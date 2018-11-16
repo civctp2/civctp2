@@ -1,6 +1,3 @@
-
-
-
 #ifndef __C3_COLOREDSWITCH_H__
 #define __C3_COLOREDSWITCH_H__
 
@@ -14,11 +11,10 @@
 
 class aui_Surface;
 
-
 class c3_ColoredSwitch : public aui_Switch, public PatternBase
 {
 public:
-	
+
 	c3_ColoredSwitch(
 		AUI_ERRCODE *retval,
 		uint32 id,
@@ -59,5 +55,4 @@ private:
 	COLOR	m_color;
 };
 
-
-#endif 
+#endif

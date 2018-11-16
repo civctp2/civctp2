@@ -4,16 +4,14 @@
 #ifndef __CHECKBOX_H__
 #define __CHECKBOX_H__
 
-
 #include "aui_switch.h"
 #include "patternbase.h"
-
 
 
 class Checkbox : public aui_Switch,  public PatternBase
 {
 public:
-	
+
 	Checkbox(
 		AUI_ERRCODE *retval,
 		uint32 id,
@@ -44,5 +42,4 @@ public:
 		sint32 y = 0 );
 };
 
-
-#endif 
+#endif

@@ -1,4 +1,3 @@
-
 class ctp2_Window;
 class ctp2_ListBox;
 
@@ -7,10 +6,10 @@ class ProfileVar;
 class ProfileEdit
 {
   private:
-	
+
 	ctp2_Window *m_window;
 	ctp2_ListBox *m_list;
-	
+
   public:
 	ProfileEdit(AUI_ERRCODE *err);
 	~ProfileEdit();
@@ -30,5 +29,3 @@ class ProfileEdit
     static void CloseWindow(aui_Control *control, uint32 action, uint32 data, void *cookie);
 	static void EnableMessages(aui_Control *control, uint32 action, uint32 data, void *cookie);
 };
-
-	

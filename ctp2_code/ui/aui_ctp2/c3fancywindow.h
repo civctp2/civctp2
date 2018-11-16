@@ -10,14 +10,14 @@
 //
 // THIS FILE IS NOT GENERATED OR SUPPORTED BY ACTIVISION.
 //
-// This material has been developed at apolyton.net by the Apolyton CtP2 
+// This material has been developed at apolyton.net by the Apolyton CtP2
 // Source Code Project. Contact the authors at ctp2source@apolyton.net.
 //
 //----------------------------------------------------------------------------
 //
 // Compiler flags
-// 
-// _MSC_VER		
+//
+// _MSC_VER
 // - Use Microsoft C++ extensions when set.
 //
 //----------------------------------------------------------------------------
@@ -36,12 +36,10 @@
 #ifndef __C3FancyWindow_H__
 #define __C3FancyWindow_H__
 
-
 #include "c3window.h"
 #include "aui_ldl.h"
 
 class c3_Button;
-
 
 
 enum FancyBorder { TL = 0,TR,BL,BR,
@@ -49,7 +47,7 @@ enum FancyBorder { TL = 0,TR,BL,BR,
 
 #define k_NUM_BORDERS (HEADER+1)
 
-class C3FancyWindow : public C3Window 
+class C3FancyWindow : public C3Window
 {
 public:
 	C3FancyWindow(
@@ -64,7 +62,7 @@ public:
 
 	virtual ~C3FancyWindow();
 	virtual AUI_ERRCODE Resize( sint32 width, sint32 height );
-	
+
 	void BringBorderToTop();
 	AUI_ERRCODE AddBordersToUI();
 	AUI_ERRCODE RemoveBordersFromUI();
@@ -77,17 +75,15 @@ protected:
     virtual void	MouseLDragAway(aui_MouseEvent * data);
 
 private:
-	
-	
-	
+
+
 	C3Window *m_border[k_NUM_BORDERS];
-	
+
 	POINT	m_offset[k_NUM_BORDERS];
-	
+
 	POINT	m_originalDimensions;
 	void NullBorders() { for(uint32 i =0; i< k_NUM_BORDERS; i++) m_border[i]=NULL; }
 	c3_Button *m_exit;
 };
 
-
-#endif 
+#endif

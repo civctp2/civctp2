@@ -11,7 +11,7 @@
 //
 // THIS FILE IS NOT GENERATED OR SUPPORTED BY ACTIVISION.
 //
-// This material has been developed at apolyton.net by the Apolyton CtP2 
+// This material has been developed at apolyton.net by the Apolyton CtP2
 // Source Code Project. Contact the authors at ctp2source@apolyton.net.
 //
 //----------------------------------------------------------------------------
@@ -43,7 +43,6 @@
 #include "aui_dropdown.h"
 
 
-
 aui_DropDown::aui_DropDown(
 	AUI_ERRCODE *retval,
 	uint32 id,
@@ -66,7 +65,6 @@ aui_DropDown::aui_DropDown(
 	Assert( AUI_SUCCESS(*retval) );
 	if ( !AUI_SUCCESS(*retval) ) return;
 }
-
 
 
 aui_DropDown::aui_DropDown(
@@ -98,17 +96,14 @@ aui_DropDown::aui_DropDown(
 }
 
 
-
 AUI_ERRCODE aui_DropDown::InitCommonLdl( MBCHAR *ldlBlock )
 {
 	aui_Ldl *theLdl = g_ui->GetLdl();
 
-	
 	BOOL valid = theLdl->IsValid( ldlBlock );
 	Assert( valid );
 	if ( !valid ) return AUI_ERRCODE_HACK;
 
-	
 	ldl_datablock *block = theLdl->GetLdl()->FindDataBlock( ldlBlock );
 	Assert( block != NULL );
 	if ( !block ) return AUI_ERRCODE_LDLFINDDATABLOCKFAILED;
@@ -127,7 +122,6 @@ AUI_ERRCODE aui_DropDown::InitCommonLdl( MBCHAR *ldlBlock )
 }
 
 
-
 AUI_ERRCODE aui_DropDown::InitCommon( sint32 buttonSize, sint32 windowSize )
 {
 	m_button = NULL,
@@ -142,7 +136,6 @@ AUI_ERRCODE aui_DropDown::InitCommon( sint32 buttonSize, sint32 windowSize )
 
 	return AUI_ERRCODE_OK;
 }
-
 
 
 AUI_ERRCODE aui_DropDown::CreateComponents( MBCHAR *ldlBlock )
@@ -209,8 +202,7 @@ AUI_ERRCODE aui_DropDown::CreateComponents( MBCHAR *ldlBlock )
 				block,
 				g_ui->Primary()->BitsPerPixel(), AUI_WINDOW_TYPE_POPUP );
 
-			
-			
+
 			aui_Ldl::Remove( m_listBoxWindow );
 
 			if ( m_listBoxWindow )
@@ -250,7 +242,6 @@ AUI_ERRCODE aui_DropDown::CreateComponents( MBCHAR *ldlBlock )
 	Assert( AUI_NEWOK(m_listBox,errcode) );
 	if ( !AUI_NEWOK(m_listBox,errcode) ) return AUI_ERRCODE_MEMALLOCFAILED;
 
-	
 	m_listBox->SetForceSelect( TRUE );
 
 	if ( m_staticPane ) AddChild( m_staticPane );
@@ -263,7 +254,6 @@ AUI_ERRCODE aui_DropDown::CreateComponents( MBCHAR *ldlBlock )
 
 	return AUI_ERRCODE_OK;
 }
-
 
 
 aui_DropDown::~aui_DropDown()
@@ -296,13 +286,12 @@ aui_DropDown::~aui_DropDown()
 }
 
 
-
 sint32 aui_DropDown::SetWindowSize( sint32 windowSize )
 {
 	sint32 prevWindowSize = m_windowSize;
 	sint32 width;
 	if(m_listBox) {
-		width = m_listBox->Width(); 
+		width = m_listBox->Width();
 		if(m_listBox->GetVerticalRanger()->GetMaximumY())
 			width += m_listBox->GetRangerSize();
 	} else
@@ -318,7 +307,6 @@ sint32 aui_DropDown::SetWindowSize( sint32 windowSize )
 }
 
 
-
 AUI_ERRCODE aui_DropDown::Resize( sint32 width, sint32 height )
 {
 	aui_Control::Resize( width, height );
@@ -330,14 +318,12 @@ AUI_ERRCODE aui_DropDown::Resize( sint32 width, sint32 height )
 }
 
 
-
 AUI_ERRCODE aui_DropDown::Hide( void )
 {
 	g_ui->RemoveWindow( m_listBoxWindow->Id() );
 
 	return aui_Control::Hide();
 }
-
 
 
 AUI_ERRCODE aui_DropDown::AddItem( aui_Item *item )
@@ -349,12 +335,10 @@ AUI_ERRCODE aui_DropDown::AddItem( aui_Item *item )
 		SetSelectedItem( selectedList->GetHead(), 1 ) :
 		SetSelectedItem( -1, 1 );
 
-	
 	m_draw |= m_drawMask & k_AUI_REGION_DRAWFLAG_UPDATE;
 
 	return AUI_ERRCODE_OK;
 }
-
 
 
 AUI_ERRCODE aui_DropDown::RemoveItem( uint32 itemId )
@@ -366,12 +350,10 @@ AUI_ERRCODE aui_DropDown::RemoveItem( uint32 itemId )
 		SetSelectedItem( selectedList->GetHead(), 1 ) :
 		SetSelectedItem( -1, 1 );
 
-	
 	m_draw |= m_drawMask & k_AUI_REGION_DRAWFLAG_UPDATE;
 
 	return AUI_ERRCODE_OK;
 }
-
 
 
 AUI_ERRCODE aui_DropDown::RepositionButton( void )
@@ -383,12 +365,10 @@ AUI_ERRCODE aui_DropDown::RepositionButton( void )
 }
 
 
-
 AUI_ERRCODE aui_DropDown::RepositionListBoxWindow( void )
 {
-	
 
-	
+
 	if ( m_window )
 	{
 		POINT screenLocation = { m_x, m_y + m_height };
@@ -401,20 +381,18 @@ AUI_ERRCODE aui_DropDown::RepositionListBoxWindow( void )
 	}
 
 
-	
+
 
 	sint32 listBoxWidth = m_listBoxWindow->Width();
-	
-	
-	
+
+
+
 
 	m_listBox->Resize( listBoxWidth, m_windowSize );
 	m_listBox->Move( 0, 0 );
 
-
 	return AUI_ERRCODE_OK;
 }
-
 
 
 sint32 aui_DropDown::SetSelectedItem( sint32 itemIndex, uint32 data )
@@ -428,18 +406,16 @@ sint32 aui_DropDown::SetSelectedItem( sint32 itemIndex, uint32 data )
 }
 
 
-
 AUI_ERRCODE aui_DropDown::ShowListBoxWindow( BOOL showIt )
 {
 	if ( showIt )
 	{
-		
+
 		if ( ( m_alwaysPopup || m_listBox->NumItems() > 1 )
 		&&   !g_ui->GetWindow( m_listBoxWindow->Id() ) )
 		{
 			RepositionListBoxWindow();
 			g_ui->AddWindow( m_listBoxWindow );
-
 
 
 		}
@@ -456,17 +432,15 @@ AUI_ERRCODE aui_DropDown::ShowListBoxWindow( BOOL showIt )
 }
 
 
-
 AUI_ERRCODE aui_DropDown::ToggleListBoxWindow( void )
 {
 	if ( !g_ui->GetWindow( m_listBoxWindow->Id() ) )
 	{
-		
+
 		if ( m_alwaysPopup || m_listBox->NumItems() > 1 )
 		{
 			RepositionListBoxWindow();
 			g_ui->AddWindow( m_listBoxWindow );
-
 
 
 		}
@@ -480,10 +454,9 @@ AUI_ERRCODE aui_DropDown::ToggleListBoxWindow( void )
 }
 
 
-
 AUI_ERRCODE aui_DropDown::DrawSelectedItem( aui_Surface *surface, sint32 x, sint32 y )
 {
-	
+
 	if ( m_staticPane || m_selectedItem < 0 ) return AUI_ERRCODE_OK;
 
 	if ( IsHidden() ) return AUI_ERRCODE_OK;
@@ -497,7 +470,6 @@ AUI_ERRCODE aui_DropDown::DrawSelectedItem( aui_Surface *surface, sint32 x, sint
 	aui_Item *item =
 		(aui_Item *)m_listBox->GetPane()->ChildList()->GetAt( position );
 
-	
 	POINT dropDownPoint = { m_x + x, m_y + y };
 	ToWindow( &dropDownPoint );
 	m_window->AddDirtyRect(
@@ -506,11 +478,9 @@ AUI_ERRCODE aui_DropDown::DrawSelectedItem( aui_Surface *surface, sint32 x, sint
 		dropDownPoint.x + item->Width(),
 		dropDownPoint.y + item->Height() );
 
-	
 	POINT itemPoint = { item->X(), item->Y() };
 	item->ToWindow( &itemPoint );
 
-	
 	BOOL wasHidden = item->IsHidden();
 	item->Show();
 
@@ -523,7 +493,6 @@ AUI_ERRCODE aui_DropDown::DrawSelectedItem( aui_Surface *surface, sint32 x, sint
 
 	return errcode;
 }
-
 
 
 AUI_ERRCODE aui_DropDown::DrawThis( aui_Surface *surface, sint32 x, sint32 y )
@@ -542,7 +511,6 @@ AUI_ERRCODE aui_DropDown::UpdateSelectedItem( BOOL update )
 	{
 		sint32 index = m_listBox->GetSelectedItemIndex();
 
-		
 		SetSelectedItem( index );
 	}
 
@@ -573,7 +541,6 @@ void aui_DropDown::MouseLGrabInside( aui_MouseEvent *mouseData )
 
 		PlaySound( AUI_SOUNDBASE_SOUND_ENGAGE );
 
-		
 		HideTipWindow();
 
 		SetMouseOwnership();
@@ -588,7 +555,6 @@ void aui_DropDown::MouseLGrabInside( aui_MouseEvent *mouseData )
 		MouseLGrabOutside( mouseData );
 }
 
-
 void aui_DropDown::MouseRGrabInside( aui_MouseEvent *mouseData )
 {
 	if (IsDisabled()) return;
@@ -599,14 +565,12 @@ void aui_DropDown::MouseRGrabInside( aui_MouseEvent *mouseData )
 
 		PlaySound( AUI_SOUNDBASE_SOUND_ENGAGE );
 
-		
 		HideTipWindow();
 
 		SetMouseOwnership();
 		SetKeyboardFocus();
 
 		if ( !HandleGameSpecificRightClick( this ) )
-
 
 		m_mouseCode = AUI_ERRCODE_HANDLEDEXCLUSIVE;
 	}
@@ -615,24 +579,20 @@ void aui_DropDown::MouseRGrabInside( aui_MouseEvent *mouseData )
 }
 
 
-
 void aui_DropDown::MouseLGrabOutside( aui_MouseEvent *mouseData )
 {
 	if (IsDisabled()) return;
 
-	
 	if ( !g_ui->GetWindow( m_listBoxWindow->Id() ) ) return;
 
-	
 	if ( !m_button->IsInside(
 		mouseData->position.x - m_x,
 		mouseData->position.y - m_y ) )
 	{
-		
+
 		POINT screenLocation = mouseData->position;
 		ToScreen( &screenLocation );
 
-		
 		if ( !m_listBoxWindow->IsInside( &screenLocation ) )
 			ShowListBoxWindow( FALSE );
 
@@ -648,21 +608,18 @@ void aui_DropDown::MouseLDropOutside( aui_MouseEvent *mouseData )
 {
 	if (IsDisabled()) return;
 
-	
 	if ( !g_ui->GetWindow( m_listBoxWindow->Id() ) ) return;
 
-	
 	if ( !m_button->IsInside(
 		mouseData->position.x - m_x,
 		mouseData->position.y - m_y ) )
 	{
-		
+
 		POINT windowLocation = mouseData->position;
 		ToScreen( &windowLocation );
 		windowLocation.x -= m_listBoxWindow->X();
 		windowLocation.y -= m_listBoxWindow->Y();
 
-		
 		if ( m_listBox->IsInside( &windowLocation ) )
 			ShowListBoxWindow( FALSE );
 
@@ -691,15 +648,13 @@ void DropDownButtonActionCallback( aui_Control *control, uint32 action, uint32 d
 }
 
 
-
 void DropDownListBoxActionCallback( aui_Control *control, uint32 action, uint32 data, void *cookie )
 {
 	if ( action == (uint32)AUI_LISTBOX_ACTION_SELECT )
 	{
 		aui_DropDown *dropdown = (aui_DropDown *)cookie;
 
-		
-		
+
 		dropdown->UpdateSelectedItem();
 	}
 }

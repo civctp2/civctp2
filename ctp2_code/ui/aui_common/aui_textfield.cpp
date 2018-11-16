@@ -1,14 +1,3 @@
-
-
-
-
-
-
-
-
-
-
-
 #include "c3.h"
 #include "aui_ui.h"
 #include "aui_window.h"
@@ -26,10 +15,8 @@
 #include "aui_sdlsurface.h"
 #endif
 
-
 WNDPROC aui_TextField::m_windowProc = NULL;
 extern aui_Win* g_winFocus;
-
 
 aui_TextField::aui_TextField(
 	AUI_ERRCODE *retval,
@@ -50,7 +37,6 @@ aui_TextField::aui_TextField(
 	Assert( AUI_SUCCESS(*retval) );
 	if ( !AUI_SUCCESS(*retval) ) return;
 }
-
 
 
 aui_TextField::aui_TextField(
@@ -78,23 +64,20 @@ aui_TextField::aui_TextField(
 }
 
 
-
 AUI_ERRCODE aui_TextField::InitCommonLdl( MBCHAR *ldlBlock )
 {
 	aui_Ldl *theLdl = g_ui->GetLdl();
 
-	
 	BOOL valid = theLdl->IsValid( ldlBlock );
 	Assert( valid );
 	if ( !valid ) return AUI_ERRCODE_HACK;
 
-	
 	ldl_datablock *block = theLdl->GetLdl()->FindDataBlock( ldlBlock );
 	Assert( block != NULL );
 	if ( !block ) return AUI_ERRCODE_LDLFINDDATABLOCKFAILED;
 
 	MBCHAR *text = block->GetString( k_AUI_TEXTFIELD_LDL_TEXT );
-	BOOL multiLine = block->GetBool( k_AUI_TEXTFIELD_LDL_MULTILINE ); 
+	BOOL multiLine = block->GetBool( k_AUI_TEXTFIELD_LDL_MULTILINE );
 	BOOL autovscroll =
 		block->GetAttributeType( k_AUI_TEXTFIELD_LDL_AUTOVSCROLL ) == ATTRIBUTE_TYPE_BOOL ?
 		block->GetBool( k_AUI_TEXTFIELD_LDL_AUTOVSCROLL ) :
@@ -128,7 +111,6 @@ AUI_ERRCODE aui_TextField::InitCommonLdl( MBCHAR *ldlBlock )
 }
 
 
-
 AUI_ERRCODE aui_TextField::InitCommon(
 	const MBCHAR *text,
 	const MBCHAR *font,
@@ -139,7 +121,7 @@ AUI_ERRCODE aui_TextField::InitCommon(
 	BOOL isfilename,
 	sint32 maxFieldLen,
 	BOOL passwordReady )
-{	
+{
 	m_blink = FALSE;
 	m_blinkThisFrame = FALSE;
 	m_multiLine = multiLine;
@@ -153,7 +135,6 @@ AUI_ERRCODE aui_TextField::InitCommon(
 	m_holdfont = NULL;
 #endif
 
-	
 	if (font) strcpy(m_desiredFont, font);
 	else strcpy(m_desiredFont, "times.ttf");
 
@@ -175,7 +156,6 @@ AUI_ERRCODE aui_TextField::InitCommon(
 	if ( m_passwordReady )
 		style |= ES_PASSWORD;
 
-	
 	m_hwnd = CreateWindowEx(
 		0,
 		"EDIT",
@@ -192,24 +172,20 @@ AUI_ERRCODE aui_TextField::InitCommon(
 	Assert( m_hwnd != NULL );
 	if ( !m_hwnd ) return AUI_ERRCODE_MEMALLOCFAILED;
 
-	
 	g_ui->AddWin( m_hwnd );
 
-	
-	
+
+
 
 	if ( !m_windowProc )
 		m_windowProc = (WNDPROC)GetWindowLong( m_hwnd, GWL_WNDPROC );
 
 	SetWindowLong( m_hwnd, GWL_WNDPROC, (LONG)TextFieldWindowProc );
 
-	
 	UpdateWindow( m_hwnd );
 
-	
 	ShowWindow( m_hwnd, SW_SHOWNORMAL );
 
-	
 	HDC hdc = GetDC( m_hwnd );
 	TEXTMETRIC tm;
 	GetTextMetrics( hdc, &tm );
@@ -217,17 +193,16 @@ AUI_ERRCODE aui_TextField::InitCommon(
 	SetBkColor(hdc, RGB(255, 255, 255));
 	::SetTextColor(hdc, RGB(20, 20, 20));
 
-	
 	if (fontheight) m_textHeight = fontheight;
 	else m_textHeight = tm.tmHeight + tm.tmExternalLeading;
 
 	if (font) EnumFonts( hdc, font, (FONTENUMPROC) EnumTextFontsProc, (LPARAM)this);
-	
-	if (m_hfont) 
+
+	if (m_hfont)
 	{
-		
+
 		m_holdfont = (HFONT)SendMessage( m_hwnd, WM_GETFONT, NULL, NULL );
-		
+
 		SendMessage( m_hwnd, WM_SETFONT, (WPARAM)m_hfont, MAKELPARAM(TRUE,0));
 
 		::SetTextColor(hdc, RGB(20, 20, 20));
@@ -244,7 +219,7 @@ AUI_ERRCODE aui_TextField::InitCommon(
 
 	// select nothing, move insertion point to end
 	m_selStart = m_selEnd = strlen(m_Text);
-	
+
 	m_Font = g_ui->LoadBitmapFont(m_desiredFont);
 	Assert(m_Font);
 	// FIXME: HACK: I'm setting the font size here because it doesn't seem to be
@@ -254,14 +229,14 @@ AUI_ERRCODE aui_TextField::InitCommon(
 
         //m_Font->SetMaxHeight(m_textHeight); //adjusting font to boxhight does not work
 	m_Font->SetPointSize(k_AUI_TEXTBASE_DEFAULT_FONTSIZE);
-	if (fontheight) 
+	if (fontheight)
             m_textHeight = fontheight;
-	else 
+	else
             m_textHeight = m_Font->GetMaxHeight(); //well, let's set at least the box height to something
         //printf("%s L%d: aui_textfield text height: %d!\n", __FILE__, __LINE__, m_textHeight);
 
 #endif
-	
+
 	sint32 newHeight = m_height - Mod(m_height,m_textHeight);
 	if ( newHeight > 0 )
 		Resize( m_width, m_height - Mod(m_height,m_textHeight) );
@@ -272,19 +247,18 @@ AUI_ERRCODE aui_TextField::InitCommon(
 }
 
 
-
 aui_TextField::~aui_TextField()
 {
-#ifdef __AUI_USE_DIRECTX__	
-	if ( m_hfont ) 
+#ifdef __AUI_USE_DIRECTX__
+	if ( m_hfont )
 	{
-		
+
 		SendMessage( m_hwnd, WM_SETFONT, (WPARAM)m_holdfont, MAKELPARAM(TRUE,0));
-		
+
 		DeleteObject( m_hfont );
 		m_hfont = NULL;
 	}
-	
+
 	if ( m_winRefCount == 1 && m_windowProc )
 		SetWindowLong( m_hwnd, GWL_WNDPROC, (LONG)m_windowProc );
 
@@ -295,11 +269,10 @@ aui_TextField::~aui_TextField()
 		g_ui->UnloadBitmapFont(m_Font);;
 		m_Font = NULL;
 	}
-	
+
 	delete[] m_Text;
 #endif
 }
-
 
 
 sint32 aui_TextField::GetFieldText( MBCHAR *text, sint32 maxCount )
@@ -317,7 +290,6 @@ sint32 aui_TextField::GetFieldText( MBCHAR *text, sint32 maxCount )
 }
 
 
-
 BOOL aui_TextField::SetFieldText( const MBCHAR *text )
 {
 	m_draw |= m_drawMask & k_AUI_REGION_DRAWFLAG_UPDATE;
@@ -325,9 +297,8 @@ BOOL aui_TextField::SetFieldText( const MBCHAR *text )
 #ifdef __AUI_USE_DIRECT_X__
 	BOOL success = SetWindowText( m_hwnd, text );
 
-	
 	if ( GetKeyboardFocus() == this ) SetFocus( m_hwnd );
-	
+
 	return success;
 #else
 	strncpy(m_Text, text, m_maxFieldLen);
@@ -337,11 +308,10 @@ BOOL aui_TextField::SetFieldText( const MBCHAR *text )
 	m_selStart = m_selEnd = strlen(m_Text);
 
 	if ( GetKeyboardFocus() == this ) g_winFocus = this;
-	
+
 	return TRUE;
 #endif
 }
-
 
 #ifdef __AUI_USE_DIRECTX__
 BOOL aui_TextField::SetMultiLine( BOOL multiLine )
@@ -358,7 +328,6 @@ BOOL aui_TextField::SetMultiLine( BOOL multiLine )
 }
 
 
-
 BOOL aui_TextField::SetPasswordReady( BOOL passwordReady )
 {
 	BOOL wasPasswordReady = m_passwordReady;
@@ -373,19 +342,17 @@ BOOL aui_TextField::SetPasswordReady( BOOL passwordReady )
 }
 #endif // __AUI_USE_DIRECTX__
 
-
 BOOL aui_TextField::SetIsFileName( BOOL isFileName )
 {
 	BOOL wasFileName = m_isFileName;
 
 	if ( (m_isFileName = isFileName) != wasFileName )
 	{
-		
+
 	}
 
 	return wasFileName;
 }
-
 
 
 sint32 aui_TextField::SetMaxFieldLen( sint32 maxFieldLen )
@@ -409,7 +376,6 @@ sint32 aui_TextField::SetMaxFieldLen( sint32 maxFieldLen )
 }
 
 
-
 aui_Control *aui_TextField::SetKeyboardFocus( void )
 {
 	if ( !IsDisabled() )
@@ -423,7 +389,6 @@ aui_Control *aui_TextField::SetKeyboardFocus( void )
 }
 
 
-
 AUI_ERRCODE aui_TextField::ReleaseKeyboardFocus( void )
 {
 	m_blink = FALSE;
@@ -432,7 +397,6 @@ AUI_ERRCODE aui_TextField::ReleaseKeyboardFocus( void )
 
 	return aui_Win::ReleaseKeyboardFocus();
 }
-
 
 #ifdef __AUI_USE_DIRECTX__
 void aui_TextField::HitEnter( HWND hwnd )
@@ -445,7 +409,6 @@ void aui_TextField::HitEnter()
 	Assert( textfield != NULL );
 	if ( !textfield ) return;
 
-	
 	if ( textfield->IsMultiLine() ) return;
 #else
 	aui_TextField *textfield = this;
@@ -464,7 +427,6 @@ void aui_TextField::HitEnter()
 }
 
 
-
 BOOL aui_TextField::IsFileName( HWND hwnd )
 {
 	aui_TextField *textfield = (aui_TextField *)GetWinFromHWND( hwnd );
@@ -473,7 +435,6 @@ BOOL aui_TextField::IsFileName( HWND hwnd )
 
 	return textfield->IsFileName();
 }
-
 
 
 sint32 aui_TextField::GetMaxFieldLen( HWND hwnd )
@@ -486,10 +447,9 @@ sint32 aui_TextField::GetMaxFieldLen( HWND hwnd )
 }
 
 
-
 AUI_ERRCODE aui_TextField::DrawThis( aui_Surface *surface, sint32 x, sint32 y )
 {
-	
+
 	if ( IsHidden() ) return AUI_ERRCODE_OK;
 
 	if ( !surface ) surface = m_window->TheSurface();
@@ -519,11 +479,9 @@ AUI_ERRCODE aui_TextField::DrawThis( aui_Surface *surface, sint32 x, sint32 y )
 	{
 		FillRect( m_memdc, &srcRect, (HBRUSH)(COLOR_WINDOW + 1) );
 
-		
 		InvalidateRect( m_hwnd, NULL, FALSE );
 		SendMessage( m_hwnd, WM_PAINT, (WPARAM)m_memdc, 0 );
 
-		
 		static POINT point = { 0, 0 };
 		if ( GetKeyboardFocus() == this && GetCaretPos( &point ) )
 		{
@@ -553,7 +511,7 @@ AUI_ERRCODE aui_TextField::DrawThis( aui_Surface *surface, sint32 x, sint32 y )
 		if ( destDC )
 		{
 			::SetTextColor(destDC, RGB(20, 20, 20));
-			
+
 			BitBlt(
 				destDC,
 				rect.left,
@@ -586,7 +544,7 @@ AUI_ERRCODE aui_TextField::DrawThis( aui_Surface *surface, sint32 x, sint32 y )
 
 void aui_TextField::PostChildrenCallback( aui_MouseEvent *mouseData )
 {
-	
+
 	if ( !mouseData->framecount
 	&&   GetKeyboardFocus() == this )
 	{
@@ -600,7 +558,6 @@ void aui_TextField::PostChildrenCallback( aui_MouseEvent *mouseData )
 		m_draw |= m_drawMask & k_AUI_REGION_DRAWFLAG_UPDATE;
 	}
 
-	
 	if ( m_blinkThisFrame && mouseData->time - m_startWaitTime > m_timeOut )
 	{
 		m_blinkThisFrame = FALSE;
@@ -608,7 +565,6 @@ void aui_TextField::PostChildrenCallback( aui_MouseEvent *mouseData )
 		m_blink = !m_blink;
 	}
 }
-
 
 
 void aui_TextField::MouseLGrabOutside( aui_MouseEvent *mouseData )
@@ -628,7 +584,6 @@ void aui_TextField::MouseLGrabOutside( aui_MouseEvent *mouseData )
 			AUI_TEXTFIELD_ACTION_DISMISS,
 			0 );
 }
-
 
 void aui_TextField::SetSelection(sint32 start, sint32 end)
 {
@@ -664,9 +619,9 @@ void aui_TextField::SelectAll(void)
 #ifdef __AUI_USE_DIRECTX__
 LRESULT CALLBACK TextFieldWindowProc( HWND hwnd, UINT message, WPARAM wParam, LPARAM lParam )
 {
-	
-	
-	
+
+
+
 
 	switch ( message )
 	{
@@ -675,9 +630,8 @@ LRESULT CALLBACK TextFieldWindowProc( HWND hwnd, UINT message, WPARAM wParam, LP
 		MBCHAR	ch = (MBCHAR)wParam;
 		if ( aui_TextField::IsFileName( hwnd ) ) {
 
-			
 			switch (ch) {
-			case '\\':	
+			case '\\':
 			case '*':
 			case '"':
 			case '/':
@@ -728,7 +682,6 @@ LRESULT CALLBACK TextFieldWindowProc( HWND hwnd, UINT message, WPARAM wParam, LP
 	return lr;
 }
 
-
 // Font enumeration proc
 int CALLBACK EnumTextFontsProc( LOGFONT *lplf, TEXTMETRIC *lptm, DWORD dwType, LPARAM lParam )
 {
@@ -738,10 +691,10 @@ int CALLBACK EnumTextFontsProc( LOGFONT *lplf, TEXTMETRIC *lptm, DWORD dwType, L
 	aui_TextField *tf = (aui_TextField *)lParam;
 
 	// if no text field is given, use the system fonts
-	if (!tf) 
+	if (!tf)
 	{
 		// reset the font to NULL
-		tf->m_hfont = NULL;	
+		tf->m_hfont = NULL;
 		return 0;
 	}
 

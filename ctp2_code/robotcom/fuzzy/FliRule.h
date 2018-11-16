@@ -1,5 +1,3 @@
-
-
 #pragma once
 #ifndef __FLI_RULE_H__
 #define __FLI_RULE_H__
@@ -7,7 +5,7 @@
 template <class T> class PointerList;
 class FliSetFunc;
 class FliSymbol;
-class FliEngine; 
+class FliEngine;
 class FliWhen;
 
 class InputString
@@ -20,7 +18,7 @@ public:
 	}
 	~InputString() {
 		delete [] m_string;
-        m_string = NULL; 
+        m_string = NULL;
 	}
 };
 

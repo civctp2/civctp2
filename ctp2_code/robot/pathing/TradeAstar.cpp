@@ -1,16 +1,3 @@
-
-
-
-
-
-
-
-
-
-
-
-
-
 #include "c3.h"
 #include "Globals.h"
 #include "TradeAstar.h"
@@ -19,26 +6,24 @@
 #include "player.h"
 
 
-
-extern World *g_theWorld; 
+extern World *g_theWorld;
 
 TradeAstar g_theTradeAstar;
-extern Player **g_player; 
+extern Player **g_player;
 
-
-sint32 TradeAstar::EntryCost(const MapPoint &prev, const MapPoint &pos,                           
-     float &cost, BOOL &is_zoc, ASTAR_ENTRY_TYPE &entry) 
+sint32 TradeAstar::EntryCost(const MapPoint &prev, const MapPoint &pos,
+     float &cost, BOOL &is_zoc, ASTAR_ENTRY_TYPE &entry)
 
 {
 	is_zoc = FALSE;
 	entry = ASTAR_CAN_ENTER;
 
-    if (g_player[m_owner]->IsExplored(pos) == FALSE) { 
-        cost = k_ASTAR_BIG; 
-		entry = ASTAR_BLOCKED; 
+    if (g_player[m_owner]->IsExplored(pos) == FALSE) {
+        cost = k_ASTAR_BIG;
+		entry = ASTAR_BLOCKED;
         return FALSE;
     }
-	
+
 	if(!g_theWorld->IsXwrap()) {
 		sint16 w = (sint16)g_theWorld->GetXWidth();
 
@@ -53,26 +38,24 @@ sint32 TradeAstar::EntryCost(const MapPoint &prev, const MapPoint &pos,
 		}
 	}
 
-	cost = float(ceil(g_theWorld->CalcTerrainFreightCost(pos))); 
-	return TRUE; 
+	cost = float(ceil(g_theWorld->CalcTerrainFreightCost(pos)));
+	return TRUE;
 }
-
 
 sint32 TradeAstar::GetMaxDir(MapPoint &pos) const
 {
-    return SOUTH; 
+    return SOUTH;
 }
 
-sint32 TradeAstar::FindPath(const PLAYER_INDEX owner, const MapPoint &start, const MapPoint &dest, 
+sint32 TradeAstar::FindPath(const PLAYER_INDEX owner, const MapPoint &start, const MapPoint &dest,
                       Path &a_path, float &total_cost, const sint32 isunit)
 
 {
-    sint32 cutoff = 2000000000; 
+    sint32 cutoff = 2000000000;
     sint32 nodes_opened=0;
-    m_owner = owner; 
+    m_owner = owner;
 
-    return Astar::FindPath(start, dest, a_path, total_cost, isunit, 
+    return Astar::FindPath(start, dest, a_path, total_cost, isunit,
             cutoff, nodes_opened);
 
 }
-

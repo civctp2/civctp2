@@ -1,16 +1,3 @@
-
-
-
-
-
-
-
-
-
-
-
-
-
 #include "c3.h"
 
 #include "aui.h"
@@ -24,7 +11,6 @@
 #include "colorset.h"
 
 extern ColorSet	*g_colorSet;
-
 
 StaticTextItem::StaticTextItem(
 	AUI_ERRCODE *retval,
@@ -44,11 +30,9 @@ StaticTextItem::StaticTextItem(
 	aui_TextBase( text ),
 	aui_Static( retval, id, x, y, width, height, text )
 {
-	
 
 
 	m_infoId = textId;
 	m_category = category;
 	m_itemType = itemType;
 }
-

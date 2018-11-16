@@ -1,4 +1,4 @@
-/* 
+/*
 Copyright (C) 1995-2001 Activision, Inc.
 
 This library is free software; you can redistribute it and/or
@@ -242,7 +242,7 @@ dp_result_t pv_addNode(pv_t *pv, playerHdl_t node)
 		if (pv->new_dests[i] == node) return dp_RES_ALREADY;
 
 	/* Make sure not too many. */
-	if (pv->new_ndests >= dp_MAXPLAYERS) 
+	if (pv->new_ndests >= dp_MAXPLAYERS)
 		return dp_RES_BUG;
 
 	/* Add to update list. */
@@ -496,29 +496,29 @@ dp_result_t pv_handlePacket(pv_t *pv, size_t len, void *buf)
  pv_set triggers updates by setting the DIRTY bit on changed variables.
  pv_DeleteHost() avoids no-such-destination errors by deleting from
  both new_dests and cur_dests.
- 	
+
  Here's the algorithm:
- If you're in the middle of an update cycle, finish it before 
+ If you're in the middle of an update cycle, finish it before
  looking for dirty variables or new_dests.  That is,
  if cur_key_index != -1, just continue sending cur_keys[cur_key_index]
  to cur_dests[]; increment to the next key index when done; if
  no more keys, set to -1.
- 
- Else if newhosts is not empty, 
+
+ Else if newhosts is not empty,
  set cur_dests to new_dests, cur_keys to everykey, clear new_dests,
  and start an update cycle.
- 
+
  Else if new_keys is not empty,
  set cur_dests to everyone, cur_keys to new_keys, clear new_keys,
  and start an update cycle.
- 
+
  If a variable is changed while we are in the middle of sending it,
  abort that particular variable transmission; it will be fully sent
  in the next cycle.
 
  This method makes sure everyone receives new values exactly once.
 --------------------------------------------------------------------------*/
- 
+
 dp_result_t pv_update(pv_t *pv, dpid_t owner)
 {
 	size_t len, hdrlen;
@@ -845,7 +845,7 @@ static dp_result_t pv_peer_thaw(pv_t *pv, FILE *fp)
 			DPRINT(("pv_peer_thaw: can't grow player %d's vars[%d]!\n", id, var.key));
 			return dp_RES_NOMEM;
 		}
-	
+
 		/* Delete old value from heap if present */
 		if (pvar->buf) dp_FREE(pvar->buf);
 

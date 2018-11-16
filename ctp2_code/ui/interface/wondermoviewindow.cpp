@@ -3,7 +3,7 @@
 // Project      : Call To Power 2
 // File type    : C++ source
 // Description	: Wonder movie pop-up window
-// Id           : $Id:$
+// Id           : $Id$
 //
 //----------------------------------------------------------------------------
 //
@@ -11,7 +11,7 @@
 //
 // THIS FILE IS NOT GENERATED OR SUPPORTED BY ACTIVISION.
 //
-// This material has been developed at apolyton.net by the Apolyton CtP2 
+// This material has been developed at apolyton.net by the Apolyton CtP2
 // Source Code Project. Contact the authors at ctp2source@apolyton.net.
 //
 //----------------------------------------------------------------------------
@@ -46,7 +46,6 @@
 #include "ctp2_hypertextbox.h"
 
 
-
 WonderMovieWindow::WonderMovieWindow(
 									 AUI_ERRCODE *retval,
 									 uint32 id,
@@ -62,7 +61,6 @@ C3Window(retval, id, ldlBlock, bpp, type)
 	Assert( AUI_SUCCESS(*retval) );
 	if ( !AUI_SUCCESS(*retval) ) return;
 }
-
 
 
 WonderMovieWindow::WonderMovieWindow(
@@ -84,7 +82,6 @@ C3Window( retval, id, x, y, width, height, bpp, pattern, type )
 	Assert(AUI_SUCCESS(*retval));
 	if (!AUI_SUCCESS(*retval)) return;
 }
-
 
 
 WonderMovieWindow::~WonderMovieWindow()
@@ -151,12 +148,10 @@ AUI_ERRCODE WonderMovieWindow::InitCommonLdl(MBCHAR *ldlBlock)
 	return InitCommon();
 }
 
-
 AUI_ERRCODE WonderMovieWindow::InitCommon(void)
-{		
+{
 	return C3Window::InitCommon();
 }
-
 
 
 void WonderMovieWindow::SetMovie(const MBCHAR *filename)
@@ -166,7 +161,6 @@ void WonderMovieWindow::SetMovie(const MBCHAR *filename)
 	m_movieButton->SetMovie(filename);
 	m_movieButton->SetFlags(k_AUI_MOVIE_PLAYFLAG_PLAYANDHOLD);
 }
-
 
 
 void WonderMovieWindow::SetWonderName(MBCHAR *name)
@@ -182,27 +176,22 @@ void WonderMovieWindow::SetText(const MBCHAR *text)
 }
 
 
-
 AUI_ERRCODE WonderMovieWindow::Idle()
 {
-	
-	
+
 	return AUI_ERRCODE_OK;
 }
 
 
-
 AUI_ERRCODE WonderMovieWindow::DrawThis( aui_Surface *surface, sint32 x, sint32 y )
 {
-	
+
 	if ( IsHidden() ) return AUI_ERRCODE_OK;
-	
 
 	if (m_pattern) {
 		RECT rect = { 0, 0, m_width, m_height };
 		m_pattern->Draw( m_surface, &rect );
 
-		
 		m_dirtyList->AddRect( &rect );
 	}
 

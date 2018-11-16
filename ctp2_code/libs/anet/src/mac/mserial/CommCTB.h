@@ -1,4 +1,4 @@
-/* 
+/*
 Copyright (C) 1995-2001 Activision, Inc.
 
 This library is free software; you can redistribute it and/or
@@ -31,7 +31,7 @@ Foundation, Inc., 59 Temple Place, Suite 330, Boston, MA  02111-1307  USA
  and have the address mean the same thing on the other machine.
  This means each computer needs its own 'address'.
  Furthermore, the dp layer expects the address to not change from session
- to session.  
+ to session.
 --------------------------------------------------------------------------*/
 typedef long ser_adr_t;
 #define ser_ADR_NONE 0			// Used internally to indicate no connection.
@@ -43,7 +43,6 @@ typedef int ser_hdl_t;			// Handles used in sending packets.
 #define ser_HDL_BROADCAST	0	// For this driver, same as ser_HDL_YOU.
 #define ser_HDL_ME			1	// The 2nd entry is for my own address.
 #define ser_HDL_YOU			2	// The 3rd entry is the other end of the wire.
-
 
 #define ser_USERMAXPACK		255
 

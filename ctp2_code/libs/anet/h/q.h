@@ -1,4 +1,4 @@
-/* 
+/*
 Copyright (C) 1995-2001 Activision, Inc.
 
 This library is free software; you can redistribute it and/or
@@ -28,9 +28,9 @@ Foundation, Inc., 59 Temple Place, Suite 330, Boston, MA  02111-1307  USA
  Revision 1.4  1997/03/07 19:34:40  dkegel
  Mention dp_FREE instead of free().
  Revision 1.3  1997/01/31 07:47:44  dkegel
- Settled the structure packing question by using 
+ Settled the structure packing question by using
  #pragma pack(x) / #pragma pack() pairs at top and bottom of
- all .h files that declare structures.  Was careful to put 
+ all .h files that declare structures.  Was careful to put
  #pragma pack(x) after last #include (to avoid wierd nesting effects
  due to lack of #pragma pack(pop).
  Revision 1.2  1996/12/18 18:20:30  administrator
@@ -42,7 +42,7 @@ Foundation, Inc., 59 Temple Place, Suite 330, Boston, MA  02111-1307  USA
 -----------------------------------------------------------------------*/
 
 #ifndef q_h
-#define q_h 
+#define q_h
 
 #include <string.h>
 #include <stddef.h>

@@ -10,13 +10,13 @@
 //
 // THIS FILE IS NOT GENERATED OR SUPPORTED BY ACTIVISION.
 //
-// This material has been developed at apolyton.net by the Apolyton CtP2 
+// This material has been developed at apolyton.net by the Apolyton CtP2
 // Source Code Project. Contact the authors at ctp2source@apolyton.net.
 //
 //----------------------------------------------------------------------------
 //
 // Compiler flags
-// 
+//
 //----------------------------------------------------------------------------
 //
 // Modifications from the original Activision code:
@@ -38,30 +38,26 @@
 typedef std::list<MapPoint, dbgallocator<MapPoint> > MapPoint_List;
 typedef std::list<std::pair<sint32, MapPoint>, dbgallocator<std::pair<sint32, MapPoint> > > Scored_MapPoint_List;
 
-
 class MapPoint;
 class Unit;
 
 class GaiaController {
   public:
-	
+
 	static uint64 sm_endgameImprovements;
 	static uint64 sm_endgameBuildings;
 	static uint64 sm_endgameWonders;
 
 	GaiaController(const PLAYER_INDEX player);
 
-	
-	
+
 	~GaiaController();
 	void Serialize(CivArchive &archive);
 
-	
 	static void InitializeStatics();
 
 	void Initialize();
 
-	
 	void RecomputeCoverage();
 
 	static void InitializeEvents();
@@ -83,16 +79,12 @@ class GaiaController {
 
 	sint16 GetTowerRadius() const;
 
-	
 	float GetTowerCoverage() const;
 
-	
 	float NewCoverageFrom(const MapPoint & pos, const sint16 radius) const;
 
-	
 	const Bit_Table & GetCoverage() const;
 
-	
 	bool CanStartCountdown() const;
 
 	bool HasReqTowerCoverage() const;
@@ -101,47 +93,35 @@ class GaiaController {
 	bool HasMinSatsBuilt() const;
 	bool HasMaxSatsBuilt() const;
 
-	
 	bool StartCountdown();
 
-	
 	sint32 TotalCountdownTurns() const;
 
-	
 	sint16 TurnsToComplete() const;
 
-	
 	bool GaiaControllerTileImp(const sint32 type) const;
 
-	
 	inline sint32 GetTowerTileImpIndex() const { return sm_towerTileImpIndex; }
 
-	
 	bool CanBuildTowers(const bool & check_pw) const;
 
-	
 	static sint32 GetMainframeBuildingIndex()
 	{ return(sm_mainframeBuildingIndex); }
 
-	
 	static sint32 GetSatelliteBuildingIndex()
 	{ return(sm_satelliteBuildingIndex); }
 
-	
-	
+
 	void ComputeTowerPositions();
 
-	
 	float GetMaxTowerCoverage() const;
 
-	
 	bool PopNextTowerPosition(MapPoint & pos);
 
-	
 	void BuildProcessingTowers();
 
   private:
-	
+
 	static sint32 sm_towerEndgameIndex;
 	static sint32 sm_satelliteEndgameIndex;
 	static sint32 sm_mainframeEndgameIndex;
@@ -149,10 +129,8 @@ class GaiaController {
 	static sint32 sm_satelliteBuildingIndex;
 	static sint32 sm_mainframeBuildingIndex;
 
-	
 	sint32 ScoreTowerPosition(MapPoint & pos, const MapPoint empire_center, MapPoint_List & towers) const;
 
-	
 	void ComputeTowerCandidates(Scored_MapPoint_List & candidates) const;
 
 	PLAYER_INDEX m_playerId;
@@ -168,4 +146,3 @@ class GaiaController {
 };
 
 #endif // __GAIA_CONTROLLER_H__
-

@@ -10,14 +10,14 @@
 //
 // THIS FILE IS NOT GENERATED OR SUPPORTED BY ACTIVISION.
 //
-// This material has been developed at apolyton.net by the Apolyton CtP2 
+// This material has been developed at apolyton.net by the Apolyton CtP2
 // Source Code Project. Contact the authors at ctp2source@apolyton.net.
 //
 //----------------------------------------------------------------------------
 //
 // Compiler flags
-// 
-// _MSC_VER		
+//
+// _MSC_VER
 // - Use Microsoft C++ extensions when set.
 //
 //----------------------------------------------------------------------------
@@ -26,7 +26,7 @@
 //
 // - Event handlers declared in a notation that is more standard C++.
 // - #pragma once commented out.
-// - Removed compiler complaint. 
+// - Removed compiler complaint.
 //
 //----------------------------------------------------------------------------
 
@@ -56,9 +56,8 @@ public:
 
 	typedef BOOL (ResourceMapDrawFunc)(aui_Surface *surf, const MapPoint &pos, void *context);
 
-	
-	ResourceMap(AUI_ERRCODE *retval, 
-					sint32 id, 
+	ResourceMap(AUI_ERRCODE *retval,
+					sint32 id,
 					MBCHAR *ldlBlock,
 					ControlActionCallback *ActionFunc = NULL,
 					void *cookie = NULL);
@@ -85,7 +84,6 @@ public:
 	void DrawView(void);
 
 	void NotifyPopChanged();
-
 
 	BOOL		DrawSprites(aui_Surface *pSurface, RECT *destRect);
 	sint32		DrawSurface(void);
@@ -121,7 +119,6 @@ public:
 
 	void		HandlePop( MapPoint point );
 
-	
 	void		SetUpdateAction(c3_UpdateAction *action) { m_updateAction = action; }
 	c3_UpdateAction *GetUpdateAction(void) { return m_updateAction; }
 
@@ -135,7 +132,7 @@ public:
 
 	void		GetOwningCity(Unit &c) { c = m_unit; }
 
-protected:		
+protected:
 	aui_Surface *   m_surface;
 
 	Unit		m_unit;
@@ -152,21 +149,20 @@ protected:
 
 	aui_StringTable *m_string;
 
-	
 	c3_UpdateAction *m_updateAction;
 
 	MapPoint			m_current_mouse_tile;
 
 	sint32		m_scale;
 
-	RECT		m_normalizedViewRect;	
-	sint32		m_leftEdge;		
-	sint32		m_topEdge;		
-	MapPoint	m_topLeftPos;	
+	RECT		m_normalizedViewRect;
+	sint32		m_leftEdge;
+	sint32		m_topEdge;
+	MapPoint	m_topLeftPos;
 
-	RECT        m_usedRect; 
-	
-	// Event callback handlers	
+	RECT        m_usedRect;
+
+	// Event callback handlers
 #if defined(_MSC_VER)
 	virtual MouseEventCallback MouseLGrabInside;
 	virtual MouseEventCallback MouseMoveInside;

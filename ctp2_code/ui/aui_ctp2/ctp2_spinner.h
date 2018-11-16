@@ -37,11 +37,10 @@
 
 #include "aui_ranger.h"
 
-
 class ctp2_Spinner : public aui_Ranger
 {
 public:
-	
+
 	ctp2_Spinner(
 		AUI_ERRCODE *retval,
 		uint32 id,
@@ -68,5 +67,4 @@ protected:
 	void					*m_spinnerCookie;
 };
 
-
-#endif 
+#endif

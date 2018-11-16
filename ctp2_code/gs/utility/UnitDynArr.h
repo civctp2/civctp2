@@ -9,12 +9,11 @@
 
 class UnitDynamicArray : public DynamicArray<Unit> {
 
-
 public:
 
-    UnitDynamicArray(); 
-    UnitDynamicArray(const sint32 size); 
-    UnitDynamicArray (const DynamicArray<Unit> &copyme); 
+    UnitDynamicArray();
+    UnitDynamicArray(const sint32 size);
+    UnitDynamicArray (const DynamicArray<Unit> &copyme);
 
 };
 

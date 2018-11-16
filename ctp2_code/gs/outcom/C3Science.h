@@ -1,14 +1,3 @@
-
-
-
-
-
-
-
-
-
-
-
 #pragma once
 
 #ifndef __C3Science_H__
@@ -16,37 +5,35 @@
 
 #include "ic3Science.h"
 
-class Player; 
-class CivArchive; 
+class Player;
+class CivArchive;
 
 class C3Science : public IC3Science
 {
 	ULONG m_refCount;
-	
-	
+
     Player	*m_player ;
 	sint32	m_owner ;
 
 public:
-	
+
 	STDMETHODIMP QueryInterface(REFIID, void **obj);
 	STDMETHODIMP_(ULONG) AddRef();
 	STDMETHODIMP_(ULONG) Release();
 
-    C3Science(sint32 idx); 
+    C3Science(sint32 idx);
     C3Science(CivArchive &archive);
     void Serialize(CivArchive &archive);
-	
+
 	STDMETHODIMP_ (sint32) GetNumAdvances(void) ;
 	STDMETHODIMP_ (sint32) GetNumDependencies(sint32 adv) ;
 	STDMETHODIMP_ (sint32) GetNumPrerequisites(sint32 adv) ;
 	STDMETHODIMP_ (sint32) GetLeadsTo(sint32 adv, sint32 lead) ;
 	STDMETHODIMP_ (sint32) GetPrereq(sint32 adv, sint32 req) ;
 
-    
     STDMETHODIMP_ (BOOL) HasAdvance (sint32 adv);
     STDMETHODIMP_ (void) SetResearching (sint32 adv);
-    
+
     STDMETHODIMP_ (BOOL) IsCurrentlyReserching();
     STDMETHODIMP_ (sint32) GetCurrentScienceCost ();
     STDMETHODIMP_ (sint32) GetCurrentScienceLevel();

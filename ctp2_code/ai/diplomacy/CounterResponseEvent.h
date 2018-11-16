@@ -10,4 +10,3 @@ public:
 };
 
 #endif // __COUNTER_RESPONSE_EVENT_H__
-

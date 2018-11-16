@@ -11,7 +11,7 @@
 //
 // THIS FILE IS NOT GENERATED OR SUPPORTED BY ACTIVISION.
 //
-// This material has been developed at apolyton.net by the Apolyton CtP2 
+// This material has been developed at apolyton.net by the Apolyton CtP2
 // Source Code Project. Contact the authors at ctp2source@apolyton.net.
 //
 //----------------------------------------------------------------------------
@@ -27,13 +27,12 @@
 //
 // - Start the great library with the current research project of the player.
 // - Prevent production errors when pressing F3 after end of turn.
-// - Added close_AllScreensAndUpdateInfoScreen so that on a new turn the 
+// - Added close_AllScreensAndUpdateInfoScreen so that on a new turn the
 //   information window can stay open. (Aug. 7th 2005 Martin Gühmann)
 //
 //----------------------------------------------------------------------------
 
 #include "c3.h"
-
 
 #include "aui.h"
 #include "aui_uniqueid.h"
@@ -90,7 +89,6 @@
 
 #include "sciencevictorydialog.h"
 
-
 extern C3UI                 *g_c3ui;
 extern WorkWindow           *g_workWindow;
 
@@ -109,7 +107,6 @@ extern ProfileDB            *g_theProfileDB;
 
 extern Network              g_network;
 extern BattleViewWindow     *g_battleViewWindow;
-
 
 double	g_screenTime = 0.0;
 
@@ -338,7 +335,6 @@ sint32 close_InfoScreen( void )
 	return 0;
 }
 
-
 //----------------------------------------------------------------------------
 //
 // Name       : open_GreatLibrary
@@ -392,7 +388,7 @@ sint32 open_GreatLibrary(sint32 index, BOOL sci)
 //
 // Returns    : sint32              : opening succeeded
 //
-// Remark(s)  : When the library is not open already, it will open with the 
+// Remark(s)  : When the library is not open already, it will open with the
 //              advance that is being researched by the current player.
 //
 //----------------------------------------------------------------------------
@@ -404,7 +400,6 @@ sint32 open_GreatLibrary( void )
 	return open_GreatLibrary(advance);
 }
 
-
 sint32 close_GreatLibrary( void )
 {
 	if ( g_greatLibrary ) {
@@ -414,7 +409,6 @@ sint32 close_GreatLibrary( void )
 	return 0;
 }
 
-
 sint32 open_OptionsScreen( sint32 fromWhichScreen )
 {
 #ifdef _DEBUG
@@ -422,7 +416,7 @@ sint32 open_OptionsScreen( sint32 fromWhichScreen )
 #endif // _DEBUG
 
 	sint32 err = optionsscreen_displayMyWindow( fromWhichScreen );
-	
+
 	return err;
 
 #ifdef _DEBUG
@@ -434,7 +428,6 @@ sint32 close_OptionsScreen( void )
 {
 	return optionsscreen_removeMyWindow( AUI_BUTTON_ACTION_EXECUTE );
 }
-
 
 sint32 open_KeyMappingScreen( void )
 {
@@ -456,7 +449,6 @@ sint32 close_ScenarioEditor(void)
 	sint32 err = ScenarioEditor::Hide();
 	return err;
 }
-
 
 sint32 close_KeyMappingScreen( void )
 {
@@ -493,46 +485,45 @@ sint32 close_KeyMappingScreen( void )
 
 
 
-sint32 open_EndGame() 
+sint32 open_EndGame()
 {
 	if(g_e3Demo) return 0;
 
-	
-	
-	
+
+
+
 	sint32 curPlayer = g_selected_item->GetVisiblePlayer();
 
-	
-	
-	
-	
-	
-	
 
-	
-	
 
-	
-	
-	
 
-	
+
+
+
+
+
+
+
+
+
+
+
+
 	return(0);
 }
 
-
 sint32 close_EndGame( void )
 {
-	
-	
-	
-	
 
-	
-	
-	
 
-	
+
+
+
+
+
+
+
+
 	return(0);
 }
 
@@ -568,35 +559,27 @@ sint32 close_TutorialWin( void )
 }
 
 
-
-sint32 open_CreditsScreen() 
+sint32 open_CreditsScreen()
 {
 	if(g_e3Demo) return 0;
-	
-	
+
 	sint32 err = creditsscreen_Initialize();
 
-	
 	Assert(!err);
 	if(err) return(-1);
 
-	
 	AUI_ERRCODE auiErr = g_c3ui->AddWindow(g_creditsWindow);
 
-	
 	Assert(auiErr == AUI_ERRCODE_OK);
 	if(auiErr != AUI_ERRCODE_OK) return(-1);
 
-	
 	return(0);
 }
-
 
 void close_CreditsScreen(void)
 {
 	creditsscreen_Cleanup();
 }
-
 
 void battleview_ExitButtonActionCallback( aui_Control *control, uint32 action, uint32 data, void *cookie );
 
@@ -641,17 +624,16 @@ sint32 close_AllScreens( void )
 	g_modalWindow = 0;
 
 	if (g_battleViewWindow) {
-		
+
 		g_modalWindow = 1;
 
 		battleview_ExitButtonActionCallback(NULL, AUI_BUTTON_ACTION_EXECUTE, 0, NULL);
 
-		
-		
+
 	}
 
-	
-	
+
+
 
 	return 1;
 }
@@ -697,17 +679,16 @@ sint32 close_AllScreensAndUpdateInfoScreen( void )
 	g_modalWindow = 0;
 
 	if (g_battleViewWindow) {
-		
+
 		g_modalWindow = 1;
 
 		battleview_ExitButtonActionCallback(NULL, AUI_BUTTON_ACTION_EXECUTE, 0, NULL);
 
-		
-		
+
 	}
 
-	
-	
+
+
 
 	return 1;
 }

@@ -11,7 +11,7 @@
 //
 // THIS FILE IS NOT GENERATED OR SUPPORTED BY ACTIVISION.
 //
-// This material has been developed at apolyton.net by the Apolyton CtP2 
+// This material has been developed at apolyton.net by the Apolyton CtP2
 // Source Code Project. Contact the authors at ctp2source@apolyton.net.
 //
 //----------------------------------------------------------------------------
@@ -37,7 +37,6 @@
 #include "aui_tab.h"
 
 
-
 aui_Tab::aui_Tab(
 	AUI_ERRCODE *retval,
 	uint32 id,
@@ -56,7 +55,6 @@ aui_Tab::aui_Tab(
 	Assert( AUI_SUCCESS(*retval) );
 	if ( !AUI_SUCCESS(*retval) ) return;
 }
-
 
 
 aui_Tab::aui_Tab(
@@ -85,15 +83,13 @@ aui_Tab::aui_Tab(
 	if ( !AUI_SUCCESS(*retval) ) return;
 }
 
-	
 
 AUI_ERRCODE aui_Tab::InitCommon( MBCHAR *ldlBlock )
 {
-	
+
 	static MBCHAR block[ k_AUI_LDL_MAXBLOCK + 1 ];
 	sprintf( block, "%s.%s", ldlBlock, "pane" );
 
-	
 	AUI_ERRCODE errcode = AUI_ERRCODE_OK;
 	m_pane = new aui_Static( &errcode, aui_UniqueId(), block );
 	Assert( AUI_NEWOK(m_pane,errcode) );
@@ -101,25 +97,21 @@ AUI_ERRCODE aui_Tab::InitCommon( MBCHAR *ldlBlock )
 
 	m_pane->SetBlindness( TRUE );
 
-	
 	m_pane->Move( 0, m_height );
 
-	
 	AddChild( m_pane );
 
 	return AUI_ERRCODE_OK; // Why not errcode?
 }
 
 
-
 AUI_ERRCODE aui_Tab::InitCommon( sint32 paneWidth, sint32 paneHeight )
 {
-	
+
 	Assert( paneWidth >= m_width );
 	if ( paneWidth < m_width ) paneWidth = m_width;
 
-	
-	
+
 	AUI_ERRCODE errcode = AUI_ERRCODE_OK;
 	m_pane = new aui_Static(
 		&errcode,
@@ -133,12 +125,10 @@ AUI_ERRCODE aui_Tab::InitCommon( sint32 paneWidth, sint32 paneHeight )
 
 	m_pane->SetBlindness( TRUE );
 
-	
 	AddChild( m_pane );
 
 	return AUI_ERRCODE_OK;
 }
-
 
 
 aui_Tab::~aui_Tab()
@@ -151,16 +141,13 @@ aui_Tab::~aui_Tab()
 }
 
 
-
 sint32 aui_Tab::SetState( sint32 state )
 {
 	sint32 prevState = m_state;
 
-	
 	if ((m_state = state))
 	{
-		
-		
+
 		if ( m_numStates == 2 ) m_state = 1;
 
 		m_attributes |= k_CONTROL_ATTRIBUTE_ON;
@@ -172,7 +159,6 @@ sint32 aui_Tab::SetState( sint32 state )
 		if ( !m_pane->IsHidden() ) m_pane->Hide();
 	}
 
-	
 	m_state = Mod(m_state,m_numStates);
 
 	if ( m_ActionFunc )
@@ -187,7 +173,6 @@ sint32 aui_Tab::SetState( sint32 state )
 			m_state ? AUI_SWITCH_ACTION_ON : AUI_SWITCH_ACTION_OFF,
 			(uint32)m_state );
 
-	
 	if ( prevState != m_state )
 		m_draw |= m_drawMask & k_AUI_REGION_DRAWFLAG_UPDATE;
 
@@ -195,24 +180,20 @@ sint32 aui_Tab::SetState( sint32 state )
 }
 
 
-
 AUI_ERRCODE aui_Tab::AddPaneControl( aui_Control *control )
 {
 	m_pane->AddChild( control );
 
-	
 	m_draw |= m_drawMask & k_AUI_REGION_DRAWFLAG_UPDATE;
 
 	return AUI_ERRCODE_OK;
 }
 
 
-
 AUI_ERRCODE aui_Tab::RemovePaneControl( uint32 controlId )
 {
 	AUI_ERRCODE errcode = m_pane->RemoveChild( controlId );
 
-	
 	if ( errcode == AUI_ERRCODE_OK )
 		m_draw |= m_drawMask & k_AUI_REGION_DRAWFLAG_UPDATE;
 
@@ -220,12 +201,10 @@ AUI_ERRCODE aui_Tab::RemovePaneControl( uint32 controlId )
 }
 
 
-
 AUI_ERRCODE aui_Tab::Show( void )
 {
 	aui_Switch::Show();
 
-	
 
 	if ( !m_state ) m_pane->Hide();
 
@@ -246,12 +225,10 @@ void aui_Tab::MouseLDragOver( aui_MouseEvent *mouseData )
 	{
 		SetWhichSeesMouse( this );
 
-		
 		if ( GetMouseOwnership() == NULL )
 		{
 			PlaySound( AUI_SOUNDBASE_SOUND_ACTIVATE );
 
-			
 			if ( m_mouseCode == AUI_ERRCODE_UNHANDLED )
 				m_mouseCode = AUI_ERRCODE_HANDLED;
 
@@ -269,16 +246,14 @@ void aui_Tab::MouseLDragOver( aui_MouseEvent *mouseData )
 }
 
 
-
 void aui_Tab::MouseLDragAway( aui_MouseEvent *mouseData )
 {
 	if ( IsDisabled() ) return;
-	
+
 	if ( GetMouseOwnership() == NULL )
 	{
 		PlaySound( AUI_SOUNDBASE_SOUND_DEACTIVATE );
 
-		
 		if ( m_mouseCode == AUI_ERRCODE_UNHANDLED )
 			m_mouseCode = AUI_ERRCODE_HANDLED;
 
@@ -293,7 +268,6 @@ void aui_Tab::MouseLDragAway( aui_MouseEvent *mouseData )
 }
 
 
-
 void aui_Tab::MouseLGrabInside( aui_MouseEvent *mouseData )
 {
 	if ( IsDisabled() ) return;
@@ -303,17 +277,14 @@ void aui_Tab::MouseLGrabInside( aui_MouseEvent *mouseData )
 
 		PlaySound( AUI_SOUNDBASE_SOUND_EXECUTE );
 
-		
 		HideTipWindow();
 
-		
 		SetMouseOwnership();
 		ReleaseMouseOwnership();
 		SetKeyboardFocus();
 
 		m_mouseCode = AUI_ERRCODE_HANDLEDEXCLUSIVE;
 
-		
 		if ( !HandleGameSpecificLeftClick( this ) )
 		if ( 0 < m_state && m_state < m_numStates - 1 )
 			SetState( Mod(m_state+1,m_numStates) );
@@ -322,13 +293,11 @@ void aui_Tab::MouseLGrabInside( aui_MouseEvent *mouseData )
 
 		m_attributes |= k_CONTROL_ATTRIBUTE_ACTIVE;
 
-		
 		m_draw |= m_drawMask & k_AUI_REGION_DRAWFLAG_MOUSELGRABINSIDE;
 	}
 	else
 		MouseLGrabOutside( mouseData );
 }
-
 
 void aui_Tab::MouseRGrabInside( aui_MouseEvent *mouseData )
 {
@@ -345,7 +314,6 @@ void aui_Tab::MouseRGrabInside( aui_MouseEvent *mouseData )
 }
 
 
-
 void aui_Tab::MouseLDropInside( aui_MouseEvent *mouseData )
 {
 	if ( IsDisabled() ) return;
@@ -353,16 +321,13 @@ void aui_Tab::MouseLDropInside( aui_MouseEvent *mouseData )
 	{
 		SetWhichSeesMouse( this );
 
-		
 		if ( GetMouseOwnership() != NULL )
 		{
 			PlaySound( AUI_SOUNDBASE_SOUND_ACTIVATE );
 
-			
 			if ( m_mouseCode == AUI_ERRCODE_UNHANDLED )
 				m_mouseCode = AUI_ERRCODE_HANDLED;
 
-			
 			m_attributes |= k_CONTROL_ATTRIBUTE_ACTIVE;
 			m_draw |= m_drawMask & k_AUI_REGION_DRAWFLAG_MOUSELDROPINSIDE;
 

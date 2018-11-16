@@ -11,7 +11,7 @@
 //
 // THIS FILE IS NOT GENERATED OR SUPPORTED BY ACTIVISION.
 //
-// This material has been developed at apolyton.net by the Apolyton CtP2 
+// This material has been developed at apolyton.net by the Apolyton CtP2
 // Source Code Project. Contact the authors at ctp2source@apolyton.net.
 //
 //----------------------------------------------------------------------------
@@ -40,28 +40,25 @@
 class ProgressWindow : public c3_PopupWindow
 {
 public:
-	
-	
+
 	static void BeginProgress(
 		ProgressWindow *&progwin,
 		MBCHAR *ldlBlock,
 		sint32 maxval,
 		sint32 x = -1, sint32 y = -1);
 
-	
-	
-	
+
+
+
 	void StartCountingTo( sint32 val, MBCHAR const * message = NULL );
 
-	
 	COLORREF SetBarColor(COLORREF color);
 
-	
-	
+
 	static void EndProgress( ProgressWindow *&progwin );
 
 private:
-	
+
 	ProgressWindow(
 		AUI_ERRCODE *retval,
 		MBCHAR *ldlBlock,
@@ -76,7 +73,6 @@ private:
 	tech_WLList<sint32> m_baseList;
 	tech_WLList<double> m_factorList;
 };
-
 
 
 class StandardProgressBar : public aui_ProgressBar
@@ -98,4 +94,3 @@ protected:
 };
 
 #endif
-

@@ -10,20 +10,20 @@
 //
 // THIS FILE IS NOT GENERATED OR SUPPORTED BY ACTIVISION.
 //
-// This material has been developed at apolyton.net by the Apolyton CtP2 
+// This material has been developed at apolyton.net by the Apolyton CtP2
 // Source Code Project. Contact the authors at ctp2source@apolyton.net.
 //
 //----------------------------------------------------------------------------
 //
 // Compiler flags
-// 
-// _MSC_VER		
+//
+// _MSC_VER
 // - Compiler version (for the Microsoft C++ compiler only)
 //
 // Note: For the blocks with _MSC_VER preprocessor directives, the following
 //       is implied: the (_MSC_VER) preprocessor directive lines, and the blocks
-//       that are inactive for _MSC_VER value 1200 are modified Apolyton code. 
-//       The blocks that are active for _MSC_VER value 
+//       that are inactive for _MSC_VER value 1200 are modified Apolyton code.
+//       The blocks that are active for _MSC_VER value
 //       1200 are the original Activision code.
 //
 //----------------------------------------------------------------------------
@@ -61,8 +61,8 @@ size_t const	MAX_UNIT_COUNT	= 100;	// TODO: check k_MAX_ARMY_SIZE
 #include "AICause.h"
 
 class Army : public ID
-{ 
-public: 
+{
+public:
 	const ArmyData *GetData() const;
 	ArmyData *AccessData() const;
 
@@ -93,10 +93,9 @@ public:
 	sint32 DelIndex(sint32 i);
 	const Unit &Get(sint32 i) const;
 	BOOL IsPresent(Unit &u);
-	
 
 
-	BOOL Insert(const Unit &id); 
+	BOOL Insert(const Unit &id);
 
 	PLAYER_INDEX GetOwner() const;
 	void SetOwner(PLAYER_INDEX p);
@@ -105,7 +104,7 @@ public:
 	void SortByAttack();
 	void SortByDefense();
 
-    uint32 GetMovementType() const; 
+    uint32 GetMovementType() const;
 	BOOL   CanEnter(const MapPoint &point) const;
 
 	BOOL IsAtLeastOneMoveLand() const;
@@ -113,7 +112,7 @@ public:
     BOOL IsAtLeastOneMoveShallowWater() const;
 	BOOL IsAtLeastOneMoveAir() const;
 	BOOL IsAtLeastOneMoveMountain() const;
-    BOOL GetMovementTypeAir() const; 
+    BOOL GetMovementTypeAir() const;
 	BOOL IsMovePointsEnough(double cost);
 
     BOOL IsIgnoresZOC() const;
@@ -126,8 +125,7 @@ public:
 	sint32 IsEnemy(Unit defender) const;
 	sint32 IsEnemy(Army &defender) const;
 
-
-    double GetHPModifier(); 
+    double GetHPModifier();
 
 	BOOL IsAsleep() const;
 	BOOL IsEntrenched() const;
@@ -152,7 +150,6 @@ public:
 	) const;
     void ForceVisibleThisTurn(const PLAYER_INDEX to_me);
 
-
     BOOL IsArmyPosFilled(const MapPoint &pos) const;
     void ResolveArmyPosConflicts();
 
@@ -174,12 +171,12 @@ public:
 	BOOL CanPlantNuke(double &chance, double &escape_chance,
 					  sint32 &uindex);
 	BOOL CanPlantNuke(double &chance, double &escape_chance);
-	BOOL CanSlaveRaid(double &success, double &death, 
+	BOOL CanSlaveRaid(double &success, double &death,
 					  sint32 &timer, sint32 &amount,
 					  sint32 &uindex);
-	BOOL CanSlaveRaid(double &success, double &death, 
+	BOOL CanSlaveRaid(double &success, double &death,
 					  sint32 &timer, sint32 &amount);
-    BOOL IsSlaveRaidPossible(const MapPoint &point, 
+    BOOL IsSlaveRaidPossible(const MapPoint &point,
 							 double &success, double &death, sint32 &timer, sint32 &amount,
 							 sint32 &uindex, BOOL &target_is_city, Unit &target_city, Unit &home_city);
 
@@ -188,7 +185,7 @@ public:
 							   sint32 &uindex);
 	BOOL CanUndergroundRailway(double &success, double &death);
 	BOOL CanInciteUprising(sint32 &uindex);
-	
+
 	BOOL CanEstablishEmbassy(sint32 &uindex);
 	BOOL CanEstablishEmbassy();
 
@@ -201,10 +198,9 @@ public:
 	BOOL CanConvertCity(double &chance, double &deathChance);
 	BOOL CanConvertCity(const MapPoint &point);
 
-	
 	BOOL CanThrowParty(sint32 &uindex);
 	BOOL CanThrowParty();
-	
+
 	BOOL CanReformCity(sint32 &uindex, const MapPoint &point);
 	BOOL CanReformCity();
 
@@ -241,10 +237,9 @@ public:
 						BOOL &isSourceCity, BOOL &isDestCity);
 
 	BOOL HasLeftMap() const;
-	
-    void CurMinMovementPoints(double &cur) const; 
-    void MinMovementPoints(double &cur) const; 
-	
+
+    void CurMinMovementPoints(double &cur) const;
+    void MinMovementPoints(double &cur) const;
 
 	BOOL CanBombard(const MapPoint &point);
 	BOOL CanBombard();
@@ -257,7 +252,7 @@ public:
 
 	void ResetPos();
 
-	
+
 
 
 	sint32 NumOrders() const;
@@ -290,10 +285,9 @@ public:
     void CalcRemainingFuel(sint32 &num_tiles_to_half, sint32 &num_tiles_to_empty) const ;
 
 	BOOL CanMove() const;
-	
+
 	BOOL CanAdvertise() const;
 
-	
 	BOOL CanBeachAssault();
 	BOOL CanHearGossip();
 	BOOL CanSlaveUprising();
@@ -325,6 +319,6 @@ public:
 
 	static BOOL GetInciteRevolutionCost( const MapPoint &point, sint32 &attackCost );
 	static BOOL GetInciteUprisingCost( const MapPoint &point, sint32 &attackCost );
-}; 
+};
 
 #endif

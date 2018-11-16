@@ -11,7 +11,7 @@
 //
 // THIS FILE IS NOT GENERATED OR SUPPORTED BY ACTIVISION.
 //
-// This material has been developed at apolyton.net by the Apolyton CtP2 
+// This material has been developed at apolyton.net by the Apolyton CtP2
 // Source Code Project. Contact the authors at ctp2source@apolyton.net.
 //
 //----------------------------------------------------------------------------
@@ -43,7 +43,7 @@
 //   - GetUnitFromCargo: Gets the i'th unit a unit is carrying.
 //   - GetContinent:     Gets the continent ID of an location.
 //   - IsWater:          Gets whether a location is water.
-// - ArmyIsValid    : Added reading of the argument - to make a valid result 
+// - ArmyIsValid    : Added reading of the argument - to make a valid result
 //                    possible.
 // - GrantAdvance   : Added input checks and an (optional) reason argument.
 // - Ambiguous sqrt resolved.
@@ -154,7 +154,6 @@
 #include "TerrainImprovementRecord.h"
 #include "terrainutil.h"
 
-
 #include "Diplomat.h"
 
 #include "scenarioeditor.h"
@@ -186,7 +185,7 @@ SlicArgList::SlicArgList()
 void SlicArgList::AddArg(SA_TYPE type, sint32 value)
 {
 	Assert(m_numArgs < k_MAX_SLIC_ARGS);
-	
+
 	m_argType[m_numArgs] = type;
 	m_argValue[m_numArgs].m_int = value;
 	m_numArgs++;
@@ -223,7 +222,7 @@ void SlicArgList::AddArg(SA_TYPE type, SlicSymbolData *symbol)
 //              value   : the read value
 //
 // Remark(s)  : - value is only valid when TRUE is returned
-//              - <Type> can one of: Int, Unit, Army, City, Player, 
+//              - <Type> can one of: Int, Unit, Army, City, Player,
 //                                   Pos, String, StringId
 //
 //----------------------------------------------------------------------------
@@ -241,7 +240,7 @@ BOOL SlicArgList::GetInt(sint32 arg, sint32 &value)
 	{
 		return m_argValue[arg].m_symbol &&
 		       m_argValue[arg].m_symbol->GetIntValue(value);
-	} 
+	}
 	return FALSE;
 }
 
@@ -249,7 +248,7 @@ BOOL SlicArgList::GetUnit(sint32 arg, Unit &u)
 {
 	Assert(arg < m_numArgs);
 	if ((m_argType[arg] == SA_TYPE_INT_VAR) ||
-	    (m_argType[arg] == SA_TYPE_BUILTIN) 
+	    (m_argType[arg] == SA_TYPE_BUILTIN)
 	   )
 	{
 		return m_argValue[arg].m_symbol &&
@@ -275,7 +274,7 @@ BOOL SlicArgList::GetCity(sint32 arg, Unit &city)
 {
 	Assert(arg < m_numArgs);
 	if ((m_argType[arg] == SA_TYPE_INT_VAR) ||
-	    (m_argType[arg] == SA_TYPE_BUILTIN) 
+	    (m_argType[arg] == SA_TYPE_BUILTIN)
 	   )
 	{
 		return m_argValue[arg].m_symbol &&
@@ -371,7 +370,7 @@ GameEventArgList *SlicArgList::CreateGameEventArgs(GAME_EVENT ev)
 				}
 				break;
 			case GEAC_POP:
-				
+
 				Assert(FALSE);
 				break;
 			case GEAC_GOLD:
@@ -381,7 +380,7 @@ GameEventArgList *SlicArgList::CreateGameEventArgs(GAME_EVENT ev)
 				}
 				break;
 			case GEAC_PATH:
-				
+
 				Assert(FALSE);
 				break;
 			case GEAC_MAPPOINT:
@@ -421,7 +420,7 @@ GameEventArgList *SlicArgList::CreateGameEventArgs(GAME_EVENT ev)
 				}
 				break;
 			case GEAC_IMPROVEMENT:
-				
+
 				Assert(FALSE);
 				break;
 			default:
@@ -461,12 +460,12 @@ SlicFunc::~SlicFunc()
 //
 // Globals    : various
 //
-// Returns    : SFN_ERROR		: indication whether the execution of the 
+// Returns    : SFN_ERROR		: indication whether the execution of the
 //                                command has started.
 //
-// Remark(s)  : SFN_ERROR_OK is returned when the execution of the command 
-//              has started. 
-//              Other return values indicate errors in the number or type of 
+// Remark(s)  : SFN_ERROR_OK is returned when the execution of the command
+//              has started.
+//              Other return values indicate errors in the number or type of
 //              the arguments.
 //
 //----------------------------------------------------------------------------
@@ -485,14 +484,13 @@ SFN_ERROR Slic_PrintText::Call(SlicArgList *args)
 
 	sint32 ival;
 	if(args->m_argType[0] == SA_TYPE_STRING) {
-		DPRINTF(k_DBG_SLIC, ("Slic_PrintText: %s\n", 
+		DPRINTF(k_DBG_SLIC, ("Slic_PrintText: %s\n",
 							 g_theStringDB->GetNameStr(args->m_argValue[0].m_int)));
 	} else if(args->GetInt(0, ival)) {
 		DPRINTF(k_DBG_SLIC, ("Slic_PrintText: %s\n",
 							 g_theStringDB->GetNameStr(ival)));
 	} else
 		return SFN_ERROR_TYPE_ARGS;
-
 
 	return SFN_ERROR_OK;
 }
@@ -521,7 +519,7 @@ SFN_ERROR Slic_AddMessage::Call(SlicArgList *args)
 
 	if(args->m_numArgs != 2)
 		return SFN_ERROR_NUM_ARGS;
-	
+
 	if(!args->GetPlayer(0, recip))
 		return SFN_ERROR_TYPE_ARGS;
 
@@ -538,11 +536,11 @@ SFN_ERROR Slic_AddMessage::Call(SlicArgList *args)
 		return SFN_ERROR_NOT_SEGMENT;
 	}
 
-	DPRINTF(k_DBG_SLIC, ("Slic_Message: ->%d: %s\n", 
+	DPRINTF(k_DBG_SLIC, ("Slic_Message: ->%d: %s\n",
 						 recip,
 						 args->m_argValue[1].m_segment->GetName()));
 
-	SlicObject *obj = new SlicObject(args->m_argValue[1].m_segment, 
+	SlicObject *obj = new SlicObject(args->m_argValue[1].m_segment,
 									 g_slicEngine->GetContext());
 	obj->AddRecipient(recip);
 	obj->CopyFromBuiltins();
@@ -561,7 +559,7 @@ SFN_ERROR Slic_Message::Call(SlicArgList *args)
 
 	if(args->m_numArgs != 2)
 		return SFN_ERROR_NUM_ARGS;
-	
+
 	if(!args->GetPlayer(0, recip))
 		return SFN_ERROR_TYPE_ARGS;
 
@@ -578,11 +576,11 @@ SFN_ERROR Slic_Message::Call(SlicArgList *args)
 		return SFN_ERROR_NOT_SEGMENT;
 	}
 
-	DPRINTF(k_DBG_SLIC, ("Slic_Message: ->%d: %s\n", 
+	DPRINTF(k_DBG_SLIC, ("Slic_Message: ->%d: %s\n",
 						 recip,
 						 args->m_argValue[1].m_segment->GetName()));
 
-	SlicObject *obj = new SlicObject(args->m_argValue[1].m_segment, 
+	SlicObject *obj = new SlicObject(args->m_argValue[1].m_segment,
 									 g_slicEngine->GetContext());
 	obj->AddRecipient(recip);
 	obj->CopyFromBuiltins();
@@ -605,7 +603,7 @@ SFN_ERROR Slic_MessageAll::Call(SlicArgList *args)
 
 	DPRINTF(k_DBG_SLIC, ("Slic_MessageAll: %s\n",
 						 args->m_argValue[0].m_segment->GetName()));
-	SlicObject *obj = new SlicObject(args->m_argValue[0].m_segment, 
+	SlicObject *obj = new SlicObject(args->m_argValue[0].m_segment,
 									 g_slicEngine->GetContext());
 	obj->AddAllRecipients();
 	g_slicEngine->Execute(obj);
@@ -618,18 +616,18 @@ SFN_ERROR Slic_MessageAllBut::Call(SlicArgList *args)
 
 	if(args->m_numArgs != 2)
 		return SFN_ERROR_NUM_ARGS;
-	
+
 	if(!args->GetPlayer(0, antiRecip))
 		return SFN_ERROR_TYPE_ARGS;
 
 	if(args->m_argType[1] != SA_TYPE_SEGMENT)
 		return SFN_ERROR_TYPE_ARGS;
 
-	DPRINTF(k_DBG_SLIC, ("Slic_Message: ->!%d: %s\n", 
+	DPRINTF(k_DBG_SLIC, ("Slic_Message: ->!%d: %s\n",
 						 antiRecip,
 						 args->m_argValue[1].m_segment->GetName()));
 
-	SlicObject *obj = new SlicObject(args->m_argValue[1].m_segment, 
+	SlicObject *obj = new SlicObject(args->m_argValue[1].m_segment,
 									 g_slicEngine->GetContext());
 	obj->AddAllRecipientsBut(antiRecip);
 	g_slicEngine->Execute(obj);
@@ -642,17 +640,17 @@ SFN_ERROR Slic_EyePoint::Call(SlicArgList *args)
 	BOOL res;
 	Unit unit;
 
-	
-	
+
+
 
 	if(args->m_numArgs != 1 && args->m_numArgs != 3)
 		return SFN_ERROR_NUM_ARGS;
 
 	res = args->GetPos(0, point);
-	// Attempt to find a city or army always, so unit will have been filled 
+	// Attempt to find a city or army always, so unit will have been filled
 	// when constructing the SlicEyePoint later.
 	if (args->GetCity(0, unit) || args->GetUnit(0, unit))
-	{ 
+	{
 		if ((!res) && unit.IsValid())
 		{
 			point	= unit.RetPos();
@@ -664,7 +662,6 @@ SFN_ERROR Slic_EyePoint::Call(SlicArgList *args)
 	{
 		return SFN_ERROR_TYPE_BUILTIN;
 	}
-	
 
 	MBCHAR text[k_MAX_MSG_LEN];
 	res = args->m_argValue[0].m_symbol->GetText(text, k_MAX_MSG_LEN);
@@ -693,14 +690,14 @@ SFN_ERROR Slic_EyePoint::Call(SlicArgList *args)
 			return SFN_ERROR_NOT_SEGMENT;
 		}
 
-		ep = new SlicEyePoint(point, text, 0, EYE_POINT_TYPE_GENERIC, unit, 
+		ep = new SlicEyePoint(point, text, 0, EYE_POINT_TYPE_GENERIC, unit,
 							  player, args->m_argValue[2].m_segment);
 	} else {
-		ep = new SlicEyePoint(point, text, 0, EYE_POINT_TYPE_GENERIC, unit, 
+		ep = new SlicEyePoint(point, text, 0, EYE_POINT_TYPE_GENERIC, unit,
 							  0, NULL);
 	}
 	g_slicEngine->GetContext()->AddEyePoint(ep);
-		
+
 	return SFN_ERROR_OK;
 }
 
@@ -711,7 +708,7 @@ SFN_ERROR Slic_DisableTrigger::Call(SlicArgList *args)
 
 	if(args->m_argType[0] != SA_TYPE_SEGMENT)
 		return SFN_ERROR_TYPE_ARGS;
-	
+
 	if(!args->m_argValue[0].m_segment)
 		return SFN_ERROR_TYPE_ARGS;
 
@@ -758,7 +755,7 @@ SFN_ERROR Slic_HasAdvance::Call(SlicArgList *args)
 {
 	if(args->m_numArgs != 2)
 		return SFN_ERROR_NUM_ARGS;
-	
+
 	sint32 player;
 
 	if(!args->GetPlayer(0, player))
@@ -805,7 +802,7 @@ SFN_ERROR Slic_IsContinentBiggerThan::Call(SlicArgList *args)
 		return SFN_ERROR_TYPE_ARGS;
 
 	res = args->GetPos(0, point);
-	if(!res) 
+	if(!res)
 		return SFN_ERROR_TYPE_BUILTIN;
 
 	m_result.m_int = g_theWorld->IsContinentBiggerThan(size, point);
@@ -824,8 +821,7 @@ SFN_ERROR Slic_IsHostile::Call(SlicArgList *args)
 
 	if(!args->GetPlayer(1, p2))
 		return SFN_ERROR_TYPE_ARGS;
-		
-	
+
 	m_result.m_int = ((g_player[p1]->m_mask_hostile & (1 << p2)) != 0);
 
 	return SFN_ERROR_OK;
@@ -857,7 +853,7 @@ SFN_ERROR Slic_TradePointsInUse::Call(SlicArgList *args)
 		return SFN_ERROR_TYPE_ARGS;
 	}
 
-	m_result.m_int = g_player[p]->m_usedTradeTransportPoints; 
+	m_result.m_int = g_player[p]->m_usedTradeTransportPoints;
 	return SFN_ERROR_OK;
 }
 
@@ -870,7 +866,7 @@ SFN_ERROR Slic_TradeRoutes::Call(SlicArgList *args)
 	if(!args->GetPlayer(0, p)) {
 		return SFN_ERROR_TYPE_ARGS;
 	}
-	
+
 	m_result.m_int = g_player[p]->GetNumTradeRoutes();
 	return SFN_ERROR_OK;
 }
@@ -896,7 +892,7 @@ SFN_ERROR Slic_AddCity::Call(SlicArgList *args)
 	if(!args->GetCity(0, city)) {
 		return SFN_ERROR_TYPE_BUILTIN;
 	}
-	
+
 	g_slicEngine->GetContext()->AddCity(city);
 	return SFN_ERROR_OK;
 }
@@ -1005,7 +1001,7 @@ SFN_ERROR Slic_IsWonderType::Call(SlicArgList *args)
 	}
 	if(args->m_argType[1] != SA_TYPE_STRING)
 		return SFN_ERROR_TYPE_ARGS;
-	
+
 	m_result.m_int = wonderutil_Get(wonder)->GetName() == args->m_argValue[1].m_int;
 	return SFN_ERROR_OK;
 }
@@ -1048,7 +1044,7 @@ SFN_ERROR Slic_IsSlaver::Call(SlicArgList *args)
 
 	if(args->m_numArgs != 1)
 		return SFN_ERROR_NUM_ARGS;
-	if(!args->GetUnit(0, unit)) {		
+	if(!args->GetUnit(0, unit)) {
 		return SFN_ERROR_TYPE_BUILTIN;
 	}
 
@@ -1078,7 +1074,7 @@ SFN_ERROR Slic_IsDiplomat::Call(SlicArgList *args)
 
 	if(args->m_numArgs != 1)
 		return SFN_ERROR_NUM_ARGS;
-	if(!args->GetUnit(0, unit)) {	   
+	if(!args->GetUnit(0, unit)) {
 		return SFN_ERROR_TYPE_BUILTIN;
 	}
 
@@ -1101,12 +1097,12 @@ SFN_ERROR Slic_IsInRegion::Call(SlicArgList *args)
 	res = args->GetPos(0, point);
 	if(!res)
 		return SFN_ERROR_TYPE_BUILTIN;
-	
+
 	if(args->m_argType[1] == SA_TYPE_REGION) {
 		res = args->m_argValue[1].m_symbol->GetRegion(region);
 		if(!res)
 			return SFN_ERROR_TYPE_ARGS;
-		
+
 		m_result.m_int = (point.x >= region.x1 && point.x <= region.x2 &&
 					point.y >= region.y1 && point.y <= region.y2);
 	} else if(args->m_argType[1] == SA_TYPE_COMPLEX_REGION) {
@@ -1202,12 +1198,12 @@ SFN_ERROR Slic_ChangeRegardLevel::Call(SlicArgList *args)
 		return SFN_ERROR_TYPE_ARGS;
 
 	if(g_player[pl1] && g_player[pl2]) {
-		
-		
 
-        
-        
-        Assert(0); 
+
+
+
+
+        Assert(0);
 		g_player[pl1]->GetRegard()->SetForPlayer(pl2, (REGARD_TYPE)(g_player[pl1]->GetRegard()->GetForPlayer(pl2) + level));
 	}
 	return SFN_ERROR_OK;
@@ -1261,18 +1257,18 @@ SFN_ERROR Slic_ControlsRegion::Call(SlicArgList *args)
 
 	if(args->m_numArgs != 2)
 		return SFN_ERROR_NUM_ARGS;
-	
+
 	if(!args->GetPlayer(0, player))
 		return SFN_ERROR_TYPE_ARGS;
 
 	BOOL done = FALSE;
 	sint32 ownedCells = 0;
-		
+
 	if(args->m_argType[1] == SA_TYPE_REGION) {
 		res = args->m_argValue[1].m_symbol->GetRegion(region);
 		if(!res)
 			return SFN_ERROR_TYPE_ARGS;
-		
+
 		m_result.m_int = TRUE;
 		for(sint32 x = region.x1; x <= region.x2 && !done; x++) {
 			for(sint32 y = region.y1; y <= region.y2 && !done; y++) {
@@ -1326,14 +1322,13 @@ SFN_ERROR Slic_DemandWarFromAllies::Call(SlicArgList *args)
 		return SFN_ERROR_TYPE_ARGS;
 	}
 
-
 	for(sint32 i = 0; i < k_MAX_PLAYERS; i++) {
-		if(g_player[i] && i != demandingPlayer && i != againstPlayer && 
+		if(g_player[i] && i != demandingPlayer && i != againstPlayer &&
 		   g_player[demandingPlayer]->IsFriendly(i)) {
 			g_player[demandingPlayer]->RequestDemandAttackEnemy(i, againstPlayer);
 		}
 	}
-			
+
 	return SFN_ERROR_OK;
 }
 
@@ -1438,15 +1433,14 @@ SFN_ERROR Slic_Accept::Call(SlicArgList *args)
 	if(message == Message(0))
 		return SFN_ERROR_NOT_IN_BUTTON;
 
-	
 	message.Accept() ;
 	if(g_theMessagePool->IsValid(message)) {
-		
+
 		message.AccessData()->KillMessageWindow();
 	}
 
 	return SFN_ERROR_OK;
-}	
+}
 
 SFN_ERROR Slic_Reject::Call(SlicArgList *args)
 {
@@ -1459,22 +1453,20 @@ SFN_ERROR Slic_Reject::Call(SlicArgList *args)
 	if(message == Message(0))
 		return SFN_ERROR_NOT_IN_BUTTON;
 
-	
 	message.Reject() ;
 	if(g_theMessagePool->IsValid(message)) {
-		
+
 		message.AccessData()->KillMessageWindow();
 	}
-	
 
 	return SFN_ERROR_OK;
-}	
+}
 
 SFN_ERROR Slic_EyeDropdown::Call(SlicArgList *args)
 {
 	if(args->m_numArgs != 2)
 		return SFN_ERROR_NUM_ARGS;
-	
+
 	sint32 startAt;
 
 	if(!args->GetInt(0, startAt))
@@ -1484,7 +1476,6 @@ SFN_ERROR Slic_EyeDropdown::Call(SlicArgList *args)
 		return SFN_ERROR_TYPE_ARGS;
 	}
 
-	
 	startAt--;
 
 	SlicSymbolData *sym = args->m_argValue[1].m_symbol;
@@ -1579,7 +1570,6 @@ SFN_ERROR Slic_LeaveRegion::Call(SlicArgList *args)
 	return SFN_ERROR_OK;
 }
 
-		
 SFN_ERROR Slic_Surrender::Call(SlicArgList *args)
 {
 	sint32 player;
@@ -1681,16 +1671,16 @@ SFN_ERROR Slic_BreakAgreement::Call(SlicArgList *args)
 	if(!args->GetInt(0, index))
 		return SFN_ERROR_TYPE_ARGS;
 
-	
-	
-	
-	
-	
-	
-	
-	
-	
-	
+
+
+
+
+
+
+
+
+
+
 	return SFN_ERROR_OK;
 }
 
@@ -1698,16 +1688,15 @@ SFN_ERROR Slic_AcceptTradeOffer::Call(SlicArgList *args)
 {
 	if(args->m_numArgs != 1)
 		return SFN_ERROR_NUM_ARGS;
-	
+
 	sint32 index;
 	if(!args->GetInt(0, index))
 		return SFN_ERROR_TYPE_ARGS;
-	
+
 	SlicObject *context = g_slicEngine->GetContext();
 	TradeOffer offer = context->GetTradeOffer(index - 1);
 	if(g_theTradeOfferPool->IsValid(offer)) {
-		
-		
+
 		if(offer.Accept(context->GetPlayer(0),
 						context->GetCity(2),
 						context->GetCity(3))) {
@@ -1730,14 +1719,14 @@ SFN_ERROR Slic_DontAcceptTradeOffer::Call(SlicArgList *args)
 
 	SlicObject *context = g_slicEngine->GetContext();
 	sint32 player = context->GetPlayer(0);
-	
-	
 
-	
+
+
+
 	if(g_network.IsHost()) {
 		g_network.QueuePacket(g_network.IndexToId(player),
 							  new NetInfo(NET_INFO_CODE_OFFER_REJECTED_MESSAGE,
-										  player, 
+										  player,
 										  context->GetRecipient(0)));
 	} else if(g_network.IsClient()) {
 		g_network.SendAction(new NetAction(NET_ACTION_OFFER_REJECTED_MESSAGE,
@@ -1864,26 +1853,24 @@ SFN_ERROR Slic_StealSpecificAdvance::Call(SlicArgList *args)
 
 SFN_ERROR Slic_DisableTileImprovementButton::Call(SlicArgList *args)
 {
-	
+
 	return SFN_ERROR_OK;
 }
 
 SFN_ERROR Slic_DisableScreensButton::Call(SlicArgList *args)
 {
 
-
 	return SFN_ERROR_OK;
 }
 
 SFN_ERROR Slic_EnableTileImprovementButton::Call(SlicArgList *args)
 {
-	
+
 	return SFN_ERROR_OK;
 }
 
 SFN_ERROR Slic_EnableScreensButton::Call(SlicArgList *args)
 {
-
 
 	return SFN_ERROR_OK;
 }
@@ -1947,13 +1934,11 @@ SFN_ERROR Slic_OpenOptions::Call(SlicArgList *args)
 SFN_ERROR Slic_OpenCivTab::Call(SlicArgList *args)
 {
 
-
 	return SFN_ERROR_OK;
 }
 
 SFN_ERROR Slic_OpenMaxTab::Call(SlicArgList *args)
 {
-
 
 	return SFN_ERROR_OK;
 }
@@ -1961,20 +1946,17 @@ SFN_ERROR Slic_OpenMaxTab::Call(SlicArgList *args)
 SFN_ERROR Slic_OpenLaborTab::Call(SlicArgList *args)
 {
 
-
 	return SFN_ERROR_OK;
 }
 
 SFN_ERROR Slic_OpenProductionTab::Call(SlicArgList *args)
 {
 
-
 	return SFN_ERROR_OK;
 }
 
 SFN_ERROR Slic_OpenCityTab::Call(SlicArgList *args)
 {
-
 
 	return SFN_ERROR_OK;
 }
@@ -2000,7 +1982,7 @@ SFN_ERROR Slic_SendTradeBid::Call(SlicArgList *args)
 
 	if(context->GetNumCities() < 2)
 		return SFN_ERROR_NOT_TRADE_BID;
-	
+
 	if(context->GetNumGoods() < 1)
 		return SFN_ERROR_NOT_TRADE_BID;
 
@@ -2032,7 +2014,7 @@ SFN_ERROR Slic_AcceptTradeBid::Call(SlicArgList *args)
 
 	if(context->GetNumCities() < 2)
 		return SFN_ERROR_NOT_TRADE_BID;
-	
+
 	if(context->GetNumGoods() < 1)
 		return SFN_ERROR_NOT_TRADE_BID;
 
@@ -2067,7 +2049,7 @@ SFN_ERROR Slic_RejectTradeBid::Call(SlicArgList *args)
 
 	if(context->GetNumCities() < 2)
 		return SFN_ERROR_NOT_TRADE_BID;
-	
+
 	if(context->GetNumGoods() < 1)
 		return SFN_ERROR_NOT_TRADE_BID;
 
@@ -2106,12 +2088,11 @@ SFN_ERROR Slic_BreakAlliance::Call(SlicArgList *args)
 	PLAYER_INDEX breakee;
 	if(!args->GetPlayer(0, breakee))
 		return SFN_ERROR_TYPE_ARGS;
-		
+
 	if(g_player[breaker]) {
-		
 
 		Diplomat & defending_diplomat = Diplomat::GetDiplomat(breakee);
-		
+
 		defending_diplomat.LogViolationEvent(breaker, PROPOSAL_TREATY_ALLIANCE);
 	}
 	return SFN_ERROR_OK;
@@ -2128,8 +2109,7 @@ SFN_ERROR Slic_AddOrder::Call(SlicArgList *args)
 	}
 
 	if(!g_theUnitPool->IsValid(unit)) {
-		
-		
+
 		return SFN_ERROR_OK;
 	}
 
@@ -2140,8 +2120,8 @@ SFN_ERROR Slic_AddOrder::Call(SlicArgList *args)
 	MapPoint oldPos;
 	unit.GetPos(oldPos);
 
-	
-	
+
+
 
 	Army army = unit.GetArmy();
 	if(!g_theArmyPool->IsValid(army)) {
@@ -2151,7 +2131,7 @@ SFN_ERROR Slic_AddOrder::Call(SlicArgList *args)
 	UNIT_ORDER_TYPE order = UNIT_ORDER_NONE;
 	if(g_slicEngine->GetContext()->GetNumOrders() > 0) {
 		order = g_slicEngine->GetContext()->GetOrder(0);
-	} 
+	}
 	if(order == UNIT_ORDER_NONE)
 		order = UNIT_ORDER_MOVE_TO;
 
@@ -2159,8 +2139,7 @@ SFN_ERROR Slic_AddOrder::Call(SlicArgList *args)
 		MapPoint curPos;
 		army.GetPos(curPos);
 		if(pos == curPos)
-			
-			
+
 			return SFN_ERROR_OK;
 
 		if(!pos.IsNextTo(curPos)) {
@@ -2168,7 +2147,7 @@ SFN_ERROR Slic_AddOrder::Call(SlicArgList *args)
 										   curPos, pos);
 			return SFN_ERROR_OK;
 		} else if(order == UNIT_ORDER_MOVE) {
-			
+
 			order = UNIT_ORDER_MOVE_TO;
 		}
 	}
@@ -2179,12 +2158,10 @@ SFN_ERROR Slic_AddOrder::Call(SlicArgList *args)
 
 SFN_ERROR Slic_EndTurn::Call(SlicArgList *args)
 {
-	
-	
-	
-	g_director->AddEndTurn(); 
-	
-	
+
+
+	g_director->AddEndTurn();
+
 	return SFN_ERROR_OK;
 }
 
@@ -2205,7 +2182,7 @@ SFN_ERROR Slic_FinishBuilding::Call(SlicArgList *args)
 	city.FinishBuilding();
 	return SFN_ERROR_OK;
 }
-	
+
 SFN_ERROR Slic_Abort::Call(SlicArgList *args)
 {
 	if(args->m_numArgs > 0)
@@ -2261,7 +2238,7 @@ SFN_ERROR Slic_DoPillageOwnLand::Call(SlicArgList *args)
 {
     if (args->m_numArgs > 0)
         return SFN_ERROR_NUM_ARGS;
-    
+
 	Unit unit = g_slicEngine->GetContext()->GetUnit(0);
 
 	if(!g_theUnitPool->IsValid(unit)) {
@@ -2359,7 +2336,7 @@ SFN_ERROR Slic_TerrainType::Call(SlicArgList *args)
 {
 	if(args->m_numArgs != 1)
 		return SFN_ERROR_NUM_ARGS;
-	
+
 	MapPoint pos;
 	if(!args->GetPos(0, pos))
 		return SFN_ERROR_TYPE_BUILTIN;
@@ -2603,7 +2580,7 @@ SFN_ERROR Slic_KillMessages::Call(SlicArgList *args)
 
 	if(args->m_numArgs != 2)
 		return SFN_ERROR_NUM_ARGS;
-	
+
 	if(!args->GetPlayer(0, recip))
 		return SFN_ERROR_TYPE_ARGS;
 
@@ -2644,7 +2621,7 @@ SFN_ERROR Slic_MessageClass::Call(SlicArgList *args)
 	if(!res) {
 		return SFN_ERROR_TYPE_ARGS;
 	}
-	
+
 	g_slicEngine->GetContext()->SetClass(type);
 
 	return SFN_ERROR_OK;
@@ -2690,7 +2667,7 @@ SFN_ERROR Slic_CityHasBuilding::Call(SlicArgList *args)
    	res = args->GetCity(0, city);
 	if(!res)
 		return SFN_ERROR_TYPE_BUILTIN;
-	
+
 	if(args->m_argType[1] != SA_TYPE_HARD_STRING)
 		return SFN_ERROR_TYPE_ARGS;
 	const char *name = args->m_argValue[1].m_symbol->GetName();
@@ -2726,7 +2703,7 @@ SFN_ERROR Slic_Title::Call(SlicArgList *args)
 
 	g_slicEngine->GetContext()->SetMessageTitle(g_theStringDB->GetNameStr(args->m_argValue[0].m_int));
 	return SFN_ERROR_OK;
-}	
+}
 
 SFN_ERROR Slic_NetworkAccept::Call(SlicArgList *args)
 {
@@ -2762,7 +2739,7 @@ SFN_ERROR Slic_Attract::Call(SlicArgList *args)
 	char *string;
 	if(!args->GetString(0, string))
 		return SFN_ERROR_TYPE_ARGS;
-	
+
 	if(!g_attractWindow) {
 		AttractWindow::Initialize();
 	}
@@ -2781,7 +2758,7 @@ SFN_ERROR Slic_StopAttract::Call(SlicArgList *args)
 	char *string;
 	if(!args->GetString(0, string))
 		return SFN_ERROR_TYPE_ARGS;
-	
+
 	if(!g_attractWindow) {
 		AttractWindow::Initialize();
 	}
@@ -2801,13 +2778,12 @@ SFN_ERROR Slic_DontSave::Call(SlicArgList *args)
 	return SFN_ERROR_OK;
 }
 
-
 SFN_ERROR Slic_IsUnitSelected::Call(SlicArgList *args)
 {
 	PLAYER_INDEX player;
 	ID item;
 	SELECT_TYPE state;
-	
+
 	g_selected_item->GetTopCurItem(player, item, state);
 
 	m_result.m_int = 0;
@@ -2840,14 +2816,14 @@ SFN_ERROR Slic_IsCitySelected::Call(SlicArgList *args)
 	PLAYER_INDEX player;
 	ID item;
 	SELECT_TYPE state;
-	
+
 	g_selected_item->GetTopCurItem(player, item, state);
 	m_result.m_int = 0;
 
 	if(state != SELECT_TYPE_LOCAL_CITY) {
 		return SFN_ERROR_OK;
 	}
-	
+
 	if(args->m_numArgs == 0) {
 		m_result.m_int = 1;
 		return SFN_ERROR_OK;
@@ -2911,7 +2887,7 @@ SFN_ERROR Slic_IsHumanPlayer::Call(SlicArgList *args)
 	sint32 index;
 	if(!args->GetInt(0, index))
 		return SFN_ERROR_TYPE_ARGS;
-	
+
 	char *keystring;
 	if(!args->GetString(1, keystring))
 		return SFN_ERROR_TYPE_ARGS;
@@ -3039,10 +3015,9 @@ SFN_ERROR Slic_CityStarvationTurns::Call(SlicArgList *args)
 	if(!res)
 		return SFN_ERROR_TYPE_BUILTIN;
 
-	m_result.m_int = city.AccessData()->GetCityData()->GetStarvationTurns();	
+	m_result.m_int = city.AccessData()->GetCityData()->GetStarvationTurns();
 	return SFN_ERROR_OK;
 }
-
 
 SFN_ERROR Slic_DisableClose::Call(SlicArgList *args)
 {
@@ -3088,7 +3063,7 @@ SFN_ERROR Slic_EnableCloseMessage::Call(SlicArgList *args)
 	}
 	return SFN_ERROR_OK;
 }
-	
+
 SFN_ERROR Slic_EnableCloseClass::Call(SlicArgList *args)
 {
 	if(args->m_numArgs != 2)
@@ -3137,7 +3112,7 @@ SFN_ERROR Slic_GoodType::Call(SlicArgList *args)
 	if(args->m_numArgs != 1)
 		return SFN_ERROR_NUM_ARGS;
 
-	if(args->m_argType[0] != SA_TYPE_HARD_STRING) 
+	if(args->m_argType[0] != SA_TYPE_HARD_STRING)
 		return SFN_ERROR_TYPE_ARGS;
 
 	const char *name = args->m_argValue[0].m_symbol->GetName();
@@ -3293,8 +3268,8 @@ SFN_ERROR Slic_CreateUnit::Call(SlicArgList *args)
 			MapPoint chk(x, y);
 			sint32 dist = pos.NormalizedDistance(chk);
 			Cell *cell = g_theWorld->GetCell(chk);
-			if(dist == distance && 
-			   g_theWorld->CanEnter(chk, rec->GetMovementType()) && 
+			if(dist == distance &&
+			   g_theWorld->CanEnter(chk, rec->GetMovementType()) &&
 			   (!cell->UnitArmy() ||
 				(cell->UnitArmy()->GetOwner() == owner &&
 				 cell->UnitArmy()->Num() < k_MAX_ARMY_SIZE)) &&
@@ -3324,7 +3299,7 @@ SFN_ERROR Slic_CreateUnit::Call(SlicArgList *args)
 				if(args->m_argType[4] == SA_TYPE_INT_VAR) {
 					SlicSymbolData *sym = args->m_argValue[4].m_symbol;
 					sym->SetUnit(unit);
-					
+
 				}
 			}
 		}
@@ -3379,7 +3354,6 @@ SFN_ERROR Slic_AddCityByIndex::Call(SlicArgList *args)
 	return SFN_ERROR_OK;
 }
 
-										
 SFN_ERROR Slic_DetachRobot::Call(SlicArgList *args)
 {
 	if(args->m_numArgs != 1)
@@ -3462,23 +3436,22 @@ SFN_ERROR Slic_AddPops::Call(SlicArgList *args)
 	if(!args->GetInt(1, count))
 		return SFN_ERROR_TYPE_ARGS;
 
-	MapPoint pos; 
+	MapPoint pos;
 	city.GetPos(pos);
-	
+
 	sint32 i;
 	if(count > 0) {
-		for (i=0; i<count; i++) { 
+		for (i=0; i<count; i++) {
 			g_gevManager->AddEvent(GEV_INSERT_Tail, GEV_MakePop,
 								   GEA_City, city.m_id,
 								   GEA_End);
-			
+
 		}
 	} else {
 		for(i = count; i < 0; i++) {
 		}
 	}
 
-	
 	sint32 delta_martial_law;
 	CityData *cd = city.GetData()->GetCityData();
 	cd->GetHappy()->CalcHappiness(*cd, FALSE, delta_martial_law, TRUE);
@@ -3542,7 +3515,7 @@ SFN_ERROR Slic_CreateCity::Call(SlicArgList *args)
 	legalPoints.Clear();
 
 	sint16 origContinent = g_theWorld->GetContinent(pos);
-	
+
 	for(x = 0; x < g_theWorld->GetXWidth(); x++) {
 		for(y = 0; y < g_theWorld->GetYHeight(); y++) {
 			MapPoint chk(x, y);
@@ -3585,7 +3558,7 @@ SFN_ERROR Slic_CreateCity::Call(SlicArgList *args)
 		rec = g_theUnitDB->Get(i);
 		if(!rec->GetHasPopAndCanBuild())
 			continue;
-		if((g_theWorld->IsLand(cpos) || g_theWorld->IsMountain(cpos)) && 
+		if((g_theWorld->IsLand(cpos) || g_theWorld->IsMountain(cpos)) &&
 		   !g_theWorld->IsWater(cpos) && rec->GetMovementTypeLand())
 			break;
 		if(g_theWorld->IsWater(cpos) && rec->GetMovementTypeSea())
@@ -3642,7 +3615,7 @@ SFN_ERROR Slic_CreateCoastalCity::Call(SlicArgList *args)
 	legalPoints.Clear();
 
 	sint16 origContinent = g_theWorld->GetContinent(pos);
-	
+
 	for(x = 0; x < g_theWorld->GetXWidth(); x++) {
 		for(y = 0; y < g_theWorld->GetYHeight(); y++) {
 			MapPoint chk(x, y);
@@ -3686,7 +3659,7 @@ SFN_ERROR Slic_CreateCoastalCity::Call(SlicArgList *args)
 		rec = g_theUnitDB->Get(i);
 		if(!rec->GetHasPopAndCanBuild())
 			continue;
-		if((g_theWorld->IsLand(cpos) || g_theWorld->IsMountain(cpos)) && 
+		if((g_theWorld->IsLand(cpos) || g_theWorld->IsMountain(cpos)) &&
 		   !g_theWorld->IsWater(cpos) && rec->GetMovementTypeLand())
 			break;
 		if(g_theWorld->IsWater(cpos) && rec->GetMovementTypeSea())
@@ -3762,7 +3735,7 @@ SFN_ERROR Slic_FindCoastalCity::Call(SlicArgList *args)
 		MapPoint pos;
 		g_player[player]->m_all_cities->Access(i).GetPos(pos);
 		if(g_theWorld->IsNextToWater(pos.x, pos.y)) {
-			
+
 			SlicSymbolData *sym = args->m_argValue[1].m_symbol;
 			if(sym->GetType() != SLIC_SYM_CITY) {
 				return SFN_ERROR_TYPE_ARGS;
@@ -3780,7 +3753,7 @@ SFN_ERROR Slic_Terraform::Call(SlicArgList *args)
 {
 	if(args->m_numArgs != 2)
 		return SFN_ERROR_NUM_ARGS;
-	
+
 	MapPoint tpos, pos;
 	if(!args->GetPos(0, tpos)) {
 		return SFN_ERROR_TYPE_ARGS;
@@ -3801,8 +3774,8 @@ SFN_ERROR Slic_Terraform::Call(SlicArgList *args)
 	cell->SetTerrain(terrain);
 	cell->SetEnv(cell->GetEnv() & ~(k_MASK_ENV_ROAD |
 										  k_MASK_ENV_IRRIGATION |
-										  k_MASK_ENV_MINE | 
-										  k_MASK_ENV_CITY | 
+										  k_MASK_ENV_MINE |
+										  k_MASK_ENV_CITY |
 										  k_MASK_ENV_INSTALLATION |
 										  k_MASK_ENV_CITY_RADIUS |
 										  k_MASK_ENV_GOOD));
@@ -3861,7 +3834,6 @@ SFN_ERROR Slic_Terraform::Call(SlicArgList *args)
 	return SFN_ERROR_OK;
 }
 
-	
 SFN_ERROR Slic_PlantGood::Call(SlicArgList *args)
 {
 	if(args->m_numArgs != 1)
@@ -3894,26 +3866,23 @@ SFN_ERROR Slic_HasGood::Call(SlicArgList *args)
 	} else {
 		m_result.m_int = good;
 	}
-	
+
 	return SFN_ERROR_OK;
 }
-
 
 SFN_ERROR Slic_GetRiotLevel::Call(SlicArgList *args)
 {
 	m_result.m_int = g_theConstDB->GetRiotLevel();
-	
+
 	return SFN_ERROR_OK;
 }
-
 
 SFN_ERROR Slic_GetRevolutionLevel::Call(SlicArgList *args)
 {
 	m_result.m_int = g_theConstDB->GetRevolutionLevel();
-	
+
 	return SFN_ERROR_OK;
 }
-
 
 SFN_ERROR Slic_GetRandomNeighbor::Call(SlicArgList *args)
 {
@@ -3928,10 +3897,10 @@ SFN_ERROR Slic_GetRandomNeighbor::Call(SlicArgList *args)
 		return SFN_ERROR_TYPE_ARGS;
 
 	SlicSymbolData *sym = args->m_argValue[1].m_symbol;
-	
-	
-	
-	
+
+
+
+
 	sint32 d = g_rand->Next(sint32(NOWHERE));
 	BOOL retry = TRUE;
 	sint32 count = 9;
@@ -3972,15 +3941,15 @@ SFN_ERROR Slic_GetRandomNeighbor::Call(SlicArgList *args)
 // Globals    : g_gevManager		: game event handler
 //
 // Returns    : SFN_ERROR			: indication whether the command has been
-//									  passed to the game event handler 
+//									  passed to the game event handler
 //
 // Remark(s)  : * SFN_ERROR_OK is returned when the command has been passed to
-// 			      the event handler.  
-//                Other return values indicate errors in the number or type of 
+// 			      the event handler.
+//                Other return values indicate errors in the number or type of
 //                the arguments.
 //
-//				* SFN_ERROR_OK does not indicate the result of the command 
-//				  execution: when e.g. the player already has the advance, 
+//				* SFN_ERROR_OK does not indicate the result of the command
+//				  execution: when e.g. the player already has the advance,
 //				  SFN_ERROR_OK will be returned, but nothing will happen.
 //
 //----------------------------------------------------------------------------
@@ -4007,9 +3976,9 @@ SFN_ERROR Slic_GrantAdvance::Call(SlicArgList *args)
 	}
 
 	sint32			adv;
-	if (args->GetInt(1, adv)) 
+	if (args->GetInt(1, adv))
 	{
-		if (adv >= g_theAdvanceDB->NumRecords()) 
+		if (adv >= g_theAdvanceDB->NumRecords())
 		{
 			return SFN_ERROR_NOT_ADVANCE;
 		}
@@ -4035,7 +4004,7 @@ SFN_ERROR Slic_GrantAdvance::Call(SlicArgList *args)
 		}
 	}
 
-	g_gevManager->AddEvent(GEV_INSERT_Tail, 
+	g_gevManager->AddEvent(GEV_INSERT_Tail,
 						   GEV_GrantAdvance,
 						   GEA_Player,	player,
 						   GEA_Int,		adv,
@@ -4055,7 +4024,7 @@ SFN_ERROR Slic_AddUnit::Call(SlicArgList *args)
 	if(!args->GetUnit(0, u)) {
 		return SFN_ERROR_TYPE_BUILTIN;
 	}
-	
+
 	g_slicEngine->GetContext()->AddUnit(u);
 	return SFN_ERROR_OK;
 }
@@ -4117,10 +4086,10 @@ SFN_ERROR Slic_GetMessageClass::Call(SlicArgList *args)
 {
 	if(args->m_numArgs != 2)
 		return SFN_ERROR_NUM_ARGS;
-	
-	
-	
-	
+
+
+
+
 	m_result.m_int = 0;
 
 	sint32 player;
@@ -4178,7 +4147,7 @@ SFN_ERROR Slic_CityCollectingGood::Call(SlicArgList *args)
 
 	if(!args->GetInt(1, good))
 		return SFN_ERROR_TYPE_ARGS;
-	
+
 #ifdef CTP1_TRADE
 	m_result.m_int = city.GetData()->GetCityData()->GetLocalResourceCount(good);
 #else
@@ -4215,7 +4184,7 @@ SFN_ERROR Slic_GetNearestWater::Call(SlicArgList *args)
 		}
 	}
 	if(minDist >= 0x7fffffff) {
-		
+
 		return SFN_ERROR_OK;
 	}
 
@@ -4226,7 +4195,7 @@ SFN_ERROR Slic_GetNearestWater::Call(SlicArgList *args)
 	SlicSymbolData *sym = args->m_argValue[1].m_symbol;
 	//Outcommented by Martin Gühmann
 	//in order to fix this function
-	//The porpose of this if statement is check whether 
+	//The porpose of this if statement is check whether
 	//the second argument is a location_t or not unfortunatly
 	//it only accepts something's location like location[0].location.
 	//But in this case SetPos function fails.
@@ -4290,8 +4259,7 @@ SFN_ERROR Slic_SaveGame::Call(SlicArgList *args)
 	if(!args->GetString(0, string))
 		return SFN_ERROR_TYPE_ARGS;
 
-	
-	
+
 	g_isScenario = FALSE;
 
 	GameFile::SaveGame(string, NULL);
@@ -4316,7 +4284,7 @@ SFN_ERROR Slic_HasRiver::Call(SlicArgList *args)
 	if(args->m_numArgs != 1) {
 		return SFN_ERROR_NUM_ARGS;
 	}
-	
+
 	MapPoint pos;
 	if(!args->GetPos(0, pos))
 		return SFN_ERROR_TYPE_ARGS;
@@ -4426,7 +4394,6 @@ SFN_ERROR Slic_SetTimerGranularity::Call(SlicArgList *args)
 	return SFN_ERROR_OK;
 }
 
-	
 SFN_ERROR Slic_QuitToLobby::Call(SlicArgList *args)
 {
 	g_civApp->PostQuitToLobbyAction();
@@ -4462,7 +4429,7 @@ SFN_ERROR Slic_BreakLeaveOurLands::Call(SlicArgList *args)
 	if(args->m_numArgs != 0) {
 		return SFN_ERROR_NUM_ARGS;
 	}
-	
+
 	SlicObject *context = g_slicEngine->GetContext();
 	if(!g_player[context->GetPlayer(0)]) {
 		return SFN_ERROR_TYPE_ARGS;
@@ -4495,7 +4462,7 @@ SFN_ERROR Slic_BreakLeaveOurLands::Call(SlicArgList *args)
 				g_network.Enqueue(new NetInfo(NET_INFO_CODE_VIOLATE_AGREEMENT,
 											  ag.m_id, unitOwner));
 			}
-												   
+
 			ag.AccessData()->RecipientIsViolating(unitOwner, TRUE);
 		}
 	}
@@ -4507,7 +4474,7 @@ SFN_ERROR Slic_BreakNoPiracy::Call(SlicArgList *args)
 	if(args->m_numArgs != 0) {
 		return SFN_ERROR_NUM_ARGS;
 	}
-	
+
 	SlicObject *context = g_slicEngine->GetContext();
 	if(!g_player[context->GetPlayer(0)]) {
 		return SFN_ERROR_TYPE_ARGS;
@@ -4538,7 +4505,7 @@ SFN_ERROR Slic_BreakNoPiracy::Call(SlicArgList *args)
 				g_network.SendAction(new NetAction(NET_ACTION_VIOLATE_AGREEMENT,
 												   ag.m_id));
 			}
-												   
+
 			ag.AccessData()->RecipientIsViolating(pirate, TRUE);
 		}
 	}
@@ -4711,47 +4678,45 @@ SFN_ERROR Slic_SetLocation::Call(SlicArgList *args)
 
 SFN_ERROR Slic_MakeLocation::Call(SlicArgList *args)
 {
-	
+
     if(args->m_numArgs != 3)
 		return SFN_ERROR_NUM_ARGS;
 
 	if(args->m_argType[0] != SA_TYPE_INT_VAR)
 		return SFN_ERROR_TYPE_ARGS;
 
-	SlicSymbolData *sym = args->m_argValue[0].m_symbol;	
+	SlicSymbolData *sym = args->m_argValue[0].m_symbol;
 	if(sym->GetType() == SLIC_SYM_STRUCT)
 		sym = sym->GetStruct()->GetDataSymbol();
 
 	if(sym->GetType() != SLIC_SYM_LOCATION)
 		return SFN_ERROR_TYPE_ARGS;
 
-	sint32 x, y; 
+	sint32 x, y;
 	MapPoint point;
 	if(!args->GetInt(1, x)) return SFN_ERROR_TYPE_ARGS;
 	if(!args->GetInt(2, y)) return SFN_ERROR_TYPE_ARGS;
-	
 
 	long width,height;
 
 	width=g_theWorld->GetXWidth();
 	height=g_theWorld->GetYHeight();
 
-	
 	if(x < 0 || x >= width)
 		return SFN_ERROR_OUT_OF_RANGE;
 
 	if(y < 0 || y >= height)
 		return SFN_ERROR_OUT_OF_RANGE;
 
-	
-	
+
+
 
 	point.x = (sint16)x;
 	point.y = (sint16)y;
 
 	sym->SetPos(point);
 	return SFN_ERROR_OK;
-	
+
 }
 
 SFN_ERROR Slic_SetOrder::Call(SlicArgList *args)
@@ -4855,7 +4820,7 @@ SFN_ERROR Slic_Preference::Call(SlicArgList *args)
 	char *prefname;
 	if(!args->GetString(0, prefname))
 		return SFN_ERROR_TYPE_ARGS;
-	
+
 	m_result.m_int = g_theProfileDB->GetValueByName(prefname);
 	return SFN_ERROR_OK;
 }
@@ -4912,10 +4877,10 @@ SFN_ERROR Slic_ToggleVeteran::Call(SlicArgList *args)
 
 	if(!g_theUnitPool->IsValid(u))
 		return SFN_ERROR_OK;
-	
+
 	if(on)
 		u.SetFlag(k_UDF_IS_VET);
-	else 
+	else
 		u.ClearFlag(k_UDF_IS_VET);
 
 	return SFN_ERROR_OK;
@@ -4932,10 +4897,10 @@ SFN_ERROR Slic_IsVeteran::Call(SlicArgList *args)
 
 	if(!g_theUnitPool->IsValid(u))
 		return SFN_ERROR_OK;
-	
+
 	if(!u.Flag(k_UDF_IS_VET))
 		m_result.m_int = 0;
-	else 
+	else
 		m_result.m_int = 1;
 
 	return SFN_ERROR_OK;
@@ -4953,9 +4918,9 @@ SFN_ERROR Slic_IsCivilian::Call(SlicArgList *args)
 	if(!g_theUnitPool->IsValid(u))
 		return SFN_ERROR_OK;
 
-	if(u.GetDBRec()->GetCanBeExpelled()) 
+	if(u.GetDBRec()->GetCanBeExpelled())
 		m_result.m_int = 1;
-	else 
+	else
 		m_result.m_int = 0;
 
 	return SFN_ERROR_OK;
@@ -4976,15 +4941,14 @@ SFN_ERROR Slic_CantAttackUnit::Call(SlicArgList *args)
 
 	if(!g_theUnitPool->IsValid(u))
 		return SFN_ERROR_OK;
-	
+
 	if(on)
 		u.SetFlag(k_UDF_IS_VET);
-	else 
+	else
 		u.ClearFlag(k_UDF_IS_VET);
 
 	return SFN_ERROR_OK;
 }
-
 
 SFN_ERROR Slic_CantAttackCity::Call(SlicArgList *args)
 {
@@ -4998,7 +4962,7 @@ SFN_ERROR Slic_CantAttackCity::Call(SlicArgList *args)
 	sint32 on;
 	if(!args->GetInt(1, on))
 		return SFN_ERROR_TYPE_ARGS;
-	
+
 	if(!g_theUnitPool->IsValid(city))
 		return SFN_ERROR_OK;
 
@@ -5022,7 +4986,7 @@ SFN_ERROR Slic_CityCantRiotOrRevolt::Call(SlicArgList *args)
 	sint32 on;
 	if(!args->GetInt(1, on))
 		return SFN_ERROR_TYPE_ARGS;
-	
+
 	if(!g_theUnitPool->IsValid(city))
 		return SFN_ERROR_OK;
 
@@ -5042,7 +5006,7 @@ SFN_ERROR Slic_SelectUnit::Call(SlicArgList *args)
 	Unit u;
 	if(!args->GetUnit(0, u))
 		return SFN_ERROR_TYPE_ARGS;
-	
+
 	if(!g_theUnitPool->IsValid(u))
 		return SFN_ERROR_OK;
 
@@ -5114,7 +5078,7 @@ SFN_ERROR Slic_AddGold::Call(SlicArgList *args)
 	if(!args->GetInt(1, amt))
 		return SFN_ERROR_TYPE_ARGS;
 
-	if(pl < 0 || pl >= k_MAX_PLAYERS) 
+	if(pl < 0 || pl >= k_MAX_PLAYERS)
 		return SFN_ERROR_OUT_OF_RANGE;
 
 	if(!g_player || !g_player[pl])
@@ -5136,7 +5100,7 @@ SFN_ERROR Slic_SetActionKey::Call(SlicArgList *args)
 	sint32 index;
 	if(!args->GetInt(0, index))
 		return SFN_ERROR_TYPE_ARGS;
-	
+
 	char *keystring;
 	if(!args->GetString(1, keystring))
 		return SFN_ERROR_TYPE_ARGS;
@@ -5204,8 +5168,7 @@ SFN_ERROR Slic_GetNeighbor::Call(SlicArgList *args)
 		return SFN_ERROR_TYPE_ARGS;
 
 	SlicSymbolData *sym = args->m_argValue[2].m_symbol;
-	
-	
+
 
 	m_result.m_int = posIn.GetNeighborPosition((WORLD_DIRECTION)dir, posOut);
 	sym->SetPos(posOut);
@@ -5263,7 +5226,7 @@ SFN_ERROR Slic_IsUnitInBuildList::Call(SlicArgList *args)
 	}
 	return SFN_ERROR_OK;
 }
-	
+
 SFN_ERROR Slic_IsBuildingInBuildList::Call(SlicArgList *args)
 {
 	if(args->m_numArgs != 2)
@@ -5558,7 +5521,7 @@ SFN_ERROR Slic_KillUnitFromBuildList::Call(SlicArgList *args)
 
 	BuildQueue *bq = city.GetData()->GetCityData()->GetBuildQueue();
 	BuildNode *bn;
-	
+
 	PointerList<BuildNode>::Walker walk(bq->GetList());
 	while(walk.IsValid()) {
 		bn = walk.GetObj();
@@ -5569,7 +5532,7 @@ SFN_ERROR Slic_KillUnitFromBuildList::Call(SlicArgList *args)
 			bq->RemoveNode(bn, CAUSE_REMOVE_BUILD_ITEM_MANUAL);
 		}
 	}
-	
+
 	return SFN_ERROR_OK;
 }
 
@@ -5716,12 +5679,11 @@ SFN_ERROR Slic_Stacked::Call(SlicArgList *args)
 	MapPoint pos;
 	if(!args->GetPos(0, pos))
 		return SFN_ERROR_TYPE_ARGS;
-	
+
 	CellUnitList *units = g_theWorld->GetCell(pos)->UnitArmy();
 	if(!units || units->Num() < 1)
 		return SFN_ERROR_OK;
 
-	
 	Army army = units->Access(0).GetArmy();
 	sint32 i;
 	for(i = 1; i < units->Num(); i++) {
@@ -5746,7 +5708,7 @@ SFN_ERROR Slic_SetString::Call(SlicArgList *args)
 
 	const MBCHAR *str = g_theStringDB->GetNameStr(args->m_argValue[1].m_int);
 	if(!str)
-		return SFN_ERROR_INTERNAL; 
+		return SFN_ERROR_INTERNAL;
 
 	g_slicEngine->GetContext()->SetAction(index, str);
 	return SFN_ERROR_OK;
@@ -5760,7 +5722,7 @@ SFN_ERROR Slic_SetStringByDBIndex::Call(SlicArgList *args)
 	sint32 index;
 	if(!args->GetInt(0, index))
 		return SFN_ERROR_TYPE_ARGS;
-	
+
 	sint32 stringId;
 	if(!args->GetInt(1, stringId))
 		return SFN_ERROR_TYPE_ARGS;
@@ -5806,9 +5768,8 @@ SFN_ERROR Slic_UnitHasUserFlag::Call(SlicArgList *args)
 	if(flag < 1 || flag > 32)
 		return SFN_ERROR_OUT_OF_RANGE;
 
-
 	m_result.m_int = 0;
-	
+
 	return SFN_ERROR_OK;
 }
 
@@ -5839,10 +5800,10 @@ SFN_ERROR Slic_BlankScreen::Call(SlicArgList *args)
 
 SFN_ERROR Slic_AddCenter::Call(SlicArgList *args)
 {
-	
+
 	if(args->m_numArgs != 1)
 		return SFN_ERROR_NUM_ARGS;
-	
+
 	MapPoint pos;
 	if(!args->GetPos(0, pos))
 		return SFN_ERROR_TYPE_ARGS;
@@ -5853,7 +5814,7 @@ SFN_ERROR Slic_AddCenter::Call(SlicArgList *args)
 
 SFN_ERROR Slic_AddEffect::Call(SlicArgList *args)
 {
-	
+
 	if(args->m_numArgs != 3)
 		return SFN_ERROR_NUM_ARGS;
 
@@ -5883,7 +5844,7 @@ SFN_ERROR Slic_AddEffect::Call(SlicArgList *args)
 	soundId = g_theSoundDB->FindTypeIndex(soundName);
 	if(soundId < 0)
 		return SFN_ERROR_SOUND_NOT_FOUND;
-	
+
 	g_director->AddSpecialEffect(pos, effectId, soundId);
 	return SFN_ERROR_OK;
 }
@@ -5976,7 +5937,7 @@ SFN_ERROR Slic_GetUnitFromArmy::Call(SlicArgList *args)
 	if(args->m_argType[2] != SA_TYPE_INT_VAR) {
 		return SFN_ERROR_TYPE_ARGS;
 	}
-	
+
 	if(index < 0 || index >= a.Num()) {
 		return SFN_ERROR_OUT_OF_RANGE;
 	}
@@ -5992,16 +5953,16 @@ SFN_ERROR Slic_GetArmyFromUnit::Call(SlicArgList *args)
 	m_result.m_int = 0;
 	Unit u;
 
-	if(args->m_numArgs != 2) 
+	if(args->m_numArgs != 2)
 		return SFN_ERROR_NUM_ARGS;
 
 	if(!args->GetUnit(0, u))
 		return SFN_ERROR_TYPE_ARGS;
 
-	if(args->m_argType[1] != SA_TYPE_INT_VAR) 
+	if(args->m_argType[1] != SA_TYPE_INT_VAR)
 		return SFN_ERROR_TYPE_ARGS;
 
-	if(!g_theArmyPool->IsValid(u.GetArmy())) 
+	if(!g_theArmyPool->IsValid(u.GetArmy()))
 		return SFN_ERROR_OK;
 
 	SlicSymbolData *sym = args->m_argValue[1].m_symbol;
@@ -6010,7 +5971,7 @@ SFN_ERROR Slic_GetArmyFromUnit::Call(SlicArgList *args)
 	m_result.m_int = 1;
 	return SFN_ERROR_OK;
 }
-		
+
 SFN_ERROR Slic_GetUnitByIndex::Call(SlicArgList *args)
 {
 	m_result.m_int = 0;
@@ -6138,7 +6099,7 @@ SFN_ERROR Slic_GetUnitsAtLocation::Call(SlicArgList *args)
 	m_result.m_int = g_theWorld->GetCell(pos)->GetNumUnits();
 	return SFN_ERROR_OK;
 }
-	
+
 SFN_ERROR Slic_GetUnitFromCell::Call(SlicArgList *args)
 {
 	m_result.m_int = 0;
@@ -6170,11 +6131,9 @@ SFN_ERROR Slic_GetUnitFromCell::Call(SlicArgList *args)
 	return SFN_ERROR_OK;
 }
 
-
 SFN_ERROR Slic_IsRoad::Call(SlicArgList *args)
 	{
-    
-	
+
 	if(args->m_numArgs != 2)
 		return SFN_ERROR_NUM_ARGS;
 	sint32 owner;
@@ -6184,19 +6143,17 @@ SFN_ERROR Slic_IsRoad::Call(SlicArgList *args)
 	if(!args->GetPos(1, pos))
 		return SFN_ERROR_TYPE_ARGS;
 
-	if (g_theWorld->IsRoad(0,pos)&& 
-		(g_theWorld->GetOwner(pos)==owner)) 
+	if (g_theWorld->IsRoad(0,pos)&&
+		(g_theWorld->GetOwner(pos)==owner))
 	  m_result.m_int = 1;
 	else
 	  m_result.m_int = 0;
 	return SFN_ERROR_OK;
 	}
 
-
 SFN_ERROR Slic_GetMapHeight::Call(SlicArgList *args)
 	{
-    
-	
+
 	if(args->m_numArgs != 0)
 		return SFN_ERROR_NUM_ARGS;
 
@@ -6204,11 +6161,9 @@ SFN_ERROR Slic_GetMapHeight::Call(SlicArgList *args)
 	return SFN_ERROR_OK;
 	}
 
-
 SFN_ERROR Slic_GetMapWidth::Call(SlicArgList *args)
 	{
-    
-	
+
 	if(args->m_numArgs != 0)
 		return SFN_ERROR_NUM_ARGS;
 
@@ -6240,11 +6195,9 @@ SFN_ERROR Slic_AddFeat::Call(SlicArgList *args)
 	return SFN_ERROR_OK;
 }
 
-
 SFN_ERROR Slic_IsFortress::Call(SlicArgList *args)
 	{
-        
-	
+
 	if(args->m_numArgs != 2)
 		return SFN_ERROR_NUM_ARGS;
 	sint32 owner;
@@ -6258,30 +6211,28 @@ SFN_ERROR Slic_IsFortress::Call(SlicArgList *args)
 
 	Cell *cell = g_theWorld->GetCell(pos);
 
-	
 	for(sint32 i = 0; i < cell->GetNumDBImprovements(); i++) {
 
-		
 		sint32 imp = cell->GetDBImprovement(i);
 		const TerrainImprovementRecord *rec = g_theTerrainImprovementDB->Get(imp);
 
 		Assert(rec);
 		if(rec) {
-			
+
 			const TerrainImprovementRecord::Effect *eff = terrainutil_GetTerrainEffect(rec, pos);
 			Assert(eff);
 			if(eff) {
 				double bonus;
 				if(eff->GetDefenseBonus(bonus)) {
-					
+
 					m_result.m_int = 1;
 				}
 			}
 		}
-	}	
-	
+	}
+
 	return SFN_ERROR_OK;
-	}	
+	}
 
 SFN_ERROR Slic_Distance::Call(SlicArgList *args)
 {
@@ -6316,7 +6267,6 @@ SFN_ERROR Slic_SquaredDistance::Call(SlicArgList *args)
 	return SFN_ERROR_OK;
 }
 
-
 SFN_ERROR Slic_GetCurrentRound::Call(SlicArgList *args)
 {
 	if(args->m_numArgs != 0)
@@ -6325,7 +6275,6 @@ SFN_ERROR Slic_GetCurrentRound::Call(SlicArgList *args)
 	m_result.m_int = NewTurnCount::GetCurrentRound();
 	return SFN_ERROR_OK;
 }
-
 
 SFN_ERROR Slic_GetCurrentYear::Call(SlicArgList *args)
 {
@@ -6392,11 +6341,11 @@ SFN_ERROR Slic_CityIsNamed::Call(SlicArgList *args)
 	if(!args->GetString(1, city_name))
 		return SFN_ERROR_TYPE_ARGS;
 
-	if(strcmp(city.AccessData()->GetCityData()->GetName(), city_name) == 0) 
+	if(strcmp(city.AccessData()->GetCityData()->GetName(), city_name) == 0)
 		m_result.m_int = 1;
-	else 
+	else
 		m_result.m_int = 0;
-	
+
 	return SFN_ERROR_OK;
 }
 
@@ -6429,7 +6378,7 @@ SFN_ERROR Slic_StringCompare::Call(SlicArgList *args)
 		}
 		string1 = const_cast<char *>(cstring1);
 	}
-	
+
 	if(!args->GetString(1, string2)){
 		if(args->GetStringId(1, stringId2)){
 			cstring2 = g_theStringDB->GetNameStr(stringId2);
@@ -6443,7 +6392,6 @@ SFN_ERROR Slic_StringCompare::Call(SlicArgList *args)
 		string2 = const_cast<char *>(cstring2);
 	}
 
-
 	if ( !stricmp(string1, string2) )
 	{
 		m_result.m_int = 1;
@@ -6454,7 +6402,6 @@ SFN_ERROR Slic_StringCompare::Call(SlicArgList *args)
 
 	return SFN_ERROR_OK;
 }
-
 
 SFN_ERROR Slic_CityNameCompare::Call(SlicArgList *args)
 {
@@ -6480,7 +6427,6 @@ SFN_ERROR Slic_CityNameCompare::Call(SlicArgList *args)
 
 	return SFN_ERROR_OK;
 }
-
 
 SFN_ERROR Slic_ChangeGlobalRegard::Call(SlicArgList *args)
 {
@@ -6511,13 +6457,12 @@ SFN_ERROR Slic_ChangeGlobalRegard::Call(SlicArgList *args)
 	{
 		if ( (g_player[i]) && (i != player) )
 		{
-			
-			
-			
-			Diplomat::GetDiplomat(i).LogRegardEvent( 
-						player, 
-						delta, 
-						REGARD_EVENT_SCENARIO, 
+
+
+			Diplomat::GetDiplomat(i).LogRegardEvent(
+						player,
+						delta,
+						REGARD_EVENT_SCENARIO,
 						explain,
 						static_cast<sint16>(duration));
 		}
@@ -6526,7 +6471,6 @@ SFN_ERROR Slic_ChangeGlobalRegard::Call(SlicArgList *args)
 	return SFN_ERROR_OK;
 
 }
-
 
 
 SFN_ERROR Slic_SetAllCitiesVisible::Call(SlicArgList *args)
@@ -6557,7 +6501,6 @@ SFN_ERROR Slic_SetAllCitiesVisible::Call(SlicArgList *args)
 	return SFN_ERROR_OK;
 }
 
-
 SFN_ERROR Slic_SetCityVisible::Call(SlicArgList *args)
 {
 	if (args->m_numArgs != 2)
@@ -6576,15 +6519,14 @@ SFN_ERROR Slic_SetCityVisible::Call(SlicArgList *args)
 		return SFN_ERROR_OUT_OF_RANGE;
 
 
-	
-	
-	
+
+
+
 	UnitDynamicArray *cityList = NULL;
 	sint32 i, j;
 	Unit city;
 	MapPoint pos;
-	
-	
+
 	for(i = 1; i < k_MAX_PLAYERS; i++)
 	{
 		if(g_player[i])
@@ -6596,12 +6538,12 @@ SFN_ERROR Slic_SetCityVisible::Call(SlicArgList *args)
 				city = cityList->Access(j);
 				if ( !stricmp(city.GetName(), str) )
 				{
-					
-					
-					
-					
 
-					
+
+
+
+
+
 					city.SetVisible(player);
 
 					return SFN_ERROR_OK;
@@ -6609,7 +6551,7 @@ SFN_ERROR Slic_SetCityVisible::Call(SlicArgList *args)
 			}
 		}
 	}
-	
+
 	return SFN_ERROR_OUT_OF_RANGE;
 }
 
@@ -6637,7 +6579,6 @@ SFN_ERROR Slic_FinishImprovements::Call(SlicArgList *args)
 
 	return SFN_ERROR_OK;
 }
-
 
 SFN_ERROR Slic_RemoveAdvance::Call(SlicArgList *args)
 {
@@ -6682,7 +6623,6 @@ SFN_ERROR Slic_PlayerGold::Call(SlicArgList *args)
 	return SFN_ERROR_OK;
 }
 
-	
 SFN_ERROR Slic_ClearBattleFlag::Call(SlicArgList *args)
 {
 	if(args->m_numArgs != 1)
@@ -6694,7 +6634,7 @@ SFN_ERROR Slic_ClearBattleFlag::Call(SlicArgList *args)
 
 	if(!g_theUnitPool->IsValid(u))
 		return SFN_ERROR_OK;
-	
+
 	if(u.Flag(k_UDF_FOUGHT_THIS_TURN)) {
 		u.ClearFlag(k_UDF_FOUGHT_THIS_TURN);
 		u.SetMovementPoints(u.GetMaxMovePoints());
@@ -6789,7 +6729,7 @@ SFN_ERROR Slic_PlayerHasWonder::Call(SlicArgList *args)
 	if(!g_player[pl]) {
 		return SFN_ERROR_DEAD_PLAYER;
 	}
-	
+
 	sint32 wonder;
 
 	if(!args->GetInt(1, wonder)) {
@@ -6875,7 +6815,7 @@ SFN_ERROR Slic_ArmyIsValid::Call(SlicArgList *args)
 {
 	m_result.m_int = 0;
 
-	if (args->m_numArgs != 1) 
+	if (args->m_numArgs != 1)
 	{
 		return SFN_ERROR_NUM_ARGS;
 	}
@@ -6901,9 +6841,9 @@ SFN_ERROR Slic_ArmyIsValid::Call(SlicArgList *args)
 //
 // Returns    : SFN_ERROR		: execution result
 //
-// Remark(s)  : Fills m_result.m_int with the requested data. When no pollution 
-//              information is available, ROUNDS_COUNT_IMMEASURABLE (no 
-//              disaster expected for a long time) is returned. 
+// Remark(s)  : Fills m_result.m_int with the requested data. When no pollution
+//              information is available, ROUNDS_COUNT_IMMEASURABLE (no
+//              disaster expected for a long time) is returned.
 //
 //----------------------------------------------------------------------------
 SFN_ERROR Slic_GetRoundsToNextDisaster::Call(SlicArgList *args)
@@ -6935,7 +6875,7 @@ SFN_ERROR Slic_GetRoundsToNextDisaster::Call(SlicArgList *args)
 //
 // Returns    : SFN_ERROR		: execution result
 //
-// Remark(s)  : Fills m_result.m_int with the requested data. When no pollution 
+// Remark(s)  : Fills m_result.m_int with the requested data. When no pollution
 //              information is available, 0 (no pollution) is returned.
 //
 //----------------------------------------------------------------------------
@@ -6968,7 +6908,7 @@ SFN_ERROR Slic_FreeAllSlaves::Call(SlicArgList *args)
 		return SFN_ERROR_OK;
 	}
 
-	if(g_network.IsClient()) 
+	if(g_network.IsClient())
 	{
 		g_network.SendAction(new NetAction(NET_ACTION_FREE_SLAVES, city.m_id));
 	}
@@ -7004,25 +6944,24 @@ SFN_ERROR Slic_PlantSpecificGood::Call(SlicArgList *args)
 
 	if(args->m_numArgs != 2)
 		return SFN_ERROR_NUM_ARGS;
-	
+
 	MapPoint pos;
 	if(!args->GetPos(0, pos))
 		return SFN_ERROR_TYPE_ARGS;
-	
+
 	sint32 goodsubtype;
 	if(!args->GetInt(1, goodsubtype))
 		return SFN_ERROR_TYPE_ARGS;
-	
+
 	if(goodsubtype<0 || goodsubtype>4)
 		return SFN_ERROR_OUT_OF_RANGE;
-
 
 	g_theWorld->SetGood(pos.x, pos.y, goodsubtype);
 	g_tiledMap->PostProcessTile(pos, g_theWorld->GetTileInfo(pos));
 	g_tiledMap->TileChanged(pos);
 	g_tiledMap->RedrawTile(&pos);
 
-	return SFN_ERROR_OK;	
+	return SFN_ERROR_OK;
 }
 
 //----------------------------------------------------------------------------
@@ -7056,7 +6995,7 @@ SFN_ERROR Slic_RemoveGood::Call(SlicArgList *args)
 	g_tiledMap->PostProcessTile(pos, g_theWorld->GetTileInfo(pos));
 	g_tiledMap->TileChanged(pos);
 	g_tiledMap->RedrawTile(&pos);
-	
+
 	return SFN_ERROR_OK;
 }
 
@@ -7066,7 +7005,7 @@ SFN_ERROR Slic_RemoveGood::Call(SlicArgList *args)
 //
 // Name       : Slic_CargoCapacity
 //
-// Description: New function to figure out how much space is left for 
+// Description: New function to figure out how much space is left for
 //              cargo units.
 //
 // Parameters : SlicArg 0: unit
@@ -7088,7 +7027,7 @@ SFN_ERROR Slic_CargoCapacity::Call(SlicArgList *args)
 	}
 
 	m_result.m_int = unit.GetCargoCapacity();
-	
+
 	return SFN_ERROR_OK;
 }
 
@@ -7124,7 +7063,7 @@ SFN_ERROR Slic_MaxCargoSize::Call(SlicArgList *args)
 	else{
 		m_result.m_int = 0;
 	}
-	
+
 	return SFN_ERROR_OK;
 }
 
@@ -7155,7 +7094,7 @@ SFN_ERROR Slic_CargoSize::Call(SlicArgList *args)
 	}
 
 	m_result.m_int = unit.GetNumCarried();
-	
+
 	return SFN_ERROR_OK;
 }
 
@@ -7195,7 +7134,7 @@ SFN_ERROR Slic_GetUnitFromCargo::Call(SlicArgList *args)
 	if(args->m_argType[2] != SA_TYPE_INT_VAR) {
 		return SFN_ERROR_TYPE_ARGS;
 	}
-	
+
 	if(index < 0 || index >= u.GetNumCarried()) {
 		return SFN_ERROR_OUT_OF_RANGE;
 	}
@@ -7233,7 +7172,7 @@ SFN_ERROR Slic_GetContinent::Call(SlicArgList *args)
 		return SFN_ERROR_TYPE_ARGS;
 
 	m_result.m_int = g_theWorld->GetContinent(pos);
-	
+
 	return SFN_ERROR_OK;
 }
 
@@ -7263,7 +7202,7 @@ SFN_ERROR Slic_IsWater::Call(SlicArgList *args)
 		return SFN_ERROR_TYPE_ARGS;
 
 	m_result.m_int = g_theWorld->IsWater(pos);
-	
+
 	return SFN_ERROR_OK;
 }
 
@@ -7296,15 +7235,14 @@ SFN_ERROR Slic_IsOnSameContinent::Call(SlicArgList *args)
 	if (!args->GetPos(1, pos2))
 		return SFN_ERROR_TYPE_ARGS;
 
-
 	if (g_theWorld->GetContinent(pos) ==
 		g_theWorld->GetContinent(pos2)) {
-		m_result.m_int = 1; 
+		m_result.m_int = 1;
 	}
 	else {
-		m_result.m_int = 0; 
+		m_result.m_int = 0;
 	}
-	
+
 	return SFN_ERROR_OK;
 }
 
@@ -7325,9 +7263,9 @@ SFN_ERROR Slic_AddSlaves::Call(SlicArgList *args)
 	if(!args->GetPlayer(2, victim))
 		return SFN_ERROR_TYPE_ARGS;
 
-	MapPoint pos; 
+	MapPoint pos;
 	city.GetPos(pos);
-	
+
 	sint32 i;
 	if(count > 0) {
 		for (i=0;  i<count; i++) {
@@ -7335,7 +7273,7 @@ SFN_ERROR Slic_AddSlaves::Call(SlicArgList *args)
 						   GEA_City, city.m_id,
 						   GEA_Player, victim,
 						   GEA_End);
-			
+
 		}
 	} else {
 		// Add code to convert count slaves to normal pops here later.
@@ -7344,7 +7282,6 @@ SFN_ERROR Slic_AddSlaves::Call(SlicArgList *args)
 		}
 	}
 
-	
 	sint32 delta_martial_law;
 	CityData *cd = city.GetData()->GetCityData();
 	cd->GetHappy()->CalcHappiness(*cd, FALSE, delta_martial_law, TRUE);

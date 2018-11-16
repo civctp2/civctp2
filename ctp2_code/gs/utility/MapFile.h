@@ -12,7 +12,6 @@ class TerrainImprovementRecord;
 #include "civarchive.h"
 #include "StrDB.h"
 
-
 class MapFileChunk {
 public:
 	uint32 m_id;
@@ -27,7 +26,7 @@ public:
 	uint64 m_improvements;
 	uint64 m_wonders;
 	uint8 m_owner;
-	
+
 	MBCHAR m_name[k_MAX_NAME_LEN];
 	void Serialize(CivArchive &archive) {
 		sint32 len;
@@ -37,7 +36,7 @@ public:
 			archive << m_improvements;
 			archive << m_wonders;
 			archive << m_owner;
-			
+
 			len = strlen(m_name) + 1;
 			archive << len;
 			archive.Store((uint8*)m_name, len * sizeof(MBCHAR));
@@ -46,7 +45,7 @@ public:
 			archive >> m_improvements;
 			archive >> m_wonders;
 			archive >> m_owner;
-			
+
 			archive >> len;
 			archive.Load((uint8*)m_name, len * sizeof(MBCHAR));
 		}
@@ -65,9 +64,8 @@ public:
 
 	template <class T> bool SaveDBNames(FILE *outfile, uint32 chunkId, CTPDatabase<T> *theDB)
 	{
-		
-		
-		
+
+
 		CivArchive archive;
 		archive.SetStore();
 		sint32 i;
@@ -88,18 +86,18 @@ public:
 				archive.Store((uint8*)idStr, len);
 			}
 		}
-		
+
 		m_chunk.m_id = chunkId;
 		m_chunk.m_size = archive.StreamLen();
-		
+
 		if(!m_chunk.Save(outfile))
 			return false;
-		
+
 		if(fwrite(archive.GetStream(), 1, archive.StreamLen(), outfile) != archive.StreamLen())
 			return false;
-		
+
 		return true;
-	}		
+	}
 
 	bool SaveTerrain(FILE *);
 	bool SaveTerrainEnv(FILE *);
@@ -108,7 +106,7 @@ public:
 	bool SaveImprovements(FILE *);
 	bool SaveVision(FILE *file);
 	bool SaveAdvances(FILE *file);
-	
+
 	bool SaveHuts(FILE *file);
 	bool SaveCivilizations(FILE *file);
 
@@ -125,7 +123,7 @@ public:
 	bool LoadVision(uint8 *buf, sint32 size);
 	bool LoadAdvanceNames(uint8 *buf, sint32 size);
 	bool LoadAdvances(uint8 *buf, sint32 size);
-	
+
 	bool LoadHuts(uint8 *buf, sint32 size);
 	bool LoadCivilizations(uint8 *buf, sint32 size);
 

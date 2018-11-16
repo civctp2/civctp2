@@ -1,8 +1,3 @@
-
-
-
-
-
 #if defined(HAVE_PRAGMA_ONCE)
 #pragma once
 #endif
@@ -33,18 +28,13 @@ public:
 
 protected:
 
-	
 	static char * m_key;
 
-	
 	static int m_key_length;
 
-	
 	static bool m_case_sensitive;
 
-	
 	static int m_skip_table[NUM_CHAR_VALUES];
 };
 
-#endif 
-
+#endif

@@ -32,7 +32,6 @@
 
 typedef sint32 sock_t;
 
-
 #define k_MAX_CONNECTIONS 4
 
 void netconsole_Initialize();
@@ -54,5 +53,5 @@ public:
 };
 
 extern NetConsole *g_netConsole;
-	
+
 #endif

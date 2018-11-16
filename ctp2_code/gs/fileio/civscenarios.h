@@ -40,7 +40,7 @@ enum CIV_SCEN_ERR {
 	CIV_SCEN_UNKNOWN
 };
 
-class CivScenarios 
+class CivScenarios
 {
 public:
 	static void Initialize(void);
@@ -52,31 +52,29 @@ public:
 	void	LoadScenarioData(Scenario *scenario, MBCHAR *scenPath);
 	void	LoadScenarioPackData(ScenarioPack *pack, MBCHAR *packPath);
 	void	LoadData(void);
-	
+
 	void	ClearData(void);
 
 	void	ReloadData(void);
 
-	
 	sint32			GetNumScenarioPacks(void) const { return m_numScenarioPacks; }
 	ScenarioPack	*GetScenarioPack(sint32 which);
 	ScenarioPack    *GetScenarioPackByPath(const MBCHAR *path);
 
-	
-	
-	
-	
+
+
+
+
 	BOOL FindScenario(MBCHAR *scenarioName, ScenarioPack **pack, Scenario **scen);
 
 	BOOL FindScenarioFromSaveFile(MBCHAR *saveFile, ScenarioPack **pack, Scenario **scen);
 
-	
-	
+
 	BOOL ScenarioHasSavedGame(Scenario *scen);
 
-	
-	
-	
+
+
+
 	SaveInfo *LoadSaveInfo(Scenario *scen);
 
 	CIV_SCEN_ERR MakeNewPack(MBCHAR *dirName, MBCHAR *packName, MBCHAR *packDesc);

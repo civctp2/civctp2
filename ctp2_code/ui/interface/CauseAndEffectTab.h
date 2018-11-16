@@ -10,7 +10,7 @@
 //
 // THIS FILE IS NOT GENERATED OR SUPPORTED BY ACTIVISION.
 //
-// This material has been developed at apolyton.net by the Apolyton CtP2 
+// This material has been developed at apolyton.net by the Apolyton CtP2
 // Source Code Project. Contact the authors at ctp2source@apolyton.net.
 //
 //----------------------------------------------------------------------------
@@ -18,12 +18,12 @@
 // Compiler flags
 //
 // - None
-// 
+//
 //----------------------------------------------------------------------------
 //
 // Modifications from the original Activision code:
 //
-// - Added m_optimizeSliderButton button for automatic slider optimization 
+// - Added m_optimizeSliderButton button for automatic slider optimization
 //   option. Including a callback function. - April 7th 2005 Martin Gühmann
 //
 //----------------------------------------------------------------------------
@@ -53,28 +53,23 @@ public:
 private:
 	void UpdateGeneral();
 
-	void UpdateFoodSpinners();			
-	void UpdateProductionSpinners();	
-	void UpdateCommerceSpinners();		
+	void UpdateFoodSpinners();
+	void UpdateProductionSpinners();
+	void UpdateCommerceSpinners();
 
-	
-	void UpdateFoodValues();		
-	void UpdateProductionValues();	
-	void UpdateCommerceValues();	
+	void UpdateFoodValues();
+	void UpdateProductionValues();
+	void UpdateCommerceValues();
 
-	
-	
+
 	void SetHappinessIcon(ctp2_Static *control, sint32 happiness);
 
-	
-	
+
 	static void UpdateCities();
 
-	
 	static AUI_ERRCODE HappinessBarActionCallback(ctp2_Static *control,
 		aui_Surface *surface, RECT &rect, void *cookie);
 
-	
 	static void RationsSpinnerActionCallback(aui_Control *control,
 		uint32 action, uint32 data, void *cookie);
 	static void WorkdaySpinnerActionCallback(aui_Control *control,
@@ -86,7 +81,6 @@ private:
 	static void ScienceTaxSpinnerActionCallback(aui_Control *control,
 		uint32 action, uint32 data, void *cookie);
 
-	
 	static void DetailsButtonActionCallback(aui_Control *control,
 		uint32 action, uint32 data, void *cookie);
 
@@ -96,71 +90,64 @@ private:
 	static void CauseAndEffectTabActionCallback(aui_Control *control,
 		uint32 action, uint32 data, void *cookie);
 
-	
-	
+
 	static void DetailsShowCallback(aui_Region *region,
 		void *userData);
 
-	
 	ctp2_Static		*m_tabPanel;
 	ctp2_Tab		*m_tab;
 
-	
 	bool			m_displayDetails;
 
-	
 	ctp2_Button		*m_detailsButton;
 	ctp2_Button		*m_optimizeSliderButton; // Added by Martin Gühmann
-	
+
 	ctp2_Static		*m_numberOfCities;
 	ctp2_Static		*m_population;
 	ctp2_Static		*m_happinessValue;
 	ctp2_Static		*m_happinessBar;
 	ctp2_Static		*m_government;
 
-	
 	C3Slider		*m_foodRationsSpinner;
 	ctp2_Static		*m_foodRequired;
 	ctp2_Static		*m_foodHappinessValue;
 	ctp2_Static		*m_foodCurValue;
 	ctp2_Static		*m_foodHappinessIcon;
-	
+
 	ctp2_Static		*m_detailsFoodTotal;
 	ctp2_Static		*m_detailsFoodCrime;
 	ctp2_Static		*m_detailsFoodConsumed;
 	ctp2_Static		*m_detailsFoodSubTotal;
 	ctp2_Static		*m_detailsFoodStored;
-	
+
 	ctp2_Static		*m_summaryFoodTotal;
 	ctp2_Static		*m_summaryFoodConsumed;
 	ctp2_Static		*m_summaryFoodStored;
 
 
-	
 	C3Slider		*m_productionWorkdaySpinner;
 	ctp2_Spinner	*m_productionPublicWorksSpinner;
 	ctp2_Static		*m_productionHappinessValue;
 	ctp2_Static		*m_productionCurValue;
 	ctp2_Static		*m_productionHappinessIcon;
-	
+
 	ctp2_Static		*m_detailsProductionTotal;
 	ctp2_Static		*m_detailsProductionCrime;
 	ctp2_Static		*m_detailsProductionUnitUpkeep;
 	ctp2_Static		*m_detailsProductionSubTotal;
 	ctp2_Static		*m_detailsProductionPublicWorks;
 	ctp2_Static		*m_detailsProductionCityUse;
-	
+
 	ctp2_Static		*m_summaryProductionTotal;
 	ctp2_Static		*m_summaryProductionPublicWorks;
 	ctp2_Static		*m_summaryProductionCityUse;
 
-	
 	C3Slider		*m_commerceWagesSpinner;
 	ctp2_Spinner	*m_commerceScienceTaxSpinner;
 	ctp2_Static		*m_commerceHappinessValue;
 	ctp2_Static		*m_commerceCurValue;
 	ctp2_Static		*m_commerceHappinessIcon;
-	
+
 	ctp2_Static		*m_detailsCommerceTotal;
 	ctp2_Static		*m_detailsCommerceCrime;
 	ctp2_Static		*m_detailsCommerceWages;
@@ -168,7 +155,7 @@ private:
 	ctp2_Static		*m_detailsCommerceSubTotal;
 	ctp2_Static		*m_detailsCommerceScience;
 	ctp2_Static		*m_detailsCommerceSavings;
-	
+
 	ctp2_Static		*m_summaryCommerceTotal;
 	ctp2_Static		*m_summaryCommerceScience;
 	ctp2_Static		*m_summaryCommerceSavings;
@@ -176,4 +163,4 @@ private:
 	MBCHAR			m_ldlBlock[100];
 };
 
-#endif 
+#endif

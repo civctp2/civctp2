@@ -1,4 +1,4 @@
-/* 
+/*
 Copyright (C) 1995-2001 Activision, Inc.
 
 This library is free software; you can redistribute it and/or
@@ -50,10 +50,10 @@ int dp_PASCAL print_cb(dptab_t *dptab, dptab_table_t *table, playerHdl_t src, pl
 {
 	dptab_table_t *sessions = (dptab_table_t *)context;
 
-	printf("print_cb: src h:%x, dest h:%x, table %s, subkey %s, err %d\n", 
-			src, dest, 
+	printf("print_cb: src h:%x, dest h:%x, table %s, subkey %s, err %d\n",
+			src, dest,
 			key2a(table->key, table->keylen),
-			key2a2(subkey, subkeylen), 
+			key2a2(subkey, subkeylen),
 			err);
 
 	return TRUE;
@@ -86,7 +86,7 @@ void dp2_poll(dp_t *mydp, int secs)
 	clock_t started;
 
 	/* Sit for a few seconds, and wait for session to be propagated to
-	 * server 
+	 * server
 	 */
 	started = eclock();
 	while ((long)(eclock() - started) < (secs * ECLOCKS_PER_SEC)) {
@@ -154,10 +154,9 @@ dp2_test(char *servername, char *sessionname)
 	printf("Created session %s.\n", sessionname);
 
 	/* Sit for a few seconds, and wait for session to be propagated to
-	 * server 
+	 * server
 	 */
 	dp2_poll(mydp, 40);
-
 
 	/* Kill our session - either by deleting it nicely, or by disconnecting
 	 * from the game server abruptly.
@@ -170,7 +169,7 @@ dp2_test(char *servername, char *sessionname)
 #endif
 
 	/* Sit for a few seconds, and wait for session deletion to be propagated to
-	 * server 
+	 * server
 	 */
 	dp2_poll(mydp, 5);
 

@@ -1,16 +1,3 @@
-
-
-
-
-
-
-
-
-
-
-
-
-
 #include "c3.h"
 
 #include "aui.h"
@@ -31,7 +18,6 @@
 extern ColorSet	*g_colorSet;
 extern C3UI		*g_c3ui;
 
-
 StaticTextBox::StaticTextBox(
 	AUI_ERRCODE *retval,
 	uint32 id,
@@ -48,13 +34,12 @@ StaticTextBox::StaticTextBox(
 	aui_TextBase( text, maxLength ),
 	aui_Static( retval, id, x, y, width, height )
 {
-	
+
 
 
 
 	m_bevel = bevel;
 }
-
 
 StaticTextBox::StaticTextBox(
 	AUI_ERRCODE *retval,
@@ -67,12 +52,10 @@ StaticTextBox::StaticTextBox(
 {
 	aui_Ldl *theLdl = g_c3ui->GetLdl();
 
-	
 	BOOL valid = theLdl->IsValid( ldlBlock );
 	Assert( valid );
 	if ( !valid ) return;
 
-	
 	ldl_datablock *block = theLdl->GetLdl()->FindDataBlock( ldlBlock );
 	Assert( block != NULL );
 	if ( !block ) return;
@@ -85,13 +68,12 @@ StaticTextBox::StaticTextBox(
 }
 
 
-
 AUI_ERRCODE StaticTextBox::DrawThis( aui_Surface *surface, sint32 x, sint32 y )
 {
-	
-	
 
-	
+
+
+
 	if ( IsHidden() ) return AUI_ERRCODE_OK;
 
 	if ( !surface ) surface = m_window->TheSurface();
@@ -106,12 +88,12 @@ AUI_ERRCODE StaticTextBox::DrawThis( aui_Surface *surface, sint32 x, sint32 y )
 
 
 
-	
 
 
 
 
-	
+
+
 
 
 

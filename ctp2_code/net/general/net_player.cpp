@@ -1,13 +1,3 @@
-
-
-
-
-
-
-
-
-
-
 #include "c3.h"
 
 #include "net_player.h"
@@ -85,8 +75,7 @@ void NetPlayer::Packetize(uint8* buf, uint16& size)
 	PUSHLONG(m_player->m_capitol->m_id);
 	PUSHLONG(m_player->m_networkGroup);
 
-	
-	
+
 	PUSHLONG(m_player->m_usedTradeTransportPoints);
 
 
@@ -182,7 +171,7 @@ void NetPlayer::Unpacketize(uint16 id, uint8* buf, uint16 size)
 	PULLBYTE(p->m_first_city);
 	PULLLONG(p->m_capitol->m_id);
 	PULLLONG(p->m_networkGroup);
-	
+
 	PULLLONG(p->m_usedTradeTransportPoints);
 
 
@@ -190,7 +179,7 @@ void NetPlayer::Unpacketize(uint16 id, uint8* buf, uint16 size)
 
 
 
-	
+
 	PULLLONG(p->m_score->m_finalScore);
 	PULLLONG(p->m_score->m_cities_recaptured);
 	PULLLONG(p->m_score->m_opponents_conquered);

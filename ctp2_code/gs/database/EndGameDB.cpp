@@ -1,4 +1,3 @@
-
 #include "c3.h"
 #include "c3errors.h"
 #include "EndGameDB.h"
@@ -53,7 +52,7 @@ void EndGameDatabase::Serialize(CivArchive &archive)
 BOOL EndGameDatabase::Initialize(char *filename, C3DIR dir)
 {
 	m_abort_parse = FALSE;
-	Token *token = new Token(filename, 
+	Token *token = new Token(filename,
 							 TOKEN_ENDGAME_MAX_VAL - TOKEN_MAX,
 							 s_endgameTokenData, dir);
 
@@ -112,4 +111,3 @@ BOOL EndGameDatabase::ParseAnEndGameObject(Token *token, sint32 index)
 	}
 	return TRUE;
 }
-

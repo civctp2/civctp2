@@ -1,4 +1,4 @@
-/* 
+/*
 Copyright (C) 1995-2001 Activision, Inc.
 
 This library is free software; you can redistribute it and/or
@@ -56,7 +56,7 @@ OSErr	FindPrefs(FSSpec* where)
 			error = ResError();
 		}
 	}
-	
+
 	return error;
 }
 
@@ -73,7 +73,7 @@ OSErr VerifyToolExists(char* toolName)
 	if (result == -1) {
 		error = -7;
 	}
-	
+
 	return error;
 }
 
@@ -100,21 +100,21 @@ OSErr CreateConfigRes(Ptr configPtr)
 			len = GetPtrSize(configPtr);
 
 			error = PtrToHand(configPtr, &theStrings, len);
-			
+
 			AddResource(theStrings, 'STR ', kConfigRes, "\pconfig");
 			error = ResError();
-		
+
 			ChangedResource(theStrings);
 			error = ResError();
-			
+
 			WriteResource(theStrings);
 			error = ResError();
-	
+
 			UpdateResFile(ref);					// No screwing around; write that resource!
 			error = ResError();
 
 			FlushVol(nil, prefs.vRefNum);
-	
+
 			CloseResFile(ref);
 		} else {
 			error = ResError();
@@ -130,9 +130,9 @@ OSErr CreateToolNameRes(StringPtr toolName)
 	FSSpec		prefs;
 	OSErr			error;
 	Handle		theStrings;
-	
+
 	//	build the 'STR ' resource
-	
+
 	error = FindPrefs(&prefs);
 	if (error == noErr) {
 		ref = FSpOpenResFile(&prefs, fsRdWrPerm);
@@ -141,23 +141,23 @@ OSErr CreateToolNameRes(StringPtr toolName)
 			if (theStrings != nil) {
 				RemoveResource(theStrings);
 				error = ResError();
-			}			
-			
+			}
+
 			error = PtrToHand(toolName, &theStrings, toolName[0] + 1);
-			
+
 			AddResource(theStrings, 'STR ', kToolNameRes, "\ptoolName");
 			error = ResError();
-			
+
 			ChangedResource(theStrings);
 			error = ResError();
-			
+
 			WriteResource(theStrings);
 			error = ResError();
-			
+
 			UpdateResFile(ref);						// No screwing around; write that resource!
 			error = ResError();
 			FlushVol(nil, prefs.vRefNum);
-	
+
 			CloseResFile(ref);
 		} else {
 			error = ResError();
@@ -173,7 +173,7 @@ OSErr GetConfig(Ptr config)
 	FSSpec		where;
 	short			ref;
 	Handle		theString;
-	Ptr			temp = nil;	
+	Ptr			temp = nil;
 	long			len;
 
 	config[0] = '\0';											// Start without a name
@@ -235,7 +235,6 @@ OSErr GetToolname(char* toolName)
 	} else {
 		error = ResError();
 	}
-	
+
 	return error;
 }
-

@@ -1,4 +1,4 @@
-/* 
+/*
 Copyright (C) 1995-2001 Activision, Inc.
 
 This library is free software; you can redistribute it and/or
@@ -60,7 +60,7 @@ static int dp_PASCAL scores_cb(dptab_t *dptab, dptab_table_t *table, playerHdl_t
 
 	/* Write out incoming score record to web message queue,
 	 * preceded by header:
-	 *	char sessid[8];		// inetadr + port + karma 
+	 *	char sessid[8];		// inetadr + port + karma
 	 *	dp_karma_t sessType;
 	 *	unsigned short bloblen;
 	 */
@@ -87,7 +87,6 @@ static int dp_PASCAL scores_cb(dptab_t *dptab, dptab_table_t *table, playerHdl_t
 
 	return 0;
 }
-
 
 /*--------------------------------------------------------------------------
  Call this once when the server is starting up.
@@ -123,7 +122,7 @@ void servscor_poll(dp_t *dp)
 }
 
 /*--------------------------------------------------------------------------
- Call when a new client connects to the server. 
+ Call when a new client connects to the server.
 --------------------------------------------------------------------------*/
 void servscor_addClient(dp_t *dp, playerHdl_t h)
 {

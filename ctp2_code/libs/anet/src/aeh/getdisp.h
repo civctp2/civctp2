@@ -1,4 +1,4 @@
-/* 
+/*
 Copyright (C) 1995-2001 Activision, Inc.
 
 This library is free software; you can redistribute it and/or
@@ -21,14 +21,12 @@ Foundation, Inc., 59 Temple Place, Suite 330, Boston, MA  02111-1307  USA
 #ifndef _header_getdisp
 #define _header_getdisp
 
-
 struct display_t {
 	DWORD dwFileVersionMS;
 	DWORD dwFileVersionLS;
 	char szName[ 256 ];
 	char szDriver[ MAX_PATH+1 ];
 };
-
 
 DWORD WINAPI GetDisplayProfileData( struct display_t *pDispEntry, DWORD nMaxint );
 
@@ -38,7 +36,6 @@ BOOL GetMyFileVersionInfo( LPSTR szFileName, struct display_t *p );
 DWORD SearchAllSubkeysForDisplays( HKEY hKey, struct display_t *pDispEntry, DWORD nMaxInt, DWORD nFound );
 BOOL GetDriverSpecs( struct display_t *pEntry, char *szSubkey );
 void ClearEntry( struct display_t *pEntry );
-
 
 #endif //_getdisp_dll
 

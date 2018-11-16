@@ -25,10 +25,8 @@
 #ifndef FREETYPE_H
 #define FREETYPE_H
 
-
 #define TT_FREETYPE_MAJOR  1
 #define TT_FREETYPE_MINOR  3
-
 
 #include "fterrid.h"
 #include "ftnameid.h"
@@ -53,7 +51,6 @@
 #ifdef __cplusplus
   extern "C" {
 #endif
-
 
   /*******************************************************************/
   /*                                                                 */
@@ -104,7 +101,6 @@
                                       /* in 26.6 fractional pixels if it  */
                                       /* was.                             */
 
-
   struct  TT_UnitVector_      /* guess what...  */
   {
     TT_F2Dot14  x;
@@ -113,7 +109,6 @@
 
   typedef struct TT_UnitVector_  TT_UnitVector;
 
-
   struct  TT_Vector_          /* simple vector type */
   {
     TT_F26Dot6  x;
@@ -121,7 +116,6 @@
   };
 
   typedef struct TT_Vector_  TT_Vector;
-
 
   /* A simple 2x2 matrix used for transformations. */
   /* You should use 16.16 fixed floats.            */
@@ -137,7 +131,6 @@
   };
 
   typedef struct TT_Matrix_  TT_Matrix;
-
 
   /* A structure used to describe the source glyph to the renderer. */
 
@@ -187,7 +180,6 @@
 
   typedef struct TT_Outline_  TT_Outline;
 
-
   /* A structure used to describe a simple bounding box. */
 
   struct TT_BBox_
@@ -199,7 +191,6 @@
   };
 
   typedef struct TT_BBox_  TT_BBox;
-
 
   /* A structure used to return glyph metrics.                          */
   /*                                                                    */
@@ -226,7 +217,6 @@
   };
 
   typedef struct TT_Glyph_Metrics_  TT_Glyph_Metrics;
-
 
   /* A structure used to return horizontal _and_ vertical glyph         */
   /* metrics.                                                           */
@@ -266,7 +256,6 @@
 
   typedef struct TT_Big_Glyph_Metrics_  TT_Big_Glyph_Metrics;
 
-
   /* A structure used to return instance metrics. */
 
   struct  TT_Instance_Metrics_
@@ -285,7 +274,6 @@
 
   typedef struct TT_Instance_Metrics_  TT_Instance_Metrics;
 
-
   /* Flow constants:                                             */
   /*                                                             */
   /* The flow of a bitmap refers to the way lines are oriented   */
@@ -299,7 +287,6 @@
 #define TT_Flow_Down  -1  /* bitmap is oriented from top to bottom */
 #define TT_Flow_Up     1  /* bitmap is oriented from bottom to top */
 #define TT_Flow_Error  0  /* an error occurred during rendering    */
-
 
   /* A structure used to describe the target bitmap or pixmap to the   */
   /* renderer.  Note that there is nothing in this structure that      */
@@ -341,7 +328,6 @@
 
   typedef struct TT_Raster_Map_  TT_Raster_Map;
 
-
   /* ------ The font header TrueType table structure ------ */
 
   struct  TT_Header_
@@ -372,7 +358,6 @@
   };
 
   typedef struct TT_Header_  TT_Header;
-
 
   /* ------ The horizontal header TrueType table structure ------ */
 
@@ -415,7 +400,6 @@
 
   typedef struct TT_Horizontal_Header_  TT_Horizontal_Header;
 
-
   /*******************************************************/
   /*  This structure is the one defined by the TrueType  */
   /*  specification.  Note that it has exactly the same  */
@@ -455,7 +439,6 @@
   };
 
   typedef struct TT_Vertical_Header_  TT_Vertical_Header;
-
 
   /* ------ The OS/2 table ------ */
 
@@ -509,7 +492,6 @@
 
   typedef struct TT_OS2_  TT_OS2;
 
-
   /* ------ The PostScript table ------ */
 
   struct  TT_Postscript_
@@ -530,7 +512,6 @@
 
   typedef struct TT_Postscript_  TT_Postscript;
 
-
   /* ------ The horizontal device metrics table (`hdmx') ------ */
 
   struct  TT_Hdmx_Record_
@@ -542,7 +523,6 @@
 
   typedef struct TT_Hdmx_Record_  TT_Hdmx_Record;
 
-
   struct  TT_Hdmx_
   {
     TT_UShort        version;
@@ -551,7 +531,6 @@
   };
 
   typedef struct TT_Hdmx_  TT_Hdmx;
-
 
   /* A structure used to describe face properties. */
 
@@ -577,7 +556,6 @@
   };
 
   typedef struct TT_Face_Properties_  TT_Face_Properties;
-
 
   /* Here are the definitions of the handle types used for FreeType's */
   /* most common objects accessed by the client application.  We use  */
@@ -621,11 +599,9 @@
   typedef struct TT_Glyph_     TT_Glyph;     /* glyph handle type         */
   typedef struct TT_CharMap_   TT_CharMap;   /* character map handle type */
 
-
   /* Almost all functions return an error code of this type. */
 
   typedef long  TT_Error;
-
 
   /*******************************************************************/
   /*                                                                 */
@@ -643,18 +619,15 @@
   TT_Error  TT_FreeType_Version( int  *major,
                                  int  *minor );
 
-
   /* Initialize the engine. */
 
   EXPORT_DEF
   TT_Error  TT_Init_FreeType( TT_Engine*  engine );
 
-
   /* Finalize the engine, and release all allocated objects. */
 
   EXPORT_DEF
   TT_Error  TT_Done_FreeType( TT_Engine  engine );
-
 
   /* Set the gray level palette.  This is an array of 5 bytes used */
   /* to produce the font smoothed pixmaps.  By convention:         */
@@ -669,7 +642,6 @@
   EXPORT_DEF
   TT_Error  TT_Set_Raster_Gray_Palette( TT_Engine  engine,
                                         TT_Byte*   palette );
-
 
   /* ----------------------- face management ----------------------- */
 
@@ -688,7 +660,6 @@
                           const TT_Text*  fontPathName,
                           TT_Face*        face );
 
-
   /* Open a TrueType font file located inside a collection. */
   /* The font is assigned by its index in `fontIndex'.      */
 
@@ -697,7 +668,6 @@
                                 const TT_Text*  collectionPathName,
                                 TT_ULong        fontIndex,
                                 TT_Face*        face );
-
 
   /* Return face properties in the `properties' structure.          */
   /*                                                                */
@@ -710,19 +680,16 @@
   TT_Error  TT_Get_Face_Properties( TT_Face              face,
                                     TT_Face_Properties*  properties );
 
-
   /* Set a face object's generic pointer */
 
   EXPORT_DEF
   TT_Error  TT_Set_Face_Pointer( TT_Face  face,
                                  void*    data );
 
-
   /* Get a face object's generic pointer */
 
   EXPORT_DEF
   void*  TT_Get_Face_Pointer( TT_Face  face );
-
 
   /* Close a face's file handle to save system resources.  The file */
   /* will be re-opened automatically on the next disk access.       */
@@ -743,13 +710,11 @@
                                  TT_Short*   topBearings,
                                  TT_UShort*  heights );
 
-
   /* Close a given font object, destroying all associated */
   /* instances.                                           */
 
   EXPORT_DEF
   TT_Error  TT_Close_Face( TT_Face  face );
-
 
   /* Get font or table data. */
 
@@ -760,7 +725,6 @@
                               void*     buffer,
                               TT_Long*  length );
 
-
 /* A simple macro to build table tags from ASCII chars */
 
 #define MAKE_TT_TAG( _x1, _x2, _x3, _x4 ) \
@@ -768,7 +732,6 @@
            ((TT_ULong)_x2 << 16) |        \
            ((TT_ULong)_x3 << 8)  |        \
             (TT_ULong)_x4)
-
 
 
   /* ----------------------- instance management -------------------- */
@@ -780,7 +743,6 @@
   TT_Error  TT_New_Instance( TT_Face       face,
                              TT_Instance*  instance );
 
-
   /* Set device resolution for a given instance.  The values are      */
   /* given in dpi (Dots Per Inch).  Default is 96 in both directions. */
 
@@ -788,7 +750,6 @@
   TT_Error  TT_Set_Instance_Resolutions( TT_Instance  instance,
                                          TT_UShort    xResolution,
                                          TT_UShort    yResolution );
-
 
   /* Set the pointsize for a given instance.  Default is 10pt. */
 
@@ -810,7 +771,6 @@
                                         TT_UShort    pixelHeight,
                                         TT_F26Dot6   pointSize );
 
-
   /* This function has been deprecated!  Do not use it, as it      */
   /* doesn't work reliably.  You can perfectly control hinting     */
   /* yourself when loading glyphs, then apply transforms as usual. */
@@ -820,13 +780,11 @@
                                              TT_Bool      rotated,
                                              TT_Bool      stretched );
 
-
   /* Return instance metrics in `metrics'. */
 
   EXPORT_DEF
   TT_Error  TT_Get_Instance_Metrics( TT_Instance           instance,
                                      TT_Instance_Metrics*  metrics );
-
 
   /* Set an instance's generic pointer. */
 
@@ -834,18 +792,15 @@
   TT_Error  TT_Set_Instance_Pointer( TT_Instance  instance,
                                      void*        data );
 
-
   /* Get an instance's generic pointer. */
 
   EXPORT_DEF
   void*     TT_Get_Instance_Pointer( TT_Instance  instance );
 
-
   /* Close a given instance object, destroying all associated data. */
 
   EXPORT_DEF
   TT_Error  TT_Done_Instance( TT_Instance  instance );
-
 
 
   /* ----------------------- glyph management ----------------------- */
@@ -856,12 +811,10 @@
   TT_Error  TT_New_Glyph( TT_Face    face,
                           TT_Glyph*  glyph );
 
-
   /* Discard (and destroy) a given glyph object. */
 
   EXPORT_DEF
   TT_Error  TT_Done_Glyph( TT_Glyph  glyph );
-
 
 #define TTLOAD_SCALE_GLYPH                    1
 #define TTLOAD_HINT_GLYPH                     2
@@ -869,7 +822,6 @@
 #define TTLOAD_IGNORE_GLOBAL_ADVANCE_WIDTH  256
 
 #define TTLOAD_DEFAULT  (TTLOAD_SCALE_GLYPH | TTLOAD_HINT_GLYPH)
-
 
   /* Load and process (scale/transform and hint) a glyph from the */
   /* given `instance'.  The glyph and instance handles must be    */
@@ -898,7 +850,6 @@
                            TT_UShort    glyphIndex,
                            TT_UShort    loadFlags );
 
-
   /* Return glyph outline pointers in `outline'.  Note that the returned */
   /* pointers are owned by the glyph object, and will be destroyed with  */
   /* it.  The client application should _not_ change the pointers.       */
@@ -907,13 +858,11 @@
   TT_Error  TT_Get_Glyph_Outline( TT_Glyph     glyph,
                                   TT_Outline*  outline );
 
-
   /* Copy the glyph metrics into `metrics'. */
 
   EXPORT_DEF
   TT_Error  TT_Get_Glyph_Metrics( TT_Glyph           glyph,
                                   TT_Glyph_Metrics*  metrics );
-
 
   /* Copy the glyph's big metrics into `metrics'. */
   /* Necessary to obtain vertical metrics.        */
@@ -921,7 +870,6 @@
   EXPORT_DEF
   TT_Error  TT_Get_Glyph_Big_Metrics( TT_Glyph               glyph,
                                       TT_Big_Glyph_Metrics*  metrics );
-
 
   /* Render the glyph into a bitmap, with given position offsets.     */
   /*                                                                  */
@@ -936,7 +884,6 @@
                                  TT_Raster_Map*  map,
                                  TT_F26Dot6      xOffset,
                                  TT_F26Dot6      yOffset );
-
 
   /* Render the glyph into a pixmap, with given position offsets.     */
   /*                                                                  */
@@ -953,7 +900,6 @@
                                  TT_F26Dot6      yOffset );
 
 
-
   /* ----------------------- outline support ------------------------ */
 
   /* Allocate a new outline.  Reserve space for `numPoints' and */
@@ -964,19 +910,16 @@
                             TT_Short     numContours,
                             TT_Outline*  outline );
 
-
   /* Release an outline. */
 
   EXPORT_DEF
   TT_Error  TT_Done_Outline( TT_Outline*  outline );
-
 
   /* Copy an outline into another one. */
 
   EXPORT_DEF
   TT_Error  TT_Copy_Outline( TT_Outline*  source,
                              TT_Outline*  target );
-
 
   /* Render an outline into a bitmap. */
 
@@ -985,14 +928,12 @@
                                    TT_Outline*     outline,
                                    TT_Raster_Map*  map );
 
-
   /* Render an outline into a pixmap. */
 
   EXPORT_DEF
   TT_Error  TT_Get_Outline_Pixmap( TT_Engine       engine,
                                    TT_Outline*     outline,
                                    TT_Raster_Map*  map );
-
 
   /* Return an outline's bounding box -- this function is slow as it */
   /* performs a complete scan-line process, without drawing, to get  */
@@ -1002,13 +943,11 @@
   TT_Error  TT_Get_Outline_BBox( TT_Outline*  outline,
                                  TT_BBox*     bbox );
 
-
   /* Apply a transformation to a glyph outline. */
 
   EXPORT_DEF
   void  TT_Transform_Outline( TT_Outline*  outline,
                               TT_Matrix*   matrix );
-
 
   /* Apply a translation to a glyph outline. */
 
@@ -1017,14 +956,12 @@
                               TT_F26Dot6   xOffset,
                               TT_F26Dot6   yOffset );
 
-
   /* Apply a transformation to a vector. */
 
   EXPORT_DEF
   void  TT_Transform_Vector( TT_F26Dot6*  x,
                              TT_F26Dot6*  y,
                              TT_Matrix*   matrix );
-
 
   /* Compute A*B/C with 64 bits intermediate precision. */
 
@@ -1033,14 +970,12 @@
                       TT_Long  B,
                       TT_Long  C );
 
-
   /* Compute A*B/0x10000 with 64 bits intermediate precision. */
   /* Useful to multiply by a 16.16 fixed float value.         */
 
   EXPORT_DEF
   TT_Long  TT_MulFix( TT_Long  A,
                       TT_Long  B );
-
 
   /* ----------------- character mapping support --------------- */
 
@@ -1059,7 +994,6 @@
   EXPORT_DEF
   int  TT_Get_CharMap_Count( TT_Face  face );
 
-
   /* Return the ID of charmap number `charmapIndex' of a given face */
   /* used to enumerate the charmaps present in a TrueType file.     */
 
@@ -1068,7 +1002,6 @@
                                TT_UShort   charmapIndex,
                                TT_UShort*  platformID,
                                TT_UShort*  encodingID );
-
 
   /* Look up the character maps found in `face' and return a handle */
   /* for the one matching `platformID' and `platformEncodingID'     */
@@ -1081,7 +1014,6 @@
                             TT_UShort    charmapIndex,
                             TT_CharMap*  charMap );
 
-
   /* Translate a character code through a given character map   */
   /* and return the corresponding glyph index to be used in     */
   /* a TT_Load_Glyph() call.  This function returns 0 in case   */
@@ -1090,7 +1022,6 @@
   EXPORT_DEF
   TT_UShort  TT_Char_Index( TT_CharMap  charMap,
                             TT_UShort   charCode );
-
 
 
   /* --------------------- names table support ------------------- */
@@ -1109,7 +1040,6 @@
   EXPORT_DEF
   int  TT_Get_Name_Count( TT_Face  face );
 
-
   /* Return the ID of the name number `nameIndex' of a given face */
   /* used to enumerate the charmaps present in a TrueType file.   */
 
@@ -1120,7 +1050,6 @@
                             TT_UShort*  encodingID,
                             TT_UShort*  languageID,
                             TT_UShort*  nameID );
-
 
   /* Return the address and length of the name number `nameIndex' */
   /* of a given face in the variables `stringPtr' resp. `length'. */
@@ -1136,12 +1065,10 @@
                                 TT_String**  stringPtr,
                                 TT_UShort*   length );
 
-
 #ifdef __cplusplus
   }
 #endif
 
 #endif /* FREETYPE_H */
-
 
 /* END */

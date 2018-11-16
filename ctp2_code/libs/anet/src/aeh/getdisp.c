@@ -1,4 +1,4 @@
-/* 
+/*
 Copyright (C) 1995-2001 Activision, Inc.
 
 This library is free software; you can redistribute it and/or
@@ -22,15 +22,12 @@ Foundation, Inc., 59 Temple Place, Suite 330, Boston, MA  02111-1307  USA
 #define _getdisp_dll
 #endif
 
-
 #include "windows.h"
 #include "winver.h"
 #include "registry.h"
 #include "getdisp.h"
 
-
 char szScratch[ MAX_PATH ];
-
 
 
 BOOL GetMyFileVersionInfo( LPSTR szFileName, struct display_t *p )
@@ -55,7 +52,6 @@ BOOL GetMyFileVersionInfo( LPSTR szFileName, struct display_t *p )
 	return TRUE;
 }
 
-
 void ClearEntry( struct display_t *pEntry )
 {
 	memset( pEntry->szName, 0, 256 );
@@ -63,7 +59,6 @@ void ClearEntry( struct display_t *pEntry )
 	pEntry->dwFileVersionMS = 0;
 	pEntry->dwFileVersionLS = 0;
 }
-
 
 BOOL GetDriverSpecs( struct display_t *pEntry, char *szSubKey )
 {
@@ -119,7 +114,6 @@ BOOL GetDriverSpecs( struct display_t *pEntry, char *szSubKey )
 	return TRUE;
 }
 
-
 DWORD SearchAllSubkeysForDisplays( HKEY hKey, struct display_t *pDispEntry, DWORD nMaxInt, DWORD nFound )
 {
 	DWORD index = 0;
@@ -165,7 +159,6 @@ DWORD SearchAllSubkeysForDisplays( HKEY hKey, struct display_t *pDispEntry, DWOR
 
 	return nFound;
 }
-
 
 DWORD WINAPI GetDisplayProfileData( struct display_t *pDispEntry, DWORD nMaxInt )
 {

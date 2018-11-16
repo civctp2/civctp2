@@ -1,4 +1,3 @@
-
 #include "c3.h"
 #include "airndcnt.h"
 #include "civarchive.h"
@@ -13,7 +12,7 @@
 
 AIRoundCount::AIRoundCount()
 {
-	m_count = 0.0; 
+	m_count = 0.0;
 }
 
 
@@ -23,9 +22,9 @@ AIRoundCount::AIRoundCount()
 
 
 AIRoundCount::AIRoundCount(CivArchive &archive)
-{ 
-    Serialize(archive); 
-} 
+{
+    Serialize(archive);
+}
 
 
 
@@ -37,10 +36,10 @@ void AIRoundCount::Serialize(CivArchive &archive)
 {
     CHECKSERIALIZE
 
-    if (archive.IsStoring()) { 
-        archive.Store((uint8*)this, sizeof(*this)); 
-    } else { 
-        archive.Load((uint8*)this, sizeof(*this)); 
+    if (archive.IsStoring()) {
+        archive.Store((uint8*)this, sizeof(*this));
+    } else {
+        archive.Load((uint8*)this, sizeof(*this));
     }
 }
 
@@ -64,8 +63,7 @@ void AIRoundCount::BeginTurn(AiMain *ai)
 
 
 double AIRoundCount::EstimateRoundsToEnd() const
-{ 
+{
 
-	return max(500 - m_count, 2.0); 
-} 
-
+	return max(500 - m_count, 2.0);
+}

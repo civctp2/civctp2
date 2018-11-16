@@ -1,5 +1,3 @@
-
-
 #include "c3.h"
 #include "net_exclusions.h"
 #include "Exclusions.h"
@@ -50,7 +48,7 @@ void NetExclusions::Unpacketize(uint16 id, uint8 *buf, uint16 size)
 
 	PULLID(packid);
 	Assert(packid == k_PACKET_EXCLUSIONS_ID);
-	
+
 	if(!g_exclusions) {
 		g_exclusions = new Exclusions();
 	}

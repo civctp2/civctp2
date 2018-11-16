@@ -12,12 +12,12 @@ class TerrainImprovementRecord;
 class Installation : public ID {
 private:
 public:
-	Installation () : ID() { return; } ; 
-	Installation (sint32 val) : ID (val) { return; }; 
-	Installation (uint32 val) : ID (val) { return; }; 
+	Installation () : ID() { return; } ;
+	Installation (sint32 val) : ID (val) { return; };
+	Installation (uint32 val) : ID (val) { return; };
 #ifdef WIN32
-	Installation (const int val) : ID (val) { return; }; 
-	Installation (const unsigned int val) : ID (val) { return; }; 
+	Installation (const int val) : ID (val) { return; };
+	Installation (const unsigned int val) : ID (val) { return; };
 #endif
 
 	void KillInstallation();

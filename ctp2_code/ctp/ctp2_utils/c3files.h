@@ -47,12 +47,12 @@
 //----------------------------------------------------------------------------
 
 enum C3DIR {
-	C3DIR_DIRECT	= -1,	
+	C3DIR_DIRECT	= -1,
 
-	C3DIR_GAMEDATA,			
+	C3DIR_GAMEDATA,
   	C3DIR_GL,
 	C3DIR_AIDATA,
-    C3DIR_UIDATA,			
+    C3DIR_UIDATA,
 	C3DIR_LAYOUT,
 	C3DIR_FONTS,
 	C3DIR_GRAPHICS,
@@ -62,7 +62,7 @@ enum C3DIR {
 	C3DIR_PICTURES,
 	C3DIR_ICONS,
 	C3DIR_CURSORS,
-    C3DIR_SOUNDS, 
+    C3DIR_SOUNDS,
 	C3DIR_VIDEOS,
 
 	C3DIR_MAX
@@ -123,7 +123,6 @@ bool		c3files_CreateDirectory(MBCHAR const *path);
 
 void		c3files_StripSpaces(MBCHAR *s);
 
-
 bool		c3files_getfilelist(C3SAVEDIR dirID, MBCHAR *ext, PointerList<MBCHAR> *plist);
 #if defined WIN32
 bool		c3files_getfilelist_ex(C3SAVEDIR dirID, MBCHAR *ext, PointerList<WIN32_FIND_DATA> *plist);
@@ -134,11 +133,10 @@ bool		c3files_getfilelist_ex(C3SAVEDIR dirID, MBCHAR *ext, PointerList<WIN32_FIN
  *
  * If the directory does not exist, it'll be created. If the creation
  * fails, NULL is returned instead.
- * 
+ *
  * @returns Path to existing CTP2 directory within users' home
  */
 const MBCHAR * c3files_GetCTPHomeDir();
-
 
 bool		c3files_HasLegalCD(void);
 void		c3files_InitializeCD(void);
@@ -149,9 +147,9 @@ void		c3files_InitializeCD(void);
  */
 int		c3files_GetCDDriveCount(void);
 /** Returns the number of the CD drive, which contains the CTP2 CD.
- * 
+ *
  * If no CD drive exists or no drive contains the CTP2 CD, -1 is returned.
- * 
+ *
  * @returns CDDriveNum
  */
 int		c3files_GetCTPCDDriveNum(void);

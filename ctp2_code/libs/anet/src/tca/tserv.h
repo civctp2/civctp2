@@ -1,4 +1,4 @@
-/* 
+/*
 Copyright (C) 1995-2001 Activision, Inc.
 
 This library is free software; you can redistribute it and/or
@@ -54,12 +54,12 @@ typedef struct {
 	tca_t *tca;
 
 	clock_t tnextPoll;
-	
+
 	long magic;
-	
+
 	/* server info */
 	assoctab_t *clients;        /* list of clients' info indexed by handle */
-	
+
 	/* client info */
 	playerHdl_t hServer;
    	tcapw_entry_t userinfo;
@@ -114,7 +114,7 @@ typedef struct {
 #define tserv_KIND_CREDENTIALS 'k'
 
 /* The packets that go over the wire.  Packed to avoid wasted space
- * and for portability. 
+ * and for portability.
  */
 #include "dppack1.h"
 
@@ -132,11 +132,11 @@ typedef struct {
 /*
  * This packet is from a server to a client requesting
  * that a connection be opened to that specified address pair
- * This packet should only be accepted by clients if it comes from a 
+ * This packet should only be accepted by clients if it comes from a
  * server and should be discarded otherwise.
  *
  * The reason for this packets existence is allow people behind firewalls
- * to open connections to each other, and to tell the client the uid of the 
+ * to open connections to each other, and to tell the client the uid of the
  * guy he's opening a connection to.
  *
  * The two addresses adr, adr2 are the two address of the player who
@@ -250,7 +250,7 @@ dp_result_t tserv_poll(tserv_t *tserv);
 	 dp_RES_EMPTY   packet rec'd from handle h not in client table,
 	                please close handle with dpio_closeHdl(result->h);
      dp_RES_CREATED	player created and logged in with given h/uid,
-	                please send a secret code email. 
+	                please send a secret code email.
 	 dp_RES_CHANGED player h/uid changed his password, email, or flags.
 	 dp_RES_HELP    please send another secret code email.
  Possible values of return->reason for the client on validation are:
@@ -311,7 +311,7 @@ dp_result_t tserv_server_add(tserv_t *tserv, playerHdl_t hServer);
 
  Success or failure is indicated by the result event from a later call
  to tserv_handle_packet().
- If the account has not yet been activated, the 
+ If the account has not yet been activated, the
 --------------------------------------------------------------------------*/
 dp_result_t tserv_account_loginW(tserv_t *tserv, const wchar_t *username, const wchar_t *password);
 
@@ -327,7 +327,7 @@ dp_result_t tserv_account_loginA(tserv_t *tserv, const char *username, const cha
  Client only.
  Call to create a new account.
 
- flags is either zero (if user wants junk mail) or 
+ flags is either zero (if user wants junk mail) or
  tcapw_entry_FLAGS_EMAIL_PRIVATE (if user prefers privacy).
 
  'username' is an arbitrary name the user would like to use; it must not be
@@ -336,7 +336,7 @@ dp_result_t tserv_account_loginA(tserv_t *tserv, const char *username, const cha
 
  'password' is an arbitrary string the user can remember; he will need it to
  log into the account later.  If this is easy to guess, the account is
- vulnerable to hacking.  
+ vulnerable to hacking.
 
  'email' is the user's Internet email address; this is required so we can
  make it harder for cheaters to create new accounts frequently and avoid
@@ -347,10 +347,10 @@ dp_result_t tserv_account_loginA(tserv_t *tserv, const char *username, const cha
 		 dp_RES_BAD on bad args.
 
  Success or failure is indicated by the result event from a later call
- to tserv_handle_packet().  
+ to tserv_handle_packet().
  If it succeeds, the user will receive an email containing a secret code
  needed to activate the account.  This should be entered by calling
- tserv_account_activate() after calling tserv_account_login() and receiving 
+ tserv_account_activate() after calling tserv_account_login() and receiving
  an event from tserv_handle_packet() containing reason dp_RES_NOTYET.
 --------------------------------------------------------------------------*/
 dp_result_t tserv_account_createW(tserv_t *tserv, const wchar_t *username, const wchar_t *password, int flags, const wchar_t *email);
@@ -396,7 +396,7 @@ dp_result_t tserv_account_activateA(tserv_t *tserv, const char *secretcode);
 
  username, password, and email are in native byte-order unicode or ASCII.
  flags is a union of user set tcapw_entry_FLAGS_*.
-  
+
  Returns dp_RES_OK if the request was successfully queued,
          dp_RES_BAD if the client was not logged in or authenticated,
          dp_RES_* if the request can't be queued.
@@ -419,7 +419,7 @@ dp_result_t tserv_change_passwordA(tserv_t *tserv, const char *oldpassword, cons
  Used only if user loses the email containing the secret code sent at account
  creation time.
  Can only be called after logging in, but before account has been activated.
- Call this to request that the server send the secret code needed for 
+ Call this to request that the server send the secret code needed for
  account activation to the user's email address.
  Multiple calls will result in the same message being sent.
 --------------------------------------------------------------------------*/

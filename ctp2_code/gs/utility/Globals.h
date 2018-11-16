@@ -42,7 +42,6 @@
 #define k_GAME_OBJ_TYPE_ENDGAME_OBJECT          14U
 #define k_GAME_OBJ_TYPE_TERRAIN_IMPROVEMENT_DB  15U
 
-
 //----------------------------------------------------------------------------
 // Library dependencies
 //----------------------------------------------------------------------------
@@ -57,25 +56,21 @@
 #define k_GAME_OBJ_TYPE_INFRASTRUCTURE          17U
 
 
-
 #define k_MAX_CIVILISATIONS	64
 #define k_MAP_WRAPAROUND 5
-
 
 #include "gstypes.h"
 #include "directions.h"
 
-enum ATTITUDE { 
+enum ATTITUDE {
     ATTITUDE_NULL,
-    ATTITUDE_HAPPY, 
+    ATTITUDE_HAPPY,
     ATTITUDE_CONTENT,
-    ATTITUDE_ANGRY, 
+    ATTITUDE_ANGRY,
     ATTITUDE_NO_EFFECT
 };
 
-
-typedef sint32 PopDBIndex; 
-
+typedef sint32 PopDBIndex;
 
 enum MAPSIZE {
 	MAPSIZE_SMALL,
@@ -83,7 +78,6 @@ enum MAPSIZE {
 	MAPSIZE_LARGE,
 	MAPSIZE_GIGANTIC
 };
-
 
 /// Global utilities for allocated object pointers
 namespace allocated

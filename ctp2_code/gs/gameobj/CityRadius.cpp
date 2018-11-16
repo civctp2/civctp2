@@ -10,13 +10,13 @@
 //
 // THIS FILE IS NOT GENERATED OR SUPPORTED BY ACTIVISION.
 //
-// This material has been developed at apolyton.net by the Apolyton CtP2 
+// This material has been developed at apolyton.net by the Apolyton CtP2
 // Source Code Project. Contact the authors at ctp2source@apolyton.net.
 //
 //----------------------------------------------------------------------------
 //
 // Compiler flags
-// 
+//
 //----------------------------------------------------------------------------
 //
 // Modifications from the original Activision code:
@@ -33,7 +33,6 @@
 
 extern World *g_theWorld;
 extern MapPoint g_mp_size;
-
 
 #include "directions.h"	// NOWHERE
 
@@ -54,7 +53,7 @@ extern MapPoint g_mp_size;
 //
 //----------------------------------------------------------------------------
 
-void CityRadiusIterator(const MapPoint &cpos, 
+void CityRadiusIterator(const MapPoint &cpos,
 						CityRadiusCallback *cb)
 {
 	// Visit the outer ring, skipping the N, E, S, and W points

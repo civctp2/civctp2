@@ -11,7 +11,7 @@
 //
 // THIS FILE IS NOT GENERATED OR SUPPORTED BY ACTIVISION.
 //
-// This material has been developed at apolyton.net by the Apolyton CtP2 
+// This material has been developed at apolyton.net by the Apolyton CtP2
 // Source Code Project. Contact the authors at ctp2source@apolyton.net.
 //
 //----------------------------------------------------------------------------
@@ -28,11 +28,9 @@
 //
 //----------------------------------------------------------------------------
 
-
 //#ifdef _TIFF_DATA_TYPEDEFS_
 #define CONFIG_TELLS_TO_DEFINE_TIFF_INTTYPES 1
 //#endif
-
 
 #include "c3.h"
 #ifdef CONFIG_TELLS_TO_DEFINE_TIFF_INTTYPES
@@ -84,7 +82,6 @@ char *tiffutils_LoadTIF(const char *filename, uint16 *width, uint16 *height, siz
 	return NULL;
 }
 
-
 char *TIF2mem(const char *filename, uint16 *width, uint16 *height, size_t *size)
 {
   printf("%s L%d: Code for loading TIFF removed (commented out)!\n", __FILE__, __LINE__);
@@ -132,13 +129,12 @@ char *TIF2mem(const char *filename, uint16 *width, uint16 *height, size_t *size)
 	return image;
 }
 
-
 int TIFGetMetrics(const char *filename, uint16 *width, uint16 *height)
 {
   printf("%s L%d: Code for loading TIFF removed (commented out)!\n", __FILE__, __LINE__);
     // 	TIFF *  tif = TIFFOpen(filename, "r");
 
-    // 	if (tif) 
+    // 	if (tif)
     // {
     // 	    uint32  w   = 0;
     //     uint32  h   = 0;
@@ -158,10 +154,10 @@ int TIFGetMetrics(const char *filename, uint16 *width, uint16 *height)
 int TIFLoadIntoBuffer16(const char *filename, uint16 *width, uint16 *height, uint16 imageRowBytes, uint16 *buffer, BOOL is565)
 {
   printf("%s L%d: Code for loading TIFF removed (commented out)!\n", __FILE__, __LINE__);
-	// uint32  w=0, h=0;  
+	// uint32  w=0, h=0;
     // 	TIFF    *tif = TIFFOpen(filename, "r");
 
-    // 	if (tif) 
+    // 	if (tif)
     // {
     // 		TIFFGetField(tif, TIFFTAG_IMAGEWIDTH, &w);
     // 		TIFFGetField(tif, TIFFTAG_IMAGELENGTH, &h);
@@ -170,9 +166,9 @@ int TIFLoadIntoBuffer16(const char *filename, uint16 *width, uint16 *height, uin
     // 		size_t  npixels     = w * h;
     // 		char *  raster      = (char *) _TIFFmalloc(npixels * sizeof(uint32));
 
-    //     if (raster) 
+    //     if (raster)
     //     {
-    // 			if (TIFFReadRGBAImage(tif, w, h, (uint32 *)raster, 0)) 
+    // 			if (TIFFReadRGBAImage(tif, w, h, (uint32 *)raster, 0))
     //         {
     // 				char * imagePtr     = (char *)buffer;
     // 				char * rasterPtr    = raster + (bytesPerRow * (h-1));
@@ -188,7 +184,6 @@ int TIFLoadIntoBuffer16(const char *filename, uint16 *width, uint16 *height, uin
     // 						imagePtrCopy = (uint16 *)imagePtr;
     // 						rasterPtrCopy = (uint32 *)rasterPtr;
 
-
     // 						for (i=0; i<(sint32)w; i++) {
     // 							pixel = *rasterPtrCopy++;
     // 							*imagePtrCopy++ = (uint16)(((pixel & 0x000000F8) << 8) | ((pixel & 0x0000FC00) >> 5) | ((pixel & 0x00F80000) >> 19));
@@ -202,7 +197,6 @@ int TIFLoadIntoBuffer16(const char *filename, uint16 *width, uint16 *height, uin
 
     // 						imagePtrCopy = (uint16 *)imagePtr;
     // 						rasterPtrCopy = (uint32 *)rasterPtr;
-
 
     // 						for (i=0; i<(sint32)w; i++) {
     // 							pixel = *rasterPtrCopy++;
@@ -263,14 +257,14 @@ char *StripTIF2Mem(const char *filename, uint16 *width, uint16 *height, size_t *
 	// for (uint32 row = 0; row < imageLength; row += RowsPerStrip)
 	// {
 	// 	tsize_t nrow = (row + RowsPerStrip > imageLength ? imageLength - row : RowsPerStrip);
-	// 	if (TIFFReadEncodedStrip(tif, TIFFComputeStrip(tif, row, 0), buf, nrow*LineSize)==-1) 
+	// 	if (TIFFReadEncodedStrip(tif, TIFFComputeStrip(tif, row, 0), buf, nrow*LineSize)==-1)
         // {
         //     /// @todo Check free(buf)?
 	// 		return NULL;
-	// 	} 
-        // else 
+	// 	}
+        // else
         // {
-	// 		for (tsize_t l = 0; l < nrow; l++) 
+	// 		for (tsize_t l = 0; l < nrow; l++)
         //     {
 	// 			memcpy(outBufPtr, &buf[l * LineSize], imageWidth * 4);
 	// 			outBufPtr += imageWidth * 4;
@@ -287,4 +281,3 @@ char *StripTIF2Mem(const char *filename, uint16 *width, uint16 *height, size_t *
 	// return outBuf;
         return NULL;
 }
-

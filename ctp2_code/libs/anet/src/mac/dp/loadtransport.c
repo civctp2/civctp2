@@ -1,4 +1,4 @@
-/* 
+/*
 Copyright (C) 1995-2001 Activision, Inc.
 
 This library is free software; you can redistribute it and/or
@@ -32,7 +32,6 @@ unsigned long*		hSer = nil;
 unsigned char*		transportGlobalsName = "\pgSer";
 ConnHandle			gConnection;
 
-
 /*----------------------------------------------------------------------
  Called internally to load a code fragment.
 ----------------------------------------------------------------------*/
@@ -49,13 +48,13 @@ OSErr preloadTransport(StringPtr transportName, CFragConnectionID* connID)
 	//	transport. We do this by looking for a file with a code
 	//	fragment and then we load all of the function pointers
 	//	from it for later use throughout the application
-	
+
 	//	create a pascal string which is the file name which has the
 	//	fragment in it
-	
+
 	anErr = FSMakeFSSpec(gvRef, gparID, transportName, &spec);
 	if (anErr == noErr) {
-	
+
 		anErr = GetDiskFragment(
 			&spec,
 			0,
@@ -66,7 +65,7 @@ OSErr preloadTransport(StringPtr transportName, CFragConnectionID* connID)
 			&mainAddr,
 			errName
 		);
-		
+
 	}
 	return anErr;
 }
@@ -105,7 +104,6 @@ void SetBasePath(void)
 	}
 }
 
-
 OSErr SetData(CFragConnectionID connID, unsigned long value)
 {
 	OSErr error;
@@ -115,13 +113,12 @@ OSErr SetData(CFragConnectionID connID, unsigned long value)
 	Str255 myName;
 	Ptr myAddr;
 
-	error = FindSymbol(connID, transportGlobalsName, (char**)&hSer, &symClass);	// Find the global 
+	error = FindSymbol(connID, transportGlobalsName, (char**)&hSer, &symClass);	// Find the global
 	if (error == noErr) {																// Found it; make it nil
 		*hSer = value;
 	}
 	return error;
 }
-
 
 OSErr SetupData(CFragConnectionID connID)
 {
@@ -132,13 +129,12 @@ OSErr SetupData(CFragConnectionID connID)
 	Str255 myName;
 	Ptr myAddr;
 
-	error = FindSymbol(connID, transportGlobalsName, (char**)&hSer, &symClass);	// Find the global 
+	error = FindSymbol(connID, transportGlobalsName, (char**)&hSer, &symClass);	// Find the global
 	if (error == noErr) {																			// Found it; make it nil
 		*hSer = nil;
 	}
 	return error;
 }
-
 
 OSErr GetData(CFragConnectionID connID, unsigned long* value)
 {
@@ -157,7 +153,6 @@ OSErr GetData(CFragConnectionID connID, unsigned long* value)
 	return error;
 }
 
-
 void CleanupTransport(CFragConnectionID connID)
 {
 	OSErr				error;
@@ -172,7 +167,7 @@ void CleanupTransport(CFragConnectionID connID)
 			error = CMClose(ser->sConnection, false, nil, 0, false);
 			CMDispose(ser->sConnection);
 		}
-		
+
 		DisposePtr((Ptr)ser);
 		error = SetData(connID, nil);
 	}
@@ -195,14 +190,14 @@ OSErr TotalHack(CFragConnectionID connID)
 	THz					myZone;
 	ser_t*				storage;
 	gConnection = nil;
-	
+
 	// get a Connection Tool name
 	strcpy((char *)toolName, "Apple Modem Tool");						// so try to use the Apple modem tool
 	c2pstr((char *)toolName);
 	end = (char *)(toolName + toolName[0] + 1);
 	memset(end, '\0', 255 - toolName[0]);
 	// init the CMBufferSizes variable so that Tool will init with defaults
-	
+
 	bufSizes[cmDataIn] = 0;
 	bufSizes[cmDataOut] = 0;
 	bufSizes[cmCntlIn] = 0;
@@ -211,7 +206,7 @@ OSErr TotalHack(CFragConnectionID connID)
 	bufSizes[cmAttnOut] = 0;
 	bufSizes[cmRsrvIn] = 0;
 	bufSizes[cmRsrvOut] = 0;
-	
+
 	error = noErr;
 	myZone = GetZone();
 	SetZone(SystemZone());
@@ -220,8 +215,8 @@ OSErr TotalHack(CFragConnectionID connID)
 	if (procID == -1) {
 		error = -2;
 	}
-	
-	// now get a conn record set up 
+
+	// now get a conn record set up
 	if (error == noErr) {
 		gConnection = CMNew(procID, cmData|cmNoMenus|cmQuiet, bufSizes, 0, 0);
 		if (gConnection != nil) {
@@ -230,7 +225,7 @@ OSErr TotalHack(CFragConnectionID connID)
 			error = SetData(connID, (unsigned long)storage);
 		}
 	}
-	
+
 	return error;
 }
 
@@ -238,34 +233,34 @@ OSErr TotalHack(CFragConnectionID connID)
 //	if there are any errors, we return FALSE.
 Boolean InitializeCommToolBox(void) {
 	CMErr			err;
-	
+
 	//CMTest();
 	//CMTest2();
 	//	this can only be initialized once
-	
+
 	if (!gCTBLoaded) {
-	
+
 		if (NGetTrapAddress(_CommToolboxDispatch, OSTrap) == NGetTrapAddress(_Unimplemented, OSTrap)) {
 			return false;
 		}
-		
+
 		err = InitCTBUtilities();
 		if (err != noErr) {
 			return false;
 		}
-		
+
 		err = InitCRM();
 		if (err != noErr) {
 			return false;
 		}
-		
+
 		err = InitCM();
 		if (err == cmNoTools) {
 			return false;
 		}
-		
+
 		gCTBLoaded = true;
 	}
-	
+
 	return true;
 }

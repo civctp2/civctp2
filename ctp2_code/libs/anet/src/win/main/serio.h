@@ -1,4 +1,4 @@
-/* 
+/*
 Copyright (C) 1995-2001 Activision, Inc.
 
 This library is free software; you can redistribute it and/or
@@ -42,7 +42,7 @@ Foundation, Inc., 59 Temple Place, Suite 330, Boston, MA  02111-1307  USA
 typedef struct {
 	OVERLAPPED overlap;			/* Shared status from operating system */
 	int pending;				/* TRUE after issuing read or write */
-	char buf[serio_BUFSIZE];	/* empty if head == tail */	
+	char buf[serio_BUFSIZE];	/* empty if head == tail */
 	int head;					/* offset of next byte to remove */
 	int tail;					/* offset at which to add next byte */
 } serio_q_t;
@@ -53,7 +53,7 @@ typedef struct {
 	HANDLE  port;				/* Result of CreateFile(portname, ...) */
 	serio_q_t rx;				/* Input Queue */
 	serio_q_t tx;				/* Output Queue */
-} serio_t;	
+} serio_t;
 
 /* A result.  Lets you know if a call failed, and why. */
 typedef int serio_res_t;	/* Error/success status type. */
@@ -100,21 +100,21 @@ serio_res_t serio_write(serio_t *serio, void *buf, size_t len);
 serio_res_t serio_read(serio_t *serio, void *buf, size_t len, size_t *n_received);
 
 /*-------------------------------------------------------------------------
- Handle any system calls that need to be made, 
+ Handle any system calls that need to be made,
  or check up on any that are already in progress.
 -------------------------------------------------------------------------*/
 serio_res_t serio_poll(serio_t *serio);
 
 /*-------------------------------------------------------------------------
- Purge input buffer.  Any characters received by the serial port are 
+ Purge input buffer.  Any characters received by the serial port are
  thrown away.
 -------------------------------------------------------------------------*/
-serio_res_t serio_purge_read(serio_t *serio); 
+serio_res_t serio_purge_read(serio_t *serio);
 
 /*-------------------------------------------------------------------------
- Purge output buffer.  Any characters not yet sent by the serial port are 
+ Purge output buffer.  Any characters not yet sent by the serial port are
  thrown away.
 -------------------------------------------------------------------------*/
-serio_res_t serio_purge_write(serio_t *serio); 
+serio_res_t serio_purge_write(serio_t *serio);
 
 #endif

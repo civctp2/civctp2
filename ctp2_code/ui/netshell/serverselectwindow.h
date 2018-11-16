@@ -1,27 +1,14 @@
-
-
-
-
-
-
-
-
-
-
-
 #ifndef __SERVERSELECTWINDOW_H__
 #define __SERVERSELECTWINDOW_H__
-
 
 #include "ns_window.h"
 #include "aui_action.h"
 
 
-
 class ServerSelectWindow : public ns_Window
 {
 public:
-	
+
 	ServerSelectWindow( AUI_ERRCODE *retval );
 	virtual ~ServerSelectWindow();
 
@@ -34,7 +21,6 @@ public:
 	void	Update( bool wait = false );
 	virtual AUI_ERRCODE Idle( void );
 
-	
 
 	enum CONTROL
 	{
@@ -50,9 +36,8 @@ public:
 	};
 
 protected:
-	
 
-	aui_Action *m_dbActionArray[ 1 ]; 
+	aui_Action *m_dbActionArray[ 1 ];
 
 	AUI_ACTION_BASIC(OKButtonAction);
     AUI_ACTION_BASIC(CancelButtonAction);
@@ -60,5 +45,4 @@ protected:
     AUI_ACTION_BASIC(DialogBoxPopDownAction);
 };
 
-
-#endif 
+#endif

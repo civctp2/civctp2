@@ -1,13 +1,3 @@
-
-
-
-
-
-
-
-
-
-
 #ifndef __troop_flow_h__
 #define __troop_flow_h__
 
@@ -21,18 +11,17 @@ typedef struct tag_troop_flow * TROOP_FLOW_PTR;
 
 
 
-typedef struct tag_troop_flow 
+typedef struct tag_troop_flow
 {
 
-  int strength;					
+  int strength;
 
-  int max_strength;				
+  int max_strength;
 
 } troop_flow;
 
 #ifdef __cplusplus
 }
 #endif
-
 
 #endif

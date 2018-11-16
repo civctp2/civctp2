@@ -11,7 +11,7 @@
 //
 // THIS FILE IS NOT GENERATED OR SUPPORTED BY ACTIVISION.
 //
-// This material has been developed at apolyton.net by the Apolyton CtP2 
+// This material has been developed at apolyton.net by the Apolyton CtP2
 // Source Code Project. Contact the authors at ctp2source@apolyton.net.
 //
 //----------------------------------------------------------------------------
@@ -81,7 +81,6 @@ Pixel32 *tileutils_LowPassFilter(Pixel32 *image, uint32 width, uint32 height)
 				  0.11111111, 0.11111111, 0.11111111,
 				  0.11111111, 0.11111111, 0.11111111 };
 
-
 	Pixel32	*filteredImage;
 
 	if (!RealConvolution(image, width, height, 0, 0, LP1, 3, 3, g_lowPassScale, FALSE, &filteredImage)) {
@@ -123,7 +122,7 @@ char *tileutils_PostProcessImage(char *image, uint16 width, uint16 height)
 char *tileutils_TIF2mem(char *filename, uint16 *width, uint16 *height)
 {
 	char *image = TIF2mem(filename, width, height);
-	
+
 	return tileutils_PostProcessImage(image, *width, *height);
 }
 
@@ -134,10 +133,8 @@ char *tileutils_StripTIF2Mem(char *filename, uint16 *width, uint16 *height)
 	return tileutils_PostProcessImage(image, *width, *height);
 }
 
-
 Pixel16 *tileutils_TGA2mem(char *filename, uint16 *width, uint16 *height)
 {
-
 
 	int		bpp;
 	int		w, h;
@@ -158,7 +155,6 @@ Pixel16 *tileutils_TGA2mem(char *filename, uint16 *width, uint16 *height)
 	return buffer;
 }
 
-
 void tileutils_EncodeCopyRun(Pixel32 **inBuf, int *pos, int width, Pixel16 **outBufPtr)
 {
 	Pixel16			pix16;
@@ -170,33 +166,27 @@ void tileutils_EncodeCopyRun(Pixel32 **inBuf, int *pos, int width, Pixel16 **out
 	RGB32Info(**inBuf, &pix16, &alpha);
 	Pixel32         pix32 = (**inBuf) & k_32_BIT_RGB_MASK;
 
-	while (pix32 != k_32_BIT_SKIP_PIXEL 
-				&& pix32 != k_32_BIT_SHADOW_PIXEL 
-				&& pix32 != k_32_BIT_COLORIZE_PIXEL 
+	while (pix32 != k_32_BIT_SKIP_PIXEL
+				&& pix32 != k_32_BIT_SHADOW_PIXEL
+				&& pix32 != k_32_BIT_COLORIZE_PIXEL
 				&& (*pos < width)) {
-		
+
 		**outBufPtr = pix16;
 
-		
 		(*outBufPtr)++;
-		
-		
+
 		(*inBuf)++;
 
-		
 		(*pos)++;
 
-		
 		runLen++;
 
 		RGB32Info(**inBuf, &pix16, &alpha);
 		pix32 = (**inBuf) & k_32_BIT_RGB_MASK;
 	}
-	
-	
+
 	Pixel16			footer      = static_cast<Pixel16>(k_TILE_COPY_RUN_ID << 8 | runLen);
 
-	
 	if (*pos >= width) footer |= k_TILE_EOLN_ID << 8;
 
 	*headerPtr = footer;
@@ -213,23 +203,19 @@ void tileutils_EncodeColorizeRun(Pixel32 **inBuf, int *pos, int width, Pixel16 *
 	RGB32Info(**inBuf, &pix16, &alpha);
 	Pixel32			pix32       = (**inBuf) & k_32_BIT_RGB_MASK;
 	while (pix32 == k_32_BIT_COLORIZE_PIXEL && (*pos < width)) {
-		
+
 		(*inBuf)++;
 
-		
 		(*pos)++;
 
-		
 		runLen++;
 
 		RGB32Info(**inBuf, &pix16, &alpha);
 		pix32 = (**inBuf) & k_32_BIT_RGB_MASK;
 	}
-	
-	
+
 	Pixel16			footer      = static_cast<Pixel16>(k_TILE_COLORIZE_RUN_ID << 8 | runLen);
 
-	
 	if (*pos >= width) footer |= k_TILE_EOLN_ID << 8;
 
 	*headerPtr = footer;
@@ -246,23 +232,19 @@ void tileutils_EncodeShadowRun(Pixel32 **inBuf, int *pos, int width, Pixel16 **o
 	RGB32Info(**inBuf, &pix16, &alpha);
 	Pixel32			pix32       = (**inBuf) & k_32_BIT_RGB_MASK;
 	while (pix32 == k_32_BIT_SHADOW_PIXEL && (*pos < width)) {
-		
+
 		(*inBuf)++;
 
-		
 		(*pos)++;
 
-		
 		runLen++;
 
 		RGB32Info(**inBuf, &pix16, &alpha);
 		pix32 = (**inBuf) & k_32_BIT_RGB_MASK;
 	}
-	
-	
+
     Pixel16         footer      = static_cast<Pixel16>(k_TILE_SHADOW_RUN_ID << 8 | runLen);
 
-	
 	if (*pos >= width) footer |= k_TILE_EOLN_ID << 8;
 
 	*headerPtr = footer;
@@ -278,33 +260,28 @@ char tileutils_EncodeSkipRun(Pixel32 **inBuf, int *pos, int width, Pixel16 **out
 	Pixel32			pix32   = (**inBuf) & k_32_BIT_RGB_MASK;
 
 	while (pix32 == k_32_BIT_SKIP_PIXEL && (*pos < width)) {
-		
+
 		(*inBuf)++;
 
-		
 		(*pos)++;
 
-		
 		runLen++;
 
 		RGB32Info(**inBuf, &pix16, &alpha);
 		pix32 = (**inBuf) & k_32_BIT_RGB_MASK;
 	}
 
-	
 	if (runLen < width) {
-		
+
 		Pixel16			footer = static_cast<Pixel16>(k_TILE_SKIP_RUN_ID << 8 | runLen);
 
-		
 		if (*pos >= width) footer |= k_EOLN_ID << 8;
-		
-		
+
 		**outBufPtr = footer;
 		(*outBufPtr)++;
 	    return FALSE;
 	} else {
-		
+
 		return TRUE;
 	}
 
@@ -362,32 +339,29 @@ Pixel16 *tileutils_EncodeTile(Pixel32 *buf, uint16 width, uint16 height, uint32 
 	Pixel16 *               dataPtr             = startOfData;
 	int                     firstNonEmpty       = -1;
 
-	for (uint16 y = 0; y < height; y++) 
+	for (uint16 y = 0; y < height; y++)
     {
-		
+
 		srcPixel = buf + width * y;
 
 		startDataPtr = dataPtr;
 
-		
 		empty = tileutils_EncodeScanline(srcPixel, width, &dataPtr);
 		if (!empty) {
 			if (firstNonEmpty == -1) {
-				
+
 				*firstNonEmptyPtr = y;
 				firstNonEmpty = 0;
 			}
 
-		
 			*table++ = startDataPtr - startOfData;
 			lastNonEmpty = y;
 		} else {
-			
-			
-            
+
+
 			if (firstNonEmpty != -1)
 				*table++ = (Pixel16) -1;
-            
+
 		}
 	}
 
@@ -397,7 +371,7 @@ Pixel16 *tileutils_EncodeTile(Pixel32 *buf, uint16 width, uint16 height, uint32 
 		Assert(lastNonEmpty != -1);
 	}
 
-	int tableSize = ((*endLinePtr-*firstNonEmptyPtr + 1 + 2)) * 2;	
+	int tableSize = ((*endLinePtr-*firstNonEmptyPtr + 1 + 2)) * 2;
 
 	int dataSize = (dataPtr - outBuf) * 2;
 
@@ -422,34 +396,28 @@ void tileutils_EncodeCopyRun16(Pixel16 **inBuf, int *pos, int width, Pixel16 **o
 	if (sourceDataIs565)
 		pix16 = ((pix16 & 0xFFC0) >> 1) | (pix16 & 0x001F);
 
-	while (pix16 != k_16_BIT_SKIP_PIXEL 
-				&& pix16 != k_16_BIT_SHADOW_PIXEL 
-				&& pix16 != k_16_BIT_COLORIZE_PIXEL 
+	while (pix16 != k_16_BIT_SKIP_PIXEL
+				&& pix16 != k_16_BIT_SHADOW_PIXEL
+				&& pix16 != k_16_BIT_COLORIZE_PIXEL
 				&& (*pos < width)) {
-		
+
 		**outBufPtr = pix16;
 
-		
 		(*outBufPtr)++;
-		
-		
+
 		(*inBuf)++;
 
-		
 		(*pos)++;
 
-		
 		runLen++;
 
 		pix16 = (**inBuf);
 		if (sourceDataIs565)
 			pix16 = ((pix16 & 0xFFC0) >> 1) | (pix16 & 0x001F);
 	}
-	
-	
+
 	Pixel16			footer  = static_cast<Pixel16>(k_TILE_COPY_RUN_ID << 8 | runLen);
 
-	
 	if (*pos >= width) footer |= k_TILE_EOLN_ID << 8;
 
 	*headerPtr = footer;
@@ -467,24 +435,20 @@ void tileutils_EncodeColorizeRun16(Pixel16 **inBuf, int *pos, int width, Pixel16
 		pix16 = ((pix16 & 0xFFC0) >> 1) | (pix16 & 0x001F);
 
 	while (pix16 == k_16_BIT_COLORIZE_PIXEL && (*pos < width)) {
-		
+
 		(*inBuf)++;
 
-		
 		(*pos)++;
 
-		
 		runLen++;
 
 		pix16 = (**inBuf);
 		if (sourceDataIs565)
 			pix16 = ((pix16 & 0xFFC0) >> 1) | (pix16 & 0x001F);
 	}
-	
-	
+
 	Pixel16		footer  = static_cast<Pixel16>(k_TILE_COLORIZE_RUN_ID << 8 | runLen);
 
-	
 	if (*pos >= width) footer |= k_TILE_EOLN_ID << 8;
 
 	*headerPtr = footer;
@@ -501,24 +465,20 @@ void tileutils_EncodeShadowRun16(Pixel16 **inBuf, int *pos, int width, Pixel16 *
 	if (sourceDataIs565)
 		pix16 = ((pix16 & 0xFFC0) >> 1) | (pix16 & 0x001F);
 	while (pix16 == k_16_BIT_SHADOW_PIXEL && (*pos < width)) {
-		
+
 		(*inBuf)++;
 
-		
 		(*pos)++;
 
-		
 		runLen++;
 
 		pix16 = (**inBuf);
 		if (sourceDataIs565)
 			pix16 = ((pix16 & 0xFFC0) >> 1) | (pix16 & 0x001F);
 	}
-	
-	
+
 	Pixel16		footer      = static_cast<Pixel16>(k_TILE_SHADOW_RUN_ID << 8 | runLen);
 
-	
 	if (*pos >= width) footer |= k_TILE_EOLN_ID << 8;
 
 	*headerPtr = footer;
@@ -533,13 +493,11 @@ char tileutils_EncodeSkipRun16(Pixel16 **inBuf, int *pos, int width, Pixel16 **o
 	if (sourceDataIs565)
 		pix16 = ((pix16 & 0xFFC0) >> 1) | (pix16 & 0x001F);
 	while (pix16 == k_16_BIT_SKIP_PIXEL && (*pos < width)) {
-		
+
 		(*inBuf)++;
 
-		
 		(*pos)++;
 
-		
 		runLen++;
 
 		pix16 = (**inBuf);
@@ -547,26 +505,23 @@ char tileutils_EncodeSkipRun16(Pixel16 **inBuf, int *pos, int width, Pixel16 **o
 			pix16 = ((pix16 & 0xFFC0) >> 1) | (pix16 & 0x001F);
 	}
 
-	
 	if (runLen < width) {
-		
+
 	    Pixel16 footer  = static_cast<Pixel16>(k_TILE_SKIP_RUN_ID << 8 | runLen);
 
-		
 		if (*pos >= width) footer |= k_EOLN_ID << 8;
-		
-		
+
 		**outBufPtr = footer;
 		(*outBufPtr)++;
 	    return FALSE;
 	} else {
-		
+
 		return TRUE;
 	}
 
 }
 
-char tileutils_EncodeScanline16(Pixel16 *scanline, int width, Pixel16 **outBufPtr, 
+char tileutils_EncodeScanline16(Pixel16 *scanline, int width, Pixel16 **outBufPtr,
 								BOOL sourceDataIs565)
 {
 	Pixel16		pix16;
@@ -596,7 +551,7 @@ char tileutils_EncodeScanline16(Pixel16 *scanline, int width, Pixel16 **outBufPt
 	return empty;
 }
 
-Pixel16 *tileutils_EncodeTile16(Pixel16 *buf, uint16 width, uint16 height, uint32 *size, 
+Pixel16 *tileutils_EncodeTile16(Pixel16 *buf, uint16 width, uint16 height, uint32 *size,
 								sint32 pitch)
 {
 	Pixel16				*srcPixel = buf;
@@ -605,14 +560,14 @@ Pixel16 *tileutils_EncodeTile16(Pixel16 *buf, uint16 width, uint16 height, uint3
 	Pixel16				*startDataPtr;
 	char				empty = FALSE;
 	int					lastNonEmpty = -1;
-	
+
 	BOOL				sourceDataIs565 = FALSE;
 
 	if (pitch == 0) {
 		pitch = width*2;
 	} else {
-		
-		if (g_is565Format) 
+
+		if (g_is565Format)
 			sourceDataIs565 = TRUE;
 	}
 
@@ -627,30 +582,27 @@ Pixel16 *tileutils_EncodeTile16(Pixel16 *buf, uint16 width, uint16 height, uint3
 	int                     firstNonEmpty       = -1;
 
 	for(int y=0; y<height; y++) {
-		
+
 		srcPixel = buf + (pitch/2) * y;
 
 		startDataPtr = dataPtr;
 
-		
 		empty = tileutils_EncodeScanline16(srcPixel, width, &dataPtr, sourceDataIs565);
 	    if (!empty) {
 			if (firstNonEmpty == -1) {
-				
+
 				*firstNonEmptyPtr = y;
 				firstNonEmpty = 0;
 			}
 
-			
 			*table++ = startDataPtr - startOfData;
 			lastNonEmpty = y;
 		} else {
-			
-			
-            
+
+
 			if (firstNonEmpty != -1)
 				*table++ = (Pixel16) -1;
-            
+
 		}
 	}
 
@@ -660,7 +612,7 @@ Pixel16 *tileutils_EncodeTile16(Pixel16 *buf, uint16 width, uint16 height, uint3
 		Assert(lastNonEmpty != -1);
 	}
 
-	int tableSize = ((*endLinePtr-*firstNonEmptyPtr + 1 + 2)) * 2;	
+	int tableSize = ((*endLinePtr-*firstNonEmptyPtr + 1 + 2)) * 2;
 
 	int dataSize = (dataPtr - outBuf) * 2;
 
@@ -677,7 +629,6 @@ Pixel16 *tileutils_EncodeTile16(Pixel16 *buf, uint16 width, uint16 height, uint3
 	return (Pixel16 *)returnBuf;
 }
 
-
 sint32 tileutils_ConvertPixelFormatFrom565(Pixel16 *data)
 {
 	uint16		start = (uint16)*data++;
@@ -685,13 +636,12 @@ sint32 tileutils_ConvertPixelFormatFrom565(Pixel16 *data)
 	Pixel16		*table = data;
 	Pixel16		*dataStart = table + (end - start + 1);
 
-	
 	for(sint32 j=start; j<end; j++) {
 
-		if ((sint16)table[j-start] == -1) 
+		if ((sint16)table[j-start] == -1)
 			continue;
 
-		Pixel16	*   rowData = dataStart + table[j-start];		
+		Pixel16	*   rowData = dataStart + table[j-start];
 		Pixel16		tag;
 
 		do {
@@ -729,13 +679,12 @@ sint32 tileutils_ConvertPixelFormatFrom555(Pixel16 *data)
 	Pixel16		*table = data;
 	Pixel16		*dataStart = table + (end - start + 1);
 
-	
 	for(sint32 j=start; j<end; j++) {
 
-		if ((sint16)table[j-start] == -1) 
+		if ((sint16)table[j-start] == -1)
 			continue;
 
-		Pixel16	*   rowData = dataStart + table[j-start];		
+		Pixel16	*   rowData = dataStart + table[j-start];
 		Pixel16		tag;
 
 		do {
@@ -775,12 +724,11 @@ void tileutils_DecodeToBuffer(Pixel16 *data, int width, int height)
 	Pixel16		start = *data++;
 	Pixel16		*dataStart = table + (72 - start);
 
-	
 	for(int j=start; j<72; j++) {
-		if (table[j-start] != k_EMPTY_TABLE_ENTRY) {		
+		if (table[j-start] != k_EMPTY_TABLE_ENTRY) {
 			Pixel16 *   rowData = dataStart + table[j-start];
 			Pixel16		tag     = *rowData++ & 0x0FFF;
-			
+
 			while ((tag & 0xF000) == 0) {
 				switch ((tag & 0x0F00) >> 8) {
 					case k_TILE_SKIP_RUN_ID	:
@@ -802,7 +750,6 @@ void tileutils_DecodeToBuffer(Pixel16 *data, int width, int height)
 	}
 }
 
-
 Pixel16 g_offsets[k_TILE_PIXEL_HEIGHT*32*sizeof(Pixel16)];
 uint32 g_bitsTable[k_TILE_PIXEL_HEIGHT];
 uint16 g_stencilSize = 0;
@@ -823,16 +770,14 @@ sint32 tileutils_EncodeStencil(MBCHAR *filename)
 		exit(-1);
 	}
 
-	
 	Pixel32 *   ptr     = (Pixel32 *)tif;
 	sint32      top     = 9999999;
 	sint32      bottom  = -1;
 	sint32      left    = 9999999;
 	sint32      right   = -1;
-	
+
 	sint32	i,j;
 
-	
 	for (i=0; i<height; i++) {
 		for (j=0; j<width; j++) {
 			if ((ptr[i*width+j] & 0xFFFFFF) != 0) {
@@ -842,7 +787,7 @@ sint32 tileutils_EncodeStencil(MBCHAR *filename)
 					top = i;
 				if (i > bottom)
 					bottom = i;
-				if (j > right) 
+				if (j > right)
 					right = j;
 			}
 		}
@@ -856,7 +801,7 @@ sint32 tileutils_EncodeStencil(MBCHAR *filename)
 //	sint32 counter = 0;
 
     std::fill(g_bitsTable, g_bitsTable + k_TILE_PIXEL_HEIGHT, 0);
-    std::fill(g_offsets, g_offsets + k_TILE_PIXEL_HEIGHT * 32, (Pixel16) 0xFFFF); 
+    std::fill(g_offsets, g_offsets + k_TILE_PIXEL_HEIGHT * 32, (Pixel16) 0xFFFF);
 	uint32	bit;
 
 	uint16	index=0;
@@ -953,7 +898,6 @@ void tileutils_LoadStencil(void)
 		fclose(file);
 	}
 
-
 }
 
 Pixel16 *tileutils_CreateBorkBork(void)
@@ -973,15 +917,15 @@ Pixel16 *tileutils_CreateBorkBork(void)
 		}
 
 		accum = g_bitsTable[i];
-		for (j=0; j<32; j++) {			
+		for (j=0; j<32; j++) {
 			if (accum & 0x00000001) {
-				
+
 				bork[i * k_TILE_PIXEL_WIDTH + pixelX] = 0;
-				
+
 				bork[(k_TILE_PIXEL_HEIGHT - 1 - i) * k_TILE_PIXEL_WIDTH + pixelX] = 1;
-				
+
 				bork[(k_TILE_PIXEL_HEIGHT - 1 - i) * k_TILE_PIXEL_WIDTH + (k_TILE_PIXEL_WIDTH - 1 - pixelX)] = 2;
-				
+
 				bork[i * k_TILE_PIXEL_WIDTH + (k_TILE_PIXEL_WIDTH - 1 - pixelX)] = 3;
 			}
 			accum >>= 1;
@@ -1007,7 +951,6 @@ Pixel16 *tileutils_CreateBorkBork(void)
 	return bork;
 }
 
-
 Pixel16 *tileutils_ExtractUpperRight(char *tif, uint16 width, uint16 height, sint32 x, sint32 y)
 {
 	sint32		i,j;
@@ -1031,9 +974,9 @@ Pixel16 *tileutils_ExtractUpperRight(char *tif, uint16 width, uint16 height, sin
 			pixelX = (x + k_TILE_PIXEL_WIDTH) - (i-24)*2-1;
 			pixelY = row;
 		}
-		
+
 		accum = g_bitsTable[i];
-		for (j=0; j<32; j++) {			
+		for (j=0; j<32; j++) {
 			if (accum & 0x00000001) {
 				pix32 = image[ row * width + pixelX];
 
@@ -1073,9 +1016,9 @@ Pixel16 *tileutils_ExtractLowerLeft(char *tif, uint16 width, uint16 height, sint
 			pixelX = (x + (i-24)*2);
 			pixelY = row;
 		}
-		
+
 		accum = g_bitsTable[i];
-		for (j=0; j<32; j++) {			
+		for (j=0; j<32; j++) {
 			if (accum & 0x00000001) {
 				pix32 = image[ row * width + pixelX];
 
@@ -1153,7 +1096,7 @@ Pixel16 *tileutils_MakeTransition2(Pixel16 *sourceStencil)
 
 	for (i=0; i<k_TILE_PIXEL_HEIGHT; i++) {
 		accum = g_bitsTable[bottom-i];
-		
+
 		for(k=0; k<32; k++) {
 			if (g_offsets[(bottom-i)*32+k] == 0xFFFF) {
 				k--;
@@ -1192,7 +1135,7 @@ Pixel16 *tileutils_MakeTransition3(Pixel16 *sourceStencil)
 
 	for (i=0; i<k_TILE_PIXEL_HEIGHT; i++) {
 		accum = g_bitsTable[i];
-		
+
 		for(k=0; k<32; k++) {
 			if (g_offsets[i*32+k] == 0xFFFF) {
 				k--;
@@ -1224,7 +1167,6 @@ void tileutils_DumpAllTransitions(MBCHAR *filename, Pixel16 *t0, Pixel16 *t1, Pi
 	sint32		i,j;
 	sint32		index;
 	FILE *      file = fopen(filename, "w");
-
 
 	fprintf(file, "\n Transition 0\n\n");
 	for (i=0; i<48; i++) {
@@ -1260,7 +1202,6 @@ void tileutils_DumpAllTransitions(MBCHAR *filename, Pixel16 *t0, Pixel16 *t1, Pi
 	for (i=0; i<48; i++) {
 		accum = g_bitsTable[47-i];
 
-
 		index = 0;
 		for (j=0; j<32; j++) {
 			if (accum & 1) {
@@ -1290,18 +1231,15 @@ void tileutils_DumpAllTransitions(MBCHAR *filename, Pixel16 *t0, Pixel16 *t1, Pi
 	fclose(file);
 }
 
-
 sint32 tileutils_ExtractStencils(sint16 fromType, sint16 toType)
 {
-	
+
 	MBCHAR		ageChar;
 	MBCHAR		filename[_MAX_PATH];
 
-	
 	sprintf(filename, "gtft%.2d%.2d.tif", fromType, toType);
 	ageChar = 'f';
 
-	
 	char	*tif;
 	uint16	width=0, height=0;
 
@@ -1314,8 +1252,7 @@ sint32 tileutils_ExtractStencils(sint16 fromType, sint16 toType)
 		printf("\n*** Could not find '%s'.\n", fname);
 		exit(-1);
 	}
-	
-	
+
 	g_transitions[fromType][toType][0] = tileutils_ExtractUpperRight(tif, width, height, 0, 48);
 	g_transitions[fromType][toType][1] = tileutils_MakeTransition1(g_transitions[fromType][toType][0]);
 	g_transitions[fromType][toType][2] = tileutils_MakeTransition2(g_transitions[fromType][toType][0]);
@@ -1337,7 +1274,7 @@ sint32 tileutils_ExtractStencils(sint16 fromType, sint16 toType)
 
 
 
-	
+
 	g_transitions[toType][fromType][0] = tileutils_ExtractLowerLeft(tif, width, height, 48, 24);
 	g_transitions[toType][fromType][1] = tileutils_MakeTransition1(g_transitions[toType][fromType][0]);
 	g_transitions[toType][fromType][2] = tileutils_MakeTransition2(g_transitions[toType][fromType][0]);
@@ -1357,7 +1294,6 @@ sint32 tileutils_ExtractStencils(sint16 fromType, sint16 toType)
 
 	if (tif)
 		free (tif);
-
 
 	return 0;
 }
@@ -1398,7 +1334,7 @@ uint16 *tileutils_ExtractWaterTable(Pixel32 *image, uint16 width, uint16 height,
 		for (j=0; j<width; j++) {
 			RGB32Components(image[width * i + j], &r, &g, &b, &a);
 			if (a > 0) {
-				
+
 				if (j < start)
 					start = j;
 
@@ -1409,7 +1345,7 @@ uint16 *tileutils_ExtractWaterTable(Pixel32 *image, uint16 width, uint16 height,
 		waterTable[(i-y)*2] = start;
 		waterTable[(i-y)*2+1] = end;
 
-		if (!anyWater && end != 0) 
+		if (!anyWater && end != 0)
 			anyWater = TRUE;
 	}
 
@@ -1421,7 +1357,6 @@ uint16 *tileutils_ExtractWaterTable(Pixel32 *image, uint16 width, uint16 height,
 
 	return waterTable;
 }
-
 
 BaseTile	*g_baseTiles[k_MAX_BASE_TILES];
 
@@ -1441,7 +1376,6 @@ void tileutils_BorkifyTile(uint16 tileNum, MBCHAR ageChar, uint16 baseType, BOOL
 	uint32		accum = 0;
 	uint16		width, height;
 
-
 	Pixel16 *   bork = tileutils_CreateBorkBork();
 
 	MBCHAR		filename[_MAX_PATH];
@@ -1449,7 +1383,7 @@ void tileutils_BorkifyTile(uint16 tileNum, MBCHAR ageChar, uint16 baseType, BOOL
 
 	char		*tif;
 	if (baseType == TERRAIN_WATER_BEACH) {
-		
+
 		tif = tileutils_StripTIF2Mem(filename, &width, &height);
 	} else {
 		tif = tileutils_TIF2mem(filename, &width, &height);
@@ -1495,26 +1429,25 @@ void tileutils_BorkifyTile(uint16 tileNum, MBCHAR ageChar, uint16 baseType, BOOL
 			borkPix = bork[y*k_TILE_PIXEL_WIDTH+x];
 
 			switch (borkPix) {
-			case 0: if (!useT0) 
-						borkPix = 0xFFFF; 
+			case 0: if (!useT0)
+						borkPix = 0xFFFF;
 				break;
-			case 1: if (!useT1) 
-						borkPix = 0xFFFF; 
+			case 1: if (!useT1)
+						borkPix = 0xFFFF;
 				break;
-			case 2: if (!useT2) 
-						borkPix = 0xFFFF; 
+			case 2: if (!useT2)
+						borkPix = 0xFFFF;
 				break;
-			case 3: if (!useT3) 
-						borkPix = 0xFFFF; 
+			case 3: if (!useT3)
+						borkPix = 0xFFFF;
 				break;
 			}
 
 			if (borkPix == 0xFFFF) {
-				
+
 				Pixel16 pix = tileImage[(y+yoffset)*k_TILE_PIXEL_WIDTH+x];
 
-				
-				
+
 				if (pix == 0x0000 || pix == 0x0001 || pix == 0x0002 || pix == 0x0003) {
 					pix = pix | 0x0820;
 				}
@@ -1522,7 +1455,7 @@ void tileutils_BorkifyTile(uint16 tileNum, MBCHAR ageChar, uint16 baseType, BOOL
 				*tileDataPtr++ = pix;
 				len++;
 			} else {
-				
+
 				*tileDataPtr++ = borkPix;
 				len++;
 				accum |= 0x80000000;
@@ -1542,19 +1475,18 @@ void tileutils_BorkifyTile(uint16 tileNum, MBCHAR ageChar, uint16 baseType, BOOL
 		accum >>= 32-(endX-startX)-1;
 		accumList[y][accumIndex] = accum;
 	}
- 
+
 	BaseTile	*baseTile = new BaseTile;
 
 	baseTile->SetBaseType((uint8)g_theTerrainDB->Get(baseType)->GetTilesetIndex());
-	
 
-	
+
 	baseTile->SetTransitionFlag(0, useT0);
 	baseTile->SetTransitionFlag(1, useT1);
 	baseTile->SetTransitionFlag(2, useT2);
 	baseTile->SetTransitionFlag(3, useT3);
 
-	
+
 
 
 
@@ -1563,28 +1495,26 @@ void tileutils_BorkifyTile(uint16 tileNum, MBCHAR ageChar, uint16 baseType, BOOL
 	Assert(len >= 0);
 	baseTile->SetTileDataLen(static_cast<uint16>(len*2));
 
-	
 	Pixel16		*dataCopy = new Pixel16[len];
 	memcpy(dataCopy, tileData, len*2);
-	baseTile->SetTileData(dataCopy);	
+	baseTile->SetTileData(dataCopy);
 
-	
-	
-	
+
+
+
 	uint16		*waterTable;
 	uint32		waterTableLen = k_TILE_PIXEL_HEIGHT * 2 * sizeof(uint16);
 
-	
 	if (baseType == TERRAIN_WATER_BEACH) {
-		
+
 		waterTable = tileutils_ExtractWaterTable((Pixel32 *)tif, width, height, 0, 24);
 	} else {
 		if (g_theTerrainDB->Get(baseType)->GetMovementTypeSea() ||
 			g_theTerrainDB->Get(baseType)->GetMovementTypeShallowWater()) {
-			
+
 			waterTable = tileutils_GenerateAllWaterTable(width, height, 0, 24);
 		} else {
-			
+
 			waterTable = NULL;
 			waterTableLen = 0;
 		}
@@ -1593,9 +1523,9 @@ void tileutils_BorkifyTile(uint16 tileNum, MBCHAR ageChar, uint16 baseType, BOOL
 
 
 
-	
-	
-	
+
+
+
 	char		*hatTif=NULL;
 	Pixel16		*hatData=NULL;
 	uint32		hatDataLen=0;
@@ -1617,7 +1547,7 @@ void tileutils_BorkifyTile(uint16 tileNum, MBCHAR ageChar, uint16 baseType, BOOL
 
 	if (tif)
 		free(tif);
-	
+
 	if (tileImage)
 		free(tileImage);
 }
@@ -1658,19 +1588,15 @@ uint16 tileutils_CompileImprovements(FILE *file)
 		if (tif) {
 			data = (Pixel16 *)tileutils_EncodeTile((Pixel32 *)tif, width, height, &dataLen);
 
-
 			free(tif);
 			tif = NULL;
 
 			id = (uint16)i;
 
-			
 			fwrite((void *)&id, 1, sizeof(uint16), file);
 
-			
 			fwrite((void *)&dataLen, 1, sizeof(uint32), file);
 
-			
 			fwrite((void *)data, 1, dataLen, file);
 		}
 	}
@@ -1682,7 +1608,6 @@ void tileutils_EncodeTileset(MBCHAR *filename)
 {
 	sint32		i, j, k;
 
-	
 	for (i=0; i<TERRAIN_MAX; i++) {
 		for (j=0; j<TERRAIN_MAX; j++) {
 			for(k=0; k<k_TRANSITIONS_PER_TILE; k++) {
@@ -1691,7 +1616,6 @@ void tileutils_EncodeTileset(MBCHAR *filename)
 		}
 	}
 
-	
 	for (i=0; i<k_MAX_BASE_TILES; i++) {
 		g_baseTiles[i] = NULL;
 	}
@@ -1723,12 +1647,12 @@ sint32 tileutils_ParseTileset(MBCHAR *filename)
 
 	printf("\nParsing Tileset Script: '%s'\n", scriptName);
 
-	Token *         theToken = new Token(scriptName, C3DIR_SPRITES); 
-	Assert(theToken); 
-	
-	if (!theToken) return FALSE; 
-	
-	sint32 tmp; 
+	Token *         theToken = new Token(scriptName, C3DIR_SPRITES);
+	Assert(theToken);
+
+	if (!theToken) return FALSE;
+
+	sint32 tmp;
 
 	while (!done) {
 		switch (theToken->Next()) {
@@ -1743,11 +1667,9 @@ sint32 tileutils_ParseTileset(MBCHAR *filename)
 
 				if (!token_ParseAnOpenBraceNext(theToken)) return FALSE;
 
-				
 				if (!token_ParseValNext(theToken, TOKEN_TILESET_TILE_BASE_TYPE, tmp)) return FALSE;
 				sint32 baseType = tmp;
 
-				
 				if (!token_ParseValNext(theToken, TOKEN_TILESET_TILE_TRANS_0, tmp)) return FALSE;
 				hasTransition[0] = tmp;
 				if (!token_ParseValNext(theToken, TOKEN_TILESET_TILE_TRANS_1, tmp)) return FALSE;
@@ -1766,11 +1688,10 @@ sint32 tileutils_ParseTileset(MBCHAR *filename)
 						break;
 					}
 				}
-				
+
 				tileutils_BorkifyTile((uint16)tileNum, ageChar, (uint16)baseType, hasTransition[0], hasTransition[1], hasTransition[2], hasTransition[3]);
 
-				
-				if(tileNum < 100 && 
+				if(tileNum < 100 &&
 				   (hasTransition[0] || hasTransition[1] || hasTransition[2] || hasTransition[3])) {
 					tileutils_BorkifyTile((uint16)(tileNum * 100) + 99, ageChar, (uint16)baseType, 0, 0, 0, 0);
 				}
@@ -1780,13 +1701,12 @@ sint32 tileutils_ParseTileset(MBCHAR *filename)
 				numBaseTiles++;
 			}
 			break;
-		case TOKEN_TILESET_MEGATILE: 
+		case TOKEN_TILESET_MEGATILE:
 			{
 				MBCHAR		configStr[100];
 
-				if (!token_ParseAnOpenBraceNext(theToken)) return FALSE; 
-				
-				
+				if (!token_ParseAnOpenBraceNext(theToken)) return FALSE;
+
 				if (!token_ParseKeywordNext(theToken, TOKEN_TILESET_MEGATILE_CONFIG)) return FALSE;
 
 				theToken->Next();
@@ -1796,7 +1716,7 @@ sint32 tileutils_ParseTileset(MBCHAR *filename)
 
 				megaTileLengths[numMegaTiles] = static_cast<uint16>(len);
 
-				for (size_t i = 0; i < len; i++) 
+				for (size_t i = 0; i < len; i++)
                 {
 					if (!token_ParseKeywordNext(theToken, TOKEN_TILESET_MEGATILE_INFO)) return FALSE;
 
@@ -1844,38 +1764,33 @@ sint32 tileutils_ParseTileset(MBCHAR *filename)
 				theToken->GetNumber(tmp);
 //				sint32 transformNum = tmp;
 
-				if (!token_ParseAnOpenBraceNext(theToken)) return FALSE; 
+				if (!token_ParseAnOpenBraceNext(theToken)) return FALSE;
 
 				sint16	*   transform = new sint16[k_TRANSFORM_SIZE];
 
 				size_t      i;
-				for (i=0; i<k_TRANSFORM_SIZE; i++) 
+				for (i=0; i<k_TRANSFORM_SIZE; i++)
 					transform[i] = k_TRANSFORM_TO_LIST_ID;
 
-				
 				for (i=0; i<k_TRANSFORM_TO_INDEX; i++) {
 					theToken->Next();
 					theToken->GetNumber(tmp);
 					transform[i] = (sint16)tmp;
 				}
-				
-				
+
 				switch (theToken->Next()) {
-					
+
 					case TOKEN_TILESET_TRANSFORM_TO :
 							theToken->Next();
 							theToken->GetNumber(tmp);
-							
+
 							transform[k_TRANSFORM_TO_INDEX] = (sint16)tmp;
 						break;
 
-					
-					case TOKEN_TILESET_TRANSFORM_TO_LIST :							
-							
-							
+					case TOKEN_TILESET_TRANSFORM_TO_LIST :
+
 							transform[k_TRANSFORM_TO_INDEX] = k_TRANSFORM_TO_LIST_ID;
 
-							
 							for (i=0; i<k_MAX_TRANSFORM_TO_LIST; i++) {
 								theToken->Next();
 								theToken->GetNumber(tmp);
@@ -1883,7 +1798,6 @@ sint32 tileutils_ParseTileset(MBCHAR *filename)
 							}
 						break;
 				}
-
 
 				transforms[numTransforms] = transform;
 
@@ -1913,7 +1827,7 @@ sint32 tileutils_ParseTileset(MBCHAR *filename)
 				tileutils_ExtractStencils(fromType, toType);
 
 				printf(" * Transition %.2d->%.2d\n", fromType, toType);
-				
+
 				numTransitions++;
 			}
 			break;
@@ -1933,7 +1847,7 @@ sint32 tileutils_ParseTileset(MBCHAR *filename)
 				transform[k_RIVER_TRANSFORM_SIZE-1] = (sint16)tmp;
 
 				if (!token_ParseAnCloseBraceNext(theToken)) return FALSE;
-				
+
 				MBCHAR		filename[_MAX_PATH];
 				char		*tif;
 				uint16		width, height;
@@ -1945,7 +1859,7 @@ sint32 tileutils_ParseTileset(MBCHAR *filename)
 
 				if (tif) riverData[numRiverTransforms] = (Pixel16 *)tileutils_EncodeTile((Pixel32 *)tif, width, height, &dataLen);
 				else riverData[numRiverTransforms] = NULL;
-				
+
 				if (tif) free(tif);
 
 				riverDataLen[numRiverTransforms] = dataLen;
@@ -1964,7 +1878,6 @@ sint32 tileutils_ParseTileset(MBCHAR *filename)
 
 	delete theToken;
 
-	
 	MBCHAR	fname[_MAX_PATH];
 
 	printf("\nWriting Tileset: ");
@@ -1977,13 +1890,12 @@ sint32 tileutils_ParseTileset(MBCHAR *filename)
 
 	FILE *  tfile = fopen(fname, "wb");
 	if (tfile) {
-		
+
 		fwrite((void *)&numTransforms, 1, sizeof(uint16), tfile);
-		
-		
+
 		if (numTransforms > 0) {
-			
-			for (size_t i = 0; i < numTransforms; i++) 
+
+			for (size_t i = 0; i < numTransforms; i++)
             {
 				fwrite((void *)transforms[i], 1, sizeof(sint16)*k_TRANSFORM_SIZE, tfile);
 
@@ -1996,7 +1908,7 @@ sint32 tileutils_ParseTileset(MBCHAR *filename)
 
 
 
-		
+
 		if (numTransitions > 0) {
 			uint32		transitionCount = 0;
 
@@ -2008,14 +1920,11 @@ sint32 tileutils_ParseTileset(MBCHAR *filename)
 				}
 			}
 
-			
 			fwrite((void *)&transitionCount, 1, sizeof(uint32), tfile);
 
-			
 			uint32  transitionSize = g_stencilSize * sizeof(Pixel16);
 			fwrite((void *)&transitionSize, 1, sizeof(uint32), tfile);
 
-			
 			for (i=0; i<TERRAIN_MAX; i++) {
 				for (j=0; j<TERRAIN_MAX; j++) {
 					sint16 from, to;
@@ -2036,7 +1945,6 @@ sint32 tileutils_ParseTileset(MBCHAR *filename)
 			printf("...Transitions");
 		}
 
-		
 		if (numBaseTiles > 0) {
 			uint32		baseTileCount = 0;
 
@@ -2057,7 +1965,7 @@ sint32 tileutils_ParseTileset(MBCHAR *filename)
 					fwrite((void *)&baseType, 1, sizeof(uint8), tfile);
 
 					uint8 flag = 0;
-					for (j = 0; j < k_TRANSITIONS_PER_TILE; j++) 
+					for (j = 0; j < k_TRANSITIONS_PER_TILE; j++)
                     {
 						if (g_baseTiles[i]->GetTransitionFlag((uint16)j))
 							flag |= (1 << j);
@@ -2065,21 +1973,19 @@ sint32 tileutils_ParseTileset(MBCHAR *filename)
 
 					fwrite((void *)&flag, 1, sizeof(uint8), tfile);
 
-					
 
 
-					
 
 
-					
+
+
+
 					uint16 len16 = g_baseTiles[i]->GetTileDataLen();
 					fwrite((void *)&len16, 1, sizeof(uint16), tfile);
 
-					
 					Pixel16 * tileData = g_baseTiles[i]->GetTileData();
 					fwrite((void *)tileData, 1, len16, tfile);
 
-					
 
 
 
@@ -2088,9 +1994,10 @@ sint32 tileutils_ParseTileset(MBCHAR *filename)
 
 
 
-				
 
-					
+
+
+
 
 
 
@@ -2100,8 +2007,7 @@ sint32 tileutils_ParseTileset(MBCHAR *filename)
 					if (len16 > 0) {
 						fwrite((void *)g_baseTiles[i]->GetHatData(), 1, len16, tfile);
 					}
-					
-					
+
 					delete g_baseTiles[i];
 					g_baseTiles[i] = NULL;
 				}
@@ -2109,13 +2015,11 @@ sint32 tileutils_ParseTileset(MBCHAR *filename)
 			printf("...Base Tiles");
 		}
 
-		
-		
+
 		fwrite((void *)&numRiverTransforms, 1, sizeof(uint16), tfile);
-		
-		
+
 		if (numRiverTransforms > 0) {
-			
+
 			for (size_t i = 0; i < numRiverTransforms; i++) {
 				fwrite((void *)riverTransforms[i], 1, sizeof(sint16)*k_RIVER_TRANSFORM_SIZE, tfile);
 
@@ -2135,15 +2039,12 @@ sint32 tileutils_ParseTileset(MBCHAR *filename)
 			printf("...River Transforms");
 		}
 
-		
 		printf("...Improvements");
 		numImprovements = tileutils_CompileImprovements(tfile);
-		
-		
+
 		if (numMegaTiles > 0) {
 			uint16		num = (uint16)numMegaTiles;
 
-			
 			fwrite((void *)&num, 1, sizeof(uint16), tfile);
 			for (size_t i = 0; i < numMegaTiles; i++) {
 				uint16		len = megaTileLengths[i];
@@ -2168,6 +2069,5 @@ sint32 tileutils_ParseTileset(MBCHAR *filename)
 		fclose(tfile);
 	}
 	return TRUE;
-	
-}
 
+}

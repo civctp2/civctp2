@@ -11,7 +11,7 @@
 //
 // THIS FILE IS NOT GENERATED OR SUPPORTED BY ACTIVISION.
 //
-// This material has been developed at apolyton.net by the Apolyton CtP2 
+// This material has been developed at apolyton.net by the Apolyton CtP2
 // Source Code Project. Contact the authors at ctp2source@apolyton.net.
 //
 //----------------------------------------------------------------------------
@@ -97,7 +97,7 @@ class ctp2_TabGroup;
 class ctp2_Tab;
 class ctp2_Switch;
 
-enum CP_SELECT 
+enum CP_SELECT
 {
 	CP_SELECT_GOOD,
 	CP_SELECT_UNIT,
@@ -106,7 +106,7 @@ enum CP_SELECT
 	CP_SELECT_MAX
 };
 
-enum CP_TAB 
+enum CP_TAB
 {
 	CP_TAB_INVALID = -1,
 	CP_TAB_CIV,
@@ -117,7 +117,7 @@ enum CP_TAB
 	CP_TAB_LAST
 };
 
-enum CP_TARGETING_MODE 
+enum CP_TARGETING_MODE
 {
 	CP_TARGETING_MODE_OFF=0,
 	CP_TARGETING_MODE_ORDER_PENDING,
@@ -126,8 +126,7 @@ enum CP_TARGETING_MODE
 	CP_TARGETING_MODE_MAX,
 };
 
-
-enum CP_OFFSETS 
+enum CP_OFFSETS
 {
 	CP_NORTH,
 	CP_SOUTH,
@@ -136,8 +135,7 @@ enum CP_OFFSETS
 	CP_MAX
 };
 
-
-enum CP_MENU_ITEM 
+enum CP_MENU_ITEM
 {
 	CP_MENU_ITEM_0,
 	CP_MENU_ITEM_1,
@@ -230,7 +228,7 @@ class ctp2_Switch;
 // Class declarations
 //----------------------------------------------------------------------------
 
-class ControlPanelWindow 
+class ControlPanelWindow
 {
 public:
 	ControlPanelWindow(
@@ -239,16 +237,15 @@ public:
 		MBCHAR *ldlBlock,
 		sint32 bpp,
 		AUI_WINDOW_TYPE type = AUI_WINDOW_TYPE_BACKGROUND );
-	
-	virtual ~ControlPanelWindow();
 
+	virtual ~ControlPanelWindow();
 
 	ctp2_Window     *GetWindow()  { return m_mainWindow;  }
 	ctp2_MenuBar    *GetMenuBar() { return m_mainMenuBar; }
 
-	
-	
-	
+
+
+
 	sint32  X       ();
 	sint32  Y       ();
 	sint32  Width   ();
@@ -259,28 +256,24 @@ public:
 	void    Offset(sint32 dx, sint32 dy);
 	void    Resize(sint32 width, sint32 height);
 
-	
 	void    AdjustToScreen();
 
 	void    ActivateSelectedInfo(sint32 type);
 	void    DeActivateSelectedInfo();
 
 	void    BuildList(sint32 index);
-	
+
 	void	SetStack(const Army &selectedArmy, CellUnitList *fullArmy, Unit singleUnit = Unit(0));
 	void    BuildUnitList();
 	void    BuildUnitListBox();
 	void    BuildCityList(const MapPoint &pos);
 	void    AppendItem(ctp2_ListBox *,MBCHAR *string);
 
-
 	void    Select  ();
 	void    Deselect();
 
-	
 	void    HappinessRedisplay(aui_Surface *surface,RECT &rect,void *cookie);
 
-	
 	void    BuildMainMenu     ();
 	void    BuildCivMenu      ();
 	void    BuildCityMenu     ();
@@ -295,118 +288,97 @@ public:
 
 	static void RebuildMenus  ();
 
-
 	void    ResetTabGroup();
 	void    CreateTabGroup(MBCHAR *ldlBlock);
 	void    CreateTab(sint32 which,MBCHAR *name);
 
-	
 	void    CreateTileImpBanks ();
 	void    ActivateTileImpBank(unsigned int group_id);
 	void    ToggleTerraforming();
 
-	
-	
-	
 
-	
+
+
+
+
 	void    InitCivTab();
 
 	static void TabCallback(aui_Control *control, uint32 action,
 	                        uint32 data, void *cookie);
-	
-	
+
 	void    InitMessageTab();
 	void    AddMessage(Message &message,bool initializing=false);
 	void    SetMessageRead(const Message &message);
 	void    RemoveMessage(Message &message);
 	void    PopulateMessageList(PLAYER_INDEX player);
 
-	
 	void    InitCityTab();
 
-	
 	void    InitUnitTab();
 
-	
 	void    InitTileImpTab();
 
-	
 	void    BeginImprovementCycle(void *rawrecord);
 	void    BeginImprovementCycle(TerrainImprovementRecord *rec);
 	void    BeginImprovementCycle(TerrainRecord *rec);
 
-	
-	
+
 	Unit    CityPanelGetCurrent();
 	void    CityPanelRebuild();
 	void    CityPanelRedisplay();
 	void    CityPanelNextCity();
 
-	
 	Army    UnitPanelGetCurrent();
 	void    UnitPanelNextUnit();
 	void    UnitPanelRedisplay();
 	void    UnitPanelNextCity();
 
-	
 	void    TileImpPanelRedisplay();
 	void    TileImpButtonRedisplay      (uint32 player_id,uint32 index);
 	void    TerraformButtonRedisplay    (uint32 player_id,uint32 index);
 
-	
 	void    BeginOrderDelivery();
 	static void PerformOrderAfterConfirmation(bool response, void *userData);
 
 	void    BeginOrderDelivery(OrderRecord *rec);
 
-	
 	void    TargetingMode();
 
-	
 	void    OrderDeliveryUpdate();
 	void    TileImpUpdate();
 	void    TerraFormUpdate();
 	void    Update();
 
-	
 	bool    IsLand(const TerrainRecord *rec);
 	bool    IsOcean(const TerrainRecord *rec);
 
-	
 	bool    ExecuteTargetingModeClick(const MapPoint &pos);
 
-	
 	bool    OrderDeliveryClick(const MapPoint &pos);
 	bool    TileImpClick(const MapPoint &pos);
 	bool    TerraFormClick(const MapPoint &pos);
 
-	
 	uint32  GetTargetingMode() const {return m_targetingMode;}
 
 	const OrderRecord *GetCurrentOrder() const { return m_currentOrder; }
 
-	
 	void    ClearTargetingMode();
 
 	void    SetTab(CP_TAB tab);
 
-	
 	void    SetProgressText(aui_Static *progressText) { m_progressText = progressText; }
 	void    SetProgressBar(aui_ProgressBar *progressBar) { m_progressBar = progressBar; }
-	
+
 	AUI_ERRCODE UpdatePlayerBeginProgress(sint32 currentPlayer);
-	
+
 	AUI_ERRCODE UpdatePlayerEndProgress(sint32 currentPlayer);
 
-	
 	void    Hide();
 	void    Show();
 	void    Toggle();
 
 private:
 
-	
 	void    PollCIVStatus();
 	void    PollMSGLOGStatus();
 	void    PollCITYStatus();
@@ -415,46 +387,36 @@ private:
 
 	BOOL    CursorOverControlPanel();
 
-	
 	void    SetControlText(aui_Control *control,MBCHAR *fmt,...);
 
-	
 	ctp2_MenuBar    *m_mainMenuBar;
 
-	
 	ctp2_Window     *m_mainWindow;
 
-	
 	ctp2_Menu       *m_contextMenu;
 
-	
 	float   m_widthRatio;
 
-	
 	bool    m_turnToggle;
 
-	
 	uint32  m_targetingMode;
 
-	
 	OrderRecord     *m_currentOrder;
 
-	
-	
-	
 
-	
+
+
+
+
 	ctp2_ListBox    *m_messageList;
 
-	
-	
+
 	ctp2_Static     *m_numCities;
 	ctp2_Static     *m_totalPop;
 	ctp2_Static     *m_currentHappiness;
 	ctp2_Static     *m_currentAdvance;
 	ctp2_Static     *m_turnsToAdvance;
 
-	
 	ctp2_DropDown   *m_mainDropDown;
 
 	ctp2_Static     *m_cityHappiness;
@@ -463,7 +425,6 @@ private:
 	ctp2_Static     *m_buildingItem;
 	ctp2_Static     *m_turnsRemaining;
 
-	
 	ctp2_Static     *m_unitImage;
 
 	ctp2_Static     *m_unitType;
@@ -474,44 +435,36 @@ private:
 
 	ctp2_ListBox    *m_unitOrders;
 
-	
 	ctp2_Static     *m_publicWorks;
 	ctp2_Button     *m_activatorButtons [CP_TILEIMP_MAX];
 	ctp2_Static     *m_tileImpPanes     [CP_TILEIMP_MAX];
 	ctp2_Button     *m_tileImpButtons   [CP_MAX_TILEIMPBUTTONS];
 	ctp2_Button     *m_terraFormButtons [CP_MAX_TILEIMPBUTTONS];
-	
+
 	ctp2_TabGroup   *m_tabGroup;
 	ctp2_Tab        *m_tabs[CP_TAB_LAST];
 
-	unsigned        m_currentTerrainSelection; 
+	unsigned        m_currentTerrainSelection;
 	TerrainImprovementRecord    *m_currentTerrainImpRec;
 	TerrainRecord               *m_currentTerrainRec;
 
-	
 	bool            m_terraFormMode;
 
-	
-	
+
 	sint32              m_currentProgress;
 	aui_Static          *m_progressText;
 	aui_ProgressBar     *m_progressBar;
 };
 
-
 void ThrowPartyUtilityDialogBoxCallback(MBCHAR *text, sint32 val2, void *data);
 void GotoCityUtilityDialogBoxCallback  (Unit city, sint32 val2);
 
-
 void controlpanelwindow_Update(Unit *city = NULL);
-
 
 sint32  controlpanelwindow_Initialize();
 sint32  controlpanelwindow_InitializeHats(void);
 void    controlpanelwindow_Cleanup(void);
 
-
 extern ControlPanelWindow *g_controlPanel;
 
 #endif
-

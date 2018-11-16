@@ -1,16 +1,3 @@
-
-
-
-
-
-
-
-
-
-
-
-
-
 #include "c3.h"
 
 #include "aui.h"
@@ -29,9 +16,7 @@
 
 #include "c3spinner.h"
 
-
 extern C3UI *g_c3ui;
-
 
 
 C3Spinner::C3Spinner(
@@ -75,27 +60,22 @@ C3Spinner::C3Spinner(
 }
 
 
-
 AUI_ERRCODE C3Spinner::InitCommon( MBCHAR *ldlBlock )
 {
 	aui_Ldl *theLdl = g_c3ui->GetLdl();
 
-	
 	BOOL valid = theLdl->IsValid( ldlBlock );
 	Assert( valid );
 	if ( !valid ) return AUI_ERRCODE_HACK;
 
-	
 	ldl_datablock *block = theLdl->GetLdl()->FindDataBlock( ldlBlock );
 	Assert( block != NULL );
 	if ( !block ) return AUI_ERRCODE_LDLFINDDATABLOCKFAILED;
 
-	
 	InitCommon( block->GetBool( "vertical" ) );
 
 	return AUI_ERRCODE_OK;
 }
-
 
 
 C3Spinner::C3Spinner(
@@ -144,7 +124,6 @@ C3Spinner::C3Spinner(
 }
 
 
-
 AUI_ERRCODE C3Spinner::InitCommon( BOOL isVertical )
 {
 	if ((m_isVertical = isVertical))
@@ -154,7 +133,6 @@ AUI_ERRCODE C3Spinner::InitCommon( BOOL isVertical )
 
 	return AUI_ERRCODE_OK;
 }
-
 
 
 AUI_ERRCODE C3Spinner::CreateButtons( void )
@@ -179,24 +157,21 @@ AUI_ERRCODE C3Spinner::CreateButtons( void )
 			aui_UniqueId(), 0, 0, 0, 0, m_pattern->GetFilename(), "<", RangerButtonActionCallback, this );
 	}
 
-	
 	AddChild( button1 );
 	AddChild( button2 );
 
-	
 	RepositionButtons();
 
 	return AUI_ERRCODE_OK;
 }
 
 
-
 AUI_ERRCODE C3Spinner::DrawThis( aui_Surface *surface, sint32 x, sint32 y )
 {
-	
-	
 
-	
+
+
+
 	if ( IsHidden() ) return AUI_ERRCODE_OK;
 
 	if ( !surface ) surface = m_window->TheSurface();
@@ -219,17 +194,15 @@ AUI_ERRCODE C3Spinner::DrawThis( aui_Surface *surface, sint32 x, sint32 y )
 	OffsetRect( &rect, m_x + x, m_y + y );
 	ToWindow( &rect );
 
-	
 	if ( m_pattern ) m_pattern->Draw( surface, &rect );
 
 	primitives_BevelRect16( surface, &rect, 1, 1, 16, 16 );
 	if ( IsActive() )
 	{
-		
+
 		primitives_BevelRect16( surface, &rect, 1, 1, 16, 16 );
 	}
 
-	
 
 	static char s[ 20 ];
 	sprintf( s, "%d", 100 - ( m_isVertical ? GetValueY() : GetValueX() ) );

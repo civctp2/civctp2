@@ -1,4 +1,3 @@
-
 #include "c3.h"
 #include "FliFuncTab.h"
 #include "fliif.h"
@@ -17,11 +16,11 @@ FliFuncTab::~FliFuncTab()
 {
 	if(m_array) {
 		for(sint32 i = 0; i < m_numEntries; i++) {
-			
-            m_array[i] = NULL; 
+
+            m_array[i] = NULL;
 		}
 		delete [] m_array;
-        m_array = NULL; 
+        m_array = NULL;
 	}
 }
 
@@ -37,7 +36,7 @@ FliSetFunc *FliFuncTab::Add(char *name, FliSymbol *variable,
 		FliSetFunc **newarray = new FliSetFunc *[m_arraySize * 2];
 		memcpy(newarray, m_array, m_arraySize * sizeof(FliSetFunc *));
 		delete [] m_array;
-        m_array = NULL; 
+        m_array = NULL;
 		m_array = newarray;
 		m_arraySize *= 2;
 	}

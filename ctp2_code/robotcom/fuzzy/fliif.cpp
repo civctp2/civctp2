@@ -1,5 +1,3 @@
-
-
 #include "c3.h"
 #include "fliif.h"
 #include <stdio.h>
@@ -18,26 +16,25 @@ static uint8 *s_codePtr;
 
 static sint32 s_currentSection;
 
-
 static BOOL		s_fliLoggingEnabled[32];
 
 PointerList<FliSymbol> *s_currentInputSymbols = NULL;
 PointerList<FliSymbol> *s_currentOutputSymbols = NULL;
 
-FliEngine *current_fli_engine; 
+FliEngine *current_fli_engine;
 static FliWhen *s_currentWhen = NULL;
 
 sint32 s_currentPlayer = 0;
 
-void SetCurrentEngine(FliEngine *e) 
-{ 
-    current_fli_engine = e; 
+void SetCurrentEngine(FliEngine *e)
+{
+    current_fli_engine = e;
 }
 
 extern "C" {
 void fli_Init()
 {
-    
+
 	s_codePtr = s_code;
 	s_currentInputSymbols = new PointerList<FliSymbol>;
 	s_currentOutputSymbols = new PointerList<FliSymbol>;
@@ -52,9 +49,9 @@ void fli_AddInputSymbol(char *name)
     FLPRINTF(("Add input sym %s\n", name));
 
 	FliSymbol *sym = current_fli_engine->GetInputSymbol(name);
-	
+
 	if(sym == NULL) {
-		current_fli_engine->ReportDBError("FLI_UNKNOWN_INPUT", 
+		current_fli_engine->ReportDBError("FLI_UNKNOWN_INPUT",
 								   fli_current_file(), fli_lineNumber,
 								   name);
 		return;
@@ -65,10 +62,10 @@ void fli_AddInputSymbol(char *name)
 void fli_AddInitializedInputSymbol(char *name, double value)
 {
 	FLPRINTF(("Add sym %s, val=%f\n", name, value));
-	
+
 	FliSymbol *sym = current_fli_engine->GetInputSymbol(name);
-	if(!sym) {	
-		current_fli_engine->ReportDBError("FLI_UNKNOWN_INPUT", 
+	if(!sym) {
+		current_fli_engine->ReportDBError("FLI_UNKNOWN_INPUT",
 								   fli_current_file(), fli_lineNumber,
 								   name);
 		return;
@@ -112,7 +109,7 @@ void fli_AddInitializedOutputSymbol(char *name, double value,
 		}
 	}
 
-    if ((value < minValue) || (maxValue < value)) {  
+    if ((value < minValue) || (maxValue < value)) {
 			current_fli_engine->ReportDBError("FLI_INTERNAL_ERROR",
 									   fli_current_file(), fli_lineNumber);
             return;
@@ -131,7 +128,7 @@ void fli_AddSetFunction(char *set_func_name, char *symbolname,
 		   sftype, v1, v2));
 	FliSymbol *sym = current_fli_engine->GetSymbol(symbolname);
 	if(!sym || !sym->IsDeclared()) {
-		current_fli_engine->ReportDBError("FLI_UNDECLARED_VARIABLE", 
+		current_fli_engine->ReportDBError("FLI_UNDECLARED_VARIABLE",
 								 fli_current_file(), fli_lineNumber,
 								 symbolname);
 		return;
@@ -156,9 +153,9 @@ void fli_EndRule()
 								s_currentSection,
 								s_currentWhen);
 
-	
-	
-	
+
+
+
 	s_currentInputSymbols = new PointerList<FliSymbol>;
 	s_currentOutputSymbols = new PointerList<FliSymbol>;
 
@@ -228,7 +225,7 @@ void fli_AddOp(int op, ...)
 		case FLOP_ENDELSEIF:
 		case FLOP_ENDEXP:
 			break;
-			
+
 		case FLOP_STOP:
 			break;
 		default:
@@ -293,7 +290,6 @@ void fli_EndWhen()
 	s_currentWhen = NULL;
 }
 
-
 void fli_DumpCode()
 {
 	uint8 *codePtr;
@@ -345,8 +341,8 @@ void fli_DumpCode()
 				FLPRINTF(("ENDIF\n"));
 				break;
             case FLOP_STARTELSE:
-                FLPRINTF(("STARTELSE\n")); 
-                break; 
+                FLPRINTF(("STARTELSE\n"));
+                break;
 			case FLOP_ENDELSE:
 				FLPRINTF(("ENDELSE\n"));
 				break;
@@ -375,7 +371,7 @@ void fli_DumpCode()
 
 void fli_DebugPrintf(char *fmt, ...)
 {
-	
+
 	if (!s_fliLoggingEnabled[s_currentPlayer]) return;
 
 	va_list list;
@@ -396,12 +392,10 @@ void fli_DebugPrintf(char *fmt, ...)
 	fclose(f);
 }
 
-
 BOOL fli_GetFliLoggingEnabled(int owner)
 {
 	return s_fliLoggingEnabled[owner];
 }
-
 
 void fli_SetFliLoggingEnabled(int owner, BOOL enabled)
 {
@@ -414,5 +408,4 @@ void fli_SetCurrentPlayer(int owner)
 }
 
 
-
-} 
+}

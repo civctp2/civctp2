@@ -1,4 +1,4 @@
-/* 
+/*
 Copyright (C) 1995-2001 Activision, Inc.
 
 This library is free software; you can redistribute it and/or
@@ -49,7 +49,7 @@ commInitReq_t commInitReq; /*  Parameters needed by some comm drivers. */
 char phonenum[256];
 char modeministr[256];
 
-int disconnect_wait;  /* time to wait to disconnect after dpReadyToFreeze */ 
+int disconnect_wait;  /* time to wait to disconnect after dpReadyToFreeze */
 long total_logins = 1000;  /* number of logins in speed test.  0=infinite */
 char user1[tcapw_LEN_USERNAME+1];  /* username and pass to use in speed test */
 char pass1[tcapw_LEN_PW+1];
@@ -81,10 +81,10 @@ dp_result_t dpio_get(
 	size_t *psize,
 	int *flags)
 {
-	(void) dpio; 
+	(void) dpio;
 	if (simnetbuf[sim_my_rx].len) {
 		size_t i;
-		
+
 		*psrc = 1 - sim_my_rx;
 		memcpy(buffer, simnetbuf[sim_my_rx].buf, simnetbuf[sim_my_rx].len);
 		*psize = simnetbuf[sim_my_rx].len;
@@ -93,7 +93,7 @@ dp_result_t dpio_get(
 		for (i = 0; i < *psize; i++)
 			printf(" %02x", ((unsigned char *)buffer)[i]);
 		printf("\n");
-		
+
 		if (flags)
 			*flags = dpio_GET_RELIABLE;
 		return dp_RES_OK;
@@ -117,8 +117,8 @@ dp_result_t dpio_put_reliable2(
 	int flags)
 {
 	static retry_sum = 0;
-	
-	DPRINT(("sim dpio_put: h:%d sending packet of size %d to h:%x\n", sim_my_rx, size, (int)(*dests))); 
+
+	DPRINT(("sim dpio_put: h:%d sending packet of size %d to h:%x\n", sim_my_rx, size, (int)(*dests)));
 	if ((int)(*dests) != (1 - sim_my_rx)) {
 		printf("dpio_put_reliable: bad dest\n");
 		exit(1);
@@ -127,7 +127,7 @@ dp_result_t dpio_put_reliable2(
 		printf("dpio_put_reliable: output buffer full\n");
 		exit(1);
 	}
-	retry_sum += retry_fraction;	
+	retry_sum += retry_fraction;
 	if (retry_sum >= 100) {
 		retry_sum -= 100;
 		printf("dpio_put_reliable: full queue simulated\n");
@@ -138,7 +138,7 @@ dp_result_t dpio_put_reliable2(
 	return dp_RES_OK;
 }
 
-playerHdl_t dpio_openHdl2(dpio_t *dpio, void *adr, void *adr2) 
+playerHdl_t dpio_openHdl2(dpio_t *dpio, void *adr, void *adr2)
 {
 	/* Should return *adr, but let's be paranoid */
 	if (sim_my_rx != SIMNET_H_CLIENT) {
@@ -171,7 +171,7 @@ dp_result_t dpio_create(dpio_t **pdpio, const dp_transport_t *transportDLLname,
 	return dp_RES_OK;
 }
 
-#define dpio_destroy(dpio, flags) 
+#define dpio_destroy(dpio, flags)
 
 dp_result_t dpio_printAdr(dpio_t *dpio, const char *adrbuf, size_t adrlen, char *buf, size_t buflen)
 {
@@ -242,7 +242,7 @@ dp_result_t dpio_thawHdl(dpio_t* dpio, playerHdl_t* hdl, FILE* file)
 	return dp_RES_OK;
 }
 
-dp_result_t dpReportAssertionFailure(int lineno, char *file, char *linetxt) 
+dp_result_t dpReportAssertionFailure(int lineno, char *file, char *linetxt)
 {
 	printf("dpReportAssertionFailure(%d, %s, %s)\n",
 			lineno, file, linetxt);
@@ -282,7 +282,7 @@ void ProcessCommandLine(int argc, char **argv)
 
 	servernames[n_servers][0] = '\0';
 	commDLLName[0] = '\0';
-	
+
 	for (i = 1; i < argc; ++i) {
 		if (argv[i][0] == '/' || argv[i][0] == '-') {
 			/* deal with args that start with - or / */
@@ -298,7 +298,7 @@ void ProcessCommandLine(int argc, char **argv)
 			switch(toupper(argv[i][1])) {
 			case 'D':
 				/*  Turn on some sort of debugging mode */
-				break;				
+				break;
 			case 'I':   /*  Set modem init string */
 				strncpy(modeministr, chptr+1, sizeof(modeministr));
 				modeministr[sizeof(modeministr)-1] = '\0';
@@ -389,7 +389,6 @@ connect to.\n");
 	}
 }
 
-
 /*----------------------------------------------------------------------------
  Callback (ick) called by dpio when a handle is opened or closed.
  err is either dp_RES_OPENED, dp_RES_HOST_NOT_RESPONDING, or dp_RES_CLOSED.
@@ -433,7 +432,7 @@ dp_result_t server_restart(tserv_t **tserv)
 	int nClients = (*tserv)->clients->n_used;
 
 	assert(nClients < 1000);
-		
+
 	DPRINT(("server_restart: freezing server (%d clients)\n", nClients));
 	if ((fp = fopen("freeze.dat", "wb")) == NULL) {
 		DPRINT(("server_restart: can't write freeze.dat\n"));
@@ -468,7 +467,7 @@ dp_result_t server_restart(tserv_t **tserv)
 		return err;
 	}
 	assert(dpio->conns);
-	
+
 	tca = tca_create();
 	if (tca == NULL) {
 		DPRINT(("server_restart: could not create tca\n"));
@@ -541,7 +540,7 @@ void server_poll(int init)
 	if (tserv) tserv_assertValid(tserv);
 	if (err != dp_RES_OK) {
 		playerHdl_t h;
-		
+
 		if (tserv)
 			tserv_poll(tserv);
 		err = dpio_update(dpio);
@@ -565,7 +564,7 @@ void server_poll(int init)
 				event.reason == dp_RES_CREATED) {
 				tcapw_entry_t entry;
 				dp_netchar_t ncs[tcapw_LEN_PW];
-				
+
 				/* An email request just came in, pull the secret code out
 				 * of the database and "email" it.
 				 */
@@ -588,11 +587,11 @@ void server_poll(int init)
 			fprintf(stderr, "server: restart failed with err:%d\n", err);
 			DPRINT(("server: restart failed with err:%d\n", err));
 			exit(1);
-		} 
+		}
 		if (tserv) tserv_assertValid(tserv);
 #endif
 		break;
-		
+
 	default:
 		printf("server: unexpected packet type %02x%02x\n", pktbuf[0], pktbuf[1]);
 	}
@@ -639,7 +638,7 @@ int client_poll(int init)
 	wchar_t email[tcapw_MAXLEN_EMAIL];
 	int done = FALSE;
 	char *servername = servernames[0];
-	
+
 	static int client_state = 0;
 	static tserv_t *tserv = NULL;
 	static tca_t *tca = NULL;
@@ -668,13 +667,13 @@ int client_poll(int init)
 	assert(err != dp_RES_BUG);
 	if (err != dp_RES_OK) {
 		playerHdl_t h;
-		
+
 		if (tserv)
 			err = tserv_poll(tserv);
 		if (err == dp_RES_HOST_NOT_RESPONDING) {
 			printf("client: Server reply timed out!\n");
 			exit(1);
-		}	  
+		}
 		err = dpio_update(dpio);
 		assert(err != dp_RES_BAD);
 		assert(err != dp_RES_BUG);
@@ -729,7 +728,7 @@ int client_poll(int init)
 		mywcs_frommbs(pw1, tcapw_LEN_PW, "pass1");
 		err = tserv_account_loginW(tserv, uname1, pw1);
 		client_state += 10;
-		printf("client: going to state %d\n", client_state);			
+		printf("client: going to state %d\n", client_state);
 		break;
 
 	case 40:        /* Wait for user1 authorization */
@@ -747,7 +746,7 @@ int client_poll(int init)
 			uid = result.uid;
 			assert(uid != tcapw_UID_NONE);
 			client_state = 100;
-			printf("client: going to state %d\n", client_state);				
+			printf("client: going to state %d\n", client_state);
 		}
 		break;
 
@@ -773,7 +772,7 @@ int client_poll(int init)
 			printf("client: going to state %d\n", client_state);
 		}
 		break;
-		
+
 	case 115:
 		if (n_connects != 0 || dpio_ReadyToFreeze(dpio, &phdl) == dp_RES_BUSY) {
 			client_state -= 5;
@@ -786,7 +785,7 @@ int client_poll(int init)
 			printf("client: going to state %d\n", client_state);
 		}
 		break;
-		
+
 	case 120:		/* Connect */
 		assert(n_connects == 0);
 		DPRINT(("client: Connecting (%d)\n", client_state));
@@ -877,7 +876,7 @@ int client_poll(int init)
 			printf("client: going to state %d\n", client_state);
 		}
 		break;
-		
+
 	case 215:
 		if (n_connects != 0 || dpio_ReadyToFreeze(dpio, &phdl) == dp_RES_BUSY) {
 			client_state -= 5;
@@ -953,7 +952,7 @@ int client_poll(int init)
 			printf("client: going to state %d\n", client_state);
 		}
 		break;
-		
+
 	case 315:
 		if (n_connects != 0 || dpio_ReadyToFreeze(dpio, &phdl) == dp_RES_BUSY) {
 			client_state -= 5;
@@ -1010,7 +1009,7 @@ int client_poll(int init)
 		break;
 
 	case 350:  /* Ask for an emailed secret code */
-#if 0		
+#if 0
 		if ((err = tserv_request_email(tserv)) == dp_RES_OK) {
 			DPRINT(("client: Sent email request (%d)\n", client_state));
 			client_state = 400;
@@ -1025,7 +1024,7 @@ int client_poll(int init)
 		client_state = 400;  /* skip it since creation should trigger email */
 #endif
 		break;
-		
+
 	case 400:		/* Ready to Disconnect? */
 		DPRINT(("client: Disconnecting (%d)\n", client_state));
 		err = dpio_closeHdl(dpio, serverhdl);
@@ -1048,7 +1047,7 @@ int client_poll(int init)
 			printf("client: going to state %d\n", client_state);
 		}
 		break;
-		
+
 	case 415:
 		if (n_connects != 0 || dpio_ReadyToFreeze(dpio, &phdl) == dp_RES_BUSY) {
 			client_state -= 5;
@@ -1075,7 +1074,7 @@ int client_poll(int init)
 		client_state += 10;
 		printf("client: going to state %d\n", client_state);
 		break;
-		
+
 	case 430:	   /* Send newuser's username and password */
 		DPRINT(("client: Setting new user's username and password (%d)\n", client_state));
 		mywcs_frommbs(uname1, tcapw_LEN_USERNAME, "newuser");
@@ -1111,12 +1110,12 @@ int client_poll(int init)
 #endif
 		{
 			dp_netchar_t ncs[tcapw_LEN_PW];
-			
+
 			mywcs_wchar2netchar(ncs, secretcode+1, tcapw_LEN_PW);
 			DPRINT(("client: sending wrong secret code %s (%d)\n", tcapw_u2ascii(ncs, tcapw_LEN_PW), client_state));
 			err = tserv_account_activateW(tserv, secretcode+1);
 			client_state += 5;
-			printf("client: going to state %d\n", client_state);			
+			printf("client: going to state %d\n", client_state);
 		}
 		break;
 
@@ -1144,7 +1143,7 @@ int client_poll(int init)
 #endif
 		}
 		break;
-		
+
 	case 457:       /* submit correct secret code */
 		if (secretcode[0]) {
 			dp_netchar_t ncs[tcapw_LEN_PW];
@@ -1153,9 +1152,9 @@ int client_poll(int init)
 			DPRINT(("client: sending secret code %s (%d)\n", tcapw_u2ascii(ncs, tcapw_LEN_PW), client_state));
 			err = tserv_account_activateW(tserv, secretcode);
 			client_state += 3;
-			printf("client: going to state %d\n", client_state);			
+			printf("client: going to state %d\n", client_state);
 		}
-		break;		
+		break;
 
 	case 460:			/* Wait for activation notice */
 		if (got_result) {
@@ -1182,7 +1181,7 @@ int client_poll(int init)
 			printf("client: going to state %d\n", client_state);
 		}
 		break;
-		
+
 	case 470:	    /* Ask to change newuser's password */
 		DPRINT(("client: Sending a new password request (%d)\n", client_state));
 		mywcs_frommbs(uname1, tcapw_LEN_USERNAME, "newuser");
@@ -1241,7 +1240,7 @@ int client_poll(int init)
 			printf("client: going to state %d\n", client_state);
 		}
 		break;
-		
+
 	case 500:		/* Ready to Disconnect? */
 		DPRINT(("client: Disconnecting (%d)\n", client_state));
 		err = dpio_closeHdl(dpio, serverhdl);
@@ -1264,7 +1263,7 @@ int client_poll(int init)
 			printf("client: going to state %d\n", client_state);
 		}
 		break;
-		
+
 	case 515:
 		if (n_connects != 0 || dpio_ReadyToFreeze(dpio, &phdl) == dp_RES_BUSY) {
 			client_state -= 5;
@@ -1317,7 +1316,7 @@ int client_poll(int init)
 			printf("client: going to state %d\n", client_state);
 		}
 		break;
-		
+
 	case 600:		/* Ready to Disconnect? */
 		DPRINT(("client: Disconnecting (%d)\n", client_state));
 		err = dpio_closeHdl(dpio, serverhdl);
@@ -1393,7 +1392,7 @@ int client_poll(int init)
 			printf("client: going to state %d\n", client_state);
 		}
 		break;
-		
+
 	case 650:	    /* Ask to change newuser's password */
 		DPRINT(("client: Sending a new password request - Ascii (%d)\n", client_state));
 		err = tserv_change_passwordA(tserv, "newpass2", "newpass", 0, "jscanlin@activision.com");
@@ -1445,7 +1444,7 @@ int client_poll(int init)
 			printf("client: going to state %d\n", client_state);
 		}
 		break;
-		
+
 	case 1000:		/* Ready to Disconnect? */
 		DPRINT(("client: Disconnecting (%d)\n", client_state));
 		err = dpio_closeHdl(dpio, serverhdl);
@@ -1469,7 +1468,7 @@ int client_poll(int init)
 		}
 		assert(n_connects == 0 || n_connects == 1);
 		break;
-		
+
 	case 1015:
 		if (n_connects != 0 || dpio_ReadyToFreeze(dpio, &phdl) == dp_RES_BUSY) {
 			client_state -= 5;
@@ -1482,7 +1481,7 @@ int client_poll(int init)
 			printf("client: going to state %d\n", client_state);
 		}
 		break;
-		
+
 	case 1020:		/* done */
 		done = TRUE;
 		break;
@@ -1510,7 +1509,7 @@ int client_poll_speedtest(int init)
 	wchar_t uname1[tcapw_LEN_USERNAME];
 	int done = FALSE;
 	char *servername;
-	
+
 	static int client_state = 0;
 	static tserv_t *tserv = NULL;
 	static tca_t *tca = NULL;
@@ -1537,14 +1536,14 @@ int client_poll_speedtest(int init)
 
 	got_result = FALSE;
 	servername = servernames[n_logins%n_servers];
-	
+
 	pktlen = dpio_MAXLEN_UNRELIABLE;
 	err = dpio_get(dpio, &src, pktbuf, &pktlen, &flags);
 	assert(err != dp_RES_BAD);
 	assert(err != dp_RES_BUG);
 	if (err != dp_RES_OK) {
 		playerHdl_t h;
-		
+
 		if (tserv)
 			err = tserv_poll(tserv);
 		if (err == dp_RES_HOST_NOT_RESPONDING) {
@@ -1641,7 +1640,7 @@ int client_poll_speedtest(int init)
 		}
 		assert(n_connects == 0 || n_connects == 1);
 		break;
-		
+
 	case 115:
 		if (n_connects != 0 || dpio_ReadyToFreeze(dpio, &phdl) == dp_RES_BUSY) {
 			client_state -= 5;
@@ -1680,7 +1679,7 @@ void create_db()
 	tcapw_uname_t uname1;
 	tcapw_uid_t uid1;
 	wchar_t wcbuf[256];
-	
+
 	dp_result_t res;
 
 	memset(&entry1, 0, sizeof(entry1));
@@ -1717,7 +1716,6 @@ void create_db()
 	DPRINT(("create_db: done.\n"));
 }
 
-
 int tserv_test(int which)
 {
 	dp_result_t err;
@@ -1742,7 +1740,7 @@ int tserv_test(int which)
 		printf("dpio_create returns fatal error: %d\n", err);
 		exit(1);
 	}
-	
+
 #ifndef SIMNET
 	if (!server)
 #endif
@@ -1776,7 +1774,7 @@ int tserv_test(int which)
 		create_db();
 		server_poll(1);  /* initialize */
 	}
-	
+
 	raw_init();
 	while (1) {
 		int charFromUser = 0;
@@ -1797,9 +1795,9 @@ int tserv_test(int which)
 				printf("%c", charFromUser);
 				*(c++) = charFromUser;
 			}
-#endif			
+#endif
 		}
-#ifdef SIMNET		
+#ifdef SIMNET
 		sim_my_rx = 0;
 		server_poll(0);
 		sim_my_rx = 1;
@@ -1818,7 +1816,7 @@ int tserv_test(int which)
 #endif
 	}
 	raw_end();
-	
+
 	printf("dpio_destroy unloading comm drivers...");
 	dpio_destroy(dpio, 0);
 	printf(" done.\n");
@@ -1858,7 +1856,7 @@ connect to.\n");
 	strcpy(pass1, "pass1");
 	commDLLName[0] = 0;
 	disconnect_wait = 0;  /* default to no wait for peer to disconnect */
-	
+
 	ProcessCommandLine(argc, argv);
 
 	if (!commDLLName[0]) {

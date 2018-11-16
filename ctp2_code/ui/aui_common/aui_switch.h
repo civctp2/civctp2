@@ -10,14 +10,14 @@
 //
 // THIS FILE IS NOT GENERATED OR SUPPORTED BY ACTIVISION.
 //
-// This material has been developed at apolyton.net by the Apolyton CtP2 
+// This material has been developed at apolyton.net by the Apolyton CtP2
 // Source Code Project. Contact the authors at ctp2source@apolyton.net.
 //
 //----------------------------------------------------------------------------
 //
 // Compiler flags
-// 
-// _MSC_VER		
+//
+// _MSC_VER
 // - Use Microsoft C++ extensions when set.
 //
 //----------------------------------------------------------------------------
@@ -31,9 +31,7 @@
 #ifndef __AUI_SWITCH_H__
 #define __AUI_SWITCH_H__
 
-
 #include "aui_control.h"
-
 
 
 enum AUI_SWITCH_ACTION
@@ -49,19 +47,16 @@ enum AUI_SWITCH_ACTION
 };
 
 
-
 #define k_AUI_SWITCH_LDL_STATE		"state"
 #define k_AUI_SWITCH_LDL_NUMSTATES	"numstates"
 
-
 #define k_AUI_SWITCH_DEFAULTNUMSTATES	2
-
 
 
 class aui_Switch : public aui_Control
 {
 public:
-	
+
 	aui_Switch(
 		AUI_ERRCODE *retval,
 		uint32 id,
@@ -89,7 +84,6 @@ protected:
 public:
 	virtual AUI_ERRCODE ResetThis( void );
 
-	
 	BOOL			IsSelected( void ) const { return m_state != 0; }
 	sint32			GetState( void ) const { return m_state; }
 	virtual sint32	SetState( sint32 state );
@@ -103,7 +97,6 @@ public:
 		sint32 x = 0,
 		sint32 y = 0 );
 
-	
 	typedef AUI_ERRCODE (SwitchDrawCallback)(
 		aui_Switch *control,
 		aui_Surface *surface,
@@ -113,10 +106,9 @@ public:
 		void *cookie,bool exclusive=true);
 
 protected:
-	sint32	m_state;		
-	sint32	m_numStates;	
+	sint32	m_state;
+	sint32	m_numStates;
 
-	
 	bool	m_drawCallbackExclusive;
 	SwitchDrawCallback *m_drawFunc;
 	void *m_drawCookie;
@@ -131,5 +123,4 @@ protected:
 	virtual void	MouseRDropInside(aui_MouseEvent * mouseData);
 };
 
-
-#endif 
+#endif

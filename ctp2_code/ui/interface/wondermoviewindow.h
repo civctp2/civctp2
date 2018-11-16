@@ -12,7 +12,7 @@ class ctp2_HyperTextBox;
 class WonderMovieWindow : public C3Window
 {
 public:
-	
+
 	WonderMovieWindow(
 		AUI_ERRCODE *retval,
 		uint32 id,
@@ -59,6 +59,5 @@ private:
 	c3_Static			*m_bottomBorder;
 	ctp2_HyperTextBox   *m_textBox;
 };
-
 
 #endif

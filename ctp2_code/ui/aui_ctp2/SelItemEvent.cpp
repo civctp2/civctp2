@@ -1,5 +1,3 @@
-
-
 #include "c3.h"
 #include "GameEventUser.h"
 #include "SelItemEvent.h"
@@ -106,10 +104,8 @@ void selecteditemevent_Initialize()
 	g_gevManager->AddCallback(GEV_ArmySelected, GEV_PRI_Primary, &s_SelItemArmySelectedEvent);
 
 
-
 }
 
 void selecteditemevent_Cleanup()
 {
 }
-

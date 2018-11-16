@@ -8,7 +8,6 @@
 #include "ctp2_Static.h"
 
 
-
 #define k_CHART_LDL_BUTTON			"button"
 #define k_CHART_LDL_LEFTIMAGE		"leftimage"
 #define k_CHART_LDL_RIGHTIMAGE		"rightimage"
@@ -22,8 +21,8 @@ class c3_HyperTipWindow;
 
 class Chart : public ctp2_Static {
 public:
-	
-	Chart( 
+
+	Chart(
 		AUI_ERRCODE	*retval,
 		uint32 id,
 		MBCHAR *ldlBlock,
@@ -98,6 +97,5 @@ private:
 void ChartPreReqActionCallback( aui_Control *control, uint32 action, uint32 data, void *cookie );
 void ChartLeadsToActionCallback( aui_Control *control, uint32 action, uint32 data, void *cookie );
 void ChartCenterActionCallback( aui_Control *control, uint32 action, uint32 data, void *cookie );
-
 
 #endif

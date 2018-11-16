@@ -1,45 +1,26 @@
-
-
-
-
-
-
-
-
-
-
-
-
-
-
 #pragma once
 
 #ifndef __IC3Science_H__
 #define __IC3Science_H__ 1
 
+#include <OBJBASE.H>
 
-#include <OBJBASE.H>  
-
-
-DEFINE_GUID(CLSID_IC3Science, 
+DEFINE_GUID(CLSID_IC3Science,
 0xbea2ff81, 0x50e, 0x11d2, 0x83, 0x55, 0x0, 0xc0, 0x4f, 0xba, 0x43, 0xc0);
-
 
 #undef INTERFACE
 #define INTERFACE IC3Science
 
 DECLARE_INTERFACE_(IC3Science, IUnknown)
 {
- 	
 
-    
+
 	STDMETHOD_ (sint32, GetNumAdvances)(THIS) PURE ;
 	STDMETHOD_ (sint32, GetNumDependencies)(THIS_ sint32 adv) PURE ;
 	STDMETHOD_ (sint32, GetNumPrerequisites)(THIS_ sint32 adv) PURE ;
 	STDMETHOD_ (sint32, GetLeadsTo)(THIS_ sint32 adv, sint32 lead) PURE ;
 	STDMETHOD_ (sint32, GetPrereq)(THIS_ sint32 adv, sint32 req) PURE ;
 
-    
     STDMETHOD_ (BOOL, HasAdvance)(THIS_ sint32 adv) PURE ;
     STDMETHOD_ (void, SetResearching)(THIS_ sint32 adv) PURE;
 

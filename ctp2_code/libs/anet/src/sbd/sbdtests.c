@@ -1,4 +1,4 @@
-/* 
+/*
 Copyright (C) 1995-2001 Activision, Inc.
 
 This library is free software; you can redistribute it and/or
@@ -113,14 +113,14 @@ void main (int argc, char *argv[])
 		tv.tv_usec = 0;
 		FD_ZERO(&rfds);
 		sockmax = sbdserv_getfds(sbdserv, &rfds);
-		nsocks = select(sockmax + 1, &rfds, NULL, NULL, &tv);		
+		nsocks = select(sockmax + 1, &rfds, NULL, NULL, &tv);
 		if (nsocks < 0) {
 			printf("select error:%d\n", errno);
 			exit(1);
 		} else if (nsocks == 0) {
 			printf("select timed out\n");
 		}
-		printf("select returns %d/%d socks", nsocks, (1 + sbdserv->conns->n_used)); 
+		printf("select returns %d/%d socks", nsocks, (1 + sbdserv->conns->n_used));
 		for (sock = 0; sock <= sockmax; sock++)
 			if (FD_ISSET(sock, &rfds))
 				printf(":%d", sock);
@@ -144,7 +144,7 @@ void main (int argc, char *argv[])
 				printf("received garbled buffer!\n");
 				assert(!memcmp(buf, testbuf, pktsize));
 				exit(1);
-			} 
+			}
 			ncomplete++;
 			if (ncomplete == npkts)
 				pleaseQuit = 1;

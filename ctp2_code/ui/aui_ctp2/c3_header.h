@@ -8,11 +8,10 @@
 #include "c3_listbox.h"
 #include "aui_header.h"
 
-
 class c3_Header : public aui_Header
 {
 public:
-	
+
 	c3_Header(
 		AUI_ERRCODE *retval,
 		uint32 id,
@@ -33,5 +32,4 @@ protected:
 	AUI_ERRCODE CreateSwitches( MBCHAR *ldlBlock = NULL );
 };
 
-
-#endif 
+#endif

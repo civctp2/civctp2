@@ -1,13 +1,3 @@
-
-
-
-
-
-
-
-
-
-
 #include "c3.h"
 
 #include "civarchive.h"
@@ -54,15 +44,15 @@ void DiplomaticRequest::RemoveAllReferences()
 									  (uint32)m_id));
 		}
     sint32 r = GetRecipient();
-    
+
 	if(g_player[r]) {
-		g_player[r]->RemoveDiplomaticReferences(*this) ;	
+		g_player[r]->RemoveDiplomaticReferences(*this) ;
 	}
 
     sint32 o = GetOwner();
-	
+
 	if(g_player[o]) {
-		g_player[o]->RemoveDiplomaticReferences(*this) ;		
+		g_player[o]->RemoveDiplomaticReferences(*this) ;
 	}
 
 	g_theDiplomaticRequestPool->Del(*this) ;
@@ -98,7 +88,7 @@ void DiplomaticRequest::Complete()
 {
 	AccessData()->Complete();
 }
-		
+
 sint32 DiplomaticRequest::GetTone() const
 {
 	return GetData()->GetTone();

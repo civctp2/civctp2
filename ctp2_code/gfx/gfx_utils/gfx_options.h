@@ -1,4 +1,3 @@
-
 #if defined(HAVE_PRAGMA_ONCE)
 #pragma once
 #endif
@@ -14,7 +13,7 @@ class GraphicOptions;
 class MapPoint;
 template <class T> class AvlTree;
 
-class CellText 
+class CellText
 {
 public:
     uint32        m_key;
@@ -22,7 +21,7 @@ public:
     MBCHAR *      m_text;
 };
 
-class GraphicsOptions 
+class GraphicsOptions
 {
 public:
 	GraphicsOptions();

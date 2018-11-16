@@ -11,7 +11,7 @@
 //
 // THIS FILE IS NOT GENERATED OR SUPPORTED BY ACTIVISION.
 //
-// This material has been developed at apolyton.net by the Apolyton CtP2 
+// This material has been developed at apolyton.net by the Apolyton CtP2
 // Source Code Project. Contact the authors at ctp2source@apolyton.net.
 //
 //----------------------------------------------------------------------------
@@ -68,8 +68,7 @@ BOOL SomeoneCanHave(const UnitRecord *rec)
 	sint32 p;
 
 	for(p = 0; p < k_MAX_PLAYERS; p++) {
-		
-		
+
 		if(g_player[p] && g_player[p]->m_advances->HasAdvance(rec->GetEnableAdvanceIndex()))
 			return TRUE;
 	}
@@ -96,7 +95,7 @@ sint32 Barbarians::ChooseUnitType()
 
 		if(!rec->GetMovementTypeLand())
 			continue;
-		
+
 		if(rec->GetAttack() < 1)
 			continue;
 
@@ -104,9 +103,9 @@ sint32 Barbarians::ChooseUnitType()
 			continue;
 		if(rec->GetNoBarbarian())
 			continue;
-	
-		
-		
+
+
+
 
 		if(SomeoneCanHave(rec)) {
 			for(j = 0; j < num_best_units; j++) {
@@ -149,7 +148,6 @@ BOOL Barbarians::AddBarbarians(const MapPoint &point, PLAYER_INDEX meat,
 	if(g_network.IsClient() && !g_network.IsLocalPlayer(meat))
 		return FALSE;
 
-
 	if(g_turn->GetRound() < g_theRiskDB->Get(g_theGameSettings->GetRisk())->GetBarbarianFirstTurn() ||
 	   g_turn->GetRound() >= g_theRiskDB->Get(g_theGameSettings->GetRisk())->GetBarbarianLastTurn()) {
 		return FALSE;
@@ -180,7 +178,7 @@ BOOL Barbarians::AddBarbarians(const MapPoint &point, PLAYER_INDEX meat,
 			if(use >= NOWHERE)
 				use = NORTH;
 		}
-	
+
 		tried[use] = TRUE;
 		triedCount++;
 		if(point.GetNeighborPosition((WORLD_DIRECTION)use, neighbor)) {
@@ -219,11 +217,11 @@ void Barbarians::BeginYear()
 		for(tries = 0; tries < k_MAX_BARBARIAN_TRIES; tries++) {
 			point.x = sint16(g_rand->Next(g_theWorld->GetXWidth()));
 			point.y = sint16(g_rand->Next(g_theWorld->GetYHeight()));
-			
+
 			if (!g_theWorld->IsLand(point)) {
 				continue;
 			}
-			
+
 			for(p = 1; p < k_MAX_PLAYERS; p++) {
 				if(g_player[p] && g_player[p]->IsVisible(point))
 					break;

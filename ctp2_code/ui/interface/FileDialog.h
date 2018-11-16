@@ -1,4 +1,3 @@
-
 #ifndef FILE_DIALOG_H__
 #define FILE_DIALOG_H__
 

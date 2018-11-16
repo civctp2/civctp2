@@ -11,20 +11,20 @@
 //
 // THIS FILE IS NOT GENERATED OR SUPPORTED BY ACTIVISION.
 //
-// This material has been developed at apolyton.net by the Apolyton CtP2 
+// This material has been developed at apolyton.net by the Apolyton CtP2
 // Source Code Project. Contact the authors at ctp2source@apolyton.net.
 //
 //----------------------------------------------------------------------------
 //
 // Compiler flags
-// 
+//
 // _MSC_VER
 // - Compiler version (for the Microsoft C++ compiler only)
 //
 // Note: For the blocks with _MSC_VER preprocessor directives, the following
 //       is implied: the (_MSC_VER) preprocessor directive lines, and the blocks
-//       that are inactive for _MSC_VER value 1200 are modified Apolyton code. 
-//       The blocks that are active for _MSC_VER value 1200 are the original 
+//       that are inactive for _MSC_VER value 1200 are modified Apolyton code.
+//       The blocks that are active for _MSC_VER value 1200 are the original
 //       Activision code.
 //
 //----------------------------------------------------------------------------
@@ -112,8 +112,8 @@
 
 class Packetizer {
 public:
-	Packetizer() 
-	{ 
+	Packetizer()
+	{
 		m_reliability = 1;
 		m_refCount = 0;
 		m_unitId = 0;
@@ -132,14 +132,14 @@ public:
 		m_sendCompressed = TRUE;
 	}
 
-	virtual ~Packetizer() 
+	virtual ~Packetizer()
 	{
 		if(m_packetbuf)
 			delete [] m_packetbuf;
 	}
 
 	sint32 AddRef() { return ++m_refCount; }
-	sint32 Release() 
+	sint32 Release()
 	{
 		--m_refCount;
 		if(m_refCount <= 0) {
@@ -160,8 +160,8 @@ public:
 	virtual void Unpacketize(uint16 id, uint8* buf, uint16 size)
 	{
 		Assert(buf[0] == 'G' && buf[1] == 'N');
-		Assert(id) ;												
-		Assert(size) ;												
+		Assert(id) ;
+		Assert(size) ;
 	}
 
 	void PacketizeAndSave()
@@ -171,7 +171,7 @@ public:
 			uint16 size = 0;
 			Packetize(buf, size);
 			m_packetsize = size;
-#ifdef LOG_NETWORK_OUTPUT			
+#ifdef LOG_NETWORK_OUTPUT
 			FILE *mtfile = fopen("netmainthread.log", "a");
 			if(mtfile) {
 				sint32 i;
@@ -182,7 +182,7 @@ public:
 				fclose(mtfile);
 			}
 #endif
-				
+
 			Assert(m_packetsize < 8192);
 			m_packetbuf = new uint8[m_packetsize];
 			memcpy(m_packetbuf, buf, m_packetsize);
@@ -193,9 +193,8 @@ public:
 
 	sint32 m_destination;
 	sint32 m_reliability;
-	sint32 m_unitId; 
-                     
- 	                 
+	sint32 m_unitId;
+
 	uint8 *m_packetbuf;
 	sint32 m_packetsize;
 	sint32 m_sendCompressed;

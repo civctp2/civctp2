@@ -17,7 +17,7 @@ private:
 	double m_happinessAmounts[HAPPY_REASON_MAX];
 	static StringID sm_happinessNames[HAPPY_REASON_MAX];
 
-	double m_tempSaveHappiness[HAPPY_REASON_MAX]; 
+	double m_tempSaveHappiness[HAPPY_REASON_MAX];
 public:
 	HappyTracker();
 	HappyTracker(CivArchive &archive);
@@ -28,7 +28,7 @@ public:
 					  double &amount,
 					  StringID &name);
 	void SetHappiness(HAPPY_REASON which, double amount);
-	
+
 	void SaveHappiness();
 	void RestoreHappiness();
 
@@ -39,5 +39,5 @@ public:
 	void Dump();
 #endif
 };
-	
+
 #endif

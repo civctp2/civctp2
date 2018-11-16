@@ -10,19 +10,19 @@
 //
 // THIS FILE IS NOT GENERATED OR SUPPORTED BY ACTIVISION.
 //
-// This material has been developed at apolyton.net by the Apolyton CtP2 
+// This material has been developed at apolyton.net by the Apolyton CtP2
 // Source Code Project. Contact the authors at ctp2source@apolyton.net.
 //
 //----------------------------------------------------------------------------
 //
 // Compiler flags
 //
-// _MSC_VER		
+// _MSC_VER
 // - Compiler version (for the Microsoft C++ compiler only)
 //
 // _ACTOR_DRAW_OPTIMIZATION
 //
-// 
+//
 //----------------------------------------------------------------------------
 //
 // Modifications from the original Activision code:
@@ -55,7 +55,7 @@ class Anim;
 
 
 
-class Actor 
+class Actor
 {
 public:
 	Actor(SpriteState * ss = NULL);
@@ -78,7 +78,6 @@ public:
 	virtual void	SetAnim(Anim *a);
 	virtual void	Process(void);
 
-	
 	inline bool	IsActive () { return m_isactive;};
 	inline void	SetActive(bool active) { m_isactive=active;};
 protected:
@@ -88,21 +87,19 @@ protected:
 	sint32			m_oldOffsetY;
 	sint32			m_oldFrame;
 #endif
-	
+
 	bool			m_isactive;
 
-	sint32			m_x;	
+	sint32			m_x;
 	sint32			m_y;
 	SpriteState		*m_spriteState;
 
-	BOOL			m_morphing; 
+	BOOL			m_morphing;
 
 	sint32			m_animPos;
 
-
 	void			SetAnimation(GAME_ACTION action);
 	void			ServeAnimation(uint32 timeslice_msecs);
-
 
 	virtual bool    ActionMove(Action *actionObj){ return false;};
 

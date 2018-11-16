@@ -11,7 +11,7 @@
 //
 // THIS FILE IS NOT GENERATED OR SUPPORTED BY ACTIVISION.
 //
-// This material has been developed at apolyton.net by the Apolyton CtP2 
+// This material has been developed at apolyton.net by the Apolyton CtP2
 // Source Code Project. Contact the authors at ctp2source@apolyton.net.
 //
 //----------------------------------------------------------------------------
@@ -35,7 +35,6 @@
 
 #ifndef __AUI_RESOURCE_H__
 #define __AUI_RESOURCE_H__
-
 
 //----------------------------------------------------------------------------
 // Library imports
@@ -75,24 +74,22 @@ struct aui_ResourceElement
 		const MBCHAR *fullPath );
 	virtual ~aui_ResourceElement();
 
-	TT		*resource;		
-	MBCHAR	*name;			
-	uint32	hash;			
-	uint32	pathhash;		
-	sint32	refcount;		
+	TT		*resource;
+	MBCHAR	*name;
+	uint32	hash;
+	uint32	pathhash;
+	sint32	refcount;
 };
-
 
 
 template<class T>
 class aui_Resource
 {
 public:
-	
+
 	aui_Resource();
 	virtual ~aui_Resource();
 
-	
 	T			*Load( const MBCHAR *name, C3DIR dir = C3DIR_DIRECT, uint32 size = 0);
 
 	AUI_ERRCODE	Unload( T *resource );
@@ -105,11 +102,9 @@ public:
 
 protected:
 	tech_WLList<aui_ResourceElement<T> *>	*m_resourceList;
-		
-		
+
 
 	static tech_WLList<MBCHAR *>			*m_pathList;
-		
 
 	static sint32							m_resourceRefCount;
 };
@@ -131,12 +126,12 @@ aui_ResourceElement<TT>::aui_ResourceElement(
 	pathhash(aui_Base::CalculateHash(fullPath)),
 	refcount(1)
 {
-	
+
 	Assert( newName != NULL && fullPath != NULL );
 	if ( !newName || !fullPath ) return;
 	// Temporary patch: modern code would use std::string and initialiser
 	strcpy(name, newName);
-	
+
 	AUI_ERRCODE errcode = AUI_ERRCODE_OK;
 	resource = new TT( &errcode, fullPath );
 	Assert( AUI_NEWOK(resource,errcode) );
@@ -151,8 +146,7 @@ aui_ResourceElement<TT>::aui_ResourceElement(
 		resource = NULL;
 		return;
 	}
-	
-	
+
 }
 
 
@@ -174,7 +168,6 @@ aui_ResourceElement<TT>::~aui_ResourceElement()
 template<class T> tech_WLList<MBCHAR *> *aui_Resource<T>::m_pathList = NULL;
 template<class T> sint32 aui_Resource<T>::m_resourceRefCount = 0;
 
-
 template<class T>
 aui_Resource<T>::aui_Resource()
 {
@@ -188,14 +181,12 @@ aui_Resource<T>::aui_Resource()
 	}
 }
 
-
 template<class T>
 aui_Resource<T>::~aui_Resource()
 {
 	if ( m_resourceList )
 	{
-		
-		
+
 		Assert( m_resourceList->L() == 0 );
 
 
@@ -240,8 +231,7 @@ AUI_ERRCODE aui_Resource<T>::AddSearchPath( const MBCHAR *path )
 	Assert( len <= MAX_PATH );
 	if ( len > MAX_PATH ) return AUI_ERRCODE_INVALIDPARAM;
 
-	
-	
+
 	const MBCHAR *last = path + len - 1;
 	Assert( *last != FILE_SEPC );
 	while ( len && ( *last == FILE_SEPC )) {
@@ -264,11 +254,9 @@ AUI_ERRCODE aui_Resource<T>::AddSearchPath( const MBCHAR *path )
 	return AUI_ERRCODE_OK;
 }
 
-
 template<class T>
 AUI_ERRCODE aui_Resource<T>::RemoveSearchPath( const MBCHAR *path )
 {
-	
 
 	ListPos position = m_pathList->GetHeadPosition();
 	for ( sint32 i = m_pathList->L(); i; i-- )
@@ -287,7 +275,6 @@ AUI_ERRCODE aui_Resource<T>::RemoveSearchPath( const MBCHAR *path )
 	return AUI_ERRCODE_OK;
 }
 
-
 template<class T>
 T *aui_Resource<T>::Load( const MBCHAR *resName, C3DIR dir, uint32 size)
 {
@@ -298,17 +285,17 @@ T *aui_Resource<T>::Load( const MBCHAR *resName, C3DIR dir, uint32 size)
 	MBCHAR tempName[MAX_PATH + 1];
 
 
-	
-	
-	
-	
-	
-	
 
 
-	
-	
-	
+
+
+
+
+
+
+
+
+
 	if (size)
 	{
 		sprintf(tempName, "%s%d", resName, size);
@@ -318,7 +305,6 @@ T *aui_Resource<T>::Load( const MBCHAR *resName, C3DIR dir, uint32 size)
 	{
 		name = resName;
 	}
-
 
 	uint32 hash = aui_Base::CalculateHash( name );
 
@@ -338,27 +324,26 @@ T *aui_Resource<T>::Load( const MBCHAR *resName, C3DIR dir, uint32 size)
 	}
 
 
-	
+
 
 	if (size)
-		name = resName; 
+		name = resName;
 
 	static MBCHAR fullPath[ MAX_PATH + 1 ];
-	strncpy( fullPath, name, MAX_PATH ); 
+	strncpy( fullPath, name, MAX_PATH );
 
-	
-	
-	
-	
+
+
+
+
 	if (dir != C3DIR_DIRECT) {
-		
-		
+
 		MBCHAR path[_MAX_PATH];
 		if (g_civPaths->FindFile(dir, name, path, TRUE)) {
 			strcpy(fullPath, path);
 		} else {
 			if (dir == C3DIR_PICTURES) {
-				
+
 				if (g_civPaths->FindFile(C3DIR_PATTERNS, name, path, TRUE)) {
 					strcpy(fullPath, path);
 				} else {
@@ -387,13 +372,12 @@ T *aui_Resource<T>::Load( const MBCHAR *resName, C3DIR dir, uint32 size)
 	return NULL;
 }
 
-
 template<class T>
 BOOL aui_Resource<T>::FindFile( MBCHAR *fullPath, const MBCHAR *name )
 {
 	if ( !strchr( name, ':' ) && strncmp( name, FILE_SEP FILE_SEP, 2 ) )
 	{
-		
+
 		ListPos position = m_pathList->GetHeadPosition();
 		if ( position )
 		{
@@ -420,7 +404,6 @@ BOOL aui_Resource<T>::FindFile( MBCHAR *fullPath, const MBCHAR *name )
     return FALSE;
 }
 
-
 template<class T>
 AUI_ERRCODE aui_Resource<T>::Unload( T *resource )
 {
@@ -443,7 +426,6 @@ AUI_ERRCODE aui_Resource<T>::Unload( T *resource )
 
 	return AUI_ERRCODE_OK;
 }
-
 
 template<class T>
 AUI_ERRCODE aui_Resource<T>::Unload( const MBCHAR *name )
@@ -474,6 +456,4 @@ AUI_ERRCODE aui_Resource<T>::Unload( const MBCHAR *name )
 	return AUI_ERRCODE_OK;
 }
 
-
-#endif 
-
+#endif

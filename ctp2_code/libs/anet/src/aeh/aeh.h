@@ -1,4 +1,4 @@
-/* 
+/*
 Copyright (C) 1995-2001 Activision, Inc.
 
 This library is free software; you can redistribute it and/or
@@ -72,8 +72,7 @@ Foundation, Inc., 59 Temple Place, Suite 330, Boston, MA  02111-1307  USA
 #define aeh_RES_FULL    3
 #define aeh_RES_BAD     5
 #define aeh_RES_ALREADY 7
-#define aeh_RES_BUG     8 
-
+#define aeh_RES_BUG     8
 
 /***********************************************************************
  ****         mapfile structures and functions                      ****
@@ -89,7 +88,7 @@ typedef struct aeh_map_func_s {
 /* single entry in list of module mapfiles gotten from mapfile catalog file */
 typedef struct {
 	unsigned long crc;         /* crc of module corresponding to mapfile */
-	unsigned long load_addr;   /* preferred load address for mapfile module */ 
+	unsigned long load_addr;   /* preferred load address for mapfile module */
 	char *path;                /* path to mapfile */
 	char *reldir;              /* relative dir of mapfile; used for printing */
 	/* pointer to first entry in linked list of functions for mapfile;
@@ -122,7 +121,6 @@ int aeh_mapcat_Create(aeh_mapcat_t *aehmapcat, const char *catpath);
  Input: aehmapcat
 --------------------------------------------------------------------------*/
 void aeh_mapcat_Destroy(aeh_mapcat_t *aehmapcat);
-
 
 
 /***********************************************************************
@@ -217,7 +215,7 @@ typedef struct {
                                     correspond to crash stack elements */
 	unsigned int ninfo;       /* number of elements in additional info array */
 	aeh_info_t *info;         /* array of additional info */
-} aeh_t; 
+} aeh_t;
 
 /* crucial crash info in binary form (limit to keep data size small);
  * used when doing file or network operations; values in buf are in portable
@@ -297,7 +295,7 @@ int aeh_getLastModule(aeh_t *aeh, char *name, int len);
 
 /*--------------------------------------------------------------------------
  Convert crash info from an object format (aeh_t) to a binary stream
-  format (aeh_buf_t). Call this to put crash info into a compact form 
+  format (aeh_buf_t). Call this to put crash info into a compact form
   for doing network or file operations.
  Input: aeh
  Output: aehbuf (preallocated)

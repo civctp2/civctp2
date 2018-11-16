@@ -1,20 +1,8 @@
-
-
-
-
-
-
-
-
-
-
-
 #ifdef HAVE_PRAGMA_ONCE
 #pragma once
 #endif
 #ifndef __ACTORPATH_H__
 #define __ACTORPATH_H__
-
 
 enum POINTSPOSTYPE {
 	POINTSPOSTYPE_STARTPOS,
@@ -29,7 +17,6 @@ public:
 	ActorPath(uint16 numPoints);
 	ActorPath(sint32 x1, sint32 y1, sint32 x2, sint32 y2);
 	~ActorPath();
-
 
 	void SetPos(uint16 pointNum, sint32 x, sint32 y);
 

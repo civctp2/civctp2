@@ -1,4 +1,3 @@
-
 #include "c3.h"
 #include "AdvanceRecord.h"
 #include "advanceutil.h"
@@ -31,7 +30,7 @@ sint32 advanceutil_GetAlienLifeAdvance()
 
 bool advanceutil_AdvanceHasPrereq(sint32 advance, sint32 prereq)
 {
-	
+
 	const AdvanceRecord *adv = g_theAdvanceDB->Get(advance);
 	sint32 i;
 	for(i = 0; i < adv->GetNumPrerequisites(); i++) {

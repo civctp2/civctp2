@@ -10,13 +10,13 @@
 //
 // THIS FILE IS NOT GENERATED OR SUPPORTED BY ACTIVISION.
 //
-// This material has been developed at apolyton.net by the Apolyton CtP2 
+// This material has been developed at apolyton.net by the Apolyton CtP2
 // Source Code Project. Contact the authors at ctp2source@apolyton.net.
 //
 //----------------------------------------------------------------------------
 //
 // Compiler flags
-// 
+//
 // __AUI_USE_DIRECTX__
 // Has to be defined, or no code will be generated at all.
 //
@@ -30,31 +30,27 @@
 
 #include "c3.h"
 
-
 #ifdef __AUI_USE_DIRECTX__
-
 
 #include "aui_ui.h"
 
 #include "aui_directinput.h"
 
 
-
 aui_DirectInput::aui_DirectInput
 (
 	AUI_ERRCODE *retval,
-	BOOL useExclusiveMode 
+	BOOL useExclusiveMode
 )
 :
 	aui_Input		(),
 	aui_DirectX		(),
-	m_lpdid		(NULL),		
-	m_inputEvent	(NULL)	
+	m_lpdid		(NULL),
+	m_inputEvent	(NULL)
 
 {
 	*retval = InitCommon(useExclusiveMode);
 }
-
 
 
 AUI_ERRCODE aui_DirectInput::InitCommon( BOOL useExclusiveMode )
@@ -65,7 +61,6 @@ AUI_ERRCODE aui_DirectInput::InitCommon( BOOL useExclusiveMode )
 	AUI_ERRCODE errcode = aui_DirectX::InitCommon( useExclusiveMode );
 	return errcode;
 }
-
 
 
 aui_DirectInput::~aui_DirectInput()
@@ -86,11 +81,10 @@ aui_DirectInput::~aui_DirectInput()
 }
 
 
-
 AUI_ERRCODE aui_DirectInput::Acquire( void )
 {
     if (!g_ui)  return AUI_ERRCODE_ACQUIREFAILED;
-    
+
 #if defined(_DEBUG)
 	uint32 const coopFlags = DISCL_NONEXCLUSIVE | DISCL_BACKGROUND;
 #else
@@ -113,7 +107,6 @@ AUI_ERRCODE aui_DirectInput::Acquire( void )
 }
 
 
-
 AUI_ERRCODE aui_DirectInput::Unacquire( void )
 {
 	aui_Input::Unacquire();
@@ -124,7 +117,6 @@ AUI_ERRCODE aui_DirectInput::Unacquire( void )
 
 	if ( hr != DI_OK ) return AUI_ERRCODE_UNACQUIREFAILED;
 
-
 		uint32 coopFlags = DISCL_NONEXCLUSIVE | DISCL_FOREGROUND;
 		if ( m_exclusiveMode )
 			coopFlags = DISCL_EXCLUSIVE | DISCL_FOREGROUND;
@@ -132,9 +124,7 @@ AUI_ERRCODE aui_DirectInput::Unacquire( void )
 		hr = m_lpdid->SetCooperativeLevel( g_ui->TheHWND(), coopFlags );
 		if ( hr != DI_OK ) return AUI_ERRCODE_SETCOOPLEVELFAILED;
 
-
 	return AUI_ERRCODE_OK;
 }
 
-
-#endif 
+#endif

@@ -1,6 +1,3 @@
-
-
-
 #ifndef __C3_RADIO_H__
 #define __C3_RADIO_H__
 
@@ -12,14 +9,12 @@
 #define k_C3_RADIO_LDL_BEVELWIDTH			"bevelwidth"
 #define k_C3_RADIO_LDL_BEVELTYPE			"beveltype"
 
-
 class aui_Surface;
-
 
 class c3_Radio : public aui_Radio, public PatternBase
 {
 public:
-	
+
 	c3_Radio(
 		AUI_ERRCODE *retval,
 		uint32 id,
@@ -57,5 +52,4 @@ private:
 	sint32	m_bevelType;
 };
 
-
-#endif 
+#endif

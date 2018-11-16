@@ -2,7 +2,7 @@
 //
 // Project      : Call To Power 2
 // File type    : C++ header file
-// Description  : 
+// Description  :
 // Id           : $Id$
 //
 //----------------------------------------------------------------------------
@@ -11,13 +11,13 @@
 //
 // THIS FILE IS NOT GENERATED OR SUPPORTED BY ACTIVISION.
 //
-// This material has been developed at apolyton.net by the Apolyton CtP2 
+// This material has been developed at apolyton.net by the Apolyton CtP2
 // Source Code Project. Contact the authors at ctp2source@apolyton.net.
 //
 //----------------------------------------------------------------------------
 //
 // Compiler flags
-// 
+//
 //----------------------------------------------------------------------------
 //
 // Modifications from the original Activision code:
@@ -73,7 +73,7 @@ class ldl_datablock {
 		m_children.AddTail(child);
 		child->m_parent = this;
 	}
-	
+
 	// Add a single attribute
 	void AddAttribute(ldl_attribute *attr) {
 		m_attributes.AddTail(attr);
@@ -94,7 +94,7 @@ class ldl_datablock {
 	void Dump(sint32 indent);
 
 	char *GetFullName(char *output);
-	
+
 public:
 
 	// get the full ldl path name
@@ -108,7 +108,7 @@ public:
 
 	// returns the attribute value or 0 if the attribute can't be found.
 	int GetAttributeType(const char *szName);
-	
+
 	// function used for templates -only-
 	BOOL AttributeNameTaken(char *szName);
 	void SetValue(char *name, int value);

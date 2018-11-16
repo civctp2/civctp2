@@ -1,4 +1,4 @@
-/* 
+/*
 Copyright (C) 1995-2001 Activision, Inc.
 
 This library is free software; you can redistribute it and/or
@@ -76,4 +76,3 @@ typedef unsigned long  dp_uint32_t;
 #endif
 
 #endif /* Protect against double-inclusion */
-

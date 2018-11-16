@@ -11,7 +11,7 @@
 //
 // THIS FILE IS NOT GENERATED OR SUPPORTED BY ACTIVISION.
 //
-// This material has been developed at apolyton.net by the Apolyton CtP2 
+// This material has been developed at apolyton.net by the Apolyton CtP2
 // Source Code Project. Contact the authors at ctp2source@apolyton.net.
 //
 //----------------------------------------------------------------------------
@@ -34,7 +34,6 @@
 #include "aui_cursor.h"
 
 
-
 aui_Cursor::aui_Cursor(
 	AUI_ERRCODE *retval,
 	const MBCHAR *filename )
@@ -50,14 +49,12 @@ aui_Cursor::aui_Cursor(
 }
 
 
-
 AUI_ERRCODE aui_Cursor::InitCommon( void )
 {
 	memset( &m_hotspot, 0, sizeof( m_hotspot ) );
 
 	return AUI_ERRCODE_OK;
 }
-
 
 
 AUI_ERRCODE aui_Cursor::GetHotspot( sint32 *x, sint32 *y )
@@ -67,7 +64,6 @@ AUI_ERRCODE aui_Cursor::GetHotspot( sint32 *x, sint32 *y )
 
 	return AUI_ERRCODE_OK;
 }
-
 
 
 AUI_ERRCODE aui_Cursor::SetHotspot( sint32 x, sint32 y )
@@ -90,4 +86,3 @@ AUI_ERRCODE aui_Cursor::LoadEmpty( sint32 width, sint32 height, sint32 bpp )
 	Assert( AUI_NEWOK(m_surface,retcode) );
 	return retcode;
 }
-

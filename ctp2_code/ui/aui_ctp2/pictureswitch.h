@@ -12,7 +12,7 @@ class Picture;
 class PictureSwitch : public aui_Switch
 {
 public:
-	
+
 	PictureSwitch(
 		AUI_ERRCODE *retval,
 		uint32 id,
@@ -29,7 +29,6 @@ public:
 		BOOL selected = FALSE );
 	virtual ~PictureSwitch() {}
 
-	
 	Picture *&ThePictureOn( void ) { return m_pictureOn; }
 	Picture *&ThePictureOff( void ) { return m_pictureOff; }
 	Picture *&ThePictureActiveOn( void ) { return m_pictureActiveOn; }
@@ -47,4 +46,4 @@ protected:
 	Picture *m_pictureActiveOff;
 };
 
-#endif 
+#endif

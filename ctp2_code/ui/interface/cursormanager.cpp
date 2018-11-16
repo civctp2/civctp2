@@ -1,10 +1,8 @@
-
-
 #include "c3.h"
 
 #include "aui_mouse.h"
 
-#include "c3ui.h" 
+#include "c3ui.h"
 
 #include "cursormanager.h"
 
@@ -13,14 +11,12 @@ extern C3UI			*g_c3ui;
 CursorManager		*g_cursorManager = NULL;
 
 
-
 void CursorManager::Initialize(void)
 {
 	Cleanup();
 
 	g_cursorManager = new CursorManager();
 }
-
 
 
 void CursorManager::Cleanup(void)
@@ -32,7 +28,6 @@ void CursorManager::Cleanup(void)
 }
 
 
-
 CursorManager::CursorManager()
 {
 	m_curCursor = CURSORINDEX_DEFAULT;
@@ -40,11 +35,9 @@ CursorManager::CursorManager()
 }
 
 
-
 CursorManager::~CursorManager()
 {
 }
-
 
 
 void CursorManager::SetCursor(CURSORINDEX cursor)
@@ -54,11 +47,11 @@ void CursorManager::SetCursor(CURSORINDEX cursor)
 		aui_Mouse		*theMouse;
 		theMouse = g_c3ui->TheMouse();
 
-		
-		
 
-		
-		
+
+
+
+
 		if(theMouse)
 			theMouse->SetAnim((sint32)cursor);
 
@@ -67,12 +60,10 @@ void CursorManager::SetCursor(CURSORINDEX cursor)
 }
 
 
-
 void CursorManager::SaveCursor(void)
 {
 	m_savedCursor = m_curCursor;
 }
-
 
 
 void CursorManager::RestoreCursor(void)
@@ -84,5 +75,3 @@ void CursorManager::RestoreCursor(void)
 		m_savedCursor = CURSORINDEX_MAX;
 	}
 }
-
-

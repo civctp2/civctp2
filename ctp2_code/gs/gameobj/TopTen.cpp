@@ -1,15 +1,3 @@
-
-
-
-
-
-
-
-
-
-
-
-
 #include "c3debug.h"
 #include "c3.h"
 #include "Globals.h"
@@ -23,7 +11,7 @@
 #include "gamefile.h"
 
 	extern	Player	**g_player ;
-	
+
 
 
 
@@ -37,7 +25,6 @@ TopTen::TopTen()
 	Clear();
 }
 
-
 void TopTen::Clear()
 {
 	sint32	i ;
@@ -45,7 +32,7 @@ void TopTen::Clear()
 	for (i=0; i<TOPTEN_LIST_SIZE; i++) {
 		m_biggestCities[i].unit.m_id = (0) ;
 		m_biggestCities[i].value = 0 ;
-		
+
 		m_happiestCities[i].unit.m_id = (0) ;
 		m_happiestCities[i].value = 0 ;
 	}
@@ -118,23 +105,20 @@ void TopTen::Serialize(CivArchive &archive)
 
 	}
 
-
 BOOL TopTen::InsertCity(TopEntry *cityList, const Unit &c, const sint32 value, sint32 &pos)
 	{
 	sint32	i,
 			insertPos ;
 
-	
 	Assert(cityList) ;
-	
+
 	Assert(c.m_id!=(0)) ;
-	
+
 	for (i=0; i<TOPTEN_LIST_SIZE; i++) {
 		if (cityList[i].unit == c) {
-			
-			
+
 			memmove(&cityList[i], &cityList[i+1], sizeof(TopEntry) * (TOPTEN_LIST_SIZE - 1 - i)) ;
-				
+
 			cityList[TOPTEN_LIST_SIZE - 1].value = 0;
 			cityList[TOPTEN_LIST_SIZE - 1].unit.m_id = 0;
 
@@ -143,7 +127,6 @@ BOOL TopTen::InsertCity(TopEntry *cityList, const Unit &c, const sint32 value, s
 
 	}
 
-	
 	insertPos = -1 ;
 	for (i=0; i<TOPTEN_LIST_SIZE; i++)
 		{
@@ -155,28 +138,22 @@ BOOL TopTen::InsertCity(TopEntry *cityList, const Unit &c, const sint32 value, s
 
 		}
 
-	
 	if (insertPos == -1)
 		{
 		pos = 0 ;
 
-		
 		return (FALSE) ;
 		}
 
-	
 
 	memmove(&cityList[insertPos+1], &cityList[insertPos], sizeof(TopEntry) * (TOPTEN_LIST_SIZE - 1 - insertPos)) ;
 
-	
 	cityList[insertPos].value = value ;
 	cityList[insertPos].unit = c ;
 	pos = insertPos ;
 
-	
 	return (TRUE) ;
 	}
-
 
 void TopTen::InsertCity(const Unit &c)
 	{
@@ -185,7 +162,6 @@ void TopTen::InsertCity(const Unit &c)
 	InsertCity(m_biggestCities, c, c.PopCount(), pos) ;
 	InsertCity(m_happiestCities, c, (sint32)(c.GetHappiness()), pos) ;
 	}
-
 
 void TopTen::CalculateBiggestCities(void)
 	{
@@ -197,7 +173,6 @@ void TopTen::CalculateBiggestCities(void)
 
 	Clear();
 
-	
 	for (plyr=0; plyr<k_MAX_PLAYERS; plyr++)
 		{
 		if (g_player[plyr] && !g_player[plyr]->IsDead())
@@ -214,7 +189,6 @@ void TopTen::CalculateBiggestCities(void)
 		}
 
 	}
-
 
 BOOL TopTen::FindCity(const Unit &c, TopEntry *list, sint32 &pos)
 	{
@@ -233,7 +207,6 @@ BOOL TopTen::FindCity(const Unit &c, TopEntry *list, sint32 &pos)
 	return (FALSE) ;
 	}
 
-
 BOOL TopTen::IsTopTenCity(const Unit &c, const sint32 category, sint32 &pos)
 	{
 	switch (category)
@@ -247,17 +220,16 @@ BOOL TopTen::IsTopTenCity(const Unit &c, const sint32 category, sint32 &pos)
 		default :
 #ifdef _MSC_VER
 #pragma warning (disable : 4127)
-#endif		
+#endif
 			Assert(FALSE) ;
 #ifdef _MSC_VER
 #pragma warning (default : 4127)
-#endif		
+#endif
 			return (FALSE) ;
 
 		}
 
 	}
-
 
 BOOL TopTen::GetCityPosition(const Unit &c, const sint32 category, sint32 &pos)
 	{
@@ -272,17 +244,16 @@ BOOL TopTen::GetCityPosition(const Unit &c, const sint32 category, sint32 &pos)
 		default :
 #ifdef _MSC_VER
 #pragma warning (disable : 4127)
-#endif		
+#endif
 			Assert(FALSE) ;
 #ifdef _MSC_VER
 #pragma warning (default : 4127)
-#endif		
+#endif
 			return (FALSE) ;
 
 		}
 
 	}
-
 
 void TopTen::EndTurn(void)
 	{

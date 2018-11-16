@@ -10,13 +10,13 @@
 //
 // THIS FILE IS NOT GENERATED OR SUPPORTED BY ACTIVISION.
 //
-// This material has been developed at apolyton.net by the Apolyton CtP2 
+// This material has been developed at apolyton.net by the Apolyton CtP2
 // Source Code Project. Contact the authors at ctp2source@apolyton.net.
 //
 //----------------------------------------------------------------------------
 //
 // Compiler flags
-// 
+//
 //----------------------------------------------------------------------------
 //
 // Modifications from the original Activision code:
@@ -55,7 +55,6 @@
 #include "aui_dragdropwindow.h"
 
 
-
 extern aui_UI		*g_ui;
 extern ColorSet		*g_colorSet;
 
@@ -64,7 +63,6 @@ extern ColorSet		*g_colorSet;
 
 uint32 ctp2_ListBox::m_ctp2_listboxClassId = aui_UniqueId();
 ctp2_ListBox *ctp2_ListBox::ms_mouseFocusListBox = NULL;
-
 
 
 ctp2_ListBox::ctp2_ListBox(
@@ -105,14 +103,13 @@ ctp2_ListBox::ctp2_ListBox(
 }
 
 
-
 ctp2_ListBox::ctp2_ListBox(
-	AUI_ERRCODE *retval, 
-	uint32 id, 
-	sint32 x, 
-	sint32 y, 
-	sint32 width, 
-	sint32 height, 
+	AUI_ERRCODE *retval,
+	uint32 id,
+	sint32 x,
+	sint32 y,
+	sint32 width,
+	sint32 height,
 	MBCHAR *pattern,
 	sint32 bevelWidth,
 	sint32 bevelType,
@@ -170,18 +167,15 @@ ctp2_ListBox::~ctp2_ListBox()
 }
 
 
-
 AUI_ERRCODE ctp2_ListBox::InitCommonLdl( MBCHAR *ldlBlock )
 {
 	sint32		bevelWidth=0, bevelType=0;
 	aui_Ldl		*theLdl = g_ui->GetLdl();
 
-	
 	BOOL valid = theLdl->IsValid( ldlBlock );
 	Assert( valid );
 	if ( !valid ) return AUI_ERRCODE_HACK;
 
-	
 	ldl_datablock *block = theLdl->GetLdl()->FindDataBlock( ldlBlock );
 	Assert( block != NULL );
 
@@ -194,10 +188,9 @@ AUI_ERRCODE ctp2_ListBox::InitCommonLdl( MBCHAR *ldlBlock )
 }
 
 
-
 AUI_ERRCODE ctp2_ListBox::InitCommon(sint32 bevelWidth, sint32 bevelType)
 {
-	
+
 	m_drawMask = k_AUI_REGION_DRAWFLAG_UPDATE
 		| k_AUI_REGION_DRAWFLAG_MOUSELGRABINSIDE
 		| k_AUI_REGION_DRAWFLAG_MOUSELDROPINSIDE
@@ -225,13 +218,12 @@ AUI_ERRCODE ctp2_ListBox::CreateRangersAndHeader( MBCHAR *ldlBlock )
 	if (m_pattern)
 		patternFilename = m_pattern->GetFilename();
 
-	
 	aui_Ldl *theLdl = g_ui->GetLdl();
 	static MBCHAR block[ k_AUI_LDL_MAXBLOCK + 1 ];
 
 	if ( ldlBlock )
 	{
-		
+
 		if ( m_header )
 		{
 			RemoveChild( m_header->Id() );
@@ -241,7 +233,6 @@ AUI_ERRCODE ctp2_ListBox::CreateRangersAndHeader( MBCHAR *ldlBlock )
 
 		sprintf( block, "%s.%s", ldlBlock, k_AUI_LISTBOX_LDL_HEADER );
 
-		
 		if ( theLdl->GetLdl()->FindDataBlock( block ) )
 			m_header = new c3_Header(
 				&errcode,
@@ -260,7 +251,6 @@ AUI_ERRCODE ctp2_ListBox::CreateRangersAndHeader( MBCHAR *ldlBlock )
 
 	AddChild( m_header );
 
-	
 	ListPos position = m_header->ChildList()->GetHeadPosition();
 	for ( sint32 i = m_header->ChildList()->L(); i; i-- )
 		m_widthList->AddTail(
@@ -270,7 +260,6 @@ AUI_ERRCODE ctp2_ListBox::CreateRangersAndHeader( MBCHAR *ldlBlock )
 	{
 		sprintf( block, "%s.%s", ldlBlock, k_AUI_LISTBOX_LDL_RANGERY );
 
-		
 		if ( theLdl->GetLdl()->FindDataBlock( block ) )
 			m_verticalRanger = new c3_Ranger(
 				&errcode,
@@ -301,7 +290,6 @@ AUI_ERRCODE ctp2_ListBox::CreateRangersAndHeader( MBCHAR *ldlBlock )
 	{
 		sprintf( block, "%s.%s", ldlBlock, k_AUI_LISTBOX_LDL_RANGERX );
 
-		
 		if ( theLdl->GetLdl()->FindDataBlock( block ) )
 			m_horizontalRanger = new c3_Ranger(
 				&errcode,
@@ -333,7 +321,7 @@ AUI_ERRCODE ctp2_ListBox::CreateRangersAndHeader( MBCHAR *ldlBlock )
 		maxRangerSize = m_horizontalRanger->Height();
 
 	if ( maxRangerSize )
-		SetRangerSize( maxRangerSize ); 
+		SetRangerSize( maxRangerSize );
 	else
 		RepositionRangers();
 
@@ -344,7 +332,6 @@ AUI_ERRCODE ctp2_ListBox::CreateRangersAndHeader( MBCHAR *ldlBlock )
 }
 
 
-
 void ctp2_ListBox::Clear(void)
 {
 	ListPos position = m_pane->ChildList()->GetHeadPosition();
@@ -352,10 +339,10 @@ void ctp2_ListBox::Clear(void)
 	{
 		ListPos prevPosition = position;
 		aui_Item *item = (aui_Item *)m_pane->ChildList()->GetNext( position );
-		
+
 		RemoveItem(item->Id());
 		delete item;
-		
+
 	}
 	m_draw |= m_drawMask & k_AUI_REGION_DRAWFLAG_UPDATE;
 
@@ -369,10 +356,10 @@ AUI_ERRCODE ctp2_ListBox::SortByColumn(
 	sint32 column,
 	BOOL ascending )
 {
-	
+
 	if ( column == -1 ) return AUI_ERRCODE_OK;
 
-	if ( column != -2 ) 
+	if ( column != -2 )
 	{
 		Assert( 0 <= column && column < m_numColumns );
 		if ( 0 > column || column >= m_numColumns ) return AUI_ERRCODE_INVALIDPARAM;
@@ -381,10 +368,9 @@ AUI_ERRCODE ctp2_ListBox::SortByColumn(
 	m_sortColumn = column;
 	m_sortAscending = ascending;
 
-	
 	if (m_numRows <= 1) return AUI_ERRCODE_OK;
 
-	sint32 cycles = 0;	
+	sint32 cycles = 0;
 	BOOL changed;
 	do
 	{
@@ -406,7 +392,7 @@ AUI_ERRCODE ctp2_ListBox::SortByColumn(
 				changed = TRUE;
 			}
 		}
-	++cycles;	
+	++cycles;
 	} while ( changed );
 
 	RepositionItems();
@@ -415,10 +401,9 @@ AUI_ERRCODE ctp2_ListBox::SortByColumn(
 }
 
 
-
 AUI_ERRCODE ctp2_ListBox::Draw(aui_Surface *surf, sint32 x, sint32 y)
 {
-	
+
 	aui_Region::Draw(surf, x, y);
 
 	if (IsHidden()) return AUI_ERRCODE_OK;
@@ -432,7 +417,6 @@ AUI_ERRCODE ctp2_ListBox::Draw(aui_Surface *surf, sint32 x, sint32 y)
 	OffsetRect( &rect, m_x + x, m_y + y );
 	ToWindow( &rect );
 
-	
 	sint32 minVertical = m_verticalRanger->GetValueY();
 	sint32 maxVertical = minVertical + m_itemsPerHeight;
 
@@ -441,17 +425,15 @@ AUI_ERRCODE ctp2_ListBox::Draw(aui_Surface *surf, sint32 x, sint32 y)
 	RECT selectRect = rect;
 	InflateRect( &selectRect, -1, 0 );
 
-	
 	ListPos position = m_visualSelectedList->GetHeadPosition();
 
-	
 		for ( sint32 i = m_visualSelectedList->L(); i; i-- )
 		{
-			
+
 			sint32 itemIndex = m_visualSelectedList->GetNext( position );
 			if ( minVertical <= itemIndex && itemIndex < maxVertical )
 			{
-				selectRect.top = rect.top + headerHeight 
+				selectRect.top = rect.top + headerHeight
 					+ ( itemIndex - minVertical ) * m_maxItemHeight;
 				selectRect.bottom = selectRect.top + m_maxItemHeight;
 
@@ -459,22 +441,20 @@ AUI_ERRCODE ctp2_ListBox::Draw(aui_Surface *surf, sint32 x, sint32 y)
 											 RGB(255,179,69), 0);
 				GetItemByIndex(itemIndex)->Draw(surf);
 
-				
-				
-				
+
+
+
 			}
 		}
-	
 
 	return AUI_ERRCODE_OK;
 }
 
 
-
 AUI_ERRCODE ctp2_ListBox::DrawThis( aui_Surface *surface, sint32 x, sint32 y )
 {
 	if (IsHidden()) return AUI_ERRCODE_OK;
-	
+
 	if ( !surface ) surface = m_window->TheSurface();
 
 	sint32 headerHeight = m_header->IsHidden() ? 0 : m_header->Height();
@@ -483,7 +463,6 @@ AUI_ERRCODE ctp2_ListBox::DrawThis( aui_Surface *surface, sint32 x, sint32 y )
 	OffsetRect( &rect, m_x + x, m_y + y );
 	ToWindow( &rect );
 
-	
 	if (m_bevelWidth > 0) {
 		RECT bevelRect = rect;
 		if (!m_verticalRanger->IsHidden())
@@ -492,7 +471,6 @@ AUI_ERRCODE ctp2_ListBox::DrawThis( aui_Surface *surface, sint32 x, sint32 y )
 			bevelRect.bottom += m_rangerSize;
 		InflateRect(&bevelRect, m_bevelWidth, m_bevelWidth);
 
-		
 		if ( m_pattern ) {
 			if ( m_srcWidthPix || m_srcHeightPix ) {
 				RECT srcRect = { m_srcX, m_srcY, m_srcX + m_srcWidthPix, m_srcY + m_srcHeightPix };
@@ -502,15 +480,14 @@ AUI_ERRCODE ctp2_ListBox::DrawThis( aui_Surface *surface, sint32 x, sint32 y )
 				m_pattern->Draw( surface, &bevelRect );
 			}
 		}
-		
-		
-		if(GetNumberOfLayers() > 0)	{ 
-			
+
+		if(GetNumberOfLayers() > 0)	{
+
 			RECT layerRectangle = { 0, 0, m_width, m_height };
 			OffsetRect(&layerRectangle, m_x + x, m_y + y);
 			ToWindow(&layerRectangle);
 			DrawLayers(surface, &layerRectangle);
-		} else						
+		} else
 			DrawThisStateImage(0, surface, &bevelRect);
 
 		if ( m_bevelType == 2 ) {
@@ -533,14 +510,13 @@ AUI_ERRCODE ctp2_ListBox::DrawThis( aui_Surface *surface, sint32 x, sint32 y )
 			}
 		}
 
-		
-		if(GetNumberOfLayers() > 0)	{ 
-			
+		if(GetNumberOfLayers() > 0)	{
+
 			RECT layerRectangle = { 0, 0, m_width, m_height };
 			OffsetRect(&layerRectangle, m_x + x, m_y + y);
 			ToWindow(&layerRectangle);
 			DrawLayers(surface, &layerRectangle);
-		} else						
+		} else
 			DrawThisStateImage(0, surface, &rect);
 
 		if(m_window->GetFocusControl() == this) {
@@ -604,7 +580,6 @@ void ctp2_ListBox::MouseMoveOutside( aui_MouseEvent *mouseData )
 
 	aui_ListBox::MouseMoveOutside(mouseData);
 
-
 }
 
 void ctp2_ListBox::MouseMoveAway( aui_MouseEvent *mouseData )
@@ -629,7 +604,6 @@ void ctp2_ListBox::MouseLDragAway( aui_MouseEvent *mouseData )
 {
 	if (IsDisabled()) return;
 
-	
 	if ( GetMouseOwnership() == this )
 	{
 		if ( m_dragDropWindow )
@@ -637,8 +611,7 @@ void ctp2_ListBox::MouseLDragAway( aui_MouseEvent *mouseData )
 
 		CalculateScroll( mouseData->position.x, mouseData->position.y );
 
-		
-		
+
 		ScrollList();
 		DragSelect( mouseData->position.y - m_y );
 		m_scrolling = TRUE;
@@ -647,7 +620,7 @@ void ctp2_ListBox::MouseLDragAway( aui_MouseEvent *mouseData )
 		if ( m_mouseCode == AUI_ERRCODE_UNHANDLED )
 			m_mouseCode = AUI_ERRCODE_HANDLED;
 
-		if(m_menuButton) {			
+		if(m_menuButton) {
 			if(mouseData->position.y < Y()) {
 				SetWhichSeesMouse(NULL);
 				m_menuButton->MouseLGrabInside(mouseData);
@@ -687,12 +660,12 @@ AUI_ERRCODE ctp2_ListBox::DoneInstantiatingThis(const MBCHAR *ldlBlock)
 	m_borderOffset.x = block->GetInt(k_CTP2_LISTBOX_LDL_BORDER_WIDTH);
 	m_borderOffset.y = block->GetInt(k_CTP2_LISTBOX_LDL_BORDER_HEIGHT);
 
-	Resize(Width() + m_borderOffset.x * 2, 
+	Resize(Width() + m_borderOffset.x * 2,
 		   Height() + m_borderOffset.y * 2);
-	Move(m_x - m_borderOffset.x, 
+	Move(m_x - m_borderOffset.x,
 		 m_y - m_borderOffset.y);
 	m_headerOffset.x = m_borderOffset.x;
-	m_pane->Move(m_pane->X() + m_borderOffset.x, 
+	m_pane->Move(m_pane->X() + m_borderOffset.x,
 				 m_pane->Y() + m_borderOffset.y);
 	return AUI_ERRCODE_OK;
 }
@@ -708,13 +681,13 @@ void ctp2_ListBox::GetDisplayRange(sint32 &top, sint32 &bottom)
 void ctp2_ListBox::EnsureItemVisible(sint32 index)
 {
 	if(index < 0 || index > m_numRows)
-		
+
 		return;
 
 	sint32 top, bottom;
 	GetDisplayRange(top, bottom);
-	if(top <= index && index <= bottom) 
-		
+	if(top <= index && index <= bottom)
+
 		return;
 
 	if(index < top) {

@@ -1,4 +1,4 @@
-/* 
+/*
 Copyright (C) 1995-2001 Activision, Inc.
 
 This library is free software; you can redistribute it and/or
@@ -17,7 +17,6 @@ Foundation, Inc., 59 Temple Place, Suite 330, Boston, MA  02111-1307  USA
 
 */
 
-
 #include <OpenTransport.h>
 #include <OpenTptInternet.h>
 #include <CodeFragments.h>
@@ -26,16 +25,16 @@ Foundation, Inc., 59 Temple Place, Suite 330, Boston, MA  02111-1307  USA
 
 Boolean OpenTransportExists(void) {
 	Boolean		result = false;
-	
+
 	//	this method checks for the existance of Open Transport
-	
+
 	if ( InitOpenTransport != (UInt16) kUnresolvedCFragSymbolAddress ) {
-	
+
 		//	we can find one of the calls, so, the engine must exist
-		
+
 		result = true;
 	}
-	
+
 	return result;
 }
 

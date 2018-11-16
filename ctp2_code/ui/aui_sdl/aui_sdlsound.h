@@ -12,7 +12,6 @@
 #include "aui_sound.h"
 
 
-
 #endif // defined(__AUI_USE_SDL__)
 
 #endif

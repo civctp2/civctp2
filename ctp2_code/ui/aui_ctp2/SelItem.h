@@ -4,7 +4,7 @@
 // File type    : C++ header
 // File name    : ui\aui_ctp2\SetItem.h
 // Description  : Handles stuff about selected items.
-// Id           : $Id:$
+// Id           : $Id$
 //
 //----------------------------------------------------------------------------
 //
@@ -42,13 +42,13 @@
 #include "Unit.h"
 #include "gstypes.h"
 
-enum SELECT_TYPE { 
+enum SELECT_TYPE {
 SELECT_TYPE_NONE,
 
 SELECT_TYPE_LOCAL_ARMY,
 SELECT_TYPE_LOCAL_ARMY_UNLOADING,
 SELECT_TYPE_REMOTE_ARMY,
-SELECT_TYPE_LOCAL_CITY, 
+SELECT_TYPE_LOCAL_CITY,
 SELECT_TYPE_REMOTE_CITY,
 SELECT_TYPE_TRADE_ROUTE,
 SELECT_TYPE_GOOD,
@@ -77,13 +77,13 @@ enum SELECT_MODE {
 };
 
 class Unit;
-class CivArchive; 
-class NetUnit; 
+class CivArchive;
+class NetUnit;
 class ID;
-struct aui_MouseEvent; 
+struct aui_MouseEvent;
 class OrderRecord;
 
-#define k_SELECTED_ITEM_VERSION_MAJOR 0 
+#define k_SELECTED_ITEM_VERSION_MAJOR 0
 #define k_SELECTED_ITEM_VERSION_MINOR 0
 
 class SelectedItem;
@@ -92,7 +92,6 @@ class SelectedItem {
 	typedef void (SelectedItem::*ClickFunctionPtr) (const MapPoint &pos,
 												const aui_MouseEvent *data,
 												BOOL doubleClick);
-
 
 
 	SELECT_TYPE m_select_state[k_MAX_PLAYERS];
@@ -108,11 +107,11 @@ class SelectedItem {
 
 
 
-    
+
     sint32 m_is_pathing;
     MapPoint m_cur_mouse_tile;
     Path *m_good_path, m_bad_path;
-    sint32 m_is_broken_path; 
+    sint32 m_is_broken_path;
 	DynamicArray<MapPoint> m_waypoints;
 	PLAYER_INDEX m_player_on_screen;
     BOOL m_auto_unload;
@@ -131,19 +130,16 @@ class SelectedItem {
 
 	ClickFunctionPtr m_clickFunc[SELECT_TYPE_MAX][SELECT_TYPE_MAX][SELECT_BUTTON_MAX][SELECT_MODE_MAX];
 
-
 public:
     friend class NetUnit;
 
-    SelectedItem(const sint32 nPlayers); 
-    SelectedItem(CivArchive &archive); 
+    SelectedItem(const sint32 nPlayers);
+    SelectedItem(CivArchive &archive);
 	~SelectedItem();
 
-    
-    void Serialize(CivArchive &archive); 
+    void Serialize(CivArchive &archive);
     void Init();
 
-	
 	void Deselect(PLAYER_INDEX player);
 
 	void EnterArmyMove(PLAYER_INDEX player, const MapPoint &pos);
@@ -157,28 +153,28 @@ public:
 
 	SELECT_TYPE GetClickedThing(const MapPoint &pos, bool click);
     void RegisterClick(const MapPoint &pos, const aui_MouseEvent *data, BOOL doubleClick,
-					   bool leftDrag, bool leftDrop); 
+					   bool leftDrag, bool leftDrop);
 
-    void KeyboardSelectFirstUnit(); 
+    void KeyboardSelectFirstUnit();
 	void SelectFirstUnit(BOOL setSelect = TRUE);
 	void NextUnmovedUnit(BOOL isFirst = FALSE, BOOL manualNextUnit = FALSE);
 	void MaybeAutoEndTurn(BOOL isFirst = FALSE);
 
 	void Refresh();
-    void SetSelectCity(const Unit &u, BOOL all = TRUE, BOOL isDoubleClick = FALSE); 
-    void SetSelectUnit(const Unit &u, BOOL all = TRUE, BOOL isDoubleClick = FALSE); 
+    void SetSelectCity(const Unit &u, BOOL all = TRUE, BOOL isDoubleClick = FALSE);
+    void SetSelectUnit(const Unit &u, BOOL all = TRUE, BOOL isDoubleClick = FALSE);
 	void SetSelectGood(const MapPoint &pos);
 
-    SELECT_TYPE GetState() { return m_select_state[GetVisiblePlayer()]; } 
+    SELECT_TYPE GetState() { return m_select_state[GetVisiblePlayer()]; }
 
-    void GetTopCurItem(PLAYER_INDEX &s_player, ID &s_item, 
+    void GetTopCurItem(PLAYER_INDEX &s_player, ID &s_item,
 					   SELECT_TYPE &s_state);
 
     MapPoint GetCurSelectPos(void) { return m_select_pos[GetVisiblePlayer()]; }
 
 	void ClipCurrentItem();
     void NextItem();
-    
+
     void ClearWaypoints();
     void NextPlayer();
     sint32 GetPlayerAfterThis(const sint32 p);
@@ -186,37 +182,33 @@ public:
 	PLAYER_INDEX GetNextHumanPlayer();
 	void NextRound();
 
-    void RegisterCreatedUnit(const PLAYER_INDEX owner); 
+    void RegisterCreatedUnit(const PLAYER_INDEX owner);
     void RegisterCreatedCity(const PLAYER_INDEX owner);
-    void RegisterRemovedArmy(const PLAYER_INDEX owner, const Army &dead_army); 
+    void RegisterRemovedArmy(const PLAYER_INDEX owner, const Army &dead_army);
     void RegisterRemovedCity(const PLAYER_INDEX owner, const Unit &dead_city);
 
 
-    
     void SetCurPlayer (PLAYER_INDEX p);
-    PLAYER_INDEX GetCurPlayer() const { return m_current_player; }; 
-    void RemovePlayer(PLAYER_INDEX p); 
+    PLAYER_INDEX GetCurPlayer() const { return m_current_player; };
+    void RemovePlayer(PLAYER_INDEX p);
 	void AddPlayer(PLAYER_INDEX p) ;
 	sint32 GetVisiblePlayer() const;
 	BOOL IsAutoCenterOn() const;
 	void SetAutoCenter(const BOOL on);
 
-    
   	void AddWaypoint(const MapPoint &p);
     sint32 GetIsPathing() const;
 	bool ShouldDrawPath();
     void GetOldMouseTilePos(MapPoint &p) const { p = m_cur_mouse_tile; }
 	void SetCurMouseTile(const MapPoint &p) { m_cur_mouse_tile = p; }
-    void SetDrawablePathDest(MapPoint &p); 
+    void SetDrawablePathDest(MapPoint &p);
 	void ConstructPath(BOOL &isCircular, double &cost);
 
 	Path *GetGoodPath() { return m_good_path; }
 	Path GetBadPath() { return m_bad_path; }
 
-	
 	void SelectTradeRoute(const MapPoint &p);
 
-    
   	sint32 IsLocalArmy() const;
 
   	void Patrol(const MapPoint &pos);
@@ -224,8 +216,8 @@ public:
 	void ForgetPatrol();
 	void ProcessUnitOrders();
 
-    void GroupArmy(); 
-    void UngroupArmy(); 
+    void GroupArmy();
+    void UngroupArmy();
 
 	void Settle();
 	void Entrench();
@@ -304,7 +296,6 @@ public:
 
 	void ArmyMovedCallback(Army &a);
 
-	
 	void SetupClickFunctions();
 	void NewRegisterClick(const MapPoint &pos, const aui_MouseEvent *data, BOOL doubleClick,
 						  bool leftDrag, bool leftDrop);
@@ -357,7 +348,6 @@ extern SelectedItem *g_selected_item;
 
 #else
 
-class SelectedItem; 
+class SelectedItem;
 
 #endif
-

@@ -10,7 +10,6 @@
 class GameEventArgList;
 class OrderRecord;
 
-
 #include "MapPoint.h"
 
 struct OrderInfo {
@@ -39,15 +38,14 @@ public:
 	sint32 m_argument;
 	sint32 m_index;
 
-	
 	GAME_EVENT m_eventType;
 	GameEventArgList *m_gameEventArgs;
 
 	Order(UNIT_ORDER_TYPE order, Path *path, const MapPoint &point,
 		  sint32 argument);
 	Order(CivArchive &archive);
-	Order() 
-	{ 
+	Order()
+	{
 		m_order = UNIT_ORDER_NONE;
 		m_path = NULL;
 		m_round = -1;

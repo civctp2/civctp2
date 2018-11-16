@@ -1,4 +1,4 @@
-/* 
+/*
 Copyright (C) 1995-2001 Activision, Inc.
 
 This library is free software; you can redistribute it and/or
@@ -79,7 +79,7 @@ static void getSystemInfo(char *systemDesc, char *crshtxt, unsigned int len)
 	static int firstCall = TRUE;
 	static char buf2d[aeh_BUF_MAXLEN] = "";
 	static char buf3d[aeh_BUF_MAXLEN] = "";
-	
+
 	aeh_SetCurrent(__LINE__, __FILE__);
 	systemDesc[0] = '\0';
 	if (crshtxt) {
@@ -127,7 +127,7 @@ static void getSystemInfo(char *systemDesc, char *crshtxt, unsigned int len)
 		if (crshtxt) strcat(systemDesc, "@@##");
 		tmplen = strlen(systemDesc) + 1;
 		if (len > tmplen + strlen(buf2d))
-			strcat(systemDesc, buf2d);		
+			strcat(systemDesc, buf2d);
 		else {
 			strncpy(systemDesc, buf2d, len - tmplen);
 			systemDesc[len - 1] = '\0';
@@ -209,7 +209,7 @@ static int dp_makeExceptionRecords(unsigned char *buf, unsigned int buflen, aehl
 	}
 	if (err == aeh_RES_BUG)
 		aehlog_delete(aehlog);
-	return (ptr - buf); 
+	return (ptr - buf);
 }
 
 /*--------------------------------------------------------------------------
@@ -416,14 +416,14 @@ static int sendtoserver(aeh_t *aeh)
 	si.cb = sizeof(si);
 	if (!SetEnvironmentVariable("SENDCRSH", "Y")) {
 		LPVOID lpMsgBuf;
-		FormatMessage( 
+		FormatMessage(
 			FORMAT_MESSAGE_ALLOCATE_BUFFER | FORMAT_MESSAGE_FROM_SYSTEM,
 			NULL,
 			GetLastError(),
 			MAKELANGID(LANG_NEUTRAL, SUBLANG_DEFAULT), // Default language
 			(LPTSTR) &lpMsgBuf,
 			0,
-			NULL 
+			NULL
 		);
 		aehDPRINT(("sendtoserver: setenv error:%s\n", lpMsgBuf));
 		LocalFree( lpMsgBuf );
@@ -433,14 +433,14 @@ static int sendtoserver(aeh_t *aeh)
 			CREATE_NEW_PROCESS_GROUP, NULL, NULL, &si, &pi)) {
 #ifdef DEBUG_PRNT
 		LPVOID lpMsgBuf;
-		FormatMessage( 
+		FormatMessage(
 			FORMAT_MESSAGE_ALLOCATE_BUFFER | FORMAT_MESSAGE_FROM_SYSTEM,
 			NULL,
 			GetLastError(),
 			MAKELANGID(LANG_NEUTRAL, SUBLANG_DEFAULT), // Default language
 			(LPTSTR) &lpMsgBuf,
 			0,
-			NULL 
+			NULL
 		);
 		aehDPRINT(("sendtoserver: command failed with error:%s\n", lpMsgBuf));
 		LocalFree( lpMsgBuf );
@@ -486,7 +486,6 @@ LONG _cdecl StupidExceptionFilter (LPEXCEPTION_POINTERS ep)
 }
 #endif
 
-
 /*--------------------------------------------------------------------------
  Records crash info to logfile. Designed to be called from an exception handler.
  For Win32, pException is the LPEXCEPTION_POINTERS structure returned by
@@ -529,7 +528,7 @@ DP_API dp_result_t DP_APIX dpReportCrashEx(LPEXCEPTION_POINTERS pException, char
 			bPrevExc++;
 			memset(&aeh, 0, sizeof(aeh_t));
 			aeh.retcode = aeh_EXCEPTION_CODE;
-			
+
 #ifdef DEBUG_AEHEXCP
 			/* No aeh_SetCurrent's can preceed this line in dpReportCrashEx -
 			 * the actual line number of the crash in aeh would be overwritten
@@ -599,7 +598,7 @@ DP_API dp_result_t DP_APIX dpReportCrashEx(LPEXCEPTION_POINTERS pException, char
 	} __except (StupidExceptionFilter(GetExceptionInformation())) {
 		return dp_RES_BUG;
 	}
-	
+
 	return err;
 }
 #endif /* _WIN32 */

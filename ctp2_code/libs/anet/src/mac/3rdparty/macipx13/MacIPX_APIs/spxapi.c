@@ -1,4 +1,4 @@
-/* 
+/*
 Copyright (C) 1995-2001 Activision, Inc.
 
 This library is free software; you can redistribute it and/or
@@ -38,7 +38,7 @@ Foundation, Inc., 59 Temple Place, Suite 330, Boston, MA  02111-1307  USA
  *         reference number from the SPXInitialize API and you must pass it into
  *         all the other SPX APIs.
  */
- 
+
 /*
  * Include files
  */
@@ -77,7 +77,7 @@ SpxAbortConnection(unsigned short connection, SPX_ECB *ecb, short drvRefNum)
 {
 	SPXpb		*spx_pb;
 	short		status;
-	
+
 #ifndef NO_ECB_CHECKS
 	if (ecb == (SPX_ECB *)0) {
 		return (SPX_BAD_PARAMETER);
@@ -87,7 +87,7 @@ SpxAbortConnection(unsigned short connection, SPX_ECB *ecb, short drvRefNum)
 	if ((ecb->status == ST_SENDPACKET) || (ecb->status == ST_ECBQ)) {
 		return (SPX_ECB_IN_USE);
 	}
-	
+
 #if !defined(powerc) && !defined (__powerc)
 	ecb->savedA5 = IpxGetRegisterA5();
 #endif
@@ -143,7 +143,7 @@ SpxCheckSocket(unsigned short socketNetOrder, short drvRefNum)
 #endif
 {
 	SPXpb		spx_pb;
-	
+
 	spx_pb.csCode = SPXCHECKSOCKET;
 	spx_pb.csParams.check.socketNumber = socketNetOrder;
 #ifndef	COMPONENT_BUILD
@@ -161,7 +161,7 @@ SpxCloseSocket(unsigned short socketNetOrder, short drvRefNum)
 #endif
 {
 	SPXpb		spx_pb;
-	
+
 	spx_pb.csCode = SPXCLOSESOCKET;
 	spx_pb.csParams.close.socketNumber = socketNetOrder;
 #ifndef	COMPONENT_BUILD
@@ -182,11 +182,11 @@ SpxEstablishConnection(unsigned short socketNetOrder, SPX_ECB *ecb, unsigned cha
 {
 	SPXpb	*spx_pb;
 	short	err_code;
-	
+
 	if (connection == (unsigned short *)0) {
 		return (SPX_BAD_PARAMETER);
 	}
-	
+
 	err_code = check_establish_ecb(ecb);
 	if (err_code) {
 		return (err_code);
@@ -195,7 +195,7 @@ SpxEstablishConnection(unsigned short socketNetOrder, SPX_ECB *ecb, unsigned cha
 	if ((ecb->status == ST_SENDPACKET) || (ecb->status == ST_ECBQ)) {
 		return (SPX_ECB_IN_USE);
 	}
-	
+
 #if !defined(powerc) && !defined (__powerc)
 	ecb->savedA5 = IpxGetRegisterA5();
 #endif
@@ -225,11 +225,11 @@ SpxEstablishConnection2(unsigned short socketNetOrder, SPX_ECB *ecb, SPX_ECB *li
 {
 	SPXpb	*spx_pb;
 	short	err_code;
-	
+
 	if (connection == (unsigned short *)0) {
 		return (SPX_BAD_PARAMETER);
 	}
-	
+
 	err_code = check_establish_ecb(ecb);
 	if (err_code) {
 		return (err_code);
@@ -238,11 +238,11 @@ SpxEstablishConnection2(unsigned short socketNetOrder, SPX_ECB *ecb, SPX_ECB *li
 	if ((ecb->status == ST_SENDPACKET) || (ecb->status == ST_ECBQ)) {
 		return (SPX_ECB_IN_USE);
 	}
-	
+
 #if !defined(powerc) && !defined (__powerc)
 	ecb->savedA5 = IpxGetRegisterA5();
 #endif
-	
+
 #ifndef NO_ECB_CHECKS
 	/*
 	 * Check validity of the listen ECB
@@ -289,7 +289,7 @@ static short
 check_establish_ecb(SPX_ECB *ecb)
 {
 	SPX_HEADER	*spxhdr;
-	
+
 #ifndef NO_ECB_CHECKS
 	/*
 	 * Check validity of the ECB
@@ -322,7 +322,7 @@ SpxGetConfiguration(unsigned short *maxConn, unsigned short *availConn, short dr
 #endif
 {
 	SPXpb		spx_pb;
-	
+
 	/*
 	 * Note: Any of the arguments to this function can be zero if the
 	 *       user doesn't want that information.
@@ -345,7 +345,7 @@ SpxGetConnectionStatus(unsigned short connection, SPX_SESSION *buffer, short drv
 #endif
 {
 	SPXpb		spx_pb;
-	
+
 	if (buffer == (SPX_SESSION *)0) {
 		return (SPX_BAD_PARAMETER);
 	}
@@ -367,7 +367,7 @@ SpxGetStatistics(SPX_STATS *buffer, unsigned long *buflen, short drvRefNum)
 #endif
 {
 	SPXpb		spx_pb;
-	
+
 	if ((buffer == (SPX_STATS *)0) || (buflen == (unsigned long *)0)) {
 		return (SPX_BAD_PARAMETER);
 	}
@@ -389,7 +389,7 @@ SpxGetVersion(unsigned char *majorVersion, unsigned char *minorVersion, unsigned
 #endif
 {
 	SPXpb		spx_pb;
-	
+
 	/*
 	 * Note: Any of the arguments to this function can be zero if the
 	 *       user doesn't want that information.
@@ -419,7 +419,7 @@ SpxListenForConnection(unsigned short socketNetOrder, SPX_ECB *ecb, unsigned cha
 	if (connection == (unsigned short *)0) {
 		return (SPX_BAD_PARAMETER);
 	}
-	
+
 #ifndef NO_ECB_CHECKS
 	/*
 	 * Check the validity of the ECB
@@ -436,7 +436,7 @@ SpxListenForConnection(unsigned short socketNetOrder, SPX_ECB *ecb, unsigned cha
 	if ((ecb->status == ST_ECBQ) || (ecb->status == ST_SENDPACKET)) {
 		return (SPX_ECB_IN_USE);
 	}
-	
+
 #if !defined(powerc) && !defined (__powerc)
 	ecb->savedA5 = IpxGetRegisterA5();
 #endif
@@ -469,7 +469,7 @@ SpxListenForConnection2(unsigned short socketNetOrder, SPX_ECB *ecb, SPX_ECB *li
 	if (connection == (unsigned short *)0) {
 		return (SPX_BAD_PARAMETER);
 	}
-	
+
 #ifndef NO_ECB_CHECKS
 	/*
 	 * Check the validity of the ECB(s)
@@ -484,7 +484,7 @@ SpxListenForConnection2(unsigned short socketNetOrder, SPX_ECB *ecb, SPX_ECB *li
 	if ((ecb->status == ST_ECBQ) || (ecb->status == ST_SENDPACKET)) {
 		return (SPX_ECB_IN_USE);
 	}
-	
+
 #if !defined(powerc) && !defined (__powerc)
 	ecb->savedA5 = IpxGetRegisterA5();
 #endif
@@ -504,7 +504,7 @@ SpxListenForConnection2(unsigned short socketNetOrder, SPX_ECB *ecb, SPX_ECB *li
 	if ((ecb->status == ST_ECBQ) || (ecb->status == ST_SENDPACKET)) {
 		return (SPX_ECB_IN_USE);
 	}
-	
+
 #if !defined(powerc) && !defined (__powerc)
 	ecb->savedA5 = IpxGetRegisterA5();
 #endif
@@ -561,7 +561,7 @@ SpxListenForConnectionPacket(unsigned short connection, SPX_ECB *ecb, short drvR
 	if ((ecb->status == ST_ECBQ) || (ecb->status == ST_SENDPACKET)) {
 		return (SPX_ECB_IN_USE);
 	}
-	
+
 #if !defined(powerc) && !defined (__powerc)
 	ecb->savedA5 = IpxGetRegisterA5();
 #endif
@@ -597,7 +597,7 @@ SpxOpenSocket(unsigned short *socketNetOrder, unsigned char flags, short drvRefN
 		 */
 		return (SPX_BAD_PARAMETER);
 	}
-	
+
 	spx_pb.csCode = SPXOPENSOCKET;
 	spx_pb.csParams.open.socketNumber = socketNetOrder;
 	spx_pb.csParams.open.flags = flags;
@@ -617,13 +617,13 @@ SpxSendSequencedPacket(unsigned short connection, SPX_ECB *ecb, short drvRefNum)
 {
 	SPXpb		*spx_pb;
 	short		status;
-	
+
 #ifndef NO_ECB_CHECKS
 	/*
 	 * Check the validity of the ECB
 	 */
 	if (ecb) {
-		if ((ecb->fragCount < 1) || 
+		if ((ecb->fragCount < 1) ||
 						(ecb->fragList[0].fragSize < SPX_HDR_SIZE)) {
 			ecb->status = SPX_BAD_PACKET;
 			return (SPX_BAD_PACKET);
@@ -636,7 +636,7 @@ SpxSendSequencedPacket(unsigned short connection, SPX_ECB *ecb, short drvRefNum)
 	if ((ecb->status == ST_SENDPACKET) || (ecb->status == ST_ECBQ)) {
 		return (SPX_ECB_IN_USE);
 	}
-	
+
 #if !defined(powerc) && !defined (__powerc)
 	ecb->savedA5 = IpxGetRegisterA5();
 #endif
@@ -666,7 +666,7 @@ SpxTerminateConnection(unsigned short connection, SPX_ECB *ecb, short drvRefNum)
 {
 	SPXpb	*spx_pb;
 	short	status;
-	
+
 #ifndef NO_ECB_CHECKS
 	/*
 	 * Check the validity of the ECB
@@ -684,7 +684,7 @@ SpxTerminateConnection(unsigned short connection, SPX_ECB *ecb, short drvRefNum)
 	if ((ecb->status == ST_SENDPACKET) || (ecb->status == ST_ECBQ)) {
 		return (SPX_ECB_IN_USE);
 	}
-	
+
 #if !defined(powerc) && !defined (__powerc)
 	ecb->savedA5 = IpxGetRegisterA5();
 #endif

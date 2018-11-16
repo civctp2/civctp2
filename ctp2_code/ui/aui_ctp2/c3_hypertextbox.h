@@ -10,14 +10,14 @@
 //
 // THIS FILE IS NOT GENERATED OR SUPPORTED BY ACTIVISION.
 //
-// This material has been developed at apolyton.net by the Apolyton CtP2 
+// This material has been developed at apolyton.net by the Apolyton CtP2
 // Source Code Project. Contact the authors at ctp2source@apolyton.net.
 //
 //----------------------------------------------------------------------------
 //
 // Compiler flags
-// 
-// _MSC_VER		
+//
+// _MSC_VER
 // - Use Microsoft C++ extensions when set.
 //
 //----------------------------------------------------------------------------
@@ -41,16 +41,14 @@
 
 class aui_Static;
 
-
 struct c3_HyperLink {
-	aui_Static *m_static;	
+	aui_Static *m_static;
 	sint32 m_db;
 	sint32 m_index;
 	sint32 m_frame;
-	COLORREF m_selectColor;		
+	COLORREF m_selectColor;
 	COLORREF m_oldColor;
 };
-
 
 enum C3_HYPERLINK_ACTION
 {
@@ -59,11 +57,10 @@ enum C3_HYPERLINK_ACTION
 	C3_HYPERLINK_ACTION_LAST
 };
 
-
 class c3_HyperTextBox : public aui_HyperTextBox, public PatternBase
 {
 public:
-	
+
 	c3_HyperTextBox(
 		AUI_ERRCODE *retval,
 		uint32 id,
@@ -104,17 +101,16 @@ public:
 		sint32 x = 0,
 		sint32 y = 0 );
 
-	
 	c3_HyperLink *GetSelectedHyperLink( void ) { return m_selectedHyperLink; }
 
 protected:
 	virtual AUI_ERRCODE AddHyperStatics( const MBCHAR *hyperText );
 
-	tech_WLList<c3_HyperLink *>	*m_hyperLinkList;	
+	tech_WLList<c3_HyperLink *>	*m_hyperLinkList;
 
 	c3_HyperLink *m_selectedHyperLink;
 
 	sint32 m_bevelWidth;
 };
 
-#endif 
+#endif

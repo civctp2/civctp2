@@ -1,4 +1,3 @@
-
 #ifndef __WORLD_DISTANCE_H__
 #define __WORLD_DISTANCE_H__
 

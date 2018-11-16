@@ -1,14 +1,3 @@
-
-
-
-
-
-
-
-
-
-
-
 #include "c3.h"
 #include "aui_ui.h"
 #include "aui_window.h"
@@ -22,7 +11,6 @@ extern C3UI			*g_c3ui;
 
 #include "profileDB.h"
 extern ProfileDB	*g_theProfileDB;
-
 
 aui_MovieButton::aui_MovieButton(
 	AUI_ERRCODE *retval,
@@ -45,7 +33,6 @@ aui_MovieButton::aui_MovieButton(
 	Assert( AUI_SUCCESS(*retval) );
 	if ( !AUI_SUCCESS(*retval) ) return;
 }
-
 
 
 aui_MovieButton::aui_MovieButton(
@@ -75,22 +62,18 @@ aui_MovieButton::aui_MovieButton(
 }
 
 
-
 AUI_ERRCODE aui_MovieButton::InitCommonLdl( MBCHAR *ldlBlock )
 {
 	aui_Ldl *theLdl = g_ui->GetLdl();
 
-	
 	BOOL valid = theLdl->IsValid( ldlBlock );
 	Assert( valid );
 	if ( !valid ) return AUI_ERRCODE_HACK;
 
-	
 	ldl_datablock *block = theLdl->GetLdl()->FindDataBlock( ldlBlock );
 	Assert( block != NULL );
 	if ( !block ) return AUI_ERRCODE_LDLFINDDATABLOCKFAILED;
 
-	
 	AUI_ERRCODE errcode = InitCommon(
 		block->GetString( k_AUI_MOVIEBUTTON_LDL_MOVIE ) );
 	Assert( AUI_SUCCESS(errcode) );
@@ -100,20 +83,17 @@ AUI_ERRCODE aui_MovieButton::InitCommonLdl( MBCHAR *ldlBlock )
 }
 
 
-
 AUI_ERRCODE aui_MovieButton::InitCommon( MBCHAR *movie )
 {
 	m_movie = NULL;
 
 	SetMovie( movie );
 
-	
-	
+
 	m_drawMask = 0;
 
 	return AUI_ERRCODE_OK;
 }
-
 
 
 aui_MovieButton::~aui_MovieButton()
@@ -124,7 +104,6 @@ aui_MovieButton::~aui_MovieButton()
 		m_movie = NULL;
 	}
 }
-
 
 
 aui_Movie *aui_MovieButton::SetMovie( const MBCHAR *movie )
@@ -143,8 +122,7 @@ aui_Movie *aui_MovieButton::SetMovie( const MBCHAR *movie )
 			return NULL;
 		}
 
-		
-		
+
 		m_movie->SetDestSurface( m_window ? m_window->TheSurface() : NULL );
 		m_movie->SetDestRect( m_x, m_y, m_x + m_width, m_y + m_height );
 
@@ -165,29 +143,28 @@ aui_Movie *aui_MovieButton::SetMovie( const MBCHAR *movie )
 }
 
 
-
 AUI_ERRCODE aui_MovieButton::Idle( void )
 {
 	if ( m_movie )
 	{
-		
+
 		if ( !m_movie->GetDestSurface() ) {
 			m_movie->SetDestSurface( m_window->TheSurface() );
 		}
 
 		if ( !m_movie->IsOpen() ) {
-			uint32 flags = m_flags;	
+			uint32 flags = m_flags;
 
 			if (m_fullScreen) {
 				flags |= k_AUI_MOVIE_PLAYFLAG_ONSCREEN;
 			}
 
 			RECT adjustedRect = {m_x, m_y, m_x+m_width, m_y+m_height};
-			
+
 			ToScreen(&adjustedRect);
 
 			if (m_movie->Open(flags, g_c3ui->Primary(), &adjustedRect) != AUI_ERRCODE_OK) {
-				
+
 				SetMovie(NULL);
 				if (GetActionFunc())
 					GetActionFunc()(this, AUI_BUTTON_ACTION_EXECUTE, 0, 0);
@@ -201,7 +178,7 @@ AUI_ERRCODE aui_MovieButton::Idle( void )
 
                     AUI_ERRCODE errcode = m_movie->Process();
 
-                    if (m_movie) 
+                    if (m_movie)
                         if (m_movie->IsFinished() && !(m_flags & k_AUI_MOVIE_PLAYFLAG_PLAYANDHOLD)) {
                             if (m_ActionFunc)
                                 m_ActionFunc((aui_Control *)this, AUI_BUTTON_ACTION_EXECUTE, 0, NULL);

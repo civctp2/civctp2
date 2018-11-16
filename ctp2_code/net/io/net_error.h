@@ -20,7 +20,7 @@ public:
 };
 
 class ErrNetBadTransport : public ErrNet {
-public:	
+public:
 	ErrNetBadTransport() : ErrNet(NET_ERR_BADTRANSPORT) {};
 };
 
@@ -52,4 +52,4 @@ public:
 #else
 class NetError;
 #endif
-#endif 
+#endif

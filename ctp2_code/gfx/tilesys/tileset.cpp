@@ -11,7 +11,7 @@
 //
 // THIS FILE IS NOT GENERATED OR SUPPORTED BY ACTIVISION.
 //
-// This material has been developed at apolyton.net by the Apolyton CtP2 
+// This material has been developed at apolyton.net by the Apolyton CtP2
 // Source Code Project. Contact the authors at ctp2source@apolyton.net.
 //
 //----------------------------------------------------------------------------
@@ -67,7 +67,6 @@
 
 extern ProjectFile *g_ImageMapPF;
 
-
 extern CivPaths		*g_civPaths;
 extern TiledMap		*g_tiledMap;
 extern sint32		g_is565Format;
@@ -75,8 +74,7 @@ extern sint32		g_is565Format;
 TileSet::TileSet()
 {
 	sint32		i,j,k;
-	
-	
+
 	m_numTransforms = 0;
 	m_transforms = NULL;
 
@@ -84,7 +82,6 @@ TileSet::TileSet()
 	m_riverTransforms = NULL;
 	m_riverData = NULL;
 
-	
 	for (i=0; i<TERRAIN_MAX; i++) {
 		for (j=0; j<TERRAIN_MAX; j++) {
 			for(k=0; k<k_TRANSITIONS_PER_TILE; k++) {
@@ -93,12 +90,10 @@ TileSet::TileSet()
 		}
 	}
 
-	
 	for (i=0; i<k_MAX_BASE_TILES; i++) {
 		m_baseTiles[i] = NULL;
 	}
 
-	
 	for (i=0; i<MAPICON_MAX; i++) {
 		m_mapIcons[i] = NULL;
 	}
@@ -147,7 +142,7 @@ void TileSet::CleanupQuick(void)
 	}
 
 	sint32 i;
-	
+
 	for (i=0; i<k_MAX_BASE_TILES; i++) {
 		if (m_baseTiles[i] != NULL) {
 			delete m_baseTiles[i];
@@ -155,7 +150,6 @@ void TileSet::CleanupQuick(void)
 		}
 	}
 
-	
 	for (i=0; i<MAPICON_MAX; i++) {
 		delete m_mapIcons[i];
 		m_mapIcons[i] = NULL;
@@ -185,7 +179,6 @@ void TileSet::CleanupMapped(void)
 
 	sint32 i;
 
-	
 	for (i=0; i<k_MAX_BASE_TILES; i++) {
 		if (m_baseTiles[i] != NULL) {
 			delete m_baseTiles[i];
@@ -193,7 +186,6 @@ void TileSet::CleanupMapped(void)
 		}
 	}
 
-	
 	for (i=0; i<MAPICON_MAX; i++) {
 		delete m_mapIcons[i];
 		m_mapIcons[i] = NULL;
@@ -220,7 +212,7 @@ void TileSet::Cleanup(void)
 	if (m_quick)
 		CleanupQuick();
 	else {
-		
+
 		if (m_transforms != NULL) {
 			for (i=0; i<m_numTransforms; i++) {
 				if (m_transforms[i] != NULL)
@@ -233,7 +225,6 @@ void TileSet::Cleanup(void)
 		}
 
 
-		
 		if (m_riverTransforms != NULL) {
 			for (i=0; i<m_numRiverTransforms; i++) {
 				if (m_riverTransforms[i] != NULL)
@@ -250,7 +241,6 @@ void TileSet::Cleanup(void)
 			m_riverData = NULL;
 		}
 
-		
 		for (i=0; i<TERRAIN_MAX; i++) {
 			for (j=0; j<TERRAIN_MAX; j++) {
 				if (m_transitions[i][j][0] != NULL) {
@@ -262,7 +252,6 @@ void TileSet::Cleanup(void)
 			}
 		}
 
-		
 		for (i=0; i<k_MAX_BASE_TILES; i++) {
 			if (m_baseTiles[i] != NULL) {
 				delete m_baseTiles[i];
@@ -280,7 +269,7 @@ void TileSet::LoadBaseTiles(FILE *file)
 
 	c3files_fread((void *)&baseTileCount, 1, sizeof(baseTileCount), file);
 
-	for (i=0; i<baseTileCount; i++) 
+	for (i=0; i<baseTileCount; i++)
 	{
 		baseTile = new BaseTile();
 
@@ -290,7 +279,6 @@ void TileSet::LoadBaseTiles(FILE *file)
 
 	}
 }
-
 
 
 void TileSet::LoadTransitions(FILE *file)
@@ -333,7 +321,7 @@ void TileSet::LoadTransitions(FILE *file)
 	return;
 
 Error:
-	
+
 	c3errors_FatalDialog("TileSet", "Could not load Transitions");
 }
 
@@ -345,7 +333,7 @@ void TileSet::LoadTransforms(FILE *file)
 
 	if (file) {
 		c3files_fread((void *)&numTransforms, 1, sizeof(numTransforms), file);
-		
+
 		m_transforms = new sint16*[numTransforms];
 		m_numTransforms = numTransforms;
 
@@ -367,7 +355,7 @@ void TileSet::LoadRiverTransforms(FILE *file)
 
 	if (file) {
 		c3files_fread((void *)&numRiverTransforms, 1, sizeof(numRiverTransforms), file);
-		
+
 		if (numRiverTransforms > 0) {
 			m_riverTransforms = new sint16*[numRiverTransforms];
 			m_numRiverTransforms = numRiverTransforms;
@@ -375,19 +363,17 @@ void TileSet::LoadRiverTransforms(FILE *file)
 
 			for (i=0; i<numRiverTransforms; i++) {
 				transform = new sint16[k_RIVER_TRANSFORM_SIZE];
-				
-				
+
 				c3files_fread((void *)transform, 1, sizeof(sint16)*k_RIVER_TRANSFORM_SIZE, file);
 				m_riverTransforms[i] = transform;
 
-				
 				c3files_fread((void *)&len, 1, sizeof(uint32), file);
 
 				if (len > 0) {
 					riverData = new Pixel16[len/2];
 					c3files_fread((void *)riverData, 1, len, file);
 
-					
+
 
 
 					m_riverData[i] = riverData;
@@ -407,23 +393,21 @@ void TileSet::LoadImprovements(FILE *file)
 
 	if (file) {
 		c3files_fread((void *)&numImprovements, 1, sizeof(numImprovements), file);
-		
+
 		if (numImprovements > 0) {
 			for (i=0; i<numImprovements; i++) {
 				uint16		impNum;
 				Pixel16		*impData;
 
-				
 				c3files_fread((void *)&impNum, 1, sizeof(uint16), file);
 
-				
 				c3files_fread((void *)&len, 1, sizeof(uint32), file);
 
 				if (len > 0) {
 					impData = new Pixel16[len/2];
 					c3files_fread((void *)impData, 1, len, file);
 
-					
+
 
 
 					m_improvementData[impNum] = impData;
@@ -441,12 +425,11 @@ void TileSet::LoadMegaTiles(FILE *file)
 
 	if (file) {
 		c3files_fread((void *)&m_numMegaTiles, 1, sizeof(m_numMegaTiles), file);
-		
+
 		if (m_numMegaTiles > 0) {
 			for (i=0; i<m_numMegaTiles; i++) {
 				uint16			megaLen;
 
-				
 				c3files_fread((void *)&megaLen, 1, sizeof(uint16), file);
 
 				m_megaTileLengths[i] = megaLen;
@@ -483,9 +466,9 @@ void TileSet::LoadMapIcons(void)
 	Pixel16		*tga;
 	Pixel16		*data;
 	sint32		i;
- 
+
 	for (i=0; i<MAPICON_MAX; i++) {
-		
+
 		sprintf(name, "UPC%.3d.TGA", i+1);
 
 		if (g_civPaths->FindFile(C3DIR_PICTURES, name, path, TRUE, FALSE) == NULL) {
@@ -514,7 +497,6 @@ void TileSet::LoadMapIcons(void)
 			continue;
 		}
 
-            
 		tga = tileutils_TGA2mem(path, &width, &height);
 		if (tga) {
 			data = (Pixel16 *)tileutils_EncodeTile16(tga, width, height, &len);
@@ -522,7 +504,7 @@ void TileSet::LoadMapIcons(void)
 			tga = NULL;
 
 			if (data) {
-				
+
 				tileutils_ConvertPixelFormatFrom555(data);
 
 				m_mapIcons[i] = data;
@@ -534,12 +516,11 @@ void TileSet::LoadMapIcons(void)
 	}
 }
 
-
 void TileSet::Load(void)
 {
 	MBCHAR		filename[_MAX_PATH];
 	FILE		*file;
-	
+
 	if (g_is565Format)
 		sprintf(filename, "gtset565.til");
 	else
@@ -553,12 +534,12 @@ void TileSet::Load(void)
 
 	file = c3files_fopen(C3DIR_TILES, filename, "rb");
 
-	if (file) 
+	if (file)
 	{
 		LoadTransforms(file);
-		
+
 		LoadTransitions(file);
-		
+
 		LoadBaseTiles(file);
 
 		LoadRiverTransforms(file);
@@ -583,7 +564,7 @@ void TileSet::QuickLoadTransforms(uint8 **dataPtr)
 	if (dataPtr) {
 		numTransforms = *(uint16 *)(*dataPtr);
 		(*dataPtr) += sizeof(uint16);
-		
+
 		m_transforms = new sint16*[numTransforms];
 		m_numTransforms = numTransforms;
 
@@ -658,18 +639,17 @@ void TileSet::QuickLoadRiverTransforms(uint8 **dataPtr)
 
 	numRiverTransforms = *(uint16 *)(*dataPtr);
 	(*dataPtr) += sizeof(uint16);
-	
+
 	if (numRiverTransforms > 0) {
 		m_riverTransforms = new sint16*[numRiverTransforms];
 		m_numRiverTransforms = numRiverTransforms;
 		m_riverData = new Pixel16*[numRiverTransforms];
 
-		for (i=0; i<numRiverTransforms; i++) {				
-			
+		for (i=0; i<numRiverTransforms; i++) {
+
 			m_riverTransforms[i] = (sint16 *)(*dataPtr);
 			(*dataPtr) += (sizeof(sint16)*k_RIVER_TRANSFORM_SIZE);
 
-			
 			len = *(uint32 *)(*dataPtr);
 			(*dataPtr) += sizeof(uint32);
 
@@ -678,7 +658,6 @@ void TileSet::QuickLoadRiverTransforms(uint8 **dataPtr)
 				(*dataPtr) += len;
 
 				if (!m_mapped) {
-					
 
 				}
 
@@ -700,27 +679,23 @@ void TileSet::QuickLoadImprovements(uint8 **dataPtr)
 	(*dataPtr) += sizeof(numImprovements);
 
 
-	
 	if (numImprovements > 0) {
 		for (i=0; i<numImprovements; i++) {
 			uint16		impNum;
 			Pixel16		*impData;
 
-			
 			impNum = *(uint16 *)(*dataPtr);
 			(*dataPtr) += sizeof(uint16);
 
-			
 			len = *(uint32 *)(*dataPtr);
 			(*dataPtr) += sizeof(uint32);
 
 			if (len > 0) {
-			
+
 				impData = (Pixel16 *)(*dataPtr);
 				(*dataPtr) += len;
 
 				if (!m_mapped) {
-					
 
 				}
 				m_improvementData[impNum] = impData;
@@ -749,7 +724,7 @@ void TileSet::QuickLoadMegaTiles(uint8 **dataPtr)
 
 			if (megaLen > 0) {
 				memcpy(m_megaTileData[i], (MegaTileStep *)(*dataPtr), sizeof(MegaTileStep) * megaLen);
-				
+
 				(*dataPtr) += (megaLen * sizeof(MegaTileStep));
 			}
 		}
@@ -770,15 +745,13 @@ void TileSet::QuickLoad(void)
 	else
 		sprintf(filename, "gtset555.til");
 
-
 	file = c3files_fopen(C3DIR_TILES, filename, "rb");
 	Assert(file != NULL);
 	if (file) {
 		if (m_tileSetData == NULL) {
-			
+
 			if (c3files_fseek(file, 0, SEEK_END)) goto Error;
-			
-			
+
 			if (c3files_fgetpos(file, &pos)) goto Error;
 
 #ifndef LINUX
@@ -787,12 +760,11 @@ void TileSet::QuickLoad(void)
 			fileSize = pos.__pos;
 #endif
 
-			
 			if (c3files_fseek(file, 0, SEEK_SET)) goto Error;
-			
+
 			m_tileSetData = new uint8[fileSize];
 		} else {
-			
+
 			Cleanup();
 		}
 
@@ -803,16 +775,14 @@ void TileSet::QuickLoad(void)
 		c3files_fclose(file);
 	}
 
-	
 	QuickLoadTransforms(&dataPtr);
 	QuickLoadTransitions(&dataPtr);
 	QuickLoadBaseTiles(&dataPtr);
-	
+
 	QuickLoadRiverTransforms(&dataPtr);
 	QuickLoadImprovements(&dataPtr);
 	QuickLoadMegaTiles(&dataPtr);
 
-    
 	LoadMapIcons();
 
 	m_quick = TRUE;
@@ -820,7 +790,7 @@ void TileSet::QuickLoad(void)
 	return;
 
 Error:
-	
+
 	if (file != NULL)
 		fclose(file);
 
@@ -841,11 +811,10 @@ void TileSet::QuickLoadMapped(void)
 	else
 		sprintf(filename, "gtset555.til");
 
-	
 
 	g_civPaths->FindFile(C3DIR_TILES, filename, path);
 #ifdef WIN32
-	m_fileHandle = CreateFile(path, 
+	m_fileHandle = CreateFile(path,
 						GENERIC_READ,
 						FILE_SHARE_READ,
 						NULL,
@@ -865,7 +834,7 @@ void TileSet::QuickLoadMapped(void)
 		return;
 	}
 
-	m_mappedFileHandle = CreateFileMapping(m_fileHandle, 
+	m_mappedFileHandle = CreateFileMapping(m_fileHandle,
 						NULL,
 						PAGE_READONLY,
 						0,
@@ -914,11 +883,10 @@ void TileSet::QuickLoadMapped(void)
 
 	dataPtr = m_tileSetData;
 
-	
 	QuickLoadTransforms(&dataPtr);
 	QuickLoadTransitions(&dataPtr);
 	QuickLoadBaseTiles(&dataPtr);
-	
+
 	QuickLoadRiverTransforms(&dataPtr);
 	QuickLoadImprovements(&dataPtr);
 	QuickLoadMegaTiles(&dataPtr);

@@ -1,18 +1,5 @@
-
-
-
-
-
-
-
-
-
-
-
-
 #ifndef _BMH_GWFILE_DLL_TYPES_H_
 #define _BMH_GWFILE_DLL_TYPES_H_
-
 
 
 #pragma warning(disable:4251)
@@ -38,12 +25,12 @@
 
 #ifdef __GWFILE_USE_IMPORT
 #define GWFileDllHeader DllImport
-#else 
+#else
 #ifdef __GWFILE_USE_EXPORT
 #define GWFileDllHeader DllExport
-#else 
+#else
 #define GWFileDllHeader
-#endif 
-#endif 
+#endif
+#endif
 
-#endif 
+#endif

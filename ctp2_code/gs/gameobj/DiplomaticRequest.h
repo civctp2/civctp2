@@ -1,19 +1,17 @@
 #ifdef HAVE_PRAGMA_ONCE
 #pragma once
 #endif
-#ifndef __DIPLOMATICREQUEST_H__ 
+#ifndef __DIPLOMATICREQUEST_H__
 #define __DIPLOMATICREQUEST_H__
 
 #include "ID.h"
 #include "DiplomaticRequestData.h"
 
-
 class DiplomaticRequest : public ID
 	{
 	public:
 
-		
-		
+
 		DiplomaticRequest() : ID() { return ; }
 		DiplomaticRequest(sint32 val) : ID(val) { return ; }
 		DiplomaticRequest(uint32 val) : ID(val) { return ; }
@@ -36,7 +34,6 @@ class DiplomaticRequest : public ID
 		REQUEST_TYPE GetRequest(void) const { return (GetData()->GetRequest()) ; }
 
 
-
 		void SetAdvance(const AdvanceType &advance) { AccessData()->SetAdvance(advance) ; }
 		void SetWanted(const AdvanceType &advance) { AccessData()->SetWanted(advance) ; }
 		void SetWanted(const Unit &city) { AccessData()->SetWanted(city) ; }
@@ -50,7 +47,6 @@ class DiplomaticRequest : public ID
 		REQUEST_RESPONSE_TYPE GetResponse() { return AccessData()->GetResponse(); }
 
 
-
 		Unit &GetTarget() { return AccessData()->GetTarget(); }
 		Gold &GetGold() { return AccessData()->GetGold(); }
 
@@ -62,8 +58,7 @@ class DiplomaticRequest : public ID
 		sint32 GetTone() const;
 		sint32 GetRound() const;
 
-		
-		
+
 		void Complete();
 	} ;
 

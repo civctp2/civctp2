@@ -1,4 +1,3 @@
-
 #ifdef HAVE_PRAGMA_ONCE
 #pragma once
 #endif
@@ -24,7 +23,6 @@ class TextTab;
 class c3_ListBox;
 class aui_TabGroup;
 
-
 sint32 loadsavescreen_displayMyWindow(uint32 type);
 sint32 loadsavescreen_removeMyWindow(uint32 action);
 AUI_ERRCODE loadsavescreen_Initialize( aui_Control::ControlActionCallback
@@ -40,14 +38,11 @@ void loadsavescreen_LoadSCENGame(void);
 
 void loadsavescreen_delete( void );
 
-
 void loadsavescreen_executePress(aui_Control *control, uint32 action, uint32 data, void *cookie );
 void loadsavescreen_backPress(aui_Control *control, uint32 action, uint32 data, void *cookie );
 void loadsavescreen_deletePress(aui_Control *control, uint32 action, uint32 data, void *cookie );
 
-
 void loadsavescreen_DifficultyScreenActionCallback(aui_Control *control, uint32 action, uint32 data, void *cookie);
-
 
 void loadsavescreen_TribeScreenActionCallback(aui_Control *control, uint32 action, uint32 data, void *cookie);
 void loadsavescreen_PlayersScreenActionCallback(aui_Control *control, uint32 action, uint32 data, void *cookie);
@@ -57,17 +52,17 @@ void loadsavescreen_ListTwoHandler(aui_Control *control, uint32 action, uint32 d
 void loadsavescreen_CivListHandler(aui_Control *control, uint32 action, uint32 data, void *cookie );
 
 enum LSS_TYPE
-{ 
-	LSS_FIRST=0, 
+{
+	LSS_FIRST=0,
 
-	LSS_LOAD_GAME=0, 
+	LSS_LOAD_GAME=0,
 	LSS_SAVE_GAME,
-	
+
 	LSS_LOAD_MP,
 	LSS_SAVE_MP,
 
 	LSS_LOAD_SCEN,
-	LSS_LOAD_SCEN_MP,	
+	LSS_LOAD_SCEN_MP,
 	LSS_SAVE_SCEN,
 
 	LSS_TOTAL
@@ -88,7 +83,6 @@ public:
 
 	virtual ~LoadSaveWindow();
 
-	
 	void FillListOne(void);
 	void FillListTwo(GameInfo *info);
 	void FillCivList(SaveInfo *info);
@@ -99,7 +93,6 @@ public:
 	void SetPowerGraph(SaveInfo *info);
 	void SetRadarMap(SaveInfo *info);
 
-	
 	void SelectCurrentGame(void);
 	void SelectCurrentSave(void);
 
@@ -118,7 +111,6 @@ public:
 	MBCHAR *GetCivName(void);
 	BOOL GetNote(MBCHAR *note);
 
-	
 	void EnableFields( BOOL enable );
 
 	GameInfo *GetGameInfo(void) const { return m_gameInfo; }
@@ -126,7 +118,6 @@ public:
 	void SetGameInfo(GameInfo *info);
 	void SetSaveInfo(SaveInfo *info);
 
-	
 	void CleanUpSaveInfo( void );
 	SaveInfo *GetSaveInfoToSave( void ) const { return m_saveInfoToSave; }
 
@@ -134,7 +125,6 @@ public:
 
 	C3TextField* GetTextField() { return m_gameTextBox; }
 
-	
 
 	ctp2_Button *GetDeleteButton( void ) {return m_deleteButton; }
 	ctp2_Button *GetOkButton( void ) { return Ok(); }
@@ -154,17 +144,14 @@ private:
 	GameInfo		*m_gameInfo;
 	SaveInfo		*m_saveInfo;
 
-	
-	
+
 	SaveInfo		*m_saveInfoRemember;
 	SaveInfo		*m_saveInfoToSave;
 
-	
 	PointerList<GameInfo> *m_fileList;
 
-	
 	c3_Static		*m_titlePanel;
-	
+
 	c3_Static		*m_gameText;
 	C3TextField		*m_gameTextBox;
 
@@ -179,23 +166,20 @@ private:
 
 	c3_ListBox		*m_listOne;
 	c3_ListBox		*m_listTwo;
-	
-	
+
 	aui_TabGroup	*m_tabGroup;
-	
-	
+
 	TextTab			*m_powerTab;
 	c3_Static		*m_powerTabImage;
 	aui_Image		*m_powerTabImageBackup;
-	
+
 	TextTab			*m_mapTab;
 	c3_Static		*m_mapTabImage;
 	aui_Image		*m_mapTabImageBackup;
-	
+
 	TextTab			*m_civsTab;
 	c3_ListBox		*m_civsList;
 
-	
 	ctp2_Button		*m_deleteButton;
 	MBCHAR			m_mostRecentName[_MAX_PATH];
 };
@@ -215,7 +199,6 @@ private:
 	c3_Static *m_myItem;
 };
 
-
 class LSGamesListItem : public c3_ListItem
 {
 public:
@@ -232,7 +215,6 @@ private:
 	GameInfo	*m_info;
 
 };
-
 
 class LSSavesListItem : public c3_ListItem
 {
@@ -251,7 +233,6 @@ private:
 	c3_Static	*m_itemText;
 	SaveInfo	*m_info;
 };
-
 
 AUI_ACTION_BASIC(LSCleanupAction);
 

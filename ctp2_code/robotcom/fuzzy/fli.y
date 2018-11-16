@@ -22,13 +22,11 @@ extern int fli_lineNumber;
 
 %}
 
-
 %union {
 	double value;
 	int sftype;
 	char *name;
 }
-
 
 
 %token NAME NUMBER IF INPUT OUTPUT NOT AND OR ELSE ELSEIF LEFT RIGHT TRI SPIKE
@@ -68,7 +66,7 @@ sectiontype:	FUZZY_EVAL { fli_SetSection(FLI_SECT_EVAL); }
 				| FUZZY_POST_OUT_DIP { fli_SetSection(FLI_SECT_POST_OUTGOING_DIPLOMACY); }
 				| FUZZY_REJECTED_MESSAGE { fli_SetSection(FLI_SECT_REJECTED_MESSAGE); }
 				| FUZZY_ACCEPTED_MESSAGE { fli_SetSection(FLI_SECT_ACCEPTED_MESSAGE); }
-				; 
+				;
 
 statements:	statement
 			| statement statements
@@ -83,25 +81,25 @@ statement:	inputdef
 			;
 
 inputdef:	INPUT NAME  { fli_AddInputSymbol($2.name); }
-			| INPUT NAME '=' NUMBER  
+			| INPUT NAME '=' NUMBER
 			{ fli_AddInitializedInputSymbol($2.name, $4.value); }
 			;
 
-outputdef:	OUTPUT NAME '[' NUMBER ',' NUMBER ']' 
-			{ 
+outputdef:	OUTPUT NAME '[' NUMBER ',' NUMBER ']'
+			{
 				fli_AddOutputSymbol($2.name, $4.value, $6.value);
 			}
-			| OUTPUT NAME '[' NUMBER ',' NUMBER ']' '=' NUMBER  
-			{ 
+			| OUTPUT NAME '[' NUMBER ',' NUMBER ']' '=' NUMBER
+			{
 				fli_AddInitializedOutputSymbol($2.name, $9.value, $4.value, $6.value);
 			}
 			;
 
-setfuncdef:	setfunctype NAME '(' NAME ',' NUMBER ',' NUMBER ')' 
+setfuncdef:	setfunctype NAME '(' NAME ',' NUMBER ',' NUMBER ')'
 			{
 				fli_AddSetFunction($2.name, $4.name, $1.sftype,
 								   $6.value, $8.value);
-			}   
+			}
 			;
 
 setfunctype:  RIGHT { $$.sftype = SFTYPE_RIGHT; }
@@ -132,7 +130,7 @@ elseclauses:	elseclause
 				| elseifclauses elseclause
 				| elseifclauses
 				;
- 
+
 elseclause:	ELSE { fli_AddOp(FLOP_ENDEXP); }   { fli_AddOp(FLOP_STARTELSE); }  rulebody { fli_AddOp(FLOP_ENDELSE); }
 			;
 
@@ -167,7 +165,7 @@ inputexp:	NAME { fli_AddOp(FLOP_PUSH, $1.name); }
 			| KINDA inputexp { fli_AddOp(FLOP_KINDA); }
 			;
 
-action:		ACTION NAME {fli_StartAction($2.name);} 
+action:		ACTION NAME {fli_StartAction($2.name);}
 				'(' arguments ')' WHEN '(' boolexp ')'
 				{ fli_EndAction(); }
 			;
@@ -191,15 +189,15 @@ extern FILE *yyin;
 
 int fli_RunParser(const char *topdir, const char *file)
 {
-    char my_errstr[200]; 
-    
+    char my_errstr[200];
+
 	fli_lineNumber = 1;
 
 	if(!fli_open_first_file(topdir, file)) {
 		fli_parse_error = FLI_CANT_OPEN_FILE;
-       
+
         sprintf (my_errstr, "Can not open file %s %s", topdir, file);
-        yyerror(my_errstr); 
+        yyerror(my_errstr);
 
 		return 0;
 	}
@@ -221,10 +219,9 @@ void yyerror(char *s)
 {
 	char buf[1024];
 	fli_parse_error = FLI_PARSER_ERROR;
-	
+
 	sprintf(buf, "%s:%d: %s", fli_current_file(), fli_lineNumber, s);
 	FLPRINTF(("%s\n", buf));
-	
+
 	fli_ReportError(buf);
 }
-

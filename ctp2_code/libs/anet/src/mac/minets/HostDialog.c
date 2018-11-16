@@ -1,4 +1,4 @@
-/* 
+/*
 Copyright (C) 1995-2001 Activision, Inc.
 
 This library is free software; you can redistribute it and/or
@@ -177,74 +177,74 @@ int DoHostListDialog()
 		GetPort(&oldPort);
 
 		/* On PowerPC, need a RoutineDescriptor from heap; on 68K, no allocation */
-		
+
 		MyFilterUPP = NewModalFilterProc(MyFilterHD);
 		if (MyFilterUPP == NIL) goto cleanUp;
 
 		/* Build dialog window and install its item values */
-		
+
 		OpenPrefsFile();
-		
+
 		dlog = OpenThisDialog();
 		if (dlog == NIL) goto cleanUp;
 
 		/* Entertain filtered user events until dialog is dismissed */
-		
+
 		while (keepGoing) {
 			ModalDialog(MyFilterUPP,&itemHit);
 			keepGoing = DoDialogItem(dlog,itemHit);
 			}
-		
+
 		/*
 		 *	Do final processing of item values, such as exporting them to caller.
 		 *	DoDialogItem() has already called AnyBadValues().
 		 */
-		
+
 		if (itemHit == OK_ITEM) {
 			Point	theCell;
 			short	dataLen;
 			OSErr	anErr;
 			Handle	aHand;
-			
+
 			//	get the current selection and store it in a global which can be accessed
 			//	from the application
-			
+
 			theCell.h = 0;
 			theCell.v = list4.currentRow;
-			
+
 			dataLen = 255;
 			LGetCell(&gSavedSelection[1], &dataLen, theCell, list4.hndl);
 			gSavedSelection[0] = dataLen;
 
 			//	we save the current selection for the next time we use this transport
-			
+
 			//	remove the current resource
-			
+
 			aHand = Get1Resource('mw2H', 1000);
 			if (aHand != nil) {
 				RemoveResource(aHand);
 				DisposeHandle(aHand);
 				aHand = nil;
 			}
-			
+
 			//	create a handle and add this resource to the resource file
-			
+
 			anErr = PtrToHand(&gSavedSelection[0], &aHand, gSavedSelection[0] + 1);		//	name and length byte
 			if ( (anErr == noErr) && (aHand != nil) ) {
 				AddResource(aHand, 'mw2H', 1000, "\pDefault Host");
 				WriteResource(aHand);
 			}
-			
+
 			//	the application likes C-strings
-			
+
 			p2cstr(gSavedSelection);
-			
+
 			okay = true;
 		} else if (itemHit == BUT5_Listen) {
-		
+
 			//	the user wants to list for a connection. We need to clear out the global selection
 			//	string
-			
+
 			gSavedSelection[0] = 0;
 
 			okay = true;
@@ -252,13 +252,13 @@ int DoHostListDialog()
 
 		/* That's all, folks! */
 
-cleanUp:		
+cleanUp:
 		ClosePrefsFile();
 
 		if (dlog) CloseThisDialog(dlog);
 		if (MyFilterUPP) DisposeRoutineDescriptor(MyFilterUPP);
 		SetPort(oldPort);
-		
+
 		return(okay);
 	}
 
@@ -275,18 +275,18 @@ static pascal Boolean MyFilterHD(DialogPtr dlog, EventRecord *evt, short *itemHi
 		short type,ch; Handle hndl; Rect box;
 		static long then; static Point clickPt;
 		static short lastItem = -1;
-		
+
 		w = (WindowPtr)(evt->message);
 		switch(evt->what) {
 			case nullEvent:
-			
+
 				//	set the help string based on which item is under the menubar
-				
+
 				{
 					short	dItem;
 					Str255	theString;
 					Point	thePoint;
-					
+
 					thePoint = evt->where;
 					GlobalToLocal(&thePoint);
 					dItem = FindDialogItem(dlog, thePoint);
@@ -295,9 +295,9 @@ static pascal Boolean MyFilterHD(DialogPtr dlog, EventRecord *evt, short *itemHi
 						GetIndString(theString, 1000, dItem + 1);
 						PutDlgString(dlog, STXT10_Help, theString, FALSE);
 					}
-				
+
 				}
-				
+
 				break;
 			case updateEvt:
 				if (w == dlog) {
@@ -443,7 +443,7 @@ static void DoDialogUpdate(DialogPtr dlog) {
 	UpdateDialog(dlog,dlog->visRgn);
 	FrameDefault(dlog, BUT1_Connect, TRUE);
 	FrameRect(&list4.bounds);
-	
+
 	saveFont = dlog->txFont;
 	saveSize = dlog->txSize;
 	saveStyle = dlog->txFace;
@@ -486,7 +486,7 @@ static void DoDialogActivate(DialogPtr dlog, int activ) {
 	TextFace(0);
 
 	LActivate(activ,list4.hndl);
-	
+
 	TextFont(saveFont);
 	TextSize(saveSize);
 	TextFace(saveStyle);
@@ -516,26 +516,26 @@ static DialogPtr OpenThisDialog()
 		//	build the list before we setup anything else
 
 		if (!BuildList(dlog,LIST4,16,&list4)) goto broken;
-		
+
 		//	setup the IP address
-		
+
 		OTInetHostToString(gInetInfo.fAddress, (char*) theString);
 		c2pstr((char*) theString);
 		PutDlgString(dlog, STXT14_IP, theString, FALSE);
-		
+
 		//	setup the machine name
-		
+
 		OTSetSynchronous(gInetService);
 		status = OTInetAddressToName(gInetService, gInetInfo.fAddress, (char*) theString);
 		OTSetAsynchronous(gInetService);
-		
+
 		if (status == noErr) {
 			c2pstr((char*) theString);
 			PutDlgString(dlog, STXT13_NAME, theString, FALSE);
 		} else {
 			PutDlgString(dlog, STXT13_NAME, "\pCannot Resolve Machine Name", FALSE);
 		}
-		
+
 		//	show the window
 
 		ShowWindow(dlog);
@@ -559,10 +559,10 @@ static void CloseThisDialog(DialogPtr dlog)
 			DisposeDialog(dlog);	/* Call CloseDialog if you provide storage to GetNewDialog */
 		}
 	}
-	
+
 void AddNewEntry(DialogPtr dlog, char* theName, char* theDesc, Boolean checkOriginalName, char* theOriginalName) {
 	short		result;
-	
+
 	result = DoEnterNewAddressDialog(theName, theDesc);
 	if (result) {
 
@@ -574,114 +574,114 @@ void AddNewEntry(DialogPtr dlog, char* theName, char* theDesc, Boolean checkOrig
 		saveFont = dlog->txFont;
 		saveSize = dlog->txSize;
 		saveStyle = dlog->txFace;
-	
+
         GetFNum("geneva", &fontID);
 	    TextFont(fontID);
 		TextSize(9);
 		TextFace(0);
-		
+
 		{
 			Boolean		aBool;
 			Point		theCell = {0, 0};
 			Handle		aHand;
-		
+
 			//	if this name is in the list, remove it
-			
+
 			aBool = LSearch(&theName[1], theName[0], nil, &theCell, list4.hndl);
 			if (aBool) {
 				if (theCell.h == 0) {
 					LDelRow(1, theCell.v, list4.hndl);
 					list4.nCells--;
-					
+
 					if (list4.currentRow > theCell.v) {
 						list4.currentRow = theCell.v;
 					}
-					
+
 				}
 			}
-			
+
 			//	if there is a resource with this name, remove it
-			
+
 			aHand = Get1NamedResource('STR ', theName);
 			if (aHand != nil) {
 				RemoveResource(aHand);
 				DisposeHandle(aHand);
 				aHand = nil;
 			}
-		
+
 		}
 
 		if (checkOriginalName) {
 			Boolean		aBool;
 			Point		theCell = {0, 0};
 			Handle		aHand;
-		
+
 			//	if this name is in the list, remove it
-			
+
 			aBool = LSearch(&theOriginalName[1], theOriginalName[0], nil, &theCell, list4.hndl);
 			if (aBool) {
 				if (theCell.h == 0) {
 					LDelRow(1, theCell.v, list4.hndl);
 					list4.nCells--;
-					
+
 					if (list4.currentRow > theCell.v) {
 						list4.currentRow = theCell.v;
 					}
-					
+
 				}
 			}
-			
+
 			//	if there is a resource with this name, remove it
-			
+
 			aHand = Get1NamedResource('STR ', theOriginalName);
 			if (aHand != nil) {
 				RemoveResource(aHand);
 				DisposeHandle(aHand);
 				aHand = nil;
 			}
-		
+
 		}
 
 		LAddRow(1, list4.nCells, list4.hndl);
 		list4.nCells++;
-		
+
 		//	add the data to the new row
-		
+
 		{
 			Point	theCell;
-			
+
 			theCell.h = 0;
 			theCell.v = list4.nCells - 1;
 			LSetCell(&theName[1], theName[0], theCell, list4.hndl);
-		
+
 			theCell.h = 1;
 			LSetCell(&theDesc[1], theDesc[0], theCell, list4.hndl);
-		
+
 		}
-		
+
 		TextFont(saveFont);
 		TextSize(saveSize);
 		TextFace(saveStyle);
 
 		AddHostToPrefs(theName, theDesc);
-		
+
 		//	select the new row
-		
+
 		//list4.currentRow = list4.nCells - 1;
 		{
 			Point	theCell;
-			
+
 			theCell.h = 0;
 			theCell.v = list4.nCells - 1;
 			LSetSelect(TRUE, theCell, list4.hndl);
 			CheckList();								//	unselect current row and select last row
 		}
-		
+
 		{
 			Handle hndl;
 			Rect box;
 			short type;
-			
+
 			GetDialogItem(dlog, LIST4, &type, &hndl, &box);
 			InvalRect(&box);
 		}
@@ -698,10 +698,10 @@ void EditEntry(DialogPtr dlog) {
 	Str255		theOriginalName = "\p";
 
 	//	get the current selection and edit it
-	
+
 	anyCell = LGetSelect(TRUE, &theCell, list4.hndl);
 	if (anyCell) {
-	
+
 		dataLen = 255;
 		LGetCell(&theName[1], &dataLen, theCell, list4.hndl);
 		theName[0] = dataLen;
@@ -712,9 +712,9 @@ void EditEntry(DialogPtr dlog) {
 		theDesc[0] = dataLen;
 
 		//	copy the name for later deletion
-		
+
 		memcpy(&theOriginalName[0], &theName[0], theName[0] + 1);
-		
+
 		//	add the new entry (this will remove the one with the original name)
 
 		AddNewEntry(dlog, theName, theDesc, true, theOriginalName);
@@ -736,7 +736,7 @@ static int DoDialogItem(DialogPtr dlog, short itemHit)
 		 * The local point is in where; modifiers in modifiers.
 		 * Returns whether or not the dialog should be closed (keepGoing).
 		 */
-		 
+
 		if (itemHit<1 || itemHit>=LASTITEM)
 			return(keepGoing);				/* Only legal items, please */
 
@@ -753,68 +753,68 @@ static int DoDialogItem(DialogPtr dlog, short itemHit)
 							Point	theCell = {0, 0};
 							short	dataLen;
 							Handle	aHand;
-							
+
 							//	if there is a current selection, remove it
-							
+
 							anyCell = LGetSelect(TRUE, &theCell, list4.hndl);
 							if (anyCell) {
-							
+
 								//	get the data and remove the resource from our file
-								
+
 								theCell.h = 0;
 								dataLen = 255;
 								LGetCell(&theName[1], &dataLen, theCell, list4.hndl);
 								theName[0] = dataLen;
-								
+
 								ParamText(theName, "\p", "\p", "\p");	//	add name to be deleted
 								aShort = CautionAlert(1500, nil);		//	returns 1 if OK to rmeove
-								
+
 								if (aShort == 1) {
-								
+
 									//	the user really want's to do this
-									
+
 									aHand = Get1NamedResource('STR ', theName);
 									if (aHand != nil) {
 										RemoveResource(aHand);
 										DisposeHandle(aHand);
 									}
-									
+
 									//	remove the resource from the list
-									
+
 									{
 										short saveFont;
 										short saveSize;
 										Style saveStyle;
                                         short fontID;
-	
+
 										saveFont = dlog->txFont;
 										saveSize = dlog->txSize;
 										saveStyle = dlog->txFace;
-									
+
                                         GetFNum("geneva", &fontID);
 	                                    TextFont(fontID);
 										TextSize(9);
 										TextFace(0);
-										
+
 										LDelRow(1, theCell.v, list4.hndl);
-	
+
 										TextFont(saveFont);
 										TextSize(saveSize);
 										TextFace(saveStyle);
 									}
-									
+
 									if (theCell.v == list4.nCells - 1) {
 										list4.currentRow -= 1;
 									}
-									
+
 									list4.nCells--;
 								}
 							}
-							
+
 							//	make sure something is still selected
-							
+
 							CheckList();
-							
+
 						}
 						break;
 					case BUT7_Edit:
@@ -857,11 +857,11 @@ static int DoDialogItem(DialogPtr dlog, short itemHit)
 				switch(itemHit) {
 					case LIST4:
 						if (LClick(where, modifiers, list4.hndl)) {
-							
+
 							//	double click is the same as clicking the edit button
-							
+
 							EditEntry(dlog);
-							
+
 						} else {
 							CheckList();
 						}
@@ -869,9 +869,9 @@ static int DoDialogItem(DialogPtr dlog, short itemHit)
 					}
 				break;
 			}
-			
+
 		//	change the hilite state of the default button
-	
+
 		{
 			short type; Handle hndl; Rect box;
 			Point appCell;
@@ -879,30 +879,30 @@ static int DoDialogItem(DialogPtr dlog, short itemHit)
 
 			SetPt(&appCell, 0, 0);
 			anyCell = LGetSelect(true, &appCell, list4.hndl);
-			
+
 			GetDialogItem(dlog, BUT1_Connect, &type, &hndl, &box);
 			if (anyCell) {
 				HiliteControl((ControlHandle) hndl, 0);
 			} else {
 				HiliteControl((ControlHandle) hndl, 255);
 			}
-			
+
 			GetDialogItem(dlog, BUT2_Remove, &type, &hndl, &box);
 			if (anyCell) {
 				HiliteControl((ControlHandle) hndl, 0);
 			} else {
 				HiliteControl((ControlHandle) hndl, 255);
 			}
-			
+
 			GetDialogItem(dlog, BUT7_Edit, &type, &hndl, &box);
 			if (anyCell) {
 				HiliteControl((ControlHandle) hndl, 0);
 			} else {
 				HiliteControl((ControlHandle) hndl, 255);
 			}
-			
+
 		}
-	
+
 		if (okay) keepGoing = AnyBadValues(dlog);
 		return(keepGoing);
 	}
@@ -1060,7 +1060,7 @@ static void PutDlgChkRadio(DialogPtr dlog, int item, int val)
 static int GetDlgChkRadio(DialogPtr dlog, int item)
 	{
 		short type; Handle hndl; Rect box;
-		
+
 		GetDialogItem(dlog,item,&type,&hndl,&box);
 		return(GetControlValue((ControlHandle)hndl) != 0);
 	}
@@ -1072,7 +1072,7 @@ static int GetDlgChkRadio(DialogPtr dlog, int item)
  *	resulting Pascal string in the buffer, str, which is assumed large enough
  *	to hold the text (256 bytes max).  If item is the number of a static text
  *	item, the empty string is delivered.  Delivers TRUE or FALSE according to
- *	whether or not the text so delivered was empty.  
+ *	whether or not the text so delivered was empty.
  */
 
 static int GetDlgString(DialogPtr dlog, int item, unsigned char *str)
@@ -1125,7 +1125,7 @@ static int GetDlgWord(DialogPtr dlog, int item, short *val)
 int TextSelected(DialogPtr dlog)
 	{
 		register TEHandle textH; int item = 0;
-		
+
 		textH = ((DialogPeek)dlog)->textH;
 		if (*textH)
 			if ( (*textH)->selStart != (*textH)->selEnd )
@@ -1136,7 +1136,7 @@ int TextSelected(DialogPtr dlog)
 /*
  *  If any of the variable argument scrap types are available for pasting from
  *  the scrap, deliver the first one.  Otherwise, deliver 0.  For example,
- *	
+ *
  *      if (whichType = CanPaste(3,'TEXT','PICT','STUF')) ...
  *
  *  There can be any number of types in the list, as long as the preceding count, n,
@@ -1148,10 +1148,10 @@ static OSType CanPaste(int n, ...)
 		register OSType nextType,ans = 0L;
 		long err,offset;
 		va_list nextArg;
-		
+
 		va_start(nextArg,n);
 		nextType = va_arg(nextArg, OSType);
-		
+
 		while (n-- > 0) {
 			err = GetScrap(NIL, nextType, &offset);
 			if (err >= -1) {
@@ -1160,7 +1160,7 @@ static OSType CanPaste(int n, ...)
 				}
 			nextType = va_arg(nextArg, OSType);
 			}
-		
+
 		va_end(nextArg);
 		return(ans);
 	}
@@ -1175,10 +1175,10 @@ void FrameDefault(DialogPtr dlog, int item, int frame)
 	{
 		short type; Handle hndl; Rect box;
 		GrafPtr oldPort; PenState oldPen;
-		
+
 		Pattern			bPat, wPat;
 		short			i;
-		
+
 		if (frame) {
 			short type; Handle hndl; Rect box;
 			Point appCell;
@@ -1191,23 +1191,23 @@ void FrameDefault(DialogPtr dlog, int item, int frame)
 			bPat.pat[i] = 0xff;
 			wPat.pat[i] = 0x00;
 		}
-		
+
 		GetPort(&oldPort); SetPort(dlog);
 		GetPenState(&oldPen);
-		
+
 		GetDialogItem(dlog,item,&type,&hndl,&box);
 		InsetRect(&box,-4,-4);
-		
+
 		PenMode(srcCopy);
 		PenSize(3,3);
-		
+
 		if (frame) {
 			PenPat(&bPat);
 		} else {
 			PenPat(&wPat);
 		}
 		FrameRoundRect(&box,16,16);
-		
+
 		SetPenState(&oldPen);
 		SetPort(oldPort);
 	}
@@ -1223,11 +1223,10 @@ void FrameDefault(DialogPtr dlog, int item, int frame)
 static void GetDlgPanel(DialogPtr dlog, int item, Rect *panel)
 	{
 		short type; Handle hndl;
-		
+
 		GetDialogItem(dlog,item,&type,&hndl,panel);
 		HideDialogItem(dlog,item);
 	}
-
 
 /*
  *	GetLengthList() should compute a given list's length and prepare
@@ -1266,15 +1265,15 @@ static void GetCellData(UserList *l, short i, short *len) {
 	if (theStringHandle != nil) {
 		HLock(theStringHandle);
 		theString = (StringPtr) *theStringHandle;
-		
+
 		//	store the description in the second column
-		
+
 		theCell = l->cell;
 		theCell.h = 1;
 		LSetCell(&theString[1], theString[0], theCell, l->hndl);
-		
+
 		//	store the name in the first column
-		
+
 		theCell.h = 0;
 		GetResInfo(theStringHandle, &theID, &theType, name);
 		LSetCell(&name[1], name[0], theCell, l->hndl);
@@ -1304,14 +1303,14 @@ static int BuildList(DialogPtr dlog, int item, int csize, UserList *l)
 		saveFont = dlog->txFont;
 		saveSize = dlog->txSize;
 		saveStyle = dlog->txFace;
-	
+
         GetFNum("geneva", &fontID);
 	    TextFont(fontID);
 		TextSize(9);
 		TextFace(0);
-	
+
 		/* Content area (plus scroll bar) of list corresponds to user item box */
-		
+
 		GetDialogItem(dlog,item,&type,&hndl,&box);
 		l->bounds = box; InsetRect(&l->bounds,-1,-1);
 		SetDialogItem(dlog,item,userItem,NIL,&l->bounds);
@@ -1337,11 +1336,11 @@ static int BuildList(DialogPtr dlog, int item, int csize, UserList *l)
 				}
 			l->cell.v = 0;
 			l->currentRow = 0;
-			
+
 			if (gSavedSelection[0] != 0) {
 				Boolean		aBool;
 				Point		theCell = {0, 0};
-				
+
 				aBool = LSearch(&gSavedSelection[1], gSavedSelection[0], nil, &theCell, l->hndl);
 				if (aBool) {
 					if (theCell.h == 0) {
@@ -1349,7 +1348,7 @@ static int BuildList(DialogPtr dlog, int item, int csize, UserList *l)
 					}
 				}
 			}
-			
+
 			CheckList();
 			EraseRect(&l->content);
 			InvalRect(&l->bounds);
@@ -1362,18 +1361,18 @@ static int BuildList(DialogPtr dlog, int item, int csize, UserList *l)
 
 		return(l->hndl!=NIL);
 	}
-	
+
 void CheckList(void) {
 	Boolean	anyCell;
 	Point	theCell = {0,0};
-	
+
 	//	unslect the previous row in the list
-	
+
 	theCell.v = list4.currentRow;
 	LSetSelect(FALSE, theCell, list4.hndl);
 	theCell.h = 1;
 	LSetSelect(FALSE, theCell, list4.hndl);
-	
+
 	theCell.h = 0;
 	theCell.v = 0;
 	anyCell = LGetSelect(TRUE, &theCell, list4.hndl);
@@ -1382,7 +1381,7 @@ void CheckList(void) {
 	}
 
 	//	select the specified row in the list
-	
+
 	theCell.h = 0;
 	theCell.v = list4.currentRow;
 	LSetSelect(TRUE, theCell, list4.hndl);
@@ -1400,34 +1399,34 @@ OSErr OpenPrefsFile(void) {
 	OSErr			result;
 	Boolean			newFile = false;
 	Handle			theSavedString;
-	
+
 	DPRINT (( "Open prefs file" ) );
 	return fnfErr;
 	result = FSMakeFSSpec(gFragSpec->vRefNum, gFragSpec->parID, "\pInternet Prefs", &prefsSpec);
 	if (result == fnfErr) {
-	
+
 		//	time to create the prefs file
-		
+
 		FSpCreateResFile(&prefsSpec, 'mwNT', 'pref', smSystemScript);
 		result = FSMakeFSSpec(gFragSpec->vRefNum, gFragSpec->parID, "\pInternet Prefs", &prefsSpec);
 		newFile = true;
 	}
-	
+
 	if (result == noErr) {
 		gPrefsResFile = FSpOpenResFile(&prefsSpec, fsRdWrPerm);
-		
+
 		/*
 		if (newFile) {
-		
+
 			//	add the default item to the file. This item cannot be removed.
-			
+
 			AddHostToPrefs("\p255.255.255.255", "\pEveryone on the local subnet");
-		
+
 		}
 		*/
-		
+
 		//	if there is a saved selection, get it now
-		
+
 		theSavedString = Get1Resource('mw2H', 1000);
 		if (theSavedString == nil) {
 			gSavedSelection[0] = 0;				//	no saved selection
@@ -1436,9 +1435,9 @@ OSErr OpenPrefsFile(void) {
 			memcpy(&gSavedSelection[0], *theSavedString, (*theSavedString)[0] + 1);
 			HUnlock(theSavedString);
 		}
-		
+
 	}
-	
+
 	return result;
 }
 
@@ -1457,31 +1456,30 @@ void AddHostToPrefs(StringPtr hostName, StringPtr description) {
 	Handle				descHandle = nil;
 
 	//	add this host and description to our preferences file
-	
+
 	//	get a unique resource ID for our string. The description will be stored
 	//	as the name of the resource. We use 1000 for the current session name
-	
+
 	do {
 		resID = Unique1ID('STR ');
 	} while (resID <= 1000);
-	
+
 	err = PtrToHand(&description[0], &descHandle, description[0] + 1);	//	string and length byte
 
 	if ( (err == noErr) && (descHandle != nil) ){
-	
+
 		//	add the handles to the resource file
-		
+
 		AddResource(descHandle, 'STR ', resID, hostName);		//	name and store the resource
 		WriteResource(descHandle);
-		
+
 	} else {
-	
+
 		//	something went wrong. Make sure we clean up our handles
-	
+
 		if (descHandle != nil) {
 			DisposeHandle(descHandle);
 		}
-	
+
 	}
 }
-

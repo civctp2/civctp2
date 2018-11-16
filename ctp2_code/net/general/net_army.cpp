@@ -1,5 +1,3 @@
-
-
 #include "c3.h"
 #include "Globals.h"
 #include "net_army.h"
@@ -15,7 +13,6 @@
 
 extern Player **g_player;
 extern UnitPool *g_theUnitPool;
-
 
 NetNewArmy::NetNewArmy(PLAYER_INDEX player, const ArmyList &army,
 					   sint32 armyIndex, CAUSE_NEW_ARMY cause)
@@ -78,7 +75,7 @@ void NetNewArmy::Unpacketize(uint16 id, uint8 *buf, uint16 size)
 	Assert(g_player[m_player]->m_all_armies->Num() == m_index);
 	if(g_player[m_player]->m_all_armies->Num() != m_index)
 		return;
-	
+
 	static ArmyList al;
 	al.Clear();
 	for(i = 0; i < m_numUnits; i++) {
@@ -164,7 +161,7 @@ void NetRemoveArmy::Unpacketize(uint16 id, uint8 *buf, uint16 size)
 #endif
 
 	g_player[m_player]->RemoveArmyFromPlayer(m_index, m_cause,
-											 TRUE, -1); 
+											 TRUE, -1);
 #endif
 }
 
@@ -202,7 +199,7 @@ void NetArmy::Unpacketize(uint16 id, uint8 *buf, uint16 size)
 
 	Army army;
 	PULLLONGTYPE(army, Army);
-	
+
 	g_network.CheckReceivedObject((uint32)army);
 
 	if(g_theArmyPool->IsValid(army)) {
@@ -279,7 +276,7 @@ void NetGroupRequest::Unpacketize(uint16 id, uint8 *buf, uint16 size)
 		theArmy = g_player[pl]->GetNewArmy(CAUSE_NEW_ARMY_REMOTE_GROUPING);
 		g_network.Enqueue(new NetInfo(NET_INFO_CODE_ADD_ARMY, pl, CAUSE_NEW_ARMY_REMOTE_GROUPING, theArmy.m_id));
 	}
-	
+
 	uint8 n, i;
 	PULLBYTE(n);
 	m_units.Clear();
@@ -343,4 +340,3 @@ void NetUngroupRequest::Unpacketize(uint16 id, uint8 *buf, uint16 size)
 	}
 	g_network.Enqueue(new NetInfo(NET_INFO_CODE_REMOTE_UNGROUP, theArmy, pl));
 }
-

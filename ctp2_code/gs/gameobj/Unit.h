@@ -11,13 +11,13 @@
 //
 // THIS FILE IS NOT GENERATED OR SUPPORTED BY ACTIVISION.
 //
-// This material has been developed at apolyton.net by the Apolyton CtP2 
+// This material has been developed at apolyton.net by the Apolyton CtP2
 // Source Code Project. Contact the authors at ctp2source@apolyton.net.
 //
 //----------------------------------------------------------------------------
 //
 // Compiler flags
-// 
+//
 // _MSC_VER
 // - Compiler version (for the Microsoft C++ compiler only)
 //
@@ -46,7 +46,7 @@
 #pragma once
 #endif
 
-#ifndef __UNIT_H__ 
+#ifndef __UNIT_H__
 #define __UNIT_H__ 1
 
 #include <string>
@@ -60,10 +60,10 @@
 
 class MapPoint;
 class UnitData;
-class UnitRecord; 
+class UnitRecord;
 class UnitDynamicArray;
 class SpriteState;
-class UnitActor; 
+class UnitActor;
 class TradeRoute;
 class Resources;
 class Army;
@@ -76,7 +76,7 @@ class aui_Surface;
 #define k_UNIT_VERSION_MINOR    0
 
 enum CAUSE_REMOVE_ARMY;
-enum CAUSE_REMOVE_CITY; 
+enum CAUSE_REMOVE_CITY;
 enum CAUSE_NEW_ARMY;
 typedef sint32 AdvanceType;
 
@@ -92,7 +92,7 @@ public:
 	Unit (sint64 val) : ID (val) { return; };
 	Unit (uint64 val) : ID (val) { return; };
 	Unit (ID i) : ID (i.m_id) { return; };
-	
+
 	UnitData *operator -> () const { return AccessData(); }
 #ifdef _DEBUG
 	char * GetText();
@@ -102,7 +102,7 @@ public:
 	const UnitRecord * GetDBRec() const;
 	const UnitRecord * GetDBRec(UnitData *u) const;
 	const UnitData * GetData(void) const;
-	UnitData * AccessData(void) const; 
+	UnitData * AccessData(void) const;
 	void KillUnit(const CAUSE_REMOVE_ARMY cause, PLAYER_INDEX killedBy);
 	void Kill(const CAUSE_REMOVE_ARMY cause, PLAYER_INDEX killedBy)
 	{ KillUnit(cause, killedBy); }
@@ -114,17 +114,15 @@ public:
 	uint32 GetOwnerBit() const;
 	uint32 GetFlag0();
 	sint32 GetType() const;
-	
+
 	const MBCHAR * GetName() const;
 	BOOL NearestFriendlyCity(MapPoint &c) const;
 	BOOL NearestFriendlyCity(Unit &u) const;
 	BOOL NearestFriendlyCityWithRoom(MapPoint &p, sint32 needRoomFor,
 	                                 Army *army) const;
 
-
 	sint32 ExertsMartialLaw() const;
 	sint32 IsContentOverseas() const { return FALSE; }
-
 
 	double GetHappiness() const;
 	double GetHappySize() const;
@@ -141,10 +139,10 @@ public:
 	double GetHappyImprovement() const;
 	double GetHappyWonders() const;
 	double GetHappyCrime() const;
-	void CalcHappiness(sint32 &virtualGoldSpent, BOOL firstPass); 
+	void CalcHappiness(sint32 &virtualGoldSpent, BOOL firstPass);
 	sint32 PayWages(sint32 w);
 	sint32 GetWagesNeeded();
-	
+
 	sint32 GetFirstMoveThisTurn() const;
 
 	sint32 GetShieldHunger() const;
@@ -161,7 +159,6 @@ public:
 	sint32 IsSameMovementType(uint32 bit_field) const;
 	sint32 IsSubmarine() const;
 	uint32 GetMovementType() const;
-
 
 	double GetMaxMovePoints() const;
 	double GetMovementPoints() const;
@@ -181,7 +178,7 @@ public:
 
 	void SetIsInTransport(const Unit &transport);
 	sint32 IsBeingTransported() const;
-	
+
 	BOOL CanAtLeastOneCargoUnloadAt(const MapPoint & old_pos, const MapPoint & dest_pos, const BOOL & used_vision) const;
 
 	BOOL UnloadCargo(const MapPoint &new_pos, Army &debark,
@@ -192,7 +189,7 @@ public:
 
 	void GetCargoHP(sint32 &i, sint32 unit_type[100],
 	                sint32 unit_hp[100]);
-	
+
 	void GetInserted (const Unit &transport);
 	BOOL InsertCargo(const Unit &addme);
 
@@ -229,7 +226,7 @@ public:
 	void SetDesiredPosInArmy(const MapPoint &p);
 
 	sint32 CanInterceptTrade() const;
-	sint32 CanRustle(CellUnitList &defender) const; 
+	sint32 CanRustle(CellUnitList &defender) const;
 	sint32 CanConvertCity(Unit &city) const;
 	sint32 CanBombard(CellUnitList &defender) const;
 	sint32 CanCounterBombard(CellUnitList &defender) const;
@@ -243,7 +240,6 @@ public:
 	void FightOneRound(Unit did, double defenders_bonuse, double amr, double dmr);
 	BOOL IsFlanker() const;
 	sint32 GetZBRange() const;
-
 
 	sint32 GetCargoCapacity() const;
 	sint32 GetNumCarried() const;
@@ -265,7 +261,6 @@ public:
 
 	BOOL GetSpecialAttackInfo(SPECATTACK attack, sint32 *soundID, sint32 *spriteID);
 
-
 	BOOL CanSettle(const MapPoint &pos) const;
 
 	BOOL IsSettleLand() const;
@@ -273,7 +268,7 @@ public:
 	BOOL IsSettleWater() const;
 	BOOL IsSettleSpace() const;
 
-	sint32 Settle(); 
+	sint32 Settle();
 
 	sint32 IsCantCaptureCity();
 	void ResetCityOwner(const PLAYER_INDEX newo, sint32 is_conquest,
@@ -310,7 +305,6 @@ public:
 	sint32 IsCity() const;
 	void DrawCityStats(aui_Surface *surf, sint32 x, sint32 y);
 
-	
 	void AddTradeRoute(TradeRoute &route, BOOL fromNetwork = FALSE);
 	void DelTradeRoute(TradeRoute route);
 
@@ -329,7 +323,6 @@ public:
 	sint32 GetIncomingTrade() const;
 	sint32 GetOutgoingTrade() const;
 
-	
 	void RemoveUnitVision();
 	void AddUnitVision(bool &revealed);
 	void DoVision(UnitDynamicArray &revealedUnits);
@@ -350,16 +343,14 @@ public:
 
 	void BeginTurnVision(PLAYER_INDEX player);
 
-	
 	sint32 CollectProduction(sint32 &mil, sint32 &mat);
 	void PayFederalProduction (double percent_military,
-	                           sint32 &mil_paid, 
-	                           double percent_terrain, 
+	                           sint32 &mil_paid,
+	                           double percent_terrain,
 	                           sint32 &mat_paid);
-	void PayFederalProductionAbs (sint32 mil_paid, 
-	                              double percent_mat, 
+	void PayFederalProductionAbs (sint32 mil_paid,
+	                              double percent_mat,
 	                              sint32 &mat_paid);
-
 
 	void SetMaterialContribution(BOOL on);
 	BOOL GetMaterialContribution() const;
@@ -370,9 +361,8 @@ public:
 	BOOL GetIsProfessional() const;
 
 	BOOL GetNeedsNoSupport() const;
-	BOOL GetShieldCost() const; 
+	BOOL GetShieldCost() const;
 
-	
 	void SetSpriteState(SpriteState *s);
 	SpriteState * GetSpriteState();
 	void SetActor(UnitActor *a);
@@ -426,7 +416,7 @@ public:
 	void SetSpiedUpon();
 
 	void CityNullifyWalls();
-	
+
 	ORDER_RESULT EstablishEmbassy(Unit &c);
 	ORDER_RESULT ThrowParty(Unit &c, sint32 gold);
 
@@ -443,9 +433,8 @@ public:
 	void SetIgnoreHappiness(BOOL v);
 #endif
 
-
 	void MakeCitizen(sint32 pi, const MapPoint &pos, sint32 origOwner = -1);
-	
+
 	sint32 PopCount() const;
 	sint32 CountSlaves() const;
 	BOOL IsWatchful() const;
@@ -507,7 +496,7 @@ public:
 
 	BOOL CanBuildUnit(sint32 type) const;
 	BOOL CanBuildBuilding(sint32 type) const;
-	
+
 	BOOL CanBuildCapitalization() const;
 	BOOL CanBuildWonder(sint32 type) const;
 	void RemoveWonderFromQueue(sint32 type);
@@ -518,15 +507,14 @@ public:
 
 	double GetDistanceToCapitol() const;
 	BOOL GetCurrentOrderString(StringId &id) const;
-	
-	
+
 	double GetSupportCost() const;
 	double GetOverseasDistress() const;
 
 	void SupportBuildings();
 	void CheckRiot();
 
-	BOOL AiGetCargoMovementPoints(double &min_move_points, 
+	BOOL AiGetCargoMovementPoints(double &min_move_points,
 	                              BOOL  &first) const;
 
 #if 0
@@ -536,8 +524,7 @@ public:
 	BOOL IsInjured() const;
 
 	void RecalculateResources();
-	
-	
+
 	BOOL FightOneLineDanceRangedAttack(Unit &defender);
 	BOOL FightOneLineDanceAssault(Unit &defender);
 

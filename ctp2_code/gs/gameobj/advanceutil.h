@@ -1,4 +1,3 @@
-
 #ifndef __ADVANCE_UTIL_H__
 #define __ADVANCE_UTIL_H__
 

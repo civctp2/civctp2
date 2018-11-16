@@ -1,27 +1,13 @@
-
-
-
-
-
-
-
-
-
-
-
 #ifndef __AUIPIXEL_H__
 #define __AUIPIXEL_H__
 
-
 class aui_Surface;
-
 
 #define VECTOR_SIZE					97
 #define FS_SCALE					1024
 
 #define k_AUI_PIXEL_MAXSCALAR		128
 #define k_AUI_PIXEL_SCALARSHIFT		7
-
 
 
 class aui_Pixel
@@ -35,10 +21,10 @@ public:
 		uint32 srcPitch );
 	static AUI_ERRCODE Convert24To16Dither(
 		uint16 *buf16,
-		uint8 *buf24, 
-		uint32 cols, uint32 rows, 
-		uint32 skipr = -1, 
-		uint32 skipg = -1, 
+		uint8 *buf24,
+		uint32 cols, uint32 rows,
+		uint32 skipr = -1,
+		uint32 skipg = -1,
 		uint32 skipb = -1);
 	static AUI_ERRCODE Convert8To16(
 		aui_Surface *surface16,
@@ -68,19 +54,18 @@ protected:
 	static double **ImageToDouble(uint8 *image24, sint32 width, sint32 height);
 	static void DoubleToImage(double **fimage, sint8 *image24,
 							  sint32 width, sint32 height);
-	static void Gradient(double **in_image, double **out_image, 
+	static void Gradient(double **in_image, double **out_image,
 						 sint32 width, sint32 height);
 
 public:
-	
-	
-	
-	
+
+
+
+
 	static uint16 Blend555( uint16 pixel1, uint16 pixel2, uint32 blend )
 	{
 		uint32 rb2, g2;
 		uint32 rb0, g0;
-
 
 		rb2 = (pixel2 & 0x7C1F);
 		rb0 = (((rb2<<5)+blend*((pixel1 & 0x7C1F)-rb2))>>5) & 0x7C1F;
@@ -91,16 +76,15 @@ public:
 		return uint16(rb0 | g0);
 	}
 
-	
-	
-	
-	
+
+
+
+
 	static uint16 Blend565( uint16 pixel1, uint16 pixel2, uint32 blend )
 	{
 		uint32 rb2, g2;
 		uint32 rb0, g0;
 
-                
 		rb2 = (pixel2 & 0xF81F);
 		rb0 = (((rb2<<5)+(blend*((pixel1 & 0xF81F)-rb2)))>>5) & 0xF81F;
 
@@ -110,9 +94,9 @@ public:
 		return uint16(rb0 | g0);
 	}
 
-	
-	
-	
+
+
+
 	static uint16 Darken555( uint16 pixel, sint32 scalar )
 	{
 		const sint32 newScalar = k_AUI_PIXEL_MAXSCALAR - scalar;
@@ -134,9 +118,9 @@ public:
 		return uint16(( r32 << 10 ) | ( g32 << 5)  | b32);
 	}
 
-	
-	
-	
+
+
+
 	static uint16 Darken565( uint16 pixel, sint32 scalar )
 	{
 		const sint32 newScalar = k_AUI_PIXEL_MAXSCALAR - scalar;
@@ -149,7 +133,7 @@ public:
 			k_AUI_PIXEL_SCALARSHIFT;
 
 		if ( scalar < 0 )
-		{		
+		{
 			if ( r32 > 0x001F ) r32 = 0x001F;
 			if ( g32 > 0x003F ) g32 = 0x003F;
 			if ( b32 > 0x001F ) b32 = 0x001F;
@@ -159,5 +143,4 @@ public:
 	}
 };
 
-
-#endif 
+#endif

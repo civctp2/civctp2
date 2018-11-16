@@ -1,14 +1,3 @@
-
-
-
-
-
-
-
-
-
-
-
 #ifdef HAVE_PRAGMA_ONCE
 #pragma once
 #endif
@@ -16,7 +5,7 @@
 #define KEYPRESS_H 1
 
 #include "keymap.h"
- 
+
 class KeyboardHandler;
 
 extern void init_keymap();
@@ -28,4 +17,4 @@ void keypress_RegisterHandler(KeyboardHandler *handler);
 void keypress_RemoveHandler(KeyboardHandler *handler);
 
 bool keypress_IsGameFunction(KEY_FUNCTION kf);
-#endif 
+#endif

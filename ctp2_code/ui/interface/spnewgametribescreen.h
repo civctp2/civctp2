@@ -10,13 +10,13 @@
 //
 // THIS FILE IS NOT GENERATED OR SUPPORTED BY ACTIVISION.
 //
-// This material has been developed at apolyton.net by the Apolyton CtP2 
+// This material has been developed at apolyton.net by the Apolyton CtP2
 // Source Code Project. Contact the authors at ctp2source@apolyton.net.
 //
 //----------------------------------------------------------------------------
 //
 // Compiler flags
-// 
+//
 //----------------------------------------------------------------------------
 //
 // Modifications from the original Activision code:
@@ -59,7 +59,6 @@ sint32 spnewgametribescreen_removeMyWindow(uint32 action,MBCHAR *lname = NULL);
 AUI_ERRCODE spnewgametribescreen_Initialize( aui_Control::ControlActionCallback *callback = NULL );
 AUI_ERRCODE spnewgametribescreen_Cleanup();
 
-
 void spnewgamescreen_scenarioExitCallback(aui_Control *control, uint32 action, uint32 data, void *cookie );
 void spnewgamescreen_scenarioPress(aui_Control *control, uint32 action, uint32 data, void *cookie) ;
 
@@ -76,7 +75,7 @@ void spnewgametribescreen_setTribeIndex( sint32, MBCHAR *lname = NULL );
 void spnewgametribescreen_getLeaderName( MBCHAR *lname );
 
 void spnewgametribescreen_enableTribes( void );
-void spnewgametribescreen_disableTribes(void);		
+void spnewgametribescreen_disableTribes(void);
 void spnewgametribescreen_disableTribe( sint32 tribe );
 void spnewgametribescreen_enableTribe( sint32 tribe );
 

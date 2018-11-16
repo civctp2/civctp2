@@ -11,7 +11,7 @@
 //
 // THIS FILE IS NOT GENERATED OR SUPPORTED BY ACTIVISION.
 //
-// This material has been developed at apolyton.net by the Apolyton CtP2 
+// This material has been developed at apolyton.net by the Apolyton CtP2
 // Source Code Project. Contact the authors at ctp2source@apolyton.net.
 //
 //----------------------------------------------------------------------------
@@ -74,14 +74,13 @@ sint32	musictrackscreen_displayMyWindow()
 	auiErr = g_c3ui->AddWindow(s_musicTrackScreen);
 	Assert( auiErr == AUI_ERRCODE_OK );
 
-	
 	aui_Item *item = s_trackList->GetSelectedItem();
 	if (item) {
 		s_trackList->DeselectItem(item);
 	}
 
 	g_musicTrackChosen = FALSE;
-	
+
 	s_trackNum = -1;
 
 	return retval;
@@ -99,19 +98,17 @@ sint32 musictrackscreen_removeMyWindow(uint32 action)
 }
 
 
-
 void MusicTrackListCallback( aui_Control *control, uint32 action, uint32 data, void *cookie )
 {
-	
+
 	if ( action != (uint32)AUI_LISTBOX_ACTION_SELECT ) return;
 
-	
 	MusicTrackListItem *item = (MusicTrackListItem *) s_trackList->GetSelectedItem();
 	if (!item)
 		return;
 
 	s_trackNum = item->GetTrackNum();
-	
+
 }
 
 
@@ -124,20 +121,19 @@ AUI_ERRCODE musictrackscreen_Initialize( void )
 	MBCHAR		windowBlock[ k_AUI_LDL_MAXBLOCK + 1 ];
 	MBCHAR		controlBlock[ k_AUI_LDL_MAXBLOCK + 1 ];
 
-	if ( s_musicTrackScreen ) return AUI_ERRCODE_OK; 
+	if ( s_musicTrackScreen ) return AUI_ERRCODE_OK;
 
 	strcpy(windowBlock, "MusicTrackScreen");
-	{ 
+	{
 		s_musicTrackScreen = new c3_PopupWindow( &errcode, aui_UniqueId(), windowBlock, 16, AUI_WINDOW_TYPE_FLOATING, false );
 		Assert( AUI_NEWOK(s_musicTrackScreen, errcode) );
 		if ( !AUI_NEWOK(s_musicTrackScreen, errcode) ) errcode;
 
-		
 		s_musicTrackScreen->Resize(s_musicTrackScreen->Width(),s_musicTrackScreen->Height());
 		s_musicTrackScreen->GrabRegion()->Resize(s_musicTrackScreen->Width(),s_musicTrackScreen->Height());
 		s_musicTrackScreen->SetStronglyModal(TRUE);
 	}
-	
+
 	s_musicTrackScreen->AddTitle( "MusicTrackScreen.Name" );
 	s_musicTrackScreen->AddClose( musictrackscreen_acceptPress );
 
@@ -147,12 +143,11 @@ AUI_ERRCODE musictrackscreen_Initialize( void )
 	if ( !AUI_NEWOK(s_trackList, errcode) ) return errcode;
 	s_trackList->SetForceSelect(FALSE);
 
-	sprintf(controlBlock, "%s.%s", windowBlock, "TrackNames");	
+	sprintf(controlBlock, "%s.%s", windowBlock, "TrackNames");
 	s_trackNames = new aui_StringTable(&errcode, controlBlock);
 	Assert(AUI_NEWOK(s_trackNames, errcode));
 	if (!AUI_NEWOK(s_trackNames, errcode)) return errcode;
-	
-	
+
 	errcode = aui_Ldl::SetupHeirarchyFromRoot( windowBlock );
 	Assert( AUI_SUCCESS(errcode) );
 
@@ -198,7 +193,6 @@ void musictrackscreen_acceptPress(aui_Control *control, uint32 action, uint32 da
 {
 	if ( musictrackscreen_removeMyWindow(action) ) {
 
-		
 		if (g_soundManager) {
 			if (s_trackNum != -1) {
 				g_soundManager->SetMusicStyle(MUSICSTYLE_USER);
@@ -224,10 +218,9 @@ MusicTrackListItem::MusicTrackListItem(AUI_ERRCODE *retval, sint32 trackNum, MBC
 	Assert( AUI_SUCCESS(*retval) );
 	if ( !AUI_SUCCESS(*retval) ) return;
 
-	
 	*retval = InitCommonLdl(trackNum, name, ldlBlock);
 	Assert( AUI_SUCCESS(*retval) );
-	if ( !AUI_SUCCESS(*retval) ) return;	
+	if ( !AUI_SUCCESS(*retval) ) return;
 }
 
 AUI_ERRCODE MusicTrackListItem::InitCommonLdl(sint32 trackNum, MBCHAR *name, MBCHAR *ldlBlock)
@@ -247,4 +240,3 @@ AUI_ERRCODE MusicTrackListItem::InitCommonLdl(sint32 trackNum, MBCHAR *name, MBC
 
 	return AUI_ERRCODE_OK;
 }
-

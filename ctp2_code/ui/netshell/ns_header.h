@@ -1,6 +1,3 @@
-
-
-
 #ifndef __NS_HEADER_H__
 #define __NS_HEADER_H__
 
@@ -30,5 +27,4 @@ protected:
 	AUI_ERRCODE CreateSwitches( MBCHAR *ldlBlock = NULL );
 };
 
-
-#endif 
+#endif

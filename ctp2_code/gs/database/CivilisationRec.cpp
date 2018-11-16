@@ -1,14 +1,3 @@
-
-
-
-
-
-
-
-
-
-
-
 #include "c3.h"
 #include "c3errors.h"
 
@@ -16,7 +5,6 @@
 #include "civarchive.h"
 #include "CivilisationRec.h"
 #include "Token.h"
-
 
 enum TOKEN_CIVILISATION_FLAG
 	{
@@ -36,7 +24,6 @@ enum TOKEN_CIVILISATION_FLAG
 	TOKEN_CIVILISATION_MAX_VAL
 	} ;
 
-
 	extern	StringDB	*g_theStringDB ;
 
 	sint32	g_parse_civilisation_abort ;
@@ -50,7 +37,7 @@ enum TOKEN_CIVILISATION_FLAG
 
 
 
-CivilisationRecord::CivilisationRecord() 
+CivilisationRecord::CivilisationRecord()
 	{
 	m_capital = k_CAPITAL_UNDEFINED ;
 	m_numCities = 0 ;
@@ -90,9 +77,9 @@ CivilisationRecord::~CivilisationRecord()
 
 void CivilisationRecord::Serialize(CivArchive &archive)
 {
-	
+
 	CHECKSERIALIZE
-		
+
 	if (archive.IsStoring()) {
 		Record::Serialize(archive);
 		archive.StoreChunk((uint8 *)&m_leader_name, ((uint8 *)&m_numCities)+sizeof(m_numCities));
@@ -115,24 +102,22 @@ void CivilisationRecord::Serialize(CivArchive &archive)
 
 
 sint32 CivilisationRecord::ParseRecord(Token *token)
-	{ 
+	{
 	MBCHAR	s[k_MAX_NAME_LEN] ;
-	char text[k_MAX_TEXT_LEN]; 
+	char text[k_MAX_TEXT_LEN];
 
 	StringId str_id ;
-	
+
 	if (!token_ParseAnOpenBraceNext(token))
 		return (FALSE) ;
 
-	
-	
+
 	if (token->Next() != TOKEN_CIV_LEADER_NAME)
 		{
 		c3errors_ErrorDialog(token->ErrStr(), "expected civilisation leader name token") ;
 
 		return (FALSE) ;
 		}
-
 
 	if (token->Next() != TOKEN_STRING)
 		{
@@ -154,15 +139,14 @@ sint32 CivilisationRecord::ParseRecord(Token *token)
 		}
 
 
-	
-	
+
+
 	if (token->Next() != TOKEN_CIV_LEADER_NAME_FEMALE)
 		{
 		c3errors_ErrorDialog(token->ErrStr(), "expected civilisation leader name token") ;
 
 		return (FALSE) ;
 		}
-
 
 	if (token->Next() != TOKEN_STRING)
 		{
@@ -208,11 +192,10 @@ sint32 CivilisationRecord::ParseRecord(Token *token)
 	strcpy(m_personality_female, text);
 
 
-
-    if (token->Next() != TOKEN_CIV_PERSONALITY_DESCRIPTION) { 
+    if (token->Next() != TOKEN_CIV_PERSONALITY_DESCRIPTION) {
         c3errors_ErrorDialog(token->ErrStr(), "expected ai personality description");
 		return FALSE;
-    } 
+    }
 	if (token->Next() != TOKEN_STRING) {
 		c3errors_ErrorDialog(token->ErrStr(), "personality description string id not found");
 		return (FALSE) ;
@@ -227,15 +210,13 @@ sint32 CivilisationRecord::ParseRecord(Token *token)
 		m_personality_description = str_id ;
 	}
 
-	
-	
+
 	if (token->Next() != TOKEN_CIV_COUNTRY)
 		{
 		c3errors_ErrorDialog(token->ErrStr(), "expected civilisation leader name token") ;
 
 		return (FALSE) ;
 		}
-
 
 	if (token->Next() != TOKEN_STRING)
 		{
@@ -256,15 +237,13 @@ sint32 CivilisationRecord::ParseRecord(Token *token)
 		m_country_name = str_id ;
 		}
 
-	
-	
+
 	if (token->Next() != TOKEN_CIV_SINGULAR)
 		{
 		c3errors_ErrorDialog(token->ErrStr(), "expected civilisation leader name token") ;
 
 		return (FALSE) ;
 		}
-
 
 	if (token->Next() != TOKEN_STRING)
 		{
@@ -285,15 +264,13 @@ sint32 CivilisationRecord::ParseRecord(Token *token)
 		m_singular_name = str_id ;
 		}
 
-	
-	
+
 	if (token->Next() != TOKEN_CIV_PLURAL)
 		{
 		c3errors_ErrorDialog(token->ErrStr(), "expected civilisation leader name token") ;
 
 		return (FALSE) ;
 		}
-
 
 	if (token->Next() != TOKEN_STRING)
 		{
@@ -314,15 +291,13 @@ sint32 CivilisationRecord::ParseRecord(Token *token)
 		m_plural_name = str_id ;
 		}
 
-	
-	
+
 	if (token->Next() != TOKEN_CIV_EMISSARY_PHOTO)
 		{
 		c3errors_ErrorDialog(token->ErrStr(), "expected civilisation emissary photo token") ;
 
 		return (FALSE) ;
 		}
-
 
 	if (token->Next() != TOKEN_STRING)
 		{
@@ -374,7 +349,6 @@ sint32 CivilisationRecord::ParseRecord(Token *token)
 
 	return (TRUE) ;
 	}
-
 
 sint32 CivilisationRecord::ParseCityList(Token *token)
 	{
@@ -436,7 +410,6 @@ sint32 CivilisationRecord::ParseCityList(Token *token)
 
 	return (TRUE) ;
 	}
-
 
 StringId CivilisationRecord::GetCityName(const sint32 city)
 	{

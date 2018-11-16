@@ -1,4 +1,4 @@
-/* 
+/*
 Copyright (C) 1995-2001 Activision, Inc.
 
 This library is free software; you can redistribute it and/or
@@ -187,7 +187,6 @@ int delay_put(delay_t *q, void *buf, size_t len, clock_t now)
 
 	return 0;
 }
-
 
 /*-----------------------------------------------------------------------
  Get data out of a queue.

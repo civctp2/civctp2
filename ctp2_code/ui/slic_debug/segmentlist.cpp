@@ -11,7 +11,7 @@
 //
 // THIS FILE IS NOT GENERATED OR SUPPORTED BY ACTIVISION.
 //
-// This material has been developed at apolyton.net by the Apolyton CtP2 
+// This material has been developed at apolyton.net by the Apolyton CtP2
 // Source Code Project. Contact the authors at ctp2source@apolyton.net.
 //
 //----------------------------------------------------------------------------
@@ -43,18 +43,14 @@
 #include "c3_static.h"
 #include "thermometer.h"
 
-
 #include "textbutton.h"
 #include "c3_button.h"
 
-
 #include "c3textfield.h"
-
 
 #include "c3listbox.h"
 #include "c3_listbox.h"
 #include "aui_listbox.h"
-
 
 #include "c3window.h"
 #include "c3windows.h"
@@ -103,17 +99,14 @@ SegmentList::SegmentList(SegmentListCallback *callback, MBCHAR *ldlBlock)
 	m_watchButton = NULL;
 	m_items = NULL;
 
-	
-	if (ldlBlock) strcpy(windowBlock,ldlBlock);	
+	if (ldlBlock) strcpy(windowBlock,ldlBlock);
 	else strcpy(windowBlock,"SegmentListPopup");
 
-	
-	{ 
+	{
 		m_window = new c3_PopupWindow( &errcode, aui_UniqueId(), windowBlock, 16, AUI_WINDOW_TYPE_FLOATING, false);
 		Assert( AUI_NEWOK(m_window, errcode) );
 		if ( !AUI_NEWOK(m_window, errcode) ) return;
 
-		
 		m_window->Resize(m_window->Width(),m_window->Height());
 		m_window->GrabRegion()->Resize(m_window->Width(),m_window->Height());
 		m_window->SetStronglyModal(FALSE);
@@ -121,10 +114,8 @@ SegmentList::SegmentList(SegmentListCallback *callback, MBCHAR *ldlBlock)
 
 	}
 
-	
 	m_callback = callback;
 
-	
 	Initialize( windowBlock );
 }
 
@@ -132,7 +123,7 @@ void SegmentListActionCallback(aui_Control *control, uint32 action, uint32 data,
 {
 	if((action != (uint32)AUI_LISTBOX_ACTION_SELECT) &&
 	   (action != (uint32)AUI_LISTBOX_ACTION_RMOUSESELECT) &&
-	   (action != (uint32)AUI_LISTBOX_ACTION_DOUBLECLICKSELECT)) 
+	   (action != (uint32)AUI_LISTBOX_ACTION_DOUBLECLICKSELECT))
 		return;
 
 	SegmentList *list = (SegmentList *)cookie;
@@ -163,7 +154,7 @@ void SegmentListButtonCallback(aui_Control *control, uint32 action, uint32 data,
 		if(control == g_segmentList->m_exitButton) {
 			segmentlist_Remove();
 		}
-			
+
 	}
 }
 
@@ -172,12 +163,12 @@ sint32 SegmentList::Initialize(MBCHAR *windowBlock)
 	AUI_ERRCODE errcode = AUI_ERRCODE_OK;
 	MBCHAR		controlBlock[ k_AUI_LDL_MAXBLOCK + 1 ];
 
-	
 
-	
+
+
 	sprintf( controlBlock, "%s.%s", windowBlock, "SegmentList" );
 	m_list = new c3_ListBox(&errcode, aui_UniqueId(), controlBlock, SegmentListActionCallback, this);
-	
+
 	Assert( AUI_NEWOK(m_list, errcode) );
 	if ( !AUI_NEWOK(m_list, errcode) ) return -1;
 
@@ -191,22 +182,20 @@ sint32 SegmentList::Initialize(MBCHAR *windowBlock)
 	Assert(AUI_NEWOK(m_exitButton, errcode));
 	if(!AUI_NEWOK(m_exitButton, errcode)) return -1;
 
-	
 	errcode = aui_Ldl::SetupHeirarchyFromRoot( windowBlock );
 	Assert( AUI_SUCCESS(errcode) );
 
 	return 0;
 }
-	
+
 sint32 SegmentList::Cleanup(void)
 {
 #define mycleanup(mypointer) if(mypointer) { delete mypointer; mypointer = NULL; };
 
 	g_c3ui->RemoveWindow( m_window->Id() );
 
-
 	mycleanup( m_list );
-	
+
 	m_callback = NULL;
 
 	delete m_window;
@@ -225,7 +214,7 @@ void SegmentList::DisplayWindow(void)
 
 	auiErr = g_c3ui->AddWindow(m_window);
 	Assert(auiErr == AUI_ERRCODE_OK);
-	
+
 	keypress_RegisterHandler(this);
 }
 
@@ -252,8 +241,7 @@ sint32 SegmentList::UpdateData(void)
 
 	strcpy(ldlBlock, "SegmentListItem");
 
-	
-	
+
 	m_list->BuildListStart();
 
 	m_list->Clear();
@@ -269,20 +257,20 @@ sint32 SegmentList::UpdateData(void)
 	m_items = new SegmentListItem *[hash->m_numSegments];
 
 	for(i = 0; i < hash->m_numSegments; i++) {
-		item = new SegmentListItem(&retval, i, 
+		item = new SegmentListItem(&retval, i,
 								   hash->m_segments[i], ldlBlock);
 		m_list->AddItem((c3_ListItem *)item);
 		m_items[i] = item;
 	}
 
-	
-	
-	
+
+
+
 	m_list->BuildListEnd();
 
 	return 0;
 }
-	
+
 SegmentListItem::SegmentListItem(AUI_ERRCODE *retval, sint32 index,
 								 SlicSegment *segment, MBCHAR *ldlBlock) :
 	aui_ImageBase(ldlBlock),
@@ -334,4 +322,3 @@ void SegmentListItem::Open()
 }
 
 #endif // CTP2_ENABLE_SLICDEBUG
-

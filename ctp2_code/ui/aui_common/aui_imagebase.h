@@ -10,19 +10,19 @@
 //
 // THIS FILE IS NOT GENERATED OR SUPPORTED BY ACTIVISION.
 //
-// This material has been developed at apolyton.net by the Apolyton CtP2 
+// This material has been developed at apolyton.net by the Apolyton CtP2
 // Source Code Project. Contact the authors at ctp2source@apolyton.net.
 //
 //----------------------------------------------------------------------------
 //
 // Compiler flags
-// 
+//
 //
 //----------------------------------------------------------------------------
 //
 // Modifications from the original Activision code:
 //
-// - Initialised all members in the default constructor, to prevent a crash 
+// - Initialised all members in the default constructor, to prevent a crash
 //   in the destructor.
 //
 //----------------------------------------------------------------------------
@@ -34,11 +34,9 @@
 #ifndef __AUI_IMAGEBASE_H__
 #define __AUI_IMAGEBASE_H__
 
-
 class aui_Image;
 class aui_Surface;
 class ldl_datablock;
-
 
 
 #define k_AUI_IMAGEBASE_LDL_BLTTYPE				"imageblttype"
@@ -46,12 +44,10 @@ class ldl_datablock;
 #define k_AUI_IMAGEBASE_LDL_STRETCH				"stretch"
 #define k_AUI_IMAGEBASE_LDL_TILE				"tile"
 
-
 #define k_AUI_IMAGEBASE_LDL_BLTFLAG				"imagebltflag"
 #define k_AUI_IMAGEBASE_LDL_BLTFLAG_COPY		"copy"
 #define k_AUI_IMAGEBASE_LDL_BLTFLAG_CHROMAKEY	"chromakey"
 #define k_AUI_IMAGEBASE_LDL_BLTFLAG_BLEND		"blend"
-
 
 #define k_AUI_IMAGEBASE_LDL_CHROMAKEY_RED	"chromared"
 #define k_AUI_IMAGEBASE_LDL_CHROMAKEY_GREEN	"chromagreen"
@@ -60,7 +56,6 @@ class ldl_datablock;
 #define k_AUI_IMAGEBASE_LDL_NUMIMAGEGROUPS		"numimagegroups"
 
 #define k_AUI_IMAGEBASE_LDL_CENTERIMAGE        "centerimage"
-
 
 enum AUI_IMAGEBASE_BLTTYPE
 {
@@ -72,8 +67,7 @@ enum AUI_IMAGEBASE_BLTTYPE
 };
 
 
-
-enum AUI_IMAGEBASE_BLTFLAG 
+enum AUI_IMAGEBASE_BLTFLAG
 {
 	AUI_IMAGEBASE_BLTFLAG_FIRST = 0,
 	AUI_IMAGEBASE_BLTFLAG_COPY = 0,
@@ -82,7 +76,6 @@ enum AUI_IMAGEBASE_BLTFLAG
 
 	AUI_IMAGEBASE_BLTFLAG_LAST
 };
-
 
 
 enum AUI_IMAGEBASE_SUBSTATE
@@ -98,11 +91,10 @@ enum AUI_IMAGEBASE_SUBSTATE
 typedef aui_Image *aui_StateImageGroup[ AUI_IMAGEBASE_SUBSTATE_LAST ];
 
 
-
 class aui_ImageBase
 {
 public:
-	
+
 	aui_ImageBase(
 		MBCHAR *ldlBlock,
 		bool loadOnDemand = false );
@@ -124,14 +116,13 @@ protected:
 	sint32 FindNumStateImageGroupsFromLdl( ldl_datablock *block );
 
 public:
-	
+
 	AUI_IMAGEBASE_BLTTYPE GetImageBltType( void ) const { return m_imageblttype; }
 	AUI_IMAGEBASE_BLTFLAG GetImageBltFlag( void) const { return m_imagebltflag; }
 	aui_Image *GetImage(
 		sint32 state = 0,
 		AUI_IMAGEBASE_SUBSTATE substate = AUI_IMAGEBASE_SUBSTATE_STATE ) const;
 
-	
 	AUI_IMAGEBASE_BLTTYPE SetImageBltType( AUI_IMAGEBASE_BLTTYPE imageblttype );
 	AUI_IMAGEBASE_BLTFLAG SetImageBltFlag( AUI_IMAGEBASE_BLTFLAG imagebltflag );
 	aui_Image *SetImage(
@@ -139,46 +130,39 @@ public:
 		sint32 state = 0,
 		AUI_IMAGEBASE_SUBSTATE substate = AUI_IMAGEBASE_SUBSTATE_STATE );
 
-	
 	bool IsLoadOnDemand() { return(m_loadOnDemand); }
 
 protected:
-	
+
 	AUI_ERRCODE DrawImage(
 		aui_Surface *destSurf,
 		RECT *destRect,
 		sint32 state = 0,
 		AUI_IMAGEBASE_SUBSTATE substate = AUI_IMAGEBASE_SUBSTATE_STATE );
 
-	AUI_IMAGEBASE_BLTTYPE	m_imageblttype; 
-	AUI_IMAGEBASE_BLTFLAG	m_imagebltflag;	
-											
+	AUI_IMAGEBASE_BLTTYPE	m_imageblttype;
+	AUI_IMAGEBASE_BLTFLAG	m_imagebltflag;
 
-	
+
 	aui_Image	*LoadTheImage( MBCHAR *name );
 
 	sint32					m_numStateImageGroups;
-	aui_StateImageGroup		*m_stateImageGroups; 
-		
-		
+	aui_StateImageGroup		*m_stateImageGroups;
+
 
 	static MBCHAR *m_substateLdlKeywords[ AUI_IMAGEBASE_SUBSTATE_LAST ];
 
-	
 	bool m_loadOnDemand;
 
-	
 	sint32	m_chromaRed;
 	sint32	m_chromaGreen;
 	sint32	m_chromaBlue;
 	bool	m_chromaSpecified;
 
-	
 	sint32 m_numberOfStateImageNames;
 	MBCHAR **m_stateImageNames;
 
 	bool m_centerImage;
 };
 
-
-#endif 
+#endif

@@ -1,10 +1,7 @@
-
 #include "c3.h"
 #include "player.h"
 
-
 #include "C3Science.h"
-
 
 #include "AdvanceRecord.h"
 #include "civarchive.h"
@@ -14,9 +11,7 @@
 
 extern StringDB *g_theStringDB;
 
-
 	extern	Player	**g_player ;
-
 
 STDMETHODIMP C3Science::QueryInterface(REFIID riid, void **obj)
 	{
@@ -39,7 +34,6 @@ STDMETHODIMP C3Science::QueryInterface(REFIID riid, void **obj)
 	return (E_NOINTERFACE) ;
 	}
 
-
 STDMETHODIMP_(ULONG) C3Science::AddRef()
 	{
 	return (++m_refCount) ;
@@ -54,7 +48,6 @@ STDMETHODIMP_(ULONG) C3Science::Release()
 
 	return (0) ;
 	}
-
 
 C3Science::C3Science(sint32 idx)
 	{
@@ -73,7 +66,7 @@ C3Science::C3Science(CivArchive &archive)
     Serialize(archive) ;
 	}
 
-void C3Science::Serialize(CivArchive &archive) 
+void C3Science::Serialize(CivArchive &archive)
 	{
 
     CHECKSERIALIZE
@@ -92,24 +85,22 @@ void C3Science::Serialize(CivArchive &archive)
 
 	}
 
-
 sint32 C3Science::GetNumAdvances(void)
 	{
 	return (g_theAdvanceDB->NumRecords()) ;
 	}
 
-
 sint32 C3Science::GetNumDependencies(sint32 adv)
 	{
 	Assert(adv >=0 && adv <= g_theAdvanceDB->NumRecords()) ;
-	
+
 	return (g_theAdvanceDB->Get(adv)->GetNumDependencies()) ;
 	}
 
 sint32 C3Science::GetNumPrerequisites(sint32 adv)
 	{
 	Assert(adv >=0 && adv <= g_theAdvanceDB->NumRecords()) ;
-	
+
 	return (g_theAdvanceDB->Get(adv)->GetNumPrerequisites()) ;
 	}
 
@@ -117,8 +108,8 @@ sint32 C3Science::GetLeadsTo(sint32 adv, sint32 lead)
 	{
 	Assert(adv >=0 && adv <= g_theAdvanceDB->NumRecords()) ;
 	Assert(lead >=0 && lead <= g_theAdvanceDB->Get(adv)->GetNumDependencies()) ;
-	
-	return 0; 
+
+	return 0;
 	}
 
 sint32 C3Science::GetPrereq(sint32 adv, sint32 req)
@@ -128,7 +119,6 @@ sint32 C3Science::GetPrereq(sint32 adv, sint32 req)
 
 	return (g_theAdvanceDB->Get(adv)->GetPrerequisitesIndex(req)) ;
 	}
-
 
 void C3Science::SetResearching(sint32 adv)
 {
@@ -148,16 +138,15 @@ BOOL C3Science::HasAdvance(sint32 adv)
 	return (m_player->HasAdvance(adv)) ;
 }
 
-
 BOOL C3Science::IsCurrentlyReserching()
 
-{ 
-    return FALSE; 
-} 
+{
+    return FALSE;
+}
 
 sint32 C3Science::GetCurrentScienceCost ()
 {
-    return m_player->GetCurrentScienceCost();    
+    return m_player->GetCurrentScienceCost();
 }
 
 sint32 C3Science::GetCurrentScienceLevel()
@@ -237,12 +226,10 @@ STDMETHODIMP_(sint32) C3Science::GetHisMinPrerequisites(PLAYER_INDEX other_playe
 	return 0;
 }
 
-
 char * C3Science::Science_Int_To_String(sint32 index)
 {
 	char * Science_string;
 
-	
 	Science_string = (char *) g_theAdvanceDB->GetNameStr(index);
 
 	return Science_string;
@@ -253,18 +240,17 @@ sint32 C3Science::Science_String_To_Int(char *Science_name)
 	StringId str_id;
 	sint32 index;
 
-	
 	if (g_theStringDB->GetStringID(Science_name, str_id))
 	{
-		
+
 		if (g_theAdvanceDB->GetNamedItem(str_id, index))
 		{
-			
+
 			return index;
 
-		} 
+		}
 
-	} 
+	}
 
 	Assert(false);
 

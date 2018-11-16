@@ -125,7 +125,7 @@ void Geometric::RaiseCircle(sint32 sx, sint32 sy,
 	for(x = sx; x < sx + rectw; x++) {
 		x2 = (((x - cx) * (x - cx)) / a_squared);
 		for(y = sy; y < sy + recth; y++) {
-			
+
 			if ((x2 + ((y-cy) * (y-cy) / b_squared)) <= 1)
 			{
 				sint32 ax, ay;
@@ -165,7 +165,6 @@ void Geometric::FixSeaFloor(sint8 *outmap, sint32 outwidth, sint32 outheight)
 	sint8 maxContinentHeight = -127;
 	sint32 x, y;
 
-	
 	for(y = 0; y < outheight; y++) {
 		for(x = 0; x < outwidth; x++) {
 			if(OUTM(x,y) < minContinentHeight &&
@@ -178,7 +177,6 @@ void Geometric::FixSeaFloor(sint8 *outmap, sint32 outwidth, sint32 outheight)
 		}
 	}
 
-	
 	if(maxContinentHeight < 127) {
 		sint8 delta = 127 - maxContinentHeight;
 		minContinentHeight += delta;
@@ -190,7 +188,6 @@ void Geometric::FixSeaFloor(sint8 *outmap, sint32 outwidth, sint32 outheight)
 		}
 	}
 
-	
 	sint32 xl, yu;
 	for(y = 0; y < outheight; y++) {
 		for(x = 0; x < outwidth; x++) {
@@ -205,7 +202,7 @@ void Geometric::FixSeaFloor(sint8 *outmap, sint32 outwidth, sint32 outheight)
 				if(h > -126)
 					h -= m_randgen->Next((h+127)/2);
 				if(h > -127) {
-					if(h >= minContinentHeight) 
+					if(h >= minContinentHeight)
 						h = minContinentHeight - 1;
 					OUTM(x, y) = (sint8)h;
 				}
@@ -213,7 +210,6 @@ void Geometric::FixSeaFloor(sint8 *outmap, sint32 outwidth, sint32 outheight)
 		}
 	}
 
-	
 	sint32 xr, yd;
 	for(y = outheight - 1; y >= 0; y--) {
 		for(x = outwidth - 1; x >= 0; x--) {
@@ -237,8 +233,7 @@ void Geometric::FixSeaFloor(sint8 *outmap, sint32 outwidth, sint32 outheight)
 		}
 	}
 
-	
-	
+
 	sint32 randrange = (minContinentHeight + 127) / 2;
 	if (randrange < 1) randrange = 1;
 	for(y = 0; y < outheight; y++) {
@@ -271,7 +266,7 @@ void Geometric::Generate(sint8 *outmap, sint32 outwidth, sint32 outheight,
 	memset(outmap, -127, outwidth * outheight);
 	m_usedmap = new sint8[outwidth * outheight];
 	memset(m_usedmap, 0, outwidth * outheight);
-	
+
 	sint32 numContinents;
 	sint32 maxWidth, maxHeight;
 	sint32 minWidth, minHeight;
@@ -320,7 +315,6 @@ void Geometric::Generate(sint8 *outmap, sint32 outwidth, sint32 outheight,
 			m_usedmap[y * outwidth + x] = 1;
 		}
 	}
-	
 
 	m_map = outmap;
 	m_width = outwidth;
@@ -373,7 +367,7 @@ void Geometric::Generate(sint8 *outmap, sint32 outwidth, sint32 outheight,
 			}
 		}
 
-		RaiseCircle(contx, conty, width, height, 
+		RaiseCircle(contx, conty, width, height,
 					   initialContinentBumpSize);
 		sint32 numSub = randgen->Next(m_maxSubContinents - m_minSubContinents) + m_minSubContinents;
 		sint32 sub;
@@ -382,7 +376,7 @@ void Geometric::Generate(sint8 *outmap, sint32 outwidth, sint32 outheight,
 								 sint32(double(initialContinentBumpSize) * m_subContinentHeightCoeff));
 		}
 	}
-		
+
 	FixSeaFloor(outmap, outwidth, outheight);
 
 	if(numSettings >= 13) {
@@ -392,8 +386,7 @@ void Geometric::Generate(sint8 *outmap, sint32 outwidth, sint32 outheight,
 						 &settings[11], 2);
 		faults->Release();
 	}
-	
-	
+
 	delete [] m_usedmap;
 
 #if !defined(USE_COM_REPLACEMENT)
@@ -410,7 +403,6 @@ void Geometric::GenerateSubContinent(sint32 contx, sint32 conty,
 #ifdef EDGE_SUB_CONTINENTS
 	sint32 center = m_randgen->Next(cwidth * 2 + cheight * 2);
 
-	
 	if(center < cwidth) {
 		cx = center + contx;
 		cy = conty;
@@ -425,14 +417,13 @@ void Geometric::GenerateSubContinent(sint32 contx, sint32 conty,
 		cy = center - ((cwidth * 2) + cheight) + conty;
 	}
 
-	
 	sint32 w = sint32(double(cwidth) * m_subContinentSizeCoeff);
 	sint32 h = sint32(double(cheight) * m_subContinentSizeCoeff);
 #else
 	cx = contx + m_randgen->Next(cwidth);
 	cy = conty + m_randgen->Next(cheight);
 	sint32 w = sint32(double(cwidth) * m_subContinentSizeCoeff);
-	sint32 h = sint32(double(cheight) * m_subContinentSizeCoeff);	
+	sint32 h = sint32(double(cheight) * m_subContinentSizeCoeff);
 #endif
 	if(w < 1 || h < 1)
 		return;
@@ -448,9 +439,8 @@ void Geometric::GenerateSubContinent(sint32 contx, sint32 conty,
 		sint32 numSub = m_randgen->Next(m_maxSubContinents - m_minSubContinents) + m_minSubContinents;
 		sint32 sub;
 		for(sub = 0; sub < numSub; sub++) {
-			GenerateSubContinent(x, y, w, h, 
+			GenerateSubContinent(x, y, w, h,
 								 sint32(double(bumpSize) * m_subContinentHeightCoeff));
 		}
 	}
 }
-

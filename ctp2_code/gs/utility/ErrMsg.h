@@ -1,14 +1,3 @@
-
-
-
-
-
-
-
-
-
-
-
 #ifdef HAVE_PRAGMA_ONCE
 #pragma once
 #endif
@@ -16,38 +5,37 @@
 #define __ERR_MSG_H__ 1
 
 
+class ErrorMsg {
 
-class ErrorMsg { 
+   uint32 val;
 
-   uint32 val; 
-   
 public:
-   char *str; 
+   char *str;
 
    ErrorMsg();
-   ErrorMsg(sint32 v); 
-   void display(); 
-   char * msg() { return str; }; 
-}; 
+   ErrorMsg(sint32 v);
+   void display();
+   char * msg() { return str; };
+};
 
 class ErrGSParse : public ErrorMsg{
-   
+
    char msg[2 * _MAX_PATH];
 public:
-   
-   ErrGSParse (char *str); 
-   ErrGSParse (char *str1, char *str2, sint32 x); 
-   ErrGSParse (char *str1, char *str2); 
-   ErrGSParse (char *str1, char *str2, char *val1); 
-   ErrGSParse (char *str1, char *str2, char *val1, char *val2); 
+
+   ErrGSParse (char *str);
+   ErrGSParse (char *str1, char *str2, sint32 x);
+   ErrGSParse (char *str1, char *str2);
+   ErrGSParse (char *str1, char *str2, char *val1);
+   ErrGSParse (char *str1, char *str2, char *val1, char *val2);
 
 };
 
-class ErrMemory : public ErrorMsg 
+class ErrMemory : public ErrorMsg
 {
 
 public:
-   ErrMemory() { str = "Out of memory";  }; 
+   ErrMemory() { str = "Out of memory";  };
 };
 
 #ifdef _DEBUG
@@ -55,14 +43,14 @@ public:
 #endif
 
 #ifdef LPRNT
-extern FILE *lprint_fout; 
-extern int turn_count; 
-extern int my_team; 
-extern char *szAppName; 
+extern FILE *lprint_fout;
+extern int turn_count;
+extern int my_team;
+extern char *szAppName;
 #endif
 
 #ifdef LPRNT
-#define LPRINT_INIT lprint_fout=fopen("civlog.txt","w");fprintf(lprint_fout,"%s\n",szAppName);fclose(lprint_fout);  
+#define LPRINT_INIT lprint_fout=fopen("civlog.txt","w");fprintf(lprint_fout,"%s\n",szAppName);fclose(lprint_fout);
 #else
 #define LPRINT_INIT
 #endif
@@ -90,13 +78,11 @@ extern char *szAppName;
 #define LPRINT2(lprint_string, lprint_first, lprint_second)
 #endif
 
-
 #ifdef LPRNT
 #define LPRINT3(lprint_string, lprint_first, lprint_second, lprint_third)  LSTART;fprintf(lprint_fout,lprint_string,lprint_first, lprint_second, lprint_third);LEND
 #else
 #define LPRINT3(lprint_string, lprint_first, lprint_second, lprint_third)
 #endif
-
 
 #ifdef LPRNT
 #define LPRINT4(lprint_string, lprint_first, lprint_second, lprint_third, lprint_fourth)  LSTART;fprintf(lprint_fout,lprint_string,lprint_first, lprint_second, lprint_third, lprint_fourth);LEND
@@ -104,4 +90,4 @@ extern char *szAppName;
 #define LPRINT4(lprint_string, lprint_first, lprint_second, lprint_third, lprint_fourth)
 #endif
 
-#endif 
+#endif

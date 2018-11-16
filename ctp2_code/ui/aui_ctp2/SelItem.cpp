@@ -12,7 +12,7 @@
 //
 // THIS FILE IS NOT GENERATED OR SUPPORTED BY ACTIVISION.
 //
-// This material has been developed at apolyton.net by the Apolyton CtP2 
+// This material has been developed at apolyton.net by the Apolyton CtP2
 // Source Code Project. Contact the authors at ctp2source@apolyton.net.
 //
 //----------------------------------------------------------------------------
@@ -28,15 +28,13 @@
 //
 // - Fixed archieve constructor to make sure that the
 //   correct stop player is set.
-// - #01 Standardization of city selection and focus handling  
+// - #01 Standardization of city selection and focus handling
 //   (L. Hirth 6/2004)
 //
 //----------------------------------------------------------------------------
 
-
 #include "c3.h"
 #include "c3errors.h"
-
 
 #include "aui.h"
 #include "aui_uniqueid.h"
@@ -44,11 +42,10 @@
 #include "aui_ldl.h"
 #include "aui_uniqueid.h"
 #include "c3_static.h"
-#include "c3_listitem.h" 
+#include "c3_listitem.h"
 #include "helptile.h"
 
 #include "aui_tipwindow.h"
-
 
 #include "player.h"
 #include "civarchive.h"
@@ -78,16 +75,13 @@
 #include "Order.h"
 #include "battleorderbox.h"
 
-
 #include "AICause.h"
-
 
 
 #include "pixelutils.h"
 #include "colorset.h"
 #include "maputils.h"
 #include "tiledmap.h"
-
 
 #include "network.h"
 #include "net_action.h"
@@ -129,13 +123,12 @@
 #include "gamesounds.h"
 #include "soundmanager.h"
 
-
 extern ControlPanelWindow	*g_controlPanel;
 extern WorkWindow				*g_workWindow;
 
 extern ColorSet					*g_colorSet;
 
-extern UnitAstar				*g_theUnitAstar; 
+extern UnitAstar				*g_theUnitAstar;
 extern Pollution				*g_thePollution ;
 
 sint32					g_tradeSelectedState = 0;
@@ -146,7 +139,6 @@ extern ResourceMap					*g_resourceMap;
 extern RadarMap                 *g_radarMap;
 
 extern SoundManager				*g_soundManager;
-
 
 #define k_UNIT_SELECT_IS_FIRST  0x00000001
 
@@ -159,7 +151,7 @@ BOOL CanAutoSelect(const Army &army)
 	   !army.IsEntrenched() &&
 	   !army.IsEntrenching() &&
 	   !army.HasLeftMap() &&
-	   ((army.NumOrders() < 1) || 
+	   ((army.NumOrders() < 1) ||
 		(army.GetOrder(0)->m_round != g_turn->GetRound() &&
 		 !army.ExecutedThisTurn())) &&
 	   army.CanMove() &&
@@ -171,10 +163,10 @@ BOOL CanAutoSelect(const Army &army)
 SelectedItem::SelectedItem(sint32 nPlayers)
 
 {
-	int i, j; 
+	int i, j;
 
-    m_current_player = 1; 
-	
+    m_current_player = 1;
+
 	if(g_player) {
 		for(i = 0; i < k_MAX_PLAYERS; i++) {
 			if(g_player[i]) {
@@ -193,45 +185,42 @@ SelectedItem::SelectedItem(sint32 nPlayers)
 	} else {
 		Assert(1 < nPlayers);
 
-		for (i=0; i<(nPlayers-1); i++) { 
-			m_next_player[i] = PLAYER_INDEX(i+1); 
+		for (i=0; i<(nPlayers-1); i++) {
+			m_next_player[i] = PLAYER_INDEX(i+1);
 		}
-		
-		for ( ; i < k_MAX_PLAYERS; i++) { 
-			m_next_player[i] = PLAYER_INDEX_INVALID; 
+
+		for ( ; i < k_MAX_PLAYERS; i++) {
+			m_next_player[i] = PLAYER_INDEX_INVALID;
 		}
-		
-		
-		m_next_player[PLAYER_INDEX(nPlayers-1)] = PLAYER_INDEX_VANDALS; 
+
+		m_next_player[PLAYER_INDEX(nPlayers-1)] = PLAYER_INDEX_VANDALS;
 	}
 
-	for (i=0; i<k_MAX_PLAYERS; i++) { 
-        m_select_state[i] = SELECT_TYPE_NONE; 
-        m_is_at_start[i]=TRUE; 
+	for (i=0; i<k_MAX_PLAYERS; i++) {
+        m_select_state[i] = SELECT_TYPE_NONE;
+        m_is_at_start[i]=TRUE;
 		m_selected_army[i].m_id = (0);
 		m_selected_city[i].m_id = (0);
-        m_remote_owner[i] = -1; 
+        m_remote_owner[i] = -1;
     }
-	
-	
+
 	for (i=0; i<k_MAX_PLAYERS; i++) {
 		m_select_pos[i] = MapPoint(0,0);
 	}
-	
+
     Init();
 }
 
-SelectedItem::SelectedItem(CivArchive &archive) 
+SelectedItem::SelectedItem(CivArchive &archive)
 
 {
 	sint32 i;
 
-	
 	for (i=0; i<k_MAX_PLAYERS; i++) {
 		m_select_pos[i] = MapPoint(0,0);
 	}
 
-    Serialize(archive); 
+    Serialize(archive);
 
 	SetPlayerOnScreen(m_current_player);
 
@@ -249,15 +238,15 @@ SelectedItem::~SelectedItem()
 	}
 }
 
-void SelectedItem::Serialize(CivArchive &archive) 
+void SelectedItem::Serialize(CivArchive &archive)
 
-{ 
-    sint32 i; 
+{
+    sint32 i;
 
     CHECKSERIALIZE
 
-    if (archive.IsStoring()) { 
-        for (i=0; i<k_MAX_PLAYERS; i++) { 
+    if (archive.IsStoring()) {
+        for (i=0; i<k_MAX_PLAYERS; i++) {
     	    archive.PutSINT32(m_select_state[i]);
        	    m_selected_army[i].Serialize(archive) ;
 			m_selected_city[i].Serialize(archive);
@@ -267,8 +256,8 @@ void SelectedItem::Serialize(CivArchive &archive)
 			m_select_pos[i].Serialize(archive);
         }
         archive.PutSINT32(m_current_player) ;
-    } else { 
-        for (i=0; i<k_MAX_PLAYERS; i++) { 
+    } else {
+        for (i=0; i<k_MAX_PLAYERS; i++) {
     	    m_select_state[i] = SELECT_TYPE(archive.GetSINT32());
 			m_selected_army[i].Serialize(archive);
 			m_selected_city[i].Serialize(archive);
@@ -287,9 +276,9 @@ void SelectedItem::Init()
 {
     m_is_pathing = FALSE;
     m_cur_mouse_tile.Set(0,0);
-    m_good_path = NULL; 
+    m_good_path = NULL;
     m_bad_path.Clear();
-    m_is_broken_path=FALSE; 
+    m_is_broken_path=FALSE;
 	m_waypoints.Clear();
 	m_player_on_screen = -1;
 	m_gotClickSinceLastAutoEnd = FALSE;
@@ -299,7 +288,6 @@ void SelectedItem::Init()
 	m_gotClick = false;
 
 	SetupClickFunctions();
-
 
 	m_moveOrder = NULL;
 
@@ -311,7 +299,6 @@ void SelectedItem::Init()
 		if(g_theOrderDB->Get(i)->GetTargetPretestMovePosition()) {
 			m_moveOrder = (OrderRecord *)g_theOrderDB->Get(i);
 
-
 		} else if(g_theOrderDB->Get(i)->GetTargetPretestTransport()) {
 			m_transportOrder = (OrderRecord *)g_theOrderDB->Get(i);
 		}
@@ -319,17 +306,17 @@ void SelectedItem::Init()
 }
 
 sint32 SelectedItem::IsLocalArmy() const
-{ 
-	return m_select_state[GetVisiblePlayer()] == SELECT_TYPE_LOCAL_ARMY; 
+{
+	return m_select_state[GetVisiblePlayer()] == SELECT_TYPE_LOCAL_ARMY;
 }
 
-void SelectedItem::GetTopCurItem(PLAYER_INDEX &s_player, ID &s_item, 
+void SelectedItem::GetTopCurItem(PLAYER_INDEX &s_player, ID &s_item,
                              SELECT_TYPE &s_state)
-{ 
+{
     s_player = GetVisiblePlayer();
-	s_state = m_select_state[s_player]; 
-    switch (s_state) { 
-    case SELECT_TYPE_NONE: 
+	s_state = m_select_state[s_player];
+    switch (s_state) {
+    case SELECT_TYPE_NONE:
     case SELECT_TYPE_REMOTE_ARMY:
 		s_item = 0;
 		break;
@@ -337,16 +324,15 @@ void SelectedItem::GetTopCurItem(PLAYER_INDEX &s_player, ID &s_item,
 		s_item = m_selected_city[s_player];
 		s_player = m_remote_owner[s_player];
 		Assert(s_item != ID(0));
-        break; 
+        break;
     case SELECT_TYPE_LOCAL_ARMY:
     case SELECT_TYPE_LOCAL_ARMY_UNLOADING:
         sint32 n;
 		if(m_selected_army[s_player].IsValid()) {
 			n = m_selected_army[s_player].Num();
 			if(n <= 0) {
-				
-				
-				
+
+
 				s_item = ID(0);
 				s_state = SELECT_TYPE_NONE;
 			} else {
@@ -354,18 +340,18 @@ void SelectedItem::GetTopCurItem(PLAYER_INDEX &s_player, ID &s_item,
 				Assert(s_item.m_id != (0));
 			}
 		} else {
-			
+
 			Assert(FALSE);
 			s_state = SELECT_TYPE_NONE;
 			s_item = ID(0);
 		}
 		break;
-    case SELECT_TYPE_LOCAL_CITY: 
+    case SELECT_TYPE_LOCAL_CITY:
 		s_item =  m_selected_city[s_player];
-		Assert(s_item.m_id != (0)); 
-		break; 
-    case SELECT_TYPE_TRADE_ROUTE: 
-        s_item = 0; 
+		Assert(s_item.m_id != (0));
+		break;
+    case SELECT_TYPE_TRADE_ROUTE:
+        s_item = 0;
         break;
 	case SELECT_TYPE_GOOD:
 		s_item = 0;
@@ -376,32 +362,31 @@ void SelectedItem::GetTopCurItem(PLAYER_INDEX &s_player, ID &s_item,
 	}
 }
 
-
-void SelectedItem::ClipCurrentItem() 
-{ 
+void SelectedItem::ClipCurrentItem()
+{
 	PLAYER_INDEX player = GetVisiblePlayer();
 	switch (m_select_state[player]) {
-    case SELECT_TYPE_NONE: 
-        return; 
+    case SELECT_TYPE_NONE:
+        return;
     case SELECT_TYPE_LOCAL_ARMY:
 		if(!g_theArmyPool->IsValid(m_selected_army[player])) {
 			m_select_state[player] = SELECT_TYPE_NONE;
 		}
-        break; 
+        break;
     case SELECT_TYPE_LOCAL_CITY:
 		if(!g_theUnitPool->IsValid(m_selected_city[player])) {
 			m_select_state[player] = SELECT_TYPE_NONE;
 		}
         break;
     default:
-        
+
 		break;
 	}
 }
 
 void SelectedItem::NextItem()
 
-{ 
+{
 	PLAYER_INDEX player = GetVisiblePlayer();
 	sint32 curIndex;
 	switch(m_select_state[player]) {
@@ -419,7 +404,7 @@ void SelectedItem::NextItem()
 				MapPoint pos;
 				m_selected_city[player].GetPos( pos );
 				m_select_pos[player] = pos;
-				if(IsAutoCenterOn()) { 
+				if(IsAutoCenterOn()) {
 					if(!g_director->TileWillBeCompletelyVisible(pos.x, pos.y)) {
 						g_director->AddCenterMap(pos);
 					}
@@ -456,7 +441,6 @@ void SelectedItem::NextUnmovedUnit(BOOL isFirst, BOOL manualNextUnit)
 	MapPoint pos;
 	Army selectArmy;
 
-
 	BOOL done = FALSE;
 
 	do {
@@ -467,9 +451,8 @@ void SelectedItem::NextUnmovedUnit(BOOL isFirst, BOOL manualNextUnit)
 
 		numArmies = p->m_all_armies->Num();
 
-		
 		for(i = 0; i < numArmies; i++) {
-			
+
 			if(CanAutoSelect(p->m_all_armies->Access(i)) &&
 			   p->m_all_armies->Access(i).GetFirstMoveThisTurn()) {
 				if(m_select_state[player] == SELECT_TYPE_LOCAL_ARMY &&
@@ -478,8 +461,7 @@ void SelectedItem::NextUnmovedUnit(BOOL isFirst, BOOL manualNextUnit)
 				if(!m_select_cycle.IsPresent(p->m_all_armies->Access(i))) {
 					found = TRUE;
 					selectArmy = p->m_all_armies->Access(i);
-					
-					
+
 					p->m_all_armies->Access(i).GetPos(pos);
 					if(g_director->TileWillBeCompletelyVisible(pos.x, pos.y)) {
 						break;
@@ -504,10 +486,10 @@ void SelectedItem::NextUnmovedUnit(BOOL isFirst, BOOL manualNextUnit)
 		}
 
 		if(!found && foundUnmovedSelected) {
-			
-			
-			
-			
+
+
+
+
 			found = TRUE;
 			selectArmy = unmovedSelectedArmy;
 			ClearCycle();
@@ -518,8 +500,7 @@ void SelectedItem::NextUnmovedUnit(BOOL isFirst, BOOL manualNextUnit)
 		MapPoint movedSelectedPos;
 
 		if(!found) {
-			
-			
+
 			for(i = 0; i < numArmies; i++) {
 				if(CanAutoSelect(p->m_all_armies->Access(i))) {
 					if(m_select_state[player] == SELECT_TYPE_LOCAL_ARMY &&
@@ -560,41 +541,39 @@ void SelectedItem::NextUnmovedUnit(BOOL isFirst, BOOL manualNextUnit)
 
 		done = TRUE;
 		if(found) {
-			Assert(selectArmy.IsValid());	
+			Assert(selectArmy.IsValid());
 			if(selectArmy.IsValid()) {
 				SetSelectUnit(selectArmy.GetTopVisibleUnit(GetVisiblePlayer()));
 				if(IsAutoCenterOn()) {
 					selectArmy.GetPos(pos);
-					
-					
+
 					if(!g_director->TileWillBeCompletelyVisible(pos.x, pos.y) ||
 					   g_player[GetVisiblePlayer()]->m_first_city) {
 						g_director->AddCenterMap(pos);
 					}
 				}
 				if(selectArmy.NumOrders() > 0) {
-					
+
 					g_director->IncrementPendingGameActions();
 					g_gevManager->AddEvent(GEV_INSERT_Tail, GEV_BeginTurnExecute,
 										   GEA_Army, selectArmy,
 										   GEA_End);
 
-					
 					if(!g_theArmyPool->IsValid(selectArmy) ||
 					   !CanAutoSelect(selectArmy)
 					   || selectArmy.NumOrders() > 0) {
-						
-						
-						
-						
-						
+
+
+
+
+
 						Deselect(player);
 						g_director->AddSelectUnit(isFirst ? k_UNIT_SELECT_IS_FIRST : 0);
 						m_selected_something_since_director_select = FALSE;
 					}
 				}
 			} else {
-				
+
 				done = true;
 			}
 		}
@@ -606,7 +585,7 @@ void SelectedItem::NextUnmovedUnit(BOOL isFirst, BOOL manualNextUnit)
 			g_soundManager->AddGameSound(GAMESOUNDS_ENDTURN);
 		}
 	}
-	
+
 	if(!manualNextUnit) {
 		MaybeAutoEndTurn(isFirst);
 	}
@@ -632,7 +611,7 @@ void SelectedItem::MaybeAutoEndTurn(BOOL isFirst)
 		return;
 
 	if(player != m_current_player) {
-		
+
 		return;
 	}
 
@@ -642,7 +621,7 @@ void SelectedItem::MaybeAutoEndTurn(BOOL isFirst)
 		BOOL endTurn = TRUE;
 
 		if(endTurn) {
-			
+
 			if(p->m_first_city && isFirst)
 				endTurn = FALSE;
 		}
@@ -655,7 +634,7 @@ void SelectedItem::MaybeAutoEndTurn(BOOL isFirst)
 				}
 			}
 		}
-		
+
 		if(endTurn) {
 			for(i = p->m_all_cities->Num() - 1; i >= 0; i--) {
 				Unit city = p->m_all_cities->Access(i);
@@ -677,21 +656,19 @@ void SelectedItem::MaybeAutoEndTurn(BOOL isFirst)
 			}
 		}
 
-		
-		
+
 		if(endTurn) {
 			if(g_c3ui->TopWindowIsNonBackground()) {
 				endTurn = FALSE;
 			}
 		}
-			
-		
-		
-		
+
+
+
+
 
 		if(endTurn && !isFirst) {
-			
-			
+
 			sint32 o, u;
 			for(o = 0; o < k_MAX_PLAYERS && endTurn; o++) {
 				if(!g_player[o] || o == player)
@@ -701,8 +678,7 @@ void SelectedItem::MaybeAutoEndTurn(BOOL isFirst)
 						MapPoint pos;
 						g_player[o]->m_all_units->Access(u).GetPos(pos);
 						if(g_theWorld->IsCity(pos)) {
-							
-							
+
 							continue;
 						}
 						endTurn = FALSE;
@@ -723,7 +699,7 @@ void SelectedItem::MaybeAutoEndTurn(BOOL isFirst)
 }
 
 void SelectedItem::ClearWaypoints()
-{ 
+{
 	m_waypoints.Clear();
 }
 
@@ -734,15 +710,15 @@ void SelectedItem::NextPlayer()
 }
 
 sint32 SelectedItem::GetPlayerAfterThis(const sint32 p)
-{ 
-    Assert(0 <= p); 
-    Assert(p < k_MAX_PLAYERS); 
+{
+    Assert(0 <= p);
+    Assert(p < k_MAX_PLAYERS);
 
     Assert(0 <= m_next_player[p]);
     Assert(m_next_player[p] < k_MAX_PLAYERS);
 
-    return m_next_player[p]; 
-} 
+    return m_next_player[p];
+}
 
 PLAYER_INDEX SelectedItem::GetNextHumanPlayer()
 {
@@ -757,7 +733,7 @@ PLAYER_INDEX SelectedItem::GetNextHumanPlayer()
 
 BOOL SelectedItem::IsAutoCenterOn() const
 {
-	return g_theProfileDB->IsAutoCenter(); 
+	return g_theProfileDB->IsAutoCenter();
 }
 
 void SelectedItem::SetAutoCenter(const BOOL on)
@@ -766,17 +742,17 @@ void SelectedItem::SetAutoCenter(const BOOL on)
 }
 
 void SelectedItem::SetCurPlayer(sint32 p)
-{ 
+{
 	sint32 visPlayer = GetVisiblePlayer();
-	Assert(m_next_player[p] != PLAYER_INDEX_INVALID); 
-	Assert(PLAYER_INDEX_0 <= p); 
-	Assert(p < k_MAX_PLAYERS); 
+	Assert(m_next_player[p] != PLAYER_INDEX_INVALID);
+	Assert(PLAYER_INDEX_0 <= p);
+	Assert(p < k_MAX_PLAYERS);
     m_auto_unload = FALSE;
 	m_current_player = p;
 	if(g_network.IsActive()) {
 		if(g_network.GetPlayerIndex() == p ||
 		   (g_network.IsHost() && g_player[p]->GetPlayerType() != PLAYER_TYPE_NETWORK)) {
-			
+
 		} else {
 			g_network.SetMyTurn(FALSE);
 		}
@@ -784,15 +760,15 @@ void SelectedItem::SetCurPlayer(sint32 p)
 	ClearCycle();
 
 	if(visPlayer != GetVisiblePlayer()) {
-		
-		
 
-		
-		
-		
 
-		
-		
+
+
+
+
+
+
+
 
 		g_turn->InformMessages();
 	} else if(GetVisiblePlayer() == m_current_player) {
@@ -803,17 +779,17 @@ void SelectedItem::NextRound()
 {
 	SetCurPlayer(0);
 }
-		   	
+
 void SelectedItem::RegisterCreatedUnit(const PLAYER_INDEX owner)
 
 {
-    
+
 }
 
 void SelectedItem::RegisterCreatedCity(const PLAYER_INDEX owner)
 
 {
-    
+
 }
 
 void SelectedItem::RegisterRemovedArmy(const PLAYER_INDEX owner, const Army &dead_army)
@@ -830,7 +806,7 @@ void SelectedItem::RegisterRemovedArmy(const PLAYER_INDEX owner, const Army &dea
 void SelectedItem::RegisterRemovedCity(const PLAYER_INDEX owner, const Unit &dead_city)
 
 {
-    if (m_select_state[owner] == SELECT_TYPE_LOCAL_CITY) { 
+    if (m_select_state[owner] == SELECT_TYPE_LOCAL_CITY) {
         if (m_selected_city[owner] == dead_city) {
 			Deselect(owner);
 			m_selected_city[owner].m_id = (0);
@@ -838,33 +814,32 @@ void SelectedItem::RegisterRemovedCity(const PLAYER_INDEX owner, const Unit &dea
     }
 }
 
-
 extern sint32 g_keypress_stop_player;
 
 void SelectedItem::RemovePlayer(PLAYER_INDEX p)
 
 {
-    sint32 i; 
+    sint32 i;
 
-    Assert(p != PLAYER_INDEX_VANDALS); 
-    Assert(m_next_player[p] != PLAYER_INDEX_INVALID); 
-    Assert(PLAYER_INDEX_0 <= p); 
-    Assert(p < k_MAX_PLAYERS); 
+    Assert(p != PLAYER_INDEX_VANDALS);
+    Assert(m_next_player[p] != PLAYER_INDEX_INVALID);
+    Assert(PLAYER_INDEX_0 <= p);
+    Assert(p < k_MAX_PLAYERS);
 
 	if(m_current_player == p) {
 		NextPlayer();
 	}
 
-    for (i=0; i<k_MAX_PLAYERS; i++) { 
-        if (m_next_player[i] == p ) { 
+    for (i=0; i<k_MAX_PLAYERS; i++) {
+        if (m_next_player[i] == p ) {
             m_next_player[i] = m_next_player[p];
 
-            if (p == g_keypress_stop_player) { 
+            if (p == g_keypress_stop_player) {
                 g_keypress_stop_player = m_next_player[i];
             }
-            m_next_player[p] = PLAYER_INDEX_INVALID; 
-            break; 
-        } 
+            m_next_player[p] = PLAYER_INDEX_INVALID;
+            break;
+        }
     }
 }
 
@@ -872,14 +847,14 @@ void SelectedItem::AddPlayer(PLAYER_INDEX p)
 	{
 	sint32	i ;
 
-	Assert(p != PLAYER_INDEX_VANDALS) ;	
+	Assert(p != PLAYER_INDEX_VANDALS) ;
 	Assert(p != PLAYER_INDEX_INVALID) ;
 	Assert(p >= PLAYER_INDEX_0) ;
 	Assert(p < k_MAX_PLAYERS) ;
 	for (i=0; i<k_MAX_PLAYERS; i++)
 		{
 		if (g_player[i] && m_next_player[i] == p)
-			c3errors_FatalDialogFromDB("CIV_ERROR", "CIV_FAILED_TO_ADD_PLAYER") ;	
+			c3errors_FatalDialogFromDB("CIV_ERROR", "CIV_FAILED_TO_ADD_PLAYER") ;
 
 		}
 
@@ -887,7 +862,6 @@ void SelectedItem::AddPlayer(PLAYER_INDEX p)
 	m_next_player[m_current_player] = p ;
 	g_turn->RegisterNewPlayer(p);
 	}
-
 
 uint32 SelectedItem_GetVersion(void)
 {
@@ -904,11 +878,11 @@ void SelectedItem::SelectFirstUnit(BOOL setSelect)
 {
 	sint32 player = GetVisiblePlayer();
     m_select_state[player] = SELECT_TYPE_LOCAL_ARMY;
-	sint32 curIndex = 0; 
+	sint32 curIndex = 0;
 	sint32 tried = 1;
 	if(g_player[player]->m_all_armies->Num() > 0) {
 		m_selected_army[player] = g_player[player]->m_all_armies->Access(0);
-		
+
 		while(tried <= g_player[player]->m_all_armies->Num() &&
 			  (!CanAutoSelect(g_player[player]->m_all_armies->Access(curIndex)))) {
 			curIndex++;
@@ -918,7 +892,7 @@ void SelectedItem::SelectFirstUnit(BOOL setSelect)
 			m_selected_army[player] = g_player[player]->m_all_armies->Access(curIndex);
 		}
 	}
-	
+
 	if(tried > g_player[player]->m_all_armies->Num()) {
 		if(g_player[player]->m_all_cities->Num() > 0 && setSelect) {
 			m_select_state[player] = SELECT_TYPE_LOCAL_CITY;
@@ -935,25 +909,25 @@ void SelectedItem::Refresh()
 {
 	ClipCurrentItem();
 
-	
-	
-	
-	
+
+
+
+
 	if ((m_player_on_screen != -1) &&
 		(m_current_player != m_player_on_screen)) return;
 
 	if(g_controlPanel) {
-		PLAYER_INDEX s_player; 
-		ID s_item; 
-		SELECT_TYPE s_state; 
-		
+		PLAYER_INDEX s_player;
+		ID s_item;
+		SELECT_TYPE s_state;
+
 		if (m_good_path)
 			m_good_path->Clear();
 		m_bad_path.Clear();
 
 		if (!Player::IsThisPlayerARobot(GetVisiblePlayer())) {
 			GetTopCurItem(s_player, s_item, s_state);
-		
+
 			if(s_state == SELECT_TYPE_LOCAL_CITY) {
 				Unit u = s_item;
 
@@ -967,8 +941,8 @@ void SelectedItem::Refresh()
 				} else {
 					SetSelectUnit(Unit(0));
 				}
-			} 
-#if !defined(ACTIVISON_ORIGINAL) // #01 Standardization of city selection and focus handling  
+			}
+#if !defined(ACTIVISON_ORIGINAL) // #01 Standardization of city selection and focus handling
 			  else {
 				m_ignoreCitySelect = TRUE;
 
@@ -980,12 +954,12 @@ void SelectedItem::Refresh()
 	}
 
 }
-		
+
 void SelectedItem::SetSelectCity(const Unit& u, BOOL all, BOOL isDoubleClick)
 
 {
-	
-#if defined(ACTIVISON_ORIGINAL) // #01 Standardization of city selection and focus handling  
+
+#if defined(ACTIVISON_ORIGINAL) // #01 Standardization of city selection and focus handling
 	if(!m_ignoreCitySelect) {
 		SetSelectUnit(u, all, isDoubleClick);
 	}
@@ -999,14 +973,14 @@ void SelectedItem::SetSelectUnit(const Unit& u, BOOL all, BOOL isDoubleClick)
 {
 	m_selected_something_since_director_select = TRUE;
 
-    PLAYER_INDEX o = GetVisiblePlayer(); 
+    PLAYER_INDEX o = GetVisiblePlayer();
 
 	if (g_player[o] == NULL) return;
 
     BOOL didSelect = FALSE;
 
     sint32 n;
-    
+
     m_auto_unload = FALSE;
 
 	m_waypoints.Clear();
@@ -1016,9 +990,9 @@ void SelectedItem::SetSelectUnit(const Unit& u, BOOL all, BOOL isDoubleClick)
 	if(!g_theUnitPool->IsValid(u))
 		return;
 
-    if (u.IsCity()) { 
-        n = g_player[o]->m_all_cities->Num(); 
-        
+    if (u.IsCity()) {
+        n = g_player[o]->m_all_cities->Num();
+
 		if(o == u.GetOwner()) {
 			m_select_state[o] = SELECT_TYPE_LOCAL_CITY;
 		} else {
@@ -1033,7 +1007,7 @@ void SelectedItem::SetSelectUnit(const Unit& u, BOOL all, BOOL isDoubleClick)
 		u.GetPos(pos);
 		m_select_pos[o] = pos;
 		g_theWorld->GetCell(pos)->GetArmy(army);
-		
+
 		g_controlPanel->SetStack(Army(0), &army);
 
 		didSelect = TRUE;
@@ -1042,15 +1016,15 @@ void SelectedItem::SetSelectUnit(const Unit& u, BOOL all, BOOL isDoubleClick)
 
 		g_c3ui->AddAction( new WorkWinUpdateAction );
 
-		// Focus on city if option is activated  
-		if(IsAutoCenterOn()) { 
+		// Focus on city if option is activated
+		if(IsAutoCenterOn()) {
 			if(!g_director->TileWillBeCompletelyVisible(pos.x, pos.y)) {
 				g_director->AddCenterMap(pos);
 			}
 		}
-	} else { 
-        n = g_player[o]->m_all_armies->Num(); 
-        
+	} else {
+        n = g_player[o]->m_all_armies->Num();
+
 		if(o == u.GetOwner()) {
 			m_select_state[o] = SELECT_TYPE_LOCAL_ARMY;
 		} else {
@@ -1058,24 +1032,22 @@ void SelectedItem::SetSelectUnit(const Unit& u, BOOL all, BOOL isDoubleClick)
 		}
 
 		m_selected_army[o] = u.GetArmy();
-		
+
 		m_select_cycle.Insert(u.GetArmy());
 
 		MapPoint	pos;
 		CellUnitList	*army;
-		
+
 		u.GetPos(pos);
 		m_select_pos[o] = pos;
 		army = g_theWorld->GetCell(pos)->UnitArmy();
 
-		
 		if ( all && g_player[o]->GetPlayerType() == PLAYER_TYPE_HUMAN &&
 			 (g_theProfileDB->IsAutoGroup() || isDoubleClick)) {
 			sint32 i;
 			BOOL selectedCombatUnits = FALSE;
 			for(i = 0; i < m_selected_army[o].Num(); i++) {
-				
-				
+
 				if(m_selected_army[o][i].GetAttack() > 0) {
 					selectedCombatUnits = TRUE;
 					break;
@@ -1092,31 +1064,28 @@ void SelectedItem::SetSelectUnit(const Unit& u, BOOL all, BOOL isDoubleClick)
 				}
 			}
 		}
-		
-
-		
 
 
 
 
 
-		
+
+
+
+
 		g_controlPanel->SetStack(m_selected_army[o], army);
 
 		SetDrawablePathDest(m_cur_mouse_tile);
-		
+
 		g_slicEngine->RunSelectedUnitTriggers(u);
 
-        didSelect = TRUE;		
+        didSelect = TRUE;
     }
 
-	
 	if (g_controlPanel) {
 		Unit top = u;
 
-		
 		if (u.GetOwner() == o) {
-
 
 
 			if (top.IsCity()) {
@@ -1128,7 +1097,7 @@ void SelectedItem::SetSelectUnit(const Unit& u, BOOL all, BOOL isDoubleClick)
 			}
 		}
 		else {
-	  
+
 			MainControlPanel::SelectedUnit();
 		}
 	}
@@ -1136,22 +1105,21 @@ void SelectedItem::SetSelectUnit(const Unit& u, BOOL all, BOOL isDoubleClick)
 	ArmyManagerWindow::NotifySelection();
 	ScenarioEditor::NotifySelection();
 
-	
 	if(didSelect)
 	{
-		if(u.IsCity()) 
+		if(u.IsCity())
 		{
 			g_gevManager->AddEvent(GEV_INSERT_Tail, GEV_CitySelected, GEA_City, u, GEA_End);
-			if(g_theProfileDB->GetAutoSwitchTabs()) 
+			if(g_theProfileDB->GetAutoSwitchTabs())
 			{
 				g_controlPanel->SetTab(CP_TAB_CITY);
 			}
 
-		} 
+		}
 		else
 		{
 			Army a;
-			if(GetSelectedArmy(a)) 
+			if(GetSelectedArmy(a))
 			{
 				g_gevManager->AddEvent(GEV_INSERT_Tail, GEV_ArmySelected, GEA_Army, a, GEA_End);
 				if(g_theProfileDB->GetAutoSwitchTabs())
@@ -1159,14 +1127,14 @@ void SelectedItem::SetSelectUnit(const Unit& u, BOOL all, BOOL isDoubleClick)
 					g_controlPanel->SetTab(CP_TAB_UNIT);
 				}
 			}
-		}		
+		}
 		return;
 	}
 
     Deselect(o);
-    
-    Assert(0); 
-    
+
+    Assert(0);
+
 }
 
 
@@ -1174,7 +1142,7 @@ void SelectedItem::SetSelectUnit(const Unit& u, BOOL all, BOOL isDoubleClick)
 
 void SelectedItem::SetSelectGood(const MapPoint &pos)
 {
-    PLAYER_INDEX o = GetVisiblePlayer(); 
+    PLAYER_INDEX o = GetVisiblePlayer();
 
 	Assert(g_theWorld->IsGood(pos));
 
@@ -1183,11 +1151,10 @@ void SelectedItem::SetSelectGood(const MapPoint &pos)
 	m_select_state[o] = SELECT_TYPE_GOOD;
 	m_select_pos[o] = pos;
 
-
 	sint32 goodIndex;
 
 	if (g_theWorld->GetGood(pos, goodIndex)) {
-		sint32 goodSoundID = g_theResourceDB->Get(goodIndex)->GetSoundIndex(); 
+		sint32 goodSoundID = g_theResourceDB->Get(goodIndex)->GetSoundIndex();
 		if (g_soundManager) {
 			g_soundManager->AddSound(SOUNDTYPE_SFX, (uint32)goodIndex, goodSoundID);
 		}
@@ -1209,23 +1176,21 @@ BOOL SelectedItem::ResumePatrol()
 	return FALSE;
 }
 
-
 void SelectedItem::ForgetPatrol()
 {
 }
 
 void SelectedItem::Deselect(PLAYER_INDEX player)
 {
-	
-	
+
 	Army a;
 	if(GetSelectedArmy(a))
 		g_gevManager->AddEvent(GEV_INSERT_Tail, GEV_ArmyDeselected, GEA_Army, a, GEA_End);
 	Unit c;
 	if(GetSelectedCity(c))
 		g_gevManager->AddEvent(GEV_INSERT_Tail, GEV_CityDeselected, GEA_City, c, GEA_End);
-	
-#if !defined(ACTIVISON_ORIGINAL) // #01 Standardization of city selection and focus handling  
+
+#if !defined(ACTIVISON_ORIGINAL) // #01 Standardization of city selection and focus handling
 	if (g_controlPanel) {
 		m_ignoreCitySelect = TRUE;
 		m_ignoreCitySelect = FALSE;
@@ -1246,10 +1211,8 @@ void SelectedItem::Deselect(PLAYER_INDEX player)
 	ArmyManagerWindow::NotifySelection();
 	ScenarioEditor::NotifySelection();
 
-	
 	m_is_pathing = false;
 
-	
 	if (g_controlPanel!=NULL)
 		g_controlPanel->Deselect();
 }
@@ -1303,7 +1266,7 @@ sint32 SelectedItem::GetTopUnit(const MapPoint &pos, Unit &top)
 
 void SelectedItem::EnterArmyMove(PLAYER_INDEX player, const MapPoint &pos)
 {
-    MapPoint		army_pos; 
+    MapPoint		army_pos;
 
     BOOL			is_transported = FALSE;
 
@@ -1322,8 +1285,8 @@ void SelectedItem::EnterArmyMove(PLAYER_INDEX player, const MapPoint &pos)
 		return;
 
 	Unit	unit;
-	
-	sint32 acknowledgeSoundID = 0; 
+
+	sint32 acknowledgeSoundID = 0;
 	sint32 cantMoveSoundID = 0;
 	sint32 unitX = 0;
 	sint32 unitY = 0;
@@ -1331,14 +1294,13 @@ void SelectedItem::EnterArmyMove(PLAYER_INDEX player, const MapPoint &pos)
 		if (g_theUnitPool->IsValid(unit))
 			acknowledgeSoundID = unit.GetAcknowledgeSoundID();
 
-		if (g_theUnitPool->IsValid(unit)) 
+		if (g_theUnitPool->IsValid(unit))
 			cantMoveSoundID = unit.GetCantMoveSoundID();
-		
+
 		unitX = unit.RetPos().x;
 		unitY = unit.RetPos().y;
 	}
 
-    
     if (army_pos == pos) {
 		m_waypoints.Clear();
 		Deselect(player);
@@ -1354,8 +1316,7 @@ void SelectedItem::EnterArmyMove(PLAYER_INDEX player, const MapPoint &pos)
 
 			sint32 origCurPlayer = m_current_player;
 			m_selected_army[player].ClearOrders();
-			
-			
+
 			goodPath->JustSetStart(m_selected_army[player]->RetPos());
 
             if (GetAutoUnload()) {
@@ -1370,12 +1331,10 @@ void SelectedItem::EnterArmyMove(PLAYER_INDEX player, const MapPoint &pos)
 									   GEA_Int, 0,
 									   GEA_End);
 
-                
                 SetAutoUnload(FALSE);
             } else {
-				
-				
-				
+
+
 				MapPoint start, curPos;
 				m_selected_army[player].GetPos(start);
 				goodPath->Start(start);
@@ -1397,7 +1356,7 @@ void SelectedItem::EnterArmyMove(PLAYER_INDEX player, const MapPoint &pos)
 				}
 				goodPath->Restart(start);
 
-				g_gevManager->AddEvent(GEV_INSERT_Tail, GEV_MoveOrder, 
+				g_gevManager->AddEvent(GEV_INSERT_Tail, GEV_MoveOrder,
 									   GEA_Army, m_selected_army[player],
 									   GEA_Path, goodPath,
 									   GEA_MapPoint, curPos,
@@ -1407,10 +1366,9 @@ void SelectedItem::EnterArmyMove(PLAYER_INDEX player, const MapPoint &pos)
             }
 
 			moved = TRUE;
-		} 
+		}
     }
 
-	
 	if (!(rand() % 3)) {
 		if (moved) {
 			g_soundManager->AddSound(SOUNDTYPE_VOICE, 0, acknowledgeSoundID,
@@ -1426,9 +1384,8 @@ void SelectedItem::PlaySelectedSound(Unit &unit)
 {
 	if (!g_theUnitPool->IsValid(unit)) return;
 
-	
 	if (g_soundManager && unit.GetOwner() == GetVisiblePlayer()) {
-		
+
 		if (!(rand() % 3)) {
 			BOOL canMove = FALSE;
 
@@ -1446,7 +1403,7 @@ void SelectedItem::PlaySelectedSound(Unit &unit)
 			} else {
 				id = unit.GetCantMoveSoundID();
 			}
-			
+
 			g_soundManager->AddSound(SOUNDTYPE_VOICE, (uint32)unit, id);
 		}
 	}
@@ -1462,14 +1419,13 @@ void SelectedItem::RegisterClick(const MapPoint &pos,  const aui_MouseEvent *dat
 
 {
 	PLAYER_INDEX	player = GetVisiblePlayer();
-    Unit			top; 
+    Unit			top;
     BOOL			is_transported = FALSE;
     BOOL			i_died = FALSE;
-    MapPoint		army_pos; 
-	
+    MapPoint		army_pos;
+
 	BOOL			leftClick = data->lbutton;
 	BOOL			rightClick = data->rbutton;
-
 
 	m_gotClickSinceLastAutoEnd = TRUE;
 
@@ -1501,18 +1457,18 @@ void SelectedItem::RegisterClick(const MapPoint &pos,  const aui_MouseEvent *dat
 		sint32 tileX, tileY;
 		tileY = pos.y;
 		maputils_MapX2TileX(pos.x, pos.y, &tileX);
-		
-		
-		
-		
-		
-		
-		
+
+
+
+
+
+
+
 		DPRINTF(k_DBG_GAMESTATE, ("POS %d %d : %s\n", pos.x, pos.y, leftDrag ? "DRAG" : (leftDrop ? "DROP" : "CLICK")));
-		DPRINTF(k_DBG_GAMESTATE, (" ai %d %d\n", converted.x, converted.y)); 
-		DPRINTF(k_DBG_GAMESTATE, (" xy %d %d\n", tileX, tileY)); 
+		DPRINTF(k_DBG_GAMESTATE, (" ai %d %d\n", converted.x, converted.y));
+		DPRINTF(k_DBG_GAMESTATE, (" xy %d %d\n", tileX, tileY));
 		DPRINTF(k_DBG_GAMESTATE, ("zoc 0x%lx, owner %d\n", g_theWorld->GetCell(pos)->GetRawZoc(), g_theWorld->GetCell(pos)->GetOwner()));
-		DPRINTF(k_DBG_GAMESTATE, ("\n")); 
+		DPRINTF(k_DBG_GAMESTATE, ("\n"));
 #endif
 	}
 
@@ -1526,47 +1482,44 @@ void SelectedItem::SelectTradeRoute( const MapPoint &pos )
 	sint32 tradeNum = cell->GetNumTradeRoutes();
 	const UnitData *ud = NULL;
 	CityData *cd = NULL;
-	
+
 	for ( sint32 i = 0 ; i < tradeNum ; i++ )
 	{
 		ud = cell->GetTradeRoute(i).GetSource().GetData();
 		cd = ud->GetCityData();
-		
-		if (cd->GetOwner() == m_current_player) 
+
+		if (cd->GetOwner() == m_current_player)
 		{
-			
+
 			if (!cell->GetTradeRoute(i).InitSelectedData())
 			{
 				if (cell->GetTradeRoute(i).IsPosInPath(pos))
 				{
-					
-					
-					
-					
+
+
+
+
 					break;
-				} 
-				else if (cell->GetTradeRoute(i).IsPosInSelectedPath(pos)) 
+				}
+				else if (cell->GetTradeRoute(i).IsPosInSelectedPath(pos))
 				{
-					
+
 					cell->GetTradeRoute(i).SetPathSelectionState(k_TRADEROUTE_SELECTED_PATH);
 				}
 			}
 			else
 			{
-				
+
 				cell->GetTradeRoute(i).SetPathSelectionState(k_TRADEROUTE_ORIGINAL_PATH);
 			}
 
-			
 			g_tradeSelectedState = TRUE;
 
-			
 			cell->GetTradeRoute(i).AddSelectedWayPoint(pos);
 
 			TradeRoute tradeRouteItem = cell->GetTradeRoute(i);
 			g_grabbedItem->SetGrabbedItem(&tradeRouteItem);
 
-			
 			cell->GetTradeRoute(i).ClearSelectedCellData(cell->GetTradeRoute(i));
 			break;
 		}
@@ -1575,17 +1528,16 @@ void SelectedItem::SelectTradeRoute( const MapPoint &pos )
 	return;
 }
 
-
-sint32 SelectedItem::GetVisiblePlayer() const 
+sint32 SelectedItem::GetVisiblePlayer() const
 {
-	
-	
-	
 
-    
-    
-    
-    if (m_player_on_screen != -1 && !g_network.IsActive()) 
+
+
+
+
+
+
+    if (m_player_on_screen != -1 && !g_network.IsActive())
 		return m_player_on_screen;
 
 	if(!g_network.IsActive()) {
@@ -1594,7 +1546,7 @@ sint32 SelectedItem::GetVisiblePlayer() const
 		if(g_network.IsClient()) {
 			return g_network.GetPlayerIndex();
 		} else {
-			if(0 && g_player[m_current_player] && 
+			if(0 && g_player[m_current_player] &&
 			   g_player[m_current_player]->GetPlayerType() ==
 			   PLAYER_TYPE_HUMAN) {
 				return m_current_player;
@@ -1611,19 +1563,18 @@ sint32 SelectedItem::GetVisiblePlayer() const
 
 void SelectedItem::AddWaypoint(const MapPoint &pos)
 {
-	
+
 	PLAYER_INDEX player = GetVisiblePlayer();
     Army a = m_selected_army[player];
 	uint32 movementFlags = a.GetMovementType();
 	static CellUnitList transports;
 
-	
     m_waypoints.Insert(pos);
 }
 
 void SelectedItem::SetDrawablePathDest(MapPoint &dest)
 
-{ 
+{
 	if (!g_theUnitAstar) return;
 
 	if(!ShouldDrawPath()) {
@@ -1636,36 +1587,34 @@ void SelectedItem::SetDrawablePathDest(MapPoint &dest)
 
     if (m_select_state[player] == SELECT_TYPE_LOCAL_ARMY) {
 		m_cur_mouse_tile = dest;
-    
+
 		Army a = m_selected_army[player];
-     
-		MapPoint start; 
+
+		MapPoint start;
 		if(m_waypoints.Num() <= 0) {
 			a.GetPos(start);
 		} else {
 			start = m_waypoints[m_waypoints.Num() - 1];
 		}
 
-		
-		if (start == dest) { 
-			m_is_pathing = FALSE; 
-			return; 
+		if (start == dest) {
+			m_is_pathing = FALSE;
+			return;
 		}
-
 
 		if(!m_good_path)
 			m_good_path = new Path;
 
-		float total_cost; 
-		Assert(g_theUnitAstar); 
+		float total_cost;
+		Assert(g_theUnitAstar);
 		sint32 r = g_theUnitAstar->FindPath(a, start,
-											player, m_cur_mouse_tile, 
-											*m_good_path, m_is_broken_path, 
-											m_bad_path, 
+											player, m_cur_mouse_tile,
+											*m_good_path, m_is_broken_path,
+											m_bad_path,
 											total_cost);
-		Assert(r); 
+		Assert(r);
 
-		m_is_pathing = r; 
+		m_is_pathing = r;
 	} else if(m_select_state[player] == SELECT_TYPE_LOCAL_ARMY_UNLOADING) {
 		m_cur_mouse_tile = dest;
 		Army a = m_selected_army[player];
@@ -1678,7 +1627,6 @@ void SelectedItem::SetDrawablePathDest(MapPoint &dest)
 			m_is_pathing = FALSE;
 			return;
 		}
-
 
 		if(m_good_path) {
 			delete m_good_path;
@@ -1714,31 +1662,31 @@ void SelectedItem::SetDrawablePathDest(MapPoint &dest)
 		m_is_pathing = r;
 	}
 }
-	
+
 void SelectedItem::ConstructPath(BOOL &isCircular, double &cost)
 {
 	PLAYER_INDEX player = GetVisiblePlayer();
 	Path *partialPath = new Path;
 	float partialCost;
 	cost = 0.0;
-	
+
 	if(m_good_path) {
 		delete m_good_path;
 		m_good_path = NULL;
 	}
-	
+
 	Army a = m_selected_army[player];
 	MapPoint start;
 	a.GetPos(start);
 	g_theUnitAstar->FindPath(a, start,
 							 player, m_waypoints[0],
 							 *partialPath, m_is_broken_path,
-							 m_bad_path, 
+							 m_bad_path,
 							 partialCost);
 	m_good_path = partialPath;
-    if (m_is_broken_path) { 
+    if (m_is_broken_path) {
         m_good_path->Concat(m_bad_path);
-    } 
+    }
 
     if (m_is_broken_path) {
         uint32 movetype = a.GetMovementType();
@@ -1751,7 +1699,7 @@ void SelectedItem::ConstructPath(BOOL &isCircular, double &cost)
             !(movetype & k_BIT_MOVEMENT_TYPE_MOUNTAIN) &&
             g_theWorld->IsMountain(m_waypoints[0])) {
             QuickSlic("35IANomountainUnitTip", player, TRUE);
-        }            
+        }
     }
 
 	cost += partialCost;
@@ -1760,16 +1708,16 @@ void SelectedItem::ConstructPath(BOOL &isCircular, double &cost)
 		g_theUnitAstar->FindPath(a, m_waypoints[i-1],
 								 player, m_waypoints[i],
 								 *partialPath, m_is_broken_path,
-								 m_bad_path, 
+								 m_bad_path,
 								 partialCost);
 		m_good_path->Concat(*partialPath);
-        if (m_is_broken_path) { 
+        if (m_is_broken_path) {
             m_good_path->Concat(m_bad_path);
-        } 
+        }
 		cost += partialCost;
 	}
 	delete partialPath;
-	
+
 	if(start == m_waypoints[m_waypoints.Num() - 1]) {
 		isCircular = TRUE;
 	} else {
@@ -1778,7 +1726,6 @@ void SelectedItem::ConstructPath(BOOL &isCircular, double &cost)
 
 	m_waypoints.Clear();
 }
-
 
 void SelectedItem::ProcessUnitOrders()
 {
@@ -1789,14 +1736,14 @@ void SelectedItem::ProcessUnitOrders()
 
 void SelectedItem::Settle()
 {
-	PLAYER_INDEX s_player; 
-	ID			s_item; 
-	SELECT_TYPE s_state; 
+	PLAYER_INDEX s_player;
+	ID			s_item;
+	SELECT_TYPE s_state;
 	BOOL		isMyTurn = !g_network.IsActive() || g_network.IsMyTurn();
 
 	GetTopCurItem(s_player, s_item, s_state);
-	
-	switch(s_state) { 
+
+	switch(s_state) {
 		case SELECT_TYPE_LOCAL_ARMY:
 			if(isMyTurn) {
 				g_gevManager->AddEvent(GEV_INSERT_Tail,
@@ -1805,24 +1752,23 @@ void SelectedItem::Settle()
 									   GEA_End);
 			} else if(g_turn->SimultaneousMode()) {
 			}
-            break; 
-		default: 
-            break; 
+            break;
+		default:
+            break;
 	}
-
 
 }
 
 void SelectedItem::Entrench()
 {
-    PLAYER_INDEX player = GetVisiblePlayer(); 
+    PLAYER_INDEX player = GetVisiblePlayer();
 
 	switch(m_select_state[player]) {
 		case SELECT_TYPE_LOCAL_ARMY:
 			g_gevManager->AddEvent(GEV_INSERT_Tail, GEV_EntrenchOrder,
 								   GEA_Army, m_selected_army[player],
 								   GEA_End);
-			
+
 			Deselect(player);
 			if(g_theProfileDB->IsAutoSelectNext()) {
 				g_director->AddSelectUnit(0);
@@ -1836,14 +1782,14 @@ void SelectedItem::Entrench()
 
 void SelectedItem::Detrench()
 {
-    PLAYER_INDEX player = GetVisiblePlayer(); 
+    PLAYER_INDEX player = GetVisiblePlayer();
 
 	switch(m_select_state[player]) {
 		case SELECT_TYPE_LOCAL_ARMY:
 			g_gevManager->AddEvent(GEV_INSERT_Tail, GEV_DetrenchOrder,
 								   GEA_Army, m_selected_army[player],
 								   GEA_End);
-			
+
 			break;
 		default:
 			break;
@@ -1852,7 +1798,7 @@ void SelectedItem::Detrench()
 
 void SelectedItem::Sleep()
 {
-    PLAYER_INDEX player = GetVisiblePlayer(); 
+    PLAYER_INDEX player = GetVisiblePlayer();
 
 	switch(m_select_state[player]) {
 		case SELECT_TYPE_LOCAL_ARMY:
@@ -1860,7 +1806,6 @@ void SelectedItem::Sleep()
 								   GEA_Army, m_selected_army[player],
 								   GEA_End);
 
-			
 			Deselect(player);
 			if(g_theProfileDB->IsAutoSelectNext()) {
 				g_director->AddSelectUnit(0);
@@ -1874,14 +1819,14 @@ void SelectedItem::Sleep()
 
 void SelectedItem::Disband()
 {
-    PLAYER_INDEX player = GetVisiblePlayer(); 
+    PLAYER_INDEX player = GetVisiblePlayer();
 
 	switch(m_select_state[player]) {
 		case SELECT_TYPE_LOCAL_ARMY:
 			g_gevManager->AddEvent(GEV_INSERT_Tail, GEV_DisbandArmyOrder,
 								   GEA_Army, m_selected_army[player],
 								   GEA_End);
-			
+
 			Deselect(player);
 			break;
 		default:
@@ -1893,47 +1838,47 @@ void SelectedItem::GroupArmy()
 {
 	PLAYER_INDEX player = GetVisiblePlayer();
 
-    switch (m_select_state[player]) { 
+    switch (m_select_state[player]) {
 		case SELECT_TYPE_LOCAL_ARMY:
 			g_gevManager->AddEvent(GEV_INSERT_Tail, GEV_GroupOrder,
 								   GEA_Army, m_selected_army[player],
 								   GEA_End);
-			
-			break;   
+
+			break;
 		default:
-			return; 
+			return;
     }
 }
 
 void SelectedItem::UngroupArmy()
 {
 	PLAYER_INDEX player = GetVisiblePlayer();
-    switch (m_select_state[player]) { 
+    switch (m_select_state[player]) {
     case SELECT_TYPE_LOCAL_ARMY:
 		g_gevManager->AddEvent(GEV_INSERT_Tail, GEV_UngroupOrder,
 							   GEA_Army, m_selected_army[player],
 							   GEA_End);
-		
-        break;   
+
+        break;
     default:
-        return; 
+        return;
     }
 
 }
 
 void SelectedItem::UnloadMode()
 
-{     
+{
 	PLAYER_INDEX player = GetVisiblePlayer();
-    switch (m_select_state[player]) { 
+    switch (m_select_state[player]) {
     case SELECT_TYPE_LOCAL_ARMY:
-        m_is_pathing = TRUE; 
-        m_select_state[player] = SELECT_TYPE_LOCAL_ARMY_UNLOADING; 
-		
-        break; 
+        m_is_pathing = TRUE;
+        m_select_state[player] = SELECT_TYPE_LOCAL_ARMY_UNLOADING;
+
+        break;
     default:
-        return; 
-    } 
+        return;
+    }
 }
 
 void SelectedItem::CancelUnload()
@@ -1950,8 +1895,8 @@ void SelectedItem::Paradrop(const MapPoint &point)
 
 	switch(m_select_state[player]) {
 		case SELECT_TYPE_LOCAL_ARMY:
-            m_is_pathing = FALSE; 
-			
+            m_is_pathing = FALSE;
+
 			g_gevManager->AddEvent(GEV_INSERT_Tail, GEV_ParadropOrder,
 								   GEA_Army, m_selected_army[player],
 								   GEA_MapPoint, point,
@@ -1971,7 +1916,7 @@ void SelectedItem::SpaceLaunch()
 			g_gevManager->AddEvent(GEV_INSERT_Tail, GEV_LaunchOrder,
 								   GEA_Army, m_selected_army[player],
 								   GEA_End);
-			
+
 			Deselect(m_current_player);
 			break;
 		default:
@@ -1989,7 +1934,6 @@ void SelectedItem::InvestigateCity(const MapPoint &point)
 							   GEA_MapPoint, point,
 							   GEA_End);
 
-		
 		Deselect(m_current_player);
 	}
 }
@@ -2003,7 +1947,7 @@ void SelectedItem::NullifyWalls(const MapPoint &point)
 							   GEA_Army, m_selected_army[player],
 							   GEA_MapPoint, point,
 							   GEA_End);
-		
+
 		Deselect(m_current_player);
 	}
 }
@@ -2017,7 +1961,7 @@ void SelectedItem::StealTechnology(const MapPoint &point)
 							   GEA_Army, m_selected_army[player],
 							   GEA_MapPoint, point,
 							   GEA_End);
-		
+
 		Deselect(m_current_player);
 	}
 }
@@ -2031,7 +1975,7 @@ void SelectedItem::InciteRevolution(const MapPoint &point)
 							   GEA_Army, m_selected_army[player],
 							   GEA_MapPoint, point,
 							   GEA_End);
-		
+
 		Deselect(m_current_player);
 	}
 }
@@ -2045,7 +1989,7 @@ void SelectedItem::AssassinateRuler(const MapPoint &point)
 							   GEA_Army, m_selected_army[player],
 							   GEA_MapPoint, point,
 							   GEA_End);
-		
+
 		Deselect(m_current_player);
 	}
 }
@@ -2055,12 +1999,12 @@ void SelectedItem::InvestigateReadiness(const MapPoint &point)
 	PLAYER_INDEX player = GetVisiblePlayer();
 
 	if(m_select_state[player] == SELECT_TYPE_LOCAL_ARMY ) {
-		
+
 		g_gevManager->AddEvent(GEV_INSERT_Tail, GEV_InvestigateReadinessOrder,
 							   GEA_Army, m_selected_army[player],
-							   GEA_MapPoint, point, 
+							   GEA_MapPoint, point,
 							   GEA_End);
-		
+
 		Deselect(m_current_player);
 	}
 }
@@ -2074,7 +2018,7 @@ void SelectedItem::Bombard(const MapPoint &pnt)
 							   GEA_Army, m_selected_army[player],
 							   GEA_MapPoint, pnt,
 							   GEA_End);
-		
+
 	}
 }
 
@@ -2087,7 +2031,7 @@ void SelectedItem::Franchise(const MapPoint &point)
 							   GEA_Army, m_selected_army[player],
 							   GEA_MapPoint, point,
 							   GEA_End);
-		
+
 	}
 }
 
@@ -2099,7 +2043,7 @@ void SelectedItem::Sue(const MapPoint &point)
 							   GEA_Army, m_selected_army[player],
 							   GEA_MapPoint, point,
 							   GEA_End);
-		
+
 	}
 }
 
@@ -2113,7 +2057,6 @@ void SelectedItem::SueFranchise(const MapPoint &point)
 							   GEA_MapPoint, point,
 							   GEA_End);
 
-		
 	}
 }
 
@@ -2126,7 +2069,6 @@ void SelectedItem::Expel(const MapPoint &point)
 							   GEA_Army, m_selected_army[player],
 							   GEA_MapPoint, point,
 							   GEA_End);
-		
 
 	}
 }
@@ -2141,10 +2083,8 @@ void SelectedItem::EstablishEmbassy(const MapPoint &point)
 							   GEA_MapPoint, point,
 							   GEA_End);
 
-		
 	}
 }
-
 
 void SelectedItem::Advertise(const MapPoint &point)
 {
@@ -2155,7 +2095,7 @@ void SelectedItem::Advertise(const MapPoint &point)
 							   GEA_Army, m_selected_army[player],
 							   GEA_MapPoint, point,
 							   GEA_End);
-		
+
 	}
 }
 
@@ -2168,7 +2108,7 @@ void SelectedItem::PlantNuke(const MapPoint &point)
 							   GEA_Army, m_selected_army[player],
 							   GEA_MapPoint, point,
 							   GEA_End);
-		
+
 	}
 }
 
@@ -2181,7 +2121,7 @@ void SelectedItem::SlaveRaid(const MapPoint &point)
 							   GEA_Army, m_selected_army[player],
 							   GEA_MapPoint, point,
 							   GEA_End);
-		
+
 	}
 }
 
@@ -2198,26 +2138,26 @@ void SelectedItem::EnslaveSettler(const MapPoint &point)
         Unit home_city;
 
         Army al = m_selected_army[player];
-        Assert(al.m_id != (0)); 
+        Assert(al.m_id != (0));
 
         if (!al.IsSlaveRaidPossible(
-            point, success, death, timer, amount, uindex, 
-            target_is_city, target_city, home_city)) { 
-            return; 
+            point, success, death, timer, amount, uindex,
+            target_is_city, target_city, home_city)) {
+            return;
         }
-       
-        MapPoint mypos; 
-        al.GetPos(mypos); 
-        if(!point.IsNextTo(mypos)) { 
+
+        MapPoint mypos;
+        al.GetPos(mypos);
+        if(!point.IsNextTo(mypos)) {
     	     return;
         }
 
-        if (!target_is_city) { 
+        if (!target_is_city) {
 			g_gevManager->AddEvent(GEV_INSERT_Tail, GEV_EnslaveSettlerOrder,
 								   GEA_Army, m_selected_army[player],
 								   GEA_MapPoint, point,
 								   GEA_End);
-		    
+
         }
 	}
 }
@@ -2231,8 +2171,7 @@ void SelectedItem::UndergroundRailway(const MapPoint &point)
 							   GEA_Army, m_selected_army[player],
 							   GEA_MapPoint, point,
 							   GEA_End);
-		
-		
+
 	}
 }
 
@@ -2245,7 +2184,7 @@ void SelectedItem::InciteUprising(const MapPoint &point)
 							   GEA_Army, m_selected_army[player],
 							   GEA_MapPoint, point,
 							   GEA_End);
-		
+
 	}
 }
 
@@ -2258,7 +2197,7 @@ void SelectedItem::BioInfect(const MapPoint &point)
 							   GEA_Army, m_selected_army[player],
 							   GEA_MapPoint, point,
 							   GEA_End);
-		
+
 	}
 }
 
@@ -2271,10 +2210,10 @@ void SelectedItem::NanoInfect(const MapPoint &point)
 							   GEA_Army, m_selected_army[player],
 							   GEA_MapPoint, point,
 							   GEA_End);
-		
+
 	}
 }
-	
+
 void SelectedItem::ConvertCity(const MapPoint &point)
 {
 	PLAYER_INDEX player = GetVisiblePlayer();
@@ -2284,9 +2223,9 @@ void SelectedItem::ConvertCity(const MapPoint &point)
 							   GEA_Army, m_selected_army[player],
 							   GEA_MapPoint, point,
 							   GEA_End);
-		
+
 	}
-}	
+}
 
 void SelectedItem::ReformCity(const MapPoint &point)
 {
@@ -2297,10 +2236,10 @@ void SelectedItem::ReformCity(const MapPoint &point)
 							   GEA_Army, m_selected_army[player],
 							   GEA_MapPoint, point,
 							   GEA_End);
-		
+
 	}
-}	
-	
+}
+
 void SelectedItem::IndulgenceSale(const MapPoint &point)
 {
 	PLAYER_INDEX player = GetVisiblePlayer();
@@ -2310,7 +2249,7 @@ void SelectedItem::IndulgenceSale(const MapPoint &point)
 							   GEA_Army, m_selected_army[player],
 							   GEA_MapPoint, point,
 							   GEA_End);
-		
+
 	}
 }
 
@@ -2322,8 +2261,7 @@ void SelectedItem::Soothsay(const MapPoint &point)
 							   GEA_Army, m_selected_army[player],
 							   GEA_MapPoint, point,
 							   GEA_End);
-		
-		
+
 	}
 }
 
@@ -2334,7 +2272,7 @@ void SelectedItem::Cloak()
 		g_gevManager->AddEvent(GEV_INSERT_Tail, GEV_CloakOrder,
 							   GEA_Army, m_selected_army[player],
 							   GEA_End);
-		
+
 	}
 }
 
@@ -2345,7 +2283,7 @@ void SelectedItem::Uncloak()
 		g_gevManager->AddEvent(GEV_INSERT_Tail, GEV_UncloakOrder,
 							   GEA_Army, m_selected_army[player],
 							   GEA_End);
-		
+
 	}
 }
 
@@ -2357,10 +2295,10 @@ void SelectedItem::Rustle(const MapPoint &point)
 							   GEA_Army, m_selected_army[player],
 							   GEA_MapPoint, point,
 							   GEA_End);
-		
+
 	}
 }
-	
+
 void SelectedItem::CreatePark(const MapPoint &point)
 {
 	PLAYER_INDEX player = GetVisiblePlayer();
@@ -2369,7 +2307,7 @@ void SelectedItem::CreatePark(const MapPoint &point)
 							   GEA_Army, m_selected_army[player],
 							   GEA_MapPoint, point,
 							   GEA_End);
-		
+
 		Deselect(m_current_player);
 	}
 }
@@ -2382,7 +2320,7 @@ void SelectedItem::CreateRift(const MapPoint &point)
 							   GEA_Army, m_selected_army[player],
 							   GEA_MapPoint, point,
 							   GEA_End);
-		
+
 		Deselect(m_current_player);
 	}
 }
@@ -2394,8 +2332,7 @@ void SelectedItem::Pillage()
 		g_gevManager->AddEvent(GEV_INSERT_Tail, GEV_PillageOrder,
 							   GEA_Army, m_selected_army[player],
 							   GEA_End);
-		
-		
+
 	}
 }
 
@@ -2408,7 +2345,7 @@ void SelectedItem::Injoin(const MapPoint &point)
 							   GEA_Army, m_selected_army[player],
 							   GEA_MapPoint, point,
 							   GEA_End);
-		
+
 	}
 }
 
@@ -2419,7 +2356,7 @@ void SelectedItem::UseSpaceLadder()
 		g_gevManager->AddEvent(GEV_INSERT_Tail, GEV_UseSpaceLadderOrder,
 							   GEA_Army, m_selected_army[player],
 							   GEA_End);
-		
+
 	}
 }
 
@@ -2431,7 +2368,7 @@ void SelectedItem::Airlift(const MapPoint &dest)
 							   GEA_Army, m_selected_army[player],
 							   GEA_MapPoint, dest,
 							   GEA_End);
-		
+
 	}
 }
 
@@ -2441,12 +2378,11 @@ void SelectedItem::Descend()
 	if(m_select_state[player] == SELECT_TYPE_LOCAL_ARMY) {
 		g_gevManager->AddEvent(GEV_INSERT_Tail, GEV_DescendOrder,
 							   GEA_Army, m_selected_army[player],
-							   GEA_End);		
-		
+							   GEA_End);
+
 		Deselect( m_current_player );
 	}
 }
-
 
 void SelectedItem::Goto(MapPoint &dest)
 {
@@ -2455,7 +2391,7 @@ void SelectedItem::Goto(MapPoint &dest)
 	if (m_select_state[owner] == SELECT_TYPE_LOCAL_ARMY) {
 		MapPoint src;
 		m_selected_army[owner].GetPos(src);
-	
+
 		EnterMovePath(owner, m_selected_army[owner], src, dest);
 	}
 }
@@ -2476,7 +2412,6 @@ void SelectedItem::EnterMovePath(sint32 owner, Army &army,
 		return;
 	}
 
-	
 	army.ClearOrders();
 	good_path->JustSetStart(army->RetPos());
 
@@ -2505,18 +2440,18 @@ void SelectedItem::InterceptTrade(void)
 		g_gevManager->AddEvent(GEV_INSERT_Tail, GEV_PirateOrder,
 							   GEA_Army, m_selected_army[player],
 							   GEA_End);
-		
+
 	}
 }
 
-BOOL SelectedItem::GetSelectedCity( Unit &city ) 
+BOOL SelectedItem::GetSelectedCity( Unit &city )
 {
 	PLAYER_INDEX pIndex;
 	ID id;
 	SELECT_TYPE sType;
 
 	GetTopCurItem(pIndex,id,sType);
-	
+
 	if (sType == SELECT_TYPE_LOCAL_CITY) {
 		city = id;
 		return TRUE;
@@ -2599,7 +2534,6 @@ void SelectedItem::DidKeyboardMove()
 	}
 }
 
-			
 void SelectedItem::EndUnitTurn()
 {
 	sint32 player = GetVisiblePlayer();
@@ -2612,7 +2546,6 @@ void SelectedItem::EndUnitTurn()
 		}
 	}
 }
-
 
 
 void SelectedItem::DirectorUnitSelection(uint32 flags)
@@ -2656,8 +2589,8 @@ void SelectedItem::RegisterManualEndTurn()
 }
 
 sint32 SelectedItem::GetIsPathing() const
-{ 
-	return m_is_pathing && 
+{
+	return m_is_pathing &&
 		((m_select_state[GetVisiblePlayer()] == SELECT_TYPE_LOCAL_ARMY) ||
 		 (m_select_state[GetVisiblePlayer()] == SELECT_TYPE_LOCAL_ARMY_UNLOADING));
 }
@@ -2666,25 +2599,25 @@ void SelectedItem::UpdateSelectedItem( void )
 {
 	ClipCurrentItem();
 
-	
-	
-	
-	
+
+
+
+
 	if ((m_player_on_screen != -1) &&
 		(m_current_player != m_player_on_screen)) return;
 
 	if(g_controlPanel) {
-		PLAYER_INDEX s_player; 
-		ID s_item; 
-		SELECT_TYPE s_state; 
-		
+		PLAYER_INDEX s_player;
+		ID s_item;
+		SELECT_TYPE s_state;
+
 		if (m_good_path)
 			m_good_path->Clear();
 		m_bad_path.Clear();
 
 		if (!Player::IsThisPlayerARobot(GetVisiblePlayer())) {
 			GetTopCurItem(s_player, s_item, s_state);
-		
+
 			if(s_state == SELECT_TYPE_LOCAL_CITY) {
 				Unit u = s_item;
 			} else if(s_state == SELECT_TYPE_LOCAL_ARMY) {
@@ -2761,7 +2694,7 @@ void SelectedItem::ArmyMovedCallback(Army &a)
 			}
 		}
 	}
-	
+
 	if(g_slicEngine->GetTutorialActive()) {
 		sint32 i;
 		BOOL allMoved = TRUE;
@@ -2781,7 +2714,7 @@ void SelectedItem::ArmyMovedCallback(Army &a)
 bool SelectedItem::ShouldDrawPath()
 {
 	Assert(g_controlPanel != NULL);
-	if (g_theProfileDB->IsUseCTP2Mode() && 
+	if (g_theProfileDB->IsUseCTP2Mode() &&
 		(g_controlPanel->GetTargetingMode()!=CP_TARGETING_MODE_ORDER_PENDING))
 		return false;
 	else
@@ -2793,7 +2726,7 @@ bool SelectedItem::GetSelectedArmy(Army &a)
 	switch(m_select_state[GetVisiblePlayer()]) {
 		case SELECT_TYPE_LOCAL_ARMY:
 		case SELECT_TYPE_LOCAL_ARMY_UNLOADING:
-			
+
 			a = m_selected_army[GetVisiblePlayer()];
 			return true;
 		default:

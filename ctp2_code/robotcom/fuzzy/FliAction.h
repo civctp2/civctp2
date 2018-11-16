@@ -1,5 +1,3 @@
-
-
 #pragma once
 #ifndef __FLI_ACTION_H__
 #define __FLI_ACTION_H__

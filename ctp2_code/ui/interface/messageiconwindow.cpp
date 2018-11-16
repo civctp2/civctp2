@@ -1,12 +1,3 @@
-
-
-
-
-
-
-
-
-
 #include "c3.h"
 
 #include "profileDB.h"
@@ -39,9 +30,7 @@ extern uint8 g_messageIconSpacing;
 extern FilenameDB *g_theMessageIconFileDB;
 extern SelectedItem *g_selected_item;
 
-
 MessageIconWindow *MessageIconWindow::m_currentIconWindow = NULL;
-
 
 MessageIconWindow::MessageIconWindow(
 	AUI_ERRCODE *retval,
@@ -59,13 +48,12 @@ MessageIconWindow::MessageIconWindow(
 	errcode = InitCommon( &data, ldlBlock, messagelist );
 	Assert( errcode == AUI_ERRCODE_OK );
 	if ( errcode != AUI_ERRCODE_OK ) return;
-	
+
 }
 
 
-
-AUI_ERRCODE MessageIconWindow::InitCommon( Message *data, 
-										  MBCHAR *ldlBlock, 
+AUI_ERRCODE MessageIconWindow::InitCommon( Message *data,
+										  MBCHAR *ldlBlock,
 										  MessageList *messagelist )
 {
 	MBCHAR			iconDataBlock[ k_AUI_LDL_MAXBLOCK + 1 ];
@@ -130,7 +118,7 @@ AUI_ERRCODE MessageIconWindow::InitCommon( Message *data,
 					k_MESSAGE_ICON_PICTURE_WONDER_SELECTED );
 		break;
 	default:
-		
+
 		ChangeIcon( k_MESSAGE_ICON_PICTURE_WARNING,
 					k_MESSAGE_ICON_PICTURE_WARNING_SELECTED );
 		break;
@@ -152,20 +140,17 @@ AUI_ERRCODE MessageIconWindow::InitCommon( Message *data,
 		SetupAnimation( pos - messagelist->GetOffset( ));
 	}
 
-	
 	m_messageOpenAction = new MessageOpenAction( this );
 	Assert( m_messageOpenAction != NULL );
 	if ( m_messageOpenAction == NULL ) return AUI_ERRCODE_MEMALLOCFAILED;
 
 	m_icon->SetAction( m_messageOpenAction );
 
-	
 	if ( MBCHAR *text = ( MBCHAR * ) data->AccessData()->GetMsgCaption() )
 		SetTipWindowText( text );
 
 	return AUI_ERRCODE_OK;
 }
-
 
 
 void MessageIconWindow::ChangeIcon( const MBCHAR *image, const MBCHAR *image2 )
@@ -184,16 +169,15 @@ void MessageIconWindow::ChangeIcon( const MBCHAR *image, const MBCHAR *image2 )
 }
 
 
-
 void MessageIconWindow::SetCurrentIconButton( MessageIconButton *iconButton )
 {
-	
+
 	if ( m_currentIconWindow && m_currentIconWindow->GetWindow()) {
 		if (g_c3ui->GetWindow( m_currentIconWindow->GetWindow()->Id( ))) {
 			m_currentIconWindow->GetWindow()->ShowWindow( FALSE );
 		}
 	}
-	
+
 	if ( iconButton ) {
 		m_currentIconWindow = this;
 	} else
@@ -203,13 +187,12 @@ void MessageIconWindow::SetCurrentIconButton( MessageIconButton *iconButton )
 		m_icon->SetCurrentIconButton( iconButton );
 }
 
-
 void MessageIconWindow::SetTipWindowText( MBCHAR *text )
 {
 	if ( text == NULL ) return;
 
 	if ( !strlen( text )) {
-		
+
 		delete ((aui_TipWindow *)m_icon->GetTipWindow());
 		m_icon->SetTipWindow( NULL );
 	} else {
@@ -217,14 +200,13 @@ void MessageIconWindow::SetTipWindowText( MBCHAR *text )
 	}
 }
 
-
-AUI_ERRCODE MessageIconWindow::SetupAnimation( uint32 position ) 
+AUI_ERRCODE MessageIconWindow::SetupAnimation( uint32 position )
 {
-	
-	
 
 
-	m_targetY = g_messageReadPositionY - 
+
+
+	m_targetY = g_messageReadPositionY -
 				(( g_messageIconHeight + g_messageIconSpacing ) * position );
 
 	if ( BOUNCE_IT ) {
@@ -240,7 +222,6 @@ AUI_ERRCODE MessageIconWindow::SetupAnimation( uint32 position )
 }
 
 
-
 void MessageIconWindow::StopAnimation( void )
 {
 	m_targetY = 0;
@@ -248,7 +229,6 @@ void MessageIconWindow::StopAnimation( void )
 	m_currentY = 0;
 	m_acceleration = 0;
 }
-
 
 
 BOOL MessageIconWindow::CheckShowWindow( void )
@@ -263,11 +243,9 @@ BOOL MessageIconWindow::CheckShowWindow( void )
 	return TRUE;
 }
 
-
 AUI_ERRCODE MessageIconWindow::Idle( void )
 {
 	if ( !m_isMoving ) return AUI_ERRCODE_OK;
-
 
 	if ( BOUNCE_IT ) {
 		if (( m_currentY + m_acceleration ) > m_targetY ) {
@@ -291,14 +269,13 @@ AUI_ERRCODE MessageIconWindow::Idle( void )
 }
 
 
-
 MessageIconWindow::~MessageIconWindow()
 {
 	if ( m_icon ) {
 		delete m_icon;
 		m_icon = NULL;
 	}
-	
+
 	if ( m_messageOpenAction ) {
 		delete m_messageOpenAction;
 		m_messageOpenAction = NULL;
@@ -313,5 +290,3 @@ MessageIconWindow::~MessageIconWindow()
 	}
 
 }
-
-

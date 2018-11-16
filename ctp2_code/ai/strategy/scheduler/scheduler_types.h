@@ -10,14 +10,14 @@
 //
 // THIS FILE IS NOT GENERATED OR SUPPORTED BY ACTIVISION.
 //
-// This material has been developed at apolyton.net by the Apolyton CtP2 
+// This material has been developed at apolyton.net by the Apolyton CtP2
 // Source Code Project. Contact the authors at ctp2source@apolyton.net.
 //
 //----------------------------------------------------------------------------
 //
 // Compiler flags
-// 
-// _MSC_VER		
+//
+// _MSC_VER
 // - Compiler version (for the Microsoft C++ compiler only)
 //
 //----------------------------------------------------------------------------
@@ -35,9 +35,7 @@
 #include <list>
 #include <limits>
 
-
 #include "Goal_And_Squad_Types.h"
-
 
 enum GOAL_RESULT
 {
@@ -51,7 +49,6 @@ enum GOAL_RESULT
 typedef sint32				Utility;
 typedef sint32				PLAYER_INDEX;
 
-
 class Agent;
 class Squad_Strength;
 class Goal;
@@ -63,8 +60,7 @@ typedef Goal*			Goal_ptr;
 typedef Squad*			Squad_ptr;
 typedef Plan*			Plan_ptr;
 
-typedef std::pair<Utility, Goal_ptr> Sorted_Goal_ptr; 
-
+typedef std::pair<Utility, Goal_ptr> Sorted_Goal_ptr;
 
 template<class _T1, class _T2> inline
 #ifdef WIN32
@@ -76,12 +72,10 @@ bool operator<(const Sorted_Goal_ptr& _X,
 
 {return (_X.first < _Y.first); }
 
-
 class STAgent;
 class STGoal;
 typedef STAgent*		STAgent_ptr;
 typedef STGoal*			STGoal_ptr;
-
 
 typedef std::list<Agent_ptr> Agent_List;
 typedef std::list<Squad_ptr> Squad_List;

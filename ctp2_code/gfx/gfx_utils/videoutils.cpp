@@ -1,15 +1,3 @@
-
-
-
-
-
-
-
-
-
-
-
-
 #include "c3.h"
 #include "aui.h"
 #include "CivPaths.h"
@@ -66,7 +54,6 @@ sint32 videoutils_PlayVideoInWindow(MBCHAR *name, MBCHAR *pattern)
 	return 0;
 }
 
-
 void videoutils_Cleanup(void)
 {
 	if (g_videoWindow != NULL) {
@@ -84,5 +71,3 @@ void videoutils_VideoWindowCloseBox(aui_Control *control, uint32 action, uint32 
 
 	}
 }
-
-

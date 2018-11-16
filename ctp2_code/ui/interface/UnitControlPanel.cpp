@@ -11,7 +11,7 @@
 //
 // THIS FILE IS NOT GENERATED OR SUPPORTED BY ACTIVISION.
 //
-// This material has been developed at apolyton.net by the Apolyton CtP2 
+// This material has been developed at apolyton.net by the Apolyton CtP2
 // Source Code Project. Contact the authors at ctp2source@apolyton.net.
 //
 //----------------------------------------------------------------------------
@@ -31,9 +31,7 @@
 
 #include "c3.h"
 
-
 #include "UnitControlPanel.h"
-
 
 #include "ArmyData.h"
 #include "ArmyPool.h"
@@ -58,9 +56,7 @@
 #include "Unit.h"
 #include "ctp2_Switch.h"
 
-
 extern C3UI *g_c3ui;
-
 
 UnitControlPanel::UnitControlPanel(MBCHAR *ldlBlock) :
 m_unitDisplayGroup(static_cast<ctp2_Static*>(
@@ -118,7 +114,7 @@ m_transportSelectionDisplay(static_cast<ctp2_Static *>(
 m_transportSelectionIcon(static_cast<ctp2_Button *>(
 	aui_Ldl::GetObject(ldlBlock, "UnitTab.TabPanel.UnitSelectionDisplay.TransportSelect.Icon")))
 {
-	
+
 	Assert(m_unitDisplayGroup);
 	Assert(m_unitListPreviousButton);
 	Assert(m_unitListLabel);
@@ -138,42 +134,35 @@ m_transportSelectionIcon(static_cast<ctp2_Button *>(
 	m_curHealth = -1;
 	m_curCargo = -2;
 
-	
 	for(int multiIndex = 0; multiIndex <
 		NUMBER_OF_MULTIPLE_SELECTION_BUTTONS; multiIndex++) {
-		
+
 		MBCHAR multiButtonName[128];
 		sprintf(multiButtonName,
 			"UnitTab.TabPanel.UnitSelectionDisplay.MultipleSelect.Unit%d",
 			multiIndex);
 
-		
 		m_multipleSelectionButton[multiIndex] = static_cast<ctp2_Button*>(
 			aui_Ldl::GetObject(ldlBlock, multiButtonName));
 		m_multipleSelectionHealth[multiIndex] = (ctp2_Static *)m_multipleSelectionButton[multiIndex]->GetChildByIndex(0);
 
-		
 		Assert(m_multipleSelectionButton[multiIndex]);
 	}
 
-	
 	for(int armyIndex = 0; armyIndex <
 		NUMBER_OF_ARMY_SELECTION_BUTTONS; armyIndex++) {
-		
+
 		MBCHAR armyButtonName[128];
 		sprintf(armyButtonName,
 			"UnitTab.TabPanel.UnitSelectionDisplay.ArmySelect.Unit%d",
 			armyIndex);
 
-		
 		m_armySelectionButton[armyIndex] = static_cast<ctp2_Button*>(
 			aui_Ldl::GetObject(ldlBlock, armyButtonName));
 		m_armySelectionHealth[armyIndex] = (ctp2_Static *)m_armySelectionButton[armyIndex]->GetChildByIndex(0);
 
-		
 		Assert(m_armySelectionButton[armyIndex]);
 
-		
 		m_armySelectionButton[armyIndex]->SetActionFuncAndCookie(
 			ArmyButtonActionCallback, this);
 	}
@@ -187,43 +176,35 @@ m_transportSelectionIcon(static_cast<ctp2_Button *>(
 		m_transportSelectionHealth[transIndex] = (ctp2_Static *)m_transportSelectionButton[transIndex]->GetChildByIndex(0);
 	}
 
-	
 	for(int orderIndex = 0; orderIndex < NUMBER_OF_ORDER_BUTTONS; orderIndex++) {
-		
+
 		MBCHAR orderButtonName[128];
 		sprintf(orderButtonName,
 			"UnitTab.TabPanel.UnitOrderButtonGrid.Order%d", orderIndex);
 
-		
 		m_orderButton[orderIndex] = static_cast<ctp2_Button*>(
 			aui_Ldl::GetObject(ldlBlock, orderButtonName));
 
-		
 		Assert(m_orderButton[orderIndex]);
 
-		
 		m_orderButton[orderIndex]->Enable(false);
 	}
 
-	
 	m_unitListPreviousButton->SetActionFuncAndCookie(
 		PrevUnitButtonActionCallback, this);
 	m_unitListNextButton->SetActionFuncAndCookie(
 		NextUnitButtonActionCallback, this);
 
-	
 	SetSelectionMode(MULTIPLE_SELECTION);
 
-	
-	
+
 	m_unitDisplayGroup->SetShowCallback(
 		UnitDisplayGroupCallback, this);
 }
 
-
 void UnitControlPanel::Update()
 {
-	
+
 	switch(m_currentMode) {
 	case SINGLE_SELECTION:
 		UpdateSingleSelectionDisplay();
@@ -243,19 +224,17 @@ void UnitControlPanel::Update()
 	}
 
 	if(!m_unitDisplayGroup->IsHidden()) {
-		
+
 		m_unitDisplayGroup->ShouldDraw();
 
 	}
 
-	
 	UpdateOrderButtons();
 }
 
-
 void UnitControlPanel::SelectedUnit()
 {
-	
+
 	Army a;
 	if(g_selected_item->GetSelectedArmy(a) && (!a.IsValid() || (a.Num() < 2))) {
 		SetSelectionMode(SINGLE_SELECTION);
@@ -267,20 +246,16 @@ void UnitControlPanel::SelectedUnit()
 	m_lastSelectedArmyCount = -1;
 }
 
-
 void UnitControlPanel::SetSelectionMode(UnitSelectionMode mode)
 {
-	
+
 	m_currentMode = mode;
 
-	
 	m_armySelectionUnit = -1;
 
-	
 	if(m_unitDisplayGroup->IsHidden())
 		return;
 
-	
 	switch(m_currentMode) {
 	case SINGLE_SELECTION:
 		m_singleSelectionDisplay->Show();
@@ -305,24 +280,21 @@ void UnitControlPanel::SetSelectionMode(UnitSelectionMode mode)
 		m_multipleSelectionDisplay->Hide();
 		m_armySelectionDisplay->Hide();
 		UnsetCargoButtons();
-		m_transportSelectionDisplay->Show();		
+		m_transportSelectionDisplay->Show();
 		break;
 	default:
 		Assert(false);
 		break;
 	}
 
-	
 	if(g_selected_item)
 		Update();
 }
 
-
 void UnitControlPanel::UpdateSingleSelectionDisplay()
 {
-	
-	
-	Army army = GetSelectedArmy();	
+
+	Army army = GetSelectedArmy();
 	static Unit unit; unit.m_id = 0;
 	double movement = -1;
 	double health = -1;
@@ -366,9 +338,8 @@ void UnitControlPanel::UpdateSingleSelectionDisplay()
 	m_curCargo = cargo;
 	m_curFuel = fuel;
 
-	
 	if(!unit.IsValid()) {
-		m_singleSelectionIcon->SetImage(NULL); 
+		m_singleSelectionIcon->SetImage(NULL);
 		m_singleSelectionAttack->SetText("");
 		m_singleSelectionDefend->SetText("");
 		m_singleSelectionMove->SetText("");
@@ -377,39 +348,32 @@ void UnitControlPanel::UpdateSingleSelectionDisplay()
 		m_singleSelectionFirepower->SetText("");
 		m_unitListLabel->SetText("");
 
-		
 		m_singleSelectionHealth->SetDrawCallbackAndCookie(NULL, NULL);
 		m_singleSelectionIcon->SetDrawCallbackAndCookie(NULL, NULL);
 		m_singleSelectionIcon->SetImageMapCallback(NULL, NULL);
 		m_singleSelectionFuel->SetDrawCallbackAndCookie(NULL, NULL);
 
-		
-		
+
 		return;
 	}
 
-	
 	const IconRecord *iconRecord = unit.GetDBRec()->GetDefaultIcon();
 
-	
 	const MBCHAR *unitIconName = iconRecord->GetLargeIcon();
 
-	
 	if(unitIconName && strcmp(unitIconName, "NULL"))
-		m_singleSelectionIcon->SetImage((char *)unitIconName); 
+		m_singleSelectionIcon->SetImage((char *)unitIconName);
 
-	
 	MBCHAR valueString[16];
 
-	
-	
+
 	sprintf(valueString, "%d",
 		static_cast<sint32>(unit.GetAttack()));
 	m_singleSelectionAttack->SetText(valueString);
 	sprintf(valueString, "%d",
 		static_cast<sint32>(unit.GetDefense()));
 	m_singleSelectionDefend->SetText(valueString);
-	
+
 	sprintf(valueString, "%d",
 		static_cast<sint32>(ceil(unit.GetMovementPoints() / 100.0)));
 	m_singleSelectionMove->SetText(valueString);
@@ -425,7 +389,6 @@ void UnitControlPanel::UpdateSingleSelectionDisplay()
 
 	m_singleSelectionFuel->SetDrawCallbackAndCookie(FuelBarDrawCallback, (void *)unit.m_id);
 
-	
 	m_singleSelectionHealth->SetDrawCallbackAndCookie(
 		HealthBarActionCallback, reinterpret_cast<void*>(unit.m_id));
 
@@ -444,14 +407,12 @@ void UnitControlPanel::UpdateSingleSelectionDisplay()
 	m_unitListLabel->SetText(unit.GetDisplayName().c_str());
 }
 
-
 void UnitControlPanel::UpdateMultipleSelectionDisplay()
 {
-	
+
 	if(!g_selected_item)
 		return;
 
-	
 	static CellUnitList cellUnitList[2];
 	static DynamicArray<Army> cellArmyList[2];
 	static sint32 curUnitList = 0;
@@ -467,13 +428,13 @@ void UnitControlPanel::UpdateMultipleSelectionDisplay()
 		cellArmyList[curUnitList].Insert(cellUnitList[curUnitList][i].GetArmy());
 	}
 
-	
-	
-	
-	
-	
 
-	
+
+
+
+
+
+
 	bool changed = false;
 
 	if(cellUnitList[curUnitList].Num() == cellUnitList[lastUnitList].Num()) {
@@ -488,39 +449,33 @@ void UnitControlPanel::UpdateMultipleSelectionDisplay()
 		changed = true;
 	}
 
-
 	if(!changed) {
 		curUnitList ^= 1;
 		return;
 	}
 
-	
 	sint32 multiIndex = 0;
 	sint32 unitIndex = 0;
 
-	
 	while(multiIndex < NUMBER_OF_MULTIPLE_SELECTION_BUTTONS) {
-		
+
 		if(unitIndex < cellUnitList[curUnitList].Num()) {
-			
+
 			Unit &unit = cellUnitList[curUnitList][unitIndex++];
 			Army army = unit.GetArmy();
 
-			
-			
+
 			bool armyAlreadyShown = false;
 			for(sint32 testIndex = unitIndex - 2; testIndex >= 0; testIndex--) {
 				if(cellUnitList[curUnitList][testIndex].GetArmy().m_id == army.m_id)
 					armyAlreadyShown = true;
 			}
 
-			
 			if(!armyAlreadyShown) {
-				
+
 				m_multiPair[multiIndex].first = this;
 				m_multiPair[multiIndex].second = army.m_id;
 
-				
 				m_multipleSelectionButton[multiIndex]->SetActionFuncAndCookie(
 					MultiButtonActionCallback, &m_multiPair[multiIndex]);
 				if(army.IsValid() && army.Num() == 1) {
@@ -531,8 +486,7 @@ void UnitControlPanel::UpdateMultipleSelectionDisplay()
 				if(m_multipleSelectionButton[multiIndex]->IsDisabled())
 					m_multipleSelectionButton[multiIndex]->Enable(true);
 
-				
-				
+
 				m_multipleSelectionButton[multiIndex]->ExchangeImage(0, 0,
 					unit.GetDBRec()->GetDefaultIcon()->GetIcon());
 				if(army.IsValid() && army.Num() > 1) {
@@ -543,7 +497,7 @@ void UnitControlPanel::UpdateMultipleSelectionDisplay()
 				}
 				multiIndex++;
 			}
-		} else {	
+		} else {
 			m_multipleSelectionButton[multiIndex]->SetActionFuncAndCookie(NULL, NULL);
 			m_multipleSelectionHealth[multiIndex]->SetDrawCallbackAndCookie(NULL, NULL);
 			if(!m_multipleSelectionButton[multiIndex]->IsDisabled())
@@ -554,47 +508,39 @@ void UnitControlPanel::UpdateMultipleSelectionDisplay()
 		}
 	}
 
-	
 	m_unitListLabel->SetText("");
 
 	curUnitList ^= 1;
 }
 
-
 void UnitControlPanel::UpdateArmySelectionDisplay()
 {
-	
-	
+
 	Army army = GetSelectedArmy();
 	if(!g_theArmyPool->IsValid(army)) {
 		SetSelectionMode(SINGLE_SELECTION);
 		return;
 	}
 
-	
 	if(army.Num() <= 1) {
 		SetSelectionMode(SINGLE_SELECTION);
 		return;
 	}
 
-	
-	
+
 	Unit unit = army[0];
 	if(unit.IsValid())
 		m_armySelectionIcon->ExchangeImage(0, 0,
 		unit.GetDBRec()->GetDefaultIcon()->GetIcon());
 
-	
 	for(int armyIndex = 0; armyIndex <
 		NUMBER_OF_ARMY_SELECTION_BUTTONS; armyIndex++) {
-		
-		
+
 		if(armyIndex < army.Num()) {
-			
+
 			const MBCHAR *unitIconName =
 				army[armyIndex].GetDBRec()->GetDefaultIcon()->GetSmallIcon();
 
-			
 			if(unitIconName && strcmp(unitIconName, "NULL")) {
 				m_armySelectionButton[armyIndex]->ExchangeImage(0, 0,
 																unitIconName);
@@ -605,7 +551,7 @@ void UnitControlPanel::UpdateArmySelectionDisplay()
 			}
 			if(m_armySelectionButton[armyIndex]->IsDisabled())
 				m_armySelectionButton[armyIndex]->Enable(true);
-		} else {	
+		} else {
 			m_armySelectionButton[armyIndex]->ExchangeImage(0, 0, NULL);
 			m_armySelectionHealth[armyIndex]->SetDrawCallbackAndCookie(NULL, NULL);
 			if(!m_armySelectionButton[armyIndex]->IsDisabled())
@@ -613,7 +559,6 @@ void UnitControlPanel::UpdateArmySelectionDisplay()
 		}
 	}
 
-	
 	m_unitListLabel->SetText(army.GetData()->GetName());
 }
 
@@ -622,7 +567,7 @@ void UnitControlPanel::UpdateTransportSelectionDisplay()
 	if(m_transportSelectionDisplay->IsHidden())
 		return;
 
-	Army army = GetSelectedArmy();	
+	Army army = GetSelectedArmy();
 	static Unit unit; unit.m_id = 0;
 
 	if(g_theArmyPool->IsValid(army)) {
@@ -632,7 +577,7 @@ void UnitControlPanel::UpdateTransportSelectionDisplay()
 			unit.m_id = army[0].m_id;
 		}
 	}
-	
+
 	if(unit.IsValid()) {
 		UnitDynamicArray *cargoList = unit->GetCargoList();
 
@@ -661,7 +606,7 @@ void UnitControlPanel::UpdateTransportSelectionDisplay()
 						butt->Enable(FALSE);
 						m_transportSelectionCargo[i] = 0;
 						m_transportSelectionHealth[i]->SetDrawCallbackAndCookie(NULL, NULL);
-						
+
 					}
 				} else {
 					if(m_transportSelectionCargo[i] != cargoList->Access(i).m_id) {
@@ -684,21 +629,17 @@ void UnitControlPanel::UpdateTransportSelectionDisplay()
 			}
 		}
 
-		
 		SetSelectionMode(SINGLE_SELECTION);
 	}
 }
 
-
 void UnitControlPanel::UpdateOrderButtons()
 {
-	
-	
+
 	static bool enableState[NUMBER_OF_ORDER_BUTTONS];
 
-	
-	
-	Army army = GetSelectedArmy();	
+
+	Army army = GetSelectedArmy();
 	if(m_lastSelectionUnit == m_armySelectionUnit) {
 		if(army.m_id == m_lastSelectedArmy.m_id) {
 			if(army.IsValid() && army.Num() == m_lastSelectedArmyCount)
@@ -712,16 +653,14 @@ void UnitControlPanel::UpdateOrderButtons()
 	m_lastSelectedArmy = army;
 	m_lastSelectedArmyCount = army.IsValid() ? army.Num() : 0;
 
-	sint32 orderIndex;	
+	sint32 orderIndex;
 	for(orderIndex = 0; orderIndex < NUMBER_OF_ORDER_BUTTONS; orderIndex++) {
-		
+
 		m_orderButton[orderIndex]->ExchangeImage(4, 0, NULL);
 		m_orderButton[orderIndex]->ShouldDraw();
 
-		
 		m_orderButton[orderIndex]->SetActionFuncAndCookie(NULL, NULL);
 
-		
 		enableState[orderIndex] = false;
 
 		aui_TipWindow *tipwin = (aui_TipWindow *)m_orderButton[orderIndex]->GetTipWindow();
@@ -731,36 +670,32 @@ void UnitControlPanel::UpdateOrderButtons()
 	}
 
 	if(g_theArmyPool->IsValid(army)) {
-		
-		
+
 		ArmyData *armyData = army.AccessData();
 		if(armyData) {
-			bool const 	isShowOrderIntersection	= 
+			bool const 	isShowOrderIntersection	=
 				!g_theProfileDB->GetValueByName("ShowOrderUnion");
-			
+
 			for(sint32 index = 0; index < g_theOrderDB->NumRecords(); index++) {
-				
+
 				const OrderRecord *orderRecord = g_theOrderDB->Get(index);
 
-				
 				if(stricmp(orderRecord->GetIDText(), "ORDER_ENSLAVE_SETTLER") == 0)
 					continue;
 
-				
-				bool const	isSelectedCapable	= 
+				bool const	isSelectedCapable	=
 					(m_armySelectionUnit >= 0) &&
 					armyData->TestOrderUnit(orderRecord, m_armySelectionUnit);
 				bool const	isArmyCapable		=
-					isSelectedCapable || ((isShowOrderIntersection) 
+					isSelectedCapable || ((isShowOrderIntersection)
 									      ? armyData->TestOrderAll(orderRecord)
 										  : armyData->TestOrderAny(orderRecord)
 										 );
 
-				if (isArmyCapable) 
+				if (isArmyCapable)
 				{
 					sint32 orderButtonIndex = orderRecord->GetButtonLocation();
 
-					
 					m_orderButton[orderButtonIndex]->ExchangeImage(4, 0,
 						orderRecord->GetCPIcon());
 
@@ -771,29 +706,25 @@ void UnitControlPanel::UpdateOrderButtons()
 						tipwin->SetTipText((char *)g_theStringDB->GetNameStr(orderRecord->GetLocalizedName()));
 					}
 
-					
-					
+
 					ORDER_TEST orderTest = armyData->TestOrder(orderRecord);
 
 					sint32 range;
 					if(!orderRecord->GetRange(range))
 						range = 0;
 
-					
 					if((orderTest == ORDER_TEST_OK) ||
 						(orderTest == ORDER_TEST_NEEDS_TARGET) ||
 						(orderTest == ORDER_TEST_NO_MOVEMENT) ||
 						(orderTest == ORDER_TEST_INVALID_TARGET)) {
-						
+
 						m_orderPair[orderButtonIndex].first = this;
 						m_orderPair[orderButtonIndex].second =
 							const_cast<OrderRecord*>(orderRecord);
 
-						
 						m_orderButton[orderButtonIndex]->SetActionFuncAndCookie(
 							OrderButtonActionCallback, &m_orderPair[orderButtonIndex]);
 
-						
 						enableState[orderButtonIndex] = true;
 					}
 				}
@@ -801,43 +732,36 @@ void UnitControlPanel::UpdateOrderButtons()
 		}
 	}
 
-	
 	for(orderIndex = 0; orderIndex < NUMBER_OF_ORDER_BUTTONS; orderIndex++) {
 		if(m_orderButton[orderIndex]->IsDisabled()) {
-			if(enableState[orderIndex])	
+			if(enableState[orderIndex])
 				m_orderButton[orderIndex]->Enable(true);
-		} else if(!enableState[orderIndex]) {	
+		} else if(!enableState[orderIndex]) {
 			m_orderButton[orderIndex]->Enable(false);
 		}
 	}
 }
 
 
-
 Army UnitControlPanel::GetSelectedArmy()
 {
-	
-	
+
 	if(!g_selected_item)
 		return(Army(0));
 
-	
 	Player *player = g_player[g_selected_item->GetVisiblePlayer()];
 
-	
 	if(!player)
 		return(Army(0));
 
-	
 	ID id;
 	PLAYER_INDEX playerIndex;
 	SELECT_TYPE selectionType;
 	g_selected_item->GetTopCurItem(playerIndex, id,
 		selectionType);
 
-	
   	if(selectionType == SELECT_TYPE_LOCAL_ARMY) {
-		
+
 		return(Army(id));
 	}
 
@@ -854,41 +778,33 @@ Army UnitControlPanel::GetSelectedArmy()
 		}
 	}
 
-	
 	return(Army(0));
 }
 
-
 void UnitControlPanel::GiveOrder(OrderRecord *order)
 {
-	
-	
+
 	g_controlPanel->BeginOrderDelivery(order);
 
 #if 0
-	
-	
+
 	Army army = GetSelectedArmy();
 	if(!g_theArmyPool->IsValid(army))
 		return;
 
-	
-	
+
 	ArmyData *armyData = army.AccessData();
 	if(!armyData)
 		return;
 
-	
 	ORDER_TEST orderTest = armyData->TestOrderHere(order, armyData->RetPos());
 
-	
 	if((orderTest==ORDER_TEST_OK) &&
 		(!order->GetTargetPretestMovePosition()))
 		armyData->PerformOrder(order);
-	else {	
-		
-		
-		
+	else {
+
+
 		g_controlPanel->BeginOrderDelivery(order);
 	}
 #endif
@@ -900,69 +816,63 @@ void UnitControlPanel::GiveOrder(OrderRecord *order)
 void UnitControlPanel::UnitDisplayGroupCallback(aui_Region *region,
 												void *userData)
 {
-	
+
 	UnitControlPanel *panel = static_cast<UnitControlPanel*>(userData);
 
-	
 	panel->SetSelectionMode(panel->m_currentMode);
 }
-
 
 
 void UnitControlPanel::PrevUnitButtonActionCallback(aui_Control *control,
 	uint32 action, uint32 data, void *cookie)
 {
-	
+
 	if(action != static_cast<uint32>(AUI_BUTTON_ACTION_EXECUTE))
 		return;
 
-	
 	UnitControlPanel *panel = static_cast<UnitControlPanel*>(cookie);
 
 	switch(panel->m_currentMode) {
 		case SINGLE_SELECTION:
 		case ARMY_SELECTION:
-			
+
 			panel->SetSelectionMode(MULTIPLE_SELECTION);
 			break;
 		case MULTIPLE_SELECTION:
 		default:
-			
+
 			g_selected_item->NextUnmovedUnit();
 			break;
 	}
 }
-
 
 void UnitControlPanel::NextUnitButtonActionCallback(aui_Control *control,
 	uint32 action, uint32 data, void *cookie)
 {
-	
+
 	if(action != static_cast<uint32>(AUI_BUTTON_ACTION_EXECUTE))
 		return;
 
-	
 	UnitControlPanel *panel = static_cast<UnitControlPanel*>(cookie);
 
 	switch(panel->m_currentMode) {
 		case SINGLE_SELECTION:
 		case ARMY_SELECTION:
-			
+
 			panel->SetSelectionMode(MULTIPLE_SELECTION);
 			break;
 		case MULTIPLE_SELECTION:
 		default:
-			
+
 			g_selected_item->NextUnmovedUnit();
 			break;
 	}
 }
 
-
 AUI_ERRCODE UnitControlPanel::HealthBarActionCallback(ctp2_Static *control,
 	aui_Surface *surface, RECT &rect, void *cookie)
 {
-	
+
 	Unit unit;
 #if defined(__LP64__)
 	unit.m_id = (uint64)(cookie);
@@ -970,31 +880,26 @@ AUI_ERRCODE UnitControlPanel::HealthBarActionCallback(ctp2_Static *control,
 	unit.m_id = (uint32)(cookie);
 #endif
 
-	
 	AUI_ERRCODE errorCode =
 		g_c3ui->TheBlitter()->ColorBlt(surface, &rect, RGB(0,0,0), 0);
 	if(errorCode != AUI_ERRCODE_OK)
 		return(errorCode);
 
-	
 	if(!unit.IsValid())
 		return AUI_ERRCODE_OK;
 
-	
-	
+
 	double healthPercent = (unit.GetDBRec()->GetMaxHP() > 0) ?
 		static_cast<double>(unit.GetHP()) /
 		static_cast<double>(unit.GetDBRec()->GetMaxHP()) : 1.0;
 
-	
-	Pixel16 color = RGB(255, 0, 0);		
+	Pixel16 color = RGB(255, 0, 0);
 	if(healthPercent > 0.666) {
-		color = RGB(0, 255, 0);			
+		color = RGB(0, 255, 0);
 	} else if(healthPercent > 0.333) {
-		color = RGB(255, 255, 0);		
+		color = RGB(255, 255, 0);
 	}
 
-	
 	RECT healthRectangle = rect;
 	sint32 width = healthRectangle.right - healthRectangle.left;
 	healthRectangle.right = healthRectangle.left +
@@ -1003,7 +908,6 @@ AUI_ERRCODE UnitControlPanel::HealthBarActionCallback(ctp2_Static *control,
 	if(healthRectangle.right <= healthRectangle.left)
 		return AUI_ERRCODE_OK;
 
-	
 	AUI_ERRCODE err = (g_c3ui->TheBlitter()->ColorBlt(surface,
 		&healthRectangle, color, 0));
 
@@ -1064,47 +968,39 @@ AUI_ERRCODE UnitControlPanel::FuelBarDrawCallback(ctp2_Static *control,
 void UnitControlPanel::MultiButtonActionCallback(aui_Control *control,
 	uint32 action, uint32 data, void *cookie)
 {
-	
+
 	if(action != static_cast<uint32>(AUI_BUTTON_ACTION_EXECUTE))
 		return;
 
-	
 	std::pair<UnitControlPanel*, uint32> *multiPair =
 		static_cast<std::pair<UnitControlPanel*, uint32>*>(cookie);
 
-	
-	
+
 	Army army(multiPair->second);
 	if(!g_theArmyPool->IsValid(army))
 		return;
 
-	
-	
+
 	Unit unit = army[0];
 	if(!unit.IsValid())
 		return;
 
-	
 	g_selected_item->SetSelectUnit(unit);
 
-	
 	multiPair->first->SetSelectionMode(ARMY_SELECTION);
 }
-
 
 
 void UnitControlPanel::ArmyButtonActionCallback(aui_Control *control,
 	uint32 action, uint32 data, void *cookie)
 {
-	
+
 	if(action != static_cast<uint32>(AUI_BUTTON_ACTION_EXECUTE))
 		return;
 
-	
 	UnitControlPanel *panel = static_cast<UnitControlPanel*>(cookie);
 
-	
-	
+
 	for(int armyIndex = 0; armyIndex <
 		NUMBER_OF_ARMY_SELECTION_BUTTONS; armyIndex++) {
 		if(panel->m_armySelectionButton[armyIndex] == control) {
@@ -1114,29 +1010,25 @@ void UnitControlPanel::ArmyButtonActionCallback(aui_Control *control,
 		}
 	}
 
-	
 	panel->Update();
 }
-
 
 void UnitControlPanel::OrderButtonActionCallback(aui_Control *control,
 	uint32 action, uint32 data, void *cookie)
 {
-	
+
 	if(action != static_cast<uint32>(AUI_BUTTON_ACTION_EXECUTE))
 		return;
 
-	
 	std::pair<UnitControlPanel*, OrderRecord*> *orderPair =
 		static_cast<std::pair<UnitControlPanel*, OrderRecord*>*>(cookie);
 
-	
 	orderPair->first->GiveOrder(orderPair->second);
 }
 
 void UnitControlPanel::Activated()
 {
-	
+
 	m_lastSelectedArmy.m_id = (unsigned) -1;
 
 	Army a;
@@ -1150,8 +1042,8 @@ void UnitControlPanel::Activated()
 }
 
 AUI_ERRCODE UnitControlPanel::DrawCargoCallback(ctp2_Static *control,
-										 aui_Surface *surface, 
-										 RECT &rect, 
+										 aui_Surface *surface,
+										 RECT &rect,
 										 void *cookie)
 {
 #if defined(__LP64__)
@@ -1179,7 +1071,7 @@ AUI_ERRCODE UnitControlPanel::DrawCargoCallback(ctp2_Static *control,
 
 	sint32 i;
 	for(i = 0; i < capacity; i++) {
-		RECT tickRect = { box.left + i * tickspacewidth, box.top, 
+		RECT tickRect = { box.left + i * tickspacewidth, box.top,
 						  box.left + i * tickspacewidth + tickwidth, box.bottom };
 		Pixel16 color = (i < numCarried) ? RGB(0,255,0) : RGB(0,0,0);
 		g_c3ui->TheBlitter()->ColorBlt(surface, &tickRect, color, 0);
@@ -1218,4 +1110,3 @@ void UnitControlPanel::UnsetCargoButtons()
 		m_transportSelectionButton[i]->SetState(FALSE);
 	}
 }
-

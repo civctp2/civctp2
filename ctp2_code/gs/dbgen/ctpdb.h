@@ -11,7 +11,7 @@
  *
  * THIS FILE IS NOT GENERATED OR SUPPORTED BY ACTIVISION.
  *
- * This material has been developed at apolyton.net by the Apolyton CtP2 
+ * This material has been developed at apolyton.net by the Apolyton CtP2
  * Source Code Project. Contact the authors at ctp2source@apolyton.net.
  *
  *----------------------------------------------------------------------------
@@ -74,7 +74,7 @@ struct fieldsize {
 
 struct bitpairtype {
 	uint32 type;
-	void *extraData; 
+	void *extraData;
 };
 
 #define k_NAMEVALUE_HAS_VALUE 0x01

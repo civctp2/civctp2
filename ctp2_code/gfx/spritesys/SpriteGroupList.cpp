@@ -2,7 +2,7 @@
 //
 // Project      : Call To Power 2
 // File type    : C++ source
-// Description  : Sprite group list 
+// Description  : Sprite group list
 //
 //----------------------------------------------------------------------------
 //
@@ -10,13 +10,13 @@
 //
 // THIS FILE IS NOT GENERATED OR SUPPORTED BY ACTIVISION.
 //
-// This material has been developed at apolyton.net by the Apolyton CtP2 
+// This material has been developed at apolyton.net by the Apolyton CtP2
 // Source Code Project. Contact the authors at ctp2source@apolyton.net.
 //
 //----------------------------------------------------------------------------
 //
 // Compiler flags
-// 
+//
 //----------------------------------------------------------------------------
 //
 // Modifications from the original Activision code:
@@ -26,7 +26,7 @@
 // - Corrected crash when loading a saved game (only in release version?).
 //
 //----------------------------------------------------------------------------
- 
+
 #include "c3.h"
 
 #include "c3errors.h"
@@ -57,7 +57,6 @@ SpriteGroupList	*g_unitSpriteGroupList;
 SpriteGroupList	*g_effectSpriteGroupList;
 SpriteGroupList	*g_goodSpriteGroupList;
 SpriteGroupList	*g_citySpriteGroupList;
-
 
 
 void spritegrouplist_Initialize(void)
@@ -94,7 +93,6 @@ void spritegrouplist_Initialize(void)
 }
 
 
-
 void spritegrouplist_Cleanup(void)
 {
 	delete g_unitSpriteGroupList;
@@ -114,14 +112,12 @@ void spritegrouplist_Cleanup(void)
 }
 
 
-
 SpriteGroupList::SpriteGroupList()
 {
 	for (sint32 i=0; i<k_MAX_SPRITES; i++) {
 		m_spriteList[i] = NULL;
 	}
 }
-
 
 
 SpriteGroupList::~SpriteGroupList()
@@ -131,7 +127,6 @@ SpriteGroupList::~SpriteGroupList()
 	}
 }
 
-
 #define _BASIC_SPRITE_LOAD_
 
 SPRITELISTERR SpriteGroupList::LoadSprite(uint32 index, GROUPTYPE type, LOADTYPE loadType,GAME_ACTION action)
@@ -139,34 +134,33 @@ SPRITELISTERR SpriteGroupList::LoadSprite(uint32 index, GROUPTYPE type, LOADTYPE
     char			inFile[_MAX_PATH];
     SpriteGroup		*newSpriteGroup=m_spriteList[index];
 
-	
-    switch (type) 
+    switch (type)
 	{
-        case GROUPTYPE_UNIT : 
+        case GROUPTYPE_UNIT :
             if(newSpriteGroup==NULL)
 		newSpriteGroup = new UnitSpriteGroup(type);
 
-            // A unit sprite file may have 3 or 2 digits in the name. 
+            // A unit sprite file may have 3 or 2 digits in the name.
             sprintf(inFile, "GU%.3d.SPR", index);
-		 
+
             MBCHAR fullPath[_MAX_PATH];
             if (!g_civPaths->FindFile(C3DIR_SPRITES, inFile, fullPath, TRUE, FALSE))
                 {
 		// No 3 digit version found: try the 2 digit version.
 		sprintf(inFile, "GU%.2d.SPR", index);
                 }
-            //printf("%s L%d: SpriteGroupList::LoadSprite %s\n", __FILE__, __LINE__, inFile);	
+            //printf("%s L%d: SpriteGroupList::LoadSprite %s\n", __FILE__, __LINE__, inFile);
             break;
 
-	case GROUPTYPE_PROJECTILE : 
+	case GROUPTYPE_PROJECTILE :
             Assert("Projectile Actors Removed From Game - CJI"==NULL);
             return SPRITELISTERR_NOTFOUND;
 
-	case GROUPTYPE_EFFECT : 
+	case GROUPTYPE_EFFECT :
             if(newSpriteGroup==NULL)
                 newSpriteGroup = new EffectSpriteGroup(type);
             sprintf(inFile, "GX%.2d.SPR", index);
-	  
+
             break;
 	case GROUPTYPE_CITY:
             if(newSpriteGroup==NULL)
@@ -183,14 +177,11 @@ SPRITELISTERR SpriteGroupList::LoadSprite(uint32 index, GROUPTYPE type, LOADTYPE
             return SPRITELISTERR_BADTYPE;
 	}
 
-	
     Assert(newSpriteGroup != NULL);
 
-	
-    if(newSpriteGroup==NULL) 
+    if(newSpriteGroup==NULL)
         return SPRITELISTERR_NOTFOUND;
 
-	
     switch(loadType)
 	{
 	case LOADTYPE_BASIC:
@@ -207,25 +198,22 @@ SPRITELISTERR SpriteGroupList::LoadSprite(uint32 index, GROUPTYPE type, LOADTYPE
             return SPRITELISTERR_NOTFOUND;
 	};
 
-	
     m_spriteList[index] = newSpriteGroup;
 
     return SPRITELISTERR_OK;
     }
 
 
-
 SPRITELISTERR SpriteGroupList::PurgeSprite(uint32 index)
     {
-    if (m_spriteList[index] != NULL) 
+    if (m_spriteList[index] != NULL)
 	{
         delete m_spriteList[index];
         m_spriteList[index] = NULL;
 	}
-	
+
     return SPRITELISTERR_OK;
     }
-
 
 
 SpriteGroup *SpriteGroupList::GetSprite(uint32 index, GROUPTYPE type, LOADTYPE loadType,GAME_ACTION action)
@@ -240,20 +228,20 @@ SpriteGroup *SpriteGroupList::GetSprite(uint32 index, GROUPTYPE type, LOADTYPE l
 
 	SpriteGroup *group = m_spriteList[index];
 
-	if (group) 
+	if (group)
 	{
-		if (loadType != group->GetLoadType()) 
+		if (loadType != group->GetLoadType())
 		{
-			if((loadType==LOADTYPE_FULL)||(loadType==LOADTYPE_INDEXED)) 
+			if((loadType==LOADTYPE_FULL)||(loadType==LOADTYPE_INDEXED))
 			{
-				
+
 				group->DeallocateStorage();
 				err = LoadSprite(index, type, loadType,action);
 				Assert(err == SPRITELISTERR_OK);
 			}
 		}
 	}
-	else 
+	else
     {
         if (SPRITELISTERR_OK == LoadSprite(index, type, loadType, action))
         {
@@ -264,9 +252,9 @@ SpriteGroup *SpriteGroupList::GetSprite(uint32 index, GROUPTYPE type, LOADTYPE l
             // Failure has been Asserted in LoadSprite
             return NULL;
         }
-	} 
+	}
 
-	switch (loadType) 
+	switch (loadType)
 	{
 	case LOADTYPE_BASIC:
 		 m_spriteList[index]->AddRef();
@@ -300,37 +288,33 @@ BOOL SpriteGroupList::ReleaseSprite(uint32 index, LOADTYPE loadType)
 
 	LOADTYPE	groupLoadType = m_spriteList[index]->GetLoadType();
 
-	
 	if (loadType == LOADTYPE_FULL) {
-		
-		if (groupLoadType == LOADTYPE_FULL) 
+
+		if (groupLoadType == LOADTYPE_FULL)
 		{
-			
+
 			m_spriteList[index]->ReleaseFullLoad();
-		} else 
+		} else
 		{
-			
+
 		}
 	} else {
-		
+
 		m_spriteList[index]->Release();
 	}
 
-	sint32	basicRefs = m_spriteList[index]->GetRefCount(), 
+	sint32	basicRefs = m_spriteList[index]->GetRefCount(),
 			fullRefs = m_spriteList[index]->GetFullLoadRefCount();
 
-	
 	if (basicRefs == 0 && fullRefs == 0) {
 		PurgeSprite(index);
 		return TRUE;
 	}
 
-	
-	if (basicRefs >= 0 && fullRefs == 0) 
+	if (basicRefs >= 0 && fullRefs == 0)
 	{
-		
-		
-		if (groupLoadType == LOADTYPE_FULL) 
+
+		if (groupLoadType == LOADTYPE_FULL)
 		{
 			m_spriteList[index]->DeallocateStorage();
 			m_spriteList[index]->DeallocateFullLoadAnims();
@@ -338,15 +322,13 @@ BOOL SpriteGroupList::ReleaseSprite(uint32 index, LOADTYPE loadType)
 			err = LoadSprite(index, m_spriteList[index]->GetType(), LOADTYPE_BASIC,(GAME_ACTION)0); // No idea why, but without releasing the old sprite a bad idea
 			Assert(err == SPRITELISTERR_OK);
 		} else {
-			
-			
+
 		}
 		return FALSE;
 	}
 
-	
 	if (fullRefs >= 0) {
-		
+
 	}
 
 	return FALSE;
@@ -374,16 +356,16 @@ void SpriteGroupList::RefreshBasicLoads(GROUPTYPE groupType)
 	MBCHAR s[_MAX_PATH];
 	sprintf( s, g_theStringDB->GetNameStr("LOADING") );
 
-	for (sint32 i=0; i<k_MAX_SPRITES; i++) 
+	for (sint32 i=0; i<k_MAX_SPRITES; i++)
 	{
 		UnitSpriteGroup *usg = (UnitSpriteGroup *)m_spriteList[i];
 
-		if (usg != NULL) 
+		if (usg != NULL)
 		{
-			
-			
-			
-			
+
+
+
+
 			if (usg->GetLoadType() == LOADTYPE_BASIC) {
 				usg->DeallocateStorage();
 

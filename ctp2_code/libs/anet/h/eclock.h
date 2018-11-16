@@ -1,4 +1,4 @@
-/* 
+/*
 Copyright (C) 1995-2001 Activision, Inc.
 
 This library is free software; you can redistribute it and/or
@@ -80,4 +80,3 @@ clock_t eclock_win32(void);
 #endif
 
 #endif  /* Protect against double inclusion */
-

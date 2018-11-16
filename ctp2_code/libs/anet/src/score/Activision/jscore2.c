@@ -1,4 +1,4 @@
-/* 
+/*
 Copyright (C) 1995-2001 Activision, Inc.
 
 This library is free software; you can redistribute it and/or
@@ -26,7 +26,7 @@ Foundation, Inc., 59 Temple Place, Suite 330, Boston, MA  02111-1307  USA
  interface for the return values.
  All score handling classes for a session type should be placed in a
  subdirectory named servjar, in a .jar file named score_<sessionType>.jar.
- 
+
  For example, for session type 30, the class score_30.class in the jar file
  score_30.jar would be loaded, and when a score report for that session type
  comes in, the score_30.getReport() method would be called to get an
@@ -126,10 +126,10 @@ int java_init(const char *dbAddr)
 		printf("Can't instantiate object of class %s\n", classname);
 		return -1;
 	} else if ((*env)->ExceptionOccurred(env) != NULL) {
-		(*env)->ExceptionDescribe(env); 
+		(*env)->ExceptionDescribe(env);
 		(*env)->ExceptionClear(env);
 	}
- 
+
 	/* Get the methods we're interested in */
 	if ((jGetReport = (*env)->GetMethodID(env, jClass,
 			"getReport", "(S[BSSISII)LActivision/ScoreReport;")) == NULL) {
@@ -205,7 +205,7 @@ int loadServlet(jobject jScoreReport, jServlet_t *jservlet)
 /*		(*env)->ExceptionDescribe(env); */
 		(*env)->ExceptionClear(env);
 	}
-	
+
 	return 0;
 }
 
@@ -214,7 +214,7 @@ int loadServlet(jobject jScoreReport, jServlet_t *jservlet)
  call the Java class that handles it.
 
  Returns 0 on success or -1 on error.
- FIXME: needs error differentiation.  Some might want to be non-fatal. 
+ FIXME: needs error differentiation.  Some might want to be non-fatal.
 --------------------------------------------------------------------------*/
 int updateScore(int sessType, char *sessid, int sessidlen, scorerep_t *rep)
 {
@@ -267,10 +267,10 @@ int updateScore(int sessType, char *sessid, int sessidlen, scorerep_t *rep)
 		assoctab_item_t *pi = assoctab_getkey(rep->players, i);
 		short id = (short)pi->key;
 		scorerep_player_t *player = (scorerep_player_t *)(pi->value);
-		
+
 		assert(player->bloblen <= scorerep_MAX_BLOBLEN);
 		memcpy(bytesBlob, player->blob, player->bloblen);
-		
+
 		(*env)->CallVoidMethod(env, jsrep, jservlet->jAddPlayer,
 			id, player->uid, jBlob, player->bloblen);
 		if ((*env)->ExceptionOccurred(env) != NULL) {
@@ -287,7 +287,7 @@ int updateScore(int sessType, char *sessid, int sessidlen, scorerep_t *rep)
  Given a session close message, call the java method to handle it.
 
  Returns 0 on success or -1 on error.
- FIXME: needs error differentiation.  Some might want to be non-fatal. 
+ FIXME: needs error differentiation.  Some might want to be non-fatal.
 --------------------------------------------------------------------------*/
 int closeSession(int sessType, char *sessid, int sessidlen)
 {
@@ -314,14 +314,14 @@ static int jargv2argv(JNIEnv *env, jobjectArray jargv, char **argv, int maxargc)
 {
 	int i;
 	jsize jargc;
-	
+
 	/* pull the first argument out of the jargv array */
 	jargc = (*env)->GetArrayLength(env, jargv);
 	for (i = 0; i < jargc && i < maxargc; i++) {
 		int len;
 		jstring jstr;
 		const char *utf8temp;
-	
+
 		jstr = (*env)->GetObjectArrayElement(env, jargv, i);
 		len = (*env)->GetStringUTFLength(env, jstr);
 		argv[i] = (char *)malloc(len + 1);
@@ -336,7 +336,7 @@ static int jargv2argv(JNIEnv *env, jobjectArray jargv, char **argv, int maxargc)
 }
 
 #define MAX_ARGC 8
-	
+
 /*--------------------------------------------------------------------------
  If we avoid the invocation api, we use a Java main function which simply
  calls this function.
@@ -447,6 +447,6 @@ Usage: java Activision.score_init wmqDir [dbAddr]\n\
 
 	(*env)->ReleaseByteArrayElements(env, jSessId, bytesSessId, 0);
 	(*env)->ReleaseByteArrayElements(env, jBlob, bytesBlob, 0);
-	
+
 	env = NULL;
 }

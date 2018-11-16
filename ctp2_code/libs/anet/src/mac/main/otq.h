@@ -1,4 +1,4 @@
-/* 
+/*
 Copyright (C) 1995-2001 Activision, Inc.
 
 This library is free software; you can redistribute it and/or
@@ -31,11 +31,10 @@ extern "C" {
 		unsigned long		in;				//	offset into buffer
 		unsigned long		out;			//	offset into buffer
 	} otq_t;
-	
+
 	void otq_put(otq_t* q, unsigned char* data, unsigned long theSize);
 	Boolean otq_get(otq_t* q, unsigned char* data, unsigned long* theSize);otq_t* otq_create(void);
-void otq_destroy(otq_t *otq); 
-
+void otq_destroy(otq_t *otq);
 
 #ifdef __cplusplus
 }

@@ -12,7 +12,7 @@ class CivArchive;
 
 #include "RiskRecord.h"
 
-class RiskDatabase : public Database<RiskRecord> 
+class RiskDatabase : public Database<RiskRecord>
 {
 public:
 	RiskDatabase();

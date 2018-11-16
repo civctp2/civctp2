@@ -1,34 +1,11 @@
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
 #ifndef __AUI_MUSIC_H__
 #define __AUI_MUSIC_H__
-
 
 #include "aui_base.h"
 #ifdef USE_SDL
 #include <SDL.h>
 #include <SDL_cdrom.h>
 #endif
-
 
 enum AUI_MUSIC_CODE
 {
@@ -40,7 +17,6 @@ enum AUI_MUSIC_CODE
 
 	AUI_MUSIC_CODE_COUNT
 };
-
 
 
 enum AUI_MUSIC_ERRCODE
@@ -63,7 +39,6 @@ enum AUI_MUSIC_ERRCODE
 };
 
 
-
 class aui_Music : public aui_Base
 {
 public:
@@ -77,7 +52,7 @@ public:
 	virtual AUI_MUSIC_ERRCODE Stop() { return AUI_MUSIC_ERRCODE_OK; }
 	virtual AUI_MUSIC_ERRCODE Play() { return AUI_MUSIC_ERRCODE_OK; }
 	virtual AUI_MUSIC_ERRCODE Play( sint32 itrack ) { return AUI_MUSIC_ERRCODE_OK; }
-	
+
 	virtual AUI_MUSIC_ERRCODE SetVolume( uint8 volume );
 	virtual uint8 GetVolume() { return m_volume; }
 
@@ -98,7 +73,6 @@ protected:
 };
 
 
-
 class aui_Redbook : public aui_Music
 {
 public:
@@ -106,7 +80,6 @@ public:
 	virtual ~aui_Redbook();
 
 
-	
 	virtual AUI_MUSIC_ERRCODE Init();
 	virtual AUI_MUSIC_ERRCODE Close();
 	virtual AUI_MUSIC_ERRCODE Pause();
@@ -116,7 +89,7 @@ public:
 	virtual AUI_MUSIC_ERRCODE Play( sint32 itrack );
 	virtual AUI_MUSIC_ERRCODE SetVolume( uint8 volume );
 	virtual AUI_MUSIC_CODE Status();
-	
+
 protected:
 
 	sint32 CDInitVolume();
@@ -136,5 +109,4 @@ protected:
 
 };
 
-
-#endif 
+#endif

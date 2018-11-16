@@ -13,7 +13,7 @@ class GameEventArgList;
 
 typedef sint32 MESSAGE_TYPE;
 
-class SlicObject : public SlicContext 
+class SlicObject : public SlicContext
 {
 private:
 	sint32 m_refCount;
@@ -45,7 +45,6 @@ private:
 
 	sint32 m_result;
 
-	
 	SlicArgList *m_argList;
 	void Execute();
 #ifdef _DEBUG
@@ -73,7 +72,7 @@ public:
 
 	void AddRecipient(const PLAYER_INDEX recip);
 	void AddAllRecipients();
-	void AddAllRecipientsBut(const PLAYER_INDEX loser1, 
+	void AddAllRecipientsBut(const PLAYER_INDEX loser1,
                              const PLAYER_INDEX loser2 = -1);
 
 	sint32 GetNumRecipients() const { return m_numRecipients; }
@@ -101,7 +100,7 @@ public:
 
 	void SetClass(sint32 mclass) { m_class = mclass; }
 
-	void SetDontSave() { m_dontSave = TRUE; }	
+	void SetDontSave() { m_dontSave = TRUE; }
 	void DisableClose() { m_closeDisabled = TRUE; }
 
 	void SetIsDiplomaticResponse() { m_isDiplomaticResponse = TRUE; }

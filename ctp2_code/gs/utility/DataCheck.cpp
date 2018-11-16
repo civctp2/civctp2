@@ -11,7 +11,7 @@
 //
 // THIS FILE IS NOT GENERATED OR SUPPORTED BY ACTIVISION.
 //
-// This material has been developed at apolyton.net by the Apolyton CtP2 
+// This material has been developed at apolyton.net by the Apolyton CtP2
 // Source Code Project. Contact the authors at ctp2source@apolyton.net.
 //
 //----------------------------------------------------------------------------
@@ -102,8 +102,7 @@
 #include "World.h"
 #include "player.h"
 
-
-extern  RandomGenerator         *g_rand; 
+extern  RandomGenerator         *g_rand;
 
 // The Databases
 extern  ProfileDB               *g_theProfileDB;
@@ -126,11 +125,10 @@ extern  UnitPool                *g_theUnitPool;
 
 // Others
 extern  Pollution               *g_thePollution;
-extern  SelectedItem            *g_selected_item; 
+extern  SelectedItem            *g_selected_item;
 extern  World                   *g_theWorld;
 extern  Player                  **g_player;
 extern  TopTen                  *g_theTopTen;
-
 
 DataCheck                       *g_dataCheck;
 
@@ -162,9 +160,8 @@ void DataCheck_Init(void)
 
 void DataCheck_Requiem(void)
 {
-	
-	
-	
+
+
 	if (g_dataCheck)
 	{
 		delete g_dataCheck;
@@ -204,7 +201,7 @@ DataCheck::DataCheck()
 
 
 
-// If we have to do copy and paste at all then let 
+// If we have to do copy and paste at all then let
 // make the preprocessor to do the work for us.
 #define CHECK_DB(db, db_type) \
 	start = clock(); \
@@ -226,18 +223,17 @@ DataCheck::DataCheck()
 void DataCheck::BeginTurn(void)
 {
 	CheckSum	*check;
-	
+
 	CivArchive	*archive;
-	
+
 	sint32	i, j;
-	
+
 	clock_t start, finish;
 
 	for(i=CRC_TYPE_MIN; i<CRC_TYPE_MAX; i++)
 		for (j=0; j<CRC_ARRAY_MAX; j++)
 			m_old_crc[i][j] = m_crc[i][j];
-		
-	
+
 	memset(&m_time, 0, CRC_TYPE_MAX * sizeof(uint32));
 
 	start = clock();
@@ -253,7 +249,7 @@ void DataCheck::BeginTurn(void)
 	m_time[CRC_TYPE_GLOBAL] = finish - start;
 	// should be replaced by:
 //	CHECK_DB(???, CRC_TYPE_GLOBAL);
-  
+
 	CHECK_DB(g_rand, CRC_TYPE_RAND);
 
 	start = clock();
@@ -320,7 +316,6 @@ void DataCheck::BeginTurn(void)
 	finish = clock();
 	m_time[CRC_TYPE_PROFILE_DB] = finish - start;
 
-	
 	start = clock();
 	archive = new CivArchive();
 	archive->SetStore();
@@ -333,7 +328,6 @@ void DataCheck::BeginTurn(void)
 	finish = clock();
 	m_time[CRC_TYPE_STRING_DB] = finish - start;
 
-	
 	CHECK_DB(g_theAdvanceDB, CRC_TYPE_ADVANCE_DB);
 	CHECK_DB(g_theAdvanceBranchDB, CRC_TYPE_ADVANCE_BRANCH_DB);
 	CHECK_DB(g_theAdvanceListDB, CRC_TYPE_ADVANCE_LIST_DB);
@@ -397,7 +391,7 @@ void DataCheck::BeginTurn(void)
 		if(!g_player[i]) continue;
 		g_player[i]->Serialize(*archive);
 	}
-	
+
 	check->AddData(archive->GetStream(), archive->StreamLen());
 	check->Done(m_crc[CRC_TYPE_PLAYER][CRC_ARRAY_0], m_crc[CRC_TYPE_PLAYER][CRC_ARRAY_1], m_crc[CRC_TYPE_PLAYER][CRC_ARRAY_2], m_crc[CRC_TYPE_PLAYER][CRC_ARRAY_3]);
 	delete archive;
@@ -423,13 +417,13 @@ void DataCheck::BeginTurn(void)
 
 
 sint32 DataCheck::IsWorldChanged () const
-{ 
+{
 	sint32	i;
 
 	for (i=0; i<CRC_ARRAY_MAX; i++)
 		if (m_crc[CRC_TYPE_WORLD][i] != m_old_crc[CRC_TYPE_WORLD][i])
 			return (TRUE);
-	
+
 	return (FALSE);
 }
 
@@ -445,7 +439,7 @@ sint32 DataCheck::IsWorldChanged () const
 
 
 
-sint32 DataCheck::IsGlobalChanged () const 
+sint32 DataCheck::IsGlobalChanged () const
 {
 	sint32	i;
 
@@ -469,9 +463,9 @@ sint32 DataCheck::IsGlobalChanged () const
 
 
 
-sint32 DataCheck::IsRandChanged () const 
+sint32 DataCheck::IsRandChanged () const
 
-{ 
+{
 	sint32	i;
 
 	for (i=0; i<CRC_ARRAY_MAX; i++) {
@@ -496,7 +490,7 @@ sint32 DataCheck::IsRandChanged () const
 
 
 sint32 DataCheck::IsDBChanged () const
-{ 
+{
 	sint32	i;
 
 	for (i=0; i<CRC_ARRAY_MAX; i++)
@@ -520,10 +514,10 @@ sint32 DataCheck::IsDBChanged () const
 
 sint32 DataCheck::IsPlayerChanged () const
 
-{ 
-	sint32	i; 
+{
+	sint32	i;
 
-	for (i=0; i<CRC_ARRAY_MAX; i++) { 
+	for (i=0; i<CRC_ARRAY_MAX; i++) {
 		if (m_crc[CRC_TYPE_PLAYER][i] != m_old_crc[CRC_TYPE_PLAYER][i]) {
 			return TRUE;
 		}
@@ -544,7 +538,7 @@ sint32 DataCheck::IsPlayerChanged () const
 
 sint32 DataCheck::IsPopChanged () const
 
-{ 
+{
 	return FALSE;
 }
 
@@ -561,10 +555,10 @@ sint32 DataCheck::IsPopChanged () const
 
 sint32 DataCheck::IsUnitChanged () const
 
-{ 
+{
 	sint32	i;
 
-	for (i=0; i<CRC_ARRAY_MAX; i++) { 
+	for (i=0; i<CRC_ARRAY_MAX; i++) {
 		if (m_crc[CRC_TYPE_UNITPOOL][i] != m_old_crc[CRC_TYPE_UNITPOOL][i]) {
 			return TRUE;
 		}
@@ -628,7 +622,7 @@ void DataCheck::SetDisplay(sint32 val)
 
 
 
-sint32 DataCheck::IsChanged(sint32 t) const 
+sint32 DataCheck::IsChanged(sint32 t) const
 {
 	sint32	i;
 
@@ -637,10 +631,10 @@ sint32 DataCheck::IsChanged(sint32 t) const
 		if (m_crc[t][i] != m_old_crc[t][i])
 			return (TRUE);
 
-	return (FALSE); 
+	return (FALSE);
 }
 
- 
+
 
 
 
@@ -680,7 +674,6 @@ void DataCheck::draw_time(aui_Surface *surf, sint32 x, sint32 y) const
 	primitives_DrawText(surf, x, y, s, 0, 0);
 }
 
-	
 
 
 
@@ -688,7 +681,8 @@ void DataCheck::draw_time(aui_Surface *surf, sint32 x, sint32 y) const
 
 
 
-void DataCheck::DisplayCRC(aui_Surface *surf) const 
+
+void DataCheck::DisplayCRC(aui_Surface *surf) const
 {
 	sint32	x=100,
 			y=80,

@@ -11,7 +11,7 @@
 //
 // THIS FILE IS NOT GENERATED OR SUPPORTED BY ACTIVISION.
 //
-// This material has been developed at apolyton.net by the Apolyton CtP2 
+// This material has been developed at apolyton.net by the Apolyton CtP2
 // Source Code Project. Contact the authors at ctp2source@apolyton.net.
 //
 //----------------------------------------------------------------------------
@@ -37,12 +37,9 @@
 #include "ns_units.h"
 #include "UnitRecord.h"
 
-
 ns_Units *g_nsUnits = NULL;
 
-
 extern StringDB *g_theStringDB;
-
 
 
 ns_Units::ns_Units()
@@ -52,7 +49,6 @@ ns_Units::ns_Units()
 	{
 		sint32 numUnits = g_theUnitDB->NumRecords();
 
-		
 		Assert( numUnits <= k_UNITS_MAX );
 		if ( numUnits > k_UNITS_MAX )
 			numUnits = k_UNITS_MAX;
@@ -76,7 +72,6 @@ ns_Units::ns_Units()
 		g_nsUnits = this;
 	}
 }
-
 
 
 ns_Units::~ns_Units()

@@ -1,4 +1,4 @@
-/* 
+/*
 Copyright (C) 1995-2001 Activision, Inc.
 
 This library is free software; you can redistribute it and/or
@@ -118,7 +118,7 @@ int update_mysql(dp_species_t sessType, dp_uid_t uid, int score, int won)
 	score_max = atol(row[1]);
 	assert(NULL == mysql_fetch_row(res));
 
-	DPRINT(("wmq2mysql: old score_sum:%d score_max:%d\n", score_sum, score_max)); 
+	DPRINT(("wmq2mysql: old score_sum:%d score_max:%d\n", score_sum, score_max));
 	score_sum += score;
 	if (score > score_max)
 		score_max = score;

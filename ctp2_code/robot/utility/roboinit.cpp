@@ -11,7 +11,7 @@
 //
 // THIS FILE IS NOT GENERATED OR SUPPORTED BY ACTIVISION.
 //
-// This material has been developed at apolyton.net by the Apolyton CtP2 
+// This material has been developed at apolyton.net by the Apolyton CtP2
 // Source Code Project. Contact the authors at ctp2source@apolyton.net.
 //
 //----------------------------------------------------------------------------
@@ -36,22 +36,20 @@
 #include "AgreementMatrix.h"
 #include "mapanalysis.h"
 
-UnitAstar * g_theUnitAstar  = NULL; 
+UnitAstar * g_theUnitAstar  = NULL;
 
 void roboinit_Initalize(CivArchive &a)
-{ 
+{
 	Astar_Init();
 
     delete g_theUnitAstar;
-    g_theUnitAstar = new UnitAstar; 
-} 
+    g_theUnitAstar = new UnitAstar;
+}
 
 void roboinit_Cleanup()
 {
-    delete g_theUnitAstar; 
+    delete g_theUnitAstar;
     g_theUnitAstar = NULL;
 
 	Astar_Cleanup();
 }
-
-

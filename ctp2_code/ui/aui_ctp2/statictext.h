@@ -4,17 +4,15 @@
 #ifndef __STATICTEXT_H__
 #define __STATICTEXT_H__
 
-
 #include "aui_static.h"
 #include "textbase.h"
 
-#define k_STATICTEXT_LDL_TEXTSIZE	"textsize"	
-
+#define k_STATICTEXT_LDL_TEXTSIZE	"textsize"
 
 class StaticText : public aui_Static, public TextBase
 {
 public:
-	
+
 	StaticText(
 		AUI_ERRCODE *retval,
 		uint32 id,
@@ -39,14 +37,12 @@ public:
 protected:
 	AUI_ERRCODE InitCommon( MBCHAR *ldlBlock );
 
-	
 	sint32	m_border;
 
 public:
-	
+
 	void DrawTextBorder( BOOL type ) { m_border = type; }
 
 };
 
-
-#endif 
+#endif

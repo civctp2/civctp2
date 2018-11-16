@@ -1,12 +1,3 @@
-
-
-
-
-
-
-
-
-
 #include "c3.h"
 #include "TerrImprove.h"
 #include "XY_Coordinates.h"

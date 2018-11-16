@@ -1,6 +1,3 @@
-
-
-
 #include "c3.h"
 
 #include "aui_uniqueid.h"
@@ -13,9 +10,7 @@
 
 #include "ns_tribes.h"
 
-
 #include "ns_item.h"
-
 
 
 ns_ListItem::ns_ListItem(
@@ -36,7 +31,6 @@ ns_ListItem::ns_ListItem(
 }
 
 
-
 AUI_ERRCODE ns_ListItem::InitCommonLdl(
 	const MBCHAR *name,
 	MBCHAR *ldlBlock)
@@ -54,7 +48,6 @@ AUI_ERRCODE ns_ListItem::InitCommonLdl(
 
 	return AUI_ERRCODE_OK;
 }
-
 
 
 ns_HPlayerItem::ns_HPlayerItem(
@@ -77,10 +70,10 @@ ns_HPlayerItem::ns_HPlayerItem(
 
 ns_HPlayerItem::~ns_HPlayerItem()
 {
-	
-	
-	
-	
+
+
+
+
 
 	if (m_civpointsButton)
 		delete m_civpointsButton;
@@ -89,7 +82,6 @@ ns_HPlayerItem::~ns_HPlayerItem()
 		delete m_pwpointsButton;
 
 }
-
 
 AUI_ERRCODE ns_HPlayerItem::InitCommonLdl(
 	void *player,
@@ -102,7 +94,6 @@ AUI_ERRCODE ns_HPlayerItem::InitCommonLdl(
 	MBCHAR			block[ k_AUI_LDL_MAXBLOCK + 1 ];
 	AUI_ERRCODE		retval;
 
-	
 
 
 
@@ -110,27 +101,27 @@ AUI_ERRCODE ns_HPlayerItem::InitCommonLdl(
 
 
 
-	SetBlindness( TRUE ); 
+
+	SetBlindness( TRUE );
 	SetImageBltFlag( AUI_IMAGEBASE_BLTFLAG_CHROMAKEY );
 
 	sprintf(block, "%s.%s", ldlBlock, "launched");
 	m_launchedItem = new c3_Static(&retval, aui_UniqueId(), block);
 	m_launchedItem->SetImageBltFlag( AUI_IMAGEBASE_BLTFLAG_CHROMAKEY );
-	m_launchedItem->SetBlindness( TRUE ); 
+	m_launchedItem->SetBlindness( TRUE );
 	AddChild(m_launchedItem);
 
 	sprintf(block, "%s.%s", ldlBlock, "name");
 	m_nameItem = new c3_Static(&retval, aui_UniqueId(), block);
-	m_nameItem->SetBlindness( TRUE ); 
+	m_nameItem->SetBlindness( TRUE );
 	AddChild(m_nameItem);
 
 	sprintf(block, "%s.%s", ldlBlock, "ping");
 	m_pingItem = new c3_Static(&retval, aui_UniqueId(), block);
-	m_pingItem->SetBlindness( TRUE ); 
+	m_pingItem->SetBlindness( TRUE );
 	AddChild(m_pingItem);
 
 
-	
 	sprintf(block, "%s.%s", ldlBlock, "tribe");
 	m_tribeItem = new c3_Static(&retval, aui_UniqueId(), block);
 
@@ -142,7 +133,6 @@ AUI_ERRCODE ns_HPlayerItem::InitCommonLdl(
 		block,
 		TribesButtonCallback,
 		this );
-
 
 	m_tribeItem->AddChild(m_tribeButton);
 
@@ -166,7 +156,7 @@ AUI_ERRCODE ns_HPlayerItem::InitCommonLdl(
 
 
 
-	
+
 	sprintf(block, "%s.%s", ldlBlock, "civpoints");
 	m_civpointsItem = new c3_Static(&retval, aui_UniqueId(),block);
 
@@ -179,12 +169,10 @@ AUI_ERRCODE ns_HPlayerItem::InitCommonLdl(
 		CivPointsButtonCallback,
 		this );
 
-
 	m_civpointsItem->AddChild(m_civpointsButton);
 
 	AddChild(m_civpointsItem);
 
-	
 	sprintf(block, "%s.%s", ldlBlock, "pwpoints");
 	m_pwpointsItem = new c3_Static(&retval, aui_UniqueId(),block);
 
@@ -197,17 +185,14 @@ AUI_ERRCODE ns_HPlayerItem::InitCommonLdl(
 		PwPointsButtonCallback,
 		this );
 
-
 	m_pwpointsItem->AddChild(m_pwpointsButton);
 
 	AddChild(m_pwpointsItem);
-
 
 	Update();
 
 	return AUI_ERRCODE_OK;
 }
-
 
 
 void ns_HPlayerItem::SetTribe( sint32 tribe )
@@ -246,7 +231,6 @@ void ns_HPlayerItem::SetCivpoints( sint32 civpoints )
 	m_civpointsButton->SetValue( civpoints );
 	m_civpointsButton->SetActionFuncAndCookie( actionFunc, cookie );
 }
-
 
 
 void ns_HPlayerItem::SetPwpoints( sint32 pwpoints )

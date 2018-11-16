@@ -1,4 +1,4 @@
-/* 
+/*
 Copyright (C) 1995-2001 Activision, Inc.
 
 This library is free software; you can redistribute it and/or
@@ -36,7 +36,7 @@ Foundation, Inc., 59 Temple Place, Suite 330, Boston, MA  02111-1307  USA
 #endif
 
 /* Need to simulate this function for tca_freeze/thaw to compile */
-dp_result_t dpReportAssertionFailure(int lineno, char *file, char *linetxt) 
+dp_result_t dpReportAssertionFailure(int lineno, char *file, char *linetxt)
 {
 	printf("dpReportAssertionFailure(%d, %s, %s)\n",
 			lineno, file, linetxt);
@@ -59,14 +59,14 @@ dp_result_t tcapw_ascii2ucs2(tcapw_t *tcapw, const char *in, short *out, int max
 
 	if (in == NULL || out == NULL)
 		return dp_RES_BAD;
-	
+
 	memset(out, 0, maxchars * sizeof(short));
 	for(i=0; in[i] && i < maxchars; i++) {
 		if (in[i] & 0x80)
 			return dp_RES_BAD;
 		out[i] = SWAB(in[i]);
 	}
-	
+
 	return dp_RES_OK;
 }
 
@@ -85,17 +85,16 @@ int tcapw_ucs22ascii(tcapw_t *tcapw, const short *in, char *out, int maxchars)
 
 	if (in == NULL || out == NULL)
 		return -1;
-	
+
 	for (i=0; i < maxchars; i++) {
 		out[i] = SWAB(in[i]) & 0x7f;
 		if (out[i] == '\0')
 			return i;
 	}
 	out[i] = '\0';
-	
+
 	return i;
 }
-
 
 void test_tcapw()
 {
@@ -109,7 +108,7 @@ void test_tcapw()
 	tcapw_uid_t uid1, uid2;
 	char email[] = "user@host";
 	int flags = 0;
-	
+
 	char namebuf[256];
 	dp_result_t res;
 
@@ -166,14 +165,14 @@ void test_tcapw()
 	assert(!res);
 	res = tcapw_entry_find_byname(tcapw, &uname2, &entry1);
 	assert(res == dp_RES_EMPTY);
-	
+
 	/* add a second user */
 	res = tcapw_ascii2ucs2(tcapw, "user2", uname2.uname, tcapw_LEN_USERNAME);
 	assert(!res);
 	res = tcapw_ascii2ucs2(tcapw, "pass2", pw2.pw, tcapw_LEN_PW);
 	assert(!res);
 	res = tcapw_password_hash(tcapw, &pw2, &hpw2);
-	assert(!res);	
+	assert(!res);
 	res = tcapw_entry_create(tcapw, &uname2, &hpw2, flags, email, &uid2);
 	assert(!res);
 
@@ -185,13 +184,13 @@ void test_tcapw()
 	assert(!res);
 	assert(!memcmp(&hpw1, &entry1.hpw, sizeof(hpw1)));
 	assert(entry1.uid == uid1);
-	
+
 	res = tcapw_entry_find_byname(tcapw, &uname2, &entry2);
 	assert(!res);
 	assert(!memcmp(&uname2, &entry2.uname, sizeof(uname2)));
 	assert(!memcmp(&hpw2, &entry2.hpw, sizeof(hpw2)));
 	assert(entry2.uid == uid2);
-	
+
 	/* Make sure their id's aren't UID_NONE or the same */
 	assert(entry1.uid != tcapw_UID_NONE);
 	assert(entry2.uid != tcapw_UID_NONE);
@@ -203,13 +202,13 @@ void test_tcapw()
 	assert(!memcmp(&uname1, &entry1b.uname, sizeof(uname1)));
 	assert(!memcmp(&hpw1, &entry1b.hpw, sizeof(hpw1)));
 	assert(entry1b.uid == entry1.uid);
-	
+
 	res = tcapw_entry_find_byid(tcapw, entry2.uid, &entry2b);
 	assert(!res);
 	assert(!memcmp(&uname2, &entry2b.uname, sizeof(uname2)));
 	assert(!memcmp(&hpw2, &entry2b.hpw, sizeof(hpw2)));
 	assert(entry2b.uid == entry2.uid);
-	
+
 	/* Make sure you can't find a bogus user */
 	res = tcapw_ascii2ucs2(tcapw, "bogus", uname3.uname, tcapw_LEN_USERNAME);
 	assert(!res);
@@ -223,7 +222,7 @@ void test_tcapw()
 	assert(res);
 	res = tcapw_entry_find_byid(tcapw, entry1b.uid, &entry1);
 	assert(res);
-	
+
 	res = tcapw_entry_find_byname(tcapw, &uname2, &entry2);
 	assert(!res);
 	assert(!memcmp(&uname2, &entry2.uname, sizeof(uname2)));
@@ -232,14 +231,14 @@ void test_tcapw()
 	assert(!res);
 	assert(!memcmp(&uname2, &entry2.uname, sizeof(uname2)));
 	assert(!memcmp(&hpw2, &entry2.hpw, sizeof(hpw2)));
-	
+
 	/* Add a third user */
 	res = tcapw_ascii2ucs2(tcapw, "user3", uname1.uname, tcapw_LEN_USERNAME);
 	assert(!res);
 	res = tcapw_ascii2ucs2(tcapw, "pass3", pw1.pw, tcapw_LEN_PW);
 	assert(!res);
 	res = tcapw_password_hash(tcapw, &pw1, &hpw1);
-	assert(!res);	
+	assert(!res);
 	res = tcapw_entry_create(tcapw, &uname1, &hpw1, flags, email, &uid1);
 	assert(!res);
 	res = tcapw_entry_find_byname(tcapw, &uname1, &entry3);
@@ -267,8 +266,8 @@ void test_tcapw()
 		assoctab_item_t *a;
 		tcapw_entry_t *p;
 		char namebuf[tcapw_LEN_USERNAME];
-		
-		DPRINT(("read %d users:\n", tcapw->tab->n_used)); 
+
+		DPRINT(("read %d users:\n", tcapw->tab->n_used));
 		for (i = 0; i < tcapw->tab->n_used; i++) {
 			a = assoctab_getkey(tcapw->tab, i);
 			p = (tcapw_entry_t *)a->value;
@@ -276,13 +275,13 @@ void test_tcapw()
 			DPRINT(("  %d %s\n", p->uid, namebuf));
 		}
 	}
-	
+
 	DPRINT(("Saving DB\n"));
 	res = tcapw_close(tcapw);
 	assert(!res);
 	tcapw_destroy(tcapw);
 
-	DPRINT(("Zeroing data\n"));	
+	DPRINT(("Zeroing data\n"));
 	/* Make sure the data made it to disk */
 	memset(&entry1, 0, sizeof(entry1));
 	memset(&entry2, 0, sizeof(entry1));
@@ -301,7 +300,7 @@ void test_tcapw()
 		assoctab_item_t *a;
 		tcapw_entry_t *p;
 		char namebuf[tcapw_LEN_USERNAME];
-		
+
 		DPRINT(("read %d users:\n", tcapw->tab->n_used));
 		for (i = 0; i < tcapw->tab->n_used; i++) {
 			a = assoctab_getkey(tcapw->tab, i);
@@ -310,7 +309,7 @@ void test_tcapw()
 			DPRINT(("  %d %s\n", p->uid, namebuf));
 		}
 	}
-		
+
 	DPRINT(("Testing Data\n"));
 	/* Make sure you can find both users by name, and that the entries match */
 	res = tcapw_entry_find_byname(tcapw, &uname1, &entry1);
@@ -353,8 +352,8 @@ void test_tcapw()
 		assoctab_item_t *a;
 		tcapw_entry_t *p;
 		char namebuf[tcapw_LEN_USERNAME];
-		
-		DPRINT(("read %d users:\n", tcapw->tab->n_used)); 
+
+		DPRINT(("read %d users:\n", tcapw->tab->n_used));
 		for (i = 0; i < tcapw->tab->n_used; i++) {
 			a = assoctab_getkey(tcapw->tab, i);
 			p = (tcapw_entry_t *)a->value;
@@ -362,7 +361,7 @@ void test_tcapw()
 			DPRINT(("  %d %s\n", p->uid, namebuf));
 		}
 	}
-	
+
 	res = tcapw_close(tcapw);
 	assert(!res);
 	tcapw_destroy(tcapw);
@@ -384,7 +383,7 @@ void test_tca()
 	int pktlen;
 	char email[] = "user@host";
 	int flags = 0;
-	
+
 	/* Assume a database named pw.dat has been created
 	 * with user2/pass2b and user3/pass3.
 	 */
@@ -406,7 +405,7 @@ void test_tca()
 		assoctab_item_t *a;
 		tcapw_entry_t *p;
 		char namebuf[tcapw_LEN_USERNAME];
-		
+
 		DPRINT(("test_tca: read %d users:\n", tcapw->tab->n_used));
 		for (i = 0; i < tcapw->tab->n_used; i++) {
 			a = assoctab_getkey(tcapw->tab, i);
@@ -415,7 +414,7 @@ void test_tca()
 			DPRINT(("  %d %s\n", p->uid, namebuf));
 		}
 	}
-	
+
 	DPRINT(("Testing 1\n"));
 	/* Try to log in user2.  Check the uid->uname while we're at it. */
 	res = tcapw_ascii2ucs2(tcapw, "user2", uname.uname, tcapw_LEN_USERNAME);
@@ -428,7 +427,7 @@ void test_tca()
 	assert(!res);
 	assert(!memcmp(&uname, &unameb, sizeof(uname)));
 
-	DPRINT(("Testing 1 - generating challenge\n"));	
+	DPRINT(("Testing 1 - generating challenge\n"));
 	tca_challenge_generate(tca, &challenge);
 	{
 		int i;
@@ -509,7 +508,7 @@ void test_tca()
 	res = tca_pwchange_validate(tca, uid2, &challenge, &pwchange);
 	printf("pwchange_validate res = %d\n", res);
 	assert(!res);
-	
+
 	/* Try to change password, with the wrong password */
 	res = tcapw_ascii2ucs2(tcapw, "pass2d", pw.pw, tcapw_LEN_PW);
 	assert(!res);
@@ -582,7 +581,7 @@ void test_tca()
 		assoctab_item_t *a;
 		tcapw_entry_t *p;
 		char namebuf[tcapw_LEN_USERNAME];
-		
+
 		DPRINT(("test_tca: read %d users:\n", tcapw->tab->n_used));
 		for (i = 0; i < tcapw->tab->n_used; i++) {
 			a = assoctab_getkey(tcapw->tab, i);
@@ -595,11 +594,10 @@ void test_tca()
 	res = tcapw_entry_delete(tca->tdb, uid2);
 	printf("entry_delete %d, res = %d\n", uid2, res);
 	assert(!res);
-	
+
 	tca_destroy(tca);
 	tca_destroy(tcac);
 }
-
 
 #include "ptimer.h"
 #define NUSERS 1000
@@ -619,7 +617,7 @@ void test_tca_speed()
 	tca_challenge_t challenge;
 	tca_response_t response;
 	int pktlen;
-	
+
 	tca = tca_create();
 	tcac = tca_create();
 	err = tca_openpw(tca, "pw.dat");
@@ -641,7 +639,7 @@ void test_tca_speed()
 
 	ptimer_disableInterrupt();
 	ptimer_zeroAll();
-	
+
 	for (i = 1; i <= NTRIALS; i++) {
 		DPRINT(("T%4.4d:", i));
 		err = tcapw_ascii2ucs2(tca->tdb, "1user", uname.uname, tcapw_LEN_USERNAME);
@@ -677,7 +675,7 @@ void test_tca_speed()
 		err = tca_uid2uname(tca, uid, &uname2);
 		ptimer_Exit(5, 1);
 		assert(!err);
-		
+
 		/* generate a challenge for middle uid */
 		DPRINT((" ch"));
 		ptimer_Enter(10, "generate challenge");
@@ -698,7 +696,7 @@ void test_tca_speed()
 		err = tca_response_validate(tca, &challenge, &response, &uid);
 		ptimer_Exit(12, 1);
 		assert(!err);
-		
+
 		err = tcapw_ascii2ucs2(tca->tdb, "bogus", uname.uname, tcapw_LEN_USERNAME);
 		assert(!err);
 		/* look up someone by a bogus uname */
@@ -755,7 +753,7 @@ void test_tca_speed()
 	assert(!err);
 
 	DPRINT(("reading tca from disk\n"));
-	ptimer_Enter(16, "tca_openpw");		
+	ptimer_Enter(16, "tca_openpw");
 	tca = tca_create();
 	err = tca_openpw(tca, "pw.dat");
 	ptimer_Exit(16, 1);
@@ -783,7 +781,6 @@ void test_tca_speed()
 	assert(!err);
 }
 
-
 int main()
 {
 	test_tcapw();
@@ -792,6 +789,3 @@ int main()
 	printf("No test failed, tca_speed.log contains %d user speed test results.\n", NUSERS);
 	return 0;
 }
-
-
-

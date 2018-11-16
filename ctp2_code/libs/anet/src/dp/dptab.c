@@ -1,4 +1,4 @@
-/* 
+/*
 Copyright (C) 1995-2001 Activision, Inc.
 
 This library is free software; you can redistribute it and/or
@@ -19,7 +19,7 @@ Foundation, Inc., 59 Temple Place, Suite 330, Boston, MA  02111-1307  USA
 
 #define VERBOSE
 /*------- Generic Table Transfer --------------------------------------------
- This module provides a generic facility to mirror hkeytab_t's across 
+ This module provides a generic facility to mirror hkeytab_t's across
  a dpio connection.
 
  $Log: dptab.c $
@@ -74,7 +74,7 @@ Foundation, Inc., 59 Temple Place, Suite 330, Boston, MA  02111-1307  USA
  Revision 1.25  1997/08/31 04:30:40  dkegel
  1. If wrapping around in dptab_update(), need to call flush
  to avoid having xfer's moved out from under you.
- We can probably reduce number of packets by only being fair if 
+ We can probably reduce number of packets by only being fair if
  top xfer is a big one - then we won't usually wrap.
  2. Better comments.
  3. Surrounded most verbose DPRINT's with #ifdef VERBOSE.
@@ -84,7 +84,7 @@ Foundation, Inc., 59 Temple Place, Suite 330, Boston, MA  02111-1307  USA
  2. Better-defined return value for dptab_update().
  Revision 1.23  1997/08/27 18:25:14  dkegel
  Implemented dptab_SMALL_PACKET's which bundle lots of little
- xfers into a single packet.  
+ xfers into a single packet.
  Updated loopback regression test.
  Revision 1.22  1997/08/26 00:18:03  dkegel
  1. Broke dptab_update() into pieces; it was too long.
@@ -117,7 +117,7 @@ Foundation, Inc., 59 Temple Place, Suite 330, Boston, MA  02111-1307  USA
  Revision 1.15  1997/08/18 17:14:09  dkegel
  1. Added dptab_delete_byAge
  2. Support PLAYER_BROADCAST in a kludgy way to support distribution
- of session records 
+ of session records
  3. In unit test, first argument now sets name of log file, so all
  nodes can be run in same directory.  (dp.ini should not specify the
  log file for this to work.)
@@ -205,7 +205,6 @@ MSVC's warning level is set to 4.
 #pragma warning( disable : 4514 )
 #endif
 
-
 #define DPRINTBUFS
 
 #ifdef DPRINTBUFS
@@ -279,7 +278,6 @@ void dptab_assertPeerXfers(dptab_t* dt)
 #define dptab_assertPeerXfers(dptab)
 #endif	/* Debug-only */
 
-
 /*-------------------------------------------------------------------------
 Special debug-only logging
 -------------------------------------------------------------------------*/
@@ -287,7 +285,7 @@ Special debug-only logging
 void dumpTable(dptab_table_t *table)
 {
 	int i;
-	DPRINT(("dumpTable: key %s: %d elements\n", 
+	DPRINT(("dumpTable: key %s: %d elements\n",
 			key2a(table->key, table->keylen), table->vars->n_used));
 	for (i=0; i<table->vars->n_used; i++) {
 		void *buf;
@@ -300,7 +298,7 @@ void dumpTable(dptab_table_t *table)
 		err = dptab_get_byindex(table, i, &buf, &len, subkey, &subkeylen);
 		assert(err == dp_RES_OK);
 		memcpy(&tag, ((char *)buf) + len, sizeof(tag));
-		DPRINT(("dumpTable: key %s subkey %s, hops %d, src h:%x, tag@%p\n", 
+		DPRINT(("dumpTable: key %s subkey %s, hops %d, src h:%x, tag@%p\n",
 				key2a(table->key, table->keylen),
 				key2a2(subkey, subkeylen),
 				tag.hops, tag.src,((char *)buf)+len));
@@ -318,8 +316,8 @@ void dumpXfers(assoctab_t *xfers, char *lab)
 		if (!pe)
 			break;	/* horrible error */
 		xfer = (dptab_xfer_t *)pe->value;
-		DPRINT(("%s xfer %d: offset %x alloc %d sub %d id %d key %s subkey %s hops %d\n", 
-			lab, i, xfer->cur_offset, xfer->allocated, pe->key, xfer->xferid, 
+		DPRINT(("%s xfer %d: offset %x alloc %d sub %d id %d key %s subkey %s hops %d\n",
+			lab, i, xfer->cur_offset, xfer->allocated, pe->key, xfer->xferid,
 			xfer->table ? key2a(xfer->table->key, xfer->table->keylen) : "NULL",
 			key2a2(xfer->subkey, xfer->subkeylen), xfer->hops));
 		assert(xfer->table);
@@ -358,7 +356,7 @@ static void dumpSubscriptionsFromPeer(dptab_peer_t *peer, char *lab)
 		if (!pe)
 			break;	/* horrible error */
 		sub = (dptab_table_t **)pe->value;
-		DPRINT(("%s sub %d: peer's table %s maps to our table %p = %s\n", 
+		DPRINT(("%s sub %d: peer's table %s maps to our table %p = %s\n",
 			lab, i,
 			key2a2(pe->key, pe->keylen),
 			*sub, key2a((*sub)->key, (*sub)->keylen) ));
@@ -391,7 +389,6 @@ static void dumpPeersWhoSubscribeToTable(dptab_table_t *tab, char *lab)
 #define dumpSubscriptionsFromPeer(peer, lab)
 #define dumpPeersWhoSubscribeToTable(table, lab)
 #endif		/* Special-debug only */
-
 
 /*
 static dptab_table_t *tab2dump = NULL;
@@ -682,8 +679,8 @@ dptab_createTable(
 }
 
 /*--------------------------------------------------------------------------
- Set (register) a table's callback function and callback context.  
- 
+ Set (register) a table's callback function and callback context.
+
  Context is used later as the context parameter of the callback function.
  It may be set to NULL if the callback doesn't need it.
 
@@ -698,8 +695,8 @@ dptab_createTable(
  called, all registered callbacks will be called three times:
  once with dp_RES_CHANGED (or dp_RES_CREATED), and twice with dp_RES_FINISHED.
 
- If a remote system sends us a variable to a table that is not republished, 
- all registered callbacks will be called once with dp_RES_CHANGED 
+ If a remote system sends us a variable to a table that is not republished,
+ all registered callbacks will be called once with dp_RES_CHANGED
  (or dp_RES_CREATED).
  If the table is republished to three other hosts, they will then also be
  called three times with dp_RES_FINISHED.
@@ -915,7 +912,6 @@ DP_API dp_result_t dptab_deleteTable(dptab_t *dptab, char *key, int keylen)
 	return dp_RES_OK;
 }
 
-
 /*--------------------------------------------------------------------------
  Get a pointer to the table with the given key.
  Pointer remains valid even if other tables are created or deleted.
@@ -951,7 +947,7 @@ DP_API dptab_table_t *dptab_getTable(dptab_t *dptab, char *key, int keylen)
 
 /*--------------------------------------------------------------------------
  Add a subscriber for the given table.
- Initially, and upon any changes, items not marked "NOFLOOD" in the given 
+ Initially, and upon any changes, items not marked "NOFLOOD" in the given
  table are automatically sent to the destination, which places them
  in the corresponding table.
  Note: the subscriber must call dptab_addPublisher(), or he will ignore
@@ -990,7 +986,7 @@ dptab_addSubscriber(
 		}
 		/* Get hop count from our secret little suffix on each variable */
 		memcpy(&tag, ((char *)buf) + len, sizeof(tag));
-		/*DPRINT(("dptab_addSubscriber: tag@%p, subkey %s, hops %d\n", 
+		/*DPRINT(("dptab_addSubscriber: tag@%p, subkey %s, hops %d\n",
 				((char *)buf)+len, key2a(subkey, subkeylen), tag.hops));*/
 		if (tag.hops > 0) {
 			int hops;
@@ -1015,7 +1011,7 @@ dptab_addSubscriber(
 /*--------------------------------------------------------------------------
  Delete a subscriber.  No remote action occurs.
 --------------------------------------------------------------------------*/
-DP_API dp_result_t 
+DP_API dp_result_t
 dptab_deleteSubscriber(
 	dptab_t *dptab, dptab_table_t *tab, playerHdl_t dest)
 {
@@ -1045,7 +1041,7 @@ dptab_handleSubscriptionRequest(
 
 	dptab_assertValid(dptab);
 
-	DPRINT(("dptab_handleSubscriptionRequest: src h:%x, t:%d, table %s\n", 
+	DPRINT(("dptab_handleSubscriptionRequest: src h:%x, t:%d, table %s\n",
 			h, *(dptab->dpio->now), key2a(req->key, req->keylen)));
 	if (reqlen < 2 || reqlen > 1 + dptab_KEY_MAXLEN) {
 		DPRINT(("dptab_handleSubscriptionRequest: request %d bytes; bad size\n", reqlen));
@@ -1053,7 +1049,7 @@ dptab_handleSubscriptionRequest(
 	}
 	table = dptab_getTable(dptab, req->key, req->keylen);
 	if (!table) {
-		DPRINT(("dptab_handleSubscriptionRequest: no such table %s\n", 
+		DPRINT(("dptab_handleSubscriptionRequest: no such table %s\n",
 				key2a(req->key, req->keylen)));
 		return dp_RES_EMPTY;
 	}
@@ -1078,7 +1074,7 @@ dp_result_t dptab_handleUnsubscriptionRequest(dptab_t *dptab, playerHdl_t h, dpt
 
 	dptab_assertValid(dptab);
 
-	DPRINT(("dptab_handleUnsubscriptionRequest: src h:%x, t:%d, table %s\n", 
+	DPRINT(("dptab_handleUnsubscriptionRequest: src h:%x, t:%d, table %s\n",
 			h, *(dptab->dpio->now), key2a(req->key, req->keylen)));
 	if (reqlen < 2 || reqlen > 1 + dptab_KEY_MAXLEN) {
 		DPRINT(("dpHandleUnsubscriptionRequest: request %d bytes; bad size\n", reqlen));
@@ -1086,7 +1082,7 @@ dp_result_t dptab_handleUnsubscriptionRequest(dptab_t *dptab, playerHdl_t h, dpt
 	}
 	table = dptab_getTable(dptab, req->key, req->keylen);
 	if (!table) {
-		DPRINT(("dptab_handleUnsubscriptionRequest: no such table %s\n", 
+		DPRINT(("dptab_handleUnsubscriptionRequest: no such table %s\n",
 				key2a(req->key, req->keylen)));
 		return dp_RES_EMPTY;
 	}
@@ -1167,7 +1163,7 @@ DP_API dp_result_t dptab_requestUnsubscription(dptab_t *dptab, char *key, int ke
 	memcpy(pkt->body.key, key, keylen);
 
 	dptab_deletePublisher(dptab, key, keylen, h);
-	
+
 	dptab_assertValid(dptab);
 	err = dpio_put_reliable(dptab->dpio, &h, 1, buf, sizeof(pkt->tag)+1+keylen, NULL);
 	if (err != dp_RES_OK) {
@@ -1183,7 +1179,7 @@ DP_API dp_result_t dptab_requestUnsubscription(dptab_t *dptab, char *key, int ke
  For use e.g. when shutting off remote player or session deltas.
  If you expect multiple subscriptions, call this until it returns
  dp_RES_EMPTY.
- Returns a pointer to the table the subscription dumped into locally.   
+ Returns a pointer to the table the subscription dumped into locally.
 --------------------------------------------------------------------------*/
 dp_result_t dptab_shutdownMatchingSubscription(dptab_t *dptab, char key, playerHdl_t h, dptab_table_t **ptable)
 {
@@ -1283,9 +1279,9 @@ dptab_addPublisher(
 	dptab_assertValid(dptab);
 	return dp_RES_OK;
 }
-	
+
 /*--------------------------------------------------------------------------
- Delete a publisher.  
+ Delete a publisher.
  The given table at the given source will no longer be allowed to update
  any table here.
  (Note: the key here is the key on the publisher's machine.)
@@ -1322,7 +1318,7 @@ dptab_deletePublisher(dptab_t *dptab, char *key, int keylen, playerHdl_t src)
 }
 
 /*--------------------------------------------------------------------------
- Find items with a particular source tag from a table, and replace their 
+ Find items with a particular source tag from a table, and replace their
  source tag with the new value.
  Useful during cheesy host migration.
 --------------------------------------------------------------------------*/
@@ -1342,7 +1338,7 @@ dptab_changeSrc(
 	dptab_assertValid(dptab);
 	dptab_assertValidTable(table);
 
-	DPRINT(("dptab_changeSrc(table %s, h:%x, h:%x): n_used %d\n", 
+	DPRINT(("dptab_changeSrc(table %s, h:%x, h:%x): n_used %d\n",
 			key2a(table->key, table->keylen), oldSrc, newSrc, table->vars->n_used));
 
 	/* For each key/value pair */
@@ -1373,8 +1369,8 @@ dptab_changeSrc(
 				i, tag.src, tag.hops));
 		if (tag.src == oldSrc) {
 			DPRINT(("dptab_changeSrc: src matches; deleting\n"));
-			/* Must make copy of key - else it goes away before 
-			 * dptab_send_delete is called! 
+			/* Must make copy of key - else it goes away before
+			 * dptab_send_delete is called!
 			 */
 			tag.src = newSrc;
 			memcpy(((char *)varbuf) + varlen, &tag, sizeof(tag));
@@ -1494,11 +1490,10 @@ dptab_varDelete(
 	return hkeytab_subscript_delete(table->vars, subkey, subkeylen);
 }
 
-
 /*--------------------------------------------------------------------------
  Set the value for item 'key'.
  Value is copied onto the heap, and must be freed later with
- dptab_set (overwriting frees), dptab_delete, dptab_deleteTable, 
+ dptab_set (overwriting frees), dptab_delete, dptab_deleteTable,
  or dptab_destroy.
  If the item does not yet exist in the table, it is created.
  Hops should be set to 1 for public variables, and 0 for private ones.
@@ -1529,9 +1524,9 @@ dptab_set(
 		dptab_assertValid(dptab);
 		return dp_RES_BUG;
 	}
-	DPRINT(("dptab_set(table %s, subkey %s, len %d, src h:%x): t:%d\n", 
-			key2a(table->key, table->keylen), 
-			key2a2(subkey, subkeylen), 
+	DPRINT(("dptab_set(table %s, subkey %s, len %d, src h:%x): t:%d\n",
+			key2a(table->key, table->keylen),
+			key2a2(subkey, subkeylen),
 			len, src, *(dptab->dpio->now)));
 	if (subkeylen < 1 || subkeylen > hkeytab_MAXLEN) {
 		DPRINT(("dptab_set: bad keylen %d\n", subkeylen));
@@ -1550,7 +1545,7 @@ dptab_set(
 	DPRINT(("dptab_set: subkey %s, pe %p, bAlreadyExists %d, status %d\n",
 			key2a(subkey, subkeylen), pe, bAlreadyExists, status));
 	if (!len && bAlreadyExists) {
-		/* BUG: can't set existing variable to zero length?? 
+		/* BUG: can't set existing variable to zero length??
 		 * This code should make sure old variable was zero length
 		 * before ignoring...
 		 */
@@ -1597,7 +1592,7 @@ dptab_set(
 	for(i = 0; i < dptab_MAX_CALLBACKS; i++) {
 		DPRINT(("dptab_set: calling callback %d:%p; status %d\n", i, table->aCb[i], status));
 		if (table->aCb[i])
-			(table->aCb[i])(dptab, table, src, PLAYER_ME, subkey, subkeylen, 
+			(table->aCb[i])(dptab, table, src, PLAYER_ME, subkey, subkeylen,
 					buf, len, len, 0, table->aContext[i], status);
 	}
 
@@ -1607,7 +1602,7 @@ dptab_set(
 		int cur_sub;
 
 		/* Set new hop count */
-		if (src != PLAYER_ME) 
+		if (src != PLAYER_ME)
 			hops--;
 
 		/* Loop over the table's subscribers */
@@ -1622,7 +1617,7 @@ dptab_set(
 
 			err = dptab_send(dptab, table, subkey, subkeylen, dest, hops);
 			if (err != dp_RES_OK) {
-				DPRINT(("dptab_set: err:%d in dptab_send for dest h:%x\n", 
+				DPRINT(("dptab_set: err:%d in dptab_send for dest h:%x\n",
 						err, dest));
 				dptab_assertValid(dptab);
 				return err;
@@ -1657,8 +1652,8 @@ dptab_delete(
 
 	dptab_assertValid(dptab);
 
-	DPRINT(("dptab_delete(dptab, table %s, subkey %s):\n", 
-			key2a(table->key, table->keylen), 
+	DPRINT(("dptab_delete(dptab, table %s, subkey %s):\n",
+			key2a(table->key, table->keylen),
 			key2a2(subkey, subkeylen)));
 	pebuf = hkeytab_subscript(table->vars, subkey, subkeylen);
 	if (!pebuf) {
@@ -1686,7 +1681,7 @@ dptab_delete(
 	memcpy(&tag, ((char *)varbuf) + varlen, sizeof(tag));
 	DPRINT(("dptab_delete: src h:%x hops %d\n", tag.src, tag.hops));
 
-	/* Warning: users must be warned that their callbacks must not delete 
+	/* Warning: users must be warned that their callbacks must not delete
 	 * tables!
 	 */
 	DPRINT(("dptab_delete: calling callbacks\n"));
@@ -1709,7 +1704,7 @@ dptab_delete(
 		dptab_assertValid(dptab);
 		return dp_RES_BUG;
 	}
-	
+
 	if (table->elsize) {
 		failure = hkeytab_subscript_delete(table->vars, subkey, subkeylen);
 	} else {
@@ -1720,19 +1715,19 @@ dptab_delete(
 		dptab_assertValid(dptab);
 		return dp_RES_BUG;
 	}
-	/* Inform other players of the change.  
+	/* Inform other players of the change.
 	 *
 	 * Note: we probably need to do this before we delete the
 	 * item itself - unwary callers may pass a pointer into
 	 * the variable to be deleted itself!  (See dptab_delete_bySrc().)
-	 * Moving this code might take some thought, though, and only 
+	 * Moving this code might take some thought, though, and only
 	 * dp insiders would try that anyway, we'll just hope nobody does it
 	 * for now.
 	 */
 
 	if (tag.hops > 0) {
 		/* Set new hop count */
-		if (tag.src != PLAYER_ME) 
+		if (tag.src != PLAYER_ME)
 			tag.hops--;
 
 		DPRINT(("dptab_delete: looping over %d destinations\n", table->subscribers->n_used));
@@ -1748,7 +1743,7 @@ dptab_delete(
 
 			err = dptab_send_delete(dptab, table, subkey, subkeylen, dest, tag.hops);
 			if (err != dp_RES_OK) {
-				DPRINT(("dptab_delete: err:%d in dptab_send_delete dest h:%x\n", 
+				DPRINT(("dptab_delete: err:%d in dptab_send_delete dest h:%x\n",
 						err, dest));
 				dptab_assertValid(dptab);
 				return err;
@@ -1815,7 +1810,7 @@ dptab_delete_bySrc(
 	dptab_assertValid(dptab);
 	dptab_assertValidTable(table);
 
-	DPRINT(("dptab_delete_bySrc(table %s, h:%x): n_used %d\n", 
+	DPRINT(("dptab_delete_bySrc(table %s, h:%x): n_used %d\n",
 			key2a(table->key, table->keylen), src, table->vars->n_used));
 
 	/* For each key/value pair - step downwards since we'll be deleting! */
@@ -1846,8 +1841,8 @@ dptab_delete_bySrc(
 				i, tag.src, tag.hops));*/
 		if (tag.src == src) {
 			DPRINT(("dptab_delete_bySrc: src matches; deleting\n"));
-			/* Must make copy of key - else it goes away before 
-			 * dptab_send_delete is called! 
+			/* Must make copy of key - else it goes away before
+			 * dptab_send_delete is called!
 			 */
 			memcpy(subkey, pe->key, pe->keylen);
 			dptab_delete(dptab, table, subkey, pe->keylen);
@@ -1864,7 +1859,7 @@ dptab_delete_bySrc(
 
 /*--------------------------------------------------------------------------
  Delete items that are older than the given number of seconds.
- Useful for broadcast data that is broadcast unreliably 
+ Useful for broadcast data that is broadcast unreliably
  (which can only be done by calling dptab_send with dest=PLAYER_BROADCAST;
   dptab_send_delete should also be used then, but can't be relied upon).
 
@@ -1921,8 +1916,8 @@ dptab_delete_byAge(dptab_t *dptab, dptab_table_t *table, int seconds)
 				i, tag.src, tag.hops, age));
 		if (age >= seconds) {
 			DPRINT(("dptab_delete_byAge: old enough; deleting\n"));
-			/* Must make copy of key - else it goes away before 
-			 * dptab_send_delete is called! 
+			/* Must make copy of key - else it goes away before
+			 * dptab_send_delete is called!
 			 */
 			memcpy(subkey, pe->key, pe->keylen);
 			dptab_delete(dptab, table, subkey, pe->keylen);
@@ -2037,10 +2032,10 @@ dptab_get_bykey2(
 }
 
 /*--------------------------------------------------------------------------
- Given a table pointer and an index, 
+ Given a table pointer and an index,
  retrieve the buffer and subkey of the nth item in the given table.
  Caller must have obtained 'table' via a call to dptab_getTable().
- 
+
  On entry, psubkey should point to a single short,
  pbuf should point to a void *, and
  plen should point to a size_t *.
@@ -2105,7 +2100,7 @@ DP_API int dptab_tableSize(dptab_table_t *table)
 /*********** Explicit network calls ***********/
 
 /*--------------------------------------------------------------------------
- Compare the names of two variables being transferred, taking into account 
+ Compare the names of two variables being transferred, taking into account
  first their table key, then their subkey.
 --------------------------------------------------------------------------*/
 #define dp_KEY_LOWSESSIONS 256
@@ -2142,7 +2137,7 @@ static int compare_xfer_keys(dptab_xfer_t *xfer1, dptab_xfer_t *xfer2)
 		}
 	}
 #ifdef VERBOSE
-	DPRINT(("compare_xfer_keys(%s/%s, %s/%s) = %d\n", 
+	DPRINT(("compare_xfer_keys(%s/%s, %s/%s) = %d\n",
 			key2a(xfer1->table->key, xfer1->table->keylen), key2a2(xfer1->subkey, xfer1->subkeylen),
 			key2a3(xfer2->table->key, xfer2->table->keylen), key2a4(xfer2->subkey, xfer2->subkeylen),
 			diff));
@@ -2175,7 +2170,7 @@ static dptab_xfer_t *dptab_xfer_insert(dptab_peer_t *peer, dptab_table_t *table,
 #if 0
 	/* Old behavior */
 	xfer = (dptab_xfer_t *)assoctab_subscript_grow(peer->tx, temp.xferid);
-	if (!xfer) 
+	if (!xfer)
 		return NULL;
 	*xfer = temp;
 	return xfer;
@@ -2184,7 +2179,7 @@ static dptab_xfer_t *dptab_xfer_insert(dptab_peer_t *peer, dptab_table_t *table,
 	 * The list is kept in {key,subkey} order by the following code.
 	 * Duplicate transmissions are detected and deleted.
 	 * e.g. If you do two sets in a row on a user record,
-	 * the user record should only be sent once.  
+	 * the user record should only be sent once.
 	 * The receiving end must detect aborted transfers, and handle properly;
 	 * this doesn't happen yet FIXME.
 	 */
@@ -2210,7 +2205,7 @@ static dptab_xfer_t *dptab_xfer_insert(dptab_peer_t *peer, dptab_table_t *table,
 		}
 	}
 	/* If we get here, the comparison will never be equal,
-	 * so let's insert a new record.  
+	 * so let's insert a new record.
 	 * To ensure the truth of the above statement, insert the
 	 * new record between the current and the previous record.
 	 */
@@ -2227,7 +2222,7 @@ static dptab_xfer_t *dptab_xfer_insert(dptab_peer_t *peer, dptab_table_t *table,
 
 /*--------------------------------------------------------------------------
  Send item 'key' to a particular destination.
- If cb is not NULL, it will be called periodically with the status of the 
+ If cb is not NULL, it will be called periodically with the status of the
  transfer.
  Hops is the number of hops left - if hops is 0, it will not be
  resent by the destination.
@@ -2278,8 +2273,8 @@ dptab_send(
 	dptab->stats[dptab_STAT_TX_RECORDS].in++;
 	dptab->stats[dptab_STAT_TX_BYTES].in += varlen + subkeylen;
 #ifdef VERBOSE
-	DPRINT(("dptab_send: STAT_TX_RECORDS.in %d STAT_TX_BYTES.in %d, len %d\n", 
-		dptab->stats[dptab_STAT_TX_RECORDS].in, 
+	DPRINT(("dptab_send: STAT_TX_RECORDS.in %d STAT_TX_BYTES.in %d, len %d\n",
+		dptab->stats[dptab_STAT_TX_RECORDS].in,
 		dptab->stats[dptab_STAT_TX_BYTES].in, varlen + subkeylen));
 #endif
 #endif
@@ -2333,8 +2328,8 @@ dptab_send_delete(
 	dptab->stats[dptab_STAT_TX_RECORDS].in++;
 	dptab->stats[dptab_STAT_TX_BYTES].in += subkeylen;
 #ifdef VERBOSE
-	DPRINT(("dptab_send_delete: STAT_TX_RECORDS.in %d STAT_TX_BYTES.in %d, len %d\n", 
-		dptab->stats[dptab_STAT_TX_RECORDS].in, 
+	DPRINT(("dptab_send_delete: STAT_TX_RECORDS.in %d STAT_TX_BYTES.in %d, len %d\n",
+		dptab->stats[dptab_STAT_TX_RECORDS].in,
 		dptab->stats[dptab_STAT_TX_BYTES].in, subkeylen));
 #endif
 #endif
@@ -2376,7 +2371,7 @@ dptab_update_send_delete(
 	dp_result_t err;
 
 	DPRINT(("dptab_update_send_delete: id %d key %s subkey %s\n",
-			xfer->xferid, 
+			xfer->xferid,
 			key2a(xfer->table->key, xfer->table->keylen),
 			key2a2(xfer->subkey, xfer->subkeylen)));
 
@@ -2403,22 +2398,22 @@ dptab_update_send_delete(
 }
 
 /*--------------------------------------------------------------------------
- dptab_xferBuffer - 
+ dptab_xferBuffer -
  a place to accumulate small transfers until we have a packet to send.
 
  To initialize the buffer, call dptab_xferBuffer_init(&xbuf).
 
  To put stuff in the buffer, drop the bytes into buf[offset++].
- Start off with dptab_SMALL_PACKET_ID, then the fields of 
+ Start off with dptab_SMALL_PACKET_ID, then the fields of
  "dptab_small_packet_t", then the len, subkey, and data of each transfer.
 
  To send and clear the buffer, call dptab_xferBuffer_flush().
  If the destination is PLAYER_BROADCAST, the packet is sent unreliably;
  otherwise, it is sent reliably.
- If the send succeeds, dptab_xferBuffer_flush() will also call the 
+ If the send succeeds, dptab_xferBuffer_flush() will also call the
  table callbacks and clear the xfer's.
 
- The only thing that puts stuff in the buffer at the moment is 
+ The only thing that puts stuff in the buffer at the moment is
  dptab_update_send_small().  Both that and dptab_update() flush it.
 --------------------------------------------------------------------------*/
 
@@ -2482,7 +2477,7 @@ static void dptab_xferBuffer_flush(dptab_t *dptab, dptab_xferBuffer_t *xbuf)
 			dptab_xfer_t *xfer = &xbuf->xfers[i];
 			/* Inform table callback that the vars have been sent */
 #ifdef VERBOSE
-			DPRINT(("dptab_xferBuffer_flush: sent table %s subkey %s t:%d; h:%x; xferid %d; is_delete %d\n", 
+			DPRINT(("dptab_xferBuffer_flush: sent table %s subkey %s t:%d; h:%x; xferid %d; is_delete %d\n",
 				key2a(xfer->table->key, xfer->table->keylen),
 				key2a2(xfer->subkey, xfer->subkeylen),
 				*(dptab->dpio->now), xbuf->dest, xfer->xferid, xfer->is_delete));
@@ -2514,7 +2509,6 @@ static void dptab_xferBuffer_flush(dptab_t *dptab, dptab_xferBuffer_t *xbuf)
 	dptab_xferBuffer_init(xbuf, xbuf->dest, xbuf->peer_tx);
 }
 
-
 /*--------------------------------------------------------------------------
  Is the transfer/variable small enough for one packet?
 --------------------------------------------------------------------------*/
@@ -2525,13 +2519,13 @@ static void dptab_xferBuffer_flush(dptab_t *dptab, dptab_xferBuffer_t *xbuf)
  Send a single small data xfer; xfer->cur_offset must be zero on entry,
  and varlen must be less than or equal to
  dpio_MAXLEN_RELIABLE - sizeof(dptab_initial_packet_t) - keylen - subkeylen.
- 
+
  On entry, *pnpkts is the number of packets we are allowed to queue.
  On exit, *pnpkts is decremented by the number of packets we actually queued.
 
  Special kludge: if varlen is dptab_SIZE_DELETE, zero bytes are sent,
  and the receiver is supposed to delete the variable.
- Variables really of size dptab_SIZE_DELETE should be sent with 
+ Variables really of size dptab_SIZE_DELETE should be sent with
  dptab_update_send_large.  The macro dptab_is_small_packet ensures this.
 
  Called only by dptab_update().
@@ -2581,7 +2575,7 @@ dptab_update_send_small(
 		|| (xfer->hops != oxfer->hops)
 		|| (xfer->subkeylen != oxfer->subkeylen)
 		|| (xfer->table->keylen != oxfer->table->keylen)
-		|| (memcmp(xfer->table->key, oxfer->table->key, xfer->table->keylen))){ 
+		|| (memcmp(xfer->table->key, oxfer->table->key, xfer->table->keylen))){
 
 			DPRINT(("dptab_update_send_small: flushing; offset %d >? %d, hops %d != %d, subkeylen %d != %d, keylen %d != %d, key diff %d\n",
 				xbuf->offset + 1+xfer->subkeylen+varlen, dpio_MAXLEN_RELIABLE,
@@ -2599,7 +2593,7 @@ dptab_update_send_small(
 		return dp_RES_BUG;
 	}
 	/* If we were just being asked to flush, we're done. */
-	if (!varbuf) 
+	if (!varbuf)
 		return dp_RES_OK;
 
 	if (xbuf->offset == 0) {
@@ -2644,7 +2638,7 @@ dptab_update_send_small(
  On entry, *pnpkts is the number of packets we are allowed to queue.
  On exit, *pnpkts is decremented by the number of packets we actually queued.
 
- If transfer finishes successfully during this call, it deletes xfer and 
+ If transfer finishes successfully during this call, it deletes xfer and
  calls the xfer's callback.
 
  Return value is whatever dpio_put_reliable returns.
@@ -2672,7 +2666,7 @@ dptab_update_send_large(
 	dptab_assertValid(dptab);
 
 	DPRINT(("dptab_update_send_large: offset %x alloc %d id %d key %s subkey %s\n",
-			xfer->cur_offset, xfer->allocated, xfer->xferid, 
+			xfer->cur_offset, xfer->allocated, xfer->xferid,
 			key2a(xfer->table->key, xfer->table->keylen),
 			key2a2(xfer->subkey, xfer->subkeylen)));
 
@@ -2691,7 +2685,7 @@ dptab_update_send_large(
 			dptab_initial_packet_t *body = (dptab_initial_packet_t *)(buf + sizeof(dp_packetType_t));
 			char *key = body->key;
 			void *payload = key + xfer->subkeylen + xfer->table->keylen;
-			size_t maxlen = dpio_MAXLEN_RELIABLE 
+			size_t maxlen = dpio_MAXLEN_RELIABLE
 				- (((char *)payload) - (char *)buf);
 
 			/* Send an initial chunk. */
@@ -2769,7 +2763,7 @@ dptab_update_send_large(
 		if (xfer->cur_offset == varlen) {
 			int i;
 			/* Now call callback and delete this xfer */
-			DPRINT(("dptab_update: large: sent table %s subkey %s t:%d; h:%x; xferid %d\n", 
+			DPRINT(("dptab_update: large: sent table %s subkey %s t:%d; h:%x; xferid %d\n",
 				key2a(xfer->table->key, xfer->table->keylen),
 				key2a2(xfer->subkey, xfer->subkeylen),
 				*(dptab->dpio->now), dest, xfer->xferid));
@@ -2784,8 +2778,8 @@ dptab_update_send_large(
 			dptab->stats[dptab_STAT_TX_RECORDS].out++;
 			dptab->stats[dptab_STAT_TX_BYTES].out += varlen + xfer->subkeylen;
 #ifdef VERBOSE
-			DPRINT(("dptab_update_send_large: STAT_TX_RECORDS.out %d STAT_TX_BYTES.out %d, len %d\n", 
-				dptab->stats[dptab_STAT_TX_RECORDS].out, 
+			DPRINT(("dptab_update_send_large: STAT_TX_RECORDS.out %d STAT_TX_BYTES.out %d, len %d\n",
+				dptab->stats[dptab_STAT_TX_RECORDS].out,
 				dptab->stats[dptab_STAT_TX_BYTES].out, varlen + xfer->subkeylen));
 #endif
 #endif
@@ -2795,7 +2789,6 @@ dptab_update_send_large(
 	}
 	return dp_RES_OK;
 }
-
 
 /*--------------------------------------------------------------------------
 Attempt to send all transfers for this destination
@@ -2812,8 +2805,8 @@ dptab_update_destination(
 	int n_tx;	/* how many are in the tx array */
 	int i_tx;	/* how many we've done; counts up from 0 each time */
 	int cur_tx;	/* where we are in the tx array; wraps around end */
-	short remcap; 
-	
+	short remcap;
+
 	precondition(dptab != NULL);
 	precondition(peer != NULL);
 	precondition(peer->tx != NULL);
@@ -2826,7 +2819,7 @@ dptab_update_destination(
 
 	n_tx = peer->tx->n_used;
 #if 0
-	/* Loop through all xfers, starting with cur_tx. 
+	/* Loop through all xfers, starting with cur_tx.
 	 * Loop downwards because we delete them as we go.
 	 */
 	cur_tx = peer->cur_tx--;	/* start next xfer next time for fairness */
@@ -2873,7 +2866,7 @@ dptab_update_destination(
 			else
 				npkts = 1;		/* or at least don't be greedy. */
 		}
-#ifdef VERBOSE 
+#ifdef VERBOSE
 		DPRINT(("dptab_update: cur_tx now %d, npkts=%d, npktsfree=%d\n",
 				cur_tx,npkts,*pNpktsfree));
 #endif
@@ -2907,7 +2900,7 @@ dptab_update_destination(
 			/* Get access to the current variable. */
 			size_t varlen = 0;
 			char  *varbuf = NULL;
-			err = dptab_get_bykey(xfer->table, xfer->subkey, 
+			err = dptab_get_bykey(xfer->table, xfer->subkey,
 									xfer->subkeylen, (void **)&varbuf, &varlen);
 			if (err != dp_RES_OK) {
 				DPRINT(("dptab_update: no buf for %s; deleting xfer\n",
@@ -2930,7 +2923,6 @@ dptab_update_destination(
 	dumpXfers(peer->tx, "dptab_update_destination exit");
 	return dp_RES_OK;
 }
-
 
 /*--------------------------------------------------------------------------
  Call dptab_update() periodically to propagate changes.
@@ -2956,9 +2948,9 @@ dptab_update_destination(
  This is a kludge that allows us to misuse this system to
  broadcast small things periodically, e.g. session advertisements on a LAN.
 
- Note that if you want to shut down, but still want all the variables you 
+ Note that if you want to shut down, but still want all the variables you
  have set so far to propagate, you should loop,
- calling dptab_update(), dpio_update(), dpio_get(), and dpio_readyToFreeze() 
+ calling dptab_update(), dpio_update(), dpio_get(), and dpio_readyToFreeze()
  until the latter returns all clear.
 
  Returns dp_RES_EMPTY if no transfers waiting; dp_RES_OK if transfers
@@ -2974,15 +2966,15 @@ dptab_update_destination(
 
 	 dptab_SMALL_PACKET_TYPE
 	 keylen key subkeylen etc.
-	 subkey len data 
+	 subkey len data
 	 subkey len data
 	 etc.
- 
- Items that are too big to fit in a single packet are handled quite 
+
+ Items that are too big to fit in a single packet are handled quite
  differently.  Each time we start sending one of these, we generate a new
  8-bit xferid, and send out the following packet:
 	 dptab_INITIAL_PACKET_TYPE
-	 xferid datalen crc keylen key 
+	 xferid datalen crc keylen key
 	 partial_data
 
  The remaining packets of the transfer contain only the xferid and item data:
@@ -2995,10 +2987,10 @@ dptab_update_destination(
  Overhead:
  Each call to this currently results in a complete sweep through all
  destinations' outstanding transfers.  If no destination has outstanding
- transfers, it takes something like twenty microseconds per destination.  
+ transfers, it takes something like twenty microseconds per destination.
  If 1000 peers are logged in, that's 20 milliseconds.  This routine should
  be called once/second, so that's 3% CPU load right there!
- Eventually, we will keep a separate list of the destinations with 
+ Eventually, we will keep a separate list of the destinations with
  outstanding transfers to reduce this overhead.
 --------------------------------------------------------------------------*/
 DP_API dp_result_t dptab_update(dptab_t *dptab)
@@ -3054,7 +3046,7 @@ DP_API dp_result_t dptab_update(dptab_t *dptab)
 		dumpXfers(peer->tx, "dptab_update peer found");
 
 		/* Don't bother if no xfers outstanding */
-		if (!(peer->tx->n_used)) 
+		if (!(peer->tx->n_used))
 			continue;
 
 		n_xfers_noticed++;
@@ -3215,7 +3207,7 @@ dptab_handlePacket(dptab_t *dptab, playerHdl_t src, size_t len, void *buf)
 		datalen = len - keylen - subkeylen - sizeof(dp_packetType_t) - sizeof_dptab_INITIAL_PACKET_HDR;
 
 		DPRINT(("dptab_handlePacket: "
-				"pktlen %d, keylen %d, subkeylen %d, datalen %d, key %s, subkey %s\n", 
+				"pktlen %d, keylen %d, subkeylen %d, datalen %d, key %s, subkey %s\n",
 				len, keylen, subkeylen, datalen,
 				key2a(key, keylen),
 				key2a2(subkey, subkeylen)));
@@ -3299,7 +3291,6 @@ dptab_handlePacket(dptab_t *dptab, playerHdl_t src, size_t len, void *buf)
 			DPRINT(("dptab_handlePacket: bug: var too long\n"));
 			return dp_RES_BUG;
 		}
-
 
 		/* Append to holding area. */
 		memcpy((char *)var->buf + xfer->cur_offset, payload, datalen);
@@ -3388,7 +3379,7 @@ dptab_handlePacket(dptab_t *dptab, playerHdl_t src, size_t len, void *buf)
 		subkey = body->key + keylen;
 
 		DPRINT(("dptab_handlePacket: "
-				"pktlen %d, keylen %d, subkeylen %d, key %s, subkey %s\n", 
+				"pktlen %d, keylen %d, subkeylen %d, key %s, subkey %s\n",
 				len, keylen, subkeylen,
 				key2a(key, keylen),
 				key2a2(subkey, subkeylen)));
@@ -3454,7 +3445,6 @@ dptab_handlePacket(dptab_t *dptab, playerHdl_t src, size_t len, void *buf)
 	return dp_RES_OK;
 }
 
-
 #define FREEZE_AND_THAW 1
 #if FREEZE_AND_THAW
 
@@ -3506,7 +3496,6 @@ dptab_tableRef_freeze(
 	return dp_RES_OK;
 }
 
-
 /*-----------------------------------------------------------------------
  Restore a reference to a dptab_table_t from disk.
  Requires that the table's state has been restored (dptab_table_thaw()
@@ -3557,7 +3546,6 @@ dptab_tableRef_thaw(
 
 	return dp_RES_OK;
 }
-
 
 /*-----------------------------------------------------------------------
  Save the state of a dptab_table_t to disk.
@@ -3660,7 +3648,6 @@ dptab_table_freeze(
 	DPRINT(("dptab_table_freeze: table %s ends at %ld file-bytes\n", key2a(table->key, table->keylen), ftell(fp)));
 	return dp_RES_OK;
 }
-
 
 /*-----------------------------------------------------------------------
  Restore the state of a dptab_table_t from disk and add it to the dptab_t.
@@ -3814,7 +3801,6 @@ dptab_table_thaw(
 	return dp_RES_OK;
 }
 
-
 /*-----------------------------------------------------------------------
  Save the state of a dptab_xfer_t to disk.
 -----------------------------------------------------------------------*/
@@ -3842,7 +3828,7 @@ dptab_xfer_freeze(
 		(fwrite(&(xfer->cur_offset), sizeof(size_t), 1, fp) != 1) ||
 		(fwrite(&(xfer->crc), sizeof(long), 1, fp) != 1) ||
 		(fwrite(&(xfer->subkeylen), sizeof(int), 1, fp) != 1) ||
-		(fwrite(xfer->subkey, sizeof(char), xfer->subkeylen, fp) != 
+		(fwrite(xfer->subkey, sizeof(char), xfer->subkeylen, fp) !=
 									(size_t)xfer->subkeylen) ||
 		(fwrite(&(xfer->hops), sizeof(int), 1, fp) != 1))
 		return dp_RES_FULL;
@@ -3861,7 +3847,6 @@ dptab_xfer_freeze(
 	DPRINT(("xfer %d ends at %ld file-bytes\n", xfer->xferid, ftell(fp)));
 	return dp_RES_OK;
 }
-
 
 /*-----------------------------------------------------------------------
  Restore the state of a dptab_xfer_t from disk.
@@ -3948,7 +3933,6 @@ dptab_xfer_thaw(
 	return dp_RES_OK;
 }
 
-
 /*-----------------------------------------------------------------------
  Save the state of a dptab_peer_t to disk.
 -----------------------------------------------------------------------*/
@@ -4026,7 +4010,6 @@ dptab_peer_freeze(
 	DPRINT(("peer h:%x ends at %ld file-bytes\n", hdl, ftell(fp)));
 	return dp_RES_OK;
 }
-
 
 /*-----------------------------------------------------------------------
  Restore the state of a dptab_peer_t from disk and add it to the dptab_t.
@@ -4154,7 +4137,6 @@ dptab_peer_thaw(
 	return dp_RES_OK;
 }
 
-
 /*-----------------------------------------------------------------------
  Save the state of a dptab_t to disk.
 -----------------------------------------------------------------------*/
@@ -4218,7 +4200,6 @@ dptab_freeze(
 	DPRINT(("dptab ends at %ld file-bytes\n", ftell(fp)));
 	return dp_RES_OK;
 }
-
 
 /*-----------------------------------------------------------------------
  Restore the state of a dptab_t from disk.
@@ -4294,7 +4275,6 @@ dptab_thaw(
 
 #endif /* FREEZE_AND_THAW */
 
-
 #ifdef dptab_UNITTEST
 
 /*-----------------------------------------------------------------------
@@ -4315,41 +4295,41 @@ int dp_PASCAL table_cb(dptab_t *dptab, dptab_table_t *table, playerHdl_t src, pl
 {
 	DPRINT(("table_cb: status:%d\n", err));
 	if (err == dp_RES_CREATED) {
-		DPRINT(("table_cb: got: src h:%x, dest h:%x, key %s, subkey %s, sent %d, total %d, nvars_tx %d\n", 
-			src, dest, 
+		DPRINT(("table_cb: got: src h:%x, dest h:%x, key %s, subkey %s, sent %d, total %d, nvars_tx %d\n",
+			src, dest,
 			key2a(table->key, table->keylen),
 			key2a2(subkey, subkeylen),
 			sent, total, nvars_tx));
 		if ((dest == PLAYER_ME) && (sent == total)) {
 			nvars_rx++;
-			printf("Got variable from h:%x; table %s, subkey %s; len %d\n", 
-				src, 
+			printf("Got variable from h:%x; table %s, subkey %s; len %d\n",
+				src,
 				key2a(table->key, table->keylen),
 				key2a2(subkey, subkeylen),
 				total);
 		}
 	} else if (err == dp_RES_DELETED) {
-		DPRINT(("table_cb: delete: src h:%x, dest h:%x, key %s, subkey %s\n", 
-			src, dest, 
+		DPRINT(("table_cb: delete: src h:%x, dest h:%x, key %s, subkey %s\n",
+			src, dest,
 			key2a(table->key, table->keylen),
 			key2a2(subkey, subkeylen)));
 		if (dest == PLAYER_ME)
 			nvars_deleted++;		/* deleted by someone else */
-		printf("Got delete variable from h:%x; table %s, subkey %s\n", 
-			src, 
+		printf("Got delete variable from h:%x; table %s, subkey %s\n",
+			src,
 			key2a(table->key, table->keylen),
 			key2a2(subkey, subkeylen));
 	} else if (err == dp_RES_FINISHED) {
-		DPRINT(("table_cb: sent: src h:%x, dest h:%x, key %s, subkey %s, sent %d, total %d, nvars_tx %d\n", 
-			src, dest, 
+		DPRINT(("table_cb: sent: src h:%x, dest h:%x, key %s, subkey %s, sent %d, total %d, nvars_tx %d\n",
+			src, dest,
 			key2a(table->key, table->keylen),
 			key2a2(subkey, subkeylen),
 			sent, total, nvars_tx));
 		if ((src == PLAYER_ME) && (sent == total)) {
 			nvars_tx++;
 			DPRINT(("table_cb: nvars_tx incremented to %d\n", nvars_tx));
-			printf("Sent variable to h:%x; table %s, subkey %s; len %d\n", 
-				dest, 
+			printf("Sent variable to h:%x; table %s, subkey %s; len %d\n",
+				dest,
 				key2a(table->key, table->keylen),
 				key2a2(subkey, subkeylen),
 				total);
@@ -4737,7 +4717,7 @@ void loopback_test(int hostnum)
 		DPRINT(("rx %d tx %d del %d stat %d ready %d\n", nvars_rx, nvars_tx, nvars_deleted, dptab_status, dpio_ReadyToFreeze(dpio, NULL)));
 		printf("rx %d tx %d del %d stat %d ready %d\n", nvars_rx, nvars_tx, nvars_deleted, dptab_status, dpio_ReadyToFreeze(dpio, NULL));
 	}
-	printf("Hmm, it took %d ticks for %d polls, or %d microsec each.\n", 
+	printf("Hmm, it took %d ticks for %d polls, or %d microsec each.\n",
 			eclock() - started,
 			i,
 			((eclock() - started) * (1000000/i) / ECLOCKS_PER_SEC));

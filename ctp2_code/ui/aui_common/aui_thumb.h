@@ -10,14 +10,14 @@
 //
 // THIS FILE IS NOT GENERATED OR SUPPORTED BY ACTIVISION.
 //
-// This material has been developed at apolyton.net by the Apolyton CtP2 
+// This material has been developed at apolyton.net by the Apolyton CtP2
 // Source Code Project. Contact the authors at ctp2source@apolyton.net.
 //
 //----------------------------------------------------------------------------
 //
 // Compiler flags
-// 
-// _MSC_VER		
+//
+// _MSC_VER
 // - Use Microsoft C++ extensions when set.
 //
 //----------------------------------------------------------------------------
@@ -31,12 +31,9 @@
 #ifndef __AUI_THUMB_H__
 #define __AUI_THUMB_H__
 
-
 #include "aui_control.h"
 
-
 class aui_Surface;
-
 
 
 enum AUI_THUMB_ACTION
@@ -50,11 +47,10 @@ enum AUI_THUMB_ACTION
 };
 
 
-
 class aui_Thumb : public aui_Control
 {
 public:
-	
+
 	aui_Thumb(
 		AUI_ERRCODE *retval,
 		uint32 id,
@@ -80,7 +76,7 @@ public:
 	AUI_ERRCODE	Reposition( sint32 x, sint32 y );
 
 protected:
-	POINT	m_grabPoint;	
+	POINT	m_grabPoint;
 
 	virtual void	MouseLDragOver(aui_MouseEvent * mouseData);
 	virtual void	MouseLDragAway(aui_MouseEvent * mouseData);
@@ -95,5 +91,4 @@ protected:
 	virtual void	MouseRDropInside(aui_MouseEvent * mouseData);
 };
 
-
-#endif 
+#endif

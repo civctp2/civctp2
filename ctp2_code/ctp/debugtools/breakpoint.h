@@ -15,7 +15,6 @@ extern "C" {
 #define Breakpoint() assert(0)
 #endif
 
-
 #ifdef __cplusplus
 }
 #endif

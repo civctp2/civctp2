@@ -1,13 +1,3 @@
-
-
-
-
-
-
-
-
-
-
 #include "c3.h"
 #include "installationpool.h"
 #include "player.h"
@@ -15,7 +5,6 @@
 #include "World.h"
 #include "civarchive.h"
 #include "Globals.h"
-
 
 InstallationPool::InstallationPool() : ObjPool(k_BIT_GAME_OBJ_TYPE_INSTALLATION)
 {
@@ -86,5 +75,3 @@ void InstallationPool::RebuildQuadTree()
 			((InstallationData*)(m_table[i]))->RebuildQuadTree();
 	}
 }
-
-

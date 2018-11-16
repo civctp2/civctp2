@@ -11,20 +11,20 @@
 //
 // THIS FILE IS NOT GENERATED OR SUPPORTED BY ACTIVISION.
 //
-// This material has been developed at apolyton.net by the Apolyton CtP2 
+// This material has been developed at apolyton.net by the Apolyton CtP2
 // Source Code Project. Contact the authors at ctp2source@apolyton.net.
 //
 //----------------------------------------------------------------------------
 //
 // Compiler flags
-// 
+//
 // _MSC_VER
 // - When defined, allows Microsoft C++ extensions.
 // - When not defined, generates standard C++.
 //
 // Note: For the blocks with _MSC_VER preprocessor directives, the following
-//       is implied: the (_MSC_VER) preprocessor directive lines and the blocks 
-//       between #else and #endif are modified Apolyton code. The blocks 
+//       is implied: the (_MSC_VER) preprocessor directive lines and the blocks
+//       between #else and #endif are modified Apolyton code. The blocks
 //       between #if and #else are the original Activision code.
 //
 //----------------------------------------------------------------------------
@@ -44,39 +44,32 @@
 #ifndef ___BMH_DOMESTIC_CONTROL_PANEL_HEADER
 #define ___BMH_DOMESTIC_CONTROL_PANEL_HEADER
 
-
 class aui_Control;
 class ctp2_Button;
 class ctp2_Static;
 
-
 class DomesticControlPanel {
 public:
-	
+
 	DomesticControlPanel(MBCHAR *ldlBlock);
 
 	void Blank();
-	
+
 	void Update();
 
 private:
-	
+
 	static void EditResearchButtonActionCallback(aui_Control *control,
 		uint32 action, uint32 data, void *cookie);
 
-	
 	void UpdateScience();
 
-	
 	void ClearScience();
 
-	
 	void UpdateStats();
 
-	
 	void UpdateGoldPW();
 
-	
 	ctp2_Static *m_scienceLabel;
 	ctp2_Button *m_scienceIconButton;
 	ctp2_Button *m_scienceTurnButton;
@@ -86,7 +79,7 @@ private:
 	ctp2_Static *m_governmentValue;
 	ctp2_Static *m_scienceValue;
 	ctp2_Static *m_pollutionValue;
-	
+
 	ctp2_Static *m_menuGoldValue;
 	ctp2_Static *m_menuPublicWorksValue;
 	ctp2_Static *m_menuHappinessValue;
@@ -105,4 +98,4 @@ private:
 	MBCHAR m_ldlBlock[100];
 };
 
-#endif 
+#endif

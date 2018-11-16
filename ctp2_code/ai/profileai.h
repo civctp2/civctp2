@@ -3,7 +3,6 @@
 
 #ifdef _Debug
 
-
 #define Goal G1_
 #define Agent A1_
 #define Squad S1_
@@ -28,4 +27,3 @@
 #endif // _Debug
 
 #endif // __ai__profileai_h__
-

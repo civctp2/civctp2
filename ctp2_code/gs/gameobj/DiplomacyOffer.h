@@ -13,19 +13,18 @@ class CivArchive;
 
 class TradeOfferData : public GAMEOBJ {
 private:
-	
-	Unit m_fromCity;         
-	ROUTE_TYPE m_offerType;  
-	sint32 m_offerResource;  
-	ROUTE_TYPE m_askingType; 
-	sint32 m_askingResource; 
-	
+
+	Unit m_fromCity;
+	ROUTE_TYPE m_offerType;
+	sint32 m_offerResource;
+	ROUTE_TYPE m_askingType;
+	sint32 m_askingResource;
 
 	friend class NetTradeOffer;
 
 public:
 	TradeOfferData(const ID id,
-				   const Unit city, 
+				   const Unit city,
 				   const ROUTE_TYPE offerType, const sint32 offerResource,
 				   const ROUTE_TYPE askingType, const sint32 askingResource)
 		: GAMEOBJ(id.m_id)
@@ -41,17 +40,14 @@ public:
 
 	TradeOfferData(CivArchive &archive) : GAMEOBJ(0) { Serialize(archive); };
 
-	
 	Unit GetFromCity() const { return m_fromCity; }
 	ROUTE_TYPE GetOfferType() const { return m_offerType; }
 	sint32 GetOfferResource() const { return m_offerResource; }
 	ROUTE_TYPE GetAskingType() const { return m_askingType; }
 	sint32 GetAskingResource() const { return m_askingResource; }
 
-	
-	
+
 	void Serialize(CivArchive &archive);
 };
 
 #endif
-

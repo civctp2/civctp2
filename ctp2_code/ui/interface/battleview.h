@@ -1,4 +1,3 @@
-
 #ifdef HAVE_PRAGMA_ONCE
 #pragma once
 #endif
@@ -34,34 +33,31 @@ struct SortedActor {
 	BattleViewActor	*actor;
 };
 
-
-void battleview_ExitButtonActionCallback( aui_Control *control, uint32 action, 
+void battleview_ExitButtonActionCallback( aui_Control *control, uint32 action,
 											uint32 data, void *cookie );
 
 class BattleView {
 public:
-	
+
 	BattleView();
 
-	
 	~BattleView();
 
-	
-	
-	
+
+
+
 	bool IsProcessing() const
 	{ return(!m_activeEvents->IsEmpty() || !m_eventQueue->IsEmpty()); }
 
-	
-	
-	
+
+
+
 	bool IsCurrentBattle(const Battle *battle) const
-		{ 
-			
-			return(m_battle == battle); 
+		{
+
+			return(m_battle == battle);
 		}
 
-	
 	void Initialize(RECT *battleViewRect);
 	void SetBattle(Battle *battle);
 	void UpdateBattle(Battle *battle);
@@ -86,10 +82,10 @@ public:
 	void RemoveDeadActorsFromEvents(BattleEvent *deathEvent);
 
 private:
-	
-	
-	
-	
+
+
+
+
 	Battle		*m_battle;
 
 	RECT						m_battleViewRect;
@@ -104,7 +100,7 @@ private:
 	PointerList<BattleEvent>	*m_activeEvents;
 	PointerList<BattleEvent>::Walker	*m_walker;
 	BattleEvent					*m_activeEvent;
-	
+
 	double						m_cityBonus;
 	double						m_terrainBonus;
 	double						m_fortBonus;

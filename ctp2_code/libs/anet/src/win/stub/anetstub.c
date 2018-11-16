@@ -1,4 +1,4 @@
-/* 
+/*
 Copyright (C) 1995-2001 Activision, Inc.
 
 This library is free software; you can redistribute it and/or
@@ -189,7 +189,7 @@ static int getinfo(char *path, char *args, char *cwd)
 	}
 	strcat(path, "\\bin\\jrew.exe");
 	strcat(args, "\\lib\\rt.jar\";jar\\atvi.jar;jar\\netshell.jar;jar\\JConfig.zip NetShell");
-	
+
 	if (!*path || !*cwd || !*args) {
 		DPRINT(("stub.getinfo: Error getting NetShell parameters\n"));
 		DPRINT((" got path, cwd, args = %s, %s, %s\n", path, cwd, args));
@@ -377,7 +377,7 @@ int WINAPI WinMain(HINSTANCE hinstExe, HINSTANCE hinstExePrev, LPSTR lpszCmdLine
 			VersionInfo.dwOSVersionInfoSize = sizeof(OSVERSIONINFO);
 			if (!GetVersionEx(&VersionInfo)) {
 				DPRINT(("stub: cannot determine OS; quitting\n"));
-				exit(1); 
+				exit(1);
 			}
 			if (VersionInfo.dwPlatformId == VER_PLATFORM_WIN32_NT || VersionInfo.dwPlatformId == VER_PLATFORM_WIN32_WINDOWS) {
 				while (' ' == *buf || '\t' == *buf) buf++;
@@ -516,7 +516,7 @@ int WINAPI WinMain(HINSTANCE hinstExe, HINSTANCE hinstExePrev, LPSTR lpszCmdLine
 //			DPRINT(("stub: nhandles = %d\n", nhandles));
 		} while (nhandles > 1);
 //		DPRINT(("stub: exited inside loop\n"));
-#ifdef NOLOOP		
+#ifdef NOLOOP
 		break;
 #endif
 	} while (!exitCode);

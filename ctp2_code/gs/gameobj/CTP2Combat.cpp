@@ -10,13 +10,13 @@
 //
 // THIS FILE IS NOT GENERATED OR SUPPORTED BY ACTIVISION.
 //
-// This material has been developed at apolyton.net by the Apolyton CtP2 
+// This material has been developed at apolyton.net by the Apolyton CtP2
 // Source Code Project. Contact the authors at ctp2source@apolyton.net.
 //
 //----------------------------------------------------------------------------
 //
 // Compiler flags
-// 
+//
 //----------------------------------------------------------------------------
 //
 // Modifications from the original Activision code:
@@ -46,7 +46,6 @@
 #include "player.h"
 #include "profileDB.h"
 
-
 #include "World.h"
 #include "Cell.h"
 
@@ -65,7 +64,6 @@
 #include "CTP2Combat.h"
 
 CTP2Combat *g_theCurrentBattle = NULL;
-
 
 extern BattleViewWindow *g_battleViewWindow;
 
@@ -112,14 +110,13 @@ public:
 
 DamageTracker s_trackedUnits[k_MAX_TRACKED_UNITS];
 
-#else 
+#else
 
 #define COMBATRAND(x) (g_rand->Next(x))
 
 static void combat_print(sint32 level, const char *fmt, ...)
 {
-	
-		
+
 		char buf[1024];
 		va_list vl;
 		va_start(vl, fmt);
@@ -127,7 +124,7 @@ static void combat_print(sint32 level, const char *fmt, ...)
 		va_end(vl);
 
 		DPRINTF(k_DBG_GAMESTATE, ("%s", buf));
-		
+
 }
 
 #endif
@@ -153,7 +150,7 @@ CombatUnit::CombatUnit(double offense, double defense,
 	s_trackedUnits[m_id].m_unit = *this;
 }
 
-#else 
+#else
 
 CombatUnit::CombatUnit(double offense, double defense,
 					   double strength, double armor,
@@ -165,7 +162,7 @@ CombatUnit::CombatUnit(double offense, double defense,
 	m_armor(armor),
 	m_ranged(ranged),
 	m_hp(hp),
-	// Using a silly ?:-construction to prevent a compiler warning. 
+	// Using a silly ?:-construction to prevent a compiler warning.
 	// TODO: make Unit::IsVeteran return bool.
 	m_isVeteran(u.IsVeteran() ? true : false),
 	m_unit(u)
@@ -175,12 +172,12 @@ CombatUnit::CombatUnit(double offense, double defense,
 	const UnitRecord *rec = m_unit.GetDBRec();
 	if(rec->GetMovementTypeAir() &&
 	   ((rec->GetMovementType() & ~(k_Unit_MovementType_Air_Bit)) == 0)) {
-		
+
 		m_type = UNIT_TYPE_AIR;
 	} else if((rec->GetMovementTypeSea() || rec->GetMovementTypeShallowWater()) &&
 			  ((rec->GetMovementType() & ~(k_Unit_MovementType_Sea_Bit |
 										   k_Unit_MovementType_ShallowWater_Bit)) == 0)) {
-		
+
 		m_type = UNIT_TYPE_NAVAL;
 	} else if(rec->GetIsFlanker()) {
 		m_type = UNIT_TYPE_FLANKER;
@@ -197,7 +194,7 @@ void CombatUnit::DeductHP(double amt)
 {
 	Assert(m_unit.IsValid());
 	Assert(amt > 0);
-	m_hp -= amt; 
+	m_hp -= amt;
 
 	m_unit->SetHP(m_hp);
 
@@ -208,7 +205,6 @@ void CombatUnit::DeductHP(double amt)
 }
 
 #endif
-
 
 CombatField::CombatField(sint32 width, sint32 height, bool isOffense)
 {
@@ -236,7 +232,6 @@ CombatField::~CombatField()
 	delete m_field;
 }
 
-
 CombatUnit &CombatField::GetUnit(sint32 x, sint32 y)
 {
 	Assert(x < m_width);
@@ -249,7 +244,7 @@ void CombatField::SetUnit(sint32 x, sint32 y, CombatUnit *u)
 {
 	Assert(x < m_width);
 	Assert(y < m_height);
-	
+
 	m_field[x][y] = *u;
 }
 
@@ -260,7 +255,7 @@ void CombatField::StartRound()
 	for(x = 0; x < m_width; x++) {
 		for(y = 0; y < m_height; y++) {
 			if(m_field[x][y].IsActive()) {
-				
+
 				m_field[x][y].m_alreadyExploded = false;
 				m_field[x][y].m_alreadyAttacked = false;
 			}
@@ -284,18 +279,17 @@ sint32 CombatField::NumAlive()
 }
 
 
-
 bool CombatField::FindTargetForRangedAttackFrom(sint32 x, sint32 y,
 												 sint32 *dx, sint32 *dy)
-{	
+{
 	sint32 yc, xc;
 
 	*dx = *dy = -1;
 
 	sint32 ydelta;
-	
-	for(xc = k_FRONT_COL; xc < m_width; xc++) {		
-		
+
+	for(xc = k_FRONT_COL; xc < m_width; xc++) {
+
 		for(ydelta = 0; ydelta < m_height; ydelta++) {
 			if(((y + ydelta) < m_height) && (m_field[xc][y + ydelta].IsActive())) {
 				*dx = xc;
@@ -311,10 +305,10 @@ bool CombatField::FindTargetForRangedAttackFrom(sint32 x, sint32 y,
 		}
 	}
 
-	
-	
-	
-	
+
+
+
+
 	for(xc = 0; xc < m_width; xc++) {
 		for(yc = 0; yc < m_height; yc++) {
 			if(m_field[xc][yc].IsActive()) {
@@ -325,7 +319,6 @@ bool CombatField::FindTargetForRangedAttackFrom(sint32 x, sint32 y,
 		}
 	}
 
-	
 	return false;
 }
 
@@ -333,12 +326,11 @@ bool CombatField::FindTargetForAttackFrom(sint32 x, sint32 y,
 										  sint32 *dx, sint32 *dy,
 										  bool isFlanker)
 {
-	
+
 	Assert(x == 0);
 
 	*dx = *dy = -1;
 
-	
 	if(m_field[x][y].IsActive()) {
 		*dx = x;
 		*dy = y;
@@ -346,11 +338,10 @@ bool CombatField::FindTargetForAttackFrom(sint32 x, sint32 y,
 	}
 
 	if(isFlanker) {
-		
-		
+
 		sint32 ydelta;
 		for(ydelta = 1; ydelta < m_height; ydelta++) {
-			
+
 			if(y + ydelta < m_height) {
 				if(m_field[x][y + ydelta].IsActive()) {
 					*dx = x;
@@ -358,8 +349,7 @@ bool CombatField::FindTargetForAttackFrom(sint32 x, sint32 y,
 					return true;
 				}
 			}
-			
-			
+
 			if(y - ydelta >= 0) {
 				if(m_field[x][y - ydelta].IsActive()) {
 					*dx = x;
@@ -375,30 +365,28 @@ bool CombatField::FindTargetForAttackFrom(sint32 x, sint32 y,
 
 void CombatField::Move()
 {
-	
+
 	sint32 x, y, y2;
 	sint32 frontCount = CountColumn(k_FRONT_COL);
 	for(x = 1; x < m_width; x++) {
 		for(y = 0; y < m_height; y++) {
 			if(!m_field[x][y].IsActive())
-				
+
 				continue;
 
 			if(m_field[0][y].IsActive())
-				
+
 				continue;
 
-			
 			for(y2 = 0; y2 < m_height; y2++) {
 				if(m_field[x][y2].IsActive())
-					
+
 					continue;
 
 				if(!m_field[0][y2].IsActive())
-					
+
 					continue;
 
-				
 				m_field[x][y2] = m_field[x][y];
 				m_field[x][y].Invalidate();
 				break;
@@ -406,26 +394,23 @@ void CombatField::Move()
 		}
 	}
 
-	
-	
+
 	CombatUnit *newRow = new CombatUnit[m_width];
 	sint32 rowPos = 0;
 
 	for(y = 0; y < m_height; y++) {
 		rowPos = 0;
-		
+
 		for(x = 0; x < m_width; x++) {
 			if(m_field[x][y].IsActive()) {
 				newRow[rowPos++] = m_field[x][y];
 			}
 		}
 
-		
 		for(x = 0; x < rowPos; x++) {
 			m_field[x][y] = newRow[x];
 		}
 
-		
 		for(; x < m_width; x++) {
 			m_field[x][y].Invalidate();
 		}
@@ -447,10 +432,9 @@ void CombatField::Sort()
 			CombatUnit *u = &m_field[x][y];
 			if(u->GetCombatType() == UNIT_TYPE_AIR) {
 				u->SetPreferredCol(k_AIR_COL);
-				u->SetPriority(sint32(u->GetOffense() + u->GetRangedAttack()));				
+				u->SetPriority(sint32(u->GetOffense() + u->GetRangedAttack()));
 			} else if((u->GetOffense() <= 0) && (u->GetDefense() <= 10) && (u->GetRangedAttack() <= 0)) {
-				
-				
+
 				u->SetPreferredCol(k_NONCOMBAT_COL);
 				u->SetPriority(0);
 			} else {
@@ -470,8 +454,7 @@ void CombatField::Sort()
 				}
 			}
 
-			
-			
+
 			if(u->GetCombatType() != UNIT_TYPE_FLANKER) {
 				u->SetPriority(u->GetPriority() + k_NON_FLANKER_PRIORITY);
 			}
@@ -491,16 +474,16 @@ void CombatField::Sort()
 	Assert(dbgcount);
 	dbgcount = 0;
 
-	
-	
-	
-	
-	
-	
-	
-	
-	
-	
+
+
+
+
+
+
+
+
+
+
 	for(x = 0; x < m_width; x++) {
 		for(y = 0; y < m_height; y++) {
 			m_field[x][y].Invalidate();
@@ -574,13 +557,13 @@ sint32 CombatField::CountColumn(sint32 col)
 void CombatField::MoveRowForward(sint32 row)
 {
 	sint32 x;
-	
+
 	for(x = k_FRONT_COL + 1; x < m_width; x++) {
-		if(m_field[x][row].IsActive() && 
+		if(m_field[x][row].IsActive() &&
 		   m_field[x][row].GetCombatType() != UNIT_TYPE_NONCOMBAT) {
-			
+
 			if(m_field[x][row].IsActive()) {
-				combat_print(k_COMBAT_DEBUG_VERBOSE, "MOVEH: %s@%d,%d -> %d,%d\n", 
+				combat_print(k_COMBAT_DEBUG_VERBOSE, "MOVEH: %s@%d,%d -> %d,%d\n",
 							 m_isOffense ? "Attacker" : "Defender",
 							 x, row, k_FRONT_COL, row);
 			}
@@ -595,7 +578,6 @@ void CombatField::MoveUnitsToFront(sint32 num)
 {
 	Assert((CountColumn(k_FRONT_COL) + num) <= m_height);
 
-	
 	sint32 ydelta, ycenter;
 	ycenter = m_height / 2;
 	for(ydelta = 0; ydelta <= (m_height / 2); ydelta++) {
@@ -603,7 +585,7 @@ void CombatField::MoveUnitsToFront(sint32 num)
 			break;
 
 		if(!m_field[k_FRONT_COL][ycenter + ydelta].IsActive()) {
-			
+
 			MoveRowForward(ycenter + ydelta);
 			if(m_field[k_FRONT_COL][ycenter + ydelta].IsActive())
 				num--;
@@ -611,7 +593,7 @@ void CombatField::MoveUnitsToFront(sint32 num)
 
 		if(ydelta != 0 && num > 0) {
             if(!m_field[k_FRONT_COL][ycenter - ydelta].IsActive()) {
-				
+
 				MoveRowForward(ycenter - ydelta);
 				if(m_field[k_FRONT_COL][ycenter - ydelta].IsActive())
 					num--;
@@ -622,28 +604,27 @@ void CombatField::MoveUnitsToFront(sint32 num)
 
 void CombatField::FindOpponents(CombatField &opposite)
 {
-	
+
 	sint32 y;
 	for(y = 0; y < m_height; y++) {
 		if(!m_field[k_FRONT_COL][y].IsActive())
-			
+
 			continue;
 
 		if(opposite.m_field[k_FRONT_COL][y].IsActive())
-			
+
 			continue;
 
 		sint32 yo;
-		
+
 		for(yo = 0; yo < m_height; yo++) {
 			if(m_field[k_FRONT_COL][y].IsActive())
-				
+
 				continue;
 			if(opposite.m_field[k_FRONT_COL][y].IsActive())
-				
+
 				continue;
 
-			
 			m_field[k_FRONT_COL][yo] = m_field[k_FRONT_COL][y];
 			m_field[k_FRONT_COL][y].Invalidate();
 			break;
@@ -653,17 +634,17 @@ void CombatField::FindOpponents(CombatField &opposite)
 
 void CombatField::FillHoles()
 {
-	
+
 	sint32 ydelta = 0;
 	sint32 ycenter = m_height / 2;
 	sint32 x;
 	sint32 yc;
 	for(x = 0; x < m_width; x++) {
-		ydelta = 0; 
+		ydelta = 0;
 		if(!m_field[x][ycenter].IsActive()) {
-			
+
 			double plusOffense = -1;
-			sint32 plusDelta = 0; 
+			sint32 plusDelta = 0;
 			for(yc = ycenter + 1; yc < m_height; yc++) {
 				plusDelta++;
 				if(m_field[x][yc].IsActive()) {
@@ -672,7 +653,7 @@ void CombatField::FillHoles()
 				}
 			}
 			double minusOffense = -1;
-			sint32 minusDelta = 0; 
+			sint32 minusDelta = 0;
 			for(yc = ycenter - 1; yc >= 0; yc--) {
 				minusDelta++;
 				if(m_field[x][yc].IsActive()) {
@@ -681,12 +662,12 @@ void CombatField::FillHoles()
 				}
 			}
 			if(plusOffense >= 0 || minusOffense >= 0) {
-				
+
 				if(plusOffense > minusOffense) {
-					
+
 					for(yc = ycenter+plusDelta; yc < m_height; yc++) {
 						if(m_field[x][yc].IsActive()) {
-							combat_print(k_COMBAT_DEBUG_VERBOSE, "MOVEV: %s@%d,%d -> %d,%d\n", 
+							combat_print(k_COMBAT_DEBUG_VERBOSE, "MOVEV: %s@%d,%d -> %d,%d\n",
 										 m_isOffense ? "Attacker" : "Defender",
 										 x, yc, x, yc - 1);
 						}
@@ -694,10 +675,10 @@ void CombatField::FillHoles()
 						m_field[x][yc].Invalidate();
 					}
 				} else {
-					
+
 					for(yc = ycenter - minusDelta; yc >= 0; yc--) {
 						if(m_field[x][yc].IsActive()) {
-							combat_print(k_COMBAT_DEBUG_VERBOSE, "MOVEV: %s@%d,%d -> %d,%d\n", 
+							combat_print(k_COMBAT_DEBUG_VERBOSE, "MOVEV: %s@%d,%d -> %d,%d\n",
 										 m_isOffense ? "Attacker" : "Defender",
 										 x, yc, x, yc + 1);
 						}
@@ -707,13 +688,13 @@ void CombatField::FillHoles()
 				}
 
 			}
-					
+
 		}
 		for(ydelta = 1; ydelta <= (m_height / 2); ydelta++) {
 			if(!m_field[x][ycenter + ydelta].IsActive()) {
 				for(yc = ycenter + ydelta + 1; yc < m_height; yc++) {
 					if(m_field[x][yc].IsActive()) {
-						combat_print(k_COMBAT_DEBUG_VERBOSE, "MOVEV: %s@%d,%d -> %d,%d\n", 
+						combat_print(k_COMBAT_DEBUG_VERBOSE, "MOVEV: %s@%d,%d -> %d,%d\n",
 									 m_isOffense ? "Attacker" : "Defender",
 									 x, yc, x, yc - 1);
 					}
@@ -721,11 +702,11 @@ void CombatField::FillHoles()
 					m_field[x][yc].Invalidate();
 				}
 			}
-			
+
 			if(!m_field[x][ycenter - ydelta].IsActive()) {
 				for(yc = ycenter - ydelta - 1; yc >= 0; yc--) {
 					if(m_field[x][yc].IsActive()) {
-						combat_print(k_COMBAT_DEBUG_VERBOSE, "MOVEV: %s@%d,%d -> %d,%d\n", 
+						combat_print(k_COMBAT_DEBUG_VERBOSE, "MOVEV: %s@%d,%d -> %d,%d\n",
 									 m_isOffense ? "Attacker" : "Defender",
 									 x, yc, x, yc + 1);
 					}
@@ -756,11 +737,10 @@ void CombatField::ReportUnits(Battle *battle, BattleEvent *event, bool initial)
 }
 #endif
 
-
 #ifdef TEST_APP
 void CombatField::Dump(bool flip)
 {
-	
+
 	sint32 x, y;
 
 	sint32 xs = flip ? m_width - 1 : 0;
@@ -801,7 +781,7 @@ CTP2Combat::CTP2Combat(sint32 w, sint32 h, FILE *input) :
 	m_attackers(w, h, true),
 	m_defenders(w, h, false)
 {
-	
+
 	sint32 state = 0;
 	sint32 lineNum = 0;
 	m_retreated = false;
@@ -810,7 +790,6 @@ CTP2Combat::CTP2Combat(sint32 w, sint32 h, FILE *input) :
 
 	while(!feof(input)) {
 
-		
 		char line[1024];
 		if(!fgets(line, 1024, input))
 			break;
@@ -818,13 +797,13 @@ CTP2Combat::CTP2Combat(sint32 w, sint32 h, FILE *input) :
 		lineNum++;
 
 		if(line[0] == '#') {
-			
+
 			continue;
 		} else if(strnicmp(line, "[attackers]", 11) == 0) {
-			
+
 			state = 1;
 		} else if(strnicmp(line, "[defenders]", 11) == 0) {
-			
+
 			state = 2;
 		} else {
 			switch(state) {
@@ -832,13 +811,13 @@ CTP2Combat::CTP2Combat(sint32 w, sint32 h, FILE *input) :
 					error_exit("Expected [attackers] or [defenders] first\n");
 					break;
 
-				case 1: 
-				case 2: 
+				case 1:
+				case 2:
 				{
 					sint32 x, y;
 					double offense, defense, strength, armor, ranged, hp;
 					char typeStr[256];
-					
+
 					if(sscanf(line, "%d,%d %lf %lf %lf %lf %lf %lf %s\n",
 							  &x, &y, &offense, &defense, &strength, &armor, &ranged, &hp, typeStr) != 9) {
 						error_exit("Couldn't parse '%s' at line %d", line, lineNum);
@@ -883,7 +862,7 @@ CTP2Combat::CTP2Combat(sint32 w, sint32 h, FILE *input) :
 	m_round = 0;
 }
 
-#else 
+#else
 
 void CombatField::FillFrom(CellUnitList &units)
 {
@@ -902,7 +881,7 @@ void CombatField::FillFrom(CellUnitList &units)
 		if(x >= m_width) {
 			x = 0;
 			y++;
-		}			
+		}
 	}
 }
 
@@ -943,7 +922,6 @@ CTP2Combat::CTP2Combat(sint32 w, sint32 h,
 		combat_print(k_COMBAT_DEBUG_VERBOSE, "defender[%d]: %lx @ %lfHP, army=%lx\n", i, defenders[i].m_id, defenders[i].GetHP(), defenders[i].GetArmy().m_id);
 	}
 
-	
 	Assert(g_player[m_attacker]);
 	Assert(g_player[m_defender]);
 	if (g_player[m_attacker] &&
@@ -952,62 +930,54 @@ CTP2Combat::CTP2Combat(sint32 w, sint32 h,
 		g_player[m_defender]->GetPlayerType() == PLAYER_TYPE_ROBOT)
 		return;
 
-	m_roundsSinceUpdate = 0x7ffffffe;  
+	m_roundsSinceUpdate = 0x7ffffffe;
 
-	
 	m_attackers.StartRound();
 	m_defenders.StartRound();
 
-	
 	if (g_theProfileDB->IsShowZoomedCombat() == FALSE)
 		return;
 
-	
-	
+
 	if((m_attacker == g_selected_item->GetVisiblePlayer()) ||
 	   (m_defender == g_selected_item->GetVisiblePlayer())) {
-		
+
 		m_battle = new Battle();
 
-		
 		m_battle->Initialize(attackers[0].GetArmy(), defenders);
 
-		
 		BattleEvent *placementEvent = new BattleEvent(BATTLE_EVENT_TYPE_PLACEMENT);
 		Assert(placementEvent);
 		m_attackers.ReportUnits(m_battle, placementEvent, true);
 		m_defenders.ReportUnits(m_battle, placementEvent, true);
 		m_battle->AddEvent(placementEvent);
 
-		
-		
-		
+
+
+
 		g_director->AddBattle(m_battle);
 	}
 
 	Assert(!IsDone());
 }
 
-
 CTP2Combat::~CTP2Combat()
 {
-	
+
 	if(m_battle) {
-		
+
 		if(g_battleViewWindow)
 			g_battleViewWindow->EndBattle();
 
-		
 		delete m_battle;
 	}
 }
 #endif
 
-
 #ifdef TEST_APP
 void CTP2Combat::DumpState()
 {
-	
+
 	combat_print(k_COMBAT_DEBUG_VERBOSE, "%d remaining defenders\n", m_defenders.NumAlive());
 	m_defenders.Dump(true);
 	combat_print(k_COMBAT_DEBUG_VERBOSE, "--front line--\n");
@@ -1019,9 +989,9 @@ void CTP2Combat::DumpState()
 
 void CTP2Combat::Balance()
 {
-	
-	
-	
+
+
+
 
 	m_attackers.FillHoles();
 	m_defenders.FillHoles();
@@ -1040,7 +1010,6 @@ void CTP2Combat::Balance()
 	attackFront = m_attackers.CountColumn(k_FRONT_COL);
 	defendFront = m_defenders.CountColumn(k_FRONT_COL);
 
-	
 	if(attackFront < defendFront) {
 		m_defenders.FindOpponents(m_attackers);
 	} else {
@@ -1056,12 +1025,10 @@ void CTP2Combat::ExecuteRangedAttack(CombatField *attacker, sint32 attX, sint32 
 {
 	m_noAttacksPossible = false;
 
-	
-	
+
 	CombatUnit *att = &attacker->GetUnit(attX, attY);
 	CombatUnit *def = &defender->GetUnit(defX, defY);
 
-	
 	if(m_battle && !att->m_alreadyAttacked) {
 		BattleEvent *attackEvent = new BattleEvent(BATTLE_EVENT_TYPE_ATTACK);
 		m_battle->AddUnitAttack(attackEvent,
@@ -1073,28 +1040,25 @@ void CTP2Combat::ExecuteRangedAttack(CombatField *attacker, sint32 attX, sint32 
 	const char *attackString = attacker == &m_attackers ? "Attacker" : "Defender";
 	const char *defenseString = defender == &m_defenders ? "Defender" : "Attacker";
 
-	
 	double hitChance = att->GetRangedAttack() /
 		(att->GetRangedAttack() + def->m_unit->GetDefense(att->m_unit));
 
 	if(sint32(COMBATRAND(1000)) < sint32(hitChance * 1000.0)) {
-		
 
-		
+
 		double damage = att->GetStrength() / def->GetArmor();
-		combat_print(k_COMBAT_DEBUG_VERBOSE, "RANGED: %s@(%2d,%2d) -HIT-  %s@(%2d,%2d) for %.2lf", attackString, attX, attY, 
+		combat_print(k_COMBAT_DEBUG_VERBOSE, "RANGED: %s@(%2d,%2d) -HIT-  %s@(%2d,%2d) for %.2lf", attackString, attX, attY,
 					 defenseString, defX, defY, damage);
 
 #ifdef TEST_APP
 		s_trackedUnits[att->m_id].m_DamageInflicted += damage;
 #endif
-		
+
 		def->DeductHP(damage);
 
 		if(!def->IsAlive()) {
 			combat_print(k_COMBAT_DEBUG_VERBOSE, ", killing %s.\n", defenseString);
 
-			
 			if(m_battle) {
 				BattleEvent *deathEvent = new BattleEvent(BATTLE_EVENT_TYPE_DEATH);
 				DPRINTF(k_DBG_GAMESTATE, ("Adding death for %lx\n", def->m_unit.m_id));
@@ -1106,7 +1070,6 @@ void CTP2Combat::ExecuteRangedAttack(CombatField *attacker, sint32 attX, sint32 
 		} else {
 			combat_print(k_COMBAT_DEBUG_VERBOSE, ", %s has %.2lfHP.\n", defenseString, def->GetHP());
 
-			
 			if(m_battle) {
 				if(!def->m_alreadyExploded) {
 					BattleEvent *explodeEvent = new BattleEvent(BATTLE_EVENT_TYPE_EXPLODE);
@@ -1118,7 +1081,7 @@ void CTP2Combat::ExecuteRangedAttack(CombatField *attacker, sint32 attX, sint32 
 			}
 		}
 	} else {
-		combat_print(k_COMBAT_DEBUG_VERBOSE, "RANGED: %s@(%2d,%2d) MISSED %s@(%2d,%2d).\n", attackString, attX, attY, 
+		combat_print(k_COMBAT_DEBUG_VERBOSE, "RANGED: %s@(%2d,%2d) MISSED %s@(%2d,%2d).\n", attackString, attX, attY,
 					 defenseString, defX, defY);
 	}
 }
@@ -1127,7 +1090,6 @@ void CTP2Combat::DoRangedAttacks(CombatField *attacker, CombatField *defender)
 {
 	sint32 x, y;
 
-	
 	for(x = 1; x < m_width; x++) {
 		for(y = 0; y < m_height; y++) {
 			CombatUnit *att = &attacker->GetUnit(x, y);
@@ -1160,11 +1122,9 @@ void CTP2Combat::ExecuteAttack(CombatField *attacker, sint32 attX, sint32 attY,
 {
 	m_noAttacksPossible = false;
 
-	
 	CombatUnit *att = &attacker->GetUnit(attX, attY);
 	CombatUnit *def = &defender->GetUnit(defX, defY);
 
-	
 	if(m_battle && !att->m_alreadyAttacked) {
 		BattleEvent *attackEvent = new BattleEvent(BATTLE_EVENT_TYPE_ATTACK);
 		m_battle->AddUnitAttack(attackEvent,
@@ -1176,14 +1136,13 @@ void CTP2Combat::ExecuteAttack(CombatField *attacker, sint32 attX, sint32 attY,
 	const char *attackString = attacker == &m_attackers ? "Attacker" : "Defender";
 	const char *defenseString = defender == &m_defenders ? "Defender" : "Attacker";
 
-	
 	double hitChance = att->m_unit->GetOffense(def->m_unit) /
 		(att->m_unit->GetOffense(def->m_unit) + def->m_unit->GetDefense(att->m_unit));
 	combat_print(k_COMBAT_DEBUG_VERBOSE, "NORMAL: %s@(%2d,%2d) -Attacking-  %s@(%2d,%2d) -  HitChance: %.2lf\n", attackString, attX, attY,
 				 defenseString, defX, defY, hitChance);
 
 	if(sint32(COMBATRAND(1000)) < sint32(hitChance * 1000.0)) {
-		
+
 		double damage = att->GetStrength() / def->GetArmor();
 		combat_print(k_COMBAT_DEBUG_VERBOSE, "NORMAL: %s@(%2d,%2d) -HIT-  %s@(%2d,%2d) for %.2lf", attackString, attX, attY,
 					 defenseString, defX, defY, damage);
@@ -1196,7 +1155,6 @@ void CTP2Combat::ExecuteAttack(CombatField *attacker, sint32 attX, sint32 attY,
 		if(!def->IsAlive()) {
 			combat_print(k_COMBAT_DEBUG_VERBOSE, ", killing %s.\n", defenseString);
 
-			
 			if(m_battle) {
 				BattleEvent *deathEvent = new BattleEvent(BATTLE_EVENT_TYPE_DEATH);
 				DPRINTF(k_DBG_GAMESTATE, ("Adding death for %lx\n", def->m_unit.m_id));
@@ -1208,7 +1166,6 @@ void CTP2Combat::ExecuteAttack(CombatField *attacker, sint32 attX, sint32 attY,
 		} else {
 			combat_print(k_COMBAT_DEBUG_VERBOSE, ", %s has %.2lfHP.\n", defenseString, def->GetHP());
 
-			
 			if(m_battle) {
 				if(!def->m_alreadyExploded) {
 					BattleEvent *explodeEvent = new BattleEvent(BATTLE_EVENT_TYPE_EXPLODE);
@@ -1220,24 +1177,23 @@ void CTP2Combat::ExecuteAttack(CombatField *attacker, sint32 attX, sint32 attY,
 			}
 		}
 	} else {
-		combat_print(k_COMBAT_DEBUG_VERBOSE, "NORMAL: %s@(%2d,%2d) MISSED %s@(%2d,%2d).\n", attackString, attX, attY, 
+		combat_print(k_COMBAT_DEBUG_VERBOSE, "NORMAL: %s@(%2d,%2d) MISSED %s@(%2d,%2d).\n", attackString, attX, attY,
 					 defenseString, defX, defY);
 	}
 }
 
-
 void CTP2Combat::DoAttacks(CombatField *attacker, CombatField *defender)
 {
-	
+
 	sint32 x = 0, y;
-	
+
 	for(y = 0; y < m_height; y++) {
 		CombatUnit *att = &attacker->GetUnit(x, y);
 		if(att->IsActive() &&
 		   att->GetOffense() > 0.001) {
 			sint32 dx, dy;
 			if(!defender->FindTargetForAttackFrom(x, y, &dx, &dy, att->GetCombatType() == UNIT_TYPE_FLANKER)) {
-				
+
 			} else {
 				Assert(dx >= 0 && dy >= 0);
 				ExecuteAttack(attacker, x, y, defender, dx, dy);
@@ -1258,19 +1214,18 @@ void CTP2Combat::DoCounterAttacks()
 
 void CTP2Combat::DoMovement()
 {
-	
-	
 
-	
-	
-	
+
+
+
+
+
 
 	Balance();
 
 	m_attackers.Move();
 	m_defenders.Move();
 
-	
 	if(m_battle) {
 		BattleEvent *placementEvent = new BattleEvent(BATTLE_EVENT_TYPE_PLACEMENT);
 		Assert(placementEvent);
@@ -1284,46 +1239,36 @@ bool CTP2Combat::ResolveOneRound()
 {
 	s_somethingDied = false;
 
-	
 	if(m_attackers.NumAlive() > 0 && m_defenders.NumAlive() > 0) {
 
-		
 		m_noAttacksPossible = true;
 
-		
 		combat_print(k_COMBAT_DEBUG_VERBOSE, "ROUND %d: (Rand calls: %d)\n", m_round, g_rand->CallCount());
 #ifdef TEST_APP
 		DumpState();
 #endif
 
-		
-		
+
 		if(!m_retreating) {
-			
+
 			DoRangedAttacks();
 		}
 
-		
 		DoRangedCounterAttacks();
 
-		
-		
+
 		if(!m_retreating) {
-			
+
 			DoAttacks();
 		}
 
-		
 		DoCounterAttacks();
-	
-		
+
 		DoMovement();
 
-		
 		m_round++;
 	}
 
-	
 	bool playAnimations = true;
 	if(m_battle && (m_round > 1)) {
 		if(IsDone() || s_somethingDied || ++m_roundsSinceUpdate >= g_theProfileDB->GetBattleSpeed()) {
@@ -1331,8 +1276,7 @@ bool CTP2Combat::ResolveOneRound()
 				g_battleViewWindow->UpdateBattle(m_battle);
 			}
 			m_roundsSinceUpdate = 0;
-			
-			
+
 			m_attackers.StartRound();
 			m_defenders.StartRound();
 		} else {
@@ -1340,15 +1284,14 @@ bool CTP2Combat::ResolveOneRound()
 		}
 	}
 
-	
-	
+
 	if(m_retreating) {
 		m_retreated = true;
 	}
 
-	
-	
-	
+
+
+
 	return playAnimations || IsDone();
 }
 
@@ -1407,7 +1350,7 @@ int main(int argc, char **argv)
 	sint32 fileArg = 3;
 	sint32 numRuns = atoi(argv[1]);
 	g_debugLevel = atoi(argv[2]);
-	
+
 	sint32 offenseVictory = 0;
 	sint32 defenseVictory = 0;
 
@@ -1418,12 +1361,12 @@ int main(int argc, char **argv)
 		if(!inputfile) {
 			error_exit("Can't open %s\n", argv[0]);
 		}
-		
+
 		sint32 w, h;
 		if(fscanf(inputfile, "%d,%d\n", &w, &h) != 2) {
 			error_exit("First line must hold width,height\n");
 		}
-		
+
 		CTP2Combat combat(w, h, inputfile);
 
 		while(!combat.IsDone()) {

@@ -10,13 +10,13 @@
 //
 // THIS FILE IS NOT GENERATED OR SUPPORTED BY ACTIVISION.
 //
-// This material has been developed at apolyton.net by the Apolyton CtP2 
+// This material has been developed at apolyton.net by the Apolyton CtP2
 // Source Code Project. Contact the authors at ctp2source@apolyton.net.
 //
 //----------------------------------------------------------------------------
 //
 // Compiler flags
-// 
+//
 //
 //----------------------------------------------------------------------------
 //
@@ -58,8 +58,7 @@ enum SPECIAL_VAR {
 
 class SlicSegment : public GameEventHookCallback {
 private:
-	
-	
+
 	SLIC_OBJECT m_type;
 	int m_codeSize;
 	sint32 m_num_trigger_symbols;
@@ -73,9 +72,8 @@ private:
 	sint32 m_fromFile;
     sint32 m_lastShown[k_MAX_PLAYERS];
 	sint32 m_firstLineNumber;
-	
 
-	
+
 	char *m_id;
 	unsigned char *m_code;
 	char *m_uiComponent;
@@ -86,9 +84,8 @@ private:
 
 	sint32 *m_parameter_indices;
 	SlicSymbolData **m_parameter_symbols;
-	
 
-	int m_poolIndex; 
+	int m_poolIndex;
 
 	friend class SlicFrame;
 
@@ -121,15 +118,15 @@ public:
     sint32 GetLastShown(sint32 player) { return (m_lastShown[player] & ~SLICLS_FLAG); }
     BOOL TestLastShown(sint32 player, sint32 turn);
     BOOL HasBeenShown(sint32 player) {
-        Assert(m_lastShown); 
-        if (!m_lastShown) return FALSE; 
-        return(m_lastShown[player] != 0); 
+        Assert(m_lastShown);
+        if (!m_lastShown) return FALSE;
+        return(m_lastShown[player] != 0);
     }
 
 	const char *GetUIComponent() const { return m_uiComponent; }
 
 	SFN_ERROR Call(SlicArgList *args, SlicObject *&obj);
-	
+
 	GAME_EVENT_HOOK_DISPOSITION GEVHookCallback(GAME_EVENT type, GameEventArgList *args);
 	void GetDescription(char *str, sint32 maxsize);
 
@@ -156,7 +153,7 @@ private:
 	sint32 m_numSegments;
 	SlicSegment **m_segments;
 	sint32 m_nextSegment;
-	friend class SegmentList; 
+	friend class SegmentList;
 
 public:
 	SlicSegmentHash(sint32 size) : StringHash<SlicSegment>(size) {

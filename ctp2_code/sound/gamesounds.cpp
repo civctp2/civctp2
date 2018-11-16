@@ -10,17 +10,17 @@
 //
 // THIS FILE IS NOT GENERATED OR SUPPORTED BY ACTIVISION.
 //
-// This material has been developed at apolyton.net by the Apolyton CtP2 
+// This material has been developed at apolyton.net by the Apolyton CtP2
 // Source Code Project. Contact the authors at ctp2source@apolyton.net.
 //
 //----------------------------------------------------------------------------
 //
 // Compiler flags
-// 
+//
 // _DEBUG
 // - Generate debug version
 //
-// _MSC_VER		
+// _MSC_VER
 // - Use Microsoft C++ extensions when set.
 //
 //----------------------------------------------------------------------------
@@ -41,7 +41,7 @@ extern SoundManager	*g_soundManager;
 
 GameSoundData g_gameSounds[] = {
 	{GAMESOUNDS_SPACE_LAUNCH,		"SOUND_ID_SPACE_LAUNCH"},
-	
+
 	{GAMESOUNDS_BUILDING_STARTED,	"SOUND_ID_BUILDING_STARTED"},
 	{GAMESOUNDS_BUILDING_COMPLETE,	"SOUND_ID_BUILDING_COMPLETE"},
 
@@ -55,8 +55,8 @@ GameSoundData g_gameSounds[] = {
 
 	{GAMESOUNDS_EXPLOSION,			"SOUND_ID_EXPLOSION"},
 
-    {GAMESOUNDS_DEFAULT_FAIL,		"SOUND_ID_DEFAULT_FAIL"}, 
-    {GAMESOUNDS_DEFAULT_CLICK,      "SOUND_ID_DEFAULT_CLICK"}, 
+    {GAMESOUNDS_DEFAULT_FAIL,		"SOUND_ID_DEFAULT_FAIL"},
+    {GAMESOUNDS_DEFAULT_CLICK,      "SOUND_ID_DEFAULT_CLICK"},
 	{GAMESOUNDS_BUTTON_PRESS,		"SOUND_ID_BUTTON_PRESS"},
 
 	{GAMESOUNDS_CHEER_CASTLE,		"SOUND_ID_CHEER_CASTLE"},
@@ -121,8 +121,8 @@ GameSoundData g_gameSounds[] = {
 	{GAMESOUNDS_HACKNEYED, "SOUND_HACKNEYED"},
 	{GAMESOUNDS_ARCHER_A, "SOUND_ARCHER_A"},
 	{GAMESOUNDS_ARCHER_B, "SOUND_ARCHER_B"},
-	{GAMESOUNDS_ARCHER_C, "SOUND_ARCHER_C"}, 
-	{GAMESOUNDS_ARCHER_D, "SOUND_ARCHER_D"}, 
+	{GAMESOUNDS_ARCHER_C, "SOUND_ARCHER_C"},
+	{GAMESOUNDS_ARCHER_D, "SOUND_ARCHER_D"},
 
 	{GAMESOUNDS_MAX,			""},
 };
@@ -143,7 +143,7 @@ sint32 gamesounds_GetGameSoundID(sint32 gamesound)
 void gamesounds_WindowOpened(void)
 {
 	if (g_soundManager) {
-		g_soundManager->AddSound(SOUNDTYPE_SFX, 0, 
+		g_soundManager->AddSound(SOUNDTYPE_SFX, 0,
 				gamesounds_GetGameSoundID(GAMESOUNDS_MAXWINDOW), 0, 0);
 	}
 }
@@ -151,7 +151,7 @@ void gamesounds_WindowOpened(void)
 void gamesounds_WindowClosed(void)
 {
 	if (g_soundManager) {
-		g_soundManager->AddSound(SOUNDTYPE_SFX, 0, 
+		g_soundManager->AddSound(SOUNDTYPE_SFX, 0,
 				gamesounds_GetGameSoundID(GAMESOUNDS_MINWINDOW), 0, 0);
 	}
 }

@@ -1,12 +1,3 @@
-
-
-
-
-
-
-
-
-
 #include "c3.h"
 #include "c3errors.h"
 
@@ -27,12 +18,12 @@
 
 #include "GameSettings.h"
 
-#define shiftbit(i) uint64(uint64(0x01) << uint64(i))		
+#define shiftbit(i) uint64(uint64(0x01) << uint64(i))
 #define FOREACH_WNDR(func) \
 uint64 forEachBuilt = builtWonders & (shiftbit(g_theWonderDB->NumRecords())-1); \
 for(sint32 wndr=0;forEachBuilt>0;wndr++,forEachBuilt>>=1) \
 	if((forEachBuilt&1) && \
-	g_theWonderDB->Get(wndr)->func() && !wonderutil_IsObsolete(wndr)) 
+	g_theWonderDB->Get(wndr)->func() && !wonderutil_IsObsolete(wndr))
 
 #define BOOL_WNDR(flag) FOREACH_WNDR(flag) { return TRUE; } return FALSE;
 #define INT_WNDR(func) \
@@ -62,13 +53,12 @@ const WonderRecord *wonderutil_Get(sint32 wonder)
 BOOL wonderutil_GetEmbassy(const uint64 builtWonders, const uint64 hisWonders)
 {
 
-	
-	
+
 	uint64 wonders = hisWonders & (shiftbit(g_theWonderDB->NumRecords())-1);
 	int j = 0;
 	while (wonders>0)
 	{
-		if ((wonders&1) && g_theWonderDB->Get(j)->GetCloseEmbassies()) 
+		if ((wonders&1) && g_theWonderDB->Get(j)->GetCloseEmbassies())
 			return FALSE;
 		wonders>>=1;
 		j++;
@@ -298,27 +288,24 @@ sint32 wonderutil_GetIncreaseRegard(const uint64 builtWonders)
 }
 
 BOOL wonderutil_IsAvailable(sint32 wonder, sint32 player)
-{	
+{
 	if(g_theWonderTracker->HasWonderBeenBuilt(wonder)) {
 		return FALSE;
 	}
 
 	const WonderRecord *rec = g_theWonderDB->Get(wonder);
-	
-	if(rec->GetEnableAdvanceIndex() >= 0 && 
+
+	if(rec->GetEnableAdvanceIndex() >= 0 &&
 	   !g_player[player]->HasAdvance(rec->GetEnableAdvanceIndex()))
 		return FALSE;
 
-	
 	if(wonderutil_IsObsolete(wonder))
 		return FALSE;
 
-	
 	if(rec->GetStartGaiaController() && !g_theGameSettings->GetAlienEndGame()) {
 		return FALSE;
 	}
 
-	
 	return TRUE;
 }
 
@@ -342,7 +329,6 @@ PLAYER_INDEX wonderutil_GetOwner(sint32 wonder)
 		return PLAYER_INDEX_INVALID;
 	return who;
 }
-
 
 void wonderutil_AddBuilt(sint32 wonder)
 {
@@ -397,9 +383,8 @@ sint32 wonderutil_GetFobCityIndex()
 {
 	sint32 i;
 	for(i = 0; i < g_theWonderDB->NumRecords(); i++) {
-		if(g_theWonderDB->Get(i)->GetCloseEmbassies()) 
+		if(g_theWonderDB->Get(i)->GetCloseEmbassies())
 			return i;
 	}
 	return i;
 }
-

@@ -1,4 +1,4 @@
-/* 
+/*
 Copyright (C) 1995-2001 Activision, Inc.
 
 This library is free software; you can redistribute it and/or
@@ -16,7 +16,6 @@ License along with this library; if not, write to the Free Software
 Foundation, Inc., 59 Temple Place, Suite 330, Boston, MA  02111-1307  USA
 
 */
-
 
 #include <string.h>	// MAD
 #include <stdlib.h>	// MAD
@@ -55,27 +54,27 @@ OSErr OpenCTBConnection(ConnHandle* connection) {
 	short				result = noErr;
 
 	if (*connection != nil) {
-	
+
 		//	put our A5 value into the connection record so that the search callbacks
 		//	can get it and restore it
-		
+
 		CMSetUserData(*connection,(long) LMGetCurrentA5());
-		
+
 		// CMChoose Dialog has to hang off this point (global coordinates)
-		
+
 		SetRect(&dialogLoc, 0, 0, 495, 285);
 		CenterOnCurrentScreen(&dialogLoc);
-		
+
 		where.h = dialogLoc.left;
 		where.v = dialogLoc.top;
-		
+
 		// now do CMChoose et al:
 		done = false;
 		do {
 			result = CMChoose(connection, where, NULL);
-			
+
 			// MAD fprintf(mfp,"result is %d. major =  %d  minor = %d\n",result,chooseOKMajor,chooseOKMinor);
-			
+
 			if ((result == chooseOKMajor) || (result == chooseOKMinor)) {
 				configStream = CMGetConfig(*connection);
 				if (configStream == NULL) {
@@ -83,7 +82,7 @@ OSErr OpenCTBConnection(ConnHandle* connection) {
 					error = -1;
 				} else {
 					CMGetToolName((***connection).procID, toolName);
-					
+
 					tempString = NewPtrClear(GetPtrSize(configStream) + 5);
 					strcpy(tempString, "Baud ");
 					here = strstr(configStream, tempString);
@@ -95,7 +94,7 @@ OSErr OpenCTBConnection(ConnHandle* connection) {
 							strcpy(tempString, configStream);
 							sprintf(tempString + (here - configStream), "%ld", baud);
 							strcat(tempString, end);
-							
+
 							error = CMSetConfig(*connection, tempString);					// Try to use the modified configuration
 							if (error == noErr) {													// It worked; save it
 								DisposePtr(configStream);
@@ -105,7 +104,7 @@ OSErr OpenCTBConnection(ConnHandle* connection) {
 							}
 						}
 					}
-					
+
 					strcpy(tempString, "CTS");
 					here = strstr(configStream, tempString);
 					if (here != nil) {
@@ -145,8 +144,8 @@ OSErr OpenCTBConnection(ConnHandle* connection) {
 			// MAD fprintf(mfp,"CMOpen = %d\n",error);
 		}
 	}
-			
-	return error;	
+
+	return error;
 }
 
 //	this method sets up and opens a CTB connection
@@ -168,8 +167,8 @@ OSErr ReopenCTBConnection(ConnHandle* connection) {
 			error = CMOpen(*connection, false, nil, 0);
 		}
 	}
-			
-	return error;	
+
+	return error;
 }
 
 //	this method initializes the comm toolbox (it first checks to see if the comm toolbox is around).
@@ -177,33 +176,33 @@ OSErr ReopenCTBConnection(ConnHandle* connection) {
 
 Boolean InitializeCommToolBox(void) {
 	CMErr			err;
-	
+
 	//	this can only be initialized once
-	
+
 	if (!gCTBLoaded) {
-	
+
 		if (NGetTrapAddress(_CommToolboxDispatch, OSTrap) == NGetTrapAddress(_Unimplemented, OSTrap)) {
 			return false;
 		}
-		
+
 		err = InitCRM();
 		if (err != noErr) {
 			return false;
 		}
-		
+
 		err = InitCTBUtilities();
 		if (err != noErr) {
 			return false;
 		}
-		
+
 		err = InitCM();
 		if (err == cmNoTools) {
 			return false;
 		}
-		
+
 		gCTBLoaded = true;
 	}
-	
+
 	return true;
 }
 
@@ -215,38 +214,38 @@ OSErr InitializeConnection(Boolean readPrefs, ConnHandle* connection) {
 	CMErr				err;
 	CMBufferSizes	bufSizes;
 	short				procID;
-	StringPtr		temp = nil;	
+	StringPtr		temp = nil;
 	Str255			toolName;
 
 	*connection = nil;
-	
+
 	// get a Connection Tool name
 
 	if (readPrefs) {
 		err = GetToolname(toolName);
 		if (err != noErr) {
 			readPrefs = false;
-			
+
 			//	if there is a serial tool, use that name
-			
+
 			PLstrcpy(toolName, "\pSerial Tool");
 			procID = CMGetProcID(toolName);
 			if (procID == -1) {
-			
+
 				//	we could not find the serial tool, use what ever is first
-			
+
 				err = CRMGetIndToolName(classCM, 1, toolName);
 				if (err != noErr) {
 					err = -1;
 					return err;
 				}
-				
+
 			}
 		}
 	} else {
 
 		//	if there is a serial tool, use that name
-		
+
 		PLstrcpy(toolName, "\pSerial Tool");
 		procID = CMGetProcID(toolName);
 		if (procID == -1) {
@@ -255,20 +254,20 @@ OSErr InitializeConnection(Boolean readPrefs, ConnHandle* connection) {
 			if (err != noErr) {
 				return err;
 			}
-			
+
 		}
 	}
 
 	err = noErr;							// We got this far, so we have a toolname
 	// get a resource ID for it
-	
+
 	procID = CMGetProcID(toolName);
 	if (procID == -1) {
 		return -1;
 	}
-	
+
 	// init the CMBufferSizes variable so that Tool will init with defaults
-	
+
 	bufSizes[cmDataIn] = 0;
 	bufSizes[cmDataOut] = 0;
 	bufSizes[cmCntlIn] = 0;
@@ -277,9 +276,9 @@ OSErr InitializeConnection(Boolean readPrefs, ConnHandle* connection) {
 	bufSizes[cmAttnOut] = 0;
 	bufSizes[cmRsrvIn] = 0;
 	bufSizes[cmRsrvOut] = 0;
-	
-	// now get a conn record set up 
-	
+
+	// now get a conn record set up
+
 	*connection = CMNew(procID, cmData|cmNoMenus|cmQuiet, bufSizes, 0, 0);
 	if (*connection == nil) {
 		return -1;
@@ -290,9 +289,9 @@ OSErr InitializeConnection(Boolean readPrefs, ConnHandle* connection) {
 		err = GetConfig(configString);
 		if (err == noErr) {
 			//	set the initial settings for the choose dialog
-			
+
 			err = CMSetConfig(*connection, configString);
-			
+
 			if (err > 0) {												// Ignore parse errors
 				err = noErr;
 			}
@@ -300,7 +299,7 @@ OSErr InitializeConnection(Boolean readPrefs, ConnHandle* connection) {
 			DisposePtr(configString);
 		}
 	}
-	
+
 	return err;
 }
 
@@ -310,7 +309,5 @@ void TearDownCTB(void) {
 	if (gCTBLoaded) {
 		gCTBLoaded = false;
 	}
-	
+
 }
-
-

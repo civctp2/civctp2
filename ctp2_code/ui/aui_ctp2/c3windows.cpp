@@ -3,7 +3,7 @@
 // Project      : Call To Power 2
 // File type    : C++ source
 // Description  : The civilization 3 base window
-// Id           : $Id:$
+// Id           : $Id$
 //
 //----------------------------------------------------------------------------
 //
@@ -11,7 +11,7 @@
 //
 // THIS FILE IS NOT GENERATED OR SUPPORTED BY ACTIVISION.
 //
-// This material has been developed at apolyton.net by the Apolyton CtP2 
+// This material has been developed at apolyton.net by the Apolyton CtP2
 // Source Code Project. Contact the authors at ctp2source@apolyton.net.
 //
 //----------------------------------------------------------------------------
@@ -30,12 +30,10 @@
 
 #include "c3.h"
 
-
 #include "aui.h"
 #include "aui_uniqueid.h"
 #include "aui_ldl.h"
 #include "c3ui.h"
-
 
 #include "statuswindow.h"
 #include "tipwindow.h"
@@ -44,39 +42,30 @@
 #include "c3_popupwindow.h"
 #include "radarwindow.h"
 
-
 #include "textbutton.h"
 #include "iconbutton.h"
-
 
 #include "c3thumb.h"
 #include "c3slider.h"
 #include "c3scroller.h"
 #include "c3spinner.h"
 
-
 #include "checkbox.h"
 #include "textswitch.h"
-
 
 #include "textradio.h"
 #include "radiogroup.h"
 
-
 #include "texttab.h"
 #include "aui_tabgroup.h"
-
 
 #include "aui_item.h"
 #include "c3listbox.h"
 #include "textbox.h"
 
-
 #include "c3dropdown.h"
 
-
 #include "c3textfield.h"
-
 
 #include "tiledmap.h"
 
@@ -85,11 +74,9 @@
 #include "CivPaths.h"
 #include "videoutils.h"
 
-
 #include "workwin.h"
 #include "statswindow.h"
 #include "workwindow.h"
-
 
 #include "backgroundwin.h"
 #include "workwin.h"
@@ -104,7 +91,6 @@
 #include "GameSettings.h"
 
 #include "c3_utilitydialogbox.h"
-
 
 
 extern sint32 g_ScreenWidth;
@@ -137,7 +123,6 @@ static TipWindow	*g_tipWindow = NULL;
 static TipWindow	*g_thumbTipWindow = NULL;
 
 
-
 static TextTab *g_happyTab = NULL;
 static IconButton *g_iconButton = NULL;
 
@@ -148,7 +133,7 @@ static IconButton *g_iconButton = NULL;
 
 void DebugExitButtonActionCallback( aui_Control *control, uint32 action, uint32 data, void *cookie )
 {
-	
+
 	if ( action != (uint32)AUI_BUTTON_ACTION_EXECUTE ) return;
 
 	AUI_ERRCODE auiErr;
@@ -160,36 +145,30 @@ void DebugExitButtonActionCallback( aui_Control *control, uint32 action, uint32 
 
 void DebugApplyButtonActionCallback( aui_Control *control, uint32 action, uint32 data, void *cookie )
 {
-	
+
 	if ( action != (uint32)AUI_BUTTON_ACTION_EXECUTE ) return;
 
-	
 	TextBox *textbox;
 	C3TextField *textfield;
 
-	
 	memcpy( &textbox, cookie, sizeof( TextBox * ) );
 	memcpy( &textfield, (MBCHAR *)cookie + sizeof( TextBox * ), sizeof( C3TextField * ) );
 
-	
 	static MBCHAR text[ 100 ];
 
-	
 	textfield->GetFieldText( text, 100 );
 
-	
-	
+
 	if ( strcmp( text, "clear" ) == 0 )
 		textbox->SetText( "" );
 
-	
 	else
 		textbox->AppendText( text );
 }
 
 void TestWindowButtonActionCallback( aui_Control *control, uint32 action, uint32 data, void *cookie )
 {
-	
+
 	if ( action != (uint32)AUI_BUTTON_ACTION_EXECUTE ) return;
 
 	AUI_ERRCODE auiErr;
@@ -206,9 +185,9 @@ void TestWindowButtonActionCallback( aui_Control *control, uint32 action, uint32
 	Assert( auiErr == AUI_ERRCODE_OK );
 	if ( auiErr != AUI_ERRCODE_OK ) return;
 
-	
-	
-	
+
+
+
 }
 
 
@@ -241,11 +220,9 @@ void CheckboxCallback( aui_Control *control, uint32 action, uint32 data, void *c
 	AUI_ERRCODE errcode = AUI_ERRCODE_OK;
 
 
-
 	switch ( action )
 	{
 	case AUI_SWITCH_ACTION_ON:
-		
 
 		if ( !g_iconButton )
 		{
@@ -255,22 +232,20 @@ void CheckboxCallback( aui_Control *control, uint32 action, uint32 data, void *c
 			g_iconButton = new IconButton(
 				&errcode,
 				k_ID_ICONBUTTON_TESTWINDOW,
-				controlX,				
-				controlY,				
+				controlX,
+				controlY,
 				50, 50,
-				k_PatternName,				
-				k_IconName,					
-				0xf2ed );				
+				k_PatternName,
+				k_IconName,
+				0xf2ed );
 			if ( !g_iconButton ) return;
 
 		}
 
-		
 
 		if ( !g_happyTab )
 		{
-			
-			
+
 			g_happyTab = new TextTab(
 				&errcode,
 				k_ID_TAB_HAPPY,
@@ -285,7 +260,6 @@ void CheckboxCallback( aui_Control *control, uint32 action, uint32 data, void *c
 				TabCallbackHappy );
 			if ( !g_happyTab ) return;
 
-			
 			errcode = g_happyTab->AddPaneControl( g_iconButton );
 			Assert( errcode == AUI_ERRCODE_OK );
 			if ( errcode != AUI_ERRCODE_OK ) return;
@@ -405,7 +379,7 @@ void ModalRadioCallback( aui_Control *control, uint32 action, uint32 data, void 
 
 int c3windows_MakeTestWindow( BOOL make )
 {
-	
+
 	static TextButton	*button = NULL;
 	static TextTab		*sadTab = NULL;
 	static Checkbox		*checkbox = NULL;
@@ -420,16 +394,14 @@ int c3windows_MakeTestWindow( BOOL make )
 
 	if ( make )
 	{
-		if ( g_testWindow ) return 0; 
+		if ( g_testWindow ) return 0;
 
-		
 		AUI_ERRCODE errcode = AUI_ERRCODE_OK;
 
-		
-		
+
 		MBCHAR windowBlock[ k_AUI_LDL_MAXBLOCK + 1 ];
 
-		{ 
+		{
 
 			sprintf( windowBlock, "mywindow" );
 
@@ -442,11 +414,11 @@ int c3windows_MakeTestWindow( BOOL make )
 			if ( !AUI_NEWOK(g_testWindow,errcode) ) return -1;
 
 
-			
-			
+
+
 			MBCHAR controlBlock[ k_AUI_LDL_MAXBLOCK + 1 ];
 
-			{ 
+			{
 
 				sprintf( controlBlock, "%s.%s", windowBlock, "mybutton" );
 
@@ -458,19 +430,18 @@ int c3windows_MakeTestWindow( BOOL make )
 				Assert( AUI_NEWOK(button,errcode) );
 				if ( !AUI_NEWOK(button,errcode) ) return -1;
 
-				
-				
-				
 
-				
+
+
+
+
 				c3windows_MakeTipWindow();
-				
-				
+
 				button->SetTipWindow( g_tipWindow );
 
-			} 
+			}
 
-			{ 
+			{
 
 				sprintf( controlBlock, "%s.%s", windowBlock, "myspinner" );
 
@@ -481,13 +452,12 @@ int c3windows_MakeTestWindow( BOOL make )
 				Assert( AUI_NEWOK(spinner,errcode) );
 				if ( !AUI_NEWOK(spinner,errcode) ) return -1;
 
-			} 
+			}
 
-			{ 
+			{
 
 				sprintf( controlBlock, "%s.%s", windowBlock, "mytabgroup" );
 
-				
 				moodyTabGroup = new aui_TabGroup(
 					&errcode,
 					k_ID_TABGROUP_MOODY,
@@ -495,15 +465,14 @@ int c3windows_MakeTestWindow( BOOL make )
 				Assert( AUI_NEWOK(moodyTabGroup,errcode) );
 				if ( !AUI_NEWOK(moodyTabGroup,errcode) ) return -1;
 
-				
 				moodyTabGroup->SetDrawMask( k_AUI_REGION_DRAWFLAG_UPDATE );
 
 
-				
-				
+
+
 				MBCHAR tabBlock[ k_AUI_LDL_MAXBLOCK + 1 ];
 
-				{ 
+				{
 
 					sprintf( tabBlock, "%s.%s", controlBlock, "sadtab" );
 
@@ -516,11 +485,11 @@ int c3windows_MakeTestWindow( BOOL make )
 					if ( !AUI_NEWOK(sadTab,errcode) ) return -1;
 
 
-					
-					
+
+
 					MBCHAR checkboxBlock[ k_AUI_LDL_MAXBLOCK + 1 ];
 
-					{ 
+					{
 
 						sprintf( checkboxBlock, "%s.pane.%s", tabBlock, "checkbox" );
 
@@ -532,11 +501,11 @@ int c3windows_MakeTestWindow( BOOL make )
 							moodyTabGroup );
 						Assert( AUI_NEWOK(checkbox,errcode) );
 						if ( !AUI_NEWOK(checkbox,errcode) ) return -1;
-						
-					} 
-						
-					{ 
-						
+
+					}
+
+					{
+
 						sprintf( checkboxBlock, "%s.pane.%s", tabBlock, "dragcheckbox" );
 
 						dragcheckbox = new Checkbox(
@@ -546,11 +515,11 @@ int c3windows_MakeTestWindow( BOOL make )
 							DraggableCheckboxCallback );
 						Assert( AUI_NEWOK(dragcheckbox,errcode) );
 						if ( !AUI_NEWOK(dragcheckbox,errcode) ) return -1;
-						
-					} 
 
-					{ 
-						
+					}
+
+					{
+
 						sprintf( checkboxBlock, "%s.pane.%s", tabBlock, "transparentcheckbox" );
 
 						transparentcheckbox = new Checkbox(
@@ -561,11 +530,11 @@ int c3windows_MakeTestWindow( BOOL make )
 						Assert( AUI_NEWOK(transparentcheckbox,errcode) );
 						if ( !AUI_NEWOK(transparentcheckbox,errcode) ) return -1;
 
-					} 
+					}
 
-				} 
+				}
 
-				{ 
+				{
 
 					sprintf( tabBlock, "%s.%s", controlBlock, "indifferenttab" );
 
@@ -578,11 +547,11 @@ int c3windows_MakeTestWindow( BOOL make )
 					if ( !AUI_NEWOK(indifferentTab,errcode) ) return -1;
 
 
-					
-					
+
+
 					MBCHAR radiogroupBlock[ k_AUI_LDL_MAXBLOCK + 1 ];
 
-					{ 
+					{
 
 						sprintf( radiogroupBlock, "%s.pane.%s", tabBlock, "modalradiogroup" );
 
@@ -594,11 +563,11 @@ int c3windows_MakeTestWindow( BOOL make )
 						if ( !AUI_NEWOK(modalRadioGroup,errcode) ) return -1;
 
 
-						
-						
+
+
 						MBCHAR radioBlock[ k_AUI_LDL_MAXBLOCK + 1 ];
 
-						{ 
+						{
 
 							sprintf( radioBlock, "%s.%s", radiogroupBlock, "stronglymodalradio" );
 
@@ -609,10 +578,10 @@ int c3windows_MakeTestWindow( BOOL make )
 								ModalRadioCallback );
 							Assert( AUI_NEWOK(stronglyModalRadio,errcode) );
 							if ( !AUI_NEWOK(stronglyModalRadio,errcode) ) return -1;
-							
-						} 
 
-						{ 
+						}
+
+						{
 
 							sprintf( radioBlock, "%s.%s", radiogroupBlock, "weaklymodalradio" );
 
@@ -624,85 +593,84 @@ int c3windows_MakeTestWindow( BOOL make )
 							Assert( AUI_NEWOK(weaklyModalRadio,errcode) );
 							if ( !AUI_NEWOK(weaklyModalRadio,errcode) ) return -1;
 
-						} 
+						}
 
-					} 
+					}
 
-				} 
+				}
 
-			} 
+			}
 
-		} 
+		}
 
-		
 		errcode = aui_Ldl::SetupHeirarchyFromRoot( windowBlock );
 		Assert( AUI_SUCCESS(errcode) );
 		if ( !AUI_SUCCESS(errcode) ) return -1;
 	}
 	else
 	{
-		if ( !g_testWindow ) return 0; 
+		if ( !g_testWindow ) return 0;
 
 		if ( button )
 		{
 			delete button;
 			button = NULL;
 		}
-		
+
 		if ( sadTab )
 		{
 			delete sadTab;
 			sadTab = NULL;
 		}
-		
+
 		if ( checkbox )
 		{
 			delete checkbox;
 			checkbox = NULL;
 		}
-		
+
 		if ( dragcheckbox )
 		{
 			delete dragcheckbox;
 			dragcheckbox = NULL;
 		}
-		
+
 		if ( transparentcheckbox )
 		{
 			delete transparentcheckbox;
 			transparentcheckbox = NULL;
 		}
-		
+
 		if ( indifferentTab )
 		{
 			delete indifferentTab;
 			indifferentTab = NULL;
 		}
-		
+
 		if ( stronglyModalRadio )
 		{
 			delete stronglyModalRadio;
 			stronglyModalRadio = NULL;
 		}
-		
+
 		if ( weaklyModalRadio )
 		{
 			delete weaklyModalRadio;
 			weaklyModalRadio = NULL;
 		}
-		
+
 		if ( modalRadioGroup )
 		{
 			delete modalRadioGroup;
 			modalRadioGroup = NULL;
 		}
-		
+
 		if ( moodyTabGroup )
 		{
 			delete moodyTabGroup;
 			moodyTabGroup = NULL;
 		}
-		
+
 		if ( spinner )
 		{
 			delete spinner;
@@ -737,17 +705,17 @@ int c3windows_MakeStandardWindow( BOOL make )
 
 	if ( make )
 	{
-		if ( g_standardWindow ) return 0; 
-		
-		
-		
-		
-		
+		if ( g_standardWindow ) return 0;
+
+
+
+
+
 		sint32 windowWidth = 3 * g_ScreenWidth / 8;
 		sint32 windowHeight = 2 * g_ScreenHeight / 6;
 		sint32 windowX = ( g_ScreenWidth - windowWidth ) / 3;
 		sint32 windowY = ( g_ScreenHeight - windowHeight ) / 3;
-		
+
 		g_standardWindow = new C3Window(
 			&errcode,
 			k_ID_WINDOW_STANDARD,
@@ -756,16 +724,16 @@ int c3windows_MakeStandardWindow( BOOL make )
 			k_PatternName );
 		Assert( g_standardWindow != NULL );
 		if ( !g_standardWindow ) return -1;
-		
-		
-		
-		
-		
+
+
+
+
+
 		sint32 controlWidth = 2 * windowWidth / 3;
 		sint32 controlHeight = windowHeight / 4;
 		sint32 controlX = windowWidth / 6;
 		sint32 controlY = windowHeight / 6;
-		
+
 		slider = new C3Slider(
 			&errcode,
 			k_ID_SLIDER,
@@ -776,32 +744,32 @@ int c3windows_MakeStandardWindow( BOOL make )
 			FALSE,
 			k_PatternName );
 		if ( !slider ) return -3;
-		
+
 		errcode = slider->SetMaximum( 3, 0 );
 		Assert( errcode == AUI_ERRCODE_OK );
 		if ( errcode != AUI_ERRCODE_OK ) return -3;
-		
+
 		errcode = slider->SetPage( 1, 1 );
 		Assert( errcode == AUI_ERRCODE_OK );
 		if ( errcode != AUI_ERRCODE_OK ) return -3;
-		
+
 		errcode = slider->UseRigidThumb( TRUE );
 		Assert( errcode == AUI_ERRCODE_OK );
 		if ( errcode != AUI_ERRCODE_OK ) return -3;
-		
+
 		errcode = slider->UseQuantizedDragging( TRUE );
 		Assert( errcode == AUI_ERRCODE_OK );
 		if ( errcode != AUI_ERRCODE_OK ) return -3;
-		
-		
-		
-		
-		
+
+
+
+
+
 		windowWidth = 200;
 		windowHeight = 40;
 		windowX = 0;
 		windowY = 0;
-		
+
 		g_thumbTipWindow = new TipWindow(
 			&errcode,
 			k_ID_WINDOW_TIP,
@@ -811,22 +779,21 @@ int c3windows_MakeStandardWindow( BOOL make )
 			"I am a Thumb control." );
 		Assert( g_thumbTipWindow != NULL );
 		if ( !g_thumbTipWindow ) return -1;
-		
-		
+
 		C3Thumb *thumb = (C3Thumb *)slider->GetThumb();
-		if ( thumb ) 
+		if ( thumb )
 			thumb->SetTipWindow( g_thumbTipWindow );
-		
-		
-		
-		
-		
-		
+
+
+
+
+
+
 		controlWidth = 2 * g_standardWindow->Width() / 3;
 		controlHeight = g_standardWindow->Height() / 8;
 		controlX = g_standardWindow->Width() / 6;
 		controlY = g_standardWindow->Height() - 2 * controlHeight;
-		
+
 		dropdown = new C3DropDown(
 			&errcode,
 			aui_UniqueId(),
@@ -838,9 +805,8 @@ int c3windows_MakeStandardWindow( BOOL make )
 			50,
 			5 * ( controlHeight - 4 ) );
 		if ( !dropdown ) return -3;
-		
-		
-		
+
+
 		i1 = new TextSwitch(
 			&errcode,
 			aui_UniqueId(),
@@ -897,22 +863,22 @@ int c3windows_MakeStandardWindow( BOOL make )
 		dropdown->AddItem( (aui_Item *)i6 );
 
 
-		
-		
-		
-		
+
+
+
+
 		errcode = g_standardWindow->AddControl( slider );
 		Assert( errcode == AUI_ERRCODE_OK );
 		if ( errcode != AUI_ERRCODE_OK ) return -4;
 		errcode = g_standardWindow->AddControl( dropdown );
 		Assert( errcode == AUI_ERRCODE_OK );
 		if ( errcode != AUI_ERRCODE_OK ) return -4;
-		
+
 		g_standardWindow->SetDraggable( TRUE );
 	}
 	else
 	{
-		if ( !g_standardWindow ) return 0; 
+		if ( !g_standardWindow ) return 0;
 
 		delete slider;
 		slider = NULL;
@@ -935,12 +901,11 @@ int c3windows_MakeStandardWindow( BOOL make )
 
 		g_c3ui->RemoveWindow( g_standardWindow->Id() );
 		delete g_standardWindow;
-		g_standardWindow = NULL;		
+		g_standardWindow = NULL;
 	}
 
 	return 0;
 }
-
 
 int c3windows_MakeTipWindow( BOOL make )
 {
@@ -948,17 +913,17 @@ int c3windows_MakeTipWindow( BOOL make )
 
 	if ( make )
 	{
-		if ( g_tipWindow ) return 0; 
-		
-		
-		
-		
-		
+		if ( g_tipWindow ) return 0;
+
+
+
+
+
 		sint32 windowWidth = 200;
 		sint32 windowHeight = 30;
 		sint32 windowX = 0;
 		sint32 windowY = 0;
-		
+
 		g_tipWindow = new TipWindow(
 			&errcode,
 			k_ID_WINDOW_TIP,
@@ -971,7 +936,7 @@ int c3windows_MakeTipWindow( BOOL make )
 	}
 	else
 	{
-		if ( !g_tipWindow ) return 0; 
+		if ( !g_tipWindow ) return 0;
 
 		delete g_tipWindow;
 		g_tipWindow = NULL;
@@ -979,7 +944,6 @@ int c3windows_MakeTipWindow( BOOL make )
 
 	return 0;
 }
-
 
 int c3windows_MakeFloatingWindow( BOOL make )
 {
@@ -997,17 +961,17 @@ int c3windows_MakeFloatingWindow( BOOL make )
 
 	if ( make )
 	{
-		if ( g_floatingWindow ) return 0; 
-		
-		
-		
-		
-		
+		if ( g_floatingWindow ) return 0;
+
+
+
+
+
 		sint32 windowWidth = 600;
 		sint32 windowHeight = 300;
 		sint32 windowX = 10;
 		sint32 windowY = 10;
-		
+
 		g_floatingWindow = new C3Window(
 			&errcode,
 			k_ID_WINDOW_FLOATING,
@@ -1017,19 +981,19 @@ int c3windows_MakeFloatingWindow( BOOL make )
 			AUI_WINDOW_TYPE_FLOATING );
 		Assert( g_floatingWindow != NULL );
 		if ( !g_floatingWindow ) return -1;
-		
+
 		g_floatingWindow->SetDraggable( TRUE );
-		
-		
-		
-		
-		
-		
+
+
+
+
+
+
 		sint32 controlWidth = 2 * windowWidth / 3;
 		sint32 controlHeight = 2 * windowHeight / 3;
 		sint32 controlX = windowWidth / 6;
 		sint32 controlY = windowHeight / 6;
-		
+
 		listbox = new C3ListBox(
 			&errcode,
 			k_ID_LISTBOX,
@@ -1039,17 +1003,17 @@ int c3windows_MakeFloatingWindow( BOOL make )
 			controlHeight,
 			k_PatternName );
 		if ( !listbox ) return -3;
-		
 
-		
-		
+
+
+
 		sint32 itemHeight = 30 + 2 * (rand()%5);
-		
+
 		for ( sint32 i = 0; i < 14; i++ )
 		{
 			static char s[ 50 ];
 			sprintf( s, "row=%d col=%d", i, 0 );
-			
+
 			items[ i ] = new TextSwitch(
 				&errcode,
 				aui_UniqueId(),
@@ -1058,11 +1022,11 @@ int c3windows_MakeFloatingWindow( BOOL make )
 				k_PatternName,
 				s );
 			if ( !items[ i ] ) return -i * 100;
-			
+
 			for ( sint32 j = 0; j < 5; j++ )
 			{
 				sprintf( s, "row=%d col=%d", i, j+1 );
-				
+
 				subItems[ i ][ j ] = new TextSwitch(
 					&errcode,
 					aui_UniqueId(),
@@ -1071,16 +1035,16 @@ int c3windows_MakeFloatingWindow( BOOL make )
 					k_PatternName,
 					s );
 				if ( !subItems[ i ][ j ] ) return -j * 1000;
-				
+
 				items[ i ]->AddChild( subItems[ i ][ j ] );
 			}
-			
+
 			listbox->AddItem( (aui_Item *)items[ i ] );
 		}
-		
-		
-		
-		
+
+
+
+
 		h1 = new TextSwitch(
 			&errcode,
 			aui_UniqueId(),
@@ -1135,20 +1099,20 @@ int c3windows_MakeFloatingWindow( BOOL make )
 		listbox->AddHeaderSwitch( h4 );
 		listbox->AddHeaderSwitch( h5 );
 		listbox->AddHeaderSwitch( h6 );
-		
-		
-		
-		
-		
-		
+
+
+
+
+
+
 		errcode = g_floatingWindow->AddControl( listbox );
 		Assert( errcode == AUI_ERRCODE_OK );
 		if ( errcode != AUI_ERRCODE_OK ) return -4;
-	
+
 	}
 	else
 	{
-		if ( !g_floatingWindow ) return 0; 
+		if ( !g_floatingWindow ) return 0;
 
 		delete listbox;
 		listbox = NULL;
@@ -1162,8 +1126,8 @@ int c3windows_MakeFloatingWindow( BOOL make )
 			delete items[ i ];
 			items[ i ] = NULL;
 		}
-		
-		
+
+
 
 
 
@@ -1188,7 +1152,7 @@ int c3windows_MakeFloatingWindow( BOOL make )
 
 void ControlWindowButtonActionCallback( aui_Control *control, uint32 action, uint32 data, void *cookie )
 {
-	
+
 	if ( action != (uint32)AUI_BUTTON_ACTION_EXECUTE ) return;
 
 	int err;
@@ -1206,7 +1170,6 @@ void ControlWindowButtonActionCallback( aui_Control *control, uint32 action, uin
 	Assert( err == 0 );
 	if ( err != 0 ) return;
 
-	
 	auiErr = g_c3ui->AddWindow( g_floatingWindow );
 	Assert( auiErr == AUI_ERRCODE_OK );
 	if ( auiErr != AUI_ERRCODE_OK ) return;
@@ -1220,7 +1183,7 @@ void ControlWindowButtonActionCallback( aui_Control *control, uint32 action, uin
 
 void KnowledgeButtonActionCallback( aui_Control *control, uint32 action, uint32 data, void *cookie )
 {
-	
+
 	if ( action != (uint32)AUI_BUTTON_ACTION_EXECUTE ) return;
 
 	c3_ExpelPopup *popup = new c3_ExpelPopup(NULL);
@@ -1229,7 +1192,7 @@ void KnowledgeButtonActionCallback( aui_Control *control, uint32 action, uint32 
 
 void DebugButtonActionCallback( aui_Control *control, uint32 action, uint32 data, void *cookie )
 {
-	
+
 	if ( action != (uint32)AUI_BUTTON_ACTION_EXECUTE ) return;
 
 	AUI_ERRCODE auiErr;
@@ -1242,10 +1205,9 @@ void DebugButtonActionCallback( aui_Control *control, uint32 action, uint32 data
 static aui_Window		*s_thumbWindow = NULL;
 static ThumbnailMap		*s_thumbnail = NULL;
 
-
 void ResourceButtonActionCallback( aui_Control *control, uint32 action, uint32 data, void *cookie )
 {
-	
+
 	if ( action != (uint32)AUI_BUTTON_ACTION_EXECUTE ) return;
 
 
@@ -1273,26 +1235,24 @@ void ResourceButtonActionCallback( aui_Control *control, uint32 action, uint32 d
 
 void CheatButtonActionCallback( aui_Control *control, uint32 action, uint32 data, void *cookie )
 {
-	
+
 	if ( action != (uint32)AUI_BUTTON_ACTION_EXECUTE ) return;
 
-	
 
 	g_theGameSettings->SetKeepScore( FALSE );
-
 
 }
 
 void DiplomacyButtonActionCallback(aui_Control *control, uint32 action, uint32 data, void *cookie)
 {
-	
+
 	if ( action != (uint32)AUI_BUTTON_ACTION_EXECUTE ) return;
 
 }
 
 void CityViewButtonActionCallback( aui_Control *control, uint32 action, uint32 data, void *cookie )
 {
-	
+
 	if ( action != (uint32)AUI_BUTTON_ACTION_EXECUTE ) return;
 
 	bool This_Code_Is_Really_Really_Old = false;
@@ -1314,12 +1274,10 @@ void CityViewButtonActionCallback( aui_Control *control, uint32 action, uint32 d
 	if (state != SELECT_TYPE_LOCAL_CITY)
 		return ;
 
-
 	err = cityviewwin_Initialize();
 	Assert( err == 0 );
 	if ( err != 0 ) return;
 
-	
 	CityViewWindow_Update();
 
 	auiErr = g_c3ui->AddWindow( g_cityViewWindow );
@@ -1340,15 +1298,13 @@ int c3windows_MakeStatusWindow( BOOL make )
 
 	if ( make )
 	{
-		if ( g_statusWindow ) return 0; 
+		if ( g_statusWindow ) return 0;
 
-		
 		sint32 windowWidth = g_ScreenWidth;
 		sint32 windowHeight = k_STATUS_WINDOW_HEIGHT;
 		sint32 windowX = 0;
 		sint32 windowY = 27;
 
-		
 		g_statusWindow = new StatusWindow(
 			&errcode,
 			k_ID_WINDOW_STATUS,
@@ -1359,12 +1315,11 @@ int c3windows_MakeStatusWindow( BOOL make )
 		if ( !g_statusWindow ) return -1;
 		g_statusWindow->SetDraggable( TRUE );
 
-		
 		sint32 controlWidth = 60;
 		sint32 controlHeight = 20;
 		sint32 controlX = g_statusWindow->Width() / 2;
 		sint32 controlY = 5;
-		
+
 		knowledgeButton = new TextButton(
 			&errcode,
 			aui_UniqueId(),
@@ -1376,7 +1331,7 @@ int c3windows_MakeStatusWindow( BOOL make )
 			"Science",
 			KnowledgeButtonActionCallback );
 		if ( !knowledgeButton ) return -16;
-		
+
 		controlX += controlWidth + 6;
 
 		button = new TextButton(
@@ -1390,7 +1345,7 @@ int c3windows_MakeStatusWindow( BOOL make )
 			"UI",
 			ControlWindowButtonActionCallback );
 		if ( !button ) return -16;
-		
+
 		controlX += controlWidth + 6;
 
 		debugButton = new TextButton(
@@ -1404,7 +1359,7 @@ int c3windows_MakeStatusWindow( BOOL make )
 			"Dbg",
 			DebugButtonActionCallback );
 		if ( !debugButton ) return -16;
-		
+
 			controlX += controlWidth + 6;
 
 		resourceButton = new TextButton(
@@ -1417,7 +1372,7 @@ int c3windows_MakeStatusWindow( BOOL make )
 			k_PatternName,
 			"FLI",
 			ResourceButtonActionCallback );
-		if ( !resourceButton ) return -16;	
+		if ( !resourceButton ) return -16;
 
 		controlX += controlWidth + 6;
 
@@ -1431,8 +1386,8 @@ int c3windows_MakeStatusWindow( BOOL make )
 			k_PatternName,
 			"Cheat",
 			CheatButtonActionCallback );
-		if ( !cheatButton ) return -16;	
-		
+		if ( !cheatButton ) return -16;
+
 		controlX += controlWidth + 6;
 
 
@@ -1447,7 +1402,7 @@ int c3windows_MakeStatusWindow( BOOL make )
 
 
 
-		
+
 		controlX += controlWidth + 6;
 		diplomacyButton = new TextButton(
 			&errcode,
@@ -1459,13 +1414,13 @@ int c3windows_MakeStatusWindow( BOOL make )
 			k_PatternName,
 			"Throne",
 			DiplomacyButtonActionCallback );
-		if ( !diplomacyButton ) return -16;	
-		
+		if ( !diplomacyButton ) return -16;
+
 		controlX += controlWidth + 6;
-		
-		
-		
-		
+
+
+
+
 		errcode = g_statusWindow->AddControl( button );
 		Assert( errcode == AUI_ERRCODE_OK );
 		if ( errcode != AUI_ERRCODE_OK ) return -15;
@@ -1478,7 +1433,6 @@ int c3windows_MakeStatusWindow( BOOL make )
 		errcode = g_statusWindow->AddControl( cheatButton );
 		Assert( errcode == AUI_ERRCODE_OK );
 		if ( errcode != AUI_ERRCODE_OK ) return -15;
-
 
 
 		errcode = g_statusWindow->AddControl( diplomacyButton );
@@ -1521,7 +1475,7 @@ int c3windows_MakeStatusWindow( BOOL make )
 	}
 	else
 	{
-		if ( !g_statusWindow ) return 0; 
+		if ( !g_statusWindow ) return 0;
 
 		g_c3ui->RemoveWindow( g_statusWindow->Id() );
 
@@ -1533,7 +1487,6 @@ int c3windows_MakeStatusWindow( BOOL make )
 		resourceButton = NULL;
 		delete cheatButton;
 		cheatButton = NULL;
-
 
 		delete diplomacyButton;
 		diplomacyButton = NULL ;
@@ -1560,15 +1513,13 @@ int c3windows_MakeDebugWindow( BOOL make )
 
 	if ( make )
 	{
-		if ( g_debugWindow ) return 0; 
+		if ( g_debugWindow ) return 0;
 
-		
 		sint32 windowWidth = g_ScreenWidth / 3;
 		sint32 windowHeight = g_ScreenHeight / 2;
 		sint32 windowX = 0;
 		sint32 windowY = g_ScreenHeight - windowHeight;
 
-		
 		g_debugWindow = new DebugWindow(
 			&errcode,
 			aui_UniqueId(),
@@ -1596,7 +1547,6 @@ int c3windows_MakeDebugWindow( BOOL make )
 		if ( !textbox ) return -3;
 
 
-
 		exitButton = new TextButton(
 			&errcode,
 			aui_UniqueId(),
@@ -1610,7 +1560,6 @@ int c3windows_MakeDebugWindow( BOOL make )
 			textbox );
 		if ( !exitButton ) return -3;
 
-
 		errcode = g_debugWindow->AddControl( textbox );
 		Assert( errcode == AUI_ERRCODE_OK );
 		if ( errcode != AUI_ERRCODE_OK ) return -4;
@@ -1620,13 +1569,12 @@ int c3windows_MakeDebugWindow( BOOL make )
 		if ( errcode != AUI_ERRCODE_OK ) return -4;
 
 
- 
 		g_debugWindow->SetTextBox(textbox);
 
 	}
 	else
 	{
-		if ( !g_debugWindow ) return 0; 
+		if ( !g_debugWindow ) return 0;
 
 		g_c3ui->RemoveWindow( g_debugWindow->Id() );
 
@@ -1647,7 +1595,7 @@ void c3windows_Cleanup( void )
 {
 	c3windows_MakeDebugWindow( FALSE );
 	workwin_Cleanup();
-	
+
 	c3windows_MakeTestWindow( FALSE );
 	c3windows_MakeFloatingWindow( FALSE );
 	c3windows_MakeStandardWindow( FALSE );
@@ -1656,11 +1604,9 @@ void c3windows_Cleanup( void )
 	controlpanelwindow_Cleanup();
 
 
-
 	radarwindow_Cleanup();
 	backgroundWin_Cleanup();
 
-	
 	if ( g_iconButton )
 	{
 		delete g_iconButton;
@@ -1674,5 +1620,3 @@ void c3windows_Cleanup( void )
 
 	g_c3ui->UnloadIcon( k_IconName );
 }
-
-

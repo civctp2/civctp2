@@ -1,13 +1,3 @@
-
-
-
-
-
-
-
-
-
-
 #include "c3.h"
 
 #include "pixelutils.h"
@@ -46,7 +36,7 @@ extern double			g_ave_frame_time;
 Action::Action(sint32 actionType, ACTIONEND endCondition, sint32 startAnimPos, BOOL specialDelayProcess)
 {
 	m_actionType = actionType;
-	m_sound_effect_id = -1;	
+	m_sound_effect_id = -1;
 	m_curAnim = NULL;
 	m_curPath = NULL;
 	m_finished = FALSE;
@@ -67,8 +57,8 @@ Action::Action(sint32 actionType, ACTIONEND endCondition, sint32 startAnimPos, B
 	m_specialDelayProcess = specialDelayProcess;
 
 	m_numRevealedActors = 0;
-	m_revealedActors = NULL; 
-	m_moveActors = NULL; 
+	m_revealedActors = NULL;
+	m_moveActors = NULL;
 	m_numOActors = 0;
 	m_unitsVisibility = 0;
 	m_unitVisionRange = 0;
@@ -82,11 +72,11 @@ Action::Action(Action *copyme)
 {
 	*this = *copyme;
 
-	
-	
-	
-	
-	
+
+
+
+
+
 
 	if (copyme->GetAnim()) {
 		m_curAnim = new Anim;
@@ -95,35 +85,33 @@ Action::Action(Action *copyme)
 		m_curAnim->SetSpecialCopyDelete(ANIMXEROX_COPY);
 	}
 
-	
 	m_curPath = NULL;
 	m_moveActors = NULL;
 	m_revealedActors = NULL;
 }
 
-
 Action::~Action(void)
 {
-	if (m_curPath != NULL) 
+	if (m_curPath != NULL)
 		delete m_curPath;
 
 	if(m_curAnim)
 		delete m_curAnim;
 
 	if(m_moveActors) {
-		
+
 		delete[] m_moveActors;
 	}
 
 	if(m_revealedActors) {
-		
+
 		delete[] m_revealedActors;
 	}
 
-	
-	
-	
-	
+
+
+
+
 }
 
 void Action::Process(void)
@@ -132,27 +120,27 @@ void Action::Process(void)
 	STOMPCHECK();
 #endif
 
-	
-	
-	
-	
+
+
+
+
 	m_animPos = m_curAnim->GetNextPosition(m_animPos);
 	m_animDelayEnd = m_curAnim->GetDelayEnd();
 	m_animElapsed = m_curAnim->GetElapsed();
 	m_animLastFrameTime = m_curAnim->GetLastFrameTime();
 
-	
-	
-	
-	
 
 
 
 
 
 
-	
-	
+
+
+
+
+
+
 	if(m_curAnim->GetWeAreInDelay() && m_actionType == UNITACTION_IDLE)
 	{
 		m_animPos = 0;
@@ -166,10 +154,10 @@ void Action::Process(void)
 	m_curActionCounter++;
 
 
-	
-	
 
-	if (m_curActionCounter > m_maxActionCounter || m_curAnim->Finished()) 
+
+
+	if (m_curActionCounter > m_maxActionCounter || m_curAnim->Finished())
 	{
 		m_curActionCounter = m_maxActionCounter;
 		m_loopAnimFinished = TRUE;
@@ -185,12 +173,12 @@ void Action::Process(void)
 
 void Action::Process(Action *pendingAction)
 {
-	
-	
-	
 
-	
-	
+
+
+
+
+
 #ifndef _TEST
 	STOMPCHECK();
 #endif
@@ -247,13 +235,12 @@ void Action::CreatePath(sint32 x1, sint32 y1, sint32 x2, sint32 y2)
 	STOMPCHECK();
 #endif
 
-	if (m_curPath != NULL) 
+	if (m_curPath != NULL)
 		delete m_curPath;
 
 	ActorPath	*path = new ActorPath(x1, y1, x2, y2);
 
 	m_curPath = path;
-
 
 
 	m_maxActionCounter = k_MAX_UNIT_MOVEMENT_ITERATIONS;
@@ -282,10 +269,10 @@ POINT Action::GetPosition(void)
 uint16 Action::GetSpriteFrame(void)
 {
 	uint16 frame;
-	
+
 	if (m_curAnim) {
 		if (m_loopAnimFinished && m_curActionCounter == m_maxActionCounter) {
-			frame = 0; 
+			frame = 0;
 		} else {
 			frame = m_curAnim->GetFrame(m_animPos);
 		}
@@ -305,7 +292,6 @@ sint32 Action::GetFacing(void)
 
 	uint16 facing;
 
-	
 	if (m_curPath != NULL) {
 		m_curPath->CalcFacing(0, m_maxActionCounter, m_curActionCounter, &facing);
 		m_facing = facing;
@@ -335,5 +321,3 @@ uint16 Action::GetTransparency(void)
 
 	return trans;
 }
-
-

@@ -1,4 +1,4 @@
-/* 
+/*
 Copyright (C) 1995-2001 Activision, Inc.
 
 This library is free software; you can redistribute it and/or
@@ -28,7 +28,7 @@ Foundation, Inc., 59 Temple Place, Suite 330, Boston, MA  02111-1307  USA
 void cancelbox_set(const char *caption, const char *msg);
 
 /*--------------------------------------------------------------------------
- Hide a cancelbox 
+ Hide a cancelbox
 --------------------------------------------------------------------------*/
 void cancelbox_clear();
 

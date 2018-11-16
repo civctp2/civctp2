@@ -34,7 +34,7 @@ public:
 	void UnsetVisible(sint32 player) { m_visibility &= ~(1 << player); }
 	void DoVision();
 	void CheckVision(sint32 owner);
-	
+
 	static sint32 GetDistance(InstallationData *inst1, InstallationData *inst2,
 							  sint32 wrap);
 

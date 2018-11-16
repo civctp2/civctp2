@@ -4,16 +4,14 @@
 #ifndef __TEXTTAB_H__
 #define __TEXTTAB_H__
 
-
 #include "aui_tab.h"
 #include "patternbase.h"
-
 
 
 class TextTab : public aui_Tab, public PatternBase
 {
 public:
-	
+
 	TextTab(
 		AUI_ERRCODE *retval,
 		uint32 id,
@@ -46,5 +44,4 @@ public:
 		sint32 y = 0 );
 };
 
-
-#endif 
+#endif

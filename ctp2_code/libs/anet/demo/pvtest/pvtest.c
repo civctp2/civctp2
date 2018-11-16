@@ -1,4 +1,4 @@
-/* 
+/*
 Copyright (C) 1995-2001 Activision, Inc.
 
 This library is free software; you can redistribute it and/or
@@ -106,7 +106,7 @@ void chat_welcome(dp_t *myDP)
 	char nameBuf[256];
 
 	printf("     &&&&&&&&&&&&&&&&&&&&&&&&&&&&&&&&&&&&&&&&&&&&&&&&&&&&&&&&&&&&&&&&     \n");
-	printf("     &&&&&&&&&&&&&&            Chat Session            &&&&&&&&&&&&&&     \n"); 
+	printf("     &&&&&&&&&&&&&&            Chat Session            &&&&&&&&&&&&&&     \n");
 	printf("     &&&&&&&&&&&&&&&&&&&&&&&&&&&&&&&&&&&&&&&&&&&&&&&&&&&&&&&&&&&&&&&&     \n\n");
 	my_Player[0] = dp_ID_NONE;
 	err = dpGetSessionDesc(myDP, &sDesc, &size);
@@ -133,7 +133,7 @@ void chat_welcome(dp_t *myDP)
 		printf("You are host.\n", nameBuf);
 	}
 	printf("Your user name is %s.\n", nameBuf);
-	printf("You can end this session by pressing ^D on a line by itself.\n"); 
+	printf("You can end this session by pressing ^D on a line by itself.\n");
 	printf("Chat away ...............\n\n");
 }
 
@@ -169,7 +169,7 @@ int main(int argc, char **argv)
 	int setkey;			/* last variable set */
 	int sendkey;		/* last variable sent */
 	int vars_received;
-	
+
 	if (argc < 2) {
 		strcpy(freezefile, "freeze.dat");
 	} else {
@@ -180,9 +180,9 @@ int main(int argc, char **argv)
 		printf("pvtest: error %d thawing %s.\n", err, freezefile);
 		exit(1);
 	}
-		
+
 	chat_welcome(myDP);
-	setkey = 0; 
+	setkey = 0;
 	vars_received = 0;
 
 	raw_init();
@@ -306,12 +306,12 @@ int main(int argc, char **argv)
 			/* Process the keyboard buffer. */
 			if (!kbuf[0])
 				continue;
-	
+
 			err = chat_broadcast(myDP, kbuf);
 			if (err != dp_RES_OK) {
 				printf("pvtest: error %d sending message.\n", err);
 			}
-	
+
 			/* Empty it. */
 			kbuf[0] = 0;
 		}

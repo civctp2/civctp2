@@ -50,15 +50,13 @@ class Unit;
 
 #include "ctp2_Menu.h"
 
-
 #include "diplomattypes.h"
 
 class CityEspionage
 {
   private:
-	
-	ctp2_Window *m_window;
 
+	ctp2_Window *m_window;
 
 	static ctp2_Button *m_cancelButton;
 

@@ -1,4 +1,4 @@
-/* 
+/*
 Copyright (C) 1995-2001 Activision, Inc.
 
 This library is free software; you can redistribute it and/or
@@ -45,7 +45,7 @@ Foundation, Inc., 59 Temple Place, Suite 330, Boston, MA  02111-1307  USA
 #include "logprint.h"
 
 /*------------------------------------------------------------------------
- Get and clear any waiting I/O errors. 
+ Get and clear any waiting I/O errors.
  If msg is not NULL, it may be filled with an explanatory message.
  Returns 0 if no error was waiting,
          a system dependent numeric code if an error occurred.
@@ -72,7 +72,7 @@ static int get_socket_error(char *msg)
 		return err;
 	}
 	switch (err) {
-	case WSASYSNOTREADY:	
+	case WSASYSNOTREADY:
 		sprintf(msg, "Indicates that the underlying network subsystem is not ready for network communication.");
 		break;
 	case WSAVERNOTSUPPORTED:
@@ -138,7 +138,7 @@ static int set_socket_nonblocking(int sock)
 
 	if (sock == -1)
 		return -1;
-	
+
 #ifdef UNIX
 	flags = fcntl(sock, F_GETFL, 0);
 	if ((-1 == flags)
@@ -184,7 +184,7 @@ static int Winsock_init(void)
 
 	/* Success: Print out what we found */
 	DPRINT(("Winsock_init: Winsock Initialized\n"));
-	DPRINT(("Winsock_init: Version    : %d.%d [%d.%d]\n", 
+	DPRINT(("Winsock_init: Version    : %d.%d [%d.%d]\n",
 		HIBYTE(wsa.wVersion), LOBYTE(wsa.wVersion),
 		HIBYTE(wsa.wHighVersion), LOBYTE(wsa.wHighVersion)));
 	DPRINT(("Winsock_init: Description: %s\n", wsa.szDescription));
@@ -295,7 +295,7 @@ sbdclnt_t *sbdclnt_create(const char *buf, size_t len, const char *hostname, sho
 }
 
 /*------------------------------------------------------------------------
- Destroy an instance of the sbdclnt module. 
+ Destroy an instance of the sbdclnt module.
 ------------------------------------------------------------------------*/
 void sbdclnt_destroy(sbdclnt_t *sbdclnt)
 {

@@ -11,4 +11,3 @@ public:
 };
 
 #endif // __REGARD_EVENT_H__
-

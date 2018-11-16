@@ -20,7 +20,6 @@
 #define k_GIGANTIC_Y	140
 #define k_GIGANTIC_Z	2
 
-
 sint32 spnewgamemapsizescreen_displayMyWindow(BOOL viewMode = FALSE, sint32 useMode = 0);
 sint32 spnewgamemapsizescreen_removeMyWindow(uint32 action);
 AUI_ERRCODE spnewgamemapsizescreen_Initialize( aui_Control::ControlActionCallback *callback = NULL );

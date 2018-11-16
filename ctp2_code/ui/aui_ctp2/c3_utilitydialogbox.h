@@ -169,7 +169,7 @@ public:
 	sint32  Initialize(MBCHAR * ldlBlock);
 	void    Cleanup(void);
 	sint32  UpdateData(void);
-	
+
 	void *  GetData(void) const { return m_data; }
 
 	void RemoveWindow( void );
@@ -191,9 +191,9 @@ class c3_UtilityTextMessagePopup
 public:
 	c3_UtilityTextMessagePopup
     (
-        MBCHAR const *                  text, 
-        sint32                          type, 
-        c3_UtilityTextMessageCallback * callback = NULL, 
+        MBCHAR const *                  text,
+        sint32                          type,
+        c3_UtilityTextMessageCallback * callback = NULL,
         MBCHAR const *                  ldlBlock = NULL
     );
 	~c3_UtilityTextMessagePopup( void );
@@ -211,7 +211,6 @@ public:
 private:
 	sint32 Initialize ( MBCHAR *ldlBlock );
 
-
 	c3_Static		*m_title_label;
 	c3_Static		*m_text;
 
@@ -225,11 +224,11 @@ class c3_UtilityTextMessageCreateAction : public aui_Action
 {
 public:
 	c3_UtilityTextMessageCreateAction
-    ( 
-        MBCHAR const *                  text        = NULL, 
-        sint32                          type        = 0, 
-        c3_UtilityTextMessageCallback * callback    = NULL, 
-        MBCHAR const *                  ldlBlock    = NULL 
+    (
+        MBCHAR const *                  text        = NULL,
+        sint32                          type        = 0,
+        c3_UtilityTextMessageCallback * callback    = NULL,
+        MBCHAR const *                  ldlBlock    = NULL
     );
 
 	virtual void	Execute
@@ -338,29 +337,25 @@ public:
 class DoubleListItem : public c3_ListItem
 {
 public:
-	
-	
+
 	DoubleListItem(AUI_ERRCODE *retval, MBCHAR *name, sint32 value, MBCHAR *text, MBCHAR *ldlBlock);
 
-	
-	
+
 	virtual void Update(void);
 
-	
 	MBCHAR	*GetName( void ) { return m_name; }
 	sint32	GetValue( void ) { return m_value; }
-	
+
 	sint32	SetSecondColumn( MBCHAR *s );
 
 protected:
 	DoubleListItem() : c3_ListItem() {}
 
-	
-	
+
 	AUI_ERRCODE InitCommonLdl(MBCHAR *name, sint32 value, MBCHAR *text, MBCHAR *ldlBlock);
-	
+
 public:
-	
+
 	virtual sint32 Compare(c3_ListItem *item2, uint32 column);
 
 private:
@@ -369,19 +364,16 @@ private:
 	MBCHAR			m_text[_MAX_PATH];
 };
 
-
 void c3Expel_Initialize( void );
 void c3Expel_Cleanup( void );
-
 
 void NameTheCityDialogBoxCallback(MBCHAR *text, sint32 val2, void *data);
 void c3_utilitydialogbox_NameCity(Unit city);
 void c3_utilitydialogbox_NameCityCleanup(void);
 
 
-
 void c3_utilitydialogbox_TextFieldDialog(MBCHAR *titleText,
-								   MBCHAR *defaultText, 
+								   MBCHAR *defaultText,
 								   MBCHAR *messageText,
 								   c3_UtilityTextFieldCallback *callback,
 								   MBCHAR *ldlBlock);

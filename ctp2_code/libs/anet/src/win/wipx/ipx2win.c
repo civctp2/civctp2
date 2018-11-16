@@ -1,4 +1,4 @@
-/* 
+/*
 Copyright (C) 1995-2001 Activision, Inc.
 
 This library is free software; you can redistribute it and/or
@@ -53,13 +53,10 @@ Foundation, Inc., 59 Temple Place, Suite 330, Boston, MA  02111-1307  USA
 #include <time.h>
 #include "dpmem.h"
 
-
 #include "ipx2win.h"
-
 
 #define DEBUG_MODULE 1
 #include "ddprint.h"
-
 
 /*************************************************************************************
 
@@ -68,25 +65,23 @@ Foundation, Inc., 59 Temple Place, Suite 330, Boston, MA  02111-1307  USA
 **************************************************************************************/
 
 
-
 /*************************************************************************************
 
                                  getsockerror()
 
 **************************************************************************************/
 
-static int getsockerror(void) 
+static int getsockerror(void)
 
 {
   int err;
-  
+
   err = WSAGetLastError();
 
   DPRINT(("Winsock error: %i\n", (int) err));
 
   return(err);
 }
-
 
 /*************************************************************************************
 
@@ -109,8 +104,7 @@ void printaddr(IPXPEER *peer, char *string)
               (int) peer->sa_nodenum[3] & 0xff,
               (int) peer->sa_nodenum[4] & 0xff,
               (int) peer->sa_nodenum[5] & 0xff);
-}                   
-
+}
 
 /*************************************************************************************
 
@@ -132,12 +126,11 @@ static BOOL gethostaddr(IPXINSTANCE *ipx)
 
 
 
-  // Note: This code may seem a long way of getting the host IP address, but its 
+  // Note: This code may seem a long way of getting the host IP address, but its
   // necessary, as getsockname() will always return INADDR_ANY on UDP sockets, and
   // the gethostname() / gethostbyname() technique will check for a DNS server if
   // the user has a modem setup (it causes the dialer to come up).  Why this
   // has to be so diffucult is a mystery to me...
-
 
   // Broadcast a packet containing a unique ID
   uniqueID = (ULONG) clock();
@@ -147,7 +140,6 @@ static BOOL gethostaddr(IPXINSTANCE *ipx)
 	  getsockerror();
 	  return(0);
   }
-
 
   // wait for packet to come back
   waittime = clock() + CLOCKS_PER_SEC * 5;
@@ -167,7 +159,6 @@ static BOOL gethostaddr(IPXINSTANCE *ipx)
 
   return(0);
 }
-
 
 /*************************************************************************************
 
@@ -193,9 +184,7 @@ IPXINSTANCE * IPXWIN_Create(int port, int *status)
   IPXPEER *     peerptr;
   BOOL          broadcast;
 
-
   DPRINT(("IPXWIN_Create() Called..\n"));
-
 
   // allocate an instance structure
   ipxptr = (IPXINSTANCE *) dp_MALLOC(sizeof(IPXINSTANCE));
@@ -241,7 +230,7 @@ IPXINSTANCE * IPXWIN_Create(int port, int *status)
   // put the socket into non-blocking mode
   {
     ULONG nonblocking = TRUE;
-    if (ioctlsocket(ipxptr->socket, FIONBIO, &nonblocking)) getsockerror();  
+    if (ioctlsocket(ipxptr->socket, FIONBIO, &nonblocking)) getsockerror();
   }
 
 //  if (!gethostaddr(ipxptr)) getsockerror();
@@ -249,7 +238,6 @@ IPXINSTANCE * IPXWIN_Create(int port, int *status)
 
   return(ipxptr);
 }
-
 
 /*************************************************************************************
 
@@ -268,7 +256,6 @@ void IPXWIN_Destroy(IPXINSTANCE *ipxptr)
 
   dp_FREE(ipxptr);
 }
-
 
 /*************************************************************************************
 
@@ -298,9 +285,9 @@ IPXHANDLE IPXWIN_Address2Handle(IPXINSTANCE *ipx, IPXPEER *addr, int insert)
   //printaddr(addr, "Address2Handle: ");
 
   // Search peer table and return handle if found
-  for (h = 0; h < ipx->nexthandle; h++)  
+  for (h = 0; h < ipx->nexthandle; h++)
   {
-    if (  (memcmp(ipx->peers[h].sa_netnum, addr->sa_netnum, sizeof(addr->sa_netnum)) == 0) 
+    if (  (memcmp(ipx->peers[h].sa_netnum, addr->sa_netnum, sizeof(addr->sa_netnum)) == 0)
          &&
           (memcmp(ipx->peers[h].sa_nodenum, addr->sa_nodenum, sizeof(addr->sa_nodenum)) == 0) )
     {
@@ -319,7 +306,6 @@ IPXHANDLE IPXWIN_Address2Handle(IPXINSTANCE *ipx, IPXPEER *addr, int insert)
   return(h);
 }
 
-
 /*************************************************************************************
 
                             IPXWIN_Handle2Address()
@@ -337,7 +323,6 @@ int IPXWIN_Handle2Address(IPXINSTANCE *ipx, IPXHANDLE handle, IPXPEER *addr)
   return(ipx2_RES_OK);
 }
 
-
 /*************************************************************************************
 
                                   IPXWIN_PutPacket()
@@ -353,7 +338,6 @@ int IPXWIN_PutPacket(IPXINSTANCE *ipx, void *bufptr, ULONG len, IPXHANDLE hdest)
 {
   int        nobytes;
   IPXPEER *  peerptr;
-
 
 //  DPRINT(("IPXWIN_PutPacket() Called..\n"));
 
@@ -387,7 +371,6 @@ int IPXWIN_PutPacket(IPXINSTANCE *ipx, void *bufptr, ULONG len, IPXHANDLE hdest)
   return(ipx2_RES_OK);
 }
 
-
 /*************************************************************************************
 
                                   IPXWIN_GetPacket()
@@ -420,7 +403,6 @@ int IPXWIN_GetPacket(IPXINSTANCE *ipx, void *bufptr, ULONG *plen, IPXHANDLE *hsr
   ULONG   nobytes;
   IPXPEER addr;
   int origlen = *plen;
-
 
 //  DPRINT(("IPXWIN_GetPacket() Called..\n"));
 
@@ -462,5 +444,3 @@ int IPXWIN_GetPacket(IPXINSTANCE *ipx, void *bufptr, ULONG *plen, IPXHANDLE *hsr
   //printaddr(&addr, "IPXWIN_GetPacket(): ");
   return(ipx2_RES_OK);
 }
-
-

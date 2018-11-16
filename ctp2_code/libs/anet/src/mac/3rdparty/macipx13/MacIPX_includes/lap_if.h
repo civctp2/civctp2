@@ -1,4 +1,4 @@
-/* 
+/*
 Copyright (C) 1995-2001 Activision, Inc.
 
 This library is free software; you can redistribute it and/or
@@ -23,7 +23,7 @@ Foundation, Inc., 59 Temple Place, Suite 330, Boston, MA  02111-1307  USA
  * Copyright (C) 1992-1994 Novell, Inc.
  * All rights reserved.
  */
- 
+
 #ifndef __LAP_IF__
 #define __LAP_IF__
 
@@ -35,11 +35,10 @@ Foundation, Inc., 59 Temple Place, Suite 330, Boston, MA  02111-1307  USA
 #include <wds.h>
 #endif
 
-
-/* 
- * Well known codes for lap_main call 
+/*
+ * Well known codes for lap_main call
  */
- 
+
 #define		DO_INIT						0L
 #define 	DO_RESTORE_STATE			1L
 
@@ -78,8 +77,8 @@ Foundation, Inc., 59 Temple Place, Suite 330, Boston, MA  02111-1307  USA
 #define		PUT_MACIPX_VERSION			604L
 
 #ifndef _TYPES_
-/* 
- * some unsigned types 
+/*
+ * some unsigned types
  */
 typedef  unsigned char 	u_char;
 typedef  unsigned int  	u_int;
@@ -87,32 +86,30 @@ typedef  unsigned long 	u_long;
 typedef  unsigned short u_short;
 #endif
 
-
-/* 
- * pointer to function types 
+/*
+ * pointer to function types
  */
 typedef  OSErr 		(*CloseProcPtr) 	(void);
-typedef  void  		(*SendCompProcPtr) 	(ParmBlkPtr paramBlock, 
-                                         WDS *wds_p, 
+typedef  void  		(*SendCompProcPtr) 	(ParmBlkPtr paramBlock,
+                                         WDS *wds_p,
 										 long status);
-typedef  OSErr 		(*SendProcPtr) 		(ParmBlkPtr paramBlock, 
-                                         WDS *wds_p, 
-										 char *dest_addr, 
+typedef  OSErr 		(*SendProcPtr) 		(ParmBlkPtr paramBlock,
+                                         WDS *wds_p,
+										 char *dest_addr,
 										 SendCompProcPtr send_completion);
 typedef  void  		(*PHProcPtr)		(void);
-typedef  OSErr 		(*LapMainProcPtr) 	(long code, 
-										 void *ptr, 
+typedef  OSErr 		(*LapMainProcPtr) 	(long code,
+										 void *ptr,
 										 u_long *len);
 typedef  Boolean  	(*DialogProcPtr) 	(long slot_num);
 typedef  OSErr  	(*SlotProcPtr) 		(long *slot_num);
-typedef	 OSErr		(*SocketProcPtr)	(char *socket_addr);			
+typedef	 OSErr		(*SocketProcPtr)	(char *socket_addr);
 typedef  void		(*SysTimeProcPtr)	(void);
 
-
-/* 
+/*
  * IPX protocol type for Ethernet, Token Ring, and what else???
  */
-#ifndef IPX_PROTOCOL_TYPE 
+#ifndef IPX_PROTOCOL_TYPE
 #define	IPX_PROTOCOL_TYPE		(unsigned short)0x8137
 #endif
 

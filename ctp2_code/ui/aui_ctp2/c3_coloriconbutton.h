@@ -10,14 +10,14 @@
 //
 // THIS FILE IS NOT GENERATED OR SUPPORTED BY ACTIVISION.
 //
-// This material has been developed at apolyton.net by the Apolyton CtP2 
+// This material has been developed at apolyton.net by the Apolyton CtP2
 // Source Code Project. Contact the authors at ctp2source@apolyton.net.
 //
 //----------------------------------------------------------------------------
 //
 // Compiler flags
-// 
-// _MSC_VER		
+//
+// _MSC_VER
 // - Use Microsoft C++ extensions when set.
 //
 //----------------------------------------------------------------------------
@@ -36,9 +36,7 @@
 #ifndef __C3_COLORICONBUTTON_H__
 #define __C3_COLORICONBUTTON_H__
 
-
 #include "c3_button.h"
-
 
 
 enum C3_COLORICONBUTTON_ACTION {
@@ -50,11 +48,10 @@ enum C3_COLORICONBUTTON_ACTION {
 class Picture;
 
 
-
 class c3_ColorIconButton : public c3_Button
 {
 public:
-	
+
 	c3_ColorIconButton(
 		AUI_ERRCODE *retval,
 		uint32 id,
@@ -81,11 +78,9 @@ public:
 	virtual AUI_ERRCODE Resize(sint32 width, sint32 height);
 	void	ResizePictureRect(void);
 
-	
 	void SetIcon(MBCHAR *name);
 	void ShrinkToFit(BOOL fit) { m_shrinkToFit = fit; }
 
-	
 	virtual AUI_ERRCODE DrawThis(
 		aui_Surface *surface = NULL,
 		sint32 x = 0,
@@ -101,8 +96,7 @@ protected:
     virtual void	MouseRGrabInside(aui_MouseEvent * data);
     virtual void	MouseRDropInside(aui_MouseEvent * data);
     virtual void	MouseRDropOutside(aui_MouseEvent * data);
-    
+
 };
 
-
-#endif 
+#endif

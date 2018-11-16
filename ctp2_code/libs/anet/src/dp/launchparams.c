@@ -1,4 +1,4 @@
-/* 
+/*
 Copyright (C) 1995-2001 Activision, Inc.
 
 This library is free software; you can redistribute it and/or
@@ -72,7 +72,7 @@ dp_result_t dp_launchParams_parse(dp_launchParams_t *params, char *line)
 				  unsigned int	i = 0;
 				  char	*tok;
 				  char	argcopy[65];
-				  
+
 				  strncpy(argcopy, arg, sizeof(argcopy));
 				  argcopy[sizeof(argcopy)-1] = 0;
 				  for (tok=strtok(argcopy, "."); tok; tok=strtok(NULL, ".")) {
@@ -170,7 +170,7 @@ void main(int argc, char *argv[])
 	printf("commInitReq.baud : %ld\n", params.commInitReq.baud);
 	printf("commInitReq.dialing_method : %ld\n", params.commInitReq.dialing_method);
 	printf("commInitReq.flags : %x\n", params.commInitReq.flags);
-	
+
 	printf("SessId : ");
 	for (i = 0; i < sizeof(params.sessId); i++) {
 		printf("%x.", params.sessId[i] & 0xFF);

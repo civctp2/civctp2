@@ -11,7 +11,7 @@
 //
 // THIS FILE IS NOT GENERATED OR SUPPORTED BY ACTIVISION.
 //
-// This material has been developed at apolyton.net by the Apolyton CtP2 
+// This material has been developed at apolyton.net by the Apolyton CtP2
 // Source Code Project. Contact the authors at ctp2source@apolyton.net.
 //
 //----------------------------------------------------------------------------
@@ -46,7 +46,7 @@ class LineGraph;
 
 enum eRankingCategories
 {
-	kRankingMilitary, 
+	kRankingMilitary,
 	kRankingEconomic,
 	kRankingScientific,
 	kRankingPollution, //Added by Martin Gühmann
@@ -54,7 +54,6 @@ enum eRankingCategories
 };
 
 extern sint32 SetupRankingGraph(LineGraph *pLineGraph, double ***pGraphData, sint32 category);
-
 
 
 class RankingTab
@@ -66,72 +65,53 @@ public:
 	static void Open(void);
 	static void Close(void);
 
-	
-	
+
 	void LoadData();
 
 private:
 
-	
 	static RankingTab * s_current_ranking_tab;
 
-	
 	bool m_line_graph;
 
-	
 	LineGraph * m_infoGraph;
 
-	
 	double **m_infoGraphData;
 
 	sint32 m_infoYCount;
 
-	
 	ctp2_Window *m_info_window;
 
-	
-	ctp2_DropDown	*m_rankingDropDown;	
+	ctp2_DropDown	*m_rankingDropDown;
 
-	
 	ctp2_Button *m_lineOrZeroSumButton;
 
-	
 	ctp2_ListBox *m_infoPlayerList;
 
 	//m_rankingPollution added by Martin Gühmann
 	sint32 m_rankingMilitary, m_rankingEconomic, m_rankingScientific, m_rankingPollution, m_rankingOverall;
 
-	
 	void Show();
 
-	
 	void Hide();
 
-	
 	void Add_Dropdown_Category(char * category);
 
-	
 	void SetLineGraph( bool line_graph );
 
-	
 	void UpdatePlayerList();
 
-	
-	
+
 	void UpdateGraph();
 
-	
 	void CleanupGraph();
 
-	
 	static void SelectRankingActionCallback(aui_Control *control,
 		uint32 action, uint32 data, void *cookie);
 
-	
 	static void LineOrZeroSumButtonActionCallback(aui_Control *control,
 		uint32 action, uint32 data, void *cookie);
 
 };
 
-
-#endif 
+#endif

@@ -11,7 +11,7 @@
 //
 // THIS FILE IS NOT GENERATED OR SUPPORTED BY ACTIVISION.
 //
-// This material has been developed at apolyton.net by the Apolyton CtP2 
+// This material has been developed at apolyton.net by the Apolyton CtP2
 // Source Code Project. Contact the authors at ctp2source@apolyton.net.
 //
 //----------------------------------------------------------------------------
@@ -68,12 +68,12 @@ extern ColorSet		*g_colorSet;
 
 #define k_UNIT_FRAME_THICKNESS	2
 
-BattleOrderBox::BattleOrderBox(AUI_ERRCODE *retval, 
-					   uint32 id, 
-					   MBCHAR *ldlBlock, 
-					   ControlActionCallback *ActionFunc, 
+BattleOrderBox::BattleOrderBox(AUI_ERRCODE *retval,
+					   uint32 id,
+					   MBCHAR *ldlBlock,
+					   ControlActionCallback *ActionFunc,
 					   void *cookie)
-	: 
+	:
 	aui_ImageBase( ldlBlock ),
 	aui_TextBase( ldlBlock, (MBCHAR *)NULL ),
 	ControlSheet(retval, id, ldlBlock, ActionFunc, cookie)
@@ -81,14 +81,14 @@ BattleOrderBox::BattleOrderBox(AUI_ERRCODE *retval,
 	InitCommon(ldlBlock);
 }
 
-BattleOrderBox::BattleOrderBox(AUI_ERRCODE *retval, 
-					   uint32 id, 
-					   sint32 x, 
-					   sint32 y, 
-					   sint32 width, 
+BattleOrderBox::BattleOrderBox(AUI_ERRCODE *retval,
+					   uint32 id,
+					   sint32 x,
+					   sint32 y,
+					   sint32 width,
 					   sint32 height,
 					   MBCHAR *pattern,
-					   ControlActionCallback *ActionFunc, 
+					   ControlActionCallback *ActionFunc,
 					   void *cookie)
 	:
 	aui_ImageBase( (sint32)0 ),
@@ -109,22 +109,19 @@ AUI_ERRCODE BattleOrderBox::InitCommon( MBCHAR *ldlBlock)
 
 	RECT			iconRect;
 	AUI_ERRCODE		errcode = AUI_ERRCODE_OK;
-	
+
 	sint32	i,j;
 
 	for ( i = 0;i < k_CARGO_CAPACITY;i++ ) {
 		m_cargo[i] = NULL;
 	}
 
-	
 	for (i=0; i<3; i++) {
 		SetRect(&iconRect, 0, 0, cellWidth, cellHeight);
 
 		OffsetRect(&iconRect, buttonBorder, buttonBorder + i*cellHeight);
 
-
 		InflateRect(&iconRect, -4, -3);
-
 
 		for (j=0; j<3; j++) {
 			sint32 index = i*3+j;
@@ -134,8 +131,7 @@ AUI_ERRCODE BattleOrderBox::InitCommon( MBCHAR *ldlBlock)
 			UnitTabButton	*button;
 			BobButtonAction	*buttonAction;
 
-			
-			button = new UnitTabButton(&errcode, aui_UniqueId(), iconRect.left, iconRect.top, 
+			button = new UnitTabButton(&errcode, aui_UniqueId(), iconRect.left, iconRect.top,
 						(iconRect.right-iconRect.left), (iconRect.bottom-iconRect.top), "upba0119.tga" );
 
 			Assert(button);
@@ -143,7 +139,7 @@ AUI_ERRCODE BattleOrderBox::InitCommon( MBCHAR *ldlBlock)
 
 			button->IconButton()->SetImageBltType(AUI_IMAGEBASE_BLTTYPE_STRETCH);
 
-			
+
 
 
 			buttonAction = new BobButtonAction(this);
@@ -162,16 +158,16 @@ AUI_ERRCODE BattleOrderBox::InitCommon( MBCHAR *ldlBlock)
 
 
 			m_unitControls[i*3+j] = button;
-			
+
 			m_unitRectColors[i*3+j] = COLOR_BLACK;
 
 			OffsetRect(&iconRect, cellWidth, 0);
 		}
-	}	
+	}
 
-	
 
-	
+
+
 	sprintf(controlBlock, "%s.%s", ldlBlock, "UnitImageButton");
 	m_unitImage = new c3_ColorIconButton(&errcode, aui_UniqueId(), controlBlock);
 
@@ -187,24 +183,21 @@ AUI_ERRCODE BattleOrderBox::InitCommon( MBCHAR *ldlBlock)
 	m_unitImage->SetAction((aui_Action *)buttonAction);
 
 
-	
 	sprintf( fortifyBlock, "%s.%s", controlBlock, "UnitF" );
 	m_unitFortify = new c3_Static( &errcode, aui_UniqueId(), fortifyBlock );
 	Assert( AUI_NEWOK( m_unitFortify, errcode) );
 	if ( !AUI_NEWOK( m_unitFortify, errcode ) ) return errcode;
-	
+
 	m_unitFortify->SetBlindness( TRUE );
 
-	
 	sprintf( fortifyBlock, "%s.%s", controlBlock, "UnitV" );
 	m_unitVeteran = new c3_Static( &errcode, aui_UniqueId(), fortifyBlock );
 	Assert( AUI_NEWOK( m_unitVeteran, errcode) );
 	if ( !AUI_NEWOK( m_unitVeteran, errcode ) ) return errcode;
-	
+
 	m_unitVeteran->SetBlindness( TRUE );
 
 
-	
 	sprintf( coloredBlock, "%s.%s", controlBlock, "Cargo" );
 
 	for ( i = 0;i < k_CARGO_CAPACITY;i++ ) {
@@ -217,55 +210,47 @@ AUI_ERRCODE BattleOrderBox::InitCommon( MBCHAR *ldlBlock)
 
 
 
-		m_cargo[i]->Move( (m_cargo[i]->Width() + k_BIG_CARGO_OFFSET) * i + 1, 
+		m_cargo[i]->Move( (m_cargo[i]->Width() + k_BIG_CARGO_OFFSET) * i + 1,
 			m_unitImage->Height() - m_cargo[i]->Height() - 1);
 		m_cargo[i]->SetColor( COLOR_GREEN );
 	}
 
 
-	
 	sprintf(controlBlock, "%s.%s", ldlBlock, "UnitARDText");
 	m_unitARDText = new c3_Static(&errcode, aui_UniqueId(), controlBlock);
 	Assert( AUI_NEWOK(m_unitARDText, errcode) );
 	if ( !AUI_NEWOK(m_unitARDText, errcode) ) return errcode;
 
-	
 	sprintf(controlBlock, "%s.%s", ldlBlock, "UnitARD");
 	m_unitARD = new c3_Static(&errcode, aui_UniqueId(), controlBlock);
 	Assert( AUI_NEWOK(m_unitARD, errcode) );
 	if ( !AUI_NEWOK(m_unitARD, errcode) ) return errcode;
 
-	
 	sprintf(controlBlock, "%s.%s", ldlBlock, "UnitMText");
 	m_unitMText = new c3_Static(&errcode, aui_UniqueId(), controlBlock);
 	Assert( AUI_NEWOK(m_unitMText, errcode) );
 	if ( !AUI_NEWOK(m_unitMText, errcode) ) return errcode;
 
-	
 	sprintf(controlBlock, "%s.%s", ldlBlock, "UnitMovement");
 	m_unitMovement = new c3_Static(&errcode, aui_UniqueId(), controlBlock);
 	Assert( AUI_NEWOK(m_unitMovement, errcode) );
 	if ( !AUI_NEWOK(m_unitMovement, errcode) ) return errcode;
 
-	
 	sprintf(controlBlock, "%s.%s", ldlBlock, "ActiveDefenseIcon");
 	m_activeDefenseIcon = new c3_Static(&errcode, aui_UniqueId(), controlBlock);
 	Assert( AUI_NEWOK(m_activeDefenseIcon, errcode) );
 	if ( !AUI_NEWOK(m_activeDefenseIcon, errcode) ) return errcode;
 
-	
 	sprintf(controlBlock, "%s.%s", ldlBlock, "VeteranIcon");
 	m_veteranIcon = new c3_Static(&errcode, aui_UniqueId(), controlBlock);
 	Assert( AUI_NEWOK(m_veteranIcon, errcode) );
 	if ( !AUI_NEWOK(m_veteranIcon, errcode) ) return errcode;
 
-	
 	sprintf( controlBlock, "%s.%s", ldlBlock, "UnitHealthBar" );
 	m_unitHealthBar = new Thermometer( &errcode, aui_UniqueId(), controlBlock );
 	Assert( AUI_NEWOK(m_unitHealthBar, errcode) );
 	if ( !AUI_NEWOK(m_unitHealthBar, errcode) ) return errcode;
 
-	
 	sprintf( controlBlock, "%s.%s", ldlBlock, "FuelLabel" );
 	m_fuelLabel = new c3_Static( &errcode, aui_UniqueId(), controlBlock );
 	Assert( AUI_NEWOK(m_fuelLabel, errcode) );
@@ -281,7 +266,6 @@ AUI_ERRCODE BattleOrderBox::InitCommon( MBCHAR *ldlBlock)
 	Assert( AUI_NEWOK(m_unitName, errcode) );
 	if ( !AUI_NEWOK(m_unitName, errcode) ) return errcode;
 
-	
 	errcode = AddSubControl(m_unitImage);
 	Assert(errcode == AUI_ERRCODE_OK);
 	errcode = AddSubControl(m_unitARDText);
@@ -296,7 +280,6 @@ AUI_ERRCODE BattleOrderBox::InitCommon( MBCHAR *ldlBlock)
 	Assert(errcode == AUI_ERRCODE_OK);
 	errcode = AddSubControl(m_unitName);
 	Assert(errcode == AUI_ERRCODE_OK);
-
 
 	return AUI_ERRCODE_OK;
 }
@@ -313,7 +296,6 @@ BattleOrderBox::~BattleOrderBox()
 			delete action;
 			delete m_unitControls[i];
 			m_unitControls[i] = NULL;
-
 
 		}
 	}
@@ -334,7 +316,7 @@ BattleOrderBox::~BattleOrderBox()
 
 	delete m_unitARDText;
 	m_unitARDText = NULL;
-		
+
 	delete m_unitARD;
 	m_unitARD = NULL;
 
@@ -364,13 +346,11 @@ AUI_ERRCODE BattleOrderBox::Show( void )
 {
 	ShowThis();
 
-	
 
 	SetStackMode(m_stackDisplay);
 
 	return AUI_ERRCODE_OK;
 }
-
 
 AUI_ERRCODE BattleOrderBox::DrawThis(aui_Surface *surface, sint32 x, sint32 y)
 {
@@ -415,7 +395,6 @@ void BattleOrderBox::SetSingleUnit(Unit theUnit)
 {
 	MBCHAR		s[_MAX_PATH];
 
-	
 	strcpy(s, theUnit.GetDBRec()->GetDefaultIcon()->GetIcon());
 	m_unitImage->SetIcon( s );
 
@@ -426,10 +405,10 @@ void BattleOrderBox::SetSingleUnit(Unit theUnit)
 		action->SetUnit(theUnit);
 
 
-	
 
 
-	
+
+
 	if ( theUnit.IsVeteran() ) {
 		m_unitVeteran->SetText( g_theStringDB->GetNameStr("str_ldl_V") );
 		m_unitVeteran->SetTextColor( g_colorSet->GetColorRef(COLOR_WHITE) );
@@ -439,7 +418,6 @@ void BattleOrderBox::SetSingleUnit(Unit theUnit)
 		m_unitImage->RemoveSubControl( m_unitVeteran->Id() );
 	}
 
-	
 	if ( theUnit.IsEntrenched() ) {
 		m_unitFortify->SetText( g_theStringDB->GetNameStr("str_ldl_F") );
 		m_unitFortify->SetTextColor( g_colorSet->GetColorRef(COLOR_WHITE) );
@@ -459,21 +437,18 @@ void BattleOrderBox::SetSingleUnit(Unit theUnit)
 		m_unitImage->RemoveSubControl( m_unitFortify->Id() );
 	}
 
-	
 	sprintf(s, "%ld/%ld/%ld", (sint32)(theUnit.GetAttack() / 10.0),
 		(sint32)(theUnit.GetZBRange() / 10.0), (sint32)(theUnit.GetDefense() / 10.0) );
 	m_unitARD->SetText(s);
 
-	
 	sprintf(s, "%ld/%ld", (sint32)(theUnit.GetMovementPoints() / 100.0), (sint32)(theUnit.GetMaxMovePoints() / 100.0));
 	m_unitMovement->SetText(s);
 
-	
 	sint32 healthPercent  = (sint32)( theUnit.GetHP() * 100  / theUnit.GetDBRec()->GetMaxHP() );
 	m_unitHealthBar->SetPercentFilled( healthPercent );
 
 	m_unitName->SetText(theUnit.GetDisplayName().c_str());
-	
+
 	if ( theUnit.GetMovementTypeAir() ) {
 		double fuel = theUnit.GetFuel() / 100.0;
 		sprintf( s, "%.1f", fuel );
@@ -486,7 +461,6 @@ void BattleOrderBox::SetSingleUnit(Unit theUnit)
 		RemoveSubControl( m_fuelBox->Id() );
 	}
 
-	
 	const UnitRecord *rec = theUnit.GetDBRec();
 	sint32 maxCargo;
 	if(rec->GetCargoDataPtr()) {
@@ -500,13 +474,12 @@ void BattleOrderBox::SetSingleUnit(Unit theUnit)
 		m_unitImage->RemoveSubControl( m_cargo[j]->Id() );
 	}
 
-	
 	if ( rec->GetCanCarry() ) {
 		for ( sint32 i = 0;i < k_CARGO_CAPACITY;i++ ) {
-			
+
 			if ( i < maxCargo ) {
 				m_unitImage->AddSubControl( m_cargo[i] );
-				
+
 				if ( i < currentCargo ) {
 					m_cargo[i]->SetColor( COLOR_GREEN );
 				}
@@ -540,14 +513,13 @@ void BattleOrderBox::SetSingleUnit(Unit theUnit)
 }
 
 void BattleOrderBox::SetStackMode(BOOL stackDisplay)
-{		
-	
+{
+
 	stackDisplay = FALSE;
 
 	sint32				i;
 	UnitTabButton		*button;
 
-	
 	for (i=0; i<k_MAX_BOB_UNITS; i++) {
 		button = m_unitControls[i];
 		Assert(button);
@@ -561,11 +533,9 @@ void BattleOrderBox::SetStackMode(BOOL stackDisplay)
 		}
 	}
 
-	
-	
+
 	stackDisplay = TRUE;
 
-	
 	if (stackDisplay) {
 		m_unitImage->Hide();
 		m_unitARDText->Hide();
@@ -604,9 +574,9 @@ void BattleOrderBox::SetStack(Army &selectedArmy, CellUnitList *fullArmy, Unit s
 	sint32			i;
 	Unit			unit;
 	UnitTabButton	*button;
-	
+
 	if (selectedArmy.m_id == (0) && fullArmy == NULL) {
-		
+
 		for (i=0; i<k_MAX_BOB_UNITS; i++) {
 			button = m_unitControls[i];
 
@@ -614,7 +584,6 @@ void BattleOrderBox::SetStack(Army &selectedArmy, CellUnitList *fullArmy, Unit s
 			if (!button) return;
 
 			button->IconButton()->SetIcon("");
-
 
 			button->UpdateData( NULL );
 
@@ -636,7 +605,6 @@ void BattleOrderBox::SetStack(Army &selectedArmy, CellUnitList *fullArmy, Unit s
 
 			button->IconButton()->SetIcon("");
 
-
 			m_unitRectColors[i] = COLOR_BLACK;
 
 			button->UpdateData( NULL );
@@ -653,8 +621,8 @@ void BattleOrderBox::SetStack(Army &selectedArmy, CellUnitList *fullArmy, Unit s
 		if (!m_stackDisplay) {
 			if(count > 0) {
 				if ( singleUnit.m_id == (0) ) {
-					SetSingleUnit(fullArmy->Access(0));		
-															
+					SetSingleUnit(fullArmy->Access(0));
+
 				}
 				else {
 					SetSingleUnit( singleUnit );
@@ -680,10 +648,9 @@ void BattleOrderBox::SetStack(Army &selectedArmy, CellUnitList *fullArmy, Unit s
 				action->SetUnit(unit);
 				action->SetArmy( selectedArmy );
 
-				
 				if (selectedArmy.m_id != (0)) {
 					if (selectedArmy.IsPresent(unit)) {
-						
+
 						m_unitRectColors[i] = COLOR_RED;
 					}
 				}
@@ -691,7 +658,6 @@ void BattleOrderBox::SetStack(Army &selectedArmy, CellUnitList *fullArmy, Unit s
 				strcpy(iconName, unit.GetDBRec()->GetDefaultIcon()->GetIcon());
 
 				button->IconButton()->SetIcon(iconName);
-
 
 				button->UpdateData( &unit );
 
@@ -704,10 +670,9 @@ void BattleOrderBox::SetStack(Army &selectedArmy, CellUnitList *fullArmy, Unit s
 
 	}
 
-
 }
 
-sint32 BattleOrderBox::ToggleStackDisplay( void ) 
+sint32 BattleOrderBox::ToggleStackDisplay( void )
 {
 	m_stackDisplay = !m_stackDisplay;
 	SetStackMode( m_stackDisplay );

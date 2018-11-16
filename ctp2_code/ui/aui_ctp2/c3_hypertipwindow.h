@@ -1,34 +1,19 @@
-
-
-
-
-
-
-
-
-
-
-
 #ifndef __C3_HYPERTIPWINDOW_H__
 #define __C3_HYPERTIPWINDOW_H__
-
 
 #include "aui_tipwindow.h"
 #include "patternbase.h"
 
-
 class aui_HyperTextBox;
-
 
 
 #define k_C3_HYPERTIPWINDOW_LDL_TIP		"hypertip"
 
 
-
 class c3_HyperTipWindow : public aui_TipWindow, public PatternBase
 {
 public:
-	
+
 	c3_HyperTipWindow(
 		AUI_ERRCODE *retval,
 		uint32 id,
@@ -49,11 +34,10 @@ protected:
 	AUI_ERRCODE InitCommon( void );
 
 public:
-	
+
 	aui_HyperTextBox *GetHyperTip( void ) const { return m_hyperTip; }
 	AUI_ERRCODE SetHyperTipText(MBCHAR *text);
 
-	
 	virtual AUI_ERRCODE DrawThis(
 		aui_Surface *surface = NULL,
 		sint32 x = 0,
@@ -61,8 +45,7 @@ public:
 
 protected:
 	BOOL m_allocatedHyperTip;
-	aui_HyperTextBox	*m_hyperTip;	
+	aui_HyperTextBox	*m_hyperTip;
 };
 
-
-#endif 
+#endif

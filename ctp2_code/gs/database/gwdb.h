@@ -1,15 +1,3 @@
-
-
-
-
-
-
-
-
-
-
-
-
 #ifdef HAVE_PRAGMA_ONCE
 #pragma once
 #endif
@@ -29,12 +17,12 @@ public:
 
 	GlobalWarmingDatabase() ;
     ~GlobalWarmingDatabase() ;
-    
+
     sint32 Initialise(char *filename, C3DIR dir) ;
 
     sint32 ParseGlobalWarmingDatabase(char *filename, C3DIR dir);
     sint32 ParseAGlobalWarming(Token *pollToken) ;
-	sint32 NumTriggers(void) const { return (m_nRec) ; }			
+	sint32 NumTriggers(void) const { return (m_nRec) ; }
 	sint32 NumChanges(void) const { return (m_rec[0].m_changes) ; }
 	double NextToWaterBonus(void) const { return (m_rec[0].m_next_to_ocean_bonus) ; }
 	double ChangeProbability(const TERRAIN_TYPES terrain, TERRAIN_TYPES &newtype) const ;
@@ -42,7 +30,6 @@ public:
     GlobalWarmingDatabase(CivArchive &archive) ;
 
 
-
-	} ; 
+	} ;
 
 #endif

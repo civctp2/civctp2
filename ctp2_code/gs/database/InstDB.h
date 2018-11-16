@@ -1,12 +1,3 @@
-
-
-
-
-
-
-
-
-
 #ifdef HAVE_PRAGMA_ONCE
 #pragma once
 #endif
@@ -27,11 +18,10 @@ public:
 	InstallationDatabase();
 	InstallationDatabase(CivArchive &archive);
 
-	
 	double m_maxVisionRange;
-	
 
-	
+
+
 
 	BOOL Initialize(char *filename, C3DIR dir);
 	void Serialize(CivArchive &archive);

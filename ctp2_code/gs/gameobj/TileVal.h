@@ -9,10 +9,10 @@
 struct TileValue
 
 {
-    sint32 production;												
-    sint32 food;													
-	sint32 resource;												
-	sint32 gold ;													
+    sint32 production;
+    sint32 food;
+	sint32 resource;
+	sint32 gold ;
     double value;
     MapPoint pos;
 };

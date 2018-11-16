@@ -1,4 +1,4 @@
-/* 
+/*
 Copyright (C) 1995-2001 Activision, Inc.
 
 This library is free software; you can redistribute it and/or
@@ -17,9 +17,9 @@ Foundation, Inc., 59 Temple Place, Suite 330, Boston, MA  02111-1307  USA
 
 */
 
-/* ***********************************************************************  
- *                               RCS HEADER  
- * $Locker: $  
+/* ***********************************************************************
+ *                               RCS HEADER
+ * $Locker: $
  * $Log: Mw2types.h $
  * Revision 1.1  1996/12/13 23:25:04  jgraebner
  * Initial revision
@@ -27,8 +27,8 @@ Foundation, Inc., 59 Temple Place, Suite 330, Boston, MA  02111-1307  USA
  * Added magic numbers and orderof().
  * Revision 1.1  1995/09/14 16:05:08  dzobel
  * Initial revision
- *   
- * *********************************************************************** */ 
+ *
+ * *********************************************************************** */
 
 /*
  *	MW2Types.h
@@ -44,7 +44,6 @@ Foundation, Inc., 59 Temple Place, Suite 330, Boston, MA  02111-1307  USA
 #define _MW2Types_h_
 
 #pragma	pack(1)			// Don't pad or align structures
-
 
 /* ======================================================================== *
 								Type Definitions

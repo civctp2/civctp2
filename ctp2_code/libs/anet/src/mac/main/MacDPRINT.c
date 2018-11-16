@@ -1,4 +1,4 @@
-/* 
+/*
 Copyright (C) 1995-2001 Activision, Inc.
 
 This library is free software; you can redistribute it and/or
@@ -17,7 +17,6 @@ Foundation, Inc., 59 Temple Place, Suite 330, Boston, MA  02111-1307  USA
 
 */
 
-
 #include <stdarg.h>
 #include <stdio.h>
 
@@ -30,7 +29,7 @@ int dprintf( const char *	__format, ...) {
 	static unsigned long debugCount = 0;
 	va_list	argptr;
 	int		len = 0;
-	
+
 	FILE* theFile = fopen("dprint.out", "a");
 
 	if (theFile != NULL) {
@@ -43,12 +42,12 @@ int dprintf( const char *	__format, ...) {
 	}
 
 	debugCount++;
-	
+
 	return len;
 }
 
 void logmessage(char* theMessage) {
-	
+
 	FILE* theFile = fopen("dprint.out", "a");
 	if (theFile != NULL) {
 
@@ -59,4 +58,3 @@ void logmessage(char* theMessage) {
 	}
 
 }
-

@@ -11,7 +11,7 @@
 //
 // THIS FILE IS NOT GENERATED OR SUPPORTED BY ACTIVISION.
 //
-// This material has been developed at apolyton.net by the Apolyton CtP2 
+// This material has been developed at apolyton.net by the Apolyton CtP2
 // Source Code Project. Contact the authors at ctp2source@apolyton.net.
 //
 //----------------------------------------------------------------------------
@@ -53,7 +53,6 @@ BattleView::BattleView()
 		m_defenders[i] = NULL;
 	}
 
-	
 	m_battle = NULL;
 
 	m_eventQueue = NULL;
@@ -68,7 +67,6 @@ BattleView::BattleView()
 	m_backgroundImage = NULL;
 	m_cityImage = NULL;
 }
-
 
 
 BattleView::~BattleView()
@@ -89,7 +87,6 @@ BattleView::~BattleView()
 
 	BattleEvent	*event;
 
-	
 	if (m_eventQueue)
 	{
 		m_walker->SetList(m_eventQueue);
@@ -106,7 +103,6 @@ BattleView::~BattleView()
 		delete m_eventQueue;
 	}
 
-	
 	m_walker->SetList(m_activeEvents);
 	while (m_walker->IsValid()) {
 		event = m_walker->GetObj();
@@ -137,12 +133,10 @@ BattleView::~BattleView()
 		delete m_walker;
 }
 
-
 void BattleView::Initialize(RECT *battleViewRect)
 {
 	AUI_ERRCODE		errcode;
-	
-	
+
 	sint32 width = battleViewRect->right - battleViewRect->left;
 	sint32 height = battleViewRect->bottom - battleViewRect->top;
 
@@ -152,10 +146,9 @@ void BattleView::Initialize(RECT *battleViewRect)
 	Assert(m_battleSurface);
 }
 
-
 void BattleView::SetBattle(Battle *battle)
 {
-	
+
 	m_numAttackers = battle->GetNumAttackers();
 	m_numDefenders = battle->GetNumDefenders();
 	for(sint32 index = 0; index < k_MAX_UNITS_PER_SIDE; index++) {
@@ -163,24 +156,19 @@ void BattleView::SetBattle(Battle *battle)
 		m_defenders[index] = battle->GetDefender(index);
 	}
 
-	
-	
-	delete m_eventQueue;	
+
+	delete m_eventQueue;
 	m_eventQueue = battle->GrabEventQueue();
 
-	
 	m_battle = battle;
 }
 
-
 void BattleView::UpdateBattle(Battle *battle)
 {
-	
-	
-	delete m_eventQueue;	
+
+	delete m_eventQueue;
 	m_eventQueue = battle->GrabEventQueue();
 }
-
 
 
 void BattleView::GetAttackerPos(sint32 column, sint32 row, sint32 *x, sint32 *y)
@@ -196,7 +184,6 @@ void BattleView::GetAttackerPos(sint32 column, sint32 row, sint32 *x, sint32 *y)
 	*y = k_BV_ATT_00_Y_POS + (row * k_BV_ATT_Y_ROW_OFFSET) + (column * k_BV_ATT_Y_COL_OFFSET);
 
 }
-
 
 
 void BattleView::GetDefenderPos(sint32 column, sint32 row, sint32 *x, sint32 *y)
@@ -240,15 +227,14 @@ void BattleView::DrawExplosions(void)
 }
 
 
-
 int battleview_AttackerSort( const void *arg1, const void *arg2 )
 {
-	SortedActor	*sa1 = (SortedActor *)arg1, 
+	SortedActor	*sa1 = (SortedActor *)arg1,
 				*sa2 = (SortedActor *)arg2;
 
 	if (sa1->y < sa2->y) {
 		return -1;
-	} else 
+	} else
 	if (sa1->y == sa2->y) {
 		if (sa1->x > sa2->x)
 			return -1;
@@ -259,7 +245,6 @@ int battleview_AttackerSort( const void *arg1, const void *arg2 )
 }
 
 
-
 void BattleView::DrawAttackers(void)
 {
 	sint32		i;
@@ -267,7 +252,6 @@ void BattleView::DrawAttackers(void)
 
 	SortedActor	sortedAttackers[k_MAX_UNITS_PER_SIDE];
 
-	
 	for (i=0; i<m_numAttackers; i++) {
 		m_attackers[i]->GetPixelPos(x, y);
 		sortedAttackers[i].x = x;
@@ -275,23 +259,19 @@ void BattleView::DrawAttackers(void)
 		sortedAttackers[i].actor = m_attackers[i];
 	}
 
-	
 	qsort((void *)sortedAttackers, m_numAttackers, sizeof(SortedActor), battleview_AttackerSort);
 
-	
 	for (i=0; i<m_numAttackers; i++) {
 		sortedAttackers[i].actor->DrawDirect(m_battleSurface, sortedAttackers[i].x, sortedAttackers[i].y);
 	}
 }
 
 
-
 int battleview_DefenderSort( const void *arg1, const void *arg2 )
 {
-	SortedActor	*sa1 = (SortedActor *)arg1, 
+	SortedActor	*sa1 = (SortedActor *)arg1,
 				*sa2 = (SortedActor *)arg2;
 
-	
 	if(sa1->x < sa2->x) {
 		return 1;
 	} else if(sa1->x == sa2->x) {
@@ -305,11 +285,10 @@ int battleview_DefenderSort( const void *arg1, const void *arg2 )
 	}
 
 #if 0
-	
 
 	if (sa1->y < sa2->y) {
 		return -1;
-	} else 
+	} else
 	if (sa1->y == sa2->y) {
 		if (sa1->x < sa2->x)
 			return -1;
@@ -330,7 +309,6 @@ void BattleView::DrawDefenders(void)
 
 	SortedActor	sortedDefenders[k_MAX_UNITS_PER_SIDE];
 
-	
 	for (i=0; i<m_numDefenders; i++) {
 		m_defenders[i]->GetPixelPos(x, y);
 		sortedDefenders[i].x = x;
@@ -338,10 +316,8 @@ void BattleView::DrawDefenders(void)
 		sortedDefenders[i].actor = m_defenders[i];
 	}
 
-	
 	qsort((void *)sortedDefenders, m_numDefenders, sizeof(SortedActor), battleview_DefenderSort);
 
-	
 	for (i=0; i<m_numDefenders; i++) {
 		sortedDefenders[i].actor->DrawDirect(m_battleSurface, sortedDefenders[i].x, sortedDefenders[i].y);
 	}
@@ -355,8 +331,7 @@ void BattleView::DrawDefenders(void)
 }
 
 
-
-void BattleView::RemoveAttacker(sint32 index) 
+void BattleView::RemoveAttacker(sint32 index)
 {
 	if(m_battle) {
 		m_battle->RemoveAttacker(m_attackers[index]);
@@ -374,8 +349,7 @@ void BattleView::RemoveAttacker(sint32 index)
 }
 
 
-
-void BattleView::RemoveDefender(sint32 index) 
+void BattleView::RemoveDefender(sint32 index)
 {
 	if(m_battle) {
 		m_battle->RemoveDefender(m_defenders[index]);
@@ -393,7 +367,6 @@ void BattleView::RemoveDefender(sint32 index)
 }
 
 
-
 void BattleView::RemoveActor(BattleViewActor *actor)
 {
 	sint32 i;
@@ -401,17 +374,15 @@ void BattleView::RemoveActor(BattleViewActor *actor)
 	Assert(actor);
 	if (actor == NULL) return;
 
-	
 	PointerList<BattleEvent>::Walker walk(m_eventQueue);
 	for(; walk.IsValid(); walk.Next()) {
 		walk.GetObj()->RemoveDeadActor(actor);
 	}
-	
+
 	for(walk.SetList(m_activeEvents); walk.IsValid(); walk.Next()) {
 		walk.GetObj()->RemoveDeadActor(actor);
 	}
 
-	
 	for (i=0; i<m_numAttackers; i++) {
 		if (actor == m_attackers[i]) {
 			RemoveAttacker(i);
@@ -419,34 +390,30 @@ void BattleView::RemoveActor(BattleViewActor *actor)
 		}
 	}
 
-	
 	for (i=0; i<m_numDefenders; i++) {
 		if (actor == m_defenders[i]) {
 			RemoveDefender(i);
 			return;
 		}
 	}
-	
-	
+
 	Assert(FALSE);
 }
 
 
-
 void BattleView::UpdateDisplay(void)
 {
-	
 
 	if (!m_backgroundImage)
 		return;
 
-	RECT rect = {0, 0, 
-					m_backgroundImage->TheSurface()->Width(), 
+	RECT rect = {0, 0,
+					m_backgroundImage->TheSurface()->Width(),
 					m_backgroundImage->TheSurface()->Height()};
 
-	g_c3ui->TheBlitter()->Blt(m_battleSurface, 0, 0, m_backgroundImage->TheSurface(), 
+	g_c3ui->TheBlitter()->Blt(m_battleSurface, 0, 0, m_backgroundImage->TheSurface(),
 							&rect, k_AUI_BLITTER_FLAG_COPY);
-	
+
 	if(m_cityImage) {
 		RECT cityrect = {0, 0,
 				m_cityImage->TheSurface()->Width(),
@@ -459,142 +426,118 @@ void BattleView::UpdateDisplay(void)
 	Assert(m_numAttackers <= k_MAX_UNITS_PER_SIDE);
 	Assert(m_numDefenders <= k_MAX_UNITS_PER_SIDE);
 
-	
-	
+
 	DrawDefenders();
 	DrawAttackers();
 
-	
+
 
 
 	DrawExplosions();
 }
 
-
 #define k_EVENT_FREQUENCY		1500
-
 
 void BattleView::Process(void)
 {
-	
-	
+
 	Assert(m_eventQueue);
 	if(!m_eventQueue)
 		return;
 
-	
 	PointerList<BattleEvent>::PointerListNode *eventNode =
 		m_eventQueue->GetHeadNode();
 
-	
 	while(eventNode) {
-		
+
 		BattleEvent *event = eventNode->GetObj();
 		Assert(event);
 		BattleViewActor *actor = event->GetActor();
 
-		
-		
+
 		bool afterAttackEvent =
 			(event->GetType() == BATTLE_EVENT_TYPE_PLACEMENT) ||
 			(event->GetType() == BATTLE_EVENT_TYPE_EXPLODE) ||
 			(event->GetType() == BATTLE_EVENT_TYPE_DEATH);
 
-		
 		bool addEvent = true;
 
-		
 		PointerList<BattleEvent>::PointerListNode *activeNode =
 			m_activeEvents->GetHeadNode();
 
-		
 		while(activeNode) {
-			
-			
+
 			if(afterAttackEvent &&
 				(activeNode->GetObj()->GetType() == BATTLE_EVENT_TYPE_ATTACK)) {
 				addEvent = false;
 				break;
 			}
 
-			
-			
-			
+
+
+
 			if((event->GetType() == BATTLE_EVENT_TYPE_PLACEMENT) &&
 				(activeNode->GetObj()->GetType() != BATTLE_EVENT_TYPE_PLACEMENT)) {
 				addEvent = false;
 				break;
 			}
 
-			
-			
-			
+
+
+
 			if(activeNode->GetObj()->GetActor() == actor) {
 				addEvent = false;
 				break;
 			}
 
-			
 			activeNode = activeNode->GetNext();
 		}
 
-		
 		if(addEvent) {
-			
+
 			PointerList<BattleEvent>::PointerListNode *addNode = eventNode;
 
-			
 			eventNode = eventNode->GetNext();
 
-			
 			m_eventQueue->Remove(addNode);
 
-			
 			m_activeEvents->AddTail(event);
 		} else {
-			
+
 			eventNode = eventNode->GetNext();
-			
-			
+
 		}
 	}
 
-	
 	if(m_activeEvents->GetCount() > 0) {
-		
+
 		m_walker->SetList(m_activeEvents);
 
-		
-		
+
 		while (m_walker->IsValid()) {
-			
+
 			BattleEvent *event = m_walker->GetObj();
 			Assert(event);
 
-			
 			event->Process();
 
-			
 			if (event->IsFinished()) {
-				
-				
+
 				m_walker->Remove();
 
-				
 				if(event->GetType() == BATTLE_EVENT_TYPE_DEATH) {
 					RemoveDeadActorsFromEvents(event);
 				}
 
 				delete event;
 
-				
-				
-				
+
+
+
 				if(!IsProcessing() && (!g_theCurrentBattle || !g_theCurrentBattle->IsDone()))
-					g_gevManager->GotUserInput();	
-													
-													
-			} else	
+					g_gevManager->GotUserInput();
+
+			} else
 				m_walker->Next();
 		}
 	}

@@ -1,4 +1,4 @@
-/* 
+/*
 Copyright (C) 1995-2001 Activision, Inc.
 
 This library is free software; you can redistribute it and/or
@@ -103,7 +103,7 @@ static atalk_hdl_t commHdl2atalk (playerHdl_t h )
 
 /*-----------------------------------------------------------------------
  Given a local port number, a remote ip address, and a remote port number,
- return a handle that can be used to send an address to that address.  
+ return a handle that can be used to send an address to that address.
 
  If 0 is given for the local port number, picks an unused one.  Not suitable
  for a handle that will be used to listen for incoming service requests on
@@ -137,7 +137,7 @@ atalk_hdl_t atalk_adr2hdl(DDPAddress* remoteadr, int insert)
 	// Look for existing address/handle
 	for (i=0; i<peertab->n_used; i++) {
 		assoctab_item_t *pe = assoctab_getkey(peertab, i);
-		if (!pe) 
+		if (!pe)
 			DEBUGSTR(("\patalk_adr2hdl: couldn't find entry\n"));
 		else {
 			peer = (DDPAddress *)pe->value;
@@ -222,7 +222,6 @@ commNoOp(
 	return (TRUE);
 }
 
-
 /*
  *	Initialize the communications driver.
  *  Call this function only once.
@@ -242,21 +241,21 @@ commInit(
 	AppleTalkInfo		atalkInfo;
 	TNetbuf				theNetBuffer;
 	extern DDPAddress	gDDPAddress;
-	
+
 	DEBUGSTR(("\p@ATALK commInit(): "));
 
 	if (req == NULL)
 		req = (commInitReq_t *)memset(&reqDummy, 0, sizeof(*req));
 	if (resp == NULL)
 		resp = &respDummy;
-		
+
 	scratch_flat = malloc(MAX_RAW_PKTLEN);
 	if (!scratch_flat) {
 		DEBUGSTR(("\pcommInit: couldn't allocate DOS memory!\n"));
 		resp->status = comm_STATUS_BAD;
 		return FALSE;
 	}
-	
+
 	//	check for the existanct of OpenTransport
 	if(!OpenTransportExists() || !OpenTransportAppleTalkExists()) {
 		DEBUGSTR(("\pcommInit: Open Transport not found\n"));
@@ -264,7 +263,7 @@ commInit(
 		free(scratch_flat);
 		return FALSE;
 	}
-	
+
 	//	Initialize OpenTransport
 	err = InitOpenTransport();
 	if (err != noErr) {
@@ -273,9 +272,9 @@ commInit(
 		free(scratch_flat);
 		return FALSE;
 	}
-	
+
 	//	open appletalk services
-	
+
 	err = StartupAppleTalk();
 	//gAppleTalkRef = OTOpenAppleTalkServices(kDefaultAppleTalkServicesPath, 0, &err);
 	if (err != noErr) {
@@ -284,10 +283,10 @@ commInit(
 		free(scratch_flat);
 		return FALSE;
 	}
-	
+
 	//	open an endpoint for sending and recieving data (if we are resuming, we start
 	//	with the same address as the last time)
-	
+
 	err = CreateAndConfigDDP(&gDDPEndpoint, req->flags & comm_INIT_FLAGS_RESUME);
 	if (err != noErr) {
 		DEBUGSTR(("\pcommInit: Cannot Configure Endpoint\n"));
@@ -296,9 +295,9 @@ commInit(
 		ShutDownAppleTalk();
 		return FALSE;
 	}
-	
+
 	//	open the mapper and register our name
-	
+
 	err = CreateAndConfigNBP(&gNBPMapper);
 	if (err != noErr) {
 		DEBUGSTR(("\pcommInit: Cannot Configure Mapper\n"));
@@ -307,13 +306,13 @@ commInit(
 		ShutDownAppleTalk();
 		return FALSE;
 	}
-	
+
 	if (!req->flags & comm_INIT_FLAGS_RESUME) {
 		OTRegisterMyName();
 	}
-	
+
 	//	create the peer table
-	
+
 	peertab = assoctab_create(sizeof(DDPAddress));
 	if (!peertab) {
 		// ABORT! Out of Memory
@@ -323,7 +322,7 @@ commInit(
 		ShutDownAppleTalk();
 		return FALSE;
 	}
-	
+
 	// Store our address in the peer table under the bogus ME handle
 	padr = (DDPAddress *)assoctab_subscript_grow(peertab, atalk_HDL_ME);
 	if (!padr) {
@@ -336,19 +335,19 @@ commInit(
 	}
 
 	#if 1
-	
+
 		//	get our address from the global created when the endpoint was bound
-		
+
 		memcpy(padr, &gDDPAddress, sizeof(DDPAddress));
-	
+
 	#else
-		
+
 		//	Get information about the AppleTalk network
-		
+
 		theNetBuffer.maxlen = sizeof(AppleTalkInfo);
 		theNetBuffer.len = sizeof(AppleTalkInfo);	//	size of data to get
 		theNetBuffer.buf = (UInt8*) &atalkInfo;		//	buffer to write data to
-		
+
 		err = OTATalkGetInfo(gAppleTalkRef, &theNetBuffer);
 		if (err != noErr) {
 			DEBUGSTR(("\pcommInit: Cannot Get AppleTalk Info\n"));
@@ -357,7 +356,7 @@ commInit(
 			ShutDownAppleTalk();
 			return FALSE;
 		}
-		
+
 		atalkInfo.fOurAddress.fSocket = SOCKET_MW2;
 		memcpy(padr, &atalkInfo.fOurAddress, sizeof(DDPAddress));
 	#endif
@@ -367,9 +366,8 @@ commInit(
 	return TRUE;
 }
 
-
 /*
- *	Tear down the communications driver.  
+ *	Tear down the communications driver.
  *
  *	Return FALSE on error.
  */
@@ -393,7 +391,7 @@ commTerm(
 		int i;
 		for (i=0; i<peertab->n_used; i++) {
 			assoctab_item_t *pe = assoctab_getkey(peertab, i);
-			if (!pe) 
+			if (!pe)
 				DEBUGSTR(("\pcommTerm: couldn't find entry\n"));
 			else if (pe->key != atalk_HDL_ME) {
 				DPRINT(("commTerm: closing handle %d\n", pe->key));
@@ -407,14 +405,13 @@ commTerm(
 	free(scratch_flat);
 	resp->status = comm_STATUS_OK;
 	DEBUGSTR(("\pcommTerm: success\n"));
-	
+
 	//	unbind our endpoint and close open transport
-	
+
 	ShutDownAppleTalk();
 
 	return TRUE;
 }
-
 
 /*
  *	Retrieve info about the communications driver.
@@ -456,7 +453,6 @@ commPlayerInfo(
 	static DDPAddress 		adr;
 	comm_status_t			err;
 
-
 	if (req == NULL)
 		req = (commPlayerInfoReq_t *)memset(&reqDummy, 0, sizeof(*req));
 	if (resp == NULL)
@@ -481,7 +477,6 @@ commPlayerInfo(
 
 	return TRUE;
 }
-
 
 /*
  *	Find out whether the transmit queue is full.
@@ -510,7 +505,6 @@ commTxFull(
 	return FALSE;
 }
 
-
 /*
  *	Send a packet.  Upon return, the buffer can be discarded, although the
  *	packet may not be sent until later.
@@ -533,28 +527,28 @@ commTxPkt(
 		req = (commTxPktReq_t *)memset(&reqDummy, 0, sizeof(*req));
 	if (resp == NULL)
 		resp = &respDummy;
-	
+
 	if (req->dest == PLAYER_BROADCAST) {
-	
+
 		//	if we are broadcasting, we need to register our name now
-		
+
 		OTRegisterMyName();
 
 		//	broadcast is only used for enumSessions packets
 		//	if this is an enumSessions packet, start a name lookup (this does nothing
 		//	if one is already running). We do the broadcast because the lookup starts
 		//	by clearing the array of DDP addresses we have accumulated so far)
-	
+
 		err = atalk_ddp_broadcast(req->buffer, req->length);
 		DoOTNameLookup();
 		CheckZoneList();
 	} else {
-	
+
 		//	this is a normal packet, just send it to who it should be sent to
 
 		h = commHdl2atalk(req->dest);
 		err = atalk_ddp_send(h, req->buffer, req->length, TTLTOS_NORMAL, 0, UDP_SEND_NORMAL);
-	
+
 	}
 
 	if (err == -1) {
@@ -562,10 +556,9 @@ commTxPkt(
 	} else {
 		resp->status = comm_STATUS_OK;
 	}
-	
+
 	return (resp->status == comm_STATUS_OK);
 }
-
 
 /*
  *	Get information about a pending incoming packet.
@@ -593,7 +586,6 @@ commPeekPkt(
 
 	return FALSE;
 }
-
 
 /*
  *	Retrieve a pending incoming packet.
@@ -624,7 +616,7 @@ commRxPkt(
 		resp->status = comm_STATUS_EMPTY;
 		return FALSE;
 	}
-	
+
 	resp->length = len;
 	atalk_ddp_status(hdl_rx, 0, NULL, &info);
 	resp->src = atalk2commHdl(atalk_adr2hdl(&info->ip_dst, FALSE));
@@ -637,7 +629,6 @@ commRxPkt(
 
 	return (resp->status == comm_STATUS_OK);
 }
-
 
 /*
  *	Attempt to parse a NUL-terminated address string into a free-format
@@ -658,7 +649,7 @@ commScanAddr(
 	long				nodeID;
 	long				netID;
 	long				socketID;
-	
+
 	//	this is only called if there is a masterhostname string. There should
 	//	not be for the AppleTalk transport. This code was used for the NBP code
 	//	was written in order to test the transport without it
@@ -674,13 +665,13 @@ commScanAddr(
 		resp->status = comm_STATUS_FULL;
 		return FALSE;
 	}
-	
+
 	//	copy the address into the supplied buffer
 
 	adr = (DDPAddress*) req->address;
 	sscanf(req->printable, "%ld.%ld.%d", &netID, &nodeID, &socketID);
 	OTInitDDPAddress(adr, netID, nodeID, socketID, 0);
-	
+
 	//	return the length of the address
 
 	resp->length = sizeof(DDPAddress);
@@ -688,7 +679,6 @@ commScanAddr(
 
 	return (TRUE);
 }
-
 
 /*
  *	Attempt to format a free-format address buffer into a NUL-terminated
@@ -734,7 +724,6 @@ commPrintAddr(
 	return TRUE;
 }
 
-
 /*
  *	Generate a pseudo-player handle referring to a group of players.  Handy
  *	for multicasting.  A group can have zero players.
@@ -762,7 +751,6 @@ commGroupAlloc(
 	return FALSE;
 }
 
-
 /*
  *	Invalidate a pseudo-player handle referring to a group of players.
  *
@@ -789,7 +777,6 @@ commGroupFree(
 	return FALSE;
 }
 
-
 /*
  *	Add one or more players to a group.
  *
@@ -815,7 +802,6 @@ commGroupAdd(
 
 	return FALSE;
 }
-
 
 /*
  *	Subtract one or more players from a group.  Do not delete the group,
@@ -893,7 +879,6 @@ commSayHi(
 	DPRINT(("commSayHi: atalk_adr2hdl returns %d; atalk2commHdl returns %d\n", h, resp->player));
 	return TRUE;
 }
-
 
 /*
  *	Tear down a data link to a player.  The link or the player may already be

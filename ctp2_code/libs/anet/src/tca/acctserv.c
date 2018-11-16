@@ -1,4 +1,4 @@
-/* 
+/*
 Copyright (C) 1995-2001 Activision, Inc.
 
 This library is free software; you can redistribute it and/or
@@ -80,10 +80,10 @@ static void send_validation_email(const char *email,
 	char body[256];
 	wchar_t wsecretcode[tcapw_LEN_PW];
 	char asecretcode[tcapw_LEN_PW];
-	
+
 	mywcs_netchar2wchar(wsecretcode, validationcode, tcapw_LEN_PW);
 	mywcs_tombs(asecretcode, tcapw_LEN_PW, wsecretcode);
-	
+
 	sprintf(body, "Welcome to ActiveLink!\nYour activation code is %s\n",
 		asecretcode);
 	sendMailToSubjBody(email, "ActiveLink Account Activation", body);
@@ -499,7 +499,7 @@ dp_result_t acctserv_account_delete(acctserv_t *acctserv,
 
 	err = tcapw_entry_delete(acctserv->tcapw, entry.uid);
 	if (err != dp_RES_OK) {
-		DPRINT(("acctserv_account_delete: delete(%d) returns err:%d\n", 
+		DPRINT(("acctserv_account_delete: delete(%d) returns err:%d\n",
 			entry.uid, err));
 		return dp_RES_BUG;
 	}
@@ -513,7 +513,6 @@ dp_result_t acctserv_account_delete(acctserv_t *acctserv,
 	}
 	return dp_RES_OK;
 }
-
 
 #ifdef acctserv_DAEMON
 
@@ -549,7 +548,7 @@ dp_dprintf(
 	return len;
 }
 
-dp_result_t dpReportAssertionFailure(int lineno, char *file, char *linetxt) 
+dp_result_t dpReportAssertionFailure(int lineno, char *file, char *linetxt)
 {
 	printf("dpReportAssertionFailure(%d, %s, %s)\n",
 			lineno, file, linetxt);
@@ -563,7 +562,7 @@ static void acctserv_response(int sockfd, int errcode, char *msg)
 	char resp[BUFLEN];
 	int nbytes;
 
-	sprintf(resp, "%d %s\n", errcode, msg); 
+	sprintf(resp, "%d %s\n", errcode, msg);
 	nbytes = write(sockfd, resp, strlen(resp));
 	if (nbytes < strlen(resp))
 		DPRINT(("acctserv: write error:%d\n", errno));
@@ -603,7 +602,7 @@ static void acctserv_handleRequest(acctserv_t *acctserv, int sockfd)
 			for (c = pbuf; c < pbuf + nbytes; c++) {
 				if (c > buf + BUFLEN) {
 					DPRINT(("acctserv: header too long for buf\n"));
-					acctserv_response(sockfd, 4, "Buffer Overflow"); 
+					acctserv_response(sockfd, 4, "Buffer Overflow");
 					return;
 				}
 				if (*c == ' ' || *c == '\t') {
@@ -616,7 +615,7 @@ static void acctserv_handleRequest(acctserv_t *acctserv, int sockfd)
 				if (!isprint(*c) && (*c != '\t') && (*c != '\n')
 				&&  (*c != '\r')) {
 					DPRINT(("acctserv: bad char:%d in request\n", *c));
-					acctserv_response(sockfd, 3, "Bad Character in Request"); 
+					acctserv_response(sockfd, 3, "Bad Character in Request");
 					return;
 				}
 				if (*c == '\r')
@@ -849,7 +848,7 @@ void main(int argc, char *argv[])
 {
 	dp_result_t err;
 	acctserv_t *acctserv;
-	int sockfd; 
+	int sockfd;
 	struct sockaddr_un my_addr;
 	int pid;
 	time_t now, next_save;
@@ -883,7 +882,7 @@ Usage: %s <Dir>\n\
 
 	printf("acctserv: binding my local socket\n");
 	memset(&my_addr, 0, sizeof(my_addr));
-	my_addr.sun_family = AF_LOCAL; 
+	my_addr.sun_family = AF_LOCAL;
 	strcpy(my_addr.sun_path, acctserv_SOCKETNAME);
 	if (bind(sockfd, (struct sockaddr *)&my_addr, sizeof(my_addr)) < 0) {
 		printf("acctserv: bind error:%d\n", errno);
@@ -912,8 +911,8 @@ Usage: %s <Dir>\n\
 			printf("acctserv: database saved\n");
 			next_save = now + TIME_SAVE;
 		}
-		/* ACCEPT A CONNECTION AND THEN CREATE A CHILD TO DO THE WORK */ 
-		/* LOOP BACK AND WAIT FOR ANOTHER CONNECTION */ 
+		/* ACCEPT A CONNECTION AND THEN CREATE A CHILD TO DO THE WORK */
+		/* LOOP BACK AND WAIT FOR ANOTHER CONNECTION */
 		printf("acctserv: starting accept\n");
 		newsock = accept(sockfd, (struct sockaddr *)&client_addr, &client_addrlen);
 		if (newsock < 0) {
@@ -928,7 +927,7 @@ Usage: %s <Dir>\n\
 			exit(1);
 
 		case 0:
-			/* CHILD PROCESS */ 
+			/* CHILD PROCESS */
 			close(sockfd);	/* child only uses newsock */
 #if 0
 			/* Multiple simultaneous requests don't work due to wmq/db
@@ -953,8 +952,8 @@ Usage: %s <Dir>\n\
 #else
 			/* only one at a time, CHILD handles connection */
 #endif
-			acctserv_handleRequest(acctserv, newsock); 
-			close(newsock); 
+			acctserv_handleRequest(acctserv, newsock);
+			close(newsock);
 			exit(0);
 			break;
 

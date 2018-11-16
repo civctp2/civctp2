@@ -1,33 +1,18 @@
-
-
-
-
-
-
-
-
-
-
-
 #ifndef __STATICPICTURE_H__
 #define __STATICPICTURE_H__
 
-
 class Picture;
 
-
 #include "aui_static.h"
-
 
 
 #define k_AUI_STATICIMAGE_LDL_IMAGE "image"
 
 
-
 class StaticPicture : public aui_Static
 {
 public:
-	
+
 	StaticPicture(
 		AUI_ERRCODE *retval,
 		uint32 id,
@@ -42,12 +27,12 @@ public:
 		sint32 height,
 		MBCHAR *picture );
 	virtual ~StaticPicture();
-	
+
 protected:
 	StaticPicture() : aui_Static() {}
 	AUI_ERRCODE InitCommon( MBCHAR *ldlBlock, MBCHAR *picture );
 	AUI_ERRCODE InitCommon( MBCHAR *picture );
-	
+
 public:
 	virtual AUI_ERRCODE DrawThis(
 		aui_Surface *surface = NULL,
@@ -60,5 +45,4 @@ protected:
 	Picture *m_picture;
 };
 
-
-#endif 
+#endif

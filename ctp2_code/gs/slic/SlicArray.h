@@ -13,8 +13,8 @@ class SlicStructDescription;
 
 class SlicArray {
 private:
-	SS_TYPE m_type; 
-	SLIC_SYM m_varType; 
+	SS_TYPE m_type;
+	SLIC_SYM m_varType;
 	SlicStackValue *m_array;
 	sint32 m_arraySize;
 	sint32 m_allocatedSize;
@@ -36,7 +36,6 @@ public:
 	BOOL Lookup(sint32 index, SS_TYPE &type, SlicStackValue &value);
 	BOOL Insert(sint32 index, SS_TYPE type, SlicStackValue value);
 
-	
 	void Prune(sint32 size);
 
 	SlicStructDescription *GetStructTemplate() { return m_structTemplate; }

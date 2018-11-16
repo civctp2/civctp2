@@ -1,14 +1,3 @@
-
-
-
-
-
-
-
-
-
-
-
 #ifdef HAVE_PRAGMA_ONCE
 #pragma once
 #endif
@@ -60,18 +49,17 @@ public:
 	void            Initialize(sint32 index, const MapPoint &pos);
 
 protected:
-    
-	
+
 	sint32				m_facing;
 	sint32				m_frame;
 	uint16				m_transparency;
 	sint32              m_index;
-	
-	
 
-	
-	
-	
+
+
+
+
+
 	MapPoint			m_pos;
 	UnitSpriteGroup		*m_unitSpriteGroup;
 
@@ -79,8 +67,8 @@ protected:
 	UNITACTION			m_curUnitAction;
 
 	Queue<Action *>		m_actionQueue;
-	
-	
+
+
 
 
 };

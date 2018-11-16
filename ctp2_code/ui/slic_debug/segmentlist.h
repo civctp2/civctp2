@@ -58,12 +58,11 @@ public:
 
 	void RemoveWindow();
 	void DisplayWindow();
-	
+
 	virtual void kh_Close();
 
 	c3_ListBox *GetList() { return m_list; }
 };
-  
 
 
 void segmentlist_Display();

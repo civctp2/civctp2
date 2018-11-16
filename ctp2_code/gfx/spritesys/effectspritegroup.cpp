@@ -2,7 +2,7 @@
 //
 // Project      : Call To Power 2
 // File type    : C++ source
-// Description  : 
+// Description  :
 //
 //----------------------------------------------------------------------------
 //
@@ -10,13 +10,13 @@
 //
 // THIS FILE IS NOT GENERATED OR SUPPORTED BY ACTIVISION.
 //
-// This material has been developed at apolyton.net by the Apolyton CtP2 
+// This material has been developed at apolyton.net by the Apolyton CtP2
 // Source Code Project. Contact the authors at ctp2source@apolyton.net.
 //
 //----------------------------------------------------------------------------
 //
 // Compiler flags
-// 
+//
 //----------------------------------------------------------------------------
 //
 // Modifications from the original Activision code:
@@ -79,11 +79,10 @@ void EffectSpriteGroup::Draw(EFFECTACTION action, sint32 frame, sint32 drawX, si
 	Assert(action > EFFECTACTION_NONE &&
 			action < EFFECTACTION_MAX);
 
-
 	if (m_sprites[action] == NULL) return;
 
 	m_sprites[action]->SetCurrentFrame((uint16)frame);
-	
+
 	if(m_sprites[EFFECTACTION_FLASH] != NULL)
 	{
 #ifndef __MAKESPR__
@@ -94,7 +93,6 @@ void EffectSpriteGroup::Draw(EFFECTACTION action, sint32 frame, sint32 drawX, si
 #endif
 	}
 
-	
 	if (action == EFFECTACTION_PLAY) {
 		if (m_sprites[action] != NULL)
 		{
@@ -109,11 +107,10 @@ void EffectSpriteGroup::DrawDirect(aui_Surface *surf, EFFECTACTION action, sint3
 	Assert(action > EFFECTACTION_NONE &&
 			action < EFFECTACTION_MAX);
 
-
 	if (m_sprites[action] == NULL) return;
 
 	m_sprites[action]->SetCurrentFrame((uint16)frame);
-	
+
 	if(m_sprites[EFFECTACTION_FLASH] != NULL)
 	{
 #ifndef __MAKESPR__
@@ -124,7 +121,6 @@ void EffectSpriteGroup::DrawDirect(aui_Surface *surf, EFFECTACTION action, sint3
 #endif
 	}
 
-	
 	if (action == EFFECTACTION_PLAY) {
 		if (m_sprites[action] != NULL)
 		{
@@ -150,7 +146,7 @@ void EffectSpriteGroup::Save(MBCHAR *filename,unsigned version_id,unsigned compr
 {
 	std::auto_ptr<SpriteFile>	file(new SpriteFile(filename));
 
-	if (SPRITEFILEERR_OK == 
+	if (SPRITEFILEERR_OK ==
 			file->Create(SPRITEFILETYPE_EFFECT, version_id, compression_mode)
 	   )
 	{
@@ -176,7 +172,7 @@ void EffectSpriteGroup::Save(MBCHAR *filename,unsigned version_id,unsigned compr
 
 sint32 EffectSpriteGroup::Parse(uint16 id,GROUPTYPE group)
 {
-	Token			*theToken=NULL; 
+	Token			*theToken=NULL;
 	MBCHAR			name[k_MAX_NAME_LENGTH];
 	MBCHAR			scriptName[k_MAX_NAME_LENGTH];
 
@@ -187,7 +183,7 @@ sint32 EffectSpriteGroup::Parse(uint16 id,GROUPTYPE group)
 
 	char			prefixStr[80];
 
-	for (i=0; i<k_MAX_NAMES; i++) 
+	for (i=0; i<k_MAX_NAMES; i++)
 	{
 		imageNames[i] = (char *)malloc(k_MAX_NAME_LENGTH);
 		shadowNames[i] = (char *)malloc(k_MAX_NAME_LENGTH);
@@ -198,29 +194,28 @@ sint32 EffectSpriteGroup::Parse(uint16 id,GROUPTYPE group)
 
 printf("Processing '%s'\n", scriptName);
 
-	theToken = new Token(scriptName, C3DIR_SPRITES); 
-	Assert(theToken); 
-	
-	if (!theToken) return FALSE; 
-	
-	sint32 tmp, tmpNumFrames = 0; 
+	theToken = new Token(scriptName, C3DIR_SPRITES);
+	Assert(theToken);
 
-	if (!token_ParseKeywordNext(theToken, TOKEN_EFFECT_SPRITE)) return FALSE; 
+	if (!theToken) return FALSE;
 
-	if (!token_ParseAnOpenBraceNext(theToken)) return FALSE; 
+	sint32 tmp, tmpNumFrames = 0;
 
-	if (!token_ParseValNext(theToken, TOKEN_EFFECT_SPRITE_PLAY, tmp)) return FALSE;    
-	if (tmp) 
+	if (!token_ParseKeywordNext(theToken, TOKEN_EFFECT_SPRITE)) return FALSE;
+
+	if (!token_ParseAnOpenBraceNext(theToken)) return FALSE;
+
+	if (!token_ParseValNext(theToken, TOKEN_EFFECT_SPRITE_PLAY, tmp)) return FALSE;
+	if (tmp)
 	{
-		
+
 		Sprite *effectSprite = new Sprite;
-		
-		
+
 		effectSprite->ParseFromTokens(theToken);
 
 		printf(" [Effect");
 		tmpNumFrames = effectSprite->GetNumFrames();
-		for(i=0; i<effectSprite->GetNumFrames(); i++) 
+		for(i=0; i<effectSprite->GetNumFrames(); i++)
 		{
 
 			sprintf(name, "%sGX%.2dES.%d.tif", prefixStr,  id, i+effectSprite->GetFirstFrame());
@@ -230,10 +225,8 @@ printf("Processing '%s'\n", scriptName);
 			strcpy(imageNames[i], name);
 		}
 
-		
 		effectSprite->Import(effectSprite->GetNumFrames(), imageNames, shadowNames);
 
-		
 		m_sprites[EFFECTACTION_PLAY] = effectSprite;
 
 		printf("]\n");
@@ -244,13 +237,12 @@ printf("Processing '%s'\n", scriptName);
 		m_anims[EFFECTACTION_PLAY] = effectAnim;
 	}
 
-	if (!token_ParseValNext(theToken, TOKEN_EFFECT_SPRITE_FLASH, tmp)) return FALSE;    
-	if (tmp) 
+	if (!token_ParseValNext(theToken, TOKEN_EFFECT_SPRITE_FLASH, tmp)) return FALSE;
+	if (tmp)
 	{
-		
+
 		Sprite *flashSprite = new Sprite;
-		
-		
+
 		flashSprite->ParseFromTokens(theToken);
 
 		printf(" [Flash");
@@ -260,19 +252,17 @@ printf("Processing '%s'\n", scriptName);
 			printf("\n Must have same number of special frames as effect frames ");
 			return FALSE;
 		}
-		
-		for(i=0; i<flashSprite->GetNumFrames(); i++) 
+
+		for(i=0; i<flashSprite->GetNumFrames(); i++)
 		{
 			sprintf(name, "%sGX%.2dFA.%d.tif", prefixStr, id, i+flashSprite->GetFirstFrame());
 			strcpy(imageNames[i], name);
-			
+
 			strcpy(shadowNames[i], "");
 		}
 
-		
 		flashSprite->Import(flashSprite->GetNumFrames(), imageNames, shadowNames);
 
-		
 		m_sprites[EFFECTACTION_FLASH] = flashSprite;
 		printf("]\n");
 
@@ -283,11 +273,10 @@ printf("Processing '%s'\n", scriptName);
 
 	}
 
-	
 
 	delete theToken;
 
-	for (i=0; i<k_MAX_NAMES; i++) 
+	for (i=0; i<k_MAX_NAMES; i++)
 	{
 		free(imageNames[i]);
 		free(shadowNames[i]);
@@ -302,9 +291,8 @@ POINT EffectSpriteGroup::GetHotPoint(EFFECTACTION action, sint32 facing)
 
 	action = EFFECTACTION_PLAY;
 
-	if (m_sprites[action] != NULL) 
+	if (m_sprites[action] != NULL)
 	{
-
 
 			return m_sprites[action]->GetHotPoint();
 
@@ -341,7 +329,6 @@ void EffectSpriteGroup::ExportScript(MBCHAR *name)
 	fprintf(file, "# %s\n", timebuf);
 	fprintf(file, "#\n\n");
 
-
 	fprintf(file, "%d # %s\n\n", 0, name);
 	fprintf(file, "%s\n", g_allTokens[TOKEN_EFFECT_SPRITE].keyword);
 	fprintf(file, "{\n");
@@ -349,7 +336,7 @@ void EffectSpriteGroup::ExportScript(MBCHAR *name)
 	ExportSpriteGroup(file,(GAME_ACTION)EFFECTACTION_PLAY ,TOKEN_EFFECT_SPRITE_PLAY, TOKEN_MAX);
 	ExportSpriteGroup(file,(GAME_ACTION)EFFECTACTION_FLASH,TOKEN_EFFECT_SPRITE_FLASH, TOKEN_MAX);
 
-  
+
 
 
 

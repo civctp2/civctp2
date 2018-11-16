@@ -4,21 +4,18 @@
 #ifndef __C3_SLIDOMETER_H__
 #define __C3_SLIDOMETER_H__
 
-
 #include "aui_ranger.h"
 #include "patternbase.h"
-
 
 class aui_Surface;
 
 #define k_C3_SLIDOMETER_PERCENT_FILLED	"percent"
 #define k_C3_SLIDOMETER_COLOR			"color"
 
-
 class c3_Slidometer : public aui_Ranger, public PatternBase
 {
 public:
-	
+
 	c3_Slidometer(
 		AUI_ERRCODE *retval,
 		uint32 id,
@@ -60,4 +57,4 @@ public:
 	{ return m_orientation == AUI_RANGER_ORIENTATION_VERTICAL; }
 };
 
-#endif 
+#endif

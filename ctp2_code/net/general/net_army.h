@@ -13,7 +13,6 @@ typedef sint32 PLAYER_INDEX;
 #include "AICause.h"
 #include "cellunitlist.h"
 
-
 class NetNewArmy : public Packetizer
 {
 public:
@@ -30,7 +29,6 @@ private:
 	uint8 m_numUnits;
 	CAUSE_NEW_ARMY m_cause;
 };
-
 
 class NetRemoveArmy : public Packetizer
 {

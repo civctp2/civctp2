@@ -1,4 +1,4 @@
-/* 
+/*
 Copyright (C) 1995-2001 Activision, Inc.
 
 This library is free software; you can redistribute it and/or
@@ -29,7 +29,7 @@ Foundation, Inc., 59 Temple Place, Suite 330, Boston, MA  02111-1307  USA
 #include "aneterr.h"
 #include "assoctab.h"
 
-/* tcapw_LEN_PW can't be changed without modifications to tca.c, since 
+/* tcapw_LEN_PW can't be changed without modifications to tca.c, since
  * the D2DES routines depend on using passwords as 16 byte keys.
  * tcapw_LEN_HASHPW is set by the 16 byte output of MD5.
  */

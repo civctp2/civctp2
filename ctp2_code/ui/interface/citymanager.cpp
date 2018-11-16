@@ -1,4 +1,3 @@
-
 #include "c3.h"
 #include "aui.h"
 #include "aui_window.h"
@@ -31,7 +30,7 @@ void CityManagerWindow::Open()
 
 		g_c3ui->AddWindow(s_cityManagerWindow);
 	}
-	
+
 	s_cityManagerWindow->Show();
 }
 
@@ -48,9 +47,9 @@ void CityManagerWindow::Cleanup()
 CityManagerWindow::CityManagerWindow(AUI_ERRCODE *retval,
 									 uint32 id,
 									 MBCHAR *ldlBlock)
-	: aui_Window(retval, id, 
+	: aui_Window(retval, id,
 				 uiutils_ChooseLdl(ldlBlock, "CITY_MANAGER_WINDOW"),
-				 16, 
+				 16,
 				 AUI_WINDOW_TYPE_STANDARD)
 {
 	m_ok = m_cancel = NULL;
@@ -101,13 +100,11 @@ AUI_ERRCODE CityManagerWindow::InitCommonLdl(MBCHAR *ldlBlock)
 	AUI_ERRCODE ret;
 
 
-
 	sprintf(controlBlock, "%s.%s", ldlBlock, "OK_BUTTON");
 	m_ok = new ctp2_Button(&ret, aui_UniqueId(), controlBlock,
 						   "CTP2_BUTTON_TEXT_RIGHT_LARGE",
 						   386, 414,
 						   100, 20,
-
 
 						   CityManagerWindowButtonCallback,
 						   this);
@@ -119,12 +116,10 @@ AUI_ERRCODE CityManagerWindow::InitCommonLdl(MBCHAR *ldlBlock)
 							   526, 414,
 							   100, 20,
 
-
 							   CityManagerWindowButtonCallback,
 							   this);
 	AddControl(m_cancel);
 
-	
 
 	m_bg = g_ui->LoadImage("CM.tga");
 
@@ -149,8 +144,8 @@ AUI_ERRCODE CityManagerWindow::DrawThis(aui_Surface *surface, sint32 x, sint32 y
 	if(m_bg) {
 		aui_Surface *srcSurf = m_bg->TheSurface();
 		RECT srcRect = {0, 0, srcSurf->Width(), srcSurf->Height()};
-		
-		err = 
+
+		err =
 			g_ui->TheBlitter()->Blt(surface,
 									0, 0,
 									srcSurf,

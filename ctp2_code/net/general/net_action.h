@@ -186,7 +186,7 @@ enum NET_ACTION {
 class NetAction : public Packetizer
 {
 public:
-	
+
 	NetAction(NET_ACTION action, ...);
 	NetAction();
 

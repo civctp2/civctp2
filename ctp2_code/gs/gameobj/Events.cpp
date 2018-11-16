@@ -1,9 +1,3 @@
-
-
-
-
-
-
 #include "c3.h"
 #include "Events.h"
 #include "GameEventUser.h"
@@ -71,7 +65,6 @@ STDEHANDLER(ScoreEventTest)
 	return GEV_HD_Continue;
 }
 
-											   
 void events_Initialize()
 {
 	armyevent_Initialize();
@@ -87,7 +80,7 @@ void events_Initialize()
 	worldevent_Initialize();
 	combatevent_Initialize();
 	tradeevent_Initialize();
-	
+
 	trackerevent_Initialize();
 
 	g_gevManager->AddCallback(GEV_CalcScores, GEV_PRI_Primary, &s_ScoreEventTest);
@@ -98,14 +91,12 @@ void events_Initialize()
 
 	FeatTracker::InitializeEvents();
 
-	
 	DiplomacyWindow::InitializeEvents();
 	ArmyManagerWindow::InitializeEvents();
 	TradeManager::InitializeEvents();
 	UnitManager::InitializeEvents();
 	DipWizard::InitializeEvents();
 
-	
 	CtpAi::InitializeEvents();
 
 	GaiaController::InitializeEvents();
@@ -131,7 +122,6 @@ void events_Cleanup()
 
 	FeatTracker::CleanupEvents();
 
-	
 	DiplomacyWindow::CleanupEvents();
 	ArmyManagerWindow::CleanupEvents();
 	TradeManager::CleanupEvents();

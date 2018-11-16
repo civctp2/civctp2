@@ -1,4 +1,4 @@
-/* 
+/*
 Copyright (C) 1995-2001 Activision, Inc.
 
 This library is free software; you can redistribute it and/or
@@ -51,7 +51,6 @@ dp_result_t dpReportAssertionFailure(int lineno, char *file, char *linetxt)
 	return dp_RES_OK;
 }
 
-
 int scorerep_test(void)
 {
 	dp_result_t err;
@@ -76,7 +75,7 @@ int scorerep_test(void)
 	assert(!err);
 	assert(rep->id == myId);
 	assert(rep->uid == myUID);
-	
+
 	/* fill my score report with a few blobs */
 	for (hisId = myId; hisId < myId + 10; hisId++) {
 		hisUID = (long) hisId + 10000;
@@ -90,11 +89,11 @@ int scorerep_test(void)
 		err = scorerep_set(rep, hisId, hisUID, 0, blob, bloblen);
 		assert(!err);
 	}
-	
+
 	/* convert it to a buffer with everyone's scores */
 	err = scorerep_toBuf(rep, scorerep_FLAGS_SELFEXIT, myId, &repbuf);
 	assert(!err);
-	
+
 	/* destroy the rep */
 	scorerep_destroy(rep);
 	rep = NULL;
@@ -110,13 +109,13 @@ int scorerep_test(void)
 	assert(!err);
 	assert(rep->id == myId);
 	assert(rep->uid == myUID);
-	
+
 	/* read the buffer into my report table */
 	err = scorerep_fromBuf(rep, &repbuf);
 	assert(!err);
 	assert(rep->players);
 	assert(rep->flags == scorerep_FLAGS_SELFEXIT);
-	
+
 	/* check that it contains what I put there and only that */
 	assert(rep->players->n_used = 10);
 	for (hisId = myId; hisId < myId + 10; hisId++) {
@@ -128,14 +127,14 @@ int scorerep_test(void)
 		assert(hisId == dpMAKESHORT(player->blob[0], player->blob[1]));
 		assert(hisUID == dpMAKELONG(player->blob[2], player->blob[3], player->blob[4], player->blob[5]));
 	}
-	
+
 	/* convert it to a buffer with only my and his scores */
 	hisId = myId + 1;
 	hisUID = (long) hisId + 10000;
 	memset(&repbuf, 0, sizeof(repbuf));
 	err = scorerep_toBuf(rep, 0, hisId, &repbuf);
 	assert(!err);
-	
+
 	/* destroy the rep */
 	scorerep_destroy(rep);
 	rep = NULL;
@@ -179,7 +178,7 @@ int scorerep_test(void)
 	/* destroy the rep */
 	scorerep_destroy(rep);
 	rep = NULL;
-	
+
 	return 0;
 }
 

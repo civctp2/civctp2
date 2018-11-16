@@ -11,7 +11,7 @@
 //
 // THIS FILE IS NOT GENERATED OR SUPPORTED BY ACTIVISION.
 //
-// This material has been developed at apolyton.net by the Apolyton CtP2 
+// This material has been developed at apolyton.net by the Apolyton CtP2
 // Source Code Project. Contact the authors at ctp2source@apolyton.net.
 //
 //----------------------------------------------------------------------------
@@ -62,9 +62,9 @@ static c3_PopupWindow	*s_spNewGameDiffScreen	= NULL;
 
 // Skill level selection
 static c3_Static *			s_skillLevel		= NULL;
-static aui_SwitchGroup *	s_group				= NULL;	
+static aui_SwitchGroup *	s_group				= NULL;
 static aui_Radio **			s_checkBox			= NULL;
-static MBCHAR				checknames[k_NUM_DIFFBOXES][50] = 
+static MBCHAR				checknames[k_NUM_DIFFBOXES][50] =
 {
 	"DiffOne",
 	"DiffTwo",
@@ -78,14 +78,13 @@ static MBCHAR				checknames[k_NUM_DIFFBOXES][50] =
 static c3_Static *			s_barbarianThreat	= NULL;
 static aui_SwitchGroup *	s_groupTwo			= NULL;
 static aui_Radio **			s_riskBox			= NULL;
-static MBCHAR				risknames[k_NUM_RISKBOXES][50] = 
+static MBCHAR				risknames[k_NUM_RISKBOXES][50] =
 {
 	"RiskOne",
 	"RiskTwo",
 	"RiskThree",
 	"RiskFour"
 };
-
 
 
 static sint32 s_difficulty1 = 0;
@@ -187,7 +186,7 @@ sint32 spnewgamediffscreen_removeMyWindow(uint32 action)
 			}
 		}
 	}
-	
+
 	AUI_ERRCODE auiErr;
 
 	auiErr = g_c3ui->RemoveWindow( s_spNewGameDiffScreen->Id() );
@@ -199,7 +198,6 @@ sint32 spnewgamediffscreen_removeMyWindow(uint32 action)
 
 	return 1;
 }
-
 
 
 AUI_ERRCODE spnewgamediffscreen_Initialize( aui_Control::ControlActionCallback *callback )
@@ -214,29 +212,26 @@ AUI_ERRCODE spnewgamediffscreen_Initialize( aui_Control::ControlActionCallback *
 		if(callback) {
 			s_spNewGameDiffScreen->Ok()->SetActionFuncAndCookie(callback, NULL);
 		}
-		return AUI_ERRCODE_OK; 
+		return AUI_ERRCODE_OK;
 	}
 
 	strcpy(windowBlock, "SPNewGameDiffScreen");
 
-	{ 
+	{
 		s_spNewGameDiffScreen = new c3_PopupWindow( &errcode, aui_UniqueId(), windowBlock, 16, AUI_WINDOW_TYPE_FLOATING, false);
 		Assert( AUI_NEWOK(s_spNewGameDiffScreen, errcode) );
 		if ( !AUI_NEWOK(s_spNewGameDiffScreen, errcode) ) errcode;
 
-		
 		s_spNewGameDiffScreen->Resize(s_spNewGameDiffScreen->Width(),s_spNewGameDiffScreen->Height());
 		s_spNewGameDiffScreen->GrabRegion()->Resize(s_spNewGameDiffScreen->Width(),s_spNewGameDiffScreen->Height());
 		s_spNewGameDiffScreen->SetStronglyModal(TRUE);
 	}
-	
+
 	if ( !callback ) callback = spnewgamediffscreen_backPress;
 
-	
 	sprintf( controlBlock, "%s.%s", windowBlock, "Name" );
 	s_spNewGameDiffScreen->AddTitle( controlBlock );
 	s_spNewGameDiffScreen->AddClose( callback );
-
 
 
 	s_skillLevel = spNew_c3_Static(&errcode,windowBlock,"SkillLevel");
@@ -255,7 +250,7 @@ AUI_ERRCODE spnewgamediffscreen_Initialize( aui_Control::ControlActionCallback *
 		Assert( AUI_NEWOK(s_checkBox[i], errcode) );
 		if ( !AUI_NEWOK(s_checkBox[i], errcode) ) return errcode;
 		s_group->AddSwitch( (aui_Radio *)s_checkBox[i] );
-	
+
 	}
 
 	Assert( g_theProfileDB->GetDifficulty() >= 0 );
@@ -275,18 +270,16 @@ AUI_ERRCODE spnewgamediffscreen_Initialize( aui_Control::ControlActionCallback *
 		Assert( AUI_NEWOK(s_riskBox[i], errcode) );
 		if ( !AUI_NEWOK(s_riskBox[i], errcode) ) return errcode;
 		s_groupTwo->AddSwitch( (aui_Radio *)s_riskBox[i] );
-	
+
 	}
 
 	s_riskBox[g_theProfileDB->GetRiskLevel()]->SetState( 1 );
 
-	
 	errcode = aui_Ldl::SetupHeirarchyFromRoot( windowBlock );
 	Assert( AUI_SUCCESS(errcode) );
 
 	return AUI_ERRCODE_OK;
 }
-
 
 
 //----------------------------------------------------------------------------
@@ -318,7 +311,7 @@ AUI_ERRCODE spnewgamediffscreen_Cleanup()
 		keypress_RemoveHandler(s_spNewGameDiffScreen);
 
 		sint32 i;
-		for (i = 0; i < k_NUM_DIFFBOXES; i++) 
+		for (i = 0; i < k_NUM_DIFFBOXES; i++)
 		{
 			delete s_checkBox[i];
 			// NULLing not necessary: deleting container next
@@ -326,8 +319,7 @@ AUI_ERRCODE spnewgamediffscreen_Cleanup()
 		delete [] s_checkBox;
 		s_checkBox	= NULL;
 
-
-		for (i = 0; i < k_NUM_RISKBOXES; ++i) 
+		for (i = 0; i < k_NUM_RISKBOXES; ++i)
 		{
 			delete s_riskBox[i];
 			// NULLing not necessary: deleting container next
@@ -352,8 +344,7 @@ AUI_ERRCODE spnewgamediffscreen_Cleanup()
 
 void spnewgamediffscreen_backPress(aui_Control *control, uint32 action, uint32 data, void *cookie )
 {
-	
-	
+
 
 	spnewgamediffscreen_removeMyWindow(action) ;
 

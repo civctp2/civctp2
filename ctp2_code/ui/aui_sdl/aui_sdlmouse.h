@@ -20,7 +20,7 @@ public:
 
 protected:
 	aui_SDLMouse();
-	virtual AUI_ERRCODE GetInput();	
+	virtual AUI_ERRCODE GetInput();
 };
 
 #endif // defined(__AUI_USE_SDL__)

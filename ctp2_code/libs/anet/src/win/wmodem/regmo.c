@@ -1,4 +1,4 @@
-/* 
+/*
 Copyright (C) 1995-2001 Activision, Inc.
 
 This library is free software; you can redistribute it and/or
@@ -18,7 +18,7 @@ Foundation, Inc., 59 Temple Place, Suite 330, Boston, MA  02111-1307  USA
 */
 
 /*--------------------------------------------------------------------------
- Class to extract information about installed modems from the windows 
+ Class to extract information about installed modems from the windows
  registry.
 --------------------------------------------------------------------------*/
 
@@ -28,37 +28,37 @@ Foundation, Inc., 59 Temple Place, Suite 330, Boston, MA  02111-1307  USA
 #include "regmo.h"
 
 //#define DPRINT(s) printf s
-#define DPRINT(s) 
+#define DPRINT(s)
 //#define DEBUG_MODULE 1
 //#include "ddprint.h"
 
 #define MAX_REG_BUFLEN 64
 
 /*-------------------------------------------------------------------------
- Search all the direct subkeys of 'hKeySearchRoot' for the first one that 
+ Search all the direct subkeys of 'hKeySearchRoot' for the first one that
  points to a registry key with the given ('name', 'value') pair.
  The pointer is a registry string named 'pointerName' which is used as a
  subkey of 'hKeyPointerRoot'.
  All string comparisons are case insensitive.
- On success, 
+ On success,
 	places name of pointed-to key in output buffer and returns its handle.
  	Assumes outputBuf is big enough.
  On failure,
  	returns NULL.
 
- For example: 
- if hKeySearchRoot contains keys "foo" and "bar", 
-	 and each of those contain a string named "hardwarekey", 
+ For example:
+ if hKeySearchRoot contains keys "foo" and "bar",
+	 and each of those contain a string named "hardwarekey",
 	 with values "fooDev" and "barDev" respectively,
  and hKeyPointerRoot contains keys "fooDev" and "barDev",
-	 and each of these contain a string named "Driver", 
+	 and each of these contain a string named "Driver",
 	 with values "fooDriver" and "barDriver" respectively,
  then calling findKeyPointingToPair(hKeySearchRoot, hKeyPointerRoot,
 	 "hardwarekey", "Driver", "barDriver", outputBuf)
 	 will return an hKey for hKeySearchRoot/barDev, and will place "barDev"
 	 into outputBuf.
 -------------------------------------------------------------------------*/
-HKEY findKeyPointingToPair(HKEY hKeySearchRoot, HKEY hKeyPointerRoot, 
+HKEY findKeyPointingToPair(HKEY hKeySearchRoot, HKEY hKeyPointerRoot,
 	const char *pointerName, const char *name, const char *value,
 	char * outputBuf)
 {
@@ -79,7 +79,7 @@ HKEY findKeyPointingToPair(HKEY hKeySearchRoot, HKEY hKeyPointerRoot,
 			if (werr != ERROR_NO_MORE_ITEMS) {
 				DPRINT(("findKeyPointingToPair: RegEnumKey rCode:%d\n", werr));
 			}
-			if (werr == ERROR_MORE_DATA) 
+			if (werr == ERROR_MORE_DATA)
 				continue;
 			break;
 		}
@@ -90,7 +90,7 @@ HKEY findKeyPointingToPair(HKEY hKeySearchRoot, HKEY hKeyPointerRoot,
 			continue;
 		}
 		/* retrieve the pointer value */
-		len = MAX_REG_BUFLEN; 
+		len = MAX_REG_BUFLEN;
 		werr = RegQueryValueEx( hKeyEnum, pointerName, NULL, NULL, pointerVal, &len);
 		CloseHandle(hKeyEnum);
 		if (werr != ERROR_SUCCESS) {
@@ -104,7 +104,7 @@ HKEY findKeyPointingToPair(HKEY hKeySearchRoot, HKEY hKeyPointerRoot,
 			continue;
 		}
 		/* retrieve the value if it is the right name */
-		len = MAX_REG_BUFLEN; 
+		len = MAX_REG_BUFLEN;
 		werr = RegQueryValueEx( hKeyPointer, name, NULL, NULL, tempbuf, &len);
 		if (werr != ERROR_SUCCESS) {
 			DPRINT(("findKeyPointingToPair: Can't find %s in subkey %s, error %d\n", name, szEnum, werr));
@@ -133,7 +133,7 @@ static HKEY OpenModemRoot(void)
 	const char *modemroot;
 	OSVERSIONINFO VersionInfo;
 	HKEY   hKeyModemroot;
-	DWORD  werr;	
+	DWORD  werr;
 
 	/* The modem info is stored slightly differently by WinNT and Win95. */
 	VersionInfo.dwOSVersionInfoSize = sizeof(OSVERSIONINFO);
@@ -165,7 +165,7 @@ static HKEY OpenModemRoot(void)
 int regmo_enum(int *keys, int maxkeys)
 {
 	char modemSubkey[64];
-	DWORD  werr;	
+	DWORD  werr;
 	HKEY   hKeyModemroot;		/* Key handle of SubKey. */
 	int i;
 	int nkeys;
@@ -226,13 +226,13 @@ static void regmo_unescape(char *p)
 --------------------------------------------------------------------------*/
 int regmo_get(regmo_t * regmo, int key)
 {
-	HKEY   hKeyModemroot;		
+	HKEY   hKeyModemroot;
 	HKEY   hKeyModem;
 	HKEY   hKeyInit;
 	char   subkey[100];
 	char   subkeyNameModem[100];
 	long   len;
-	DWORD  werr;	
+	DWORD  werr;
 	int i;
 	char deviceType;
 	int n_init;
@@ -291,15 +291,15 @@ int regmo_get(regmo_t * regmo, int key)
 			CloseHandle(hKeyModem);
 			return __LINE__;
 		}
-		/* winmodems sometimes (always?) omit AttachedTo in favor of 
+		/* winmodems sometimes (always?) omit AttachedTo in favor of
 		 * PORTNAME in config manager.
 		 * Here are the three areas of the registry that are involved:
 		 *
 		 * HKEY_DYN_DATA/ConfigManager/Enum/xxx/Hardwarekey ----
 		 *												        |
 		 *					             -----------------------
-		 *                              | 
-		 * HKEY_LOCAL_MACHINE/Enum/[Hardwarekey] 
+		 *                              |
+		 * HKEY_LOCAL_MACHINE/Enum/[Hardwarekey]
 		 * 							/ Class
 		 * 							/ PORTNAME
 		 * 							/ DRIVER -------------------
@@ -327,7 +327,7 @@ int regmo_get(regmo_t * regmo, int key)
 			CloseHandle(hKeyDynConfigMan);
 			return __LINE__;
 		}
-		hKey2 = findKeyPointingToPair(hKeyDynConfigMan, hKeyMachineEnum, 
+		hKey2 = findKeyPointingToPair(hKeyDynConfigMan, hKeyMachineEnum,
 			"Hardwarekey", "DRIVER", subkeyNameModem, subkeyName2);
 		CloseHandle(hKeyDynConfigMan);
 		CloseHandle(hKeyMachineEnum);
@@ -412,7 +412,7 @@ void main(void)
 	regmo_t regmo;
 	int i;
 	int err;
-	
+
 	printf("nkeys %d\n", nkeys);
 	for (i=0; i<nkeys; i++) {
 		printf("keys[%d] %d\n", i, keys[i]);
@@ -424,9 +424,9 @@ void main(void)
 			for (j=0; (j<regmo_N_INIT) && (regmo.Init[j][0]); j++) {
 				printf("Init[%d] %s\n", j, regmo.Init[j]);
 			}
-		} else 
+		} else
 			printf("err: %d, can't get info on key %d\n", err, keys[i]);
 	}
-					
+
 }
 #endif

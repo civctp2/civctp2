@@ -1,30 +1,16 @@
-
-
-
-
-
-
-
-
-
-
-
 #ifndef __AUI_SCREEN_H__
 #define __AUI_SCREEN_H__
-
 
 #include "aui_base.h"
 #include "tech_wllist.h"
 
-
 class aui_Window;
-
 
 
 class aui_Screen : public aui_Base
 {
 public:
-	
+
 	aui_Screen(
 		AUI_ERRCODE *retval,
 		uint32 id );
@@ -49,5 +35,4 @@ protected:
 	tech_WLList<aui_Window *> *m_tempWindowList;
 };
 
-
-#endif 
+#endif

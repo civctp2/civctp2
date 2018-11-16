@@ -1,16 +1,3 @@
-
-
-
-
-
-
-
-
-
-
-
- 
-
 #ifdef HAVE_PRAGMA_ONCE
 #pragma once
 #endif
@@ -43,8 +30,8 @@ RECT	textutils_CenterText(aui_Surface *pSurface, const MBCHAR *pString,
 
 void	textutils_AddFont(const MBCHAR *szFileName);
 void	textutils_RemoveFont(const MBCHAR *szFileName);
-HFONT	textutils_CreateFont(aui_Surface *pSurface, const MBCHAR *szFaceName, 
-						   sint32 iDeciPtHeight, sint32 iDeciPtWidth, 
+HFONT	textutils_CreateFont(aui_Surface *pSurface, const MBCHAR *szFaceName,
+						   sint32 iDeciPtHeight, sint32 iDeciPtWidth,
 						   sint32 iAttributes, BOOL fLogRes);
 
 void	textutils_SelectFont(HFONT hFont);

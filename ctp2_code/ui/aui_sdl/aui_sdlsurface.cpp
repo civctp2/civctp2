@@ -57,7 +57,7 @@ aui_SDLSurface::aui_SDLSurface(
             {
 	    m_allocated = takeOwnership;
             }
-	
+
 	//just checking (fmt->Gmask >> fmt->Gshift == 0x3F) should be enough
         //but save is save...
 	if ((fmt->Rmask >> fmt->Rshift == 0x1F) && (fmt->Gmask >> fmt->Gshift == 0x3F) && (fmt->Bmask >> fmt->Bshift == 0x1F)) {
@@ -74,14 +74,12 @@ aui_SDLSurface::aui_SDLSurface(
 }
 
 
-
 AUI_ERRCODE aui_SDLSurface::InitCommon( void )
 {
 	m_lpdds = NULL;
 
 	return AUI_ERRCODE_OK;
 }
-
 
 
 aui_SDLSurface::~aui_SDLSurface()
@@ -96,20 +94,18 @@ aui_SDLSurface::~aui_SDLSurface()
 }
 
 
-
 uint32 aui_SDLSurface::SetChromaKey( uint32 color ) {
     int hr = SDL_SetColorKey(m_lpdds, SDL_SRCCOLORKEY, color); //|SDL_RLEACCEL ?
     //hr == 0 if succeded!
     //printf("%s L%d: SDL_SRCCOLORKEY set to %#X\n", __FILE__, __LINE__, color);
-    
+
     if ( hr == 0 )
         return aui_Surface::SetChromaKey( color ); //sets aui_Surface.m_chromaKey and returns last value!
-    
+
     //return AUI_ERRCODE_OK;  //this is not sensible, should retrun last color key!?!
     printf("%s L%d: SDL_SRCCOLORKEY setting failed!\n", __FILE__, __LINE__);
     return (uint32)-1; //better?
     }
-
 
 
 BOOL aui_SDLSurface::IsOK( void ) const
@@ -120,7 +116,7 @@ BOOL aui_SDLSurface::IsOK( void ) const
 
 
 
-AUI_ERRCODE aui_SDLSurface::Lock( RECT *rect, LPVOID *buffer, DWORD flags ){ 
+AUI_ERRCODE aui_SDLSurface::Lock( RECT *rect, LPVOID *buffer, DWORD flags ){
 
     AUI_ERRCODE errcode = AUI_ERRCODE_OK;
 
@@ -165,6 +161,5 @@ AUI_ERRCODE aui_SDLSurface::Unlock( LPVOID buffer )
 
 	return errcode;
 }
-
 
 #endif

@@ -1,4 +1,3 @@
-
 #ifndef NETWORK_EVENT_H__
 #define NETWORK_EVENT_H__
 

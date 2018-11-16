@@ -1,21 +1,8 @@
-
-
-
-
-
-
-
-
-
-
-
 #ifndef __AUI_SOUND_H__
 #define __AUI_SOUND_H__
 
-
 #include "aui_base.h"
 #include "aui_memmap.h"
-
 
 
 class aui_SoundFormat : public aui_FileFormat
@@ -32,7 +19,6 @@ public:
 protected:
 	uint8 *m_data;
 };
-
 
 
 class aui_WavSoundFormat : public aui_SoundFormat
@@ -67,8 +53,8 @@ public:
 		char *fileName,
 		float x,
 		float y,
-		float z ) { return AUI_ERRCODE_OK; } 
-	virtual AUI_ERRCODE Load( void );	
+		float z ) { return AUI_ERRCODE_OK; }
+	virtual AUI_ERRCODE Load( void );
 	virtual AUI_ERRCODE Unload ( void );
 	virtual void Play( void ) {}
 	virtual void Stop( void ) {}
@@ -85,7 +71,7 @@ protected:
 	aui_SoundFormat *m_format;
 	uint8 *m_data;
 	size_t m_size;
-}; 
+};
 
 
 
@@ -108,5 +94,4 @@ protected:
 	void SetSoundProperties( void ) {}
 };
 
-
-#endif 
+#endif

@@ -1,4 +1,4 @@
-/* 
+/*
 Copyright (C) 1995-2001 Activision, Inc.
 
 This library is free software; you can redistribute it and/or
@@ -23,7 +23,7 @@ Foundation, Inc., 59 Temple Place, Suite 330, Boston, MA  02111-1307  USA
  * Copyright (C) 1992-1994 Novell, Inc.
  * All rights reserved.
  */
- 
+
 #ifndef __SAP_INTERNAL__
 #define __SAP_INTERNAL__
 

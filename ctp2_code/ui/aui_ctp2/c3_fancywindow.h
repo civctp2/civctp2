@@ -10,14 +10,14 @@
 //
 // THIS FILE IS NOT GENERATED OR SUPPORTED BY ACTIVISION.
 //
-// This material has been developed at apolyton.net by the Apolyton CtP2 
+// This material has been developed at apolyton.net by the Apolyton CtP2
 // Source Code Project. Contact the authors at ctp2source@apolyton.net.
 //
 //----------------------------------------------------------------------------
 //
 // Compiler flags
-// 
-// _MSC_VER		
+//
+// _MSC_VER
 // - Use Microsoft C++ extensions when set.
 //
 //----------------------------------------------------------------------------
@@ -36,15 +36,13 @@
 #ifndef __C3_FANCYWINDOW_H__
 #define __C3_FANCYWINDOW_H__
 
-
 #include "aui_ldl.h"
 #include "c3window.h"
 #include "c3_button.h"
 
 class c3_Static;
 
-
-enum C3_FANCYBORDER { 
+enum C3_FANCYBORDER {
 	C3_FANCYBORDER_TL = 0,
 	C3_FANCYBORDER_TR,
 	C3_FANCYBORDER_TOP
@@ -52,8 +50,7 @@ enum C3_FANCYBORDER {
 
 #define k_NUM_C3_FANCYBORDERS ( C3_FANCYBORDER_TOP + 1 )
 
-
-class c3_FancyWindow : public C3Window 
+class c3_FancyWindow : public C3Window
 {
 public:
 	c3_FancyWindow(
@@ -70,7 +67,6 @@ public:
 	virtual ~c3_FancyWindow();
 	virtual AUI_ERRCODE Resize( sint32 width, sint32 height );
 
-	
 	void BringBorderToTop();
 	AUI_ERRCODE AddBordersToUI();
 	AUI_ERRCODE RemoveBordersFromUI();
@@ -89,11 +85,11 @@ protected:
     virtual void	MouseLDragAway(aui_MouseEvent * data);
 
 private:
-	
+
 	C3Window *m_border[k_NUM_C3_FANCYBORDERS];
-	
+
 	POINT	m_offset[k_NUM_C3_FANCYBORDERS];
-	
+
 	POINT	m_originalDimensions;
 	void NullBorders() { for(uint32 i =0; i< k_NUM_C3_FANCYBORDERS; i++) m_border[i]=NULL; }
 
@@ -106,7 +102,7 @@ private:
 
 
 
-enum C3_FANCYBORDER2 { 
+enum C3_FANCYBORDER2 {
 	C3_FANCYBORDER2_TL = 0,
 	C3_FANCYBORDER2_TR,
 	C3_FANCYBORDER2_TOP
@@ -114,8 +110,7 @@ enum C3_FANCYBORDER2 {
 
 #define k_NUM_C3_FANCYBORDERS2 ( C3_FANCYBORDER2_TOP + 1 )
 
-
-class c3_FancyWindow2 : public C3Window 
+class c3_FancyWindow2 : public C3Window
 {
 public:
 	c3_FancyWindow2(
@@ -131,7 +126,6 @@ public:
 
 	virtual ~c3_FancyWindow2();
 
-	
 	void BringBorderToTop();
 	AUI_ERRCODE AddBordersToUI();
 	AUI_ERRCODE RemoveBordersFromUI();
@@ -142,11 +136,10 @@ public:
 	c3_Button	*Ok( void ) { return m_ok; }
 
 private:
-	
-	
-	
+
+
 	C3Window *m_border[k_NUM_C3_FANCYBORDERS2];
-	
+
 	POINT	m_offset[k_NUM_C3_FANCYBORDERS2];
 	void NullBorders() { for(uint32 i =0; i< k_NUM_C3_FANCYBORDERS; i++) m_border[i]=NULL; }
 
@@ -156,5 +149,4 @@ private:
 	c3_Button	*m_ok;
 };
 
-
-#endif 
+#endif

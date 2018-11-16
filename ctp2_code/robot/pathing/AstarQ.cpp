@@ -1,16 +1,14 @@
-
 #include "c3.h"
-
 
 
 AstarQueue::AstarQueue()
 {
-	head = NULL; 
+	head = NULL;
 }
 
 void AstarQueue::Enqueue(AstarPoint *node)
 {
-	AstarPoint *tmp=NULL; 
+	AstarPoint *tmp=NULL;
 
 
 
@@ -38,20 +36,19 @@ void AstarQueue::Enqueue(AstarPoint *node)
 
 AstarPoint *AstarQueue::Dequeue()
 {
-	AstarPoint *tmp ; 
+	AstarPoint *tmp ;
 
 
-
-	return tmp; 
+	return tmp;
 
 }
 
 sint32 AstarQueue::Remove(const AstarPoint *node)
 
 {
-    
-    AstarPoint *tmp = NULL; 
-    sint32 searching = FALSE; 
+
+    AstarPoint *tmp = NULL;
+    sint32 searching = FALSE;
 
 
 
@@ -72,6 +69,3 @@ sint32 AstarQueue::Remove(const AstarPoint *node)
 
     return searching;
 }
-
-
-

@@ -1,23 +1,9 @@
-
-
-
-
-
-
-
-
-
-
-
-
 #include "c3.h"
-
 
 #include "aui.h"
 #include "aui_uniqueid.h"
 #include "aui_ldl.h"
 #include "c3ui.h"
-
 
 #include "background.h"
 #include "statuswindow.h"
@@ -25,7 +11,6 @@
 #include "statswindow.h"
 
 #include "chatbox.h"
-
 
 #include "network.h"
 
@@ -41,7 +26,6 @@
 
 #include "bset.h"
 
-
 #include "profileDB.h"
 
 #include "director.h"
@@ -49,12 +33,9 @@
 #include "screenmanager.h"
 extern ScreenManager	*g_screenManager;
 
-
 extern Director			*g_director;
 
-
 Background				*g_background = NULL;
-
 
 void DumpSpanList(aui_DirtyList *list);
 
@@ -76,7 +57,7 @@ extern RECT				g_backgroundViewport;
 
 #ifdef _DEBUG
 #include "DataCheck.h"
-extern DataCheck		*g_dataCheck; 
+extern DataCheck		*g_dataCheck;
 #endif
 
 extern int sprite_Update(aui_Surface *surf);
@@ -91,27 +72,27 @@ sint32 backgroundWin_Initialize(bool fullscreen)
 {
 	AUI_ERRCODE errcode;
 
-	if ( g_background ) return 0; 
+	if ( g_background ) return 0;
 
-	
-	
-	
-	
+
+
+
+
 
 	sint32 backgroundWidth = g_ScreenWidth + 5 * k_TILE_GRID_WIDTH / 2;
-	
+
 	sint32 controlPanelHeight=0;
 
 	if (!fullscreen)
 	{
-		if (g_ScreenWidth < 1024) 
+		if (g_ScreenWidth < 1024)
 		{
-			
+
 			controlPanelHeight = 100;
-		} 
-		else 
+		}
+		else
 		{
-			
+
 			controlPanelHeight = 150;
 		}
 	}
@@ -134,9 +115,9 @@ sint32 backgroundWin_Initialize(bool fullscreen)
 		backgroundHeight += heightAdjust;
 	}
 
-	
-	
-	
+
+
+
 	SetRect(
 		&g_backgroundViewport,
 		k_TILE_GRID_WIDTH,
@@ -144,7 +125,6 @@ sint32 backgroundWin_Initialize(bool fullscreen)
 		backgroundWidth - widthAdjust - 3 * k_TILE_GRID_WIDTH / 2,
 		backgroundHeight - heightAdjust - k_TILE_GRID_HEIGHT );
 
-	
 	g_background = new Background(
 		&errcode,
 		k_ID_BACKGROUND,
@@ -164,7 +144,7 @@ sint32 backgroundWin_Initialize(bool fullscreen)
 
 sint32 backgroundWin_Cleanup( void )
 {
-	if ( !g_background ) return 0; 
+	if ( !g_background ) return 0;
 
 	g_c3ui->RemoveWindow( g_background->Id() );
 	delete g_background;
@@ -186,34 +166,29 @@ AUI_ERRCODE background_draw_handler(LPVOID bg)
 	mouse = g_c3ui->TheMouse();
 	if (mouse == NULL) return AUI_ERRCODE_INVALIDPARAM;
 
-	
-	
-	
+
+
+
 	if ( !g_tiledMap ) return AUI_ERRCODE_INVALIDPARAM;
 
-	
 	if (g_modalWindow > 0) {
-		
+
 			g_screenManager->LockSurface(surface);
 			g_tiledMap->DrawChatText();
 			g_screenManager->UnlockSurface();
-		
+
 		return AUI_ERRCODE_OK;
 	}
 
 	Assert(g_c3ui);
 	if (!g_c3ui) return AUI_ERRCODE_INVALIDPARAM;
 
-	
 	g_tiledMap->UpdateMixFromMap(surface);
 
-	
 	if ( g_theProfileDB->IsWaterAnim() ) g_tiledMap->DrawWater();
 
-	
 	g_theTradePool->Draw(surface);
 
-	
 	g_tiledMap->RepaintSprites(surface, g_tiledMap->GetMapViewRect(), false);
 
 	if(g_director) {
@@ -224,18 +199,15 @@ AUI_ERRCODE background_draw_handler(LPVOID bg)
 
 	pos.y = mouse->Y() - back->Y();
 
-	
 	g_tiledMap->DrawUnfinishedMove( surface );
 
-	if (pos.y < back->Height()) 
+	if (pos.y < back->Height())
 	{
-		
+
 		g_tiledMap->DrawHiliteMouseTile(surface);
 
-		
 		g_tiledMap->DrawLegalMove(surface);
 	}
-
 
 #ifdef _PLAYTEST
 	switch(g_debugOwner) {
@@ -268,20 +240,19 @@ AUI_ERRCODE background_draw_handler(LPVOID bg)
 			break;
         case k_DEBUG_OWNER_FRAME_RATE:
             DisplayFrame (surface);
-            break; 
+            break;
 		default:
 			break;
 	}
 #endif
 
-	
-	
-	
-	
+
+
+
+
 	g_tiledMap->CopyMixDirtyRects(back->GetDirtyList());
 
-	
-	
+
 	g_tiledMap->ClearMixDirtyRects();
 
 	return AUI_ERRCODE_OK;
@@ -313,4 +284,3 @@ void DumpSpanList(aui_DirtyList *list)
 
 	fclose(outFile);
 }
-

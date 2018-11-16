@@ -1,14 +1,11 @@
 #ifndef __AUI_BLITTER_H__
 #define __AUI_BLITTER_H__
 
-
 #include "aui_base.h"
-
 
 class aui_Surface;
 class aui_DirtyList;
 struct aui_SpanList;
-
 
 
 #define k_AUI_BLITTER_FLAG_COPY			0x00000001
@@ -16,7 +13,6 @@ struct aui_SpanList;
 #define k_AUI_BLITTER_FLAG_BLEND		0x00000004
 #define k_AUI_BLITTER_FLAG_STIPPLE		0x00000008
 #define k_AUI_BLITTER_FLAG_FAST			0x00000010
-
 
 #define k_AUI_BLITTER_FLAG_OUT			0x00010000
 #define k_AUI_BLITTER_FLAG_IN			0x00020000
@@ -30,15 +26,15 @@ aui_Stencil *aui_CreateStencil(aui_Surface *pSurface);
 class aui_Blitter : public aui_Base
 {
 public:
-	
+
 	aui_Blitter() {}
 	virtual ~aui_Blitter() {}
 
 
-	
-	
-	
-	
+
+
+
+
 
 	typedef AUI_ERRCODE (RobustBltFunc)(
 		aui_Surface *destSurf,
@@ -55,7 +51,6 @@ public:
 		RECT *srcRect,
 		uint32 flags );
 
-	
 	virtual RobustBltFunc Blt;
 
 	virtual NakedBltFunc Blt8To8;
@@ -63,10 +58,10 @@ public:
 	virtual NakedBltFunc Blt24To24;
 
 
-	
-	
-	
-	
+
+
+
+
 
 	typedef AUI_ERRCODE (RobustTileBltFunc)(
 		aui_Surface *destSurf,
@@ -86,7 +81,6 @@ public:
 		sint32 anchory,
 		uint32 flags );
 
-	
 	virtual RobustTileBltFunc TileBlt;
 
 	virtual NakedTileBltFunc TileBlt8To8;
@@ -94,12 +88,12 @@ public:
 	virtual NakedTileBltFunc TileBlt24To24;
 
 
-	
-	
-	
-	
-	
-	
+
+
+
+
+
+
 
 	typedef AUI_ERRCODE (RobustBevelBltFunc)(
 		aui_Surface *destSurf,
@@ -119,7 +113,6 @@ public:
 		sint32 lighty,
 		uint32 flags );
 
-	
 	virtual RobustBevelBltFunc BevelBlt;
 
 	virtual NakedBevelBltFunc BevelBlt8;
@@ -127,8 +120,8 @@ public:
 	virtual NakedBevelBltFunc BevelBlt24;
 
 
-	
-	
+
+
 
 	typedef AUI_ERRCODE (RobustColorBltFunc)(
 		aui_Surface *destSurf,
@@ -142,7 +135,6 @@ public:
 		uint32 color,
 		uint32 flags );
 
-	
 	virtual RobustColorBltFunc ColorBlt;
 
 	virtual NakedColorBltFunc ColorBlt8;
@@ -150,7 +142,6 @@ public:
 	virtual NakedColorBltFunc ColorBlt24;
 
 
-	
 	typedef AUI_ERRCODE (RobustColorStencilBltFunc)(
 		aui_Surface *destSurf,
 		RECT *destRect,
@@ -167,7 +158,6 @@ public:
 		uint32 color,
 		uint32 flags );
 
-	
 	virtual RobustColorStencilBltFunc ColorStencilBlt;
 
 	virtual NakedColorStencilBltFunc ColorStencilBlt8;
@@ -193,10 +183,10 @@ public:
 		aui_Stencil *stencil,
 		RECT *stencilRect);
 
-	
-	
-	
-	
+
+
+
+
 
 	typedef AUI_ERRCODE (RobustStretchBltFunc)(
 		aui_Surface *destSurf,
@@ -212,7 +202,6 @@ public:
 		RECT *srcRect,
 		uint32 flags );
 
-	
 	virtual RobustStretchBltFunc StretchBlt;
 
 	virtual NakedStretchBltFunc StretchBlt8To8;
@@ -220,7 +209,7 @@ public:
 	virtual NakedStretchBltFunc StretchBlt24To24;
 
 
-	
+
 
 	AUI_ERRCODE SpanBlt(
 		aui_Surface *destSurf,
@@ -239,5 +228,4 @@ public:
 		uint32 flags );
 };
 
-
-#endif 
+#endif

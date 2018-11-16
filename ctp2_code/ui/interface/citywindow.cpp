@@ -11,7 +11,7 @@
 //
 // THIS FILE IS NOT GENERATED OR SUPPORTED BY ACTIVISION.
 //
-// This material has been developed at apolyton.net by the Apolyton CtP2 
+// This material has been developed at apolyton.net by the Apolyton CtP2
 // Source Code Project. Contact the authors at ctp2source@apolyton.net.
 //
 //----------------------------------------------------------------------------
@@ -34,22 +34,22 @@
 //   manager and city manager, by Martin Gühmann.
 // - Turn display on the turn button under the image button is disabled for
 //   capitalization and infrastructure as well, by Martin Gühmann.
-// - Rush buy costs aren't shown anymore for capitalization and 
+// - Rush buy costs aren't shown anymore for capitalization and
 //   infrastructure, by Martin Gühmann.
 // - Rush buy costs aren't shown anymore for items that aren't at the front
 //   of the build queue, by Martin Gühmann.
 // - Turn count on the turn count button is now updated when another item is
 //   selected than the first item of the build queue, by Martin Gühmann.
-// - #01 Standardization of city selection and focus handling  
+// - #01 Standardization of city selection and focus handling
 //   (L. Hirth 6/2004)
 // - Net food and net production are now displayed insted of gross food and
-//   gross production. So it is done for science and gold. This helps the 
-//   player better to know how much food is needed, as a negative amount is 
+//   gross production. So it is done for science and gold. This helps the
+//   player better to know how much food is needed, as a negative amount is
 //   displayed if the city starves. - April 6th 2005 Martin Gühmann
 // - Added OptimizeSpecialists function for specialists optimisation option.
 //   - April 7th 2005 Martin Gühmann
 // - The Project method now updates also the sprite of the city to support
-//   new turns to next pop feature, when you change the specialist 
+//   new turns to next pop feature, when you change the specialist
 //   distribution, unfortunatly it does work as exspected.
 //   - April 23rd 2005 Martin Gühmann
 // - Added National Manager button and functions callback. - July 24th 2005 Martin Gühmann
@@ -134,13 +134,11 @@ extern ProjectFile                  *g_GreatLibPF;
 #include "AICause.h"	// CAUSE_NEW_ARMY_GROUPING, CAUSE_REMOVE_ARMY_GROUPING
 #include "ArmyPool.h"	// g_armyPool
 
-
 static CityWindow                   *s_cityWindow = NULL;
 extern C3UI                         *g_c3ui;
 
 static MBCHAR                       *s_cityWindowBlock = "CityWindow";
 static MBCHAR                       *s_cityStatsBlock = "CityStatisticsWindow";
-
 
 static sint32 s_isBuilding = 1;
 static sint32 s_isWonder = 1;
@@ -202,24 +200,23 @@ CityWindow::CityWindow(AUI_ERRCODE *err)
 	Assert(*err == AUI_ERRCODE_OK);
 
 	m_popSpinners[POP_ENTERTAINER] = (ctp2_Spinner *)aui_Ldl::GetObject(s_cityWindowBlock, "Tabs.Specialists.TabPanel.WorkerBox.EntertainersSpinner");
-	m_popSpinners[POP_ENTERTAINER]->SetSpinnerCallback(CityWindow::WorkerSpinnerCallback, 
+	m_popSpinners[POP_ENTERTAINER]->SetSpinnerCallback(CityWindow::WorkerSpinnerCallback,
 													   m_popSpinners[POP_ENTERTAINER]);
 
-
 	m_popSpinners[POP_SCIENTIST] = (ctp2_Spinner *)aui_Ldl::GetObject(s_cityWindowBlock, "Tabs.Specialists.TabPanel.WorkerBox.ScientistsSpinner");
-	m_popSpinners[POP_SCIENTIST]->SetSpinnerCallback(CityWindow::WorkerSpinnerCallback, 
+	m_popSpinners[POP_SCIENTIST]->SetSpinnerCallback(CityWindow::WorkerSpinnerCallback,
 													 m_popSpinners[POP_SCIENTIST]);
 
 	m_popSpinners[POP_FARMER] = (ctp2_Spinner *)aui_Ldl::GetObject(s_cityWindowBlock, "Tabs.Specialists.TabPanel.WorkerBox.FarmersSpinner");
-	m_popSpinners[POP_FARMER]->SetSpinnerCallback(CityWindow::WorkerSpinnerCallback, 
+	m_popSpinners[POP_FARMER]->SetSpinnerCallback(CityWindow::WorkerSpinnerCallback,
 												  m_popSpinners[POP_FARMER]);
 
 	m_popSpinners[POP_LABORER] = (ctp2_Spinner *)aui_Ldl::GetObject(s_cityWindowBlock, "Tabs.Specialists.TabPanel.WorkerBox.LaborersSpinner");
-	m_popSpinners[POP_LABORER]->SetSpinnerCallback(CityWindow::WorkerSpinnerCallback, 
+	m_popSpinners[POP_LABORER]->SetSpinnerCallback(CityWindow::WorkerSpinnerCallback,
 												   m_popSpinners[POP_LABORER]);
 
 	m_popSpinners[POP_MERCHANT] = (ctp2_Spinner *)aui_Ldl::GetObject(s_cityWindowBlock, "Tabs.Specialists.TabPanel.WorkerBox.MerchantsSpinner");
-	m_popSpinners[POP_MERCHANT]->SetSpinnerCallback(CityWindow::WorkerSpinnerCallback, 
+	m_popSpinners[POP_MERCHANT]->SetSpinnerCallback(CityWindow::WorkerSpinnerCallback,
 													m_popSpinners[POP_MERCHANT]);
 
 	*err = aui_Ldl::SetActionFuncAndCookie(s_cityWindowBlock, "Tabs.QueueTab.TabPanel.ItemDescription", CityWindow::HyperLink, NULL);
@@ -250,7 +247,7 @@ CityWindow::CityWindow(AUI_ERRCODE *err)
 	*err = aui_Ldl::SetActionFuncAndCookie(s_cityWindowBlock, "Tabs.QueueTab.TabPanel.RushBuyButton", CityWindow::Buy, NULL);
 	Assert(*err == AUI_ERRCODE_OK);
 	*err = aui_Ldl::SetActionFuncAndCookie(s_cityWindowBlock, "Tabs.InventoryTab.TabPanel.SellButton", CityWindow::Sell, NULL);
-	
+
 
 
 
@@ -279,7 +276,7 @@ CityWindow::CityWindow(AUI_ERRCODE *err)
 	m_globalScience = (ctp2_Static *)aui_Ldl::GetObject(s_cityWindowBlock, "Globals.ScienceValue");
 	m_globalTrade = (ctp2_Static *)aui_Ldl::GetObject(s_cityWindowBlock, "Globals.TradeValue");
 	m_globalPopulation = (ctp2_Static *)aui_Ldl::GetObject(s_cityWindowBlock, "Globals.PopulationValue");
-	
+
 	ctp2_Static *efficiencyBar = (ctp2_Static *)aui_Ldl::GetObject(s_cityWindowBlock, "Tabs.Specialists.TabPanel.EfficiencyBar");
 	if(efficiencyBar) {
 		efficiencyBar->SetDrawCallbackAndCookie(CityWindow::DrawEfficiencyBar, NULL);
@@ -294,7 +291,7 @@ CityWindow::CityWindow(AUI_ERRCODE *err)
 	Assert(dd);
 	if(dd) {
 		dd->Clear();
-		
+
 		dd->SetWindowSize(g_theBuildListSequenceDB->NumRecords() * 22);
 
 		sint32 i;
@@ -323,7 +320,6 @@ CityWindow::CityWindow(AUI_ERRCODE *err)
 	m_queueList = (ctp2_ListBox *)aui_Ldl::GetObject(s_cityWindowBlock, "Tabs.QueueTab.TabPanel.List");
 	m_inventoryList = (ctp2_ListBox *)aui_Ldl::GetObject(s_cityWindowBlock, "Tabs.InventoryTab.TabPanel.List");
 
-	
 	m_queueList->SetForceSelect(TRUE);
 	m_inventoryList->SetForceSelect(TRUE);
 
@@ -332,7 +328,6 @@ CityWindow::CityWindow(AUI_ERRCODE *err)
 	m_happinessList = (ctp2_ListBox *)aui_Ldl::GetObject(s_cityWindowBlock, "Tabs.Statistics.TabPanel.HappinessList");
 	Assert(m_happinessList);
 
-	
 	m_pollutionList->SetAbsorbancy(FALSE);
 	m_happinessList->SetAbsorbancy(FALSE);
 
@@ -341,10 +336,9 @@ CityWindow::CityWindow(AUI_ERRCODE *err)
 
 	aui_Ldl::SetActionFuncAndCookie(s_cityWindowBlock, "Tabs.QueueTab", BuildTabCallback, (void *)CW_PANEL_BUILD);
 	aui_Ldl::SetActionFuncAndCookie(s_cityWindowBlock, "Tabs.InventoryTab", BuildTabCallback, (void *)CW_PANEL_INVENTORY);
-	
+
 	*err = aui_Ldl::SetActionFuncAndCookie(s_cityWindowBlock, "ShowStatisticsButton", ShowStatistics, NULL);
 	Assert(*err == AUI_ERRCODE_OK);
-
 
 	sint32 x,y;
 	sint32 unitButton = 0;
@@ -353,13 +347,13 @@ CityWindow::CityWindow(AUI_ERRCODE *err)
 			char buf[256];
 			sprintf(buf, "Tabs.Units.TabPanel.UnitButtons.b%c%c.IconBorder.Button", char(x + '0'), char(y + '0'));
 			m_unitButtons[unitButton] = (ctp2_Button *)aui_Ldl::GetObject(s_cityWindowBlock, buf);
-			Assert(m_unitButtons[unitButton]);			
+			Assert(m_unitButtons[unitButton]);
 			m_unitId[unitButton] = 0;
 			if(m_unitButtons[unitButton]) {
 				m_unitButtons[unitButton]->Enable(FALSE);
 				m_unitButtons[unitButton]->SetActionFuncAndCookie(UnitButtonCallback, (void *)unitButton);
 			}
-			
+
 			unitButton++;
 		}
 	}
@@ -378,7 +372,6 @@ CityWindow::CityWindow(AUI_ERRCODE *err)
 	m_unhappyIcon = g_c3ui->LoadImage("updi43.tga");
 }
 
-
 //----------------------------------------------------------------------------
 //
 // Name       : CityWindow::~CityWindow
@@ -391,12 +384,12 @@ CityWindow::CityWindow(AUI_ERRCODE *err)
 //
 // Returns    : -
 //
-// Remark(s)  : - Member pointer variables that have been initialised with 
+// Remark(s)  : - Member pointer variables that have been initialised with
 //                GetObject are references, and do not have to be deleted.
 //              - Member pointer variables that have been initialised with
-//                BuildHierarchyFromRoot have to be deleted with 
+//                BuildHierarchyFromRoot have to be deleted with
 //                DeleteHierarchyFromRoot.
-//              - Containers have to be cleared, but setting member variables 
+//              - Containers have to be cleared, but setting member variables
 //                (to NULL) *in a destructor* is a waste of time.
 //
 //----------------------------------------------------------------------------
@@ -422,7 +415,7 @@ CityWindow::~CityWindow()
 		m_queueList->Clear();
 	}
 
-	ctp2_DropDown *	const	dropdown	= 
+	ctp2_DropDown *	const	dropdown	=
 		reinterpret_cast<ctp2_DropDown *>
 			(aui_Ldl::GetObject(s_cityWindowBlock, "GovernorBox.Pulldown"));
 	if (dropdown)			// container + reference
@@ -441,18 +434,14 @@ CityWindow::~CityWindow()
 	}
 }
 
-
 AUI_ERRCODE CityWindow::Initialize()
 {
-	
-	
+
 	workwin_Initialize();
 
-	
 	if(s_cityWindow)
 		return AUI_ERRCODE_OK;
 
-	
 	AUI_ERRCODE err = AUI_ERRCODE_OK;
 	s_cityWindow = new CityWindow(&err);
 
@@ -471,8 +460,7 @@ AUI_ERRCODE CityWindow::Cleanup()
 AUI_ERRCODE CityWindow::Display(CityData *city)
 {
 	if(g_network.IsClient() && g_network.GetSensitiveUIBlocked()) {
-		
-		
+
 		return AUI_ERRCODE_OK;
 	}
 
@@ -480,18 +468,17 @@ AUI_ERRCODE CityWindow::Display(CityData *city)
 		Initialize();
 
 	Assert(s_cityWindow);
-	
+
 	if(city)
 		s_cityWindow->SetCity(city);
 	else {
 		if(g_player[g_selected_item->GetVisiblePlayer()]->m_all_cities->Num() < 1) {
-			
+
 			return AUI_ERRCODE_OK;
 		}
 		s_cityWindow->SetCity(g_player[g_selected_item->GetVisiblePlayer()]->m_all_cities->Access(0).CD());
 	}
 
-	
 	AUI_ERRCODE err = g_c3ui->AddWindow(s_cityWindow->m_window);
 	Assert(err == AUI_ERRCODE_OK);
 	if(err != AUI_ERRCODE_OK)
@@ -515,7 +502,7 @@ AUI_ERRCODE CityWindow::Display(CityData *city)
 
 AUI_ERRCODE CityWindow::Hide()
 {
-	
+
 	if(!s_cityWindow)
 		return AUI_ERRCODE_OK;
 
@@ -527,7 +514,7 @@ AUI_ERRCODE CityWindow::Hide()
 	}
 
 	return g_c3ui->RemoveWindow(s_cityWindow->m_window->Id());
-	
+
 }
 
 CityData *CityWindow::GetCityData(const Unit &city)
@@ -540,20 +527,18 @@ CityData *CityWindow::GetCityData(const Unit &city)
 		s_cityWindow->m_cities = new PointerList<CityData>;
 	}
 
-	
 	if(!g_c3ui->GetWindow(s_cityWindow->m_window->Id()))
 		CopyCitiesBack();
 
 	PointerList<CityData>::Walker walk(s_cityWindow->m_cities);
 	while(walk.IsValid()) {
 		if(walk.GetObj()->GetHomeCity().m_id == city.m_id) {
-			
+
 			return walk.GetObj();
 		}
 		walk.Next();
 	}
 
-	
 	s_cityWindow->m_cities->AddTail(new CityData(city.GetData()->GetCityData()));
 	Project(s_cityWindow->m_cities->GetTail());
 	return s_cityWindow->m_cities->GetTail();
@@ -562,7 +547,6 @@ CityData *CityWindow::GetCityData(const Unit &city)
 void CityWindow::SetCity(CityData *city)
 {
 	m_cityData = GetCityData(city->GetHomeCity().m_id);
-
 
 	Project();
 	Update();
@@ -577,7 +561,6 @@ void CityWindow::Project(CityData *cityData)
 {
 	sint32 gold;
 
-	
 	cityData->CollectResources();
 #if defined(NEW_RESOURCE_PROCESS)
 	cityData->ProcessResources();
@@ -612,30 +595,28 @@ void CityWindow::Update()
 
 	m_updating = true;
 
-	
 	ctp2_DropDown *cityDD = (ctp2_DropDown *)aui_Ldl::GetObject("CityWindow.CityList.Pulldown");
 	if(cityDD) {
 		UnitDynamicArray *cityList = g_player[g_selected_item->GetVisiblePlayer()]->m_all_cities;
 
 		cityDD->Clear();
 
-		
 		sint32 height = cityList->Num() * 22;
 		if(height > 330)
 			height = 330;
 
 		cityDD->SetWindowSize(height);
 
-		
 
-		
+
+
 		sint32 i, viewingIndex = 0;
 		for(i = 0; i < cityList->Num(); i++) {
 			ctp2_ListItem *item = (ctp2_ListItem *)aui_Ldl::BuildHierarchyFromRoot("cw_CityItem");
 			Assert(item);
 			if(item) {
 				ctp2_Static *label = (ctp2_Static *)item->GetChildByIndex(0);
-				label->SetText(cityList->Access(i).GetName());			
+				label->SetText(cityList->Access(i).GetName());
 				cityDD->AddItem(item);
 			}
 
@@ -643,8 +624,7 @@ void CityWindow::Update()
 				viewingIndex = i;
 
 		}
-		
-		
+
 
 		cityDD->SetSelectedItem(viewingIndex);
 	}
@@ -681,9 +661,9 @@ void CityWindow::Update()
 	}
 
 	sint32 i;
-   
+
 	for(i = 0; i < CW_RES_MAX; i++) {
-		
+
 		if(m_resVal[i]) {
 			switch(i) {
 				case CW_RES_FOOD:
@@ -709,7 +689,6 @@ void CityWindow::Update()
 	}
 	UpdateBuildTabs();
 
-	
 	ctp2_Button *button = (ctp2_Button *)aui_Ldl::GetObject(s_cityWindowBlock, "GovernorBox.Toggle");
 	Assert(button);
 
@@ -719,7 +698,7 @@ void CityWindow::Update()
 	if(button) {
 		if(m_cityData->GetUseGovernor()) {
 			button->SetText("X");
-			
+
 			if(dd) {
 				dd->SetSelectedItem(m_cityData->GetBuildListSequenceIndex());
 				dd->Enable(TRUE);
@@ -757,9 +736,8 @@ void CityWindow::Update()
 		m_happinessBar->ShouldDraw(TRUE);
 	}
 
-
 	if(m_happinessValue) {
-		sprintf(buf, "%d", static_cast<sint32>(m_cityData->GetHappiness()));	
+		sprintf(buf, "%d", static_cast<sint32>(m_cityData->GetHappiness()));
 		m_happinessValue->SetText(buf);
 	}
 
@@ -784,7 +762,7 @@ void CityWindow::Update()
 		sprintf(buf, "%d", m_cityData->GetNetCityProduction());
 		m_globalProduction->SetText(buf);
 	}
-				
+
 	if(m_globalPopulation) {
 		sprintf(buf, "%d", m_cityData->PopCount() * k_PEOPLE_PER_POPULATION + m_cityData->GetPartialPopulation());
 		m_globalPopulation->SetText(buf);
@@ -831,15 +809,14 @@ void CityWindow::Update()
 //----------------------------------------------------------------------------
 void CityWindow::UpdateBuildTabs()
 {
-	
+
 	ctp2_ListBox *lb = m_queueList;
 	Assert(lb);
 	if(lb) {
-		
+
 		PopulateQueueList(m_cityData, lb, "cw_InventoryListItem");
 	}
 
-	
 	ctp2_Button *turnCountButton = (ctp2_Button *)aui_Ldl::GetObject(s_cityWindowBlock, "Tabs.QueueTab.TabPanel.ItemProgress.IconBorder.IconButton.RadialButton");
 	MBCHAR buf[20];
 	if(turnCountButton) {
@@ -853,14 +830,13 @@ void CityWindow::UpdateBuildTabs()
 			strcpy(buf, "---");
 		turnCountButton->SetText(buf);
 	}
-	
+
 	lb = m_inventoryList;
 	Assert(lb);
 	if(lb) {
 		ClearInventoryUserData();
 		lb->Clear();
 
-		
 		sint32 i;
 		for(i = 0; i < g_theBuildingDB->NumRecords(); i++) {
 			if(m_cityData->GetImprovements() & ((uint64)1 << (uint64)i)) {
@@ -884,7 +860,6 @@ void CityWindow::UpdateBuildTabs()
 			}
 		}
 
-		
 		for(i = 0; i < g_theWonderDB->NumRecords(); i++) {
 			if(m_cityData->GetBuiltWonders() & ((uint64)1 << (uint64)i)) {
 				ctp2_ListItem *item;
@@ -893,11 +868,11 @@ void CityWindow::UpdateBuildTabs()
 				if(item) {
 					ctp2_Static *box = (ctp2_Static *)item->GetChildByIndex(0);
 					if(box) {
-						ctp2_Static *label = (ctp2_Static *)box->GetChildByIndex(0);				  
+						ctp2_Static *label = (ctp2_Static *)box->GetChildByIndex(0);
 						label->SetText(g_theWonderDB->Get(i)->GetNameText());
 
 						label = (ctp2_Static *)box->GetChildByIndex(1);
-						
+
 						if(label) {
 							label->SetText("");
 						}
@@ -920,7 +895,7 @@ void CityWindow::UpdateBuildTabs()
 //
 // Name       : CityWindow::UpdateBuildTabButtons
 //
-// Description: Enables disables the rush buy button and the sell 
+// Description: Enables disables the rush buy button and the sell
 //              building button.
 //
 // Parameters : -
@@ -943,7 +918,7 @@ void CityWindow::UpdateBuildTabButtons()
 		m_cityData->IsBuildingCapitalization()		||
 		m_cityData->IsBuildingInfrastructure()		||
 		(m_queueList->GetSelectedItemIndex() > 0)
-	   )	
+	   )
 	{
 		m_rushBuyButton->Enable(FALSE);
 	}
@@ -952,14 +927,14 @@ void CityWindow::UpdateBuildTabButtons()
 		m_rushBuyButton->Enable(TRUE);
 	}
 
-	if(m_cityData->SellingBuilding() >= 0 || 
+	if(m_cityData->SellingBuilding() >= 0 ||
 	   m_cityData->GetImprovements() == 0 ||
 	   !m_inventoryList->GetSelectedItem()) {
 		m_sellButton->Enable(FALSE);
 	} else {
 		m_sellButton->Enable(TRUE);
 	}
-		
+
 }
 
 //----------------------------------------------------------------------------
@@ -984,7 +959,7 @@ void CityWindow::UpdateCostsGives()
 	Assert(costsValue);
 	Assert(givesValue);
 
-	if(m_cityData->GetBuildQueue()->GetLen() < 1 
+	if(m_cityData->GetBuildQueue()->GetLen() < 1
 	|| m_cityData->AlreadyBoughtFront()
 	//Added by Martin Gühmann to disable the rush buy cost in the case of infrastructure and capitalization
 	|| m_cityData->GetBuildQueue()->GetHead()->m_category == k_GAME_OBJ_TYPE_CAPITALIZATION
@@ -998,14 +973,13 @@ void CityWindow::UpdateCostsGives()
 		sprintf(buf, "%d", m_cityData->GetOvertimeCost());
 		costsValue->SetText(buf);
 	}
-	
+
 	ctp2_Static *tabpanel = (ctp2_Static *)aui_Ldl::GetObject(s_cityWindowBlock, "Tabs.QueueTab.TabPanel");
 	Assert(tabpanel);
 	if(tabpanel) {
 		tabpanel->ShouldDraw(TRUE);
 	}
 
-	
 	ctp2_ListBox *lb = (ctp2_ListBox *)aui_Ldl::GetObject(s_cityWindowBlock, "Tabs.InventoryTab.TabPanel.List");
 
 	Assert(lb);
@@ -1033,7 +1007,6 @@ void CityWindow::UpdateCostsGives()
 	}
 }
 
-
 void CityWindow::SetValueBox(MBCHAR *component, sint32 val)
 {
 
@@ -1052,7 +1025,6 @@ void CityWindow::SetValueBox(MBCHAR *component, sint32 val)
 
 void CityWindow::UpdateInfoBoxes()
 {
-	
 
 
 
@@ -1063,7 +1035,8 @@ void CityWindow::UpdateInfoBoxes()
 
 
 
-	
+
+
 
 
 
@@ -1081,7 +1054,7 @@ void CityWindow::CopyCitiesBack()
 
 			PointerList<CityData>::Walker walk(s_cityWindow->m_cities);
 			while(walk.IsValid()) {
-				
+
 				if(EditQueue::EditingCity(walk.GetObj())) {
 					walk.Next();
 					continue;
@@ -1098,7 +1071,7 @@ void CityWindow::CopyCitiesBack()
 			if(g_nationalManagementDialog) {
 				g_nationalManagementDialog->Update();
 			}
-		}		
+		}
 	}
 }
 
@@ -1112,7 +1085,7 @@ void CityWindow::Close(aui_Control *control, uint32 action, uint32 data, void *c
 }
 
 void CityWindow::Cancel(aui_Control *control, uint32 action, uint32 data, void *cookie)
-{	
+{
 	if(action != AUI_BUTTON_ACTION_EXECUTE)
 		return;
 
@@ -1123,14 +1096,14 @@ void CityWindow::Cancel(aui_Control *control, uint32 action, uint32 data, void *
 		s_cityWindow->m_cityData = NULL;
 		Hide();
 	}
-	
+
 }
 
 void CityWindow::NextCity(aui_Control *control, uint32 action, uint32 data, void *cookie)
 {
 	if(action != AUI_BUTTON_ACTION_EXECUTE)
 		return;
-	
+
 	sint32 i;
 	if(!s_cityWindow)
 		return;
@@ -1141,7 +1114,7 @@ void CityWindow::NextCity(aui_Control *control, uint32 action, uint32 data, void
 		s_cityWindow->SetCity(cityList->Access(0).CD());
 		return;
 	}
-		
+
 	if(cityList->Num() < 2)
 		return;
 
@@ -1175,7 +1148,7 @@ void CityWindow::PreviousCity(aui_Control *control, uint32 action, uint32 data, 
 		s_cityWindow->SetCity(cityList->Access(0).CD());
 		return;
 	}
-		
+
 	if(cityList->Num() < 2)
 		return;
 
@@ -1233,7 +1206,7 @@ void CityWindow::Resource(aui_Control *control, uint32 action, uint32 data, void
 
 
 #if 0
-	
+
 	ctp2_Static *workerBox = (ctp2_Static *)aui_Ldl::GetObject("CityWindow.Tabs.Specialists.TabPanel.WorkerBox");
 	ctp2_Static *resourceBox = (ctp2_Static *)aui_Ldl::GetObject("CityWindow.ResourceMapBox");
 	Assert(workerBox);
@@ -1259,11 +1232,11 @@ void CityWindow::WorkerSpinnerCallback(aui_Control *control, uint32 action, uint
 		return;
 
 	ctp2_Spinner *spinner = (ctp2_Spinner *)cookie;
-	
+
 	Assert(s_cityWindow);
 	if(!s_cityWindow)
 		return;
-	
+
 	sint32 num = spinner->GetValueX();
 	Assert(num >= 0);
 	sint32 oldnum;
@@ -1282,7 +1255,7 @@ void CityWindow::WorkerSpinnerCallback(aui_Control *control, uint32 action, uint
 	} else {
 		Assert(FALSE);
 	}
-	
+
 	if(popType != POP_MAX) {
 		oldnum = s_cityWindow->m_cityData->SpecialistCount(popType);
 		sint32 delta = num - oldnum;
@@ -1349,11 +1322,11 @@ void CityWindow::ClearInventoryUserData()
 	{
 		for (int i = 0; i < m_inventoryList->NumItems(); ++i)
 		{
-			ctp2_ListItem * const	item	= 
+			ctp2_ListItem * const	item	=
 				static_cast<ctp2_ListItem *>(m_inventoryList->GetItemByIndex(i));
 			if (item)
 			{
-				InventoryItemInfo	* info	= 
+				InventoryItemInfo	* info	=
 					reinterpret_cast<InventoryItemInfo *>(item->GetUserData());
 				delete info;
 				item->SetUserData(NULL);
@@ -1361,7 +1334,6 @@ void CityWindow::ClearInventoryUserData()
 		} // for
 	}
 }
-
 
 void CityWindow::EditQueue(aui_Control *control, uint32 action, uint32 data, void *cookie)
 {
@@ -1373,9 +1345,9 @@ void CityWindow::EditQueue(aui_Control *control, uint32 action, uint32 data, voi
 
 	EditQueue::Display(s_cityWindow->m_cityData);
 
-		
-		
-		
+
+
+
 
 
 
@@ -1413,7 +1385,7 @@ void CityWindow::OpenNationalManager(aui_Control *control, uint32 action, uint32
 //
 // Name       : CityWindow::OptimizeSpecialists
 //
-// Description: Optimizes the specialists assignment. 
+// Description: Optimizes the specialists assignment.
 //
 // Parameters : aui_Control *control
 //              uint32 action
@@ -1476,7 +1448,7 @@ void CityWindow::BuildListSelect(aui_Control *control, uint32 action, uint32 dat
 	ctp2_ListBox *lb = s_cityWindow->m_queueList;
 
 	Assert(lb);
-	
+
 	if(lb) {
 		ctp2_ListItem *item = (ctp2_ListItem *)lb->GetSelectedItem();
 		SlicContext sc;
@@ -1487,28 +1459,27 @@ void CityWindow::BuildListSelect(aui_Control *control, uint32 action, uint32 dat
 		if(!item) {
 			SetItemDescription(NULL, sc, NULL, hyperTextBox, s_cityWindow->m_tabPanels[CW_PANEL_BUILD],
 							   imageButton);
-			
-			
+
 			s_cityWindow->UpdateBuildTabButtons();
 			return;
 		}
 
 		const IconRecord *icon = NULL;
-		
+
 		BuildNode *node = s_cityWindow->m_cityData->GetBuildQueue()->GetNodeByIndex(lb->GetSelectedItemIndex());
 		Assert(node);
 		if(node) {
 			switch(node->m_category) {
-				case k_GAME_OBJ_TYPE_UNIT: 
-					icon = g_theUnitDB->Get(node->m_type)->GetDefaultIcon(); 
+				case k_GAME_OBJ_TYPE_UNIT:
+					icon = g_theUnitDB->Get(node->m_type)->GetDefaultIcon();
 					sc.AddUnitRecord(node->m_type);
 					break;
-				case k_GAME_OBJ_TYPE_IMPROVEMENT: 
-					icon = g_theBuildingDB->Get(node->m_type)->GetDefaultIcon(); 
+				case k_GAME_OBJ_TYPE_IMPROVEMENT:
+					icon = g_theBuildingDB->Get(node->m_type)->GetDefaultIcon();
 					sc.AddBuilding(node->m_type);
 					break;
-				case k_GAME_OBJ_TYPE_WONDER: 
-					icon = g_theWonderDB->Get(node->m_type)->GetDefaultIcon(); 
+				case k_GAME_OBJ_TYPE_WONDER:
+					icon = g_theWonderDB->Get(node->m_type)->GetDefaultIcon();
 					sc.AddWonder(node->m_type);
 					break;
 				case k_GAME_OBJ_TYPE_CAPITALIZATION:
@@ -1536,7 +1507,7 @@ void CityWindow::BuildListSelect(aui_Control *control, uint32 action, uint32 dat
 					break;
 			}
 		}
-	
+
 		SetItemDescription(icon, sc, NULL, hyperTextBox, s_cityWindow->m_tabPanels[CW_PANEL_BUILD],
 						   imageButton);
 	}
@@ -1546,21 +1517,21 @@ void CityWindow::BuildListSelect(aui_Control *control, uint32 action, uint32 dat
 	ctp2_Button *	turnCountButton = (ctp2_Button *) aui_Ldl::GetObject
 		(s_cityWindowBlock, "Tabs.QueueTab.TabPanel.ItemProgress.IconBorder.IconButton.RadialButton");
 
-	if (lb && turnCountButton) 
+	if (lb && turnCountButton)
 	{
 		BuildNode *		node	= s_cityWindow->m_cityData->GetBuildQueue()->GetNodeByIndex
 									(lb->GetSelectedItemIndex());
-		sint32 const	turns	= (lb->GetSelectedItemIndex() == 0) 
+		sint32 const	turns	= (lb->GetSelectedItemIndex() == 0)
 						    	  ?	s_cityWindow->m_cityData->HowMuchLonger()
 							      : s_cityWindow->m_cityData->HowMuchLonger(node->m_cost);
 
 		//Added by Martin Gühmann to disable the turn count display for capitalization and infrastructure
 		MBCHAR buf[20];
-		if ((turns >= 0)											&& 
+		if ((turns >= 0)											&&
 			(turns < 0x7fffffff)									&&
 			(node->m_category != k_GAME_OBJ_TYPE_CAPITALIZATION)	&&
 			(node->m_category != k_GAME_OBJ_TYPE_INFRASTRUCTURE)
-		   )	
+		   )
 		{
 			sprintf(buf, "%d", turns);
 		}
@@ -1583,7 +1554,7 @@ void CityWindow::InventoryListSelect(aui_Control *control, uint32 action, uint32
 	ctp2_ListBox *lb = s_cityWindow->m_inventoryList;
 
 	Assert(lb);
-	
+
 	if(lb) {
 		ctp2_ListItem *item = (ctp2_ListItem *)lb->GetSelectedItem();
 		SlicContext sc;
@@ -1593,8 +1564,7 @@ void CityWindow::InventoryListSelect(aui_Control *control, uint32 action, uint32
 
 		if(!item) {
 			SetItemDescription(NULL, sc, NULL, hyperTextBox, s_cityWindow->m_tabPanels[CW_PANEL_INVENTORY], imageButton);
-			
-			
+
 			s_cityWindow->UpdateBuildTabButtons();
 			return;
 		}
@@ -1609,7 +1579,7 @@ void CityWindow::InventoryListSelect(aui_Control *control, uint32 action, uint32
 			icon = g_theWonderDB->Get(info->m_type)->GetDefaultIcon();
 			sc.AddWonder(info->m_type);
 		}
-		
+
 		SetItemDescription(icon, sc, NULL, hyperTextBox, s_cityWindow->m_tabPanels[CW_PANEL_INVENTORY], imageButton);
 	}
 	s_cityWindow->UpdateBuildTabButtons();
@@ -1620,7 +1590,6 @@ void CityWindow::Buy(aui_Control *control, uint32 action, uint32 data, void *coo
 	if(action != AUI_BUTTON_ACTION_EXECUTE)
 		return;
 
-	
 	s_cityWindow->m_cityData->AddBuyFront();
 	s_cityWindow->UpdateCostsGives();
 	s_cityWindow->UpdateBuildTabButtons();
@@ -1628,7 +1597,7 @@ void CityWindow::Buy(aui_Control *control, uint32 action, uint32 data, void *coo
 
 void CityWindow::Sell(aui_Control *control, uint32 action, uint32 data, void *cookie)
 {
-    
+
 	if(action != AUI_BUTTON_ACTION_EXECUTE)
 		return;
 
@@ -1641,7 +1610,7 @@ void CityWindow::Sell(aui_Control *control, uint32 action, uint32 data, void *co
 			if(!info->m_isBuilding) {
 				return;
 			}
-			
+
 			s_cityWindow->m_cityData->AddSellBuilding(info->m_type);
 			s_cityWindow->UpdateBuildTabButtons();
 		}
@@ -1651,7 +1620,7 @@ void CityWindow::Sell(aui_Control *control, uint32 action, uint32 data, void *co
 void CityWindow::HyperLink( aui_Control *control, uint32 action, uint32 data, void *cookie )
 {
 	if ( action != (uint32)CTP2_HYPERLINK_ACTION_EXECUTE ) return;
-	
+
 	ctp2_HyperLink *hl = ((ctp2_HyperTextBox *)control)->GetSelectedHyperLink();
 
 	if ( hl ) {
@@ -1666,7 +1635,6 @@ void CityWindow::CityList( aui_Control *control, uint32 action, uint32 data, voi
 
 	open_CityStatus();
 }
-
 
 //----------------------------------------------------------------------------
 //
@@ -1738,14 +1706,14 @@ void CityWindow::PopulateQueueList(CityData *cd, ctp2_ListBox *lb, char *itemBlo
 				|| bn->m_category == k_GAME_OBJ_TYPE_CAPITALIZATION)
 				{
 					strcpy(buf, "---");
-				} 
-				else 
+				}
+				else
 				{
 					sprintf(buf, "%d", turns);
 				}
 				turnstatic->SetText(buf);
 			}
-			
+
 			lb->AddItem(item);
 		}
 		walk.Next();
@@ -1764,7 +1732,7 @@ AUI_ERRCODE CityWindow::DrawGrowthBar(ctp2_Static *control,
 
 	RECT destRect = rect;
 	AUI_ERRCODE err;
-	
+
 	err = g_ui->TheBlitter()->ColorBlt(surface, &destRect, RGB(0,0,0), 0);
 
 	destRect.top += 2;
@@ -1783,7 +1751,6 @@ AUI_ERRCODE CityWindow::DrawGrowthBar(ctp2_Static *control,
 	if(overcrowding > 1)
 		overcrowding = 1;
 
-	
 	destRect.right = destRect.left + sint32((1.0 - cd->GetOvercrowdingCoefficient()) * double(width));
 	if(destRect.right > rect.right)
 		destRect.right = rect.right;
@@ -1792,9 +1759,8 @@ AUI_ERRCODE CityWindow::DrawGrowthBar(ctp2_Static *control,
 
 	if((cd->GetGrowthRate() > 0) && ((destRect.right - destRect.left) < width)) {
 		destRect.left = destRect.right;
-		
-		
-		
+
+
 		sint32 maxAbsoluteGrowthRate = g_theConstDB->GetMaxAbsoluteGrowthRate();
 		sint32 actualGrowthRate = cd->GetGrowthRate();
 		double growthRatio = 0;
@@ -1825,7 +1791,7 @@ AUI_ERRCODE CityWindow::DrawHappinessBar(ctp2_Static *control,
 
 	RECT destRect = rect;
 	AUI_ERRCODE err;
-	
+
 	err = g_ui->TheBlitter()->ColorBlt(surface, &destRect, RGB(0,0,0), 0);
 
 	destRect.top += 2;
@@ -1835,7 +1801,7 @@ AUI_ERRCODE CityWindow::DrawHappinessBar(ctp2_Static *control,
 
 	sint32 width = destRect.right - destRect.left;
 	CityData *cd = s_cityWindow->m_cityData;
-	
+
 	double happiness = cd->GetHappiness();
 	if(happiness > 100) happiness = 100;
 
@@ -1843,11 +1809,11 @@ AUI_ERRCODE CityWindow::DrawHappinessBar(ctp2_Static *control,
 
 	uint32 color;
 	if(happiness < g_theConstDB->GetRiotLevel()) {
-		color = RGB(255,0,0); 
+		color = RGB(255,0,0);
 	} else if(cd->IsCelebratingHappiness()) {
-		color = RGB(0,255,0); 
+		color = RGB(0,255,0);
 	} else {
-		color = RGB(255,255,0); 
+		color = RGB(255,255,0);
 	}
 	err = g_ui->TheBlitter()->ColorBlt(surface, &destRect, color, 0);
 	return err;
@@ -1866,9 +1832,9 @@ AUI_ERRCODE CityWindow::DrawEfficiencyBar(ctp2_Static *control,
 
 	RECT destRect = rect;
 	AUI_ERRCODE err;
-	
+
 	err = g_ui->TheBlitter()->ColorBlt(surface, &destRect, RGB(0,0,0), 0);
-	
+
 	destRect.top += 2;
 	destRect.bottom -= 2;
 	destRect.left += 2;
@@ -1899,7 +1865,7 @@ AUI_ERRCODE CityWindow::DrawBuildBar(ctp2_Static *control,
 
 	RECT destRect = rect;
 	AUI_ERRCODE err;
-	
+
 	err = g_ui->TheBlitter()->ColorBlt(surface, &destRect, RGB(0,0,0), 0);
 
 	destRect.top += 1;
@@ -1912,7 +1878,7 @@ AUI_ERRCODE CityWindow::DrawBuildBar(ctp2_Static *control,
 
 	double percentComplete = (cd->GetBuildQueue()->GetPercentCompleted(cd->GetStoredCityProduction())) / 100.0;
 	if(percentComplete < 0) {
-		
+
 		destRect.right = destRect.left;
 	} else {
 		destRect.right = destRect.left + sint32(double(width) * percentComplete);
@@ -1941,7 +1907,6 @@ void CityWindow::ShowStatistics(aui_Control *control, uint32 action, uint32 data
 	}
 }
 
-
 void CityWindow::UpdateResourceMap()
 {
 	if(g_resourceMap) {
@@ -1957,14 +1922,13 @@ void CityWindow::UpdateResourceMap()
 
 void CityWindow::UpdateAdviceText()
 {
-	ctp2_HyperTextBox *advice = 
+	ctp2_HyperTextBox *advice =
 		(ctp2_HyperTextBox *)aui_Ldl::GetObject(s_cityStatsBlock, "Advice");
 
 	Assert(advice);
 	if(advice == NULL)
 		return;
 
-	
 	if(m_cityData == NULL)
 		{
 			advice->SetHyperText("");
@@ -1974,10 +1938,9 @@ void CityWindow::UpdateAdviceText()
 	PLAYER_INDEX playerId = g_selected_item->GetVisiblePlayer();
 	const Governor & governor = Governor::GetGovernor(playerId);
 
-	StringId adviceId = 
+	StringId adviceId =
 		governor.GetCityBuildQueueAdvice(m_cityData);
-	
-	
+
 	if (adviceId < 0)
 		{
 			advice->SetHyperText("");
@@ -1986,8 +1949,7 @@ void CityWindow::UpdateAdviceText()
 
 	MBCHAR	strbuf[k_MAX_NAME_LEN];
 	SlicContext sc;
-	
-	
+
 	stringutils_Interpret(g_theStringDB->GetNameStr(adviceId),
 						  sc, strbuf);
 	advice->SetHyperText(strbuf);
@@ -2007,7 +1969,7 @@ void CityWindow::UpdateUnitButtons()
 	Cell *cell = g_theWorld->GetCell(pos);
 	sint32 i;
 	sint32 button = 0;
-		
+
 	for(i = 0; i < cell->GetNumUnits(); i++) {
 		Unit u = cell->AccessUnit(i);
 		Assert(u.IsValid());
@@ -2038,7 +2000,7 @@ void CityWindow::UpdateUnitButtons()
 
 void CityWindow::UpdateActivateButtons()
 {
-	
+
 	sint32 i;
 	for(i = 0; i < k_MAX_ARMY_SIZE; i++) {
 		if(m_unitButtons[i]->GetToggleState()) {
@@ -2048,7 +2010,6 @@ void CityWindow::UpdateActivateButtons()
 		}
 	}
 
-	
 	m_activateButton->Enable(FALSE);
 	m_disbandButton->Enable(FALSE);
 }
@@ -2069,12 +2030,11 @@ AUI_ERRCODE CityWindow::DrawResourceMap(ctp2_Static *control,
 	return AUI_ERRCODE_OK;
 }
 
-	
 void CityWindow::SetItemDescription(const IconRecord *icon, SlicContext &sc, ctp2_Static *imageBox, ctp2_HyperTextBox *hyperTextBox, aui_Region *parent, ctp2_Button *imageButton)
 {
 	Assert(imageBox || imageButton);
 	if(!imageBox && !imageButton) return;
-	
+
 	Assert(hyperTextBox);
 	if(!hyperTextBox) return;
 
@@ -2085,7 +2045,7 @@ void CityWindow::SetItemDescription(const IconRecord *icon, SlicContext &sc, ctp
 		} else {
 			strcpy(dammit, icon->GetLargeIcon());
 		}
-                
+
 		if(imageBox) {
 			imageBox->SetImage(dammit);
 			imageBox->ShouldDraw(TRUE);
@@ -2093,24 +2053,24 @@ void CityWindow::SetItemDescription(const IconRecord *icon, SlicContext &sc, ctp
 			imageButton->ExchangeImage(4, 0, dammit);
 			imageButton->ShouldDraw(TRUE);
 		}
-			
+
 		const char *statText = icon->GetStatText();
 		const char *descString = NULL;
 		char *allocatedText = NULL;
 		const char *gltext = NULL;
 		if(strrchr(statText, '.') &&
 		   (!(stricmp(strrchr(statText, '.'), ".txt")))) {
-			
+
 			MBCHAR *fileText;
 			size_t size;
 			fileText = (MBCHAR *)g_GreatLibPF->getData((char *)statText, &size, C3DIR_GL);
-			
+
 			if(fileText != NULL) {
 				allocatedText = new MBCHAR[size + 1];
 				memcpy(allocatedText, fileText, size * sizeof(MBCHAR));
 				allocatedText[size] = 0;
 			}
-			
+
 			g_GreatLibPF->freeData(fileText);
 		} else {
 			gltext = glutil_LoadText(statText, sc);
@@ -2119,7 +2079,7 @@ void CityWindow::SetItemDescription(const IconRecord *icon, SlicContext &sc, ctp
 		if(!allocatedText && !gltext) {
 			descString = g_theStringDB->GetNameStr(icon->GetStatText());
 		}
-		
+
 		Assert(descString || allocatedText || gltext);
 		MBCHAR interpText[2048];
 		if(descString) {
@@ -2132,11 +2092,11 @@ void CityWindow::SetItemDescription(const IconRecord *icon, SlicContext &sc, ctp
 		} else {
 			strcpy(interpText, icon->GetStatText());
 		}
-		
+
 		hyperTextBox->SetHyperText(interpText);
 	} else {
 		if(imageBox) {
-			imageBox->SetImage(NULL); 
+			imageBox->SetImage(NULL);
 			imageBox->ShouldDraw(TRUE);
 		} else if(imageButton) {
 			imageButton->ExchangeImage(4, 0, NULL);
@@ -2203,7 +2163,6 @@ void CityWindow::FillHappinessList()
 		if(amount < 0.1 && amount > -0.1)
 			continue;
 
-		
 
 		happies[numHappies].reason = (HAPPY_REASON)i;
 		happies[numHappies].amount = amount;
@@ -2221,9 +2180,7 @@ void CityWindow::FillHappinessList()
 
 	Assert(numUnhappies == 0);
 
-	
 	qsort((void *)happies, numHappies, sizeof(cw_HappyData), cw_compareHappyValues);
-	
 
 	m_happinessList->Clear();
 
@@ -2318,8 +2275,7 @@ AUI_ERRCODE CityWindow::DrawHappyIcons(ctp2_Static *control,
 								  RECT &rect,
 								  void *cookie )
 {
-	
-	
+
 #if defined(__LP64__)
 	sint32 amount = (sint64)cookie;
 #else
@@ -2387,20 +2343,20 @@ void CityWindow::FillPollutionList()
 		}
 	}
 
-	
-	
-	
+
+
+
 
 	MBCHAR interp[k_MAX_NAME_LEN];
 	ctp2_Static *label,*sublabel;
 
 	m_pollutionList->Clear();
 
-	ctp2_ListItem *allAbsItems[2 + 64]; 
+	ctp2_ListItem *allAbsItems[2 + 64];
 	ctp2_ListItem *allPercentItems[64];
 	sint32 numAbsItems = 0, numPercentItems = 0;
 
-	if (m_cityData->GetPopulationPollution()) 
+	if (m_cityData->GetPopulationPollution())
 	{
 		ctp2_ListItem *	item = (ctp2_ListItem *) aui_Ldl::BuildHierarchyFromRoot("cw_PollutionListItem");
 		if (item)
@@ -2416,7 +2372,7 @@ void CityWindow::FillPollutionList()
 		}
 	}
 
-	if (m_cityData->GetProductionPollution()) 
+	if (m_cityData->GetProductionPollution())
 	{
 		ctp2_ListItem * item = (ctp2_ListItem *) aui_Ldl::BuildHierarchyFromRoot("cw_PollutionListItem");
 		if (item)
@@ -2437,7 +2393,7 @@ void CityWindow::FillPollutionList()
 	{
 		if (m_cityData->HaveImprovement(i))
 		{
-			// For an improvement, there are 3 values that contribute to or 
+			// For an improvement, there are 3 values that contribute to or
 			// decrease the pollution:
 			// - an intrinsic (fixed) building pollution value
 			// - a modifier to the production pollution of the city
@@ -2448,7 +2404,7 @@ void CityWindow::FillPollutionList()
 			g_theBuildingDB->Get(i)->GetPollutionAmount(value);
 
 			// production pollution modifier
-			double	production_pollution_percent	= 0;	
+			double	production_pollution_percent	= 0;
 			g_theBuildingDB->Get(i)->GetProductionPollutionPercent(production_pollution_percent);
 			value += m_cityData->GetProductionPollution() * production_pollution_percent;
 
@@ -2479,7 +2435,6 @@ void CityWindow::FillPollutionList()
 		}
 	}
 
-	
 	qsort((void *)allAbsItems, numAbsItems, sizeof(ctp2_ListItem *), cw_comparePollutionItems);
 	qsort((void *)allPercentItems, numPercentItems, sizeof(ctp2_ListItem *), cw_comparePollutionItems);
 
@@ -2497,7 +2452,6 @@ void CityWindow::FillStatsLists()
 	FillHappinessList();
 	FillPollutionList();
 
-	
 	ctp2_Static *crimeBox = (ctp2_Static *)aui_Ldl::GetObject(s_cityWindowBlock, "Tabs.Statistics.TabPanel.Crime");
 	if(crimeBox) {
 		MBCHAR buf[k_MAX_NAME_LEN];
@@ -2508,7 +2462,7 @@ void CityWindow::FillStatsLists()
 
 void CityWindow::NotifyUnitChange()
 {
-	
+
 	if(!s_cityWindow) return;
 	if(!g_c3ui->GetWindow(s_cityWindow->m_window->Id())) return;
 
@@ -2523,16 +2477,13 @@ void CityWindow::NotifyBuildChange(CityData *city)
 	s_cityWindow->UpdateBuildTabs();
 }
 
-
 void CityWindow::DoneEditingQueue(CityData *cd)
 {
 	Assert(s_cityWindow);
 	if(!s_cityWindow) return;
 
-	
 	if(g_c3ui->GetWindow(s_cityWindow->m_window->Id()) != NULL) return;
 
-	
 	CopyCitiesBack();
 }
 
@@ -2576,7 +2527,7 @@ void CityWindow::ActivateUnitCallback(aui_Control *control, uint32 action, uint3
 										   GEV_DetrenchOrder,
 										   GEA_Army, u.GetArmy().m_id,
 										   GEA_End);
-				}				
+				}
 				s_cityWindow->m_unitButtons[b]->SetToggleState(false);
 			}
 		}
@@ -2611,7 +2562,7 @@ void CityWindow::DisbandQuery(bool result, void *ud)
 		{
 			if ((s_cityWindow->m_unitId[b] != 0) &&				 // box filled
 				s_cityWindow->m_unitButtons[b]->GetToggleState() // box selected
-			   )	
+			   )
 			{
 				Unit u(s_cityWindow->m_unitId[b]);
 				Assert(u.IsValid());
@@ -2624,10 +2575,10 @@ void CityWindow::DisbandQuery(bool result, void *ud)
 			}
 		} // for
 
-		// Perform the actual disbanding. 
-		g_gevManager->AddEvent(GEV_INSERT_Tail, 
+		// Perform the actual disbanding.
+		g_gevManager->AddEvent(GEV_INSERT_Tail,
 							   GEV_DisbandArmyOrder,
-							   GEA_Army, 
+							   GEA_Army,
 							   temp.m_id,
 							   GEA_End
 							  );
@@ -2660,7 +2611,6 @@ void CityWindow::DisbandUnitCallback(aui_Control *control, uint32 action, uint32
 		}
 	}
 
-	
 	Assert(FALSE);
 }
 
@@ -2669,7 +2619,6 @@ void CityWindow::NotifyCityCaptured(const Unit &c)
 	if(!s_cityWindow)
 		return;
 
-	
 	EditQueue::NotifyCityCaptured(c);
 
 	bool needToClose = false;

@@ -11,4 +11,3 @@ public:
 };
 
 #endif // __REACT_EVENT_H__
-

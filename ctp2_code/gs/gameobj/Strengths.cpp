@@ -10,13 +10,13 @@
 //
 // THIS FILE IS NOT GENERATED OR SUPPORTED BY ACTIVISION.
 //
-// This material has been developed at apolyton.net by the Apolyton CtP2 
+// This material has been developed at apolyton.net by the Apolyton CtP2
 // Source Code Project. Contact the authors at ctp2source@apolyton.net.
 //
 //----------------------------------------------------------------------------
 //
 // Compiler flags
-// 
+//
 //----------------------------------------------------------------------------
 //
 // Modifications from the original Activision code:
@@ -51,7 +51,7 @@ Strengths::Strengths(sint32 owner)
 		return;
 
 	sint32 const	curRound = NewTurnCount::GetCurrentRound();
-	
+
 	sint32 c, y;
 	for(y = 1; y < curRound; y++) {
 		for(c = 0; c < sint32(STRENGTH_CAT_MAX); c++) {
@@ -140,19 +140,19 @@ void Strengths::Calculate()
 
 sint32 Strengths::GetStrength(STRENGTH_CAT category)
 {
-	return m_strengthRecords[category].Num() 
+	return m_strengthRecords[category].Num()
 		   ? m_strengthRecords[category].GetLast()
 		   : 0;
 }
 
-sint32 Strengths::GetTurnStrength(STRENGTH_CAT category, sint32 turn) 
+sint32 Strengths::GetTurnStrength(STRENGTH_CAT category, sint32 turn)
 {
 	if (!m_strengthRecords[category].Num()) return 0;
-	
-	
-	
-	
-	
+
+
+
+
+
 	if (turn >= m_strengthRecords[category].Num()) return 0;
 
 	return m_strengthRecords[category][turn];

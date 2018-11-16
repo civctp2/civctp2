@@ -27,22 +27,22 @@ enum
 #define TOPTEN_LIST_SIZE	10
 
 class TopTen
-	{ 
+	{
 private :
-	
-	
-	
-	
 
-	
-	
-	
+
+
+
+
+
+
+
 	TopEntry m_biggestCities[TOPTEN_LIST_SIZE] ;
 
 	TopEntry m_happiestCities[TOPTEN_LIST_SIZE] ;
 
-	
-	
+
+
 
 	BOOL InsertCity(TopEntry *cityList, const Unit &c, const sint32 value, sint32 &pos) ;
 

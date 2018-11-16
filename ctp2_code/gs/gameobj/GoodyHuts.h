@@ -11,7 +11,7 @@
 //
 // THIS FILE IS NOT GENERATED OR SUPPORTED BY ACTIVISION.
 //
-// This material has been developed at apolyton.net by the Apolyton CtP2 
+// This material has been developed at apolyton.net by the Apolyton CtP2
 // Source Code Project. Contact the authors at ctp2source@apolyton.net.
 //
 //----------------------------------------------------------------------------
@@ -43,7 +43,7 @@
 
 class GoodyHut;
 
-enum GOODY 
+enum GOODY
 {
 	GOODY_BOGUS,
 	GOODY_GOLD,
@@ -72,7 +72,7 @@ class NetCellList;
 // Class declarations
 //----------------------------------------------------------------------------
 
-class GoodyHut 
+class GoodyHut
 {
 public:
 	GoodyHut();
@@ -84,7 +84,7 @@ public:
 
 private:
 //----------------------------------------------------------------------------
-// Do not change anything in the types or order of the following variable 
+// Do not change anything in the types or order of the following variable
 // declarations. Doing so will break reading in of save files.
 // See the Serialize implementation for more details.
 //----------------------------------------------------------------------------

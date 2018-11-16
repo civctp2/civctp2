@@ -1,4 +1,4 @@
-/* 
+/*
 Copyright (C) 1995-2001 Activision, Inc.
 
 This library is free software; you can redistribute it and/or
@@ -22,7 +22,7 @@ Foundation, Inc., 59 Temple Place, Suite 330, Boston, MA  02111-1307  USA
  (See server/servscor.c for server-side code, and score/score*.c for
  shared code.)
 
- If there is a connection to an internet game server 
+ If there is a connection to an internet game server
  (hGameServer != PLAYER_NONE), the scores are sent there
  whenever players leave.
  Otherwise, the scores are reported to the comm driver immediately
@@ -32,7 +32,7 @@ Foundation, Inc., 59 Temple Place, Suite 330, Boston, MA  02111-1307  USA
  right now.
 
  Scores are identified by the session id of the game, and the user id
- of each player.  
+ of each player.
  Scores are not reported for players that don't have user id's.
 -----------------------------------------------------------------------*/
 
@@ -51,7 +51,7 @@ Foundation, Inc., 59 Temple Place, Suite 330, Boston, MA  02111-1307  USA
 #include "eclock.h"
 
 /*----------------------------------------------------------------------
- Debugging routines. 
+ Debugging routines.
 ----------------------------------------------------------------------*/
 #ifdef _DEBUG
 static void dumpBuf(const char *buf, int len)
@@ -81,7 +81,7 @@ dp_result_t dpscore_client_init(dp_t *dp)
 	dptab_table_t *tab;
 	char key[dptab_KEY_MAXLEN];
 
-	ASSERTMEM();	
+	ASSERTMEM();
 	DPRINT(("dpscore_client_init: creating myscores table\n"));
 	/* Create outgoing scores table. */
 	key[0] = dp_KEY_MYSCORES;
@@ -118,7 +118,7 @@ dp_result_t dpscore_client_cleanup(dp_t *dp)
 	dptab_deleteTable(dp->dt, key, 1);
 	dp->myscoretab = NULL;  /* clear our quick access pointer */
 	ASSERTMEM();
-	
+
 	/* Delete incoming scores.  KLUDGE; only does one session type... */
 	/* Watch out- the entry in the publishers table contains a pointer
 	 * to this table.  Possible crash bug if a record comes in
@@ -174,7 +174,7 @@ dp_result_t dpscore_client_playerLeaving(dp_t *dp, dpid_t id)
 		/* If (local player), set SELFEXIT to show we're leaving */
 		/* We care because when local player leaves, we report on everyone */
 		/* Use same code as dpEnumPlayers to detect local player */
-		firstId = (dpid_t) (id & ~(dp_PLAYERS_PER_HOST-1));	
+		firstId = (dpid_t) (id & ~(dp_PLAYERS_PER_HOST-1));
 		flags = 0;
 		if (firstId == dp->firstId)
 			flags = scorerep_FLAGS_SELFEXIT;
@@ -243,10 +243,10 @@ DP_API dp_result_t dpReportScore(dp_t *dp, dpid_t id, long score)
 }
 
 /*-------------------------------------------------------------------------
- Begin a score report.  
+ Begin a score report.
  Flag must be zero.
  This should only be called at the end of the game (but before dpClose).
- 
+
  Call dpReportScoreStart before calling dpReportScore2, then
  call dpReportScore2 to report as many scores as you like, then finally
  call dpReportScoreEnd to finish sending the block of scores.
@@ -290,24 +290,23 @@ DP_API dp_result_t DP_APIX dpReportScore2(dp_t *dp, dpid_t dpId, int scoreId, lo
 		req.param_num = scoreId;
 		req.param_value = scoreVal;
 		/* set a playerHdl to param_value2 base on the given dpId */
-		req.param_value2 = (long)dpid2commHdl(dp, dpId); 
+		req.param_value2 = (long)dpid2commHdl(dp, dpId);
 		req.reqLen = sizeof(commSetParamReq_t);
 		commSetParam(&req, &resp, dp->dpio->commPtr);
 		/* Driver usually returns status dp_RES_OK or dp_RES_UNIMPLEMENTED */
 		DPRINT(("dpReportScore2: driver reports err:%d for scoreId %d\n",
 				resp.status, scoreId));
-		return resp.status;  
+		return resp.status;
 	}
 	return dp_RES_OK;
 }
 
-
 /*-------------------------------------------------------------------------
- Report the score(s) for player dpId.  
+ Report the score(s) for player dpId.
 
  The idea is to pack all the score info of interest about a particular player
  into a compact buffer, then call this function.  This should be done
- periodically, e.g. after every major event.  
+ periodically, e.g. after every major event.
 
  You should use the first two bytes for a rough 'score', most significant
  byte first, and the third byte should be 0 normally, and 1 if this player
@@ -338,13 +337,13 @@ DP_API dp_result_t DP_APIX dpReportScoreBuf(dp_t *dp, dpid_t dpId, int scoreId, 
 		req.param_num = scoreId;
 		req.param_value = scoreVal;
 		/* set a playerHdl to param_value2 base on the given dpId */
-		req.param_value2 = (long)dpid2commHdl(dp, dpId); 
+		req.param_value2 = (long)dpid2commHdl(dp, dpId);
 		req.reqLen = sizeof(commSetParamReq_t);
 		commSetParam(&req, &resp);
 		/* Driver usually returns status dp_RES_OK or dp_RES_UNIMPLEMENTED */
 		DPRINT(("dpReportScoreBuf: driver reports err:%d for scoreId %d\n",
 				resp.status, scoreId));
-		return resp.status;  
+		return resp.status;
 	}
 #endif
 
@@ -354,7 +353,7 @@ DP_API dp_result_t DP_APIX dpReportScoreBuf(dp_t *dp, dpid_t dpId, int scoreId, 
 		DPRINT(("dpReportScoreBuf: player %d had no uid.  Not reporting.\n", dpId));
 		return dp_RES_OK;
 	}
-	
+
 	/* Create the score matrix for this session, if needed, and register our
 	 * player and uid
 	 */
@@ -362,7 +361,7 @@ DP_API dp_result_t DP_APIX dpReportScoreBuf(dp_t *dp, dpid_t dpId, int scoreId, 
 		dpid_t mydpid;
 		dp_uid_t myuid;
 		dp_session_t sess;
-		
+
 		dp->scorerep = scorerep_create();
 		if (!dp->scorerep)
 			return dp_RES_NOMEM;
@@ -391,7 +390,7 @@ DP_API dp_result_t DP_APIX dpReportScoreBuf(dp_t *dp, dpid_t dpId, int scoreId, 
 		DPRINT(("dpReportScoreBuf: scorerep_set returns err:%d\n", err));
 		return err;
 	}
-	
+
 	return dp_RES_OK;
 }
 
@@ -412,7 +411,7 @@ DP_API dp_result_t DP_APIX dpReportScoreEnd(dp_t *dp)
 		req.param_value = FALSE;	/* To end score reporting */
 		req.reqLen = sizeof(commSetParamReq_t);
 		commSetParam(&req, &resp);
-		return resp.status;  
+		return resp.status;
 	}
 #endif
 	return dp_RES_OK;
@@ -440,7 +439,6 @@ int dp_PASCAL dpscores_cb(dptab_t *dptab, dptab_table_t *table, playerHdl_t src,
 	return 0;
 }
 
-
 /*--------------------------------------------------------------------------
  Request that the server send us score data for the given session type.
  Call from dpRequestObjectDeltas().
@@ -452,7 +450,7 @@ dp_result_t dpscore_client_subscribe(dp_t *dp, dp_species_t sessType)
 	char key[dptab_KEY_MAXLEN];
 	int keylen;
 	ASSERTMEM();
-	
+
 	/* Create incoming scores table. */
 	key[0] = dp_KEY_SCORES;
 	key[1] = dpGETSHORT_FIRSTBYTE(sessType);
@@ -472,7 +470,7 @@ dp_result_t dpscore_client_subscribe(dp_t *dp, dp_species_t sessType)
 		return err;
 	}
 
-	/* Request the game server to send us data on this table. 
+	/* Request the game server to send us data on this table.
 	 * For now, ask for the whole table; later, we'll ask for just
 	 * part of it (otherwise we'll drown in data).
 	 */
@@ -497,7 +495,7 @@ dpid_t dpGetMyId(dp_t *dp)
 	size_t len;
 	char subkey[dptab_KEY_MAXLEN];
 	int subkeylen;
-	
+
 	err = dptab_get_byindex(dp->myplayers, 0, &buf, &len, subkey, &subkeylen);
 	if (err != dp_RES_OK) {
 		DPRINT(("dpGetMyId: no player created yet?\n"));

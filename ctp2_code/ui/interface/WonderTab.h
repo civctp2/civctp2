@@ -14,7 +14,6 @@ class ctp2_DropDown;
 class ctp2_ListBox;
 
 
-
 class WonderTab
 {
 public:
@@ -24,19 +23,15 @@ public:
 	static void Open(void);
 	static void Close(void);
 
-	
 	void UpdateList();
 
 private:
 	ctp2_ListBox *m_list;
 
-	
 	ctp2_Window *m_info_window;
 
-	
 	void Show();
 
-	
 	void Hide();
 
 	void LoadData();
@@ -47,5 +42,4 @@ private:
 
 };
 
-
-#endif 
+#endif

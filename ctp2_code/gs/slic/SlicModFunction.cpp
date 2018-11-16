@@ -1,4 +1,3 @@
-
 #include "c3.h"
 
 #include "SlicEngine.h"
@@ -66,4 +65,3 @@ SLIC_TAG SlicModFunc::GetArg(sint32 arg)
 	else
 		return ST_END;
 }
-

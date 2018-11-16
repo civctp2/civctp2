@@ -11,7 +11,7 @@
 //
 // THIS FILE IS NOT GENERATED OR SUPPORTED BY ACTIVISION.
 //
-// This material has been developed at apolyton.net by the Apolyton CtP2 
+// This material has been developed at apolyton.net by the Apolyton CtP2
 // Source Code Project. Contact the authors at ctp2source@apolyton.net.
 //
 //----------------------------------------------------------------------------
@@ -36,7 +36,6 @@
 
 #include "Foreigner.h"
 
-
 #include "player.h"
 #include "Army.h"
 #include "ArmyData.h"
@@ -53,12 +52,10 @@
 
 extern sint32 g_saveFileVersion;
 
-
 Foreigner::Foreigner() {
-	
+
 	Initialize();
 }
-
 
 void Foreigner::Initialize()
 {
@@ -78,7 +75,6 @@ void Foreigner::Initialize()
 	m_embargo = false;
 }
 
-
 void Foreigner::Load(CivArchive & archive)
 {
 	RegardEventList::iterator event_iter;
@@ -94,23 +90,20 @@ void Foreigner::Load(CivArchive & archive)
 	m_hasInitiative = (val?true:false);
 	archive >> m_lastIncursion;
 
-	
-	for (sint32 type = 0; type < (sint32) REGARD_EVENT_ALL; type++) 
+	for (sint32 type = 0; type < (sint32) REGARD_EVENT_ALL; type++)
 	{
 		m_regardEventList[type].clear();
 
-		
 		archive >> size;
 
-		
 		for (i = 0; i < size; i++)
 		{
-			
+
 			if (g_saveFileVersion >= 57)
 			{
-				archive >> event.regard;	
-				archive >> event.turn;		
-				archive >> event.duration;  
+				archive >> event.regard;
+				archive >> event.turn;
+				archive >> event.duration;
 
 				archive >> buf_size;
 				if (buf_size > 0)
@@ -126,28 +119,28 @@ void Foreigner::Load(CivArchive & archive)
 			}
 			else
 			{
-				
+
 				archive.Load((uint8 *) &event, sizeof(RegardEvent));
 				event.explainStrId = -1;
 			}
 			m_regardEventList[type].push_back(event);
-		} 
+		}
 
-	} 
+	}
 
 	archive >> size;
 	NegotiationEvent negotiation;
 	m_negotiationEvents.clear();
 	for (i = 0; i < size; i++)
 	{
-		
+
 		if (g_saveFileVersion >= 60)
 		{
 			archive.Load((uint8 *) &negotiation, sizeof(NegotiationEvent));
 		}
 		else
 		{
-			
+
 			OldNegotiationEvent oldnegotiation;
 			archive.Load((uint8 *) &oldnegotiation, sizeof(OldNegotiationEvent));
 			negotiation.proposal = oldnegotiation.proposal;
@@ -172,7 +165,6 @@ void Foreigner::Load(CivArchive & archive)
 		m_embargo = false;
 }
 
-
 void Foreigner::Save(CivArchive & archive) const
 {
 	RegardEventList::const_iterator event_iter;
@@ -181,21 +173,18 @@ void Foreigner::Save(CivArchive & archive) const
 	archive << m_trustworthiness;
 	archive << (sint8)(m_hasInitiative?1:0);
 	archive << m_lastIncursion;
-	
-	
+
 	for (sint32 type = 0; type < (sint32) REGARD_EVENT_ALL; type++) {
 
-		
 		archive << (sint16) m_regardEventList[type].size();
 
-		
-		for (event_iter = m_regardEventList[type].begin(); 
-			 event_iter != m_regardEventList[type].end(); 
-			 event_iter++) 
+		for (event_iter = m_regardEventList[type].begin();
+			 event_iter != m_regardEventList[type].end();
+			 event_iter++)
 		{
-			archive << (ai::Regard) event_iter->regard;	
-			archive << (sint16) event_iter->turn;		
-			archive << (sint16) event_iter->duration;    
+			archive << (ai::Regard) event_iter->regard;
+			archive << (sint16) event_iter->turn;
+			archive << (sint16) event_iter->duration;
 			if (event_iter->explainStrId != -1)
 			{
 				name_str = g_theStringDB->GetIdStr(event_iter->explainStrId);
@@ -204,15 +193,14 @@ void Foreigner::Save(CivArchive & archive) const
 			}
 			else
 			{
-				
+
 				archive << (sint16) 0;
 			}
 
-			
-			
-		} 
-		
-	} 
+
+		}
+
+	}
 
 	archive << (sint16) m_negotiationEvents.size();
 	NegotiationEventList::const_iterator negotiation_iter;
@@ -229,10 +217,9 @@ void Foreigner::Save(CivArchive & archive) const
 	archive << (sint8)(m_embargo?1:0);
 }
 
-
-void Foreigner::BeginTurn() 
+void Foreigner::BeginTurn()
 {
-	
+
     m_goldFromTrade = 0;
 	m_goldFromTribute = 0;
 }
@@ -253,7 +240,6 @@ const ai::Regard & Foreigner::GetEffectiveRegard() const {
 	return effectiveRegard;
 }
 
-
 const ai::Regard & Foreigner::GetPublicRegard(const REGARD_EVENT_TYPE &type) const {
 	if (type == REGARD_EVENT_ALL)
 		return m_regardTotal;
@@ -261,11 +247,9 @@ const ai::Regard & Foreigner::GetPublicRegard(const REGARD_EVENT_TYPE &type) con
 		return m_regard[type];
 }
 
-
 const ai::Regard & Foreigner::GetTrust() const {
 	return m_trustworthiness;
 }
-
 
 void Foreigner::SetTrust(const ai::Regard &trust) {
 	m_trustworthiness = trust;
@@ -276,11 +260,10 @@ void Foreigner::SetTrust(const ai::Regard &trust) {
 
 
 
-void Foreigner::LogRegardEvent(const REGARD_EVENT_TYPE & type,  
+void Foreigner::LogRegardEvent(const REGARD_EVENT_TYPE & type,
 							   const RegardEvent & regardEvent ) {
 	m_regardEventList[type].push_front(regardEvent);
 }
-
 
 
 void Foreigner::RecomputeRegard(const DiplomacyRecord & diplomacy,
@@ -290,17 +273,14 @@ void Foreigner::RecomputeRegard(const DiplomacyRecord & diplomacy,
 	ai::Regard max_regard_delta(0);
 	RegardEventList::iterator event_iter;
 
-	
 	m_regardTotal = baseRegard;
 	const DiplomacyRecord::RegardDecay *regard_decay = NULL;
-		
-	
+
 	for (sint32 type = 0; type < (sint32) REGARD_EVENT_ALL; type++) {
 
-		
 		m_regard[type] = NEUTRAL_REGARD;
 
-		switch (type) 
+		switch (type)
 		{
 		case REGARD_EVENT_SCENARIO:
 			diplomacy.GetScenarioEvent(regard_decay);
@@ -324,40 +304,37 @@ void Foreigner::RecomputeRegard(const DiplomacyRecord & diplomacy,
 			diplomacy.GetProductionEvent(regard_decay);
 			break;
 		default:
-			
+
 			Assert(0);
 		}
 
-		
 		event_iter = m_regardEventList[type].begin();
-		while (event_iter != m_regardEventList[type].end()) 
+		while (event_iter != m_regardEventList[type].end())
 		{
 
-			
-			
-			
-			
+
+
+
+
 			if (event_iter->turn < decayRound)
 			{
-				
+
 				if (event_iter->regard == 0 ) {
 					event_iter = m_regardEventList[type].erase(event_iter);
 					continue;
 				}
 
-				
-				if (event_iter->duration <= 0) 
+				if (event_iter->duration <= 0)
 				{
 					if (event_iter->regard > 0)
 						event_iter->regard =
 							sint16(event_iter->regard*regard_decay->GetPositiveDecay());
 
-					
 					else
 						event_iter->regard =
 							sint16(event_iter->regard*regard_decay->GetNegativeDecay());
 				}
- 				
+
 				else if ((sint32) event_iter->turn + (sint32) event_iter->duration < decayRound) {
 					event_iter = m_regardEventList[type].erase(event_iter);
 					continue;
@@ -365,12 +342,12 @@ void Foreigner::RecomputeRegard(const DiplomacyRecord & diplomacy,
 
 			}
 
-			
-			
-			
-			
 
-			
+
+
+
+
+
 			if (m_regard[type] + event_iter->regard > (NEUTRAL_REGARD - MAX_REGARD) &&
 				m_regard[type] + event_iter->regard < (NEUTRAL_REGARD + MAX_REGARD))
 			{
@@ -385,22 +362,21 @@ void Foreigner::RecomputeRegard(const DiplomacyRecord & diplomacy,
 			}
 
 			if (abs(event_iter->regard) > max_regard_delta) {
-				
+
 				m_bestRegardExplain = event_iter->explainStrId;
 				max_regard_delta = abs(event_iter->regard);
 			}
 			event_iter++;
-		} 
+		}
 
-		
-		
-		
+
+
+
         m_regardEventList[type].sort(std::greater<RegardEvent>());
 
-	} 
+	}
 
 }
-
 
 const StringId & Foreigner::GetBestRegardExplain(const REGARD_EVENT_TYPE &type) const {
 	if (type == REGARD_EVENT_ALL)
@@ -416,18 +392,15 @@ const StringId & Foreigner::GetBestRegardExplain(const REGARD_EVENT_TYPE &type) 
 
 void Foreigner::ConsiderResponse( const Response & response ) {
 
-	
-	
+
 	if (m_myLastResponse.priority < response.priority) {
 		m_myLastResponse = response;
 	}
 }
 
-
 const Response & Foreigner::GetMyLastResponse() const {
 	return m_myLastResponse;
 }
-
 
 void Foreigner::SetMyLastResponse(const Response & response) {
 	m_myLastResponse = response;
@@ -441,15 +414,13 @@ void Foreigner::SetMyLastResponse(const Response & response) {
 
 void Foreigner::AddTradeValue(const sint32 value)
 {
-	
+
 	m_goldFromTrade += value;
 }
-
 
 sint32 Foreigner::GetTradeFrom() const {
 	return m_goldFromTrade;
 }
-
 
 sint32 Foreigner::GetTributeFrom() const {
 	return m_goldFromTribute;
@@ -461,13 +432,11 @@ sint32 Foreigner::GetTributeFrom() const {
 
 
 void Foreigner::ConsiderNewProposal(const NewProposal & newProposal ) {
-	
-	
+
 	if (m_myLastNewProposal.priority < newProposal.priority) {
 		m_myLastNewProposal = newProposal;
 	}
 }
-
 
 const NewProposal & Foreigner::GetMyLastNewProposal() const {
 	return m_myLastNewProposal;
@@ -482,23 +451,20 @@ void Foreigner::SetMyLastNewProposal(const NewProposal & newProposal) {
 	m_myLastNewProposal = newProposal;
 }
 
-
 NegotiationEventList::const_iterator Foreigner::GetNegotiationEventIndex( const NewProposal & newProposal ) const
 {
 	NegotiationEventList::const_iterator iter = m_negotiationEvents.begin();
 	sint32 count = 0;
 	while ( iter != m_negotiationEvents.end() )
 	{
-		if (( iter->proposal.senderId == 
+		if (( iter->proposal.senderId ==
 			   newProposal.senderId) &&
 			( iter->proposal.detail.first_type ==
 			newProposal.detail.first_type ) &&
-			
-			
+
 			( iter->proposal.detail.second_type ==
 			newProposal.detail.second_type ) )
-			
-			
+
 		{
 			return iter;
 		}
@@ -506,21 +472,18 @@ NegotiationEventList::const_iterator Foreigner::GetNegotiationEventIndex( const 
 		count++;
 	}
 
-	
 	return iter;
 }
 
-
-bool Foreigner::GetNewProposalTimeout(const NewProposal & newProposal, 
+bool Foreigner::GetNewProposalTimeout(const NewProposal & newProposal,
 						   const sint16 timeout_period) const
 {
-	NegotiationEventList::const_iterator iter = 
+	NegotiationEventList::const_iterator iter =
 		GetNegotiationEventIndex(newProposal);
 
 	if (iter == m_negotiationEvents.end())
 		return false;
 
-	
 	if (iter->round + timeout_period < NewTurnCount::GetCurrentRound())
 		return false;
 
@@ -528,17 +491,14 @@ bool Foreigner::GetNewProposalTimeout(const NewProposal & newProposal,
 }
 
 
-
 void Foreigner::AddNewNegotiationEvent(const NegotiationEvent & event)
 {
-	
+
 	m_negotiationEvents.push_front(event);
 
-	
 	if (m_negotiationEvents.size() > 3)
 		m_negotiationEvents.pop_back();
 }
-
 
 const NegotiationEventList & Foreigner::GetNegotiationEvents() const
 {
@@ -555,18 +515,15 @@ void Foreigner::SetLastIncursion(const sint32 last_incursion)
 	m_lastIncursion = last_incursion;
 }
 
-
 sint32 Foreigner::GetLastIncursion() const
 {
 	return m_lastIncursion;
 }
 
-
 void Foreigner::SetHotwarAttack(const sint16 last_hot_war_attack)
 {
 	m_hotwarAttackedMe = last_hot_war_attack;
 }
-
 
 sint16 Foreigner::GetLastHotwarAttack() const
 {
@@ -576,12 +533,10 @@ sint16 Foreigner::GetLastHotwarAttack() const
 	return NewTurnCount::GetCurrentRound() - m_hotwarAttackedMe;
 }
 
-
 void Foreigner::SetColdwarAttack(const sint16 last_cold_war_attack)
 {
 	m_coldwarAttackedMe = last_cold_war_attack;
 }
-
 
 sint16 Foreigner::GetLastColdwarAttack() const
 {
@@ -591,12 +546,10 @@ sint16 Foreigner::GetLastColdwarAttack() const
 	return NewTurnCount::GetCurrentRound() - m_coldwarAttackedMe;
 }
 
-
 void Foreigner::SetGreetingTurn()
 {
 	m_greetingTurn = (sint16) NewTurnCount::GetCurrentRound();
 }
-
 
 sint16 Foreigner::GetTurnsSinceGreeting() const
 {
@@ -606,30 +559,26 @@ sint16 Foreigner::GetTurnsSinceGreeting() const
 	return NewTurnCount::GetCurrentRound() - m_greetingTurn;
 }
 
-
 void Foreigner::DebugStatus() const
 {
 	RegardEventList::const_iterator event_iter;
 
-	
-	for (sint32 type = 0; type < (sint32) REGARD_EVENT_ALL; type++) 
+	for (sint32 type = 0; type < (sint32) REGARD_EVENT_ALL; type++)
 	{
 		DPRINTF(k_DBG_DIPLOMACY, ("Type = %s:\n",
 			s_regardEventNames[type].c_str()));
 
-		
 		event_iter = m_regardEventList[type].begin();
-		while (event_iter != m_regardEventList[type].end()) 
+		while (event_iter != m_regardEventList[type].end())
 		{
 			DPRINTF(k_DBG_DIPLOMACY, (" delta = %d [%s]\n",
 				event_iter->regard,
 				g_theStringDB->GetNameStr(event_iter->explainStrId) ));
 
 			event_iter++;
-		} 
-	} 
+		}
+	}
 }
-
 
 void Foreigner::LogDebugStatus(const DiplomacyRecord & diplomacy) const
 {
@@ -637,12 +586,11 @@ void Foreigner::LogDebugStatus(const DiplomacyRecord & diplomacy) const
 	double decay;
 	sint32 round;
 	const DiplomacyRecord::RegardDecay *regard_decay = NULL;
-	
-	
+
 	gslog_dipprint("     delta  : rnds/decay : regard change reason (type) \n");
-	for (sint32 type = 0; type < (sint32) REGARD_EVENT_ALL; type++) 
+	for (sint32 type = 0; type < (sint32) REGARD_EVENT_ALL; type++)
 	{
-		switch (type) 
+		switch (type)
 		{
 		case REGARD_EVENT_SCENARIO:
 			diplomacy.GetScenarioEvent(regard_decay);
@@ -666,23 +614,22 @@ void Foreigner::LogDebugStatus(const DiplomacyRecord & diplomacy) const
 			diplomacy.GetProductionEvent(regard_decay);
 			break;
 		default:
-			
+
 			Assert(0);
 		}
-		
-		
+
 		event_iter = m_regardEventList[type].begin();
-		while (event_iter != m_regardEventList[type].end()) 
+		while (event_iter != m_regardEventList[type].end())
 		{
-			
+
 			if (event_iter->duration < 0)
 			{
 				if (event_iter->regard < 0)
 					decay = regard_decay->GetNegativeDecay();
 				else
 					decay= regard_decay->GetPositiveDecay();
-				
-				gslog_dipprint("    %5d   :    %2.2f    : [%s] (%s)\n", 
+
+				gslog_dipprint("    %5d   :    %2.2f    : [%s] (%s)\n",
 					event_iter->regard,
 					decay,
 					event_iter->explainStrId<0?"":g_theStringDB->GetNameStr(event_iter->explainStrId),
@@ -692,24 +639,22 @@ void Foreigner::LogDebugStatus(const DiplomacyRecord & diplomacy) const
 			{
 				round = (event_iter->turn - NewTurnCount::GetCurrentRound())
 					+ (sint32) event_iter->duration;
-				
-				gslog_dipprint("    %5d   :   %5d    : [%s] (%s)\n", 
+
+				gslog_dipprint("    %5d   :   %5d    : [%s] (%s)\n",
 					event_iter->regard,
 					round,
 					event_iter->explainStrId<0?"":g_theStringDB->GetNameStr(event_iter->explainStrId),
 					s_regardEventNames[type].c_str());
 			}
 			event_iter++;
-		} 
-	} 
+		}
+	}
 }
-
 
 bool Foreigner::GetEmbargo() const
 {
 	return m_embargo;
 }
-
 
 void Foreigner::SetEmbargo(const bool embargo)
 {

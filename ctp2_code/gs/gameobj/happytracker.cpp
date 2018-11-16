@@ -1,4 +1,3 @@
-
 #include "c3.h"
 #include "HappyTracker.h"
 #include "StrDB.h"
@@ -17,7 +16,7 @@ static sint32 s_refCount = 0;
 HappyTracker::HappyTracker()
 {
 	if(!s_refCount) {
-		
+
 		g_theStringDB->GetStringID("HAPPY_REASON_CITY_SIZE", sm_happinessNames[HAPPY_REASON_CITY_SIZE]);
 		g_theStringDB->GetStringID("HAPPY_REASON_DISTANCE_FROM_CAPITOL", sm_happinessNames[HAPPY_REASON_DISTANCE_FROM_CAPITOL]);
 		g_theStringDB->GetStringID("HAPPY_REASON_ENEMY_ACTION", sm_happinessNames[HAPPY_REASON_ENEMY_ACTION]);
@@ -36,7 +35,6 @@ HappyTracker::HappyTracker()
 		g_theStringDB->GetStringID("HAPPY_REASON_FEATS", sm_happinessNames[HAPPY_REASON_FEATS]);
 		g_theStringDB->GetStringID("HAPPY_REASON_NUM_CITIES", sm_happinessNames[HAPPY_REASON_NUM_CITIES]);
 
-		
 		g_theStringDB->GetStringID("HAPPY_REASON_HAPPINESS_ATTACK", sm_happinessNames[HAPPY_REASON_HAPPINESS_ATTACK]);
 		g_theStringDB->GetStringID("HAPPY_REASON_SLAVES_TAKEN", sm_happinessNames[HAPPY_REASON_SLAVES_TAKEN]);
 		g_theStringDB->GetStringID("HAPPY_REASON_INDULGENCES", sm_happinessNames[HAPPY_REASON_INDULGENCES]);
@@ -71,7 +69,7 @@ void HappyTracker::Serialize(CivArchive &archive)
 	if(archive.IsStoring()) {
 		archive.Store((uint8*)m_happinessAmounts, sizeof(double) * (HAPPY_REASON_MAX));
 	} else {
-		
+
 		if(g_saveFileVersion < 65) {
 			archive.Load((uint8*)m_happinessAmounts, sizeof(double) * (HAPPY_REASON_MAX - 1));
 			sint32 i;
@@ -93,7 +91,6 @@ void HappyTracker::GetHappiness(HAPPY_REASON which,
 	name = sm_happinessNames[which];
 }
 
-
 void HappyTracker::SetHappiness(HAPPY_REASON which, double amount)
 {
 	m_happinessAmounts[which] = amount;
@@ -111,9 +108,9 @@ void HappyTracker::RestoreHappiness()
 
 void HappyTracker::ClearEntries(HAPPY_REASON start, HAPPY_REASON end)
 {
-	
-	
-	
+
+
+
 
 	if((sint32)start < 0) {
 		start = (HAPPY_REASON)0;
@@ -123,7 +120,6 @@ void HappyTracker::ClearEntries(HAPPY_REASON start, HAPPY_REASON end)
 		m_happinessAmounts[start] = 0.0;
 	}
 }
-
 
 void HappyTracker::AddTimedChange(HAPPY_REASON which, double delta)
 {
@@ -144,7 +140,7 @@ void HappyTracker::Dump()
 	DPRINTF(k_DBG_GAMESTATE, ("Happy happy, joy joy:\n"));
 	for(i = HAPPY_REASON((sint32)HAPPY_REASON_SMOKING_CRACK + 1);
 		i < HAPPY_REASON_MAX; i = HAPPY_REASON((sint32)i + 1)) {
-		DPRINTF(k_DBG_GAMESTATE, ("  %20s: %.2lf\n", 
+		DPRINTF(k_DBG_GAMESTATE, ("  %20s: %.2lf\n",
 							 g_theStringDB->GetNameStr(sm_happinessNames[i]),
 							 m_happinessAmounts[i]));
 	}

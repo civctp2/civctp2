@@ -3,7 +3,7 @@
 // Project      : Call To Power 2
 // File type    : C++ source
 // Description  : Call to Power 2 user interface spinner
-// Id           : $Id:$
+// Id           : $Id$
 //
 //----------------------------------------------------------------------------
 //
@@ -48,9 +48,7 @@
 #include "ctp2_Static.h"
 #include <string>
 
-
 extern C3UI *g_c3ui;
-
 
 
 ctp2_Spinner::ctp2_Spinner(
@@ -72,7 +70,6 @@ ctp2_Spinner::ctp2_Spinner(
 	SetDisplay();
 }
 
-
 void ctp2_Spinner::ActionCallback(aui_Control *control, uint32 state, uint32 data, void *cookie)
 {
 	ctp2_Spinner *spinner = (ctp2_Spinner *)cookie;
@@ -84,7 +81,6 @@ void ctp2_Spinner::ActionCallback(aui_Control *control, uint32 state, uint32 dat
 	if(spinner->m_spinnerActionFunc)
 		spinner->m_spinnerActionFunc(control, state, data, spinner->m_spinnerCookie);
 
-	
 	if(state == AUI_RANGER_ACTION_VALUECHANGE)
 		spinner->SetDisplay();
 }

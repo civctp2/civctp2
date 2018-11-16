@@ -10,17 +10,17 @@
 //
 // THIS FILE IS NOT GENERATED OR SUPPORTED BY ACTIVISION.
 //
-// This material has been developed at apolyton.net by the Apolyton CtP2 
+// This material has been developed at apolyton.net by the Apolyton CtP2
 // Source Code Project. Contact the authors at ctp2source@apolyton.net.
 //
 //----------------------------------------------------------------------------
 //
 // Compiler flags
-// 
+//
 // _DEBUG
 // - Generate debug version
 //
-// _MSC_VER		
+// _MSC_VER
 // - Use Microsoft C++ extensions when set.
 //
 // USE_SDL
@@ -66,7 +66,7 @@ CivSound::CivSound(const uint32 &associatedObject, const sint32 &soundID)
 	m_soundID = soundID;
     m_isPlaying = FALSE;
     m_isLooping = FALSE;
-    
+
     if (0 == fname) {
         m_soundFilename[0] = 0;
         m_dataptr = NULL;
@@ -76,7 +76,6 @@ CivSound::CivSound(const uint32 &associatedObject, const sint32 &soundID)
 
     strcpy(m_soundFilename, fname);
 
-    
     m_dataptr = g_SoundPF->getData(m_soundFilename, &m_datasize);
 
 #if !defined(USE_SDL)
@@ -85,7 +84,7 @@ CivSound::CivSound(const uint32 &associatedObject, const sint32 &soundID)
 # if 0
     // Argh, audio format mismatch!!!
 	m_Audio = Mix_QuickLoad_RAW((Uint8 *) m_dataptr, (Uint32) m_datasize);
-# else 
+# else
     m_Audio = Mix_LoadWAV_RW(SDL_RWFromMem(m_dataptr, m_datasize), 1);
 # endif
 #endif
@@ -102,7 +101,7 @@ CivSound::~CivSound()
 		Mix_FreeChunk(m_Audio);
 	}
 #endif
-    
+
     if (m_dataptr) {
         g_SoundPF->freeData(m_dataptr);
 	}
@@ -210,4 +209,3 @@ CivSound::SetVolume(const sint32 &volume)
 #endif
 	m_volume = volume;
 }
-

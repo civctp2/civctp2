@@ -1,4 +1,4 @@
-/* 
+/*
 Copyright (C) 1995-2001 Activision, Inc.
 
 This library is free software; you can redistribute it and/or
@@ -28,7 +28,7 @@ Foundation, Inc., 59 Temple Place, Suite 330, Boston, MA  02111-1307  USA
 #include "assoctab.h"
 #include "crypttab.h"
 #include "mywcs.h"     /* extra wcs functions */
-#include "../3rdparty/md5/global.h"  /* for md5 */ 
+#include "../3rdparty/md5/global.h"  /* for md5 */
 #include "../3rdparty/md5/md5.h"
 
 #ifdef _DEBUG
@@ -38,7 +38,7 @@ const char *tcapw_u2ascii(const dp_netchar_t *ncs, int maxlen)
 	wchar_t wcs[256];
 	memset(buf, 0, maxlen+1);
 	buf[0] = '?';
-	mywcs_netchar2wchar(wcs, ncs, maxlen); 
+	mywcs_netchar2wchar(wcs, ncs, maxlen);
 	mywcs_tombs(buf, maxlen, wcs);
 	return buf;
 }
@@ -85,7 +85,6 @@ void tcapw_destroy(tcapw_t *tcapw)
 	memset(tcapw, 0, sizeof(tcapw_t));
 	free(tcapw);
 }
-
 
 const unsigned char freezekey[8] = "z8&2nD!G";
 
@@ -164,14 +163,14 @@ dp_result_t tcapw_password_hash(tcapw_t *tcapw, const tcapw_pw_t *pw, tcapw_hpw_
 {
 	MD5_CTX context;
 	int len_pw;
-	
+
 	if (tcapw == NULL || pw == NULL || hpw == NULL)
 		return dp_RES_BAD;
 
 	/* zero pad the password out to the maximum length to be consistant */
 	len_pw = mywcs_lenn(pw->pw, tcapw_LEN_PW);
 	memset((void *)(pw->pw + len_pw), 0, tcapw_LEN_PW - len_pw);
-		
+
 	MD5Init(&context);
 	MD5Update(&context, (char *)pw->pw, tcapw_LEN_PW*sizeof(short));
 	MD5Final(hpw->hpw, &context);
@@ -195,7 +194,7 @@ dp_result_t tcapw_entry_create(tcapw_t *tcapw, const tcapw_uname_t *username, co
 	dp_result_t err;
 	tcapw_entry_t *p;
 	tcapw_entry_t entry;
-	
+
 	if (tcapw == NULL || username == NULL || hpw == NULL || uid == NULL || email == NULL)
 		return dp_RES_BAD;
 
@@ -205,7 +204,7 @@ dp_result_t tcapw_entry_create(tcapw_t *tcapw, const tcapw_uname_t *username, co
 		return dp_RES_ALREADY;
 	else if (err != dp_RES_EMPTY)  /* failed to find username for a bad reason */
 		return err;
-	
+
 	/* Need to figure out how to pick a uid safely */
 	if (tcapw->tab->n_used == 0) {
 		p = &entry;
@@ -232,7 +231,7 @@ dp_result_t tcapw_entry_create(tcapw_t *tcapw, const tcapw_uname_t *username, co
 	p->created = time(NULL);
 	p->lastlogin = p->created;
 	p->secretcode = (unsigned short)((unsigned short)eclock()*(long)3001);
-	
+
 	return dp_RES_OK;
 }
 
@@ -246,7 +245,7 @@ dp_result_t tcapw_entry_create(tcapw_t *tcapw, const tcapw_uname_t *username, co
 dp_result_t tcapw_entry_delete(tcapw_t *tcapw, tcapw_uid_t uid)
 {
 	dp_result_t err;
-	
+
 	if (tcapw == NULL || uid == tcapw_UID_NONE)
 		return dp_RES_BAD;
 	if ((err = assoctab_subscript_delete(tcapw->tab, uid)) != dp_RES_OK)
@@ -265,15 +264,15 @@ dp_result_t tcapw_entry_delete(tcapw_t *tcapw, tcapw_uid_t uid)
 dp_result_t tcapw_entry_change(tcapw_t *tcapw, tcapw_uid_t uid, const tcapw_hpw_t *new_hpw, int flags, const char *email)
 {
 	tcapw_entry_t *p;
-	
+
 	if (tcapw == NULL || uid == tcapw_UID_NONE || new_hpw == NULL || email == NULL)
 		return dp_RES_BAD;
-	
+
 	p = (tcapw_entry_t *) assoctab_subscript(tcapw->tab, uid);
 	memcpy(&(p->hpw), new_hpw, sizeof(tcapw_hpw_t));
 	p->flags = flags;
 	strncpy(p->email, email, tcapw_MAXLEN_EMAIL);
-	
+
 	return dp_RES_OK;
 }
 
@@ -287,7 +286,7 @@ dp_result_t tcapw_entry_change(tcapw_t *tcapw, tcapw_uid_t uid, const tcapw_hpw_
 dp_result_t tcapw_entry_find_byid(tcapw_t *tcapw, tcapw_uid_t uid, tcapw_entry_t *buf)
 {
 	tcapw_entry_t *p;
-	
+
 	if (tcapw == NULL || uid == tcapw_UID_NONE || buf == NULL)
 		return dp_RES_BAD;
 	/* brute force linear search, hidden inside assoctab_subscript */

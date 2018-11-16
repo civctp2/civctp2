@@ -1,4 +1,4 @@
-/* 
+/*
 Copyright (C) 1995-2001 Activision, Inc.
 
 This library is free software; you can redistribute it and/or
@@ -75,15 +75,15 @@ typedef struct {
 } dptabt1_t;
 
 /*--------------------------------------------------------------------------
- Given a process id, key and subkey, allocate and fill a buffer with the 
+ Given a process id, key and subkey, allocate and fill a buffer with the
  test data.
  Returns length of buffer.
 
  Test patterns length is as follows:
-   odd tables: 
+   odd tables:
    	length=4
    even tables:
-    odd subkeys: 
+    odd subkeys:
 		length=max allowed
 	even subkeys:
 		length=BIGDATALEN
@@ -111,7 +111,7 @@ static int testramp_fill(int id, int key, int subkey, char **bufp)
 	/* Fill with pattern */
 	xor = (char)((id << 6) | (key << 4) | subkey);
 	buf = malloc(len);
-	if (!buf) 
+	if (!buf)
 		return 0;
 	for (i=0; i<len; i++)
 		buf[i] = (char)((i & 255) ^ xor);
@@ -123,7 +123,7 @@ static int testramp_fill(int id, int key, int subkey, char **bufp)
 }
 
 /*--------------------------------------------------------------------------
- Given a process id, key and subkey, compare a buffer with the 
+ Given a process id, key and subkey, compare a buffer with the
  expected test pattern.
 
  Aborts with given error message if comparison fails.
@@ -156,7 +156,7 @@ static void testramp_compare(int id, int key, int subkey, char *buf, int buflen,
 }
 
 /*-----------------------------------------------------------------------
- Routine called by dptab whenever any i/o happens.  
+ Routine called by dptab whenever any i/o happens.
  We pass in the dptabt1_t in the context parameter, so we can
  know which test instance the callback is for.
 -----------------------------------------------------------------------*/
@@ -180,52 +180,52 @@ int dp_PASCAL table_cb(dptab_t *dptab, dptab_table_t *table, playerHdl_t src, pl
 	DPRINT(("dptabt1: table_cb: id %d, idsrc %d, status:%d\n", ptest->id, idsrc, err));
 
 	if (err == dp_RES_CREATED) {
-		DPRINT(("table_cb: got: src h:%x, dest h:%x, key %s, subkey %s, sent %d, total %d, nvars_tx %d\n", 
-			src, dest, 
+		DPRINT(("table_cb: got: src h:%x, dest h:%x, key %s, subkey %s, sent %d, total %d, nvars_tx %d\n",
+			src, dest,
 			key2a(table->key, table->keylen),
 			key2a2(subkey, subkeylen),
 			sent, total, ptest->nvars_tx));
 		if ((src != PLAYER_ME) && (dest == PLAYER_ME) && (sent == total)) {
 			ptest->nvars_rx++;
-			DPRINT(("id %d: Got %d'th variable from h:%x; table %s, subkey %s; len %d\n", 
+			DPRINT(("id %d: Got %d'th variable from h:%x; table %s, subkey %s; len %d\n",
 				ptest->id,
 				ptest->nvars_rx,
-				src, 
+				src,
 				key2a(table->key, table->keylen),
 				key2a2(subkey, subkeylen),
 				total));
-			printf("id %d: Got %d'th variable from h:%x; table %s, subkey %s; len %d\n", 
+			printf("id %d: Got %d'th variable from h:%x; table %s, subkey %s; len %d\n",
 				ptest->id,
 				ptest->nvars_rx,
-				src, 
+				src,
 				key2a(table->key, table->keylen),
 				key2a2(subkey, subkeylen),
 				total);
 		}
 	} else if (err == dp_RES_DELETED) {
-		DPRINT(("table_cb: delete: src h:%x, dest h:%x, key %s, subkey %s\n", 
-			src, dest, 
+		DPRINT(("table_cb: delete: src h:%x, dest h:%x, key %s, subkey %s\n",
+			src, dest,
 			key2a(table->key, table->keylen),
 			key2a2(subkey, subkeylen)));
 		if (dest == PLAYER_ME)
 			ptest->nvars_rx_delete++;		/* deleted by someone else */
-		printf("id %d: Got delete variable from h:%x; table %s, subkey %s\n", 
+		printf("id %d: Got delete variable from h:%x; table %s, subkey %s\n",
 			ptest->id,
-			src, 
+			src,
 			key2a(table->key, table->keylen),
 			key2a2(subkey, subkeylen));
 	} else if (err == dp_RES_FINISHED) {
-		DPRINT(("table_cb: sent: src h:%x, dest h:%x, key %s, subkey %s, sent %d, total %d, nvars_tx %d\n", 
-			src, dest, 
+		DPRINT(("table_cb: sent: src h:%x, dest h:%x, key %s, subkey %s, sent %d, total %d, nvars_tx %d\n",
+			src, dest,
 			key2a(table->key, table->keylen),
 			key2a2(subkey, subkeylen),
 			sent, total, ptest->nvars_tx));
 		if ((src == PLAYER_ME) && (sent == total)) {
 			ptest->nvars_tx++;
 			DPRINT(("table_cb: nvars_tx incremented to %d\n", ptest->nvars_tx));
-			printf("id %d: Sent %d'th variable to h:%x; table %s, subkey %s; len %d\n", 
+			printf("id %d: Sent %d'th variable to h:%x; table %s, subkey %s; len %d\n",
 				ptest->id, ptest->nvars_tx,
-				dest, 
+				dest,
 				key2a(table->key, table->keylen),
 				key2a2(subkey, subkeylen),
 				total);
@@ -237,17 +237,17 @@ int dp_PASCAL table_cb(dptab_t *dptab, dptab_table_t *table, playerHdl_t src, pl
 			}
 		}
 	}
-	if (checklocal) 
+	if (checklocal)
 		testramp_compare(idsrc, skey, subkey[0], buf, total, "table_cb");
 	return TRUE;
 }
 
 /*-------------------------------------------------------------------------
  Build tables 1 and 2.
- Table 1 is a table of integers with two elements: 
+ Table 1 is a table of integers with two elements:
 	1.0
 	1.1
- Table 2 is a table of blobs with two elements: 
+ Table 2 is a table of blobs with two elements:
  	2.2
  	2.3
  Make sure those elements are accessible, and nonexistent elements aren't.
@@ -457,7 +457,6 @@ void dptabt1_peer_connect(dptabt1_t *ptest, char *peerAdr)
 	assert(err == dp_RES_OK);
 }
 
-
 /*--------------------------------------------------------------------------
  Generate a specific stream of dptab traffic, designed to test several
  assumptions about how dptab works.
@@ -506,7 +505,7 @@ void dptabt1_send(dptabt1_t *ptest)
 
 /*--------------------------------------------------------------------------
  Call this repeatedly.
- Checks for dptab traffic from the peer's dptab_send() to be received, verify 
+ Checks for dptab traffic from the peer's dptab_send() to be received, verify
  that it meets our expectations.
  Returns FALSE if done, TRUE if it still needs to be called.
 --------------------------------------------------------------------------*/
@@ -604,10 +603,10 @@ int dptabt1_poll(dptabt1_t *ptest)
 			exit(1);
 		}
 	}
-	if ((ptest->nvars_rx >= 5) 
-	&&  (ptest->nvars_tx >= 5) 
-	&&  (ptest->nvars_rx_delete >= 1) 
-	&&  (ptest->dptab_status == dp_RES_EMPTY) 
+	if ((ptest->nvars_rx >= 5)
+	&&  (ptest->nvars_tx >= 5)
+	&&  (ptest->nvars_rx_delete >= 1)
+	&&  (ptest->dptab_status == dp_RES_EMPTY)
 	&&  (dp_RES_BUSY != dpio_ReadyToFreeze(ptest->dpio, NULL))) {
 		return FALSE;
 	}
@@ -673,7 +672,7 @@ void dptabt1_destroy(dptabt1_t *ptest)
 
 /*-----------------------------------------------------------------------
  Unit test main loop.  Creates two test objects, hooks them together,
- and polls them until they cry uncle.  Any failure causes the 
+ and polls them until they cry uncle.  Any failure causes the
  subroutines to terminate the program with an error message.
 -----------------------------------------------------------------------*/
 main(int argc, char **argv)

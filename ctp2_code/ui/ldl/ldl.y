@@ -81,7 +81,7 @@ int ldlif_parse(const char *filename)
 	if(!ldl_open_first_file(filename)) {
 		return -1;
 	}
-	
+
 	ldl_parse_error = LDL_ERROR_OK;
 
 	do {

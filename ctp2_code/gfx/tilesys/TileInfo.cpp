@@ -2,7 +2,7 @@
 //
 // Project      : Call To Power 2
 // File type    : C++ source
-// Description  : 
+// Description  :
 //
 //----------------------------------------------------------------------------
 //
@@ -10,13 +10,13 @@
 //
 // THIS FILE IS NOT GENERATED OR SUPPORTED BY ACTIVISION.
 //
-// This material has been developed at apolyton.net by the Apolyton CtP2 
+// This material has been developed at apolyton.net by the Apolyton CtP2
 // Source Code Project. Contact the authors at ctp2source@apolyton.net.
 //
 //----------------------------------------------------------------------------
 //
 // Compiler flags
-// 
+//
 //
 //----------------------------------------------------------------------------
 //
@@ -25,7 +25,7 @@
 // - Repaired memory leak.
 //
 //----------------------------------------------------------------------------
- 
+
 #include "c3.h"
 #include "pixelutils.h"
 #include "tileutils.h"
@@ -66,7 +66,7 @@ TileInfo::TileInfo(TileInfo *copy)
 {
 	*this = *copy;
 
-	if (copy->m_goodActor) 
+	if (copy->m_goodActor)
     {
 		m_goodActor = new GoodActor(copy->m_goodActor);
 	}
@@ -94,7 +94,6 @@ TILEINDEX TileInfo::GetTileNum(void)
 		return m_tileNum;
 	}
 
-	
 	if (!g_player[g_selected_item->GetVisiblePlayer()]) return m_tileNum;
 
 	if(g_player[g_selected_item->GetVisiblePlayer()]->m_hasGlobalRadar) {
@@ -116,8 +115,8 @@ sint32 TileInfo::SetGoodActor(sint32 index, MapPoint pos)
 {
     delete m_goodActor;
 	m_goodActor = new GoodActor(index, pos);
-	
-	if (g_theProfileDB->IsGoodAnim()) 
+
+	if (g_theProfileDB->IsGoodAnim())
 	{
 		m_goodActor->FullLoad();
 	}
@@ -137,7 +136,7 @@ void TileInfo::Serialize(CivArchive &archive)
 
 	if(archive.IsStoring()) {
 		DPRINTF(k_DBG_GRAPHICS, ("%d,%d,%d,%d, %d,%d,%d,%d\n",
-								 m_riverPiece, m_megaInfo, 
+								 m_riverPiece, m_megaInfo,
 								 m_terrainType, m_tileNum,
 								 m_transitions[0], m_transitions[1],
 								 m_transitions[2], m_transitions[3]));

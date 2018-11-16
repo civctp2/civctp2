@@ -1,10 +1,3 @@
-
-
-
-
-
-
-
 #ifdef HAVE_PRAGMA_ONCE
 #pragma once
 #endif
@@ -18,23 +11,22 @@
 typedef sint32 MESSAGE_TYPE ;
 
 
-
 #define k_HACK_RECONSTITUTED_CLASS 0x72adc754
 
 class MessagePool : public ObjPool
 	{
-		
-		
 
-		
-		
 
-		
-		
-		
 
-		
-		
+
+
+
+
+
+
+
+
+
 
 	public:
 		MessageData* AccessMessage(const Message id)

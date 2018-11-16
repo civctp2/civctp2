@@ -23,8 +23,8 @@ private:
 class NetDipResponse : public Packetizer
 {
   public:
-	NetDipResponse(Response &resp, sint32 exec, sint32 other) { 
-		m_resp = resp; 
+	NetDipResponse(Response &resp, sint32 exec, sint32 other) {
+		m_resp = resp;
 		m_executor = (uint8)exec;
 		m_otherGuy = (uint8)other;
 	}
@@ -44,5 +44,5 @@ class NetAgreementMatrix : public Packetizer
 	void Packetize(uint8 *buf, uint16 &size);
 	void Unpacketize(uint16 id, uint8 *buf, uint16 size);
 };
-	
+
 #endif

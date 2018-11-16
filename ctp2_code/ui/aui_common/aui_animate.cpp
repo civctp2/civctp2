@@ -1,14 +1,3 @@
-
-
-
-
-
-
-
-
-
-
-
 #include "c3.h"
 
 #include "aui_animate.h"
@@ -27,9 +16,8 @@ void aui_Animate::Hermite(
 {
 	if ( nNumFrames == 2 )
 	{
-		
 
-		double effect = t*t*t; 
+		double effect = t*t*t;
 		thePoint->x = int(
 			( 1.0 - effect )*(double)keyFrame[0].x +
 			effect*(double)keyFrame[1].x + 0.5 );
@@ -40,7 +28,6 @@ void aui_Animate::Hermite(
 
 	else
 	{
-		
 
 		DPOINT D0;
 		DPOINT D1;
@@ -77,7 +64,6 @@ void aui_Animate::Hermite(
 
 		t -= (double)i;
 
-		
 		double f1 = 2.0*t*t*t - 3.0*t*t + 1.0;
 		double f2 = t*t*t - 2.0*t*t + t;
 		double f3 = t*t*t - t*t;

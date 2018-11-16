@@ -1,14 +1,3 @@
-
-
-
-
-
-
-
-
-
-
-
 #ifdef HAVE_PRAGMA_ONCE
 #pragma once
 #endif
@@ -51,7 +40,7 @@ public:
 	void			DrawSelectionBrackets(void);
 	BOOL			Draw(BOOL fogged = FALSE);
 	void			DrawDirect(aui_Surface *surf, sint32 x, sint32 y, double scale);
-	
+
 	void			DrawText(sint32 x, sint32 y, MBCHAR *goodText);
 
 	BOOL			IsAnimating(void);
@@ -66,7 +55,7 @@ public:
 	void            Initialize(sint32 index, const MapPoint &pos);
 
 	void			GetBoundingRect(RECT *rect);
-	
+
 	void            Serialize(CivArchive &archive);
 
 	LOADTYPE		GetLoadType(void) { return m_loadType; }
@@ -75,18 +64,17 @@ public:
 	void			DumpFullLoad(void);
 
 protected:
-    
-	
+
 	sint32				m_facing;
 	sint32				m_frame;
 	uint16				m_transparency;
 	sint32              m_index;
-	
-	
 
-	
-	
-	
+
+
+
+
+
 	MapPoint			m_pos;
 	GoodSpriteGroup		*m_goodSpriteGroup;
 
@@ -95,8 +83,8 @@ protected:
 
 	Queue<Action *>		m_actionQueue;
 	LOADTYPE			m_loadType;
-	
-	
+
+
 
 
 };

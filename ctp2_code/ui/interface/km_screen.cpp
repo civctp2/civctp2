@@ -11,7 +11,7 @@
 //
 // THIS FILE IS NOT GENERATED OR SUPPORTED BY ACTIVISION.
 //
-// This material has been developed at apolyton.net by the Apolyton CtP2 
+// This material has been developed at apolyton.net by the Apolyton CtP2
 // Source Code Project. Contact the authors at ctp2source@apolyton.net.
 //
 //----------------------------------------------------------------------------
@@ -28,7 +28,6 @@
 // - Initialized local variables. (Sep 9th 2005 Martin Gühmann)
 //
 //----------------------------------------------------------------------------
-
 
 #include "c3.h"
 #include "c3window.h"
@@ -48,7 +47,7 @@
 #include "keymap.h"
 #include "keypress.h"
 
-#include "c3_dropdown.h"	
+#include "c3_dropdown.h"
 #include "spnewgamewindow.h"
 #include "km_screen.h"
 
@@ -129,7 +128,6 @@ sint32 km_screen_removeMyWindow(uint32 action)
 }
 
 
-
 AUI_ERRCODE km_screen_Initialize( void )
 {
 	AUI_ERRCODE errcode = AUI_ERRCODE_OK;
@@ -138,35 +136,32 @@ AUI_ERRCODE km_screen_Initialize( void )
 	MBCHAR		controlBlock[ k_AUI_LDL_MAXBLOCK + 1 ];
 	sint32 i;
 
-	if ( s_km_screen ) return AUI_ERRCODE_OK; 
+	if ( s_km_screen ) return AUI_ERRCODE_OK;
 
 	strcpy(windowBlock, "KmScreen");
 
-	{ 
+	{
 		s_km_screen = new c3_PopupWindow( &errcode, aui_UniqueId(), windowBlock, 16, AUI_WINDOW_TYPE_FLOATING );
 		Assert( AUI_NEWOK(s_km_screen, errcode) );
 		if ( !AUI_NEWOK(s_km_screen, errcode) ) errcode;
 
-		
 		s_km_screen->Resize(s_km_screen->Width(),s_km_screen->Height());
 		s_km_screen->GrabRegion()->Resize(s_km_screen->Width(),s_km_screen->Height());
 		s_km_screen->SetStronglyModal(TRUE);
 	}
-	
-	s_km_screen->AddClose( km_screen_backPress );
 
+	s_km_screen->AddClose( km_screen_backPress );
 
 	sprintf( controlBlock, "%s.%s", windowBlock, "Name" );
 	s_km_screen->AddTitle( controlBlock );
 
 
-	
 	s_switch = new ctp2_Button*[KM_MAX];
 
 	sprintf( groupBlock, "%s.%s", windowBlock, "Group" );
-	
-	
-	
+
+
+
 
 	s_groupStatic = new ctp2_Static(&errcode, aui_UniqueId(), groupBlock);
 	Assert(AUI_NEWOK(s_groupStatic, errcode));
@@ -178,28 +173,24 @@ AUI_ERRCODE km_screen_Initialize( void )
 		Assert( AUI_NEWOK(s_switch[i], errcode) );
 		if ( !AUI_NEWOK(s_switch[i], errcode) ) return errcode;
 	}
- 
+
 	s_switch[0]->SetToggleState(true);
 
-	
 	sprintf( controlBlock, "%s.%s", windowBlock, "ResetButton" );
 	s_resetButton = new ctp2_Button( &errcode, aui_UniqueId(), controlBlock, km_screen_resetPress );
 	Assert( AUI_NEWOK(s_resetButton, errcode) );
 	if ( !AUI_NEWOK(s_resetButton, errcode) ) return errcode;
 
-	
 	sprintf( controlBlock, "%s.%s", windowBlock, "KeyList" );
 	s_keyList = new c3_ListBox( &errcode, aui_UniqueId(), controlBlock );
 	Assert( AUI_NEWOK(s_keyList, errcode) );
 	if ( !AUI_NEWOK(s_keyList, errcode) ) return errcode;
-	
-	
+
 	sprintf( controlBlock, "%s", "KeylistStrings" );
 	s_strings = new aui_StringTable( &errcode, controlBlock );
 	Assert( AUI_NEWOK(s_strings , errcode) );
 	if ( !AUI_NEWOK(s_strings , errcode) ) return errcode;
 
-	
 	errcode = aui_Ldl::SetupHeirarchyFromRoot( windowBlock );
 	Assert( AUI_SUCCESS(errcode) );
 
@@ -209,12 +200,11 @@ AUI_ERRCODE km_screen_Initialize( void )
 }
 
 
-
 AUI_ERRCODE km_screen_Cleanup()
 {
 #define mycleanup(mypointer) if(mypointer) { delete mypointer; mypointer = NULL; };
 
-	if ( !s_km_screen  ) return AUI_ERRCODE_OK; 
+	if ( !s_km_screen  ) return AUI_ERRCODE_OK;
 
 	g_c3ui->RemoveWindow( s_km_screen->Id() );
 
@@ -266,15 +256,15 @@ void km_screen_switchPress(aui_Control *control, uint32 action, uint32 data, voi
 	switch ( action ) {
 	case AUI_SWITCH_ACTION_ON:
 		for ( i = KM_BASIC;i < KM_MAX;i++ ) {
-			
+
 			if ( control == s_switch[i] ) {
 				s_switch[i]->SetToggleState(true);
 				s_selected = i;
 			} else {
 				s_switch[i]->SetToggleState(false);
 			}
-		}		
-		
+		}
+
 		km_screen_loadKeyList();
 		break;
 	case AUI_SWITCH_ACTION_OFF:
@@ -286,7 +276,6 @@ sint32 km_screen_remapKey( WPARAM wParam )
 {
 	KeyListItem *item;
 
-	
 	item = (KeyListItem *)s_keyList->GetSelectedItem();
 	if ( !item ) return 0;
 
@@ -296,8 +285,7 @@ sint32 km_screen_remapKey( WPARAM wParam )
 	theKeyMap->remap_key( keyFunc, wParam, keycode );
 	item->UpdateKey( theKeyMap->get_keycode(keyFunc) );
 
-	
-	
+
 	sint32 curIndex = s_keyList->GetSelectedItemIndex();
 	sint32 curRangerPos = s_keyList->GetVerticalRanger()->GetValueY();
 
@@ -317,12 +305,11 @@ sint32 km_screen_loadKeyList( void )
 	sint32 i;
 	sint32 keycode = 0;
 
-	
 	s_keyList->Clear();
 
 	KeyListItem *item;
 	sprintf( ldl, "KeyListItem" );
-	
+
 	switch ( s_selected ) {
 	case KM_BASIC:
 		for ( i = KEY_FUNCTION_MOVE_NORTH;i <= KEY_FUNCTION_NEXT_ROUND;i++ ) {
@@ -359,7 +346,7 @@ sint32 km_screen_loadKeyList( void )
 	case KM_MAP:
 #ifdef _PLAYTEST
 		for ( i = KEY_FUNCTION_TOGGLE_CITY_NAMES;i <= KEY_FUNCTION_TOGGLE_SPACE;i++ ) {
-#else 
+#else
 		for ( i = KEY_FUNCTION_TOGGLE_CITY_NAMES;i <= KEY_FUNCTION_ZOOM_OUT1;i++ ) {
 #endif
 			item = new KeyListItem( &errcode, i, theKeyMap->get_keycode(KEY_FUNCTION(i)), ldl );
@@ -383,7 +370,6 @@ sint32 km_screen_loadKeyList( void )
 	return 0;
 }
 
-
 KeyListItem::KeyListItem(AUI_ERRCODE *retval, sint32 index, uint32 keycode, MBCHAR *ldlBlock)
 	:
 	aui_ImageBase(ldlBlock),
@@ -395,9 +381,8 @@ KeyListItem::KeyListItem(AUI_ERRCODE *retval, sint32 index, uint32 keycode, MBCH
 
 	*retval = InitCommonLdl(index, keycode, ldlBlock);
 	Assert( AUI_SUCCESS(*retval) );
-	if ( !AUI_SUCCESS(*retval) ) return;	
+	if ( !AUI_SUCCESS(*retval) ) return;
 }
-
 
 AUI_ERRCODE KeyListItem::InitCommonLdl(sint32 index, uint32 keycode, MBCHAR *ldlBlock)
 {
@@ -444,7 +429,7 @@ MBCHAR *km_GetKeyName(uint32 code)
 			} else if(code >= 1 && code <= 26) {
 				sprintf(str, "%s + %c", ctrl, code + 'a' - 1);
 			} else {
-				sprintf(str, "%c", code); 
+				sprintf(str, "%c", code);
 			}
 			break;
 	}
@@ -458,11 +443,9 @@ void KeyListItem::Update(void)
 
 	str = km_GetKeyName(m_keycode);
 
-	
 	subItem = (c3_Static *)GetChildByIndex(0);
 	subItem->SetText(m_name);
 
-	
 	subItem = (c3_Static *)GetChildByIndex(1);
 	subItem->SetText( str );
 }
@@ -476,7 +459,6 @@ void KeyListItem::UpdateKey( uint32 keycode )
 
 	str = km_GetKeyName(m_keycode);
 
-	
 	subItem = (c3_Static *)GetChildByIndex(1);
 	subItem->SetText( str );
 
@@ -513,5 +495,3 @@ sint32 KeyListItem::Compare(c3_ListItem *item2, uint32 column)
 
 	return 0;
 }
-
-

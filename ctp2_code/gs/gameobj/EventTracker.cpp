@@ -60,12 +60,11 @@ EventData *EventTracker::GetEvents(BOOL Reset)
 		return NULL;
 	}
 }
-		
 
 void EventTracker::Serialize(CivArchive &archive)
 {
 	sint32 i;
-	if(archive.IsStoring()) 
+	if(archive.IsStoring())
 	{
 		archive << m_dataList->GetCount();
 		PointerList<EventData>::PointerListNode *curDataPtr;
@@ -99,7 +98,6 @@ int EventTracker::GetEventCount()
 {
 	return m_dataList->GetCount();
 }
-
 
 STDEHANDLER(TrackCreateWonderEvent)
 {

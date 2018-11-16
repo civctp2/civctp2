@@ -11,7 +11,7 @@
 //
 // THIS FILE IS NOT GENERATED OR SUPPORTED BY ACTIVISION.
 //
-// This material has been developed at apolyton.net by the Apolyton CtP2 
+// This material has been developed at apolyton.net by the Apolyton CtP2
 // Source Code Project. Contact the authors at ctp2source@apolyton.net.
 //
 //----------------------------------------------------------------------------
@@ -38,7 +38,7 @@
 #include "dynarr.h"
 #include "directions.h"
 
-struct Direction { 
+struct Direction {
 
 sint8 dir;
 
@@ -50,57 +50,54 @@ void DelPointers() {}
 sint8 operator=(sint8 val) { return dir = val; }
 sint8 operator=(WORLD_DIRECTION val) { return dir = sint8(val); }
 
-void Serialize(CivArchive &archive); 
+void Serialize(CivArchive &archive);
 };
 
-class Path { 
-	
-	
-	
-    sint32 m_next_dir; 
-	
-	
+class Path {
 
-	
-	
-	
-	MapPoint m_start; 
-	DynamicArray<Direction> m_step; 
-	
-	
 
-	
-	
-	
-	
-    MapPoint m_current; 
-    sint32 m_next; 
-	
-	
+    sint32 m_next_dir;
+
+
+
+
+
+
+	MapPoint m_start;
+	DynamicArray<Direction> m_step;
+
+
+
+
+
+
+
+    MapPoint m_current;
+    sint32 m_next;
+
 
 	friend class NetOrder;
 
 public:
 
-    Path(); 
+    Path();
 	Path(const Path *copy);
     void FlattenAstarList(AstarPoint *best);
     void FlattenNormalizedPointList(const MapPoint &start, DynamicArray<MapPoint> &pixel);
-    void SetStart(const MapPoint &s) { m_start = s; m_step.Clear(); } 
-    void Clear(); 
+    void SetStart(const MapPoint &s) { m_start = s; m_step.Clear(); }
+    void Clear();
     sint32 Num() { return m_step.Num() + ((m_start.x == -1) ? 0 : 1); }
 
-    void Start(MapPoint &p); 
+    void Start(MapPoint &p);
 	void Restart(MapPoint &p);
     void JustSetStart(const MapPoint &p);
 
-
     bool IsEnd() const;
-    sint32 Next(MapPoint &p); 
-    void GetCurrentPoint(MapPoint &p) const; 
+    sint32 Next(MapPoint &p);
+    void GetCurrentPoint(MapPoint &p) const;
     void ClipStartToCurrent();
 
-    void GetStartPoint(MapPoint &pos) const; 
+    void GetStartPoint(MapPoint &pos) const;
     void StartDir(WORLD_DIRECTION &d);
     void GetCurrentDir(WORLD_DIRECTION &d);
     bool IsEndDir();
@@ -109,14 +106,14 @@ public:
 	void ConcatReturnPath();
 	void Concat(Path const & otherpath);
 
-    void Serialize(CivArchive &archive); 
+    void Serialize(CivArchive &archive);
     void InsertFront(const MapPoint &pos);
     void PrependDir (sint32 dir);
-    void AddDir(const WORLD_DIRECTION d); 
+    void AddDir(const WORLD_DIRECTION d);
 
-    void InsertEnd(const MapPoint &pos); 
+    void InsertEnd(const MapPoint &pos);
     void SnipEnd();
-    void SpaceMove(const MapPoint &start, const MapPoint &dest); 
+    void SpaceMove(const MapPoint &start, const MapPoint &dest);
 
 	sint32 GetMovesRemaining();
 	sint32 GetStep() { return m_next_dir; }
@@ -124,11 +121,9 @@ public:
 
 	MapPoint GetEnd() const;
 
-	
 	sint32 GetNextIndex() const;
 	void RestoreIndexAndCurrentPos(const sint32 & index);
 
-	
 	void SnipEndUntilCanEnter(const uint32 & movement_type);
 
 };

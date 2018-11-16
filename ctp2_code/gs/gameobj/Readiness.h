@@ -1,11 +1,3 @@
-
-
-
-
-
-
-
-
 #ifdef HAVE_PRAGMA_ONCE
 #pragma once
 #endif
@@ -15,39 +7,38 @@
 #include "ctp2_enums.h"
 
 class CivArchive;
-class Unit; 
+class Unit;
 template <class T> class DynamicArray;
 class Army;
 
 class MilitaryReadiness
 {
 private:
-	
-	
-    double m_delta; 
-    double m_hp_modifier; 
-    double m_cost; 
-    double m_percent_last_turn; 
+
+    double m_delta;
+    double m_hp_modifier;
+    double m_cost;
+    double m_percent_last_turn;
 	READINESS_LEVEL m_readinessLevel;
-    BOOL m_ignore_unsupport; 
+    BOOL m_ignore_unsupport;
 	sint32 m_owner;
 	sint32 m_turnStarted;
-    sint32 m_pad; 
-	
-	
+    sint32 m_pad;
 
-	
-	
-	
 
-	
-	
+
+
+
+
+
+
+
 	friend class NetReadiness;
 
 public:
 	MilitaryReadiness(sint32 o);
-    
-    void SetLevel(sint32 gov, DynamicArray<Army> &m_all_armies, 
+
+    void SetLevel(sint32 gov, DynamicArray<Army> &m_all_armies,
               READINESS_LEVEL level, BOOL immediate = FALSE);
 	READINESS_LEVEL GetLevel() const { return m_readinessLevel; }
     double GetCost() const { return m_cost; }
@@ -59,11 +50,11 @@ public:
     double GetReadyHP(sint32 gov, READINESS_LEVEL level);
 
     void SetPecentLastTurn(double &v) { m_percent_last_turn = v; }
-    double GetPecentLastTurn() const { return m_percent_last_turn; } 
+    double GetPecentLastTurn() const { return m_percent_last_turn; }
 
-    void SupportUnit(const Unit &u, sint32 gov); 
+    void SupportUnit(const Unit &u, sint32 gov);
 	double GetSupportCost(const Unit &u);
-    void UnsupportUnit(const Unit &u, sint32 gov); 
+    void UnsupportUnit(const Unit &u, sint32 gov);
     void KillUnitsOverBudget(sint32 gov, DynamicArray<Army> &m_all_armies, sint32 mil_total);
 	void RecalcCost();
 

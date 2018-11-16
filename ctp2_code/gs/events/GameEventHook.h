@@ -10,14 +10,14 @@
 //
 // THIS FILE IS NOT GENERATED OR SUPPORTED BY ACTIVISION.
 //
-// This material has been developed at apolyton.net by the Apolyton CtP2 
+// This material has been developed at apolyton.net by the Apolyton CtP2
 // Source Code Project. Contact the authors at ctp2source@apolyton.net.
 //
 //----------------------------------------------------------------------------
 //
 // Compiler flags
-// 
-// _MSC_VER		
+//
+// _MSC_VER
 // - Compiler version (for the Microsoft C++ compiler only)
 //
 // _DEBUG
@@ -63,30 +63,29 @@ class GameEventHookCallback;
 // Class declarations
 //----------------------------------------------------------------------------
 
-class GameEventHookCallback 
+class GameEventHookCallback
 {
 public:
 	virtual ~GameEventHookCallback() { }
 
-	virtual GAME_EVENT_HOOK_DISPOSITION 
-	GEVHookCallback(GAME_EVENT type, GameEventArgList *args) 
-	{ 
+	virtual GAME_EVENT_HOOK_DISPOSITION
+	GEVHookCallback(GAME_EVENT type, GameEventArgList *args)
+	{
 		return GEV_HD_Continue;
 	}
 
-	virtual void GetDescription(char * str, sint32 maxsize) 
-	{ 
+	virtual void GetDescription(char * str, sint32 maxsize)
+	{
 		strncpy(str, "An undescribed callback", maxsize);
 	}
 };
 
-	
-class GameEventHook 
+class GameEventHook
 {
 public:
-    struct Node 
+    struct Node
     {
-	    Node(GameEventHookCallback * cb, GAME_EVENT_PRIORITY pri) 
+	    Node(GameEventHookCallback * cb, GAME_EVENT_PRIORITY pri)
         :   m_cb        (cb),
             m_priority  (pri)
         { ; };
@@ -103,16 +102,15 @@ public:
 
 	GAME_EVENT_ERR      Activate
     (
-        GameEventArgList *  args, 
+        GameEventArgList *  args,
         sint32 &            resumeIndex
     );
 	GAME_EVENT_ERR      Resume
     (
-        GameEventArgList *  args, 
-        sint32              startIndex, 
+        GameEventArgList *  args,
+        sint32              startIndex,
         sint32 &            resumeIndex
     );
-
 
 #if defined(_DEBUG)
 	void Dump(FILE * f) const;
@@ -122,13 +120,12 @@ private:
     GAME_EVENT_ERR      Run
     (
         std::list<Node>::iterator &     startAt,
-        GameEventArgList *              args, 
+        GameEventArgList *              args,
         sint32 &                        resumeIndex
     );
 
 	GAME_EVENT              m_type;
     std::list<Node>         m_callbacks;
 };
-
 
 #endif

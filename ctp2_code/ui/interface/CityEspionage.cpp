@@ -11,7 +11,7 @@
 //
 // THIS FILE IS NOT GENERATED OR SUPPORTED BY ACTIVISION.
 //
-// This material has been developed at apolyton.net by the Apolyton CtP2 
+// This material has been developed at apolyton.net by the Apolyton CtP2
 // Source Code Project. Contact the authors at ctp2source@apolyton.net.
 //
 //----------------------------------------------------------------------------
@@ -109,11 +109,10 @@ CityEspionage::~CityEspionage()
 
 AUI_ERRCODE CityEspionage::Initialize()
 {
-	
+
 	if(s_CityEspionage)
 		return AUI_ERRCODE_OK;
 
-	
 	AUI_ERRCODE err = AUI_ERRCODE_OK;
 	s_CityEspionage = new CityEspionage(&err);
 
@@ -142,7 +141,6 @@ AUI_ERRCODE CityEspionage::Display(Unit *c)
 	if(!s_CityEspionage) {
 		return AUI_ERRCODE_HACK;
 	}
-	
 
 	AUI_ERRCODE err = AUI_ERRCODE_INVALIDPARAM;
 
@@ -154,13 +152,12 @@ AUI_ERRCODE CityEspionage::Display(Unit *c)
 			err = s_CityEspionage->m_window->Show();
 		}
 
-	
 		ctp2_Static *st;
 		SlicObject so;
 		Unit city;
 		if(c==NULL)
 		{
-			if(!g_selected_item->GetSelectedCity(city)) 
+			if(!g_selected_item->GetSelectedCity(city))
 			{
 				return err;
 			}
@@ -174,56 +171,47 @@ AUI_ERRCODE CityEspionage::Display(Unit *c)
 
 		MBCHAR interp[k_MAX_NAME_LEN];
 
-		
 		interp[0] = 0;
 		stringutils_Interpret(g_theStringDB->GetNameStr("str_ldl_Espionage_City_Label"), so, interp);
 		st = (ctp2_Static *)aui_Ldl::GetObject(s_CityEspionageBlock, "DialogBackground.CityLabel");
 		st->SetText(interp);
 
-		
 		interp[0] = 0;
 		stringutils_Interpret(g_theStringDB->GetNameStr("str_ldl_Espionage_Population_Label"), so, interp);
 		st = (ctp2_Static *)aui_Ldl::GetObject(s_CityEspionageBlock, "DialogBackground.PopulationLabel");
 		st->SetText(interp);
 
-		
 		interp[0] = 0;
 		stringutils_Interpret(g_theStringDB->GetNameStr("str_ldl_Espionage_Happiness_Label"), so, interp);
 		st = (ctp2_Static *)aui_Ldl::GetObject(s_CityEspionageBlock, "DialogBackground.HapinessLabel");
 		st->SetText(interp);
 
-		
 		interp[0] = 0;
 		stringutils_Interpret(g_theStringDB->GetNameStr("str_ldl_Espionage_Building_Label"), so, interp);
 		st = (ctp2_Static *)aui_Ldl::GetObject(s_CityEspionageBlock, "DialogBackground.Building");
 		st->SetText(interp);
 
-		
 		interp[0] = 0;
 		stringutils_Interpret(g_theStringDB->GetNameStr("str_ldl_Espionage_CompleteIn_Label"), so, interp);
 		st = (ctp2_Static *)aui_Ldl::GetObject(s_CityEspionageBlock, "DialogBackground.CompleteIn");
 		st->SetText(interp);
 
-		
 		interp[0] = 0;
 		stringutils_Interpret(g_theStringDB->GetNameStr("str_ldl_Espionage_CityIncome_Label"), so, interp);
 		st = (ctp2_Static *)aui_Ldl::GetObject(s_CityEspionageBlock, "DialogBackground.CityIncome");
 		st->SetText(interp);
 
-		
 		interp[0] = 0;
 		stringutils_Interpret(g_theStringDB->GetNameStr("str_ldl_Espionage_GoldInTrade_Label"), so, interp);
 		st = (ctp2_Static *)aui_Ldl::GetObject(s_CityEspionageBlock, "DialogBackground.GoldFromTrade");
 		st->SetText(interp);
 
-		
 		ctp2_ListBox *m_inventoryList = (ctp2_ListBox *)aui_Ldl::GetObject(s_CityEspionageBlock, "DialogBackground.InventoryList");
 		Assert(m_inventoryList);
 		if(m_inventoryList) {
-			
+
 			m_inventoryList->Clear();
 
-			
 			sint32 i;
 			for(i = 0; i < g_theBuildingDB->NumRecords(); i++) {
 				if(city->GetImprovements() & ((uint64)1 << (uint64)i)) {
@@ -232,7 +220,6 @@ AUI_ERRCODE CityEspionage::Display(Unit *c)
 					Assert(item);
 					if(item) {
 
-						
 						item->SetText(g_theBuildingDB->Get(i)->GetNameText());
 						InventoryItemInfo *info = new InventoryItemInfo(true, i);
 						item->SetUserData(info);
@@ -241,7 +228,6 @@ AUI_ERRCODE CityEspionage::Display(Unit *c)
 				}
 			}
 
-			
 			for(i = 0; i < g_theWonderDB->NumRecords(); i++) {
 				if(city->GetCityData()->GetBuiltWonders() & ((uint64)1 << (uint64)i)) {
 					ctp2_ListItem *item;
@@ -249,7 +235,6 @@ AUI_ERRCODE CityEspionage::Display(Unit *c)
 					Assert(item);
 					if(item) {
 
-						
 						item->SetText(g_theWonderDB->Get(i)->GetNameText());
 						InventoryItemInfo *info = new InventoryItemInfo(false, i);
 						item->SetUserData(info);
@@ -264,27 +249,25 @@ AUI_ERRCODE CityEspionage::Display(Unit *c)
 			Cell *cell = g_theWorld->GetCell(pos);
 			cell->GetArmy(cellUnitList);
 
-			
 			sint32 multiIndex = 0;
 			sint32 unitIndex = 0;
 
-			
 			while(multiIndex < 12) {
 				sprintf(interp,"DialogBackground.FortifiedUnitsBox.Unit%i",multiIndex);
 				st = (ctp2_Static *)aui_Ldl::GetObject(s_CityEspionageBlock, interp);
-				
-				if(unitIndex < cellUnitList.Num()) 
+
+				if(unitIndex < cellUnitList.Num())
 				{
-					
+
 					Unit &unit = cellUnitList[unitIndex++];
-					
+
 					if(st->IsDisabled())
 						st->Enable(true);
 
 					st->ExchangeImage(0, 0,	unit.GetDBRec()->GetDefaultIcon()->GetIcon());
 				}
 				else
-				{	
+				{
 					if(!st->IsDisabled())
 						st->Enable(false);
 					st->ExchangeImage(0, 0, NULL);
@@ -316,4 +299,3 @@ void CityEspionage::CancelCallback(aui_Control *control, uint32 action, uint32 d
 
 	Hide();
 }
-

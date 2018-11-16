@@ -1,4 +1,4 @@
-/* 
+/*
 Copyright (C) 1995-2001 Activision, Inc.
 
 This library is free software; you can redistribute it and/or
@@ -18,7 +18,7 @@ Foundation, Inc., 59 Temple Place, Suite 330, Boston, MA  02111-1307  USA
 */
 
 /*--------------------------------------------------------------------------
- Small module for creating a send/cancel dialog box. 
+ Small module for creating a send/cancel dialog box.
 --------------------------------------------------------------------------*/
 
 #include <windows.h>
@@ -118,7 +118,7 @@ int sendbox_create(int iCmdShow, char *signature, int commentLen, int timeout)
  are returned in comment.
  Returns sendbox_CLICKED_NONE if no interesting events have occured,
          sendbox_CLICKED_CANCEL if the user clicked cancel,
-		 sendbox_CLICKED_OK if the user clicked OK. 
+		 sendbox_CLICKED_OK if the user clicked OK.
 --------------------------------------------------------------------------*/
 int sendbox_poll(char *comment)
 {

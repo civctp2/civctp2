@@ -21,25 +21,25 @@ public:
 	~PlayerData();
 
 	char* m_name;
-	uint16 m_id;    
-	sint32 m_index; 
-	sint32 m_group; 
+	uint16 m_id;
+	sint32 m_index;
+	sint32 m_group;
 	PointerList<Packetizer> *m_packetList;
 	DynamicArray<Unit> m_createdUnits;
 	DynamicArray<Army> m_createdArmies;
 	GUID m_guid;
 
 	NetHash m_unitHash;
-	BOOL m_frozen; 
+	BOOL m_frozen;
 
 
 
 
-	PointerList<PointerList<Packetizer>::PointerListNode> *m_bookmarks; 
+	PointerList<PointerList<Packetizer>::PointerListNode> *m_bookmarks;
 	BOOL m_ready;
 	sint32 m_blocked;
 
-	sint32 m_totalTimeUsed;	
+	sint32 m_totalTimeUsed;
 
 	BOOL m_ackBeginTurn;
 	BOOL m_sentResync;

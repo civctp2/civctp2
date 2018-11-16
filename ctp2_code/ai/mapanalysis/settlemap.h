@@ -10,14 +10,14 @@
 //
 // THIS FILE IS NOT GENERATED OR SUPPORTED BY ACTIVISION.
 //
-// This material has been developed at apolyton.net by the Apolyton CtP2 
+// This material has been developed at apolyton.net by the Apolyton CtP2
 // Source Code Project. Contact the authors at ctp2source@apolyton.net.
 //
 //----------------------------------------------------------------------------
 //
 // Compiler flags
-// 
-// _MSC_VER		
+//
+// _MSC_VER
 // - Compiler version (for the Microsoft C++ compiler only)
 //
 // _DEBUG
@@ -52,7 +52,6 @@
 
 const sint16 k_minimum_settle_city_size = 2;
 
-
 const sint32 k_targets_per_continent = 25;
 
 class SettleMap {
@@ -60,15 +59,13 @@ public:
 
 	static SettleMap s_settleMap;
 
-	
-	
-	
+
+
+
 	void Cleanup();
 
-	
 	void Initialize();
 
-	
 	void HandleCityGrowth(const Unit & city);
 
 	struct SettleTarget
@@ -86,32 +83,25 @@ public:
 	typedef std::list<SettleTarget > SettleTargetList;
 #endif
 
-	
-	void GetSettleTargets(const PLAYER_INDEX &player, 
+	void GetSettleTargets(const PLAYER_INDEX &player,
 						  const bool & settle_water,
 						  SettleMap::SettleTargetList & targets) const;
-	
-	
+
 	bool CanSettlePos(const MapPoint & rc_pos) const;
 
-	
 	void SetCanSettlePos(const MapPoint & rc_pos, const bool can_settle);
 
-	
 	double GetValue(const MapPoint & rc_pos) const;
 
-private:	
-	
+private:
+
 	SettleMap();
 
-	
 	double ComputeSettleValue(const MapPoint & pos) const;
 
     MapGrid<double> m_settleValues;
 	Bit_Table m_invalidCells;
-	
-	
+
 };
 
-#endif 
-
+#endif

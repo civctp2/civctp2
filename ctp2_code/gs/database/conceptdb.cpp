@@ -1,5 +1,3 @@
-
-
 #include "c3.h"
 #include "c3errors.h"
 
@@ -15,19 +13,16 @@
 extern sint32	g_abort_parse;
 extern StringDB	*g_theStringDB;
 
-
 ConceptDB::ConceptDB()
 {
 	Initialize();
 }
-
 
 ConceptDB::ConceptDB(CivArchive &archive)
 {
 	Initialize();
 	Serialize(archive);
 }
-
 
 ConceptDB::~ConceptDB()
 {
@@ -39,7 +34,6 @@ ConceptDB::~ConceptDB()
 		delete m_alphaToIndex;
 }
 
-
 void ConceptDB::Initialize(void)
 {
 	m_nConcepts = 0;
@@ -48,15 +42,13 @@ void ConceptDB::Initialize(void)
 	m_alphaToIndex = NULL;
 }
 
-
 sint32 ConceptDB::Init(MBCHAR *filename)
 {
 	if (!ParseConceptDatabase( filename ))
 		return FALSE;
-	
+
 	return TRUE;
 }
-
 
 sint32 ConceptDB::ParseConceptDatabase(MBCHAR *filename)
 {
@@ -88,20 +80,18 @@ sint32 ConceptDB::ParseConceptDatabase(MBCHAR *filename)
 	}
 
 	m_conceptInfo = new ConceptInfo[m_nConcepts];
-    m_indexToAlpha = new sint32[m_nConcepts]; 
-    m_alphaToIndex = new sint32[m_nConcepts]; 
+    m_indexToAlpha = new sint32[m_nConcepts];
+    m_alphaToIndex = new sint32[m_nConcepts];
 
 	for (sint32 i = 0;i < m_nConcepts;i++) {
 		if (!ParseAConcept(conceptToken, &m_conceptInfo[i]))
 			return FALSE;
 
-		
 		m_alphaToIndex[i] = i;
 		m_indexToAlpha[i] = i;
 
 #if 0
-		
-		
+
 		{
 			const MBCHAR *str = g_theStringDB->GetNameStr(
 				m_conceptInfo[i].m_name );
@@ -110,13 +100,12 @@ sint32 ConceptDB::ParseConceptDatabase(MBCHAR *filename)
 				if ( stricmp( str, g_theStringDB->GetNameStr(
 					m_conceptInfo[ m_alphaToIndex[ a ] ].m_name ) ) < 0 )
 				{
-					
+
 					memmove(
 						m_alphaToIndex + a + 1,
 						m_alphaToIndex + a,
 						( i - a ) * sizeof(sint32) );
 
-					
 					for ( sint32 j = 0; j < i; ++j )
 						if ( m_indexToAlpha[ j ] >= a )
 							++m_indexToAlpha[ j ];
@@ -125,7 +114,6 @@ sint32 ConceptDB::ParseConceptDatabase(MBCHAR *filename)
 				}
 			}
 
-			
 			m_alphaToIndex[ a ] = i;
 			m_indexToAlpha[ i ] = a;
 		}
@@ -139,39 +127,38 @@ sint32 ConceptDB::ParseConceptDatabase(MBCHAR *filename)
 	return TRUE;
 }
 
-
 sint32 ConceptDB::ParseAConcept(Token *conceptToken, ConceptInfo *conceptInfo)
 {
 	char str[k_MAX_NAME_LEN];
-	StringId str_id; 
+	StringId str_id;
 
 	conceptInfo->m_noIndex = FALSE;
-	
-	if (conceptToken->GetType() == TOKEN_EOF) { 
-		return FALSE; 
-	} 
-	
-	if (conceptToken->GetType() != TOKEN_STRING) { 
-		c3errors_ErrorDialog  (conceptToken->ErrStr(), "Concept id expected"); 
+
+	if (conceptToken->GetType() == TOKEN_EOF) {
+		return FALSE;
+	}
+
+	if (conceptToken->GetType() != TOKEN_STRING) {
+		c3errors_ErrorDialog  (conceptToken->ErrStr(), "Concept id expected");
         g_abort_parse = TRUE;
 		return FALSE;
-	} else { 
-		conceptToken->GetString(str); 
-		if (!g_theStringDB->GetStringID(str, str_id)) { 
-			c3errors_ErrorDialog (conceptToken->ErrStr(), "Could not find %s in string database", str); 
+	} else {
+		conceptToken->GetString(str);
+		if (!g_theStringDB->GetStringID(str, str_id)) {
+			c3errors_ErrorDialog (conceptToken->ErrStr(), "Could not find %s in string database", str);
             g_abort_parse = TRUE;
-			return FALSE; 
+			return FALSE;
 		}
 	}
 
 	conceptInfo->m_name = str_id;
-	
-	if (conceptToken->Next() != TOKEN_OPEN_BRACE) { 
-		c3errors_ErrorDialog  (conceptToken->ErrStr(), "Missing open brace"); 
+
+	if (conceptToken->Next() != TOKEN_OPEN_BRACE) {
+		c3errors_ErrorDialog  (conceptToken->ErrStr(), "Missing open brace");
         g_abort_parse = TRUE;
 		return FALSE;
-	} 
-	
+	}
+
 	if(conceptToken->Next() != TOKEN_CONCEPT_DEFAULT_ICON) {
 		c3errors_ErrorDialog(conceptToken->ErrStr(), "Field CONCEPT_DEFAULT_ICON expected");
 		g_abort_parse = TRUE;
@@ -183,7 +170,6 @@ sint32 ConceptDB::ParseAConcept(Token *conceptToken, ConceptInfo *conceptInfo)
 		return FALSE;
 	}
 
-	
 	conceptToken->GetString(str);
 	sint32 i = g_theIconDB->FindTypeIndex(str);
 	if (i == -1) {
@@ -194,22 +180,21 @@ sint32 ConceptDB::ParseAConcept(Token *conceptToken, ConceptInfo *conceptInfo)
 
 	conceptInfo->m_iconDBIndex = i;
 
-	if (g_abort_parse) return FALSE; 
+	if (g_abort_parse) return FALSE;
 
 	conceptToken->Next();
 
 	while ( ParseOptional(conceptToken, conceptInfo) );
 
-	if (conceptToken->GetType() != TOKEN_CLOSE_BRACE) { 
-		c3errors_ErrorDialog  (conceptToken->ErrStr(), "Missing close brace"); 
+	if (conceptToken->GetType() != TOKEN_CLOSE_BRACE) {
+		c3errors_ErrorDialog  (conceptToken->ErrStr(), "Missing close brace");
         g_abort_parse = TRUE;
-		return FALSE; 
-	} 
+		return FALSE;
+	}
 
-	conceptToken->Next();     
-	return TRUE; 
+	conceptToken->Next();
+	return TRUE;
 }
-
 
 BOOL ConceptDB::ParseOptional( Token *conceptToken, ConceptInfo *info )
 {
@@ -227,16 +212,14 @@ BOOL ConceptDB::ParseOptional( Token *conceptToken, ConceptInfo *info )
 }
 
 
+const MBCHAR *ConceptDB::GetNameStr (sint32 at) const
 
-const MBCHAR *ConceptDB::GetNameStr (sint32 at) const 
-
-{ 
-   Assert(0 <= at); 
+{
+   Assert(0 <= at);
    Assert(at < m_nConcepts);
 
-   return g_theStringDB->GetNameStr(m_conceptInfo[at].m_name); 
+   return g_theStringDB->GetNameStr(m_conceptInfo[at].m_name);
 }
-
 
 void ConceptDB::Serialize(CivArchive &archive)
 {
@@ -246,9 +229,8 @@ void ConceptDB::Serialize(CivArchive &archive)
 		archive<<m_nConcepts ;
     	archive.Store((uint8 *)m_conceptInfo, sizeof(ConceptInfo) * m_nConcepts) ;
     	archive.Store((uint8 *)m_indexToAlpha, sizeof(sint32) * m_nConcepts) ;
-		
-		
-       
+
+
 	} else {
 		archive>>m_nConcepts ;
 		if (m_conceptInfo)

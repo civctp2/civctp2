@@ -1,4 +1,4 @@
-/* 
+/*
 Copyright (C) 1995-2001 Activision, Inc.
 
 This library is free software; you can redistribute it and/or
@@ -42,7 +42,6 @@ Foundation, Inc., 59 Temple Place, Suite 330, Boston, MA  02111-1307  USA
 	(rep->players->buf && \
 	 rep->players->n_used <= rep->players->n_alloced && \
 	 rep->players->n_alloced <= 1000 && rep->players->unit < 4000));
-
 
 #if defined(DPRNT) || defined(DEBUG) || defined(_DEBUG)
 /* Convert a binary buffer to hex notation.  Don't use twice in one DPRINT! */
@@ -154,7 +153,7 @@ dp_result_t scorerep_set(scorerep_t *rep, dpid_t dpId, dp_uid_t uid, int scoreId
 		DPRINT(("scorerep_set: bloblen %d is out of range (0-%d)\n", bloblen, scorerep_MAX_BLOBLEN));
 		return dp_RES_BAD;
 	}
-	
+
 	/* Create the table of tables, if needed... */
 	if (!rep->players) {
 		rep->players = assoctab_create(sizeof(scorerep_player_t));
@@ -173,10 +172,10 @@ dp_result_t scorerep_set(scorerep_t *rep, dpid_t dpId, dp_uid_t uid, int scoreId
 	/* Save the score blob */
 	player->uid = uid;
 	memcpy(player->blob, blob, bloblen);
-	player->bloblen = bloblen;	
+	player->bloblen = bloblen;
 	ASSERTMEM();
 	scorerep_ASSERT_VALID(rep);
-	
+
 	return dp_RES_OK;
 }
 
@@ -185,10 +184,10 @@ dp_result_t scorerep_set(scorerep_t *rep, dpid_t dpId, dp_uid_t uid, int scoreId
  network.
 
  Flags is 0 or a bitwise combination of scorerep_FLAGS_*.
- If scorerep_FLAGS_SELFEXIT, everyone's score is output; else 
+ If scorerep_FLAGS_SELFEXIT, everyone's score is output; else
  only reports on score for us (i.e. the id we reported via setSelf) and the
  given id.
- Other flags are simply stored in the report for interpretation by the 
+ Other flags are simply stored in the report for interpretation by the
  receiver.
 --------------------------------------------------------------------------*/
 dp_result_t scorerep_toBuf(const scorerep_t *rep, long flags, dpid_t id, scorerep_buf_t *repbuf)
@@ -197,7 +196,7 @@ dp_result_t scorerep_toBuf(const scorerep_t *rep, long flags, dpid_t id, scorere
 	short nPlayers;
 	unsigned char *pbuf;
 	scorerep_player_t *player;
-	
+
 	ASSERTMEM();
 	scorerep_ASSERT_VALID(rep);
 	scorerep_print(rep);
@@ -211,7 +210,7 @@ dp_result_t scorerep_toBuf(const scorerep_t *rep, long flags, dpid_t id, scorere
 	 *  short leaver_id;		// id of leaving player
 	 *  short leaver_uid;		// uid of leaving player
 	 * 	short nPlayers;
-	 *	short ids[nPlayers];	// rows; player id's 
+	 *	short ids[nPlayers];	// rows; player id's
 	 *	long uids[nPlayers];	// user id's associated with those players
 	 *  short bloblen[nPlayers];  // lengths of the players' score blobs
 	 *	char blobs[nPlayers][bloblen[nPlayers]];  // score blobs
@@ -219,7 +218,7 @@ dp_result_t scorerep_toBuf(const scorerep_t *rep, long flags, dpid_t id, scorere
 	 */
 	precondition(rep);
 	precondition(repbuf);
-	precondition(rep->players); 
+	precondition(rep->players);
 
 	if (flags & scorerep_FLAGS_SELFEXIT) {
 		assert(id == rep->id);
@@ -260,7 +259,7 @@ dp_result_t scorerep_toBuf(const scorerep_t *rep, long flags, dpid_t id, scorere
 	*pbuf++ = dpGETSHORT_SECONDBYTE(nPlayers);
 	ASSERTMEM();
 	scorerep_ASSERT_VALID(rep);
-	
+
 	DPRINT(("scorerep_toBuf: players:"));
 	if (!(flags & scorerep_FLAGS_SELFEXIT)) {
 		scorerep_player_t *myplayer = assoctab_subscript(rep->players, rep->id);
@@ -316,7 +315,7 @@ dp_result_t scorerep_toBuf(const scorerep_t *rep, long flags, dpid_t id, scorere
 		scorerep_ASSERT_VALID(rep);
 	} else {
 		size_t len = (size_t)(pbuf - repbuf->buf) + nPlayers * (sizeof(long) + 2*sizeof(short));  /* length so far, without blobs */
-		
+
 		if (len > scorerep_MAX_BUFLEN) {
 			DPRINT(("scorerep_toBuf: rep (nP:%d) is too large for repbuf\n", nPlayers));
 			dpReportAssertionFailure(__LINE__, __FILE__, "overflow");
@@ -325,7 +324,7 @@ dp_result_t scorerep_toBuf(const scorerep_t *rep, long flags, dpid_t id, scorere
 		/* Fill dpid array */
 		for (i=0; i < nPlayers; i++) {
 			assoctab_item_t *pe = assoctab_getkey(rep->players, i);
-			
+
 			assert(pe);
 			DPRINT((" id:%d", pe->key));
 			*pbuf++ = dpGETSHORT_FIRSTBYTE(pe->key);
@@ -338,7 +337,7 @@ dp_result_t scorerep_toBuf(const scorerep_t *rep, long flags, dpid_t id, scorere
 		/* Fill uid array */
 		for (i=0; i < nPlayers; i++) {
 			assoctab_item_t *pe = assoctab_getkey(rep->players, i);
-			
+
 			assert(pe);
 			player = (scorerep_player_t *)pe->value;
 			DPRINT((" uid:%d", player->uid));
@@ -351,10 +350,10 @@ dp_result_t scorerep_toBuf(const scorerep_t *rep, long flags, dpid_t id, scorere
 		ASSERTMEM();
 		scorerep_ASSERT_VALID(rep);
 
-		/* Fill bloblen array */		
+		/* Fill bloblen array */
 		for (i=0; i < nPlayers; i++) {
 			assoctab_item_t *pe = assoctab_getkey(rep->players, i);
-			
+
 			assert(pe);
 			player = (scorerep_player_t *)pe->value;
 			DPRINT((" bloblen:%d", player->bloblen));
@@ -378,7 +377,7 @@ dp_result_t scorerep_toBuf(const scorerep_t *rep, long flags, dpid_t id, scorere
 		/* Fill score blob array */
 		for (i=0; i < nPlayers; i++) {
 			assoctab_item_t *pe = assoctab_getkey(rep->players, i);
-			
+
 			assert(pe);
 			player = (scorerep_player_t *)pe->value;
 			memcpy(pbuf, player->blob, player->bloblen);
@@ -415,7 +414,7 @@ dp_result_t scorerep_fromBuf(scorerep_t *rep, const scorerep_buf_t *repbuf)
 	precondition(repbuf);
 	precondition(/* repbuf->len >= 0 && (Expression always true) */ repbuf->len <= scorerep_MAX_BUFLEN);
 	ASSERTMEM();
-	
+
 	/* Iterate through the elements of the buffer, merrily calling
 	 * scorerep_set() as you go.
 	 */
@@ -435,7 +434,7 @@ dp_result_t scorerep_fromBuf(scorerep_t *rep, const scorerep_buf_t *repbuf)
 	nPlayers = dpMAKESHORT(pbuf[0], pbuf[1]);
 	pbuf += sizeof(short);
 	ASSERTMEM();
-	
+
 	DPRINT(("scorerep_fromBuf: reading %d Players from buf:%s\n", nPlayers, hexstring(repbuf->buf, repbuf->len)));
 	if (nPlayers <= 0)
 		return dp_RES_EMPTY;
@@ -447,7 +446,7 @@ dp_result_t scorerep_fromBuf(scorerep_t *rep, const scorerep_buf_t *repbuf)
 		DPRINT(("scorerep_fromBuf: repbuf->len:%d > scorerep_MAX_BUFLEN:%d.\n", repbuf->len, scorerep_MAX_BUFLEN));
 		return dp_RES_BAD;
 	}
-	
+
 	ids = (dpid_t *)pbuf;
 	pbuf += sizeof(short) * nPlayers;
 	uids = (dp_uid_t *)pbuf;
@@ -460,14 +459,14 @@ dp_result_t scorerep_fromBuf(scorerep_t *rep, const scorerep_buf_t *repbuf)
 		dpid_t id;
 		dp_uid_t uid;
 		unsigned short bloblen;
-		
+
 		c = (char *)(ids + i);
 		id = dpMAKESHORT(c[0], c[1]);
 		c = (char *)(uids + i);
 		uid = dpMAKELONG(c[0], c[1], c[2], c[3]);
 		c = (char *)(bloblens + i);
 		bloblen = dpMAKESHORT(c[0], c[1]);
-		
+
 		err = scorerep_set(rep, id, uid, 0, pbuf, bloblen);
 		pbuf += bloblen;
 		ASSERTMEM();
@@ -495,7 +494,7 @@ dp_result_t scorerep_fromBuf(scorerep_t *rep, const scorerep_buf_t *repbuf)
 dp_result_t scorerep_player_toBuf(const scorerep_player_t *player, scorerep_buf_t *repbuf)
 {
 	unsigned char *pbuf;
-	
+
 	/* save in the following format:
 	 * struct {
 	 *	short bloblen;
@@ -505,7 +504,7 @@ dp_result_t scorerep_player_toBuf(const scorerep_player_t *player, scorerep_buf_
 	precondition(player);
 	precondition(player->bloblen <= scorerep_MAX_BUFLEN);
 	ASSERTMEM();
-	
+
 	if (sizeof(player->bloblen) + player->bloblen > scorerep_MAX_BUFLEN) {
 		DPRINT(("scorerep_player_toBuf: player is too large for repbuf\n"));
 		dpReportAssertionFailure(__LINE__, __FILE__, "overflow");
@@ -516,7 +515,7 @@ dp_result_t scorerep_player_toBuf(const scorerep_player_t *player, scorerep_buf_
 	pbuf = repbuf->buf;
 	*pbuf++ = dpGETSHORT_FIRSTBYTE(player->bloblen);
 	*pbuf++ = dpGETSHORT_SECONDBYTE(player->bloblen);
-	memcpy(pbuf, player->blob, player->bloblen);	
+	memcpy(pbuf, player->blob, player->bloblen);
 	repbuf->len = (pbuf - repbuf->buf);
 	ASSERTMEM();
 	if (repbuf->len > sizeof(repbuf->buf)) {
@@ -540,7 +539,7 @@ dp_result_t scorerep_player_fromBuf(scorerep_player_t *player, const scorerep_bu
 
 	precondition(player);
 	ASSERTMEM();
-	
+
 	pbuf = repbuf->buf;
 	player->bloblen = dpMAKESHORT(pbuf[0], pbuf[1]);
 	pbuf += sizeof(short);
@@ -549,10 +548,9 @@ dp_result_t scorerep_player_fromBuf(scorerep_player_t *player, const scorerep_bu
 		DPRINT(("scorerep_player_fromBuf: bloblen %d is out of range (0-%d)\n", player->bloblen, scorerep_MAX_BLOBLEN));
 		return dp_RES_BUG;
 	}
-	
+
 	DPRINT(("scorerep_player_fromBuf: reading blob of length %d\n", player->bloblen));
 	memcpy(player->blob, pbuf, player->bloblen);
 	ASSERTMEM();
 	return dp_RES_OK;
 }
-

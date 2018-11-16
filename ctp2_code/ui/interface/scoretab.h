@@ -17,12 +17,11 @@ public:
 
 	void Update(void);
 private:
-	
+
 	ctp2_Static *m_difficulty;
 	ctp2_Static *m_rank;
 	ctp2_Static *m_total;
 
-	
 	ctp2_ListBox *m_scoreList;
 
 	ctp2_ListItem *m_scoreElem[SCORE_CAT_MAX];

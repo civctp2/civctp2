@@ -184,11 +184,11 @@ void FaultGenerator::Generate(sint8 *outmap, sint32 outwidth, sint32 outheight,
 		sint32 sx = randgen->Next(outwidth),
 			sy = randgen->Next(outheight);
 		sint32 x, y;
-		sint32 horiz = randgen->Next(100) < 50; 
-		sint32 dir = randgen->Next(100) < 50;    
+		sint32 horiz = randgen->Next(100) < 50;
+		sint32 dir = randgen->Next(100) < 50;
 		if(horiz) {
 			double yslope = (double)(randgen->Next(1800) - 900) / 1000.0;
-			
+
 			x = sx;
 			for(sint32 w = 0; w < length; w++) {
 				y = sint32(sy + ((double)w * yslope));
@@ -197,9 +197,9 @@ void FaultGenerator::Generate(sint8 *outmap, sint32 outwidth, sint32 outheight,
 				while(y < 0)
 					y += outheight;
 
-				Shift(outmap, x, y, outwidth, outheight, 
+				Shift(outmap, x, y, outwidth, outheight,
 				      false, 1, yslope, length / 2, dir ? -1 : 1);
-				Shift(outmap, x, y, outwidth, outheight, 
+				Shift(outmap, x, y, outwidth, outheight,
 				      false, -1, 0 - yslope,  length / 2, dir ? 1 : -1);
 				x++;
 				if(x >= outwidth)
@@ -207,7 +207,7 @@ void FaultGenerator::Generate(sint8 *outmap, sint32 outwidth, sint32 outheight,
 			}
 		} else {
 			double xslope = (double)(randgen->Next(1800) - 900) / 1000.0;
-			
+
 			y = sy;
 			for(sint32 h = 0; h < length; h++) {
 				x = sint32(sx + ((double)h * xslope));
@@ -216,9 +216,9 @@ void FaultGenerator::Generate(sint8 *outmap, sint32 outwidth, sint32 outheight,
 				while(x < 0)
 					x += outwidth;
 
-				Shift(outmap, x, y, outwidth, outheight, 
+				Shift(outmap, x, y, outwidth, outheight,
 				      true, 1, xslope, length / 2, dir ? -1 : 1);
-				Shift(outmap, x, y, outwidth, outheight, 
+				Shift(outmap, x, y, outwidth, outheight,
 				      true, -1, 0 - xslope, length / 2, dir ? 1 : -1);
 				y++;
 				if(y >= outheight)

@@ -1,6 +1,5 @@
 #if 0
 
-
 #ifdef HAVE_PRAGMA_ONCE
 #pragma once
 #endif
@@ -11,7 +10,6 @@
 class Token;
 
 #define MAX_RESOURCES	64
-
 
 enum DEAD_TILE_TYPE
 	{
@@ -68,7 +66,6 @@ enum DEAD_RESOURCE_TYPE
 	DEAD_RESOURCE_TYPE_MAX
 	} ;
 
-
 enum REGION_TYPE
 	{
 	REGION_TYPE_NORTH_POLAR,
@@ -91,8 +88,7 @@ class Token ;
 class UVRecord : public Record
 	{
 	private:
-		
-		
+
 
 		double	m_meridian_prob[k_NUM_MERIDIANS+1],
 				m_meridian_phase_bonus[k_NUM_MERIDIANS+1] ;
@@ -103,37 +99,36 @@ class UVRecord : public Record
 				m_dead_gold[MAX_RESOURCES] ;
 		sint32 m_dummy;
 
-		
 
 	public:
-		
 
-		
-		
-		
 
-		
-		
+
+
+
+
+
+
 
 		UVRecord() ;
 		~UVRecord() ;
 
 		double GetBaseProb(const sint32 region) const
 			{
-			Assert((region>=0) && (region<=k_NUM_MERIDIANS)) ;			
+			Assert((region>=0) && (region<=k_NUM_MERIDIANS)) ;
 			return (m_meridian_prob[region]) ;
 			}
 
 		double GetBonus(const sint32 region) const
 			{
-			Assert((region>=0) && (region<=k_NUM_MERIDIANS)) ;			
+			Assert((region>=0) && (region<=k_NUM_MERIDIANS)) ;
 			return (m_meridian_phase_bonus[region]) ;
 			}
 
 		double GetProb(const sint32 phase, const sint32 region) const
 			{
 			Assert(phase>=0) ;
-			Assert((region>=0) && (region<=k_NUM_MERIDIANS)) ;			
+			Assert((region>=0) && (region<=k_NUM_MERIDIANS)) ;
 			return (m_meridian_prob[region] + m_meridian_phase_bonus[region] * phase) ;
 			}
 

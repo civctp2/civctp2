@@ -1,16 +1,3 @@
-
-
-
-
-
-
-
-
-
-
-
-
-
 #include "c3.h"
 
 #include "aui.h"
@@ -31,10 +18,8 @@
 #include "texttable.h"
 #include "c3windows.h"
 
-
 extern C3UI			*g_c3ui;
 extern ColorSet		*g_colorSet;
-
 
 TextTable::TextTable(
 	AUI_ERRCODE *retval,
@@ -79,7 +64,6 @@ TextTable::TextTable(
 	if ( !AUI_SUCCESS(*retval) ) return;
 }
 
-
 TextTable::TextTable(
 	AUI_ERRCODE *retval,
 	uint32 id,
@@ -118,10 +102,10 @@ TextTable::TextTable(
 	Assert( AUI_SUCCESS(*retval) );
 	if ( !AUI_SUCCESS(*retval) ) return;
 
-	
-	
 
-	
+
+
+
 	*retval = InitCommon(columns, surface);
 	Assert( AUI_SUCCESS(*retval) );
 	if ( !AUI_SUCCESS(*retval) ) return;
@@ -131,21 +115,18 @@ TextTable::TextTable(
 	if ( !AUI_SUCCESS(*retval) ) return;
 }
 
-
 AUI_ERRCODE TextTable::InitCommon( MBCHAR *ldlBlock, aui_Surface *surface )
 {
-	
+
 	uint32 columns = 0;
 	uint32 size = 0;
 
 	aui_Ldl *theLdl = g_c3ui->GetLdl();
-	
-	
+
 	BOOL valid = theLdl->IsValid( ldlBlock );
 	Assert( valid );
 	if ( !valid ) return AUI_ERRCODE_HACK;
 
-	
 	ldl_datablock *block = theLdl->GetLdl()->FindDataBlock( ldlBlock );
 	Assert( block != NULL );
 	if ( !block ) return AUI_ERRCODE_LDLFINDDATABLOCKFAILED;
@@ -153,58 +134,51 @@ AUI_ERRCODE TextTable::InitCommon( MBCHAR *ldlBlock, aui_Surface *surface )
 	columns = block->GetInt( k_TEXTTABLE_LDL_COLUMNS );
 	size = block->GetInt( k_TEXTTABLE_LDL_TEXTSIZE );
 
-	
-
-	
 
 
-	
+
+
+
+
 	if (!columns) return AUI_ERRCODE_OK;
 
-	
 	InitCommon ( columns, surface );
 
 	return AUI_ERRCODE_OK;
 }
 
-
 AUI_ERRCODE TextTable::InitCommon( uint32 columns, aui_Surface *surface )
 {
 	m_numItems = 0;
 
-	
 	m_item_width = m_width / columns;
 	m_item_height = 0;
 
 	MBCHAR strbuf[256];
 	uint32 i = 0;
 
-	
 	if (columns > k_TEXTTABLE_MAXHEADERS) m_columns = k_TEXTTABLE_MAXHEADERS;
 	else m_columns = columns;
-	
+
 	m_rows = 0;
 	sint32 textHeight = 0;
 
-	
-	if (surface) 
+	if (surface)
 	{
-		textHeight = textutils_GetFontHeight( 
+		textHeight = textutils_GetFontHeight(
 			(aui_DirectSurface *)surface, m_fontsize );
 	}
 	else
 	{
-		
-		textHeight = textutils_GetHeight( 
+
+		textHeight = textutils_GetHeight(
 			(aui_DirectSurface *)g_c3ui->Primary(), "Wj" );
 	}
-	
-	
+
 	m_item_height = textHeight;
 
 	AUI_ERRCODE errcode;
 
-	
 	aui_Static **itemPtr = m_items;
 	for ( i = k_TEXTTABLE_MAXITEMS; i; i-- )
 	{
@@ -212,7 +186,7 @@ AUI_ERRCODE TextTable::InitCommon( uint32 columns, aui_Surface *surface )
 			&errcode,
 			aui_UniqueId(),
 			0, 0, m_item_width, m_item_height,
-			NULL, 
+			NULL,
 			k_TEXTTABLE_MAXTEXT);
 
 		(*itemPtr)->SetTextFontSize(m_fontsize);
@@ -236,7 +210,6 @@ AUI_ERRCODE TextTable::InitCommon( uint32 columns, aui_Surface *surface )
 
 	return AUI_ERRCODE_OK;
 }
-
 
 
 AUI_ERRCODE TextTable::CreateRangers( void )
@@ -268,11 +241,9 @@ AUI_ERRCODE TextTable::CreateRangers( void )
 
 	RepositionRangers();
 
-	
-	
+
 	return AUI_ERRCODE_OK;
 }
-
 
 
 TextTable::~TextTable()
@@ -283,27 +254,24 @@ TextTable::~TextTable()
 	for ( i = k_TEXTTABLE_MAXITEMS; i; i-- )
 		delete *itemPtr++;
 
-	
-	
+
+
 
 
 
 
 }
 
-
 void TextTable::InitHeaders( void )
 {
 	uint32 i = 0;
 
-	
 	if ( !m_columns ) return;
 
 	TextSwitch **headerPtr = m_table_headers;
 	for ( i = 0; i < m_columns ; i++ )
 		AddHeaderSwitch(*headerPtr++);
 }
-
 
 
 BOOL TextTable::AddColumn( uint32 pos, MBCHAR *text )
@@ -313,26 +281,21 @@ BOOL TextTable::AddColumn( uint32 pos, MBCHAR *text )
 	MBCHAR strbuf[256];
 
 	TextSwitch **headerPtr = m_table_headers;
-	
-	
+
 	if (!pos || (pos > m_columns)) pos = m_columns;
-	
-	
+
 	if (!text)
 		sprintf(strbuf,"col-%d",pos);
 	else strcpy(strbuf, text);
 
-	
 	m_item_width = m_width / (m_columns + 1);
 
-	
-	for ( i = 0 ; i < pos ; i++ ) 
+	for ( i = 0 ; i < pos ; i++ )
 		*headerPtr++;
 
-	
 	if (pos == m_columns)
 	{
-		
+
 		*headerPtr = new TextSwitch(
 			&errcode,
 			aui_UniqueId(),
@@ -340,84 +303,70 @@ BOOL TextTable::AddColumn( uint32 pos, MBCHAR *text )
 			k_PatternName,
 			strbuf );
 	}
-	
+
 	return TRUE;
 }
 
-
 BOOL TextTable::AddRow( uint32 pos, MBCHAR *text )
 {
-	
 
 	uint32 i = 0;
 	MBCHAR strbuf[256];
 
-	
 	if (!pos || (pos > m_rows)) pos = m_rows;
-	
-	
+
 	if (!text)
 		sprintf(strbuf,"row-%d",pos);
 	else strcpy(strbuf, text);
 
-	
-	
 
-	
+
+
+
 	if ( (m_numItems + m_columns) > k_TEXTTABLE_MAXITEMS ) return FALSE;
 
-	
 	aui_Static **itemPtr = m_items;
 	aui_Static *parent = NULL;
-	
-	for ( i = 0 ; i < m_numItems ; i++ ) 
+
+	for ( i = 0 ; i < m_numItems ; i++ )
 		*itemPtr++;
-	
-	
+
 	parent = *itemPtr++;
 	parent->SetText(strbuf);
 
-	
 	for ( i = 1 ; i < m_columns ; i++ )
 	{
-
 
 		parent->AddChild(*itemPtr++);
 	}
 
-	
 	m_numItems = m_numItems + m_columns;
 	m_rows++;
 
-	
 	AddItem((aui_Item *)parent);
 	return TRUE;
 }
-
 
 BOOL TextTable::SetTextEntry( uint32 row, uint32 column, MBCHAR *text )
 {
 	uint32 i,j;
 
-	
 	if (( row >= m_rows ) || ( column >= m_columns )) return FALSE;
 
-	
 	aui_Static **itemPtr = m_items;
-	
-	
+
 	for ( i = 0 ; i < m_rows ; i++ )
 	{
-		
+
 		if ( i == row )
 		{
-			
+
 			for ( j = 0 ; j < column ; j++ )
 				*itemPtr++;
 			(*itemPtr)->SetText(text);
 			break;
 		}
-		else 
+		else
 		{
 			for ( j = 0 ; j < m_columns ; j++ )
 				*itemPtr++;
@@ -426,31 +375,27 @@ BOOL TextTable::SetTextEntry( uint32 row, uint32 column, MBCHAR *text )
 
 	return TRUE;
 }
-
 
 BOOL TextTable::GetTextEntry( uint32 row, uint32 column, MBCHAR *strbuf )
 {
 	uint32 i,j;
 
-	
 	if (( row >= m_rows ) || ( column >= m_columns )) return FALSE;
 
-	
 	aui_Static **itemPtr = m_items;
-	
-	
+
 	for ( i = 0 ; i < m_rows ; i++ )
 	{
-		
+
 		if ( i == row )
 		{
-			
+
 			for ( j = 0 ; j < column ; j++ )
 				*itemPtr++;
 			strcpy(strbuf,(*itemPtr)->GetText());
 			break;
 		}
-		else 
+		else
 		{
 			for ( j = 0 ; j < m_columns ; j++ )
 				*itemPtr++;
@@ -460,17 +405,14 @@ BOOL TextTable::GetTextEntry( uint32 row, uint32 column, MBCHAR *strbuf )
 	return TRUE;
 }
 
-
 BOOL TextTable::SetTextHeader( uint32 pos, MBCHAR *text )
 {
 	uint32 i = 0;
 
-	
 	if (pos >= m_columns) return FALSE;
 
 	TextSwitch **headerPtr = m_table_headers;
 
-	
 	for( i = 0 ; i < pos ; i++ )
 		*headerPtr++;
 
@@ -479,17 +421,14 @@ BOOL TextTable::SetTextHeader( uint32 pos, MBCHAR *text )
 	return TRUE;
 }
 
-
 BOOL TextTable::GetTextHeader( uint32 pos, MBCHAR *strbuf )
 {
 	uint32 i = 0;
 
-	
 	if (pos >= m_columns) return FALSE;
 
 	TextSwitch **headerPtr = m_table_headers;
 
-	
 	for( i = 0 ; i < pos ; i++ )
 		*headerPtr++;
 
@@ -499,7 +438,6 @@ BOOL TextTable::GetTextHeader( uint32 pos, MBCHAR *strbuf )
 }
 
 
-
 BOOL TextTable::CleanTextTable( void )
 {
 	uint32 i,j;
@@ -507,12 +445,11 @@ BOOL TextTable::CleanTextTable( void )
 	aui_Static **itemPtr = m_items;
 	aui_Static *parent = NULL;
 
-	
 	for ( i = 0 ; i < m_rows ; i++ )
 	{
 		parent = *itemPtr++;
 		RemoveItem(parent->Id());
-		
+
 		for ( j = 1 ; j < m_columns ; j++ )
 		{
 			parent->RemoveChild((*itemPtr)->Id());
@@ -520,20 +457,18 @@ BOOL TextTable::CleanTextTable( void )
 		}
 	}
 
-	
 	m_numItems = 0;
 	m_rows = 0;
 
 	return TRUE;
 }
 
-
 AUI_ERRCODE TextTable::DrawThis( aui_Surface *surface, sint32 x, sint32 y )
 {
-	
-	
 
-	
+
+
+
 	if ( IsHidden() ) return AUI_ERRCODE_OK;
 
 	if ( !surface ) surface = m_window->TheSurface();
@@ -542,15 +477,15 @@ AUI_ERRCODE TextTable::DrawThis( aui_Surface *surface, sint32 x, sint32 y )
 	OffsetRect( &rect, m_x + x, m_y + y );
 	ToWindow( &rect );
 
-	
 
 
-	
+
+
 
 	primitives_BevelRect16( surface, &rect, 1, 1, 16, 16 );
 	if ( IsActive() )
 	{
-		
+
 		primitives_BevelRect16( surface, &rect, 1, 1, 16, 16 );
 	}
 

@@ -10,13 +10,13 @@
 //
 // THIS FILE IS NOT GENERATED OR SUPPORTED BY ACTIVISION.
 //
-// This material has been developed at apolyton.net by the Apolyton CtP2 
+// This material has been developed at apolyton.net by the Apolyton CtP2
 // Source Code Project. Contact the authors at ctp2source@apolyton.net.
 //
 //----------------------------------------------------------------------------
 //
 // Compiler flags
-// 
+//
 // __AUI_USE_DIRECTX__
 // - When defined, use DirectX.
 // - When not defined, this file is not used at all.
@@ -31,9 +31,7 @@
 
 #include "c3.h"
 
-
 #ifdef __AUI_USE_DIRECTX__
-
 
 #include "aui_ui.h"
 #include "aui_surface.h"
@@ -42,7 +40,6 @@
 
 #include "profileDB.h"
 extern ProfileDB *g_theProfileDB;
-
 
 
 aui_DirectMouse::aui_DirectMouse(
@@ -56,7 +53,7 @@ aui_DirectMouse::aui_DirectMouse(
 	if ( !AUI_SUCCESS(*retval) ) return;
 
 	*retval = CreateDirectMouse();
-   
+
     Assert(*retval != AUI_ERRCODE_CREATEFAILED);
     Assert(*retval != AUI_ERRCODE_SETFORMATFAILED);
     Assert(*retval != AUI_ERRCODE_SETCOOPLEVELFAILED);
@@ -72,15 +69,12 @@ AUI_ERRCODE aui_DirectMouse::CreateDirectMouse( void )
 {
 	HRESULT hr;
 
-	
 	hr = m_lpdi->CreateDevice( GUID_SysMouse, &m_lpdid, NULL );
 	if ( hr != DI_OK ) return AUI_ERRCODE_CREATEFAILED;
 
-	
 	hr = m_lpdid->SetDataFormat( &c_dfDIMouse );
 	if ( hr != DI_OK ) return AUI_ERRCODE_SETFORMATFAILED;
 
-	
 	uint32 coopFlags = DISCL_NONEXCLUSIVE | DISCL_FOREGROUND;
 	if ( m_exclusiveMode )
 		coopFlags = DISCL_EXCLUSIVE | DISCL_FOREGROUND;
@@ -91,7 +85,6 @@ AUI_ERRCODE aui_DirectMouse::CreateDirectMouse( void )
 	hr = m_lpdid->SetEventNotification( m_inputEvent );
 	if ( hr != DI_OK ) return AUI_ERRCODE_SETEVENTFAILED;
 
-	
 	static DIPROPDWORD dipdw_buffersize =
 	{
 		{
@@ -116,19 +109,17 @@ AUI_ERRCODE aui_DirectMouse::GetInput( void )
 {
 	if ( !m_lpdid ) return AUI_ERRCODE_NODIRECTINPUTDEVICE;
 
-	
-	
+
 	m_data.time = GetTickCount();
 
 	bool haveMoves = false;
-	
+
 	for ( sint32 numInputs = 200; numInputs; numInputs-- )
 	{
 		DWORD numElements = 1;
 		static DIDEVICEOBJECTDATA od[ 1 ];
 		DIDEVICEOBJECTDATA *ptrOd = od;
 
-		
 		HRESULT hr = m_lpdid->GetDeviceData(
 			sizeof( DIDEVICEOBJECTDATA ),
 			ptrOd,
@@ -159,10 +150,9 @@ AUI_ERRCODE aui_DirectMouse::GetInput( void )
 				return AUI_ERRCODE_NOINPUT;
 		}
 
-		
 		switch ( ptrOd->dwOfs )
 		{
-		
+
 		case DIMOFS_X:
 			m_data.position.x += sint32(m_sensitivity * sint32(ptrOd->dwData));
 			if ( m_data.position.x >= g_ui->Primary()->Width() )
@@ -173,7 +163,6 @@ AUI_ERRCODE aui_DirectMouse::GetInput( void )
 			haveMoves = true;
 			break;
 
-		
 		case DIMOFS_Y:
 			m_data.position.y += sint32(m_sensitivity * sint32(ptrOd->dwData));
 			if ( m_data.position.y >= g_ui->Primary()->Height() )
@@ -184,11 +173,10 @@ AUI_ERRCODE aui_DirectMouse::GetInput( void )
 			haveMoves = true;
 			break;
 
-		
 		case DIMOFS_BUTTON0:
-			
+
 			if (g_theProfileDB && g_theProfileDB->GetLeftHandedMouse()) {
-				
+
 				m_data.rbutton = uint8(ptrOd->dwData) & 0x80;
 				m_data.flags = m_flags;
 			} else {
@@ -197,11 +185,10 @@ AUI_ERRCODE aui_DirectMouse::GetInput( void )
 			}
 			return AUI_ERRCODE_OK;
 
-		
 		case DIMOFS_BUTTON1:
-			
+
 			if (g_theProfileDB && g_theProfileDB->GetLeftHandedMouse()) {
-				
+
 				m_data.lbutton = uint8(ptrOd->dwData) & 0x80;
 				m_data.flags = m_flags;
 			} else {
@@ -222,50 +209,49 @@ AUI_ERRCODE aui_DirectMouse::GetInput( void )
 
 		case DIK_LSHIFT :
 			if (uint8(ptrOd->dwData) & 0x80) {
-				
+
 				m_flags |= k_MOUSE_EVENT_FLAG_LSHIFT;
 			} else {
-				
+
 				m_flags &= ~k_MOUSE_EVENT_FLAG_LSHIFT;
 			}
 			return AUI_ERRCODE_OK;
 		case DIK_RSHIFT :
 			if (uint8(ptrOd->dwData) & 0x80) {
-				
+
 				m_flags |= k_MOUSE_EVENT_FLAG_RSHIFT;
 			} else {
-				
+
 				m_flags &= ~k_MOUSE_EVENT_FLAG_RSHIFT;
 			}
 			return AUI_ERRCODE_OK;
 		case DIK_LCONTROL :
 			if (uint8(ptrOd->dwData) & 0x80) {
-				
+
 				m_flags |= k_MOUSE_EVENT_FLAG_LCONTROL;
 			} else {
-				
+
 				m_flags &= ~k_MOUSE_EVENT_FLAG_LCONTROL;
 			}
 			return AUI_ERRCODE_OK;
 		case DIK_RCONTROL :
 			if (uint8(ptrOd->dwData) & 0x80) {
-				
+
 				m_flags |= k_MOUSE_EVENT_FLAG_RCONTROL;
 			} else {
-				
+
 				m_flags &= ~k_MOUSE_EVENT_FLAG_RCONTROL;
 			}
 			return AUI_ERRCODE_OK;
 		}
 	}
 
-	
-	
-	
-	
+
+
+
+
 
 	return AUI_ERRCODE_OK;
 }
 
-
-#endif 
+#endif

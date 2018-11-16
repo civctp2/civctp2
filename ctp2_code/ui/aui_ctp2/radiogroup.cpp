@@ -1,16 +1,3 @@
-
-
-
-
-
-
-
-
-
-
-
-
-
 #include "c3.h"
 
 #include "aui.h"
@@ -23,19 +10,17 @@
 #include "radiogroup.h"
 
 
-
 RadioGroup::RadioGroup(
 	AUI_ERRCODE *retval,
 	uint32 id,
 	MBCHAR *ldlBlock )
 	:
 	aui_ImageBase( ldlBlock ),
-	aui_TextBase( ldlBlock, (MBCHAR *)NULL ), 
+	aui_TextBase( ldlBlock, (MBCHAR *)NULL ),
 	aui_SwitchGroup( retval, id, ldlBlock ),
 	PatternBase( ldlBlock, (MBCHAR *)NULL )
 {
 }
-
 
 
 RadioGroup::RadioGroup(
@@ -56,15 +41,13 @@ RadioGroup::RadioGroup(
 }
 
 
-
 AUI_ERRCODE RadioGroup::DrawThis( aui_Surface *surface, sint32 x, sint32 y )
 {
-	
+
 	if ( IsHidden() ) return AUI_ERRCODE_OK;
 
 	if ( !surface ) surface = m_window->TheSurface();
 
-	
 	RECT rect = { 0, 0, m_width, m_height };
 	OffsetRect( &rect, m_x + x, m_y + y );
 	ToWindow( &rect );
@@ -77,7 +60,7 @@ AUI_ERRCODE RadioGroup::DrawThis( aui_Surface *surface, sint32 x, sint32 y )
 
 
 
-	
+
 
 
 

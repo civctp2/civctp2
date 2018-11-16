@@ -1,4 +1,3 @@
-
 #ifndef ARMY_MANAGER_WINDOW_H__
 #define ARMY_MANAGER_WINDOW_H__
 
@@ -78,5 +77,4 @@ class ArmyManagerWindow {
 	static void CleanupEvents();
 };
 
-	
 #endif

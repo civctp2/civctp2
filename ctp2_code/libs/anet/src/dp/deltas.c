@@ -1,4 +1,4 @@
-/* 
+/*
 Copyright (C) 1995-2001 Activision, Inc.
 
 This library is free software; you can redistribute it and/or
@@ -100,7 +100,7 @@ void dp_PASCAL dp_rplayers_enumEx_cb(dpid_t id, char *name, long flags, void *co
  is generated and placed in a queue for retrieval with dpReceive.
  See anet.h for the definition of dp_objectDelta_packet_t.
 
- When called with monitor=TRUE, a burst of messages are generated giving 
+ When called with monitor=TRUE, a burst of messages are generated giving
  the initial contents of the table.
  When called with monitor=FALSE, no more messages of that sort will
  be generated, although there may still be some in the queue; you can
@@ -109,11 +109,11 @@ void dp_PASCAL dp_rplayers_enumEx_cb(dpid_t id, char *name, long flags, void *co
  The key argument is a variable-length binary string that indicates
  what objects to start or stop monitoring.
 
- To start or stop monitoring sessions, use 
+ To start or stop monitoring sessions, use
 	keylen=1, key[0] = dp_KEY_SESSIONS
- To stop monitoring servers, use 
+ To stop monitoring servers, use
 	keylen=1, key[0] = dp_KEY_SERVERPINGS,
- To start monitoring servers, use 
+ To start monitoring servers, use
  	keylen=3;
 	key[0] = dp_KEY_SERVERPINGS,
 	key[1] = (char) dpGETSHORT_FIRSTBYTE(sessiontype);
@@ -123,7 +123,7 @@ void dp_PASCAL dp_rplayers_enumEx_cb(dpid_t id, char *name, long flags, void *co
 	key[0] = dp_KEY_PLAYERS;
 	dpGetSessionId(dp, &sess, &key[1], &keylen);
 	keylen++;
- To request that latencies be included in player deltas for the current 
+ To request that latencies be included in player deltas for the current
 	session, use
 	keylen = 1, key[0] = dp_KEY_PLAYER_LATENCIES;
 	The latency in milliseconds will be placed in the latency field of
@@ -155,7 +155,7 @@ DP_API dp_result_t DP_APIX dpRequestObjectDeltas(
 			DPRINT(("dpRequestObjectDeltas: sessions: can't specify session type yet\n"));
 			return dp_RES_BAD;
 		}
-		if (dp->monitor_object_sessions && monitor) 
+		if (dp->monitor_object_sessions && monitor)
 			return dp_RES_ALREADY;
 		/* Cause dp_sessions_cb to generate new messages */
 		dp->monitor_object_sessions = monitor;
@@ -211,7 +211,7 @@ DP_API dp_result_t DP_APIX dpRequestObjectDeltas(
 			}
 			dp->monitor_object_servers_sessType = dpMAKESHORT(key[1], key[2]);
 			DPRINT(("dpRequestObjectDeltas: servers_sessType %d\n",dp->monitor_object_servers_sessType));
-			
+
 			/* enumerate the existing servers */
 			for (i=0; i<dptab_tableSize(dp->serverpings); i++) {
 				dp_serverInfo_t *server;
@@ -234,7 +234,7 @@ DP_API dp_result_t DP_APIX dpRequestObjectDeltas(
 		return dp_RES_OK;
 		break;
 
-	case dp_KEY_PLAYERS: 
+	case dp_KEY_PLAYERS:
 		{
 		dp_session_t sDesc;
 		void *rplayers_context;
@@ -295,7 +295,7 @@ DP_API dp_result_t DP_APIX dpRequestObjectDeltas(
 		dp->monitor_player_latencies = (monitor) ? TRUE : FALSE;
 		return dp_RES_OK;
 		break;
-		
+
 	case dp_KEY_SCORES:
 		/* For the moment, only allow the default session type */
 		if (keylen != 1) {
@@ -308,7 +308,7 @@ DP_API dp_result_t DP_APIX dpRequestObjectDeltas(
 			return dp_RES_BUG;
 		}
 		return dp_RES_OK;
-		break; 
+		break;
 	default:
 		;
 	}
@@ -402,28 +402,28 @@ dp_result_t dpSendObjectDelta(
 			pkt.body.flags |= dp_OBJECTDELTA_FLAG_INOPENSESS;
 			if (id >= dp->firstId && id < dp->firstId + dp_PLAYERS_PER_HOST)
 				pkt.body.flags |= dp_OBJECTDELTA_FLAG_LOCAL;
-			if (dp_commHdl2dpid(dp, dp->hMaster) == id) 
+			if (dp_commHdl2dpid(dp, dp->hMaster) == id)
 				pkt.body.flags |= dp_OBJECTDELTA_FLAG_ISHOST;
 		}
 		datalen = sizeof(dp_playerId_t);
 		DPRINT(("playername:%s ping:%d loss:%d", data->p.name, pkt.body.latency, pkt.body.pktloss));
-		break; 
+		break;
 	}
 	case dp_KEY_SESSIONS:
 		if (dp->players && !memcmp(data->sess.reserved2, dp->sess_subkey, dp->sess_subkeylen))
 			pkt.body.flags |= dp_OBJECTDELTA_FLAG_INOPENSESS;
 		if (!memcmp(data->sess.adrMaster, dp->dpio->myAdr, dp->dpio->myAdrLen))
 			pkt.body.flags |= dp_OBJECTDELTA_FLAG_LOCAL;
-		datalen = sizeof(dp_session_t); 
+		datalen = sizeof(dp_session_t);
 		DPRINT(("sessname %s, flags %x", data->sess.sessionName, data->sess.flags));
-		break; 
+		break;
 	case dp_KEY_SERVERPINGS:
 		datalen = sizeof(dp_serverInfo_t);
 		DPRINT(("hostname %s", data->serv.hostname));
-		break; 
+		break;
 	case dp_KEY_SCORES:
-		datalen = sizeof(data->score.nScoreTypes) 
-			+ data->score.nScoreTypes * ( sizeof(data->score.scoreIds[0]) + 
+		datalen = sizeof(data->score.nScoreTypes)
+			+ data->score.nScoreTypes * ( sizeof(data->score.scoreIds[0]) +
 										  sizeof(data->score.scores[0]) );
 		DPRINT(("uid %d", dpMAKELONG(subkey[0], subkey[1], subkey[2], subkey[3])));
 		break;
@@ -447,6 +447,3 @@ dp_result_t dpSendObjectDelta(
 	dp_assertValid(dp);
 	return err;
 }
-
-
-

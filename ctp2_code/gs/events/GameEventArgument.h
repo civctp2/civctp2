@@ -57,10 +57,10 @@ public:
 private:
 	GAME_EVENT_ARGUMENT m_type;
 	union {
-		uint32 m_id;         
-		sint32 m_value;  
-		SimpleMapPoint m_pos;  
-		void *m_ptr;     
+		uint32 m_id;
+		sint32 m_value;
+		SimpleMapPoint m_pos;
+		void *m_ptr;
 	} m_data;
 };
 

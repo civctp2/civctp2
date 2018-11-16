@@ -1,17 +1,5 @@
-
-
-
-
-
-
-
-
-
-
- 
 #ifndef __ALLINONEWINDOW_H__
 #define __ALLINONEWINDOW_H__
-
 
 #include "ns_aiplayersetup.h"
 #include "ns_window.h"
@@ -27,7 +15,6 @@ class aui_Switch;
 class aui_StringTable;
 class ns_HPlayerItem;
 
-
 class DialogBoxWindow;
 extern DialogBoxWindow *g_rulesWindow;
 extern DialogBoxWindow *g_exclusionsWindow;
@@ -35,10 +22,8 @@ extern DialogBoxWindow *g_exclusionsWindow;
 class AllinoneWindow;
 extern AllinoneWindow *g_allinoneWindow;
 
-
 #define k_PPT_PUBLIC	0
 #define k_PPT_PRIVATE	1
-
 
 
 #include "StartingPosition.h"
@@ -52,15 +37,14 @@ struct ns_ScenarioInfo {
 	uint8 m_startInfoType;
 	uint8 m_haveSavedGame;
 	sint32 m_legalCivs[k_MAX_PLAYERS];
-	MBCHAR m_scenarioName[_MAX_PATH]; 
-	                                  
-};
+	MBCHAR m_scenarioName[_MAX_PATH];
 
+};
 
 class AllinoneWindow : public ns_Window
 {
 public:
-	
+
 	AllinoneWindow( AUI_ERRCODE *retval );
 	virtual ~AllinoneWindow();
 
@@ -77,31 +61,27 @@ public:
 
 	sint32 CurNumHumanPlayers( void );
 	sint32 CurNumAiPlayers( void );
-	sint32 CurNumPlayers( void ); 
+	sint32 CurNumPlayers( void );
 
-	
 	MBCHAR m_lname[ 101 ];
 
-	
-	
+
 	tech_WLList<nf_AIPlayer *> *m_aiplayerList;
 
-	
 	bool m_receivedGuids;
 	CivGuid m_civGuids[k_MAX_PLAYERS];
 
-	
-	
-	
+
+
+
 	BOOL WhoHasTribe( sint32 index, uint16 *curKey, BOOL *curIsAI, BOOL *curIsFemale );
 
-	
-	
-	
+
+
+
 	sint32 FindTribe( uint16 key, BOOL isAI, BOOL *isFemale = NULL );
 
-	
-	
+
 	BOOL AssignTribe(
 		sint32 index,
 		uint16 key,
@@ -109,13 +89,12 @@ public:
 		BOOL isFemale,
 		BOOL unassign );
 
-	
-	
-	
-	
+
+
+
+
 	void RequestTribe( sint32 index );
 
-	
 	BOOL IsMine( NETFunc::Player *player );
 	ns_HPlayerItem *GetHPlayerFromId( dpid_t id );
 	NETFunc::Player *GetPlayerFromKey( uint16 key );
@@ -136,34 +115,29 @@ public:
 
 	void	Update( void );
 
-	
-	void	UpdateGameSetup( bool b = false ); 
-	
-	void	ReallyUpdateGameSetup( void ); 
+	void	UpdateGameSetup( bool b = false );
 
-	void	UpdatePlayerSetup( void ); 
+	void	ReallyUpdateGameSetup( void );
+
+	void	UpdatePlayerSetup( void );
 	void	UpdateAIPlayerSetup( nf_AIPlayer *aiplayer );
 	void	DeleteAIPlayer( nf_AIPlayer *aiplayer );
 	void	ReallyUpdateAIPlayerSetup( void );
 
 	void	AddAIPlayer( sint32 curCount = 0 );
 
-	
 	sint32	OKToAddPlayers( void );
-
 
 	BOOL    LoadGUIDs(SaveInfo *info);
 	BOOL    SetScenarioInfo(SaveInfo *info);
 
 	ns_ScenarioInfo *GetScenarioInfo() { return &m_scenInfo; }
 
-
 	virtual AUI_ERRCODE Idle( void );
 	virtual AUI_ERRCODE SetParent( aui_Region *region );
 
 	void EnableButtonsForUnlaunch();
 
-	
 
 	enum CONTROL
 	{
@@ -219,27 +193,22 @@ public:
 		CONTROL_RULESTITLESTATICTEXT2,
 		CONTROL_RULESSHEET,
 
-
 		CONTROL_BLOODLUSTSWITCH,
-
 
 
 		CONTROL_POLLUTIONSWITCH,
 
 		CONTROL_DYNAMICJOINSWITCH,
 
-
 		CONTROL_HANDICAPPINGSWITCH,
 		CONTROL_GOLDSTATICTEXT,
 		CONTROL_PWSTATICTEXT,
-
 
 
 		CONTROL_CIVPOINTSBUTTON,
 		CONTROL_PWPOINTSBUTTON,
 
 		CONTROL_RULESOKBUTTON,
-
 
 		CONTROL_EXCLUSIONSTITLESTATICTEXT,
 		CONTROL_EXCLUSIONSSHEET,
@@ -267,14 +236,12 @@ public:
 		CONTROL_MAX = CONTROL_LAST - CONTROL_FIRST
 	};
 
-	
 	AUI_ERRCODE CreateExclusions( void );
 
 	void UpdatePlayerButtons( void );
 	void SpitOutGameSetup( void );
 
 	void	UpdateTribeSwitches( void );
-
 
 
 protected:
@@ -286,12 +253,12 @@ protected:
 	Mode m_mode;
 	BOOL m_isScenarioGame;
 
-	
-	
 
 
 
-	
+
+
+
 	uint32 m_tickGame;
 	uint32 m_tickPlayer;
 	uint32 m_tickAIPlayer;
@@ -314,7 +281,7 @@ protected:
 
 	bool m_joinedGame;
 
-	aui_Action *m_dbActionArray[ 1 ]; 
+	aui_Action *m_dbActionArray[ 1 ];
 
 	sint32 m_numAvailUnits;
 	aui_Switch *m_units[ k_UNITS_MAX ];
@@ -323,10 +290,9 @@ protected:
 	sint32 m_numAvailWonders;
 	aui_Switch *m_wonders[ k_WONDERS_MAX ];
 	friend class nf_GameSetup;
-	
+
 	ns_ScenarioInfo m_scenInfo;
 
-	
 
 	friend class PlayStyleDropDownAction;
 
@@ -334,7 +300,6 @@ protected:
 
 
 	static void PlayStyleValueSpinnerCallback(aui_Control *control, uint32 action, uint32 data, void *cookie);
-	
 
 
     AUI_ACTION_BASIC(GameNameTextFieldAction);
@@ -381,7 +346,7 @@ protected:
 	private:
 		sint32 m_index;
 	};
-	
+
 	class ImprovementExclusionAction : public aui_Action
 	{
 	public:
@@ -398,7 +363,7 @@ protected:
 	private:
 		sint32 m_index;
 	};
-	
+
 	class WonderExclusionAction : public aui_Action
 	{
 	public:
@@ -416,7 +381,6 @@ protected:
 		sint32 m_index;
 	};
 };
-
 
 void AllinoneAgesCallback(
 	aui_Control *control,
@@ -459,5 +423,4 @@ void AllinoneWorldTypeCallback(
 	uint32 data,
 	void* cookie );
 
-
-#endif 
+#endif

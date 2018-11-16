@@ -1,42 +1,30 @@
-
-
-
-
-
-
 #include "command.h"
-
 
 CommandLineParser::CommandLineParser()
 {
-  
-  Usage		= NULL; 
 
-  
-  Options	= NULL; 
-  XOption	= NULL; 
-}  
+  Usage		= NULL;
 
+  Options	= NULL;
+  XOption	= NULL;
+}
 
 CommandLineParser::~CommandLineParser()
 {
   ResetOptions();
 }
 
-
-void 
+void
 CommandLineParser::SetUsage(void (*UsageFunc)())
 {
   Usage = UsageFunc;
 }
 
-
-void 
+void
 CommandLineParser::ResetOptions()
 {
   __CBS *options=Options;
 
-  
   while(Options!=NULL)
   {
 	 options = Options->next;
@@ -44,28 +32,23 @@ CommandLineParser::ResetOptions()
 	 Options = options;
   }
 
-  
   if(XOption)
 	 delete XOption;
 
   XOption = NULL;
 
-  
   Usage   = NULL;
 }
 
-
-void 
+void
 CommandLineParser::AddCommandOption(char *Key,unsigned flags,bool (*ActionFunc)(char *,int len))
 {
-	
+
 	if(ActionFunc==NULL)
 		return;
 
-	
 	__CBS *new_option=new __CBS;
 
-	
 	new_option->Value.ActionFunc	= ActionFunc;
 	new_option->flags				= flags;
 
@@ -77,133 +60,112 @@ CommandLineParser::AddCommandOption(char *Key,unsigned flags,bool (*ActionFunc)(
 		new_option->Key			= strdup(Key);
 	}
 
-	
 	AddCommandOption(new_option);
 }
 
-void 
+void
 CommandLineParser::AddCommandOption(char *Key,unsigned flags,bool *flag)
 {
-	
+
 	if((Key==NULL)||(flag==NULL))
 		return;
 
-	
 	__CBS *new_option=new __CBS;
 
-	
 	new_option->CommandType	= CT_USE_FLAG;
 	new_option->Key			= strdup(Key);
 	new_option->Value.flag	= flag;
 	new_option->flags		= flags;
 
-	
 	AddCommandOption(new_option);
 }
 
-void 
+void
 CommandLineParser::AddCommandOption(char *Key,unsigned flags,int *val)
 {
-	
+
 	if((Key==NULL)||(val==NULL))
 		return;
 
-	
 	__CBS *new_option=new __CBS;
 
-	
 	new_option->CommandType	= CT_USE_INT;
 	new_option->Key			= strdup(Key);
 	new_option->Value.ival  = val;
 	new_option->flags		= flags;
 
-	
 	AddCommandOption(new_option);
 }
 
-
-void 
+void
 CommandLineParser::AddCommandOption(char *Key,unsigned flags,float *val)
 {
-	
+
 	if((Key==NULL)||(val==NULL))
 		return;
 
-	
 	__CBS *new_option=new __CBS;
 
-	
 	new_option->CommandType	= CT_USE_FLOAT;
 	new_option->Key			= strdup(Key);
 	new_option->Value.fval	= val;
 	new_option->flags		= flags;
 
-	
 	AddCommandOption(new_option);
 }
 
-
-void 
+void
 CommandLineParser::AddCommandOption(char *Key,unsigned flags,char **val)
 {
-	
+
 	if((Key==NULL)||(val==NULL))
 		return;
 
-	
 	__CBS *new_option=new __CBS;
 
-	
 	new_option->CommandType	= CT_USE_STRING;
 	new_option->Key			= strdup(Key);
 	new_option->Value.sval  = val;
 	new_option->flags		= flags;
 
-	
 	AddCommandOption(new_option);
 }
 
 
-
-void 
+void
 CommandLineParser::AddCommandOption(__CBS *new_option)
 {
-	
+
 	if(new_option==NULL)
 		return;
 
-	
 	if(new_option->Key==NULL)
 	{
 	   if(XOption!=NULL)
 		  delete XOption;
 
-	   
 	   XOption = new_option;
-	
+
 	   return;
 	}
 	else
 	 new_option->KeyLen = strlen(new_option->Key);
 
-	
 	new_option->next= Options;
 	Options			= new_option;
 }
 
 
-
-__CBS * 
+__CBS *
 CommandLineParser::LookupCommandOption(char *str)
 {
-	
+
 	if(str==NULL)
 	   return NULL;
 
 	__CBS	*cur=Options;
 	int		test=true;
 
-	
 	while(cur!=NULL)
 	{
 		if(cur->Key!=NULL)
@@ -223,25 +185,22 @@ CommandLineParser::LookupCommandOption(char *str)
 	return NULL;
 }
 
-
-bool		 
+bool
 CommandLineParser::ExecuteOption(__CBS *option,char *buff)
 {
-	
+
 	if(option==NULL)
 		return false;
 
   	int  len=0;
   	bool retval = false;
-  	
-	
+
   	if(buff!=NULL)
   	{
   		 len   = strlen(buff)-option->KeyLen;
   		 buff += option->KeyLen;
   	}
-  	
-	
+
   	switch(option->CommandType)
   	{
   	case	CT_NOP              :
@@ -265,7 +224,7 @@ CommandLineParser::ExecuteOption(__CBS *option,char *buff)
   	default:
   		    return false;
   	}
-  	
+
   	return retval;
 }
 
@@ -275,10 +234,10 @@ CommandLineParser::ExecuteOption(__CBS *option,char *buff)
 
 
 
-bool		
+bool
 CommandLineParser::AssignFlag	(__CBS *option,char *buf,int len)
 {
-  
+
   bool  val=true;
 
   if(option->flags & CTFLAGS_INVERT)
@@ -289,35 +248,35 @@ CommandLineParser::AssignFlag	(__CBS *option,char *buf,int len)
   return true;
 }
 
-bool		
+bool
 CommandLineParser::AssignInt	(__CBS *option,char *buf,int len)
 {
-  
+
   if(!IsStringLegal(buf,len))
 	 return false;
 
   *(option->Value.ival) = atoi(buf);
-  
+
   return true;
 }
 
-bool		
+bool
 CommandLineParser::AssignFloat	(__CBS *option,char *buf,int len)
 {
-  
+
   if(!IsStringLegal(buf,len))
 	 return false;
 
   *(option->Value.fval) = (float)atof(buf);
-  
+
   return true;
-  
+
 }
 
-bool		
+bool
 CommandLineParser::AssignString(__CBS *option,char *buf,int len)
 {
-  
+
   if(!IsStringLegal(buf,len))
 	 return false;
   *(option->Value.sval) = strdup(buf);
@@ -325,8 +284,7 @@ CommandLineParser::AssignString(__CBS *option,char *buf,int len)
   return true;
 }
 
-
-bool		
+bool
 CommandLineParser::IsStringLegal(char *buf,int len)
 {
   if(buf==NULL)
@@ -339,15 +297,13 @@ CommandLineParser::IsStringLegal(char *buf,int len)
 }
 
 
-
-bool 
+bool
 CommandLineParser::Execute(char *command_line)
 {
   return true;
 }
 
-
-bool 
+bool
 CommandLineParser::Execute(int num_args,char **command_line)
 {
   if(num_args<=0)
@@ -358,7 +314,7 @@ CommandLineParser::Execute(int num_args,char **command_line)
   for(int i=0;i<num_args;i++)
   {
 	 option = LookupCommandOption(command_line[i]);
-     
+
 	 if(option==NULL)
 		option=XOption;
 
@@ -368,4 +324,3 @@ CommandLineParser::Execute(int num_args,char **command_line)
 
   return true;
 }
-

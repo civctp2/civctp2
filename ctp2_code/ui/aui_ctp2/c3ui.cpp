@@ -39,7 +39,6 @@
 #include "aui_keyboard.h"
 #include "aui_surface.h"
 
-
 C3UI::C3UI(
 	AUI_ERRCODE *retval,
 	HINSTANCE hinst,
@@ -56,7 +55,6 @@ C3UI::C3UI(
 	m_iconResource = new aui_Resource<Icon>;
 	m_pictureResource = new aui_Resource<Picture>;
 }
-
 
 
 C3UI::~C3UI()
@@ -80,12 +78,11 @@ C3UI::~C3UI()
 	}
 }
 
-BOOL C3UI::TopWindowIsNonBackground(void) 
+BOOL C3UI::TopWindowIsNonBackground(void)
 {
-	if (TopWindow()) { 
+	if (TopWindow()) {
 		return TopWindow()->Type() != AUI_WINDOW_TYPE_BACKGROUND &&
-				TopWindow()->Type() != AUI_WINDOW_TYPE_SINKING; 
-	} else 
-		return FALSE; 
+				TopWindow()->Type() != AUI_WINDOW_TYPE_SINKING;
+	} else
+		return FALSE;
 }
-

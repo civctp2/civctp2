@@ -4,16 +4,14 @@
 #ifndef __TEXTSWITCH_H__
 #define __TEXTSWITCH_H__
 
-
 #include "aui_switch.h"
 #include "patternbase.h"
-
 
 
 class TextSwitch : public aui_Switch, public PatternBase
 {
 public:
-	
+
 	TextSwitch(
 		AUI_ERRCODE *retval,
 		uint32 id,
@@ -44,5 +42,4 @@ public:
 		sint32 y = 0 );
 };
 
-
-#endif 
+#endif

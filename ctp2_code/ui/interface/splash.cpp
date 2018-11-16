@@ -1,5 +1,3 @@
-
-
 #include "c3.h"
 #include "splash.h"
 
@@ -26,14 +24,12 @@ void Splash::Cleanup(void)
 }
 
 
-
 Splash::Splash()
 :
     m_textX     (k_SPLASH_FIRST_X),
     m_textY     (k_SPLASH_FIRST_Y)
 {
 }
-
 
 
 void Splash::AddText(MBCHAR const * text)
@@ -48,7 +44,6 @@ void Splash::AddText(MBCHAR const * text)
                            );
     }
 }
-
 
 
 void Splash::AddTextNL(MBCHAR const * text)
@@ -89,4 +84,3 @@ void Splash::AddHilitedTextNL(MBCHAR const *text)
 	   if (m_textY >= surface->Height()) m_textY = k_SPLASH_FIRST_Y;
     }
 }
-

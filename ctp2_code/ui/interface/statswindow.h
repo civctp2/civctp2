@@ -13,7 +13,6 @@ enum SW {
 	SW_NO_DIPLOMACY
 };
 
-
 enum BUTTON {
 	BUTTON_CIV,
 	BUTTON_CITY,
@@ -25,7 +24,6 @@ enum BUTTON {
 	BUTTON_INFO,
 	BUTTON_OPTIONS
 };
-
 
 class StatsWindow : public C3Window
 {
@@ -70,10 +68,8 @@ private:
 
 };
 
-
 #define k_STATS_WINDOW_HEIGHT		40
 #define k_STATS_NUM_BUTTONS			8
-
 
 int StatsWindow_Initialize( void );
 int StatsWindow_Cleanup( void );
@@ -86,6 +82,5 @@ BOOL statswindow_IsTradeDisabled();
 
 sint32 statswindow_DisableScreensButton( void );
 sint32 statswindow_EnableScreensButton( void );
-
 
 #endif

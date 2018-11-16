@@ -1,4 +1,3 @@
-
 #ifndef LDL_USER_H
 #define LDL_USER_H
 
@@ -7,5 +6,4 @@
 #include "ldl_file.hpp"
 #include "ldl_memmap.h"
 
-
-#endif 
+#endif

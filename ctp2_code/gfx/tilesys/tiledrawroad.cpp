@@ -1,15 +1,3 @@
-
-
-
-
-
-
-
-
-
-
-
- 
 #include "c3.h"
 #include "aui.h"
 #include "aui_directsurface.h"
@@ -36,7 +24,7 @@ void TiledMap::DrawARoadPiece(aui_Surface *surface, Pixel16 *data, sint32 x, sin
 {
 	if (fog) {
 		if (m_zoomLevel != k_ZOOM_NORMAL) {
-			DrawBlendedOverlayScaled(surface, data, x, y, GetZoomTilePixelWidth(), 
+			DrawBlendedOverlayScaled(surface, data, x, y, GetZoomTilePixelWidth(),
 				GetZoomTileGridHeight(), k_FOW_COLOR, k_FOW_BLEND_VALUE, flags);
 		} else {
 			DrawBlendedOverlay(surface, data, x, y, k_FOW_COLOR, k_FOW_BLEND_VALUE, flags);
@@ -58,12 +46,12 @@ void TiledMap::DrawARoadPiece(aui_Surface *surface, Pixel16 *data, sint32 x, sin
 
 void TiledMap::DrawRoads(
 	aui_Surface *surface,
-	const MapPoint &pos,		
-	sint32 x,			
-	sint32 y,			
-	sint32 roadType,	
-	uint16 roadOffset,	
-	BOOL fog,			
+	const MapPoint &pos,
+	sint32 x,
+	sint32 y,
+	sint32 roadType,
+	uint16 roadOffset,
+	BOOL fog,
 	sint32 flags)
 {
 	MapPoint	newPos;
@@ -71,13 +59,11 @@ void TiledMap::DrawRoads(
 	sint32		neighborFlag = 0;
 	Pixel16		*data;
 
-	
 	if ( g_theWorld->IsCity(pos) ) {
 		DrawCityRoads( surface, pos, x, y, roadType, roadOffset, fog );
 		return;
 	}
 
-	
 	if(pos.GetNeighborPosition(NORTH,newPos)) {
 		if (g_theWorld->IsAnyRoad(newPos) ||
 			g_theWorld->IsTunnel(newPos) ||
@@ -151,7 +137,6 @@ void TiledMap::DrawRoads(
 		}
 	}
 
-	
 	if (roadType == k_ROAD_TYPE_3 || roadType == k_ROAD_TYPE_4) {
 		data = m_tileSet->GetRoadData(ROAD_MAGLEVPOST+roadOffset);
 		DrawARoadPiece(surface, data, x, y, fog);
@@ -196,7 +181,6 @@ void TiledMap::DrawRoads(
 		return;
 	}
 
-	
 	if (isConnectStraight == k_X_INTERSECT) {
 		data = m_tileSet->GetRoadData(ROAD_X_STRAIGHT+roadOffset);
 		DrawARoadPiece(surface, data, x, y, fog);
@@ -217,7 +201,7 @@ void TiledMap::DrawRoads(
 
 
 	}
-	else if (isConnectStraight == k_T_INTERSECT)	
+	else if (isConnectStraight == k_T_INTERSECT)
 	{
 		if ((neighborFlag & k_MASK_8) == k_MASK_8) {
 			data = m_tileSet->GetRoadData(ROAD_T_SOUTH+roadOffset);
@@ -299,7 +283,7 @@ void TiledMap::DrawRoads(
 
 		}
 	}
-	else if (isConnectStraight)	
+	else if (isConnectStraight)
 	{
 		if (neighborFlag & k_BIT_SOUTH) {
 			data = m_tileSet->GetRoadData(ROAD_SOUTH+roadOffset);
@@ -383,7 +367,6 @@ void TiledMap::DrawRoads(
 		}
 	}
 
-	
 	if (isConnectDiagonal == k_X_INTERSECT) {
 		data = m_tileSet->GetRoadData(ROAD_X_DIAGONAL+roadOffset);
 		DrawARoadPiece(surface, data, x, y, fog);
@@ -404,7 +387,7 @@ void TiledMap::DrawRoads(
 
 
 	}
-	else if (isConnectDiagonal == k_T_INTERSECT)	
+	else if (isConnectDiagonal == k_T_INTERSECT)
 	{
 		if ((neighborFlag & k_MASK_9) == k_MASK_9) {
 			data = m_tileSet->GetRoadData(ROAD_T_SOUTHWEST+roadOffset);
@@ -487,7 +470,7 @@ void TiledMap::DrawRoads(
 
 		}
 	}
-	else if (isConnectDiagonal)	
+	else if (isConnectDiagonal)
 	{
 		if (neighborFlag & k_BIT_SOUTHWEST) {
 			data = m_tileSet->GetRoadData(ROAD_SOUTHWEST+roadOffset);
@@ -581,12 +564,12 @@ void TiledMap::DrawRoads(
 
 void TiledMap::DrawCityRoads(
 	aui_Surface *surface,
-	const MapPoint &pos,		
-	sint32 x,			
-	sint32 y,			
-	sint32 roadType,	
-	uint16 roadOffset,	
-	BOOL fog,			
+	const MapPoint &pos,
+	sint32 x,
+	sint32 y,
+	sint32 roadType,
+	uint16 roadOffset,
+	BOOL fog,
 	sint32 flags
 	)
 {
@@ -595,7 +578,6 @@ void TiledMap::DrawCityRoads(
 	sint32 neighborFlag = 0;
 	Pixel16	*data = NULL;
 
-	
 	if(pos.GetNeighborPosition(NORTH,newPos)) {
 		if ( g_theWorld->IsRoad(k_ROAD_TYPE_1, newPos) ) {
 			roadOffset = k_ROAD_OFFSET_1;
@@ -635,7 +617,7 @@ void TiledMap::DrawCityRoads(
 			data = NULL;
 		}
 	}
-	
+
 	if(pos.GetNeighborPosition(NORTHEAST,newPos)) {
 		if ( g_theWorld->IsRoad(k_ROAD_TYPE_1, newPos) ) {
 			roadOffset = k_ROAD_OFFSET_1;
@@ -675,7 +657,7 @@ void TiledMap::DrawCityRoads(
 			data = NULL;
 		}
 	}
-	
+
 	if(pos.GetNeighborPosition(EAST,newPos)) {
 		if ( g_theWorld->IsRoad(k_ROAD_TYPE_1, newPos) ) {
 			roadOffset = k_ROAD_OFFSET_1;
@@ -715,7 +697,7 @@ void TiledMap::DrawCityRoads(
 			data = NULL;
 		}
 	}
-	
+
 	if(pos.GetNeighborPosition(SOUTHEAST,newPos)) {
 		if ( g_theWorld->IsRoad(k_ROAD_TYPE_1, newPos) ) {
 			roadOffset = k_ROAD_OFFSET_1;
@@ -754,7 +736,7 @@ void TiledMap::DrawCityRoads(
 			data = NULL;
 		}
 	}
-	
+
 	if(pos.GetNeighborPosition(SOUTH,newPos)) {
 		if ( g_theWorld->IsRoad(k_ROAD_TYPE_1, newPos) ) {
 			roadOffset = k_ROAD_OFFSET_1;
@@ -794,7 +776,7 @@ void TiledMap::DrawCityRoads(
 			data = NULL;
 		}
 	}
-	
+
 	if(pos.GetNeighborPosition(SOUTHWEST,newPos)) {
 		if ( g_theWorld->IsRoad(k_ROAD_TYPE_1, newPos) ) {
 			roadOffset = k_ROAD_OFFSET_1;
@@ -834,7 +816,7 @@ void TiledMap::DrawCityRoads(
 			data = NULL;
 		}
 	}
-	
+
 	if(pos.GetNeighborPosition(WEST,newPos)) {
 		if ( g_theWorld->IsRoad(k_ROAD_TYPE_1, newPos) ) {
 			roadOffset = k_ROAD_OFFSET_1;
@@ -874,7 +856,7 @@ void TiledMap::DrawCityRoads(
 			data = NULL;
 		}
 	}
-	
+
 	if(pos.GetNeighborPosition(NORTHWEST,newPos)) {
 		if ( g_theWorld->IsRoad(k_ROAD_TYPE_1, newPos) ) {
 			roadOffset = k_ROAD_OFFSET_1;
@@ -914,6 +896,3 @@ void TiledMap::DrawCityRoads(
 		}
 	}
 }
-
-
-

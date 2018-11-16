@@ -1,4 +1,3 @@
-
 #ifndef WONDER_UTIL_H__
 #define WONDER_UTIL_H__
 

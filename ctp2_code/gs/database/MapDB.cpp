@@ -1,5 +1,3 @@
-
-
 #include "c3.h"
 #include "c3errors.h"
 #include "MapDB.h"
@@ -58,7 +56,7 @@ BOOL MapDatabase::Initialize(char *filename, C3DIR dir)
 			return FALSE;
 		}
 		token->GetNumber(x);
-		
+
 		if(token->Next() != TOKEN_NUMBER) {
 			c3errors_ErrorDialog(token->ErrStr(), "Expected height");
 			delete token;
@@ -107,4 +105,3 @@ const MapRecord *MapDatabase::FindBestMapSizeMatch(sint32 w, sint32 h)
 		closestRec = 0;
 	return &m_rec[closestRec];
 }
-

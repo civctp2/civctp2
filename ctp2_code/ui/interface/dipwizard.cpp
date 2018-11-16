@@ -11,7 +11,7 @@
 //
 // THIS FILE IS NOT GENERATED OR SUPPORTED BY ACTIVISION.
 //
-// This material has been developed at apolyton.net by the Apolyton CtP2 
+// This material has been developed at apolyton.net by the Apolyton CtP2
 // Source Code Project. Contact the authors at ctp2source@apolyton.net.
 //
 //----------------------------------------------------------------------------
@@ -32,7 +32,6 @@
 // - Initialized local variables. (Sep 9th 2005 Martin Gühmann)
 //
 //----------------------------------------------------------------------------
-
 
 #include "c3.h"
 #include "dipwizard.h"
@@ -95,7 +94,7 @@ extern C3UI       *g_c3ui;
 
 ctp2_Static       *DipWizard::m_stages[DIP_WIZ_STAGE_MAX];
 ctp2_Button       *DipWizard::m_toneButtons[DIPLOMATIC_TONE_MAX];
-ctp2_Button       *DipWizard::m_backButton = NULL, 
+ctp2_Button       *DipWizard::m_backButton = NULL,
                   *DipWizard::m_nextButton = NULL,
                   *DipWizard::m_sendButton = NULL,
                   *DipWizard::m_cancelButton = NULL;
@@ -151,7 +150,6 @@ DiplomacyArg      DipWizard::m_viewThreatArg;
 DIP_WIZ_VIEW_TYPE DipWizard::m_viewType;
 bool              DipWizard::m_sendCounter;
 
-
 DipWizard::DipWizard(AUI_ERRCODE *err)
 {
 	*err = AUI_ERRCODE_OK;
@@ -170,7 +168,6 @@ DipWizard::DipWizard(AUI_ERRCODE *err)
 		Assert(m_stages[i]);
 	}
 
-	
 	m_nations = (ctp2_DropDown *)aui_Ldl::GetObject(s_dipWizardBlock, "Stage0.Nations");
 	if(m_nations) m_nations->SetActionFuncAndCookie(NationCallback, NULL);
 
@@ -192,7 +189,7 @@ DipWizard::DipWizard(AUI_ERRCODE *err)
 		MBCHAR toneId[k_MAX_NAME_LEN];
 		sprintf(toneId, "str_ldl_DipTone%d", i);
 		label->SetText(g_theStringDB->GetNameStr(toneId));
-		
+
 	}
 
 	m_backButton = (ctp2_Button *)aui_Ldl::GetObject(s_dipWizardBlock, "CreateButtons.BackButton");
@@ -212,13 +209,12 @@ DipWizard::DipWizard(AUI_ERRCODE *err)
 
 	m_rejectButton = (ctp2_Button *)aui_Ldl::GetObject(s_dipWizardBlock, "ViewButtons.RejectButton");
 	aui_Ldl::SetActionFuncAndCookie(s_dipWizardBlock, "ViewButtons.RejectButton", RejectCallback, NULL);
-	
+
 	m_counterOrThreatenButton = (ctp2_Button *)aui_Ldl::GetObject(s_dipWizardBlock, "ViewButtons.CounterOrThreatenButton");
 	if(m_counterOrThreatenButton) m_counterOrThreatenButton->SetActionFuncAndCookie(CounterOrThreatenCallback, NULL);
-	
+
 	m_createButtons = (ctp2_Static *)aui_Ldl::GetObject(s_dipWizardBlock, "CreateButtons");
 	m_viewButtons = (ctp2_Static *)aui_Ldl::GetObject(s_dipWizardBlock, "ViewButtons");
-
 
 	m_intelButton = (ctp2_Button *)aui_Ldl::GetObject(s_dipWizardBlock, "CheckIntelligenceButton");
 	aui_Ldl::SetActionFuncAndCookie(s_dipWizardBlock, "CheckIntelligenceButton", CheckIntelligence, NULL);
@@ -234,12 +230,11 @@ DipWizard::DipWizard(AUI_ERRCODE *err)
 	aui_Ldl::SetActionFuncAndCookie(s_dipWizardBlock, "Stage1.Tabs.Request", ProposalTabCallback, (void *)DIP_WIZ_PROP_TAB_REQUEST);
 	aui_Ldl::SetActionFuncAndCookie(s_dipWizardBlock, "Stage1.Tabs.Offer", ProposalTabCallback, (void *)DIP_WIZ_PROP_TAB_OFFER);
 	aui_Ldl::SetActionFuncAndCookie(s_dipWizardBlock, "Stage1.Tabs.Treaty", ProposalTabCallback, (void *)DIP_WIZ_PROP_TAB_TREATY);
-	
+
 	aui_Ldl::SetActionFuncAndCookie(s_dipWizardBlock, "Stage2.Tabs.Request", ExchangeTabCallback, (void *)DIP_WIZ_PROP_TAB_REQUEST);
 	aui_Ldl::SetActionFuncAndCookie(s_dipWizardBlock, "Stage2.Tabs.Offer", ExchangeTabCallback, (void *)DIP_WIZ_PROP_TAB_OFFER);
 	aui_Ldl::SetActionFuncAndCookie(s_dipWizardBlock, "Stage2.Tabs.Treaty", ExchangeTabCallback, (void *)DIP_WIZ_PROP_TAB_TREATY);
 
-	
 	m_parchment = (ctp2_Static *)aui_Ldl::GetObject(s_dipWizardBlock, "Details.Parchment");
 	m_responseDiplomat = (ctp2_Static *)aui_Ldl::GetObject(s_dipWizardBlock, "Stage3.Diplomat");
 	//Added by Martin Gühmann to display the emissary photo of recipient
@@ -247,10 +242,10 @@ DipWizard::DipWizard(AUI_ERRCODE *err)
 
 	m_threatList = (ctp2_ListBox *)aui_Ldl::GetObject(s_dipWizardBlock, "Stage4.List");
 	m_threatList->SetActionFuncAndCookie(ThreatListCallback, NULL);
-	
-	
-	
-	
+
+
+
+
 
 	m_window->SetStronglyModal(TRUE);
 
@@ -262,7 +257,7 @@ DipWizard::DipWizard(AUI_ERRCODE *err)
 	m_menuExchange = -1;
 	m_proposalDataPending = false;
 
-	m_intelButton->Enable(FALSE); 
+	m_intelButton->Enable(FALSE);
 
 	m_viewTone = -1;
 	m_viewProposal = -1;
@@ -284,7 +279,6 @@ DipWizard::~DipWizard()
 		aui_Ldl::DeleteHierarchyFromRoot(s_dipWizardBlock);
 	}
 
-	
 	sint32 i;
 	for(i = 0; i < DIP_WIZ_STAGE_MAX; i++) {
 		m_stages[i] = NULL;
@@ -314,8 +308,7 @@ DipWizard::~DipWizard()
 		aui_Ldl::DeleteHierarchyFromRoot("DipPercentRequest");
 		m_percentRequestWindow = NULL;
 	}
-	
-	
+
 	if(m_curMenu) {
 		delete m_curMenu;
 		m_curMenu = NULL;
@@ -324,11 +317,10 @@ DipWizard::~DipWizard()
 
 AUI_ERRCODE DipWizard::Initialize()
 {
-	
+
 	if(s_dipWizard)
 		return AUI_ERRCODE_OK;
 
-	
 	AUI_ERRCODE err = AUI_ERRCODE_OK;
 	s_dipWizard = new DipWizard(&err);
 
@@ -357,12 +349,10 @@ AUI_ERRCODE DipWizard::Display()
 	if(!s_dipWizard) {
 		return AUI_ERRCODE_HACK;
 	}
-	
 
 	if(g_network.IsActive() && g_player[g_selected_item->GetVisiblePlayer()] &&
 	   g_player[g_selected_item->GetVisiblePlayer()]->m_playerType == PLAYER_TYPE_ROBOT) {
-		
-		
+
 		return AUI_ERRCODE_OK;
 	}
 
@@ -376,10 +366,9 @@ AUI_ERRCODE DipWizard::Display()
 			err = s_dipWizard->m_window->Show();
 		}
 
-		m_recipient = -1; 
+		m_recipient = -1;
 		SetStage(0);
 
-		
 		FillRecipientLists();
 
 		m_sendCounter = false;
@@ -389,8 +378,7 @@ AUI_ERRCODE DipWizard::Display()
 		SetProposal(-1);
 		SetExchange(-1);
 
-		
-		
+
 	}
 
 	return err;
@@ -412,16 +400,16 @@ AUI_ERRCODE DipWizard::Hide()
 bool DipWizard::CanInitiateRightNow()
 {
 	if(!g_network.IsActive()) {
-		
+
 		return true;
 	}
 
 	if(!g_network.IsMyTurn()) {
-		
+
 		return false;
 	}
 
-	const Diplomat & diplomat = 
+	const Diplomat & diplomat =
 		Diplomat::GetDiplomat(g_selected_item->GetVisiblePlayer());
 
 	sint32 p;
@@ -432,17 +420,16 @@ bool DipWizard::CanInitiateRightNow()
 			continue;
 
 		if(diplomat.GetMyLastNewProposal(p) != Diplomat::s_badNewProposal)
-			
+
 			return false;
 	}
 
-	
 	return true;
 }
 
 void DipWizard::FillProposalLists()
 {
-	
+
 	sint32 pr;
 	ctp2_ListBox *propList = NULL, *exchList = NULL;
 
@@ -454,19 +441,17 @@ void DipWizard::FillProposalLists()
 		m_exchList[i]->SetActionFuncAndCookie(ExchListCallback, (void *)i);
 	}
 
-	const Diplomat & diplomat = 
+	const Diplomat & diplomat =
 		Diplomat::GetDiplomat(g_selected_item->GetVisiblePlayer());
 
 	for(pr = 0; pr < g_theDiplomacyProposalDB->NumRecords(); pr++) {
 		const DiplomacyProposalRecord *rec = g_theDiplomacyProposalDB->Get(pr);
 		if(!rec) continue;
 
-		
 		if (diplomat.InvalidNewProposal(m_recipient, rec))
 			continue;
 
-		
-		
+
 		if(rec->GetArg1HisCity() && m_recipient >= 0 && m_recipient < k_MAX_PLAYERS && g_player[m_recipient]) {
 			sint32 c;
 			bool seenOne = false;
@@ -479,7 +464,7 @@ void DipWizard::FillProposalLists()
 			if(!seenOne)
 				continue;
 		}
-					
+
 		if(rec->GetCategoryRequest()) {
 			propList = m_propList[DIP_WIZ_PROP_TAB_REQUEST];
 			exchList = m_exchList[DIP_WIZ_PROP_TAB_REQUEST];
@@ -499,32 +484,31 @@ void DipWizard::FillProposalLists()
 		AddProposalItem(exchList, rec);
 	}
 
-	
-	
-	
+
+
+
 	if(m_threatList) {
 		m_threatList->Clear();
 		if(GetStage() == DIP_WIZ_STAGE_MAKE_THREAT) {
 			m_sendButton->Enable(FALSE);
 		}
-		
 
-		
+
 		sint32 threatenee = m_recipient;
 
 		if(threatenee > 0 && threatenee < k_MAX_PLAYERS) {
 			for(i = 1; i < g_theDiplomacyThreatDB->NumRecords(); i++) {
 				const DiplomacyThreatRecord *rec = g_theDiplomacyThreatDB->Get(i);
-				
+
 				switch(rec->GetArg1()) {
 				case k_DiplomacyThreat_Arg1_HisCity_Bit:
 				case k_DiplomacyThreat_Arg1_SpecialAttack_Bit:
 					{
 						if(m_recipient < 0 || m_recipient >= k_MAX_PLAYERS || !g_player[threatenee])
 							continue;
-						
+
 						bool foundCity = false;
-						
+
 						sint32 c;
 						for(c = 0; c < g_player[threatenee]->m_all_cities->Num(); c++) {
 							if(g_player[threatenee]->m_all_cities->Access(c).GetEverVisible() & (1 << g_selected_item->GetVisiblePlayer())) {
@@ -540,23 +524,23 @@ void DipWizard::FillProposalLists()
 					{
 						sint32 p;
 						bool foundThirdParty = false;
-						
+
 						for(p = 1; p < k_MAX_PLAYERS; p++) {
 							if(!g_player[p]) continue;
-							
+
 							if(p == g_selected_item->GetVisiblePlayer())
 								continue;
-							
+
 							if(p == threatenee)
 								continue;
-							
+
 							if(!g_player[g_selected_item->GetVisiblePlayer()]->HasContactWith(p))
 								continue;
-							
+
 							foundThirdParty = true;
 							break;
 						}
-						
+
 						if(!foundThirdParty)
 							continue;
 						break;
@@ -567,13 +551,10 @@ void DipWizard::FillProposalLists()
 						if(m_recipient < 0 || m_recipient >= k_MAX_PLAYERS || !g_player[threatenee])
 							continue;
 
-						
 						const Diplomat & diplomat = Diplomat::GetDiplomat(g_selected_item->GetVisiblePlayer());
 
-						
 						ai::Agreement pact;
-						
-						
+
 						bool has_pacts = diplomat.GetAgreementToBreak(threatenee, pact);
 						if (!has_pacts)
 							continue;
@@ -583,19 +564,19 @@ void DipWizard::FillProposalLists()
 				default:
 					break;
 				}
-				
+
 				ctp2_ListItem *item = (ctp2_ListItem *)aui_Ldl::BuildHierarchyFromRoot("DipWizThreatItem");
 				Assert(item);
 				if(!item)
 					break;
-				
+
 				item->SetUserData((void *)i);
-				
+
 				ctp2_Static *text = (ctp2_Static *)item->GetChildByIndex(0);
 				Assert(text);
 				if(!text)
 					break;
-				
+
 				text->SetText(g_theStringDB->GetNameStr(rec->GetTitle()));
 				m_threatList->AddItem(item);
 			}
@@ -609,12 +590,10 @@ void DipWizard::FillRecipientLists()
 	Player *visPlayer = g_player[g_selected_item->GetVisiblePlayer()];
 	if(!visPlayer) return;
 
-	
 
 	if(m_nations) {
 		m_nations->Clear();
 
-		
 		item = (ctp2_ListItem *)aui_Ldl::BuildHierarchyFromRoot("DipWizNationItem");
 		Assert(item);
 		if(item) {
@@ -623,7 +602,7 @@ void DipWizard::FillRecipientLists()
 			item->SetUserData((void *)-1);
 			m_nations->AddItem(item);
 		}
-						   
+
 		sint32 pl;
 		for(pl = 1; pl < k_MAX_PLAYERS; pl++) {
 			if(g_player[pl] == visPlayer) continue;
@@ -633,17 +612,14 @@ void DipWizard::FillRecipientLists()
 			item = (ctp2_ListItem *)aui_Ldl::BuildHierarchyFromRoot("DipWizNationItem");
 			Assert(item);
 			if(item) {
-					
-				
+
 				ctp2_Static *label = (ctp2_Static *)item->GetChildByIndex(0);
 				MBCHAR buf[k_MAX_NAME_LEN];
 				g_player[pl]->m_civilisation->GetCountryName(buf);
 				label->SetText(buf);
-				
-				
+
 				item->SetUserData((void *)pl);
 
-				
 				m_nations->AddItem(item);
 			}
 		}
@@ -669,9 +645,9 @@ void DipWizard::SetNation(sint32 pl)
 {
 	if(m_recipient == pl) return;
 
-	
-	
-	
+
+
+
 	if (pl >= 0)
 		m_recipient = pl;
 
@@ -702,13 +678,12 @@ void DipWizard::SetNation(sint32 pl)
 	UpdateButtons();
 	UpdateDetails();
 
-	
 	FillProposalLists();
 
-	
-	
-	
-	
+
+
+
+
 	if (pl < 0)
 		m_recipient = pl;
 }
@@ -733,7 +708,6 @@ void DipWizard::SetTone(sint32 tone)
 	UpdateDetails();
 }
 
-	
 void DipWizard::SetProposal(sint32 prop)
 {
 	m_proposal = prop;
@@ -789,44 +763,42 @@ void DipWizard::SetStage(sint32 stage)
 
 	UpdateButtons();
 	UpdateProposalStage();
-	UpdateExchangeStage();	
+	UpdateExchangeStage();
 	UpdateViewProposalStage();
 }
 
 void DipWizard::SetViewResponse(sint32 sender, sint32 recipient, bool negotiationsComplete, const Response *useResp, const Response *useThreatResp)
 {
-	const Response & sender_response = 
+	const Response & sender_response =
 		Diplomat::GetDiplomat(sender).GetResponsePending(recipient);
-	
-	const Response & last_receiver_response = 
+
+	const Response & last_receiver_response =
 		Diplomat::GetDiplomat(recipient).GetMyLastResponse(sender);
-	
+
 	bool receiver_has_initiative = Diplomat::GetDiplomat(sender).GetReceiverHasInitiative(recipient);
 
 	Response resp;
 	if(useResp) {
 		resp = *useResp;
-	} else if(negotiationsComplete || 
+	} else if(negotiationsComplete ||
 		( receiver_has_initiative && sender_response.type != RESPONSE_THREATEN)
 	   ) {
-		
-		
+
 		resp = last_receiver_response;
 	} else if (sender_response.type == RESPONSE_THREATEN) {
-		
+
 		resp = sender_response;
 	} else {
-		
+
 		resp = Diplomat::GetDiplomat(recipient).GetResponsePending(sender);
 	}
 
-	
 	if(resp.type == RESPONSE_INVALID)
 		return;
 
-	
-	
-	
+
+
+
 	Initialize();
 
 	m_viewSender = sender;
@@ -839,18 +811,16 @@ void DipWizard::SetViewResponse(sint32 sender, sint32 recipient, bool negotiatio
 	m_viewExchange = -1;
 	m_viewThreat = -1;
 
-	
 
 	if(resp.type == RESPONSE_COUNTER) {
 		m_viewTone = resp.counter.tone;
-		
-			
-			
-			
-		
+
+
+
+
+
 			m_viewProposal = diplomacyutil_GetDBIndex(resp.counter.first_type);
 			m_viewExchange = diplomacyutil_GetDBIndex(resp.counter.second_type);
-		
 
 		m_viewProposalArg = resp.counter.first_arg;
 		m_viewExchangeArg = resp.counter.second_arg;
@@ -884,22 +854,21 @@ void DipWizard::SetViewResponse(sint32 sender, sint32 recipient, bool negotiatio
 		const NewProposal & orig = Diplomat::GetDiplomat(sender).GetMyLastNewProposal(recipient);
 		if(orig == Diplomat::s_badNewProposal)
 		{
-			
+
 			Assert(0);
 			return;
 		}
 
 		if(resp.receiverId == g_selected_item->GetVisiblePlayer() && last_receiver_response.type == RESPONSE_COUNTER) {
-			
-			
+
 			m_viewProposal = diplomacyutil_GetDBIndex(last_receiver_response.counter.first_type);
 			m_viewProposalArg = last_receiver_response.counter.first_arg;
-			
+
 			m_viewExchange = diplomacyutil_GetDBIndex(last_receiver_response.counter.second_type);
 			m_viewExchangeArg = last_receiver_response.counter.second_arg;
 			m_viewTone = last_receiver_response.counter.tone;
 		} else {
-			
+
 			m_viewProposal = diplomacyutil_GetDBIndex(orig.detail.first_type);
 			m_viewProposalArg = orig.detail.first_arg;
 			m_viewExchange = diplomacyutil_GetDBIndex(orig.detail.second_type);
@@ -910,7 +879,7 @@ void DipWizard::SetViewResponse(sint32 sender, sint32 recipient, bool negotiatio
 	}
 
 	Display();
-	SetStage(DIP_WIZ_STAGE_VIEW_PROPOSAL);	
+	SetStage(DIP_WIZ_STAGE_VIEW_PROPOSAL);
 	UpdateDetails();
 }
 
@@ -927,9 +896,9 @@ void DipWizard::SetViewProposal(sint32 sender, sint32 receiver)
 	NewProposal prop = Diplomat::GetDiplomat(sender).GetMyLastNewProposal(receiver);
 	if(prop == Diplomat::s_badNewProposal) return;
 
-	
-	
-	
+
+
+
 	Initialize();
 
 	m_viewProposal = diplomacyutil_GetDBIndex(prop.detail.first_type);
@@ -940,7 +909,6 @@ void DipWizard::SetViewProposal(sint32 sender, sint32 receiver)
 
 	m_viewType = DIP_WIZ_VIEW_TYPE_PROPOSAL;
 
-	
 	m_viewResponseType = -1;
 
 	Display();
@@ -951,19 +919,18 @@ void DipWizard::SetViewProposal(sint32 sender, sint32 receiver)
 void DipWizard::UpdateProposalStage()
 {
 	if(GetStage() != DIP_WIZ_STAGE_PROPOSAL && GetStage() != DIP_WIZ_STAGE_EXCHANGE) {
-		
+
 		sint32 i;
 		for(i = 0; i < DIP_WIZ_PROP_TAB_MAX; i++) {
 			m_propList[i]->DeselectItem(m_propList[i]->GetSelectedItem());
 		}
 
-		if(!m_sendCounter) 
+		if(!m_sendCounter)
 			SetProposal(-1);
 
 		return;
 	}
 
-	
 }
 
 void DipWizard::UpdateViewProposalStage()
@@ -971,7 +938,6 @@ void DipWizard::UpdateViewProposalStage()
 	if(GetStage() != DIP_WIZ_STAGE_VIEW_PROPOSAL)
 		return;
 
-	
 	SlicObject so;
 	const MBCHAR *theString = NULL;
 	MBCHAR text[k_MAX_NAME_LEN];
@@ -1002,8 +968,8 @@ void DipWizard::UpdateViewProposalStage()
 				rejectButtonText = NULL;
 			} else {
 				theString = "str_ldl_DipWizReceivedReject";
-				
-				if(m_viewThreat < 0) { 
+
+				if(m_viewThreat < 0) {
 					counterButtonText = "str_ldl_DipWizThreaten";
 					rejectButtonText = NULL;
 					acceptButtonText = "str_ldl_DipWizardClose";
@@ -1011,7 +977,7 @@ void DipWizard::UpdateViewProposalStage()
 					counterButtonText = NULL;
 					rejectButtonText = NULL;
 				}
-			}				
+			}
 			break;
 		}
 		case DIP_WIZ_VIEW_TYPE_FINAL_RESPONSE:
@@ -1033,8 +999,7 @@ void DipWizard::UpdateViewProposalStage()
 		case DIP_WIZ_VIEW_TYPE_COUNTER:
 			so.AddPlayer(m_viewRecipient);
 			theString = "str_ldl_DipWizReceivedCounter";
-			
-			
+
 			counterButtonText = "str_ldl_DipWizThreaten";
 			rejectButtonText = "str_ldl_DipWizReject";
 			acceptButtonText = "str_ldl_DipWizAccept";
@@ -1083,7 +1048,7 @@ void DipWizard::UpdateViewProposalStage()
 void DipWizard::UpdateExchangeStage()
 {
 	if(GetStage() != DIP_WIZ_STAGE_EXCHANGE) {
-		
+
 		sint32 i;
 		for(i = 0; i < DIP_WIZ_PROP_TAB_MAX; i++) {
 			m_exchList[i]->DeselectItem(m_exchList[i]->GetSelectedItem());
@@ -1093,7 +1058,6 @@ void DipWizard::UpdateExchangeStage()
 		return;
 	}
 
-	
 	const DiplomacyProposalRecord *rec = NULL;
 	if(m_proposal >= 0)
 		rec = g_theDiplomacyProposalDB->Get(m_proposal);
@@ -1105,14 +1069,13 @@ void DipWizard::UpdateExchangeStage()
 	char labelStrName[k_MAX_NAME_LEN];
 	strcpy(labelStrName, "str_ldl_DipWizSelect");
 
-	
 	tab[0] = (ctp2_Tab *)aui_Ldl::GetObject(s_dipWizardBlock, "Stage2.Tabs.Request");
 	if(tab[0])
 		tabButton = tab[0]->GetButton();
 
 	if(tabButton) {
 		if(rec && rec->GetExcludesRequest()) {
-			
+
 			tabButton->Hide();
 			if(tab[0] && tab[0]->GetPanel() && !tab[0]->GetPanel()->IsHidden()) {
 				changeTab = true;
@@ -1128,10 +1091,10 @@ void DipWizard::UpdateExchangeStage()
 	tab[1] = (ctp2_Tab *)aui_Ldl::GetObject(s_dipWizardBlock, "Stage2.Tabs.Offer");
 	if(tab[1])
 		tabButton = tab[1]->GetButton();
-	
+
 	if(tabButton) {
 		if(rec && rec->GetExcludesOffer()) {
-			
+
 			tabButton->Hide();
 			if(tab[1] && tab[1]->GetPanel() && !tab[1]->GetPanel()->IsHidden()) {
 				changeTab = true;
@@ -1151,7 +1114,7 @@ void DipWizard::UpdateExchangeStage()
 	if(tabButton) {
 		if(rec && rec->GetExcludesTreaty()) {
 			tabButton->Hide();
-			
+
 			if(tab[2] && tab[2]->GetPanel() && !tab[2]->GetPanel()->IsHidden()) {
 				changeTab = true;
 				shown = 2;
@@ -1161,9 +1124,9 @@ void DipWizard::UpdateExchangeStage()
 			strcat(labelStrName, "Treaty");
 		}
 	}
-	
+
 	if(changeTab) {
-		
+
 		ctp2_TabGroup *tabGroup = (ctp2_TabGroup *)aui_Ldl::GetObject(s_dipWizardBlock, "Stage2.Tabs");
 		sint32 i;
 		for(i = 0; i < DIP_WIZ_PROP_TAB_MAX; i++) {
@@ -1257,7 +1220,7 @@ void DipWizard::UpdateButtons()
 			m_backButton->Enable(TRUE);
 			m_nextButton->Enable(FALSE);
 			m_cancelButton->Enable(TRUE);
-			
+
 			Assert(m_proposal >= 0);
 
 			break;
@@ -1275,7 +1238,7 @@ void DipWizard::UpdateButtons()
 		{
 			m_createButtons->Show();
 			m_viewButtons->Hide();
-			
+
 			m_backButton->Enable(FALSE);
 			m_nextButton->Enable(FALSE);
 			m_sendButton->Enable(TRUE);
@@ -1297,8 +1260,7 @@ void DipWizard::UpdateDetails()
 	MBCHAR text[k_MAX_NAME_LEN];
 	MBCHAR text2[k_MAX_NAME_LEN];
 	bool viewingProposal = (GetStage() == DIP_WIZ_STAGE_VIEW_PROPOSAL) || (GetStage() == DIP_WIZ_STAGE_MAKE_THREAT);
-		
-	
+
 	st = (ctp2_Static *)aui_Ldl::GetObject(s_dipWizardBlock, "Details.Year");
 	if(st) {
 		SlicObject so;
@@ -1306,7 +1268,6 @@ void DipWizard::UpdateDetails()
 		st->SetText(text);
 	}
 
-	
 	st = (ctp2_Static *)aui_Ldl::GetObject(s_dipWizardBlock, "Details.Recipient");
 	if(st) {
 		if(!viewingProposal) {
@@ -1322,7 +1283,7 @@ void DipWizard::UpdateDetails()
 				st->SetText("");
 			}
 		} else {
-			
+
 			if(m_viewRecipient == g_selected_item->GetVisiblePlayer()) {
 				SlicObject so;
 				so.AddPlayer(m_viewSender);
@@ -1358,7 +1319,6 @@ void DipWizard::UpdateDetails()
 		}
 	}
 
-	
 	st = (ctp2_Static *)aui_Ldl::GetObject(s_dipWizardBlock, "Details.ToneIcon");
 	if(st) {
 		sint32 tone = viewingProposal ? m_viewTone : m_tone;
@@ -1369,15 +1329,13 @@ void DipWizard::UpdateDetails()
 		}
 	}
 
-	
 	st = (ctp2_Static *)aui_Ldl::GetObject(s_dipWizardBlock, "Details.Proposal");
-	if(st) {		
+	if(st) {
 		if((viewingProposal && m_viewProposal >= 0) ||
 		   (!viewingProposal && m_proposal >= 0)) {
 			ProposalData propData;
 			FillInProposalData(propData);
 
-			
 			sint32 sender, receiver;
 			if(!viewingProposal) {
 				sender = g_selected_item->GetVisiblePlayer();
@@ -1389,13 +1347,12 @@ void DipWizard::UpdateDetails()
 
 			text2[0] = 0;
 
-			DiplomacyWindow::GetProposalDetails(propData, sender, receiver, text, text2, 
+			DiplomacyWindow::GetProposalDetails(propData, sender, receiver, text, text2,
 												(viewingProposal && m_viewResponseType == RESPONSE_COUNTER), NULL);
 			st->SetText(text);
 
-			
 			st = (ctp2_Static *)aui_Ldl::GetObject(s_dipWizardBlock, "Details.Exchange");
-			if(st) {		
+			if(st) {
 				if(((viewingProposal && m_viewExchange >= 0) ||
 				    (!viewingProposal && m_exchange >= 0)) &&
 				   text2[0] != 0) {
@@ -1416,7 +1373,7 @@ void DipWizard::UpdateDetails()
 	if(st) {
 
 		if(!viewingProposal) {
-			
+
 			st->SetText("");
 		} else {
 			if(GetStage() == DIP_WIZ_STAGE_MAKE_THREAT) {
@@ -1434,8 +1391,8 @@ void DipWizard::UpdateDetails()
 						if(AddThreatData(so, threatDBIndex, m_threatArg)) {
 							stringutils_Interpret(g_theStringDB->GetNameStr(threatDetail), so, text);
 						} else {
-							
-							strcpy(text, ""); 
+
+							strcpy(text, "");
 						}
 					}
 				}
@@ -1452,8 +1409,8 @@ void DipWizard::UpdateDetails()
 						if(AddThreatData(so, threatDBIndex, m_viewThreatArg)) {
 							stringutils_Interpret(g_theStringDB->GetNameStr(threatDetail), so, text);
 						} else {
-							
-							strcpy(text, ""); 
+
+							strcpy(text, "");
 						}
 					}
 				} else {
@@ -1493,9 +1450,9 @@ void DipWizard::UpdateDetails()
 						strcpy(text, g_theStringDB->GetNameStr("str_dip_ResponseReject"));
 						break;
 					default:
-						
+
 						text[0] = 0;
-						break;						   
+						break;
 				}
 #endif
 			}
@@ -1504,12 +1461,11 @@ void DipWizard::UpdateDetails()
 	}
 
 
-	
-	
+
+
 	st = (ctp2_Static *)aui_Ldl::GetObject(s_dipWizardBlock, "Details");
 	st->ShouldDraw(TRUE);
 }
-
 
 void DipWizard::FillInProposalData(ProposalData &prop, bool counter)
 {
@@ -1518,17 +1474,17 @@ void DipWizard::FillInProposalData(ProposalData &prop, bool counter)
 		if(counter) {
 			sint32 reciprocal;
 			if (!g_theDiplomacyProposalDB->Get(m_proposal)->GetReciprocalIndex(reciprocal))
-				
+
 				prop.first_type = diplomacyutil_GetProposalType(m_proposal);
 			else
-				
+
 				prop.first_type = diplomacyutil_GetProposalType(reciprocal);
 
 			if (!g_theDiplomacyProposalDB->Get(m_exchange)->GetReciprocalIndex(reciprocal))
-				
+
 				prop.second_type = diplomacyutil_GetProposalType(m_exchange);
 			else
-				
+
 				prop.second_type = diplomacyutil_GetProposalType(reciprocal);
 		} else {
 			prop.first_type = diplomacyutil_GetProposalType(m_proposal);
@@ -1564,7 +1520,7 @@ void DipWizard::ToneButtonCallback(aui_Control *control, uint32 action, uint32 d
 	Assert(tone < DIPLOMATIC_TONE_MAX);
 	if(tone < 0 || tone >= DIPLOMATIC_TONE_MAX) return;
 
-	SetTone(tone);	
+	SetTone(tone);
 }
 
 void DipWizard::PropListCallback(aui_Control *control, uint32 action, uint32 data, void *cookie)
@@ -1633,7 +1589,7 @@ void DipWizard::NationCallback(aui_Control *control, uint32 action, uint32 data,
 {
 	if(action != AUI_DROPDOWN_ACTION_SELECT)
 		return;
-	
+
 	Assert(control == m_nations);
 	if(control != m_nations) return;
 
@@ -1647,7 +1603,6 @@ void DipWizard::NationCallback(aui_Control *control, uint32 action, uint32 data,
 	UpdateButtons();
 }
 
-	
 void DipWizard::BackCallback(aui_Control *control, uint32 action, uint32 data, void *cookie)
 {
 	if(action != AUI_BUTTON_ACTION_EXECUTE) return;
@@ -1671,7 +1626,7 @@ void DipWizard::NextCallback(aui_Control *control, uint32 action, uint32 data, v
 			SetStage(GetStage() + 1);
 		}
 	}
-	
+
 }
 
 void DipWizard::CancelCallback(aui_Control *control, uint32 action, uint32 data, void *cookie)
@@ -1695,11 +1650,11 @@ void DipWizard::CancelCallback(aui_Control *control, uint32 action, uint32 data,
 // Parameters : action                  : an AUI_BUTTON_ACTION (aui_button.h)
 //            : control                   ?
 //            : data                      ?
-//            : cookie                    ?  
+//            : cookie                    ?
 //
 // Globals    : g_network				: multiplayer manager
 //				g_selectedItem			: selected player
-//				
+//
 // Returns    : -
 //
 // Remark(s)  : -
@@ -1720,33 +1675,30 @@ void DipWizard::SendCallback(aui_Control *control, uint32 action, uint32 data, v
 
 		m_sendCounter = false;
 
-		
-		
+
 		if(GetStage() != DIP_WIZ_STAGE_VIEW_PROPOSAL) {
 			Hide();
-			
+
 		}
 
 		Diplomat::GetDiplomat(response.receiverId).ExecuteResponse(response);
 	} else if(GetStage() != DIP_WIZ_STAGE_MAKE_THREAT) {
 		NewProposal prop;
 
-		
 		prop.senderId = g_selected_item->GetVisiblePlayer();
 		prop.receiverId = m_recipient;
 		prop.priority=9999;
 		FillInProposalData(prop.detail);
 
-		
-		
+
 		if(GetStage() != DIP_WIZ_STAGE_VIEW_PROPOSAL) {
 			Hide();
-			
+
 		}
 
 		Diplomat::GetDiplomat(g_selected_item->GetVisiblePlayer()).ExecuteNewProposal(prop);
 	} else {
-		
+
 		Response resp;
 		resp.type = RESPONSE_THREATEN;
 		resp.senderId = g_selected_item->GetVisiblePlayer();
@@ -1762,7 +1714,6 @@ void DipWizard::SendCallback(aui_Control *control, uint32 action, uint32 data, v
 
 }
 
-
 const MBCHAR *DipWizard::GetCategoryName(DIP_WIZ_PROP_TAB tab)
 {
 	switch(tab) {
@@ -1776,9 +1727,9 @@ const MBCHAR *DipWizard::GetCategoryName(DIP_WIZ_PROP_TAB tab)
 void DipWizard::ProposalTabCallback(aui_Control *control, uint32 action, uint32 data, void *cookie)
 {
 	if(action != ctp2_Tab::ACTION_ACTIVATED) return;
-	
+
 	MBCHAR buf[k_MAX_NAME_LEN];
-	sprintf(buf, "%s.Stage%d.Tabs.%s.TabPanel.List", s_dipWizardBlock, DIP_WIZ_STAGE_PROPOSAL, 
+	sprintf(buf, "%s.Stage%d.Tabs.%s.TabPanel.List", s_dipWizardBlock, DIP_WIZ_STAGE_PROPOSAL,
 #if defined(__LP64__)
 			GetCategoryName(DIP_WIZ_PROP_TAB(sint64(cookie))));
 #else
@@ -1800,7 +1751,7 @@ void DipWizard::ExchangeTabCallback(aui_Control *control, uint32 action, uint32 
 	if(action != ctp2_Tab::ACTION_ACTIVATED) return;
 
 	MBCHAR buf[k_MAX_NAME_LEN];
-	sprintf(buf, "%s.Stage%d.Tabs.%s.TabPanel.List", s_dipWizardBlock, DIP_WIZ_STAGE_EXCHANGE, 
+	sprintf(buf, "%s.Stage%d.Tabs.%s.TabPanel.List", s_dipWizardBlock, DIP_WIZ_STAGE_EXCHANGE,
 #if defined(__LP64__)
 			GetCategoryName(DIP_WIZ_PROP_TAB(sint64(cookie))));
 #else
@@ -1826,7 +1777,7 @@ void DipWizard::AcceptCallback(aui_Control *control, uint32 action, uint32 data,
 		return;
 
 	if(m_viewType == DIP_WIZ_VIEW_TYPE_FINAL_RESPONSE) {
-		
+
 		Hide();
 		return;
 	}
@@ -1839,8 +1790,7 @@ void DipWizard::AcceptCallback(aui_Control *control, uint32 action, uint32 data,
 		if(m_viewResponseType == RESPONSE_COUNTER) {
 			response.type = RESPONSE_ACCEPT;
 		} else {
-			
-			
+
 			response.type = RESPONSE_REJECT;
 		}
 
@@ -1851,7 +1801,7 @@ void DipWizard::AcceptCallback(aui_Control *control, uint32 action, uint32 data,
 		Hide();
 		Diplomat::GetDiplomat(m_viewRecipient).ExecuteResponse(response);
 	}
-			
+
 }
 
 void DipWizard::RejectCallback(aui_Control *control, uint32 action, uint32 data, void *cookie)
@@ -1890,7 +1840,7 @@ void DipWizard::CounterOrThreatenCallback(aui_Control *control, uint32 action, u
 		m_viewTone = prop.detail.tone;
 		m_viewThreat = -1;
 		m_viewResponseType = RESPONSE_THREATEN;
-		
+
 		m_threatArg = -1;
 		SetThreat(-1);
 
@@ -1976,7 +1926,7 @@ void DipWizard::ProcessMenuSelection(sint32 itemIndex, void *cookie)
 #endif
 				break;
 			default:
-				
+
 				Assert(FALSE);
 				break;
 		}
@@ -2021,10 +1971,10 @@ bool DipWizard::ProposalContextMenu(sint32 proposal)
 {
 	Assert(!m_curMenu);
 	if(m_curMenu) {
-		
+
 		delete m_curMenu;
 	}
-	
+
 	const DiplomacyProposalRecord *rec = g_theDiplomacyProposalDB->Get(proposal);
 	Assert(rec);
 	if(!rec)
@@ -2040,13 +1990,13 @@ bool DipWizard::ProposalContextMenu(sint32 proposal)
 			AddCityItems(m_curMenu, m_recipient);
 			break;
 		case k_DiplomacyProposal_Arg1_OwnArmy_Bit:
-			
+
 			break;
 		case k_DiplomacyProposal_Arg1_HisArmy_Bit:
-			
+
 			break;
 		case k_DiplomacyProposal_Arg1_HisAgreement_Bit:
-			
+
 			break;
 		case k_DiplomacyProposal_Arg1_OwnAdvance_Bit:
 			AddAdvanceItems(m_curMenu, g_selected_item->GetVisiblePlayer(), m_recipient);
@@ -2061,13 +2011,13 @@ bool DipWizard::ProposalContextMenu(sint32 proposal)
 			AddStopResearchItems(m_curMenu, m_recipient);
 			break;
 		case k_DiplomacyProposal_Arg1_OwnUnitType_Bit:
-			
+
 			break;
 		case k_DiplomacyProposal_Arg1_OwnGood_Bit:
-			
+
 			break;
 		case k_DiplomacyProposal_Arg1_HisGood_Bit:
-			
+
 			break;
 		case k_DiplomacyProposal_Arg1_OwnGold_Bit:
 			RequestGoldValue(g_selected_item->GetVisiblePlayer());
@@ -2093,7 +2043,7 @@ bool DipWizard::ProposalContextMenu(sint32 proposal)
 			needItems = false;
 			break;
 		default:
-			
+
 			Assert(rec->GetArg1() == 0);
 			needItems = false;
 			break;
@@ -2103,7 +2053,7 @@ bool DipWizard::ProposalContextMenu(sint32 proposal)
 		delete m_curMenu;
 		m_curMenu = NULL;
 		if(needItems) {
-			
+
 			return false;
 		}
 	} else {
@@ -2111,7 +2061,7 @@ bool DipWizard::ProposalContextMenu(sint32 proposal)
 		m_proposalDataPending = true;
 	}
 	return true;
-}						
+}
 
 void DipWizard::AddCityItems(ctp2_Menu *menu, sint32 player)
 {
@@ -2119,7 +2069,7 @@ void DipWizard::AddCityItems(ctp2_Menu *menu, sint32 player)
 	Assert(player < k_MAX_PLAYERS);
 	if((player < 0) || (player >= k_MAX_PLAYERS))
 		return;
-	
+
 	Assert(g_player[player]);
 	if(!g_player[player])
 		return;
@@ -2128,7 +2078,7 @@ void DipWizard::AddCityItems(ctp2_Menu *menu, sint32 player)
 	for(i = 0; i < g_player[player]->m_all_cities->Num(); i++) {
 		Unit city = g_player[player]->m_all_cities->Access(i);
 		if(player != g_selected_item->GetVisiblePlayer()) {
-			
+
 			if(!(city.GetEverVisible() & (1 << g_selected_item->GetVisiblePlayer())))
 				continue;
 		}
@@ -2142,7 +2092,7 @@ void DipWizard::AddAgreementItems(ctp2_Menu *menu, sint32 player)
 	Assert(player < k_MAX_PLAYERS);
 	if((player < 0) || (player >= k_MAX_PLAYERS))
 		return;
-	
+
 	Assert(g_player[player]);
 	if(!g_player[player])
 		return;
@@ -2211,12 +2161,12 @@ void DipWizard::AddAdvanceItems(ctp2_Menu *menu, sint32 sender, sint32 receiver)
 	sint32 a;
 	for(a = 0; a < g_theAdvanceDB->NumRecords(); a++) {
 		if(!g_player[sender]->HasAdvance(a)) {
-			
+
 			continue;
 		}
 
 		if(g_player[receiver]->HasAdvance(a)) {
-			
+
 			continue;
 		}
 
@@ -2238,7 +2188,7 @@ void DipWizard::AddStopResearchItems(ctp2_Menu *menu, sint32 playerId)
 	sint32 a;
 	for(a = 0; a < g_theAdvanceDB->NumRecords(); a++) {
 		if(!g_player[playerId]->m_advances->CanResearch(a)) {
-			
+
 			continue;
 		}
 
@@ -2264,8 +2214,7 @@ void DipWizard::AddThirdPartyItems(ctp2_Menu *menu, sint32 sender, sint32 receiv
 
 bool DipWizard::AddThreatData(SlicObject &so, sint32 threat, const DiplomacyArg &arg)
 {
-	
-	
+
 	const DiplomacyThreatRecord *rec = g_theDiplomacyThreatDB->Get(threat);
 	Assert(rec);
 	if(!rec)
@@ -2298,7 +2247,7 @@ bool DipWizard::AddThreatData(SlicObject &so, sint32 threat, const DiplomacyArg 
 		default:
 			return true;
 	}
-	Assert(false); 
+	Assert(false);
 	return false;
 }
 
@@ -2383,8 +2332,7 @@ void DipWizard::GoldCancel(aui_Control *control, uint32 action, uint32 data, voi
 		g_c3ui->RemoveWindow(m_goldRequestWindow->Id());
 	}
 
-	
-	
+
 	ProcessMenuCancel();
 	m_proposalDataPending = false;
 }
@@ -2398,8 +2346,7 @@ void DipWizard::PollutionCancel(aui_Control *control, uint32 action, uint32 data
 		g_c3ui->RemoveWindow(m_pollutionRequestWindow->Id());
 	}
 
-	
-	
+
 	ProcessMenuCancel();
 	m_proposalDataPending = false;
 }
@@ -2413,8 +2360,7 @@ void DipWizard::PercentCancel(aui_Control *control, uint32 action, uint32 data, 
 		g_c3ui->RemoveWindow(m_percentRequestWindow->Id());
 	}
 
-	
-	
+
 	ProcessMenuCancel();
 	m_proposalDataPending = false;
 }
@@ -2426,10 +2372,10 @@ void DipWizard::RequestGoldValue(sint32 player)
 		Assert(m_goldRequestWindow);
 		if(!m_goldRequestWindow)
 			return;
-		
-		
-		
-		
+
+
+
+
 		aui_Ldl::SetActionFuncAndCookie("DipGoldRequest.OkButton", DipWizard::GoldOk, NULL);
 		aui_Ldl::SetActionFuncAndCookie("DipGoldRequest.CancelButton", DipWizard::GoldCancel, NULL);
 		m_goldRequestWindow->SetStronglyModal(TRUE);
@@ -2438,7 +2384,7 @@ void DipWizard::RequestGoldValue(sint32 player)
 	if(player == g_selected_item->GetVisiblePlayer()) {
 		spinner->SetMaximum(g_player[player]->m_gold->GetLevel(), 0);
 	} else {
-		
+
 		spinner->SetMaximum(~(1 << 31), 0);
 	}
 
@@ -2453,22 +2399,22 @@ void DipWizard::RequestPollutionValue(sint32 player)
 		Assert(m_pollutionRequestWindow);
 		if(!m_pollutionRequestWindow)
 			return;
-		
-		
-		
-		
+
+
+
+
 		aui_Ldl::SetActionFuncAndCookie("DipPollutionRequest.OkButton", DipWizard::PollutionOk, NULL);
 		aui_Ldl::SetActionFuncAndCookie("DipPollutionRequest.CancelButton", DipWizard::PollutionCancel, NULL);
 		m_pollutionRequestWindow->SetStronglyModal(TRUE);
 	}
 	ctp2_Spinner *spinner = (ctp2_Spinner *)aui_Ldl::GetObject("DipPollutionRequest.Spinner");
-	
+
 	spinner->SetMaximum(static_cast<sint32>(g_player[player]->GetPollutionLevel() * 0.95), 0);
-	
+
 	spinner->SetMinimum(static_cast<sint32>(g_player[player]->GetPollutionLevel() * 0.25), 0);
-	
+
 	spinner->SetPage(static_cast<sint32>(g_player[player]->GetPollutionLevel() * 0.20), 0);
-	
+
 	spinner->SetIncrement(static_cast<sint32>(g_player[player]->GetPollutionLevel() * 0.10), 0);
 
 	g_c3ui->AddWindow(m_pollutionRequestWindow);
@@ -2482,22 +2428,22 @@ void DipWizard::RequestPercentValue()
 		Assert(m_percentRequestWindow);
 		if(!m_percentRequestWindow)
 			return;
-		
-		
-		
-		
+
+
+
+
 		aui_Ldl::SetActionFuncAndCookie("DipPercentRequest.OkButton", DipWizard::PercentOk, NULL);
 		aui_Ldl::SetActionFuncAndCookie("DipPercentRequest.CancelButton", DipWizard::PercentCancel, NULL);
 		m_percentRequestWindow->SetStronglyModal(TRUE);
 	}
 	ctp2_Spinner *spinner = (ctp2_Spinner *)aui_Ldl::GetObject("DipPercentRequest.Spinner");
-	
+
 	spinner->SetMaximum(75, 0);
-	
+
 	spinner->SetMinimum(5,0);
-	
+
 	spinner->SetPage(20, 0);
-	
+
 	spinner->SetIncrement(10, 0);
 
 	g_c3ui->AddWindow(m_percentRequestWindow);
@@ -2518,7 +2464,7 @@ void DipWizard::ThreatMenuCallback(ctp2_Menu *menu, CTP2_MENU_ACTION action, sin
 			m_threatList->DeselectItem(m_threatList->GetSelectedItem());
 		} else {
 			ctp2_ListItem *item = (ctp2_ListItem *)m_threatList->GetSelectedItem();
-			Assert(item); 
+			Assert(item);
 			if(item) {
 #if defined(__LP64__)
 				m_menuThreat = (sint64)item->GetUserData();
@@ -2550,11 +2496,11 @@ void DipWizard::ThreatMenuCallback(ctp2_Menu *menu, CTP2_MENU_ACTION action, sin
 #endif
 							break;
 						default:
-							
+
 							Assert(FALSE);
 							break;
 					}
-					
+
 					SetThreat(m_menuThreat);
 					m_sendButton->Enable(TRUE);
 				}
@@ -2563,7 +2509,6 @@ void DipWizard::ThreatMenuCallback(ctp2_Menu *menu, CTP2_MENU_ACTION action, sin
 				m_sendButton->Enable(FALSE);
 			}
 		}
-
 
 		delete m_threatMenu;
 		m_threatMenu = NULL;
@@ -2574,7 +2519,7 @@ bool DipWizard::ThreatContextMenu(sint32 threat)
 {
 	Assert(!m_threatMenu);
 	if(m_threatMenu) {
-		
+
 		delete m_threatMenu;
 	}
 
@@ -2661,7 +2606,7 @@ STDEHANDLER(DipWizResponseReady)
 
 	if(p1 == g_selected_item->GetVisiblePlayer() ||
 	   p2 == g_selected_item->GetVisiblePlayer()) {
-		
+
 		DipWizard::SetViewResponse(p1, p2, false);
 	}
 
@@ -2687,12 +2632,12 @@ STDEHANDLER(DipWizContinueDiplomacyEvent)
 	if(!args->GetPlayer(1, p2)) return GEV_HD_Continue;
 
 	if(p1 == g_selected_item->GetVisiblePlayer()) {
-		
+
 		DipWizard::SetViewResponse(p1, p2, true);
 
 		RESPONSE_TYPE rtype = Diplomat::GetDiplomat(p2).GetResponsePending(p1).type;
 	} else if(p2 == g_selected_item->GetVisiblePlayer()) {
-		
+
 		DipWizard::SetViewResponse(p1, p2, true);
 	}
 	return GEV_HD_Continue;
@@ -2702,7 +2647,7 @@ void DipWizard::InitializeEvents()
 {
 	g_gevManager->AddCallback(GEV_ResponseReady, GEV_PRI_Post, &s_DipWizResponseReady);
 	g_gevManager->AddCallback(GEV_NewProposal, GEV_PRI_Post, &s_DipWizNewProposalEvent);
-	
+
 }
 
 void DipWizard::NotifyResponse(const Response &resp, sint32 responder, sint32 other_player)
@@ -2756,17 +2701,16 @@ AUI_ERRCODE DrawDiplomatColor(ctp2_Static *control,
 	primitives_PaintRect16(surface, &rect, g_colorSet->GetPlayerColor(pl));
 	return AUI_ERRCODE_OK;
 }
-							  
+
 void DipWizard::DisplayResponseDiplomat(sint32 player)
 {
 	m_responseDiplomat->Show();
-	
-	
-	
-	
+
+
+
+
 	m_responseDiplomat->SetDrawCallbackAndCookie(DrawDiplomatColor, (void *)player);
 }
-
 
 void DipWizard::DisplayParchment(sint32 player)
 {

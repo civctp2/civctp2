@@ -1,4 +1,4 @@
-/* 
+/*
 Copyright (C) 1995-2001 Activision, Inc.
 
 This library is free software; you can redistribute it and/or
@@ -92,7 +92,7 @@ CFragConnectionID gConnID = 0;
 /*----------------------------------------------------------------------
  Convert a dp_transport_t into an FSSpec.
  The name field of the dp_transport_t is in C format;
- the name field of the FSSpec is in Pascal format; 
+ the name field of the FSSpec is in Pascal format;
 ----------------------------------------------------------------------*/
 static OSErr makeFSSpecFromTransport(const dp_transport_t *src, FSSpec *dest)
 {
@@ -105,7 +105,7 @@ static OSErr makeFSSpecFromTransport(const dp_transport_t *src, FSSpec *dest)
 #if 0
 /*----------------------------------------------------------------------
  Convert an FSSpec into a dp_transport_t.
- The name field of the FSSpec is in Pascal format; 
+ The name field of the FSSpec is in Pascal format;
  the name field of the dp_transport_t is in C format.
 ----------------------------------------------------------------------*/
 static void makeTransportFromFSSpec(const FSSpec *src, dp_transport_t *dest)
@@ -125,7 +125,7 @@ static void makeTransportFromFSSpec(const FSSpec *src, dp_transport_t *dest)
  Read description out of the DLL file.
 
  Mac-specific:
- If driver has a "commLoadTest" method, call it to see if the driver 
+ If driver has a "commLoadTest" method, call it to see if the driver
  wants to say "Don't load me".
 ----------------------------------------------------------------------*/
 dp_result_t dpGetTransportInfo(
@@ -162,7 +162,7 @@ dp_result_t dpGetTransportInfo(
 	);
 	if (anErr != noErr)
 		return dp_RES_BAD;
-		
+
 	/* Once past this point, we must call CloseConnection when exiting. */
 
 	// get a pointer to the comm driver info structure in the code fragment.
@@ -255,7 +255,7 @@ dp_result_t dpEnumTransports(dp_transport_t *path, dpEnumTransportCallback_t cb,
 			continue;
 
 		// Skip to next file if type or creator wrong
-		if (((myCPB.hFileInfo.ioFlFndrInfo).fdType != kTransportType) 
+		if (((myCPB.hFileInfo.ioFlFndrInfo).fdType != kTransportType)
 		||  ((myCPB.hFileInfo.ioFlFndrInfo).fdCreator != kTransportCreator))
 			continue;
 
@@ -277,24 +277,23 @@ dp_result_t dpEnumTransports(dp_transport_t *path, dpEnumTransportCallback_t cb,
 	return dp_RES_OK;
 }
 
-
 /*----------------------------------------------------------------------
  Called internally by dpCreate to load a DLL.
 
  Mac-specific:
  1) The first parameter must really be a dp_t.
  2) The second parameter must be a dp_transport_t; on the Mac,
- dp_transport_t's have a FSSpec at offset 0, and the string FSSpec 
+ dp_transport_t's have a FSSpec at offset 0, and the string FSSpec
  at offset 100.
 
  Transports are loaded into the system heap by the shell.
  When the shell does a dpFreeze, the handle is saved in the freeze file.
  dpCreate, when it reads the freeze file, finds the transport by
  reading the handle from the freeze file!
- Thus the first parameter must really be a dp_t!  
- The handle to the transport is stored in dp->commInitReq.hwirq.  
+ Thus the first parameter must really be a dp_t!
+ The handle to the transport is stored in dp->commInitReq.hwirq.
 ----------------------------------------------------------------------*/
-dp_result_t dpLoadDLL(dpio_t *dpio, dp_transport_t *transport) 
+dp_result_t dpLoadDLL(dpio_t *dpio, dp_transport_t *transport)
 {
 	dp_result_t			result = dp_RES_BAD;
 
@@ -305,7 +304,6 @@ dp_result_t dpLoadDLL(dpio_t *dpio, dp_transport_t *transport)
 	static SETSCREENRECT setScreenRect;
 	extern Rect gScreenRect;
 	FSSpec spec;
-
 
 	typedef struct {
 		unsigned char *name;
@@ -350,7 +348,7 @@ dp_result_t dpLoadDLL(dpio_t *dpio, dp_transport_t *transport)
 	//	transport. We do this by looking for a file with a code
 	//	fragment and then we load all of the function pointers
 	//	from it for later use throughout the application
-	
+
 	anErr = GetDiskFragment(
 		&spec,
 		0,
@@ -365,7 +363,7 @@ dp_result_t dpLoadDLL(dpio_t *dpio, dp_transport_t *transport)
 		DPRINT(("GetDiskFragment failed!\n"));
 		return dp_RES_EMPTY;
 	}
-	
+
 	//	the code fragment has been loaded
 	anErr = noErr;
 	for (sym=syms; sym->name; sym++) {
@@ -380,9 +378,9 @@ dp_result_t dpLoadDLL(dpio_t *dpio, dp_transport_t *transport)
 	}
 
 	if (anErr == noErr) {
-	
+
 		//	we don't need this function, so, we don't check for errors
-	
+
 		FindSymbol(gConnID, "\pcommNeedsUI", (Ptr*) &commNeedsUI, &symClass);
 
 		//	pass the screen rectangle into the code fragment for user interface
@@ -399,13 +397,13 @@ dp_result_t dpLoadDLL(dpio_t *dpio, dp_transport_t *transport)
 				}
 			}
 		#endif
-		
+
 		//	make sure we remember the connection ID so that we can
 		//	close the code fragment later, even if the dpUnloadDLL
 		//	is called another app which by an app we launch instead of us.
 		if (dpio)
 			dpio->commInitReq.hwirq = (long) gConnID;
-		
+
 		//	everything initialized fine, so, we return in a happy state
 		result = dp_RES_OK;
 	}
@@ -414,7 +412,6 @@ dp_result_t dpLoadDLL(dpio_t *dpio, dp_transport_t *transport)
 
 #endif
 }
-
 
 /*----------------------------------------------------------------------
  Called internally by dpDestroy to unload a DLL.
@@ -429,4 +426,3 @@ void dpUnloadDLL(dpio_t *dpio) {
 #endif
 	(void) dpio;
 }
-

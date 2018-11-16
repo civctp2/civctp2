@@ -1,4 +1,4 @@
-/* 
+/*
 Copyright (C) 1995-2001 Activision, Inc.
 
 This library is free software; you can redistribute it and/or
@@ -21,16 +21,16 @@ Foundation, Inc., 59 Temple Place, Suite 330, Boston, MA  02111-1307  USA
  Test of dpio handle open, data send, handle close
 
  Usage: dpiot -d=driver -h=n [options]
- or:    dpiot -d=driver -h=n -n=hostnum -a=nextAddress [options] 
+ or:    dpiot -d=driver -h=n -n=hostnum -a=nextAddress [options]
 
  This test program measures the performance of the dpio module.
- It measures the time it takes various things to propagate around a ring 
+ It measures the time it takes various things to propagate around a ring
  of n hosts.  The things sent around the ring include:
  * a single small (four-byte) packet
  The results are reported in seconds per hop for the small entries,
  and bytes per second for the large entries.
 
- The first form spawns n processes using the second form, and waits for 
+ The first form spawns n processes using the second form, and waits for
  them all to finish.  I.e. for i=0..n, it executes
     dpiot -d=driver -h=n -n=i -a=((i+1 mod n) + 1).0.0.0
  For example, if driver is wloop.dll, and N == 2, it executes:
@@ -44,13 +44,12 @@ Foundation, Inc., 59 Temple Place, Suite 330, Boston, MA  02111-1307  USA
 
  This assumes we're using one of Marshall's loopback drivers,
  which assign the address 1.0.0.0 to the first host, 2.0.0.0 to the second,
- etc.  The expression ((i+2) mod n + 1).0.0.0 is the address of the 'next' 
+ etc.  The expression ((i+2) mod n + 1).0.0.0 is the address of the 'next'
  host to be opened, the one with i one higher than this host.
  We might later add the ability to specify a list of real network addresses
  rather than having the first form synthesize loopback driver addresses.
 
-
- The second form expects a driver filename, its host number, and the network 
+ The second form expects a driver filename, its host number, and the network
  address of the 'next' host in the ring.  It creates a ring of hosts
  forwarding a table to each other, and measures performance of the code
  that propagates table entries around the ring.  See the function
@@ -77,7 +76,6 @@ Freeze and Thaw Test
 #define TRUE 1
 #define FALSE 0
 #endif
-
 
 /**
 * Constants
@@ -141,7 +139,6 @@ typedef struct dpiotResult_s {
 	int packetLoss;
 } dpiotResult_t;
 
-
 /**
 * Global variables
 */
@@ -154,10 +151,9 @@ playerHdl_t qq_src;		/* Who sent us a QQ packet */
 playerHdl_t su_src;
 int su_num;
 int su_pktnum;
-playerHdl_t hdl_opened;		
+playerHdl_t hdl_opened;
 playerHdl_t hdl_deleted;
 clock_t dpio_now;
-
 
 /**
 * Methods
@@ -189,7 +185,7 @@ writeReport(
 			fprintf(log, "singleSmallTime %f seconds (%f bytes/sec)\n",
 				res->singleSmallTime, res->pktsize * (res->pkts - 1) / res->singleSmallTime);
 		}
-	} 
+	}
 }
 
 /*-------------------------------------------------------------------------
@@ -264,7 +260,6 @@ int timer_handler(int sigtype)
 	abortTest(logFile, 3, "\nTimeout\n", NULL);
 	return 0;
 }
-
 
 /*-------------------------------------------------------------------------
  Handle a signal (^C or similar)
@@ -370,7 +365,7 @@ handleArguments(
 or: (internal use) %s -f=freeze_file -n=my_host_number\n\
  where freeze_file specifies an existing freeze file;\n",
 argv[0], MAXPKTS, sizeof(dp_packetType_t), dpio_MAXLEN_UNRELIABLE-2, argv[0]);
- 
+
 	/* Handle each command-line argument */
 	for(i = 0; i < argc; i++) {
 		if((argv[i][0] == '-') || (argv[i][0] == '/')) {
@@ -527,20 +522,20 @@ argv[0], MAXPKTS, sizeof(dp_packetType_t), dpio_MAXLEN_UNRELIABLE-2, argv[0]);
  completion).
 
  Does the following steps:
- 1. Initialize dpio 
+ 1. Initialize dpio
  2. If childnum is > 0, this child is a slave:
-    Open a handle to address 
+    Open a handle to address
  3. If childnum == 0, this child is the master:
 	Wait for someone to open a handle to us
-    Open a handle to address 
-    Send a packet to address 
+    Open a handle to address
+    Send a packet to address
  4. If childnum > 0:
     Wait until packet recieved, then send it to address.
 
  N must be 2 or greater.
 
 -------------------------------------------------------------------------*/
-int 
+int
 run_one_node(
 	int childNum,
 	char *sNextAdr,
@@ -561,7 +556,7 @@ run_one_node(
 	dp_transport_t dll;
 	char nbuf[dpio_MAXLEN_UNRELIABLE];
 	char dplogname[200];
-	
+
 	char fname[256];
 	int i;
 	int startLoopAt = 0;
@@ -572,7 +567,7 @@ run_one_node(
 	assert(loopTotal < 128);
 	assert(endLoopAt > 0);
 
-	/* Set a timeout of 20 seconds; 200 seconds if running serial driver 
+	/* Set a timeout of 20 seconds; 200 seconds if running serial driver
 	 * or multiple packets */
 	signal(SIGTIMER, timer_handler);
 	if (portnum < 0 && pkts < 2) {
@@ -597,7 +592,7 @@ run_one_node(
 
 	#ifdef WIN32
 		/* Randomize so dpio's starting packet sequence number is random */
-		srand(GetTickCount());		
+		srand(GetTickCount());
 	#endif
 
 	/* 1. Initialize dpio */
@@ -676,7 +671,7 @@ run_one_node(
 		results.packetLoss = dpio->rxDropPercent;
 
 		/* 2. If childnum is > 0, this child is a slave:
-		 *    Open a handle to address 
+		 *    Open a handle to address
 		 */
 		printf("Node %d step 2\n", childNum);
 		if (childNum > 0) {
@@ -695,7 +690,7 @@ run_one_node(
 
 		/* 3a. If childnum == 0, this child is the master:
 		 *     Wait for someone to open a handle to us
-		 *     Open a handle to address 
+		 *     Open a handle to address
 		 */
 		printf("Node %d step 3a\n", childNum);
 		if (childNum == 0) {
@@ -764,7 +759,7 @@ run_one_node(
 			boolean first;
 			printf("Node %d: Sending %d packets(siz:%d) to addr:%s(h:%x)\n",
 				childNum, pkts, pktsize, scanReq.printable, dest);
-			
+
 			for (j = 0, chksum = 0, pktgot = 0, first = TRUE; j < pkts || pktgot < pkts; ) {
 				if (pktgot < pkts) {
 					do {
@@ -779,7 +774,7 @@ run_one_node(
 				}
 
 				if (first) {	/* kludgy */
-					results.sentSingleSmallTime = eclock(); 
+					results.sentSingleSmallTime = eclock();
 					first = FALSE;
 				}
 				if (j >= pkts) continue;  /*done sending packets; just receive*/
@@ -887,7 +882,7 @@ int run_n_nodes(
 	int* procs = NULL;
 	int* result = NULL;
 	int i;
-	
+
 	if ((procs = (int *) malloc(results.n_hosts * sizeof(int))) == NULL)
 		abortTest(logFile, 3, "Unable to allocate process handle storage.\n", NULL);
 	if((result = (int *) malloc(results.n_hosts * sizeof(int))) == NULL)
@@ -908,7 +903,7 @@ int run_n_nodes(
 		sprintf(childArgs[7], "-s=%d", pktsize);
 		if (TRUE == bFreeze)
 			childArgs[8] = NULL;
-		printf("Launching %s %s %s %s %s %s %s %s\n", 
+		printf("Launching %s %s %s %s %s %s %s %s\n",
 				childArgs[0],
 				childArgs[1],
 				childArgs[2],
@@ -944,7 +939,6 @@ int run_n_nodes(
 	}
 	return 0;
 }
-
 
 /*-------------------------------------------------------------------------
  Entry point

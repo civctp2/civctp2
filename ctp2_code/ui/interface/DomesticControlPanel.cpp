@@ -11,7 +11,7 @@
 //
 // THIS FILE IS NOT GENERATED OR SUPPORTED BY ACTIVISION.
 //
-// This material has been developed at apolyton.net by the Apolyton CtP2 
+// This material has been developed at apolyton.net by the Apolyton CtP2
 // Source Code Project. Contact the authors at ctp2source@apolyton.net.
 //
 //----------------------------------------------------------------------------
@@ -32,7 +32,6 @@
 //----------------------------------------------------------------------------
 
 #include "c3.h"
-
 
 #include "DomesticControlPanel.h"
 
@@ -63,9 +62,9 @@
 extern ColorSet             *g_colorSet;
 extern Pollution            *g_thePollution;
 
-AUI_ERRCODE domesticcontrolpanel_HappinessDrawCallback(ctp2_Static *control, 
+AUI_ERRCODE domesticcontrolpanel_HappinessDrawCallback(ctp2_Static *control,
                                                        aui_Surface *surface,
-                                                       RECT &rect, 
+                                                       RECT &rect,
                                                        void *cookie)
 {
 	if (g_selected_item==NULL)
@@ -75,28 +74,24 @@ AUI_ERRCODE domesticcontrolpanel_HappinessDrawCallback(ctp2_Static *control,
 	float total;
 
 	if(!g_player[g_selected_item->GetVisiblePlayer()]) {
-		
+
 		return AUI_ERRCODE_OK;
 	}
-	
-	
+
 	g_player[g_selected_item->GetVisiblePlayer()]->CountCityHappiness(hapvals[0],hapvals[1],hapvals[2]);
 
-	
 	total = (float)(hapvals[0]+hapvals[1]+hapvals[2]);
 
 	RECT tmp=rect;
-	
-	
+
 	tmp.left += 2;
 	tmp.right -= 4;
-	
-	
+
 	tmp.top += 5;
 	tmp.left += 2;
 	tmp.right -= 2;
 	tmp.bottom -= 5;
-	
+
 	if(total<=0.0f)
 		primitives_PaintRect16(surface, &tmp, g_colorSet->GetColor(COLOR_YELLOW));
 	else
@@ -120,27 +115,25 @@ AUI_ERRCODE domesticcontrolpanel_HappinessDrawCallback(ctp2_Static *control,
 	return AUI_ERRCODE_OK;
 }
 
-AUI_ERRCODE domesticcontrolpanel_PollutionDrawCallback(ctp2_Static *control, 
+AUI_ERRCODE domesticcontrolpanel_PollutionDrawCallback(ctp2_Static *control,
                                                        aui_Surface *surface,
-                                                       RECT &rect, 
+                                                       RECT &rect,
                                                        void *cookie)
 {
-	
+
 	double total = double(g_thePollution->GetGlobalPollutionLevel());
 	double nextEvent = double(g_thePollution->GetNextTrigger());
 
 	RECT tmp=rect;
-	
-	
+
 	tmp.left += 2;
 	tmp.right -= 4;
-	
-	
-	tmp.top += 5;	
+
+	tmp.top += 5;
 	tmp.left += 2;
 	tmp.right -= 2;
 	tmp.bottom -= 5;
-	
+
 	sint32 width = static_cast<sint32>((total * (tmp.right - tmp.left)) / nextEvent);
 	primitives_PaintRect16(surface, &tmp, g_colorSet->GetColor(COLOR_BLACK));
 
@@ -154,7 +147,6 @@ AUI_ERRCODE domesticcontrolpanel_PollutionDrawCallback(ctp2_Static *control,
 
 	return AUI_ERRCODE_OK;
 }
-
 
 
 DomesticControlPanel::DomesticControlPanel(MBCHAR *ldlBlock) :
@@ -196,7 +188,7 @@ m_menuHappinessValue(static_cast<ctp2_Static*>(
 m_menuPollutionValue(static_cast<ctp2_Static*>(
                      aui_Ldl::GetObject("MainMenu.PollutionBar")))
 {
-	
+
 	Assert(m_scienceLabel);
 	Assert(m_scienceIconButton);
 	Assert(m_scienceTurnButton);
@@ -212,7 +204,6 @@ m_menuPollutionValue(static_cast<ctp2_Static*>(
 
 	strcpy(m_ldlBlock,ldlBlock);
 
-	
 	m_scienceIconButton->SetActionFuncAndCookie(
 		EditResearchButtonActionCallback, this);
 	m_scienceTurnButton->SetActionFuncAndCookie(
@@ -249,7 +240,7 @@ m_menuPollutionValue(static_cast<ctp2_Static*>(
 //
 // Returns    : -
 //
-// Remark(s)  : Only the top bar data is blanked out now. The other panels are 
+// Remark(s)  : Only the top bar data is blanked out now. The other panels are
 //              hidden later anyway.
 //
 //----------------------------------------------------------------------------
@@ -268,42 +259,36 @@ void DomesticControlPanel::Blank()
 
 void DomesticControlPanel::Update()
 {
-	
+
 	UpdateGoldPW();
 
-	
 	if(m_scienceIconButton->IsHidden())
 		return;
 
-	
 	UpdateScience();
 	UpdateStats();
 }
 
-
 void DomesticControlPanel::EditResearchButtonActionCallback(aui_Control *control,
 	uint32 action, uint32 data, void *cookie)
 {
-	
+
 	if(action != static_cast<uint32>(AUI_BUTTON_ACTION_EXECUTE))
 		return;
 
-	
-	
+
 	sci_advancescreen_displayMyWindow(NULL, k_SCI_INCLUDE_CANCEL);
 }
 
-
 void DomesticControlPanel::UpdateScience()
 {
-	
+
 	Player *player = g_player[g_selected_item->GetVisiblePlayer()];
 	if(!player) {
 		ClearScience();
 		return;
 	}
 
-	
 	Advances *advances = player->m_advances;
 	AdvanceType currentAdvance = advances->GetResearching();
 	sint32 numberOfTurns = advances->TurnsToNextAdvance();
@@ -317,47 +302,41 @@ void DomesticControlPanel::UpdateScience()
 	m_currentResearch = currentAdvance;
 	m_currentTurns = numberOfTurns;
 
-	
 	if(!currentAdvanceRecord || alreadyHas) {
 		ClearScience();
 		return;
 	}
 
-	
 	MBCHAR tempStr[100];
 	strncpy(tempStr,currentAdvanceRecord->GetNameText(),99);
 	tempStr[99]=0;
 	m_scienceLabel->GetTextFont()->TruncateString(tempStr, m_scienceLabel->Width());
 	m_scienceLabel->SetText(tempStr);
 
-	
 	const MBCHAR *scienceIconName =
 		currentAdvanceRecord->GetIcon()->GetIcon();
 
-	
-	
+
 	if(scienceIconName && strcmp(scienceIconName, "NULL")) {
-		
+
 		m_scienceIconButton->SetText("");
 		m_scienceIconButton->ExchangeImage(4, 0, scienceIconName);
 	} else {
-		
+
 		m_scienceIconButton->SetText("---");
 		m_scienceIconButton->ExchangeImage(4, 0, NULL);
 	}
 
-	
 	MBCHAR numTurns[50];
-	
+
 	if(numberOfTurns < 0)
-		
+
 		sprintf(numTurns, "---");
 	else
-		
-		sprintf(numTurns, "%d", numberOfTurns + 1);
-	m_scienceTurnButton->SetText(numTurns); 
-}
 
+		sprintf(numTurns, "%d", numberOfTurns + 1);
+	m_scienceTurnButton->SetText(numTurns);
+}
 
 void DomesticControlPanel::ClearScience()
 {
@@ -367,11 +346,10 @@ void DomesticControlPanel::ClearScience()
 	m_scienceTurnButton->SetText("");
 }
 
-
 void DomesticControlPanel::UpdateStats()
 {
 	if(!g_player[g_selected_item->GetVisiblePlayer()]) {
-		
+
 		return;
 	}
 
@@ -391,7 +369,7 @@ void DomesticControlPanel::UpdateStats()
 		pw == m_currentPW && government == m_currentGovernment &&
 		science == m_currentScience && pollution == m_currentPollution)
 	{
-		
+
 		return;
 	}
 
@@ -402,7 +380,6 @@ void DomesticControlPanel::UpdateStats()
 	m_currentScience    = science;
 	m_currentPollution  = pollution;
 
-	
 	MBCHAR stringBuffer[50];
 
 	sprintf(stringBuffer, "%d/%d", cities, g_theGovernmentDB->Get(government)->GetTooManyCitiesThreshold());
@@ -413,7 +390,7 @@ void DomesticControlPanel::UpdateStats()
 
 	sprintf(stringBuffer, "%d%%", pw);
 	m_publicWorksValue->SetText(stringBuffer);
-	
+
 	sprintf(stringBuffer, "%s", g_theGovernmentDB->Get(government)->GetNameText());
 	m_governmentValue->SetText(stringBuffer);
 
@@ -429,7 +406,7 @@ void DomesticControlPanel::UpdateStats()
 
 void DomesticControlPanel::UpdateGoldPW()
 {
-	
+
 	if (g_player[g_selected_item->GetVisiblePlayer()] == NULL)
 		return;
 
@@ -442,8 +419,7 @@ void DomesticControlPanel::UpdateGoldPW()
 	m_currentGold = gold;
 	m_currentPW = pw;
 
-	
-	
+
 	MBCHAR goldStr[50];
 	sprintf(goldStr, "%d", gold);
 
@@ -451,7 +427,7 @@ void DomesticControlPanel::UpdateGoldPW()
 
 	MBCHAR pwStr[50];
 	sprintf(pwStr, "%d", pw);
-	m_publicWorksValue->SetText(pwStr); 
+	m_publicWorksValue->SetText(pwStr);
 	m_menuPublicWorksValue->SetText(pwStr);
 
 	m_menuHappinessValue->ShouldDraw(TRUE);

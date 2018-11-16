@@ -1,17 +1,5 @@
-
-
-
-
-
-
-
-
-
-
- 
 #ifndef __DIALOGBOXWINDOW_H__
 #define __DIALOGBOXWINDOW_H__
-
 
 #include "ns_window.h"
 #include "aui_action.h"
@@ -19,10 +7,9 @@
 class aui_Button;
 
 
-
 class DialogBoxWindow : public ns_Window
 {
-public: 
+public:
 	DialogBoxWindow(
 		AUI_ERRCODE *retval,
 		MBCHAR *ldlBlock,
@@ -34,12 +21,10 @@ public:
 		MBCHAR *ldlBlock,
 		aui_Action **actions );
 
-	
 	static void PopDown(
 		DialogBoxWindow *dbw,
 		aui_Button *button = NULL );
 
-	
 
 	enum CONTROL
 	{
@@ -67,7 +52,7 @@ public:
 	aui_Button *GetButton( sint32 i ) const { return m_buttons[ i ]; }
 
 protected:
-	DialogBoxWindow() 
+	DialogBoxWindow()
 	:	ns_Window		(),
 	   	m_numButtons	(0),
 		m_buttons		(NULL)
@@ -79,14 +64,14 @@ protected:
 		aui_Action **actions );
 
 	sint32		m_numButtons;
-	aui_Button	**m_buttons; 
+	aui_Button	**m_buttons;
 
 	class SafeDeleteAction : public aui_Action
 	{
 	public:
-		SafeDeleteAction(DialogBoxWindow * dbw ) 
+		SafeDeleteAction(DialogBoxWindow * dbw )
         :   aui_Action  (),
-            m_dbw       (dbw) 
+            m_dbw       (dbw)
         { ; };
 		virtual ~SafeDeleteAction(void) { ; };
 
@@ -102,5 +87,4 @@ protected:
 	};
 };
 
-
-#endif 
+#endif

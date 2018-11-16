@@ -10,14 +10,14 @@
 //
 // THIS FILE IS NOT GENERATED OR SUPPORTED BY ACTIVISION.
 //
-// This material has been developed at apolyton.net by the Apolyton CtP2 
+// This material has been developed at apolyton.net by the Apolyton CtP2
 // Source Code Project. Contact the authors at ctp2source@apolyton.net.
 //
 //----------------------------------------------------------------------------
 //
 // Compiler flags
-// 
-// _MSC_VER		
+//
+// _MSC_VER
 // - Compiler version (for the Microsoft C++ compiler only)
 //
 //----------------------------------------------------------------------------
@@ -53,7 +53,6 @@ class CivilisationDatabase : public Database<CivilisationRecord>
 		~CivilisationDatabase () ;
 		void Serialize(CivArchive &archive) ;
 
-		
 
 		BOOL Initialise(char *filename, C3DIR dir) ;
 	    BOOL ParseCivilisationDatabase(char *filename, C3DIR dir);
@@ -63,43 +62,42 @@ class CivilisationDatabase : public Database<CivilisationRecord>
 
 		StringId GetLeaderName(const CIV_INDEX civ) const
 			{
-			Assert(civ>=0) ; 
+			Assert(civ>=0) ;
 			Assert(civ < (CIV_INDEX)(m_nRec)) ;
 			return (m_rec[civ].GetLeaderName()) ;
 			}
-		
+
 		StringId GetLeaderNameFemale(const CIV_INDEX civ) const
 			{
-			Assert(civ>=0) ; 
+			Assert(civ>=0) ;
 			Assert(civ < (CIV_INDEX)(m_nRec)) ;
 			return (m_rec[civ].GetLeaderNameFemale()) ;
 			}
 
         StringId GetPersonalityDescription(const CIV_INDEX civ) const
-        { 
-            Assert(civ>=0); 
+        {
+            Assert(civ>=0);
             Assert(civ < (CIV_INDEX)(m_nRec));
-            return (m_rec[civ].GetPersonalityDescription()); 
-        } 
-
+            return (m_rec[civ].GetPersonalityDescription());
+        }
 
 		StringId GetPluralCivName(const CIV_INDEX civ) const
 			{
-			Assert(civ>=0) ; 
+			Assert(civ>=0) ;
 			Assert(civ < (CIV_INDEX)(m_nRec)) ;
 			return (m_rec[civ].GetPluralCivName()) ;
 			}
-		
+
 		StringId GetCountryName(const CIV_INDEX civ) const
 			{
-			Assert(civ>=0) ; 
+			Assert(civ>=0) ;
 			Assert(civ < (CIV_INDEX)(m_nRec)) ;
 			return (m_rec[civ].GetCountryName()) ;
 			}
 
 		StringId GetSingularCivName(const CIV_INDEX civ) const
 			{
-			Assert(civ>=0) ; 
+			Assert(civ>=0) ;
 			Assert(civ < (CIV_INDEX)(m_nRec)) ;
 			return (m_rec[civ].GetSingularCivName()) ;
 			}
@@ -113,21 +111,21 @@ class CivilisationDatabase : public Database<CivilisationRecord>
 
 		sint32 GetNumCities(const CIV_INDEX civ) const
 			{
-			Assert(civ>=0) ; 
+			Assert(civ>=0) ;
 			Assert(civ < (CIV_INDEX)(m_nRec)) ;
 			return (m_rec[civ].GetNumCities()) ;
 			}
 
 		StringId GetCityName(const CIV_INDEX civ, const sint32 city)
 			{
-			Assert(civ>=0) ; 
+			Assert(civ>=0) ;
 			Assert(civ < (CIV_INDEX)(m_nRec)) ;
 			return (m_rec[civ].GetCityName(city)) ;
 			}
 
 		StringId GetCapital(const CIV_INDEX civ) const
 			{
-			Assert(civ>=0) ; 
+			Assert(civ>=0) ;
 			Assert(civ < (CIV_INDEX)(m_nRec)) ;
 			return (m_rec[civ].GetCapital()) ;
 			}
@@ -143,4 +141,3 @@ class CivilisationDatabase : public Database<CivilisationRecord>
 extern CivilisationDatabase *g_theCivilisationDB ;
 
 #endif
-

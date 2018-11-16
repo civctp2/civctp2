@@ -1,4 +1,4 @@
-/* 
+/*
 Copyright (C) 1995-2001 Activision, Inc.
 
 This library is free software; you can redistribute it and/or
@@ -63,7 +63,7 @@ char *		StrLookupFind(StrLookup obj, char *string);
 int			StrLookupFormat(char *buffer, char *fmt, ...);
 
 extern StrLookup StrLookup_Global_Object;
- 
+
 #define STRLOOKUP(str) StrLookupFind(StrLookup_Global_Object, str)
 #define STRLOOKUP_INIT(file) StrLookup_Global_Object = StrLookupCreate(file)
 #define STRLOOKUP_TERMINATE StrLookupDestroy(StrLookup_Global_Object)

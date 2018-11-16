@@ -10,15 +10,15 @@
 //
 // THIS FILE IS NOT GENERATED OR SUPPORTED BY ACTIVISION.
 //
-// This material has been developed at apolyton.net by the Apolyton CtP2 
+// This material has been developed at apolyton.net by the Apolyton CtP2
 // Source Code Project. Contact the authors at ctp2source@apolyton.net.
 //
 //----------------------------------------------------------------------------
 //
 // Compiler flags
-// 
+//
 // NON_STANDART_C_PLUS_PLUS
-// - When defined, generates the original Activision non standart 
+// - When defined, generates the original Activision non standart
 //   compilant code.
 // - When defined, generates modified standart compilant code.
 //
@@ -33,7 +33,6 @@
 
 #ifndef __TECH_WLLIST_H__
 #define __TECH_WLLIST_H__
-
 
 #include "tech_memory.h"
 
@@ -55,65 +54,52 @@ template< class T >
 class tech_WLList
 {
 public:
-	
+
 	tech_WLList( size_t blockSize = k_TECH_WLLIST_DEFAULT_BLOCKSIZE );
 	virtual ~tech_WLList();
 
-	
 	size_t  L( void ) const { return m_length; }
 	bool    IsEmpty( void ) const { return m_length == 0; }
 
-	
 	T &GetHead( void ) { return m_pHead->element; }
 	T GetHead( void ) const { return m_pHead->element; }
 	T &GetTail( void ) { return m_pTail->element; }
 	T GetTail( void ) const { return m_pTail->element; }
 
-	
 	T RemoveHead( void );
 	T RemoveTail( void );
 
-	
 	size_t RemoveDuplicates( void );
 
-	
 	ListPos AddHead( const T &newElement );
 	ListPos AddTail( const T &newElement );
 
-	
 	void AddHead( const tech_WLList &NewList );
 	void AddTail( const tech_WLList &NewList );
 
-	
 	ListPos GetHeadPosition( void ) const { return (ListPos)m_pHead; }
 	ListPos GetTailPosition( void ) const { return (ListPos)m_pTail; }
 
-	
 	T &GetNext( ListPos &position );
 	T GetNext( ListPos &position ) const;
 
-	
 	T &GetPrev( ListPos &position );
 	T GetPrev( ListPos &position ) const;
 
-	
 	T &GetAt( ListPos position );
 	T GetAt( ListPos position ) const;
 	void SetAt( ListPos position, const T &newElement );
 	void DeleteAt( ListPos position );
 	void DeleteAll( void );
 
-	
 	ListPos InsertBefore( ListPos position, const T &newElement );
 	ListPos InsertAfter( ListPos position, const T &newElement );
 
-	
 	ListPos Find( const T &searchElement, ListPos startAt = (ListPos)0 ) const;
-		
+
 	ListPos FindIndex( size_t index ) const;
-		
+
 	T GetAtIndex( size_t index ) const;
-		
 
 protected:
 	struct Link
@@ -123,17 +109,15 @@ protected:
 		T element;
 	};
 
-	
 	Link *NewLink( Link *pPrevLink, Link *pNextLink );
 
-	
 	void DeleteLink( Link *&pLink );
 
-	size_t m_length;		
-	Link *m_pHead;				
-	Link *m_pTail;				
+	size_t m_length;
+	Link *m_pHead;
+	Link *m_pTail;
 
-	tech_Memory< Link > *m_memory; 
+	tech_Memory< Link > *m_memory;
 };
 
 
@@ -153,7 +137,6 @@ tech_WLList< T >::tech_WLList( size_t blockSize )
 	m_memory = new tech_Memory< Link >(
 		blockSize ? blockSize : k_TECH_WLLIST_DEFAULT_BLOCKSIZE );
 }
-
 
 template< class T >
 tech_WLList< T >::~tech_WLList()
@@ -183,7 +166,6 @@ inline T &tech_WLList< T >::GetNext( ListPos &position )
 	return pLink->element;
 }
 
-
 template< class T >
 inline T tech_WLList< T >::GetNext( ListPos &position ) const
 {
@@ -191,7 +173,6 @@ inline T tech_WLList< T >::GetNext( ListPos &position ) const
 	position = (ListPos)pLink->pNext;
 	return pLink->element;
 }
-
 
 template< class T >
 inline T &tech_WLList< T >::GetPrev( ListPos &position )
@@ -201,7 +182,6 @@ inline T &tech_WLList< T >::GetPrev( ListPos &position )
 	return pLink->element;
 }
 
-
 template< class T >
 inline T tech_WLList< T >::GetPrev( ListPos &position ) const
 {
@@ -210,7 +190,6 @@ inline T tech_WLList< T >::GetPrev( ListPos &position ) const
 	return pLink->element;
 }
 
-
 template< class T >
 inline T &tech_WLList< T >::GetAt( ListPos position )
 {
@@ -218,14 +197,12 @@ inline T &tech_WLList< T >::GetAt( ListPos position )
 	return pLink->element;
 }
 
-
 template< class T >
 inline T tech_WLList< T >::GetAt( ListPos position ) const
 {
 	Link *pLink = (Link *)position;
 	return pLink->element;
 }
-
 
 template< class T >
 inline void tech_WLList< T >::SetAt( ListPos position, const T &newElement )
@@ -256,7 +233,6 @@ typename tech_WLList< T >::Link *tech_WLList< T >::NewLink(
 
 	return pNewLink;
 }
-
 
 template< class T >
 void tech_WLList< T >::DeleteLink( Link *&pLink )
@@ -295,7 +271,6 @@ ListPos tech_WLList< T >::AddHead( const T &newElement )
 	return (ListPos)pNewLink;
 }
 
-
 template< class T >
 ListPos tech_WLList< T >::AddTail( const T &newElement )
 {
@@ -315,7 +290,6 @@ ListPos tech_WLList< T >::AddTail( const T &newElement )
 	return (ListPos)pNewLink;
 }
 
-
 template< class T >
 void tech_WLList< T >::AddHead( const tech_WLList &NewList )
 {
@@ -324,7 +298,6 @@ void tech_WLList< T >::AddHead( const tech_WLList &NewList )
 		AddHead( NewList.GetPrev( position ) );
 }
 
-
 template< class T >
 void tech_WLList< T >::AddTail( const tech_WLList &NewList )
 {
@@ -332,7 +305,6 @@ void tech_WLList< T >::AddTail( const tech_WLList &NewList )
 	while ( position )
 		AddTail( NewList.GetNext( position ) );
 }
-
 
 template< class T >
 T tech_WLList< T >::RemoveHead( void )
@@ -353,7 +325,6 @@ T tech_WLList< T >::RemoveHead( void )
 
 	return theElement;
 }
-
 
 template< class T >
 T tech_WLList< T >::RemoveTail( void )
@@ -376,7 +347,6 @@ T tech_WLList< T >::RemoveTail( void )
 	return theElement;
 }
 
-
 template< class T >
 ListPos tech_WLList< T >::InsertBefore( ListPos position, const T &newElement )
 {
@@ -396,7 +366,6 @@ ListPos tech_WLList< T >::InsertBefore( ListPos position, const T &newElement )
 
 	return (ListPos)pNewLink;
 }
-
 
 template< class T >
 ListPos tech_WLList< T >::InsertAfter( ListPos position, const T &newElement )
@@ -418,11 +387,10 @@ ListPos tech_WLList< T >::InsertAfter( ListPos position, const T &newElement )
 	return (ListPos)pNewLink;
 }
 
-
 template< class T >
 void tech_WLList< T >::DeleteAt( ListPos position )
 {
-	
+
 	if (!position) return;
 
 	Link *pOldLink = (Link *)position;
@@ -456,7 +424,6 @@ void tech_WLList< T >::DeleteAt( ListPos position )
 	DeleteLink( pOldLink );
 }
 
-
 template< class T >
 void tech_WLList< T >::DeleteAll( void )
 {
@@ -471,7 +438,6 @@ void tech_WLList< T >::DeleteAll( void )
 	m_pHead = m_pTail = 0;
 }
 
-
 template< class T >
 ListPos tech_WLList< T >::FindIndex( size_t index ) const
 {
@@ -485,11 +451,10 @@ ListPos tech_WLList< T >::FindIndex( size_t index ) const
 	return (ListPos)pLink;
 }
 
-
 template< class T >
 T tech_WLList< T >::GetAtIndex( size_t index ) const
 {
-	
+
 
 
 
@@ -499,7 +464,6 @@ T tech_WLList< T >::GetAtIndex( size_t index ) const
 
 	return GetAt( pLink );
 }
-
 
 template< class T >
 ListPos tech_WLList< T >::Find( const T &searchElement, ListPos startAt ) const
@@ -515,23 +479,19 @@ ListPos tech_WLList< T >::Find( const T &searchElement, ListPos startAt ) const
 	return (ListPos)0;
 }
 
-
 template< class T >
 size_t tech_WLList< T >::RemoveDuplicates( void )
 {
-	size_t numDupsFound = 0; 
+	size_t numDupsFound = 0;
 
-	
 	ListPos outerPosition = m_pHead;
 
 
+	for (size_t i = m_length; i; i-- )
 
-	for (size_t i = m_length; i; i-- )	
-													
 	{
 		T element = GetNext( outerPosition );
 
-		
 		ListPos innerPosition = outerPosition;
 		for (size_t j = i - 1; j; j-- )
 		{
@@ -542,7 +502,6 @@ size_t tech_WLList< T >::RemoveDuplicates( void )
 				DeleteAt( position );
 				numDupsFound++;
 
-				
 				if ( outerPosition == position )
 					outerPosition = innerPosition;
 				i--;
@@ -556,4 +515,4 @@ size_t tech_WLList< T >::RemoveDuplicates( void )
 
 
 
-#endif 
+#endif

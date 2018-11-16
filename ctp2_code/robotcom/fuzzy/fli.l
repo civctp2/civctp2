@@ -2,14 +2,13 @@
 #include <crtdbg.h>
 #include <windows.h>
 #include "c3debug.h"
-#include <stdio.h> 
+#include <stdio.h>
 #include <stdlib.h>
 #include <string.h>
 
 #include "y.tab.h"
 #define PARSER_INTERFACE
 #include "fliif.h"
-
 
 int fli_lineNumber;
 
@@ -59,17 +58,17 @@ string  \"[^\"\n]*[\"\n]
 				strcpy(include_filename_stack[include_stack_ptr],
 					   buf);
 			    yyin = fopen( buf, "r" );
-			  
+
 			    if ( ! yyin ) {
 				    fli_parse_error = FLI_CANT_OPEN_FILE;
 					yyterminate();
 				} else {
-				
+
 						yy_switch_to_buffer(
 								yy_create_buffer( yyin, YY_BUF_SIZE ) );
-			  
+
 						fli_lineNumber = 1;
-						BEGIN(INITIAL);	
+						BEGIN(INITIAL);
 				}
 			}
 		}
@@ -78,7 +77,7 @@ string  \"[^\"\n]*[\"\n]
 				    yyterminate();
 				}
 <<EOF>> {
-	 	
+
 			if ( --include_stack_ptr < 0 ) {
 				if(include_stack_ptr == -1) {
 					return END_OF_INPUT;
@@ -87,7 +86,7 @@ string  \"[^\"\n]*[\"\n]
 				yyterminate();
 			} else {
 				fclose(yyin);
-				yyin = 0; 
+				yyin = 0;
 				yy_delete_buffer( YY_CURRENT_BUFFER );
 				free(include_filename_stack[include_stack_ptr + 1]);
 				yy_switch_to_buffer(
@@ -97,7 +96,7 @@ string  \"[^\"\n]*[\"\n]
 			}
         }
 
-{string}    { 
+{string}    {
 				yylval.name = malloc(strlen(yytext) - 1);
 				strncpy(yylval.name, yytext + 1, strlen(yytext + 1) - 1);
 				yylval.name[strlen(yytext + 1) - 1] = 0;
@@ -114,9 +113,9 @@ or			{ return OR; }
 left		{ return LEFT; }
 right		{ return RIGHT; }
 tri			{ return TRI; }
-spike		{ return SPIKE; } 
+spike		{ return SPIKE; }
 fuzzy_eval 	{ return FUZZY_EVAL; }
-fuzzy_init  { return FUZZY_INIT; } 
+fuzzy_init  { return FUZZY_INIT; }
 fuzzy_beginturn { return FUZZY_BEGINTURN; }
 fuzzy_endturn  { return FUZZY_ENDTURN; }
 fuzzy_begin_diplomacy 	{ return FUZZY_DIP; }
@@ -142,8 +141,8 @@ when        { return WHEN; }
 .			{ return yytext[0]; }
 %%
 
-int yywrap() 
-{ 
+int yywrap()
+{
 	return 1;
 }
 
@@ -151,7 +150,7 @@ int fli_open_first_file(const char *topdir, const char *file)
 {
 	char buf[MAX_PATH];
 
-	include_stack_ptr=0; 
+	include_stack_ptr=0;
 	sprintf(buf, "%s\\%s", topdir, file);
 	s_topdir = topdir;
 	include_filename_stack[0] = malloc(strlen(buf) + 1);
@@ -167,21 +166,20 @@ int fli_open_first_file(const char *topdir, const char *file)
 
 const char *fli_current_file()
 {
-    char *tmp=NULL; 
-	char *str=NULL; 
+    char *tmp=NULL;
+	char *str=NULL;
 
-	// get rid of the full path	
+	// get rid of the full path
 //	Assert(0 <= include_stack_ptr);
 
 	str = include_filename_stack[include_stack_ptr];
 
-	if (str) { 
-	    for (tmp = str; *tmp; tmp++) { 
-			if (*tmp == '\\') { 
-				str = tmp+1; 
-			} 
+	if (str) {
+	    for (tmp = str; *tmp; tmp++) {
+			if (*tmp == '\\') {
+				str = tmp+1;
+			}
 		}
-	} 
-	return str; 
+	}
+	return str;
 }
-

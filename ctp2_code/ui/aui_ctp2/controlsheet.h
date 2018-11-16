@@ -1,15 +1,3 @@
-
-
-
-
-
-
-
-
-
-
-
-
 #ifdef HAVE_PRAGMA_ONCE
 #pragma once
 #endif
@@ -23,7 +11,6 @@ class ControlSheet : public aui_Control, public PatternBase
 {
 public:
 
-	
 	ControlSheet(
 		AUI_ERRCODE *retval,
 		uint32 id,
@@ -45,12 +32,11 @@ public:
 	virtual AUI_ERRCODE DrawThis(aui_Surface *surface = NULL,
 								sint32 x = 0,
 								sint32 y = 0);
-	
+
 	void SetBorder( sint32 border ) { m_border = border; }
 
 private:
-	sint32 m_border;	
+	sint32 m_border;
 };
 
-
-#endif 
+#endif

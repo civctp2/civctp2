@@ -10,13 +10,13 @@
 //
 // THIS FILE IS NOT GENERATED OR SUPPORTED BY ACTIVISION.
 //
-// This material has been developed at apolyton.net by the Apolyton CtP2 
+// This material has been developed at apolyton.net by the Apolyton CtP2
 // Source Code Project. Contact the authors at ctp2source@apolyton.net.
 //
 //----------------------------------------------------------------------------
 //
 // Compiler flags
-// 
+//
 //
 //----------------------------------------------------------------------------
 //
@@ -72,15 +72,15 @@ namespace
     {
         switch (builtin)
         {
-#if 0   // Unused CTP1 leftovers?                  
+#if 0   // Unused CTP1 leftovers?
 	    case SLIC_BUILTIN_GLOBAL:
 	    case SLIC_BUILTIN_POP:
-	    case SLIC_BUILTIN_IMPROVEMENT:  
+	    case SLIC_BUILTIN_IMPROVEMENT:
 #endif
-        default:  
+        default:
             return SLIC_SYM_UNDEFINED;
 
-	    case SLIC_BUILTIN_ACTION:       
+	    case SLIC_BUILTIN_ACTION:
             return SLIC_SYM_STRING;
 
 	    case SLIC_BUILTIN_ADVANCE:
@@ -88,22 +88,22 @@ namespace
 	    case SLIC_BUILTIN_GOLD:
 	    case SLIC_BUILTIN_GOOD:
 	    case SLIC_BUILTIN_GOVERNMENT:
-        case SLIC_BUILTIN_PLAYER:   
+        case SLIC_BUILTIN_PLAYER:
 	    case SLIC_BUILTIN_UNITRECORD:
 	    case SLIC_BUILTIN_VALUE:
 	    case SLIC_BUILTIN_WONDER:
             return SLIC_SYM_IVAR;
 
-	    case SLIC_BUILTIN_ARMY:     
+	    case SLIC_BUILTIN_ARMY:
             return SLIC_SYM_ARMY;
 
-	    case SLIC_BUILTIN_CITY:     
+	    case SLIC_BUILTIN_CITY:
             return SLIC_SYM_CITY;
 
-	    case SLIC_BUILTIN_UNIT:     
+	    case SLIC_BUILTIN_UNIT:
             return SLIC_SYM_UNIT;
 
-	    case SLIC_BUILTIN_LOCATION: 
+	    case SLIC_BUILTIN_LOCATION:
             return SLIC_SYM_LOCATION;
         }
     }
@@ -184,7 +184,7 @@ SlicContext::SlicContext()
 	m_actionList = NULL;
 	m_numActions = 0;
 	m_tradeOffersList = NULL;
-	
+
 	m_governmentList = NULL;
 	m_numOrders = 0;
 	m_orderList = NULL;
@@ -230,13 +230,13 @@ SlicContext::SlicContext(SlicContext *copy)
 	COPY_SIMPLE_ARRAY(m_governmentList, sint32);
 	COPY_SIMPLE_ARRAY(m_advanceList, sint32);
 
-	CopyArray(m_calamityList, copy->m_calamityList, 
+	CopyArray(m_calamityList, copy->m_calamityList,
 			  m_numCalamities, copy->m_numCalamities);
-	CopyArray(m_goldList, copy->m_goldList, 
+	CopyArray(m_goldList, copy->m_goldList,
 			  m_numGolds, copy->m_numGolds);
-	CopyArray(m_rankList, copy->m_rankList, 
+	CopyArray(m_rankList, copy->m_rankList,
 			  m_numRanks, copy->m_numRanks);
-	CopyArray(m_wonderList, copy->m_wonderList, 
+	CopyArray(m_wonderList, copy->m_wonderList,
 			  m_numWonders, copy->m_numWonders);
 	CopyArray(m_orderList, copy->m_orderList,
 			  m_numOrders, copy->m_numOrders);
@@ -286,7 +286,7 @@ SlicContext::~SlicContext()
 	delete m_governmentList;
     delete m_tradeOffersList;
 
-	delete [] m_calamityList; 
+	delete [] m_calamityList;
 	delete [] m_goldList;
     delete [] m_rankList;
     delete [] m_wonderList;
@@ -298,9 +298,9 @@ SlicContext::~SlicContext()
     delete [] m_buildingList;
     delete [] m_tradeBidList;
 
-	if (m_actionList) 
+	if (m_actionList)
     {
-		for (size_t i = 0; i < (unsigned) m_numActions; ++i) 
+		for (size_t i = 0; i < (unsigned) m_numActions; ++i)
         {
 			delete [] m_actionList[i];
 		}
@@ -618,7 +618,7 @@ void SlicContext::AddAction(const MBCHAR *action)
 	m_actionList = newList;
     sint32 n = strlen(action) + 1;
 	newList[m_numActions] = new MBCHAR[n];
-    memset(newList[m_numActions], 0, n); 
+    memset(newList[m_numActions], 0, n);
 	strcpy(newList[m_numActions], action);
 	m_numActions++;
 }
@@ -637,7 +637,7 @@ sint32 *SlicContext::Expand(sint32 *list, sint32 size)
 {
 	sint32 *newList = new sint32[size + 1];
 	if(list) {
-		
+
 		memcpy(newList, list, size * sizeof(sint32));
 		delete [] list;
 	}
@@ -645,7 +645,7 @@ sint32 *SlicContext::Expand(sint32 *list, sint32 size)
 	return newList;
 }
 
-void SlicContext::CopyArray(sint32 *&to, sint32 *from, 
+void SlicContext::CopyArray(sint32 *&to, sint32 *from,
 							sint32 &tosize, sint32 size)
 {
 	if(!from || size == 0) {
@@ -763,7 +763,7 @@ void SlicContext::SetInt(sint32 index, sint32 &val)
 {
 	if(!m_intList)
 		m_intList = new SimpleDynamicArray<sint32>;
-	
+
 	if(index < 0)
 		return;
 
@@ -780,7 +780,7 @@ void SlicContext::SetUnitRecord(sint32 index, sint32 rec)
 {
 	if(!m_unitRecordList)
 		m_unitRecordList = new SimpleDynamicArray<sint32>;
-	
+
 	if(index < 0)
 		return;
 
@@ -1105,7 +1105,7 @@ void SlicContext::AddTradeOffer(const TradeOffer &offer)
 {
 	if(!m_tradeOffersList)
 		m_tradeOffersList = new SimpleDynamicArray<TradeOffer>;
-	
+
 	m_tradeOffersList->Insert(offer);
 }
 
@@ -1158,7 +1158,7 @@ void SlicContext::SetOrder(sint32 index, UNIT_ORDER_TYPE order)
 		m_orderList = Expand(m_orderList, index);
 		m_numOrders = index + 1;
 	}
-	m_orderList[index] = order;	
+	m_orderList[index] = order;
 }
 
 sint32 SlicContext::GetNumOrders() const
@@ -1211,7 +1211,7 @@ uint32 SlicContext::GetTradeBid(sint32 index) const
 
 void SlicContext::AddMadlib(char *name, const sint32 choice)
 {
-    
+
 	m_madlibChoiceList = Expand(m_madlibChoiceList, m_numMadlibs);
 	m_madlibChoiceList[m_numMadlibs] = choice;
 
@@ -1228,7 +1228,7 @@ sint32 SlicContext::GetMadlib(char *name)
 {
     int i;
 
-	if(!m_madlibNameList || !m_madlibChoiceList || 
+	if(!m_madlibNameList || !m_madlibChoiceList ||
        !name || (m_numMadlibs <= 0))
 		return -1;
 
@@ -1294,7 +1294,6 @@ sint32 SlicContext::Hash(char *name)
 }
 
 
-
 void SlicContext::DelCity()
 {
     if (m_cityList) {
@@ -1312,9 +1311,8 @@ void SlicContext::DelUnit()
 void SlicContext::DelPlayer()
 {
 	Assert(FALSE);
-    
-    
-    
+
+
 }
 
 void SlicContext::DelAdvance()
@@ -1402,7 +1400,6 @@ void SlicContext::DelAge()
     if (m_numAges > 0)
         m_numAges--;
 }
-
 
 #ifdef _DEBUG
 void SlicContext::Dump()
@@ -1509,7 +1506,7 @@ void SlicContext::Snarf(GameEventArgList *args)
 		args->GetArg(GEA_Player, i)->GetPlayer(p);
 		SetPlayer(i, p);
 	}
-		
+
 	MapPoint pos;
 	for(i = 0, c = args->GetArgCount(GEA_MapPoint); i < c; i++) {
 		args->GetArg(GEA_MapPoint, i)->GetPos(pos);
@@ -1644,13 +1641,12 @@ void SlicContext::CopyFromBuiltins()
 		SlicArray *array = sym->GetArray();
 		Assert(array);
 		if(!array) continue;
-		
+
 		SS_TYPE stype;
 		SlicStackValue sval;
 
 		if(array->GetSize() < 1) continue;
 
-		
 		switch(b) {
 			case SLIC_BUILTIN_PLAYER:       UNFILL(m_playerList, sint32, GetPlayer, SetPlayer); break;
 			case SLIC_BUILTIN_CITY:  		UNFILL(m_cityList, Unit, GetCity, SetCity); break;
@@ -1658,7 +1654,7 @@ void SlicContext::CopyFromBuiltins()
 			case SLIC_BUILTIN_GLOBAL:       break;
 			case SLIC_BUILTIN_ARMY:         UNFILL(m_armyList, Army, GetArmy, SetArmy); break;
 			case SLIC_BUILTIN_LOCATION:     UNFILL(m_locationList, MapPoint, GetPos, SetLocation); break;
-				
+
 			case SLIC_BUILTIN_ADVANCE:      UNFILL(m_advanceList, sint32, GetIntValue, SetAdvance); break;
 			case SLIC_BUILTIN_GOVERNMENT:   UNFILL(m_governmentList, sint32, GetIntValue, SetGovernment); break;
 			case SLIC_BUILTIN_GOLD:         break;
@@ -1673,7 +1669,7 @@ void SlicContext::CopyFromBuiltins()
 			default:
 				Assert(FALSE);
 				break;
-		}				
+		}
 	}
 }
 #undef UNFILL

@@ -11,7 +11,7 @@
 //
 // THIS FILE IS NOT GENERATED OR SUPPORTED BY ACTIVISION.
 //
-// This material has been developed at apolyton.net by the Apolyton CtP2 
+// This material has been developed at apolyton.net by the Apolyton CtP2
 // Source Code Project. Contact the authors at ctp2source@apolyton.net.
 //
 //----------------------------------------------------------------------------
@@ -48,7 +48,6 @@
 #include "Anim.h"
 #include "GoodActor.h"
 
-
 #include "ActorPath.h"
 #include "Action.h"
 #include "director.h"
@@ -75,7 +74,6 @@ GoodActor::GoodActor(GoodActor *copy)
 
 	m_actionQueue.CopyQueue();
 }
-
 
 GoodActor::GoodActor(CivArchive &archive)
 {
@@ -119,7 +117,7 @@ void GoodActor::Initialize(sint32 index, const MapPoint &pos)
 	m_index = index;
 
 	m_actionQueue.Allocate(k_MAX_ACTION_QUEUE_SIZE);
-	
+
 }
 
 void GoodActor::FullLoad(void)
@@ -128,10 +126,9 @@ void GoodActor::FullLoad(void)
 	if (m_loadType == LOADTYPE_FULL) return;
 
 	SpriteGroup *group = g_goodSpriteGroupList->GetSprite(m_index, GROUPTYPE_GOOD, LOADTYPE_FULL,(GAME_ACTION)0);
-	
+
 	m_loadType = LOADTYPE_FULL;
 
-	
 	Assert(group == m_goodSpriteGroup);
 
 	m_frame = 0;
@@ -153,16 +150,15 @@ void GoodActor::DumpFullLoad(void)
 	m_frame = 0;
 }
 
-
 void GoodActor::PositionActor(MapPoint &pos)
 {
 	sint32 pixelX, pixelY;
 
 	maputils_MapXY2PixelXY(pos.x, pos.y, &pixelX, &pixelY);
 
-	
 
-	
+
+
 
 
 	SetX(pixelX);
@@ -173,7 +169,7 @@ void GoodActor::PositionActor(MapPoint &pos)
 
 void GoodActor::AddIdle(void)
 {
-	
+
 	if (m_curAction) return;
 
 	m_curAction = new Action(GOODACTION_IDLE, ACTIONEND_ANIMEND);
@@ -189,14 +185,12 @@ void GoodActor::AddIdle(void)
 
 void GoodActor::Process(void)
 {
-	
 
 	sint32		tickCount = GetTickCount();
 
 	if (m_curAction) {
 		m_curAction->Process();
 
-		
 		if (m_curAction->Finished()) {
 			if (m_curAction->GetDelay() > 0 &&
 				tickCount > m_curAction->GetDelay()) {
@@ -224,22 +218,19 @@ void GoodActor::Process(void)
 		m_x = x;
 		m_y = y;
 
-		
 		m_frame = m_curAction->GetSpriteFrame();
 
-		
 		m_transparency = m_curAction->GetTransparency();
 
 		POINT curPt;
 
-		
 		if (m_curAction->GetPath() != NULL) {
-			
+
 			curPt = m_curAction->GetPosition();
 			m_x = curPt.x;
 			m_y = curPt.y;
 		}
-		
+
 		m_facing = m_curAction->GetFacing();
 	}
 }
@@ -259,7 +250,7 @@ void GoodActor::GetNextAction(void)
 			Assert(FALSE);
 		}
 	} else {
-		
+
 		AddIdle();
 	}
 }
@@ -268,11 +259,10 @@ void GoodActor::AddAction(Action *actionObj)
 {
 	Assert(m_goodSpriteGroup != NULL);
 	if (m_goodSpriteGroup == NULL) return;
-	
+
 	Assert(actionObj != NULL);
 	if (actionObj == NULL) return;
 
-	
 
 	m_actionQueue.Enqueue(actionObj);
 
@@ -300,17 +290,15 @@ void GoodActor::DumpAllActions(void)
 
 }
 
-
 Anim *GoodActor::GetAnim(GOODACTION action)
 {
 	Assert(m_goodSpriteGroup != NULL);
 	if (m_goodSpriteGroup == NULL) return NULL;
 
-	
 	Anim	*origAnim = m_goodSpriteGroup->GetAnim((GAME_ACTION)action);
-	if (origAnim == NULL) 
+	if (origAnim == NULL)
 	{
-		
+
 		origAnim = m_goodSpriteGroup->GetAnim((GAME_ACTION)GOODACTION_IDLE);
 		Assert(origAnim != NULL);
 		return NULL;
@@ -331,13 +319,11 @@ void GoodActor::DrawSelectionBrackets(void)
 	TileSet		*tileSet = g_tiledMap->GetTileSet();
 
 	SetRect(&rect, 0, 0, 1, 1);
-	
 
-	
- 	OffsetRect(&rect,	m_x + (sint32)(k_TILE_PIXEL_WIDTH * g_tiledMap->GetScale())/2, 
+
+ 	OffsetRect(&rect,	m_x + (sint32)(k_TILE_PIXEL_WIDTH * g_tiledMap->GetScale())/2,
 						m_y + (sint32)(k_TILE_GRID_HEIGHT * g_tiledMap->GetScale())/2);
 
-	
 	InflateRect(&rect, 25, 25);
 
 	g_tiledMap->AddDirtyRectToMix(rect);
@@ -347,7 +333,6 @@ void GoodActor::DrawSelectionBrackets(void)
 	rect.right -= (iconDim.x+1);
 	rect.bottom -= (iconDim.y+1);
 
-	
 	Pixel16			*topLeft, *topRight, *botLeft, *botRight;
 
 	topLeft = tileSet->GetMapIconData(MAPICON_BRACKET1);
@@ -372,9 +357,9 @@ BOOL GoodActor::Draw(BOOL fogged)
 	sint32			xoffset = (sint32)((double)k_ACTOR_CENTER_OFFSET_X * g_tiledMap->GetScale());
 	sint32			yoffset = (sint32)((double)k_ACTOR_CENTER_OFFSET_Y * g_tiledMap->GetScale());
 
-	
 
-	
+
+
 
 
 
@@ -382,8 +367,8 @@ BOOL GoodActor::Draw(BOOL fogged)
 
 
 #ifdef _ACTOR_DRAW_OPTIMIZATION
-	
-	if ( ( m_frame == m_oldFrame ) && 
+
+	if ( ( m_frame == m_oldFrame ) &&
 		( m_x+xoffset == m_oldOffsetX ) && ( m_y+yoffset == m_oldOffsetY ) )
 	{
 		if ( m_paintTwice > 1 )
@@ -404,7 +389,7 @@ BOOL GoodActor::Draw(BOOL fogged)
 	if (fogged)
 		flags |= k_BIT_DRAWFLAGS_FOGGED;
 
-	m_goodSpriteGroup->Draw(m_curGoodAction, m_frame, m_x+xoffset, m_y+yoffset, m_facing, 
+	m_goodSpriteGroup->Draw(m_curGoodAction, m_frame, m_x+xoffset, m_y+yoffset, m_facing,
 							g_tiledMap->GetScale(), m_transparency, color, flags);
 
 	if (g_selected_item->GetState() == SELECT_TYPE_GOOD) {
@@ -421,11 +406,10 @@ void GoodActor::DrawDirect(aui_Surface *surf, sint32 x, sint32 y, double scale)
 	uint16			flags = k_DRAWFLAGS_NORMAL;
 	Pixel16			color = 0x0000;
 
-
 	sint32			xoffset = (sint32)((double)k_ACTOR_CENTER_OFFSET_X * scale);
 	sint32			yoffset = (sint32)((double)k_ACTOR_CENTER_OFFSET_Y * scale);
 
-	m_goodSpriteGroup->DrawDirect(surf, GOODACTION_IDLE, m_frame, x+xoffset, y+yoffset, m_facing, scale, 
+	m_goodSpriteGroup->DrawDirect(surf, GOODACTION_IDLE, m_frame, x+xoffset, y+yoffset, m_facing, scale,
 							m_transparency, color, flags);
 }
 
@@ -446,7 +430,7 @@ POINT GoodActor::GetHotpoint(void)
 
 BOOL GoodActor::IsAnimating(void)
 {
-	
+
 	return FALSE;
 }
 
@@ -487,7 +471,7 @@ void GoodActor::GetBoundingRect(RECT *rect)
 
 	POINT	hotPoint = m_goodSpriteGroup->GetHotPoint(m_curGoodAction);
 	double	scale = g_tiledMap->GetScale();
-	sint32	xoff = (sint32)((double)(k_ACTOR_CENTER_OFFSET_X - hotPoint.x) * scale), 
+	sint32	xoff = (sint32)((double)(k_ACTOR_CENTER_OFFSET_X - hotPoint.x) * scale),
 			yoff = (sint32)((double)(k_ACTOR_CENTER_OFFSET_Y - hotPoint.y) * scale);
 
 	rect->left = 0;
@@ -509,7 +493,6 @@ void GoodActor::Serialize(CivArchive &archive)
 		archive >> m_index;
 		m_pos.Serialize(archive);
 
-		
 		Initialize(m_index, m_pos);
 	}
 }

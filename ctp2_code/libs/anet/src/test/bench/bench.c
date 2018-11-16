@@ -1,4 +1,4 @@
-/* 
+/*
 Copyright (C) 1995-2001 Activision, Inc.
 
 This library is free software; you can redistribute it and/or
@@ -114,7 +114,6 @@ typedef struct bench_s
 	int				amHost;	/* TRUE if we create session, or become host */
 } bench_t;
 
-
 static bench_time_t		bench_timers[bench_NUM_TIMERS];
 static bench_t			*bench_process_list = NULL;
 static int		        bench_process_number = 0;
@@ -125,8 +124,8 @@ static bench_stat_t		bench_stats;
 static unsigned long	bench_maxexec;
 static int				bench_globals[bench_NUM_GLOBALS];
 
-/* 
- * prototypes 
+/*
+ * prototypes
  */
 static void bench_time_Reset(int timer);
 static void bench_time_Sample(int timer, unsigned long sample);
@@ -201,7 +200,7 @@ int bench_compare_rank(const void *a, const void *b)
 /*--------------------------------------------------------------------------
  Call this to get the current process's id rank.
  Assumes that all processes are in the same session; else idrank is garbage.
- Each process's idrank is set to -1 if he's not in a game, to 0 if he's host, 
+ Each process's idrank is set to -1 if he's not in a game, to 0 if he's host,
  and to 1, 2, 3... if he's the normal client with the lowest, next lowest,
  etc. id.
 --------------------------------------------------------------------------*/
@@ -216,7 +215,7 @@ static int bench_get_rank(bench_t *bench)
 		return bench->idrank;
 
 	err = dpGetCurrentHostId(bench->dp, &bench_compare_hostid);
-	if (err != dp_RES_OK) 
+	if (err != dp_RES_OK)
 		return -1;
 
 	bench_rank_dirty = 0;
@@ -231,7 +230,7 @@ static int bench_get_rank(bench_t *bench)
 	n = i;
 	/*printf("Before sort:\n");
 	for (i=0; i<n; i++) {
-		printf("rank %d id %d proc %d\n", i, 
+		printf("rank %d id %d proc %d\n", i,
 				bench_compare_array[i]->id,
 				bench_compare_array[i]->number);
 	}*/
@@ -239,7 +238,7 @@ static int bench_get_rank(bench_t *bench)
 	/*printf("After sort:\n");*/
 	for (i=0; i<n; i++) {
 		bench_compare_array[i]->idrank = i;
-		/*printf("rank %d id %d proc %d\n", i, 
+		/*printf("rank %d id %d proc %d\n", i,
 				bench_compare_array[i]->id,
 				bench_compare_array[i]->number);*/
 	}
@@ -270,7 +269,7 @@ void bench_print(bench_t *bench, const char *fmt, ...)
    		va_start(args, fmt);
 		vsprintf(buff, fmt, args);
    		va_end(args);
-   
+
 		printf("%03d : %07d : %s", bench->number, bench_uptime(), buff);
 	}
 }
@@ -296,9 +295,9 @@ prog_cmd_res_t benchCmd_DPRINT(prog_process_t *process, const char *params, void
 		printf("Prints a message to the dp log; only useful in debug build\n");
 		return (prog_cmd_RES_OK);
 	}
-   
+
    	DPRINT(("%s\n", params));
-   
+
    	return (prog_cmd_RES_CONTINUE);
 }
 
@@ -323,9 +322,9 @@ prog_cmd_res_t benchCmd_Verbosity(prog_process_t *process, const char *params, v
 		printf("Changes the verbosity level (currently 0-3)\n");
 		return (prog_cmd_RES_OK);
 	}
-   
+
    	bench->verbosity = bench_expand_intvar_quick(bench, params);
-   
+
    	return (prog_cmd_RES_CONTINUE);
 }
 
@@ -364,32 +363,30 @@ prog_cmd_res_t benchCmd_dpCreate(prog_process_t *process, const char *params, vo
 		return (prog_cmd_RES_ERROR);
 	}
 
-	
-#ifdef UNIX	
-	
+#ifdef UNIX
+
 	/*
 	 * Change the rx mode to no waiting
 	 */
 	res = dpReportScore2(bench->dp, 0, dp_PARAMID_RXWAIT, 0);
-	
+
 	if (res != dp_RES_OK)
 	{
 		printf("Could not set rxWait mode to 0 [%d]\n", res);
 		return (prog_cmd_RES_ERROR);
 	}
-	
+
 	/*
 	 * Obtain the file descriptor of the socket
 	 */
 	bench->filedesc = 0;
 	dpGetParameterLong(bench->dp, dp_PARAMID_FILEDESC, &bench->filedesc);
 	bench_print(bench, "dpGetParameterLong returned file descriptor %d\n", bench->filedesc);
-		
+
 #endif
-	
+
 	return (prog_cmd_RES_CONTINUE);
 }
-
 
 /*
  * benchCmd_dpDestroy
@@ -427,7 +424,6 @@ prog_cmd_res_t benchCmd_dpDestroy(prog_process_t *process, const char *params, v
 	return (prog_cmd_RES_CONTINUE);
 }
 
-
 /*
  * benchCmd_dpSetGameServer
  *
@@ -443,7 +439,7 @@ prog_cmd_res_t benchCmd_dpSetGameServer(prog_process_t *process, const char *par
 
 	memcpy(buff, params, PROG_MAX_PARAM_LENGTH);
 	prog_Char2Args(buff, &argc, argv);
-	
+
 	if (PROG_CMD_TEST_PARAM(params))
 	{
 		printf("dpSetGameServer server species.\n");
@@ -461,7 +457,7 @@ prog_cmd_res_t benchCmd_dpSetGameServer(prog_process_t *process, const char *par
 	{
 		bench_print(bench, "dpSetGameServer NULL 0\n");
 		res = dpSetGameServerEx(bench->dp, NULL, 0);
-	}	
+	}
 	else
 	{
 		char server[80];
@@ -495,7 +491,7 @@ prog_cmd_res_t benchCmd_dpSetGameServer(prog_process_t *process, const char *par
 			exit(1);
 		}
 	}
-	
+
 	if (res != dp_RES_OK)
 	{
 		printf("Could not set game server [%d]\n", res);
@@ -520,7 +516,7 @@ static int dp_PASCAL bench_cb_session_find(dp_session_t *sDesc, long *pTimeout,l
 	}
 
 	/*DPRINT(("(k %d; %d/%d plrs; spec %d; fl %x; U1 %x; pw '%s') name %s reserved2 %d.%d.%d.%d\n",
-		sDesc->karma & 0xffff, 
+		sDesc->karma & 0xffff,
 		sDesc->currentPlayers,
 		sDesc->maxPlayers,
 		sDesc->sessionType, sDesc->flags,
@@ -541,7 +537,6 @@ static int dp_PASCAL bench_cb_session_find(dp_session_t *sDesc, long *pTimeout,l
 
 	return TRUE;
 }
-
 
 /*
  * benchCmd_dpOpen
@@ -586,7 +581,7 @@ prog_cmd_res_t benchCmd_dpOpen(prog_process_t *process, const char *params, void
 		res = bench_expand_var(bench, ptr, sessname);
 		if (res == prog_RES_OK)
 			ptr = sessname;
-			
+
 		bench_print(bench, "Creating Session %s\n", ptr);
 
 		memset(&bench->session, 0x00, sizeof (bench->session));
@@ -632,7 +627,7 @@ prog_cmd_res_t benchCmd_dpOpen(prog_process_t *process, const char *params, void
 	if (res != dp_RES_OK)
 	{
 		assert(res != dp_RES_BAD);
-		
+
 		printf("Could not open session [%d]\n", res);
 		return (prog_cmd_RES_ERROR);
 	}
@@ -643,7 +638,6 @@ prog_cmd_res_t benchCmd_dpOpen(prog_process_t *process, const char *params, void
 
 	return (prog_cmd_RES_CONTINUE);
 }
-
 
 /*
  * benchCmd_dpClose
@@ -682,7 +676,6 @@ prog_cmd_res_t benchCmd_dpClose(prog_process_t *process, const char *params, voi
 	return (prog_cmd_RES_CONTINUE);
 }
 
-
 /*
  * benchCmd_dpCreatePlayer
  *
@@ -696,7 +689,7 @@ prog_cmd_res_t benchCmd_dpCreatePlayer(prog_process_t *process, const char *para
 	int 		argc;
 	char	 	*argv[PROG_MAX_PARAM];
 	dp_result_t res;
-	
+
 	memcpy(buff, params, PROG_MAX_PARAM_LENGTH);
 	prog_Char2Args(buff, &argc, argv);
 
@@ -732,7 +725,7 @@ prog_cmd_res_t benchCmd_dpCreatePlayer(prog_process_t *process, const char *para
 
 	sprintf(bname, "%s[%d]", name, bench->number);
 	bench_print(bench, "dpCreatePlayer %s\n", bname);
-	
+
 	res = dpCreatePlayer(bench->dp, bench_cb_player_create, bench, bname);
 
 	if (res != dp_RES_OK)
@@ -747,7 +740,6 @@ prog_cmd_res_t benchCmd_dpCreatePlayer(prog_process_t *process, const char *para
 
 	return (prog_cmd_RES_CONTINUE);
 }
-
 
 /*
  * benchCmd_dpDestroyPlayer
@@ -783,7 +775,6 @@ prog_cmd_res_t benchCmd_dpDestroyPlayer(prog_process_t *process, const char *par
 
 	return (prog_cmd_RES_CONTINUE);
 }
-
 
 /*
  * benchCmd_dpSend
@@ -857,20 +848,20 @@ static prog_cmd_res_t benchCmd_dpGetStats(prog_process_t *process, const char *p
    bench_t     *bench = (bench_t *) context;
    dp_result_t res;
    dp_stat_t   stat;
-   
+
    res = dpGetStats(bench->dp, dp_STAT_DPIO_RX_UNREL_PKTS, &stat, sizeof (dp_stat_t));
    bench_stats.rx_pkts += stat.in;
    bench_print(bench, "Unreliable Packets RX:  %5d [%7d]\n", stat.in, bench_stats.rx_pkts);
-   res = dpGetStats(bench->dp, dp_STAT_DPIO_RX_UNREL_BYTES, &stat, sizeof (dp_stat_t)); 
+   res = dpGetStats(bench->dp, dp_STAT_DPIO_RX_UNREL_BYTES, &stat, sizeof (dp_stat_t));
    bench_stats.rx_bytes += stat.in;
    bench_print(bench, "Unreliable Bytes RX:    %5d [%7d]\n", stat.in, bench_stats.rx_bytes);
-   res = dpGetStats(bench->dp, dp_STAT_DPIO_TX_UNREL_PKTS, &stat, sizeof (dp_stat_t)); 
+   res = dpGetStats(bench->dp, dp_STAT_DPIO_TX_UNREL_PKTS, &stat, sizeof (dp_stat_t));
    bench_stats.tx_pkts += stat.out;
    bench_print(bench, "Unreliable Packets TX : %5d [%7d]\n", stat.out, bench_stats.tx_pkts);
-   res = dpGetStats(bench->dp, dp_STAT_DPIO_TX_UNREL_BYTES, &stat, sizeof (dp_stat_t)); 
+   res = dpGetStats(bench->dp, dp_STAT_DPIO_TX_UNREL_BYTES, &stat, sizeof (dp_stat_t));
    bench_stats.tx_bytes += stat.out;
    bench_print(bench, "Unreliable Bytes TX:    %5d [%7d]\n", stat.out, bench_stats.tx_bytes);
-   
+
    return (prog_cmd_RES_CONTINUE);
 }
 
@@ -908,7 +899,7 @@ static char key2a_buf3[256];
 static void dp_playerId_t_toString(const dp_playerId_t *src, char *buf)
 {
 	int i;
-	
+
 	/* print out dp_playerId_t field */
 	sprintf(buf, "playerId: id=%d, karma=%d, name=%s, blob=", src->id, src->karma, src->name);
 	for (i=0; i< src->bloblen; i++)
@@ -929,10 +920,10 @@ static void dp_session_t_toString(const dp_session_t *src, char *buf)
 			src->maxPlayers,
 			key2a2(src->reserved2, sizeof(src->reserved2))
 			);
-	for (i=0; i < sizeof(src->szUserField); i++) 
+	for (i=0; i < sizeof(src->szUserField); i++)
 		sprintf(buf + strlen(buf), " %02x", src->szUserField[i]);
 	sprintf(buf +strlen(buf), ", adrMaster ");
-	for (i=0; i < sizeof(src->adrMaster); i++) 
+	for (i=0; i < sizeof(src->adrMaster); i++)
 		sprintf(buf + strlen(buf), " %02x", src->adrMaster[i]);
 }
 
@@ -941,23 +932,23 @@ static void dp_session_t_toString(const dp_session_t *src, char *buf)
 --------------------------------------------------------------------------*/
 static void dp_serverInfo_t_toString(const dp_serverInfo_t *src, char *buf)
 {
-	sprintf(buf, "serverInfo: host %s, rtt %d, loss %d%% sessType %d, cur_users %d, max_users %d, sessTypeUsers %d", 
-			src->hostname, src->rtt_ms_avg, src->loss_percent, 
-			src->sessType, src->cur_users, src->max_users, 
+	sprintf(buf, "serverInfo: host %s, rtt %d, loss %d%% sessType %d, cur_users %d, max_users %d, sessTypeUsers %d",
+			src->hostname, src->rtt_ms_avg, src->loss_percent,
+			src->sessType, src->cur_users, src->max_users,
 			src->cur_sessTypeUsers);
 }
 
 /*--------------------------------------------------------------------------
-  converts fields in dp_objectDelta_packet_t into ASCII characters and put 
+  converts fields in dp_objectDelta_packet_t into ASCII characters and put
   them into a buffer.
 --------------------------------------------------------------------------*/
-static void dp_objectDelta2string(dp_objectDelta_packet_t *delta, char *buf) 
+static void dp_objectDelta2string(dp_objectDelta_packet_t *delta, char *buf)
 {
 	if (delta->key[0] == dp_KEY_PLAYERS)
 		sprintf(buf, "objectDelta: status:%d, latency:%dms, flags:%lx, key:%s, subkey:%s\n", delta->status, delta->latency, delta->flags, key2a(delta->key, delta->keylen), key2a2(delta->subkey, delta->subkeylen));
 	else
 		sprintf(buf, "objectDelta: status:%d, flags:%lx, key:%s, subkey:%s\n", delta->status, delta->flags, key2a(delta->key, delta->keylen), key2a2(delta->subkey, delta->subkeylen));
-	
+
 	switch (delta->key[0]) {
 	case dp_KEY_PLAYERS:
 		dp_playerId_t_toString(&delta->data.p, buf+strlen(buf));
@@ -976,10 +967,9 @@ static void dp_objectDelta2string(dp_objectDelta_packet_t *delta, char *buf)
 	}
 }
 
-
 /*
  * benchCmd_dpReceive
- * 
+ *
  */
 prog_cmd_res_t benchCmd_dpReceive(prog_process_t *process, const char *params, void *context)
 {
@@ -989,7 +979,7 @@ prog_cmd_res_t benchCmd_dpReceive(prog_process_t *process, const char *params, v
 	dpid_t			idFrom;
 	dpid_t			idTo;
 	size_t      	size;
-	
+
 	ASSERT(bench);
 
 	/* If there is no dp then do nothing */
@@ -998,13 +988,13 @@ prog_cmd_res_t benchCmd_dpReceive(prog_process_t *process, const char *params, v
 		bench_print(bench, "Call to bench poll when dp is invalid\n");
 		return (prog_cmd_RES_ERROR);
 	}
-	
+
 	/* Spin the network */
 	while (1)
     {
    		size = sizeof (buf);
 	   	res = dpReceive(bench->dp, &idFrom, &idTo, 0, &buf, &size);
-			
+
 		/* Was there any data ? */
 		if (res == dp_RES_EMPTY)
 		{
@@ -1025,14 +1015,14 @@ prog_cmd_res_t benchCmd_dpReceive(prog_process_t *process, const char *params, v
 			bench_print(bench, "Error calling dpReceive\n");
 			return (prog_cmd_RES_ERROR);
 		}
-		
+
 		/* Was there something other than OK */
 		if (res != dp_RES_OK)
 		{
-			bench_print(bench, "Unknown response from dpReceive [%d]\n", res); 
+			bench_print(bench, "Unknown response from dpReceive [%d]\n", res);
 			return (prog_cmd_RES_ERROR);
 		}
-		
+
 		/* There was data */
     	{
 #include "dppack1.h"
@@ -1059,7 +1049,7 @@ prog_cmd_res_t benchCmd_dpReceive(prog_process_t *process, const char *params, v
 				case dppt_MAKE('C', 'H'):
 					bench_print(bench, "Received CHAT : From %04d : %s\n", idFrom, pkt->u.buf);
 					break;
-			
+
 				case dp_USER_ADDPLAYER_PACKET_ID:
 				{
 					if (bench->verbosity >= bench_VERBOSITY_LOTS)
@@ -1068,7 +1058,7 @@ prog_cmd_res_t benchCmd_dpReceive(prog_process_t *process, const char *params, v
 				 	}
 				   	break;
 				}
-			
+
 				case dp_USER_DELPLAYER_PACKET_ID:
 				{
 					if (bench->verbosity >= bench_VERBOSITY_LOTS)
@@ -1077,28 +1067,28 @@ prog_cmd_res_t benchCmd_dpReceive(prog_process_t *process, const char *params, v
 					}
 				   	break;
 				}
-	
+
 				case dp_USER_ADDGROUP_PACKET_ID:
 					bench_print(bench, "Group %s (%d) added.\n", pkt->u.ag.name, pkt->u.ag.id);
 					break;
-		
+
 				case dp_USER_DELGROUP_PACKET_ID:
 					bench_print(bench, "Group %s (%d) deleted.\n", pkt->u.dg.name, pkt->u.dg.id);
 					break;
-		
+
 				case dp_USER_ADDPLAYERTOGROUP_PACKET_ID:
 					bench_print(bench, "Player %d added to group %d.\n", pkt->u.gap.dpIdPlayer, pkt->u.gap.dpIdGroup);
 					break;
-		
+
 				case dp_USER_DELPLAYERFROMGROUP_PACKET_ID:
 					bench_print(bench, "Player %d deleted from group %d.\n", pkt->u.gdp.dpIdPlayer, pkt->u.gdp.dpIdGroup);
 					break;
-		
+
 				case dp_USER_PLAYERDATA_PACKET_ID:
 					bench_print(bench, "New value for player %d's variable %d: len %d, value %-20.20s\n",
 						pkt->u.pv.id, pkt->u.pv.key, pkt->u.pv.len, pkt->u.pv.data);
 					break;
-		
+
 				case dp_USER_HOST_PACKET_ID:
 					bench_print(bench, "This machine is now host.\n");
 					bench->amHost = TRUE;
@@ -1172,7 +1162,7 @@ prog_cmd_res_t benchCmd_dpReceive(prog_process_t *process, const char *params, v
 						break;
 					}
 					break;
-				
+
 				case dp_SESSIONRESULT_PACKET_ID:
 					if (pkt->u.sessRes.reason != dp_RES_OK) {
 						bench_print(bench, "Session join failed, reason:%d\n", pkt->u.sessRes.reason);
@@ -1180,10 +1170,10 @@ prog_cmd_res_t benchCmd_dpReceive(prog_process_t *process, const char *params, v
 						bench_print(bench, "Joined session %s, type:%d\n", pkt->u.sessRes.sess.sessionName, pkt->u.sessRes.sess.sessionType);
 					}
 					break;
-			
+
 				default:
 					bench_print(bench, "Received %c%c : From %04d : Len %d : Data %02x %02x %02x %02x   %02x %02x %02x %02x\n",
-						*buf, *(buf + 1), idFrom, size, 
+						*buf, *(buf + 1), idFrom, size,
 						*(buf + 2) & 0xFF, *(buf + 3) & 0xFF, *(buf + 4) & 0xFF, *(buf + 5) & 0xFF,
 						*(buf + 6) & 0xFF, *(buf + 7) & 0xFF, *(buf + 8) & 0xFF, *(buf + 9) & 0xFF);
 					break;
@@ -1199,7 +1189,7 @@ prog_cmd_res_t benchCmd_dpReceive(prog_process_t *process, const char *params, v
  * command "TIMER"
  * parameters "TIMER NUMBER" "OPTIONS"
  * options START END
- * 
+ *
  * example TIMER 0 START
  *
  */
@@ -1210,7 +1200,7 @@ prog_cmd_res_t benchCmd_Timer(prog_process_t *process, const char *params, void 
 	int 		argc;
 	char	 	*argv[PROG_MAX_PARAM];
 	int 		timer;
-	
+
 	memcpy(buff, params, PROG_MAX_PARAM_LENGTH);
 	prog_Char2Args(buff, &argc, argv);
 
@@ -1263,7 +1253,7 @@ prog_cmd_res_t benchCmd_Timer(prog_process_t *process, const char *params, void 
 			/* Finish a particular timer */
 			bench_time_Sample(timer, (eclock() - bench->timer[timer]) * 1000 / ECLOCKS_PER_SEC);
 			break;
-		
+
 		case 'c':
 		case 'C':
 			/* Copy a particular statistic into I0 */
@@ -1273,32 +1263,32 @@ prog_cmd_res_t benchCmd_Timer(prog_process_t *process, const char *params, void 
 				case 'N':
 					prog_process_SetInteger(&bench->process, 0, bench_time_GetNumber(timer));
 					break;
-				
+
 				case 'a':
 				case 'A':
 					prog_process_SetInteger(&bench->process, 0, (int) bench_time_GetAvg(timer));
 					break;
-				
+
 				case 's':
 				case 'S':
 					prog_process_SetInteger(&bench->process, 0, (int) bench_time_GetStdDev(timer));
 					break;
-				
+
 				default:
 					printf ("Unknown Argument\n");
 					return (prog_cmd_RES_ERROR);
 					break;
 			}
 			break;
-				
+
 		case 'r':
 		case 'R':
 			bench_time_Report(timer);
 			break;
-	 
+
 	 	case 'o':
 	 	case 'O':
-	   		
+
 	   		switch (*(argv[1] + 1))
 		    {
 			 	case 'n':
@@ -1306,13 +1296,13 @@ prog_cmd_res_t benchCmd_Timer(prog_process_t *process, const char *params, void 
 			   		bench_print(bench, "Turning Timer %d ON\n", timer);
 			   		bench_timers[timer].on = 1;
 			   		break;
-			   
+
 			 	case 'f':
 			 	case 'F':
 			   		bench_print(bench, "Turning Timer %d OFF\n", timer);
 	   				bench_timers[timer].on = 0;
 			   		break;
-			    
+
 			 	default:
 			   		printf("Unknown Argument\n");
 			   		break;
@@ -1323,7 +1313,7 @@ prog_cmd_res_t benchCmd_Timer(prog_process_t *process, const char *params, void 
 		case 'Z':
 			bench_time_Reset(timer);
 			break;
-	   
+
 		default:
 			printf("Unknown Argument\n");
 			return (prog_cmd_RES_ERROR);
@@ -1331,7 +1321,6 @@ prog_cmd_res_t benchCmd_Timer(prog_process_t *process, const char *params, void 
 	}
 	return (prog_cmd_RES_CONTINUE);
 }
-
 
 /*
  * benchCmd_Wait
@@ -1350,10 +1339,10 @@ prog_cmd_res_t benchCmd_Wait(prog_process_t *process, const char *params, void *
 	char	 	*argv[PROG_MAX_PARAM];
 	prog_cmd_res_t	res;
 	long		waitflags;		/* what we're waiting for */
-	
+
 	memcpy(buff, params, PROG_MAX_PARAM_LENGTH);
 	prog_Char2Args(buff, &argc, argv);
-	
+
 	if (PROG_CMD_TEST_PARAM(params))
 	{
 		printf("Wait [time [time [Shutdown] | Freeze]] | Solitary]\n");
@@ -1386,10 +1375,10 @@ prog_cmd_res_t benchCmd_Wait(prog_process_t *process, const char *params, void *
 
 	/* Handle waits that do NOT want network traffic. */
 	if ((argc >= 1) && (*argv[0] == 'S')) {
-		/* wait until we are the solitary process, do NOT spin the network ! */	
+		/* wait until we are the solitary process, do NOT spin the network ! */
 		if (bench_process_number > 1) {
 			return (prog_cmd_RES_WAIT);
-		}	
+		}
 		return (prog_cmd_RES_CONTINUE);
 	}
 
@@ -1496,7 +1485,6 @@ prog_cmd_res_t benchCmd_Wait(prog_process_t *process, const char *params, void *
 	return (prog_cmd_RES_WAIT);
 }
 
-
 /*
  * benchCmd_Spawn
  *
@@ -1514,35 +1502,35 @@ prog_cmd_res_t benchCmd_Spawn(prog_process_t *process, const char *params, void 
 	prog_line_t *line;
 	prog_cmd_res_t res;
 	char		errbuf[256];
-	
+
 	memcpy(buff, params, PROG_MAX_PARAM_LENGTH);
 	prog_Char2Args(buff, &argc, argv);
-	
+
 	if (argc < 2)
 	{
 		printf("Expected at least 2 parameters, found %d\n", argc);
 		return (prog_cmd_RES_ERROR);
 	}
-	
+
 	res = bench_expand_intvar(bench, argv[1], &num, errbuf);
 	if (res != prog_RES_OK) {
 		printf("Spawn: 2nd argument %s: %s\n", argv[1], errbuf);
 		return (prog_cmd_RES_ERROR);
 	}
 	line = prog_Resolv(argv[0], process->program);
-	
+
 	if (num < 1 || num > 256)
 	{
 		printf("Number to Spawn must be in the range 1-256, supplied was '%s'=%d\n", argv[1], num);
 		return (prog_cmd_RES_ERROR);
 	}
-	
+
 	if (!line)
 	{
 		printf("Spawn: Could not resolve label name %s\n", argv[0]);
 		return (prog_cmd_RES_ERROR);
 	}
-	
+
 	while (num--)
 	{
 		int argi;
@@ -1551,8 +1539,8 @@ prog_cmd_res_t benchCmd_Spawn(prog_process_t *process, const char *params, void 
 		{
 			printf("Could not create bench\n");
 			return (prog_cmd_RES_ERROR);
-		}		
-		
+		}
+
 		bench_print(bench, "Spawning new process %d at %s\n", b->number, argv[0]);
 		/* Pass in remaining parameters in the processes string array,
 		 * evaluating any variables now.
@@ -1572,7 +1560,7 @@ prog_cmd_res_t benchCmd_Spawn(prog_process_t *process, const char *params, void 
 		}
 		bench_process_Start(b);
   	}
-		
+
 	return (prog_cmd_RES_CONTINUE);
 }
 
@@ -1584,7 +1572,7 @@ static int bench_expand_intvar_quick(bench_t *bench, const char *varname)
 	prog_res_t res;
 	int val;
 	char errbuf[256];
-	
+
 	res = bench_expand_intvar(bench, varname, &val, errbuf);
 	if (res != prog_RES_OK) {
 		bench_print(bench, "bench_expand_intvar_quick: %s\n", errbuf);
@@ -1749,7 +1737,7 @@ static prog_res_t bench_expand_intvar(bench_t *bench, const char *varname, int *
 			break;
 	}
 	return prog_RES_OK;
-}	
+}
 
 /*--------------------------------------------------------------------------
  Expand any variable references at runtime to their string values.
@@ -1786,7 +1774,7 @@ static prog_res_t bench_expand_var(bench_t *bench, const char *varname, char *sr
 			break;
 	}
 	return res;
-}	
+}
 
 /*
  * benchCmd_Print
@@ -1805,10 +1793,10 @@ prog_cmd_res_t benchCmd_Print(prog_process_t *process, const char *params, void 
 	char		obuf[2048];
 	char		*obufp;
 	prog_res_t res;
-	
+
 	memcpy(buff, params, PROG_MAX_PARAM_LENGTH);
 	prog_Char2Args(buff, &argc, argv);
-	
+
 	if (PROG_CMD_TEST_PARAM(params))
 	{
 		printf("Print string, expanding $[IST] keywords\n");
@@ -1851,7 +1839,7 @@ prog_cmd_res_t benchCmd_Print(prog_process_t *process, const char *params, void 
 			strcpy(obufp, argv[num]);
 		}
 		obufp += strlen(obufp);
-		if (num < argc) 
+		if (num < argc)
 			*obufp++ = ' ';
 		assert(obufp - obuf < sizeof(obuf));
 	}
@@ -1869,8 +1857,8 @@ prog_cmd_res_t benchCmd_Print(prog_process_t *process, const char *params, void 
  * benchCmd_Eval
  *
  * command "Eval"
- * parameters "INFO_NAME VARIABLE_NUMBER" 
- * 
+ * parameters "INFO_NAME VARIABLE_NUMBER"
+ *
  * example Eval $amHost 0
  *
  */
@@ -1943,7 +1931,7 @@ prog_cmd_res_t benchCmd_SetGlobal(prog_process_t *process, const char *params, v
 	int 		gnum;
 	prog_cmd_res_t res;
 	char		errbuf[256];
-	
+
 	memcpy(buff, params, PROG_MAX_PARAM_LENGTH);
 	prog_Char2Args(buff, &argc, argv);
 
@@ -1956,10 +1944,10 @@ prog_cmd_res_t benchCmd_SetGlobal(prog_process_t *process, const char *params, v
 	if (PROG_CMD_TEST_INFO(params))
 	{
 		printf("There are %d global variables available.\n" \
-				"The first arg is the global to set;\n", 
-				"The second arg is the value to set it to; see Print for a list of supported values.\n", 
-				"Example: SETGLOBAL 0 1 : sets global #0 to 1\n", 
-				"Example: SETGLOBAL 0 $hostId : sets global #0 to value of $hostid\n", 
+				"The first arg is the global to set;\n",
+				"The second arg is the value to set it to; see Print for a list of supported values.\n",
+				"Example: SETGLOBAL 0 1 : sets global #0 to 1\n",
+				"Example: SETGLOBAL 0 $hostId : sets global #0 to value of $hostid\n",
 				bench_NUM_GLOBALS);
 		return (prog_cmd_RES_OK);
 	}
@@ -1998,7 +1986,7 @@ prog_cmd_res_t benchCmd_SetGlobal(prog_process_t *process, const char *params, v
  *
  * command "ReadLineIntoGlobals"
  * parameters "GLOBALNUMBER"
- * example ReadLineIntoGlobals 0 
+ * example ReadLineIntoGlobals 0
  *
  */
 prog_cmd_res_t benchCmd_ReadLineIntoGlobals(prog_process_t *process, const char *params, void *context)
@@ -2013,7 +2001,7 @@ prog_cmd_res_t benchCmd_ReadLineIntoGlobals(prog_process_t *process, const char 
 	char		linebuf[256];
 	char		*tok;
 	int         i;
-	
+
 	memcpy(buff, params, PROG_MAX_PARAM_LENGTH);
 	prog_Char2Args(buff, &argc, argv);
 
@@ -2026,7 +2014,7 @@ prog_cmd_res_t benchCmd_ReadLineIntoGlobals(prog_process_t *process, const char 
 	if (PROG_CMD_TEST_INFO(params))
 	{
 		printf("Reads a line from stdin\n" \
-				"The first arg is the first global to set.\n", 
+				"The first arg is the first global to set.\n",
 				"Example: ReadLineIntoGlobals 0 : sets global #0 and up to the values on the next line of stdin\n");
 		return (prog_cmd_RES_OK);
 	}
@@ -2059,7 +2047,7 @@ prog_cmd_res_t benchCmd_ReadLineIntoGlobals(prog_process_t *process, const char 
 	for (i=0, tok=strtok(linebuf, " \t"); tok; tok=strtok(NULL, " \t"), i++) {
 		bench_globals[gnum + i] = atoi(tok);
 	}
-	bench_print(bench, 
+	bench_print(bench,
 			"ReadLineIntoGlobals: read %d values into globals [%d..%d]\n",
 			i, gnum, gnum+i-1);
 
@@ -2089,7 +2077,7 @@ prog_cmd_res_t benchCmd_LoseHost(prog_process_t *process, const char *params, vo
  *
  * command "LosePeerWithRank"
  * parameters "INTEGER OR INTVAR"
- * example LosePeerWithRank 0 
+ * example LosePeerWithRank 0
  * example LosePeerWithRank $I1
  */
 prog_cmd_res_t benchCmd_LosePeerWithRank(prog_process_t *process, const char *params, void *context)
@@ -2160,7 +2148,7 @@ prog_cmd_res_t benchCmd_Login(prog_process_t *process, const char *params, void 
 	char		username[PROG_MAX_STRINGLEN];
 	char		password[PROG_MAX_STRINGLEN];
 	prog_cmd_res_t res;
-	
+
 	memcpy(buff, params, PROG_MAX_PARAM_LENGTH);
 	prog_Char2Args(buff, &argc, argv);
 
@@ -2199,7 +2187,7 @@ prog_cmd_res_t benchCmd_Login(prog_process_t *process, const char *params, void 
 			printf("ReportScore: Bad stringvar for password: %s\n", argv[1]);
 			return (prog_cmd_RES_ERROR);
 		}
-	} else 
+	} else
 		strncpy(password, argv[1], 16);
 	password[16] = '\0';
 
@@ -2215,7 +2203,7 @@ prog_cmd_res_t benchCmd_Login(prog_process_t *process, const char *params, void 
 	bench->bitflag |= bench_BITFLAG_WAIT_LOGIN;
 	bench->bitflag &= ~bench_BITFLAG_ERROR;
 	bench->flag = bench_flag_WAIT;
-	
+
 	return (prog_cmd_RES_CONTINUE);
 }
 
@@ -2240,7 +2228,7 @@ prog_cmd_res_t benchCmd_ReportScore(prog_process_t *process, const char *params,
 	char		scorebuf[3];
 	prog_cmd_res_t res;
 	char		errbuf[256];
-	
+
 	memcpy(buff, params, PROG_MAX_PARAM_LENGTH);
 	prog_Char2Args(buff, &argc, argv);
 
@@ -2290,7 +2278,7 @@ prog_cmd_res_t benchCmd_ReportScore(prog_process_t *process, const char *params,
 		printf("ReportScore: Invalid id: %d.\n", id);
 		return (prog_cmd_RES_ERROR);
 	}
-	
+
 	return (prog_cmd_RES_CONTINUE);
 }
 
@@ -2307,15 +2295,15 @@ int main(int argc, char **argv)
 	int				bail;
 	unsigned long	endtime;
 	bench_t	*pptr;
-   
+
 	srand(eclock());
 	bench_starttime = eclock();
-	
+
    	bench_stats.rx_pkts = 0;
    	bench_stats.rx_bytes = 0;
    	bench_stats.rx_pkts = 0;
    	bench_stats.rx_bytes = 0;
-   
+
 	if (argc < 3)
 	{
 		printf("useage - bench \"program\" maxexec [parameters]\n");
@@ -2323,11 +2311,11 @@ int main(int argc, char **argv)
 		printf(" maxexec is the maximum amount of time between executions (ms)\n");
 		return (1);
 	}
-	
+
 	bench_maxexec = (atoi(argv[2]) * ECLOCKS_PER_SEC) / 1000;
 
 	prog_syntax_Create(&syntax);
-	
+
 	prog_syntax_AddCmd(&syntax, "DPRINT", benchCmd_DPRINT);
 	prog_syntax_AddCmd(&syntax, "Verbosity", benchCmd_Verbosity);
    	prog_syntax_AddCmd(&syntax, "dpCreate", benchCmd_dpCreate);
@@ -2351,7 +2339,7 @@ int main(int argc, char **argv)
 	prog_syntax_AddCmd(&syntax, "Eval", benchCmd_Eval);
 	prog_syntax_AddCmd(&syntax, "Login", benchCmd_Login);
 	prog_syntax_AddCmd(&syntax, "ReportScore", benchCmd_ReportScore);
-	
+
 	switch (prog_Load(&program, &syntax, argv[1], argc - 2, argv + 2))
 	{
 		case prog_RES_OK:
@@ -2377,7 +2365,7 @@ int main(int argc, char **argv)
 			return (1);
 			break;
 	}
-	
+
 	DPRINT(("Bench: Start of main loop (initializing logging)\n"));
 	dp_flushLog();
 
@@ -2387,17 +2375,17 @@ int main(int argc, char **argv)
 	{
 		bench_time_Reset(i);
 	}
-	
+
 	bench = bench_process_Create(&program, NULL);
-	
+
 	if (!bench)
 	{
 		printf("Could not create bench\n");
 		return (1);
 	}
-	
+
 	bench_process_Start(bench);
-	
+
 	bail = 0;
 
 	while (!bail)
@@ -2419,9 +2407,9 @@ int main(int argc, char **argv)
 		}
 
 	   	timer2 = eclock();
-	   
-//		bench_time_Sample(4, (timer2 - timer) * 1000 / ECLOCKS_PER_SEC);		
-	/*	
+
+//		bench_time_Sample(4, (timer2 - timer) * 1000 / ECLOCKS_PER_SEC);
+	/*
 		if ((timer2 - timer) > (prog_process_GetInteger(&bench->process, 9) * ECLOCKS_PER_SEC / 1000))
 		{
 			printf("FATAL: Step timer exceeds allowed value\n");
@@ -2429,7 +2417,7 @@ int main(int argc, char **argv)
 			bail = 1;
 			break;
 		}
-		
+
 		if ((timer2 - timer) > (prog_process_GetInteger(&bench->process, 8) * ECLOCKS_PER_SEC / 1000))
 		{
 			printf("WARN: Step timer exceeds allowed value\n");
@@ -2446,7 +2434,7 @@ int main(int argc, char **argv)
 	}
 
    	endtime = eclock();
-  /* 
+  /*
    	printf("Global Statistics:\n");
    	printf("Average Connect Time:             : %f\n", bench_time_GetAvg(2));
 	printf("Success Rate:                     : %d [%d]\n", bench_time_GetNumber(5), bench_time_GetNumber(1));
@@ -2457,12 +2445,12 @@ int main(int argc, char **argv)
    	printf("Packets Received                  : %d\n", bench_stats.rx_pkts);
    	printf("Bytes Received                    : %d\n", bench_stats.rx_bytes);
 	printf("Total Received (pkts*32+bytes)    : %d\n", bench_stats.rx_pkts * 32 + bench_stats.rx_bytes);
-   	printf("Bits Received per second          : %d\n", (bench_stats.rx_pkts * 32 + bench_stats.rx_bytes) * ECLOCKS_PER_SEC * 10 / (endtime - bench_starttime)); 
+   	printf("Bits Received per second          : %d\n", (bench_stats.rx_pkts * 32 + bench_stats.rx_bytes) * ECLOCKS_PER_SEC * 10 / (endtime - bench_starttime));
    	printf("Packets Transmitted               : %d\n", bench_stats.tx_pkts);
    	printf("Bytes Transmitted                 : %d\n", bench_stats.tx_bytes);
 	printf("Total Transmitted (pkts*32+bytes) : %d\n", bench_stats.tx_pkts * 32 + bench_stats.tx_bytes);
-   	printf("Bits Transmitted per second       : %d\n", (bench_stats.tx_pkts * 32 + bench_stats.tx_bytes) * ECLOCKS_PER_SEC * 10 / (endtime - bench_starttime)); 
-  */ 
+   	printf("Bits Transmitted per second       : %d\n", (bench_stats.tx_pkts * 32 + bench_stats.tx_bytes) * ECLOCKS_PER_SEC * 10 / (endtime - bench_starttime));
+  */
   // 	printf(" - Unloading program\n");
 	prog_UnLoad(&program);
  //	printf(" - Destroying syntax\n");
@@ -2470,7 +2458,6 @@ int main(int argc, char **argv)
 
 	return (bench_exitcode);
 }
-
 
 
 /*
@@ -2489,7 +2476,6 @@ void bench_time_Reset(int timer)
 	bench_timers[timer].max = 0;
 };
 
-
 /*
  * bench_time_Sample
  *
@@ -2507,7 +2493,6 @@ void bench_time_Sample(int timer, unsigned long sample)
 		bench_timers[timer].max = (bench_timers[timer].max > sample) ? bench_timers[timer].max : sample;
 	}
 }
-
 
 /*
  * bench_time_Report
@@ -2535,13 +2520,13 @@ void bench_time_Report(int timer)
 
 /*
  * bench_time_GetNumber
- * 
+ *
  */
 int bench_time_GetNumber(int timer)
 {
 	return (bench_timers[timer].count);
 }
-	
+
 /*
  * bench_time_GetAvg
  *
@@ -2550,10 +2535,10 @@ double bench_time_GetAvg(int timer)
 {
 	return (((double) bench_timers[timer].sum) / (double) bench_timers[timer].count);
 }
-	
+
 /*
  * bench_time_GetStdDev
- * 
+ *
  */
 double bench_time_GetStdDev(int timer)
 {
@@ -2562,30 +2547,27 @@ double bench_time_GetStdDev(int timer)
 	return (sqrt(avgsq - avg * avg));
 }
 
-
 /*
  * bench_time_GetMax
- * 
+ *
  */
 static int bench_time_GetMax(int timer)
 {
 	return (bench_timers[timer].max);
 }
 
-
 /*
  * bench_time_GetMin
- * 
+ *
  */
 static int bench_time_GetMin(int timer)
 {
 	return (bench_timers[timer].min);
 }
 
-
 /*
  * bench_cb_session_join
- * 
+ *
  */
 int dp_PASCAL bench_cb_session_join(dp_session_t *session, long *timeout, long flags, void *context)
 {
@@ -2638,12 +2620,11 @@ void dp_PASCAL bench_cb_player_create(dpid_t id, char_t *name, long flags, void 
 	}
 }
 
-
 /*
  * bench_process_Create
- * 
- * Creates a bench_t which 
- * 
+ *
+ * Creates a bench_t which
+ *
  * in  -> program: program to use
  *        start: starting location in the program
  * out <- pointer to initialized bench structure
@@ -2652,7 +2633,7 @@ static bench_t *bench_process_Create(prog_t *program, prog_line_t *start)
 {
 	bench_t *bench;
 	char logfname[128];
-	
+
 	bench = (bench_t *) malloc(sizeof (bench_t));
 
 	if (!bench)
@@ -2660,7 +2641,7 @@ static bench_t *bench_process_Create(prog_t *program, prog_line_t *start)
 		return (NULL);
 	}
 	memset(bench, 0, sizeof(bench_t));
-	
+
 	bench->number = bench_process_id++;
 	bench->dp = NULL;
    	bench->verbosity = 0;
@@ -2674,7 +2655,6 @@ static bench_t *bench_process_Create(prog_t *program, prog_line_t *start)
 
     return (bench);
 }
-
 
 
 /*
@@ -2704,7 +2684,6 @@ prog_res_t bench_process_Start(bench_t *bench)
 	}
 	return (prog_RES_OK);
 }
-
 
 /*
  * bench_process_Stop
@@ -2752,7 +2731,6 @@ prog_res_t bench_process_Stop(bench_t *bench)
 	return (prog_RES_ERROR);
 }
 
-
 /*
  * bench_ProcessStep
  *
@@ -2779,17 +2757,17 @@ prog_res_t bench_process_Step()
 		struct timeval	timeout;
 		int				n;
 		int				max = 0;
-	
+
 		pptr = bench_process_list;
-	
-		/* 
+
+		/*
 		 * For UNIX we "select" the file descriptors of all the sockets
 		 * to see which ones require processing.  Only those processes
 		 * which are waiting are considered.
 		 */
-	
+
 		FD_ZERO(&fds);
-	
+
 		while (pptr)
 		{
 			if (pptr->dp && pptr->flag & bench_flag_WAIT)
@@ -2798,31 +2776,31 @@ prog_res_t bench_process_Step()
 				{
 					max = pptr->filedesc + 1;
 				}
-				
+
 //				printf("Waiting on filedesc %d\n", pptr->filedesc);
-				
+
 				FD_SET(pptr->filedesc, &fds);
 			}
 			pptr = pptr->next;
 		}
-	
+
 		timeout.tv_usec = 2000;
 		timeout.tv_sec = 0;
-		
+
 		n = select(max, &fds, NULL, NULL, &timeout);
-		
+
 		if (n)
 		{
 			/*
-			 * Something happened, proceed through the file descriptors 
+			 * Something happened, proceed through the file descriptors
 			 * to see which ones have pending IO and then step them
 			 */
 			pptr = bench_process_list;
-			
+
 			while (pptr)
 			{
 				next = pptr->next;
-				
+
 				if (pptr->dp && FD_ISSET(pptr->filedesc, &fds))
 				{
 				   	if (pptr->verbosity >= bench_VERBOSITY_LOTS)
@@ -2844,15 +2822,15 @@ prog_res_t bench_process_Step()
 						default:
 						case prog_RES_OK:
 							break;
-		
+
 						case prog_RES_END:
 							bench_process_Stop(pptr);
 							break;
-		
+
 						case prog_RES_ERROR:
 							return (prog_RES_ERROR);
 							break;
-				
+
 						case prog_RES_EXIT:
 							return (prog_RES_EXIT);
 							break;
@@ -2865,7 +2843,7 @@ prog_res_t bench_process_Step()
 	}
 
 	lasttime = eclock();
-	
+
 #endif
 
 	pptr = bench_process_list;
@@ -2873,7 +2851,7 @@ prog_res_t bench_process_Step()
 	while (pptr)
 	{
 		next = pptr->next;
-	
+
 		if (pptr->verbosity > bench_VERBOSITY_NONE)
 		{
 			dp_setLogFP(pptr->logfp);
@@ -2882,7 +2860,7 @@ prog_res_t bench_process_Step()
 		{
 			dp_setLogFP(dp_LOG_FILE_NONE);
 		}
-		
+
 		switch (prog_process_Step(&pptr->process, pptr))
 		{
 			default:
@@ -2897,7 +2875,7 @@ prog_res_t bench_process_Step()
 				bench_process_Stop(pptr);
 				return (prog_RES_ERROR);
 				break;
-			
+
 			case prog_RES_EXIT:
 				bench_exitcode = prog_process_GetExitCode(&pptr->process);
 				bench_process_Stop(pptr);

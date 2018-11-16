@@ -18,10 +18,8 @@
 #include "verify.h"
 
 
-
 #define MAX_USERNAME	12
 #define MAX_PASSWORD	12
-
 
 /*--------------------------------------------------------------------------
  user_t data type.
@@ -34,7 +32,6 @@ typedef struct
 	char	szUsername[ MAX_USERNAME + 1 ];
 	char	szPassword[ MAX_PASSWORD + 1 ];
 } user_t;
-
 
 static user_t verify_user;
 
@@ -81,7 +78,6 @@ BOOL IsValidUser( char *szListFile )
 
 	return bFoundUser;
 }
-
 
 /*--------------------------------------------------------------------------
  Retreives 'szUsername' and 'szPassword' from 'szFingerprintFile.'

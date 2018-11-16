@@ -1,4 +1,3 @@
-
 #include "c3.h"
 #include "orderdb.h"
 #include "Order.h"
@@ -62,7 +61,7 @@ BOOL orderDB_Parse(char *filename)
 			c3errors_ErrorDialog(token->ErrStr(), "Order %s is unknown", str);
 			break;
 		}
-		
+
 		OrderInfo *oi = &g_orderInfo[order];
 		if(token->Next() != TOKEN_NUMBER) {
 			abort = TRUE;
@@ -123,4 +122,3 @@ BOOL orderDB_Parse(char *filename)
 	delete token;
 	return !abort;
 }
-

@@ -1,4 +1,4 @@
-/* 
+/*
 Copyright (C) 1995-2001 Activision, Inc.
 
 This library is free software; you can redistribute it and/or
@@ -17,7 +17,6 @@ Foundation, Inc., 59 Temple Place, Suite 330, Boston, MA  02111-1307  USA
 
 */
 
-
 #include <Traps.h>	// MAD
 #include <Gestalt.h>
 
@@ -34,7 +33,6 @@ Foundation, Inc., 59 Temple Place, Suite 330, Boston, MA  02111-1307  USA
 ser_t*				ser = NULL;
 
 #define PLAYER_YOU 0	// MAD
-
 
 #define min(a,b)	( ((a) < (b)) ? (a) : (b) )
 
@@ -70,7 +68,7 @@ int commInit(commInitReq_t *req, commInitResp_t *resp) {
     Boolean				loaded;
 
 	/*
-	 *	Initialize the communications driver.  
+	 *	Initialize the communications driver.
 	 *
 	 *	Return FALSE on error.
 	 */
@@ -91,15 +89,15 @@ int commInit(commInitReq_t *req, commInitResp_t *resp) {
 
 	//	allocate the memory for the communications record (this
 	//	also initializes all of the fields in the structure)
-	
+
 	ser = CTB_create();
 	if (ser == nil) {
 		resp->status = comm_STATUS_BUG;
 		return false;
 	}
 
-	// openMFP();	// MAD	
-	
+	// openMFP();	// MAD
+
 	loaded = InitializeCommToolBox();
 	if (loaded) {
 		// MAD fprintf(mfp,"InitCommToolbox -- loaded\n");	// MAD
@@ -114,7 +112,7 @@ int commInit(commInitReq_t *req, commInitResp_t *resp) {
 
 				return false;
 			}
-		
+
 			error = ReopenCTBConnection(&connection);
 			// MAD fprintf(mfp,"ReOpen Connection = %d\n",error);	// MAD
 			if (error != noErr) {
@@ -137,7 +135,7 @@ int commInit(commInitReq_t *req, commInitResp_t *resp) {
 
 				return false;
 			}
-		
+
 			error = OpenCTBConnection(&connection);
 			// MAD fprintf(mfp,"Open Connection = %d\n",error);	// MAD
 			if (error != noErr) {
@@ -150,9 +148,9 @@ int commInit(commInitReq_t *req, commInitResp_t *resp) {
 		}
 
 		//	there is an open connection, save the ConnHandle for later use
-		
+
 		ser->sConnection = connection;
-		
+
 		if (CTB_adr2hdl(ser, &req->sessionId, TRUE) != ser_HDL_ME) {
 			// MAD fprintf(mfp,"adr2hdl = %d\n",error);	// MAD
 			resp->status = comm_STATUS_BUG;
@@ -168,15 +166,14 @@ int commInit(commInitReq_t *req, commInitResp_t *resp) {
 }
 
 
-
 int commTerm(commTermReq_t *req, commTermResp_t *resp) {
 
 /*
- *	Tear down the communications driver.  
+ *	Tear down the communications driver.
  *
  *	Return FALSE on error.
  */
- 
+
  	//	shut down and dispose of the CTB connection
 
 	if (ser->sConnection != nil) {
@@ -184,15 +181,14 @@ int commTerm(commTermReq_t *req, commTermResp_t *resp) {
 		CMDispose(ser->sConnection);
 		ser->sConnection = nil;
 	}
-	
+
 	//	dispose of the connection record
-	
+
 	free(ser);
 	ser = nil;
 
 	return true;
 }
-
 
 
 int commDriverInfo(commDriverInfoReq_t *req, commDriverInfoResp_t *resp) {
@@ -219,7 +215,6 @@ int commDriverInfo(commDriverInfoReq_t *req, commDriverInfoResp_t *resp) {
 
     return (TRUE);
 }
-
 
 
 int commPlayerInfo(commPlayerInfoReq_t *req, commPlayerInfoResp_t *resp) {
@@ -271,7 +266,6 @@ int commPlayerInfo(commPlayerInfoReq_t *req, commPlayerInfoResp_t *resp) {
     return(TRUE);
 }
 
-
 int commTxFull(commTxFullReq_t *req, commTxFullResp_t *resp) {
 
 /*
@@ -291,7 +285,6 @@ int commTxFull(commTxFullReq_t *req, commTxFullResp_t *resp) {
     resp->status = 1;
     return(FALSE);
 }
-
 
 int commTxPkt( commTxPktReq_t *req, commTxPktResp_t *resp) {
 
@@ -331,7 +324,6 @@ int commTxPkt( commTxPktReq_t *req, commTxPktResp_t *resp) {
     return(resp->status == 0);
 }
 
-
 int commPeekPkt(commPeekPktReq_t *req, commPeekPktResp_t *resp) {
     commPeekPktReq_t	reqDummy;
     commPeekPktResp_t	respDummy;
@@ -349,7 +341,6 @@ int commPeekPkt(commPeekPktReq_t *req, commPeekPktResp_t *resp) {
 
 	return(FALSE);
 }
-
 
 int commRxPkt(commRxPktReq_t *req, commRxPktResp_t *resp) {
 
@@ -376,7 +367,6 @@ int commRxPkt(commRxPktReq_t *req, commRxPktResp_t *resp) {
 		DPRINT(("commRxPkt: GOOD PACKET\n"));
     return (resp->status == ser_RES_OK);
 }
-
 
 int commScanAddr(commScanAddrReq_t *req, commScanAddrResp_t *resp) {
 
@@ -409,7 +399,6 @@ int commScanAddr(commScanAddrReq_t *req, commScanAddrResp_t *resp) {
     resp->status = 0;
     return (TRUE);
 }
-
 
 int commPrintAddr( commPrintAddrReq_t *req, commPrintAddrResp_t *resp) {
     commPrintAddrReq_t	reqDummy;
@@ -446,7 +435,6 @@ int commPrintAddr( commPrintAddrReq_t *req, commPrintAddrResp_t *resp) {
     return(TRUE);
 }
 
-
 int commGroupAlloc(commGroupAllocReq_t *req, commGroupAllocResp_t *resp) {
 
 /*
@@ -460,7 +448,6 @@ int commGroupAlloc(commGroupAllocReq_t *req, commGroupAllocResp_t *resp) {
     resp = resp;
     return(FALSE);
 }
-
 
 int commGroupFree(commGroupFreeReq_t *req, commGroupFreeResp_t *resp) {
 
@@ -476,7 +463,6 @@ int commGroupFree(commGroupFreeReq_t *req, commGroupFreeResp_t *resp) {
 }
 
 
-
 int commGroupAdd(commGroupAddReq_t *req, commGroupAddResp_t *resp) {
 
 /*
@@ -484,7 +470,7 @@ int commGroupAdd(commGroupAddReq_t *req, commGroupAddResp_t *resp) {
  *
  *	Return TRUE if the players were all added.
  */
- 
+
     req = req;
     resp = resp;
 
@@ -529,7 +515,6 @@ commSetParam(
 
 #endif
 
-
 int commSayHi(commSayHiReq_t *req, commSayHiResp_t *resp) {
 
 /*
@@ -558,13 +543,13 @@ int commSayHi(commSayHiReq_t *req, commSayHiResp_t *resp) {
     hdl = CTB_adr2hdl(ser, req->address, TRUE);
 	DPRINT(("commSayHi: adr %x, hdl %d\n", *(ser_adr_t *)req->address, hdl));
 	if (hdl == ser_HDL_ME) {
-		resp->player = PLAYER_ME; 
+		resp->player = PLAYER_ME;
 		resp->status = 0;
 		return TRUE;
 	}
-	
+
 	if (hdl == ser_HDL_YOU) {
-		resp->player = PLAYER_YOU;	// MAD 
+		resp->player = PLAYER_YOU;	// MAD
 		resp->status = 0;
 		return TRUE;
 	}
@@ -572,7 +557,6 @@ int commSayHi(commSayHiReq_t *req, commSayHiResp_t *resp) {
     resp->status = 2;
     return TRUE;
 }
-
 
 int commSayBye(commSayByeReq_t *req, commSayByeResp_t *resp) {
 
@@ -617,7 +601,7 @@ Boolean commLoadTest(void)
 	long	value;
 	OSErr	error;
 	FSSpec	where;
-	
+
 	if (NGetTrapAddress(_CommToolboxDispatch, OSTrap) != NGetTrapAddress(_Unimplemented, OSTrap)) {
 		if (NGetTrapAddress(_Gestalt, OSTrap) != NGetTrapAddress(_Unimplemented, OSTrap)) {
 
@@ -626,7 +610,7 @@ Boolean commLoadTest(void)
 			if (error == noErr) {
 				// Check for CTB
 				error = Gestalt(gestaltCTBVersion, &value);
-				
+
 				if (error == noErr) {						// There is a comm toolbox; we can procede
 					result = true;
 				}
@@ -648,7 +632,7 @@ Boolean commNeedsUI(commInitReq_t* req) {
 	} else {
 		return true;
 	}
-	
+
 }
 
 #endif
@@ -659,9 +643,9 @@ Boolean commNeedsUI(commInitReq_t* req) {
 void CTB_Unload(void) {
 
 	//	shut down the communications toolbox
-	
+
 	TearDownCTB();
-	
+
 }
 #endif
 
@@ -680,27 +664,26 @@ unsigned char CTB_crc(unsigned char *ptr, int len) {
 	return crc & 0xff;
 }
 
-
 ser_hdl_t CTB_adr2hdl(ser_t *ser, ser_adr_t *adr, int insert) {
 
 	/*-----------------------------------------------------------------------
 	 Given an ser Adress, open a handle that can be used to send an
 	 Adress to that Adress.
 	 Multiple calls with the same arg will return the same result.
-	
+
 	 Note: the first call with insert on will assign the Adress of ser_ADR_ME.
 	 The second call with insert on will assign the Adress of ser_ADR_YOU.
 	 Further calls with insert on are illegal.
-	
+
 	 adrMask should be set to -1 unless you only want to compare part of the
 	 address!
-	
+
 	 This whole thing is a stupid convenience for the upper layer, which
 	 wants to be able to associate Adresses of some sort with computers.
-	
+
 	 Returns ser_HDL_NONE on failure.
 	-----------------------------------------------------------------------*/
-	
+
 #if 0 // MAD
 	int i;
 	ser_adr_t *padr;
@@ -730,19 +713,19 @@ ser_hdl_t CTB_adr2hdl(ser_t *ser, ser_adr_t *adr, int insert) {
   if (*adr == ser->myAdr  ) return ser_HDL_ME;
   if (*adr == ser->yourAdr) return ser_HDL_YOU;
 
-  if (!insert) 
+  if (!insert)
   {
     return ser_HDL_NONE;
   }
 
-  if (ser->nextHdl == ser_HDL_ME) 
+  if (ser->nextHdl == ser_HDL_ME)
   {
     // Caller is setting this station's Adress.
     ser->myAdr = *adr;
     return ser->nextHdl++;
   }
 
-  if (ser->nextHdl == ser_HDL_YOU) 
+  if (ser->nextHdl == ser_HDL_YOU)
   {
     // Caller is setting other station's Adress.
     ser->yourAdr = *adr;
@@ -754,19 +737,16 @@ ser_hdl_t CTB_adr2hdl(ser_t *ser, ser_adr_t *adr, int insert) {
 #endif
 }
 
-
 ser_result_t CTB_hdlDestroy(ser_t *ser, ser_hdl_t hdl) {
 	// MAD assoctab_subscript_delete(ser->adrtab, hdl);
 	return ser_RES_OK;
 }
-
 
 ser_result_t CTB_put(ser_t *ser, ser_hdl_t dest, void *buf, size_t len) {
 	ser_hdr_t		hdr;
 	CMStatFlags		flags;
 	CMBufferSizes	sizes;
 
-	
 #if 0 // MAD
 	if ((dest != ser_HDL_BROADCAST) && !assoctab_subscript(ser->adrtab, dest)) {
 		DPRINT(("ser_put: handle %d not in table\n", dest));
@@ -792,7 +772,7 @@ ser_result_t CTB_put(ser_t *ser, ser_hdl_t dest, void *buf, size_t len) {
 		char kludge[1000];
 		memcpy(kludge, &hdr, 5);	// MAD sizeof(hdr));
 		memcpy(kludge+ 5 /* MAD sizeof(hdr) */, buf, len);
-		
+
 		nBytes = len + 5; // MAD sizeof(hdr);
 		theErr = CMWrite(
 			ser->sConnection,			//	connection to write to
@@ -813,9 +793,8 @@ ser_result_t CTB_put(ser_t *ser, ser_hdl_t dest, void *buf, size_t len) {
 	return ser_RES_OK;
 }
 
-
 ser_result_t CTB_get(ser_t *ser, void *buf, size_t *len) {
-	
+
 	/*-----------------------------------------------------------------------
 	 Receive a packet via the serial port.
 	 Caller must put size of buffer in len before calling.
@@ -827,7 +806,7 @@ ser_result_t CTB_get(ser_t *ser, void *buf, size_t *len) {
 	 On success,
 	 	returns ser_RES_OK,
 		sets *len to the packet length,
-	
+
 	 Strategy:
 	   Read ser_READSIZE bytes at a time from the serial port into ser->rbuf.
 	   ser->len is number of bytes in ser->rbuf.
@@ -845,18 +824,18 @@ ser_result_t CTB_get(ser_t *ser, void *buf, size_t *len) {
 		// fprintf(mfp,"rx pkt: no connection\n");
 		return ser_RES_BAD;
 	}
-	
+
 	mfp = fopen("md.log","a");
-	
+
 	while (true) {
 		int c;
-	
+
 		//	if we have used up all of the bytes in our recieve buffer, read some more
-		
+
 		if (ser->head >= ser->len) {
 			long	nBytes = ser_READSIZE;
 			CMErr	theErr;
-			
+
 			theErr = CMRead(
 				ser->sConnection,			//	CTB connection to read from
 				&(ser->rbuf[0]),			//	buffer to read into
@@ -871,36 +850,36 @@ ser_result_t CTB_get(ser_t *ser, void *buf, size_t *len) {
 			fprintf(mfp,"CTB_get %d bytes\n",nBytes);
 
 			//	if there was an error, it's time to bail
-			
+
 			if (theErr != noErr && theErr != cmTimeOut) {	// MAD
 				fprintf(mfp,"rx pkt: CMRead  = %d\n",theErr);
 				return ser_RES_BAD;
 			}
-			
+
 			//	if we didn't read anything, there is nothing to do
-	
+
 			if (nBytes <= 0) {
 				fprintf(mfp,"rx pkt: nothing to read: res_empty\n");
 				return ser_RES_EMPTY;
 			}
-			
+
 			//	start processing bytes from the start of the buffer (save
 			//	the number of bytes in the buffer so we know when we're done)
-			
+
 			ser->head = 0;
 			ser->len = nBytes;
 		}
 
 		//	process the bytes in the buffer
-		
+
 		// Continue accumulating bytes of packet.
-		
+
 		c = ser->rbuf[ser->head++];
 		if (ser->got < 5)		// if still filling header[
 			((unsigned char *)&ser->pkt)[ser->got++] = c;
-		else	
+		else
 			ser->pkt.body[ser->got++ - 5] = c;
-			
+
 		// Do header processing.
 		if (ser->got == 1) {
 			// Does 1st byte of header match?
@@ -938,7 +917,7 @@ ser_result_t CTB_get(ser_t *ser, void *buf, size_t *len) {
 				*len = ser->pkt.hdr.bodylen;
 				// MAD adr = ser->pkt.hdr.src;	// packet only has low byte of address
 				// MAD *src = CTB_adr2hdl(ser, &adr, FALSE, 255);	// so mask all but low byte out
-				
+
 				// fprintf(mfp,"rx pkt: RES_OK %d\n",*len);
 
 				return ser_RES_OK;
@@ -949,7 +928,6 @@ ser_result_t CTB_get(ser_t *ser, void *buf, size_t *len) {
 	fclose(mfp);	// MAD
 }
 
-
 ser_t *CTB_create(void) {
 
 	ser_t *ser;
@@ -958,14 +936,14 @@ ser_t *CTB_create(void) {
 		// ABORT! Out of Memory
 		return NULL;
 	}
-	
+
 	ser->sConnection = NULL;		//	ConnHandle will go here later
 	ser->baud = 0;
 	ser->portnum = -1;
 
 	ser->myAdr = ser_ADR_NONE;
 	ser->yourAdr = ser_ADR_NONE;
-	
+
 #if 0 // MAD
 	ser->adrtab = assoctab_create(sizeof(ser_adr_t));
 	if (!ser->adrtab) {
@@ -1003,15 +981,15 @@ void CTB_Load(void) {
 	commGroupSubtract = CTB_commGroupSubtract;
 	commSayHi = CTB_commSayHi;
 	commSayBye = CTB_commSayBye;
-	
+
 	commUnload = CTB_Unload;
-	
+
 	//	load our resource into the global driver information block
 
 	dpGetTransportInfo(kSERIALDRIVERNAME, &gCommDriverInfo_CTB);
 
 	//	initialize the CTB
-	
+
 	InitializeCommToolBox();
 
 }
@@ -1025,7 +1003,7 @@ ser_result_t CTB_hdl2adr(ser_t *ser, ser_hdl_t hdl, ser_adr_t *adr) {
 		*adr = ser->yourAdr;
 	else
 		*adr = ser_ADR_NONE;
-	
+
 	return (*adr != ser_ADR_NONE) ? ser_RES_OK : ser_RES_EMPTY;
 #else
 	ser_adr_t *padr = assoctab_subscript(ser->adrtab, hdl);
@@ -1037,4 +1015,3 @@ ser_result_t CTB_hdl2adr(ser_t *ser, ser_hdl_t hdl, ser_adr_t *adr) {
 	return ser_RES_OK;
 #endif
 }
-

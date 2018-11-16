@@ -10,7 +10,7 @@
 //
 // THIS FILE IS NOT GENERATED OR SUPPORTED BY ACTIVISION.
 //
-// This material has been developed at apolyton.net by the Apolyton CtP2 
+// This material has been developed at apolyton.net by the Apolyton CtP2
 // Source Code Project. Contact the authors at ctp2source@apolyton.net.
 //
 //----------------------------------------------------------------------------
@@ -29,7 +29,6 @@
 
 #include "c3debug.h"
 
-
 #include "c3.h"
 #include "c3errors.h"
 
@@ -38,7 +37,6 @@
 #include "World.h"
 #include "Cell.h"
 #include "civarchive.h"
-
 
 #include "SelItem.h"
 #include "aui.h"
@@ -52,7 +50,6 @@
 
 #include "TradePool.h"
 #include "TradeOfferPool.h"
-
 
 #include "UnitData.h"
 #include "citydata.h"
@@ -107,15 +104,14 @@
 #include "Globals.h"
 
 
-
-extern TradeAstar g_theTradeAstar; 
+extern TradeAstar g_theTradeAstar;
 
 
 
 
 
 Army Player::GetArmyList(uint32 army_id, BOOL &is_unknown_id)
-{ 
+{
 	Assert(FALSE);
 	return Army(0);
 }
@@ -141,16 +137,16 @@ BOOL Player::ArmySettle(const uint32 army_id, BOOL &is_unknown_id)
 	return FALSE;
 }
 
-BOOL Player::ArmyCanEnter(const uint32 army_id, BOOL &is_unknown_id, MapPoint &pos, 
+BOOL Player::ArmyCanEnter(const uint32 army_id, BOOL &is_unknown_id, MapPoint &pos,
    BOOL &move_to_many_units_dest, BOOL &move_violated_zoc, BOOL &move_violated_movetype, BOOL &move_out_of_fuel)
 {
 	is_unknown_id = TRUE;
 	return FALSE;
 }
 
-BOOL Player::ArmyMoveTo(const uint32 army_id, BOOL &is_unknown_id, MapPoint &pos, 
+BOOL Player::ArmyMoveTo(const uint32 army_id, BOOL &is_unknown_id, MapPoint &pos,
    BOOL &did_move, BOOL &i_died, BOOL &move_violated_zoc,
-   BOOL &revealed_foreign_units, BOOL &revealed_unexplored, 
+   BOOL &revealed_foreign_units, BOOL &revealed_unexplored,
    BOOL &is_transported, BOOL &out_of_fuel)
 {
 	return FALSE;
@@ -167,7 +163,6 @@ BOOL Player::AiArmyGroup(uint32 add_me, uint32 target, BOOL *is_unknown_id)
 	return FALSE;
 }
 
-
 BOOL Player::AiArmyUngroup(uint32 split_me, BOOL &is_unknown_id)
 
 {
@@ -176,10 +171,10 @@ BOOL Player::AiArmyUngroup(uint32 split_me, BOOL &is_unknown_id)
 
 BOOL Player::GetCityPos(uint32 city_id, BOOL &is_unknown_id, MapPoint &ipos)
 {
-    return TRUE; 
+    return TRUE;
 }
 
-BOOL Player::CityEnqueueBuildItem (uint32 city_id, BOOL *is_unknown_id, 
+BOOL Player::CityEnqueueBuildItem (uint32 city_id, BOOL *is_unknown_id,
         sint32 category, sint32 unit_type)
 {
 
@@ -190,51 +185,49 @@ sint32 Player::CityGetStoredProduction (uint32 city_id, BOOL *is_unknown_id)
 
 {
 	return 0;
-} 
-
+}
 
 sint32 Player::CityGetGrossProduction (uint32 city_id, BOOL *is_unknown_id)
 {
 	return 0;
-} 
+}
 
 sint32 Player::CityGetNetProduction (uint32 city_id, BOOL *is_unknown_id)
 {
 	return 0;
-} 
+}
 
-sint32 Player::CityGetStoredFood (uint32 city_id, BOOL *is_unknown_id) 
+sint32 Player::CityGetStoredFood (uint32 city_id, BOOL *is_unknown_id)
 {
 	return 0;
-} 
-
+}
 
 sint32 Player::CityGetGrossFood (uint32 city_id, BOOL *is_unknown_id)
 {
 	return 0;
-} 
+}
 
 sint32 Player::CityGetNetFood (uint32 city_id, BOOL *is_unknown_id)
 {
 	return 0;
-} 
+}
 
 sint32 Player::CityGetGrossGold (uint32 city_id, BOOL *is_unknown_id)
 {
 	return 0;
-} 
+}
 
 sint32 Player::CityGetNetGold (uint32 city_id, BOOL *is_unknown_id)
 {
 	return 0;
-} 
+}
 
 sint32 Player::GetTotalBuildingUpkeep()
 {
-    return 0; 
-} 
+    return 0;
+}
 
-BOOL Player::CityChangeCurrentlyBuildingItem(uint32 city_id, BOOL *is_unknown_id, 
+BOOL Player::CityChangeCurrentlyBuildingItem(uint32 city_id, BOOL *is_unknown_id,
    sint32 category, sint32 item_type)
 
 {
@@ -243,15 +236,14 @@ BOOL Player::CityChangeCurrentlyBuildingItem(uint32 city_id, BOOL *is_unknown_id
 
 uint32 Player::GetArmyId (const Unit &u)
 {
-    Assert(0); 
-    return 0; 
+    Assert(0);
+    return 0;
 }
-
 
 uint32 Player::GetCityId (const Unit &u)
 {
-    Assert(0); 
-    return 0; 
+    Assert(0);
+    return 0;
 }
 
 void Player::RegisterCreateBuilding(Unit &u, sint32 blg_type)
@@ -262,7 +254,6 @@ void Player::RegisterCreateEndgameObject(Unit &u, sint32 object_type)
 {
 }
 
-
 void Player::RegisterLostBuilding(Unit &u, sint32 blg_type)
 {
 }
@@ -270,7 +261,6 @@ void Player::RegisterLostBuilding(Unit &u, sint32 blg_type)
 void Player::RegisterNewGovernment(Unit &u, sint32 government_type)
 {
 }
-
 
 void Player::RegisterNewCapitolBuilding(Unit &u)
 {
@@ -395,14 +385,13 @@ BOOL Player::WasCityHappinessAttacked(uint32 city_id, BOOL &is_unknown_id)
 	return FALSE;
 }
 
-
 BOOL Player::AiCreateTradeRoute(BOOL *is_unknown_id, uint32 u_src_city,
     sint32 type_route, sint32 scr_good,   uint32 u_dest_city)
 {
 	return FALSE;
 }
 
-sint32 Player::GetResourceCount(BOOL *is_unknown_id , uint32 u_city_id, 
+sint32 Player::GetResourceCount(BOOL *is_unknown_id , uint32 u_city_id,
                                 const sint32 type_good) const
 
 {
@@ -413,7 +402,6 @@ double Player::GetRouteCost(BOOL *is_unknown_id , uint32 u_src_city, uint32 u_de
 {
 	return 0;
 }
-
 
 
 BOOL Player::CityBuyFront(BOOL *is_unknown_id , uint32 u_city_id)
@@ -470,7 +458,7 @@ sint32 Player::GetCitySlaveCount(uint32 city_id, BOOL &is_unknown_id)
 
 
 
-void Player::GetCityProjectedHappinessAndCrime(uint32 city_id, double &happiness, double &crime, BOOL &is_unknown_id, 
+void Player::GetCityProjectedHappinessAndCrime(uint32 city_id, double &happiness, double &crime, BOOL &is_unknown_id,
      sint32 *delta_martial_law)
 {
 }
@@ -523,7 +511,7 @@ void Player::GetCityProjectedProduction(uint32 city_id, sint32 &production, BOOL
 
 
 
-void Player::GetCityProjectedTrade(uint32 city_id, BOOL &is_unknown_id, 
+void Player::GetCityProjectedTrade(uint32 city_id, BOOL &is_unknown_id,
    sint32 &projected_gross_gold, sint32 &projected_net_gold)
 {
 }
@@ -608,58 +596,54 @@ void Player::GetCityScience(uint32 city_id, sint32 &science, BOOL &is_unknown_id
 {
 }
 
-BOOL Player::ArmyGetNumCargo (BOOL *is_unknown_id, uint32 u_id, 
+BOOL Player::ArmyGetNumCargo (BOOL *is_unknown_id, uint32 u_id,
          sint32 *full_slots, sint32 *empty_slots)
 {
 	return FALSE;
 }
 
-sint32 Player::AiNumUnitsCanMoveIntoThisTranportEver(BOOL *is_unknown_id,  uint32 test_me, 
+sint32 Player::AiNumUnitsCanMoveIntoThisTranportEver(BOOL *is_unknown_id,  uint32 test_me,
    uint32 transport)
 {
 	return 0;
 }
 
-
-BOOL Player::AiCanMoveArmyIntoThisTranportEver(BOOL *is_unknown_id,  uint32 test_me, 
+BOOL Player::AiCanMoveArmyIntoThisTranportEver(BOOL *is_unknown_id,  uint32 test_me,
    uint32 transport)
 {
 
 	return FALSE;
 }
 
-BOOL Player::AiCanMoveArmyIntoThisTranportRightNow(BOOL *is_unknown_id,  
-   uint32 move_me, uint32 transport, BOOL *enough_move, BOOL *adjacent, 
+BOOL Player::AiCanMoveArmyIntoThisTranportRightNow(BOOL *is_unknown_id,
+   uint32 move_me, uint32 transport, BOOL *enough_move, BOOL *adjacent,
    BOOL *ever)
 {
 	return FALSE;
 }
 
-
-BOOL Player::AiArmyMoveIntoTranport(BOOL *is_unknown_id,  uint32 move_me, 
+BOOL Player::AiArmyMoveIntoTranport(BOOL *is_unknown_id,  uint32 move_me,
    uint32 transport, BOOL *is_transported)
 {
-	return FALSE; 
+	return FALSE;
 }
 
-
-BOOL Player::AiUnloadAllTransportsInArmy(BOOL *is_unknown_id, 
-        uint32 unload_me, const MapPoint &dest_pos, 
-        BOOL *did_move, BOOL *i_died, 
-		BOOL *revealed_foreign_units, BOOL *revealed_unexplored, 
+BOOL Player::AiUnloadAllTransportsInArmy(BOOL *is_unknown_id,
+        uint32 unload_me, const MapPoint &dest_pos,
+        BOOL *did_move, BOOL *i_died,
+		BOOL *revealed_foreign_units, BOOL *revealed_unexplored,
         BOOL *zocViolation, BOOL *is_transported)
 
-{ 
+{
 	return FALSE;
 }
 
-BOOL Player::AiGetCargoMovementPoints (BOOL *is_unknown_id, 
+BOOL Player::AiGetCargoMovementPoints (BOOL *is_unknown_id,
          uint32 unload_me,  double *min_move_points, BOOL *first_move)
-         
-{    
+
+{
 	return FALSE;
 }
- 
 
 
 BOOL Player::AiGetArmy(BOOL &is_unknown_id, uint32 u_army_id, Army &a)
@@ -669,24 +653,23 @@ BOOL Player::AiGetArmy(BOOL &is_unknown_id, uint32 u_army_id, Army &a)
 
 BOOL Player::AiGetCity(BOOL &is_unknown_id, uint32 u_city_id, Unit &city)
 {
-    return TRUE; 
+    return TRUE;
 }
 
 uint32 Player::AiGetCityID(Unit &city)
 
+{
 
-{ 
-    
 
-    
-    
-    
-    
-    
-    
+
+
+
+
+
+
 
     return 0;
-} 
+}
 
 
 
@@ -700,12 +683,10 @@ void Player::AiMakeTradeOffer(uint32 cityId, sint32 resource, sint32 gold)
 {
 }
 
-
 void Player::SetGovernorPwReserve(const sint32 &reserve)
 {
 	m_governorPwReserve = reserve;
 }
-
 
 sint32 Player::GetGovernorPwReserve() const
 {

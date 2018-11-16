@@ -1,5 +1,3 @@
-
-
 #include "c3.h"
 #include "net_research.h"
 #include "net_util.h"

@@ -11,7 +11,7 @@
 //
 // THIS FILE IS NOT GENERATED OR SUPPORTED BY ACTIVISION.
 //
-// This material has been developed at apolyton.net by the Apolyton CtP2 
+// This material has been developed at apolyton.net by the Apolyton CtP2
 // Source Code Project. Contact the authors at ctp2source@apolyton.net.
 //
 //----------------------------------------------------------------------------
@@ -37,7 +37,6 @@
 
 #include "aui_hypertextbase.h"
 
-
 aui_HyperTextBase::aui_HyperTextBase(
 	AUI_ERRCODE *retval,
 	MBCHAR *ldlBlock )
@@ -46,7 +45,6 @@ aui_HyperTextBase::aui_HyperTextBase(
 	Assert( AUI_SUCCESS(*retval) );
 	if ( !AUI_SUCCESS(*retval) ) return;
 }
-
 
 
 aui_HyperTextBase::aui_HyperTextBase(
@@ -60,17 +58,14 @@ aui_HyperTextBase::aui_HyperTextBase(
 }
 
 
-
 AUI_ERRCODE aui_HyperTextBase::InitCommonLdl( MBCHAR *ldlBlock )
 {
 	aui_Ldl *theLdl = g_ui->GetLdl();
 
-	
 	BOOL valid = theLdl->IsValid( ldlBlock );
 	Assert( valid );
 	if ( !valid ) return AUI_ERRCODE_HACK;
 
-	
 	ldl_datablock *block = theLdl->GetLdl()->FindDataBlock( ldlBlock );
 	Assert( block != NULL );
 	if ( !block ) return AUI_ERRCODE_LDLFINDDATABLOCKFAILED;
@@ -83,7 +78,6 @@ AUI_ERRCODE aui_HyperTextBase::InitCommonLdl( MBCHAR *ldlBlock )
 
 	return AUI_ERRCODE_OK;
 }
-
 
 
 AUI_ERRCODE aui_HyperTextBase::InitCommon(
@@ -103,21 +97,19 @@ AUI_ERRCODE aui_HyperTextBase::InitCommon(
 		if ( m_hyperCurLen > m_hyperMaxLen )
 			m_hyperCurLen = m_hyperMaxLen;
 
-		
 		m_hyperText = new MBCHAR[ m_hyperMaxLen + 1 ];
 		Assert( m_hyperText != NULL );
 		if ( !m_hyperText ) return AUI_ERRCODE_MEMALLOCFAILED;
 
 		memset( m_hyperText, '\0', m_hyperMaxLen + 1 );
 
-		
 		strncpy( m_hyperText, hyperText, m_hyperMaxLen );
 	}
 	else
 	{
 		if ( m_hyperMaxLen )
 		{
-			
+
 			m_hyperText = new MBCHAR[ m_hyperMaxLen + 1 ];
 			Assert( m_hyperText != NULL );
 			if ( !m_hyperText ) return AUI_ERRCODE_MEMALLOCFAILED;
@@ -146,7 +138,6 @@ AUI_ERRCODE aui_HyperTextBase::InitCommon(
 }
 
 
-
 aui_HyperTextBase::~aui_HyperTextBase()
 {
 	if ( m_hyperText )
@@ -165,7 +156,6 @@ aui_HyperTextBase::~aui_HyperTextBase()
 }
 
 
-
 AUI_ERRCODE aui_HyperTextBase::SetHyperText(
 	const MBCHAR *hyperText,
 	uint32 maxlen )
@@ -173,10 +163,8 @@ AUI_ERRCODE aui_HyperTextBase::SetHyperText(
 	Assert( hyperText != NULL );
 	if ( !hyperText ) return AUI_ERRCODE_INVALIDPARAM;
 
-	
 	memset( m_hyperText, '\0', m_hyperMaxLen + 1 );
 
-	
 	if ( maxlen > m_hyperMaxLen ) maxlen = m_hyperMaxLen;
 	strncpy( m_hyperText, hyperText, maxlen );
 
@@ -186,13 +174,11 @@ AUI_ERRCODE aui_HyperTextBase::SetHyperText(
 }
 
 
-
 AUI_ERRCODE aui_HyperTextBase::AppendHyperText( const MBCHAR *hyperText )
 {
 	Assert( hyperText != NULL );
 	if ( !hyperText ) return AUI_ERRCODE_INVALIDPARAM;
 
-	
 
 	strncat( m_hyperText, hyperText, m_hyperMaxLen - m_hyperCurLen );
 
@@ -202,12 +188,11 @@ AUI_ERRCODE aui_HyperTextBase::AppendHyperText( const MBCHAR *hyperText )
 }
 
 
-
 AUI_ERRCODE aui_HyperTextBase::AddHyperStatics( const MBCHAR *hyperText )
 {
 	if ( !hyperText )
 	{
-		
+
 		RemoveHyperStatics();
 		hyperText = m_hyperText;
 	}
@@ -215,7 +200,6 @@ AUI_ERRCODE aui_HyperTextBase::AddHyperStatics( const MBCHAR *hyperText )
 	sint32 len = strlen( hyperText );
 	if ( !len ) return AUI_ERRCODE_OK;
 
-	
 	aui_Static *hs = CreateHyperStatic(
 		hyperText,
 		len,
@@ -240,14 +224,12 @@ AUI_ERRCODE aui_HyperTextBase::AddHyperStatics( const MBCHAR *hyperText )
 }
 
 
-
 void aui_HyperTextBase::RemoveHyperStatics( void )
 {
 	ListPos position = m_hyperStaticList->GetHeadPosition();
 	for ( sint32 i = m_hyperStaticList->L(); i; i-- )
 		DestroyHyperStatic( m_hyperStaticList->RemoveTail() );
 }
-
 
 
 aui_Static *aui_HyperTextBase::CreateHyperStatic(
@@ -263,7 +245,7 @@ aui_Static *aui_HyperTextBase::CreateHyperStatic(
 	COLORREF shadowColor,
 	uint32 flags )
 {
-	
+
 	AUI_ERRCODE errcode = AUI_ERRCODE_OK;
 	aui_Static *hs = new aui_Static(
 		&errcode,
@@ -276,31 +258,26 @@ aui_Static *aui_HyperTextBase::CreateHyperStatic(
 
 	hs->SetBlindness( TRUE );
 
-	
 	hs->TextFlags() = flags;
 	hs->SetTextColor( color );
 	hs->SetTextUnderline( underline );
 	hs->SetTextShadow( shadow );
 	hs->SetTextShadowColor( shadowColor );
 
-	
 	hs->SetTextFont( ttffile );
 	hs->SetTextFontSize( pointSize );
 	hs->SetTextBold( bold );
 	hs->SetTextItalic( italic );
 
-	
 	hs->TextReloadFont();
 
-	
-	
+
 	hs->Resize(
 		hs->GetTextFont()->GetStringWidth( hs->GetText() ),
 		hs->GetTextFont()->GetLineSkip() );
 
 	return hs;
 }
-
 
 
 void aui_HyperTextBase::DestroyHyperStatic( aui_Static *hs )
@@ -310,7 +287,6 @@ void aui_HyperTextBase::DestroyHyperStatic( aui_Static *hs )
 
 	delete hs;
 }
-
 
 
 AUI_ERRCODE aui_HyperTextBase::DrawThisHyperText(

@@ -1,4 +1,4 @@
-/* 
+/*
 Copyright (C) 1995-2001 Activision, Inc.
 
 This library is free software; you can redistribute it and/or
@@ -18,8 +18,8 @@ Foundation, Inc., 59 Temple Place, Suite 330, Boston, MA  02111-1307  USA
 */
 
 /* ***********************************************************************
- *                               RCS HEADER  
- * $Locker: $  
+ *                               RCS HEADER
+ * $Locker: $
  * $Log: ini.c $
  * Revision 1.15  1997/09/22 22:16:45  lbennett
  * Removed MSVC L4 warnings.
@@ -62,12 +62,12 @@ Foundation, Inc., 59 Temple Place, Suite 330, Boston, MA  02111-1307  USA
  * Initial revision
  * Revision 1.1  1994/08/31  10:08:04  clarkej
  * Initial revision
- * 
+ *
  * Revision 1.1  1994/07/07  22:37:49  zobeld
  * Initial revision
- * 
- * *********************************************************************** */ 
- 
+ *
+ * *********************************************************************** */
+
 /*
 	INI.C
 	.INI file.
@@ -216,7 +216,6 @@ dpini_findSection(
 	return (0);
 }
 
-
 /*--------------------------------------------------------------------------
  Search the current section of the current .INI file for the parameter.
  Parameter names are case-insensitive.
@@ -303,9 +302,9 @@ static dp_result_t reltoabspath(char *relpath, char *cwd) {
 	strcpy(prbuf, relpath);
 
 	/* strip trailing / or \ */
-	if ((*(pbuf + strlen(pbuf)-1) == '/') 
+	if ((*(pbuf + strlen(pbuf)-1) == '/')
 	||  (*(pbuf + strlen(pbuf)-1) == '\\')) *(pbuf + strlen(pbuf)-1) = '\0';
-	if ((*(prbuf + strlen(prbuf)-1) == '/') 
+	if ((*(prbuf + strlen(prbuf)-1) == '/')
 	||  (*(prbuf + strlen(prbuf)-1) == '\\')) *(prbuf + strlen(prbuf)-1) = '\0';
 
 	while (*prbuf == '.') {
@@ -314,7 +313,7 @@ static dp_result_t reltoabspath(char *relpath, char *cwd) {
 			||  !*(prbuf + 2)) {
 				prbuf += 3;
 				/* tmpbuf = strrchr(pbuf, '/' || '\\') */
-				for (tmpbuf = pbuf + strlen(pbuf)-1; 
+				for (tmpbuf = pbuf + strlen(pbuf)-1;
 					 (*tmpbuf != '/') && (*tmpbuf != '\\');
 					 tmpbuf--) {
 					if (tmpbuf < pbuf) {
@@ -375,7 +374,7 @@ DP_API dp_result_t DP_APIX dpReadAnetInf(const char *path, dp_appParam_t *pAppPa
 
 	/* Open the .ini file and find the [ActiveNet] section */
 	strcat(ini, "/");
-	strcat(ini, INIFile); 
+	strcat(ini, INIFile);
 	oldini = dpini_GetFile();
 	strcpy(oldinibuf, oldini);
 	DPRINT(("dpReadAnetInf: opening %s\n", ini));

@@ -11,7 +11,7 @@
 //
 // THIS FILE IS NOT GENERATED OR SUPPORTED BY ACTIVISION.
 //
-// This material has been developed at apolyton.net by the Apolyton CtP2 
+// This material has been developed at apolyton.net by the Apolyton CtP2
 // Source Code Project. Contact the authors at ctp2source@apolyton.net.
 //
 //----------------------------------------------------------------------------
@@ -41,7 +41,6 @@
 //----------------------------------------------------------------------------
 
 #include "c3.h"
- 
 
 
 #include "Globals.h"
@@ -121,16 +120,15 @@ extern SelectedItem *g_selected_item;
 #include "unitutil.h"
 #include "ctpai.h"
 
-
 #include "gamefile.h"
 
 void Unit::KillUnit (const CAUSE_REMOVE_ARMY cause, PLAYER_INDEX killedBy)
 
 {
-	
+
 	UnitData *u = g_theUnitPool->GetUnit(m_id);
 	g_player[u->GetOwner()]->AdjustEventPollution(GetDBRec()->GetLaunchPollution());
-	
+
 	Unit tmp(m_id);
 	tmp.RemoveAllReferences(cause, killedBy);
 }
@@ -138,10 +136,10 @@ void Unit::KillUnit (const CAUSE_REMOVE_ARMY cause, PLAYER_INDEX killedBy)
 void Unit::RemoveAllReferences(const CAUSE_REMOVE_ARMY cause, PLAYER_INDEX killedBy)
 
 {
-	BOOL is_renumber_cont = FALSE; 
+	BOOL is_renumber_cont = FALSE;
 
-	
-	
+
+
 
 	if (IsCity()) {
 		AccessData()->GetCityData()->PrepareToRemove(cause, killedBy);
@@ -152,7 +150,7 @@ void Unit::RemoveAllReferences(const CAUSE_REMOVE_ARMY cause, PLAYER_INDEX kille
 	}
 
 	sint32 r=TRUE;
-	
+
 	switch(cause) {
 		case CAUSE_REMOVE_ARMY_ATTACKED:
 		case CAUSE_REMOVE_ARMY_DIED_IN_ATTACK:
@@ -175,7 +173,7 @@ void Unit::RemoveAllReferences(const CAUSE_REMOVE_ARMY cause, PLAYER_INDEX kille
 			g_slicEngine->RunMiscUnitDeathTriggers(*this);
 			break;
 	}
-	
+
 	DPRINTF(k_DBG_GAMESTATE, ("Unit::RemoveAllReferences: id: %d",
 							  m_id));
 	if(g_network.IsActive()) {
@@ -185,48 +183,48 @@ void Unit::RemoveAllReferences(const CAUSE_REMOVE_ARMY cause, PLAYER_INDEX kille
 			g_network.AddDeadUnit(m_id);
 		}
 	}
-	
+
 	if(GetActor() != NULL) {
-		if (cause == CAUSE_REMOVE_ARMY_PARADROP_COMPLETE 
+		if (cause == CAUSE_REMOVE_ARMY_PARADROP_COMPLETE
 			|| IsBeingTransported()
 			|| cause == CAUSE_REMOVE_ARMY_DIED_IN_ATTACK
 			|| cause == CAUSE_REMOVE_ARMY_ATTACKED
 			|| cause == CAUSE_REMOVE_ARMY_SETTLE
-			|| cause == CAUSE_REMOVE_ARMY_DISBANDED 
+			|| cause == CAUSE_REMOVE_ARMY_DISBANDED
 			|| cause == CAUSE_REMOVE_ARMY_GOVERNMENT_CHANGE
 			|| cause == CAUSE_REMOVE_ARMY_NUKE
 			|| cause == CAUSE_REMOVE_ARMY_PARKRANGER) {
 			g_director->AddFastKill(*this);
 		} else {
-			
-			
-			
-			
-			
+
+
+
+
+
 				g_director->AddDeath(*this);
-				
+
 		}
 	} else {
 		sint32 xx=1;
 	}
-	
+
 	if(!g_theUnitDB->Get(GetType(), g_player[GetOwner()]->GetGovernmentType())->GetIsTrader()) {
 		AccessData()->KillVision();
 	}
-	
+
 	MapPoint pos;
 	GetPos(pos);
-	PLAYER_INDEX owner = GetOwner(); 
-	
+	PLAYER_INDEX owner = GetOwner();
+
 	if(!g_theUnitDB->Get(GetType(), g_player[GetOwner()]->GetGovernmentType())->GetIsTrader() && !IsTempSlaveUnit() &&
 		!IsBeingTransported() && !HasLeftMap()) {
-		
+
 		r = g_theWorld->RemoveUnitReference(pos, *this);
 		Assert(r);
 
-		
-		
-		
+
+
+
 
 
 
@@ -239,31 +237,30 @@ void Unit::RemoveAllReferences(const CAUSE_REMOVE_ARMY cause, PLAYER_INDEX kille
 
 
 	}
-	
+
 	if(!IsTempSlaveUnit()) {
-		
+
 		r = g_player[owner]->RemoveUnitReference(*this, cause, killedBy);
-		Assert(r); 
+		Assert(r);
 	}
-	
+
 	Unit transport = GetTransport();
 	if(transport.IsValid()) {
 		transport.RemoveTransportedUnit(*this);
 	}
 
 	if(GetDBRec()->GetHasPopAndCanBuild()) {
-		if (cause != CAUSE_REMOVE_ARMY_POLLUTION 
-			&& cause != CAUSE_REMOVE_ARMY_FLOOD) { 
+		if (cause != CAUSE_REMOVE_ARMY_POLLUTION
+			&& cause != CAUSE_REMOVE_ARMY_FLOOD) {
 			g_theWorld->SetCanalTunnel(pos, 0);
-			is_renumber_cont = TRUE; 
+			is_renumber_cont = TRUE;
 		}
-		
+
 		Cell *cell = g_theWorld->GetCell(pos);
 
-		
-		
+
 		g_theWorld->CutImprovements(pos);
-		
+
 
 
 
@@ -280,8 +277,7 @@ void Unit::RemoveAllReferences(const CAUSE_REMOVE_ARMY cause, PLAYER_INDEX kille
 		if(cell->UnitArmy()) {
 			sint32 i;
 			if(cause != CAUSE_REMOVE_ARMY_NUKE) {
-				
-				
+
 
 				for(i = cell->UnitArmy()->Num() - 1; i >= 0; i--) {
 					if(!g_theWorld->CanEnter(pos, cell->UnitArmy()->Access(i).GetMovementType())) {
@@ -304,22 +300,19 @@ void Unit::RemoveAllReferences(const CAUSE_REMOVE_ARMY cause, PLAYER_INDEX kille
 		GetArmy().Del(*this);
 	}
 
-	
 
 	if(!g_theUnitDB->Get(GetType())->GetIsTrader(), g_player[GetOwner()]->GetGovernmentType()) {
 		UpdateZOCForRemoval();
 	}
 
-	
 	r = g_theUnitPool->Del(m_id);
 
 	if (is_renumber_cont) {
 		g_theWorld->NumberContinents();
 	}
-	
-	Assert(r); 
-}
 
+	Assert(r);
+}
 
 
 void Unit::FastKill()
@@ -400,7 +393,7 @@ const MBCHAR * Unit::GetName() const
 // Returns    : std::string     : text to display as name
 //
 // Remark(s)  : Differs from GetName only for units that have been marked as
-//              leader in unit.txt. In this case, the player name is appended 
+//              leader in unit.txt. In this case, the player name is appended
 //              to the unit name.
 //
 //----------------------------------------------------------------------------
@@ -416,8 +409,8 @@ std::string Unit::GetDisplayName(void) const
 	else
 	{
 		std::string	unitName(g_theStringDB->GetNameStr(info->m_name));
-		return info->GetLeader() 
-			   ? unitName + " " + g_player[GetOwner()]->GetLeaderName() 
+		return info->GetLeader()
+			   ? unitName + " " + g_player[GetOwner()]->GetLeaderName()
 			   : unitName;
 	}
 }
@@ -433,15 +426,14 @@ sint32 Unit::GetType() const
 	return g_theUnitPool->GetUnit(m_id)->GetType();
 }
 
-
-void Unit::GetPos(MapPoint &pos) const 
+void Unit::GetPos(MapPoint &pos) const
 
 {
 	UnitData *ptr = g_theUnitPool->GetUnit(m_id);
-	ptr->GetPos(pos); 
+	ptr->GetPos(pos);
 }
 
-MapPoint Unit::RetPos() const 
+MapPoint Unit::RetPos() const
 
 {
 	MapPoint pos;
@@ -449,7 +441,6 @@ MapPoint Unit::RetPos() const
 	ptr->GetPos(pos);
 	return pos;
 }
-
 
 double Unit::GetHPModifier()
 
@@ -467,7 +458,6 @@ uint32 Unit::GetOwnerBit() const
 {
 	return g_theUnitPool->GetUnit(m_id)->GetOwnerBit();
 }
-
 
 sint32 Unit::IsIgnoresZOC() const
 {
@@ -502,13 +492,11 @@ BOOL Unit::NearestFriendlyCity(MapPoint &p) const
 	{
 		g_player[GetOwner()]->m_all_cities->Get(i).GetPos(city_pos);
 
-		
 		uint32 d = max(abs(city_pos.x - unit_pos.x), abs(city_pos.y - unit_pos.y));
 
-		
 		if (d<closest_distance)
 		{
-			
+
 			closest_distance = d ;
 			p = city_pos ;
 		}
@@ -527,33 +515,29 @@ BOOL Unit::NearestFriendlyCityWithRoom(MapPoint &p, sint32 needRoom,
 	sint32      i,
 	            n;
 
-	
 	uint32	closest_distance = 0xFFFFFFFF;
 
-	
 	GetPos(unit_pos);
 	p = unit_pos;
 	n = g_player[GetOwner()]->m_all_cities->m_nElements;
 	for (i=0; i<n; i++)	{
-		
+
 		g_player[GetOwner()]->m_all_cities->Get(i).GetPos(city_pos);
-		
-		
+
 		uint32	d = max(abs(city_pos.x - unit_pos.x), abs(city_pos.y - unit_pos.y));
 		sint32 numUnits = g_theWorld->GetCell(city_pos)->GetNumUnits();
 		if(numUnits + needRoom > k_MAX_ARMY_SIZE)
 			continue;
 
-		if(army && 
+		if(army &&
 		   (army->IsAtLeastOneMoveWater() || army->IsAtLeastOneMoveShallowWater())) {
-			if(!g_theWorld->IsNextToWater(city_pos.x, city_pos.y) && 
+			if(!g_theWorld->IsNextToWater(city_pos.x, city_pos.y) &&
 			   !g_theWorld->IsWater(city_pos))
 				continue;
 		}
 
-		
 		if (d<closest_distance) {
-			
+
 			closest_distance = d;
 			p = city_pos;
 		}
@@ -589,13 +573,11 @@ BOOL Unit::NearestFriendlyCity(Unit &c) const
 		{
 		g_player[GetOwner()]->m_all_cities->Get(i).GetPos(city_pos);
 
-		
 		uint32	d = max(abs(city_pos.x - unit_pos.x), abs(city_pos.y - unit_pos.y));
 
-		
 		if (d<closest_distance)
 			{
-			
+
 			closest_distance = d;
 			c = g_player[GetOwner()]->m_all_cities->Get(i).m_id;
 			}
@@ -634,7 +616,7 @@ void Unit::Launch()
 
 
 
-sint32 Unit::MoveToPosition(const MapPoint &p, UnitDynamicArray &revealed, 
+sint32 Unit::MoveToPosition(const MapPoint &p, UnitDynamicArray &revealed,
                             bool &revealed_unexplored)
 {
 
@@ -659,15 +641,14 @@ sint32 Unit::MoveToPosition(const MapPoint &p, UnitDynamicArray &revealed,
 	return (SetPosition(p, revealed, revealed_unexplored)) ;
 }
 
-
-sint32 Unit::SetPosition(const MapPoint &p, UnitDynamicArray &revealed, 
+sint32 Unit::SetPosition(const MapPoint &p, UnitDynamicArray &revealed,
                          bool &revealed_unexplored)
 
 {
 	BOOL left_map;
-	AccessData()->SetPos(p, revealed_unexplored, left_map); 
+	AccessData()->SetPos(p, revealed_unexplored, left_map);
 	if(!left_map) {
-		return g_theWorld->InsertUnit(p, *this, revealed); 
+		return g_theWorld->InsertUnit(p, *this, revealed);
 	} else {
 		return TRUE;
 	}
@@ -687,7 +668,7 @@ double Unit::GetMovementPoints() const
 
 {
 	const UnitData *ud=GetData();
-	return ud->GetMovementPoints(); 
+	return ud->GetMovementPoints();
 }
 
 void Unit::SetMovementPoints(double m)
@@ -696,17 +677,15 @@ void Unit::SetMovementPoints(double m)
 	AccessData()->SetMovementPoints(m);
 }
 
-
 BOOL Unit::CanBeExpelled() const
 {
 	return GetDBRec()->GetCanBeExpelled() && (g_theWorld->GetOwner(RetPos()) != GetOwner());
 }
 
-
 double Unit::GetAttack() const
 
 {
-	return GetDBRec()->GetAttack(); 
+	return GetDBRec()->GetAttack();
 }
 
 double Unit::GetDefense() const
@@ -747,13 +726,11 @@ sint32 Unit::ExertsMartialLaw() const
 	return GetDBRec()->GetExertsMartialLaw();
 }
 
-
 sint32 Unit::GetFirstMoveThisTurn() const
 
 {
 	return GetData()->GetFirstMoveThisTurn();
 }
-
 
 uint32 Unit::GetMovementType() const
 
@@ -767,7 +744,6 @@ sint32 Unit::GetMovementTypeLand() const
 {
 	return GetDBRec()->GetMovementTypeLand();
 }
-
 
 sint32 Unit::GetMovementTypeSea() const
 
@@ -804,7 +780,7 @@ sint32 Unit::IsSubmarine() const
 	return GetDBRec()->GetIsSubmarine();
 }
 
-sint32 Unit::IsNoZoc() const 
+sint32 Unit::IsNoZoc() const
 
 {
 	return GetDBRec()->GetNoZoc();
@@ -815,7 +791,6 @@ sint32 Unit::DeductMoveCost(const double cost, BOOL &out_of_fuel)
 	return AccessData()->DeductMoveCost(*this, cost, out_of_fuel);
 
 }
-
 
 void Unit::SetIsInTransport(const Unit &transport)
 
@@ -842,7 +817,6 @@ void Unit::Transform()
 #endif
 
 
-
 BOOL Unit::CanAtLeastOneCargoUnloadAt(const MapPoint & old_pos, const MapPoint & dest_pos, const BOOL & use_vision) const
 {
 	return AccessData()->CanAtLeastOneCargoUnloadAt(old_pos, dest_pos, use_vision);
@@ -852,7 +826,7 @@ BOOL Unit::UnloadCargo(const MapPoint &new_pos, Army &debark,
                        BOOL justOneUnit, const Unit &theUnit)
 
 {
-	return AccessData()->UnloadCargo(new_pos, debark, justOneUnit, theUnit); 
+	return AccessData()->UnloadCargo(new_pos, debark, justOneUnit, theUnit);
 }
 
 BOOL Unit::UnloadSelectedCargo(const MapPoint &new_pos, Army &debark)
@@ -866,7 +840,6 @@ BOOL Unit::IsMovePointsEnough(const MapPoint &pos) const
 }
 
 
-
 void Unit::GetInserted(const Unit &transport)
 {
 	AccessData()->GetInserted(transport);
@@ -875,12 +848,12 @@ void Unit::GetInserted(const Unit &transport)
 BOOL Unit::InsertCargo(const Unit &addme)
 
 {
-	return AccessData()->InsertCargo(addme); 
+	return AccessData()->InsertCargo(addme);
 }
 
 BOOL Unit::CanBeachAssault() const
 {
-	return GetDBRec()->GetCanBeachAssault(); 
+	return GetDBRec()->GetCanBeachAssault();
 }
 
 //PFT
@@ -898,7 +871,7 @@ sint32 Unit::ResetMovement()
 void Unit::SetHP(const double newval)
 
 {
-	AccessData()->SetHP(newval); 
+	AccessData()->SetHP(newval);
 }
 
 void Unit::SetHPToMax()
@@ -911,7 +884,6 @@ sint32 Unit::GetFuel() const
 {
 	return GetData()->GetFuel();
 }
-
 
 void Unit::SetFuel (sint32 val)
 
@@ -950,7 +922,7 @@ void Unit::UnVeteran()
 
 sint32 Unit::CanInterceptTrade() const
 {
-	return GetData()->CanInterceptTrade(); 
+	return GetData()->CanInterceptTrade();
 }
 
 sint32 Unit::CanRustle(CellUnitList &defender) const
@@ -963,12 +935,11 @@ sint32 Unit::CanConvertCity(Unit &city) const
 	return GetData()->CanConvertCity(city);
 }
 
-sint32 Unit::CanBombard(CellUnitList &defender) const 
+sint32 Unit::CanBombard(CellUnitList &defender) const
 
 {
 	return GetData()->CanBombard(defender);
 }
-
 
 sint32 Unit::CanCounterBombard(CellUnitList &defender) const
 
@@ -1040,7 +1011,6 @@ void Unit::GetCargoHP(sint32 &i, sint32 unit_type[100],
 
 }
 
-
 sint32 Unit::GetNumCarried() const
 {
 	return GetData()->GetNumCarried();
@@ -1063,7 +1033,7 @@ sint32 Unit::GetSelect2SoundID(void)
 
 sint32 Unit::GetMoveSoundID(void)
 {
-	
+
 	if(!g_theUnitPool->IsValid(m_id))
 		return 0;
 	return GetDBRec()->GetSoundMoveIndex();
@@ -1172,7 +1142,6 @@ char * Unit::GetText()
 {
 
 
-
 	if (g_isScenario)
 	{
 		return (char *) GetName();
@@ -1188,14 +1157,13 @@ void Unit::SetText(char *str)
 
 #endif
 
-
 sint32 Unit::IsCantCaptureCity()
 
 {
 	return GetDBRec()->GetCantCaptureCity();
 }
 
-void Unit::ResetCityOwner(const PLAYER_INDEX newo, sint32 is_conquest, 
+void Unit::ResetCityOwner(const PLAYER_INDEX newo, sint32 is_conquest,
                           const CAUSE_REMOVE_CITY cause)
 
 {
@@ -1222,7 +1190,7 @@ void Unit::ResetCityOwner(const PLAYER_INDEX newo, sint32 is_conquest,
 
 
 
-void Unit::ResetUnitOwner(const PLAYER_INDEX newo, 
+void Unit::ResetUnitOwner(const PLAYER_INDEX newo,
                           CAUSE_REMOVE_ARMY rem_cause)
 {
 	if(g_network.IsHost()) {
@@ -1359,7 +1327,6 @@ sint32 Unit::IsSameMovementType(uint32 bit_field) const
 	return GetDBRec()->GetMovementType() & bit_field;
 }
 
-
 void Unit::DestroyCapitol()
 
 {
@@ -1405,7 +1372,6 @@ uint32 Unit_Unit_GetVersion(void)
 	return (k_UNIT_VERSION_MAJOR<<16 | k_UNIT_VERSION_MINOR);
 }
 
-
 sint32 Unit::IsCity() const
 
 {
@@ -1428,7 +1394,6 @@ void Unit::DrawCityStats(aui_Surface *surf, sint32 x, sint32 y)
 
 {
 
-	
 }
 
 void Unit::AddTradeRoute(TradeRoute &route, BOOL fromNetwork)
@@ -1549,7 +1514,6 @@ void Unit::PayFederalProductionAbs(sint32 mil_paid,
 	AccessData()->PayFederalProductionAbs (mil_paid, percent_mat, mat_paid);
 }
 
-
 void Unit::SetMaterialContribution(BOOL on)
 {
 	AccessData()->SetMaterialContribution(on);
@@ -1575,7 +1539,7 @@ void Unit::SetIsProfessional(BOOL on)
 {
 	if (GetIsProfessional() != on) {
 		g_player[GetOwner()]->RegisterProfessionalChange(on, *this);
-		AccessData()->SetIsProfessional(on); 
+		AccessData()->SetIsProfessional(on);
 	}
 }
 
@@ -1587,7 +1551,7 @@ BOOL Unit::GetIsProfessional() const
 BOOL Unit::GetNeedsNoSupport() const
 
 {
-	return GetDBRec()->GetNeedsNoSupport(); 
+	return GetDBRec()->GetNeedsNoSupport();
 }
 
 BOOL Unit::GetShieldCost() const
@@ -1719,7 +1683,7 @@ double Unit::GetHappyCrime() const
 	return GetData()->GetHappyCrime();
 }
 
-void Unit::CalcHappiness(sint32 &virtualGoldSpent, BOOL firstPass) 
+void Unit::CalcHappiness(sint32 &virtualGoldSpent, BOOL firstPass)
 
 {
 	AccessData()->CalcHappiness(virtualGoldSpent, firstPass);
@@ -1786,7 +1750,6 @@ sint32 Unit::AirportLastUsed() const
 {
 	return GetData()->AirportLastUsed();
 }
-	
 
 BOOL Unit::HasCityWalls() const
 {
@@ -1807,7 +1770,6 @@ ORDER_RESULT Unit::StealTechnology(const Unit &c, sint32 whichAdvance)
 {
 	return AccessData()->StealTechnology(c, whichAdvance);
 }
-
 
 ORDER_RESULT Unit::InciteRevolution(Unit &c)
 {
@@ -1834,7 +1796,6 @@ void Unit::SetSpiedUpon()
 	AccessData()->SetSpiedUpon();
 }
 
-
 void Unit::CityNullifyWalls()
 {
 	AccessData()->CityNullifyWalls();
@@ -1859,7 +1820,6 @@ sint32 Unit::GetFranchiseOwner() const
 {
 	return GetData()->GetFranchiseOwner();
 }
-
 
 void Unit::SetFranchiseTurnsRemaining(sint32 turns)
 {
@@ -1894,7 +1854,6 @@ sint32 Unit::PopCount() const
 {
 	return GetData()->PopCount();
 }
-
 
 sint32 Unit::CountSlaves() const
 {
@@ -2238,7 +2197,7 @@ void Unit::CheckRiot()
 	AccessData()->CheckRiot();
 }
 
-BOOL Unit::AiGetCargoMovementPoints(double &min_move_points, 
+BOOL Unit::AiGetCargoMovementPoints(double &min_move_points,
                                     BOOL  &first) const
 {
 	return GetData()->AiGetCargoMovementPoints(min_move_points, first);
@@ -2265,7 +2224,7 @@ void Unit::RecalculateResources()
 {
 	AccessData()->RecalculateResources();
 }
-	
+
 BOOL Unit::FightOneLineDanceRangedAttack(Unit &defender)
 {
 	return AccessData()->FightOneLineDanceRangedAttack(defender);
@@ -2355,7 +2314,7 @@ void Unit::AddWonderHPBonus(sint32 amt)
 
 
 
-sint32 Unit::CanPlantNuke(const MapPoint &pos) 
+sint32 Unit::CanPlantNuke(const MapPoint &pos)
 {
 	return AccessData()->CanPlantNuke(pos);
 }
@@ -2517,9 +2476,8 @@ void Unit::UpdateZOCForRemoval()
 		Cell *cell = g_theWorld->GetCell(pos);
 		CellUnitList *units = cell->UnitArmy();
 		sint32 i;
-		
-		
-		
+
+
 		BOOL updateZoc = TRUE;
 		if(cell->GetCity().m_id != 0 &&
 		   cell->GetCity().IsValid() &&
@@ -2537,7 +2495,7 @@ void Unit::UpdateZOCForRemoval()
 		if(updateZoc) {
 			g_theWorld->RemoveZOC(pos, GetOwner());
 			g_theWorld->AddOtherArmyZOC(pos, GetOwner(), Army(0), Unit(0));
-			
+
 			sint32 dd;
 			for(dd = 0; dd < (sint32)NOWHERE; dd++) {
 				MapPoint npos;
@@ -2561,68 +2519,67 @@ void Unit::CheckVisionRadius()
 }
 
 BOOL UnitCanCarry(sint32 dest, sint32 src)
-{ 
-	const UnitRecord *drec = g_theUnitDB->Get(dest); 
+{
+	const UnitRecord *drec = g_theUnitDB->Get(dest);
 	const UnitRecord *srec = g_theUnitDB->Get(src);
 //	const UnitRecord *drec = g_theUnitDB->Get(dest, g_player[GetOwner()]->GetGovernmentType()); // Owner has to be passed
 //	const UnitRecord *srec = g_theUnitDB->Get(src, g_player[GetOwner()]->GetGovernmentType());
 
-
 	if (!drec->GetCanCarry()) {
-		return FALSE; 
-	} 
-	
-	if (srec->GetSizeSmall()) { 
-		
+		return FALSE;
+	}
+
+	if (srec->GetSizeSmall()) {
+
 		if (drec->GetCanCarrySmallLand() && srec->GetMovementTypeLand()) {
-			return TRUE; 
+			return TRUE;
 		}
-		
+
 		if (drec->GetCanCarrySmallAir() && srec->GetMovementTypeAir()) {
-			return TRUE; 
+			return TRUE;
 		}
-		
+
 		if (drec->GetCanCarrySmallWater() && srec->GetMovementTypeSea()) {
-			return TRUE; 
+			return TRUE;
 		}
-		
+
 		if (drec->GetCanCarrySmallSpace() && srec->GetMovementTypeSpace()) {
-			return TRUE; 
+			return TRUE;
 		}
 	}else if (srec->GetSizeMedium()) {
 		if (drec->GetCanCarryMedLand() && srec->GetMovementTypeLand()) {
-			return TRUE; 
+			return TRUE;
 		}
-		
+
 		if (drec->GetCanCarryMedAir() && srec->GetMovementTypeAir()) {
-			return TRUE; 
+			return TRUE;
 		}
-		
+
 		if (drec->GetCanCarryMedWater() && srec->GetMovementTypeSea()) {
-			return TRUE; 
+			return TRUE;
 		}
-		
+
 		if (drec->GetCanCarryMedSpace() && srec->GetMovementTypeSpace()) {
-			return TRUE; 
+			return TRUE;
 		}
-	} else if (srec->GetSizeLarge()) { 
+	} else if (srec->GetSizeLarge()) {
 		if (drec->GetCanCarryLargeLand() && srec->GetMovementTypeLand()) {
-			return TRUE; 
+			return TRUE;
 		}
-		
+
 		if (drec->GetCanCarryLargeAir() && srec->GetMovementTypeAir()) {
-			return TRUE; 
+			return TRUE;
 		}
-		
+
 		if (drec->GetCanCarryLargeWater() && srec->GetMovementTypeSea()) {
-			return TRUE; 
+			return TRUE;
 		}
-		
+
 		if (drec->GetCanCarryLargeSpace() && srec->GetMovementTypeSpace()) {
-			return TRUE; 
+			return TRUE;
 		}
-	} 
-	return FALSE; 
+	}
+	return FALSE;
 }
 
 CityData *Unit::GetCityData() const
@@ -2657,7 +2614,7 @@ bool Unit::NeedsRefueling() const
 //
 //  Description: Test if a unit passes an order's UnitPretest
 //
-//  Parameters : OrderRecord * order_rec : The order's order record 
+//  Parameters : OrderRecord * order_rec : The order's order record
 //
 //  Globals    : g_theUnitDB             : The unit database
 //
@@ -2685,7 +2642,6 @@ bool Unit::UnitValidForOrder(const OrderRecord * order_rec) const
 
 	bool order_valid = false;
 
-	
 	if(order_rec->GetUnitPretest_CanAttack())
 		order_valid = (unit_rec->GetAttack() > 0.0 );
 	else if(order_rec->GetUnitPretest_CanEntrench())
@@ -2757,7 +2713,7 @@ bool Unit::UnitValidForOrder(const OrderRecord * order_rec) const
 	else if(order_rec->GetUnitPretest_CanTransport())
 		order_valid = unit_rec->GetCargoData();
 	else if(order_rec->GetUnitPretest_CanBeTransported())
-		order_valid = unit_rec->GetSizeMedium() || 
+		order_valid = unit_rec->GetSizeMedium() ||
 		              unit_rec->GetSizeSmall();
 	else if(order_rec->GetUnitPretest_CanLaunch())
 		order_valid = unit_rec->GetSpaceLaunch();

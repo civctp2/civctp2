@@ -1,18 +1,5 @@
-
-
-
-
-
-
-
-
-
-
-
-
 #ifndef _BMH_GWARCHIVE_DLL_TYPES_H_
 #define _BMH_GWARCHIVE_DLL_TYPES_H_
-
 
 
 #pragma warning(disable:4251)
@@ -38,12 +25,12 @@
 
 #ifdef __GWARCHIVE_USE_IMPORT
 #define GWArchiveDllHeader DllImport
-#else 
+#else
 #ifdef __GWARCHIVE_USE_EXPORT
 #define GWArchiveDllHeader DllExport
-#else 
+#else
 #define GWArchiveDllHeader
-#endif 
-#endif 
+#endif
+#endif
 
-#endif 
+#endif

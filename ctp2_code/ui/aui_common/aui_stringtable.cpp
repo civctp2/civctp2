@@ -10,13 +10,13 @@
 //
 // THIS FILE IS NOT GENERATED OR SUPPORTED BY ACTIVISION.
 //
-// This material has been developed at apolyton.net by the Apolyton CtP2 
+// This material has been developed at apolyton.net by the Apolyton CtP2
 // Source Code Project. Contact the authors at ctp2source@apolyton.net.
 //
 //----------------------------------------------------------------------------
 //
 // Compiler flags
-// 
+//
 //----------------------------------------------------------------------------
 //
 // Modifications from the original Activision code:
@@ -36,7 +36,6 @@
 extern StringDB	*g_theStringDB;
 
 
-
 aui_StringTable::aui_StringTable(
 	AUI_ERRCODE *retval,
 	MBCHAR *ldlBlock )
@@ -44,7 +43,6 @@ aui_StringTable::aui_StringTable(
 	*retval = InitCommonLdl( ldlBlock );
 	Assert( AUI_SUCCESS(*retval) );
 }
-
 
 
 aui_StringTable::aui_StringTable(
@@ -56,29 +54,24 @@ aui_StringTable::aui_StringTable(
 }
 
 
-
 AUI_ERRCODE aui_StringTable::InitCommonLdl( MBCHAR *ldlBlock )
 {
 	aui_Ldl *theLdl = g_ui->GetLdl();
 
-	
 	BOOL valid = theLdl->IsValid( ldlBlock );
 	Assert( valid );
 	if ( !valid ) return AUI_ERRCODE_HACK;
 
-	
 	ldl_datablock *block = theLdl->GetLdl()->FindDataBlock( ldlBlock );
 	Assert( block != NULL );
 	if ( !block ) return AUI_ERRCODE_LDLFINDDATABLOCKFAILED;
 
-	
 	sint32 numStrings = FindNumStringsFromLdl( block );
 
 	AUI_ERRCODE errcode = InitCommon( numStrings );
 	Assert( AUI_SUCCESS(errcode) );
 	if ( !AUI_SUCCESS(errcode) ) return errcode;
 
-	
 	MBCHAR temp[ k_AUI_LDL_MAXBLOCK + 1 ];
 
 	if ( block->GetBool(k_AUI_STRINGTABLE_LDL_NODATABASE) ) {
@@ -104,7 +97,6 @@ AUI_ERRCODE aui_StringTable::InitCommonLdl( MBCHAR *ldlBlock )
 }
 
 
-
 sint32 aui_StringTable::FindNumStringsFromLdl( ldl_datablock *block )
 {
 	if ( block->GetAttributeType( k_AUI_STRINGTABLE_LDL_NUMSTRINGS ) ==
@@ -126,7 +118,6 @@ sint32 aui_StringTable::FindNumStringsFromLdl( ldl_datablock *block )
 }
 
 
-
 AUI_ERRCODE aui_StringTable::InitCommon( sint32 numStrings )
 {
 	if ((m_numStrings = numStrings))
@@ -144,7 +135,6 @@ AUI_ERRCODE aui_StringTable::InitCommon( sint32 numStrings )
 }
 
 
-
 aui_StringTable::~aui_StringTable()
 {
 	if ( m_strings )
@@ -156,7 +146,6 @@ aui_StringTable::~aui_StringTable()
 		delete [] m_strings;
 	}
 }
-
 
 
 sint32 aui_StringTable::SetNumStrings( sint32 numStrings )
@@ -189,7 +178,6 @@ sint32 aui_StringTable::SetNumStrings( sint32 numStrings )
 }
 
 
-
 MBCHAR *aui_StringTable::GetString( sint32 index )
 {
 	Assert( index >= 0 && index < m_numStrings );
@@ -197,7 +185,6 @@ MBCHAR *aui_StringTable::GetString( sint32 index )
 
 	return m_strings[ index ];
 }
-
 
 
 AUI_ERRCODE aui_StringTable::SetString( const MBCHAR *text, sint32 index )

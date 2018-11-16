@@ -10,7 +10,7 @@
 //
 // THIS FILE IS NOT GENERATED OR SUPPORTED BY ACTIVISION.
 //
-// This material has been developed at apolyton.net by the Apolyton CtP2 
+// This material has been developed at apolyton.net by the Apolyton CtP2
 // Source Code Project. Contact the authors at ctp2source@apolyton.net.
 //
 //----------------------------------------------------------------------------
@@ -25,8 +25,8 @@
 //
 // - Added CalcTerrainFreightCost by Martin Gühmann
 // - Added GetFoodFromTerrain, GetShieldsFromTerrain and GetGoldFromTerrain
-//   with a hypothetical terrain type argument to check whether there is a 
-//   a good terraforming option. - Sep. 21st 2004 Martin Gühmann 
+//   with a hypothetical terrain type argument to check whether there is a
+//   a good terraforming option. - Sep. 21st 2004 Martin Gühmann
 //
 //----------------------------------------------------------------------------
 #ifdef HAVE_PRAGMA_ONCE
@@ -41,16 +41,16 @@
 
 
 
-#define k_MASK_ENV_ROAD         0x00000003  
+#define k_MASK_ENV_ROAD         0x00000003
 #define k_SHIFT_ENV_ROAD        0
 
-#define k_MASK_ENV_IRRIGATION   0x0000000c  
+#define k_MASK_ENV_IRRIGATION   0x0000000c
 #define k_SHIFT_ENV_IRRIGATION  2
 
-#define k_MASK_ENV_MINE         0x00000030 
+#define k_MASK_ENV_MINE         0x00000030
 #define k_SHIFT_ENV_MINE        4
 
-#define k_MASK_ENV_GOOD         0x000001c0  
+#define k_MASK_ENV_GOOD         0x000001c0
 #define k_SHIFT_ENV_GOOD        6
 
 #define k_ENV_GOOD1             1
@@ -62,16 +62,16 @@
 #define k_ENV_GOOD4             4
 #define k_BIT_ENV_GOOD4  (k_ENV_GOOD4 << k_SHIFT_ENV_GOOD)
 
-#define k_MASK_ENV_CANAL_TUNNEL 0x00000200 
+#define k_MASK_ENV_CANAL_TUNNEL 0x00000200
 #define k_SHIFT_ENV_CANAL_TUNNEL 9
 
-#define k_MASK_ENV_CITY         0x00000400 
+#define k_MASK_ENV_CITY         0x00000400
 #define k_SHIFT_ENV_CITY 10
 #define k_BIT_ENV_CITY          (1 << k_SHIFT_ENV_CITY)
 
-#define k_MASK_ENV_RIV_CUR      0x00000800 
+#define k_MASK_ENV_RIV_CUR      0x00000800
 #define k_SHIFT_ENV_RIV_CUR     11
-#define k_BIT_ENV_RIV_CUR      (1 << k_SHIFT_ENV_RIV_CUR) 
+#define k_BIT_ENV_RIV_CUR      (1 << k_SHIFT_ENV_RIV_CUR)
 
 
 
@@ -81,13 +81,13 @@
 
 
 
-#define k_MASK_ENV_INSTALLATION 0x00004000  
+#define k_MASK_ENV_INSTALLATION 0x00004000
 #define k_SHIFT_ENV_INSTALLATION 14
-#define k_BIT_ENV_INSTALLATION  (1 << k_SHIFT_ENV_INSTALLATION) 
+#define k_BIT_ENV_INSTALLATION  (1 << k_SHIFT_ENV_INSTALLATION)
 
 #define k_MASK_ENV_CITY_RADIUS 0x00008000
 #define k_SHIFT_ENV_CITY_RADIUS 15
-#define k_BIT_ENV_CITY_RADIUS (1 << k_SHIFT_ENV_CITY_RADIUS) 
+#define k_BIT_ENV_CITY_RADIUS (1 << k_SHIFT_ENV_CITY_RADIUS)
 
 #define k_SHIFT_ENV_HAS_WORMHOLE 16
 #define k_MASK_ENV_HAS_WORMHOLE (1 << k_SHIFT_ENV_HAS_WORMHOLE)
@@ -105,9 +105,8 @@
 #define k_CELL_VERSION_MINOR	0
 
 #define k_BATTLE_FLAG_VICTOR_SHIFT 8
-#define k_BATTLE_FLAG_DECAY_TIME 5 
+#define k_BATTLE_FLAG_DECAY_TIME 5
 #define k_MASK_DECAY_TIME 0xff
-
 
 
 template <class T> class DynamicArray;
@@ -137,10 +136,9 @@ class Cell {
 private:
 
 
-
 	uint32 m_env;
 	uint32 m_zoc;
-	sint16 m_move_cost; 
+	sint16 m_move_cost;
 
 #ifdef BATTLE_FLAGS
 	uint16 m_battleFlags;
@@ -149,18 +147,17 @@ private:
 	sint8 m_gf;
 	sint8 m_terrain_type;
 
-	
 	Unit m_city;
 
-	
-	
-	
-	sint8 m_cellOwner;
-	
-	
 
-	
-	
+
+
+	sint8 m_cellOwner;
+
+
+
+
+
 	CellUnitList *m_unit_army;
 	DynamicArray<ID> *m_objects;
 
@@ -168,12 +165,10 @@ private:
 	Pop m_aPop;
 	TradeDynamicArray *m_tradeRoutes;
 	DynamicArray<TerrainImprovement> *m_improvements;
-	
-	
+
 #endif
 	GoodyHut *m_jabba;
-	
-	
+
 
 public:
 
@@ -193,7 +188,6 @@ public:
 	sint32 IsAnyUnitInCell() const;
 	sint32 InsertUnit(const Unit id);
 	sint32 RemoveUnitReference(const Unit &id);
-
 
 	sint64 IsZoc (sint32 UnitFlags, uint64 maskAlliance);
 	uint32 GetRawZoc() { return m_zoc; }
@@ -239,8 +233,7 @@ public:
 
 	uint32 GetEnv() { return m_env; }
 	void SetEnv(uint32 env);
-	
-	
+
 	void SetEnvFast(uint32 env) { m_env = env; }
 
 	BOOL CanEnter(const uint32 flag) const;
@@ -260,7 +253,6 @@ public:
 	void Serialize(CivArchive &archive) ;
 
 
-
 	sint32 IsDead(void) const;
 	void Kill(void) ;
 
@@ -276,7 +268,6 @@ public:
 	sint32 GetNumTradeRoutes() const;
 	TradeRoute GetTradeRoute(sint32 index) const;
 
-	
 
 	sint32 GetNumObjects();
 	ID GetObject(sint32 index);
@@ -304,25 +295,21 @@ public:
 
 	void SetOwner(sint32 o);
 
-	inline sint32 GetOwner(void) const { 
-		return ((sint32)(m_cellOwner)) ; 
+	inline sint32 GetOwner(void) const {
+		return ((sint32)(m_cellOwner)) ;
 	}
 
-	
 #if 0
 	TileInfo	*GetTileInfo(void) const;
 	void		SetTileInfo(TileInfo *tileInfo) { m_tileInfo = tileInfo; }
 #endif
 
-	
 	GoodyHut	*GetGoodyHut(void);
 	void DeleteGoodyHut();
 
-	
 	void CreateGoodyHut();
 
 	double GetTerrainDefenseBonus();
-
 
 	BOOL HasWormhole() const;
 	void SetWormhole(BOOL on);
@@ -340,23 +327,23 @@ public:
 
 //Added by Martin Gühmann
 	double CalcTerrainFreightCost();
-	
-	
-	
-	
-	
-	
-	
+
+
+
+
+
+
+
 private:
-	
+
 	static int m_playerLandArea[k_MAX_PLAYERS+1];
 public:
-	
+
 	static int PlayerLandArea(int player);
-	
-	
-	
-	
+
+
+
+
 	static void RecalcPlayerLandArea();
 };
 

@@ -11,7 +11,7 @@
 //
 // THIS FILE IS NOT GENERATED OR SUPPORTED BY ACTIVISION.
 //
-// This material has been developed at apolyton.net by the Apolyton CtP2 
+// This material has been developed at apolyton.net by the Apolyton CtP2
 // Source Code Project. Contact the authors at ctp2source@apolyton.net.
 //
 //----------------------------------------------------------------------------
@@ -72,7 +72,6 @@
 #include "colorset.h"
 #include "GovernmentRecord.h"
 
-
 #include "director.h"
 extern Director		*g_director;
 
@@ -80,18 +79,15 @@ extern C3UI			*g_c3ui;
 extern ProjectFile	*g_GreatLibPF;
 extern GreatLibrary	*g_greatLibrary;
 
-
 extern ScienceWin	*g_scienceWin;
 
 #include "ScienceManagementDialog.h"
-
 
 #include "soundmanager.h"
 #include "gamesounds.h"
 extern SoundManager	*g_soundManager;
 
 extern ColorSet	*g_colorSet;
-
 
 static C3Window		*s_sci_advanceScreen	= NULL;
 
@@ -138,7 +134,7 @@ SciAdvanceScreenKeyboardHandler s_keyboardHandler;
 void sci_advancescreen_StatsCallback( aui_Control *control, uint32 action, uint32 data, void *cookie )
 {
 	if ( action != (uint32)CTP2_HYPERLINK_ACTION_EXECUTE ) return;
-	
+
 	ctp2_HyperLink *hl = ((ctp2_HyperTextBox *)control)->GetSelectedHyperLink();
 
 	if ( hl ) {
@@ -160,7 +156,7 @@ void sci_advancescreen_listAction( aui_Control *control, uint32 action, uint32 d
 	case AUI_LISTBOX_ACTION_SELECT:
 
 
-		
+
 
 
 		ctp2_ListBox *lb;
@@ -170,8 +166,7 @@ void sci_advancescreen_listAction( aui_Control *control, uint32 action, uint32 d
 		item = (ctp2_ListItem *)lb->GetSelectedItem();
 		if(!item) return;
 
-		
-		
+
 		sci_advancescreen_updateData( NULL, FALSE );
 		break;
 
@@ -179,11 +174,11 @@ void sci_advancescreen_listAction( aui_Control *control, uint32 action, uint32 d
 		if(sci_advancescreen_removeMyWindow(action)) {
 
 
-			
+
 
 
 			ctp2_ListBox *lb = (ctp2_ListBox *)control;
-			
+
 			ctp2_ListItem *item = (ctp2_ListItem *)lb->GetSelectedItem();
 			if(!item) return;
 
@@ -192,11 +187,10 @@ void sci_advancescreen_listAction( aui_Control *control, uint32 action, uint32 d
 				g_scienceManagementDialog->Update();
 			}
 
-
 			if ( g_scienceWin )
 				g_scienceWin->UpdateData( SCI_UPDATE_NOLIST );
 
-			
+
 
 
 
@@ -223,7 +217,6 @@ sint32	sci_advancescreen_displayMyWindow( MBCHAR *messageText, sint32 from, Sequ
 	Player *p = g_player[ g_selected_item->GetVisiblePlayer() ];
 	s_oldResearching = p->m_advances->GetResearching();
 
-	
 	s_screenSequence = seq;
 
 	sint32 retval=0;
@@ -241,10 +234,10 @@ sint32	sci_advancescreen_displayMyWindow( MBCHAR *messageText, sint32 from, Sequ
 	else {
 		s_cancel->Hide();
 
-		
-		
-		
-		
+
+
+
+
 		sint32 soundID = gamesounds_GetGameSoundID(GAMESOUNDS_CHEER_CASTLE);
 		g_soundManager->AddSound(SOUNDTYPE_SFX, 0, soundID);
 	}
@@ -256,12 +249,10 @@ sint32	sci_advancescreen_displayMyWindow( MBCHAR *messageText, sint32 from, Sequ
 	auiErr = g_c3ui->AddWindow(s_sci_advanceScreen);
 	Assert( auiErr == AUI_ERRCODE_OK );
 
-	
-	
+
 	if (from == k_SCI_INCLUDE_CANCEL) {
 		keypress_RegisterHandler(&s_keyboardHandler);
 	}
-
 
 	return retval;
 }
@@ -276,15 +267,15 @@ sint32 sci_advancescreen_removeMyWindow(uint32 action)
 
 		Assert( auiErr == AUI_ERRCODE_OK );
 
-		
 
 
 
 
 
 
-		
-		
+
+
+
 		if (s_screenSequence) {
 			g_director->ActionFinished(s_screenSequence);
 			s_screenSequence = NULL;
@@ -295,7 +286,6 @@ sint32 sci_advancescreen_removeMyWindow(uint32 action)
 }
 
 
-
 AUI_ERRCODE sci_advancescreen_Initialize( MBCHAR *messageText )
 {
 	AUI_ERRCODE errcode = AUI_ERRCODE_OK;
@@ -304,17 +294,16 @@ AUI_ERRCODE sci_advancescreen_Initialize( MBCHAR *messageText )
 
 	if ( s_sci_advanceScreen ) {
 		s_sci_advanceScreen->MoveOG();
-		return AUI_ERRCODE_OK; 
+		return AUI_ERRCODE_OK;
 	}
 
 	strcpy(windowBlock, "SciAdvanceScreen");
 
-	{ 
+	{
 		s_sci_advanceScreen = new C3Window( &errcode, aui_UniqueId(), windowBlock, 16, AUI_WINDOW_TYPE_STANDARD, false);
 		Assert( AUI_NEWOK(s_sci_advanceScreen, errcode) );
 		if ( !AUI_NEWOK(s_sci_advanceScreen, errcode) ) errcode;
 
-		
 		s_sci_advanceScreen->Resize(s_sci_advanceScreen->Width(),s_sci_advanceScreen->Height());
 		s_sci_advanceScreen->GrabRegion()->Resize(s_sci_advanceScreen->Width(),20);
 		s_sci_advanceScreen->SetDraggable( TRUE );
@@ -325,7 +314,6 @@ AUI_ERRCODE sci_advancescreen_Initialize( MBCHAR *messageText )
 		"SciAdvanceScreen.Background" );
 	s_background->Enable(false);
 
-	
 	s_back = new ctp2_Button(&errcode, aui_UniqueId(),
 		"SciAdvanceScreen.Background.BackButton", sci_advancescreen_backPress);
 	s_cancel = new ctp2_Button(&errcode, aui_UniqueId(),
@@ -339,7 +327,7 @@ AUI_ERRCODE sci_advancescreen_Initialize( MBCHAR *messageText )
 	s_name = new ctp2_Static(&errcode, aui_UniqueId(), "SciAdvanceScreen.Background.Name");
 
 	sprintf( controlBlock, "%s.%s", windowBlock, "Background.SciAdvanceList" );
-	s_advanceList = new ctp2_ListBox( &errcode, aui_UniqueId(), controlBlock, 
+	s_advanceList = new ctp2_ListBox( &errcode, aui_UniqueId(), controlBlock,
 		sci_advancescreen_listAction );
 	Assert( AUI_NEWOK(s_advanceList, errcode) );
 	if ( !AUI_NEWOK(s_advanceList, errcode) ) return errcode;
@@ -358,7 +346,7 @@ AUI_ERRCODE sci_advancescreen_Initialize( MBCHAR *messageText )
 		"SciAdvanceScreen.Background.ResearchGoal" );
 
 	sprintf( controlBlock, "%s.%s", windowBlock, "Background.GlStats" );
-	s_glStats = new ctp2_HyperTextBox( &errcode, aui_UniqueId(), controlBlock, 
+	s_glStats = new ctp2_HyperTextBox( &errcode, aui_UniqueId(), controlBlock,
 		sci_advancescreen_StatsCallback );
 	Assert( AUI_NEWOK(s_glStats, errcode) );
 	if ( !AUI_NEWOK(s_glStats, errcode) ) return errcode;
@@ -374,7 +362,6 @@ AUI_ERRCODE sci_advancescreen_Initialize( MBCHAR *messageText )
 	s_advanceString = new aui_StringTable( &errcode, controlBlock );
 	if ( !AUI_NEWOK(s_advanceString, errcode) ) return errcode;
 
-	
 	errcode = aui_Ldl::SetupHeirarchyFromRoot( windowBlock );
 	Assert( AUI_SUCCESS(errcode) );
 
@@ -385,12 +372,11 @@ AUI_ERRCODE sci_advancescreen_Initialize( MBCHAR *messageText )
 }
 
 
-
 AUI_ERRCODE sci_advancescreen_Cleanup()
 {
 #define mycleanup(mypointer) if(mypointer) { delete mypointer; mypointer = NULL; };
 
-	if ( !s_sci_advanceScreen  ) return AUI_ERRCODE_OK; 
+	if ( !s_sci_advanceScreen  ) return AUI_ERRCODE_OK;
 
 	g_c3ui->RemoveWindow( s_sci_advanceScreen->Id() );
 	keypress_RemoveHandler(&s_keyboardHandler);
@@ -428,16 +414,15 @@ void sci_advancescreen_backPress(aui_Control *control, uint32 action, uint32 dat
 	if ( action != (uint32)AUI_BUTTON_ACTION_EXECUTE ) return;
 
 	if(sci_advancescreen_removeMyWindow(action)) {
-		
 
-		
-		
+
+
+
 		ctp2_ListItem *item;
 
 		item = (ctp2_ListItem*)s_advanceList->GetSelectedItem();
 
 		if (!item) {
-
 
 
 			return;
@@ -447,11 +432,11 @@ void sci_advancescreen_backPress(aui_Control *control, uint32 action, uint32 dat
 		if(g_scienceManagementDialog) {
 			g_scienceManagementDialog->Update();
 		}
-		
+
 		if ( g_scienceWin )
 			g_scienceWin->UpdateData( SCI_UPDATE_NOLIST );
 
-		
+
 
 
 
@@ -517,10 +502,9 @@ void sci_advancescreen_cancelPress(aui_Control *control, uint32 action, uint32 d
 //
 //----------------------------------------------------------------------------
 
-sint32 sci_advancescreen_loadList( void ) 
+sint32 sci_advancescreen_loadList( void )
 {
 
-	
 	Player *p = g_player[g_selected_item->GetVisiblePlayer()];
 	MBCHAR str[_MAX_PATH];
 	if(!s_scienceGoalTree)
@@ -540,18 +524,16 @@ sint32 sci_advancescreen_loadList( void )
 	}
 	s_goaltext->SetText(str);
 
-	
 	if (!s_advanceList) return 0;
 
-	
 	ctp2_ListItem *item = NULL;
 	ctp2_Static *child = NULL;
-	
+
 	s_advanceList->Clear();
 
-	
 
-	
+
+
 	uint8 *			advances		= p->m_advances->CanResearch();
 	sint32 const	advanceCount	= g_theAdvanceDB->NumRecords();
 	sint32			curItemIndex	= 0;
@@ -568,10 +550,10 @@ sint32 sci_advancescreen_loadList( void )
 			{
 				sprintf( str, "%s", g_theStringDB->GetNameStr(g_theAdvanceDB->Get(i)->m_name) );
 			}
-			
+
 			item = (ctp2_ListItem *)aui_Ldl::BuildHierarchyFromRoot("SciListItem");
 			child = (ctp2_Static *)item->GetChildByIndex(0);
-			if(child) 
+			if(child)
 			{
 				child->SetText(str);
 			}
@@ -583,7 +565,6 @@ sint32 sci_advancescreen_loadList( void )
 		}
 	}
 
-	
 	delete advances;
 
 	s_advanceList->SortByColumn(0,TRUE);
@@ -596,7 +577,7 @@ sint32 sci_advancescreen_loadList( void )
 	for (sint32 index = curItemIndex - 1; (index >= 0) && !isIndexOk; --index)
 	{
 		s_advanceList->SelectItem(index);
-		ctp2_ListItem *	item = 
+		ctp2_ListItem *	item =
 			reinterpret_cast<ctp2_ListItem *>(s_advanceList->GetSelectedItem());
 #if defined(__LP64__)
 		isIndexOk = (research == reinterpret_cast<sint64>(item->GetUserData()));
@@ -616,7 +597,7 @@ sint32 sci_advancescreen_updateData( MBCHAR *messageText, BOOL defaultMessage )
 	sint32 advanceTurns;
 
 	Player *p = g_player[g_selected_item->GetVisiblePlayer()];
-	
+
 	if ( messageText ) {
 		s_message->SetHyperText( messageText );
 	}
@@ -624,8 +605,7 @@ sint32 sci_advancescreen_updateData( MBCHAR *messageText, BOOL defaultMessage )
 		s_message->SetHyperText( s_advanceString->GetString(0) );
 	}
 
-	
-	
+
 	ctp2_ListItem *item;
 
 	item = (ctp2_ListItem*)s_advanceList->GetSelectedItem();
@@ -656,7 +636,6 @@ sint32 sci_advancescreen_updateData( MBCHAR *messageText, BOOL defaultMessage )
 	advanceTurns = p->m_advances->TurnsToNextAdvance((AdvanceType)item->GetUserData());
 #endif
 
-	
 	if ( advanceTurns == -1 ) {
 		sprintf( str, "-" );
 	}
@@ -683,7 +662,7 @@ sint32 sci_advancescreen_setStatsInfo( sint32 index )
 
 
 
-    if (s_glStats == NULL) 
+    if (s_glStats == NULL)
         return(1);
 
 #define GIVES_TEXT_LEN 8192
@@ -691,23 +670,22 @@ sint32 sci_advancescreen_setStatsInfo( sint32 index )
 	MBCHAR linkText[GIVES_TEXT_LEN];
 	givesText[0] = 0;
 
-	
-	
-	
 
-	
+
+
+
+
 	bool isAdvance = false;
-	
+
 	bool anyAdvance = false;
 
-
 	sint32 i;
-	for(i = 0; i < g_theUnitDB->NumRecords(); i++) 
+	for(i = 0; i < g_theUnitDB->NumRecords(); i++)
 	{
 		const UnitRecord *rec = g_theUnitDB->Get(i);
-		if(rec->GetEnableAdvanceIndex() == index) 
+		if(rec->GetEnableAdvanceIndex() == index)
 		{
-			
+
 			if( !isAdvance )
 			{
 				sprintf(givesText, "%s\n", g_theStringDB->GetNameStr("ADVANCE_GIVES_UNITS"));
@@ -726,15 +704,14 @@ sint32 sci_advancescreen_setStatsInfo( sint32 index )
 		return 1;
 	}
 
-
 	for(i = 0; i < g_theBuildingDB->NumRecords(); i++) {
 		const BuildingRecord *rec = g_theBuildingDB->Get(i);
-		if(rec->GetEnableAdvanceIndex() == index) 		
+		if(rec->GetEnableAdvanceIndex() == index)
 		{
-			
+
 			if( !isAdvance )
 			{
-				sprintf(givesText + strlen(givesText), "%s\n", 
+				sprintf(givesText + strlen(givesText), "%s\n",
 					g_theStringDB->GetNameStr("ADVANCE_GIVES_BUILDINGS"));
 				isAdvance = true;
 				anyAdvance = true;
@@ -751,16 +728,15 @@ sint32 sci_advancescreen_setStatsInfo( sint32 index )
 
 	isAdvance = false;
 
-
 	for(i = 0; i < g_theWonderDB->NumRecords(); i++) {
 		const WonderRecord *rec = g_theWonderDB->Get(i);
 
-		if(rec->GetEnableAdvanceIndex() == index) 
+		if(rec->GetEnableAdvanceIndex() == index)
 		{
-			
+
 			if( !isAdvance )
 			{
-				sprintf(givesText + strlen(givesText), "%s\n", 
+				sprintf(givesText + strlen(givesText), "%s\n",
 					g_theStringDB->GetNameStr("ADVANCE_GIVES_WONDERS"));
 				isAdvance = true;
 				anyAdvance = true;
@@ -770,7 +746,6 @@ sint32 sci_advancescreen_setStatsInfo( sint32 index )
 			strncat(givesText, linkText, GIVES_TEXT_LEN - strlen(givesText));
 		}
 	}
-
 
 	bool isTileImp = false;
 	for(i = 0; i < g_theTerrainImprovementDB->NumRecords(); i++) {
@@ -804,26 +779,24 @@ sint32 sci_advancescreen_setStatsInfo( sint32 index )
 		}
 	}
 
-		   
-	
+
 	if( !anyAdvance )
 	{
 		sprintf( givesText, "%s", g_theStringDB->GetNameStr( "ADVANCE_NO_SPECIFIC_ADVANCES" ) );
 	}
-	
+
 	s_glStats->SetHyperText(givesText);
 
 #if 0
     sprintf( variableFile, g_theAdvanceDB->Get(index)->GetIcon()->GetVari() );
 
     text = (char *)(g_GreatLibPF->getData(variableFile, &size));
-    
+
     if (text == NULL) {
         s_glStats->SetHyperText(" ");
         return(0);
     }
 
-    
     terminated_text = new char[size+1];
     memcpy(terminated_text, text, size);
     terminated_text[size] = 0;
@@ -864,9 +837,9 @@ void sci_advancescreen_fillgoalarray(sint32 goal)
 	const AdvanceRecord *rec = g_theAdvanceDB->Get(goal);
 
 	s_scienceGoalTree[goal]=true;
-	
+
 	sint32 i;
-	for(i = 0; i < rec->GetNumPrerequisites(); i++) 
+	for(i = 0; i < rec->GetNumPrerequisites(); i++)
 	{
 		if(rec->GetIndex() != rec->GetPrerequisitesIndex(i))
 		{

@@ -1,5 +1,3 @@
-
-
 #include "c3.h"
 
 #include "aui.h"
@@ -10,12 +8,12 @@
 
 #include "primitives.h"
 
-ControlSheet::ControlSheet(AUI_ERRCODE *retval, 
-					   uint32 id, 
-					   MBCHAR *ldlBlock, 
-					   ControlActionCallback *ActionFunc, 
+ControlSheet::ControlSheet(AUI_ERRCODE *retval,
+					   uint32 id,
+					   MBCHAR *ldlBlock,
+					   ControlActionCallback *ActionFunc,
 					   void *cookie)
-	: 
+	:
 	aui_ImageBase( ldlBlock ),
 	aui_TextBase(ldlBlock, (MBCHAR *)NULL),
 	aui_Control(retval, id, ldlBlock, ActionFunc, cookie),
@@ -23,18 +21,17 @@ ControlSheet::ControlSheet(AUI_ERRCODE *retval,
 {
 	m_border = TRUE;
 
-	
 	SetDrawMask( k_AUI_REGION_DRAWFLAG_UPDATE );
 }
 
-ControlSheet::ControlSheet(AUI_ERRCODE *retval, 
-					   uint32 id, 
-					   sint32 x, 
-					   sint32 y, 
-					   sint32 width, 
+ControlSheet::ControlSheet(AUI_ERRCODE *retval,
+					   uint32 id,
+					   sint32 x,
+					   sint32 y,
+					   sint32 width,
 					   sint32 height,
 					   MBCHAR *pattern,
-					   ControlActionCallback *ActionFunc, 
+					   ControlActionCallback *ActionFunc,
 					   void *cookie)
 	:
 	aui_ImageBase( (sint32)0 ),
@@ -44,19 +41,17 @@ ControlSheet::ControlSheet(AUI_ERRCODE *retval,
 {
 	m_border = TRUE;
 
-	
 	SetDrawMask( k_AUI_REGION_DRAWFLAG_UPDATE );
 }
 
 ControlSheet::~ControlSheet()
 {
-	
-}
 
+}
 
 AUI_ERRCODE ControlSheet::DrawThis(aui_Surface *surface, sint32 x, sint32 y)
 {
-	
+
 	if ( IsHidden() ) return AUI_ERRCODE_OK;
 
 	if ( !surface ) surface = m_window->TheSurface();
@@ -83,4 +78,3 @@ AUI_ERRCODE ControlSheet::DrawThis(aui_Surface *surface, sint32 x, sint32 y)
 
 	return AUI_ERRCODE_OK;
 }
-

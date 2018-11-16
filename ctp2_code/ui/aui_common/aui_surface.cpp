@@ -10,13 +10,13 @@
 //
 // THIS FILE IS NOT GENERATED OR SUPPORTED BY ACTIVISION.
 //
-// This material has been developed at apolyton.net by the Apolyton CtP2 
+// This material has been developed at apolyton.net by the Apolyton CtP2
 // Source Code Project. Contact the authors at ctp2source@apolyton.net.
 //
 //----------------------------------------------------------------------------
 //
 // Compiler flags
-// 
+//
 //----------------------------------------------------------------------------
 //
 // Modifications from the original Activision code:
@@ -33,7 +33,6 @@
 #include "aui_rectangle.h"
 
 
-
 sint32 aui_Surface::m_surfaceRefCount = 0;
 #ifdef USE_SDL
 SDL_mutex *		aui_Surface::m_cs = NULL;
@@ -43,7 +42,6 @@ CRITICAL_SECTION	aui_Surface::m_cs;
 uint32 aui_Surface::m_surfaceClassId = aui_UniqueId();
 
 extern sint32 g_is565Format;
-
 
 aui_Surface::aui_Surface(
 	AUI_ERRCODE *retval,
@@ -60,43 +58,36 @@ aui_Surface::aui_Surface(
 	Assert( AUI_SUCCESS(*retval) );
 	if ( !AUI_SUCCESS(*retval) ) return;
 
-	
 	m_pitch = pitch ?
 		pitch :
 		m_bytewidth + ( uint32(-m_bytewidth) & 0x3 );
 
 	m_size = m_pitch * m_height;
 
-	
 	if ( !(m_saveBuffer = buffer) )
 	{
 #ifndef __AUI_USE_SDL__
 		HDC hdc = ::GetDC( g_ui->TheHWND() );
 
-		
 		m_hdc = CreateCompatibleDC( hdc );
 		Assert( m_hdc != NULL );
 		if ( !m_hdc ) return;
 
-		
 		m_hbitmap = CreateCompatibleBitmap( hdc, m_width, m_height );
 		Assert( m_hbitmap != NULL );
 		if ( !m_hbitmap ) return;
 
 		::ReleaseDC( g_ui->TheHWND(), hdc );
 
-		
 		m_holdbitmap = (HBITMAP)SelectObject( m_hdc, m_hbitmap );
 
-		
 		RECT rect = { 0, 0, m_width, m_height };
 		FillRect( m_hdc, &rect, (HBRUSH)GetStockObject( BLACK_BRUSH ) );
 #endif
-		
+
 		m_saveBuffer = (uint8 *)(new uint32[ m_size >> 2 ]);
 		Assert( m_saveBuffer != NULL );
 
-		
 		if ((m_allocated = (BOOL) (NULL != m_saveBuffer)))
 			memset( m_saveBuffer, 0x00, m_size );
 		else
@@ -108,11 +99,10 @@ aui_Surface::aui_Surface(
 }
 
 
-
 AUI_ERRCODE aui_Surface::InitCommon( sint32 width, sint32 height, sint32 bpp, BOOL isPrimary )
 {
 	m_pixelFormat = AUI_SURFACE_PIXELFORMAT_UNKNOWN,
-	m_chromaKey = 0x00000000, 
+	m_chromaKey = 0x00000000,
 	m_isPrimary = isPrimary,
 	m_buffer = NULL,
 #ifdef __AUI_USE_DIRECTX__
@@ -145,20 +135,18 @@ AUI_ERRCODE aui_Surface::InitCommon( sint32 width, sint32 height, sint32 bpp, BO
 	}
 
 
-	
 
-	if ( bpp == 16 ) 
+
+	if ( bpp == 16 )
 		if (g_is565Format) {
                     m_pixelFormat = AUI_SURFACE_PIXELFORMAT_565;
-                    } 
+                    }
                 else {
                     m_pixelFormat = AUI_SURFACE_PIXELFORMAT_555;
                     }
 
-
 	return AUI_ERRCODE_OK;
 }
-
 
 
 aui_Surface::~aui_Surface()
@@ -191,14 +179,12 @@ aui_Surface::~aui_Surface()
 }
 
 
-
 uint32 aui_Surface::SetChromaKey( uint32 color )
 {
 	uint32 prevColor = m_chromaKey;
 	m_chromaKey = color;
 	return prevColor;
 }
-
 
 
 uint32 aui_Surface::SetChromaKey( uint8 red, uint8 green, uint8 blue )
@@ -216,9 +202,9 @@ uint32 aui_Surface::SetChromaKey( uint8 red, uint8 green, uint8 blue )
 			?
 			( blue >> 5 ) |
 			( ( green >> 5 ) << 3 ) |
-			( ( red >> 6 ) << 6 )		
+			( ( red >> 6 ) << 6 )
 			:
-			(uint32)red );				
+			(uint32)red );
 
 	case 2:
 		switch ( m_pixelFormat )
@@ -252,11 +238,10 @@ uint32 aui_Surface::SetChromaKey( uint8 red, uint8 green, uint8 blue )
             printf("%s L%d: AUI_SURFACE_PIXELFORMAT_888 m_bpp %d\n",__FILE__, __LINE__, m_bpp);
 		Assert( m_pixelFormat == AUI_SURFACE_PIXELFORMAT_888 );
 
-		
 		return SetChromaKey( RGB(red,green,blue) );
 
 	default:
-		
+
 		Assert( FALSE );
 		break;
 	}
@@ -272,7 +257,6 @@ AUI_ERRCODE aui_Surface::Lock( RECT *rect, LPVOID *buffer, DWORD flags )
 {
 	*buffer = NULL;
 
-	
 	while ( ManipulateLockList( rect, buffer, AUI_SURFACE_LOCKOP_ADD ) != AUI_ERRCODE_OK )
 		;
 
@@ -288,13 +272,11 @@ AUI_ERRCODE aui_Surface::Unlock( LPVOID buffer )
 	return ManipulateLockList( NULL, &buffer, AUI_SURFACE_LOCKOP_REMOVE );
 }
 
-
 #ifdef __AUI_USE_DIRECTX__
 AUI_ERRCODE aui_Surface::GetDC( HDC *hdc )
 {
 	AUI_ERRCODE errcode = AUI_ERRCODE_OK;
 
-	
 	Assert( hdc != NULL );
 	if ( !hdc ) return AUI_ERRCODE_INVALIDPARAM;
 
@@ -310,8 +292,7 @@ AUI_ERRCODE aui_Surface::GetDC( HDC *hdc )
 		{
 			m_dcIsGot = TRUE;
 
-			
-			
+
 			BITMAPINFOHEADER bih;
 			memset( &bih, 0, sizeof( bih ) );
 			bih.biSize = sizeof( bih );
@@ -327,7 +308,7 @@ AUI_ERRCODE aui_Surface::GetDC( HDC *hdc )
 				0,
 				m_height,
 				m_saveBuffer,
-				(BITMAPINFO *)&bih, 
+				(BITMAPINFO *)&bih,
 				DIB_RGB_COLORS );
 		}
 		else
@@ -336,7 +317,6 @@ AUI_ERRCODE aui_Surface::GetDC( HDC *hdc )
 
 	return errcode;
 }
-
 
 AUI_ERRCODE aui_Surface::ReleaseDC( HDC hdc )
 {
@@ -354,8 +334,7 @@ AUI_ERRCODE aui_Surface::ReleaseDC( HDC hdc )
 		{
 			m_dcIsGot = FALSE;
 
-			
-			
+
 			BITMAPINFOHEADER bih;
 			memset( &bih, 0, sizeof( bih ) );
 			bih.biSize = sizeof( bih );
@@ -371,7 +350,7 @@ AUI_ERRCODE aui_Surface::ReleaseDC( HDC hdc )
 				0,
 				m_height,
 				m_saveBuffer,
-				(BITMAPINFO *)&bih, 
+				(BITMAPINFO *)&bih,
 				DIB_RGB_COLORS );
 		}
 		else
@@ -406,7 +385,6 @@ AUI_ERRCODE aui_Surface::BlankRGB(const uint8 &red, const uint8 &green, const ui
 	return AUI_ERRCODE_BLTFAILED;
 }
 
-
 inline BOOL aui_Surface::IsLocked( RECT *rect )
 {
 	aui_SurfaceSubset *subset = m_locklist;
@@ -431,7 +409,6 @@ inline BOOL aui_Surface::IsLocked( LPVOID buffer )
 }
 
 
-
 AUI_ERRCODE aui_Surface::ManipulateLockList( RECT *rect, LPVOID *buffer, AUI_SURFACE_LOCKOP op )
 {
 	AUI_ERRCODE errcode = AUI_ERRCODE_OK;
@@ -451,21 +428,19 @@ AUI_ERRCODE aui_Surface::ManipulateLockList( RECT *rect, LPVOID *buffer, AUI_SUR
 		}
 		else
 		{
-			
+
 			RECT entireSurfaceRect = { 0, 0, m_width, m_height };
 			if ( !rect ) rect = &entireSurfaceRect;
 
-			
 			if ( IsLocked( rect ) )
 			{
 				errcode = AUI_ERRCODE_SURFACEBUSY;
 
-				
 				Assert( errcode != AUI_ERRCODE_SURFACEBUSY );
 			}
 			else
 			{
-				
+
 				if ( !*buffer )
 					*buffer = m_saveBuffer +
 						rect->top * m_pitch +
@@ -475,13 +450,11 @@ AUI_ERRCODE aui_Surface::ManipulateLockList( RECT *rect, LPVOID *buffer, AUI_SUR
 				for ( sint32 i = k_SURFACE_MAXLOCK; i; i--, subset++ )
 				if ( !subset->buffer )
 				{
-					
+
 					m_locksRemain--;
 
-					
 					m_buffer = m_saveBuffer;
 
-					
 					subset->buffer = *buffer;
 					CopyRect( &subset->rect, rect );
 
@@ -499,10 +472,9 @@ AUI_ERRCODE aui_Surface::ManipulateLockList( RECT *rect, LPVOID *buffer, AUI_SUR
 			for ( sint32 i = k_SURFACE_MAXLOCK; i; i--, subset++ )
 			if ( subset->buffer == *buffer )
 			{
-				
+
 				if ( ++m_locksRemain == k_SURFACE_MAXLOCK ) m_buffer = NULL;
 
-				
 				memset( subset, 0, sizeof( aui_SurfaceSubset ) );
 
 				break;

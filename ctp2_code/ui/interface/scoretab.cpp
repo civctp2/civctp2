@@ -1,5 +1,3 @@
-
-
 #include "c3.h"
 #include "scoretab.h"
 
@@ -55,7 +53,6 @@ ScoreTab::ScoreTab(void) :
 	m_scoreList->AddItem(m_scoreElem[SCORE_CAT_ADVANCES]);
 }
 
-
 void ScoreTab::Update(void)
 {
 	MBCHAR commaNumber[80];
@@ -71,7 +68,6 @@ void ScoreTab::Update(void)
 
 	Score *score = pl->m_score;
 
-	
 	AUI_ERRCODE errcode;
 	static aui_StringTable difficulty1strings( &errcode, "strings.difficulty1strings" );
 	m_difficulty->SetText(difficulty1strings.GetString( g_theGameSettings->GetDifficulty() ));

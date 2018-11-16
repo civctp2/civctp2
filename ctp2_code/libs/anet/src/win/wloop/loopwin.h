@@ -1,4 +1,4 @@
-/* 
+/*
 Copyright (C) 1995-2001 Activision, Inc.
 
 This library is free software; you can redistribute it and/or
@@ -26,7 +26,7 @@ Foundation, Inc., 59 Temple Place, Suite 330, Boston, MA  02111-1307  USA
 #ifndef LOOPWIN_H
 #define LOOPWIN_H 1
 
-#include <windows.h> 
+#include <windows.h>
 #include <windowsx.h>
 #include "commapi.h"			// For caller-friendly error codes
 
@@ -55,18 +55,16 @@ typedef struct {
 typedef struct _LOOPINSTANCE       // Loopback Instance Struct  (Gee, in C++, this would be an object)
 {
   LOOPADDR		addr;			  // My "address"
-				
+
   int           nexthandle;       // next available peer handle (next unused peers[] element)
   LOOPPEER		peers[MAX_PEERS]; // Peer info (indexed with peer handle)
-} 
+}
 LOOPINSTANCE;
-
 
 // substitution literals for DOS types
 #define loop_hdl_t		LOOPHANDLE
 #define loop_result_t	int
 #define loop_t			LOOPINSTANCE
-
 
 // LOOPWIN Function Result Codes.  same as interface our caller inherits from...
 #define loop_RES_OK	comm_STATUS_OK
@@ -77,7 +75,6 @@ LOOPINSTANCE;
 // Other result codes
 
 #define	LOOP_ERROR		-1
-
 
 // LOOPWIN Functions
 
@@ -93,7 +90,6 @@ int				LOOPWIN_PutPacket(LOOPINSTANCE *loop, void *bufptr, ULONG len, LOOPHANDLE
 
 int				LOOPWIN_GetPacket(LOOPINSTANCE *loop, void *bufptr, ULONG *len, LOOPHANDLE *hsrc, LOOPADDR *srcaddr);
 
-
 #define loop_create(stat, sessionId)             LOOPWIN_Create(stat, sessionId)
 
 #define loop_destroy(loop)                       LOOPWIN_Destroy(loop)
@@ -105,6 +101,5 @@ int				LOOPWIN_GetPacket(LOOPINSTANCE *loop, void *bufptr, ULONG *len, LOOPHANDL
 #define loop_put(loop, buf, len, dest)           LOOPWIN_PutPacket(loop, buf, len, dest)
 
 #define loop_get(loop, buf, len, srcHdl, srcAdr) LOOPWIN_GetPacket(loop, buf, len, srcHdl, srcAdr)
-
 
 #endif

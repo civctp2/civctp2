@@ -1,185 +1,3 @@
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
 
 
 
@@ -217,7 +35,7 @@
 
 #include <ctype.h>
 
-#include "math.h" 
+#include "math.h"
 #include "common.h"
 #include "linked_list.h"
 
@@ -244,16 +62,16 @@
 
 void iparser::Report_Error
 (
-  char *raw_message,                      
-  int report_type                     
+  char *raw_message,
+  int report_type
 )
 
 {
-    char message[1024]; 
+    char message[1024];
     char buf[1024];
 	va_list list;
 
-    sprintf (message, "%s", raw_message); 
+    sprintf (message, "%s", raw_message);
 
 	va_start(list, message);
 	vsprintf(buf, message, list);
@@ -262,19 +80,18 @@ void iparser::Report_Error
 
 	switch(report_type) {
 		case REPORT_WARNING:
-			
+
 			AILOG((wstr, "IParse WARNING: %s\n", message));
 			break;
 
 		case REPORT_ERROR:
-			
+
 			AILOG((wstr, "IParse ERROR: %s\n", message));
 			break;
 
 		case REPORT_FATAL:
-			
+
 			AILOG((wstr, "IParse FATAL ERROR: %s\n", message));
-           
 
 			Assert(false);
 			break;
@@ -301,7 +118,7 @@ void iparser::Report_Error
 int IParser_Find_Char_Type
 (
 
-  char ch                      
+  char ch
 )
 {
 	if (ch == EOF)
@@ -309,7 +126,7 @@ int IParser_Find_Char_Type
 
 	if (isalnum(ch) || (ch == '.') || (ch == '_'))
 		return ALNUM;
-    
+
 	if (isspace(ch) || !isgraph(ch) || (ch == 13))
 		return WHITE_SPACE;
 
@@ -334,7 +151,7 @@ int IParser_Is_OK_Char_Not_Float(char ch)
 {
   if (isalnum(ch))
     return(ALNUM);
-  if (ch is ';') return(SYMBOL);        
+  if (ch is ';') return(SYMBOL);
   if (ch is '"') return(SYMBOL);
   if (ch is '{') return(SYMBOL);
   if (ch is '}') return(SYMBOL);
@@ -364,7 +181,6 @@ int IParser_Is_OK_Char_Not_Float(char ch)
 ///////////////////////////////////////////////////////////////////////////////
 
 
-
 ///////////////////////////////////////////////////////////////////////////////
 //
 // iparser::Get_New_Struct
@@ -379,28 +195,27 @@ struct_list_element *iparser::Get_New_Struct
 
 {
   // Local Variables //////////////////////////////////////////////////////////
-  struct_list_element *new_struct;      // Ptr for mem allocation            
-  char *new_string;                     // Temp ptr for mem allocation       
+  struct_list_element *new_struct;      // Ptr for mem allocation
+  char *new_string;                     // Temp ptr for mem allocation
   /////////////////////////////////////////////////////////////////////////////
 
   new_struct = (struct_list_element *) MALLOC (sizeof(struct_list_element));
 
   new_string = (char *) MALLOC (strlen(the_struct_name)+1);
 
-  strcpy(new_string, the_struct_name);  // Copy over the name of struct      
+  strcpy(new_string, the_struct_name);  // Copy over the name of struct
 
-  new_struct->struct_name = new_string; // Assign it in the right place      
-  new_struct->struct_length = 0;        // Blank it                          
-  new_struct->the_definition = NULL;    // Blank it                          
-  new_struct->next_struct = NULL;       // Blank it                          
+  new_struct->struct_name = new_string; // Assign it in the right place
+  new_struct->struct_length = 0;        // Blank it
+  new_struct->the_definition = NULL;    // Blank it
+  new_struct->next_struct = NULL;       // Blank it
 
-  return(new_struct);                   // Send it back to user              
+  return(new_struct);                   // Send it back to user
 }
 //
 // iparser::Get_New_Struct
 //
 ///////////////////////////////////////////////////////////////////////////////
-
 
 
 ///////////////////////////////////////////////////////////////////////////////
@@ -418,38 +233,36 @@ variable_struct *iparser::Get_New_Variable
 
 {
   // Local Variables //////////////////////////////////////////////////////////
-  variable_struct *new_variable;           // Ptr for mem allocation            
-  char *new_string;                        // Temp ptr for mem allocation       
+  variable_struct *new_variable;           // Ptr for mem allocation
+  char *new_string;                        // Temp ptr for mem allocation
   /////////////////////////////////////////////////////////////////////////////
 
   new_variable = (variable_struct *)MALLOC(sizeof(variable_struct));
 
 
-
   new_string = (char *)MALLOC(strlen(the_variable_name)+1);
 
-  strcpy(new_string, the_variable_name);   // Copy over the name of variable       
+  strcpy(new_string, the_variable_name);   // Copy over the name of variable
 
-  new_variable->variable_name = new_string;// Assign it in the right place      
+  new_variable->variable_name = new_string;// Assign it in the right place
 
   new_variable->variable_type = the_variable_type;
 
   new_variable->int_value = 0;
   new_variable->double_value = 0.0;
 
-  new_variable->the_struct_el = NULL;      // Blank it                          
-  new_variable->string_value = NULL;       // Blank it                          
-  new_variable->next_array_variable = NULL;// Blank it                          
-  new_variable->next_variable = NULL;      // Blank it   
+  new_variable->the_struct_el = NULL;      // Blank it
+  new_variable->string_value = NULL;       // Blank it
+  new_variable->next_array_variable = NULL;// Blank it
+  new_variable->next_variable = NULL;      // Blank it
   new_variable->struct_element_count = 0;  // Blank it
 
-  return(new_variable);                    // Send it back to user              
+  return(new_variable);                    // Send it back to user
 }
 //
 // iparser::Get_New_Variable
 //
 ///////////////////////////////////////////////////////////////////////////////
-
 
 
 ///////////////////////////////////////////////////////////////////////////////
@@ -467,29 +280,28 @@ field_def *iparser::Get_New_Field
 
 {
   // Local Variables //////////////////////////////////////////////////////////
-  field_def *new_field;                 // Ptr for mem allocation            
-  char *new_string;                     // Temp ptr for mem allocation       
+  field_def *new_field;                 // Ptr for mem allocation
+  char *new_string;                     // Temp ptr for mem allocation
   /////////////////////////////////////////////////////////////////////////////
 
   new_field = (field_def *)MALLOC(sizeof(field_def));
 
   new_string = (char *)MALLOC(strlen(the_field_name)+1);
 
-  strcpy(new_string, the_field_name);   // Copy over the name of field       
+  strcpy(new_string, the_field_name);   // Copy over the name of field
 
-  new_field->field_name = new_string;   // Assign it in the right place      
+  new_field->field_name = new_string;   // Assign it in the right place
 
   new_field->field_type = the_field_type;
 
-  new_field->next_field = NULL;         // Blank it                          
+  new_field->next_field = NULL;         // Blank it
 
-  return(new_field);                    // Send it back to user              
+  return(new_field);                    // Send it back to user
 }
 //
 // iparser::Get_New_Field
 //
 ///////////////////////////////////////////////////////////////////////////////
-
 
 
 ///////////////////////////////////////////////////////////////////////////////
@@ -508,17 +320,16 @@ void iparser::Insert_Variable
   variable_struct *temp;
   /////////////////////////////////////////////////////////////////////////////
 
-  temp = variables;         // Insert variable to head of list      
+  temp = variables;         // Insert variable to head of list
   the_variable->next_variable = temp;
   variables = the_variable;
 
-  number_of_variables += 1; // Increment variable count             
+  number_of_variables += 1; // Increment variable count
 }
 //
 // iparser::Insert_Variable
 //
 ///////////////////////////////////////////////////////////////////////////////
-
 
 
 ///////////////////////////////////////////////////////////////////////////////
@@ -541,7 +352,7 @@ void iparser::Insert_Struct
   the_struct->next_struct = temp;
   the_structs = the_struct;
 
-  number_of_structures += 1;// Increment struct count            
+  number_of_structures += 1;// Increment struct count
 }
 //
 // iparser::Insert_Struct
@@ -577,20 +388,20 @@ int iparser::Read_Next_String
     sint32 finite_loop=0; //use to catch inifinite loops
 #endif
 
-  while (IParser_Find_Char_Type(ch) is BOGUS) 
+  while (IParser_Find_Char_Type(ch) is BOGUS)
   {
 Assert(++finite_loop < 100000); // make sure we catch infinite loogs
 
-    ch = parse_buffer[*parse_pos];      // Read a single character from file 
+    ch = parse_buffer[*parse_pos];      // Read a single character from file
     (*parse_pos)++;
 
     if ((*parse_pos) > buffer_length)
-      return(EOF);                      // Hit end of file prematurely      
+      return(EOF);                      // Hit end of file prematurely
   } // while (IParser_Find_Char_Type(ch) is BOGUS...
 
   // We special case "Compiler Directives"
   // C.D.'s are an alpha-numeric string, but they start with the #
-  if (ch is '#') 
+  if (ch is '#')
   {
     (*declaration_string) = ch;         // Allow #defines
     declaration_string++;
@@ -598,7 +409,7 @@ Assert(++finite_loop < 100000); // make sure we catch infinite loogs
     (*parse_pos)++;
 
     if ((*parse_pos) > buffer_length)
-      return(EOF);                      // Hit end of file prematurely 
+      return(EOF);                      // Hit end of file prematurely
   }
 
   // We also special case curly-bracketed code
@@ -606,38 +417,37 @@ Assert(++finite_loop < 100000); // make sure we catch infinite loogs
   if (ch is '{') {
     (*declaration_string) = ch;         // Allow Bracketed code segments
     declaration_string++;
-    ch = parse_buffer[*parse_pos];      // Read a single character from file 
+    ch = parse_buffer[*parse_pos];      // Read a single character from file
     (*parse_pos)++;
 
     if ((*parse_pos) > buffer_length)
-      return(EOF);                      // Hit end of file prematurely       
+      return(EOF);                      // Hit end of file prematurely
   }
 
   else
-    // SECOND, read until we hit a junk character                          
-    while (IParser_Find_Char_Type(ch) is ALNUM) 
+    // SECOND, read until we hit a junk character
+    while (IParser_Find_Char_Type(ch) is ALNUM)
     {
       (*declaration_string) = ch;
       declaration_string++;
       ch = parse_buffer[*parse_pos];    // Read asingle character from file
       (*parse_pos)++;
-  
+
       if ((*parse_pos) > buffer_length)
-        return(EOF);                    // Hit end of file prematurely     
+        return(EOF);                    // Hit end of file prematurely
     }
 
-  // Set back file ptr by one to let "bad" character be part of decl       
+  // Set back file ptr by one to let "bad" character be part of decl
   (*parse_pos)--;
 
-  (*declaration_string) = 0;            // End string nicely                 
+  (*declaration_string) = 0;            // End string nicely
 
-  return(EXCELLENT);                    // Say if we reached end of string   
+  return(EXCELLENT);                    // Say if we reached end of string
 }
 //
 // iparser::Read_Next_String
 //
 ///////////////////////////////////////////////////////////////////////////////
-
 
 
 ///////////////////////////////////////////////////////////////////////////////
@@ -655,11 +465,11 @@ struct_list_element *iparser::Which_Struct
 
 {
   // Local Variables //////////////////////////////////////////////////////////
-  struct_list_element *current_structure; // Ptr to current struct in list  
-  int done = BOGUS;                     // Loop exit flag                   
+  struct_list_element *current_structure; // Ptr to current struct in list
+  int done = BOGUS;                     // Loop exit flag
   /////////////////////////////////////////////////////////////////////////////
 
-  current_structure = the_structs; // Start at head of list  
+  current_structure = the_structs; // Start at head of list
 #ifdef _DEBUG
     sint32 finite_loop=0; //use to catch inifinite loops
 #endif
@@ -667,25 +477,24 @@ struct_list_element *iparser::Which_Struct
   while (!done) {
 Assert(++finite_loop < 100000); // make sure we catch infinite loogs
 
-    if (current_structure is NULL)      // We've reached end of list         
-      return(NULL);                     // Didn't find a matching struct    
+    if (current_structure is NULL)      // We've reached end of list
+      return(NULL);                     // Didn't find a matching struct
 
     else
       done = (!strcmp(declaration_string,
                       current_structure->struct_name)
-             );                         // Do we match current struct name  
+             );                         // Do we match current struct name
 
     if (!done)
       current_structure = current_structure->next_struct;
   }
 
-  return(current_structure);            // We matched to a structure name    
+  return(current_structure);            // We matched to a structure name
 }
 //
 // iparser::Which_Struct
 //
 ///////////////////////////////////////////////////////////////////////////////
-
 
 
 ///////////////////////////////////////////////////////////////////////////////
@@ -703,30 +512,29 @@ variable_struct *iparser::Which_Variable
 
 {
   // Local Variables //////////////////////////////////////////////////////////
-  variable_struct *current_variable;    // Ptr to current struct in list     
-  int done = BOGUS;                     // Loop exit flag                    
+  variable_struct *current_variable;    // Ptr to current struct in list
+  int done = BOGUS;                     // Loop exit flag
   /////////////////////////////////////////////////////////////////////////////
 
-  current_variable = variables; // Start at head of list             
+  current_variable = variables; // Start at head of list
 
-  // Go til we match or until we've reached end of list                      
+  // Go til we match or until we've reached end of list
   while ((!done)&&(current_variable isnt NULL)) {
 
     done = (!strcmp(declaration_string,
                     current_variable->variable_name)
-           );                           // Do we match current variable name     
+           );                           // Do we match current variable name
 
     if (!done)
       current_variable = current_variable->next_variable;
   }
 
-  return(current_variable);                // We matched to a variable name        
+  return(current_variable);                // We matched to a variable name
 }
 //
 // iparser::Which_Variable
 //
 ///////////////////////////////////////////////////////////////////////////////
-
 
 
 ///////////////////////////////////////////////////////////////////////////////
@@ -744,45 +552,45 @@ int iparser::Variable_Match
 
 {
   if (!strcmp(declaration_string,"int"))
-    return(INT_VARIABLE);               // Declaring an integer or int array 
+    return(INT_VARIABLE);               // Declaring an integer or int array
 
   if (!strcmp(declaration_string,"float"))
-    return(FLOAT_VARIABLE);             // Declaring a float or float array  
+    return(FLOAT_VARIABLE);             // Declaring a float or float array
 
   if (!strcmp(declaration_string,"double"))
     return(DOUBLE_VARIABLE);            // Declaring a double or double array
 
   if (!strcmp(declaration_string,"char"))
-    return(CHAR_VARIABLE);              // Declaring a char or char array    
+    return(CHAR_VARIABLE);              // Declaring a char or char array
 
   if (!strcmp(declaration_string,"struct"))
-    return(STRUCT_DEFINITION);          // Declaring a structure             
+    return(STRUCT_DEFINITION);          // Declaring a structure
 
   if (!strcmp(declaration_string,"#define"))
-    return(DEFINE_DECLARATION);         // Declaration by define             
+    return(DEFINE_DECLARATION);         // Declaration by define
 
   if (!strcmp(declaration_string,"#include"))
-    return(INCLUDE_DIRECTIVE);          // Declaration by define             
+    return(INCLUDE_DIRECTIVE);          // Declaration by define
 
   if (!strcmp(declaration_string,"if"))
-    return(CONDITIONAL_CODE);           // Conditional code follows          
+    return(CONDITIONAL_CODE);           // Conditional code follows
 
   if (!strcmp(declaration_string,"else"))
-    return(ELSE_CODE);                  // Conditional code follows          
+    return(ELSE_CODE);                  // Conditional code follows
 
   if (!strcmp(declaration_string,"for"))
-    return(PARSE_FOR_LOOP);             // For-loop follows                  
+    return(PARSE_FOR_LOOP);             // For-loop follows
 
   if (!strcmp(declaration_string,"{"))
-    return(CODE_BRACKET);               // code_bracket follows              
+    return(CODE_BRACKET);               // code_bracket follows
 
   if (Which_Struct( declaration_string))
     return(STRUCT_ARRAY_VARIABLE);      // Array of previously defined struct
 
   if (Which_Variable( declaration_string) isnt NULL)
-    return(VARIABLE_ASSIGN);            // Assignment to defined variable       
+    return(VARIABLE_ASSIGN);            // Assignment to defined variable
 
-  return(BAD_DECLARATION);              // Declaration of unknown type       
+  return(BAD_DECLARATION);              // Declaration of unknown type
 }
 //
 // iparser::Variable_Match
@@ -790,12 +598,11 @@ int iparser::Variable_Match
 ///////////////////////////////////////////////////////////////////////////////
 
 
-
 ///////////////////////////////////////////////////////////////////////////////
 //
 // iparser::Search_For_Next_Declaration
 //
-// Get the next declaration string in the parse buffer 
+// Get the next declaration string in the parse buffer
 //
 // Returns: EARLY_END_OF_FILE, or next Toekn Type
 //
@@ -809,10 +616,10 @@ int iparser::Search_For_Next_Declaration
 
 {
   // Local Variables //////////////////////////////////////////////////////////
-  int declaration_type;                 // What sort of declaration is next  
+  int declaration_type;                 // What sort of declaration is next
   /////////////////////////////////////////////////////////////////////////////
 
-  if (Read_Next_String(parse_buffer, parse_pos, buffer_length, 
+  if (Read_Next_String(parse_buffer, parse_pos, buffer_length,
                               declaration_string) is EOF)
     declaration_type = EARLY_END_OF_FILE;
   else
@@ -824,7 +631,6 @@ int iparser::Search_For_Next_Declaration
 // iparser::Search_For_Next_Declaration
 //
 ///////////////////////////////////////////////////////////////////////////////
-
 
 
 ///////////////////////////////////////////////////////////////////////////////
@@ -849,40 +655,39 @@ int iparser::Read_Until_String
 
 {
   // Local Variables //////////////////////////////////////////////////////////
-  int end_flag = BOGUS;                 // Are we comparing to end string?   
-  int done = BOGUS;                     // Run out of file or matched end    
-  signed char ch;                       // Character read in from file       
-  int length = 1;                       // Length of declaration in chars    
-  int end_pos = 1;                      // Position in end string to compare 
+  int end_flag = BOGUS;                 // Are we comparing to end string?
+  int done = BOGUS;                     // Run out of file or matched end
+  signed char ch;                       // Character read in from file
+  int length = 1;                       // Length of declaration in chars
+  int end_pos = 1;                      // Position in end string to compare
   /////////////////////////////////////////////////////////////////////////////
 
-  char *current_char;                   // Ptr to current place in buffer    
-  current_char = (*declaration_buffer); // set to start of buffer            
-
+  char *current_char;                   // Ptr to current place in buffer
+  current_char = (*declaration_buffer); // set to start of buffer
 
 #ifdef _DEBUG
-    sint32 finite_loop=0; 
+    sint32 finite_loop=0;
 #endif
 
-  while(!done) 
+  while(!done)
   {
 Assert(++finite_loop < 100000); // make sure we catch infinite loogs
-    ch = parse_buffer[*parse_pos];      // Read a single character from file 
+    ch = parse_buffer[*parse_pos];      // Read a single character from file
     (*parse_pos)++;
 
     // See if we've overrun the buffer
-    if ((*parse_pos) > buffer_length) 
+    if ((*parse_pos) > buffer_length)
     {
       ch = EOF;
       done = EXCELLENT;
     } // if ((*parse_pos) > buffer_length...
 
     // If we're still in a valid part of the buffer
-    else 
+    else
     {
-      (*declaration_buffer)[length-1] = ch;  // Add character to buffer   
+      (*declaration_buffer)[length-1] = ch;  // Add character to buffer
 
-      length++;                         // Increment count of buf size       
+      length++;                         // Increment count of buf size
 
 //CUTME We don't do this silly realloc any more...too slow.
 //CUTME      (*declaration_buffer) = (char *) REALLOC ((*declaration_buffer), length);
@@ -891,15 +696,15 @@ Assert(++finite_loop < 100000); // make sure we catch infinite loogs
       if (end_flag is EXCELLENT)
       {
         if (end_string[end_pos] isnt ch)
-          end_flag = BOGUS;             // Doesn't really match end string   
+          end_flag = BOGUS;             // Doesn't really match end string
 
-        else 
+        else
         {
           end_pos++;
 
-          if (end_string[end_pos] is 0) 
+          if (end_string[end_pos] is 0)
           {
-            done = EXCELLENT;           // We've hit the end of declaration  
+            done = EXCELLENT;           // We've hit the end of declaration
             length -= strlen(end_string)+1;
           } // if (end_string[end_pos] is 0...
 
@@ -908,11 +713,11 @@ Assert(++finite_loop < 100000); // make sure we catch infinite loogs
       } // if (end_flag is EXCELLENT...
 
       // See if we've found a potential start to the end string
-      if (ch is end_string[0]) 
+      if (ch is end_string[0])
       {
         end_flag = EXCELLENT;
 
-        if (end_string[1] is 0) 
+        if (end_string[1] is 0)
         {
           done = EXCELLENT;
           length -=2;
@@ -938,12 +743,11 @@ Assert(++finite_loop < 100000); // make sure we catch infinite loogs
 ///////////////////////////////////////////////////////////////////////////////
 
 
-
 ///////////////////////////////////////////////////////////////////////////////
 //
 // iparser::Append_Good_Char
 //
-// Stick a pre-approved character onto the end of a string.  This version of 
+// Stick a pre-approved character onto the end of a string.  This version of
 // the function removes excess white space, too.
 //
 // Modifies: Can grow (REALLOC) the string.
@@ -955,12 +759,12 @@ void iparser::Append_Good_Char
 	char the_char                         // New character
 )
 
-{                          
+{
   // Local Variables //////////////////////////////////////////////////////////
 //CUTME  char *temp;
   /////////////////////////////////////////////////////////////////////////////
 
-	if (the_char is ' ') 
+	if (the_char is ' ')
 	{
 		if ((*pos) is 0) return;
 
@@ -970,8 +774,8 @@ void iparser::Append_Good_Char
 	}
 
 	to_string[(*pos)] = the_char;
-	(*pos)++;                     
-  
+	(*pos)++;
+
 //CUTME  temp = (*to_string) = (char *) REALLOC ((*to_string), (*pos)+1);
 //CUTME  if (temp is NULL) Report_Error("YUCK. Bad. Puke.", REPORT_ERROR);
 }
@@ -979,7 +783,6 @@ void iparser::Append_Good_Char
 // iparser::Append_Good_Char
 //
 ///////////////////////////////////////////////////////////////////////////////
-
 
 
 ///////////////////////////////////////////////////////////////////////////////
@@ -1014,7 +817,6 @@ void iparser::Append_Quote_Char
 ///////////////////////////////////////////////////////////////////////////////
 
 
-
 ///////////////////////////////////////////////////////////////////////////////
 //
 // iparser::Save_Only_Alpha_Numeric
@@ -1032,10 +834,10 @@ char * iparser::Save_Only_Alpha_Numeric
 
 {
 	// Local Variables //////////////////////////////////////////////////////////
-	int i=0;							// Index to position in line         
-	int good=0;							// Index to last good character      
-	int char_type;						// What sort of character is this?   
-	char *new_string;					// String with only good stuff in it 
+	int i=0;							// Index to position in line
+	int good=0;							// Index to last good character
+	int char_type;						// What sort of character is this?
+	char *new_string;					// String with only good stuff in it
 	/////////////////////////////////////////////////////////////////////////////
 
 	// Make sure there's no zero length
@@ -1044,40 +846,37 @@ char * iparser::Save_Only_Alpha_Numeric
 	// Allocate room for string and end mark (and one for good luck!)
 	// Note that the biggest the good stuff can grow to is 3 times the
 	// original (ALL SYMBOLS).
-	new_string = (char *)MALLOC((3*source_length)+1);      
-	new_string[0] = 0;                    // Mark end of new string            
-
+	new_string = (char *)MALLOC((3*source_length)+1);
+	new_string[0] = 0;                    // Mark end of new string
 
 	#ifdef _DEBUG
-	sint32 finite_loop=0; 
+	sint32 finite_loop=0;
 	#endif
 
-	while (a_string[i] isnt 0)         // Check the whole string for good 
+	while (a_string[i] isnt 0)         // Check the whole string for good
 	{
 		Assert(++finite_loop < 100000); // make sure we catch infinite loogs
 		// Check the current character with the provided function
-		if ((char_type = (*check_char_fcn)(a_string[i])) is ALNUM) 
+		if ((char_type = (*check_char_fcn)(a_string[i])) is ALNUM)
 		{
-			// Save the confirmed good characters 
+			// Save the confirmed good characters
 			Append_Good_Char(new_string, &good, a_string[i]);
 
 		} // if ((char_type = (*check_char_fcn)(a_string[i])) is ALNUM...
 
 		// Handle non-confirmed good characters
-		else if (char_type is SYMBOL) 
+		else if (char_type is SYMBOL)
 		{
-			// Save things in quotes                    
-			if (a_string[i] is '"') 
+			// Save things in quotes
+			if (a_string[i] is '"')
 			{
-				
+
 				Append_Quote_Char(new_string, &good, a_string[i]);
 
-				
 				i++;
 
-				
-				
-				while ((a_string[i] isnt 0) && (a_string[i] isnt '"')) 
+
+				while ((a_string[i] isnt 0) && (a_string[i] isnt '"'))
 				{
 					Assert(++finite_loop < 100000); // make sure we catch infinite loogs
 					Append_Quote_Char(new_string, &good, a_string[i]);
@@ -1085,44 +884,43 @@ char * iparser::Save_Only_Alpha_Numeric
 
 				} // while ((a_string[i] isnt 0) && (a_string[i] isnt '"')...
 
-				
-				if (a_string[i] is '"')  
+				if (a_string[i] is '"')
 					Append_Quote_Char(new_string, &good, a_string[i]);
 
-			}  // This was a quote symbol 
-			else 
+			}  // This was a quote symbol
+			else
 			// This was some other Symbol character!
 			{
 
-				// Insert the symbol character with a space before and after.        
-				// Add space before is needed                                        
+				// Insert the symbol character with a space before and after.
+				// Add space before is needed
 				Append_Good_Char(new_string, &good, ' ');
 
-				// Add symbol                                                        
+				// Add symbol
 				Append_Good_Char(new_string, &good, a_string[i]);
 
-				// Add space after                                                   
+				// Add space after
 				Append_Good_Char(new_string, &good, ' ');
 
-			}  // This is a non-quote symbol   
+			}  // This is a non-quote symbol
 
-		} // This was a symbol of some sort 
+		} // This was a symbol of some sort
 
-		else // Treat any unknown character as a blank space 
+		else // Treat any unknown character as a blank space
 			Append_Good_Char(new_string, &good, ' ');
 
 		// Increment the source counter
 		i++;
 
-	} // While not at end of the string 
+	} // While not at end of the string
 
 	// Resize the string to be big enough for an end-string marker
 //CUTME	new_string = (char *) REALLOC (new_string, good+1);
-	new_string[good] = 0;                 // End line properly.               
+	new_string[good] = 0;                 // End line properly.
 
 //CUTME	temp = (*a_string);
-//CUTME	(*a_string) = new_string;             // Save new string.                 
-//CUTME	FREE(temp);                           // Release extra memory.             
+//CUTME	(*a_string) = new_string;             // Save new string.
+//CUTME	FREE(temp);                           // Release extra memory.
 
 	// send back the good stuff
 	return new_string;
@@ -1131,7 +929,6 @@ char * iparser::Save_Only_Alpha_Numeric
 // iparser::Save_Only_Alpha_Numeric
 //
 ///////////////////////////////////////////////////////////////////////////////
-
 
 
 ///////////////////////////////////////////////////////////////////////////////
@@ -1150,47 +947,46 @@ int iparser::Parse_Int
   char string_symbols[MAX_SYMBOLS][IPARSE_MAX_STRING_LENGTH], // String for symbols
   int *symbol_types                     // Pre-determined types of symbols
 )
-           
+
 {
   // Local Variables //////////////////////////////////////////////////////////
-  variable_struct *new_int_variable;    // Ptr to mem for variable              
-  int error = IPARSE_NO_ERR;                   // Was there a bad declaration?      
-  int is_integer;                       // Is the expression an int?       
+  variable_struct *new_int_variable;    // Ptr to mem for variable
+  int error = IPARSE_NO_ERR;                   // Was there a bad declaration?
+  int is_integer;                       // Is the expression an int?
   /////////////////////////////////////////////////////////////////////////////
 
-  // FIRST, see if this is a simple assignment of an expression to an int  
-  if (!strcmp(string_symbols[1], "=")) 
+  // FIRST, see if this is a simple assignment of an expression to an int
+  if (!strcmp(string_symbols[1], "="))
   {
     // Allocate a new variable
     new_int_variable = Get_New_Variable(INT_VARIABLE, string_symbols[0]);
 
     // Compute its value with the expression evaluator
-    new_int_variable->double_value = 
+    new_int_variable->double_value =
       expression(this,2,num_symbols-1,int_symbols,
                  double_symbols,string_symbols,
-                 symbol_types, &is_integer, &(new_int_variable->int_value), 
+                 symbol_types, &is_integer, &(new_int_variable->int_value),
                  &error);
   }
 
-  // SECOND, check to see if this is a decalaration w/o assignment          
-  else if (num_symbols is 1) 
+  // SECOND, check to see if this is a decalaration w/o assignment
+  else if (num_symbols is 1)
   {
     // Just allocate a new int variable.  Don't give an special
     new_int_variable = Get_New_Variable(INT_VARIABLE, string_symbols[0]);
   }
 
-  else return(HEINOUS);                 // Not a valid integer variable declr   
+  else return(HEINOUS);                 // Not a valid integer variable declr
 
-  // Put the variable in the list 
-  Insert_Variable(new_int_variable); 
+  // Put the variable in the list
+  Insert_Variable(new_int_variable);
 
-  return(error);                        // Say it's OK                       
+  return(error);                        // Say it's OK
 }
 //
 // iparser::Parse_Int
 //
 ///////////////////////////////////////////////////////////////////////////////
-
 
 
 ///////////////////////////////////////////////////////////////////////////////
@@ -1212,64 +1008,63 @@ int iparser::Parse_Char
 
 {
   // Local Variables //////////////////////////////////////////////////////////
-  variable_struct *new_char_variable;   // Ptr to mem for variable             
-  int error = IPARSE_NO_ERR;                 // Was there a bad declaration?      
+  variable_struct *new_char_variable;   // Ptr to mem for variable
+  int error = IPARSE_NO_ERR;                 // Was there a bad declaration?
   /////////////////////////////////////////////////////////////////////////////
 
-  // FIRST, see if this is a simple assignment of a single character         
-  if (!strcmp(string_symbols[1], "=")) 
+  // FIRST, see if this is a simple assignment of a single character
+  if (!strcmp(string_symbols[1], "="))
   {
 
     new_char_variable = Get_New_Variable(CHAR_VARIABLE, string_symbols[0]);
 
-    // Assign first character of 4th symbol to int value. No error checking  
+    // Assign first character of 4th symbol to int value. No error checking
     new_char_variable->int_value = (int) string_symbols[3][0];
 
   }
 
-  // SECOND, check to see if this is a decalaration w/o assignment           
+  // SECOND, check to see if this is a decalaration w/o assignment
   else if (num_symbols is 1) {
     new_char_variable = Get_New_Variable(CHAR_VARIABLE, string_symbols[0]);
   }
 
-  // THIRD, check to see if a string is being declared, w/o assignment       
-  else if ((!strcmp(string_symbols[1], "["))&&(num_symbols is 4)) 
+  // THIRD, check to see if a string is being declared, w/o assignment
+  else if ((!strcmp(string_symbols[1], "["))&&(num_symbols is 4))
   {
     new_char_variable = Get_New_Variable(STRING_VARIABLE, string_symbols[0]);
-          
-    // Allocate room for string          
+
+    // Allocate room for string
     new_char_variable->string_value  = (char *)MALLOC(int_symbols[2]);
     new_char_variable->int_value  = int_symbols[2];
   }
 
-  // FOURTH, check to see if a string is being declared, with assignment     
+  // FOURTH, check to see if a string is being declared, with assignment
   else if ((!strcmp(string_symbols[1], "["))&&(num_symbols is 6)) {
     new_char_variable = Get_New_Variable(STRING_VARIABLE, string_symbols[0]);
-          
-    // Allocate room for string          
+
+    // Allocate room for string
     new_char_variable->string_value  = (char *)MALLOC(int_symbols[2]);
     new_char_variable->int_value  = int_symbols[2];
 
-    strncpy(new_char_variable->string_value, &(string_symbols[5][1]), 
+    strncpy(new_char_variable->string_value, &(string_symbols[5][1]),
             strlen(string_symbols[5])-2);
 
     // Put a string-end marker on the end
     new_char_variable->string_value[strlen(string_symbols[5])-2] = 0;
   }
 
-  else return(HEINOUS);                 // Not a valid integer variable declr   
+  else return(HEINOUS);                 // Not a valid integer variable declr
 
-  // Put the variable in the list 
-  Insert_Variable(new_char_variable);    
+  // Put the variable in the list
+  Insert_Variable(new_char_variable);
 
-  return(error);                        // Say it's OK  
-  
+  return(error);                        // Say it's OK
+
 }
 //
 // iparser::Parse_Char
 //
 ///////////////////////////////////////////////////////////////////////////////
-
 
 
 ///////////////////////////////////////////////////////////////////////////////
@@ -1293,42 +1088,41 @@ int iparser::Parse_Double
 
 {
   // Local Variables //////////////////////////////////////////////////////////
-  variable_struct *new_double_variable; // Ptr to mem for variable              
-  int error = IPARSE_NO_ERR;                 // Was there a bad declaration?      
-  int is_integer;                       // Is the expression an int?       
+  variable_struct *new_double_variable; // Ptr to mem for variable
+  int error = IPARSE_NO_ERR;                 // Was there a bad declaration?
+  int is_integer;                       // Is the expression an int?
   /////////////////////////////////////////////////////////////////////////////
 
-  // FIRST, see if this is a simple assignment of an expression to an double 
-  if (!strcmp(string_symbols[1], "=")) 
+  // FIRST, see if this is a simple assignment of an expression to an double
+  if (!strcmp(string_symbols[1], "="))
   {
 
     new_double_variable = Get_New_Variable(the_type, string_symbols[0]);
 
-    new_double_variable->double_value = 
+    new_double_variable->double_value =
       expression(this,2,num_symbols-1,int_symbols,
                  double_symbols,string_symbols,
-                 symbol_types, &is_integer, &(new_double_variable->int_value), 
+                 symbol_types, &is_integer, &(new_double_variable->int_value),
                  &error);
 
    }
 
-  // SECOND, check to see if this is a decalaration w/o assignment           
+  // SECOND, check to see if this is a decalaration w/o assignment
   else if (num_symbols is 1) {
     new_double_variable = Get_New_Variable(the_type, string_symbols[0]);
     }
 
-  else return(HEINOUS);                 // Not a valid integer variable declr   
+  else return(HEINOUS);                 // Not a valid integer variable declr
 
-  // Put the variable in the list 
-  Insert_Variable(new_double_variable);  
+  // Put the variable in the list
+  Insert_Variable(new_double_variable);
 
-  return(error);                        // Say it's OK                       
+  return(error);                        // Say it's OK
 }
 //
 // iparser::Parse_Double
 //
 ///////////////////////////////////////////////////////////////////////////////
-
 
 
 ///////////////////////////////////////////////////////////////////////////////
@@ -1353,9 +1147,9 @@ int iparser::Assign_To_Variable
 
 {
   // Local Variables //////////////////////////////////////////////////////////
-  variable_struct *assign_variable;     // Ptr to mem for variable              
-  int error = IPARSE_NO_ERR;                 // Was there a bad declaration?      
-  int is_integer;                       // Is expr really an int?      
+  variable_struct *assign_variable;     // Ptr to mem for variable
+  int error = IPARSE_NO_ERR;                 // Was there a bad declaration?
+  int is_integer;                       // Is expr really an int?
   /////////////////////////////////////////////////////////////////////////////
 
   // What variable are we talking about?
@@ -1366,34 +1160,34 @@ int iparser::Assign_To_Variable
   switch (assign_variable->variable_type)
   {
   case INT_VARIABLE :
-    assign_variable->double_value = 
+    assign_variable->double_value =
       expression(this,
         1,num_symbols-1,int_symbols,
         double_symbols,string_symbols,
-        symbol_types, &is_integer, &(assign_variable->int_value), 
+        symbol_types, &is_integer, &(assign_variable->int_value),
         &error);
     break;
   case FLOAT_VARIABLE :
-    assign_variable->double_value = 
+    assign_variable->double_value =
       expression(this,
         1,num_symbols-1,int_symbols,
         double_symbols,string_symbols,
-        symbol_types, &is_integer, &(assign_variable->int_value), 
+        symbol_types, &is_integer, &(assign_variable->int_value),
         &error);
     break;
   case DOUBLE_VARIABLE :
-    assign_variable->double_value = 
+    assign_variable->double_value =
       expression(this,
         1,num_symbols-1,int_symbols,
         double_symbols,string_symbols,
-        symbol_types, &is_integer, &(assign_variable->int_value), 
+        symbol_types, &is_integer, &(assign_variable->int_value),
         &error);
     break;
   case CHAR_VARIABLE :
     assign_variable->int_value = (int) string_symbols[2][0];
     break;
   case STRING_VARIABLE :
-    strncpy(assign_variable->string_value, &(string_symbols[1][1]), 
+    strncpy(assign_variable->string_value, &(string_symbols[1][1]),
             strlen(string_symbols[1])-2);
     assign_variable->string_value[strlen(string_symbols[1])-2] = 0;
     break;
@@ -1402,13 +1196,12 @@ int iparser::Assign_To_Variable
     break;
   };
 
-  return(error);                        // Say it's OK                       
+  return(error);                        // Say it's OK
 }
 //
 // iparser::Assign_To_Variable
 //
 ///////////////////////////////////////////////////////////////////////////////
-
 
 
 ///////////////////////////////////////////////////////////////////////////////
@@ -1432,29 +1225,27 @@ int iparser::Parse_Pound_Define
 
 {
   // Local Variables //////////////////////////////////////////////////////////
-  variable_struct *new_variable;        // Ptr to mem for variable              
-  int error = IPARSE_NO_ERR;                 // Was there a bad declaration?      
-  int is_integer;                       // Is it really an int?        
+  variable_struct *new_variable;        // Ptr to mem for variable
+  int error = IPARSE_NO_ERR;                 // Was there a bad declaration?
+  int is_integer;                       // Is it really an int?
   /////////////////////////////////////////////////////////////////////////////
 
-  // FIRST, see if this is a string define             
-  if (string_symbols[1][0] is '"') 
+  // FIRST, see if this is a string define
+  if (string_symbols[1][0] is '"')
   {
 
     new_variable = Get_New_Variable(STRING_VARIABLE, string_symbols[0]);
-          
-    
-    new_variable->string_value 
+
+    new_variable->string_value
       = (char *)MALLOC(strlen(string_symbols[1])-1);
     new_variable->int_value  = strlen(string_symbols[1])-1;
-    strncpy(new_variable->string_value, &(string_symbols[1][1]), 
+    strncpy(new_variable->string_value, &(string_symbols[1][1]),
             strlen(string_symbols[1])-2);
 
     new_variable->string_value[strlen(string_symbols[1])-2] = 0;
   }
 
-  
-  else 
+  else
   {
     new_variable = Get_New_Variable(DOUBLE_VARIABLE, string_symbols[0]);
     new_variable->double_value = expression(this, 1,num_symbols-1,
@@ -1463,15 +1254,13 @@ int iparser::Parse_Pound_Define
                                          symbol_types, &is_integer,
                                          &(new_variable->int_value), &error);
 
-    
     if (is_integer)
       new_variable->variable_type = INT_VARIABLE;
     }
 
-  
-  Insert_Variable(new_variable);        
-  
-  return(error);                        
+  Insert_Variable(new_variable);
+
+  return(error);
 }
 
 
@@ -1492,54 +1281,49 @@ int iparser::Parse_Pound_Define
 
 int iparser::Parse_Include
 (
-  int num_symbols,                      
-  int *int_symbols,                     
-  double *double_symbols,               
-  char string_symbols[MAX_SYMBOLS][IPARSE_MAX_STRING_LENGTH], 
-  int *symbol_types                     
+  int num_symbols,
+  int *int_symbols,
+  double *double_symbols,
+  char string_symbols[MAX_SYMBOLS][IPARSE_MAX_STRING_LENGTH],
+  int *symbol_types
 )
 
 {
-  
-  int error = IPARSE_NO_ERR;                 
-  int file_name_length;               
-  char file_name[IPARSE_MAX_STRING_LENGTH];  
 
-  
+  int error = IPARSE_NO_ERR;
+  int file_name_length;
+  char file_name[IPARSE_MAX_STRING_LENGTH];
+
 
   if (num_symbols isnt 1)
     return(HEINOUS);
 
-  
   file_name_length = strlen(string_symbols[0]);
 
-  
   if ((string_symbols[0][0] isnt '"') or (string_symbols[0][file_name_length-1] isnt '"'))
   {
     return(HEINOUS);
   }
 
-  
   strncpy(file_name, &(string_symbols[0][1]), file_name_length-2);
 
-  
   file_name[file_name_length-2] = 0;
 
-  
 
 
-    
 
-    
- 
+
+
+
+
     error = Parse_File(file_name);
 
 
-    
- 
 
 
-  return(error);                        
+
+
+  return(error);
 }
 
 
@@ -1558,59 +1342,54 @@ int iparser::Parse_Include
 
 void iparser::Append_Field_To_Structure
 (
-  struct_list_element *new_struct,      
-  int *current_symbol,                  
-  int num_symbols, 
-  char string_symbols[MAX_SYMBOLS][IPARSE_MAX_STRING_LENGTH], 
-  int field_type,                       
-  int the_field_length                  
+  struct_list_element *new_struct,
+  int *current_symbol,
+  int num_symbols,
+  char string_symbols[MAX_SYMBOLS][IPARSE_MAX_STRING_LENGTH],
+  int field_type,
+  int the_field_length
 )
 
 {
-  
-  field_def *new_field;                 
-  field_def *prev_field;                
-  
 
-  
+  field_def *new_field;
+  field_def *prev_field;
+
+
   new_field = Get_New_Field(field_type, string_symbols[(*current_symbol)+1]);
 
-  
-  new_struct->struct_length += the_field_length; 
+  new_struct->struct_length += the_field_length;
   new_field->field_length = the_field_length;
 
-  
   if (new_struct->the_definition is NULL)
-    new_struct->the_definition = new_field; 
-  
-  else 
-  
+    new_struct->the_definition = new_field;
+
+  else
+
   {
     prev_field = new_struct->the_definition;
 
-
 #ifdef _DEBUG
-    sint32 finite_loop=0; 
+    sint32 finite_loop=0;
 #endif
 
-    while (prev_field->next_field isnt NULL) 
+    while (prev_field->next_field isnt NULL)
     {
-Assert(++finite_loop < 100000); 
-      prev_field = prev_field->next_field;    
+Assert(++finite_loop < 100000);
+      prev_field = prev_field->next_field;
     }
-    prev_field->next_field = new_field; 
+    prev_field->next_field = new_field;
 
   }
 
-
 #ifdef _DEBUG
-    sint32 finite_loop=0; 
+    sint32 finite_loop=0;
 #endif
-  
-  while (strcmp(string_symbols[(*current_symbol)++], ";")) 
+
+  while (strcmp(string_symbols[(*current_symbol)++], ";"))
   {
-Assert(++finite_loop < 100000); 
-  }                                     
+Assert(++finite_loop < 100000);
+  }
 }
 
 
@@ -1631,42 +1410,42 @@ Assert(++finite_loop < 100000);
 
 int iparser::Add_Next_Field
 (
-  struct_list_element *new_struct,      
-  int *current_symbol,                  
-  int num_symbols, 
-  int *int_symbols,                     
-  char string_symbols[MAX_SYMBOLS][IPARSE_MAX_STRING_LENGTH]  
+  struct_list_element *new_struct,
+  int *current_symbol,
+  int num_symbols,
+  int *int_symbols,
+  char string_symbols[MAX_SYMBOLS][IPARSE_MAX_STRING_LENGTH]
 )
 
 {
-  if (!strcmp(string_symbols[(*current_symbol)], "char")) 
+  if (!strcmp(string_symbols[(*current_symbol)], "char"))
   {
     if (!strcmp(string_symbols[(*current_symbol)+2], "["))
-      Append_Field_To_Structure(new_struct, current_symbol,num_symbols, 
-                                       string_symbols, STRING_VARIABLE, 
+      Append_Field_To_Structure(new_struct, current_symbol,num_symbols,
+                                       string_symbols, STRING_VARIABLE,
                                        int_symbols[(*current_symbol)+3]);
-    else 
+    else
       Append_Field_To_Structure(new_struct, current_symbol, num_symbols,
                                        string_symbols, CHAR_VARIABLE, 1);
   }
-  else if (!strcmp(string_symbols[(*current_symbol)], "int")) 
+  else if (!strcmp(string_symbols[(*current_symbol)], "int"))
   {
-    Append_Field_To_Structure(new_struct, current_symbol, num_symbols, 
+    Append_Field_To_Structure(new_struct, current_symbol, num_symbols,
                                      string_symbols, INT_VARIABLE, sizeof(int));
   }
-  else if (!strcmp(string_symbols[(*current_symbol)], "float")) 
+  else if (!strcmp(string_symbols[(*current_symbol)], "float"))
   {
-    Append_Field_To_Structure(new_struct, current_symbol, num_symbols, 
+    Append_Field_To_Structure(new_struct, current_symbol, num_symbols,
                                      string_symbols, FLOAT_VARIABLE,sizeof(float));
   }
-  else if (!strcmp(string_symbols[(*current_symbol)], "double")) 
+  else if (!strcmp(string_symbols[(*current_symbol)], "double"))
   {
     Append_Field_To_Structure(new_struct, current_symbol, num_symbols,
                                      string_symbols, DOUBLE_VARIABLE,sizeof(double));
   }
   else Report_Error("Bad field name", REPORT_ERROR);
 
-  return(*current_symbol);              
+  return(*current_symbol);
 }
 
 
@@ -1686,38 +1465,36 @@ int iparser::Add_Next_Field
 
 int iparser::Parse_Struct
 (
-  int num_symbols,                      
-  int *int_symbols,                     
-  double *double_symbols,               
-  char string_symbols[MAX_SYMBOLS][IPARSE_MAX_STRING_LENGTH], 
-  int *symbol_types                     
+  int num_symbols,
+  int *int_symbols,
+  double *double_symbols,
+  char string_symbols[MAX_SYMBOLS][IPARSE_MAX_STRING_LENGTH],
+  int *symbol_types
 )
 
 {
-  
-  struct_list_element *new_struct;      
-  int error = IPARSE_NO_ERR;                 
-  int current_symbol;                   
-  
+
+  struct_list_element *new_struct;
+  int error = IPARSE_NO_ERR;
+  int current_symbol;
 
   new_struct = Get_New_Struct(string_symbols[0]);
- 
+
   current_symbol = 2;
 
-
 #ifdef _DEBUG
-    sint32 finite_loop=0; 
+    sint32 finite_loop=0;
 #endif
-  while (current_symbol < num_symbols-1) 
+  while (current_symbol < num_symbols-1)
   {
-Assert(++finite_loop < 100000); 
+Assert(++finite_loop < 100000);
     Add_Next_Field(new_struct, &current_symbol, num_symbols, int_symbols,
                           string_symbols);
   }
 
   Insert_Struct(new_struct);
 
-  return(error);                        
+  return(error);
 }
 
 
@@ -1738,119 +1515,109 @@ Assert(++finite_loop < 100000);
 
 int iparser::Fill_Individual_Field
 (
-  char *buf,                            
-  int the_type,                         
-  int *int_symbols,                     
-  double *double_symbols,               
-  char string_symbols[MAX_SYMBOLS][IPARSE_MAX_STRING_LENGTH], 
-  int *symbol_types,                    
-  int *current_symbol                   
+  char *buf,
+  int the_type,
+  int *int_symbols,
+  double *double_symbols,
+  char string_symbols[MAX_SYMBOLS][IPARSE_MAX_STRING_LENGTH],
+  int *symbol_types,
+  int *current_symbol
 )
 
 {
-  
-  double temp_double;                   
-  float temp;                           
-  int temp_int;                         
-  int is_integer;                       
-  int error;                            
-  int field_end_symbol;                 
-  
 
-  
+  double temp_double;
+  float temp;
+  int temp_int;
+  int is_integer;
+  int error;
+  int field_end_symbol;
+
+
   field_end_symbol = *current_symbol;
 #ifdef _DEBUG
-    sint32 finite_loop=0; 
+    sint32 finite_loop=0;
 #endif
 
-  
   while ((string_symbols[field_end_symbol][0] isnt ';') and
          (string_symbols[field_end_symbol][0] isnt ','))
   {
-Assert(++finite_loop < 100000); 
+Assert(++finite_loop < 100000);
     field_end_symbol++;
   }
 
-  sint32 symbol_len; 
-  switch (the_type) 
+  sint32 symbol_len;
+  switch (the_type)
   {
 
     case CHAR_VARIABLE :
-      (*current_symbol)++;                
-      
-      
+      (*current_symbol)++;
+
       (*buf) = string_symbols[(*current_symbol)][0];
 
-      (*current_symbol)+=2;               
-      (*current_symbol)++;                
+      (*current_symbol)+=2;
+      (*current_symbol)++;
       break;
 
     case STRING_VARIABLE :
-      
+
      symbol_len = strlen(string_symbols[(*current_symbol)])-2;
 
-     if (symbol_len <= 0) { 
+     if (symbol_len <= 0) {
          Report_Error("Missing array field", REPORT_FATAL);
-         return(HEINOUS); 
-     } 
+         return(HEINOUS);
+     }
 
-     Assert(0 < symbol_len); 
+     Assert(0 < symbol_len);
 
-     strncpy(buf, &(string_symbols[(*current_symbol)][1]), 
+     strncpy(buf, &(string_symbols[(*current_symbol)][1]),
         symbol_len);
       buf[symbol_len] = 0;
-      (*current_symbol)++;                
-      (*current_symbol)++;                
+      (*current_symbol)++;
+      (*current_symbol)++;
       break;
 
     case INT_VARIABLE :
 
-      
       expression(this, *current_symbol, field_end_symbol-1,
              int_symbols,
              double_symbols,string_symbols,
              symbol_types, &is_integer,
              &(temp_int), &error);
 
-      
       memcpy(buf, (char *) (&(temp_int)), sizeof(int));
 
-      
       (*current_symbol) = field_end_symbol+1;
-      
+
       break;
 
     case FLOAT_VARIABLE :
 
-      
       temp = (float) expression(this, *current_symbol,field_end_symbol-1,
              int_symbols,
              double_symbols,string_symbols,
              symbol_types, &is_integer,
              &(temp_int), &error);
 
-      
       memcpy(buf, (char *) (&temp), sizeof(float));
 
-      
       (*current_symbol) = field_end_symbol+1;
 
       break;
 
     case DOUBLE_VARIABLE :
 
-      
       temp_double = expression(this, *current_symbol,field_end_symbol-1,
              int_symbols,
              double_symbols,string_symbols,
              symbol_types, &is_integer,
              &(temp_int), &error);
-    
+
       memcpy(buf, (char *) (&temp_double), sizeof(double));
 
 
 
-      
+
       (*current_symbol) = field_end_symbol+1;
       break;
 
@@ -1877,34 +1644,33 @@ Assert(++finite_loop < 100000);
 
 void iparser::Fill_All_Fields
 (
-  struct_list_element *the_struct,      
-  char **buf,                           
-  int *int_symbols,                     
-  double *double_symbols,               
-  char string_symbols[MAX_SYMBOLS][IPARSE_MAX_STRING_LENGTH], 
-  int *symbol_types,                    
-  int *current_symbol                   
+  struct_list_element *the_struct,
+  char **buf,
+  int *int_symbols,
+  double *double_symbols,
+  char string_symbols[MAX_SYMBOLS][IPARSE_MAX_STRING_LENGTH],
+  int *symbol_types,
+  int *current_symbol
 )
 
 {
-  
-  field_def *current_field;             
-  
+
+  field_def *current_field;
 
   current_field = the_struct->the_definition;
 #ifdef _DEBUG
-    sint32 finite_loop=0; 
+    sint32 finite_loop=0;
 #endif
 
-  while (current_field isnt NULL) 
+  while (current_field isnt NULL)
   {
-Assert(++finite_loop < 100000); 
-    Fill_Individual_Field( (*buf), current_field->field_type, 
-                             int_symbols, double_symbols, string_symbols, 
+Assert(++finite_loop < 100000);
+    Fill_Individual_Field( (*buf), current_field->field_type,
+                             int_symbols, double_symbols, string_symbols,
                              symbol_types, current_symbol);
 
-    (*buf) += current_field->field_length;     
-    current_field = current_field->next_field; 
+    (*buf) += current_field->field_length;
+    current_field = current_field->next_field;
   }
 
 }
@@ -1926,78 +1692,68 @@ Assert(++finite_loop < 100000);
 
 int iparser::Parse_Struct_Array
 (
-  char *declaration_string,             
-  int num_symbols,                      
-  int *int_symbols,                     
-  double *double_symbols,               
-  char string_symbols[MAX_SYMBOLS][IPARSE_MAX_STRING_LENGTH], 
-  int *symbol_types                     
-)           
-         
+  char *declaration_string,
+  int num_symbols,
+  int *int_symbols,
+  double *double_symbols,
+  char string_symbols[MAX_SYMBOLS][IPARSE_MAX_STRING_LENGTH],
+  int *symbol_types
+)
+
 {
-  
-  struct_list_element *the_struct;      
-  variable_struct *new_variable;        
-  int error = IPARSE_NO_ERR;                 
-  int current_symbol;                   
-  int array_size;                       
-  char *new_field_ptr;                  
-  int end_of_index = 3;                 
-  int is_integer;                       
-  
+
+  struct_list_element *the_struct;
+  variable_struct *new_variable;
+  int error = IPARSE_NO_ERR;
+  int current_symbol;
+  int array_size;
+  char *new_field_ptr;
+  int end_of_index = 3;
+  int is_integer;
 
   the_struct = Which_Struct( declaration_string);
 #ifdef _DEBUG
-    sint32 finite_loop=0; 
+    sint32 finite_loop=0;
 #endif
 
-  
-  while(string_symbols[end_of_index][0] isnt ']') 
+  while(string_symbols[end_of_index][0] isnt ']')
   {
-Assert(++finite_loop < 100000); 
+Assert(++finite_loop < 100000);
     end_of_index++;
   }
 
-  
   expression(this, 2,end_of_index-1,int_symbols,
              double_symbols,string_symbols,
-             symbol_types, &is_integer, 
-             &(array_size), 
+             symbol_types, &is_integer,
+             &(array_size),
              &error);
 
-  
   new_variable = Get_New_Variable(STRUCT_ARRAY_VARIABLE, string_symbols[0]);
 
-  
   new_variable->the_struct_el = the_struct;
 
-  
-  new_variable->string_value               
+  new_variable->string_value
     = (char *) MALLOC((the_struct->struct_length)*(array_size));
 
-  
-  new_field_ptr = new_variable->string_value;  
+  new_field_ptr = new_variable->string_value;
 
-  
-  current_symbol = end_of_index + 4;    
+  current_symbol = end_of_index + 4;
 
-  
-  while (current_symbol < num_symbols-1) 
+  while (current_symbol < num_symbols-1)
   {
-Assert(++finite_loop < 100000); 
-    
-    Fill_All_Fields(the_struct, &new_field_ptr, int_symbols, 
-                           double_symbols, string_symbols, symbol_types, 
+Assert(++finite_loop < 100000);
+
+    Fill_All_Fields(the_struct, &new_field_ptr, int_symbols,
+                           double_symbols, string_symbols, symbol_types,
                            &current_symbol);
 
-    
     new_variable->struct_element_count++;
 
   }
 
   Insert_Variable(new_variable);
 
-  return(error);                        
+  return(error);
 }
 
 
@@ -2017,49 +1773,46 @@ Assert(++finite_loop < 100000);
 
 int iparser::Find_Matched_Bracket
 (
-  char *parse_buffer,                   
-  int parse_pos,                        
-  int buffer_length                     
-) 
+  char *parse_buffer,
+  int parse_pos,
+  int buffer_length
+)
 
 {
-  
+
   int done = BOGUS;
-  int left_brackets = 1;                
-  
+  int left_brackets = 1;
 
   #ifdef _DEBUG
-    sint32 finite_loop=0; 
+    sint32 finite_loop=0;
 #endif
 
-  while (!done) 
+  while (!done)
   {
-Assert(++finite_loop < 100000); 
-    if (parse_pos is buffer_length) 
+Assert(++finite_loop < 100000);
+    if (parse_pos is buffer_length)
       done = EXCELLENT;
-    else 
+    else
     {
-      
+
       if (parse_buffer[parse_pos] is '{')
         left_brackets++;
 
-      
-      if (parse_buffer[parse_pos] is '}') 
+      if (parse_buffer[parse_pos] is '}')
       {
-        
+
         left_brackets--;
 
-        
         if (left_brackets is 0)
           done = EXCELLENT;
 
-      } 
+      }
 
-    } 
+    }
 
     if (!done) parse_pos++;
 
-  } 
+  }
 
   return(parse_pos);
 }
@@ -2078,28 +1831,27 @@ Assert(++finite_loop < 100000);
 
 void iparser::Get_Next_Statement_Start_And_End
 (
-  char *parse_buffer,                   
-  int *parse_pos,                       
-  int buffer_length,                    
-  int *the_start,                       
-  int *the_end                          
+  char *parse_buffer,
+  int *parse_pos,
+  int buffer_length,
+  int *the_start,
+  int *the_end
 )
 
 {
-  
+
   int statement_start, statement_end;
   char next_string[200];
-  char *buf;                            
+  char *buf;
   int next_type = NO_DECLARATION;
-  
 
-  buf = (char *)MALLOC(1);              
+  buf = (char *)MALLOC(1);
 
-  next_type = Search_For_Next_Declaration(parse_buffer, parse_pos, 
+  next_type = Search_For_Next_Declaration(parse_buffer, parse_pos,
                                                  buffer_length,
                                                  next_string);
 
-  FREE(buf);                            
+  FREE(buf);
 
   statement_start = *parse_pos;
 
@@ -2128,31 +1880,30 @@ void iparser::Get_Next_Statement_Start_And_End
 
 int iparser::Get_Else_Start_And_End
 (
-  char *parse_buffer,                   
-  int *temp_pos,                        
-  int buffer_length,                    
-  int *the_start,                       
-  int *the_end                          
+  char *parse_buffer,
+  int *temp_pos,
+  int buffer_length,
+  int *the_start,
+  int *the_end
 )
 
 {
-  
+
   char next_string[200];
-  char *buf;                            
+  char *buf;
   int next_type = NO_DECLARATION;
-  
 
-  buf = (char *)MALLOC(1);              
+  buf = (char *)MALLOC(1);
 
-  next_type = Search_For_Next_Declaration(parse_buffer, temp_pos, 
+  next_type = Search_For_Next_Declaration(parse_buffer, temp_pos,
 			 buffer_length,next_string);
 
-  FREE(buf);                            
+  FREE(buf);
 
-  if (next_type is ELSE_CODE) 
+  if (next_type is ELSE_CODE)
   {
 
-    Get_Next_Statement_Start_And_End(parse_buffer, temp_pos, buffer_length, 
+    Get_Next_Statement_Start_And_End(parse_buffer, temp_pos, buffer_length,
              the_start, the_end);
     return(EXCELLENT);
   }
@@ -2177,63 +1928,59 @@ int iparser::Get_Else_Start_And_End
 
 int iparser::Parse_Conditional_Code
 (
-  char *parse_buffer,                   
-  int *parse_pos,                       
-  int buffer_length,                    
-  int num_symbols,                      
-  int *int_symbols,                     
-  double *double_symbols,               
-  char string_symbols[MAX_SYMBOLS][IPARSE_MAX_STRING_LENGTH], 
-  int *symbol_types                     
+  char *parse_buffer,
+  int *parse_pos,
+  int buffer_length,
+  int num_symbols,
+  int *int_symbols,
+  double *double_symbols,
+  char string_symbols[MAX_SYMBOLS][IPARSE_MAX_STRING_LENGTH],
+  int *symbol_types
 )
 
 {
-  
-  int error = IPARSE_NO_ERR;                 
-  int is_integer;                       
-  int conditional;                      
-  int is_else = BOGUS;                  
+
+  int error = IPARSE_NO_ERR;
+  int is_integer;
+  int conditional;
+  int is_else = BOGUS;
   int then_start, then_end;
   int else_start, else_end;
   int temp_pos;
-  
 
-  
-  if (!strcmp(string_symbols[0], "(")) 
+
+  if (!strcmp(string_symbols[0], "("))
   {
 
-    
     expression(this,
                1,num_symbols-1,int_symbols,
                double_symbols,string_symbols,
-               symbol_types, &is_integer, &(conditional), 
+               symbol_types, &is_integer, &(conditional),
                &error);
 
-    
     temp_pos = *parse_pos;
     Get_Next_Statement_Start_And_End(
-		parse_buffer, &temp_pos, buffer_length, 
+		parse_buffer, &temp_pos, buffer_length,
         &then_start, &then_end);
 
-    
     temp_pos = then_end+1;
-    is_else = Get_Else_Start_And_End(parse_buffer, &temp_pos, buffer_length, 
+    is_else = Get_Else_Start_And_End(parse_buffer, &temp_pos, buffer_length,
          &else_start, &else_end);
 
-    if (!is_else) else_end = then_end;  
+    if (!is_else) else_end = then_end;
 
     if (conditional)
       Do_Parse(parse_buffer, &then_start, then_end);
     else
       Do_Parse(parse_buffer, &else_start, else_end);
 
-    *parse_pos = else_end+1;            
+    *parse_pos = else_end+1;
 
     }
 
-  else return(HEINOUS);                 
+  else return(HEINOUS);
 
-  return(error);                        
+  return(error);
 }
 
 
@@ -2253,88 +2000,85 @@ int iparser::Parse_Conditional_Code
 
 int iparser::Next_Symbol
 (
-  char *the_string, 
-  const int the_string_len, 
-  int *place_in_the_string, 
-  char *new_symbol, 
+  char *the_string,
+  const int the_string_len,
+  int *place_in_the_string,
+  char *new_symbol,
   const int new_symbol_len
 )
 
 {
-  
+
   int type = STR_TOK;
-  int is_number = BOGUS;                
-  char *new_symbol_end; 
-  
+  int is_number = BOGUS;
+  char *new_symbol_end;
 
-  new_symbol_end = new_symbol + new_symbol_len; 
+  new_symbol_end = new_symbol + new_symbol_len;
 
-  Assert(*place_in_the_string < the_string_len); 
+  Assert(*place_in_the_string < the_string_len);
 
-  if (the_string[*place_in_the_string] is ' ')  
-     (*place_in_the_string)++;          
+  if (the_string[*place_in_the_string] is ' ')
+     (*place_in_the_string)++;
 
-
-  Assert(*place_in_the_string < the_string_len); 
-  if (isdigit(the_string[*place_in_the_string])) 
+  Assert(*place_in_the_string < the_string_len);
+  if (isdigit(the_string[*place_in_the_string]))
   {
     type = INT_TOK;
     is_number = EXCELLENT;
   }
 
-  
-  Assert(*place_in_the_string < the_string_len); 
-  if (the_string[*place_in_the_string] is '"') 
+  Assert(*place_in_the_string < the_string_len);
+  if (the_string[*place_in_the_string] is '"')
   {
 
-    Assert(new_symbol < new_symbol_end); 
+    Assert(new_symbol < new_symbol_end);
     (*new_symbol) = the_string[*place_in_the_string];
-    new_symbol++;                       // Move to next character in symbol  
-    (*place_in_the_string)++;           // Move to next character in string  
+    new_symbol++;                       // Move to next character in symbol
+    (*place_in_the_string)++;           // Move to next character in string
 
-    while ((the_string[*place_in_the_string] isnt 0) 
-     && (the_string[*place_in_the_string] isnt '"')) 
+    while ((the_string[*place_in_the_string] isnt 0)
+     && (the_string[*place_in_the_string] isnt '"'))
     {
 
-      Assert(new_symbol < new_symbol_end); 
-      Assert(*place_in_the_string < the_string_len); 
+      Assert(new_symbol < new_symbol_end);
+      Assert(*place_in_the_string < the_string_len);
       (*new_symbol) = the_string[*place_in_the_string];
 
-      (*place_in_the_string)++;         
-      new_symbol++;                     
+      (*place_in_the_string)++;
+      new_symbol++;
     }
 
-    Assert(*place_in_the_string < the_string_len); 
-    if (the_string[*place_in_the_string] is '"') 
+    Assert(*place_in_the_string < the_string_len);
+    if (the_string[*place_in_the_string] is '"')
     {
 
-       Assert(new_symbol < new_symbol_end); 
+       Assert(new_symbol < new_symbol_end);
       (*new_symbol) = the_string[*place_in_the_string];
 
-      (*place_in_the_string)++;         // Move to next character in string  
-      new_symbol++;                     // Move to next character in symbol  
+      (*place_in_the_string)++;         // Move to next character in string
+      new_symbol++;                     // Move to next character in symbol
     }
 
   }
 
-  else 
-  // Keep all of the next bunch of alpha-numeric characters as a symbol     
-  Assert(*place_in_the_string < the_string_len); 
-  while(IParser_Find_Char_Type(the_string[*place_in_the_string]) isnt BOGUS) 
+  else
+  // Keep all of the next bunch of alpha-numeric characters as a symbol
+  Assert(*place_in_the_string < the_string_len);
+  while(IParser_Find_Char_Type(the_string[*place_in_the_string]) isnt BOGUS)
   {
 
-    Assert(new_symbol < new_symbol_end); 
-    Assert(*place_in_the_string < the_string_len); 
+    Assert(new_symbol < new_symbol_end);
+    Assert(*place_in_the_string < the_string_len);
     if ((!isdigit(the_string[*place_in_the_string]))
-         && (the_string[*place_in_the_string] isnt '.')) 
+         && (the_string[*place_in_the_string] isnt '.'))
     {
       is_number = HEINOUS;
       type = STR_TOK;
     }
 
-    if (is_number isnt HEINOUS) 
+    if (is_number isnt HEINOUS)
     {
-      if ((type is DOUBLE_TOK) && (the_string[*place_in_the_string] is '.')) 
+      if ((type is DOUBLE_TOK) && (the_string[*place_in_the_string] is '.'))
       {
         is_number = HEINOUS;
         type = STR_TOK;
@@ -2342,17 +2086,17 @@ int iparser::Next_Symbol
       else if (the_string[*place_in_the_string] is '.') type = DOUBLE_TOK;
     }
 
-    // Copy the symbol's character to the symbol array                       
+    // Copy the symbol's character to the symbol array
     (*new_symbol) = the_string[*place_in_the_string];
 
-    (*place_in_the_string)++;           // Move to next character in string  
-    new_symbol++;                       // Move to next character in symbol  
+    (*place_in_the_string)++;           // Move to next character in string
+    new_symbol++;                       // Move to next character in symbol
   }
 
-   Assert(new_symbol < new_symbol_end); 
-  (*new_symbol) = 0;                    // Mark the end of the symbol string 
-  if (the_string[*place_in_the_string] isnt 0)  // End of initial string     
-    (*place_in_the_string)++;           // Move to next symbol in the string 
+   Assert(new_symbol < new_symbol_end);
+  (*new_symbol) = 0;                    // Mark the end of the symbol string
+  if (the_string[*place_in_the_string] isnt 0)  // End of initial string
+    (*place_in_the_string)++;           // Move to next symbol in the string
 
   return(type);
 }
@@ -2360,7 +2104,6 @@ int iparser::Next_Symbol
 // iparser::Next_Symbol
 //
 ///////////////////////////////////////////////////////////////////////////////
-
 
 
 ///////////////////////////////////////////////////////////////////////////////
@@ -2375,13 +2118,13 @@ void iparser::Parse_New_Command
 (
   char *command_str,                    // The ascii command string
   const int command_str_len,
-  int *num_symbols,                     // Number of symbols  
+  int *num_symbols,                     // Number of symbols
   int *int_symbols,                     // Integer values of all symbols
   double *double_symbols,               // Double value of all symbols
   char string_symbols[MAX_SYMBOLS][IPARSE_MAX_STRING_LENGTH], // String for symbols
   int *symbol_types                     // Pre-determined types of symbols
 )
-        
+
 {
   // Local Variables //////////////////////////////////////////////////////////
   int i = 0;
@@ -2393,18 +2136,18 @@ void iparser::Parse_New_Command
 
   (*num_symbols) = 0;
 
-  while (command_str[i] isnt 0) 
+  while (command_str[i] isnt 0)
   {
 
-      Assert(i < command_str_len); 
-      Assert(*num_symbols < MAX_SYMBOLS); 
+      Assert(i < command_str_len);
+      Assert(*num_symbols < MAX_SYMBOLS);
 
-    // Find the next symbol in the string                                    
-    tok_type = Next_Symbol(command_str, command_str_len, &i, 
+    // Find the next symbol in the string
+    tok_type = Next_Symbol(command_str, command_str_len, &i,
         string_symbols[(*num_symbols)], IPARSE_MAX_STRING_LENGTH);
 
-    // Extract numbers from the numeric symbols if needed                    
-    if (tok_type is INT_TOK) 
+    // Extract numbers from the numeric symbols if needed
+    if (tok_type is INT_TOK)
     {
 		//REM280299: added error checking, bad values can cause infinite loops
 		//int_symbols[(*num_symbols)] = atoi(string_symbols[(*num_symbols)]);
@@ -2448,7 +2191,6 @@ void iparser::Parse_New_Command
 ///////////////////////////////////////////////////////////////////////////////
 
 
-
 ///////////////////////////////////////////////////////////////////////////////
 //
 // iparser::Parse_Declaration
@@ -2457,7 +2199,7 @@ void iparser::Parse_New_Command
 // we've created
 //
 // Returns: Error Code (IPARSE_NO_ERR, BAD_VARIABLE, etc.)
-// Modifies: 
+// Modifies:
 //
 int iparser::Parse_Declaration
 (
@@ -2465,18 +2207,18 @@ int iparser::Parse_Declaration
   int *parse_pos,                       // Position in buffer
   int buffer_length,                    // Length of buffer
   int declaration_type,                 // What sort of declaration is this?
-  char *declaration_string,             // Raw buffer containing declaration    
+  char *declaration_string,             // Raw buffer containing declaration
   char **buf,                            // Cleaned-up buffer
 	int current_declaration_length		// How long is the current declaration?
 )
-              
+
 {
   // Local Variables //////////////////////////////////////////////////////////
-  int int_symbols[MAX_SYMBOLS];         // Any symbols which are integers    
-  int symbol_types[MAX_SYMBOLS];        // what kind of symbol is it         
-  double double_symbols[MAX_SYMBOLS];   // Any symbols which are doubles     
-  char string_symbols[MAX_SYMBOLS][IPARSE_MAX_STRING_LENGTH];  // Strings           
-  int num_symbols;                      // How many symbols there are       
+  int int_symbols[MAX_SYMBOLS];         // Any symbols which are integers
+  int symbol_types[MAX_SYMBOLS];        // what kind of symbol is it
+  double double_symbols[MAX_SYMBOLS];   // Any symbols which are doubles
+  char string_symbols[MAX_SYMBOLS][IPARSE_MAX_STRING_LENGTH];  // Strings
+  int num_symbols;                      // How many symbols there are
   char *good_string;					// Just the good stuff
   /////////////////////////////////////////////////////////////////////////////
 
@@ -2485,10 +2227,10 @@ int iparser::Parse_Declaration
   good_string = Save_Only_Alpha_Numeric(*buf, IParser_Find_Char_Type,
 	  current_declaration_length);
 
-  int good_str_len = strlen(good_string); 
+  int good_str_len = strlen(good_string);
   Parse_New_Command(good_string, good_str_len, &num_symbols,
-        int_symbols, 
-        double_symbols, 
+        int_symbols,
+        double_symbols,
         string_symbols,
         symbol_types);
 
@@ -2496,7 +2238,7 @@ int iparser::Parse_Declaration
   // FIXME: Let's just do a good string once per file!!!
   FREE(good_string);
 
-  switch (declaration_type) 
+  switch (declaration_type)
   {
   case INT_VARIABLE :
     return(Parse_Int( num_symbols,
@@ -2554,7 +2296,6 @@ int iparser::Parse_Declaration
 ///////////////////////////////////////////////////////////////////////////////
 
 
-
 ///////////////////////////////////////////////////////////////////////////////
 //
 // iparser::Get_Termination_String
@@ -2566,13 +2307,13 @@ int iparser::Parse_Declaration
 //
 char *iparser::Get_Termination_String
 (
-  int declaration_type, 
+  int declaration_type,
   char *end_string
 )
 
 {
 
-  switch (declaration_type) 
+  switch (declaration_type)
   {
   case DEFINE_DECLARATION :
     strcpy(end_string, "\n");
@@ -2608,7 +2349,6 @@ char *iparser::Get_Termination_String
 ///////////////////////////////////////////////////////////////////////////////
 
 
-
 ///////////////////////////////////////////////////////////////////////////////
 //
 // iparser::Complete_Declaration
@@ -2629,10 +2369,10 @@ int iparser::Complete_Declaration
 )
 {
 	// Local Variables //////////////////////////////////////////////////////////
-	char *buf;                            // Buffer for reading declaration    
-	char *start_buf;                      // Where was the start of the buffer 
-	int error = IPARSE_NO_ERR;                 // Default to no error               
-	char end_string[80];                  // String to end declaration         
+	char *buf;                            // Buffer for reading declaration
+	char *start_buf;                      // Where was the start of the buffer
+	int error = IPARSE_NO_ERR;                 // Default to no error
+	char end_string[80];                  // String to end declaration
 	int current_declaration_length;		// How long is the current declaration?
 	/////////////////////////////////////////////////////////////////////////////
 
@@ -2642,32 +2382,31 @@ int iparser::Complete_Declaration
 	buf = declaration_buffer;
 
 	// Read until we hit a semi-colon or other termination marker
-	error = Read_Until_String(parse_buffer, parse_pos, 
-        buffer_length, 
-        Get_Termination_String(declaration_type,end_string), 
-		&buf, current_declaration_length);     
+	error = Read_Until_String(parse_buffer, parse_pos,
+        buffer_length,
+        Get_Termination_String(declaration_type,end_string),
+		&buf, current_declaration_length);
 
 	start_buf = buf;
 
-	if (error is IPARSE_NO_ERR)                // Don't go on if messed up    
+	if (error is IPARSE_NO_ERR)                // Don't go on if messed up
 	{
-		// Interpret the data in buffer     
+		// Interpret the data in buffer
 		error = Parse_Declaration(parse_buffer, parse_pos, buffer_length,
-						  declaration_type, 
+						  declaration_type,
 						  declaration_string,
 						  &buf,
-						  current_declaration_length);    
+						  current_declaration_length);
 	}
 
-	//  FREE(buf);                            // Release the buffer's memory       
+	//  FREE(buf);                            // Release the buffer's memory
 
-	return(error);                        // Let them know if bad              
+	return(error);                        // Let them know if bad
 }
 //
 // iparser::Complete_Declaration
 //
 ///////////////////////////////////////////////////////////////////////////////
-
 
 
 ///////////////////////////////////////////////////////////////////////////////
@@ -2689,14 +2428,14 @@ int iparser::Do_Parse
 
 {
 	// Local Variables //////////////////////////////////////////////////////////
-	int current_declaration_type;       // What is the current declaration   
-	char declaration_string[IPARSE_MAX_STRING_LENGTH]; // First word of declaration   
-	int error = BOGUS;                  // There was an error in declaration 
+	int current_declaration_type;       // What is the current declaration
+	char declaration_string[IPARSE_MAX_STRING_LENGTH]; // First word of declaration
+	int error = BOGUS;                  // There was an error in declaration
 	char *declaration_buffer;			// Used to copy single delcarations,
 										// but cna be as long as whole source!
 	/////////////////////////////////////////////////////////////////////////////
 
-	current_declaration_type = BAD_VARIABLE; // Just default to get into loop     
+	current_declaration_type = BAD_VARIABLE; // Just default to get into loop
 
 	// Set up a buffer into which to copy each declaration.  Make it as long
 	// as the source, since we don't know a priori how big it is (and a comment
@@ -2704,18 +2443,17 @@ int iparser::Do_Parse
 	declaration_buffer = (char *) MALLOC(buffer_length);
 
 #ifdef _DEBUG
-    sint32 finite_count=0; 
+    sint32 finite_count=0;
 #endif _DEBUG
 
 	while ((current_declaration_type isnt EARLY_END_OF_FILE) && (!error)) 	{
 
-Assert(finite_count++ < 100000); 
-
+Assert(finite_count++ < 100000);
 
         Assert(*parse_pos <= buffer_length);
-        
-		// Find the next known declaration   
-		current_declaration_type = 
+
+		// Find the next known declaration
+		current_declaration_type =
 		Search_For_Next_Declaration(parse_buffer,
 									 parse_pos,
 									 buffer_length,
@@ -2729,22 +2467,21 @@ Assert(finite_count++ < 100000);
 			return(IPARSE_NO_ERR);
 		}
 
-		// Finish the variable declaration      
-		error = Complete_Declaration(parse_buffer, parse_pos, 
-            buffer_length, current_declaration_type, 
+		// Finish the variable declaration
+		error = Complete_Declaration(parse_buffer, parse_pos,
+            buffer_length, current_declaration_type,
             declaration_string, declaration_buffer);
 	}
 
 	// Get rid of the declaration buffer
 	FREE(declaration_buffer);
 
-	return(error);                        // Relay an error code               
+	return(error);                        // Relay an error code
 }
 //
 // iparser::Do_Parse
 //
 ///////////////////////////////////////////////////////////////////////////////
-
 
 
 ///////////////////////////////////////////////////////////////////////////////
@@ -2780,14 +2517,14 @@ void iparser::Read_File_Into_Buffer
 
 	// seek to the end of file to determine the file length
 	if (fseek(parse_file, 0, 2))
-		Report_Error("Unable to seek to end of file while preprocessing script", 
+		Report_Error("Unable to seek to end of file while preprocessing script",
                   REPORT_FATAL);
 
 	// allocate the buffer
 	if ((*parse_buffer = (char *) MALLOC (ftell(parse_file))) == NULL)
-		Report_Error("Unable to allocate memory for buffer while preprocessing script", 
+		Report_Error("Unable to allocate memory for buffer while preprocessing script",
                   REPORT_FATAL);
-	
+
 	// starting location
 	next_char = *parse_buffer;
 
@@ -2796,7 +2533,7 @@ void iparser::Read_File_Into_Buffer
 		Report_Error("Unable to seek to start of file", REPORT_FATAL);
 
 	// preprocess the file
-	while(TRUE) 
+	while(TRUE)
   {
 		ch = signed char (getc(parse_file));				      // Read a single character from file
 		current_type = IParser_Find_Char_Type(ch);	// figure out what it is
@@ -2819,19 +2556,19 @@ void iparser::Read_File_Into_Buffer
   	}
 
   	// Just eat up all the characters in a double slash comment
-		if (in_cpp_comment) 
+		if (in_cpp_comment)
     {
-			if ((ch == 10) || (ch == 13)) 
+			if ((ch == 10) || (ch == 13))
       {
 				in_cpp_comment = FALSE;
         *next_char++ = ch;  // add character to buffer
 			}
 		}
 		// Just eat up all the characters in a slash star comment
-		else if (in_c_comment) 
+		else if (in_c_comment)
     {
 
-			if (comment_end_flag) 
+			if (comment_end_flag)
       {
 				if (ch == '/') in_c_comment = FALSE;
 				else comment_end_flag = FALSE;
@@ -2841,8 +2578,7 @@ void iparser::Read_File_Into_Buffer
 				comment_end_flag = TRUE;
 		}
 
-		
-		else switch (current_type) 
+		else switch (current_type)
     {
 		case END_OF_FILE:
 			// compute length of output and return
@@ -2871,7 +2607,6 @@ void iparser::Read_File_Into_Buffer
 ///////////////////////////////////////////////////////////////////////////////
 
 
-
 ///////////////////////////////////////////////////////////////////////////////
 //
 // iparser::Trash_Variables
@@ -2889,19 +2624,18 @@ void iparser::Trash_Variables
   Trash_Variables(the_variable->next_variable);
 
   if (the_variable->variable_name isnt NULL)
-    FREE(the_variable->variable_name);  // Free mem used by name             
+    FREE(the_variable->variable_name);  // Free mem used by name
 
   if (the_variable->string_value isnt NULL)
-    FREE(the_variable->string_value);   // Free mem used by data             
+    FREE(the_variable->string_value);   // Free mem used by data
 
-  FREE(the_variable);                   // Free mem used by variable            
+  FREE(the_variable);                   // Free mem used by variable
 
 }
 //
 // iparser::Trash_Variables
 //
 ///////////////////////////////////////////////////////////////////////////////
-
 
 
 ///////////////////////////////////////////////////////////////////////////////
@@ -2923,15 +2657,14 @@ void iparser::Trash_Field_Definitions
   Trash_Field_Definitions(the_field->next_field);
 
   if (the_field->field_name isnt NULL)
-    FREE(the_field->field_name);        // Free mem used by name             
+    FREE(the_field->field_name);        // Free mem used by name
 
-  FREE(the_field);                      // Free mem used by field            
+  FREE(the_field);                      // Free mem used by field
 }
 //
 // iparser::Trash_Field_Definitions
 //
 ///////////////////////////////////////////////////////////////////////////////
-
 
 
 ///////////////////////////////////////////////////////////////////////////////
@@ -2953,13 +2686,13 @@ void iparser::Trash_Structs
   Trash_Structs(the_struct->next_struct);
 
   if (the_struct->struct_name isnt NULL)
-    FREE(the_struct->struct_name);      // Free mem used by name             
+    FREE(the_struct->struct_name);      // Free mem used by name
 
-  // Free mem used by field defs       
+  // Free mem used by field defs
   if (the_struct->the_definition isnt NULL)
-    Trash_Field_Definitions(the_struct->the_definition);        
+    Trash_Field_Definitions(the_struct->the_definition);
 
-  FREE(the_struct);                     // Free mem used by struct           
+  FREE(the_struct);                     // Free mem used by struct
 
 }
 //
@@ -2968,32 +2701,31 @@ void iparser::Trash_Structs
 ///////////////////////////////////////////////////////////////////////////////
 
 
-
 ///////////////////////////////////////////////////////////////////////////////
 //
 // iparser::Get_Runtime_Struct_Field
 //
-// Return ptr to memory location of field of a structure variable  
-// 
+// Return ptr to memory location of field of a structure variable
+//
 // Returns: Ptr to struct field
 //
 char *iparser::Get_Runtime_Struct_Field
 (
 	char *source_name                   // Whole name of the field
-) 
-           
+)
+
 {
 	// Local Variables //////////////////////////////////////////////////////////
-	variable_struct *the_variable_ptr;  // ptr to the int variable          
-	int int_symbols[MAX_FIELD_SYMBOLS]; // Any symbols which are integers    
-	int symbol_types[MAX_FIELD_SYMBOLS];// what kind of symbol is it         
-	double double_symbols[MAX_FIELD_SYMBOLS];// Any symbols which are double   
-	char string_symbols[MAX_FIELD_SYMBOLS][IPARSE_MAX_STRING_LENGTH];// Strings       
-	int num_symbols;                    // How many symbols there are        
-	int field_start_offset;             // Where in the block is this field  
-	struct_list_element *the_struct;    // Definition of the structure       
-	int done = BOGUS;                   // Have we found the field           
-	field_def *the_field;               // Ptr to field - is it the one?     
+	variable_struct *the_variable_ptr;  // ptr to the int variable
+	int int_symbols[MAX_FIELD_SYMBOLS]; // Any symbols which are integers
+	int symbol_types[MAX_FIELD_SYMBOLS];// what kind of symbol is it
+	double double_symbols[MAX_FIELD_SYMBOLS];// Any symbols which are double
+	char string_symbols[MAX_FIELD_SYMBOLS][IPARSE_MAX_STRING_LENGTH];// Strings
+	int num_symbols;                    // How many symbols there are
+	int field_start_offset;             // Where in the block is this field
+	struct_list_element *the_struct;    // Definition of the structure
+	int done = BOGUS;                   // Have we found the field
+	field_def *the_field;               // Ptr to field - is it the one?
 	char *name;							// Needed to avoid memory problem
 	int source_length;					// How long is the raw string?
 	char *good_name;					// just the good chars
@@ -3012,33 +2744,33 @@ char *iparser::Get_Runtime_Struct_Field
 	good_name = Save_Only_Alpha_Numeric(name, IParser_Is_OK_Char_Not_Float,
 		source_length);
 
-    int good_name_len = strlen(good_name); 
+    int good_name_len = strlen(good_name);
 	Parse_New_Command(good_name, good_name_len, &num_symbols,
-						int_symbols, 
-						double_symbols, 
+						int_symbols,
+						double_symbols,
 						string_symbols,
 						symbol_types);
 
-	// Find the variable 
+	// Find the variable
 	the_variable_ptr = Which_Variable( string_symbols[0]);
 
-	if (the_variable_ptr is NULL) 
+	if (the_variable_ptr is NULL)
 	{
 		FREE (name);
-		return(NULL);                       // Couldn't find it                  
+		return(NULL);                       // Couldn't find it
 	}
 
-	// Retrieve structure definition                                           
+	// Retrieve structure definition
 	the_struct = the_variable_ptr->the_struct_el;
 
 	// Second symbol contains index in the array.  Skip up to start of nth item
 	field_start_offset = (the_struct->struct_length)*int_symbols[2];
 
-	the_field = the_struct->the_definition; // First field in struct            
+	the_field = the_struct->the_definition; // First field in struct
 
-	while (!done) 
+	while (!done)
 	{
-		if (the_field is NULL) 
+		if (the_field is NULL)
 		{
 			FREE (name);
 			return(NULL);
@@ -3046,7 +2778,7 @@ char *iparser::Get_Runtime_Struct_Field
 
 		done = (!strcmp(the_field->field_name,string_symbols[5]));
 
-		if (!done) 
+		if (!done)
 		{
 			field_start_offset += the_field->field_length;
 			the_field = the_field->next_field;
@@ -3064,11 +2796,9 @@ char *iparser::Get_Runtime_Struct_Field
 ///////////////////////////////////////////////////////////////////////////////
 
 
-
 /*****************************************************************************
  * PUBLIC ROUTINES
  *****************************************************************************/
-
 
 
 ///////////////////////////////////////////////////////////////////////////////
@@ -3104,7 +2834,6 @@ iparser::iparser(AiMain *init_ai)
 ///////////////////////////////////////////////////////////////////////////////
 
 
-
 ///////////////////////////////////////////////////////////////////////////////
 //
 // iparser::Parse_File
@@ -3113,7 +2842,7 @@ iparser::iparser(AiMain *init_ai)
 //
 // Returns: Error code (NO_FILE_ERROR, etc.)
 // Modifies: Fills in parse domain
-// 
+//
 // PUBLIC
 //
 int iparser::Parse_File
@@ -3123,8 +2852,8 @@ int iparser::Parse_File
 
 {
   // Local Variables //////////////////////////////////////////////////////////
-  FILE *parse_file = NULL;              // Ptr to file to add to domain      
-  int error;                            // Error code for parsing the file   
+  FILE *parse_file = NULL;              // Ptr to file to add to domain
+  int error;                            // Error code for parsing the file
   char errmsg[1000];
   char *parse_buffer=NULL;
   int parse_pos = 0;
@@ -3136,14 +2865,14 @@ int iparser::Parse_File
   /////////////////////////////////////////////////////////////////////////////
 
   //set up for Report_Error
-  strcpy(m_current_file_name, file_name); 
+  strcpy(m_current_file_name, file_name);
 
   // Go through the path and find what directory the file is in
-  while ((not found) and 
+  while ((not found) and
     (directory_number < text_path.count))
   {
     // Get the next directory path
-    directory_name = (char *) 
+    directory_name = (char *)
       text_path.Return_Data_By_Number(directory_number);
 
     // Find the full file name
@@ -3151,15 +2880,13 @@ int iparser::Parse_File
 
     // See if we can open the file
     found = ((parse_file = fopen(full_file_name, "r")) != NULL);
-    
-    
+
     // Go to the next directory
     directory_number++;
 
   }
 
-
-  // If it wasn't found in one of the path directories, try it without 
+  // If it wasn't found in one of the path directories, try it without
   // changing the path.
   if (not found)
   {
@@ -3191,7 +2918,6 @@ int iparser::Parse_File
 ///////////////////////////////////////////////////////////////////////////////
 
 
-
 ///////////////////////////////////////////////////////////////////////////////
 //
 // iparser::~iparser
@@ -3221,7 +2947,7 @@ iparser::~iparser()
   for (i = text_path.count-1; i >= 0; i--)
   {
     // Grab the last include directory
-    an_include_path = (char *) 
+    an_include_path = (char *)
       text_path.Return_Data_By_Number(i);
 
     // Release the memory
@@ -3239,7 +2965,6 @@ iparser::~iparser()
 ///////////////////////////////////////////////////////////////////////////////
 
 
-
 ///////////////////////////////////////////////////////////////////////////////
 //
 // iparser::Get_Runtime_Char
@@ -3255,22 +2980,22 @@ signed char iparser::Get_Runtime_Char
 (
   char *name,                           // Name of the variable
   int *error                            // Error code (HEINOUS, IPARSE_NO_ERR)
-) 
+)
 
 {
   // Local Variables //////////////////////////////////////////////////////////
-  variable_struct *char_variable_ptr;   // ptr to the char variable            
+  variable_struct *char_variable_ptr;   // ptr to the char variable
   char error_string[256];				// Error if not found
   /////////////////////////////////////////////////////////////////////////////
 
   char_variable_ptr = Which_Variable( name);
 
-  if (char_variable_ptr is NULL) 
+  if (char_variable_ptr is NULL)
   {
     (*error) = VARIABLE_NOT_FOUND;
 	sprintf(error_string, "Config or AIP char parameter '%s' not found.", name);
 	Report_Error(error_string, REPORT_ERROR);
-    return(HEINOUS);                    // Couldn't find it                  
+    return(HEINOUS);                    // Couldn't find it
   }
 
   (*error) = IPARSE_NO_ERR;
@@ -3281,7 +3006,6 @@ signed char iparser::Get_Runtime_Char
 // iparser::Get_Runtime_Char
 //
 ///////////////////////////////////////////////////////////////////////////////
-
 
 
 ///////////////////////////////////////////////////////////////////////////////
@@ -3303,7 +3027,7 @@ int iparser::Get_Runtime_Int
 
 {
   // Local Variables //////////////////////////////////////////////////////////
-  variable_struct *int_variable_ptr;    // ptr to the int variable              
+  variable_struct *int_variable_ptr;    // ptr to the int variable
   char error_string[256];				// Error if not found
   int report_error;						// Should we Report_Error the error
   /////////////////////////////////////////////////////////////////////////////
@@ -3311,33 +3035,31 @@ int iparser::Get_Runtime_Int
   // Should we Report_Error any errors?
 	report_error = ((*error) != IPARSE_DONT_REPORT_ERROR);
 
-
   int_variable_ptr = Which_Variable( name);
 
-  if (int_variable_ptr is NULL) 
+  if (int_variable_ptr is NULL)
   {
     (*error) = VARIABLE_NOT_FOUND;
  	sprintf(error_string, "Config or AIP int parameter '%s' not found.", name);
 	if (report_error) Report_Error(error_string, REPORT_ERROR);
-   return(HEINOUS);                    // Couldn't find it                  
+   return(HEINOUS);                    // Couldn't find it
   }
 
-  if (int_variable_ptr->variable_type isnt INT_VARIABLE) 
+  if (int_variable_ptr->variable_type isnt INT_VARIABLE)
   {
     (*error) = WRONG_TYPE;
   	sprintf(error_string, "Config or AIP int parameter '%s' found but wrong type.", name);
 	if (report_error) Report_Error(error_string, REPORT_WARNING);
-   return(HEINOUS);                    // Couldn't find it                  
+   return(HEINOUS);                    // Couldn't find it
   }
   (*error) = IPARSE_NO_ERR;
 
-  return(int_variable_ptr->int_value);  // Send back the number              
+  return(int_variable_ptr->int_value);  // Send back the number
 }
 //
 // iparser::Get_Runtime_Int
 //
 ///////////////////////////////////////////////////////////////////////////////
-
 
 
 ///////////////////////////////////////////////////////////////////////////////
@@ -3359,19 +3081,19 @@ double iparser::Get_Runtime_Float
 
 {
 	// Local Variables //////////////////////////////////////////////////////////
-	variable_struct *variable_ptr;        // ptr to the int variable           
+	variable_struct *variable_ptr;        // ptr to the int variable
 	char error_string[256];				// Error if not found
 	int report_error;
 	/////////////////////////////////////////////////////////////////////////////
 
 	variable_ptr = Which_Variable( name);
 
-	if (variable_ptr is NULL) 
+	if (variable_ptr is NULL)
 	{
 		(*error) = VARIABLE_NOT_FOUND;
 		sprintf(error_string, "Config or AIP float parameter '%s' not found.", name);
 		Report_Error(error_string, REPORT_ERROR);
-		return(HEINOUS);                    // Couldn't find it                  
+		return(HEINOUS);                    // Couldn't find it
 	}
 
 	// Should we Report_Error any errors?
@@ -3383,17 +3105,16 @@ double iparser::Get_Runtime_Float
 		(*error) = WRONG_TYPE;
 		sprintf(error_string, "Config or AIP float parameter '%s' found but wrong type.", name);
 		if (report_error) Report_Error(error_string, REPORT_WARNING);
-		return(HEINOUS);                    // Couldn't find it                  
+		return(HEINOUS);                    // Couldn't find it
 	}
 	(*error) = IPARSE_NO_ERR;
 
-	return(((float)variable_ptr->double_value)); // Send back the number      
+	return(((float)variable_ptr->double_value)); // Send back the number
 }
 //
 // iparser::Get_Runtime_Float
 //
 ///////////////////////////////////////////////////////////////////////////////
-
 
 
 ///////////////////////////////////////////////////////////////////////////////
@@ -3415,7 +3136,7 @@ double iparser::Get_Runtime_Double
 
 {
 	// Local Variables //////////////////////////////////////////////////////////
-	variable_struct *variable_ptr;      // ptr to the int variable              
+	variable_struct *variable_ptr;      // ptr to the int variable
 	char error_string[256];				// Error if not found
 	int report_error;					// Should we Report_Error the error
 	/////////////////////////////////////////////////////////////////////////////
@@ -3425,31 +3146,30 @@ double iparser::Get_Runtime_Double
 
 	variable_ptr = Which_Variable( name);
 
-	if (variable_ptr is NULL) 
+	if (variable_ptr is NULL)
 	{
 		(*error) = VARIABLE_NOT_FOUND;
 		sprintf(error_string, "Config or AIP double parameter '%s' not found.", name);
 		if (report_error) Report_Error(error_string, REPORT_ERROR);
-		return(HEINOUS);                    // Couldn't find it                  
+		return(HEINOUS);                    // Couldn't find it
 	}
 
-	if (variable_ptr->variable_type isnt DOUBLE_VARIABLE) 
+	if (variable_ptr->variable_type isnt DOUBLE_VARIABLE)
 	{
 		(*error) = WRONG_TYPE;
 		sprintf(error_string, "Config or AIP string parameter '%s' found but wrong type.", name);
 		if (report_error) Report_Error(error_string, REPORT_WARNING);
-		return(variable_ptr->double_value);                    // Couldn't find it                  
+		return(variable_ptr->double_value);                    // Couldn't find it
 	}
 
 	(*error) = IPARSE_NO_ERR;
 
-	return(variable_ptr->double_value);   // Send back the number              
+	return(variable_ptr->double_value);   // Send back the number
 }
 //
 // iparser::Get_Runtime_Double
 //
 ///////////////////////////////////////////////////////////////////////////////
-
 
 
 ////////////////////////////////////////////////////////////////////////////////
@@ -3473,31 +3193,30 @@ char *iparser::Get_Runtime_String
 
 {
   // Local Variables //////////////////////////////////////////////////////////
-  variable_struct *variable_ptr;        // ptr to the int variable              
+  variable_struct *variable_ptr;        // ptr to the int variable
   char error_string[256];				// Error if not found
   /////////////////////////////////////////////////////////////////////////////
 
   variable_ptr = Which_Variable( name);
 
-  if (variable_ptr is NULL) 
+  if (variable_ptr is NULL)
   {
     (*error) = VARIABLE_NOT_FOUND;
 	sprintf(error_string, "Config or AIP string parameter '%s' not found.", name);
 	Report_Error(error_string, REPORT_ERROR);
-    return(NULL);                       // Couldn't find it                  
+    return(NULL);                       // Couldn't find it
   }
 
   (*error) = IPARSE_NO_ERR;
 
   strcpy(new_ptr, variable_ptr->string_value);
 
-  return(new_ptr);                      // Send back the number              
+  return(new_ptr);                      // Send back the number
 }
 //
 // iparser::Get_Runtime_String
 //
 ///////////////////////////////////////////////////////////////////////////////
-
 
 
 ///////////////////////////////////////////////////////////////////////////////
@@ -3520,19 +3239,19 @@ char *iparser::Allocate_And_Get_Runtime_String
 
 {
   // Local Variables //////////////////////////////////////////////////////////
-  variable_struct *variable_ptr;        // ptr to the int variable              
+  variable_struct *variable_ptr;        // ptr to the int variable
   char *new_ptr;                        // PTR to new buffer for string
   char error_string[256];				// Error if not found
   /////////////////////////////////////////////////////////////////////////////
 
   variable_ptr = Which_Variable( name);
 
-  if (variable_ptr is NULL) 
+  if (variable_ptr is NULL)
   {
     (*error) = VARIABLE_NOT_FOUND;
  	sprintf(error_string, "Config or AIP string parameter '%s' not found.", name);
 	Report_Error(error_string, REPORT_ERROR);
-   return(NULL);                       // Couldn't find it                  
+   return(NULL);                       // Couldn't find it
   }
 
   (*error) = IPARSE_NO_ERR;
@@ -3542,13 +3261,12 @@ char *iparser::Allocate_And_Get_Runtime_String
 
   strcpy(new_ptr, variable_ptr->string_value);
 
-  return(new_ptr);                      // Send back the number              
+  return(new_ptr);                      // Send back the number
 }
 //
 // iparser::Get_Runtime_String
 //
 ///////////////////////////////////////////////////////////////////////////////
-
 
 
 //////////////////////////////////////////////////////////////////////////////
@@ -3566,17 +3284,17 @@ signed char iparser::Get_Runtime_Char_Field
 (
   char *name,                           // Name of the variable
   int *error                            // Error code (HEINOUS, IPARSE_NO_ERR)
-) 
-           
+)
+
 {
   // Local Variables //////////////////////////////////////////////////////////
-  char *the_field_ptr;                  // Ptr to the field                 
+  char *the_field_ptr;                  // Ptr to the field
   char error_string[256];				// Error if not found
   /////////////////////////////////////////////////////////////////////////////
 
   the_field_ptr = Get_Runtime_Struct_Field( name);
 
-  if (the_field_ptr is NULL) 
+  if (the_field_ptr is NULL)
   {
     (*error)  = VARIABLE_NOT_FOUND;
 	sprintf(error_string, "Config or AIP char parameter '%s' not found.", name);
@@ -3594,7 +3312,6 @@ signed char iparser::Get_Runtime_Char_Field
 ///////////////////////////////////////////////////////////////////////////////
 
 
-
 ///////////////////////////////////////////////////////////////////////////////
 //
 // iparser::Get_Runtime_Int_Field
@@ -3610,18 +3327,18 @@ int iparser::Get_Runtime_Int_Field
 (
   char *name,                           // Name of the variable
   int *error                            // Error code (HEINOUS, IPARSE_NO_ERR)
-) 
-           
+)
+
 {
   // Local Variables //////////////////////////////////////////////////////////
-  char *the_field_ptr;                  // Ptr to the field                 
+  char *the_field_ptr;                  // Ptr to the field
   int result;
   char error_string[256];				// Error if not found
   /////////////////////////////////////////////////////////////////////////////
 
   the_field_ptr = Get_Runtime_Struct_Field( name);
 
-  if (the_field_ptr is NULL) 
+  if (the_field_ptr is NULL)
   {
     (*error)  = VARIABLE_NOT_FOUND;
 	sprintf(error_string, "Config or AIP int parameter '%s' not found.", name);
@@ -3629,19 +3346,18 @@ int iparser::Get_Runtime_Int_Field
     return(HEINOUS);
   }
 
-  memcpy((char *) (&result), 
+  memcpy((char *) (&result),
    the_field_ptr,
    sizeof(int));
 
   (*error) = IPARSE_NO_ERR;
 
-  return(result);                       // Send back the number              
+  return(result);                       // Send back the number
 }
 //
 // iparser::Get_Runtime_Int_Field
 //
 ///////////////////////////////////////////////////////////////////////////////
-
 
 
 ///////////////////////////////////////////////////////////////////////////////
@@ -3659,18 +3375,18 @@ double iparser::Get_Runtime_Float_Field
 (
   char *name,                           // Name of the variable
   int *error                            // Error code (HEINOUS, IPARSE_NO_ERR)
-) 
-           
+)
+
 {
   // Local Variables //////////////////////////////////////////////////////////
-  char *the_field_ptr;                  // Ptr to the field                 
+  char *the_field_ptr;                  // Ptr to the field
   float result;
   char error_string[256];				// Error if not found
   /////////////////////////////////////////////////////////////////////////////
 
   the_field_ptr = Get_Runtime_Struct_Field(name);
 
-  if (the_field_ptr is NULL) 
+  if (the_field_ptr is NULL)
   {
     (*error)  = VARIABLE_NOT_FOUND;
  	sprintf(error_string, "Config or AIP float parameter '%s' not found.", name);
@@ -3678,19 +3394,18 @@ double iparser::Get_Runtime_Float_Field
    return(HEINOUS);
   }
 
-  memcpy((char *) (&result), 
+  memcpy((char *) (&result),
    the_field_ptr,
    sizeof(float));
 
   (*error) = IPARSE_NO_ERR;
 
-  return(result);                       // Send back the number              
+  return(result);                       // Send back the number
 }
 //
 // iparser::Get_Runtime_Float_Field
 //
 ///////////////////////////////////////////////////////////////////////////////
-
 
 
 ///////////////////////////////////////////////////////////////////////////////
@@ -3708,18 +3423,18 @@ double iparser::Get_Runtime_Double_Field
 (
   char *name,                           // Name of the variable
   int *error                            // Error code (HEINOUS, IPARSE_NO_ERR)
-) 
-           
+)
+
 {
   // Local Variables //////////////////////////////////////////////////////////
-  char *the_field_ptr;                  // Ptr to the field                 
+  char *the_field_ptr;                  // Ptr to the field
   double result;
   char error_string[256];				// Error if not found
   /////////////////////////////////////////////////////////////////////////////
 
   the_field_ptr = Get_Runtime_Struct_Field( name);
 
-  if (the_field_ptr is NULL) 
+  if (the_field_ptr is NULL)
   {
     (*error)  = VARIABLE_NOT_FOUND;
 	sprintf(error_string, "Config or AIP double parameter '%s' not found.", name);
@@ -3727,20 +3442,19 @@ double iparser::Get_Runtime_Double_Field
     return(HEINOUS);
   }
 
-  memcpy((char *) (&result), 
+  memcpy((char *) (&result),
    the_field_ptr,
    sizeof(double));
 
   (*error) = IPARSE_NO_ERR;
 
-  return(result);                       // Send back the number              
+  return(result);                       // Send back the number
 }
 //
 // iparser::Get_Runtime_Double_Field
 //
 ///////////////////////////////////////////////////////////////////////////////
 
-   
 
 ///////////////////////////////////////////////////////////////////////////////
 //
@@ -3759,16 +3473,16 @@ char *iparser::Get_Runtime_String_Field
   int *error,                           // Error code (HEINOUS, IPARSE_NO_ERR)
   char *buf                             // PTR to existing buffer for string
 )
-      
+
 {
   // Local Variables //////////////////////////////////////////////////////////
-  char *the_field_ptr;                  // Ptr to the field                
+  char *the_field_ptr;                  // Ptr to the field
   char error_string[256];				// Error if not found
   /////////////////////////////////////////////////////////////////////////////
 
   the_field_ptr = Get_Runtime_Struct_Field( name);
 
-  if (the_field_ptr is NULL) 
+  if (the_field_ptr is NULL)
   {
     (*error)  = VARIABLE_NOT_FOUND;
 	sprintf(error_string, "Config or AIP string parameter '%s' not found.", name);
@@ -3780,13 +3494,12 @@ char *iparser::Get_Runtime_String_Field
 
   (*error) = IPARSE_NO_ERR;
 
-  return(buf);                          // Send back the number              
+  return(buf);                          // Send back the number
 }
 //
 // iparser::Get_Runtime_String_Field
 //
 ///////////////////////////////////////////////////////////////////////////////
-
 
 
 ///////////////////////////////////////////////////////////////////////////////
@@ -3806,17 +3519,16 @@ char *iparser::Allocate_And_Get_Runtime_String_Field
   char *name,                           // Name of the variable
   int *error                            // Error code (HEINOUS, IPARSE_NO_ERR)
 )
-      
+
 {
   // Local Variables //////////////////////////////////////////////////////////
-  char *the_field_ptr;                  // Ptr to the field                
+  char *the_field_ptr;                  // Ptr to the field
   char *new_ptr;                        // Newly allocated string
   /////////////////////////////////////////////////////////////////////////////
 
-
   the_field_ptr = Get_Runtime_Struct_Field( name);
 
-  if (the_field_ptr is NULL) 
+  if (the_field_ptr is NULL)
   {
     (*error)  = VARIABLE_NOT_FOUND;
     return(NULL);
@@ -3825,7 +3537,7 @@ char *iparser::Allocate_And_Get_Runtime_String_Field
   // Allocate enough new memory to fit the string value
   new_ptr = (char *) MALLOC(strlen(the_field_ptr)+1);
 
-  if (new_ptr is NULL) 
+  if (new_ptr is NULL)
   {
     (*error)  = OTHER_ERROR;
     return(NULL);
@@ -3836,14 +3548,13 @@ char *iparser::Allocate_And_Get_Runtime_String_Field
   strcpy(new_ptr, the_field_ptr);
 //  strncpy(buf, the_field_ptr, strlen(the_field_ptr)+1);
 
-  return(new_ptr);                      // Send back the number              
+  return(new_ptr);                      // Send back the number
 
 }
 //
 // iparser::Allocate_And_Get_Runtime_String_Field
 //
 ///////////////////////////////////////////////////////////////////////////////
-
 
 
 ///////////////////////////////////////////////////////////////////////////////
@@ -3860,17 +3571,17 @@ int iparser::Get_Struct_Array_Element_Count
 (
   char *name,                           // Name of the variable
   int *error                            // Error code (HEINOUS, IPARSE_NO_ERR)
-) 
-           
+)
+
 {
   // Local Variables //////////////////////////////////////////////////////////
-  variable_struct *the_variable_ptr;    // ptr to the int variable          
+  variable_struct *the_variable_ptr;    // ptr to the int variable
   /////////////////////////////////////////////////////////////////////////////
 
-  // Find the variable 
+  // Find the variable
   the_variable_ptr = Which_Variable( name);
 
-  if (the_variable_ptr is NULL) 
+  if (the_variable_ptr is NULL)
   {
     (*error)  = VARIABLE_NOT_FOUND;
     return(HEINOUS);
@@ -3886,7 +3597,6 @@ int iparser::Get_Struct_Array_Element_Count
 ///////////////////////////////////////////////////////////////////////////////
 
 
-
 ///////////////////////////////////////////////////////////////////////////////
 //
 // iparser::Append_Path
@@ -3894,7 +3604,7 @@ int iparser::Get_Struct_Array_Element_Count
 // Add a new directory at the end of the list of directories to search for include
 // files.
 //
-// NOTE: The current directory ".\" is always put at the end of the list 
+// NOTE: The current directory ".\" is always put at the end of the list
 // automatically, but it can be added manually earlier in the list"
 
 
@@ -3904,48 +3614,38 @@ int iparser::Get_Struct_Array_Element_Count
 
 void iparser::Append_Path
 (
-  char *new_path                        
-) 
-           
+  char *new_path
+)
+
 {
-  
-  char *real_path;                      
-  int path_length;                      
-  int add_slash;                        
-  
+
+  char *real_path;
+  int path_length;
+  int add_slash;
 
 
-  
+
+
   path_length = strlen(new_path);
 
-  
   if (new_path[path_length-1] isnt DIRECTORY_CHARACTER)
   {
-    
+
     path_length++;
 
-    
     add_slash = TRUE;
   }
 
-  
   real_path = (char *) MALLOC(path_length+1);
 
-  
   strcpy(real_path, new_path);
 
-  
   if (add_slash)
   {
     real_path[path_length-1] = DIRECTORY_CHARACTER;
-    real_path[path_length] = 0;         
+    real_path[path_length] = 0;
   }
 
-  
   text_path.Append_Data(real_path);
 
 }
-
-
-
-

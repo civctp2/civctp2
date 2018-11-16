@@ -1,4 +1,4 @@
-/* 
+/*
 Copyright (C) 1995-2001 Activision, Inc.
 
 This library is free software; you can redistribute it and/or
@@ -124,7 +124,7 @@ Foundation, Inc., 59 Temple Place, Suite 330, Boston, MA  02111-1307  USA
  Added dpio_getBroadcastHdls to expose list of all connections
  Revision 1.6  1997/02/16 03:57:54  dkegel
  1. dpio_thaw now part of dpio_create
- 2. thawing now gets transport DLL name and comm parameters from freeze 
+ 2. thawing now gets transport DLL name and comm parameters from freeze
  file.
  Revision 1.5  1997/02/15 02:19:02  dkegel
  1. dpio_noteArrivalTime no longer public.
@@ -278,7 +278,7 @@ typedef struct {
 	clock_t ping_next_forced;		/* time to send a forced ping */
 	clock_t ping_next_keepalive;	/* time to send a keepalive ping */
 				/* indexed by ping_current_pktnum % * dpio_PING_TIME_SENT_N */
-	clock_t ping_time_sent[dpio_PING_TIME_SENT_N];	
+	clock_t ping_time_sent[dpio_PING_TIME_SENT_N];
 	short	ping_bits;		/* Bit i set if i'th newest ping is still outstanding */
 } dpio_conn_t;
 
@@ -355,7 +355,7 @@ typedef struct dpio_s {
 #endif
 
 	/* Variables to support latency measurement.
-	 * See design comment for dpio_setPingIntervals(). */ 
+	 * See design comment for dpio_setPingIntervals(). */
 	clock_t ping_piggyback_interval;	/* in ECLOCKS */
 	clock_t ping_forced_interval;		/* in ECLOCKS */
 } dpio_t;
@@ -472,7 +472,7 @@ clock_t dpio_getHdlAge(dpio_t *dpio, playerHdl_t h);
 int dpio_getHdlTxPktsFree(dpio_t *dpio, playerHdl_t h);
 
 /*-----------------------------------------------------------------------
- Given an ASCII network address and a buffer length, fill a buffer with the 
+ Given an ASCII network address and a buffer length, fill a buffer with the
  binary address.
  Returns length of address in bytes, or 0 upon error.
  Output buffer must be big enough, or buffer won't be valid.
@@ -499,7 +499,7 @@ DP_API dp_result_t dpio_printAdr(dpio_t *dpio, const char *adrbuf, size_t adrlen
 
 /*-----------------------------------------------------------------------
  Open a connection to a new peer (or an old one).
- It's ok to call it twice on the same address, it returns 
+ It's ok to call it twice on the same address, it returns
  the same handle, and doesn't clear any buffers or timers.
  The callback cb is ignored; the parameter will be removed eventually.
 -----------------------------------------------------------------------*/
@@ -528,7 +528,7 @@ playerHdl_t dpio_openHdl(dpio_t *dpio, void *adr, dpioOpenHdlCallback_t cb, void
   even if packets arrive from that address at a later time.
 
  Note also that the callback paramater (and the associated context) has
- been dropped from the above function definition since it is not used 
+ been dropped from the above function definition since it is not used
  and this may be an attempt to have it erased alltogether :)
 -----------------------------------------------------------------------*/
 playerHdl_t dpio_openHdl2(dpio_t *dpio, void *adr, void *adr2);
@@ -557,7 +557,7 @@ playerHdl_t dpio_openHdlRaw(dpio_t *dpio, void *adr);
 /*-----------------------------------------------------------------------
  Similar to dpio_openHdlRaw except that TWO addresses are supplied.
  Refer to dpio_openHdl2 for reasons why you would want to do this.
- 
+
  The flags can be a combination of:
 	dpio_OPENHDL_RAW_2NDLIVE: the second address is to be treated as LIVE
 -----------------------------------------------------------------------*/
@@ -584,8 +584,8 @@ dp_result_t dpio_hdl2adr2(dpio_t *dpio, playerHdl_t h, void *adr, void *adr2, in
  "name" is a pointer to the buffer to copy the name to,
  "name_size" is the number of bytes available in that buffer.
  If name_size <= strlen(player name), returns dp_RES_FULL.
- Only supported by transports which have the comm_DRIVER_KNOWS_PLAYERLST 
- bit set in comm_driverInfo_t.capabilities,  
+ Only supported by transports which have the comm_DRIVER_KNOWS_PLAYERLST
+ bit set in comm_driverInfo_t.capabilities,
 --------------------------------------------------------------------------*/
 dp_result_t dpio_hdl2name(dpio_t *dpio, playerHdl_t h, char *name, size_t name_size);
 
@@ -603,7 +603,6 @@ dp_result_t dpio_setMaster(dpio_t *dpio, playerHdl_t hMaster);
 
 #endif
 
-
 /*------------------------------------------------------------------------
  Set dpio's Rx/Tx timeout and restransmission parameters.
  2nd parameter is actual system realtime clock speed.
@@ -613,7 +612,7 @@ void dpio_set_clocks(dpio_t *dpio, int clocksPerSec);
 /*------------------------------------------------------------------------
  Set the intervals used by the latency measurement system.
  If both intervals are 0, only ACKs of non-retransmitted reliable packets
-	will generate new measurements.  No extra bandwidth is used, but 
+	will generate new measurements.  No extra bandwidth is used, but
 	measurements may be infrequent if there are few reliable packets or
 	there is heavy packet loss.
  If piggbackPingInterval is set, additional small ping packets and
@@ -627,7 +626,7 @@ void dpio_set_clocks(dpio_t *dpio, int clocksPerSec);
 
  Pings will never be sent more than once per round trip time, regardless
  of the intervals requested, and are only sent to handles with the
- appropriate mode bit set (dpio_OPTION_PIGGYBACK_PING or 
+ appropriate mode bit set (dpio_OPTION_PIGGYBACK_PING or
  dpio_OPTION_FORCED_PING) using dpio_setHandleOptions().
 
  Regardless of round trip time or the parameters to this function, pings
@@ -682,7 +681,7 @@ dp_result_t dpio_get(
     to address of array of playerHdl_t's (such as an array maintained
 	for a player list).
  2. Hardware broadcast.  Set nDests to 1, and nDests to the address
-    of a playerHdl_t holding PLAYER_BROADCAST.  
+    of a playerHdl_t holding PLAYER_BROADCAST.
 
  If the network driver supports vector sends, this routine will pass
  the vector send through to the driver to reduce network overhead.
@@ -746,17 +745,17 @@ int dpio_getBroadcastHdls(dpio_t *dpio, playerHdl_t hdls[], int max_nhdls);
  Supported options are one or more flag bits or'd together.
  Right now, there is only one flag bit:
 
- dpio_OPTION_KEEPALIVE 
-  If we have not received a packet on this handle in the last 
+ dpio_OPTION_KEEPALIVE
+  If we have not received a packet on this handle in the last
   dp_PLAYER_TIMEOUT seconds, declare the handle timed out
   (dpio_findTimedOutHost will find it on the next call after this happens).
 
-  If we have not received a packet on this handle in the last 
+  If we have not received a packet on this handle in the last
   dp_PLAYER_TIMEOUT/2 seconds, send a garbage packet to the host reliably,
   which should force it to ack the packet and reset the keepalive timer
   above.
 
- Returns 
+ Returns
    dp_RES_BAD if handle invalid,
    dp_RES_BUG if option invalid,
    dp_RES_OK on success.
@@ -770,22 +769,22 @@ dp_result_t dpio_setHandleOptions(dpio_t *dpio, playerHdl_t h, int options);
  Scans through all open handles, and checks each handle h as follows:
 
  1) If h has dpio_OPTION_KEEPALIVE set but no packet has been received
- on h in a long time, it calls 
+ on h in a long time, it calls
  dpio->openHdl_callback(h, ..., dp_RES_HOST_NOT_RESPONDING),
  and returns h.
  Bug: if the connection had an explicit openHdl callback,
  it is confusing that the generic dpio->openHdl_callback() is called here.
- 
+
  2) If h has dpio_OPTION_KEEPALIVE set but no packet has been sent
  to h in a long time, it sends them a keepalive packet.
 
  3) Detects hosts which have actively reset the connection by
  sending us a new SYN with a new packetnumber.
  Also watches handles which dpio_closeHdl() has been called on;
- when their tx/rx buffers are empty, it declares them ready for 
+ when their tx/rx buffers are empty, it declares them ready for
  immediate closing by returning them to the caller.
 
- On exit, returns handle of a player that needs immediate closing, 
+ On exit, returns handle of a player that needs immediate closing,
  or PLAYER_NONE.
 -----------------------------------------------------------------------*/
 playerHdl_t dpio_findTimedOutHost(dpio_t *dpio);
@@ -801,15 +800,15 @@ playerHdl_t dpio_findTimedOutHost(dpio_t *dpio);
  interesting packet, but have not sent us a packet in a long time.
  When passed a handle, checks that handle for timeout; if passed
  PLAYER_NONE, checks all available handles for timeout.
- If it finds such a host, it calls 
- dpio->openHdl_callback(h, ..., dp_RES_HOST_NOT_RESPONDING) 
+ If it finds such a host, it calls
+ dpio->openHdl_callback(h, ..., dp_RES_HOST_NOT_RESPONDING)
  where h is a handle to the timed-out host, and returns h.
 
  Note: if the connection had an explicit openHdl callback,
  it is confusing that the generic dpio->openHdl_callback() is called here.
  (We should look at whether we should scrap the per-connection callbacks
  and just have a generic one for all connections.)
- 
+
  Also detects those hosts which have actively reset the connection by
  sending us a new SYN with a new packetnumber.
  Will also delete handles which closeHdl has set to close when their
@@ -850,7 +849,6 @@ dp_result_t dpio_higherLevelBlanketAck(
 	int nDests,             /* Size of destination vector */
 	char *tag,
 	size_t taglen);
-
 
 /*-------------------------------------------------------------------------
 Debug-only support

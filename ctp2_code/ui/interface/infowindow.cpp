@@ -11,7 +11,7 @@
 //
 // THIS FILE IS NOT GENERATED OR SUPPORTED BY ACTIVISION.
 //
-// This material has been developed at apolyton.net by the Apolyton CtP2 
+// This material has been developed at apolyton.net by the Apolyton CtP2
 // Source Code Project. Contact the authors at ctp2source@apolyton.net.
 //
 //----------------------------------------------------------------------------
@@ -51,21 +51,20 @@ extern C3UI *g_c3ui;
 
 InfoWindow::InfoWindow(void) :
 	m_window(static_cast<ctp2_Window*>(
-		aui_Ldl::BuildHierarchyFromRoot("InfoDialog"))),	
+		aui_Ldl::BuildHierarchyFromRoot("InfoDialog"))),
 	m_closeButton(static_cast<ctp2_Button*>(
 		aui_Ldl::GetObject("InfoDialog.CloseButton")))
 {
 	Assert(m_window);
 
 	m_score_tab = new ScoreTab();
-	
+
 	m_ranking_tab = new RankingTab(m_window);
 
 	m_wonder_tab = new WonderTab(m_window);
 
-	
 	Assert(m_closeButton);
-	
+
 	m_closeButton->SetActionFuncAndCookie(CloseButtonActionCallback, this);
 }
 
@@ -131,45 +130,40 @@ void InfoWindow::Close(void)
 	}
 }
 
-
 void InfoWindow::Show()
 {
-	
+
 	m_score_tab->Update();
-	
+
 	m_ranking_tab->LoadData();
 	m_wonder_tab->UpdateList();
 
 	m_window->Show();
 }
 
-
 void InfoWindow::Hide()
 {
-	Close(); 
+	Close();
 }
-
 
 void InfoWindow::CloseButtonActionCallback(aui_Control *control,
 	uint32 action, uint32 data, void *cookie)
 {
-	
+
 	if(action != static_cast<uint32>(AUI_BUTTON_ACTION_EXECUTE))
 		return;
 
-	
 	static_cast<InfoWindow*>(cookie)->Hide();
 }
 
 InfoWindow::~InfoWindow(void)
 {
-	if (m_window) 
+	if (m_window)
 	{
 		aui_Ldl::DeleteHierarchyFromRoot("InfoDialog");
 		m_window = NULL;
 	}
 
-	
 	if (m_ranking_tab)
 		delete m_ranking_tab;
 

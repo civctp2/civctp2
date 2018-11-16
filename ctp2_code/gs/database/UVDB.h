@@ -1,15 +1,3 @@
-
-
-
-
-
-
-
-
-
-
-
-
 #ifdef HAVE_PRAGMA_ONCE
 #pragma once
 #endif
@@ -20,7 +8,6 @@ class CivArchive ;
 class Token;
 
 #define k_MAX_RESOURCES	64
-
 
 #include "dbtypes.h"
 
@@ -79,7 +66,6 @@ enum DEAD_RESOURCE_TYPE
 	DEAD_RESOURCE_TYPE_MAX
 	} ;
 
-
 enum REGION_TYPE
 	{
 	REGION_TYPE_NORTH_POLAR,
@@ -92,12 +78,11 @@ enum REGION_TYPE
 	REGION_TYPE_MAX,
 	} ;
 
-
 class OzoneDatabase
 	{
 	private:
-		
-		
+
+
 
 
 
@@ -106,20 +91,18 @@ class OzoneDatabase
 		double	m_meridian_prob[k_NUM_MERIDIANS+1],
 				m_meridian_phase_bonus[k_NUM_MERIDIANS+1] ;
 
-
 		sint32	m_dead_food[k_MAX_RESOURCES],
 				m_dead_shield[k_MAX_RESOURCES],
 				m_dead_trade[k_MAX_RESOURCES],
 				m_dead_gold[k_MAX_RESOURCES] ;
 
-		
 
 	public:
 
 		OzoneDatabase() ;
 		OzoneDatabase(CivArchive &archive) ;
 		~OzoneDatabase() ;
-    
+
 		sint32 Initialise(char *filename, C3DIR dir) ;
 
 		sint32 ParseOzoneDatabase(char *filename, C3DIR dir);
@@ -127,23 +110,22 @@ class OzoneDatabase
 
 		double GetBaseProb(const sint32 region) const
 			{
-			Assert((region>=0) && (region<=k_NUM_MERIDIANS)) ;			
+			Assert((region>=0) && (region<=k_NUM_MERIDIANS)) ;
 			return (m_meridian_prob[region]) ;
 			}
 
 		double GetBonus(const sint32 region) const
 			{
-			Assert((region>=0) && (region<=k_NUM_MERIDIANS)) ;			
+			Assert((region>=0) && (region<=k_NUM_MERIDIANS)) ;
 			return (m_meridian_phase_bonus[region]) ;
 			}
 
 		double GetProb(const sint32 region) const
 			{
 
-			Assert((region>=0) && (region<=k_NUM_MERIDIANS)) ;			
+			Assert((region>=0) && (region<=k_NUM_MERIDIANS)) ;
 			return (m_meridian_prob[region]) ;
 			}
-
 
 
 		sint32 ParseUVTriggerRecord(Token *uvToken) ;
@@ -153,6 +135,6 @@ class OzoneDatabase
 		sint32 ParseDeadResourceNumbers(Token *uvToken, sint32 &food, sint32 &shield, sint32 &trade, sint32 &gold) ;
 		void Serialize(CivArchive &archive) ;
 
-	} ; 
+	} ;
 
 #endif

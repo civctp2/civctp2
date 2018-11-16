@@ -1,4 +1,3 @@
-
 #ifndef UNIT_MANAGER_H__
 #define UNIT_MANAGER_H__
 
@@ -49,7 +48,6 @@ class UnitManager {
 
 	static void UpkeepButton(aui_Control *control, uint32 action, uint32 data, void *cookie);
 	static void Advice(aui_Control *control, uint32 action, uint32 data, void *cookie);
-	
 
 	static void TacticalList(aui_Control *control, uint32 action, uint32 data, void *cookie);
 	static void DisbandButton(aui_Control *control, uint32 action, uint32 data, void *cookie);
@@ -61,14 +59,13 @@ class UnitManager {
 	static void DisbandQuery(bool response, void *data);
 	void DisbandSelected();
 
-
 	static void InitializeEvents();
 	static void CleanupEvents();
 
 	uint32 GetLastDisbandedUnit() { return m_lastDisbandedUnit; }
 	void SetLastDisbandedUnit(uint32 u) { m_lastDisbandedUnit = u; }
   private:
-    
+
 	static bool sm_statsTabVisible;
 
 	ctp2_Window *m_window, *m_adviceWindow;

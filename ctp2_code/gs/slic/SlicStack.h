@@ -20,7 +20,6 @@ typedef union {
 	SlicSymbolData *m_sym;
 } SlicStackValue;
 
-
 class SlicStack {
 private:
 	sint32 m_sptr;
@@ -37,8 +36,7 @@ public:
 	void Dump();
 #endif
 
-	
-	
+
 	static SlicSymbolData *GetSymbol(SS_TYPE symType, SlicStackValue symVal);
 	static sint32 Eval(SS_TYPE type, SlicStackValue symVal);
 	static BOOL GetUnit(SS_TYPE type, SlicStackValue symVal, Unit &u);

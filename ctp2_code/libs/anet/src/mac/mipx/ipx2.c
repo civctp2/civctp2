@@ -1,4 +1,4 @@
-/* 
+/*
 Copyright (C) 1995-2001 Activision, Inc.
 
 This library is free software; you can redistribute it and/or
@@ -163,7 +163,7 @@ ipx2_t *ipx2_create(int socket, int *status)
 	short		localSocket = socket;
 
 	//	set up the UPPs for the callbacks
-	
+
 	ipx2_send_callback_UPP = NewIOCompletionProc(ipx2_send_callback);
 	if (ipx2_send_callback_UPP == nil) {
 		return nil;
@@ -223,7 +223,7 @@ ipx2_t *ipx2_create(int socket, int *status)
 	//printf("allocating the me handle:\n");
 	// Allocate the me handle.
 	fpOut = (char *)ipx->rx->scratch.flat.p;
-	
+
 	IpxGetInternetworkAddress((unsigned char *)fpOut);
 	bh = ipx2_adr2hdl(ipx, (nw_adr_t *)fpOut, 1);
 	//printf("My address is: ");
@@ -249,7 +249,7 @@ ipx2_t *ipx2_create(int socket, int *status)
 		return NULL;
 	}
 	*status = 0;
-	
+
 	return ipx;
 }
 
@@ -311,7 +311,7 @@ ipx2_hdl_t ipx2_adr2hdl(ipx2_t *ipx, nw_adr_t *adr, int insert) {
 		return ipx2_HDL_NONE;
 	}
 	memcpy(&peer->dest, adr, sizeof(nw_adr_t));
-	
+
 	memcpy(&targetAddress.netNode, adr, sizeof(nw_adr_t));
 	targetAddress.socket = ipx->socket;
 
@@ -432,7 +432,7 @@ ipx2_result_t ipx2_get(ipx2_t *ipx, void *buf, size_t *plen, ipx2_hdl_t *srcHdl,
 			//len = pp->hdr_n_buf.flat.h->Length; wrong
 			//len = NativeToBigEndian(16, pp->hdr_n_buf.flat.h->Length); wrong
 			len = pp->hdr_n_buf.flat.h->packetLen - sizeof(nw_hdr_t);
-	
+
 			//printf("get: len %d, src= ", len);
 			//printAdr(&pp->hdr_n_buf.flat.h->src);
 			//printf("\n");
@@ -450,7 +450,7 @@ ipx2_result_t ipx2_get(ipx2_t *ipx, void *buf, size_t *plen, ipx2_hdl_t *srcHdl,
 		// Set CC to a bogus value so we can see if IPX is ever setting it.
 		//pp->ecb.flat.e->CompletionCode = 0x88;
 		pp->ecb.flat.e->UserWorkspace[0] = 0x88;					//	in use for recieve
-	
+
 		pp->ecb.flat.e->fragList[1].fragSize = ipxq_MAX_USERDATALEN;
 		//printf("ListenForPacket: Before ipx2_call:\n");
 		//printECB(pp);
@@ -472,5 +472,3 @@ ipx2_result_t ipx2_get(ipx2_t *ipx, void *buf, size_t *plen, ipx2_hdl_t *srcHdl,
 	//printf("\n");
 	return stat;
 }
-
-

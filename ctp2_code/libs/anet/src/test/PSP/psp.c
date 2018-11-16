@@ -1,4 +1,4 @@
-/* 
+/*
 Copyright (C) 1995-2001 Activision, Inc.
 
 This library is free software; you can redistribute it and/or
@@ -41,7 +41,6 @@ Foundation, Inc., 59 Temple Place, Suite 330, Boston, MA  02111-1307  USA
  Hidden Arguments:
 	-m=player			Player number (used only in PSPs spawned by PSP)
 	(Note that arguments -b and -e are ignored if -m is present).
-
 
  Test Design
  -----------
@@ -145,7 +144,6 @@ MSVC's warning level is set to 4.
 #include "eclock.h"
 #include "anet.h"
 
-
 /* Mac replacements for some "standard" DOS stuff. */
 #ifdef __MWERKS__
 #include "stricmp.h"
@@ -164,7 +162,6 @@ MSVC's warning level is set to 4.
 #define TRUE 1
 #define FALSE 0
 #endif
-
 
 /**
 * Constants
@@ -262,14 +259,12 @@ typedef struct pspResult_s {
 	char *driver;
 } pspResult_t;
 
-
 /**
 * Global variables
 */
 
 pspResult_t results;	// Must be global for signal handler
 FILE* logFile;			// Must be global for signal handler
-
 
 /**
 * Methods
@@ -342,7 +337,6 @@ writeReport(
 	}
 }
 
-
 /*-------------------------------------------------------------------------
  Stop the test
 -------------------------------------------------------------------------*/
@@ -366,7 +360,6 @@ abortTest(
 	exit(exitCode);
 }
 
-
 /*-------------------------------------------------------------------------
  Handle a signal (^C or similar)
 -------------------------------------------------------------------------*/
@@ -377,7 +370,6 @@ signalHandler(
 	sigId = sigId;
 	abortTest(logFile, psp_RES_SIGNAL, "Test terminated at user request.\n", &results);
 }
-
 
 /*-------------------------------------------------------------------------
  Set the player as having acknowledged.
@@ -426,7 +418,6 @@ getAck(
 
 }
 
-
 /*-------------------------------------------------------------------------
  Callback triggered by dpOpen.
 -------------------------------------------------------------------------*/
@@ -448,7 +439,6 @@ open_cb(
 	(void) flags;
 	return (ps != NULL);
 }
-
 
 /*-------------------------------------------------------------------------
  Callback triggered by listing sessions.
@@ -483,7 +473,6 @@ listSessions_cb(
 	return TRUE;
 }
 
-
 /*-------------------------------------------------------------------------
  Join the first session that matches the given name.
  User must have called listSesions() first.
@@ -513,7 +502,6 @@ joinSessionByName(
 
 	return err;
 }
-
 
 /*-------------------------------------------------------------------------
  Callback triggered by creating a player.
@@ -552,7 +540,6 @@ create_player_cb(
 	(void) name;
 	(void) flags;
 }
-
 
 /*-------------------------------------------------------------------------
  Callback triggered by listing players.
@@ -593,7 +580,6 @@ listPlayers_cb(
 	(void) flags;
 }
 
-
 /*-------------------------------------------------------------------------
  Callback triggered by listing groups.
 -------------------------------------------------------------------------*/
@@ -616,7 +602,6 @@ listGroups_cb(
 	(void) name;
 	(void) flags;
 }
-
 
 /*-------------------------------------------------------------------------
  Callback triggered by listing group players.
@@ -656,7 +641,6 @@ listGroupPlayers_cb(
 	(void) name;
 	(void) flags;
 }
-
 
 /*-------------------------------------------------------------------------
  Handle a received message, if any.
@@ -774,7 +758,6 @@ processMessage(dp_t* myDP, pspResult_t* res)
 	}
 }
 
-
 /*-------------------------------------------------------------------------
  Tell other tests we're done, and wait for them to be done too.
 -------------------------------------------------------------------------*/
@@ -814,10 +797,9 @@ void synchronize_done_simple(
 		processMessage(myDP, &results);
 }
 
-
 /*-------------------------------------------------------------------------
  Tell the master we're done, and wait for it to tell us everyone else is
- done.  
+ done.
  Assuming that everyone finds out the master's address before their own,
  this avoids the race condition at the start of a session where
  some players don't know the player id yet that appears as the source or
@@ -883,7 +865,6 @@ void synchronize_done_via_host(
 		printf("%d.%d: Really complete.\n", res->thisPlayer, iteration);
 	}
 }
-
 
 /*-------------------------------------------------------------------------
  Handle command-line arguments
@@ -1102,7 +1083,6 @@ handleArguments(
 	return 0;
 }
 
-
 /*-------------------------------------------------------------------------
  Launch all tests
 -------------------------------------------------------------------------*/
@@ -1195,7 +1175,6 @@ int launch (
 	}
 	return rVal;
 }
-
 
 /*-------------------------------------------------------------------------
  Collate results from all tests
@@ -1447,7 +1426,6 @@ int collate (
 	return 1;
 }
 
-
 /*-------------------------------------------------------------------------
  Run the test for one player
 -------------------------------------------------------------------------*/
@@ -1626,7 +1604,7 @@ int testOne (
 		#ifdef WIN32
 			srand(GetTickCount());
 		#endif
-		/* 
+		/*
 			WARNING: Using a randomly generated or time-based session ID
 			does not work for this test; the individual runs are started
 			at nearly the same time.
@@ -1913,7 +1891,6 @@ int testOne (
 			}
 		} /* not thawed */
 
-
 		/* Wait for player, group player, player variable list */
 		printf("%d.%d: Waiting for %d players.\n", thisPlayer, iLoop, results.n_expectedPlayers);
 		results.n_players = 0;
@@ -1924,7 +1901,7 @@ int testOne (
 			 ((results.n_players < results.n_expectedPlayers) ||
 			 (group && results.n_gplayers < results.n_expectedPlayers) ||
 			 (pVarCount && results.n_pvplayers < results.n_expectedPlayers))) {
-			
+
 			processMessage(myDP, &results);
 			if (results.n_players < results.n_expectedPlayers) {
 				results.callbacksFinished = FALSE;
@@ -2107,7 +2084,7 @@ int testOne (
 		while((dpReadyToFreeze(myDP) == dp_RES_BUSY) && ((long)(eclock() - endtime) < 0))
 			processMessage(myDP, &results);
 
-		/* Close the session, then hang around a little longer, to re-ack 
+		/* Close the session, then hang around a little longer, to re-ack
 		 * any dropped packets.
 		 */
 		printf("%d.%d: Leaving session.\n", thisPlayer, iLoop);
@@ -2171,7 +2148,6 @@ int testOne (
 		return psp_RES_OK;
 	return psp_RES_TOOFEWPLAYERS;
 }
-
 
 /*-------------------------------------------------------------------------
  Entry point

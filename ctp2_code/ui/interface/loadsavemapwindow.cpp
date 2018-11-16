@@ -11,7 +11,7 @@
 //
 // THIS FILE IS NOT GENERATED OR SUPPORTED BY ACTIVISION.
 //
-// This material has been developed at apolyton.net by the Apolyton CtP2 
+// This material has been developed at apolyton.net by the Apolyton CtP2
 // Source Code Project. Contact the authors at ctp2source@apolyton.net.
 //
 //----------------------------------------------------------------------------
@@ -29,7 +29,6 @@
 //----------------------------------------------------------------------------
 
 #include "c3.h"
-
 
 #include "aui.h"
 #include "aui_ldl.h"
@@ -56,11 +55,10 @@
 #include "StrDB.h"
 #include "profileDB.h"
 
-#include "spnewgamewindow.h" 
+#include "spnewgamewindow.h"
 #include "loadsavemapwindow.h"
 
 #include "pixelutils.h"
-
 
 #include "radarmap.h"
 
@@ -91,12 +89,10 @@ LoadSaveMapWindow::LoadSaveMapWindow(AUI_ERRCODE *retval, uint32 id,
 	m_saveMapInfoRemember = NULL;
 	m_saveMapInfoToSave = NULL;
 
-	
 	m_type = LSMS_TOTAL;
 
 	InitCommonLdl(ldlBlock);
 }
-
 
 AUI_ERRCODE LoadSaveMapWindow::InitCommonLdl(MBCHAR *ldlBlock)
 {
@@ -106,7 +102,6 @@ AUI_ERRCODE LoadSaveMapWindow::InitCommonLdl(MBCHAR *ldlBlock)
 
 	AUI_ERRCODE		errcode = AUI_ERRCODE_OK;
 
-	
 
 	sprintf( block, "%s.%s", ldlBlock, "Name" );
 	AddTitle( block );
@@ -124,7 +119,6 @@ AUI_ERRCODE LoadSaveMapWindow::InitCommonLdl(MBCHAR *ldlBlock)
 	Assert(m_nameString);
 	if (!m_nameString) return AUI_ERRCODE_LOADFAILED;
 
-	
 	sprintf(block, "%s.%s", ldlBlock, "TitlePanel");
 	m_titlePanel = new c3_Static(&errcode, aui_UniqueId(), block);
 	Assert(m_titlePanel);
@@ -133,7 +127,7 @@ AUI_ERRCODE LoadSaveMapWindow::InitCommonLdl(MBCHAR *ldlBlock)
 	m_gameMapText = spNew_c3_Static(&errcode, block, "GameMapText");
 	Assert(m_gameMapText);
 	if (!m_gameMapText) return AUI_ERRCODE_LOADFAILED;
-	
+
 	m_gameMapTextBox = spNewTextEntry(&errcode, block, "GameMapTextBox");
 	Assert(m_gameMapTextBox);
 	if (!m_gameMapTextBox) return AUI_ERRCODE_LOADFAILED;
@@ -156,28 +150,23 @@ AUI_ERRCODE LoadSaveMapWindow::InitCommonLdl(MBCHAR *ldlBlock)
 	Assert(m_noteTextBox);
 	if (!m_noteTextBox) return AUI_ERRCODE_LOADFAILED;
 
-	
-	m_listOne = spNew_c3_ListBox(&errcode, ldlBlock, "ListOne", 
+	m_listOne = spNew_c3_ListBox(&errcode, ldlBlock, "ListOne",
 									loadsavemapscreen_ListOneHandler, (void *)this);
 	Assert(m_listOne);
 	if (!m_listOne) return AUI_ERRCODE_LOADFAILED;
 
-	
-	m_listTwo = spNew_c3_ListBox(&errcode, ldlBlock, "ListTwo", 
+	m_listTwo = spNew_c3_ListBox(&errcode, ldlBlock, "ListTwo",
 									loadsavemapscreen_ListTwoHandler, (void *)this);
 	Assert(m_listTwo);
 	if (!m_listTwo) return AUI_ERRCODE_LOADFAILED;
 
-	
 	sprintf(tabGroupBlock, "%s.%s", ldlBlock, "LoadTabGroup" );
 	m_tabGroup = new aui_TabGroup( &errcode, aui_UniqueId(), tabGroupBlock );
 	Assert( AUI_NEWOK(m_tabGroup, errcode) );
 	if (!m_tabGroup) return AUI_ERRCODE_LOADFAILED;
 
-	
 	m_tabGroup->SetDrawMask( k_AUI_REGION_DRAWFLAG_UPDATE );
 
-	
 	sprintf(tabBlock, "%s.%s", tabGroupBlock, "MapTab");
 	m_mapTab = new TextTab(&errcode, aui_UniqueId(), tabBlock, NULL);
 	Assert( AUI_NEWOK(m_mapTab, errcode) );
@@ -188,18 +177,17 @@ AUI_ERRCODE LoadSaveMapWindow::InitCommonLdl(MBCHAR *ldlBlock)
 	Assert(m_mapTabImage);
 	if (!m_mapTabImage) return AUI_ERRCODE_LOADFAILED;
 
-	
-	
-	
+
+
+
 	m_mapTabImageBackup = new aui_Image(
 		&errcode, m_mapTabImage->GetImage()->GetFilename() );
 	Assert(m_mapTabImageBackup);
 	if (!m_mapTabImageBackup) return AUI_ERRCODE_LOADFAILED;
 
-	
 	m_mapTabImageBackup->Load();
 
-	
+
 
 
 	return AUI_ERRCODE_OK;
@@ -213,7 +201,6 @@ LoadSaveMapWindow::~LoadSaveMapWindow()
 
 	mycleanup(m_nameString);
 
-	
 	mycleanup(m_titlePanel);
 	mycleanup(m_gameMapText);
 	mycleanup(m_gameMapTextBox);
@@ -224,7 +211,7 @@ LoadSaveMapWindow::~LoadSaveMapWindow()
 
 	mycleanup(m_listOne);
 	mycleanup(m_listTwo);
-	
+
 	mycleanup(m_tabGroup);
 	mycleanup(m_mapTab);
 	mycleanup(m_mapTabImage);
@@ -234,7 +221,6 @@ LoadSaveMapWindow::~LoadSaveMapWindow()
 
 #undef mycleanup
 }
-
 
 
 void LoadSaveMapWindow::FillListOne(void)
@@ -250,11 +236,10 @@ void LoadSaveMapWindow::FillListOne(void)
 
 	PointerList<GameMapInfo>::Walker *walker = new PointerList<GameMapInfo>::Walker(m_fileList);
 
-	
 	while (walker->IsValid()) {
 		LSMGameMapsListItem *item = new LSMGameMapsListItem(
 			&errcode,
-			"LSMGameMapsListItem", 
+			"LSMGameMapsListItem",
 			walker->GetObj());
 		Assert(errcode == AUI_ERRCODE_OK);
 		if (errcode != AUI_ERRCODE_OK) return;
@@ -266,7 +251,6 @@ void LoadSaveMapWindow::FillListOne(void)
 
 	delete walker;
 }
-
 
 
 void LoadSaveMapWindow::FillListTwo(GameMapInfo *info)
@@ -312,7 +296,6 @@ void LoadSaveMapWindow::FillListTwo(GameMapInfo *info)
 	}
 }
 
-
 void LoadSaveMapWindow::SelectCurrentGameMap(void)
 {
 	if (!m_listOne) return;
@@ -346,7 +329,6 @@ void LoadSaveMapWindow::SelectCurrentGameMap(void)
 		m_listOne->SelectItem(foundItem);
 	}
 }
-
 
 void LoadSaveMapWindow::SelectCurrentSaveMap(void)
 {
@@ -386,13 +368,13 @@ void LoadSaveMapWindow::SelectCurrentSaveMap(void)
 
 void LoadSaveMapWindow::SetType(uint32 type)
 {
-	
+
 	m_type = type;
 
 	if((m_type>=LSMS_FIRST) && (m_type<LSMS_TOTAL)) {
-		TitleText()->SetText(m_nameString->GetString(m_type));		
+		TitleText()->SetText(m_nameString->GetString(m_type));
 	} else
-		Assert(0); 
+		Assert(0);
 
 	switch (m_type)
 	{
@@ -407,29 +389,26 @@ void LoadSaveMapWindow::SetType(uint32 type)
 
 	m_fileList = GameMapFile::BuildSaveMapList(C3SAVEDIR_MAP);
 
-	
 	FillListOne();
 
 	SelectCurrentGameMap();
 	SelectCurrentSaveMap();
 
 	if (m_type == LSMS_SAVE_GAMEMAP) {
-		
+
 		if ( CreateSaveMapInfoIfNeeded( m_saveMapInfoRemember ) )
 			m_saveMapInfo = m_saveMapInfoRemember;
 
-		
-		
+
 		CreateSaveMapInfoIfNeeded( m_saveMapInfoToSave );
 
 		BuildDefaultSaveMapName(
 			m_gameMapInfo ? m_gameMapInfo->name : NULL,
 			m_saveMapInfoToSave->fileName);
 	} else {
-		
+
 	}
 }
-
 
 BOOL LoadSaveMapWindow::CreateSaveMapInfoIfNeeded( SaveMapInfo *&info )
 {
@@ -442,14 +421,11 @@ BOOL LoadSaveMapWindow::CreateSaveMapInfoIfNeeded( SaveMapInfo *&info )
 
 		m_tabGroup->ShouldDraw(TRUE);
 
-		
 		return TRUE;
 	}
 
-	
 	return FALSE;
 }
-
 
 void LoadSaveMapWindow::CleanUpSaveMapInfo( void )
 {
@@ -470,7 +446,6 @@ void LoadSaveMapWindow::CleanUpSaveMapInfo( void )
 }
 
 
-
 void LoadSaveMapWindow::GetRadarMap(SaveMapInfo *info)
 {
 	RadarMap	*radarMap;
@@ -483,12 +458,10 @@ void LoadSaveMapWindow::GetRadarMap(SaveMapInfo *info)
 	radarMap = new RadarMap(&errcode, aui_UniqueId(), 0, 0, width, height, m_pattern->GetFilename());
 	if (!radarMap) return;
 
-	
 	aui_Surface	*surf = (aui_Surface *)radarMap->GetMapSurface();
 
-	radarMap->RenderMap(surf);	
+	radarMap->RenderMap(surf);
 
-	
 	info->radarMapWidth = width;
 	info->radarMapHeight = height;
 	info->radarMapData = new Pixel16[width*height];
@@ -502,12 +475,10 @@ void LoadSaveMapWindow::GetRadarMap(SaveMapInfo *info)
 	if (surf->Lock(NULL, (LPVOID *)&buffer, 0) != AUI_ERRCODE_OK) return;
 	pitch = surf->Pitch();
 
-	
 	for (i=0; i<height; i++) {
 		bufferDataPtr = buffer + i * (pitch/2);
 		memcpy(radarDataPtr, bufferDataPtr, width * sizeof(Pixel16));
 
-		
 		if (!g_is565Format) {
 			for (sint32 j=0; j<width; j++) {
 				radarDataPtr[j] = pixelutils_Convert555to565(radarDataPtr[j]);
@@ -523,10 +494,9 @@ void LoadSaveMapWindow::GetRadarMap(SaveMapInfo *info)
 }
 
 
-
 void LoadSaveMapWindow::SetRadarMap(SaveMapInfo *info)
 {
-	
+
 	aui_Image		*image = m_mapTabImage->GetImage();
 
 	Assert( image != NULL );
@@ -535,14 +505,14 @@ void LoadSaveMapWindow::SetRadarMap(SaveMapInfo *info)
 	RECT rect =
 	{
 		0,
-		0, 
+		0,
 		m_mapTabImageBackup->TheSurface()->Width(),
 		m_mapTabImageBackup->TheSurface()->Height()
 	};
 
 	if ( !info )
 	{
-		
+
 		g_c3ui->TheBlitter()->Blt(
 			m_mapTabImage->GetImage()->TheSurface(),
 			0, 0,
@@ -563,7 +533,6 @@ void LoadSaveMapWindow::SetRadarMap(SaveMapInfo *info)
 	Assert( height <= rect.bottom );
 	if ( height > rect.bottom ) return;
 
-	
 
 	aui_Surface		*surface = image->TheSurface();
 
@@ -581,7 +550,6 @@ void LoadSaveMapWindow::SetRadarMap(SaveMapInfo *info)
 
 	pitch = surface->Pitch();
 
-	
 	for (i=0; i<height; i++) {
 		bufferDataPtr = buffer + i * (pitch/2);
 		memcpy(bufferDataPtr, radarDataPtr, width * sizeof(Pixel16));
@@ -601,20 +569,17 @@ void LoadSaveMapWindow::SetRadarMap(SaveMapInfo *info)
 	surface->Unlock(buffer);
 }
 
-
 void LoadSaveMapWindow::SetGameMapName(MBCHAR *name)
 {
 	if (!m_gameMapTextBox) return;
 	m_gameMapTextBox->SetFieldText(name);
 }
 
-
 void LoadSaveMapWindow::SetSaveMapName(MBCHAR *name)
 {
 	if (!m_saveMapTextBox) return;
 	m_saveMapTextBox->SetFieldText(name);
 }
-
 
 void LoadSaveMapWindow::SetNote(MBCHAR *note)
 {
@@ -636,7 +601,6 @@ BOOL LoadSaveMapWindow::GetGameMapName(MBCHAR *name)
 	return TRUE;
 }
 
-
 BOOL LoadSaveMapWindow::GetSaveMapName(MBCHAR *name)
 {
 	Assert(m_saveMapTextBox);
@@ -646,7 +610,6 @@ BOOL LoadSaveMapWindow::GetSaveMapName(MBCHAR *name)
 
 	return TRUE;
 }
-
 
 BOOL LoadSaveMapWindow::GetNote(MBCHAR *note)
 {
@@ -658,10 +621,9 @@ BOOL LoadSaveMapWindow::GetNote(MBCHAR *note)
 	return TRUE;
 }
 
-
-void LoadSaveMapWindow::SetGameMapInfo(GameMapInfo *info) 
-{ 
-	m_gameMapInfo = info; 
+void LoadSaveMapWindow::SetGameMapInfo(GameMapInfo *info)
+{
+	m_gameMapInfo = info;
 
 	if (info != NULL) {
 		SetGameMapName(info->name);
@@ -674,15 +636,14 @@ void LoadSaveMapWindow::SetGameMapInfo(GameMapInfo *info)
 	}
 }
 
-
-void LoadSaveMapWindow::SetSaveMapInfo(SaveMapInfo *info) 
-{ 
-	m_saveMapInfo = info; 
+void LoadSaveMapWindow::SetSaveMapInfo(SaveMapInfo *info)
+{
+	m_saveMapInfo = info;
 
 	if (info != NULL) {
 		SetSaveMapName(info->fileName);
 		SetNote(info->note);
-		
+
 		SetRadarMap(info);
 	}
 	else
@@ -709,7 +670,6 @@ void LoadSaveMapWindow::SetSaveMapInfo(SaveMapInfo *info)
 	m_tabGroup->ShouldDraw(TRUE);
 }
 
-
 void LoadSaveMapWindow::BuildDefaultSaveMapName(MBCHAR *gameMapName, MBCHAR *name)
 {
 	MBCHAR		saveMapName[_MAX_PATH];
@@ -721,22 +681,18 @@ void LoadSaveMapWindow::BuildDefaultSaveMapName(MBCHAR *gameMapName, MBCHAR *nam
 		strcpy(theGameMapName, gameMapName);
 	}
 
-	
 	theGameMapName[6] = '\0';
 
 	if (gameMapName == NULL)
 		SetGameMapName(theGameMapName);
 
-
 	sprintf(saveMapName, "%s", theGameMapName);
 
-	
 
 	strcpy(name, saveMapName);
 
 	SetSaveMapName(saveMapName);
 }
-
 
 void LoadSaveMapWindow::EnableFields( BOOL enable )
 {
@@ -766,27 +722,24 @@ LSMGameMapsListItem::LSMGameMapsListItem(AUI_ERRCODE *retval, MBCHAR *ldlBlock, 
 
 	m_itemIcon = spNew_c3_Static(retval, ldlBlock, "GameMapsIcon");
 	if(m_itemIcon) {
-		
+
 		AddChild(m_itemIcon);
 	}
 
 	m_itemText = spNew_c3_Static(retval, ldlBlock, "GameMapsText");
 	if(m_itemText) {
-		
+
 		m_itemText->SetText(info->name);
 
-		
 		m_itemText->Resize(Width()-m_itemIcon->Width()-5, Height());
 		m_itemText->Move(m_itemIcon->Width()+5, m_itemText->Y());
 
-		
 		m_itemIcon->AddChild(m_itemText);
 	}
 }
 
 LSMGameMapsListItem::~LSMGameMapsListItem()
 {
-
 
 }
 
@@ -796,7 +749,6 @@ sint32 LSMGameMapsListItem::Compare(c3_ListItem *item2, uint32 column)
 
 	return 0;
 }
-
 
 
 LSMSaveMapsListItem::LSMSaveMapsListItem(AUI_ERRCODE *retval, MBCHAR *ldlBlock, SaveMapInfo *info)
@@ -811,27 +763,24 @@ LSMSaveMapsListItem::LSMSaveMapsListItem(AUI_ERRCODE *retval, MBCHAR *ldlBlock, 
 
 	m_itemIcon = spNew_c3_Static(retval, ldlBlock, "SaveMapsIcon");
 	if(m_itemIcon) {
-		
+
 		AddChild(m_itemIcon);
 	}
 
 	m_itemText = spNew_c3_Static(retval, ldlBlock, "SaveMapsText");
 	if(m_itemText) {
-		
+
 		m_itemText->SetText(info->fileName);
 
-		
 		m_itemText->Resize(Width()-m_itemIcon->Width()-5, Height());
 		m_itemText->Move(m_itemIcon->Width()+5, m_itemText->Y());
 
-		
 		m_itemIcon->AddChild(m_itemText);
 	}
 }
 
 LSMSaveMapsListItem::~LSMSaveMapsListItem()
 {
-
 
 }
 
@@ -841,4 +790,3 @@ sint32 LSMSaveMapsListItem::Compare(c3_ListItem *item2, uint32 column)
 
 	return 0;
 }
-

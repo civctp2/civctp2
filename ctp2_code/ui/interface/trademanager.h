@@ -1,4 +1,3 @@
-
 #ifndef TRADE_MANAGER_H__
 #define TRADE_MANAGER_H__
 
@@ -13,7 +12,6 @@ class C3Slider;
 
 #include "Unit.h"
 #include "pointerlist.h"
-
 
 struct CreateListData {
 	Unit m_source;
@@ -46,7 +44,7 @@ class TradeManager
 	ctp2_ListBox *m_summaryList;
 
 	ctp2_Button  *m_createButton, *m_breakButton;
-	
+
 	ctp2_Button *m_ownCitiesButton, *m_friendlyCitiesButton, *m_allCitiesButton;
 
 	ctp2_Static *m_numCitiesLabel;

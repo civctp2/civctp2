@@ -11,7 +11,7 @@
 //
 // THIS FILE IS NOT GENERATED OR SUPPORTED BY ACTIVISION.
 //
-// This material has been developed at apolyton.net by the Apolyton CtP2 
+// This material has been developed at apolyton.net by the Apolyton CtP2
 // Source Code Project. Contact the authors at ctp2source@apolyton.net.
 //
 //----------------------------------------------------------------------------
@@ -34,7 +34,6 @@
 
 #include "c3.h"
 
-
 #include "aui.h"
 #include "aui_ldl.h"
 #include "aui_uniqueid.h"
@@ -54,7 +53,6 @@
 #include "c3slider.h"
 #include "c3textfield.h"
 
-
 #include "ctp2_button.h"
 
 #include "profileDB.h"
@@ -70,25 +68,21 @@
 
 #include "custommapscreen.h"
 
-
 #include "spnewgamewindow.h"
 
 #include "civ3_main.h"
 
 #include "civapp.h"
 
-
 #include "scenariowindow.h"
 #include "civscenarios.h"
 #include "loadsavewindow.h"
 #include "gamefile.h"
 
-
 #include "hotseatlist.h"
 #include "gameinit.h"
 
 #include "scorewarn.h"
-
 
 #include "initialplaywindow.h"
 
@@ -106,13 +100,11 @@ extern c3_PopupWindow       *g_spNewGameTribeScreen;
 extern MBCHAR               g_slic_filename[_MAX_PATH];
 extern MBCHAR               g_civilisation_filename[_MAX_PATH];
 
-
 SPNewGameWindow             *g_spNewGameWindow      = NULL;
 
 BOOL                        g_launchIntoCheatMode = FALSE;
 
 void spnewgamescreen_SetupHotseatOrEmail();
-
 
 #include "TurnYearStatus.h"
 
@@ -122,11 +114,10 @@ void spnewgamescreen_SetupHotseatOrEmail();
 sint32	spnewgamescreen_displayMyWindow()
 {
 	sint32 retval=0;
-	
+
 	g_launchIntoCheatMode = FALSE;
-	
-	
-	
+
+
 	g_useCustomYear = false;
 	if (g_pTurnLengthOverride)
 	{
@@ -135,9 +126,8 @@ sint32	spnewgamescreen_displayMyWindow()
 	}
 
 	if(!g_spNewGameWindow) { retval = spnewgamescreen_Initialize(); }
-	
-	
-	
+
+
 	if ( !g_spNewGameTribeScreen ) spnewgametribescreen_Initialize();
 
 	sint32 const    tribeIndex = spnewgametribescreen_getTribeIndex();
@@ -153,8 +143,7 @@ sint32	spnewgamescreen_displayMyWindow()
 		spnewgamescreen_setPlayerName( lname );
 	}
 
-	
-	
+
 	if (g_spNewGameWindow)
 	{
 
@@ -182,10 +171,8 @@ sint32	spnewgamescreen_displayMyWindow()
 
 	g_c3ui->AddWindow(g_spNewGameWindow);
 
-	
 	return retval;
 }
-
 
 sint32 spnewgamescreen_removeMyWindow(uint32 action)
 {
@@ -207,8 +194,7 @@ AUI_ERRCODE spnewgamescreen_Initialize( void )
 	AUI_ERRCODE errcode = AUI_ERRCODE_OK;
 	MBCHAR		windowBlock[ k_AUI_LDL_MAXBLOCK + 1 ];
 
-	if ( g_spNewGameWindow ) return AUI_ERRCODE_OK; 
-
+	if ( g_spNewGameWindow ) return AUI_ERRCODE_OK;
 
 	strcpy(windowBlock, "SPNewGameWindow");
 
@@ -266,11 +252,9 @@ AUI_ERRCODE spnewgamescreen_Cleanup()
 	return AUI_ERRCODE_OK;
 }
 
-
 sint32 spnewgamescreen_setPlayerName( const MBCHAR *name )
 {
-	
-	
+
 	if ( g_spNewGameWindow )
 		g_spNewGameWindow->m_spName->SetFieldText( name );
 
@@ -279,7 +263,7 @@ sint32 spnewgamescreen_setPlayerName( const MBCHAR *name )
 
 sint32 spnewgamescreen_update( void )
 {
-	
+
 	if(g_spNewGameWindow)
 		g_spNewGameWindow->Update();
 
@@ -316,39 +300,34 @@ spnewgamescreen_instaPress(aui_Control *control, uint32 action, uint32 data, voi
 void
 spnewgamescreen_startPress(aui_Control *control, uint32 action, uint32 data, void *cookie )
 {
-	if ( action == uint32(AUI_BUTTON_ACTION_EXECUTE) ) 
+	if ( action == uint32(AUI_BUTTON_ACTION_EXECUTE) )
 	{
-		if (c3files_HasLegalCD()) 
+		if (c3files_HasLegalCD())
 		{
-			if(!g_startEmailGame && !g_startHotseatGame) 
+			if(!g_startEmailGame && !g_startHotseatGame)
 			{
 				spnewgamescreen_removeMyWindow(action);
-				
-				
+
 				MBCHAR fieldText[k_MAX_NAME_LEN];
-				
-				
+
 				g_spNewGameWindow->m_spName->GetFieldText(fieldText, k_MAX_NAME_LEN);
 				g_theProfileDB->SetLeaderName(fieldText);
-				
-				
+
 				g_theProfileDB->SetSaveNote("");
-				
-				
-				
+
+
 				g_theProfileDB->SetTutorialAdvice(FALSE);
-				
+
 				g_civApp->PostStartGameAction();
-			} 
-			else 
+			}
+			else
 			{
-				
+
 				MBCHAR fieldText[k_MAX_NAME_LEN];
-				
-				
+
 				g_spNewGameWindow->m_spName->GetFieldText(fieldText, k_MAX_NAME_LEN);
 				g_theProfileDB->SetLeaderName(fieldText);
-				
+
 				spnewgamescreen_SetupHotseatOrEmail();
 			}
 		}
@@ -360,8 +339,7 @@ spnewgamescreen_returnPress(aui_Control *control, uint32 action, uint32 data, vo
 {
 	if ( action != (uint32)AUI_BUTTON_ACTION_EXECUTE ) return;
 
-	
-	
+
 	BOOL wasPBEMOrHotseat = FALSE;
 	if (g_startHotseatGame || g_startEmailGame)
 		wasPBEMOrHotseat = TRUE;
@@ -369,7 +347,6 @@ spnewgamescreen_returnPress(aui_Control *control, uint32 action, uint32 data, vo
 	g_startHotseatGame = FALSE;
 	g_startEmailGame = FALSE;
 
-	
 	g_isScenario = FALSE;
 	memset(g_scenarioName, '\0', k_SCENARIO_NAME_MAX);
 	g_civPaths->ClearCurScenarioPath();
@@ -389,7 +366,6 @@ spnewgamescreen_quitPress(aui_Control *control, uint32 action, uint32 data, void
 
 	spnewgamescreen_removeMyWindow(action);
 
-	
 		ExitGame();
 }
 
@@ -400,8 +376,7 @@ void spnewgamescreen_tribePress( aui_Control *control, uint32 action, uint32 dat
 {
 	if ( action != (uint32)AUI_BUTTON_ACTION_EXECUTE ) return;
 
-	
-	
+
 	spnewgametribescreen_displayMyWindow( NULL, TRUE );
 
 	sint32 index = (sint32)g_theProfileDB->GetCivIndex();
@@ -448,7 +423,7 @@ void spnewgamescreen_mapPress( aui_Control *control, uint32 action, uint32 data,
 {
 	if ( action != (uint32)AUI_BUTTON_ACTION_EXECUTE ) return;
 
-	custommapscreen_displayMyWindow();		
+	custommapscreen_displayMyWindow();
 }
 
 void spnewgamescreen_rulesPress( aui_Control *control, uint32 action, uint32 data, void *cookie )
@@ -458,16 +433,13 @@ void spnewgamescreen_rulesPress( aui_Control *control, uint32 action, uint32 dat
 	spnewgamerulesscreen_displayMyWindow();
 }
 
-
 void spnewgamescreen_editorPress( aui_Control *control, uint32 action, uint32 data, void *cookie )
 {
 	if ( action != (uint32)AUI_BUTTON_ACTION_EXECUTE ) return;
 
 	g_launchIntoCheatMode = TRUE;
 
-	
 	disclaimer_Initialize(spnewgamescreen_startPress);
-
 
 }
 
@@ -487,13 +459,10 @@ void spnewgamescreen_scenarioExitCallback(aui_Control *control, uint32 action, u
 		if(!c3files_HasLegalCD())
 			exit(0);
 
-		
 		SaveInfo *saveInfo = new SaveInfo;
 
-		
 		strcpy(saveInfo->fileName, k_SCENARIO_DEFAULT_SAVED_GAME_NAME);
 
-		
 		strcpy(saveInfo->pathName, tempPath);
 
 		if (GameFile::FetchExtendedSaveInfo(tempPath, saveInfo)) {
@@ -507,7 +476,7 @@ void spnewgamescreen_scenarioExitCallback(aui_Control *control, uint32 action, u
 
 		return;
 	}
-	
+
 	g_spNewGameWindow->Update();
 }
 
@@ -515,7 +484,7 @@ void spnewgamescreen_scenarioExitCallback(aui_Control *control, uint32 action, u
 
 
 
-void spnewgamescreen_scenarioPress(aui_Control *control, uint32 action, uint32 data, void *cookie) 
+void spnewgamescreen_scenarioPress(aui_Control *control, uint32 action, uint32 data, void *cookie)
 {
 	if ( action != (uint32)AUI_BUTTON_ACTION_EXECUTE ) return;
 
@@ -524,8 +493,7 @@ void spnewgamescreen_scenarioPress(aui_Control *control, uint32 action, uint32 d
 		g_spNewGameWindow->Update();
 	} else {
 		scenarioscreen_displayMyWindow();
-		
-		
+
 		scenarioscreen_SetExitCallback(spnewgamescreen_scenarioExitCallback);
 	}
 }
@@ -548,7 +516,6 @@ void spnewgamescreen_worldShapePress( aui_Control *control, uint32 action, uint3
 }
 
 
-
 void spnewgamescreen_clanSelect(aui_Control *control, uint32 action, uint32 data, void *cookie )
 {
 
@@ -563,7 +530,7 @@ void spnewgamescreen_clanSelect(aui_Control *control, uint32 action, uint32 data
 void spnewgamescreen_genderSelect(aui_Control *control, uint32 action, uint32 data, void *cookie )
 {
 	if ( action != (uint32)AUI_LISTBOX_ACTION_SELECT  ) return;
-	
+
 	if(g_spNewGameWindow) callbackSetSelected(control,cookie);
 }
 void
@@ -580,24 +547,24 @@ spnewgamescreen_pCustomPress(aui_Control *control, uint32 action, uint32 data, v
 void spnewgamescreen_mapSizeSelect(aui_Control *control, uint32 action, uint32 data, void *cookie )
 {
 	if ( action != (uint32)AUI_LISTBOX_ACTION_SELECT  ) return;
-	
+
 	if(g_spNewGameWindow) {
 		callbackSetSelected(control,cookie);
-		
+
 		switch(((c3_ListBox*)control)->GetSelectedItemIndex()) {
-		case 0: 
+		case 0:
 			g_theProfileDB->SetMapSize( MAPSIZE_SMALL);
 
 			break;
-		case 1: 
+		case 1:
 			g_theProfileDB->SetMapSize( MAPSIZE_MEDIUM);
 
 			break;
-		case 2: 
+		case 2:
 			g_theProfileDB->SetMapSize( MAPSIZE_LARGE);
 
 			break;
-		case 3: 
+		case 3:
 			g_theProfileDB->SetMapSize( MAPSIZE_GIGANTIC);
 
 			break;
@@ -608,32 +575,32 @@ void spnewgamescreen_mapSizeSelect(aui_Control *control, uint32 action, uint32 d
 void spnewgamescreen_worldTypeSelect(aui_Control *control, uint32 action, uint32 data, void *cookie )
 {
 	if ( action != (uint32)AUI_LISTBOX_ACTION_SELECT  ) return;
-	
+
 	if(g_spNewGameWindow) callbackSetSelected(control,cookie);
 }
 void spnewgamescreen_worldShapeSelect(aui_Control *control, uint32 action, uint32 data, void *cookie )
 {
 	if ( action != (uint32)AUI_LISTBOX_ACTION_SELECT  ) return;
-	
+
 	if(g_spNewGameWindow) callbackSetSelected(control,cookie);
 }
 void spnewgamescreen_difficultySelect(aui_Control *control, uint32 action, uint32 data, void *cookie )
 {
 	if ( action != (uint32)AUI_LISTBOX_ACTION_SELECT  ) return;
-	
+
 	if(g_spNewGameWindow) {
 		callbackSetSelected(control,cookie);
-		
+
 		g_theProfileDB->SetDifficulty( ((c3_ListBox*)control)->GetSelectedItemIndex());
 	}
 }
 void spnewgamescreen_riskLevelSelect(aui_Control *control, uint32 action, uint32 data, void *cookie )
 {
 	if ( action != (uint32)AUI_LISTBOX_ACTION_SELECT  ) return;
-	
+
 	if(g_spNewGameWindow) {
 		callbackSetSelected(control,cookie);
-		
+
 		g_theProfileDB->SetRiskLevel( ((c3_ListBox*)control)->GetSelectedItemIndex() );
 	}
 }
@@ -641,10 +608,10 @@ void
 spnewgamescreen_opponentSelect(aui_Control *control, uint32 action, uint32 data, void *cookie )
 {
 	if ( action != (uint32)AUI_LISTBOX_ACTION_SELECT  ) return;
-	
+
 	if(g_spNewGameWindow) {
 		callbackSetSelected(control,cookie);
-		
+
 		g_theProfileDB->SetNPlayers( ((c3_ListBox*)control)->GetSelectedItemIndex()+3 );
 	}
 }
@@ -653,17 +620,16 @@ spnewgamescreen_wCustomPress(aui_Control *control, uint32 action, uint32 data, v
 {
 	if ( action != (uint32)AUI_BUTTON_ACTION_EXECUTE ) return;
 
-
-		custommapscreen_displayMyWindow();		
+		custommapscreen_displayMyWindow();
 }
 
 void
 spnewgamescreen_genocidePress(aui_Control *control, uint32 action, uint32 data, void *cookie )
 {
 	if ( action == uint32(AUI_SWITCH_ACTION_PRESS) ) {
-		uint32 state = data; 
+		uint32 state = data;
 		c3_CheckBox *mycheckbox = (c3_CheckBox*)control;
-		
+
 		g_theProfileDB->SetGenocideRule( state ? FALSE : TRUE );
 	}
 }
@@ -671,9 +637,9 @@ void
 spnewgamescreen_tradePress(aui_Control *control, uint32 action, uint32 data, void *cookie )
 {
 	if ( action == uint32(AUI_SWITCH_ACTION_PRESS) ) {
-		uint32 state = data; 
+		uint32 state = data;
 		c3_CheckBox *mycheckbox = (c3_CheckBox*)control;
-		
+
 		g_theProfileDB->SetTradeRule( state ? FALSE : TRUE );
 	}
 }
@@ -681,9 +647,9 @@ void
 spnewgamescreen_combatPress(aui_Control *control, uint32 action, uint32 data, void *cookie )
 {
 	if ( action == uint32(AUI_SWITCH_ACTION_PRESS) ) {
-		uint32 state = data; 
+		uint32 state = data;
 		c3_CheckBox *mycheckbox = (c3_CheckBox*)control;
-		
+
 		g_theProfileDB->SetSimpleCombatRule( state ? FALSE : TRUE );
 	}
 }
@@ -691,9 +657,9 @@ void
 spnewgamescreen_pollutionPress(aui_Control *control, uint32 action, uint32 data, void *cookie )
 {
 	if ( action == uint32(AUI_SWITCH_ACTION_PRESS) ) {
-		uint32 state = data; 
+		uint32 state = data;
 		c3_CheckBox *mycheckbox = (c3_CheckBox*)control;
-		
+
 		g_theProfileDB->SetPollutionRule( state ? FALSE : TRUE );
 	}
 }
@@ -732,8 +698,8 @@ ctp2_Button* spNew_ctp2_Button(AUI_ERRCODE *errcode, MBCHAR *ldlParent,MBCHAR *l
 
 
 
-ctp2_Button* 
-spNew_ctp2_Button(AUI_ERRCODE *errcode, 
+ctp2_Button*
+spNew_ctp2_Button(AUI_ERRCODE *errcode,
 				  MBCHAR *ldlParent,
 				  MBCHAR *ldlMe,
 				  MBCHAR *default_text,
@@ -748,9 +714,9 @@ spNew_ctp2_Button(AUI_ERRCODE *errcode,
 	else
 		sprintf( textBlock, "%s.%s", ldlParent, ldlMe );
 
-	myButton = new ctp2_Button (errcode, 
+	myButton = new ctp2_Button (errcode,
 								aui_UniqueId(),
-								textBlock, 
+								textBlock,
 								buttonFlavor,
 								500, 10,
 								100, 20,
@@ -760,7 +726,6 @@ spNew_ctp2_Button(AUI_ERRCODE *errcode,
 	Assert( AUI_NEWOK(myButton, *errcode) );
 	return myButton;
 }
-
 
 
 c3_Switch* spNew_c3_Switch(AUI_ERRCODE *errcode, MBCHAR *ldlParent,MBCHAR *ldlMe,
@@ -796,9 +761,9 @@ c3_ListBox* spNew_c3_ListBox(AUI_ERRCODE *errcode, MBCHAR *ldlParent,MBCHAR *ldl
 {
 	MBCHAR			textBlock[ k_AUI_LDL_MAXBLOCK + 1 ];
 	c3_ListBox *myListBox = NULL;
-	sprintf( textBlock, "%s.%s", ldlParent, ldlMe ); 
-	myListBox = new c3_ListBox(errcode,aui_UniqueId(), textBlock, callback,cookie );	
-	Assert( AUI_NEWOK(myListBox, *errcode) ); 
+	sprintf( textBlock, "%s.%s", ldlParent, ldlMe );
+	myListBox = new c3_ListBox(errcode,aui_UniqueId(), textBlock, callback,cookie );
+	Assert( AUI_NEWOK(myListBox, *errcode) );
 	return myListBox;
 }
 
@@ -808,7 +773,6 @@ c3_DropDown* spNew_c3_DropDown(AUI_ERRCODE *errcode, MBCHAR *ldlParent,MBCHAR *l
 	MBCHAR			textBlock[ k_AUI_LDL_MAXBLOCK + 1 ];
 	c3_DropDown *myDropDown = NULL;
 
-	
 	sprintf(textBlock, "%s.%s", ldlParent, ldlMe);
 	myDropDown = new c3_DropDown( errcode, aui_UniqueId(), textBlock);
 	Assert( AUI_NEWOK(myDropDown, *errcode) );
@@ -844,13 +808,12 @@ void spFillListBox(AUI_ERRCODE *retval, c3_ListBox *mylist, aui_StringTable *myt
 
 	for (i=0; i<mytable->GetNumStrings(); i++) {
 		aui_Item		*item=NULL;
-		
+
 		item = (aui_Item*) new SPDropDownListItem(retval, listitemparent, listitemme, mytable->GetString(i));
 		if (item)
 			mylist->AddItem(item );
 	}
 }
-
 
 c3_Static* spNew_c3_Static(AUI_ERRCODE *errcode, MBCHAR *ldlParent,MBCHAR *ldlMe)
 {
@@ -897,7 +860,6 @@ TwoChoiceButton* spNewTwoChoiceButton(AUI_ERRCODE *errcode, MBCHAR* ldlParent, M
 	return mybutton;
 }
 
-
 C3Slider* spNew_C3Slider(AUI_ERRCODE *errcode, MBCHAR *ldlParent, MBCHAR *ldlMe,
 	 					void (*callback)(aui_Control*,uint32,uint32,void*))
 {
@@ -936,33 +898,30 @@ aui_SwitchGroup* spNew_aui_SwitchGroup( AUI_ERRCODE *errcode, MBCHAR *ldlParent,
 	return mygroup;
 }
 
-
-void spnewgamescreen_HotseatCallback(sint32 launch, sint32 player, 
-									 sint32 civ, BOOL human, 
+void spnewgamescreen_HotseatCallback(sint32 launch, sint32 player,
+									 sint32 civ, BOOL human,
 									 MBCHAR *name, MBCHAR *email)
 {
 	if(launch) {
 		DPRINTF(k_DBG_GAMESTATE, ("Hotseat callback: %d, %d, %d, %s\n", player, civ, human, email));
-		
+
 		MBCHAR fieldText[k_MAX_NAME_LEN];
-		
-		
+
 		g_spNewGameWindow->m_spName->GetFieldText(fieldText, k_MAX_NAME_LEN);
 		g_theProfileDB->SetLeaderName(fieldText);
-		
-		
-		
-		
-		
+
+
+
+
+
 		g_theProfileDB->SetSaveNote("");
-		
-		
-		
+
+
 		g_theProfileDB->SetTutorialAdvice(FALSE);
-		
+
 		g_civApp->PostStartGameAction();
 	} else {
-		
+
 		g_hsPlayerSetup[player].civ = civ;
 		g_hsPlayerSetup[player].isHuman = human;
 		delete [] g_hsPlayerSetup[player].name;
@@ -978,7 +937,6 @@ void spnewgamescreen_SetupHotseatOrEmail()
 {
 	memset(g_hsPlayerSetup, 0, sizeof(g_hsPlayerSetup));
 
-	
 	hotseatlist_ClearOptions();
 	hotseatlist_EnableAllCivs();
 

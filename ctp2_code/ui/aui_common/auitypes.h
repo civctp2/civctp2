@@ -1,14 +1,3 @@
-
-
-
-
-
-
-
-
-
-
-
 #ifndef __AUITYPES_H__
 #define __AUITYPES_H__
 
@@ -16,11 +5,11 @@
 
 enum AUI_ERRCODE
 {
-	AUI_ERRCODE_HACK = -1,	
-							
-							
-							
-							
+	AUI_ERRCODE_HACK = -1,
+
+
+
+
 	AUI_ERRCODE_FIRST = 0,
 	AUI_ERRCODE_OK = 0,
 	AUI_ERRCODE_LOADFAILED,
@@ -110,5 +99,4 @@ typedef tchar                           MBCHAR;
 typedef MBCHAR*                         LPMBCHAR;
 #endif
 
-
-#endif 
+#endif

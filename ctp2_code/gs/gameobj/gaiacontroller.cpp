@@ -2,7 +2,7 @@
 //
 // Project      : Call To Power 2
 // File type    : C++ source
-// Description  : Gaia Controller 
+// Description  : Gaia Controller
 //
 //----------------------------------------------------------------------------
 //
@@ -10,13 +10,13 @@
 //
 // THIS FILE IS NOT GENERATED OR SUPPORTED BY ACTIVISION.
 //
-// This material has been developed at apolyton.net by the Apolyton CtP2 
+// This material has been developed at apolyton.net by the Apolyton CtP2
 // Source Code Project. Contact the authors at ctp2source@apolyton.net.
 //
 //----------------------------------------------------------------------------
 //
 // Compiler flags
-// 
+//
 //----------------------------------------------------------------------------
 //
 // Modifications from the original Activision code:
@@ -52,7 +52,6 @@
 #include "mapanalysis.h"
 
 using namespace std ;
-
 
 uint64 GaiaController::sm_endgameImprovements = 0x0;
 uint64 GaiaController::sm_endgameBuildings = 0x0;
@@ -91,12 +90,11 @@ void GaiaController::Serialize(CivArchive &archive)
 		archive >> m_numWondersBuilt;
 		archive >> m_numTowersBuilt;
 		archive >> tmp_val;
-		m_percentCoverage = (float) tmp_val;	
+		m_percentCoverage = (float) tmp_val;
 		archive >> m_completedTurn;
 	}
 	m_coveredCells.Serialize(archive);
 }
-
 
 void GaiaController::InitializeStatics()
 {
@@ -104,9 +102,9 @@ void GaiaController::InitializeStatics()
 	const BuildingRecord *building_rec;
 	const WonderRecord *wonder_rec;
 
-	sm_towerEndgameIndex = 
+	sm_towerEndgameIndex =
 		g_theEndGameObjectDB->FindRecordNameIndex("ENDGAME_PROCESSING_TOWER");
-			
+
 	Assert(sm_towerEndgameIndex >= 0);
 	Assert(g_theEndGameObjectDB->Get(sm_towerEndgameIndex) >= 0);
 	if (sm_towerEndgameIndex >= 0 && g_theEndGameObjectDB->Get(sm_towerEndgameIndex))
@@ -115,7 +113,6 @@ void GaiaController::InitializeStatics()
 			GetTerrainImprovementPtr();
 		sm_towerTileImpIndex = terr_rec->GetIndex();
 	}
-
 
 	sm_satelliteEndgameIndex =
 		g_theEndGameObjectDB->FindRecordNameIndex("ENDGAME_POWER_SATELLITE");
@@ -173,8 +170,7 @@ void GaiaController::InitializeStatics()
 
 void GaiaController::Initialize()
 {
-	
-	
+
 
 	m_numMainframes = 0;
 	m_numSatellites = 0;
@@ -186,17 +182,14 @@ void GaiaController::Initialize()
 	sint32 x_size = g_theWorld->GetXWidth();
 	sint32 y_size = g_theWorld->GetYHeight();
 
-	
 	m_coveredCells.Resize( x_size, y_size, 0 );
 }
-
 
 
 GaiaController::~GaiaController()
 {
     // Nothing allocated directly.
 }
-
 
 void GaiaController::RecomputeCoverage()
 {
@@ -209,10 +202,9 @@ void GaiaController::RecomputeCoverage()
 	sint32 type;
 	sint32 radius = GetTowerRadius();
 
-	const DynamicArray<Installation> *tile_imps = 
+	const DynamicArray<Installation> *tile_imps =
 		player_ptr->m_allInstallations;
 
-	
 	m_coveredCells.Reset( 0 );
 	m_numTowersBuilt = 0;
 	sint32 covered_cells = 0;
@@ -225,30 +217,27 @@ void GaiaController::RecomputeCoverage()
 			{
 				m_numTowersBuilt++;
 
-				
 				tile_imps->Access(i).GetPos(pos);
 
-				
 				RadiusIterator it(pos, radius);
 
-				for(it.Start(); !it.End(); it.Next()) 
+				for(it.Start(); !it.End(); it.Next())
 					{
 						cell_pos = it.Pos();
-						
+
 						if (m_coveredCells.Get(cell_pos.x, cell_pos.y) == FALSE)
 							{
-								
+
 								covered_cells++;
 								m_coveredCells.Set(cell_pos.x, cell_pos.y, 1);
 							}
 					}
 			}
 	}
-	m_percentCoverage = ((float) covered_cells / 
+	m_percentCoverage = ((float) covered_cells /
 						 (g_theWorld->GetXWidth() * g_theWorld->GetYHeight()));
 
 }
-
 
 STDEHANDLER(GaiaController_CaptureCity)
 {
@@ -277,28 +266,25 @@ STDEHANDLER(GaiaController_CaptureCity)
 	if (city_data == NULL)
 		return GEV_HD_Continue;
 
-	
 	uint64 city_buildings = city_data->GetImprovements();
 	uint64 city_wonders = city_data->GetBuiltWonders();
 	if (((city_buildings & GaiaController::sm_endgameBuildings) == 0x0) &&
 		((city_wonders & GaiaController::sm_endgameWonders) == 0x0))
 		return GEV_HD_Continue;
 
-	
 	sint32 type;
 	for (type = 0; type < g_theBuildingDB->NumRecords(); type++)
 		{
 			if ((city_buildings & ((uint64)0x1 << (uint64)type)) &&
 				(GaiaController::sm_endgameBuildings & ((uint64)0x1 << (uint64)type)))
 				{
-					
+
 					if (owner_player &&	owner_player->GetGaiaController())
 						{
 							owner_player->GetGaiaController()->
 								HandleBuildingChange(type, city, 1);
 						}
 
-					
 					if (original_player && original_player->GetGaiaController())
 						{
 							original_player->GetGaiaController()->
@@ -307,20 +293,18 @@ STDEHANDLER(GaiaController_CaptureCity)
 				}
 		}
 
-	
 	for (type = 0; type < g_theWonderDB->NumRecords(); type++)
 		{
 			if ((city_wonders & ((uint64)0x1 << (uint64)type)) &&
 				(GaiaController::sm_endgameWonders & ((uint64)0x1 << (uint64)type)))
 				{
-					
+
 					if (owner_player &&	owner_player->GetGaiaController())
 						{
 							owner_player->GetGaiaController()->
 								HandleWonderChange(type,1);
 						}
 
-					
 					if (original_player && original_player->GetGaiaController())
 						{
 							original_player->GetGaiaController()->
@@ -331,7 +315,6 @@ STDEHANDLER(GaiaController_CaptureCity)
 
 	return GEV_HD_Continue;
 }
-
 
 STDEHANDLER(GaiaController_CutImprovements)
 {
@@ -358,9 +341,8 @@ STDEHANDLER(GaiaController_CutImprovements)
 	Player *owner_player = g_player[owner];
 	if (owner_player == NULL ||
 		owner_player->GetGaiaController() == NULL)
-		return GEV_HD_Continue;		
+		return GEV_HD_Continue;
 
-	
 	sint32 num = cell->GetNumDBImprovements();
 	for (sint16 i = 0; i < num; i++)
 		{
@@ -376,7 +358,6 @@ STDEHANDLER(GaiaController_CutImprovements)
 		return GEV_HD_Continue;
 }
 
-
 STDEHANDLER(GaiaController_ImprovementComplete)
 {
 	sint32 owner;
@@ -388,7 +369,7 @@ STDEHANDLER(GaiaController_ImprovementComplete)
 
 	if(!args->GetPlayer(0, owner))
 		return GEV_HD_Continue;
-	
+
 	if(!args->GetInt(0, type))
 		return GEV_HD_Continue;
 
@@ -400,21 +381,20 @@ STDEHANDLER(GaiaController_ImprovementComplete)
 	//It is not very probably that you get 0.
 	if (owner == -1)
 		return GEV_HD_Continue;
-	
+
 	Player *owner_player = g_player[owner];
 	if (owner_player == NULL ||
 		owner_player->GetGaiaController() == NULL)
-		return GEV_HD_Continue;		
+		return GEV_HD_Continue;
 
 	if (GaiaController::sm_endgameImprovements & ((uint64)0x1 << (uint64)type))
 		{
-			
+
 			owner_player->GetGaiaController()->
 				HandleTerrImprovementChange(type, pos, 1);
 		}
 	return GEV_HD_Continue;
 }
-
 
 STDEHANDLER(GaiaController_SellBuilding)
 {
@@ -427,21 +407,19 @@ STDEHANDLER(GaiaController_SellBuilding)
 	if(!args->GetInt(0, type))
 		return GEV_HD_Continue;
 
-	
 	Player *owner_player = g_player[city.GetOwner()];
 	if (owner_player == NULL ||
 		owner_player->GetGaiaController() == NULL)
-		return GEV_HD_Continue;		
+		return GEV_HD_Continue;
 
 	if (GaiaController::sm_endgameBuildings & ((uint64)0x1 << (uint64)type))
 		{
-			
+
 			owner_player->GetGaiaController()->
 				HandleBuildingChange(type, city, -1);
 		}
 	return GEV_HD_Continue;
 }
-
 
 
 STDEHANDLER(GaiaController_CreateBuilding)
@@ -455,21 +433,19 @@ STDEHANDLER(GaiaController_CreateBuilding)
 	if(!args->GetInt(0, type))
 		return GEV_HD_Continue;
 
-	
 	Player *owner_player = g_player[city.GetOwner()];
 	if (owner_player == NULL ||
 		owner_player->GetGaiaController() == NULL)
-		return GEV_HD_Continue;		
+		return GEV_HD_Continue;
 
 	if (GaiaController::sm_endgameBuildings & ((uint64)0x1 << (uint64)type))
 		{
-			
+
 			owner_player->GetGaiaController()->
 				HandleBuildingChange(type, city, 1);
 		}
 	return GEV_HD_Continue;
 }
-
 
 STDEHANDLER(GaiaController_DisbandCity)
 {
@@ -489,35 +465,32 @@ STDEHANDLER(GaiaController_DisbandCity)
 	Player *owner_player = g_player[owner];
 	if (owner_player == NULL ||
 		owner_player->GetGaiaController() == NULL)
-		return GEV_HD_Continue;		
+		return GEV_HD_Continue;
 
-	
 	uint64 city_buildings = city_data->GetImprovements();
 	uint64 city_wonders = city_data->GetBuiltWonders();
 	if (((city_buildings & GaiaController::sm_endgameBuildings) == 0x0) &&
 		((city_wonders & GaiaController::sm_endgameWonders) == 0x0))
 		return GEV_HD_Continue;
 
-	
 	sint32 type;
 	for (type = 0; type < g_theBuildingDB->NumRecords(); type++)
 		{
 			if ((city_buildings & ((uint64)0x1 << (uint64)type)) &&
 				(GaiaController::sm_endgameBuildings & ((uint64)0x1 << (uint64)type)))
 				{
-					
+
 					owner_player->GetGaiaController()->
 						HandleBuildingChange(type, city, -1);
 				}
 		}
 
-	
 	for (type = 0; type < g_theWonderDB->NumRecords(); type++)
 		{
 			if ((city_wonders & ((uint64)0x1 << (uint64)type)) &&
 				(GaiaController::sm_endgameWonders & ((uint64)0x1 << (uint64)type)))
 				{
-					
+
 					owner_player->GetGaiaController()->
 						HandleWonderChange(type, -1);
 				}
@@ -525,7 +498,6 @@ STDEHANDLER(GaiaController_DisbandCity)
 
 	return GEV_HD_Continue;
 }
-
 
 STDEHANDLER(GaiaController_CreateWonder)
 {
@@ -538,21 +510,19 @@ STDEHANDLER(GaiaController_CreateWonder)
 	if(!args->GetInt(0, type))
 		return GEV_HD_Continue;
 
-	
 	Player *owner_player = g_player[city.GetOwner()];
 	if (owner_player == NULL ||
 		owner_player->GetGaiaController() == NULL)
-		return GEV_HD_Continue;		
+		return GEV_HD_Continue;
 
 	if (GaiaController::sm_endgameWonders & ((uint64)0x1 << (uint64)type))
 		{
-			
+
 			owner_player->GetGaiaController()->
 				HandleWonderChange(type, 1);
 		}
 	return GEV_HD_Continue;
 }
-
 
 STDEHANDLER(GaiaController_BuildingRemoved)
 {
@@ -565,21 +535,19 @@ STDEHANDLER(GaiaController_BuildingRemoved)
 	if(!args->GetInt(0, type))
 		return GEV_HD_Continue;
 
-	
 	Player *owner_player = g_player[city.GetOwner()];
 	if (owner_player == NULL ||
 		owner_player->GetGaiaController() == NULL)
-		return GEV_HD_Continue;		
+		return GEV_HD_Continue;
 
 	if (GaiaController::sm_endgameBuildings & ((uint64)0x1 << (uint64)type))
 		{
-			
+
 			owner_player->GetGaiaController()->
 				HandleBuildingChange(type, city, -1);
 		}
 	return GEV_HD_Continue;
 }
-
 
 STDEHANDLER(GaiaController_WonderRemoved)
 {
@@ -592,15 +560,14 @@ STDEHANDLER(GaiaController_WonderRemoved)
 	if(!args->GetInt(0, type))
 		return GEV_HD_Continue;
 
-	
 	Player *owner_player = g_player[city.GetOwner()];
 	if (owner_player == NULL ||
 		owner_player->GetGaiaController() == NULL)
-		return GEV_HD_Continue;		
+		return GEV_HD_Continue;
 
 	if (GaiaController::sm_endgameWonders & ((uint64)0x1 << (uint64)type))
 		{
-			
+
 			owner_player->GetGaiaController()->
 				HandleWonderChange(type, -1);
 		}
@@ -609,43 +576,43 @@ STDEHANDLER(GaiaController_WonderRemoved)
 
 void GaiaController::InitializeEvents()
 {
-	g_gevManager->AddCallback(GEV_CaptureCity, 
-							  GEV_PRI_Pre, 
+	g_gevManager->AddCallback(GEV_CaptureCity,
+							  GEV_PRI_Pre,
 							  &s_GaiaController_CaptureCity);
 
 	g_gevManager->AddCallback(GEV_CutImprovements,
 							  GEV_PRI_Pre,
 							  &s_GaiaController_CutImprovements);
 
-	g_gevManager->AddCallback(GEV_ImprovementComplete, 
+	g_gevManager->AddCallback(GEV_ImprovementComplete,
 							  GEV_PRI_Post,
 							  &s_GaiaController_ImprovementComplete);
 
-	g_gevManager->AddCallback(GEV_SellBuilding, 
+	g_gevManager->AddCallback(GEV_SellBuilding,
 							  GEV_PRI_Pre,
 							  &s_GaiaController_SellBuilding);
 
-	g_gevManager->AddCallback(GEV_CreateBuilding, 
+	g_gevManager->AddCallback(GEV_CreateBuilding,
 							  GEV_PRI_Post,
 							  &s_GaiaController_CreateBuilding);
 
-	g_gevManager->AddCallback(GEV_DisbandCity, 
+	g_gevManager->AddCallback(GEV_DisbandCity,
 							  GEV_PRI_Pre,
 							  &s_GaiaController_DisbandCity);
 
-	g_gevManager->AddCallback(GEV_CreateWonder, 
+	g_gevManager->AddCallback(GEV_CreateWonder,
 							  GEV_PRI_Post,
 							  &s_GaiaController_CreateWonder);
 
-	g_gevManager->AddCallback(GEV_BuildingRemoved, 
+	g_gevManager->AddCallback(GEV_BuildingRemoved,
 							  GEV_PRI_Pre,
 							  &s_GaiaController_BuildingRemoved);
 
-	g_gevManager->AddCallback(GEV_WonderRemoved, 
+	g_gevManager->AddCallback(GEV_WonderRemoved,
 							  GEV_PRI_Pre,
 							  &s_GaiaController_WonderRemoved);
 }
-	
+
 void GaiaController::CleanupEvents()
 {
 }
@@ -659,7 +626,6 @@ void GaiaController::HandleBuildingChange(const sint32 type, Unit & city, const 
 		m_numSatellites += delta;
 		RecomputeCoverage();
 
-		
 		if (delta > 0)
 		{
 			Assert(city->GetCityData());
@@ -681,7 +647,7 @@ void GaiaController::HandleBuildingChange(const sint32 type, Unit & city, const 
 				m_completedTurn = -1;
 		}
 	}
-	
+
 }
 
 void GaiaController::HandleWonderChange(const sint32 type, const sint16 delta)
@@ -695,7 +661,6 @@ void GaiaController::HandleWonderChange(const sint32 type, const sint16 delta)
 			m_completedTurn = -1;
 	}
 
-	
 }
 
 void GaiaController::HandleTerrImprovementChange(const sint32 type, const MapPoint & pos, const sint16 delta)
@@ -712,7 +677,7 @@ void GaiaController::HandleTerrImprovementChange(const sint32 type, const MapPoi
 					m_completedTurn = -1;
 			}
 		}
-	
+
 }
 
 sint16 GaiaController::NumMainframesBuilt() const
@@ -740,7 +705,7 @@ sint16 GaiaController::NumSatellitesRequired() const
 	sint32 value = 0;
 	if (g_theEndGameObjectDB->Get(sm_satelliteEndgameIndex)->GetMinNeeded())
 		g_theEndGameObjectDB->Get(sm_satelliteEndgameIndex)->GetMinNeeded(value);
-	
+
 	return (sint16) value;
 }
 
@@ -766,7 +731,7 @@ sint16 GaiaController::NumTowersRequired() const
 	sint32 value = 0;
 	if (g_theEndGameObjectDB->Get(sm_towerEndgameIndex)->GetMinNeeded())
 		g_theEndGameObjectDB->Get(sm_towerEndgameIndex)->GetMinNeeded(value);
-	
+
 	return (sint16) value;
 }
 
@@ -775,17 +740,17 @@ double GaiaController::TowerCoverageRequired() const
 	double value = 0;
 	if (g_theEndGameObjectDB->Get(sm_towerEndgameIndex)->GetMinCoverage())
 		g_theEndGameObjectDB->Get(sm_towerEndgameIndex)->GetMinCoverage(value);
-	
+
 	return value;
 }
 
 sint16 GaiaController::GetTowerRadius() const
 {
 	Assert(sm_towerEndgameIndex >= 0);
-	const EndGameObjectRecord *tower_rec = 
+	const EndGameObjectRecord *tower_rec =
 		g_theEndGameObjectDB->Get(sm_towerEndgameIndex);
 	Assert(sm_satelliteEndgameIndex >= 0);
-	const EndGameObjectRecord *satellite_rec = 
+	const EndGameObjectRecord *satellite_rec =
 		g_theEndGameObjectDB->Get(sm_satelliteEndgameIndex);
 
 	sint32 min_radius = 0;
@@ -810,7 +775,7 @@ sint16 GaiaController::GetTowerRadius() const
 	if ( (m_numSatellites > min_satellites) &&
 		 (max_radius > min_radius) )
 		{
-			double ratio = ((double)(m_numSatellites - min_satellites) / 
+			double ratio = ((double)(m_numSatellites - min_satellites) /
 							(max_satellites - min_satellites));
 			if (ratio > 1.0)
 				add_radius = (sint16) (max_radius - min_radius);
@@ -821,12 +786,10 @@ sint16 GaiaController::GetTowerRadius() const
 	return ((sint16) min_radius + add_radius);
 }
 
-
 float GaiaController::GetTowerCoverage() const
 {
-	return m_percentCoverage;	
+	return m_percentCoverage;
 }
-
 
 float GaiaController::NewCoverageFrom(const MapPoint & pos, const sint16 radius) const
 {
@@ -834,31 +797,28 @@ float GaiaController::NewCoverageFrom(const MapPoint & pos, const sint16 radius)
 	MapPoint cell_pos;
 	sint32 covered_cells = 0;
 
-	
-	for(it.Start(); !it.End(); it.Next()) 
+	for(it.Start(); !it.End(); it.Next())
 		{
 			cell_pos = it.Pos();
-			
+
 			if (m_coveredCells.Get(cell_pos.x, cell_pos.y) != FALSE)
 				covered_cells++;
 		}
-	return (float) (covered_cells / 
+	return (float) (covered_cells /
 			(g_theWorld->GetXWidth() * g_theWorld->GetYHeight()));
 }
-
 
 const Bit_Table & GaiaController::GetCoverage() const
 {
 	return m_coveredCells;
 }
 
-
 bool GaiaController::CanStartCountdown() const
 {
-	if (GetTowerCoverage() < TowerCoverageRequired()) 
+	if (GetTowerCoverage() < TowerCoverageRequired())
 		return false;
 
-	if (NumTowersBuilt() < NumTowersRequired()) 
+	if (NumTowersBuilt() < NumTowersRequired())
 		return false;
 
 	if (NumMainframesBuilt() < NumMainframesRequired())
@@ -867,25 +827,25 @@ bool GaiaController::CanStartCountdown() const
 	if (NumSatellitesLaunched() < NumSatellitesRequired())
 		return false;
 
-	
-	
+
+
 
 	return true;
 }
 
 bool GaiaController::HasReqTowerCoverage() const
 {
-	if(GetTowerCoverage() >= TowerCoverageRequired()) 
+	if(GetTowerCoverage() >= TowerCoverageRequired())
 		return true;
-	else 
+	else
 		return false;
 }
 
 bool GaiaController::HasMinTowersBuilt() const
 {
-	if(NumTowersBuilt() >= NumTowersRequired()) 
+	if(NumTowersBuilt() >= NumTowersRequired())
 		return true;
-	else 
+	else
 		return false;
 }
 
@@ -893,7 +853,7 @@ bool GaiaController::HasMinCoresBuilt() const
 {
 	if(NumMainframesBuilt() >= NumMainframesRequired())
 		return true;
-	else 
+	else
 		return false;
 }
 
@@ -901,7 +861,7 @@ bool GaiaController::HasMinSatsBuilt() const
 {
 	if(NumSatellitesLaunched() >= NumSatellitesRequired())
 		return true;
-	else 
+	else
 		return false;
 }
 
@@ -909,26 +869,24 @@ bool GaiaController::HasMaxSatsBuilt() const
 {
 	if(NumSatellitesLaunched() >= MaxSatellitesAllowed())
 		return true;
-	else 
+	else
 		return false;
 }
 
 
-
 bool GaiaController::StartCountdown()
 {
-	
+
 	sint32 max_turns_to_activate = TotalCountdownTurns();
 
-	
 	if (CanStartCountdown())
 	{
 		if (m_completedTurn < 0)
 		{
-			m_completedTurn = 
+			m_completedTurn =
 				(sint16) (NewTurnCount::GetCurrentRound() + max_turns_to_activate);
 		}
-		
+
 		return true;
 	}
 	else
@@ -938,10 +896,9 @@ bool GaiaController::StartCountdown()
 	}
 }
 
-
 sint32 GaiaController::TotalCountdownTurns() const
 {
-	
+
 	static sint32 max_turns_to_activate = -1;
 	sint32 turns;
 	if (max_turns_to_activate == -1)
@@ -959,10 +916,8 @@ sint32 GaiaController::TotalCountdownTurns() const
 				}
 		}
 
-	
 	return(max_turns_to_activate);
 }
-
 
 sint16 GaiaController::TurnsToComplete() const
 {
@@ -975,14 +930,12 @@ sint16 GaiaController::TurnsToComplete() const
 		return -1;
 }
 
-
 bool GaiaController::GaiaControllerTileImp(const sint32 type) const
 {
 	if (type == sm_towerTileImpIndex)
 		return true;
 	return false;
 }
-
 
 bool GaiaController::CanBuildTowers(const bool & check_pw) const
 {
@@ -993,16 +946,14 @@ bool GaiaController::CanBuildTowers(const bool & check_pw) const
 }
 
 
-
 sint32 GaiaController::ScoreTowerPosition(MapPoint & pos, const MapPoint empire_center, MapPoint_List & towers) const
 {
-	
 
-	
+
 	static sint32 optimal_distance = -1;
 	if (optimal_distance < 0)
 		{
-			const EndGameObjectRecord *tower_rec = 
+			const EndGameObjectRecord *tower_rec =
 				g_theEndGameObjectDB->Get(sm_towerEndgameIndex);
 			Assert(tower_rec);
 
@@ -1014,32 +965,28 @@ sint32 GaiaController::ScoreTowerPosition(MapPoint & pos, const MapPoint empire_
 			if (tower_rec->GetMaxRadius())
 				tower_rec->GetMaxRadius(max_radius);
 
-
 			if (max_radius != 0)
 				{
-					
-					optimal_distance = 
+
+					optimal_distance =
 						(sint32) floor(1.75 * (float) min_radius + ((float)(max_radius - min_radius) / 2.0));
 
-					
 					optimal_distance *= optimal_distance;
 				}
 			else
 				optimal_distance = 1;
 		}
 
-	
 	sint32 empire_distance =
 		MapPoint::GetSquaredDistance(pos, empire_center);
-	
-	
+
 	MapPoint_List::const_iterator tower_iter;
 	sint32 tmp_distance;
 	sint32 tmp_score;
 	sint32 min_score = optimal_distance;
 	for (tower_iter = towers.begin(); tower_iter != towers.end(); tower_iter++)
 		{
-			
+
 			tmp_distance = MapPoint::GetSquaredDistance(pos, *tower_iter);
 			tmp_score = optimal_distance;
 			if (tmp_distance <= optimal_distance)
@@ -1052,16 +999,14 @@ sint32 GaiaController::ScoreTowerPosition(MapPoint & pos, const MapPoint empire_
 				}
 		}
 
-	
-	sint32 max_distance = (g_theWorld->GetHeight() * g_theWorld->GetWidth()) * 
-		(g_theWorld->GetHeight() * g_theWorld->GetWidth()); 
+	sint32 max_distance = (g_theWorld->GetHeight() * g_theWorld->GetWidth()) *
+		(g_theWorld->GetHeight() * g_theWorld->GetWidth());
 	min_score += sint32(
 			(optimal_distance/10) * (1.0 - ((float) empire_distance / (float) max_distance))
 		);
-	
+
 	return min_score;
 }
-
 
 void GaiaController::ComputeTowerCandidates(Scored_MapPoint_List & candidates) const
 {
@@ -1080,7 +1025,6 @@ void GaiaController::ComputeTowerCandidates(Scored_MapPoint_List & candidates) c
 }
 
 
-
 void GaiaController::ComputeTowerPositions()
 {
 	MapPoint_List towers;
@@ -1092,21 +1036,17 @@ void GaiaController::ComputeTowerPositions()
 	if (player_ptr == NULL)
 		return;
 
-	
 	if (!CanBuildTowers(true))
 		return;
 
-	
-	
+
 	ComputeTowerCandidates(candidates);
 
-	
 	m_maxPercentCoverage = candidates.size();
 	m_maxPercentCoverage /= (g_theWorld->GetWidth() * g_theWorld->GetHeight());
 	m_maxPercentCoverage *= (float) 1.2;
 
-	
-	const DynamicArray<Installation> *tile_imps = 
+	const DynamicArray<Installation> *tile_imps =
 		player_ptr->m_allInstallations;
 
 	sint32 type;
@@ -1119,54 +1059,44 @@ void GaiaController::ComputeTowerPositions()
 			}
 	}
 
-	
 	m_newTowerPositions.clear();
 
-	
 	Assert(candidates.size());
 	if (candidates.size() <= 0)
 	{
 		return;
 	}
 
-	
 	sint32 tower_pw_cost;
 	sint32 total_pw = player_ptr->m_materialPool->GetMaterials();
 	do {
 
-		
 		MapPoint empire_pos = MapAnalysis::GetMapAnalysis().GetEmpireCenter(m_playerId);
 		Scored_MapPoint_List::iterator candidate_iter;
-		for (candidate_iter = candidates.begin(); 
-			 candidate_iter != candidates.end(); 
+		for (candidate_iter = candidates.begin();
+			 candidate_iter != candidates.end();
 			 candidate_iter++)
 			{
-				candidate_iter->first = ScoreTowerPosition(candidate_iter->second, empire_pos, towers); 
+				candidate_iter->first = ScoreTowerPosition(candidate_iter->second, empire_pos, towers);
 			}
 
-		
 		candidates.sort(std::greater<pair<sint32, MapPoint> >());
 
-		
 	    pos =  candidates.front().second;
 		candidates.pop_front();
 		m_newTowerPositions.push_back(pos);
 
-		
 		towers.push_back(pos);
 
-		
 		tower_pw_cost = terrainutil_GetProductionCost(sm_towerTileImpIndex, pos, -1);
 		total_pw -= tower_pw_cost;
 	} while (total_pw > 0);
 }
 
-
 float GaiaController::GetMaxTowerCoverage() const
 {
 	return m_maxPercentCoverage;
 }
-
 
 bool GaiaController::PopNextTowerPosition(MapPoint & pos)
 {
@@ -1183,29 +1113,27 @@ bool GaiaController::PopNextTowerPosition(MapPoint & pos)
 	return found;
 }
 
-
 void GaiaController::BuildProcessingTowers()
 {
-	
+
 	MapPoint pos;
 	bool found = PopNextTowerPosition(pos);
 	if (!found)
 	{
-		
+
 		ComputeTowerPositions();
 		found = PopNextTowerPosition(pos);
 	}
-	
+
 	while (found)
 	{
-		
+
 		g_gevManager->AddEvent(GEV_INSERT_Tail, GEV_CreateImprovement,
 			GEA_Player, m_playerId,
 			GEA_MapPoint, pos,
 			GEA_Int, GetTowerTileImpIndex(),
-			GEA_Int, 0,  
+			GEA_Int, 0,
 			GEA_End);
 		found = PopNextTowerPosition(pos);
 	}
 }
-

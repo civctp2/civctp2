@@ -11,7 +11,7 @@
 //
 // THIS FILE IS NOT GENERATED OR SUPPORTED BY ACTIVISION.
 //
-// This material has been developed at apolyton.net by the Apolyton CtP2 
+// This material has been developed at apolyton.net by the Apolyton CtP2
 // Source Code Project. Contact the authors at ctp2source@apolyton.net.
 //
 //----------------------------------------------------------------------------
@@ -27,7 +27,7 @@
 //
 // Modifications from the original Activision code:
 //
-// - Added new functions to calculate the food, shields and gold values produced 
+// - Added new functions to calculate the food, shields and gold values produced
 //   at the storing time of this UnseenCell. - Dec. 22nd 2004 Martin Gühmann
 // - Added visible city oner flag and get method to be able to figure out
 //   the city in whose radius the tile was at the last visit.
@@ -95,7 +95,6 @@ public:
 #define k_UCF_IS_WATCHFUL               0x0400
 
 
-
 class UnseenCell
 {
 	friend class NetUnseenCell;
@@ -118,18 +117,18 @@ public:
 
 
 
-	
-	
-	
+
+
+
 	uint16  m_flags;
 	sint8   m_bioInfectedOwner;
 	sint8   m_nanoInfectedOwner;
-	
+
 	sint8   m_convertedOwner;
 	sint8   m_franchiseOwner;
 	sint8   m_injoinedOwner;
 	sint8   m_happinessAttackOwner;
-	
+
 	sint16  m_citySize;
 	sint16  m_cityOwner;
 	sint16  m_citySpriteIndex;
@@ -144,9 +143,9 @@ public:
 
 	sint8   m_cell_owner;
 
-	
-	
-	
+
+
+
 	uint32  m_slaveBits;
 
 private:
@@ -156,7 +155,7 @@ private:
 
 	TileInfo *m_tileInfo;
 	MapPoint m_point;
-	
+
 	PointerList<UnseenInstallationInfo> *m_installations;
 	PointerList<UnseenImprovementInfo> *m_improvements;
 
@@ -175,8 +174,7 @@ public:
 	UnseenCell(UnseenCell *old);
 	UnseenCell(CivArchive &archive);
 	~UnseenCell();
-	
-	
+
 
 	void GetPos(MapPoint &pos) { pos = m_point; }
 	uint32 GetEnv() { return m_env; }
@@ -240,7 +238,6 @@ public:
 	sint32 GetShieldsProduced() const;
 	sint32 GetGoldFromTerrain() const;
 	sint32 GetGoldProduced() const;
-
 
 	void Serialize(CivArchive &archive);
 };

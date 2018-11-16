@@ -1,13 +1,11 @@
-
 #pragma once
 #ifndef __IC3TRADEOFFER_H__
 #define __IC3TRADEOFFER_H__
 
-
-DEFINE_GUID(CLSID_IC3TradeOffer, 
-			0xcfed4800, 
-			0x6f1b, 
-			0x11d2, 
+DEFINE_GUID(CLSID_IC3TradeOffer,
+			0xcfed4800,
+			0x6f1b,
+			0x11d2,
 			0x8d, 0x13, 0x0, 0x60, 0x97, 0xde, 0x50, 0xd5);
 
 #undef INTERFACE

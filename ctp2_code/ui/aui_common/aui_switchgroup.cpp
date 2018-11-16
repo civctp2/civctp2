@@ -1,20 +1,8 @@
-
-
-
-
-
-
-
-
-
-
-
 #include "c3.h"
 #include "aui_switch.h"
 #include "aui_window.h"
 
 #include "aui_switchgroup.h"
-
 
 
 aui_SwitchGroup::aui_SwitchGroup(
@@ -33,7 +21,6 @@ aui_SwitchGroup::aui_SwitchGroup(
 	Assert( AUI_SUCCESS(*retval) );
 	if ( !AUI_SUCCESS(*retval) ) return;
 }
-
 
 
 aui_SwitchGroup::aui_SwitchGroup(
@@ -57,12 +44,10 @@ aui_SwitchGroup::aui_SwitchGroup(
 }
 
 
-
 AUI_ERRCODE aui_SwitchGroup::InitCommonLdl( MBCHAR *ldlBlock )
 {
 	return InitCommon();
 }
-
 
 
 AUI_ERRCODE aui_SwitchGroup::InitCommon( void )
@@ -72,7 +57,6 @@ AUI_ERRCODE aui_SwitchGroup::InitCommon( void )
 
 	return AUI_ERRCODE_OK;
 }
-
 
 
 AUI_ERRCODE aui_SwitchGroup::AddChild( aui_Region *child )
@@ -85,14 +69,12 @@ AUI_ERRCODE aui_SwitchGroup::AddChild( aui_Region *child )
 }
 
 
-
 AUI_ERRCODE aui_SwitchGroup::RemoveChild( uint32 switchId )
 {
 	if ( m_whichIsSelected == switchId ) m_whichIsSelected = 0;
 
 	return aui_Control::RemoveChild( switchId );
 }
-
 
 sint32 aui_SwitchGroup::WhichIndexIsSelected( void )
 {
@@ -107,7 +89,6 @@ sint32 aui_SwitchGroup::WhichIndexIsSelected( void )
 	return -1;
 }
 
-
 BOOL aui_SwitchGroup::MakeSureOnlyOneIsSelected( void )
 {
 	BOOL foundSelectedSwitch = FALSE;
@@ -120,21 +101,20 @@ BOOL aui_SwitchGroup::MakeSureOnlyOneIsSelected( void )
 		if (theSwitch) {
 			if ( theSwitch->IsSelected() )
 			{
-				
+
 				if ( foundSelectedSwitch )
-					
+
 					theSwitch->SetState( 0 );
 				else
 				{
 					foundSelectedSwitch = TRUE;
 					m_whichIsSelected = theSwitch->Id();
 
-					
 					theSwitch->SetState( theSwitch->GetState() );
 				}
 			}
 			else
-				
+
 				theSwitch->SetState( 0 );
 		}
 	}
@@ -143,12 +123,10 @@ BOOL aui_SwitchGroup::MakeSureOnlyOneIsSelected( void )
 }
 
 
-
 void aui_SwitchGroup::PreChildrenCallback( aui_MouseEvent *input )
 {
 	m_whichWasSelected = m_whichIsSelected;
 }
-
 
 
 void aui_SwitchGroup::PostChildrenCallback( aui_MouseEvent *input )
@@ -166,18 +144,17 @@ void aui_SwitchGroup::PostChildrenCallback( aui_MouseEvent *input )
 
 			if ( theSwitch->Id() != m_whichWasSelected )
 			{
-				
+
 				aui_Switch *otherSwitch = m_whichWasSelected ?
 					(aui_Switch *)GetChild( m_whichWasSelected ) :
 					NULL;
 
 				if ( otherSwitch )
-					
+
 					otherSwitch->SetState( 0 );
 
 				m_whichIsSelected = theSwitch->Id();
 
-				
 				m_draw |= m_drawMask & k_AUI_REGION_DRAWFLAG_UPDATE;
 
 				m_mouseCode = AUI_ERRCODE_HANDLEDEXCLUSIVE;

@@ -1,20 +1,8 @@
-
-
-
-
-
-
-
-
-
-
-
 #include "c3.h"
 #include "aui_window.h"
 #include "aui_action.h"
 
 #include "aui_radio.h"
-
 
 
 aui_Radio::aui_Radio(
@@ -34,7 +22,6 @@ aui_Radio::aui_Radio(
 		cookie )
 {
 }
-
 
 
 aui_Radio::aui_Radio(
@@ -66,7 +53,6 @@ aui_Radio::aui_Radio(
 }
 
 
-
 void aui_Radio::MouseLDropInside( aui_MouseEvent *mouseData )
 {
 	if (IsDisabled()) return;
@@ -75,19 +61,16 @@ void aui_Radio::MouseLDropInside( aui_MouseEvent *mouseData )
 	{
 		SetWhichSeesMouse( this );
 
-		
 		if ( GetMouseOwnership() == this )
 		{
-			
+
 			ReleaseMouseOwnership();
 
 			PlaySound( AUI_SOUNDBASE_SOUND_EXECUTE );
 
-			
 			m_mouseCode = AUI_ERRCODE_HANDLEDEXCLUSIVE;
 
-			
-			
+
 			if ( !HandleGameSpecificLeftClick( this ) )
 			if ( 0 < m_state && m_state < m_numStates - 1 )
 				SetState( Mod(m_state+1,m_numStates) );
@@ -96,18 +79,15 @@ void aui_Radio::MouseLDropInside( aui_MouseEvent *mouseData )
 
 			m_attributes |= k_CONTROL_ATTRIBUTE_ACTIVE;
 
-			
 			m_draw |= m_drawMask & k_AUI_REGION_DRAWFLAG_MOUSELDROPINSIDE;
 		}
 		else
 		{
 			PlaySound( AUI_SOUNDBASE_SOUND_ACTIVATE );
 
-			
 			if ( m_mouseCode == AUI_ERRCODE_UNHANDLED )
 				m_mouseCode = AUI_ERRCODE_HANDLED;
 
-			
 			m_attributes |= k_CONTROL_ATTRIBUTE_ACTIVE;
 			m_draw |= m_drawMask & k_AUI_REGION_DRAWFLAG_MOUSELDROPINSIDE;
 
@@ -120,7 +100,6 @@ void aui_Radio::MouseLDropInside( aui_MouseEvent *mouseData )
 	else
 		MouseLDropOutside( mouseData );
 }
-
 
 void aui_Radio::MouseRDropInside( aui_MouseEvent *mouseData )
 {
@@ -136,4 +115,3 @@ void aui_Radio::MouseRDropInside( aui_MouseEvent *mouseData )
 		MouseRDropOutside( mouseData );
 	}
 }
-

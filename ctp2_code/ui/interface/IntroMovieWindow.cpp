@@ -11,7 +11,7 @@
 //
 // THIS FILE IS NOT GENERATED OR SUPPORTED BY ACTIVISION.
 //
-// This material has been developed at apolyton.net by the Apolyton CtP2 
+// This material has been developed at apolyton.net by the Apolyton CtP2
 // Source Code Project. Contact the authors at ctp2source@apolyton.net.
 //
 //----------------------------------------------------------------------------
@@ -43,7 +43,6 @@
 #include "IntroMovieWin.h"
 
 
-
 IntroMovieWindow::IntroMovieWindow(
 									 AUI_ERRCODE *retval,
 									 uint32 id,
@@ -57,7 +56,6 @@ C3Window(retval, id, ldlBlock, bpp, type)
 	Assert( AUI_SUCCESS(*retval) );
 	if ( !AUI_SUCCESS(*retval) ) return;
 }
-
 
 
 IntroMovieWindow::IntroMovieWindow(
@@ -77,7 +75,6 @@ C3Window( retval, id, x, y, width, height, bpp, pattern, type )
 	Assert(AUI_SUCCESS(*retval));
 	if (!AUI_SUCCESS(*retval)) return;
 }
-
 
 
 IntroMovieWindow::~IntroMovieWindow()
@@ -106,12 +103,10 @@ AUI_ERRCODE IntroMovieWindow::InitCommonLdl(MBCHAR *ldlBlock)
 	return InitCommon();
 }
 
-
 AUI_ERRCODE IntroMovieWindow::InitCommon(void)
-{		
+{
 	return C3Window::InitCommon();
 }
-
 
 
 void IntroMovieWindow::SetMovie(MBCHAR *filename)
@@ -125,17 +120,16 @@ void IntroMovieWindow::SetMovie(MBCHAR *filename)
 
 
 AUI_ERRCODE IntroMovieWindow::Idle(){
-    
+
     return(m_movieButton->Idle());
 //	return AUI_ERRCODE_OK;
 }
 
 
-
 AUI_ERRCODE IntroMovieWindow::DrawThis( aui_Surface *surface, sint32 x, sint32 y )
 {
-	
+
         if ( IsHidden() ) return AUI_ERRCODE_OK; //this is nonsens!
-	
+
 	return AUI_ERRCODE_OK;
 }

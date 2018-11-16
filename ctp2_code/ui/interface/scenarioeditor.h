@@ -11,7 +11,7 @@
 //
 // THIS FILE IS NOT GENERATED OR SUPPORTED BY ACTIVISION.
 //
-// This material has been developed at apolyton.net by the Apolyton CtP2 
+// This material has been developed at apolyton.net by the Apolyton CtP2
 // Source Code Project. Contact the authors at ctp2source@apolyton.net.
 //
 //----------------------------------------------------------------------------
@@ -25,7 +25,7 @@
 // Modifications from the original Activision code:
 //
 // -Added a private static variable and the accoriding access function
-//  to allow newly created cities to have the size displayed in the 
+//  to allow newly created cities to have the size displayed in the
 //  city pop spinner, by Martin Gühmann.
 // -Added GetLastPlayer() to get the last player in the game, by Martin Gühmann.
 //
@@ -40,7 +40,6 @@ class ctp2_ListBox;
 class MapCopyBuffer;
 class FileDialog;
 class ctp2_Button;
-
 
 class ctp2_DropDown;
 
@@ -87,7 +86,7 @@ enum SCEN_MAP_MODE {
 	SCEN_MAP_UNIT,
 	SCEN_MAP_CITY,
 	SCEN_MAP_TERRAIN,
-	SCEN_MAP_TERRAINIMP,	
+	SCEN_MAP_TERRAINIMP,
 	SCEN_MAP_RIVER,
 	SCEN_MAP_HUT,
 	SCEN_MAP_GOOD1,
@@ -113,14 +112,14 @@ class ScenarioEditor {
   private:
 	ctp2_Window *m_window;
 	ctp2_Switch **m_terrainSwitches;
-	ctp2_Switch **m_terrainImpSwitches;	
+	ctp2_Switch **m_terrainImpSwitches;
 	ctp2_Window *m_addStuffWindow;
 	ctp2_Switch *m_otherMapSwitch[k_NUM_OTHER_MAP_SWITCHES];
-	
+
 	ctp2_Switch *m_eraseButton;
 
 	ctp2_Button *m_tabButton[k_NUM_TAB_BUTTONS];
-	
+
 	ctp2_Switch *m_xWrapButton;
 	bool m_xWrap;
 	bool m_yWrap;
@@ -132,7 +131,7 @@ class ScenarioEditor {
 	sint32 m_brushSize;
 	sint32 m_unitIndex;
 	sint32 m_cityStyle;
-	//Added by Martin Gühmann to add the pop number 
+	//Added by Martin Gühmann to add the pop number
 	//displayed in the CityPopSpinner to new created cities.
 	sint32 m_newPopSize;
 	SCEN_START_LOC_MODE m_startLocMode;
@@ -167,24 +166,23 @@ class ScenarioEditor {
 	void PopulateTerrainList();
 	void PopulateUnitList(SCEN_UNIT_CAT cat);
 	void PopulateCityList();
-	
+
 	void PopulateTerrainImprovementList();
 
 	void RehideUnitSwitches();
 
-	
 	static bool HandleClicks();
 	static bool PaintTerrainMode();
-	static bool PaintTerrainImprovementMode();		
+	static bool PaintTerrainImprovementMode();
 	static sint32 PaintTerrain();
-	static sint32 PaintTerrainImprovement();		
+	static sint32 PaintTerrainImprovement();
 	static sint32 BrushSize();
 	static bool PlaceUnitsMode();
 	static sint32 UnitIndex();
 	static bool PlaceCityMode();
 	static sint32 CityStyle();
-	//Function added by Martin Gühmann so that the 
-	//pop size displayed in the CityPopSpinner can 
+	//Function added by Martin Gühmann so that the
+	//pop size displayed in the CityPopSpinner can
 	//be added to newly created cities.
 	static sint32 CitySize();
 	static bool PlaceStartFlags();
@@ -197,7 +195,7 @@ class ScenarioEditor {
 	static sint32 PaintGood();
 
 	static void TerrainSwitch(aui_Control *control, uint32 action, uint32 data, void *cookie);
-	static void TerrainImprovementSwitch(aui_Control *control, uint32 action, uint32 data, void *cookie); 
+	static void TerrainImprovementSwitch(aui_Control *control, uint32 action, uint32 data, void *cookie);
 	static void UnitSwitch(aui_Control *control, uint32 action, uint32 data, void *cookie);
 	static void CityStyleSwitch(aui_Control *control, uint32 action, uint32 data, void *cookie);
 
@@ -224,7 +222,6 @@ class ScenarioEditor {
 	static void PlayerSpinner(aui_Control *control, uint32 action, uint32 data, void *cookie);
 
 
-	
 	void ShowAddList(SCEN_ADD addtype);
 	bool UpdateAddList(SCEN_ADD addtype);
 
@@ -237,18 +234,17 @@ class ScenarioEditor {
 
 	static void BrushSize(aui_Control *control, uint32 action, uint32 data, void *cookie);
 
-	static void LoadScenario(aui_Control *control, uint32 action, uint32 data, void *cookie); 
+	static void LoadScenario(aui_Control *control, uint32 action, uint32 data, void *cookie);
 	static void SaveScenario(aui_Control *control, uint32 action, uint32 data, void *cookie);
 	static void SaveScenarioAs(aui_Control *control, uint32 action, uint32 data, void *cookie);
 	static void NameTheScenarioCallback(MBCHAR *text, sint32 accepted, void *data);
 	static void LoadMap(aui_Control *control, uint32 action, uint32 data, void *cookie);
 	static void SaveMap(aui_Control *control, uint32 action, uint32 data, void *cookie);
-	
+
 	static bool WorldHasPlayerOrCiv(sint32 playerOrCiv, sint32 &index);
 	static void PlaceFlag(MapPoint &pos);
 	static void GetLabel(MBCHAR *labelString, sint32 playerOrCiv);
 
-	
 	static void RegionButton(aui_Control *control, uint32 action, uint32 data, void *cookie);
 	static bool DrawRegion();
 	static bool SelectRegion();
@@ -276,7 +272,7 @@ class ScenarioEditor {
 	static void Year(aui_Control *control, uint32 action, uint32 data, void *cookie);
 	static void Barbarians(aui_Control *control, uint32 action, uint32 data, void *cookie);
 	static void Difficulty(aui_Control *control, uint32 action, uint32 data, void *cookie);
-	
+
 	static void SetXWrap(aui_Control *control, uint32 action, uint32 data, void *cookie);
 	static void SetYWrap(aui_Control *control, uint32 action, uint32 data, void *cookie);
 
@@ -298,14 +294,12 @@ class ScenarioEditor {
 	void SetupGlobalControls();
 	void UpdatePlayerCount();
 
-	
 	void AddDropDownItem(ctp2_DropDown *dd, MBCHAR *ldlblock, char * item);
 	sint32 GetNumPlayers();
 	sint32 GetLastPlayer();
 	static void LimitPlayerChoice(aui_Control *control, uint32 action, uint32 data, void *cookie);
 	static void ExcludeSwitch(aui_Control *control, uint32 action, uint32 data, void *cookie);
-	
-	
+
 	static void DisableErase(void);
 	static void ReloadSlic(aui_Control *control, uint32 action, uint32 data, void *cookie);
 	static void RemoveGoods(aui_Control *control, uint32 action, uint32 data, void *cookie);

@@ -11,7 +11,7 @@
 //
 // THIS FILE IS NOT GENERATED OR SUPPORTED BY ACTIVISION.
 //
-// This material has been developed at apolyton.net by the Apolyton CtP2 
+// This material has been developed at apolyton.net by the Apolyton CtP2
 // Source Code Project. Contact the authors at ctp2source@apolyton.net.
 //
 //----------------------------------------------------------------------------
@@ -86,7 +86,6 @@
 
 #include "civapp.h"
 #include "c3_utilitydialogbox.h"
-
 
 extern StringDB                *g_theStringDB;
 extern ProfileDB               *g_theProfileDB;
@@ -181,7 +180,7 @@ NetCRC::NetCRC()
 //
 // Name       : NetCRC::SerializeDBs
 //
-// Description: Serializes the databases and creates check sums from the 
+// Description: Serializes the databases and creates check sums from the
 //              archieves, so that the databases can be checked for synchronicity.
 //
 // Parameters : -
@@ -240,7 +239,7 @@ sint32 NetCRC::SerializeDBs()
 	CHECKDB(g_theUnitBuildListDB);     // 37
 	CHECKDB(g_theWonderDB);            // 38
 	CHECKDB(g_theWonderBuildListDB);   // 39
-	
+
 	return numchecked;
 }
 
@@ -265,7 +264,7 @@ void NetCRC::Packetize(uint8 *buf, uint16 &size)
 	PUSHID(k_PACKET_CRC_ID);
 
 	sint32 num = SerializeDBs();
-	
+
 	PUSHLONG(m_startAt);
 	PUSHLONG(m_stopAt);
 	PUSHLONG(num);
@@ -308,14 +307,13 @@ void NetCRC::Unpacketize(uint16 id, uint8 *buf, uint16 size)
 	PULLLONG(remoteNum);
 
 	if(num != remoteNum) {
-		// No idea what this should do, this can only happen if the 
-		// remote executable is compiled from a different version 
+		// No idea what this should do, this can only happen if the
+		// remote executable is compiled from a different version
 		// of the source code.
 		Error("Number of databases doesn't even match, sheesh!");
 		return;
 	}
 
-	
 	sint32 i,j;
 	uint32 part;
 	BOOL alreadybad;
@@ -329,7 +327,7 @@ void NetCRC::Unpacketize(uint16 id, uint8 *buf, uint16 size)
 				sprintf(buf, "Database #%d is out of synch", j + m_startAt);
 				Error(buf);
 				alreadybad = TRUE;
-				
+
 			}
 		}
 	}

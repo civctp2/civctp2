@@ -1,10 +1,3 @@
-
-
-
-
-
-
-
 #include "c3.h"
 
 #include "aui.h"
@@ -16,7 +9,6 @@
 #include "primitives.h"
 
 #include "c3_thumb.h"
-
 
 
 c3_Thumb::c3_Thumb(
@@ -37,7 +29,6 @@ c3_Thumb::c3_Thumb(
 {
 }
 
-
 c3_Thumb::c3_Thumb(
 	AUI_ERRCODE *retval,
 	uint32 id,
@@ -52,13 +43,12 @@ c3_Thumb::c3_Thumb(
 {
 }
 
-
 AUI_ERRCODE c3_Thumb::DrawThis( aui_Surface *surface, sint32 x, sint32 y )
 {
-	
-	
 
-	
+
+
+
 	if ( IsHidden() ) return AUI_ERRCODE_OK;
 
 	if ( !surface ) surface = m_window->TheSurface();
@@ -69,7 +59,6 @@ AUI_ERRCODE c3_Thumb::DrawThis( aui_Surface *surface, sint32 x, sint32 y )
 
 	DrawThisStateImage(0, surface, &rect);
 
-	
 	if ( m_pattern ) {
 		m_pattern->Draw( surface, &rect );
 		primitives_BevelRect16( surface, &rect, 2, 0, 16, 16 );

@@ -1,5 +1,3 @@
-
-
 #include "c3.h"
 #include "GameEventArgList.h"
 #include "GameEventArgument.h"
@@ -105,7 +103,7 @@ void GameEventArgList::Serialize(CivArchive &archive)
 				}
 			}
 		}
-	}				  
+	}
 }
 
 void GameEventArgList::Add(GameEventArgument *arg)
@@ -120,8 +118,7 @@ void GameEventArgList::Add(GameEventArgument *arg)
 }
 
 
-
-GameEventArgument *GameEventArgList::GetArg(GAME_EVENT_ARGUMENT argType, 
+GameEventArgument *GameEventArgList::GetArg(GAME_EVENT_ARGUMENT argType,
 											sint32 index)
 {
 	Assert(argType > GEA_Null);
@@ -132,7 +129,7 @@ GameEventArgument *GameEventArgList::GetArg(GAME_EVENT_ARGUMENT argType,
 
 	if(!m_argLists[argType])
 		return NULL;
-	 
+
 	PointerList<GameEventArgument>::Walker walk(m_argLists[argType]);
 	sint32 i;
 	for(i = 0; i < index && walk.IsValid(); i++) {
@@ -157,7 +154,6 @@ sint32 GameEventArgList::GetArgCount(GAME_EVENT_ARGUMENT argType)
 
 	return m_argLists[argType]->GetCount();
 }
-
 
 BOOL GameEventArgList::GetCity(sint32 index, Unit &c)
 {
@@ -200,7 +196,6 @@ BOOL GameEventArgList::GetArmy(sint32 index, Army &a)
 	return TRUE;
 }
 
-
 BOOL GameEventArgList::GetInt(sint32 index, sint32 &value)
 {
 	GameEventArgument *arg;
@@ -225,7 +220,6 @@ BOOL GameEventArgList::GetPlayer(sint32 index, sint32 &player)
 	return res;
 }
 
-
 BOOL GameEventArgList::GetPos(sint32 index, MapPoint &pos)
 {
 	GameEventArgument *arg;
@@ -237,7 +231,6 @@ BOOL GameEventArgList::GetPos(sint32 index, MapPoint &pos)
 		pos.Set(-1,-1);
 	return res;
 }
-
 
 BOOL GameEventArgList::GetPath(sint32 index, Path *&path)
 {

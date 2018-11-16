@@ -1,4 +1,3 @@
-
 #ifdef HAVE_PRAGMA_ONCE
 #pragma once
 #endif
@@ -14,9 +13,9 @@ class Splash;
 
 #ifdef _DEBUG
 extern Splash *         g_splash;
-extern sint32           g_splash_cur; 
+extern sint32           g_splash_cur;
 extern sint32           g_splash_old;
-extern MBCHAR           g_splash_buf[100]; 
+extern MBCHAR           g_splash_buf[100];
 #define SPLASH_STRING(x) { if (g_splash) { \
 g_splash_cur = GetTickCount(); \
 sprintf (g_splash_buf, " %4.2f secs  ", double(g_splash_cur - g_splash_old) * 0.001); \

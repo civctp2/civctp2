@@ -1,15 +1,4 @@
-
-
-
-
-
-
-
-
-
-
-
-#ifdef HAVE_PRAGMA_ONCE 
+#ifdef HAVE_PRAGMA_ONCE
 #pragma once
 #endif
 #ifndef __BASETILE_H__
@@ -36,8 +25,7 @@ public:
 	void	SetBaseType(uint8 type) { m_baseType = type; }
 
 
-
-	BOOL	GetTransitionFlag(sint16 flagNum) 
+	BOOL	GetTransitionFlag(sint16 flagNum)
 	{
 		switch (flagNum) {
 		case 0: return m_flags & k_BTF_TRANSITION0;
@@ -70,7 +58,7 @@ public:
 			break;
 		}
 	}
-	
+
 
 
 

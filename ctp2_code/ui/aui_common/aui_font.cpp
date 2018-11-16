@@ -1,18 +1,6 @@
-
-
-
-
-
-
-
-
-
-
-
 #include "c3.h"
 
 #include "aui_font.h"
-
 
 
 aui_Font::aui_Font(
@@ -26,7 +14,6 @@ aui_Font::aui_Font(
 	Assert( AUI_SUCCESS(*retval) );
 	if ( !AUI_SUCCESS(*retval) ) return;
 }
-
 
 
 AUI_ERRCODE aui_Font::InitCommon( MBCHAR *descriptor )
@@ -55,12 +42,10 @@ AUI_ERRCODE aui_Font::InitCommon( MBCHAR *descriptor )
 }
 
 
-
 aui_Font::~aui_Font()
 {
 	Unload();
 }
-
 
 
 AUI_ERRCODE aui_Font::SetDescriptor( MBCHAR *descriptor )
@@ -73,7 +58,6 @@ AUI_ERRCODE aui_Font::SetDescriptor( MBCHAR *descriptor )
 
 	return SetVariablesFromDescriptor();
 }
-
 
 
 AUI_ERRCODE aui_Font::SetVariablesFromDescriptor( void )
@@ -103,23 +87,23 @@ AUI_ERRCODE aui_Font::SetVariablesFromDescriptor( void )
 
 AUI_ERRCODE aui_Font::Load( void )
 {
-	
+
 	Unload();
 #ifdef WIN32
 	m_hfont = CreateFont(
-		m_height,						
-		m_averageWidth,					
-		m_escapement,					
-		m_orientation,					
-		m_weight,						
-		m_italic,						
-		m_underline,					
-		m_strikeout,					
-		m_charset,						
-		m_outputPrecision,				
-		m_clipPrecision,				
-		m_quality,						
-		m_pitchAndFamily,				
+		m_height,
+		m_averageWidth,
+		m_escapement,
+		m_orientation,
+		m_weight,
+		m_italic,
+		m_underline,
+		m_strikeout,
+		m_charset,
+		m_outputPrecision,
+		m_clipPrecision,
+		m_quality,
+		m_pitchAndFamily,
 		m_fontname );
 #endif
 	Assert( m_hfont != NULL );
@@ -127,7 +111,6 @@ AUI_ERRCODE aui_Font::Load( void )
 
 	return AUI_ERRCODE_OK;
 }
-
 
 
 AUI_ERRCODE aui_Font::Unload( void )

@@ -10,7 +10,7 @@
 //
 // THIS FILE IS NOT GENERATED OR SUPPORTED BY ACTIVISION.
 //
-// This material has been developed at apolyton.net by the Apolyton CtP2 
+// This material has been developed at apolyton.net by the Apolyton CtP2
 // Source Code Project. Contact the authors at ctp2source@apolyton.net.
 //
 //----------------------------------------------------------------------------
@@ -40,7 +40,7 @@
 #include "Path.h"
 #include "AgreementMatrix.h"
 
-extern TradeAstar g_theTradeAstar; 
+extern TradeAstar g_theTradeAstar;
 
 sint32 tradeutil_GetTradeValue(const sint32 owner, const Unit &destination, sint32 resource)
 {
@@ -51,14 +51,12 @@ sint32 tradeutil_GetTradeValue(const sint32 owner, const Unit &destination, sint
 	if(resource < 0 || resource >= g_theResourceDB->NumRecords())
 		return 0;
 
-
 	double baseValue = g_theWorld->GetGoodValue(resource);
 	double distance = static_cast<double>(const_cast<Unit &>(destination).CD()->GetDistanceToGood(resource));
 	sint32 totalValue = sint32(baseValue * distance);
-	
-	
-	
-	bool trade_pact = 
+
+
+	bool trade_pact =
 		AgreementMatrix::s_agreements.HasAgreement(owner, destination.GetOwner(), PROPOSAL_TREATY_TRADE_PACT);
 	if (trade_pact) {
 		totalValue = (sint32) (totalValue * 1.05);
@@ -69,7 +67,7 @@ sint32 tradeutil_GetTradeValue(const sint32 owner, const Unit &destination, sint
 
 sint32 tradeutil_GetAccurateTradeDistance(Unit &source, Unit &destination)
 {
-	
+
 	Path path;
 	float cost;
 
@@ -77,11 +75,11 @@ sint32 tradeutil_GetAccurateTradeDistance(Unit &source, Unit &destination)
 										destination.RetPos(), path,
 										cost, FALSE);
 
-	
 
-	
+
+
 	cost = tradeutil_GetNetTradeCosts(cost);
-	
+
 	if(cost < 1)
 		cost = 1;
 
@@ -94,10 +92,10 @@ sint32 tradeutil_GetTradeDistance(Unit &source, Unit &destination)
 	double cost;
 
 #if 0
-	
-	
-	
-	
+
+
+
+
 	sint32 r = g_theTradeAstar.FindPath(source.GetOwner(), source.RetPos(),
 										destination.RetPos(), path,
 										cost, FALSE);
@@ -105,12 +103,11 @@ sint32 tradeutil_GetTradeDistance(Unit &source, Unit &destination)
 
 	cost = static_cast<double>(source.RetPos().NormalizedDistance(destination.RetPos()));
 
-	
 	cost *= g_theWorld->CalcTerrainFreightCost(source.RetPos());
 
-	
-	
-	
+
+
+
 	cost = tradeutil_GetNetTradeCosts(cost);
 	if(cost < 1)
 		cost = 1;

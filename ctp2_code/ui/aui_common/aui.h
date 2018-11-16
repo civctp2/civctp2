@@ -2,7 +2,7 @@
 //
 // Project      : Call To Power 2
 // File type    : C++ header file
-// Description  : 
+// Description  :
 // Id           : $Id$
 //
 //----------------------------------------------------------------------------
@@ -11,13 +11,13 @@
 //
 // THIS FILE IS NOT GENERATED OR SUPPORTED BY ACTIVISION.
 //
-// This material has been developed at apolyton.net by the Apolyton CtP2 
+// This material has been developed at apolyton.net by the Apolyton CtP2
 // Source Code Project. Contact the authors at ctp2source@apolyton.net.
 //
 //----------------------------------------------------------------------------
 //
 // Compiler flags
-// 
+//
 //----------------------------------------------------------------------------
 //
 // Modifications from the original Activision code:
@@ -37,22 +37,18 @@
 #include "windows.h"
 #endif
 
-
 #include <math.h>
 #include <stdio.h>
 #include <stdarg.h>
 #include <limits.h>
 #include <string.h>
 
-
 #include "ldl.h"
 #include "freetype.h"
-
 
 #include "auicfg.h"
 #include "auitypes.h"
 #include "auidebug.h"
-
 
 
 #if defined(WIN32)
@@ -74,4 +70,4 @@
 #include <reftime.h>
 #endif // __AUI_USE_DIRECTMEDIA__
 
-#endif 
+#endif

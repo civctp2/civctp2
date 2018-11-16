@@ -15,7 +15,6 @@ public:
 	RiskRecord(CivArchive &archive);
 	void Serialize(CivArchive &archive);
 
-	
 	double m_barbarianHutChance;
 	sint32 m_maxHutBarbarians;
 	double m_goldChance;
@@ -28,7 +27,6 @@ public:
 	double m_cityChance;
 	double m_settlerChance;
 
-	
 	double m_barbarianChance;
 	sint32 m_firstBarbarianTurn;
 	sint32 m_lastBarbarianTurn;
@@ -36,6 +34,6 @@ public:
 	sint32 m_barbarianUnitRankMax;
 	sint32 m_maxSpontaneousBarbarians;
 	sint32 m_barbarianUnitRankMin;
-	
+
 };
 #endif

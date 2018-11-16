@@ -1,4 +1,4 @@
-/* 
+/*
 Copyright (C) 1995-2001 Activision, Inc.
 
 This library is free software; you can redistribute it and/or
@@ -21,11 +21,11 @@ Foundation, Inc., 59 Temple Place, Suite 330, Boston, MA  02111-1307  USA
  Adapter layer to convert OpenTransport UDP into a shared library suitable
  for use with Activenet.
  (Sources originally copied from Trumpet driver for DOS Netmech.)
- 
+
  $Log: trumpdll.c $
  Revision 1.2  1997/08/22 18:20:05  anitalee
  changes made by Danny Swarzman.
- 
+
  1997/08/05 dswarzman
  Fixed system includes.
  Initial revision
@@ -148,7 +148,7 @@ static void dprint_peertab(assoctab_t *p)
 
 /*-----------------------------------------------------------------------
  Given a local port number, a remote ip address, and a remote port number,
- return a handle that can be used to send an address to that address.  
+ return a handle that can be used to send an address to that address.
 
  If 0 is given for the local port number, picks an unused one.  Not suitable
  for a handle that will be used to listen for incoming service requests on
@@ -188,7 +188,7 @@ trump_hdl_t trump_adr2hdl(ip_adr_t remoteadr, short localport, short remoteport,
 	// Look for existing address/handle
 	for (i=0; i<peertab->n_used; i++) {
 		assoctab_item_t *pe = assoctab_getkey(peertab, i);
-		if (!pe) 
+		if (!pe)
 			DPRINT(("trump_adr2hdl: couldn't find entry\n"));
 		else {
 			peer = (ip_adr_t *)pe->value;
@@ -278,7 +278,7 @@ Boolean commNeedsUI(commInitReq_t* req) {
 	} else {
 		return true;
 	}
-	
+
 }
 
 /*
@@ -306,7 +306,7 @@ commInit(
 		req = (commInitReq_t *)memset(&reqDummy, 0, sizeof(*req));
 	if (resp == NULL)
 		resp = &respDummy;
-		
+
 	scratch_flat = malloc(MAX_RAW_PKTLEN);
 	//scratch_flat = my_dos_malloc(MAX_RAW_PKTLEN, &scratch_seg, &scratch_off, &scratch_selector);
 	if (!scratch_flat) {
@@ -314,7 +314,7 @@ commInit(
 		resp->status = comm_STATUS_BAD;
 		return FALSE;
 	}
-	
+
 	//	check for the existanct of OpenTransport
 	if(!OpenTransportExists() || !OpenTransportInetExists()) {
 		//DebugStr("\pOpen Transport Does Not Exist");
@@ -323,7 +323,7 @@ commInit(
 		free(scratch_flat);
 		return FALSE;
 	}
-	
+
 	//	Initialize OpenTransport
 	err = InitOpenTransport();
 	if (err != noErr) {
@@ -331,18 +331,18 @@ commInit(
 		free(scratch_flat);
 		return FALSE;
 	}
-	
+
 	//	initialize Internet Services
-	
+
 	gInetService = OTOpenInternetServices(kDefaultInternetServicesPath, 0, &err);
 	if (err != noErr) {
 		resp->status = comm_STATUS_BAD;
 		free(scratch_flat);
 		return FALSE;
 	}
-	
+
 	//	open an endpoint for sending and recieving data
-	
+
 	err = CreateAndConfigUDP(&gUDPEndpoint);
 	if (err != noErr) {
 		resp->status = comm_STATUS_BAD;
@@ -352,33 +352,33 @@ commInit(
 
 		return FALSE;
 	}
-	
+
 	//	create the peer table
-	
+
 	peertab = assoctab_create(sizeof(ip_adr_t));
 	if (!peertab) {
 		// ABORT! Out of Memory
 		resp->status = comm_STATUS_BAD;
 		free(scratch_flat);
-		
+
 		ShutDownUDP();
-		
+
 		return FALSE;
 	}
-	
+
 	//	Get information about the Internet
-	
+
 	err = OTInetGetInterfaceInfo(&gInetInfo, kDefaultInetInterface);
 	if (err != noErr) {
 		//DebugStr("\pCannot Get Information About Default Interface");
 		resp->status = comm_STATUS_BAD;
 		free(scratch_flat);
-		
+
 		ShutDownUDP();
-		
+
 		return FALSE;
 	}
-	
+
 	// Store our address in the peer table under the bogus ME handle
 	padr = (ip_adr_t *)assoctab_subscript_grow(peertab, trump_HDL_ME);
 	if (!padr) {
@@ -386,9 +386,9 @@ commInit(
 		resp->status = comm_STATUS_BAD;
 		free(scratch_flat);
 		assoctab_destroy(peertab);
-		
+
 		ShutDownUDP();
-		
+
 		return FALSE;
 	}
 	dprint_peertab(peertab);
@@ -406,9 +406,9 @@ commInit(
 		resp->status = comm_STATUS_BUSY;
 		free(scratch_flat);
 		assoctab_destroy(peertab);
-		
+
 		ShutDownUDP();
-		
+
 		return FALSE;
 	}
 	/*
@@ -417,35 +417,35 @@ commInit(
 			resp->status = comm_STATUS_EMPTY;
 			free(scratch_flat);
 			assoctab_destroy(peertab);
-			
+
 			ShutDownUDP();
-			
+
 			return FALSE;
 		}
 	} else {
-	
+
 		//	we need to load the last string selected when we are resuming
-		
+
 		OpenPrefsFile();
 		p2cstr(gSavedSelection);		//	the apps like C-strings
 		ClosePrefsFile();
-	
+
 	}
 	*/
 	//	initialize our address list to nothing
-	
+
 	InitAddressList();
-	
+
 	//	add our own address to the beginning of the list (it MUST Be the first
 	//	address in our list - we broadcast to all _other_ addresses in our list)
-	
+
 	AddAddressToList(gInetInfo.fAddress);
-	
+
 	//	add the address from the dialog to our broadcast list if the user chose one
-	
+
 	if (gSavedSelection[0] != 0) {
 		InetHostInfo	theHostInfo;
-		
+
 		OTSetSynchronous(gInetService);
 		err = OTInetStringToAddress(gInetService, gSavedSelection, &theHostInfo);
 		OTSetAsynchronous(gInetService);
@@ -460,9 +460,8 @@ commInit(
 	return TRUE;
 }
 
-
 /*
- *	Tear down the communications driver.  
+ *	Tear down the communications driver.
  *
  *	Return FALSE on error.
  */
@@ -486,7 +485,7 @@ commTerm(
 		int i;
 		for (i=0; i<peertab->n_used; i++) {
 			assoctab_item_t *pe = assoctab_getkey(peertab, i);
-			if (!pe) 
+			if (!pe)
 				DPRINT(("commTerm: couldn't find entry\n"));
 			else if (pe->key != trump_HDL_ME) {
 				DPRINT(("commTerm: closing handle %d\n", pe->key));
@@ -500,14 +499,13 @@ commTerm(
 	free(scratch_flat);
 	resp->status = comm_STATUS_OK;
 	DPRINT(("commTerm: success\n"));
-	
+
 	//	unbind our endpoint and close open transport
-	
+
 	ShutDownUDP();
 
 	return TRUE;
 }
-
 
 /*
  *	Retrieve info about the communications driver.
@@ -550,7 +548,6 @@ commPlayerInfo(
 	static ip_adr_t 		adr;
 	comm_status_t			err;
 
-
 	if (req == NULL)
 		req = (commPlayerInfoReq_t *)memset(&reqDummy, 0, sizeof(*req));
 	if (resp == NULL)
@@ -575,7 +572,6 @@ commPlayerInfo(
 
 	return TRUE;
 }
-
 
 /*
  *	Find out whether the transmit queue is full.
@@ -603,7 +599,6 @@ commTxFull(
 
 	return FALSE;
 }
-
 
 /*
  *	Send a packet.  Upon return, the buffer can be discarded, although the
@@ -673,7 +668,6 @@ commSetParam(
 	return FALSE;
 }
 
-
 /*
  *	Get information about a pending incoming packet.
  *
@@ -700,7 +694,6 @@ commPeekPkt(
 
 	return FALSE;
 }
-
 
 /*
  *	Retrieve a pending incoming packet.
@@ -731,7 +724,7 @@ commRxPkt(
 		resp->status = comm_STATUS_EMPTY;
 		return FALSE;
 	}
-	
+
 	resp->length = len;
 	tcpabi_udp_status(hdl_rx, 0, NULL, &info);
 	resp->src = trump2commHdl(trump_adr2hdl(info->ip_dst, 0, 0, FALSE));
@@ -744,7 +737,6 @@ commRxPkt(
 
 	return (resp->status == comm_STATUS_OK);
 }
-
 
 /*
  *	Attempt to parse a NUL-terminated address string into a free-format
@@ -775,31 +767,31 @@ commScanAddr(
 		resp->status = comm_STATUS_FULL;
 		return FALSE;
 	}
-	
+
 	adr = (ip_adr_t*) req->address;
 
 	//	convert the dotted decimal address or host name to an IP address (we do
 	//	this sync.)
-	
+
 	OTSetSynchronous(gInetService);
 	err = OTInetStringToAddress(gInetService, req->printable, &theHost);
 	OTSetAsynchronous(gInetService);
 	if (err != noErr) {
-	
+
 		//{
 		//	Str255	theString;
-		//	
+		//
 		//	NumToString(err, theString);
 		//	DebugStr(theString);
 		//}
-		
+
 		DPRINT(("@TRUMP commScanAddr: resolve failed!\n"));
 		resp->status = comm_STATUS_BAD;
 	    return FALSE;
 	}
-	
+
 	*adr = theHost.addrs[0];		//	we only want the first address
-	
+
 	//	return the length of the address
 
 	resp->length = sizeof(ip_adr_t);
@@ -807,7 +799,6 @@ commScanAddr(
 
 	return (TRUE);
 }
-
 
 /*
  *	Attempt to format a free-format address buffer into a NUL-terminated
@@ -853,7 +844,6 @@ commPrintAddr(
 	return TRUE;
 }
 
-
 /*
  *	Generate a pseudo-player handle referring to a group of players.  Handy
  *	for multicasting.  A group can have zero players.
@@ -881,7 +871,6 @@ commGroupAlloc(
 	return FALSE;
 }
 
-
 /*
  *	Invalidate a pseudo-player handle referring to a group of players.
  *
@@ -907,7 +896,6 @@ commGroupFree(
 
 	return FALSE;
 }
-
 
 /*
  *	Add one or more players to a group.
@@ -1011,7 +999,6 @@ commSayHi(
 		h, resp->player));
 	return TRUE;
 }
-
 
 /*
  *	Tear down a data link to a player.  The link or the player may already be

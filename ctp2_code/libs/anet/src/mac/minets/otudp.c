@@ -1,4 +1,4 @@
-/* 
+/*
 Copyright (C) 1995-2001 Activision, Inc.
 
 This library is free software; you can redistribute it and/or
@@ -46,16 +46,16 @@ EndpointRef				gUDPEndpoint;
 
 Boolean OpenTransportInetExists(void) {
 	Boolean		result = false;
-	
+
 	//	this method checks for the existance of Open Transport
-	
+
 	if ( OTOpenInternetServices != (UInt16) kUnresolvedCFragSymbolAddress ) {
-	
+
 		//	we can find one of the calls, so, the engine must exist
-		
+
 		result = true;
 	}
-	
+
 	return result;
 }
 OSStatus DoInetBind(EndpointRef ep) {
@@ -63,43 +63,43 @@ OSStatus DoInetBind(EndpointRef ep) {
 	TBind				bindReq;
 	InetAddress			inAddr;
 	InetInterfaceInfo	theInfo;
-	
+
 	//	build an internet address with the port number for MW2
 	//	and our IP address
-	
+
 	OTInetGetInterfaceInfo(&theInfo, kDefaultInetInterface);
 	OTInitInetAddress(&inAddr, SOCKET_MW2, theInfo.fAddress);
-	
+
 	bindReq.addr.maxlen = sizeof(InetAddress);
 	bindReq.addr.len = sizeof(InetAddress);
 	bindReq.addr.buf = (unsigned char*) &inAddr;
 	bindReq.qlen = 0;
-	
+
 	err = OTBind(ep, &bindReq, nil);
 	return err;
 }
 OSStatus CreateAndConfigUDP(EndpointRef *ep) {
 	OSStatus			err;
 	TBind				bindInfo;
-	
+
 	//	create a queue to recieve packets into
 	gInQueue = otq_create();
 	if (gInQueue != nil) {
 		*ep = OTOpenEndpoint(OTCreateConfiguration(kUDPName), 0, nil, &err);
 		if (err == noErr) {
-		
+
 			err = OTGetEndpointInfo(*ep, &gEndPointInfo);
 			if (err == noErr) {
-			
+
 				//	install a notifier and bind the endpoint
-				
+
 				err = OTInstallNotifier(*ep, HandleEndpointEventsUDP, &gExtraOTDataUDP);
 				if (err == noErr) {
 	    			err = DoInetBind(*ep);
 					if (err == noErr) {
-					
+
 						//	once we're all setup, we want to start operating in async mode
-						
+
 						err = OTSetAsynchronous(*ep);
 						if (err == noErr) {
 							//err = OTSetBlocking(*ep);
@@ -109,21 +109,21 @@ OSStatus CreateAndConfigUDP(EndpointRef *ep) {
 					}
 				}
 			}
-			
+
 		}
-	
-	} else {	
+
+	} else {
 		err = MemError();
 	}
-	
-	gUDPEndpoint = *ep;	
+
+	gUDPEndpoint = *ep;
 	return (err);
 }
 OSStatus ShutDownUDP(EndpointRef ep) {
 	OSStatus	result = noErr;
 	CloseTheEndPoint(ep);			//	set the endpoint back to sync mode to tear it down
 	CloseOpenTransport();
-	
+
 	otq_destroy(gInQueue);
 	gInQueue = nil;
 	return result;
@@ -138,13 +138,13 @@ pascal void HandleEndpointEventsUDP(void* contextPtr, OTEventCode code, OTResult
 	Boolean						doneReading = false;
 	OTResult					epState;
 	//	this method handles events for this endpoint
-	switch (code) {			
+	switch (code) {
 		case T_DATA:
-			
+
 			do {
 				OTFlags				flags = 0;
 				TUnitData			theData;
-			
+
 				theData.addr.buf = (UInt8*) gRecvBuf;				//	address destination
 				theData.addr.maxlen = sizeof(InetAddress);			//	address length
 				theData.opt.len = 0;
@@ -152,23 +152,23 @@ pascal void HandleEndpointEventsUDP(void* contextPtr, OTEventCode code, OTResult
 				theData.udata.buf = gRecvBuf + sizeof(InetAddress);	//	data destination
 				theData.udata.maxlen = udpMaxRawData;				//	buffer size
 				theData.opt.maxlen = 0;
-			
+
 				error = OTRcvUData(gUDPEndpoint, &theData, &flags);
-				
+
 				//	if there is too much data for our buffer, there is something
 				//	wrong with our implementation
-				
+
 				if (flags & T_MORE) {
 					overflowErrors++;
 				}
-				
+
 				//	process errors and keep good packets
-				
+
 				switch (error) {
 					case kOTNoError:
 						otq_put(gInQueue, gRecvBuf, sizeof(InetAddress) + theData.udata.len);
 						break;
-						
+
 					case kOTLookErr:
 						error = OTLook(gUDPEndpoint);
 						if (error == T_ORDREL) {
@@ -183,16 +183,16 @@ pascal void HandleEndpointEventsUDP(void* contextPtr, OTEventCode code, OTResult
 							}
 						}
 						break;
-				
+
 					case kOTNoDataErr:
 						doneReading = true;
 						break;
 				}
-				
+
 			} while (!doneReading);
-			
+
 			break;
-			
+
 		case T_UDERR:
 			HandleErrorUDERR();
 			break;
@@ -229,7 +229,7 @@ pascal void HandleEndpointEventsUDP(void* contextPtr, OTEventCode code, OTResult
 		case kOTConfigurationChanged:
 			unhandled++;
 			break;
-			
+
 		default:
 			unknown++;
 			break;
@@ -242,7 +242,7 @@ OSStatus HandleErrorUDERR(void) {
 	char		optBuff[100];
 	uderr.addr.maxlen = sizeof(InetAddress);
 	uderr.addr.buf = (unsigned char *)addrBuf;
-	
+
 	uderr.opt.maxlen = 100;
 	uderr.opt.buf = (unsigned char *)optBuff;
 	return OTRcvUDErr(gUDPEndpoint, &uderr);

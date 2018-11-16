@@ -1,4 +1,4 @@
-/* 
+/*
 Copyright (C) 1995-2001 Activision, Inc.
 
 This library is free software; you can redistribute it and/or
@@ -25,7 +25,6 @@ Foundation, Inc., 59 Temple Place, Suite 330, Boston, MA  02111-1307  USA
  *  Content:    DirectXSetup, error codes and flags
  ***************************************************************************/
 
-
 #define DSETUPERR_BADWINDOWSVERSION     -1
 #define DSETUPERR_SOURCEFILENOTFOUND    -2
 #define DSETUPERR_BADSOURCESIZE         -3
@@ -39,7 +38,6 @@ Foundation, Inc., 59 Temple Place, Suite 330, Boston, MA  02111-1307  USA
 #define DSETUPERR_UNKNOWNOS             -11
 #define DSETUPERR_USERHITCANCEL         -12
 #define DSETUPERR_NOTPREINSTALLEDONNT   -13
-
 
 //
 // DSETUP Flags
@@ -64,6 +62,3 @@ Foundation, Inc., 59 Temple Place, Suite 330, Boston, MA  02111-1307  USA
 #define DSETUP_DIRECTXSETUP     0x00001000      /* install DirectXSetup DLL's   */
 #define DSETUP_PROMPTFORDRIVERS 0x10000000      /* prompt when replacing display/audio drivers  */
 #define DSETUP_RESTOREDRIVERS   0x20000000      /* restore display/audio drivers  */
-
-
-

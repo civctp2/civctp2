@@ -4,7 +4,6 @@
 #ifndef __TURN_COUNT_H__
 #define __TURN_COUNT_H__
 
-
 #include "newturncount.h"
 
 class CivArchive ;
@@ -13,8 +12,8 @@ template <class T> class SimpleDynamicArray;
 typedef sint32 PLAYER_INDEX;
 
 class TurnCount {
-    sint32 m_round; 
-    sint32 m_turn; 
+    sint32 m_round;
+    sint32 m_turn;
 	sint32 m_year;
 	sint32 m_activePlayers;
 	BOOL m_simultaneousMode;
@@ -26,7 +25,6 @@ class TurnCount {
 	uint8 m_sentGameOverMessage;
 	sint32 m_happinessPlayer;
 
-	
     friend class NetInfo;
 
 	private :
@@ -36,18 +34,17 @@ class TurnCount {
 		static sint32 sm_the_stop_player;
 
 public:
-    
-    static sint32 GetStopPlayer() { return sm_the_stop_player; }
-    static void SetStopPlayer(const sint32 &player_index) { sm_the_stop_player = player_index; } 
 
-    TurnCount(); 
+    static sint32 GetStopPlayer() { return sm_the_stop_player; }
+    static void SetStopPlayer(const sint32 &player_index) { sm_the_stop_player = player_index; }
+
+    TurnCount();
     TurnCount(CivArchive &archive);
 	~TurnCount();
 
     void Init();
     void Init(CivArchive &archive);
-    
-    
+
 	void ChooseNextActivePlayer();
     void EndThisTurn();
 	void BeginNewRound();
@@ -72,9 +69,9 @@ public:
 	BOOL SimultaneousMode() const;
 	void SetSimultaneousMode(BOOL on);
 	void NetworkEndTurn(BOOL force = FALSE);
-	
+
     void Serialize(CivArchive &archive) ;
-    
+
 	void CountActivePlayers();
     void PlayerDead(PLAYER_INDEX player);
 	void RegisterNewPlayer(PLAYER_INDEX player);

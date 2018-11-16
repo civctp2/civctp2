@@ -1,6 +1,3 @@
-
-
-
 #include "c3.h"
 
 #include "aui.h"
@@ -21,7 +18,6 @@
 #include "ctp2_button.h"
 #include "ctp2_Static.h"
 #include "c3ui.h"
-
 
 #include "AdvanceRecord.h"
 #include "player.h"
@@ -76,7 +72,6 @@ AUI_ERRCODE Chart::InitCommon( MBCHAR *ldlBlock )
 {
 	sint32 i;
 	AUI_ERRCODE errcode;
-
 
 	m_centerButton = NULL;
 	m_left = NULL;
@@ -139,7 +134,7 @@ AUI_ERRCODE Chart::InitCommon( MBCHAR *ldlBlock )
 
 
 
-			
+
 
 
 
@@ -159,7 +154,7 @@ AUI_ERRCODE Chart::InitCommon( MBCHAR *ldlBlock )
 
 
 
-				
+
 
 
 
@@ -181,7 +176,7 @@ AUI_ERRCODE Chart::InitCommon( MBCHAR *ldlBlock )
 
 
 
-				
+
 
 
 
@@ -193,12 +188,12 @@ AUI_ERRCODE Chart::InitCommon( MBCHAR *ldlBlock )
 	if ( !m_centerButton ) {
 		aui_BitmapFont *font;
 
-		m_centerButton = new ctp2_Button( 
-			&errcode, 
+		m_centerButton = new ctp2_Button(
+			&errcode,
 			aui_UniqueId(),
 			NULL, k_CHART_PATTERN,
-			0, 0, 100, 20,  
-			ChartCenterActionCallback, 
+			0, 0, 100, 20,
+			ChartCenterActionCallback,
 			this );
 		errcode = AddSubControl( m_centerButton );
 		Assert( errcode == AUI_ERRCODE_OK );
@@ -214,7 +209,7 @@ AUI_ERRCODE Chart::InitCommon( MBCHAR *ldlBlock )
 
 
 
-		
+
 
 
 
@@ -238,7 +233,7 @@ AUI_ERRCODE Chart::InitCommon( MBCHAR *ldlBlock )
 
 
 
-			
+
 
 
 
@@ -264,7 +259,7 @@ AUI_ERRCODE Chart::InitCommon( MBCHAR *ldlBlock )
 
 
 
-			
+
 
 
 
@@ -313,7 +308,6 @@ Chart::~Chart()
 }
 
 
-
 AUI_ERRCODE Chart::Show()
 {
 	AUI_ERRCODE errcode = ctp2_Static::Show();
@@ -339,17 +333,15 @@ AUI_ERRCODE Chart::Draw( aui_Surface *surface, sint32 x, sint32 y )
 {
 	AUI_ERRCODE errcode = AUI_ERRCODE_OK;
 
-	
 	if ( !IsHidden() )
 		errcode = DrawThis( surface, x, y );
 
-	
-	
-	
+
+
+
 	if ( errcode == AUI_ERRCODE_OK )
 		DrawChildren( surface, x, y );
 
-	
 	m_draw = 0;
 
 	if ( IsHidden() ) return AUI_ERRCODE_OK;
@@ -391,7 +383,6 @@ AUI_ERRCODE Chart::Draw( aui_Surface *surface, sint32 x, sint32 y )
 	OffsetRect( &tempRect, rect.left, rect.top );
 	primitives_FrameRect16( surface, &tempRect, g_colorSet->GetColor((COLOR)m_centerColor) );
 
-
 	POINT center, leftCenter, rightCenter;
 	center.x = rect.left + m_centerButton->X();
 	center.y = rect.top + m_centerButton->Y() + m_centerButton->Height() / 2;
@@ -399,7 +390,7 @@ AUI_ERRCODE Chart::Draw( aui_Surface *surface, sint32 x, sint32 y )
 	leftCenter.y = center.y;
 	rightCenter.x = center.x + m_centerButton->Width() + m_distFromCenter / 2;
 	rightCenter.y = center.y;
-	
+
 	if ( m_numPreReq ) {
 		primitives_DrawLine16( surface, leftCenter.x, leftCenter.y, center.x, center.y, 0x0000 );
 	}
@@ -473,11 +464,11 @@ sint32 Chart::SetTipInfo( ctp2_Button *button, sint32 index )
 
 
 	c3_HyperTipWindow *tipWindow = (c3_HyperTipWindow *)button->GetTipWindow();
-	
+
 	MBCHAR name[k_MAX_NAME_LEN];
 
 	sprintf(name, "%s_HELP", g_theStringDB->GetIdStr(g_theAdvanceDB->Get(index)->m_name));
-	
+
 	MBCHAR str[_MAX_PATH];
 	sprintf( str, "%s", g_theStringDB->GetNameStr(name) );
 	tipWindow->SetHyperTipText( str );
@@ -491,7 +482,6 @@ AUI_ERRCODE Chart::Update( sint32 index )
 	const MBCHAR *s;
 
 	m_numPreReq = g_theAdvanceDB->Get(index)->GetNumPrerequisites();
-
 
 	m_numLeadsTo = 0;
 	for(i = 0; i < g_theAdvanceDB->NumRecords() && m_numLeadsTo < k_MAX_LEADS_TO; i++) {
@@ -509,12 +499,10 @@ AUI_ERRCODE Chart::Update( sint32 index )
 	sint32 xpos = m_distFromSide;
 	sint32 ypos = (Height() - (m_numPreReq * buttonHeight + (m_numPreReq - 1) * heightBetweenButtons)) / 2;
 
-	
 	sint32 curPlayer = g_selected_item->GetVisiblePlayer();
 	uint8 *adv = g_player[curPlayer]->m_advances->CanResearch();
 	sint32 numAdv = g_player[curPlayer]->m_advances->GetNum();
 
-	
 	for ( i = 0;i < m_numPreReq;i++ ) {
 		m_preReqIndex[i] = g_theAdvanceDB->Get(index)->GetPrerequisitesIndex(i);
 		s = g_theAdvanceDB->GetNameStr( m_preReqIndex[i] );
@@ -524,22 +512,20 @@ AUI_ERRCODE Chart::Update( sint32 index )
 		m_preReqButton[i]->Show();
 
 
-		
-		
-		
-		
+
+
+
+
 		aui_Ldl		*ldl = g_c3ui->GetLdl();
 		if (ldl) {
 			ldl->Remove((void *)m_preReqButton[i]);
 
-			
 			MBCHAR name[k_MAX_NAME_LEN];
 
 			sprintf(name, "%s", g_theStringDB->GetIdStr(g_theAdvanceDB->Get(m_preReqIndex[i])->m_name));
 
 			ldl->Associate((aui_Control *)m_preReqButton[i], name);
 		}
-		
 
 		if ( g_player[curPlayer]->HasAdvance(m_preReqIndex[i]) ) {
 			m_preReqColor[i] = COLOR_GREEN;
@@ -561,7 +547,6 @@ AUI_ERRCODE Chart::Update( sint32 index )
 	xpos += buttonWidth + distanceFromCenter;
 	ypos = (Height() - buttonHeight) / 2;
 
-	
 	m_centerIndex = index;
 	s = g_theAdvanceDB->GetNameStr( m_centerIndex );
 
@@ -569,15 +554,14 @@ AUI_ERRCODE Chart::Update( sint32 index )
 	m_centerButton->SetText( s );
 
 
-	
-	
-	
-	
+
+
+
+
 	aui_Ldl		*ldl = g_c3ui->GetLdl();
 	if (ldl) {
 		ldl->Remove((void *)m_centerButton);
 
-		
 		MBCHAR name[k_MAX_NAME_LEN];
 
 		sprintf(name, "%s", g_theStringDB->GetIdStr(g_theAdvanceDB->Get(m_centerIndex)->m_name));
@@ -596,13 +580,12 @@ AUI_ERRCODE Chart::Update( sint32 index )
 			m_centerColor = COLOR_RED;
 		}
 	}
-	
+
 	xpos += buttonWidth + distanceFromCenter;
 	ypos = (Height() - (m_numLeadsTo * buttonHeight + (m_numLeadsTo - 1) * heightBetweenButtons)) / 2;
 
-	
 	for ( i = 0;i < m_numLeadsTo;i++ ) {
-		
+
 		s = g_theAdvanceDB->GetNameStr( m_leadsToIndex[i] );
 
 		m_leadsToButton[i]->Move( xpos, ypos + i*heightBetweenButtons + i*buttonHeight );
@@ -610,15 +593,14 @@ AUI_ERRCODE Chart::Update( sint32 index )
 
 		m_leadsToButton[i]->Show();
 
-		
-		
-		
-		
+
+
+
+
 		aui_Ldl		*ldl = g_c3ui->GetLdl();
 		if (ldl) {
 			ldl->Remove((void *)m_leadsToButton[i]);
 
-			
 			MBCHAR name[k_MAX_NAME_LEN];
 
 			sprintf(name, "%s", g_theStringDB->GetIdStr(g_theAdvanceDB->Get(m_leadsToIndex[i])->m_name));
@@ -655,7 +637,7 @@ AUI_ERRCODE Chart::Update( sint32 index )
 
 void ChartPreReqActionCallback( aui_Control *control, uint32 action, uint32 data, void *cookie )
 {
-	
+
 	if ( action != (uint32)AUI_BUTTON_ACTION_EXECUTE ) return;
 
 	Chart *chart = (Chart *)cookie;
@@ -670,7 +652,7 @@ void ChartPreReqActionCallback( aui_Control *control, uint32 action, uint32 data
 
 void ChartLeadsToActionCallback( aui_Control *control, uint32 action, uint32 data, void *cookie )
 {
-	
+
 	if ( action != (uint32)AUI_BUTTON_ACTION_EXECUTE ) return;
 
 	Chart *chart = (Chart *)cookie;
@@ -685,7 +667,6 @@ void ChartLeadsToActionCallback( aui_Control *control, uint32 action, uint32 dat
 
 void ChartCenterActionCallback( aui_Control *control, uint32 action, uint32 data, void *cookie )
 {
-	
+
 	if ( action != (uint32)AUI_BUTTON_ACTION_EXECUTE ) return;
 }
-

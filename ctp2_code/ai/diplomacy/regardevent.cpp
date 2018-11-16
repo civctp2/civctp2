@@ -1,16 +1,3 @@
-
-
-
-
-
-
-
-
-
-
-
-
-
 #include "c3.h"
 
 #include "RegardEvent.h"
@@ -60,22 +47,19 @@ STDEHANDLER(KillUnitRegardEvent)
 		return GEV_HD_Continue;
 
 	Diplomat & diplomat = Diplomat::GetDiplomat(u.GetOwner());
-	
-	
+
 	if (cause != CAUSE_REMOVE_ARMY_DIED_IN_ATTACK_ON_TOP &&
 		cause != CAUSE_REMOVE_ARMY_ATTACKED)
 		return GEV_HD_Continue;
 
 	sint32 cost;
 
-	
 	if (u.Flag(k_UDF_IS_IN_TRANSPORT))
 	{
 		return GEV_HD_Continue;
 	}
 
-	
-	
+
 	CellUnitList army;
 	g_theWorld->GetArmy(u.RetPos(), army);
 	bool not_at_war = (AgreementMatrix::s_agreements.TurnsAtWar(killer, u.GetOwner()) < 1);
@@ -89,7 +73,7 @@ STDEHANDLER(KillUnitRegardEvent)
 			g_theStringDB->GetStringID("REGARD_EVENT_ATTACKED_CIVILIANS", strId);
 			diplomat.LogRegardEvent( killer,
 				cost,
-				REGARD_EVENT_MILITARY_SAFETY,	
+				REGARD_EVENT_MILITARY_SAFETY,
 				strId);
 
 			if (diplomat.GetCurrentDiplomacy(killer).GetAttackCivilianTrustCost())
@@ -105,14 +89,12 @@ STDEHANDLER(KillUnitRegardEvent)
 				Diplomat::ApplyGlobalTrustChange(killer, trust_cost, "Committed the war crime of killing a civilian unit.");
 			}
 
-			
 			diplomat.UpdateRegard(killer);
 		}
 	}
 
 	return GEV_HD_Continue;
 }
-
 
 STDEHANDLER(BorderIncursionRegardEvent)
 {
@@ -126,15 +108,14 @@ STDEHANDLER(BorderIncursionRegardEvent)
 
 	Diplomat & owner_diplomat = Diplomat::GetDiplomat(border_owner);
 
-	
-	
+
 	sint32 turns_since_withdraw_troops_agreement = 	AgreementMatrix::s_agreements.
 		GetAgreementDuration(border_owner, army_owner,PROPOSAL_REQUEST_WITHDRAW_TROOPS);
-	if ((turns_since_withdraw_troops_agreement >= 20) && 
+	if ((turns_since_withdraw_troops_agreement >= 20) &&
 		(!AgreementMatrix::s_agreements.HasAgreement(border_owner, army_owner, PROPOSAL_TREATY_ALLIANCE)) &&
 		(!owner_diplomat.GetBorderIncursionBy(army_owner)))
 	{
-		
+
 		owner_diplomat.GetCurrentDiplomacy(army_owner).GetIncursionRegardCost(cost);
 		g_theStringDB->GetStringID("REGARD_EVENT_PEACETIME_BORDER_INCURSION", strId);
 		owner_diplomat.LogRegardEvent( army_owner,
@@ -144,8 +125,7 @@ STDEHANDLER(BorderIncursionRegardEvent)
 
 		owner_diplomat.SetBorderIncursionBy(army_owner);
 
-		
-		
+
 		owner_diplomat.LogViolationEvent(army_owner, PROPOSAL_REQUEST_WITHDRAW_TROOPS);
 	}
 
@@ -261,7 +241,7 @@ STDEHANDLER(InvaderMovementRegardEvent)
 {
 	Army a;
 	MapPoint from, to;
-	
+
 	if(!args->GetArmy(0, a)) return GEV_HD_Continue;
 	if(!args->GetPos(0, from)) return GEV_HD_Continue;
 	if(!args->GetPos(1, to)) return GEV_HD_Continue;
@@ -270,7 +250,6 @@ STDEHANDLER(InvaderMovementRegardEvent)
 	sint32 new_cell_owner = g_theWorld->GetCell(to)->GetOwner();
 	sint32 army_owner = a->GetOwner();
 
-	
 	if (old_cell_owner == -1 ||
 		new_cell_owner == -1 ||
 		old_cell_owner == army_owner ||
@@ -282,12 +261,10 @@ STDEHANDLER(InvaderMovementRegardEvent)
 	sint32 invader_movement_cost;
 	StringId strId;
 
-	
-	if (g_player[new_cell_owner] && 
+	if (g_player[new_cell_owner] &&
 		!g_player[new_cell_owner]->HasContactWith(army_owner))
 		return GEV_HD_Continue;
 
-	
 	if (AgreementMatrix::s_agreements.HasAgreement(new_cell_owner, army_owner, PROPOSAL_REQUEST_WITHDRAW_TROOPS))
 	{
 		ai::Agreement agreement =
@@ -296,7 +273,6 @@ STDEHANDLER(InvaderMovementRegardEvent)
 			return GEV_HD_Continue;
 	}
 
-	
 	if (!a->PlayerCanSee(new_cell_owner) || a->IsCivilian() )
 		return GEV_HD_Continue;
 
@@ -308,7 +284,7 @@ STDEHANDLER(InvaderMovementRegardEvent)
 			invader_movement_cost,
 			REGARD_EVENT_MILITARY_SAFETY,
 			strId);
-	
+
 	return GEV_HD_Continue;
 }
 
@@ -323,7 +299,6 @@ STDEHANDLER(BattleAftermathRegardEvent)
 	Unit td;
 	sint32 attack_owner, defense_owner;
 
-	
 	args->GetArmy(0, army);
 
 	if(!args->GetPos(0, pos))
@@ -340,7 +315,6 @@ STDEHANDLER(BattleAftermathRegardEvent)
 
 	Diplomat & defending_diplomat = Diplomat::GetDiplomat(defense_owner);
 
-	
 	defending_diplomat.LogViolationEvent(attack_owner, PROPOSAL_TREATY_CEASEFIRE);
 
 	return GEV_HD_Continue;
@@ -355,10 +329,10 @@ STDEHANDLER(StopPiracyRegardEvent)
 	TradeRoute route;
 	Army army;
 
-	if(!args->GetTradeRoute(0, route)) 
+	if(!args->GetTradeRoute(0, route))
 		return GEV_HD_Continue;
-	
-	if(!args->GetArmy(0, army)) 
+
+	if(!args->GetArmy(0, army))
 		return GEV_HD_Continue;
 
 	PLAYER_INDEX army_owner = army->GetOwner();
@@ -370,17 +344,14 @@ STDEHANDLER(StopPiracyRegardEvent)
 	return GEV_HD_Continue;
 }
 
-
 STDEHANDLER(NeighborHatredRegardEvent)
 {
 	PLAYER_INDEX playerId;
 	PLAYER_INDEX foreignerId;
 
-	
 	if (!args->GetPlayer(0, playerId))
 		return GEV_HD_Continue;
 
-	
 	if (playerId == 0)
 		return GEV_HD_Continue;
 
@@ -392,11 +363,10 @@ STDEHANDLER(NeighborHatredRegardEvent)
 
 	for (foreignerId = 1; foreignerId < CtpAi::s_maxPlayers; foreignerId++)
 	{
-		
+
 		if (foreignerId == playerId)
 			continue;
 
-		
 		if (g_player[foreignerId] == NULL ||
 			g_player[foreignerId]->HasContactWith(playerId) == FALSE)
 			continue;
@@ -404,60 +374,52 @@ STDEHANDLER(NeighborHatredRegardEvent)
 		if (g_player[playerId]->HasContactWith(foreignerId) == FALSE)
 			continue;
 
-		
 		if (MapAnalysis::GetMapAnalysis().ShareContinent(playerId, foreignerId) == false)
 			continue;
 
-		
 		if (AgreementMatrix::s_agreements.
 			HasAgreement(playerId, foreignerId, PROPOSAL_TREATY_DECLARE_WAR))
 			continue;
 
-		
 		if (AgreementMatrix::s_agreements.
 				HasAgreement(playerId, foreignerId, PROPOSAL_TREATY_ALLIANCE) ||
 			AgreementMatrix::s_agreements.
 				HasAgreement(playerId, foreignerId, PROPOSAL_TREATY_MILITARY_PACT))
 			continue;
 
-		
-		
+
 		sint32 cost;
 		diplomat.GetCurrentDiplomacy(foreignerId).GetShareContinentRegardCost(cost);
 
-		
 		if (AgreementMatrix::s_agreements.
 			HasAgreement(playerId, foreignerId, PROPOSAL_TREATY_PEACE))
 		{
 			cost /= 2;
 		}
 
-		
 		if (AgreementMatrix::s_agreements.
 			HasAgreement(playerId, foreignerId, PROPOSAL_TREATY_TRADE_PACT))
 		{
 			cost /= 2;
 		}
 
-		
 		if (AgreementMatrix::s_agreements.
 			HasAgreement(playerId, foreignerId, PROPOSAL_TREATY_RESEARCH_PACT))
 		{
 			cost /= 2;
 		}
-		
+
 		StringId strId;
 		g_theStringDB->GetStringID("REGARD_EVENT_ENEMY_SHARES_CONTINENT", strId);
 		diplomat.LogRegardEvent( foreignerId,
 			cost,
 			REGARD_EVENT_MILITARY_POWER,
 			strId,
-			50); 
+			50);
 	}
 
 	return GEV_HD_Continue;
 }
-
 
 STDEHANDLER(CaptureCityRegardEvent)
 {
@@ -478,13 +440,11 @@ STDEHANDLER(CaptureCityRegardEvent)
 
 	originalOwner = city.GetOwner();
 
-	
 	if ((CAUSE_REMOVE_CITY)cause != CAUSE_REMOVE_CITY_ATTACK)
 		return GEV_HD_Continue;
 
 	Diplomat & city_diplomat = Diplomat::GetDiplomat(originalOwner);
 
-	
 	StringId strId;
 	sint32 cost;
 
@@ -492,18 +452,16 @@ STDEHANDLER(CaptureCityRegardEvent)
 	city_diplomat.GetCurrentDiplomacy(newOwner).GetTakeCityRegardCost(cost);
 	city_diplomat.LogRegardEvent( newOwner, cost, REGARD_EVENT_MILITARY_POWER, strId);
 
-	
 	city_diplomat.LogViolationEvent(newOwner, PROPOSAL_TREATY_CEASEFIRE);
 
 	return GEV_HD_Continue;
 }
 
-
 STDEHANDLER(InciteRevolution_RegardEvent)
 {
 	Unit unit;
 	Unit city;
-	
+
 	if (!args->GetUnit(0,unit))
 		return GEV_HD_Continue;
 
@@ -516,11 +474,10 @@ STDEHANDLER(InciteRevolution_RegardEvent)
 	Diplomat & city_diplomat = Diplomat::GetDiplomat(city_owner);
 
 	city_diplomat.SetColdwarAttack(attack_owner, (sint16) NewTurnCount::GetCurrentRound());
-	
+
 	sint32 cost;
 	city_diplomat.GetCurrentDiplomacy(attack_owner).GetInciteRevolutionRegardCost(cost);
 
-	
 	StringId strId;
 	g_theStringDB->GetStringID("REGARD_EVENT_ENEMY_INCITED_REVOLUTION", strId);
 	city_diplomat.LogRegardEvent( attack_owner,
@@ -528,21 +485,18 @@ STDEHANDLER(InciteRevolution_RegardEvent)
 			REGARD_EVENT_MILITARY_SAFETY,
 			strId);
 
-	
 	city_diplomat.LogViolationEvent(attack_owner, PROPOSAL_TREATY_MILITARY_PACT);
-	
-	
+
 	city_diplomat.LogViolationEvent(attack_owner, PROPOSAL_TREATY_ALLIANCE);
 
 	return GEV_HD_Continue;
 }
 
-
 STDEHANDLER(AssassinateRulerUnit_RegardEvent)
 {
 	Unit unit;
 	Unit city;
-	
+
 	if (!args->GetUnit(0,unit))
 		return GEV_HD_Continue;
 
@@ -555,11 +509,10 @@ STDEHANDLER(AssassinateRulerUnit_RegardEvent)
 	Diplomat & city_diplomat = Diplomat::GetDiplomat(city_owner);
 
 	city_diplomat.SetColdwarAttack(attack_owner, (sint16) NewTurnCount::GetCurrentRound());
-	
+
 	sint32 cost;
 	city_diplomat.GetCurrentDiplomacy(attack_owner).GetAssassinateRulerRegardCost(cost);
 
-	
 	StringId strId;
 	g_theStringDB->GetStringID("REGARD_EVENT_ENEMY_ASSASSINATED_RULER", strId);
 	city_diplomat.LogRegardEvent( attack_owner,
@@ -567,21 +520,18 @@ STDEHANDLER(AssassinateRulerUnit_RegardEvent)
 			REGARD_EVENT_MILITARY_SAFETY,
 			strId);
 
-	
 	city_diplomat.LogViolationEvent(attack_owner, PROPOSAL_TREATY_MILITARY_PACT);
 
-	
 	city_diplomat.LogViolationEvent(attack_owner, PROPOSAL_TREATY_ALLIANCE);
 
 	return GEV_HD_Continue;
 }
 
-
 STDEHANDLER(MakeFranchise_RegardEvent)
 {
 	Unit unit;
 	Unit city;
-	
+
 	if (!args->GetUnit(0,unit))
 		return GEV_HD_Continue;
 
@@ -594,11 +544,10 @@ STDEHANDLER(MakeFranchise_RegardEvent)
 	Diplomat & city_diplomat = Diplomat::GetDiplomat(city_owner);
 
 	city_diplomat.SetColdwarAttack(attack_owner, (sint16) NewTurnCount::GetCurrentRound());
-	
+
 	sint32 cost;
 	city_diplomat.GetCurrentDiplomacy(attack_owner).GetFranchiseCityRegardCost(cost);
 
-	
 	StringId strId;
 	g_theStringDB->GetStringID("REGARD_EVENT_ENEMY_FRANCHISED_CITY", strId);
 	city_diplomat.LogRegardEvent( attack_owner,
@@ -606,17 +555,15 @@ STDEHANDLER(MakeFranchise_RegardEvent)
 			REGARD_EVENT_GOLD,
 			strId);
 
-	
 
 	return GEV_HD_Continue;
 }
-
 
 STDEHANDLER(PlantNukeUnit_RegardEvent)
 {
 	Unit unit;
 	Unit city;
-	
+
 	if (!args->GetUnit(0,unit))
 		return GEV_HD_Continue;
 
@@ -633,7 +580,6 @@ STDEHANDLER(PlantNukeUnit_RegardEvent)
 	sint32 cost;
 	city_diplomat.GetCurrentDiplomacy(attack_owner).GetPlantNukeRegardCost(cost);
 
-	
 	StringId strId;
 	g_theStringDB->GetStringID("REGARD_EVENT_ENEMY_PLANTED_NUKE", strId);
 	city_diplomat.LogRegardEvent( attack_owner,
@@ -641,7 +587,6 @@ STDEHANDLER(PlantNukeUnit_RegardEvent)
 			REGARD_EVENT_MILITARY_SAFETY,
 			strId);
 
-	
 	city_diplomat.LogViolationEvent(attack_owner, PROPOSAL_TREATY_CEASEFIRE);
 
 	if (city_diplomat.GetCurrentDiplomacy(attack_owner).GetUsedNukesTrustCost() &&
@@ -655,19 +600,18 @@ STDEHANDLER(PlantNukeUnit_RegardEvent)
 	return GEV_HD_Continue;
 }
 
-
 STDEHANDLER(EnslaveSettler_RegardEvent)
 {
 	Army a;
 	Unit slaver, settler;
-	
-	if(!args->GetArmy(0, a)) 
+
+	if(!args->GetArmy(0, a))
 		return GEV_HD_Continue;
-	
-	if(!args->GetUnit(0, slaver)) 
+
+	if(!args->GetUnit(0, slaver))
 		return GEV_HD_Continue;
-	
-	if(!args->GetUnit(1, settler)) 
+
+	if(!args->GetUnit(1, settler))
 		return GEV_HD_Continue;
 
 	PLAYER_INDEX attack_owner = slaver.GetOwner();
@@ -678,7 +622,6 @@ STDEHANDLER(EnslaveSettler_RegardEvent)
 	sint32 cost;
 	settler_diplomat.GetCurrentDiplomacy(attack_owner).GetEnslaveSettlerRegardCost(cost);
 
-	
 	StringId strId;
 	g_theStringDB->GetStringID("REGARD_EVENT_ENEMY_ENSLAVED_SETTLER", strId);
 	settler_diplomat.LogRegardEvent( attack_owner,
@@ -686,18 +629,16 @@ STDEHANDLER(EnslaveSettler_RegardEvent)
 			REGARD_EVENT_MILITARY_SAFETY,
 			strId);
 
-	
 	settler_diplomat.LogViolationEvent(attack_owner, PROPOSAL_TREATY_CEASEFIRE);
 
 	return GEV_HD_Continue;
 }
 
-
 STDEHANDLER(SlaveRaidCity_RegardEvent)
 {
 	Unit unit;
 	Unit city;
-	
+
 	if (!args->GetUnit(0,unit))
 		return GEV_HD_Continue;
 
@@ -712,7 +653,6 @@ STDEHANDLER(SlaveRaidCity_RegardEvent)
 	sint32 cost;
 	city_diplomat.GetCurrentDiplomacy(attack_owner).GetSlaveRaidRegardCost(cost);
 
-	
 	StringId strId;
 	g_theStringDB->GetStringID("REGARD_EVENT_ENEMY_SLAVE_RAIDED_CITY", strId);
 	city_diplomat.LogRegardEvent( attack_owner,
@@ -720,23 +660,19 @@ STDEHANDLER(SlaveRaidCity_RegardEvent)
 			REGARD_EVENT_MILITARY_SAFETY,
 			strId);
 
-	
 	city_diplomat.LogViolationEvent(attack_owner, PROPOSAL_TREATY_CEASEFIRE);
 
 	return GEV_HD_Continue;
 }
-
 
 STDEHANDLER(EmbargoRegardEvent)
 {
 	PLAYER_INDEX playerId;
 	PLAYER_INDEX foreignerId;
 
-	
 	if (!args->GetPlayer(0, playerId))
 		return GEV_HD_Continue;
 
-	
 	if (playerId == 0)
 		return GEV_HD_Continue;
 
@@ -748,11 +684,10 @@ STDEHANDLER(EmbargoRegardEvent)
 
 	for (foreignerId = 1; foreignerId < CtpAi::s_maxPlayers; foreignerId++)
 	{
-		
+
 		if (foreignerId == playerId)
 			continue;
 
-		
 		if (g_player[foreignerId] == NULL ||
 			g_player[foreignerId]->HasContactWith(playerId) == FALSE)
 			continue;
@@ -760,30 +695,27 @@ STDEHANDLER(EmbargoRegardEvent)
 		if (g_player[playerId]->HasContactWith(foreignerId) == FALSE)
 			continue;
 
-		
 		if (Diplomat::GetDiplomat(foreignerId).GetEmbargo(playerId) == false)
 			continue;
 
-		
-		
+
 		sint32 regard_cost = 0;
 		if (diplomat.GetCurrentDiplomacy(foreignerId).GetEmbargoTradeRegardCost())
 		{
 			diplomat.GetCurrentDiplomacy(foreignerId).GetEmbargoTradeRegardCost(regard_cost);
-				
+
 			StringId strId;
 			g_theStringDB->GetStringID("REGARD_EVENT_EMBARGO_TRADE", strId);
-			diplomat.LogRegardEvent(foreignerId, 
-				regard_cost, 
-				REGARD_EVENT_GOLD, 
+			diplomat.LogRegardEvent(foreignerId,
+				regard_cost,
+				REGARD_EVENT_GOLD,
 				strId,
-				1); 
+				1);
 		}
 	}
 
 	return GEV_HD_Continue;
 }
-
 
 STDEHANDLER(Lawsuit_RegardEvent)
 {
@@ -808,11 +740,10 @@ STDEHANDLER(Lawsuit_RegardEvent)
 	Diplomat & victim_diplomat = Diplomat::GetDiplomat(victim);
 
 	victim_diplomat.SetColdwarAttack(victim, (sint16) NewTurnCount::GetCurrentRound());
-	
+
 	sint32 cost;
 	victim_diplomat.GetCurrentDiplomacy(attack_owner).GetLawsuitRegardCost(cost);
 
-	
 	StringId strId;
 	g_theStringDB->GetStringID("REGARD_EVENT_ENEMY_LAWSUIT", strId);
 	victim_diplomat.LogRegardEvent( attack_owner,
@@ -820,17 +751,15 @@ STDEHANDLER(Lawsuit_RegardEvent)
 			REGARD_EVENT_PRODUCTION,
 			strId);
 
-	
 
 	return GEV_HD_Continue;
 }
-
 
 STDEHANDLER(ExpelUnits_RegardEvent)
 {
 	Army army;
 	MapPoint pos;
-	
+
 	if (!args->GetArmy(0,army))
 		return GEV_HD_Continue;
 
@@ -839,22 +768,20 @@ STDEHANDLER(ExpelUnits_RegardEvent)
 
 	PLAYER_INDEX attack_owner = army.GetOwner();
 
-	
 	Cell *cell = g_theWorld->GetCell(pos);
 	if(!cell->UnitArmy())
 		return GEV_HD_Continue;
 
 	PLAYER_INDEX victim = cell->AccessUnit(0)->GetOwner();
-	
+
 	Diplomat & victim_diplomat = Diplomat::GetDiplomat(victim);
 
-	
-	
-	
+
+
+
 	sint32 cost;
 	victim_diplomat.GetCurrentDiplomacy(attack_owner).GetExpelUnitsRegardCost(cost);
 
-	
 	StringId strId;
 	g_theStringDB->GetStringID("REGARD_EVENT_ENEMY_EXPELLED_UNITS", strId);
 	victim_diplomat.LogRegardEvent( attack_owner,
@@ -862,17 +789,15 @@ STDEHANDLER(ExpelUnits_RegardEvent)
 			REGARD_EVENT_MILITARY_POWER,
 			strId);
 
-	
 
 	return GEV_HD_Continue;
 }
-
 
 STDEHANDLER(NukeCityUnit_RegardEvent)
 {
 	Unit unit;
 	Unit city;
-	
+
 	if (!args->GetUnit(0,unit))
 		return GEV_HD_Continue;
 
@@ -889,7 +814,6 @@ STDEHANDLER(NukeCityUnit_RegardEvent)
 	sint32 cost;
 	city_diplomat.GetCurrentDiplomacy(attack_owner).GetNukeCityRegardCost(cost);
 
-	
 	StringId strId;
 	g_theStringDB->GetStringID("REGARD_EVENT_ENEMY_NUKED_CITY", strId);
 	city_diplomat.LogRegardEvent( attack_owner,
@@ -905,18 +829,16 @@ STDEHANDLER(NukeCityUnit_RegardEvent)
 		Diplomat::ApplyGlobalTrustChange(attack_owner, trust_cost*2, "Committed the war crime of nuking a city first.");
 	}
 
-	
 	city_diplomat.LogViolationEvent(attack_owner, PROPOSAL_TREATY_CEASEFIRE);
 
 	return GEV_HD_Continue;
 }
 
-
 STDEHANDLER(NukeLocationUnit_RegardEvent)
 {
 	Unit unit;
 	MapPoint pos;
-	
+
 	if(!args->GetUnit(0, unit)) return GEV_HD_Continue;
 	if(!args->GetPos(0, pos)) return GEV_HD_Continue;
 
@@ -932,14 +854,13 @@ STDEHANDLER(NukeLocationUnit_RegardEvent)
 	else
 		pos_owner = g_theWorld->GetOwner(pos);
 
-	
 	if (pos_owner == -1)
 		return GEV_HD_Continue;
 
 	Diplomat & pos_diplomat = Diplomat::GetDiplomat(pos_owner);
 
 	pos_diplomat.SetColdwarAttack(attack_owner, (sint16) NewTurnCount::GetCurrentRound());
-	
+
 	sint32 cost;
 	pos_diplomat.GetCurrentDiplomacy(attack_owner).GetNukeCityRegardCost(cost);
 
@@ -950,7 +871,6 @@ STDEHANDLER(NukeLocationUnit_RegardEvent)
 			REGARD_EVENT_MILITARY_SAFETY,
 			strId);
 
-	
 	pos_diplomat.LogViolationEvent(attack_owner, PROPOSAL_TREATY_CEASEFIRE);
 
 	if (pos_diplomat.GetCurrentDiplomacy(attack_owner).GetUsedNukesTrustCost() &&
@@ -964,12 +884,11 @@ STDEHANDLER(NukeLocationUnit_RegardEvent)
 	return GEV_HD_Continue;
 }
 
-
 STDEHANDLER(UndergroundRailwayUnit_RegardEvent)
 {
 	Unit unit;
 	Unit city;
-	
+
 	if (!args->GetUnit(0,unit))
 		return GEV_HD_Continue;
 
@@ -984,7 +903,6 @@ STDEHANDLER(UndergroundRailwayUnit_RegardEvent)
 	sint32 cost;
 	city_diplomat.GetCurrentDiplomacy(attack_owner).GetUndergroundRailwayRegardCost(cost);
 
-	
 	StringId strId;
 	g_theStringDB->GetStringID("REGARD_EVENT_ENEMY_FREED_SLAVES", strId);
 	city_diplomat.LogRegardEvent( attack_owner,
@@ -992,18 +910,16 @@ STDEHANDLER(UndergroundRailwayUnit_RegardEvent)
 			REGARD_EVENT_MILITARY_SAFETY,
 			strId);
 
-	
 	city_diplomat.LogViolationEvent(attack_owner, PROPOSAL_TREATY_CEASEFIRE);
 
 	return GEV_HD_Continue;
 }
 
-
 STDEHANDLER(InciteUprisingUnit_RegardEvent)
 {
 	Unit unit;
 	Unit city;
-	
+
 	if (!args->GetUnit(0,unit))
 		return GEV_HD_Continue;
 
@@ -1018,7 +934,6 @@ STDEHANDLER(InciteUprisingUnit_RegardEvent)
 	sint32 cost;
 	city_diplomat.GetCurrentDiplomacy(attack_owner).GetInciteUprisingRegardCost(cost);
 
-	
 	StringId strId;
 	g_theStringDB->GetStringID("REGARD_EVENT_ENEMY_INCITED_UPRISING", strId);
 	city_diplomat.LogRegardEvent( attack_owner,
@@ -1026,18 +941,16 @@ STDEHANDLER(InciteUprisingUnit_RegardEvent)
 			REGARD_EVENT_MILITARY_SAFETY,
 			strId);
 
-	
 	city_diplomat.LogViolationEvent(attack_owner, PROPOSAL_TREATY_CEASEFIRE);
 
 	return GEV_HD_Continue;
 }
 
-
 STDEHANDLER(BioInfectCityUnit_RegardEvent)
 {
 	Unit unit;
 	Unit city;
-	
+
 	if (!args->GetUnit(0,unit))
 		return GEV_HD_Continue;
 
@@ -1052,7 +965,6 @@ STDEHANDLER(BioInfectCityUnit_RegardEvent)
 	sint32 cost;
 	city_diplomat.GetCurrentDiplomacy(attack_owner).GetBioInfectedCityRegardCost(cost);
 
-	
 	StringId strId;
 	g_theStringDB->GetStringID("REGARD_EVENT_ENEMY_BIO_INFECTED_CITY", strId);
 	city_diplomat.LogRegardEvent( attack_owner,
@@ -1060,18 +972,16 @@ STDEHANDLER(BioInfectCityUnit_RegardEvent)
 			REGARD_EVENT_MILITARY_SAFETY,
 			strId);
 
-	
 	city_diplomat.LogViolationEvent(attack_owner, PROPOSAL_TREATY_CEASEFIRE);
 
 	return GEV_HD_Continue;
 }
 
-
 STDEHANDLER(PlagueCityUnit_RegardEvent)
 {
 	Unit unit;
 	Unit city;
-	
+
 	if (!args->GetUnit(0,unit))
 		return GEV_HD_Continue;
 
@@ -1084,11 +994,10 @@ STDEHANDLER(PlagueCityUnit_RegardEvent)
 	Diplomat & city_diplomat = Diplomat::GetDiplomat(city_owner);
 
 	city_diplomat.SetColdwarAttack(attack_owner, (sint16) NewTurnCount::GetCurrentRound());
-	
+
 	sint32 cost;
 	city_diplomat.GetCurrentDiplomacy(attack_owner).GetPlagueCityRegardCost(cost);
 
-	
 	StringId strId;
 	g_theStringDB->GetStringID("REGARD_EVENT_ENEMY_PLAGUED_CITY", strId);
 	city_diplomat.LogRegardEvent( attack_owner,
@@ -1096,18 +1005,16 @@ STDEHANDLER(PlagueCityUnit_RegardEvent)
 			REGARD_EVENT_MILITARY_SAFETY,
 			strId);
 
-	
 	city_diplomat.LogViolationEvent(attack_owner, PROPOSAL_TREATY_CEASEFIRE);
 
 	return GEV_HD_Continue;
 }
 
-
 STDEHANDLER(NanoInfectCityUnit_RegardEvent)
 {
 	Unit unit;
 	Unit city;
-	
+
 	if (!args->GetUnit(0,unit))
 		return GEV_HD_Continue;
 
@@ -1120,11 +1027,10 @@ STDEHANDLER(NanoInfectCityUnit_RegardEvent)
 	Diplomat & city_diplomat = Diplomat::GetDiplomat(city_owner);
 
 	city_diplomat.SetColdwarAttack(attack_owner, (sint16) NewTurnCount::GetCurrentRound());
-	
+
 	sint32 cost;
 	city_diplomat.GetCurrentDiplomacy(attack_owner).GetNanoInfectCityRegardCost(cost);
 
-	
 	StringId strId;
 	g_theStringDB->GetStringID("REGARD_EVENT_ENEMY_NANO_INFECTED_CITY", strId);
 	city_diplomat.LogRegardEvent( attack_owner,
@@ -1132,18 +1038,16 @@ STDEHANDLER(NanoInfectCityUnit_RegardEvent)
 			REGARD_EVENT_MILITARY_SAFETY,
 			strId);
 
-	
 	city_diplomat.LogViolationEvent(attack_owner, PROPOSAL_TREATY_CEASEFIRE);
 
 	return GEV_HD_Continue;
 }
 
-
 STDEHANDLER(ConvertCityUnit_RegardEvent)
 {
 	Unit unit;
 	Unit city;
-	
+
 	if (!args->GetUnit(0,unit))
 		return GEV_HD_Continue;
 
@@ -1156,11 +1060,10 @@ STDEHANDLER(ConvertCityUnit_RegardEvent)
 	Diplomat & city_diplomat = Diplomat::GetDiplomat(city_owner);
 
 	city_diplomat.SetColdwarAttack(attack_owner, (sint16) NewTurnCount::GetCurrentRound());
-	
+
 	sint32 cost;
 	city_diplomat.GetCurrentDiplomacy(attack_owner).GetConvertCityRegardCost(cost);
 
-	
 	StringId strId;
 	g_theStringDB->GetStringID("REGARD_EVENT_ENEMY_CONVERTED_CITY", strId);
 	city_diplomat.LogRegardEvent( attack_owner,
@@ -1168,22 +1071,19 @@ STDEHANDLER(ConvertCityUnit_RegardEvent)
 			REGARD_EVENT_MILITARY_SAFETY,
 			strId);
 
-	
 	city_diplomat.LogViolationEvent(attack_owner, PROPOSAL_TREATY_MILITARY_PACT);
 	city_diplomat.LogViolationEvent(attack_owner, PROPOSAL_TREATY_TRADE_PACT);
 
-	
 	city_diplomat.LogViolationEvent(attack_owner, PROPOSAL_TREATY_ALLIANCE);
 
 	return GEV_HD_Continue;
 }
-
 
 STDEHANDLER(IndulgenceSaleMade_RegardEvent)
 {
 	Unit unit;
 	Unit city;
-	
+
 	if (!args->GetUnit(0,unit))
 		return GEV_HD_Continue;
 
@@ -1196,11 +1096,10 @@ STDEHANDLER(IndulgenceSaleMade_RegardEvent)
 	Diplomat & city_diplomat = Diplomat::GetDiplomat(city_owner);
 
 	city_diplomat.SetColdwarAttack(attack_owner, (sint16) NewTurnCount::GetCurrentRound());
-	
+
 	sint32 cost;
 	city_diplomat.GetCurrentDiplomacy(attack_owner).GetConvertCityRegardCost(cost);
 
-	
 	StringId strId;
 	g_theStringDB->GetStringID("REGARD_EVENT_ENEMY_CONVERTED_CITY", strId);
 	city_diplomat.LogRegardEvent( attack_owner,
@@ -1208,22 +1107,19 @@ STDEHANDLER(IndulgenceSaleMade_RegardEvent)
 			REGARD_EVENT_MILITARY_SAFETY,
 			strId);
 
-	
 	city_diplomat.LogViolationEvent(attack_owner, PROPOSAL_TREATY_MILITARY_PACT);
 	city_diplomat.LogViolationEvent(attack_owner, PROPOSAL_TREATY_TRADE_PACT);
 
-	
 	city_diplomat.LogViolationEvent(attack_owner, PROPOSAL_TREATY_ALLIANCE);
 
 	return GEV_HD_Continue;
 }
 
-
 STDEHANDLER(CreateParkUnit_RegardEvent)
 {
 	Unit unit;
 	Unit city;
-	
+
 	if (!args->GetUnit(0,unit))
 		return GEV_HD_Continue;
 
@@ -1240,7 +1136,6 @@ STDEHANDLER(CreateParkUnit_RegardEvent)
 	sint32 cost;
 	city_diplomat.GetCurrentDiplomacy(attack_owner).GetCreateParkRegardCost(cost);
 
-	
 	StringId strId;
 	g_theStringDB->GetStringID("REGARD_EVENT_ENEMY_CREATED_PARK", strId);
 	city_diplomat.LogRegardEvent( attack_owner,
@@ -1256,28 +1151,24 @@ STDEHANDLER(CreateParkUnit_RegardEvent)
 		Diplomat::ApplyGlobalTrustChange(attack_owner, trust_cost*2, "Committed the war crime of nano-attacking a city first.");
 	}
 
-	
 	city_diplomat.LogViolationEvent(attack_owner, PROPOSAL_TREATY_CEASEFIRE);
 
 	return GEV_HD_Continue;
 }
 
-
 STDEHANDLER(PillageUnit_RegardEvent)
 {
 	Unit unit;
-	
+
 	if (!args->GetUnit(0,unit))
 		return GEV_HD_Continue;
 
 	PLAYER_INDEX attack_owner = unit.GetOwner();
 	PLAYER_INDEX victim = g_theWorld->GetOwner(unit.RetPos());
 
-	
 	if (victim == -1)
 		return GEV_HD_Continue;
 
-	
 	if (victim == attack_owner)
 		return GEV_HD_Continue;
 
@@ -1286,7 +1177,6 @@ STDEHANDLER(PillageUnit_RegardEvent)
 	sint32 cost;
 	victim_diplomat.GetCurrentDiplomacy(attack_owner).GetPillageRegardCost(cost);
 
-	
 	StringId strId;
 	g_theStringDB->GetStringID("REGARD_EVENT_ENEMY_PILLAGED", strId);
 	victim_diplomat.LogRegardEvent( attack_owner,
@@ -1294,18 +1184,16 @@ STDEHANDLER(PillageUnit_RegardEvent)
 			REGARD_EVENT_MILITARY_SAFETY,
 			strId);
 
-	
 	victim_diplomat.LogViolationEvent(attack_owner, PROPOSAL_TREATY_CEASEFIRE);
 
 	return GEV_HD_Continue;
 }
 
-
 STDEHANDLER(InjoinUnit_RegardEvent)
 {
 	Unit unit;
 	Unit city;
-	
+
 	if (!args->GetUnit(0,unit))
 		return GEV_HD_Continue;
 
@@ -1318,11 +1206,10 @@ STDEHANDLER(InjoinUnit_RegardEvent)
 	Diplomat & city_diplomat = Diplomat::GetDiplomat(city_owner);
 
 	city_diplomat.SetColdwarAttack(attack_owner, (sint16) NewTurnCount::GetCurrentRound());
-	
+
 	sint32 cost;
 	city_diplomat.GetCurrentDiplomacy(attack_owner).GetInjoinCityRegardCost(cost);
 
-	
 	StringId strId;
 	g_theStringDB->GetStringID("REGARD_EVENT_ENEMY_INJOINED_CITY", strId);
 	city_diplomat.LogRegardEvent( attack_owner,
@@ -1330,11 +1217,9 @@ STDEHANDLER(InjoinUnit_RegardEvent)
 			REGARD_EVENT_PRODUCTION,
 			strId);
 
-	
 	city_diplomat.LogViolationEvent(attack_owner, PROPOSAL_TREATY_TRADE_PACT);
 	city_diplomat.LogViolationEvent(attack_owner, PROPOSAL_TREATY_RESEARCH_PACT);
 
-	
 	city_diplomat.LogViolationEvent(attack_owner, PROPOSAL_TREATY_ALLIANCE);
 
 	return GEV_HD_Continue;
@@ -1347,18 +1232,18 @@ STDEHANDLER(InjoinUnit_RegardEvent)
 
 
 
-void RegardEventCallbacks::AddCallbacks() 
+void RegardEventCallbacks::AddCallbacks()
 {
-	
-	g_gevManager->AddCallback(GEV_KillUnit, 
-							  GEV_PRI_Pre, 
+
+	g_gevManager->AddCallback(GEV_KillUnit,
+							  GEV_PRI_Pre,
 							  &s_KillUnitRegardEvent);
 
 	g_gevManager->AddCallback(GEV_BorderIncursion,
-							  GEV_PRI_Pre, 
+							  GEV_PRI_Pre,
 							  &s_BorderIncursionRegardEvent);
 
-	
+
 
 
 
@@ -1383,103 +1268,83 @@ void RegardEventCallbacks::AddCallbacks()
 	g_gevManager->AddCallback(GEV_BeginTurn,
 							  GEV_PRI_Pre,
 							  &s_NeighborHatredRegardEvent);
-	
-	
+
 	g_gevManager->AddCallback(GEV_InciteRevolutionUnit,
 							  GEV_PRI_Pre,
 							  &s_InciteRevolution_RegardEvent);
 
-	
 	g_gevManager->AddCallback(GEV_AssassinateRulerUnit,
 							  GEV_PRI_Pre,
 							  &s_AssassinateRulerUnit_RegardEvent);
 
-	
 	g_gevManager->AddCallback(GEV_MakeFranchise,
 							  GEV_PRI_Pre,
 							  &s_MakeFranchise_RegardEvent);
 
-	
 	g_gevManager->AddCallback(GEV_PlantNukeUnit,
 							  GEV_PRI_Pre,
 							  &s_PlantNukeUnit_RegardEvent);
 
-	
 	g_gevManager->AddCallback(GEV_SlaveRaidCity,
 							  GEV_PRI_Pre,
 							  &s_SlaveRaidCity_RegardEvent);
 
-	
 	g_gevManager->AddCallback(GEV_Lawsuit,
 							  GEV_PRI_Pre,
 							  &s_Lawsuit_RegardEvent);
 
-	
 	g_gevManager->AddCallback(GEV_ExpelUnits,
 							  GEV_PRI_Pre,
 							  &s_ExpelUnits_RegardEvent);
 
-	
 	g_gevManager->AddCallback(GEV_NukeCityUnit,
 							  GEV_PRI_Pre,
 							  &s_NukeCityUnit_RegardEvent);
 
-	
 	g_gevManager->AddCallback(GEV_NukeLocationUnit,
 							  GEV_PRI_Pre,
 							  &s_NukeLocationUnit_RegardEvent);
 
-	
 	g_gevManager->AddCallback(GEV_EnslaveSettler,
 							  GEV_PRI_Pre,
 							  &s_EnslaveSettler_RegardEvent);
 
-	
 	g_gevManager->AddCallback(GEV_UndergroundRailwayUnit,
 							  GEV_PRI_Pre,
 							  &s_UndergroundRailwayUnit_RegardEvent);
 
-	
 	g_gevManager->AddCallback(GEV_InciteUprisingUnit,
 							  GEV_PRI_Pre,
 							  &s_InciteUprisingUnit_RegardEvent);
 
-	
 	g_gevManager->AddCallback(GEV_BioInfectCityUnit,
 							  GEV_PRI_Pre,
 							  &s_BioInfectCityUnit_RegardEvent);
 
-	
 	g_gevManager->AddCallback(GEV_PlagueCityUnit,
 							  GEV_PRI_Pre,
 							  &s_PlagueCityUnit_RegardEvent);
 
-	
 	g_gevManager->AddCallback(GEV_NanoInfectCityUnit,
 							  GEV_PRI_Pre,
 							  &s_NanoInfectCityUnit_RegardEvent);
 
-	
 	g_gevManager->AddCallback(GEV_ConvertCityUnit,
 							  GEV_PRI_Pre,
 							  &s_ConvertCityUnit_RegardEvent);
 
-	
 	g_gevManager->AddCallback(GEV_IndulgenceSaleMade,
 							  GEV_PRI_Pre,
 							  &s_IndulgenceSaleMade_RegardEvent);
 
-	
 	g_gevManager->AddCallback(GEV_CreateParkUnit,
 							  GEV_PRI_Pre,
 							  &s_CreateParkUnit_RegardEvent);
 
-	
 	g_gevManager->AddCallback(GEV_PillageUnit,
 							  GEV_PRI_Pre,
 							  &s_PillageUnit_RegardEvent);
 
-	
 	g_gevManager->AddCallback(GEV_InjoinUnit,
 							  GEV_PRI_Pre,
 							  &s_InjoinUnit_RegardEvent);
@@ -1488,4 +1353,3 @@ void RegardEventCallbacks::AddCallbacks()
 							  GEV_PRI_Pre,
 							  &s_EmbargoRegardEvent);
 }
-

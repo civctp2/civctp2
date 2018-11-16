@@ -1,18 +1,6 @@
-
-
-
-
-
-
-
-
-
-
-
 #include "c3.h"
 
 #include "aui_static.h"
-
 
 
 aui_Static::aui_Static(
@@ -31,7 +19,6 @@ aui_Static::aui_Static(
 	Assert( AUI_SUCCESS(*retval) );
 	if ( !AUI_SUCCESS(*retval) ) return;
 }
-
 
 
 aui_Static::aui_Static(
@@ -57,20 +44,18 @@ aui_Static::aui_Static(
 }
 
 
-
 AUI_ERRCODE aui_Static::InitCommonLdl( MBCHAR *ldlBlock )
 {
 	return InitCommon();
 }
 
 
-
 AUI_ERRCODE aui_Static::InitCommon( void )
 {
-	
 
 
-	
+
+
 	SetDrawMask( k_AUI_REGION_DRAWFLAG_UPDATE );
 
 	return AUI_ERRCODE_OK;

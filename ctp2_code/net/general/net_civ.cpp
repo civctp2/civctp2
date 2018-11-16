@@ -11,7 +11,7 @@
 //
 // THIS FILE IS NOT GENERATED OR SUPPORTED BY ACTIVISION.
 //
-// This material has been developed at apolyton.net by the Apolyton CtP2 
+// This material has been developed at apolyton.net by the Apolyton CtP2
 // Source Code Project. Contact the authors at ctp2source@apolyton.net.
 //
 //----------------------------------------------------------------------------
@@ -62,7 +62,7 @@ void NetCivilization::Packetize(uint8 *buf, uint16 &size)
 	PUSHSTRING(m_data->m_country_name);
 	PUSHSTRING(m_data->m_singular_name);
 	PUSHSTRING(m_data->m_personality_description);
-	
+
 	uint16 numCityNames = (uint16)g_theCivilisationDB->Get(m_data->m_civ)->GetNumCityName();
 	PUSHSHORT(numCityNames);
 	sint32 i;
@@ -81,7 +81,7 @@ void NetCivilization::Unpacketize(uint16 id, uint8 *buf, uint16 size)
 	Civilisation cid;
 
 	PULLLONGTYPE(cid, Civilisation);
-	
+
 	g_network.CheckReceivedObject((uint32)cid);
 
 	if(!g_theCivilisationPool)
@@ -92,7 +92,7 @@ void NetCivilization::Unpacketize(uint16 id, uint8 *buf, uint16 size)
 	} else {
 		m_data = g_theCivilisationPool->AccessData(cid);
 	}
-	
+
 	m_data->m_id = (uint32)cid;
 	PULLBYTETYPE(m_data->m_owner, PLAYER_INDEX);
 	PULLBYTETYPE(m_data->m_gender, GENDER);
@@ -104,7 +104,7 @@ void NetCivilization::Unpacketize(uint16 id, uint8 *buf, uint16 size)
 	PULLSTRING(m_data->m_singular_name);
 	PULLSTRING(m_data->m_personality_description);
 
-	uint16 numCityNames;	
+	uint16 numCityNames;
 	PULLSHORT(numCityNames);
 	sint32 i;
 	for(i = 0; i < numCityNames; i++) {
@@ -122,7 +122,7 @@ void NetSetLeaderName::Packetize(uint8 *buf, uint16 &size)
 {
 	size = 0;
 	PUSHID(k_PACKET_SET_LEADER_NAME_ID);
-	
+
 	PUSHBYTE(m_player);
 	PUSHSTRING(g_player[m_player]->m_civilisation->GetLeaderName());
 }
@@ -133,7 +133,7 @@ void NetSetLeaderName::Unpacketize(uint16 id, uint8 *buf, uint16 size)
 	uint16 packid;
 	PULLID(packid);
 	Assert(packid == k_PACKET_SET_LEADER_NAME_ID);
-	
+
 	MBCHAR nbuf[1024];
 	PULLBYTE(m_player);
 	PULLSTRING(nbuf);
@@ -145,6 +145,3 @@ void NetSetLeaderName::Unpacketize(uint16 id, uint8 *buf, uint16 size)
 		}
 	}
 }
-
-
-

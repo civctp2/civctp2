@@ -11,7 +11,7 @@
 //
 // THIS FILE IS NOT GENERATED OR SUPPORTED BY ACTIVISION.
 //
-// This material has been developed at apolyton.net by the Apolyton CtP2 
+// This material has been developed at apolyton.net by the Apolyton CtP2
 // Source Code Project. Contact the authors at ctp2source@apolyton.net.
 //
 //----------------------------------------------------------------------------
@@ -25,11 +25,10 @@
 //
 // Modifications from the original Activision code:
 //
-// - Added close_AllScreensAndUpdateInfoScreen so that on a new turn the 
+// - Added close_AllScreensAndUpdateInfoScreen so that on a new turn the
 //   information window can stay open. (Aug. 7th 2005 Martin Gühmann)
 //
 //----------------------------------------------------------------------------
-
 
 #ifdef HAVE_PRAGMA_ONCE
 #pragma once

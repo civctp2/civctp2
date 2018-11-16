@@ -1,5 +1,3 @@
-
-
 #include "c3.h"
 #include "c3errors.h"
 #include "c3files.h"
@@ -14,16 +12,14 @@
 extern sint32	g_abort_parse;
 extern StringDB	*g_theStringDB;
 
-
 HighScoreDB::HighScoreDB()
 {
 	Initialize();
 }
 
-
 HighScoreDB::~HighScoreDB()
 {
-	
+
 	SaveHighScores();
 
 	HighScoreInfo *prevScore = m_highScoreInfo;
@@ -38,11 +34,9 @@ HighScoreDB::~HighScoreDB()
 			prevScore = nextScore;
 		}
 
-		
 		Assert( prevScore == NULL );
 	}
 }
-
 
 void HighScoreDB::Initialize(void)
 {
@@ -51,29 +45,25 @@ void HighScoreDB::Initialize(void)
 	LoadHighScores();
 }
 
-
 sint32 HighScoreDB::AddHighScore(MBCHAR *name, sint32 score)
 {
 	HighScoreInfo *nextScore = NULL;
 	HighScoreInfo *prevScore = NULL;
 	sint32 i = 0;
-	
-	
+
 	HighScoreInfo *newScore = new HighScoreInfo;
 	strcpy(newScore->m_name, name);
 	newScore->m_score = score;
 	newScore->m_next = NULL;
 
-	
-	if (!m_nHighScores) 
+	if (!m_nHighScores)
 	{
-		
+
 		m_highScoreInfo = newScore;
 		m_nHighScores++;
 		return 0;
 	}
 
-	
 	if (m_highScoreInfo->m_score < newScore->m_score)
 	{
 		newScore->m_next = m_highScoreInfo;
@@ -84,12 +74,11 @@ sint32 HighScoreDB::AddHighScore(MBCHAR *name, sint32 score)
 		return 0;
 	}
 
-	
 	nextScore = m_highScoreInfo->m_next;
 	prevScore = m_highScoreInfo;
 	for ( i = 0 ; i < m_nHighScores ; i++ )
 	{
-		
+
 		if (!nextScore)
 		{
 			prevScore->m_next = newScore;
@@ -99,7 +88,6 @@ sint32 HighScoreDB::AddHighScore(MBCHAR *name, sint32 score)
 			return 0;
 		}
 
-		
 		if (nextScore->m_score < newScore->m_score)
 		{
 			newScore->m_next = nextScore;
@@ -116,24 +104,21 @@ sint32 HighScoreDB::AddHighScore(MBCHAR *name, sint32 score)
 	return 0;
 }
 
-
 sint32 HighScoreDB::CheckMaxScores( void )
 {
 	HighScoreInfo *nextScore = m_highScoreInfo;
 	HighScoreInfo *prevScore = NULL;
 
-	
 	if (m_nHighScores > k_MAX_HIGH_SCORES)
 	{
-		
+
 		Assert(m_nHighScores == k_MAX_HIGH_SCORES+1);
 		for (sint32 i = 0 ; i < k_MAX_HIGH_SCORES; i++)
 		{
 			prevScore = nextScore;
 			nextScore = nextScore->m_next;
 		}
-		
-		
+
 		prevScore->m_next = NULL;
 		delete nextScore;
 		nextScore = NULL;
@@ -143,27 +128,23 @@ sint32 HighScoreDB::CheckMaxScores( void )
 	return 0;
 }
 
-
 HighScoreInfo *HighScoreDB::GetHighScoreInfo( sint32 index )
 {
-	
-	
-	if (index > m_nHighScores) index = m_nHighScores;
-	if (index < 0) index = 0;	
 
-	
+	if (index > m_nHighScores) index = m_nHighScores;
+	if (index < 0) index = 0;
+
 	if (!m_highScoreInfo) return NULL;
 
 	HighScoreInfo *nextScore = m_highScoreInfo;
-	
+
 	for (sint32 i = 0 ; i < index ; i++)
 	{
-		nextScore = nextScore->m_next;	
+		nextScore = nextScore->m_next;
 	}
 
 	return nextScore;
 }
-
 
 
 void HighScoreDB::LoadHighScores( void )
@@ -178,36 +159,33 @@ void HighScoreDB::LoadHighScores( void )
 
 	FILE *fp;
 
-	
 	fp = c3files_fopen(C3DIR_GAMEDATA, "hscore.txt", "r");
-	
+
 	if (!fp) return;
 
-	
 	while(1)
 	{
 		i = 0;
 		j = 0;
-		
+
 		if (!fgets(strbuf, 255, fp)) break;
-		
+
 		while(i < 256)
 		{
-			
+
 			c = strbuf[i++];
 			if (c == '{')
-			{ 
+			{
 				while ((i < 256) && (j < 256))
 				{
-					
+
 					c = strbuf[i++];
 					if (c == '}') break;
 					rankname[j++] = c;
 				}
-				
+
 				rankname[j] = '\0';
-				
-				
+
 				j = 0;
 				while((i < 256) && (c != '\n'))
 				{
@@ -219,40 +197,32 @@ void HighScoreDB::LoadHighScores( void )
 			}
 		}
 
-		
 		if (i == 256) break;
 
-		
 		if (sscanf(scorebuf, "%d", &score) != 1) break;
 
-		
 		AddHighScore(rankname,score);
 	}
 
-	
 	fclose(fp);
 }
-
 
 void HighScoreDB::SaveHighScores( void )
 {
 	FILE *fp;
 
-	
 	fp = c3files_fopen(C3DIR_GAMEDATA, "hscore.txt", "w");
-	
+
 	if (!fp) return;
 
 	HighScoreInfo *nextScore = m_highScoreInfo;
 
-	
 	for ( sint32 i = 0 ; i < m_nHighScores ; i++)
 	{
-		
+
 		fprintf(fp, "{%s} %d\n", nextScore->m_name, nextScore->m_score);
 		nextScore = nextScore->m_next;
 	}
 
-	
 	fclose(fp);
 }

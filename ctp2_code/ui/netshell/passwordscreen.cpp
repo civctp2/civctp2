@@ -3,7 +3,7 @@
 // Project      : Call To Power 2
 // File type    : C++ source
 // Description  : Multiplayer password screen
-// Id           : $Id:$
+// Id           : $Id$
 //
 //----------------------------------------------------------------------------
 //
@@ -11,7 +11,7 @@
 //
 // THIS FILE IS NOT GENERATED OR SUPPORTED BY ACTIVISION.
 //
-// This material has been developed at apolyton.net by the Apolyton CtP2 
+// This material has been developed at apolyton.net by the Apolyton CtP2
 // Source Code Project. Contact the authors at ctp2source@apolyton.net.
 //
 //----------------------------------------------------------------------------
@@ -48,7 +48,6 @@
 #include "spnewgamewindow.h"
 
 extern C3UI			*g_c3ui;
-
 
 static ns_Window *s_passwordScreen	= NULL;
 
@@ -89,10 +88,8 @@ sint32 passwordscreen_displayMyWindow( PASSWORDSCREEN_MODE m )
 		s_passwordScreen->AddChild( s_askStatic );
 		s_passwordScreen->AddChild( s_yesnoSwitchGroup );
 
-		
 		s_yesRadio->SetState( 0 );
 
-		
 		s_noRadio->SetState( 1 );
 
 		s_passwordScreen->RemoveChild( s_joinStatic->Id() );
@@ -112,13 +109,10 @@ sint32 passwordscreen_displayMyWindow( PASSWORDSCREEN_MODE m )
 		s_passwordScreen->RemoveChild( s_askStatic->Id() );
 		s_passwordScreen->RemoveChild( s_yesnoSwitchGroup->Id() );
 
-		
 		s_noRadio->SetState( 0 );
 
-		
 		s_yesRadio->SetState( 1 );
 
-		
 		s_inputTextField->SetFieldText( "" );
 
 		s_passwordScreen->AddChild( s_joinStatic );
@@ -138,7 +132,6 @@ sint32 passwordscreen_displayMyWindow( PASSWORDSCREEN_MODE m )
 		s_passwordScreen->RemoveChild( s_askStatic->Id() );
 		s_passwordScreen->RemoveChild( s_yesnoSwitchGroup->Id() );
 
-		
 		s_noRadio->SetState( 1 );
 
 		s_passwordScreen->RemoveChild( s_joinStatic->Id() );
@@ -158,7 +151,6 @@ sint32 passwordscreen_displayMyWindow( PASSWORDSCREEN_MODE m )
 		s_passwordScreen->RemoveChild( s_askStatic->Id() );
 		s_passwordScreen->RemoveChild( s_yesnoSwitchGroup->Id() );
 
-		
 		s_noRadio->SetState( 1 );
 
 		s_passwordScreen->RemoveChild( s_joinStatic->Id() );
@@ -178,7 +170,6 @@ sint32 passwordscreen_displayMyWindow( PASSWORDSCREEN_MODE m )
 		s_passwordScreen->RemoveChild( s_askStatic->Id() );
 		s_passwordScreen->RemoveChild( s_yesnoSwitchGroup->Id() );
 
-		
 		s_noRadio->SetState( 1 );
 
 		s_passwordScreen->RemoveChild( s_joinStatic->Id() );
@@ -198,7 +189,6 @@ sint32 passwordscreen_displayMyWindow( PASSWORDSCREEN_MODE m )
 		s_passwordScreen->RemoveChild( s_askStatic->Id() );
 		s_passwordScreen->RemoveChild( s_yesnoSwitchGroup->Id() );
 
-		
 		s_noRadio->SetState( 1 );
 
 		s_passwordScreen->RemoveChild( s_joinStatic->Id() );
@@ -218,7 +208,6 @@ sint32 passwordscreen_displayMyWindow( PASSWORDSCREEN_MODE m )
 		s_passwordScreen->RemoveChild( s_askStatic->Id() );
 		s_passwordScreen->RemoveChild( s_yesnoSwitchGroup->Id() );
 
-		
 		s_noRadio->SetState( 1 );
 
 		s_passwordScreen->RemoveChild( s_joinStatic->Id() );
@@ -238,7 +227,6 @@ sint32 passwordscreen_displayMyWindow( PASSWORDSCREEN_MODE m )
 		s_passwordScreen->RemoveChild( s_askStatic->Id() );
 		s_passwordScreen->RemoveChild( s_yesnoSwitchGroup->Id() );
 
-		
 		s_noRadio->SetState( 1 );
 
 		s_passwordScreen->RemoveChild( s_joinStatic->Id() );
@@ -258,7 +246,6 @@ sint32 passwordscreen_displayMyWindow( PASSWORDSCREEN_MODE m )
 		s_passwordScreen->RemoveChild( s_askStatic->Id() );
 		s_passwordScreen->RemoveChild( s_yesnoSwitchGroup->Id() );
 
-		
 		s_noRadio->SetState( 1 );
 
 		s_passwordScreen->RemoveChild( s_joinStatic->Id() );
@@ -274,7 +261,7 @@ sint32 passwordscreen_displayMyWindow( PASSWORDSCREEN_MODE m )
 		s_passwordScreen->AddChild( s_scenarionotfoundStatic );
 		break;
 	default:
-		
+
 		Assert( FALSE );
 		break;
 	}
@@ -315,7 +302,7 @@ AUI_ERRCODE passwordscreen_Initialize( void )
 	s_okButton = spNew_ctp2_Button(
 				&errcode,
 				windowBlock,
-				"button0", 
+				"button0",
 				PasswordScreenCallback);
 	Assert( AUI_NEWOK(s_okButton, errcode) );
 	if ( !AUI_NEWOK(s_okButton, errcode) ) return errcode;
@@ -349,7 +336,7 @@ AUI_ERRCODE passwordscreen_Initialize( void )
 		&errcode,
 		aui_UniqueId(),
 		controlBlock,
-		PasswordScreenCallback ); 
+		PasswordScreenCallback );
 
 	Assert( AUI_NEWOK(s_yesRadio, errcode) );
 	if ( !AUI_NEWOK(s_yesRadio, errcode) ) return errcode;
@@ -445,7 +432,6 @@ AUI_ERRCODE passwordscreen_Initialize( void )
 	return AUI_ERRCODE_OK;
 }
 
-
 AUI_ERRCODE passwordscreen_Cleanup()
 {
 #define mycleanup(mypointer) if(mypointer) { delete mypointer; mypointer = NULL; };
@@ -477,7 +463,6 @@ AUI_ERRCODE passwordscreen_Cleanup()
 #undef mycleanup
 }
 
-
 void PasswordScreenCallback(
 	aui_Control *control,
 	uint32 action,
@@ -491,7 +476,6 @@ void PasswordScreenCallback(
 		s_passwordScreen->AddChild( s_inputStatic );
 		s_passwordScreen->AddChild( s_inputTextField );
 
-		
 		s_inputTextField->SetKeyboardFocus();
 	}
 	else if ( control == s_noRadio )
@@ -501,14 +485,12 @@ void PasswordScreenCallback(
 		s_passwordScreen->RemoveChild( s_inputStatic->Id() );
 		s_passwordScreen->RemoveChild( s_inputTextField->Id() );
 
-		
 		s_inputTextField->SetFieldText( "" );
 	}
 	else if ( control == s_inputTextField )
 	{
 		if ( action != (uint32)AUI_TEXTFIELD_ACTION_EXECUTE ) return;
 
-		
 		PasswordScreenCallback(
 			s_okButton,
 			AUI_BUTTON_ACTION_EXECUTE,
@@ -521,28 +503,25 @@ void PasswordScreenCallback(
 
 		passwordscreen_removeMyWindow();
 
-		
 		if ( !s_passwordScreen->GetChild( s_denyStatic->Id() ) &&
 			 !s_passwordScreen->GetChild( s_fullStatic->Id() ) &&
 			 !s_passwordScreen->GetChild( s_nolobbyStatic->Id() ) &&
 			 !s_passwordScreen->GetChild( s_scenarionotfoundStatic->Id() ) &&
 			 !s_passwordScreen->GetChild( s_connectionlostStatic->Id() ) )
 		{
-			
+
 			MBCHAR password[ dp_PASSWORDLEN + 1 ];
 			memset( password, 0, sizeof( password ) );
 
-			
-			
+
 			if ( s_passwordScreen->GetChild( s_inputTextField->Id() ) )
 				s_inputTextField->GetFieldText( password, dp_PASSWORDLEN );
 
-			
 			if ( s_passwordScreen->GetChild( s_yesnoSwitchGroup->Id() ) )
 			{
 				g_gameSelectWindow->PasswordScreenDone( password );
 			}
-			else 
+			else
 			{
 				g_lobbyWindow->PasswordScreenDone( password );
 			}
@@ -553,7 +532,7 @@ void PasswordScreenCallback(
 		}
 		else
 		{
-			
+
 		}
 	}
 }

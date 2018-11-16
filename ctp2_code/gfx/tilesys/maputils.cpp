@@ -10,13 +10,13 @@
 //
 // THIS FILE IS NOT GENERATED OR SUPPORTED BY ACTIVISION.
 //
-// This material has been developed at apolyton.net by the Apolyton CtP2 
+// This material has been developed at apolyton.net by the Apolyton CtP2
 // Source Code Project. Contact the authors at ctp2source@apolyton.net.
 //
 //----------------------------------------------------------------------------
 //
 // Compiler flags
-// 
+//
 //----------------------------------------------------------------------------
 //
 // Modifications from the original Activision code:
@@ -44,8 +44,8 @@ extern World		*g_theWorld;
 
 
 void maputils_WrapPoint(
-	sint32 x,		
-	sint32 y,	
+	sint32 x,
+	sint32 y,
 	sint32 *wrapX,
 	sint32 *wrapY
 	)
@@ -77,10 +77,10 @@ void maputils_WrapPoint(
 	}
 
 	if (g_theWorld->IsYwrap()) {
-		
+
 		while(*wrapY<0)
 			*wrapY = *wrapY + mapHeight;
-		
+
 		while(*wrapY >= mapHeight)
 			*wrapY = *wrapY - mapHeight;
 	} else {
@@ -102,15 +102,15 @@ BOOL maputils_TilePointInTileRect(sint32 x, sint32 y, RECT *tileRect)
 	if (wrappedRect.bottom >= mapHeight) wrappedRect.bottom -= mapHeight;
 
 	if (wrappedRect.right < wrappedRect.left) {
-		
+
 		if (x < wrappedRect.left && x >= wrappedRect.right) return FALSE;
 	} else {
-		
+
 		if (x < wrappedRect.left || x >= wrappedRect.right) return FALSE;
 	}
 
 	if (wrappedRect.bottom < wrappedRect.top) {
-		
+
 		if (y < wrappedRect.top && y >= wrappedRect.bottom) return FALSE;
 	} else {
 		if (y < wrappedRect.top || y >= wrappedRect.bottom) return FALSE;
@@ -120,30 +120,29 @@ BOOL maputils_TilePointInTileRect(sint32 x, sint32 y, RECT *tileRect)
 }
 
 
-
 sint32 maputils_TileX2MapX(
-	sint32 tileX,	
-	sint32 tileY	
+	sint32 tileX,
+	sint32 tileY
 	)
 {
-	
+
     sint32 mapWidth = g_tiledMap->GetMapWidth();
     tileX -= (tileY>>1);
 
-	
-	
-	
-	
-	
-	
+
+
+
+
+
+
 	while (tileX<0)
 		tileX += mapWidth;
 
-	
-	
-	
-	
-	while (tileX>=mapWidth) 
+
+
+
+
+	while (tileX>=mapWidth)
 		tileX -= mapWidth;
 
 	return tileX;
@@ -154,15 +153,15 @@ sint32 maputils_TileX2MapX(
 
 
 void maputils_TileX2MapXAbs(
-	sint32 tileX,	
-	sint32 tileY,	
-	sint32 *mapX	
+	sint32 tileX,
+	sint32 tileY,
+	sint32 *mapX
 	)
 {
 	sint32 mapWidth, mapHeight;
-	
+
 	g_tiledMap->GetMapMetrics(&mapWidth,&mapHeight);
-		  
+
 	*mapX = (tileX - (tileY >> 1)) % mapWidth;
 
 	while (*mapX<0)
@@ -170,11 +169,10 @@ void maputils_TileX2MapXAbs(
 
 }
 
-
 void maputils_MapX2TileX(
-	sint32 mapX,	
-	sint32 mapY,	
-	sint32 *tileX	
+	sint32 mapX,
+	sint32 mapY,
+	sint32 *tileX
 	)
 {
 	sint32 mapWidth, mapHeight;
@@ -183,10 +181,10 @@ void maputils_MapX2TileX(
 }
 
 void maputils_MapXY2PixelXY(
-	sint32 mapX,	
-	sint32 mapY,	
-	sint32 *pixelX, 
-	sint32 *pixelY	
+	sint32 mapX,
+	sint32 mapY,
+	sint32 *pixelX,
+	sint32 *pixelY
 	)
 {
 	if (!g_tiledMap) return;
@@ -202,30 +200,28 @@ void maputils_MapXY2PixelXY(
 
 	splitViewRectB = splitViewRectT = splitViewRectR = splitViewRectL = *mapViewRect;
 
-	if (mapY & 0x01) 
-
+	if (mapY & 0x01)
 
 		nudge = g_tiledMap->GetZoomTilePixelWidth()>>1;
 	else
 		nudge = 0;
-      
-	
+
 	sint32 realX;
 	maputils_MapX2TileX(mapX,mapY,&realX);
 	tempPos.x = realX;
 	tempPos.y = mapY;
 
-	
-	
-	
-	
-	
-	
-	
-	
-	
-	
-	
+
+
+
+
+
+
+
+
+
+
+
 	if(mapViewRect->right >= mapWidth && mapViewRect->left < mapWidth) {
 		splitViewRectR.left = mapViewRect->left;
 		splitViewRectR.right = mapWidth;
@@ -267,7 +263,7 @@ void maputils_MapXY2PixelXY(
 		splitViewRectT.left = 0;
 		splitViewRectT.right = mapWidth;
 	}
-	
+
 	if(PtInRect(&splitViewRectL, tempPos))
 	{
 		*pixelX = ((sint32)((realX * (g_tiledMap->GetZoomTilePixelWidth()) + nudge) - (splitViewRectL.left * (g_tiledMap->GetZoomTilePixelWidth()))));
@@ -284,20 +280,19 @@ void maputils_MapXY2PixelXY(
 	if(PtInRect(&splitViewRectT, tempPos))
 	{
 	 	*pixelY = (sint32)((mapY * ((g_tiledMap->GetZoomTilePixelHeight())/2)) - (splitViewRectT.top * ((g_tiledMap->GetZoomTilePixelHeight())/2)));
-	 
+
 	}
 	else if(PtInRect(&splitViewRectB, tempPos))
 	{
 	 	*pixelY = (sint32)((mapY * ((g_tiledMap->GetZoomTilePixelHeight())/2)) - (splitViewRectB.top * ((g_tiledMap->GetZoomTilePixelHeight())/2)));
-	 
+
 	}
 	else
 	{
 	  	*pixelY = (sint32)((mapY * ((g_tiledMap->GetZoomTilePixelHeight())/2)) - (mapViewRect->top * ((g_tiledMap->GetZoomTilePixelHeight())/2)));
-	  
+
 	}
 
-	
 	sint32 xoff,yoff;
 
 	g_tiledMap->GetSmoothScrollOffsets(xoff,yoff);
@@ -321,10 +316,10 @@ void maputils_MapXY2PixelXY
 }
 
 void maputils_MapXY2PixelXY(
-	sint32 mapX,	
-	sint32 mapY,	
-	sint32 *pixelX, 
-	sint32 *pixelY,	
+	sint32 mapX,
+	sint32 mapY,
+	sint32 *pixelX,
+	sint32 *pixelY,
 	RECT *mapViewRect
 	)
 {
@@ -344,29 +339,28 @@ void maputils_MapXY2PixelXY(
 	splitViewRectB = splitViewRectT = splitViewRectR = splitViewRectL = *mapViewRect;
 
 	if (mapY & 0x01) {
-		
+
 		nudge = (sint32)((tileWidth*scale)/2);
 		nudge = g_tiledMap->GetZoomTilePixelWidth() / 2;
 	} else
 		nudge = 0;
-      
-	
+
 	sint32 realX;
 	maputils_MapX2TileX(mapX,mapY,&realX);
 	tempPos.x = realX;
 	tempPos.y = mapY;
 
-	
-	
-	
-	
-	
-	
-	
-	
-	
-	
-	
+
+
+
+
+
+
+
+
+
+
+
 	if(mapViewRect->right >= mapWidth && mapViewRect->left < mapWidth) {
 		splitViewRectR.left = mapViewRect->left;
 		splitViewRectR.right = mapWidth;
@@ -408,7 +402,7 @@ void maputils_MapXY2PixelXY(
 		splitViewRectT.left = 0;
 		splitViewRectT.right = mapWidth;
 	}
-	
+
 	if(PtInRect(&splitViewRectL, tempPos))
 	{
 		*pixelX = ((sint32)((realX * (g_tiledMap->GetZoomTilePixelWidth()) + nudge) - (splitViewRectL.left * (g_tiledMap->GetZoomTilePixelWidth()))));
@@ -435,7 +429,3 @@ void maputils_MapXY2PixelXY(
 		*pixelY = (sint32)((mapY * ((g_tiledMap->GetZoomTilePixelHeight())/2)) - (mapViewRect->top * ((g_tiledMap->GetZoomTilePixelHeight())/2)));
 	}
 }
-
-
-
-

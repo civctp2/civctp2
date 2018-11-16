@@ -3,7 +3,7 @@
 // Project      : Call To Power 2
 // File type    : C++ source
 // Description  : Network (multiplayer) user interface
-// Id           : $Id:$
+// Id           : $Id$
 //
 //----------------------------------------------------------------------------
 //
@@ -39,7 +39,7 @@ class aui_Screen;
 class aui_Shell : public aui_Base
 {
 public:
-	
+
 	aui_Shell(
 		AUI_ERRCODE *retval );
 	virtual ~aui_Shell();
@@ -61,6 +61,5 @@ protected:
 	aui_Screen			*m_curScreen;
 	tech_WLList<uint32>	*m_screenHistory;
 };
-
 
 #endif

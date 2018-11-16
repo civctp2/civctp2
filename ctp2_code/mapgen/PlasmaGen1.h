@@ -21,7 +21,6 @@ private:
 public:
 	PlasmaGenerator1() { m_refCount = 0; }
 
-	
 	STDMETHODIMP QueryInterface(REFIID, void **obj);
 	STDMETHODIMP_(ULONG) AddRef();
 	STDMETHODIMP_(ULONG) Release();

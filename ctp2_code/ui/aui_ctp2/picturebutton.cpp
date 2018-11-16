@@ -1,16 +1,3 @@
-
-
-
-
-
-
-
-
-
-
-
-
-
 #include "c3.h"
 
 #include "aui.h"
@@ -22,7 +9,6 @@
 #include "picturebutton.h"
 
 extern C3UI *g_c3ui;
-
 
 PictureButton::PictureButton(
 	AUI_ERRCODE *retval,
@@ -74,17 +60,14 @@ AUI_ERRCODE PictureButton::InitCommon(MBCHAR *upPicture, MBCHAR *downPicture, BO
 
 		ldlBlock = upPicture;
 
-		
 		BOOL valid = theLdl->IsValid( ldlBlock );
 		Assert( valid );
 		if ( !valid ) return AUI_ERRCODE_HACK;
 
-		
 		ldl_datablock *block = theLdl->GetLdl()->FindDataBlock( ldlBlock );
 		Assert( block != NULL );
 		if ( !block ) return AUI_ERRCODE_LDLFINDDATABLOCKFAILED;
 
-		
 
 		upName = block->GetString( "uppicture" );
 		Assert( upName != NULL );
@@ -94,10 +77,9 @@ AUI_ERRCODE PictureButton::InitCommon(MBCHAR *upPicture, MBCHAR *downPicture, BO
 		upName = upPicture;
 		downName = downPicture;
 	}
-	
+
 	AUI_ERRCODE retval;
 
-	
 	if (g_civPaths->FindFile(C3DIR_PICTURES, upName, path)) {
 		if (m_upPicture) delete m_upPicture;
 		m_upPicture = new Picture(&retval, path);
@@ -106,7 +88,6 @@ AUI_ERRCODE PictureButton::InitCommon(MBCHAR *upPicture, MBCHAR *downPicture, BO
 		m_upPicture = NULL;
 	}
 
-	
 	if (g_civPaths->FindFile(C3DIR_PICTURES, downName, path)) {
 		if (m_downPicture) delete m_downPicture;
 		m_downPicture = new Picture(&retval, path);
@@ -125,10 +106,9 @@ PictureButton::~PictureButton()
 }
 
 
-
 AUI_ERRCODE PictureButton::DrawThis( aui_Surface *surface, sint32 x, sint32 y )
 {
-	
+
 	if ( IsHidden() ) return AUI_ERRCODE_OK;
 
 	if ( !surface ) surface = m_window->TheSurface();
@@ -151,4 +131,3 @@ AUI_ERRCODE PictureButton::DrawThis( aui_Surface *surface, sint32 x, sint32 y )
 
 	return AUI_ERRCODE_OK;
 }
-

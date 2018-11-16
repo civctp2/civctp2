@@ -23,5 +23,4 @@ enum TOKEN_ENDGAME {
 	TOKEN_ENDGAME_MAX_VAL
 };
 
-	
 #endif

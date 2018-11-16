@@ -11,22 +11,20 @@ class C3TradeOffer : public IC3TradeOffer
 {
 private:
 	ULONG m_refCount;
-	
+
 	PLAYER_INDEX m_aiPlayer;
 	TradeOffer m_offer;
-	
+
 public:
 	C3TradeOffer(const TradeOffer &offer, PLAYER_INDEX aiPlayer);
 	C3TradeOffer(CivArchive &archive);
 	~C3TradeOffer();
 	void Serialize(CivArchive &archive);
 
-	
 	STDMETHODIMP QueryInterface(REFIID, void **obj);
 	STDMETHODIMP_(ULONG) AddRef();
 	STDMETHODIMP_(ULONG) Release();
 
-	
 	STDMETHODIMP_(uint32) GetID();
 	STDMETHODIMP_(PLAYER_INDEX) GetOwner();
 	STDMETHODIMP_(uint32) GetFromCity();
@@ -38,5 +36,3 @@ public:
 };
 
 #endif
-
-	

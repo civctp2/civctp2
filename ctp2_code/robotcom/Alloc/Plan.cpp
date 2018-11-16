@@ -1,16 +1,3 @@
- 
-
-
-
-
-
-
-
-
-
-
-
-
 #include "c3.h"
 #include "globals.h"
 #include "c3types.h"
@@ -18,10 +5,8 @@
 
 #include "IMapPointData.h"
 
-
 #include "FlatPtr.h"
 #include "civarchive.h"
-
 
 
 #include "common.h"
@@ -32,11 +17,9 @@
 #include "goal.h"
 
 
-
 #include "semi_dynamic_array.h"
 #include "list_array.h"
 #include "pool.h"
-
 
 #include "Plan.h"
 #include "dynarr.h"
@@ -49,20 +32,17 @@
 #include "squad_strength.h"
 
 
+ZEROMEM(PlanFlat);
 
-ZEROMEM(PlanFlat); 
-
-
-FLATSERIALIZE(PlanFlat); 
-
+FLATSERIALIZE(PlanFlat);
 
 
 extern Pool<Squad> * g_squad_pool;
 
 Plan::Plan()
-{ 
+{
 
-	
+
 
 
 	Init();
@@ -85,18 +65,17 @@ void Plan::Init()
 	the_goal = NULL;
 
 
-	
+
 
 	m_needed_strength.Init();
 }
 
 Plan::Plan(AiMain *ai,CivArchive &archive)
-{ 
-	
+{
 
 
-    Serialize(ai, archive); 
-} 
+    Serialize(ai, archive);
+}
 
 
 
@@ -105,7 +84,7 @@ Plan::Plan(AiMain *ai,CivArchive &archive)
 
 
 Plan::~Plan()
-{ 
+{
 
 
 
@@ -130,10 +109,10 @@ Plan::~Plan()
 
 
 
-	
 
 
-} 
+
+}
 
 
 
@@ -180,15 +159,14 @@ void Plan::Serialize(AiMain *ai, CivArchive &archive)
 
     CHECKSERIALIZE
 
-    PlanFlat::Serialize(archive); 
+    PlanFlat::Serialize(archive);
 
 
-	
 
 
-    m_needed_strength.Serialize(archive); 
 
-	
+    m_needed_strength.Serialize(archive);
+
     if (archive.IsStoring())
 	{
 
@@ -204,7 +182,7 @@ void Plan::Serialize(AiMain *ai, CivArchive &archive)
 			archive << (sint32) the_goal->goal_ID;
 		else archive << (sint32) -1;
 
-	} 
+	}
 	else
 	{
 
@@ -218,31 +196,28 @@ void Plan::Serialize(AiMain *ai, CivArchive &archive)
 
 
 
-		
+
 		archive >> squad_id;
 
-		
 		if (squad_id == -1) the_squad = NULL;
 		else
 		{
-			
+
 			the_squad = ai->m_planner->Look_Up_Squad_In_Load_Table(squad_id);
 		}
 
-		
 		archive >> goal_id;
 
-		
-        if (UNASSIGNED_ID == goal_id) { 
+        if (UNASSIGNED_ID == goal_id) {
             the_goal = NULL;
         }
 		else
 		{
-			
+
 			the_goal = ai->m_planner->Look_Up_Goal_In_Load_Table(goal_id);
 		}
 
-	} 
+	}
 
 }
 
@@ -308,30 +283,30 @@ void Plan::Serialize(AiMain *ai, CivArchive &archive)
 
 
 BOOL Plan::Plan_Is_Needed_And_Valid() const
-{ 
+{
 
     if (used)
-        return FALSE; 
+        return FALSE;
 
-    if (NULL == the_squad) 
-        return FALSE; 
+    if (NULL == the_squad)
+        return FALSE;
 
     if (the_squad->already_committed)
-        return FALSE; 
+        return FALSE;
 
-    if (the_squad->my_agents.count < 1) 
-        return FALSE; 
+    if (the_squad->my_agents.count < 1)
+        return FALSE;
 
-    if (NULL == the_goal) { 
-        return FALSE; 
+    if (NULL == the_goal) {
+        return FALSE;
     }
 
-    if (!the_goal->CanBeExecuted()) { 
-        return FALSE; 
-    } 
+    if (!the_goal->CanBeExecuted()) {
+        return FALSE;
+    }
 
-    return TRUE; 
-}	
+    return TRUE;
+}
 
 
 
@@ -350,56 +325,47 @@ BOOL Plan::Plan_Is_Needed_And_Valid() const
 
 BOOL Plan::AccumulateEnoughStrength(AiMain *ai)
 {
-	
-	squad_ptr the_new_squad;			
-	BOOL recruited = false;				
-	int excess;
-	
 
-	
+	squad_ptr the_new_squad;
+	BOOL recruited = false;
+	int excess;
+
+
 	if (the_goal->what_goal == GOAL_TYPE_RETREAT)
 		{
 			the_goal->Detach_Squad();
 		}
 
-	
-    if (NULL == the_goal->attacking_squad) 
+    if (NULL == the_goal->attacking_squad)
 	{
-		int squad_pool_index;			
+		int squad_pool_index;
 
 
-		
-		
-		the_new_squad = 
+
+
+		the_new_squad =
 			g_squad_pool->Get_Next_Pointer(squad_pool_index);
 		the_new_squad->Init(ai->m_planner);
 		the_new_squad->squad_pool_index = squad_pool_index;
 
-		
-		the_new_squad->Set_Goal (the_goal); 
+		the_new_squad->Set_Goal (the_goal);
 
-		
 		ai->m_planner->Add_Squad(the_new_squad);
 
-		
 		the_new_squad->Recruit_Best_Strength(ai, the_goal, the_squad);
-	
-		
-		recruited = TRUE; 
 
-    } 
+		recruited = TRUE;
 
-	
-	else 
-	{  
-        
- 		
-		recruited = 
-			the_goal->attacking_squad->Recruit_Best_Strength(ai, 
-											the_goal, the_squad); 
-    } 
+    }
 
-	
+	else
+	{
+
+		recruited =
+			the_goal->attacking_squad->Recruit_Best_Strength(ai,
+											the_goal, the_squad);
+    }
+
 
 	return the_goal->Is_Satisfied(&excess);
 }

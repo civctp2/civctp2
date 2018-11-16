@@ -11,7 +11,7 @@
 //
 // THIS FILE IS NOT GENERATED OR SUPPORTED BY ACTIVISION.
 //
-// This material has been developed at apolyton.net by the Apolyton CtP2 
+// This material has been developed at apolyton.net by the Apolyton CtP2
 // Source Code Project. Contact the authors at ctp2source@apolyton.net.
 //
 //----------------------------------------------------------------------------
@@ -69,7 +69,6 @@ LobbyChangeWindow::LobbyChangeWindow(
 	if ( !AUI_SUCCESS(*retval) ) return;
 }
 
-
 AUI_ERRCODE LobbyChangeWindow::InitCommon( void )
 {
 	m_controls = new aui_Control *[ m_numControls = CONTROL_MAX ];
@@ -80,13 +79,11 @@ AUI_ERRCODE LobbyChangeWindow::InitCommon( void )
 	return AUI_ERRCODE_OK;
 }
 
-
 AUI_ERRCODE LobbyChangeWindow::CreateControls( void )
 {
 	AUI_ERRCODE errcode = AUI_ERRCODE_OK;
 
 
-	
 	aui_Control *control;
 
 	control = new c3_Static(
@@ -138,11 +135,9 @@ AUI_ERRCODE LobbyChangeWindow::CreateControls( void )
 	m_controls[ CONTROL_CANCELBUTTON ] = control;
 
 
-	
 	aui_Ldl::SetupHeirarchyFromRoot( "lobbychangewindow" );
 
 
-	
 	aui_Action *action;
 
 	action = new OKButtonAction;
@@ -160,19 +155,16 @@ AUI_ERRCODE LobbyChangeWindow::CreateControls( void )
 	if ( !action ) return AUI_ERRCODE_MEMALLOCFAILED;
 	m_controls[ CONTROL_LOBBIESLISTBOX ]->SetAction( action );
 
-	
-	
+
 	aui_Header *hdr = ((aui_ListBox *)m_controls[ CONTROL_LOBBIESLISTBOX ])
 		->GetHeader();
 	uint32 switchid = hdr->WhichIsSelected();
 	aui_Switch *sw = (aui_Switch *)hdr->GetChild( switchid );
 	if ( sw ) sw->SetState( sw->GetState() );
 
-
 	Update();
 
 	m_controls[ CONTROL_CURRENTLOBBYTEXTFIELD ]->Enable( FALSE );
-
 
 	return AUI_ERRCODE_OK;
 }
@@ -191,11 +183,10 @@ void LobbyChangeWindow::Update(void)
 AUI_ERRCODE LobbyChangeWindow::Idle( void )
 {
 	NETFunc::Message *m;
-	
+
 	while((m = g_netfunc->GetMessage())) {
-		
-		
-		
+
+
 		g_netfunc->HandleMessage(m);
 
 		switch ( m->GetCode() )
@@ -245,7 +236,7 @@ void LobbyChangeWindow::LobbyListBoxAction::Execute(
 AUI_ERRCODE LobbyChangeWindow::SetParent( aui_Region *region )
 {
 	if(region)
-	
+
 	((aui_TextField *)m_controls[CONTROL_CURRENTLOBBYTEXTFIELD])->
 		SetFieldText(g_netfunc->GetSession()->GetName());
 
@@ -269,11 +260,10 @@ void LobbyChangeWindow::OKButtonAction::Execute(
 			LobbyWindow *w = (LobbyWindow *)(g_netshell->FindWindow(NetShell::WINDOW_LOBBY));
 			w->Update();
 		}
-		
+
 		g_netshell->GotoScreen( NetShell::SCREEN_LOBBY );
 	}
 }
-
 
 void LobbyChangeWindow::CancelButtonAction::Execute(
 	aui_Control *control,
@@ -282,6 +272,5 @@ void LobbyChangeWindow::CancelButtonAction::Execute(
 {
 	if ( action != (uint32)AUI_BUTTON_ACTION_EXECUTE ) return;
 
-	
 	g_netshell->GotoScreen( NetShell::SCREEN_LOBBY );
 }

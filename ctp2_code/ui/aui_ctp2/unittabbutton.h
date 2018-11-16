@@ -23,7 +23,6 @@ class UnitTabButton : public aui_Control, public PatternBase
 {
 public:
 
-	
 	UnitTabButton(
 		AUI_ERRCODE *retval,
 		uint32 id,
@@ -52,7 +51,7 @@ public:
 	c3_ColorIconButton	*IconButton( void ) const { return m_button; }
 
 	sint32	UpdateData( Unit *unit );
-	
+
 private:
 	Thermometer			*m_healthBar;
 	c3_ColorIconButton		*m_button;
@@ -65,5 +64,4 @@ private:
 
 };
 
-
-#endif 
+#endif

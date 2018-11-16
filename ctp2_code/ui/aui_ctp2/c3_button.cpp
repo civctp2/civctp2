@@ -11,7 +11,7 @@
 //
 // THIS FILE IS NOT GENERATED OR SUPPORTED BY ACTIVISION.
 //
-// This material has been developed at apolyton.net by the Apolyton CtP2 
+// This material has been developed at apolyton.net by the Apolyton CtP2
 // Source Code Project. Contact the authors at ctp2source@apolyton.net.
 //
 //----------------------------------------------------------------------------
@@ -52,7 +52,6 @@ extern C3UI			*g_c3ui;
 extern SlicEngine	*g_slicEngine;
 extern ColorSet		*g_colorSet;
 
-
 c3_Button::c3_Button(
 	AUI_ERRCODE *retval,
 	uint32 id,
@@ -72,7 +71,6 @@ c3_Button::c3_Button(
 	Assert( AUI_SUCCESS(*retval) );
 	if ( !AUI_SUCCESS(*retval) ) return;
 }
-
 
 
 c3_Button::c3_Button(
@@ -100,25 +98,21 @@ c3_Button::c3_Button(
 }
 
 
-
 AUI_ERRCODE c3_Button::InitCommonLdl( MBCHAR *ldlBlock )
 {
-	sint32		bevelWidth=k_C3_BUTTON_DEFAULT_BEVELWIDTH, 
+	sint32		bevelWidth=k_C3_BUTTON_DEFAULT_BEVELWIDTH,
 				bevelType=0;
 	aui_Ldl		*theLdl = g_c3ui->GetLdl();
 
-	
 	BOOL valid = theLdl->IsValid( ldlBlock );
 	Assert( valid );
 	if ( !valid ) return AUI_ERRCODE_HACK;
 
-	
 	ldl_datablock *block = theLdl->GetLdl()->FindDataBlock( ldlBlock );
 	Assert( block != NULL );
 
-
 	if ( !block ) return AUI_ERRCODE_LDLFINDDATABLOCKFAILED;
-	
+
 	if (block->GetAttributeType( k_C3_BUTTON_LDL_BEVELWIDTH) == ATTRIBUTE_TYPE_INT) {
 		bevelWidth = block->GetInt( k_C3_BUTTON_LDL_BEVELWIDTH );
 	}
@@ -126,12 +120,11 @@ AUI_ERRCODE c3_Button::InitCommonLdl( MBCHAR *ldlBlock )
 	if (block->GetAttributeType( k_C3_BUTTON_LDL_BEVELTYPE ) == ATTRIBUTE_TYPE_INT) {
 		m_bevelType = block->GetInt( k_C3_BUTTON_LDL_BEVELTYPE );
 	} else {
-		m_bevelType = 0; 
+		m_bevelType = 0;
 	}
 
 	return InitCommon(bevelWidth);
 }
-
 
 
 AUI_ERRCODE c3_Button::InitCommon( sint32 bevelWidth )
@@ -142,13 +135,12 @@ AUI_ERRCODE c3_Button::InitCommon( sint32 bevelWidth )
 }
 
 
-
 AUI_ERRCODE c3_Button::DrawThis(
 	aui_Surface *surface,
 	sint32 x,
 	sint32 y )
 {
-	
+
 	if ( IsHidden() ) return AUI_ERRCODE_OK;
 
 	if ( !surface ) surface = m_window->TheSurface();
@@ -156,7 +148,6 @@ AUI_ERRCODE c3_Button::DrawThis(
 	RECT rect = { 0, 0, m_width, m_height };
 	OffsetRect( &rect, m_x + x, m_y + y );
 	ToWindow( &rect );
-
 
 	if ( m_pattern ) {
 		if ( m_srcWidthPix || m_srcHeightPix ) {
@@ -184,7 +175,6 @@ AUI_ERRCODE c3_Button::DrawThis(
 		}
 	}
 
-	
 	RECT down = rect;
 	down.left += 2;
 	down.top += 2;
@@ -245,7 +235,6 @@ AUI_ERRCODE c3_Button::DrawThis(
 }
 
 
-
 c3_EditButton::c3_EditButton(
 	AUI_ERRCODE *retval,
 	uint32 id,
@@ -268,7 +257,6 @@ c3_EditButton::c3_EditButton(
 	Assert( AUI_SUCCESS(*retval) );
 	if ( !AUI_SUCCESS(*retval) ) return;
 }
-
 
 
 c3_EditButton::c3_EditButton(
@@ -302,17 +290,14 @@ c3_EditButton::c3_EditButton(
 }
 
 
-
 AUI_ERRCODE c3_EditButton::InitCommonLdl( MBCHAR *ldlBlock )
 {
 	aui_Ldl		*theLdl = g_c3ui->GetLdl();
 
-	
 	BOOL valid = theLdl->IsValid( ldlBlock );
 	Assert( valid );
 	if ( !valid ) return AUI_ERRCODE_HACK;
 
-	
 	ldl_datablock *block = theLdl->GetLdl()->FindDataBlock( ldlBlock );
 	Assert( block != NULL );
 
@@ -331,7 +316,6 @@ AUI_ERRCODE c3_EditButton::InitCommonLdl( MBCHAR *ldlBlock )
 }
 
 
-
 AUI_ERRCODE c3_EditButton::InitCommon( sint32 val, sint32 min, sint32 max )
 {
 	m_val = val;
@@ -348,12 +332,10 @@ AUI_ERRCODE c3_EditButton::InitCommon( sint32 val, sint32 min, sint32 max )
 }
 
 
-
 AUI_ERRCODE c3_EditButton::CreateFieldAndActions( MBCHAR *ldlBlock )
 {
 	AUI_ERRCODE errcode = AUI_ERRCODE_OK;
 
-	
 	aui_Ldl *theLdl = g_ui->GetLdl();
 	static MBCHAR block[ k_AUI_LDL_MAXBLOCK + 1 ];
 
@@ -361,7 +343,6 @@ AUI_ERRCODE c3_EditButton::CreateFieldAndActions( MBCHAR *ldlBlock )
 	{
 		sprintf( block, "%s.%s", ldlBlock, k_C3_EDITBUTTON_LDL_FIELD );
 
-		
 		if ( theLdl->GetLdl()->FindDataBlock( block ) )
 			m_field = new C3TextField(
 				&errcode,
@@ -380,25 +361,20 @@ AUI_ERRCODE c3_EditButton::CreateFieldAndActions( MBCHAR *ldlBlock )
 	if ( !AUI_NEWOK(m_field,errcode) )
 		return AUI_ERRCODE_MEMALLOCFAILED;
 
-	
-	
+
 	aui_Ldl::Remove( m_field );
 
-	
 	m_field->SetActionFuncAndCookie( c3_EditButtonFieldCallback, this );
 
-	
 	if ( (m_origCallback = GetActionFunc()) )
 		m_origCookie = GetCookie();
 	else
 		m_origAction = GetAction();
 
-	
 	SetActionFuncAndCookie( c3_EditButtonCallback, m_field );
 
 	return AUI_ERRCODE_OK;
 }
-
 
 
 c3_EditButton::~c3_EditButton( void )
@@ -409,11 +385,11 @@ c3_EditButton::~c3_EditButton( void )
 		m_field = NULL;
 	}
 
-	
-	
-	
-	
-	
+
+
+
+
+
 	if ( !m_origCallback && m_origAction )
 		delete m_origAction;
 
@@ -421,7 +397,6 @@ c3_EditButton::~c3_EditButton( void )
 	m_cookie = NULL;
 	m_origAction = NULL;
 }
-
 
 
 AUI_ERRCODE c3_EditButton::SetValue( sint32 val )
@@ -443,7 +418,6 @@ AUI_ERRCODE c3_EditButton::SetValue( sint32 val )
 }
 
 
-
 AUI_ERRCODE c3_EditButton::SetMinimum( sint32 min )
 {
 	Assert( min <= m_max );
@@ -458,7 +432,6 @@ AUI_ERRCODE c3_EditButton::SetMinimum( sint32 min )
 }
 
 
-
 AUI_ERRCODE c3_EditButton::SetMaximum( sint32 max )
 {
 	Assert( max >= m_min );
@@ -467,18 +440,15 @@ AUI_ERRCODE c3_EditButton::SetMaximum( sint32 max )
 
 	m_max = max;
 
-	
 	if ( m_val > m_max ) m_val = m_max;
 
 	return SetValue( m_val );
 }
 
 
-
 void c3_EditButton::DoCallback( void )
 {
-	
-	
+
 	if ( !GetActionFunc() && !GetAction() ) return;
 
 	if ( !HandleGameSpecificLeftClick( this ) )
@@ -487,7 +457,6 @@ void c3_EditButton::DoCallback( void )
 	else if ( m_origAction )
 		m_origAction->Execute( this, AUI_BUTTON_ACTION_EXECUTE, 0 );
 }
-
 
 
 void c3_EditButtonCallback( aui_Control *control, uint32 action, uint32 data, void *cookie )
@@ -506,11 +475,9 @@ void c3_EditButtonCallback( aui_Control *control, uint32 action, uint32 data, vo
 
 	field->SetKeyboardFocus();
 
-	
-	
+
 	field->GetParentWindow()->ShouldDraw();
 }
-
 
 
 void c3_EditButtonFieldCallback( aui_Control *control, uint32 action, uint32 data, void *cookie )
@@ -530,7 +497,6 @@ void c3_EditButtonFieldCallback( aui_Control *control, uint32 action, uint32 dat
 
 	button->SetKeyboardFocus();
 
-	
-	
+
 	button->GetParentWindow()->ShouldDraw();
 }

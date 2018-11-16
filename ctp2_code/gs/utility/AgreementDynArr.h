@@ -7,15 +7,13 @@
 #include "Agreement.h"
 #include "dynarr.h"
 
-
 class AgreementDynamicArray : public DynamicArray<Agreement> {
-
 
 public:
 
-    AgreementDynamicArray(); 
-    AgreementDynamicArray(const sint32 size); 
-    AgreementDynamicArray (const DynamicArray<Agreement> &copyme); 
+    AgreementDynamicArray();
+    AgreementDynamicArray(const sint32 size);
+    AgreementDynamicArray (const DynamicArray<Agreement> &copyme);
 
 };
 

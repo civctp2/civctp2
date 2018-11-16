@@ -1,4 +1,4 @@
-/* 
+/*
 Copyright (C) 1995-2001 Activision, Inc.
 
 This library is free software; you can redistribute it and/or
@@ -98,7 +98,6 @@ MSVC's warning level is set to 4.
 #pragma warning( disable : 4514 )
 #endif
 
-
 /**
 * Constants
 */
@@ -108,13 +107,11 @@ MSVC's warning level is set to 4.
 /* The maximum number of nodes we can communicate with */
 #define TCP_MAX_PEERS	100
 
-
 /**
 * Global Data
 */
 
 static TCPINSTANCE *pTcp;
-
 
 /**
 * Methods
@@ -147,7 +144,6 @@ tcp2commHdl(
 	return ((playerHdl_t) h);
 }
 
-
 /*****************************************************************************
  Convert a playerHdl_t to the corresponding TCPHANDLE.
 *****************************************************************************/
@@ -170,7 +166,6 @@ commHdl2tcp(
 	return ((TCPHANDLE) h);
 }
 
-
 /*****************************************************************************
  Do nothing; return TRUE.  If resp is not null, copy TCP_RES_OK
  into resp->status
@@ -189,7 +184,6 @@ commNoOp(
 	DPRINT(("@\n"));
 	return (TRUE);
 }
-
 
 /*****************************************************************************
  Initialize the communications driver.
@@ -240,10 +234,9 @@ commInit(
 	return TRUE;
 }
 
-
 /*****************************************************************************
- Tear down the communications driver.  
-  
+ Tear down the communications driver.
+
  WARNING: Call this function only once, only after calling commInit().
 
  Return TRUE if successful, FALSE otherwise.  If resp is not NULL,
@@ -268,7 +261,6 @@ commTerm(
 	DPRINT(("@\n"));
 	return TRUE;
 }
-
 
 /*****************************************************************************
  Retrieve info about the communications driver.
@@ -315,14 +307,13 @@ commDriverInfo(
 	return (TRUE);
 }
 
-
 /*****************************************************************************
  Retrieve info about a player, including ourselves.
 
  The player info is copied into the appropriate fields in resp.  The
  fields and values are:
 	status (comm_status_t): TCP_RES_OK on success, TCP_RES_BAD for
-				invalid parameters, a value returned by 
+				invalid parameters, a value returned by
 				TCPWIN_Handle2Address() on other error.
 	name (char[]): Player name; always the empty string (this layer
 				doesn't know about names).
@@ -331,7 +322,7 @@ commDriverInfo(
 				and the last two bytes are the port number in network order.
 	addrLen (size_t): The number of bytes that address points to.
 	nodeID (char[8]): Always {0,0,0,0,0,0,0,0}.
- 
+
  WARNING: Potential memory leak, potential unexpected behavior.  The player
  address is copied into a static buffer, and the resp->address field is
  overwritten to point to the static buffer.  If the resp->address field
@@ -384,7 +375,6 @@ commPlayerInfo(
 	return(TRUE);
 }
 
-
 /*****************************************************************************
  Find out whether the transmit queue is full.
 
@@ -411,14 +401,13 @@ commTxFull(
 	return FALSE;
 }
 
-
 /*****************************************************************************
   Send a packet.
-  
+
   On entry, req->dest contains the player handle of the recipient or
   PLAYER_BROADCAST, req->buffer contains the packet to be sent, and
   req->length contains the number of bytes in the packet.
-  
+
   On exit, the buffer may be discarded, although the packet may not be
   sent until later; resp->status contains the completion status.
 
@@ -462,14 +451,13 @@ commTxPkt(
 	return (TCP_RES_OK == resp->status);
 }
 
-
 /*****************************************************************************
   Get information about a pending incoming packet.
   Return TRUE if a packet is available, FALSE otherwise.
 
   Not yet implemented.
 *****************************************************************************/
-DLLEXPORT int cdecl 
+DLLEXPORT int cdecl
 commPeekPkt(
 	commPeekPktReq_t *req,
 	commPeekPktResp_t *resp)
@@ -489,7 +477,6 @@ commPeekPkt(
 	resp->status = TCP_RES_UNIMPLEMENTED;
 	return FALSE;
 }
-
 
 /*****************************************************************************
  Retrieve a pending incoming packet.
@@ -557,7 +544,6 @@ commRxPkt(
 	return (TCP_RES_OK == err);
 }
 
-
 /*****************************************************************************
  Attempt to parse a NUL-terminated address string into a 6-byte address
  buffer.
@@ -615,29 +601,29 @@ commScanAddr(
 	{
 		OSStatus err;
 		InetHostInfo theHost;
-			
+
 		OTSetSynchronous(pTcp->inetService);
 		err = OTInetStringToAddress(pTcp->inetService, req->printable, &theHost);
 		OTSetAsynchronous(pTcp->inetService);
 		if (err != noErr) {
-		
+
 			//{
 			//	Str255	theString;
-			//	
+			//
 			//	NumToString(err, theString);
 			//	DebugStr(theString);
 			//}
-			
+
 			DPRINT(("@TCP commScanAddr: resolve failed!\n"));
 			resp->status = TCP_RES_BAD;
 		    return FALSE;
 		}
-		
+
 		adr = theHost.addrs[0];		//	we only want the first address
 	}
 	#else
 		adr = inet_addr(req->printable);
-	
+
 		/* Get address from name if not numeric */
 		/* WARNING: gethostbyname is not SOCKS5 compliant */
 		if (adr == INADDR_NONE) {
@@ -650,7 +636,7 @@ commScanAddr(
 			memcpy(&adr, he->h_addr, sizeof(u_long));
 		}
 	#endif
-	
+
 		/* Save and return */
 		/* Note: yes, it really expects the returned address in a field
 		   in the req parameter, and the length of that address in a field
@@ -663,13 +649,12 @@ commScanAddr(
 	return (TRUE);
 }
 
-
 /*****************************************************************************
   Attempt to format a 6-byte address buffer into a NUL-terminated
   string.  The string will be of the form 255.255.255.255:65535, where
   the first four numbers are the address and the final number is the port
   (socket) number.
-  
+
   Return TRUE if the buffer was formatted successfully, FALSE otherwise.
 *****************************************************************************/
 DLLEXPORT int cdecl				/* success boolean */
@@ -733,12 +718,11 @@ commPrintAddr(
     #ifdef __MWERKS__
 	    DisposePtr((Ptr) strAddr);
     #endif
-	
+
 	/* Save status and return */
 	resp->status = TCP_RES_OK;
 	return TRUE;
 }
-
 
 /*****************************************************************************
   Generate a pseudo-player handle referring to a group of players.  Handy
@@ -747,7 +731,7 @@ commPrintAddr(
 
   Not yet implemented.
 *****************************************************************************/
-DLLEXPORT int cdecl 
+DLLEXPORT int cdecl
 commGroupAlloc(
 	commGroupAllocReq_t *req,
 	commGroupAllocResp_t *resp)
@@ -765,14 +749,13 @@ commGroupAlloc(
 	return FALSE;
 }
 
-
 /*****************************************************************************
   Invalidate a pseudo-player handle referring to a group of players.
   Return TRUE if the pseudo-player handle was invalidated.
 
   Not yet implemented.
 *****************************************************************************/
-DLLEXPORT int cdecl 
+DLLEXPORT int cdecl
 commGroupFree(
 	commGroupFreeReq_t *req,
 	commGroupFreeResp_t *resp)
@@ -790,14 +773,13 @@ commGroupFree(
 	return FALSE;
 }
 
-
 /*****************************************************************************
   Add one or more players to a group.
   Return TRUE if the players were all added.
 
   Not yet implemented.
 *****************************************************************************/
-DLLEXPORT int cdecl 
+DLLEXPORT int cdecl
 commGroupAdd(
 	commGroupAddReq_t *req,
 	commGroupAddResp_t *resp)
@@ -814,7 +796,6 @@ commGroupAdd(
 	resp->status = TCP_RES_UNIMPLEMENTED;
 	return FALSE;
 }
-
 
 /*****************************************************************************
   Set driver parameters.
@@ -838,7 +819,6 @@ commSetParam(
 	resp->status = TCP_RES_UNIMPLEMENTED;
 	return TRUE;
 }
-
 
 /*****************************************************************************
   Establish a data link to a player and shake hands with him.  This does
@@ -885,7 +865,6 @@ commSayHi(
 	return TRUE;
 }
 
-
 /*****************************************************************************
   Tear down a data link to a player.  The link or the player may already be
   down, so don't shake hands.
@@ -922,7 +901,6 @@ commSayBye(
 	return TRUE;
 }
 
-
 #if defined(_WINDOWS)
 /*****************************************************************************
   Windows-only DLL entry point.
@@ -940,22 +918,21 @@ DllMain (
 			/* start Windows Sockets */
 			WSAStartup(MAKEWORD(1, 1), &wsaData);
 			return(TRUE);
- 
+
 		case DLL_PROCESS_DETACH:
 			/* end Windows Sockets */
-			WSACleanup(); 
+			WSACleanup();
 			return(TRUE);
 
 		case DLL_THREAD_ATTACH:
 			return(TRUE);
- 
+
 		case DLL_THREAD_DETACH:
 			return(TRUE);
 	}
- 
+
 	(void) lpReserved;
 	(void) hModule;
 	return(TRUE);
 }
 #endif /* defined(_WINDOWS) */
-

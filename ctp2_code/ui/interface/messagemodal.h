@@ -10,13 +10,13 @@
 //
 // THIS FILE IS NOT GENERATED OR SUPPORTED BY ACTIVISION.
 //
-// This material has been developed at apolyton.net by the Apolyton CtP2 
+// This material has been developed at apolyton.net by the Apolyton CtP2
 // Source Code Project. Contact the authors at ctp2source@apolyton.net.
 //
 //----------------------------------------------------------------------------
 //
 // Compiler flags
-// 
+//
 //----------------------------------------------------------------------------
 //
 // Modifications from the original Activision code:
@@ -25,7 +25,6 @@
 // - #pragma once commented out.
 //
 //----------------------------------------------------------------------------
-
 
 #ifdef HAVE_PRAGMA_ONCE
 #pragma once
@@ -41,7 +40,6 @@
 #define k_MODAL_BUTTON_TEXT_PADDING			15
 #define k_MODAL_BUTTON_DEFAULT_WIDTH		70
 
-
 class aui_Static;
 class aui_Button;
 class aui_HyperTextBox;
@@ -53,11 +51,9 @@ class MessageEyePointStandard;
 class MessageEyePointDropdown;
 class MessageEyePointListbox;
 
-
 class MessageModalResponseAction;
 
-
-class MessageModal : public c3_PopupWindow 
+class MessageModal : public c3_PopupWindow
 {
 public:
 	MessageModal(
@@ -86,10 +82,9 @@ protected:
 	AUI_ERRCODE CreateResponses( MBCHAR *ldlBlock );
 	AUI_ERRCODE CreateStandardTextBox( MBCHAR *ldlBlock );
 
-	
-	AUI_ERRCODE CreateEyePointBox( MBCHAR *ldlBlock ); 
-	AUI_ERRCODE CreateStandardEyePointBox( MBCHAR *ldlBlock ); 
-	AUI_ERRCODE CreateDropdownEyePointBox( MBCHAR *ldlBlock ); 
+	AUI_ERRCODE CreateEyePointBox( MBCHAR *ldlBlock );
+	AUI_ERRCODE CreateStandardEyePointBox( MBCHAR *ldlBlock );
+	AUI_ERRCODE CreateDropdownEyePointBox( MBCHAR *ldlBlock );
 	AUI_ERRCODE CreateListboxEyePointBox( MBCHAR *ldlBlock );
 
 private:
@@ -113,9 +108,8 @@ private:
 
 };
 
-
-int messagemodal_CreateModalMessage( Message data );	
+int messagemodal_CreateModalMessage( Message data );
 int messagemodal_DestroyModalMessage( void );
 int messagemodal_PrepareDestroyWindow();
 
-#endif 
+#endif

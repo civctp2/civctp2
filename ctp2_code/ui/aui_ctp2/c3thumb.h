@@ -4,16 +4,14 @@
 #ifndef __C3THUMB_H__
 #define __C3THUMB_H__
 
-
 #include "aui_thumb.h"
 #include "patternbase.h"
 #include "aui_soundbase.h"
 
-
 class C3Thumb : public aui_Thumb, public PatternBase
 {
 public:
-	
+
 	C3Thumb(
 		AUI_ERRCODE *retval,
 		uint32 id,
@@ -40,5 +38,4 @@ public:
 	AUI_ERRCODE	PlaySound( AUI_SOUNDBASE_SOUND sound );
 };
 
-
-#endif 
+#endif

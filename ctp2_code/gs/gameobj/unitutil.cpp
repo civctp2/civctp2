@@ -10,7 +10,7 @@
 //
 // THIS FILE IS NOT GENERATED OR SUPPORTED BY ACTIVISION.
 //
-// This material has been developed at apolyton.net by the Apolyton CtP2 
+// This material has been developed at apolyton.net by the Apolyton CtP2
 // Source Code Project. Contact the authors at ctp2source@apolyton.net.
 //
 //----------------------------------------------------------------------------
@@ -73,8 +73,7 @@ void unitutil_Initialize()
 		if(rec->GetVisionRange() > s_maxVisionRange)
 			s_maxVisionRange = rec->GetVisionRange();
 	}
-	
-	
+
 	for(i = 0; i < SPECATTACK_MAX; i++) {
 		s_specialAttackMap[i] = NULL;
 	}
@@ -175,7 +174,7 @@ sint32 unitutil_GetSeaCity()
 
 	return 0;
 }
-	
+
 sint32 unitutil_GetCityTypeFor(const MapPoint &pos)
 {
 	if(g_theWorld->IsLand(pos))
@@ -205,7 +204,7 @@ void unitutil_GetAverageDefenseBonus(const MapPoint &pos, const Army &attackers,
 	entrenched_bonus = 0.0;
 	const UnitRecord *rec;
 	sint32 i;
-	
+
 	cell = g_theWorld->GetCell(pos);
 	if(cell->GetCity().m_id != (0)) {
 		cityData = cell->GetCity().GetData()->GetCityData();
@@ -218,7 +217,6 @@ void unitutil_GetAverageDefenseBonus(const MapPoint &pos, const Army &attackers,
 			} else {
 				city_bonus += cityData->GetDefendersBonus();
 
-				
 				double wallval=g_featTracker->GetAdditiveEffect(FEAT_EFFECT_REDUCE_CITY_WALLS, attackers.GetOwner());
 				if(wallval)
 				{
@@ -254,23 +252,22 @@ bool unitutil_GetCityInfo(MapPoint &pos, char * city_name, sint32 & image_index)
 		BOOL hasWalls = cityData->HasCityWalls();
 		BOOL hasForceField = cityData->HasForceField();
 
-		
-		BOOL futureAge = 0; 
+		BOOL futureAge = 0;
 
 		if (futureAge) {
-			
+
 			if (hasForceField) {
 				image_index = 3;
 			} else {
 				if (hasWalls) {
-					
+
 					image_index = 2;
 				} else {
 					image_index = 2;
 				}
 			}
 		} else {
-			
+
 			if (hasWalls) {
 				image_index = 1;
 			} else {
@@ -285,17 +282,16 @@ bool unitutil_GetCityInfo(MapPoint &pos, char * city_name, sint32 & image_index)
 	return false;
 }
 
-
 void unitutil_ExecuteMadLaunch(Unit & unit)
 {
-	
-	if( unit.GetDBRec()->GetNuclearAttack() && 
+
+	if( unit.GetDBRec()->GetNuclearAttack() &&
 		g_theUnitPool->IsValid(unit->GetTargetCity()) &&
 		!unit.Flag(k_UDF_MAD_LAUNCHED)) {
-		
-		
-		
-		
+
+
+
+
 		if (unit.IsBeingTransported())
 		{
 			Unit transport = unit.GetTransport();
@@ -304,7 +300,7 @@ void unitutil_ExecuteMadLaunch(Unit & unit)
 		} else {
 			unit->CreateOwnArmy();
 		}
-		
+
 		unit.SetFlag(k_UDF_MAD_LAUNCHED);
 		unit.SetMovementPoints(unit.GetDBRec()->GetMaxMovePoints());
 		g_gevManager->AddEvent(GEV_INSERT_AfterCurrent, GEV_MADLaunch,

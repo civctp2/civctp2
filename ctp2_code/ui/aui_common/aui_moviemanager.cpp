@@ -1,19 +1,7 @@
-
-
-
-
-
-
-
-
-
-
-
 #include "c3.h"
 #include "aui_ui.h"
 
 #include "aui_moviemanager.h"
-
 
 
 aui_MovieManager::aui_MovieManager( BOOL init )
@@ -27,7 +15,6 @@ aui_MovieManager::aui_MovieManager( BOOL init )
 		Assert( m_movieResource != NULL );
 	}
 }
-
 
 
 aui_MovieManager::~aui_MovieManager()

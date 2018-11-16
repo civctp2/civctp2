@@ -11,7 +11,7 @@
 //
 // THIS FILE IS NOT GENERATED OR SUPPORTED BY ACTIVISION.
 //
-// This material has been developed at apolyton.net by the Apolyton CtP2 
+// This material has been developed at apolyton.net by the Apolyton CtP2
 // Source Code Project. Contact the authors at ctp2source@apolyton.net.
 //
 //----------------------------------------------------------------------------
@@ -40,12 +40,9 @@
 
 #include "ns_tribes.h"
 
-
 ns_Tribes *g_nsTribes = NULL;
 
-
 extern StringDB *g_theStringDB;
-
 
 
 ns_Tribes::ns_Tribes()
@@ -55,7 +52,6 @@ ns_Tribes::ns_Tribes()
 	{
 		sint32 numCivs = g_theCivilisationDB->NumRecords();
 
-		
 		Assert( numCivs <= k_TRIBES_MAX - 1 );
 		if ( numCivs > k_TRIBES_MAX - 1 )
 			numCivs = k_TRIBES_MAX - 1;
@@ -65,8 +61,7 @@ ns_Tribes::ns_Tribes()
 		Assert( AUI_NEWOK(m_stringtable,errcode) );
 		if ( !AUI_NEWOK(m_stringtable,errcode) ) return;
 
-		
-		
+
 		m_stringtable->SetString( (char *)g_theStringDB->GetNameStr("str_tbl_ldl_None"), 0 );
 
 		for ( sint32 i = 0; i < numCivs; i++ )
@@ -83,7 +78,6 @@ ns_Tribes::ns_Tribes()
 }
 
 
-
 ns_Tribes::~ns_Tribes()
 {
 	if ( m_stringtable )
@@ -94,7 +88,6 @@ ns_Tribes::~ns_Tribes()
 
 	g_nsTribes = NULL;
 }
-
 
 
 ns_TribesDropDown::ns_TribesDropDown(
@@ -110,7 +103,6 @@ ns_TribesDropDown::ns_TribesDropDown(
 	Assert( AUI_SUCCESS(*retval) );
 	if ( !AUI_SUCCESS(*retval) ) return;
 
-	
 	Assert( g_nsTribes );
 	if ( !g_nsTribes )
 	{
@@ -135,9 +127,8 @@ ns_TribesDropDown::ns_TribesDropDown(
 }
 
 
-
 ns_TribesDropDown::~ns_TribesDropDown()
 {
-	
+
 	m_listBox->RemoveItems( TRUE );
 }

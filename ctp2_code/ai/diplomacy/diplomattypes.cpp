@@ -1,13 +1,3 @@
-
-
-
-
-
-
-
-
-
-
 #include "c3.h"
 #include "SlicConst.h"
 #include "SlicEngine.h"
@@ -66,13 +56,12 @@ extern std::string s_proposalNames[PROPOSAL_MAX] = {
 	"TREATY_ALLIANCE",
 };
 
-extern std::string s_threatNames[THREAT_MAX] = { 
+extern std::string s_threatNames[THREAT_MAX] = {
 	"NONE",
-	
-	
-	
+
+
 	"DESTROY_CITY",
-	
+
 	"TRADE_EMBARGO",
 	"DECLARE_WAR"
 };
@@ -82,13 +71,12 @@ extern std::string s_responseNames[RESPONSE_MAX] = {
 	"REJECT",
 	"ACCEPT",
 	"COUNTER",
-	"THREATEN",	
+	"THREATEN",
 };
-
 
 extern std::string s_motivationNames[MOTIVATION_MAX] = {
 	"NONE",
-	
+
 	"FEAR_SCENARIO",
 	"FEAR_INVASION",
 	"FEAR_CITY_DEFENSE",
@@ -100,7 +88,7 @@ extern std::string s_motivationNames[MOTIVATION_MAX] = {
 	"FEAR_MILITARY_RANK",
 	"FEAR_TRADE_RANK",
 	"FEAR_POLLUTION_RANK",
-	
+
 	"DESIRE_SCENARIO",
 	"DESIRE_ATTACK",
 	"DESIRE_ATTACK_CITY",
@@ -113,10 +101,8 @@ extern std::string s_motivationNames[MOTIVATION_MAX] = {
 	"DESIRE_ENLIST_FRIEND",
 };
 
-
 void DiplomatTypes::InitializeSlicConsts() {
 
-	
 	g_slicEngine->AddConst("MIN_REGARD", MIN_REGARD);
 	g_slicEngine->AddConst("HOTWAR_REGARD", HOTWAR_REGARD);
 	g_slicEngine->AddConst("COLDWAR_REGARD", COLDWAR_REGARD);
@@ -124,39 +110,32 @@ void DiplomatTypes::InitializeSlicConsts() {
 	g_slicEngine->AddConst("FRIEND_REGARD", FRIEND_REGARD);
 	g_slicEngine->AddConst("ALLIED_REGARD", ALLIED_REGARD);
 	g_slicEngine->AddConst("MAX_REGARD", MAX_REGARD);
-	
+
 	sint32 i;
 	std::string fullname;
 
-	
 	for ( i = 0; i < REGARD_EVENT_MAX; i++) {
 		fullname = std::string("REGARD_EVENT_") + s_regardEventNames[i];
 		g_slicEngine->AddConst(fullname.c_str(), i);
 	}
 
-	
 	for ( i = PROPOSAL_NONE; i < PROPOSAL_MAX; i++) {
 		fullname = std::string("PROPOSAL_") + s_proposalNames[i];
 		g_slicEngine->AddConst(fullname.c_str(),i);
 	}
 
-	
 	for ( i = THREAT_NONE; i < THREAT_MAX; i++) {
 		fullname = std::string("THREAT_") + s_threatNames[i];
 		g_slicEngine->AddConst(fullname.c_str(),i);
 	}
 
-	
 	for ( i = RESPONSE_INVALID; i < RESPONSE_MAX; i++) {
 		fullname = std::string("RESPONSE_") + s_responseNames[i];
 		g_slicEngine->AddConst(fullname.c_str(),i);
 	}
 
-	
 	for ( i = MOTIVATION_NONE; i < MOTIVATION_MAX; i++) {
 		fullname = std::string("MOTIVATION_") +  s_motivationNames[i];
 		g_slicEngine->AddConst(fullname.c_str(),i);
 	}
 }
-
-

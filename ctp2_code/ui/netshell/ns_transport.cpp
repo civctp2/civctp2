@@ -2,7 +2,7 @@
 //
 // Project      : Call To Power 2
 // File type    : C++ source
-// Description  : 
+// Description  :
 //
 //----------------------------------------------------------------------------
 //
@@ -10,13 +10,13 @@
 //
 // THIS FILE IS NOT GENERATED OR SUPPORTED BY ACTIVISION.
 //
-// This material has been developed at apolyton.net by the Apolyton CtP2 
+// This material has been developed at apolyton.net by the Apolyton CtP2
 // Source Code Project. Contact the authors at ctp2source@apolyton.net.
 //
 //----------------------------------------------------------------------------
 //
 // Compiler flags
-// 
+//
 //----------------------------------------------------------------------------
 //
 // Modifications from the original Activision code:
@@ -30,16 +30,13 @@
 #include "ns_transport.h"
 
 
-
-ns_Transport::ns_Transport(NETFunc::Transport * transport) 
-:	ns_Object<NETFunc::Transport, ns_Transport>(transport) 
+ns_Transport::ns_Transport(NETFunc::Transport * transport)
+:	ns_Object<NETFunc::Transport, ns_Transport>(transport)
 {
 	list.push_back(Struct(STRING,	&m_name));
 };
-
 
 void ns_Transport::Update( NETFunc::Transport *transport ) {
 	SetMine(false);
 	m_name = transport->GetName();
 }
-

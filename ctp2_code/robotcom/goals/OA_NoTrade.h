@@ -1,4 +1,3 @@
-
 #pragma once
 
 #ifndef __OA_DONT_TRADE_WITH_ENEMY_H__
@@ -6,15 +5,15 @@
 
 #include "Oa.h"
 
-class Opportunity_Action_Dont_Trade_With_Enemy : public Opportunity_Action { 
+class Opportunity_Action_Dont_Trade_With_Enemy : public Opportunity_Action {
 
 public:
 
-    Opportunity_Action_Dont_Trade_With_Enemy(); 
+    Opportunity_Action_Dont_Trade_With_Enemy();
     ~Opportunity_Action_Dont_Trade_With_Enemy();
 
-    void Serialize (CivArchive &archive); 
-	void Execute(AiMain *ai); 
+    void Serialize (CivArchive &archive);
+	void Execute(AiMain *ai);
 };
 
 #endif __OA_DONT_TRADE_WITH_ENEMY_H__

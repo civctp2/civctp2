@@ -1,6 +1,3 @@
-
-
-
 #include "c3.h"
 #include "UnitEvent.h"
 #include "Events.h"
@@ -44,9 +41,8 @@ STDEHANDLER(KillUnitEvent)
 		killer = -1;
 
 	if(u->GetCargoList() && u->GetCargoList()->Num() > 0) {
-		
-		
-		
+
+
 		g_gevManager->AddEvent(GEV_INSERT_AfterCurrent, GEV_KillUnit,
 							   GEA_Unit, u,
 							   GEA_Int, cause,
@@ -61,7 +57,7 @@ STDEHANDLER(KillUnitEvent)
 								   GEA_End);
 		}
 
-		return GEV_HD_Stop; 
+		return GEV_HD_Stop;
 	}
 
 	u.Kill(cause, killer);
@@ -103,7 +99,7 @@ STDEHANDLER(AddUnitToArmyEvent)
 	if(!args->GetInt(0, (sint32 &)cause)) return GEV_HD_Continue;
 
 	u->ChangeArmy(a, cause);
-	
+
 	Assert(u->GetArmy()->m_id == a->m_id);
 
 	return GEV_HD_Continue;
@@ -130,8 +126,8 @@ STDEHANDLER(WakeUnitEvent)
 STDEHANDLER(EntrenchUnitEvent)
 {
     Unit u;
-	if(!args->GetUnit(0, u)) 
-		
+	if(!args->GetUnit(0, u))
+
 		return GEV_HD_Stop;
 
 	u->Entrench();
@@ -150,13 +146,13 @@ STDEHANDLER(DetrenchUnitEvent)
 STDEHANDLER(InvestigationEvent)
 {
 	Unit c;
-	
+
 	if(!args->GetCity(0, c)) return GEV_HD_Continue;
 
 	CityEspionage::Display(&c);
 	return GEV_HD_Continue;
 }
-	
+
 STDEHANDLER(InciteRevolutionUnitEvent)
 {
 	Unit u, c;
@@ -179,10 +175,9 @@ STDEHANDLER(AssassinateRulerUnitEvent)
 
 STDEHANDLER(PlantNukeUnitEvent)
 {
-	
+
 	return GEV_HD_Continue;
 }
-	
 
 STDEHANDLER(UndergroundRailwayUnitEvent)
 {
@@ -191,11 +186,11 @@ STDEHANDLER(UndergroundRailwayUnitEvent)
 	if(!args->GetCity(0, c)) return GEV_HD_Continue;
 
 	c.RemoveOneSlave(u.GetOwner());
-	
+
 	Unit hc;
 	double distance;
 	sint32 r = g_player[u.GetOwner()]->GetNearestCity(u.RetPos(),
-													  hc, 
+													  hc,
 													  distance);
 	Assert(r);
 
@@ -213,7 +208,7 @@ STDEHANDLER(UndergroundRailwayUnitEvent)
 	g_gevManager->AddEvent(GEV_INSERT_AfterCurrent, GEV_MakePop,
 						   GEA_City, hc.m_id,
 						   GEA_End);
-	
+
 	u->GetArmy()->ActionSuccessful(SPECATTACK_FREESLAVES, u, c);
 
 	SlicObject *so;
@@ -301,7 +296,6 @@ STDEHANDLER(BioInfectCityUnitEvent)
 	if(!args->GetUnit(0, u)) return GEV_HD_Continue;
 	if(!args->GetCity(0, c)) return GEV_HD_Continue;
 
-	
 	SlicObject *so;
 
 	so = new SlicObject("33CrisisCityInfected") ;
@@ -310,7 +304,7 @@ STDEHANDLER(BioInfectCityUnitEvent)
 	g_slicEngine->Execute(so) ;
 
 	DPRINTF(k_DBG_GAMESTATE, ("Bio infection succeeded\n"));
-	
+
 	so = new SlicObject("10iBioInfectComplete") ;
 	so->AddRecipient(c.GetOwner()) ;
 	so->AddCivilisation(u.GetOwner()) ;
@@ -327,7 +321,6 @@ STDEHANDLER(BioInfectCityUnitEvent)
 						   GEA_City, c.m_id,
 						   GEA_Player, u.GetOwner(),
 						   GEA_End);
-	
 
 	u.GetArmy()->ActionSuccessful(SPECATTACK_BIOTERROR, u, c);
 	return GEV_HD_Continue;
@@ -339,7 +332,6 @@ STDEHANDLER(PlagueCityUnitEvent)
 	if(!args->GetUnit(0, u)) return GEV_HD_Continue;
 	if(!args->GetCity(0, c)) return GEV_HD_Continue;
 
-	
 	SlicObject *so;
 
 	so = new SlicObject("33CrisisCityInfected") ;
@@ -348,7 +340,7 @@ STDEHANDLER(PlagueCityUnitEvent)
 	g_slicEngine->Execute(so) ;
 
 	DPRINTF(k_DBG_GAMESTATE, ("Bio infection succeeded\n"));
-	
+
 	so = new SlicObject("10jPlagueComplete") ;
 	so->AddRecipient(c.GetOwner()) ;
 	so->AddCivilisation(c.GetOwner()) ;
@@ -365,7 +357,6 @@ STDEHANDLER(PlagueCityUnitEvent)
 						   GEA_City, c.m_id,
 						   GEA_Player, u.GetOwner(),
 						   GEA_End);
-	
 
 	u.GetArmy()->ActionSuccessful(SPECATTACK_BIOTERROR, u, c);
 	return GEV_HD_Continue;
@@ -379,20 +370,19 @@ STDEHANDLER(NanoInfectCityUnitEvent)
 	if(!args->GetCity(0, c)) return GEV_HD_Continue;
 
 	DPRINTF(k_DBG_GAMESTATE, ("Nano infection succeeded"));
-	
+
 	SlicObject *so;
 	so = new SlicObject("911CrisisCityIsNanoInfected") ;
 	so->AddRecipient(c.GetOwner()) ;
 	so->AddCivilisation(u.GetOwner()) ;
 	so->AddCity(c) ;
 	g_slicEngine->Execute(so) ;
-	
+
 	g_gevManager->AddEvent(GEV_INSERT_AfterCurrent, GEV_NanoInfectCity,
 						   GEA_City, c.m_id,
 						   GEA_Player, u.GetOwner(),
 						   GEA_End);
-	
-	
+
 	u.GetArmy()->ActionSuccessful(SPECATTACK_NANOTERROR, u, c);
 	return GEV_HD_Continue;
 }
@@ -403,7 +393,6 @@ STDEHANDLER(ConvertCityUnitEvent)
 	if(!args->GetUnit(0, u)) return GEV_HD_Continue;
 	if(!args->GetCity(0, c)) return GEV_HD_Continue;
 
-	
 	DPRINTF(k_DBG_GAMESTATE, ("Conversion succeeded\n"));
 	if(u.GetDBRec()->GetIsTelevangelist()) {
 		g_gevManager->AddEvent(GEV_INSERT_AfterCurrent, GEV_ConvertCity,
@@ -411,17 +400,16 @@ STDEHANDLER(ConvertCityUnitEvent)
 							   GEA_Player, u.GetOwner(),
 							   GEA_Int, CONVERTED_BY_TELEVANGELIST,
 							   GEA_End);
-							   
-		
+
 	} else {
 		g_gevManager->AddEvent(GEV_INSERT_AfterCurrent, GEV_ConvertCity,
 							   GEA_City, c.m_id,
 							   GEA_Player, u.GetOwner(),
 							   GEA_Int, CONVERTED_BY_CLERIC,
 							   GEA_End);
-		
+
 	}
-	
+
 	{
 		SlicObject *so = new SlicObject("151ConvertCompleteVictim") ;
 		so->AddRecipient(c.GetOwner()) ;
@@ -429,13 +417,13 @@ STDEHANDLER(ConvertCityUnitEvent)
 		so->AddUnitRecord(u.GetType());
 		g_slicEngine->Execute(so) ;
 	}
-	
+
 	u.GetArmy()->ActionSuccessful(SPECATTACK_CONVERTCITY, u, c);
 	g_gevManager->AddEvent(GEV_INSERT_AfterCurrent, GEV_ContactMade,
 						   GEA_Player, c.GetOwner(),
 						   GEA_Player, u.GetOwner(),
 						   GEA_End);
-	
+
 	return GEV_HD_Continue;
 }
 
@@ -446,13 +434,13 @@ STDEHANDLER(ReformCityUnitEvent)
 	if(!args->GetCity(0, c)) return GEV_HD_Continue;
 
 	DPRINTF(k_DBG_GAMESTATE, ("Reformation succeeded\n"));
-	
+
 	g_gevManager->AddEvent(GEV_INSERT_AfterCurrent, GEV_UnconvertCity,
 						   GEA_City, c.m_id,
 						   GEA_End);
-	
+
 	u.GetArmy()->ActionSuccessful(SPECATTACK_REFORMCITY, u, c);
-	
+
 	SlicObject *so = new SlicObject("135ReformCity") ;
 	so->AddCity(c);
 	so->AddRecipient(c.GetOwner()) ;
@@ -484,7 +472,7 @@ STDEHANDLER(InjoinUnitEvent)
 						   GEA_City, c.m_id,
 						   GEA_Player, u.GetOwner(),
 						   GEA_End);
-	
+
 	return GEV_HD_Continue;
 }
 
@@ -499,7 +487,6 @@ STDEHANDLER(NukeCityUnitEvent)
 						   GEA_Player, u.GetOwner(),
 						   GEA_End);
 
-	
 	g_gevManager->AddEvent(GEV_INSERT_AfterCurrent, GEV_KillUnit,
 		GEA_Unit, u,
 		GEA_Int, CAUSE_REMOVE_ARMY_NUKE,
@@ -527,21 +514,19 @@ STDEHANDLER(NukeLocationUnitEvent)
 
 	static CellUnitList tempKillList;
 	tempKillList.Clear();
-	
-	
+
 	SquareIterator it(pos, 1);
 	for(it.Start(); !it.End(); it.Next()) {
 		Cell *cell = g_theWorld->GetCell(it.Pos());
 		sint32 i;
 		for(i = 0; i < cell->GetNumUnits(); i++) {
-			if(cell->AccessUnit(i).m_id != u.m_id) {  
+			if(cell->AccessUnit(i).m_id != u.m_id) {
 				tempKillList.Insert(cell->AccessUnit(i));
 			}
 		}
 	}
-		
-	
-	
+
+
 	for(sint32 j = 0; j < tempKillList.Num(); j++) {
 		g_gevManager->AddEvent(GEV_INSERT_AfterCurrent, GEV_KillUnit,
 							   GEA_Unit, tempKillList[j].m_id,
@@ -586,7 +571,7 @@ STDEHANDLER(LaunchUnitEvent)
 {
 	Unit u;
 	MapPoint pos;
-	
+
 	if(!args->GetUnit(0, u)) return GEV_HD_Continue;
 	if(!args->GetPos(0, pos)) return GEV_HD_Continue;
 
@@ -609,7 +594,6 @@ STDEHANDLER(LaunchUnitEvent)
 							   GEA_Army, u.GetArmy().m_id,
 							   GEA_End);
 	}
-
 
 	return GEV_HD_Continue;
 }
@@ -673,7 +657,7 @@ STDEHANDLER(SetUnloadMovementUnitEvent)
 	return GEV_HD_Continue;
 }
 
-void unitevent_Initialize() 
+void unitevent_Initialize()
 {
 	g_gevManager->AddCallback(GEV_KillUnit, GEV_PRI_Primary, &s_KillUnitEvent);
 	g_gevManager->AddCallback(GEV_KillCity, GEV_PRI_Primary, &s_KillUnitEvent);

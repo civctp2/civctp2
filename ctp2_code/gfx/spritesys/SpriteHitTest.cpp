@@ -2,7 +2,7 @@
 //
 // Project      : Call To Power 2
 // File type    : C++ source
-// Description  : 
+// Description  :
 // Id           : $Id$
 //
 //----------------------------------------------------------------------------
@@ -11,7 +11,7 @@
 //
 // THIS FILE IS NOT GENERATED OR SUPPORTED BY ACTIVISION.
 //
-// This material has been developed at apolyton.net by the Apolyton CtP2 
+// This material has been developed at apolyton.net by the Apolyton CtP2
 // Source Code Project. Contact the authors at ctp2source@apolyton.net.
 //
 //----------------------------------------------------------------------------
@@ -34,8 +34,6 @@
 #include "spriteutils.h"
 #include "Sprite.h"
 
-
-
 #ifdef _MSC_VER
 #pragma optimize ("agtp", on)
 #endif
@@ -45,51 +43,44 @@ BOOL Sprite::HitTestLow(POINT mousePt, Pixel16 *frame, sint32 drawX, sint32 draw
 {
 	uint8			*surfBase;
 
-	
 	sint32 surfWidth = m_surfWidth;
 	sint32 surfHeight = m_surfHeight;
 	sint32 surfPitch = m_surfPitch;
 
-	
 	if (drawX < 0 - width) return FALSE;
 	if (drawY < 0 - height) return FALSE;
 	if (drawX >= surfWidth - width) return FALSE;
 	if (drawY >= surfHeight - height) return FALSE;
 
-	
-	
+
 	if (drawX < 0 || drawY < 0 || drawX >= surfWidth || drawY >= surfHeight) {
 		return FALSE;
 	}
 
-	
 
 	surfBase = m_surfBase + (drawY * surfPitch) + (drawX * sizeof(Pixel16));
 
-	
 	Pixel16		*table = frame+1;
 	Pixel16		*dataStart = table + height;
 
 	register	sint32 j;
 	sint32		len;
 
-	
 	mousePt.x -= drawX;
 	mousePt.y -= drawY;
 
 	sint32 x = 0;
 
-	
 	for(j=0; j<height; j++) {
-		if (table[j] != k_EMPTY_TABLE_ENTRY) {		
+		if (table[j] != k_EMPTY_TABLE_ENTRY) {
 			Pixel16		*rowData;
 			Pixel16		tag;
 
 			rowData = dataStart + table[j];
-			
+
 			tag = *rowData++;
-			tag = tag & 0x0FFF;	
-			
+			tag = tag & 0x0FFF;
+
 			x = 0;
 
 			while ((tag & 0xF000) == 0) {
@@ -99,7 +90,7 @@ BOOL Sprite::HitTestLow(POINT mousePt, Pixel16 *frame, sint32 drawX, sint32 draw
 						break;
 					case k_COPY_RUN_ID			: {
 							len = (tag & 0x00FF);
-							if (mousePt.y == j && mousePt.x >= x && mousePt.x < x + len) 
+							if (mousePt.y == j && mousePt.x >= x && mousePt.x < x + len)
 								return TRUE;
 							x += len;
 							rowData += len;
@@ -113,7 +104,7 @@ BOOL Sprite::HitTestLow(POINT mousePt, Pixel16 *frame, sint32 drawX, sint32 draw
 						}
 						break;
 					case k_FEATHERED_RUN_ID	:
-						
+
 						if (mousePt.y == j && mousePt.x == x)
 							return TRUE;
 
@@ -142,12 +133,10 @@ BOOL Sprite::HitTestLowReversed(POINT mousePt, Pixel16 *frame, sint32 drawX, sin
 {
 	uint8			*surfBase;
 
-	
 	sint32 surfWidth = m_surfWidth;
 	sint32 surfHeight = m_surfHeight;
 	sint32 surfPitch = m_surfPitch;
 
-	
 	if (drawX < 0 - width) return FALSE;
 	if (drawY < 0 - height) return FALSE;
 	if (drawX >= surfWidth - width) return FALSE;
@@ -157,10 +146,8 @@ BOOL Sprite::HitTestLowReversed(POINT mousePt, Pixel16 *frame, sint32 drawX, sin
 		return FALSE;
 	}
 
-	
 	surfBase = m_surfBase + (drawY * surfPitch) + (drawX * sizeof(Pixel16));
 
-	
 	Pixel16		*table = frame+1;
 	Pixel16		*dataStart = table + height;
 
@@ -172,15 +159,14 @@ BOOL Sprite::HitTestLowReversed(POINT mousePt, Pixel16 *frame, sint32 drawX, sin
 
 	sint32 x;
 
-	
 	for(j=0; j < height; j++) {
-		if (table[j] != k_EMPTY_TABLE_ENTRY) {		
+		if (table[j] != k_EMPTY_TABLE_ENTRY) {
 			Pixel16		*rowData;
 			Pixel16		tag;
 
 			rowData = dataStart + table[j];
 			tag = *rowData++;
-			tag = tag & 0x0FFF;	
+			tag = tag & 0x0FFF;
 
 			x = width-1;
 
@@ -191,7 +177,7 @@ BOOL Sprite::HitTestLowReversed(POINT mousePt, Pixel16 *frame, sint32 drawX, sin
 						break;
 					case k_COPY_RUN_ID			: {
 							len = (tag & 0x00FF);
-	
+
 							if (mousePt.y == j && mousePt.x < x && mousePt.x >= x-len)
 								return TRUE;
 							x -= len;
@@ -206,8 +192,8 @@ BOOL Sprite::HitTestLowReversed(POINT mousePt, Pixel16 *frame, sint32 drawX, sin
 						}
 						break;
 					case k_FEATHERED_RUN_ID	:
-					
-						if (mousePt.y == j && mousePt.x == x) 
+
+						if (mousePt.y == j && mousePt.x == x)
 							return TRUE;
 
 						rowData++;
@@ -218,7 +204,7 @@ BOOL Sprite::HitTestLowReversed(POINT mousePt, Pixel16 *frame, sint32 drawX, sin
 			}
 		}
 	}
-	
+
 	return FALSE;
 }
 
@@ -232,7 +218,6 @@ BOOL Sprite::HitTestScaledLow(POINT mousePt, Pixel16 *data, sint32 x, sint32 y, 
 {
 	uint8			*surfBase;
 
-	
 	Pixel16		emptyRow[2];
 
 	emptyRow[0] = (Pixel16)((k_CHROMAKEY_RUN_ID << 8) | m_width);
@@ -240,7 +225,6 @@ BOOL Sprite::HitTestScaledLow(POINT mousePt, Pixel16 *data, sint32 x, sint32 y, 
 
 	RECT destRect = { x, y, x + destWidth, y + destHeight };
 
-	
 	sint32 surfWidth = m_surfWidth;
 	sint32 surfHeight = m_surfHeight;
 	sint32 surfPitch = m_surfPitch;
@@ -252,13 +236,11 @@ BOOL Sprite::HitTestScaledLow(POINT mousePt, Pixel16 *data, sint32 x, sint32 y, 
 	if (destRect.right > surfWidth) return FALSE;
 	if (destRect.bottom > surfHeight) return FALSE;
 
-	
 	Pixel16			*destPixel;
 
 	Pixel16			*table = data+1;
 	Pixel16			*dataStart = table + m_height;
 
-	
 	sint32				vaccum;
 	sint32				vincx, vincxy;
 	sint32				vend;
@@ -278,12 +260,11 @@ BOOL Sprite::HitTestScaledLow(POINT mousePt, Pixel16 *data, sint32 x, sint32 y, 
 	mousePt.x -= x;
 	mousePt.y -= y;
 
-	
 	while ( vpos1 < vend) {
 		if (vaccum < 0) {
 			vaccum += vincx;
 		} else {
-			
+
 			Pixel16		*rowData1, *rowData2;
 			Pixel16		pixel1, pixel2;
 
@@ -293,16 +274,15 @@ BOOL Sprite::HitTestScaledLow(POINT mousePt, Pixel16 *data, sint32 x, sint32 y, 
 			sint32		hpos;
 			sint32		hdestpos;
 
-			
 			if (table[vpos1] == k_EMPTY_TABLE_ENTRY) rowData1 = emptyRow;
-			else rowData1 = dataStart + table[vpos1];	
+			else rowData1 = dataStart + table[vpos1];
 			if (table[vpos2] == k_EMPTY_TABLE_ENTRY) rowData2 = emptyRow;
 			else rowData2 = dataStart + table[vpos2];
 
 			haccum = destWidth*2 - m_width;
 			hincx = destWidth*2;
 			hincxy = (destWidth - m_width) * 2;
-			
+
 			hpos = 0;
 			if (reverse) hdestpos = x + destWidth;
 			else hdestpos = x;
@@ -312,11 +292,11 @@ BOOL Sprite::HitTestScaledLow(POINT mousePt, Pixel16 *data, sint32 x, sint32 y, 
 			sint32		mode2;
 			sint32		pos1 = 0;
 			sint32		pos2 = 0;
-			sint32		end1, 
+			sint32		end1,
 						end2;
-			sint32		alpha1, 
+			sint32		alpha1,
 						alpha2;
-			sint32		oldend1 = 0, 
+			sint32		oldend1 = 0,
 						oldend2 = 0;
 
 			end1 = ReadTag(&mode1, &rowData1, &alpha1);
@@ -333,7 +313,6 @@ BOOL Sprite::HitTestScaledLow(POINT mousePt, Pixel16 *data, sint32 x, sint32 y, 
 
 					destPixel = (Pixel16 *)(surfBase + ((vdestpos-y) * surfPitch) + ((hdestpos-x) * 2));
 
-					
 					while (pos1 <= hpos) {
 						switch (mode1) {
 							case k_CHROMAKEY_RUN_ID	:
@@ -346,7 +325,7 @@ BOOL Sprite::HitTestScaledLow(POINT mousePt, Pixel16 *data, sint32 x, sint32 y, 
 							case k_SHADOW_RUN_ID		:
 									if (mousePt.x == (hdestpos-x) && mousePt.y == (vdestpos-y))
 										return TRUE;
-								break;			
+								break;
 							case k_FEATHERED_RUN_ID	:
 									if (mousePt.x == (hdestpos-x) && mousePt.y == (vdestpos-y))
 										return TRUE;
@@ -355,7 +334,7 @@ BOOL Sprite::HitTestScaledLow(POINT mousePt, Pixel16 *data, sint32 x, sint32 y, 
 							default:
 								Assert(mode1 == k_CHROMAKEY_RUN_ID || mode1 == k_COPY_RUN_ID || mode1 == k_SHADOW_RUN_ID || mode1 == k_FEATHERED_RUN_ID);
 						}
-						
+
 						pos1++;
 
 						if (pos1 >= end1) {
@@ -364,9 +343,8 @@ BOOL Sprite::HitTestScaledLow(POINT mousePt, Pixel16 *data, sint32 x, sint32 y, 
 						}
 					}
 
-					
 					while (pos2 <= hpos) {
-					
+
 						switch (mode2) {
 							case k_CHROMAKEY_RUN_ID	:
 								break;
@@ -384,7 +362,7 @@ BOOL Sprite::HitTestScaledLow(POINT mousePt, Pixel16 *data, sint32 x, sint32 y, 
 										return TRUE;
 									rowData2++;
 								break;
-							default : 
+							default :
 								Assert(mode2 == k_CHROMAKEY_RUN_ID || mode2 == k_COPY_RUN_ID || mode2 == k_SHADOW_RUN_ID || mode2 == k_FEATHERED_RUN_ID);
 						}
 
@@ -404,7 +382,7 @@ BOOL Sprite::HitTestScaledLow(POINT mousePt, Pixel16 *data, sint32 x, sint32 y, 
 
 			vaccum += vincxy;
 			vdestpos++;
-		} 
+		}
 		vpos1++;
 		vpos2++;
 	}

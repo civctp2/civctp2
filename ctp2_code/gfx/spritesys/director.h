@@ -1,14 +1,3 @@
-
-
-
-
-
-
-
-
-
-
-
 #ifdef HAVE_PRAGMA_ONCE
 #pragma once
 #endif
@@ -20,13 +9,12 @@
 #include "aui_mouse.h"
 #include "Queue.h"
 
-class Unit; 
-class TradeRoute; 
+class Unit;
+class TradeRoute;
 
 #include "pointerlist.h"
 #include "directoractions.h"
 #include "gamesounds.h"
-
 
 #define k_MAX_DIRECTOR_QUEUE_ITEMS		2000
 #define k_MAXFRAMERATE 20
@@ -37,9 +25,9 @@ class TradeRoute;
 #define k_TRANSPORTREMOVEONLY -1
 #define k_TRANSPORTADDONLY -2
 
-#define k_TIME_LOG_SIZE				30			
+#define k_TIME_LOG_SIZE				30
 #define k_DEFAULT_FPS				10
-#define k_ELAPSED_CEILING			100			
+#define k_ELAPSED_CEILING			100
 
 class UnitActor;
 class ProjectileActor;
@@ -83,9 +71,9 @@ enum DQITEM_TYPE {
 	DQITEM_FACEOFF,
 	DQITEM_TERMINATE_FACEOFF,
 	DQITEM_TERMINATE_SOUND,
-	
+
 	DQITEM_INVOKE_THRONE_ROOM,
-	
+
 	DQITEM_INVOKE_RESEARCH_ADVANCE,
 
 	DQITEM_BEGIN_SCHEDULER,
@@ -146,18 +134,18 @@ enum SEQ_ACTOR {
 
 class Sequence {
 public:
-	Sequence() 
-	{ 
-		m_sequenceID = 0; 
-		m_refCount = 0; 
+	Sequence()
+	{
+		m_sequenceID = 0;
+		m_refCount = 0;
 		m_addedToActiveList[SEQ_ACTOR_PRIMARY] = FALSE;
 		m_addedToActiveList[SEQ_ACTOR_SECONDARY] = FALSE;
 	}
 
-	Sequence(sint32 seqID) 
-	{ 
-		m_sequenceID = seqID; 
-		m_refCount = 0; 
+	Sequence(sint32 seqID)
+	{
+		m_sequenceID = seqID;
+		m_refCount = 0;
 		m_addedToActiveList[SEQ_ACTOR_PRIMARY] = FALSE;
 		m_addedToActiveList[SEQ_ACTOR_SECONDARY] = FALSE;
 	}
@@ -196,7 +184,6 @@ public:
 
 	Sequence		*NewSequence(void);
 
-	
 	void			UpdateTimingClock(void);
 	void			Process(void);
 	void			PauseDirector(BOOL pause);
@@ -204,7 +191,7 @@ public:
 #ifdef _DEBUG
 	void			DumpItem(DQItem *item);
 	void			DumpInfo(void);
-#endif 
+#endif
 
 	void			HandleNextAction(void);
 
@@ -221,13 +208,11 @@ public:
 
 	BOOL			TileIsVisibleToPlayer(MapPoint &pos);
 
-	
 	bool			IsProcessing();
 
-	
-	void			AddMoveProcess(UnitActor *top, UnitActor *dest, sint32 arraySize, UnitActor **moveActors, BOOL isTransported); 
+	void			AddMoveProcess(UnitActor *top, UnitActor *dest, sint32 arraySize, UnitActor **moveActors, BOOL isTransported);
 
-	void			AddMove(Unit &mover, MapPoint &oldPos, MapPoint &newPos, sint32 numRevealed, UnitActor **revealedActors, 
+	void			AddMove(Unit &mover, MapPoint &oldPos, MapPoint &newPos, sint32 numRevealed, UnitActor **revealedActors,
 						sint32 numRest, UnitActor **restOfStack, BOOL isTransported, sint32 soundID);
 
 	void			AddTeleport(Unit &top, MapPoint &oldPos, MapPoint &newPos, 	sint32 numRevealed, UnitActor **revealedActors,
@@ -246,10 +231,10 @@ public:
 	void			AddShow(Unit hider);
 	void			AddWork(Unit worker);
 	void			AddFastKill(Unit dead);
-	void			AddRemoveVision(MapPoint &pos, double range);	
-	void			AddAddVision(MapPoint &pos, double range);		
-	void			AddSetVisibility(UnitActor *actor, uint32 visibility);	
-	void			AddSetOwner(UnitActor *actor, sint32 owner);	
+	void			AddRemoveVision(MapPoint &pos, double range);
+	void			AddAddVision(MapPoint &pos, double range);
+	void			AddSetVisibility(UnitActor *actor, uint32 visibility);
+	void			AddSetOwner(UnitActor *actor, sint32 owner);
 	void			AddSetVisionRange(UnitActor *actor, double range);
 	void			AddCombatFlash(const MapPoint &pos);
 	void			AddCopyVision(void);
@@ -266,13 +251,11 @@ public:
 	void			AddTerminateFaceoff(Unit &faceroffer);
 	void			AddTerminateSound(Unit &unit);
 	void			AddInvokeThroneRoom(void);
-	void			AddInvokeResearchAdvance(MBCHAR *text);	
+	void			AddInvokeResearchAdvance(MBCHAR *text);
 	void            AddBeginScheduler(sint32 player);
 
- 
 	void			ActiveUnitAdd(UnitActor *unitActor);
 	void			ActiveUnitRemove(UnitActor *unitActor);
-
 
 	void			ActiveEffectAdd(EffectActor *effectActor);
 	void			ActiveEffectRemove(EffectActor *effectActor);
@@ -303,13 +286,11 @@ public:
 
 	void			NextPlayer(BOOL forcedUpdate = FALSE);
 
-	
 	uint32			GetMasterCurTime(void) {return m_masterCurTime;}
 	void			SetMasterCurTime(uint32 val) {m_masterCurTime = val;}
 	sint32			GetAverageFPS(void) const { return m_averageFPS; }
 
-	
-	void		Kill(UnitActor *actor);	
+	void		Kill(UnitActor *actor);
 	void        FastKill(UnitActor *actor);
 
 	void        FastKill(EffectActor *actor);
@@ -329,29 +310,27 @@ public:
 	void NotifyResync();
 
 
-
 	tech_WLList<UnitActor *>		*m_activeUnitList;
 
 	tech_WLList<EffectActor *>		*m_activeEffectList;
-	tech_WLList<TradeActor *>		*m_tradeActorList; 
+	tech_WLList<TradeActor *>		*m_tradeActorList;
 
-	BOOL							m_nextPlayer; 
+	BOOL							m_nextPlayer;
 
-	
-	uint32							m_masterCurTime;			
-	sint32							m_lastTickCount;			
-	sint32							m_timeLog[k_TIME_LOG_SIZE];	
-	sint32							m_timeLogIndex;				
-	sint32							m_averageElapsed;			
+	uint32							m_masterCurTime;
+	sint32							m_lastTickCount;
+	sint32							m_timeLog[k_TIME_LOG_SIZE];
+	sint32							m_timeLogIndex;
+	sint32							m_averageElapsed;
 	sint32							m_averageFPS;
 
-	BOOL							m_actionFinished;			
-																
-	BOOL							m_paused;
-	BOOL							m_processingActiveUnits;	
-	BOOL							m_processingActiveEffects;	
+	BOOL							m_actionFinished;
 
-	
+	BOOL							m_paused;
+	BOOL							m_processingActiveUnits;
+	BOOL							m_processingActiveEffects;
+
+
 
 
 
@@ -410,4 +389,4 @@ DQHandler dh_invokeThroneRoom;
 DQHandler dh_invokeResearchAdvance;
 DQHandler dh_beginScheduler;
 
-#endif 
+#endif

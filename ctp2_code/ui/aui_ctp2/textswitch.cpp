@@ -1,16 +1,3 @@
-
-
-
-
-
-
-
-
-
-
-
-
-
 #include "c3.h"
 
 #include "aui.h"
@@ -36,7 +23,6 @@ extern ColorSet		*g_colorSet;
 extern SlicEngine	*g_slicEngine;
 extern C3UI			*g_c3ui;
 
-
 TextSwitch::TextSwitch(
 	AUI_ERRCODE *retval,
 	uint32 id,
@@ -45,12 +31,11 @@ TextSwitch::TextSwitch(
 	void *cookie)
 	:
 	aui_ImageBase( ldlBlock ),
-	aui_TextBase( ldlBlock, (MBCHAR *)NULL ), 
+	aui_TextBase( ldlBlock, (MBCHAR *)NULL ),
 	aui_Switch( retval, id, ldlBlock, ActionFunc, cookie ),
 	PatternBase( ldlBlock, (MBCHAR *)NULL )
 {
 }
-
 
 
 TextSwitch::TextSwitch(
@@ -74,13 +59,12 @@ TextSwitch::TextSwitch(
 }
 
 
-
 AUI_ERRCODE TextSwitch::DrawThis( aui_Surface *surface, sint32 x, sint32 y )
 {
-	
-	
 
-	
+
+
+
 	if ( IsHidden() ) return AUI_ERRCODE_OK;
 
 	if ( !surface ) surface = m_window->TheSurface();
@@ -89,13 +73,12 @@ AUI_ERRCODE TextSwitch::DrawThis( aui_Surface *surface, sint32 x, sint32 y )
 	OffsetRect( &rect, m_x + x, m_y + y );
 	ToWindow( &rect );
 
-	
 	if ( m_pattern )
 		m_pattern->Draw( surface, &rect );
 
 	primitives_FrameRect16(surface, &rect, g_colorSet->GetColor(COLOR_BLACK));
 
-	
+
 
 
 
@@ -114,17 +97,16 @@ AUI_ERRCODE TextSwitch::DrawThis( aui_Surface *surface, sint32 x, sint32 y )
 
 	if ( IsActive() )
 	{
-		
+
 		if ( IsOn() )
 		{
-			
+
 		}
 		else
 		{
-			
+
 		}
 
-		
 		if (m_text) {
 
 
@@ -135,7 +117,7 @@ AUI_ERRCODE TextSwitch::DrawThis( aui_Surface *surface, sint32 x, sint32 y )
 	}
 	else
 	{
-		
+
 		if (m_text) {
 
 

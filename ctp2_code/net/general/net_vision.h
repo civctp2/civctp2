@@ -6,7 +6,6 @@
 
 #include "net_packet.h"
 
-
 #define k_VISION_STEP 7
 
 class UnseenCell;
@@ -24,7 +23,6 @@ private:
 	uint16 m_row;
 	uint8 m_numRows;
 };
-
 
 class NetUnseenCell : public Packetizer
 {

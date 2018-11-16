@@ -5,7 +5,6 @@
 
 class tech_MemMap;
 
-
 class ldl_MemMap : public tech_MemMap
 {
 public:
@@ -18,5 +17,4 @@ public:
 	virtual void ReleaseFileBits( unsigned char *&bits );
 };
 
-
-#endif 
+#endif

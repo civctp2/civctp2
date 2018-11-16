@@ -11,20 +11,20 @@
 //
 // THIS FILE IS NOT GENERATED OR SUPPORTED BY ACTIVISION.
 //
-// This material has been developed at apolyton.net by the Apolyton CtP2 
+// This material has been developed at apolyton.net by the Apolyton CtP2
 // Source Code Project. Contact the authors at ctp2source@apolyton.net.
 //
 //----------------------------------------------------------------------------
 //
 // Compiler flags
-// 
+//
 // _MSC_VER
 // - When defined, allows Microsoft C++ extensions.
 // - When not defined, generates standard C++.
 //
 // Note: For the blocks with _MSC_VER preprocessor directives, the following
-//       is implied: the (_MSC_VER) preprocessor directive lines and the blocks 
-//       between #else and #endif are modified Apolyton code. The blocks 
+//       is implied: the (_MSC_VER) preprocessor directive lines and the blocks
+//       between #else and #endif are modified Apolyton code. The blocks
 //       between #if and #else are the original Activision code.
 //
 // CTP1_TRADE
@@ -68,7 +68,6 @@
 #include "Unit.h"
 #include "BldQue.h"
 
-
 #include "UnitDynArr.h"
 #include "TradeDynArr.h"
 #include "Resources.h"
@@ -88,10 +87,8 @@ class Happy;
 class SlicObject;
 class Cell;
 
-
 #define k_PEOPLE_PER_POPULATION 10000
 //#define NEW_RESOURCE_PROCESS 1
-
 
 enum OPTIMISE_STATE {
 	OPTIMISE_STATE_NONE,
@@ -125,7 +122,7 @@ struct TerrainValue;
 class CityData : public CityRadiusCallback {
 
 //----------------------------------------------------------------------------
-// Do not change anything in the types or order of the following variable 
+// Do not change anything in the types or order of the following variable
 // declarations. Doing so will break reading in of save files.
 // See the Serialize implementation for more details.
 //----------------------------------------------------------------------------
@@ -144,7 +141,7 @@ class CityData : public CityRadiusCallback {
 	sint32 m_science;
 	sint32 m_luxury;
 	CITY_ATTITUDE m_city_attitude;
-	
+
 	sint32 m_collected_production_this_turn; // Will be unused
 	sint32 m_gross_production;
 	sint32 m_net_production;
@@ -159,7 +156,6 @@ class CityData : public CityRadiusCallback {
 	double m_food_lost_to_crime;
 	double m_food_consumed_this_turn;
 
-	
 	sint32 m_total_pollution;
 	sint32 m_cityPopulationPollution;
 	sint32 m_cityIndustrialPollution;
@@ -168,8 +164,7 @@ class CityData : public CityRadiusCallback {
 	BOOL m_contribute_materials;
 	BOOL m_contribute_military;
 
-	
-	
+
 	BOOL m_capturedThisTurn;
 
 	sint32 m_spied_upon;
@@ -192,10 +187,8 @@ class CityData : public CityRadiusCallback {
 	BOOL m_isInjoined;
 	sint32 m_injoinedBy;
 
-
 	sint32 m_airportLastUsed;
 
-	
 	sint32 m_founder;
 
 	sint32 m_wages_paid;
@@ -218,10 +211,10 @@ class CityData : public CityRadiusCallback {
 	sint16 m_lastCelebrationMsg;
 	uint8 m_alreadySoldABuilding;
 
-	
-	
-	
-	
+
+
+
+
 	sint32 m_population;
 	sint32 m_partialPopulation;
 	sint16 m_numSpecialists[POP_MAX];
@@ -230,19 +223,16 @@ class CityData : public CityRadiusCallback {
 	sint32 m_workerFullUtilizationIndex;
 	sint32 m_workerPartialUtilizationIndex;
 
-	
 	BOOL m_useGovernor;
 	sint32 m_buildListSequenceIndex;
 	sint32 m_garrisonOtherCities;
 	BOOL m_garrisonComplete;
 
-	
 	sint8 m_currentGarrison;
 	sint8 m_neededGarrison;
 	double m_currentGarrisonStrength;
 	double m_neededGarrisonStrength;
 
-	
 	sint32 m_sellBuilding;
 	bool m_buyFront;
 
@@ -255,22 +245,20 @@ class CityData : public CityRadiusCallback {
 
 	sint32 m_starvation_turns;
 
-	
 	sint32 m_cityStyle;
 
 	MapPoint m_pos;
 
-	
 	BOOL m_is_rioting;
 
 //----------------------------------------------------------------------------
 // Changing the order below this line should not break anything.
 //----------------------------------------------------------------------------
-	
+
 	Unit m_home_city;
 	uint8 m_min_turns_revolt; // Number of revolt risk free turns.
 	BuildQueue m_build_queue;
-	
+
 	TradeDynamicArray m_tradeSourceList;
 	TradeDynamicArray m_tradeDestinationList;
 #ifdef CTP1_TRADE
@@ -282,19 +270,18 @@ class CityData : public CityRadiusCallback {
 	Resources m_buyingResources;
 #endif
 	Happy     *m_happy;
-	
+
 	MBCHAR    m_name[k_MAX_NAME_LEN] ;
 
 	sint32    *m_distanceToGood;
 
-	
 	double    m_defensiveBonus;
-	
+
 	sint32    *m_ringFood;
 	sint32    *m_ringProd;
 	sint32    *m_ringGold;
 	sint32    *m_ringSizes;
-	
+
 #if defined(NEW_RESOURCE_PROCESS)
 	double    *m_farmersEff;
 	double    *m_laborersEff;
@@ -333,7 +320,7 @@ class CityData : public CityRadiusCallback {
 	sint32    m_max_scie_from_terrain;
 	double    m_gross_science;
 	double    m_science_lost_to_crime;
-#endif	
+#endif
 
 	RADIUS_OP m_cityRadiusOp;
 	UnitDynamicArray *m_killList;
@@ -342,13 +329,13 @@ class CityData : public CityRadiusCallback {
 	SlicObject *m_tempGoodAdder;
 	sint32 m_tempGood, m_tempGoodCount;
 	BOOL m_sentInefficientMessageAlready;
-	
-	
 
-	
-	
+
+
+
+
 #ifdef _DEBUG
-	BOOL m_ignore_happiness; 
+	BOOL m_ignore_happiness;
 #endif
 
 	friend class NetPop;
@@ -357,11 +344,11 @@ class CityData : public CityRadiusCallback {
 	friend class NetCityName;
 	friend class NetCityResources;
 	friend class World;
-	friend class Happy; 
+	friend class Happy;
 	friend class NetHappy;
 	friend class NetCityBuildQueue;
-	friend class C3Player; 
-	friend class C3Population; 
+	friend class C3Player;
+	friend class C3Population;
 
 #ifdef _PLAYTEST
 	friend class CreateImprovementCommand;
@@ -391,13 +378,11 @@ public:
 	sint32 GetNetCityFood() const { return sint32(m_food_delta); }
 	sint32 GetGrossCityFood() const { return sint32(m_gross_food); }
 
-	
 	sint32 GetStarvationTurns() const {return m_starvation_turns;}
 
 	double GetProducedFood() const { return m_net_food; }
 	double GetConsumedFood() const { return m_food_consumed_this_turn; }
 
-	
 	void SetShieldstore (sint32 s);
 	void AddShields(sint32 s);
 
@@ -406,21 +391,20 @@ public:
 	sint32 ProcessProduction(bool projectedOnly, sint32 &grossProduction, sint32 &collectedProduction, sint32 &crimeLoss, sint32 &franchiseLoss, bool considerOnlyFromTerrain = false) const;
 	sint32 ProcessProduction(bool projectedOnly);
 #endif
-	
+
 	double ProjectMilitaryContribution();
 	sint32 GetStoredCityProduction() const { return m_shieldstore; }
 	sint32 GetNetCityProduction() const { return m_net_production; }
 	sint32 GetGrossCityProduction() const { return m_gross_production; }
 
-	
 	sint32 ComputeMaterialsPaid(double percent_terrain);
 
 	void PayFederalProduction(double percent_military,
-	                          sint32 &mil_paid, 
-	                          double percent_terrain, 
+	                          sint32 &mil_paid,
+	                          double percent_terrain,
 	                          sint32 &mat_paid);
-	void PayFederalProductionAbs(sint32 mil_paid, 
-	                             double percent_mat, 
+	void PayFederalProductionAbs(sint32 mil_paid,
+	                             double percent_mat,
 	                             sint32 &mat_paid);
 
 	void ShieldSupportTroops();
@@ -432,14 +416,11 @@ public:
 	void SetMilitaryContribution(BOOL on) { m_contribute_military = on; }
 	BOOL GetMilitaryContribution() { return m_contribute_military; }
 
-	
 	void IncrementBuildQueue();
 	sint32 LoadQueue(const MBCHAR *file);
 	sint32 SaveQueue(const MBCHAR *file);
 
-	
 	BuildQueue *GetBuildQueue(void) { return &m_build_queue; }
-
 
 
 	void   CollectResources();
@@ -467,17 +448,16 @@ public:
 	sint32 SubtractAccumulatedFood(sint32 amount);
 
 
-
 	void SetTerrainEmptyRow(const sint32 row_len, sint32 &n, DynamicArray<TerrainValue> &val);
-	void GotoRowStart(const MapPoint &center, const WORLD_DIRECTION d1, 
-	                  const WORLD_DIRECTION d2, const sint32 row_len, 
+	void GotoRowStart(const MapPoint &center, const WORLD_DIRECTION d1,
+	                  const WORLD_DIRECTION d2, const sint32 row_len,
 	                  sint32 &n, DynamicArray<TerrainValue> &val);
 	void GetOpenTerrainValuesRow(sint32 len, MapPoint &pos, sint32 &n, DynamicArray<TerrainValue> &val);
 	void GetOpenTerrainValues(const MapPoint &center, sint32 &n, DynamicArray<TerrainValue> &val);
 	BOOL CityCanHavePopAt(MapPoint &pos) const;
 
 	void UpdateSprite(void);
-	
+
 	BOOL IsWatchful() const;
 	void SetWatchful();
 	void ModifySpecialAttackChance(UNIT_ORDER_TYPE attack, double &chance);
@@ -522,13 +502,11 @@ public:
 	void CalcGoldLoss(const bool projectedOnly, sint32 &gold, sint32 &convertedGold, sint32 &crimeLost) const;
 #endif
 
-	sint32 GetNetCityGold() const { return m_net_gold; } 
-	sint32 GetGrossCityGold() const { return m_gross_gold; } 
-
+	sint32 GetNetCityGold() const { return m_net_gold; }
+	sint32 GetGrossCityGold() const { return m_gross_gold; }
 
 
 	void ResetConquestDistress(double new_distress);
-
 
 	void ImprovementHealUnitsInCity() const;
 	void ImprovementRefuelUnitsInCity() const;
@@ -537,7 +515,6 @@ public:
 	sint32 GetRawMaterials() const;
 	void UseRawMaterials(sint32 amt);
 	BOOL IsConnected(MapPoint &point, uint8* array = NULL, sint32 w = 0, sint32 h = 0);
-
 
 
 	void CalcPollution(void) ;
@@ -552,10 +529,10 @@ public:
 	void InitBeginTurnVariables();
 	void DoTurnCounters();
 	void TryToBuild();
-	sint32 BeginTurn(); 
+	sint32 BeginTurn();
 	void EndTurn();
 
-	sint32 GetNumPop() const; 
+	sint32 GetNumPop() const;
 
 
 
@@ -572,7 +549,7 @@ public:
 
 	uint64 GetBuiltWonders() const { return m_builtWonders; }
 
-	void DestroyCapitol(); 
+	void DestroyCapitol();
 	void SetCapitol(const BOOL delay_registration);
 	void DestroyImprovement(sint32 type);
 	void NewGovernment(sint32 government_type);
@@ -586,11 +563,11 @@ public:
 
 	BOOL ShouldRevolt(const sint32 inciteBonus);
 	void Revolt(sint32 &playerToJoin, BOOL causeIsExternal = FALSE);
-	void TeleportUnits(const MapPoint &pos,  BOOL &revealed_foreign_units, 
+	void TeleportUnits(const MapPoint &pos,  BOOL &revealed_foreign_units,
 	                         BOOL &revealed_unexplored, sint32 foreigner);
 	void StopTradingWith(const PLAYER_INDEX bannedRecipient);
 	Happy *GetHappy(void) { return (m_happy); }
-	
+
 	MBCHAR *GetName(void) { return (m_name); }
 	void SetName(const MBCHAR *name);
 
@@ -600,7 +577,6 @@ public:
 		foodConsumed = (sint32)(m_food_consumed_this_turn);
 	}
 
-	
 	sint32 GetTradeCrime() const { return m_gold_lost_to_crime; }
 	sint32 GetProdCrime() const { return m_production_lost_to_crime; }
 	void GetFoodCrime( sint32 &foodCrime ) const {
@@ -662,7 +638,6 @@ public:
 	void SetIgnoreHappiness(BOOL v) { m_ignore_happiness = v; }
 #endif
 
-
 	void DoUprising(UPRISING_CAUSE cause);
 	void FinishUprising(Army &sa, UPRISING_CAUSE cause);
 	void CleanupUprising(Army &sa);
@@ -698,11 +673,9 @@ public:
 
 	BOOL IsLocalResource( sint32 resource ) const;
 
-	
-	
+
 	bool GetResourceTradeRoute(sint32 resource, TradeRoute & route) const;
 
-	
 	bool IsSellingResourceTo(sint32 resource, Unit & destination) const;
 
 	sint32 GetOvertimeCost();
@@ -724,7 +697,6 @@ public:
 
 	void SetSize(sint32 size);
 
-	
 	void SetImprovements(uint64 improvements) { m_built_improvements = improvements; }
 	void SetWonders(uint64 wonders) { m_builtWonders = wonders; }
 	sint32 GetNumTradeRoutes() const;
@@ -831,14 +803,12 @@ public:
 
 	void BuildFront();
 
-	
 	sint32 GetValue() const;
 
 	sint32 GetSizeIndex() const { return m_sizeIndex; }
 	void MakeCitizen(PopDBIndex type, const MapPoint &center_pos,
 	                 sint32 origOwner);
 
-	
 #if !defined(NEW_RESOURCE_PROCESS)
 	void	GetFullAndPartialRadii(sint32 &fullRadius, sint32 &partRadius) const;
 	double	GetUtilisationRatio(uint32 const squaredDistance) const;
@@ -853,7 +823,6 @@ public:
 	sint32 EntertainerCount() const;
 	sint32 MerchantCount() const;
 	sint32 LaborerCount() const;
-	
 
 #if defined(NEW_RESOURCE_PROCESS)
 	void ComputeSizeIndexes(const sint32 & workers, sint32 & size_index) const;
@@ -861,7 +830,6 @@ public:
 	void ComputeSizeIndexes(const sint32 & workers, sint32 & size_index, sint32 & full_index, sint32 & partial_index) const;
 #endif
 
-	
 	sint32 GetBestSpecialist(const POP_TYPE & type) const;
 
 	void AdjustSizeIndices();
@@ -869,7 +837,6 @@ public:
 	void ChangePopulation(sint32 delta);
 	void FindBestSpecialists();
 
-	
 	BOOL GetUseGovernor() const;
 	void SetUseGovernor(const bool &value);
 
@@ -882,19 +849,15 @@ public:
 	sint32 GetGarrisonComplete() const;
 	void SetGarrisonComplete(const sint32 &value);
 
-	
 	sint8 GetCurrentGarrison() const;
 	void SetCurrentGarrison(const sint8 & value);
 
-	
 	sint8 GetNeededGarrison() const;
 	void SetNeededGarrison(const sint8 & value);
 
-	
 	double GetCurrentGarrisonStrength() const;
 	void SetCurrentGarrisonStrength(const double & value);
 
-	
 	double GetNeededGarrisonStrength() const;
 	void SetNeededGarrisonStrength(const double & value);
 
@@ -931,7 +894,6 @@ public:
 
 	sint32 GetDesiredSpriteIndex(bool justTryLand = false);
 
-	
 	bool IsACopy();
 
 	void   DoSupport(bool projectedOnly);
@@ -945,12 +907,12 @@ public:
 
 	sint32 ComputeProductionLosses(sint32 gross_production, sint32 &crime_loss, sint32 &franchise_loss) const;
 
-	double GetOvercrowding(const CitySizeRecord *rec){ 
-		return rec->GetBaseOvercrowding() + GetBuildingOvercrowdingBonus(); 
+	double GetOvercrowding(const CitySizeRecord *rec){
+		return rec->GetBaseOvercrowding() + GetBuildingOvercrowdingBonus();
 	};
 
-	sint32 GetMaxPop(const CitySizeRecord *rec){ 
-		return rec->GetBaseMaxPop() + GetBuildingMaxPopIncrease(); 
+	sint32 GetMaxPop(const CitySizeRecord *rec){
+		return rec->GetBaseMaxPop() + GetBuildingMaxPopIncrease();
 	};
 
 	sint32 CrimeLoss(sint32 gross) const;
@@ -1010,5 +972,3 @@ public:
 
 uint32 CityData_CityData_GetVersion(void);
 #endif
-
-

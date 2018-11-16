@@ -1,4 +1,3 @@
-
 #ifdef HAVE_PRAGMA_ONCE
 #pragma once
 #endif
@@ -97,7 +96,7 @@ public:
 	c3_ListBox *AdvanceList( void ) { return m_advanceList; }
 	c3_Button *PlusButton( void ) { return m_plusButton; }
 	c3_Button *MinusButton( void ) { return m_minusButton; }
-	
+
 	Chart *Tree( void ) { return m_tree; }
 
 	MBCHAR *GetString( sint32 index ) { return m_string->GetString(index); }
@@ -107,26 +106,22 @@ public:
 class KnowledgeListItem: public c3_ListItem
 {
 public:
-	
-	
+
 	KnowledgeListItem(AUI_ERRCODE *retval, sint32 index, MBCHAR *ldlBlock);
 
-	
-	
+
 	virtual void Update(void);
 
-	
 	sint32	GetIndex(void) { return m_index; }
 
 protected:
 	KnowledgeListItem() : c3_ListItem() {}
 
-	
-	
+
 	AUI_ERRCODE InitCommonLdl(sint32 index, MBCHAR *ldlBlock);
-	
+
 public:
-	
+
 	virtual sint32 Compare(c3_ListItem *item2, uint32 column);
 
 private:
@@ -136,26 +131,22 @@ private:
 class EmbassyListItem: public c3_ListItem
 {
 public:
-	
-	
+
 	EmbassyListItem(AUI_ERRCODE *retval, sint32 index, MBCHAR *ldlBlock);
 
-	
-	
+
 	virtual void Update(void);
 
-	
 	sint32	GetIndex(void) { return m_index; }
 
 protected:
 	EmbassyListItem() : c3_ListItem() {}
 
-	
-	
+
 	AUI_ERRCODE InitCommonLdl(sint32 index, MBCHAR *ldlBlock);
-	
+
 public:
-	
+
 	virtual sint32 Compare(c3_ListItem *item2, uint32 column);
 
 private:
@@ -165,28 +156,24 @@ private:
 class AdvanceListItem: public c3_ListItem
 {
 public:
-	
-	
+
 	AdvanceListItem(AUI_ERRCODE *retval, sint32 index, MBCHAR *ldlBlock);
 	~AdvanceListItem();
 
-	
-	
+
 	virtual void Update(void);
 
-	
 	sint32	GetIndex(void) { return m_index; }
 	sint32	GetBranchVal( void ) { return m_branchVal; }
 
 protected:
 	AdvanceListItem() : c3_ListItem() {}
 
-	
-	
+
 	AUI_ERRCODE InitCommonLdl(sint32 index, MBCHAR *ldlBlock);
-	
+
 public:
-	
+
 	virtual sint32 Compare(c3_ListItem *item2, uint32 column);
 
 private:
@@ -194,13 +181,12 @@ private:
 	sint32	m_branchVal;
 };
 
-
 sint32 knowledgewin_UpdateFromSwitch( void );
 sint32 knowledgewin_InitGraphicTrim( MBCHAR *windowBlock );
 sint32 knowledgewin_Initialize( void );
 sint32 knowledgewin_Cleanup( void );
 
-class SW_UpdateAction : public c3_UpdateAction 
+class SW_UpdateAction : public c3_UpdateAction
 {
 public:
 	SW_UpdateAction(bool all = false)

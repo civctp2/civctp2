@@ -1,6 +1,3 @@
-
-
-
 #ifndef __C3_CHECKBOX_H__
 #define __C3_CHECKBOX_H__
 
@@ -13,11 +10,10 @@
 
 class aui_Surface;
 
-
 class c3_CheckBox : public aui_Switch, public PatternBase
 {
 public:
-	
+
 	c3_CheckBox(
 		AUI_ERRCODE *retval,
 		uint32 id,
@@ -55,5 +51,4 @@ private:
 	sint32	m_bevelWidth;
 };
 
-
-#endif 
+#endif

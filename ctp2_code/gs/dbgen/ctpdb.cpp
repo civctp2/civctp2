@@ -11,7 +11,7 @@
 //
 // THIS FILE IS NOT GENERATED OR SUPPORTED BY ACTIVISION.
 //
-// This material has been developed at apolyton.net by the Apolyton CtP2 
+// This material has been developed at apolyton.net by the Apolyton CtP2
 // Source Code Project. Contact the authors at ctp2source@apolyton.net.
 //
 //----------------------------------------------------------------------------
@@ -32,8 +32,8 @@
 // Modifications from the original Activision code:
 //
 // - Variable 'or' renamed, because this a reserved symbol (same as ||) now.
-// - Modifed db_add_bit_pair function to allow bit pairs to have default 
-//   values so that when two records are merged, only the bit is merged 
+// - Modifed db_add_bit_pair function to allow bit pairs to have default
+//   values so that when two records are merged, only the bit is merged
 //   in that is set. - Sep. 28th 2004 Martin Gühmann
 // - Portability improved (ctplinuxfan).
 //
@@ -110,7 +110,7 @@ static int copy_file(char *srcFName, char *dstFName)
 	       ) > 0) {
 		wrote = fwrite((void *)&buf, sizeof(char),
 		               read, outFile);
-		
+
 	}
 
 	fclose(outFile);
@@ -147,7 +147,6 @@ void db_start_record(char *name)
 {
 	g_record = new RecordDescription(name);
 }
-
 
 FILE *db_open_file(const char *filename)
 {
@@ -210,7 +209,6 @@ void db_maybe_copy(char *newFilePath)
 	chdir(db_get_code_directory());
 
 	char oldFilePath[_MAX_PATH];
-
 
 	strcpy(oldFilePath, newFilePath);
 	char *dot = strrchr(oldFilePath, '.');
@@ -287,7 +285,7 @@ void db_end_record(char *name)
 {
 	char filename[1024];
 	FILE *outfile = NULL;
-	
+
 	sprintf(filename, "%s%s%sRecord.h.new",
 	        db_get_code_directory(), FILE_SEP, name);
 
@@ -300,10 +298,8 @@ void db_end_record(char *name)
 
 	fclose(outfile);
 
-	
 	db_maybe_copy(strrchr(filename, FILE_SEPC) + 1);
 
-	
 	sprintf(filename, "%s%s%sRecord.cpp.new",
 	        db_get_code_directory(), FILE_SEP, name);
 
@@ -313,7 +309,7 @@ void db_end_record(char *name)
 		return;
 
 	g_record->ExportCode(outfile);
-	
+
 	fclose(outfile);
 
 	db_maybe_copy(strrchr(filename, FILE_SEPC) + 1);
@@ -471,7 +467,7 @@ void db_add_bit_pair(struct namelist *list, struct fieldsize *size, struct bitpa
 		free(list);
 		list = next;
 	}
-}		
+}
 
 void db_add_grouped_bits(char *groupName, struct namelist *list)
 {

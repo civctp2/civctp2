@@ -1,29 +1,16 @@
-
-
-
-
-
-
-
-
-
-
-
 #ifndef __AUI_DIRECTSURFACE_H__
 #define __AUI_DIRECTSURFACE_H__
 
 #ifdef __AUI_USE_DIRECTX__
 
-
 #include "aui_surface.h"
 #include "aui_directx.h"
-
 
 
 class aui_DirectSurface : public aui_Surface, public aui_DirectX
 {
 public:
-	
+
 	aui_DirectSurface(
 		AUI_ERRCODE *retval,
 		sint32 width,
@@ -49,28 +36,23 @@ public:
 
 	virtual uint32 SetChromaKey( uint32 color );
 
-	
 	virtual AUI_ERRCODE Lock( RECT *rect, LPVOID *buffer, DWORD flags );
 	virtual AUI_ERRCODE Unlock( LPVOID buffer );
 
-	
 	virtual AUI_ERRCODE GetDC( HDC *hdc );
 	virtual AUI_ERRCODE ReleaseDC( HDC hdc );
 
-	
 	LPDIRECTDRAWSURFACE	DDS( void ) const { return m_lpdds; }
 	BOOL				IsDCGot( void ) const { return m_dcIsGot; }
 
-	
 	virtual BOOL IsOK( void ) const;
 
 	static uint32 m_directSurfaceClassId;
 
 protected:
-	LPDIRECTDRAWSURFACE	m_lpdds;	
+	LPDIRECTDRAWSURFACE	m_lpdds;
 };
 
+#endif
 
-#endif 
-
-#endif 
+#endif

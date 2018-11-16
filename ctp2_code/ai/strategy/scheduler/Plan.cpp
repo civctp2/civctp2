@@ -29,16 +29,16 @@
 //
 // - Changed the > and < operator  (to change the Sort method see Sort_Matches) - Calvitix
 //   instead of only looking for the matching value, the new operator first
-//   compare the Goal Raw-priority. If it is equal, then compare matching 
+//   compare the Goal Raw-priority. If it is equal, then compare matching
 //   value. It has the advantage to give the possibility for high priority
-//   goal that demands many units to be considered. 
-//   For example :  3 units available, 
-//                  3 Goals : 
+//   goal that demands many units to be considered.
+//   For example :  3 units available,
+//                  3 Goals :
 //                  GOAL1  priority 50000, demands 2 units to be satisfied
 //                  GOAL2  priority 40000, demands 1 unit to be satisfied
 //                  GOAL3  priority 30000, demands 1 unit to be satisfied
 //
-//      the matches are : 
+//      the matches are :
 //
 //                  GOAL1 <-> UNIT1   52000
 //                  GOAL1 <-> UNIT2   49000
@@ -50,10 +50,10 @@
 //                  GOAL3 <-> UNIT2   53000
 //                  GOAL3 <-> UNIT3   55000
 //
-//      Original Sort_matches and agent committing : 
+//      Original Sort_matches and agent committing :
 //
 //              GOAL3  ->  UNIT3   --> OK
-//              GOAL2  ->  UNIT1   --> OK     
+//              GOAL2  ->  UNIT1   --> OK
 //              GOAL1  ->  FAILED to Satisfy, and it has the greatest priority !!!!
 //
 //
@@ -62,7 +62,7 @@
 //              GOAL1  -> UNIT1
 //                     -> UNIT2    --> OK
 //              GOAL2  -> UNIT3    --> OK
-//              GOAL3  -> FAILED to Satisfy       
+//              GOAL3  -> FAILED to Satisfy
 //
 // - Added an method that determines if the matches can be reevaluated)
 //   (ie the agent can be rollbacked and eventually be used for another goal)
@@ -154,7 +154,7 @@ Plan & Plan::operator = (Plan const & plan)
 	Set_Goal(plan.m_the_goal);	    // sets m_the_goal, uses m_the_squad
 	m_matching_value    = plan.m_matching_value;
 	m_matches           = plan.m_matches;
-	
+
 	return *this;
 }
 
@@ -174,9 +174,9 @@ Plan & Plan::operator = (Plan const & plan)
 //
 //----------------------------------------------------------------------------
 Plan::~Plan()
-{ 
+{
     Agent_Match_List().swap(m_matches);
-} 
+}
 
 //----------------------------------------------------------------------------
 //
@@ -189,24 +189,24 @@ Plan::~Plan()
 //
 // Globals    : -
 //
-// Returns    : bool    : This object has lower/higher priority than the object 
+// Returns    : bool    : This object has lower/higher priority than the object
 //                        to compare against.
 //
-// Remark(s)  : The order is determined by the priority of the goal, with 
+// Remark(s)  : The order is determined by the priority of the goal, with
 //              matching value as tie breaker.
 //
 //----------------------------------------------------------------------------
 bool Plan::operator < (Plan const & plan) const
 {
-    Utility const   myPriority      = m_the_goal 
-                                      ? m_the_goal->Get_Raw_Priority() 
+    Utility const   myPriority      = m_the_goal
+                                      ? m_the_goal->Get_Raw_Priority()
                                       : Goal::BAD_UTILITY;
-    Utility const   otherPriority   = plan.m_the_goal 
-                                      ? plan.m_the_goal->Get_Raw_Priority() 
+    Utility const   otherPriority   = plan.m_the_goal
+                                      ? plan.m_the_goal->Get_Raw_Priority()
                                       : Goal::BAD_UTILITY;
 
     return (myPriority < otherPriority) ||
-           ((myPriority == otherPriority) && 
+           ((myPriority == otherPriority) &&
             (m_matching_value < plan.m_matching_value)
            );
 }
@@ -227,10 +227,10 @@ bool Plan::operator > (Plan const & plan) const
 //
 // Globals    : -
 //
-// Returns    : bool    : This object is equal to/different from the object 
+// Returns    : bool    : This object is equal to/different from the object
 //                        to compare against.
 //
-// Remark(s)  : Equality is defined is having the same squad and the same 
+// Remark(s)  : Equality is defined is having the same squad and the same
 //              goal.
 //
 //----------------------------------------------------------------------------
@@ -245,26 +245,23 @@ bool Plan::operator!= (Plan const & plan) const
 	return !(operator == (plan));
 }
 
-
 GOAL_TYPE Plan::Get_Goal_Type() const
 {
 	if (m_the_goal)	{
 		return m_the_goal->Get_Goal_Type();
 	}
 	else {
-		
+
 		Assert(false);
 		return GOAL_TYPE_NULL;
 	}
 }
 
-
 bool Plan::Plan_Is_Needed_And_Valid() const
-{ 
+{
     return m_the_goal  &&
            m_the_squad && (m_the_squad->Get_Num_Agents() > 0);
-}	
-
+}
 
 Utility Plan::Compute_Matching_Value()
 {
@@ -274,22 +271,22 @@ Utility Plan::Compute_Matching_Value()
 	Assert(m_the_goal && m_the_squad);
     if (m_the_goal && m_the_squad)
     {
-	    for 
-        (	
+	    for
+        (
             Agent_Match_List::iterator match_iter = m_matches.begin();
 		    match_iter != m_matches.end();
 		    ++match_iter
-        ) 
+        )
         {
-	        Agent_ptr agent_ptr = *(match_iter->squad_index); 
+	        Agent_ptr agent_ptr = *(match_iter->squad_index);
 		    match_iter->value   = m_the_goal->Compute_Matching_Value(agent_ptr);
-		    
-            if (match_iter->value > Goal::BAD_UTILITY) 
+
+            if (match_iter->value > Goal::BAD_UTILITY)
             {
 			    accumulated_matching_value += match_iter->value;
 			    ++found_agents;
 		    }
-	    } 
+	    }
     }
 
 	if (found_agents > 0)
@@ -298,19 +295,17 @@ Utility Plan::Compute_Matching_Value()
         m_matches.sort(std::greater<Agent_Match>());
 	}
 	else
-    {		
+    {
         m_matching_value = Goal::BAD_UTILITY;
     }
-	
+
 	return m_matching_value;
 }
-
 
 Utility Plan::Get_Matching_Value() const
 {
 	return m_matching_value;
 }
-
 
 void Plan::Set_Goal(Goal_ptr goal)
 {
@@ -319,12 +314,12 @@ void Plan::Set_Goal(Goal_ptr goal)
 	Assert(m_the_goal && m_the_squad);
 	if (m_the_goal && m_the_squad)
 	{
-		for 
-        ( 		
+		for
+        (
             Agent_Match_List::iterator match_iter = m_matches.begin();
             match_iter != m_matches.end();
 		    ++match_iter
-        ) 
+        )
 	    {
             match_iter->goal_index  = m_the_goal->Get_Agent_List().end();
             match_iter->committed   = false;
@@ -332,18 +327,16 @@ void Plan::Set_Goal(Goal_ptr goal)
 	}
 }
 
-
 Goal_ptr Plan::Get_Goal() const
 {
 	return m_the_goal;
 }
 
-
 void Plan::Set_Squad(Squad_ptr squad)
 {
 	m_the_squad = squad;
 
-	if (m_the_squad) 
+	if (m_the_squad)
     {
 		Agent_List & agent_list = m_the_squad->Get_Agent_List();
 
@@ -351,16 +344,16 @@ void Plan::Set_Squad(Squad_ptr squad)
 
 		Agent_Match_List::iterator match_iter       = m_matches.begin();
 
-		for 
+		for
         (
             Agent_List::const_iterator agent_iter   = agent_list.begin();
 			agent_iter != agent_list.end();
-			++agent_iter        
-        ) 
+			++agent_iter
+        )
         {
 			match_iter->value           = Goal::BAD_UTILITY;
 			match_iter->squad_index     = agent_iter;
-			
+
 			if (m_the_goal)
 			{
 				match_iter->goal_index  = m_the_goal->Get_Agent_List().end();
@@ -376,12 +369,10 @@ void Plan::Set_Squad(Squad_ptr squad)
     }
 }
 
-
 Squad_ptr Plan::Get_Squad() const
 {
 	return m_the_squad;
 }
-
 
 sint32 Plan::Commit_Agents()
 {
@@ -399,27 +390,25 @@ sint32 Plan::Commit_Agents()
 		AI_DPRINTF(k_DBG_SCHEDULER_DETAIL, m_the_goal->Get_Player_Index(), m_the_goal->Get_Goal_Type(), -1,
 			("\t\tNO AGENTS COMMITTED: (goal: %x squad: %x)\n",m_the_goal, m_the_squad));
 
-        
         return 0;
     }
 
 	sint32 committed_agents = 0;
-	
-    for 
+
+    for
     (
         Agent_Match_List::iterator match_iter   = m_matches.begin();
 		match_iter != m_matches.end() && !m_the_goal->Is_Satisfied();
 	    ++match_iter
-    ) 
+    )
     {
 	    Agent_ptr agent_ptr = (* (*match_iter).squad_index );
 
-		
 		if (match_iter->value > Goal::BAD_UTILITY &&
 			!agent_ptr->Get_Is_Used() &&
 			agent_ptr->Get_Can_Be_Executed())
 		{
-				
+
 #ifdef _DEBUG_SCHEDULER
 			CTPGoal_ptr ctpgoal_ptr = (CTPGoal_ptr) m_the_goal;
 			if (ctpgoal_ptr->ReferencesAgent((const CTPAgent_ptr) agent_ptr))
@@ -428,8 +417,7 @@ sint32 Plan::Commit_Agents()
 			}
 #endif // _DEBUG_SCHEDULER
 
-			
-			bool const committed = 
+			bool const committed =
                 m_the_goal->Commit_Agent(agent_ptr, match_iter->goal_index);
 
 			if (committed)
@@ -440,23 +428,21 @@ sint32 Plan::Commit_Agents()
 			}
 
 #ifdef _DEBUG_SCHEDULER
-			
+
 			m_the_goal->Validate();
 #endif // _DEBUG_SCHEDULER
 
-		} 
+		}
 
-	} 
-
+	}
 
 #ifdef _DEBUG_SCHEDULER
-	
+
 	if (!m_the_goal->Validate())
 	{
 		Assert(0);
 	}
 #endif // _DEBUG_SCHEDULER
-
 
 #ifdef _DEBUG
 	CTPGoal_ptr stgoal_ptr = (CTPGoal_ptr) m_the_goal;
@@ -465,12 +451,12 @@ sint32 Plan::Commit_Agents()
 	bool debug_plan;
 	if (CtpAiDebug::IsDebugGoalTypeSet())
 	{
-		
+
 		debug_plan = CtpAiDebug::DebugLogCheck(-1, m_the_goal->Get_Goal_Type(), -1);
 	}
 	else if (CtpAiDebug::IsDebugArmyIdSet())
 	{
-		
+
 		debug_plan = false;
 		for (agent_iter = agent_list.begin(); agent_iter != agent_list.end(); agent_iter++)
 		{
@@ -483,24 +469,23 @@ sint32 Plan::Commit_Agents()
 	}
 	else
 	{
-		
+
 		debug_plan = CtpAiDebug::DebugLogCheck(m_the_goal->Get_Player_Index(), -1, -1);
 	}
 
 	int mask;
-	
-	if ( debug_plan && committed_agents > 0 ) 
+
+	if ( debug_plan && committed_agents > 0 )
 	{
 		if (stgoal_ptr->Is_Satisfied() || stgoal_ptr->Is_Execute_Incrementally())
 			mask = k_DBG_SCHEDULER;
 		else
 			mask = k_DBG_SCHEDULER_DETAIL;
-		
-		
+
 		DPRINTF(mask, ("\t\tEXECUTING GOAL: (goal: %x squad: %x)\n",stgoal_ptr, m_the_squad));
 		DPRINTF(mask, ("\t\t\t"));
 		stgoal_ptr->Log_Debug_Info(mask);
-		
+
 		DPRINTF(mask, ("\t\tSquad:\n"));
 		m_the_squad->Log_Debug_Info(mask);
 	}
@@ -508,7 +493,6 @@ sint32 Plan::Commit_Agents()
 
 	return committed_agents;
 }
-
 
 GOAL_RESULT Plan::Execute_Task()
 {
@@ -530,7 +514,6 @@ bool Plan::Commited_Agents_Need_Orders() const
 	sint16 rollback_agents = 0;
     CTPAgent_ptr agent_ptr;
 
-	
 	CTPGoal_ptr ctpgoal_ptr = (CTPGoal_ptr) m_the_goal;
 
 	Agent_Match_List::const_iterator match_iter;
@@ -538,7 +521,6 @@ bool Plan::Commited_Agents_Need_Orders() const
 		 match_iter != m_matches.end();
 		 match_iter++) {
 
-		
 		agent_ptr = (CTPAgent_ptr) *(match_iter->squad_index);
 
 		if (match_iter->committed)
@@ -546,9 +528,9 @@ bool Plan::Commited_Agents_Need_Orders() const
 
 				if (agent_ptr->Get_Army()->NumOrders() <= 0)
 					return true;
-			} 
+			}
 
-	} 
+	}
 
 	return false;
 }
@@ -575,13 +557,13 @@ sint32 Plan::Rollback_All_Agents()
     if (m_the_goal && m_the_squad)
     {
 	    CTPGoal_ptr ctpgoal_ptr = static_cast<CTPGoal_ptr>(m_the_goal);
-	    
-	    for 
+
+	    for
         (
             Agent_Match_List::iterator match_iter = m_matches.begin();
 		    match_iter != m_matches.end();
 		    ++match_iter
-        ) 
+        )
         {
             CTPAgent_ptr agent_ptr = (CTPAgent_ptr) *(match_iter->squad_index);
 
@@ -592,17 +574,16 @@ sint32 Plan::Rollback_All_Agents()
 			    match_iter->value       = Goal::BAD_UTILITY;
 			    agent_ptr->Set_Is_Used(false);
 			    ++rollback_agents;
-		    } 
+		    }
 		    else
 		    {
 			    Assert(ctpgoal_ptr->Get_Agent_List().end() == match_iter->goal_index);
 		    }
         }
-	} 
-	
+	}
+
 	return rollback_agents;
 }
-
 
 void Plan::Move_All_Agents(Squad_ptr new_squad)
 {
@@ -612,18 +593,16 @@ void Plan::Move_All_Agents(Squad_ptr new_squad)
 	Agent_ptr agent_ptr;
     Agent_List::const_iterator agent_iter;
 
-	
 	CTPGoal_ptr ctpgoal_ptr = (CTPGoal_ptr) m_the_goal;
 
 	Agent_Match_List::iterator match_iter;
     match_iter = m_matches.begin();
 	while (match_iter != m_matches.end()) {
 
-        
 		if (match_iter->committed)
 			{
 #ifdef _DEBUG
-				
+
 				CTPAgent_ptr ctpagent_ptr = (CTPAgent_ptr) (*((*match_iter).goal_index));
 				if (!g_theArmyPool->IsValid(ctpagent_ptr->Get_Army()))
 				{
@@ -633,72 +612,63 @@ void Plan::Move_All_Agents(Squad_ptr new_squad)
 #endif // _DEBUG
 				agent_ptr = ctpgoal_ptr->Rollback_Agent((*match_iter).goal_index);
 
-                
 
-				
+
+
 				new_squad->Add_Agent(agent_ptr);
 
-				
 				match_iter->committed = false;
 
-				
 				agent_ptr->Set_Is_Used(false);
 
-                
                 agent_iter = match_iter->squad_index;
 
-                
-                
-                match_iter++; 
 
-                
+                match_iter++;
+
 				m_the_squad->Remove_Agent(agent_iter, false);
-			} 
+			}
         else
 		{
-			
+
 			Assert(ctpgoal_ptr->Get_Agent_List().end() == match_iter->goal_index);
 
-            
-            match_iter++; 
+            match_iter++;
 		}
-	} 
+	}
 
 #ifdef _DEBUG_SCHEDULER
-	
+
 	ctpgoal_ptr->Validate();
 #endif // _DEBUG_SCHEDULER
 }
-
 
 bool Plan::Remove_Agent_Reference(const Agent_List::const_iterator & agent_iter)
 {
 	Assert(m_the_goal);
 	Assert(m_the_squad);
-	
+
 	CTPGoal_ptr ctpgoal_ptr	= static_cast<CTPGoal_ptr>(m_the_goal);
 
-	for 
+	for
     (
         Agent_Match_List::iterator  match_iter  = m_matches.begin();
         match_iter != m_matches.end();
         ++match_iter
-    ) 
+    )
 	{
-        
-        if (match_iter->squad_index == agent_iter) 
+
+        if (match_iter->squad_index == agent_iter)
 		{
-            if (match_iter->committed) 
+            if (match_iter->committed)
             {
                 if (ctpgoal_ptr)
                 {
 				    ctpgoal_ptr->Rollback_Agent(match_iter->goal_index);
                 }
 
-				
 				(*agent_iter)->Set_Is_Used(false);
-	
-				
+
 #ifdef _DEBUG_SCHEDULER
 				if (ctpgoal_ptr->ReferencesAgent((const CTPAgent_ptr) *agent_iter))
 				{
@@ -706,11 +676,10 @@ bool Plan::Remove_Agent_Reference(const Agent_List::const_iterator & agent_iter)
 				}
 #endif // _DEBUG_SCHEDULER
             }
-			else 
+			else
 			{
 				Assert(ctpgoal_ptr->Get_Agent_List().end() == match_iter->goal_index);
 
-				
 #ifdef _DEBUG_SCHEDULER
 				if (ctpgoal_ptr->ReferencesAgent((const CTPAgent_ptr) *agent_iter))
 				{
@@ -722,28 +691,26 @@ bool Plan::Remove_Agent_Reference(const Agent_List::const_iterator & agent_iter)
             match_iter = m_matches.erase(match_iter);
 
             return true;
-        } 
-	} 
+        }
+	}
 
 	return false;
 }
 
 
-
 bool Plan::Agent_Committed(const Agent_ptr agent_ptr) const
 {
-    for  
+    for
     (
 	    Agent_Match_List::const_iterator match_iter = m_matches.begin();
         match_iter != m_matches.end();
         ++match_iter
-    ) 
+    )
     {
 		Agent_List::const_iterator goal_index = match_iter->goal_index;
 
 		Assert(!match_iter->committed || goal_index != m_the_goal->Get_Agent_List().end());
 
-        
         if (match_iter->committed && *goal_index == agent_ptr)
 		{
             return true;

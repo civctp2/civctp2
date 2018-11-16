@@ -2,7 +2,7 @@
 //
 // Project      : Call To Power 2
 // File type    : C++ header
-// Description  : 
+// Description  :
 //
 //----------------------------------------------------------------------------
 //
@@ -10,20 +10,20 @@
 //
 // THIS FILE IS NOT GENERATED OR SUPPORTED BY ACTIVISION.
 //
-// This material has been developed at apolyton.net by the Apolyton CtP2 
+// This material has been developed at apolyton.net by the Apolyton CtP2
 // Source Code Project. Contact the authors at ctp2source@apolyton.net.
 //
 //----------------------------------------------------------------------------
 //
 // Compiler flags
-// 
-// _MSC_VER		
+//
+// _MSC_VER
 // - Compiler version (for the Microsoft C++ compiler only)
 //
 // Note: For the blocks with _MSC_VER preprocessor directives, the following
 //       is implied: the (_MSC_VER) preprocessor directive lines, and the blocks
-//       that are inactive for _MSC_VER value 1200 are modified Apolyton code. 
-//       The blocks that are inactiThe blocks that are active for _MSC_VER value 
+//       that are inactive for _MSC_VER value 1200 are modified Apolyton code.
+//       The blocks that are inactiThe blocks that are active for _MSC_VER value
 //       1200 are the original Activision code.
 //
 //----------------------------------------------------------------------------
@@ -40,7 +40,6 @@
 
 #ifndef __STRING_DB_H__
 #define __STRING_DB_H__ 1
-
 
 //----------------------------------------------------------------------------
 // Library dependencies
@@ -72,17 +71,17 @@ extern	StringDB *	g_theStringDB;
 class StringDB
 {
 public:
-	StringDB(); 
-    virtual ~StringDB(); 
+	StringDB();
+    virtual ~StringDB();
 
 	// Modifiers
 	bool					InsertStr
 	(
-		MBCHAR const *			add_id, 
+		MBCHAR const *			add_id,
 		MBCHAR const *			new_text
-	); 
+	);
 	bool					Parse(MBCHAR * filename);
-	
+
 	// Accessors
 	MBCHAR *				GetIdStr
 	(
@@ -101,10 +100,9 @@ public:
 		MBCHAR **				new_text
 	) const;
 
-
 private:
 	std::vector<StringRecord *> m_all;	// a flattened list version of m_head
-	std::vector<StringRecord *> m_head;	
+	std::vector<StringRecord *> m_head;
 		// hash vector of B-trees of lexicographically ordered strings
 
 	bool					AddStrNode
@@ -115,9 +113,9 @@ private:
 		StringRecord * &		newPtr
 	);
 	void					AssignIndex(StringRecord * & ptr);
-	void					Btree2Array(void); 
+	void					Btree2Array(void);
 	StringRecord * &		GetHead(MBCHAR const * id);
-	StringRecord /*const*/ * const &	
+	StringRecord /*const*/ * const &
 							GetHead(MBCHAR const * id) const;
 	bool					GetIndexNode
 	(

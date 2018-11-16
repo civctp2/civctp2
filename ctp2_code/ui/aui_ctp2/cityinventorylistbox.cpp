@@ -65,7 +65,6 @@
 extern	ControlPanelWindow	*g_controlPanel;
 extern	Player				**g_player;
 extern	DebugWindow			*g_debugWindow;
- 
 
 CityInventoryListBox::CityInventoryListBox(AUI_ERRCODE *retval,
 			uint32 id,
@@ -121,16 +120,16 @@ sint32 CityInventoryListBox::FillInventoryBox(const Unit &unit)
 			RemoveItemByIndex(i);
 		}
 	} else {
-		for (i = NumItems()-1;i >= 0;i--) 
+		for (i = NumItems()-1;i >= 0;i--)
 			RemoveItemByIndex(i);
 
 		m_unit = &unit;
-		
+
 		uint64 improvements = unit.GetImprovements();
 		for(i = 0 ; i < g_theBuildingDB->NumRecords(); i++) {
 			if(improvements & ((uint64)1 << (uint64)i)) {
 				sprintf(str, "%s    %i", g_theStringDB->GetNameStr(g_theBuildingDB->Get(i)->m_name),g_theBuildingDB->Get(i)->GetUpkeep());
-				
+
 				item = new StaticTextItem(
 					&errcode,
 					i,
@@ -146,7 +145,6 @@ sint32 CityInventoryListBox::FillInventoryBox(const Unit &unit)
 			}
 		}
 
-		
 		uint64 wonders = unit.GetData()->GetCityData()->GetBuiltWonders();
 		for(i = 0 ; i < g_theWonderDB->NumRecords(); i++) {
 			if(wonders & ((uint64)1 << (uint64)i)) {
@@ -250,7 +248,7 @@ void CityInventoryListBox::UpdateInventoryBox( const Unit &unit )
 				AddItem( (aui_Item *)item );
 		}
 	}
-	
+
 	n = g_theBuildingDB->NumRecords();
 	for(i = 0; i < n; i++) {
 		const BuildingRecord *rec = g_theBuildingDB->Get(i);
@@ -339,9 +337,7 @@ sint32 CityInventoryListBox::UpdateImage( const Unit &unit )
 		bn = bq->GetHead();
 	}
 
-
 	if (text) {
-
 
 
 		sprintf(str,"");
@@ -351,24 +347,20 @@ sint32 CityInventoryListBox::UpdateImage( const Unit &unit )
 	else if (bn) {
 
 
-
 		sint32 completed = bq->GetPercentCompleted(unit.GetData()->GetCityData()->GetStoredCityProduction());
 
 		if (bn->m_category == k_GAME_OBJ_TYPE_IMPROVEMENT) {
 			sprintf(str, "%s", g_theStringDB->GetNameStr(g_theBuildingDB->Get(bn->m_type)->m_name));
 
-
 		}
 		else if (bn->m_category == k_GAME_OBJ_TYPE_UNIT) {
 			sprintf(str, "%s", g_theStringDB->GetNameStr(g_theUnitDB->Get(bn->m_type)->m_name));
-
 
 		}
 
 	}
 
 	else {
-
 
 		sprintf(str,"");
 
@@ -398,7 +390,6 @@ void CityInventoryListBox::CutBuilding( const Unit &unit)
 	}
 
 	FillInventoryBox(unit);
-
 
 
 }

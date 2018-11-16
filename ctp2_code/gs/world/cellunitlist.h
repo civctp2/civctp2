@@ -10,20 +10,20 @@
 //
 // THIS FILE IS NOT GENERATED OR SUPPORTED BY ACTIVISION.
 //
-// This material has been developed at apolyton.net by the Apolyton CtP2 
+// This material has been developed at apolyton.net by the Apolyton CtP2
 // Source Code Project. Contact the authors at ctp2source@apolyton.net.
 //
 //----------------------------------------------------------------------------
 //
 // Compiler flags
-// 
-// _MSC_VER		
+//
+// _MSC_VER
 // - Compiler version (for the Microsoft C++ compiler only)
 //
 // Note: For the blocks with _MSC_VER preprocessor directives, the following
 //       is implied: the (_MSC_VER) preprocessor directive lines, and the blocks
-//       that are inactive for _MSC_VER value 1200 are modified Apolyton code. 
-//       The blocks that are inactiThe blocks that are active for _MSC_VER value 
+//       that are inactive for _MSC_VER value 1200 are modified Apolyton code.
+//       The blocks that are inactiThe blocks that are active for _MSC_VER value
 //       1200 are the original Activision code.
 //
 //----------------------------------------------------------------------------
@@ -56,7 +56,6 @@ class CivArchive;
 #define k_CULF_CAN_SPACE_LAND 0x08
 #define k_CULF_IN_SPACE       0x10
 
-
 #define k_CULF_EXECUTED_THIS_TURN 0x80
 
 class CellUnitList
@@ -67,7 +66,6 @@ public:
 	uint32 m_moveIntersection;
 	uint8 m_flags;
 
-	
 	sint32 m_nElements;
 
 	CellUnitList() {m_nElements = 0;}
@@ -102,7 +100,7 @@ public:
 		Assert(i < m_nElements);
 		return m_array[i];
 	}
-	
+
 	void Clear() { m_nElements = 0; }
 
 	const sint32 Num() const { if(!this) return 0; else return m_nElements; }
@@ -123,7 +121,7 @@ public:
 	BOOL IsEnemy(Unit defender) const;
 	BOOL IsEnemy(CellUnitList &defender) const;
 	BOOL CanAtLeastOneCaptureCity() const;
-    BOOL CanBeExpelled(); 
+    BOOL CanBeExpelled();
 
 	BOOL IsVisible(PLAYER_INDEX player) const;
 	bool GetTopVisibleUnitOfMoveType
@@ -137,7 +135,7 @@ public:
 	(
 		PLAYER_INDEX const	looker
 	) const;
-	
+
 	BOOL CanBeSued() const;
 	BOOL ExertsZOC() const;
 
@@ -151,8 +149,8 @@ public:
 						 BOOL &alliedCity);
 	BOOL IsMovePointsEnough(const double cost) const;
 	BOOL IsMovePointsEnough(const MapPoint &pos);
-    BOOL GetMovementTypeAir() const; 
-	bool GetMovementTypeLand() const; 
+    BOOL GetMovementTypeAir() const;
+	bool GetMovementTypeLand() const;
 	BOOL CanBeCargoPodded() const;
 	BOOL CanSpaceLand() const;
 	BOOL CanSpaceLaunch() const;
@@ -160,17 +158,15 @@ public:
 
 	void UpdateMoveIntersection();
 
-	
-	void ComputeStrength(double & attack, 
-						 double & defense, 
-						 double & ranged, 
-						 sint16 & defend_unit_count, 
+	void ComputeStrength(double & attack,
+						 double & defense,
+						 double & ranged,
+						 sint16 & defend_unit_count,
 						 sint16 & ranged_unit_count,
 						 double & land_bombard,
 						 double & water_bombard,
 						 double & air_bombard) const;
 
-	
 	double GetAverageHealthPercentage();
 };
 

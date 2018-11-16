@@ -4,27 +4,23 @@
 #ifndef __TEXTTABLE_H__
 #define __TEXTTABLE_H__
 
-
 #include "aui_listbox.h"
 #include "patternbase.h"
 
-
 class aui_Surface;
-class aui_Static;	
+class aui_Static;
 class TextSwitch;
 
-
-#define k_TEXTTABLE_MAXTEXT			256		
-#define k_TEXTTABLE_MAXITEMS		200		
-#define k_TEXTTABLE_MAXHEADERS		20		
-#define k_TEXTTABLE_LDL_COLUMNS		"columns"	
-#define k_TEXTTABLE_LDL_TEXTSIZE	"textsize"	
-
+#define k_TEXTTABLE_MAXTEXT			256
+#define k_TEXTTABLE_MAXITEMS		200
+#define k_TEXTTABLE_MAXHEADERS		20
+#define k_TEXTTABLE_LDL_COLUMNS		"columns"
+#define k_TEXTTABLE_LDL_TEXTSIZE	"textsize"
 
 class TextTable : public aui_ListBox, public PatternBase
 {
 public:
-	
+
 	TextTable(
 		AUI_ERRCODE *retval,
 		uint32 id,
@@ -78,18 +74,16 @@ public:
 		sint32 y = 0 );
 
 protected:
-	
-	uint32		m_columns;						
-	uint32		m_rows;							
-	uint32		m_item_width;					
-	uint32		m_item_height;					
 
-	
-	uint32		m_numItems;						
-	
-	aui_Static	*m_items[ k_TEXTTABLE_MAXITEMS ];	
-	TextSwitch	*m_table_headers[ k_TEXTTABLE_MAXHEADERS ];	
+	uint32		m_columns;
+	uint32		m_rows;
+	uint32		m_item_width;
+	uint32		m_item_height;
+
+	uint32		m_numItems;
+
+	aui_Static	*m_items[ k_TEXTTABLE_MAXITEMS ];
+	TextSwitch	*m_table_headers[ k_TEXTTABLE_MAXHEADERS ];
 };
 
-
-#endif 
+#endif

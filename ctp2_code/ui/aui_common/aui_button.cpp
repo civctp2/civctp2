@@ -1,14 +1,3 @@
-
-
-
-
-
-
-
-
-
-
-
 #include "c3.h"
 #include "aui_ui.h"
 #include "aui_action.h"
@@ -20,7 +9,6 @@
 #include "soundmanager.h"
 
 extern SoundManager		*g_soundManager;
-
 
 aui_Button::aui_Button(
 	AUI_ERRCODE *retval,
@@ -40,7 +28,6 @@ aui_Button::aui_Button(
 	Assert( AUI_SUCCESS(*retval) );
 	if ( !AUI_SUCCESS(*retval) ) return;
 }
-
 
 
 aui_Button::aui_Button(
@@ -66,12 +53,10 @@ aui_Button::aui_Button(
 }
 
 
-
 AUI_ERRCODE aui_Button::InitCommonLdl( MBCHAR *ldlBlock )
 {
 	return InitCommon();
 }
-
 
 
 AUI_ERRCODE aui_Button::InitCommon( void )
@@ -85,7 +70,6 @@ AUI_ERRCODE aui_Button::InitCommon( void )
 }
 
 
-
 AUI_ERRCODE aui_Button::ResetThis( void )
 {
 	m_isRepeating = FALSE;
@@ -95,13 +79,12 @@ AUI_ERRCODE aui_Button::ResetThis( void )
 }
 
 
-
 AUI_ERRCODE aui_Button::DrawThis(
 	aui_Surface *surface,
 	sint32 x,
 	sint32 y )
 {
-	
+
 	if ( IsHidden() ) return AUI_ERRCODE_OK;
 
 	if ( !surface ) surface = m_window->TheSurface();
@@ -139,23 +122,20 @@ void aui_Button::KeyboardCallback( aui_KeyboardEvent *keyboardData )
 
 
 
-	
-	
+
+
 	if ( !GetMouseOwnership() && ( keyboardData->key == AUI_KEYBOARD_KEY_RETURN)) {
-		
+
 		if ( keyboardData->down && !m_keyboardEvent.down )
 		{
 			PlaySound( AUI_SOUNDBASE_SOUND_ENGAGE );
 
-			
 			HideTipWindow();
 
-			
 			m_attributes |= k_CONTROL_ATTRIBUTE_DOWN;
 			m_attributes |= k_CONTROL_ATTRIBUTE_ACTIVE;
 			m_draw |= m_drawMask & k_AUI_REGION_DRAWFLAG_KEYSTATECHANGE;
 
-			
 			m_isRepeating = TRUE;
 			m_repeatCount = 0;
 			m_startWaitTime = keyboardData->time;
@@ -165,23 +145,19 @@ void aui_Button::KeyboardCallback( aui_KeyboardEvent *keyboardData )
 				m_action->Execute( this, AUI_BUTTON_ACTION_PRESS, 0 );
 		}
 
-		
 		else if ( !keyboardData->down && m_keyboardEvent.down )
 		{
 			PlaySound( AUI_SOUNDBASE_SOUND_EXECUTE );
 
-			
 			m_attributes &= ~k_CONTROL_ATTRIBUTE_DOWN;
 			m_attributes &= ~k_CONTROL_ATTRIBUTE_ACTIVE;
 
-			
 			m_draw |= m_drawMask & k_AUI_REGION_DRAWFLAG_KEYSTATECHANGE;
 
 			if(GetAttracting()) {
 				SetAttract(false, 0);
 			}
 
-			
 			m_isRepeating = FALSE;
 			if ( m_ActionFunc )
 				m_ActionFunc( this, AUI_BUTTON_ACTION_EXECUTE, 0, m_cookie );
@@ -190,7 +166,6 @@ void aui_Button::KeyboardCallback( aui_KeyboardEvent *keyboardData )
 		}
 	}
 }
-
 
 
 void aui_Button::PostChildrenCallback( aui_MouseEvent *mouseData )
@@ -217,10 +192,9 @@ void aui_Button::PostChildrenCallback( aui_MouseEvent *mouseData )
 }
 
 
-
 void aui_Button::MouseLDragOver( aui_MouseEvent *mouseData )
 {
-	
+
 	aui_Control::MouseLDragOver(mouseData);
 
 	if (IsDisabled()) return;
@@ -229,12 +203,10 @@ void aui_Button::MouseLDragOver( aui_MouseEvent *mouseData )
 	{
 		SetWhichSeesMouse( this );
 
-		
 		if ( GetMouseOwnership() == this )
 		{
 			PlaySound( AUI_SOUNDBASE_SOUND_ENGAGE );
 
-			
 			if ( m_mouseCode == AUI_ERRCODE_UNHANDLED )
 				m_mouseCode = AUI_ERRCODE_HANDLED;
 
@@ -242,7 +214,6 @@ void aui_Button::MouseLDragOver( aui_MouseEvent *mouseData )
 			m_attributes |= k_CONTROL_ATTRIBUTE_ACTIVE;
 			m_draw |= m_drawMask & k_AUI_REGION_DRAWFLAG_MOUSELDRAGOVER;
 
-			
 			m_isRepeating = TRUE;
 		}
 	}
@@ -251,20 +222,17 @@ void aui_Button::MouseLDragOver( aui_MouseEvent *mouseData )
 }
 
 
-
 void aui_Button::MouseLDragAway( aui_MouseEvent *mouseData )
 {
-	
+
 	aui_Control::MouseLDragAway(mouseData);
 
 	if (IsDisabled()) return;
 
-	
 	if ( GetMouseOwnership() == this )
 	{
 		PlaySound( AUI_SOUNDBASE_SOUND_DISENGAGE );
 
-		
 		if ( m_mouseCode == AUI_ERRCODE_UNHANDLED )
 			m_mouseCode = AUI_ERRCODE_HANDLED;
 
@@ -272,7 +240,6 @@ void aui_Button::MouseLDragAway( aui_MouseEvent *mouseData )
 		m_attributes &= ~k_CONTROL_ATTRIBUTE_ACTIVE;
 		m_draw |= m_drawMask & k_AUI_REGION_DRAWFLAG_MOUSELDRAGAWAY;
 
-		
 		m_isRepeating = FALSE;
 		if ( m_ActionFunc )
 			m_ActionFunc( this, AUI_BUTTON_ACTION_RELEASE, 0, m_cookie );
@@ -282,12 +249,11 @@ void aui_Button::MouseLDragAway( aui_MouseEvent *mouseData )
 }
 
 
-
 void aui_Button::MouseLGrabInside( aui_MouseEvent *mouseData )
 {
 	if (IsDisabled()) {
 		if (g_soundManager) {
-			g_soundManager->AddSound(SOUNDTYPE_SFX, 0, 
+			g_soundManager->AddSound(SOUNDTYPE_SFX, 0,
 					gamesounds_GetGameSoundID(GAMESOUNDS_GENERALFAIL), 0, 0);
 		}
 		return;
@@ -299,21 +265,17 @@ void aui_Button::MouseLGrabInside( aui_MouseEvent *mouseData )
 
 		PlaySound( AUI_SOUNDBASE_SOUND_ENGAGE );
 
-		
 		HideTipWindow();
 
-		
 		SetMouseOwnership();
 		SetKeyboardFocus();
 
 		m_mouseCode = AUI_ERRCODE_HANDLEDEXCLUSIVE;
 
-		
 		m_attributes |= k_CONTROL_ATTRIBUTE_DOWN;
 		m_attributes |= k_CONTROL_ATTRIBUTE_ACTIVE;
 		m_draw |= m_drawMask & k_AUI_REGION_DRAWFLAG_MOUSELGRABINSIDE;
 
-		
 		m_isRepeating = TRUE;
 		m_repeatCount = 0;
 		m_startWaitTime = mouseData->time;
@@ -327,7 +289,6 @@ void aui_Button::MouseLGrabInside( aui_MouseEvent *mouseData )
 }
 
 
-
 void aui_Button::MouseLDropInside( aui_MouseEvent *mouseData )
 {
 	if (IsDisabled()) {
@@ -338,29 +299,24 @@ void aui_Button::MouseLDropInside( aui_MouseEvent *mouseData )
 	{
 		SetWhichSeesMouse( this );
 
-		
 		if ( GetMouseOwnership() == this )
 		{
-			
+
 			ReleaseMouseOwnership();
 
 			PlaySound( AUI_SOUNDBASE_SOUND_EXECUTE );
-				
-			
+
 			m_mouseCode = AUI_ERRCODE_HANDLEDEXCLUSIVE;
 
-			
 			m_attributes &= ~k_CONTROL_ATTRIBUTE_DOWN;
 
-			
-			
-			
+
+
+
 			m_attributes &= ~k_CONTROL_ATTRIBUTE_ACTIVE;
 
-			
 			m_draw |= m_drawMask & k_AUI_REGION_DRAWFLAG_MOUSELDROPINSIDE;
 
-			
 			m_isRepeating = FALSE;
 
 			if(GetAttracting()) {
@@ -377,11 +333,9 @@ void aui_Button::MouseLDropInside( aui_MouseEvent *mouseData )
 		{
 			PlaySound( AUI_SOUNDBASE_SOUND_ACTIVATE );
 
-			
 			if ( m_mouseCode == AUI_ERRCODE_UNHANDLED )
 				m_mouseCode = AUI_ERRCODE_HANDLED;
 
-			
 			m_attributes |= k_CONTROL_ATTRIBUTE_ACTIVE;
 			m_draw |= m_drawMask & k_AUI_REGION_DRAWFLAG_MOUSELDROPINSIDE;
 		}
@@ -391,26 +345,21 @@ void aui_Button::MouseLDropInside( aui_MouseEvent *mouseData )
 }
 
 
-
 void aui_Button::MouseLDropOutside( aui_MouseEvent *mouseData )
 {
 	if (IsDisabled()) return;
 
-	
 	if ( GetMouseOwnership() == this )
 	{
-		
+
 		ReleaseMouseOwnership();
 
-		
 		if ( m_mouseCode == AUI_ERRCODE_UNHANDLED )
 			m_mouseCode = AUI_ERRCODE_HANDLED;
 
-		
 		m_draw |= m_drawMask & k_AUI_REGION_DRAWFLAG_MOUSELDROPOUTSIDE;
 	}
 }
-
 
 void aui_Button::MouseRDropInside( aui_MouseEvent *mouseData )
 {
@@ -426,4 +375,3 @@ void aui_Button::MouseRDropInside( aui_MouseEvent *mouseData )
 		MouseRDropOutside( mouseData );
 	}
 }
-

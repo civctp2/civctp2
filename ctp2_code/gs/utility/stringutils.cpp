@@ -11,13 +11,13 @@
 //
 // THIS FILE IS NOT GENERATED OR SUPPORTED BY ACTIVISION.
 //
-// This material has been developed at apolyton.net by the Apolyton CtP2 
+// This material has been developed at apolyton.net by the Apolyton CtP2
 // Source Code Project. Contact the authors at ctp2source@apolyton.net.
 //
 //----------------------------------------------------------------------------
 //
 // Compiler flags
-// 
+//
 // _JAPANESE
 // - Add provisions for handling SJIS characters.
 //
@@ -26,7 +26,7 @@
 // Modifications from the original Activision code:
 //
 // - fixed for japanese by t.s. 2003.12
-// - Made the interpretation text size a parameter to support the German 
+// - Made the interpretation text size a parameter to support the German
 //   version.
 // - Removed unneeded inlcude files. (Aug 20th 2005 Martin Gühmann)
 //
@@ -63,14 +63,14 @@ void stringutils_HackColor(BOOL on)
 //
 // Returns    : -
 //
-// Remark(s)  : When the original string does not contain any variables, it 
+// Remark(s)  : When the original string does not contain any variables, it
 //              will be copied literally.
 //              The interpreted string is truncated at a_Capacity characters.
-//              Any individual (sub)expression will still be truncated at 
+//              Any individual (sub)expression will still be truncated at
 //              k_MAX_INTERP_LEN characters.
 //              TODO: Reimplementation with std::string/stringstream.
 //              TODO: Check all calls of this function to pass the proper
-//                    capacity, instead of relying on the default 
+//                    capacity, instead of relying on the default
 //                    k_MAX_INTERP_LEN value to work "because it worked in the
 //                    original version".
 //
@@ -115,9 +115,8 @@ void stringutils_Interpret
 			continue;
 		}
 
-		
 		strncpy(expression, input + 1, closeBrace - input - 1);
-		expression[closeBrace - input - 1] = 0;		
+		expression[closeBrace - input - 1] = 0;
 
 		if(*closeBrace == '#') {
 			const char *catStrPtr = closeBrace + 1;
@@ -162,12 +161,11 @@ void stringutils_Interpret
 	*output = '\0';
 }
 
-
 void stringutils_SetStaticStringId(StringId & stringId, char * stringName)
 {
 	if (stringId < 0)
 		{
-			BOOL found = 
+			BOOL found =
 				g_theStringDB->GetStringID(stringName, stringId);
 			Assert(found);
 		}

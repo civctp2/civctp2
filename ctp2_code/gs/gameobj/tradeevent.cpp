@@ -1,4 +1,3 @@
-
 #include "c3.h"
 #include "tradeevent.h"
 #include "TradeRoute.h"
@@ -19,15 +18,13 @@ STDEHANDLER(KillTradeRouteEvent)
 	return GEV_HD_Continue;
 }
 
-
 STDEHANDLER(SetPiratingArmyEvent)
 {
 	TradeRoute route;
 	Army a;
 
 	if(!args->GetTradeRoute(0, route)) return GEV_HD_Continue;
-	
-	
+
 	args->GetArmy(0, a);
 
 	route->SetPiratingArmy(a);
@@ -44,5 +41,3 @@ void tradeevent_Initialize()
 void tradeevent_Cleanup()
 {
 }
-
-

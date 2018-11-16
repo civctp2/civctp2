@@ -6,23 +6,22 @@
 
 #include "ic3TerrDB.h"
 
-class Player; 
-class CivArchive; 
+class Player;
+class CivArchive;
 
 class C3TerrainDB : public IC3TerrainDB
 {
 	ULONG m_refCount;
-	
-	
-    Player *m_player; 
+
+    Player *m_player;
 
 public:
-	
+
 	STDMETHODIMP QueryInterface(REFIID, void **obj);
 	STDMETHODIMP_(ULONG) AddRef();
 	STDMETHODIMP_(ULONG) Release();
 
-    C3TerrainDB(Player *p); 
+    C3TerrainDB(Player *p);
     C3TerrainDB(Player *p, CivArchive &archive);
     void Serialize(CivArchive &archive);
 
@@ -34,4 +33,3 @@ public:
 };
 
 #endif __C3TerrDB_H__
-

@@ -1,7 +1,4 @@
-
-
 #include "c3.h"
-
 
 #include "aui.h"
 #include "aui_uniqueid.h"
@@ -15,45 +12,36 @@
 #include "c3_static.h"
 #include "c3_coloredswitch.h"
 
-
 #include "statuswindow.h"
 #include "controlpanelwindow.h"
 
 #include "workwin.h"
 #include "debugwindow.h"
 
-
 #include "textbutton.h"
 #include "iconbutton.h"
 #include "picturebutton.h"
 #include "coloriconbutton.h"
-
 
 #include "c3thumb.h"
 #include "c3slider.h"
 #include "c3scroller.h"
 #include "c3spinner.h"
 
-
 #include "checkbox.h"
 #include "textswitch.h"
 #include "coloriconswitch.h"
 
-
 #include "texttab.h"
 #include "aui_tabgroup.h"
 
-
 #include "aui_static.h"
-
 
 #include "aui_item.h"
 #include "c3listbox.h"
 #include "textbox.h"
 
-
 #include "c3dropdown.h"
-
 
 #include "c3textfield.h"
 
@@ -62,9 +50,7 @@
 #include "c3listbox.h"
 #include "cityinventorylistbox.h"
 
-
 #include "aui_progressbar.h"
-
 
 #include "tiledmap.h"
 #include "c3windows.h"
@@ -72,9 +58,7 @@
 #include "CivPaths.h"
 #include "videoutils.h"
 
-
 #include "toolbar.h"
-
 
 #include "controlsheet.h"
 #include "TerrImproveData.h"
@@ -101,7 +85,6 @@
 #include "TurnCnt.h"
 
 
-
 extern sint32		g_ScreenWidth;
 extern sint32		g_ScreenHeight;
 extern sint32		g_isCheatModeOn;
@@ -114,19 +97,16 @@ extern C3Window		*g_floatingWindow;
 extern DebugWindow	*g_debugWindow;
 extern WorkWindow	*g_workWindow;
 
-
-extern TerrainImprovementPool	*g_theTerrainImprovementPool;	
+extern TerrainImprovementPool	*g_theTerrainImprovementPool;
 extern Player					**g_player;
 extern SelectedItem				*g_selected_item;
 extern TiledMap					*g_tiledMap;
 extern InstallationDatabase		*g_theInstallationDB;
 
 
-
 extern ProductionTabControl		*g_cp_productionTab;
 extern CityTabControl			*g_cp_cityTab;
 extern UnitsTabControl			*g_cp_unitsTab;
-
 
 ControlPanelWindow	*g_controlPanel = NULL;
 
@@ -161,24 +141,19 @@ static c3_ColoredSwitch *s_yearBox;
 static c3_Static *s_populationLabel;
 static c3_Static *s_populationBox;
 
-
 static aui_ProgressBar	*s_progressBar;
 
 static aui_StringTable	*s_yearString;
 
-
 extern sint32		g_tileImprovementMode;
 
-
 #define k_STATUS_WINDOW_HEIGHT		30
-#define k_CONTROL_PANEL_WIDTH		709 
+#define k_CONTROL_PANEL_WIDTH		709
 #define k_CONTROL_PANEL_HEIGHT		150
-
 
 class c3_NormalProgressBar : public aui_ProgressBar {
 public:
-	
-	
+
 	c3_NormalProgressBar(AUI_ERRCODE *retval, uint32 id, MBCHAR *ldlBlock) :
 	aui_ProgressBar( retval, id, ldlBlock ),
 	aui_ImageBase( ldlBlock ),
@@ -192,20 +167,16 @@ public:
 protected:
 	c3_NormalProgressBar() : aui_ProgressBar() {}
 
-	
 	virtual AUI_ERRCODE CalculateIntervals( double *start, double *stop ) {
-		
+
 		double x = (double)m_curValue / (double)m_maxValue;
 
-		
 		*start = 0.0;
 		*stop = x;
 
-		
 		return AUI_ERRCODE_OK;
 	}
 };
-
 
 extern sint32 g_modalWindow;
 
@@ -220,9 +191,8 @@ void CityManagerButtonCallback(aui_Control *control, uint32 action, uint32 data,
 		CityWindow::Display(city.CD());
 	else
 		CityWindow::Display(NULL);
-	
-}
 
+}
 
 void TileImprovementButtonCallback(aui_Control *control, uint32 action, uint32 data, void *cookie)
 {
@@ -232,7 +202,7 @@ void TileImprovementButtonCallback(aui_Control *control, uint32 action, uint32 d
 
 void ZoomPlusButtonActionCallback( aui_Control *control, uint32 action, uint32 data, void *cookie )
 {
-	
+
 	if ( action != (uint32)AUI_BUTTON_ACTION_EXECUTE ) return;
     if (g_tiledMap) {
 		g_tiledMap->ZoomIn();
@@ -241,22 +211,21 @@ void ZoomPlusButtonActionCallback( aui_Control *control, uint32 action, uint32 d
 
 void ZoomMinusButtonActionCallback( aui_Control *control, uint32 action, uint32 data, void *cookie )
 {
-	
+
 	if ( action != (uint32)AUI_BUTTON_ACTION_EXECUTE ) return;
 	if (g_tiledMap) {
 		g_tiledMap->ZoomOut();
 	}
 }
 
-
 void DonkeyCallback(aui_Control *control, uint32 action, uint32 data, void *cookie )
 {
-	
+
 	if ( action != (uint32)AUI_BUTTON_ACTION_EXECUTE ) return;
 
-	MBCHAR filename[_MAX_PATH]; 
+	MBCHAR filename[_MAX_PATH];
     g_civPaths->FindFile(C3DIR_SOUNDS, "donkey.wav", filename);
-    PlaySound (filename, NULL, SND_ASYNC | SND_FILENAME); 
+    PlaySound (filename, NULL, SND_ASYNC | SND_FILENAME);
 }
 
 void TurnButtonCallback(aui_Control *control, uint32 action, uint32 data, void *cookie)
@@ -277,7 +246,6 @@ sint32 controlpanelwindow_Initialize()
 
 	if (g_controlPanel) return 0;
 
-	
 	sint32 windowWidth = k_CONTROL_PANEL_WIDTH;
 	sint32 windowHeight = k_CONTROL_PANEL_HEIGHT;
 	sint32 windowX = 264;
@@ -292,10 +260,10 @@ sint32 controlpanelwindow_Initialize()
 	Assert( AUI_NEWOK(g_controlPanel, errcode) );
 	if ( !AUI_NEWOK(g_controlPanel, errcode) ) return -1;
 
-	
 
 
-	
+
+
 	g_controlPanel->Resize	(800, g_controlPanel->Height());
 	g_controlPanel->Move	(g_controlPanel->X(), g_ScreenHeight - g_controlPanel->Height());
 
@@ -317,7 +285,7 @@ sint32 controlpanelwindow_Initialize()
 
 
 
-	
+
 
 
 
@@ -487,7 +455,6 @@ sint32 controlpanelwindow_InitializeHats()
 	Assert( AUI_NEWOK(s_zoomMinusButton, errcode) );
 	if ( !AUI_NEWOK(s_zoomMinusButton, errcode) ) return -3;
 
-	
 	errcode = aui_Ldl::SetupHeirarchyFromRoot( windowBlock );
 	Assert( AUI_SUCCESS(errcode) );
 	if ( !AUI_SUCCESS(errcode) ) return -1;
@@ -497,7 +464,7 @@ sint32 controlpanelwindow_InitializeHats()
 
 sint32 controlpanelwindow_Cleanup( void )
 {
-	
+
 	if (!g_controlPanel) return 0;
 
 
@@ -508,19 +475,16 @@ if (s_donkeys) {
 	s_donkeys = NULL;
 }
 
-	
 	ControlPanelWindow_TileImp_Cleanup();
 	ControlPanelWindow_Land_Cleanup();
 	ControlPanelWindow_Sea_Cleanup();
 	ControlPanelWindow_Space_Cleanup();
 	ControlPanelWindow_Terra_Cleanup();
 
-	
 	cp_tileimp_trackerCleanup();
 
 	specialattackwindow_Cleanup();
 
-	
 	delete s_tileMenuControl;
 	s_tileMenuControl = NULL;
 	delete s_landTileControl;
@@ -532,13 +496,11 @@ if (s_donkeys) {
 	delete s_terraTileControl;
 	s_terraTileControl = NULL;
 
-	
 	controlpanelwindow_CleanupCitySelectedTabGroup();
-	
+
 	delete s_yearBox;
 	s_yearBox = NULL;
 
-	
 	delete s_progressBar;
 	s_progressBar = NULL;
 
@@ -572,7 +534,7 @@ if (s_donkeys) {
 
 	delete g_controlPanel;
 	g_controlPanel = NULL;
-	
+
 	return 0;
 }
 
@@ -580,7 +542,7 @@ if (s_donkeys) {
 
 
 
-void 
+void
 HideElement(aui_Region *element)
 {
 	if (element!=NULL)
@@ -590,7 +552,7 @@ HideElement(aui_Region *element)
 
 
 
-void 
+void
 HideControlPanel()
 {
 	HideElement(g_testWindow            );
@@ -600,7 +562,6 @@ HideControlPanel()
 	HideElement(g_workWindow            );
 
 	HideElement(g_radarWindow           );
-
 
 
 	HideElement((aui_Window*)g_controlPanel->GetWindow());
@@ -627,6 +588,3 @@ HideControlPanel()
 	HideElement(s_populationLabel       );
 	HideElement(s_populationBox         );
 }
-
-
-

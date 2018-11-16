@@ -1,4 +1,3 @@
-
 #ifndef __TERRAIN_UTIL_H__
 #define __TERRAIN_UTIL_H__
 
@@ -9,11 +8,9 @@ class MapPoint;
 class Unit;
 
 
-
 #include "TerrainImprovementRecord.h"
 
 void terrainutil_Initialize();
-
 
 const TerrainImprovementRecord *terrainutil_GetBestRoad(sint32 player, const MapPoint &pos);
 
@@ -96,7 +93,6 @@ sint32 terrainutil_GetWhiteHill();
 sint32 terrainutil_GetWhiteMountain();
 sint32 terrainutil_GetWaterKelp();
 sint32 terrainutil_GetWaterReef();
-
 
 sint32 terrainutil_GetTerraformHillsImprovement();
 sint32 terrainutil_GetTerraformPlainsImprovement();

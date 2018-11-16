@@ -11,7 +11,7 @@
 //
 // THIS FILE IS NOT GENERATED OR SUPPORTED BY ACTIVISION.
 //
-// This material has been developed at apolyton.net by the Apolyton CtP2 
+// This material has been developed at apolyton.net by the Apolyton CtP2
 // Source Code Project. Contact the authors at ctp2source@apolyton.net.
 //
 //----------------------------------------------------------------------------
@@ -56,7 +56,6 @@ extern SoundManager		*g_soundManager;
 WonderMovieWindow		*g_wonderMovieWindow = NULL;
 
 
-
 void wondermoviewin_Initialize(Sequence *seq)
 {
 	AUI_ERRCODE		errcode = AUI_ERRCODE_OK;
@@ -73,7 +72,6 @@ void wondermoviewin_Initialize(Sequence *seq)
 }
 
 
-
 void wondermoviewin_DisplayWonderMovie(sint32 id)
 {
 	if (g_soundManager) {
@@ -83,7 +81,6 @@ void wondermoviewin_DisplayWonderMovie(sint32 id)
 
 	Assert(g_wonderMovieWindow != NULL);
 	if (g_wonderMovieWindow == NULL) return;
-
 
 	WonderRecord *rec = g_theWonderDB->Access(id);
 	Assert(rec);
@@ -116,7 +113,6 @@ void wondermoviewin_DisplayWonderMovie(sint32 id)
 }
 
 
-
 void wondermoviewin_Cleanup()
 {
 	Sequence *seq=NULL;
@@ -133,7 +129,6 @@ void wondermoviewin_Cleanup()
 }
 
 
-
 void wondermoviewin_MovieButtonCallback(aui_Control *control, uint32 action, uint32 data, void * cookie)
 {
 	if ( action != (uint32)AUI_BUTTON_ACTION_EXECUTE ) return;
@@ -142,11 +137,9 @@ void wondermoviewin_MovieButtonCallback(aui_Control *control, uint32 action, uin
 }
 
 
-
 void CloseMovieAction::Execute(aui_Control *control, uint32 action, uint32 data)
 {
-	
-	
+
 
 	wondermoviewin_Cleanup();
 
@@ -154,4 +147,3 @@ void CloseMovieAction::Execute(aui_Control *control, uint32 action, uint32 data)
 		g_soundManager->StartMusic();
 	}
 }
-

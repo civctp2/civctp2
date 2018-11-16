@@ -1,15 +1,3 @@
-
-
-
-
-
-
-
-
-
-
-
-
 #include "c3.h"
 #include "c3errors.h"
 #include "civarchive.h"
@@ -30,7 +18,6 @@
 
 	extern	TokenData	g_ImpDB_token_data[] ;
 
-
 	sint32	g_parse_gw_abort ;
 
 
@@ -50,7 +37,7 @@ GWRecord::GWRecord()
     Assert(g_theStringDB) ;
     Assert(g_theAdvanceDB) ;
     Assert(g_theGovernmentDB) ;
-	
+
 	m_changes = 0 ;
 	for (i=0; i<MAX_CHANGES; i++)
 		{
@@ -74,7 +61,7 @@ GWRecord::GWRecord()
 
 
 sint32 GWRecord::ParseGWRecord(Token *pollToken)
-	{ 
+	{
 	BOOL	done ;
 
     sint32	tmp ;
@@ -84,25 +71,21 @@ sint32 GWRecord::ParseGWRecord(Token *pollToken)
 	if (!token_ParseAnOpenBraceNext(pollToken))
 		return (FALSE) ;
 
-	
 	if (!token_ParseValNext(pollToken, TOKEN_GW_POLLUTION_NEXT_TO_OCEAN, tmp))
 		return (FALSE) ;
 
 	m_next_to_ocean_bonus = tmp * 0.01f ;
 
-	
 	if (!token_ParseValNext(pollToken, TOKEN_GW_POLLUTION_NEIGHBOUR_BONUS, tmp))
 		return (FALSE) ;
 
 	m_neighbour_bonus = tmp * 0.01f ;
 
-	
 	if (!token_ParseValNext(pollToken, TOKEN_GW_POLLUTION_MAX_BONUS, tmp))
 		return (FALSE) ;
 
 	m_max_bonus = tmp * 0.01f ;
 
-	
 	m_changes = 0 ;
 	done = FALSE ;
 	while (!done)
@@ -113,7 +96,7 @@ sint32 GWRecord::ParseGWRecord(Token *pollToken)
 			}
 		else
 			{
-			
+
 			switch (pollToken->GetType())
 				{
 				case TOKEN_GW_POLLUTION_TILE_DESERT :
@@ -175,12 +158,11 @@ sint32 GWRecord::ParseGWRecord(Token *pollToken)
 				default :
 					Assert(FALSE) ;
 					c3errors_ErrorDialog (pollToken->ErrStr(), "unknown tile type") ;
-	
+
 					return (FALSE) ;
 
 				}
 
-			
 			if (pollToken->Next() != TOKEN_NUMBER)
 				{
 				c3errors_ErrorDialog (pollToken->ErrStr(), "number expected for probability") ;
@@ -190,7 +172,7 @@ sint32 GWRecord::ParseGWRecord(Token *pollToken)
 
 			pollToken->GetFloat(dtmp) ;
 			m_prob[m_changes] = dtmp * 0.01f ;
-			
+
 			switch (pollToken->Next())
 				{
 				case TOKEN_GW_POLLUTION_TILE_TO_DESERT :
@@ -265,7 +247,7 @@ sint32 GWRecord::ParseGWRecord(Token *pollToken)
 
     if (g_parse_gw_abort)
 		return (FALSE) ;
-	
+
 	return (TRUE) ;
 	}
 

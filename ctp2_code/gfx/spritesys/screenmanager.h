@@ -32,5 +32,4 @@ private:
 	BOOL			m_isLocked;
 };
 
-
 #endif

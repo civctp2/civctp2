@@ -11,7 +11,7 @@
 //
 // THIS FILE IS NOT GENERATED OR SUPPORTED BY ACTIVISION.
 //
-// This material has been developed at apolyton.net by the Apolyton CtP2 
+// This material has been developed at apolyton.net by the Apolyton CtP2
 // Source Code Project. Contact the authors at ctp2source@apolyton.net.
 //
 //----------------------------------------------------------------------------
@@ -104,13 +104,13 @@ namespace
             CTPDatabase<RiskRecord> *    risks
         )
         {
-	        sint32  gameRiskLevel   = 
+	        sint32  gameRiskLevel   =
                 std::min<sint32>(settings->GetRisk(), risks->NumRecords() - 1);
             m_risk                  = risks->Get(gameRiskLevel);
             Assert(m_risk);
 
-            m_BarbarianThreshold    = 
-                static_cast<size_t>(m_risk->GetHutChanceBarbarian() * 100.0);       
+            m_BarbarianThreshold    =
+                static_cast<size_t>(m_risk->GetHutChanceBarbarian() * 100.0);
             m_GoldThreshold         = m_BarbarianThreshold +
                 static_cast<size_t>(m_risk->GetHutChanceGold() * 100.0);
             m_AdvanceThreshold      = m_GoldThreshold +
@@ -129,11 +129,11 @@ namespace
 //
 // Description: Generate a goody type from a random value
 //
-// Parameters : randomValue     
+// Parameters : randomValue
 //
 // Globals    : -
 //
-// Returns    : GOODY       : generated type of goody 
+// Returns    : GOODY       : generated type of goody
 //
 // Remark(s)  : -
 //
@@ -174,7 +174,7 @@ namespace
 //
 // Description: Generate an amount of gold from a random value
 //
-// Parameters : randomValue     
+// Parameters : randomValue
 //
 // Globals    : -
 //
@@ -186,9 +186,9 @@ namespace
         sint32  GoldAmount(sint32 randomValue) const
         {
             return m_risk->GetHutMinGold() +
-                   (((m_risk->GetHutMaxGold() - m_risk->GetHutMinGold()) * randomValue) / 
+                   (((m_risk->GetHutMaxGold() - m_risk->GetHutMinGold()) * randomValue) /
                         k_VALUE_RANGE
-                   );        
+                   );
         }
 
 //----------------------------------------------------------------------------
@@ -198,7 +198,7 @@ namespace
 // Description: Get the number of prerequisites that may be skipped when
 //              selecting a new advance.
 //
-// Parameters : -    
+// Parameters : -
 //
 // Globals    : -
 //
@@ -219,7 +219,7 @@ namespace
 // Description: Get the number of prerequisites that may be skipped when
 //              selecting a new unit.
 //
-// Parameters : -    
+// Parameters : -
 //
 // Globals    : -
 //
@@ -235,7 +235,7 @@ namespace
 
     private:
         RiskRecord const *  m_risk;
-        size_t              m_BarbarianThreshold;       
+        size_t              m_BarbarianThreshold;
         size_t              m_GoldThreshold;
         size_t              m_AdvanceThreshold;
         size_t              m_UnitThreshold;
@@ -246,8 +246,8 @@ namespace
 } // namespace
 
 GoodyHut::GoodyHut()
-{   
-    m_typeValue = g_rand->Next(100); 
+{
+    m_typeValue = g_rand->Next(100);
 	m_value     = g_rand->Next(k_VALUE_RANGE);
 }
 
@@ -268,7 +268,7 @@ GoodyHut::GoodyHut(CivArchive &archive)
 //
 // Description: Generate a goody type for a player
 //
-// Parameters : owner       : the player     
+// Parameters : owner       : the player
 //
 // Globals    : g_theGameSettings
 //              g_theRiskDB
@@ -276,7 +276,7 @@ GoodyHut::GoodyHut(CivArchive &archive)
 //              g_theAdvanceDB
 //              g_theUnitDB
 //
-// Returns    : GOODY       : generated type of goody 
+// Returns    : GOODY       : generated type of goody
 //
 // Remark(s)  : When no proper goody can be generated, GOODY_BOGUS is returned.
 //              The barbarian player gets this result always.
@@ -304,14 +304,14 @@ GOODY GoodyHut::ChooseType(PLAYER_INDEX const & owner)
     case GOODY_ADVANCE:
         {
             Advances const *    advances     = g_player[owner]->m_advances;
-		    AdvanceType *       possible     = 
+		    AdvanceType *       possible     =
                 new AdvanceType[g_theAdvanceDB->NumRecords()];
 		    size_t              nextPossible = 0;
             sint32 const        maxNovelty   = risk.GetMaxAdvanceLeap();
 
-		    for (AdvanceType i = 0; i < g_theAdvanceDB->NumRecords(); ++i) 
+		    for (AdvanceType i = 0; i < g_theAdvanceDB->NumRecords(); ++i)
             {
-                if (advances->HasAdvance(i)) 
+                if (advances->HasAdvance(i))
                     continue;   // known
 
 			    if ((g_theAdvanceDB->Get(i)->GetNumPrerequisites() > 0) &&
@@ -326,7 +326,7 @@ GOODY GoodyHut::ChooseType(PLAYER_INDEX const & owner)
                 // else: too advanced
 		    }
 
-		    if (nextPossible) 
+		    if (nextPossible)
             {
 		        m_value = possible[(nextPossible * m_value) / k_VALUE_RANGE];
 		    }
@@ -339,15 +339,15 @@ GOODY GoodyHut::ChooseType(PLAYER_INDEX const & owner)
 	    }
         break;
 
-    case GOODY_GOLD:       
+    case GOODY_GOLD:
 		m_value = risk.GoldAmount(m_value);
 		break;
 
     case GOODY_SETTLER:
         {
-		    for (size_t i = 0; i < static_cast<size_t>(g_theUnitDB->NumRecords()); ++i) 
+		    for (size_t i = 0; i < static_cast<size_t>(g_theUnitDB->NumRecords()); ++i)
             {
-			    if (g_theUnitDB->Get(i)->GetSettleLand()) 
+			    if (g_theUnitDB->Get(i)->GetSettleLand())
                 {
 				    m_value = i;
 				    return GOODY_UNIT;
@@ -365,23 +365,23 @@ GOODY GoodyHut::ChooseType(PLAYER_INDEX const & owner)
 		    size_t              nextPossible = 0;
             sint32 const        maxNovelty   = risk.GetMaxUnitAdvanceLeap();
 
-		    for (sint32 i = 0; i < g_theUnitDB->NumRecords(); ++i) 
+		    for (sint32 i = 0; i < g_theUnitDB->NumRecords(); ++i)
             {
 			    UnitRecord const * rec = g_theUnitDB->Get(i);
 
 			    if (!rec->GetMovementTypeLand())
 				    continue;   // would die immediately here
-			    if (rec->GetAttack() < 1)               
+			    if (rec->GetAttack() < 1)
 				    continue;   // defenseless?
 			    if (rec->GetHasPopAndCanBuild())
 				    continue;   // settler, handled separately
-			    if (g_exclusions->IsUnitExcluded(i))    
+			    if (g_exclusions->IsUnitExcluded(i))
 				    continue;   // excluded (MP, mod)
-			    if (rec->GetNumGovernmentType() > 0) 
+			    if (rec->GetNumGovernmentType() > 0)
 				    continue;   // government specific?
 
 			    if (advances->GetMinPrerequisites
-                        (rec->GetEnableAdvanceIndex(), maxNovelty) 
+                        (rec->GetEnableAdvanceIndex(), maxNovelty)
                     <= maxNovelty
                    )
                 {
@@ -390,7 +390,7 @@ GOODY GoodyHut::ChooseType(PLAYER_INDEX const & owner)
                 // else : too advanced
 		    }
 
-		    if (nextPossible) 
+		    if (nextPossible)
             {
 		        m_value = possible[(nextPossible * m_value) / k_VALUE_RANGE];
 		    }
@@ -411,7 +411,7 @@ GOODY GoodyHut::ChooseType(PLAYER_INDEX const & owner)
 void GoodyHut::OpenGoody(PLAYER_INDEX const & owner, MapPoint const & point)
 {
 	SlicObject *so ;
-	
+
 	switch(ChooseType(owner)) {
 		case GOODY_BOGUS:
 		{
@@ -419,18 +419,17 @@ void GoodyHut::OpenGoody(PLAYER_INDEX const & owner, MapPoint const & point)
 			so->AddRecipient(owner) ;
 			g_slicEngine->Execute(so) ;
 			DPRINTF(k_DBG_GAMESTATE, ("No soup for you!\n"));
-            
-			
+
 			if (g_soundManager) {
 				sint32 visiblePlayer = g_selected_item->GetVisiblePlayer();
 				if (visiblePlayer == owner) {
-					g_soundManager->AddSound(SOUNDTYPE_SFX, (uint32)0, 
+					g_soundManager->AddSound(SOUNDTYPE_SFX, (uint32)0,
 											gamesounds_GetGameSoundID(GAMESOUNDS_DRAGDROP_FAIL),
 											point.x,
 											point.y);
 				}
 			}
-			
+
 			break;
 		}
 		case GOODY_CITY:
@@ -458,15 +457,15 @@ void GoodyHut::OpenGoody(PLAYER_INDEX const & owner, MapPoint const & point)
 			g_slicEngine->Execute(so) ;
 			DPRINTF(k_DBG_GAMESTATE, ("You get a city!\n"));
 
-			
-			
-			
+
+
+
 
 
 			if (g_soundManager) {
 				sint32 visiblePlayer = g_selected_item->GetVisiblePlayer();
 				if (visiblePlayer == owner) {
-					g_soundManager->AddSound(SOUNDTYPE_SFX, (uint32)0, 
+					g_soundManager->AddSound(SOUNDTYPE_SFX, (uint32)0,
 											gamesounds_GetGameSoundID(GAMESOUNDS_GOODY_CITY),
 											point.x,
 											point.y);
@@ -486,7 +485,7 @@ void GoodyHut::OpenGoody(PLAYER_INDEX const & owner, MapPoint const & point)
 			{
 				if (g_soundManager)
 				{
-					g_soundManager->AddSound(SOUNDTYPE_SFX, 
+					g_soundManager->AddSound(SOUNDTYPE_SFX,
 											 0, // no associated object
 											 gamesounds_GetGameSoundID(GAMESOUNDS_TOOEXPENSIVE),
 											 point.x,
@@ -508,7 +507,7 @@ void GoodyHut::OpenGoody(PLAYER_INDEX const & owner, MapPoint const & point)
 			if (g_soundManager) {
 				sint32 visiblePlayer = g_selected_item->GetVisiblePlayer();
 				if (visiblePlayer == owner) {
-					g_soundManager->AddSound(SOUNDTYPE_SFX, (uint32)0, 
+					g_soundManager->AddSound(SOUNDTYPE_SFX, (uint32)0,
 											gamesounds_GetGameSoundID(GAMESOUNDS_ADVANCE),
 											point.x,
 											point.y);
@@ -541,14 +540,14 @@ void GoodyHut::OpenGoody(PLAYER_INDEX const & owner, MapPoint const & point)
 			if (g_soundManager) {
 				sint32 visiblePlayer = g_selected_item->GetVisiblePlayer();
 				if (visiblePlayer == owner) {
-					g_soundManager->AddSound(SOUNDTYPE_SFX, (uint32)0, 
+					g_soundManager->AddSound(SOUNDTYPE_SFX, (uint32)0,
 											gamesounds_GetGameSoundID(GAMESOUNDS_GOODY_UNIT),
 											point.x,
 											point.y);
 				}
 			}
 			break;
-		}	
+		}
 		case GOODY_BARBARIANS:
 			if(Barbarians::AddBarbarians(point, owner, TRUE)) {
 				so = new SlicObject("84BesetByVandals") ;
@@ -558,23 +557,22 @@ void GoodyHut::OpenGoody(PLAYER_INDEX const & owner, MapPoint const & point)
 				if (g_soundManager) {
 					sint32 visiblePlayer = g_selected_item->GetVisiblePlayer();
 					if (visiblePlayer == owner) {
-						g_soundManager->AddSound(SOUNDTYPE_SFX, (uint32)0, 
+						g_soundManager->AddSound(SOUNDTYPE_SFX, (uint32)0,
 												 gamesounds_GetGameSoundID(GAMESOUNDS_BOO),
 												 point.x,
 												 point.y);
-					}	
+					}
 				}
 			} else {
 				so = new SlicObject("93BesetByNothing");
 				so->AddRecipient(owner) ;
 				g_slicEngine->Execute(so) ;
 				DPRINTF(k_DBG_GAMESTATE, ("No soup for you!\n"));
-				
-				
+
 				if (g_soundManager) {
 					sint32 visiblePlayer = g_selected_item->GetVisiblePlayer();
 					if (visiblePlayer == owner) {
-						g_soundManager->AddSound(SOUNDTYPE_SFX, (uint32)0, 
+						g_soundManager->AddSound(SOUNDTYPE_SFX, (uint32)0,
 												 gamesounds_GetGameSoundID(GAMESOUNDS_DRAGDROP_FAIL),
 												 point.x,
 												 point.y);

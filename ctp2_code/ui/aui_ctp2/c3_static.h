@@ -10,14 +10,14 @@
 //
 // THIS FILE IS NOT GENERATED OR SUPPORTED BY ACTIVISION.
 //
-// This material has been developed at apolyton.net by the Apolyton CtP2 
+// This material has been developed at apolyton.net by the Apolyton CtP2
 // Source Code Project. Contact the authors at ctp2source@apolyton.net.
 //
 //----------------------------------------------------------------------------
 //
 // Compiler flags
-// 
-// _MSC_VER		
+//
+// _MSC_VER
 // - Use Microsoft C++ extensions when set.
 //
 //----------------------------------------------------------------------------
@@ -28,13 +28,11 @@
 //
 //----------------------------------------------------------------------------
 
-
 #ifndef __C3_STATIC_H__
 #define __C3_STATIC_H__
 
 #include "aui_static.h"
 #include "patternbase.h"
-
 
 #define k_C3_STATIC_LDL_BEVELWIDTH			"bevelwidth"
 #define k_C3_STATIC_LDL_BEVELTYPE			"beveltype"
@@ -43,7 +41,6 @@
 #define k_C3_STATIC_ACTION_RMOUSE 2
 
 class aui_Surface;
-
 
 class c3_Static : public aui_Static, public PatternBase
 {
@@ -63,7 +60,6 @@ public:
 						uint32 bevelWidth,
 						uint32 bevelType);
 
-
 	AUI_ERRCODE InitCommonLdl( MBCHAR *ldlBlock );
 	AUI_ERRCODE InitCommon(uint32 bevelWidth, uint32 bevelType );
 
@@ -73,7 +69,6 @@ public:
 
 	uint32 BevelWidth() { return m_bevelWidth; }
 
-	
 	virtual bool IgnoreHighlight() { return true; }
 
 protected:
@@ -83,10 +78,8 @@ protected:
 	virtual void	MouseRGrabInside(aui_MouseEvent * mouseData);
 	virtual void	MouseRDropInside(aui_MouseEvent * mouseData);
 
-
 	uint32 m_bevelWidth;
 	uint32 m_bevelType;
 };
-
 
 #endif

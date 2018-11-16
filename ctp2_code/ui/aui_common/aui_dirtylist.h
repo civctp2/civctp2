@@ -1,26 +1,13 @@
-
-
-
-
-
-
-
-
-
-
-
 #ifndef __AUI_DIRTYLIST_H__
 #define __AUI_DIRTYLIST_H__
-
 
 #include "aui_base.h"
 #include "tech_wllist.h"
 
-
 struct aui_Span
 {
-	sint16 run;		
-	sint16 length;	
+	sint16 run;
+	sint16 length;
 };
 
 
@@ -29,20 +16,19 @@ struct aui_Span
 
 
 
-#define k_DIRTYLIST_MAXSPANS	15 
+#define k_DIRTYLIST_MAXSPANS	15
 
 struct aui_SpanList
 {
-	sint32 num; 
+	sint32 num;
 	aui_Span spans[ k_DIRTYLIST_MAXSPANS ];
 };
-
 
 
 class aui_DirtyList : public aui_Base, public tech_WLList<RECT *>
 {
 public:
-	
+
 	aui_DirtyList(
 		BOOL useSpans = FALSE,
 		sint32 width = 0,
@@ -70,27 +56,21 @@ public:
 	sint32 GetWidth() const { return m_width; }
 	sint32 GetHeight() const { return m_height; }
 
-	
 	aui_SpanList *GetSpans() const { return m_spanListArray; }
 	AUI_ERRCODE SetSpans( aui_DirtyList *newDirtyList );
 
-	
 	BOOL IsEmpty( void ) const { return m_isEmpty; }
 
-	
 	AUI_ERRCODE ComputeSpans( RECT *newRect );
 
 protected:
 	tech_Memory<RECT> *m_rectMemory;
 
-	
 	sint32 m_width;
 	sint32 m_height;
 
-	
 	aui_SpanList *m_spanListArray;
 	sint32 m_isEmpty;
 };
 
-
-#endif 
+#endif

@@ -4,15 +4,13 @@
 #ifndef __STATICTEXTBOX_H__
 #define __STATICTEXTBOX_H__
 
-
 #include "aui_static.h"
-
 
 
 class StaticTextBox : public aui_Static
 {
 public:
-	
+
 	StaticTextBox(
 		AUI_ERRCODE *retval,
 		uint32 id,
@@ -38,10 +36,9 @@ public:
 
 	sint32 GetBevel() { return m_bevel; }
 	void SetBevel( sint32 bevel ) { m_bevel = bevel; }
-	
+
 protected:
 	sint32 m_bevel;
 };
 
-
-#endif 
+#endif

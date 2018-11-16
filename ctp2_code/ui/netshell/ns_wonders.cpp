@@ -11,7 +11,7 @@
 //
 // THIS FILE IS NOT GENERATED OR SUPPORTED BY ACTIVISION.
 //
-// This material has been developed at apolyton.net by the Apolyton CtP2 
+// This material has been developed at apolyton.net by the Apolyton CtP2
 // Source Code Project. Contact the authors at ctp2source@apolyton.net.
 //
 //----------------------------------------------------------------------------
@@ -37,9 +37,7 @@
 
 #include "ns_wonders.h"
 
-
 ns_Wonders *g_nsWonders = NULL;
-
 
 
 ns_Wonders::ns_Wonders()
@@ -49,7 +47,6 @@ ns_Wonders::ns_Wonders()
 	{
 		sint32 numWonders = g_theWonderDB->NumRecords();
 
-		
 		Assert( numWonders <= k_WONDERS_MAX );
 		if ( numWonders > k_WONDERS_MAX )
 			numWonders = k_WONDERS_MAX;
@@ -70,7 +67,6 @@ ns_Wonders::ns_Wonders()
 		g_nsWonders = this;
 	}
 }
-
 
 
 ns_Wonders::~ns_Wonders()

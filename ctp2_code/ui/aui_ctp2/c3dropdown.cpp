@@ -11,7 +11,7 @@
 //
 // THIS FILE IS NOT GENERATED OR SUPPORTED BY ACTIVISION.
 //
-// This material has been developed at apolyton.net by the Apolyton CtP2 
+// This material has been developed at apolyton.net by the Apolyton CtP2
 // Source Code Project. Contact the authors at ctp2source@apolyton.net.
 //
 //----------------------------------------------------------------------------
@@ -44,9 +44,7 @@
 
 #include "c3dropdown.h"
 
-
 extern C3UI *g_c3ui;
-
 
 C3DropDown::C3DropDown(
 	AUI_ERRCODE *retval,
@@ -120,7 +118,6 @@ AUI_ERRCODE C3DropDown::CreateComponents( void )
 	Assert( AUI_NEWOK(m_listBox,errcode) );
 	if ( !AUI_NEWOK(m_listBox,errcode) ) return AUI_ERRCODE_MEMALLOCFAILED;
 
-	
 	m_listBox->SetForceSelect( TRUE );
 
 	errcode;
@@ -143,7 +140,6 @@ AUI_ERRCODE C3DropDown::CreateComponents( void )
 	return AUI_ERRCODE_OK;
 }
 
-
 AUI_ERRCODE C3DropDown::DrawThis( aui_Surface *surface, sint32 x, sint32 y )
 {
 		if ( IsHidden() ) return AUI_ERRCODE_OK;
@@ -158,7 +154,6 @@ AUI_ERRCODE C3DropDown::DrawThis( aui_Surface *surface, sint32 x, sint32 y )
 
 	primitives_BevelRect16( surface, &rect, 2, 0, 16, 16 );
 
-
 	DrawSelectedItem( surface, 2, 2 );
 
 	if ( surface == m_window->TheSurface() )
@@ -166,7 +161,6 @@ AUI_ERRCODE C3DropDown::DrawThis( aui_Surface *surface, sint32 x, sint32 y )
 
 	return AUI_ERRCODE_OK;
 }
-
 
 AUI_ERRCODE C3DropDown::RepositionButton( void )
 {

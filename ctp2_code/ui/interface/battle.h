@@ -1,5 +1,3 @@
-
-
 #ifndef __BATTLE_H__
 #define __BATTLE_H__
 
@@ -14,17 +12,17 @@ public:
 
 	void Initialize(const Army &attackers, CellUnitList &defenders);
 
-	
-	
-	
-	
-	
+
+
+
+
+
 
 	void MakeAttackers(sint32 numAttackers, const Army &attackers);
 	void MakeDefenders(sint32 numDefenders, CellUnitList &defenders);
 
 	BattleViewActor			*ActorFromUnit(BOOL isDefender, Unit theUnit);
-	
+
 	void					GetAttackerPos(sint32 column, sint32 row, sint32 *x, sint32 *y);
 	void					GetDefenderPos(sint32 column, sint32 row, sint32 *x, sint32 *y);
 
@@ -56,15 +54,14 @@ public:
 	sint32					GetNumDefenders(void) { return m_numDefenders; }
 	BattleViewActor			*GetDefender(sint32 index) { return m_defenders[index]; }
 
-	
-	
+
 	void RemoveAttacker(BattleViewActor *actor);
 	void RemoveDefender(BattleViewActor *actor);
 
-	
-	
-	
-	
+
+
+
+
 	PointerList<BattleEvent> *GrabEventQueue();
 
 private:
@@ -78,7 +75,6 @@ private:
 
 	PointerList<BattleEvent>	*m_eventQueue;
 
-	
 	double						m_cityBonus;
 	sint32						m_cityImage;
 	MBCHAR						m_cityName[k_MAX_NAME_LEN];
@@ -94,4 +90,4 @@ private:
 
 };
 
-#endif 
+#endif

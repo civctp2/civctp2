@@ -11,7 +11,7 @@
 class NetHash
 {
 public:
-	NetHash() 
+	NetHash()
 	{
 		for(uint32 i = 0; i < k_NET_HASH_TABLE_SIZE; i++) {
 			m_table[i] = NULL;
@@ -20,7 +20,7 @@ public:
 		m_lowKey = k_NET_HASH_TABLE_SIZE;
 		m_highKey = 0;
 	}
-	~NetHash() 
+	~NetHash()
 	{
 		Clear();
 	}
@@ -36,9 +36,9 @@ public:
 		uint32 m_id;
 	};
 private:
-	uint32 Key(uint32 id) 
-	{ 
-		
+	uint32 Key(uint32 id)
+	{
+
 		return (id % k_NET_HASH_TABLE_SIZE);
 	}
 
@@ -69,24 +69,23 @@ NetHash::Remove(uint32 id)
 {
 	uint32 key = Key(id);
 
-	
-	
-	
+
+
+
 	Assert(m_table[key] != NULL);
 	if(!m_table[key]) {
 		return;
 	}
 
 	PointerList<Entry>::Walker walk(m_table[key]);
-	
+
 	while(walk.IsValid()) {
 		if(walk.GetObj()->m_id == id) {
-			
+
 			walk.Remove();
 
-			
 			uint32 hkey = key;
-			while(key == m_lowKey && 
+			while(key == m_lowKey &&
 				  key < k_NET_HASH_TABLE_SIZE &&
 				  !m_table[key]) {
 				key++;
@@ -120,7 +119,6 @@ NetHash::IsPresent(uint32 id)
 	}
 	return FALSE;
 }
-
 
 inline void
 NetHash::Clear()

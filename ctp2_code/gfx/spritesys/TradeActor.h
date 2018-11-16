@@ -1,14 +1,3 @@
-
-
-
-
-
-
-
-
-
-
-
 #ifdef HAVE_PRAGMA_ONCE
 #pragma once
 #endif
@@ -53,8 +42,8 @@ public:
 	MapPoint		GetCurrentPos(void) { return m_currentPos; }
 	MapPoint		GetSourcePos(void) { return m_sourcePos; }
 	MapPoint		GetDestPos(void) { return m_destPos; }
-	MapPoint		GetNextPos(void); 
-	MapPoint		LookAtNextPos(void); 
+	MapPoint		GetNextPos(void);
+	MapPoint		LookAtNextPos(void);
 
 	uint16			GetWidth(void);
 	uint16			GetHeight(void);
@@ -80,12 +69,11 @@ protected:
 	sint32							m_facing;
 	sint32							m_frame;
 	uint16							m_transparency;
-	
+
 	Action							*m_curAction;
 	GOODACTION						m_curGoodAction;
 
 	Queue<Action *>					m_actionQueue;
-
 
 };
 

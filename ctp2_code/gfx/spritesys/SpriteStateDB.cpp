@@ -1,16 +1,3 @@
-
-
-
-
-
-
-
-
-
-
-
-
-
 #include "c3.h"
 
 #include "SpriteStateDB.h"
@@ -48,13 +35,11 @@ SpriteStateDB::SpriteStateDB(CivArchive &archive)
 	Serialize(archive) ;
 	}
 
-
 SpriteStateDB::~SpriteStateDB ()
 
 {
 	delete m_map;
 }
-
 
 void SpriteStateDB::SetSize(sint32 s)
 
@@ -66,16 +51,16 @@ void SpriteStateDB::SetSize(sint32 s)
 sint32 SpriteStateDB::FindTypeIndex(char *str) const
 
 {
-    sint32 i; 
+    sint32 i;
 
-    Assert(m_map); 
+    Assert(m_map);
 
-	for (i=0; i<m_size; i++) { 
+	for (i=0; i<m_size; i++) {
         if (strcmp(m_map[i].m_name, str) == 0) {
-			return i; 
-		} 
-	} 
-	return -1; 
+			return i;
+		}
+	}
+	return -1;
 }
 
 sint32 SpriteStateDB::GetDefaultVal(sint32 index) const
@@ -83,7 +68,7 @@ sint32 SpriteStateDB::GetDefaultVal(sint32 index) const
 {
 
 	Assert(0 <= index);
-	Assert(index < m_size); 
+	Assert(index < m_size);
 
 	if (index < 0 || index >= m_size) return -1;
 
@@ -94,20 +79,19 @@ void SpriteStateDB::SetName(sint32 index, char str[_MAX_PATH])
 
 {
  	Assert(0 <= index);
-	Assert(index < m_size); 
-    Assert(m_map); 
+	Assert(index < m_size);
+    Assert(m_map);
 
-    strcpy(m_map[index].m_name, str); 
+    strcpy(m_map[index].m_name, str);
 }
-
 
 void SpriteStateDB::SetVal(sint32 index, sint32 val)
 {
  	Assert(0 <= index);
-	Assert(index < m_size); 
-    Assert(m_map); 
+	Assert(index < m_size);
+    Assert(m_map);
 
-    m_map[index].m_default_val = val; 
+    m_map[index].m_default_val = val;
 }
 
 
@@ -129,7 +113,7 @@ void SpriteStateDB::Serialize(CivArchive &archive)
 	if (archive.IsStoring()) {
 		archive<<m_size ;
     	archive.Store((uint8 *)m_map, sizeof(SpriteNameNode) * m_size) ;
-       
+
 	} else {
 		archive>>m_size ;
 		if (m_map)
@@ -141,71 +125,69 @@ void SpriteStateDB::Serialize(CivArchive &archive)
 
 }
 
-
 sint32 SpriteStateDB::ParseASpriteState (Token *spriteToken, sint32 count)
 {
     char str[_MAX_PATH];
 
-	if (spriteToken->GetType() == TOKEN_EOF) { 
-		return FALSE; 
-	} 
-	
-	if (spriteToken->GetType() != TOKEN_STRING) { 
-		c3errors_ErrorDialog  (spriteToken->ErrStr(), "Sprite name expected"); 
+	if (spriteToken->GetType() == TOKEN_EOF) {
+		return FALSE;
+	}
+
+	if (spriteToken->GetType() != TOKEN_STRING) {
+		c3errors_ErrorDialog  (spriteToken->ErrStr(), "Sprite name expected");
         g_abort_parse = TRUE;
 		return FALSE;
-	} else { 
-   		spriteToken->GetString(str); 
-        SetName(count, str); 
+	} else {
+   		spriteToken->GetString(str);
+        SetName(count, str);
 	}
 
     sint32 val;
-    if (spriteToken->Next() != TOKEN_NUMBER) { 
-		c3errors_ErrorDialog  (spriteToken->ErrStr(), "Sprite default number expected"); 
+    if (spriteToken->Next() != TOKEN_NUMBER) {
+		c3errors_ErrorDialog  (spriteToken->ErrStr(), "Sprite default number expected");
         g_abort_parse = TRUE;
 		return FALSE;
-	} else { 
-   		spriteToken->GetNumber(val); 
-        SetVal(count, val); 
+	} else {
+   		spriteToken->GetNumber(val);
+        SetVal(count, val);
 	}
 
     spriteToken->Next();
 
     return TRUE;
 }
-	
 
 sint32 SpriteStateDB::Parse(char *filename)
 
 {
     sint32 n;
 
-    Token *spriteToken = new Token(filename, C3DIR_GAMEDATA); 
-	Assert(spriteToken); 
-	
-   	if (spriteToken->GetType() != TOKEN_NUMBER) { 
-		c3errors_ErrorDialog  (spriteToken->ErrStr(), "Missing number of ability"); 
+    Token *spriteToken = new Token(filename, C3DIR_GAMEDATA);
+	Assert(spriteToken);
+
+   	if (spriteToken->GetType() != TOKEN_NUMBER) {
+		c3errors_ErrorDialog  (spriteToken->ErrStr(), "Missing number of ability");
         g_abort_parse = TRUE;
 		delete spriteToken;
-		return FALSE; 
-	} else { 
-		spriteToken->GetNumber(n); 
-		spriteToken->Next(); 
-		if (n <0) { 
-			c3errors_ErrorDialog  (spriteToken->ErrStr(), "Number of sprites is negative"); 
+		return FALSE;
+	} else {
+		spriteToken->GetNumber(n);
+		spriteToken->Next();
+		if (n <0) {
+			c3errors_ErrorDialog  (spriteToken->ErrStr(), "Number of sprites is negative");
             g_abort_parse = TRUE;
 			delete spriteToken;
-			return FALSE; 
+			return FALSE;
 		}
-		SetSize(n + 1); 
+		SetSize(n + 1);
 	}
-	
+
     int count = 0;
 
-    while (ParseASpriteState(spriteToken, count)) { 
+    while (ParseASpriteState(spriteToken, count)) {
         count++;
     }
-    
+
 	Assert(count == n);
 	if(count == n) {
 		SetName(count, "SPRITE_MYSTERY");
@@ -214,7 +196,7 @@ sint32 SpriteStateDB::Parse(char *filename)
 
 	if (g_abort_parse) {
 		delete spriteToken;
-		return FALSE; 
+		return FALSE;
 	}
 
 	delete spriteToken;

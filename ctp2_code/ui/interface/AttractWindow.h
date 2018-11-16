@@ -1,5 +1,3 @@
-
-
 #ifndef __ATTRACT_WINDOW_H__
 #define __ATTRACT_WINDOW_H__
 

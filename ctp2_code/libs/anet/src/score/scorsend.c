@@ -1,4 +1,4 @@
-/* 
+/*
 Copyright (C) 1995-2001 Activision, Inc.
 
 This library is free software; you can redistribute it and/or
@@ -102,7 +102,7 @@ int main(int argc, char **argv)
 	char scorebuf[3];
 	int send_score = FALSE;
 	int quit_wait = 1000;
-	
+
 	char	GameName[MAX_PATH]="";
 	char	GamePath[MAX_PATH]="";
 	char	GameArgs[MAX_PATH]="";
@@ -140,7 +140,7 @@ int main(int argc, char **argv)
 			usage();
 		}
 		if ((c1 == 'u') && argc-argi < 2) {
-			PRINT(("Bad argument '%s'; -%c requires 2 parameters\n", c1, argv[argi])); 
+			PRINT(("Bad argument '%s'; -%c requires 2 parameters\n", c1, argv[argi]));
 		}
 
 		switch (c1) {
@@ -318,7 +318,7 @@ int main(int argc, char **argv)
 		exit(1);
 	}
 	fclose(fp);
-	
+
 	assert(dp);
 	dp->now = eclock();
 
@@ -329,25 +329,25 @@ int main(int argc, char **argv)
 		size_t size = sizeof(sess);
 		dpid_t myid = dp_ID_NONE;
 		int do_shutdown = 0;
-		
+
 		err = dpGetSessionDesc(dp, &sess, &size);
 		if (err != dp_RES_OK) {
 			printf("scorsend: dpGetSessionDesc returns error %d\n", err);
 			exit(1);
-		}		
+		}
 		key[0] = dp_KEY_PLAYERS;
 		err = dpGetSessionId(dp, &sess, &key[1], &keylen);
 		keylen++;
 		if (err != dp_RES_OK) {
 			printf("scorsend: dpGetSessionId returns error %d\n", err);
 			exit(1);
-		}	
-		err = dpRequestObjectDeltas(dp, TRUE, key, keylen);	
+		}
+		err = dpRequestObjectDeltas(dp, TRUE, key, keylen);
 		if (err != dp_RES_OK) {
 			printf("scorsend: error %d from dpRequestObjectDeltas\n", err);
 			exit(1);
 		}
-		
+
 		while (1) {
 			dpid_t idFrom, idTo;
 			char pktbuf[dpio_MAXLEN_UNRELIABLE];
@@ -371,8 +371,8 @@ int main(int argc, char **argv)
 			}
 			if (err == dp_RES_OK) {
 				dp_objectDelta_packet_t *delta;
-				
-				switch (*((dp_packetType_t *)pktbuf)) {	
+
+				switch (*((dp_packetType_t *)pktbuf)) {
 				case dp_OBJECTDELTA_PACKET_ID:
 					delta = (dp_objectDelta_packet_t *)(pktbuf + sizeof(dp_packetType_t));
 					if (delta->key[0] != dp_KEY_PLAYERS)

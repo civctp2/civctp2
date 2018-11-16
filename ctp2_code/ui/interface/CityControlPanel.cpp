@@ -3,7 +3,7 @@
 // Project      : Call To Power 2
 // File type    : C++ source
 // File name    : \UI\Interface\CityControlPanel.cpp
-// Description  : Handling for the city tab of the control panel 
+// Description  : Handling for the city tab of the control panel
 // Id           : $Id$
 //
 //----------------------------------------------------------------------------
@@ -12,7 +12,7 @@
 //
 // THIS FILE IS NOT GENERATED OR SUPPORTED BY ACTIVISION.
 //
-// This material has been developed at apolyton.net by the Apolyton CtP2 
+// This material has been developed at apolyton.net by the Apolyton CtP2
 // Source Code Project. Contact the authors at ctp2source@apolyton.net.
 //
 //----------------------------------------------------------------------------
@@ -28,13 +28,13 @@
 // - Made rush buy button behaviour consistent with other windows.
 // - Disabled rushbuy button if infrastructure or captalization are
 //   at the front of the build queue, by Martin Gühmann.
-// - If infrastructure or capitalization are at the front of the 
+// - If infrastructure or capitalization are at the front of the
 //   build queue no cost or turns are shown anymore, by Martin Gühmann.
 // - Rush buy button should be disabled when it is not the player's turn
 //   unfortunatly the button state is not updated on the end turn event.
-// - Made update of rush buy button possible when (only) the gold of the 
+// - Made update of rush buy button possible when (only) the gold of the
 //   player has changed.
-// - #01 Standardization of city selection and focus handling  
+// - #01 Standardization of city selection and focus handling
 //   (L. Hirth 6/2004)
 //
 //----------------------------------------------------------------------------
@@ -113,7 +113,7 @@ m_governorDropDown(static_cast<ctp2_DropDown*>(
 				   aui_Ldl::GetObject(ldlBlock,
 				   "CityTab.TabPanel.GovernorSelect.Pulldown")))
 {
-	
+
 	Assert(m_buildItemLabel);
 	Assert(m_buildItemIconButton);
 	Assert(m_buildItemTurnButton);
@@ -125,7 +125,6 @@ m_governorDropDown(static_cast<ctp2_DropDown*>(
 	Assert(m_governorDropDown);
 	Assert(m_buildItemProgressBar);
 
-	
 	m_buildItemIconButton->SetActionFuncAndCookie(
 		EditBuildQueueButtonActionCallback, this);
 	m_buildItemTurnButton->SetActionFuncAndCookie(
@@ -152,7 +151,6 @@ m_governorDropDown(static_cast<ctp2_DropDown*>(
 	m_useGovernor = false;
 	m_currentGovernor = -1;
 
-	
 	m_buildItemIconButton->Enable(false);
 	m_buildItemTurnButton->Enable(false);
 	m_cityListPreviousButton->Enable(false);
@@ -163,59 +161,50 @@ m_governorDropDown(static_cast<ctp2_DropDown*>(
 
 	m_buildItemProgressBar->SetDrawCallbackAndCookie(ProgressDrawCallback, 0);
 
-	
 	m_governorDropDown->Clear();
 
-	
 	for(sint32 governorIndex = 0; governorIndex <
 		g_theBuildListSequenceDB->NumRecords(); governorIndex++) {
-		
+
 		ctp2_ListItem *listItem = static_cast<ctp2_ListItem*>(
 			aui_Ldl::BuildHierarchyFromRoot("GovernorListItem"));
 
-		
 		ctp2_Static *label = static_cast<ctp2_Static*>(
 			listItem->GetChildByIndex(0));
 		label->SetText(
 			g_theBuildListSequenceDB->Get(
 			governorIndex)->GetNameText());
 
-		
 		m_governorDropDown->AddItem(listItem);
 	}
-	if(m_governorDropDown->IsDisabled()) 
+	if(m_governorDropDown->IsDisabled())
 	{
 		m_governorDropDown->SetSelectedItem(-1);
 	}
 }
 
-
 void CityControlPanel::Update()
 {
-	
+
 	UpdateBuildItem();
 	UpdateGovernor();
 
 }
 
-
 void CityControlPanel::PrevCityButtonActionCallback(aui_Control *control,
 	uint32 action, uint32 data, void *cookie)
 {
-	
+
 	if(action != static_cast<uint32>(AUI_BUTTON_ACTION_EXECUTE))
 		return;
 
-	
 	CityControlPanel *cityControlPanel =
 		static_cast<CityControlPanel*>(cookie);
 
-	
 	sint32 numberOfItems =
 		cityControlPanel->m_cityListDropDown->GetListBox()->NumItems();
 
-	
-	
+
 	if(numberOfItems < 2)
 		return;
 
@@ -223,10 +212,8 @@ void CityControlPanel::PrevCityButtonActionCallback(aui_Control *control,
 		(cityControlPanel->m_cityListDropDown->GetSelectedItem() +
 		numberOfItems - 1) % numberOfItems);
 
-	
 	cityControlPanel->Update();
 }
-
 
 void CityControlPanel::NextCityButtonActionCallback(aui_Control *control,
 	uint32 action, uint32 data, void *cookie)
@@ -243,7 +230,6 @@ void CityControlPanel::NextCityButtonActionCallback(aui_Control *control,
 	sint32 numberOfItems =
 		cityControlPanel->m_cityListDropDown->GetListBox()->NumItems();
 
-	
 	// If only one or zero city exists, no change needed
 	if(numberOfItems < 2)
 		return;
@@ -257,38 +243,31 @@ void CityControlPanel::NextCityButtonActionCallback(aui_Control *control,
 	cityControlPanel->Update();
 }
 
-
 void CityControlPanel::EditBuildQueueButtonActionCallback(aui_Control *control,
 	uint32 action, uint32 data, void *cookie)
 {
-	
+
 	if(action != static_cast<uint32>(AUI_BUTTON_ACTION_EXECUTE))
 		return;
 
-	
 	Player *player = g_player[g_selected_item->GetVisiblePlayer()];
 	if(!player)
 		return;
 
-	
 	CityControlPanel *cityControlPanel =
 		static_cast<CityControlPanel*>(cookie);
 
-	
 	sint32 numberOfItems =
 		cityControlPanel->m_cityListDropDown->GetListBox()->NumItems();
 
-	
-	
+
 	if(numberOfItems < 1)
 		return;
 
-	
 	sint32 selectedItem = cityControlPanel->m_cityListDropDown->GetSelectedItem();
 	if (selectedItem >= numberOfItems)
 		selectedItem = numberOfItems - 1;
 
-	
 	if(g_network.IsClient() && g_network.GetSensitiveUIBlocked()) {
 	} else {
 		EditQueue::Display(CityWindow::GetCityData(player->GetCityFromIndex(selectedItem)));
@@ -298,7 +277,7 @@ void CityControlPanel::EditBuildQueueButtonActionCallback(aui_Control *control,
 void CityControlPanel::RushBuyBuildButtonActionCallback(aui_Control *control,
 	uint32 action, uint32 data, void *cookie)
 {
-	
+
 	if(action != static_cast<uint32>(AUI_BUTTON_ACTION_EXECUTE))
 		return;
 
@@ -313,29 +292,24 @@ void CityControlPanel::RushBuyBuildButtonActionCallback(aui_Control *control,
 	((CityControlPanel*)cookie)->Update();
 }
 
-
 void CityControlPanel::ToggleGovernorButtonActionCallback(aui_Control *control,
 	uint32 action, uint32 data, void *cookie)
 {
-	
+
 	if(action != static_cast<uint32>(AUI_BUTTON_ACTION_EXECUTE))
 		return;
 
-	
 	Player *player = g_player[g_selected_item->GetVisiblePlayer()];
 	if(!player)
 		return;
 
-	
 	CityControlPanel *cityControlPanel =
 		static_cast<CityControlPanel*>(cookie);
 
-	
 	sint32 numberOfItems =
 		cityControlPanel->m_cityListDropDown->GetListBox()->NumItems();
 
-	
-	
+
 	if(numberOfItems < 1)
 		return;
 
@@ -343,53 +317,44 @@ void CityControlPanel::ToggleGovernorButtonActionCallback(aui_Control *control,
 	if(selIndex < 0 || selIndex >= player->m_all_cities->Num())
 		return;
 
-	
 	CityData *cityData =
 		player->GetCityFromIndex(
 		cityControlPanel->m_cityListDropDown->GetSelectedItem()
 		).GetCityData();
 	cityData->SetUseGovernor(!cityData->GetUseGovernor());
 
-	
 	cityControlPanel->UpdateGovernor();
 }
-
 
 void CityControlPanel::SelectGovernorActionCallback(aui_Control *control,
 	uint32 action, uint32 data, void *cookie)
 {
-	
+
 	if(action != static_cast<uint32>(AUI_DROPDOWN_ACTION_SELECT))
 		return;
 
-	
 	if(!g_selected_item)
 		return;
 	Player *player = g_player[g_selected_item->GetVisiblePlayer()];
 	if(!player)
 		return;
 
-	
 	CityControlPanel *cityControlPanel =
 		static_cast<CityControlPanel*>(cookie);
 
-	
 	sint32 numberOfItems =
 		cityControlPanel->m_cityListDropDown->GetListBox()->NumItems();
 
-	
-	
+
 	if(numberOfItems < 1)
 		return;
 
-	
 	CityData *cityData = cityControlPanel->GetSelectedCity();
 	if(cityData) {
 		cityData->SetBuildListSequenceIndex(
 			static_cast<ctp2_DropDown*>(control)->GetSelectedItem());
 	}
 
-	
 	cityControlPanel->UpdateGovernor();
 }
 
@@ -403,12 +368,11 @@ CityData *CityControlPanel::GetSelectedCity()
 	return u.CD();
 }
 
-
 //----------------------------------------------------------------------------
 //
 // Name       : CityControlPanel::CitySelectActionCallback
 //
-// Description: Will be called when a city is selected on the control panel 
+// Description: Will be called when a city is selected on the control panel
 //              city list.
 //
 //----------------------------------------------------------------------------
@@ -431,12 +395,11 @@ void CityControlPanel::CitySelectActionCallback(aui_Control *control,
 			if(g_selected_item->GetSelectedCity(oldCity) && (oldCity.m_id == cd->GetHomeCity().m_id)) {
 			// same city selected as before, nothing to do
 
-
 			} else {
  				// City has changed, do the neccessary
 				g_selected_item->SetSelectCity(cd->GetHomeCity());
 
-				MapPoint pos = cd->GetHomeCity().RetPos(); // Not needed         
+				MapPoint pos = cd->GetHomeCity().RetPos(); // Not needed
 
 			}
 		}
@@ -447,13 +410,12 @@ void CityControlPanel::CitySelectActionCallback(aui_Control *control,
 }
 
 
-
 //----------------------------------------------------------------------------
 //
 // Name       : CityControlPanel::UpdateBuildItem
 //
 // Description: Updates all the data concerning city build items of the
-//              city tab including rush buy button, turn button rush buy 
+//              city tab including rush buy button, turn button rush buy
 //              costs.
 //
 // Parameters : -
@@ -471,7 +433,7 @@ void CityControlPanel::UpdateBuildItem()
 {
 	sint32 const	visiblePlayer	= g_selected_item->GetVisiblePlayer();
 	Player *		player			= g_player[visiblePlayer];
-	if(!player || (player->GetNumCities() <= 0)) 
+	if(!player || (player->GetNumCities() <= 0))
 	{
 		ClearBuildItem();
 		return;
@@ -480,13 +442,13 @@ void CityControlPanel::UpdateBuildItem()
 	sint32			city_index		= m_cityListDropDown->GetSelectedItem();
 	if (city_index == -1)
 	{
-		return; 
+		return;
 	}
 	else if (city_index >= player->GetNumCities())
 	{
 		city_index	= 0;
 	}
-	
+
 	sint32			numberOfItems	= m_cityListDropDown->GetListBox()->NumItems();
 	Unit			city			= player->GetCityFromIndex(city_index);
 	CityData *		theCity			= city.CD();
@@ -536,7 +498,7 @@ void CityControlPanel::UpdateBuildItem()
 	m_currentTurns		= turns;
 	m_buildItemProgressBar->SetDrawCallbackAndCookie
 		(ProgressDrawCallback, (void *) m_currentCity.m_id);
-	
+
 	if(numberOfItems < 1) {
 		ClearBuildItem();
 		return;
@@ -550,7 +512,6 @@ void CityControlPanel::UpdateBuildItem()
 		return;
 	}
 
-	
 	MBCHAR tempStr[100];
 	strncpy(tempStr, GetBuildName(head), 99);
 	tempStr[99] = 0;
@@ -559,11 +520,11 @@ void CityControlPanel::UpdateBuildItem()
 
 	const MBCHAR *buildIconName = GetBuildIcon(head);
 	if (buildIconName && strcmp(buildIconName, "NULL")) {
-		
+
 		m_buildItemIconButton->SetText("");
 		m_buildItemIconButton->ExchangeImage(4, 0, buildIconName);
 	} else {
-		
+
 		m_buildItemIconButton->SetText("---");
 		m_buildItemIconButton->ExchangeImage(4, 0, NULL);
 	}
@@ -580,7 +541,7 @@ void CityControlPanel::UpdateBuildItem()
 	{
 		sprintf(numTurns, "%d", turns);
 	}
-	m_buildItemTurnButton->SetText(numTurns); 
+	m_buildItemTurnButton->SetText(numTurns);
 }
 
 void CityControlPanel::NoBuildItem()
@@ -593,7 +554,6 @@ void CityControlPanel::NoBuildItem()
 	m_buildItemTurnButton->SetText("-");
 }
 
-
 void CityControlPanel::ClearBuildItem()
 {
 	if(m_currentItem >= -1) {
@@ -601,48 +561,42 @@ void CityControlPanel::ClearBuildItem()
 		m_buildItemIconButton->ExchangeImage(4, 0, NULL);
 		m_buildItemIconButton->SetText("");
 		m_buildItemTurnButton->SetText("");
-		
-		
+
 		m_buildItemIconButton->Enable(false);
 		m_buildItemTurnButton->Enable(false);
 		m_currentItem = -2;
 	}
 }
 
-
 void CityControlPanel::UpdateGovernor()
 {
-	
+
 	Player *player = g_player[g_selected_item->GetVisiblePlayer()];
 
-	
 	sint32 numberOfItems =
 		m_cityListDropDown->GetListBox()->NumItems();
 
-	
 	if (!player || numberOfItems < 1 || player->GetNumCities() <= 0) {
 		if(!m_governorToggleButton->IsDisabled()) {
-			
+
 			m_governorToggleButton->Enable(false);
 			m_governorToggleButton->SetText("");
 		}
 
 		if(!m_governorDropDown->IsDisabled()) {
-			
+
 			m_governorDropDown->Enable(false);
 			m_governorDropDown->SetSelectedItem(-1);
 		}
 		return;
 	}
 
-	
-	
+
 	if(m_governorToggleButton->IsDisabled()) {
-		
+
 		m_governorToggleButton->Enable(true);
 	}
 
-	
 	sint32 city_index = m_cityListDropDown->GetSelectedItem();
 	if (city_index >= player->GetNumCities())
 		city_index = 0;
@@ -652,36 +606,34 @@ void CityControlPanel::UpdateGovernor()
 
 	Unit city = player->GetCityFromIndex(city_index);
 
-	
 	if(city.GetCityData()->GetUseGovernor()) {
 		if(!m_useGovernor) {
-			
+
 			m_governorToggleButton->SetText("X");
 			m_useGovernor = true;
 		}
 
 		if(m_governorDropDown->IsDisabled()) {
-			
-			
+
 			m_governorDropDown->Enable(true);
 		}
-		
+
 		if(m_currentGovernor != city.GetCityData()->GetBuildListSequenceIndex()) {
 			m_governorDropDown->SetSelectedItem(
 				city.GetCityData()->GetBuildListSequenceIndex());
 			m_currentGovernor = city.GetCityData()->GetBuildListSequenceIndex();
 		}
 	} else {
-		
+
 		if(m_useGovernor) {
 			m_governorToggleButton->SetText("");
 			m_useGovernor = false;
 		}
 
 		if(!m_governorDropDown->IsDisabled())
-			
+
 			m_governorDropDown->Enable(false);
-	
+
 		if(m_currentGovernor >= 0) {
 			m_governorDropDown->SetSelectedItem(-1);
 			m_currentGovernor = -1;
@@ -689,13 +641,12 @@ void CityControlPanel::UpdateGovernor()
 	}
 }
 
-
 //----------------------------------------------------------------------------
 //
 // Name       : CityControlPanel::UpdateCityList
 //
 // Description: Clears and refills the dropdown selection list of cities
-//              located on the CityControlPanel 
+//              located on the CityControlPanel
 //
 // Parameters : -
 //
@@ -755,10 +706,9 @@ void CityControlPanel::UpdateCityList()
 	}
 }
 
-
 const MBCHAR *CityControlPanel::GetBuildName(const BuildNode *buildNode)
 {
-	
+
 	Assert(buildNode);
 
 	return g_theStringDB->GetNameStr(GetBuildStringId(buildNode));
@@ -766,19 +716,19 @@ const MBCHAR *CityControlPanel::GetBuildName(const BuildNode *buildNode)
 
 StringId CityControlPanel::GetBuildStringId(const BuildNode *buildNode)
 {
-	
+
 	Assert(buildNode);
 
 	sint32 id;
-	
+
 	switch(buildNode->m_category) {
-		case k_GAME_OBJ_TYPE_UNIT: 
+		case k_GAME_OBJ_TYPE_UNIT:
 			return(g_theUnitDB->Get(buildNode->m_type)->GetName());
 			break;
-		case k_GAME_OBJ_TYPE_IMPROVEMENT: 
+		case k_GAME_OBJ_TYPE_IMPROVEMENT:
 			return(g_theBuildingDB->Get(buildNode->m_type)->GetName());
 			break;
-		case k_GAME_OBJ_TYPE_WONDER: 
+		case k_GAME_OBJ_TYPE_WONDER:
 			return(g_theWonderDB->Get(buildNode->m_type)->GetName());
 			break;
 		case k_GAME_OBJ_TYPE_CAPITALIZATION:
@@ -788,34 +738,30 @@ StringId CityControlPanel::GetBuildStringId(const BuildNode *buildNode)
 			g_theStringDB->GetStringID("INFRASTRUCTURE", id);
 			return id;
 		default:
-			Assert(false);	
+			Assert(false);
 			break;
 	}
 
-	
 	return 0;
 }
 
-
 const MBCHAR *CityControlPanel::GetBuildIcon(const BuildNode *buildNode)
 {
-	
+
 	Assert(buildNode);
 
-	
 	const MBCHAR *largeIcon = NULL;
 
-	
 	switch(buildNode->m_category) {
-		case k_GAME_OBJ_TYPE_UNIT: 
+		case k_GAME_OBJ_TYPE_UNIT:
 			largeIcon = g_theUnitDB->Get(
 				buildNode->m_type)->GetDefaultIcon()->GetLargeIcon();
 			break;
-		case k_GAME_OBJ_TYPE_IMPROVEMENT: 
+		case k_GAME_OBJ_TYPE_IMPROVEMENT:
 			largeIcon = g_theBuildingDB->Get(
 				buildNode->m_type)->GetDefaultIcon()->GetIcon();
 			break;
-		case k_GAME_OBJ_TYPE_WONDER: 
+		case k_GAME_OBJ_TYPE_WONDER:
 			largeIcon = g_theWonderDB->Get(
 				buildNode->m_type)->GetDefaultIcon()->GetIcon();
 			break;
@@ -841,11 +787,10 @@ const MBCHAR *CityControlPanel::GetBuildIcon(const BuildNode *buildNode)
 		}
 
 		default:
-			Assert(false);	
+			Assert(false);
 			break;
 	}
 
-	
 	return(largeIcon);
 }
 
@@ -857,7 +802,7 @@ void CityControlPanel::SelectedCity()
 
 	CityData *oldCityData = GetSelectedCity();
 	if(oldCityData && oldCityData->GetHomeCity().m_id == newCity.m_id) {
-		
+
 		if(!g_network.IsClient()) {
 			CityWindow::Project(oldCityData);
 		}
@@ -885,29 +830,23 @@ void CityControlPanel::Activated()
 	if(g_selected_item->GetSelectedCity(city))
 		return;
 
-	
-	
+
 	if(!g_selected_item)
 		return;
 
-	
 	Player *player = g_player[g_selected_item->GetVisiblePlayer()];
 
-	
 	if(!player)
 		return;
 
-	
 	ID id;
 	PLAYER_INDEX playerIndex;
 	SELECT_TYPE selectionType;
 	g_selected_item->GetTopCurItem(playerIndex, id,
 		selectionType);
 
-	
   	if(selectionType != SELECT_TYPE_NONE) {
-		
-		
+
 		Unit city = g_theWorld->GetCity(g_selected_item->GetCurSelectPos());
 		if(city.IsValid()) {
 			g_selected_item->SetSelectCity(city);
@@ -916,8 +855,8 @@ void CityControlPanel::Activated()
 }
 
 AUI_ERRCODE CityControlPanel::ProgressDrawCallback(ctp2_Static *control,
-												   aui_Surface *surface, 
-												   RECT &rect, 
+												   aui_Surface *surface,
+												   RECT &rect,
 												   void *cookie)
 {
   //Unit city; city.m_id = reinterpret_cast<uint32>(cookie); //gcc >= 4 does not accept this any more
@@ -929,10 +868,9 @@ AUI_ERRCODE CityControlPanel::ProgressDrawCallback(ctp2_Static *control,
 		return AUI_ERRCODE_OK;
 	}
 
-	
 	double storedProd = double(city.CD()->GetStoredCityProduction());
 	double neededProd = double(city.CD()->GetBuildQueue()->GetHead()->m_cost);
-	
+
 	double percentComplete;
 	if(neededProd == 0) {
 		percentComplete = 1.0;
@@ -949,4 +887,3 @@ AUI_ERRCODE CityControlPanel::ProgressDrawCallback(ctp2_Static *control,
 	g_c3ui->TheBlitter()->ColorBlt(surface, &destRect, RGB(0,0,255), 0);
 	return AUI_ERRCODE_OK;
 }
-

@@ -11,7 +11,7 @@
 //
 // THIS FILE IS NOT GENERATED OR SUPPORTED BY ACTIVISION.
 //
-// This material has been developed at apolyton.net by the Apolyton CtP2 
+// This material has been developed at apolyton.net by the Apolyton CtP2
 // Source Code Project. Contact the authors at ctp2source@apolyton.net.
 //
 //----------------------------------------------------------------------------
@@ -103,7 +103,7 @@ void DrawTradeRouteSegment(aui_Surface *surf, MapPoint &pos, WORLD_DIRECTION dir
 	y2 += g_tiledMap->GetZoomTilePixelHeight();
 
 	sint32 top, left, right, bottom;
-	
+
 	if (x1 < x2) {
 		left = x1;
 		right = x2;
@@ -124,13 +124,11 @@ void DrawTradeRouteSegment(aui_Surface *surf, MapPoint &pos, WORLD_DIRECTION dir
 
 	SetRect(&tempRect, left, top, right, bottom);
 
-	
 	if (x1 >= 0 && y1 >= 0 && x2 >= 0 && y2 >= 0 &&
 		x1 < surf->Width() && y1 < surf->Height() && x2 < surf->Width() && y2 < surf->Height()) {
 
 		primitives_DrawDashedAALine16(surf,x1,y1,x2,y2,route,k_TRADE_DASH_LEN);
 	}
-
 
 	if (x1==x2) {
 		x1++;
@@ -139,17 +137,15 @@ void DrawTradeRouteSegment(aui_Surface *surf, MapPoint &pos, WORLD_DIRECTION dir
 		y1++;
 		y2++;
 	}
-	
+
 	tempRect.right++;
 	tempRect.bottom++;
 
-	
 	if (x1 >= 0 && y1 >= 0 && x2 >= 0 && y2 >= 0 &&
 		x1 < surf->Width() && y1 < surf->Height() && x2 < surf->Width() && y2 < surf->Height()) {
 
 		primitives_DrawDashedAALine16(surf,x1,y1,x2,y2,outline, k_TRADE_DASH_LEN);
 	}
-
 
 	g_tiledMap->AddDirtyRectToMix(tempRect);
 
@@ -181,10 +177,10 @@ void DrawReversedTradeRouteSegment(aui_Surface *surf, MapPoint &pos, WORLD_DIREC
 
 
 void DrawTradeRoute(
-		aui_Surface *pSurface,					
-		DynamicArray<MapPoint> *pRoute,		
-		uint16 route,						
-		uint16 outline						
+		aui_Surface *pSurface,
+		DynamicArray<MapPoint> *pRoute,
+		uint16 route,
+		uint16 outline
 		)
 {
 	Assert(pSurface);
@@ -193,12 +189,12 @@ void DrawTradeRoute(
 	if (pRoute==NULL) return;
 
 	if (outline == 0x0000)
-		outline = 0x0001; 
+		outline = 0x0001;
 
 	MapPoint prev, curr;
 	MapPoint screenPrev, screenCurr;
 
-	WORLD_DIRECTION		dir = NOWHERE, 
+	WORLD_DIRECTION		dir = NOWHERE,
 						oldDir = NOWHERE;
 
 	for (sint32 i = 0;i < pRoute->Num()-1;i++)
@@ -209,9 +205,8 @@ void DrawTradeRoute(
 
 
 
-		
-		if (g_tiledMap->TileIsVisible(prev.x, prev.y))
 
+		if (g_tiledMap->TileIsVisible(prev.x, prev.y))
 
 		{
 
@@ -228,15 +223,12 @@ void DrawTradeRoute(
 				routeColor = pixelutils_PercentDarken(routeColor, 64);
 			}
 
-			
-			
+
 			if (oldDir != NOWHERE)
 				DrawReversedTradeRouteSegment(pSurface, prev, oldDir, routeColor, outline);
 
-			
 			DrawTradeRouteSegment(pSurface, prev, dir, routeColor, outline);
 
-			
 			if ((i == pRoute->Num()-1) && g_tiledMap->GetLocalVision()->IsExplored(curr)) {
 				routeColor = route;
 				if (!g_tiledMap->GetLocalVision()->IsVisible(curr)) {
@@ -282,8 +274,6 @@ void DrawTradeRoute(
 
 		}
 
-		
 
 	}
 }
-

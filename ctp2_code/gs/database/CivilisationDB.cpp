@@ -1,14 +1,3 @@
-
-
-
-
-
-
-
-
-
-
-
 #include "c3.h"
 #include "c3errors.h"
 
@@ -38,13 +27,11 @@ enum TOKEN_CIVILISATION_FLAG
 	TOKEN_CIVILISATION_MAX_VAL
 	} ;
 
-#define shiftbit(i) ((uint64)((uint64)(0x01) << (uint64)(i)))		
-
+#define shiftbit(i) ((uint64)((uint64)(0x01) << (uint64)(i)))
 
 	extern StringDB *g_theStringDB ;
-	
-	extern sint32 g_parse_civilisation_abort ;
 
+	extern sint32 g_parse_civilisation_abort ;
 
 TokenData g_CivilisationDB_token_data [TOKEN_CIVILISATION_MAX_VAL] = {
 	{ TOKEN_CIV_LEADER_NAME, "CIV_LEADER_NAME" },
@@ -54,10 +41,10 @@ TokenData g_CivilisationDB_token_data [TOKEN_CIVILISATION_MAX_VAL] = {
     { TOKEN_CIV_PERSONALITY_DESCRIPTION, "CIV_PERSONALITY_DESCRIPTION"},
 	{ TOKEN_CIV_CITY_NAME, "CIV_CITY_NAME" },
 	{ TOKEN_CIV_IS_CAPITAL, "CITY_IS_CAPITAL"},
-	{ TOKEN_CIV_SINGULAR, "CIV_SINGULAR"},				
+	{ TOKEN_CIV_SINGULAR, "CIV_SINGULAR"},
 	{ TOKEN_CIV_PLURAL, "CIV_PLURAL"},
 	{ TOKEN_CIV_EMISSARY_PHOTO, "CIV_EMISSARY_PHOTO" },
-	{ TOKEN_CIV_COUNTRY, "CIV_COUNTRY"},				
+	{ TOKEN_CIV_COUNTRY, "CIV_COUNTRY"},
 	{ TOKEN_CIV_CITY_STYLE, "CIV_CITY_STYLE" },
     { TOKEN_CIV_PARCHMENT, "CIV_PARCHMENT"},
 	} ;
@@ -153,7 +140,7 @@ void CivilisationDatabase::Serialize(CivArchive &archive)
 BOOL CivilisationDatabase::Initialise(char *filename, C3DIR dir)
 	{
 	g_parse_civilisation_abort = FALSE ;
-	if(!ParseCivilisationDatabase(filename, dir)) 
+	if(!ParseCivilisationDatabase(filename, dir))
 		return (FALSE) ;
 
 	Assert(m_nRec) ;
@@ -178,7 +165,7 @@ BOOL CivilisationDatabase::ParseCivilisationDatabase(char *filename, C3DIR dir)
 	sint32	n ;
 
     if (civilisationToken->GetType() != TOKEN_NUMBER)
-		{ 
+		{
 		c3errors_ErrorDialog(civilisationToken->ErrStr(), "Expected number of Civilisations not found") ;
         return (FALSE) ;
 		}
@@ -205,7 +192,7 @@ BOOL CivilisationDatabase::ParseCivilisationDatabase(char *filename, C3DIR dir)
 		return (FALSE) ;
 		}
 
-	if (g_parse_civilisation_abort) 
+	if (g_parse_civilisation_abort)
 		return (FALSE) ;
 
 	return (TRUE) ;
@@ -224,10 +211,10 @@ BOOL CivilisationDatabase::ParseACivilisation(Token *civilisationToken, const si
 	char str[k_MAX_NAME_LEN] ;
 
 	StringId str_id ;
-	
+
 	if (civilisationToken->Next() == TOKEN_EOF)
 		return (FALSE) ;
-	
+
 	if (civilisationToken->GetType() != TOKEN_STRING)
 		{
 		c3errors_ErrorDialog(civilisationToken->ErrStr(), "Civilisation id expected") ;
@@ -243,11 +230,11 @@ BOOL CivilisationDatabase::ParseACivilisation(Token *civilisationToken, const si
 			}
 
 		}
-	
+
 	StringId u ;
 
 	AddRec(str_id, u) ;
-	
+
 #ifdef _DEBUG
 	if(!(rand() % 10000)) {
 		static saidItOnce = FALSE;

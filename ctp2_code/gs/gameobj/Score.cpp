@@ -10,19 +10,19 @@
 //
 // THIS FILE IS NOT GENERATED OR SUPPORTED BY ACTIVISION.
 //
-// This material has been developed at apolyton.net by the Apolyton CtP2 
+// This material has been developed at apolyton.net by the Apolyton CtP2
 // Source Code Project. Contact the authors at ctp2source@apolyton.net.
 //
 //----------------------------------------------------------------------------
 //
 // Compiler flags
-// 
+//
 //----------------------------------------------------------------------------
 //
 // Modifications from the original Activision code:
 //
 // - #01 When calculating the score for the player, the population of the cities
-//    will be considered with realistic limits (2004/06/04 L. Hirth). 
+//    will be considered with realistic limits (2004/06/04 L. Hirth).
 //
 //----------------------------------------------------------------------------
 
@@ -138,8 +138,8 @@ sint32 Score::GetTotalScore()
 		return m_finalScore;
 	}
 
-	
-	
+
+
 
 	sint32 i;
 	sint32 total = 0;
@@ -163,7 +163,7 @@ sint32 Score::GetPlayerStrength(Player *pl)
 sint32 Score::GetPartialScoreCount(SCORE_CATEGORY cat)
 {
 	Player *pl = g_player[m_owner];
-	if(!pl) 
+	if(!pl)
 		pl = Player::GetDeadPlayer(m_owner);
 	if(!pl)
 		return 0;
@@ -185,7 +185,7 @@ sint32 Score::GetPartialScoreCount(SCORE_CATEGORY cat)
 					total += GetPlayerStrength(g_player[i]);
 			}
 			PointerList<Player>::Walker walk(g_deadPlayer);
-			while (walk.IsValid()) 
+			while (walk.IsValid())
 			{
 				total += GetPlayerStrength(walk.GetObj());
 				walk.Next();
@@ -208,8 +208,7 @@ sint32 Score::GetPartialScoreCount(SCORE_CATEGORY cat)
 		}
 		case SCORE_CAT_FEATS:
 		{
-			
-			
+
 			count = m_feats;
 			break;
 		}
@@ -222,7 +221,7 @@ sint32 Score::GetPartialScoreCount(SCORE_CATEGORY cat)
 		case SCORE_CAT_WONDERS:
 		{
 			uint64 built = pl->m_builtWonders;
-			for(i = 0; i < 64; i++) 
+			for(i = 0; i < 64; i++)
 			{
 				if(((uint64)1 << (uint64)i) & built)
 					count++;
@@ -232,7 +231,7 @@ sint32 Score::GetPartialScoreCount(SCORE_CATEGORY cat)
 		case SCORE_CAT_POPULATION:
 		{
 			sint32 totalPop = 0;
-			
+
 			for ( i = 0 ; i < k_MAX_PLAYERS ; i++ )
 			{
 				if (g_player[i] && (i != PLAYER_INDEX_VANDALS))
@@ -245,7 +244,7 @@ sint32 Score::GetPartialScoreCount(SCORE_CATEGORY cat)
 		}
 		case SCORE_CAT_CITIES0TO30:
 		{
-			for(i = pl->m_all_cities->Num() - 1; i >= 0; i--) 
+			for(i = pl->m_all_cities->Num() - 1; i >= 0; i--)
 			{
 				sint32 pop = pl->m_all_cities->Access(i).PopCount();
 					if (pop < 3)
@@ -256,7 +255,7 @@ sint32 Score::GetPartialScoreCount(SCORE_CATEGORY cat)
 
 		case SCORE_CAT_CITIES30TO100:
 		{
-			for(i = pl->m_all_cities->Num() - 1; i >= 0; i--) 
+			for(i = pl->m_all_cities->Num() - 1; i >= 0; i--)
 			{
 				sint32 pop = pl->m_all_cities->Access(i).PopCount();
 					if ((pop >= 3) && (pop < 10))
@@ -267,7 +266,7 @@ sint32 Score::GetPartialScoreCount(SCORE_CATEGORY cat)
 
 		case SCORE_CAT_CITIES100TO500:
 		{
-			for(i = pl->m_all_cities->Num() - 1; i >= 0; i--) 
+			for(i = pl->m_all_cities->Num() - 1; i >= 0; i--)
 			{
 				sint32 pop = pl->m_all_cities->Access(i).PopCount();
 					if ((pop >= 10) && (pop < 50))
@@ -278,7 +277,7 @@ sint32 Score::GetPartialScoreCount(SCORE_CATEGORY cat)
 
 		case SCORE_CAT_CITIES500PLUS:
 		{
-			for(i = pl->m_all_cities->Num() - 1; i >= 0; i--) 
+			for(i = pl->m_all_cities->Num() - 1; i >= 0; i--)
 			{
 				sint32 pop = pl->m_all_cities->Access(i).PopCount();
 					if (pop >= 50)
@@ -288,7 +287,7 @@ sint32 Score::GetPartialScoreCount(SCORE_CATEGORY cat)
 			break;
 		}
 	}
-	if(count<0)	
+	if(count<0)
 	{
 		count=0;
 	}
@@ -299,14 +298,14 @@ sint32 Score::GetPartialScore(SCORE_CATEGORY cat)
 {
 	sint32 count = GetPartialScoreCount(cat);
 	double value = count * GetPartialScoreValue(cat);
-	if(value<0)	
+	if(value<0)
 	{
 		value=0;
 	}
 
 	switch (cat)
 	{
-		
+
 		case SCORE_CAT_POPULATION:
 		case SCORE_CAT_RANK:
 		{
@@ -319,20 +318,20 @@ sint32 Score::GetPartialScore(SCORE_CATEGORY cat)
 
 double Score::GetPartialScoreValue(SCORE_CATEGORY cat)
 {
-	
+
 	Player *pl = g_player[m_owner];
-	if(!pl) 
+	if(!pl)
 		pl = Player::GetDeadPlayer(m_owner);
 	if(!pl)
 		return 0;
 
-	
-	
+
+
 
 	Difficulty *diff = pl->m_difficulty;
 	double ret = 0;
 
-	switch(cat) 
+	switch(cat)
 	{
 		case SCORE_CAT_FEATS:
 		{
@@ -427,15 +426,14 @@ const MBCHAR *Score::GetPartialScoreItemized(SCORE_CATEGORY cat)
 	const MBCHAR *formatNormal = "%s x %s";
 	const MBCHAR *formatPercent = "%s%% x %s";
 
-	
 	Player *pl = g_player[m_owner];
-	if(!pl) 
+	if(!pl)
 		pl = Player::GetDeadPlayer(m_owner);
 	if(!pl)
 		return 0;
 
-	
-	
+
+
 
 	Difficulty *diff = pl->m_difficulty;
 	sint32 count = GetPartialScoreCount(cat);
@@ -444,14 +442,14 @@ const MBCHAR *Score::GetPartialScoreItemized(SCORE_CATEGORY cat)
 	double value = GetPartialScoreValue(cat);
 	const MBCHAR *formatStr = formatNormal;
 
-	switch (cat) 
+	switch (cat)
 	{
 		case SCORE_CAT_POPULATION:
 		case SCORE_CAT_RANK:
 			formatStr = formatPercent;
 			break;
 	}
-	
+
 	cpw_NumberToCommas((sint32 )value, commaValue);
 	cpw_NumberToCommas(count, commaCount);
 	sprintf(buffer, formatStr, commaCount, commaValue);
@@ -473,7 +471,7 @@ const MBCHAR *Score::GetScoreString(SCORE_CATEGORY cat)
 		case SCORE_CAT_CITIES500PLUS: return g_theStringDB->GetNameStr("SCORE_CAT_CITIES500PLUS");
 		case SCORE_CAT_CITIES_RECAPTURED: return g_theStringDB->GetNameStr("SCORE_CAT_CITIES_RECAPTURED");
 		case SCORE_CAT_OPPONENTS_CONQUERED: return g_theStringDB->GetNameStr("SCORE_CAT_OPPONENTS_CONQUERED");
-		case SCORE_CAT_TYPE_OF_VICTORY: 
+		case SCORE_CAT_TYPE_OF_VICTORY:
 		{
 			switch (m_victory_type)
 			{
@@ -501,4 +499,3 @@ const MBCHAR *Score::GetScoreString(SCORE_CATEGORY cat)
 			return g_theStringDB->GetNameStr("SCORE_CAT_UNKNOWN");
 	}
 }
-

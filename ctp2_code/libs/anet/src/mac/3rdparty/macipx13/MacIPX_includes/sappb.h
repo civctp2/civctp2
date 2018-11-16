@@ -1,4 +1,4 @@
-/* 
+/*
 Copyright (C) 1995-2001 Activision, Inc.
 
 This library is free software; you can redistribute it and/or
@@ -23,7 +23,7 @@ Foundation, Inc., 59 Temple Place, Suite 330, Boston, MA  02111-1307  USA
  * Copyright (C) 1992-1994 Novell, Inc.
  * All rights reserved.
  */
- 
+
 #ifndef __SAPPB_INCLUDED__
 #define __SAPPB_INCLUDED__
 
@@ -81,7 +81,6 @@ typedef struct SAPpb {
 #if defined(powerc) || defined(__powerc)
 #pragma options align=reset
 #endif
-
 
 /*
  * SAP csCodes

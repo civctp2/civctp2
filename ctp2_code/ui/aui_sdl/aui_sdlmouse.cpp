@@ -29,14 +29,12 @@ aui_SDLMouse::~aui_SDLMouse()
 {
 }
 
-
 void HandleMouseWheel(sint16 delta){
     if (!g_civApp) return;
 
-	
-	
+
     ctp2_ListBox *box = ctp2_ListBox::GetMouseFocusListBox();
- 
+
     if (box != NULL) {
         if (delta) {
             if (delta < 0) {
@@ -44,7 +42,7 @@ void HandleMouseWheel(sint16 delta){
                 } else {
                 box->ForceScroll(0, -1);
                 }
-			
+
             return;
             }
         }
@@ -57,10 +55,10 @@ void HandleMouseWheel(sint16 delta){
                     } else {
                     box1->ForceScroll(0, -1);
                     }
-			
+
                 return;
                 }
- 
+
             }
         else { //this idea came last; might turn the previous ones unnessesary
             aui_Ranger *box2 = aui_Ranger::GetMouseFocusRanger();
@@ -71,18 +69,17 @@ void HandleMouseWheel(sint16 delta){
                         } else {
                         box2->ForceScroll(0, -1);
                         }
-			
+
                     return;
                     }
- 
-                }
 
+                }
 
             }
         }
-	
+
 // 		BOOL scrolled = FALSE;
-		
+
 // 		if (g_civApp->IsGameLoaded()) {
 // 			if (g_tiledMap) {
 // 				if (delta < 0) {
@@ -104,7 +101,6 @@ void HandleMouseWheel(sint16 delta){
 // 		}
     }
 
-
     AUI_ERRCODE
         aui_SDLMouse::GetInput(void)
         {
@@ -116,7 +112,7 @@ void HandleMouseWheel(sint16 delta){
             // check for one of the mouse events
             int numElements =
                 SDL_PeepEvents(&od, 1, SDL_GETEVENT,
-                    SDL_EVENTMASK(SDL_MOUSEMOTION) | SDL_EVENTMASK(SDL_MOUSEBUTTONDOWN) | 
+                    SDL_EVENTMASK(SDL_MOUSEMOTION) | SDL_EVENTMASK(SDL_MOUSEBUTTONDOWN) |
                     SDL_EVENTMASK(SDL_MOUSEBUTTONUP));
             if (0 > numElements) {
                 fprintf(stderr, "%s L%d: SDL_PeepEvents: Still events stored! Error?: %s\n", __FILE__, __LINE__, SDL_GetError());

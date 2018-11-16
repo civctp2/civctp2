@@ -11,17 +11,17 @@
 //
 // THIS FILE IS NOT GENERATED OR SUPPORTED BY ACTIVISION.
 //
-// This material has been developed at apolyton.net by the Apolyton CtP2 
+// This material has been developed at apolyton.net by the Apolyton CtP2
 // Source Code Project. Contact the authors at ctp2source@apolyton.net.
 //
 //----------------------------------------------------------------------------
 //
 // Compiler flags
-// 
+//
 // _DEBUG
 // - Generate debug version.
 //
-// _MSC_VER		
+// _MSC_VER
 // - Compiler version (for the Microsoft C++ compiler only).
 //
 // __GNUC__
@@ -71,7 +71,7 @@
 #include <crtdbg.h>
 
 // Do not define the min and max *macros* in <windows.h>.
-#define NOMINMAX	
+#define NOMINMAX
 #include <windows.h>
 #else
 #include "windows.h"

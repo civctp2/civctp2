@@ -10,13 +10,13 @@
 //
 // THIS FILE IS NOT GENERATED OR SUPPORTED BY ACTIVISION.
 //
-// This material has been developed at apolyton.net by the Apolyton CtP2 
+// This material has been developed at apolyton.net by the Apolyton CtP2
 // Source Code Project. Contact the authors at ctp2source@apolyton.net.
 //
 //----------------------------------------------------------------------------
 //
 // Compiler flags
-// 
+//
 //----------------------------------------------------------------------------
 //
 // Modifications from the original Activision code:
@@ -25,7 +25,6 @@
 // - removed new diplo attempt - E 12.27.2006
 //
 //----------------------------------------------------------------------------
-
 
 #ifndef DIPWIZARD_H__
 #define DIPWIZARD_H__
@@ -60,21 +59,20 @@ enum DIP_WIZ_PROP_TAB {
 };
 
 enum DIP_WIZ_VIEW_TYPE {
-	DIP_WIZ_VIEW_TYPE_PROPOSAL, 
-	DIP_WIZ_VIEW_TYPE_RESPONSE, 
-	DIP_WIZ_VIEW_TYPE_FINAL_RESPONSE, 
-	DIP_WIZ_VIEW_TYPE_THREAT,   
-	DIP_WIZ_VIEW_TYPE_COUNTER,  
+	DIP_WIZ_VIEW_TYPE_PROPOSAL,
+	DIP_WIZ_VIEW_TYPE_RESPONSE,
+	DIP_WIZ_VIEW_TYPE_FINAL_RESPONSE,
+	DIP_WIZ_VIEW_TYPE_THREAT,
+	DIP_WIZ_VIEW_TYPE_COUNTER,
 	DIP_WIZ_VIEW_TYPE_MAX
 };
-
 
 #include "diplomattypes.h"
 
 class DipWizard
 {
   private:
-	
+
 	ctp2_Window *m_window;
 	static ctp2_Static *m_stages[DIP_WIZ_STAGE_MAX];
 	static ctp2_DropDown *m_nations;
@@ -95,7 +93,6 @@ class DipWizard
 	static ctp2_Button *m_rejectButton, *m_acceptButton;
 	static ctp2_Button *m_intelButton;
 
-	
 	static ctp2_Window *m_goldRequestWindow;
 	static ctp2_Window *m_pollutionRequestWindow;
 	static ctp2_Window *m_percentRequestWindow;
@@ -104,7 +101,6 @@ class DipWizard
 	static bool m_proposalDataPending;
 	static bool m_threatDataPending;
 
-	
 	static sint32 m_recipient;
 	static sint32 m_tone;
 	static sint32 m_proposal;
@@ -114,7 +110,6 @@ class DipWizard
 
 	static DiplomacyArg m_proposalArg, m_exchangeArg, m_threatArg;
 
-	
 	static sint32 m_viewTone,
 		m_viewRecipient, m_viewSender,
 		m_viewProposal, m_viewExchange,
@@ -156,12 +151,11 @@ class DipWizard
 	static const MBCHAR *GetCategoryName(DIP_WIZ_PROP_TAB tab);
 	static void UpdateButtons();
 
-	
 	static void ToneButtonCallback(aui_Control *control, uint32 action, uint32 data, void *cookie);
 	static void PropListCallback(aui_Control *control, uint32 action, uint32 data, void *cookie);
 	static void ExchListCallback(aui_Control *control, uint32 action, uint32 data, void *cookie);
 	static void NationCallback(aui_Control *control, uint32 action, uint32 data, void *cookie);
-	
+
 	static void BackCallback(aui_Control *control, uint32 action, uint32 data, void *cookie);
 	static void NextCallback(aui_Control *control, uint32 action, uint32 data, void *cookie);
 	static void CancelCallback(aui_Control *control, uint32 action, uint32 data, void *cookie);
@@ -175,7 +169,6 @@ class DipWizard
 	static void CounterOrThreatenCallback(aui_Control *control, uint32 action, uint32 data, void *cookie);
 	static void CheckIntelligence(aui_Control *control, uint32 action, uint32 data, void *cookie);
 
-	
 	static void ProcessMenuSelection(sint32 itemIndex, void *cookie);
 	static void ProcessMenuCancel();
 	static void MenuCallback(ctp2_Menu *menu, CTP2_MENU_ACTION action, sint32 itemIndex, void *cookie);
@@ -197,26 +190,22 @@ class DipWizard
 	static void RequestPollutionValue(sint32 player);
 	static void RequestPercentValue();
 
-	
 	static void ThreatMenuCallback(ctp2_Menu *menu, CTP2_MENU_ACTION action, sint32 itemIndex, void *cookie);
 	static bool ThreatContextMenu(sint32 threat);
 	static void ThreatListCallback(aui_Control *control, uint32 action, uint32 data, void *cookie);
 
 
-	
 	static void InitializeEvents();
 
-	
 	static void NotifyResponse(const Response &resp, sint32 responder, sint32 other_player);
 	static void NotifyThreatRejected(const Response &resp, const Response &sender_response, sint32 responder, sint32 other_player);
 
-	
 	static void DisplayDiplomat(sint32 player);
 	static void DisplayResponseDiplomat(sint32 player);
 	static void DisplayParchment(sint32 player);
 
 	static aui_Window *GetWindow();
-	
+
 };
 
 #endif

@@ -11,13 +11,13 @@
 //
 // THIS FILE IS NOT GENERATED OR SUPPORTED BY ACTIVISION.
 //
-// This material has been developed at apolyton.net by the Apolyton CtP2 
+// This material has been developed at apolyton.net by the Apolyton CtP2
 // Source Code Project. Contact the authors at ctp2source@apolyton.net.
 //
 //----------------------------------------------------------------------------
 //
 // Compiler flags
-// 
+//
 // _JAPANESE
 // - Handle Japanese 2-byte character input data.
 //
@@ -25,7 +25,7 @@
 //
 // Modifications from the original Activision code:
 //
-// - Modified by Martin Gühmann on October the 28th: line added in 
+// - Modified by Martin Gühmann on October the 28th: line added in
 //   sint32 GreatLibrary::UpdateList( DATABASE database )
 //   to make sure that also goods with the GLHidden flag aren't shown.
 // - Start the great library with the current research project of the player.
@@ -56,9 +56,7 @@
 #include "aui_ldl.h"
 #include "aui_stringtable.h"
 
-
 #include "ctp2_Window.h"
-
 
 #include "ctp2_button.h"
 
@@ -68,13 +66,10 @@
 #include "texttab.h"
 #include "c3_button.h"
 
-
 #include "aui_static.h"
-
 
 #include "aui_listbox.h"
 #include "ctp2_hypertextbox.h"
-
 
 #include "ctp2_button.h"
 #include "ctp2_listbox.h"
@@ -91,7 +86,6 @@
 #include "pixelutils.h"
 #include "colorset.h"
 
-
 #include "AdvanceRecord.h"
 
 #include "conceptdb.h"
@@ -102,14 +96,11 @@
 #include "GovernmentRecord.h"
 #include "TerrainImprovementRecord.h"
 
-
 #include "ResourceRecord.h"
-
 
 #include "OrderRecord.h"
 
 #include "profileDB.h"
-
 
 #include "chart.h"
 
@@ -125,12 +116,9 @@
 
 #include "wonderutil.h"
 
-
 #include "text_hasher.h"
 
-
 #include "MessageBoxDialog.h"
-
 
 #include "ctp2_textfield.h"
 #include <vector>
@@ -177,7 +165,6 @@ static char const s_database_names[DATABASE_MAX][GL_MAX_DB_NAME_SIZE] =
 
 GreatLibrary	*g_greatLibrary = NULL;
 
-
 Text_Hasher<char *> * GreatLibrary::m_great_library_info = NULL;
 
 
@@ -187,17 +174,16 @@ Text_Hasher<char *> * GreatLibrary::m_great_library_info = NULL;
 
 void GreatLibrary::Initialize_Great_Library_Data()
 {
-	
+
 	const int GREAT_LIBRARY_HASH_SIZE = 2000;
 
 	delete m_great_library_info;
-	m_great_library_info = new Text_Hasher<char *> 
+	m_great_library_info = new Text_Hasher<char *>
 		(
 			GREAT_LIBRARY_HASH_SIZE,
 			NULL
 		);
 
-	
 	Load_Great_Library();
 
 }
@@ -214,7 +200,7 @@ void GreatLibrary::Initialize_Great_Library_Data()
 
 void GreatLibrary::Shutdown_Great_Library_Data()
 {
-	
+
 	delete m_great_library_info;
 	m_great_library_info = NULL;
 }
@@ -243,54 +229,48 @@ void GreatLibrary::Load_Great_Library()
 	{
 		return;
 	}
-	
+
 	FILE * great_library = c3files_fopen(C3DIR_GL, "Great_Library.txt", "r");
 
 	Assert(great_library);
 
-	
 	if (!great_library)
 		return;
 
-	
 	{
-		
+
 		char ch;
-		
-		
+
 		const int MAX_NAME = 1024;
 		const int MAX_ENTRY	= k_MAX_GL_ENTRY;
 		char the_name[MAX_NAME];
 		char the_entry[MAX_ENTRY];
 		int name_pos = 0;
 		int entry_pos = 0;
-		char * end_ptr = NULL;		
+		char * end_ptr = NULL;
 
 #if defined(_JAPANESE)
 		int end_pos;
 		char * end_tag = "[END]";
 #endif
-		
+
 		Read_Library_State reading_what = LOOKING_FOR_NAME;
 
-		
 		while (!feof(great_library))
 		{
-			
+
 			ch = fgetc(great_library);
 
-			
 			switch (reading_what)
 			{
 
 
-			
 			case LOOKING_FOR_NAME:
 				{
-					
+
 					if (ch == '[')
 					{
-						
+
 						reading_what = IN_NAME;
 
 						name_pos = 0;
@@ -300,42 +280,36 @@ void GreatLibrary::Load_Great_Library()
 				}
 				break;
 
-			
 			case IN_NAME:
 				{
-					
+
 					if (ch == ']')
 					{
 						reading_what = IN_TEXT;
 
-						
 						the_name[name_pos++] = 0;
 
-						
 						ch = fgetc(great_library);
 
 					}
 					else
 					{
-						
+
 						the_name[name_pos++] = ch;
 
-						
 						Assert(name_pos < MAX_NAME);
 						if (name_pos >= MAX_NAME)
 						{
-							
+
 							the_name[name_pos-1] = 0;
 
-							
 							while (ch != ']')
 							{
 								ch = fgetc(great_library);
-							} 
+							}
 
 							reading_what = IN_TEXT;
 
-							
 							ch = fgetc(great_library);
 						}
 
@@ -343,19 +317,16 @@ void GreatLibrary::Load_Great_Library()
 				}
 				break;
 
-			
 			case IN_TEXT:
 				{
-					
+
 					if (ch == '[')
 					{
-						
+
 						end_ptr = &(the_entry[entry_pos]);
 
-						
 						the_entry[entry_pos++] = ch;
 
-						
 						reading_what = IN_END;
 #if defined(_JAPANESE)
 						end_pos = 0;
@@ -363,39 +334,33 @@ void GreatLibrary::Load_Great_Library()
 					}
 					else
 					{
-						
+
 						the_entry[entry_pos++] = ch;
 
-						
-						
+
 						Assert(entry_pos < MAX_ENTRY - 6);
 						if (entry_pos >= MAX_ENTRY - 6)
 						{
-							
+
 							end_ptr = &(the_entry[entry_pos]);
 
-							
 							while (ch != '[')
 							{
 								ch = fgetc(great_library);
 							}
 
-							
 							the_entry[entry_pos++] = ch;
 
-							
 							reading_what = IN_END;
 						}
 					}
 
-
 				}
 				break;
 
-			
 			case IN_END:
 				{
-					
+
 					the_entry[entry_pos++] = ch;
 
 #if defined(_JAPANESE)
@@ -404,7 +369,7 @@ void GreatLibrary::Load_Great_Library()
 
 					if (ch == ']')
 					{
-						
+
 						the_entry[entry_pos] = 0;
 
 #if !defined(_JAPANESE)
@@ -415,7 +380,6 @@ void GreatLibrary::Load_Great_Library()
 						{
 							*end_ptr = 0;
 
-							
 							char * name_copy = new char[strlen(the_name)+1];
 							char * entry_copy = new char[strlen(the_entry)+1];
 							strcpy(name_copy, the_name);
@@ -423,23 +387,20 @@ void GreatLibrary::Load_Great_Library()
 							name_copy[strlen(the_name)] = 0;
 							entry_copy[strlen(the_entry)] = 0;
 
-							
 							for (size_t j = 0; j < strlen(name_copy); j++)
 								name_copy[j] = tolower(name_copy[j]);
 
-							
 							m_great_library_info->Add_To_Hash_Table(
 								name_copy,
 								entry_copy
 								);
 
-							
 							reading_what = LOOKING_FOR_NAME;
 						}
-						
+
 						else
 						{
-							
+
 							reading_what = IN_TEXT;
 						}
 
@@ -458,7 +419,6 @@ void GreatLibrary::Load_Great_Library()
 		}
 	}
 
-	
 	fclose(great_library);
 
 }
@@ -477,23 +437,21 @@ int GreatLibrary::Get_Database_From_Name
 	char * database_name
 )
 {
-	
+
 	for (int i = 0; i < DATABASE_MAX; i++)
 	{
-		
+
 		if (!strcmp(database_name, s_database_names[i]))
 		{
-			
+
 			return i;
 
-		} 
+		}
 
-	} 
+	}
 
-	
 	Assert(false);
 
-	
 	return 0;
 
 }
@@ -510,115 +468,104 @@ int GreatLibrary::Get_Database_From_Name
 
 int GreatLibrary::Get_Object_Index_From_Name
 (
-	int which_database,					
+	int which_database,
 	char * object_name
 )
 {
-	
-	
+
 	int index;
-	
-	
+
 	char * db_item_name = NULL;
 
 
-	
 	switch ( which_database ) {
 	case DATABASE_UNITS:
 		for (index = 0; index < g_theUnitDB->NumRecords(); index++)
 		{
-			
+
 			db_item_name = g_theStringDB->GetIdStr(g_theUnitDB->Get(index)->m_name);
 
-			
 			if (!strcmp(db_item_name, object_name))
 			{
-				
+
 				return index;
 
-			} 
+			}
 
-		} 
+		}
 
 		break;
 
 	case DATABASE_SEARCH:
-		
-		
+
 		return 0;
 		break;
 
 	case DATABASE_ORDERS:
 		for (index = 0; index < g_theOrderDB->NumRecords(); index++)
 		{
-			
+
 			db_item_name = g_theStringDB->GetIdStr(g_theOrderDB->Get(index)->m_name);
 
-			
 			if (!strcmp(db_item_name, object_name))
 			{
-				
+
 				return index;
 
-			} 
+			}
 
-		} 
-
+		}
 
 		break;
 
 	case DATABASE_RESOURCE:
 		for (index = 0; index < g_theResourceDB->NumRecords(); index++)
 		{
-			
+
 			db_item_name = g_theStringDB->GetIdStr(g_theResourceDB->Get(index)->m_name);
 
-			
 			if (!strcmp(db_item_name, object_name))
 			{
-				
+
 				return index;
 
-			} 
+			}
 
-		} 
-
+		}
 
 		break;
 
 	case DATABASE_BUILDINGS:
 		for (index = 0; index < g_theBuildingDB->NumRecords(); index++)
 		{
-			
+
 			db_item_name = g_theStringDB->GetIdStr(g_theBuildingDB->Get(index)->m_name);
 
-			
 			if (!strcmp(db_item_name, object_name))
 			{
-				
+
 				return index;
 
-			} 
+			}
 
-		} 
+		}
 
 		break;
 
 	case DATABASE_WONDERS:
 		for (index = 0; index < g_theWonderDB->NumRecords(); index++)
 		{
-			
+
 			db_item_name = g_theStringDB->GetIdStr(g_theWonderDB->Get(index)->m_name);
 
-			
 			if (!strcmp(db_item_name, object_name))
 			{
-				
+
 				return index;
 
-			} 
+			}
 
-		} 
+		}
 
 		break;
 
@@ -626,19 +573,17 @@ int GreatLibrary::Get_Object_Index_From_Name
 
 		for (index = 0; index < g_theAdvanceDB->NumRecords(); index++)
 		{
-			
+
 			db_item_name = g_theStringDB->GetIdStr(g_theAdvanceDB->Get(index)->m_name);
 
-			
 			if (!strcmp(db_item_name, object_name))
 			{
-				
+
 				return index;
 
-			} 
+			}
 
-		} 
-
+		}
 
 		break;
 
@@ -646,72 +591,68 @@ int GreatLibrary::Get_Object_Index_From_Name
 	{
 		for (index = 0; index < g_theTerrainDB->NumRecords(); index++)
 		{
-			
+
 			db_item_name = g_theStringDB->GetIdStr(g_theTerrainDB->Get(index)->m_name);
 
-			
 			if (!strcmp(db_item_name, object_name))
 			{
-				
+
 				return index;
 
-			} 
+			}
 
-		} 
+		}
 
 		break;
 	}
 	case DATABASE_CONCEPTS:
 		for (index = 0; index < g_theConceptDB->m_nConcepts; index++)
 		{
-			
+
 			db_item_name = g_theStringDB->GetIdStr(g_theConceptDB->GetConceptInfo(index)->m_name);
 
-			
 			if (!strcmp(db_item_name, object_name))
 			{
-				
+
 				return index;
 
-			} 
+			}
 
-		} 
+		}
 
 		break;
 
 	case DATABASE_GOVERNMENTS:
 		for (index = 0; index < g_theGovernmentDB->NumRecords(); index++)
 		{
-			
+
 			db_item_name = g_theStringDB->GetIdStr(g_theGovernmentDB->Get(index)->m_name);
 
-			
 			if (!strcmp(db_item_name, object_name))
 			{
-				
+
 				return index;
 
-			} 
+			}
 
-		} 
+		}
 
 		break;
 
 	case DATABASE_TILE_IMPROVEMENTS:
 		for (index = 0; index < g_theTerrainImprovementDB->NumRecords(); index++)
 		{
-			
+
 			db_item_name = g_theStringDB->GetIdStr(g_theTerrainImprovementDB->Get(index)->m_name);
 
-			
 			if (!strcmp(db_item_name, object_name))
 			{
-				
+
 				return index;
 
-			} 
+			}
 
-		} 
+		}
 
 		break;
 
@@ -722,13 +663,11 @@ int GreatLibrary::Get_Object_Index_From_Name
 		break;
 	}
 
-	
 	bool bad_object_name = false;
 
 	DPRINTF(k_DBG_GAMESTATE, ("Bad object Name: %s, DB: %i\n", object_name, which_database));
 	Assert(bad_object_name);
 
-	
 	return 0;
 }
 
@@ -743,10 +682,9 @@ int GreatLibrary::Get_Object_Index_From_Name
 
 void greatlibrary_SetGoalCallback( aui_Control *control, uint32 action, uint32 data, void *cookie )
 {
-	
+
 	if ( action != (uint32)AUI_BUTTON_ACTION_EXECUTE ) return;
 
-	
 	g_greatLibrary->HandleSetGoal();
 
 }
@@ -756,7 +694,7 @@ void greatlibrary_SetGoalCallback( aui_Control *control, uint32 action, uint32 d
 
 void greatlibrary_ExitCallback( aui_Control *control, uint32 action, uint32 data, void *cookie )
 {
-	
+
 	if ( action != (uint32)AUI_BUTTON_ACTION_EXECUTE ) return;
 
 	close_GreatLibrary();
@@ -777,10 +715,9 @@ void greatlibrary_ExitCallback( aui_Control *control, uint32 action, uint32 data
 
 void greatlibrary_BackCallback( aui_Control *control, uint32 action, uint32 data, void *cookie )
 {
-	
+
 	if ( action != (uint32)AUI_BUTTON_ACTION_EXECUTE ) return;
 
-	
 	g_greatLibrary->Back();
 }
 
@@ -791,13 +728,11 @@ void greatlibrary_BackCallback( aui_Control *control, uint32 action, uint32 data
 
 void greatlibrary_ForwardCallback( aui_Control *control, uint32 action, uint32 data, void *cookie )
 {
-	
+
 	if ( action != (uint32)AUI_BUTTON_ACTION_EXECUTE ) return;
 
-	
 	g_greatLibrary->Forward();
 }
-
 
 void GreatLibrary::kh_Close()
 {
@@ -814,7 +749,7 @@ void GreatLibrary::kh_Close()
 
 void greatlibrary_IndexButtonCallback( aui_Control *control, uint32 action, uint32 data, void *cookie )
 {
-	
+
 	if ( action != (uint32)AUI_SWITCH_ACTION_ON ) return;
 
 	if ( g_greatLibrary ) g_greatLibrary->HandleIndexButton( (ctp2_Button *)control );
@@ -823,7 +758,7 @@ void greatlibrary_IndexButtonCallback( aui_Control *control, uint32 action, uint
 void greatlibrary_TechBoxActionCallback( aui_Control *control, uint32 action, uint32 data, void *cookie )
 {
 	if ( action != (uint32)CTP2_HYPERLINK_ACTION_EXECUTE ) return;
-	
+
 	ctp2_HyperLink *hl = ((ctp2_HyperTextBox *)control)->GetSelectedHyperLink();
 
 	if ( hl ) {
@@ -840,7 +775,6 @@ void greatlibrary_SearchWordActionCallback( aui_Control *control, uint32 action,
 {
 	if ( action != (uint32)CTP2_HYPERLINK_ACTION_EXECUTE ) return;
 
-	
 	g_greatLibrary->Force_A_Search();
 
 }
@@ -878,7 +812,7 @@ void greatlibrary_SearchWordActionCallback( aui_Control *control, uint32 action,
 
 void greatlibrary_PrereqActionCallback( aui_Control *control, uint32 action, uint32 data, void *cookie )
 {
-	
+
 	if ( action != (uint32)AUI_BUTTON_ACTION_EXECUTE ) return;
 
 	Chart *chart = (Chart *)cookie;
@@ -894,7 +828,7 @@ void greatlibrary_PrereqActionCallback( aui_Control *control, uint32 action, uin
 
 void greatlibrary_LeadsToActionCallback( aui_Control *control, uint32 action, uint32 data, void *cookie )
 {
-	
+
 	if ( action != (uint32)AUI_BUTTON_ACTION_EXECUTE ) return;
 
 	Chart *chart = (Chart *)cookie;
@@ -914,14 +848,14 @@ void greatlibrary_LeadsToActionCallback( aui_Control *control, uint32 action, ui
 
 
 void GreatLibrary_Topics_List_Callback
-( 
-	aui_Control *control, 
-	uint32 action, 
-	uint32 data, 
-	void *cookie 
+(
+	aui_Control *control,
+	uint32 action,
+	uint32 data,
+	void *cookie
 )
 {
-	
+
 	g_greatLibrary->HandleListButton(control, action, data, cookie);
 
 }
@@ -940,9 +874,8 @@ TechListItem::TechListItem(AUI_ERRCODE *retval, sint32 index, DATABASE database,
 
 	*retval = InitCommonLdl(index, database, ldlBlock);
 	Assert( AUI_SUCCESS(*retval) );
-	if ( !AUI_SUCCESS(*retval) ) return;	
+	if ( !AUI_SUCCESS(*retval) ) return;
 }
-
 
 AUI_ERRCODE TechListItem::InitCommonLdl(sint32 index, DATABASE database, MBCHAR *ldlBlock)
 {
@@ -968,21 +901,18 @@ void TechListItem::Update(void)
 
 	ctp2_Static *subItem;
 
-	
 	subItem = (ctp2_Static *)GetChildByIndex(0);
 
-	
 	enum DATABASE real_database = m_database;
 	int real_index = m_index;
 
-	
 	if (m_database == DATABASE_SEARCH)
 	{
-		
+
 		real_database = g_greatLibrary->m_search_results[m_index].m_database;
 		real_index = g_greatLibrary->m_search_results[m_index].m_item;
 
-	} 
+	}
 
 	switch ( real_database ) {
 	case DATABASE_UNITS:
@@ -992,11 +922,11 @@ void TechListItem::Update(void)
 	case DATABASE_ORDERS:
 		subItem->SetText( g_theStringDB->GetNameStr(g_theOrderDB->Get(real_index)->GetName()) );
 		break;
-		
+
 	case DATABASE_RESOURCE:
 		subItem->SetText( g_theStringDB->GetNameStr(g_theResourceDB->Get(real_index)->GetName()) );
 		break;
-		
+
 	case DATABASE_BUILDINGS:
 		subItem->SetText( g_theStringDB->GetNameStr(g_theBuildingDB->Get(real_index)->GetName()) );
 		break;
@@ -1039,7 +969,7 @@ sint32 TechListItem::Compare(ctp2_ListItem *item2, uint32 column)
 
 	switch (column) {
 	case 0:
-		val1 = m_index; 
+		val1 = m_index;
 		val2 = ((TechListItem *)item2)->GetIndex();
 		if (val1 < val2) return -1;
 		else if (val1 > val2) return 1;
@@ -1062,12 +992,11 @@ sint32 greatlibrary_Initialize( sint32 theMode, BOOL sci )
 		}
 		g_greatLibrary->SetSci( sci );
 		g_greatLibrary->GetWindow()->MoveOG();
-		return 0;	
+		return 0;
 	}
 
 	g_greatLibrary = new GreatLibrary( theMode );
 	g_greatLibrary->SetSci( sci );
-
 
 	return 0;
 }
@@ -1075,9 +1004,8 @@ sint32 greatlibrary_Initialize( sint32 theMode, BOOL sci )
 sint32 greatlibrary_Cleanup( void )
 {
 	if ( g_greatLibrary ) {
-		
-		
-		
+
+
 		g_greatLibrary->Remove();
 		delete g_greatLibrary;
 	}
@@ -1098,7 +1026,6 @@ GreatLibrary::GreatLibrary( sint32 theMode )
 	m_listDatabase = DATABASE_UNITS;
 	m_maxIndex = 0;
 
-	
 	m_history_position = 0;
 
 	strcpy(windowBlock,"GreatLibrary");
@@ -1107,18 +1034,15 @@ GreatLibrary::GreatLibrary( sint32 theMode )
 
 	m_window->m_window->SetDraggable(TRUE);
 
-
 #ifdef WIN32
 	m_techMovie = NULL;
 #endif
 
-	
 	Initialize( windowBlock );
 
 	m_techTree->Update( theMode );
 	m_window->SetTechMode( theMode, DATABASE_ADVANCES );
 
-	
 	m_window->SetTechTree ( m_techTree );
 	m_window->SetTechStillShot ( m_techStillShot );
 	m_window->SetTechHistoricalText ( m_techHistoricalText );
@@ -1129,11 +1053,9 @@ GreatLibrary::GreatLibrary( sint32 theMode )
 	m_window->SetTechRequirementsText ( m_techRequirementsText );
 	m_window->SetTechVariablesText ( m_techVariablesText );
 
-	
 	SlicObject so;
 	so.AddAdvance(theMode);
 
- 	
 	m_window->LoadGameplayText( so );
 	if(m_window->LoadHistoricalText( so ) == GreatLibraryWindow::GREAT_LIBRARY_PANEL_BLANK) {
 		m_historicalTab->Enable(FALSE);
@@ -1145,7 +1067,6 @@ GreatLibrary::GreatLibrary( sint32 theMode )
 	m_window->LoadVariablesText( so );
 
 
-	
 	if ( g_theProfileDB->IsLibraryAnim() ) {
 		m_techStillShot->Hide();
 #ifdef WIN32
@@ -1168,7 +1089,6 @@ GreatLibrary::GreatLibrary( sint32 theMode )
 		}
 	}
 
-	
 	m_buttonString = LIB_STRING_INDEX;
 
 }
@@ -1208,20 +1128,18 @@ sint32 GreatLibrary::Initialize( MBCHAR *windowBlock )
 
 	m_itemLabel = (ctp2_Static *)aui_Ldl::GetObject(windowBlock, "ItemLabel");
 
-	
 	if( rand()%100 == 1) {
 		m_search_word->SetFieldText("Lemur Poo");
 	} else {
 		m_search_word->SetFieldText("");
 	}
 
-	
 	m_search_word->SetKeyboardFocus();
 	m_search_word->SelectAll();
 
 
-	
-	
+
+
 	if ( g_theProfileDB->IsLibraryAnim() ) {
 		RECT rect = {
 			k_VIDEO_X,
@@ -1237,14 +1155,11 @@ sint32 GreatLibrary::Initialize( MBCHAR *windowBlock )
 #endif
 	}
 
-
 	m_techStillShot = (ctp2_Static *)aui_Ldl::GetObject(windowBlock, "TechStillShot");
-
 
 	sprintf( controlBlock, "LibraryStrings" );
 	m_string = new aui_StringTable( &errcode, controlBlock );
 	TestControl( m_string );
-
 
 	ctp2_Static *control = (ctp2_Static *)aui_Ldl::GetObject(windowBlock, "Tabs.TechTreeTab.TabPanel");
 	m_techTree = new Chart(&errcode, aui_UniqueId(), "TechTree", NULL, NULL);
@@ -1292,7 +1207,7 @@ sint32 GreatLibrary::Initialize( MBCHAR *windowBlock )
 	sprintf( buttonBlock, "%s.%s", controlBlock, "ImproveButton" );
 	m_improveButton = (ctp2_Button *)aui_Ldl::GetObject(windowBlock, buttonBlock);
 	m_improveButton->SetActionFuncAndCookie( greatlibrary_IndexButtonCallback, NULL );
-	
+
 	sprintf( buttonBlock, "%s.%s", controlBlock, "WondersButton" );
 	m_wondersButton = (ctp2_Button *)aui_Ldl::GetObject(windowBlock, buttonBlock);
 	m_wondersButton->SetActionFuncAndCookie( greatlibrary_IndexButtonCallback, NULL );
@@ -1317,24 +1232,22 @@ sint32 GreatLibrary::Initialize( MBCHAR *windowBlock )
 	m_conceptButton = (ctp2_Button *)aui_Ldl::GetObject(windowBlock, buttonBlock);
 	m_conceptButton->SetActionFuncAndCookie( greatlibrary_IndexButtonCallback, NULL );
 
-	
 	if (m_history.size() == 0)
 	{
-		
+
 		m_forwardButton->Enable(FALSE);
 
-		
 		m_backButton->Enable(FALSE);
 
-	} 
+	}
 
 	return 0;
 }
 
 GreatLibrary::~GreatLibrary( void )
 {
-	
-	
+
+
 
 
 
@@ -1342,9 +1255,9 @@ GreatLibrary::~GreatLibrary( void )
 
 	if (m_window) delete m_window;
 
-	
-	
-	
+
+
+
 	if(m_techTree)
 	{
 		delete m_techTree;
@@ -1367,22 +1280,20 @@ GreatLibrary::~GreatLibrary( void )
 void GreatLibrary::Display( void )
 {
 	AUI_ERRCODE errcode = AUI_ERRCODE_OK;
-	
+
 	GetWindow()->SetType(AUI_WINDOW_TYPE_FLOATING);
 	errcode = g_c3ui->AddWindow( GetWindow() );
 	Assert( errcode == AUI_ERRCODE_OK );
-	
-	
+
 
 	keypress_RegisterHandler(this);
 
-	
 	m_buttonString = LIB_STRING_INDEX;
 
 	ClearHistory();
 	// This has already been set: no need to use some dummy advance.
 	SetLibrary(m_window->GetTechMode(), m_window->GetTechDatabase());
-	
+
 	FixTabs();
 }
 
@@ -1393,8 +1304,8 @@ void GreatLibrary::Remove( void )
 	errcode = g_c3ui->RemoveWindow( GetWindow()->Id() );
 	Assert( errcode == AUI_ERRCODE_OK );
 
-	
-	
+
+
 
 	keypress_RemoveHandler(this);
 
@@ -1405,25 +1316,20 @@ sint32 GreatLibrary::SetLibrary( sint32 theMode, DATABASE theDatabase, bool add_
 
 	m_selectedIndex = theMode;
 
-	
 	bool there_is_a_gameplay_panel = true;
 
-	
 	bool there_is_an_historical_panel = true;
 
-	
 	enum DATABASE real_database = theDatabase;
 	int real_index = theMode;
 
 	if (!g_greatLibrary || !g_greatLibrary->m_window) return 0;
 
-	
 	sint32 videoWidth = 242;
 	sint32 videoHeight = 182;
 	sint32 videoX = 382;
 	sint32 videoY = 316;
 
-	
 	sint32 windowWidth = g_ScreenWidth;
 	sint32 windowHeight = g_ScreenHeight;
 	sint32 windowX = 0;
@@ -1431,14 +1337,12 @@ sint32 GreatLibrary::SetLibrary( sint32 theMode, DATABASE theDatabase, bool add_
 
 	sint32 hidden;
 
-	
 	SetCategoryName(theDatabase);
 
-	
 	SlicObject so;
-	
+
 	if(theDatabase == DATABASE_SEARCH) {
-		
+
 		theDatabase = g_greatLibrary->m_search_results[theMode].m_database;
 		theMode = g_greatLibrary->m_search_results[theMode].m_item;
 	}
@@ -1452,9 +1356,9 @@ sint32 GreatLibrary::SetLibrary( sint32 theMode, DATABASE theDatabase, bool add_
 		m_techTab->Enable( FALSE );
 		FixTabs();
 	}
-	
+
 	bool enableGoal = false;
-	
+
 	switch ( theDatabase ) {
 	case DATABASE_UNITS:
 		g_greatLibrary->m_window->SetTechMode(theMode, DATABASE_UNITS);
@@ -1488,7 +1392,6 @@ sint32 GreatLibrary::SetLibrary( sint32 theMode, DATABASE theDatabase, bool add_
 		g_greatLibrary->m_window->SetTechMode(theMode, DATABASE_ADVANCES);
 		so.AddAdvance(theMode);
 
-		
 		m_techTree->Update( theMode );
 
 		hidden = m_techTree->IsHidden();
@@ -1532,55 +1435,48 @@ sint32 GreatLibrary::SetLibrary( sint32 theMode, DATABASE theDatabase, bool add_
 
 	m_database = theDatabase;
 
-	
 	if (add_to_history)
 	{
-		
+
 		Great_Library_Item new_gl_page;
 
-		
 		new_gl_page.m_database = real_database;
 		new_gl_page.m_item = real_index;
 
-		
-		
-		
+
+
+
 		if ((m_history.size() != 0) && (m_history_position < (signed) m_history.size() - 1))
 		{
-			
-			
+
 			m_history.erase(m_history.begin() + m_history_position + 1, m_history.end());
 		}
 
-		
 		m_history.push_back(new_gl_page);
 
-		
 		m_history_position = m_history.size() - 1;
 
-		
 		m_forwardButton->Enable(FALSE);
 
-		
 		if (m_history_position == 0)
 		{
-			
+
 			m_backButton->Enable(FALSE);
 
-		} 
+		}
 
 		else
 		{
-			
+
 			m_backButton->Enable(TRUE);
 		}
 
-	} 
-	
-	
+	}
 
-	
-#ifdef WIN32	
+
+
+
+#ifdef WIN32
 	if (m_techMovie) {
 		if (m_techMovie->Open()) m_techMovie->CloseStream();
 		delete m_techMovie;
@@ -1607,16 +1503,13 @@ sint32 GreatLibrary::SetLibrary( sint32 theMode, DATABASE theDatabase, bool add_
 		GetWindow()->ShouldDraw();
 	}
 
-	
 	m_window->SetTechTree ( m_techTree );
 #ifdef WIN32
 	m_window->SetTechMovie ( m_techMovie );
 #endif
 
-	
 	int text_load_result;
 
-	
 	text_load_result = m_window->LoadGameplayText(so);
 
 
@@ -1644,7 +1537,7 @@ sint32 GreatLibrary::SetLibrary( sint32 theMode, DATABASE theDatabase, bool add_
 
 
 
-	
+
 	text_load_result = m_window->LoadHistoricalText(so);
 	if(text_load_result == GreatLibraryWindow::GREAT_LIBRARY_PANEL_BLANK) {
 		m_historicalTab->Enable(FALSE);
@@ -1678,16 +1571,15 @@ sint32 GreatLibrary::SetLibrary( sint32 theMode, DATABASE theDatabase, bool add_
 
 
 
-	
+
 
 	m_window->LoadRequirementsText(so);
 	m_window->LoadVariablesText(so);
 
-	
 	if ( g_theProfileDB->IsLibraryAnim() ) {
 #ifdef WIN32
 		if (m_techMovie) {
-			if (m_techMovie->Open()) 
+			if (m_techMovie->Open())
 				m_techMovie->CloseStream();
 		}
 		if (!g_greatLibrary->m_window->LoadTechMovie()) {
@@ -1848,9 +1740,9 @@ sint32 GreatLibrary::ClearHistory( void )
 //
 // Name       : HandleSetGoal
 //
-// Description: Handles the settings of goals, takes the items from the 
+// Description: Handles the settings of goals, takes the items from the
 //              Great Libary window, shows a message what will be researched.
-//              And make the civilization to set the goal if the advance is 
+//              And make the civilization to set the goal if the advance is
 //              not already researched.
 //
 // Parameters : -
@@ -1865,13 +1757,10 @@ sint32 GreatLibrary::ClearHistory( void )
 sint32 GreatLibrary::HandleSetGoal( void )
 {
 
-	
 	MBCHAR goal_set_message[500];
 
-	
 	const MBCHAR *selection_name = GetItemName(m_database, m_window->GetTechMode());
 
-	
 	if (!selection_name)
 		return -1;
 
@@ -1895,7 +1784,6 @@ sint32 GreatLibrary::HandleSetGoal( void )
 		MessageBoxDialog::Information(goal_set_message, "InfoSetGoal");
 	}
 
-
 	return 0;
 }
 
@@ -1906,7 +1794,7 @@ sint32 GreatLibrary::HandleSetGoal( void )
 // Description: Get the - language dependent - name of a database item.
 //
 // Parameters : database        : database
-//              item            : *lexicographic* index of the item in the 
+//              item            : *lexicographic* index of the item in the
 //                                database
 //
 // Globals    : g_theStringDB
@@ -1923,8 +1811,7 @@ MBCHAR const * GreatLibrary::GetItemName(int database, int item) const
 	if (item < 0)
 		return NULL;
 
-	
-	switch ( database ) 
+	switch ( database )
 	{
 	default:
 		return NULL;
@@ -1939,7 +1826,7 @@ MBCHAR const * GreatLibrary::GetItemName(int database, int item) const
                 g_greatLibrary->m_search_results[item].m_database;
 		    int             real_index      =
                 g_greatLibrary->m_search_results[item].m_item;
-		
+
     		return GetItemName(real_database, real_index);
         }
 
@@ -2004,8 +1891,7 @@ MBCHAR const * GreatLibrary::GetObjectName(int database, int index) const
 	if (index < 0)
 		return NULL;
 
-	
-	switch (database) 
+	switch (database)
 	{
 	default:
 		return NULL;
@@ -2053,7 +1939,7 @@ MBCHAR const * GreatLibrary::GetObjectName(int database, int index) const
 
 
 const MBCHAR * GreatLibrary::GetSelectionName() const
-{ 
+{
 	return GetItemName(m_database, m_selectedIndex);
 }
 
@@ -2087,66 +1973,65 @@ void GreatLibrary::SetCategoryName
 )
 {
 
-	
-	switch ( the_database ) 
+	switch ( the_database )
 	{
 	case DATABASE_UNITS:
-		
+
 		m_categoryText->SetText(g_theStringDB->GetNameStr("str_ldl_CAPS_UNITS"));
 
 		break;
 	case DATABASE_BUILDINGS:
-		
+
 		m_categoryText->SetText(g_theStringDB->GetNameStr("str_ldl_IMPROVE"));
 
 		break;
 	case DATABASE_WONDERS:
-		
+
 		m_categoryText->SetText(g_theStringDB->GetNameStr("str_ldl_CAPS_WONDERS"));
 
 		break;
 	case DATABASE_ADVANCES:
-		
+
 		m_categoryText->SetText(g_theStringDB->GetNameStr("str_ldl_CAPS_ADVANCES"));
 
 		break;
 	case DATABASE_TERRAIN:
-		
+
 		m_categoryText->SetText(g_theStringDB->GetNameStr("str_ldl_TERRAIN"));
 
 		break;
 	case DATABASE_CONCEPTS:
-		
+
 		m_categoryText->SetText(g_theStringDB->GetNameStr("str_ldl_CONCEPTS"));
 
 		break;
 
 	case DATABASE_GOVERNMENTS:
-		
+
 		m_categoryText->SetText(g_theStringDB->GetNameStr("str_ldl_GOVERN"));
 
 		break;
 
 	case DATABASE_TILE_IMPROVEMENTS:
-		
+
 		m_categoryText->SetText(g_theStringDB->GetNameStr("str_ldl_CAPS_TILE_IMP"));
 
 		break;
-		
+
 	case DATABASE_ORDERS:
-		
+
 		m_categoryText->SetText(g_theStringDB->GetNameStr("str_ldl_ORDERS"));
 
 		break;
 
 	case DATABASE_RESOURCE:
-		
+
 		m_categoryText->SetText(g_theStringDB->GetNameStr("str_ldl_CAPS_GOODS"));
 
 		break;
 
 	case DATABASE_SEARCH:
-		
+
 		m_categoryText->SetText(g_theStringDB->GetNameStr("str_ldl_CAPS_SEARCH"));
 
 		break;
@@ -2164,7 +2049,6 @@ void GreatLibrary::SetCategoryName
 
 sint32 GreatLibrary::HandleIndexButton( ctp2_Button *button )
 {
-
 
 	DATABASE newDatabase = DATABASE_DEFAULT;
 
@@ -2202,14 +2086,13 @@ sint32 GreatLibrary::HandleIndexButton( ctp2_Button *button )
 		newDatabase = DATABASE_CONCEPTS;
 	}
 
-	
 	SetCategoryName(newDatabase);
 
 	m_page = 0;
 	m_selectedIndex = -1;
 	m_topics_list->ShouldDraw();
 	UpdateList( newDatabase );
-	
+
 	return 0;
 }
 
@@ -2232,7 +2115,7 @@ sint32 GreatLibrary::HandleIndexButton( ctp2_Button *button )
 //----------------------------------------------------------------------------
 sint32 GreatLibrary::GetIndexFromAlpha(sint32 alpha, DATABASE theDatabase) const
 {
-	switch ( theDatabase ) 
+	switch ( theDatabase )
 	{
 		case DATABASE_UNITS:
 			return g_theUnitDB->m_alphaToIndex[alpha];
@@ -2278,7 +2161,7 @@ sint32 GreatLibrary::GetIndexFromAlpha(sint32 alpha, DATABASE theDatabase) const
 //----------------------------------------------------------------------------
 sint32 GreatLibrary::GetAlphaFromIndex(sint32 index, DATABASE theDatabase) const
 {
-	switch ( theDatabase ) 
+	switch ( theDatabase )
 	{
 		case DATABASE_UNITS:
 			return g_theUnitDB->m_indexToAlpha[index];
@@ -2311,7 +2194,7 @@ sint32 GreatLibrary::GetAlphaFromIndex(sint32 index, DATABASE theDatabase) const
 //
 // Description: Displays the selected topic when it is klicked in the listbox.
 //
-// Parameters : 
+// Parameters :
 //
 // Globals    : -
 //
@@ -2322,14 +2205,13 @@ sint32 GreatLibrary::GetAlphaFromIndex(sint32 index, DATABASE theDatabase) const
 //----------------------------------------------------------------------------
 sint32 GreatLibrary::HandleListButton
 (
-	aui_Control *control, 
-	uint32 action, 
-	uint32 data, 
-	void *cookie 
+	aui_Control *control,
+	uint32 action,
+	uint32 data,
+	void *cookie
 )
 {
 
-	
 	int index;
 
 	switch ( action ) {
@@ -2337,21 +2219,17 @@ sint32 GreatLibrary::HandleListButton
 
 		ctp2_ListItem *item;
 
-		
 		item = (ctp2_ListItem *)m_topics_list->GetSelectedItem();
-		if (!item) 
+		if (!item)
 			return 0;
 
-		
 #if defined(__LP64__)
 		index = (sint64) item->GetUserData();
 #else
 		index = (int) item->GetUserData();
 #endif
 
-		
 		SetLibrary( GetIndexFromAlpha(index, m_listDatabase), m_listDatabase );
-
 
 		break;
 
@@ -2377,11 +2255,10 @@ sint32 GreatLibrary::HandleListButton
 // Remark(s)  : -
 //
 //----------------------------------------------------------------------------
-sint32 GreatLibrary::UpdateList( DATABASE database ) 
+sint32 GreatLibrary::UpdateList( DATABASE database )
 {
 	sint32 index;
 
-	
 	m_topics_list->Clear();
 	m_listDatabase = database;
 
@@ -2390,13 +2267,11 @@ sint32 GreatLibrary::UpdateList( DATABASE database )
 
 #define HIDE(db, index) (db->Get(db->m_alphaToIndex[index])->GetGLHidden())
 
-		
 		for (index = 0; index < g_theUnitDB->NumRecords(); index++)
 		{
 			if(HIDE(g_theUnitDB, index))
 				continue;
 
-			
 			Add_Item_To_Topics_List(g_theStringDB->GetNameStr(g_theUnitDB->GetName(
 						g_theUnitDB->m_alphaToIndex[index])), index);
 
@@ -2405,14 +2280,12 @@ sint32 GreatLibrary::UpdateList( DATABASE database )
 		break;
 
 	case DATABASE_SEARCH:
-		
-		
+
 		Search_Great_Library();
 
-		
 		for (index = 0; (unsigned) index < m_search_results.size(); index++)
 		{
-			
+
 			int real_index = m_search_results[index].m_item;
 			enum DATABASE real_database = m_search_results[index].m_database;
 
@@ -2421,16 +2294,14 @@ sint32 GreatLibrary::UpdateList( DATABASE database )
 
 		}
 
-
 		break;
 
 	case DATABASE_ORDERS:
-		
+
 		for (index = 0; index < g_theOrderDB->NumRecords(); index++)
 		{
 			if(HIDE(g_theOrderDB, index)) continue;
 
-			
 			Add_Item_To_Topics_List(g_theStringDB->GetNameStr(g_theOrderDB->GetName(
 						g_theOrderDB->m_alphaToIndex[ index ])), index);
 
@@ -2439,11 +2310,11 @@ sint32 GreatLibrary::UpdateList( DATABASE database )
 		break;
 
 	case DATABASE_RESOURCE:
-		
+
 		for (index = 0; index < g_theResourceDB->NumRecords(); index++)
 		{
 			if(HIDE(g_theResourceDB, index)) continue;
-			
+
 			Add_Item_To_Topics_List(g_theStringDB->GetNameStr(g_theResourceDB->GetName(
 						g_theResourceDB->m_alphaToIndex[ index ])), index);
 
@@ -2452,12 +2323,11 @@ sint32 GreatLibrary::UpdateList( DATABASE database )
 		break;
 
 	case DATABASE_BUILDINGS:
-		
+
 		for (index = 0; index < g_theBuildingDB->NumRecords(); index++)
 		{
 			if(HIDE(g_theBuildingDB, index)) continue;
 
-			
 			Add_Item_To_Topics_List(g_theStringDB->GetNameStr(g_theBuildingDB->GetName(
 						g_theBuildingDB->m_alphaToIndex[ index ])), index);
 
@@ -2466,12 +2336,11 @@ sint32 GreatLibrary::UpdateList( DATABASE database )
 		break;
 
 	case DATABASE_WONDERS:
-		
+
 		for (index = 0; index < g_theWonderDB->NumRecords(); index++)
 		{
 			if(HIDE(g_theWonderDB, index)) continue;
 
-			
 			Add_Item_To_Topics_List(g_theStringDB->GetNameStr(g_theWonderDB->GetName(
 						g_theWonderDB->m_alphaToIndex[ index ])), index);
 
@@ -2480,12 +2349,11 @@ sint32 GreatLibrary::UpdateList( DATABASE database )
 		break;
 
 	case DATABASE_ADVANCES:
-		
+
 		for (index = 0; index < g_theAdvanceDB->NumRecords(); index++)
 		{
 			if(HIDE(g_theAdvanceDB, index)) continue;
 
-			
 			Add_Item_To_Topics_List(g_theStringDB->GetNameStr(g_theAdvanceDB->GetName(
 						g_theAdvanceDB->m_alphaToIndex[ index ])), index);
 
@@ -2494,12 +2362,11 @@ sint32 GreatLibrary::UpdateList( DATABASE database )
 		break;
 
 	case DATABASE_TERRAIN:
-		
+
 		for (index = 0; index < g_theTerrainDB->NumRecords(); index++)
 		{
 			if(HIDE(g_theTerrainDB, index)) continue;
 
-			
 			Add_Item_To_Topics_List(g_theStringDB->GetNameStr(g_theTerrainDB->GetName(
 						g_theTerrainDB->m_alphaToIndex[ index ])), index);
 
@@ -2508,10 +2375,10 @@ sint32 GreatLibrary::UpdateList( DATABASE database )
 		break;
 
 	case DATABASE_CONCEPTS:
-		
+
 		for (index = 0; index < g_theConceptDB->GetNumConcepts(); index++)
 		{
-			
+
 			Add_Item_To_Topics_List(g_theConceptDB->GetNameStr(
 							g_theConceptDB->m_alphaToIndex[ index ]), index);
 
@@ -2520,12 +2387,11 @@ sint32 GreatLibrary::UpdateList( DATABASE database )
 		break;
 
 	case DATABASE_GOVERNMENTS:
-		
+
 		for (index = 0; index < g_theGovernmentDB->NumRecords(); index++)
 		{
 			if(HIDE(g_theGovernmentDB, index)) continue;
 
-			
 			Add_Item_To_Topics_List(g_theStringDB->GetNameStr(g_theGovernmentDB->GetName(
 						g_theGovernmentDB->m_alphaToIndex[ index ])), index);
 
@@ -2534,12 +2400,11 @@ sint32 GreatLibrary::UpdateList( DATABASE database )
 		break;
 
 	case DATABASE_TILE_IMPROVEMENTS:
-		
+
 		for (index = 0; index < g_theTerrainImprovementDB->NumRecords(); index++)
 		{
 			if(HIDE(g_theTerrainImprovementDB, index)) continue;
 
-			
 			Add_Item_To_Topics_List(g_theStringDB->GetNameStr(g_theTerrainImprovementDB->GetName(
 						g_theTerrainImprovementDB->m_alphaToIndex[ index ])), index);
 
@@ -2548,7 +2413,6 @@ sint32 GreatLibrary::UpdateList( DATABASE database )
 		break;
 
 	default:
-
 
 		return FALSE;
 	}
@@ -2585,7 +2449,7 @@ int GreatLibrary::Get_Database_Size(int the_database)
 		break;
 
 	case DATABASE_SEARCH:
-		
+
 		num = m_search_results.size();
 		break;
 
@@ -2636,7 +2500,6 @@ int GreatLibrary::Get_Database_Size(int the_database)
 
 	default:
 
-		
 		break;
 
 	}
@@ -2662,42 +2525,33 @@ int GreatLibrary::Get_Database_Size(int the_database)
 //----------------------------------------------------------------------------
 void GreatLibrary::Search_Great_Library()
 {
-	
+
 	const int MAX_SEARCH_KEY = 100;
 
-	
 	char search_key[MAX_SEARCH_KEY];
 
-	
 	char * gameplay_text = NULL;
 	char * historical_text = NULL;
 	char * title_text = NULL;
 	char * requirements_text = NULL;
 	char * variables_text = NULL;
 
-	
 	Great_Library_Item current;
 
-	
 	bool match = false;
 
-	
-	m_search_results.erase( 
-		m_search_results.begin(), 
+	m_search_results.erase(
+		m_search_results.begin(),
 		m_search_results.end()
 		);
 
 
-	
 	m_search_word->GetFieldText(search_key, MAX_SEARCH_KEY);
 
-	
 	String_Search::Set_Case_Sensitive(false);
-	
-	
+
 	String_Search::Set_Search_Key(search_key);
 
-	
 	for (int i = DATABASE_UNITS; i < DATABASE_SEARCH; i++)
 	{
 		for (int j = 0; j < Get_Database_Size(i); j++)
@@ -2723,16 +2577,16 @@ void GreatLibrary::Search_Great_Library()
 			variables_text = m_window->GetVariablesText(i, j);
 			if (variables_text)
 				match |= String_Search::Search(variables_text);
-			
+
 			if (match)
 			{
 				current.m_database = (enum DATABASE) i;
 				current.m_item = j;
-			
+
 				m_search_results.push_back(current);
-			} 
-		} 
-	} 
+			}
+		}
+	}
 }
 
 
@@ -2745,17 +2599,15 @@ void GreatLibrary::Search_Great_Library()
 
 void GreatLibrary::Force_A_Search()
 {
-	
+
 	m_listDatabase = DATABASE_SEARCH;
 
-	
 	SetCategoryName(m_listDatabase);
 
 	m_page = 0;
 	m_selectedIndex = -1;
 	m_topics_list->ShouldDraw();
 
-	
 	UpdateList( m_listDatabase );
 
 }
@@ -2777,33 +2629,27 @@ void GreatLibrary::Force_A_Search()
 //----------------------------------------------------------------------------
 void GreatLibrary::Back()
 {
-	
+
 	enum DATABASE next_database;
 	int next_index;
 
-	
 	if (m_history_position <= 0)
 		return;
 
-	
 	m_history_position--;
 
-	
 	if (m_history_position == 0)
 	{
-		
+
 		m_backButton->Enable(FALSE);
 
-	} 
+	}
 
-	
 	m_forwardButton->Enable(TRUE);
 
-	
 	next_database = m_history[m_history_position].m_database;
 	next_index = m_history[m_history_position].m_item;
 
-	
 	SetLibrary(next_index, next_database, false);
 }
 
@@ -2824,33 +2670,27 @@ void GreatLibrary::Back()
 //----------------------------------------------------------------------------
 void GreatLibrary::Forward()
 {
-	
+
 	enum DATABASE next_database;
 	int next_index;
 
-	
 	if (m_history_position >= (signed) m_history.size() - 1)
 		return;
 
-	
 	m_history_position++;
 
-	
 	if (m_history_position == (signed) m_history.size() - 1)
 	{
-		
+
 		m_forwardButton->Enable(FALSE);
 
-	} 
+	}
 
-	
 	m_backButton->Enable(TRUE);
 
-	
 	next_database = m_history[m_history_position].m_database;
 	next_index = m_history[m_history_position].m_item;
 
-	
 	SetLibrary(next_index, next_database, false);
 }
 
@@ -2869,9 +2709,9 @@ void GreatLibrary::Add_Item_To_Topics_List
 	int index
 )
 {
-	
+
 	void *cookie = (void *) index;
-	
+
 	Assert(m_topics_list);
 	if(!m_topics_list) return;
 
@@ -2885,8 +2725,7 @@ void GreatLibrary::Add_Item_To_Topics_List
 	if(!box) return;
 
 	box->SetText(name);
-	
-	
+
 	item->SetUserData(cookie);
 
 	m_topics_list->AddItem(item);
@@ -2898,7 +2737,7 @@ void GreatLibrary::Add_Item_To_Topics_List
 
 void GreatLibrary::FixTabs()
 {
-	
+
 	ctp2_Tab *curTab=m_tabGroup->GetCurrentTab();
 	m_tabGroup->SelectTab( m_historicalTab );
 	m_tabGroup->SelectTab( m_gameplayTab );

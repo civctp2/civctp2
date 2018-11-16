@@ -10,13 +10,13 @@
 //
 // THIS FILE IS NOT GENERATED OR SUPPORTED BY ACTIVISION.
 //
-// This material has been developed at apolyton.net by the Apolyton CtP2 
+// This material has been developed at apolyton.net by the Apolyton CtP2
 // Source Code Project. Contact the authors at ctp2source@apolyton.net.
 //
 //----------------------------------------------------------------------------
 //
 // Compiler flags
-// 
+//
 // __AUI_USE_DIRECTX__
 // - When not set, this file does not do anything at all.
 //
@@ -32,11 +32,9 @@
 
 #include "c3.h"
 
-
 #ifdef __AUI_USE_DIRECTX__
 
 #include "civ3_main.h"
-
 
 #include "aui_mouse.h"
 #include "aui_keyboard.h"
@@ -51,14 +49,12 @@ extern BOOL			g_exclusiveMode;
 #include "civapp.h"
 extern CivApp		*g_civApp;
 
-
 #include "display.h"
 
 extern BOOL					g_createDirectDrawOnSecondary;
 extern sint32				g_ScreenWidth;
 extern sint32				g_ScreenHeight;
 extern DisplayDevice		g_displayDevice;
-
 
 aui_DirectUI::aui_DirectUI
 (
@@ -69,9 +65,9 @@ aui_DirectUI::aui_DirectUI
 	sint32 height,
 	sint32 bpp,
 	MBCHAR *ldlFilename,
-	BOOL useExclusiveMode 
+	BOOL useExclusiveMode
 )
-:   
+:
     aui_UI              (retval, hinst, hwnd, width, height, bpp, ldlFilename),
     aui_DirectX         (),
     m_lpdds             (NULL),
@@ -88,7 +84,6 @@ aui_DirectUI::aui_DirectUI
 }
 
 
-
 AUI_ERRCODE aui_DirectUI::InitCommon()
 {
 	m_savedMouseAnimFirstIndex = 0;
@@ -101,11 +96,10 @@ AUI_ERRCODE aui_DirectUI::InitCommon()
     	HRESULT const   hr  = CoInitialize(NULL);
         m_isCoinitialized   = (S_OK == hr) || (S_FALSE == hr);
     }
-#endif 
+#endif
 
 	return AUI_ERRCODE_OK;
 }
-
 
 
 AUI_ERRCODE aui_DirectUI::DestroyNativeScreen(void)
@@ -121,17 +115,16 @@ AUI_ERRCODE aui_DirectUI::DestroyNativeScreen(void)
 	return AUI_ERRCODE_OK;
 }
 
-
 AUI_ERRCODE aui_DirectUI::CreateNativeScreen( BOOL useExclusiveMode )
 {
-	
+
 	AUI_ERRCODE errcode = aui_DirectX::InitCommon( useExclusiveMode );
 	Assert( AUI_SUCCESS(errcode) );
 	if ( !AUI_SUCCESS(errcode) ) return errcode;
 
-	
-	
-	
+
+
+
 
 	HRESULT hr;
 
@@ -140,15 +133,14 @@ AUI_ERRCODE aui_DirectUI::CreateNativeScreen( BOOL useExclusiveMode )
 	if ( m_exclusiveMode )
 		coopFlags = DDSCL_EXCLUSIVE | DDSCL_FULLSCREEN | DDSCL_ALLOWREBOOT;
 
-	
-	
-	
+
+
+
 	if (g_createDirectDrawOnSecondary) {
-        coopFlags = DDSCL_SETFOCUSWINDOW | DDSCL_CREATEDEVICEWINDOW | 
+        coopFlags = DDSCL_SETFOCUSWINDOW | DDSCL_CREATEDEVICEWINDOW |
 					DDSCL_ALLOWREBOOT | DDSCL_EXCLUSIVE | DDSCL_FULLSCREEN;
 	}
 
-	
 	hr = m_lpdd->SetCooperativeLevel( m_hwnd, coopFlags );
 	Assert( hr == DD_OK );
 	if ( hr != DD_OK ) return AUI_ERRCODE_SETCOOPLEVELFAILED;
@@ -158,16 +150,14 @@ AUI_ERRCODE aui_DirectUI::CreateNativeScreen( BOOL useExclusiveMode )
 	Assert( hr == DD_OK );
 	if ( hr != DD_OK ) return AUI_ERRCODE_SETDISPLAYFAILED;
 
-	
 	MoveWindow(
 		m_hwnd,
 		0, 0,
 
-		g_ScreenWidth, 
+		g_ScreenWidth,
 		g_ScreenHeight,
 		TRUE );
 
-	
 	LPDIRECTDRAWSURFACE lpdds;
 	DDSURFACEDESC ddsd;
 	memset( &ddsd, 0, sizeof( ddsd ) );
@@ -225,14 +215,12 @@ aui_DirectUI::~aui_DirectUI( void )
     {
 	    CoUninitialize();
     }
-#endif 
+#endif
 }
-
 
 AUI_ERRCODE aui_DirectUI::TearDownMouse(void)
 {
-	
-	
+
 	if (m_mouse) {
 		m_mouse->GetAnimIndexes(&m_savedMouseAnimFirstIndex, &m_savedMouseAnimLastIndex);
 		m_savedMouseAnimCurIndex = m_mouse->GetCurrentCursorIndex();
@@ -252,13 +240,11 @@ AUI_ERRCODE aui_DirectUI::TearDownMouse(void)
 }
 
 
-
 AUI_ERRCODE aui_DirectUI::RestoreMouse(void)
 {
 	AUI_ERRCODE		auiErr;
 	BOOL			exclusive = TRUE;
 
-	
 	aui_DirectMouse *mouse = new aui_DirectMouse( &auiErr, "CivMouse", exclusive );
 	Assert(mouse != NULL);
 	if ( !mouse ) return AUI_ERRCODE_MEMALLOCFAILED;
@@ -284,10 +270,8 @@ AUI_ERRCODE aui_DirectUI::RestoreMouse(void)
 	return AUI_ERRCODE_OK;
 }
 
-
 AUI_ERRCODE aui_DirectUI::AltTabOut( void )
 {
-
 
 	if(m_keyboard) m_keyboard->Unacquire();
 	if ( m_joystick ) m_joystick->Unacquire();
@@ -311,7 +295,7 @@ AUI_ERRCODE aui_DirectUI::AltTabOut( void )
 	}
 
 	while ( ShowCursor( TRUE ) < 0 )
-		; 
+		;
 
 	if ( m_minimize || m_exclusiveMode )
 	{
@@ -328,10 +312,8 @@ AUI_ERRCODE aui_DirectUI::AltTabOut( void )
 }
 
 
-
 AUI_ERRCODE aui_DirectUI::AltTabIn( void )
 {
-
 
 	if ( !m_primary ) CreateNativeScreen( m_exclusiveMode );
 
@@ -341,8 +323,7 @@ AUI_ERRCODE aui_DirectUI::AltTabIn( void )
 	::ShowWindow(m_hwnd, SW_SHOWMAXIMIZED);
 
 	while ( ShowCursor( FALSE ) >= 0 )
-		; 
-
+		;
 
 	if (g_exclusiveMode) {
 		RestoreMouse();
@@ -361,7 +342,6 @@ AUI_ERRCODE aui_DirectUI::AltTabIn( void )
 
 		main_HideTaskBar();
 
-		
 		RECT clipRect = { 0, 0, m_width, m_height };
 		ClipCursor(&clipRect);
 	}
@@ -377,5 +357,4 @@ AUI_ERRCODE aui_DirectUI::AltTabIn( void )
 	return FlushDirtyList();
 }
 
-
-#endif  // __AUI_USE_DIRECTX__ 
+#endif  // __AUI_USE_DIRECTX__

@@ -1,9 +1,3 @@
-
-
-
-
-
-
 #include "c3.h"
 #include "c3errors.h"
 #include "c3debug.h"
@@ -58,14 +52,13 @@ GameEventManager::GameEventManager()
 #ifdef _DEBUG
 	m_eventHistory = new PointerList<GameEvent>;
 
-	
 	FILE *f = fopen(EVENTLOGNAME, "w");
 	fclose(f);
 #endif
 
 	sint32 i;
 	for(i = 0; i < GEV_MAX; i++) {
-		
+
 		m_hooks[i] = NULL;
 	}
 
@@ -96,7 +89,6 @@ GameEventManager::~GameEventManager()
 		}
 	}
 }
-
 
 GAME_EVENT_ERR GameEventManager::AddEvent(GAME_EVENT_INSERT insert, GAME_EVENT type,
 				GAME_EVENT_ARGUMENT t1, int a1,
@@ -282,7 +274,6 @@ GAME_EVENT_ERR GameEventManager::AddEvent(GAME_EVENT_INSERT insert, GAME_EVENT t
 	return AddEvent(insert, type, argTypes, args);
 }
 
-
 GAME_EVENT_ERR GameEventManager::AddEvent(GAME_EVENT_INSERT insert, GAME_EVENT type,
 	const GAME_EVENT_ARGUMENT* argTypes, const void** args)
 {
@@ -290,7 +281,7 @@ GAME_EVENT_ERR GameEventManager::AddEvent(GAME_EVENT_INSERT insert, GAME_EVENT t
 	Assert(type < GEV_MAX);
 	if(type < (GAME_EVENT)0 || type >= GEV_MAX)
 		return GEV_ERR_BadEvent;
-	
+
 	if(g_slicEngine->AtBreak()) {
 		return GEV_ERR_AtBreak;
 	}
@@ -322,11 +313,10 @@ GAME_EVENT_ERR GameEventManager::ArglistAddEvent(GAME_EVENT_INSERT insert,
 	Assert(type < GEV_MAX);
 	if(type < (GAME_EVENT)0 || type >= GEV_MAX)
 		return GEV_ERR_BadEvent;
-	
-	
+
 	GameEvent *newEvent = new GameEvent(type, argList, m_serial++, m_processingEvent);
 
-	newEvent->SetType(type);	
+	newEvent->SetType(type);
 	switch(insert) {
 		case GEV_INSERT_Front:
 			m_eventList->AddHead(newEvent);
@@ -343,10 +333,9 @@ GAME_EVENT_ERR GameEventManager::ArglistAddEvent(GAME_EVENT_INSERT insert,
 		default:
 			return GEV_ERR_BadInsert;
 	}
-	
+
 	g_director->IncrementPendingGameActions();
 
-	
 	Process();
 
 	return GEV_ERR_OK;
@@ -355,10 +344,9 @@ GAME_EVENT_ERR GameEventManager::ArglistAddEvent(GAME_EVENT_INSERT insert,
 GAME_EVENT_ERR GameEventManager::Process()
 {
 	if(m_processing)
-		
+
 		return GEV_ERR_OK;
 
-	
 	if(!m_eventList->GetHead()) {
 		return GEV_ERR_OK;
 	}
@@ -368,13 +356,12 @@ GAME_EVENT_ERR GameEventManager::Process()
 
 	EVENTLOG(("\nGameEventManager::Process()\n"));
 
-	
 	m_processing = true;
 
 	GAME_EVENT_ERR err = GEV_ERR_OK;
 
 	do {
-		
+
 		err = ProcessHead();
 	} while(m_eventList->GetHead() && err == GEV_ERR_OK && !g_slicEngine->AtBreak() && !m_needUserInput && !m_pauseCount);
 
@@ -383,8 +370,7 @@ GAME_EVENT_ERR GameEventManager::Process()
 			err = GEV_ERR_OK;
 			break;
 		case GEV_ERR_NeedUserInput:
-			
-			
+
 			err = GEV_ERR_OK;
 			m_needUserInput = true;
 			break;
@@ -403,8 +389,7 @@ GAME_EVENT_ERR GameEventManager::ProcessHead()
 	EVENTLOG(("ProcessEvent: %s Serial: %d\n", g_eventDescriptions[event->GetType()].name,
 			event->GetSerial()));
 
-	
-	
+
 	m_processingEvent = event->GetType();
 
 	GAME_EVENT_ERR err = event->Process(complete);
@@ -412,7 +397,6 @@ GAME_EVENT_ERR GameEventManager::ProcessHead()
 	m_processingEvent = GEV_MAX;
 	if(complete) {
 
-		
 		Assert(event == m_eventList->GetHead());
 		m_eventList->RemoveHead();
 		g_director->DecrementPendingGameActions();
@@ -434,7 +418,7 @@ GAME_EVENT_ERR GameEventManager::ProcessHead()
 	return err;
 }
 
-GAME_EVENT_ERR GameEventManager::AddCallback(GAME_EVENT type, 
+GAME_EVENT_ERR GameEventManager::AddCallback(GAME_EVENT type,
 											 GAME_EVENT_PRIORITY pri,
 											 GameEventHookCallback *cb)
 {
@@ -465,13 +449,13 @@ GAME_EVENT_ERR GameEventManager::RemoveCallback(GAME_EVENT type,
 	return GEV_ERR_OK;
 }
 
-GAME_EVENT_ERR GameEventManager::ActivateHook(GAME_EVENT type, 
+GAME_EVENT_ERR GameEventManager::ActivateHook(GAME_EVENT type,
 											  GameEventArgList *args,
 											  sint32 &resumeIndex)
 {
 	Assert(type < GEV_MAX);
 	if((type >= GEV_MAX) || !m_hooks[type])
-		
+
 		return GEV_ERR_OK;
 
 	return m_hooks[type]->Activate(args, resumeIndex);
@@ -483,7 +467,7 @@ GAME_EVENT_ERR GameEventManager::ResumeHook(GAME_EVENT type,
 											sint32 &resumeIndex)
 {
 	if(!m_hooks[type])
-		
+
 		return GEV_ERR_OK;
 
 	return m_hooks[type]->Resume(args, startIndex, resumeIndex);
@@ -578,7 +562,7 @@ char GameEventManager::ArgChar(GAME_EVENT type, sint32 index)
 
 		if(count == index)
 			return *argString;
-		
+
 		argString++;
 		count++;
 	}
@@ -601,7 +585,7 @@ sint32 GameEventManager::GetNumArgs(GAME_EVENT type)
 	while(*argString) {
 		Assert(*argString == '%' || *argString == '&');
 		if(*argString != '%') {
-			
+
 			return count;
 		}
 
@@ -616,15 +600,14 @@ sint32 GameEventManager::GetNumArgs(GAME_EVENT type)
 
 	return count;
 }
-	
-	
+
 BOOL GameEventManager::VerifyArgs(GAME_EVENT type, const GAME_EVENT_ARGUMENT* argTypes, const void** args)
 {
 	Assert(type >= (GAME_EVENT)0);
 	Assert(type < GEV_MAX);
 	if(type < (GAME_EVENT)0 || type >= GEV_MAX)
 		return FALSE;
-	
+
 	GameEventDescription *desc = &g_eventDescriptions[type];
 	char *argString = desc->args;
 
@@ -640,13 +623,13 @@ BOOL GameEventManager::VerifyArgs(GAME_EVENT type, const GAME_EVENT_ARGUMENT* ar
 
 		if(nextArgType == GEA_End && *argString == 0)
 			return TRUE;
-		
+
 		if(!isOptional) {
-			
+
 			Assert(*argString == '%' || *argString == '&');
 			if(*argString != '%' && *argString != '&')
 				return FALSE;
-			
+
 			if(*argString == '&')
 				isOptional = true;
 		} else {
@@ -658,8 +641,7 @@ BOOL GameEventManager::VerifyArgs(GAME_EVENT type, const GAME_EVENT_ARGUMENT* ar
 		if(isOptional && nextArgType == GEA_End) {
 			return TRUE;
 		}
-		
-		
+
 		argString++;
 		argNum++;
 
@@ -667,7 +649,6 @@ BOOL GameEventManager::VerifyArgs(GAME_EVENT type, const GAME_EVENT_ARGUMENT* ar
 		if(!(*argString))
 			return FALSE;
 
-		
 
 		static Army a;
 		static Unit u, c;
@@ -772,7 +753,7 @@ BOOL GameEventManager::VerifyArgs(GAME_EVENT type, const GAME_EVENT_ARGUMENT* ar
 #ifdef _DEBUG
 void GameEventManager::Log(const char *fmt, ...)
 {
-	
+
 	if (g_eventLog == FALSE)
 		return;
 
@@ -781,14 +762,13 @@ void GameEventManager::Log(const char *fmt, ...)
 	va_start(vl, fmt);
 	vsprintf(text, fmt, vl);
 	va_end(vl);
-	
+
 	FILE *f = fopen(EVENTLOGNAME, "a");
 	if(f) {
 		fprintf(f, "%s", text);
 		fclose(f);
 	}
-	
-	
+
 }
 
 void GameEventManager::Dump()
@@ -797,25 +777,22 @@ void GameEventManager::Dump()
 
 	GAME_EVENT ev;
 	for(ev = (GAME_EVENT)0; ev < GEV_MAX; ev = GAME_EVENT((sint32)ev + 1)) {
-		
+
 		fprintf(f, "%d: GEV_%s(", (sint32)ev, g_eventDescriptions[ev].name);
 
 		char *argString = g_eventDescriptions[ev].args;
 		BOOL first = TRUE;
 
 
-		
 		while(*argString) {
 			Assert(*argString == '%' || *argString == '&');
-			
-			
+
 			BOOL  optional= *argString=='&';
 			if(optional)
 				{
 				fprintf(f, " [");
 				}
-			
-			
+
 
 			argString++;
 			if(!(*argString)) {
@@ -829,16 +806,13 @@ void GameEventManager::Dump()
 			fprintf(f, "%s", ArgCharToName(*argString));
 			argString++;
 
-			
 			if(optional)
 				{
 				fprintf(f, "]");
 				}
-			
-			
+
 		}
 
-		
 		fprintf(f, "): %s\n", g_eventDescriptions[ev].description);
 
 		if(m_hooks[ev]) {

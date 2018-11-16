@@ -1,5 +1,3 @@
-
-
 #include "c3.h"
 
 #include "DiffDB.h"
@@ -34,9 +32,9 @@ DifficultyDBRecord::DifficultyDBRecord()
 
 	memset((uint8*)&m_base_contentment, 0, (uint8*)&m_advanceChances - (uint8*)&m_base_contentment + sizeof(m_advanceChances));
 
-   m_base_contentment= 0; 
+   m_base_contentment= 0;
    m_granary_coef = 0;
-   m_big_city_scale = 0.0; 
+   m_big_city_scale = 0.0;
    m_big_city_offset = 0.0;
 
    m_pollution_multiplier = 0.0 ;
@@ -65,10 +63,10 @@ void DifficultyDBRecord::Serialize(CivArchive &archive)
 	sint32 count;
 	sint32 i;
   	if (archive.IsStoring()) {
-	archive << m_base_contentment; 
+	archive << m_base_contentment;
     archive << m_granary_coef;
 
-    archive.PutDoubleString( m_big_city_scale); 
+    archive.PutDoubleString( m_big_city_scale);
     archive.PutDoubleString( m_big_city_offset);
 	archive.PutDoubleString( m_pollution_multiplier );
 	archive << m_science_handicap;
@@ -77,14 +75,13 @@ void DifficultyDBRecord::Serialize(CivArchive &archive)
 	archive << m_vision_bonus;
 	archive << m_base_score;
 
-	
 	archive << m_time_scale.m_startYear;
 	archive << m_time_scale.m_numPeriods;
 	for(i = 0; i < m_time_scale.m_numPeriods; i++) {
 		archive << m_time_scale.m_periods[i].m_startTurn;
 		archive << m_time_scale.m_periods[i].m_yearsPerTurn;
 	}
-	
+
 	archive.PutDoubleString( m_feats_factor);
 	archive.PutDoubleString( m_advances_factor);
 	archive.PutDoubleString( m_wonders_factor);
@@ -124,12 +121,12 @@ void DifficultyDBRecord::Serialize(CivArchive &archive)
 	archive.PutDoubleString( m_ai_distance_from_capitol_adjustment);
 	archive.PutDoubleString( m_pollution_adjust);
 
-	
-	
-	
-	
 
-	
+
+
+
+
+
 	archive << m_ai_min_behind_percent;
 	archive << m_ai_max_behind_percent;
 	archive << m_ai_min_ahead_percent;
@@ -173,7 +170,7 @@ DifficultyDB::DifficultyDB()
 {
 }
 
- 
+
 
 
 
@@ -225,7 +222,6 @@ void DifficultyDB::Serialize(CivArchive &archive)
 
 	}
 
-
 sint32 DifficultyDB::GetYearFromTurn(sint32 diff, sint32 turn)
 {
 	DifficultyDBRecord		*rec;
@@ -258,17 +254,16 @@ sint32 DifficultyDB::GetYearFromTurn(sint32 diff, sint32 turn)
 			sint32 totalTurns = rec->m_time_scale.m_periods[i+1].m_startTurn -
 								rec->m_time_scale.m_periods[i].m_startTurn;
 			curYear += (totalTurns * rec->m_time_scale.m_periods[i].m_yearsPerTurn);
-			
+
 			turnsLeft -= totalTurns;
 		} else {
-			
+
 			curYear += (turnsLeft * rec->m_time_scale.m_periods[i].m_yearsPerTurn);
 		}
 	}
 
 	return curYear;
 }
-
 
 sint32 DifficultyDB::GetYearIncrementFromTurn(sint32 diff, sint32 turn)
 {
@@ -299,7 +294,7 @@ const char *DifficultyDB::GetYearStringFromTurn(sint32 diff, sint32 turn)
 
 
 
-	
+
 	static char buf[k_MAX_NAME_LEN];
 	if(g_useCustomYear && g_pTurnLengthOverride) {
 		if((unsigned) turn >= g_turnLengthOverrideSize) {
@@ -309,7 +304,7 @@ const char *DifficultyDB::GetYearStringFromTurn(sint32 diff, sint32 turn)
 	} else {
 		sint32 year = GetYearFromTurn(diff, turn);
 		if(year == 0) {
-			
+
 			year = 1;
 		}
 
@@ -320,7 +315,6 @@ const char *DifficultyDB::GetYearStringFromTurn(sint32 diff, sint32 turn)
 
 	return buf;
 }
-		
 
 sint32 DifficultyDB::ParseAdvanceChances(Token *diffToken, DifficultyDBRecord *rec)
 {
@@ -345,7 +339,7 @@ sint32 DifficultyDB::ParseAdvanceChances(Token *diffToken, DifficultyDBRecord *r
 			c3errors_ErrorDialog(diffToken->ErrStr(), "%s is not an advance", str);
 			return FALSE;
 		}
-		
+
 		if(diffToken->Next() != TOKEN_NUMBER) {
 			c3errors_ErrorDialog(diffToken->ErrStr(), "Each advance requires a human chance and an AI chance");
 			return FALSE;
@@ -368,30 +362,26 @@ sint32 DifficultyDB::ParseATimeScale(Token *diffToken, DifficultyDBRecord *rec)
 
 	if (!token_ParseKeywordNext(diffToken, TOKEN_TIME_SCALE)) return FALSE;
 	if (!token_ParseAnOpenBraceNext(diffToken)) return FALSE;
-    
-	
+
 	if (!token_ParseValNext(diffToken, TOKEN_START_YEAR, tmp)) return FALSE;
 	rec->m_time_scale.m_startYear = tmp;
 
-	
-    if (!token_ParseValNext(diffToken, TOKEN_NUM_PERIODS, tmp)) return FALSE;        
+    if (!token_ParseValNext(diffToken, TOKEN_NUM_PERIODS, tmp)) return FALSE;
 	rec->m_time_scale.m_numPeriods = tmp;
 
 	if (tmp > k_MAX_PERIODS) {
 		c3errors_FatalDialog("DifficultyDB", "%d periods defined, %d periods allowed.", tmp, k_MAX_PERIODS);
 		return FALSE;
 	}
-	
+
 	for (sint32 i=0; i<rec->m_time_scale.m_numPeriods; i++) {
 		if (!token_ParseKeywordNext(diffToken, TOKEN_PERIOD)) return FALSE;
 		if (!token_ParseAnOpenBraceNext(diffToken)) return FALSE;
 
-		
 		if (!token_ParseValNext(diffToken, TOKEN_START_TURN, tmp)) return FALSE;
 		rec->m_time_scale.m_periods[i].m_startTurn = tmp;
 
-		
-		if (!token_ParseValNext(diffToken, TOKEN_YEARS_PER_TURN, tmp)) return FALSE;        
+		if (!token_ParseValNext(diffToken, TOKEN_YEARS_PER_TURN, tmp)) return FALSE;
 		rec->m_time_scale.m_periods[i].m_yearsPerTurn = tmp;
 
 		if (!token_ParseAnCloseBraceNext(diffToken)) return FALSE;
@@ -414,18 +404,18 @@ sint32 DifficultyDB::ParseATimeScale(Token *diffToken, DifficultyDBRecord *rec)
 }
 
 sint32 DifficultyDB::ParseADiff(Token *diffToken, DifficultyDBRecord *rec)
-{    
+{
 	sint32 i;
 
-    if (diffToken->GetType() != TOKEN_OPEN_BRACE) { 
+    if (diffToken->GetType() != TOKEN_OPEN_BRACE) {
         c3errors_ErrorDialog (diffToken->ErrStr(), "Missing expected open brace");
         g_abort_parse = TRUE;
-        return FALSE; 
-    } 
-    if (!token_ParseValNext(diffToken, TOKEN_BASE_CONTENTMENT, rec->m_base_contentment)) return FALSE;        
-    if (!token_ParseValNext(diffToken, TOKEN_GRANARY_COEF, rec->m_granary_coef)) return FALSE;    
-    if (!token_ParseFloatNext(diffToken, TOKEN_BIG_CITY_SCALE, rec->m_big_city_scale)) return FALSE;    
-    if (!token_ParseFloatNext(diffToken, TOKEN_BIG_CITY_OFFSET, rec->m_big_city_offset)) return FALSE;      
+        return FALSE;
+    }
+    if (!token_ParseValNext(diffToken, TOKEN_BASE_CONTENTMENT, rec->m_base_contentment)) return FALSE;
+    if (!token_ParseValNext(diffToken, TOKEN_GRANARY_COEF, rec->m_granary_coef)) return FALSE;
+    if (!token_ParseFloatNext(diffToken, TOKEN_BIG_CITY_SCALE, rec->m_big_city_scale)) return FALSE;
+    if (!token_ParseFloatNext(diffToken, TOKEN_BIG_CITY_OFFSET, rec->m_big_city_offset)) return FALSE;
 	if (!token_ParseValNext(diffToken, TOKEN_SCIENCE_HANDICAP, rec->m_science_handicap)) return FALSE;
 
     if (!token_ParseFloatNext(diffToken, TOKEN_DIFFICULTY_POLLUTION_MULTIPLIER, rec->m_pollution_multiplier )) return FALSE;
@@ -464,7 +454,7 @@ sint32 DifficultyDB::ParseADiff(Token *diffToken, DifficultyDBRecord *rec)
 
 
 
-	
+
 	if(!token_ParseValNext(diffToken, TOKEN_AI_START_UNITS, rec->m_ai_start_units)) return FALSE;
 	if(!token_ParseValNext(diffToken, TOKEN_AI_START_GOLD, rec->m_ai_start_gold)) return FALSE;
 	if(!token_ParseValNext(diffToken, TOKEN_AI_START_ADVANCES, rec->m_ai_start_advances)) return FALSE;
@@ -477,15 +467,12 @@ sint32 DifficultyDB::ParseADiff(Token *diffToken, DifficultyDBRecord *rec)
 	if(!token_ParseFloatNext(diffToken, TOKEN_AI_DISTANCE_FROM_CAPITOL_ADJUSTMENT, rec->m_ai_distance_from_capitol_adjustment)) return FALSE;
 	if(!token_ParseFloatNext(diffToken, TOKEN_POLLUTION_ADJUST, rec->m_pollution_adjust)) return FALSE;
 
-	
 	if(!token_ParseFloatNext(diffToken, TOKEN_AI_MIN_BEHIND_PERCENT, rec->m_ai_min_behind_percent)) return FALSE;
 	if(!token_ParseFloatNext(diffToken, TOKEN_AI_MAX_BEHIND_PERCENT, rec->m_ai_max_behind_percent)) return FALSE;
 
-	
 	if(!token_ParseFloatNext(diffToken, TOKEN_AI_MIN_AHEAD_PERCENT, rec->m_ai_min_ahead_percent)) return FALSE;
 	if(!token_ParseFloatNext(diffToken, TOKEN_AI_MAX_AHEAD_PERCENT, rec->m_ai_max_ahead_percent)) return FALSE;
 
-	
 
 	if(diffToken->Next() != TOKEN_AI_MIN_BEHIND_TECHNOLOGY_COST) {
 		c3errors_ErrorDialog(diffToken->ErrStr(), "Expected AI_MIN_BEHIND_TECHNOLOGY_COST");
@@ -565,7 +552,6 @@ sint32 DifficultyDB::ParseADiff(Token *diffToken, DifficultyDBRecord *rec)
 		diffToken->GetFloat(rec->m_ai_max_behind_gold_adjustment[i]);
 	}
 
-	
 
 	if(diffToken->Next() != TOKEN_AI_MIN_AHEAD_TECHNOLOGY_COST) {
 		c3errors_ErrorDialog(diffToken->ErrStr(), "Expected AI_MIN_AHEAD_TECHNOLOGY_COST");
@@ -651,7 +637,6 @@ sint32 DifficultyDB::ParseADiff(Token *diffToken, DifficultyDBRecord *rec)
 	if(!token_ParseFloatNext(diffToken, TOKEN_HUMAN_SCIENCE_BONUS, rec->m_human_science_bonus)) return FALSE;
 	if(!token_ParseFloatNext(diffToken, TOKEN_HUMAN_FOOD_BONUS, rec->m_human_food_bonus)) return FALSE;
 	if(!token_ParseFloatNext(diffToken, TOKEN_EXTRA_SETTLER_CHANCE, rec->m_extra_settler_chance)) return FALSE;
-	
 
 	if(!ParseAdvanceChances(diffToken, rec)) return FALSE;
 
@@ -660,29 +645,28 @@ sint32 DifficultyDB::ParseADiff(Token *diffToken, DifficultyDBRecord *rec)
 	if(!token_ParseFloatNext(diffToken, TOKEN_POLLUTION_PRODUCTION_RATIO, rec->m_pollution_production_ratio)) return FALSE;
 	if(!token_ParseFloatNext(diffToken, TOKEN_POLLUTION_POPULATION_RATIO, rec->m_pollution_population_ratio)) return FALSE;
 
-	if (diffToken->Next() != TOKEN_CLOSE_BRACE) { 
+	if (diffToken->Next() != TOKEN_CLOSE_BRACE) {
         ("Missing expected close brace");
-        return FALSE; 
-    } 
+        return FALSE;
+    }
     diffToken->Next();
-    
+
     return TRUE;
 }
 
 sint32 DifficultyDB::Parse(char *filename)
 
 {
-    int i; 
-	Token *diffToken = new Token(filename, C3DIR_GAMEDATA); 
+    int i;
+	Token *diffToken = new Token(filename, C3DIR_GAMEDATA);
 
-    for (i=0; i<LEVELS_OF_DIFFICULTY; i++) { 
+    for (i=0; i<LEVELS_OF_DIFFICULTY; i++) {
         if (!ParseADiff(diffToken, Get(i))) {
 			delete diffToken;
-			return FALSE; 
+			return FALSE;
 		}
     }
 
-	
 	delete diffToken;
 
     return TRUE;
@@ -811,7 +795,7 @@ double DifficultyDBRecord::GetAiTechnologyCost(const sint32 playerId, const sint
 			value = max_behind_value;
 		else
 		{
-			
+
 			percent_spread = m_ai_max_behind_percent - m_ai_min_behind_percent;
 			value_spread = max_behind_value - min_behind_value;
 			rank_spread_percent = (m_ai_min_behind_percent - rank_percent) / fabs(percent_spread);
@@ -824,7 +808,7 @@ double DifficultyDBRecord::GetAiTechnologyCost(const sint32 playerId, const sint
 		value = min_ahead_value;
 	else
 	{
-		
+
 		percent_spread = m_ai_max_ahead_percent - m_ai_min_ahead_percent;
 		value_spread =  max_ahead_value - min_ahead_value;
 		rank_spread_percent = (m_ai_min_ahead_percent - rank_percent) / fabs(percent_spread);
@@ -852,7 +836,7 @@ double DifficultyDBRecord::GetAiProductionCostAdjustment(const sint32 playerId, 
 			value = max_behind_value;
 		else
 		{
-			
+
 			percent_spread = m_ai_max_behind_percent - m_ai_min_behind_percent;
 			value_spread = max_behind_value - min_behind_value;
 			rank_spread_percent = (m_ai_min_behind_percent - rank_percent) / fabs(percent_spread);
@@ -865,7 +849,7 @@ double DifficultyDBRecord::GetAiProductionCostAdjustment(const sint32 playerId, 
 		value = min_ahead_value;
 	else
 	{
-		
+
 		percent_spread = m_ai_max_ahead_percent - m_ai_min_ahead_percent;
 		value_spread =  max_ahead_value - min_ahead_value;
 		rank_spread_percent = (m_ai_min_ahead_percent - rank_percent) / fabs(percent_spread);
@@ -893,7 +877,7 @@ double DifficultyDBRecord::GetAiGoldAdjustment(const sint32 playerId, const sint
 			value = max_behind_value;
 		else
 		{
-			
+
 			percent_spread = m_ai_max_behind_percent - m_ai_min_behind_percent;
 			value_spread = max_behind_value - min_behind_value;
 			rank_spread_percent = (m_ai_min_behind_percent - rank_percent) / fabs(percent_spread);
@@ -906,7 +890,7 @@ double DifficultyDBRecord::GetAiGoldAdjustment(const sint32 playerId, const sint
 		value = min_ahead_value;
 	else
 	{
-		
+
 		percent_spread = m_ai_max_ahead_percent - m_ai_min_ahead_percent;
 		value_spread =  max_ahead_value - min_ahead_value;
 		rank_spread_percent = (m_ai_min_ahead_percent - rank_percent) / fabs(percent_spread);

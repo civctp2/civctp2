@@ -10,20 +10,20 @@
 //
 // THIS FILE IS NOT GENERATED OR SUPPORTED BY ACTIVISION.
 //
-// This material has been developed at apolyton.net by the Apolyton CtP2 
+// This material has been developed at apolyton.net by the Apolyton CtP2
 // Source Code Project. Contact the authors at ctp2source@apolyton.net.
 //
 //----------------------------------------------------------------------------
 //
 // Compiler flags
-// 
-// _MSC_VER		
+//
+// _MSC_VER
 // - Compiler version (for the Microsoft C++ compiler only)
 //
 // Note: For the blocks with _MSC_VER preprocessor directives, the following
 //       is implied: the (_MSC_VER) preprocessor directive lines, and the blocks
-//       that are inactive for _MSC_VER value 1200 are modified Apolyton code. 
-//       The blocks that are inactiThe blocks that are active for _MSC_VER value 
+//       that are inactive for _MSC_VER value 1200 are modified Apolyton code.
+//       The blocks that are inactiThe blocks that are active for _MSC_VER value
 //       1200 are the original Activision code.
 //
 //----------------------------------------------------------------------------
@@ -43,12 +43,11 @@
 #ifndef __SPRITEGROUPLIST_H__
 #define __SPRITEGROUPLIST_H__
 
-
 //----------------------------------------------------------------------------
 // Library dependencies
 //----------------------------------------------------------------------------
 
-// None 
+// None
 
 //----------------------------------------------------------------------------
 // Export overview
@@ -56,7 +55,7 @@
 
 class	SpriteGroupList;
 
-enum	SPRITELISTERR 
+enum	SPRITELISTERR
 {
 		SPRITELISTERR_OK,
 		SPRITELISTERR_NOTFOUND,
@@ -76,11 +75,11 @@ enum	SPRITELISTERR
 // Class declarations
 //----------------------------------------------------------------------------
 
-uint8 const	k_MAX_SPRITES	= 255;	
+uint8 const	k_MAX_SPRITES	= 255;
 // uint8 restriction: see UnitActor::Serialize. Going beyond 255 will require
 // a file format update.
 
-class SpriteGroupList 
+class SpriteGroupList
 {
 public:
 	SpriteGroupList();

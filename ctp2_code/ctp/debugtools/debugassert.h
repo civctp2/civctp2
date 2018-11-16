@@ -16,7 +16,6 @@
 extern "C" {
 #endif
 
-	
 #include "log.h"
 
 
@@ -69,7 +68,7 @@ void DebugAssert_Close (void);
 
 
 
-#undef ASSERT    
+#undef ASSERT
 #define ASSERT(condition)													\
 	{if (! ((int) (condition))) {											\
 		DebugAssert_Assert ( __FILE__, __LINE__, LOG_ASSERT, #condition);	\
@@ -122,7 +121,7 @@ void DebugAssert_Close (void);
 
 
 
-	
+
 void DebugAssert_Assert (const char *module_name, int module_line, const char *log_class, const char *condition_string);
 
 
@@ -134,4 +133,4 @@ void DebugAssert_Assert (const char *module_name, int module_line, const char *l
 
 #endif
 
-#endif 
+#endif

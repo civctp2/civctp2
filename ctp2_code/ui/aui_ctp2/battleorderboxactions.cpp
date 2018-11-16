@@ -1,13 +1,3 @@
-
-
-
-
-
-
-
-
-
-
 #include "c3.h"
 
 #include "aui.h"
@@ -51,20 +41,18 @@ BobButtonAction::BobButtonAction(BattleOrderBox *bob)
 
 void BobButtonAction::Execute(aui_Control *control, uint32 action, uint32 data )
 {
-	
 
 	switch ( action ) {
 	case AUI_BUTTON_ACTION_EXECUTE:
-		
-		
+
 
 		if(!g_theProfileDB->IsAutoGroup()) {
 			if (g_theUnitPool->IsValid(m_unit)) {
-				
+
 				Army army = m_army;
-				
+
 				if ( m_army.m_id == (0) ) return;
-				
+
 				MapPoint	pos;
 				m_unit.GetPos(pos);
 
@@ -80,49 +68,45 @@ void BobButtonAction::Execute(aui_Control *control, uint32 action, uint32 data )
 					MapPoint crap;
 					m_army.AddOrders( UNIT_ORDER_GROUP_UNIT, NULL, crap, (int)(m_unit) );
 				}
-				
+
 				CellUnitList	*cellArmy;
 				cellArmy = g_theWorld->GetCell(pos)->UnitArmy();
-				
-				
+
 
 			}
 		} else {
-		
+
 			if ( g_theUnitPool->IsValid(m_unit) ) {
 				Army army = m_army;
 				m_unit.AccessData()->CreateOwnArmy();
 				g_selected_item->SetSelectUnit( m_unit, FALSE );
-				
+
 				CellUnitList	*cellArmy;
 				MapPoint	pos;
-				
+
 				m_unit.GetPos(pos);
 				cellArmy = g_theWorld->GetCell(pos)->UnitArmy();
-				
-				
+
 
 			}
 		}
-		
+
 		break;
 	case C3_COLORICONBUTTON_ACTION_RIGHTCLK:
 		if ( g_theUnitPool->IsValid(m_unit) ) {
-			
+
 			m_bob->ToggleStackDisplay();
 
-			
 			if ( !m_bob->GetStackDisplay() ) {
 				m_bob->SetSingleUnit( m_unit );
 			}
-			
+
 			CellUnitList	*cellArmy;
 			MapPoint	pos;
 
 			m_unit.GetPos(pos);
 			cellArmy = g_theWorld->GetCell(pos)->UnitArmy();
 
-			
 
 		}
 		break;
@@ -130,18 +114,16 @@ void BobButtonAction::Execute(aui_Control *control, uint32 action, uint32 data )
 		if ( g_theUnitPool->IsValid(m_unit) ) {
 			Army army = m_army;
 			Unit unit = m_unit;
-			
-			
+
 			unit.AccessData()->CreateOwnArmy();
 			g_selected_item->SetSelectUnit( unit, TRUE, TRUE);
-			
+
 			CellUnitList	*cellArmy;
 			MapPoint	pos;
 
 			unit.GetPos(pos);
 			cellArmy = g_theWorld->GetCell(pos)->UnitArmy();
 
-			
 
 		}
 		break;

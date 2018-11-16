@@ -7,15 +7,13 @@
 #include "DiplomaticRequest.h"
 #include "dynarr.h"
 
-
 class DiplomaticRequestDynamicArray : public DynamicArray<DiplomaticRequest> {
-
 
 public:
 
-    DiplomaticRequestDynamicArray(); 
-    DiplomaticRequestDynamicArray(const sint32 size); 
-    DiplomaticRequestDynamicArray (const DynamicArray<DiplomaticRequest> &copyme); 
+    DiplomaticRequestDynamicArray();
+    DiplomaticRequestDynamicArray(const sint32 size);
+    DiplomaticRequestDynamicArray (const DynamicArray<DiplomaticRequest> &copyme);
 
 };
 

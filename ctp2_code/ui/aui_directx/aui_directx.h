@@ -1,25 +1,13 @@
-
-
-
-
-
-
-
-
-
-
-
 #ifndef __AUI_DIRECTX_H__
 #define __AUI_DIRECTX_H__
 
 #ifdef __AUI_USE_DIRECTX__
 
 
-
 class aui_DirectX
 {
 public:
-	
+
 	aui_DirectX() { m_directXRefCount++; m_exclusiveMode = FALSE; }
 	virtual ~aui_DirectX();
 
@@ -32,7 +20,6 @@ public:
 		return classId == m_directXClassId;
 	}
 
-	
 	LPDIRECTDRAW		DD( void ) const { return m_lpdd; }
 	LPDIRECTINPUT		DI( void ) const { return m_lpdi; }
 
@@ -58,7 +45,6 @@ private:
 typedef aui_DirectX aui_Native;
 
 
-
 #ifndef DDLOCK_NOSYSLOCK
 #define DDLOCK_NOSYSLOCK 0
 #endif
@@ -71,7 +57,6 @@ typedef aui_DirectX aui_Native;
 #define IID_IDirectDrawSurface3 IID_IDirectDrawSurface2
 #endif
 
+#endif
 
-#endif 
-
-#endif 
+#endif

@@ -31,7 +31,6 @@
 #include "aui_keyboard.h"
 
 
-
 aui_Keyboard::aui_Keyboard(
 	AUI_ERRCODE *retval )
 	:
@@ -46,7 +45,6 @@ aui_Keyboard::aui_Keyboard(
 }
 
 
-
 AUI_ERRCODE aui_Keyboard::InitCommon( void )
 {
 	memset( &m_data, 0, sizeof( m_data ) );
@@ -56,12 +54,10 @@ AUI_ERRCODE aui_Keyboard::InitCommon( void )
 }
 
 
-
 aui_Keyboard::~aui_Keyboard()
 {
 	Unacquire();
 }
-
 
 
 AUI_ERRCODE aui_Keyboard::GetKeyboardState( uint8 *keyboardState )

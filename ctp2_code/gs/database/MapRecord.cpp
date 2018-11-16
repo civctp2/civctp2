@@ -16,7 +16,7 @@ BOOL MapRecord::Parse(Token *token)
 			return FALSE;
 		}
 		sint32 t;
-		for(t = sint32(TOKEN_MAP_NUM_CONTINENTS); 
+		for(t = sint32(TOKEN_MAP_NUM_CONTINENTS);
 			t < sint32(TOKEN_MAP_MAX_VAL); t++) {
 			if(!token_ParseFloatNext(token, t, m_settings[m_numLevels][t - sint32(TOKEN_MAP_NUM_CONTINENTS)])) {
 				c3errors_ErrorDialog(token->ErrStr(), "Expected %s", g_mapTokenData[t].keyword);
@@ -40,7 +40,7 @@ const double *MapRecord::GetSettings(sint32 level, sint32 &numSettings) const
 	} else if(level >= m_numLevels) {
 		level = m_numLevels;
 	}
-	
+
 	numSettings = k_NUM_MAP_VARS;
 
 	return &m_settings[level][0];

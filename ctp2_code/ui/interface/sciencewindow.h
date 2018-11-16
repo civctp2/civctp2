@@ -4,15 +4,13 @@
 #ifndef __SCIENCEWINDOW_H__
 #define __SCIENCEWINDOW_H__
 
-
 #include "c3window.h"
 
 enum DATABASE;
 
 class c3_HyperTextBox;
 
-
-class ScienceWindow : public C3Window 
+class ScienceWindow : public C3Window
 {
 public:
 	ScienceWindow(
@@ -41,7 +39,6 @@ public:
 		sint32 x = 0,
 		sint32 y = 0 );
 
-	
 	sint32 SetTechMode ( sint32 mode, DATABASE database );
 
 	void SetGivesText( c3_HyperTextBox *text ) { m_givesBox = text; };
@@ -54,5 +51,4 @@ private:
 
 };
 
-
-#endif 
+#endif

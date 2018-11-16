@@ -1,5 +1,3 @@
-
-
 #include "c3.h"
 #include "Order.h"
 #include "Path.h"
@@ -126,7 +124,7 @@ void Order::Serialize(CivArchive &archive)
 		archive << hasPath;
 		if(hasPath)
 			m_path->Serialize(archive);
-		
+
 		hasArgs = m_gameEventArgs != NULL;
 		archive << hasArgs;
 		if(hasArgs)
@@ -169,7 +167,6 @@ void Order::operator delete(void *ptr)
 	g_theOrderPond->Release_Pointer(order->m_index);
 }
 
-
 bool Order::IsSpecialAttack(UNIT_ORDER_TYPE order)
 {
 	switch(order) {
@@ -208,7 +205,7 @@ bool Order::IsSpecialAttack(UNIT_ORDER_TYPE order)
 		case UNIT_ORDER_UNLOAD:
 		case UNIT_ORDER_LAUNCH:
 		case UNIT_ORDER_TARGET:
-		case UNIT_ORDER_CLEAR_TARGET:			
+		case UNIT_ORDER_CLEAR_TARGET:
 			return true;
 		default:
 			return false;
@@ -217,17 +214,15 @@ bool Order::IsSpecialAttack(UNIT_ORDER_TYPE order)
 
 static GAME_EVENT s_orderToEventMap[UNIT_ORDER_MAX];
 
-
 GAME_EVENT Order::OrderToEvent(UNIT_ORDER_TYPE order)
 {
 	return s_orderToEventMap[order];
 }
 
 
-
 void Order::AssociateEventsWithOrders()
 {
-	
+
 	const char *event_name;
 	for(sint32 i = 0; i < UNIT_ORDER_MAX; i++) {
 		s_orderToEventMap[i] = GEV_MAX;
@@ -247,7 +242,6 @@ void Order::AssociateEventsWithOrders()
 		}
 	}
 }
-
 
 CURSORINDEX Order::GetCursor(OrderRecord *order)
 {

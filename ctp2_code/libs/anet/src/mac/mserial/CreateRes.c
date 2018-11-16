@@ -1,4 +1,4 @@
-/* 
+/*
 Copyright (C) 1995-2001 Activision, Inc.
 
 This library is free software; you can redistribute it and/or
@@ -20,10 +20,10 @@ Foundation, Inc., 59 Temple Place, Suite 330, Boston, MA  02111-1307  USA
 /*
 	CreateRes.c
 	© 1994 Green Dragon Creations, Inc.
-	
+
 	Description:
 		This code saves STR resources into the currently open resource file
-	
+
 */
 
 #include <Aliases.h>
@@ -69,33 +69,32 @@ OSErr CreateRes(Ptr configPtr,StringPtr toolName) {
 	long			theStringsSize;
 	short			fRefNum;
 
-	c2pstr(configPtr);		
+	c2pstr(configPtr);
 	//	build the 'STR ' resource
-	
+
 	theStrings = GetResource('STR ',5000);
 	if (theStrings != nil) {
 		RemoveResource(theStrings);
-	}			
+	}
 	theErr = PtrToHand(configPtr,&theStrings,configPtr[0]+1);
 	AddResource(theStrings, 'STR ', 5000, "\pconfig");
 	ChangedResource(theStrings);
 	WriteResource(theStrings);
-	
-	p2cstr((StringPtr)configPtr);		
-	
-	c2pstr((char*)toolName);		
+
+	p2cstr((StringPtr)configPtr);
+
+	c2pstr((char*)toolName);
 	//	build the 'STR ' resource
-	
+
 	theStrings = GetResource('STR ',6000);
 	if (theStrings != nil) {
 		RemoveResource(theStrings);
-	}			
+	}
 	theErr = PtrToHand(toolName,&theStrings,toolName[0]+1);
 	AddResource(theStrings, 'STR ', 6000, "\ptoolName");
 	ChangedResource(theStrings);
 	WriteResource(theStrings);
-	
-	p2cstr((StringPtr)toolName);		
+
+	p2cstr((StringPtr)toolName);
 	return theErr;
 }
-

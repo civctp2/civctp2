@@ -1,11 +1,3 @@
-
-
-
-
-
-
-
-
 #ifdef HAVE_PRAGMA_ONCE
 #pragma once
 #endif
@@ -33,8 +25,7 @@ enum TERRAIN_IMPROVEMENT {
 	TERRAIN_IMPROVEMENT_CANAL_TUNNEL,
 
     TERRAIN_IMPROVEMENT_TRANSFORM,
-	TERRAIN_IMPROVEMENT_INSTALLATION 
-  	                                
+	TERRAIN_IMPROVEMENT_INSTALLATION
 
 };
 #else

@@ -1,4 +1,4 @@
-/* 
+/*
 Copyright (C) 1995-2001 Activision, Inc.
 
 This library is free software; you can redistribute it and/or
@@ -25,8 +25,8 @@ Foundation, Inc., 59 Temple Place, Suite 330, Boston, MA  02111-1307  USA
 /*--------------------------------------------------------------------------
  Calls to schedule responses and inform this layer of the needed userinfo.
 
- Arguments are same as for tserv_account_login/createW, but 
- username and password are in the current locale's 8-bit or multibyte-string 
+ Arguments are same as for tserv_account_login/createW, but
+ username and password are in the current locale's 8-bit or multibyte-string
  character set instead of Unicode.
 --------------------------------------------------------------------------*/
 dp_result_t tserv_account_loginA(tserv_t *tserv, const char *username, const char *password)
@@ -38,7 +38,7 @@ dp_result_t tserv_account_loginA(tserv_t *tserv, const char *username, const cha
 		return dp_RES_BAD;
 	if (mywcs_frommbs(wpw, MYLEN, password) == -1)
 		return dp_RES_BAD;
-	
+
 	return tserv_account_loginW(tserv, wuname, wpw);
 }
 
@@ -47,7 +47,7 @@ dp_result_t tserv_account_createA(tserv_t *tserv, const char *username, const ch
 	wchar_t wuname[MYLEN];
 	wchar_t wpw[MYLEN];
 	wchar_t wemail[MYLEN];
-	
+
 	if (mywcs_frommbs(wuname, MYLEN, username) == -1)
 		return dp_RES_BAD;
 	if (mywcs_frommbs(wpw, MYLEN, password) == -1)
@@ -70,8 +70,8 @@ dp_result_t tserv_account_activateA(tserv_t *tserv, const char *secretcode)
 /*--------------------------------------------------------------------------
   Send a userinfo change request using the challenge we logged in with.
 
-  Arguments are same as for tserv_change_passwordW, but 
-  passwords are in the current locale's 8-bit or multibyte-string 
+  Arguments are same as for tserv_change_passwordW, but
+  passwords are in the current locale's 8-bit or multibyte-string
   character set instead of Unicode.
 --------------------------------------------------------------------------*/
 dp_result_t tserv_change_passwordA(tserv_t *tserv, const char *oldpassword, const char *newpassword, int flags, const char *email)
@@ -79,7 +79,7 @@ dp_result_t tserv_change_passwordA(tserv_t *tserv, const char *oldpassword, cons
 	wchar_t woldpw[MYLEN];
 	wchar_t wnewpw[MYLEN];
 	wchar_t wemail[MYLEN];
-	
+
 	if (mywcs_frommbs(woldpw, MYLEN, oldpassword) == -1)
 		return dp_RES_BAD;
 	if (mywcs_frommbs(wnewpw, MYLEN, newpassword) == -1)

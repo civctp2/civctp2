@@ -11,7 +11,7 @@
 //
 // THIS FILE IS NOT GENERATED OR SUPPORTED BY ACTIVISION.
 //
-// This material has been developed at apolyton.net by the Apolyton CtP2 
+// This material has been developed at apolyton.net by the Apolyton CtP2
 // Source Code Project. Contact the authors at ctp2source@apolyton.net.
 //
 //----------------------------------------------------------------------------
@@ -25,7 +25,7 @@
 // Modifications from the original Activision code:
 //
 // - Added serilization method export. (Aug 24th 2005 Martin Gühmann)
-// - Added alias names and the possibility to have default values from 
+// - Added alias names and the possibility to have default values from
 //   other entries. (Aug 26th 2005 Martin Gühmann)
 //
 //----------------------------------------------------------------------------

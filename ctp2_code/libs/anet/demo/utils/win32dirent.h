@@ -1,4 +1,4 @@
-/* 
+/*
 Copyright (C) 1995-2001 Activision, Inc.
 
 This library is free software; you can redistribute it and/or
@@ -21,9 +21,9 @@ Foundation, Inc., 59 Temple Place, Suite 330, Boston, MA  02111-1307  USA
  POSIX-style directory processing for Win32.
 
  Created 17-Nov-98 by Jason Scanlin (jscanlin@activision.com).
- 
+
  Copyright 1998 by Activision.
- This source code is free and may be used or redistributed under the 
+ This source code is free and may be used or redistributed under the
  terms GNU General Public Licence.
 ------------------------------------------------------------------------*/
 
@@ -58,7 +58,7 @@ DIR *opendir(const char *);
  Returns 0 on success or -1 on failure.
 
  dirent_errno is set to 0 on success or to one of the following on error:
-	EINVAL - Bad dirp, probably not opened or already closed. 
+	EINVAL - Bad dirp, probably not opened or already closed.
 ------------------------------------------------------------------------*/
 int closedir(DIR *);
 
@@ -68,7 +68,7 @@ int closedir(DIR *);
  Returns 0 on success or -1 on failure.
 
  dirent_errno is set to 0 on success or to one of the following on error:
-	EINVAL - Bad dirp, probably not opened or already closed. 
+	EINVAL - Bad dirp, probably not opened or already closed.
 ------------------------------------------------------------------------*/
 int rewinddir(DIR *);
 
@@ -111,7 +111,7 @@ struct dirent *readdir(DIR *);
  sorted using qsort with <cmp>, and collected in a malloc'd array in
  *<namelist>.
  A null <selector> selects all files.  A null <cmp> does no sorting.
- 
+
  Returns the number of entries selected, or -1 on error.
 
  dirent_errno is set to 0 on success or to one of the following on error:

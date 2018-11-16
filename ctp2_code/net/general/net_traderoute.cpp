@@ -1,12 +1,3 @@
-
-
-
-
-
-
-
-
-
 #include "c3.h"
 #include "network.h"
 #include "net_traderoute.h"
@@ -52,7 +43,7 @@ void NetTradeRoute::Packetize(uint8 *buf, uint16 & size)
 	PUSHLONG((uint32)(m_routeData->m_transportCost * 10000.0));
 	PUSHBYTE((uint8)m_routeData->m_sourceRouteType);
 	PUSHLONG(m_routeData->m_sourceResource);
-	
+
 	uint32 passesThrough = 0;
 	for(i = 0; i < k_MAX_PLAYERS; i++) {
 		passesThrough |= (m_routeData->m_passesThrough[i] << i);
@@ -108,7 +99,7 @@ void NetTradeRoute::Unpacketize(uint16 id, uint8 *buf, uint16 size)
 	m_routeData->m_transportCost = transportCost / 10000.;
 	PULLBYTETYPE(m_routeData->m_sourceRouteType, ROUTE_TYPE);
 	PULLLONG(m_routeData->m_sourceResource);
-	
+
 	PULLLONG(passesThrough);
 	for(i = 0; i < k_MAX_PLAYERS; i++) {
 		m_routeData->m_passesThrough[i] = (passesThrough & (1 << i)) ? TRUE : FALSE;
@@ -122,7 +113,6 @@ void NetTradeRoute::Unpacketize(uint16 id, uint8 *buf, uint16 size)
 
 	PULLLONG(sourceCityID);
 	PULLLONG(destCityID);
-
 
 	if(!g_theTradePool->IsValid(m_routeData->m_id)) {
 		m_routeData->m_sourceCity = Unit(sourceCityID);
@@ -146,7 +136,6 @@ void NetTradeRoute::Unpacketize(uint16 id, uint8 *buf, uint16 size)
 
 	PULLSHORT(numWp);
 
-	
 	m_routeData->RemoveFromCells();
 
 	m_routeData->m_path.Clear();
@@ -156,8 +145,8 @@ void NetTradeRoute::Unpacketize(uint16 id, uint8 *buf, uint16 size)
 		PULLSHORTTYPE(pnt.x, sint16);
 		PULLSHORTTYPE(pnt.y, sint16);
 		m_routeData->m_path.Insert(pnt);
-        owner = m_routeData->m_sourceCity.GetOwner(); 
-		
+        owner = m_routeData->m_sourceCity.GetOwner();
+
 		g_theWorld->GetCell(pnt)->AddTradeRoute(route);
 	}
 
@@ -170,6 +159,5 @@ void NetTradeRoute::Unpacketize(uint16 id, uint8 *buf, uint16 size)
 		g_director->TradeActorCreate(route);
 	}
 
-	
 	TradeManager::Notify();
 }

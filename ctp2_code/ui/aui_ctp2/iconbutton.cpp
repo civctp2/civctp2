@@ -1,16 +1,3 @@
-
-
-
-
-
-
-
-
-
-
-
-
-
 #include "c3.h"
 
 #include "aui.h"
@@ -25,7 +12,6 @@
 
 #include "CivPaths.h"
 
-
 #include "primitives.h"
 
 #include "iconbutton.h"
@@ -35,7 +21,6 @@
 extern C3UI			*g_c3ui;
 extern CivPaths		*g_civPaths;
 extern ColorSet		*g_colorSet;
-
 
 IconButton::IconButton(
 	AUI_ERRCODE *retval,
@@ -74,7 +59,6 @@ IconButton::IconButton(
 {
 	InitCommon(ldlBlock, TRUE);
 
-
 }
 
 AUI_ERRCODE IconButton::InitCommon( MBCHAR *ldlBlock, BOOL isLDL)
@@ -84,17 +68,14 @@ AUI_ERRCODE IconButton::InitCommon( MBCHAR *ldlBlock, BOOL isLDL)
 	if (isLDL) {
 		aui_Ldl *theLdl = g_c3ui->GetLdl();
 
-		
 		BOOL valid = theLdl->IsValid( ldlBlock );
 		Assert( valid );
 		if ( !valid ) return AUI_ERRCODE_HACK;
 
-		
 		ldl_datablock *block = theLdl->GetLdl()->FindDataBlock( ldlBlock );
 		Assert( block != NULL );
 		if ( !block ) return AUI_ERRCODE_LDLFINDDATABLOCKFAILED;
 
-		
 
 		name = block->GetString( "icon" );
 		Assert( name != NULL );
@@ -120,10 +101,9 @@ IconButton::~IconButton()
 	}
 }
 
-
 AUI_ERRCODE IconButton::DrawThis( aui_Surface *surface, sint32 x, sint32 y )
 {
-	
+
 	if ( IsHidden() ) return AUI_ERRCODE_OK;
 
 	if ( !surface ) surface = m_window->TheSurface();

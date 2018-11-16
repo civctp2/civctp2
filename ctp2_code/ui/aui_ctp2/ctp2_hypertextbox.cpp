@@ -11,7 +11,7 @@
 //
 // THIS FILE IS NOT GENERATED OR SUPPORTED BY ACTIVISION.
 //
-// This material has been developed at apolyton.net by the Apolyton CtP2 
+// This material has been developed at apolyton.net by the Apolyton CtP2
 // Source Code Project. Contact the authors at ctp2source@apolyton.net.
 //
 //----------------------------------------------------------------------------
@@ -148,7 +148,7 @@ void ctp2_HyperTextBox::FormatText
 {
 	for (MBCHAR const * ptr = a_Text; ptr < a_TextEnd; )
 	{
-		aui_Static *	hs		= 
+		aui_Static *	hs		=
 			CreateHyperStatic(ptr,
 							  a_TextEnd - ptr,	// may be corrected later
 							  m_hyperTtffile,
@@ -159,13 +159,13 @@ void ctp2_HyperTextBox::FormatText
 							  m_hyperUnderline,
 							  m_hyperShadow,
 							  m_hyperShadowColor,
-							  m_hyperFlags 
+							  m_hyperFlags
 							 );
 		Assert(hs);
 		if (!hs) return;
 
 		MBCHAR *		cReturn	= strrchr(hs->GetText(), '\r');
-		if (cReturn) 
+		if (cReturn)
 		{
 			*cReturn = ' ';
 		}
@@ -179,7 +179,7 @@ void ctp2_HyperTextBox::FormatText
 		{
 			// The whole text will fit on the current line.
 			hs->Move(m_curStaticPos.x, m_curStaticPos.y);
-			
+
 			m_curStaticPos.x = nextX;
 			if (nextY > m_virtualHeight)
 			{
@@ -193,15 +193,15 @@ void ctp2_HyperTextBox::FormatText
 			RECT			wrap	= { 0, 0, m_width - m_curStaticPos.x, 0 };
 			POINT			penPos	= { 0, 0 };
 			MBCHAR const *	start	= ptr;
-			
+
 			hs->GetTextFont()->GetLineInfo
 				(&wrap, &penPos, NULL, NULL, &ptr, a_TextEnd);
-			
+
 			if (ptr == a_TextEnd)
 			{
 				// Not even the first word will fit on the current line.
 				hs->Move(m_curStaticPos.x = 0,
-						 m_curStaticPos.y = m_virtualHeight 
+						 m_curStaticPos.y = m_virtualHeight
 						);
 
 				m_virtualHeight += hs->Height();
@@ -230,7 +230,7 @@ void ctp2_HyperTextBox::FormatText
 				{
 					// Move everything to the next line.
 					hs->Move(m_curStaticPos.x = 0,
-							 m_curStaticPos.y = m_virtualHeight 
+							 m_curStaticPos.y = m_virtualHeight
 							);
 
 					m_virtualHeight += hs->Height();
@@ -257,19 +257,19 @@ void ctp2_HyperTextBox::FormatText
 					{
 						m_virtualHeight = nextY;
 					}
-	
+
 					m_curStaticPos.x = 0;
 					m_curStaticPos.y = m_virtualHeight;
 				}
 			}
 		}
-		
-		// Check for line breaks		
+
+		// Check for line breaks
 		if (*(ptr - 1) == '\n')
 		{
 			m_curStaticPos.x = 0;
 			m_curStaticPos.y = m_virtualHeight;
-		} 
+		}
 
 		// Removed the arbitrary limit of k_AUI_HYPERTEXTBOX_LDL_MAXSTATICS
 		// (= 100) hyperstatic list items, because it resulted in a mismatch
@@ -289,7 +289,6 @@ void ctp2_HyperTextBox::FormatText
 	} // for
 }
 
-
 ctp2_HyperTextBox::ctp2_HyperTextBox(
 	AUI_ERRCODE *retval,
 	uint32 id,
@@ -303,7 +302,6 @@ ctp2_HyperTextBox::ctp2_HyperTextBox(
 	aui_HyperTextBox(),
 	PatternBase(ldlBlock, NULL)
 {
-
 
 
 	*retval = aui_Region::InitCommonLdl(id, ldlBlock);
@@ -336,7 +334,6 @@ ctp2_HyperTextBox::ctp2_HyperTextBox(
 }
 
 
-
 ctp2_HyperTextBox::ctp2_HyperTextBox(
 	AUI_ERRCODE *retval,
 	uint32 id,
@@ -366,17 +363,14 @@ ctp2_HyperTextBox::ctp2_HyperTextBox(
 }
 
 
-
 AUI_ERRCODE ctp2_HyperTextBox::InitCommonLdl( MBCHAR *ldlBlock )
 {
 	aui_Ldl *theLdl = g_ui->GetLdl();
 
-	
 	BOOL valid = theLdl->IsValid( ldlBlock );
 	Assert( valid );
 	if ( !valid ) return AUI_ERRCODE_HACK;
 
-	
 	ldl_datablock *block = theLdl->GetLdl()->FindDataBlock( ldlBlock );
 	Assert( block != NULL );
 	if ( !block ) return AUI_ERRCODE_LDLFINDDATABLOCKFAILED;
@@ -395,7 +389,6 @@ AUI_ERRCODE ctp2_HyperTextBox::InitCommonLdl( MBCHAR *ldlBlock )
 }
 
 
-
 AUI_ERRCODE ctp2_HyperTextBox::InitCommon( void )
 {
 	m_hyperLinkList = new tech_WLList<ctp2_HyperLink *>;
@@ -406,7 +399,6 @@ AUI_ERRCODE ctp2_HyperTextBox::InitCommon( void )
 
 	return AUI_ERRCODE_OK;
 }
-
 
 ctp2_HyperTextBox::~ctp2_HyperTextBox()
 {
@@ -419,12 +411,10 @@ ctp2_HyperTextBox::~ctp2_HyperTextBox()
 }
 
 
-
 AUI_ERRCODE ctp2_HyperTextBox::CreateRanger( MBCHAR *ldlBlock )
 {
 	AUI_ERRCODE errcode = AUI_ERRCODE_OK;
 
-	
 	aui_Ldl *theLdl = g_c3ui->GetLdl();
 	static MBCHAR block[ k_AUI_LDL_MAXBLOCK + 1 ];
 
@@ -432,7 +422,6 @@ AUI_ERRCODE ctp2_HyperTextBox::CreateRanger( MBCHAR *ldlBlock )
 	{
 		sprintf( block, "%s.%s", ldlBlock, k_AUI_HYPERTEXTBOX_LDL_RANGERY );
 
-		
 		if ( theLdl->GetLdl()->FindDataBlock( block ) )
 			m_ranger = new c3_Ranger(
 				&errcode,
@@ -470,12 +459,11 @@ AUI_ERRCODE ctp2_HyperTextBox::CreateRanger( MBCHAR *ldlBlock )
 	return RepositionRanger();
 }
 
-
 AUI_ERRCODE ctp2_HyperTextBox::AddHyperStatics( const MBCHAR *hyperText )
 {
 	if ( !hyperText )
 	{
-		
+
 		RemoveHyperStatics();
 		RemoveHyperLinks();
 		m_curStaticPos.x = 0;
@@ -489,7 +477,6 @@ AUI_ERRCODE ctp2_HyperTextBox::AddHyperStatics( const MBCHAR *hyperText )
 
 	const MBCHAR *ptr = hyperText;
 	const MBCHAR *stop = ptr + len;
-
 
 
 	sint32 hyperLinkDB = 0;
@@ -529,12 +516,10 @@ AUI_ERRCODE ctp2_HyperTextBox::AddHyperStatics( const MBCHAR *hyperText )
 			}
 			break;
 
-			
 			case 's':
 				sscanf( ++ptr, ":%d>", &m_hyperShadow );
 				break;
 
-			
 			case 'h':
 			{
 				uint8 r, g, b;
@@ -547,13 +532,12 @@ AUI_ERRCODE ctp2_HyperTextBox::AddHyperStatics( const MBCHAR *hyperText )
 				sscanf( ++ptr, ":%d>", &m_hyperUnderline );
 				break;
 
-			
 			case 'l':
 				sscanf( ++ptr, ":%d,%d>", &hyperLinkDB, &hyperLinkIndex );
-				
-				
-				
-				
+
+
+
+
 				oldUnderline = m_hyperUnderline;
 				oldColor = m_hyperColor;
 				m_hyperColorOld = m_hyperColor;
@@ -563,18 +547,16 @@ AUI_ERRCODE ctp2_HyperTextBox::AddHyperStatics( const MBCHAR *hyperText )
 				isHyperLink = TRUE;
 				break;
 
-			
-			
+
 			case 'L':
 				{
 
-				
 				MBCHAR			hyperLinkDB_name[GL_MAX_DB_NAME_SIZE];
 				MBCHAR			hyperLinkIndex_name[MAX_SIZE_IDENTIFIER + 1];
 				MBCHAR const *	copyBegin;
 				MBCHAR const *	copyEnd;
-				MBCHAR const *	copySafeEnd; 
-				
+				MBCHAR const *	copySafeEnd;
+
 				copyBegin	= std::find_if(ptr + 2, stop, IsIdentifierBegin);
 				copyEnd		= std::find_if(copyBegin, stop, IsNotInIdentifier);
 				copySafeEnd	= std::min(copyEnd, copyBegin + GL_MAX_DB_NAME_SIZE);
@@ -600,19 +582,19 @@ AUI_ERRCODE ctp2_HyperTextBox::AddHyperStatics( const MBCHAR *hyperText )
 
 
 
-				
 
 
-				
+
+
 				hyperLinkDB = GreatLibrary::Get_Database_From_Name(hyperLinkDB_name);
-				hyperLinkIndex = 
+				hyperLinkIndex =
 					GreatLibrary::Get_Object_Index_From_Name(hyperLinkDB, hyperLinkIndex_name);
-		
 
-				
-				
-				
-				
+
+
+
+
+
 				oldUnderline = m_hyperUnderline;
 				oldColor = m_hyperColor;
 				m_hyperColorOld = m_hyperColor;
@@ -632,11 +614,11 @@ AUI_ERRCODE ctp2_HyperTextBox::AddHyperStatics( const MBCHAR *hyperText )
 					{
 						MBCHAR const *	ptr	= g_greatLibrary->GetObjectName
 												(hyperLinkDB, hyperLinkIndex);
-						
-						FormatText(ptr, 
-							       ptr + strlen(ptr), 
-								   hyperLinkDB, 
-								   hyperLinkIndex, 
+
+						FormatText(ptr,
+							       ptr + strlen(ptr),
+								   hyperLinkDB,
+								   hyperLinkIndex,
 								   true
 								  );
 
@@ -649,7 +631,7 @@ AUI_ERRCODE ctp2_HyperTextBox::AddHyperStatics( const MBCHAR *hyperText )
 				break;
 
 			default:
-				
+
 				Assert( FALSE );
 				return AUI_ERRCODE_INVALIDPARAM;
 			}
@@ -675,7 +657,6 @@ AUI_ERRCODE ctp2_HyperTextBox::AddHyperStatics( const MBCHAR *hyperText )
 			FormatText(ptr, nextStop, hyperLinkDB, hyperLinkIndex, isHyperLink);
 			ptr	= nextStop;
 
-			
 			if ( isHyperLink ) {
 				isHyperLink = FALSE;
 				m_hyperUnderline = oldUnderline;
@@ -697,7 +678,6 @@ void ctp2_HyperTextBox::RemoveHyperLinks( void )
 		DestroyHyperLink( m_hyperLinkList->RemoveTail() );
 }
 
-
 void ctp2_HyperTextBox::DestroyHyperLink( ctp2_HyperLink *hl )
 {
 	Assert( hl != NULL );
@@ -706,13 +686,12 @@ void ctp2_HyperTextBox::DestroyHyperLink( ctp2_HyperLink *hl )
 	delete hl;
 }
 
-
 AUI_ERRCODE ctp2_HyperTextBox::DrawThis(
 	aui_Surface *surface,
 	sint32 x,
 	sint32 y )
 {
-	
+
 	if ( IsHidden() ) return AUI_ERRCODE_OK;
 
 	if ( !surface ) surface = m_window->TheSurface();
@@ -721,7 +700,6 @@ AUI_ERRCODE ctp2_HyperTextBox::DrawThis(
 	OffsetRect( &rect, m_x + x, m_y + y );
 	ToWindow( &rect );
 
-	
 	rect.left -= k_CTP2_HYPERTEXTBOX_INSETWIDTH;
 	rect.top -= k_CTP2_HYPERTEXTBOX_INSETWIDTH;
 	rect.bottom += k_CTP2_HYPERTEXTBOX_INSETWIDTH;
@@ -748,7 +726,6 @@ AUI_ERRCODE ctp2_HyperTextBox::DrawThis(
 		surface,
 		&rect );
 
-	
 	rect.left += k_CTP2_HYPERTEXTBOX_INSETWIDTH;
 	rect.top += k_CTP2_HYPERTEXTBOX_INSETWIDTH;
 	rect.bottom -= k_CTP2_HYPERTEXTBOX_INSETWIDTH;
@@ -774,7 +751,7 @@ AUI_ERRCODE ctp2_HyperTextBox::DrawThis(
 
 
 
-	
+
 	rect.left -= k_CTP2_HYPERTEXTBOX_INSETWIDTH;
 	rect.top -= k_CTP2_HYPERTEXTBOX_INSETWIDTH;
 	rect.bottom += k_CTP2_HYPERTEXTBOX_INSETWIDTH;
@@ -788,7 +765,6 @@ AUI_ERRCODE ctp2_HyperTextBox::DrawThis(
 	return AUI_ERRCODE_OK;
 }
 
-
 void ctp2_HyperTextBox::MouseLDropInside( aui_MouseEvent *mouseData )
 {
 	if (IsDisabled()) return;
@@ -797,33 +773,29 @@ void ctp2_HyperTextBox::MouseLDropInside( aui_MouseEvent *mouseData )
 	{
 		SetWhichSeesMouse( this );
 
-		
 		if ( GetMouseOwnership() == this )
 		{
-			
+
 			ReleaseMouseOwnership();
 
 			PlaySound( AUI_SOUNDBASE_SOUND_EXECUTE );
 
-			
 			m_mouseCode = AUI_ERRCODE_HANDLEDEXCLUSIVE;
 
-			
 
 
-			
-			
-			
+
+
+
+
 			m_attributes &= ~k_CONTROL_ATTRIBUTE_ACTIVE;
 
 			POINT pos;
 			pos.x = mouseData->position.x - m_x;
 			pos.y = mouseData->position.y - m_y;
 
-			
 			pos.y += m_ranger->GetValueY();
 
-			
 			m_selectedHyperLink = NULL;
 
 			ListPos lp = m_hyperLinkList->GetHeadPosition();
@@ -847,10 +819,8 @@ void ctp2_HyperTextBox::MouseLDropInside( aui_MouseEvent *mouseData )
 
 			if ( m_selectedHyperLink ) {
 
-				
 				m_draw |= m_drawMask & k_AUI_REGION_DRAWFLAG_MOUSELDROPINSIDE;
 
-				
 
 				if ( !HandleGameSpecificLeftClick( this ) )
 				if ( m_ActionFunc )
@@ -858,7 +828,7 @@ void ctp2_HyperTextBox::MouseLDropInside( aui_MouseEvent *mouseData )
 				else if ( m_action )
 					m_action->Execute( this, CTP2_HYPERLINK_ACTION_EXECUTE, 0 );
 				else {
-					
+
 					open_GreatLibrary();
 					if(g_greatLibrary) {
 						g_greatLibrary->SetLibrary(m_selectedHyperLink->m_index, (DATABASE)m_selectedHyperLink->m_db);
@@ -873,11 +843,9 @@ void ctp2_HyperTextBox::MouseLDropInside( aui_MouseEvent *mouseData )
 		{
 			PlaySound( AUI_SOUNDBASE_SOUND_ACTIVATE );
 
-			
 			if ( m_mouseCode == AUI_ERRCODE_UNHANDLED )
 				m_mouseCode = AUI_ERRCODE_HANDLED;
 
-			
 			m_attributes |= k_CONTROL_ATTRIBUTE_ACTIVE;
 			m_draw |= m_drawMask & k_AUI_REGION_DRAWFLAG_MOUSELDROPINSIDE;
 		}
@@ -886,12 +854,10 @@ void ctp2_HyperTextBox::MouseLDropInside( aui_MouseEvent *mouseData )
 		MouseLDropOutside( mouseData );
 }
 
-
 void ctp2_HyperTextBox::MouseLDropOutside( aui_MouseEvent *mouseData )
 {
 	if (IsDisabled()) return;
 
-	
 	m_selectedHyperLink = NULL;
 
 	ListPos lp = m_hyperLinkList->GetHeadPosition();
@@ -905,7 +871,6 @@ void ctp2_HyperTextBox::MouseLDropOutside( aui_MouseEvent *mouseData )
 	m_draw |= m_drawMask & k_AUI_REGION_DRAWFLAG_MOUSELDROPOUTSIDE;
 }
 
-
 void ctp2_HyperTextBox::MouseLGrabInside( aui_MouseEvent *mouseData )
 {
 	if (IsDisabled()) return;
@@ -916,16 +881,13 @@ void ctp2_HyperTextBox::MouseLGrabInside( aui_MouseEvent *mouseData )
 
 		PlaySound( AUI_SOUNDBASE_SOUND_ENGAGE );
 
-		
 		HideTipWindow();
 
-		
 		SetMouseOwnership();
 		SetKeyboardFocus();
 
 		m_mouseCode = AUI_ERRCODE_HANDLEDEXCLUSIVE;
 
-		
 		m_attributes |= k_CONTROL_ATTRIBUTE_DOWN;
 		m_attributes |= k_CONTROL_ATTRIBUTE_ACTIVE;
 		m_draw |= m_drawMask & k_AUI_REGION_DRAWFLAG_MOUSELGRABINSIDE;
@@ -934,10 +896,8 @@ void ctp2_HyperTextBox::MouseLGrabInside( aui_MouseEvent *mouseData )
 		pos.x = mouseData->position.x - m_x;
 		pos.y = mouseData->position.y - m_y;
 
-		
 		pos.y += m_ranger->GetValueY();
 
-		
 		m_selectedHyperLink = NULL;
 
 		ListPos lp = m_hyperLinkList->GetHeadPosition();
@@ -959,7 +919,7 @@ void ctp2_HyperTextBox::MouseLGrabInside( aui_MouseEvent *mouseData )
 				hl->m_static->SetTextColor( hl->m_oldColor );
 			}
 		}
-		
+
 
 
 
@@ -971,7 +931,3 @@ void ctp2_HyperTextBox::MouseLGrabInside( aui_MouseEvent *mouseData )
 	else
 		MouseLGrabOutside( mouseData );
 }
-
-
-
-

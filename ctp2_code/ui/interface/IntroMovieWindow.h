@@ -45,6 +45,4 @@ private:
 	aui_MovieButton		*m_movieButton;
 };
 
-
 #endif
-

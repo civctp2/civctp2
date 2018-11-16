@@ -1,5 +1,3 @@
-
-
 #include "c3.h"
 #include "GameEventArgument.h"
 
@@ -66,7 +64,6 @@ void GameEventArgument::Init(GAME_EVENT_ARGUMENT type, const void* arg)
 	if(type < (GAME_EVENT_ARGUMENT)0 || type >= GEA_End)
 		return;
 
-	
 	static Unit unit;
 	static Army army;
 	static MapPoint pos;
@@ -245,7 +242,6 @@ BOOL GameEventArgument::GetAdvance(sint32 &a)
 	a = m_data.m_value;
 	return TRUE;
 }
-
 
 BOOL GameEventArgument::GetWonder(sint32 &w)
 {

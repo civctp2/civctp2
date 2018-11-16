@@ -1,4 +1,4 @@
-/* 
+/*
 Copyright (C) 1995-2001 Activision, Inc.
 
 This library is free software; you can redistribute it and/or
@@ -52,7 +52,7 @@ typedef struct {
 typedef struct {
 	unsigned char response[tca_LEN_RESPONSE];
 	char unamelen;
-	short uname[tcapw_LEN_USERNAME /*unamelen*/];    /* VARIABLE LENGTH USERNAME */ 
+	short uname[tcapw_LEN_USERNAME /*unamelen*/];    /* VARIABLE LENGTH USERNAME */
 } PACK tca_response_t;
 
 /* A password or email change request from a user, created by
@@ -86,7 +86,6 @@ typedef struct {
 	tcapw_t *tdb;
 	/* a random challenge generator's data would go here */
 } tca_t;
-
 
 /*--------------------------------------------------------------------------
   Create an instance of the trivial challenge authenticator module.

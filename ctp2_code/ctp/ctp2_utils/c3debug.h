@@ -2,7 +2,7 @@
 //
 // Project      : Call To Power 2
 // File type    : C++ header
-// Description  : 
+// Description  :
 // Id           : $Id$
 //
 //----------------------------------------------------------------------------
@@ -17,7 +17,7 @@
 //----------------------------------------------------------------------------
 //
 // Compiler flags
-// _MSC_VER		
+// _MSC_VER
 // - Compiler version (for the Microsoft C++ compiler only)
 //
 //----------------------------------------------------------------------------
@@ -60,7 +60,6 @@
 #define Report(x) { fprintf(stderr, "%s\n", x); }
 #endif
 
-
 typedef void (* CivExceptionFunction) (void);
 
 #define k_DBG_ALL				0xffffffff
@@ -76,11 +75,10 @@ typedef void (* CivExceptionFunction) (void);
 #define k_DBG_FIX				0x00000100
 #define k_DBG_SLIC				0x00000200
 #define k_DBG_SCHEDULER			0x00000400
-#define k_DBG_SCHEDULER_DETAIL	0x00000c00  
-#define k_DBG_SCHEDULER_ALL		0x00001c00  
+#define k_DBG_SCHEDULER_DETAIL	0x00000c00
+#define k_DBG_SCHEDULER_ALL		0x00001c00
 #define k_DBG_DIPLOMACY			0x00002000
 #define k_DBG_MAPANALYSIS		0x00004000
-
 
 #define k_DEBUG_OWNER_NONE			0
 #define k_DEBUG_OWNER_CRC			1

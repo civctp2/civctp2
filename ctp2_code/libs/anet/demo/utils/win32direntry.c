@@ -1,4 +1,4 @@
-/* 
+/*
 Copyright (C) 1995-2001 Activision, Inc.
 
 This library is free software; you can redistribute it and/or
@@ -22,9 +22,9 @@ Foundation, Inc., 59 Temple Place, Suite 330, Boston, MA  02111-1307  USA
  This file is intended for use only with the win32dirent.h interface.
 
  Created 17-Nov-98 by Jason Scanlin (jscanlin@activision.com).
- 
+
  Copyright 1998 by Activision.
- This source code is free and may be used or redistributed under the 
+ This source code is free and may be used or redistributed under the
  terms GNU General Public Licence.
 ------------------------------------------------------------------------*/
 

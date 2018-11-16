@@ -1,4 +1,4 @@
-/* 
+/*
 Copyright (C) 1995-2001 Activision, Inc.
 
 This library is free software; you can redistribute it and/or
@@ -40,7 +40,6 @@ Foundation, Inc., 59 Temple Place, Suite 330, Boston, MA  02111-1307  USA
  Revision 1.1  1997/02/12 03:06:31  dkegel
  Initial revision
 --------------------------------------------------------------------------*/
-
 
 #ifndef dpprivy_h
 #define dpprivy_h
@@ -156,7 +155,7 @@ void dp_assertValid(dp_t *d);
 	 ((dp)->hMaster == PLAYER_ME))
 
 /*----------------------------------------------------------------------
- Unpack the compact, byte-order-uniform version of a dp_playerId_t 
+ Unpack the compact, byte-order-uniform version of a dp_playerId_t
  into the fluffy form we use internally.
  Does not fill in address field; that has to be looked up in the hosts table.
  Returns number of bytes used, or -1 on error.
@@ -197,7 +196,7 @@ dp_result_t dp_broadcast_reliable(dp_t *dp, void *buf, size_t size, playerHdl_t 
  Note: will not return PLAYER_ME if there's only one player on this machine.
 
  If flags is DP_SEND_RELIABLE, never yields PLAYER_BROADCAST.
- If flags is DP_SEND_UNRELIABLE, yields PLAYER_BROADCAST only if 
+ If flags is DP_SEND_UNRELIABLE, yields PLAYER_BROADCAST only if
  idTo is dp_ID_BROADCAST and the driver prefers broadcast.
 --------------------------------------------------------------------------*/
 int dp_getBroadcastHdls(dp_t *dp, playerHdl_t hdls[]
@@ -246,14 +245,14 @@ dp_result_t dpGetSessionDescById(
 	size_t *pbuflen);
 
 /*----------------------------------------------------------------------
- Clear out any unnecessary player table publishers (i.e. any but the 
- host of the session we are in) and tell them to cancel our 
+ Clear out any unnecessary player table publishers (i.e. any but the
+ host of the session we are in) and tell them to cancel our
  subscription.
- Call this when entering a game to really turn off (not just ignore) 
+ Call this when entering a game to really turn off (not just ignore)
  player deltas from outside sessions.
 ----------------------------------------------------------------------*/
 dp_result_t dpPrunePlayerSubscriptions(dp_t *dp);
-	
+
 /*----------------------------------------------------------------------
  Clear out any unnecessary session table publishers (i.e. the server,
  if we are not in a lobby) and tell them to cancel our subscription.
@@ -330,13 +329,13 @@ int dp_PASCAL dp_rplayers_cb(dptab_t *dptab, dptab_table_t *table, playerHdl_t s
 dp_result_t dpEnumServersPoll(dp_t *dp);
 
 /*----------------------------------------------------------------------
- Look up the session type and id of the session the given uid most 
+ Look up the session type and id of the session the given uid most
  recently tried to join.
 ----------------------------------------------------------------------*/
 dp_result_t dp_uid2sessid(dp_t *dp, dp_uid_t uid, char *sessidbuf, int *sessidlen, dp_species_t *sessType);
 
 /*----------------------------------------------------------------------
- Remember the session type and id of the session the given uid most 
+ Remember the session type and id of the session the given uid most
  recently tried to join.
  Silently ignores calls with uid == dp_UID_NONE
 ----------------------------------------------------------------------*/

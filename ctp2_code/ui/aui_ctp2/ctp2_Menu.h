@@ -1,7 +1,5 @@
-
 #ifndef CTP2_MENU_H__
 #define CTP2_MENU_H__
-
 
 
 #include "ctp2_listitem.h"
@@ -22,25 +20,25 @@ struct aui_MouseEvent;
 class ctp2_MenuButton;
 
 typedef void (CTP2MenuCallback) (
-		ctp2_Menu *menu,         
-		CTP2_MENU_ACTION action, 
-		sint32 itemIndex,        
-		void *cookie);           
+		ctp2_Menu *menu,
+		CTP2_MENU_ACTION action,
+		sint32 itemIndex,
+		void *cookie);
 
 class ctp2_Menu {
   private:
 	class Item {
 	public:
-		
+
 		Item() : m_item(NULL), m_shortcut(NULL), m_cookie(NULL) { }
 
-		
-		
-		
-		
-		
-		
-		
+
+
+
+
+
+
+
 		~Item() { delete m_shortcut; }
 
 		ctp2_ListItem *m_item;
@@ -48,7 +46,6 @@ class ctp2_Menu {
 		void *m_cookie;
 	};
 
-		
 	ctp2_Window *m_window;
 	ctp2_ListBox *m_list;
 	PointerList<Item> *m_items;
@@ -72,47 +69,35 @@ class ctp2_Menu {
 
   public:
 
-	
-	
+
 	ctp2_Menu(bool atMouse, CTP2MenuCallback *callback);
 
-	
 	ctp2_Menu(const MBCHAR *block, bool atMouse, CTP2MenuCallback *callback);
 
 	~ctp2_Menu();
 
-	
-	
+
 	void AddItem(const MBCHAR *text, const MBCHAR *shortcut, void *cookie);
 	void AddItemWithIcon(const MBCHAR *text, const MBCHAR *icon, const MBCHAR *shortcut, void *cookie);
 
-	
 	void Open();
 
-	
-	
+
 	void Close();
 
-	
 	void Move(sint32 x, sint32 y);
 
-	
 	sint32 GetNumItems() const;
 
-	
 	const MBCHAR *GetShortcutString(sint32 index);
 
-	
-	
+
 	bool HandleShortcut(const MBCHAR *string);
 
-	
 	void SetCallback(CTP2MenuCallback *callback);
 
-	
 	static void WeaklyModalCancel(aui_MouseEvent *event, ctp2_Window *window, void *cookie, bool &passEventOn);
 
-	
 	void	Clear();
 
 	void SetSiblingArea(aui_Region *region) { m_siblingArea = region; }

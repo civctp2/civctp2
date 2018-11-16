@@ -2,7 +2,7 @@
 //
 // Project      : Call To Power 2
 // File type    : C++ header
-// Description  : Map visibility handling 
+// Description  : Map visibility handling
 //
 //----------------------------------------------------------------------------
 //
@@ -10,20 +10,20 @@
 //
 // THIS FILE IS NOT GENERATED OR SUPPORTED BY ACTIVISION.
 //
-// This material has been developed at apolyton.net by the Apolyton CtP2 
+// This material has been developed at apolyton.net by the Apolyton CtP2
 // Source Code Project. Contact the authors at ctp2source@apolyton.net.
 //
 //----------------------------------------------------------------------------
 //
 // Compiler flags
-// 
-// _MSC_VER		
+//
+// _MSC_VER
 // - When defined, allows Microsoft C++ extensions.
 // - When not defined, generates standard C++.
 //
 // Note: For the blocks with _MSC_VER preprocessor directives, the following
-//       is implied: the (_MSC_VER) preprocessor directive lines and the blocks 
-//       between #else and #endif are modified Apolyton code. The blocks 
+//       is implied: the (_MSC_VER) preprocessor directive lines and the blocks
+//       between #else and #endif are modified Apolyton code. The blocks
 //       between #if and #else are the original Activision code.
 //
 //----------------------------------------------------------------------------
@@ -63,52 +63,51 @@ enum CIRCLE_OP {
 class Vision
 {
 private:
-	
+
 //----------------------------------------------------------------------------
-// Do not change anything in the types or order of the following variable 
+// Do not change anything in the types or order of the following variable
 // declarations. Doing so will break reading in of save files.
 // See the Serialize implementation for more details.
 //----------------------------------------------------------------------------
-	
+
 	sint16 m_width;
 	sint16 m_height;
 	sint32 m_owner;
 	sint16 m_xyConversion;
 	BOOL   m_isYwrap;
 	BOOL   m_amOnScreen;
-	
+
 //----------------------------------------------------------------------------
 // Changing the order below this should not break anything.
 //----------------------------------------------------------------------------
-	
-	
 
-	
-	
-	
+
+
+
+
+
 	uint16 **m_array;
 	UnseenCellQuadTree *m_unseenCells;
-	
-	
 
-	friend class NetVision;  
+
+	friend class NetVision;
 	friend class MapFile;
-	
-	
-	
-	
 
-	Vision *m_mergeFrom; 
-	BOOL m_revealedUnexplored; 
+
+
+
+
+	Vision *m_mergeFrom;
+	BOOL m_revealedUnexplored;
 
 	void FillCircle
 	(
-		MapPoint const &			center, 
-		double const				radius, 
+		MapPoint const &			center,
+		double const				radius,
 		CIRCLE_OP					op,
 		DynamicArray<MapPoint> *	removeadd = NULL
 	);
-	void DoFillCircleOp(const MapPoint &pos, CIRCLE_OP op, 
+	void DoFillCircleOp(const MapPoint &pos, CIRCLE_OP op,
 						DynamicArray<MapPoint> *removeadd);
 
 #if 0
@@ -130,15 +129,15 @@ public:
 
 	void AddRadar(MapPoint pos, double radius);
 
-	void AddVisible(MapPoint pos, double radius, bool &revealed_unexplored, 
+	void AddVisible(MapPoint pos, double radius, bool &revealed_unexplored,
 					DynamicArray<MapPoint> *removeadd = NULL);
 	void RemoveVisible(MapPoint pos, double radius,
 					   DynamicArray<MapPoint> *removeadd = NULL);
 	BOOL IsVisible(MapPoint pos) const;
 
-	
-	
-	
+
+
+
 	BOOL GetLastSeen(const MapPoint &point, UnseenCellCarton &ucell);
 
 	inline void Convert(MapPoint &pos) const {
@@ -153,23 +152,21 @@ public:
 			pos.x += m_width;
 		while(pos.x >= m_width)
 			pos.x -= m_width;
-		
+
 		pos.y -= pos.x;
 		while(pos.y < 0) {
 			pos.y += m_height;
 		}
 	}
 
-
-	void MergeMap(Vision *src) ;									
+	void MergeMap(Vision *src) ;
 
 	void AddUnseen(const MapPoint &point);
-	void AddUnseen(UnseenCell *ucell); 
+	void AddUnseen(UnseenCell *ucell);
 	void GetUnseenCellList(DynamicArray<UnseenCellCarton> &array);
 
 	void Clear();
 
-	
 	void CopyCircle(Vision *src, const MapPoint &center, sint32 radius);
 	BOOL MergePoint(sint32 x, sint32 y);
 	void ModifyPoint(Vision *src, sint32 x, sint32 y);

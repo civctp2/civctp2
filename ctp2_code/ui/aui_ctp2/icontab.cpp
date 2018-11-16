@@ -1,15 +1,3 @@
-
-
-
-
-
-
-
-
-
-
-
-
 #include "c3.h"
 
 #include "aui.h"
@@ -22,7 +10,6 @@
 #include "primitives.h"
 
 #include "icontab.h"
-
 
 IconTab::IconTab(
 	AUI_ERRCODE *retval,
@@ -49,10 +36,9 @@ IconTab::IconTab(
 {
 }
 
-
 AUI_ERRCODE IconTab::DrawThis( aui_Surface *surface, sint32 x, sint32 y )
 {
-	
+
 	if ( IsHidden() ) return AUI_ERRCODE_OK;
 
 	if ( !surface ) surface = m_window->TheSurface();
@@ -61,7 +47,6 @@ AUI_ERRCODE IconTab::DrawThis( aui_Surface *surface, sint32 x, sint32 y )
 	OffsetRect( &rect, m_x + x, m_y + y );
 	ToWindow( &rect );
 
-	
 	RECT center;
 	center.left = (m_width - m_icon->TheSurface()->Width()) / 2;
 	center.top = (m_height - m_icon->TheSurface()->Height()) / 2;
@@ -69,17 +54,15 @@ AUI_ERRCODE IconTab::DrawThis( aui_Surface *surface, sint32 x, sint32 y )
 	center.bottom = center.top + m_icon->TheSurface()->Height();
 	OffsetRect( &center, rect.left, rect.top );
 
-	
 	if ( m_pattern )
 		m_pattern->Draw( surface, &rect );
 
-	
 	AUI_TABGROUP_ALIGNMENT a = ((aui_TabGroup *)m_parent)->
 		GetTabGroupAlignment();
 
 	if ( IsOn() )
 	{
-		
+
 		RECT offset = { center.left+1, center.top+1, center.right+1, center.bottom+1 };
 		m_icon->Draw( surface, &offset, m_color );
 
@@ -94,7 +77,7 @@ AUI_ERRCODE IconTab::DrawThis( aui_Surface *surface, sint32 x, sint32 y )
 
 	if ( IsActive() )
 	{
-		
+
 		if ( IsOn() )
 			primitives_BevelTabSelected16( surface, &rect, 2, 0, 16, 16, a );
 		else
@@ -102,7 +85,7 @@ AUI_ERRCODE IconTab::DrawThis( aui_Surface *surface, sint32 x, sint32 y )
 	}
 	else
 	{
-		
+
 	}
 
 	if ( surface == m_window->TheSurface() )

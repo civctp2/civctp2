@@ -1,4 +1,4 @@
-/* 
+/*
 Copyright (C) 1995-2001 Activision, Inc.
 
 This library is free software; you can redistribute it and/or
@@ -43,7 +43,7 @@ Foundation, Inc., 59 Temple Place, Suite 330, Boston, MA  02111-1307  USA
  *         reference number from the IPXInitialize API and you must pass it into
  *         all the other IPX APIs.
  */
- 
+
 /*
  * Include files
  */
@@ -99,7 +99,7 @@ IpxCancelEvent(unsigned short socketNetOrder, IPX_ECB *ecb, short drvRefNum)
 #endif
 {
 	IPXpb		ipx_pb;
-	
+
 	/*
 	 * If the ECB is no longer waiting to be used for receiving, or
 	 * waiting for an AES, we cannot cancel it
@@ -135,7 +135,7 @@ IpxCheckSocket(unsigned short socketNetOrder, short drvRefNum)
 #endif
 {
 	IPXpb		ipx_pb;
-	
+
 	ipx_pb.csCode = IPXCHECKSOCKET;
 	ipx_pb.csParams.check.socketNumber = socketNetOrder;
 #ifndef	COMPONENT_BUILD
@@ -153,7 +153,7 @@ IpxCloseSocket(unsigned short socketNetOrder, short drvRefNum)
 #endif
 {
 	IPXpb		ipx_pb;
-	
+
 	ipx_pb.csCode = IPXCLOSESOCKET;
 	ipx_pb.csParams.close.socketNumber = socketNetOrder;
 #ifndef	COMPONENT_BUILD
@@ -171,7 +171,7 @@ IpxGetInfo(IPX_CONFIG_INFO *buffer, unsigned long *buflen, short drvRefNum)
 #endif
 {
 	IPXpb		ipx_pb;
-	
+
 	if ((buffer == (IPX_CONFIG_INFO *)0) || (buflen == (unsigned long *)0)) {
 		return (IPX_BAD_PARAMETER);
 	}
@@ -193,7 +193,7 @@ IpxGetInternetworkAddress(unsigned char *networkAddress, short drvRefNum)
 #endif
 {
 	IPXpb		ipx_pb;
-	
+
 	if (networkAddress == (unsigned char *)0) {
 		return (IPX_BAD_PARAMETER);
 	}
@@ -216,7 +216,7 @@ IpxGetLocalTarget(unsigned char *networkAddress, IPX_ECB *ecb,
 #endif
 {
 	IPXpb		ipx_pb;
-	
+
 	if (networkAddress == (unsigned char *)0) {
 		return (IPX_BAD_PARAMETER);
 	}
@@ -250,7 +250,7 @@ IpxGetLocalTargetAsynch(unsigned char *networkAddress, IPX_ECB *ecb,
 {
 	IPXpb		*ipx_pb;
 	short		status;
-	
+
 	if (networkAddress == (unsigned char *)0) {
 		return (IPX_BAD_PARAMETER);
 	}
@@ -260,7 +260,7 @@ IpxGetLocalTargetAsynch(unsigned char *networkAddress, IPX_ECB *ecb,
 	 */
 #ifndef NO_ECB_CHECKS
 	if (recv_ecb) {
-		if ((recv_ecb->fragCount != 1) || 
+		if ((recv_ecb->fragCount != 1) ||
 		    (recv_ecb->fragList[0].fragSize < sizeof(routeResponsePacket_t))) {
 			recv_ecb->status = IPX_BAD_PACKET;
 			return (IPX_BAD_PACKET);
@@ -296,7 +296,6 @@ IpxGetLocalTargetAsynch(unsigned char *networkAddress, IPX_ECB *ecb,
 	return (status);
 }
 
-
 pascal short
 #ifndef	COMPONENT_BUILD
 IpxGetMaxPacketSize(unsigned long *maxPktSize)
@@ -305,7 +304,7 @@ IpxGetMaxPacketSize(unsigned long *maxPktSize, short drvRefNum)
 #endif
 {
 	IPXpb		ipx_pb;
-	
+
 	if (maxPktSize == (unsigned long *)0) {
 		return (IPX_BAD_PARAMETER);
 	}
@@ -326,7 +325,7 @@ IpxGetStatistics(IPX_STATS *buffer, unsigned long *buflen, short drvRefNum)
 #endif
 {
 	IPXpb		ipx_pb;
-	
+
 	if ((buffer == (IPX_STATS *)0) || (buflen == (unsigned long *)0)) {
 		return (IPX_BAD_PARAMETER);
 	}
@@ -350,7 +349,7 @@ IpxGetVersion(unsigned char *majorVersion, unsigned char *minorVersion,
 #endif
 {
 	IPXpb		ipx_pb;
-	
+
 	/*
 	 * Note: Any of the arguments to this function can be zero if the
 	 *       user doesn't want that information.
@@ -374,11 +373,11 @@ IpxInitialize(short *drvRefNumPtr)
 #endif
 {
 	short	drvrRefNum, status;
-	
+
 	status = find_ipx_drvr(&drvrRefNum);
 	if (status == 0) {
 #ifndef	COMPONENT_BUILD
-#ifdef CANNOT_USE_GLOBALS	
+#ifdef CANNOT_USE_GLOBALS
 		Ipx_set_drvr_ref_num((long)drvrRefNum);
 #else
 		MacIPXDrvrRefNum = drvrRefNum;
@@ -431,7 +430,7 @@ IpxOpenSocket(unsigned short *socketNetOrder, unsigned char flags, short drvRefN
 #endif
 {
 	IPXpb		ipx_pb;
-	
+
 	ipx_pb.csCode = IPXOPENSOCKET;
 	ipx_pb.csParams.open.socketNumber = socketNetOrder;
 	ipx_pb.csParams.open.flags = flags;
@@ -469,7 +468,7 @@ IpxReceive(unsigned short socketNetOrder, IPX_ECB *ecb, short drvRefNum)
 	if ((ecb->status == ST_ECBQ) || (ecb->status == ST_SENDPACKET)) {
 		return (IPX_ECB_IN_USE);
 	}
-	
+
 #if !defined(powerc) && !defined (__powerc)
 	ecb->savedA5 = IpxGetRegisterA5();
 #endif
@@ -498,7 +497,7 @@ IpxRelinquishControl(short drvRefNum)
 #endif
 {
 	IPXpb	ipx_pb;
-	
+
 	ipx_pb.csCode = IPXRELINQUISHCONTROL;
 #ifndef	COMPONENT_BUILD
 	return (call_ipx(&ipx_pb, FALSE));
@@ -536,7 +535,7 @@ IpxScheduleIpxEvent(unsigned short socketNetOrder, unsigned long timeTicks,
 	if (ecb->status == ST_AESQ) {
 		return (IPX_ECB_IN_USE);
 	}
-	
+
 #if !defined(powerc) && !defined (__powerc)
 	ecb->savedA5 = IpxGetRegisterA5();
 #endif
@@ -585,7 +584,7 @@ IpxSend(unsigned short socketNetOrder, IPX_ECB *ecb, short drvRefNum)
 	if ((ecb->status == ST_SENDPACKET) || (ecb->status == ST_ECBQ)) {
 		return (IPX_ECB_IN_USE);
 	}
-	
+
 #if !defined(powerc) && !defined (__powerc)
 	ecb->savedA5 = IpxGetRegisterA5();
 #endif
@@ -638,7 +637,7 @@ IpxSend2(unsigned short socketNetOrder, IPX_ECB *ecb, unsigned char flags, short
 	if ((ecb->status == ST_SENDPACKET) || (ecb->status == ST_ECBQ)) {
 		return (IPX_ECB_IN_USE);
 	}
-	
+
 	if (flags & DO_NOT_CHECKSUM_PACKET) {
 		ecb->flags |= NO_CHECKSUM_FLAG;
 		ecb->flags &= (~CHECKSUM_FLAG);
@@ -677,7 +676,7 @@ call_ipx(IPXpb *ipx_pb, int async, short drvRefNum)
 	short	err;
 
 #ifndef	COMPONENT_BUILD
-#ifdef CANNOT_USE_GLOBALS	
+#ifdef CANNOT_USE_GLOBALS
 	ipx_pb->ioCRefNum = (short)Ipx_get_drvr_ref_num();
 #else
 	ipx_pb->ioCRefNum = MacIPXDrvrRefNum;
@@ -748,12 +747,12 @@ Ipx_set_drvr_ref_num(long refNum)
 		lea		@private_storage, a0
 		move.l	refNum, (a0)
 		bra.s	@2
-		
+
 extern Ipx_get_drvr_ref_num:
 		lea		@private_storage, a0
 		move.l	(a0), d0
 		rts
-		
+
 	@private_storage	dc.l 	0
 
 	@2
@@ -776,7 +775,7 @@ pascal IPX_ECB *
 IpxGetECBFromRegisterA0()
 {
 	IPX_ECB		*ecb;
-	
+
 	asm {
 		move.l	a0, ecb
 	}
@@ -796,12 +795,12 @@ Ipx_set_drvr_ref_num(long refNum)
 	lea		private_storage, a0
 	move.l	4(a7), (a0)
 	bra.s	L1
-		
+
 ENTRY static Ipx_get_drvr_ref_num
 	lea		private_storage, a0
 	move.l	(a0), d0
 	rts
-			
+
 private_storage:	dc.l 	0
 
 L1:

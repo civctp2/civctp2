@@ -1,5 +1,3 @@
-
-
 #include "c3.h"
 #include "FliSymTab.h"
 #include "fliif.h"
@@ -15,7 +13,7 @@ FliSymTab::FliSymTab(sint32 initsize) :
 	m_array = new FliSymbol *[initsize];
 	m_numEntries = 0;
 
-    m_max_num_fuzzy_set = 0; 
+    m_max_num_fuzzy_set = 0;
     m_fuzzy_set_buff=NULL;
 
 }
@@ -24,17 +22,17 @@ FliSymTab::~FliSymTab()
 {
 	if(m_array) {
 		delete [] m_array;
-        m_array = NULL; 
+        m_array = NULL;
 	}
 
-    sint32 i; 
-    if (m_max_num_fuzzy_set) { 
-        for (i=0; i<m_max_num_fuzzy_set; i++) { 
-            delete[] m_fuzzy_set_buff[i]; 
-            m_fuzzy_set_buff[i] = NULL; 
+    sint32 i;
+    if (m_max_num_fuzzy_set) {
+        for (i=0; i<m_max_num_fuzzy_set; i++) {
+            delete[] m_fuzzy_set_buff[i];
+            m_fuzzy_set_buff[i] = NULL;
         }
-        delete[] m_fuzzy_set_buff; 
-        m_fuzzy_set_buff=NULL; 
+        delete[] m_fuzzy_set_buff;
+        m_fuzzy_set_buff=NULL;
     }
 
 }
@@ -63,9 +61,8 @@ void FliSymTab::Init()
 	}
 }
 
-
 void FliSymTab::InitGraphics()
-{ 
+{
     CalcNumFuzzyVariables();
     AllocateFuzzySetBuff ();
 }
@@ -84,93 +81,90 @@ FliSymbol *FliSymTab::Get(sint32 index)
 	return m_array[index];
 }
 
+sint32 FliSymTab::GetNumFuzzyVariables(const sint32 idx_section)
+{
+    Assert(0 <= idx_section);
+    Assert(idx_section < FLI_SECT_MAX);
 
-sint32 FliSymTab::GetNumFuzzyVariables(const sint32 idx_section) 
-{ 
-    Assert(0 <= idx_section); 
-    Assert(idx_section < FLI_SECT_MAX); 
-
-    return m_num_variables[idx_section]; 
-} 
+    return m_num_variables[idx_section];
+}
 
 void FliSymTab::CalcNumFuzzyVariables()
 {
-    sint32 idx_symbol, count, idx_section; 
+    sint32 idx_symbol, count, idx_section;
 
-    for (idx_section=0; idx_section<FLI_SECT_MAX; idx_section++) { 
-        count = 0; 
-        for (idx_symbol=0; idx_symbol < m_numEntries; idx_symbol++) { 
-            if (m_array[idx_symbol]->UsedInSection(idx_section)) { 
-                count++; 
-            } 
+    for (idx_section=0; idx_section<FLI_SECT_MAX; idx_section++) {
+        count = 0;
+        for (idx_symbol=0; idx_symbol < m_numEntries; idx_symbol++) {
+            if (m_array[idx_symbol]->UsedInSection(idx_section)) {
+                count++;
+            }
         }
-        m_num_variables[idx_section]=count; 
+        m_num_variables[idx_section]=count;
     }
-} 
-
-void FliSymTab::AllocateFuzzySetBuff ()
-{ 
-    
-    
-    
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-    m_max_num_fuzzy_set = 8;  
-    m_fuzzy_set_buff = new double *[m_max_num_fuzzy_set]; 
-    sint32 i; 
-    for (i=0; i<m_max_num_fuzzy_set; i++) { 
-        m_fuzzy_set_buff[i] = new double[sint32(k_NUM_DEFUZZ_SAMPLES)];
-    } 
 }
 
+void FliSymTab::AllocateFuzzySetBuff ()
+{
 
-FliSymbol* FliSymTab::FindSymbol(const sint32 idx_section, 
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+    m_max_num_fuzzy_set = 8;
+    m_fuzzy_set_buff = new double *[m_max_num_fuzzy_set];
+    sint32 i;
+    for (i=0; i<m_max_num_fuzzy_set; i++) {
+        m_fuzzy_set_buff[i] = new double[sint32(k_NUM_DEFUZZ_SAMPLES)];
+    }
+}
+
+FliSymbol* FliSymTab::FindSymbol(const sint32 idx_section,
    const sint32 idx_variable)
 {
-    sint32 i; 
-    sint32 count=0; 
-    for (i=0; i<m_numEntries; i++) { 
-        if (m_array[i]->UsedInSection(idx_section)) { 
-            if (count == idx_variable) { 
-                return m_array[i]; 
-            } 
+    sint32 i;
+    sint32 count=0;
+    for (i=0; i<m_numEntries; i++) {
+        if (m_array[i]->UsedInSection(idx_section)) {
+            if (count == idx_variable) {
+                return m_array[i];
+            }
             count++;
         }
     }
-    Assert(0); 
-    return NULL; 
+    Assert(0);
+    return NULL;
 }
 
-void FliSymTab::GetFuzzyGraph(sint32 idx_section, sint32 idx_variable, 
-        char **label, double *minx, double *maxx, double *miny, double *maxy, 
+void FliSymTab::GetFuzzyGraph(sint32 idx_section, sint32 idx_variable,
+        char **label, double *minx, double *maxx, double *miny, double *maxy,
         sint32 *num_graphs, sint32 *num_x, double ***height, double *defuzz_val)
 
 {
-    FliSymbol *symbol = FindSymbol(idx_section, idx_variable); 
+    FliSymbol *symbol = FindSymbol(idx_section, idx_variable);
 
-    *miny = 0.0; 
-    *maxy = 1.0; 
+    *miny = 0.0;
+    *maxy = 1.0;
 
-    symbol->GetFuzzyGraph(idx_section, label, minx, maxx, num_graphs, m_max_num_fuzzy_set, 
+    symbol->GetFuzzyGraph(idx_section, label, minx, maxx, num_graphs, m_max_num_fuzzy_set,
         m_fuzzy_set_buff, defuzz_val);
 
-    *height = m_fuzzy_set_buff; 
-    *num_x = sint32 (k_NUM_DEFUZZ_SAMPLES); 
+    *height = m_fuzzy_set_buff;
+    *num_x = sint32 (k_NUM_DEFUZZ_SAMPLES);
 }
-
 
 MBCHAR	s_inputComment[_MAX_PATH];
 FILE	*s_inputLogFile;
@@ -187,19 +181,19 @@ void FliSymTab::DumpFZInputHeaders(sint32 which)
 	s_inputLogFile = fopen(fname, "a");
 	Assert(s_inputLogFile);
 
-    sint32 i; 
-    for (i=0; i<m_numEntries; i++) { 
+    sint32 i;
+    for (i=0; i<m_numEntries; i++) {
         if (m_array[i]->GetType() == FLI_SYM_INPUT) {
 			fprintf(s_inputLogFile, "%s\t", m_array[i]->GetName());
         }
     }
-	
+
 	fprintf(s_inputLogFile, "\n");
-    
+
 	fclose(s_inputLogFile);
 	s_inputLogFile = NULL;
 
-    return ; 
+    return ;
 }
 
 void FliSymTab::DumpFZInputs(sint32 which)
@@ -209,24 +203,24 @@ void FliSymTab::DumpFZInputs(sint32 which)
 	sprintf(fname, "logs\\%s%d.txt", FZINPUTLOGFILENAME, which);
 	s_inputLogFile = fopen(fname, "a");
 
-    sint32 i; 
-    for (i=0; i<m_numEntries; i++) { 
+    sint32 i;
+    for (i=0; i<m_numEntries; i++) {
         if (m_array[i]->GetType() == FLI_SYM_INPUT) {
 			fprintf(s_inputLogFile, "%f\t", m_array[i]->GetValue());
         }
     }
-	
+
 	if (strlen(s_inputComment) > 0) {
 		fprintf(s_inputLogFile, "%s", s_inputComment);
 		s_inputComment[0] = '\0';
 	}
 
 	fprintf(s_inputLogFile, "\n");
-    
+
 	fclose(s_inputLogFile);
 	s_inputLogFile = NULL;
 
-    return ; 
+    return ;
 }
 
 #endif

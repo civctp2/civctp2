@@ -11,7 +11,7 @@
 //
 // THIS FILE IS NOT GENERATED OR SUPPORTED BY ACTIVISION.
 //
-// This material has been developed at apolyton.net by the Apolyton CtP2 
+// This material has been developed at apolyton.net by the Apolyton CtP2
 // Source Code Project. Contact the authors at ctp2source@apolyton.net.
 //
 //----------------------------------------------------------------------------
@@ -51,7 +51,6 @@
 
 extern sint32               g_modalWindow;
 
-
 STDEHANDLER(InterfaceCreateCityEvent)
 {
 	Unit city;
@@ -74,7 +73,7 @@ STDEHANDLER(InterfaceMakePopEvent)
 		if(!args->GetCity(0, city)) return GEV_HD_Continue;
 		if(city.GetOwner() == g_selected_item->GetVisiblePlayer() &&
 		   city.CD()->PopCount() == 1) {
-			
+
 			EditQueue::Display(CityWindow::GetCityData(city));
 		}
 	}
@@ -134,13 +133,13 @@ STDEHANDLER(InterfaceUpdateCityProjection)
 		// Reenable opening the city window - see InterfacePreBeginTurnEvent.
 		if (g_modalWindow > 0)
 		{
-			--g_modalWindow;	
+			--g_modalWindow;
 		}
 	}
 
 	return GEV_HD_Continue;
 }
-		
+
 STDEHANDLER(InterfaceBeginTurnRecenter)
 {
 	sint32 pl;
@@ -155,7 +154,7 @@ STDEHANDLER(InterfaceBeginTurnRecenter)
 		} else if(g_selected_item->GetSelectedCity(c)) {
 			pos = c.RetPos();
 		}
-			
+
 		if(pos.x >= 0 && !g_director->TileWillBeCompletelyVisible(pos.x, pos.y)) {
 			g_director->AddCenterMap(pos);
 		}
@@ -172,7 +171,7 @@ STDEHANDLER(InterfacePreBeginTurn)
 		close_AllScreensAndUpdateInfoScreen();
 		// Prevent opening the city window during the production computations.
 		// It will be reenabled in InterfaceUpdateCityProjection.
-		++g_modalWindow;	
+		++g_modalWindow;
 		if(g_controlPanel)
 			g_controlPanel->ClearTargetingMode();
 
@@ -182,9 +181,9 @@ STDEHANDLER(InterfacePreBeginTurn)
 		}
 
 		if(g_network.IsHost() && g_network.GetPlayerIndex() == pl) {
-			
+
 			if (g_soundManager) {
-				g_soundManager->AddSound(SOUNDTYPE_SFX, (uint32)0, 
+				g_soundManager->AddSound(SOUNDTYPE_SFX, (uint32)0,
 				                         gamesounds_GetGameSoundID(GAMESOUNDS_NET_YOUR_TURN),
 				                         0,
 				                         0);
@@ -196,16 +195,14 @@ STDEHANDLER(InterfacePreBeginTurn)
 
 void interfaceevent_Initialize()
 {
-	
+
 	MainControlPanel::InitializeEvents();
 
-	
 	g_gevManager->AddCallback(GEV_CreateCity, GEV_PRI_Post, &s_InterfaceCreateCityEvent);
 	g_gevManager->AddCallback(GEV_MakePop, GEV_PRI_Post, &s_InterfaceMakePopEvent);
 	g_gevManager->AddCallback(GEV_OpenInitialCityInterface, GEV_PRI_Post, &s_InterfaceOpenInitialCityInterfaceEvent);
 
-	
-	
+
 	g_gevManager->AddCallback(GEV_BuildUnit, GEV_PRI_Post, &s_InterfaceUpdateCityEvent);
 	g_gevManager->AddCallback(GEV_BuildBuilding, GEV_PRI_Post, &s_InterfaceUpdateCityEvent);
 	g_gevManager->AddCallback(GEV_BuildWonder, GEV_PRI_Post, &s_InterfaceUpdateCityEvent);
@@ -226,4 +223,3 @@ void interfaceevent_Initialize()
 void interfaceevent_Cleanup()
 {
 }
-

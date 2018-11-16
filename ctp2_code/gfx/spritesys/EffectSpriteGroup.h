@@ -1,16 +1,3 @@
-
-
-
-
-
-
-
-
-
-
-
- 
-
 #ifdef HAVE_PRAGMA_ONCE
 #pragma once
 #endif
@@ -24,7 +11,7 @@
 
 enum EFFECTACTION {
 	EFFECTACTION_NONE = -1,
-	
+
 	EFFECTACTION_PLAY,
 	EFFECTACTION_FLASH,
 
@@ -66,9 +53,7 @@ public:
 	sint32			Parse(uint16 id,GROUPTYPE group);
 	POINT			GetHotPoint(EFFECTACTION action, sint32 facing);
 
-
 private:
-
 
 
 };

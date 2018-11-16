@@ -1,4 +1,4 @@
-/* 
+/*
 Copyright (C) 1995-2001 Activision, Inc.
 
 This library is free software; you can redistribute it and/or
@@ -75,7 +75,7 @@ extern ptimer_t ptimer_data[NPMAX];
  * Stolen from http://www.cs.wustl.edu/~schmidt/ACE_wrappers/ace/OS.i
  * See also http://www.sandpile.org/80x86/rdtsc.shtml
  */
-__int64 __inline rdtsc() 
+__int64 __inline rdtsc()
 {
 	//__int64 hugetime;
 

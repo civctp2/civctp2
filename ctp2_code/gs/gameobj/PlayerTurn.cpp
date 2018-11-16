@@ -11,7 +11,7 @@
 //
 // THIS FILE IS NOT GENERATED OR SUPPORTED BY ACTIVISION.
 //
-// This material has been developed at apolyton.net by the Apolyton CtP2 
+// This material has been developed at apolyton.net by the Apolyton CtP2
 // Source Code Project. Contact the authors at ctp2source@apolyton.net.
 //
 //----------------------------------------------------------------------------
@@ -53,7 +53,6 @@
 #include "TurnCnt.h"
 #include "Score.h"
 
-
 #include "profileDB.h"
 #include "civapp.h"
 #include "SelItem.h"
@@ -78,30 +77,30 @@ void Player::BeginTurn()
 {
 #ifdef _DEBUG
 	if(m_owner == 1) {
-		
+
 	}
 #endif
 
-	
-	
-	
-	
 
 
 
 
 
-	
-	if (g_tileImprovementMode) 
+
+
+
+
+
+	if (g_tileImprovementMode)
 	{
 		g_tileImprovementMode = 0;
-		
+
 	}
 
-	
 
-	
-	if(g_controlPanel) 
+
+
+	if(g_controlPanel)
 	{
 		g_controlPanel->UpdatePlayerBeginProgress(m_owner);
 		g_controlPanel->GetWindow()->DrawChildren();
@@ -114,20 +113,18 @@ void Player::BeginTurn()
 			continue;
 		}
 
-		
-		
+
+
 
 
 
 	}
 
-	
 	if (g_selected_item->GetVisiblePlayer() == m_owner)
 		g_controlPanel->PopulateMessageList(m_owner);
 
-
 	m_is_turn_over = FALSE;
-	
+
 	m_end_turn_soon = FALSE;
 
 	if(g_network.IsHost()) {
@@ -156,18 +153,15 @@ void Player::BeginTurn()
 		                       GEA_Player, m_owner,
 		                       GEA_End);
 
-		
-		
+
 		g_gevManager->AddEvent(GEV_INSERT_Tail,
 		                       GEV_PeaceMovement,
 		                       GEA_Player, m_owner,
 		                       GEA_End);
 
-		
-		
-		m_gold->ClearStats(); 
 
-		
+		m_gold->ClearStats();
+
 		g_gevManager->AddEvent(GEV_INSERT_Tail,
 		                       GEV_PollutionTurn,
 		                       GEA_Player, m_owner,
@@ -203,8 +197,8 @@ void Player::BeginTurn()
 		                       GEA_Player, m_owner,
 		                       GEA_End);
 
-		
-		
+
+
 
 		g_gevManager->AddEvent(GEV_INSERT_Tail,
 		                       GEV_BeginTurnImprovements,
@@ -233,10 +227,10 @@ void Player::BeginTurn()
 		                       GEA_Player, m_owner,
 		                       GEA_End);
 
-		
-		
-		
-		
+
+
+
+
 
 		BeginTurnUnits();
 
@@ -245,7 +239,6 @@ void Player::BeginTurn()
 		                       GEA_Player, m_owner,
 		                       GEA_End);
 
-		
 		m_strengths->Calculate();
 		if(g_network.IsHost()) {
 			g_network.Block(m_owner);
@@ -257,10 +250,8 @@ void Player::BeginTurn()
 		DPRINTF(k_DBG_GAMESTATE, ("Player[%d]::BeginTurn: not running\n", m_owner));
 	}
 
-
 	if(!g_network.IsClient()) {
-		
-		
+
 		g_gevManager->AddEvent(GEV_INSERT_Tail,
 		                       GEV_FinishBeginTurn,
 		                       GEA_Player, m_owner,

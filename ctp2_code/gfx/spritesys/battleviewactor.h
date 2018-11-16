@@ -1,14 +1,3 @@
-
-
-
-
-
-
-
-
-
-
-
 #ifdef HAVE_PRAGMA_ONCE
 #pragma once
 #endif
@@ -42,10 +31,9 @@ public:
 	~BattleViewActor();
 
 	void			GetIDAndType(sint32 owner, SpriteState *ss, Unit id, sint32 unitType, const MapPoint &pos, uint32 *spriteID, GROUPTYPE *groupType);
-	
+
 	void			Initialize(void);
 
-	
 	virtual void	Process(void);
 	void			DumpAllActions(void);
 	void			AddAction(Action *actionObj);
@@ -53,11 +41,10 @@ public:
 	void			AddIdle(BOOL NoIdleJustDelay = FALSE);
 
 	Anim			*GetAnim(UNITACTION action);
-	
+
 	BOOL			HasThisAnim(UNITACTION action) { if (!m_unitSpriteGroup) return FALSE; return (m_unitSpriteGroup->GetAnim((GAME_ACTION)action) != NULL); }
 	Anim			*MakeFakeDeath(void);
 
-	
 	void			Draw(BOOL fogged = FALSE);
 	void			DrawDirect(aui_Surface *surf, sint32 x, sint32 y);
 
@@ -65,7 +52,7 @@ public:
 
 	MapPoint		GetPos(void) { return m_pos; }
 	void			SetPos(MapPoint pnt) { m_pos = pnt; }
-    void            GetPixelPos(sint32 &x, sint32 &y) { x = m_x; y = m_y; } 
+    void            GetPixelPos(sint32 &x, sint32 &y) { x = m_x; y = m_y; }
 	void			SetPixelPos(sint32 x, sint32 y) { m_x = x; m_y = y; }
 
 	sint32			GetFacing(void) const { return m_facing; }
@@ -91,7 +78,6 @@ public:
 	void			SetHitPoints(double points) { m_hitPoints = points; }
 	void			SetHitPointsMax(double points) { m_hitPointsMax = points; }
 
-
 	void			SetFortified(BOOL fortified) { m_isFortified = fortified; }
 	BOOL			GetFortified(void) { return m_isFortified; }
 
@@ -110,14 +96,13 @@ protected:
 	UNITACTION			m_curUnitAction;
 
 	Queue<Action *>		m_actionQueue;
-	GROUPTYPE			m_type;			
-	uint32				m_spriteID;		
+	GROUPTYPE			m_type;
+	uint32				m_spriteID;
 
 	double				m_hitPoints;
 	double				m_hitPointsMax;
 
 	BOOL				m_isFortified;
 };
-
 
 #endif

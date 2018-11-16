@@ -1,21 +1,3 @@
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
 #include "c3.h"
 #include "aui_rectangle.h"
 
@@ -26,9 +8,8 @@
 
 BOOL Rectangle_Clip( RECT *clipee, RECT *clipper )
 {
-	BOOL hasNonzeroArea = TRUE; 
+	BOOL hasNonzeroArea = TRUE;
 
-	
 	if ( clipee->right < clipper->left )
 	{
 		clipee->left = clipee->right = clipper->left;
@@ -36,7 +17,7 @@ BOOL Rectangle_Clip( RECT *clipee, RECT *clipper )
 	}
 	else
 	{
-		
+
 		if ( clipee->left > clipper->right )
 		{
 			clipee->left = clipee->right = clipper->right;
@@ -44,17 +25,15 @@ BOOL Rectangle_Clip( RECT *clipee, RECT *clipper )
 		}
 		else
 		{
-			
+
 			if ( clipee->left < clipper->left )
 				clipee->left = clipper->left;
 
-			
 			if ( clipee->right > clipper->right )
 				clipee->right = clipper->right;
 		}
 	}
 
-	
 	if ( clipee->bottom < clipper->top )
 	{
 		clipee->top = clipee->bottom = clipper->top;
@@ -62,7 +41,7 @@ BOOL Rectangle_Clip( RECT *clipee, RECT *clipper )
 	}
 	else
 	{
-		
+
 		if ( clipee->top > clipper->bottom )
 		{
 			clipee->top = clipee->bottom = clipper->bottom;
@@ -70,11 +49,10 @@ BOOL Rectangle_Clip( RECT *clipee, RECT *clipper )
 		}
 		else
 		{
-			
+
 			if ( clipee->top < clipper->top )
 				clipee->top = clipper->top;
 
-			
 			if ( clipee->bottom > clipper->bottom )
 				clipee->bottom = clipper->bottom;
 		}
@@ -92,24 +70,20 @@ BOOL Rectangle_Clip( RECT *clipee, RECT *clipper )
 
 sint32 Rectangle_Subtract( RECT *in, RECT *sub, RECT out[4] )
 {
-	
+
 	Assert( in != NULL );
 	if ( !in ) return -1;
 
-	
 	Assert( in->left <= in->right && in->top <= in->bottom );
 	if ( in->left >= in->right || in->top >= in->bottom ) return 0;
 
-	
 	Assert( sub != NULL );
 	if ( !sub ) return -1;
 
-	
 	Assert( sub->left <= sub->right && sub->top <= sub->bottom );
 	if ( sub->left >= sub->right || sub->top >= sub->bottom
 	||
-	
-	
+
 	   ( in->left >= sub->right
 	||   in->top >= sub->bottom
 	||   in->right <= sub->left
@@ -119,8 +93,7 @@ sint32 Rectangle_Subtract( RECT *in, RECT *sub, RECT out[4] )
 		return 1;
 	}
 
-	
-	
+
 	Assert( out != NULL );
 	if ( !out ) return -1;
 
@@ -308,10 +281,10 @@ BOOL Rectangle_Consolidate( RECT *rect, RECT *rect1, RECT *rect2 )
 
 BOOL Rectangle_SmartConsolidate( RECT *rect, RECT *rect1, RECT *rect2 )
 {
-	
+
 	if ( !Rectangle_Intersect( rect1, rect2 ) )
 	{
-		
+
 		if ( rect1->left == rect2->left && rect1->right == rect2->right )
 		{
 			if ( rect1->bottom == rect2->top )
@@ -356,10 +329,9 @@ BOOL Rectangle_SmartConsolidate( RECT *rect, RECT *rect1, RECT *rect2 )
 		return TRUE;
 	}
 
-	
-	
+
 	Rectangle_Consolidate( rect, rect1, rect2 );
-	return 
+	return
 		Rectangle_Area( rect ) <=
 		Rectangle_Area( rect1 ) +
 		Rectangle_Area( rect2 );

@@ -11,7 +11,7 @@
 //
 // THIS FILE IS NOT GENERATED OR SUPPORTED BY ACTIVISION.
 //
-// This material has been developed at apolyton.net by the Apolyton CtP2 
+// This material has been developed at apolyton.net by the Apolyton CtP2
 // Source Code Project. Contact the authors at ctp2source@apolyton.net.
 //
 //----------------------------------------------------------------------------
@@ -70,7 +70,7 @@ DBToken::~DBToken()
 
 DBLexer::DBLexer(const C3DIR & c3dir, const char *file)
 {
-	
+
 	m_tokenHash = new StringHash<DBToken>(SIZE_HASH_TABLE);
 
 	strcpy(m_filename, file);
@@ -94,8 +94,7 @@ DBLexer::DBLexer(const C3DIR & c3dir, const char *file)
 	m_nextToken = TOKEN_UNDEFINED;
 	m_whichTokenText = 0;
 
-	
-	
+
 	GetToken();
 }
 
@@ -111,28 +110,25 @@ DBLexer::~DBLexer()
 	if (m_file)
 	{
 		fclose(m_file);
-	}	
+	}
 }
 
 void DBLexer::SetTokens(char **tokens, sint32 maxToken)
 {
-	
+
 	Assert(maxToken > k_Token_Custom_Base);
 	if(maxToken < k_Token_Custom_Base)
 		return;
 
-	
-	
+
 	DBCustomTokens *cust = new DBCustomTokens(tokens, maxToken - k_Token_Custom_Base);
 	m_customTokenStack->AddTail(cust);
 
-	
-	
+
 	delete m_tokenHash;
 	m_tokenHash = new StringHash<DBToken>(SIZE_HASH_TABLE);
 
 
-	
 	sint32 i;
 	for(i = 0; i < cust->m_numTokens; i++) {
 		m_tokenHash->Add(new DBToken(cust->m_tokens[i], k_Token_Custom_Base + i));
@@ -141,15 +137,14 @@ void DBLexer::SetTokens(char **tokens, sint32 maxToken)
 
 void DBLexer::RestoreTokens()
 {
-	
-	
+
 	delete m_tokenHash;
 	m_tokenHash = new StringHash<DBToken>(SIZE_HASH_TABLE);
 
 	DBCustomTokens *old = m_customTokenStack->RemoveTail();
 	Assert(old);
 	delete old;
-	
+
 	if(m_customTokenStack->GetTail()) {
 		DBCustomTokens *cust = m_customTokenStack->GetTail();
 
@@ -166,16 +161,15 @@ sint32 DBLexer::GetToken()
 	{
 		return TOKEN_UNDEFINED;
 	}
-	
-	
 
-	
+
+
+
 	m_whichTokenText++;
 	m_whichTokenText %= k_TOKEN_HISTORY_SIZE;
-	
-	sint32 tok = m_nextToken;	
 
-	
+	sint32 tok = m_nextToken;
+
 	m_nextToken = dbllex();
 	sint32 nextTokenText = (m_whichTokenText + 1) % k_TOKEN_HISTORY_SIZE;
 	m_tokenLine[nextTokenText] = g_dblexerLineNumber;
@@ -183,10 +177,9 @@ sint32 DBLexer::GetToken()
 	if(m_nextToken != k_Token_String) {
 		strcpy(m_tokenText[nextTokenText], dbltext);
 	} else {
-		
+
 		strcpy(m_tokenText[nextTokenText], dbltext + 1);
 
-		
 		m_tokenText[nextTokenText][strlen(m_tokenText[nextTokenText]) - 1] = 0;
 	}
 
@@ -303,7 +296,7 @@ void DBLexer::ReportError(char *fmt, ...)
 
 	c3errors_ErrorDialog("Database", buf);
 }
-	
+
 sint32 DBLexer::GetLineNumber()
 {
 	return m_tokenLine[m_whichTokenText];
@@ -313,4 +306,3 @@ const char *DBLexer::GetFilename()
 {
 	return m_filename;
 }
-

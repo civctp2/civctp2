@@ -1,5 +1,3 @@
-
-
 #include "c3.h"
 #include "FliOutputProc.h"
 #include "FliSetFunc.h"
@@ -19,7 +17,6 @@ void FliOutputProc::AddModifier(uint8 op)
 		m_modifiers[m_modifierPtr++] = op;
 }
 
-
 double FliOutputProc::Membership(double x, double dx, sint32 &insideLeftSteps, BOOL &insideRight)
 {
 	double val = m_function->GetMembership(x, dx, insideLeftSteps, insideRight);
@@ -35,8 +32,7 @@ double FliOutputProc::Membership(double x, double dx, sint32 &insideLeftSteps, B
 				val = 2 * val - (val * val);
 				break;
 			default:
-				
-				
+
 				Assert(FALSE);
 				break;
 		}
@@ -52,7 +48,7 @@ double FliOutputProc::GetLeftEdge()
 
 double FliOutputProc::GetRecommendedDX()
 {
-    return m_function->GetRecommendedDX(); 
+    return m_function->GetRecommendedDX();
 }
 
 void FliOutputProc::Serialize(CivArchive &archive)

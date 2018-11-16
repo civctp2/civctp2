@@ -1,15 +1,3 @@
-
-
-
-
-
-
-
-
-
-
-
-
 #pragma once
 #ifndef __CIVARCHIVE_H__
 #define __CIVARCHIVE_H__
@@ -30,44 +18,41 @@ class CivArchive : public IC3CivArchive
 
         ULONG m_refCount;
 
-		bool	m_bIsStoring ;										
+		bool	m_bIsStoring ;
 
-		uint32	m_ulAllocated,										
-				m_ulLength ;										
+		uint32	m_ulAllocated,
+				m_ulLength ;
 
-		uint8	*m_pbBaseMemory,									
-				*m_pbInsert ;										
+		uint8	*m_pbBaseMemory,
+				*m_pbInsert ;
 
-		void DoubleUp() ;											
-		void DoubleExpand(uint32 ulAmount) ;						
+		void DoubleUp() ;
+		void DoubleExpand(uint32 ulAmount) ;
 
 	public:
-		void SetSize(uint32 ulSize) ;								
-		void SetStore(void) { m_bIsStoring = true ; }				
-		void SetLoad(void) { m_bIsStoring = false ; }				
+		void SetSize(uint32 ulSize) ;
+		void SetStore(void) { m_bIsStoring = true ; }
+		void SetLoad(void) { m_bIsStoring = false ; }
 		void ResetForLoad();
-		uint8 *GetStream(void) { return (m_pbBaseMemory) ; }		
-		uint32 StreamLen(void) { return (m_ulLength) ; }			
+		uint8 *GetStream(void) { return (m_pbBaseMemory) ; }
+		uint32 StreamLen(void) { return (m_ulLength) ; }
 
-		
 		friend class GameFile ;
-		friend class GameMapFile ; 
+		friend class GameMapFile ;
 		friend class DataCheck ;
-		friend class BuildQueue ;									
-		friend class NetCRC;  
+		friend class BuildQueue ;
+		friend class NetCRC;
 	public:
-		CivArchive() ;												
-		CivArchive(uint32 ulSize) ;									
-		~CivArchive() ;												
+		CivArchive() ;
+		CivArchive(uint32 ulSize) ;
+		~CivArchive() ;
 
 
-        	
 	STDMETHODIMP QueryInterface(REFIID, void **obj);
 	STDMETHODIMP_(ULONG) AddRef();
 	STDMETHODIMP_(ULONG) Release();
 
-		
-		 STDMETHODIMP_ (void) Store(uint8 *pbData, uint32 ulLen) ;					
+		 STDMETHODIMP_ (void) Store(uint8 *pbData, uint32 ulLen) ;
 #ifndef HUNT_SERIALIZE
 		void StoreChunk(uint8 *start, uint8 *end);
 #endif
@@ -102,8 +87,8 @@ class CivArchive : public IC3CivArchive
 			PutUINT64(val); return (*this);
 		}
 		void PutDOUBLE(const double &val) {
-			
-			double temp = val; 
+
+			double temp = val;
 			Store((uint8 *)&temp, sizeof(temp));
 		}
 		void PutDoubleString(const double &val);
@@ -139,8 +124,7 @@ class CivArchive : public IC3CivArchive
 			Store((uint8 *)&temp, sizeof(temp));
 		}
 
-		
-		 STDMETHODIMP_ (void) Load(uint8 *pbData, uint32 ulLen) ;					
+		 STDMETHODIMP_ (void) Load(uint8 *pbData, uint32 ulLen) ;
 #ifndef HUNT_SERIALIZE
 		  void LoadChunk(uint8 *start, uint8 *end);
 #endif
@@ -174,8 +158,8 @@ class CivArchive : public IC3CivArchive
 		double GetDOUBLE(void) {
 			double val;
 			Load((uint8 *)&val, sizeof(val));
-			
-			return val; 
+
+			return val;
 		}
 		sint8 GetSINT8(void) {
 			sint8 val;
@@ -217,13 +201,12 @@ class CivArchive : public IC3CivArchive
 			Load((uint8 *)&val, sizeof(val));
 			return SDL_SwapLE64(val);
 		}
-	
+
 		void PerformMagic(uint32 id) ;
 		void TestMagic(uint32 id) ;
-		
-		 STDMETHODIMP_ (BOOL) IsStoring(void) { return (m_bIsStoring) ; }			
 
-		
+		 STDMETHODIMP_ (BOOL) IsStoring(void) { return (m_bIsStoring) ; }
+
 		void StoreArray( sint8 * dataarray, size_t size ) {
 			Store((uint8 *)dataarray, size);
 		}
@@ -297,7 +280,6 @@ class CivArchive : public IC3CivArchive
 				dataarray[i] = GetDOUBLE();
 		}
 	} ;
-
 
 
 #ifdef _DEBUG
