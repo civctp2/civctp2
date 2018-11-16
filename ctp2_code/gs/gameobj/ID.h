@@ -80,18 +80,28 @@ class ID {
 public:
 	uint32 m_id; 
 	
-	ID () { m_id = 0; };
-	ID (sint32 val) { m_id = val; }; 
-	ID (uint32 val) { m_id = val; }; 
-#if defined(WIN32)
-	ID (const int val) {
-		Assert (0 <= val); 
-		m_id = unsigned int (val); }; 
+/* 	ID () { m_id = 0; }; */
+/* 	ID (sint32 val) { m_id = val; };  */
+/* 	ID (uint32 val) { m_id = val; };  */
+/* 	ID (sint64 val) { m_id = val; };  */
+/* 	ID (uint64 val) { m_id = val; };  */
+/* #if defined(WIN32) */
+/* 	ID (const int val) { */
+/* 		Assert (0 <= val);  */
+/* 		m_id = unsigned int (val); };  */
 	
-	ID (const unsigned int val) {
-		m_id = val; }; 
-#endif
-	
+/* 	ID (const unsigned int val) { */
+/* 		m_id = val; };  */
+/* #endif */
+
+	ID (uint32 val = 0) 
+    :   m_id    (val)
+    {  };
+
+    ID (const ID & i) 
+    :   m_id    (i.m_id)
+    {  };
+
 	void Castrate() { } 
 	void DelPointers() {} 
 	

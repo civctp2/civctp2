@@ -1055,7 +1055,11 @@ void ScenarioEditor::RehideUnitSwitches()
 		Assert(sw);
 		if(!sw) break;
 
+#if defined(__LP64__)
+		if((sint64)sw->GetCookie() < 0) {
+#else
 		if((sint32)sw->GetCookie() < 0) {
+#endif
 			
 			sw->Enable(FALSE);
 		}
@@ -1195,7 +1199,11 @@ void ScenarioEditor::TerrainImprovementSwitch(aui_Control *control, uint32 actio
 	if (action == AUI_SWITCH_ACTION_PRESS)
 		DisableErase();
 
+#if defined(__LP64__)
+	sint32 ter = (sint64)cookie;
+#else
 	sint32 ter = (sint32)cookie;
+#endif
 	sint32 i;
 
 	if(s_scenarioEditor->m_terrainImpSwitches[ter]->GetState() == 0) {
@@ -1233,7 +1241,11 @@ void ScenarioEditor::TerrainSwitch(aui_Control *control, uint32 action, uint32 d
 	if (action == AUI_SWITCH_ACTION_PRESS)
 		DisableErase();
 
+#if defined(__LP64__)
+	sint32 ter = (sint64)cookie;
+#else
 	sint32 ter = (sint32)cookie;
+#endif
 	sint32 i;
 	if(s_scenarioEditor->m_terrainSwitches[ter]->GetState() == 0) {
 		s_scenarioEditor->m_paintTerrain = -1;
@@ -1261,13 +1273,22 @@ void ScenarioEditor::ExcludeSwitch(aui_Control *control, uint32 action, uint32 d
 {
 	if(( action != AUI_SWITCH_ACTION_ON) && (action != AUI_SWITCH_ACTION_OFF) )
 		return;
+#if defined(__LP64__)
+	BOOL isExcluded = g_exclusions->IsUnitExcluded((sint64)cookie);
+	g_exclusions->ExcludeUnit((sint64)cookie, !isExcluded);
+#else
 	BOOL isExcluded = g_exclusions->IsUnitExcluded((sint32)cookie);
 	g_exclusions->ExcludeUnit((sint32)cookie, !isExcluded);
+#endif
 }
 void ScenarioEditor::UnitSwitch(aui_Control *control, uint32 action, uint32 data, void *cookie)
 {
 	if(action == AUI_SWITCH_ACTION_OFF) {
+#if defined(__LP64__)
+		if(s_scenarioEditor && s_scenarioEditor->m_unitIndex == (sint64)cookie) {
+#else
 		if(s_scenarioEditor && s_scenarioEditor->m_unitIndex == (sint32)cookie) {
+#endif
 			s_scenarioEditor->m_unitIndex = -1;
 			if(s_scenarioEditor->m_mapMode == SCEN_MAP_UNIT) {
 				s_scenarioEditor->m_mapMode = SCEN_MAP_NONE;
@@ -1285,7 +1306,11 @@ void ScenarioEditor::UnitSwitch(aui_Control *control, uint32 action, uint32 data
 		return;
 
 	
+#if defined(__LP64__)
+	sint32 ui = (sint64)cookie;
+#else
 	sint32 ui = (sint32)cookie;
+#endif
 	sint32 i;
 	ctp2_Switch *me = (ctp2_Switch *)control;
 	
@@ -1332,7 +1357,11 @@ void ScenarioEditor::UnitSwitch(aui_Control *control, uint32 action, uint32 data
 void ScenarioEditor::CityStyleSwitch(aui_Control *control, uint32 action, uint32 data, void *cookie)
 {
 	if(action == AUI_SWITCH_ACTION_OFF) {
+#if defined(__LP64__)
+		if(s_scenarioEditor && s_scenarioEditor->m_cityStyle == (sint64)cookie) {
+#else
 		if(s_scenarioEditor && s_scenarioEditor->m_cityStyle == (sint32)cookie) {
+#endif
 			s_scenarioEditor->m_cityStyle = -2;
 			if(s_scenarioEditor->m_mapMode == SCEN_MAP_CITY) {
 				s_scenarioEditor->m_mapMode = SCEN_MAP_NONE;
@@ -1351,7 +1380,11 @@ void ScenarioEditor::CityStyleSwitch(aui_Control *control, uint32 action, uint32
 
 
 
+#if defined(__LP64__)
+	sint32 cs = (sint64)cookie;
+#else
 	sint32 cs = (sint32)cookie;
+#endif
 	sint32 i;
 	ctp2_Switch *me = (ctp2_Switch *)control;
 	
@@ -1479,7 +1512,11 @@ void ScenarioEditor::TabCallback(aui_Control *control, uint32 action, uint32 dat
 
 	Assert(s_scenarioEditor);
 	if(s_scenarioEditor) {
+#if defined(__LP64__)
+		s_scenarioEditor->SetTab((SCEN_TAB)(sint64)cookie);
+#else
 		s_scenarioEditor->SetTab((SCEN_TAB)(sint32)cookie);
+#endif
 	}
 }
 
@@ -1489,7 +1526,11 @@ void ScenarioEditor::UnitTabButton(aui_Control *control, uint32 action, uint32 d
 
 	Assert(s_scenarioEditor);
 	if(s_scenarioEditor) {
+#if defined(__LP64__)
+		s_scenarioEditor->PopulateUnitList((SCEN_UNIT_CAT)(sint64)cookie);
+#else
 		s_scenarioEditor->PopulateUnitList((SCEN_UNIT_CAT)(sint32)cookie);
+#endif
 	}
 }
 
@@ -1741,7 +1782,11 @@ void ScenarioEditor::CivModeSwitch(aui_Control *control, uint32 action, uint32 d
 		return;
 
 	sint32 i;
+#if defined(__LP64__)
+	SCEN_START_LOC_MODE newMode = (SCEN_START_LOC_MODE)(sint64)cookie;
+#else
 	SCEN_START_LOC_MODE newMode = (SCEN_START_LOC_MODE)(sint32)cookie;
+#endif
 
 	if(action == AUI_SWITCH_ACTION_OFF) {
 		if(s_scenarioEditor->m_mapMode == SCEN_MAP_STARTFLAGS) {
@@ -2000,7 +2045,11 @@ void ScenarioEditor::AddAddButton(aui_Control *control, uint32 action, uint32 da
 			if(!haveCity)
 				return;
 
+#if defined(__LP64__)
+			dbindex = (sint64)selItem->GetUserData();
+#else
 			dbindex = (sint32)selItem->GetUserData();
+#endif
 			Assert(dbindex >= 0);
 			Assert(dbindex < g_theBuildingDB->NumRecords());
 			if(dbindex < 0 || dbindex >= g_theBuildingDB->NumRecords())
@@ -2021,7 +2070,11 @@ void ScenarioEditor::AddAddButton(aui_Control *control, uint32 action, uint32 da
 			if(!haveCity)
 				return;
 
+#if defined(__LP64__)
+			dbindex = (sint64)selItem->GetUserData();
+#else
 			dbindex = (sint32)selItem->GetUserData();
+#endif
 			Assert(dbindex >= 0);
 			Assert(dbindex < g_theWonderDB->NumRecords());
 			if(dbindex < 0 || dbindex >= g_theWonderDB->NumRecords())
@@ -2045,7 +2098,11 @@ void ScenarioEditor::AddAddButton(aui_Control *control, uint32 action, uint32 da
 			break;
 		}
 		case SCEN_ADD_ADVANCES:
+#if defined(__LP64__)
+			dbindex = (sint64) selItem->GetUserData();
+#else
 			dbindex = (sint32) selItem->GetUserData();
+#endif
 			Assert(dbindex >= 0);
 			Assert(dbindex < g_theAdvanceDB->NumRecords());
 			if(dbindex < 0 || dbindex >= g_theAdvanceDB->NumRecords())
@@ -2113,7 +2170,11 @@ void ScenarioEditor::AddRemoveButton(aui_Control *control, uint32 action, uint32
 	Unit city;
 	BOOL haveCity = g_selected_item->GetSelectedCity(city);
 
+#if defined(__LP64__)
+	dbindex = (sint64)selItem->GetUserData();
+#else
 	dbindex = (sint32)selItem->GetUserData();
+#endif
 
 	sint32 player = g_selected_item->GetVisiblePlayer();
 
@@ -2270,7 +2331,11 @@ void ScenarioEditor::BrushSize(aui_Control *control, uint32 action, uint32 data,
 	Assert(s_scenarioEditor);
 	if(!s_scenarioEditor) return;
 
+#if defined(__LP64__)
+	s_scenarioEditor->m_brushSize = (sint64)cookie;
+#else
 	s_scenarioEditor->m_brushSize = (sint32)cookie;
+#endif
 }
 
 
@@ -2695,7 +2760,11 @@ void ScenarioEditor::FileAction(FileDialog *dialog, uint32 action, const MBCHAR 
 	if(!s_scenarioEditor) return;
 
 	Assert(dialog == s_scenarioEditor->m_fileDialog);
+#if defined(__LP64__)
+	uint32 mode = (uint64)cookie;
+#else
 	uint32 mode = (uint32)cookie;
+#endif
 
 	if(action == k_FILE_DIALOG_CANCEL) return;
 
@@ -2985,7 +3054,11 @@ void ScenarioEditor::ChangeMapSizeCallback(bool response, void *userData)
 	if(!response)
 		return;
 
+#if defined(__LP64__)
+	g_theProfileDB->SetMapSize((MAPSIZE)(sint64)userData);
+#else
 	g_theProfileDB->SetMapSize((MAPSIZE)(sint32)userData);
+#endif
 
 	g_civApp->PostRestartGameAction();
 
@@ -3218,7 +3291,11 @@ void ScenarioEditor::WorldTabSwitch(aui_Control *control, uint32 action, uint32 
 				continue;
 			s_scenarioEditor->m_otherMapSwitch[i]->SetState(0);
 		}
+#if defined(__LP64__)
+		s_scenarioEditor->m_mapMode =  (SCEN_MAP_MODE)(sint64)cookie;
+#else
 		s_scenarioEditor->m_mapMode =  (SCEN_MAP_MODE)(sint32)cookie;
+#endif
 	}
 }	
 

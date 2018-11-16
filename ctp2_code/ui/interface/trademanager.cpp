@@ -774,7 +774,11 @@ void TradeManager::CreateRoute(aui_Control *control, uint32 action, uint32 uidat
 
 	Assert(s_tradeManager);
 	if(!s_tradeManager) return;
+#if defined(__LP64__)
+	bool breakInstead = (sint64)(cookie) != 0;
+#else
 	bool breakInstead = sint32(cookie) != 0;
+#endif
 		
 	ctp2_Static *market = (ctp2_Static *)aui_Ldl::GetObject(s_tradeManagerBlock, "Market");
 	if(!breakInstead) {
@@ -811,7 +815,11 @@ void TradeManager::CreateRoute(aui_Control *control, uint32 action, uint32 uidat
 		ctp2_ListItem *item = (ctp2_ListItem *)s_tradeManager->m_summaryList->GetSelectedItem();
 		if(!item) return;
 
+#if defined(__LP64__)
+		TradeRoute route((uint64)item->GetUserData());
+#else
 		TradeRoute route((uint32)item->GetUserData());
+#endif
 		Assert(route.IsValid());
 		if(!route.IsValid()) return;
 
@@ -908,8 +916,13 @@ sint32 TradeManager::CompareCreateItems(ctp2_ListItem *item1, ctp2_ListItem *ite
 
 sint32 TradeManager::CompareSummaryItems(ctp2_ListItem *item1, ctp2_ListItem *item2, sint32 column)
 {
+#if defined(__LP64__)
+	TradeRoute route1 = TradeRoute(uint64(item1->GetUserData()));
+	TradeRoute route2 = TradeRoute(uint64(item2->GetUserData()));
+#else
 	TradeRoute route1 = TradeRoute(uint32(item1->GetUserData()));
 	TradeRoute route2 = TradeRoute(uint32(item2->GetUserData()));
+#endif
 
 	Assert(route1.IsValid());
 	Assert(route2.IsValid());	
@@ -988,7 +1001,11 @@ AUI_ERRCODE TradeManager::DrawNationColumn(ctp2_Static *control,
 										   RECT &rect,
 										   void *cookie)
 {
+#if defined(__LP64__)
+	sint32 player = (sint64)cookie;
+#else
 	sint32 player = (sint32)cookie;
+#endif
 	Assert(g_colorSet);
 	if(!g_colorSet)
 		return AUI_ERRCODE_INVALIDPARAM;
@@ -1011,7 +1028,11 @@ AUI_ERRCODE TradeManager::DrawPiracyColumn(ctp2_Static *control,
 										   RECT &rect,
 										   void *cookie)
 {
+#if defined(__LP64__)
+	TradeRoute route((uint64)cookie);
+#else
 	TradeRoute route((uint32)cookie);
+#endif
 	if(!route.IsValid()) return AUI_ERRCODE_OK;
 
 	Pixel16 color = 0xffff;

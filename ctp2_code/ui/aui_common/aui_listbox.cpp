@@ -1298,7 +1298,11 @@ void aui_ListBox::SendSelectCallback(
 {
 	if ( !data && (action == AUI_LISTBOX_ACTION_SELECT 
 		|| action == AUI_LISTBOX_ACTION_RMOUSESELECT))
+#if defined(__LP64__)
+		data = (size_t)m_selectedList;
+#else
 		data = (uint32)m_selectedList;
+#endif
 
 	
 	m_selectedList->DeleteAll();

@@ -19,10 +19,8 @@ class Message : public ID
 		Message() : ID() { return ; }
 		Message(sint32 val) : ID(val) { return ; }
 		Message(uint32 val) : ID(val) { return ; }
-#ifdef WIN32
-		Message(const int val) : ID(val) { return ; }
-		Message(const unsigned int val) : ID(val) { return ; }
-#endif
+		Message(sint64 val) : ID(val) { return ; }
+		Message(uint64 val) : ID(val) { return ; }
 
 		void KillMessage() ;
 		void Kill() { KillMessage() ; }

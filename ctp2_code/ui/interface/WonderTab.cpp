@@ -226,7 +226,11 @@ sint32 WonderTab::CompareWonderItems(ctp2_ListItem *item1, ctp2_ListItem *item2,
 	
 	if(column==2)
 	{
+#if defined(__LP64__)
+		return (sint64)item1->GetUserData() - (sint64)item2->GetUserData();
+#else
 		return (sint32)item1->GetUserData() - (sint32)item2->GetUserData();
+#endif
 	}
 	else
 	{

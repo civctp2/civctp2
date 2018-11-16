@@ -1666,7 +1666,11 @@ void EditQueue::LoadModeCallback(aui_Control *control, uint32 action, uint32 dat
 	Assert(s_editQueue);
 	if(!s_editQueue) return;
 
+#if defined(__LP64__)
+	sint32 saveMode = (sint64)cookie;
+#else
 	sint32 saveMode = (sint32)cookie;
+#endif
 
 	Assert(s_editQueue->m_itemsBox);
 	Assert(s_editQueue->m_loadBox);
@@ -1708,7 +1712,11 @@ void EditQueue::CityDropDown(aui_Control *control, uint32 action, uint32 data, v
 		ctp2_ListItem *item = (ctp2_ListItem *)s_editQueue->m_cityDropDown->GetListBox()->GetItemByIndex(s_editQueue->m_cityDropDown->GetSelectedItem());
 		Assert(item);
 		if(item) {
+#if defined(__LP64__)
+			Unit city((uint64)item->GetUserData());
+#else
 			Unit city((uint32)item->GetUserData());
+#endif
 			CityData *cd = CityWindow::GetCityData(city);
 			if(cd != s_editQueue->m_cityData) {
 				SetCity(cd);
@@ -1735,7 +1743,11 @@ void EditQueue::PreviousCity(aui_Control *control, uint32 action, uint32 data, v
 	if(!item) return;
 
 	static Unit city;
+#if defined(__LP64__)
+	city.m_id = (uint64)item->GetUserData();
+#else
 	city.m_id = (uint32)item->GetUserData();
+#endif
 	SetCity(CityWindow::GetCityData(city));	
 }
 
@@ -1755,7 +1767,11 @@ void EditQueue::NextCity(aui_Control *control, uint32 action, uint32 data, void 
 	if(!item) return;
 
 	static Unit city;
+#if defined(__LP64__)
+	city.m_id = (uint64)item->GetUserData();
+#else
 	city.m_id = (uint32)item->GetUserData();
+#endif
 	SetCity(CityWindow::GetCityData(city));	
 }
 
@@ -1821,7 +1837,11 @@ void EditQueue::MultiActionButton(aui_Control *control, uint32 action, uint32 da
 	Assert(s_editQueue);
 	if(!s_editQueue) return;
 
+#if defined(__LP64__)
+	EDIT_QUEUE_MULTI_ACTION eqAction = (EDIT_QUEUE_MULTI_ACTION)(sint64)cookie;
+#else
 	EDIT_QUEUE_MULTI_ACTION eqAction = (EDIT_QUEUE_MULTI_ACTION)(sint32)cookie;
+#endif
 	Assert(s_editQueue->m_mode == EDIT_QUEUE_MODE_MULTI);
 
 	if(eqAction == EDIT_QUEUE_MULTI_ACTION_OVERWRITE) {

@@ -15,7 +15,7 @@
 // Source Code Project. Contact the authors at ctp2source@apolyton.net.
 //
 //----------------------------------------------------------------------------
-//
+//g
 // Compiler flags
 //
 // - None
@@ -679,13 +679,21 @@ void DipWizard::SetNation(sint32 pl)
 
 	ctp2_ListBox *nationList = (ctp2_ListBox *)m_nations->GetListBox();
 	ctp2_ListItem *item = (ctp2_ListItem *)nationList->GetSelectedItem();
+#if defined(__LP64__)
+	if(!item || (pl != (sint64)item->GetUserData())) {
+#else
 	if(!item || (pl != (sint32)item->GetUserData())) {
+#endif
 		sint32 i;
 		for(i = 0; i < nationList->NumItems(); i++) {
 
 			item = (ctp2_ListItem *)nationList->GetItemByIndex(i);
 			Assert(item);
+#if defined(__LP64__)
+			if(item && (pl == (sint64)item->GetUserData())) {
+#else
 			if(item && (pl == (sint32)item->GetUserData())) {
+#endif
 				m_nations->SetSelectedItem(i);
 				break;
 			}
@@ -1547,7 +1555,11 @@ void DipWizard::ToneButtonCallback(aui_Control *control, uint32 action, uint32 d
 {
 	if(action != AUI_BUTTON_ACTION_EXECUTE) return;
 
+#if defined(__LP64__)
+	sint32 tone = (sint64)cookie;
+#else
 	sint32 tone = (sint32)cookie;
+#endif
 	Assert(tone >= 0);
 	Assert(tone < DIPLOMATIC_TONE_MAX);
 	if(tone < 0 || tone >= DIPLOMATIC_TONE_MAX) return;
@@ -1565,6 +1577,15 @@ void DipWizard::PropListCallback(aui_Control *control, uint32 action, uint32 dat
 
 	if(!lb->IsHidden()) {
 		ctp2_ListItem *item = (ctp2_ListItem *)lb->GetSelectedItem();
+#if defined(__LP64__)
+		if(!item || !ProposalContextMenu((sint64)item->GetUserData())) {
+			SetProposal(-1);
+		} else {
+			if(!m_proposalDataPending)
+				SetProposal((sint64)item->GetUserData());
+			else
+				m_menuProposal = (sint64)item->GetUserData();
+#else
 		if(!item || !ProposalContextMenu((sint32)item->GetUserData())) {
 			SetProposal(-1);
 		} else {
@@ -1572,6 +1593,7 @@ void DipWizard::PropListCallback(aui_Control *control, uint32 action, uint32 dat
 				SetProposal((sint32)item->GetUserData());
 			else
 				m_menuProposal = (sint32)item->GetUserData();
+#endif
 		}
 	}
 }
@@ -1586,6 +1608,15 @@ void DipWizard::ExchListCallback(aui_Control *control, uint32 action, uint32 dat
 
 	if(!lb->IsHidden()) {
 		ctp2_ListItem *item = (ctp2_ListItem *)lb->GetSelectedItem();
+#if defined(__LP64__)
+		if(!item || !ProposalContextMenu((sint64)item->GetUserData())) {
+			SetExchange(-1);
+		} else {
+			if(!m_proposalDataPending)
+				SetExchange((sint64)item->GetUserData());
+			else
+				m_menuExchange = (sint64)item->GetUserData();
+#else
 		if(!item || !ProposalContextMenu((sint32)item->GetUserData())) {
 			SetExchange(-1);
 		} else {
@@ -1593,6 +1624,7 @@ void DipWizard::ExchListCallback(aui_Control *control, uint32 action, uint32 dat
 				SetExchange((sint32)item->GetUserData());
 			else
 				m_menuExchange = (sint32)item->GetUserData();
+#endif
 		}
 	}
 }
@@ -1607,7 +1639,11 @@ void DipWizard::NationCallback(aui_Control *control, uint32 action, uint32 data,
 
 	ctp2_ListItem *item = (ctp2_ListItem *)m_nations->GetListBox()->GetSelectedItem();
 	if(!item) SetNation(-1);
+#if defined(__LP64__)
+	else SetNation((sint64)item->GetUserData());
+#else
 	else SetNation((sint32)item->GetUserData());
+#endif
 	UpdateButtons();
 }
 
@@ -1743,7 +1779,11 @@ void DipWizard::ProposalTabCallback(aui_Control *control, uint32 action, uint32 
 	
 	MBCHAR buf[k_MAX_NAME_LEN];
 	sprintf(buf, "%s.Stage%d.Tabs.%s.TabPanel.List", s_dipWizardBlock, DIP_WIZ_STAGE_PROPOSAL, 
+#if defined(__LP64__)
+			GetCategoryName(DIP_WIZ_PROP_TAB(sint64(cookie))));
+#else
 			GetCategoryName(DIP_WIZ_PROP_TAB(sint32(cookie))));
+#endif
 
 	ctp2_ListBox *lb = (ctp2_ListBox *)aui_Ldl::GetObject(buf);
 	if(lb) {
@@ -1761,7 +1801,11 @@ void DipWizard::ExchangeTabCallback(aui_Control *control, uint32 action, uint32 
 
 	MBCHAR buf[k_MAX_NAME_LEN];
 	sprintf(buf, "%s.Stage%d.Tabs.%s.TabPanel.List", s_dipWizardBlock, DIP_WIZ_STAGE_EXCHANGE, 
+#if defined(__LP64__)
+			GetCategoryName(DIP_WIZ_PROP_TAB(sint64(cookie))));
+#else
 			GetCategoryName(DIP_WIZ_PROP_TAB(sint32(cookie))));
+#endif
 
 	ctp2_ListBox *lb = (ctp2_ListBox *)aui_Ldl::GetObject(buf);
 	if(lb) {
@@ -1883,7 +1927,11 @@ void DipWizard::ProcessMenuSelection(sint32 itemIndex, void *cookie)
 		switch(rec->GetArg1()) {
 			case k_DiplomacyProposal_Arg1_OwnCity_Bit:
 			case k_DiplomacyProposal_Arg1_HisCity_Bit:
+#if defined(__LP64__)
+				arg.cityId = (sint64)cookie;
+#else
 				arg.cityId = (sint32)cookie;
+#endif
 				break;
 			case k_DiplomacyProposal_Arg1_OwnArmy_Bit:
 				break;
@@ -1895,7 +1943,11 @@ void DipWizard::ProcessMenuSelection(sint32 itemIndex, void *cookie)
 			case k_DiplomacyProposal_Arg1_HisAdvance_Bit:
 			case k_DiplomacyProposal_Arg1_OwnStopResearch_Bit:
 			case k_DiplomacyProposal_Arg1_HisStopResearch_Bit:
+#if defined(__LP64__)
+				arg.advanceType = (sint64)cookie;
+#else
 				arg.advanceType = (sint32)cookie;
+#endif
 				break;
 			case k_DiplomacyProposal_Arg1_OwnUnitType_Bit:
 				break;
@@ -1905,6 +1957,15 @@ void DipWizard::ProcessMenuSelection(sint32 itemIndex, void *cookie)
 				break;
 			case k_DiplomacyProposal_Arg1_OwnGold_Bit:
 			case k_DiplomacyProposal_Arg1_HisGold_Bit:
+#if defined(__LP64__)
+				arg.gold = (sint64)cookie;
+				break;
+			case k_DiplomacyProposal_Arg1_ThirdParty_Bit:
+				arg.playerId = (sint64)cookie;
+				break;
+			case k_DiplomacyProposal_Arg1_Percent_Bit:
+				arg.percent = (double) ((sint64) cookie) / 100.0;
+#else
 				arg.gold = (sint32)cookie;
 				break;
 			case k_DiplomacyProposal_Arg1_ThirdParty_Bit:
@@ -1912,6 +1973,7 @@ void DipWizard::ProcessMenuSelection(sint32 itemIndex, void *cookie)
 				break;
 			case k_DiplomacyProposal_Arg1_Percent_Bit:
 				arg.percent = (double) ((sint32) cookie) / 100.0;
+#endif
 				break;
 			default:
 				
@@ -2458,13 +2520,26 @@ void DipWizard::ThreatMenuCallback(ctp2_Menu *menu, CTP2_MENU_ACTION action, sin
 			ctp2_ListItem *item = (ctp2_ListItem *)m_threatList->GetSelectedItem();
 			Assert(item); 
 			if(item) {
+#if defined(__LP64__)
+				m_menuThreat = (sint64)item->GetUserData();
+#else
 				m_menuThreat = (sint32)item->GetUserData();
+#endif
 				const DiplomacyThreatRecord *rec = g_theDiplomacyThreatDB->Get(m_threat);
 				Assert(rec);
 				if(rec) {
 					switch(rec->GetArg1()) {
 						case k_DiplomacyThreat_Arg1_HisCity_Bit:
 						case k_DiplomacyThreat_Arg1_SpecialAttack_Bit:
+#if defined(__LP64__)
+							m_threatArg.cityId = (sint64)cookie;
+							break;
+						case k_DiplomacyThreat_Arg1_ThirdParty_Bit:
+							m_threatArg.playerId = (sint64)cookie;
+							break;
+						case k_DiplomacyThreat_Arg1_AgreementId_Bit:
+							m_threatArg.agreementId = (sint64)cookie;
+#else
 							m_threatArg.cityId = (sint32)cookie;
 							break;
 						case k_DiplomacyThreat_Arg1_ThirdParty_Bit:
@@ -2472,6 +2547,7 @@ void DipWizard::ThreatMenuCallback(ctp2_Menu *menu, CTP2_MENU_ACTION action, sin
 							break;
 						case k_DiplomacyThreat_Arg1_AgreementId_Bit:
 							m_threatArg.agreementId = (sint32)cookie;
+#endif
 							break;
 						default:
 							
@@ -2549,6 +2625,17 @@ void DipWizard::ThreatListCallback(aui_Control *control, uint32 action, uint32 d
 
 	if(!lb->IsHidden()) {
 		ctp2_ListItem *item = (ctp2_ListItem *)lb->GetSelectedItem();
+#if defined(__LP64__)
+		if(!item || !ThreatContextMenu((sint64)item->GetUserData())) {
+			SetThreat(-1);
+			m_sendButton->Enable(FALSE);
+		} else {
+			m_sendButton->Enable(TRUE);
+			if(!m_proposalDataPending)
+				SetThreat((sint64)item->GetUserData());
+			else
+				m_menuThreat = (sint64)item->GetUserData();
+#else
 		if(!item || !ThreatContextMenu((sint32)item->GetUserData())) {
 			SetThreat(-1);
 			m_sendButton->Enable(FALSE);
@@ -2558,6 +2645,7 @@ void DipWizard::ThreatListCallback(aui_Control *control, uint32 action, uint32 d
 				SetThreat((sint32)item->GetUserData());
 			else
 				m_menuThreat = (sint32)item->GetUserData();
+#endif
 		}
 	}
 }
@@ -2660,7 +2748,11 @@ AUI_ERRCODE DrawDiplomatColor(ctp2_Static *control,
 							  RECT &rect,
 							  void *cookie)
 {
+#if defined(__LP64__)
+	sint32 pl = (sint64)cookie;
+#else
 	sint32 pl = (sint32)cookie;
+#endif
 	primitives_PaintRect16(surface, &rect, g_colorSet->GetPlayerColor(pl));
 	return AUI_ERRCODE_OK;
 }

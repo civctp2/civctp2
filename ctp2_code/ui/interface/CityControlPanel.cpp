@@ -4,7 +4,7 @@
 // File type    : C++ source
 // File name    : \UI\Interface\CityControlPanel.cpp
 // Description  : Handling for the city tab of the control panel 
-// Id           : $Id:$
+// Id           : $Id$
 //
 //----------------------------------------------------------------------------
 //
@@ -398,7 +398,7 @@ CityData *CityControlPanel::GetSelectedCity()
 	ctp2_ListItem *selItem = (ctp2_ListItem *)m_cityListDropDown->GetListBox()->GetSelectedItem();
 	if(!selItem) return NULL;
 	Unit u;
-	u.m_id = (uint32)selItem->GetUserData();
+	u.m_id = (long)selItem->GetUserData();//gcc >= 4 accepts this but it is still very dirty... see also below
 	if(!u.IsValid()) return NULL;
 	return u.CD();
 }
@@ -870,7 +870,7 @@ void CityControlPanel::SelectedCity()
 	for(i = 0; i < numberOfItems; i++) {
 		ctp2_ListItem *item = static_cast<ctp2_ListItem*>(m_cityListDropDown->GetListBox()->GetItemByIndex(i));
 		if(item) {
-			Unit thisCity; thisCity.m_id = (uint32)item->GetUserData();
+		  Unit thisCity; thisCity.m_id = (long)item->GetUserData(); //gcc >= 4 accepts this but it is still very dirty... see also below
 			if(thisCity.m_id == newCity.m_id) {
 				m_cityListDropDown->SetSelectedItem(i);
 				break;
@@ -920,7 +920,8 @@ AUI_ERRCODE CityControlPanel::ProgressDrawCallback(ctp2_Static *control,
 												   RECT &rect, 
 												   void *cookie)
 {
-	Unit city; city.m_id = (uint32)cookie;
+  //Unit city; city.m_id = reinterpret_cast<uint32>(cookie); //gcc >= 4 does not accept this any more
+  Unit city; city.m_id = (long)(cookie);//this is accepted but is still very dirty...
 
 	g_c3ui->TheBlitter()->ColorBlt(surface, &rect, RGB(0,0,0), 0);
 

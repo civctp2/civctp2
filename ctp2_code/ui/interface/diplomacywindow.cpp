@@ -560,9 +560,15 @@ void DiplomacyWindow::UpdateProposalList(ctp2_ListBox *propList, bool toPlayer)
 		const Response *response = NULL;
 		if(oldItem) {
 			if(toPlayer) {
+#if defined(__LP64__)
+				oldSelectedPlayer = (sint64)oldItem->GetUserData();
+			} else {
+				oldSelectedPlayer = (sint64)oldItem->GetUserData();
+#else
 				oldSelectedPlayer = (sint32)oldItem->GetUserData();
 			} else {
 				oldSelectedPlayer = (sint32)oldItem->GetUserData();
+#endif
 			}
 		}
 
@@ -1900,7 +1906,11 @@ STDEHANDLER(DipWinResponseReady)
 		sint32 i;
 		for(i = 0; i < lb->NumItems(); i++) {
 			ctp2_ListItem *item = (ctp2_ListItem *)lb->GetItemByIndex(i);
+#if defined(__LP64__)
+			if(sint64(item->GetUserData()) == p2) {
+#else
 			if(sint32(item->GetUserData()) == p2) {
+#endif
 				lb->SelectItem(item);
 				break;
 			}
@@ -1921,7 +1931,11 @@ STDEHANDLER(DipWinResponseReady)
 		sint32 i;
 		for(i = 0; i < lb->NumItems(); i++) {
 			ctp2_ListItem *item = (ctp2_ListItem *)lb->GetItemByIndex(i);
+#if defined(__LP64__)
+			if(sint64(item->GetUserData()) == p1) {
+#else
 			if(sint32(item->GetUserData()) == p1) {
+#endif
 				lb->SelectItem(item);
 				break;
 			}
@@ -1968,7 +1982,11 @@ STDEHANDLER(DipWinNewProposalEvent)
 			for(i = 0; i < lb->NumItems(); i++) {
 				ctp2_ListItem *item = (ctp2_ListItem *)lb->GetItemByIndex(i);
 				Assert(item);
+#if defined(__LP64__)
+				if(item && sint64(item->GetUserData()) == p1) {
+#else
 				if(item && sint32(item->GetUserData()) == p1) {
+#endif
 					lb->SelectItem(item);
 					break;
 				}
@@ -2011,7 +2029,11 @@ void DiplomacyWindow::Civ(aui_Control *control, uint32 action, uint32 data, void
 
 AUI_ERRCODE DiplomacyWindow::DrawCivColor(ctp2_Static *control, aui_Surface *surface, RECT &rect, void *cookie )
 {
+#if defined(__LP64__)
+	sint32 player = (sint64)cookie;
+#else
 	sint32 player = (sint32)cookie;
+#endif
 	Assert(g_colorSet);
 	if(!g_colorSet)
 		return AUI_ERRCODE_INVALIDPARAM;
@@ -2552,7 +2574,11 @@ void DiplomacyWindow::ProcessMenuSelection(sint32 itemIndex, void *cookie)
 		switch(rec->GetArg1()) {
 			case k_DiplomacyProposal_Arg1_OwnCity_Bit:
 			case k_DiplomacyProposal_Arg1_HisCity_Bit:
+#if defined(__LP64__)
+				arg.cityId = (sint64)cookie;
+#else
 				arg.cityId = (sint32)cookie;
+#endif
 				break;
 			case k_DiplomacyProposal_Arg1_OwnArmy_Bit:
 				break;
@@ -2564,7 +2590,11 @@ void DiplomacyWindow::ProcessMenuSelection(sint32 itemIndex, void *cookie)
 			case k_DiplomacyProposal_Arg1_HisAdvance_Bit:
 			case k_DiplomacyProposal_Arg1_OwnStopResearch_Bit:
 			case k_DiplomacyProposal_Arg1_HisStopResearch_Bit:
+#if defined(__LP64__)
+				arg.advanceType = (sint64)cookie;
+#else
 				arg.advanceType = (sint32)cookie;
+#endif
 				break;
 			case k_DiplomacyProposal_Arg1_OwnUnitType_Bit:
 				break;
@@ -2574,6 +2604,15 @@ void DiplomacyWindow::ProcessMenuSelection(sint32 itemIndex, void *cookie)
 				break;
 			case k_DiplomacyProposal_Arg1_OwnGold_Bit:
 			case k_DiplomacyProposal_Arg1_HisGold_Bit:
+#if defined(__LP64__)
+				arg.gold = (sint64)cookie;
+				break;
+			case k_DiplomacyProposal_Arg1_ThirdParty_Bit:
+				arg.playerId = (sint64)cookie;
+				break;
+			case k_DiplomacyProposal_Arg1_Percent_Bit:
+				arg.percent = (double) ((sint64) cookie) / 100.0;
+#else
 				arg.gold = (sint32)cookie;
 				break;
 			case k_DiplomacyProposal_Arg1_ThirdParty_Bit:
@@ -2581,6 +2620,7 @@ void DiplomacyWindow::ProcessMenuSelection(sint32 itemIndex, void *cookie)
 				break;
 			case k_DiplomacyProposal_Arg1_Percent_Bit:
 				arg.percent = (double) ((sint32) cookie) / 100.0;
+#endif
 				break;
 			default:
 				
@@ -2765,7 +2805,11 @@ void DiplomacyWindow::ProposalsMade(aui_Control *control, uint32 action, uint32 
 		s_dipWindow->ShowSections(k_DIPWIN_PROPOSALS_RECEIVED | k_DIPWIN_PROPOSALS_MADE | k_DIPWIN_PROPOSAL_DETAILS);
 	} else {
 
+#if defined(__LP64__)
+		sint32 otherPlayer = (sint64)item->GetUserData();
+#else
 		sint32 otherPlayer = (sint32)item->GetUserData();
+#endif
 		s_dipWindow->SetViewingResponse(g_selected_item->GetVisiblePlayer(),
 										otherPlayer);
 		RESPONSE_TYPE rtype = Diplomat::GetDiplomat(otherPlayer).GetResponsePending(g_selected_item->GetVisiblePlayer()).type;
@@ -2929,11 +2973,19 @@ void DiplomacyWindow::ThreatList(aui_Control *control, uint32 action, uint32 dat
 		ctp2_ListItem *selItem = (ctp2_ListItem *)lb->GetSelectedItem();
 		
 		if(selItem) {
+#if defined(__LP64__)
+			if(!s_dipWindow->ThreatContextMenu((sint64)selItem->GetUserData())) {
+				s_dipWindow->m_sendThreat = THREAT_NONE;
+				lb->DeselectItem(selItem);
+			} else {
+				s_dipWindow->m_sendThreat = (sint64)selItem->GetUserData();
+#else
 			if(!s_dipWindow->ThreatContextMenu((sint32)selItem->GetUserData())) {
 				s_dipWindow->m_sendThreat = THREAT_NONE;
 				lb->DeselectItem(selItem);
 			} else {
 				s_dipWindow->m_sendThreat = (sint32)selItem->GetUserData();
+#endif
 			}
 		}
 		s_dipWindow->Update();
@@ -2965,17 +3017,28 @@ void DiplomacyWindow::ThreatMenuCallback(ctp2_Menu *menu, CTP2_MENU_ACTION actio
 			ctp2_ListItem *item = (ctp2_ListItem *)lb->GetSelectedItem();
 			Assert(item); 
 			if(item) {
+#if defined(__LP64__)
+				s_dipWindow->m_sendThreat = (sint64)item->GetUserData();
+#else
 				s_dipWindow->m_sendThreat = (sint32)item->GetUserData();
+#endif
 				const DiplomacyThreatRecord *rec = g_theDiplomacyThreatDB->Get(s_dipWindow->m_sendThreat);
 				Assert(rec);
 				if(rec) {
 					switch(rec->GetArg1()) {
 						case k_DiplomacyThreat_Arg1_HisCity_Bit:
 						case k_DiplomacyThreat_Arg1_SpecialAttack_Bit:
+#if defined(__LP64__)
+							s_dipWindow->m_threatArg.cityId = (sint64)cookie;
+							break;
+						case k_DiplomacyThreat_Arg1_ThirdParty_Bit:
+							s_dipWindow->m_threatArg.playerId = (sint64)cookie;
+#else
 							s_dipWindow->m_threatArg.cityId = (sint32)cookie;
 							break;
 						case k_DiplomacyThreat_Arg1_ThirdParty_Bit:
 							s_dipWindow->m_threatArg.playerId = (sint32)cookie;
+#endif
 							break;
 						default:
 							
@@ -3048,7 +3111,11 @@ void DiplomacyWindow::TabPanelActionCallback(aui_Control *control, uint32 action
 		return;
 
 	
+#if defined(__LP64__)
+	sint32 section = (sint64)cookie;
+#else
 	sint32 section = (sint32)cookie;
+#endif
 
 	if(section != k_DIPWIN_CREATE_PROPOSAL) {
 		
