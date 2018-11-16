@@ -113,11 +113,8 @@ static void bExitPress( aui_Control *control, uint32 action, uint32 data, void *
 static
 sint32 removeMyWindow(uint32);
 
-
-
-
-
-static AUI_ERRCODE newC3Static(MBCHAR *parent,MBCHAR *name,c3_Static **mystatic)
+static AUI_ERRCODE
+newC3Static(const MBCHAR *parent, const MBCHAR *name, c3_Static **mystatic)
 {
 	MBCHAR			textBlock[ k_AUI_LDL_MAXBLOCK + 1 ];
 	AUI_ERRCODE errcode = AUI_ERRCODE_OK;
@@ -197,12 +194,6 @@ sint32 helptile_Initialize( void )
 
 static void mycleanup(c3_Static **mypointer)
 { if(*mypointer) { delete *mypointer; *mypointer = NULL; } }
-static void mycleanup(ctp2_Button **mypointer)
-{ if(*mypointer) { delete *mypointer; *mypointer = NULL; } }
-static void mycleanup(c3_ListBox **mypointer)
-{ if(*mypointer) { delete *mypointer; *mypointer = NULL; } }
-static void mycleanup(C3Window **mypointer)
-{ if(*mypointer) { delete *mypointer; *mypointer = NULL; } }
 static void mycleanup(TileControl **mypointer)
 { if(*mypointer) { delete *mypointer; *mypointer = NULL; } }
 static void mycleanup(aui_StringTable **mypointer)
@@ -269,7 +260,6 @@ void helptile_displayData(const MapPoint &p)
 // Added by Martin Gühmann
 
 	UnseenCellCarton ucell;
-	BOOL hasUnseen = FALSE;
 	if(!g_tiledMap->GetLocalVision()->IsVisible(p)
 	&& !g_fog_toggle
 	&& !g_god

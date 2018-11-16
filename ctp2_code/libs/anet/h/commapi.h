@@ -699,7 +699,7 @@ commRxPkt(
 typedef struct {			/* Request (filled in by caller) */
 	void *			address;	/* Free-format address buffer (or NULL) */
 	size_t			size;		/* Size of address buffer */
-	char *			printable;	/* Printable string (NUL-terminated) */
+	const char *		printable;	/* Printable string (NUL-terminated) */
 } commScanAddrReq_t;
 
 typedef struct {			/* Response (filled in by routine) */
@@ -732,7 +732,7 @@ commScanAddr(
  */
 
 typedef struct {			/* Request (filled in by caller) */
-	char *			printable;	/* For NUL-term printable string (or NULL) */
+	char *		printable;	/* For NUL-term printable string (or NULL) */
 	size_t			size;		/* Size of string buffer */
 	const void *	address;	/* (in format returned by commScanAddr) address data */
 	size_t			length;		/* Length of address data */

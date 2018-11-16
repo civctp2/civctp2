@@ -167,7 +167,7 @@ struct PSlicObject {
 	int m_is_alert;
 	int m_is_help;
 	char *m_ui_component;
-	char *m_event_name;
+	const char *m_event_name;
 	SLIC_PRI m_priority;
 	char *m_filename;
 };
@@ -205,7 +205,7 @@ extern int g_slicWarnUndeclared;
 extern FILE *debuglog;
 #endif
 
-SLIC_ERROR slicif_run_parser(char *filename, int symStart);
+SLIC_ERROR slicif_run_parser(const char *filename, int symStart);
 void slicif_add_object(struct PSlicObject* obj);
 void slicif_add_op(SOP op, ...);
 void slicif_init();
@@ -213,37 +213,37 @@ void slicif_cleanup();
 void slicif_set_start(int symStart);
 void slicif_start();
 void slicif_dump_code(unsigned char *code, int size);
-void slicif_declare_sym(char *name, SLIC_SYM type);
-void slicif_declare_array(char *name, SLIC_SYM type);
-void slicif_declare_fixed_array(char *name, SLIC_SYM type, int size);
+void slicif_declare_sym(const char *name, SLIC_SYM type);
+void slicif_declare_array(const char *name, SLIC_SYM type);
+void slicif_declare_fixed_array(const char *name, SLIC_SYM type, int size);
 
 void slicif_start_block();
 void slicif_end_block();
 
 void slicif_start_if();
 void slicif_end_if();
-void slicif_add_if_clause_end(char *ptr);
+void slicif_add_if_clause_end(unsigned char *ptr);
 
 void slicif_start_while();
 void slicif_end_while();
 
-int slicif_find_string(char *id);
+int slicif_find_string(const char *id);
 void slicif_set_file_num(int type);
-void slicif_add_region(char *name, int x1, int y1, int x2, int y2);
-void slicif_start_complex_region(char *name);
+void slicif_add_region(const char *name, int x1, int y1, int x2, int y2);
+void slicif_start_complex_region(const char *name);
 void slicif_finish_complex_region();
-void slicif_add_region_to_complex(char *name);
-int slicif_open_first_file(char *name);
+void slicif_add_region_to_complex(const char *name);
+int slicif_open_first_file(const char *name);
 const char *slicif_current_file();
 
-void slicif_add_parameter(SLIC_SYM type, char *name);
+void slicif_add_parameter(SLIC_SYM type, const char *name);
 void slicif_function_return(SF_RET rettype);
 
-void slicif_start_segment(char *name);
+void slicif_start_segment(const char *name);
 
-void slicif_get_local_name(char *localName, char *name);
+void slicif_get_local_name(char *localName, const char *name);
 
-void slicif_add_prototype(char *name);
+void slicif_add_prototype(const char *name);
 
 void slicif_start_for();
 void slicif_for_expression();
@@ -251,26 +251,26 @@ void slicif_for_continue();
 void slicif_start_for_body();
 void slicif_end_for();
 
-int slicif_find_const(char *name, int *value);
-void slicif_add_const(char *name, int value);
+int slicif_find_const(const char *name, int *value);
+void slicif_add_const(const char *name, int value);
 
-void slicif_check_event_exists(char *name);
-char *slicif_create_name(char *base);
+void slicif_check_event_exists(const char *name);
+char *slicif_create_name(const char *base);
 
 void slicif_set_priority(SLIC_PRI pri);
 SLIC_PRI slicif_get_priority();
 
 char *slicif_get_segment_name_copy();
-void slicif_set_event_checking(char *eventname);
+void slicif_set_event_checking(const char *eventname);
 
-void slicif_add_local_struct(char *structtype, char *name);
+void slicif_add_local_struct(const char *structtype, const char *name);
 
 void slicif_register_line(int line, int offset);
 
 const char *slicif_get_filename();
 
-void slicif_start_event(char *name);
-void slicif_check_arg_symbol(SLIC_SYM type, char *typeName);
+void slicif_start_event(const char *name);
+void slicif_check_arg_symbol(SLIC_SYM type, const char *typeName);
 void slicif_check_argument();
 void slicif_check_string_argument();
 void slicif_check_hard_string_argument();
@@ -279,9 +279,9 @@ void slicif_check_num_args();
 int slicif_find_db(const char *dbname, void **dbptr);
 int slicif_find_db_index(void *dbptr, const char *name);
 
-int slicif_find_file(char *filename, char *fullpath);
-void slicif_report_error(char *s);
-int slicif_is_valid_string(char *s);
+int slicif_find_file(const char *filename, char *fullpath);
+void slicif_report_error(const char *s);
+int slicif_is_valid_string(const char *s);
 
 int slicif_find_db_value(void *dbptr, const char *recname, const char *valname);
 int slicif_find_db_value_by_index(void *dbptr, int index, const char *valname);
@@ -297,7 +297,7 @@ int slicif_is_name(void *dbptr, const char *name);
 
 #if defined(__cplusplus)
 class SlicNamedSymbol;
-SlicNamedSymbol *slicif_get_symbol(char *name);
+SlicNamedSymbol *slicif_get_symbol(const char *name);
 #endif
 
 #endif

@@ -71,7 +71,7 @@ AUI_ERRCODE aui_DragDropWindow::DrawThis(
 		BOOL wasHidden = m_dragDropItem->IsHidden();
 		m_dragDropItem->Show();
 
-		AUI_ERRCODE errcode = m_dragDropItem->Draw(
+		m_dragDropItem->Draw(
 			surface,
 			-itemPoint.x,
 			-itemPoint.y );

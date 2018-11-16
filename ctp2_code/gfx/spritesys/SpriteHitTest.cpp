@@ -34,6 +34,7 @@
 #include "spriteutils.h"
 #include "Sprite.h"
 
+
 #ifdef _MSC_VER
 #pragma optimize ("agtp", on)
 #endif

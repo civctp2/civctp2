@@ -298,7 +298,7 @@ int g_gameWatchID = -1;
 #if defined(USE_SDL) || defined(__AUI_USE_SDL__)
 #include <SDL.h>
 #endif
-#ifdef LINUX
+#ifndef WIN32
 #include <time.h>
 #endif
 
@@ -781,8 +781,7 @@ sint32 CivApp::InitializeAppDB(CivArchive &archive)
 	}
 
 	// Has to be done after the initialization of the string database
-	MBCHAR s[_MAX_PATH];
-	sprintf( s, g_theStringDB->GetNameStr("LOADING") );
+	const char *s = g_theStringDB->GetNameStr("LOADING");
 	g_theProgressWindow->StartCountingTo( 10, s );
 
 	Assert(g_theSoundDB);
@@ -1884,8 +1883,7 @@ sint32 CivApp::InitializeGameUI(void)
 		"InitProgressWindow",
 		130 );
 
-	MBCHAR s[_MAX_PATH];
-	sprintf( s, g_theStringDB->GetNameStr("LOADING") );
+	const char *s = g_theStringDB->GetNameStr("LOADING");
 
 	g_theProgressWindow->StartCountingTo( 10, s );
 
@@ -2300,8 +2298,7 @@ sint32 InitializeSpriteEditorUI(void)
 		"InitProgressWindow",
 		120 );
 
-	MBCHAR s[_MAX_PATH];
-	sprintf( s, g_theStringDB->GetNameStr("LOADING") );
+	const char *s = g_theStringDB->GetNameStr("LOADING");
 
 	g_theProgressWindow->StartCountingTo( 10, s );
 
@@ -2400,8 +2397,7 @@ sint32 CivApp::InitializeSpriteEditor(CivArchive &archive)
 		"InitProgressWindow",
 		860 );
 
-	MBCHAR s[_MAX_PATH];
-	sprintf( s, g_theStringDB->GetNameStr("LOADING") );
+	const char * s = g_theStringDB->GetNameStr("LOADING");
 
 	g_theProgressWindow->StartCountingTo( 10, s );
 
@@ -2932,12 +2928,6 @@ sint32 CivApp::ProcessAI()
 	if(victorywin_IsOnScreen())
 		return 0;
 
-#ifdef USE_SDL
-	uint32 start_time_ms = SDL_GetTicks();
-#else
-	uint32 start_time_ms = GetTickCount();
-#endif
-
 	if (g_c3ui->TheMouse()) {
 		if (g_c3ui->TheMouse()->IsSuspended() && !g_runInBackground) {
 			return 0;
@@ -3234,8 +3224,7 @@ sint32 CivApp::LoadSavedGame(MBCHAR *name)
 		"InitProgressWindow",
 		1300 );
 
-	MBCHAR s[_MAX_PATH];
-	sprintf( s, g_theStringDB->GetNameStr("LOADING") );
+	const char *s = g_theStringDB->GetNameStr("LOADING");
 
 	char filepath[_MAX_PATH]={0};
 	FILE *fin=NULL;
@@ -3704,8 +3693,8 @@ int InitializeImageMaps()
 {
     MBCHAR path[_MAX_PATH] = { 0 };
     int i=0;
-    char *patname;
-    char *picname;
+    const char *patname;
+    const char *picname;
 
     Assert(g_c3ui);
     if (g_c3ui->Primary())

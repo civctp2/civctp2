@@ -113,7 +113,7 @@ DBLexer::~DBLexer()
 	}
 }
 
-void DBLexer::SetTokens(char **tokens, sint32 maxToken)
+void DBLexer::SetTokens(const char **tokens, sint32 maxToken)
 {
 
 	Assert(maxToken > k_Token_Custom_Base);
@@ -282,7 +282,7 @@ bool DBLexer::GetBitIndex(const char **bitnames, sint32 numBitnames, sint32 &ind
 	return false;
 }
 
-void DBLexer::ReportError(char *fmt, ...)
+void DBLexer::ReportError(const char *fmt, ...)
 {
 	va_list list;
 	va_start(list, fmt);

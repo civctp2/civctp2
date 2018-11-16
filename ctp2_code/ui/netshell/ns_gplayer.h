@@ -36,11 +36,11 @@ public:
 	ns_GPlayer(NETFunc::Player * player);
 	void Update( NETFunc::Player *player );
 
-	char *m_host;
-	char *m_launched;
-	char *m_name;
+	const char *m_host;
+	const char *m_launched;
+	const char *m_name;
 	int m_ping;
-	char *m_tribe;
+	const char *m_tribe;
 
 	int m_civpoints;
 	int m_pwpoints;

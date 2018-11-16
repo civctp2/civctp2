@@ -555,7 +555,7 @@ AUI_ERRCODE SpriteEditWindow::InitCommon(void)
 }
 
 
-AUI_ERRCODE SpriteEditWindow::InitCommonLdl(MBCHAR *ldlBlock)
+AUI_ERRCODE SpriteEditWindow::InitCommonLdl(const MBCHAR *ldlBlock)
 {
 	InitCommon();
 	return C3Window::InitCommon();
@@ -582,7 +582,7 @@ SpriteEditWindow::FileExists(char *name)
 	MBCHAR spritePath[_MAX_PATH];
 	MBCHAR fullPath[_MAX_PATH];
 	g_civPaths->GetSpecificPath(C3DIR_SPRITES, spritePath, FALSE);
-	sprintf(fullPath, "%s\\%s", spritePath,name);
+	sprintf(fullPath, "%s" FILE_SEP "%s", spritePath,name);
 
 	if (c3files_PathIsValid(fullPath))
 		return true;
@@ -590,11 +590,8 @@ SpriteEditWindow::FileExists(char *name)
 	return false;
 }
 
-
-
-
 void
-SpriteEditWindow::LoadSprite(char *name)
+SpriteEditWindow::LoadSprite(const char *name)
 {
 	char tbuffer[256];
 
@@ -681,14 +678,10 @@ SpriteEditWindow::LoadSprite(char *name)
 	m_drawFlag      = true;
 }
 
-
-
-
 void
-SpriteEditWindow::SaveSprite(char *name)
+SpriteEditWindow::SaveSprite(const char *name)
 {
 	char tbuffer[256];
-	char *fname=name;
 
 	if (name==NULL)
 	{
@@ -703,13 +696,10 @@ SpriteEditWindow::SaveSprite(char *name)
 
 	m_currentSprite->Save(name,k_SPRITEFILE_VERSION2,SPRDATA_LZW1);
 
-	sprintf(tbuffer,"%s.TXT",fname);
+	sprintf(tbuffer,"%s.TXT", name);
 
 	m_currentSprite->ExportScript(name);
 }
-
-
-
 
 void
 SpriteEditWindow::BeginAnimation()
@@ -717,8 +707,6 @@ SpriteEditWindow::BeginAnimation()
 
 	if (m_currentAnim==NULL)
 		return;
-
-	sint32	  speed				= g_theProfileDB->GetUnitSpeed();
 
 	m_frame = 0;
 
@@ -746,14 +734,11 @@ SpriteEditWindow::BeginAnimation()
 
 }
 
-
-
-
 void
 SpriteEditWindow::Animate()
 {
 	BOOL	animation_over=false;
-	sint32 	last_frame=m_frame,num_frames=0;
+	sint32 	num_frames=0;
 
 	if (m_currentAnim!=NULL)
 	{

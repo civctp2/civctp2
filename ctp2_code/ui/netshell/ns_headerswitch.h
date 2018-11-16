@@ -17,7 +17,7 @@ public:
 	ns_HeaderSwitch(
 		AUI_ERRCODE *retval,
 		uint32 id,
-		MBCHAR *ldlBlock,
+		const MBCHAR *ldlBlock,
 		ControlActionCallback *ActionFunc = NULL,
 		void *cookie = NULL );
 	ns_HeaderSwitch(
@@ -38,11 +38,11 @@ public:
 
 protected:
 	ns_HeaderSwitch() : aui_Radio() {}
-	AUI_ERRCODE InitCommonLdl( MBCHAR *ldlBlock );
-	AUI_ERRCODE InitCommon( MBCHAR *icon );
+	AUI_ERRCODE InitCommonLdl(const MBCHAR *ldlBlock);
+	AUI_ERRCODE InitCommon(const MBCHAR *icon);
 
 protected:
-	AUI_ERRCODE	SetIcon( MBCHAR *icon );
+	AUI_ERRCODE	SetIcon(const MBCHAR *icon);
 	aui_Image	*GetIcon( void ) const { return m_icon; }
 
 	virtual AUI_ERRCODE DrawThis(

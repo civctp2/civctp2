@@ -18,8 +18,8 @@ extern aui_UI		*g_ui;
 StaticPicture::StaticPicture(
 	AUI_ERRCODE *retval,
 	uint32 id,
-	MBCHAR *ldlBlock,
-	MBCHAR *picture )
+	const MBCHAR *ldlBlock,
+	const MBCHAR *picture )
 	:
 	aui_ImageBase( ldlBlock ),
 	aui_TextBase(ldlBlock, (MBCHAR *)NULL),
@@ -41,7 +41,7 @@ StaticPicture::StaticPicture(
 	sint32 y,
 	sint32 width,
 	sint32 height,
-	MBCHAR *picture )
+	const MBCHAR *picture )
 	:
 	aui_ImageBase( (sint32)0 ),
 	aui_TextBase(NULL),
@@ -56,7 +56,7 @@ StaticPicture::StaticPicture(
 }
 
 
-AUI_ERRCODE StaticPicture::InitCommon( MBCHAR *ldlBlock, MBCHAR *picture )
+AUI_ERRCODE StaticPicture::InitCommon(const MBCHAR *ldlBlock, const MBCHAR *picture)
 {
 	aui_Ldl *theLdl = g_ui->GetLdl();
 
@@ -68,7 +68,7 @@ AUI_ERRCODE StaticPicture::InitCommon( MBCHAR *ldlBlock, MBCHAR *picture )
 	Assert( block != NULL );
 	if ( !block ) return AUI_ERRCODE_LDLFINDDATABLOCKFAILED;
 
-	MBCHAR *name =
+	const MBCHAR *name =
 		block->GetString( picture ? picture : k_AUI_STATICIMAGE_LDL_IMAGE );
 	Assert( name != NULL );
 	if ( name )
@@ -82,7 +82,7 @@ AUI_ERRCODE StaticPicture::InitCommon( MBCHAR *ldlBlock, MBCHAR *picture )
 }
 
 
-AUI_ERRCODE StaticPicture::InitCommon( MBCHAR *picture )
+AUI_ERRCODE StaticPicture::InitCommon(const MBCHAR *picture)
 {
 	AUI_ERRCODE errcode;
 

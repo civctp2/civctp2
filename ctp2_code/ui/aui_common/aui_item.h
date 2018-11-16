@@ -11,7 +11,7 @@ public:
 	aui_Item(
 		AUI_ERRCODE *retval,
 		uint32 id,
-		MBCHAR *ldlBlock )
+		const MBCHAR *ldlBlock)
 		:
 		aui_ImageBase( ldlBlock ),
 		aui_TextBase( ldlBlock, (const MBCHAR *)NULL ),

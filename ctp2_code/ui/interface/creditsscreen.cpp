@@ -153,9 +153,6 @@ sint32 creditsscreen_Initialize()
 	Assert(AUI_SUCCESS(errcode));
 	if(!AUI_SUCCESS(errcode)) return(-1);
 
-
-	C3Window *initPlayWindow = GetInitialPlayScreen();
-
 	g_creditsWindow->Move((g_ScreenWidth - g_creditsWindow->Width()) / 2,
 		(g_ScreenHeight - g_creditsWindow->Height()) / 2);
 
@@ -183,7 +180,7 @@ void creditsscreen_Cleanup()
 class c3_SimpleAnimation : public aui_Static {
 public:
 
-	c3_SimpleAnimation(AUI_ERRCODE *retval, uint32 id, MBCHAR *ldlBlock)
+	c3_SimpleAnimation(AUI_ERRCODE *retval, uint32 id, const MBCHAR *ldlBlock)
 	:	aui_Static(retval, id, ldlBlock),
 		m_frames(NULL),
 		m_currentFrame(0),
@@ -221,7 +218,7 @@ protected:
 	{
 	};
 
-	void InitCommonLdl(MBCHAR *ldlBlock);
+	void InitCommonLdl(const MBCHAR *ldlBlock);
 
 	void UpdateAnimation(sint32 deltaTime);
 
@@ -239,8 +236,6 @@ private:
 
 AUI_ERRCODE c3_SimpleAnimation::Idle()
 {
-
-	int index = 0;
 
 	sint32 deltaTime = GetTickCount() - lastIdle;
 
@@ -262,7 +257,7 @@ AUI_ERRCODE c3_SimpleAnimation::Idle()
 	return AUI_ERRCODE_OK;
 }
 
-void c3_SimpleAnimation::InitCommonLdl(MBCHAR *ldlBlock)
+void c3_SimpleAnimation::InitCommonLdl(const MBCHAR *ldlBlock)
 {
 
 	AUI_ERRCODE errcode;
@@ -357,7 +352,7 @@ protected:
 
 	virtual AUI_ERRCODE DrawBlendImage(aui_Surface *destSurf, RECT *destRect);
 
-	void InitCommonLdl(MBCHAR *ldlBlock);
+	void InitCommonLdl(const MBCHAR *ldlBlock);
 
 private:
 
@@ -476,8 +471,6 @@ AUI_ERRCODE c3_TriggeredAnimation::Idle()
 
 	if(m_blendVal >= k_C3_ANIMATION_MAXBLEND) return AUI_ERRCODE_OK;
 
-	int index = 0;
-
 	sint32 deltaTime = GetTickCount() - lastIdle;
 
 	if(deltaTime < m_blendSpeed) return AUI_ERRCODE_OK;
@@ -504,7 +497,7 @@ AUI_ERRCODE c3_TriggeredAnimation::Idle()
 	return AUI_ERRCODE_OK;
 }
 
-void c3_TriggeredAnimation::InitCommonLdl(MBCHAR *ldlBlock)
+void c3_TriggeredAnimation::InitCommonLdl(const MBCHAR *ldlBlock)
 {
 
 	AUI_ERRCODE errcode;
@@ -572,14 +565,14 @@ struct sCreditsLine
 	uint32			 m_font;
 	sCreditsLine	*m_pNext;
 
-	sCreditsLine(uint32 font, MBCHAR *pText);
+	sCreditsLine(uint32 font, const MBCHAR *pText);
 };
 
 
 class cCreditsPage
 {
 public:
-	void			 AddLine(uint32 font, MBCHAR *pText);
+	void			 AddLine(uint32 font, const MBCHAR *pText);
 	void			 ResetLines(void);
 	cCreditsPage(void);
 	~cCreditsPage();
@@ -618,7 +611,7 @@ public:
 	(
 		AUI_ERRCODE *	retval,
 		uint32			id,
-		MBCHAR *		ldlBlock
+		const MBCHAR *		ldlBlock
 	)
 	:	aui_Static(retval, id, ldlBlock),
 		m_lastIdle(GetTickCount()),
@@ -653,7 +646,7 @@ public:
 		sint32			y,
 		sint32			width,
 		sint32			height,
-		const MBCHAR *	text		= NULL,
+		const MBCHAR *	text	= NULL,
 		uint32			maxLength	= 0
 	)
 	:	aui_Static(retval, id, x, y, width, height, text, maxLength),
@@ -700,11 +693,11 @@ public:
 
 private:
 
-	bool ParseFontDef(MBCHAR *pToken);
-	uint32 GetFontNumber(MBCHAR *pToken);
-	uint32 GetFontSize(MBCHAR *pToken);
-	uint32 GetNumberFromToken(MBCHAR *pToken);
-	eTokenType TokenType(MBCHAR *pToken);
+	bool ParseFontDef(const MBCHAR *pToken);
+	uint32 GetFontNumber(const MBCHAR *pToken);
+	uint32 GetFontSize(const MBCHAR *pToken);
+	uint32 GetNumberFromToken(const MBCHAR *pToken);
+	eTokenType TokenType(const MBCHAR *pToken);
 	bool IsDelimeter(char c);
 	bool IsComment(char c);
 	void ReadToEOL(FILE *textfile);
@@ -726,16 +719,9 @@ private:
 
 };
 
-
-
-
-
-
-
-
-
-CreditsWindow::CreditsWindow(AUI_ERRCODE *retval, sint32 id, MBCHAR *ldlBlock, sint32 bpp,
-							 AUI_WINDOW_TYPE type, bool bevel)
+CreditsWindow::CreditsWindow(AUI_ERRCODE *retval, sint32 id,
+    const MBCHAR *ldlBlock, sint32 bpp,
+    AUI_WINDOW_TYPE type, bool bevel)
 	:	C3Window(retval, id, ldlBlock, bpp, type, bevel)
 {
 
@@ -749,8 +735,8 @@ CreditsWindow::CreditsWindow(AUI_ERRCODE *retval, sint32 id, MBCHAR *ldlBlock, s
 }
 
 CreditsWindow::CreditsWindow(AUI_ERRCODE *retval, uint32 id, sint32 x, sint32 y,
-							 sint32 width, sint32 height, sint32 bpp, MBCHAR *pattern,
-							 AUI_WINDOW_TYPE type, bool bevel)
+    sint32 width, sint32 height, sint32 bpp, const MBCHAR *pattern,
+    AUI_WINDOW_TYPE type, bool bevel)
 	:	C3Window(retval, id, x, y, width, height, bpp, pattern, type, bevel)
 {
 
@@ -795,8 +781,6 @@ AUI_ERRCODE CreditsWindow::Idle()
 
 	int index = 0;
 
-	sint32 tickCount = GetTickCount();
-
 	sint32 deltaTime = GetTickCount() - lastIdle;
 
 	if(deltaTime < m_animationSpeed) return AUI_ERRCODE_OK;
@@ -821,7 +805,7 @@ AUI_ERRCODE CreditsWindow::Idle()
 	return AUI_ERRCODE_OK;
 }
 
-void CreditsWindow::InitCommonLdl(MBCHAR *ldlBlock)
+void CreditsWindow::InitCommonLdl(const MBCHAR *ldlBlock)
 {
 
 	AUI_ERRCODE errcode;
@@ -1015,7 +999,7 @@ void CreditsWindow::ShowSecretImage()
 
 
 
-sCreditsLine::sCreditsLine(uint32 font, MBCHAR *pText)
+sCreditsLine::sCreditsLine(uint32 font, const MBCHAR *pText)
 {
 	strcpy(m_text, pText);
 	m_font = font;
@@ -1042,7 +1026,7 @@ cCreditsPage::~cCreditsPage()
 	}
 }
 
-void cCreditsPage::AddLine(uint32 font, MBCHAR *pText)
+void cCreditsPage::AddLine(uint32 font, const MBCHAR *pText)
 {
 	sCreditsLine *pLine = new sCreditsLine(font, pText);
 	if (m_numLines)
@@ -1366,7 +1350,7 @@ bool c3_CreditsText::IsDelimeter(char c)
 
 
 
-eTokenType c3_CreditsText::TokenType(MBCHAR *pToken)
+eTokenType c3_CreditsText::TokenType(const MBCHAR *pToken)
 {
 	if (!strnicmp(pToken, "<fontDef", 8))
 	{
@@ -1407,7 +1391,7 @@ eTokenType c3_CreditsText::TokenType(MBCHAR *pToken)
 	return kText;
 }
 
-bool c3_CreditsText::ParseFontDef(MBCHAR *pToken)
+bool c3_CreditsText::ParseFontDef(const MBCHAR *pToken)
 {
 	MBCHAR errorStr[128];
 
@@ -1432,16 +1416,16 @@ bool c3_CreditsText::ParseFontDef(MBCHAR *pToken)
 }
 
 
-uint32 c3_CreditsText::GetFontSize(MBCHAR *pToken)
+uint32 c3_CreditsText::GetFontSize(const MBCHAR *pToken)
 {
 
 	return GetNumberFromToken(pToken);
 }
 
-uint32 c3_CreditsText::GetNumberFromToken(MBCHAR *pToken)
+uint32 c3_CreditsText::GetNumberFromToken(const MBCHAR *pToken)
 {
 
-	MBCHAR *pFoo = pToken;
+	const MBCHAR *pFoo = pToken;
 	bool error = true;
 	int i;
 	int len = strlen(pToken);
@@ -1464,12 +1448,11 @@ uint32 c3_CreditsText::GetNumberFromToken(MBCHAR *pToken)
 	return atoi(pFoo);
 }
 
-
-uint32 c3_CreditsText::GetFontNumber(MBCHAR *pToken)
+uint32 c3_CreditsText::GetFontNumber(const MBCHAR *pToken)
 {
 	uint32 retval = GetNumberFromToken(pToken);
 
-	if ((retval < 0)  || (retval > kCreditsTextNumFonts))
+	if (retval > kCreditsTextNumFonts)
 	{
 		return (unsigned) -1;
 	}
@@ -1492,8 +1475,6 @@ void c3_CreditsText::ResetPages()
 
 AUI_ERRCODE c3_CreditsText::Idle()
 {
-
-	int index = 0;
 
 	sint32 deltaTime = GetTickCount() - m_lastIdle;
 

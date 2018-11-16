@@ -62,7 +62,7 @@ public:
 	aui_TextField(
 		AUI_ERRCODE *retval,
 		uint32 id,
-		MBCHAR *ldlBlock,
+		const MBCHAR *ldlBlock,
 		ControlActionCallback *ActionFunc = NULL,
 		void *cookie = NULL );
 	aui_TextField(
@@ -79,7 +79,7 @@ public:
 
 protected:
 	aui_TextField() : aui_Win() {}
-	AUI_ERRCODE InitCommonLdl( MBCHAR *ldlBlock );
+	AUI_ERRCODE InitCommonLdl(const MBCHAR *ldlBlock);
 	AUI_ERRCODE InitCommon(
 		const MBCHAR *text,
 		const MBCHAR *font,

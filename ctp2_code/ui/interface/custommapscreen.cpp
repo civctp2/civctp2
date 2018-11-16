@@ -67,7 +67,6 @@ extern sint32				g_god;
 
 static aui_StringTable *s_closeButtonStrings = NULL;
 static c3_PopupWindow	*s_customMapWindow	= NULL;
-static c3_Button	*s_back				= NULL;
 static C3Slider		*s_wetdry			= NULL,
 					*s_warmcold			= NULL,
 					*s_oceanland		= NULL,
@@ -166,7 +165,6 @@ AUI_ERRCODE custommapscreen_Initialize( aui_Control::ControlActionCallback *call
 	{
 		s_customMapWindow = new c3_PopupWindow( &errcode, aui_UniqueId(), windowBlock, 16, AUI_WINDOW_TYPE_FLOATING, false);
 		Assert( AUI_NEWOK(s_customMapWindow, errcode) );
-		if ( !AUI_NEWOK(s_customMapWindow, errcode) ) errcode;
 
 		s_customMapWindow->Resize(s_customMapWindow->Width(),s_customMapWindow->Height());
 		s_customMapWindow->GrabRegion()->Resize(s_customMapWindow->Width(),s_customMapWindow->Height());

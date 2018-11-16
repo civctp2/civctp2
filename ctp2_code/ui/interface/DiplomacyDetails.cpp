@@ -89,7 +89,7 @@
 #include "ctp2_hypertextbox.h"
 
 static DiplomacyDetails     *s_DiplomacyDetails;
-static MBCHAR               *s_DiplomacyDetailsBlock = "DiplomacyDetails";
+static const MBCHAR         *s_DiplomacyDetailsBlock = "DiplomacyDetails";
 
 #define k_INT_FLAG_COL      0
 #define k_INT_NATION_COL    1
@@ -280,7 +280,7 @@ AUI_ERRCODE DiplomacyDetails::Display(Unit *cfdshk)
 					Civilisation civ = *g_player[p]->m_civilisation;
 
 					if((child = (ctp2_Static *)item->GetChildByIndex(k_INT_FLAG_COL))) {
-						child->SetDrawCallbackAndCookie(DrawPlayerFlag, (void *)p, false);
+						child->SetDrawCallbackAndCookie(DrawPlayerFlag, (void *)(intptr_t)p, false);
 						child->SetActionFuncAndCookie(SelectItem, (void *)item);
 					}
 					if((child = (ctp2_Static *)item->GetChildByIndex(k_INT_NATION_COL))) {
@@ -291,7 +291,7 @@ AUI_ERRCODE DiplomacyDetails::Display(Unit *cfdshk)
 					}
 
 					if((child = (ctp2_Static *)item->GetChildByIndex(k_INT_REGARD_COL))) {
-						child->SetDrawCallbackAndCookie(DrawPlayerRegard, (void *)p, true);
+						child->SetDrawCallbackAndCookie(DrawPlayerRegard, (void *)(intptr_t)p, true);
 						MBCHAR buf[k_MAX_NAME_LEN];
 						sprintf(buf, "%s: %d",
 								g_theStringDB->GetNameStr("str_ldl_Regard"),
@@ -301,7 +301,7 @@ AUI_ERRCODE DiplomacyDetails::Display(Unit *cfdshk)
 					}
 
 					if((child = (ctp2_Static *)item->GetChildByIndex(k_INT_STRENGTH_COL))) {
-						child->SetDrawCallbackAndCookie(DrawPlayerStrength, (void *)p, true);
+						child->SetDrawCallbackAndCookie(DrawPlayerStrength, (void *)(intptr_t)p, true);
 
 						MBCHAR buf[k_MAX_NAME_LEN];
 						sprintf(buf, "%s: %d",
@@ -312,17 +312,17 @@ AUI_ERRCODE DiplomacyDetails::Display(Unit *cfdshk)
 					}
 
 					if((child = (ctp2_Static *)item->GetChildByIndex(k_INT_EMBASSY_COL))) {
-						child->SetDrawCallbackAndCookie(DrawEmbassy, (void *)p, true);
+						child->SetDrawCallbackAndCookie(DrawEmbassy, (void *)(intptr_t)p, true);
 						child->SetActionFuncAndCookie(SelectItem, (void *)item);
 					}
 
 					if((child = (ctp2_Static *)item->GetChildByIndex(k_INT_TREATIES_COL))) {
-						child->SetDrawCallbackAndCookie(DrawTreaties, (void *)p, true);
+						child->SetDrawCallbackAndCookie(DrawTreaties, (void *)(intptr_t)p, true);
 
 						child->SetActionFuncAndCookie(SelectItem, (void *)item);
 					}
 
-					item->SetUserData((void*)p);
+					item->SetUserData((void*)(intptr_t)p);
 					sm_list->AddItem(item);
 				}
 			}
@@ -676,8 +676,8 @@ AUI_ERRCODE DiplomacyDetails::DrawPlayerRegard(ctp2_Static *control,
 												 void *cookie)
 {
 	aui_Image *image = NULL;
-	MBCHAR *imageName = NULL;
-	char **toneIcons = DiplomacyWindow::GetToneIcons();
+	const MBCHAR *imageName = NULL;
+	const char **toneIcons = DiplomacyWindow::GetToneIcons();
 #if defined(__LP64__)
 	sint32 p = (sint64)cookie;
 #else
@@ -738,7 +738,7 @@ AUI_ERRCODE DiplomacyDetails::DrawPlayerStrength(ctp2_Static *control,
 												   void *cookie)
 {
 	aui_Image *image = NULL;
-	MBCHAR *imageName = NULL;
+	const MBCHAR *imageName = NULL;
 #if defined(__LP64__)
 	sint32 p = (sint64)cookie;
 #else
@@ -807,8 +807,7 @@ AUI_ERRCODE DiplomacyDetails::DrawEmbassy(ctp2_Static *control,
 											RECT &rect,
 											void *cookie)
 {
-	aui_Image *image = NULL;
-	MBCHAR *imageName = NULL;
+	const MBCHAR *imageName = NULL;
 #if defined(__LP64__)
 	sint32 p = (sint64)cookie;
 #else

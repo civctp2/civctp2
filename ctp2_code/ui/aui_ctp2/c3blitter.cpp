@@ -49,10 +49,10 @@ C3Blitter::C3Blitter() : aui_NativeBlitter()
 
 
    if(CheckMMXTechnology())
-       _Blt16To16Fast = &Blt16To16FastMMX;
+       _Blt16To16Fast = &C3Blitter::Blt16To16FastMMX;
    else{
        printf("%s L%d: Using slow blitting!\n", __FILE__, __LINE__);
-       _Blt16To16Fast = &Blt16To16Fast;
+       _Blt16To16Fast = &C3Blitter::Blt16To16Fast;
        }
 };
 
@@ -189,7 +189,9 @@ AUI_ERRCODE C3Blitter::Blt16To16Fast(
 
 			if ( flags & k_AUI_BLITTER_FLAG_COPY )
 			{
+#ifdef _MSC_VER
 				const sint32 scanWidth = 2 * ( srcRect->right - srcRect->left );
+#endif
 
 				const uint16 *stop = srcBuf + srcPitch * ( srcRect->bottom - srcRect->top );
 
@@ -519,7 +521,9 @@ AUI_ERRCODE C3Blitter::Blt16To16FastFPU(
 
 			if ( flags & k_AUI_BLITTER_FLAG_COPY )
 			{
+#ifdef _MSC_VER
 				const sint32 scanWidth = 2 * ( srcRect->right - srcRect->left );
+#endif
 
 				const uint16 *stop = srcBuf + srcPitch * ( srcRect->bottom - srcRect->top );
 

@@ -78,8 +78,8 @@
 #include "net_action.h"
 
 static UnitManager *s_unitManager = NULL;
-static MBCHAR *s_unitManagerBlock = "UnitManager";
-static MBCHAR *s_unitManagerAdviceBlock = "UnitManagerAdviceWindow";
+static const MBCHAR *s_unitManagerBlock = "UnitManager";
+static const MBCHAR *s_unitManagerAdviceBlock = "UnitManagerAdviceWindow";
 bool UnitManager::sm_statsTabVisible = true;
 
 extern C3UI *g_c3ui;
@@ -307,7 +307,7 @@ void UnitManager::UpdateStatsList()
 	Assert(m_statsList);
 	if(!m_statsList) return;
 
-	sint32 i;
+	intptr_t i;
 	sint32 visP = g_selected_item->GetVisiblePlayer();
 	if(!g_player[visP]) return;
 	Player *pl = g_player[visP];
@@ -478,9 +478,9 @@ void UnitManager::UpdateTacticalList()
 
 			child = (ctp2_Static *)item->GetChildByIndex(k_TACTICAL_HEALTH_COL);
 			if(child) {
-				child->SetDrawCallbackAndCookie(DrawHealthBar, (void *)u.m_id);
+				child->SetDrawCallbackAndCookie(DrawHealthBar, (void *)(uintptr_t)u.m_id);
 			}
-			item->SetUserData((void *)u.m_id);
+			item->SetUserData((void *)(uintptr_t)u.m_id);
 			item->SetCompareCallback(CompareTacticalItems);
 			m_tacticalList->AddItem(item);
 		}

@@ -10,7 +10,7 @@ class ctp2_Button;
 class ZoomPad {
 public:
 
-	ZoomPad(MBCHAR *ldlBlock);
+	ZoomPad(const MBCHAR *ldlBlock);
 
 
 	void Update();

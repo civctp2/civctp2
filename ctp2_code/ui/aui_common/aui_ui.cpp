@@ -314,7 +314,6 @@ aui_UI::~aui_UI()
 
 	free_crc();
 
-	sint32 test = aui_Base::GetBaseRefCount();
 #ifndef __AUI_USE_SDL__
 	Assert( aui_Base::GetBaseRefCount() == 2 );
 #endif
@@ -1202,7 +1201,7 @@ void aui_UI::SetEditRegion( aui_Region *region )
 
 			MBCHAR *lastName = ldlBlock;
 
-			for(; *ldlBlock; *ldlBlock++) {
+			for(; *ldlBlock; ldlBlock++) {
 				*p++ = *ldlBlock;
 				if (*ldlBlock == '.') {
 					*p++ = ' ';

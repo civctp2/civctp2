@@ -68,10 +68,9 @@
 
 extern ColorSet *g_colorSet;
 
-static sint32 k_ONE_FIVE__NEG_TWO_TWO_CONVERSION = 3;
 static sint32 k_ZERO_FOUR__NEG_TWO_TWO_CONVERSION = 2;
 
-CauseAndEffectTab::CauseAndEffectTab(MBCHAR *ldlBlock) :
+CauseAndEffectTab::CauseAndEffectTab(const MBCHAR *ldlBlock) :
 m_tabPanel(static_cast<ctp2_Static*>(aui_Ldl::GetObject(ldlBlock))),
 m_detailsButton(static_cast<ctp2_Button*>(aui_Ldl::GetObject(
 	"DomesticDialog.DetailsButton"))),
@@ -535,9 +534,6 @@ void CauseAndEffectTab::UpdateCommerceValues()
 		totalCommerceScience += commerceScience;
 		totalCommerceSavings += commerceSavings;
 	}
-
-	sint32 subTotal = totalCommerceCrime + totalCommerceWages +
-		totalCommerceBuildingUpkeep;
 
 	totalCommerceSavings += player->CalcWonderGold();
 

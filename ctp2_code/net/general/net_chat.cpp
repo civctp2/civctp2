@@ -6,7 +6,7 @@
 
 extern Player **g_player;
 
-NetChat::NetChat(uint32 destmask, MBCHAR *str, sint16 len)
+NetChat::NetChat(uint32 destmask, const MBCHAR *str, sint16 len)
 {
 	m_destmask = destmask;
 	m_str = new MBCHAR[len+1];

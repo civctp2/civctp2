@@ -76,8 +76,8 @@ extern C3UI *g_c3ui;
 #include "tiledmap.h"
 
 static TradeManager *s_tradeManager = NULL;
-static MBCHAR *s_tradeManagerBlock = "TradeManager";
-static MBCHAR *s_tradeAdviceBlock = "TradeAdvice";
+static const MBCHAR *s_tradeManagerBlock = "TradeManager";
+static const MBCHAR *s_tradeAdviceBlock = "TradeAdvice";
 
 extern ColorSet *g_colorSet;
 
@@ -226,14 +226,6 @@ AUI_ERRCODE TradeManager::Display()
 			}
 		}
 
-		ctp2_Tab *tab = (ctp2_Tab *)aui_Ldl::GetObject(s_tradeManagerBlock, "TradeTabs.Market");
-		ctp2_TabGroup *tabGroup = (ctp2_TabGroup *)aui_Ldl::GetObject(s_tradeManagerBlock, "TradeTabs");
-
-
-
-
-
-
 		s_tradeManager->Update();
 	}
 	return err;
@@ -257,7 +249,6 @@ AUI_ERRCODE TradeManager::Hide()
 
 void TradeManager::SetMode(TRADE_MANAGER_MODE mode)
 {
-	MBCHAR *tradeBlock="TradeManager:TradeTabs";
 	ctp2_Tab *market = (ctp2_Tab *)aui_Ldl::GetObject(s_tradeManagerBlock, "TradeTabs.Market");
 	ctp2_Tab *summary = (ctp2_Tab *)aui_Ldl::GetObject(s_tradeManagerBlock, "TradeTabs.Summary");
 	ctp2_TabGroup *group = (ctp2_TabGroup *)aui_Ldl::GetObject(s_tradeManagerBlock, "TradeTabs");
@@ -483,7 +474,7 @@ void TradeManager::UpdateCreateList(const PLAYER_INDEX & player_id)
 						}
 
 						if((child = (ctp2_Static *)item->GetChildByIndex(k_NATION_COL_INDEX))) {
-							child->SetDrawCallbackAndCookie(DrawNationColumn, (void *)data->m_destination.GetOwner());
+							child->SetDrawCallbackAndCookie(DrawNationColumn, (void *)(intptr_t)data->m_destination.GetOwner());
 						}
 
 						item->SetCompareCallback(CompareCreateItems);
@@ -719,7 +710,7 @@ void TradeManager::UpdateSummaryList()
 			}
 
 			if((child = (ctp2_Static *)item->GetChildByIndex(k_PIRACY_COL_SUM_INDEX))) {
-				child->SetDrawCallbackAndCookie(DrawPiracyColumn, (void *)route.m_id);
+				child->SetDrawCallbackAndCookie(DrawPiracyColumn, (void *)(uintptr_t)route.m_id);
 			}
 
 			MBCHAR buf[20];
@@ -739,10 +730,10 @@ void TradeManager::UpdateSummaryList()
 			}
 
 			if((child = (ctp2_Static *)item->GetChildByIndex(k_NATION_COL_SUM_INDEX))) {
-				child->SetDrawCallbackAndCookie(DrawNationColumn, (void *)route.GetDestination().GetOwner());
+				child->SetDrawCallbackAndCookie(DrawNationColumn, (void *)(intptr_t)route.GetDestination().GetOwner());
 			}
 
-			item->SetUserData((void *)route.m_id);
+			item->SetUserData((void *)(uintptr_t)route.m_id);
 			item->SetCompareCallback(CompareSummaryItems);
 
 			m_summaryList->AddItem(item);
@@ -771,7 +762,6 @@ void TradeManager::CreateRoute(aui_Control *control, uint32 action, uint32 uidat
 	bool breakInstead = sint32(cookie) != 0;
 #endif
 
-	ctp2_Static *market = (ctp2_Static *)aui_Ldl::GetObject(s_tradeManagerBlock, "Market");
 	if(!breakInstead) {
 		Assert(s_tradeManager->m_createList);
 		if(!s_tradeManager->m_createList) return;

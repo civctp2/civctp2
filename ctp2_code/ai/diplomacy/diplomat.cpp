@@ -308,7 +308,6 @@ Diplomat::Diplomat()
 
 void Diplomat::Resize(const PLAYER_INDEX & newMaxPlayerId)
 {
-	sint32 old_size = m_lastMotivation.size();
 
 	m_lastMotivation.resize(newMaxPlayerId);
 	m_diplomaticStates.resize(newMaxPlayerId);
@@ -812,14 +811,13 @@ void Diplomat::LogViolationEvent(const PLAYER_INDEX foreignerId, const PROPOSAL_
 	StringId strId;
 	REGARD_EVENT_TYPE regard_event_type = REGARD_EVENT_DIPLOMACY;
 	bool act_of_war = false;
-	char * trust_message = NULL;
+	const char * trust_message = NULL;
 
 	if (foreignerId == 0)
 		return;
 
 	if (m_playerId == 0)
 		return;
-
 	switch (proposal_type)
 	{
 
@@ -1569,19 +1567,18 @@ void Diplomat::DeclareWar(const PLAYER_INDEX foreignerId)
 {
 	Player * player_ptr = g_player[m_playerId];
 	Player * foreigner_ptr = g_player[foreignerId];
-	bool NO_CONTACT_DECLARE_WAR = false;
 
 	if (foreignerId != 0)
 	{
 		if (!player_ptr || !player_ptr->HasContactWith(foreignerId))
 		{
-			Assert(NO_CONTACT_DECLARE_WAR)
+			Assert(!"NO_CONTACT_DECLARE_WAR")
 			return;
 		}
 
 		if (!foreigner_ptr || !foreigner_ptr->HasContactWith(m_playerId))
 		{
-			Assert(NO_CONTACT_DECLARE_WAR)
+			Assert(!"NO_CONTACT_DECLARE_WAR")
 			return;
 		}
 	}
@@ -1656,7 +1653,7 @@ void Diplomat::DeclareWar(const PLAYER_INDEX foreignerId)
 		g_network.Unblock(m_playerId);
 	}
 
-    g_theTradePool->BreakOffTrade(m_playerId, foreignerId);
+	g_theTradePool->BreakOffTrade(m_playerId, foreignerId);
 
 	player_ptr->CloseEmbassy(foreignerId);
 	foreigner_ptr->CloseEmbassy(m_playerId);
@@ -1880,13 +1877,11 @@ bool Diplomat::LaunchNuclearAttackOnCity(const Unit & city)
 
 bool Diplomat::ExecuteThreat(const Threat & threat)
 {
-	const NewProposal & sender_proposal =
-		GetMyLastNewProposal(threat.receiverId);
 	const Diplomat & receiver_diplomat = Diplomat::GetDiplomat(threat.receiverId);
 	StringId strId;
 	sint32 regard_cost=0;
 	sint32 trust_cost=0;
-	char *str_buf = NULL;
+	const char *str_buf = NULL;
 
 	switch (threat.detail.type)
 	{
@@ -1896,17 +1891,6 @@ bool Diplomat::ExecuteThreat(const Threat & threat)
 		trust_cost /= 2;
 		str_buf = "Threatened to destroy our city.";
 		break;
-
-
-
-
-
-
-
-
-
-
-
 
 	case THREAT_TRADE_EMBARGO:
 
@@ -1937,7 +1921,6 @@ bool Diplomat::ExecuteThreat(const Threat & threat)
 
 	return false;
 }
-
 
 bool Diplomat::HasThreat(const PLAYER_INDEX & foreignerId,
 						 const THREAT_TYPE type,
@@ -2000,7 +1983,6 @@ bool Diplomat::ComputeThreatResponse(const PLAYER_INDEX foreignerId, Response & 
 	const Diplomat & foreign_diplomat = Diplomat::GetDiplomat(foreignerId);
 	const MapAnalysis & map_analysis = MapAnalysis::GetMapAnalysis();
 	const AgreementMatrix & agreements = AgreementMatrix::s_agreements;
-	const Response & receiver_response = GetDiplomat(foreignerId).GetMyLastResponse(m_playerId);
 
 	ai::Agreement pact;
 
@@ -2401,8 +2383,7 @@ void Diplomat::ExecuteResponse( const PLAYER_INDEX sender,
 		DPRINTF(k_DBG_DIPLOMACY, (">>> No response found by player %d.\n",
 			static_cast<sint32>(m_playerId)));
 		DPRINTF(k_DBG_DIPLOMACY, ("    (Why didn't the default response fire?)\n\n"));
-		bool NO_RESPONSE_FOUND = false;
-		Assert(NO_RESPONSE_FOUND);
+		Assert(!"NO_RESPONSE_FOUND");
 
 		response.type = RESPONSE_REJECT;
 	}
@@ -3898,9 +3879,6 @@ sint32 Diplomat::GetNextKeyAdvance() const
 	if (g_player[m_playerId] == NULL)
 		return -1;
 
-	AdvanceType my_research = g_player[m_playerId]->m_advances->GetResearching();
-
-
 	const AdvanceRecord *rec;
 	sint32 advance_index;
 	for (advance_index = 0; advance_index < g_theAdvanceDB->NumRecords(); advance_index++)
@@ -3940,32 +3918,27 @@ StringId Diplomat::GetScienceAdvice(SlicContext & sc, StringId & advance_advice)
 
 	sint32 stop_researching_adv;
 	uint32 foreignerId;
-	for (foreignerId = 1; foreignerId < s_theDiplomats.size(); foreignerId)
-		{
+	for (foreignerId = 1; foreignerId < s_theDiplomats.size(); foreignerId++) {
 
-			if (TestEffectiveRegard(foreignerId, ALLIED_REGARD ))
-				continue;
+		if (TestEffectiveRegard(foreignerId, ALLIED_REGARD ))
+			continue;
 
-			stop_researching_adv = GetStopResearchingAdvance(foreignerId);
+		stop_researching_adv = GetStopResearchingAdvance(foreignerId);
 
-			if (stop_researching_adv >= 0)
-				{
-					sc.AddPlayer(foreignerId);
-					sc.AddAdvance(stop_researching_adv);
+		if (stop_researching_adv >= 0) {
+			sc.AddPlayer(foreignerId);
+			sc.AddAdvance(stop_researching_adv);
 
-					if (g_theAdvanceDB->Get(stop_researching_adv)->GetKeyAdvanceAdvice())
-						g_theAdvanceDB->Get(stop_researching_adv)->GetKeyAdvanceAdvice(advance_advice);
+			if (g_theAdvanceDB->Get(stop_researching_adv)->GetKeyAdvanceAdvice())
+				g_theAdvanceDB->Get(stop_researching_adv)->GetKeyAdvanceAdvice(advance_advice);
 
-					if (g_player[m_playerId]->HasAdvance(stop_researching_adv) == TRUE)
-						{
-							return nonProliferationAdvice;
-						}
-					else
-						{
-							return manhattanProjectAdvice;
-						}
-				}
+			if (g_player[m_playerId]->HasAdvance(stop_researching_adv) == TRUE) {
+				return nonProliferationAdvice;
+			} else {
+				return manhattanProjectAdvice;
+			}
 		}
+	}
 
 	sint32 next_key_adv = GetNextKeyAdvance();
 
@@ -4337,7 +4310,6 @@ void Diplomat::UpdateAttributes()
 	sint32 i;
 	for ( foreigner = 1;  (unsigned) foreigner< m_foreigners.size(); foreigner++ )
 	{
-
 		m_foreigners[foreigner].BeginTurn();
 
 		if (foreigner == m_playerId)
@@ -4917,7 +4889,6 @@ void Diplomat::TargetNuclearAttack(const PLAYER_INDEX foreignerId, const bool la
 	Assert(player_ptr != NULL);
 	Assert(player_ptr->m_all_armies != NULL);
 
-	sint32 num_armies = player_ptr->m_all_armies->Num();
 	Army army;
 
 	NukeTargetList nuke_city_list;
@@ -5212,7 +5183,6 @@ void Diplomat::DisbandNanoWeapons(const double percent)
 
 void Diplomat::ExecutePersistantAgreements()
 {
-	AgreementMatrix & agreements = AgreementMatrix::s_agreements;
 
 	for (uint32 foreignerId = 1; foreignerId < m_foreigners.size(); foreignerId++)
 	{
@@ -5494,9 +5464,6 @@ bool Diplomat::IsBestHotwarEnemy(const PLAYER_INDEX foreignerId) const
 
 bool Diplomat::CanFormAlliance(const PLAYER_INDEX foreignerId)
 {
-	Diplomat & foreign_diplomat =
-		Diplomat::GetDiplomat(foreignerId);
-
 	Player *player_ptr = g_player[m_playerId];
 	Player *foreigner_ptr = g_player[foreignerId];
 	Assert(player_ptr);

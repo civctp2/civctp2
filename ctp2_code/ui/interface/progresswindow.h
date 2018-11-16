@@ -43,7 +43,7 @@ public:
 
 	static void BeginProgress(
 		ProgressWindow *&progwin,
-		MBCHAR *ldlBlock,
+		const MBCHAR *ldlBlock,
 		sint32 maxval,
 		sint32 x = -1, sint32 y = -1);
 
@@ -61,7 +61,7 @@ private:
 
 	ProgressWindow(
 		AUI_ERRCODE *retval,
-		MBCHAR *ldlBlock,
+		const MBCHAR *ldlBlock,
 		sint32 x = -1, sint32 y = -1);
 	virtual ~ProgressWindow();
 
@@ -81,7 +81,7 @@ public:
 	StandardProgressBar(
 		AUI_ERRCODE *retval,
 		uint32 id,
-		MBCHAR *ldlBlock )
+		const MBCHAR *ldlBlock )
 		:
 		aui_ImageBase( ldlBlock ),
 		aui_TextBase( ldlBlock, (const MBCHAR *)NULL ),

@@ -28,9 +28,9 @@ public:
 	// read an ldl file and new the data associated with it
 	uint32 ReadData(const char *fname = NULL);
 
-	ldl_datablock *FindDataBlock( char *szName, ldl_datablock *dbParent = NULL );
+	ldl_datablock *FindDataBlock(const char *szName, ldl_datablock *dbParent = NULL);
 	// compatibility
-	ldl_datablock *FindDataBlock( char *szName, BOOL value ) { return FindDataBlock( szName ); }
+	ldl_datablock *FindDataBlock(const char *szName, BOOL value) { return FindDataBlock(szName); }
 
 	BOOL WriteData();
 };

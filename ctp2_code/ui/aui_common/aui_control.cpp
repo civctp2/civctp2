@@ -35,6 +35,7 @@
 #include <string>
 #ifndef WIN32
 #include <sstream>
+extern class aui_Win* g_winFocus;
 #else
 #include <strstream>
 #endif
@@ -83,7 +84,7 @@ static const MBCHAR *const k_AUI_CONTROL_LDL_STATUS_TEXT	=	"statustext";
 aui_Control::aui_Control(
 	AUI_ERRCODE *retval,
 	uint32 id,
-	MBCHAR *ldlBlock,
+	const MBCHAR *ldlBlock,
 	ControlActionCallback *ActionFunc,
 	void *cookie )
 :
@@ -120,7 +121,7 @@ aui_Control::aui_Control(
 	aui_ImageBase           ((sint32) 0),
 	aui_TextBase            (NULL),
 	aui_Region              (retval, id, x, y, width, height),
-	aui_SoundBase           ((MBCHAR **) NULL),
+	aui_SoundBase           ((const MBCHAR **) NULL),
 	m_stringTable           (NULL),
 	m_allocatedTip          (false),
 	m_statusText            (NULL),
@@ -139,7 +140,7 @@ aui_Control::aui_Control(
 
 
 AUI_ERRCODE aui_Control::InitCommonLdl(
-	MBCHAR *ldlBlock,
+	const MBCHAR *ldlBlock,
 	ControlActionCallback *ActionFunc,
 	void *cookie )
 {
@@ -157,7 +158,7 @@ AUI_ERRCODE aui_Control::InitCommonLdl(
 	Assert( AUI_SUCCESS(errcode) );
 	if ( !AUI_SUCCESS(errcode) ) return errcode;
 
-	MBCHAR *tip = block->GetString(k_AUI_CONTROL_LDL_TIPWINDOW);
+	const MBCHAR *tip = block->GetString(k_AUI_CONTROL_LDL_TIPWINDOW);
 	if (tip) {
 		m_tip = new aui_TipWindow(&errcode, aui_UniqueId(), "DefaultTipWindow");
 		Assert( AUI_NEWOK(m_tip,errcode) );
@@ -176,7 +177,7 @@ AUI_ERRCODE aui_Control::InitCommonLdl(
 		SetTipWindow( m_tip );
 	}
 
-	MBCHAR *shortcut = block->GetString(k_AUI_CONTROL_SHORTCUT);
+	const MBCHAR *shortcut = block->GetString(k_AUI_CONTROL_SHORTCUT);
 	m_keyboardAction = 0;
 	if(shortcut) {
 		if(shortcut[0] == '^') {
@@ -578,7 +579,6 @@ AUI_ERRCODE aui_Control::ReleaseKeyboardFocus( void )
 #ifdef WIN32
 		SetFocus(g_ui->TheHWND());
 #else
-		extern class aui_Win* g_winFocus;
 		g_winFocus = 0;
 #endif
 		m_whichHasFocus = NULL;
@@ -969,7 +969,7 @@ AUI_ERRCODE	aui_Control::Resize(sint32 width, sint32 height)
 	AUI_ERRCODE errorCode = aui_Region::Resize(width, height);
 
 	if(m_numberOfLayers) {
-		MBCHAR *ldlBlock = (MBCHAR *)GetLdlBlock();
+		const MBCHAR *ldlBlock= (MBCHAR *)GetLdlBlock();
 		if(!ldlBlock)
 
 			ldlBlock = aui_Ldl::GetBlock(this);

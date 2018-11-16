@@ -35,11 +35,11 @@
 #include "keyboardhandler.h"
 
 typedef void (HotseatListCallback)(sint32 launch,
-								   sint32 player,
-								   sint32 civ,
-								   BOOL human,
-								   MBCHAR *name,
-								   MBCHAR *email);
+				   sint32 player,
+				   sint32 civ,
+				   BOOL human,
+				   const MBCHAR *name,
+				   const MBCHAR *email);
 
 #define k_MAX_HOTSEAT_PLAYERS 8
 
@@ -48,8 +48,8 @@ class HotseatListItem : public c3_ListItem
 public:
 
 	HotseatListItem(AUI_ERRCODE *retval, sint32 index,
-					sint32 civ, BOOL isHuman, MBCHAR *email,
-					MBCHAR *ldlBlock);
+					sint32 civ, BOOL isHuman, const MBCHAR *email,
+					const MBCHAR *ldlBlock);
 
 
 	virtual void Update(void);
@@ -58,9 +58,9 @@ public:
 	void	SetCiv(sint32 civ) { m_civ = civ; }
 
 	BOOL IsHuman() { return m_isHuman; }
-	MBCHAR	*GetEmail( void ) { return m_email; }
+	const MBCHAR	*GetEmail( void ) { return m_email; }
 	sint32  GetIndex() { return m_index; }
-	MBCHAR *GetName() { return m_name; }
+	const MBCHAR *GetName() { return m_name; }
 
 	void SetHuman(BOOL human);
 	void ChooseCiv();
@@ -70,7 +70,7 @@ protected:
 	HotseatListItem() : c3_ListItem() {}
 
 
-	AUI_ERRCODE InitCommonLdl(sint32 civ, BOOL isHuman, MBCHAR *email, MBCHAR *ldlBlock);
+	AUI_ERRCODE InitCommonLdl(sint32 civ, BOOL isHuman, const MBCHAR *email, const MBCHAR *ldlBlock);
 
 public:
 
@@ -87,7 +87,7 @@ private:
 class HotseatList : public KeyboardHandler
 {
 public:
-	HotseatList( HotseatListCallback *callback = NULL, MBCHAR *ldlBlock = NULL );
+	HotseatList(HotseatListCallback *callback = NULL, const MBCHAR *ldlBlock = NULL);
 	virtual ~HotseatList();
 
 	c3_PopupWindow	*m_window;
@@ -99,7 +99,7 @@ public:
 	HotseatListItem *m_items[k_MAX_HOTSEAT_PLAYERS];
 
 public:
-	sint32 Initialize ( MBCHAR *ldlBlock );
+	sint32 Initialize (const MBCHAR *ldlBlock);
 	sint32 UpdateData ( void );
 
 	sint32 EnableButtons( void );

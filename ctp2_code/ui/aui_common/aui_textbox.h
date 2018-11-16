@@ -16,7 +16,7 @@ public:
 	aui_TextBox(
 		AUI_ERRCODE *retval,
 		uint32 id,
-		MBCHAR *ldlBlock,
+		const MBCHAR *ldlBlock,
 		ControlActionCallback *ActionFunc = NULL,
 		void *cookie = NULL );
 	aui_TextBox(
@@ -26,24 +26,24 @@ public:
 		sint32 y,
 		sint32 width,
 		sint32 height,
-		MBCHAR *text = NULL,
+		const MBCHAR *text = NULL,
 		ControlActionCallback *ActionFunc = NULL,
 		void *cookie = NULL );
 	virtual ~aui_TextBox();
 
 protected:
 	aui_TextBox() : aui_ListBox() {}
-	AUI_ERRCODE InitCommonLdl( MBCHAR *ldlBlock );
+	AUI_ERRCODE InitCommonLdl(const MBCHAR *ldlBlock);
 	AUI_ERRCODE InitCommon( void );
 
 public:
 	virtual AUI_ERRCODE	SetText(
 		const MBCHAR *text,
 		uint32 maxlen = 0xffffffff );
-	virtual AUI_ERRCODE	AppendText( MBCHAR *text );
+	virtual AUI_ERRCODE	AppendText(const MBCHAR *text);
 
 	virtual AUI_ERRCODE AppendText(
-		MBCHAR *text,
+		const MBCHAR *text,
 		COLORREF color,
 		sint32 bold = 0,
 		sint32 italic = 0 );
@@ -53,13 +53,13 @@ public:
 		sint32 x = 0,
 		sint32 y = 0 );
 
-	virtual void SetTextFont( MBCHAR *ttffile );
+	virtual void SetTextFont(const MBCHAR *ttffile);
 	virtual void SetTextFontSize( sint32 pointSize );
 
 protected:
 
-	AUI_ERRCODE	CalculateItems( MBCHAR *text = NULL );
-	AUI_ERRCODE	CalculateAppendedItems( MBCHAR *text = NULL );
+	AUI_ERRCODE	CalculateItems(const MBCHAR *text = NULL);
+	AUI_ERRCODE	CalculateAppendedItems(const MBCHAR *text = NULL);
 
 	sint32		m_numItems;
 	sint32		m_curItem;

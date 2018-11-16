@@ -40,7 +40,7 @@
 aui_Tab::aui_Tab(
 	AUI_ERRCODE *retval,
 	uint32 id,
-	MBCHAR *ldlBlock,
+	const MBCHAR *ldlBlock,
 	ControlActionCallback *ActionFunc,
 	void *cookie )
 	:
@@ -84,7 +84,7 @@ aui_Tab::aui_Tab(
 }
 
 
-AUI_ERRCODE aui_Tab::InitCommon( MBCHAR *ldlBlock )
+AUI_ERRCODE aui_Tab::InitCommon(const MBCHAR *ldlBlock)
 {
 
 	static MBCHAR block[ k_AUI_LDL_MAXBLOCK + 1 ];

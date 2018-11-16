@@ -473,7 +473,7 @@ GAME_EVENT_ERR GameEventManager::ResumeHook(GAME_EVENT type,
 	return m_hooks[type]->Resume(args, startIndex, resumeIndex);
 }
 
-char *GameEventManager::ArgCharToName(char want)
+const char *GameEventManager::ArgCharToName(char want)
 {
 	switch(want) {
 		case GEAC_ARMY: return "GEA_Army";
@@ -547,7 +547,7 @@ char GameEventManager::ArgChar(GAME_EVENT type, sint32 index)
 		return '\0';
 
 	GameEventDescription *desc = &g_eventDescriptions[type];
-	char *argString = desc->args;
+	const char *argString = desc->args;
 	sint32 count = 0;
 
 	while(*argString) {
@@ -579,7 +579,7 @@ sint32 GameEventManager::GetNumArgs(GAME_EVENT type)
 		return -1;
 
 	GameEventDescription *desc = &g_eventDescriptions[type];
-	char *argString = desc->args;
+	const char *argString = desc->args;
 	sint32 count = 0;
 
 	while(*argString) {
@@ -609,7 +609,7 @@ BOOL GameEventManager::VerifyArgs(GAME_EVENT type, const GAME_EVENT_ARGUMENT* ar
 		return FALSE;
 
 	GameEventDescription *desc = &g_eventDescriptions[type];
-	char *argString = desc->args;
+	const char *argString = desc->args;
 
 	BOOL done = FALSE;
 	GAME_EVENT_ARGUMENT nextArgType;

@@ -33,7 +33,7 @@ public:
 	SpriteStateDB(CivArchive &archive) ;
 	~SpriteStateDB ();
 	void SetSize(sint32 size);
-	sint32 FindTypeIndex(char *str) const;
+	sint32 FindTypeIndex(const char *str) const;
 	sint32 GetDefaultVal(sint32 index) const;
     void SetName(sint32 count, char str[_MAX_PATH]);
     void SetVal(sint32 count, sint32 val);

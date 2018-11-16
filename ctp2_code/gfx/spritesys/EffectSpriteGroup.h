@@ -29,13 +29,13 @@ public:
 	EffectSpriteGroup(GROUPTYPE type);
 	virtual ~EffectSpriteGroup();
 
-	void			Load(char *filename);
-	void			Save(char *filename,unsigned version_id,unsigned compression_mode);
+	void			Load(const char *filename);
+	void			Save(const char *filename,unsigned version_id,unsigned compression_mode);
 
-	void			LoadBasic(char *filename){Load(filename);};
-	void			LoadFull (char *filename){Load(filename);};
+	void			LoadBasic(const char *filename){Load(filename);};
+	void			LoadFull (const char *filename){Load(filename);};
 
-	void			ExportScript(MBCHAR *name);
+	void			ExportScript(const MBCHAR *name);
 
 	void			Draw(EFFECTACTION action, sint32 frame, sint32 drawX, sint32 drawY, sint32 SdrawX, sint32 SdrawY, sint32 facing, double scale, uint16 transparency, Pixel16 outlineColor, uint16 flags, BOOL specialDelayProcess, BOOL directionalAttack = FALSE);
 	void			DrawDirect(aui_Surface *surf, EFFECTACTION action, sint32 frame, sint32 drawX, sint32 drawY, sint32 SdrawX, sint32 SdrawY, sint32 facing, double scale, uint16 transparency, Pixel16 outlineColor, uint16 flags, BOOL specialDelayProcess, BOOL directionalAttack = FALSE);

@@ -64,7 +64,7 @@ extern C3UI *g_c3ui;
 c3_HyperTextBox::c3_HyperTextBox(
 	AUI_ERRCODE *retval,
 	uint32 id,
-	MBCHAR *ldlBlock,
+	const MBCHAR *ldlBlock,
 	ControlActionCallback *ActionFunc,
 	void *cookie,
 	bool draw_frame
@@ -119,7 +119,7 @@ c3_HyperTextBox::c3_HyperTextBox(
 	sint32 y,
 	sint32 width,
 	sint32 height,
-	MBCHAR *pattern,
+	const MBCHAR *pattern,
 	ControlActionCallback *ActionFunc,
 	void *cookie )
 	:
@@ -144,7 +144,7 @@ c3_HyperTextBox::c3_HyperTextBox(
 }
 
 
-AUI_ERRCODE c3_HyperTextBox::InitCommonLdl( MBCHAR *ldlBlock )
+AUI_ERRCODE c3_HyperTextBox::InitCommonLdl(const MBCHAR *ldlBlock)
 {
 	aui_Ldl *theLdl = g_ui->GetLdl();
 
@@ -190,7 +190,7 @@ c3_HyperTextBox::~c3_HyperTextBox()
 }
 
 
-AUI_ERRCODE c3_HyperTextBox::CreateRanger( MBCHAR *ldlBlock )
+AUI_ERRCODE c3_HyperTextBox::CreateRanger(const MBCHAR *ldlBlock)
 {
 	AUI_ERRCODE errcode = AUI_ERRCODE_OK;
 
@@ -291,7 +291,7 @@ AUI_ERRCODE c3_HyperTextBox::AddHyperStatics( const MBCHAR *hyperText )
 			case 'c':
 			{
 				uint8 r, g, b;
-				sscanf( ++ptr, ":%u,%u,%u>", &r, &g, &b );
+				sscanf( ++ptr, ":%hhu,%hhu,%hhu>", &r, &g, &b );
 				m_hyperColorOld = m_hyperColor;
 				m_hyperColor = RGB(r,g,b);
 			}
@@ -304,7 +304,7 @@ AUI_ERRCODE c3_HyperTextBox::AddHyperStatics( const MBCHAR *hyperText )
 			case 'h':
 			{
 				uint8 r, g, b;
-				sscanf( ++ptr, ":%u,%u,%u>", &r, &g, &b );
+				sscanf( ++ptr, ":%hhu,%hhu,%hhu>", &r, &g, &b );
 				m_hyperShadowColor = RGB(r,g,b);
 			}
 			break;
@@ -640,7 +640,6 @@ AUI_ERRCODE c3_HyperTextBox::AddHyperStatics( const MBCHAR *hyperText )
 
 void c3_HyperTextBox::RemoveHyperLinks( void )
 {
-	ListPos position = m_hyperLinkList->GetHeadPosition();
 	for ( sint32 i = m_hyperLinkList->L(); i; i-- )
 		DestroyHyperLink( m_hyperLinkList->RemoveTail() );
 }

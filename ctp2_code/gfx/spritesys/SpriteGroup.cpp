@@ -114,7 +114,7 @@ void SpriteGroup::Draw(	 sint32 drawX,
 
 void SpriteGroup::DrawText(sint32 x,
 						   sint32 y,
-						   char *s)
+						   const char *s)
 {
 }
 

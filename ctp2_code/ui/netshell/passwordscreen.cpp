@@ -297,7 +297,8 @@ AUI_ERRCODE passwordscreen_Initialize( void )
 		0,
 		AUI_WINDOW_TYPE_FLOATING);
 	Assert( AUI_NEWOK(s_passwordScreen, errcode) );
-	if ( !AUI_NEWOK(s_passwordScreen, errcode) ) errcode;
+	if ( !AUI_NEWOK(s_passwordScreen, errcode) )
+		return errcode;
 
 	s_okButton = spNew_ctp2_Button(
 				&errcode,

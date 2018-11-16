@@ -28,7 +28,7 @@ double ldl_datablock::GetDouble( const char *szName )
 	return 0;
 }
 
-char *ldl_datablock::GetString( const char *szName )
+const char *ldl_datablock::GetString(const char *szName)
 {
 	ldl_attribute *atr = GetAttribute(szName);
 

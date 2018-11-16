@@ -435,7 +435,7 @@ GameEventArgList *SlicArgList::CreateGameEventArgs(GAME_EVENT ev)
 	return newArgs;
 }
 
-SlicFunc::SlicFunc(char *name, SLIC_FUNC_RET_TYPE type)
+SlicFunc::SlicFunc(const char *name, SLIC_FUNC_RET_TYPE type)
 {
 	m_type = type;
 	m_name = new char[strlen(name) + 2];

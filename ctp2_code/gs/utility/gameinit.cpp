@@ -50,6 +50,8 @@
 #include <ios>
 #include <iostream>
 
+#include <err.h>
+
 #include "aui.h"
 
 
@@ -553,9 +555,9 @@ sint32 gameinit_PlaceInitalUnits(sint32 nPlayers, MapPoint player_start_list[k_M
 void gameinit_SpewUnits(sint32 player, MapPoint &pos)
 {
 	FILE *uFile = fopen("logs" FILE_SEP "unitlist.txt", "r");
-	sint32 n = g_theUnitDB->NumRecords();
 	sint32 i;
 	if(!uFile) {
+		sint32 n = g_theUnitDB->NumRecords();
 		for (i=0; i<n; i++) {
 			if (!g_theUnitDB->Get(i)->GetHasPopAndCanBuild() &&
 				!g_theUnitDB->Get(i)->GetIsTrader()
@@ -579,12 +581,15 @@ void gameinit_SpewUnits(sint32 player, MapPoint &pos)
 		}
 		pos.x++;
 	} else {
-		fscanf(uFile, "%ld\n", &n);
+		size_t n;
+		if (fscanf(uFile, "%zd\n", &n) != 1)
+			err(1, "%s: Can not parse number of uids from log-file", __func__);
 
 		sint32 *uids = new sint32[n];
 
 		for (i=0; i<n; i++) {
-			fscanf(uFile, "%ld\n", &uids[i]);
+			if (fscanf(uFile, "%d\n", &uids[i]) != 1)
+				err(1, "%s: Can not parse uid %d from log-file", __func__, i);
 		}
 		fclose(uFile);
 
@@ -634,11 +639,11 @@ sint32 gameinit_InitializeGameFiles(void)
 {
 	int r;
 
-	MBCHAR str1[_MAX_PATH];
+	char str1[_MAX_PATH];
 
-	MBCHAR dir[_MAX_PATH];
+	char dir[_MAX_PATH];
 	FILE *fin;
-	MBCHAR		*fn = "InitializeGameFiles";
+	const char *fn = "InitializeGameFiles";
 
 	g_abort_parse = FALSE;
 

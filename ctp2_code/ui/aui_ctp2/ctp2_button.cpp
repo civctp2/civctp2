@@ -40,9 +40,9 @@ ctp2_Button::~ctp2_Button()
 
 
 
-AUI_ERRCODE ctp2_Button::InitCommonLdl(MBCHAR *ldlBlock, MBCHAR *ldlTemplate,
-									   sint32 x, sint32 y,
-									   sint32 width, sint32 height)
+AUI_ERRCODE ctp2_Button::InitCommonLdl(const MBCHAR *ldlBlock, const MBCHAR *ldlTemplate,
+    sint32 x, sint32 y,
+    sint32 width, sint32 height)
 {
 
 	aui_Ldl *theLdl = g_c3ui->GetLdl();

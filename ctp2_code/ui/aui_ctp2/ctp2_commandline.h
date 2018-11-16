@@ -17,7 +17,7 @@ public:
 	void	HandleKeypress(WPARAM wParam, LPARAM lParam);
 
 	RECT	*GetRect(void) { return &m_rect; }
-	MBCHAR	*GetString(void) { return m_string; }
+	const MBCHAR	*GetString(void) { return m_string; }
 
 private:
 	aui_BitmapFont		*m_font;

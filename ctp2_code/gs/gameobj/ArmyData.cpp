@@ -9249,7 +9249,7 @@ bool ArmyData::TestOrderAny(OrderRecord const * order_rec) const
 bool ArmyData::TestOrderUnit(const OrderRecord *order_rec, uint32 unit_index) const
 {
 
-	if((unit_index < 0) || (unit_index >= static_cast<uint32>(m_nElements))) // Should be fixed in CellUnitList
+	if (unit_index >= static_cast<uint32>(m_nElements)) // Should be fixed in CellUnitList
 		return(false);
 
 	return(m_array[unit_index].UnitValidForOrder(order_rec));

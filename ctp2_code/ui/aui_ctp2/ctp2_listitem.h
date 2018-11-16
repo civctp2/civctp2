@@ -20,7 +20,7 @@ public:
 	void *m_userData;
 	CTP2ItemCompareCallback *m_compareCallback;
 
-	ctp2_ListItem(AUI_ERRCODE *retval, MBCHAR *ldlBlock);
+	ctp2_ListItem(AUI_ERRCODE *retval, const MBCHAR *ldlBlock);
 
 	virtual ~ctp2_ListItem();
 
@@ -64,7 +64,7 @@ protected:
 
 
 
-	AUI_ERRCODE InitCommonLdl(MBCHAR *ldlBlock);
+	AUI_ERRCODE InitCommonLdl(const MBCHAR *ldlBlock);
 
 	ctp2_ListItem() : aui_Item() {}
 

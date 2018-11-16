@@ -66,7 +66,7 @@ public:
 	aui_DropDown(
 		AUI_ERRCODE *retval,
 		uint32 id,
-		MBCHAR *ldlBlock,
+		const MBCHAR *ldlBlock,
 		ControlActionCallback *ActionFunc = NULL,
 		void *cookie = NULL );
 	aui_DropDown(
@@ -84,9 +84,9 @@ public:
 
 protected:
 	aui_DropDown() : aui_Control() {}
-	AUI_ERRCODE InitCommonLdl( MBCHAR *ldlBlock );
+	AUI_ERRCODE InitCommonLdl(const MBCHAR *ldlBlock);
 	AUI_ERRCODE InitCommon( sint32 buttonSize, sint32 windowSize );
-	AUI_ERRCODE CreateComponents( MBCHAR *ldlBlok = NULL );
+	AUI_ERRCODE CreateComponents(const MBCHAR *ldlBlok = NULL);
 
 public:
 

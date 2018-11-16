@@ -77,9 +77,9 @@ public:
 
 	SaveInfo *LoadSaveInfo(Scenario *scen);
 
-	CIV_SCEN_ERR MakeNewPack(MBCHAR *dirName, MBCHAR *packName, MBCHAR *packDesc);
+	CIV_SCEN_ERR MakeNewPack(const MBCHAR *dirName, const MBCHAR *packName, const MBCHAR *packDesc);
 	CIV_SCEN_ERR UpdatePacklist(ScenarioPack *pack);
-	CIV_SCEN_ERR MakeNewScenario(ScenarioPack *pack, MBCHAR *scenName, MBCHAR *scenDesc);
+	CIV_SCEN_ERR MakeNewScenario(ScenarioPack *pack, const MBCHAR *scenName, const MBCHAR *scenDesc);
 
 private:
 	sint32			m_numScenarioPacks;

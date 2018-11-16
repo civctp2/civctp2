@@ -172,7 +172,7 @@ RankingTab::RankingTab(ctp2_Window *parent) :
 
 }
 
-void RankingTab::Add_Dropdown_Category(char * category)
+void RankingTab::Add_Dropdown_Category(const char * category)
 {
 
 	ctp2_ListItem *listItem = NULL;

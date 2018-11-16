@@ -20,7 +20,7 @@ public:
 	TextBox(
 		AUI_ERRCODE *retval,
 		uint32 id,
-		MBCHAR *ldlBlock,
+		const MBCHAR *ldlBlock,
 		ControlActionCallback *ActionFunc = NULL,
 		void *cookie = NULL);
 	TextBox(
@@ -30,13 +30,13 @@ public:
 		sint32 y,
 		sint32 width,
 		sint32 height,
-		MBCHAR *pattern,
-		MBCHAR *text = NULL,
+		const MBCHAR *pattern,
+		const MBCHAR *text = NULL,
 		ControlActionCallback *ActionFunc = NULL,
 		void *cookie = NULL);
 	virtual ~TextBox() {}
 
-	AUI_ERRCODE InitCommonLdl( MBCHAR *ldlBlock );
+	AUI_ERRCODE InitCommonLdl(const MBCHAR *ldlBlock);
 	AUI_ERRCODE InitCommon( BOOL fromLDL );
 
 	virtual void		SetTextFont(MBCHAR *name) { aui_TextBox::SetTextFont(name); }
@@ -44,7 +44,7 @@ public:
 	virtual AUI_ERRCODE	RepositionItems( void );
 
 protected:
-	AUI_ERRCODE	CreateRangers( MBCHAR *ldlBlock );
+	AUI_ERRCODE	CreateRangers(const MBCHAR *ldlBlock);
 
 public:
 

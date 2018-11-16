@@ -43,7 +43,7 @@ public:
 	aui_SwitchGroup(
 		AUI_ERRCODE *retval,
 		uint32 id,
-		MBCHAR *ldlBlock );
+		const MBCHAR *ldlBlock );
 	aui_SwitchGroup(
 		AUI_ERRCODE *retval,
 		uint32 id,
@@ -55,7 +55,7 @@ public:
 
 protected:
 	aui_SwitchGroup() : aui_Control() {}
-	AUI_ERRCODE InitCommonLdl( MBCHAR *ldlBlock );
+	AUI_ERRCODE InitCommonLdl(const MBCHAR *ldlBlock);
 	AUI_ERRCODE InitCommon( void );
 
 public:

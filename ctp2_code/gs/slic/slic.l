@@ -48,6 +48,9 @@ int include_line_number_stack[MAX_INCLUDE_DEPTH];
 extern int include_stack_ptr;
 extern int g_slicWarnUndeclared;
 
+#define YY_NO_INPUT
+#define YY_NO_UNPUT
+
 %}
 string 		\"[^\"\n]*[\"\n]
 slicid      \'[^\'\n]*[\'\n]
@@ -209,7 +212,7 @@ Return      { return KW_RETURN; }
 %%
 int yywrap() { return 1; }
 
-int slicif_open_first_file(char *file)
+int slicif_open_first_file(const char *file)
 {
 	char buf[MAX_PATH];
 

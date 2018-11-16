@@ -135,7 +135,7 @@ void RobotAstar::RecalcEntryCost(AstarPoint *parent,
 		static MapPoint tmppos;
 		tmppos.Iso2Norm(node->m_pos);
 
-		BOOL r2 =  (*m_callback)(TRUE, (MapPointData*)&tmpprev,
+		(*m_callback)(TRUE, (MapPointData*)&tmpprev,
 			(MapPointData*)&tmppos, &new_entry_cost, new_is_zoc, new_entry);
 	}
 }

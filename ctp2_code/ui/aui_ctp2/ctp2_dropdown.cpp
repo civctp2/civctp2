@@ -24,7 +24,7 @@
 //
 // Modifications from the original Activision code:
 //
-// - ForceSelect can now be disabled. (Feb 4th 2007 Martin Gühmann)
+// - ForceSelect can now be disabled. (Feb 4th 2007 Martin G"uhmann)
 //
 //----------------------------------------------------------------------------
 
@@ -59,7 +59,7 @@ ctp2_DropDown::ctp2_DropDown(
 	sint32 y,
 	sint32 width,
 	sint32 height,
-	MBCHAR *pattern,
+	const MBCHAR *pattern,
 	sint32 buttonSize,
 	sint32 windowSize,
 	ControlActionCallback *ActionFunc,
@@ -78,7 +78,7 @@ ctp2_DropDown::ctp2_DropDown(
 	Assert( AUI_SUCCESS(*retval) );
 	if ( !AUI_SUCCESS(*retval) ) return;
 
-	*retval = aui_SoundBase::InitCommon( (MBCHAR **)NULL );
+	*retval = aui_SoundBase::InitCommon((const MBCHAR **)NULL);
 	Assert( AUI_SUCCESS(*retval) );
 	if ( !AUI_SUCCESS(*retval) ) return;
 
@@ -94,7 +94,7 @@ ctp2_DropDown::ctp2_DropDown(
 ctp2_DropDown::ctp2_DropDown(
 	AUI_ERRCODE *retval,
 	uint32 id,
-	MBCHAR *ldlBlock,
+	const MBCHAR *ldlBlock,
 	ControlActionCallback *ActionFunc,
 	void *cookie)
 	:
@@ -125,7 +125,7 @@ ctp2_DropDown::ctp2_DropDown(
 }
 
 
-AUI_ERRCODE ctp2_DropDown::CreateComponents( MBCHAR *ldlBlock )
+AUI_ERRCODE ctp2_DropDown::CreateComponents(const MBCHAR *ldlBlock)
 {
 	AUI_ERRCODE errcode = AUI_ERRCODE_OK;
 

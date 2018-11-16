@@ -14,7 +14,7 @@ extern CivApp           *g_civApp;
 
 aui_SDLMouse::aui_SDLMouse(
    AUI_ERRCODE *retval,
-   MBCHAR *ldlBlock,
+   const MBCHAR *ldlBlock,
    BOOL useExclusiveMode)
    :
    aui_Input(retval),

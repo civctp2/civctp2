@@ -198,7 +198,6 @@ void NetCity::Unpacketize(uint16 id, uint8* buf, uint16 size)
 		pos = 6 + unitSize;
 		CityData* cityData = unitData->m_city_data;
 
-		sint32 oldSizeIndex = cityData->m_sizeIndex;
 		double oldVision = cityData->GetVisionRadius();
 
 		PULLBYTE(m_isInitialPacket);

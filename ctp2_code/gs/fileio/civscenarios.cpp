@@ -154,7 +154,7 @@ void CivScenarios::LoadScenarioPackData(ScenarioPack *pack, MBCHAR *packPath)
 		pack->m_description[strlen(pack->m_description)-1] = '\0';
 	}
 
-	sint32		numScenarios;
+	long		numScenarios;
 	fscanf(listFile, "%ld", &numScenarios);
 
 	fclose(listFile);
@@ -167,7 +167,7 @@ void CivScenarios::LoadScenarioPackData(ScenarioPack *pack, MBCHAR *packPath)
 		MBCHAR		scenListName[_MAX_PATH];
 		int		r;
 
-		sprintf(scenPath, "%s%s%s%#.4d", packPath, FILE_SEP, k_SCENARIO_FOLDER_PREFIX, i, k_SCENARIO_INFO_FILENAME);
+		sprintf(scenPath, "%s%s%s%.4d", packPath, FILE_SEP, k_SCENARIO_FOLDER_PREFIX, i);
 		sprintf(scenListName, "%s%s%s", scenPath, FILE_SEP, k_SCENARIO_INFO_FILENAME);
 
 #ifdef WIN32
@@ -449,7 +449,8 @@ SaveInfo *CivScenarios::LoadSaveInfo(Scenario *scen)
 	return NULL;
 }
 
-CIV_SCEN_ERR CivScenarios::MakeNewPack(MBCHAR *dirName, MBCHAR *packName, MBCHAR *packDesc)
+CIV_SCEN_ERR CivScenarios::
+MakeNewPack(const MBCHAR *dirName, const MBCHAR *packName, const MBCHAR *packDesc)
 {
 	MBCHAR				path[_MAX_PATH],
 					rootPath[_MAX_PATH];
@@ -461,7 +462,7 @@ CIV_SCEN_ERR CivScenarios::MakeNewPack(MBCHAR *dirName, MBCHAR *packName, MBCHAR
 
 	g_civPaths->GetScenarioRootPath(rootPath);
 
-	sprintf(path, "%s%s%s", rootPath, dirName);
+	sprintf(path, "%s%s", rootPath, dirName);
 #ifdef WIN32
 	if(!_stat(path, &tmpstat)) {
 #else
@@ -510,7 +511,7 @@ CIV_SCEN_ERR CivScenarios::UpdatePacklist(ScenarioPack *pack)
 	return CIV_SCEN_OK;
 }
 
-CIV_SCEN_ERR CivScenarios::MakeNewScenario(ScenarioPack *pack, MBCHAR *scenName, MBCHAR *scenDesc)
+CIV_SCEN_ERR CivScenarios::MakeNewScenario(ScenarioPack *pack, const MBCHAR *scenName, const MBCHAR *scenDesc)
 {
 #ifdef WIN32
 	struct _stat		tmpstat;

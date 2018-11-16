@@ -38,18 +38,18 @@ public:
 	void			DeallocateStorage(void);
 	void			DeallocateFullLoadAnims(void);
 
-	void			LoadBasic(char *filename);
-	void			LoadIndexed(char *filename,GAME_ACTION index);
-	void			LoadFull(char *filename);
+	void			LoadBasic(const char *filename);
+	void			LoadIndexed(const char *filename, GAME_ACTION index);
+	void			LoadFull(const char *filename);
 
-	bool			GetImageFileName(char *name,char *format,...);
+	bool			GetImageFileName(char *name, const char *format,...);
 
-	void			Save(char *filename,unsigned version_id,unsigned compression_mode);
+	void			Save(const char *filename,unsigned version_id,unsigned compression_mode);
 
 	void			Draw(UNITACTION action, sint32 frame, sint32 drawX, sint32 drawY,
 						   sint32 facing, double scale, uint16 transparency, Pixel16 outlineColor, uint16 flags, BOOL specialDelayProcess, BOOL directionalAttack);
 
-	void			DrawText(sint32 x, sint32 y, MBCHAR *s);
+	void			DrawText(sint32 x, sint32 y, const char *s);
 	void			DrawDirect(aui_Surface *surf, UNITACTION action, sint32 frame, sint32 drawX, sint32 drawY,
 							   sint32 facing, double scale, uint16 transparency, Pixel16 outlineColor, uint16 flags,
 							   BOOL specialDelayProcess,
@@ -77,7 +77,7 @@ public:
 	void			SetNumFirePointsWork(uint16 num) { m_numFirePointsWork = num; }
 
 	sint32			Parse(uint16 id,GROUPTYPE type);
-	void			ExportScript(MBCHAR *name);
+	void			ExportScript(const char *name);
 
 	POINT			GetHotPoint(UNITACTION action, sint32 facing);
 	void			SetHotPoint(UNITACTION action, sint32 facing,POINT pt);

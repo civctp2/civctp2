@@ -25,7 +25,7 @@ aui_Ranger *aui_Ranger::ms_mouseFocusRanger = NULL;
 aui_Ranger::aui_Ranger(
 	AUI_ERRCODE *retval,
 	uint32 id,
-	MBCHAR *ldlBlock,
+	const MBCHAR *ldlBlock,
 	ControlActionCallback *ActionFunc,
 	void *cookie )
 	:
@@ -75,7 +75,7 @@ aui_Ranger::aui_Ranger(
 }
 
 
-AUI_ERRCODE aui_Ranger::InitCommonLdl( MBCHAR *ldlBlock )
+AUI_ERRCODE aui_Ranger::InitCommonLdl(const MBCHAR *ldlBlock)
 {
 	aui_Ldl *theLdl = g_ui->GetLdl();
 
@@ -88,7 +88,7 @@ AUI_ERRCODE aui_Ranger::InitCommonLdl( MBCHAR *ldlBlock )
 	if ( !block ) return AUI_ERRCODE_LDLFINDDATABLOCKFAILED;
 
 	AUI_RANGER_TYPE type;
-	MBCHAR *keyword = block->GetString( k_AUI_RANGER_LDL_TYPE );
+	const MBCHAR *keyword = block->GetString(k_AUI_RANGER_LDL_TYPE);
 	if ( !keyword )
 		type = AUI_RANGER_TYPE_SCROLLER;
 	else
@@ -254,7 +254,7 @@ aui_Button *aui_Ranger::CreateArrowButton(const MBCHAR *ldlBlock,
 	return(arrowButton);
 }
 
-AUI_ERRCODE aui_Ranger::CreateButtonsAndThumb(MBCHAR *ldlBlock)
+AUI_ERRCODE aui_Ranger::CreateButtonsAndThumb(const MBCHAR *ldlBlock)
 {
 
 	AUI_ERRCODE errcode = AUI_ERRCODE_OK;

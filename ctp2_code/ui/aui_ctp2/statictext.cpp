@@ -18,7 +18,7 @@ extern C3UI		*g_c3ui;
 StaticText::StaticText(
 	AUI_ERRCODE *retval,
 	uint32 id,
-	MBCHAR *ldlBlock)
+	const MBCHAR *ldlBlock)
 :
 	aui_Static( retval, id, ldlBlock ),
 	TextBase( ldlBlock, (MBCHAR *)NULL )
@@ -37,7 +37,7 @@ StaticText::StaticText(
 	sint32 y,
 	sint32 width,
 	sint32 height,
-	MBCHAR *text,
+	const MBCHAR *text,
 	uint32 maxLength,
 	uint32 size)
 :
@@ -49,7 +49,7 @@ StaticText::StaticText(
 	if (size) m_size = size;
 }
 
-AUI_ERRCODE StaticText::InitCommon( MBCHAR *ldlBlock )
+AUI_ERRCODE StaticText::InitCommon(const MBCHAR *ldlBlock)
 {
 	uint32 size = 0;
 

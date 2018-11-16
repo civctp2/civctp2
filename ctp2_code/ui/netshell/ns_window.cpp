@@ -44,7 +44,7 @@
 ns_Window::ns_Window(
 	AUI_ERRCODE *retval,
 	uint32 id,
-	MBCHAR *ldlBlock,
+	const MBCHAR *ldlBlock,
 	sint32 bpp,
 	AUI_WINDOW_TYPE type )
 	:
@@ -60,7 +60,7 @@ ns_Window::ns_Window(
 }
 
 
-AUI_ERRCODE ns_Window::InitCommonLdl( MBCHAR *ldlBlock )
+AUI_ERRCODE ns_Window::InitCommonLdl(const MBCHAR *ldlBlock)
 {
 	aui_Ldl *theLdl = g_ui->GetLdl();
 
@@ -75,7 +75,7 @@ AUI_ERRCODE ns_Window::InitCommonLdl( MBCHAR *ldlBlock )
 	Assert( block != NULL );
 	if ( !block ) return AUI_ERRCODE_LDLFINDDATABLOCKFAILED;
 
-	MBCHAR *tile = block->GetString( k_NS_WINDOW_TILE_LDL_NAME );
+	const MBCHAR *tile = block->GetString( k_NS_WINDOW_TILE_LDL_NAME );
 	BOOL retired = block->GetBool( k_NS_WINDOW_RETIRED_LDL_NAME );
 
 	AUI_ERRCODE errcode = InitCommon(
@@ -203,7 +203,7 @@ AUI_ERRCODE ns_Window::InitCommonLdl( MBCHAR *ldlBlock )
 }
 
 
-AUI_ERRCODE ns_Window::InitCommon( MBCHAR *tile, BOOL retired )
+AUI_ERRCODE ns_Window::InitCommon(const MBCHAR *tile, BOOL retired)
 {
 	m_numControls = 0;
 	m_controls = NULL;
@@ -276,7 +276,7 @@ aui_Control *ns_Window::FindControl( uint32 index )
 }
 
 
-aui_Image *ns_Window::SetTile( MBCHAR *tile )
+aui_Image *ns_Window::SetTile(const MBCHAR *tile)
 {
 	aui_Image *prevTile = m_tile;
 
@@ -299,14 +299,13 @@ aui_Image *ns_Window::SetTile( MBCHAR *tile )
 	return prevTile;
 }
 
-
 BOOL ns_Window::SetRetired( BOOL retired )
 {
 	BOOL wasRetired = m_retired;
 	if ((m_retired = retired && !wasRetired))
 	{
 
-		MBCHAR *blockIdentifier = aui_Ldl::GetBlock( this );
+		const MBCHAR *blockIdentifier = aui_Ldl::GetBlock(this);
 		Assert( blockIdentifier != NULL );
 		if ( !blockIdentifier ) return wasRetired;
 

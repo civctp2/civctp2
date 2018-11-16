@@ -718,8 +718,6 @@ sint32 KnowledgeListItem::Compare(c3_ListItem *item2, uint32 column)
 {
 	sint32	val1, val2;
 
-	if (column < 0) return 0;
-
 	switch (column) {
 	case 0:
 		val1 = m_index;
@@ -781,8 +779,6 @@ void EmbassyListItem::Update(void)
 sint32 EmbassyListItem::Compare(c3_ListItem *item2, uint32 column)
 {
 	sint32	val1, val2;
-
-	if (column < 0) return 0;
 
 	switch (column) {
 	case 0:
@@ -971,8 +967,6 @@ sint32 AdvanceListItem::Compare(c3_ListItem *item2, uint32 column)
 {
 	c3_Static		*i1, *i2;
 	sint32	val1, val2;
-
-	if (column < 0) return 0;
 
 	switch (column) {
 	case 0:

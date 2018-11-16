@@ -28,9 +28,6 @@
 extern C3UI *g_c3ui;
 extern StringDB *g_theStringDB;
 
-static sint32			s_currentWonderDisplay;
-static c3_Button		*s_eventsInfoButton[17];
-
 TimelineTab::TimelineTab(ctp2_Window *parent) :
 	m_rightButton(static_cast<ctp2_Button*>(
 		aui_Ldl::GetObject("InfoDialog.TabGroup.Tab2.TabPanel.RightButton"))),

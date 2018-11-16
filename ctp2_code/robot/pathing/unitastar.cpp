@@ -714,7 +714,6 @@ sint32 UnitAstar::InitPoint(AstarPoint *parent, AstarPoint *point,
 
 {
 
-    BOOL is_ortho = FALSE;
     AstarPoint *d = point;
     BOOL is_zoc=FALSE;
     ASTAR_ENTRY_TYPE entry=ASTAR_CAN_ENTER;
@@ -1668,7 +1667,6 @@ BOOL UnitAstar::VerifyMem() const
 BOOL UnitAstar::CheckIsDangerForPos(const MapPoint & myPos, const BOOL IsCivilian)
 {
 
-	Cell* c = g_theWorld->GetCell(myPos);
     Diplomat & diplomat = Diplomat::GetDiplomat(m_owner);
     ai::Regard baseRegard = NEUTRAL_REGARD;
 

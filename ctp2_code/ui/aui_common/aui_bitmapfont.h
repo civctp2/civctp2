@@ -80,12 +80,12 @@ public:
 
 	static void AttributesToDescriptor(
 		MBCHAR out[ k_AUI_BITMAPFONT_MAXDESCLEN + 1 ],
-		MBCHAR ttffile[ MAX_PATH + 1 ],
+		const MBCHAR *ttffile,
 		sint32 pointSize,
 		sint32 bold,
 		sint32 italic );
 	static void DescriptorToAttributes(
-		MBCHAR in[ k_AUI_BITMAPFONT_MAXDESCLEN + 1 ],
+		const MBCHAR *in,
 		MBCHAR ttffile[ MAX_PATH + 1 ],
 		sint32 *pointSize,
 		sint32 *bold,

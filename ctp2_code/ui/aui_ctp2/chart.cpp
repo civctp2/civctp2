@@ -40,7 +40,7 @@ extern ProjectFile	*g_GreatLibPF;
 
 Chart::Chart( AUI_ERRCODE *retval,
 			 uint32 id,
-			 MBCHAR *ldlBlock,
+			 const MBCHAR *ldlBlock,
 			 ControlActionCallback *ActionFunc,
 			 void *cookie )
 	:
@@ -57,7 +57,7 @@ Chart::Chart( AUI_ERRCODE *retval,
 			 sint32 y,
 			 sint32 width,
 			 sint32 height,
-			 MBCHAR *pattern,
+			 const MBCHAR *pattern,
 			 ControlActionCallback *ActionFunc,
 			 void *cookie )
 	:
@@ -68,7 +68,7 @@ Chart::Chart( AUI_ERRCODE *retval,
 	InitCommon( NULL );
 }
 
-AUI_ERRCODE Chart::InitCommon( MBCHAR *ldlBlock )
+AUI_ERRCODE Chart::InitCommon(const MBCHAR *ldlBlock)
 {
 	sint32 i;
 	AUI_ERRCODE errcode;
@@ -501,7 +501,6 @@ AUI_ERRCODE Chart::Update( sint32 index )
 
 	sint32 curPlayer = g_selected_item->GetVisiblePlayer();
 	uint8 *adv = g_player[curPlayer]->m_advances->CanResearch();
-	sint32 numAdv = g_player[curPlayer]->m_advances->GetNum();
 
 	for ( i = 0;i < m_numPreReq;i++ ) {
 		m_preReqIndex[i] = g_theAdvanceDB->Get(index)->GetPrerequisitesIndex(i);

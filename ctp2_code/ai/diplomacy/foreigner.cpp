@@ -32,6 +32,7 @@
 
 #include "c3.h"
 
+#include <functional>
 #include <list>
 
 #include "Foreigner.h"

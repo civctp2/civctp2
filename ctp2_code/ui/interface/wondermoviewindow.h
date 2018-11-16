@@ -16,7 +16,7 @@ public:
 	WonderMovieWindow(
 		AUI_ERRCODE *retval,
 		uint32 id,
-		MBCHAR *ldlBlock,
+		const MBCHAR *ldlBlock,
 		sint32 bpp,
 		AUI_WINDOW_TYPE type = AUI_WINDOW_TYPE_STANDARD );
 	WonderMovieWindow(
@@ -27,12 +27,12 @@ public:
 		sint32 width,
 		sint32 height,
 		sint32 bpp,
-		MBCHAR *pattern,
+		const MBCHAR *pattern,
 		AUI_WINDOW_TYPE type = AUI_WINDOW_TYPE_STANDARD );
 
 	virtual ~WonderMovieWindow();
 
-	virtual AUI_ERRCODE InitCommonLdl(MBCHAR *ldlBlock);
+	virtual AUI_ERRCODE InitCommonLdl(const MBCHAR *ldlBlock);
 	virtual AUI_ERRCODE InitCommon(void);
 
 	virtual AUI_ERRCODE Idle();
@@ -43,7 +43,7 @@ public:
 		sint32 y = 0 );
 
 	void SetMovie(const MBCHAR *filename);
-	void SetWonderName(MBCHAR *name);
+	void SetWonderName(const MBCHAR *name);
 	void SetText(const MBCHAR *text);
 
 	Sequence *GetSequence(void) { return m_sequence;}

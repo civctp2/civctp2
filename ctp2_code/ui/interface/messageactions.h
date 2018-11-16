@@ -137,8 +137,8 @@ public:
     )
 	:   aui_Action  (),
         m_window    (window),
-        m_dropdown  (dropdown),
-        m_modal     (modal)
+        m_modal     (modal),
+        m_dropdown  (dropdown)
     { ; };
 	virtual ~MessageDropdownAction(void) { ; };
 
@@ -287,8 +287,8 @@ public:
         PLAYER_INDEX        index
     )
     :   aui_Action      (),
-        m_iconWindow    (iconWindow),
-        m_index         (index)
+        m_index         (index),
+        m_iconWindow    (iconWindow)
     { ; };
 	MessageCleanupAction
     (
@@ -296,8 +296,8 @@ public:
         PLAYER_INDEX        index
     )
     :   aui_Action      (),
-        m_iconWindow    (window ? window->GetIconWindow() : NULL),
-        m_index         (index)
+        m_index         (index),
+        m_iconWindow    (window ? window->GetIconWindow() : NULL)
     { ; };
 	virtual ~MessageCleanupAction(void) { ; };
 
@@ -324,8 +324,8 @@ public:
     )
     :   aui_Action      (),
         m_offset        (offset),
-        m_messagelist   (list),
-        m_offsetflag    (flag)
+        m_offsetflag    (flag),
+        m_messagelist   (list)
     { ; };
 	virtual ~ChangeOffsetMessageIconButtonAction(void) { ; };
 

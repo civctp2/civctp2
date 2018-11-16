@@ -20,21 +20,21 @@ public:
 		sint32 y,
 		sint32 width,
 		sint32 height,
-		MBCHAR *upPicture,
-		MBCHAR *downPicture,
+		const MBCHAR *upPicture,
+		const MBCHAR *downPicture,
 		ControlActionCallback *ActionFunc = NULL,
 		void *cookie = NULL );
 
 	PictureButton(
 		AUI_ERRCODE *retval,
 		uint32 id,
-		MBCHAR *ldlBlock,
+		const MBCHAR *ldlBlock,
 		ControlActionCallback *ActionFunc = NULL,
 		void *cookie = NULL );
 
 	virtual ~PictureButton();
 
-	AUI_ERRCODE InitCommon(MBCHAR *upPicture, MBCHAR *downPicture, BOOL isLDL = FALSE);
+	AUI_ERRCODE InitCommon(const MBCHAR *upPicture, const MBCHAR *downPicture, BOOL isLDL = FALSE);
 
 	virtual AUI_ERRCODE DrawThis(
 		aui_Surface *surface = NULL,

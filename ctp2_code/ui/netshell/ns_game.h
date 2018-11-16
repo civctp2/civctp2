@@ -36,10 +36,10 @@ public:
 	ns_Game(NETFunc::Game * game);
 	void Update( NETFunc::Game *game );
 
-	char *m_locked;
-	char *m_closed;
-	char *m_launched;
-	char *m_name;
+	const char *m_locked;
+	const char *m_closed;
+	const char *m_launched;
+	const char *m_name;
 
 	int m_players;
 };

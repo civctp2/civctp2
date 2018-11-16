@@ -313,7 +313,7 @@ TiledMap::TiledMap(MapPoint &size)
 	Assert( AUI_NEWOK(stringTable, errcode) );
 
 	if (AUI_NEWOK(stringTable, errcode) ) {
-		MBCHAR		*fontNameString,
+		const MBCHAR		*fontNameString,
 					*fontSizeString;
 		sint32		fontSize;
 
@@ -332,7 +332,7 @@ TiledMap::TiledMap(MapPoint &size)
 
 		m_font->SetPointSize(fontSize);
 
-		MBCHAR *fString = stringTable->GetString(2);
+		const MBCHAR *fString = stringTable->GetString(2);
 
 		strncpy(m_fortifyString, fString, 3);
 		m_fortifyString[3] = 0;

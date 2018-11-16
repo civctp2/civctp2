@@ -67,26 +67,26 @@ public:
 		void *cookie);
 
 	ctp2_Static(AUI_ERRCODE *retval,
-						uint32 id,
-						MBCHAR *ldlBlock );
+			uint32 id,
+			const MBCHAR *ldlBlock );
 	ctp2_Static(AUI_ERRCODE *retval,
-						uint32 id,
-						sint32 x,
-						sint32 y,
-						sint32 width,
-						sint32 height,
-						MBCHAR *pattern,
-						MBCHAR *text,
-						uint32 maxLength,
-						uint32 bevelWidth,
-						uint32 bevelType);
+			uint32 id,
+			sint32 x,
+			sint32 y,
+			sint32 width,
+			sint32 height,
+			const MBCHAR *pattern,
+			const MBCHAR *text,
+			uint32 maxLength,
+			uint32 bevelWidth,
+			uint32 bevelType);
 
-	AUI_ERRCODE InitCommonLdl( MBCHAR *ldlBlock );
+	AUI_ERRCODE InitCommonLdl(const MBCHAR *ldlBlock);
 	AUI_ERRCODE InitCommon(uint32 bevelWidth, uint32 bevelType );
 
 	virtual AUI_ERRCODE DrawThis(aui_Surface *surface,
-											sint32 x,
-											sint32 y);
+			sint32 x,
+			sint32 y);
 
 	uint32 BevelWidth() { return m_bevelWidth; }
 

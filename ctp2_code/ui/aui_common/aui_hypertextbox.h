@@ -26,7 +26,7 @@ public:
 	aui_HyperTextBox(
 		AUI_ERRCODE *retval,
 		uint32 id,
-		MBCHAR *ldlBlock,
+		const MBCHAR *ldlBlock,
 		ControlActionCallback *ActionFunc = NULL,
 		void *cookie = NULL );
 	aui_HyperTextBox(
@@ -42,9 +42,9 @@ public:
 
 protected:
 	aui_HyperTextBox() : aui_Control(), aui_HyperTextBase() {}
-	AUI_ERRCODE InitCommonLdl( MBCHAR *ldlBlock );
+	AUI_ERRCODE InitCommonLdl(const MBCHAR *ldlBlock);
 	AUI_ERRCODE InitCommon( void );
-	AUI_ERRCODE CreateRanger( MBCHAR *ldlBlock = NULL );
+	AUI_ERRCODE CreateRanger(const MBCHAR *ldlBlock = NULL);
 
 public:
 	virtual AUI_ERRCODE	Resize( sint32 width, sint32 height );

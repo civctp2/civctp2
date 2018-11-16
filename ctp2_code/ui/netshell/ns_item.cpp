@@ -16,7 +16,7 @@
 ns_ListItem::ns_ListItem(
 	AUI_ERRCODE *retval,
 	const MBCHAR *name,
-	MBCHAR *ldlBlock )
+	const MBCHAR *ldlBlock)
 	:
 	aui_ImageBase(ldlBlock),
 	aui_TextBase(ldlBlock, (MBCHAR *)NULL),
@@ -33,7 +33,7 @@ ns_ListItem::ns_ListItem(
 
 AUI_ERRCODE ns_ListItem::InitCommonLdl(
 	const MBCHAR *name,
-	MBCHAR *ldlBlock)
+	const MBCHAR *ldlBlock)
 {
 	MBCHAR			block[ k_AUI_LDL_MAXBLOCK + 1 ];
 	AUI_ERRCODE		retval;
@@ -54,7 +54,7 @@ ns_HPlayerItem::ns_HPlayerItem(
 	AUI_ERRCODE *retval,
 	void *player,
 	BOOL isAI,
-	MBCHAR *ldlBlock)
+	const MBCHAR *ldlBlock)
 	:
 	aui_ImageBase(ldlBlock),
 	aui_TextBase(ldlBlock, (MBCHAR *)NULL),
@@ -86,7 +86,7 @@ ns_HPlayerItem::~ns_HPlayerItem()
 AUI_ERRCODE ns_HPlayerItem::InitCommonLdl(
 	void *player,
 	BOOL isAI,
-	MBCHAR *ldlBlock)
+	const MBCHAR *ldlBlock)
 {
 	m_player = player;
 	m_isAI = isAI;

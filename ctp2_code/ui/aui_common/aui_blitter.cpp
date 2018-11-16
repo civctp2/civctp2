@@ -24,7 +24,7 @@
 //
 // Modifications from the original Activision code:
 //
-// - Standardized code (May 21th 2006 Martin Gühmann)
+// - Standardized code (May 21th 2006 Martin G"uhmann)
 //
 //----------------------------------------------------------------------------
 
@@ -816,8 +816,6 @@ AUI_ERRCODE aui_Blitter::TileBlt8To8(
 						{
 							if ( *srcBuf != chromakey )
 								*destBuf = *srcBuf;
-							else
-								destBuf;
 
 							if ( ++srcBuf == stopSrcHorizontal )
 								srcBuf = beginningSrcLine;
@@ -1014,8 +1012,6 @@ AUI_ERRCODE aui_Blitter::TileBlt16To16(
 						{
 							if ( *srcBuf != chromakey )
 								*destBuf = *srcBuf;
-							else
-								destBuf;
 
 							if ( ++srcBuf == stopSrcHorizontal )
 								srcBuf = beginningSrcLine;
@@ -2199,14 +2195,15 @@ aui_Stencil *aui_CreateStencil(aui_Surface *pSurface)
 
 	if (wasUnlocked)
 	{
-
-		AUI_ERRCODE errcode = pSurface->Unlock((LPVOID)pSrcBase);
+#ifdef _DEBUG
+		AUI_ERRCODE errcode =
+#endif
+		pSurface->Unlock((LPVOID)pSrcBase);
 		Assert(errcode == AUI_ERRCODE_OK);
 	}
 
 	return pBuffer;
 }
-
 
 // void BlockCopy16(uint16 *pDst, uint16 *pSrc, sint32 copylength){
 // //#ifndef WIN32
@@ -2577,7 +2574,7 @@ AUI_ERRCODE aui_Blitter::StretchBlt8To8(
 						*destBuf = *srcBuf;
 
 						srcBuf =
-							(uint8 *)uint32((srcPtr += stepHorizontal) + 0.5);
+							(uint8 *)uintptr_t((srcPtr += stepHorizontal) + 0.5);
 
 					} while ( ++destBuf != stopHorizontal );
 

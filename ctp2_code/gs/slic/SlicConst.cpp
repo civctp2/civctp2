@@ -4,7 +4,7 @@
 #include "diplomattypes.h"
 #include "civarchive.h"
 
-char *slic_const_test_names[] = {
+static const char *slic_const_test_names[] = {
 	"Continue",
 	"GetInput",
 	"Stop",

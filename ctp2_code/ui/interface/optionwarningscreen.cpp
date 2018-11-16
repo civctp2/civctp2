@@ -126,7 +126,6 @@ AUI_ERRCODE optionwarningscreen_Initialize( void )
 		AUI_WINDOW_TYPE_FLOATING,
 		false );
 	Assert( AUI_NEWOK(s_optionwarningscreenWindow, errcode) );
-	if ( !AUI_NEWOK(s_optionwarningscreenWindow, errcode) ) errcode;
 
 	s_optionwarningscreenWindow->SetStronglyModal(TRUE);
 
@@ -236,9 +235,6 @@ void optionwarningscreen_but2Press(aui_Control *control, uint32 action, uint32 d
 		return;
 
 	if(optionwarningscreen_removeMyWindow(action)) {
-
-
-
 
 		g_isScenario = FALSE;
 

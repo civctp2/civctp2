@@ -37,7 +37,7 @@
 #include "aui_surface.h"
 #include "aui_ui.h"
 
-MBCHAR *aui_ImageBase::m_substateLdlKeywords[ AUI_IMAGEBASE_SUBSTATE_LAST ] =
+const MBCHAR *aui_ImageBase::m_substateLdlKeywords[ AUI_IMAGEBASE_SUBSTATE_LAST ] =
 {
 	"image",
 	"activeimage",
@@ -49,7 +49,7 @@ MBCHAR *aui_ImageBase::m_substateLdlKeywords[ AUI_IMAGEBASE_SUBSTATE_LAST ] =
 
 aui_ImageBase::aui_ImageBase
 (
-	MBCHAR *        ldlBlock,
+	const MBCHAR *        ldlBlock,
 	bool            loadOnDemand
 )
 :
@@ -90,7 +90,7 @@ aui_ImageBase::aui_ImageBase
 
 
 AUI_ERRCODE aui_ImageBase::InitCommonLdl(
-	MBCHAR *ldlBlock )
+	const MBCHAR *ldlBlock )
 {
 	aui_Ldl *theLdl = g_ui->GetLdl();
 
@@ -126,7 +126,7 @@ AUI_ERRCODE aui_ImageBase::InitCommonLdl(
 		imagebltflag = AUI_IMAGEBASE_BLTFLAG_CHROMAKEY;
 
 	AUI_IMAGEBASE_BLTTYPE imageblttype = AUI_IMAGEBASE_BLTTYPE_COPY;
-	MBCHAR *type = block->GetString( k_AUI_IMAGEBASE_LDL_BLTTYPE );
+	const MBCHAR *type = block->GetString( k_AUI_IMAGEBASE_LDL_BLTTYPE );
 	if ( type )
 	{
 		if ( !stricmp( type, k_AUI_IMAGEBASE_LDL_STRETCH ) )
@@ -135,7 +135,7 @@ AUI_ERRCODE aui_ImageBase::InitCommonLdl(
 			imageblttype = AUI_IMAGEBASE_BLTTYPE_TILE;
 	}
 
-	MBCHAR *flags = block->GetString(k_AUI_IMAGEBASE_LDL_BLTFLAG);
+	const MBCHAR *flags = block->GetString(k_AUI_IMAGEBASE_LDL_BLTFLAG);
 	if ((flags)&&(!m_chromaSpecified))
 	{
 		if (!stricmp(flags, k_AUI_IMAGEBASE_LDL_BLTFLAG_CHROMAKEY))
@@ -313,7 +313,7 @@ AUI_IMAGEBASE_BLTFLAG aui_ImageBase::SetImageBltFlag(
 
 
 aui_Image *aui_ImageBase::SetImage(
-	MBCHAR *image,
+	const MBCHAR *image,
 	sint32 state,
 	AUI_IMAGEBASE_SUBSTATE substate )
 {

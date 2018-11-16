@@ -46,7 +46,7 @@ void AttractWindow::Cleanup(void)
 	}
 }
 
-AttractWindow::AttractWindow(AUI_ERRCODE *retval, uint32 id, MBCHAR *ldlBlock,
+AttractWindow::AttractWindow(AUI_ERRCODE *retval, uint32 id, const MBCHAR *ldlBlock,
 							 sint32 bpp, AUI_WINDOW_TYPE type)
 							 :
 C3Window(retval, id, ldlBlock, bpp, type)
@@ -181,7 +181,7 @@ void AttractWindow::ClearWindow(void)
 
 
 
-void AttractWindow::HighlightControl(MBCHAR *ldlName)
+void AttractWindow::HighlightControl(const MBCHAR *ldlName)
 {
 	Assert(g_c3ui);
 	if (!g_c3ui) return;
@@ -246,7 +246,7 @@ void AttractWindow::HighlightControl(MBCHAR *ldlName)
 	m_finishTime = GetTickCount() + k_ATTRACT_DURATION;
 }
 
-void AttractWindow::RemoveControl(MBCHAR *ldlName)
+void AttractWindow::RemoveControl(const MBCHAR *ldlName)
 {
 	aui_Region *region = (aui_Region *)g_c3ui->GetLdl()->GetObject(ldlName);
 	if(region) {

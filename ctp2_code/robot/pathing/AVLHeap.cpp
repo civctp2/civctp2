@@ -100,9 +100,9 @@ AstarPoint * AVLHeap::GetNew()
 void AVLHeap::MassDelete(const bool isunit)
 
 {
-    sint32 c = pixelutils_RGB(0,0,30);
 
 #ifdef _DEBUG
+    sint32 c = pixelutils_RGB(0,0,30);
     if (isunit) {
         AstarPoint *tmp=NULL;
         for (tmp = m_used_head; tmp; tmp = tmp->m_next) {

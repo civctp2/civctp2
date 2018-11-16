@@ -6,7 +6,7 @@
 
 aui_Sound::aui_Sound(
 	AUI_ERRCODE *retval,
-	MBCHAR *filename )
+	const MBCHAR *filename)
 	:
 	aui_Base()
 {
@@ -22,7 +22,7 @@ aui_Sound::~aui_Sound()
 }
 
 
-AUI_ERRCODE aui_Sound::InitCommon( MBCHAR *filename )
+AUI_ERRCODE aui_Sound::InitCommon(const MBCHAR *filename)
 {
 	m_format = NULL;
 	m_data = NULL;
@@ -35,7 +35,7 @@ AUI_ERRCODE aui_Sound::InitCommon( MBCHAR *filename )
 }
 
 
-AUI_ERRCODE aui_Sound::SetFilename( MBCHAR *filename)
+AUI_ERRCODE aui_Sound::SetFilename(const MBCHAR *filename)
 {
 	Unload();
 
@@ -79,7 +79,7 @@ AUI_ERRCODE aui_Sound::Unload( void )
 }
 
 AUI_ERRCODE aui_WavSoundFormat::LoadSoundData(
-	MBCHAR *filename,
+	const MBCHAR *filename,
 	uint8 **wavdata,
 	size_t *size)
 {

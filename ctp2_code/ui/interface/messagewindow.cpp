@@ -24,7 +24,7 @@
 //
 // Modifications from the original Activision code:
 //
-// - Made message window non-modal. - Oct 16th 2005 Martin Gühmann
+// - Made message window non-modal. - Oct 16th 2005 Martin G"uhmann
 //
 //----------------------------------------------------------------------------
 
@@ -160,7 +160,7 @@ AUI_ERRCODE MessageWindow::InitCommon( Message data,
 	return AUI_ERRCODE_OK;
 }
 
-AUI_ERRCODE MessageWindow::CreateWindowEdges( MBCHAR *ldlBlock )
+AUI_ERRCODE MessageWindow::CreateWindowEdges(const MBCHAR *ldlBlock)
 {
 	MBCHAR			imageBlock[ k_AUI_LDL_MAXBLOCK + 1 ];
 	AUI_ERRCODE		errcode = AUI_ERRCODE_OK;
@@ -241,7 +241,7 @@ AUI_ERRCODE MessageWindow::CreateWindowEdges( MBCHAR *ldlBlock )
 }
 
 
-AUI_ERRCODE MessageWindow::CreateTurnText( MBCHAR *ldlBlock )
+AUI_ERRCODE MessageWindow::CreateTurnText(const MBCHAR *ldlBlock)
 {
 	MBCHAR			textBlock[ k_AUI_LDL_MAXBLOCK + 1 ];
 	AUI_ERRCODE		errcode = AUI_ERRCODE_OK;
@@ -289,7 +289,7 @@ AUI_ERRCODE MessageWindow::CreateTurnText( MBCHAR *ldlBlock )
 }
 
 
-AUI_ERRCODE MessageWindow::CreateStandardTextBox( MBCHAR *ldlBlock )
+AUI_ERRCODE MessageWindow::CreateStandardTextBox(const MBCHAR *ldlBlock)
 {
 	MBCHAR			textBlock[ k_AUI_LDL_MAXBLOCK + 1 ];
 	AUI_ERRCODE		errcode = AUI_ERRCODE_OK;
@@ -313,7 +313,7 @@ AUI_ERRCODE MessageWindow::CreateStandardTextBox( MBCHAR *ldlBlock )
 	return AUI_ERRCODE_OK;
 }
 
-AUI_ERRCODE MessageWindow::CreateStandardDismissButton( MBCHAR *ldlBlock )
+AUI_ERRCODE MessageWindow::CreateStandardDismissButton(const MBCHAR *ldlBlock)
 {
 	AUI_ERRCODE		errcode = AUI_ERRCODE_OK;
 	MBCHAR			buttonBlock[ k_AUI_LDL_MAXBLOCK + 1 ];
@@ -337,7 +337,7 @@ AUI_ERRCODE MessageWindow::CreateStandardDismissButton( MBCHAR *ldlBlock )
 }
 
 
-AUI_ERRCODE MessageWindow::CreateStandardMinimizeButton( MBCHAR *ldlBlock )
+AUI_ERRCODE MessageWindow::CreateStandardMinimizeButton(const MBCHAR *ldlBlock)
 {
 	AUI_ERRCODE		errcode = AUI_ERRCODE_OK;
 	MBCHAR			buttonBlock[ k_AUI_LDL_MAXBLOCK + 1 ];
@@ -363,7 +363,7 @@ AUI_ERRCODE MessageWindow::CreateStandardMinimizeButton( MBCHAR *ldlBlock )
 }
 
 
-AUI_ERRCODE MessageWindow::CreateGreatLibraryButton( MBCHAR *ldlBlock )
+AUI_ERRCODE MessageWindow::CreateGreatLibraryButton(const MBCHAR *ldlBlock)
 {
 	AUI_ERRCODE		errcode = AUI_ERRCODE_OK;
 	MBCHAR			buttonBlock[ k_AUI_LDL_MAXBLOCK + 1 ];
@@ -391,7 +391,7 @@ AUI_ERRCODE MessageWindow::CreateGreatLibraryButton( MBCHAR *ldlBlock )
 }
 
 
-AUI_ERRCODE MessageWindow::CreateEyePointBox( MBCHAR *ldlBlock )
+AUI_ERRCODE MessageWindow::CreateEyePointBox(const MBCHAR *ldlBlock)
 {
 	if(!g_theMessagePool->IsValid(m_message))
 		return AUI_ERRCODE_OK;
@@ -412,7 +412,7 @@ AUI_ERRCODE MessageWindow::CreateEyePointBox( MBCHAR *ldlBlock )
 }
 
 
-AUI_ERRCODE MessageWindow::CreateStandardEyePointBox( MBCHAR *ldlBlock )
+AUI_ERRCODE MessageWindow::CreateStandardEyePointBox(const MBCHAR *ldlBlock)
 {
 	AUI_ERRCODE		errcode = AUI_ERRCODE_OK;
 
@@ -426,7 +426,7 @@ AUI_ERRCODE MessageWindow::CreateStandardEyePointBox( MBCHAR *ldlBlock )
 }
 
 
-AUI_ERRCODE MessageWindow::CreateDropdownEyePointBox( MBCHAR *ldlBlock )
+AUI_ERRCODE MessageWindow::CreateDropdownEyePointBox(const MBCHAR *ldlBlock)
 {
 	AUI_ERRCODE		errcode = AUI_ERRCODE_OK;
 
@@ -440,7 +440,7 @@ AUI_ERRCODE MessageWindow::CreateDropdownEyePointBox( MBCHAR *ldlBlock )
 }
 
 
-AUI_ERRCODE MessageWindow::CreateListboxEyePointBox( MBCHAR *ldlBlock )
+AUI_ERRCODE MessageWindow::CreateListboxEyePointBox(const MBCHAR *ldlBlock)
 {
 	AUI_ERRCODE		errcode = AUI_ERRCODE_OK;
 
@@ -454,7 +454,7 @@ AUI_ERRCODE MessageWindow::CreateListboxEyePointBox( MBCHAR *ldlBlock )
 }
 
 
-AUI_ERRCODE MessageWindow::CreateResponses( MBCHAR *ldlBlock )
+AUI_ERRCODE MessageWindow::CreateResponses(const MBCHAR *ldlBlock)
 {
 	if(!g_theMessagePool->IsValid(m_message))
 		return AUI_ERRCODE_OK;
@@ -473,7 +473,7 @@ AUI_ERRCODE MessageWindow::CreateResponses( MBCHAR *ldlBlock )
 }
 
 
-AUI_ERRCODE MessageWindow::CreateSelectResponses( MBCHAR *ldlBlock )
+AUI_ERRCODE MessageWindow::CreateSelectResponses(const MBCHAR *ldlBlock)
 {
 	AUI_ERRCODE errcode = AUI_ERRCODE_OK;
 
@@ -486,7 +486,7 @@ AUI_ERRCODE MessageWindow::CreateSelectResponses( MBCHAR *ldlBlock )
 	return AUI_ERRCODE_OK;
 }
 
-AUI_ERRCODE MessageWindow::CreateSubmitResponses( MBCHAR *ldlBlock )
+AUI_ERRCODE MessageWindow::CreateSubmitResponses(const MBCHAR *ldlBlock)
 {
 	AUI_ERRCODE		errcode = AUI_ERRCODE_OK;
 
@@ -498,7 +498,6 @@ AUI_ERRCODE MessageWindow::CreateSubmitResponses( MBCHAR *ldlBlock )
 
 	return AUI_ERRCODE_OK;
 }
-
 
 AUI_ERRCODE MessageWindow::ShowWindow( BOOL show )
 {
@@ -694,87 +693,17 @@ MessageWindow::~MessageWindow ()
 
 void MessageWindow::BringBorderToTop()
 {
-
-
-
-
-
-
-
-
-
-
-
 }
-
 
 AUI_ERRCODE MessageWindow::AddBordersToUI()
 {
-	AUI_ERRCODE errcode = AUI_ERRCODE_OK;
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
 
 
 	return AUI_ERRCODE_OK;
 }
 
-
 AUI_ERRCODE MessageWindow::RemoveBordersFromUI()
 {
-	AUI_ERRCODE errcode = AUI_ERRCODE_OK;
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
 
 	return AUI_ERRCODE_OK;
 }

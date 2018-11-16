@@ -21,7 +21,7 @@ extern aui_Win* g_winFocus;
 aui_TextField::aui_TextField(
 	AUI_ERRCODE *retval,
 	uint32 id,
-	MBCHAR *ldlBlock,
+	const MBCHAR *ldlBlock,
 	ControlActionCallback *ActionFunc,
 	void *cookie )
 	:
@@ -64,7 +64,7 @@ aui_TextField::aui_TextField(
 }
 
 
-AUI_ERRCODE aui_TextField::InitCommonLdl( MBCHAR *ldlBlock )
+AUI_ERRCODE aui_TextField::InitCommonLdl(const MBCHAR *ldlBlock)
 {
 	aui_Ldl *theLdl = g_ui->GetLdl();
 
@@ -76,7 +76,7 @@ AUI_ERRCODE aui_TextField::InitCommonLdl( MBCHAR *ldlBlock )
 	Assert( block != NULL );
 	if ( !block ) return AUI_ERRCODE_LDLFINDDATABLOCKFAILED;
 
-	MBCHAR *text = block->GetString( k_AUI_TEXTFIELD_LDL_TEXT );
+	const MBCHAR *text = block->GetString(k_AUI_TEXTFIELD_LDL_TEXT);
 	BOOL multiLine = block->GetBool( k_AUI_TEXTFIELD_LDL_MULTILINE );
 	BOOL autovscroll =
 		block->GetAttributeType( k_AUI_TEXTFIELD_LDL_AUTOVSCROLL ) == ATTRIBUTE_TYPE_BOOL ?
@@ -88,7 +88,7 @@ AUI_ERRCODE aui_TextField::InitCommonLdl( MBCHAR *ldlBlock )
 		TRUE;
 	BOOL isfilename = block->GetBool( k_AUI_TEXTFIELD_LDL_ISFILENAME );
 	BOOL passwordReady = block->GetBool( k_AUI_TEXTFIELD_LDL_PASSWORD );
-	MBCHAR *font = block->GetString( k_AUI_TEXTFIELD_LDL_FONT );
+	const MBCHAR *font = block->GetString(k_AUI_TEXTFIELD_LDL_FONT);
 	sint32 fontheight = block->GetInt( k_AUI_TEXTFIELD_LDL_FONT );
 
 	sint32 maxFieldLen =
@@ -455,7 +455,9 @@ AUI_ERRCODE aui_TextField::DrawThis( aui_Surface *surface, sint32 x, sint32 y )
 	if ( !surface ) surface = m_window->TheSurface();
 
 	RECT rect = { 0, 0, m_width, m_height };
+#ifdef __AUI_USE_DIRECTX__
 	RECT srcRect = rect;
+#endif
 	OffsetRect( &rect, m_x + x, m_y + y );
 	ToWindow( &rect );
 

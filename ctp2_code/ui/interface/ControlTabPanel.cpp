@@ -35,7 +35,8 @@
 #include "TilesControlPanel.h"
 #include "UnitControlPanel.h"
 
-static MBCHAR *AppendBlockName(MBCHAR *ldlBlock, MBCHAR *subBlock)
+static MBCHAR *
+AppendBlockName(const MBCHAR *ldlBlock, const MBCHAR *subBlock)
 {
 
 	MBCHAR *newBlock = new char[strlen(ldlBlock) + strlen(subBlock) + 2];
@@ -45,7 +46,7 @@ static MBCHAR *AppendBlockName(MBCHAR *ldlBlock, MBCHAR *subBlock)
 	return(newBlock);
 }
 
-ControlTabPanel::ControlTabPanel(MBCHAR *ldlBlock) :
+ControlTabPanel::ControlTabPanel(const MBCHAR *ldlBlock) :
 m_ldlBlock(AppendBlockName(ldlBlock, "ControlTabPanel")),
 m_domesticControlPanel(new DomesticControlPanel(m_ldlBlock.get())),
 m_cityControlPanel(new CityControlPanel(m_ldlBlock.get())),

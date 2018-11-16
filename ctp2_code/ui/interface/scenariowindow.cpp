@@ -78,7 +78,7 @@ extern MBCHAR                       g_scenarioName[k_SCENARIO_NAME_MAX];
 
 
 
-ScenarioWindow::ScenarioWindow(AUI_ERRCODE *retval, MBCHAR *ldlBlock)
+ScenarioWindow::ScenarioWindow(AUI_ERRCODE *retval, const MBCHAR *ldlBlock)
 {
 	Assert(AUI_SUCCESS(*retval));
 
@@ -143,7 +143,7 @@ void ScenarioWindow::FillListWithScenarios(ctp2_ListBox *available)
 {
 	int					i=0;
 	ScenarioPack		*scenPack;
-	MBCHAR				*ldlBlock = "ScenarioListItem";
+	const MBCHAR		*ldlBlock = "ScenarioListItem";
 
 	scenPack = m_scenarioPack;
 
@@ -189,7 +189,6 @@ void ScenarioWindow::FillListWithScenarioPacks(ctp2_ListBox *available,bool hide
 {
 	int					i=0;
 	ScenarioPack		*scenPack;
-	MBCHAR				*ldlBlock = "ScenarioPackListItem";
 	MBCHAR checkFile[_MAX_PATH];
 #ifdef WIN32
 	struct _stat fileStatus;
@@ -701,7 +700,10 @@ void ScenarioWindow::NewPackOk(aui_Control *control, uint32 action, uint32 data,
 		return;
 	}
 
-	CIV_SCEN_ERR err = g_civScenarios->MakeNewPack(dir, name, desc);
+#ifdef _DEBUG
+	CIV_SCEN_ERR err =
+#endif
+	g_civScenarios->MakeNewPack(dir, name, desc);
 	Assert(err == CIV_SCEN_OK);
 
 	Assert(s_ScenarioWindow);
@@ -764,7 +766,10 @@ void ScenarioWindow::NewScenOk(aui_Control *control, uint32 action, uint32 data,
 		MBCHAR scenPackDir[_MAX_PATH];
 		strcpy(scenPackDir, s_ScenarioWindow->m_scenarioPack->m_path);
 
-		CIV_SCEN_ERR err = g_civScenarios->MakeNewScenario(s_ScenarioWindow->m_scenarioPack, name, desc);
+#ifdef _DEBUG
+		CIV_SCEN_ERR err =
+#endif
+		g_civScenarios->MakeNewScenario(s_ScenarioWindow->m_scenarioPack, name, desc);
 		Assert(err == CIV_SCEN_OK);
 
 		s_ScenarioWindow->m_scenarioPack = g_civScenarios->GetScenarioPackByPath(scenPackDir);

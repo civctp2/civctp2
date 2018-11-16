@@ -31,12 +31,12 @@ public:
 	CitySpriteGroup(GROUPTYPE type);
 	virtual ~CitySpriteGroup();
 
-	void			Load(char *filename);
+	void			Load(const char *filename);
 	void			Import(uint16 id);
 
 	void			Draw(sint32 drawX, sint32 drawY, sint32 facing, double scale,
 					  uint16 transparency, Pixel16 outlineColor, uint16 flags);
-	void			DrawText(sint32 x, sint32 y, char *s);
+	void			DrawText(sint32 x, sint32 y, const char *s);
 
 private:
 

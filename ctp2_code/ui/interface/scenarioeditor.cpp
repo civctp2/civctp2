@@ -151,9 +151,9 @@
 
 extern C3UI *g_c3ui;
 
-static MBCHAR *s_scenarioEditorBlock = "ScenarioEditor";
+static const MBCHAR *s_scenarioEditorBlock = "ScenarioEditor";
 static ScenarioEditor *s_scenarioEditor = NULL;
-static MBCHAR *s_scenarioAddStuffBlock = "ScenAddStuffWindow";
+static const MBCHAR *s_scenarioAddStuffBlock = "ScenAddStuffWindow";
 
 extern RadarMap *g_radarMap;
 extern ControlPanelWindow *g_controlPanel;
@@ -176,21 +176,16 @@ extern MBCHAR g_slic_filename[_MAX_PATH];
 #define k_MAX_ADD_GOLD_OR_PW 1000000
 #define MAX_CHARS 7
 
-static MBCHAR *k_WORLD_TAB_BUTTON = "ScenarioEditor.TabGroup.WorldButton";
-static MBCHAR *k_UNIT_TAB_BUTTON = "ScenarioEditor.TabGroup.UnitButton";
-static MBCHAR *k_CITY_TAB_BUTTON = "ScenarioEditor.TabGroup.CityButton";
-static MBCHAR *k_CIV_TAB_BUTTON = "ScenarioEditor.TabGroup.CivButton";
-
 extern void WhackScreen();
 
-char *s_scenTabNames[SCEN_TAB_MAX] = {
+static const char *s_scenTabNames[SCEN_TAB_MAX] = {
 	"World",
 	"Unit",
 	"City",
 	"Civ",
 };
 
-static char *s_playerSpinners[] = {
+static const char *s_playerSpinners[] = {
 	"UnitControls.Player",
 	"CityControls.Player",
 	"CivControls.Player"
@@ -201,7 +196,7 @@ BOOL s_wasKeepingScore = FALSE;
 
 BOOL g_toeMode = FALSE;
 
-static char *s_modeSwitchNames[SCEN_START_LOC_MODE_MAX] = {
+static const char *s_modeSwitchNames[SCEN_START_LOC_MODE_MAX] = {
 	"TabGroup.Civ.FullModeSwitch",
 	"TabGroup.Civ.PlayerNoCivSwitch",
 	"TabGroup.Civ.PlayerWithCivSwitch",
@@ -708,7 +703,7 @@ void ScenarioEditor::PopulateTerrainList()
 
 		m_terrainSwitches[t] = sw;
 
-		sw->SetActionFuncAndCookie(ScenarioEditor::TerrainSwitch, (void *)t);
+		sw->SetActionFuncAndCookie(ScenarioEditor::TerrainSwitch, (void *)(intptr_t)t);
 		((aui_TipWindow *)sw->GetTipWindow())->SetTipText((MBCHAR *)trec->GetNameText());
 
 		col++;
@@ -811,7 +806,7 @@ void ScenarioEditor::PopulateUnitList(SCEN_UNIT_CAT cat)
 			sw->SetImage((char *)iconname, 1);
 		}
 
-		sw->SetActionFuncAndCookie(ScenarioEditor::UnitSwitch, (void *)ui);
+		sw->SetActionFuncAndCookie(ScenarioEditor::UnitSwitch, (void *)(intptr_t)ui);
 
 		((aui_TipWindow *)sw->GetTipWindow())->SetTipText((MBCHAR *)rec->GetNameText());
 
@@ -823,7 +818,7 @@ void ScenarioEditor::PopulateUnitList(SCEN_UNIT_CAT cat)
 		{
 			sw->SetState(1);
 		}
-		sw->SetActionFuncAndCookie(ScenarioEditor::ExcludeSwitch, (void *)ui);
+		sw->SetActionFuncAndCookie(ScenarioEditor::ExcludeSwitch, (void *)(intptr_t)ui);
 		col++;
 		if(col >= k_UNIT_COLS_PER_ROW) {
 			col = 0;
@@ -883,7 +878,7 @@ void ScenarioEditor::PopulateCityList()
 		Assert(sw);
 		if(!sw) break;
 
-		sw->SetActionFuncAndCookie(ScenarioEditor::CityStyleSwitch, (void *)cs);
+		sw->SetActionFuncAndCookie(ScenarioEditor::CityStyleSwitch, (void *)(intptr_t)cs);
 		col++;
 		if(col >= k_CITY_COLS_PER_ROW) {
 			col = 0;
@@ -988,7 +983,7 @@ void ScenarioEditor::PopulateTerrainImprovementList()
 
 		m_terrainImpSwitches[t] = sw;
 
-		sw->SetActionFuncAndCookie(ScenarioEditor::TerrainImprovementSwitch, (void *)t);
+		sw->SetActionFuncAndCookie(ScenarioEditor::TerrainImprovementSwitch, (void *)(intptr_t)t);
 		((aui_TipWindow *)sw->GetTipWindow())->SetTipText((MBCHAR *)rec->GetNameText());
 
 		col++;
@@ -1944,7 +1939,7 @@ void ScenarioEditor::AddRightList(aui_Control *control, uint32 action, uint32 da
 	ScenarioEditor::AddRemoveButton(NULL, AUI_LISTBOX_ACTION_DOUBLECLICKSELECT, 0, NULL);
 }
 
-void ScenarioEditor::AddAddItem(ctp2_ListBox *list, const MBCHAR *text, sint32 userData)
+void ScenarioEditor::AddAddItem(ctp2_ListBox *list, const MBCHAR *text, intptr_t userData)
 {
 	ctp2_ListItem *item = (ctp2_ListItem*)aui_Ldl::BuildHierarchyFromRoot("ScenAddStuffItem");
 	Assert(item);
@@ -2768,8 +2763,6 @@ void ScenarioEditor::SetupGlobalControls()
 
 	sint32 i;
 	ctp2_DropDown *dd;
-	ctp2_ListItem *item = NULL;
-	ctp2_Static *box = NULL;
 	dd = (ctp2_DropDown *)aui_Ldl::GetObject(s_scenarioEditorBlock, "Globals.MapSize");
 
 	AUI_ERRCODE err = AUI_ERRCODE_OK;
@@ -2872,10 +2865,8 @@ void ScenarioEditor::SetupGlobalControls()
 	table = NULL;
 
 	ctp2_Static *st = (ctp2_Static *)aui_Ldl::GetObject(s_scenarioEditorBlock, "Globals.YearDisplay");
-	MBCHAR tempstr[_MAX_PATH];
 
-	sprintf(tempstr, TurnYearStatus::GetCurrentYear());
-	st->SetText(tempstr);
+	st->SetText(TurnYearStatus::GetCurrentYear());
 
 	UpdatePlayerCount();
 
@@ -2886,7 +2877,7 @@ void ScenarioEditor::UpdatePlayerCount()
 {
 
 	ctp2_Static *st = (ctp2_Static *)aui_Ldl::GetObject(s_scenarioEditorBlock, "Globals.Players");
-	MBCHAR tempstr[_MAX_PATH];
+	MBCHAR tempstr[64];
 
 	sprintf(tempstr, "%d", GetNumPlayers());
 	st->SetText(tempstr);
@@ -2959,15 +2950,7 @@ void ScenarioEditor::MapSize(aui_Control *control, uint32 action, uint32 data, v
 		return;
 
 	MessageBoxDialog::Query( "str_ldl_Confirm_Restart", "ConfirmMapSizeRestart",
-		ScenarioEditor::ChangeMapSizeCallback, (void*)mapSize );
-
-
-
-
-
-
-
-
+		ScenarioEditor::ChangeMapSizeCallback, (void*)(intptr_t)mapSize );
 }
 
 void ScenarioEditor::ChangeMapSizeCallback(bool response, void *userData)
@@ -3010,10 +2993,8 @@ void ScenarioEditor::Year(aui_Control *control, uint32 action, uint32 data, void
 	}
 
 	ctp2_Static *st = (ctp2_Static *)aui_Ldl::GetObject(s_scenarioEditorBlock, "Globals.YearDisplay");
-	MBCHAR tempstr[_MAX_PATH];
 
-	sprintf(tempstr, TurnYearStatus::GetCurrentYear());
-	st->SetText(tempstr);
+	st->SetText(TurnYearStatus::GetCurrentYear());
 
 	MainControlPanel::UpdatePlayer(g_selected_item->GetVisiblePlayer());
 }
@@ -3029,6 +3010,7 @@ void ScenarioEditor::Barbarians(aui_Control *control, uint32 action, uint32 data
 	g_theProfileDB->SetRiskLevel(risk);
 
 }
+
 void ScenarioEditor::SetGovernment(aui_Control *control, uint32 action, uint32 data, void *cookie)
 {
 	if(action != AUI_DROPDOWN_ACTION_SELECT) return;
@@ -3288,7 +3270,8 @@ void ScenarioEditor::FogButton(aui_Control *control, uint32 action, uint32 data,
 	WhackScreen();
 }
 
-void ScenarioEditor::AddDropDownItem(ctp2_DropDown *dd, MBCHAR *ldlblock, char * item)
+void ScenarioEditor::AddDropDownItem(ctp2_DropDown *dd,
+    const MBCHAR *ldlblock, const char * item)
 {
 
 	ctp2_ListItem *listItem = NULL;
@@ -3371,7 +3354,6 @@ void ScenarioEditor::RemoveGoods(aui_Control *control, uint32 action, uint32 dat
 
 	for(sint32 x = 0; x < g_theWorld->GetXWidth(); x++) {
 		for(sint32 y = 0; y < g_theWorld->GetYHeight(); y++) {
-			Cell *cell = g_theWorld->GetCell(x, y);
 			g_theWorld->ClearGoods(x,y);
 		}
 	}
@@ -3446,8 +3428,8 @@ void ScenarioEditor::FindPosNow(aui_Control *control, uint32 action, uint32 data
 
 	MBCHAR Xtext[MAX_CHARS];
 	MBCHAR Ytext[MAX_CHARS];
-	uint32 posX = 0;
-	uint32 posY = 0;
+	int posX = 0;
+	int posY = 0;
 
 	ctp2_TextField *tf = (ctp2_TextField *)aui_Ldl::GetObject(s_scenarioEditorBlock, "WorldExtraControls.FindPosXField");
 	if(!tf->GetFieldText(Xtext, MAX_CHARS)) {

@@ -433,8 +433,8 @@ typedef struct {			/* Request (filled in by caller) */
 	long baseadr;          /* ignored by Windows */
 	long hwirq;            /* ignored by Windows */
 	long swint;            /* ignored by Windows */
-	char *phonenum;
-	char *modeministr;
+	const char *phonenum;
+	const char *modeministr;
 	long flags;			/* controls whether to dial and/or test */
 	long dialing_method;	/* parameter to HMSetDialingMethod */
 } PACK commInitReq_t;
@@ -823,7 +823,7 @@ DP_API dp_result_t DP_APIX dpCreate(
 	dp_t **pdp,
 	dp_transport_t *transport,
 	commInitReq_t *params,
-	char *thawFilename);
+	const char *thawFilename);
 
 /*------------------------------------------------------------------------
  Destroy a dp_t.
@@ -840,7 +840,7 @@ DP_API dp_result_t DP_APIX dpDestroy(
 --------------------------------------------------------------------------*/
 DP_API dp_result_t DP_APIX dpResolveHostname(
 	dp_t *dp,
-	char *hostname,
+	const char *hostname,
 	char adrbuf[dp_MAX_ADR_LEN]);
 
 /*------------------------------------------------------------------------
@@ -866,7 +866,7 @@ DP_API dp_result_t DP_APIX dpResolveHostname(
 ------------------------------------------------------------------------*/
 DP_API dp_result_t DP_APIX dpSetGameServerEx(
 	dp_t *dp,
-	char *masterHostName,	/* server's name, or NULL to clear */
+	const char *masterHostName,	/* server's name, or NULL to clear */
 	dp_species_t sessionType);
 
 /*--------------------------------------------------------------------------
@@ -886,7 +886,7 @@ DP_API dp_result_t DP_APIX dpGetGameServerEx(
 ------------------------------------------------------------------------*/
 DP_API dp_result_t DP_APIX dpSetGameServer(
 	dp_t *dp,
-	char *masterHostName);	/* server's name, or NULL to clear */
+	const char *masterHostName);	/* server's name, or NULL to clear */
 
 /*------------------------------------------------------------------------
  Retrieve the current session description.
@@ -1228,7 +1228,7 @@ DP_API dp_result_t DP_APIX dpCreatePlayer(
 	dp_t	*dp,
 	dpEnumPlayersCallback_t cb,
 	void	*context,
-	dp_char_t	*name);
+	const dp_char_t	*name);
 
 /*------------------------------------------------------------------------
  Destroy the given player; removes the player from the game session.
@@ -1276,7 +1276,7 @@ DP_API dp_result_t DP_APIX dpGetPlayerName(
 DP_API dp_result_t DP_APIX dpSetPlayerName(
 	dp_t *dp,
 	dpid_t id,
-	dp_char_t *name);
+	const dp_char_t *name);
 
 /*------------------------------------------------------------------------
  Retrieve the blob associated with player having the given id.
@@ -1446,12 +1446,12 @@ DP_API dp_result_t DP_APIX dpEnumGroupPlayers(
  Set variable 'key' for a player.  See dp.htm for more info.
 ------------------------------------------------------------------------*/
 DP_API dp_result_t DP_APIX dpSetPlayerData(
-	dp_t   *dp,
-	dpid_t idPlayer,
-	int    key,
-	void   *buf,
-	size_t buflen,
-	long   flags);
+    dp_t   *dp,
+    dpid_t idPlayer,
+    int    key,
+    const void   *buf,
+    size_t buflen,
+    long   flags);
 
 /*------------------------------------------------------------------------
  Send a given player's variable 'key' to a player (or to everybody,
@@ -1804,7 +1804,7 @@ DP_API int DP_APIX dp_unpack_session(dp_t *dp, const char *subkey, int subkeylen
 /*--------------------------------------------------------------------------
  Change the .INI file accessed by future calls.
 --------------------------------------------------------------------------*/
-DP_API void DP_APIX dpini_SetFile(char *iniFileName);
+DP_API void DP_APIX dpini_SetFile(const char *iniFileName);
 
 /*--------------------------------------------------------------------------
  Return the name of the current .INI file.

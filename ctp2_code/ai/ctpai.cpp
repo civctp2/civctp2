@@ -488,8 +488,6 @@ void CtpAi::GroupWithEscort(const Army & army)
 	if (army.Num() > 1)
 		return;
 
-	PLAYER_INDEX playerId = army->GetOwner();
-
 	sint32 min_strength = -1;
 	sint32 tmp_strength;
 	Army min_army;
@@ -1601,10 +1599,7 @@ void CtpAi::UnGroupGarrisonUnits(const PLAYER_INDEX playerId)
 		MapPoint	pos(city.RetPos());
 		g_theWorld->GetArmy(pos, garrison);
 
-        sint32		min_size	= k_MAX_ARMY_SIZE;
-
-		for (sint32 j = 0; j < garrison.Num(); ++j)
-        {
+		for (sint32 j = 0; j < garrison.Num(); ++j) {
 			//there is a problem to determine if units are in garrison or just pathing through the city
 			// If fear it will also ungroup all the units of the tile (garrison points on a cellunitlist that
 			// cannot know which units is group tu another.
@@ -1836,7 +1831,6 @@ void CtpAi::NetworkClientBeginTurn(PLAYER_INDEX player)
 void CtpAi::Resize()
 {
 
-	sint32 old_player_count = s_maxPlayers;
 	s_maxPlayers = 0;
 	sint32 index;
 	for(index = 0; index < k_MAX_PLAYERS; index++) {
@@ -2028,8 +2022,7 @@ void CtpAi::AddMiscMapTargets(const PLAYER_INDEX playerId)
 	const StrategyRecord & strategy =
 		Diplomat::GetDiplomat(playerId).GetCurrentStrategy();
 
-	Player *player_ptr = g_player[playerId];
-	Assert(player_ptr);
+	Assert(g_player[playerId]);
 
 	CTPGoal_ptr goal_ptr;
 
@@ -2088,8 +2081,6 @@ void CtpAi::AddMiscMapTargets(const PLAYER_INDEX playerId)
 
 void CtpAi::ComputeCityGarrisons(const PLAYER_INDEX playerId )
 {
-	sint32 committed_units = 0;
-
 	Unit city;
 	MapPoint pos;
 	Army army;
@@ -2343,8 +2334,7 @@ bool CtpAi::GetNearestRefuel(const Army & army, const MapPoint & start_pos, MapP
 
 	if (refueling_distance < 0)
 	{
-		bool NO_REFUEL_DESTINATION = false;
-		Assert(NO_REFUEL_DESTINATION);
+		Assert(!"NO_REFUEL_DESTINATION");
 		return false;
 	}
 	return true;
@@ -2389,9 +2379,7 @@ void CtpAi::RefuelAirplane(const Army & army)
 		new_path,
 		total_cost))
 	{
-
-		bool NO_REFUEL_PATH = false;
-		Assert(NO_REFUEL_PATH);
+		Assert(!"NO_REFUEL_PATH");
 		return;
 	}
 
@@ -2420,7 +2408,6 @@ void CtpAi::ExecuteOpportunityActions(const PLAYER_INDEX player)
 	if (player_ptr == NULL)
 		return;
 	sint32 num_armies = player_ptr->m_all_armies->Num();
-	sint32 num_cities = player_ptr->m_all_cities->Num();
 	Army army;
 
 

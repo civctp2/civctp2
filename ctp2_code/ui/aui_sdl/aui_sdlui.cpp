@@ -63,7 +63,7 @@ aui_SDLUI::aui_SDLUI
 	sint32 width,
 	sint32 height,
 	sint32 bpp,
-	MBCHAR *ldlFilename,
+	const MBCHAR *ldlFilename,
 	BOOL useExclusiveMode
 )
 :   aui_UI              (),

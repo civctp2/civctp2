@@ -222,10 +222,6 @@ void MessageList::ChangeOffset( sint32 offset, int flag )
 		m_offset = m_offset + offset;
 
 	Assert( m_offset >= 0 );
-	if ( m_offset < 0 ) {
-		ChangeOffset( 0, SHOW_MESSAGE_OFFSET_ABSOLUTE );
-		return;
-	}
 
 	uint32 minCount = m_offset;
 	uint32 maxCount = ( m_offset + g_messageMaxVisible );

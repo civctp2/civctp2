@@ -122,10 +122,9 @@ static int tracklen_GetTrackLengthsViaHandle( DWORD *trackLenBuf, unsigned int w
 	uint64 totalLen_ms = 0;
 #endif
 	DWORD i;
-	BOOL bAllTracksOK = TRUE;
-	int iRet;
 
 #if defined(WIN32) && !defined(USE_SDL)
+	int iRet;
 	memset(&mp, 0, sizeof(mp));
 	mp.dwTimeFormat = MCI_FORMAT_MILLISECONDS;
 	iRet = mciSendCommand(wDeviceID, MCI_SET, MCI_SET_TIME_FORMAT, (DWORD)&mp);
@@ -532,7 +531,9 @@ BYTE tracklen_CheckTrackLengths( char *szVersionInfoBuffer )
 #define AUTORUN_DEFAULT 0x95
 #define AUTORUN_DISABLE 0xff
 
+#if defined(WIN32)
 static ULONG s_oldAutoRunValue = AUTORUN_UNKNOWN;
+#endif
 
 void tracklen_AutoPlay_Disable()
 {

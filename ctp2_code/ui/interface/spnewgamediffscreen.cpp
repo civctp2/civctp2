@@ -57,14 +57,11 @@ extern ProfileDB			*g_theProfileDB;
 
 static c3_PopupWindow	*s_spNewGameDiffScreen	= NULL;
 
-
-
-
 // Skill level selection
 static c3_Static *			s_skillLevel		= NULL;
-static aui_SwitchGroup *	s_group				= NULL;
-static aui_Radio **			s_checkBox			= NULL;
-static MBCHAR				checknames[k_NUM_DIFFBOXES][50] =
+static aui_SwitchGroup *s_group				= NULL;
+static aui_Radio **	s_checkBox			= NULL;
+static const MBCHAR	*checknames[k_NUM_DIFFBOXES] =
 {
 	"DiffOne",
 	"DiffTwo",
@@ -75,10 +72,10 @@ static MBCHAR				checknames[k_NUM_DIFFBOXES][50] =
 };
 
 // Barbarian threat selection
-static c3_Static *			s_barbarianThreat	= NULL;
-static aui_SwitchGroup *	s_groupTwo			= NULL;
-static aui_Radio **			s_riskBox			= NULL;
-static MBCHAR				risknames[k_NUM_RISKBOXES][50] =
+static c3_Static *	s_barbarianThreat	= NULL;
+static aui_SwitchGroup *s_groupTwo			= NULL;
+static aui_Radio **	s_riskBox			= NULL;
+static const MBCHAR	*risknames[k_NUM_RISKBOXES] =
 {
 	"RiskOne",
 	"RiskTwo",
@@ -86,24 +83,23 @@ static MBCHAR				risknames[k_NUM_RISKBOXES][50] =
 	"RiskFour"
 };
 
-
 static sint32 s_difficulty1 = 0;
 static sint32 s_difficulty2 = 0;
-sint32 spnewgamediffscreen_getDifficulty1( void )
+
+sint32
+spnewgamediffscreen_getDifficulty1(void)
 {
 	return s_difficulty1;
 }
-sint32 spnewgamediffscreen_getDifficulty2( void )
+
+sint32
+spnewgamediffscreen_getDifficulty2(void)
 {
 	return s_difficulty2;
 }
 
-
-
-
-
-
-void spnewgamediffscreen_setDifficulty1( sint32 d )
+void
+spnewgamediffscreen_setDifficulty1(sint32 d)
 {
 	Assert( d >= 0 && d < k_NUM_DIFFBOXES );
 	if ( d < 0 || d >= k_NUM_DIFFBOXES )
@@ -116,12 +112,8 @@ void spnewgamediffscreen_setDifficulty1( sint32 d )
 	g_theProfileDB->SetDifficulty( s_difficulty1 = d );
 }
 
-
-
-
-
-
-void spnewgamediffscreen_setDifficulty2( sint32 d )
+void
+spnewgamediffscreen_setDifficulty2(sint32 d)
 {
 	Assert( d >= 0 && d < k_NUM_RISKBOXES );
 	if ( d < 0 || d >= k_NUM_RISKBOXES )
@@ -134,11 +126,8 @@ void spnewgamediffscreen_setDifficulty2( sint32 d )
 	g_theProfileDB->SetRiskLevel( s_difficulty2 = d );
 }
 
-
-
-
-
-sint32	spnewgamediffscreen_displayMyWindow(BOOL viewMode,BOOL reinit)
+sint32
+spnewgamediffscreen_displayMyWindow(BOOL viewMode,BOOL reinit)
 {
 	sint32 retval=0;
 	if(!s_spNewGameDiffScreen) { retval = spnewgamediffscreen_Initialize(); }
@@ -163,7 +152,9 @@ sint32	spnewgamediffscreen_displayMyWindow(BOOL viewMode,BOOL reinit)
 
 	return retval;
 }
-sint32 spnewgamediffscreen_removeMyWindow(uint32 action)
+
+sint32
+spnewgamediffscreen_removeMyWindow(uint32 action)
 {
 	if ( action != (uint32)AUI_BUTTON_ACTION_EXECUTE ) return 0;
 
@@ -199,8 +190,8 @@ sint32 spnewgamediffscreen_removeMyWindow(uint32 action)
 	return 1;
 }
 
-
-AUI_ERRCODE spnewgamediffscreen_Initialize( aui_Control::ControlActionCallback *callback )
+AUI_ERRCODE
+spnewgamediffscreen_Initialize( aui_Control::ControlActionCallback *callback )
 {
 	AUI_ERRCODE errcode = AUI_ERRCODE_OK;
 	MBCHAR		windowBlock[ k_AUI_LDL_MAXBLOCK + 1 ];
@@ -220,7 +211,6 @@ AUI_ERRCODE spnewgamediffscreen_Initialize( aui_Control::ControlActionCallback *
 	{
 		s_spNewGameDiffScreen = new c3_PopupWindow( &errcode, aui_UniqueId(), windowBlock, 16, AUI_WINDOW_TYPE_FLOATING, false);
 		Assert( AUI_NEWOK(s_spNewGameDiffScreen, errcode) );
-		if ( !AUI_NEWOK(s_spNewGameDiffScreen, errcode) ) errcode;
 
 		s_spNewGameDiffScreen->Resize(s_spNewGameDiffScreen->Width(),s_spNewGameDiffScreen->Height());
 		s_spNewGameDiffScreen->GrabRegion()->Resize(s_spNewGameDiffScreen->Width(),s_spNewGameDiffScreen->Height());
@@ -281,7 +271,6 @@ AUI_ERRCODE spnewgamediffscreen_Initialize( aui_Control::ControlActionCallback *
 	return AUI_ERRCODE_OK;
 }
 
-
 //----------------------------------------------------------------------------
 //
 // Name       : spnewgamediffscreen_Cleanup
@@ -303,7 +292,8 @@ AUI_ERRCODE spnewgamediffscreen_Initialize( aui_Control::ControlActionCallback *
 // Remark(s)  : -
 //
 //----------------------------------------------------------------------------
-AUI_ERRCODE spnewgamediffscreen_Cleanup()
+AUI_ERRCODE
+spnewgamediffscreen_Cleanup()
 {
 	if (s_spNewGameDiffScreen)
 	{
@@ -339,13 +329,10 @@ AUI_ERRCODE spnewgamediffscreen_Cleanup()
 	return AUI_ERRCODE_OK;
 }
 
-
-
-
-void spnewgamediffscreen_backPress(aui_Control *control, uint32 action, uint32 data, void *cookie )
+void
+spnewgamediffscreen_backPress(aui_Control *control, uint32 action, uint32 data, void *cookie )
 {
 
 
 	spnewgamediffscreen_removeMyWindow(action) ;
-
 }

@@ -676,7 +676,10 @@ void MapAnalysis::UpdateBoundingRectangle(const Army & army)
     (g_theWorld->IsXwrap() == TRUE),
     (g_theWorld->IsYwrap() == TRUE));
 
-    bool added = m_empireBoundingRect[player].Add(armyRect);
+#ifdef _DEBUG
+    bool added =
+#endif
+    m_empireBoundingRect[player].Add(armyRect);
     Assert(added == true);
 
     m_empireCenter[player].xy2rc(m_empireBoundingRect[player].GetCenter(), * g_theWorld->GetSize());
@@ -723,7 +726,10 @@ void MapAnalysis::UpdateBoundingRectangle(const Unit & city)
     (g_theWorld->IsXwrap() == TRUE),
     (g_theWorld->IsYwrap() == TRUE));
 
-    bool added = m_empireBoundingRect[player].Add(cityRect);
+#ifdef _DEBUG
+    bool added =
+#endif
+    m_empireBoundingRect[player].Add(cityRect);
     Assert(added == true);
 
     m_empireCenter[player].xy2rc(m_empireBoundingRect[player].GetCenter(), * g_theWorld->GetSize());
@@ -872,8 +878,6 @@ const PLAYER_INDEX & opponentId) const
 
     sint32 opponent_nukes =
     GetNuclearWeaponsCount(opponentId);
-
-    bool no_nuke_defense = (GetNuclearWeaponsCount(playerId) == 0);
 
     sint32 num_cities = player_ptr->m_all_cities->Num();
     for (sint32 i = 0; i < num_cities; i++)

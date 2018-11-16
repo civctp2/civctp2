@@ -217,32 +217,22 @@ void ConnectionSelectWindow::Update(void)
 
 	if(item) {
 		b->Enable(TRUE);
+		int	baselen;
 
 		NETFunc::Transport *t = item->GetNetShellObject()->GetNETFuncObject();
 
-
-
-
-
-
-
-
-
-
-
-
-
-		char *filename = t->GetFileName();
-		char *slash = strrchr(filename, '/');
+		const char *filename = t->GetFileName();
+		const char *slash = strrchr(filename, '/');
 		if(slash)
 			filename = slash + 1;
-		char *dot = strchr(filename, '.');
-		if(dot)
-			*dot = 0;
+		const char *dot = strchr(filename, '.');
+		if (dot)
+			baselen = dot - filename;
+		else
+			baselen = strlen(filename);
 		static MBCHAR block[ k_AUI_LDL_MAXBLOCK + 1 ];
-		sprintf( block, "connectionselectwindow.connectiondescriptionstrings.%s", filename );
-		if(dot)
-			*dot = '.';
+		sprintf(block, "connectionselectwindow.connectiondescriptionstrings.%.*s",
+			baselen, filename);
 
 		ns_String description = ns_String(block);
 		if(description.GetString())
@@ -260,13 +250,11 @@ void ConnectionSelectWindow::Update(void)
 	}
 }
 
-
 AUI_ERRCODE ConnectionSelectWindow::Idle( void )
 {
 	NETFunc::Message *m;
 
 	while((m = g_netfunc->GetMessage())) {
-
 
 		g_netfunc->HandleMessage(m);
 
@@ -290,7 +278,6 @@ AUI_ERRCODE ConnectionSelectWindow::Idle( void )
 
 	return AUI_ERRCODE_OK;
 }
-
 
 void ConnectionSelectWindow::ConnectionListBoxAction::Execute(
 	aui_Control *control,
@@ -320,7 +307,6 @@ void ConnectionSelectWindow::ConnectionListBoxAction::Execute(
 		break;
 	}
 }
-
 
 void ConnectionSelectWindow::OKButtonAction::Execute(
 	aui_Control *control,

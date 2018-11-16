@@ -71,6 +71,8 @@
 //
 //----------------------------------------------------------------------------
 
+#include <functional>
+
 #include "c3.h"
 #include "Plan.h"
 
@@ -511,10 +513,7 @@ bool Plan::Commited_Agents_Need_Orders() const
 	Assert(m_the_goal);
 	Assert(m_the_squad);
 
-	sint16 rollback_agents = 0;
-    CTPAgent_ptr agent_ptr;
-
-	CTPGoal_ptr ctpgoal_ptr = (CTPGoal_ptr) m_the_goal;
+	CTPAgent_ptr agent_ptr;
 
 	Agent_Match_List::const_iterator match_iter;
 	for (match_iter = m_matches.begin();

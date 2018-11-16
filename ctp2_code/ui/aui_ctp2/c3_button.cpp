@@ -55,12 +55,12 @@ extern ColorSet		*g_colorSet;
 c3_Button::c3_Button(
 	AUI_ERRCODE *retval,
 	uint32 id,
-	MBCHAR *ldlBlock,
+	const MBCHAR *ldlBlock,
 	ControlActionCallback *ActionFunc,
 	void *cookie )
 	:
 	aui_ImageBase( ldlBlock ),
-	aui_TextBase( ldlBlock, (MBCHAR *)NULL ),
+	aui_TextBase( ldlBlock, (const MBCHAR *)NULL ),
 	aui_Button( retval, id, ldlBlock, ActionFunc, cookie ),
 	PatternBase(ldlBlock, NULL)
 {
@@ -80,7 +80,7 @@ c3_Button::c3_Button(
 	sint32 y,
 	sint32 width,
 	sint32 height,
-	MBCHAR *pattern,
+	const MBCHAR *pattern,
 	ControlActionCallback *ActionFunc,
 	void *cookie )
 	:
@@ -98,10 +98,9 @@ c3_Button::c3_Button(
 }
 
 
-AUI_ERRCODE c3_Button::InitCommonLdl( MBCHAR *ldlBlock )
+AUI_ERRCODE c3_Button::InitCommonLdl(const MBCHAR *ldlBlock)
 {
-	sint32		bevelWidth=k_C3_BUTTON_DEFAULT_BEVELWIDTH,
-				bevelType=0;
+	sint32		bevelWidth=k_C3_BUTTON_DEFAULT_BEVELWIDTH;
 	aui_Ldl		*theLdl = g_c3ui->GetLdl();
 
 	BOOL valid = theLdl->IsValid( ldlBlock );
@@ -238,12 +237,12 @@ AUI_ERRCODE c3_Button::DrawThis(
 c3_EditButton::c3_EditButton(
 	AUI_ERRCODE *retval,
 	uint32 id,
-	MBCHAR *ldlBlock,
+	const MBCHAR *ldlBlock,
 	ControlActionCallback *ActionFunc,
 	void *cookie )
 	:
 	aui_ImageBase( ldlBlock ),
-	aui_TextBase( ldlBlock, (MBCHAR *)NULL ),
+	aui_TextBase( ldlBlock, (const MBCHAR *)NULL ),
 	c3_Button( retval, id, ldlBlock, ActionFunc, cookie )
 {
 	Assert( AUI_SUCCESS(*retval) );
@@ -266,7 +265,7 @@ c3_EditButton::c3_EditButton(
 	sint32 y,
 	sint32 width,
 	sint32 height,
-	MBCHAR *pattern,
+	const MBCHAR *pattern,
 	ControlActionCallback *ActionFunc,
 	void *cookie )
 	:
@@ -290,7 +289,7 @@ c3_EditButton::c3_EditButton(
 }
 
 
-AUI_ERRCODE c3_EditButton::InitCommonLdl( MBCHAR *ldlBlock )
+AUI_ERRCODE c3_EditButton::InitCommonLdl(const MBCHAR *ldlBlock)
 {
 	aui_Ldl		*theLdl = g_c3ui->GetLdl();
 
@@ -332,7 +331,7 @@ AUI_ERRCODE c3_EditButton::InitCommon( sint32 val, sint32 min, sint32 max )
 }
 
 
-AUI_ERRCODE c3_EditButton::CreateFieldAndActions( MBCHAR *ldlBlock )
+AUI_ERRCODE c3_EditButton::CreateFieldAndActions(const MBCHAR *ldlBlock)
 {
 	AUI_ERRCODE errcode = AUI_ERRCODE_OK;
 
@@ -496,7 +495,6 @@ void c3_EditButtonFieldCallback( aui_Control *control, uint32 action, uint32 dat
 	button->SetValue( atoi( text ) );
 
 	button->SetKeyboardFocus();
-
 
 	button->GetParentWindow()->ShouldDraw();
 }

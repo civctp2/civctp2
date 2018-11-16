@@ -57,14 +57,14 @@ enum NET_MSG_TYPE {
 class NetInfoMessage : public Packetizer
 {
 public:
-	NetInfoMessage(NET_MSG_TYPE msg, MBCHAR *playerName, sint32 index);
+	NetInfoMessage(NET_MSG_TYPE msg, const MBCHAR *playerName, sint32 index);
 	NetInfoMessage() {}
 
 	void Packetize(uint8 *buf, uint16 &size);
 	void Unpacketize(uint16 id, uint8 *buf, uint16 size);
 private:
 	NET_MSG_TYPE m_msg;
-	MBCHAR *m_name;
+	const MBCHAR *m_name;
 	sint32 m_player;
 };
 

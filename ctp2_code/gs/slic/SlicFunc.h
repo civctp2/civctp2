@@ -170,7 +170,7 @@ protected:
 	SlicFuncResult m_result;
 
 public:
-	SlicFunc(char *name, SLIC_FUNC_RET_TYPE type);
+	SlicFunc(const char *name, SLIC_FUNC_RET_TYPE type);
 	SlicFunc(CivArchive &archive);
 	virtual ~SlicFunc();
 	void Serialize(CivArchive &archive);

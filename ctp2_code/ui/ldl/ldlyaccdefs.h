@@ -45,6 +45,7 @@
 #define yyerror ldlerror
 #define yyexca ldlexca
 #define yylex ldllex
+extern int ldllex(void); /* implicit declarations are no longer valid in C99 */
 #define yylval ldllval
 #define yynerrs ldlnerrs
 #define yypact ldlpact

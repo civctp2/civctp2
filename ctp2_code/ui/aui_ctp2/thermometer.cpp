@@ -20,7 +20,7 @@ Thermometer::Thermometer(
 	sint32 y,
 	sint32 width,
 	sint32 height,
-	MBCHAR *pattern,
+	const MBCHAR *pattern,
 	sint32 percentFilled,
 	ControlActionCallback *ActionFunc,
 	void *cookie )
@@ -36,7 +36,7 @@ Thermometer::Thermometer(
 Thermometer::Thermometer(
 	AUI_ERRCODE *retval,
 	uint32 id,
-	MBCHAR *ldlBlock,
+	const MBCHAR *ldlBlock,
 	ControlActionCallback *ActionFunc,
 	void *cookie )
 	:
@@ -50,7 +50,7 @@ Thermometer::Thermometer(
 	if ( !AUI_SUCCESS(*retval) ) return;
 }
 
-AUI_ERRCODE Thermometer::InitCommonLdl( MBCHAR *ldlBlock )
+AUI_ERRCODE Thermometer::InitCommonLdl(const MBCHAR *ldlBlock)
 {
 
 	sint32 percentFilled = 0;

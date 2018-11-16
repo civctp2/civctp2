@@ -16,7 +16,7 @@
 
 extern C3UI *g_c3ui;
 
-static MBCHAR *s_VictoryWindowBlock = "VictoryWindow";
+static const MBCHAR *s_VictoryWindowBlock = "VictoryWindow";
 
 
 

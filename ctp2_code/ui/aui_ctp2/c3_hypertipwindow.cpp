@@ -16,7 +16,7 @@ extern ColorSet *g_colorSet;
 c3_HyperTipWindow::c3_HyperTipWindow(
 	AUI_ERRCODE *retval,
 	uint32 id,
-	MBCHAR *ldlBlock )
+	const MBCHAR *ldlBlock)
 	:
 	aui_TipWindow( retval, id, ldlBlock ),
 	PatternBase( ldlBlock, NULL )
@@ -37,7 +37,7 @@ c3_HyperTipWindow::c3_HyperTipWindow(
 	sint32 y,
 	sint32 width,
 	sint32 height,
-	MBCHAR	*pattern )
+	const MBCHAR	*pattern)
 	:
 	aui_TipWindow( retval, id, x, y, width, height ),
 	PatternBase(pattern)
@@ -51,7 +51,7 @@ c3_HyperTipWindow::c3_HyperTipWindow(
 }
 
 
-AUI_ERRCODE c3_HyperTipWindow::InitCommonLdl( MBCHAR *ldlBlock )
+AUI_ERRCODE c3_HyperTipWindow::InitCommonLdl(const MBCHAR *ldlBlock)
 {
 	aui_Ldl *theLdl = g_ui->GetLdl();
 
@@ -94,7 +94,7 @@ AUI_ERRCODE c3_HyperTipWindow::InitCommonLdl( MBCHAR *ldlBlock )
 	return AUI_ERRCODE_OK;
 }
 
-AUI_ERRCODE c3_HyperTipWindow::SetHyperTipText(MBCHAR *text)
+AUI_ERRCODE c3_HyperTipWindow::SetHyperTipText(const MBCHAR *text)
 {
 	m_hyperTip->SetHyperText(text);
 

@@ -170,29 +170,15 @@ STDEHANDLER(FullAttack_NextSStateEvent)
 	if (!args->GetPlayer(0, playerId))
 		return GEV_HD_Continue;
 
-	Player *player = g_player[playerId];
-	Assert(player);
+	Assert(g_player[playerId]);
 
 	Diplomat & diplomat = Diplomat::GetDiplomat(playerId);
 
 	AiState state;
 
-	if (
-
-		(diplomat.AtWarCount() > 0) &&
-
-
-
-
-
-
-
-
-		( Governor::GetGovernor(playerId).PercentUnbuilt( Governor::BUILD_UNIT_LIST_OFFENSE ) <= 0.50) &&
-
-		( Governor::GetGovernor(playerId).PercentUnbuilt( Governor::BUILD_UNIT_LIST_DEFENSE ) <= 0.50)
-		)
-	{
+	if ((diplomat.AtWarCount() > 0) &&
+	    (Governor::GetGovernor(playerId).PercentUnbuilt(Governor::BUILD_UNIT_LIST_OFFENSE) <= 0.50) &&
+	    (Governor::GetGovernor(playerId).PercentUnbuilt(Governor::BUILD_UNIT_LIST_DEFENSE) <= 0.50)) {
 		BOOL invaded = FALSE;
 
 		for (sint32 i=1; i<AgreementMatrix::s_agreements.GetMaxPlayers(); i++) {
@@ -253,8 +239,7 @@ STDEHANDLER(BuildupStrength_NextSStateEvent)
 
 	AiState state;
 
-	Player *player = g_player[playerId];
-	Assert(player);
+	Assert(g_player[playerId]);
 
 	if (diplomat.AtWarCount() <= 0)
 		return GEV_HD_Continue;
@@ -308,24 +293,12 @@ STDEHANDLER(SeigeCities_NextSStateEvent)
 
 	Diplomat & diplomat = Diplomat::GetDiplomat(playerId);
 
-	Player *player = g_player[playerId];
-	Assert(player);
+	Assert(g_player[playerId]);
 
-	if (
-
-		(diplomat.AtWarCount() > 0) &&
-
-
-
-
-
-		( Governor::GetGovernor(playerId).PercentUnbuilt( Governor::BUILD_UNIT_LIST_OFFENSE ) <= 0.50) &&
-
-		( Governor::GetGovernor(playerId).PercentUnbuilt( Governor::BUILD_UNIT_LIST_RANGED ) <= 0.50) &&
-
-		( Governor::GetGovernor(playerId).PercentUnbuilt( Governor::BUILD_UNIT_LIST_DEFENSE ) <= 0.50)
-		)
-	{
+	if ((diplomat.AtWarCount() > 0) &&
+	    (Governor::GetGovernor(playerId).PercentUnbuilt(Governor::BUILD_UNIT_LIST_OFFENSE) <= 0.50) &&
+	    (Governor::GetGovernor(playerId).PercentUnbuilt(Governor::BUILD_UNIT_LIST_RANGED) <= 0.50) &&
+	    (Governor::GetGovernor(playerId).PercentUnbuilt(Governor::BUILD_UNIT_LIST_DEFENSE) <= 0.50)) {
 		AiState state;
 
 		if(diplomat.GetPersonality()->GetSeigeCitiesStrategy()){
@@ -701,7 +674,6 @@ STDEHANDLER(DefenseLevel_NextSStateEvent)
 #define MEDIUM_DEFENSE_LEVEL	10000
 #define LOW_DEFENSE_LEVEL		5000
 #define MINIMUM_DEFENSE_LEVEL	1000
-	Player *player_ptr = g_player[playerId];
 
 	if(diplomat.GetPersonality()->GetDefenceVeryHighStrategy()
 	&& diplomat.GetPersonality()->GetDefenceHighStrategy()

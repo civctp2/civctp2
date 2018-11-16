@@ -45,6 +45,7 @@
 #include "profileai.h"
 
 #include <algorithm>
+#include <functional>
 #include <list>
 
 #include "Scheduler.h"
@@ -1115,8 +1116,6 @@ bool Scheduler::Prioritize_Goals()
 
 		goal_type = (*goal_ptr_iter)->Get_Goal_Type();
 
-		sint32 count = m_goals_of_type[goal_type].size();
-
 		CTPGoal_ptr goal2 = (CTPGoal_ptr) *goal_ptr_iter;
 
 		Sorted_Goal_Iter tmp_goal_iter =
@@ -1167,7 +1166,6 @@ bool Scheduler::Prioritize_Goals()
 	t1 = GetTickCount();
 
 	sint16 committed_agents = 0;
-	const StrategyRecord &strategy = Diplomat::GetDiplomat(m_playerId).GetCurrentStrategy();
 
 	for (goal_type = 0;	goal_type < g_theGoalDB->NumRecords(); goal_type++) {
 
@@ -1175,7 +1173,7 @@ bool Scheduler::Prioritize_Goals()
 	AI_DPRINTF(k_DBG_SCHEDULER, m_playerId, goal_type, -1,("// \n"));
 	AI_DPRINTF(k_DBG_SCHEDULER, m_playerId, goal_type, -1,("// %s \n",g_theGoalDB->Get(goal_type)->GetNameText()));
 	AI_DPRINTF(k_DBG_SCHEDULER, m_playerId, goal_type, -1,("// \n\n"));
-    AI_DPRINTF(k_DBG_SCHEDULER, m_playerId, goal_type, -1,
+	AI_DPRINTF(k_DBG_SCHEDULER, m_playerId, goal_type, -1,
     ("\t %9x,\tGOAL\t\t,\tCOORDS\t\t,\tINIT_VALUE,\t\tLAST_VALUE,\t\tTHREAT,\t\tENEMYVAL,\t\tALLIEDVAL,\t\tMAXPOW,\t\tHOMEDIST \t(   )\t,\t\tENEMYDIST (    ),\t\tSETTLE,\t\tCHOKE,\t\tUNEXPLORED,\t\tTHREATEN, \n",
     this));
 
@@ -1239,15 +1237,16 @@ bool Scheduler::Prioritize_Goals()
 		AI_DPRINTF(k_DBG_SCHEDULER_ALL, m_playerId, goal_type, -1, ("\t//\n"));
 		AI_DPRINTF(k_DBG_SCHEDULER_ALL, m_playerId, goal_type, -1, ("\n"));
 
-		int count=0;
-
-		for (sorted_goal_iter = m_goals_of_type[goal_type].begin();
-		sorted_goal_iter != m_goals_of_type[goal_type].end();
-		sorted_goal_iter++) {
 #ifdef _DEBUG
+		int count=0;
+#endif
+		for (sorted_goal_iter = m_goals_of_type[goal_type].begin();
+		    sorted_goal_iter != m_goals_of_type[goal_type].end();
+		    sorted_goal_iter++) {
+#ifdef _DEBUG
+
 			if (sorted_goal_iter->first > Goal::BAD_UTILITY + 0.5)
 			{
-
 
 				AI_DPRINTF(k_DBG_SCHEDULER_ALL, m_playerId, goal_type, -1,
 					("\t%3d: ", count++));
@@ -1329,8 +1328,6 @@ bool Scheduler::Prune_Goals()
 
 		pruned_goal_iter = m_goals_of_type[goal_type].end();
 
-
-		sint16 eval_count = 0;
 		goal_ptr_iter = m_goals_of_type[goal_type].begin();
 		while (goal_ptr_iter != pruned_goal_iter &&
 			goal_ptr_iter != m_goals_of_type[goal_type].end()) {
@@ -1661,18 +1658,14 @@ bool Scheduler::Free_Undercommitted_Goal()
 	}
 
 	if (highest_goal_priority > Goal::BAD_UTILITY) {
-
-		sint32 count = Rollback_Matches_For_Goal(highest_goal_iter->second);
+		Rollback_Matches_For_Goal(highest_goal_iter->second);
 
 		undercommittment_found = true;
 	}
 	return undercommittment_found;
 }
 
-void Scheduler::Remove_Matches_For_Goal
-(
- const Goal_ptr & goal_ptr
- )
+void Scheduler::Remove_Matches_For_Goal(const Goal_ptr & goal_ptr)
 {
     std::list<Plan_List::iterator> & match_refs = goal_ptr->Get_Match_References();
     std::list<Plan_List::iterator>::iterator plan_ref_iter;

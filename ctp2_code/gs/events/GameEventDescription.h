@@ -5,9 +5,9 @@
 #define __GAME_EVENT_DESCRIPTION_H__
 
 struct GameEventDescription {
-	char *name;
-	char *description;
-	char *args;
+	const char *name;
+	const char *description;
+	const char *args;
 };
 
 #ifdef EVENT

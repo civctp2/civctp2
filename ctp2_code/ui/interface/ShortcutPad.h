@@ -27,7 +27,7 @@ public:
 		return_type (*m_function)();
 	};
 
-	ShortcutPad(MBCHAR *ldlBlock);
+	ShortcutPad(const MBCHAR *ldlBlock);
 
 private:
 

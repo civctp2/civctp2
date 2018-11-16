@@ -49,7 +49,7 @@
 ns_ChatBox::ns_ChatBox(
 	AUI_ERRCODE *retval,
 	uint32 id,
-	MBCHAR *ldlBlock,
+	const MBCHAR *ldlBlock,
 	ControlActionCallback *ActionFunc,
 	void *cookie )
 	:
@@ -85,7 +85,7 @@ ns_ChatBox::ns_ChatBox(
 	bGroup = false;
 }
 
-void ns_ChatBox::Receive(NETFunc::Player *p, TYPE t, char *m) {
+void ns_ChatBox::Receive(NETFunc::Player *p, TYPE t, const char *m) {
 	COLORREF color = 0x00ffffff;
 	BOOL bold = FALSE;
 	BOOL italic = FALSE;
@@ -124,7 +124,7 @@ void ns_ChatBox::Receive(NETFunc::Player *p, TYPE t, char *m) {
 	AppendText( buf, color, bold, italic );
 }
 
-AUI_ERRCODE ns_ChatBox::InitCommonLdl( MBCHAR *ldlBlock )
+AUI_ERRCODE ns_ChatBox::InitCommonLdl(const MBCHAR *ldlBlock)
 {
 	AUI_ERRCODE errcode = InitCommon();
 	Assert( AUI_SUCCESS(errcode) );

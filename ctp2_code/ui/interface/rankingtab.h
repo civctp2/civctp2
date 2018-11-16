@@ -55,7 +55,6 @@ enum eRankingCategories
 
 extern sint32 SetupRankingGraph(LineGraph *pLineGraph, double ***pGraphData, sint32 category);
 
-
 class RankingTab
 {
 public:
@@ -64,7 +63,6 @@ public:
 
 	static void Open(void);
 	static void Close(void);
-
 
 	void LoadData();
 
@@ -95,12 +93,11 @@ private:
 
 	void Hide();
 
-	void Add_Dropdown_Category(char * category);
+	void Add_Dropdown_Category(const char * category);
 
 	void SetLineGraph( bool line_graph );
 
 	void UpdatePlayerList();
-
 
 	void UpdateGraph();
 

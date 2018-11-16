@@ -114,16 +114,11 @@ AUI_ERRCODE spnewgamerulesscreen_Initialize( void )
 	{
 		s_spNewGameRulesScreen = new c3_PopupWindow( &errcode, aui_UniqueId(), windowBlock, 16, AUI_WINDOW_TYPE_FLOATING, false);
 		Assert( AUI_NEWOK(s_spNewGameRulesScreen, errcode) );
-		if ( !AUI_NEWOK(s_spNewGameRulesScreen, errcode) ) errcode;
 
 		s_spNewGameRulesScreen->Resize(s_spNewGameRulesScreen->Width(),s_spNewGameRulesScreen->Height());
 		s_spNewGameRulesScreen->GrabRegion()->Resize(s_spNewGameRulesScreen->Width(),s_spNewGameRulesScreen->Height());
 		s_spNewGameRulesScreen->SetStronglyModal(TRUE);
 	}
-
-
-
-
 
 	sprintf( controlBlock, "%s.%s", windowBlock, "Name" );
 	s_spNewGameRulesScreen->AddTitle( controlBlock );

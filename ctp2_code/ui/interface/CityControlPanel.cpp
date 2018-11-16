@@ -77,7 +77,7 @@ namespace
 	sint32 const CITY_PRODUCTION_HALTED	= 0x7fffffff;
 }
 
-CityControlPanel::CityControlPanel(MBCHAR *ldlBlock) :
+CityControlPanel::CityControlPanel(const MBCHAR *ldlBlock) :
 m_buildItemLabel(static_cast<ctp2_Static*>(
 				 aui_Ldl::GetObject(ldlBlock,
 				 "CityTab.TabPanel.BuildProgress.Title"))),
@@ -398,9 +398,6 @@ void CityControlPanel::CitySelectActionCallback(aui_Control *control,
 			} else {
  				// City has changed, do the neccessary
 				g_selected_item->SetSelectCity(cd->GetHomeCity());
-
-				MapPoint pos = cd->GetHomeCity().RetPos(); // Not needed
-
 			}
 		}
 		if(!g_network.IsClient()) {
@@ -497,7 +494,7 @@ void CityControlPanel::UpdateBuildItem()
 	m_currentItem		= head ? head->m_type : -1;
 	m_currentTurns		= turns;
 	m_buildItemProgressBar->SetDrawCallbackAndCookie
-		(ProgressDrawCallback, (void *) m_currentCity.m_id);
+		(ProgressDrawCallback, (void *)(uintptr_t)m_currentCity.m_id);
 
 	if(numberOfItems < 1) {
 		ClearBuildItem();

@@ -2821,7 +2821,6 @@ dpFreeze(
 	DPRINT(("dpFreeze: freezing sessionContexts of %d items\n", dp->sessionContexts->n_used));
 	dumpSessionContexts(dp);
 	for(i = 0; i < dp->sessionContexts->n_used; i++) {
-		assoctab_item_t* item = NULL;
 		/* Write out the session context */
 		dp_sessionContext_t **sess = dynatab_subscript(dp->sessionContexts, i);
 		condition(sess != NULL, "not enough items in sessionContexts");
@@ -3409,7 +3408,7 @@ DP_API dp_result_t dpCommThaw(dp_t **pdp, FILE *thawfp, dpCommThawCallback_t cb,
 	if (params.OpenAddresses[0]) {
 		DPRINT(("dpCommThaw: Open Addresses %s\n", params.OpenAddresses));
 		params.commInitReq.flags |= comm_INIT_FLAGS_CONN_ADDR;
-		params.commInitReq.dialing_method = (int) params.OpenAddresses;
+		params.commInitReq.dialing_method = (intptr_t) params.OpenAddresses;
 	}
 
 	/* Load Activenet. */
@@ -3713,7 +3712,7 @@ DP_API dp_result_t dpCreate(
 	dp_t **pdp,
 	dp_transport_t *transport,
 	commInitReq_t *params,
-	char *thawFilename)
+	const char *thawFilename)
 {
 	dp_t *dp;
 	dp_result_t		err;
@@ -4003,7 +4002,7 @@ DP_API dp_result_t dpCloseGameServer(
 --------------------------------------------------------------------------*/
 DP_API dp_result_t dpResolveHostname(
 	dp_t *dp,
-	char *hostname,
+	const char *hostname,
 	char adrbuf[dp_MAX_ADR_LEN])
 {
 	precondition(dp != NULL);
@@ -4118,7 +4117,7 @@ static dp_result_t dp_setSessionTablePeer(
 ------------------------------------------------------------------------*/
 DP_API dp_result_t DP_APIX dpSetGameServer(
 	dp_t *dp,
-	char *masterHostName)	/* server's name, or NULL to clear */
+	const char *masterHostName)	/* server's name, or NULL to clear */
 #ifdef dp_MULTISESSTABLE
 {
 	dp_result_t err;
@@ -4155,7 +4154,7 @@ DP_API dp_result_t DP_APIX dpSetGameServer(
 ------------------------------------------------------------------------*/
 DP_API dp_result_t DP_APIX dpSetGameServerEx(
 	dp_t *dp,
-	char *masterHostName,	/* server's name, or NULL to clear */
+	const char *masterHostName,	/* server's name, or NULL to clear */
 	dp_species_t sessionType)
 #endif
 {
@@ -4180,7 +4179,7 @@ DP_API dp_result_t DP_APIX dpSetGameServerEx(
 		/* Let them log in even if they didn't finish shutting down */
 		dp->quitState = 0;
 
-		err = dpResolveHostname(dp, masterHostName, (char*) newHostAdr);
+		err = dpResolveHostname(dp, masterHostName, newHostAdr);
 		if (err != dp_RES_OK) {
 			DPRINT(("Unable to get address, err:%d\n", err));
 			/*dpCloseGameServer(dp);*/
@@ -6988,10 +6987,10 @@ dp_result_t dpPruneSessionSubscription(dp_t *dp)
  now, but calls callback with dp_ID_NONE during later call to dpReceive.
 ----------------------------------------------------------------------*/
 DP_API dp_result_t dpCreatePlayer(
-	dp_t	*dp,
-	dpEnumPlayersCallback_t cb,
-	void	*context,
-	char_t	*name)
+    dp_t	*dp,
+    dpEnumPlayersCallback_t cb,
+    void	*context,
+    const char_t	*name)
 {
 	dp_playerId_t player;
 	char playerbuf[dpio_MAXLEN_RELIABLE];
@@ -7259,7 +7258,7 @@ DP_API dp_result_t dpGetPlayerName(
 DP_API dp_result_t dpSetPlayerName(
 	dp_t *dp,
 	dpid_t id,
-	dp_char_t *name)
+	const dp_char_t *name)
 {
 	dp_result_t err;
 	dp_playerId_t player;
@@ -8658,7 +8657,7 @@ static dp_result_t dpSendVictory(dp_t *dp)
 		dp_packetType_t   tag;
 	} PACK pkt;
 
-	dp_result_t		err;
+	dp_result_t		err = -1;
 	playerHdl_t dests[MY_MAX_HOSTS];		/* FIXME */
 	int ndests;
 
@@ -8709,8 +8708,7 @@ static dp_result_t dpHandleVictory(dp_t *dp, playerHdl_t src, size_t reqlen)
 	 */
 	if (dp->election_size) {
 		dpid_t winner_id;
-		int winner_votes = dp_election_tally(dp, &winner_id);
-		int election_size = dp->election_size;
+		dp_election_tally(dp, &winner_id);
 
 		dp_election_end(dp);
 
@@ -8866,7 +8864,6 @@ static dp_result_t dpPoll(
 	playerHdl_t h;
 	dp_result_t err;
 	dp_result_t return_value = dp_RES_OK;
-	int nhdls= -1;
 	int beacon_expired;
 	int beacon2_expired;
 	int beacon4_expired;
@@ -9006,7 +9003,7 @@ static dp_result_t dpPoll(
 			dpGetSessionDesc(dp, &sess, 0);
 #endif
 #endif
-			if ((dp->hMaster == PLAYER_ME)
+			if (dp->hMaster == PLAYER_ME
 #ifdef IGNORE_CLOSEDSESS
 #ifdef USE_dp_enableNewPlayers
 			&&  dp->enableNewPlayers
@@ -10145,7 +10142,7 @@ static int dp_getGroupHdls(dp_t *dp, dpid_t id, playerHdl_t hdls[])
 			}
 		}
 		/* Don't send to myself */
-		if ((h == PLAYER_ME) /*&& (dp->my_nPlayers < 3)*/)
+		if (h == PLAYER_ME /*&& (dp->my_nPlayers < 3)*/)
 			h = PLAYER_NONE;
 
 		/* Add to hdls if not duplicate */
@@ -10946,12 +10943,12 @@ DP_API dp_result_t dpEnumGroupPlayers(
  Set variable 'key' for a player.
 ------------------------------------------------------------------------*/
 DP_API dp_result_t dpSetPlayerData(
-	dp_t   *dp,
-	dpid_t idPlayer,
-	int    key,
-	void   *buf,
+    dp_t   *dp,
+    dpid_t idPlayer,
+    int    key,
+    const void   *buf,
     size_t buflen,
-	long   flags)
+    long   flags)
 {
 	dptab_table_t *playervars;
 	playerHdl_t src;

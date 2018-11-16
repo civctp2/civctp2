@@ -36,9 +36,9 @@ public:
 	ns_Session(NETFunc::Session * session);
 	void Update( NETFunc::Session *session );
 
-	char *m_locked;
-	char *m_closed;
-	char *m_name;
+	const char *m_locked;
+	const char *m_closed;
+	const char *m_name;
 	int m_players;
 };
 

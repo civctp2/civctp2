@@ -26,8 +26,7 @@ public:
 	virtual AUI_ERRCODE SetParent( aui_Region *region );
 	nf_GameSetup *GetGameSetup(NETFunc::Session *session);
 
-	void PasswordScreenDone( MBCHAR *password );
-
+	void PasswordScreenDone(const MBCHAR *password);
 
 	enum CONTROL
 	{
@@ -68,7 +67,6 @@ protected:
 public:
 	virtual AUI_ERRCODE Idle( void );
 	virtual AUI_ERRCODE SetParent( aui_Region *region );
-
 
 	enum CONTROL
 	{

@@ -204,7 +204,6 @@ bool Goal::Is_Single_Squad() const
 
 	std::list<Plan_List::iterator>::const_iterator match_iter =
 		m_match_references.begin();
-	bool found = false;
 	Squad_ptr first_squad_ptr = NULL;
 	Squad_ptr tmp_squad_ptr;
 	Agent_List::const_iterator agent_iter;

@@ -14,7 +14,7 @@ public:
 	static sint32 GetCurrentRound();
 	static void RunNewYearMessages();
 	static void SendMsgEndOfGameEarlyWarning();
-	static void SendMsgToAllPlayers(MBCHAR *s);
+	static void SendMsgToAllPlayers(const MBCHAR *s);
 	static BOOL VerifyEndTurn(BOOL force);
 
 	static void ClientStartNewYear();

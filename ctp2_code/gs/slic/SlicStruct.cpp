@@ -455,7 +455,7 @@ void SlicStructInstance::Serialize(CivArchive &archive)
 			archive >> haveData;
 			if(haveData) {
 				CreateMember(i);
-				(SlicStructMemberData *)slicsymbol_Load(archive, m_members[i]);
+				slicsymbol_Load(archive, m_members[i]);
 				m_members[i]->SetParent(this);
 			}
 		}
@@ -540,7 +540,7 @@ SlicSymbolData *SlicStructInstance::GetMemberSymbol(sint32 index)
 	return m_members[index];
 }
 
-sint32 SlicStructInstance::GetMemberSymbolIndex(SlicStructMemberData *memb)
+sint32 SlicStructInstance::GetMemberSymbolIndex(const SlicStructMemberData *memb)
 {
 	for (size_t i = 0; i < m_validIndexCount; ++i)
 	{
@@ -551,7 +551,7 @@ sint32 SlicStructInstance::GetMemberSymbolIndex(SlicStructMemberData *memb)
 	return -1;
 }
 
-SlicSymbolData *SlicStructInstance::GetMemberSymbolByName(char *name)
+SlicSymbolData *SlicStructInstance::GetMemberSymbolByName(const char *name)
 {
 	sint32 const	index	= m_description->GetMemberIndex(name);
 	if ((index < 0) || ((unsigned) index >= m_validIndexCount))

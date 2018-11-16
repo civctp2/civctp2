@@ -38,7 +38,7 @@ extern StringDB	*g_theStringDB;
 
 aui_StringTable::aui_StringTable(
 	AUI_ERRCODE *retval,
-	MBCHAR *ldlBlock )
+	const MBCHAR *ldlBlock )
 {
 	*retval = InitCommonLdl( ldlBlock );
 	Assert( AUI_SUCCESS(*retval) );
@@ -54,7 +54,7 @@ aui_StringTable::aui_StringTable(
 }
 
 
-AUI_ERRCODE aui_StringTable::InitCommonLdl( MBCHAR *ldlBlock )
+AUI_ERRCODE aui_StringTable::InitCommonLdl(const MBCHAR *ldlBlock)
 {
 	aui_Ldl *theLdl = g_ui->GetLdl();
 
@@ -178,7 +178,7 @@ sint32 aui_StringTable::SetNumStrings( sint32 numStrings )
 }
 
 
-MBCHAR *aui_StringTable::GetString( sint32 index )
+const MBCHAR *aui_StringTable::GetString( sint32 index )
 {
 	Assert( index >= 0 && index < m_numStrings );
 	if ( index < 0 || index >= m_numStrings ) return NULL;

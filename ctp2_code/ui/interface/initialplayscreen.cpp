@@ -73,11 +73,7 @@ extern  CivPaths			*g_civPaths;
 extern	ProfileDB			*g_theProfileDB;
 
 static C3Window				*s_initplayWindow		= NULL;
-static MBCHAR				*s_initplayWindowLDLBlock = "InitPlayWindow";
-
-
-
-
+static const MBCHAR			*s_initplayWindowLDLBlock = "InitPlayWindow";
 
 sint32	initialplayscreen_displayMyWindow()
 {
@@ -122,7 +118,6 @@ AUI_ERRCODE initialplayscreen_Initialize( void )
 	Assert(errcode == AUI_ERRCODE_OK);
 
 #ifndef _DEBUG
-	AUI_ERRCODE *retval=0;
 	ctp2_Button *spriteTest = (ctp2_Button *)aui_Ldl::GetObject(s_initplayWindowLDLBlock, "SpriteTestButton");
  	spriteTest->Hide();
 #endif

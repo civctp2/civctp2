@@ -117,7 +117,7 @@ public:
 
 	AUI_ACTION_BASIC(DestroyAction);
 
-	MBCHAR *GetTrueBmp( void ) { return m_truebmp->GetString(); }
+	const MBCHAR *GetTrueBmp( void ) { return m_truebmp->GetString(); }
 
 protected:
 	aui_Screen *m_screens[ SCREEN_MAX ];

@@ -90,7 +90,7 @@ class aui_TextBase
 public:
 
 	aui_TextBase(
-		MBCHAR *ldlBlock,
+		const MBCHAR *ldlBlock,
 		const MBCHAR *text );
 	aui_TextBase(
 		const MBCHAR *text = NULL,
@@ -99,12 +99,12 @@ public:
 
 protected:
 	AUI_ERRCODE InitCommonLdl(
-		MBCHAR *ldlBlock,
+		const MBCHAR *ldlBlock,
 		const MBCHAR *text );
 	AUI_ERRCODE InitCommon(
 		const MBCHAR *text,
 		uint32 maxLength,
-		MBCHAR *fontname,
+		const MBCHAR *fontname,
 		sint32 fontsize,
 		COLORREF color,
 		COLORREF shadowcolor,
@@ -115,14 +115,14 @@ protected:
 		uint32 flags );
 
 public:
-	MBCHAR *GetText( void ) const { return (MBCHAR *)m_text; }
+	const MBCHAR *GetText( void ) const { return m_text; }
 	virtual AUI_ERRCODE	SetText(
 		const MBCHAR *text,
 		uint32 len = 0xffffffff );
 
-	AUI_ERRCODE	SetText2(MBCHAR *fmt,...);
+	AUI_ERRCODE	SetText2(const MBCHAR *fmt,...);
 
-	virtual AUI_ERRCODE	AppendText( MBCHAR *text );
+	virtual AUI_ERRCODE	AppendText(const MBCHAR *text);
 
 	COLORREF GetTextColor( void ) const { return m_textcolor; }
 	void SetTextColor( COLORREF color ) { m_textcolor = color; }
@@ -141,7 +141,7 @@ public:
 	uint32 &TextFlags( void ) { return m_textflags; }
 
 
-	virtual void SetTextFont( MBCHAR *ttffile );
+	virtual void SetTextFont(const MBCHAR *ttffile);
 	virtual void SetTextFontSize( sint32 pointSize );
 	void SetTextBold( sint32 bold );
 	void SetTextItalic( sint32 italic );
@@ -151,9 +151,9 @@ public:
 protected:
 
 	static uint32 FindNextWordBreak(
-		MBCHAR *text, HDC hdc, sint32 width );
+		const MBCHAR *text, HDC hdc, sint32 width );
 	static MBCHAR *FindNextToken(
-		MBCHAR *text, MBCHAR *tokenList, sint32 count );
+		const MBCHAR *text, const MBCHAR *tokenList, sint32 count );
 
 	AUI_ERRCODE DrawThisText(
 		aui_Surface *destSurf,

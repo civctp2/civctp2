@@ -81,7 +81,7 @@ STDEHANDLER(DirectorMoveUnitsEvent)
 	sint32 numRest = a->Num() - 1;
 
 	if (numRest > 0) {
-		restOfStack = new (UnitActor* [numRest]);
+		restOfStack = new UnitActor* [numRest];
 		a->GetActors(top_src, restOfStack);
 	}
 
@@ -176,9 +176,9 @@ STDEHANDLER(DirectorActionSuccessful)
 		soundID = rec->GetSoundIDIndex();
 		spriteID = rec->GetSpriteID()->GetValue();
 		if (spriteID != -1 && soundID != -1) {
-			if((((unit.GetOwner() == g_selected_item->GetVisiblePlayer()) ||
-				 (unit.GetVisibility() & (1 << g_selected_item->GetVisiblePlayer()))) ||
-				g_theUnitPool->IsValid(c) &&
+			if (unit.GetOwner() == g_selected_item->GetVisiblePlayer() ||
+				 (unit.GetVisibility() & (1 << g_selected_item->GetVisiblePlayer())) ||
+				(g_theUnitPool->IsValid(c) &&
 				((c.GetOwner() == g_selected_item->GetVisiblePlayer()) ||
 				 (c.GetVisibility() & (1 << g_selected_item->GetVisiblePlayer()))))) {
 

@@ -74,7 +74,7 @@ extern SelectedItem			*g_selected_item;
 
 ButtonBank::ButtonBank(AUI_ERRCODE *retval,
 					   uint32 id,
-					   MBCHAR *ldlBlock,
+					   const MBCHAR *ldlBlock,
 					   ControlActionCallback *ActionFunc,
 					   void *cookie)
 	:
@@ -91,7 +91,7 @@ ButtonBank::ButtonBank(AUI_ERRCODE *retval,
 					   sint32 y,
 					   sint32 width,
 					   sint32 height,
-					   MBCHAR *pattern,
+					   const MBCHAR *pattern,
 					   ControlActionCallback *ActionFunc,
 					   void *cookie)
 	:
@@ -136,7 +136,7 @@ ButtonBank::~ButtonBank()
 	if ( !AUI_NEWOK(action, errcode) ) return AUI_ERRCODE_MEMALLOCFAILED;			\
 	m_buttons[mode]->SetAction(action);
 
-AUI_ERRCODE ButtonBank::InitCommon(MBCHAR *bankBlock)
+AUI_ERRCODE ButtonBank::InitCommon(const MBCHAR *bankBlock)
 {
 	MBCHAR				buttonBlock[ k_AUI_LDL_MAXBLOCK + 1 ];
 	MBCHAR				tableBlock[ k_AUI_LDL_MAXBLOCK + 1 ];
@@ -367,7 +367,6 @@ void ButtonBank::FillBank(Army &selected, CellUnitList *all)
 	sint32				i, count, countAll;
 	Unit				unit;
 	const UnitRecord	*unitRec;
-	BOOL				condition = FALSE;
 	MapPoint			pos;
 	double				success, death;
 	sint32				timer, amount;
@@ -497,8 +496,6 @@ void ButtonBank::FillBank(Army &selected, CellUnitList *all)
 		if ( count == 1 && unitRec->GetCanCarry() ) {
 			AddButton( ORDERMODE_CARGO );
 		}
-
-		BOOL canRailLaunch = FALSE;
 
 		Unit city = g_theWorld->GetCell(unit.RetPos())->GetCity();
 		if (city.m_id != (0)) {

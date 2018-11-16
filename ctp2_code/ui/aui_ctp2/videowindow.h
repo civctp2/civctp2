@@ -18,8 +18,8 @@ public:
 		sint32 width,
 		sint32 height,
 		sint32 bpp,
-		MBCHAR *pattern,
-		MBCHAR *name,
+		const MBCHAR *pattern,
+		const MBCHAR *name,
 		BOOL modal,
 		AUI_WINDOW_TYPE type = AUI_WINDOW_TYPE_FLOATING );
 	virtual ~VideoWindow();
@@ -27,7 +27,7 @@ public:
 protected:
 	VideoWindow() : C3Window() {};
 	AUI_ERRCODE InitCommon( void );
-	AUI_ERRCODE CreateVideoSurface( MBCHAR *name, BOOL modal );
+	AUI_ERRCODE CreateVideoSurface(const MBCHAR *name, BOOL modal);
 
 public:
 	virtual AUI_ERRCODE Idle( void );

@@ -44,7 +44,7 @@ class ctp2_Tab;
 
 class CauseAndEffectTab {
 public:
-	CauseAndEffectTab(MBCHAR *ldlBlock);
+	CauseAndEffectTab(const MBCHAR *ldlBlock);
 
 	void Update();
 

@@ -297,7 +297,7 @@ dp_result_t dpio_printAdr(dpio_t *dpio, const char *adrbuf, size_t adrlen, char 
 	sprintf(buf, "%d", *adrbuf);
 	return dp_RES_OK;
 }
-int dpio_scanAdr(dpio_t *dpio, char *hostname, char *adrbuf, size_t buflen)
+int dpio_scanAdr(dpio_t *dpio, const char *hostname, char *adrbuf, size_t buflen)
 {
 	int adr;
 	sscanf(hostname, "%d", &adr);
@@ -381,7 +381,7 @@ DP_API dp_result_t dpCreate(
 	dp_t **pdp,
 	dp_transport_t *transport,
 	commInitReq_t *params,
-	char *thawFilename)
+	const char *thawFilename)
 {
     dp_t *dp;
 	dp_result_t		dpio_err;

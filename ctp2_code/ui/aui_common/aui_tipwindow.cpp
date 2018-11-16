@@ -14,7 +14,7 @@ extern ColorSet *g_colorSet;
 aui_TipWindow::aui_TipWindow(
 	AUI_ERRCODE *retval,
 	uint32 id,
-	MBCHAR *ldlBlock )
+	const MBCHAR *ldlBlock )
 	:
 	aui_Window( retval, id, ldlBlock, 0, AUI_WINDOW_TYPE_TIP )
 {
@@ -46,7 +46,7 @@ aui_TipWindow::aui_TipWindow(
 }
 
 
-AUI_ERRCODE aui_TipWindow::InitCommonLdl( MBCHAR *ldlBlock )
+AUI_ERRCODE aui_TipWindow::InitCommonLdl(const MBCHAR *ldlBlock)
 {
 	aui_Ldl *theLdl = g_ui->GetLdl();
 
@@ -89,7 +89,7 @@ AUI_ERRCODE aui_TipWindow::InitCommonLdl( MBCHAR *ldlBlock )
 	return AUI_ERRCODE_OK;
 }
 
-AUI_ERRCODE aui_TipWindow::SetTipText(MBCHAR *text)
+AUI_ERRCODE aui_TipWindow::SetTipText(const MBCHAR *text)
 {
 	m_staticTip->SetText(text);
 	aui_BitmapFont	*font = m_staticTip->GetTextFont();

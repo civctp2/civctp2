@@ -36,7 +36,7 @@ public:
 	ns_Transport(NETFunc::Transport * transport);
 	void Update( NETFunc::Transport *transport );
 
-	char *m_name;
+	const char *m_name;
 };
 
 #endif

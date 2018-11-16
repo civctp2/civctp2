@@ -137,11 +137,8 @@ extern ProjectFile                  *g_GreatLibPF;
 static CityWindow                   *s_cityWindow = NULL;
 extern C3UI                         *g_c3ui;
 
-static MBCHAR                       *s_cityWindowBlock = "CityWindow";
-static MBCHAR                       *s_cityStatsBlock = "CityStatisticsWindow";
-
-static sint32 s_isBuilding = 1;
-static sint32 s_isWonder = 1;
+static const MBCHAR *s_cityWindowBlock = "CityWindow";
+static const MBCHAR *s_cityStatsBlock = "CityStatisticsWindow";
 
 CityWindow::CityWindow(AUI_ERRCODE *err)
 {
@@ -351,7 +348,7 @@ CityWindow::CityWindow(AUI_ERRCODE *err)
 			m_unitId[unitButton] = 0;
 			if(m_unitButtons[unitButton]) {
 				m_unitButtons[unitButton]->Enable(FALSE);
-				m_unitButtons[unitButton]->SetActionFuncAndCookie(UnitButtonCallback, (void *)unitButton);
+				m_unitButtons[unitButton]->SetActionFuncAndCookie(UnitButtonCallback, (void *)(intptr_t)unitButton);
 			}
 
 			unitButton++;
@@ -1652,7 +1649,7 @@ void CityWindow::CityList( aui_Control *control, uint32 action, uint32 data, voi
 // Remark(s)  : -
 //
 //----------------------------------------------------------------------------
-void CityWindow::PopulateQueueList(CityData *cd, ctp2_ListBox *lb, char *itemBlock)
+void CityWindow::PopulateQueueList(CityData *cd, ctp2_ListBox *lb, const char *itemBlock)
 {
 	BuildQueue *bq = cd->GetBuildQueue();
 	PointerList<BuildNode> *blist = bq->GetList();
@@ -1743,7 +1740,6 @@ AUI_ERRCODE CityWindow::DrawGrowthBar(ctp2_Static *control,
 	sint32 width = destRect.right - destRect.left;
 	CityData *cd = s_cityWindow->m_cityData;
 
-	const CitySizeRecord *rec = g_theCitySizeDB->Get(cd->GetSizeIndex());
 	double overcrowding = cd->GetOvercrowdingCoefficient();
 	if(overcrowding < 0)
 		overcrowding = 0;
@@ -2207,10 +2203,10 @@ void CityWindow::FillHappinessList()
 			ctp2_Static *happyAmount;
 			if(happies[i].amount > 0) {
 				happyAmount = (ctp2_Static *)box->GetChildByIndex(2);
-				happyAmount->SetDrawCallbackAndCookie(DrawHappyIcons, (void *)(sint32)happies[i].amount, false);
+				happyAmount->SetDrawCallbackAndCookie(DrawHappyIcons, (void *)(intptr_t)happies[i].amount, false);
 			} else {
 				happyAmount = (ctp2_Static *)box->GetChildByIndex(0);
-				happyAmount->SetDrawCallbackAndCookie(DrawUnhappyIcons, (void *)(sint32)happies[i].amount, false);
+				happyAmount->SetDrawCallbackAndCookie(DrawUnhappyIcons, (void *)(intptr_t)happies[i].amount, false);
 			}
 
 			char buf[20];
@@ -2243,7 +2239,6 @@ AUI_ERRCODE CityWindow::DrawUnhappyIcons(ctp2_Static *control,
 	sint32 numIcons = (abs(amount) + (k_NUM_POINTS_PER_ICON - 1)) / k_NUM_POINTS_PER_ICON;
 	if(numIcons <= 0)
 		numIcons = 1;
-	sint32 x = 0;
 	sint32 w = (rect.right - im->TheSurface()->Width() - rect.left) / numIcons;
 	if(w > im->TheSurface()->Width())
 		w = im->TheSurface()->Width();
@@ -2288,7 +2283,6 @@ AUI_ERRCODE CityWindow::DrawHappyIcons(ctp2_Static *control,
 	sint32 numIcons = (abs(amount) + (k_NUM_POINTS_PER_ICON - 1)) / k_NUM_POINTS_PER_ICON;
 	if(numIcons <= 0)
 		numIcons = 1;
-	sint32 x = 0;
 	sint32 w = (rect.right - im->TheSurface()->Width() - rect.left) / numIcons;
 	if(w > im->TheSurface()->Width())
 		w = im->TheSurface()->Width();
@@ -2367,7 +2361,7 @@ void CityWindow::FillPollutionList()
 			sublabel = (ctp2_Static *)label->GetChildByIndex(1);
 			sprintf(interp,"%i",m_cityData->GetPopulationPollution());
 			sublabel->SetText(interp);
-			item->SetUserData((void *)m_cityData->GetPopulationPollution());
+			item->SetUserData((void *)(intptr_t)m_cityData->GetPopulationPollution());
 			allAbsItems[numAbsItems++] = item;
 		}
 	}
@@ -2383,7 +2377,7 @@ void CityWindow::FillPollutionList()
 			sublabel = (ctp2_Static *)label->GetChildByIndex(1);
 			sprintf(interp,"%i",m_cityData->GetProductionPollution());
 			sublabel->SetText(interp);
-			item->SetUserData((void *)m_cityData->GetProductionPollution());
+			item->SetUserData((void *)(intptr_t)m_cityData->GetProductionPollution());
 			allAbsItems[numAbsItems++] = item;
 		}
 	}
@@ -2426,9 +2420,9 @@ void CityWindow::FillPollutionList()
 					sublabel = (ctp2_Static *)label->GetChildByIndex(0);
 					sublabel->SetText(g_theBuildingDB->Get(i)->GetNameText());
 					sublabel = (ctp2_Static *)label->GetChildByIndex(1);
-					sprintf(interp,"%d",(sint32) value);
+					sprintf(interp, "%d", (int)value);
 					sublabel->SetText(interp);
-					item->SetUserData((void *)(sint32)value);
+					item->SetUserData((void *)(intptr_t)value);
 					allAbsItems[numAbsItems++] = item;
 				}
 			}

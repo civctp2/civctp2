@@ -149,7 +149,7 @@ void HotseatListButtonActionCallback( aui_Control *control, uint32 action, uint3
 	}
 }
 
-HotseatList::HotseatList( HotseatListCallback *callback, MBCHAR *ldlBlock )
+HotseatList::HotseatList(HotseatListCallback *callback, const MBCHAR *ldlBlock)
 {
 	AUI_ERRCODE errcode = AUI_ERRCODE_OK;
 	MBCHAR		windowBlock[ k_AUI_LDL_MAXBLOCK + 1 ];
@@ -175,7 +175,7 @@ HotseatList::HotseatList( HotseatListCallback *callback, MBCHAR *ldlBlock )
 	Initialize( windowBlock );
 }
 
-sint32 HotseatList::Initialize( MBCHAR *windowBlock )
+sint32 HotseatList::Initialize(const MBCHAR *windowBlock)
 {
 	AUI_ERRCODE errcode = AUI_ERRCODE_OK;
 	MBCHAR		controlBlock[ k_AUI_LDL_MAXBLOCK + 1 ];
@@ -332,8 +332,6 @@ sint32 HotseatList::ChooseNextOpenCiv(HotseatListItem *curItem, sint32 curCiv)
 	sint32 realCiv = curCiv;
 	curCiv = g_theCivilisationDB->m_indexToAlpha[curCiv];
 
-	sint32	oldCiv = curCiv;
-
 	sint32	numEnabledCivs = hotseatlist_NumEnabled();
 
 	while(!found) {
@@ -387,8 +385,9 @@ sint32 HotseatList::ChooseNextOpenCiv(HotseatListItem *curItem, sint32 curCiv)
 
 
 HotseatListItem::HotseatListItem(AUI_ERRCODE *retval, sint32 index,
-								 sint32 civ, BOOL isHuman, MBCHAR *email,
-								 MBCHAR *ldlBlock)
+    sint32 civ, BOOL isHuman,
+    const MBCHAR *email,
+    const MBCHAR *ldlBlock)
 	:
 	aui_ImageBase(ldlBlock),
 	aui_TextBase(ldlBlock, (MBCHAR *)NULL),
@@ -441,9 +440,9 @@ void HotseatNameCallback(aui_Control *control, uint32 action, uint32 data,
 }
 
 AUI_ERRCODE HotseatListItem::InitCommonLdl(sint32 civ,
-										   BOOL isHuman,
-										   MBCHAR *email,
-										   MBCHAR *ldlBlock)
+					   BOOL isHuman,
+					   const MBCHAR *email,
+					   const MBCHAR *ldlBlock)
 {
 	MBCHAR			block[ k_AUI_LDL_MAXBLOCK + 1 ];
 	AUI_ERRCODE		retval;

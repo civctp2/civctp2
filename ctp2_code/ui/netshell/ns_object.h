@@ -71,7 +71,6 @@ public:
 		nf_object = 0;
 	}
 
-	void SetKey( void ) {}
 };
 
 #endif

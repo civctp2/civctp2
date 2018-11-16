@@ -42,7 +42,7 @@ extern sint32 g_bpp;
 
 void ProgressWindow::BeginProgress(
 	ProgressWindow *&progwin,
-	MBCHAR *ldlBlock,
+	const MBCHAR *ldlBlock,
 	sint32 maxval,
 	sint32 x, sint32 y)
 {
@@ -85,7 +85,7 @@ void ProgressWindow::BeginProgress(
 	progwin->StartCountingTo( 0 );
 }
 
-void ProgressWindow::StartCountingTo( sint32 val, MBCHAR const * message )
+void ProgressWindow::StartCountingTo(sint32 val, MBCHAR const * message)
 {
 
 	if ( message )
@@ -135,7 +135,7 @@ void ProgressWindow::EndProgress( ProgressWindow *&progwin )
 
 ProgressWindow::ProgressWindow(
 	AUI_ERRCODE *retval,
-	MBCHAR *ldlBlock,
+	const MBCHAR *ldlBlock,
 	sint32 x, sint32 y)
 	:
 	c3_PopupWindow(

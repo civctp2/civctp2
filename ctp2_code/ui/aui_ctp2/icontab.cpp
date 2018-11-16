@@ -20,7 +20,7 @@ IconTab::IconTab(
 	sint32 height,
 	sint32 paneWidth,
 	sint32 paneHeight,
-	MBCHAR *pattern,
+	const MBCHAR *pattern,
 	Icon *icon,
 	uint16 color,
 	ControlActionCallback *ActionFunc,

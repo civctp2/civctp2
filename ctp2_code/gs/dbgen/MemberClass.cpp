@@ -358,7 +358,7 @@ void MemberClass::ExportParser(FILE *outfile, char *recordName)
 	// TODO add aka and default names.
 
 	PointerList<Datum>::Walker walk(&m_datumList);
-	fprintf(outfile, "static char *s_%s_%s_Tokens[] = {\n", recordName, m_name);
+	fprintf(outfile, "static const char *s_%s_%s_Tokens[] = {\n", recordName, m_name);
 	while(walk.IsValid()) {
 		fprintf(outfile, "    \"%s\",\n", walk.GetObj()->m_name);
 		walk.Next();

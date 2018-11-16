@@ -487,42 +487,12 @@ sint32 close_KeyMappingScreen( void )
 
 sint32 open_EndGame()
 {
-	if(g_e3Demo) return 0;
-
-
-
-
-	sint32 curPlayer = g_selected_item->GetVisiblePlayer();
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
 
 	return(0);
 }
 
 sint32 close_EndGame( void )
 {
-
-
-
-
-
-
-
-
-
 
 	return(0);
 }
@@ -686,7 +656,6 @@ sint32 close_AllScreensAndUpdateInfoScreen( void )
 
 
 	}
-
 
 
 

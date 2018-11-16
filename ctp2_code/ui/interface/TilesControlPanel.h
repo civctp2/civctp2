@@ -10,7 +10,7 @@
 class TilesControlPanel {
 public:
 
-	TilesControlPanel(MBCHAR *ldlBlock);
+	TilesControlPanel(const MBCHAR *ldlBlock);
 };
 
 #endif

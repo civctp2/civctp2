@@ -69,7 +69,7 @@ void CitySpriteGroup::Import(uint16 id)
 {
 }
 
-void CitySpriteGroup::DrawText(sint32 x, sint32 y, char *s)
+void CitySpriteGroup::DrawText(sint32 x, sint32 y, const char *s)
 {
-	primitives_DrawText(g_screenManager->GetSurface(), x, y, (MBCHAR *)s, 0, 0);
+	primitives_DrawText(g_screenManager->GetSurface(), x, y, s, 0, 0);
 }

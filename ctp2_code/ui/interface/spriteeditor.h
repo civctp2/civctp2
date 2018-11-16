@@ -57,30 +57,21 @@ public:
 
 
 	virtual AUI_ERRCODE InitCommon(void);
-	virtual AUI_ERRCODE InitCommonLdl(MBCHAR *ldlBlock);
-
-
-
+	virtual AUI_ERRCODE InitCommonLdl(const MBCHAR *ldlBlock);
 
 	virtual AUI_ERRCODE DrawThis(
 		aui_Surface *surface = NULL,
 		sint32 x = 0,
 		sint32 y = 0 );
 
-
-
-
 	virtual AUI_ERRCODE	Idle( void );
-
-
-
 
 	void	InitializeControls(AUI_ERRCODE *errcode,MBCHAR *windowsBlock);
 	void	TopLevel();
 
-	void			LoadSprite(char *name=NULL);
+	void			LoadSprite(const char *name=NULL);
 
-	void			SaveSprite(char *name=NULL);
+	void			SaveSprite(const char *name=NULL);
 
 	void			DrawSprite();
 	void			ReDrawLargeSprite();

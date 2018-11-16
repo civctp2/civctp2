@@ -8,7 +8,7 @@
 
 extern StringDB	*g_theStringDB;
 
-ns_String::ns_String( char *ldlBlock ) {
+ns_String::ns_String(const char *ldlBlock) {
 	m_string = NULL;
 
 	aui_Ldl *theLdl = g_ui->GetLdl();
@@ -37,6 +37,6 @@ ns_String::~ns_String( void ) {
 	m_string = NULL;
 }
 
-char *ns_String::GetString( void ) {
+const char *ns_String::GetString(void) {
 	return m_string;
 }

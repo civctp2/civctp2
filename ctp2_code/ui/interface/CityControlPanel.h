@@ -48,7 +48,7 @@ class aui_Surface;
 class CityControlPanel {
 public:
 
-	CityControlPanel(MBCHAR *ldlBlock);
+	CityControlPanel(const MBCHAR *ldlBlock);
 
 	void Update();
 

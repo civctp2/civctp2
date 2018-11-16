@@ -25,12 +25,11 @@ uint16 aui_Pixel::Get16BitRGB( uint8 red, uint8 green, uint8 blue )
 
 uint8 aui_Pixel::GetPaletteIndexedColor( uint8 red, uint8 green, uint8 blue, HPALETTE *hpal )
 {
-	uint16 valMain, valCompare = 0;
-	uint8 r, g, b;
 	uint8 color = 0;
-	sint32 diff = INT_MAX;
-	AUI_SURFACE_PIXELFORMAT pf = g_ui->PixelFormat();
 #ifndef USE_SDL
+	uint16 valMain, valCompare = 0;
+	sint32 diff = INT_MAX;
+	uint8 r, g, b;
 	PALETTEENTRY *pe;
 
 	pe = new PALETTEENTRY[ 256 ];
@@ -81,9 +80,8 @@ uint8 aui_Pixel::GetPaletteIndexedColor( uint8 red, uint8 green, uint8 blue, RGB
 	uint8 r, g, b;
 	uint8 color = 0;
 	sint32 diff = INT_MAX;
-	AUI_SURFACE_PIXELFORMAT pf = g_ui->PixelFormat();
 
-	valMain |= ( red >> 3 ) << 10;
+	valMain = ( red >> 3 ) << 10;
 	valMain |= ( green >> 3 ) << 5;
 	valMain |= ( blue >> 3 );
 
@@ -475,7 +473,6 @@ AUI_ERRCODE aui_Pixel::Convert24To16(
 	if ( surface16->BitsPerPixel() != 16 ) return AUI_ERRCODE_INVALIDPARAM;
 
 	const sint32 destWidth = surface16->Width();
-	const sint32 destHeight = surface16->Height();
 	const sint32 destPitch = surface16->Pitch();
 
 	const sint32 destDiff = destPitch / 2 - destWidth;
@@ -554,7 +551,6 @@ AUI_ERRCODE aui_Pixel::Convert8To16(
 				rgbq[i].rgbBlue );
 
 	const sint32 destWidth = surface16->Width();
-	const sint32 destHeight = surface16->Height();
 	const sint32 destPitch = surface16->Pitch();
 
 	const sint32 destDiff = destPitch / 2 - destWidth;

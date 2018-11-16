@@ -101,10 +101,10 @@ void NETFunc::ListHandler<NETFunc::Transport>::SetKey(void) {}
 ns_PlayerSetupListBox::ns_PlayerSetupListBox (
 	AUI_ERRCODE *retval,
 	uint32 id,
-	MBCHAR *ldlBlock,
+	const MBCHAR *ldlBlock,
 	ControlActionCallback *ActionFunc,
 	void *cookie,
-	char *filename)
+	const char *filename)
 
 	:
 	aui_ImageBase( ldlBlock),
@@ -123,10 +123,10 @@ ns_PlayerSetupListBox::ns_PlayerSetupListBox (
 ns_GameSetupListBox::ns_GameSetupListBox (
 	AUI_ERRCODE *retval,
 	uint32 id,
-	MBCHAR *ldlBlock,
+	const MBCHAR *ldlBlock,
 	ControlActionCallback *ActionFunc,
 	void *cookie,
-	char *filename)
+	const char *filename)
 
 	:
 	aui_ImageBase( ldlBlock),
@@ -144,10 +144,10 @@ ns_GameSetupListBox::ns_GameSetupListBox (
 ns_AIPlayerSetupListBox::ns_AIPlayerSetupListBox (
 	AUI_ERRCODE *retval,
 	uint32 id,
-	MBCHAR *ldlBlock,
+	const MBCHAR *ldlBlock,
 	ControlActionCallback *ActionFunc,
 	void *cookie,
-	char *filename)
+	const char *filename)
 
 	:
 	aui_ImageBase( ldlBlock),
@@ -173,8 +173,8 @@ HotseatTransport::HotseatTransport()
 	strcpy( description.name, s.GetString() );
 }
 
-ns_TransportListBox::ns_TransportListBox (
-	AUI_ERRCODE *retval, uint32 id, MBCHAR *ldlBlock, ControlActionCallback *ActionFunc, void *cookie )
+ns_TransportListBox::ns_TransportListBox(AUI_ERRCODE *retval,
+    uint32 id, const MBCHAR *ldlBlock, ControlActionCallback *ActionFunc, void *cookie)
 	:
 	aui_ImageBase( ldlBlock),
 	aui_TextBase( ldlBlock, (MBCHAR *)NULL ),
@@ -250,7 +250,7 @@ ns_TransportListBox::~ns_TransportListBox()
 ns_SessionListBox::ns_SessionListBox (
 		AUI_ERRCODE *retval,
 		uint32 id,
-		MBCHAR *ldlBlock,
+		const MBCHAR *ldlBlock,
 		ControlActionCallback *ActionFunc,
 		void *cookie )
 	:
@@ -268,7 +268,7 @@ ns_SessionListBox::ns_SessionListBox (
 ns_LobbyListBox::ns_LobbyListBox (
 		AUI_ERRCODE *retval,
 		uint32 id,
-		MBCHAR *ldlBlock,
+		const MBCHAR *ldlBlock,
 		ControlActionCallback *ActionFunc,
 		void *cookie )
 	:
@@ -286,7 +286,7 @@ ns_LobbyListBox::ns_LobbyListBox (
 ns_GameListBox::ns_GameListBox (
 		AUI_ERRCODE *retval,
 		uint32 id,
-		MBCHAR *ldlBlock,
+		const MBCHAR *ldlBlock,
 		ControlActionCallback *ActionFunc,
 		void *cookie )
 	:
@@ -304,7 +304,7 @@ ns_GameListBox::ns_GameListBox (
 ns_PlayerListBox::ns_PlayerListBox (
 		AUI_ERRCODE *retval,
 		uint32 id,
-		MBCHAR *ldlBlock,
+		const MBCHAR *ldlBlock,
 		ControlActionCallback *ActionFunc,
 		void *cookie )
 	:
@@ -390,7 +390,7 @@ void ns_PlayerListBox::ColorCodePingTime( NETFunc::Player *player )
 ns_RPlayerListBox::ns_RPlayerListBox (
 		AUI_ERRCODE *retval,
 		uint32 id,
-		MBCHAR *ldlBlock,
+		const MBCHAR *ldlBlock,
 		ControlActionCallback *ActionFunc,
 		void *cookie )
 	:
@@ -408,7 +408,7 @@ ns_RPlayerListBox::ns_RPlayerListBox (
 ns_ServerListBox::ns_ServerListBox (
 		AUI_ERRCODE *retval,
 		uint32 id,
-		MBCHAR *ldlBlock,
+		const MBCHAR *ldlBlock,
 		ControlActionCallback *ActionFunc,
 		void *cookie )
 	:
@@ -492,7 +492,7 @@ void ns_ServerListBox::ColorCodePingTime( NETFunc::Server *server )
 ns_GPlayerListBox::ns_GPlayerListBox (
 		AUI_ERRCODE *retval,
 		uint32 id,
-		MBCHAR *ldlBlock,
+		const MBCHAR *ldlBlock,
 		ns_HPlayerListBox *hplayerlistbox,
 		ControlActionCallback *ActionFunc,
 		void *cookie )
@@ -636,7 +636,10 @@ void ns_GPlayerListBox::Delete( NETFunc::Player *player )
 
 	if ( g_netfunc->IsHost() )
 	{
-		BOOL success = g_allinoneWindow->AssignTribe(
+#ifdef _DEBUG
+		BOOL success =
+#endif
+		g_allinoneWindow->AssignTribe(
 			0,
 			*(uint16 *)player->GetKey()->buf,
 			FALSE,
@@ -764,7 +767,6 @@ AUI_ERRCODE ns_ListBox<NETFunc::Player, ns_Player>::StoreAppropriateData(
 	sint32 i )
 {
 
-	static MBCHAR scratch[ k_NS_ITEM_MAXTEXT + 1 ];
 	ns_Player *netShellObject = item->GetNetShellObject();
 	if ( !netShellObject )
 		netShellObject = ((ns_Item<NETFunc::Player, ns_Player> *)item->
@@ -795,7 +797,7 @@ AUI_ERRCODE ns_ListBox<NETFunc::Player, ns_Player>::StoreAppropriateData(
 		case ns_Accessor<NETFunc::Player>::INT:
 			item->SetTextBold(netShellObject->IsMine());
 			MBCHAR text[40];
-			sprintf(text, "%d", reinterpret_cast<sint32 const *>(dataPtr));
+			sprintf(text, "%jd", (intmax_t)(intptr_t)reinterpret_cast<sint32 const *>(dataPtr));
 			return item->SetText(text);
 
 		case ns_Accessor<NETFunc::Player>::ICON:
@@ -814,7 +816,7 @@ AUI_ERRCODE ns_ListBox<NETFunc::Player, ns_Player>::StoreAppropriateData(
 ns_AIPlayerListBox::ns_AIPlayerListBox (
 		AUI_ERRCODE *retval,
 		uint32 id,
-		MBCHAR *ldlBlock,
+		const MBCHAR *ldlBlock,
 		ns_HPlayerListBox *hplayerlistbox,
 		ControlActionCallback *ActionFunc,
 		void *cookie )
@@ -892,7 +894,10 @@ void ns_AIPlayerListBox::Delete( nf_AIPlayer *player )
 
 	if ( g_netfunc->IsHost() )
 	{
-		BOOL success = g_allinoneWindow->AssignTribe(
+#ifdef _DEBUG
+		BOOL success =
+#endif
+		g_allinoneWindow->AssignTribe(
 			0,
 			*(uint16 *)player->GetKey()->buf,
 			TRUE,

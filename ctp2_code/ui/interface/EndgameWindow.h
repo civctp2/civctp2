@@ -57,16 +57,13 @@ public:
 
 	void UpdateTurn(EndGame *endGame);
 
-
-	virtual AUI_ERRCODE Idle();
-
 	void kh_Close();
 
 protected:
 
 	EndGameWindow() : C3Window() {}
 
-	void InitCommonLdl(MBCHAR *ldlBlock);
+	void InitCommonLdl(const MBCHAR *ldlBlock);
 
 	void CleanPointers();
 

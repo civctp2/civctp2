@@ -24,7 +24,7 @@
 //
 // Modifications from the original Activision code:
 //
-// - Standardized code (May 21th 2006 Martin Gühmann)
+// - Standardized code (May 21th 2006 Martin G"uhmann)
 //
 //----------------------------------------------------------------------------
 
@@ -39,7 +39,7 @@
 aui_TabGroup::aui_TabGroup(
 	AUI_ERRCODE *retval,
 	uint32 id,
-	MBCHAR *ldlBlock )
+	const MBCHAR *ldlBlock)
 	:
 	aui_ImageBase( ldlBlock ),
 	aui_TextBase( ldlBlock, (const MBCHAR *)NULL ),
@@ -77,7 +77,7 @@ aui_TabGroup::aui_TabGroup(
 }
 
 
-AUI_ERRCODE aui_TabGroup::InitCommonLdl( MBCHAR *ldlBlock )
+AUI_ERRCODE aui_TabGroup::InitCommonLdl(const MBCHAR *ldlBlock)
 {
 	aui_Ldl *theLdl = g_ui->GetLdl();
 
@@ -90,7 +90,7 @@ AUI_ERRCODE aui_TabGroup::InitCommonLdl( MBCHAR *ldlBlock )
 	if ( !block ) return AUI_ERRCODE_LDLFINDDATABLOCKFAILED;
 
 	AUI_TABGROUP_ALIGNMENT alignment = AUI_TABGROUP_ALIGNMENT_TOP;
-	MBCHAR *alignmentString = block->GetString( k_AUI_TABGROUP_LDL_ALIGNMENT );
+	const MBCHAR *alignmentString = block->GetString(k_AUI_TABGROUP_LDL_ALIGNMENT);
 	if ( alignmentString )
 	{
 		if ( !stricmp( alignmentString, k_AUI_TABGROUP_LDL_LEFT ) )

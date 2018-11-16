@@ -83,7 +83,6 @@ class CityData;
 class BuildingBuildListRecord;
 class BuildListSequenceRecord;
 class WonderBuildListRecord;
-class StrategyRecord::PopAssignmentElement;
 class UnitBuildListRecord;
 
 //----------------------------------------------------------------------------

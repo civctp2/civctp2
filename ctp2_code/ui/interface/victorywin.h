@@ -138,10 +138,10 @@ public:
 
 AUI_ACTION_BASIC(CloseVictoryWindowAction);
 
-sint32 victorywin_AddWonders( MBCHAR* windowBlock );
+sint32 victorywin_AddWonders(const MBCHAR* windowBlock );
 sint32 victorywin_Initialize( sint32 type = 0 );
-sint32 victorywin_Init_Controls( MBCHAR* windowBlock );
-sint32 victorywin_Init_TabGroups( MBCHAR* windowBlock );
+sint32 victorywin_Init_Controls(const MBCHAR* windowBlock );
+sint32 victorywin_Init_TabGroups(const MBCHAR* windowBlock );
 
 sint32 victorywin_DisplayWindow( sint32 type = 0 );
 void   victorywin_Cleanup( void );

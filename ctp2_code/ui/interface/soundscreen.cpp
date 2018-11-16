@@ -50,24 +50,21 @@ extern ProfileDB			*g_theProfileDB;
 
 static c3_PopupWindow *s_soundWindow	= NULL;
 static C3Slider		*s_sfx				= NULL,
-					*s_music			= NULL,
-					*s_voice			= NULL;
+			*s_music			= NULL,
+			*s_voice			= NULL;
 
 static c3_Static	*s_sfxN				= NULL,
-					*s_musicN			= NULL,
-					*s_voiceN			= NULL;
+			*s_musicN			= NULL,
+			*s_voiceN			= NULL;
 static c3_Static	*s_sfxmin			= NULL,
-					*s_sfxmax			= NULL,
-					*s_musicmin			= NULL,
-					*s_musicmax			= NULL,
-					*s_voicemin			= NULL,
-					*s_voicemax			= NULL;
+			*s_sfxmax			= NULL,
+			*s_musicmin			= NULL,
+			*s_musicmax			= NULL,
+			*s_voicemin			= NULL,
+			*s_voicemax			= NULL;
 
-
-
-
-
-sint32	soundscreen_displayMyWindow()
+sint32
+soundscreen_displayMyWindow()
 {
 	sint32 retval=0;
 	if(!s_soundWindow) { retval = soundscreen_Initialize(); }
@@ -80,7 +77,9 @@ sint32	soundscreen_displayMyWindow()
 
 	return retval;
 }
-sint32 soundscreen_removeMyWindow(uint32 action)
+
+sint32
+soundscreen_removeMyWindow(uint32 action)
 {
 	if ( action != (uint32)AUI_BUTTON_ACTION_EXECUTE ) return 0;
 
@@ -101,8 +100,8 @@ sint32 soundscreen_removeMyWindow(uint32 action)
 	return 1;
 }
 
-
-AUI_ERRCODE soundscreen_Initialize( void )
+AUI_ERRCODE
+soundscreen_Initialize( void )
 {
 	AUI_ERRCODE errcode = AUI_ERRCODE_OK;
 	MBCHAR		windowBlock[ k_AUI_LDL_MAXBLOCK + 1 ];
@@ -118,7 +117,6 @@ AUI_ERRCODE soundscreen_Initialize( void )
 		AUI_WINDOW_TYPE_FLOATING,
 		false );
 	Assert( AUI_NEWOK(s_soundWindow, errcode) );
-	if ( !AUI_NEWOK(s_soundWindow, errcode) ) errcode;
 
 	s_soundWindow->SetStronglyModal(TRUE);
 
@@ -156,8 +154,8 @@ AUI_ERRCODE soundscreen_Initialize( void )
 	return AUI_ERRCODE_OK;
 }
 
-
-AUI_ERRCODE soundscreen_Cleanup()
+AUI_ERRCODE
+soundscreen_Cleanup()
 {
 #define mycleanup(mypointer) if(mypointer) { delete mypointer; mypointer = NULL; };
 
@@ -189,47 +187,37 @@ AUI_ERRCODE soundscreen_Cleanup()
 #undef mycleanup
 }
 
-
-
-
-void soundscreen_exitPress(aui_Control *control, uint32 action, uint32 data, void *cookie )
+void
+soundscreen_exitPress(aui_Control *control, uint32 action, uint32 data, void *cookie )
 {
 	g_theProfileDB->Save();
 
 	soundscreen_removeMyWindow(action);
 }
 
-
-
-
-
-
-
-
-
-void soundscreen_sfxSlide(aui_Control *control, uint32 action, uint32 data, void *cookie )
+void
+soundscreen_sfxSlide(aui_Control *control, uint32 action, uint32 data, void *cookie )
 {
 	if ( action != AUI_RANGER_ACTION_VALUECHANGE ) return;
 	g_theProfileDB->SetSFXVolume(s_sfx->GetValueX());
 
 }
-void soundscreen_musicSlide(aui_Control *control, uint32 action, uint32 data, void *cookie )
+
+void
+soundscreen_musicSlide(aui_Control *control, uint32 action, uint32 data, void *cookie )
 {
 	if ( action != AUI_RANGER_ACTION_VALUECHANGE ) return;
 	g_theProfileDB->SetMusicVolume(s_music->GetValueX());
 
 }
-void soundscreen_voiceSlide(aui_Control *control, uint32 action, uint32 data, void *cookie )
+
+void
+soundscreen_voiceSlide(aui_Control *control, uint32 action, uint32 data, void *cookie )
 {
 	if ( action != AUI_RANGER_ACTION_VALUECHANGE ) return;
 	g_theProfileDB->SetVoiceVolume(s_voice->GetValueX());
 
 }
-
-
-
-
-
 
 void soundscreen_getValues(sint32 &sfx, sint32 &music, sint32 &voice)
 {

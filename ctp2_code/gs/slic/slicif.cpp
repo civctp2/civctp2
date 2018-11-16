@@ -274,7 +274,7 @@ void slicif_add_object(struct PSlicObject *obj)
 	slicif_start();
 }
 
-void slicif_declare_sym(char *name, SLIC_SYM type)
+void slicif_declare_sym(const char *name, SLIC_SYM type)
 {
 	char buf[1024];
 	char realname[1024];
@@ -307,7 +307,7 @@ void slicif_declare_sym(char *name, SLIC_SYM type)
 	}
 }
 
-void slicif_declare_array(char *name, SLIC_SYM type)
+void slicif_declare_array(const char *name, SLIC_SYM type)
 {
 	char buf[1024];
 	SlicNamedSymbol *sym = g_slicEngine->GetOrMakeSymbol(name);
@@ -331,13 +331,13 @@ void slicif_declare_array(char *name, SLIC_SYM type)
 	}
 }
 
-void slicif_declare_fixed_array(char *name, SLIC_SYM type, int size)
+void slicif_declare_fixed_array(const char *name, SLIC_SYM type, int size)
 {
 	char buf[1024];
 	SlicNamedSymbol *sym = g_slicEngine->GetOrMakeSymbol(name);
 	if(sym) {
 		if(sym->GetType() != SLIC_SYM_UNDEFINED) {
-			sprintf("Symbol '%s' in array declaration already has a type", name);
+			snprintf(buf, sizeof buf, "Symbol '%s' in array declaration already has a type", name);
 			yyslerror(buf);
 		} else {
 			sym->SetType(SLIC_SYM_ARRAY);
@@ -705,7 +705,7 @@ void slicif_add_op(SOP op, ...)
 			s_block_ptr[s_level] = s_code_ptr - 5;
 
 
-			slicif_add_if_clause_end((char *)(s_code_ptr - 5));
+			slicif_add_if_clause_end((s_code_ptr - 5));
 			*(s_code_ptr - 6) = SOP_JMP;
 
 
@@ -1087,9 +1087,9 @@ void slicif_start_if()
 	s_if_stack[s_if_level].count = 0;
 }
 
-void slicif_add_if_clause_end(char *ptr)
+void slicif_add_if_clause_end(unsigned char *ptr)
 {
-	s_if_stack[s_if_level].array[s_if_stack[s_if_level].count++] = (unsigned char *)ptr;
+	s_if_stack[s_if_level].array[s_if_stack[s_if_level].count++] = ptr;
 }
 
 void slicif_end_if()
@@ -1661,7 +1661,7 @@ void slicif_dump_code(unsigned char* code, int codeSize)
 }
 #endif
 
-int slicif_find_string(char *id)
+int slicif_find_string(const char *id)
 {
 	char errbuf[1024];
 
@@ -1686,7 +1686,7 @@ void slicif_set_file_num(int num)
 	s_file_num = num;
 }
 
-void slicif_add_region(char *name, int x1, int y1, int x2, int y2)
+void slicif_add_region(const char *name, int x1, int y1, int x2, int y2)
 {
 #if 0
 	struct PSlicSymbol *rgnsym;
@@ -1712,7 +1712,7 @@ void slicif_add_region(char *name, int x1, int y1, int x2, int y2)
 #endif
 }
 
-void slicif_start_complex_region(char *name)
+void slicif_start_complex_region(const char *name)
 {
 #if 0
 	struct PSlicSymbol *rgnsym;
@@ -1744,7 +1744,7 @@ void slicif_finish_complex_region()
 
 }
 
-void slicif_add_region_to_complex(char *name)
+void slicif_add_region_to_complex(const char *name)
 {
 #if 0
 	struct PSlicComplexRegion *oldhead, *chk;
@@ -1799,7 +1799,7 @@ void slicif_add_region_to_complex(char *name)
 #endif
 }
 
-void slicif_start_segment(char *name)
+void slicif_start_segment(const char *name)
 {
 	s_inSegment = 1;
 	strcpy(s_current_segment_name, name);
@@ -1813,7 +1813,7 @@ char *slicif_get_segment_name_copy()
 	return name;
 }
 
-void slicif_add_parameter(SLIC_SYM type, char *name)
+void slicif_add_parameter(SLIC_SYM type, const char *name)
 {
 	char namebuf[1024];
 	SlicSymbolData *sym;
@@ -1847,12 +1847,12 @@ void slicif_function_return(SF_RET rettype)
 	s_function_return_type = rettype;
 }
 
-void slicif_get_local_name(char *localName, char *name)
+void slicif_get_local_name(char *localName, const char *name)
 {
 	sprintf(localName, "%s#%s", s_current_segment_name, name);
 }
 
-void slicif_add_prototype(char *name)
+void slicif_add_prototype(const char *name)
 {
 	SlicSymbolData *sym;
 	sym = g_slicEngine->GetOrMakeSymbol(name);
@@ -1916,17 +1916,17 @@ void slicif_end_for()
 	s_while_level--;
 }
 
-int slicif_find_const(char *name, int *value)
+int slicif_find_const(const char *name, int *value)
 {
 	return (int)g_slicEngine->FindConst(name, (sint32*)value);
 }
 
-void slicif_add_const(char *name, int value)
+void slicif_add_const(const char *name, int value)
 {
 	g_slicEngine->AddConst((MBCHAR *)name, (sint32)value);
 }
 
-void slicif_check_event_exists(char *name)
+void slicif_check_event_exists(const char *name)
 {
 	GAME_EVENT ev = g_gevManager->GetEventIndex(name);
 	if(ev >= GEV_MAX) {
@@ -1936,10 +1936,10 @@ void slicif_check_event_exists(char *name)
 	}
 }
 
-char *slicif_create_name(char *base)
+char *slicif_create_name(const char *base)
 {
 	char *name = (char *)malloc(strlen(base) + 10);
-	sprintf(name, "%s!%08lx", base, s_temp_name_counter++);
+	sprintf(name, "%s!%08x", base, s_temp_name_counter++);
 	return name;
 }
 
@@ -1954,7 +1954,7 @@ SLIC_PRI slicif_get_priority()
 	return s_priority;
 }
 
-void slicif_set_event_checking(char *eventname)
+void slicif_set_event_checking(const char *eventname)
 {
 
 
@@ -2021,7 +2021,7 @@ void slicif_register_line(int line, int offset)
 	}
 }
 
-SlicNamedSymbol *slicif_get_symbol(char *name)
+SlicNamedSymbol *slicif_get_symbol(const char *name)
 {
 	char localname[1024];
 	slicif_get_local_name(localname, name);
@@ -2034,7 +2034,7 @@ SlicNamedSymbol *slicif_get_symbol(char *name)
 	return sym;
 }
 
-void slicif_start_event(char *name)
+void slicif_start_event(const char *name)
 {
 	char errbuf[1024];
 
@@ -2048,7 +2048,7 @@ void slicif_start_event(char *name)
 	slicif_add_op(SOP_SARGS);
 }
 
-void slicif_check_arg_symbol(SLIC_SYM type, char *typeName)
+void slicif_check_arg_symbol(SLIC_SYM type, const char *typeName)
 {
 	char errbuf[1024];
 	SLIC_SYM symType;

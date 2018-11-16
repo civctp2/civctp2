@@ -9,11 +9,11 @@ private:
 
 public:
 	CityManagerWindow(AUI_ERRCODE *retval,
-					  uint32 id,
-					  MBCHAR *ldlBlock);
+			  uint32 id,
+			  const MBCHAR *ldlBlock);
 	~CityManagerWindow();
 
-	AUI_ERRCODE InitCommonLdl(MBCHAR *ldlBlock);
+	AUI_ERRCODE InitCommonLdl(const MBCHAR *ldlBlock);
 	AUI_ERRCODE DrawThis(aui_Surface *surface, sint32 x, sint32 y);
 
 	static void Open();

@@ -12,23 +12,23 @@ public:
 
 	aui_Font(
 		AUI_ERRCODE *retval,
-		MBCHAR *descriptor = NULL );
+		const MBCHAR *descriptor = NULL );
 	virtual ~aui_Font();
 
 protected:
 	aui_Font() : aui_Base() {}
-	AUI_ERRCODE InitCommon( MBCHAR *descriptor );
+	AUI_ERRCODE InitCommon(const MBCHAR *descriptor);
 
 public:
 	AUI_ERRCODE Load( void );
 	AUI_ERRCODE Unload( void );
 
 	HFONT		GetHFONT( void ) const { return m_hfont; }
-	MBCHAR		*GetDescriptor( void ) const { return (MBCHAR *)m_descriptor; }
+	const MBCHAR	*GetDescriptor( void ) const { return m_descriptor; }
 
-	AUI_ERRCODE	SetDescriptor( MBCHAR *descriptor );
+	AUI_ERRCODE	SetDescriptor(const MBCHAR *descriptor);
 
-	MBCHAR		*GetFilename( void ) const { return GetDescriptor(); }
+	const MBCHAR	*GetFilename( void ) const { return GetDescriptor(); }
 	AUI_ERRCODE	SetFilename( MBCHAR *filename )
 	{ return SetDescriptor( filename ); }
 

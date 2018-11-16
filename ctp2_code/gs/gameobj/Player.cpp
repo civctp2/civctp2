@@ -3887,7 +3887,7 @@ void Player::BuildResearchDialog(AdvanceType advance)
 
 		strcpy(messageStr, dstring);
 
-		sprintf(tempStr, "%#.3d", (sint32)advance);
+		sprintf(tempStr, "%.3d", (sint32)advance);
 
 		MBCHAR *p = strstr(messageStr, "000>");
 		if(p) {
@@ -6795,7 +6795,7 @@ void Player::SendTestMessage(void)
 
 
 
-MBCHAR *Player::GetLeaderName(void)
+const MBCHAR *Player::GetLeaderName(void)
 {
     if (!g_network.IsActive() && !g_slicEngine->GetTutorialActive() &&
 		g_theProfileDB->GetPlayerIndex() == m_owner) {
@@ -8243,18 +8243,15 @@ void Player::AddProductionFromFranchise(sint32 amt)
 
 void Player::DisplayAdvances()
 	{
-	MBCHAR	s[512];
 
 	AdvanceType	adv;
 
-	sprintf(s, "Advances, Player %ld:", m_owner);
-	g_debugWindow->AddText(s);
+	g_debugWindow->AddText("Advances, Player %ld:", m_owner);
 
 		for (adv=0; adv<m_advances->GetNum(); adv++)
 			if (HasAdvance(adv))
 				{
-				sprintf(s, " %s", g_theAdvanceDB->GetNameStr(adv));
-				g_debugWindow->AddText(s);
+				g_debugWindow->AddText(" %s", g_theAdvanceDB->GetNameStr(adv));
 				}
 
 	}
@@ -8266,56 +8263,15 @@ void Player::DisplayWWR()
     m_global_happiness->DisplayWWR();
 
     char str[80];
-    sprintf(str, "  readiness level %d cost %d  %%  %3.1f",  m_readiness->GetLevel(),
+    g_debugWindow->AddText("  readiness level %d cost %f  %%  %3.1f",  m_readiness->GetLevel(),
         m_readiness->GetCost(),
         100.0 * m_readiness->GetPecentLastTurn());
-	g_debugWindow->AddText(str);
-    sprintf(str, "  materials %% %3.1f materials current %d", 100.0 * m_materialsTax, m_materialPool->GetMaterials());
-	g_debugWindow->AddText(str);
+    g_debugWindow->AddText("  materials %% %3.1f materials current %d", 100.0 * m_materialsTax, m_materialPool->GetMaterials());
     double tmp;
     m_tax_rate->GetScienceTaxRate(tmp);
-    sprintf(str, "  science %% %3.1f science current %d", tmp, 100.0 * m_science->GetLevel());
-	g_debugWindow->AddText(str);
-    sprintf(str, "  gold %d", m_gold->GetLevel());
-	g_debugWindow->AddText(str);
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
+    g_debugWindow->AddText("  science %% %3.1f science current %f", tmp, 100.0 * m_science->GetLevel());
+    g_debugWindow->AddText("  gold %d", m_gold->GetLevel());
 }
-
-
-
-
-
-
-
-
-
-
-
-
 
 
 uint32 Player_Player_GetVersion(void)
@@ -8369,7 +8325,7 @@ sint32 Player::GetCheapestMilitaryUnit()
 
 MBCHAR *Player::GenerateDescriptionString(int is_winner)
 {
-    char *ptag = NULL;
+    const char *ptag = NULL;
 	sint32 curScore = infowin_GetCivScore(m_owner);
 
     if (is_winner) {

@@ -23,7 +23,7 @@ public:
 						uint32 bevelWidth,
 						uint32 bevelType);
 
-	AUI_ERRCODE InitCommonLdl( MBCHAR *ldlBlock );
+	AUI_ERRCODE InitCommonLdl(const MBCHAR *ldlBlock);
 	AUI_ERRCODE InitCommon(void);
 
 	void SetColor(COLOR color) { m_color = color; }

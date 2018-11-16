@@ -47,10 +47,8 @@ AUI_ERRCODE Picture::MakeMipmap( void )
 	errcode = pSrcSurf->Lock(NULL, (LPVOID *)&pSrcBuffer, 0);
 	if ( errcode == AUI_ERRCODE_OK )
 	{
-
 		sint32 srcWidth = pSrcSurf->Width();
 		sint32 srcHeight = pSrcSurf->Height();
-		sint32 srcPitch = pSrcSurf->Pitch();
 
 		uint16 *pSrcPixel;
 		uint16 *pDestPixel;
@@ -58,7 +56,6 @@ AUI_ERRCODE Picture::MakeMipmap( void )
 		sint32 mipWidth = srcWidth >> 1;
 		sint32 mipHeight = srcHeight >> 1;
 		sint32 mipBpp = 16;
-		sint32 mipSize = (mipWidth*mipHeight) << 1;
 
 		AUI_ERRCODE retcode;
 		pMipmap = aui_Factory::new_Surface(retcode,mipWidth,mipHeight,mipBpp);
@@ -214,17 +211,11 @@ AUI_ERRCODE Picture::Draw( aui_Surface *pDestSurf, RECT *pDestRect )
 
 				sint32 srcWidth = pSrcSurf->Width();
 				sint32 srcHeight = pSrcSurf->Height();
-				sint32 srcPitch = pSrcSurf->Pitch();
 
 				sint32 mipWidth = pMipSurf->Width();
 				sint32 mipHeight = pMipSurf->Height();
-				sint32 mipPitch = pSrcSurf->Pitch();
-
 
 				sint32 destPitch = pDestSurf->Pitch();
-
-
-
 
 				uint16 *pDestPixel;
 				sint32 inc = (destPitch >> 1) - width;

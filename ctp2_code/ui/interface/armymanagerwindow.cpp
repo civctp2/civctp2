@@ -72,7 +72,7 @@ extern C3UI *g_c3ui;
 extern ColorSet	*g_colorSet;
 
 static ArmyManagerWindow *s_armyWindow = NULL;
-static MBCHAR *s_armyWindowBlock = "ArmyManager";
+static const MBCHAR *s_armyWindowBlock = "ArmyManager";
 
 ArmyManagerWindow::ArmyManagerWindow(AUI_ERRCODE *err)
 {
@@ -98,11 +98,11 @@ ArmyManagerWindow::ArmyManagerWindow(AUI_ERRCODE *err)
 		MBCHAR name[k_MAX_NAME_LEN];
 		sprintf(name, "%s.InArmyBox.Unit%d", s_armyWindowBlock, i);
 		aui_Ldl::SetActionFuncAndCookie(name, ArmyManagerWindow::InArmy, NULL);
-		(static_cast<ctp2_Static*>(aui_Ldl::GetObject(name,"UnitHealth")))->SetDrawCallbackAndCookie(ArmyManagerWindow::DrawHealthCallbackInArmy,(void *)i);
+		(static_cast<ctp2_Static*>(aui_Ldl::GetObject(name,"UnitHealth")))->SetDrawCallbackAndCookie(ArmyManagerWindow::DrawHealthCallbackInArmy,(void *)(intptr_t)i);
 
 		sprintf(name, "%s.OutOfArmyBox.Unit%d", s_armyWindowBlock, i);
 		aui_Ldl::SetActionFuncAndCookie(name, ArmyManagerWindow::OutOfArmy, NULL);
-		(static_cast<ctp2_Static*>(aui_Ldl::GetObject(name,"UnitHealth")))->SetDrawCallbackAndCookie(ArmyManagerWindow::DrawHealthCallbackOutOfArmy,(void *)i);
+		(static_cast<ctp2_Static*>(aui_Ldl::GetObject(name,"UnitHealth")))->SetDrawCallbackAndCookie(ArmyManagerWindow::DrawHealthCallbackOutOfArmy,(void *)(intptr_t)i);
 	}
 
 	*err = AUI_ERRCODE_OK;
@@ -883,8 +883,6 @@ void ArmyManagerWindow::OutOfArmy(aui_Control *control, uint32 action, uint32 da
 
 	bool enableAddButton=true;
 	bool enableAddAllButton=false;
-	ctp2_ListBox *armyList = (ctp2_ListBox *)aui_Ldl::GetObject(s_armyWindowBlock, "ArmiesList");
-	ctp2_ListItem *item = (ctp2_ListItem *)armyList->GetSelectedItem();
 	int i;
 	for(i = 0; i < k_MAX_ARMY_SIZE; i++) {
 		MBCHAR switchName[k_MAX_NAME_LEN];

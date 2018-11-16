@@ -60,7 +60,7 @@ extern ColorSet		*g_colorSet;
 c3_Slidometer::c3_Slidometer(
 	AUI_ERRCODE *retval,
 	uint32 id,
-	MBCHAR *ldlBlock,
+	const MBCHAR *ldlBlock,
 	ControlActionCallback *ActionFunc,
 	void *cookie )
 	:
@@ -106,7 +106,7 @@ c3_Slidometer::c3_Slidometer(
 	sint32 width,
 	sint32 height,
 	BOOL isVertical,
-	MBCHAR *pattern,
+	const MBCHAR *pattern,
 	sint32 percentFilled,
 	ControlActionCallback *ActionFunc,
 	void *cookie )
@@ -132,7 +132,7 @@ c3_Slidometer::c3_Slidometer(
 	Assert( AUI_SUCCESS(*retval) );
 	if ( !AUI_SUCCESS(*retval) ) return;
 
-	*retval = aui_SoundBase::InitCommon((MBCHAR **)NULL );
+	*retval = aui_SoundBase::InitCommon((const MBCHAR **)NULL);
 	Assert( AUI_SUCCESS(*retval) );
 	if ( !AUI_SUCCESS(*retval) ) return;
 
@@ -150,7 +150,7 @@ c3_Slidometer::c3_Slidometer(
 }
 
 
-AUI_ERRCODE c3_Slidometer::InitCommon( MBCHAR *ldlBlock )
+AUI_ERRCODE c3_Slidometer::InitCommon(const MBCHAR *ldlBlock)
 {
 
 	sint32 percentFilled = 0;
@@ -179,7 +179,7 @@ AUI_ERRCODE c3_Slidometer::InitCommon( void )
 }
 
 
-AUI_ERRCODE c3_Slidometer::CreateThumb( MBCHAR *ldlBlock )
+AUI_ERRCODE c3_Slidometer::CreateThumb(const MBCHAR *ldlBlock)
 {
 	AUI_ERRCODE errcode = AUI_ERRCODE_OK;
 

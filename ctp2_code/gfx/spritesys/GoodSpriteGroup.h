@@ -60,19 +60,19 @@ public:
 	void			DeallocateStorage(void);
 	void			DeallocateFullLoadAnims(void);
 
-	void			LoadBasic(char *filename);
-	void			LoadFull(char *filename);
+	void			LoadBasic(const char *filename);
+	void			LoadFull(const char *filename);
 
-	void			Save(char *filename,unsigned version_id,unsigned compression_mode);
+	void			Save(const char *filename,unsigned version_id,unsigned compression_mode);
 
-	void			ExportScript(MBCHAR *name);
+	void			ExportScript(const char *name);
 
 	void			Draw(GOODACTION action, sint32 frame, sint32 drawX, sint32 drawY,
 						   sint32 facing, double scale, uint16 transparency, Pixel16 outlineColor, uint16 flags);
 	void			DrawDirect(aui_Surface *surf, GOODACTION action, sint32 frame, sint32 drawX, sint32 drawY,
 						   sint32 facing, double scale, uint16 transparency, Pixel16 outlineColor, uint16 flags);
 
-	void			DrawText(sint32 x, sint32 y, char *s);
+	void			DrawText(sint32 x, sint32 y, const char *s);
 
 	void			RunBenchmark(aui_Surface *surf);
 

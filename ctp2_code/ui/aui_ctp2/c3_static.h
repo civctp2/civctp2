@@ -47,20 +47,20 @@ class c3_Static : public aui_Static, public PatternBase
 public:
 	c3_Static(AUI_ERRCODE *retval,
 						uint32 id,
-						MBCHAR *ldlBlock );
+						const MBCHAR *ldlBlock );
 	c3_Static(AUI_ERRCODE *retval,
 						uint32 id,
 						sint32 x,
 						sint32 y,
 						sint32 width,
 						sint32 height,
-						MBCHAR *pattern,
-						MBCHAR *text,
+						const MBCHAR *pattern,
+						const MBCHAR *text,
 						uint32 maxLength,
 						uint32 bevelWidth,
 						uint32 bevelType);
 
-	AUI_ERRCODE InitCommonLdl( MBCHAR *ldlBlock );
+	AUI_ERRCODE InitCommonLdl(const MBCHAR *ldlBlock);
 	AUI_ERRCODE InitCommon(uint32 bevelWidth, uint32 bevelType );
 
 	virtual AUI_ERRCODE DrawThis(aui_Surface *surface,

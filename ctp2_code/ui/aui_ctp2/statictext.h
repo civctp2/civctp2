@@ -16,7 +16,7 @@ public:
 	StaticText(
 		AUI_ERRCODE *retval,
 		uint32 id,
-		MBCHAR *ldlBlock);
+		const MBCHAR *ldlBlock);
 	StaticText(
 		AUI_ERRCODE *retval,
 		uint32 id,
@@ -24,7 +24,7 @@ public:
 		sint32 y,
 		sint32 width,
 		sint32 height,
-		MBCHAR *text = NULL,
+		const MBCHAR *text = NULL,
 		uint32 maxLength = 0,
 		uint32 size = 0);
 	virtual ~StaticText() {}
@@ -35,7 +35,7 @@ public:
 		sint32 y = 0 );
 
 protected:
-	AUI_ERRCODE InitCommon( MBCHAR *ldlBlock );
+	AUI_ERRCODE InitCommon(const MBCHAR *ldlBlock);
 
 	sint32	m_border;
 

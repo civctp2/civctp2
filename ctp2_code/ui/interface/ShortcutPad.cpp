@@ -44,7 +44,7 @@ namespace Shortcuts {
 	ShortcutPad::ShortcutCallback<AUI_ERRCODE> TradeCallback(TradeManager::Display);
 };
 
-ShortcutPad::ShortcutPad(MBCHAR *ldlBlock) :
+ShortcutPad::ShortcutPad(const MBCHAR *ldlBlock) :
 m_cityManagementButton(static_cast<ctp2_Button*>(aui_Ldl::GetObject(ldlBlock,
 	"ShortcutPad.CityManagementButton"))),
 m_civilizationManagementButton(static_cast<ctp2_Button*>(aui_Ldl::GetObject(ldlBlock,

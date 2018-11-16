@@ -79,7 +79,7 @@ aui_BitmapFont::aui_BitmapFont(
 
 void aui_BitmapFont::AttributesToDescriptor(
 	MBCHAR out[ k_AUI_BITMAPFONT_MAXDESCLEN + 1 ],
-	MBCHAR ttffile[ MAX_PATH + 1 ],
+	const MBCHAR *ttffile,
 	sint32 pointSize,
 	sint32 bold,
 	sint32 italic )
@@ -95,7 +95,7 @@ void aui_BitmapFont::AttributesToDescriptor(
 
 
 void aui_BitmapFont::DescriptorToAttributes(
-	MBCHAR in[ k_AUI_BITMAPFONT_MAXDESCLEN + 1 ],
+	const MBCHAR *in,
 	MBCHAR ttffile[ MAX_PATH + 1 ],
 	sint32 *pointSize,
 	sint32 *bold,
@@ -1186,7 +1186,7 @@ sint32 aui_BitmapFont::GetStringWidth( const MBCHAR *string )
 
 	POINT penPos = { 0, 0 };
 
-	AUI_ERRCODE errcode = RenderLine(
+	RenderLine(
 		NULL,
 		NULL,
 		NULL,

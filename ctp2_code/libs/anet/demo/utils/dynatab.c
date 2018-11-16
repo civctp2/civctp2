@@ -411,8 +411,6 @@ void test1(dynatab_t *pt)
 
 #if defined(dynatab_UNITTEST)
 
-#include <malloc.h>		/* for _heapchk() */
-
 #define NTABS 100
 main()
 {

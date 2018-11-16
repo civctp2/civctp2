@@ -104,7 +104,7 @@ ThumbnailMap::~ThumbnailMap()
 	}
 }
 
-void ThumbnailMap::InitCommonLdl(MBCHAR *ldlBlock)
+void ThumbnailMap::InitCommonLdl(const MBCHAR *ldlBlock)
 {
 	aui_Ldl *theLdl = g_c3ui->GetLdl();
 

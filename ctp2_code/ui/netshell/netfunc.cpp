@@ -179,7 +179,7 @@ int adialup_willdial(void)
 
 
 
-void NETFunc::StringMix(int c, char *mix, char *msg, ...) {
+void NETFunc::StringMix(int c, char *mix, const char *msg, ...) {
 	char *next, *arg;
 	va_list al;
 	char str[]="% ";
@@ -206,7 +206,7 @@ void NETFunc::StringMix(int c, char *mix, char *msg, ...) {
 }
 
 
-char *NETFunc::StringDup(char *s) {
+char *NETFunc::StringDup(const char *s) {
 	if(s)
 		return strcpy(new char[strlen(s) + 1], s);
 	else
@@ -268,8 +268,7 @@ bool NETFunc::MessageHandler::HandleAll(Message *m) {
 NETFunc::MessageHandler *NETFunc::MessageHandler::hList[] = {0};
 int NETFunc::MessageHandler::hCount = 0;
 
-
-NETFunc::Message::Message(CODE c, void *p, size_t s) {
+NETFunc::Message::Message(CODE c, const void *p, size_t s) {
 	newbody = true;
 	body = new char[s + sizeof(CODE)];
 	*(CODE *)body = c;
@@ -331,7 +330,6 @@ NETFunc::Message::CODE NETFunc::Message::GetCode(void) {
 	return *(CODE *)body;
 }
 
-
 NETFunc::Messages::Messages(void) {}
 
 NETFunc::Messages::~Messages(void) {
@@ -349,7 +347,6 @@ NETFunc::Message *NETFunc::Messages::Pop(void) {
 
 NETFunc::Messages NETFunc::messages = Messages();
 
-
 NETFunc::Keys::Keys(void) {
 	memset(&curkey, 0, sizeof(KeyStruct));
 	curkey.len = 1;
@@ -361,12 +358,11 @@ void NETFunc::Keys::NextKey(void) {
 	curkey.buf[curkey.len-1]++;
 }
 
-
 NETFunc::Key::Key(void) {
 	memset(&key, 0, sizeof(KeyStruct));
 }
 
-NETFunc::Key::Key(Key *k) {
+NETFunc::Key::Key(const Key *k) {
 	key = k->key;
 }
 
@@ -374,18 +370,17 @@ NETFunc::Key::Key(KeyStruct *k) {
 	key = *k;
 }
 
-bool NETFunc::Key::Equals(Key *k) {
+bool NETFunc::Key::Equals(const Key *k) const {
 	return memcmp(&key, &k->key, sizeof(key.len) + key.len) == 0;
 }
 
-bool NETFunc::Key::Equals(KeyStruct *k) {
+bool NETFunc::Key::Equals(const KeyStruct *k) const {
 	return memcmp(&key, k, sizeof(key.len) + key.len) == 0;
 }
 
 NETFunc::KeyStruct *NETFunc::Key::GetKey(void) {
 	return &key;
 }
-
 
 NETFunc::STATUS NETFunc::EnumServers(bool b) {
 	KeyStruct key;
@@ -399,7 +394,6 @@ NETFunc::STATUS NETFunc::EnumServers(bool b) {
 	key.len = 3;
 	return dpRequestObjectDeltas(dp, b, &key.buf[0], key.len) == dp_RES_OK ? OK : ERR;
 }
-
 
 NETFunc::STATUS NETFunc::EnumSessions(bool b) {
 	KeyStruct key;
@@ -415,7 +409,6 @@ NETFunc::STATUS NETFunc::EnumSessions(bool b) {
 
 	return s;
 }
-
 
 NETFunc::STATUS NETFunc::EnumPlayers(bool b, KeyStruct *k) {
 	KeyStruct key;
@@ -469,7 +462,7 @@ NETFunc::Server::Server(dp_object_t *o, KeyStruct *k, long f):Key(k) {
 NETFunc::Server::~Server(void) {
 }
 
-char *NETFunc::Server::GetName(void) {
+const char *NETFunc::Server::GetName(void) {
 	return server.hostname;
 }
 
@@ -528,7 +521,7 @@ void NETFunc::ListHandler<NETFunc::Server>::SetKey(void) {
 }
 
 
-NETFunc::Contact::Contact(char *n, char *p) {
+NETFunc::Contact::Contact(const char *n, const char *p) {
 	name = NETFunc::StringDup(n);
 	number = NETFunc::StringDup(p);
 }
@@ -541,20 +534,20 @@ NETFunc::Contact::~Contact(void) {
 	delete number;
 }
 
-char *NETFunc::Contact::GetName(void) {
+const char *NETFunc::Contact::GetName(void) {
 	return name;
 }
 
-char *NETFunc::Contact::GetNumber(void) {
+const char *NETFunc::Contact::GetNumber(void) {
 	return number;
 }
 
-void NETFunc::Contact::SetName(char *n) {
+void NETFunc::Contact::SetName(const char *n) {
 	delete name;
 	name = NETFunc::StringDup(n);
 }
 
-void NETFunc::Contact::SetNumber(char *p) {
+void NETFunc::Contact::SetNumber(const char *p) {
 	delete number;
 	number = NETFunc::StringDup(p);
 }
@@ -575,7 +568,7 @@ NETFunc::ContactList::~ContactList(void) {
 
 
 
-NETFunc::Port::Port(commPortName_t *p, int b, char *i) {
+NETFunc::Port::Port(commPortName_t *p, int b, const char *i) {
 	port = *p;
 	baud	= b;
 	strncpy(init, i, nf_PORTINITLEN);
@@ -595,7 +588,7 @@ int NETFunc::Port::GetNumber(void) {
 	return port.portnum;
 }
 
-char *NETFunc::Port::GetName(void) {
+const char *NETFunc::Port::GetName(void) {
 	return port.name;
 }
 
@@ -603,7 +596,7 @@ int NETFunc::Port::GetBaud(void) {
 	return baud;
 }
 
-char *NETFunc::Port::GetInit(void) {
+const char *NETFunc::Port::GetInit(void) {
 	return init;
 }
 
@@ -675,40 +668,6 @@ DWORD WINAPI NETFunc::ReConnectThread(LPVOID r) {
 	return 0;
 }
 
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
 NETFunc::Transport::Transport(const comm_driverInfo_t *d, const dp_transport_t *t, KeyStruct *k)
 :
 	Key(k),
@@ -737,9 +696,6 @@ commInitReq_t *NETFunc::Transport::GetParams(void) {
 	return &parameters;
 }
 
-
-
-
 NETFunc::STATUS NETFunc::Transport::GetStatus(void) {
 	return status;
 }
@@ -748,11 +704,11 @@ NETFunc::Transport::TYPE NETFunc::Transport::GetType(void) {
 	return Transport::UNKNOWN;
 }
 
-char *NETFunc::Transport::GetName(void) {
+const char *NETFunc::Transport::GetName(void) {
 	return description.name;
 }
 
-char *NETFunc::Transport::GetFileName(void) {
+const char *NETFunc::Transport::GetFileName(void) {
 	return transport.fname;
 }
 
@@ -959,11 +915,11 @@ NETFunc::AIPlayer::AIPlayer(void) {
 NETFunc::AIPlayer::~AIPlayer(void) {
 }
 
-char *NETFunc::AIPlayer::GetName(void) {
+const char *NETFunc::AIPlayer::GetName(void) {
 	return name;
 }
 
-void NETFunc::AIPlayer::SetName(char *n) {
+void NETFunc::AIPlayer::SetName(const char *n) {
 	strncpy(name, n, dp_PNAMELEN - 1);
 	name[dp_PNAMELEN - 1] = 0;
 }
@@ -1068,21 +1024,6 @@ template<>
 void NETFunc::ListHandler<NETFunc::AIPlayer>::SetKey(void) {
 }
 
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
 void NETFunc::Player::SetGroupMaster(bool b) {
 	if(player.bloblen == 0) {
 		player.bloblen = 1;
@@ -1127,11 +1068,11 @@ dpid_t NETFunc::Player::GetId(void) {
 	return player.id;
 }
 
-char *NETFunc::Player::GetName(void) {
+const char *NETFunc::Player::GetName(void) {
 	return player.name;
 }
 
-unsigned char *NETFunc::Player::GetBlob(void) {
+unsigned const char *NETFunc::Player::GetBlob(void) {
 	return &player.blob[1];
 }
 
@@ -1243,11 +1184,11 @@ NETFunc::PlayerStat::PlayerStat(void) {
 NETFunc::PlayerStat::~PlayerStat(void) {
 }
 
-char *NETFunc::PlayerStat::GetName(void) {
+const char *NETFunc::PlayerStat::GetName(void) {
 	return name;
 }
 
-void NETFunc::PlayerStat::SetName(char *n) {
+void NETFunc::PlayerStat::SetName(const char *n) {
 	strncpy(name, n, dp_PNAMELEN - 1);
 	name[dp_PNAMELEN - 1] = 0;
 }
@@ -1400,12 +1341,12 @@ NETFunc::PlayerSetup::PlayerSetup() {
 NETFunc::PlayerSetup::~PlayerSetup() {
 }
 
-void NETFunc::PlayerSetup::SetName(char *n) {
+void NETFunc::PlayerSetup::SetName(const char *n) {
 	strncpy(player.name, n, dp_PNAMELEN);
 	player.name[dp_PNAMELEN - 1] = 0;
 }
 
-void NETFunc::PlayerSetup::SetBlob(char *b) {
+void NETFunc::PlayerSetup::SetBlob(const char *b) {
 	SetBlob((void *)b, strlen(b) + 1);
 }
 
@@ -1420,11 +1361,11 @@ void NETFunc::PlayerSetup::SetBlobLen(unsigned char l) {
 		player.bloblen = l + 1;
 }
 
-char *NETFunc::PlayerSetup::GetDescription(void) {
+const char *NETFunc::PlayerSetup::GetDescription(void) {
 	return description;
 }
 
-void NETFunc::PlayerSetup::SetDescription(char *d) {
+void NETFunc::PlayerSetup::SetDescription(const char *d) {
 	strncpy(description, d, nf_PLAYERDESCLEN);
 }
 
@@ -1541,11 +1482,11 @@ NETFunc::Session::Session(dp_object_t *o, KeyStruct *k, long f):Key(k) {
 	flags = f;
 }
 
-char *NETFunc::Session::GetName(void) {
+const char *NETFunc::Session::GetName(void) {
 	return session.sessionName;
 }
 
-char *NETFunc::Session::GetPassword(void) {
+const char *NETFunc::Session::GetPassword(void) {
 	return session.szPassword;
 }
 
@@ -1561,7 +1502,7 @@ short NETFunc::Session::GetFree() {
 	return GetMaxPlayers() - GetPlayers();
 }
 
-char *NETFunc::Session::GetUserField() {
+const char *NETFunc::Session::GetUserField() {
 	return session.szUserField;
 }
 
@@ -1819,11 +1760,11 @@ NETFunc::GameSetup::GameSetup(Game *g):Game(*g), Packet() {
 NETFunc::GameSetup::~GameSetup() {
 }
 
-char *NETFunc::GameSetup::GetDescription(void) {
+const char *NETFunc::GameSetup::GetDescription(void) {
 	return description;
 }
 
-void NETFunc::GameSetup::SetDescription(char *d) {
+void NETFunc::GameSetup::SetDescription(const char *d) {
 	strncpy(description, d, nf_GAMEDESCLEN);
 }
 
@@ -1832,11 +1773,11 @@ void NETFunc::GameSetup::SetGroups(char groups) {
 	session.dwUser1 |= (groups & nf_GROUPNUMBER);
 }
 
-void NETFunc::GameSetup::SetName(char *n) {
+void NETFunc::GameSetup::SetName(const char *n) {
 	strncpy(session.sessionName, n, dp_SNAMELEN);
 }
 
-void NETFunc::GameSetup::SetPassword(char *p) {
+void NETFunc::GameSetup::SetPassword(const char *p) {
 	strncpy(session.szPassword, p, dp_PASSWORDLEN);
 }
 
@@ -1844,13 +1785,13 @@ void NETFunc::GameSetup::SetSize(short s) {
 	session.maxPlayers = s;
 }
 
-void NETFunc::GameSetup::SetUserField(char *u) {
-	SetUserField((void *)u, strlen(u) + 1);
+void NETFunc::GameSetup::SetUserField(const char *u) {
+	SetUserField((const void *)u, strlen(u) + 1);
 }
 
-void NETFunc::GameSetup::SetUserField(void *u, short s) {
+void NETFunc::GameSetup::SetUserField(const void *u, short s) {
 	s = s > dp_USERFIELDLEN ? dp_USERFIELDLEN : s;
-	memcpy(session.szUserField, u, s);
+	memmove(session.szUserField, u, s);
 }
 
 void NETFunc::GameSetup::SetLaunched(bool b) {
@@ -1946,10 +1887,7 @@ NETFunc::STATUS NETFunc::GameSetup::Update(bool b) {
 	return OK;
 }
 
-
-
-
-NETFunc::STATUS	NETFunc::Chat::Send(Player *p, char *m) {
+NETFunc::STATUS	NETFunc::Chat::Send(Player *p, const char *m) {
 	size_t size = strlen(m) + 1;
 	char buffer[dpio_MAXLEN_UNRELIABLE];
 	*(TYPE *)buffer = PUBLIC;
@@ -1969,7 +1907,7 @@ NETFunc::STATUS	NETFunc::Chat::Send(Player *p, char *m) {
 	}
 }
 
-NETFunc::STATUS	NETFunc::Chat::SendGroup(char *m) {
+NETFunc::STATUS	NETFunc::Chat::SendGroup(const char *m) {
 	size_t size = strlen(m) + 1;
 	char buffer[dpio_MAXLEN_UNRELIABLE];
 	*(TYPE *)buffer = GROUP;
@@ -2224,7 +2162,7 @@ NETFunc::NETFunc(void) {
 	status = START;
 }
 
-NETFunc::STATUS NETFunc::Connect(char *file) {
+NETFunc::STATUS NETFunc::Connect(const char *file) {
 
 	result = dpCreate(&dp, NULL, NULL, file);
 	if(result != dp_RES_OK)
@@ -2569,7 +2507,7 @@ NETFunc::STATUS NETFunc::UnLaunchAll() {
 	return OK;
 }
 
-NETFunc::STATUS NETFunc::Login(char *username, char *password) {
+NETFunc::STATUS NETFunc::Login(const char *username, const char *password) {
 	if(status == LOGIN) {
 		if(userId != dp_UID_NONE || !strlen(username)) {
 			PushMessage(new Message(Message::LOGINOK));
@@ -2818,7 +2756,7 @@ NETFunc::STATUS NETFunc::Reset() {
 	return OK;
 }
 
-NETFunc::STATUS NETFunc::Join(Game *g, char *password) {
+NETFunc::STATUS NETFunc::Join(Game *g, const char *password) {
 
 	if(g->IsCurrentSession())
 		return ERR;
@@ -3481,7 +3419,7 @@ NETFunc::Message *NETFunc::GetMessage(void) {
 	return m;
 }
 
-void NETFunc::PushChatMessage(char *m) {
+void NETFunc::PushChatMessage(const char *m) {
 	size_t size = strlen(m) + 1;
 	char buffer[dpio_MAXLEN_UNRELIABLE];
 	*(Chat::TYPE *)buffer = Chat::SYSTEM;
@@ -3510,9 +3448,9 @@ dpid_t NETFunc::destination = 0;
 
 dp_species_t NETFunc::GameType = 0;
 
-char *NETFunc::LobbyName = "Lobby";
+const char *NETFunc::LobbyName = "Lobby";
 
-char *NETFunc::DllPath = "anet";
+const char *NETFunc::DllPath = "anet";
 
 int NETFunc::PlayerSetupPacketKey = 0;
 

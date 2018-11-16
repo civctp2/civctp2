@@ -49,7 +49,7 @@ public:
 
 	static const MBCHAR *GetCurrentRound();
 
-	TurnYearStatus(MBCHAR *ldlBlock);
+	TurnYearStatus(const MBCHAR *ldlBlock);
 
 	void UpdatePlayer(PLAYER_INDEX player);
 

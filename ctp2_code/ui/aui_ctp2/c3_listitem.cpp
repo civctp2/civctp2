@@ -11,7 +11,7 @@
 #include "c3_listitem.h"
 #include "c3_static.h"
 
-c3_ListItem::c3_ListItem(AUI_ERRCODE *retval, MBCHAR *ldlBlock)
+c3_ListItem::c3_ListItem(AUI_ERRCODE *retval, const MBCHAR *ldlBlock)
 	:
 	aui_ImageBase(ldlBlock),
 	aui_TextBase(ldlBlock, (MBCHAR *)NULL),
@@ -35,7 +35,7 @@ c3_ListItem::~c3_ListItem()
 		delete m_childList->GetNext( position );
 }
 
-AUI_ERRCODE c3_ListItem::InitCommonLdl(MBCHAR *ldlBlock)
+AUI_ERRCODE c3_ListItem::InitCommonLdl(const MBCHAR *ldlBlock)
 {
 	return AUI_ERRCODE_OK;
 }
@@ -47,7 +47,7 @@ sint32 c3_ListItem::Compare(c3_ListItem *item2, uint32 column)
 	return 0;
 }
 
-SingleListItem::SingleListItem(AUI_ERRCODE *retval, MBCHAR *name, sint32 value, MBCHAR *ldlBlock)
+SingleListItem::SingleListItem(AUI_ERRCODE *retval, const MBCHAR *name, sint32 value, const MBCHAR *ldlBlock)
 	:
 	aui_ImageBase(ldlBlock),
 	aui_TextBase(ldlBlock, (MBCHAR *)NULL),
@@ -61,7 +61,7 @@ SingleListItem::SingleListItem(AUI_ERRCODE *retval, MBCHAR *name, sint32 value, 
 	if ( !AUI_SUCCESS(*retval) ) return;
 }
 
-AUI_ERRCODE SingleListItem::InitCommonLdl(MBCHAR *name, sint32 value, MBCHAR *ldlBlock)
+AUI_ERRCODE SingleListItem::InitCommonLdl(const MBCHAR *name,sint32 value, const MBCHAR *ldlBlock)
 {
 	MBCHAR			block[ k_AUI_LDL_MAXBLOCK + 1 ];
 	AUI_ERRCODE		retval;
@@ -105,8 +105,6 @@ sint32 SingleListItem::Compare(c3_ListItem *item2, uint32 column)
 	c3_Static		*i1, *i2;
 	MBCHAR			strbuf1[256];
 	MBCHAR			strbuf2[256];
-
-	if (column < 0) return 0;
 
 	switch (column) {
 	case 0:

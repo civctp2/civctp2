@@ -57,7 +57,7 @@ template <class T> class CTPDatabase;
 template <class T, class AccessorInfo> class SlicDBConduit : public SlicDBInterface
 {
 public:
-	SlicDBConduit(const char *slicname, CTPDatabase<T> *db, AccessorInfo *acc, char **tokens, sint32 numTokens) {
+	SlicDBConduit(const char *slicname, CTPDatabase<T> *db, AccessorInfo *acc, const char **tokens, sint32 numTokens) {
 		m_slicname = new char[strlen(slicname) + 1];
 		strcpy(m_slicname, slicname);
 		m_db = db;
@@ -213,7 +213,7 @@ private:
 	CTPDatabase<T> *m_db;
 	char *m_slicname;
 	AccessorInfo *m_accessors;
-	char **m_tokens;
+	const char **m_tokens;
 	sint32 m_numTokens;
 };
 

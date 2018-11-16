@@ -48,7 +48,7 @@ void SpriteStateDB::SetSize(sint32 s)
 	m_map = new SpriteNameNode[m_size];
 }
 
-sint32 SpriteStateDB::FindTypeIndex(char *str) const
+sint32 SpriteStateDB::FindTypeIndex(const char *str) const
 
 {
     sint32 i;

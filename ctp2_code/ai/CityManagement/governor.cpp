@@ -191,7 +191,7 @@ void Governor::ResizeAll(const PLAYER_INDEX & newMaxPlayerId)
 
 	s_theGovernors.resize(newMaxPlayerId);
 
-	for (size_t i = old_size; i < newMaxPlayerId; ++i)
+	for (size_t i = old_size; i < (size_t)newMaxPlayerId; ++i)
 	{
 		s_theGovernors[i].SetPlayerId(i);
 	}
@@ -408,7 +408,6 @@ sint32 Governor::ComputeBestGovernment() const
 	Player * player_ptr = g_player[m_playerId];
 	Assert(player_ptr != NULL);
 
-	bool config_found = false;
 	bool obsolete;
 	sint32 government_index = -1;
 	for (sint32 gov_index = 0; government_index == -1 && gov_index < strategy.GetNumGovernment(); gov_index++)
@@ -962,8 +961,7 @@ bool Governor::ComputeBestSliders(SlidersSetting & sliders_setting) const
 bool Governor::FitSlidersToCities( SlidersSetting & sliders_setting ) const
 {
 	Assert(m_playerId >= 0);
-	Player *player_ptr = g_player[m_playerId];
-	Assert(player_ptr);
+	Assert(g_player[m_playerId]);
 
 	bool production_test;
 	bool gold_test;
@@ -972,9 +970,6 @@ bool Governor::FitSlidersToCities( SlidersSetting & sliders_setting ) const
 	sint32 prod, gold, food;
 
 	NormalizeSliders(sliders_setting);
-
-	const StrategyRecord & strategy =
-		Diplomat::GetDiplomat(m_playerId).GetCurrentStrategy();
 
 	bool found = false;
 	bool changed = true;
@@ -1498,11 +1493,8 @@ void Governor::ComputeRoadPriorities()
 
 
 
-
 		float total_cost = 0.0;
 		Path found_path;
-		double trans_max_r = 0.8;
-
 
 		if (g_city_astar.FindRoadPath(city_unit.RetPos(), min_neighbor_unit.RetPos(),
 			m_playerId,
@@ -1622,14 +1614,13 @@ void Governor::PlaceTileImprovements()
 
 	strategy.GetMaxEvalTileImprovements(max_eval);
 	max_eval = MIN(max_eval, (sint32)s_tiQueue.size());
-	TiGoalQueue::iterator max_iter = TiGoalQueue::iterator(&s_tiQueue[max_eval]);
 
-	std::partial_sort(s_tiQueue.begin(), max_iter, s_tiQueue.end(), std::greater<TiGoal>());
+	std::partial_sort(s_tiQueue.begin(), s_tiQueue.begin() + max_eval, s_tiQueue.end(), std::greater<TiGoal>());
 
 	sint32 avail_pw = player_ptr->GetMaterialsStored() - reserve_pw;
 
 	TiGoalQueue::const_iterator iter;
-	for(iter = s_tiQueue.begin(); iter != max_iter; iter++)
+	for(iter = s_tiQueue.begin(); iter != s_tiQueue.begin() + max_eval; iter++)
 	{
 		sint32 const needed_pw =
 		       terrainutil_GetProductionCost(iter->type, iter->pos, 0);
@@ -4121,7 +4112,7 @@ sint32 Governor::GetNeededUnitType(const CityData *city, sint32 & list_num) cons
 
 	BUILD_UNIT_LIST max_list = BUILD_UNIT_LIST_MAX;
 	sint32 max_production = 0;
-	sint32 turns_to_build = 9999;
+	sint32 turns_to_build;
 	sint32 needed_production;
 	sint32 type = -1;
 	sint32 cont;
@@ -4133,8 +4124,6 @@ sint32 Governor::GetNeededUnitType(const CityData *city, sint32 & list_num) cons
 
 	strategy.GetBuildTransportProductionLevel(build_transport_production_level);
 	strategy.GetBuildSettlerProductionLevel(build_settler_production_level);
-
-	bool can_build_settler = false;
 
 	for (list_num = 0; list_num < BUILD_UNIT_LIST_MAX; list_num++)
 	{
@@ -4227,7 +4216,9 @@ sint32 Governor::GetNeededUnitType(const CityData *city, sint32 & list_num) cons
 		}
 	}
 
+#ifdef _DEBUG
 	UnitRecord const *	unit	= g_theUnitDB->Get(type);
+#endif
 	DPRINTF(k_DBG_GAMESTATE, ("Selected unit type: %s\n", unit ? unit->GetNameText() : "none"));
 				DPRINTF(k_DBG_GAMESTATE, ("Player: %lx\n", m_playerId));
 
@@ -4634,8 +4625,6 @@ void Governor::ManageGoodsTradeRoutes()
 {
 	Assert(g_player[m_playerId] != NULL);
 	Player *player_ptr = g_player[m_playerId];
-
-	sint32 cur_round = player_ptr->GetCurRound();
 
 	Unit city;
 	sint32 i,g,d; // Are compared against sint32

@@ -25,7 +25,7 @@ public:
 
 	~c3_ListBox();
 
-	AUI_ERRCODE InitCommonLdl( MBCHAR *ldlBlock );
+	AUI_ERRCODE InitCommonLdl(const MBCHAR *ldlBlock);
 	AUI_ERRCODE InitCommon(sint32 bevelWidth, sint32 bevelType );
 	AUI_ERRCODE CreateRangersAndHeader( MBCHAR *ldlBlock = NULL );
 

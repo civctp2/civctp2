@@ -348,20 +348,17 @@ void NetCRC::Unpacketize(uint16 id, uint8 *buf, uint16 size)
 // Remark(s)  : -
 //
 //----------------------------------------------------------------------------
-void NetCRC::Error(char *buf)
+void NetCRC::Error(const char *buf)
 {
 	extern void network_AbortCallback( sint32 type );
 
 	DPRINTF(k_DBG_NET, ("NetCRC: %s\n", buf));
 	const char *str = g_theStringDB->GetNameStr("str_ldl_mp_dbase_out_of_synch");
-	char nonConstStr[1024];
-	if (str) {
-		strcpy(nonConstStr, str);
-	} else {
-		strcpy(nonConstStr, "Databases out of sync, returning to lobby");
+	if (!str) {
+		str = "Databases out of sync, returning to lobby";
 	}
 	c3_RemoveAbortMessage();
 	g_civApp->ProcessGraphicsCallback();
-	c3_AbortMessage(nonConstStr, k_UTILITY_ABORT, network_AbortCallback );
+	c3_AbortMessage(str, k_UTILITY_ABORT, network_AbortCallback );
 	g_network.SetCRCError();
 }

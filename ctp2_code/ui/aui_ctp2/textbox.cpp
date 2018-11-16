@@ -31,8 +31,8 @@ TextBox::TextBox(
 	sint32 y,
 	sint32 width,
 	sint32 height,
-	MBCHAR *pattern,
-	MBCHAR *text,
+	const MBCHAR *pattern,
+	const MBCHAR *text,
 	ControlActionCallback *ActionFunc,
 	void *cookie)
 	:
@@ -52,7 +52,7 @@ TextBox::TextBox(
 	Assert( AUI_SUCCESS(*retval) );
 	if ( !AUI_SUCCESS(*retval) ) return;
 
-	*retval = aui_SoundBase::InitCommon((MBCHAR **)NULL );
+	*retval = aui_SoundBase::InitCommon((const MBCHAR **)NULL);
 	Assert( AUI_SUCCESS(*retval) );
 	if ( !AUI_SUCCESS(*retval) ) return;
 
@@ -72,7 +72,7 @@ TextBox::TextBox(
 TextBox::TextBox(
 	AUI_ERRCODE *retval,
 	uint32 id,
-	MBCHAR *ldlBlock,
+	const MBCHAR *ldlBlock,
 	ControlActionCallback *ActionFunc,
 	void *cookie)
 	:
@@ -109,7 +109,7 @@ TextBox::TextBox(
 	if ( !AUI_SUCCESS(*retval) ) return;
 }
 
-AUI_ERRCODE TextBox::InitCommonLdl( MBCHAR *ldlBlock )
+AUI_ERRCODE TextBox::InitCommonLdl(const MBCHAR *ldlBlock)
 {
 	return InitCommon(TRUE);
 }
@@ -142,7 +142,7 @@ AUI_ERRCODE TextBox::InitCommon( BOOL fromLDL )
 		font = GetTextFont();
 	}
 
-	MBCHAR *fontName = font->GetTTFFile();
+	const MBCHAR *fontName = font->GetTTFFile();
 
 	itemPtr = m_items;
 	for (i = k_AUI_TEXTBOX_MAXITEMS; i; i--, itemPtr++ )
@@ -167,7 +167,7 @@ AUI_ERRCODE TextBox::InitCommon( BOOL fromLDL )
 }
 
 
-AUI_ERRCODE TextBox::CreateRangers( MBCHAR *ldlBlock )
+AUI_ERRCODE TextBox::CreateRangers(const MBCHAR *ldlBlock)
 {
 	AUI_ERRCODE errcode = AUI_ERRCODE_OK;
 	MBCHAR		*patternFilename = NULL;

@@ -3,7 +3,7 @@
 #include "ldl_memmap.h"
 
 
-unsigned char *ldl_MemMap::GetFileBits( char *filename, unsigned long *junk )
+unsigned char *ldl_MemMap::GetFileBits(const char *filename, unsigned long *)
 {
 	unsigned int filesize;
 	unsigned char *bits;

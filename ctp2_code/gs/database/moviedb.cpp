@@ -42,7 +42,7 @@ void MovieDB::SetSize(sint32 s)
 	m_map = new MovieNameNode[m_size];
 }
 
-sint32 MovieDB::FindTypeIndex(char *str) const
+sint32 MovieDB::FindTypeIndex(const char *str) const
 
 {
     sint32 i;
@@ -57,7 +57,7 @@ sint32 MovieDB::FindTypeIndex(char *str) const
 	return -1;
 }
 
-MBCHAR *MovieDB::GetMovieFilename(sint32 index) const
+const MBCHAR *MovieDB::GetMovieFilename(sint32 index) const
 {
 
 	Assert(0 <= index);
@@ -76,7 +76,7 @@ void MovieDB::SetName(sint32 index, char str[_MAX_PATH])
     strcpy(m_map[index].m_name, str);
 }
 
-void MovieDB::SetMovieFilename(sint32 index, MBCHAR *s)
+void MovieDB::SetMovieFilename(sint32 index, const MBCHAR *s)
 {
  	Assert(0 <= index);
 	Assert(index < m_size);
@@ -136,7 +136,7 @@ sint32 MovieDB::ParseAMovie(Token *movieToken, sint32 count)
     return TRUE;
 }
 
-sint32 MovieDB::Parse(char *filename)
+sint32 MovieDB::Parse(const char *filename)
 
 {
 

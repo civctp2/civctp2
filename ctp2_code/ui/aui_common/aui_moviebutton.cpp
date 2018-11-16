@@ -15,7 +15,7 @@ extern ProfileDB	*g_theProfileDB;
 aui_MovieButton::aui_MovieButton(
 	AUI_ERRCODE *retval,
 	uint32 id,
-	MBCHAR *ldlBlock,
+	const MBCHAR *ldlBlock,
 	ControlActionCallback *ActionFunc,
 	void *cookie )
 	:
@@ -42,7 +42,7 @@ aui_MovieButton::aui_MovieButton(
 	sint32 y,
 	sint32 width,
 	sint32 height,
-	MBCHAR *movie,
+	const MBCHAR *movie,
 	ControlActionCallback *ActionFunc,
 	void *cookie )
 	:
@@ -62,7 +62,7 @@ aui_MovieButton::aui_MovieButton(
 }
 
 
-AUI_ERRCODE aui_MovieButton::InitCommonLdl( MBCHAR *ldlBlock )
+AUI_ERRCODE aui_MovieButton::InitCommonLdl(const MBCHAR *ldlBlock)
 {
 	aui_Ldl *theLdl = g_ui->GetLdl();
 
@@ -83,7 +83,7 @@ AUI_ERRCODE aui_MovieButton::InitCommonLdl( MBCHAR *ldlBlock )
 }
 
 
-AUI_ERRCODE aui_MovieButton::InitCommon( MBCHAR *movie )
+AUI_ERRCODE aui_MovieButton::InitCommon(const MBCHAR *movie)
 {
 	m_movie = NULL;
 
@@ -175,8 +175,6 @@ AUI_ERRCODE aui_MovieButton::Idle( void )
                     if ( !m_movie->IsPlaying() && !m_movie->IsFinished()) {
 				m_movie->Play();
 			}
-
-                    AUI_ERRCODE errcode = m_movie->Process();
 
                     if (m_movie)
                         if (m_movie->IsFinished() && !(m_flags & k_AUI_MOVIE_PLAYFLAG_PLAYANDHOLD)) {

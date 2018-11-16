@@ -160,12 +160,12 @@ extern PointerList<Player> *g_deadPlayer;
 
 
 struct MagicValue {
-	char *string;
+	const char *string;
 	sint32 version;
 };
 
 #define k_NUM_MAGIC_VALUES 18
-MagicValue s_magicValue[k_NUM_MAGIC_VALUES] = {
+static MagicValue s_magicValue[k_NUM_MAGIC_VALUES] = {
 	{ "CTP0049", 49},
 	{ "CTP0050", 50},
 	{ "CTP0051", 51},
@@ -290,8 +290,7 @@ uint32 GameFile::SaveDB(CivArchive &archive)
 		"InitProgressWindow",
 		330 );
 
-	MBCHAR s[_MAX_PATH];
-	sprintf( s, g_theStringDB->GetNameStr("LOADING") );
+	const char *s = g_theStringDB->GetNameStr("LOADING");
 
 	g_theProgressWindow->StartCountingTo( 10, s );
 
@@ -451,8 +450,7 @@ uint32 GameFile::Save(const MBCHAR *filepath, SaveInfo *info)
 			520 );
 	}
 
-	MBCHAR s[_MAX_PATH];
-	sprintf( s, g_theStringDB->GetNameStr("SAVING") );
+	const char *s = g_theStringDB->GetNameStr("SAVING");
 	if(showProgress)
 		g_theProgressWindow->StartCountingTo( 100, s );
 
@@ -829,8 +827,7 @@ uint32 GameFile::Restore(const MBCHAR *filepath)
 		"InitProgressWindow",
 		1090 );
 
-	MBCHAR s[_MAX_PATH];
-	sprintf( s, g_theStringDB->GetNameStr("LOADING") );
+	const char *s = g_theStringDB->GetNameStr("LOADING");
 
 	g_theProgressWindow->StartCountingTo( 10, s );
 
@@ -1582,8 +1579,8 @@ BOOL GameFile::LoadBasicGameInfo(FILE *saveFile, SaveInfo *info)
 
 void GameFile::SaveExtendedGameInfo(FILE *saveFile, SaveInfo *info)
 {
-	MBCHAR		*functionName = "GameFile::SaveExtendedGameInfo";
-	MBCHAR		*errorString = "Unable to write save file.";
+	const char *functionName = "GameFile::SaveExtendedGameInfo";
+	const char *errorString = "Unable to write save file.";
 
 	sint32		n;
 
@@ -2620,8 +2617,8 @@ BOOL GameMapFile::LoadExtendedGameMapInfo(FILE *saveFile, SaveMapInfo *info)
 
 void GameMapFile::SaveExtendedGameMapInfo(FILE *saveFile, SaveMapInfo *info)
 {
-	MBCHAR		*functionName = "GameMapFile::SaveExtendedGameMapInfo";
-	MBCHAR		*errorString = "Unable to write savemap file.";
+	const char	*functionName = "GameMapFile::SaveExtendedGameMapInfo";
+	const char	*errorString = "Unable to write savemap file.";
 
 	sint32		n;
 

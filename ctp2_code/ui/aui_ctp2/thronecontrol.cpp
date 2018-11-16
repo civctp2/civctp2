@@ -55,13 +55,13 @@
 extern C3UI		*g_c3ui;
 extern CivPaths	*g_civPaths;
 
-static MBCHAR *s_throneImage[ k_THRONE_IMAGES + 1 ];
+static const MBCHAR *s_throneImage[k_THRONE_IMAGES + 1];
 
 static POINT	s_upgradeLoc[k_THRONE_IMAGES] = { { 0, 230 }, { 204, 204 }, { 210, 300 }, { 284, 380 }, { 410, 250 } };
 
 static	Pixel16 s_highlightColor[k_THRONE_IMAGES] = { 0xffff, 0xffff, 0xffff, 0xffff, 0xffff };
 
-static MBCHAR s_currentName[k_THRONE_IMAGES][255] = {
+static const MBCHAR s_currentName[k_THRONE_IMAGES][255] = {
 	"castlecurrent",
 	"entertainmentcurrent",
 	"fountaincurrent",
@@ -69,7 +69,7 @@ static MBCHAR s_currentName[k_THRONE_IMAGES][255] = {
 	"religiouscurrent"
 };
 
-static MBCHAR s_upgradeName[k_THRONE_IMAGES][255] = {
+static const MBCHAR s_upgradeName[k_THRONE_IMAGES][255] = {
 	"castleupgrade",
 	"entertainmentupgrade",
 	"fountainupgrade",
@@ -88,7 +88,7 @@ void ZoomedImageActionCallback( aui_Control *control, uint32 action, uint32 data
 
 ThroneControl::ThroneControl(AUI_ERRCODE *retval,
 							sint32 id,
-							MBCHAR *ldlBlock,
+							const MBCHAR *ldlBlock,
 							ControlActionCallback *ActionFunc,
 							void *cookie)
 	:
@@ -106,7 +106,7 @@ ThroneControl::ThroneControl(AUI_ERRCODE *retval,
 							sint32 y,
 							sint32 width,
 							sint32 height,
-							MBCHAR *pattern,
+							const MBCHAR *pattern,
 							ControlActionCallback *ActionFunc,
 							void *cookie)
 	:
@@ -133,7 +133,7 @@ ThroneControl::~ThroneControl()
 #undef cleanup
 }
 
-void ThroneControl::InitCommonLdl(MBCHAR *ldlBlock)
+void ThroneControl::InitCommonLdl(const MBCHAR *ldlBlock)
 {
 	aui_Ldl *theLdl = g_c3ui->GetLdl();
 

@@ -412,18 +412,15 @@ void Battle::AddEvent(BattleEvent *event)
 	if (!event) return;
 
 
-
-
-
 	Assert(m_eventQueue);
 	if (m_eventQueue)
 		m_eventQueue->AddTail(event);
 }
 
-
 void Battle::ShowEvent(BattleEvent *event)
 {
-	MBCHAR		*s;
+#ifdef _DEBUG /* { */
+	const MBCHAR	*s;
 
 	switch (event->GetType()) {
 	case BATTLE_EVENT_TYPE_PLACEMENT :
@@ -484,8 +481,8 @@ void Battle::ShowEvent(BattleEvent *event)
 
 		index++;
 	}
+#endif /* } */
 }
-
 
 void Battle::RemoveAttacker(BattleViewActor *actor)
 {

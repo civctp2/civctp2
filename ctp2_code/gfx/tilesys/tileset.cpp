@@ -61,7 +61,7 @@
 #include <sys/types.h>
 #endif
 #include <fcntl.h>
-#ifdef LINUX
+#ifndef WIN32
 #include <sys/mman.h>
 #endif
 

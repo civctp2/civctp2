@@ -68,14 +68,14 @@ ctp2_ListBox *ctp2_ListBox::ms_mouseFocusListBox = NULL;
 ctp2_ListBox::ctp2_ListBox(
 	AUI_ERRCODE *retval,
 	uint32 id,
-	MBCHAR *ldlBlock,
+	const MBCHAR *ldlBlock,
 	ControlActionCallback *ActionFunc,
 	void *cookie )
 	:
 	aui_ImageBase( ldlBlock),
-	aui_TextBase( ldlBlock, (MBCHAR *)NULL ),
+	aui_TextBase(ldlBlock, (const MBCHAR *)NULL),
 	aui_ListBox(),
-	PatternBase(ldlBlock, (MBCHAR *)NULL)
+	PatternBase(ldlBlock, (const MBCHAR *)NULL)
 {
 	*retval = aui_Region::InitCommonLdl( id, ldlBlock );
 	Assert( AUI_SUCCESS(*retval) );
@@ -110,14 +110,14 @@ ctp2_ListBox::ctp2_ListBox(
 	sint32 y,
 	sint32 width,
 	sint32 height,
-	MBCHAR *pattern,
+	const MBCHAR *pattern,
 	sint32 bevelWidth,
 	sint32 bevelType,
 	ControlActionCallback *ActionFunc,
 	void *cookie)
 	:
 	aui_ImageBase((sint32) 0),
-	aui_TextBase((MBCHAR const *) NULL, (uint32) 0),
+	aui_TextBase((const MBCHAR *) NULL, (uint32) 0),
 	aui_ListBox(),
 	PatternBase(pattern)
 {
@@ -125,7 +125,7 @@ ctp2_ListBox::ctp2_ListBox(
 	Assert( AUI_SUCCESS(*retval) );
 	if ( !AUI_SUCCESS(*retval) ) return;
 
-	*retval = aui_SoundBase::InitCommon( (MBCHAR **)NULL );
+	*retval = aui_SoundBase::InitCommon((const MBCHAR **)NULL);
 	Assert( AUI_SUCCESS(*retval) );
 	if ( !AUI_SUCCESS(*retval) ) return;
 
@@ -159,7 +159,6 @@ ctp2_ListBox::~ctp2_ListBox()
 	ListPos position = m_pane->ChildList()->GetHeadPosition();
 	for ( sint32 i = m_pane->ChildList()->L(); i; i-- )
 	{
-		ListPos prevPosition = position;
 		aui_Item *item = (aui_Item *)m_pane->ChildList()->GetNext( position );
 		delete item;
 	}
@@ -167,7 +166,7 @@ ctp2_ListBox::~ctp2_ListBox()
 }
 
 
-AUI_ERRCODE ctp2_ListBox::InitCommonLdl( MBCHAR *ldlBlock )
+AUI_ERRCODE ctp2_ListBox::InitCommonLdl(const MBCHAR *ldlBlock)
 {
 	sint32		bevelWidth=0, bevelType=0;
 	aui_Ldl		*theLdl = g_ui->GetLdl();
@@ -210,7 +209,7 @@ AUI_ERRCODE ctp2_ListBox::InitCommon(sint32 bevelWidth, sint32 bevelType)
 
 
 
-AUI_ERRCODE ctp2_ListBox::CreateRangersAndHeader( MBCHAR *ldlBlock )
+AUI_ERRCODE ctp2_ListBox::CreateRangersAndHeader(const MBCHAR *ldlBlock)
 {
 	AUI_ERRCODE errcode = AUI_ERRCODE_OK;
 	MBCHAR		*patternFilename = NULL;
@@ -337,7 +336,6 @@ void ctp2_ListBox::Clear(void)
 	ListPos position = m_pane->ChildList()->GetHeadPosition();
 	for ( sint32 i = m_pane->ChildList()->L(); i; i-- )
 	{
-		ListPos prevPosition = position;
 		aui_Item *item = (aui_Item *)m_pane->ChildList()->GetNext( position );
 
 		RemoveItem(item->Id());
@@ -652,7 +650,7 @@ void ctp2_ListBox::MouseRDragAway( aui_MouseEvent *mouseData )
 AUI_ERRCODE ctp2_ListBox::DoneInstantiatingThis(const MBCHAR *ldlBlock)
 {
 	aui_Ldl		*theLdl = g_ui->GetLdl();
-	ldl_datablock *block = theLdl->GetLdl()->FindDataBlock( (MBCHAR *)ldlBlock );
+	ldl_datablock *block = theLdl->GetLdl()->FindDataBlock(ldlBlock);
 	Assert( block != NULL );
 
 	if ( !block ) return AUI_ERRCODE_LDLFINDDATABLOCKFAILED;

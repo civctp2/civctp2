@@ -619,7 +619,7 @@ bool MapFile::SaveCivilizations(FILE *outfile)
 		ptr += sizeof(uint32);
 
 		size_t length;
-		MBCHAR *pName;
+		const MBCHAR *pName;
 		if (g_player[i])
 		{
 			pName = g_player[i]->GetLeaderName();

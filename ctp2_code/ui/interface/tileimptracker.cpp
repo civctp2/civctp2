@@ -69,8 +69,6 @@ static c3_Static        *s_trackerTimeN         = NULL;
 static c3_Static        *s_trackerTimeV         = NULL;
 static c3_Static        *s_trackerMatN          = NULL;
 static c3_Static        *s_trackerMatV          = NULL;
-static c3_Static        *s_trackerAdvN          = NULL;
-static c3_Static        *s_trackerAdvV          = NULL;
 static c3_Static        *s_trackerFoodN         = NULL;
 static c3_Static        *s_trackerFoodV         = NULL;
 static c3_Static        *s_trackerProductionN   = NULL;
@@ -233,8 +231,6 @@ void tileimptracker_DisplayData(MapPoint &p, sint32 type)
 
 		g_tileImpTrackerWindow->Move(x,y);
 
-		TERRAIN_TYPES terr = g_theWorld->GetTerrainType(p);
-
 		sint32  mat, time,
 		        food, production,
 		        gold;
@@ -249,7 +245,6 @@ void tileimptracker_DisplayData(MapPoint &p, sint32 type)
 
 		if(rec->GetClassTerraform())
 		{
-			const TerrainRecord *oldT = g_theTerrainDB->Get(cell->GetTerrainType());
 			sint32 t;
 			if(rec->GetTerraformTerrainIndex(t)) {
 				const TerrainRecord *newT = g_theTerrainDB->Get(t);
@@ -357,8 +352,6 @@ void tileimptracker_DisplayData(MapPoint &p, sint32 type)
 }
 
 static void mycleanup(c3_Static **mypointer)
-{ if(*mypointer) { delete *mypointer; *mypointer = NULL; } }
-static void mycleanup(C3Window **mypointer)
 { if(*mypointer) { delete *mypointer; *mypointer = NULL; } }
 
 //----------------------------------------------------------------------------

@@ -51,7 +51,7 @@ public:
 	C3Slider(
 		AUI_ERRCODE *retval,
 		uint32 id,
-		MBCHAR *ldlBlock,
+		const MBCHAR *ldlBlock,
 		ControlActionCallback *ActionFunc = NULL,
 		void *cookie = NULL );
 	C3Slider(
@@ -62,16 +62,16 @@ public:
 		sint32 width,
 		sint32 height,
 		BOOL isVertical,
-		MBCHAR *pattern,
+		const MBCHAR *pattern,
 		ControlActionCallback *ActionFunc = NULL,
 		void *cookie = NULL );
 	virtual ~C3Slider() {}
 
 protected:
 	C3Slider() : aui_Ranger() {}
-	AUI_ERRCODE InitCommon( MBCHAR *ldlBlock );
+	AUI_ERRCODE InitCommon(const MBCHAR *ldlBlock);
 	AUI_ERRCODE InitCommon( void );
-	AUI_ERRCODE CreateThumb( MBCHAR *ldlBlock );
+	AUI_ERRCODE CreateThumb(const MBCHAR *ldlBlock);
 
 public:
 	virtual AUI_ERRCODE DrawThis(

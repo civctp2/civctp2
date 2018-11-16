@@ -12,7 +12,7 @@ public:
 
 	c3_Image(
 		AUI_ERRCODE *retval,
-		MBCHAR *filename = NULL );
+		const MBCHAR *filename = NULL );
 	virtual ~c3_Image() {}
 
 	BOOL PtOnImage( POINT *p );

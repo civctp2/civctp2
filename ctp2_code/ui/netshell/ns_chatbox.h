@@ -19,7 +19,7 @@ public:
 	ns_ChatBox(
 		AUI_ERRCODE *retval,
 		uint32 id,
-		MBCHAR *ldlBlock,
+		const MBCHAR *ldlBlock,
 		ControlActionCallback *ActionFunc = NULL,
 		void *cookie = NULL );
 	virtual ~ns_ChatBox();
@@ -31,7 +31,7 @@ public:
 	bool IsGroup(void);
 	void SetGroup(bool g);
 
-	void Receive(NETFunc::Player *p, TYPE t, char *m);
+	void Receive(NETFunc::Player *p, TYPE t, const char *m);
 
 	AUI_ERRCODE RepositionItems( void );
 	AUI_ERRCODE DrawThis(
@@ -44,7 +44,7 @@ protected:
 	aui_TextBase *m_textstyleChat;
 	aui_TextBase *m_textstyleWhisper;
 
-	AUI_ERRCODE InitCommonLdl( MBCHAR *ldlBlock );
+	AUI_ERRCODE InitCommonLdl(const MBCHAR *ldlBlock);
 	AUI_ERRCODE InitCommon( void );
 	AUI_ERRCODE	CreateComponents( void );
 

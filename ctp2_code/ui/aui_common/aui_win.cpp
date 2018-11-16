@@ -8,7 +8,7 @@
 
 
 BOOL aui_Win::m_registered = FALSE;
-MBCHAR *aui_Win::m_windowClass = "aui_Win";
+const MBCHAR *aui_Win::m_windowClass = "aui_Win";
 sint32 aui_Win::m_winRefCount = 0;
 tech_WLList<aui_Win *> *aui_Win::m_winList = 0;
 aui_Win *g_winFocus = 0;
@@ -16,7 +16,7 @@ aui_Win *g_winFocus = 0;
 aui_Win::aui_Win(
 	AUI_ERRCODE *retval,
 	uint32 id,
-	MBCHAR *ldlBlock,
+	const MBCHAR *ldlBlock,
 	ControlActionCallback *ActionFunc,
 	void *cookie )
 	:
@@ -56,7 +56,7 @@ aui_Win::aui_Win(
 }
 
 
-AUI_ERRCODE aui_Win::InitCommonLdl( MBCHAR *ldlBlock )
+AUI_ERRCODE aui_Win::InitCommonLdl(const MBCHAR *ldlBlock)
 {
 	return InitCommon();
 }
@@ -314,12 +314,11 @@ void aui_Win::MouseMoveOutside( aui_MouseEvent *mouseData )
 
 void aui_Win::WinMouseMove( aui_MouseEvent *mouseData )
 {
+#ifdef __AUI_USE_DIRECTX__
 	POINT local =
 		{ mouseData->position.x - m_x, mouseData->position.y - m_y };
 	POINT screen =
 		{ local.x + m_offscreen.x, local.x + m_offscreen.y };
-
-#ifdef __AUI_USE_DIRECTX__
 	SendMessage(
 		m_hwnd,
 		WM_NCHITTEST,
@@ -369,12 +368,11 @@ void aui_Win::WinMouseLDrag( aui_MouseEvent *mouseData )
 {
 	if ( GetMouseOwnership() == this )
 	{
+#ifdef __AUI_USE_DIRECTX__
 		POINT local =
 		{ mouseData->position.x - m_x, mouseData->position.y - m_y };
 		POINT screen =
 		{ local.x + m_offscreen.x, local.x + m_offscreen.y };
-
-#ifdef __AUI_USE_DIRECTX__
 		WPARAM wParam = MK_LBUTTON;
 		if ( mouseData->rbutton ) wParam |= MK_RBUTTON;
 
@@ -424,12 +422,11 @@ void aui_Win::WinMouseRDrag( aui_MouseEvent *mouseData )
 {
 	if ( GetMouseOwnership() == this )
 	{
+#ifdef __AUI_USE_DIRECTX__
 		POINT local =
 		{ mouseData->position.x - m_x, mouseData->position.y - m_y };
 		POINT screen =
 		{ local.x + m_offscreen.x, local.x + m_offscreen.y };
-
-#ifdef __AUI_USE_DIRECTX__
 		WPARAM wParam = MK_RBUTTON;
 		if ( mouseData->lbutton ) wParam |= MK_LBUTTON;
 
@@ -459,12 +456,11 @@ void aui_Win::MouseLGrabInside( aui_MouseEvent *mouseData )
 
 		SetKeyboardFocus();
 
+#ifdef __AUI_USE_DIRECTX__
 		POINT local =
 		{ mouseData->position.x - m_x, mouseData->position.y - m_y };
 		POINT screen =
 		{ local.x + m_offscreen.x, local.x + m_offscreen.y };
-
-#ifdef __AUI_USE_DIRECTX__
 		BOOL set = SetCursorPos( screen.x, screen.y );
 		Assert( set );
 
@@ -533,12 +529,11 @@ void aui_Win::MouseLDropInside( aui_MouseEvent *mouseData )
 
 		PlaySound( AUI_SOUNDBASE_SOUND_EXECUTE );
 
+#ifdef __AUI_USE_DIRECTX__
 		POINT local =
 		{ mouseData->position.x - m_x, mouseData->position.y - m_y };
 		POINT screen =
 		{ local.x + m_offscreen.x, local.x + m_offscreen.y };
-
-#ifdef __AUI_USE_DIRECTX__
 		BOOL set = SetCursorPos( screen.x, screen.y );
 		Assert( set );
 
@@ -619,12 +614,11 @@ void aui_Win::MouseLDoubleClickInside( aui_MouseEvent *mouseData )
 
 		SetMouseOwnership();
 
+#ifdef __AUI_USE_DIRECTX__
 		POINT local =
 		{ mouseData->position.x - m_x, mouseData->position.y - m_y };
 		POINT screen =
 		{ local.x + m_offscreen.x, local.x + m_offscreen.y };
-
-#ifdef __AUI_USE_DIRECTX__
 		BOOL set = SetCursorPos( screen.x, screen.y );
 		Assert( set );
 
@@ -669,12 +663,11 @@ void aui_Win::MouseRDoubleClickInside( aui_MouseEvent *mouseData )
 
 		SetMouseOwnership();
 
+#ifdef __AUI_USE_DIRECTX__
 		POINT local =
 		{ mouseData->position.x - m_x, mouseData->position.y - m_y };
 		POINT screen =
 		{ local.x + m_offscreen.x, local.x + m_offscreen.y };
-
-#ifdef __AUI_USE_DIRECTX__
 		BOOL set = SetCursorPos( screen.x, screen.y );
 		Assert( set );
 

@@ -16,18 +16,18 @@ class MessageEyePointListItem : public c3_ListItem
 {
 public:
 
-	MessageEyePointListItem(AUI_ERRCODE *retval, MBCHAR *name, sint32 index, MBCHAR *ldlBlock);
-
+	MessageEyePointListItem(AUI_ERRCODE *retval, const MBCHAR *name,
+	    sint32 index, const MBCHAR *ldlBlock);
 
 	virtual void Update(void);
 
-	MBCHAR	*GetName( void ) { return m_name; }
+	const MBCHAR	*GetName( void ) { return m_name; }
 	sint32	GetIndex( void ) { return m_index; }
 
 protected:
 	MessageEyePointListItem() : c3_ListItem() {}
 
-	AUI_ERRCODE InitCommonLdl(MBCHAR *name, sint32 index, MBCHAR *ldlBlock);
+	AUI_ERRCODE InitCommonLdl(const MBCHAR *name, sint32 index, const MBCHAR *ldlBlock);
 
 public:
 	virtual sint32 Compare(c3_ListItem *item2, uint32 column);
@@ -42,16 +42,16 @@ class MessageEyePointStandard
 {
 public:
 	MessageEyePointStandard( AUI_ERRCODE *retval,
-							 MBCHAR *ldlBlock,
-							 MessageWindow *window );
+		 const MBCHAR *ldlBlock,
+		 MessageWindow *window );
 	MessageEyePointStandard( AUI_ERRCODE *retval,
-							 MBCHAR *ldlBlock,
-							 MessageModal *window );
+		 const MBCHAR *ldlBlock,
+		 MessageModal *window );
 
 	virtual ~MessageEyePointStandard();
 
-	virtual AUI_ERRCODE InitCommon( MBCHAR *ldlBlock, MessageWindow *window );
-	virtual AUI_ERRCODE InitCommon( MBCHAR *ldlBlock, MessageModal *window );
+	virtual AUI_ERRCODE InitCommon(const MBCHAR *ldlBlock, MessageWindow *window);
+	virtual AUI_ERRCODE InitCommon(const MBCHAR *ldlBlock, MessageModal *window);
 
 private:
 	aui_Button						*m_button;
@@ -63,16 +63,16 @@ class MessageEyePointDropdown
 {
 public:
 	MessageEyePointDropdown( AUI_ERRCODE *retval,
-							 MBCHAR *ldlBlock,
-							 MessageWindow *window );
+		 const MBCHAR *ldlBlock,
+		 MessageWindow *window );
 	MessageEyePointDropdown( AUI_ERRCODE *retval,
-							 MBCHAR *ldlBlock,
-							 MessageModal *window );
+		 const MBCHAR *ldlBlock,
+		 MessageModal *window );
 
 	virtual ~MessageEyePointDropdown();
 
-	virtual AUI_ERRCODE InitCommon( MBCHAR *ldlBlock, MessageWindow *window );
-	virtual AUI_ERRCODE InitCommon( MBCHAR *ldlBlock, MessageModal *window );
+	virtual AUI_ERRCODE InitCommon(const MBCHAR *ldlBlock, MessageWindow *window );
+	virtual AUI_ERRCODE InitCommon(const MBCHAR *ldlBlock, MessageModal *window );
 
 private:
 	aui_Button					*m_button;
@@ -87,16 +87,16 @@ class MessageEyePointListbox
 {
 public:
 	MessageEyePointListbox( AUI_ERRCODE *retval,
-							MBCHAR *ldlBlock,
-							MessageWindow *window );
+		const MBCHAR *ldlBlock,
+		MessageWindow *window );
 	MessageEyePointListbox( AUI_ERRCODE *retval,
-							MBCHAR *ldlBlock,
-							MessageModal *window );
+		const MBCHAR *ldlBlock,
+		MessageModal *window );
 
 	virtual ~MessageEyePointListbox();
 
-	virtual AUI_ERRCODE InitCommon( MBCHAR *ldlBlock, MessageWindow *window );
-	virtual AUI_ERRCODE InitCommon( MBCHAR *ldlBlock, MessageModal *window );
+	virtual AUI_ERRCODE InitCommon(const MBCHAR *ldlBlock, MessageWindow *window );
+	virtual AUI_ERRCODE InitCommon(const MBCHAR *ldlBlock, MessageModal *window );
 
 private:
 	aui_Button						*m_buttonLeft;

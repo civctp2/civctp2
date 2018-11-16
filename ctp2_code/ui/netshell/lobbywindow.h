@@ -31,9 +31,7 @@ public:
 	virtual AUI_ERRCODE Idle( void );
 	virtual AUI_ERRCODE SetParent( aui_Region *region );
 
-	void PasswordScreenDone( MBCHAR *password );
-
-
+	void PasswordScreenDone(const MBCHAR *password);
 
 
 	enum CONTROL

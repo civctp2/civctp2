@@ -24,9 +24,9 @@ public:
 
 	static dp_species_t GameType;
 
-	static char *LobbyName;
+	static const char *LobbyName;
 
-	static char *DllPath;
+	static const char *DllPath;
 
 	static	char	servername[64];
 	static	char	playername[dp_PNAMELEN];
@@ -65,10 +65,10 @@ enum STATUS {
 
 
 
-static void StringMix(int c, char *mix, char *msg, ...);
+static void StringMix(int c, char *mix, const char *msg, ...);
 
 
-static char *StringDup(char *s);
+static char *StringDup(const char *s);
 
 
 class Timer {
@@ -112,22 +112,18 @@ public:
 
 	Key(void);
 
-	Key(Key *k);
+	Key(const Key *k);
 
 	Key(KeyStruct *k);
 
-	bool Equals(Key *k);
+	bool Equals(const Key *k) const;
 
-	bool Equals(KeyStruct *k);
+	bool Equals(const KeyStruct *k) const;
 
 	virtual void SetKey(void) {};
 
 	KeyStruct *GetKey(void);
 };
-
-
-
-
 
 template<class T>
 class List:public std::list<T *> {
@@ -164,7 +160,7 @@ public:
 		typename NETFunc::List<T>::iterator i = Find(t);
 #endif
 		if(i == this->end()) {
-			push_back(t);
+			this->push_back(t);
 			return t;
 		} else {
 			memcpy(*i, t, sizeof(T));
@@ -182,7 +178,7 @@ public:
 
 		if(i != this->end()) {
 			delete *i;
-			erase(i);
+			this->erase(i);
 		}
 	}
 
@@ -198,7 +194,7 @@ public:
 			return *i;
 		} else {
 			T *n = new T(*t);
-			push_back(n);
+			this->push_back(n);
 			return n;
 		}
 	}
@@ -285,7 +281,7 @@ public:
 
 	typedef sint16 CODE;
 
-	Message(CODE c, void *p, size_t s);
+	Message(CODE c, const void *p, size_t s);
 
 	Message(CODE c);
 
@@ -308,11 +304,6 @@ public:
 	dpid_t GetSender(void);
 };
 friend class Message;
-
-
-
-
-
 
 class Messages:public List<Message> {
 public:
@@ -345,7 +336,7 @@ protected:
 	char	*first;
 public:
 
-	char *GetBody(void) {
+	const char *GetBody(void) {
 		return body;
 	}
 
@@ -403,7 +394,7 @@ public:
 
 	}
 
-	void Push(char *c) {
+	void Push(const char *c) {
 		int s = strlen(c) + 1;
 		Grow(s);
 		strcpy(body + size - s, c);
@@ -519,7 +510,7 @@ public:
 
 	virtual ~Server(void);
 
-	char *GetName(void);
+	const char *GetName(void);
 
 	int GetPlayers(void);
 
@@ -529,27 +520,24 @@ public:
 };
 
 
-
-
-
 class Contact:public Key {
 	char	*name;
 	char	*number;
 public:
 
-	Contact(char *n, char *p);
+	Contact(const char *n, const char *p);
 
 	Contact(void);
 
 	virtual ~Contact(void);
 
-	char *GetName(void);
+	const char *GetName(void);
 
-	char *GetNumber(void);
+	const char *GetNumber(void);
 
-	void SetName(char *n);
+	void SetName(const char *n);
 
-	void SetNumber(char *p);
+	void SetNumber(const char *p);
 };
 
 
@@ -574,7 +562,7 @@ class Port:public Key {
 	char init[nf_PORTINITLEN];
 public:
 
-	Port(commPortName_t *p, int b, char *i);
+	Port(commPortName_t *p, int b, const char *i);
 
 	Port(void);
 
@@ -584,11 +572,11 @@ public:
 
 	int GetNumber(void);
 
-	char *GetName(void);
+	const char *GetName(void);
 
 	int GetBaud(void);
 
-	char *GetInit(void);
+	const char *GetInit(void);
 };
 
 class Transport;
@@ -661,9 +649,9 @@ public:
 
 	virtual TYPE GetType(void);
 
-	char *GetName(void);
+	const char *GetName(void);
 
-	char *GetFileName(void);
+	const char *GetFileName(void);
 
 	virtual STATUS SetPort(long p);
 
@@ -797,9 +785,9 @@ public:
 
 	~AIPlayer(void);
 
-	char *GetName(void);
+	const char *GetName(void);
 
-	void SetName(char *name);
+	void SetName(const char *name);
 
 	unsigned char GetGroup(void);
 
@@ -865,9 +853,9 @@ public:
 
 	dpid_t GetId(void);
 
-	char *GetName(void);
+	const char *GetName(void);
 
-	unsigned char *GetBlob(void);
+	unsigned const char *GetBlob(void);
 
 	unsigned char GetBlobLen(void);
 
@@ -930,9 +918,9 @@ public:
 
 	~PlayerStat(void);
 
-	void SetName(char *n);
+	void SetName(const char *n);
 
-	char *GetName(void);
+	const char *GetName(void);
 
 	void SetGroup(unsigned char group);
 
@@ -1001,17 +989,17 @@ public:
 
 	~PlayerSetup();
 
-	void SetName(char *n);
+	void SetName(const char *n);
 
-	void SetBlob(char *b);
+	void SetBlob(const char *b);
 
 	void SetBlob(void *b, unsigned char s);
 
 	void SetBlobLen(unsigned char l);
 
-	char *GetDescription(void);
+	const char *GetDescription(void);
 
-	void SetDescription(char *d);
+	void SetDescription(const char *d);
 
 	void SetGroup(char group);
 
@@ -1055,9 +1043,9 @@ public:
 
 	Session(dp_object_t *o, KeyStruct *k, long f);
 
-	char *GetName(void);
+	const char *GetName(void);
 
-	char *GetPassword(void);
+	const char *GetPassword(void);
 
 	short GetPlayers(void);
 
@@ -1065,7 +1053,7 @@ public:
 
 	short GetFree();
 
-	char *GetUserField();
+	const char *GetUserField();
 
 	dp_karma_t GetKarma();
 
@@ -1180,19 +1168,19 @@ public:
 
 	~GameSetup();
 
-	char *GetDescription(void);
+	const char *GetDescription(void);
 
-	void SetDescription(char *d);
+	void SetDescription(const char *d);
 
-	void SetName(char *n);
+	void SetName(const char *n);
 
-	void SetPassword(char *p);
+	void SetPassword(const char *p);
 
 	void SetSize(short s);
 
-	void SetUserField(char *u);
+	void SetUserField(const char *u);
 
-	void SetUserField(void *u, short s);
+	void SetUserField(const void *u, short s);
 
 	void SetSyncLaunch(bool s);
 
@@ -1230,11 +1218,11 @@ public:
 	typedef char TYPE;
 
 
-	STATUS	Send(Player *p, char *m);
+	STATUS	Send(Player *p, const char *m);
 
-	STATUS	SendGroup(char *m);
+	STATUS	SendGroup(const char *m);
 
-	virtual void Receive(Player *p, TYPE t, char *m) = 0;
+	virtual void Receive(Player *p, TYPE t, const char *m) = 0;
 
 	bool Handle(Message *m);
 };
@@ -1246,9 +1234,6 @@ public:
 	STATUS Quit(void);
 
 	static STATUS GetStatus(void);
-
-
-
 
 	STATUS SetPlayerSetup(PlayerSetup *p);
 
@@ -1266,9 +1251,6 @@ public:
 
 	static STATUS SetRemotePlayerPacket(PlayerSetup *p);
 
-
-
-
 	STATUS SetGameSetup(GameSetup *g);
 
 	static STATUS SetGameSetupPacket(GameSetup *g);
@@ -1281,21 +1263,11 @@ public:
 
 	STATUS ChangeAIPlayer(AIPlayer *p);
 
-
-
-
-
-
-
-
-
-
-
 	STATUS Launch(void);
 
 	static STATUS UnLaunchAll(void);
 
-	STATUS Login(char *username, char *password);
+	STATUS Login(const char *username, const char *password);
 
 	STATUS SetTransport(Transport *t);
 
@@ -1329,9 +1301,9 @@ public:
 
 	STATUS Reset(void);
 
-	STATUS Connect(char *file);
+	STATUS Connect(const char *file);
 
-	STATUS Join(Game *g, char *password = "");
+	STATUS Join(Game *g, const char *password = "");
 
 	STATUS Join(Lobby *l);
 
@@ -1355,18 +1327,13 @@ public:
 
 	TransportSetup *GetTransport(void);
 
-	void PushChatMessage(char *m);
+	void PushChatMessage(const char *m);
 
 	static void PushMessage(Message *m);
 
 	bool HandleMessage(Message *p);
 
 	static STATUS Send(dp_t *p, Message *m, dpid_t id, dpid_t from = dp_ID_BROADCAST, bool r = true);
-
-
-
-
-
 
 
 private:

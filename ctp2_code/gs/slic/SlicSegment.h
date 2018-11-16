@@ -73,7 +73,6 @@ private:
     sint32 m_lastShown[k_MAX_PLAYERS];
 	sint32 m_firstLineNumber;
 
-
 	char *m_id;
 	unsigned char *m_code;
 	char *m_uiComponent;

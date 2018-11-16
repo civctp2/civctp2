@@ -183,8 +183,8 @@ public:
 	TwoChoiceButton(
 		AUI_ERRCODE *retval,
 		uint32 id,
-		MBCHAR *ldlBlock,
-		MBCHAR *choiceOff, MBCHAR *choiceOn, uint32 onoff = 0,
+		const MBCHAR *ldlBlock,
+		const MBCHAR *choiceOff, const MBCHAR *choiceOn, uint32 onoff = 0,
 		ControlActionCallback *ActionFunc = NULL,
 		void *cookie = NULL );
 	~TwoChoiceButton() {};
@@ -203,7 +203,7 @@ public:
 	SPProfileBox (
 		AUI_ERRCODE *retval,
 		uint32 id,
-		MBCHAR *ldlBlock );
+		const MBCHAR *ldlBlock );
 	virtual ~SPProfileBox();
 	void	SetLeader(uint32 index);
 private:
@@ -228,7 +228,7 @@ public:
 	SPWorldBox (
 		AUI_ERRCODE *retval,
 		uint32 id,
-		MBCHAR *ldlBlock );
+		const MBCHAR *ldlBlock );
 	virtual ~SPWorldBox();
 	AUI_ERRCODE DrawThis(
 		aui_Surface *surface,
@@ -265,7 +265,7 @@ public:
 	SPRulesBox (
 		AUI_ERRCODE *retval,
 		uint32 id,
-		MBCHAR *ldlBlock );
+		const MBCHAR *ldlBlock );
 	virtual ~SPRulesBox();
 
 	uint32 GetGenocideRules();
@@ -292,7 +292,7 @@ public:
 	SPNewGameWindow(
 		AUI_ERRCODE *retval,
 		uint32 id,
-		MBCHAR *ldlBlock,
+		const MBCHAR *ldlBlock,
 		sint32 bpp,
 		AUI_WINDOW_TYPE type = AUI_WINDOW_TYPE_STANDARD,
 		bool bevel = true);
@@ -359,7 +359,8 @@ public:
 class SPDropDownListItem : public c3_ListItem
 {
 public:
-	SPDropDownListItem(AUI_ERRCODE *retval, MBCHAR *ldlBlock,MBCHAR *type,const MBCHAR *name);
+	SPDropDownListItem(AUI_ERRCODE *retval, const MBCHAR *ldlBlock,
+	    const MBCHAR *type, const MBCHAR *name);
 	~SPDropDownListItem();
 	sint32 Compare(c3_ListItem *item2, uint32 column){return 0; };
 private:
@@ -369,45 +370,55 @@ private:
 
 sint32				callbackSetSelected(aui_Control *control, void *cookie);
 
-aui_StringTable		*spNewStringTable(AUI_ERRCODE *errcode, MBCHAR *ldlme);
-c3_Button			*spNew_c3_Button(AUI_ERRCODE *errcode, MBCHAR *ldlParent,MBCHAR *ldlMe,
-									void (*callback)(aui_Control*,uint32,uint32,void*));
-ctp2_Button			*spNew_ctp2_Button(AUI_ERRCODE *errcode, MBCHAR *ldlParent,MBCHAR *ldlMe,
-									   void (*callback)(aui_Control*,uint32,uint32,void*));
-c3_Switch			*spNew_c3_Switch(AUI_ERRCODE *errcode, MBCHAR *ldlParent,MBCHAR *ldlMe,
-									void (*callback)(aui_Control*,uint32,uint32,void*)=NULL,
-									void *cookie=NULL );
+aui_StringTable		*spNewStringTable(AUI_ERRCODE *errcode, const MBCHAR *ldlme);
+c3_Button			*spNew_c3_Button(AUI_ERRCODE *errcode, const MBCHAR *ldlParent, const MBCHAR *ldlMe,
+				    void (*callback)(aui_Control*,uint32,uint32,void*));
+ctp2_Button			*spNew_ctp2_Button(AUI_ERRCODE *errcode, const MBCHAR *ldlParent,
+				    const MBCHAR *ldlMe, void (*callback)(aui_Control*,uint32,uint32,void*));
+c3_Switch			*spNew_c3_Switch(AUI_ERRCODE *errcode, const MBCHAR *ldlParent,
+				    const MBCHAR *ldlMe,
+				    void (*callback)(aui_Control*,uint32,uint32,void*)=NULL,
+				    void *cookie=NULL );
 aui_Switch			*spNew_aui_Switch(
-									AUI_ERRCODE *errcode,
-									MBCHAR *ldlParent,MBCHAR *ldlMe,
-									void (*callback)(aui_Control*,uint32,uint32,void*)=NULL,
-									void *cookie=NULL );
-c3_Static			*spNew_c3_Static(AUI_ERRCODE *errcode, MBCHAR *ldlParent,MBCHAR *ldlMe);
-C3TextField			*spNewTextEntry(AUI_ERRCODE *errcode, MBCHAR *ldlParent,MBCHAR *ldlMe,
-									void (*callback)(aui_Control*,uint32,uint32,void*)=NULL ,void *cookie=NULL );
-c3_ListBox			*spNew_c3_ListBox(AUI_ERRCODE *errcode, MBCHAR *ldlParent,MBCHAR *ldlMe,
-									void (*callback)(aui_Control*,uint32,uint32,void*) = NULL,
-									void *cookie = NULL);
-c3_DropDown			*spNew_c3_DropDown(AUI_ERRCODE *errcode, MBCHAR *ldlParent,MBCHAR *ldlMe,void (*callback)(aui_Control*,uint32,uint32,void*));
-void				spFillDropDown(AUI_ERRCODE *retval, c3_DropDown *mydrop, aui_StringTable *mytable, MBCHAR *listitemparent, MBCHAR *listitemme);
-void				spFillListBox(AUI_ERRCODE *retval, c3_ListBox *mylist, aui_StringTable *mytable, MBCHAR *listitemparent, MBCHAR *listitemme);
-TwoChoiceButton		*spNewTwoChoiceButton(AUI_ERRCODE *errcode, MBCHAR* ldlParent, MBCHAR *ldlMe,MBCHAR *ldlstringtable,
-									uint32 state,void (*callback)(aui_Control*,uint32,uint32,void*) = NULL);
-C3Slider			*spNew_C3Slider(AUI_ERRCODE *errcode, MBCHAR *ldlParent, MBCHAR *ldlMe,
-	 								void (*callback)(aui_Control*,uint32,uint32,void*));
-c3_CheckBox			*spNew_c3_CheckBox(AUI_ERRCODE *errcode, MBCHAR* ldlParent, MBCHAR *ldlMe,
-									uint32 state,void (*callback)(aui_Control*,uint32,uint32,void*) = NULL, void *cookie = NULL);
-aui_SwitchGroup		*spNew_aui_SwitchGroup( AUI_ERRCODE *errcode, MBCHAR *ldlParent, MBCHAR *ldlMe );
+				    AUI_ERRCODE *errcode,
+				    const MBCHAR *ldlParent, const MBCHAR *ldlMe,
+				    void (*callback)(aui_Control*,uint32,uint32,void*)=NULL,
+				    void *cookie=NULL );
+c3_Static			*spNew_c3_Static(AUI_ERRCODE *errcode, const MBCHAR *ldlParent, const MBCHAR *ldlMe);
+C3TextField			*spNewTextEntry(AUI_ERRCODE *errcode, const MBCHAR *ldlParent,
+				    const MBCHAR *ldlMe,
+				    void (*callback)(aui_Control*,uint32,uint32,void*)=NULL ,void *cookie=NULL );
+c3_ListBox			*spNew_c3_ListBox(AUI_ERRCODE *errcode, const MBCHAR *ldlParent,
+				    const MBCHAR *ldlMe,
+				    void (*callback)(aui_Control*,uint32,uint32,void*) = NULL,
+				    void *cookie = NULL);
+c3_DropDown			*spNew_c3_DropDown(AUI_ERRCODE *errcode, const MBCHAR *ldlParent,
+				    const MBCHAR *ldlMe,void (*callback)(aui_Control*,uint32,uint32,void*));
+void				spFillDropDown(AUI_ERRCODE *retval, c3_DropDown *mydrop, aui_StringTable *mytable,
+				    const MBCHAR *listitemparent, const MBCHAR *listitemme);
+void				spFillListBox(AUI_ERRCODE *retval, c3_ListBox *mylist, aui_StringTable *mytable,
+				    const MBCHAR *listitemparent, const MBCHAR *listitemme);
+TwoChoiceButton		*spNewTwoChoiceButton(AUI_ERRCODE *errcode, const MBCHAR* ldlParent,
+				    const MBCHAR *ldlMe, const MBCHAR *ldlstringtable,
+				    uint32 state,void (*callback)(aui_Control*,uint32,uint32,void*) = NULL);
+C3Slider			*spNew_C3Slider(AUI_ERRCODE *errcode, const MBCHAR *ldlParent,
+				    const MBCHAR *ldlMe,
+				    void (*callback)(aui_Control*,uint32,uint32,void*));
+c3_CheckBox			*spNew_c3_CheckBox(AUI_ERRCODE *errcode, const MBCHAR* ldlParent,
+				    const MBCHAR *ldlMe,
+				    uint32 state,void (*callback)(aui_Control*,uint32,uint32,void*) = NULL, void *cookie = NULL);
+aui_SwitchGroup		*spNew_aui_SwitchGroup( AUI_ERRCODE *errcode, const MBCHAR *ldlParent,
+				    const MBCHAR *ldlMe );
 
 
 
 
 ctp2_Button*
 spNew_ctp2_Button(AUI_ERRCODE *errcode,
-				  MBCHAR *ldlParent,
-				  MBCHAR *ldlMe,
-				  MBCHAR *default_text,
-				  void (*callback)(aui_Control*,uint32,uint32,void*),
-				  MBCHAR *buttonFlavor);
+		  const MBCHAR *ldlParent,
+		  const MBCHAR *ldlMe,
+		  const MBCHAR *default_text,
+		  void (*callback)(aui_Control*,uint32,uint32,void*),
+		  const MBCHAR *buttonFlavor);
 
 #endif

@@ -22,7 +22,7 @@ extern C3UI *g_c3ui;
 C3Spinner::C3Spinner(
 	AUI_ERRCODE *retval,
 	uint32 id,
-	MBCHAR *ldlBlock,
+	const MBCHAR *ldlBlock,
 	ControlActionCallback *ActionFunc,
 	void *cookie )
 	:
@@ -60,7 +60,7 @@ C3Spinner::C3Spinner(
 }
 
 
-AUI_ERRCODE C3Spinner::InitCommon( MBCHAR *ldlBlock )
+AUI_ERRCODE C3Spinner::InitCommon(const MBCHAR *ldlBlock)
 {
 	aui_Ldl *theLdl = g_c3ui->GetLdl();
 
@@ -86,7 +86,7 @@ C3Spinner::C3Spinner(
 	sint32 width,
 	sint32 height,
 	BOOL isVertical,
-	MBCHAR *pattern,
+	const MBCHAR *pattern,
 	ControlActionCallback *ActionFunc,
 	void *cookie )
 	:
@@ -106,7 +106,7 @@ C3Spinner::C3Spinner(
 	Assert( AUI_SUCCESS(*retval) );
 	if ( !AUI_SUCCESS(*retval) ) return;
 
-	*retval = aui_SoundBase::InitCommon((MBCHAR **)NULL);
+	*retval = aui_SoundBase::InitCommon((const MBCHAR **)NULL);
 	Assert( AUI_SUCCESS(*retval) );
 	if ( !AUI_SUCCESS(*retval) ) return;
 

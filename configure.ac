@@ -7,7 +7,7 @@ AC_CONFIG_AUX_DIR(ctp2_code/os/autoconf/config)
 AC_CANONICAL_HOST
 AC_CANONICAL_TARGET
 
-AM_INIT_AUTOMAKE
+AM_INIT_AUTOMAKE([subdir-objects])
 AM_CONFIG_HEADER(ctp2_code/os/include/config.h)
 AM_MAINTAINER_MODE
 AC_PROG_MAKE_SET
@@ -86,12 +86,6 @@ AC_PATH_PROG(PDFLATEX,pdflatex)
 AC_PATH_PROG(PERL,perl)
 AC_PATH_PROG(THUMBPDF,thumbpdf)
 AC_PATH_PROGS(VIEWPDF,acroread gpdf)
-
-for ac_remove_CFLAG in "-O1" "-O2" "-O3" ; do
-	CFLAGS=${CFLAGS//${ac_remove_CFLAG}/}
-	CPPFLAGS=${CPPFLAGS//${ac_remove_CFLAG}/}
-	CXXFLAGS=${CXXFLAGS//${ac_remove_CFLAG}/}
-done
 
 ctp2_code='$(top_srcdir)/ctp2_code'
 AC_SUBST(ctp2_code)

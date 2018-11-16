@@ -263,7 +263,7 @@ AUI_ERRCODE aui_Resource<T>::RemoveSearchPath( const MBCHAR *path )
 	{
 		ListPos prevPosition = position;
 
-		MBCHAR *thisPath = m_pathList->GetNext( position );
+		const MBCHAR *thisPath = m_pathList->GetNext( position );
 		if ( strcmp( path, thisPath ) == 0 )
 		{
 			m_pathList->DeleteAt( prevPosition );

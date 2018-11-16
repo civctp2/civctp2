@@ -1255,8 +1255,7 @@ void CityViewButtonActionCallback( aui_Control *control, uint32 action, uint32 d
 
 	if ( action != (uint32)AUI_BUTTON_ACTION_EXECUTE ) return;
 
-	bool This_Code_Is_Really_Really_Old = false;
-	Assert(This_Code_Is_Really_Really_Old);
+	Assert(!"This_Code_Is_Really_Really_Old");
 
 #if 0
 	int err;
@@ -1292,9 +1291,7 @@ int c3windows_MakeStatusWindow( BOOL make )
 {
 	AUI_ERRCODE errcode = AUI_ERRCODE_OK;
 
-	static C3TextField *textfield;
-	static C3TextField *textfield2;
-	static TextButton	*button, *debugButton, *resourceButton, *cheatButton, *cityViewButton, *knowledgeButton, *diplomacyButton;
+	static TextButton	*button, *debugButton, *resourceButton, *cheatButton, *knowledgeButton, *diplomacyButton;
 
 	if ( make )
 	{
@@ -1509,7 +1506,6 @@ int c3windows_MakeDebugWindow( BOOL make )
 
 	static TextBox *textbox;
 	static TextButton *exitButton;
-	static C3TextField *textfield;
 
 	if ( make )
 	{

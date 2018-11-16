@@ -221,14 +221,13 @@ class ScenarioEditor {
 
 	static void PlayerSpinner(aui_Control *control, uint32 action, uint32 data, void *cookie);
 
-
 	void ShowAddList(SCEN_ADD addtype);
 	bool UpdateAddList(SCEN_ADD addtype);
 
 	static void CloseAddStuff(aui_Control *control, uint32 action, uint32 data, void *cookie);
 	static void AddLeftList(aui_Control *control, uint32 action, uint32 data, void *cookie);
 	static void AddRightList(aui_Control *control, uint32 action, uint32 data, void *cookie);
-	static void AddAddItem(ctp2_ListBox *list, const MBCHAR *text, sint32 userData);
+	static void AddAddItem(ctp2_ListBox *list, const MBCHAR *text, intptr_t userData);
 	static void AddAddButton(aui_Control *control, uint32 action, uint32 data, void *cookie);
 	static void AddRemoveButton(aui_Control *control, uint32 action, uint32 data, void *cookie);
 
@@ -294,7 +293,7 @@ class ScenarioEditor {
 	void SetupGlobalControls();
 	void UpdatePlayerCount();
 
-	void AddDropDownItem(ctp2_DropDown *dd, MBCHAR *ldlblock, char * item);
+	void AddDropDownItem(ctp2_DropDown *dd, const MBCHAR *ldlblock, const char * item);
 	sint32 GetNumPlayers();
 	sint32 GetLastPlayer();
 	static void LimitPlayerChoice(aui_Control *control, uint32 action, uint32 data, void *cookie);

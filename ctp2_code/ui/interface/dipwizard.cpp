@@ -88,7 +88,7 @@
 extern ColorSet   *g_colorSet;
 
 static DipWizard  *s_dipWizard;
-static MBCHAR     *s_dipWizardBlock = "DipWizard";
+static const MBCHAR *s_dipWizardBlock = "DipWizard";
 
 extern C3UI       *g_c3ui;
 
@@ -178,7 +178,7 @@ DipWizard::DipWizard(AUI_ERRCODE *err)
 		Assert(m_toneButtons[i]);
 
 		if(m_toneButtons[i]) {
-			m_toneButtons[i]->SetActionFuncAndCookie(ToneButtonCallback, (void *)i);
+			m_toneButtons[i]->SetActionFuncAndCookie(ToneButtonCallback, (void *)(intptr_t)i);
 		}
 
 		MBCHAR labelName[k_MAX_NAME_LEN];
@@ -437,8 +437,8 @@ void DipWizard::FillProposalLists()
 	for(i = 0; i < DIP_WIZ_PROP_TAB_MAX; i++) {
 		m_propList[i]->Clear();
 		m_exchList[i]->Clear();
-		m_propList[i]->SetActionFuncAndCookie(PropListCallback, (void *)i);
-		m_exchList[i]->SetActionFuncAndCookie(ExchListCallback, (void *)i);
+		m_propList[i]->SetActionFuncAndCookie(PropListCallback, (void *)(intptr_t)i);
+		m_exchList[i]->SetActionFuncAndCookie(ExchListCallback, (void *)(intptr_t)i);
 	}
 
 	const Diplomat & diplomat =
@@ -570,7 +570,7 @@ void DipWizard::FillProposalLists()
 				if(!item)
 					break;
 
-				item->SetUserData((void *)i);
+				item->SetUserData((void *)(intptr_t)i);
 
 				ctp2_Static *text = (ctp2_Static *)item->GetChildByIndex(0);
 				Assert(text);
@@ -618,7 +618,7 @@ void DipWizard::FillRecipientLists()
 				g_player[pl]->m_civilisation->GetCountryName(buf);
 				label->SetText(buf);
 
-				item->SetUserData((void *)pl);
+				item->SetUserData((void *)(intptr_t)pl);
 
 				m_nations->AddItem(item);
 			}
@@ -635,7 +635,7 @@ void DipWizard::AddProposalItem(ctp2_ListBox *propList, const DiplomacyProposalR
 			if(label) {
 				label->SetText(g_theStringDB->GetNameStr(rec->GetTitle()));
 			}
-			propItem->SetUserData((void *)rec->GetIndex());
+			propItem->SetUserData((void *)(intptr_t)rec->GetIndex());
 			propList->AddItem(propItem);
 		}
 	}
@@ -2082,7 +2082,7 @@ void DipWizard::AddCityItems(ctp2_Menu *menu, sint32 player)
 			if(!(city.GetEverVisible() & (1 << g_selected_item->GetVisiblePlayer())))
 				continue;
 		}
-		menu->AddItem(city.GetName(), NULL, (void *)city.m_id);
+		menu->AddItem(city.GetName(), NULL, (void *)(uintptr_t)city.m_id);
 	}
 }
 
@@ -2170,7 +2170,7 @@ void DipWizard::AddAdvanceItems(ctp2_Menu *menu, sint32 sender, sint32 receiver)
 			continue;
 		}
 
-		menu->AddItem(g_theAdvanceDB->Get(a)->GetNameText(), NULL, (void *)a);
+		menu->AddItem(g_theAdvanceDB->Get(a)->GetNameText(), NULL, (void *)(intptr_t)a);
 	}
 }
 
@@ -2192,7 +2192,7 @@ void DipWizard::AddStopResearchItems(ctp2_Menu *menu, sint32 playerId)
 			continue;
 		}
 
-		menu->AddItem(g_theAdvanceDB->Get(a)->GetNameText(), NULL, (void *)a);
+		menu->AddItem(g_theAdvanceDB->Get(a)->GetNameText(), NULL, (void *)(intptr_t)a);
 	}
 }
 
@@ -2208,7 +2208,7 @@ void DipWizard::AddThirdPartyItems(ctp2_Menu *menu, sint32 sender, sint32 receiv
 
 		MBCHAR civName[k_MAX_NAME_LEN];
 		g_player[p]->GetCivilisation()->GetPluralCivName(civName);
-		menu->AddItem(civName, NULL, (void *)p);
+		menu->AddItem(civName, NULL, (void *)(intptr_t)p);
 	}
 }
 
@@ -2635,7 +2635,6 @@ STDEHANDLER(DipWizContinueDiplomacyEvent)
 
 		DipWizard::SetViewResponse(p1, p2, true);
 
-		RESPONSE_TYPE rtype = Diplomat::GetDiplomat(p2).GetResponsePending(p1).type;
 	} else if(p2 == g_selected_item->GetVisiblePlayer()) {
 
 		DipWizard::SetViewResponse(p1, p2, true);
@@ -2709,7 +2708,7 @@ void DipWizard::DisplayResponseDiplomat(sint32 player)
 
 
 
-	m_responseDiplomat->SetDrawCallbackAndCookie(DrawDiplomatColor, (void *)player);
+	m_responseDiplomat->SetDrawCallbackAndCookie(DrawDiplomatColor, (void *)(intptr_t)player);
 }
 
 void DipWizard::DisplayParchment(sint32 player)

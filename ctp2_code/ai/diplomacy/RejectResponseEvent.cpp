@@ -35,7 +35,6 @@ STDEHANDLER(NoThreat_RejectResponseEvent)
 		return GEV_HD_Continue;
 
 	Diplomat & sender_diplomat = Diplomat::GetDiplomat(sender);
-	Diplomat & receiver_diplomat = Diplomat::GetDiplomat(receiver);
 
 	if (1) {
 		Response response;
@@ -57,9 +56,6 @@ STDEHANDLER(NoThreat_RejectResponseEvent)
 	return GEV_HD_Continue;
 }
 
-
-
-
 STDEHANDLER(ThreatenAlliedInvasion_RejectResponseEvent)
 {
 	PLAYER_INDEX sender;
@@ -72,7 +68,6 @@ STDEHANDLER(ThreatenAlliedInvasion_RejectResponseEvent)
 		return GEV_HD_Continue;
 
 	Diplomat & sender_diplomat = Diplomat::GetDiplomat(sender);
-	Diplomat & receiver_diplomat = Diplomat::GetDiplomat(receiver);
 
 	const NewProposal & sender_proposal =
 		sender_diplomat.GetMyLastNewProposal(receiver);
@@ -88,7 +83,6 @@ STDEHANDLER(ThreatenAlliedInvasion_RejectResponseEvent)
 				PROPOSAL_TREATY_ALLIANCE) )
 				allyId = foreignerId;
 	}
-
 
 	if (allyId != -1) {
 		Response response;

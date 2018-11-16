@@ -134,11 +134,11 @@ class CivilisationData : public GAMEOBJ
 		void ReleaseCityName(const sint32 name);
 		sint32 GetUseCount(const sint32 name) const;
 
-		MBCHAR *GetLeaderName(void) ;
+		const MBCHAR *GetLeaderName(void) ;
 		void SetLeaderName(const MBCHAR *s);
 
 		void SetPersonalityDescription(const MBCHAR* s);
-		MBCHAR* GetPersonalityDescription(void);
+		const MBCHAR* GetPersonalityDescription(void);
 
 		void GetPluralCivName(MBCHAR *s);
 		void SetPluralCivName(const MBCHAR *s);

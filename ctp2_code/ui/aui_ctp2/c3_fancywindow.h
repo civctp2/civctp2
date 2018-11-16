@@ -56,10 +56,10 @@ public:
 	c3_FancyWindow(
 		AUI_ERRCODE *retval,
 		uint32 id,
-		MBCHAR *ldlBlock,
+		const MBCHAR *ldlBlock,
 		sint32 bpp,
 		MBCHAR ldlBorder[k_NUM_C3_FANCYBORDERS][ k_AUI_LDL_MAXBLOCK + 1 ] = NULL,
-		MBCHAR *ldlTitle = NULL,
+		const MBCHAR *ldlTitle = NULL,
 		AUI_WINDOW_TYPE type = AUI_WINDOW_TYPE_BACKGROUND,
 		bool bevel = true,
 		void (*exitCallBack)( aui_Control *, uint32, uint32, void *) = NULL);
@@ -116,10 +116,10 @@ public:
 	c3_FancyWindow2(
 		AUI_ERRCODE *retval,
 		uint32 id,
-		MBCHAR *ldlBlock,
+		const MBCHAR *ldlBlock,
 		sint32 bpp,
 		MBCHAR ldlBorder[k_NUM_C3_FANCYBORDERS2][ k_AUI_LDL_MAXBLOCK + 1 ] = NULL,
-		MBCHAR *ldlTitle = NULL,
+		const MBCHAR *ldlTitle = NULL,
 		AUI_WINDOW_TYPE type = AUI_WINDOW_TYPE_BACKGROUND,
 		bool bevel = true,
 		void (*exitCallBack)( aui_Control *, uint32, uint32, void *) = NULL);

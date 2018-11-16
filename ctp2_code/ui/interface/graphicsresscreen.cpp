@@ -56,7 +56,6 @@ extern C3UI				*g_c3ui;
 extern ProfileDB		*g_theProfileDB;
 
 static c3_PopupWindow	*s_graphicsResScreen= NULL;
-static c3_Button		*s_accept			= NULL;
 static c3_ListBox		*s_resList			= NULL;
 static c3_Static		*s_warning			= NULL;
 static sint32			s_currentResIndex	= 0;
@@ -129,7 +128,6 @@ AUI_ERRCODE graphicsresscreen_Initialize( void )
 	{
 		s_graphicsResScreen = new c3_PopupWindow( &errcode, aui_UniqueId(), windowBlock, 16, AUI_WINDOW_TYPE_FLOATING, false );
 		Assert( AUI_NEWOK(s_graphicsResScreen, errcode) );
-		if ( !AUI_NEWOK(s_graphicsResScreen, errcode) ) errcode;
 
 		s_graphicsResScreen->Resize(s_graphicsResScreen->Width(),s_graphicsResScreen->Height());
 		s_graphicsResScreen->GrabRegion()->Resize(s_graphicsResScreen->Width(),s_graphicsResScreen->Height());

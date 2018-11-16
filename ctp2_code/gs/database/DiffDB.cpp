@@ -646,12 +646,12 @@ sint32 DifficultyDB::ParseADiff(Token *diffToken, DifficultyDBRecord *rec)
 	if(!token_ParseFloatNext(diffToken, TOKEN_POLLUTION_POPULATION_RATIO, rec->m_pollution_population_ratio)) return FALSE;
 
 	if (diffToken->Next() != TOKEN_CLOSE_BRACE) {
-        ("Missing expected close brace");
-        return FALSE;
-    }
-    diffToken->Next();
+		c3errors_ErrorDialog (diffToken->ErrStr(), "Missing expected close brace");
+		return FALSE;
+	}
+	diffToken->Next();
 
-    return TRUE;
+	return TRUE;
 }
 
 sint32 DifficultyDB::Parse(char *filename)

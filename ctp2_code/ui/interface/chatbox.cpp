@@ -135,7 +135,7 @@ ChatBox::~ChatBox()
 	m_chatWindow = NULL;
 }
 
-void ChatBox::AddText(MBCHAR *text)
+void ChatBox::AddText(const MBCHAR *text)
 {
 	m_chatWindow->GetTextBox()->AppendHyperText(text);
 
@@ -158,7 +158,7 @@ void ChatBox::SetActive(BOOL active)
 	m_active = active;
 }
 
-void ChatBox::AddLine(sint32 playerNum, MBCHAR *text)
+void ChatBox::AddLine(sint32 playerNum, const MBCHAR *text)
 {
 	COLOR		color = g_colorSet->ComputePlayerColor(playerNum);
 	COLORREF	colorRef = g_colorSet->GetColorRef(color);
@@ -187,7 +187,7 @@ void ChatBox::AddLine(sint32 playerNum, MBCHAR *text)
 
 
 
-ChatWindow::ChatWindow(AUI_ERRCODE *retval, uint32 id, MBCHAR *ldlBlock, sint32 bpp,
+ChatWindow::ChatWindow(AUI_ERRCODE *retval, uint32 id, const MBCHAR *ldlBlock, sint32 bpp,
 						AUI_WINDOW_TYPE type)
 :	C3Window(retval, id, ldlBlock, bpp, type)
 {
@@ -204,7 +204,7 @@ ChatWindow::~ChatWindow()
 		delete m_textField;
 }
 
-AUI_ERRCODE ChatWindow::InitCommonLdl(MBCHAR *ldlBlock)
+AUI_ERRCODE ChatWindow::InitCommonLdl(const MBCHAR *ldlBlock)
 {
 	MBCHAR			controlBlock[k_AUI_LDL_MAXBLOCK + 1];
 	AUI_ERRCODE		errcode = AUI_ERRCODE_OK;
@@ -235,7 +235,7 @@ AUI_ERRCODE ChatWindow::InitCommonLdl(MBCHAR *ldlBlock)
 	return AUI_ERRCODE_OK;
 }
 
-void ChatWindow::ColorizeString(MBCHAR *destString, MBCHAR *srcString, COLORREF colorRef)
+void ChatWindow::ColorizeString(MBCHAR *destString, const MBCHAR *srcString, COLORREF colorRef)
 {
 	if (!destString) return;
 	if (!srcString) return;
@@ -304,7 +304,7 @@ void ChatWindow::ChatCallback(aui_Control *control, uint32 action, uint32 data, 
 
 }
 
-BOOL ChatWindow::CheckForEasterEggs(MBCHAR *s)
+BOOL ChatWindow::CheckForEasterEggs(const MBCHAR *s)
 {
 	if (!strcmp(s, "pacman")) {
 		return TRUE;
@@ -314,9 +314,9 @@ BOOL ChatWindow::CheckForEasterEggs(MBCHAR *s)
 		return TRUE;
 	} else
 	if (!strncmp(s, "/rnd", 4) && !g_network.IsActive()) {
-		sint32 i, n;
 		extern BOOL gDone;
 #if defined(WIN32)
+		sint32 i, n;
 		MSG	msg;
 
 		MBCHAR *temp = s+4;
@@ -420,12 +420,12 @@ BOOL ChatWindow::CheckForEasterEggs(MBCHAR *s)
 		}
 	} else
 	if (!strncmp(s, "/exportmap", 10)) {
-		MBCHAR *temp = s + 11;
+		const MBCHAR *temp = s + 11;
 		g_theWorld->ExportMap(temp);
 		return TRUE;
 	} else
 	if (!strncmp(s, "/importmap", 10)) {
-		MBCHAR *temp = s + 11;
+		const MBCHAR *temp = s + 11;
 
 		if (g_theWorld->ImportMap(temp)) {
 			g_tiledMap->PostProcessMap();
@@ -434,7 +434,7 @@ BOOL ChatWindow::CheckForEasterEggs(MBCHAR *s)
 		return TRUE;
 	}  else
 	if(!strncmp(s, "/attach", 7) && !g_network.IsActive()) {
-		MBCHAR *arg = s + 7;
+		const MBCHAR *arg = s + 7;
 		while(isspace(*arg))
 			arg++;
 		if(*arg >= '0' && *arg <= '9') {
@@ -458,7 +458,7 @@ BOOL ChatWindow::CheckForEasterEggs(MBCHAR *s)
 		}
 	} else
 	if(!strncmp(s, "/detach", 7) && !g_network.IsActive()) {
-		MBCHAR *arg = s + 7;
+		const MBCHAR *arg = s + 7;
 		while(isspace(*arg))
 			arg++;
 		if(*arg >= '0' && *arg <= '9') {
@@ -489,7 +489,7 @@ BOOL ChatWindow::CheckForEasterEggs(MBCHAR *s)
 		extern BOOL gDone;
 		MSG	msg;
 
-		MBCHAR *temp = s+5;
+		const MBCHAR *temp = s+5;
 		while(isspace(*temp))
 			temp++;
 

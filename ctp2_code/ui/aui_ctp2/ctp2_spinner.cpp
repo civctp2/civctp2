@@ -24,7 +24,7 @@
 //
 // Modifications from the original Activision code:
 //
-// - Allowed optional text display instead of a number (May 21th 2006 Martin Gühmann)
+// - Allowed optional text display instead of a number (May 21th 2006 Martin G"uhmann)
 //
 //----------------------------------------------------------------------------
 
@@ -54,7 +54,7 @@ extern C3UI *g_c3ui;
 ctp2_Spinner::ctp2_Spinner(
 	AUI_ERRCODE *retval,
 	uint32 id,
-	MBCHAR *ldlBlock,
+	const MBCHAR *ldlBlock,
 	ControlActionCallback *ActionFunc,
 	void *cookie )
 	:

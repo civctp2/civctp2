@@ -196,18 +196,16 @@ int validateComm(void *_comm)
 -------------------------------------------------------------------------*/
 int cdecl					/* success boolean */
 commNoOp(
-	commNoOpReq_t* req,		/* ignored */
+	commNoOpReq_t* req __attribute__((unused)),
 	commNoOpResp_t* resp,	/* (output) status */
 	void *commPtr)
 {
-	comm_t *comm = (comm_t *) commPtr;
 	commNoOpResp_t	respDummy;
 
 	DPRINT(("commNoOp: uudps\n"));
 
 	/* Protect against invalid arguments */
-	assert(validateComm(comm));
-	(void) req;
+	assert(validateComm((comm_t *)commPtr));
 	if (NULL == resp)
 		resp = &respDummy;
 
@@ -339,7 +337,6 @@ commInit(
 	sockaddr_in sockAddr;
 	commInitResp_t respDummy;
 	addr_t addr;
-	uudps_peer2_t addr2;
 	u_short port;	/* in host byte ordering */
 	comm_t	*comm = (comm_t *) commPtr;
 
@@ -638,13 +635,12 @@ commTxFull(
 	commTxFullResp_t* resp,	/* */
 	void *commPtr)			/* comm context */
 {
-	comm_t	*comm = (comm_t *) commPtr;
 	commTxFullReq_t reqDummy;
 	commTxFullResp_t respDummy;
 
 	DPRINT(("commTxFull:\n"));
 
-	assert(validateComm(comm));
+	assert(validateComm((comm_t *)commPtr));
 
 	/* Protect against invalid arguments */
 	if (NULL == req)
@@ -966,7 +962,6 @@ commPrintAddr(
 	commPrintAddrResp_t* resp,  /* (output) status */
 	void *commPtr)				/* comm context */
 {
-	comm_t	*comm = (comm_t *) commPtr;
 	commPrintAddrResp_t respDummy;
 	char * strAddr;
 	char strPort[128];
@@ -975,7 +970,7 @@ commPrintAddr(
 	DPRINT(("@TCP commPrintAddr(): "));
 
 	/* Protect against invalid parameters */
-	assert(validateComm(comm));
+	assert(validateComm((comm_t *)commPtr));
 	assert(req != NULL);
 	if (NULL == resp)
 		resp = &respDummy;
@@ -1131,14 +1126,13 @@ commGroupAlloc(
 	commGroupAllocResp_t* resp,	/* */
 	void *commPtr)				/* comm context */
 {
-	comm_t	*comm = (comm_t *) commPtr;
 	commGroupAllocReq_t reqDummy;
 	commGroupAllocResp_t respDummy;
 
 	DPRINT(("commGroupAlloc:\n"));
 
 	/* Protect against invalid arguments */
-	assert(validateComm(comm));
+	assert(validateComm((comm_t *)commPtr));
 	if (NULL == req)
 		req = memset(&reqDummy, 0, sizeof(*req));
 	if (NULL == resp)
@@ -1161,14 +1155,13 @@ commGroupFree(
 	commGroupFreeResp_t* resp,	/* */
 	void *commPtr)				/* comm context */
 {
-	comm_t	*comm = (comm_t *) commPtr;
 	commGroupFreeReq_t reqDummy;
 	commGroupFreeResp_t respDummy;
 
 	DPRINT(("commGroupFree:\n"));
 
 	/* Protect against invalid arguments */
-	assert(validateComm(comm));
+	assert(validateComm((comm_t *)commPtr));
 	if (NULL == req)
 		req = memset(&reqDummy, 0, sizeof(*req));
 	if (NULL == resp)
@@ -1191,14 +1184,13 @@ commGroupAdd(
 	commGroupAddResp_t* resp,	/* */
 	void *commPtr)				/* comm context */
 {
-	comm_t	*comm = (comm_t *) commPtr;
 	commGroupAddReq_t reqDummy;
 	commGroupAddResp_t respDummy;
 
 	DPRINT(("commGroupAdd:\n"));
 
 	/* Protect against invalid arguments */
-	assert(validateComm(comm));
+	assert(validateComm((comm_t *)commPtr));
 	if (NULL == req)
 		req = memset(&reqDummy, 0, sizeof(*req));
 	if (NULL == resp)

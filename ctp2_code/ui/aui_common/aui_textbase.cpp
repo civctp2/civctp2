@@ -43,7 +43,7 @@ extern StringDB	*g_theStringDB;
 
 
 aui_TextBase::aui_TextBase(
-	MBCHAR *ldlBlock,
+	const MBCHAR *ldlBlock,
 	const MBCHAR *text )
 {
 	AUI_ERRCODE errcode = InitCommonLdl(
@@ -76,7 +76,7 @@ aui_TextBase::aui_TextBase(
 }
 
 
-AUI_ERRCODE aui_TextBase::InitCommonLdl( MBCHAR *ldlBlock, const MBCHAR *text )
+AUI_ERRCODE aui_TextBase::InitCommonLdl(const MBCHAR *ldlBlock, const MBCHAR *text)
 {
 	aui_Ldl *theLdl = g_ui->GetLdl();
 
@@ -125,14 +125,14 @@ AUI_ERRCODE aui_TextBase::InitCommonLdl( MBCHAR *ldlBlock, const MBCHAR *text )
 		shadowcolor = RGB( red, green, blue );
 	}
 
-	MBCHAR *fontname;
+	const MBCHAR *fontname;
 	fontname = block->GetString( k_AUI_TEXTBASE_LDL_FONTNAME );
 	if ( !fontname )
 		fontname = k_AUI_TEXTBASE_DEFAULT_FONTNAME;
 
 	uint32 flags = k_AUI_BITMAPFONT_DRAWFLAG_JUSTCENTER |
 		k_AUI_BITMAPFONT_DRAWFLAG_VERTCENTER;
-	MBCHAR *type = block->GetString( k_AUI_TEXTBASE_LDL_BLTTYPE );
+	const MBCHAR *type = block->GetString(k_AUI_TEXTBASE_LDL_BLTTYPE);
 	if ( type )
 	{
 		if ( !stricmp( type, k_AUI_TEXTBASE_LDL_FILL ) )
@@ -217,7 +217,7 @@ AUI_ERRCODE aui_TextBase::InitCommonLdl( MBCHAR *ldlBlock, const MBCHAR *text )
 AUI_ERRCODE aui_TextBase::InitCommon(
 	const MBCHAR *text,
 	uint32 maxLength,
-	MBCHAR *fontname,
+	const MBCHAR *fontname,
 	sint32 fontsize,
 	COLORREF color,
 	COLORREF shadowcolor,
@@ -307,7 +307,7 @@ AUI_ERRCODE aui_TextBase::SetText(
 	return AUI_ERRCODE_OK;
 }
 
-AUI_ERRCODE	aui_TextBase::SetText2(MBCHAR *fmt,...)
+AUI_ERRCODE	aui_TextBase::SetText2(const MBCHAR *fmt,...)
 {
 
 	Assert(fmt != NULL );
@@ -337,7 +337,7 @@ AUI_ERRCODE	aui_TextBase::SetText2(MBCHAR *fmt,...)
 
 
 
-AUI_ERRCODE aui_TextBase::AppendText( MBCHAR *text )
+AUI_ERRCODE aui_TextBase::AppendText(const MBCHAR *text)
 {
 	Assert( text != NULL );
 	if ( !text ) return AUI_ERRCODE_INVALIDPARAM;
@@ -351,7 +351,7 @@ AUI_ERRCODE aui_TextBase::AppendText( MBCHAR *text )
 }
 
 
-void aui_TextBase::SetTextFont( MBCHAR *ttffile )
+void aui_TextBase::SetTextFont(const MBCHAR *ttffile)
 {
 	if ( !ttffile ) return;
 	strncpy( m_textttffile, ttffile, MAX_PATH );
@@ -457,16 +457,16 @@ AUI_ERRCODE aui_TextBase::DrawThisText(
 }
 
 uint32 aui_TextBase::FindNextWordBreak(
-	MBCHAR *text, HDC hdc, sint32 width )
+	const MBCHAR *text, HDC hdc, sint32 width )
 {
 	Assert( text != NULL );
 	if ( !text ) return 0;
 
 	uint32 totalLength = 0;
-	sint32 totalSize = 0;
 #ifdef __AUI_USE_DIRECTX__
-	MBCHAR *token;
-	MBCHAR *word = text;
+	sint32 totalSize = 0;
+	const MBCHAR *token;
+	const MBCHAR *word = text;
 	while ( token = FindNextToken( word, " \t\n", 1 ) )
 	{
 		SIZE wordSize = { 0, 0 };
@@ -502,7 +502,7 @@ uint32 aui_TextBase::FindNextWordBreak(
 
 
 MBCHAR *aui_TextBase::FindNextToken(
-	MBCHAR *text, MBCHAR *tokenList, sint32 count )
+	const MBCHAR *text, const MBCHAR *tokenList, sint32 count )
 {
 	Assert( text != NULL );
 	if ( !text ) return NULL;
@@ -511,7 +511,7 @@ MBCHAR *aui_TextBase::FindNextToken(
 
 	MBCHAR *tokenPtr = NULL;
 
-	MBCHAR *charPtr = tokenList;
+	const MBCHAR *charPtr = tokenList;
 	for ( sint32 i = strlen( tokenList ); i; i-- )
 	{
 		MBCHAR *newTokenPtr = strchr( text, *charPtr++ );

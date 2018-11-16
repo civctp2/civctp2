@@ -653,8 +653,8 @@ public:
     void ShowCellOwners();
 #endif
 
-	BOOL ExportMap(MBCHAR *filename);
-	BOOL ImportMap(MBCHAR *filename);
+	BOOL ExportMap(const MBCHAR *filename);
+	BOOL ImportMap(const MBCHAR *filename);
 
 	void SmartSetTerrain(const MapPoint &pos, sint32 terr, sint32 radius);
 	void SmartSetOneCell(const MapPoint &pos, sint32 terr);

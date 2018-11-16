@@ -152,7 +152,6 @@ int assoctab_subscript_delete(assoctab_t *tab, int key)
 #if defined(assoctab_UNITTEST)
 
 #include <stdio.h>
-#include <malloc.h>		/* for _heapchk() */
 
 void test1(assoctab_t *pt, int callnum)
 {

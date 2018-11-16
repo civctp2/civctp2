@@ -773,94 +773,6 @@ AUI_ERRCODE AllinoneWindow::CreateControls( void )
 	if ( !AUI_NEWOK(control,errcode) ) return errcode;
 	m_controls[ CONTROL_WONDERSLISTBOX ] = control;
 
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
 	control = new aui_Button(
 		&errcode,
 		aui_UniqueId(),
@@ -1143,7 +1055,6 @@ AUI_ERRCODE AllinoneWindow::CreateControls( void )
 	if ( !AUI_SUCCESS(errcode) ) return AUI_ERRCODE_HACK;
 
 	sint32 numStyles = st.GetNumStrings();
-	ctp2_Static *label = NULL;
 	sint32 i;
 	for ( i = 0; i < numStyles; i++ )
 	{
@@ -1154,21 +1065,11 @@ AUI_ERRCODE AllinoneWindow::CreateControls( void )
 		Assert( AUI_NEWOK(item,errcode) );
 		if ( !AUI_NEWOK(item,errcode) ) return AUI_ERRCODE_MEMALLOCFAILED;
 
-
-
-
-
-
-
-
-
 		playstyleDropDown->AddItem( (ctp2_ListItem *)item );
-
 	}
 
 	aui_Switch *s = (aui_Switch *)m_controls[ CONTROL_PPTSWITCH ];
 	s->SetState( s->GetState() );
-
 
 	aui_Window *window = (aui_Window *)aui_Ldl::GetObject("ruleswindow");
 	ctp2_Button *button = (ctp2_Button *)aui_Ldl::GetObject("ruleswindow", "rulesokbutton");
@@ -1343,7 +1244,6 @@ AllinoneWindow::~AllinoneWindow()
 	g_allinoneWindow = NULL;
 }
 
-
 AUI_ERRCODE AllinoneWindow::DrawThis(
 	aui_Surface *surface,
 	sint32 x,
@@ -1351,25 +1251,8 @@ AUI_ERRCODE AllinoneWindow::DrawThis(
 {
 	AUI_ERRCODE err = ns_Window::DrawThis( surface, x, y );
 
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-	return AUI_ERRCODE_OK;
+	return err;
 }
-
 
 AUI_ERRCODE AllinoneWindow::CreateExclusions( void )
 {
@@ -1958,7 +1841,10 @@ sint32 AllinoneWindow::FindTribe( uint16 key, BOOL isAI, BOOL *isFemale )
 				uint16 curKey;
 				BOOL curIsAI;
 				BOOL curIsFemale;
-				BOOL success = WhoHasTribe( i, &curKey, &curIsAI, &curIsFemale );
+#ifdef _DEBUG
+				BOOL success =
+#endif
+				WhoHasTribe(i, &curKey, &curIsAI, &curIsFemale);
 				Assert( success );
 
 				if ( curKey == 0 )
@@ -2001,9 +1887,12 @@ sint32 AllinoneWindow::FindTribe( uint16 key, BOOL isAI, BOOL *isFemale )
 					uint16 curKey;
 					BOOL curIsAI;
 					BOOL curIsFemale;
-					BOOL success = WhoHasTribe( m_scenInfo.m_legalCivs[i] + 1,
-												&curKey, &curIsAI,
-												&curIsFemale );
+#ifdef _DEBUG
+					BOOL success =
+#endif
+					WhoHasTribe(m_scenInfo.m_legalCivs[i] + 1,
+							&curKey, &curIsAI,
+							&curIsFemale);
 					Assert(success);
 					if(curKey == 0) {
 						if(isFemale) *isFemale = curIsFemale;
@@ -2020,7 +1909,10 @@ sint32 AllinoneWindow::FindTribe( uint16 key, BOOL isAI, BOOL *isFemale )
 				uint16 curKey;
 				BOOL curIsAI;
 				BOOL curIsFemale;
-				BOOL success = WhoHasTribe( i, &curKey, &curIsAI, &curIsFemale );
+#ifdef _DEBUG
+				BOOL success =
+#endif
+				WhoHasTribe(i, &curKey, &curIsAI, &curIsFemale);
 				Assert( success );
 
 				if ( curKey == 0 )
@@ -2056,7 +1948,10 @@ BOOL AllinoneWindow::AssignTribe(
 	uint16 curKey;
 	BOOL curIsAI;
 	BOOL curIsFemale;
-	BOOL success = WhoHasTribe( index, &curKey, &curIsAI, &curIsFemale );
+#ifdef _DEBUG
+	BOOL success =
+#endif
+	WhoHasTribe(index, &curKey, &curIsAI, &curIsFemale);
 	Assert( success );
 
 	Assert( curKey == 0 || ( curKey == key && curIsAI == isAI ) );
@@ -2195,60 +2090,6 @@ void AllinoneWindow::RequestTribe( sint32 index )
 	if ( err != NETFunc::OK ) return;
 }
 
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
 BOOL AllinoneWindow::LoadGUIDs(SaveInfo *info)
 {
 	int res;
@@ -2336,7 +2177,7 @@ void AllinoneWindow::SetupNewScenario()
 	m_scenInfo.m_haveSavedGame = FALSE;
 	m_scenInfo.m_scenarioName[0] = 0;
 
-	int res = dpSetPlayerData(
+	dpSetPlayerData(
 		g_netfunc->GetDP(),
 		g_netfunc->GetPlayer()->GetId(),
 		k_SCENARIO_INFO_ID,
@@ -2450,7 +2291,10 @@ AUI_ERRCODE AllinoneWindow::Idle( void )
 				BOOL isFemale = FALSE;
 				sint32 tribeToGet = FindTribe( 0, TRUE, &isFemale );
 
-				BOOL success = AssignTribe(
+#ifdef _DEBUG
+				BOOL success =
+#endif
+				AssignTribe(
 					tribeToGet,
 					*(uint16 *)aiplayer.GetKey()->buf,
 					TRUE,
@@ -2463,8 +2307,10 @@ AUI_ERRCODE AllinoneWindow::Idle( void )
 
 				nf_AIPlayer aiplayer;
 				aiplayer.Set( m->GetBodySize(), m->GetBody() );
-
-				BOOL success = AssignTribe(
+#ifdef _DEBUG
+				BOOL success =
+#endif
+				AssignTribe(
 					0,
 					*(uint16 *)aiplayer.GetKey()->buf,
 					TRUE,
@@ -2498,14 +2344,18 @@ AUI_ERRCODE AllinoneWindow::Idle( void )
 					uint16 curKey;
 					BOOL curIsAI;
 					BOOL curIsFemale;
-					BOOL success = WhoHasTribe( index, &curKey, &curIsAI, &curIsFemale );
+#ifdef _DEBUG
+					BOOL success =
+#endif
+					WhoHasTribe(index, &curKey, &curIsAI, &curIsFemale);
 					Assert( success );
 
 					if ( curKey == 0 )
 					{
-
-
-						BOOL success = AssignTribe(
+#ifdef _DEBUG
+						BOOL success =
+#endif
+						AssignTribe(
 							index,
 							key,
 							FALSE,
@@ -2518,7 +2368,10 @@ AUI_ERRCODE AllinoneWindow::Idle( void )
 
 						sint32 curTribe = FindTribe( key, FALSE );
 
-						BOOL success = AssignTribe(
+#ifdef _DEBUG
+						BOOL success =
+#endif
+						AssignTribe(
 							curTribe,
 							key,
 							FALSE,
@@ -2528,8 +2381,10 @@ AUI_ERRCODE AllinoneWindow::Idle( void )
 
 						NETFunc::Message msg = NETFunc::Message(
 							(NETFunc::Message::Code)CUSTOMCODE_REQUESTDENIED );
-
-						NETFunc::STATUS err = g_netfunc->Send(
+#ifdef _DEBUG
+						NETFunc::STATUS err =
+#endif
+						g_netfunc->Send(
 							g_netfunc->GetDP(),
 							&msg,
 							m->GetSender() );
@@ -3130,18 +2985,14 @@ AUI_ERRCODE AllinoneWindow::Idle( void )
 
 		CreateExclusions();
 
-
-
-
 		g_playersetup.SetKey( g_netfunc->GetPlayer()->GetKey() );
 		if ( m_mode == CONTINUE_JOIN )
 		{
-
 			if ( m_receivedGuids )
 			{
 				sint32 i;
 
-				for(sint32 i = 0; i < k_MAX_PLAYERS; i++) {
+				for (i = 0; i < k_MAX_PLAYERS; i++) {
 					if(m_civGuids[i].guid == *g_network.GetGuid()) {
 						RequestTribe( m_civGuids[ i ].civIndex + 1 );
 						break;
@@ -3158,11 +3009,6 @@ AUI_ERRCODE AllinoneWindow::Idle( void )
 		}
 
 
-
-
-
-
-
 		UpdatePlayerButtons();
 
 
@@ -3174,10 +3020,6 @@ AUI_ERRCODE AllinoneWindow::Idle( void )
 	}
 
 	if(becameHost) {
-
-
-
-
 
 		nf_GameSetup *newGS = new nf_GameSetup( g_gamesetup );
 		if ( newGS )
@@ -3203,10 +3045,6 @@ AUI_ERRCODE AllinoneWindow::Idle( void )
 
 		g_netfunc->PushChatMessage(m_messageGameHost->GetString());
 
-
-
-
-
 		NETFunc::EnumPlayers(false, g_netfunc->GetSession()->GetKey());
 
 		((ns_GPlayerListBox *)FindControl( CONTROL_GPLAYERSLISTBOX ))->
@@ -3216,8 +3054,7 @@ AUI_ERRCODE AllinoneWindow::Idle( void )
 			SetKey(g_netfunc->GetSession()->GetKey());
 
 		NETFunc::EnumPlayers(true, g_netfunc->GetSession()->GetKey());
-		switch ( m_mode )
-		{
+		switch ( m_mode ) {
 		case JOIN: SetMode( CREATE ); break;
 		case CONTINUE_JOIN: SetMode( CONTINUE_CREATE ); break;
 		default: Assert( FALSE ); break;
@@ -3225,7 +3062,10 @@ AUI_ERRCODE AllinoneWindow::Idle( void )
 
 		if ( !FindTribe( *(uint16 *)g_playersetup.GetKey()->buf, FALSE ) )
 		{
-			BOOL success = AssignTribe(
+#ifdef _DEBUG
+			BOOL success =
+#endif
+			AssignTribe(
 				FindTribe( 0, FALSE ),
 				*(uint16 *)g_playersetup.GetKey()->buf,
 				FALSE,
@@ -3603,8 +3443,7 @@ void AllinoneWindow::UpdateConfig( void )
 	if ( index < 0 || index >= m_playStyleValueStrings->GetNumStrings() )
 		return;
 
-	MBCHAR *string = m_playStyleValueStrings->GetString( index );
-
+	const MBCHAR *string = m_playStyleValueStrings->GetString(index);
 
 	if ( strlen( string ) )
 	{
@@ -3644,7 +3483,6 @@ void AllinoneWindow::UpdateGameSetup(bool b)
 	}
 }
 
-
 void AllinoneWindow::ReallyUpdateGameSetup()
 {
 
@@ -3664,31 +3502,22 @@ void AllinoneWindow::ReallyUpdateGameSetup()
 	m_shouldUpdateGame = false;
 }
 
-
 void AllinoneWindow::UpdatePlayerSetup(void)
 {
 	m_shouldUpdatePlayer = true;
 
-	uint32 tickNow = GetTickCount();
+	g_playersetup.Update();
 
-	{
-		g_playersetup.Update();
+	ns_PlayerSetupListBox *l = (ns_PlayerSetupListBox *)
+	    ((ns_Window *)g_netshell->
+	    FindWindow( NetShell::WINDOW_PLAYERSELECT))->
+	    FindControl( PlayerSelectWindow::CONTROL_PLAYERNAMELISTBOX);
 
-		ns_PlayerSetupListBox *l = (ns_PlayerSetupListBox *)
-			((ns_Window *)g_netshell->
-			 FindWindow( NetShell::WINDOW_PLAYERSELECT ))->
-			FindControl( PlayerSelectWindow::CONTROL_PLAYERNAMELISTBOX );
+	if (l->FindItem( &g_playersetup))
+		l->ChangeItem( &g_playersetup);
 
-		if( l->FindItem( &g_playersetup ) )
-			l->ChangeItem( &g_playersetup );
-
-		m_shouldUpdatePlayer = false;
-	}
-
-
+	m_shouldUpdatePlayer = false;
 }
-
-
 
 void AllinoneWindow::UpdateAIPlayerSetup( nf_AIPlayer *aiplayer )
 {
@@ -4367,33 +4196,9 @@ void AllinoneWindow::OKButtonAction::Execute(
 	spnewgamediffscreen_setDifficulty2( g_gamesetup.GetDifficulty2() );
 
 
-
-
 	g_theProfileDB->SetGenocideRule(
 		((aui_Switch *)g_allinoneWindow->FindControl(
 			AllinoneWindow::CONTROL_BLOODLUSTSWITCH ))->GetState() );
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
 
 
 
@@ -4404,29 +4209,11 @@ void AllinoneWindow::OKButtonAction::Execute(
 
 
 
-
-
-
 	g_theProfileDB->SetPowerPoints(
 		((c3_EditButton *)g_allinoneWindow->FindControl(
 			AllinoneWindow::CONTROL_CIVPOINTSBUTTON ))->GetValue() );
 
-
-
-
-
-
-
-
-
-
-
-
-
-	NETFunc::STATUS status = g_netfunc->Launch();
-
-
-
+	g_netfunc->Launch();
 
 	g_playersetup.SetReadyToLaunch( true );
 	control->Enable( FALSE );
@@ -4510,18 +4297,18 @@ void AllinoneWindow_SetupGameForLaunch( void )
 
 			if(g_gamesetup.GetHandicapping()) {
 				g_network.SetNSPlayerInfo(nfPlayer->GetId(),
-										  nfPlayer->GetName(),
-										  tribe,
-										  playersetup.GetGroup(),
-										  playersetup.GetCivPoints(),
-										  playersetup.GetPwPoints());
+				    nfPlayer->GetName(),
+				    tribe,
+				    playersetup.GetGroup(),
+				    playersetup.GetCivPoints(),
+				    playersetup.GetPwPoints());
 			} else {
 				g_network.SetNSPlayerInfo(nfPlayer->GetId(),
-										  nfPlayer->GetName(),
-										  tribe,
-										  playersetup.GetGroup(),
-										  g_gamesetup.GetCivPoints(),
-										  g_gamesetup.GetPwPoints());
+				    nfPlayer->GetName(),
+				    tribe,
+				    playersetup.GetGroup(),
+				    g_gamesetup.GetCivPoints(),
+				    g_gamesetup.GetPwPoints());
 			}
 		}
 	}
@@ -4576,31 +4363,6 @@ void AllinoneWindow_SetupGameForLaunch( void )
 	}
 }
 
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
 void AllinoneWindow::RulesButtonAction::Execute(
 	aui_Control *control,
 	uint32 action,
@@ -4608,24 +4370,8 @@ void AllinoneWindow::RulesButtonAction::Execute(
 {
 	if ( action != (uint32)AUI_BUTTON_ACTION_EXECUTE ) return;
 
-	AllinoneWindow *w = g_allinoneWindow;
-
-
 	g_ui->AddWindow( g_rulesWindow );
-
-
-
-
-
-
-
-
-
-
-
-
 }
-
 
 void AllinoneWindow::ExclusionsButtonAction::Execute(
 	aui_Control *control,
@@ -4634,52 +4380,8 @@ void AllinoneWindow::ExclusionsButtonAction::Execute(
 {
 	if ( action != (uint32)AUI_BUTTON_ACTION_EXECUTE ) return;
 
-	AllinoneWindow *w = g_allinoneWindow;
-
-
 	g_ui->AddWindow( g_exclusionsWindow );
-
-
-
-
-
-
-
-
-
-
-
-
 }
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
 
 void AllinoneWindow::RulesOKButtonAction::Execute(
 	aui_Control *control,
@@ -4688,27 +4390,8 @@ void AllinoneWindow::RulesOKButtonAction::Execute(
 {
 	if ( action != (uint32)AUI_BUTTON_ACTION_EXECUTE ) return;
 
-	AllinoneWindow *w = g_allinoneWindow;
-
 	g_ui->RemoveWindow( g_rulesWindow->Id() );
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
 }
-
 
 void AllinoneWindow::ExclusionsOKButtonAction::Execute(
 	aui_Control *control,
@@ -4717,27 +4400,8 @@ void AllinoneWindow::ExclusionsOKButtonAction::Execute(
 {
 	if ( action != (uint32)AUI_BUTTON_ACTION_EXECUTE ) return;
 
-	AllinoneWindow *w = g_allinoneWindow;
-
 	g_ui->RemoveWindow( g_exclusionsWindow->Id() );
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
 }
-
 
 void AllinoneWindow::CancelButtonAction::Execute(
 	aui_Control *control,
@@ -4822,28 +4486,11 @@ void AllinoneWindow::SpitOutGameSetup( void )
 	static MBCHAR moreinfo[ biglen + 1 ];
 	static MBCHAR temp[ biglen + 1 ];
 
-
 	memset( info, 0, sizeof( info ) );
 
 	static ns_String customRules( "strings.customrules" );
 	strncat( info, customRules.GetString(), biglen );
 	strncat( info, "\n", biglen );
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
 
 
 
@@ -4922,8 +4569,6 @@ void AllinoneWindow::SpitOutGameSetup( void )
 	}
 
 
-
-
 	aui_Switch *sw = (aui_Switch *)m_controls[ CONTROL_DYNAMICJOINSWITCH ];
 	if ( sw->GetState() )
 	{
@@ -4932,24 +4577,6 @@ void AllinoneWindow::SpitOutGameSetup( void )
 		strncat( info, "\n", biglen );
 		displayedSomething = true;
 	}
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
 
 	sw = (aui_Switch *)m_controls[ CONTROL_HANDICAPPINGSWITCH ];
 	if ( sw->GetState() )
@@ -4976,23 +4603,11 @@ void AllinoneWindow::SpitOutGameSetup( void )
 				strncat( info, "\n", biglen );
 			}
 
-
-
-
-
-
-
-
-
-
-
-
 			displayedSomething = true;
 		}
 		r = (c3_EditButton *)m_controls[ CONTROL_PWPOINTSBUTTON ];
 		if ( r->GetValue() > r->GetMinimum() )
 		{
-
 			{
 				static ns_String pwInfo( "strings.pwinfo" );
 				sprintf(
@@ -5004,29 +4619,9 @@ void AllinoneWindow::SpitOutGameSetup( void )
 				strncat( info, "\n", biglen );
 			}
 
-
-
-
-
-
-
-
-
-
-
-
 			displayedSomething = true;
 		}
 	}
-
-
-
-
-
-
-
-
-
 
 	sw = (aui_Switch *)m_controls[ CONTROL_BLOODLUSTSWITCH ];
 	if ( sw->GetState() )
@@ -5037,36 +4632,6 @@ void AllinoneWindow::SpitOutGameSetup( void )
 		displayedSomething = true;
 	}
 
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
 	sw = (aui_Switch *)m_controls[ CONTROL_POLLUTIONSWITCH ];
 	if ( !sw->GetState() )
 	{
@@ -5075,9 +4640,6 @@ void AllinoneWindow::SpitOutGameSetup( void )
 		strncat( info, "\n", biglen );
 		displayedSomething = true;
 	}
-
-
-
 
 	{
 		displayedSomething = true;
@@ -5192,20 +4754,15 @@ void AllinoneWindow::SpitOutGameSetup( void )
 		strncat( info, "\n", biglen );
 	}
 
-
 	if ( len > 2 )
 	{
 		moreinfo[ len - 2 ] = '\0';
 	}
 
-
-
-
 	static aui_TextBase textStyle( "styles.system", (MBCHAR *)NULL );
 	((ns_ChatBox *)m_controls[ CONTROL_CHATBOX ])->
 		AppendText( info, textStyle.GetTextColor(), FALSE, FALSE );
 }
-
 
 void AllinoneWindow::DialogBoxPopDownAction::Execute(
 	aui_Control *control,
@@ -5226,62 +4783,12 @@ void AllinoneWindow::DialogBoxPopDownAction::Execute(
 	w->Update();
 }
 
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
 void AllinoneWindow::PlayStyleDropDownAction::Execute(
 	aui_Control *control,
 	uint32 action,
 	uint32 data )
 {
 	if ( action != (uint32)AUI_DROPDOWN_ACTION_SELECT ) return;
-
 
 	AllinoneWindow *w = g_allinoneWindow;
 	if ( !w ) return;
@@ -5290,47 +4797,18 @@ void AllinoneWindow::PlayStyleDropDownAction::Execute(
 	sint32 index = dropdown->GetListBox()->GetSelectedItemIndex();
 	if ( index >= 0 )
 	{
-
 		w->UpdateConfig();
 
-
-		if ( g_gamesetup.GetPlayStyle() != index )
+		if (g_gamesetup.GetPlayStyle() != index) {
 			((ctp2_Spinner *)w->FindControl(
 				AllinoneWindow::CONTROL_PLAYSTYLEVALUESPINNER ))->
 					SetValue( 0, 0 );
-
-		{
-			g_gamesetup.SetPlayStyle( index );
-			w->UpdateGameSetup(true);
 		}
+
+		g_gamesetup.SetPlayStyle( index );
+		w->UpdateGameSetup(true);
 	}
 }
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
 
 void AllinoneWindow::PlayStyleValueSpinnerCallback(aui_Control *control, uint32 action, uint32 data, void *cookie)
 {
@@ -5354,7 +4832,6 @@ void AllinoneWindow::PlayStyleValueSpinnerCallback(aui_Control *control, uint32 
 	inCallback = false;
 }
 
-
 void AllinoneWindow::DynamicJoinSwitchAction::Execute(
 	aui_Control *control,
 	uint32 action,
@@ -5363,81 +4840,14 @@ void AllinoneWindow::DynamicJoinSwitchAction::Execute(
 	if ( action != (uint32)AUI_SWITCH_ACTION_ON
 	&&   action != (uint32)AUI_SWITCH_ACTION_OFF ) return;
 
-
 	AllinoneWindow *w = g_allinoneWindow;
 	if ( !w ) return;
 
-	BOOL join = ((aui_Switch *)control)->GetState();
+	char join = ((aui_Switch *)control)->GetState();
 
-	{
-		g_gamesetup.SetDynamicJoin( (char)join );
-		w->UpdateGameSetup();
-	}
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
+	g_gamesetup.SetDynamicJoin(join);
+	w->UpdateGameSetup();
 }
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
 
 void AllinoneWindow::HandicappingSwitchAction::Execute(
 	aui_Control *control,
@@ -5447,7 +4857,6 @@ void AllinoneWindow::HandicappingSwitchAction::Execute(
 	if ( action != (uint32)AUI_SWITCH_ACTION_ON
 	&&   action != (uint32)AUI_SWITCH_ACTION_OFF ) return;
 
-
 	AllinoneWindow *w = g_allinoneWindow;
 	if ( !w ) return;
 
@@ -5455,7 +4864,7 @@ void AllinoneWindow::HandicappingSwitchAction::Execute(
 
 	w->UpdateConfig();
 
-		g_gamesetup.SetHandicapping(static_cast<char>(hand));
+	g_gamesetup.SetHandicapping(static_cast<char>(hand));
 
 	if ( !g_gamesetup.GetHandicapping() )
 	{
@@ -5484,105 +4893,17 @@ void AllinoneWindow::HandicappingSwitchAction::Execute(
 		}
 	}
 
-		w->UpdateGameSetup(true);
+	w->UpdateGameSetup(true);
 }
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
 
 void AllinoneWindow::BloodlustSwitchAction::Execute(
 	aui_Control *control,
 	uint32 action,
 	uint32 data )
 {
-	if ( action != (uint32)AUI_SWITCH_ACTION_ON
-	&&   action != (uint32)AUI_SWITCH_ACTION_OFF ) return;
-
+	if (action != (uint32)AUI_SWITCH_ACTION_ON &&
+	    action != (uint32)AUI_SWITCH_ACTION_OFF)
+		return;
 
 	AllinoneWindow *w = g_allinoneWindow;
 	if ( !w ) return;
@@ -5595,114 +4916,23 @@ void AllinoneWindow::BloodlustSwitchAction::Execute(
 	}
 }
 
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
 void AllinoneWindow::PollutionSwitchAction::Execute(
 	aui_Control *control,
 	uint32 action,
 	uint32 data )
 {
-	if ( action != (uint32)AUI_SWITCH_ACTION_ON
-	&&   action != (uint32)AUI_SWITCH_ACTION_OFF ) return;
-
+	if (action != (uint32)AUI_SWITCH_ACTION_ON &&
+	    action != (uint32)AUI_SWITCH_ACTION_OFF )
+		return;
 
 	AllinoneWindow *w = g_allinoneWindow;
 	if ( !w ) return;
 
 	sint32 poll = ((aui_Switch *)control)->GetState();
 
-	{
-		g_gamesetup.SetPollution(static_cast<char>(poll));
-		w->UpdateGameSetup(true);
-	}
+	g_gamesetup.SetPollution(static_cast<char>(poll));
+	w->UpdateGameSetup(true);
 }
-
 
 void AllinoneWindow::CivPointsButtonAction::Execute(
 	aui_Control *control,
@@ -5711,13 +4941,11 @@ void AllinoneWindow::CivPointsButtonAction::Execute(
 {
 	if ( action != (uint32)AUI_BUTTON_ACTION_EXECUTE ) return;
 
-
 	AllinoneWindow *w = g_allinoneWindow;
 	if ( !w ) return;
 
 	sint32 value = ((c3_EditButton *)control)->GetValue();
-
-		g_gamesetup.SetCivPoints( value );
+	g_gamesetup.SetCivPoints( value );
 
 	if ( !g_gamesetup.GetHandicapping() )
 	{
@@ -5744,7 +4972,7 @@ void AllinoneWindow::CivPointsButtonAction::Execute(
 		}
 	}
 
-		w->UpdateGameSetup(true);
+	w->UpdateGameSetup(true);
 }
 
 void AllinoneWindow::PwPointsButtonAction::Execute(
@@ -5754,13 +4982,11 @@ void AllinoneWindow::PwPointsButtonAction::Execute(
 {
 	if ( action != (uint32)AUI_BUTTON_ACTION_EXECUTE ) return;
 
-
 	AllinoneWindow *w = g_allinoneWindow;
 	if ( !w ) return;
 
 	sint32 value = ((c3_EditButton *)control)->GetValue();
-
-		g_gamesetup.SetPwPoints( value );
+	g_gamesetup.SetPwPoints( value );
 
 	if ( !g_gamesetup.GetHandicapping() )
 	{
@@ -5787,76 +5013,8 @@ void AllinoneWindow::PwPointsButtonAction::Execute(
 		}
 	}
 
-		w->UpdateGameSetup(true);
+	w->UpdateGameSetup(true);
 }
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
 
 void AllinoneWindow::AgesButtonAction::Execute(
 	aui_Control *control,
@@ -5874,7 +5032,6 @@ void AllinoneWindow::AgesButtonAction::Execute(
 		( g_netfunc->IsHost() && g_playersetup.IsReadyToLaunch() ) );
 }
 
-
 void AllinoneAgesCallback(
 	aui_Control *control,
 	uint32 action,
@@ -5888,7 +5045,6 @@ void AllinoneAgesCallback(
 
 	agesscreen_removeMyWindow( action );
 
-
 	if ( w->GetMode() == w->CREATE )
 	{
 		g_gamesetup.SetStartAge(static_cast<char>(agesscreen_getStartAge()));
@@ -5896,7 +5052,6 @@ void AllinoneAgesCallback(
 		w->UpdateGameSetup(true);
 	}
 }
-
 
 void AllinoneWindow::MapSizeButtonAction::Execute(
 	aui_Control *control,
@@ -5915,7 +5070,6 @@ void AllinoneWindow::MapSizeButtonAction::Execute(
 		0 );
 }
 
-
 void AllinoneWindow::WorldShapeButtonAction::Execute(
 	aui_Control *control,
 	uint32 action,
@@ -5925,7 +5079,6 @@ void AllinoneWindow::WorldShapeButtonAction::Execute(
 
 	AllinoneWindow *w = g_allinoneWindow;
 
-
 	spnewgamemapshapescreen_displayMyWindow(
 		w->GetMode() == JOIN ||
 		w->GetMode() == CONTINUE_CREATE ||
@@ -5933,7 +5086,6 @@ void AllinoneWindow::WorldShapeButtonAction::Execute(
 		( g_netfunc->IsHost() && g_playersetup.IsReadyToLaunch() ) );
 
 }
-
 
 void AllinoneMapSizeCallback(
 	aui_Control *control,
@@ -5948,14 +5100,12 @@ void AllinoneMapSizeCallback(
 
 	spnewgamemapsizescreen_removeMyWindow( action );
 
-
 	if ( w->GetMode() == w->CREATE )
 	{
 		g_gamesetup.SetMapSize(static_cast<char>(spnewgamemapsizescreen_getMapSizeIndex()));
 		w->UpdateGameSetup(true);
 	}
 }
-
 
 void AllinoneWorldShapeCallback(
 	aui_Control *control,
@@ -5970,7 +5120,6 @@ void AllinoneWorldShapeCallback(
 
 	spnewgamemapshapescreen_removeMyWindow( action );
 
-
 	if ( w->GetMode() == w->CREATE )
 	{
 
@@ -5979,7 +5128,6 @@ void AllinoneWorldShapeCallback(
 		w->UpdateGameSetup(true);
 	}
 }
-
 
 void AllinoneTribeCallback(
 	aui_Control *control,
@@ -5998,9 +5146,6 @@ void AllinoneTribeCallback(
 		action,
 		item->IsAI() ? NULL : w->m_lname );
 
-
-
-
 	sint32 index = spnewgametribescreen_getTribeIndex() + 1;
 	if ( index < 0 ) index = 0;
 
@@ -6009,7 +5154,6 @@ void AllinoneTribeCallback(
 	uint16 key = ( item->IsAI() ?
 		*(uint16 *)item->GetAIPlayer()->GetKey()->buf :
 		*(uint16 *)item->GetPlayer()->GetKey()->buf );
-
 
 	if ( g_netfunc->IsHost() && index == 0 )
 	{
@@ -6027,36 +5171,28 @@ void AllinoneTribeCallback(
 	{
 		if ( g_netfunc->IsHost() )
 		{
-			nf_AIPlayer *aiplayer = item->GetAIPlayer();
-
 			uint16 curKey;
 			BOOL curIsAI;
 			BOOL curIsFemale;
-			BOOL success = w->WhoHasTribe( index, &curKey, &curIsAI, &curIsFemale );
+#ifdef _DEBUG
+			BOOL success =
+#endif
+			w->WhoHasTribe(index, &curKey, &curIsAI, &curIsFemale);
 			Assert( success );
 
 			if ( curKey == 0 || curKey == key )
 			{
-
-				BOOL success = w->AssignTribe(
+#ifdef _DEBUG
+				BOOL success =
+#endif
+				w->AssignTribe(
 					index,
 					key,
 					TRUE,
 					s_maleRadio ? !s_maleRadio->GetState() : FALSE,
-					FALSE );
+					FALSE);
 				Assert( success );
 			}
-			else
-			{
-
-			}
-
-
-
-
-
-
-
 
 			spnewgametribescreen_setTribeIndex(
 				g_playersetup.GetTribe() - 1,
@@ -6080,13 +5216,18 @@ void AllinoneTribeCallback(
 				uint16 curKey;
 				BOOL curIsAI;
 				BOOL curIsFemale;
-				BOOL success = w->WhoHasTribe( index, &curKey, &curIsAI, &curIsFemale );
+#ifdef _DEBUG
+				BOOL success =
+#endif
+				w->WhoHasTribe(index, &curKey, &curIsAI, &curIsFemale);
 				Assert( success );
 
 				if ( curKey == 0 )
 				{
-
-					BOOL success = w->AssignTribe(
+#ifdef _DEBUG
+					BOOL success =
+#endif
+					w->AssignTribe(
 						index,
 						key,
 						FALSE,
@@ -6094,11 +5235,7 @@ void AllinoneTribeCallback(
 						FALSE );
 					Assert( success );
 				}
-				else if ( curKey != key )
-				{
-
-				}
-				else
+				else if ( curKey == key )
 				{
 
 					Assert( curIsAI == FALSE );
@@ -6107,7 +5244,6 @@ void AllinoneTribeCallback(
 		}
 	}
 }
-
 
 void AllinoneWindow::WorldTypeButtonAction::Execute(
 	aui_Control *control,
@@ -6125,7 +5261,6 @@ void AllinoneWindow::WorldTypeButtonAction::Execute(
 		( g_netfunc->IsHost() && g_playersetup.IsReadyToLaunch() ) );
 }
 
-
 void AllinoneWorldTypeCallback(
 	aui_Control *control,
 	uint32 action,
@@ -6138,7 +5273,6 @@ void AllinoneWorldTypeCallback(
 	if ( !w ) return;
 
 	custommapscreen_removeMyWindow( action );
-
 
 	if ( w->GetMode() == w->CREATE )
 	{
@@ -6153,7 +5287,6 @@ void AllinoneWorldTypeCallback(
 		w->UpdateGameSetup(true);
 	}
 }
-
 
 void AllinoneWindow::DifficultyButtonAction::Execute(
 	aui_Control *control,
@@ -6171,7 +5304,6 @@ void AllinoneWindow::DifficultyButtonAction::Execute(
 		( g_netfunc->IsHost() && g_playersetup.IsReadyToLaunch() ) );
 }
 
-
 void AllinoneDifficultyCallback(
 	aui_Control *control,
 	uint32 action,
@@ -6184,7 +5316,6 @@ void AllinoneDifficultyCallback(
 	if ( !w ) return;
 
 	spnewgamediffscreen_removeMyWindow( action );
-
 
 	if ( w->GetMode() == w->CREATE )
 	{
@@ -6200,14 +5331,14 @@ void AllinoneWindow::UnitExclusionAction::Execute(
 	uint32 action,
 	uint32 data )
 {
-	if ( action != (uint32)AUI_SWITCH_ACTION_ON
-	&&   action != (uint32)AUI_SWITCH_ACTION_OFF ) return;
-
+	if (action != (uint32)AUI_SWITCH_ACTION_ON &&
+	    action != (uint32)AUI_SWITCH_ACTION_OFF)
+		return;
 
 	if(!g_netfunc)
 		return;
 
-	if ( g_netfunc->IsHost() )
+	if (g_netfunc->IsHost())
 	{
 		AllinoneWindow *w = g_allinoneWindow;
 		if ( !w ) return;
@@ -6216,26 +5347,22 @@ void AllinoneWindow::UnitExclusionAction::Execute(
 
 		if(!sw) return;
 
+		if (g_exclusions)
+			g_exclusions->ExcludeUnit( m_index, sw->GetState());
 
-		if(g_exclusions)
-			g_exclusions->ExcludeUnit( m_index, sw->GetState() );
-
-		{
-			g_gamesetup.SetUnit( (char)sw->GetState(), m_index );
-			w->UpdateGameSetup(true);
-		}
+		g_gamesetup.SetUnit( (char)sw->GetState(), m_index );
+		w->UpdateGameSetup(true);
 	}
 }
-
 
 void AllinoneWindow::ImprovementExclusionAction::Execute(
 	aui_Control *control,
 	uint32 action,
 	uint32 data )
 {
-	if ( action != (uint32)AUI_SWITCH_ACTION_ON
-	&&   action != (uint32)AUI_SWITCH_ACTION_OFF ) return;
-
+	if (action != (uint32)AUI_SWITCH_ACTION_ON &&
+	    action != (uint32)AUI_SWITCH_ACTION_OFF)
+		return;
 
 	if ( g_netfunc->IsHost() )
 	{
@@ -6246,22 +5373,19 @@ void AllinoneWindow::ImprovementExclusionAction::Execute(
 
 		g_exclusions->ExcludeBuilding( m_index, sw->GetState() );
 
-		{
-			g_gamesetup.SetImprovement( (char)sw->GetState(), m_index );
-			w->UpdateGameSetup(true);
-		}
+		g_gamesetup.SetImprovement( (char)sw->GetState(), m_index );
+		w->UpdateGameSetup(true);
 	}
 }
-
 
 void AllinoneWindow::WonderExclusionAction::Execute(
 	aui_Control *control,
 	uint32 action,
 	uint32 data )
 {
-	if ( action != (uint32)AUI_SWITCH_ACTION_ON
-	&&   action != (uint32)AUI_SWITCH_ACTION_OFF ) return;
-
+	if (action != (uint32)AUI_SWITCH_ACTION_ON &&
+	    action != (uint32)AUI_SWITCH_ACTION_OFF)
+		return;
 
 	if ( g_netfunc->IsHost() )
 	{
@@ -6272,22 +5396,19 @@ void AllinoneWindow::WonderExclusionAction::Execute(
 
 		g_exclusions->ExcludeWonder( m_index, sw->GetState() );
 
-		{
-			g_gamesetup.SetWonder( (char)sw->GetState(), m_index );
-			w->UpdateGameSetup(true);
-		}
+		g_gamesetup.SetWonder( (char)sw->GetState(), m_index );
+		w->UpdateGameSetup(true);
 	}
 }
-
 
 void AllinoneWindow::LockSwitchAction::Execute(
 	aui_Control *control,
 	uint32 action,
 	uint32 data )
 {
-	if ( action != (uint32)AUI_SWITCH_ACTION_ON
-	&&   action != (uint32)AUI_SWITCH_ACTION_OFF ) return;
-
+	if (action != (uint32)AUI_SWITCH_ACTION_ON &&
+	    action != (uint32)AUI_SWITCH_ACTION_OFF)
+		return;
 
 	AllinoneWindow *w = g_allinoneWindow;
 	if ( !w ) return;
@@ -6298,7 +5419,6 @@ void AllinoneWindow::LockSwitchAction::Execute(
 	{
 		if ( !g_gamesetup.IsClosed() )
 		{
-
 			g_gamesetup.SetSize(static_cast<char>(w->CurNumHumanPlayers()));
 			dpEnableNewPlayers(g_netfunc->GetDP(), 0);
 			g_gamesetup.SetClosed( true );
@@ -6309,7 +5429,6 @@ void AllinoneWindow::LockSwitchAction::Execute(
 	{
 		if ( g_gamesetup.IsClosed() )
 		{
-
 			sint32 newMaxNumHumans = k_NS_MAX_PLAYERS - w->CurNumAiPlayers();
 			if ( newMaxNumHumans > k_NS_MAX_HUMANS )
 				newMaxNumHumans = k_NS_MAX_HUMANS;
@@ -6321,7 +5440,6 @@ void AllinoneWindow::LockSwitchAction::Execute(
 	}
 }
 
-
 void AllinoneWindow::AddAIButtonAction::Execute(
 	aui_Control *control,
 	uint32 action,
@@ -6329,80 +5447,10 @@ void AllinoneWindow::AddAIButtonAction::Execute(
 {
 	if ( action != (uint32)AUI_BUTTON_ACTION_EXECUTE ) return;
 
-
 	AllinoneWindow *w = g_allinoneWindow;
 
 	w->AddAIPlayer();
 }
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
 
 void TribesButtonCallback(
 	aui_Control *control,
@@ -6435,109 +5483,6 @@ void TribesButtonCallback(
 		!item->IsAI() );
 }
 
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
 void CivPointsButtonCallback(
 	aui_Control *control,
 	uint32 action,
@@ -6548,22 +5493,16 @@ void CivPointsButtonCallback(
 
 	if ( action != (uint32)AUI_BUTTON_ACTION_EXECUTE ) return;
 
-
 	c3_EditButton *button = (c3_EditButton *)control;
 	sint32 value = button->GetValue();
 
 	AllinoneWindow *w = g_allinoneWindow;
 	if ( !w ) return;
-	ns_HPlayerListBox *hplistbox = (ns_HPlayerListBox *)w->
-		FindControl( w->CONTROL_HPLAYERSLISTBOX );
 
 	ns_HPlayerItem *item = (ns_HPlayerItem *)cookie;
 
 	if ( item->IsAI() )
 	{
-		ns_AIPlayerListBox *aiplistbox = (ns_AIPlayerListBox *)
-			w->FindControl( AllinoneWindow::CONTROL_AIPLAYERSLISTBOX );
-
 		if ( g_netfunc->IsHost() )
 		{
 			nf_AIPlayer *aiplayer = item->GetAIPlayer();
@@ -6590,7 +5529,6 @@ void CivPointsButtonCallback(
 	}
 }
 
-
 void PwPointsButtonCallback(
 	aui_Control *control,
 	uint32 action,
@@ -6599,22 +5537,16 @@ void PwPointsButtonCallback(
 {
 	if ( action != (uint32)AUI_BUTTON_ACTION_EXECUTE ) return;
 
-
 	c3_EditButton *button = (c3_EditButton *)control;
 	sint32 value = button->GetValue();
 
 	AllinoneWindow *w = g_allinoneWindow;
 	if ( !w ) return;
-	ns_HPlayerListBox *hplistbox = (ns_HPlayerListBox *)w->
-		FindControl( w->CONTROL_HPLAYERSLISTBOX );
 
 	ns_HPlayerItem *item = (ns_HPlayerItem *)cookie;
 
 	if ( item->IsAI() )
 	{
-		ns_AIPlayerListBox *aiplistbox = (ns_AIPlayerListBox *)
-			w->FindControl( AllinoneWindow::CONTROL_AIPLAYERSLISTBOX );
-
 		if ( g_netfunc->IsHost() )
 		{
 			nf_AIPlayer *aiplayer = item->GetAIPlayer();

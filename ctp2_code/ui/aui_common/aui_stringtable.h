@@ -22,7 +22,7 @@ public:
 
 	aui_StringTable(
 		AUI_ERRCODE *retval,
-		MBCHAR *ldlBlock );
+		const MBCHAR *ldlBlock );
 	aui_StringTable(
 		AUI_ERRCODE *retval,
 		sint32 numStrings = 0 );
@@ -30,7 +30,7 @@ public:
 
 protected:
 	aui_StringTable() {}
-	AUI_ERRCODE InitCommonLdl( MBCHAR *ldlBlock );
+	AUI_ERRCODE InitCommonLdl(const MBCHAR *ldlBlock);
 	AUI_ERRCODE InitCommon( sint32 numStrings );
 	sint32		FindNumStringsFromLdl( ldl_datablock *block );
 
@@ -38,7 +38,7 @@ public:
 	sint32	GetNumStrings( void ) const { return m_numStrings; }
 	sint32	SetNumStrings( sint32 numStrings );
 
-	MBCHAR		*GetString( sint32 index );
+	const MBCHAR	*GetString( sint32 index );
 	AUI_ERRCODE	SetString( const MBCHAR *text, sint32 index );
 
 protected:

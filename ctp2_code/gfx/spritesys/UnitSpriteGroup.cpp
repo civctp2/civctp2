@@ -230,7 +230,7 @@ void UnitSpriteGroup::RunBenchmark(aui_Surface *surf)
 exit(0);
 }
 
-void UnitSpriteGroup::LoadBasic(MBCHAR *filename)
+void UnitSpriteGroup::LoadBasic(const char *filename)
 {
 	SpriteFile		*file = new SpriteFile(filename);
 	SPRITEFILETYPE	type;
@@ -247,7 +247,7 @@ void UnitSpriteGroup::LoadBasic(MBCHAR *filename)
 
 
 
-void UnitSpriteGroup::LoadIndexed(MBCHAR *filename,GAME_ACTION index)
+void UnitSpriteGroup::LoadIndexed(const char *filename,GAME_ACTION index)
 {
 	SpriteFile		*file = new SpriteFile(filename);
 	SPRITEFILETYPE	type;
@@ -262,7 +262,7 @@ void UnitSpriteGroup::LoadIndexed(MBCHAR *filename,GAME_ACTION index)
 }
 
 
-void UnitSpriteGroup::LoadFull(MBCHAR *filename)
+void UnitSpriteGroup::LoadFull(const char *filename)
 {
 	SpriteFile		*file = new SpriteFile(filename);
 	SPRITEFILETYPE	type;
@@ -276,7 +276,7 @@ void UnitSpriteGroup::LoadFull(MBCHAR *filename)
 	delete file;
 }
 
-void UnitSpriteGroup::Save(MBCHAR *filename,unsigned version_id,unsigned compression_mode)
+void UnitSpriteGroup::Save(const char *filename,unsigned version_id,unsigned compression_mode)
 {
 	SpriteFile *file = new SpriteFile(filename);
 	if (SPRITEFILEERR_OK ==
@@ -301,11 +301,11 @@ void UnitSpriteGroup::Save(MBCHAR *filename,unsigned version_id,unsigned compres
 
 
 
-void UnitSpriteGroup::DrawText(sint32 x, sint32 y, char *s)
+void UnitSpriteGroup::DrawText(sint32 x, sint32 y, const char *s)
 {
 #ifndef __MAKESPR__
-	primitives_DrawText(g_screenManager->GetSurface(), x+1, y+1, (MBCHAR *)s, g_colorSet->GetColorRef(COLOR_BLACK), 1);
-	primitives_DrawText(g_screenManager->GetSurface(), x, y, (MBCHAR *)s, g_colorSet->GetColorRef(COLOR_WHITE), 1);
+	primitives_DrawText(g_screenManager->GetSurface(), x+1, y+1, s, g_colorSet->GetColorRef(COLOR_BLACK), 1);
+	primitives_DrawText(g_screenManager->GetSurface(), x, y, s, g_colorSet->GetColorRef(COLOR_WHITE), 1);
 #endif
 }
 
@@ -320,7 +320,7 @@ void UnitSpriteGroup::DrawText(sint32 x, sint32 y, char *s)
 
 
 bool
-UnitSpriteGroup::GetImageFileName(char *name,char *format,...)
+UnitSpriteGroup::GetImageFileName(char *name, const char *format,...)
 {
    	va_list          v_args;
 	char			 fname[512];
@@ -438,7 +438,7 @@ sint32 UnitSpriteGroup::Parse(uint16 id, GROUPTYPE type)
 
 		m_sprites[UNITACTION_MOVE] = (Sprite *)moveSprite;
 		printf("]\n");
-                printf("%s L%d: Assigned m_sprites[UNITACTION_MOVE]= %#X!\n", __FILE__, __LINE__, m_sprites[UNITACTION_MOVE]);
+                printf("%s L%d: Assigned m_sprites[UNITACTION_MOVE]= %p!\n", __FILE__, __LINE__, m_sprites[UNITACTION_MOVE]);
 		Anim *moveAnim = new Anim;
 
 		moveAnim->ParseFromTokens(theToken);
@@ -763,7 +763,7 @@ UnitSpriteGroup::SetHotPoint(UNITACTION action, sint32 facing,POINT pt)
 
 
 
-void UnitSpriteGroup::ExportScript(MBCHAR *name)
+void UnitSpriteGroup::ExportScript(const char *name)
 {
 	FILE				*file;
 	sint32				i;

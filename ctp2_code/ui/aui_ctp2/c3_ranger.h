@@ -19,7 +19,7 @@ public:
 	c3_Ranger(
 		AUI_ERRCODE *retval,
 		uint32 id,
-		MBCHAR *ldlBlock,
+		const MBCHAR *ldlBlock,
 		ControlActionCallback *ActionFunc = NULL,
 		void *cookie = NULL );
 	c3_Ranger(
@@ -31,16 +31,16 @@ public:
 		sint32 height,
 		AUI_RANGER_TYPE type,
 		AUI_RANGER_ORIENTATION orientation,
-		MBCHAR *pattern,
+		const MBCHAR *pattern,
 		ControlActionCallback *ActionFunc = NULL,
 		void *cookie = NULL );
 	virtual ~c3_Ranger();
 
 protected:
 	c3_Ranger() : aui_Ranger() {}
-	AUI_ERRCODE InitCommonLdl( MBCHAR *ldlBlock );
+	AUI_ERRCODE InitCommonLdl(const MBCHAR *ldlBlock);
 	AUI_ERRCODE InitCommon( void );
-	AUI_ERRCODE CreateButtonsAndThumb( MBCHAR *ldlBlock );
+	AUI_ERRCODE CreateButtonsAndThumb(const MBCHAR *ldlBlock);
 
 public:
 	virtual AUI_ERRCODE DrawThis(

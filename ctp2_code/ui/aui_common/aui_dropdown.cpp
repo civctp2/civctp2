@@ -46,7 +46,7 @@
 aui_DropDown::aui_DropDown(
 	AUI_ERRCODE *retval,
 	uint32 id,
-	MBCHAR *ldlBlock,
+	const MBCHAR *ldlBlock,
 	ControlActionCallback *ActionFunc,
 	void *cookie )
 	:
@@ -96,7 +96,7 @@ aui_DropDown::aui_DropDown(
 }
 
 
-AUI_ERRCODE aui_DropDown::InitCommonLdl( MBCHAR *ldlBlock )
+AUI_ERRCODE aui_DropDown::InitCommonLdl(const MBCHAR *ldlBlock)
 {
 	aui_Ldl *theLdl = g_ui->GetLdl();
 
@@ -138,7 +138,7 @@ AUI_ERRCODE aui_DropDown::InitCommon( sint32 buttonSize, sint32 windowSize )
 }
 
 
-AUI_ERRCODE aui_DropDown::CreateComponents( MBCHAR *ldlBlock )
+AUI_ERRCODE aui_DropDown::CreateComponents(const MBCHAR *ldlBlock)
 {
 	AUI_ERRCODE errcode = AUI_ERRCODE_OK;
 

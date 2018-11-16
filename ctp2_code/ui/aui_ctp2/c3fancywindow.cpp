@@ -50,7 +50,7 @@ extern C3UI						*g_c3ui;
 C3FancyWindow::C3FancyWindow(
 	AUI_ERRCODE *retval,
 	uint32 id,
-	MBCHAR *ldlBlock,
+	const MBCHAR *ldlBlock,
 	sint32 bpp,
 	MBCHAR ldlBorder[k_NUM_BORDERS][ k_AUI_LDL_MAXBLOCK + 1 ],
 	AUI_WINDOW_TYPE type,
@@ -201,7 +201,7 @@ AUI_ERRCODE	C3FancyWindow::Resize( sint32 width, sint32 height )
 
 
 	sint32 lx =0, cx = dw/2, rx = dw,
-			ty = 0, cy = dh/2, by = dh;
+			ty = 0, by = dh;
 
 #if 0
 	m_border[TL]->Offset(lx,ty);

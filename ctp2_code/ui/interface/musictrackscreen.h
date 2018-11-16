@@ -12,15 +12,14 @@ class MusicTrackListItem : public c3_ListItem
 {
 public:
 
-	MusicTrackListItem(AUI_ERRCODE *retval, sint32 trackNum, MBCHAR *name, MBCHAR *ldlBlock);
-
+	MusicTrackListItem(AUI_ERRCODE *retval, sint32 trackNum, const MBCHAR *name, const MBCHAR *ldlBlock);
 
 	virtual void Update(void) {}
 
 	sint32 GetTrackNum(void) { return m_trackNum; }
 protected:
 	MusicTrackListItem() : c3_ListItem() {}
-	AUI_ERRCODE InitCommonLdl(sint32 trackNum, MBCHAR *name, MBCHAR *ldlBlock);
+	AUI_ERRCODE InitCommonLdl(sint32 trackNum, const MBCHAR *name, const MBCHAR *ldlBlock);
 
 private:
 	sint32 m_trackNum;
