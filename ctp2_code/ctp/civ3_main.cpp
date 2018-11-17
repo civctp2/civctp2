@@ -2054,15 +2054,7 @@ int SDLMessageHandler(const SDL_Event &event)
 
 	return DefWindowProc(hwnd, iMsg, wParam, lParam);
 #else
-// this event is handled in aui_sdlmouse.cpp
-//          case SDL_MOUSEBUTTONDOWN:
-//              if (event.button.button == SDL_BUTTON_WHEELUP){
-//                   printf("%s L%d: Mouse wheel up handled!\n", __FILE__, __LINE__);
-//                   ui_HandleMouseWheel((sint16)1);
-//                  }
-//              else if (event.button.button == SDL_BUTTON_WHEELDOWN)
-//  			ui_HandleMouseWheel((sint16)-1);
-
+// SDL_MOUSEBUTTONDOWN event is handled in aui_sdlmouse.cpp
              break;
 	}
 
