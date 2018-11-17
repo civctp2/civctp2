@@ -33,44 +33,20 @@ aui_SDLMouse::~aui_SDLMouse()
 void HandleMouseWheel(sint16 delta){
     if (!g_civApp) return;
 
-    ctp2_ListBox *box = ctp2_ListBox::GetMouseFocusListBox();
- 
-    if (box != NULL) {
-        if (delta) {
-            if (delta < 0) {
-                box->ForceScroll(0, 1);
-                } else {
-                box->ForceScroll(0, -1);
-                }
-            return;
-            }
-        }
-    else {
-        c3_ListBox *box1 = c3_ListBox::GetMouseFocusListBox();
-        if (box1 != NULL) {
-            if (delta) {
-                if (delta < 0) {
-                    box1->ForceScroll(0, 1);
-                    } else {
-                    box1->ForceScroll(0, -1);
-                    }
-                return;
-                }
-            }
-        else { //this idea came last; might turn the previous ones unnessesary
-            aui_Ranger *box2 = aui_Ranger::GetMouseFocusRanger();
-            if (box2 != NULL) {
-                if (delta) {
-                    if (delta < 0) {
-                        box2->ForceScroll(0, 1);
-                        } else {
-                        box2->ForceScroll(0, -1);
-                        }
-                    return;
-                    }
-                }
-            }
-        }
+    aui_Ranger *box2 = aui_Ranger::GetMouseFocusRanger();
+    if (box2 != NULL) {
+	if (delta) {
+	    if (delta < 0) {
+		box2->ForceScroll(0, 1);
+		}
+	    else {
+		box2->ForceScroll(0, -1);
+		}
+	    return;
+	    }
+	}
+    else
+	printf("%s L%d: Mouse wheel for SDL not handled!\n", __FILE__, __LINE__);
     }
 
 AUI_ERRCODE
@@ -107,11 +83,11 @@ aui_SDLMouse::GetInput(void)
             break;
          case SDL_MOUSEBUTTONDOWN:
          case SDL_MOUSEBUTTONUP:
-	    if (od.button.button == SDL_BUTTON_WHEELUP){
+	    if (od[ev].button.button == SDL_BUTTON_WHEELUP){
 		HandleMouseWheel((sint16)1);
 		break;
 	    }
-	    else if (od.button.button == SDL_BUTTON_WHEELDOWN){
+	    else if (od[ev].button.button == SDL_BUTTON_WHEELDOWN){
 		HandleMouseWheel((sint16)-1);
 		break;
 	    }
