@@ -357,17 +357,9 @@ AUI_ERRCODE aui_Movie::Open(
 		//code from SDL_ffmpeg example:
 		film= SDL_ffmpegOpen(m_filename);
 		if (film){
-		    SDL_ffmpegStream *str;
-		    str = SDL_ffmpegGetVideoStream(film, 0);
-
-		    if(str->frameRate[1]) // can be zero according to SDL_ffmpeg.h
-		      m_timePerFrame = 1000.0 * str->frameRate[0] / str->frameRate[1];
-		    else
-		      m_timePerFrame = 1000.0 * str->frameRate[0];
-		    
 		    SDL_ffmpegSelectVideoStream(film, 0);
 		    SDL_ffmpegSelectAudioStream(film, 0);
-			
+		    
 		    int w,h;
 		    // we get the size from our active video stream
 		    if(SDL_ffmpegGetVideoSize(film, &w, &h))
@@ -595,6 +587,7 @@ AUI_ERRCODE aui_Movie::Process( void )
 
 	if ( m_isPlaying && !m_isPaused )
 	{
+#ifdef __AUI_USE_DIRECTX__
 		uint32 time = GetTickCount();
 		if ( time - m_lastFrameTime > m_timePerFrame )
 		{
@@ -603,7 +596,6 @@ AUI_ERRCODE aui_Movie::Process( void )
 				( m_flags & k_AUI_MOVIE_PLAYFLAG_ONSCREEN ) ?
 				g_ui->Secondary() :
 				m_surface;
-#ifdef __AUI_USE_DIRECTX__
 			uint8 *frame = (uint8 *)AVIStreamGetFrame( m_getFrame, m_curFrame );
 			Assert( frame != NULL );
 			if ( !frame ) return AUI_ERRCODE_HACK;
@@ -659,27 +651,39 @@ AUI_ERRCODE aui_Movie::Process( void )
 				if ( !(m_flags & k_AUI_MOVIE_PLAYFLAG_LOOP) )
 					m_isFinished = TRUE;
 			}
-#elif defined(USE_SDL_FFMPEG)
-			SDL_ffmpegVideoFrame* frame= 0;
-			SDL_Rect sdl_rect = { m_rect.left, m_rect.top, m_rect.right-m_rect.left, m_rect.bottom-m_rect.top };
-			aui_SDLSurface* sdl_surf = static_cast<aui_SDLSurface*>(surface);
-			
-			frame = SDL_ffmpegGetVideoFrame(film);
-			if(frame){
-			  SDL_BlitSurface(frame->buffer, 0, sdl_surf->DDS(), &sdl_rect);
-			  // we flip the double buffered screen so we might actually see something
-			  SDL_Flip(sdl_surf->DDS());
-			}
-			// end reached?
-			m_isFinished= SDL_ffmpegGetPosition(film) >= SDL_ffmpegGetDuration(film);
-#else
-			m_isFinished = TRUE;
-#endif
 
 			m_lastFrameTime = time;
 
 			retval = AUI_ERRCODE_HANDLED;
 		}
+#elif defined(USE_SDL_FFMPEG)
+		aui_Surface *surface = ( m_flags & k_AUI_MOVIE_PLAYFLAG_ONSCREEN ) ?
+		    g_ui->Primary() :
+		    m_surface;
+		
+		int s;
+		SDL_ffmpegStream *str;
+		SDL_ffmpegVideoFrame* frame= 0;
+		SDL_Rect sdl_rect = { m_rect.left, m_rect.top, m_rect.right-m_rect.left, m_rect.bottom-m_rect.top };
+		aui_SDLSurface* sdl_surf = static_cast<aui_SDLSurface*>(surface);
+		int64_t duration= SDL_ffmpegGetDuration(film);
+		
+		while(!frame && !m_isFinished){ //wait until there is a frame to be shown
+		    frame = SDL_ffmpegGetVideoFrame(film);
+		    SDL_Delay(5); //too much for 25 fps but here we have only 15 fps
+		    
+		    if(frame){
+			// we got a frame, so we better show this one
+			SDL_BlitSurface(frame->buffer, 0, sdl_surf->DDS(), &sdl_rect);
+			// we flip the double buffered screen so we might actually see something
+			SDL_Flip(sdl_surf->DDS());
+			}
+		    m_isFinished= SDL_ffmpegGetPosition(film) >= duration;
+		    }
+#else
+		m_isFinished = TRUE;
+		retval = AUI_ERRCODE_HANDLED;
+#endif
 	}
 	
 	return retval;
