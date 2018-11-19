@@ -71,7 +71,7 @@ COPY ctp2_data/  /ctp2/ctp2_data/
 
 RUN cd /ctp2 \
     && ./autogen.sh \
-    && CPPFLAGS="-I/usr/local/include/SDL/" \
+    && CPPFLAGS="-I/usr/include/SDL/ -I/usr/local/include/SDL/" \
     CC=/usr/bin/gcc-5 \
     CXX=/usr/bin/g++-5 \
     CFLAGS="$CFLAGS -w -fuse-ld=gold" \
