@@ -34,6 +34,8 @@ RUN git clone --depth 1 -b v0.6.1 http://github.com/FFmpeg/FFmpeg/ && \
     cd FFmpeg && \
     ./configure \
     	--prefix=/usr/local/ \
+	--enable-shared \
+	--disable-static \
 	--disable-doc \
 	--disable-avdevice \
 	--disable-ffprobe \
@@ -50,8 +52,9 @@ RUN git clone -b v1.3.2 http://github.com/lynxabraxas/SDL_ffmpeg && \
     mkdir SDL_ffmpeg_build && \
     cd SDL_ffmpeg_build && \
     cmake \
-    	  -DCMAKE_INSTALL_PREFIX=/usr/ \
+    	  -DCMAKE_INSTALL_PREFIX=/usr/local/ \
 	  -DCMAKE_BUILD_TYPE=Release \
+	  -DCMAKE_VERBOSE_MAKEFILEL=ON \
 	  ../SDL_ffmpeg && \
     make && \
     make install
