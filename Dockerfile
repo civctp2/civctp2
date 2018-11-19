@@ -17,7 +17,7 @@ FROM system as builder
 
 RUN apt-get update && apt-get install -y --no-install-recommends \
     libsdl1.2-dev libsdl-mixer1.2-dev libsdl-image1.2-dev byacc libgtk2.0-dev gcc-5 g++-5 \
-    automake libtool unzip flex git ca-certificates
+    automake libtool unzip flex git ca-certificates cmake
 
 ### set default compilers
 RUN update-alternatives --install /usr/bin/gcc gcc /usr/bin/gcc-5 100 && \
@@ -30,10 +30,13 @@ RUN update-alternatives --install /usr/bin/gcc gcc /usr/bin/gcc-5 100 && \
     cpp --version
 
 ### build ffmpeg
-RUN git clone --depth 1 -b v0.5.2 http://github.com/FFmpeg/FFmpeg/ && \
+RUN git clone --depth 1 -b v0.6.1 http://github.com/FFmpeg/FFmpeg/ && \
     cd FFmpeg && \
     ./configure \
     	--prefix=/usr/local/ \
+	--disable-doc \
+	--disable-avdevice \
+	--disable-ffprobe \
 	--disable-ffmpeg \
 	--disable-ffplay \
 	--disable-ffserver && \
@@ -43,12 +46,13 @@ RUN git clone --depth 1 -b v0.5.2 http://github.com/FFmpeg/FFmpeg/ && \
 ### ffmpeg built
 
 ### build SDL_ffmpeg
-RUN git clone -b v0.9.0 http://github.com/lynxabraxas/SDL_ffmpeg && \
-    cd /SDL_ffmpeg/trunk/ && \
-    sed -i 's/CFLAGS=-I$INCDIR/CFLAGS="$CFLAGS -I$INCDIR"/' configure  && \
-    sed -i 's/LDFLAGS=-L$LIBDIR/LDFLAGS="$LDFLAGS -L$LIBDIR"/' configure  && \
-    LDFLAGS="-lm" \
-    ./configure --prefix=/usr/local/ --static=yes && \
+RUN git clone -b v1.3.2 http://github.com/lynxabraxas/SDL_ffmpeg && \
+    mkdir SDL_ffmpeg_build && \
+    cd SDL_ffmpeg_build && \
+    cmake \
+    	  -DCMAKE_INSTALL_PREFIX=/usr/ \
+	  -DCMAKE_BUILD_TYPE=Release \
+	  ../SDL_ffmpeg && \
     make && \
     make install
 
