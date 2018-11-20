@@ -24,7 +24,7 @@ RUN cd /ctp2 && \
     CC=/usr/bin/gcc-5 \
     CXX=/usr/bin/g++-5 \
     CFLAGS="$CFLAGS -w -fuse-ld=gold" \
-    CXXFLAGS="$CXXFLAGS -w -fuse-ld=gold" \
+    CXXFLAGS="$CXXFLAGS -fpermissive -w -fuse-ld=gold" \
     ./configure --prefix=/opt/ctp2 --bindir=/opt/ctp2/ctp2_program/ctp --enable-silent-rules && \
     make && \
     make install
