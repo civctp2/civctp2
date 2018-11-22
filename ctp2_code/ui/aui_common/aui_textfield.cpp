@@ -746,11 +746,25 @@ bool aui_TextField::HandleKey(uint32 wParam){
     // No tags allowed, they are for "tabbing focus" between controls.
   case VK_TAB:
     return false;
-  default: // append char to char array, apparently easiest with std::string
+  case VK_BACK: {
+    std::string str(m_Text); // char array to c++ string
+    if( str.length() > 0 )
+      str.pop_back(); //lop off character
+    SetFieldText(str.c_str()); // c++ string to char array, use SetFieldText (not just modify m_Text) to cause re-drawing
+    break;
+    }
+  default: { // append char to char array, apparently easiest with std::string
+
+    static MBCHAR text[ 1025 ];
+    GetFieldText( text, 1024 );
+    // Don't let any more characters in if you're at the max.
+    if ( (sint32)strlen( text ) >= GetMaxFieldLen() ) return 0;
+    
     std::string str(m_Text); // char array to c++ string
     str += static_cast<char>(wParam); // append char to string
     SetFieldText(str.c_str()); // c++ string to char array, use SetFieldText (not just modify m_Text) to cause re-drawing
     break;
+    }
   }
   return true;
 }

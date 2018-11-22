@@ -1822,7 +1822,7 @@ int SDLMessageHandler(const SDL_Event &event)
 						( (mod & KMOD_SHIFT) ? (charWShift) : (charWoShift) ) \
 					); \
 				break;
-			SDLKCONV(SDLK_BACKSPACE, '\b' + 128);
+			SDLKCONV(SDLK_BACKSPACE, VK_BACK); // set to VK_BACK to hit escape rules in aui_textfield.cpp
 			SDLKCONV(SDLK_TAB, '\t' + 128);
 			SDLKCONV(SDLK_RETURN, '\r' + 128);
 			SDLKCONV(SDLK_ESCAPE, VK_ESCAPE); // set to VK_ESCAPE to hit escape rules in keypress.cpp
