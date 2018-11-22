@@ -720,3 +720,37 @@ int CALLBACK EnumTextFontsProc( LOGFONT *lplf, TEXTMETRIC *lptm, DWORD dwType, L
 	return TRUE;
 }
 #endif // __AUI_USE_DIRECTX__
+
+/* 
+Handling key input for text field with SDL
+
+while it seems that directx/windows can provide a callback function (TextFieldWindowProc) to the window manager input callback (CallWindowProc)
+SDL needs basic key handling (or use GUI lib), see e.g.:
+http://lazyfoo.net/tutorials/SDL/32_text_input_and_clipboard_handling/index.php
+https://wiki.libsdl.org/Tutorials/TextInput
+
+civ3_main.cpp has the SDLMessageHandler which extracts the char from the key pressed from SDL_Event &event and converts to wParam
+this is then processed by ui_HandleKeypress (keypress.cpp)
+where first HandleKey of the topWindow is called, which passes HandleKey to child elements of aui_control, as is aui_win and parent of aui_textfield
+here in aui_TextField HandleKey of aui_control is overwritten such that the keys are appended to the current text field string
+ */
+bool aui_TextField::HandleKey(uint32 wParam){
+  printf("%s L%d: HandleKey called!\n", __FILE__, __LINE__);
+
+  switch ( wParam ){
+    // Have to handle the enter key here so that buffered input will
+    // be handled correctly with the Windows message queue.
+  case VK_RETURN:
+    aui_TextField::HitEnter();
+    break;
+    // No tags allowed, they are for "tabbing focus" between controls.
+  case VK_TAB:
+    return false;
+  default: // append char to char array, apparently easiest with std::string
+    std::string str(m_Text); // char array to c++ string
+    str += static_cast<char>(wParam); // append char to string
+    SetFieldText(str.c_str()); // c++ string to char array, use SetFieldText (not just modify m_Text) to cause re-drawing
+    break;
+  }
+  return true;
+}
