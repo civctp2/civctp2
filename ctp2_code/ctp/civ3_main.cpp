@@ -1825,7 +1825,7 @@ int SDLMessageHandler(const SDL_Event &event)
 			SDLKCONV(SDLK_BACKSPACE, '\b' + 128);
 			SDLKCONV(SDLK_TAB, '\t' + 128);
 			SDLKCONV(SDLK_RETURN, '\r' + 128);
-			SDLKCONV(SDLK_ESCAPE, SDLK_ESCAPE + 256);
+			SDLKCONV(SDLK_ESCAPE, VK_ESCAPE); // set to VK_ESCAPE to hit escape rules in keypress.cpp
 			SDLKCONV(SDLK_SPACE, ' ');
 			SDLKCONV(SDLK_EXCLAIM, '!');
 			SDLKCONV(SDLK_QUOTEDBL, '"');
