@@ -763,6 +763,7 @@ bool aui_TextField::HandleKey(uint32 wParam){
     std::string str(m_Text); // char array to c++ string
     str += static_cast<char>(wParam); // append char to string
     SetFieldText(str.c_str()); // c++ string to char array, use SetFieldText (not just modify m_Text) to cause re-drawing
+    g_soundManager->AddGameSound(GAMESOUNDS_EDIT_TEXT);// play key sound ;-)
     break;
     }
   }

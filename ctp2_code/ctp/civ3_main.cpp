@@ -1795,7 +1795,6 @@ int SDLMessageHandler(const SDL_Event &event)
 	// unchanged ui_HandleKeypress(wParam, lParam)
 
 	static bool swallowNextChar = false;
-//could not find ui_HandleKeypress(wParam, lParm)! Could this mean this code was under reconstruction in trunk when the clone for linux was made???
 
 	switch(event.type) {
 	case SDL_KEYDOWN:
