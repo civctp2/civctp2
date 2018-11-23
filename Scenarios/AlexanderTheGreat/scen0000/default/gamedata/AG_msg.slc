@@ -1,0 +1,1947 @@
+  ///////////////////////////////////////////////////
+ // Messages for the Alexander the Great scenario //
+///////////////////////////////////////////////////
+// Apolyton modifications
+// - Corinthian League defeat message added
+/////////////////////////////////////////////////
+
+
+  //---------------------//
+ // Start game messages //
+//---------------------//
+
+messagebox 'AGStartA' {
+	Show();
+	Title(ID_AG_START_TITLE);
+	Text(ID_AG_START_A);
+	Button(ID_AG_BUTTON_NEXT) {
+		Kill();
+		Message(1, 'AGStartB');
+	}
+}
+
+messagebox 'AGStartB' {
+	Show(); Title(ID_AG_BLANK);
+	Text(ID_AG_START_B);
+	Button(ID_AG_BUTTON_NEXT) {
+		Kill();
+		Message(1, 'AGStartC');
+	}
+	Button(ID_AG_BUTTON_BACK) {
+		Kill();
+		Message(1, 'AGStartA');
+	}
+}
+
+messagebox 'AGStartC' {
+	Show(); Title(ID_AG_BLANK);
+	Text(ID_AG_START_C);
+	Button(ID_AG_BUTTON_RULES) {
+		Kill();
+		LibraryConcept(71);
+	}
+	Button(ID_AG_BUTTON_BACK) {
+		Kill();
+		Message(1, 'AGStartB');
+	}
+}
+
+  //------------------------//
+ // Miscellaneous messages //
+//------------------------//
+
+messagebox 'AGDisbandFail' {
+	Show(); Title(ID_AG_BLANK);
+	Text(ID_AG_DISBAND_FAIL);
+}
+
+messagebox 'AGCorinthSettler' {
+	Show(); Title(ID_AG_BLANK);
+	Text(ID_AG_CORINTH_SETTLER);
+}
+
+messagebox 'AGCorinthSettler2' {
+	Show(); Title(ID_AG_BLANK);
+	Text(ID_AG_CORINTH_SETTLER2);
+}
+
+messagebox 'AGGordiumA' {
+	Show(); Title(ID_AG_BLANK);
+	Text(ID_AG_GORDIUM_A);
+	Button(ID_AG_BUTTON_NEXT) {
+		Kill();
+		Message(1, 'AGGordiumB');
+	}
+}
+
+messagebox 'AGGordiumB' {
+	Show(); Title(ID_AG_BLANK);
+	Text(ID_AG_GORDIUM_B);
+	Button(ID_AG_BUTTON_BACK) {
+		Kill();
+		Message(1, 'AGGordiumA');
+	}
+}
+
+messagebox 'AGTheocracy' {
+	Show(); Title(ID_AG_BLANK);
+	Text(ID_AG_THEOCRACY);
+}
+
+
+  //------------------//
+ // General messages //
+//------------------//
+
+alertbox 'AGParmenionPlot' {
+	Show(); Title(ID_AG_BLANK);
+	Text(ID_AG_PARMENION_PLOT);
+	Button(ID_AG_BUTTON_DISAGREE) {
+		Kill();
+		Message(1, 'AGParmenionDefect');
+	}
+	Button(ID_AG_BUTTON_EXECUTE) {
+		Kill();
+		Message(1, 'AGParmenionTraitor');
+	}
+}
+
+alertbox 'AGParmenionDefect' {
+	Show(); Title(ID_AG_BLANK);
+	if (Random(2) == 0) {
+		CreateUnitNearestCity (UnitDB(UNIT_PARMENION), parmenUnit.location, 4, 10);
+		Event: KillUnit(parmenUnit, 0, 1);
+		Text(ID_AG_PARMENION_DEFECT);
+	} else {
+		Text(ID_AG_PARMENION_LOYAL);
+	}
+	Button(ID_AG_BUTTON_OK) {
+		Kill();
+	}
+}
+
+alertbox 'AGParmenionTraitor' {
+	Show(); Title(ID_AG_BLANK);
+	Text(ID_AG_PARMENION_TRAIT);
+	Event: KillUnit(parmenUnit, 0, 1);
+	Button(ID_AG_BUTTON_OK) {
+		Kill();
+	}
+}
+
+alertbox 'AGParmenionOld' {
+	Show(); Title(ID_AG_BLANK);
+	Text(ID_AG_PARMENION_OLD);
+	generalDeaths = generalDeaths + 1;
+	if (generalDeaths == 1) {
+		Button(ID_AG_BUTTON_NEXT) {
+			Kill();
+			Message(1, 'AGHephaestion');
+		}
+	} elseif (generalDeaths == 2) {
+		Button(ID_AG_BUTTON_NEXT) {
+			Kill();
+			Message(1, 'AGPtolemy');
+		}
+	} elseif (generalDeaths == 3) {
+		Button(ID_AG_BUTTON_NEXT) {
+			Kill();
+			Message(1, 'AGSeleucus');
+		}
+	} else {
+		Button(ID_AG_BUTTON_OK) {
+			Kill();
+		}
+	}
+}
+
+alertbox 'AGParmenionBattle' {
+	Show(); Title(ID_AG_BLANK);
+	Text(ID_AG_PARMENION_BATTLE);
+	generalDeaths = generalDeaths + 1;
+	if (generalDeaths == 1) {
+		Button(ID_AG_BUTTON_NEXT) {
+			Kill();
+			Message(1, 'AGHephaestion');
+		}
+	} elseif (generalDeaths == 2) {
+		Button(ID_AG_BUTTON_NEXT) {
+			Kill();
+			Message(1, 'AGPtolemy');
+		}
+	} elseif (generalDeaths == 3) {
+		Button(ID_AG_BUTTON_NEXT) {
+			Kill();
+			Message(1, 'AGSeleucus');
+		}
+	} else {
+		Button(ID_AG_BUTTON_OK) {
+			Kill();
+		}
+	}
+}
+
+alertbox 'AGAntipaterOld' {
+	Show(); Title(ID_AG_BLANK);
+	Text(ID_AG_ANTIPATER_OLD);
+	generalDeaths = generalDeaths + 1;
+	if (generalDeaths == 1) {
+		Button(ID_AG_BUTTON_NEXT) {
+			Kill();
+			Message(1, 'AGHephaestion');
+		}
+	} elseif (generalDeaths == 2) {
+		Button(ID_AG_BUTTON_NEXT) {
+			Kill();
+			Message(1, 'AGPtolemy');
+		}
+	} elseif (generalDeaths == 3) {
+		Button(ID_AG_BUTTON_NEXT) {
+			Kill();
+			Message(1, 'AGSeleucus');
+		}
+	} else {
+		Button(ID_AG_BUTTON_OK) {
+			Kill();
+		}
+	}
+}
+
+alertbox 'AGAntipaterBattle' {
+	Show(); Title(ID_AG_BLANK);
+	Text(ID_AG_ANTIPATER_BATTLE);
+	generalDeaths = generalDeaths + 1;
+	if (generalDeaths == 1) {
+		Button(ID_AG_BUTTON_NEXT) {
+			Kill();
+			Message(1, 'AGHephaestion');
+		}
+	} elseif (generalDeaths == 2) {
+		Button(ID_AG_BUTTON_NEXT) {
+			Kill();
+			Message(1, 'AGPtolemy');
+		}
+	} elseif (generalDeaths == 3) {
+		Button(ID_AG_BUTTON_NEXT) {
+			Kill();
+			Message(1, 'AGSeleucus');
+		}
+	} else {
+		Button(ID_AG_BUTTON_OK) {
+			Kill();
+		}
+	}
+}
+
+alertbox 'AGCraterusOld' {
+	Show(); Title(ID_AG_BLANK);
+	Text(ID_AG_CRATERUS_OLD);
+	generalDeaths = generalDeaths + 1;
+	if (generalDeaths == 1) {
+		Button(ID_AG_BUTTON_NEXT) {
+			Kill();
+			Message(1, 'AGHephaestion');
+		}
+	} elseif (generalDeaths == 2) {
+		Button(ID_AG_BUTTON_NEXT) {
+			Kill();
+			Message(1, 'AGPtolemy');
+		}
+	} elseif (generalDeaths == 3) {
+		Button(ID_AG_BUTTON_NEXT) {
+			Kill();
+			Message(1, 'AGSeleucus');
+		}
+	} else {
+		Button(ID_AG_BUTTON_OK) {
+			Kill();
+		}
+	}
+}
+
+alertbox 'AGCraterusBattle' {
+	Show(); Title(ID_AG_BLANK);
+	Text(ID_AG_CRATERUS_BATTLE);
+	generalDeaths = generalDeaths + 1;
+	if (generalDeaths == 1) {
+		Button(ID_AG_BUTTON_NEXT) {
+			Kill();
+			Message(1, 'AGHephaestion');
+		}
+	} elseif (generalDeaths == 2) {
+		Button(ID_AG_BUTTON_NEXT) {
+			Kill();
+			Message(1, 'AGPtolemy');
+		}
+	} elseif (generalDeaths == 3) {
+		Button(ID_AG_BUTTON_NEXT) {
+			Kill();
+			Message(1, 'AGSeleucus');
+		}
+	} else {
+		Button(ID_AG_BUTTON_OK) {
+			Kill();
+		}
+	}
+}
+
+alertbox 'AGHephaestionOld' {
+	Show(); Title(ID_AG_BLANK);
+	Text(ID_AG_HEPHAESTION_OLD);
+	generalDeaths = generalDeaths + 1;
+	if (generalDeaths == 2) {
+		Button(ID_AG_BUTTON_NEXT) {
+			Kill();
+			Message(1, 'AGPtolemy');
+		}
+	} elseif (generalDeaths == 3) {
+		Button(ID_AG_BUTTON_NEXT) {
+			Kill();
+			Message(1, 'AGSeleucus');
+		}
+	} else {
+		Button(ID_AG_BUTTON_OK) {
+			Kill();
+		}
+	}
+}
+
+alertbox 'AGHephaestionBattle' {
+	Show(); Title(ID_AG_BLANK);
+	Text(ID_AG_HEPHAESTION_BATTLE);
+	generalDeaths = generalDeaths + 1;
+	if (generalDeaths == 2) {
+		Button(ID_AG_BUTTON_NEXT) {
+			Kill();
+			Message(1, 'AGPtolemy');
+		}
+	} elseif (generalDeaths == 3) {
+		Button(ID_AG_BUTTON_NEXT) {
+			Kill();
+			Message(1, 'AGSeleucus');
+		}
+	} else {
+		Button(ID_AG_BUTTON_OK) {
+			Kill();
+		}
+	}
+}
+
+alertbox 'AGPtolemyOld' {
+	Show(); Title(ID_AG_BLANK);
+	Text(ID_AG_PTOLEMY_OLD);
+	generalDeaths = generalDeaths + 1;
+	if (generalDeaths == 3) {
+		Button(ID_AG_BUTTON_NEXT) {
+			Kill();
+			Message(1, 'AGSeleucus');
+		}
+	} else {
+		Button(ID_AG_BUTTON_OK) {
+			Kill();
+		}
+	}
+}
+
+alertbox 'AGPtolemyBattle' {
+	Show(); Title(ID_AG_BLANK);
+	Text(ID_AG_PTOLEMY_BATTLE);
+	generalDeaths = generalDeaths + 1;
+	if (generalDeaths == 3) {
+		Button(ID_AG_BUTTON_NEXT) {
+			Kill();
+			Message(1, 'AGSeleucus');
+		}
+	} else {
+		Button(ID_AG_BUTTON_OK) {
+			Kill();
+		}
+	}
+}
+
+alertbox 'AGSeleucusOld' {
+	Show(); Title(ID_AG_BLANK);
+	Text(ID_AG_SELEUCUS_OLD);
+	generalDeaths = generalDeaths + 1;
+	Button(ID_AG_BUTTON_OK) {
+		Kill();
+	}
+}
+
+alertbox 'AGSeleucusBattle' {
+	Show(); Title(ID_AG_BLANK);
+	Text(ID_AG_SELEUCUS_BATTLE);
+	generalDeaths = generalDeaths + 1;
+	Button(ID_AG_BUTTON_OK) {
+		Kill();
+	}
+}
+
+alertbox 'AGHephaestion' {
+	Show(); Title(ID_AG_BLANK);
+	Text(ID_AG_HEPHAESTION);
+	CreateUnitNearestCity (UnitDB(UNIT_HEPHAESTION), pellaLoc, 1, 0);
+	FindSpecialUnit (UnitDB(UNIT_HEPHAESTION), 1);
+	hephUnit = specUnit;
+	Button(ID_AG_BUTTON_OK) {
+		Kill();
+	}
+}
+
+alertbox 'AGPtolemy' {
+	Show(); Title(ID_AG_BLANK);
+	Text(ID_AG_PTOLEMY);
+	CreateUnitNearestCity (UnitDB(UNIT_PTOLEMY), pellaLoc, 1, 0);
+	FindSpecialUnit (UnitDB(UNIT_PTOLEMY), 1);
+	ptolUnit = specUnit;
+	Button(ID_AG_BUTTON_OK) {
+		Kill();
+	}
+}
+
+alertbox 'AGSeleucus' {
+	Show(); Title(ID_AG_BLANK);
+	Text(ID_AG_SELEUCUS);
+	CreateUnitNearestCity (UnitDB(UNIT_SELEUCUS), pellaLoc, 1, 0);
+	FindSpecialUnit (UnitDB(UNIT_SELEUCUS), 1);
+	seleucUnit = specUnit;
+	Button(ID_AG_BUTTON_OK) {
+		Kill();
+	}
+}
+
+alertbox 'AGGeneralDrown' {
+	Show(); Title(ID_AG_BLANK);
+	Text(ID_AG_GENERAL_DROWN);
+	generalDeaths = generalDeaths + 1;
+	if (generalDeaths == 1) {
+		Button(ID_AG_BUTTON_NEXT) {
+			Kill();
+			Message(1, 'AGHephaestion');
+		}
+	} elseif (generalDeaths == 2) {
+		Button(ID_AG_BUTTON_NEXT) {
+			Kill();
+			Message(1, 'AGPtolemy');
+		}
+	} elseif (generalDeaths == 3) {
+		Button(ID_AG_BUTTON_NEXT) {
+			Kill();
+			Message(1, 'AGSeleucus');
+		}
+	} else {
+		Button(ID_AG_BUTTON_OK) {
+			Kill();
+		}
+	}
+}
+
+
+  //-----------------------//
+ // Carthaginian messages //
+//-----------------------//
+
+messagebox 'AGCarthage' {
+	Show(); Title(ID_AG_BLANK);
+	Text(ID_AG_CARTHAGE);
+}
+
+messagebox 'AGCarthageConquer' {
+	Show(); Title(ID_AG_BLANK);
+	Text(ID_AG_CARTHAGE_CONQUER);
+}
+
+
+  //----------------//
+ // Egypt messages //
+//----------------//
+
+messagebox 'AGGazaBeside' {
+	Show(); Title(ID_AG_BLANK);
+	Text(ID_AG_GAZA_BESIDE);
+}
+
+messagebox 'AGGazaConquer' {
+	Show(); Title(ID_AG_BLANK);
+	Text(ID_AG_GAZA_CONQUER);
+}
+
+messagebox 'AGEgyptCantDefect' {
+	Show(); Title(ID_AG_BLANK);
+	Text(ID_AG_EGYPT_CNT_DEFECT);
+}
+
+messagebox 'AGEgyptDefect' {
+	Show(); Title(ID_AG_BLANK);
+	Text(ID_AG_EGYPT_DEFECT);
+}
+
+messagebox 'AGEgyptTyre' {
+	Show(); Title(ID_AG_BLANK);
+	Text(ID_AG_EGYPT_TYRE);
+}
+
+  //----------------//
+ // Arabia messages //
+//----------------//
+
+messagebox 'AGArabiaRoad' {
+	Show(); Title(ID_AG_BLANK);
+	Text(ID_AG_ARABIA_ROAD);
+}
+
+messagebox 'AGMarib' {
+	Show(); Title(ID_AG_BLANK);
+	Text(ID_AG_MARIB);
+}
+
+messagebox 'AGMaribConquer' {
+	Show(); Title(ID_AG_BLANK);
+	Text(ID_AG_MARIB_CONQUER);
+}
+
+messagebox 'AGShabwahConquer' {
+	Show(); Title(ID_AG_BLANK);
+	Text(ID_AG_SHABWAH_CONQUER);
+}
+
+messagebox 'AGDhufarConquer' {
+	Show(); Title(ID_AG_BLANK);
+	Text(ID_AG_DHUFAR_CONQUER);
+}
+
+messagebox 'AGArabiaBySea1' {
+	Show(); Title(ID_AG_BLANK);
+	Text(ID_AG_ARABIA_BY_SEA1);
+}
+
+messagebox 'AGArabiaBySea2' {
+	Show(); Title(ID_AG_BLANK);
+	Text(ID_AG_ARABIA_BY_SEA2);
+}
+
+messagebox 'AGRoadToMarib1' {
+	Show(); Title(ID_AG_BLANK);
+	Text(ID_AG_ROAD_TO_MARIB1);
+}
+
+messagebox 'AGRoadToMarib2' {
+	Show(); Title(ID_AG_BLANK);
+	Text(ID_AG_ROAD_TO_MARIB2);
+}
+
+
+  //-------------------//
+ // Ethiopia messages //
+//-------------------//
+
+messagebox 'AGEthiopia' {
+	Show(); Title(ID_AG_BLANK);
+	Text(ID_AG_ETHIOPIA);
+}
+
+messagebox 'AGMeroe' {
+	Show(); Title(ID_AG_BLANK);
+	Text(ID_AG_MEROE);
+}
+
+
+  //-----------------//
+ // Persia messages //
+//-----------------//
+
+messagebox 'AGpersepRoad' {
+	Show(); Title(ID_AG_BLANK);
+	Text(ID_AG_PERSEP_ROAD);
+}
+
+messagebox 'AGScoutReportA' {
+	Show(); Title(ID_AG_BLANK);
+	Text(ID_AG_SCOUT_REPORT_A);
+	Button(ID_AG_BUTTON_NEXT) {
+		Kill();
+		Message(1, 'AGScoutReportB');
+	}
+}
+
+messagebox 'AGScoutReportB' {
+	Show(); Title(ID_AG_BLANK);
+	Text(ID_AG_SCOUT_REPORT_B);
+	Button(ID_AG_BUTTON_NEXT) {
+		Kill();
+		Message(1, 'AGScoutReportC');
+	}
+	Button(ID_AG_BUTTON_BACK) {
+		Kill();
+		Message(1, 'AGScoutReportA');
+	}
+}
+
+messagebox 'AGScoutReportC' {
+	Show(); Title(ID_AG_BLANK);
+	Text(ID_AG_SCOUT_REPORT_C);
+	Button(ID_AG_BUTTON_BACK) {
+		Kill();
+		Message(1, 'AGScoutReportB');
+	}
+}
+
+messagebox 'AGTyreApproach' {
+	Show(); Title(ID_AG_BLANK);
+	Text(ID_AG_TYRE_APPROACH);
+}
+
+messagebox 'AGTyreBeside' {
+	Show(); Title(ID_AG_BLANK);
+	Text(ID_AG_TYRE_BESIDE);
+}
+
+messagebox 'AGTyreConquer' {
+	Show(); Title(ID_AG_BLANK);
+	Text(ID_AG_TYRE_CONQUER);
+}
+
+alertbox 'AGDariusDefeatA' {
+	Show(); Title(ID_AG_BLANK);
+	Text(ID_AG_DARIUS_DEFEAT_A);
+	Button(ID_AG_BUTTON_NEXT) {
+		Kill();
+		Message(1, 'AGMacedHappy');
+	}
+}
+
+alertbox 'AGMacedHappy' {
+	Show(); Title(ID_AG_BLANK);
+	Text(ID_AG_MACEDHAPPY);
+	Button(ID_AG_BUTTON_NEXT) {
+		Kill();
+		Message(1, 'AGDariusDefeatB');
+	}
+	Button(ID_AG_BUTTON_BACK) {
+		Kill();
+		Message(1, 'AGDariusDefeatA');
+	}
+}
+
+alertbox 'AGDariusDefeatB' {
+	Show(); Title(ID_AG_BLANK);
+	Text(ID_AG_DARIUS_DEFEAT_B);
+	Button(ID_AG_BUTTON_NEXT) {
+		Kill();
+		Message(1, 'AGBarsineA');
+	}
+	Button(ID_AG_BUTTON_BACK) {
+		Kill();
+		Message(1, 'AGMacedHappy');
+	}
+}
+
+alertbox 'AGDariusDefeatOther' {
+	Show(); Title(ID_AG_BLANK);
+	Text(ID_AG_DARIUS_DEFEAT_OTHER);
+	Button(ID_AG_BUTTON_OK) {
+		Kill();
+	}
+}
+
+alertbox 'AGBarsineA' {
+	Show(); Title(ID_AG_BLANK);
+	Text(ID_AG_BARSINE_A);
+	Button(ID_AG_BUTTON_NEXT) {
+		Kill();
+		if (memnonUnit.valid) {
+			Message(1, 'AGBarsine2B');
+		} else {
+			Message(1, 'AGBarsineB');
+		}
+	}
+}
+
+alertbox 'AGBarsineB' {
+	Show(); Title(ID_AG_BLANK);
+	Text(ID_AG_BARSINE_B);
+	Button(ID_AG_BUTTON_MISTRESS) {
+		barsineMistress = 1;	// start mistress counter
+		Kill();
+	}
+	Button(ID_AG_BUTTON_WIFE) {
+		Kill();
+		Message(1, 'AGBarsineMarry');
+	}
+}
+
+alertbox 'AGBarsine2B' {
+	Show(); Title(ID_AG_BLANK);
+	Text(ID_AG_BARSINE2_B);
+	Button(ID_AG_BUTTON_OK) {
+		Kill();
+	}
+}
+
+alertbox 'AGBarsineMarry' {
+	Show(); Title(ID_AG_BLANK);
+	Text(ID_AG_BARSINE_MARRY);
+	Button(ID_AG_BUTTON_OK) {
+		Kill();
+		poisonCounter = 1;						// start Poison counter
+		wife[0] = 1;							// start Barsine's "procreation counter"
+		if(IsPlayerAlive(2)) {					// if the Corinthian League isn't dead
+			LogRegardEvent(2, 1, -200, 0, ID_AG_REGARD_EVENT, 0);	// reduce regard with CL by 200
+		}
+		if(IsPlayerAlive(3)) {					// if the Greeks aren't dead
+			LogRegardEvent(3, 1, -200, 0, ID_AG_REGARD_EVENT, 0);	// reduce regard with G by 200
+		}
+	}
+}
+
+alertbox 'AGBarsineMarry2' {
+	Show(); Title(ID_AG_BLANK);
+	Text(ID_AG_BARSINE_MARRY2);
+	Button(ID_AG_BUTTON_OK) {
+		Kill();
+		wife[0] = 1;								// start Barsine's "procreation counter"
+		if(IsPlayerAlive(2)) {						// if the Corinthian League isn't dead
+			LogRegardEvent(2, 1, -200, 0, ID_AG_REGARD_EVENT, 0);	// reduce reputation with CL by 200
+		}
+		if(IsPlayerAlive(3)) {						// if the Greeks aren't dead
+			LogRegardEvent(3, 1, -200, 0, ID_AG_REGARD_EVENT, 0);	// reduce reputation with G by 200
+		}
+	}
+}
+
+alertbox 'AGBarsineMarry3' {
+	Show(); Title(ID_AG_BLANK);
+	Text(ID_AG_BARSINE_MARRY3);
+	Button(ID_AG_BUTTON_OK) {
+		Kill();
+		wife[1] = 1;								// start Barsine's "procreation counter"
+		if(IsPlayerAlive(2)) {						// if the Corinthian League isn't dead
+			LogRegardEvent(2, 1, -100, 0, ID_AG_REGARD_EVENT, 0);	// reduce regard with CL by 200
+		}
+		if(IsPlayerAlive(3)) {						// if the Greeks aren't dead
+			LogRegardEvent(3, 1, -100, 0, ID_AG_REGARD_EVENT, 0);	// reduce regard with G by 200
+		}
+	}
+}
+
+alertbox 'AGBarsineWidowA' {
+	Show(); Title(ID_AG_BLANK);
+	Text(ID_AG_BARSINE_WIDOW_A);
+	Button(ID_AG_BUTTON_NEXT) {
+		Kill();
+		Message(1, 'AGBarsineWidowB');
+	}
+}
+
+alertbox 'AGBarsineWidowB' {
+	Show(); Title(ID_AG_BLANK);
+	Text(ID_AG_BARSINE_WIDOW_B);
+	Button(ID_AG_BUTTON_NO) {
+		Kill();
+		barsineMistress = -1;		// Start mistress counter
+	}
+	Button(ID_AG_BUTTON_YES) {
+		Kill();
+		Message(1, 'AGBarsineMarry2');
+	}
+}
+
+alertbox 'AGBarsine2Years' {
+	Show(); Title(ID_AG_BLANK);
+	Text(ID_AG_BARSINE_2YEARS);
+	Button(ID_AG_BUTTON_YES) {
+		Kill();
+		Message(1, 'AGBarsineMarry3');
+	}
+	Button(ID_AG_BUTTON_NO) {
+		Kill();
+	}
+}
+
+
+messagebox 'AGMemnonOld' {
+	Show(); Title(ID_AG_BLANK);
+	Text(ID_AG_MEMNON_OLD);
+}
+
+messagebox 'AGMemnonBattle' {
+	Show(); Title(ID_AG_BLANK);
+	Text(ID_AG_MEMNON_BATTLE);
+}
+
+
+alertbox 'AGPersiansDead' {
+	Show(); Title(ID_AG_BLANK);
+	Text(ID_AG_PERSIANS_DEAD);
+	Button(ID_AG_BUTTON_OK) {
+		Kill();
+	}
+	Button(ID_AG_BUTTON_BACK) {
+		Kill();
+		Message(1, 'AGPersiaDefeat');
+	}
+}
+
+messagebox 'AGHappyEmpire' {
+	Show(); Title(ID_AG_BLANK);
+	Text(ID_AG_HAPPY_EMPIRE);
+}
+
+alertbox 'AGBarsine2Years2' {
+	Show(); Title(ID_AG_BLANK);
+	Text(ID_AG_BARSINE_2YEARS2);
+	Button(ID_AG_BUTTON_YES) {
+		Kill();
+		Message(1, 'AGBarsineMarry3');
+	}
+	Button(ID_AG_BUTTON_NO) {
+		Kill();
+	}
+}
+
+messagebox 'AGBarsinePoison' {
+	Show(); Title(ID_AG_BLANK);
+	Text(ID_AG_BARSINE_POISON);
+}
+
+alertbox 'AGDariusDeadA' {
+	Show(); Title(ID_AG_BLANK);
+	Text(ID_AG_DARIUS_DEAD_A);
+	Button(ID_AG_BUTTON_NEXT) {
+		Kill();
+		Message(1, 'AGDariusDeadB');
+	}
+}
+
+alertbox 'AGDariusDeadB' {
+	Show(); Title(ID_AG_BLANK);
+	Text(ID_AG_DARIUS_DEAD_B);
+	Button(ID_AG_BUTTON_NEXT) {
+		Kill();
+		Message(1, 'AGDariusDeadC');
+	}
+}
+
+alertbox 'AGDariusDeadC' {
+	Show(); Title(ID_AG_BLANK);
+	Text(ID_AG_DARIUS_DEAD_C);
+	Button(ID_AG_BUTTON_PAMPER) {
+		Kill();
+		Message(1, 'AGPersianPamper');
+		pamperCost = 1;
+		statieraCount = 1;
+	}
+	Button(ID_AG_BUTTON_KILL) {
+		Kill();
+		Message(1, 'AGPersianKill');
+	}
+}
+
+messagebox 'AGDariusDeadOther' {
+	Show(); Title(ID_AG_BLANK);
+	Text(ID_AG_DARIUS_DEAD_OTHER);
+}
+
+alertbox 'AGPersianPamper' {
+	Show(); Title(ID_AG_BLANK);
+	Text(ID_AG_PERSIAN_PAMPER);
+	Button(ID_AG_BUTTON_OK) {
+		Kill();
+	}
+}
+
+alertbox 'AGPersianKill' {
+	Show(); Title(ID_AG_BLANK);
+	Text(ID_AG_PERSIAN_KILL);
+	Button(ID_AG_BUTTON_OK) {
+		Kill();
+	}
+}
+
+alertbox 'AGStatA' {
+	Show(); Title(ID_AG_BLANK);
+	Text(ID_AG_STAT_A);
+	Button(ID_AG_BUTTON_NEXT) {
+		Kill();
+		Message(1, 'AGStatB');
+	}
+}
+
+alertbox 'AGStatB' {
+	Show(); Title(ID_AG_BLANK);
+	Text(ID_AG_STAT_B);
+	Button(ID_AG_BUTTON_NEXT) {
+		Kill();
+		Message(1, 'AGStatC');
+	}
+	Button(ID_AG_BUTTON_BACK) {
+		Kill();
+		Message(1, 'AGStatA');
+	}
+}
+
+alertbox 'AGStatC' {
+	Show(); Title(ID_AG_BLANK);
+	Text(ID_AG_STAT_C);
+	Button(ID_AG_BUTTON_MARRY) {
+		Kill();
+		Message(1, 'AGStatMarryA');
+		AddGold(1, -5000);							// Subtract 5000 Gold from M
+		if(IsPlayerAlive(2)) {						// if Corinthian League isn't dead
+			LogRegardEvent(2, 1, -100, 0, ID_AG_REGARD_EVENT, 0);	// reduce regard by 100
+		}
+		if(IsPlayerAlive(3)) {						// if Greeks aren't dead
+			LogRegardEvent(3, 1, -100, 0, ID_AG_REGARD_EVENT, 0);	// reduce regard by 100
+		}
+	}
+	Button(ID_AG_BUTTON_WAIT) {
+		Kill();
+		Message(1, 'AGStatWait');
+	}
+	Button(ID_AG_BUTTON_BACK) {
+		Kill();
+		Message(1, 'AGStatB');
+	}
+}
+
+alertbox 'AGStatMarryA' {
+	Show(); Title(ID_AG_BLANK);
+	Text(ID_AG_STAT_MARRY_A);
+	wife[3] = 1;			// start Statiera's "procreation counter"
+	if (statieraCount > 0) {
+		Button(ID_AG_BUTTON_NEXT) {
+			Kill();
+			Message(1, 'AGStatMarryB');
+		}
+	}
+	statieraCount = 0;
+}
+
+alertbox 'AGStatMarryB' {
+	Show(); Title(ID_AG_BLANK);
+	Text(ID_AG_STAT_MARRY_B);
+	Button(ID_AG_BUTTON_OK) {
+		Kill();
+	}
+}
+
+alertbox 'AGStatWait' {
+	Show(); Title(ID_AG_BLANK);
+	Text(ID_AG_STAT_WAIT);
+	Button(ID_AG_BUTTON_OK) {
+		Kill();
+	}
+}
+
+alertbox 'AGStatMarry2' {
+	Show(); Title(ID_AG_BLANK);
+	Text(ID_AG_STAT_MARRY2);
+	Button(ID_AG_BUTTON_YES) {
+		Kill();
+		Message(1, 'AGStatMarryA');
+	}
+	Button(ID_AG_BUTTON_NO) {
+		Kill();
+		statieraCount = 0;
+	}
+	Button(ID_AG_BUTTON_WAIT) {
+		Kill();
+		statieraCount = -1;
+	}
+}
+
+alertbox 'AGStatMarry3' {
+	Show(); Title(ID_AG_BLANK);
+	Text(ID_AG_STAT_MARRY3);
+	Button(ID_AG_BUTTON_YES) {
+		Kill();
+		Message(1, 'AGStatMarryA');
+	}
+	Button(ID_AG_BUTTON_NO) {
+		Kill();
+		statieraCount = 0;
+	}
+	Button(ID_AG_BUTTON_WAIT) {
+		Kill();
+		statieraCount = -1;
+	}
+}
+
+messagebox 'AGBessus' {
+	Show(); Title(ID_AG_BLANK);
+	Text(ID_AG_BESSUS);
+}
+
+messagebox 'AGBessus2' {
+	Show(); Title(ID_AG_BLANK);
+	Text(ID_AG_BESSUS2);
+}
+
+messagebox 'AGBessusOld' {
+	Show(); Title(ID_AG_BLANK);
+	Text(ID_AG_BESSUS_OLD);
+}
+
+messagebox 'AGBessusBattle' {
+	Show(); Title(ID_AG_BLANK);
+	Text(ID_AG_BESSUS_BATTLE);
+}
+
+
+  //----------------------------//
+ // Marriage and Heir messages //
+//----------------------------//
+
+alertbox 'AGPregnant' {
+	Show(); Title(ID_AG_BLANK);
+	Text(ID_AG_PREGNANT);
+	Button(ID_AG_BUTTON_OK) {
+		Kill();
+	}
+}
+
+alertbox 'AGPregnant2' {
+	Show(); Title(ID_AG_BLANK);
+	Text(ID_AG_PREGNANT2);
+	Button(ID_AG_BUTTON_OK) {
+		Kill();
+	}
+}
+
+alertbox 'AGItsAGirl' {
+	Show(); Title(ID_AG_BLANK);
+	Text(ID_AG_ITS_A_GIRL);
+	Button(ID_AG_BUTTON_OK) {
+		Kill();
+	}
+}
+
+alertbox 'AGItsAGirl2' {
+	Show(); Title(ID_AG_BLANK);
+	Text(ID_AG_ITS_A_GIRL2);
+	Button(ID_AG_BUTTON_OK) {
+		Kill();
+	}
+}
+
+alertbox 'AGItsABoy' {
+	Show(); Title(ID_AG_BLANK);
+	Text(ID_AG_ITS_A_BOY);
+	Button(ID_AG_BUTTON_OK) {
+		Kill();
+	}
+}
+
+alertbox 'AGItsABoy2' {
+	Show(); Title(ID_AG_BLANK);
+	Text(ID_AG_ITS_A_BOY2);
+	Button(ID_AG_BUTTON_OK) {
+		Kill();
+	}
+}
+
+alertbox 'AGItsABoy3' {
+	Show(); Title(ID_AG_BLANK);
+	Text(ID_AG_ITS_A_BOY3);
+	Button(ID_AG_BUTTON_OK) {
+		Kill();
+	}
+}
+
+alertbox 'AGStillborn' {
+	Show(); Title(ID_AG_BLANK);
+	Text(ID_AG_STILLBORN);
+	Button(ID_AG_BUTTON_OK) {
+		Kill();
+	}
+}
+
+alertbox 'AGSonBirthday' {
+	Show(); Title(ID_AG_BLANK);
+	Text(ID_AG_SON_BIRTHDAY);
+	Button(ID_AG_BUTTON_OK) {
+		Kill();
+	}
+}
+
+alertbox 'AGSon2Birthday' {
+	Show(); Title(ID_AG_BLANK);
+	Text(ID_AG_SON2_BIRTHDAY);
+	Button(ID_AG_BUTTON_OK) {
+		Kill();
+	}
+}
+
+alertbox 'AGSon3Birthday' {
+	Show(); Title(ID_AG_BLANK);
+	Text(ID_AG_SON3_BIRTHDAY);
+	Button(ID_AG_BUTTON_OK) {
+		Kill();
+	}
+}
+
+alertbox 'AGSon1Disease' {
+	Show(); Title(ID_AG_BLANK);
+	Text(ID_AG_SON1_DISEASE);
+	Button(ID_AG_BUTTON_OK) {
+		Kill();
+	}
+}
+
+alertbox 'AGSon2Disease' {
+	Show(); Title(ID_AG_BLANK);
+	Text(ID_AG_SON2_DISEASE);
+	Button(ID_AG_BUTTON_OK) {
+		Kill();
+	}
+}
+
+alertbox 'AGSon12Disease' {
+	Show(); Title(ID_AG_BLANK);
+	Text(ID_AG_SON1_2_DISEASE);
+	Button(ID_AG_BUTTON_OK) {
+		Kill();
+	}
+}
+
+alertbox 'AGSonTwelveA' {
+	Show(); Title(ID_AG_BLANK);
+	Text(ID_AG_SON_TWELVE_A);
+	Button(ID_AG_BUTTON_NEXT) {
+		Kill();
+		Message(1, 'AGSonTwelveB');
+	}
+}
+
+alertbox 'AGSon2TwelveA' {
+	Show(); Title(ID_AG_BLANK);
+	Text(ID_AG_SON_TWELVE_A);
+	Button(ID_AG_BUTTON_NEXT) {
+		Kill();
+		Message(1, 'AGSonTwelveB2');
+	}
+}
+
+alertbox 'AGSon3TwelveA' {
+	Show(); Title(ID_AG_BLANK);
+	Text(ID_AG_SON_TWELVE_A);
+	Button(ID_AG_BUTTON_OK) {
+		Kill();
+	}
+	Button(ID_AG_BUTTON_NEXT) {
+		Kill();
+		Message(1, 'AGSonTwelveB3');
+	}
+}
+
+alertbox 'AGSonTwelveB' {
+	Show(); Title(ID_AG_BLANK);
+	Text(ID_AG_SON_TWELVE_A);
+	Button(ID_AG_BUTTON_OK) {
+		Kill();
+	}
+	Button(ID_AG_BUTTON_BACK) {
+		Kill();
+		Message(1, 'AGSonTwelveA');
+	}
+}
+
+alertbox 'AGSonTwelveB2' {
+	Show(); Title(ID_AG_BLANK);
+	Text(ID_AG_SON_TWELVE_A);
+	Button(ID_AG_BUTTON_OK) {
+		Kill();
+	}
+	Button(ID_AG_BUTTON_BACK) {
+		Kill();
+		Message(1, 'AGSon2TwelveA');
+	}
+}
+
+alertbox 'AGSonTwelveB3' {
+	Show(); Title(ID_AG_BLANK);
+	Text(ID_AG_SON_TWELVE_A);
+	Button(ID_AG_BUTTON_OK) {
+		Kill();
+	}
+	Button(ID_AG_BUTTON_BACK) {
+		Kill();
+		Message(1, 'AGSon3TwelveA');
+	}
+}
+
+
+  //--------------------//
+ // Phoenican messages //
+//--------------------//
+
+messagebox 'AGPhoenEnter' {
+	Show(); Title(ID_AG_BLANK);
+	Text(ID_AG_PHOEN_ENTER);
+}
+
+messagebox 'AGPhoenEnter2' {
+	Show(); Title(ID_AG_BLANK);
+	Text(ID_AG_PHOEN_ENTER2);
+}
+
+messagebox 'AGPhoenAradus' {
+	Show(); Title(ID_AG_BLANK);
+	Text(ID_AG_PHOEN_ARADUS);
+}
+
+messagebox 'AGPhoenAradus2' {
+	Show(); Title(ID_AG_BLANK);
+	Text(ID_AG_PHOEN_ARADUS2);
+}
+
+messagebox 'AGPhoenSidon' {
+	Show(); Title(ID_AG_BLANK);
+	Text(ID_AG_PHOEN_SIDON);
+}
+
+messagebox 'AGPhoenSidon2' {
+	Show(); Title(ID_AG_BLANK);
+	Text(ID_AG_PHOEN_SIDON2);
+}
+
+
+  //------------------------//
+ // Empire defeat messages //
+//------------------------//
+
+alertbox 'AGCarthageDefeat' {
+	Show(); Title(ID_AG_BLANK);
+	Text(ID_AG_CARTHAGE_DEFEAT);
+	Button(ID_AG_BUTTON_OK) {
+		Kill();
+	}
+}
+
+alertbox 'AGPersiaDefeat' {
+	Show(); Title(ID_AG_BLANK);
+	Text(ID_AG_PERSIA_DEFEAT);
+	Button(ID_AG_BUTTON_NEXT) {
+		Kill();
+		Message(1, 'AGPersiansDead');
+	}
+}
+
+alertbox 'AGGreekDefeat' {
+	Show(); Title(ID_AG_BLANK);
+	Text(ID_AG_GREEK_DEFEAT);
+	Button(ID_AG_BUTTON_OK) {
+		Kill();
+	}
+}
+
+alertbox 'AGRomanDefeat' {
+	Show(); Title(ID_AG_BLANK);
+	Text(ID_AG_ROMAN_DEFEAT);
+	Button(ID_AG_BUTTON_OK) {
+		Kill();
+	}
+}
+
+alertbox 'AGIndepDefeat' {
+	Show(); Title(ID_AG_BLANK);
+	Text(ID_AG_INDEP_DEFEAT);
+	Button(ID_AG_BUTTON_OK) {
+		Kill();
+	}
+}
+
+messagebox 'AGLeadDefeat' {
+	Show(); Title(ID_AG_BLANK);
+	Text(ID_AG_LEAD_DEFEAT);
+}
+
+messagebox 'AGBarbDefeat' {
+	Show(); Title(ID_AG_BLANK);
+	Text(ID_AG_BARB_DEFEAT);
+}
+
+// not ACTIVISION_ORIGINAL
+// Added Corinthian League defeat message, as suggested by Immortal Wombat.
+alertbox 'AGCLDefeat' {
+	Show(); Title(ID_AG_BLANK);
+	Text(ID_AG_CL_DEFEAT);
+	Button(ID_AG_BUTTON_OK) {
+		Kill();
+	}
+}
+// end ACTIVISION_ORIGINAL
+
+  //-----------------//
+ // Sogdia messages //
+//-----------------//
+
+messagebox 'AGSogdiaEnter' {
+	Show(); Title(ID_AG_BLANK);
+	Text(ID_AG_SOGDIA_ENTER);
+}
+
+messagebox 'AGSogdiaRebel' {
+	Show(); Title(ID_AG_BLANK);
+	Text(ID_AG_SOGDIA_REBEL);
+}
+
+messagebox 'AGSogdiaReport' {
+	Show(); Title(ID_AG_BLANK);
+	Text(ID_AG_SOGDIA_REPORT);
+}
+
+alertbox 'AGSogdiaDefeatA' {
+	Show(); Title(ID_AG_BLANK);
+	Text(ID_AG_SOGDIA_DEFEAT_A);
+	Button(ID_AG_BUTTON_NEXT) {
+		Kill();
+		Message(1, 'AGSogdiaDefeatB');
+	}
+}
+
+alertbox 'AGSogdiaDefeatB' {
+	Show(); Title(ID_AG_BLANK);
+	Text(ID_AG_SOGDIA_DEFEAT_B);
+	Button(ID_AG_BUTTON_NEXT) {
+		Kill();
+		Message(1, 'AGSogdiaDefeatC');
+	}
+	Button(ID_AG_BUTTON_BACK) {
+		Kill();
+		Message(1, 'AGSogdiaDefeatA');
+	}
+}
+
+alertbox 'AGSogdiaDefeatC' {
+	Show(); Title(ID_AG_BLANK);
+	Text(ID_AG_SOGDIA_DEFEAT_C);
+	Button(ID_AG_BUTTON_MARRY) {
+		Kill();
+		Message(1, 'AGRoxaneMarry');
+		rebellionOver = 1;
+	}
+	Button(ID_AG_BUTTON_KILL) {
+		Kill();
+		Message(1, 'AGSogdiaKill');
+		rebellionOver = 1;
+	}
+}
+
+alertbox 'AGRoxaneMarry' {
+	Show(); Title(ID_AG_BLANK);
+	Text(ID_AG_ROXANE_MARRY);
+	wife[1] = 1;					// start Roxane's "procreation counter"
+	if (Random(2) > 0) {
+		rebellionOver = 1;			// Sogdian Rebellion ends
+	} else {
+		rebelFlag = 2;				// Sogdian Rebellion continues
+	}
+	Button(ID_AG_BUTTON_OK) {
+		Kill();
+	}
+}
+
+alertbox 'AGSogdiaKill' {
+	Show(); Title(ID_AG_BLANK);
+	Text(ID_AG_SOGDIA_KILL);
+	rebellionOver = 1;				// Sogdian Rebellion ends
+	Button(ID_AG_BUTTON_OK) {
+		Kill();
+	}
+}
+
+alertbox 'AGSogdiaBribe' {
+	Show(); Title(ID_AG_BLANK);
+	Text(ID_AG_SOGDIA_BRIBE);
+
+	Button(ID_AG_BUTTON_YES) {
+		Kill();
+		if (PlayerGold(1) >= 1000) {		// If M has 1000 Gold or more
+			AddGold(1, -1000);				// Deduct 1000 Gold
+			rebellionOver = 1;				// Sogdian Rebellion ends
+		} else {
+			Message(1, 'AGSogdiaBribeNSF');
+			rebelFlag = 3;					// Sogdian Rebellion continues
+		}
+	}
+	Button(ID_AG_BUTTON_NO) {
+		Kill();
+		Message(1, 'AGSogdiaBribeNo');
+		rebelFlag = 3;						// Sogdian Rebellion continues
+	}
+}
+
+alertbox 'AGSogdiaBribeNo' {
+	Show(); Title(ID_AG_BLANK);
+	Text(ID_AG_SOGDIA_BRIBE_NO);
+	Button(ID_AG_BUTTON_OK) {
+		Kill();
+	}
+}
+
+alertbox 'AGSogdiaBribeNSF' {
+	Show(); Title(ID_AG_BLANK);
+	Text(ID_AG_SOGDIA_BRIBE_NSF);
+	Button(ID_AG_BUTTON_OK) {
+		Kill();
+	}
+}
+
+
+
+  //----------------//
+ // Seres messages //
+//----------------//
+
+messagebox 'AGSeres' {
+	Show(); Title(ID_AG_BLANK);
+	Text(ID_AG_SERES);
+}
+
+messagebox 'AGSeres2' {
+	Show(); Title(ID_AG_BLANK);
+	Text(ID_AG_SERES2);
+}
+
+  //----------------//
+ // India messages //
+//----------------//
+
+messagebox 'AGNearCrossRoad' {
+	Show(); Title(ID_AG_BLANK);
+	Text(ID_AG_NEAR_CROSSROAD);
+}
+
+messagebox 'AGCaspianGate' {
+	Show(); Title(ID_AG_BLANK);
+	Text(ID_AG_CASPIAN_GATE);
+}
+
+messagebox 'AGCrossroads' {
+	Show(); Title(ID_AG_BLANK);
+	Text(ID_AG_CROSSROADS);
+}
+
+messagebox 'AGIndiaRoute' {
+	Show(); Title(ID_AG_BLANK);
+	Text(ID_AG_INDIA_ROUTE);
+}
+
+messagebox 'AGIndiaRoute2' {
+	Show(); Title(ID_AG_BLANK);
+	Text(ID_AG_INDIA_ROUTE2);
+}
+
+messagebox 'AGIndiaRoute3' {
+	Show(); Title(ID_AG_BLANK);
+	Text(ID_AG_INDIA_ROUTE3);
+}
+
+messagebox 'AGWilderness' {
+	Show(); Title(ID_AG_BLANK);
+	Text(ID_AG_WILDERNESS);
+}
+
+messagebox 'AGTaksasilaA' {
+	Show(); Title(ID_AG_BLANK);
+	Text(ID_AG_TAKSASILA_A);
+	Button(ID_AG_BUTTON_NEXT) {
+		Message(1, 'AGTaksasilaB');
+		Kill();
+	}
+}
+
+messagebox 'AGTaksasilaB' {
+	Show(); Title(ID_AG_BLANK);
+	Text(ID_AG_TAKSASILA_B);
+	Button(ID_AG_BUTTON_BACK) {
+		Message(1, 'AGTaksasilaA');
+		Kill();
+	}
+}
+
+messagebox 'AGTaksasila2A' {
+	Show(); Title(ID_AG_BLANK);
+	Text(ID_AG_TAKSASILA2_A);
+	Button(ID_AG_BUTTON_NEXT) {
+		Message(1, 'AGTaksasila2B');
+		Kill();
+	}
+}
+
+messagebox 'AGTaksasila2B' {
+	Show(); Title(ID_AG_BLANK);
+	Text(ID_AG_TAKSASILA2_B);
+	Button(ID_AG_BUTTON_NEXT) {
+		Message(1, 'AGTaksasila2C');
+		Kill();
+	}
+	Button(ID_AG_BUTTON_BACK) {
+		Message(1, 'AGTaksasila2A');
+		Kill();
+	}
+}
+
+messagebox 'AGTaksasila2C' {
+	Show(); Title(ID_AG_BLANK);
+	Text(ID_AG_TAKSASILA2_C);
+	Button(ID_AG_BUTTON_BACK) {
+		Message(1, 'AGTaksasila2B');
+		Kill();
+	}
+}
+
+messagebox 'AGPorusOld' {
+	Show(); Title(ID_AG_BLANK);
+	Text(ID_AG_PORUS_OLD);
+}
+
+messagebox 'AGPorusBattle' {
+	Show(); Title(ID_AG_BLANK);
+	Text(ID_AG_PORUS_BATTLE);
+}
+
+messagebox 'AGMagadhan' {
+	Show(); Title(ID_AG_BLANK);
+	Text(ID_AG_MAGADHAN);
+	Button(ID_AG_BUTTON_NEXT) {
+		Message(1, 'AGMagadhan2');
+		Kill();
+	}
+}
+
+messagebox 'AGMagadhan2' {
+	Show(); Title(ID_AG_BLANK);
+	Text(ID_AG_MAGADHAN);
+	Button(ID_AG_BUTTON_BACK) {
+		Message(1, 'AGMagadhan');
+		Kill();
+	}
+}
+
+messagebox 'AGSouthIndia' {
+	Show(); Title(ID_AG_BLANK);
+	Text(ID_AG_SOUTH_INDIA);
+}
+
+messagebox 'AGMagadhanFlee' {
+	Show(); Title(ID_AG_BLANK);
+	Text(ID_AG_MAGADHAN_FLEE);
+}
+
+messagebox 'AGKausambi' {
+	Show(); Title(ID_AG_BLANK);
+	Text(ID_AG_KAUSAMBI);
+}
+
+messagebox 'AGUjjayini' {
+	Show(); Title(ID_AG_BLANK);
+	Text(ID_AG_UJJAYINI);
+}
+
+messagebox 'AGPataliputraA' {
+	Show(); Title(ID_AG_BLANK);
+	Text(ID_AG_PATALIPUTRA_A);
+	Button(ID_AG_BUTTON_NEXT) {
+		Kill();
+		Message(1, 'AGPataliputraB');
+	}
+}
+
+messagebox 'AGPataliputraB' {
+	Show(); Title(ID_AG_BLANK);
+	Text(ID_AG_PATALIPUTRA_B);
+	Button(ID_AG_BUTTON_BACK) {
+		Kill();
+		Message(1, 'AGPataliputraA');
+	}
+}
+
+messagebox 'AGKasi' {
+	Show(); Title(ID_AG_BLANK);
+	Text(ID_AG_KASI);
+}
+
+alertbox 'AGMagadhanDefeat' {
+	Show(); Title(ID_AG_BLANK);
+	Text(ID_AG_MAGADHAN_DEFEAT);
+	Button(ID_AG_BUTTON_NO) {
+		Kill();
+	}
+	Button(ID_AG_BUTTON_YES) {
+		Kill();
+		if (PlayerGold(1) >= 5000) {		// If M has 5000 Gold or more
+			AddGold(1, -5000);				// Deduct 5000 Gold
+			HappyIndians();					// Make the major Indian Cities you control very happy
+			Message(1, 'AGMagadhanMoney');
+		} else {
+			Message(1, 'AGMagadhanNomoney');
+		}
+	}
+}
+
+alertbox 'AGMagadhanMoney' {
+	Show(); Title(ID_AG_BLANK);
+	Text(ID_AG_MAGADHAN_MONEY);
+	Button(ID_AG_BUTTON_OK) {
+		Kill();
+	}
+}
+
+alertbox 'AGMagadhanNomoney' {
+	Show(); Title(ID_AG_BLANK);
+	Text(ID_AG_MAGADHAN_NOMONEY);
+	Button(ID_AG_BUTTON_OK) {
+		Kill();
+	}
+}
+
+alertbox 'AGSindu' {
+	Show(); Title(ID_AG_BLANK);
+	Text(ID_AG_SINDU);
+	Button(ID_AG_BUTTON_NO) {
+		Kill();
+		Message(1, 'AGSinduNomarry');
+		magadhanDeal = -1;
+	}
+	Button(ID_AG_BUTTON_MARRY) {
+		Kill();
+		if (PlayerGold(1) >= 6000) {		// If M has 6000 Gold or more
+			AddGold(1, -6000);				// Deduct 6000 Gold
+			wife[2] = 1;					// start Sindu's "procreation counter"
+			magadhanDeal = 1;
+			Message(1, 'AGSinduMarry');
+		} else {
+			Message(1, 'AGSinduNomoney');
+		}
+	}
+}
+
+alertbox 'AGSinduMarry' {
+	Show(); Title(ID_AG_BLANK);
+	Text(ID_AG_SINDU_MARRY);
+	Button(ID_AG_BUTTON_OK) {
+		Kill();
+	}
+}
+
+alertbox 'AGSinduNomarry' {
+	Show(); Title(ID_AG_BLANK);
+	Text(ID_AG_SINDU_NOMARRY);
+	Button(ID_AG_BUTTON_OK) {
+		Kill();
+	}
+}
+
+alertbox 'AGSinduNomoney' {
+	Show(); Title(ID_AG_BLANK);
+	Text(ID_AG_SINDU_NOMONEY);
+	Button(ID_AG_BUTTON_OK) {
+		Kill();
+	}
+}
+
+alertbox 'AGChandra' {
+	Show(); Title(ID_AG_BLANK);
+	Text(ID_AG_CHANDRA);
+	Button(ID_AG_BUTTON_OK) {
+		Kill();
+	}
+}
+
+messagebox 'AGChandraRumor' {
+	Show(); Title(ID_AG_BLANK);
+	Text(ID_AG_CHANDRA_RUMOR);
+}
+
+messagebox 'AGChandraDead' {
+	Show(); Title(ID_AG_BLANK);
+	Text(ID_AG_CHANDRA_DEAD);
+}
+
+messagebox 'AGChandraOld' {
+	Show(); Title(ID_AG_BLANK);
+	Text(ID_AG_CHANDRA_OLD);
+}
+
+//------------------------//
+// Various city messages //
+//----------------------//
+
+messagebox 'AGBabylon' {
+	Show(); Title(ID_AG_BLANK);
+	Text(ID_AG_BABYLON);
+}
+
+messagebox 'AGEcbatana' {
+	Show(); Title(ID_AG_BLANK);
+	Text(ID_AG_ECBATANA);
+}
+
+messagebox 'AGSyracuse' {
+	Show(); Title(ID_AG_BLANK);
+	Text(ID_AG_SYRACUSE);
+}
+
+messagebox 'AGAthens' {
+	Show(); Title(ID_AG_BLANK);
+	Text(ID_AG_ATHENS);
+}
+
+messagebox 'AGSparta' {
+	Show(); Title(ID_AG_BLANK);
+	Text(ID_AG_SPARTA);
+}
+
+messagebox 'AGPersepolis' {
+	Show(); Title(ID_AG_BLANK);
+	Text(ID_AG_PERSEPOLIS);
+}
+
+messagebox 'AGSusa' {
+	Show(); Title(ID_AG_BLANK);
+	Text(ID_AG_SUSA);
+}
+
+messagebox 'AGRome' {
+	Show(); Title(ID_AG_BLANK);
+	Text(ID_AG_ROME);
+}
+
+messagebox 'AGPersepolis2' {
+	Show(); Title(ID_AG_BLANK);
+	Text(ID_AG_PERSEPOLIS2);
+}
+
+messagebox 'AGSusa2' {
+	Show(); Title(ID_AG_BLANK);
+	Text(ID_AG_SUSA2);
+}
+
+messagebox 'AGEcbatana2' {
+	Show(); Title(ID_AG_BLANK);
+	Text(ID_AG_ECBATANA2);
+}
+
+messagebox 'AGBabylon2' {
+	Show(); Title(ID_AG_BLANK);
+	Text(ID_AG_BABYLON2);
+}
+
+messagebox 'AGAthens2' {
+	Show(); Title(ID_AG_BLANK);
+	Text(ID_AG_ATHENS2);
+}
+
+messagebox 'AGSpartaDefect' {
+	Show(); Title(ID_AG_BLANK);
+	Text(ID_AG_SPARTA_DEFECT);
+}
+
+  //--------------------------//
+ // Endgame-related messages //
+//--------------------------//
+
+alertbox 'AGAlexDefeatA' {
+	Show(); Title(ID_AG_BLANK);
+	Text(ID_AG_ALEX_DEFEAT_A);
+	Button(ID_AG_BUTTON_NEXT) {
+		Kill();
+		Message(1, 'AGAlexDefeatB');
+	}
+}
+
+alertbox 'AGAlexDefeatB' {
+	Show(); Title(ID_AG_BLANK);
+	Text(ID_AG_ALEX_DEFEAT_B);
+	Button(ID_AG_BUTTON_NEXT) {
+		Kill();
+		Message(1, 'AGAlexStage4');
+	}
+	Button(ID_AG_BUTTON_BACK) {
+		Kill();
+		Message(1, 'AGAlexDefeatA');
+	}
+}
+
+alertbox 'AGAlexDead' {
+	Show(); Title(ID_AG_BLANK);
+	Text(ID_AG_ALEX_DEAD);
+	Button(ID_AG_BUTTON_NEXT) {
+		Kill();
+		AlexanderGameOver();
+	}
+}
+
+alertbox 'AGAlexShipA' {
+	Show(); Title(ID_AG_BLANK);
+	Text(ID_AG_ALEX_SHIP_A);
+	Button(ID_AG_BUTTON_NEXT) {
+		Kill();
+		Message(1, 'AGAlexShipB');
+	}
+}
+
+alertbox 'AGAlexShipB' {
+	Show(); Title(ID_AG_BLANK);
+	Text(ID_AG_ALEX_SHIP_B);
+	Button(ID_AG_BUTTON_NEXT) {
+		Kill();
+		Message(1, 'AGAlexStage4');
+	}
+	Button(ID_AG_BUTTON_BACK) {
+		Kill();
+		Message(1, 'AGAlexShipA');
+	}
+}
+
+alertbox 'AGAlexDrown' {
+	Show(); Title(ID_AG_BLANK);
+	Text(ID_AG_ALEX_DROWN);
+	Button(ID_AG_BUTTON_NEXT) {
+		Kill();
+		AlexanderGameOver();
+	}
+}
+
+alertbox 'AGAlexStage1' {
+	Show(); Title(ID_AG_BLANK);
+	Text(ID_AG_ALEX_STAGE1);
+	Button(ID_AG_BUTTON_OK) {
+		Kill();
+	}
+}
+
+alertbox 'AGAlexStage2' {
+	Show(); Title(ID_AG_BLANK);
+	Text(ID_AG_ALEX_STAGE2);
+	Button(ID_AG_BUTTON_OK) {
+		Kill();
+	}
+}
+
+alertbox 'AGAlexStage3' {
+	Show(); Title(ID_AG_BLANK);
+	Text(ID_AG_ALEX_STAGE3);
+	Button(ID_AG_BUTTON_OK) {
+		Kill();
+	}
+}
+
+alertbox 'AGAlexStage4' {
+	Show(); Title(ID_AG_BLANK);
+	Text(ID_AG_ALEX_STAGE4);
+	Button(ID_AG_BUTTON_YES) {
+		Kill();
+		alexTreatment = 1;
+	}
+	Button(ID_AG_BUTTON_NO) {
+		Kill();
+	}
+}
+
+alertbox 'AGAlexDisease' {
+	Show(); Title(ID_AG_BLANK);
+	Text(ID_AG_ALEX_DISEASE);
+	Button(ID_AG_BUTTON_NEXT) {
+		Kill();
+		Message(1, 'AGGameOver');
+	}
+}
+
+alertbox 'AGAlexDisease2' {
+	Show(); Title(ID_AG_BLANK);
+	Text(ID_AG_ALEX_DISEASE2);
+	Button(ID_AG_BUTTON_NEXT) {
+		Kill();
+		Message(1, 'AGGameOver');
+	}
+}
+
+
+  //--------------------------//
+ // Endgame ranking messages //
+//--------------------------//
+
+alertbox 'AGGameover' {
+	Show(); Title(ID_AG_BLANK);
+	Text(ID_AG_GAMEOVER);
+	Button(ID_AG_BUTTON_OK) {
+		Kill();
+		GameOver(1, 1);
+	}
+}
+
+alertbox 'AGUnworthy' {
+	Show(); Title(ID_AG_BLANK);
+	Text(ID_AG_UNWORTHY);
+	Button(ID_AG_BUTTON_NEXT) {
+		Kill();
+		Message(1, 'AGGameover');
+	}
+}
+
+alertbox 'AGGood' {
+	Show(); Title(ID_AG_BLANK);
+	Text(ID_AG_GOOD);
+	Button(ID_AG_BUTTON_NEXT) {
+		Kill();
+		Message(1, 'AGGameover');
+	}
+}
+
+alertbox 'AGMighty' {
+	Show(); Title(ID_AG_BLANK);
+	Text(ID_AG_MIGHTY);
+	Button(ID_AG_BUTTON_NEXT) {
+		Kill();
+		Message(1, 'AGGameover');
+	}
+}
+
+alertbox 'AGGreat' {
+	Show(); Title(ID_AG_BLANK);
+	Text(ID_AG_GREAT);
+	Button(ID_AG_BUTTON_NEXT) {
+		Kill();
+		Message(1, 'AGGameover');
+	}
+}
+
+alertbox 'AGMagnificent' {
+	Show(); Title(ID_AG_BLANK);
+	Text(ID_AG_MAGNIFICENT);
+	Button(ID_AG_BUTTON_NEXT) {
+		Kill();
+		Message(1, 'AGGameover');
+	}
+}
+
+alertbox 'AGDemigod' {
+	Show(); Title(ID_AG_BLANK);
+	Text(ID_AG_DEMIGOD);
+	Button(ID_AG_BUTTON_NEXT) {
+		Kill();
+		Message(1, 'AGGameover');
+	}
+}
+
+alertbox 'AGGod' {
+	Show(); Title(ID_AG_BLANK);
+	Text(ID_AG_GOD);
+	Button(ID_AG_BUTTON_NEXT) {
+		Kill();
+		Message(1, 'AGGameover');
+	}
+}
+
+messagebox 'AGTemp' {
+	Show(); Title(ID_AG_BLANK);
+	Text(ID_AG_TEMP);
+}
+
+alertbox 'AGTemp2' {
+	Show(); Title(ID_AG_BLANK);
+	Text(ID_AG_TEMP2);
+}

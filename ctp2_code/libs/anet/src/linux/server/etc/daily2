@@ -1,0 +1,50 @@
+#!/bin/sh
+# Start (or restart) the ActiveNet game server, saving /tmp/dp.log if exists
+# Throw away the freeze file before restarting.
+#
+# You should not need to edit this file.  All modifiable
+# fields are controlled by the file ~/etc/anet2env
+#
+
+# Set environment variables
+. ~/etc/anet2env
+
+# Stop existing server
+. ~/etc/stop2
+
+# Remove old freeze file
+rm -f $ANET2_FREEZE
+
+# Save one level of old log
+echo Resetting game server at `date`
+rm -f $ANET2_LOG.old
+if [ -f $ANET2_LOG ]; then
+   mv $ANET2_LOG $ANET2_LOG.old
+fi
+
+if [ -n $ANET2_INI ]; then
+	prevlog=/tmp/dp1.log
+	for logfile in /tmp/dp.log; do
+		if [ -f "$logfile" ]; then
+			mv "$logfile" "$prevlog" 
+		fi
+		prevlog=$logfile
+	done
+fi
+
+# Save today's client crash logs
+if [ -z "$ANET2_CRASHLOG" ]; then
+	MY_CRASHLOG=/var/tmp/atvilog.bin
+else
+	MY_CRASHLOG=$ANET2_CRASHLOG
+fi
+if [ -s $MY_CRASHLOG ]; then
+   if [ ! -d $ANET2_WEBHOME/atvilog ]; then
+      mkdir $ANET2_WEBHOME/atvilog
+   fi
+   mv $MY_CRASHLOG $ANET2_WEBHOME/atvilog/`date '+%y-%m-%d'`.bin
+fi
+
+# Start the server
+. ~/etc/runAnet2
+

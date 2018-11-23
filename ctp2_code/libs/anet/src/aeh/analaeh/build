@@ -1,0 +1,54 @@
+#!/bin/sh
+# analcrsh Build Script
+set -e
+die() {
+	echo "Build failed; $0"
+	exit 1
+}
+
+FLAGS_NORMAL="-DNDEBUG -O3 -Werror"
+FLAGS_DEBUG="-DDEBUG -g -Werror"
+FLAGS_PROFILE="-DNDEBUG -D_PROFILE -O3 -pg -Werror"
+FLAGS_LOG="-DNDEBUG -DPRNT -O3 -Werror"
+
+# Default is to do the all
+case $1 in "" )
+	./build NORMAL || die
+	./build DEBUG || die
+	./build PROFILE || die
+	./build LOG || die
+esac
+
+echo -n "Crash Logger: "
+
+# Normal Build
+case $1 in normal | NORMAL ) 
+	echo "NORMAL"
+	if [ ! -d normal ]; then mkdir normal; fi
+	cd normal
+	make -f ../makefile.lin "FLAGS=${FLAGS_NORMAL}" SUFFIX= || die
+esac
+
+# Debugging Build
+case $1 in debug | DEBUG ) 
+	echo "DEBUG"
+	if [ ! -d debug ]; then mkdir debug; fi
+	cd debug
+	make -f ../makefile.lin "FLAGS=${FLAGS_DEBUG}" SUFFIX=d || die
+esac
+
+# Profiling Build
+case $1 in profile | PROFILE ) 
+	echo "PROFILE"
+	if [ ! -d profile ]; then mkdir profile; fi
+	cd profile
+	make -f ../makefile.lin "FLAGS=${FLAGS_PROFILE}" SUFFIX=p || die
+esac
+
+# Logging Build
+case $1 in log | LOG ) 
+	echo "LOG"
+	if [ ! -d log ]; then mkdir log; fi
+	cd log
+	make -f ../makefile.lin "FLAGS=${FLAGS_LOG}" SUFFIX=l || die
+esac

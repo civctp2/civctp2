@@ -1,0 +1,1295 @@
+<center><h1>Anet SDK - Release notes</h1></center>
+<!-- Do not edit with Microsoft Word or any other wyswig editor.-->
+<!-- Use only a plain text editor.-->
+<h2>Changes</h2>
+<ul>
+
+<li>1 Sept 2001
+<ul>
+<li>Sanitized for public release.  Added LGPL license.
+<li>Deleted doc related to the automatic patch downloader,
+as that's not really a safe thing to have on public untrusted servers.
+That would need to be redone using cryptographically signed downloads to
+be useful.
+<li>This package still contains a number of references to Activision
+and how they built games in the past.  These are probably obsolete and
+should be removed eventually.
+</ul>
+
+
+<li>27 Apr 1999
+<ul>
+<li>Clean up better when dpOpen() fails.  This fixes a bug in Civ
+where you couldn't get back into the lobby if join failed.
+</ul>
+
+<li>20 Apr 1999
+<ul>
+<li>modcrc now included in Linux build.  Output file now portable.
+</ul>
+
+<li>16 Apr 1999
+<ul>
+<li>Made small change to anet2.dll and anetdrop.exe for 
+compatibility with MPlayer.
+</ul>
+
+<li>15 Apr 1999
+<ul>
+<li>Changed how non-responding players are timed out.
+Only the master does this now; this fixes the "different players have
+different player lists" bug.
+</ul>
+
+<li>12 Apr 1999
+<ul>
+<li>Fixed player latency bug harder.  No longer use risky estimator.
+<li>Fixed bug that prevented games connected to game server from being joined
+directly (without use of the game server).
+</ul>
+
+<li>8 Apr 1999
+<ul>
+<li>Fixed bug that caused player latencies to go negative above 2 seconds.
+</ul>
+
+<li>30 Mar 1999
+<ul>
+<li>anetdrop now writes ASCII files instead of binary files, takes a
+-y option to give freeze file a suffix that depends on the session type,
+and takes a -l= option that lets you join by session ID.
+These changes are needed to support web launching.
+</ul>
+
+<li>25 Mar 1999
+<ul>
+<li>
+Added new function <a href="dp.htm#dpGetGameServerEx">dpGetGameServerEx()</a>
+<li>Updated chat demo; it's now much cleaner.
+</ul>
+
+<li>24 Mar 1999
+<ul>
+<li>
+<a href="dp.htm#dp_objectDelta_packet">dp_objectDelta_packet_t</a>
+now contains a pktloss field which is set for
+player deltas if dp_KEY_PLAYER_LATENCIES have been requested with 
+dpRequestObjectDeltas().
+<li>dpGetPlayerCaps now sets the dwPktLoss field of dp_caps_t.
+<li>When a player becomes host due to migration, we now reconnect to the 
+game server if the connection had been lost.  This makes sure the game
+stays in the server's session list.
+<li>Fixed a bug that caused keepalives to happen too infrequently.
+<li>Fixed a bug that kept players behind the same NAT or dual interface
+players on the same LAN from connecting.
+<li>UDP LAN driver no longer triggers autodial.
+</ul>
+
+<li>9 Mar 1999
+<ul>
+<li>Fixed bug which caused reliable transport to fail to retransmit
+maximal-sized packets sometimes.
+</ul>
+
+<li>4 Mar 1999
+<ul>
+<li>dpSetPingIntervals now works properly for players that join after the
+call.
+<li>Removed australia1 from hard-coded default server list.
+<li>Added file bootserv.txt to win\dll.  It should be placed in the current
+directory of each product.
+</ul>
+
+<li>1 Mar 1999
+<ul>
+<li>The crash logger dialog box in sendcrsh.exe now has a text field labeled
+'CRC' that shows the crash signature.
+<li>Analcrsh prints out the crash signature as 'Stack CRC'.
+<li>Added setPingIntervals command to gtest.
+</ul>
+
+<li>26 Feb 1999
+<ul>
+<li>Fixed another bug in reliable transport that could cause it to get stuck
+once in a great while.
+<li>Implemented a more correct fix for the retransmission bug introduced on
+21 Feb 1999.
+<li>Added <a href="dp.htm#dpSetPingIntervals">dpSetPingIntervals()</a> to
+make it easier to measure latencies.
+</ul>
+
+<li>23 Feb 1999
+<ul>
+<li>Fixed a bug in reliable transport introduced with last change that
+caused reliable transport to get stuck.
+</ul>
+
+<li>21 Feb 1999
+<ul>
+<li>Reliable packet retransmission now sends as many logical packets as will
+fit in a physical packet, which fixes a speed problem introduced when we added
+packet gathering.
+<li>Packet gathering code now checks whether driver can handle big packets
+before trying to send them.
+</ul>
+
+<li>18 Feb 1999
+<ul>
+<li>On the server, atvilog.bin is put directly into $ANET2_WEBHOME instead of
+/var/tmp by default.
+<li>Sendcrsh.exe has a nicer dialog box and a place for users to type in
+comments.  Analcrsh now handles these new comments.
+</ul>
+
+<li>12 Feb 1999
+<ul>
+<li>Crashes are no longer written to disk in atvilog.bin; instead,
+they are passed to the program sendcrsh.exe, which pops up a window
+once anet2.dll is unloaded, and gives the user the option of sending
+the crashlog via TCP/IP to a game server.
+<li>Session records are now passed reliably from the host to the client
+in the internet case for Battlezone's benefit.
+</ul>
+
+<li>8 Feb 1999
+<ul>
+<li>Fixed carry bug that could cause reliable transfers to get stuck.
+<li>Fixed assertion in Internet drivers that complained incorrectly that
+packets were too big.
+</ul>
+
+<li>5 Feb 1999
+<ul>
+<li>dpFlush() now buffers up to 520 bytes per packet on the internet
+transports.  This can improve network throughput.
+<li>The linux build is now glibc.
+<li>The linux build now includes easy to install server and crash monitoring
+tools.
+</ul>
+
+<li>3 Feb 1999
+<ul>
+<li>The server bootstrap list is now loaded from the file bootserv.txt in
+the same directory as anet2.dll.  If servers.dat exists, that is used instead.
+If bootserv.txt does not exist, the old hard coded list is used.
+</ul>
+
+<li>2 Feb 1999
+<ul>
+<li>Fixed bug which caused dpReceive to return EMPTY instead of AGAIN
+occasionally.
+<li>Added dpFlush().  If you call this after finishing your network
+processing, the library will buffer up your packets until the next call to
+dpFlush().  For some applications, this can greatly decrease network overhead.
+</ul>
+
+<li>26 Jan 1999
+<ul>
+<li>Fixed bugs that happened if two players had the same local address.
+For example, if two people with cable modems set up Sygate and used the same
+local LAN address, and the game happened to pick the same port.
+<li>Fixed bug that caused servers to be too sensitive to dropped ack packets
+from clients.
+</ul>
+
+<li>22 Jan 1999
+<ul>
+<li>Fixed bug that caused the first few reliable packets to be delayed in some
+cases.
+<li>Server sends session updates every 4 seconds instead of every 2.
+<li>Session records now have lowest priority.
+<li>Removed a few bottlenecks in bench.c/bench.pr, which is good for about 256
+players on a 350 MHz Pentium II with no logging.
+</ul>
+
+<li>7 Jan 1999
+<ul>
+<li>Internally, Anet is now more efficient in how it sends player 
+information from the server or host, which reduces server connect time 
+roughly 10-20%.
+</ul>
+
+<li>4 Jan 1999
+<ul>
+<li>When a player behind a NAT connects to a server and immediately
+issues a dpOpen(...NULL...) to join any server lobby, it now succeeds.
+(There used to be a race condition; I now delay sending the join request
+until our public address is known.)  This happened every time in Dark Reign 1.4,
+and was likely to happen in other games, too.
+</ul>
+
+<li>31 Dec 1998
+<ul>
+<li>Fixed a problem involving two players behind the same firewall
+(forgot to open up firewall properly; this caused remote player enumeration
+and sometimes session joining to fail).
+<li>Rewrote the Wait command in the bench test program; Wait 1000 should
+now always wait 1 second (with granularity influenced by the commandline
+timestep parameter).
+</ul>
+
+<li>20 Dec 1998
+<ul>
+<li>Fixed a problem which caused dpSend to get confused instead of
+returning dp_RES_FULL occasionally if you tried to send too many packets.
+<li>Fixed two minor glitches that caused some server traffic to be
+sent in two packets when it could have fit in one packet. 
+</ul>
+
+<li>13 Dec 1998
+<ul>
+<li>Fixed two server bugs that caused problems with two player games
+where both players are behind same NAT.  The server should now correctly 
+forward both addresses of the joiner to the host.
+</ul>
+
+<li>10 Dec 1998
+<ul>
+<li>2 player games can continue only if the host left gracefully with
+dpShutdown() (or with dpClose(), if the host lingers long enough for
+the retransmits to go through).  
+If the host leaves ungracefully (e.g. by crashing, and timing out), 
+the session is declared lost.
+This prevents a 2 player game from splitting into two 1 player games.
+<li>3 and 4 player games can continue only if the host leaves gracefully,
+or if nobody else leaves while the host is timing out.
+This prevents these games from splitting.
+</ul>
+
+<li>9 Dec 1998
+<ul>
+<li>Added dpGetCurrentHostId().
+<li>Host migration is now much more reliable; up to 1/3 of the players can
+leave the game at about the same time without the session being lost.
+<li>Fixed a rare bug in handling bogus ack packets.
+<li>dpShutdown no longer accidentally kicks players out when the host leaves.
+</ul>
+
+<li>23 Nov 1998
+<ul>
+<li>Wrote several more regression test scenarios for host migration, and fixed problems they found.
+<li>dpGetParameterLong now properly passes requests to drivers, even if
+it doesn't recognize them itself.  This fixes a problem with bench that
+prevented it from responding quickly to network I/O.
+<li>Reliable transmissions now slightly less sensitive to packet loss;
+the code that let multiple packets be acked with a single ack was
+written in Nov 97, but was not normally compiled in until now (!).
+</ul>
+
+<li>19 Nov 1998
+<ul>
+<li>Bench scripts now have access to number of players.  
+First real regression test for host migration uses this.
+<li>Fixed host migration bug introduced on 15 Nov; players were killing 
+themselves even when they weren't the lone holdout in the election.
+<li>Now ignore host migration votes from players who have left the game.
+<li>Wrote <a href="anet_inf.htm">central document describing contents
+of the ANET.INF file</a> and what uses it.
+</ul>
+
+<li>15 Nov 1998
+<ul>
+<li>SESSIONLOST packet now sent sooner - it had been waiting up to
+a second to close the session when it was lost.  Also, SESSIONLOST
+packet hadn't always been sent after an involuntary close; it's 
+sent more uniformly now.
+<li>Fixed bug in host migration when only one player lost his
+connection only to the host, but all the other N*(N-1)-1 connections
+remained good.  (The fellow in question didn't kill himself properly,
+and was left alone in a session.)
+</ul>
+
+<li>12 Nov 1998
+<ul>
+<li>Debug build no longer checks heap on every call to dpReceive().  This was
+causing the debug version of dpReceive() to take 300ms on some games.
+</ul>
+
+<li>11 Nov 1998
+<ul>
+<li>Added workaround in winets2.dll for bug that caused trouble with the 
+Surfboard 1200 one-way cable modem (used by MediaOne on east coast).
+<li>wipx2d.dll now shows "Debug IPX" as its name.
+<li>Fixed rare crash bug in analcrsh.exe.
+<li>Linux debug library no longer DPRINTs when reading from socket gives
+EWOULDBLOCK
+<li>dp_setLogFp(NULL) now properly triggers create of logfile on next
+DPRINT.  
+<li>Added LoseHost and DPRINT commands to bench to support host migration
+regression test.  Each process now has its own log file (bench%d.log).
+</ul>
+
+<li>6 Nov 1998
+<ul>
+<li>Linux build now includes antpsrv, antpclient, and wmqmerge programs;
+these are building blocks we plan to use for password, score, crash,
+and statistics database sharing between servers.
+</ul>
+
+<li>5 Nov 1998
+<ul>
+<li>Fixed two host migration bugs- one that caused session to disappear
+from server or lan after migration, and one that caused session migration
+to fail totally if just one player happened to lose connection to just the
+host.
+</ul>
+
+<li>29 Oct 1998
+<ul>
+<li>Fixed an assertion failure that can happen if you disconnect from
+a game server immediately after connecting.  (It was more serious if you're
+logged in with a username and password, but nobody's doing that yet.)
+</ul>
+
+<li>28 Oct 1998
+<ul>
+<li>Fixed a host migration bug - 
+game no longer disappears from list on Internet after migration.
+(The fix on June 11th was incomplete because sometimes the delete message
+for the old session arrived after the change message for the new session.
+Delete messages are now ignored if not from the current owner.)
+</ul>
+
+<li>27 Oct 1998
+<ul>
+<li>Fixed bug introduced 13 October which caused session list to be empty
+after returning from a game.  Mea culpa.
+<li>Updater DLL now has one more error message in updater.txt.
+</ul>
+
+<li>26 Oct 1998
+<ul>
+<li>Disabled 2d display device detection during crash logging,
+since the code that does the detection seems to be having trouble.
+</ul>
+
+<li>23 Oct 1998
+<ul>
+<li>Backed out a change to the IPX driver made on 24 September
+that was causing problems on one pair of machines.
+</ul>
+
+<li>21 Oct 1998
+<ul>
+<li>dpShutdown now takes third parameter to control whether it
+disconnects from the game server; this is for convenience,
+so you can use the same logic for leaving sessions as for leaving
+the program altogether.  
+(The only reason to use dpShutdown rather than dpClose etc. in this case
+is that it takes care of checking for dpReadyToFreeze() etc.
+This extra check shouldn't be needed, but it helps work around
+a problem reconnecting to players you've just disconnected from.)
+</ul>
+
+<li>19 Oct 1998
+<ul>
+<li>Internet driver for win32 now opens a UDP port within the range 21100-21299
+by default (though game can override this; also, if that port is not
+available, the driver lets the OS pick the port).  
+This lets users who are behind port-screening firewalls set their firewalls to
+allow access.  (Users behind NAT firewalls, on the other hand,
+never had to do any special firewall configuration, and still don't.)
+</ul>
+
+<li>16 Oct 1998
+<ul>
+<li>Server table now works properly if a server in the bootstrap list
+changes IP address.
+<li>Fixed another minor bug in crash logger.
+</ul>
+
+<li>15 Oct 1998
+<ul>
+<li>Server table now updates properly when you connect to a game
+server even if you don't enumerate servers or request server deltas.
+<li>Updated bootstrap server list.
+<li>Added <a href="dp.htm#errors">section on error handling</a> to documentation.
+<li>Fixed two problems in crash handler that caused some crash reports to be
+lost.
+</ul>
+
+<li>13 Oct 1998
+<ul>
+<li>When you join a non-lobby session, all player and session information 
+from the server and from other sessions is now turned off.
+This fixes a packet leak which used up a noticable amount of bandwidth.
+</ul>
+
+<li>9 Oct 1998
+<ul>
+<li>dp_initEnumServers() now ignores old versions of the servers.dat freeze
+file with the wrong record length.  The servers.dat file will be overwritten
+with an up to date version on freezing.
+</ul>
+
+<li>8 Oct 1998
+<ul>
+<li>Added player latency deltas.  To request them within the current session, 
+use dpRequestObjectDeltas() with the key key[0]=dp_KEY_PLAYER_LATENCIES, and
+turn on player deltas normally.  See <a href=dp.htm#dpRequestObjectDeltas>
+dpRequestObjectDeltas()</a> for details.
+</ul>
+
+<li>7 Oct 1998
+<ul>
+<li>dpSetPlayerName() bug fixed.
+</ul>
+
+<li>6 Oct 1998
+<ul>
+<li>dpOpen now sends a local dp_sessionResult_packet_t packet in addition
+to a callback to indicate success or failure.  This is part of a general
+shift away from callbacks, which are considered unsafe.
+</ul>
+
+<li>5 Oct 1998
+<ul>
+<li>dpOpen now always generates a callback; this fixes a bug if the host was
+unreachable.
+<li>The cache file (feif.dat) used by dpGetAppVersion() is written properly
+even if disconnected from game server when shutting down.
+<li>A new transport is available, UDP LAN.  This is useful for customers
+who don't have a usable IPX installation, but who do have a good Internet
+LAN, and want to play locally without using the game servers.
+<li>Minor fixes in server README, daily2, servfil, and runservfil.cgi.
+<li>Session joining code cleaned up in preparation for dpOpen2().
+</ul>
+
+<li>25 Sep 1998
+<ul>
+<li>Server now increments nextid separately for each lobby.
+<li>dpfreeze now works properly after players leave.
+</ul>
+
+<li>24 Sep 1998
+<ul>
+<li>Fixed bug that occasionally caused create player to fail on rejoin!
+<li>Fixed bug that occasionally chewed up CPU time if a destination handle
+went bad.
+<li>Fixed minor bug that caused debug version to run slowly.
+<li>Changed Win32 IPX driver to get IPX address differently.  Should
+be slightly faster, and is definitely more kosher.
+</ul>
+
+<li>23 Sep 1998
+<ul>
+<li>Added -m commandline parameter to game server to set max number of
+connections.  This should be about 2x the max number of users.
+Maxium value 2000.  We have verified that the server can handle 280
+users with -m=600.  It can take a fair bit of CPU and RAM when under heavy load;
+we will continue tuning the server code after I'82 beta.
+<li>Found but did not fix a problem with the game server restart under heavy
+load.  The workaround is to delete the /tmp/*dat* files before restarting.
+<li>Updated the server's README file.  Installation needs to be made easier.
+</ul>
+
+<li>22 Sep 1998
+<ul>
+<li>Documentation now explains current approach to score reporting,
+and has been brought more or less up to date.
+<li>Game server now properly saves state to disk when stopped, and reloads
+it when restarted.
+</ul>
+
+<li>18 Sep 1998
+<ul>
+<li>Fixed two bottlenecks in the server; behaves noticably better
+under heavy load, handles packet loss better.  <b>Note</b>: dpReceive() 
+may take more cpu time; please profile your game
+and alert <tt>dank-anet@kegel.com</tt> if cpu use is excessive.
+<li>Debug dwango driver now outputs to dp.log.  Dwango support still has
+known problems.
+</ul>
+
+<li>16 Sep 1998
+<ul>
+<li>Added Dwango support; use anetdrop -n=wdwango.dll.
+<li>eclock.c now in demo/utils rather than src/dp.
+<li>Fixed several bugs in bench.
+<li>Linux SDK now logs packets to output%d.%d in debug builds.
+<li>Server now assigns players to lobbies better - used to screw up if too
+many people.
+<li>Host no longer gets error if deleting his own player.
+</ul>
+
+<li>09 Sep 1998
+<ul>
+<li>Added user login; see dpAccountLogin/Activate, dpChangePassword.
+<li>dp_playerId_t.karma now holds the lower 16 bits of the player's uid.
+This will move to a new field in a future release.
+<li>Added native score reporting; see dpReportScoreBuf.
+<li>Added new linux build system.
+<li>Added new multithreaded scripting language for benchmarking server
+performance; see linux86/bench.
+<li>Purged obsolete source files.
+</ul>
+
+<li>27 Jul 1998
+<ul>
+<li>Split off simple type and constant definitions from anet.h into
+aneterr.h to help tca source modules compile.
+</ul>
+
+<li>17 Jul 1998
+<ul>
+<li>dkupddll.dll now looks for a file called 
+updaters.dat in the current directory, and reads from it a list of 
+update servers.  One is chosen at random on each connect.  If the file
+is not found, the update server defaults to updater.activision.com.
+</ul>
+
+<li>26 Jun 1998
+<ul>
+<li>Added a two-second wait when launching from anetdrop -x
+after connecting to the game server, so dpOpen() creates the
+session with the right host address.
+<li>Added a new demo program, <a href="../demo/band/band.c">band.c</a>,
+which launches from anetdrop and sends packets at an even
+rate; it's a tool for exploring the behavior of third-party networks like
+Heat.
+</ul>
+
+<li>25 Jun 1998
+<ul>
+<li>Added new call dpGetCurrentTransportInfo() so you can tell which
+tranport DLL you were loaded with, and get its path and filename.
+Used by Battlezone to load different network tuning file for each transport.
+</ul>
+
+<li>24 Jun 1998
+<ul>
+<li>Fixed an intermittant crash in anetdrop; thanks to NT for noticing
+a reference to address 1...
+<li>dpReportException tries harder to simply return if it experiences
+an internal fault.
+<li>Debugging winets2, wheat2, and wmpath2 drivers now do their own packet 
+logging to output.1, and rename old output.1's to output.2, etc. upon
+each dpCreate().
+<li>Heat driver now only reports scores if in a challenge.
+</ul>
+
+<li>18 Jun 1998
+<ul>
+<li>Internet driver now complains nicely if it isn't initialized right.
+</ul>
+
+<li>17 Jun 1998
+<ul>
+<li>Fixed bug introduced 23 May in dpReceive() that caused occasional packet loss.
+<li>Added more safety checks in crash logger.
+</ul>
+
+<li>12 Jun 1998
+<ul>
+<li>Fixed two bugs in host migration caused by recent changes:
+game no longer disappears from list in IPX after migration,
+and clients leaving no longer trigger elections (!).
+</ul>
+
+<li>11 Jun 1998
+<ul>
+<li>Fixed bug in host migration caused by 4 Jun change in player deletion
+timing- games would sometimes not show up on server after migration.
+<li>Fixed atomic printing in DPRINT.
+<li>AddPlayer messages now include the public address of the player
+again for Dark Reign 1.3's benefit, even though it's bogus if the user
+is behind a firewall.
+</ul>
+
+<li>9 Jun 1998
+<ul>
+<li>Fixed crash bug in host migration caused by 4 Jun change in player
+deletion timing.
+<li>Chat demo now closes session properly, even if score reporting not
+supported.
+</ul>
+
+<li>5 Jun 1998
+<ul>
+<li>When dpReceive detects a CRC error when receiving packets with
+the modem and serial drivers, it now reports dp_RES_EMPTY instead of
+dp_RES_BAD, because dp_RES_BAD is supposed to mean 'caller brain damage' now.
+</ul>
+
+<li>4 Jun 1998
+<ul>
+<li>Fixed bug in dual-address support which could cause some clients with
+both dialup and ethernet Internet active at same time to fail to get into 
+lobby on server.
+<li>When a handle is starting to close, dpSetConnCallback() now calls back with dp_RES_PEER_CLOSED.  It still also calls back with dp_RES_CLOSED when handle finishes closing.
+<li>Likewise, players now get deleted from the session as soon as possible,
+rather than when they finish closing.  This fixes a problem which could
+cause dpSend(...,dp_ID_BROADCAST, dp_SEND_RELIABLE...) to return dp_RES_FULL
+until the player leaving times out.
+<br>
+Users leaving sessions should still do a dpClose(), then wait for
+dpReadyToFreeze to not return dp_RES_BUSY, but it is no longer as important
+to idle calling dpReceive() for an extra second afterwards, which was
+a partial workaround for this and other bugs.
+<li>Fixed bug in server which caused status page to list games even if they
+didn't have any games played yet today.
+</ul>
+
+<li>1 Jun 1998
+<ul>
+<li>Server now allows 400 connections.
+<li>New functions dp_getLogFP() and dp_setLogFP() for use by test bench.
+<li>dpSend() now returns dp_RES_PEER_CLOSED instead of dp_RES_BAD 
+if destination doesn't currently have a network address.
+This happens when sending to a player who never
+existed, has been deleted, or (occasionally) is very new.  (This last behavior
+is a bug that needs fixing.)
+</ul>
+
+<LI>30 May 1998
+<UL>
+<li>dpSetSessionDescription() now ignores changes in non-user-settable fields.
+<li>dpSetActiveThread(NULL) now properly reports error instead of crashing.
+(Thanks to the <a href="aeh.htm">crash logger</a> for finding this.)
+<li>User packets received after dpClose() no longer cause crash in debug
+builds (thanks to Matt's stress tester for finding this).
+<li>Game server now outputs statistics for
+pickup by the <a href="http://iserv.activision.com/">master server</a>,
+which now shows current count of players by game across all servers.  Cool!
+<li>Packet histogram in log file now disabled by default- let Dan know if you
+want it back.
+</ul>
+<LI>23 May 1998
+<UL>
+<li>dpReceive() no longer needs to be called 'until it returns EMPTY
+three times in a row'.  If it returns dp_RES_EMPTY, you can be sure
+you have emptied the packet queue.
+<LI>Product README's should include the following warning:<br>
+When playing IPX games, having IPX bound to more than one network adapter
+will cause problems.  This can accidentally happen if you
+try to play on IPX while dialed up to the Internet.
+To solve this problem, either play on Internet instead of IPX, or
+remove the IPX binding on the Dialup Adapter
+by right-clicking on Network Neighborhood, clicking on Properties,
+clicking on "IPX/SPX -> Dial-Up Adapter", and clicking Remove.
+<li>dpDownloadUpdate() now returns dp_RES_USER_CANCELLED if user
+aborts the download.
+<li>dpDownloadUpdate() now finds either dkupddll.dll or dkupddlld.dll
+more robustly.  If dkupddlld.dll is used, and logging is turned on,
+a verbose log of the download process appears in the log file.
+This should aid debugging.
+<li><a href="dp.htm#APIFuncRef">The API function reference</a> has been
+updated, and now has slightly better hyperlinking (embedded URL's
+in anet.h are automatically turned into hyperlinks).
+<li>dp_serverInfo_t now has two new fields, cur_games and cur_sessTypeGames,
+so users can see how many games are on each server.
+<li>dpEnableNewPlayers(dp, FALSE) no longer prevents sessions from being
+seen.  You can check the dp_SESSION_FLAGS_ENABLE_NEWPLAYERS	bit
+in the dp_session_t flags field to tell if the session is accepting
+new players or not.
+<li>A precision timer (ptimer.c in the sources) is available for benchmarking 
+how long calls like dpReceive() take.  Average time on a P90 is 
+400 microseconds.
+Max time may be five times that, but should be very uncommon.
+</UL>
+
+<li>15 May 1998
+<ul>
+<li>Dual adapter support is now more robust.  It is now okay to 
+run on systems with a LAN adapter connected to the Internet <b>and</b>
+a modem dialed up to the Internet at the same time.
+<li>Now supports some kinds of firewalls.<br>
+Firewalls that don't remap addresses or port numbers should now work.<br>
+Firewalls that do remap addresses or port numbers should also work,
+but only if they create holes based on (public adr/port) rather than
+(public adr/port, remote adr/port).<br> 
+(Does not yet support Linux's IP Masquerading.)
+<li>dpRequestObjectDeltas() - session messages now include a bit saying
+whether the session has been joined or hosted by the local machine,
+and player messages now set the LOCAL bit correctly.
+<li>dpGetParameterLong() and dpReportScore2() now return dp_RES_UNIMPLEMENTED
+rather than dp_RES_BAD if currently active transport doesn't support the 
+desired parameter or score.
+<li>Any time a dp function returns dp_RES_BAD, the caller has committed
+a programming error, and should abort and fix his code.
+(A few places might still return dp_RES_BAD incorrectly;
+please report any suspicious-looking dp_RES_BAD's to dank-anet@kegel.com.)
+<li>Any time a dp function returns dp_RES_BUG, the library has committed
+a programming error; the caller should abort and complain mightily to
+dank-anet@kegel.com.
+<li>Documentation updated- new <a href="dp.htm#APIFuncRef">function
+reference</a>, new <a href="services.htm">3rd party network support guide</a>.
+<li>"0" is now accepted as a synonym for "OK" in modem responses.
+<li>Fixed various timer wraparound bugs.
+<li>Changes in anetdrop and anet2.dll to support Microsoft Game Zone.
+<li>Now supports compiling on Red Hat Linux 5.0.
+<li>Server now has more informative status pages.
+<li>Server now easier to manage remotely.
+</ul>
+
+<li>20 Apr 1998 
+<ul>
+<li>dpRequestObjectDeltas() player change messages for the current session now
+support an additional flag, ISHOST, which is set for the player who is
+hosting the session.  A player change message is generated whenever a 
+new player becomes host.
+This means dp informs every player in the session of a host migration.
+</ul>
+
+<li>17 Apr 1998 
+<ul>
+<li>dpRequestObjectDeltas() now supports player change messages, too.
+</ul>
+
+<li>16 Apr 1998 
+<ul>
+<li>New function dpRequestObjectDeltas() lets you monitor
+sessions and servers without periodic calls to dpEnumSessions or
+dpEnumServers.
+<li>New function dpGetSessionId() lets you compare dp_session_t's
+to see if they represent the same session.
+</ul>
+
+<li>10 Apr 1998 
+<ul>
+<li>New player messages no longer generated when player name or blob changes.
+<li>wmpath2.dll now operational; we support MPlayer.
+<li>Better sanity checking in general, e.g. no longer crash if dpClose(NULL,
+0) is called.
+<li>Crash logger now records register values, and lets you specify a context
+string.  dpReportAssertionFailure now generates an exception; see <a
+href="aeh.htm">aeh.htm</a> to see how to modify your exception handler to
+calmly record these without aborting, if desired.
+</ul>
+
+<li>20 Mar 1998 
+<ul>
+<li>Sessions created locally show up faster in session list.  (Only applies when not connected to internet game server.)
+</ul>
+
+<li>5 Mar 1998 
+<ul>
+<li>Raised player limit in anetdrop to 22.
+<li>Added new function dpGetParameterLong to get at parameters from external
+game shells.  First parameter supported dp_PARAMID_SYNCJOIN, so Heat can tell
+Battlezone whether to be in sync join or dynamic join mode.
+<li>dpDestroy no longer overwrites feif.dat if it has no version records.
+This fixes a bug in Battlezone that caused the version check info not to be
+cached.
+<li>Keepalives now sent more frequently.  This should fix the timeout problem
+observed especially on Heat.
+<li>Added function dpSetActiveThread() for games that want to defeat my thread
+check, like Dark Reign 1.2.
+<li>Now compile the MPath foundation driver for MPlayer, too.  It's called
+wmpath2.dll.
+</ul>
+<li>1 Mar 1998 
+<ul>
+<li>Fixed one more host migration bug.  Definitely works better now.
+However, the spurious player creation/deletion messages for the old 
+host are still there.  Further work needed.
+<li>Changed dpSend so it uses hardware broadcast for unreliable
+broadcasts if the driver has the DRIVER_PREFERS_BROADCAST bit set.
+This should improve performance on Heat and similar multicast networks.
+</ul>
+
+<li>28 Feb 1998 
+<ul>
+<li>Host migration might work better now; the election finishes even if the
+old host has not yet been fully purged.  
+<li>Probably fixed a bug where a machine which used to host a session crashed 
+when someone tried to join that stale session.  I expect this will solve the
+problem, but it needs to be tested.
+<li>The log file now shows the szUserField of all session records.
+<li>dpCreate now returns a more informative error when it has trouble
+opening a session from parameters in a freeze file created by anetdrop -x.  
+(This is the mode used to launch under Heat.)
+</ul>
+
+<li>26 Feb 1998 
+<ul>
+<li>dpDownloadPatch now calls Win32's GetForegroundWindow instead of popping
+up its own root window, at Battlezone's request.
+<li>Enabled argument checking in release build.  Bad arguments now logged as
+assertion failures in atvilog.bin, and the function that was called with bad
+arguments returns with value dp_RES_BAD.  This should prevent a few crashes
+we've seen.  (The <a href="aeh.htm">crash logger</a> is really working!)
+</ul>
+
+<li>25 Feb 1998 
+<ul>
+<li>Fixed WinModem bug in modem driver.  Now correctly detects at least one
+brand of WinModem.  Not sure we use exactly the right init string yet, though.
+</ul>
+
+<li>23 Feb 1998 
+<ul>
+<li>Fixed crash bug in Heat driver.
+<li>Implemented nouploadcrash in dp.ini.
+</ul>
+
+<li>22 Feb 1998 
+<ul>
+<li>Fixed recent crash bug in dpEnumServers() - you can once again
+safely call dpEnumServers() with a NULL callback pointer.
+<li>Fixed sign extension bug which caused dwUser1 field
+of dp_session_t to become corrupt if 2nd MSB was > 0x80 in Internet play.
+</ul>
+
+<li>20 Feb 1998 
+<ul>
+<li>A new function <a href="dp.htm#dpEnumPorts">dpEnumPorts</a> is available, and should be used
+rather than hardcoding the list of available ports.  For the modem
+driver, it returns both comm ports and installed modems.  If you choose
+an installed modem, it uses the init string from the Windows registry
+for that modem- a lifesaver for some users.
+<li>A new function <a href="dp.htm#dpEnumServersEx">dpEnumServersEx</a> is availble, and provides more information
+about the servers, including packet loss and number of users.
+<li>The Internet driver has been juggled around a bit to be more friendly
+towards Dial-Up Networking's autodialer.
+<li>Nonessential data files, like feif.dat and servers.dat, are silently
+deleted by the library if corrupted.
+</ul>
+<li>16 Feb 1998 
+<ul>
+<li>The updater no longer uses nor requires wininet.dll.  This should
+fix a Win98 incompatibility and a licensing problem.
+<li>A bug that caused unneeded patch downloads was fixed (probably still
+lurking in the netshell; anet.java should use dp's updater, and lose its own).
+<li>Modem driver now works properly on all Win95 machines (ReadFile
+was blocking forever if I tried to use overlapped I/O, so I set zero
+timeouts, and it seemed to work.)
+<li>DPRINT in comm drivers can now show up in the usual dp.log (at least
+after commInit returns).
+<li>Supports new way of using dpOpen() to join a lobby at a game server:
+specify NULL for the session; the server will pick a lobby for you.  This
+should be noticably faster.
+<li>Supports new way of using dpOpen() to join a game using just an IP
+address and no game server.  To use this, the host should specify the
+standard port number (21154, I think) when doing dpCreate, and the client
+should zero out a dp_session_t, and call dpResolveHostname to fill in
+the adrMaster field.
+<li>Much better writeup in <a href="dp.htm#startup">dp.htm</a> about how
+to call dpCreate.
+<li>Better <a href="aeh.htm">crash logger doc in aeh.htm</a>.
+<li>Minor bugfixes in crash logger.
+<li>The server now deletes freeze.dat etc. if they are corrupted.  This
+should reduce server downtime.  Still don't know why/when those become
+corrupted.
+<li>The server's name.txt file now supports a -v option after the
+session type to indicate that player variables are allowed in that session.
+<li>The server's script files now kill the server hard if it doesn't go
+gently.  This should reduce server downtime.  Still don't know why server
+doesn't die nicely sometimes.
+<li>dpReadyToFreeze no longer has verbose DPRINT's.
+</ul>
+<li>5 Feb 1998 
+<ul>
+<li>No longer requires imagehlp.dll on user machines.
+<li>Anetdrop now supports serial and modem.
+<li>Max size of player variables is now 256K.
+<li>All exported functions are now declared explictly cdecl.
+</ul>
+<li>4 Feb 1998 
+<ul>
+<li>Updated <a href="dp.htm">dp.htm</a> to match anet.h.
+<li>Fixed dpReportCrash; added dpReportAssertionFailure.
+</ul>
+<li>2 Feb 1998 
+<ul>
+<li>Serial and modem drivers for win32 now use overlapped I/O.
+<li>Server problems with host migration have been fixed.
+<li>A new parameter in dp.ini, TIMEOUT=timeoutsecs, lets you disable 
+or tweak player timeout detection.  This is useful when stepping through
+code in a debugger, or as a workaround for users with incredibly slow 
+machines that timeout during game launch.
+<li>Now handles large numbers of player variables properly.
+<li>Added new function dpReportCrash(), updated server, and added 
+new executable analcrsh.exe (see <A href="aeh.htm">aeh.htm</A>)
+to let programs report exceptions to the programmer automatically.
+This will be very helpful during beta test and QA, because it will 
+provide symbolic crash dumps without requiring the testers to install
+Visual C.
+<li>Updated Heat driver to have proper capability flags.
+<li>dpCreate now gets player names from driver during dpCommThaw if it has 
+that capability bit set.  Used for Heat.
+</ul>
+<li>8 Jan 1998 
+<ul>
+<li>Created anetdrop.exe, a command line launcher for activenet games.
+Added example batch files join2.bat and host2.bat in demo/chat showing how
+to use anetdrop.
+<li>Created wheat.dll, a first cut at support for the heat online service.
+<li>Fixed problem with server which limited it to 35 connection.
+</ul>
+<li>24 Dec 1997 
+<ul>
+<li>dpSetGameServer no longer closes open session.  
+This fixes bug where the current game was lost if the connection to the 
+game server went down.
+<li>Server lobbies no longer get corrupted by phony elections
+<li>Fixed bug introduced in last rev in dpSetGameServer when changing servers.
+<li>dpGetSessionDescription now uses cached copy of session description
+if it's disappeared because of packet loss (e.g. in IPX).
+<li>dpEnumPlayers now behaves same for local session whether you specify
+it implicitly with NULL or explicitly with a valid session record pointer.
+</ul>
+<li>12 Dec 1997 
+<ul>
+<li>Session packets are now compressed about 3:1 when using the new login 
+packet.  This increases the maximum number of sessions that can be listed
+while still letting clients connect to the server in finite time.
+<li>Ack packets now have an extra byte suffix which helps compensate
+for any earlier ack packets that were lost.  
+At 25% round trip packet loss (split between clients and server),
+28.8 bandwidth at client, and 100 rooms in session table, this 
+increases performance on the load test by 20%.
+<li>Fixed host migration and freeze/thaw bugs introduced by new login packet
+change.
+<li>Fixed two bugs in server 
+(uudps.c used to crash when sending to unknown destination;
+dropped packet simulation was broken).
+<li>dpCreatePlayer no longer fails if session record missing (as often
+happens with IPX and packet loss); it blindly tries to join, and relies
+on the host sending back an active rejection if the session was closed
+or full.
+</ul>
+<li>8 Dec 1997 
+<ul>
+<li>Game server now accepts new kind of login packet which specifies
+what session type the client wants to look at. 
+dpSetGameServer now looks at anet.inf to figure out what session type to send
+the server.  A new function call dpSetGameServerEx should be used instead of
+dpSetGameServer for new programs, because it's kludgy for the library to
+assume anet.inf has the right session type...
+<br>
+This improves server performance noticably.  In particular, running the 
+load app with n=1, pktloss=30, and bandwidth=28800 connects under 10 seconds
+instead of 9-40 seconds.   Should make performance less sensitive to how many
+different kinds of games are using the server, too.
+</ul>
+<li>4 Dec 1997 
+<ul>
+<li>If modem connection is lost during a session, dpReceive will return
+dp_RES_MODEM_NO_RESPONSE.
+</ul>
+<li>16 Nov 1997 
+<ul>
+<li>Only send new session packets at most once a second.  This significantly
+reduces server traffic.
+<li>Added new way to send delete records- they can now be combined in same
+packet as small set records.  This significantly reduces server traffic.  A
+new byte was added to the handshake sequence to allow us to use the old method
+with old hosts.  This will let us mix new and old servers and clients.
+<li>Fixed a bug in dpSetPlayerName and dpSetPlayerBlob.
+<li>Fixed a bug in host migration with four or more players.
+</ul>
+<li>13 Nov 1997 
+<ul>
+<li>Added error code dp_RES_MODEM_BAD_INITSTRING for using a bad
+initialization string with a modem (also returned if a modem is not connected
+to the machine).
+</ul>
+<li>7 Nov 1997 
+<ul>
+<li>Fixed bug in serial and modem drivers that caused packets with CRC
+errors to be accepted, and packets with zero CRC's to be dropped.  Ouch!
+<li>Fixed bug in DownloadPatch; it now set the focus and shows the cursor.
+<li>dpEnumServers() now lists just four Activision game servers,
+all with geographical names; one in Southern California, one in
+Northern California, one in New Jersey, and one in Australia.
+<li>Added dpSetPlayerName, dpSetPlayerBlob, and dpGetPlayerBlob.  To
+create a player and set his blob at the same time, call dpCreatePlayer,
+then immediately call dpSetPlayerBlob().
+<li>Added dpEnumPlayersEx() to give access to player blobs.
+</ul>
+<li>28 Oct 1997 
+<ul>
+<li>Integrated DownloadPatch into dpDownloadUpdate().  This will eventually
+grab the patch from the currently connected server; right now, it just
+always goes to the default server.  The Java wrapper for the patch
+is not yet updated to use dpDownloadUpdate, but should be.
+<li>dkupddll.dll now built here; get it from win\dll and put it in
+app's current directory next to anet2.dll.  Uses static binding,
+which probably wastes a lot of memory.
+<li>Fixed big oops introduced in the last version that caused internet to
+fail.
+<li>Fixed crash bug in server that seems to have been there since remote
+player enumeration was added.
+</ul>
+<li>24 Oct 1997 
+<ul>
+<li>Host migration works now.
+<li>Added support for people who have a TCP/IP LAN not connected
+to the Internet and dialup TCP/IP just for Internet.
+<li>Added version info in dpEnumApp.
+<li>Added dpGetAppVersion() to tell you about the current app; meant
+to integrate well with Erik's DownloadPatch function.
+</ul>
+<li>4 Sept 1997 
+<ul>
+<li>Server now supports over a hundred players.
+<li>Load application (see src/test/load) lets us load down servers with
+arbitrary numbers of players.
+<li>dpOpen and dpCreatePlayer now obey the session's maxPlayer limit.
+<li>Server now uses uudps, so client better use winets.  (Needed for load
+app.)
+<li>dpEnumServers now transfers table of game servers down from 
+server you're connected to, if any.
+<li>dpEnumServers now closes handles after sending pings; winets
+now obeys the commSayBye that closes the handle; dpReceive now
+handles ping packets correctly even if the handle has been closed.
+<li>internet drivers winets and uudps now handle pings themselves.
+</ul>
+<li>1 Sept 1997 
+<ul>
+<li>Fixed numerous bugs, including several having to do with detecting
+deleted or timed out players or sessions.
+<li>Compress player and host records; seems to use half the modem bandwidth.
+(Session records are still wastefully uncompressed.)
+</ul>
+<li>25 Aug 1997 - 
+Alongside the original libraries, this release now includes
+the first release of version 2 of the libraries ("big lobbies").
+(The new ones have '2' in their names to distinguish them from the
+originals.)  Here's how to use the version 2 code:
+<ul>
+<li>link to anet2.lib instead of anetdll.lib in release builds,
+and to anet2d.lib instead of anetdlld.lib in debug builds.
+<li>Copy anet2.dll into the product directory instead of anetdll.dll.
+(Note: if you can't tolerate this name change, link with anetdll.lib,
+and copy anet2.dll into the product directory as anetdll.dll.)
+<li> Copy the '2' versions of the transport DLL's (winet2.dll, etc.)
+into the product's DLL directory instead of the originals (winet.dll, etc).
+(Note: if you can't tolerate this name change, 
+copy winet2.dll into the product directory as winet.dll, etc.)
+</ul>
+Here are the changes in the version 2 libraries:
+<ul>
+<li>Should be better at detecting when gameserver connection is lost;
+dpReceive will return dp_RES_HOST_NOT_RESPONDING once if this happens.
+<li>Should be better at detecting when sessions are closed and can't be
+migrated; dpReceive will get a dp_SESSIONLOST_PACKET_ID packet in this case.
+<li>Should be easier to maintain; the new source code is much simpler and
+better documented than the old source code.
+<li>Host migration not supported in this version - if the master leaves
+a session, the session is lost (and the caller is notified).  We'll support
+this soon.
+<li>Bandwidth consumption is still unreasonable because two separate packets
+are sent for each old player when each new player joins.  
+This will be fixed soon.
+<li>Player groups and player variables are not implemented.  This will be
+fixed soon.  
+<li>Uses a different port number, so version 2 servers can coexist on
+the same machine as version 1 servers.
+<li>Log files don't have player names in them at the moment, which
+makes them a little harder to read; this will be fixed in a future release.
+<li>Multiple lobbies per server are almost ready.
+<li>The game server communication API is not yet available, but will be
+exposed in a future release.
+</ul>
+
+<li>13 Aug 1997
+<ul>
+<li>Added <a href="index.html">list of available documentation</a> to make it easier to
+read everything.
+<li>Listing applications before creating dp used to cause .ini file
+to not be read properly.  This is now fixed.
+<li>Made a change that should list players more reliably in 
+lobbies with 12 or more players.  
+<li>Install programs for netshell and demos should work on NT now.
+<li>Program to launch netshell is now called netshell.exe.
+<li>Several minor new API calls (dp_setLogFname(), dp_flushLog(), 
+dpini_GetFile())
+</ul>
+<li>11 Aug 1997
+<ul>
+<li>dpGetPlayerCaps() now returns true ping time much quicker at startup.
+<li>Added two new session flags (dp_SESSION_FLAGS_ISSERVER and
+dp_SESSION_FLAGS_MIGRATE_FORBIDDEN).  The first one lets you detect
+when a lobby is hosted directly on a game server, and the second
+one is used to prevent such lobbies from migrating; this should prevent
+server lobbies from being grabbed by clients with flaky connections.
+Losing connection to a session with migrate forbidden now generates a
+dp_SESSIONLOST message.
+<li>Added regression test to build process.
+</ul>
+<li>27 July 1997
+<ul>
+<li>Fixed problem loading drivers on Mac.  All places in API that
+refer to driver filenames now use dp_transport_t, which has a few
+extra fields on the Mac.
+<li><a href="shell.htm">Netshell</a> now working on Win95 well enough
+to let developers try integrating their games.
+You should be able to download anetdemo.zip; try it out on your machine,
+let us know what problems you run in to.
+<li>Added dpLaunchApp() call; mostly for internal use by netshell.
+<li>Fixed bug that caused trouble when user connects, disconnects,
+then connects again.  (Note: this turns out to be a common condition!)
+<li>.ini files no longer clip the last char of the last line if it lacked a
+newline.
+</ul>
+<li>16 July 1997
+<ul>
+<li>Added i76.polar.net to list of servers.
+<li>Anetj.dll may now be in dll subdirectory.
+<li>Includes demo.zip, with first version of netshell and two demo 'games'
+plus installers; the demo games are launched by the netshell.
+<li>Added shellOpts field to dp_appParam_t so netshell can tell how it
+needs to be launched.
+</ul>
+<li>11 July 1997
+<ul>
+<li>Added <a href="dp.htm#extraserver">extraserver=</a> setting in [DEBUG] section of .ini file
+<li>Compile with Visual C 4.2 rather than 5.0.
+<li>Compile anetj.dll with non-debugging version of Anet
+so it doesn't require msvcrtd.dll, which might not be on users' machines.
+I'll add a way to specify debugging libraries from java later.
+</ul>
+<li>10 July 1997
+<ul>
+<li>dpd.lib now uses Zi format for debugging info
+<li>Even better <a href="../demo/turn/index.html">doc for the Turn demo</a>.
+Uses anetdlld.lib now instead of dpd.lib.
+<li>dp_appParam_t.sessionType now read correctly from registry.
+<li>User programs no longer need to do /D WIN32 when compiling.  This fixes
+bug causing crash after callbacks in Java.
+<li>Java: Creating sessions now supported
+<li>Java: Added ANet.InstalledApp.execWithConsole() method.
+</ul>
+<li>9 July 1997
+<ul>
+<li>Switched remaining libraries over to use Multithreaded DLL version
+of Visual C's standard C library.  This means all games that use our libraries
+should be compiled for the Multithreaded DLL C library (use the /MD flag
+on the cl commandline, or pick "Multithreaded DLL" under Build / Project
+Settings / C/C++ / Category: Code Generation.
+<li> Fixed loopback drivers to work properly with freeze and thaw.
+<li> Fixed bug that caused client to time out after thawing.
+<li> Improved demo/turn's batch files and <a href="../demo/index.html">doc</a>.
+</ul>
+<li>25 June 1997
+<ul>
+<li>ANETDLL.DLL (Release) and ANETDLLD.DLL (Debugging) are now compiled
+with the Multithreaded DLL version of the Visual C++ standard library,
+so games using them should also be compiled that way, and
+users will need msvcrt4.dll in their system directory to run.
+This means installer changes in some cases!
+(This is at the request of Zork Grand Inquisitor, but it's a good idea;
+it slims down the memory requirements, I think.)
+<li>When you change game servers, the list of sessions is now cleared.
+<li>A bug introduced last week which caused occasional crashes in dpOpen is fixed.
+<li>dpReceive now returns dp_RES_FULL if your receive buffer is too small.
+<li>The Java port can now join sessions and list players.
+<li>A new demo, demo\chat, has been added as a prototype of
+a game that lacks its own netshell, and is launched from an external generic
+shell.  This is still being refined.
+</ul>
+<li>20 June 1997
+<ul>
+<li>Active close is now implemented on handles.  This means that
+disconnecting from game servers and games is handled somewhat more
+gracefully (but both sides have to support it for it to work).
+<li>Functions to enumerate installed applications on the user's system
+and to enumerate game servers have been added.  These are still being
+refined.
+<li>The bare bones beginning of a Java port (really, a wrapper around the
+native code) is now included.
+</ul>
+<li>1 June 1997
+<ul>
+<li>The initial Solaris/Sparc support is now included (UDP only).
+<li>The initial Mac support is now included (MacIPX only).
+</ul>
+<li>1 Mar 97
+<ul>
+<li>User code now only needs to include <a href="../h/anet.h">anet.h</a>
+to compile, and no longer has to be recompiled if internal Anet 
+structures change size.
+<li>Can now send packets to player groups.
+<li>Player variables now should be much more robust.
+<li>Game server code in better shape, and uses less bandwidth.
+<li><a href="gtest.htm">gtest</a> has been beefed up to be a useful
+test/learning program, and is included in the SDK in both source and
+executable form.
+<li>Both debugging and non-debugging versions of the Windows library
+and DLL's are included (the DOS library and DLL's are still provided as
+debuggging only for now).
+<li>Finished ironing out most of the issues caused by the switchover
+to dpio.
+</ul>
+<li>11 Feb 97
+<ul>
+<li>Implemented player variables and player groups more fully.
+You still can't send packets to a player group, though.
+<li>
+Moved reliable packet delivery to its own layer inbetween the 
+high-level dp package and the low-level comm dll package.
+Now when the library opens a connection to another node, it always
+opens both an unreliable and a reliable data stream.
+All programs need to be recompiled, including game servers, to work with this.
+<li>Moved to a different port number for both UDP/IP and IPX; see
+commapi.h/commapi_NET_PORTOFFSET.
+</ul>
+
+<li>1 Feb 97 - Added dpcompat.h to make compiling for either our
+library or Microsoft's library easier.  Added dxview, an example
+program that can be compiled for either library.
+</ul>
+
+<h2>Licensing info</h2>
+The Anet SDK currently uses several third-party libraries
+under license:
+<ul>
+<li>Modem library
+<i>(DOS and Win95)</i><br>
+The serial communications were implemented using the 
+<a href="http://www.gleaf.com/~gleaf/CommLibInfo.html">Greenleaf 
+Communications Library</a>.  (We could easily get away from this for win32,
+but for now, we use it for both DOS and Win32.)  A copy of the Greenleaf
+DLL is included with the ActiveNet SDK, and I believe the Greenleaf library
+allows this to be freely redistributed as long as at least one programmer 
+working directly on the game has a license for a copy of the Greenleaf 
+library.  (This might be pessimistic... but I'm no lawyer :-)
+<br>
+(Activision has one copy, and one additional copy should be purchased for
+each new DOS networking programmer we add.)
+<li>DOS Extender
+<i>(DOS Only)</i><br>
+DOS4GW, the DOS extender that comes with Watcom C, is not suitable
+for use with DOS ActiveNet simply because it is missing one crucial DPMI
+function needed for invoking IPX.  DOS4GW's big brother,
+<a href="http://www.tenberry.com/dos4g/">DOS4G</a>, does support that DPMI
+call and works fine, but its licencing fee of $2/copy make it impractical
+for use with games.<p>
+The <a href="http://www.devoresoftware.com/cwwmain.htm">Causeway DOS extender</a>.
+is both affordable and suitable.
+(Its licencing terms only require that each
+programmer using it purchase a copy at $195 from 
+<a href="http://www.devoresoftware.com">http://www.devoresoftware.com</a>.)
+I recommend it; it seems to be well supported.
+<br>
+<li>PPP Stack
+<i>(DOS Only)</i><br>
+The ppp driver we recommend for use with DOS products is the shareware
+driver by <a href="http://www.klos.com">KLOS (http://www.klos.com)</a>.
+<br>
+(Activision has a license allowing unlimited use for products distributed
+directly by Activision.)
+</ul>
+<h2>Note regarding DOS IPX and DOS Extenders</h2>
+You should bind your shipping executables to
+<a href="http://www.devoresoftware.com">the Causeway DOS extender</a>
+because it has better DPMI support than the DOS extender that comes
+with Watcom.  (It also writes out a nifty CW.ERR file if your program
+crashes, which allows you or a Perl script to figure out the name of
+the function that crashed.)
+<p>
+If you compile your programs with a stock version of Watcom,
+you will be able to access the IPX network when running under Windows 95
+but not DOS, because the DOS extender that comes with Watcom, DOS4GW, 
+doesn't support far calls.
+
+<h2>Note regarding DOS PPP (internet dialer)</h2>
+A copy of the ppp driver and example usage in a product are included in 
+<a href="../demo/mercppp">demo/mercppp</a> for your convenience.  
+See below for licensing info.
+For general instructions on setting up internet drivers 
+for use with this SDK, consult <a href="../demo/mercppp/mercfaq.htm">the Mercnet FAQ in demo/mercppp</a>.
+<hr>
+<a href="../index.html">Back to top</a>

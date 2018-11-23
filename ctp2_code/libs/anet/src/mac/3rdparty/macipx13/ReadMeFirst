@@ -1,0 +1,88 @@
+MacIPXª Software Developer's Kit, v1.3
+© Copyright 1995 Novell, Inc.
+All rights reserved worldwide.
+
+
+MacIPX Redistribution
+
+The MacIPX Control Panel and network interface files may be licensed for redistribution through the OEM sales department.   For more information, please call 408-577-7176, or contact your local OEM Account Representative.
+
+
+Application Programming Interfaces (APIs)
+
+The APIs are provided in source form and should work properly under MPW C, Think C (now known as Symantec C), and Metrowerks CodeWarrior. (Note: MPW users must also use the ipxapi.a assembly language file.)
+
+
+Samples
+
+The IPX and SPX sample programs can be run as MPW tools, Think C applications, or Metrowerks CodeWarrior applications.
+
+
+The IPX Gateway for MacIPX
+
+You need the IPX Gateway software *only* under specific circumstances; that is, you are using a MacIPX-based application on network segments that use only the AppleTalk transport protocol to connect Macintosh workstations to the network. Such "AppleTalk-only" segments result from technological or administrative conditions like these: the segment may use LocalTalk or another cable served by a third-party AppleTalk router, the segment may be used for AppleTalk Remote Access (ARA), or a network administrator may want to designate a segment for AppleTalk traffic only.  
+
+If you use Ethernet or Token Ring segments to connect your Macintosh workstations to an IPX network and you permit IPX traffic on those segments, then you do *not* need the IPX Gateway software.
+
+The IPX Gateway is no longer included with the MacIPX SDK because it is bundled with the Novell NetWare 4.1 and the Novell Multi-Protocol Router (MPR) 3.0 releases.  It is also available as an archive in a number of places. This archive contains the IPX Gateway software for Novell NetWare file servers, version 3.11 or later, or for Novell's Multi-Protocol Router, version 2.0 or later.
+
+You can find this archive posted to the following locations:
+
+NetWire (Compuserve)
+Filename: MIPXGW.EXE
+Location: NOVLIB, Library 8 (Mac/Unix/LANalyzer).
+
+APPLELINK
+Filename: MacIPX Gateway v1.01
+Location: (Each level represents a folder within the previous folder.)
+>Support
+->Third Parties
+-->Third Parties (H-O)
+--->Novell
+---->Novell
+----->Patches
+
+FTP Server (130.57.11.140)
+Filename: MIPXGW.EXE
+Location: nw311/nwmac
+Customers using their FTP software to download this file must make sure to set the file transfer type to "binary" (*not* MacBinary or ASCII).
+
+NSEPro
+Filename: MIPXGW.EXE
+Location: Service and Support/File Patches and Fixes/Macintosh
+
+
+Fixed Anomalies and Other Changes
+
+The following changes have been made since the previous MacIPX release (Version 1.2.1):
+
+1. The safety check of the pointer passed to the SAP QueryServices API is performed before the pointer is used by the API.
+
+2. The MacIPX driver is no longer opened automatically when the driver is loaded into memory during boot time.  This change causes the MacIPX Gestalt selector to return a value of zero for the MacIPX version number.  This is *not* an error condition, it is an indication that the MacIPX driver is not open.  Your application will not function properly with MacIPX v1.3 if it assumes that a Gestalt response of zero is an indication of a MacIPX problem.
+
+3. Since the MacIPX driver is no longer opened automatically during boot time, your application may encounter problems when it tries to open the driver itself.  The most common cause of this problem is an insufficient stack size within your application.
+
+
+Known Anomalies and Limitations
+
+1. Your application *must* close all open IPX or SPX sockets and *must* shut down all advertised services before terminating. A system crash may occur at a later time if your application does not do this. Similarly, if your application crashes and you try to get back to the Finder by exiting to shell from a low-level debugger, a system crash may also occur at a later time.
+
+2. If, when establishing or listening for an SPX connection, your application will receive data immediately after the connection is established, you should use either the SpxEstablishConnection2 or SpxListenForConnection2 APIs in order to provide the first ECB in which the incoming data will be placed. If you do not do this, the incoming data will be dropped because of a lack of ECBs.
+
+3. No programming interface is provided to MacIPX's diagnostic services.
+
+4. No programming interface is provided to allow access to NetWare Directory Services running on NetWare 4.x servers. (Note: You can still query NetWare 4.x servers for IPX/SPX services by using MacIPX's bindery APIs.)
+
+5. The connection that MacIPX establishes with a NetWare server through the MacIPXCreateConnectionWithServer API is an "attached" connection; that is, you are attached to the server, but not logged in to the server. This "attached" connection appears in the Monitor NLM as "Not-Logged-In." As a result, some bindery objects will not be visible to the MacIPXReadPropertyValue and MacIPXScanBinderyObject APIs. The only bindery objects that will be visible to MacIPX have an object security access level of "Anyone." For more information about bindery object access levels, refer to Chapter 7, "Locating Services with MacIPX," in the MacIPX Programmer's Guide.
+
+6. The AdvertiseService API does not check for illegal characters in the server name argument to the API. Use of an illegal character may cause unpredictable behavior in NetWare servers. For a list of legal characters, refer to Chapter 7, "Locating Services with MacIPX," in the MacIPX Programmer's Guide.
+
+7. MPW CFront v3.3.1 has a bug that prevents it from working properly with the type definition for the RecvLookAheadHandler. The work-around is to replace the type definition with the following:
+
+typedef	IPX_ECB*	IPX_ECBPtr;
+
+typedef pascal IPX_ECBPtr (*RecvLookAheadHandler)(unsigned short socket,
+									LookAheadStructure *LookAheadStruct,
+									long userData);
+
+8. The online documentation incorrectly states that the documentation applies to the v1.2 APIs.  This documentation is also valid for the v1.3 release.

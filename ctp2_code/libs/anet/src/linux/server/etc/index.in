@@ -1,0 +1,29 @@
+<HTML>
+<HEAD>
+<META HTTP-EQUIV="Refresh" CONTENT="{UPDATE}">
+<META HTTP-EQUIV="Expires" CONTENT="{EXPTIME}">
+<TITLE>Activision Game Server</TITLE>
+</HEAD>
+
+<BODY BGCOLOR=#FFFFFF TEXT=#000000>
+<CENTER>
+<B><FONT SIZE=+2>Activision Game Server</FONT>
+- <FONT SIZE=+1>{HOSTNAME}</FONT></B>
+</CENTER>
+
+
+<table>
+<tr><td>
+Games:<td>#current players<td>#current games<td>#games past 24 hrs.
+<tr><td>
+GAMELIST sep=<tr><td> after=<td>{CURPLAYERS}<td>{CURGAMES}<td>{GAMESDAY}
+</table>
+
+
+<P>
+Updated every {UPDATE} seconds.<BR>Page will reload automatically if
+your browser supports this feature.<BR>Current time: {TIME}
+</CENTER>
+<A HREF="http://www.activision.com/">Return to Activision</A>
+</BODY>
+</HTML>

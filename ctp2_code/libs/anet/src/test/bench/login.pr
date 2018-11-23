@@ -1,0 +1,203 @@
+# Login benchmarking program
+# usage : bench login.pr maxexec server time dwelltime 
+#
+# maxexec - maximum amount of time between processing the steps
+# server - server to use
+# nplayers - Number of players (note, server must have players
+# 	named 66001, 66002, ... with passwords 66001, 66002, ...
+#   and uids 66001, 66002, ... for this to work.  Use dbmod, createdb.sh). 
+# time - total time to run test after last player enters (ms)
+# dwelltime(ms) - amount of time a player should wait between iterations
+
+Print bench login.pr [maxexec] %1 %2 %3 %4 %5
+
+# Set I8 to the WARNING level of time allowed per step (ms)
+SET I8 10000
+# Set I9 to the FATAL level of time allowed per step (ms)
+SET I9 10000
+
+GOTO @BEGIN
+
+#--------------------------------------------------------------------------
+
+LABEL @FAIL
+# Exit with fail code
+EXIT 1
+
+#--------------------------------------------------------------------------
+
+LABEL @BEGIN
+
+Verbosity 0
+Print Spawning %2 players...
+
+# G0 = 0;  // global quitstate
+SetGlobal 0 0
+
+# Create players
+# Player %2 / 2 is verbose.
+# I3 = 66000 + argv[2]/2; 
+SET I3 %2
+SET I1 2
+DIV I3 I1
+
+# I0 = 66001; I2 = 66001 + argv[2];
+SET I0 1
+SET I1 1
+SET I2 %2
+ADD I2 I1
+SET I4 %5
+ADD I0 I4
+ADD I2 I4
+ADD I3 I4
+
+Print Spawn $I0 - $I2 : $I3 verbose
+# do {
+LABEL @SPAWNLOOP
+# 	if (I0 == I3) Spawn(verbose, user=I0, pass=I0);
+#	else Spawn(non_verbose, user=I0, pass=I0);
+IF I0 = I3 @SPAWNV
+Spawn @CLIENT 1 $I0 $I0 
+GOTO @SPAWNDONE
+LABEL @SPAWNV
+Spawn @CLIENTV 1 $I0 $I0
+LABEL @SPAWNDONE
+# 	I0++;
+ADD I0 I1
+# } while (I0 != I2);
+IF I0 ! I2 @SPAWNLOOP
+
+SET I8 100
+SET I9 200
+
+Print Running for %3 ms...
+
+# Main thread waits %3 ms before telling everyone to leave and reporting
+Wait %3
+# G0 = 1;
+SetGlobal 0 1
+Wait Solitary
+
+# Write reports on the timers
+Print Timer 1: Login and dpOpen
+Timer 1 REPORT
+Print Timer 2: dpCreatePlayer
+Timer 2 REPORT
+#Print Timer 4: Wait Shutdown
+#Timer 4 REPORT
+
+# Test to see if we had any failures
+Timer 0 COPY NUMBER
+SET I1 0
+ADD I1 I0
+Timer 5 COPY NUMBER
+Print $I0 of $I1 connections completed in %3 ms.
+
+# Exit with success code, killing all subprocesses
+EXIT 0
+
+#--------------------------------------------------------------------------
+
+LABEL @CLIENTV
+Print $S0 : Spawning Verbose
+Verbosity 2
+LABEL @CLIENT
+
+# I7 = argv[1];  
+Eval $S0 7
+
+# do { 
+LABEL @START
+
+Timer 0 START
+Timer 0 END
+
+# Create dp
+ONERROR @ETERMINATE
+dpCreate winets2.dll
+
+# Connect to game server
+ONERROR @EDESTROY
+dpSetGameServer %1 65
+
+# Join any game session on the server and login
+ONERROR @E2DESTROY
+Print $S0 : Login
+Timer 1 START
+Login $S0 $S1
+dpOpen ANY
+Wait Login
+Wait dpOpen
+Timer 1 END
+
+# Create a player
+ONERROR @ECLOSE
+Timer 2 START
+dpCreatePlayer $S0
+Wait dpCreatePlayer
+Timer 2 END
+
+# If (myUID != expectedUID) Close()
+Eval $myUID 6
+IF I6 = I7 @LOGGEDIN
+Print Error: Login UID $myUID != expected $S0
+GOTO @CLOSE
+LABEL @LOGGEDIN
+
+Timer 5 START
+Timer 5 END
+
+# Say something
+dpSend BROADCAST Hello
+# Wait around listening for a dwelltime
+Wait %4
+# Say something
+dpSend BROADCAST ByeBye
+
+# Shut down
+Print $S0 : Logout
+GOTO @CLOSE
+LABEL @ECLOSE
+Print $S0 : Error on dpCreatePlayer!
+LABEL @CLOSE
+ONERROR @E3DESTROY
+#Timer 4 START
+Wait 4000 2000 Shutdown
+#Timer 4 END
+
+# Destroy dp
+SET I5 0
+GOTO @DESTROY
+LABEL @EDESTROY
+Print $S0 : Error on Connect!
+GOTO @DESTROY
+LABEL @E2DESTROY
+Print $S0 : Error on Open or Login!
+# Destroy, then wait 40s for the handle to time out
+SET I5 40000
+GOTO @DESTROY
+LABEL @E3DESTROY
+Print $S0 : Error on Shutdown!
+# Destroy, then wait 40s for the handle to time out
+SET I5 40000
+LABEL @DESTROY
+ONERROR @E2TERMINATE
+dpGetStats
+dpDestroy
+Wait $I5
+
+# } while (G0 == 0);
+SET I0 0
+Eval $G0 1
+IF I0 = I1 @START
+
+Verbosity 0
+
+# Termination
+GOTO @TERMINATE
+LABEL @ETERMINATE
+Print Error on dpCreate. Terminating early!
+GOTO @TERMINATE
+LABEL @E2TERMINATE
+Print Error on dpDestroy. Terminating early!
+LABEL @TERMINATE

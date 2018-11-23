@@ -1,0 +1,413 @@
+#----------------------------------------------------------------------------
+#
+# Project      : Call To Power 2
+# File type    : String text file
+# Description  : Contains additional strings that should go to other files
+#                eventually (Spanish)
+# Id           : $Id:$
+#
+#----------------------------------------------------------------------------
+#
+# Disclaimer
+#
+# THIS FILE IS NOT GENERATED OR SUPPORTED BY ACTIVISION.
+#
+# This material has been developed at apolyton.net by the Apolyton CtP2 
+# Source Code Project. Contact the authors at ctp2source@apolyton.net.
+#
+#----------------------------------------------------------------------------
+#
+# Modifications from the original Activision code:
+#
+# - Removed diplomatic photo strings as they have been already moved back
+#   to civ_str.txt. - 7th April 2005 Martin Gühmann 
+# - Moved BUILD_LIST_SEQUENCE_DEFAULT to gl_str.txt.
+#   - 7th April 2005 Martin Gühmann
+# - Moved Great Libary title string to ldl_str.txt. - 9th April 2005 Martin Gühmann
+# - Moved Diplomacy Embargo Button strings to tips_str.txt (Aug 14th 2005 Martin Gühmann)
+# - Moved trust loss strings to info_str.txt. (Aug 31rd 2005 Martin Gühmann)
+#
+#----------------------------------------------------------------------------
+
+# # Stuff moved from add_str.txt to ldl_str.txt 9/5/00 by Jonathan
+# # Please add all new strings below here - with note 
+# # explaining where they should go eventually.
+
+# More Stuuf for LDL_STR
+# Multiplayer Disclaimer String
+str_ldl_MultiplayerDisclaimer	"Activision recomienda un máximo de 4 jugadores para partidas en modo multijugador de Call To Power."
+
+## Stuff for LDL_STR.txt
+str_ldl_AutoCenter_On	"Autocentrar - Sí"
+str_ldl_AutoCenter_Off	"Autocentrar - No"
+
+str_ldl_ShowPoliticalBorders_On		"Mostrar fronteras políticas"
+str_ldl_ShowPoliticalBorders_Off	"Ocultar fronteras políticas "
+
+str_ldl_ShowTradeRoutes_On			"Mostrar rutas comerciales"
+str_ldl_ShowTradeRoutes_Off			"Ocultar rutas comerciales "
+
+# Got lost somehow, City manager button.
+str_ldl_DisbandUnit                 "Disolver"
+
+# City advisor
+# str_ldl_CityAdvisor "Asesor de ciudad"
+
+# City Window
+str_ldl_CityWindowUpkeep "Mantenimiento"
+
+# Dip wizard strings
+# Gets displayed on the "Accept" button depending on context
+str_ldl_DipWizardClose "Cerrar" 
+str_ldl_DipWizardCheckIntelligence "Comprobar intelig."
+
+# Empire Manager
+str_ldl_People_ "Población:"
+str_ldl_Cities_ "Ciudades:"
+
+T_NO_KILL_CIVILIAN "Atacar al {unitrecord[0].name} de {player[0].civ_name_singular} provocará tensión diplomática.\n\nPuedes dar la orden de expulsión de unidades civiles como la del {unitrecord[0].name} y mantener tu posición diplomática. Selecciona una de tus unidades militares y utiliza la orden de <c:0,50,200>expulsión<e>." 
+
+# Info screen score tab list headers.  I don't know how to label these.  This is just so there's something
+# here for someone who does.
+str_ldl_SCORE_VALUE "Cálculos:"
+str_ldl_SCORE_TOTAL "Puntuación:"
+
+# List headers on wonder tab of info screen
+str_ldl_InfoScreenWonder "Maravilla"
+str_ldl_InfoScreenYear "Año"
+str_ldl_InfoScreenCity "Ciudad"
+str_ldl_InfoScreenPlayer "Jugador"
+str_ldl_INFO_WONDER_TAB "Maravillas"
+
+
+str_ldl_DipDetails_EmbassyReq			"Se requiere una embajada"
+str_ldl_RADAR_MAP_FILTER	"Filtrado"
+
+# Replaces string in ldl_str.txt, changed to Status from Modifiers
+str_ldl_CityWinStatisticsTab "Estado"
+
+#revised below
+# Added
+#str_code_CityWinTotalHappinessFormat "Total: %d"
+
+str_code_QueryRebuildCapitol "¿Estás seguro de que quieres reconstruir tu capitolio?"
+
+# Trade manager strings
+str_ldl_TradeManagerCities "Most. ciud.:"
+str_ldl_TradeManagerOwnCities "Propias"
+str_ldl_TradeManagerFriendlyCities "Amigas"
+str_ldl_TradeManagerAllCities "Todas"
+str_ldl_TradeManagerCitiesPerGood "Ciud. por merc.:"
+
+# Moved from info_str.txt, had an error (string[0] no good, need action[0])
+NEXT_EMAIL_PLAYER 			"Por favor, envía la partida guardada en tu escritorio a {player[0].leader_name} ({action[0].name}) de los {player[0].civ_name_plural}."
+
+# Added strings for the science screen.
+str_ldl_ResearchGoal		"* Obj:"
+
+# TURN in all caps for control panel close button lable
+str_ldl_endbuttonTURN	"TURN"
+
+# String for not showing dialogs again.
+str_ldl_DontShowAgain		"No volver a mostrar este mensaje."
+
+# In science picker, when the advance gives you tile improvements:
+ADVANCE_GIVES_TILE_IMPROVEMENTS "Mejoras de terreno:"
+
+str_ldl_RADAR_MAP_TRADE "Comercio"
+str_ldl_RADAR_MAP_TERRAIN "Terreno"
+
+##############################################
+## PLEASE ENTER NEW STUFF BELOW THIS LINE
+## Strings above sent to be localized 9/18/00
+##############################################
+
+BC_YEAR_FORMAT "%d a. C."
+AD_YEAR_FORMAT "%d d. C."
+
+
+# Advanced Options Title
+str_ldl_AdvancedOptions "OPCIONES AVANZADAS"
+
+#updated from ldl_str
+str_ldl_INFORMATION_DIALOG_TITLE 			"E S T A D Í S T I C A S"
+
+str_COMPUTER_TURNS		"Turnos del ordenador..."
+
+#revised from ldl_str.txt
+str_code_TotalPollutionFormat "%d"
+str_ldl_CityWinHappiness "Felicidad:"
+str_ldl_CityWinPollution "Contaminación:"
+
+#revised from above to eliminate phrase 'Total: '
+str_code_CityWinTotalHappinessFormat "%d"
+
+str_ldl_Starving "Hambruna"
+
+str_ldl_reloadSlic "Recargar Slic"
+str_ReloadSlic_OK "¡Cargado de Slic completada!"
+str_ReloadSlic_Fail "¡Cargado de Slic fallida! ¡Comprueba errores de sintaxis!"
+str_ldl_scen_notes "NOTAS:"
+
+#Unit Manager Advisor Window Title -- this is completely new
+str_ldl_MilitaryAdvisor "ASESOR MILITAR"
+
+#Trade Manager Advisor Window Title -- this is completely new
+str_ldl_TradeAdvisor	"ASESOR DE COMERCIO"
+
+#City Manager Advisor Window Title -- this is a revision from title to ALL CAPS
+# the original can be found in add_str, above.
+str_ldl_CityAdvisor	"ASESOR DE CIUDAD"
+str_ldl_DeclareEmbargo "Embargo"
+str_ldl_IW_CONFIRM_EMBARGO "Declarar embargo a {player[0].country_name}?"
+str_Goods_Generated "¡Mercancías generadas con éxito!"
+str_Goods_All_Gone "¡Mercancías eliminadas con éxito!"
+str_ldl_RemoveGoods "Elim. merc."
+str_ldl_GenerateGoods "Generar merc."
+
+##############################################
+## PLEASE ENTER NEW STUFF BELOW THIS LINE
+## Strings above sent to be localized 9/29/00
+##############################################
+
+#
+# Network strings: Commented out in ldl_str.txt, converted to ctp2 format
+#
+NETWORK_PLAYER_LEFT "{action[0].name} ha abandonado la partida. Un jugador controlado por el ordenador tomará el relevo del imperio del jugador saliente."
+NETWORK_PLAYER_JOINED "{action[0].name} ha tomado control de los {player[0].civ_name_plural}"
+NETWORK_DIFFERENT_PLAYER_JOINED "{action[0].name} se une jugando como los  {player[0].civ_name_plural}, pero este imperio pertenecía antes a otro. ¿Quieres expulsarles? "
+BUTTON_EJECT "Expulsar"
+BUTTON_LET_THEM_STAY "Dejar que se queden"
+NETWORK_YOU_ARE_NOW_HOST "Ahora eres el host de esta partida."
+NETWORK_NEW_HOST "{action[0].name} es ahora el host de esta partida."
+NETWORK_YOU_ARE_NOW_HOST "Ahora eres el host de esta partida."
+NETWORK_NEW_HOST "{action[0].name} es ahora el host de esta partida."
+NETWORK_SESSION_LOST "Conexión con el host perdida, volviendo al lobby."
+NETWORK_WAITING_ON_PLAYERS "Esperando jugadores"
+NETWORK_WAITING_FOR_DATA "Esperando datos"
+NETWORK_RESYNCING "Nueva sincronización"
+
+
+# This one is new.  Used as the "sender" of chat messages that are sent by the engine, not another player.
+NETWORK_SENDER_SYSTEM "Sistema"
+
+str_ldl_AddStuff "A Ñ A D I R   C O S A S "
+str_ldl_SelectCity "¡Selecciona una ciudad!"
+str_ldl_AddPW "Añadir obras públicas:"
+str_ldl_AddGold "Añadir oro:"
+
+# in Build Queue Editor Laod Screen
+str_ldl_LoadQueueColon "Cargar cola:"
+
+
+#Main title for Intelligence Dialog box
+str_ldl_IntelligenceTitle "I N T E L I G E N C I A"
+
+##############################################
+## PLEASE ENTER NEW STUFF BELOW THIS LINE
+## Strings above sent to be localized 10/6/00
+##############################################
+str_ldl_PosField "Pos:"
+
+#JBR1003 - moved from cut_str
+SENDER_KILLED_TRADE_ROUTE "{player[0].leader_name} ha cancelado la ruta comercial por la que se lleva {good[0].name} de {city[0].name} a {city[1].name}."
+NETWORK_TIME_LEFT "Tiempo restante"
+
+str_ldl_CityEspionage "Espionaje en ciudad"
+str_ldl_NatlManagerHotKey "F1"
+str_ldl_EmpireManagerHotKey "F2"
+str_ldl_ScienceHotKey "F3"
+str_ldl_UnitManagerHotKey "F4"
+str_ldl_TradeScreenHotKey "F5"
+str_ldl_IntelligenceHotKey "F6"
+str_ldl_ScoreHotKey "F7"
+str_ldl_GreatLibraryHotKey "F8"
+str_ldl_AdvancedHotKey "F9"
+str_ldl_ArmyManagementHotKey "G"
+str_ldl_Cheat_Mode_CaseHotKey "Control+s"
+str_ldl_QuitHotKey "Q"
+str_ldl_SaveGameHotKey "!"
+str_ldl_LoadGameHotKey "@"
+
+str_ldl_TradeSummaryHotKey "Control+t"
+str_ldl_GaiaHotkey "Control+g"
+str_ldl_BuildQueueHotKey "Control+b"
+str_ldl_CityManagementHotKey "Control+i"
+str_ldl_NewProposalHotKey "Control+d"
+
+str_ldl_TimelineHotKey "Control+l"
+str_ldl_RankHotKey "Control+k"
+str_ldl_RestartHotKey "Control+z"
+
+str_ldl_NewGameHotKey "Control+x"
+str_ldl_SoundHotKey "Control+v"
+str_ldl_GraphicsHotKey "Control+f"
+str_ldl_MusicHotKey "ctl+m"
+str_ldl_GameplayHotKey "Control+p"
+str_ldl_CityEspionageHotKey "Control+e"
+str_ldl_FindMeButton "¡Encontrar!"
+str_ldl_FindX "X"
+str_ldl_FindY "Y"
+str_ldl_FindPosLabel "Encon. pos.:"
+str_ldl_CityManager "Administración ciudad"
+
+# Shows up over main map in upper left corner to say whose turn it is right now (has a colon appended by code, followed by leader name).
+NETWORK_CURRENT_PLAYER "Jugador actual"
+str_tbl_ldl_Open_City_Management "Admón. ciudad"
+str_tbl_ldl_Open_Build_Queue "Cola de construc. de ciudad"
+str_tbl_ldl_Open_Trade_Summary "Resumen de comercio"
+str_tbl_ldl_Open_Dip_Wizard "Nueva proposición"
+str_tbl_ldl_Gaia "Gaia"
+str_tbl_ldl_Open_Wonders "Maravillas" 
+str_tbl_ldl_Open_Ranking "Ranking"
+str_tbl_ldl_Msg_Tab "Pestaña Mensajes"
+str_tbl_ldl_TileImp_Tab "Mejoras de terreno"
+str_tbl_ldl_Open_Scenario_Editor "Editor de escenario"
+str_tbl_ldl_Sound_Options "Opciones de sonido"
+str_tbl_ldl_Graphics_Options "Opciones de gráficos"
+str_tbl_ldl_Gameplay_Options "Opciones de juego"
+str_tbl_ldl_Restart_Game "Reiniciar partida"
+str_tbl_ldl_New_Game "Nueva partida "
+str_tbl_ldl_Toggle_Radar "Most./Ocul. radar"
+str_tbl_ldl_Toggle_Ctl_Panel "Most./Ocul. Panel de control"
+str_tbl_ldl_Toggle_All "Most./Ocul. todo"
+str_tbl_ldl_Open_Army_Mgmt "Abrir Admón. del ejército"
+str_ldl_UNIT_CONTROLS "CONTROLES DE UNIDAD"
+
+##############################################
+## PLEASE ENTER NEW STUFF BELOW THIS LINE
+## Strings above sent to be localized 10/12/00
+##############################################
+
+str_ldl_GreatLibrary "Gran Biblioteca"   
+str_control_key "Control"  
+ 
+str_ldl_EnableAllMessages "Activar todos los mensajes" 
+
+#################################
+#status text for scenario editor#
+#################################
+str_SE_MapSize "El cambio del tamaño del mapa carga un nuevo mapa"
+str_SE_YearSpinner "Número de turnos: consulta la Pantalla de años para el año correspondiente"
+str_SE_YearDisplay "Pantalla de años"
+str_SE_Difficulty "Selecciona la dificultad del juego"
+str_SE_Barbarians "Selecciona la amenaza bárbara"
+str_SE_SaveMap "Guardar SÓLO mapa"
+str_SE_LoadMap "Cargar SÓLO mapa"
+str_SE_SaveScenario "Guardar escenario como una partida guardada"
+str_SE_LoadScenario "Cargar escenario"
+str_SE_WorldTab "Pestaña Mundo: todas las opciones globales"
+str_SE_UnitTab "Pestaña Unidades: coloca las unidades para cualquier jugador"
+str_SE_CityTab "Pestaña Ciudad: crea/modifica ciudades para cualquier jugador"
+str_SE_Civ_Button "Pestaña Imperio: modifica la configuración de cada jugador"
+str_SE_Hut "Añadir/quitar ruinas"
+str_SE_River "Añadir/quitar ríos"
+str_SE_Good1 "Añadir/quitar mercancía 1"
+str_SE_Good2 "Añadir/quitar mercancía 2"
+str_SE_Good3 "*Añadir/quitar mercancía 3: debes definir esto en terrain.txt"
+str_SE_Good4 "*Añadir/quitar mercancía 4: debes definir esto en terrain.txt"
+str_SE_Pollution "Contaminación Sí/No"
+str_SE_Land "Mostrar unidades terrestres"
+str_SE_Sea "Mostrar unidades navaless"
+str_SE_Air "Mostrar unidades aéreas"
+str_SE_Special "Mostrar unidades no convencionales/especiales"
+str_SE_PopSpinner "Fijar la población de la ciudad seleccionada"
+str_SE_AddBuildings "Añadir construcciones a la ciudad seleccionada"
+str_SE_AddWonders "Añadir maravillas a la ciudad seleccionada"
+str_SE_PlayerSelect "Seleccionar un jugador"
+str_SE_FullMode "Fijar localizaciones de inicio por jugador para todas las naciones con elección de nación"
+str_SE_NoCiv "Fijar localizaciones de inicio por jugador sin elección de nación."
+str_SE_WithCiv "Fijar localizaciones de inicio por nación, con elección de jugador"
+str_SE_JustCiv "Fijar localizaciones de inicio por nación, sin elección de jugador"
+str_SE_AddPW "Añadir obras públicas: introduce un número y pulsa Intro"
+str_SE_AddGold "Añadir oro: introduce un número y pulsa Intro"
+str_SE_Erase "Eliminar una unidad o ciudad"
+str_SE_ClearWorld "Despejar todas las casillas terrestres del mundo"
+str_SE_ReloadSlic "Recargar archivos SLIC"
+str_SE_Fog "Niebla de guerra Sí/No"
+str_SE_Copy "Modo Copiar Sí: haz clic y arrastra para seleccionar una zona"
+str_SE_Paste "Modo Pegar SÍ: cursor situado en la parte superior izquierda de la selección"
+str_SE_SaveClip "Guardar la zona seleccionada en el portapapeles"
+str_SE_SmallBrush "Añadir una casilla"
+str_SE_MedBrush "Añadir una casilla de 2x2"
+str_SE_LargeBrush "Añadir una casilla de 8x8"
+str_SE_LoadClip "Cargar selección del portapapeles"
+str_SE_Explore "Fijar todo el mundo explorado"
+str_SE_Unexplore "Fijar todo el mundo inexplorado"
+str_SE_XWrap "Ajuste de X Sí/No"
+str_SE_YWrap "Ajuste de Y Sí/No"
+str_SE_Pos "Posición actual del cursor"
+str_SE_LegalOnly "Colocar sólo las unidades en las que el jugador tiene activar adelantos"
+str_SE_ShowLabels "Etiquetas Sí/No"
+str_SE_AddAdvances "Añadir/Quitar adelantos del jugador"
+str_SE_Nation "Seleccionar nación del jugador"
+str_SE_LeaderName "Mostrar/Modificar el nombre del líder"
+str_SE_CityName " Mostrar/Modificar el nombre de la ciudad seleccionada"
+str_SE_FindPosX "Introducir coordenada X"
+str_SE_FindPosY "Introducir coordenada Y"
+str_SE_FindMe "Haz clic para centrar en las coordenadas X e Y"
+str_SE_RemoveGoods "Eliminar todas las mercancías del mapa"
+str_SE_GenerateGoods "Añadir las mercancías al mapa"
+
+# Filename prefix for quicksaves.
+QUICKSAVE_NAME "GUARDADO RÁPIDO"
+
+# Scenario editor <CHANGEME>
+str_ldl_Confirm_Restart		"Esto reiniciará la partida. ¿Estás seguro?"
+REGARD_EVENT_WONDER "Los {player[0].civ_name_plural} están impresionados con las increíbles maravillas de nuestra nación."
+
+# for the keymap screen
+str_tbl_ldl_Advanced_Options "Opciones avanzadas"
+
+# Two items on the options menu
+str_ldl_ZoomOut "Alejar"
+str_ldl_ZoomIn "Acercar"
+
+# Added for network games, there are more restrictions on when you can initiate diplomacy
+str_code_CantInitiateDiplomacyNow "Sólo puedes enviar una nueva proposición cuando sea tu turno o cuando estés esperando la respuesta de una proposición anterior."
+
+# Status text for minimize button on radar map
+STATUSBAR_MINIMAP_MINIMIZE "Haz clic aquí para minimizar la pantalla"
+str_player_choice "Elegir jugador"
+
+# Entry on right click menu for the cargo view
+CONTEXT_VIEW_CARGO " Ver carga"
+
+# For netshell list header
+str_ldl_Settlers "Colonos"
+
+# More Stuuf for LDL_STR
+# Multiplayer Disclaimer String
+str_ldl_MultiplayerDisclaimer	"Activision recomienda un máximo de 4 jugadores para partidas en modo multijugador de Call To Power."
+
+# When units will be disbanded due to a government change, ask first:
+str_code_GovernmentChangeDisbandsUnits "Si formas este gobierno algunas de tus unidades quedarán disueltas, ¿estás seguro de que quieres formarlo?"
+
+# For the science picker
+ADVANCE_GIVES_GOVS "Gobiernos:"
+
+# New Status text strings
+STATUSBAR_TRADEMAN_OPEN_CITIES_SLIDER			"Esto te permite fijar las ciudades mostradas por mercancía."
+STATUSBAR_TRADEMAN_OPEN_SORTBY_NATION_BUTTON	"Esto te permite ordenar la lista según las naciones que las reciben."
+STATUSBAR_CITYMAN_MAIN_CLEAR_BUTTON				"Esto te permite borrar todos los objetos de la cola de construcción."
+STATUSBAR_DIPMAN_TABLE_DECLAREWAR_BUTTON		"Esto te permite declarar la guerra a una nación extranjera."
+STATUSBAR_DIPMAN_CREATE_INTELLIGENCE_BUTTON		"Haz clic aquí para comprobar la inteligencia de esta nación."
+STATUSBAR_ARMYMAN_ADD_BUTTON					"Haz clic aquí para añadir todas las unidades a este ejército."
+STATUSBAR_ARMYMAN_ADD_ALL_BUTTON				"Haz clic aquí para añadir todas las unidades a este ejército."
+STATUSBAR_ARMYMAN_REMOVE_BUTTON				"Haz clic aquí para eliminar las unidades seleccionadas de este ejército."
+STATUSBAR_ARMYMAN_REMOVE_ALL_BUTTON				"Haz clic aquí para eliminar las unidades seleccionadas de este ejército."
+STATUSBAR_ARMYMAN_CLOSE_BUTTON					"Haz clic aquí para cerrar Administración del ejército."
+STATUSBAR_ARMYMAN_NEW_ARMY_BUTTON				"Haz clic aquí para crear un nuevo ejército."
+
+# Fix for localization
+str_profile_EndTurnSound "Sonido Finalizar turno"
+
+# For the context menu, lets you get the tile info window for squares with cities/units.
+CONTEXT_TILE_INFO "Información del mapa"
+
+HAPPY_REASON_FEATS "Proezas de marav."
+
+str_ldl_EditQueueReallyDelete "¿Eliminar de forma permanente la cola %s?"
+
+# A different kind of disconnection message for network games
+NETWORK_ACTIVENET_LOST "Se ha perdido la conexión con el servidor de Activenet, intentando volver al lobby."

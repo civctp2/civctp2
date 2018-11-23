@@ -1,0 +1,24 @@
+# Makefile for dptabt1, a unit test for dptab
+
+PACK=__attribute__ ((packed))
+OPT = -DUNIX -Dcdecl="" "-D__NO_ANONYMOUS_UNIONS__" "-DPACK=$(PACK)" -I. -I../../../../h -I../../../../demo/utils -I..
+COPT = $(FLAGS) $(OPT)
+OBJ_FILES = dptabt1.o /usr/lib/libm.a libbsd.a ../../../../linux86/lib/$(dp_LIB)
+
+default: ../../../../linux86/bin/$(DEST) 
+
+../../../../linux86/bin/$(DEST): $(DEST)
+	if [ ! -d ../../../../linux86 ]; then mkdir ../../../../linux86; fi
+	if [ ! -d ../../../../linux86/bin ]; then mkdir ../../../../linux86/bin; fi
+	cp $(DEST) ../../../../linux86/bin
+
+$(DEST): $(OBJ_FILES)
+	gcc $(COPT) $(OBJ_FILES) $(LOPT) -o $(DEST)
+
+dptabt1.o: ../dptabt1.c ../../../../h/dp2.h
+	gcc -c $(COPT) ../dptabt1.c
+
+libbsd.a: /usr/lib/libbsd*.a
+	cp -p $< $@
+
+# end of MAKEFILE

@@ -1,0 +1,14 @@
+#13
+ICON_GOV_DEFAULT	{ Icon "CM038F.tga"	Movie "CM038A.avi"	Gameplay "GAMEC001.txt"	Historical "HISTC001.txt"	Prerequisites "PREQC001.txt"	Vari "VARIC001.txt" }
+ICON_GOV_TYRANNY	{ Icon "CC056F.tga"	Movie "CC056A.avi"	Gameplay "GAMEC056.txt"	Historical "HISTC056.txt"	Prerequisites "PREQC056.txt"	Vari "VARIC056.txt" }
+ICON_GOV_ANARCHY	{ Icon "CC057F.tga"	Movie "CC057A.avi"	Gameplay "GAMEC057.txt"	Historical "HISTC057.txt"	Prerequisites "PREQC057.txt"	Vari "VARIC057.txt" }
+ICON_GOV_MONARCHY	{ Icon "CA013F.tga"	Movie "CA013A.avi"	Gameplay "GAMEC058.txt"	Historical "HISTC058.txt"	Prerequisites "PREQC058.txt"	Vari "VARIC058.txt" }
+ICON_GOV_CITY_STATE	{ Icon "CA016F.tga"	Movie "CA016A.avi"	Gameplay "GAMEC059.txt"	Historical "HISTC059.txt"	Prerequisites "PREQC059.txt"	Vari "VARIC059.txt" }
+ICON_GOV_THEOCRACY	{ Icon "CA023F.tga"	Movie "CA023A.avi"	Gameplay "GAMEC060.txt"	Historical "HISTC060.txt"	Prerequisites "PREQC060.txt"	Vari "VARIC060.txt" }
+ICON_GOV_DEMOCRACY	{ Icon "CA046F.tga"	Movie "CA046A.avi"	Gameplay "GAMEC061.txt"	Historical "HISTC061.txt"	Prerequisites "PREQC061.txt"	Vari "VARIC061.txt" }
+ICON_GOV_COMMUNISM	{ Icon "CA058F.tga"	Movie "CA058A.avi"	Gameplay "GAMEC062.txt"	Historical "HISTC062.txt"	Prerequisites "PREQC062.txt"	Vari "VARIC062.txt" }
+ICON_GOV_FASCISM	{ Icon "CA060F.tga"	Movie "CA060A.avi"	Gameplay "GAMEC063.txt"	Historical "HISTC063.txt"	Prerequisites "PREQC063.txt"	Vari "VARIC063.txt" }
+ICON_GOV_MULTINATIONAL_REPUBLIC	{ Icon "CA079F.tga"	Movie "CA079A.avi"	Gameplay "GAMEC064.txt"	Historical "HISTC064.txt"	Prerequisites "PREQC064.txt"	Vari "VARIC064.txt" }
+ICON_GOV_TECHNOCRACY	{ Icon "CA093F.tga"	Movie "CA093A.avi"	Gameplay "GAMEC065.txt"	Historical "HISTC065.txt"	Prerequisites "PREQC065.txt"	Vari "VARIC065.txt" }
+ICON_GOV_VIRTUAL_DEMOCRACY	{ Icon "CA116F.tga"	Movie "CA116A.avi"	Gameplay "GAMEC066.txt"	Historical "HISTC066.txt"	Prerequisites "PREQC066.txt"	Vari "VARIC066.txt" }
+ICON_GOV_ECOTOPIA	{ Icon "CA106F.tga"	Movie "CA106A.avi"	Gameplay "GAMEC067.txt"	Historical "HISTC067.txt"	Prerequisites "PREQC067.txt"	Vari "VARIC067.txt" }

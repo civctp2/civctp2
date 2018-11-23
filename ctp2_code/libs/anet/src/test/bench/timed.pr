@@ -1,0 +1,158 @@
+# Server Benchmarking program, dpOpen version
+# usage : bench bench3.pr maxexec server nprocs time process_to_log dwelltime 
+#
+# maxexec - maximum amount of time between processing the steps
+# server - server to use
+# nprocs - number of players to simulate simultanesously
+# time - total time to run test after last player enters (ms)
+# process_to_log - which process should log
+# dwelltime(ms) - amount of time a player should wait between iterations
+
+Print %1 %2 %3 %4 %5
+
+# Set I8 to the WARNING level of time allowed per step (ms)
+SET I8 10000
+# Set I9 to the FATAL level of time allowed per step (ms)
+SET I9 10000
+
+GOTO @BEGIN
+
+#--------------------------------------------------------------------------
+
+LABEL @FAIL
+# Exit with fail code
+EXIT 1
+
+#--------------------------------------------------------------------------
+
+LABEL @SPAWNV
+Spawn @CLIENTV 1
+GOTO @SPAWNDONE
+
+#--------------------------------------------------------------------------
+
+LABEL @BEGIN
+
+Verbosity 0
+Print Spawning %2 players...
+
+# Create %2 players
+SET I0 1
+SET I1 %2
+SET I2 1
+# End point is nplayers + 1
+ADD I1 I2
+# Which player should be verbose
+SET I3 %4
+
+# do {
+LABEL @OUTLOOP
+
+# 	if (I0 == argv[4]) spawn(verbose); else spawn();
+IF I0 = I3 @SPAWNV
+Spawn @CLIENT 1
+LABEL @SPAWNDONE
+
+# } while (I0++ < argv[2]);
+ADD I0 I2
+IF I0 < I1 @OUTLOOP
+
+SET I8 100
+SET I9 200
+
+Print Running for %3 ms...
+
+# Main thread waits %3 ms before reporting and killing everyone
+Wait %3
+
+# Write reports on the timers
+Print Timer 1: dpSetGameServer stats
+Timer 1 REPORT
+Print Timer 2: dpOpen2
+Timer 2 REPORT
+Print Timer 4: Wait Shutdown
+Timer 4 REPORT
+
+# Test to see if we had any failures
+Timer 0 COPY NUMBER
+SET I1 0
+ADD I1 I0
+Timer 5 COPY NUMBER
+Print $I0 of $I1 connections completed in %3 ms.
+
+# Exit with success code, killing all subprocesses
+EXIT 0
+
+#--------------------------------------------------------------------------
+
+LABEL @CLIENTV
+Verbosity 2
+LABEL @CLIENT
+
+# Repeat until the main thread exits
+LABEL @START
+
+Timer 0 START
+Timer 0 END
+
+ONERROR @TERMINATE
+
+# Create dp
+dpCreate winets2.dll
+
+ONERROR @DESTROY
+
+# Connect to game server
+Timer 1 START
+dpSetGameServer %1 65
+Timer 1 END
+
+# Wait 5000
+# dpReceive
+
+ONERROR @CLOSE
+
+# Join any session on the server and create a player
+Timer 2 START
+dpOpen ANY
+Wait
+Timer 2 END
+
+Timer 3 START
+dpCreatePlayer BenchPlayer
+Wait
+Timer 3 END
+
+Timer 5 START
+Timer 5 END
+
+# Say something
+dpSend BROADCAST Hello
+# Wait around listening for a dwelltime
+Wait %5
+# Say something
+dpSend BROADCAST ByeBye
+
+# Shut down
+LABEL @CLOSE
+ONERROR @DESTROY
+Timer 4 START
+Wait 2000 1000 Shutdown
+Timer 4 END
+
+# Destroy dp
+LABEL @DESTROY
+ONERROR @TERMINATE
+
+dpGetStats
+dpDestroy
+
+ADD I4 I5
+
+# Loop until we are killed by the main thread
+GOTO @START
+
+Verbosity 1
+
+# Termination
+LABEL @TERMINATE

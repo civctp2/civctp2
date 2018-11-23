@@ -1,0 +1,148 @@
+#-----------------------------------------------------------------------------
+#
+#  Project      : Call To Power 2
+#  File type    : DbGen input
+#  Description  : Terrain improvement record definition
+# 
+# ----------------------------------------------------------------------------
+# 
+#  Disclaimer
+# 
+#  THIS FILE IS NOT GENERATED OR SUPPORTED BY ACTIVISION.
+# 
+#  This material has been developed at apolyton.net by the Apolyton CtP2 
+#  Source Code Project. Contact the authors at ctp2source@apolyton.net.
+# 
+#-----------------------------------------------------------------------------
+# 
+#  Modifications from the original Activision code:
+# 
+#  - Sound added.
+#  - Added Freight for trade redirection.
+#  - Government modifier added.
+#  - DisplayLevel and CanPillage added to support visible wonders.
+#  - GovernmentType - added by E; a copy of unit Government type code
+#  - CultureOnly - added by E; can only research if civ has certain citystyle
+#  - IsRestrictedToGood - added by E; can only build imps if tile has good
+#  - Wonder and Urban Class - added by E; FutureUse; for visible wonders and citysprawl
+#  - CantPillage - added by E; FutureUse; prevent pillage of certain imps 
+#  - NeedsWorker - added by E; FutureUse; can't build unless IsWorker unit is on square
+#  - NeedsWaterSupply- added by E; FutureUse; can only build on rivers or adjacent to 
+#                      other IsWaterSupply imps
+#  - PlantGood - added by E; FutureUse; imp that places a good instead
+#
+#-----------------------------------------------------------------------------
+TerrainImprovement {
+	Bits Class {
+		Farm,
+		Road,
+		Mine,
+		ATM,
+		OceanFarm,
+		OceanMine,
+		OceanATM,
+		OceanRoad,
+		Structure1,
+		Structure2,
+		LandDetector,
+		OceanDetector,
+		Terraform,
+		Wonder, //added by E for visible wonders
+		Urban //added by E for future Urban Sprawl
+	}
+
+	Bits Excludes {
+		Farm,
+		Road,
+		Mine,
+		ATM,
+		OceanFarm,
+		OceanMine,
+		OceanATM,
+		OceanRoad,
+		Structure1,
+		Structure2,
+		LandDetector,
+		OceanDetector,
+		Terraform,
+		Wonder, //added by E for visible wonders
+		Urban //added by E for future Urban Sprawl
+	}
+
+	Bits CanSee {
+		Standard,
+		Underwater,
+		Stealth,
+		UnusedBit3,
+		UnusedBit4,
+		UnusedBit5,
+		UnusedBit6,
+		UnusedBit7,
+		UnusedBit8,
+		UnusedBit9,
+		UnusedBit10,
+		UnusedBit11,
+		UnusedBit12,
+		UnusedBit13,
+		UnusedBit14,
+		UnusedBit15
+	}
+
+	Struct Effect {
+		Record Terrain[] Terrain
+		Bit(Int) BonusFood
+		Bit(Int) BonusProduction
+		Bit(Int) BonusGold
+		Bit(Int) MoveCost
+		#Added by Martin Gühmann for Trade redirection
+		Bit(Int) Freight
+		Bit Radar
+		Bit CantPillage //futureUse added by E to prevent pillage of certain imps 
+		Bit NeedsWorker //futureUse - can't build unless IsWorker unit is on square
+		Bit NeedsWaterSupply //futureUse -- can only build on rivers or adjacent to other IsWaterSupply imps
+		Bit Airport
+		Bit ListeningPost
+		Bit Endgame
+		Bit(Int) VisionRange
+		Bit(Int) RadarRange
+		Bit(Float) DefenseBonus
+		Bit(Int) PlantGood //added by E for future imp that places a good instead
+		Record Advance EnableAdvance
+		Record Advance[] ObsoleteAdvance
+		Int ProductionCost
+		Int ProductionTime
+		Int TilesetIndex
+	}
+
+	#Added Sound by Martin Gühmann
+	Record Sound Sound
+	Record Terrain[] CantBuildOn
+	Record Government[] GovernmentsModified
+	Record CityStyle[] CultureOnly //added by E -- can only build imps if civ has certain citystyle
+	Record Government[] GovernmentType //added by E --- a copy of unit Government type code
+	Record Resource[] IsRestrictedToGood //added by E -- can only build imps if tile has good
+	Bit(Struct Effect) Effect
+	Struct Effect[] TerrainEffect
+
+	Record Icon Icon
+	#MDS 090800 not sure about this, trying to add 2 new fields...
+	StringId Tooltip
+	StringId Statusbar
+
+	Int Level # If a farm, is it farm 1, farm 2, farm 3?  same thing for any type.
+	#Removed limit of three for Construction Tile by Martin Gühmann
+	Int[] ConstructionTiles
+
+	Bit(Record Terrain) TerraformTerrain # Only meaningful if Class == Terraform
+	Bit(Int) Column # ignored except for terraforms
+
+	Bit(Int) IntBorderRadius
+	Bit(Int) SquaredBorderRadius
+
+	Bit GLHidden
+
+	# Display level (0 = ground level = under roads, > 0 = on top of roads)
+	Int DisplayLevel	= 0
+	# Pillage prevention
+	Bit	CantPillage
+}

@@ -1,0 +1,100 @@
+\chapter{Building Civilization Call To Power 2\label{cha:buildctp2}}
+This chapter contains information, how you start the build process.
+\begin{section}{Windows}
+\begin{subsection}{Launch Microsoft Visual C++ IDE}
+If you haven't done so already, launch MS VC++ IDE.
+\end{subsection}% Launch Microsoft Visual C++ IDE
+
+\begin{subsection}{Opening the workspace}
+Choose \textit{File - Open} and start with the installation directory of the CtP2 source code (e.g.: \textit{C:\textbackslash{}ctp2source}). Click through the directories to open \textit{C:\textbackslash{}ctp2source\textbackslash{}ctp2\_code\textbackslash{}ctp\textbackslash{}civctp.dsw}.
+
+Now you have the choice between building the DirectX version and the SDL version. If you haven't installed the SDL libraries, follow the next section, else continue with the SDL section.
+\end{subsection}% Opening the workspace
+
+\begin{subsection}{Compiling the DirectX version}
+\begin{subsubsection}{Set the active configuration}
+Open \textit{Build - Set active configuration} and choose \textit{ctp2 - Win32 Debug}.
+\end{subsubsection}% Set the active configuration
+
+\begin{subsubsection}{Start the build}
+Run \textit{Build - CivCTP\_dbg.exe}. Have yourself a break while the source compiles. This lasts about 20 - 30 minutes, but will vary depending on your system.
+\end{subsubsection}% Start the build
+
+\begin{subsubsection}{Copy CivCTP\_dbg.exe to your CtP2 installation}
+Go to \textit{C:\textbackslash{}ctp2source\textbackslash{}ctp2\_code\textbackslash{}ctp} and copy \textit{CivCTP\_dbg.exe} to the \textit{ctp2\_program\textbackslash{}ctp} subdirectory of your CtP2 installation (e.g. into \textit{C:\textbackslash{}Program\_Files\textbackslash{}Activision\textbackslash{}CtP2\textbackslash{}ctp2\_program\textbackslash{}ctp}).
+\end{subsubsection}% Copy CivCTP\_dbg.exe to your CtP2 installation
+
+\begin{subsubsection}{Copy anet2d.dll to your CtP2 installation}
+Repeat the previous step for the file \textit{anet2d.dll}.
+\end{subsubsection}% Copy anet2d.dll to your CtP2 installation
+
+\begin{subsubsection}{Copy the ctp2\_data and ctp2\_program directories}
+Copy the ctp2\_data directory and the ctp2\_program directory recursively to your CtP2 installation path (e.g. into \textit{C:\textbackslash{}Program\_Files\textbackslash{}Activision\textbackslash{}CtP2\textbackslash{}ctp2\_program\textbackslash{}ctp}). If you are prompted for overwriting files, respond with "Yes for All" to make sure you get the newest version.
+\end{subsubsection}% Copy the ctp2\_data and ctp2\_program directories
+
+\begin{subsubsection}{Run the executable CivCTP\_dbg.exe}
+You can now run your self build Civilization Call to Power 2. If you get some assertion errors, ignore them first and see how things are going.
+
+You can then start diving into the code and fixing bugs (or assertions by assuring the condition within the Assert() won't happen) or adding new features.
+\end{subsubsection}% Run the executable CivCTP\_dbg.exe
+
+\end{subsection}% Compiling the DirectX version
+
+\begin{subsection}{Compiling the SDL version}
+\begin{subsubsection}{Set the active configuration}
+Open \textit{Build - Set active configuration} and choose \textit{ctp2 - SDL Debug}.
+\end{subsubsection}% Set the active configuration
+
+\begin{subsubsection}{Start the build}
+Run \textit{Build - CivCTP\_SDL\_dbg.exe}. Have yourself a break while the source compiles. This lasts about 20 - 30 minutes, but will vary depending on your system.
+\end{subsubsection}% Start the build
+
+\begin{subsubsection}{Copy CivCTP\_SDL\_dbg.exe to your CtP2 installation}
+Open the Windows Explorer and go to the path \textit{C:\textbackslash{}ctp2source\textbackslash{}ctp2\_code\textbackslash{}ctp}. Copy \textit{CivCTP\_dbg.exe} to the \textit{ctp2\_program\textbackslash{}ctp} subdirectory of your CtP2 installation (e.g. into \textit{C:\textbackslash{}Program\_Files\textbackslash{}Activision\textbackslash{}CtP2\textbackslash{}ctp2\_program\textbackslash{}ctp}).
+\end{subsubsection}% Copy CivCTP\_dbg.exe to your CtP2 installation
+
+\begin{subsubsection}{Copy anet2d.dll to your CtP2 installation}
+Repeat the previous step for the file \textit{anet2d.dll}.
+\end{subsubsection}% Copy anet2d.dll to your CtP2 installation
+
+\begin{subsubsection}{Copy the ctp2\_data and ctp2\_program directories}
+Copy the ctp2\_data directory and the ctp2\_program directory recursively to your CtP2 installation path (e.g. into \textit{C:\textbackslash{}Program\_Files\textbackslash{}Activision\textbackslash{}CtP2\textbackslash{}ctp2\_program\textbackslash{}ctp}). If you are prompted for overwriting files, respond with "Yes for All" to make sure you get the newest version.
+\end{subsubsection}% Copy the ctp2\_data and ctp2\_program directories
+
+\begin{subsubsection}{Copy the SDL libraries to your CtP2 installation}
+Go into C:\textbackslash{}libs and copy all .dll files located within the lib subdirectory of each SDL directory to the \textit{ctp2\_program\textbackslash{}ctp\textbackslash{}} subdirectory of your CtP2 installation path (e.g. into \textit{C:\textbackslash{}Program\_Files\textbackslash{}Activision\textbackslash{}CtP2\textbackslash{}ctp2\_program\textbackslash{}ctp}).
+\end{subsubsection}
+
+\begin{subsubsection}{Run the executable CivCTP\_dbg.exe}
+You can now run your self build Civilization Call to Power 2. If you get some assertion errors, ignore them first and see how things are going.
+
+You can then start diving into the code and fixing bugs (or assertions by assuring the condition within the Assert() won't happen) or adding new features.
+\end{subsubsection}% Run the executable CivCTP\_dbg.exe
+
+\end{subsection}% Compiling the SDL version
+
+\begin{subsection}{Solving problems during compilation}
+
+\begin{subsubsection}{Files could not be found during compilation}
+
+File not found errors most often are just problems due to your setup.
+If you find an error like:
+\begin{verbatim}
+Performing Custom Build Step on .\ctpdb.y
+'C:\Program' is not recognized as an internal or external command,
+operable program or batch file.
+Error executing c:\windows\system32\cmd.exe.
+\end{verbatim}
+
+you installed the sources somewhere into C:\textbackslash{}Program Files, but cmd.exe did interpret the beginnning of the sources path until the first space as a command, and the remainder as arguments to that command. There are some external programs involved in the build process, so the solution could be either quoting the path in the CDKDIR variable like this:
+\begin{verbatim}
+set CDKDIR="C:\Program Files\Path to the Call To Power 2 Sources by Activision"
+\end{verbatim}
+
+Or install them to a different directory, whose full path name contains alphanumeric characters only (or as a last resort, use underscores instead of spaces).
+
+\end{subsubsection}% xxx is not regognized as an internal or external command, operable program or batch file
+
+\end{subsection}% Solving problem during compilation
+
+\end{section}% Windows

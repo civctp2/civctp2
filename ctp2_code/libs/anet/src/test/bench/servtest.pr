@@ -1,0 +1,170 @@
+# Server Reliability Program 2
+# Puts a player on every server and logs disconnects.
+# Paramaters :
+# Test Time - Time in ms to run test
+# Dwell Time - Time in ms that each client sits on a server before 
+# 	disconnecting and reconnecting deliberately
+
+# Start Spawning off for each server we wish to test
+Spawn @SERVER:us1 1
+#Spawn @SERVER:us2 1
+#Spawn @SERVER:us3 1
+#Spawn @SERVER:us4 1
+#Spawn @SERVER:ionet 1
+#Spawn @SERVER:california12 1
+#Spawn @SERVER:uk1 1
+#Spawn @SERVER:australia1 1
+#Spawn @SERVER:stockholm 1
+#Spawn @SERVER:argentina 1
+
+# Wait until test is over
+Wait %1
+
+# Print out some overall info
+Print Connections: $TC1 attempts $TC2 connects $TC3 players $TC4 disconnects
+Print Time to dpOpen:
+Timer 2 REPORT
+Print Time to dpCreatePlayer:
+Timer 3 REPORT
+Print Time connected (of %2 ms attempted dwell time):
+Timer 4 REPORT
+
+# Kill all clients and exit
+EXIT 0
+
+#--------------------------------------------------------------------------
+
+#LABEL @SERVER
+#SET S0 %3
+#ONERROR @TERMINATE
+#dpCreate winets2.dll
+#ONERROR @DESTROY
+#GOTO @JOIN
+
+LABEL @SERVER:us1
+SET S0 us1.alink.activision.com
+ONERROR @TERMINATE
+dpCreate winets2.dll
+ONERROR @DESTROY
+GOTO @JOIN
+
+LABEL @SERVER:us2
+SET S0 us2.alink.activision.com
+ONERROR @TERMINATE
+dpCreate winets2d.dll
+ONERROR @DESTROY
+GOTO @JOIN
+
+LABEL @SERVER:us3
+SET S0 us3.alink.activision.com
+ONERROR @TERMINATE
+dpCreate winets2d.dll
+ONERROR @DESTROY
+GOTO @JOIN
+
+LABEL @SERVER:us4
+SET S0 us4.alink.activision.com
+ONERROR @TERMINATE
+dpCreate winets2d.dll
+ONERROR @DESTROY
+GOTO @JOIN
+
+LABEL @SERVER:ionet
+SET S0 ags.ionet.net
+ONERROR @TERMINATE
+dpCreate winets2d.dll
+ONERROR @DESTROY
+GOTO @JOIN
+
+LABEL @SERVER:california12
+SET S0 california12.activision.com
+ONERROR @TERMINATE
+dpCreate winets2d.dll
+ONERROR @DESTROY
+GOTO @JOIN
+
+LABEL @SERVER:australia1
+SET S0 australia1.activision.com
+ONERROR @TERMINATE
+dpCreate winets2d.dll
+ONERROR @DESTROY
+GOTO @JOIN
+
+LABEL @SERVER:uk1
+SET S0 uk1.activision.co.uk
+ONERROR @TERMINATE
+dpCreate winets2d.dll
+ONERROR @DESTROY
+GOTO @JOIN
+
+LABEL @SERVER:stockholm
+SET S0 stockholm.alink.fragzone.se
+ONERROR @TERMINATE
+dpCreate winets2d.dll
+ONERROR @DESTROY
+GOTO @JOIN
+
+LABEL @SERVER:argentina
+SET S0 activision.ciudad.com.ar
+ONERROR @TERMINATE
+dpCreate winets2d.dll
+ONERROR @DESTROY
+GOTO @JOIN
+
+#--------------------------------------------------------------------------
+
+# Join any session on the server
+LABEL @JOIN
+
+SET I1 0
+SET I2 1
+
+LABEL @JOINLOOP
+
+ADD I1 I2
+Print Server $S0 : Attempting connection $I1
+
+Timer 1 START
+Timer 1 END
+
+ONERROR @CLOSE
+dpSetGameServer $S0 65
+Wait
+Timer 2 START
+dpOpen ANY
+Wait
+Timer 2 END
+
+Print Server $S0 : Connection $I1 succeeded
+
+Timer 3 START
+dpCreatePlayer MrReliable
+Wait
+Timer 3 END
+
+Print Server $S0 : Player creation $I1 succeeded
+
+# Wait until we get kicked off the server
+Timer 4 START
+Wait %2
+Timer 4 END
+
+Print Server $S0 : Connection $I1 lost
+
+# Close the session
+LABEL @CLOSE
+ONERROR @DESTROY
+dpClose
+
+# Wait 20s for any problems to clear up
+Wait 20000
+
+# try, try again
+GOTO @JOINLOOP
+
+# Destroy dp
+LABEL @DESTROY
+ONERROR @TERMINATE
+dpDestroy
+
+LABEL @TERMINATE

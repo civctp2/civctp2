@@ -1,0 +1,461 @@
+#----------------------------------------------------------------------------
+#
+# Project      : Call To Power 2
+# File type    : String text file
+# Description  : Contains main info meassage strings in French
+# Id           : $Id:$
+#
+#----------------------------------------------------------------------------
+#
+# Disclaimer
+#
+# THIS FILE IS NOT GENERATED OR SUPPORTED BY ACTIVISION.
+#
+# This material has been developed at apolyton.net by the Apolyton CtP2 
+# Source Code Project. Contact the authors at ctp2source@apolyton.net.
+#
+#----------------------------------------------------------------------------
+#
+# Modifications from the original Activision code:
+#
+# - Moved TREATY_TO_EXPIRE message string from dip2_str.txt, was moved from
+#   cut_str.txt and updated by PFT before. - Mar. 25th 2005 Martin Gühmann
+# - Moved and updated the rest of the diplomacy messages from cut_str.txt 
+#   for later reimplementation. - Mar. 25th 2005 Martin Gühmann
+# - Merged in trust loss strings from add_str.txt. (Aug 31rd 2005 Martin Gühmann)
+#
+#----------------------------------------------------------------------------
+
+#### General Message Strings ####
+
+## Instant Action Messages ##
+IA_BREAK_TREATY				"Si nous violons notre traité avec les {player[1].civ_name_plural}, non seulement nous susciterons leur courroux, mais nous courrons également le risque de baisser dans l'estime des dirigeants de ce monde.  Etes-vous sûr de vouloir agir dans ce sens, {player[0].sir} ?"
+IA_BREAK_CEASE_FIRE			"{player[0].sir_cap}, êtes-vous sûr de vouloir rompre le traité de paix avec les {player[1].civ_name_plural} ?"
+IA_BREAK_NO_PIRACY			"{player[0].sir_cap}, voulez-vous vraiment que nous pirations cette route commerciale ? Nous avions convenu de ne pas entraver les échanges de cette nation."
+IA_AUTO_UNLOAD				"Voulez-vous que nos soldats débarquent ici, {player[0].sir} ?"
+IA_ENTERING_LANDS			"{player[0].sir_cap}, voulez-vous vraiment que nos forces envahissent le territoire des {player[1].civ_name_plural} ?"
+IA_OUT_OF_FUEL				"Vu les ordres que vous avez donnés, nos avions risquent de tomber en panne d'essence et de s'écraser. Etes-vous sûr de vouloir les détruire, {player[0].sir} ?"
+IA_BREAK_ECOPACT			"{player[0].sir_cap}, nos villes sont trop polluantes. Nous allons bientôt violer les termes de notre pacte anti-pollution avec les {player[1].civ_name_plural}."
+IA_BREAK_LEAVE_OUR_LANDS		"{player[0].sir_cap}, nous avons accepté de respecter les frontières des {player[1].civ_name_plural}. Allez-vous vous risquer à susciter leur courroux en déplaçant des unités sur leur territoire ?"
+IA_PILLAGE_OWN_LAND			"Cet aménagement de case a été élaboré par notre peuple. Etes-vous sûr de vouloir anéantir le fruit de leur travail ?"
+IA_SELL_IMPROVEMENT			"La vente {building[0].name#PREPOSITION} de cette ville vous rapportera {gold[0].value} pièces d'or. Etes-vous sûr de vouloir vendre cet aménagement ?"
+IA_FREE_SLAVES				"Voulez-vous affranchir les esclaves de {city[0].name} ? "
+IA_POLLUTION_ENDS_GOVERNMENT		"Le peuple a jugé notre politique écologique hypocrite et intolérable. Les rebelles ont renversé le gouvernement. Notre empire est désormaisf réduit à l'anarchie."
+IA_MAX_CITIES_REACHED			"Vous avez atteint le nombre maximal de villes autorisé par votre gouvernement actuel. Si vous étendez davantage votre empire, le mécontentement de vos citoyens grandira. Peut-être devriez-vous envisager de changer de gouvernement ?"
+IA_SETTLING_TOO_CLOSE			"Vous ne pouvez pas construire de ville à l'intérieur de {city[0].name}. Il serait préférable que nous trouvions un emplacement plus favorable à notre expansion."
+IA_CITY_WILL_STARVE_INITIAL_WARNING	"{player[0].sir_cap}, la ville de {city[0].name} ne produit pas suffisamment de nourriture pour subvenir aux besoins de sa population. Les citoyens vont bientôt devoir puiser dans leurs réserves."
+IA_CITY_WILL_STARVE_FOOD_STORES_LOW	"{player[0].sir_cap}, {city[0].name} a bientôt épuisé ses réserves de nourriture. Si ses citoyens ne se décident pas à en produire davantage, ils risquent de succomber à la famine."
+IA_CITY_WILL_STARVE			"Les citoyens de {city[0].name} ont épuisé leur stock de nourriture. Si vous mettez fin à votre tour maintenant, la famine s'abattra sur eux. Voulez-vous terminer votre tour maintenant ?"
+IA_CANNOT_CAPTURE_CITY			"Seules les unités terrestres offensives peuvent s'emparer d'une ville ennemie."
+IA_CAPITOL_WARNING			"Le palais représente le siège du gouvernement de notre empire. Vous ne pouvez pas disposer de plus d'un palais à la fois. Lorsque le nouveau palais sera construit, l'ancien palais de {city[0].name} sera vendu et le siège du gouvernement transféré à {city[1].name}."
+IA_PILLAGE_SUICIDE			"Des unités ont été détruites lors du pillage d'une route sur terrain impraticable."
+IA_TERRAFORM_DEAD_TILE			"Avant de pouvoir terraformer des cases inactives, vous devez faire des recherches en écologie."
+IA_CERTAIN_REVOLUTION			"{player[0].sir_cap}, notre peuple est au bord de la révolution. Si vous mettez fin à votre tour maintenant, la situation ne fera qu'empirer. Etes-vous sûr de vouloir terminer votre tour sans prendre de mesures pour y remédier ?" 
+IA_CANNOT_AFFORD_MAINTENANCE		"Nous n'avons pas les moyens d'assurer la maintenance de nos bâtiments et aménagements, {player[0].sir}. Nos réserves d'or seront bientôt épuisées. Si vous terminez votre tour maintenant, nous serons contraints de vendre des aménagements pour combler le déficit. Etes-vous sûr de vouloir mettre fin à votre tour ?" 
+IA_CANNOT_AFFORD_SUPPORT		"Nous n'avons pas les moyens d'entretenir autant d'unités militaires, {player[0].sir}. Si vous terminez votre tour maintenant, nos chefs militaires seront contraints de démanteler des unités. Voulez-vous vraiment terminer votre tour ?"
+IA_WAR_DISCONTENT_RISING		"{player[0].sir_cap}, un trop grand nombre de nos unités militaires sont éloignées de leur ville d'origine. Nos citoyens sont mécontents de cette situation. Peut-être faudrait-il envisager d'en désactiver quelques-unes ?"
+
+
+## Diplomacy Messages ##
+TREATY_TO_EXPIRE			"Notre traité avec les {player[0].civ_name_plural} est sur le point d'expirer."
+BROKE_TREATY				"Les {player[0].civ_name_plural} ont rompu leur traité avec les {player[1].civ_name_plural}."
+NO_PIRACY_BROKEN			"Les {player[0].civ_name_plural} ont été pris en train de pirater nos routes commerciales."
+ECOPACT_BROKEN				"Les {player[0].civ_name_plural} ont violé le pacte anti-pollution qu'ils ont signé avec nous. Leurs villes sont en train de polluer le monde à vitesse grand V !"
+ECOPACT_BROKEN_BY_YOU			"{player[0].sir_cap}, nous avons violé notre pacte anti-pollution avec les {player[1].civ_name_plural}. Nous venons de nous faire des ennemis !"
+ECOPACT_BROKEN_BY_3RD			"{player[0].sir_cap}, les {player[0].civ_name_plural} ont violé leur pacte anti-pollution avec les {player[1].civ_name_plural}."
+MILITARY_PACT_BROKEN_BY_YOU		"{player[0].sir_cap}, en refusant d'envoyer des troupes sur les premières lignes des {player[1].civ_name_plural}, nous avons violé notre pacte militaire. Ils se sentent trahis."
+MILITARY_PACT_BROKEN_BY_AI		"{player[0].sir_cap}, les {player[1].civ_name_plural} ont violé leur accord les engageant à nous fournir un soutien militaire en cas de besoin."
+MILITARY_PACT_BROKEN_BY_3RD		"{player[0}.sir_cap}, les {player[1].civ_name_plural} sont revenus sur leur pacte militaire avec les {player[2].civ_name_plural}."
+ALLIANCE_BROKEN				"Les infâmes {player[1].civ_name_plural} nous ont attaqués. Ils ont ouvertement trahi l'alliance que nous avions conclue avec eux !"
+ALLIANCE_BROKEN_BY_YOU			"{player[0].sir_cap}, nous avons violé notre alliance avec les {player[1].civ_name_plural} ! Ceux-ci sont furieux contre nous ! Plus aucune nation ne nous fera confiance après une telle traîtrise !"
+ALLIANCE_BROKEN_BY_3RD			"{player[0].sir_cap}, les {player[1].civ_name_plural} auraient rompu l'alliance qui les liait aux {player[2].civ_name_plural}."
+ALL_AGREEMENTS_BROKEN_BY_AI		"{player[1].leader_name} a un message pour nous, {player[0].sir} : vu les circonstances, les {player[2].civ_name_plural} ne peuvent plus honorer leurs accords. Considérez tous les pactes, traités et accords conclus avec nous comme nuls et non avenus."
+
+## Useful diplomacy messages that should be reimplemented ##
+CEASE_FIRE_BROKEN			"Les infâmes {player[0].civ_name_plural} ont violé le traité de paix que nous avions conclu, ils nous ont attaqués sans la moindre provocation de notre part."
+LEAVE_OUR_LANDS_BROKEN			"Les {player[0].civ_name_plural} ont violé l'accord de non-intrusion conclu avec nous."
+LEAVE_OUR_LANDS_BROKEN_BY_YOU		"Vous n'avez pas respecté votre promesse de retirer vos troupes du territoire {player[0].civ_name_singular}."
+REDUCE_POLLUTION_BROKEN			"Les {player[0].civ_name_plural} ont violé l'accord anti-pollution."
+REDUCE_POLLUTION_BROKEN_BY_YOU		"Vous avez violé l'accord anti-pollution conclu avec les {player[0].civ_name_plural}."
+STOP_TRADE_WITH_BROKEN			"Les misérables {player[0].civ_name_plural} ont violé l'embargo décrété contre les {player[1].civ_name_plural}."
+STOP_TRADE_WITH_BROKEN_BY_YOU		"Vous avez violé l'embargo décrété contre les {player[0].civ_name_plural} avec les {player[1].civ_name_plural}."
+END_POLLUTION_BROKEN			"Les {player[0].civ_name_plural} ont violé le pacte conclu afin de mettre un terme à la pollution."
+END_POLLUTION_BROKEN_BY_YOU		"Vous avez violé le pacte conclu avec les {player[0].civ_name_plural} afin de mettre un terme à la pollution."
+ATTACK_ENEMY_BROKEN			"Les {player[0].civ_name_plural} ont violé l'accord conclu avec vous dans le but d'attaquer les {player[1].civ_name_plural}."
+ATTACK_ENEMY_BROKEN_BY_YOU		"Vous avez violé l'accord conclu avec les {player[0].civ_name_plural} dans le but d'attaquer les {player[1].civ_name_plural}."
+
+
+## Empire & City Related ##
+UNIT_COMPLETED				"Une nouvelle unité type {unit[0].name} est prête à {city[0].name}."
+NEW_UNIT_COMPLETED			"Une nouvelle unité type {unit[0].name} est prête à {city[0].name}. Prochain objet dans la liste : {action[0].name}."
+CITY_BUILD_QUEUE_IS_EMPTY		"La liste d'attente de construction de {city[0].name} est vide."
+UNIT_COMPLETED_QUEUE_EMPTY		"Une nouvelle unité type {unit[0].name} est prête à {city[0].name}. Désormais, la liste d'attente de {city[0].name} est vide."
+BUILDING_BUILT				"{city[0].name} a achevé la construction {building[0].name#PREPOSITION}. Voici le prochain élément sur la liste d'attente : {action[0].name}."
+BUILDING_BUILT_QUEUE_EMPTY		"{city[0].name} a achevé la construction {building[0].name#PREPOSITION}. La liste d'attente de {city[0].name} est désormais vide."
+WONDER_BUILT				"{city[0].name} a construit {wonder[0].name#ARTICLE}. Voici le prochain objet dans la liste :  {action[0].name}."
+WONDER_BUILT_QUEUE_EMPTY		"{city[0].name} a construit {wonder[0].name#ARTICLE}. Maintenant, la liste d'attente de {city[0].name} est vide."
+ENDGAME_BUILT				"{city[0].name} a achevé la construction de l'objet suivant : {action[0].name}. Prochain objet dans la liste : {action[1].name}."
+ENDGAME_BUILT_QUEUE_EMPTY		"{city[0].name} a achevé la construction  de l'objet suivant : {action[0].name}. Désormais, la liste d'attente de construction de {city[0].name} est vide."
+CITY_INEFFICIENCY			"Les habitants de {city[0].name}  essayent de construire des objets obsolètes. Nous devrions leur donner de nouveaux ordres."
+CITY_IS_CELEBRATING_HAPPINESS		"{player[0].sir_cap}, les citoyens de {city[0].name} organisent une fête en notre honneur.  Ils sont ravis de la manière dont nous gérons leur pays et sont fiers d'être des {player[0].civ_name_plural}."
+CRISIS_CITY_IS_INFECTED			"Les habitants de {city[0].name} sont victimes d'un agent biologique extrêmement infectieux. Nous devons couper les routes commerciales allant de vers la ville. Le risque de propagation est trop grand."
+CITY_RIOTING				"{city[0].name} se soulève ! Les insurgés se livrent en masse au pillage. Les forces de police sont impuissantes et la situation ne fait qu'empirer."
+NEW_CIV					"{city[0].name}, l'une des villes des {player[0].civ_name_plural} s'est révoltée et forme désormais un nouvel empire. Ceux-ci se font appeler les {player[1].civ_name_plural}."
+CITY_NEW_OWNER				"Les {player[1].civ_name_plural} se sont emparés de {city[0].name}, l'une des villes des {player[0].civ_name_plural}."
+CIV_NEW_GOV				"Les nouvelles de l'étranger indiquent que les {player[0].civ_name_plural} ont changé de type de gouvernement, optant pour {gov[0].name#ARTICLE}."
+NEW_GOV_ENACTED				"Un nouveau type de gouvernement vient supplanter l'anarchie."
+SEA_CITY_BUILDER			"Nos réalisations technologiques nous ouvrent de nouveaux champs d'exploration et de conquête. A ce titre, la ville de {city[0].name} entreprend la colonisation du fond des océans par des humains."
+NOT_ENOUGH_GOLD				"{player[0].sir_cap}, nos réserves d'or s'épuisent à un rythme affolant. Nous devons produire rapidement de l'or pour éviter de vendre des aménagements de ville pour payer nos dépenses !"
+NO_MAINT				"Faute de moyens, nous avons été contraints de vendre {building[0].name#ARTICLE} à {city[0].name}."
+BARBARIAN_WARNING			"Les barbares ont été repérés à proximité de la ville de {city[0].name}."
+WAGE_LEVEL_RESET			"Nous n'avons pas les moyens de maintenir les salaires au niveau actuel. Une baisse générale s'impose."
+CANT_BUILD_UNIT_CELL_IS_FULL		"La ville de {city[0].name} a été contrainte d'arrêter la production de l'unité figurant actuellement dans la liste d'attente de construction. Cette ville possède déjà 12 unités, soit le nombre maximum d'unités autorisé par case. Nous devons déplacer au moins l'une d'entre elles hors des murs de {city[0].name} si nous voulons  poursuivre la construction de nouvelles unités dans cette ville."
+BUILDING_SETTLER_CITY_OF_ONE		"Vous êtes sur le point de terminer la construction de l'unité type {unitrecord[0].name} à {city[0].name}. Etant donné que la population de {city[0].name} est d'une unité, la construction de cette unité risque de démanteler la ville. Voulez-vous vraiment la construire ?"
+CITY_DESTROYED_BY_STARVING		"La ville de {city[0].name} a été décimée par la famine."
+CITY_DESTROYED_BY_WAR			"La ville de {city[0].name} a été détruite par les forces ennemies. Aucun de ses citoyens n'a survécu au siège."
+CRISIS_CITIES_IN_REVOLT			"{player[0].sir_cap}, nous avons de très mauvaises nouvelles de la ville de {city[0].name}. Les citoyens sont plus que lassés de votre règne. Ils se sont révoltés et ont formé leur propre empire."
+CRISIS_CITY_IS_NANO_INFECTED		"{player[0].sir_cap}, la ville de {city[0].name} a été contaminée par une arme biologique. Nous devons fermer les routes commerciales, pour éviter que d'autres villes ne soient contaminées."
+SEA_CITY_OTHERS				"{player[0].sir_cap}, les {player[1].civ_name_plural} ont réussi à établir leur première colonie sous-marine."
+UNIT_DISBANDED_ON_GOV_CHANGE		"{player[0].sir_cap}, avec le changement de gouvernement, certaines de nos unités ont été démantelées."
+
+## SLIC stuff
+BUTTON_DONT_SHOW_AGAIN			"Veuillez ne plus montrer plus cela."
+NEW_CITY_BUILT				"Vous avez créé la ville de  {city[0].name}."
+WAR_OVER				"Les {player[0].civ_name_plural} ne sont plus en guerre avec les {player[1].civ_name_plural}."
+
+
+## Trade Messages ##
+TRADE_PIRATED				"{player[0].sir_cap}, notre route commerciale allant de {city[0].name} à {city[1].name} a été piratée par les {player[1].civ_name_plural]."
+TRADE_ROUTES_BROKEN_BY_EMBARGO		"{player[0].sir_cap}, les {player[1].civ_name_plural} font peser un embargo sur notre commerce. Toutes les routes commerciales à destination de leur territoire ayant été rompues, toutes nos caravanes sont définitivement perdues."
+TRADE_ROUTES_BROKEN_BY_WAR		"Mauvaise nouvelle, {player[0].sir}. A cause du conflit avec les {player[1].civ_name_plural}, toutes nos routes commerciales à destination des villes des {player[1].civ_name_plural} ont été rompues. Toutes les caravanes affectées à ces routes sont définitivement perdues."
+
+## Trade Advisor Stuff ##
+SELECTED_TRADE_ADVICE			"Vendre {good[0].name#ARTICLE} à {city[1].name} nous rapportera {gold[0].value} pièces d'or et requiert {value[0].value} caravane(s)."
+NEED_MORE_CARAVANS			"Nous devons acheter {value[0].value} caravane(s) de plus avant de pouvoir établir cette route commerciale."
+CREATE_ROUTE_ADVICE			"Nous devrions faire envoyer {good[0].name#ARTICLE} de {city[0].name} à {city[1].name}."
+BUILD_MORE_CARAVANS			"Nous avons besoin de davantage de caravanes."
+MAXIMUM_TRADE_EFFICIENCY		"Notre commerce a atteint une efficience maximale. Nous ne pouvons pas créer de nouvelles routes pour le moment."
+ROUTE_TYPE_FOOD				"Nourriture"
+
+## Victory/End of Game Messages ##
+PLAYER_DEFEATED				"Les {player[0].civ_name_plural} ont subi une cuisante défaite."
+PLAYER_DEFEATED_BY			"Les {player[1].civ_name_plural} ont conquis le territoire des {player[0].civ_name_plural}."
+YOU_LOSE				"Vous avez manqué à vos devoirs. Votre empire est au bord de la ruine et votre peuple réclame un nouveau dirigeant, plus puissant. Il ne vous reste plus qu'à espérer que l'histoire vous épargne. Pour le moment, le règne de {player[0].leader_name} touche à sa fin."
+END_OF_GAME_TIME_IS_RUNNING_OUT		"Le temps presse. L'humanité est en quête d'un dirigeant unique. Son choix se fera très rapidement."
+END_OF_GAME_OUT_OF_TIME			"Nous sommes en l'an 2300, le temps vous est compté. Si vous continuez, votre score ne sera pas pris en compte."
+
+## Pollution ##
+WORLD_POLLUTION_SPACE_LAUNCH		"Nos satellites ont détecté une hausse de la pollution atmosphérique due à des expériences astronautiques."
+WORLD_POLLUTION_WARNING			"La pollution mondiale a atteint un niveau toxique. Le monde est sur le point de vivre une catastrophe écologique."
+WORLD_POLLUTION_NUCLEAR_WAR		"La guerre nucléaire ravage l'environnement. Nous avons détecté des retombées radioactives dans l'atmosphère."
+WORLD_POLLUTION_GLOBAL_WARMING		"Notre planète n'est plus en mesure de supporter la pollution constante des terres. L'incapacité de la communauté internationale à réduire les émissions risque d'entraîner un réchauffement imminent de la planète."
+WORLD_POLLUTION_FLOODING_IMMINENT	"Le réchauffement de la Terre a entraîné une montée du niveau des océans. Nos plus grands météorologues prédisent une inondation sans précédent si la pollution de l'environnement se poursuit."
+WORLD_POLLUTION_FLOODING_MINOR		"Nous commençons à voir les effets du réchauffement de la Terre sur notre climat. Les inondations menacent nos villes et les conditions météorologiques sont pour le moins inquiétantes."
+WORLD_POLLUTION_VIRIDIAN		"Avec le réchauffement de la Terre, notre planète est devenue un désert quasi inhabitable. Les Viridians avaient raison !"
+GROSS_POLLUTER				"Il s'agit d'une catastrophe écologique. La pollution a atteint un niveau toxique et les terres autour de {city[0].name} vont être dévastées."
+WORLD_POLLUTION_STABLE			"Bonne nouvelle, {player[0].sir} ! La pollution mondiale, ce fléau, s'est enfin stabilisée. Les cicatrices vont commencer à se refermer."
+WORLD_POLLUTION_OZONE_LOSS_IMMINENT	"{player[0].sir_cap}, la couche d'ozone se détériore très rapidement. Selon nos climatologues, les rayons ultraviolets vont bientôt atteindre des niveaux dangereux."
+WORLD_POLLUTION_FLOODING_MAJOR		"{player[0].sir_cap}, les inondations continuent de ravager des villes. Des dizaines de millions de personnes ont péri."
+CITY_POLLUTION_WARNING			"{player[0].sir_cap}, {city[0].name} est une ville extrêmement polluante."
+CITIES_KILLED_BY_CALAMITY		"La ville de {city[0].name} a été détruite par les inondations. Nous devons réduire très rapidement la pollution de notre empire avant qu'une catastrophe écologique ne se produise."
+
+## Wonders ##
+WONDER_STARTED				"Une course aux merveilles du monde a été lancée. {player[0].leader_name}, chef des {player[0].civ_name_plural} a commencé à travailler sur {wonder[0].name#ARTICLE}."
+WONDER_STOPPED				"Nos rivaux ont renoncé à la gloire. {player[0].leader_name} a mis un terme aux travaux sur {wonder[0].name#ARTICLE}."
+WONDER_ALMOST_FINISHED			"Il ne nous reste plus beaucoup de temps. {player[0].leader_name} est sur le point de terminer {wonder[0].name#ARTICLE}."
+WONDER_COMPLETE_OWNER			"La grandeur de notre empire est le fruit du travail accompli par nos citoyens.  {city[0].name} a terminé {wonder[0].name#ARTICLE} !"
+WONDER_COMPLETE_ALL			"Un événement fâcheux vient de se produire.  {player[0].leader_name} a terminé {wonder[0].name#ARTICLE}."
+WONDER_DESTROYED			"Lors de l'attaque de la ville de {city[0].name}, {wonder[0].name#ARTICLE} a disparu.  Notre planète a perdu une merveille."  
+NANITE_DEFUSER_ELIMINATES_NUKES		"Les {player[0].civ_name_plural} ont construit {wonder[0].name#ARTICLE}. Cette merveille a effectivement permis d'éliminer toutes les armes nucléaires de la  planète."
+FORBIDDEN_CITY_PEACE			"Nous sommes parvenus à construire la Cité interdite."
+CITY_JOINE_YOUR_CIV			"Depuis la promulgation de l'Acte d'égalité, notre empire est devenu le refuge de tous les opprimés de la planète. Les citoyens de {city[0].name} se sont révoltés, se séparant des {player[0].civ_name_plural} pour intégrer notre empire."
+NO_EMBASSIES_WONDER			"La Cité interdite nous empêche d'établir une ambassade avec les {player[0].civ_name_plural}."
+WONDER_OBSOLETE				"La découverte {advance[0].name#PREPOSITION} a rendu {wonder[0].name#ARTICLE} obsolète."
+
+## Ruins ##
+DISCOVERED_REMNANTS_OF_ANCIENT_CIV	"Nous avons trouvé les vestiges d'une ancienne culture. Au milieu des ruines, les explorateurs ont découvert le secret d'un nouveau progrès. Désormais, nous possédons la connaissance {advance[0].name#PREPOSITION}."
+RUIN_BECOMES_CITY			"Nous avons découvert une tribu cachée dont les membres nous prennent pour des héros de leur mythologie. Ceux-ci se sont intégrés avec joie à notre empire."
+NOMADS_HAVE_JOINED_YOU			"Un groupe de nomades a fait serment d'allégeance à votre empire."
+MERCENARIES_HAVE_JOINED_YOU		"Attirés par l'appât du gain,  des mercenaires ont intégré notre empire."
+DISCOVERED_ANCIENT_TREASURE		"Parmi les ruines d'une civilisation disparue depuis la nuit des temps, nous avons découvert un trésor d'une valeur de {gold[0].value} pièces d'or."
+BESET_BY_VANDALS			"Préparez-vous au combat ! Nos unités sont tombées dans un embuscade des Barbares."
+BESET_BY_NOTHING			"Les fouilles que nous effectuons dans ces ruines n'ont rien donné pour le moment."
+
+## Government ##
+CANT_CHANGE_GOV				"Vous ne pouvez pas changer de gouvernement avant de découvrir un nouveau progrès en la matière."
+CHANGE_GOV_WARNING			"Les changements de gouvernement sont généralement suivis d'une brève période d'anarchie.  Voulez-vous quand même opter pour {government[0].name#ARTICLE} ?"
+PLAYER_DISCOVERS_NEW_GOVERNMENT		"Vous avez découvert le gouvernement du type {GovernmentDB(government[0].type)}. Voulez-vous instaurer un nouveau gouvernement ?"
+
+## Advances ##
+PICK_NEW_DISCOVERY			"En découvrant <l:4,000>{advance[0].name#ARTICLE}<e>, nos chercheurs ont fait un grand pas dans la connaissance de l'humain, ouvrant de nouvelles perspectives scientifiques et culturelles.  Sélectionnez un nouveau progrès sur lequel entamer des recherches."
+UNIT_OBSOLETE_CIVWIDE			"La découverte {advance[0].name#PREPOSITION} a rendu les unités suivantes obsolètes."
+
+## Units ##
+NO_SUPPORT				"Faute d'entretien, des unités ont été démantelées."
+ONE_OR_MORE_UNITS_WILL_CRASH		"Votre {unit[1].name} risque de manquer de carburant si son tour ne se termine pas dans une ville ou une base aérienne."
+UNIT_EXPELLED				"Les {player[0].civ_name_plural} ont expulsé quelques-unes de nos unités de leur territoire."
+
+## Warfare ##
+CITIES_CAPTURED_VICTIM			"La ville de {city[0].name} est tombée entre les mains des forces ennemies !"
+CAPITAL_CITY_CAPTURED_VICTIM		"Notre capitale, {city[0].name}, a été prise d'assaut par les forces ennemies !"
+CAPITAL_CITY_CAPTURED_ATTACKER		"Quelle victoire ! Nous avons conquis la capitale des {player[0].civ_name_plural}."
+CIV_STARTED_WAR				"Les {player[0].civ_name_plural} sont entrés en guerre avec les {player[1].civ_name_plural}."
+ADVANCE_FROM_CAPTURING_CITY		"{player[0].sir_cap}, lors du pillage de la cité de {city[0].name} que nous venons de conquérir, nos troupes se sont emparées du secret de {advance[0].name}."
+ADVANCE_FROM_CAPTURING_CITY_VICTIM	"{player[0].sir_cap}, c'est avec horreur que nous apprenons que les {player[1].civ_name_plural} nous ont pris la cité de {city[0].name} et qu'ils se sont également emparés du secret de {advance[0].name}."
+
+## Combat ##
+UNIT_VETERAN				"Votre {unit[0].name} accède au statut de vétéran en raison de sa bravoure au combat."
+
+## Age Change Messages ##
+AGE_ONE_ENTERED				"Malgré sa jeunesse, notre empire évolue. Nous venons d'entrer dans l'Antiquité."
+AGE_TWO_ENTERED				"Les premiers écrits remplace la transmission verbale. nous entamons l'Age Classique." 
+AGE_THREE_ENTERED			"Sur les ruines de la Rome antique, notre nation continue de s'étendre. Le moyen age commence." 
+AGE_FOUR_ENTERED			"Notre empire entre dans une phase d'expansion culturelle et scientifique. Il s'agit de la Renaissance."
+AGE_FIVE_ENTERED			"Notre Empire débute une ère de croissance insoupçonnée, entraîné par une explosion de la productivité. En vivant cette Révolution industrielle, nous entrons dans l'Age Industriel. " 
+AGE_SIX_ENTERED				"Nous avons assis notre connaissance de la planète. Nous venons d'entrer dans l'Ere moderne." 
+AGE_SEVEN_ENTERED			"Décoder les mystères de la science devient aisé, notre peuple a atteint une époque de prospérité, d'innovation scientifique... : L'Ere de l'Informatique " 
+AGE_EIGHT_ENTERED			"Les mystères de la vie sont sur le point de se révéler. Notre empire est au seuil d'un nouvel âge d'or de la science : l'Ere génétique." 
+AGE_NINE_ENTERED			"Nous sommes bientôt à l'apogée de l'humanité. Nous sommes entrés dans l'Ere du diamant." 
+AGE_TEN_ENTERED				"La recherche des toutes les technologies est achevée. Notre Empire attend un futur inconnu..."
+
+##                 ##
+## Special Actions ##
+##                 ##
+
+## Advertise ##
+## Corporate Branch Attack ##
+ADVERTISE_COMPLETE_VICTIM		"Les {player[0].civ_name_plural} ont lancé une offensive publicitaire sur {city[0].name}."
+ADVERTISE_COMPLETE_ATTACKER		"Notre campagne publicitaire est une réussite. La ville étrangère de {city[0].name} est devenue rentable."
+
+## Aid Uprising ##
+## Abolitionist Attack ##
+CRISIS_SLAVE_REVOLT			"Les esclaves de {city[0].name} ont renversé leurs maîtres."
+UPRISING_COMPLETE_VICTIM		"Les abolitionnistes étrangers ont essayé d'infiltrer notre ville de {city[0].name}, fomentant ainsi une révolte d'esclaves."
+UPRISING_FAILED_ATTACKER		"Notre abolitionniste n'a pas réussi à déclencher de révolte d'esclaves à {city[0].name}."
+UPRISING_FAILED_VICTIM			"Des forces loyales et vigilantes ont essayé de contrecarrer les projets de révolte d'esclaves fomentées par un abolitionniste étranger dans la ville de {city[0].name}."
+
+## Conduct Hit ##
+## Eco-terrorist Attack ##
+CONDUCTHIT_COMPLETE_VICTIM		"Une personnalité éminente a été assassinée dans la ville de {city[0].name}. L'assassin est un écoterroriste étranger sans doute outré par notre politique environnementale. Nos citoyens sont à la fois indignés, effrayés et profondément courroucés par cet acte de violence."
+CONDUCTHIT_FAILED_VICTIM		"Nous avons empêché un écoterroriste étranger de perpétrer un attentat contre une personnalité connue de {city[0].name}."
+CONDUCTHIT_COMPLETE_ATTACKER		"L'un de nos écoterroristes a réussi à perpétrer un attentat contre une personnalité de {city[0].name}. Heureusement, l'indignation des citoyens se porte contre leurs propres dirigeants auxquels ils reprochent de ne pas avoir pris de mesures préventives."
+CONDUCTHIT_FAILED_ATTACK		"Il s'agit d'un revers, {player[0].sir}. Notre écoterroriste a été arrêté avant de pouvoir perpétrer un attentat sur la ville de {city[0].name}."
+
+## Convert City ##
+## Cleric Attack ##
+## Televangelist Attack ##
+CONVERT_COMPLETE_VICTIM			"Une unité étrangère de type {unitrecord[0].name} a converti la ville de {city[0].name} à la doctrine hérétique."
+CONVERT_FAILED_VICTIM			"Nous avons capturé une unité étrangère du type {unitrecord[0].name} en essayant de convertir la ville de {city[0].name}."
+CONVERT_FAILED_ATTACKER			"Nos tentatives de conversion religieuse ont échoué. Les citoyens de {city[0].name} ont rejeté notre croyance."
+PROTECTED_FROM_CONVERSION_BY_WONDER	"La ville de {city[0].name} est protégée de la conversion par {wonder[0].name#ARTICLE}."
+
+## Enslave ##
+## Slaver Attack ##
+SLAVERY_COMPLETE_ATTACKER		"{player[0].sir_cap}, notre raid pour capturer des esclaves a été couronné de succès ! Les prisonniers ont été emmenés pour travailler à {city[0].name}."
+SLAVE_COMPLETE_VICTIM			"Les esclavagistes étrangers ont assailli {city[0].name}, l'une de nos villes. Un grand nombre de citoyens a été réduit en esclavage."
+SLAVE_FAILED_VICTIM			"Les défenseurs de {city[0].name} ont pris les esclavagistes étrangers sur le fait."
+PROTECTED_FROM_SLAVERY_VICTIM		"Bonne nouvelle ! Les remparts de {city[0].name} ont permis à nos citoyens d'échapper à l'esclavage."
+PROTECTED_FROM_SLAVERY_ATTACKER		"Les remparts ont empêché nos esclavagistes d'entrer dans la ville étrangère de {city[0].name}."
+SETTLER_SLAVED_VICTIM			"Malédiction ! Notre colon a disparu sans laisser de trace. Les esclavagistes étrangers sont sans aucun doute responsables de cet acte de haine."
+
+## Establish Embassy ##
+## Diplomat Action ##
+## Empathic Diplomat Action ##
+EMBASSY_VICTIM				"Une unité type {unitrecord[0].name} des {player[0].civ_name_plural} a établi une ambassade dans notre ville de {city[0].name}."
+EMBASSY_ATTACKER			"Notre {unitrecord[0].name} a établi une nouvelle ambassade à {city[0].name}, ville des {player[0].civ_name_plural}."
+
+## Faith Healing ##
+## Televangelist Attack ##
+FAITH_HEAL_VICTIM			"Les citoyens de {city[0].name} ont succombé à une offensive religieuse de l'étranger et ont donné tout leur argent aux télévangélistes lors d'une manifestation de guérison par la foi."
+FAITH_HEAL_ATTACKER			"L'un de nos télévangélistes a organisé une manifestation de guérison par la foi à {city[0].name}, ville des {player[0].civ_name_plural}. Les gains ont été considérables."
+
+## File Injunction ##
+## Lawyer Attack ##
+INJUNCTION_COMPLETE_VICTIM		"La production a été interrompue dans la ville de {city[0].name} par les avocats étrangers."
+INJUNCTION_COMPLETE_ATTACK		"Nos avocats ont demandé une injonction à la ville de {city[0].name}, la forçant à interrompre toute production."
+
+## Franchise ##
+## Corporate Branch Attack ##
+BRANCH_COMPLETE_VICTIM			"Des consortiums étrangers ont implanté une franchise à {city[0].name}. Si nous n'intervenons pas, les richesses durement acquises par nos citoyens iront remplir les caisses de nos rivaux."
+BRANCH_FAILED_VICTIM			"Malgré tous les efforts des consortiums étrangers pour implanter une franchise dans notre ville de {city[0].name}, nous avons réussi à les empêcher d'entrer."
+
+## Free Slave ##
+## Abolitionist Attack ##
+FREESLAVE_COMPLETE_VICTIM		"Des abolitionnistes étrangers ont libéré quelques-uns de nos esclaves dans la ville de {city[0].name}."
+FREESLAVE_FAILED_VICTIM			"Les gardiens de notre industrie sont parvenus à arrêter des abolitionnistes étrangers tentant d'interrompre le travail de la main d'œuvre à {city[0].name}."
+FREESLAVE_COMPLETE_AGRESSOR		"Nous avons remporté une victoire dans la lutte contre la servitude. Notre abolitionniste est parvenu à libérer des esclaves étrangers de {city[0].name}. Les nouveaux citoyens ont trouvé refuge dans la ville de {city[1].name}."
+FREESLAVE_FAILED_AGRESSOR		"Les combattants de la liberté viennent de subir un nouveau revers. Notre abolitionniste n'a pas réussi à libérer des esclaves de la ville de {city[0].name}."
+FREESLAVE_NO_SLAVES_TO_FREE		"Pas d'esclaves à libérer dans la ville de {city[0].name}."
+
+## Incite Revolt ##
+## Spy Attack ##
+## Cyberninja Attack ##
+INCITE_REVOLUTION_FAILED_VICTIM		"Une unité étrangère du type {unitrecord[0].name} a tenté d'encourager la révolution à {city[0].name}. Heureusement, la loyauté de nos citoyens est forte. Depuis, les tentatives de soulèvement n'ont fait que céder du terrain."
+INCITE_REVOLUTION_FAILED_AGRESSOR	"Notre {unitrecord[0].name} n'est pas parvenu à déclencher la révolution à {city[0].name}."
+INCITE_REVOLUTION_COMPLETE_VICTIM	"Les habitants de {city[0].name} se sont révoltés et ont formé leur propre empire. Les seuls responsables envisageables sont les agents étrangers."
+
+## Infection ##
+## Infector Attack ##
+BIOINFECT_COMPLETE_VICTIM		"{player[0].sir_cap}, un agent biologique extrêmement infectieux a été introduit dans la ville de {city[0].name}. Des milliers de citoyens ne sont plus en mesure de travailler et, dans l'ensemble, le bonheur de la ville est faible. Nous soupçonnons les contamineurs étrangers d'être responsables de ce terrible incident."
+BIOINFECT_FAILED_VICTIM			"{player[0].sir_cap}, un contamineur étranger a été pris en train d'attaquer la ville de {city[0].name} avec des armes biologiques."
+BIOINFECT_COMPLETE_AGRESSOR		"Notre contamineur a accompli sa mission. Les habitants de {city[0].name} subissent les effets dévastateurs de notre attaque biologique. La production et le bonheur ont considérablement diminué."
+BIOINFECT_FAILED_AGRESSOR		"Hélas, nos tentatives de contamination sont restées vaines. Nos cibles ont  intercepté notre contaminateur avant qu'il ne lance son attaque."
+IMMUNE_TO_BIOINFECT_AGRESSOR		"Notre contamination de {city[0].name} a échoué. Cette ville dispose en toute logique d'une immunité contre les armes biologiques."
+IMMUNE_TO_BIOINFECT_VICTIM		"{player[0].sir_cap}, notre vigilance et notre préparation militaire se sont avérées payantes ! La micro-défense a protégé {city[0].name} d'une potentielle attaque biologique."
+INFECTED_VIA_TRADE			"Un agent infectieux fait des ravages à {city[0].name}. Il semble s'être répandu via les routes commerciales de la ville."
+
+## Investigate City ##
+## Spy Attack ##
+## Cyberninja Attack ##
+INVESTIGATE_CITY_FAILED_VICTIM		"Notre travail de contre-espionnage s'est avéré payant. Des agents ont arrêté un espion étranger en train d'enquêter sur la ville de {city[0].name}."
+INVESTIGATE_CITY_FAILED_AGRESSOR	"Notre {unitrecord[0].name} s'est fait capturer en train d'espionner la ville de {city[0].name}."
+# Added 7/2004 L. Hirth
+INVESTIGATE_CITY_FAILED_ESC_VICTIM	"Nos opérations de contre-espionnage ont permis de mettre un terme aux activités d'un agent étranger qui tentait d'enquêter sur la ville de {city[0].name}. Malheureusement, nous n'avons pas pu capturer cet agent."
+INVESTIGATE_CITY_FAILED_ESC_AGRESSOR	"Le contre-espionnage étranger a découvert les opérations de notre {unitrecord[0].name} alors qu'il enquêtait sur la ville de {city[0].name}. Par chance, notre agent a pu s'échapper."
+# Added End
+
+## Nanite Cleansing ##
+## Eco-Ranger Attack ##
+NANITE_CLEANSE_COMPLETE_VICTIM		"Voici de terribles nouvelles, {player[0].sir}. Un éco-ranger étranger a complètement rasé {city[0].name} en la détruisant aux nanites."
+NANITE_CLEANSE_FAILED_VICTIM		"{player[0].sir_cap}, nous avons réussi à éviter la catastrophe ! Notre ville, {city[0].name}, a arrêté un éco-ranger qui tentait de la détruire aux nanites."
+NANITE_CLEANSE_COMPLETE_ATTACK		"Victoire, sublime victoire ! Notre éco-ranger est parvenu à raser la ville {city[0].name} par une attaque aux nanites. La nature a repris ses droits dans cette partie du monde."
+NANITE_CLEANSE_FAILED_ATTACK		"Notre éco-ranger n'a pas réussi à déclencher une attaque aux nanites dans la ville de {city[0].name}."
+
+## Nuclear Missile ##
+## Nuke Attack ##
+SAFE_FROM_NUKES_VICTIM			"Le système de missiles balistiques de la ville de {city[0].name} a abattu un missile nucléaire. La ville a été épargnée."
+SAFE_FROM_NUKES_AGRESSOR		"Notre attaque militaire de la ville de {city[0].name} a échoué à cause de leur système de missiles balistiques. Nous devons envisager une autre tactique pour détruire cette ville."
+
+## Plant Nuke ##
+## Spy Attack ##
+## Cyberninja Attack ##
+NUKE_COMPLETE_VICTIM			"Nos ennemis ont placé et fait exploser une arme nucléaire dans la ville de {city[0].name}. Lorsque nous aurons découvert les coupables, nous leur ferons payer leur acte d'ignominie !"
+NUKE_FAILED_VICTIM			"Notre vigilance s'est avérée payante. Nos agents ont réussi à localiser et à désamorcer un dispositif nucléaire censé exploser dans notre ville de {city[0].name}. Il ne fait pas de doute que les espions étrangers sont derrière cette attaque nucléaire !"
+NUKE_COMPLETE_AGRESSOR			"Une unité type {unitrecord[0].name} a réussi à placer une arme nucléaire dans la ville de {city[0].name}. Les dégâts ont été considérables."
+NUKE_FAILED_AGRESSOR			"Notre {unitrecord[0].name}  s'est fait arrêter en tentant de faire exploser une arme nucléaire dans la ville de {city[0].name}. La situation diplomatique risque d'être critique."
+
+## Plague ##
+## Infector's Second Attack ##
+PLAGUE_COMPLETE_VICTIM			"Un contamineur étranger a introduit une épidémie dans notre ville de {city[0].name}, {player[0].sir}. Des dizaines de milliers de personnes sont mortes."
+PLAGUE_FAILED_VICTIM			"Nous avons arrêté un contamineur en train d'essayer d'introduire une épidémie à {city[0].name}."
+PLAGUE_COMPLETE_AGRESSOR		"L'attaque infectieuse de notre contamineur a été couronnée de succès, {player[0].sir} ! La ville de {city[0].name} a subi des pertes considérables, le bilan s'élève à des dizaines de milliers de morts."
+PLAGUE_FAILED_AGRESSOR			"Notre contamineur n'est pas parvenu à introduire d'épidémie à {city[0].name}."
+IMMUNE_TO_PLAGUE_AGRESSOR		"Nos ennemis ont une très légère avance sur nous. {city[0].name} est immunisée contre nos armes biologiques. Elle est sans doute protégée par un système de micro-défense."
+IMMUNE_TO_PLAGUE_VICTIM			"{city[0].name} est protégée des effets dévastateurs des armes biologiques grâce à son système de micro-défense."
+
+## Reform City ##
+## All Military Unit Action ##
+REFORM_CITY				"Nous avons réussi à réformer la ville de {city[0].name}. Ses citoyens ne sont plus sous le joug étranger."
+
+## Sell Indulgences ##
+## Cleric Attack ##
+INDULGENCE_COMPLETE_VICTIM		"Un religieux étranger est parvenu à soutirer de l'argent aux citoyens en proie à la culpabilité de la ville de {city[0].name}. Il leur a vendu des indulgences."
+INDULGENCE_FAILED_VICTIM		"Les habitants de {city[0].name} ont résisté aux manipulations d'un religieux étranger qui tentait de leur vendre des indulgences. "
+INDULGENCE_COMPLETE_ATTACKER		"Notre guerre sainte devient rentable. Notre religieux a en effet réalisé des bénéfices en vendant des indulgences aux misérables pêcheurs de {city[0].name}."
+INDULGENCE_FAILED_ATTACKER		"Notre religieux n'a pas réussi à vendre d'indulgences dans la ville étrangère de {city[0].name}."
+
+## Soothsay ##
+## Cleric Attack ##
+## Televangelist Attack ##
+SOOTHSAY_COMPLETE_VICTIM		"Une unité étrangère du type {unitrecord[0].name} a réussi à prêcher l'apocalypse dans notre ville de {city[0].name}. Les citoyens sont mécontents, persuadés que leur avenir est peu prometteur."
+SOOTHSAY_FAILED_VICTIM			"Nous avons arrêté une unité étrangère du type {unitrecord[0].name} en train de prêcher l'apocalypse dans la ville de {city[0].name}. Nous avons pu négocier avec l'intrus."
+SOOTHSAY_COMPLETE_ATTACKER		"Notre {unitrecord[0].name} a fait baisser le niveau de bonheur de la ville de {city[0].name} en prêchant l'apocalypse."
+SOOTHSAY_FAILED_ATTACKER		"Notre {unitrecord[0].name} a essayé de prêcher l'apocalypse dans la ville de {city[0].name}. Ayant échoué, il a été capturé."
+
+## Steal Technology ##
+## Spy Attack ##
+## Cyberninja Attack ##
+STEAL_TECHNOLOGY_VICTIM			"Des espions ont dérobé le secret de l'un de nos progrès dans la ville de {city[0].name}. Nous n'en savons pas davantage."
+STEAL_TECHNOLOGY_FAILED_VICTIM		"Nos rivaux convoitent nos connaissances, mais nous faisons preuve de vigilance. Nous avons réussi à intercepter une unité étrangère type {unitrecord[0].name} en train de voler des technologies dans notre ville de {city[0].name}."
+STOLE_TECHNOLOGY_AGRESSOR		"Notre {unitrecord[0].name} a réussi à infiltrer des laboratoires top-secrets des  {player[0].civ_name_plural} et à voler leurs technologies. Nous possédons désormais la connaissance {advance[0].name#PREPOSITION}."
+STEAL_TECHNOLOGY_FAILED_AGRESSOR	"Notre {unitrecord[0].name} n'a pas réussi à voler de technologie aux {player[0].civ_name_plural}."
+NOTHING_TO_STEAL_AGRESSOR		"D'après notre unité type {unitrecord[0].name}, présente sur le terrain, les {player[0].civ_name_plural} ne possèdent pas de progrès vaillant la peine d'être volés. Cela vient confirmer l'idée de notre supériorité technologique."
+STEAL_WHICH_ADVANCE			"Quel progrès voulez-vous dérober aux {player[0].civ_name_plural} ? (Vous pouvez aussi choisir un progrès au hasard pour maximiser vos chances de réussite.)"
+NO_ADVANCES_TO_STEAL			"Les {player[0].civ_name_plural} ne possèdent pas de progrès que nous ayons déjà."
+
+## Stopped by Spies ##
+STOPPED_BY_SPIES_VICTIM			"Notre vigilance nous a sauvés.  Nos agents ont capturé une unité étrangère type {unitrecord[0].name} dans la ville de {city[0].name}."
+STOPPED_BY_SPIES_AGRESSOR		"Le travail du contre-espionnage étranger dans la ville de {city[0].name} a empêché notre {unitrecord[0].name} d'exécuter les ordres."
+
+## Sue ##
+## Lawyer Attack ##
+SUE_COMPLETE_VICTIM			"Nous venons de subir une défaite sur le plan juridique. Un avocat étranger a réussi à poursuivre en justice l'une de nos unités type {unitrecord[0].name}."
+SUE_FAILED_VICTIM			"Un avocat étranger a tenté en vain de poursuivre l'une de nos unités type {unitrecord[0].name}. Cependant, la justice a fini par l'emporter."
+SUE_COMPLETE_ATTACKER			"Notre avocat a réussi à plaider en faveur de la destruction d'une unité étrangère type {unitrecord[0].name}."
+SUE_FAILED_ATTACKER			"Notre avocat a tenté de poursuivre en justice une unité étrangère type {unitrecord[0].name}, en vain."
+SUE_FRANCHISE_COMPLETE_VICTIM		"Les actions juridiques des nations étrangères ont abouti à la fermeture de notre franchise dans la ville de {city[0].name}."
+SUE_FRANCHISE_FAILED_VICTIM		"Malgré les actions entreprises par un avocat étranger, notre franchise de la ville de {city[0].name} n'a pas cessé son activité."
+SUE_FRANCHISE_COMPLETE_ATTACKER		"Un de nos avocats a réussi à poursuivre en justice la franchise étrangère implantée dans notre ville de {city[0].name}, la forçant à cesser son activité."
+SUE_FRANCHISE_FAILED_ATTACKER		"Malgré tous les efforts de notre avocat, la franchise étrangère de la ville de {city[0].name} continuera de saigner nos citoyens."
+
+## Hold Reception ##
+## Diplomat Action ##
+## Empathic Diplomat Action ##
+PARTY_COMPLETE_VICTIM			"Une unité type {unitrecord[0].name} des {player[0].civ_name_plural} a donné une réception solennelle dans la ville de {city[0].name}. Le spectacle était de haute volée, la nourriture excellente et tout le monde a passé une très bonne soirée. Nombre de nos représentants officiels ont été très impressionnés par les {player[0].civ_name_plural} et estiment que nous devrions faire tout notre possible pour mettre de côté nos différences afin de développer le partenariat entre nos deux nations."
+PARTY_COMPLETE_ATTACKER			"Notre {unitrecord[0].name} a donné une réception dans la ville étrangère de {city[0].name}. Les dignitaires et les représentants officiels des {player[0].civ_name_plural} y étaient conviés. Nous pouvons espérer qu'à l'avenir les {player[0].civ_name_plural} seront davantage disposés à collaborer avec nous."
+
+##Disabled Screen Buttons##
+
+CIV_STATUS_DISABLED			"Vous devez construire une ville avant d'accéder à cet écran."
+SCIENCE_STATUS_DISABLED			"Vous devez construire une ville avant d'accéder à cet écran."
+CITY_STATUS_DISABLED			"Vous devez construire une ville avant d'accéder à cet écran."
+DIPLOMACY_STATUS_DISABLED		"Vous devez entrer en contact avec un autre empire avant d'accéder à cet écran."
+UNIT_STATUS_DISABLED			"Vous devez posséder des unités pour accéder à cet écran."
+TRADE_STATUS_DISABLED			"Vous devez construire une ville avant d'accéder à cet écran."
+DIP_OFFER_ADVANCE_NONE			"Pas de progrès à offrir."
+
+## Gaia Controller Endgame ##
+GC_DISCOVERED_SOLARIS_PROJECT_US	"Excellentes nouvelles, {player[0].sir} !  Nous avons réussi à mener à bien le projet Solaris ! Nous allons pouvoir entamer nos travaux sur le contrôleur de Gaia."
+GC_DISCOVERED_SOLARIS_PROJECT_THEM	"Les nouvelles de l'étranger confirment que le projet Solaris a été mené à bien par les {player[0].civ_name_plural}. Rien ne laisse entendre qu'ils s'apprêtent à travailler sur le contrôleur de Gaia. Nous devrions quant à nous porter toute notre attention à sa construction. Il est hors de question que nous nous laissions devancer !"
+GC_MUST_DISCOVER_GAIA_CONTROLLER	"Les nouvelles sont plutôt mauvaises, {player[0].sir}. Les {player[1].civ_name_plural} ont mené à bien le projet Solaris. Nous devons faire tout notre possible pour découvrir les secrets du contrôleur de Gaia, afin de commencer à travailler dessus. Il est hors de question de laisser ce projet nous échapper ! Nous n'avons plus de temps à perdre !"
+GC_MIN_CORES_REACHED_US			"Nous effectuons les travaux préparatoires à la construction du contrôleur de Gaia. Nous avons construit le nombre minimum d'ordinateurs requis."
+GC_MIN_CORES_REACHED_THEM		"Les {player[0].civ_name_plural} ont nettement avancé leurs travaux sur le contrôleur de Gaia. Ils ont construit le minimum d'ordinateurs nécessaires."
+GC_MIN_SATS_REACHED_US			"Nous sommes sur le point d'achever le contrôleur de Gaia, {player[0].sir}. Nous avons construit le minimum de satellites nécessaires. Bien qu'ils ne soient pas essentiels, les satellites supplémentaires permettront d'étendre le champ d'action du contrôleur de Gaia et ainsi de maximiser nos chances de réussite."
+GC_MAX_SATS_REACHED			"{player[0].sir_cap}, nous avons construit le nombre maximum de satellites de Gaia. Tout satellite supplémentaire n'aura aucun effet sur l'action du contrôleur de Gaia."
+GC_MIN_SATS_REACHED_THEM		"Des rapports confirment que les {player[0].civ_name_plural} ont construit le minimum de satellites nécessaires pour leur contrôleur de Gaia. Les progrès réalisés sont considérables."
+GC_MIN_OBELISKS_REACHED_US		"Nous avons réussi à construire le minimum d'obélisques nécessaires pour le contrôleur de Gaia. Nous approchons à grand pas de sa réalisation !"
+GC_MIN_OBELISKS_REACHED_THEM		"{player[0].sir_cap}, les {player[1].civ_name_plural} sont parvenus à construire le minimum d'obélisques nécessaires pour leur contrôleur de Gaia. Bien que nous ne sachions précisément s'ils progressent plus rapidement que nous, une chose est sûre : nous n'avons pas de temps à perdre."
+GC_READY_TO_ACTIVATE_US			"{player[0].sir_cap}, nous sommes sur le point d'entrer dans l'histoire. Nous avons construit tous les composants nécessaires au contrôleur de Gaia ! Tous les systèmes fonctionnent. Nous sommes en mesure de l'activer à tout moment."
+GC_READY_TO_ACTIVATE_THEM		"{player[0].sir_cap}, les {player[1].civ_name_plural} ont construit un contrôleur de Gaia. Ils vont l'activer d'un moment à l'autre. Seules des mesures draconiennes pourront empêcher que cela ne se produise."
+GC_HALFWAY_TO_WIN_US			"{player[0].sir_cap}, notre contrôleur de Gaia est sur le point d'entrer en phase d'activation ! Bientôt, nous serons les maîtres du monde !"
+GC_HALFWAY_TO_WIN_THEM			"{player[0].sir_cap}, le contrôleur de Gaia des {player[1].civ_name_plural} est sur le point d'être totalement opérationnel. Le monde sera bientôt contrôlé par les {player[1].civ_name_plural}. Il faut à tout prix empêcher cela !"
+GC_OBELISKS_DESTROYED			"Les nouvelles sont terribles, {player[0].sir}. Des saboteurs étrangers ont détruit l'une des obélisques de notre contrôleur de Gaia. Notre séquence d'activation a été interrompue. Nous devons immédiatement reconstruire notre contrôleur de Gaia !"
+GC_CORES_DESTROYED			"L'offensive récente de {city[0].name} a abouti à la destruction de l'un des ordinateurs essentiels au fonctionnement de notre contrôleur de Gaia. Nous allons devoir reconstruire un contrôleur et le protéger d'éventuelles attaques."
+GC_COMPLETED_FIRST_CORE_THEM		"Les {player[0].civ_name_plural} progressent dans la construction de leur contrôleur de Gaia. Ils ont achevé leur premier ordinateur."
+GC_COMPLETED_FIRST_SAT_THEM		"Les {player[0].civ_name_plural} ont terminé leur premier satellite de Gaia."
+GC_COMPLETED_FIRST_OBELISK_THEM		"Les {player[0].civ_name_plural} ont construit leur première obélisque."
+GC_ENEMY_ACTIVATION_STOPPED_BY_US	"{player[0].sir_cap}, nous avons porté le coup de grâce au contrôleur de Gaia des {player[1].civ_name_plural}, les contraignant à interrompre la séquence d'activation. C'est une occasion à ne pas manquer."
+GC_ENEMY_ACTIVATION_STOPPED_BY_THEM	"Nous venons d'apprendre que les {player[0].civ_name_plural} ont interrompu la séquence d'activation de leur contrôleur de Gaia. Bien que nous ne connaissions pas les responsables, nous suspectons une nation rivale d'avoir détruit plusieurs composants nécessaires."
+
+### Multiplayer ###
+### Hotseat Game Messages ###
+### Email Game Messages ###
+NEXT_HOT_SEAT_PLAYER			"{player[0].leader_name}, chef des {player[0].civ_name_plural}, c'est à vous."
+NEXT_EMAIL_PLAYER			"Veuillez envoyer la partie sauvegardée sur votre bureau à {player[0].leader_name} ({action[0].name}), chef des {player[0].civ_name_plural}."
+HOTSEAT_CITY_ATTACKED			"Les {player[0].civ_name_plural} ont attaqué {city[0].name} avec leur {unit[0].name}."
+HOTSEAT_ARMY_ATTACKED			"Les {player[0].civ_name_plural} ont attaqué votre {unit[1].name} avec leur {unit[0].name}"
+
+### Trust Warning Messages ###
+### Global Trust Loss ###
+TRUST_LOST_KILLED_CIVILIAN_UNIT		"{player[0].sir_cap}, nous avons tué une unité civile des {player[1].civ_name_plural} ! Cela est considéré comme un crime de guerre. Outre les {player[1].civ_name_plural}, nous avons bouleversé le monde entier."
+TRUST_LOSS_UNPROVOKED_ATTACK		"{player[0].sir_cap}, nous avons attaqué les {player[1].civ_name_plural} sans avertissement ni provocation préalables ! Ils se sentent profondément trahis par notre conduite. Pis encore, la communauté internationale met en cause notre fiabilité."
+TRUST_LOSS_VIOLATED_PEACE_TREATY	"{player[0].sir_cap}, en attaquant les {player[1].civ_name_plural}, nous avons violé notre traité de paix ! Vu leur indignation, ils risquent de conseiller aux autres nations de se méfier de nous."
+TRUST_LOSS_VIOLATED_MILITARY_PACT	""
+TRUST_LOSS_VIOLATED_ALLIANCE		""
+
+### Nation-specific Trust Loss ###
+TRUST_LOSS_FAIL_TO_WITHDRAW		"{player[0].sir_cap}, nous n'avons pas retiré nos troupes du territoire des {player[1].civ_name_plural}. Désormais, ils se méfient et risquent de rechigner à signer des accords avec nous."
+TRUST_LOSS_FAIL_TO_STOP_PIRACY		"Les {player[1].civ_name_plural} sont furieux car nous n'avons pas cessé de pirater leurs routes commerciales. A l'avenir, les {player[1].civ_name_plural} ne nous feront plus confiance."
+TRUST_LOSS_FAIL_TO_REDUCE_WEAPONS	""
+TRUST_LOSS_FAIL_TO_REDUCE_POLLUTION	""
+TRUST_LOSS_VIOLATED_CEASE_FIRE		"{player[0].sir_cap}, nous avons violé l'accord de cessez-le-feu signé avec les {player[1].civ_name_plural}. Ils sont furieux contre nous et risquent de ne plus nous faire confiance."
+TRUST_LOSS_VIOLATED_RESEARCH_PACT	"{player[0].sir_cap}, nos récentes actions ont constitué une violation de notre pacte de recherche avec les {player[1].civ_name_plural}. Désormais, ils se méfient de nous et s'interrogent sur nos intentions."
+TRUST_LOSS_VIOLATED_POLLUTION_PACT	""
+TRUST_LOSS_VIOLATED_TRADE_PACT		"{player[0].sir_cap}, nos récentes actions nous ont contraints à renoncer au pacte commercial signé avec les {player[1].civ_name_plural}. Il s'agit d'un acte de trahison qu'ils ne sont pas près d'oublier !"
+
+#Nano-Terror#
+IMMUNE_TO_NANO_TERROR_VICTIM		"Votre peuple peut à nouveau dormir sur ses deux oreilles. La ville de {city[0].name} est à l'abri des nano-attaques."
+NANO_TERROR_FAILED_VICTIM		"Nos scientifiques ont contrecarré un complot ennemi visant à saboter les usines de {city[0].name} à l'aide d'une terrible arme nano-technologique."
+NANO_TERROR_COMPLETE_VICTIM		"Des étrangers ont libéré un virus nano-technologique dans la ville de {city[0].name}."
+NANO_TERROR_FAILED_AGRESSOR		"Vos tentatives pour sauver la Terre ont avorté. Votre nano-attaque est un échec."
+IMMUNE_TO_NANO_TERROR_AGRESSOR		"Malgré tous vos efforts, l'ennemi s'est aperçu de votre ruse. La ville que vous avez pris pour cible est immunisée contre les nano-attaques."

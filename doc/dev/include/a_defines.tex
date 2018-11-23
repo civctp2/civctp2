@@ -1,0 +1,106 @@
+\chapter{Definitions\label{cha:definitions}}
+This chapter describes the preprocessor definitions in the source and how they actually affect a build.
+\begin{section}{Preprocessor definitions used in Call to Power 2}
+
+\newlength{\cdefheading}
+\setlength{\cdefheading}{25mm}
+\newlength{\cdeftext}
+\setlength{\cdeftext}{\textwidth}
+\addtolength{\cdeftext}{-\cdefheading}
+\addtolength{\cdeftext}{-\tabcolsep}
+\addtolength{\cdeftext}{-\tabcolsep}
+
+\newcommand{\begincdefinitions}[1]{
+	\begin{subsection}{#1}
+	\begin{longtable}{p{\cdefheading}@{}p{\cdeftext}}
+}
+\newcommand{\addcdefinition}[4]{\hypertarget{def:#2}{}\\*
+	\multicolumn{2}{l}{\textbf{#1}}\\*
+	\textit{Default:}&#4\\*
+	\textit{Description:}&#3\\
+}
+\newcommand{\termcdefinitions}[0]{
+	\end{longtable}
+	\end{subsection}
+}
+
+\begincdefinitions{Additional \#defines}
+\addcdefinition{\_\_AUI\_USE\_DIRECTMEDIA\_\_}{__AUI_USE_DIRECT_MEDIA__}{Use DirectMedia}{defined (\textit{ui/aui\_common/auicfg.h})}
+\addcdefinition{\_\_AUI\_USE\_DIRECTX\_\_}{__AUI_USE_DIRECTX__}{Use DirectX}{defined (\textit{ui/aui\_common/auicfg.h})}
+\addcdefinition{\_\_BIG\_DIRTY\_BLITS\_\_}{__BIG_DIRTY_BLITS__}{undefined (never used, \textit{gfx/tilesys/tiledmap.cpp})}{Always undefined}
+\addcdefinition{\_\_GRIDDED\_BLITS\_\_}{__GRIDDED_BLITS__}{??? (\textit{gfx/tilesys/tiledmap.cpp})}{defined (\textit{gfx/tilesys/tiledmap.cpp})}
+\addcdefinition{\_\_GW\_USE\_EXPORT}{__GW_USE_EXPORT}{Use \_\_declspec(dllexport) in gamewatch headers, i.e. export symbols for linking a dll}{default within \textit{GameWatch/gamewatch/gamewatch.dsp}, all other projects using gamewatch should use \hyperlink{def:__GW_USE_IMPORT}{\textbf{\_\_GW\_USE\_IMPORT}}}
+\addcdefinition{\_\_GW\_USE\_IMPORT}{__GW_USE_IMPORT}{Use \_\_declspec(dllimport) in gamewatch headers, i.e. prevent linking symbols by just providing declarations of functions used}{default within \textit{ctp/civctp.dsp}, \textit{GameWatch/gwarchive/gwarchive.dsp}, \textit{GameWatch/gwciv/gwciv.dsp}, \textit{GameWatch/gwfile/gwfile.dsp}}
+\addcdefinition{\_\_GWARCHIVE\_USE\_EXPORT}{__GWARCHIVE_USE_EXPORT}{Use \_\_declspec(dllexport) in gwarchive headers, i.e. export symbols for linking}{default within \textit{GameWatch/gwarchive/gwarchive.dsp}, all other projects using gwarchive should use \hyperlink{def:__GWARCHIVE_USE_IMPORT}{\textbf{\_\_GWARCHIVE\_USE\_IMPORT}}}
+\addcdefinition{\_\_GWARCHIVE\_USE\_IMPORT}{__GWARCHIVE_USE_IMPORT}{Use \_\_declspec(dllimport) in gwarchive headers, i.e. prevent duplicate symbols by just providing declarations of functions used}{undefined}
+\addcdefinition{\_\_GWCIV\_USE\_EXPORT}{__GWCIV_USE_EXPORT}{Use \_\_declspec(dllexport) in gwciv headers, i.e. export symbols for linking}{default within \textit{GameWatch/gwciv/gwciv.dsp}, all other projects using gwciv should use \hyperlink{def:__GWCIV_USE_IMPORT}{\textbf{\_\_GWCIV\_USE\_IMPORT}}}
+\addcdefinition{\_\_GWCIV\_USE\_IMPORT}{__GWCIV_USE_IMPORT}{Use \_\_declspec(dllimport) in gwciv headers, i.e. prevent duplicate symbols by just providing declarations of functions used}{default within \textit{ctp/civctp.dsp}}
+\addcdefinition{\_\_GWFILE\_USE\_EXPORT}{__GWFILE_USE_EXPORT}{Use \_\_declspec(dllexport) in gwfile headers, i.e. export symbols for linking}{default within \textit{GameWatch/gwfile/gwfile.dsp}, all other projects using gwfile should use \hyperlink{def:__GWFILE_USE_IMPORT}{\textbf{\_\_GWFILE\_USE\_IMPORT}}}
+\addcdefinition{\_\_GWFILE\_USE\_IMPORT}{__GWFILE_USE_IMPORT}{Use \_\_declspec(dllimport) in gwfile headers, i.e. prevent duplicate symbols by just providing declarations of functions used}{undefined}
+\addcdefinition{\_\_MAKESPR\_\_}{__MAKESPR__}{???}{undefined}
+\addcdefinition{\_BAD\_BUTTON}{_BAD_BUTTON}{Appears to make a list of deleted buttons in SlicButton.cpp}{undefined}
+\addcdefinition{\_\_SPRITETEST\_\_}{__SPRITETEST__}{???}{undefined}
+\addcdefinition{\_\_TILETOOL\_\_}{__TILETOOL__}{???}{undefined}
+\addcdefinition{\_\_USING\_SPANS\_\_}{__USING_SPANS__}{???}{undefined}
+\addcdefinition{\_ACTOR\_DRAW\_OPTIMIZATION}{_ACTOR_DRAW_OPTIMIZATION}{Try to prevent redrawing of sprites which have already been drawn}{undefined}
+\addcdefinition{\_AI\_BACKDOOR}{_AI_BACKDOOR}{???}{???}
+\addcdefinition{\_AIDLL}{_AIDLL}{???}{undefined (unless \textit{robotcom.dsp} is active)}
+\addcdefinition{\_BFR\_}{_BFR_}{Build Final Release}{default only within civctp.dsp for configuration \textit{ctp2 - Win32 Final}}
+\addcdefinition{\_DEBUG}{_DEBUG}{Activate additional code for debugging}{defined for Debug configurations}
+\addcdefinition{\_DEBUG\_INCOMPATIBLE}{_DEBUG_INCOMPATIBLE}{???}{undefined}
+\addcdefinition{\_DEBUG\_MEMORY}{_DEBUG_MEMORY}{Generates extra memory debug information (needs \hyperlink{def:_DEBUG}{\textbf{\_DEBUG}} and \hyperlink{def:_MEMORYLOGGING}{\textbf{\_MEMORYLOGGING}})}{defined for configurations \textit{Win32 - Debug} and \textit{Win32 - Debug Browse}}
+\addcdefinition{\_DEBUG\_SCHEDULER}{_DEBUG_SCHEDULER}{Adds additional assertions for schedular in ai/strategy}{undefined}
+\addcdefinition{\_DEBUGTOOLS}{_DEBUGTOOLS}{Use debug logs (ctp/debugtools)}{defined for configuration \textit{Win32 Debug}}
+\addcdefinition{\_JAPANESE\_}{_JAPANESE_}{Build Japanese version}{defined within \textit{civctp\_j.dsp} only}
+\addcdefinition{\_MEMORYLOGGING}{_MEMORYLOGGING}{Generates extra memory debug information (needs \hyperlink{def:_DEBUG}{\textbf{\_DEBUG}} and \hyperlink{def:_DEBUG_MEMORY}{\textbf{\_DEBUG\_MEMORY}})}{undefined}
+\addcdefinition{\_NO\_GAME\_WATCH}{_NO_GAME_WATCH}{Do not generate a GameWatch file}{defined in \textit{ctp/civ3\_main.h}}
+\addcdefinition{\_PLAYTEST}{_PLAYTEST}{Activates further stuff for a playtest release}{defined for configurations \textit{Win32 Debug}, \textit{Win32 Test}, \textit{Win32 Debug Browse}, \textit{Win32 Optimized Test}}
+\addcdefinition{\_SMALL\_MAPPOINTS}{_SMALL_MAPPOINTS}{MapPoints won\'t get a Z-Component}{defined in \textit{gs/world/MapPoint.h}}
+\addcdefinition{\_TEST}{_TEST}{Should be used for test code, though it only disables warnings regardings overflows in floating point constant arithmetic}{defined for configuration \textit{Win32 Test}}
+\addcdefinition{\_WAS\_ABOUT\_TEST\_WHEN\_DAN\_GOT\_ME\_REPRO\_STEPS}{_WAS_ABOUT_TEST_WHEN_DAN_GOT_ME_REPRO_STEPS}{Executes a foobar SlicObject for testing}{undefined}
+\addcdefinition{CELL\_COLOR}{CELL_COLOR}{Reset Cell-Color in debug-mode (needs \hyperlink{def:_DEBUG}{\textbf{\_DEBUG}})}{defined in \textit{gs/world/Cell.h}}
+\addcdefinition{CLEAN\_INSTEAD\_OF\_CONVERT}{CLEAN_INSTEAD_OF_CONVERT}{Prefer clean rowData over RGB 565 to 555 conversion for sprites}{undefined}
+\addcdefinition{CUSTOM\_ALLOCATE}{CUSTOM_ALLOCATE}{Overriden new/delete operators in ctp/ctp2\_utils/AvlTree.h}{undefined}
+\addcdefinition{CTP1\_HAS\_RISEN\_FROM\_THE\_GRAVE}{CTP1_HAS_RISEN_FROM_THE_GRAVE}{Do not use the CTP2 worker utilisation style (i.e. use CTP1 behaviour instead)}{undefined}
+\addcdefinition{CTP1\_TRADE}{CTP1_TRADE}{Enable CTP1 trade behaviour}{undefined}
+\addcdefinition{DUMP\_ASTAR}{DUMP_ASTAR}{Enable command to dump astar findpath callstack to a filename}{undefined}
+\addcdefinition{GENERATE\_ADDRESS\_LOG}{GENERATE_ADDRESS_LOG}{Generate a file address.log upon termination, which contains the entry points and names of functions registered via Debug\_AddFunction(...)}{undefined}
+\addcdefinition{IANSCROLL}{IANSCROLL}{???}{undefined}
+\addcdefinition{MEMORY\_LOGGED}{MEMORY_LOGGED}{Used to activate leak tracing code in ctp/debugtools/debugmemory.cpp}{defined, when \hyperlink{def:_DEBUG_MEMORY}{\textbf{\_DEBUG\_MEMORY}} is defined in \textit{ctp/debugtools/debugmemory.h} (else undefined)}
+\addcdefinition{MEMORY\_FAST}{MEMORY_FAST}{??? Uses an own heap to prevent leaks, no logging}{defined, when \hyperlink{def:_DEBUG_MEMORY}{\textbf{\_DEBUG\_MEMORY}} is not defined in \textit{ctp/debugtools/debugmemory.h} (else undefined)}
+\addcdefinition{NDEBUG}{NDEBUG}{Do a release build, i.e. remove asserts, etc.}{undefined}
+\addcdefinition{NETWORK\_PARANOID}{NETWORK_PARANOID}{Verify army position during each order execution}{undefined}
+\addcdefinition{NON\_STANDART\_C\_PLUS\_PLUS}{NON_STANDART_C_PLUS_PLUS}{Use Activision code which is not standard compliant}{undefined}
+\addcdefinition{REQUIRE\_CORRECT\_LOG}{REQUIRE_CORRECT_LOG}{Not implemented, perhaps intended for verifying the map file to match executable symbols for logging correct entry points (e.g. for leaks)}{undefined}
+\addcdefinition{SUPER\_DEBUG\_HEURISTIC}{SUPER_DEBUG_HEURISTIC}{???}{undefined}
+\addcdefinition{SUPER\_DEBUG\_SPEED}{SUPER_DEBUG_SPEED}{???}{??? defined (\textit{robotcom/planner/Scheduler.h})}
+\addcdefinition{TEST\_APP}{TEST_APP}{???}{undefined}
+\addcdefinition{TEST\_DRIVER}{TEST_DRIVER}{Activates test replacements in ai/strategy/goal/Goal.cpp}{undefined}
+\addcdefinition{tracklen\_CRYPTLOG}{tracklen_CRYPTLOG}{Activate logging of crypt part within tracklen code (needs \hyperlink{def:tracklen_LOGGING}{\textbf{tracklen\_LOGGING}})}{undefined}
+\addcdefinition{tracklen\_LOGGING}{tracklen_LOGGING}{Activate logging of tracklen code}{undefined}
+\addcdefinition{USE\_MILES\_STUBS}{USE_MILES_STUBS}{Deactivate sound and mss32.lib/mss32.dll dependency by using stub functions}{undefined}
+\addcdefinition{USE\_NDBG}{USE_NDBG}{???}{???}
+\addcdefinition{USE\_LOGGING}{USE_LOGGING}{Enable logging even on non-debug version}{undefined}
+\addcdefinition{USE\_SDL}{USE_SDL}{Use SDL instead of native MM-libs (so far replaces only miles sound)}{defined for \textit{Win32 SDL} targets}
+\addcdefinition{USE\_STOP\_ZERO\_MOVEMENT}{USE_STOP_ZERO_MOVEMENT}{Prevents unit without movement points from moving}{undefined}
+\termcdefinitions{}
+
+\newpage
+\begincdefinitions{Standard \#defines (system specific)}
+\addcdefinition{\_MBCS}{_MBCS}{Use multibyte characters}{???}
+\addcdefinition{\_UNICODE}{_UNICODE}{Use unicode (wide) characters}{???}
+\addcdefinition{\_WINDOWS}{_WINDOWS}{Build on a windows system}{must be defined on Windows and must not be defined on any other platform}
+\addcdefinition{HAVE\_CONFIG\_H}{HAVE_CONFIG_H}{Include config.h generated by autoconf/autoheader}{???}
+\addcdefinition{LINUX}{LINUX}{Build on linux}{must be defined on Linux and must not be defined on any other platform}
+\addcdefinition{WIN32}{WIN32}{Build on a WIN32 platform}{must be defined on Windows and not be defined on any other platform}
+\termcdefinitions{}% Additional \#defines
+
+\newpage
+\begincdefinitions{Compiler \#defines}
+\addcdefinition{\_\_cplusplus}{__cplusplus}{Set by the C++ Compiler}{defined, when compiling on C++}
+\addcdefinition{\_\_GNUC\_\_}{__GNUC__}{GNU C of GNU Compiler Collection}{defined, when compiling with the GNU C compiler}
+\addcdefinition{\_MSC\_VER\_}{_MSC_VER}{MS Visual C++/.NET}{defined by the Visual C/C++ compiler to its version}
+\termcdefinitions{}% Compiler \#defines
+
+\end{section}% Preprocessor definitions used in Call to Power 2
+

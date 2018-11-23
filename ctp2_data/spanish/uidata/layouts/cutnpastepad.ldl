@@ -1,0 +1,103 @@
+#######################################
+
+# File: cutnpastepad.ldl
+
+# Last Access: Mon Jun 01 13:01:31 1998
+
+#######################################
+
+
+
+CNP_SWITCH {
+
+	int	ypix		5
+
+	int	widthpix	30
+
+	int	heightpix	30
+
+	string	pattern	"error.tga"
+
+}
+
+
+
+
+
+##-----------------------------------##
+
+##              Data                 ##
+
+##-----------------------------------##
+
+CutNPastePad {
+
+	string	pattern	"error.tga"
+
+	int	xpix	0
+
+	int	ypix	0
+
+	int	widthpix	200
+
+	int	heightpix	40
+
+
+
+	ExitButton:CTP2_STANDARD_FONT {
+
+		int	xpix	180
+
+		int	ypix	5
+
+		int	widthpix	15
+
+		int	heightpix	15
+
+		string	text	"str_ldl_X"
+		string	pattern	"error.tga"
+
+	}
+
+
+
+	SelectorTool {
+
+		int	xpix	5
+
+		string	text	"str_ldl_s"
+	}
+
+	CuttingTool {
+
+		int	xpix	40
+
+		string	text	"str_ldl_cu"
+	}
+
+	CopyingTool {
+
+		int	xpix	75
+
+		string	text	"str_ldl_co"
+	}
+
+	PastingTool {
+
+		int	xpix	110
+
+		string	text	"str_ldl_p"
+	}
+
+	DeletingTool {
+
+		int	xpix	145
+
+		string	text	"str_ldl_d"
+	}
+
+}
+
+
+
+$

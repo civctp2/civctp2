@@ -1,0 +1,50 @@
+<h1><center>The Anet Game Server</center></h2>
+<p>
+The <b>Anet game server</b> is a place where people playing over the 
+Net can find opponents, chat, and launch games.
+It is accessed directly by the game, and sometimes also by a Web browser.
+It consists of a program which we distribute free of charge to Internet Service 
+Providers and other interested parties.
+An up to date list of all servers is maintained by a master server,
+and is downloaded by the Anet library when users connect to any game
+server.
+<p>
+The server executable is part of the Linux version of the Anet SDK.
+The intrepid game programmer may run his or her own game server
+and/or score server during development; contact Dan Kegel for more info.
+<p>
+The current version of the server acts mostly as a player-matching
+service; Anet games use Anet Game Servers as gathering
+places for people starting or joining games.
+In addition, the following features were being worked on 
+in 1998-1999, and are in various stages of completion:
+<ul>
+<li> Robustness: a load test application (not yet included!?)
+can simulate hundreds of typical users, can be used to verify 
+that the game servers can give good
+service to users even when being pounded by a large number of users.
+
+<li> Authentication: users will log in to the server when they first access it;
+this generates marketing data, lets the server notify people when their 
+buddies log in, and gives the server a username to tally player scores under.
+
+<li> Score reporting: when players kill opponants or achieve mission
+objectives during play, these events are reported to the server, which 
+relays them to a central database.  
+Players are then ranked by score at the game vendor's web site.  (The notion of
+score can be defined differently for each game, at the game designer's 
+discretion.)
+</ul>
+<h2>Current Anet Game Servers</h2>
+A status page which gathers info about all the servers can be
+run on any web server; see ../src/linux/anetmon.
+<p>
+Some info about individual servers is available from the servers themselves,
+usually at the url http://servername/anet2.
+
+<hr>
+<a href="index.html">Back to top</a>
+<hr>
+<i>Dan Kegel</i><br>
+<i>Copyright 1995-2001 Activision</i>
+

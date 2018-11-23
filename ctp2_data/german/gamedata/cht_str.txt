@@ -1,0 +1,97 @@
+#################################
+#
+# BETA PATCH CHEAT TOOLS STRINGS
+#
+#################################
+# SAM032299
+#################################
+
+#
+# SAM032299 added for cheat toolbar enhancements
+#
+
+#
+# Single-Player Game Launch Screen
+#
+str_ldl_Editor					"Editor starten"
+
+#
+# Cheat Toolbar
+#
+str_ldl_Tile_Pad				"Gelände"
+str_ldl_Civ						"Nat. "
+str_ldl_Edit_City				"Stadt bearbeiten"
+str_ldl_Unit_City				"Einheit/Stadt"
+
+str_ldl_Toolbar_Title			"CTP2-Cheatmodus"
+str_ldl_World_Settings			"Welt"
+str_ldl_Player_Settings			"Spieler"
+str_ldl_Player_Static_Text		"Spieler:"
+str_ldl_Player_Name_Text		"PNT"
+str_ldl_Year_Static_Text		"Jahr:"
+str_ldl_Year_Text				"YT"
+str_ldl_Num_Players_Static_Text	"# Spieler:"
+str_ldl_Num_Players_Text		"NPT"
+str_ldl_Map_Size_Static_Text	"Größe:"
+str_ldl_Map_Size_Text			"MST"
+str_ldl_Difficulty_Static_Text	"Schwierigkeit:"
+str_ldl_Difficulty_Text			"DT"
+str_ldl_Save_As_SP				"Als ES-Spiel speich."
+str_ldl_Save_As_MP				"Als MS-Spiel speich."
+
+# SAM041599 added ResetLOS button to cheat mode screen
+str_ldl_Reset_LOS				"Sicht"
+
+#
+# for Tile Pad
+#
+str_ldl_Forest					"Wald"
+str_ldl_Plains					"Steppe"
+str_ldl_Tundra					"Tundra"
+str_ldl_Glacier					"Gletscher"
+str_ldl_Grassland				"Weideland"
+str_ldl_Desert					"Wüste"
+str_ldl_Swamp					"Sümpfe"
+str_ldl_Jungle					"Dschungel"
+str_ldl_Mountain				"Berg"
+str_ldl_Hills					"Hügel"
+str_ldl_ShallowWater			"Flachwasser"
+str_ldl_DeepWater				"Tiefsee"
+str_ldl_Volcano					"Meeresvulkan"
+str_ldl_Space					"Weltraum"
+str_ldl_Beach					"Strand"
+str_ldl_Shelf					"Felsenriff"
+str_ldl_Trench					"Canyon"
+str_ldl_Rift					"Meeresriff"
+str_ldl_Dead					"Ödland"
+str_ldl_BrownHill				"Wüsenhügel"
+str_ldl_BrownMountain			"Wüsenberg"
+str_ldl_WhiteHill				"Gletscherhügel"
+str_ldl_WhiteMountain			"Gletscherberg"
+str_ldl_Goody					"Ruinen"
+str_ldl_River					"Fluss"
+
+#
+# for City Pad
+#
+str_ldl_City_Pad_Message		"Solange das Stadtfenster geöffnet ist, können Sie in der markierten Stadt Modernisierungen und Weltwunder per SOFORTKAUF erwerben, indem Sie sie im Menü unter Produktion auswählen."
+
+#
+# for Pollution Pad
+#
+str_ldl_Global_Pollution		"Globale Umweltverschmutzung"
+str_ldl_Ozone_Damage			"Ozonloch"
+str_ldl_Flooding				"Flutwelle"
+str_ldl_never					"Nie"
+str_ldl_O						"O"
+str_ldl_F						"F"
+
+#
+# for Unit Pad
+#
+str_ldl_Kill					"Auflösen"
+
+#
+# for Tile Improvements Pad
+#
+str_ldl_Tile_Imp_Pad_Message	"Solange dieses Fenster geöffnet ist, können Sie mit Hilfe des jeweiligen Menüs verfügbare Feld-Modernisierungen und Gebäude frei platzieren und das Gelände per Terraforming umwandeln."

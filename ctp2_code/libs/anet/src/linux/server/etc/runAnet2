@@ -1,0 +1,44 @@
+#!/bin/sh
+# start the ANet game server
+#   
+# You should not need to edit this file.  All modifiable
+# fields are controlled by the file ~/etc/anet2env
+#
+
+args=""
+args="$args -R=$ANET2_ROOM"
+if [ ! -z "$ANET2_ROOM" ]; then
+  if [ ! -s $ANET2_ROOM ]; then
+    ~/etc/servfil
+  fi
+fi
+if [ ! -z "$ANET2_WEB" ]; then
+	args="$args $ANET2_WEB"
+fi
+if [ ! -z "$ANET2_WMQ_OUT" ]; then
+	args="$args -Q=$ANET2_WMQ_OUT"
+	if [ ! -d $ANET2_WMQ_OUT ]; then
+		mkdir $ANET2_WMQ_OUT
+	fi
+fi
+if [ ! -z "$ANET2_FREEZE" ]; then
+	args="$args -F=$ANET2_FREEZE"
+fi
+if [ ! -z "$ANET2_INI" ]; then
+	args="$args -I=$ANET2_INI"
+fi
+if [ ! -z "$ANET2_SERVERS" ]; then
+	args="$args -H=$ANET2_SERVERS"
+fi
+if [ ! -z "$ANET2_APPS" ]; then
+	args="$args -A=$ANET2_APPS"
+fi
+if [ ! -z "$ANET2_CRASHLOG" ]; then
+	args="$args -C=$ANET2_CRASHLOG"
+fi
+
+$ANET2_EXEC $args > $ANET2_LOG 2>&1 < /dev/null &
+echo Starting: $ANET2_EXEC $args 
+
+# This file exists so that all commands will start
+# the server using the same command line.

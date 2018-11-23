@@ -1,0 +1,216 @@
+:KEY:
+szFormattedMessage
+
+:TRANSLATED:
+There is an upgrade available for this version of %s.\nThis upgrade is required to play in multiplayer mode.\n\nThe upgrade is %uKB in size.\nAt 28.8Kbps, the download will take about %u minutes and %u seconds.\n\nWould you like to download the upgrade now?
+
+
+:KEY:
+szPleaseWait
+
+:TRANSLATED:
+Please Wait
+
+
+:KEY:
+szDownloading
+
+:TRANSLATED:
+Downloading...
+
+
+:KEY:
+szAgainOrQuit
+
+:TRANSLATED:
+If you are experiencing difficulty downloading, \nyou may download the upgrade manually from Activision's website \nhttp://www.activision.com
+
+
+:KEY:
+szTryAgainLater
+
+:TRANSLATED:
+All servers are busy.  Please try again later.
+
+
+:KEY:
+szOK
+
+:TRANSLATED:
+OK
+
+
+:KEY:
+szCancel
+
+:TRANSLATED:
+Cancel
+
+
+:KEY:
+szTryAgain
+
+:TRANSLATED:
+Try Again
+
+
+:KEY:
+szYes
+
+:TRANSLATED:
+Yes
+
+
+:KEY:
+szNo
+
+:TRANSLATED:
+No
+
+
+:KEY:
+szQuit
+
+:TRANSLATED:
+Quit
+
+
+:KEY:
+szFormattedNoApplicablePatches
+
+:TRANSLATED:
+Version %d.%d is the latest version of %s.  You already have version %d.%d.
+
+
+:KEY:
+szDefaultTitle
+
+:TRANSLATED:
+(your software)
+
+
+:KEY:
+szResumeDlgTitle
+
+:TRANSLATED:
+Resume Download?
+
+
+:KEY:
+szResumeDownload
+
+:TRANSLATED:
+We see that you have previously attempted to download this upgrade.  Would you like to continue the download from where you left off, or start the process over again?
+
+
+:KEY:
+szResume
+
+:TRANSLATED:
+Resume
+
+
+:KEY:
+szStartOver
+
+:TRANSLATED:
+Start over
+
+
+:KEY:
+szRemoteResumeError
+
+:TRANSLATED:
+The remote server was unable to resume downloading from this point.  We will start the download process from the beginning.
+
+
+:KEY:
+szInformation
+
+:TRANSLATED:
+Information
+
+
+:KEY:
+szExeFailDelete
+
+:TRANSLATED:
+Upgrade process was not successful.  Would you like to store the upgrade files in your %s directory?
+
+
+:KEY:
+szExeSuccessDelete
+
+:TRANSLATED:
+Upgrade applied successfully.  You no longer need the patch files, would you like to delete these files from your %s directory?
+
+
+:KEY:
+szExeFileList
+
+:TRANSLATED:
+The upgrade files were downloaded and executed in this order:
+
+
+:KEY:
+szExeFileListSingular
+
+:TRANSLATED:
+The upgrade file downloaded is:
+
+
+:KEY:
+szFileNotExecuted
+
+:TRANSLATED:
+(Files with a * were not properly executed.)
+
+
+:KEY:
+szAttention
+
+:TRANSLATED:
+Attention
+
+
+:KEY:
+szFormattedIntro
+
+:TRANSLATED:
+This version of %s is not the most recent.\n\nAn upgrade exists that updates %s, version %d.%d, to version %d.%d.  This upgrade totals %d KB in size and require %d minute(s) and %d second(s) for transfer on a 28.8Kbps modem.\n\nWould you like to download the upgrade files now?  (This upgrade is required to play %s in multiplayer mode.)
+
+
+:KEY:
+szComplete
+
+:TRANSLATED:
+Download Complete
+
+
+:KEY:
+szPatchNow
+
+:TRANSLATED:
+All upgrade files were successfully downloaded.  Would you like to update your game now?
+
+
+:KEY:
+szExeFileListNotExecuted
+
+:TRANSLATED:
+The upgrade files downloaded to your %s directory must be executed in this order:
+
+
+:KEY:
+szExeFileListSingularNotExecuted
+
+:TRANSLATED:
+The upgrade downloaded to your %s directory is:
+
+
+
+:KEY:
+szInternalLauncherError
+
+:TRANSLATED:
+The patches you downloaded couldn't be run due to an internal error creating the file %s.  You may want to clear out your windows temp directory and try again.

@@ -1,0 +1,97 @@
+#################################
+#
+# BETA PATCH CHEAT TOOLS STRINGS
+#
+#################################
+# SAM032299
+#################################
+
+#
+# SAM032299 added for cheat toolbar enhancements
+#
+
+#
+# Single-Player Game Launch Screen
+#
+str_ldl_Editor					"Launch Editor"
+
+#
+# Cheat Toolbar
+#
+str_ldl_Tile_Pad				"Terrain"
+str_ldl_Civ						"Civ"
+str_ldl_Edit_City				"Edit City"
+str_ldl_Unit_City				"Unit/City"
+
+str_ldl_Toolbar_Title			"Call to Power Cheat Mode"
+str_ldl_World_Settings			"World Settings"
+str_ldl_Player_Settings			"Player Settings"
+str_ldl_Player_Static_Text		"Player:"
+str_ldl_Player_Name_Text		"PNT"
+str_ldl_Year_Static_Text		"Game Year:"
+str_ldl_Year_Text				"YT"
+str_ldl_Num_Players_Static_Text	"Num Players:"
+str_ldl_Num_Players_Text		"NPT"
+str_ldl_Map_Size_Static_Text	"Map Size:"
+str_ldl_Map_Size_Text			"MST"
+str_ldl_Difficulty_Static_Text	"Difficulty:"
+str_ldl_Difficulty_Text			"DT"
+str_ldl_Save_As_SP				"Save as SP Game"
+str_ldl_Save_As_MP				"Save as MP Game"
+
+# SAM041599 added ResetLOS button to cheat mode screen
+str_ldl_Reset_LOS				"Reset LOS"
+
+#
+# for Tile Pad
+#
+str_ldl_Forest					"Forest"
+str_ldl_Plains					"Plains"
+str_ldl_Tundra					"Tundra"
+str_ldl_Glacier					"Glacier"
+str_ldl_Grassland				"Grassland"
+str_ldl_Desert					"Desert"
+str_ldl_Swamp					"Swamp"
+str_ldl_Jungle					"Jungle"
+str_ldl_Mountain				"Mountain"
+str_ldl_Hills					"Hills"
+str_ldl_ShallowWater			"Shallow Water"
+str_ldl_DeepWater				"Deep Water"
+str_ldl_Volcano					"Underwater Volcano"
+str_ldl_Space					"Space"
+str_ldl_Beach					"Beach"
+str_ldl_Shelf					"Continental Shelf"
+str_ldl_Trench					"Trench"
+str_ldl_Rift					"Deep Sea Rift"
+str_ldl_Dead					"Destroyed Land"
+str_ldl_BrownHill				"Sand Dunes"
+str_ldl_BrownMountain			"Desert Mountain"
+str_ldl_WhiteHill				"Arctic Hill"
+str_ldl_WhiteMountain			"Arctic Mountain"
+str_ldl_Goody					"Ruins"
+str_ldl_River					"River"
+
+#
+# for City Pad
+#
+str_ldl_City_Pad_Message		"While this City Pad is open, you can RUSH BUY Improvements and Wonders for the selected City using the Production tab on the Control Panel."
+
+#
+# for Pollution Pad
+#
+str_ldl_Global_Pollution		"Total World Pollution"
+str_ldl_Ozone_Damage			"Ozone Damage"
+str_ldl_Flooding				"Flooding"
+str_ldl_never					"N/A"
+str_ldl_O						"O"
+str_ldl_F						"F"
+
+#
+# for Unit Pad
+#
+str_ldl_Kill					"Kill"
+
+#
+# for Tile Improvements Pad
+#
+str_ldl_Tile_Imp_Pad_Message	"While this Tile Improvements Pad is open, you can freely place legal Tile Improvements, Installations and Terraforming using the Control Panel interface."

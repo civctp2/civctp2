@@ -1,0 +1,739 @@
+template ORDERBOX:CTP2_STANDARD_FONT {
+
+	bool	shadowfont	true
+
+	string	image0	"upba5611.tga"
+
+	string	image1	"upba5612.tga"
+
+	string	disabledimage0	"upba5621.tga"
+
+	int	xpix	69
+
+	int	widthpix	156
+
+	int	heightpix	19
+
+	string	imagebltflag	"chromakey"
+
+	int	bevelwidth	0
+
+}
+
+
+
+UnitStatusWin {
+
+	string	pattern	"upba5607.tga"
+
+#	int 	xpix		264
+
+#	int 	ypix		72
+
+	string	xanchor	"center"
+
+	string	yanchor	"center"
+
+	int	widthpix	530
+
+	int	heightpix	297
+
+
+
+	Title:CTP2_STANDARD_TITLE_FONT {
+
+		int	xpix	180
+
+		int	ypix	4
+
+		int	widthpix	158
+
+		int	heightpix	13	
+
+		bool	usedatabase	true
+
+		string	text	"str_ldl_UNIT_STATUS"
+	}
+
+
+
+	List {
+
+		int	xpix	21
+
+		int	ypix	57
+
+		int	widthpix	305
+
+		int	heightpix	191
+
+		int columns		6
+
+		int	beveltype	2
+
+		int bevelwidth	2
+
+		bool alwaysranger TRUE
+
+		int	srcxpix	19
+
+		int	srcypix	55
+
+		int	srcwidthpix		309
+
+		int	srcheightpix	215
+
+		string	pattern "upba5607.tga"
+
+		int minthumbsize	6
+
+		rangery {
+
+			int	widthpix	15
+
+			int	heigthpix	15
+
+			string	type	"scroller"
+
+			string	orientation	"vertical"
+
+			string	pattern	"upba5605.tga"
+
+			incy {
+
+				int	widthpix	15
+
+				int	heightpix	15
+
+				string	pattern	"upba5605.tga"
+
+			}
+
+			decy {
+
+				int	widthpix	15
+
+				int	heightpix	15
+
+				string	pattern	"upba5605.tga"
+
+			}
+
+#			thumb {
+
+#				string	image0	"upba5613.tga"
+
+#				string	imagebltflag	"chromakey"
+
+#			}
+
+		}
+
+		header {
+
+			switch0:CTP2_HEADER_FONT {
+
+				int	widthpix	20
+
+				int	heightpix	20
+
+				string	pattern	"upba5605.tga"
+				string	text	"str_ldl_HASH_MARK"
+
+				int bevelwidth 	1
+
+			}
+
+			switch1:CTP2_STANDARD_FONT {
+
+				int	widthpix	20
+
+				int	heightpix	20
+
+				string	pattern	"upba5605.tga"
+				string	image0	"upa060.tga"
+				string	image1	"upa060.tga"
+				string	image2	"upa060.tga"
+				string	imageblttype	"stretch"
+				string	imagebltflag	"chromakey"
+				string tipwindow "str_ldl_Specforce"
+				int bevelwidth 	1
+
+			}
+
+			switch2:CTP2_STANDARD_FONT {
+
+				int	widthpix	100
+
+				int	heightpix	20
+
+				string text "str_ldl_CAPS_NAME"
+				string	pattern	"upba5605.tga"
+
+				int bevelwidth 	1
+
+			}
+
+			switch3:CTP2_STANDARD_FONT {
+
+				int	widthpix	80
+
+				int	heightpix	20
+
+				string text "str_ldl_ARDM"
+				string	pattern	"upba5605.tga"
+
+				int bevelwidth 	1
+
+			}
+
+			switch4:CTP2_STANDARD_FONT {
+
+				int	widthpix	65
+
+				int	heightpix	20
+
+				string text "str_ldl_SUPPORT"
+				string	pattern	"upba5605.tga"
+
+				int bevelwidth 	1
+
+			}
+
+			switch5:CTP2_STANDARD_FONT {
+
+				int	widthpix	20
+
+				int	heightpix	20
+#				string text "str_ldl_BUILDING"
+				string	pattern	"upba5605.tga"
+				string	image0	"ups011b.tga"
+				string	image1	"ups011b.tga"
+				string	image2	"ups011b.tga"
+				string	imageblttype	"stretch"
+				string	imagebltflag	"chromakey"
+				string  tipwindow "str_ldl_Supp"
+				int bevelwidth 	1
+
+			}
+
+		}
+
+	}
+
+
+
+	MilitarySlider {
+
+		int	xpix	374
+
+		int	ypix	112
+
+		int	widthpix	117
+
+		int	heightpix	20
+
+		int	maxxval		2
+
+		int	maxyval		0
+
+		int	pagexval	1
+
+		int	pageyval	1
+
+		int xval		0
+
+		string	pattern	"upba5608.tga"
+
+		string	type	"slider"
+
+		string	orientation	"horizontal"
+
+		bool	rigidthumb	TRUE
+
+		bool	quantizedrag	TRUE
+
+		int		minthumbsize	9
+
+		thumb {
+
+			int	widthpix	9
+
+			int heightpix	20
+
+			string	image0	"upba2512.tga"
+
+			string	imagebltflag	"chromakey"
+
+		}
+
+		int	percent	75
+
+	}
+
+	OutlineBox {
+		int	xpix	349
+		int	ypix	55
+		int	widthpix	164
+		int	heightpix	180
+		int	beveltype	2
+		int	bevelwidth	2
+	}
+
+
+
+	ReadyLabel:CTP2_STANDARD_FONT {
+
+		string	text	"str_ldl_CAPS_MILITARY_READINESS"
+		int	xpix	370
+
+		int	ypix	60
+
+		int	widthpix	140
+
+		int	heightpix	15
+
+	}
+
+	StandLabel:CTP2_STANDARD_FONT {
+
+		string	text	"str_ldl_CAPS_STAND_DOWN"
+		int	xpix	342
+
+		int	ypix	90
+
+		int	widthpix	90
+
+		int	heightpix	20
+
+	}
+
+	AlertLabel:CTP2_STANDARD_FONT {
+
+		string	text	"str_ldl_CAPS_ON_ALERT"
+		int	xpix	404
+
+		int	ypix	137
+
+		int	widthpix	65
+
+		int	heightpix	20
+
+	}
+
+	WarLabel:CTP2_STANDARD_FONT {
+
+		string	text	"str_ldl_CAPS_AT_WAR"
+		int	xpix	463
+
+		int	ypix	90
+
+		int	widthpix	50
+
+		int	heightpix	20
+
+	}
+
+	CostLabel:CTP2_STANDARD_FONT {
+
+		string	text	"str_ldl_MILITARY_SUPPORT_COST_COLON"
+		int	xpix	341
+
+		int	ypix	168
+
+		int	widthpix	123
+
+		int	heightpix	30
+
+	}
+
+	TotalLabel:CTP2_STANDARD_FONT {
+
+		string	text	"str_ldl_PRODUCTION_PERCENTAGE_COLON"
+		int	xpix	356
+
+		int	ypix	206
+
+		int	widthpix	87
+
+		int	heightpix	30
+
+	}
+
+
+
+	CostBox:CTP2_STANDARD_FONT {
+
+		int	xpix	451
+
+		int	ypix	214
+
+		int	widthpix	55
+
+		int	heightpix	17
+
+#		string	pattern	"upba3010.tga"
+
+		string	pattern	"upba5607.tga"
+
+		string	text	"str_ldl_0"
+		int	bevelwidth	1
+
+		int	beveltype	2
+
+		int	srcxpix	451
+
+		int	srcypix	203
+
+		int	srcwidthpix		55
+
+		int	srcheightpix	17
+
+	}
+
+	TotalBox:CTP2_STANDARD_FONT {
+
+		int	xpix	451
+
+		int	ypix	175
+
+		int	widthpix	55
+
+		int	heightpix	17
+
+#		string	pattern	"upba3010.tga"
+
+		string	pattern	"upba5607.tga"
+
+		string	text	"str_ldl_15"
+		int	bevelwidth	1
+
+		int	beveltype	2
+
+		int	srcxpix	451
+
+		int	srcypix	175
+
+		int	srcwidthpix		55
+
+		int	srcheightpix	17
+
+	}
+
+	DisbandButton:CTP2_STANDARD_FONT {
+		
+		int	xpix	76
+		int	ypix	254
+		int	widthpix	89
+		int	heightpix	21
+		int	bevelwidth	0
+		string	image0	"upba5702.tga"
+		string	image1	"upba5703.tga"
+		string	imagebltflag	"chromakey"
+		string	text	"str_ldl_DISBAND"
+	}
+
+
+}
+
+
+
+ShowAllListItem {
+
+#	string	pattern			"upba3010.tga"
+
+	Total:CTP2_STANDARD_FONT{
+
+		int		xpix			0
+
+		int		ypix			0
+
+		int		widthpix		27
+
+		int		heightpix		20
+
+#		string	pattern			"upba3010.tga"
+
+	}
+
+	Status:CTP2_STANDARD_FONT{
+
+		int		xpix			0
+
+		int		ypix			0
+
+		int		widthpix		33
+
+		int		heightpix		20
+
+#		string	pattern			"upba3010.tga"
+
+	}
+
+	Name:CTP2_STANDARD_FONT{
+
+		int		xpix			0
+
+		int		ypix			0
+
+		int		widthpix		67
+
+		int		heightpix		20
+
+#		string	pattern			"upba3010.tga"
+
+	}
+
+	ARDM:CTP2_STANDARD_FONT{
+
+		int		xpix			0
+
+		int		ypix			0
+
+		int		widthpix		73
+
+		int		heightpix		20
+
+#		string	pattern			"upba3010.tga"
+
+	}
+
+	Support:CTP2_STANDARD_FONT{
+
+		int		xpix			0
+
+		int		ypix			0
+
+		int		widthpix		71
+
+		int		heightpix		20
+
+#		string	pattern			"upba3010.tga"
+
+	}
+
+	Construction:CTP2_STANDARD_FONT{
+
+		int		xpix			0
+
+		int		ypix			0
+
+		int		widthpix		79
+
+		int		heightpix		20
+
+#		string	pattern			"upba3010.tga"
+
+	}
+
+}
+
+
+
+UssGotoScreen {
+
+	string	pattern	"upba5620.tga"
+
+	int 	xpix		316
+
+	int 	ypix		185
+
+	int	widthpix	449
+
+	int	heightpix	297
+
+	Name:CTP2_STANDARD_FONT {
+
+		string xanchor "center"
+
+		string yanchor "top"
+
+		int widthpct 50
+
+		int heightpix 20
+
+		string	text	"str_ldl_CAPS_GO_TO_CITY"
+	}
+
+	CityList {
+
+		int	xpix	251
+
+		int	ypix	62
+
+		int	widthpix	146
+
+		int	heightpix	171
+
+		int columns		1
+
+		int	beveltype	2
+
+		int bevelwidth	2
+
+		bool alwaysranger TRUE
+
+		int	srcxpix	249
+
+		int	srcypix	60
+
+		int	srcwidthpix		150
+
+		int	srcheightpix	175
+
+		string	pattern "upba5620.tga"
+
+		int minthumbsize	6
+
+		rangery {
+
+			int	widthpix	15
+
+			int	heigthpix	15
+
+			string	type	"scroller"
+
+			string	orientation	"vertical"
+
+			string	pattern	"upba5605.tga"
+
+			incy {
+
+				int	widthpix	15
+
+				int	heightpix	15
+
+				string	pattern	"upba5605.tga"
+
+			}
+
+			decy {
+
+				int	widthpix	15
+
+				int	heightpix	15
+
+				string	pattern	"upba5605.tga"
+
+			}
+
+#			thumb {
+
+#				string	image0	"upba5613.tga"
+
+#				string	imagebltflag	"chromakey"
+
+#			}
+
+		}
+
+		header {
+
+			switch0:CTP2_HEADER_FONT {
+
+				int	widthpix	146
+
+				int	heightpix	0
+
+				int bevelwidth 	0
+
+			}
+
+		}
+
+	}
+
+	OkButton {
+
+		string	image0	"upba5617.tga"
+
+		string	image1	"upba5609.tga"
+
+		int	xpix	400
+
+		int	ypix	274
+
+		int	widthpix	46
+
+		int	heightpix	19	
+
+		string	imagebltflag	"chromakey"
+
+		int	bevelwidth	0
+
+	}
+
+	GotoLabel:CTP2_STANDARD_FONT {
+
+		int	xpix	46
+
+		int	ypix	62
+
+		int	widthpix	40
+
+		int	heightpix	17
+
+		int	bevelwidth	0
+
+		string	text	"str_ldl_GO_TO_COLON"
+	}
+
+	GotoBox:CTP2_STANDARD_FONT {
+
+		int	xpix	87
+
+		int	ypix	62
+
+		int	widthpix	107
+
+		int	heightpix	17
+
+		string	pattern	"upba5620.tga"
+
+		int	srcxpix	87
+
+		int	srcypix	62
+
+		int	srcwidthpix	107
+
+		int	srcheightpix	17
+
+		int	beveltype	2
+
+		int	bevelwidth	1
+
+	}
+
+}
+
+
+
+UssGotoListItem {
+
+	Name:CTP2_STANDARD_FONT{
+
+		int		xpix			0
+
+		int		ypix			0
+
+		int		widthpix		146
+
+		int		heightpix		20
+
+	}
+
+}
+
+UnitStrings {
+	int	numStrings	1
+
+	string	string0	"str_ldl_Disband_seleted_unit"
+}
+
+
+
+$
+
+
+
+

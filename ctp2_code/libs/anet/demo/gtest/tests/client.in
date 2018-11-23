@@ -1,0 +1,92 @@
+# Join the game and create a player.
+sessions
+wait
+assert n_sessions > 0
+
+join d
+assert theError == 0
+wait
+assert theError == 0
+newp client
+wait
+assert theError == 0
+
+sleep 4
+pl
+
+sleep 4
+pl
+
+sleep 4
+pl
+
+sleep 4
+pl
+
+sleep 4
+pl
+
+sleep 4
+pl
+
+sleep 4
+pl
+
+sleep 4
+pl
+
+sleep 4
+pl
+
+sleep 4
+pl
+
+sleep 4
+pl
+
+sleep 4
+pl
+
+sleep 4
+pl
+
+sleep 4
+pl
+
+sleep 4
+pl
+
+sleep 4
+pl
+
+sleep 4
+pl
+
+sleep 4
+pl
+
+sleep 4
+pl
+
+sleep 4
+pl
+
+sleep 4
+pl
+
+sleep 4
+pl
+
+sleep 4
+pl
+
+sleep 4
+pl
+
+sleep 4
+pl
+
+sleep 4
+pl
+
+quit

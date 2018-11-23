@@ -1,0 +1,97 @@
+#################################
+#
+# BETA PATCH CHEAT TOOLS STRINGS
+#
+#################################
+# SAM032299
+#################################
+
+#
+# SAM032299 added for cheat toolbar enhancements
+#
+
+#
+# Single-Player Game Launch Screen
+#
+str_ldl_Editor					"Lancia editor"
+
+#
+# Cheat Toolbar
+#
+str_ldl_Tile_Pad				"Terreno"
+str_ldl_Civ						"Imp"
+str_ldl_Edit_City				"Modifica città"
+str_ldl_Unit_City				"Unità/Città"
+
+str_ldl_Toolbar_Title			"Mod. Trucchi Call to Power"
+str_ldl_World_Settings			"Impost. mondo"
+str_ldl_Player_Settings			"Impost. gioc."
+str_ldl_Player_Static_Text		"Gioc.:"
+str_ldl_Player_Name_Text		"TNG"
+str_ldl_Year_Static_Text		"Anno partita:"
+str_ldl_Year_Text				"TA"
+str_ldl_Num_Players_Static_Text	"Num. giocatori:"
+str_ldl_Num_Players_Text		"TNG"
+str_ldl_Map_Size_Static_Text	"Dim. mappa:"
+str_ldl_Map_Size_Text			"TDM"
+str_ldl_Difficulty_Static_Text	"Difficoltà:"
+str_ldl_Difficulty_Text			"TD"
+str_ldl_Save_As_SP				"Salva come part. GS"
+str_ldl_Save_As_MP				"Salva come part. MG"
+
+# SAM041599 added ResetLOS button to cheat mode screen
+str_ldl_Reset_LOS				"Resetta NDG"
+
+#
+# for Tile Pad
+#
+str_ldl_Forest					"Foresta"
+str_ldl_Plains					"Pianura"
+str_ldl_Tundra					"Tundra"
+str_ldl_Glacier					"Ghiacciaio"
+str_ldl_Grassland				"Prateria"
+str_ldl_Desert					"Deserto"
+str_ldl_Swamp					"Palude"
+str_ldl_Jungle					"Giungla"
+str_ldl_Mountain				"Montagna"
+str_ldl_Hills					"Collina"
+str_ldl_ShallowWater			"Acqua bassa"
+str_ldl_DeepWater				"Acqua profonda"
+str_ldl_Volcano					"Vulcano sottomarino"
+str_ldl_Space					"Spazio"
+str_ldl_Beach					"Spiaggia"
+str_ldl_Shelf					"Piattaforma continentale"
+str_ldl_Trench					"Fossa sottomarina"
+str_ldl_Rift					"Faglia oceanica"
+str_ldl_Dead					"Terra distrutta"
+str_ldl_BrownHill				"Collina desertica"
+str_ldl_BrownMountain			"Montagna desertica"
+str_ldl_WhiteHill				"Collina artica"
+str_ldl_WhiteMountain			"Montagna artica"
+str_ldl_Goody					"Rovine"
+str_ldl_River					"Fiume"
+
+#
+# for City Pad
+#
+str_ldl_City_Pad_Message		"Quando viene visualizzata la schermata della città, puoi effettuare l'acquisto rapido di miglioramenti e meraviglie per la città selezionata tramite la scheda Produzione sul pannello di controllo."
+
+#
+# for Pollution Pad
+#
+str_ldl_Global_Pollution		"Inquinam. tot. mondo"
+str_ldl_Ozone_Damage			"Danni ozono"
+str_ldl_Flooding				"Inondazioni"
+str_ldl_never					"N.D."
+str_ldl_O						"O"
+str_ldl_F						"A"
+
+#
+# for Unit Pad
+#
+str_ldl_Kill					"Elimina"
+
+#
+# for Tile Improvements Pad
+#
+str_ldl_Tile_Imp_Pad_Message	"Quando viene visualizzata la relativa schermata, puoi collocare miglioramenti per le caselle o installazioni ed effettuare la trasformazione del terreno usando il pannello di controllo."

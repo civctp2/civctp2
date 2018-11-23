@@ -1,0 +1,265 @@
+<h1><center>Supporting Third-Party Game Services</center></h1>
+<center>Last updated: 22 September 98</center>
+<p>
+Games developed with Anet normally run either standalone
+or connected to the Anet game servers.  However,
+the marketplace dictates that it be possible to enable games to use third party
+game networking services.  This allows the game to reach the widest audience,
+and potentially allows for revenue from subscription-oriented game
+networking services.
+<p>
+Third-party networks, such as <a href="http://www.kali.net">Kali</a>,
+that perform IPX emulation can be used without any special support;
+the user simply selects IPX.  However, the integration and performance
+this provides leave something to be desired.  The remainder of this
+document will not discuss IPX emulation.
+<p>
+Anet now directly supports three third-party gaming networks under Win95:
+<a href="http://www.heat.net">Heat</a>,
+<a href="http://www.mplayer.com">MPlayer</a>, and
+<a href="http://www.zone.com">Microsoft Game Zone</a>.
+<p>
+Also, an alpha driver for <a href="http://www.dwango.com">Dwango</a> is
+included in the SDK.
+<p>
+Anet's third-party network support has two parts:
+<ol>
+<li>a command-line launcher program named anetdrop.exe, common to all
+third-party networks, plus
+<li>if the third-party network is not IP-based, a wrapper transport dll
+specific to each third-party network; currently, wheat.dll and wmpath.dll.
+</ol>
+These files are in the win\bin and win\dll folders of the Anet SDK.
+<h2>Wrapper Transport DLL's</h2>
+If a 3rd party game network supports IPX emulation or can provide
+the IP addresses of the players on the commandline when launching,
+anetdrop.exe can be used with the existing wipx2.dll or winets2.dll
+drivers.
+<p>
+3rd party game networks that have their own game networking API can
+usually be supported by writing a <i>wrapper</i> transport DLL.
+Example sources can be obtained from Dan Kegel.  Wrappers have been
+written for Heat and MPlayer under Win95, and Dwango under DOS.
+<p>
+This option does allow for primitive score reporting to the game network,
+and is fairly easy to implement.
+<h2>Supporting Anetdrop</h2>
+Games must be written specifically to support Anetdrop.  They should
+check for a commandline switch, e.g. -drop; if it is present, they
+call <a href="dp.htm#dpCreate">dpCreate</a>(&dp, NULL, NULL, "freeze.dat"),
+use <a href="dp.htm#dpEnumPlayers">dpEnumPlayers()</a>
+or <a href="dp.htm#dpRequestObjectDeltas">dpRequestObjectDeltas()</a> to see whether they are host or client,
+and then skip their player marshalling screen and proceed directly to their
+game setup screen.
+<p>
+When the game is installed, a special text file named
+<a href="shell.htm#anet.inf">anet.inf</a> must go into the game directory.
+It contains, among other things, the name of the executable anetdrop
+will launch, and a few parameters, such as the session type to use for that
+game.
+
+<h2>Using Anetdrop</h2>
+Anetdrop can be used with any Anet transport and any appropriately
+enabled game.  An example program, chat.exe, is included with the
+Anet SDK, in win\bin\chat.  Anetdrop is run by the 3rd party network
+game browser, which uses commandline parameters to tell anetdrop what to do.
+<p>
+<a name="options">Run anetdrop once without any commandline parameters to get a list
+of the legal parameters.  Here is the current list:</a>
+<pre>
+-n=path            	# which transport to use, e.g. -n=anet/winets2.dll
+-h                 	# host a session
+-m=maxplayers      	# Max number of players in session
+-j                 	# join a session
+-J=16              	# join any internet session (16=lobby, 0=game)
+-s=mygame          	# session name
+-p=myname          	# player name
+-a=206.43.1.0      	# address (of host; used when joining if no broadcast)
+-g=server_name  	# Name of the server to connect to
+-v               	# Allow player variables
+-w                 	# Don't exit until command does; return its exit code.
+-x                 	# Let launched program init comm system
+-b=9600            	# Baud rate
+-c=0               	# COM port to use (0=COM1)
+-f=5555555        	# Phone number to dial when using modem, omit to answer
+-i=ATZ             	# Modem initialization string
+-d=1               	# Dial method (1=Tone, 0=Pulse)
+-o=206.41.1.1;206.41.1.2 # open connections to the list of addresses
+-o=@ADDRESSFILE          # open connections to the address in the file ADDRESSFILE
+-k                 	# Disables the dialog boxes
+</pre>
+<p>
+To get used to anetdrop without worrying about funny drivers, you can try
+it out first with one of the standard drivers, e.g. the loopback driver.
+Try the following (assuming you've installed the Anet SDK to \anet):
+<pre>cd \anet\win\bin\chat
+copy ..\..\dll\*.dll
+..\anetdrop -h -p=player1 -n=wloop2.dll
+</pre>
+This should start one chat program and cause it to host a session.
+Start another one and have it join the session by typing
+<pre>
+..\anetdrop -j -p=player2 -n=wloop2.dll
+</pre>
+You should be able to chat back and forth.  (The loopback driver is
+kinda slow, as is the chat program's keyboard handling, so don't
+worry if chat seems sluggish.)
+Press ^D to quit.
+<p>
+Next, try it with the Internet driver.  This time, specify a session name, too:
+<pre>..\anetdrop -h -s=testChat -p=player1 -n=winets2.dll -g=california12.activision.com
+..\anetdrop -j -s=testChat -p=player2 -n=winets2.dll -g=california12.activision.com
+</pre>
+You should still be able to chat.  Plus, if you peek at the server
+using
+<pre><a href="gtest.htm">gtest</a> -n=winets2.dll -p=california12.activision.com
+species 65
+sessions
+</pre>
+you should be able to see the named session.  (65 is the session type given in
+win\bin\chat\anet.inf.)
+<h2>Running Anetdrop with MPlayer</h2>
+Here are some notes on testing games on MPlayer.
+<p>
+<ol>
+<li>
+Contact your game's liason at MPlayer for a game id for your game, and for
+test accounts on MPlayer.   Ask them to set up a single UDP GULP
+named ANET_UDP; this is the GULP the WMpath2.dll driver uses to communicate.
+(The default is a TCP gulp, but you don't want that; it slows down
+performance noticably, and causes jerkiness.)
+
+<li> Make sure that you have installed the game and the Mplayer Client
+software. These instructions assume that you've installed the game in the
+C:\DarkReign\ directory.   You might also want to read through the MPlayer
+SDK documentation to understand their architecture.
+
+<li>
+<b>This step would normally be done by Mplayer Automatically.</b><br>
+You will need to make some additions to the Mplayer section of the
+registry.  You will need to traverse the folders HKey_LOCAL_MACHINE ->
+SOFTWARE -> Mpath -> Mplayer -> Manifest.
+You will need to select EDIT -> New -> Key.
+If your game's MPlayer game id were 176, the key would be called "GAME176".
+Open the newly created Key and add the following string values (modified for
+your game):
+<pre>
+BMP                    leave blank
+Cmdline                "-n:wmpath2.dll -j -x -v -w"
+Config                 leave blank  (or give full path of game config DLL)
+EXE                    "c:\DarkReign\anetdrop.exe"
+Help                   leave blank
+Path                   "C:\DarkReign\"
+PWD                    "C:\DarkReign\"
+Title                  "DarkReign"
+Type                   "0"
+URL                    leave blank
+Version                "Beta Version"
+</pre>
+
+The Cmdline value contains the <a href="#options">parameters passed to anetdrop</a>.
+<li> At this point, you should be configured to launch a game on Mplayer. Please
+remember that the previous instructions assume that you installed Mplayer in
+the default directory and the game is in the "C:\DarkReign\" directory.  If
+not, please make sure the Registry entries reflect this. I'm attaching a file
+called "DarkReign.mpi". When you double-click on this file, you should cause
+Mplayer to start up, validate, and ask you if you want to create a new account
+or logon.  Select Logon.
+
+<li> The game's Game lobby is usually a restricted lobby which means that only
+specific accounts can logon to Mplayer and enter this game Lobby.
+Use the accounts MPlayer gave you in step 1 above for testing.
+
+<li> Once you've logged into Mplayer, you should arrive in the game's Game
+Lobby.   At this point, you will receive a message indicating that special
+files have been downloaded that will allow you to test the game in MPlayer's
+Developer Universe.  You should receive two shortcuts on your Windows 95
+Desktop.  By clicking on the "Developer Universe" shortcut icon, Mplayer will
+startup, you should logon, and you will eventually make it to MPlayer's Main menu.
+
+<li> While logged on to the Mplayer Developer Universe, double click on the
+DarkReign.MPI file on your desktop.  This will take you to the game's Game
+Lobby within the MPlayer Developer Universe.
+
+<li> Once you've logged into Mplayer, you should arrive in the game's Game
+Lobby.  Select Create Room and have all other players meet in this room.
+Player with the "M" is the Moderator of the game.  Once everyone has clicked
+"Ready To Play", have the Moderator launch the game by pressing the Launch
+button.
+
+<li>If you have created a Game Configuration DLL,
+the Config value in the registry (see above) should be set to
+full path of the DLL, e.g. "C:\DarkReign\MpDRConfig.dll".
+When in a game room, select Settings icon in
+the upper right area of the User Interface to verify that the moderator can
+change the game setting and launch into the appropriate scenario/settings.
+Verify that the non-moderators can see these game settings.
+
+<li> Play the game....
+</ol>
+
+
+
+<h2>Running Anetdrop with Microsoft Game Zone</h2>
+Here are some notes on testing games on MS Game Zone.
+<p>
+<ol>
+
+<li> Games on the Microsoft Game Zone require that each game is incorporated
+into the Game Zone software package.  You will need to contact the Game Zone
+for this to occur.  They will require some artwork to be used for your game.
+
+<li> The Game Zone tests two registry keys to determine if the game is
+installed.  They require the path to your game and the version number of the
+game.  Keys with the names "AppPath" and "Version" are currently being used,
+so it would be nice to remain consistent.  It is expected that these keys are
+present in the release version of your product.
+
+<li> All Anet games on Game Zone currently use manual IP and use the
+winets2 driver.
+
+<li> Since the game is being launched from the command line using anetdrop,
+the anet.inf file will need to be correctly configured.
+
+<li> Your will need to supply the Game Zone with the command lines that
+launch your game for both the host and the clients.  Game Zone can provide the
+following constants to the command line.<br>
+<pre>
+%n  - Name of the player
+%p? - Address if player number ? where 0 is always the host
+%c - Number of players in the session
+</pre>
+A typical command line for the host is:
+<pre>
+anetdrop -n=winets2.dll -h -n=%c -p=%n -o=%p0;%p1;%p2;%p3;%p4;%p5;%p6;%p7
+</pre>
+Whilst the clients use a slightly modified command line:
+<pre>
+anetdrop -n=winets2.dll -J=0 -p=%n -a=%p0 -o=%p0;%p1;%p2;%p3;%p4;%p5;%p6;%p7
+</pre>
+Additional paramaters may be required such as -x if your application has a
+lengthy delay before initializing the networking and -v if your appication
+requires player variables.  Refer to the <a href="#options">anetdrop
+options</a> for more information.
+
+<li> The Game Zone will setup your game on <a
+href="http://retailtest.zone.com">Retail Test</a> until it is ready for
+release.  Your game won't actually be located in the list of games available
+for play, you will need to obtain the exact URL from your Game Zone contact.
+
+<li> Create some test user accounts and then enter the session which the Zone
+has provided.  From here you should be able to chat to other players, create
+games and join games.
+
+<li> Once a game has been created and other players have joined it, the host
+launched the game...  It is at this point that the anetdrop command lines are
+executed.
+
+<li> Play the Game...
+</ol>
+
+<hr>
+<a href="index.html">Back to top</a>
+<hr>
+<i>Dan Kegel</i><br>
+<i>Copyright 1995-2001 Activision</i>

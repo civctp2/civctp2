@@ -1,0 +1,1186 @@
+################################################################################
+#
+# Project      : Call To Power 2
+# File type    : LDL layout description 
+# Description  : Main ldl file
+# Id           : $Id:$
+#
+################################################################################
+#
+# Disclaimer
+#
+# THIS FILE IS NOT GENERATED OR SUPPORTED BY ACTIVISION.
+#
+# This material has been developed at apolyton.net by the Apolyton CtP2 
+# Source Code Project. Contact the authors at ctp2source@apolyton.net.
+#
+################################################################################
+#
+# Modifications from the original Activision code:
+#
+# - Added the refuel mouse cursor. - April 30th 2005 Martin Gühmann
+# - mywindow can now be loaded. (Aug 22nd 2005 Martin Gühmann)
+#
+################################################################################
+
+#######################################
+# File: C:\civ3_project\civ3_data\english\uidata\layouts\civ3.ldl
+# Last Access: Mon Jun 01 13:01:30 1998
+#######################################
+##-----------------------------------##
+##              Imports              ##
+##-----------------------------------##
+import "ctp_template.ldl"
+
+#import "font1.ldl"
+#import "font2.ldl"
+#import "font3.ldl"
+#import "font4.ldl"
+#import "font5.ldl"
+#import "font6.ldl"
+
+
+
+#import "buttonbank.ldl"
+import "controlpanel.ldl"
+#import "tradescreen.ldl"
+import "ancient.ldl"
+#import "cityview.ldl"
+#import "cvscreen.ldl"
+import "citystatus.ldl"
+#import "queuewin.ldl"
+#import "unitstatus.ldl"
+import "greatlibrary.ldl"
+import "messagebox.ldl"
+import "helptile.ldl"
+#import "diplomacy.ldl"
+#import "fliwindow.ldl"
+import "science.ldl"
+import "statswindow.ldl"
+import "spriteeditor.ldl"
+import "spnewgame.ldl"
+import "scenario.ldl"
+import "custommap.ldl"
+import "options.ldl"
+import "graphics.ldl"
+import "sound.ldl"
+import "gameplayoptions.ldl"
+import "loadsave.ldl"
+
+
+#########################
+# cheat tool ldl's
+#########################
+import "toolbar.ldl"
+#import "unitpad.ldl"
+#import "advancespad.ldl"
+
+#import "citypad.ldl"
+#import "tilepad.ldl"
+#import "pollutionpad.ldl"
+#########################
+
+
+import "civstatus.ldl"
+import "ce_screen.ldl"
+
+
+import "km_screen.ldl"
+import "creditsscreen.ldl"
+
+
+import "happystatus.ldl"
+import "infoscreen.ldl"
+import "helppopup.ldl"
+import "spnewgamepopups.ldl"
+import "battleview.ldl"
+import "c3utilitydialog.ldl"
+import "wondermovie.ldl"
+import "endgame.ldl"
+import "victorymovie.ldl"
+import "victoryscreen.ldl"
+import "throneroom.ldl"
+import "musicscreen.ldl"
+import "sciencevictory.ldl"
+
+import "fancy.ldl"
+
+
+import "ns_template.ldl"
+import "ns_selcnct.ldl"
+import "ns_selserv.ldl"
+import "ns_selplyr.ldl"
+import "ns_editplyr.ldl"
+import "ns_lobby.ldl"
+import "ns_chglobby.ldl"
+import "ns_joingame.ldl"
+import "ns_launch.ldl"
+import "ns_strings.ldl"
+import "attract.ldl"
+
+import "tutorialwin.ldl"
+
+import "intromovie.ldl"
+
+import "hotseatlist.ldl"
+
+## Slic debugger ldls
+import "segmentlist.ldl"
+import "sourcelist.ldl"
+import "watchlist.ldl"
+
+## New ldls for ctp2
+import "citymanager.ldl"
+import "citywindow.ldl"
+import "editqueue.ldl"
+import "diplomacywindow.ldl"
+import "armymanager.ldl"
+import "scenarioeditor.ldl"
+import "trademanager.ldl"
+import "intelligence.ldl"
+import "unitmanager.ldl"
+import "dipwizard.ldl"
+import "profileedit.ldl"
+
+import "cityespionage.ldl"
+import "DiplomacyDetails.ldl"
+import "ChatWindow.ldl"
+
+##-----------------------------------##
+##             Templates             ##
+##-----------------------------------##
+template default {
+	string	xanchor	"left"
+	string	yanchor	"top"
+	int	xpix	0
+	int	ypix	0
+	int	widthpix	100
+	int	heightpix	100
+}
+
+
+##-----------------------------------##
+##              Data                 ##
+##-----------------------------------##
+OldCityViewWindow {
+	string	xanchor	"left"
+	string	yanchor	"top"
+	int	xpix	0
+	int	ypix	0
+	int	widthpix	1024
+	int	heightpix	768
+	string	pattern	"error.tga"
+	StaticImage {
+		string	image0	"citytemp.tga"
+		string	xanchor	"left"
+		string	yanchor	"top"
+		int	xpix	0
+		int	ypix	0
+		int	widthpix	1024
+		int	heightpix	768
+	}
+}
+
+
+
+
+mywindow {
+	string	xanchor	"center"
+	string	yanchor	"center"
+	string	pattern	"pattern.tga"
+	int	widthpct	75
+	int	heightpct	75
+	mybutton {
+		string	xanchor	"right"
+		string	yanchor	"bottom"
+		int	xpct	10
+		int	ypct	10
+		int	widthpct	20
+		int	heightpct	10
+		string	pattern	"pattern.tga"
+		string	text	"str_ldl_Exit"
+	}
+	myspinner {
+		string	xanchor	"right"
+		string	yanchor	"top"
+		int	xpct	10
+		int	ypct	10
+		int	widthpct	10
+		int	heightpix	0
+		bool	vertical	TRUE
+		string	pattern	"pattern.tga"
+	}
+	mytabgroup {
+		string	xanchor	"left"
+		string	yanchor	"bottom"
+		int	xpix	10
+		int	ypix	10
+		int	widthpct	50
+		int	heightpct	50
+		sadtab {
+			string	parent	"mywindow"
+			int	heightpct	5
+			string	pattern	"pattern.tga"
+			string	text	"str_ldl_Sad"
+			pane {
+				string	parent	"mywindow"
+				int	widthpct	50
+				int	heightpct	45
+				checkbox {
+					int	xpix	50
+					int	ypix	50
+					int	widthpix	150
+					int	heightpix	30
+					string	pattern	"upba3010.tga"
+					string	text	"str_ldl_Add_Tab"
+				}
+				dragcheckbox {
+					int	xpix	50
+					int	ypix	90
+					int	widthpix	150
+					int	heightpix	30
+					string	pattern	"error.tga"
+					string	text	"str_ldl_Make_Draggable"
+				}
+				transparentcheckbox {
+					int	xpix	50
+					int	ypix	130
+					int	widthpix	150
+					int	heightpix	30
+					string	pattern	"error.tga"
+					string	text	"str_ldl_Make_Transparent"
+				}
+			}
+		}
+		indifferenttab {
+			string	parent	"mywindow"
+			int	heightpct	5
+			string	pattern	"error.tga"
+			string	text	"str_ldl_Indifferent"
+			pane {
+				string	parent	"mywindow"
+				int	widthpct	50
+				int	heightpct	45
+				modalradiogroup {
+					string	xanchor	"center"
+					string	yanchor	"center"
+					int	widthpct	90
+					int	heightpct	90
+					string	pattern	"error.tga"
+					string	text	"str_ldl_Radio_Group"
+					stronglymodalradio {
+						int	xpix	50
+						int	ypix	30
+						int	widthpix	150
+						int	heightpix	30
+						string	pattern	"error.tga"
+						string	text	"str_ldl_Strongly_Modal"
+					}
+					weaklymodalradio {
+						int	xpix	50
+						int	ypix	70
+						int	widthpix	150
+						int	heightpix	30
+						string	pattern	"error.tga"
+						string	text	"str_ldl_Weakly_Modal"
+					}
+				}
+			}
+		}
+	}
+}
+
+
+WorkWindow {
+	int	xpix	70
+	int	ypix	140
+	int	widthpix	411
+	int	heightpix	252
+	string	pattern	"error.tga"
+	ExitButton {
+		int	xpix	389
+		int	ypix	-1
+		int	widthpix	22
+		int	heightpix	16
+		string	image0	"error.tga"
+		string	image1	"error.tga"
+		int bevelwidth 0
+	}
+	ResourceMap {
+		int	xpix	14
+		int	ypix	15
+		int	widthpix	384
+		int	heightpix	216
+	}
+}
+
+
+
+TurnWindow {
+	int	xpix	973
+	int	ypix	587
+	int	widthpix	51
+	int	heightpix	181
+	string	pattern	"error.tga"
+	UnitButton {
+		int	xpix	1
+		int	ypix	14
+		int	widthpix	48
+		int	heightpix	41
+		string	image0	"error.tga"
+		string	image1	"error.tga"
+		string tipwindow "str_ldl_Nunit"
+		int	bevelwidth	0
+	}
+	CityButton {
+		int	xpix	1
+		int	ypix	69
+		int	widthpix	49
+		int	heightpix	41
+		string tipwindow "str_ldl_Ncity"
+		string	image0	"error.tga"
+		string	image1	"error.tga"
+		int	bevelwidth	0
+	}
+	UndoButton {
+		int	xpix	0
+		int	ypix	90
+		int	widthpix	49
+		int	heightpix	41
+		string	image0	"error.tga"
+		string	image1	"error.tga"
+		string tipwindow "str_ldl_Undo"
+		int	bevelwidth	0
+	}
+	EndButton {
+		int	xpix	0
+		int	ypix	124
+		int	widthpix	50
+		int	heightpix	41
+		string tipwindow "str_ldl_End"
+		string	image0	"error.tga"
+		string	image1	"error.tga"
+		string	disabledimage0	"error.tga"
+		int	bevelwidth	0
+	}
+}
+
+
+ThumbWindow {
+	int xpix 0
+	int ypix 0
+	int widthpix 640
+	int heightpix 480
+	string pattern "error.tga"
+	
+	ThumbnailMap {
+		int xpix 20
+		int ypix 20
+		int widthpix 320
+		int heightpix 240
+		string pattern "error.tga"
+		TipWindow {
+			int widthpix 150
+			int heightpix 20
+			tip {
+				string	text	"str_ldl_This_is_a_City"
+			}
+		}
+	}
+}
+
+# city name window
+CityNameWindow {
+	int		xpix	525
+	int 	ypix	592
+
+	int	widthpix	234
+
+	int	heightpix	27
+
+	Name:CTP2_STANDARD_FONT {
+		string	image0	"error.tga"
+		int	xpix	0
+		int	ypix	0
+		int	widthpix	234
+		int	heightpix	27
+	}
+
+}
+
+
+# Ranger Buttons
+RangerUp {
+	string	xanchor	"center"
+	string	yanchor	"center"
+	int	widthpix	9
+	int	heightpix	9
+	string	imagebltflag	"chromakey"
+	string	image0	"upba5615.tga"
+}
+
+
+RangerDown {
+	string	xanchor	"center"
+	string	yanchor	"center"
+	int	widthpix	9
+	int	heightpix	9
+	string	imagebltflag	"chromakey"
+	string	image0	"upba5614.tga"
+}
+RangerLeft {
+	string	xanchor	"center"
+	string	yanchor	"center"
+	int	widthpix	9
+	int	heightpix	9
+	string	imagebltflag	"chromakey"
+	string	image0	"upba6322.tga"
+}
+RangerRight {
+	string	xanchor	"center"
+	string	yanchor	"center"
+	int	widthpix	9
+	int	heightpix	9
+	string	imagebltflag	"chromakey"
+	string	image0	"upba6324.tga"
+}
+
+
+# Civ Mouse
+
+
+CivMouse {
+	# for telling the mouse you will eventually have more
+	# cursors than what's listed here.
+	# Actual should go into a cursor database like the message icons.
+	int numcursors 92
+		
+	# C_DEFAULT
+	string cursor0	"uc001.tga"
+	int	 hotspotx0	0
+	int	 hotspoty0	0
+
+	# C_MOVE
+	string cursor1	"uc002.tga"
+	int	 hotspotx1	21
+	int	 hotspoty1	21
+
+
+	#C_NOMOVE
+	string cursor2	"uc003.tga"
+	int	 hotspotx2	21
+	int	 hotspoty2	21
+
+	#C_ASSAULT
+	string cursor3	"uc004.tga"
+	int	 hotspotx3	21
+	int	 hotspoty3	21
+
+	#C_NOASSAULT
+	string cursor4	"uc005.tga"
+	int	hotspotx4	21
+	int hotspoty4	21
+
+	#C_BOMBARD
+	string cursor5	"uc006.tga"
+	int	hotspotx5	21
+	int hotspoty5	21
+
+	#C_NOBOMBARD
+	string cursor6	"UC007.tga"
+	int	hotspotx6	21
+	int hotspoty6	21
+
+	#C_SPECIAL_ACTION
+	string cursor7	"UC009.tga"
+	int	hotspotx7	21
+	int hotspoty7	21
+
+	#C_NOSPECIAL_ACTION
+	string cursor8	"UC008.tga"
+	int	hotspotx8	21
+	int hotspoty8	21
+
+	#C_ZOOMIN
+	string cursor9	"UC010.tga"
+	int	hotspotx9	21
+	int hotspoty9	0
+
+	#C_ZOOMOUT
+	string cursor10	"UC011.tga"
+	int	hotspotx10	22
+	int hotspoty10	45
+
+	#C_SCROLLUP
+	string cursor11	"UC010.tga"
+	int	hotspotx11	23
+	int hotspoty11	0
+
+	#C_SCROLLDOWN
+	string cursor12	"UC011.tga"
+	int	hotspotx12	23
+	int hotspoty12	45
+
+	#C_SCROLLEFT
+	string cursor13	"UC012.tga"
+	int	hotspotx13	0
+	int hotspoty13	23
+
+	#C_SCROLLRIGHT
+	string cursor14	"UC013.tga"
+	int	hotspotx14	45
+	int hotspoty14	22
+
+	#C_SELECTION ???
+	# left?
+	string cursor15	"UC012.tga"
+	int	hotspotx15	0
+	int hotspoty15	23
+
+#
+# Zoom in, Zoom out
+# ?????????????????
+
+#	string	cursor20	"UC029.tga"
+#	int		hotspotx20	13
+#	int		hotspoty20	13
+
+#	string	cursor21	"UC030.tga"
+#	int		hotspotx21	13
+#	int		hotspoty21	13
+
+# Pasted and auto formatted from the asset spreadsheet
+
+	#CURSORINDEX_EXPEL,
+	string cursor16 "UC014.TGA"
+	int hotspotx16 13
+	int hotspoty16 13
+
+	#CURSORINDEX_EXPEL_INVALID,
+	string cursor17 "UC015.TGA"
+	int hotspotx17 13
+	int hotspoty17 13
+
+	# 	Pillage Cursor
+	string cursor18 "UC016.TGA"
+	int hotspotx18 13
+	int hotspoty18 13
+
+	# 	Pillage Invalid Cursor
+	string cursor19 "UC017.TGA"
+	int hotspotx19 13
+	int hotspoty19 13
+
+	# 	Establish Embassy Cursor
+	string cursor20 "UC018.TGA"
+	int hotspotx20 13
+	int hotspoty20 13
+
+	# 	Establish Embassy Invalid Cursor
+	string cursor21 "UC019.TGA"
+	int hotspotx21 13
+	int hotspoty21 13
+
+	# 	Reform Cursor
+	string cursor22 "UC020.TGA"
+	int hotspotx22 13
+	int hotspoty22 13
+
+	# 	Reform Invalid Cursor
+	string cursor23 "UC021.TGA"
+	int hotspotx23 13
+	int hotspoty23 13
+
+	# 	Disband Army Cursor
+	string cursor24 "UC022.TGA"
+	int hotspotx24 13
+	int hotspoty24 13
+
+	# 	Disband Army Invalid Cursor
+	string cursor25 "UC023.TGA"
+	int hotspotx25 13
+	int hotspoty25 13
+
+	# 	Slave Raid Cursor
+	string cursor26 "UC024.TGA"
+	int hotspotx26 13
+	int hotspoty26 13
+
+	# 	Slave Raid Invalid Cursor
+	string cursor27 "UC025.TGA"
+	int hotspotx27 13
+	int hotspoty27 13
+
+	# 	Sleep Cursor
+	string cursor28 "UC026.TGA"
+	int hotspotx28 13
+	int hotspoty28 13
+
+	# 	Sleep Invalid Cursor
+	string cursor29 "UC027.TGA"
+	int hotspotx29 13
+	int hotspoty29 13
+
+	# 	Investigate City Cursor
+	string cursor30 "UC028.TGA"
+	int hotspotx30 13
+	int hotspoty30 13
+
+	# 	Investigate City Invalid Cursor
+	string cursor31 "UC029.TGA"
+	int hotspotx31 13
+	int hotspoty31 13
+
+	# 	Aid Uprising Cursor
+	string cursor32 "UC030.TGA"
+	int hotspotx32 13
+	int hotspoty32 13
+
+	# 	Aid Uprising Invalid Cursor
+	string cursor33 "UC031.TGA"
+	int hotspotx33 13
+	int hotspoty33 13
+
+	# 	Convert Cursor
+	string cursor34 "UC032.TGA"
+	int hotspotx34 13
+	int hotspoty34 13
+
+	# 	Convert Invalid Cursor
+	string cursor35 "UC033.TGA"
+	int hotspotx35 13
+	int hotspoty35 13
+
+	# 	Indulgence Cursor
+	string cursor36 "UC034.TGA"
+	int hotspotx36 13
+	int hotspoty36 13
+
+	# 	Indulgence Invalid Cursor
+	string cursor37 "UC035.TGA"
+	int hotspotx37 13
+	int hotspoty37 13
+
+	# 	Soothsay Cursor
+	string cursor38 "UC036.TGA"
+	int hotspotx38 13
+	int hotspoty38 13
+
+	# 	Soothsay Invalid Cursor
+	string cursor39 "UC037.TGA"
+	int hotspotx39 13
+	int hotspoty39 13
+
+	# 	Incite Revolution Cursor
+	string cursor40 "UC038.TGA"
+	int hotspotx40 13
+	int hotspoty40 13
+
+	# 	Incite Revolution Invalid Cursor
+	string cursor41 "UC039.TGA"
+	int hotspotx41 13
+	int hotspoty41 13
+
+	# 	Steal Technology Cursor
+	string cursor42 "UC040.TGA"
+	int hotspotx42 13
+	int hotspoty42 13
+
+	# 	Steal Technology Invalid Cursor
+	string cursor43 "UC041.TGA"
+	int hotspotx43 13
+	int hotspoty43 13
+
+	# 	Sabotage Industry Cursor
+	string cursor44 "UC042.TGA"
+	int hotspotx44 13
+	int hotspoty44 13
+
+	# 	Sabotage Industry Invalid Cursor
+	string cursor45 "UC043.TGA"
+	int hotspotx45 13
+	int hotspoty45 13
+
+	# 	Plant Nuke Cursor
+	string cursor46 "UC044.TGA"
+	int hotspotx46 13
+	int hotspoty46 13
+
+	# 	Plant Nuke Invalid Cursor
+	string cursor47 "UC045.TGA"
+	int hotspotx47 13
+	int hotspoty47 13
+
+	# 	Injoin Cursor
+	string cursor48 "UC046.TGA"
+	int hotspotx48 13
+	int hotspoty48 13
+
+	# 	Injoin Invalid Cursor
+	string cursor49 "UC047.TGA"
+	int hotspotx49 13
+	int hotspoty49 13
+
+	# 	Sue Cursor
+	string cursor50 "UC048.TGA"
+	int hotspotx50 13
+	int hotspoty50 13
+
+	# 	Sue Invalid Cursor
+	string cursor51 "UC049.TGA"
+	int hotspotx51 13
+	int hotspoty51 13
+
+	# 	Hostile Takeover Cursor
+	string cursor52 "UC050.TGA"
+	int hotspotx52 13
+	int hotspoty52 13
+
+	# 	Hostile Takeover Invalid Cursor
+	string cursor53 "UC051.TGA"
+	int hotspotx53 13
+	int hotspoty53 13
+
+	# 	Assassinate Cursor
+	string cursor54 "UC052.TGA"
+	int hotspotx54 13
+	int hotspoty54 13
+
+	# 	Assassinate Invalid Cursor
+	string cursor55 "UC053.TGA"
+	int hotspotx55 13
+	int hotspoty55 13
+
+	# 	Nano Infect Cursor
+	string cursor56 "UC054.TGA"
+	int hotspotx56 13
+	int hotspoty56 13
+
+	# 	Nano Infect Invalid Cursor
+	string cursor57 "UC055.TGA"
+	int hotspotx57 13
+	int hotspoty57 13
+
+	# 	Bio Infect Cursor
+	string cursor58 "UC056.TGA"
+	int hotspotx58 13
+	int hotspoty58 13
+
+	# 	Bio Infect Invalid Cursor
+	string cursor59 "UC057.TGA"
+	int hotspotx59 13
+	int hotspoty59 13
+
+	# 	Nanite Cleansing Cursor
+	string cursor60 "UC058.TGA"
+	int hotspotx60 13
+	int hotspoty60 13
+
+	# 	Nanite Cleansing Invalid Cursor
+	string cursor61 "UC059.TGA"
+	int hotspotx61 13
+	int hotspoty61 13
+
+	# 	Fortify Cursor
+	string cursor62 "UC060.TGA"
+	int hotspotx62 13
+	int hotspoty62 13
+
+	# 	Fortify Invalid Cursor
+	string cursor63 "UC061.TGA"
+	int hotspotx63 13
+	int hotspoty63 13
+
+	# 	Franchise Cursor
+	string cursor64 "UC062.TGA"
+	int hotspotx64 13
+	int hotspoty64 13
+
+	# 	Franchise Invalid Cursor
+	string cursor65 "UC063.TGA"
+	int hotspotx65 13
+	int hotspoty65 13
+
+	# 	Board Transport Cursor
+	string cursor66 "UC064.TGA"
+	int hotspotx66 13
+	int hotspoty66 13
+
+	# 	Board Transport Invalid Cursor
+	string cursor67 "UC065.TGA"
+	int hotspotx67 13
+	int hotspoty67 13
+
+	# 	Unload Cursor
+	string cursor68 "UC066.TGA"
+	int hotspotx68 13
+	int hotspoty68 13
+
+	# 	Unload Invalid Cursor
+	string cursor69 "UC067.TGA"
+	int hotspotx69 13
+	int hotspoty69 13
+
+	# 	Settle Cursor
+	string cursor70 "UC068.TGA"
+	int hotspotx70 13
+	int hotspoty70 13
+
+	# 	Settle Invalid Cursor
+	string cursor71 "UC069.TGA"
+	int hotspotx71 13
+	int hotspoty71 13
+
+	# 	Underground Railway Cursor
+	string cursor72 "UC070.TGA"
+	int hotspotx72 13
+	int hotspoty72 13
+
+	# 	Underground Railway Invalid Cursor
+	string cursor73 "UC071.TGA"
+	int hotspotx73 13
+	int hotspoty73 13
+
+	# 	Piracy Cursor
+	string cursor74 "UC072.TGA"
+	int hotspotx74 13
+	int hotspoty74 13
+
+	# 	Piracy Invalid Cursor
+	string cursor75 "UC073.TGA"
+	int hotspotx75 13
+	int hotspoty75 13
+
+	# 	Throw Party Cursor
+	string cursor76 "UC074.TGA"
+	int hotspotx76 13
+	int hotspoty76 13
+
+	# 	Throw Party Invalid Cursor
+	string cursor77 "UC075.TGA"
+	int hotspotx77 13
+	int hotspoty77 13
+
+	# 	Advertise Cursor
+	string cursor78 "UC076.TGA"
+	int hotspotx78 13
+	int hotspoty78 13
+
+	# 	Advertise Invalid Cursor
+	string cursor79 "UC077.TGA"
+	int hotspotx79 13
+	int hotspoty79 13
+
+	# 	Launch Cursor
+	string cursor80 "UC078.TGA"
+	int hotspotx80 13
+	int hotspoty80 13
+
+	# 	Launch Invalid Cursor
+	string cursor81 "UC079.TGA"
+	int hotspotx81 13
+	int hotspoty81 13
+
+	# 	Target Cursor
+	string cursor82 "UC080.TGA"
+	int hotspotx82 13
+	int hotspoty82 13
+
+	# 	Target Invalid Cursor
+	string cursor83 "UC081.TGA"
+	int hotspotx83 13
+	int hotspoty83 13
+
+	# 	Plague Cursor
+	string cursor84 "UC082.TGA"
+	int hotspotx84 13
+	int hotspoty84 13
+
+	# 	Plague Invalid Cursor
+	string cursor85 "UC083.TGA"
+	int hotspotx85 13
+	int hotspoty85 13
+
+	# 	Faith Healing Cursor
+	string cursor86 "UC084.TGA"
+	int hotspotx86 13
+	int hotspoty86 13
+
+	# 	Faith Healing Invalid Cursor
+	string cursor87 "UC085.TGA"
+	int hotspotx87 13
+	int hotspoty87 13
+
+	# 	Clear Target Cursor not Clear target
+	string cursor88 "UC086.TGA"
+	int hotspotx88 13
+	int hotspoty88 13
+
+	# 	Clear Target Invalid Cursor
+	string cursor89 "UC087.TGA"
+	int hotspotx89 13
+	int hotspoty89 13
+
+	# 	Refuel Cursor
+	string cursor90 "UC088.TGA"
+	int hotspotx90 13
+	int hotspoty90 13
+
+	# 	Refuel Invalid Cursor
+	string cursor91 "UC089.TGA"
+	int hotspotx91 13
+	int hotspoty91 13
+
+
+	# number of miliseconds between animation frames.
+# not needed?
+#	int	animdelay	200
+#	int	firstindex	0
+#	int	lastindex	3
+	
+	# default cursor
+	anim0 {
+		int	animdelay	200
+		
+		int	firstindex	0
+		int	lastindex	0
+	}
+
+	# Move
+	anim1 {
+		int animdelay 	200
+		int firstindex	1
+		int lastindex	1
+	}
+
+	# No Move
+	anim2 {
+		int animdelay 	200
+		int firstindex	2
+		int lastindex	2
+	}
+
+	# Assault	
+	anim3 {
+		int animdelay 	200
+		int firstindex	3
+		int lastindex	3
+	}
+	
+	# No Assault
+	anim4 {
+		int animdelay 	200
+		int firstindex	4
+		int lastindex	4
+	}
+	
+	# Bombard
+	anim5 {
+		int animdelay 	200
+		int firstindex	5
+		int lastindex	5
+	}
+	
+	# No Bombard
+	anim6 {
+		int animdelay 	200
+		int firstindex	6
+		int lastindex	6
+	}
+	
+	# Special Action
+	anim7 {
+		int animdelay 	200
+		int firstindex	7
+		int lastindex	7
+	}
+	
+	# No Special Action
+	anim8 {
+		int animdelay 	200
+		int firstindex	8
+		int lastindex	8
+	}
+
+	# Zoom In
+	anim9 {
+		int animdelay	200
+		int firstindex	20
+		int lastindex	20
+	}
+
+	# Zoom Out
+	anim10 {
+		int animdelay	200
+		int firstindex	21
+		int lastindex	21
+	}
+	
+	# Scroll Up
+	anim11 {
+		int animdelay	200
+		int firstindex	9
+		int lastindex	9
+	}
+	
+	# Scroll Down
+	anim12 {
+		int animdelay	200
+		int firstindex	10
+		int lastindex	10
+	}
+	
+	# Scroll Left
+	anim13 {
+		int animdelay	200
+		int firstindex	11
+		int lastindex	11
+	}
+	
+	# Scroll Right
+	anim14 {
+		int animdelay	200
+		int firstindex	12
+		int lastindex	12
+	}
+
+	# Selection
+	anim15 {
+		int animdelay 	200
+		int firstindex	0
+		int lastindex	0
+	}
+
+# now you can do the same for anim1, anim2, etc. and use
+# aui_Mouse::SetAnim( animNum ) in your code instead of
+# aui_Mouse::SetIndexes/AnimDelay().
+}
+
+
+# Fonts for things other than interface
+
+TiledMapFontStringTable {
+	int	numstrings	3
+	
+	string string0 		"str_tbl_ldl_arialbd_ttf"
+	string string1 		"str_tbl_ldl_9"
+	string string2		"str_ldl_F"
+}
+
+TurnStrings {
+	int	numstrings		14
+	string string0		"str_tbl_ldl_upba0515_tga"
+	string string1		"str_tbl_ldl_upba0516_tga"
+	string string2		"str_tbl_ldl_upba0504_tga"
+	string string3		"str_tbl_ldl_upba0511_tga"
+	string string4		"str_tbl_ldl_upba0519_tga"
+	string string5		"str_tbl_ldl_upba0520_tga"
+	string string6		"str_tbl_ldl_upba0521_tga"
+	string string7		"str_tbl_ldl_upba0522_tga"
+	string string8		"str_tbl_ldl_upba0506_tga"
+	string string9		"str_tbl_ldl_upba0513_tga"
+	string string10		"str_tbl_ldl_upba0507_tga"
+	string string11		"str_tbl_ldl_upba0514_tga"
+	string string12		"str_tbl_ldl_upba0526_tga"
+	string string13		"str_tbl_ldl_upba0527_tga"
+}
+
+WorkMapStrings {
+	int	numstrings		3
+
+	string	string0		"str_tbl_ldl_FOOD_COLON"
+	string	string1		"str_tbl_ldl_PROD_COLON"
+	string	string2		"str_tbl_ldl_GOLD_COLON"
+}
+
+ResourceMapStrings {
+	int	numstrings		3
+
+	string	string0		"str_tbl_ldl_FOOD_COLON"
+	string	string1		"str_tbl_ldl_PROD_COLON"
+	string	string2		"str_tbl_ldl_GOLD_COLON"
+}
+
+DefaultTipWindow {
+	int	xpix		0
+	int	ypix		0
+	int	widthpix	10
+	int	heightpix	10
+	tip:CTP2_STANDARD_FONT {
+		int	xpix		0
+		int	ypix		0
+		int	widthpix	10
+		int	heightpix	10
+		int fontcolorred			255
+		int fontcolorgreen			255
+		int fontcolorblue			255
+	}
+}
+
+DefaultHyperTipWindow {
+	int	xpix		0
+	int	ypix		0
+	int	widthpix	100
+	int	heightpix	100
+	hypertip:CTP2_STANDARD_FONT {
+		int	xpix		0
+		int	ypix		0
+		int	widthpix	10
+		int	heightpix	10
+		int fontcolorred			255
+		int fontcolorgreen			255
+		int fontcolorblue			255
+		string	pattern	"error.tga"
+	}
+}
+
+# Now in ChatWindow.ldl
+#
+# SAM021799 added new chat window
+#
+#ChatWindow {
+#	int	xpix		0
+#	int ypix		0
+#	int widthpix	320
+#	int heightpix	240
+#	string	pattern		"uptg20e.tga"
+#
+#	ChatTextBox:CTP2_LIST_BOX {
+#		int xpix		6
+#		int ypix		7
+#		int widthpix	290
+#		int heightpix	200
+#		string	pattern		"error.tga"
+#		int bevelwidth 0
+#		rangery {
+#			int	widthpix		15
+#			string	type		"scroller"
+#			string	orientation	"vertical"
+#			string	pattern		"error.tga"
+#			int		maxxval		0
+#
+#			incy {
+#				int	heightpix	15
+#				string	pattern	"error.tga"
+#			}
+#			decy {
+#				int	heightpix	15
+#				string	pattern	"error.tga"
+#			}
+#			thumb {
+#				string	pattern	"error.tga"
+#			}
+#		}
+#	}
+#	
+#	ChatTextField {
+#		int xpix		7
+#		int ypix		212
+#		int widthpix	296
+#		int heightpix	18
+#		int bevelwidth	2
+#		int beveltype	1
+#	}
+#}
+
+$

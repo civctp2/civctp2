@@ -1,0 +1,76 @@
+/*--------------------------------------------------------------------------
+ Resource file for Windows DLL.
+ Needed only because we compress the DLL, so the embedded info record
+ is not readable!
+ 
+ $Log: wineti.rc $
+ Revision 1.1  1997/08/22 23:08:32  lbennett
+ Initial revision
+ Revision 1.1  1997/06/04 01:27:24  dkegel
+ Initial revision
+--------------------------------------------------------------------------*/
+
+/* Here is the approximate definition of this structure, taken from commapi.h.
+ * If commapi.h has changed since this was taken out, beware!
+
+#define comm_DRIVER_SIGNATURE		"AVKEGL7"	
+#define comm_DRIVER_SIGLEN			8
+#define comm_DRIVER_NAMELEN			32
+
+typedef struct {
+	char signature[comm_DRIVER_SIGLEN];
+	size_t recordLen;				
+	char name[comm_DRIVER_NAMELEN];
+	short version;				
+	short capabilities;		
+	short needs;		
+} comm_driverInfo_t;
+
+static comm_driverInfo_t commDriverInfo = {
+		comm_DRIVER_SIGNATURE,
+		sizeof(comm_driverInfo_t),
+#ifdef _DEBUG
+		"Debug "
+#endif
+#ifndef TCP_LAN
+		"Internet",
+#else
+		"TCP/IP LAN",
+#endif
+		0x0100,
+#ifndef TCP_LAN
+		(comm_DRIVER_IS_VISIBLE | comm_DRIVER_IS_FAST | comm_DRIVER_ALLOWS_GAMELIST | comm_DRIVER_JUMBO_PACKETS),
+#else
+		(comm_DRIVER_IS_VISIBLE | comm_DRIVER_IS_FAST | comm_DRIVER_ALLOWS_GAMELIST | comm_DRIVER_NO_BROADCAST | comm_DRIVER_JUMBO_PACKETS),
+#endif
+		0
+	);
+***************/
+
+#include "..\..\..\h\commapi.h"
+
+resname comminfo
+BEGIN
+   comm_DRIVER_SIGNATURE "\0",
+   50L,
+#ifdef _DEBUG
+	#ifdef TCP_LAN
+	   "Debug TCP/IP LAN" "\0\0\0\0" "\0\0\0\0" "\0\0\0\0" "\0\0\0\0",
+	#else
+	   "Debug Internet"  "\0\0" "\0\0\0\0" "\0\0\0\0" "\0\0\0\0" "\0\0\0\0",
+	#endif
+#else
+	#ifdef TCP_LAN
+	   "TCP/IP LAN" "\0\0" "\0\0\0\0" "\0\0\0\0" "\0\0\0\0" "\0\0\0\0" "\0\0\0\0",
+	#else
+	   "Internet"     "\0\0\0\0" "\0\0\0\0" "\0\0\0\0" "\0\0\0\0" "\0\0\0\0" "\0\0\0\0",
+	#endif
+#endif
+   0x0101,
+   (comm_DRIVER_IS_VISIBLE | comm_DRIVER_IS_FAST | comm_DRIVER_ALLOWS_GAMELIST 
+#ifndef TCP_LAN
+				| comm_DRIVER_NO_BROADCAST
+#endif
+   ),
+   0
+END 

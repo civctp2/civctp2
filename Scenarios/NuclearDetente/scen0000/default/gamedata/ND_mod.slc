@@ -1,0 +1,15 @@
+
+  ///////////////////
+ // Mod Functions //
+///////////////////
+
+
+// Keeps you from building Anti-Ballistic Missiles
+int_f mod_CanCityBuildBuilding(city_t theCity, int_t theBuilding)
+{
+	if (theBuilding == BuildingDB(IMPROVE_ANTI_BALLISTIC_MISSILES)) {
+		return 0;
+	} else {
+		return 1;
+	}
+}

@@ -1,0 +1,1175 @@
+//test messages go here
+
+messagebox 'TMTurn0' {
+	Show();
+	Title(ID_T_TURN_0_TITLE);
+	Text(ID_T_TURN_0);
+	Attract("ControlPanelWindow.ControlPanel.TurnYearStatus");
+	Button(ID_T_BUTTON_NEXT) {
+		MinimizeAction();
+		Message(g.player, 'TMTurn0B');
+	}
+}
+
+messagebox 'TMTurn0B' {
+	Show();
+	Title(ID_T_TURN_0_B_TITLE);
+	Text(ID_T_TURN_0_B);
+	Button(ID_T_BUTTON_NEXT) {
+		Kill();
+		Message(g.player, 'TMGoodPlaces');
+	}
+	Button(ID_T_BUTTON_BACK) {
+		Kill();
+		Message(g.player, 'TMTurn0');
+	}
+}
+
+alertbox 'TATurn0A' {
+	Text(ID_T_TURN_0_A);
+	Button(ID_T_BUTTON_CLOSE_FIRST) {
+		Kill();
+	}
+}
+
+messagebox 'TMWait1' {
+	Show();
+	Title(ID_T_WAIT_TITLE);
+	Text(ID_T_WAIT_1);
+	Button(ID_T_BUTTON_OK) {
+		MinimizeAction();
+	}
+}
+
+messagebox 'TMWait2' {
+	Show();
+	Title(ID_T_WAIT_TITLE);
+	Text(ID_T_WAIT_2);
+	Button(ID_T_BUTTON_OK) {
+		MinimizeAction();
+	}
+}
+messagebox 'TMWait3' {
+	Show();	
+	Title(ID_T_WAIT_TITLE);
+	Text(ID_T_WAIT_3);
+	Button(ID_T_BUTTON_OK) {
+		MinimizeAction();
+	}
+}
+messagebox 'TMWait4' {
+	Show();
+	Title(ID_T_WAIT_TITLE);
+	Text(ID_T_WAIT_4);
+	Button(ID_T_BUTTON_OK) {
+		MinimizeAction();
+	}
+}
+messagebox 'TMGoodPlaces' {
+	Show();
+	Text(ID_T_GOOD_PLACES);
+	Button(ID_T_BUTTON_BACK) {
+		MinimizeAction();
+		Message(g.player, 'TMTurn0B');
+	}
+}
+
+messagebox 'TMCreateCity' {
+	Show();
+	Text(ID_T_CREATED_CITY);
+	Button(ID_T_BUTTON_NEXT) {
+		MinimizeAction();
+		Message(g.player, 'TMBuiltCityWhatNow');
+		Attract("ControlPanelWindow.ControlPanel.ShortcutPad.CityManagementButton");	
+	}	 
+}		
+
+messagebox 'TMHutCity' {
+	Show();
+	Text(ID_T_HUT_CITY);
+	Button(ID_T_BUTTON_NEXT) {
+		MinimizeAction();
+		Message(g.player, 'TMBuiltCityWhatNow');
+		Attract("ControlPanelWindow.ControlPanel.ShortcutPad.CityManagementButton");	
+	}	 
+}
+
+messagebox 'TMBuiltCityWhatNow' {
+	Show();
+	Text(ID_T_BUILT_CITY_WHAT_NOW);
+}
+
+messagebox 'TMKeepHittingEnd' {
+	Show();
+	Text(ID_T_KEEP_HITTING_END);
+	Button(ID_T_BUTTON_OK) {
+		MinimizeAction();
+	}
+}
+
+messagebox 'TMKeepHittingEndWonder' {
+	Show();
+	Text(ID_T_KEEP_HITTING_END_WONDER);
+	Button(ID_T_BUTTON_OK) {
+		MinimizeAction();
+	}
+}
+
+messagebox 'TMKeepHittingEndBuilding' {
+	Show();
+	Text(ID_T_KEEP_HITTING_END_BUILDING);
+	Button(ID_T_BUTTON_OK) {
+		MinimizeAction();
+	}
+}
+
+messagebox 'TMOpenedCityMgmt' {
+	Show();
+	Text(ID_T_OPENED_CITY_MGMT);
+	Attract("CityWindow.EditQueueButton");
+	Button(ID_T_BUTTON_OK) {
+		MinimizeAction();
+	}
+}
+
+messagebox 'TMMoveUnit1' {
+	Show();
+	Text(ID_T_MOVE_UNIT1);
+	Button(ID_T_BUTTON_OK) {
+		MinimizeAction();
+	}
+}
+
+messagebox 'TMMoveUnit2' {
+	Show();
+	Text(ID_T_MOVE_UNIT2);
+	Button(ID_T_BUTTON_OK) {
+		MinimizeAction();
+	}
+}
+
+alertbox 'TAReselectUnit' {
+	Text(ID_T_RESELECT_UNIT);
+	Button(ID_T_BUTTON_OK) {
+		Kill();
+	}		
+}
+
+messagebox 'TMBuiltCityWall' {
+	Show();
+	Text(ID_T_BUILT_CITY_WALL);
+	Button(ID_T_BUTTON_OK) {
+		MinimizeAction();
+	}
+}
+
+messagebox 'TMBuiltGranary' {
+	Show();
+	Text(ID_T_BUILT_GRANARY);
+	Button(ID_T_BUTTON_OK) {
+		MinimizeAction();
+	}
+}
+
+messagebox 'TMBuiltTemple' {
+	Show();
+	Text(ID_T_BUILT_TEMPLE);
+	Button(ID_T_BUTTON_OK) {
+		MinimizeAction();
+	}
+}
+
+messagebox 'TMBuiltMarketplace' {
+	Show();
+	Text(ID_T_BUILT_MARKETPLACE);
+	Button(ID_T_BUTTON_OK) {
+		MinimizeAction();
+	}
+}
+
+//messagebox 'TMFortifiedUnit' {
+//	Show();
+//	Text(ID_T_FORTIFIED_UNIT);
+//}
+
+messagebox 'TMBuildMoreUnits' {
+	Show();
+	Text(ID_T_BUILD_MORE_UNITS);
+	Button(ID_T_BUTTON_OK) {
+		MinimizeAction();
+	}
+}
+
+messagebox 'TMFirstContact' {
+	Show();
+	Text(ID_T_FIRST_CONTACT);
+	Attract("ControlPanelWindow.ControlPanel.ShortcutPad.DiplomacyButton");
+	DisableTrigger('TSPDiplomacy');
+	Button(ID_T_BUTTON_OK) {
+		MinimizeAction();
+	}
+}
+
+messagebox 'TMConfirmEarlyDisband' {
+	Show();
+	Text(ID_T_CONFIRM_EARLY_DISBAND);
+	Button(ID_T_BUTTON_OK) {
+		MinimizeAction();
+	}
+}
+
+messagebox 'TMFortifyOther' {
+	Show();
+	Text(ID_T_FORTIFY_OTHER);
+	Button(ID_T_BUTTON_OK) {
+		MinimizeAction();
+	}
+}
+
+messagebox 'TMFortifyInCities' {
+	Show();
+	Text(ID_T_FORTIFY_IN_CITIES);
+	Button(ID_T_BUTTON_OK) {
+		MinimizeAction();
+	}
+}
+
+messagebox 'TMFortifiedUnitInCity' {
+	Show();
+	Text(ID_T_FORTIFIED_UNIT_IN_CITY);
+	Button(ID_T_BUTTON_OK) {
+		MinimizeAction();
+	}
+}
+
+messagebox 'TMKeepMoving' {
+	Show();
+	Text(ID_T_KEEP_MOVING);
+	Button(ID_T_BUTTON_OK) {
+		MinimizeAction();
+	}
+}
+
+messagebox 'TMKeepExploring' {
+	Show();
+	Text(ID_T_KEEP_EXPLORING);
+	Button(ID_T_BUTTON_OK) {
+		MinimizeAction();
+	}
+}
+
+messagebox 'TMSettlerWarning' {
+	Show();
+	Text(ID_T_SETTLER_WARNING);
+	Button(ID_T_BUTTON_OK) {
+		MinimizeAction();
+	}
+}
+
+alertbox 'TAShowCheckQueueValue' {
+	Text(ID_T_SHOW_CHECK_QUEUE);
+	Button(ID_T_BUTTON_OK) {
+		Kill();
+	}
+}
+
+alertbox 'TAShowTerrainScore' {
+	Text(ID_T_SHOW_TERRAIN_SCORE);
+	Button(ID_T_BUTTON_OK) {
+		Kill();
+	}
+}
+
+messagebox 'TMThisIsAGoodCitySpot' {
+	Show();
+	Title(ID_T_TITLE_GOOD_SPOT);
+	Text(ID_T_GOOD_SPOT);
+	Button(ID_T_BUTTON_OK) {
+		MinimizeAction();
+	}
+	Button(ID_T_BUTTON_DONT_SHOW) {
+		Kill();	
+		DisableTrigger('TMovingSettlers');
+	}
+
+}
+
+messagebox 'TMMoveYerGuySomeMore' {
+	Show();
+	Title(ID_T_TITLE_BAD_SPOT);
+	Text(ID_T_MOVE_MORE);
+	Button(ID_T_BUTTON_OK) {
+		MinimizeAction();
+	}
+	Button(ID_T_BUTTON_DONT_SHOW) {
+		Kill();	
+		DisableTrigger('TMovingSettlers');
+	}
+}
+
+messagebox 'TMBuildADamnCity' {
+	Show();
+	Text(ID_T_BUILD_A_DAMN_CITY);
+	Button(ID_T_BUTTON_OK) {
+		MinimizeAction();
+	}
+}
+
+messagebox 'TMStartOver' {
+	Show();
+	Text(ID_T_START_OVER);
+	Button(ID_T_BUTTON_OK) {
+		MinimizeAction();
+	}
+}
+
+messagebox 'TMBuildQueueEmpty' {
+	Show();
+	Text(ID_T_BUILD_QUEUE_EMPTY);
+	Attract("ControlPanelWindow.ControlPanel.ShortcutPad.CityManagementButton");
+	Button(ID_T_BUTTON_OK) {
+		MinimizeAction();
+	}
+}
+
+messagebox 'TMCitiesNotBuilding' {
+	Show();
+	Text(ID_T_CITIES_NOT_BUILDING);
+	Attract("ControlPanelWindow.ControlPanel.ControlTabPanel.CityTab.TabPanel.BuildProgress.IconBorder.IconButton");
+	Button(ID_T_BUTTON_OK) {
+		MinimizeAction();
+	}
+}
+
+messagebox 'TMPickNewAdvance' {
+	Show();
+	Text(ID_T_PICK_NEW_ADVANCE);
+	Button(ID_T_BUTTON_OK) {
+		MinimizeAction();
+	}
+}
+
+messagebox 'TMBuildCaravans' {
+	Show();
+	Text(ID_T_BUILD_CARAVANS);
+	Button(ID_T_BUTTON_OK) {
+		MinimizeAction();
+	}
+}
+
+messagebox 'TMEmbassy' {
+	Show();
+	Text(ID_T_EMBASSY);
+	Button(ID_T_BUTTON_OK) {
+		MinimizeAction();
+	}
+}
+
+messagebox 'TMUsePW' {
+	Show();
+	Text(ID_T_USE_PW);
+	Attract("ControlPanelWindow.ControlPanel.ControlTabPanel.TilesTab.TabButton");
+	Button(ID_T_BUTTON_OK) {
+		MinimizeAction();
+	}
+}
+
+messagebox 'TMIncreasePW' {
+	Show();
+	Text(ID_T_INCREASE_PW);
+	Attract("ControlPanelWindow.ControlPanel.ShortcutPad.CivilizationManagementButton");
+	DisableTrigger('TSPCivMgmt');
+	Button(ID_T_BUTTON_OK) {
+		MinimizeAction();
+	}
+}
+
+alertbox 'TAPWTooHigh' {
+	Text(ID_T_PW_TOO_HIGH);
+	Button(ID_T_BUTTON_OK) {
+		Kill();
+	}
+}
+
+messagebox 'TMRadiusRunDown' {
+	Show();
+	Text(ID_T_RADIUS_RUNDOWN);
+}
+
+messagebox 'TMLookForGoodSpot1' {
+	Show();
+	Text(ID_T_GOOD_SPOT1);
+	Button(ID_T_BUTTON_NEXT) {
+		Kill();
+		Message(g.player, 'TMTellMeRiver');
+	}
+}
+
+messagebox 'TMTellMeRiver' {
+	Show();
+	Text(ID_T_TELL_ME_RIVER);
+	Button(ID_T_BUTTON_OK) {
+		MinimizeAction();
+	}
+}
+
+messagebox 'TMLookForGoodSpot2' {
+	Show();
+	Text(ID_T_GOOD_SPOT2);
+	Button(ID_T_BUTTON_NEXT) {
+		Kill();
+		Message(g.player, 'TMTellMeGood');
+	}
+}
+
+messagebox 'TMTellMeGood' {
+	Show();
+	Text(ID_T_TELL_ME_GOOD);
+	Button(ID_T_BUTTON_OK) {
+		MinimizeAction();
+	}
+}
+
+messagebox 'TMLookForGoodSpot3' {
+	Show();
+	Text(ID_T_GOOD_SPOT3);
+	Button(ID_T_BUTTON_OK) {
+		MinimizeAction();
+	}
+}
+
+messagebox 'TMLookForGoodSpot4' {
+	Show();
+	Text(ID_T_GOOD_SPOT4);
+	Button(ID_T_BUTTON_OK) {
+		MinimizeAction();
+	}
+}
+
+messagebox 'TMCheckRiver' {
+	SetString(0, ID_T_NORTH);
+	SetString(1, ID_T_NORTHEAST);
+	SetString(2, ID_T_EAST);
+	SetString(3, ID_T_NORTHWEST);
+	SetString(4, ID_T_SOUTHEAST);
+	SetString(5, ID_T_WEST);
+	SetString(6, ID_T_SOUTHWEST);
+	SetString(7, ID_T_SOUTH);
+	SetString(8, ID_T_SELF);
+	Show();
+	Text(ID_T_RIVER_DIRECTION);
+}
+
+messagebox 'TMCheckGood' {
+	SetString(0, ID_T_NORTH);
+	SetString(1, ID_T_NORTHEAST);
+	SetString(2, ID_T_EAST);
+	SetString(3, ID_T_NORTHWEST);
+	SetString(4, ID_T_SOUTHEAST);
+	SetString(5, ID_T_WEST);
+	SetString(6, ID_T_SOUTHWEST);
+	SetString(7, ID_T_SOUTH);
+	SetString(8, ID_T_SELF);
+	Show();
+	Text(ID_T_GOOD_DIRECTION);
+	Button(ID_T_BUTTON_OK) {
+		MinimizeAction();
+	}
+	Button(ID_T_BUTTON_DONT_SHOW) {
+		Kill();
+		DisableTrigger('TSettlerHelpLook');
+	}
+}
+
+messagebox'TMNoGoodsKeepLooking' {
+	Show();
+	Text(ID_T_NO_GOODS_KEEP_LOOKING);
+	Button(ID_T_BUTTON_YES) {
+		Kill();
+		YES_HELP_FLAG = 1;
+	}
+	Button(ID_T_BUTTON_NO) {
+		Kill();
+		DisableTrigger('TSettlerHelpLook');
+	}
+}
+
+alertbox 'TAUnhappyCities' {
+	Text(ID_T_UNHAPPY_CITIES);
+	Attract("ControlPanelWindow.ControlPanel.ShortcutPad.NationalManagementButton");
+	DisableTrigger('TSPNatlMgmt');
+	Button(ID_T_BUTTON_OK) {
+		Kill();
+	}
+	Button(ID_T_BUTTON_DONT_SHOW) {
+		Kill();
+		DisableTrigger('TCheckCities');
+	}
+}
+
+alertbox 'TAOneUnhappyCity' {
+	Text(ID_T_ONE_UNHAPPY_CITY);
+	Attract("ControlPanelWindow.ControlPanel.ShortcutPad.CityManagementButton");
+	Button(ID_T_BUTTON_OK) {
+		Kill();
+	}
+	Button(ID_T_BUTTON_DONT_SHOW) {
+		Kill();
+		DisableTrigger('TCheckCities');
+	}
+}
+
+alertbox 'TAStarvingCities' {
+	Text(ID_T_STARVING_CITIES);
+	Attract("ControlPanelWindow.ControlPanel.ShortcutPad.NationalManagementButton");
+	Button(ID_T_BUTTON_OK) {
+		Kill();
+	}
+	Button(ID_T_BUTTON_DONT_SHOW) {
+		Kill();
+		DisableTrigger('TCheckCities');
+	}
+}
+
+alertbox 'TAOneStarvingCity' {
+	Text(ID_T_ONE_STARVING_CITY);
+	Attract("ControlPanelWindow.ControlPanel.ShortcutPad.CityManagementButton");
+	Button(ID_T_BUTTON_OK) {
+		Kill();
+	}
+	Button(ID_T_BUTTON_DONT_SHOW) {
+		Kill();
+		DisableTrigger('TCheckCities');
+	}
+}
+
+alertbox 'TACheckLevels' {
+	Text(ID_T_CHECK_LEVELS);
+	Button(ID_T_BUTTON_OK) {
+		Kill();
+	}
+}
+
+alertbox 'TACheckLevels1' {
+	Text(ID_T_CHECK_LEVELS1);
+	Button(ID_T_BUTTON_OK) {
+		Kill();
+	}
+}
+
+alertbox 'TACheckLevels2' {
+	Text(ID_T_CHECK_LEVELS2);
+	Button(ID_T_BUTTON_OK) {
+		Kill();
+	}
+}
+
+alertbox 'TACheckLevels3' {
+	Text(ID_T_CHECK_LEVELS3);
+	Button(ID_T_BUTTON_OK) {
+		Kill();
+	}
+}
+
+alertbox 'TACheckLevels4' {
+	Text(ID_T_CHECK_LEVELS4);
+	Button(ID_T_BUTTON_OK) {
+		Kill();
+	}
+}
+
+messagebox 'TMYouHaveAGood' {
+	SetString(0, ID_T_NORTH_OF);
+	SetString(1, ID_T_NORTHEAST_OF);
+	SetString(2, ID_T_EAST_OF);
+	SetString(3, ID_T_NORTHWEST_OF);
+	SetString(4, ID_T_SOUTHEAST_OF);
+	SetString(5, ID_T_WEST_OF);
+	SetString(6, ID_T_SOUTHWEST_OF);
+	SetString(7, ID_T_SOUTH_OF);
+	SetString(8, ID_T_SELF_ON);
+	Show();
+	Text(ID_T_YOU_HAVE_GOOD);
+	Attract("ControlPanelWindow.ControlPanel.ShortcutPad.TradeButton");
+	DisableTrigger('TSPTrade');
+	Button(ID_T_BUTTON_OK) {
+		MinimizeAction();
+	}
+}
+
+messagebox 'TMYouHaveNoGoods' {
+	Show();
+	Text(ID_T_NO_HAVE_GOOD);
+	Button(ID_T_BUTTON_NEXT) {
+		Kill();
+		Message(g.player, 'TMLittleHelp');
+	}
+}
+
+messagebox 'TMBuildCaravans' {
+	SetString(0, ID_T_NORTH_OF);
+	SetString(1, ID_T_NORTHEAST_OF);
+	SetString(2, ID_T_EAST_OF);
+	SetString(3, ID_T_NORTHWEST_OF);
+	SetString(4, ID_T_SOUTHEAST_OF);
+	SetString(5, ID_T_WEST_OF);
+	SetString(6, ID_T_SOUTHWEST_OF);
+	SetString(7, ID_T_SOUTH_OF);
+	SetString(8, ID_T_SELF_ON);
+	Show();
+	Text(ID_T_HAVE_GOODS_BUILD_CARAVANS);
+	Button(ID_T_BUTTON_OK) {
+		MinimizeAction();
+	}
+}
+
+messagebox 'TMSettleNearGoods' {
+	Show();
+	Text(ID_T_NO_GOODS_SETTLE_NEAR_GOODS);
+	Button(ID_T_BUTTON_NEXT) {
+		Kill();
+		Message(g.player, 'TMLittleHelp');
+	}
+}
+
+messagebox 'TMLittleHelp' {
+	Show();
+	Text(ID_T_LITTLE_HELP);
+	Button(ID_T_BUTTON_YES) {
+		Kill();
+		YES_HELP_FLAG = 1;
+	}
+	Button(ID_T_BUTTON_NO) {
+		Kill();
+		DisableTrigger('TSettlerHelpLook');
+	}
+}
+
+messagebox 'TMBioInfectCity' {
+	Show();
+	Text(ID_T_BIOINFECT_CITY);
+	Button(ID_T_BUTTON_OK) {
+		MinimizeAction();
+	}
+}
+
+alertbox 'TABorderIncursion' {
+	Show();
+	Text(ID_T_BORDER_INCURSION);
+	Button(ID_T_BUTTON_OK) {
+		Kill();
+	}
+}
+messagebox 'TMBorderPullout' {
+	Show();
+	Text(ID_T_BORDER_PULLOUT);
+	Button(ID_T_BUTTON_OK) {
+		MinimizeAction();
+	}
+}
+
+messagebox 'TMRushBuy' {
+	Show();
+	Text(ID_T_RUSH_BUY);
+	Button(ID_T_BUTTON_OK) {
+		MinimizeAction();
+	}
+}
+
+messagebox 'TMCantMoveYet' {
+	Show();
+	Text(ID_T_CANT_MOVE_YET);
+	Button(ID_T_BUTTON_OK) {
+		MinimizeAction();
+	}
+}
+
+messagebox 'TMCaptureCity' {
+	Show();
+	Text(ID_T_CAPTURE_CITY);
+	Button(ID_T_BUTTON_OK) {
+		MinimizeAction();
+	}
+}
+
+messagebox 'TMDestroyedCity' {
+	Show();
+	Text(ID_T_DESTROYED_CITY);
+	Button(ID_T_BUTTON_OK) {
+		MinimizeAction();
+	}
+}
+
+messagebox 'TMCityRiot' {
+	Show();
+	Text(ID_T_CITY_RIOT);
+	Button(ID_T_BUTTON_OK) {
+		MinimizeAction();
+	}
+}
+
+messagebox 'TMConvertCity' {
+	Show();
+	Text(ID_T_CONVERT_CITY);
+	Button(ID_T_BUTTON_OK) {
+		MinimizeAction();
+	}
+}
+
+messagebox 'TMTileImprovement' {
+	Show();
+	Text(ID_T_TILE_IMPROVEMENT);
+	Button(ID_T_BUTTON_OK) {
+		MinimizeAction();
+	}
+}
+
+messagebox 'TMCreatePark' {
+	Show();
+	Text(ID_T_CREATE_PARK);
+	Button(ID_T_BUTTON_OK) {
+		MinimizeAction();
+	}
+}
+
+messagebox 'TMDetrenched' {
+	Show();
+	Text(ID_T_DETRENCHED);
+	Button(ID_T_BUTTON_OK) {
+		MinimizeAction();
+	}
+}
+
+messagebox 'TMDisbandArmyOrder' {
+	Show();
+	Text(ID_T_DISBAND_ARMY_ORDER);
+	Button(ID_T_BUTTON_OK) {
+		MinimizeAction();
+	}
+}
+
+messagebox 'TMDisbandCity' {
+	Show();
+	Text(ID_T_DISBAND_CITY);
+	Button(ID_T_BUTTON_OK) {
+		MinimizeAction();
+	}
+}
+
+messagebox 'TMSettlerEnslaved' {
+	Show();
+	Text(ID_T_SETTLER_ENSLAVED);
+	Button(ID_T_BUTTON_OK) {
+		MinimizeAction();
+	}
+}
+
+messagebox 'TMGetMap' {
+	Show();
+	Text(ID_T_GET_MAP);
+	Button(ID_T_BUTTON_OK) {
+		MinimizeAction();
+	}
+}
+
+messagebox 'TMTileImpComplete' {
+	Show();
+	Text(ID_T_TILE_IMP_COMPLETE);
+	Button(ID_T_BUTTON_OK) {
+		MinimizeAction();
+	}
+}
+
+messagebox 'TMSpyInciteRevolution' {
+	Show();
+	Text(ID_T_SPY_INCITE_REVOLUTION);
+	Button(ID_T_BUTTON_OK) {
+		MinimizeAction();
+	}
+}
+
+messagebox 'TMAbolitionistInciteUprising' {
+	Show();
+	Text(ID_T_ABOLITIONIST_INCITE_UPRISING);
+	Button(ID_T_BUTTON_OK) {
+		MinimizeAction();
+	}
+}
+
+messagebox 'TMClericIndulgenceSale' {
+	Show();
+	Text(ID_T_CLERIC_INDULGENCE_SALE);
+	Button(ID_T_BUTTON_OK) {
+		MinimizeAction();
+	}
+}
+
+messagebox 'TMLawyerInjoinCity' {
+	Show();
+	Text(ID_T_LAWYER_INJOIN_CITY);
+	Button(ID_T_BUTTON_OK) {
+		MinimizeAction();
+	}
+}
+
+messagebox 'TMCorporateFranchise' {
+	Show();
+	Text(ID_T_CORPORATE_FRANCHISE);
+	Button(ID_T_BUTTON_OK) {
+		MinimizeAction();
+	}
+}
+
+messagebox 'TMMoveIntoTransport' {
+	Show();
+	Text(ID_T_MOVE_INTO_TRANSPORT);
+	Button(ID_T_BUTTON_OK) {
+		MinimizeAction();
+	}
+}
+
+messagebox 'TMMovePathOrder' {
+	Show();
+	Text(ID_T_MOVE_PATH_ORDER);
+	Button(ID_T_BUTTON_OK) {
+		MinimizeAction();
+	}
+}
+
+messagebox 'TMMoveUnloadOrder' {
+	Show();
+	Text(ID_T_MOVE_UNLOAD_ORDER);
+	Button(ID_T_BUTTON_OK) {
+		MinimizeAction();
+	}
+}
+
+messagebox 'TMEcoTerroristNanoInfectCity' {
+	Show();
+	Text(ID_T_ECOTERRORIST_NANOINFECT_CITY);
+	Button(ID_T_BUTTON_OK) {
+		MinimizeAction();
+	}
+}
+
+messagebox 'TMCityNuked' {
+	Show();
+	Text(ID_T_CITY_NUKED);
+	Button(ID_T_BUTTON_OK) {
+		MinimizeAction();
+	}
+}
+
+messagebox 'TMPillageOrder' {
+	Show();
+	Text(ID_T_PILLAGE_ORDER);
+	Button(ID_T_BUTTON_OK) {
+		MinimizeAction();
+	}
+}
+
+messagebox 'TMPirateOrder' {
+	Show();
+	Text(ID_T_PIRATE_ORDER);
+	Button(ID_T_BUTTON_OK) {
+		MinimizeAction();
+	}
+}
+
+messagebox 'TMInfectorPlagueCity' {
+	Show();
+	Text(ID_T_INFECTOR_PLAGUE_CITY);
+	Button(ID_T_BUTTON_OK) {
+		MinimizeAction();
+	}
+}
+
+messagebox 'TMReformCityOrder' {
+	Show();
+	Text(ID_T_REFORM_CITY_ORDER);
+	Button(ID_T_BUTTON_OK) {
+		MinimizeAction();
+	}
+}
+
+messagebox 'TMDipRejection' {
+	Show();
+	Text(ID_T_DIP_REJECTION);
+	Button(ID_T_BUTTON_OK) {
+		MinimizeAction();
+	}
+}
+
+messagebox 'TMDipRejectionPlayer' {
+	Show();
+	Text(ID_T_DIP_REJECTION_PLAYER);
+	Button(ID_T_BUTTON_OK) {
+		MinimizeAction();
+	}
+}
+
+messagebox 'TMLawyerSueFranchise' {
+	Show();
+	Text(ID_T_LAWYER_SUE_FRANCHISE);
+	Button(ID_T_BUTTON_OK) {
+		MinimizeAction();
+	}
+}
+
+messagebox 'TMBuildingSold' {
+	Show();
+	Text(ID_T_BUILDING_SOLD);
+	Button(ID_T_BUTTON_OK) {
+		MinimizeAction();
+	}
+}
+
+messagebox 'TMNukeTargeted' {
+	Show();
+	Text(ID_T_NUKE_TARGETED);
+	Button(ID_T_BUTTON_OK) {
+		MinimizeAction();
+	}
+}
+
+messagebox 'TMSlaverRaidCity' {
+	Show();
+	Text(ID_T_SLAVER_RAID_CITY);
+	Button(ID_T_BUTTON_OK) {
+		MinimizeAction();
+	}
+}
+
+messagebox 'TMSleepOrder' {
+	Show();
+	Text(ID_T_SLEEP_ORDER);
+	Button(ID_T_BUTTON_OK) {
+		MinimizeAction();
+	}
+}
+
+messagebox 'TMAbolitionistFreeSlaves' {
+	Show();
+	Text(ID_T_ABOLITIONIST_FREE_SLAVES);
+	Button(ID_T_BUTTON_OK) {
+		MinimizeAction();
+	}
+}
+
+messagebox 'TMUnloadCargo' {
+	Show();
+	Text(ID_T_UNLOAD_CARGO);
+	Button(ID_T_BUTTON_OK) {
+		MinimizeAction();
+	}
+}
+
+messagebox 'TMCantDisbandBigCity' {
+	Show();
+	Text(ID_T_CANT_DISBAND_BIG_CITY);
+	Button(ID_T_BUTTON_OK) {
+		MinimizeAction();
+	}
+}
+
+messagebox 'TMUseMayors' {
+	Show();
+	Title(ID_T_WAIT_TITLE);
+	Text(ID_T_USE_MAYORS);
+	Button(ID_T_BUTTON_OK) {
+		MinimizeAction();
+	}
+}
+
+messagebox 'TMNewGovt' {
+	Show();
+	Text(ID_T_NEW_GOVT);
+	Button(ID_T_BUTTON_OK) {
+		MinimizeAction();
+	}
+}
+
+messagebox 'TMCMQueueTab' {
+	Show();
+	Title(ID_T_WAIT_TITLE);
+	Text(ID_T_CM_QUEUE_TAB);
+	Button(ID_T_BUTTON_OK) {
+		MinimizeAction();
+	}
+}
+
+messagebox 'TMCMInventoryTab' {
+	Show();
+	Title(ID_T_WAIT_TITLE);
+	Text(ID_T_CM_INVENTORY_TAB);
+	Button(ID_T_BUTTON_OK) {
+		MinimizeAction();
+	}
+}
+
+messagebox 'TMCMSpecialists' {
+	Show();
+	Title(ID_T_WAIT_TITLE);
+	Text(ID_T_CM_SPECIALISTS);
+	Button(ID_T_BUTTON_OK) {
+		MinimizeAction();
+	}
+}
+
+messagebox 'TMCMStatistics' {
+	Show();
+	Title(ID_T_WAIT_TITLE);
+	Text(ID_T_CM_STATISTICS);
+	Button(ID_T_BUTTON_OK) {
+		MinimizeAction();
+	}
+}
+
+messagebox 'TMCMUnits' {
+	Show();
+	Title(ID_T_WAIT_TITLE);
+	Text(ID_T_CM_UNITS);
+	Button(ID_T_BUTTON_OK) {
+		MinimizeAction();
+	}
+}
+
+alertbox 'TAPOO' {
+	Text(ID_T_POO);
+	Button(ID_T_BUTTON_OK) {
+		Kill();
+	}
+}
+
+messagebox 'TMSPCivMgmt' {
+	Show();
+	Title(ID_T_TITLE_SP_CIV_MGMT);
+	Text(ID_T_SP_CIV_MGMT);
+	Button(ID_T_BUTTON_NEXT) {
+		Kill();
+		Message(g.player, 'TMSPCivMgmtA');
+	}
+}
+
+messagebox 'TMSPCivMgmtA' {
+	Show();
+	Title(ID_T_TITLE_SP_CIV_MGMT_A);
+	Text(ID_T_SP_CIV_MGMT_A);
+	Button(ID_T_BUTTON_NEXT) {
+		Kill();
+		Message(g.player, 'TMSPCivMgmtB');
+	}
+	Button(ID_T_BUTTON_BACK) {
+		Kill();
+		Message(g.player, 'TMSPCivMgmt');
+	}
+}
+
+messagebox 'TMSPCivMgmtB' {
+	Show();
+	Title(ID_T_TITLE_SP_CIV_MGMT_B);
+	Text(ID_T_SP_CIV_MGMT_B);
+	Button(ID_T_BUTTON_NEXT) {
+		Kill();
+		Message(g.player, 'TMSPCivMgmtC');
+	}
+	Button(ID_T_BUTTON_BACK) {
+		Kill();
+		Message(g.player, 'TMSPCivMgmtA');
+	}
+}
+
+messagebox 'TMSPCivMgmtC' {
+	Show();
+	Title(ID_T_TITLE_SP_CIV_MGMT_C);
+	Text(ID_T_SP_CIV_MGMT_C);
+	Button(ID_T_BUTTON_NEXT) {
+		Kill();
+		Message(g.player, 'TMSPCivMgmtD');
+	}
+	Button(ID_T_BUTTON_BACK) {
+		Kill();
+		Message(g.player, 'TMSPCivMgmtB');
+	}
+}
+
+messagebox 'TMSPCivMgmtD' {
+	Show();
+	Title(ID_T_TITLE_SP_CIV_MGMT_D);
+	Text(ID_T_SP_CIV_MGMT_D);
+	Button(ID_T_BUTTON_BACK) {
+		Kill();
+		Message(g.player, 'TMSPCivMgmtC');
+	}
+}
+messagebox 'TMSPUnitMgmt' {
+	Show();
+	Title(ID_T_WAIT_TITLE);
+	Text(ID_T_SP_UNIT_MGMT);
+	Button(ID_T_BUTTON_OK) {
+		MinimizeAction();
+	}
+}
+
+messagebox 'TMSPDiplomacy' {
+	Show();
+	Title(ID_T_WAIT_TITLE);
+	Text(ID_T_SP_DIPLOMACY);
+	Button(ID_T_BUTTON_OK) {
+		MinimizeAction();
+	}
+}
+
+messagebox 'TMSPScience' {
+	Show();
+	Title(ID_T_WAIT_TITLE);
+	Text(ID_T_SP_SCIENCE);
+	Button(ID_T_BUTTON_OK) {
+		MinimizeAction();
+	}
+}
+
+messagebox 'TMSPGreatLibrary' {	
+	Show();
+	Title(ID_T_WAIT_TITLE);
+	Text(ID_T_SP_GREAT_LIBRARY);
+	Button(ID_T_BUTTON_OK) {
+		MinimizeAction();
+	}
+}
+
+messagebox 'TMSPTrade' {
+	Show();
+	Title(ID_T_WAIT_TITLE);
+	Text(ID_T_SP_TRADE);
+	Button(ID_T_BUTTON_OK) {
+		MinimizeAction();
+	}
+}
+
+messagebox 'TMSPNatlMgmt' {
+	Show();
+	Title(ID_T_WAIT_TITLE);
+	Text(ID_T_SP_NATL_MGMT);
+	Button(ID_T_BUTTON_OK) {
+		MinimizeAction();
+	}
+}
+
+messagebox 'TMCityTooSmallForSettler' {
+	Show();
+	Title(ID_T_CITY_TOO_SMALL_TITLE);
+	Text(ID_T_CITY_TOO_SMALL);
+	Button(ID_T_BUTTON_OK) {
+		MinimizeAction();
+	}
+}
+
+messagebox 'TMTooManyUnits' {
+	Show();
+	Title(ID_T_TOO_MANY_UNITS_TITLE);
+	Text(ID_T_TOO_MANY_UNITS);
+	Button(ID_T_BUTTON_OK) {
+		MinimizeAction();
+	}
+}

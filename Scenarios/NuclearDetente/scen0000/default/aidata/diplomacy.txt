@@ -1,0 +1,1102 @@
+# 6
+
+DIPLOMACY_DEFAULT {
+    Threaten 50
+
+	ScenarioEvent {
+        PositiveDecay 0.8
+        NegativeDecay 0.9
+	}
+	
+	MilitaryPowerEvent  {
+        PositiveDecay 0.8
+        NegativeDecay 0.9
+	}
+
+	MilitarySafetyEvent  {
+        PositiveDecay 0.8
+        NegativeDecay 0.9
+	}
+
+	DiplomacyEvent  {
+        PositiveDecay 0.8
+        NegativeDecay 0.9
+	}
+
+	GoldEvent  {
+        PositiveDecay 0.8
+        NegativeDecay 0.9
+	}
+
+	KnowledgeEvent  {
+        PositiveDecay 0.8
+        NegativeDecay 0.9
+	}
+
+	ProductionEvent  {
+        PositiveDecay 0.8
+        NegativeDecay 0.9
+	}
+
+	// regard cost or bonus for selected events
+	IncursionRegardCost -100	
+	IncursionOfAllieRegardCost -200
+	InvaderMovementRegardCost -10
+	PerRoutePiracyRegardCost -10
+	ShareContinentRegardCost 0
+	InciteRevolutionRegardCost -60
+	AssassinateRulerRegardCost -60
+	FranchiseCityRegardCost -40
+	PlantNukeRegardCost -150
+	SlaveRaidRegardCost -50
+	LawsuitRegardCost -30
+	ExpelUnitsRegardCost -10
+	NukeCityRegardCost -250
+	ConvertCityRegardCost -50
+	EnslaveSettlerRegardCost -60
+	UndergroundRailwayRegardCost -60
+	InciteUprisingRegardCost -60
+	BioInfectedCityRegardCost -70
+	PlagueCityRegardCost -70
+	NanoInfectCityRegardCost -100
+	CreateParkRegardCost -250
+	InjoinCityRegardCost -50
+	PillageRegardCost -50
+
+	// how much regard from empathic diplomats holding receptions (once every 10 turns)
+	HoldReceptionRegardBonus 50
+
+	// every time a civilian is killed (settler, diplomat, cleric)
+	AttackCivilianRegardCost -50
+
+	// every time we are attacked less than a round after war is declared
+	PreemptiveAttackRegardCost -10
+
+	EmbargoTradeRegardCost -50
+	TakeCityRegardCost -100
+
+    // every turn with pact, add trust
+	HasPactTrustBonus 5
+
+    // every turn not at war, increase trust (up to 500 only)
+	NoWarTrustBonus 3
+
+	// every time foreigner follows through with agreement, add trust
+	FollowThroughTrustBonus 20
+
+	// when they kill a non-combat unit all players trust them less
+	AttackCivilianTrustCost -50
+
+	// when they attack with out declaring war the round before
+	PreemptiveAttackTrustCost -20
+
+	// minimum time before wanting to see map again
+	WantMapTurns 5
+
+	// NOTE: SenderRegardResult is regard sender gains or loses from
+	// receiver; likewise, ReceiverRegardResult is regard receiver
+	// gains or loses from sender if agreement is accepted.
+
+	ProposalElement { 
+		Proposal PROPOSAL_OFFER_GIVE_CITY 
+		SendPriority 100 
+		AcceptPriority 110
+		RejectPriority 100
+	    SenderRegardResult 100
+	    ReceiverRegardResult 0
+		ViolationRegardCost 0
+		ViolationTrustCost 0
+	}
+
+	ProposalElement {
+		Proposal PROPOSAL_REQUEST_GIVE_CITY
+		SendPriority 100
+		AcceptPriority 110
+		RejectPriority 100
+	    SenderRegardResult -50
+	    ReceiverRegardResult 100
+		ViolationRegardCost 0
+		ViolationTrustCost 0
+	}
+
+	ProposalElement {
+		Proposal PROPOSAL_OFFER_WITHDRAW_TROOPS
+		SendPriority 100
+		AcceptPriority 110
+		RejectPriority 100
+		SenderRegardResult 200
+		ReceiverRegardResult 0
+		ViolationRegardCost -250
+		ViolationTrustCost -20
+	}
+
+	ProposalElement {
+		Proposal PROPOSAL_REQUEST_WITHDRAW_TROOPS
+		SendPriority 100
+		AcceptPriority 110
+		RejectPriority 100
+		SenderRegardResult -50
+		ReceiverRegardResult 200
+		ViolationRegardCost -250
+		ViolationTrustCost -20
+	}
+
+	ProposalElement {
+		Proposal PROPOSAL_OFFER_STOP_PIRACY
+		SendPriority 200
+		AcceptPriority 210
+		RejectPriority 100
+		SenderRegardResult 50
+		ReceiverRegardResult 0
+		ViolationRegardCost -200
+		ViolationTrustCost -50
+	}
+
+	ProposalElement {
+		Proposal PROPOSAL_REQUEST_STOP_PIRACY
+		SendPriority 100
+		AcceptPriority 210
+		RejectPriority 100
+		SenderRegardResult 0
+		ReceiverRegardResult 50
+		ViolationRegardCost -200
+		ViolationTrustCost -50
+	}
+
+	ProposalElement {
+		Proposal PROPOSAL_OFFER_BREAK_AGREEMENT
+		SendPriority 100
+		AcceptPriority 110
+		RejectPriority 100
+		SenderRegardResult 50
+		ReceiverRegardResult 0
+		ViolationRegardCost 0
+		ViolationTrustCost 0
+	}
+
+	ProposalElement {
+		Proposal PROPOSAL_REQUEST_BREAK_AGREEMENT
+		SendPriority 100
+		AcceptPriority 110
+		RejectPriority 100
+		SenderRegardResult 0
+		ReceiverRegardResult 50
+		ViolationRegardCost 0
+		ViolationTrustCost 0
+	}
+
+	ProposalElement {
+		Proposal PROPOSAL_OFFER_STOP_RESEARCH
+		SendPriority 100
+		AcceptPriority 110
+		RejectPriority 100
+		SenderRegardResult 100
+		ReceiverRegardResult 0
+		ViolationRegardCost 0
+		ViolationTrustCost 0
+	}
+
+	ProposalElement {
+		Proposal PROPOSAL_REQUEST_STOP_RESEARCH
+		SendPriority 100
+		AcceptPriority 110
+		RejectPriority 100
+		SenderRegardResult -50
+		ReceiverRegardResult 150
+		ViolationRegardCost 0
+		ViolationTrustCost 0
+	}
+
+	ProposalElement {
+		Proposal PROPOSAL_OFFER_REDUCE_NUCLEAR_WEAPONS
+		SendPriority 100
+		AcceptPriority 110
+		RejectPriority 100
+		SenderRegardResult 100
+		ReceiverRegardResult 0
+		ViolationRegardCost -200
+		ViolationTrustCost -20
+	}
+
+	ProposalElement {
+		Proposal PROPOSAL_REQUEST_REDUCE_NUCLEAR_WEAPONS
+		SendPriority 100
+		AcceptPriority 110
+		RejectPriority 100
+		SenderRegardResult -50
+		ReceiverRegardResult 150
+		ViolationRegardCost -200
+		ViolationTrustCost -20
+	}
+
+	ProposalElement {
+		Proposal PROPOSAL_OFFER_REDUCE_BIO_WEAPONS
+		SendPriority 100
+		AcceptPriority 110
+		RejectPriority 100
+		SenderRegardResult 100
+		ReceiverRegardResult 0
+		ViolationRegardCost -200
+		ViolationTrustCost -20
+	}
+
+	ProposalElement {
+		Proposal PROPOSAL_REQUEST_REDUCE_BIO_WEAPONS
+		SendPriority 100
+		AcceptPriority 110
+		RejectPriority 100
+		SenderRegardResult -50
+		ReceiverRegardResult 150
+		ViolationRegardCost -200
+		ViolationTrustCost -20
+	}
+
+	ProposalElement {
+		Proposal PROPOSAL_OFFER_REDUCE_NANO_WEAPONS
+		SendPriority 100
+		AcceptPriority 110
+		RejectPriority 100
+		SenderRegardResult 100
+		ReceiverRegardResult 0
+		ViolationRegardCost -200
+		ViolationTrustCost -20
+	}
+
+	ProposalElement {
+		Proposal PROPOSAL_REQUEST_REDUCE_NANO_WEAPONS
+		SendPriority 100
+		AcceptPriority 110
+		RejectPriority 100
+		SenderRegardResult -50
+		ReceiverRegardResult 150
+		ViolationRegardCost -200
+		ViolationTrustCost -20
+	}
+
+	ProposalElement {
+		Proposal PROPOSAL_OFFER_GIVE_ADVANCE
+		SendPriority 100
+		AcceptPriority 110
+		RejectPriority 100
+		SenderRegardResult 100
+		ReceiverRegardResult 0
+		ViolationRegardCost 0
+		ViolationTrustCost 0
+	}
+
+	ProposalElement {
+		Proposal PROPOSAL_REQUEST_GIVE_ADVANCE
+		SendPriority 100
+		AcceptPriority 110
+		RejectPriority 100
+		SenderRegardResult -10
+		ReceiverRegardResult 100
+		ViolationRegardCost 0
+		ViolationTrustCost 0
+	}
+
+	ProposalElement {
+		Proposal PROPOSAL_OFFER_GIVE_GOLD
+		SendPriority 100
+		AcceptPriority 110
+		RejectPriority 100
+		SenderRegardResult 100
+		ReceiverRegardResult 0
+		ViolationRegardCost 0
+		ViolationTrustCost 0
+	}
+
+	ProposalElement {
+		Proposal PROPOSAL_REQUEST_GIVE_GOLD
+		SendPriority 100
+		AcceptPriority 110
+		RejectPriority 100
+		SenderRegardResult -10
+		ReceiverRegardResult 100
+		ViolationRegardCost 0
+		ViolationTrustCost 0
+	}
+
+	ProposalElement {
+		Proposal PROPOSAL_OFFER_REDUCE_POLLUTION
+		SendPriority 100
+		AcceptPriority 110
+		RejectPriority 100
+		SenderRegardResult 100
+		ReceiverRegardResult 0
+		ViolationRegardCost -150
+		ViolationTrustCost -20
+	}
+
+	ProposalElement {
+		Proposal PROPOSAL_REQUEST_REDUCE_POLLUTION
+		SendPriority 100
+		AcceptPriority 110
+		RejectPriority 100
+		SenderRegardResult 0
+		ReceiverRegardResult 100
+		ViolationRegardCost -150
+		ViolationTrustCost -20
+	}
+
+	ProposalElement {
+		Proposal PROPOSAL_OFFER_MAP
+		SendPriority 100
+		AcceptPriority 110
+		RejectPriority 100
+		SenderRegardResult 100
+		ReceiverRegardResult 0
+		ViolationRegardCost 0
+		ViolationTrustCost 0
+	}
+
+	ProposalElement {
+		Proposal PROPOSAL_REQUEST_MAP
+		SendPriority 100
+		AcceptPriority 110
+		RejectPriority 100
+		SenderRegardResult 0
+		ReceiverRegardResult 100
+		ViolationRegardCost 0
+		ViolationTrustCost 0
+	}
+
+	ProposalElement {
+		Proposal PROPOSAL_OFFER_HONOR_MILITARY_AGREEMENT
+		SendPriority 100
+		AcceptPriority 110
+		RejectPriority 100
+		SenderRegardResult 50
+		ReceiverRegardResult 0
+		ViolationRegardCost 0
+		ViolationTrustCost 0
+	}
+
+	ProposalElement {
+		Proposal PROPOSAL_REQUEST_HONOR_MILITARY_AGREEMENT
+		SendPriority 100
+		AcceptPriority 110
+		RejectPriority 100
+		SenderRegardResult -20
+		ReceiverRegardResult 250
+		ViolationRegardCost 0
+		ViolationTrustCost 0
+	}
+
+	ProposalElement {
+		Proposal PROPOSAL_OFFER_HONOR_POLLUTION_AGREEMENT
+		SendPriority 100
+		AcceptPriority 110
+		RejectPriority 100
+		SenderRegardResult 50
+		ReceiverRegardResult 0
+		ViolationRegardCost 0
+		ViolationTrustCost 0
+	}
+
+	ProposalElement {
+		Proposal PROPOSAL_REQUEST_HONOR_POLLUTION_AGREEMENT
+		SendPriority 100
+		AcceptPriority 110
+		RejectPriority 100
+		SenderRegardResult 0
+		ReceiverRegardResult 50
+		ViolationRegardCost 0
+		ViolationTrustCost 0
+	}
+
+	ProposalElement {
+		Proposal PROPOSAL_OFFER_END_EMBARGO
+		SendPriority 100
+		AcceptPriority 110
+		RejectPriority 100
+		SenderRegardResult 20
+		ReceiverRegardResult 0
+		ViolationRegardCost 0
+		ViolationTrustCost 0
+	}
+
+	ProposalElement {
+		Proposal PROPOSAL_REQUEST_END_EMBARGO
+		SendPriority 100
+		AcceptPriority 110
+		RejectPriority 100
+		SenderRegardResult 0
+		ReceiverRegardResult 50
+		ViolationRegardCost 0
+		ViolationTrustCost 0
+	}
+
+	ProposalElement {
+		Proposal PROPOSAL_TREATY_DECLARE_WAR
+		SendPriority 100
+		AcceptPriority 0
+		RejectPriority 0
+		SenderRegardResult 0
+		ReceiverRegardResult 0
+		ViolationRegardCost 0
+		ViolationTrustCost 0
+	}
+
+	ProposalElement {
+		Proposal PROPOSAL_TREATY_CEASEFIRE
+		SendPriority 100
+		AcceptPriority 110
+		RejectPriority 100
+		SenderRegardResult 200
+		ReceiverRegardResult 150
+		ViolationRegardCost -50
+		ViolationTrustCost -50
+	}
+
+	ProposalElement {
+		Proposal PROPOSAL_TREATY_PEACE
+		SendPriority 100
+		AcceptPriority 110
+		RejectPriority 100
+		SenderRegardResult 200
+		ReceiverRegardResult 150
+		ViolationRegardCost -100
+		ViolationTrustCost -100
+	}
+
+	ProposalElement {
+		Proposal PROPOSAL_TREATY_TRADE_PACT
+		SendPriority 100
+		AcceptPriority 110
+		RejectPriority 100
+		SenderRegardResult 200
+		ReceiverRegardResult 150
+		ViolationRegardCost -100
+		ViolationTrustCost -30
+	}
+
+	ProposalElement {
+		Proposal PROPOSAL_TREATY_RESEARCH_PACT
+		SendPriority 100
+		AcceptPriority 110
+		RejectPriority 100
+		SenderRegardResult 200
+		ReceiverRegardResult 150
+		ViolationRegardCost -100
+		ViolationTrustCost -30
+	}
+
+	ProposalElement {
+		Proposal PROPOSAL_TREATY_MILITARY_PACT
+		SendPriority 100
+		AcceptPriority 110
+		RejectPriority 100
+		SenderRegardResult 200
+		ReceiverRegardResult 150
+		ViolationRegardCost -100
+		ViolationTrustCost -30
+	}
+
+	ProposalElement {
+		Proposal PROPOSAL_TREATY_POLLUTION_PACT
+		SendPriority 100
+		AcceptPriority 110
+		RejectPriority 100
+		SenderRegardResult 200
+		ReceiverRegardResult 150
+		ViolationRegardCost -100
+		ViolationTrustCost -30
+	}
+
+	ProposalElement {
+		Proposal PROPOSAL_TREATY_ALLIANCE
+		SendPriority 100
+		AcceptPriority 110
+		RejectPriority 100
+		SenderRegardResult 200
+		ReceiverRegardResult 150
+		ViolationRegardCost -100
+		ViolationTrustCost -30
+	}
+}
+
+DIPLOMACY_PROVOKE_WAR {
+  Inherit DIPLOMACY_DEFAULT
+
+  // start a war with our neighbor
+  ShareContinentRegardCost 0
+
+  ProposalElement {
+   	Proposal PROPOSAL_TREATY_DECLARE_WAR
+	SendPriority 500
+	AcceptPriority 0
+	RejectPriority 0
+	SenderRegardResult 0
+	ReceiverRegardResult 0
+	ViolationRegardCost 0
+	ViolationTrustCost 0
+  }
+
+  ProposalElement {
+	Proposal PROPOSAL_REQUEST_GIVE_CITY
+	SendPriority 500
+	AcceptPriority 110
+	RejectPriority 100
+	SenderRegardResult 100
+	ReceiverRegardResult -100
+	ViolationRegardCost 0
+	ViolationTrustCost 0
+  }
+
+  ProposalElement {
+	Proposal PROPOSAL_TREATY_PEACE
+	SendPriority 0
+	AcceptPriority 50
+	RejectPriority 150
+	SenderRegardResult 200
+	ReceiverRegardResult 150
+	ViolationRegardCost -100
+	ViolationTrustCost -100
+  }
+
+}
+
+DIPLOMACY_MAKE_FRIEND {
+  Inherit DIPLOMACY_DEFAULT
+
+  // do not become antagonized by neighbors
+  ShareContinentRegardCost 0
+
+  ProposalElement {
+   	Proposal PROPOSAL_TREATY_DECLARE_WAR
+	SendPriority 50
+	AcceptPriority 0
+	RejectPriority 0
+	SenderRegardResult 0
+	ReceiverRegardResult 0
+	ViolationRegardCost 0
+	ViolationTrustCost 0
+  }
+
+  ProposalElement {
+	Proposal PROPOSAL_TREATY_CEASEFIRE
+	SendPriority 150
+	AcceptPriority 150
+	RejectPriority 50
+	SenderRegardResult 100
+	ReceiverRegardResult 100
+	ViolationRegardCost -50
+	ViolationTrustCost -50
+  }
+
+  ProposalElement {
+	Proposal PROPOSAL_TREATY_PEACE
+	SendPriority 200
+	AcceptPriority 150
+	RejectPriority 50
+	SenderRegardResult 100
+	ReceiverRegardResult 100
+	ViolationRegardCost -50
+	ViolationTrustCost -50
+  }
+
+  ProposalElement {
+	Proposal PROPOSAL_OFFER_GIVE_ADVANCE
+	SendPriority 200
+	AcceptPriority 150
+	RejectPriority 50
+	SenderRegardResult 100
+	ReceiverRegardResult 0
+	ViolationRegardCost 0
+	ViolationTrustCost 0
+  }
+}
+
+DIPLOMACY_STAY_AT_WAR {
+  Inherit DIPLOMACY_PROVOKE_WAR
+
+    // do not forget regard events that threaten our military safety
+	MilitarySafetyEvent  {
+        PositiveDecay 0.8
+        NegativeDecay 0.9
+	}
+
+  ProposalElement {
+	Proposal PROPOSAL_TREATY_CEASEFIRE
+	SendPriority 0
+	AcceptPriority 50
+	RejectPriority 150
+	SenderRegardResult 150
+	ReceiverRegardResult 150
+	ViolationRegardCost -50
+	ViolationTrustCost -50
+  }
+
+  ProposalElement {
+	Proposal PROPOSAL_TREATY_PEACE
+	SendPriority 0
+	AcceptPriority 50
+	RejectPriority 150
+	SenderRegardResult 250
+	ReceiverRegardResult 250
+	ViolationRegardCost -50
+	ViolationTrustCost -50
+  }
+}
+
+DIPLOMACY_GET_OUT_OF_WAR {
+  Inherit DIPLOMACY_MAKE_FRIEND
+
+    // do not forget regard events that threaten our military safety
+	MilitarySafetyEvent  {
+        PositiveDecay 0.9
+        NegativeDecay 0.8
+	}
+
+
+  ProposalElement {
+	Proposal PROPOSAL_TREATY_CEASEFIRE
+	SendPriority 200
+	AcceptPriority 200
+	RejectPriority 50
+	SenderRegardResult 150
+	ReceiverRegardResult 150
+	ViolationRegardCost -50
+	ViolationTrustCost -50
+  }
+
+  ProposalElement {
+	Proposal PROPOSAL_OFFER_GIVE_GOLD
+	SendPriority 200
+	AcceptPriority 150
+	RejectPriority 50
+	SenderRegardResult 100
+	ReceiverRegardResult 0
+	ViolationRegardCost 0
+	ViolationTrustCost 0
+  }
+
+}
+
+DIPLOMACY_ND_SCENARIO_DEFAULT {
+  Inherit DIPLOMACY_DEFAULT
+	// NOTE: SenderRegardResult is regard sender gains or loses from
+	// receiver; likewise, ReceiverRegardResult is regard receiver
+	// gains or loses from sender if agreement is accepted.
+
+	// DO NOT accept or send most proposals
+
+	ProposalElement { 
+		Proposal PROPOSAL_OFFER_GIVE_CITY 
+		SendPriority 100 
+		AcceptPriority 110
+		RejectPriority 100
+	    SenderRegardResult 100
+	    ReceiverRegardResult 0
+		ViolationRegardCost 0
+		ViolationTrustCost 0
+	}
+
+	ProposalElement {
+		Proposal PROPOSAL_REQUEST_GIVE_CITY
+		SendPriority 100
+		AcceptPriority 110
+		RejectPriority 100
+	    SenderRegardResult -50
+	    ReceiverRegardResult 100
+		ViolationRegardCost 0
+		ViolationTrustCost 0
+	}
+
+	ProposalElement {
+		Proposal PROPOSAL_OFFER_WITHDRAW_TROOPS
+		SendPriority 100
+		AcceptPriority 110
+		RejectPriority 100
+		SenderRegardResult 200
+		ReceiverRegardResult 0
+		ViolationRegardCost -250
+		ViolationTrustCost -20
+	}
+
+	ProposalElement {
+		Proposal PROPOSAL_REQUEST_WITHDRAW_TROOPS
+		SendPriority 100
+		AcceptPriority 110
+		RejectPriority 100
+		SenderRegardResult -50
+		ReceiverRegardResult 200
+		ViolationRegardCost -250
+		ViolationTrustCost -20
+	}
+
+	ProposalElement {
+		Proposal PROPOSAL_OFFER_STOP_PIRACY
+		SendPriority 200
+		AcceptPriority 210
+		RejectPriority 100
+		SenderRegardResult 50
+		ReceiverRegardResult 0
+		ViolationRegardCost -200
+		ViolationTrustCost -50
+	}
+
+	ProposalElement {
+		Proposal PROPOSAL_REQUEST_STOP_PIRACY
+		SendPriority 100
+		AcceptPriority 210
+		RejectPriority 100
+		SenderRegardResult 0
+		ReceiverRegardResult 50
+		ViolationRegardCost -200
+		ViolationTrustCost -50
+	}
+
+	ProposalElement {
+		Proposal PROPOSAL_OFFER_BREAK_AGREEMENT
+		SendPriority 100
+		AcceptPriority 110
+		RejectPriority 100
+		SenderRegardResult 50
+		ReceiverRegardResult 0
+		ViolationRegardCost 0
+		ViolationTrustCost 0
+	}
+
+	ProposalElement {
+		Proposal PROPOSAL_REQUEST_BREAK_AGREEMENT
+		SendPriority 100
+		AcceptPriority 110
+		RejectPriority 100
+		SenderRegardResult 0
+		ReceiverRegardResult 50
+		ViolationRegardCost 0
+		ViolationTrustCost 0
+	}
+
+	ProposalElement {
+		Proposal PROPOSAL_OFFER_STOP_RESEARCH
+		SendPriority 100
+		AcceptPriority 110
+		RejectPriority 100
+		SenderRegardResult 100
+		ReceiverRegardResult 0
+		ViolationRegardCost 0
+		ViolationTrustCost 0
+	}
+
+	ProposalElement {
+		Proposal PROPOSAL_REQUEST_STOP_RESEARCH
+		SendPriority 100
+		AcceptPriority 110
+		RejectPriority 100
+		SenderRegardResult -50
+		ReceiverRegardResult 150
+		ViolationRegardCost 0
+		ViolationTrustCost 0
+	}
+
+	ProposalElement {
+		Proposal PROPOSAL_OFFER_REDUCE_NUCLEAR_WEAPONS
+		SendPriority 100
+		AcceptPriority 110
+		RejectPriority 100
+		SenderRegardResult 100
+		ReceiverRegardResult 0
+		ViolationRegardCost -200
+		ViolationTrustCost -20
+	}
+
+	ProposalElement {
+		Proposal PROPOSAL_REQUEST_REDUCE_NUCLEAR_WEAPONS
+		SendPriority 100
+		AcceptPriority 110
+		RejectPriority 100
+		SenderRegardResult -50
+		ReceiverRegardResult 150
+		ViolationRegardCost -200
+		ViolationTrustCost -20
+	}
+
+	ProposalElement {
+		Proposal PROPOSAL_OFFER_REDUCE_BIO_WEAPONS
+		SendPriority 100
+		AcceptPriority 110
+		RejectPriority 100
+		SenderRegardResult 100
+		ReceiverRegardResult 0
+		ViolationRegardCost -200
+		ViolationTrustCost -20
+	}
+
+	ProposalElement {
+		Proposal PROPOSAL_REQUEST_REDUCE_BIO_WEAPONS
+		SendPriority 100
+		AcceptPriority 110
+		RejectPriority 100
+		SenderRegardResult -50
+		ReceiverRegardResult 150
+		ViolationRegardCost -200
+		ViolationTrustCost -20
+	}
+
+	ProposalElement {
+		Proposal PROPOSAL_OFFER_REDUCE_NANO_WEAPONS
+		SendPriority 100
+		AcceptPriority 110
+		RejectPriority 100
+		SenderRegardResult 100
+		ReceiverRegardResult 0
+		ViolationRegardCost -200
+		ViolationTrustCost -20
+	}
+
+	ProposalElement {
+		Proposal PROPOSAL_REQUEST_REDUCE_NANO_WEAPONS
+		SendPriority 100
+		AcceptPriority 110
+		RejectPriority 100
+		SenderRegardResult -50
+		ReceiverRegardResult 150
+		ViolationRegardCost -200
+		ViolationTrustCost -20
+	}
+
+	ProposalElement {
+		Proposal PROPOSAL_OFFER_GIVE_ADVANCE
+		SendPriority 100
+		AcceptPriority 110
+		RejectPriority 100
+		SenderRegardResult 100
+		ReceiverRegardResult 0
+		ViolationRegardCost 0
+		ViolationTrustCost 0
+	}
+
+	ProposalElement {
+		Proposal PROPOSAL_REQUEST_GIVE_ADVANCE
+		SendPriority 100
+		AcceptPriority 110
+		RejectPriority 100
+		SenderRegardResult -10
+		ReceiverRegardResult 100
+		ViolationRegardCost 0
+		ViolationTrustCost 0
+	}
+
+	ProposalElement {
+		Proposal PROPOSAL_OFFER_GIVE_GOLD
+		SendPriority 100
+		AcceptPriority 110
+		RejectPriority 100
+		SenderRegardResult 100
+		ReceiverRegardResult 0
+		ViolationRegardCost 0
+		ViolationTrustCost 0
+	}
+
+	ProposalElement {
+		Proposal PROPOSAL_REQUEST_GIVE_GOLD
+		SendPriority 100
+		AcceptPriority 110
+		RejectPriority 100
+		SenderRegardResult -10
+		ReceiverRegardResult 100
+		ViolationRegardCost 0
+		ViolationTrustCost 0
+	}
+
+	ProposalElement {
+		Proposal PROPOSAL_OFFER_REDUCE_POLLUTION
+		SendPriority 100
+		AcceptPriority 110
+		RejectPriority 100
+		SenderRegardResult 100
+		ReceiverRegardResult 0
+		ViolationRegardCost -150
+		ViolationTrustCost -20
+	}
+
+	ProposalElement {
+		Proposal PROPOSAL_REQUEST_REDUCE_POLLUTION
+		SendPriority 100
+		AcceptPriority 110
+		RejectPriority 100
+		SenderRegardResult 0
+		ReceiverRegardResult 100
+		ViolationRegardCost -150
+		ViolationTrustCost -20
+	}
+
+	ProposalElement {
+		Proposal PROPOSAL_OFFER_MAP
+		SendPriority 100
+		AcceptPriority 110
+		RejectPriority 100
+		SenderRegardResult 100
+		ReceiverRegardResult 0
+		ViolationRegardCost 0
+		ViolationTrustCost 0
+	}
+
+	ProposalElement {
+		Proposal PROPOSAL_REQUEST_MAP
+		SendPriority 100
+		AcceptPriority 110
+		RejectPriority 100
+		SenderRegardResult 0
+		ReceiverRegardResult 100
+		ViolationRegardCost 0
+		ViolationTrustCost 0
+	}
+
+	ProposalElement {
+		Proposal PROPOSAL_OFFER_HONOR_MILITARY_AGREEMENT
+		SendPriority 100
+		AcceptPriority 110
+		RejectPriority 100
+		SenderRegardResult 50
+		ReceiverRegardResult 0
+		ViolationRegardCost 0
+		ViolationTrustCost 0
+	}
+
+	ProposalElement {
+		Proposal PROPOSAL_REQUEST_HONOR_MILITARY_AGREEMENT
+		SendPriority 100
+		AcceptPriority 110
+		RejectPriority 100
+		SenderRegardResult -20
+		ReceiverRegardResult 250
+		ViolationRegardCost 0
+		ViolationTrustCost 0
+	}
+
+	ProposalElement {
+		Proposal PROPOSAL_OFFER_HONOR_POLLUTION_AGREEMENT
+		SendPriority 100
+		AcceptPriority 110
+		RejectPriority 100
+		SenderRegardResult 50
+		ReceiverRegardResult 0
+		ViolationRegardCost 0
+		ViolationTrustCost 0
+	}
+
+	ProposalElement {
+		Proposal PROPOSAL_REQUEST_HONOR_POLLUTION_AGREEMENT
+		SendPriority 100
+		AcceptPriority 110
+		RejectPriority 100
+		SenderRegardResult 0
+		ReceiverRegardResult 50
+		ViolationRegardCost 0
+		ViolationTrustCost 0
+	}
+
+	ProposalElement {
+		Proposal PROPOSAL_OFFER_END_EMBARGO
+		SendPriority 100
+		AcceptPriority 110
+		RejectPriority 100
+		SenderRegardResult 20
+		ReceiverRegardResult 0
+		ViolationRegardCost 0
+		ViolationTrustCost 0
+	}
+
+	ProposalElement {
+		Proposal PROPOSAL_REQUEST_END_EMBARGO
+		SendPriority 100
+		AcceptPriority 110
+		RejectPriority 100
+		SenderRegardResult 0
+		ReceiverRegardResult 50
+		ViolationRegardCost 0
+		ViolationTrustCost 0
+	}
+
+	ProposalElement {
+		Proposal PROPOSAL_TREATY_DECLARE_WAR
+		SendPriority 100
+		AcceptPriority 0
+		RejectPriority 0
+		SenderRegardResult 0
+		ReceiverRegardResult 0
+		ViolationRegardCost 0
+		ViolationTrustCost 0
+	}
+
+	ProposalElement {
+		Proposal PROPOSAL_TREATY_CEASEFIRE
+		SendPriority 100
+		AcceptPriority 110
+		RejectPriority 100
+		SenderRegardResult 200
+		ReceiverRegardResult 150
+		ViolationRegardCost -50
+		ViolationTrustCost -50
+	}
+
+	ProposalElement {
+		Proposal PROPOSAL_TREATY_PEACE
+		SendPriority 100
+		AcceptPriority 110
+		RejectPriority 100
+		SenderRegardResult 200
+		ReceiverRegardResult 150
+		ViolationRegardCost -100
+		ViolationTrustCost -100
+	}
+
+	ProposalElement {
+		Proposal PROPOSAL_TREATY_TRADE_PACT
+		SendPriority 100
+		AcceptPriority 110
+		RejectPriority 100
+		SenderRegardResult 200
+		ReceiverRegardResult 150
+		ViolationRegardCost -100
+		ViolationTrustCost -30
+	}
+
+	ProposalElement {
+		Proposal PROPOSAL_TREATY_RESEARCH_PACT
+		SendPriority 100
+		AcceptPriority 110
+		RejectPriority 100
+		SenderRegardResult 200
+		ReceiverRegardResult 150
+		ViolationRegardCost -100
+		ViolationTrustCost -30
+	}
+
+	ProposalElement {
+		Proposal PROPOSAL_TREATY_MILITARY_PACT
+		SendPriority 100
+		AcceptPriority 110
+		RejectPriority 100
+		SenderRegardResult 200
+		ReceiverRegardResult 150
+		ViolationRegardCost -100
+		ViolationTrustCost -30
+	}
+
+	ProposalElement {
+		Proposal PROPOSAL_TREATY_POLLUTION_PACT
+		SendPriority 100
+		AcceptPriority 110
+		RejectPriority 100
+		SenderRegardResult 200
+		ReceiverRegardResult 150
+		ViolationRegardCost -100
+		ViolationTrustCost -30
+	}
+
+	ProposalElement {
+		Proposal PROPOSAL_TREATY_ALLIANCE
+		SendPriority 100
+		AcceptPriority 110
+		RejectPriority 100
+		SenderRegardResult 200
+		ReceiverRegardResult 150
+		ViolationRegardCost -100
+		ViolationTrustCost -30
+	}
+}

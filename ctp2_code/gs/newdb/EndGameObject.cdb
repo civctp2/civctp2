@@ -1,0 +1,24 @@
+
+EndGameObject {
+	// note: must specify wonder, building or terrain improvement
+	Bit (Record Wonder) Wonder
+	Bit (Record Building) Building
+    Bit (Record TerrainImprovement) TerrainImprovement
+
+	// used for satellites and mainframes
+    Bit (Int) MinNeeded
+    Bit (Int) MaxNeeded
+
+	// used for satellites (removed after construction)
+    Bit IsSatellite
+
+	// used for towers
+	Bit (Record EndGameObject) PowerSource
+    Bit (Int) MinRadius
+	Bit (Int) MaxRadius
+	Bit (Float) MinCoverage
+
+	// atleast one end game object must specify
+	// turns needed to activate a completed project
+	Bit (Int) TurnsToActivate
+}

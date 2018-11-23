@@ -1,0 +1,388 @@
+<h1>Activenet distributed game server architecture </h1>
+<i>Last updated: 10 Aug 1998</i>
+
+<h2>Goals</h2>
+We will deploy game server code to about ten Linux machines
+running all over the world.  The end user will be able to
+fire up a game client and see all sessions available all over the
+world without caring too much about which server they connected to.
+<p>The implementation should be
+<ul>
+<li>Simple
+<li>Efficient - transmits only changes in tables
+<li>Able to work with clients behind firewalls (but not servers)
+<li>Supports creating and joining multiple sessions on the same machine
+</ul> 
+
+<h2>Definitions</h2>
+<ul>
+<li>Master server - a program running on a machine owned by Activision
+that keeps the other servers' user info tables up to date.
+<li>Game server - program running on a machine owned by Activision or an ISP
+which tells game clients and web browsers about current games and chat areas
+<li>Game client - program running on an end-user machine.  For instance,
+the Activenet Netshell or a game such as Interstate '76.
+<li>game host - a game server or client which has created a session.
+<li>session - a collection of 0 or more players.  
+Within a session, messages can be sent to individual players,
+to groups of players, or broadcast to all players in the session.
+<li>player - an object created by dpCreatePlayer inside a session.
+It lives on a particular game client or server.  It is the endpoint for
+messages sent by dpSend.
+<li>user - a person who has a username and password to access the
+Activenet game servers.  Users can check on the status of other users
+with dpGetUserStatus, and send messages to them independent of what session 
+they are in using dpSendUserMessage.
+</ul>
+
+<h2>Strategy</h2>
+The basic networking code used to propagate game information,
+called dptab, provides a way to publish tables of data.
+Each table has a name.  Each data element inside each table also has
+a name.  The names can be arbitrarily long sequences of arbitrary bytes.
+There are several predefined identifiers for use in table names, e.g.
+<ul>
+<li>SESSIONS    = 1
+<li>MYSESSIONS  = 2
+<li>PLAYERS     = 3
+<li>MYPLAYERS   = 4
+<li>HOSTS       = 5
+<li>SESSIONINFO = 22
+</ul>
+In addition, each game supported by Activenet has a 16 bit sessionType
+identifier.  A sessionType is associated with a game name
+by adding a directory in the source tree under src/netshell/data
+with the sessionType in decimal containing a text file named name.txt,
+e.g. for Dark Reign, the filename is 666/name.txt.
+(To associate a localized session name, also create a sessionType.locale
+directory.  e.g. for Dark Reign japanese, the filename is 666.jp/name.txt.)
+<p>
+Session identifiers (the same identifier is used within the SESSIONS and 
+MYSESSIONS tables) are designed so that no central registry is required
+to generate them; a machine that wishes to create a session just does so.
+The identifier is the session's karma (a karma is a 16 bit number chosen
+at random) preceded by the session master's address.
+For instance, let's say the session host chose karma abcd.
+If using IPX, addresses are ten bytes long,
+so the session identifier could be 0.0.10.0,ff.33.ee.dd.ab.ce:ab.cd.
+If using IP, addresses are four bytes long,
+so the session identifier could be ee.dd.ab.ce:ab.cd.
+
+<h2>Authentication</h2>
+There is a single username/password database for all servers.
+Before connecting to a game server, call dpSetUsername(..., username, password).
+Password is currently ignored, but will eventually be used to answer
+challenges from the game server.
+<p>
+By default, the library acts as if dpSetUsername(,,,, "guest", "")
+had been called.  This creates the anonymous (guest) user.
+<p>
+dpSetUsername remembers the username and password.
+Later, if a host or server wants to know who we are, they send
+us a challenge consisting of twenty questions about our password,
+and we respond with the username and the answers to those twenty
+questions.  
+
+<h2>Logging in to Game Servers</h2>
+When dpSetGameServer() is called, it sends a login request to
+the gameserver.  When the gameserver receives the login request,
+it may authenticate the user as above, or (for guest users) just
+accept the user.  It indicates that the user has been accepted by
+creating a record for the user in the HOSTS table, and publishing
+that table to the client.
+
+<h2>Session data propagation</h2>
+Each game server publishes a SESSIONS table which is read by clients
+that connect to that server, and lists all sessions available worldwide.
+<p>
+Each game server also publishes a MYSESSIONS table which is read by 
+other servers, and lists all sessions started by the game server itself
+or by clients attached to it.
+<p>
+Each game server mounts the MYSESSIONS tables from all the other game
+servers onto its own SESSIONS table.  The data from the individual
+MYSESSIONS tables combines to form one giant table.
+<p>
+Each game client publishes a MYSESSIONS table which is read only by
+the game server it attaches to.
+A game client that creates a session is called a game host, and is
+the initial master of that session.
+To create a session, a machine simply puts a new record in MYSESSIONS.
+The new session should show up in the SESSIONS table received from the
+game server within five seconds.
+<p>
+Each element of the SESSIONS and MYSESSIONS tables is a dp_session_t.
+
+<h2>Creating and Joining Sessions</h2>
+When user code calls dpOpen to join or create a session, it creates the 
+following tables:
+<ul>
+<li>PLAYERS.sessionid - a table of dp_playerId_t's, one for each player
+<li>HOSTS.sessionid - a table of dp_host_t's, one for each client.
+This table is published to everyone who
+joins the session, and is used for three purposes: 
+<ol>
+<li>to give the client a range of dpid's to use for its players
+<li>to decide what machines broadcast messages should be sent to
+<li>to help pick a new session host if the old one disconnects
+</ol>
+</ul>
+
+Then, if joining an existing session, dpOpen adds the session master
+as a publisher of the HOSTS.SESSIONID and PLAYERS.SESSIONID tables.
+It then sends the session host a join request containing the id of 
+the desired session.
+dpReceive() on the host then creates a record in his HOSTS.sessionid table 
+for the client, and, if the client is not itself, it publishes
+the HOSTS.SESSIONID and PLAYERS.SESSIONID to the new client,
+and subscribes to the new client's MYPLAYERS table.
+Finally, dpReceive() on the client publishes the client's MYPLAYERS
+table to the master, and signals the user code via a callback that
+the session join was successful.
+
+<h2>Creating Players</h2>
+To create a new player, a client picks a two-byte player id from the
+range given it by the master in its HOST record, then 
+creates a player record in its MYPLAYERS table.
+When the master notices the new player appear, it may verify the player id, 
+and it adds the new player to the PLAYERS.SESSIONID table.
+
+<h2>User data</h2>
+The profile for a particular user is stored on the server in table PLAYERINFO
+by userid.  Userid's are strings assigned by the user but checked at the
+central database for uniqueness during the account generation process.
+A filter can be used to subscribe to PLAYERINFO and retrieve
+just a particular user profile.
+<p>
+All game servers subscribe to the master server's PLAYERINFO table.
+
+<h2>Reducing amount of data sent</h2>
+The servers will maintain a table called SESSIONINFO which lists
+summary information for each session type.  This relieves the client
+of the need to enumerate <i>all</i> sessions when all it wants is
+to give the user some idea of where the action is.
+<p>
+Table subscriptions can be <i>filtered</i>.  The publisher
+only sends changes in records that match the filter.
+Initially, only two filters will be supported: 
+MEMCMP(offset, len, value) and !MEMCMP(offset, len, value).
+That allows clients to subscribe to SESSIONS with a filter for,
+say, I'76 sessions; they might mount that subscription at
+SESSIONS.I76 (where I76 is the sessionType value for I'76).
+It also allows servers to subscribe to another server's SESSIONS
+table, and specify "don't give me sessions that have my IP address
+in the game server field".
+
+<h2>When the session master goes offline</h2>
+When any participant in the session loses contact with the initial
+session master, it switches its subscription for that table to the
+machine of the player with the next player id.  
+If a machine discovers that it is now the master, it places a record
+in MYSESSIONS, which automatically informs the game server of the change.
+If the original machine comes back online, it should notice that
+the game server lists a new host for the session, and reenter the
+session as a client rather than a host.
+<p>
+Note that the initial session master need not create any players in
+the session.  This could happen in the case of a game server.
+We might want to set a bit in the session record for these sessions
+saying "session cannot migrate".  In that case, if the server went
+offline, the players could continue playing, but nobody could join
+(or leave!) the session.
+
+<h2>Firewall Strategy</h2>
+To accomodate port mapping firewalls,
+the address used on IP has been extended to six bytes to include the
+port number; clients no longer always open a particular port.
+<p>
+To allow clients to be behind SOCKS firewalls,
+the <a href="http://www.socks.nec.com/guidelines.html">guidelines 
+for SOCKS clients</a> will be followed on clients (but not on the
+server).
+<p>
+To allow the use of IP addresses in universal client identifiers,
+clients which are behind a firewall will ask the game server what
+IP address and port number they appear to be using, and will use
+that when constructing ID's.  Client machine records will contain
+both the external IP adr/port number and the internal IP adr/port number.
+When a client opens a connection to another client,
+it checks to see if it might be behind the same firewall;
+if so, it pings the other client at both addresses, and uses the
+address/port number of the first reply to open the connection.
+
+<h2>Server Login, Buddy Lists, Instant Messages, and Score Retrieval</h2>
+
+<h3>The Login Process</h3>
+See tserv.h.
+<ol>
+
+<li>The client opens a connection to the server by calling
+dp_setGameServerEx().
+
+<li>The next step depends on whether the user has an account already:
+<ul>
+<li>
+To log in to an existing account, the client calls 
+<b>
+dpAccountLogin(dp, username, password) 
+</b>
+aka 
+<tt>
+tserv_account_login(tserv, username, password) 
+</tt>
+after connecting to the game server.  Some later call to tserv_handle_packet
+will indicate success or failure by the value of 'event'.
+
+<li>
+To create a new account, the client calls 
+<b>
+dpAccountCreate(dp, username, password, emailadr, flags) 
+</b>
+aka 
+<tt>
+tserv_account_create(tserv, username, password, emailadr, flags) 
+</tt>
+after connecting to the game server.
+The server creates the account, and sends an email message to the user telling 
+him the code needed to activate the account.
+</ul>
+
+When dpio_get() returns a packet that starts with dp_TSERV_PACKET_ID,
+dpReceive() passes it to tserv_handle_packet(..., &event).
+<p>
+When something interesting happens, tserv_handle_packet will return
+dp_RES_OK, and event will contain the result to the pending operation
+(login, create, or activate).  dpReceive will convert this to a packet
+of type dp_ACCOUNT_PACKET_ID.
+
+
+<li>
+If the account exists but has not yet been activated, the server will reply
+with an event telling the client to prompt for the secret activation code;
+the client prompts the user for the activation code, then calls 
+<b>
+dpAccountActivate(dp, secret_code) 
+</b>
+aka
+<tt>
+tserv_account_activate(tserv, secret_code)
+</tt>
+
+</ol>
+
+<h3>How the UID's of all players in a session become known and trusted</h3>
+
+<ul>
+<li>When server receives an indirectOpen packet from a handle, he 
+looks up the handle for the host, then instead of calling dpio_requestOpen, he
+calls tserv_sendCredentials(tserv, hostHandle, clientHandle); this not only tells the host to
+open the handle to the joiner, but also causes
+both the joiner and the host to receive a tserv_event announcing the other's
+UID.  This is how the host learns the uid of the joiner.
+
+<li> host puts joiner's uid in his dp_playerId_t.karma in the player table.
+That's how everyone learns each others' uid's; they trust what comes
+from the server.
+(Note: this requires the host to subscribe the joiners' myplayer tables
+into *his* myplayer table, and use a listener on myplayers to copy
+the data into his players table; that way, he gets a chance to insert
+the uid.)
+
+<li> Clients verify host is genuine; his handle must be either the
+game server, or his uid must match tserv_hdl2uid(hMaster).  
+The best way to do this is to notify the user code when this becomes
+known true or false, so the user interface can make sure it's known before
+launch.  This can be handled with the uid field of the host's player record-
+so we don't trust the uid record from the player who has handle hMaster,
+we retrieve it with tserv_hdl2uid(hMaster).
+
+</ul>
+
+<h3>What the client can find out</h3>
+The following info is obtained by subscribing to particular tables on the
+game server:
+<ul>
+<li>The uid's of all users in the open session 
+[dp_KEY_USERS_BYSESSION . sessionid]<br>
+Each host maintains a [dp_KEY_USERS_BYSESSION . sessionid] table
+containing the uid's of all users in the session, and publishes it
+to the server, which republishes it to any interested client.
+
+<li>The uid of all users close to you in the challenge ladder
+[dp_KEY_USERS_BYLADDER . userid]
+<li>The uid of all users in your buddy list who are online
+[dp_KEY_USERS_BYBUDDY . userid]
+<li>The full user info (minus rank) of all users mentioned in any of the previous lists
+[dp_KEY_USERS_BYUID . userid]
+<p>
+For each user, the server keeps a list of all the handles that are interested
+in that user.  When that user's info changes, it is copied into the 
+USERS_BYUID table for each of those handles.  
+(The list is actually an assoctab indexed by uid; its payload is the number 
+of tables (0-3) interested in that uid.  When the count goes to zero, the 
+entry is deleted.)
+<li>The challenge rank of all users mentioned in any of the previous lists
+[dp_KEY_USERS_RANK . userid]
+</ul>
+The user code accesses these by requesting object deltas for those tables.
+
+<h3>Scores</h3>
+Score data is handled by the modules in src/score,
+and also by server/servscor.c (for the server-only code) and
+dp/dpscore.c (for the client-only code).  Clients send
+score reports up to the server whenever a player leaves.  The server
+cross-checks the reports, and uses them to update a score database,
+kept in a standard database system (at the moment, gdbm) for easy
+querying by other software.
+<p>
+The server maintains one table, dp_KEY_MYSCORES, which all the clients
+publish score reports into.  It also maintains one score table per
+session type, [dp_KEY_SCORES.sessionType], containing the cumulative 
+scores for each user of that session type.  When it receives a record
+in the dp_KEY_MYSCORES table, it cross-checks it, and eventually updates the
+scores database and the [dp_KEY_SCORES.sessionType] table.
+<p>
+Likewise, each client maintains two tables, dp_KEY_MYSCORES (published
+to the server's dp_KEY_MYSCORES) and [dp_KEY_SCORES.sessionType] (subscribed 
+from the server's [dp_KEY_SCORES.sessionType]).
+<p>
+User code stores scores by calling dpReportScore2() whenever a score changes;
+the current scores when a player leaves the game are automatically placed
+in the client's dp_KEY_MYSCORES table and uploaded to the server.
+<p>
+User code retrieves cumulative scores by calling
+dpRequestObjectDeltas([dp_KEY_SCORES.sessionType]) once; this triggers a
+message any time a new score is available.
+Later, there will be a way to specify which range of users you are interested
+in scores for.
+<p>
+Behind the scenes, a central score server gathers score data from all
+servers continuously via http, sends the score data through a game-specific
+function, and makes the processed score data available again via http.
+The game-specific function (and the whole master score server) is written
+in Java.  Two of these will be run, and will produce identical results, 
+so game servers can connect to either one if there are backbone problems.
+In fact, game developers can run their own little score server while
+developing the game-specific server-side score processing function;
+when the function is done, it is uploaded to the production score servers,
+which look in a file scoreNNNN.jar for the score-processing functions
+for game type NNNN.
+
+<h3>Data Sharing between Servers</h3>
+Originally, the dptab subscription mechanism was designed to allow
+servers' session tables to be published to one or more master servers;
+the game servers would then subscribe from the big session tables
+at the master servers.  If a connection goes down and is reestablished,
+currently, the entire table is retransmitted.
+<p>
+For large nonvolatile tables, we probably want to avoid that table 
+retransmission.  A new method, based on http, is used to share crash
+data between the game servers and the master crash server.  
+A similar method will be used for score data and possibly password data.
+<p>
+This method will probably be built into dptab, along with
+a 2nd persistance mechanism which backs tables with a .gdb database
+file on the fly rather than at dptab_freeze time.
+
+<hr>
+<i>Dan Kegel</i>

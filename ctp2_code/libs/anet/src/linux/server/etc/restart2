@@ -1,0 +1,28 @@
+#!/bin/sh
+# restart the ActiveNet game server
+# Don't disturb it if it's up.
+#
+# You should not need to edit this file.  All modifiable
+# fields are controlled by the file ~/etc/anet2env
+#
+
+# Set the variables
+. ~/etc/anet2env
+
+# Check for existing server
+ps auxww | grep $ANET2_EXEC | grep -v grep | awk '{print $2}' > /tmp/anet2.pid 
+if [ -s /tmp/anet2.pid ]; then
+   # Already running; do nothing
+   echo Game server already running at `date`
+   true
+else
+   # Save old log
+   echo Starting game server daemon at `date`
+   rm -f $ANET2_LOG.old
+   if [ -f $ANET2_LOG ]; then
+      mv $ANET2_LOG $ANET2_LOG.old
+   fi
+   # Run server
+   . ~/etc/runAnet2
+fi
+

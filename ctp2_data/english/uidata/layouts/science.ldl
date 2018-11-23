@@ -1,0 +1,2412 @@
+################################################################################
+#
+#  Project      : Call To Power 2
+#  File type    : LDL layout description 
+#  Description  : Science and advance dialogs
+# 
+################################################################################
+# 
+#  Disclaimer
+# 
+#  THIS FILE IS NOT GENERATED OR SUPPORTED BY ACTIVISION.
+# 
+#  This material has been developed at apolyton.net by the Apolyton CtP2 
+#  Source Code Project. Contact the authors at ctp2source@apolyton.net.
+# 
+################################################################################
+# 
+#  Modifications from the original Activision code:
+# 
+#  - Hypertext size set to 8192, to match the buffer size of the executable.
+# 
+################################################################################
+
+################################################################################
+# List items.
+################################################################################
+
+# Single column in a single item.
+template ADVANCE_LIST_COLUMN:CTP2_STATIC_BACKGROUND {
+	# Size.
+	int		heightpix	14	
+}
+
+# Item for use in city resource list.
+ScienceAdvanceListItem:CTP2_LIST_ITEM {
+	column0:ADVANCE_LIST_COLUMN {
+		string	just		"left"
+		int		widthpix	234
+	}
+	column1:ADVANCE_LIST_COLUMN {
+		int		widthpix	28
+	}
+	column2:ADVANCE_LIST_COLUMN {
+		int		widthpix	28
+	}
+	column3:ADVANCE_LIST_COLUMN {
+		int		widthpix	28
+	}
+	column4:ADVANCE_LIST_COLUMN {
+		int		widthpix	28
+	}
+	column5:ADVANCE_LIST_COLUMN {
+		int		widthpix	28
+	}
+	column6:ADVANCE_LIST_COLUMN {
+		int		widthpix	28
+	}
+	column7:ADVANCE_LIST_COLUMN {
+		int		widthpix	28
+	}
+	column8:ADVANCE_LIST_COLUMN {
+		int		widthpix	28
+	}
+}
+
+################################################################################
+# Templates
+################################################################################
+
+# Current progress information.
+template CURRENT_PROGRESS_INFORMATION:CTP2_STATIC_GROUP {
+	# Location
+	int		xpix		313
+
+	Label:CTP2_STATIC_BACKGROUND {
+		# Location
+		int		widthpix	80
+
+		# Format
+		string	just		"left"
+		bool	vertcenter	false
+		bool	wordwrap	true
+	}
+	Value:CTP2_GENERIC_TEXT_DISPLAY_14 {
+		# Location
+		int		xpix		80
+		int		widthpix	80
+	}
+}
+
+# Header for advance list.
+template SCIENCE_ADVANCE_HEADER:CTP2_HEADER_FONT {
+	# Size.
+	int		heightpix	16
+
+	# Background.
+	string	pattern		"uptg20e.tga"
+
+	# Enable chromakey for blits.
+	string	imagebltflag	"chromakey"
+
+	# Center image icons.
+	bool	centerimage	true
+
+	# Bevel.
+	int		bevelwidth	1
+}
+
+# Ranger template for advance pop-up.
+template SCI_STATS_RANGER:CTP2_STANDARD_FONT {
+	bool alwaysranger	true
+	rangery {
+		int	widthpix	15
+		int	heigthpix	15
+		string	type	"scroller"
+		string	orientation	"vertical"
+		string	pattern	"uptg10.tga"
+
+		incy {
+			int	widthpix	15
+			int	heightpix	15
+			string	pattern	"uptg10.tga"
+		}
+
+		decy {
+			int	widthpix	15
+			int	heightpix	15
+			string	pattern	"uptg10.tga"
+		}
+	}
+}
+
+################################################################################
+# Dialogs
+################################################################################
+
+# Main science dialog.
+ScienceManagementDialog:CTP2_DIALOG_WINDOW {
+	# Title string.
+	string	title	"str_ldl_SCIENCE_DIALOG_TITLE"
+
+	# Advisor button.
+	AdvisorButton:CTP2_STANDARD_ADVISOR {
+	int xpix -100
+	}
+
+	# Change Research.
+	ChangeResearch:CTP2_GENERIC_SIZABLE_TEXT_BUTTON {
+		# Location
+		int		xpix		208
+		int		ypix		354
+		int		widthpix	160
+		# Label
+		string	text	"str_ldl_SD_CHANGE_RESEARCH"
+
+		# Tooltip
+		string	statustext	"STATUSBAR_SCIADV_MAIN_CHGRESEARCH_BUTTON"
+	}
+
+	# Close button.
+	CloseButton:CTP2_STANDARD_CLOSE {
+
+		# Tooltip
+		string	statustext	"STATUSBAR_SCIADV_INTEL_CLOSE_BUTTON"
+	}
+
+	CurrentResearch:CTP2_STATIC_GROUP {
+		# Location.
+		int		xpix			46
+		int		ypix			35
+		int		widthpix		484
+		int		heightpix		136
+
+		# Bevel for now, maybe forever?
+		int		beveltype		2
+		int		bevelwidth		0
+
+		# Tooltip
+		string	statustext	"STATUSBAR_SCIADV_MAIN_NOWRESEARCHING_BUTTON"
+
+		# Group title.
+		Title:CTP2_STATIC_BACKGROUND {
+			# Size.
+			int		widthpix		484
+			int		heightpix		25
+			# Label
+			string	text	"str_ldl_SD_CURRENT_RESEARCH_GROUP"
+		}
+
+		# Hypertext information box.
+		Description:CTP2_HYPER_TEXT_BOX {
+			# Runtime instantiation type.
+			string	objecttype	"ctp2_hypertextbox"
+#not ACTIVISION_ORIGINAL
+			int             hypermaxlength          8192
+#end ACTIVISION_ORIGINAL
+
+			# Background.
+			string pattern "uptg06e.tga"
+
+			int		beveltype		2
+			
+			# Location.
+			int		xpix			15
+			int		ypix			30
+			int		widthpix		160
+			int		heightpix		94
+		}
+
+		# Advance display.
+		AdvanceProgress:CTP2_PROGRESS_DISPLAY {
+			# Location.
+			int		xpix			190
+			int		ypix			25
+		}
+
+		# Turns
+		Turn:CURRENT_PROGRESS_INFORMATION {
+			# Tooltip
+			string	statustext	"STATUSBAR_SCIADV_MAIN_DISCINTURNS_BUTTON"
+			# Location.
+			int		ypix			25
+			# Label
+			Label {
+				int		heightpix	30
+				string	text		"str_ldl_SD_TURNS_TO_ADVANCE"
+			}
+			# Value
+			Value {
+				int		ypix			17
+			}
+		}
+
+		# Seperate text.
+		Separator1:CTP2_STATIC_BACKGROUND {
+			# Location.
+			int		xpix			311
+			int		ypix			59
+			int		widthpix		164
+			int		heightpix		4
+
+			# Bevel for groove effect.
+			int		beveltype		1
+			int		bevelwidth		2
+		}
+
+		# Spent
+		Spent:CURRENT_PROGRESS_INFORMATION {
+			# Tooltip
+			string	statustext	"STATUSBAR_SCIADV_MAIN_GOLDTOSCI_DISPLAY"
+			# Location.
+			int		ypix			65
+			# Label
+			Label {
+				int		heightpix	30
+				string	text		"str_ldl_SD_CURRENT_EXPENDITURE"
+			}
+			# Value
+			Value {
+				int		ypix			17
+			}
+		}
+
+		# Seperate text.
+		Separator2:CTP2_STATIC_BACKGROUND {
+			# Location.
+			int		xpix			311
+			int		ypix			102
+			int		widthpix		164
+			int		heightpix		4
+
+			# Bevel for groove effect.
+			int		beveltype		1
+			int		bevelwidth		2
+		}
+
+		# Total Cost
+		TotalCost:CURRENT_PROGRESS_INFORMATION {
+			# Location.
+			int		ypix			110
+			# Label
+			Label {
+				string	text		"str_ldl_SD_TOTAL_COST"
+			}
+		}
+	}
+
+	# List of advances and which civilizations have them.
+	AdvanceList:CTP2_LISTBOX {
+		# Location
+		int		xpix		60
+		int		ypix		192
+		int		widthpix	448
+		int		heightpix	142
+		bool		alwaysranger	FALSE
+
+		# Column headers, here is the fun part, these need to
+		# match the item widths in order to appear correctly.
+		header {
+			switch0:SCIENCE_ADVANCE_HEADER {
+				int		widthpix	214
+				string	text		"str_ldl_SD_AL_ADVANCE_NAME"
+				# Tooltip
+				string	statustext	"STATUSBAR_SCIADV_INTEL_SORTNAME_BUTTON"
+			}
+			switch1:SCIENCE_ADVANCE_HEADER {
+				int		widthpix		28
+				int		numimagegroups	3
+				# Tooltip
+				string	statustext	"STATUSBAR_SCIADV_INTEL_SORTYOUR_BUTTON"
+			}
+			switch2:SCIENCE_ADVANCE_HEADER {
+				int		widthpix		28
+				int		numimagegroups	3
+				# Tooltip
+				string	statustext	"STATUSBAR_SCIADV_INTEL_SORTTHEM_BUTTON"
+			}
+			switch3:SCIENCE_ADVANCE_HEADER {
+				int		widthpix		28
+				int		numimagegroups	3
+				# Tooltip
+				string	statustext	"STATUSBAR_SCIADV_INTEL_SORTTHEM_BUTTON"
+			}
+			switch4:SCIENCE_ADVANCE_HEADER {
+				int		widthpix		28
+				int		numimagegroups	3
+				# Tooltip
+				string	statustext	"STATUSBAR_SCIADV_INTEL_SORTTHEM_BUTTON"
+			}
+			switch5:SCIENCE_ADVANCE_HEADER {
+				int		widthpix		28
+				int		numimagegroups	3
+				# Tooltip
+				string	statustext	"STATUSBAR_SCIADV_INTEL_SORTTHEM_BUTTON"
+			}
+			switch6:SCIENCE_ADVANCE_HEADER {
+				int		widthpix		28
+				int		numimagegroups	3
+				# Tooltip
+				string	statustext	"STATUSBAR_SCIADV_INTEL_SORTTHEM_BUTTON"
+			}
+			switch7:SCIENCE_ADVANCE_HEADER {
+				int		widthpix		28
+				int		numimagegroups	3
+				# Tooltip
+				string	statustext	"STATUSBAR_SCIADV_INTEL_SORTTHEM_BUTTON"
+			}
+			switch8:SCIENCE_ADVANCE_HEADER {
+				int		widthpix		28
+				int		numimagegroups	3
+				# Tooltip
+				string	statustext	"STATUSBAR_SCIADV_INTEL_SORTTHEM_BUTTON"
+			}
+		}
+	}
+
+	# Background image.
+	Background:CTP2_DIALOG_BG {
+		# Background.
+		# string	image00				"upfg100.tga"
+		
+		string image00 "uptg24a.tga"
+		string image02 "uptg24c.tga"
+		string image03 "uptg24d.tga"
+		string image05 "uptg24f.tga"
+	}
+}
+
+# Advance selection dialog.
+SciAdvanceScreen {
+	# Center on screen.
+	string	xanchor		"center"
+	string	yanchor		"center"
+
+	# Size.
+	int	widthpix	449
+	int	heightpix	352
+
+	Background:CTP2_STANDARD_DIALOG_PATTERN {	
+		# Size.
+		int	widthpix	449
+		int	heightpix	352
+
+
+		# Title.
+		Name:CTP_GREY_TITLE_FONT {
+			# Center at top of window.
+			string xanchor "center"
+			int	ypix	17
+			# Size.
+			int widthpct 60
+			#set pattern so redraw is good
+			string	pattern	"uptg20e.tga"
+			int heightpix 18
+			# Label.
+			string	text	"str_ldl_CHANGE_SCIENCE"
+		}
+
+		# List box with advance options.
+		SciAdvanceList:CTP2_LISTBOX {
+			# Location and size.
+			int	xpix	33
+			int	ypix	165
+			int	widthpix	160
+			int	heightpix	114
+			bool 	alwaysranger FALSE
+
+			# Thumb control should be at least 6 high.
+#			int minthumbsize	6
+		}
+
+		# Accept change and return to previous screen.
+		GoalButton:CTP2_GENERIC_SIZABLE_TEXT_BUTTON {
+			int	xpix	33
+			int	ypix	307
+			int	heightpix	20
+			int	widthpix	160
+			string	text	"str_ldl_ASP_GOAL"	
+		}
+
+		# Accept change and return to previous screen.
+		BackButton:CTP2_GENERIC_SIZABLE_TEXT_BUTTON {
+			int	xpix	342
+			int	ypix	308
+			int	heightpix	20
+			int	widthpix	71
+			string	text	"str_ldl_CAPS_OK"	
+		}
+
+		# Cancel change.
+		CancelButton:CTP2_GENERIC_SIZABLE_TEXT_BUTTON {
+			int	xpix	258
+			int	ypix	308
+			int	heightpix	20
+			int	widthpix	71
+			string	text	"str_ldl_CAPS_CANCEL"
+		}
+
+		# Label before current change name.
+		ChangeLabel:CTP2_STANDARD_FONT {
+			int	xpix	33
+			int	ypix	148
+			int	widthpix	160
+			int	heightpix	14
+			string	pattern	"uptg20e.tga"
+			string	text	"str_ldl_CHANGE_TO_COLON"
+		}
+
+		# Change name.
+		ChangeBox:CTP2_STANDARD_FONT {
+			int	xpix	205
+			int	ypix	148
+			string 	imagebltflag	"chromakey"
+			string	pattern	"uptg20j.tga"
+		}
+
+		# Label for turns until advance complete.
+		TurnsLabel:CTP2_STANDARD_FONT {
+			int	xpix	205
+			int	ypix	282
+			int	widthpix	156
+			int	heightpix	14
+			string	text	"str_ldl_TURNS_TO_ADVANCE_COLON"
+		}
+
+		# Turns until advance complete.
+		TurnsBox:CTP2_GENERIC_TEXT_DISPLAY_14 {
+			int	xpix	355
+			int	ypix	282
+			int	widthpix	40
+		}
+
+		# Some kinda message?
+		Message:CTP2_HYPER_TEXT_BOX {
+			int	xpix	38
+			int	ypix	41
+			int	widthpix	360
+			int	heightpix	90
+			int	bevelwidth	1
+			int	beveltype	2
+			string	just	"center"
+			string	pattern	"uptg20e.tga"
+		}
+
+		ResearchGoal:CTP2_STANDARD_FONT {
+			int xpix		33
+			int ypix		280
+			int widthpix	160
+			int heightpix	20
+			string text "str_ldl_ResearchGoal"
+		}
+
+		# Great library information display.
+		GlStats:CTP2_HYPER_TEXT_BOX {
+			int	xpix	210
+			int	ypix	170
+			int	widthpix	186
+			int	heightpix	104
+#			string	pattern	"uptg10.tga"
+		}
+	}
+}
+
+################################################################################
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+################################################################################
+# Old stuff....
+################################################################################
+
+template PLAYER_TOP:CTP2_STANDARD_FONT {
+
+	int	ypix 28
+
+	int	widthpix	76
+
+	int	heightpix	23
+
+	string	text	"str_ldl_"
+}
+
+
+
+template PLAYER_BOTTOM:CTP2_STANDARD_FONT {
+
+	int	ypix 53
+
+	int	widthpix	76
+
+	int	heightpix	23
+
+	string	text	"str_ldl_"
+}
+
+
+
+template FLAG_TOP {
+
+	int	ypix 28
+
+	int	widthpix	23
+
+	int	heightpix	23
+
+	int	bevelwidth	0
+
+}
+
+
+
+template FLAG_BOTTOM {
+
+	int	ypix 53
+
+	int	widthpix	23
+
+	int	heightpix	23
+
+	int	bevelwidth	0
+
+}
+
+
+
+template FLAG_HEADER {
+
+	int	widthpix	23
+
+	int	heightpix	23
+
+	int	bevelwidth	0
+
+}
+
+
+
+template ADVSWITCH:CTP2_STANDARD_FONT {
+
+	int	widthpix	50
+
+	int	heightpix	20
+
+	string text "str_ldl_Blah"
+	int	bevelwidth	0
+
+#	string	pattern	"upba3010.tga"
+
+}
+
+
+
+template SCIENCE_BOX:CTP2_STANDARD_FONT {
+
+	int	widthpix	40
+
+	int	heightpix	16
+
+	int	beveltype	2
+
+	int	bevelwidth	1
+
+	string	pattern	"upba5400.tga"
+
+	int	srcwidthpix	40
+
+	int	srcheightpix	16
+
+}
+
+
+
+template SCI_HEADER:CTP2_STANDARD_FONT {
+
+	int	heightpix	20
+
+	string	pattern	"upba5605.tga"
+
+	int	bevelwidth	1
+
+}
+
+
+
+ScienceWin {
+
+	string	pattern	"upba5400.tga"
+
+#	int 	xpix		194
+
+#	int 	ypix		72
+
+	int	widthpix	635
+
+	int	heightpix	476
+
+	string	xanchor		"center"
+
+	string	yanchor		"center"
+
+	c3_FancyTop {
+
+		string	pattern	"upba5409.tga"
+
+		int 	xpix		0
+
+		int 	ypix		-9
+
+		int	widthpix	634
+
+		int	heightpix	9
+
+#		string	imagebltflag	"chromakey"
+
+	}
+
+	CloseButton:CTP2_STANDARD_FONT {
+		int	xpix	564
+		int	ypix	438
+		int	widthpix	71
+		int	heightpix	38
+		string	text	"str_ldl_CLOSE"
+		string	image0	"upba5558.tga"
+		string	image1	"upba5559.tga"
+		string	imagebltflag	"chromakey"
+		int	bevelwidth	0
+	}
+
+
+
+	Title:CTP2_STANDARD_TITLE_FONT {
+
+		int	xpix	232
+
+		int	ypix	1
+
+		int	widthpix	158
+
+		int	heightpix	13	
+
+		string	text	"str_ldl_CAPS_SCIENCE"
+	}
+
+
+
+	AdvanceList {
+
+		int	xpix	26
+
+		int	ypix	103
+
+		int	widthpix	409
+
+		int	heightpix	186
+
+		int columns		10
+
+		int	beveltype	2
+
+		int	bevelwidth	2
+
+		bool	alwaysranger	true
+
+		string	pattern "upba5400.tga"
+
+		int	srcxpix	24
+
+		int	srcypix 81
+
+		int	srcwidthpix		413
+
+		int	srcheightpix	210
+
+		rangery {
+
+			int	widthpix	15
+
+			int	heigthpix	15
+
+			string	type	"scroller"
+
+			string	orientation	"vertical"
+
+			string	pattern	"upba5605.tga"
+
+			incy {
+
+				int	widthpix	15
+
+				int	heightpix	15
+
+				string	pattern	"upba5605.tga"
+
+			}
+
+			decy {
+
+				int	widthpix	15
+
+				int	heightpix	15
+
+				string	pattern	"upba5605.tga"
+
+			}
+
+#			thumb {
+
+#				string	image0	"upba5613.tga"
+
+#				string	imagebltflag	"chromakey"
+
+#			}
+
+		}
+
+		header {
+
+			switch0:SCI_HEADER {
+
+				int	widthpix	52
+
+				int	heightpix	20
+
+				string	text	"str_ldl_KNOWN"
+			}
+
+			switch1:SCI_HEADER {
+
+				int	widthpix	47
+
+				string	text	"str_ldl_TREE"
+			}
+
+			switch2:SCI_HEADER {
+
+				int	widthpix	100
+
+				string	text	"str_ldl_CAPS_ADVANCE"
+			}
+
+			switch3:SCI_HEADER {
+
+				int	widthpix	30
+
+				int	heightpix	20
+
+			}
+
+			switch4:SCI_HEADER {
+
+				int	widthpix	30
+
+				int	heightpix	20
+
+			}
+
+			switch5:SCI_HEADER {
+
+				int	widthpix	30
+
+				int	heightpix	20
+
+			}
+
+			switch6:SCI_HEADER {
+
+				int	widthpix	30
+
+				int	heightpix	20
+
+			}
+
+			switch7:SCI_HEADER {
+
+				int	widthpix	30
+
+				int	heightpix	20
+
+			}
+
+			switch8:SCI_HEADER {
+
+				int	widthpix	30
+
+				int	heightpix	20
+
+			}
+
+			switch9:SCI_HEADER {
+
+				int	widthpix	30
+
+				int	heightpix	20
+
+			}
+
+		}
+
+	}
+
+
+
+	ChangeButton:CTP2_STANDARD_FONT {
+
+		string	image0	"upba5401.tga"
+
+		string	image1	"upba5402.tga"
+
+		int	xpix	494
+
+		int	ypix	40
+
+		int	widthpix	93
+
+		int	heightpix	24
+
+		int bevelwidth 	0
+
+		string	text	"str_ldl_CAPS_CHANGE"
+		string	imagebltflag	"chromakey"
+
+	}
+
+	ResearchBox:CTP2_STANDARD_FONT {
+
+		int	xpix	464
+
+		int	ypix	89
+
+		int	widthpix	141
+
+		int	heightpix	16
+
+		int beveltype	2
+
+		int bevelwidth 	1
+
+		string	pattern	"upba5400.tga"
+
+		int	srcxpix	467
+
+		int	srcypix	79
+
+		int	srcwidthpix		141
+
+		int	srcheightpix	16
+
+		string	text	"str_ldl_BASKET_WEAVING"
+	}
+
+	ResearchMeter {
+
+		int xpix 465
+
+		int ypix 116
+
+		int widthpix	85
+
+		int heightpix	9
+
+		int percent		80
+
+		string	pattern	"upba5400.tga"
+
+		int srcxpix 474
+
+		int srcypix 120
+
+		int srcwidthpix		85
+
+		int srcheightpix	9
+
+	}
+
+	ResearchClock {
+
+		string	image0	"upba5411.tga"
+		string tipwindow "str_ldl_Clock"
+		int	xpix	555
+
+		int	ypix	109
+
+		int	widthpix	15
+
+		int	heightpix	16
+
+		int bevelwidth 	0
+
+		string	imagebltflag	"chromakey"
+
+	}
+
+	TurnsBox:CTP2_STANDARD_FONT {
+
+		int	xpix	585
+
+		int	ypix	112
+
+		int	widthpix	30
+
+		int	heightpix	16
+
+		int	beveltype	2
+
+		int bevelwidth 	1
+
+		string	text	"str_ldl_5"
+		string	pattern	"upba5400.tga"
+
+		int	srcxpix	585
+
+		int	srcypix	117
+
+		int	srcwidthpix		30
+
+		int	srcheightpix	16
+
+	}
+
+	CostLabel:CTP2_STANDARD_FONT {
+
+		int	xpix	483
+
+		int	ypix	137
+
+		int	widthpix	30
+
+		int	heightpix	16
+
+		string	text	"str_ldl_CAPS_COST"
+		int	bevelwidth	0
+
+	}
+
+	CostBox:CTP2_STANDARD_FONT {
+
+		int	xpix	518
+
+		int	ypix	137
+
+		int	widthpix	74
+
+		int	heightpix	16
+
+		int	beveltype	2
+
+		int	bevelwidth	1
+
+		string	pattern	"upba5400.tga"
+
+		int	srcxpix	518
+
+		int	srcypix	137
+
+		int	srcwidthpix		74
+
+		int	srcheightpix	16
+
+	}
+
+	PlusButton {
+
+		int	xpix	569
+
+		int	ypix	159
+
+		int	widthpix	22
+
+		int	heightpix	18
+
+		string	image0	"upba5258.tga"
+
+		string	image1	"upba5259.tga"
+
+		string	imagebltflag	"chromakey"
+
+		int	bevelwidth	0
+
+	}
+
+	MinusButton {
+
+		int	xpix	484
+
+		int	ypix	159
+
+		int	widthpix	22
+
+		int	heightpix	18
+
+		string	image0	"upba5260.tga"
+
+		string	image1	"upba5261.tga"
+
+		string	imagebltflag	"chromakey"
+
+		int	bevelwidth	0
+
+	}
+
+	PercentBox:SCIENCE_BOX {
+
+		int	xpix	518
+
+		int	ypix	160
+
+		string	text	"str_ldl_50"
+		int	srcxpix	519
+
+		int	srcypix	160
+
+	}
+
+	SciLabel:CTP2_STANDARD_FONT {
+
+		int	xpix	479
+
+		int	ypix	187
+
+		int	widthpix	30
+
+		int	heightpix	16
+
+		string	text	"str_ldl_SCI"
+	}
+
+	SciBeaker {
+
+		string	image0	"upba5410.tga"
+		string tipwindow "str_ldl_Scien"
+		int	xpix	518
+
+		int	ypix	186
+
+		int	widthpix	12
+
+		int	heightpix	16
+
+		int bevelwidth 	0
+
+		string	imagebltflag	"chromakey"
+
+	}
+
+	SciBox:SCIENCE_BOX {
+
+		int	xpix	552
+
+		int	ypix	188
+
+		string	text	"str_ldl_25"
+		int	srcxpix	520
+
+		int	srcypix	188
+
+	}
+
+	LibraryButton:CTP2_STANDARD_FONT {
+
+		string	image0	"upba5403.tga"
+
+		string	image1	"upba5404.tga"
+
+		int	xpix	486
+
+		int	ypix	244
+
+		int	widthpix	103
+
+		int	heightpix	24
+
+		int	bevelwidth	0
+
+		string	text	"str_ldl_CAPS_GREAT_LIBRARY"
+		string	imagebltflag	"chromakey"
+
+	}
+
+	Chart {
+
+		int	xpix	24
+
+		int	ypix	297
+
+		int	widthpix	534
+
+		int	heightpix	131
+
+		int	beveltype	2
+
+		int	bevelwidth	2
+
+		string	pattern	"upba5400.tga"
+
+		int	srcxpix	24
+
+		int	srcypix	297
+
+		int	srcwidthpix		534
+
+		int	srcheightpix	131
+
+		button:CTP2_STANDARD_FONT {
+
+			string	text	"str_ldl_"
+			int	xpix	0
+
+			int	ypix	0
+
+			int	widthpix	143
+
+			int	heightpix	20
+
+			string	pattern	"chart.tga"
+
+			string	textblttype	"center"
+
+		}
+
+	}
+
+
+
+	KnownToLabel:CTP2_STANDARD_FONT {
+
+		int	xpix	0
+
+		int	ypix	10
+
+		int	widthpix	165
+
+		int	heightpix	16
+
+		string	text	"str_ldl_ADVANCES_KNOWN_TO_COLON"
+	}
+
+
+
+	# players and flags
+
+	PlayerOne:PLAYER_TOP {
+
+		int	xpix	61
+
+		string	text "str_ldl_1"
+	}
+
+	PlayerTwo:PLAYER_BOTTOM {
+
+		int	xpix	61
+
+		string	text "str_ldl_2"
+	}
+
+	PlayerThree:PLAYER_TOP {
+
+		int	xpix	161
+
+		string	text "str_ldl_3"
+	}
+
+	PlayerFour:PLAYER_BOTTOM {
+
+		int	xpix	161
+
+		string	text "str_ldl_4"
+	}
+
+	PlayerFive:PLAYER_TOP {
+
+		int	xpix	261
+
+		string	text "str_ldl_5"
+	}
+
+	PlayerSix:PLAYER_BOTTOM {
+
+		int	xpix	261
+
+		string	text "str_ldl_6"
+	}
+
+	PlayerSeven:PLAYER_TOP {
+
+		int	xpix	361
+
+		string	text "str_ldl_7"
+	}
+
+	PlayerEight:PLAYER_BOTTOM {
+
+		int	xpix	361
+
+	}
+
+	FlagOne:FLAG_TOP {
+
+		int xpix	38
+
+	}
+
+	FlagTwo:FLAG_BOTTOM {
+
+		int xpix	38
+
+	}
+
+	FlagThree:FLAG_TOP {
+
+		int xpix	138
+
+	}
+
+	FlagFour:FLAG_BOTTOM {
+
+		int xpix	138
+
+	}
+
+	FlagFive:FLAG_TOP {
+
+		int xpix	238
+
+	}
+
+	FlagSix:FLAG_BOTTOM {
+
+		int xpix	238
+
+	}
+
+	FlagSeven:FLAG_TOP {
+
+		int xpix	338
+
+	}
+
+	FlagEight:FLAG_BOTTOM {
+
+		int xpix	338
+
+	}
+
+
+
+}
+
+
+
+KnowledgeScreen {
+
+	string	xanchor	"left"
+
+	string	yanchor	"top"
+
+	string	pattern	"upba3010.tga"
+
+	int	xpix	0
+
+	int	ypix	0
+
+	int	widthpix	1024
+
+	int	heightpix	768
+
+	ReturnButton {
+
+		string	image0	"upba2303.tga"
+
+		int	xpix	882
+
+		int	ypix	660
+
+		int	widthpix	75
+
+		int	heightpix	46
+
+		int 	bevelwidth	0
+
+		string	imagebltflag	"chromakey"
+
+	}
+
+	ExitButton {
+
+		string	image0	"upba1811.tga"
+
+#		string	image1	"upba1811.tga"
+
+		int	xpix	993
+
+		int	ypix	3
+
+		int	widthpix	28
+
+		int	heightpix	23
+
+	}
+
+	AdvanceText:CTP2_STANDARD_FONT {
+
+		int	xpix	849
+
+		int	ypix	250
+
+		int	widthpix	127
+
+		int	heightpix	30
+
+		int bevelwidth 	2
+
+		int beveltype	1
+
+	}
+
+	BarText:CTP2_STANDARD_FONT {
+
+		string	text	"str_ldl_Knowledge_Bar"
+		int	xpix	406
+
+		int	ypix	51
+
+		int	widthpix	211
+
+		int	heightpix	24
+
+		int bevelwidth 	1
+
+		int beveltype	1
+
+	}
+
+	SciLabel:CTP2_STANDARD_FONT {
+
+		string	text	"str_ldl_CAPS_SCIENCE"
+		int	xpix	843
+
+		int	ypix	378
+
+		int	widthpix	60
+
+		int	heightpix	20
+
+		int bevelwidth 	0
+
+	}
+
+	SciBox:CTP2_STANDARD_FONT {
+
+		string	text	"str_ldl_0"
+		int	xpix	913
+
+		int	ypix	378
+
+		int	widthpix	50
+
+		int	heightpix	20
+
+		int	beveltype	1
+
+		int bevelwidth 	2
+
+		string	pattern	"upba3010.tga"
+
+	}
+
+
+
+	GivesBox:CTP2_STANDARD_FONT {
+
+		int	xpix	700
+
+		int	ypix	568
+
+		int	widthpix	137
+
+		int	heightpix	137
+
+		string	pattern	"upba3010.tga"
+
+	}
+
+	CivBox {
+
+		int	xpix	175
+
+		int	ypix	96
+
+		int	widthpix	664	
+
+		int	heightpix	47
+
+		string	pattern "upba3010.tga"
+
+		int	bevelwidth	2
+
+		int	beveltype	1
+
+		CivText:CTP2_STANDARD_FONT {
+
+			int	xpix	5
+
+			int	ypix	2
+
+			int	widthpix	100
+
+			int	heightpix	20
+
+			int	bevelwidth 0
+
+			string	text	"str_ldl_CIVILIZATIONS_COLON"
+		}
+
+	}
+
+
+
+	Automate:CTP2_STANDARD_FONT {
+
+		int	xpix	358
+
+		int	ypix	95
+
+		int	widthpix	286
+
+		int	heightpix	26
+
+		string	pattern	"upba3010.tga"
+
+		string	text	"str_ldl_Automate_Research_To_Find"
+		Military:CTP2_STANDARD_FONT {
+
+				int xpix	0
+
+				int ypix	0
+
+				int widthpix	286
+
+				int heightpix	20
+
+				string	pattern	"upba3010.tga"
+
+				string	text	"str_ldl_Military"
+		}
+
+		Knowledge:CTP2_STANDARD_FONT {
+
+				int xpix	0
+
+				int ypix	0
+
+				int widthpix	286
+
+				int heightpix	20
+
+				string	pattern	"upba3010.tga"
+
+				string	text	"str_ldl_Knowledge"
+		}
+
+		Trade:CTP2_STANDARD_FONT {
+
+				int xpix	0
+
+				int ypix	0
+
+				int widthpix	286
+
+				int heightpix	20
+
+				string	pattern	"upba3010.tga"
+
+				string	text	"str_ldl_Trade"
+		}
+
+		Government:CTP2_STANDARD_FONT {
+
+				int xpix	0
+
+				int ypix	0
+
+				int widthpix	286
+
+				int heightpix	20
+
+				string	pattern	"upba3010.tga"
+
+				string	text	"str_ldl_Government"
+		}
+
+		Ocean:CTP2_STANDARD_FONT {
+
+				int xpix	0
+
+				int ypix	0
+
+				int widthpix	286
+
+				int heightpix	20
+
+				string	pattern	"upba3010.tga"
+
+				string	text	"str_ldl_Ocean"
+		}
+
+		Space:CTP2_STANDARD_FONT {
+
+				int xpix	0
+
+				int ypix	0
+
+				int widthpix	286
+
+				int heightpix	20
+
+				string	pattern	"upba3010.tga"
+
+				string	text	"str_ldl_Space"
+		}
+
+	}
+
+
+
+	Center {
+
+		string	image0	"upba2107.tga"
+
+		int xpix	106
+
+		int ypix	131
+
+		int widthpix	803
+
+		int heightpix	417
+
+		string	pattern	"upba3010.tga"
+
+		Sheet {
+
+			int	xpix	8
+
+			int	ypix	7
+
+			int	widthpix	787
+
+			int	heightpix	410
+
+			string	pattern	"upba3010.tga"
+
+
+
+			KnownByYou {
+
+				int	xpix	250
+
+				int	ypix	40
+
+				int	widthpix	299
+
+				int	heightpix	60
+
+				int columns		1
+
+				string	pattern	"upba3010.tga"
+
+				header {
+
+					switch0:CTP2_HEADER_FONT {
+
+						int	widthpix	299
+
+						int	heightpix	0
+
+						string text "str_ldl_"
+						string	pattern	"upba3010.tga"
+
+					}
+
+				}
+
+			}
+
+			KnownByBoth {
+
+				int	xpix	250
+
+				int	ypix	144
+
+				int	widthpix	299
+
+				int	heightpix	60
+
+				int columns		1
+
+				string	pattern	"upba3010.tga"
+
+				header {
+
+					switch0:CTP2_HEADER_FONT {
+
+						int	widthpix	299
+
+						int	heightpix	0
+
+						string text "str_ldl_"
+						string	pattern	"upba3010.tga"
+
+					}
+
+				}
+
+			}
+
+			KnownByOthers {
+
+				int	xpix	250
+
+				int	ypix	249
+
+				int	widthpix	299
+
+				int	heightpix	60
+
+				int columns		1
+
+				string	pattern	"upba3010.tga"
+
+				header {
+
+					switch0:CTP2_HEADER_FONT {
+
+						int	widthpix	299
+
+						int	heightpix	0
+
+						string text "str_ldl_"
+						string	pattern	"upba3010.tga"
+
+					}
+
+				}
+
+			}
+
+			Embassies {
+
+				int	xpix	233
+
+				int	ypix	353
+
+				int	widthpix	335
+
+				int	heightpix	60
+
+				int columns		1
+
+				string	pattern	"upba3010.tga"
+
+				header {
+
+					switch0:CTP2_HEADER_FONT {
+
+						int	widthpix	299
+
+						int	heightpix	0
+
+						string text "str_ldl_"
+						string	pattern	"upba3010.tga"
+
+					}
+
+				}
+
+			}
+
+			LineOne {
+
+				int	xpix	2
+
+				int	ypix	100
+
+				int	widthpix	783
+
+				int	heightpix	10
+
+				string	pattern	"upba2003.tga"
+
+			}
+
+			LineTwo {
+
+				int	xpix	2
+
+				int	ypix	205
+
+				int	widthpix	783
+
+				int	heightpix	10
+
+				string	pattern	"upba2003.tga"
+
+			}
+
+			LineThree {
+
+				int	xpix	2
+
+				int	ypix	309
+
+				int	widthpix	783
+
+				int	heightpix	10
+
+				string	pattern	"upba2003.tga"
+
+			}
+
+			TitleOne {
+
+				string	image0	"upba2105.tga"
+
+				int	xpix	250
+
+				int	ypix	2
+
+				int	widthpix	299
+
+				int	heightpix	49
+
+			}
+
+			TitleTwo {
+
+				string	image0	"upba2105.tga"
+
+				int	xpix	250
+
+				int	ypix	106
+
+				int	widthpix	299
+
+				int	heightpix	49
+
+			}
+
+			TitleThree {
+
+				string	image0	"upba2105.tga"
+
+				int	xpix	250
+
+				int	ypix	211
+
+				int	widthpix	299
+
+				int	heightpix	49
+
+			}
+
+			TitleFour {
+
+				string	image0	"upba2106.tga"
+
+				int	xpix	233
+
+				int	ypix	315
+
+				int	widthpix	335
+
+				int	heightpix	49
+
+			}
+
+			TitleOneText:CTP2_STANDARD_FONT {
+
+				string	text	"str_ldl_Known_Only_To_You"
+				int	xpix	250
+
+				int	ypix	2
+
+				int	widthpix	299
+
+				int	heightpix	20
+
+			}
+
+			TitleTwoText:CTP2_STANDARD_FONT {
+
+				string	text	"str_ldl_Known_To_You_And_Others"
+				int	xpix	250
+
+				int	ypix	106
+
+				int	widthpix	299
+
+				int	heightpix	20
+
+			}
+
+			TitleThreeText:CTP2_STANDARD_FONT {
+
+				string	text	"str_ldl_Only_Known_By_Others"
+				int	xpix	250
+
+				int	ypix	211
+
+				int	widthpix	299
+
+				int	heightpix	20
+
+			}
+
+			TitleFourText:CTP2_STANDARD_FONT {
+
+				string	text	"str_ldl_Embassies_With_These_Civilizations"
+				int	xpix	233
+
+				int	ypix	316
+
+				int	widthpix	335
+
+				int	heightpix	20
+
+			}
+
+		}
+
+	}
+
+
+
+
+
+
+
+	TitleText:CTP2_STANDARD_FONT {
+
+#		string	pattern	"upba3010.tga"
+
+		int	xpix	400
+
+		int	ypix	25
+
+		int	widthpix	200
+
+		int	heightpix	40
+
+		string	text	"str_ldl_SCIENCE_STATUS"
+	}
+
+
+
+	ListTop {
+
+		string	image0	"upba3301.tga"
+
+		int	xpix	85
+
+		int	ypix	145
+
+		int	widthpix	793
+
+		int heightpix	71
+
+		string	imagebltflag	"chromakey"
+
+	}
+
+	ListBl {
+
+		string	image0	"upba2604.tga"
+
+		int	xpix	107
+
+		int	ypix	533
+
+		int	widthpix	333
+
+		int heightpix	20
+
+		string	imagebltflag	"chromakey"
+
+	}
+
+	ListBc {
+
+		string	image0	"upba3303.tga"
+
+		int	xpix	440
+
+		int	ypix	533
+
+		int	widthpix	82
+
+		int heightpix	21
+
+		string	imagebltflag	"chromakey"
+
+	}
+
+	ListBr {
+
+		string	image0	"upba2604.tga"
+
+		int	xpix	522
+
+		int	ypix	533
+
+		int	widthpix	333
+
+		int heightpix	20
+
+		string	imagebltflag	"chromakey"
+
+	}
+
+
+
+	Lt {
+
+		string	image0	"upba3001.tga"
+
+		int	xpix	0
+
+		int	ypix	0
+
+		int	widthpix	335
+
+		int heightpix	186
+
+		string	imagebltflag	"chromakey"
+
+	}
+
+	Ct {
+
+		string	image0	"upba3002.tga"
+
+		int	xpix	335
+
+		int	ypix	0
+
+		int	widthpix	298
+
+		int heightpix	98
+
+		string	imagebltflag	"chromakey"
+
+	}
+
+	Rt {
+
+		string	image0	"upba3003.tga"
+
+		int	xpix	633
+
+		int	ypix	0
+
+		int	widthpix	391
+
+		int heightpix	191
+
+		string	imagebltflag	"chromakey"
+
+	}
+
+	LeftImage {
+
+		string	image0	"upba3005.tga"
+
+		int	xpix	0
+
+		int	ypix	186
+
+		int	widthpix	37
+
+		int heightpix	544
+
+		string	imagebltflag	"chromakey"
+
+	}
+
+	RightImage {
+
+		string	image0	"upba3007.tga"
+
+		int	xpix	983
+
+		int	ypix	191
+
+		int	widthpix	41
+
+		int heightpix	576
+
+		string	imagebltflag	"chromakey"
+
+	}
+
+	BottomImage {
+
+		string	image0	"upba3006.tga"
+
+		int	xpix	0
+
+		int	ypix	730
+
+		int	widthpix	984
+
+		int heightpix	38
+
+		string	imagebltflag	"chromakey"
+
+	}
+
+
+
+
+
+	TitleBar {
+
+		string	image0	"upba2101.tga"
+
+		int	xpix	0
+
+		int	ypix	0
+
+		int	widthpix	1024
+
+		int	heightpix	27
+
+	}
+
+	UpperLeft {
+
+		string	image0	"upba2103.tga"
+
+		int	xpix	0
+
+		int	ypix	29
+
+		int	widthpix	45
+
+		int	heightpix	48
+
+	}
+
+	UpperRight {
+
+		string	image0	"upba2104.tga"
+
+		int	xpix	979
+
+		int	ypix	29
+
+		int	widthpix	45
+
+		int	heightpix	48
+
+	}
+
+	CenterBottomOne {
+
+		string	image0	"upba1707.tga"
+
+		int	xpix	86
+
+		int	ypix	548
+
+		int	widthpix	283
+
+		int	heightpix	20
+
+	}
+
+	CenterBottomTwo {
+
+		string	image0	"upba1707.tga"
+
+		int	xpix	368
+
+		int	ypix	548
+
+		int	widthpix	283
+
+		int	heightpix	20
+
+	}
+
+	CenterBottomThree {
+
+		string	image0	"upba1707.tga"
+
+		int	xpix	651
+
+		int	ypix	548
+
+		int	widthpix	283
+
+		int	heightpix	20
+
+	}
+
+	LowerLeft {
+
+		string	image0	"upba1622.tga"
+
+		int	xpix	0
+
+		int	ypix	728
+
+		int	widthpix	20
+
+		int	heightpix	28
+
+	}
+
+	LowerRight {
+
+		string	image0	"upba1623.tga"
+
+		int	xpix	1004
+
+		int	ypix	728
+
+		int	widthpix	20
+
+		int	heightpix	28
+
+	}
+
+	Bottom {
+
+		int	xpix	0
+
+		int	ypix	755
+
+		int	widthpix	1024
+
+		int	heightpix	13
+
+		string	pattern	"upba0601.tga"
+
+	}	
+
+}
+
+
+
+KnowledgeListItem {
+
+#	string	pattern			"upba3010.tga"
+
+	Name:CTP2_STANDARD_FONT{
+
+		int		xpix			0
+
+		int		ypix			0
+
+		int		widthpix		210
+
+		int		heightpix		20
+
+#		string	pattern			"upba3010.tga"
+
+	}
+
+}
+
+
+
+EmbassyListItem {
+
+#	string	pattern			"upba3010.tga"
+
+	Name:CTP2_STANDARD_FONT{
+
+		int		xpix			0
+
+		int		ypix			0
+
+		int		widthpix		210
+
+		int		heightpix		20
+
+#		string	pattern			"upba3010.tga"
+
+	}
+
+}
+
+
+
+template ADVTEXT:CTP2_STANDARD_FONT {
+
+	int		xpix			0
+
+	int		ypix			0
+
+	int		heightpix		25
+
+	int		widthpix		129
+
+	string	just	"center"
+
+	bool	vertcenter	true
+
+}
+
+
+
+template ADVSYM {
+
+	int		xpix			0
+
+	int		ypix			0
+
+	int		heightpix		25
+
+	int		widthpix		47
+
+	Branch {
+		int	xpix	10
+		int	ypix	3
+		int	widthpix	26
+		int	heightpix	19
+	}
+
+}
+
+
+
+template ADVFLAG {
+
+	int		xpix			20
+
+	int		ypix			0
+
+	int		heightpix		25
+
+	int		widthpix		65
+
+#	string	image0	"upba3305.tga"
+
+#	string	imagebltflag	"chromakey"
+
+}
+
+
+
+AdvanceListItem {
+
+	PlayerFlag:ADVFLAG {
+
+	}
+
+	SymTwo:ADVSYM {
+
+	}
+
+	Name:ADVTEXT {
+
+	}
+
+	FlagOne:ADVFLAG {
+
+	}
+
+	FlagTwo:ADVFLAG {
+
+	}
+
+	FlagThree:ADVFLAG {
+
+	}
+
+	FlagFour:ADVFLAG {
+
+	}
+
+	FlagFive:ADVFLAG {
+
+	}
+
+	FlagSix:ADVFLAG {
+
+	}
+
+	FlagSeven:ADVFLAG {
+
+	}
+
+}
+
+
+
+
+SciListItem:CTP2_LIST_ITEM {
+
+	Name:CTP2_STANDARD_FONT {
+		string objecttype "ctp2_Static"
+		int heightpix 24
+		int		widthpix		160
+	}
+
+}
+
+
+SciAdvanceString {
+	int	numStrings	1
+
+	string	string0	"str_tbl_ldl_Select_a_new"
+}
+
+ScienceStrings {
+	int	numStrings	12
+
+	string	string0		"str_tbl_ldl_upk103.tga"
+	string	string1		"str_tbl_ldl_upk110.tga"
+	string	string2		"str_tbl_ldl_upk105.tga"
+	string	string3		"str_tbl_ldl_upk108.tga"
+	string	string4		"str_tbl_ldl_upk111.tga"
+	string	string5		"str_tbl_ldl_upk109.tga"
+	string	string6		"str_tbl_ldl_upk101.tga"
+	string	string7		"str_tbl_ldl_upk100.tga"
+	string	string8		"str_tbl_ldl_upk102.tga"
+	string	string9		"str_tbl_ldl_upk106.tga"
+	string	string10	"str_tbl_ldl_upk104.tga"
+	string	string11	"str_tbl_ldl_upk107.tga"
+}
+
+$
+

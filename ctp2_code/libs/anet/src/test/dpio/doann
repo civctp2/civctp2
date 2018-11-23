@@ -1,0 +1,5 @@
+#!/bin/csh
+
+foreach file (output0.*)
+	perl ../../dp/annotate.pl $file > ann.$file
+end

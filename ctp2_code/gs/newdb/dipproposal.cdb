@@ -1,0 +1,101 @@
+
+DiplomacyProposal {
+	StringID Title
+
+	# These are used by the UI to sort proposal types, not necessarily the
+	# same as Class/Excludes
+	Bits Category {
+		Request,
+		Treaty,
+		Gift
+	}
+	String Type
+	Bits Arg1 {
+		OwnCity,
+		HisCity,
+		OwnArmy,
+		HisArmy,
+		HisAgreement,
+		OwnAdvance,
+		HisAdvance,
+		OwnStopResearch,
+		HisStopResearch,
+		OwnUnitType,
+		OwnGood,
+		HisGood,
+		ThirdParty,
+		OwnGold,
+		HisGold,
+		OwnPollution,
+		HisPollution,
+		Percent
+	}
+
+	Struct StrengthStrings {
+		Bit(StringId) DetailsWeak
+		Bit(StringId) DetailsEven
+		Bit(StringId) DetailsStrong
+	}
+
+	# One StrengthStrings for each tone
+	Bit(Struct StrengthStrings) Details0
+	Bit(Struct StrengthStrings) Details1
+	Bit(Struct StrengthStrings) Details2
+	Bit(Struct StrengthStrings) Details3
+	Bit(Struct StrengthStrings) Details4
+
+	# and the same for exchanges
+	Bit(Struct StrengthStrings) DetailsEx0
+	Bit(Struct StrengthStrings) DetailsEx1
+	Bit(Struct StrengthStrings) DetailsEx2
+	Bit(Struct StrengthStrings) DetailsEx3
+	Bit(Struct StrengthStrings) DetailsEx4
+
+	# Bits for class and excludes must be the same.
+	# Each type can exclude other classes from
+	# being used as the second part (exchange) 
+	# of the proposal.
+	Bits Class {
+		Request,
+		Treaty,
+		Offer
+	}
+	
+	Bits Excludes {
+		Request,
+		Treaty,
+		Offer
+	}
+
+	# When countering a proposal, want to use the opposite sense of strings.
+	# This tells us what record holds the opposite.
+	Bit(Record DiplomacyProposal) Reciprocal
+
+	# Image filename for the intelligence UI.
+	File Image
+
+	# Proposal slot (0-7), do not set for transient proposals
+	Bit (int) ImageSlot
+
+	# Check before displaying proposal in list
+	Bit Disabled
+	Bit HasAlly
+	Bit HasBorderIncursion
+	Bit IsPirating
+	Bit HasEmbassy
+	Bit HasHotwar
+	Bit NoHotwar
+	Bit HasPeaceTreaty
+	Bit HasAlliance
+	Bit HasNuclearWeapons
+	Bit HasBioWeapons
+	Bit HasNanoWeapons
+	Bit HasEmbargo
+	Bit HasMilitaryAgreement
+	Bit HasPollutionAgreement
+	Bit HasPollution
+
+	// if set, then a violation reduces trust of all players
+	Bit TrustViolationGlobal
+}
+

@@ -1,0 +1,13 @@
+11
+VICTORY_LOST_OUT_OF_TIME			"GM005.AVI"		# Outro 1 (Lose) - GW37A.avi
+VICTORY_LOST_CONQUERED				"GM005.AVI"		# Killed By Enemy - GW37A.avi
+VICTORY_LOST_DIPLOMACY				"GM005.AVI"		# Alliance Victory (Lose) - GW37A.avi
+VICTORY_LOST_SCIENCE				"GM005.AVI"		# Gaia Controller (Lose) - GW37A.avi
+VICTORY_LOST_INEPT					"GM005.AVI"		# Killed by Barbarians - GW37A.avi
+VICTORY_LOST_SCENARIO				"GM005.AVI"		# Outro 1 (Lose)
+VICTORY_WON_CONQUERED_WORLD			"GM003.AVI"		# Killed All Enemies (Win) - GW38A.avi
+VICTORY_WON_DIPLOMACY				"GM004.AVI"		# Alliance Victory  - GW36A.avi
+VICTORY_WON_SCIENCE					"GM002.AVI"		# Gaia Controller  - GW36A.avi
+VICTORY_INTRO						"GM001.avi"		# Intro Movie
+VICTORY_WON_SCENARIO				"GM003.AVI"		# Outro 2 (Win)
+

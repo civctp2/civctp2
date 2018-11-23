@@ -1,0 +1,183 @@
+# Server Benchmarking program
+# usage : bench bench.pr maxexec server nprocs iters to_log dwelltime 
+#
+# maxexec - maximum amount of time between processing the steps
+# server - server to use
+# nprocs - number of players to simulate simultanesously
+# iters - number of iterations to perform per player
+# to_log - processes between 1 and to_log should log
+# dwelltime(ms) - amount of time to wait between interations
+
+Print server=%1 nprocs=%2 iters=%3 plog=1-%4 dwelltime=%5
+
+# Set I8 to the WARNING level of time allowed per step (ms)
+SET I8 10000
+# Set I9 to the FATAL level of time allowed per step (ms)
+SET I9 10000
+
+GOTO @BEGIN
+
+#--------------------------------------------------------------------------
+
+LABEL @FAIL
+Verbosity 2 
+Print process $procid exits
+# Exit with fail code
+EXIT 1
+
+#--------------------------------------------------------------------------
+
+LABEL @SPAWNV
+Spawn @CLIENTV 1
+GOTO @SPAWNDONE
+
+#--------------------------------------------------------------------------
+
+LABEL @BEGIN
+
+Verbosity 2
+
+# Create %2 players
+SET I0 1
+SET I1 %2
+SET I2 1
+# End point is nplayers + 1
+ADD I1 I2
+# Which players should be verbose
+SET I3 %4
+ADD I3 I2
+
+#Timer 2 OFF
+
+# do {
+LABEL @OUTLOOP
+
+# 	if (I0 <= argv[4]) spawn(verbose); else spawn();
+IF I0 < I3 @SPAWNV
+Spawn @CLIENT 1
+LABEL @SPAWNDONE
+
+Wait 250
+
+# } while (I0++ < argv[2]);
+ADD I0 I2
+IF I0 < I1 @OUTLOOP
+
+#Timer 2 ON
+SET I8 100
+SET I9 200
+Wait Solitary
+
+# Write reports on the timers
+#Timer 0 REPORT
+Print Timer 1: dpSetGameServer stats
+Timer 1 REPORT
+Print Timer 2: dpOpen
+Timer 2 REPORT
+Print Timer 3: dpCreatePlayer
+Timer 3 REPORT
+Print Timer 4: Wait Shutdown
+Timer 4 REPORT
+#Timer 5 REPORT
+
+# Test to see if we had any failures
+Timer 0 COPY NUMBER
+SET I1 0
+ADD I1 I0
+Timer 5 COPY NUMBER
+Print $I0 of $I1 connections succeeded.
+IF I0 < I1 @FAIL
+
+# Figure out if the average time was greater than 5000
+#Timer 2 COPY AVG
+#SET I1 5000
+#IF I0 > I1 @FAIL
+
+# Exit with success code
+EXIT 0
+
+#--------------------------------------------------------------------------
+
+LABEL @CLIENTV
+SET I3 2
+LABEL @CLIENT
+
+Verbosity $I3
+
+# Number of iterations to perform
+SET I0 %3
+SET I1 0
+SET I2 -1
+
+LABEL @START
+
+Timer 0 START
+Timer 0 END
+
+ONERROR @TERMINATE
+
+# Create dp
+#Verbosity 2
+dpCreate winets2.dll
+#Verbosity $I3
+
+ONERROR @DESTROY
+
+# Connect to game server
+#Verbosity 2
+Timer 1 START
+dpSetGameServer %1 65
+Timer 1 END
+#Verbosity $I3
+
+# Wait 5000
+# dpReceive
+
+ONERROR @CLOSE
+#ONERROR @FAIL
+
+# Join any session on the server
+Timer 2 START
+dpOpen ANY
+Wait
+Timer 2 END
+
+# Create a player in the room
+Timer 3 START
+dpCreatePlayer BenchPlayer
+Wait
+Timer 3 END
+
+Timer 5 START
+Timer 5 END
+
+# Wait a bit
+#Wait 5000
+
+# Say something
+#dpSend BROADCAST Hello
+Wait %5
+#dpSend BROADCAST ByeBye
+
+# Shut down
+LABEL @CLOSE
+ONERROR @DESTROY
+Timer 4 START
+Wait 2000 1000 Shutdown
+Timer 4 END
+
+# Destroy dp
+LABEL @DESTROY
+ONERROR @TERMINATE
+
+dpGetStats
+dpDestroy
+
+# Loop
+ADD I0 I2
+IF I0 ! I1 @START
+
+Verbosity 1
+
+# Termination
+LABEL @TERMINATE

@@ -1,0 +1,104 @@
+#######################################
+# File: citypad.ldl
+# Last Access: Thu Mar 25 16:56:03 1999
+#######################################
+
+##-----------------------------------##
+##             Templates             ##
+##-----------------------------------##
+CITYPAD_SPINNER {
+	int	widthpix	22
+	int	heightpix	18
+	string	imagebltflag	"chromakey"
+}
+
+CITYPAD_LABEL:CTP2_STANDARD_FONT {
+	int	widthpix	80
+	int	heightpix	20
+}
+
+
+##-----------------------------------##
+##                Data               ##
+##-----------------------------------##
+CitypadString {
+	int	numstrings	3
+	string	string0	"str_tbl_ldl_Roman"
+	string	string1	"str_tbl_ldl_Arabian"
+	string	string2	"str_tbl_ldl_Asian"
+}
+
+CityPad {
+	string	pattern	"upba6417.tga"
+	int	xpix	43
+	int	ypix	37
+	int	widthpix	389
+	int	heightpix	129
+	CityPadStaticText:CTP2_STANDARD_FONT {
+		int	xpix	10
+		int	ypix	18
+		int	widthpix	94
+		int	heightpix	18
+		string	text	"str_ldl_Edit_City"
+		int	bevelwidth	1
+		int	beveltype	2
+		string	pattern	"upba5605.tga"
+	}
+	CityNameField {
+		int	xpix	27
+		int	ypix	40
+		int	widthpix	120
+		int	heightpix	20
+		string	pattern	"upba6417.tga"
+		# Make sure that maxfieldlen same as used in:
+	    #    CityStatusWin:CityName 
+		#    CityPad:CityNameField 
+	    #    NameTheCityPop:TextField (640 and normal)
+		int	maxfieldlen	50
+	}
+	CitySizeField {
+		int	xpix	66
+		int	ypix	79
+		int	widthpix	40
+		int	heightpix	20
+		string	pattern	"upba6417.tga"
+	}
+	PlusButton:CITYPAD_SPINNER {
+		int	xpix	107
+		int	ypix	77
+		string	image0	"upba5258.tga"
+		string	image1	"upba5259.tga"
+		int	bevelwidth	0
+	}
+	MinusButton:CITYPAD_SPINNER {
+		int	xpix	37
+		int	ypix	78
+		string	image0	"upba5260.tga"
+		string	image1	"upba5261.tga"
+		int	bevelwidth	0
+	}
+	SizeLabel:CITYPAD_LABEL {
+		int	xpix	44
+		int	ypix	58
+		string	text	"str_ldl_City_Size"
+	}
+	UserMessage:CTP2_STANDARD_FONT {
+		int	xpix	163
+		int	ypix	30
+		int	widthpix	213
+		int	heightpix	74
+		string	pattern	"upba6417.tga"
+		string	text	"str_ldl_City_Pad_Message"
+		string	textblttype	"fill"
+		int	bevelwidth	0
+	}
+	PlayerIcon {
+		int	xpix	357
+		int	ypix	10
+		int	widthpix	23
+		int	heightpix	23
+	}
+}
+
+
+$

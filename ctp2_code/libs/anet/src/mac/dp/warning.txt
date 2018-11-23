@@ -1,0 +1,15 @@
+This code is meant to be compiled with Codewarrior on either Mac or Win95.
+To compile with Codewarrior on Win95, use the project file in this directory.
+To compile with Codewarrior on Mac, use the project file in ..\macbuild.
+
+Warning: if you wish to make changes to the project settings, you need
+to check out the .cwp (codewarrior project) file both in this directory
+and in the resource.frk subdirectory; don't let them get out of sync!
+
+Note: you can delete all the files in the resource.frk subdirectory 
+except for the .cwp file.  If you delete that, Codewarrior's IDE will
+crash on startup.
+
+See also the README.TXT in ..\macbuild.
+
+Dan Kegel

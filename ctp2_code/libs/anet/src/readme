@@ -1,0 +1,7 @@
+See the file DEFAULT.HTM in this directory for a description of
+the source tree and build process.
+
+If you don't have time to read the documentation, 
+BUILDALL.BAT is what I run to build the SDK on my machine.
+It will require adjustment to run on other machines.
+- Dan

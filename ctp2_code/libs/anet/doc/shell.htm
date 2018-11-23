@@ -1,0 +1,300 @@
+<HTML>
+<BODY>
+
+<CENTER>
+<H1>
+The Anet Shell</H1></CENTER>
+
+<CENTER>Last updated: 16 August 97</CENTER>
+
+<H2>
+Contents</H2>
+
+<UL>
+<LI>
+<A HREF="#Overview">Overview</A></LI>
+
+<LI>
+<A HREF="#anet.inf">How the shell knows what games are installed</A></LI>
+
+<LI>
+<A HREF="#Howto">How to Enable Your Game to run under the Shell</A></LI>
+
+<LI>
+<A HREF="#Debugging">Debugging Tips</A></LI>
+
+<LI>
+<A HREF="#Customizing">Data Files and Customization</A></LI>
+</UL>
+
+<HR><A NAME="Overview"></A>
+<H2>
+Overview</H2>
+The <B>Anet Shell</B>, or Netshell, is a ready-made network pregame
+setup component which can be used by game programmers. Its main reason
+for existence is to keep us from having to reinvent the wheel with every
+new game. Every game has had to have a network shell programmer; with the
+Anet Shell to draw on, that programmer should need less
+time to write and debug the game's network shell.
+
+<P>The Anet Shell takes care of managing phone numbers and dialing
+(when using modem), selecting and authenticating to game servers (when
+using Internet), lobby chat, and hosting or joining games. Once the user
+decides to host or join a game, the Anet Shell passes control to the
+game program, which then lets the user set game options and launch.
+
+<P>A fundamental goal of the Anet Shell is stability and support for
+all our games. To that end, the shell will only be compiled once, and all
+customization will be handled by loading in files at runtime. Updates to
+the Anet Shell can be downloaded and installed once, and will automatically
+affect all games installed on the user's machine.
+
+<P>Initially, it will have a standard screen layout, and the game programmer
+will be able to customize it by specifying background and button art and
+sounds. Later, if there is demand for more customizability, we may allow
+the game programmer to override some of the behavior of the Anet Shell
+to allow game-specific screen layouts and functions. This will be done
+via DLL's or a similar mechanism.
+
+<P>The Anet Shell will eventually be able to handle English, German,
+and Japanese. In fact, when Japanese users chat, and English users are
+in the room, the English users should be able to see the Japanese characters
+properly on the screen. (The limiting factor is the font- we currently
+can't afford to ship a Japanese font; they're expensive!)
+
+<P>The Anet Shell will be implemented as a program which can be run
+from the Start menu or from splash screens. It can be started with a parameter
+which specifies which game is selected. If no game is specified when starting,
+it presents a menu of games to the user.
+
+<P>The user interface will take the user through the following screens:
+<OL>
+<LI>
+Transport Selection</LI>
+
+<LI>
+Transport-specific setup (e.g. phone book or server selection)</LI>
+
+<LI>
+Character Selection</LI>
+
+<LI>
+Game-themed chat screen</LI>
+</OL>
+
+<HR><A NAME="anet.inf"></A>
+<H2>
+How the Shell knows what games are installed</H2>
+Under Windows 95, the Shell will locate compatible applications by looking
+in the Registry under HKEY_LOCAL_MACHINE/SOFTWARE/Activision/Activenet/Applications/MyGame
+for a key named 'Cwd' containing the absolute path to the directory the
+game is installed in. Under MacOS, the Shell will look in the Preferences
+folder for a folder called "Activenet", which will contain an alias to
+each Anet-enabled application.
+
+<P>A file named <B>ANET.INF</B> should be installed in the same folder
+as each game application; it describes the game application to the Shell.
+For instance, one of the demo applications in the SDK has the following
+ANET.INF:
+<PRE>[ActiveNet]
+Name=Chat
+Run=chat.exe
+Cmdline=
+SessionType=65
+ShellOpts=/nopregame /nosync</PRE>
+Here's what each line means:
+<BR><B>name</B> is the name of the game. (This is only used during debugging.)
+<BR><B>run</B> is the executable to run (e.g. mech2.exe)
+<BR><B>SessionType</B> is a number assigned by <A HREF="mailto:dank-anet@kegel.com">Dan
+Kegel</A> to identify this application
+<BR><B>cmdline</B> is any commandline arguments the game needs; usually
+blank.
+<BR><B>ShellOpts</B> are options that control how the Shell treats your
+game. Usually blank, but can contain the word <B>/nopregame</B> if your
+game doesn't want the Shell to give your game a pregame chat screen or
+the word <B>/nosync</B> if your game doesn't require synchronized launching.
+
+<P>The following words can also be used in ShellOpts under Windows 95 for
+debugging:
+<UL>
+<LI>
+/NEWCONSOLE => new Win32 console created for game</LI>
+
+<LI>
+/OLDCONSOLE => existing Win32 console used for game</LI>
+</UL>
+
+<HR><A NAME="Howto"></A>
+<H2>
+How to Enable Your Game to run under the Shell</H2>
+Here's what you need to do to register your application at setup time:
+<OL>
+<LI>
+Ask Dan Kegel for a SessionType for your game, and create an <A HREF="#anet.inf">anet.inf</A>
+file in the directory where your game is installed. For instance, assuming
+your game is called "My Game", and Dan gave you session type 1234, here's
+what anet.inf might look like:</LI>
+
+<PRE>[ActiveNet]
+Name=My Game
+Run=mygame.exe
+AppKey=Mygame_exe
+SessionType=1234</PRE>
+
+<LI>
+The AppKey line is a new addition to the anet.inf file (1/9/98), and must
+be included if your game will support automatic downloading of patches
+from the web using dkupddll.dll. Otherwise, you need not include it.&nbsp;
+The value here provides information to automatically launch your game after
+patches are downloaded from the web and executed.</LI>
+
+
+<P>The value here is the registry subkey your game uses under HKEY_LOCAL_MACHINE/SOFTWARE/Microsoft/Windows/CurrentVersion/App
+Paths.
+
+<P>For example, if you used AppKey=Mygame_exe, then to launch your game
+after patching, dkupddll would look to the key: HKEY_LOCAL_MACHINE/SOFTWARE/Microsoft/Windows/CurrentVersion/App
+Paths/Mygame_exe.
+
+<P>The default value of this key is the path to your game's main executable.
+Contact Cross Production if the installer for your game does not yet create
+a registry key here. The AppKey line here is necessary in spite of the
+Run line, since Run points to the executable for the multiplayer version
+of your game, which may not be the main executable of your game.
+<BR>&nbsp;
+<LI>
+Install a copy of NetShell and its two test applications (chat and turn).</LI>
+
+<LI>
+(In real life, you'd use an installer for this step:) Run regedit and look
+at the key "HKEY_LOCAL_MACHINE/SOFTWARE/Activision/Activenet/Applications/Chat".
+Notice it has a CWD value pointing to the directory holding the Chat demo.
+Create a new key just like it for your game, e.g. "HKEY_LOCAL_MACHINE/SOFTWARE/Activision/Activenet/Applications/MyGame/CWD",
+and set it to the absolute path where your game is installed.</LI>
+
+<LI>
+If you want to start Shell with your game preselected, make a shortcut
+with target</LI>
+
+<PRE>C:\NETSHELL\netshell.exe -t:[sessionType]</PRE>
+where [sessionType] is the sessionType you got from Dan Kegel. (Your installer
+will eventually make a start menu shortcut for this.)</OL>
+Here's what you need to do to get your application to launch properly:
+<OL>
+<LI>
+In the directory containing your executable, make a directory named "dll"
+and copy the transport dll's there (e.g. copy \anetsdk\win\dll\w*.dll dll).</LI>
+
+<LI>
+Create a DLL subdirectory in your product's directory containing (in the
+case of a Windows game) the files WINET.DLL, WIPX.DLL, WSERIAL.DLL, WMODEM.DLL,
+ANETDLLD.DLL, and ANETDLL.DLL from the WIN\DLL folder of the SDK.</LI>
+
+<LI>
+Make sure MSVCRT.DLL (and, for debugging, MSVCRTD.DLL) are either in the
+WINDOWS\SYSTEM directory, or in the product's directory.</LI>
+
+<LI>
+Link the release version of your program to ANETDLL.LIB, and the debug
+version to ANETDLLD.LIB.</LI>
+
+<LI>
+In your program, call dpCreate as follows:</LI>
+
+<PRE>dp_result_t err;
+err = dpCreate(&amp;dp, NULL, NULL, "freeze.dat");
+if (err != dp_RES_OK)
+&nbsp;&nbsp;&nbsp; abort("Can't initialize DP");</PRE>
+
+<LI>
+When your program is done, call</LI>
+
+<PRE>dpDestroy(dp, 1);</PRE>
+then tell NetShell whether it should start again by calling
+<PRE>dpExitFromApp(int exit_status);</PRE>
+If you use a zero exit status, and don't crash, the Shell will start up
+again when your app exits.</OL>
+That's it! You should be able to see your game in the list of games when
+you run Shell.&nbsp;
+<HR><A NAME="Debugging"></A>
+<H2>
+Debugging Tips</H2>
+
+<H3>
+Using a debugger with a game launched from the Shell</H3>
+To run your game under a debugger, edit the game's <A HREF="#anet.inf">anet.inf</A>
+file, and change the line that normally starts your game directly, e.g.
+<PRE>Run=mygame.exe</PRE>
+to invoke the debugger instead, e.g.
+<PRE>Run=c:\msdev\bin\msdev.exe mygame.pdb</PRE>
+or to start a DOS window where you can start the debugger by hand, e.g.
+<PRE>Run=c:\command.com</PRE>
+
+<H3>
+Troubleshooting</H3>
+If the dpCreate function call fails, run the debugging version of your
+game (which was linked to ANETDLLD.LIB), and create the file dp.ini <A HREF="dp.htm#inifiles">as
+described in dp.htm</A>, with the lines
+<PRE>[DEBUG]
+ALL=1
+TOLOG=1&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp; # use TOALOG instead of TOLOG if program is crashing
+LOGFILE=dp.log</PRE>
+Then look for the <A HREF="dp.htm#logfiles">logfile dp.log</A> after running
+your program; it will contain information that will help you and/or the
+Anet team debug the problem.&nbsp;<A NAME="Customizing"></A>
+<H2>
+Data Files and Customization</H2>
+If game-specific art or behavior is required in a game's pregame chat area
+in the Shell, the programmer can create it during development by dropping
+the right files into the directory where the Shell is installed. When it's
+finished, the assets should be provided to the Anet team, who will
+include the data in the next update of the Shell. We will have an automatic
+update mechanism, so even users who don't have a product installed can
+visit the game's chat area (but they probably won't be allowed to chat
+unless they actually have the game installed).
+
+<P>In the Shell directory, all game-specific data is stored in the data
+directory. Whenever a file is read from the data directory, the following
+directories are searched in this order:
+<PRE>/data/[session type].[language code] || /data/[session type]
+/data/default.[language code] || /data/default</PRE>
+Therefore, if you have any game-specific files which you want to load instead
+of the default files (like sounds or art), you can place these files in
+the /data/[session type] directory.
+
+<P>If you want to define your own custom colors or fonts, you can create
+a java class Settings which derives from NS.Settings (see NS.java), and
+place the "Settings.class" file in your data directory.
+
+<P>In a similar fashion, you can substitute you own classes for just about
+any part of the netshell. For example, if you wanted to make your own pregame
+setup panel, you would create a class called PregamePanel which derived
+from Area.Panel, and place this in a file call PregamePanel.class in your
+data/[session type] directory.
+<H2>
+Other internal Shell details</H2>
+NetShell uses the following registry keys under "HKEY_LOCAL_MACHINE/SOFTWARE/Activision/Activenet/Applications/NetShell":
+<UL>
+<LI>
+Cmdline (contains the arguments to Java Runtime Environment)</LI>
+
+<LI>
+Cwd (contains the full path to the directory where NetShell was installed)</LI>
+
+<LI>
+Name (contains the name NetShell)</LI>
+
+<LI>
+Path (contains the full path to netshell.exe which keeps track of NetShell
+and the games launched from it)</LI>
+
+<LI>
+Run (contains the full path to Java Runtime Environment which is needed
+to run NetShell)</LI>
+</UL>
+
+<HR><A HREF="index.html">Back to Anet SDK table of contents</A>&nbsp;
+<HR><I>Dan Kegel</I>
+<BR><I>Copyright 1995-2001 Activision</I>
+</BODY>
+</HTML>

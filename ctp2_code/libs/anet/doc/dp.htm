@@ -1,0 +1,2051 @@
+<html>
+<head>
+<title>Anet API</title>
+</head>
+<body>
+<h1><center><a name="Top">The Anet API</a></center></h1>
+<center><font size="-1">Copyright 1995-2001, <a href="http://www.activision.com/">Activision</a></font></center>
+<h1>Contents</h1>
+<ul>
+<li><a href="#Overview">Overview</a>
+<li><a href="#functionGroups">The major groups of functions provided by this
+library</a>
+<li><a href="#Debugging">Debugging Aides</a>
+<li><a href="#SysMsgs">System Message Reference</a>
+<li><a href="#APIFuncRef">Function Reference</a>
+<li><a href="#Compatibility">Compatibility with other API's</a>
+</ul>
+<hr>
+<h1><center><a name="Overview">API Overview</a></center></h1>
+
+<h2>Purpose</h2>
+The Anet API, like Microsoft's DirectPlay, takes care of the 
+dirty part of writing networked games (e.g. dialing the modem or 
+connecting over the 'Net), and lets you concentrate on writing the game.
+It supports many kinds of connections: LAN, Internet, modem, direct serial 
+connection, and proprietary gaming networks such as 
+<a href="http://www.heat.net/">Heat</a>. 
+
+<p>
+Unlike Microsoft's DirectPlay or 
+Apple's <a href="http://developer.apple.com/dev/games/">NetSprocket</a>,
+it supports not just Windows 95, but also Windows NT, Linux, 
+Java, MacOS, and DOS.
+
+<h2>What's under the hood?</h2>
+The Anet API includes a library, known as DP, written in C,
+which handles high-level functions such as player and session management
+(described by this document),
+a number of dynamic-link libraries, called Transport DLL's,
+and a helper app called <a href="services.htm">anetdrop</a>.
+
+<h3>Internationalization</h3>
+In these days of the global Internet, the only reliable way to share 
+player names across the network is to use <a href="http://www.unicode.org">
+the Unicode character set</a>.  To make this transparant to the programmer,
+the Anet functions that manipulate names will be upgraded soon
+to automatically convert between the default character set and Unicode.
+Following Microsoft's standard approach, each of these functions will
+have two versions: one that uses a wide Unicode character string,
+and another that uses a normal 8-bit character string.
+If you use the latter, the strings will be converted to Unicode for you.
+<p>
+The first function call to support this is 
+<a href="#dpAccountLogin">dpAccountLogin</a>; others will follow.
+
+<h3>The Transport DLL's</h3>
+A transport DLL is a simple library that provides an unreliable packet
+delivery service.  These can be wrappers around existing API's (as 
+in the case of IPX, DOS Dwango, and Win95 Internet transports),
+or they can actually implement a packet protocol and talk to hardware
+(as in the Modem, Null-Modem, and DOS Internet transports).  
+It's not too hard to develop new transport DLL's;
+if an API exists, and you just need to wrap it into a DLL, you might
+be able to get it up and running in two days, and finished in a week.
+
+<h4>Listing available transport DLL's</h4>
+Before initializing the DP library, you need to choose a transport DLL.
+The available transport DLL's can be listed by calling 
+<a href="#dpEnumTransports">dpEnumTransports(path, callback, context)</a>.  
+The callback function <a href="#dpEnumTransportCallback_t">dpEnumTransportCallback_t(fname, description, context)</a>
+returns both a filename and a description.  Description->name is usually
+presented to the user in a menu, as in <a href="net1.gif">Mercnet's Connection
+Type screen</a>.  Certain transport DLL's may prefer to be hidden,
+for instance, the Dwango DLL has the comm_DRIVER_IS_VISIBLE bit of
+description->capabilities cleared because the Dwango transport can only
+be used if the game was launched from the Dwango client program.
+
+<p>
+Given the file name of a transport DLL, the DLL's description may also be
+retrieved with 
+<a href="#dpGetTransportInfo">dpGetTransportInfo(path, &amp;description)</a>.  
+
+<h4>Listing available comm ports / modems</h4>
+If the DLL is a serial or modem DLL, i.e. if it has the comm_DRIVER_NEEDS_PORTNUM
+bit set in description->needs during dpEnumTransport's callback, you can
+retrieve a list of available port names and numbers by calling 
+<a href="#dpEnumPorts">dpEnumPorts</a>.  
+Under Windows, this will return not just available comm ports, but also
+available installed modems.  It will not return any comm ports which
+are in use by the mouse or by other programs.
+You should present the names from this list to 
+the user, and pass the matching port number in to dpCreate in the portnum
+field of the params argument.
+<p>
+If the user chooses one of the installed modems, dpCreate will then
+get the init string for the modem from the registry.  This is very helpful,
+since some 'modern' modems have impossible-to-figure-out init strings.
+
+<a name="functionGroups"><h3>The DP library</h3></a>
+The following paragraphs describe the major functions of the
+library.  An <a href="#APIFuncRef">API Function Reference</a> is also available.
+In general, all calls to the library are nonblocking.  If an operation
+involves waiting for an event, a callback function is used to return
+the result(s) of the operation.  The only exception is dpCreate,
+which may block under some circumstances (DNS lookup, modem dialing, etc.).
+<ul>
+<li><a href="#startup">Startup</a>
+<li><a href="#shutdown">Shutdown</a>
+<li><a href="#servers">Game Servers</a>
+<li><a href="#login">Server Login</a>
+<li><a href="#sessions">Session Management</a>
+<li><a href="#startup">Passing an Open Session Between Programs</a>
+<li><a href="#players">Player Management</a>
+<li><a href="#scores">Score Reporting</a>
+<li><a href="#groups">Group Management</a>
+<li><a href="#datagrams">Sending/Receiving Datagrams</a>
+<li><a href="#variables">Shared Memory / Player Variables</a>
+<li><a href="#performance">Performance Measurement</a>
+<li><a href="#launching">Launching and Being Launched</a>
+<li><a href="#patches">Downloading Patches</a>
+</ul>
+
+<a name="startup"><h4>Startup</h4></a>
+The DP library is initialized by calling 
+<a href="#dpCreate">dpCreate(&amp;dp, NULL, NULL, "freeze.dat")</a>
+or by choosing a transport DLL (and possibly a comm port and baud rate), 
+then calling
+<a href="#dpCreate">dpCreate(&amp;dp, transportName, params, NULL)</a>.  
+The first form restores a session saved with dpFreeze.
+The second form loads the selected transport DLL, and passes it the given <i>params</i>.
+If no special parameters are needed, for instance, when using the ipx or
+internet drivers, params may be NULL.  Otherwise, params is a pointer to a
+commInitReq_t.  To initialize this variable, first memset it to zero
+and set its reqLen field as follows:
+<blockquote><pre>commInitReq_t params;
+memset(&amp;params, 0, sizeof(commInitReq_t));
+params.reqLen = sizeof(commInitReq_t); </pre></blockquote>
+Then fill in fields as required by the driver you're using:
+<ul>
+<li> serial, modem, and loopback drivers 
+<ul>
+<li>
+	sessionId is a random number that must be chosen at initial startup.
+	This is used to uniquely identify the current run of the current 
+	application (which may span several dpOpen/dpClose cycles),
+	and is preserved by dpFreeze/dpCreate cycles.
+	It substitutes for a network address.
+</ul>
+<li>serial and modem drivers
+<ul>
+<li>
+	portnum is the COM port to use; 0=COM1, 1=COM2, etc.  This should be
+	obtained from the list returned by dpEnumPorts.
+<li>
+	baud is the data transfer rate in bits per sec; legal values are
+	9600, 19200, 38400, and 57600.
+</ul>
+<li>modem driver
+<ul>
+<li>
+	baseadr - if nonzero, it is the Win32 comm handle to use. On exit from 
+	dpCreate, baseadr is set to the Win32 comm handle being used.
+	This is normally used internally by activenet.
+
+<li>
+	hwirq - if it is equal to the magic value 12345, 
+	the value in swint is taken to be a pointer to a boolean; commInit 
+	checks the boolean periodically, aborts if the boolean goes true.
+
+<li>
+	swint - see hwirq.
+
+<li>
+	phonenum is a pointer to the phone number to dial.
+<li>
+	modeministr is a pointer to the modem initialization string.
+<li>
+	dialing_method is comm_INIT_DIALING_METHOD_TONE for dtmf dialing or 
+	comm_INIT_DIALING_METHOD_PULSE for dpmf dialing.
+</ul>
+</ul>
+<p>
+During normal operation, the DP library's
+<a href="#dpReceive">dpReceive(dp, idFrom, idTo, flags, buffer, size)</a>
+function must be called frequently. Certain housekeeping tasks depend on
+calls to this function to trigger them.
+
+<a name="shutdown"><h4>Shutdown</h4></a>
+
+<p>
+When the user wishes to quit the program, the main loop should call
+<a href="#dpShutdown">dpShutdown</a> once per loop until it returns something
+other than dp_RES_BUSY.  This gives all the connections, including
+the connection to the game server, time to shut down properly.
+When the main loop finally exits, the DP library should be freed by 
+calling <a href="#dpDestroy">dpDestroy</a>.  This unloads the transport
+DLL and frees memory.
+
+<a name="servers"><h4>Selecting a Game Server</h4></a>
+If the user chooses the Internet transport, an Internet game server
+should be specified by calling
+<a href="#dpSetGameServer">dpSetGameServer(dp, masterHostName)</a>
+before listing games.
+You can get a list of valid game servers by calling
+<a href="#dpRequestObjectDeltas">dpRequestObjectDeltas()</a> to monitor
+servers, then watching for 
+<a href="#dp_objectDelta_packet">dp_objectDelta_packet_t</a> messages.
+You will receive a constant stream of messages describing the available
+servers and their status.  Be sure to turn off the messages by calling
+<a href="#dpRequestObjectDeltas">dpRequestObjectDeltas()</a> again when
+the user has finished picking a server.
+<p>
+You can also call
+<a href="#dpEnumServers">dpEnumServers(dp, timeout_ms, callback, context)</a>
+or
+<a href="#dpEnumServersEx">dpEnumServersEx(dp, timeout_ms, session_type, callback, context)</a>
+Use a timeout of 2000.  
+<p>
+If the file <tt>bootserv.txt</tt> exists, an initial list of game
+servers is read in from it (one server per line; ip address or hostname
+followed by hostname).  Otherwise a hard-coded bootstrap list is used.
+The list of game servers is updated whenever you connect to a game server 
+and use any of the above ways of listing game servers.
+The current server list is saved in servers.dat between runs.
+<p>
+<a name="login"><h4>Server Login</h4></a>
+If the user wishes his score to be used to update his skill rating
+on the game vendor web site, he or she needs to log in after connecting
+to the game server. 
+<p>
+Before logging in, the player must have obtained a username and password
+from the game vendor web site.  API functions have been written to allow
+account creation within games, but it was not settled whether to use
+these or a web interface for user account management, and development
+was never quite completed.
+<p>
+The function 
+<a href="#dpAccountLogin">dpAccountLogin</a> accepts a username
+and password, and sends them to the server; the server replies with
+a message of type dp_ACCOUNT_PACKET_ID explaining whether the login
+was successful.  A login might be unsuccessful for two reasons:
+the account might still need to be activated, in which case the user
+needs to visit the account signup web page again, or the username or
+password might not be valid.
+<p>
+Once the first game using score reporting is deployed, we will add
+additional functionality that takes advantage of the user's login status,
+e.g. buddy tracking and user-to-user messaging.
+<p>
+Currently (9/98), the lower 16 bits of the player's userid are available in
+dp_playerId_t.karma.  This can be used to tell whether remote players have
+logged in.  Only if all players in a session are logged in will scores be
+reported.  The field containing the userid will be renamed and will
+hold the full 32 bits of the userid before the first game using this feature
+is released.
+<p>
+There are two versions of dpAccountLogin - one for Unicode, and one
+for the default system character set.  If you use the latter, the username
+and password will be converted to Unicode for you.
+<a name="sessions"><h4>Session Management</h4></a>
+When a bunch of people get together to play a game, that's called a
+session.  
+
+<p>
+A person wishing to start a game creates a session by calling
+<a href="#dpOpen">dpOpen(dp, s, callback, ...)</a> with the following fields
+set:
+<ul>
+<li>first, memset the structure to zero, so reserved fields are null.
+<li>flags = dp_SESSION_FLAGS_CREATESESSION
+<li>sessionName = ASCII name of game session, usually input by user
+<li>sessionType = a number obtained from <a href="mailto:dank-anet@kegel.com">Dan Kegel</a>; the netshell has a table mapping sessionType to game name. 
+For instance, Interstate '76 has value 303.
+<li>maxPlayers = 8 (or whatever)
+<li>szPassword = optional password
+<li>szUserField = any info about the session you want public
+</ul>
+Sessions start out with zero players in them.  The callback 
+<a href="#dpEnumSessionsCallback_t">dpEnumSessionsCallback_t(s, ...)</a>
+is called when the operation completes.
+
+<p>
+A person wishing to join a game can do it one of three ways:
+<ul>
+<li> he first lists the available games by calling
+<a href="#dpEnumSessions">dpEnumSessions(dp, ...)</a>.  
+The callback 
+<a href="#dpEnumSessionsCallback_t">dpEnumSessionsCallback_t(s, ...)</a>
+returns a description of each session.  s->sessionName is usually presented
+to the user in a menu.
+<a href="#dpOpen">dpOpen(dp, s,...)</a> is then called with
+the description of the session the user wants to open.
+<li> he first connects to a game server using 
+<a href="#dpSetGameServer">dpSetGameServer(dp, ...)</a>.
+<a href="#dpOpen">dpOpen(dp, s,...)</a> is then called with
+s set to NULL.  The game server then puts him in a lobby session based on
+the session type set during dpSetGameServer().
+<li> he knows the address of the machine whose game he wants to join.
+<a href="#dpResolveHostname">dpResolveHostname(dp, ...)</a> is called
+using the machine's address.
+<a href="#dpOpen">dpOpen(dp, s,...)</a> is then called with
+<ul>
+<li>s->adrMaster filled with the address returned by dpResolveHostname()
+<li>s->sessionType filled with session type of the game he wants to join
+<li>s->flags set to 0 if he wants to join a game session or
+dp_FLAGS_SESSION_ISLOBBY if he wants to join a lobby session
+</ul>
+</ul>
+<h5>Leaving a session</h5>
+<a name="orderly_close">When</a> the user is done with a session, the program leaves the session
+by calling <a href="#dpClose">dpClose(dp)</a>.  
+It should then wait for the dpClose to finish; this is done by hanging
+out in the main loop, calling dpReceive as normal, until about one second
+after <a href="#dpReadyToFreeze">dpReadyToFreeze</a> returns something
+other than dp_RES_BUSY.  This gives all the peer-to-peer connections
+opened for the session time to shut down properly.
+
+<h4>Passing an Open Session Between Programs</h4>
+A program can save the state of a session by calling
+<a href="#dpFreeze">dpFreeze(dp, fname)</a>.  A session can also
+be saved before it's even started; see <a href="services.htm#options">anetdrop's -x option</a>.  This is needed when using third-party drivers that can only
+be initialized once.
+<p>
+To restore the state of a saved session, pass the same filename as the
+last parameter to <a href="#dpCreate">dpCreate()</a> instead of NULL.
+<p>
+This makes it possible to create separate lobby programs that set up
+games, and pass them to the game program proper.  The game program
+can use the same interface to pass the session back to the lobby program
+upon completion, if a debriefing room is desired.
+<p>
+The ID of the local player should be determined by calling 
+<a href="#dpEnumPlayers">dpEnumPlayers()</a>
+and watching for a player with the dp_EPC_FLAGS_LOCAL flag bit set,
+or by calling 
+<a href="#dpGetSessionDesc">dpGetSessionDesc()</a> to get the current session
+description,
+<a href="#dpGetSessionId">dpGetSessionId()</a> to extract its id, and
+<a href="#dpRequestObjectDeltas">dpRequestObjectDeltas()</a> to monitor
+players, then watching for a <a href="#dp_objectDelta_packet">dp_objectDelta_packet_t</a> message with the dp_OBJECTDELTA_FLAG_LOCAL flag bit set.
+<p>
+See <a href="services.htm">services.htm</a> for more info on launching
+into a game from 3rd party gaming networks.
+<p>
+See also <a href="services.htm">anetdrop</a>, which
+lets you start sessions from the commandline and pass them easily
+to a game program.
+
+<a name="players"><h4>Player Management</h4></a>
+Anet keeps track of the players in each session,
+and assigns each player a unique id which will not be reused for any
+other player during the session.  Player id's are 16 bit numbers
+which tend to start near zero, and tend to increase as players are
+added.  Their most important use is with <a href="#dpSend">dpSend</a>
+and <a href="#dpReceive">dpReceive</a>,
+where they indicate destination and source of the message.
+
+After opening a session, a player needs to be created by calling
+<a href="#dpCreatePlayer">dpCreatePlayer(dp, callback, context, name)</a>.
+The callback 
+<a href="#dpEnumPlayersCallback_t">dpEnumPlayersCallback_t(id, name, flags, context)</a>
+is called when the operation completes; save the value of id, this is the id
+of the new player.
+
+<p>
+To get the name of a particular player, call
+<a href="#dpGetPlayerName">dpGetPlayerName(dp, id, buf, buflen)</a>.  
+
+<p>
+To get the number of players in the currently open session, call 
+<a href="#dpNumPlayers">dpNumPlayers(dp)</a>.  
+
+<p>
+To get a list of the players in the currently open session, call 
+<a href="#dpEnumPlayers">dpEnumPlayers(dp, NULL, callback, context, timeout)</a>.  
+The callback 
+<a href="#dpEnumPlayersCallback_t">dpEnumPlayersCallback_t(id, name, flags, context)</a>
+returns a description of each player.
+(To get a list of the players in some other session, call 
+dpEnumPlayers(dp, s, ...), using one of the session descriptions s returned
+by dpEnumSessions.)
+
+<p>
+When a player wants to leave the session, call 
+<a href="#dpDestroyPlayer">dpDestroyPlayer(dp, id)</a>.  You can 
+omit this if you're about to <a href="#orderly_close">call dpClose()</a>, 
+which destroys all the locally created players anyway.
+
+<p>
+To prevent new players from seeing or joining a session in progress, call
+<a href="#dpEnableNewPlayers">dpEnableNewPlayers(dp, FALSE)</a>.
+Call it again with TRUE to re-enable new players.
+
+<a name="scores"><h4>Score Reporting</h4></a>
+Score reporting is an interesting and challenging aspect of producing
+a successful computer game, since it involves linking the game
+to a database of very sensitive (at least to the players!) data,
+and because each game may have very different ideas of what kinds of
+data it wants to report.
+<p>
+Early game networks such as Heat and Dwango tended to let the game
+report a single number, or possibly several numbers, as a player's score;
+the format of the number is more or less rigidly defined by the game network.
+This was initially supported with the dpReportScore() (for Dwango)
+and dpReportScoreStart/dpReportScore2/dpReportScoreEnd (for Heat) interfaces,
+which immediately transmitted score data via a special call to the transport
+DLL.
+These interfaces are now deprecated.
+<p>
+More recent networks such as WON prefer to let the game report a blob
+of data; it is up to the game programmer to describe the blob's format
+to the WON database programmer so he or she can interpret the score data
+and display it on the WON web site.
+This style is supported with the dpReportScoreBuf() interface.  
+<p>
+<a href="#dpReportScoreBuf">dpReportScoreBuf()</a>
+takes a player id and a buffer of game-defined score
+data.  It is called whenever a significant change in any player's score
+occurs (e.g. when a player kills somebody or is killed, or completes
+a game objective).  The Anet library will then use that data
+to report a full set of score buffers to the game server when appropriate;
+currently, this is done whenever any player leaves the game.
+<p>
+In order for this interface to support the older game networks,
+the first three bytes of the score buffer must follow a standard format;
+see the comment for <a href="#dpReportScoreBuf">dpReportScoreBuf()</a>.
+The rest of the score buffer may be formatted any way the game likes,
+but should be kept compact; the format of the buffer will need to be
+documented so the score server database programmer can decode the buffer.
+<p>
+When connected to an Anet game server, scores will only be
+reported if all players in the session have <a href="#login">logged in</a>
+to the game server.
+
+<a name="groups"><h4>Group Management</h4></a>
+If a program wants to send messages often to a particular group of
+players, a <b>player group</b> can be created by calling
+<a href="#dpCreateGroup">dpCreateGroup(dp, &idGroup, name)</a>.
+The new group's id will be placed in idGroup.  This function call is currently
+allowed only on the master.
+<p>
+When the group is no longer needed, call 
+<a href="#dpDestroyGroup">dpDestroyGroup(dp, id)</a>.
+<p>
+To get a list of the groups in the current session, call 
+<a href="#dpEnumGroups">dpEnumGroups(dp, NULL, callback, context, timeout)</a>.  
+The callback 
+<a href="#dpEnumPlayersCallback_t">dpEnumPlayersCallback_t(id, name, flags, context)</a>
+returns a description of each group.  (Only groups in the
+current session can currently be listed.)
+<p>
+To add a player to a group, call
+<a href="#dpAddPlayerToGroup">dpAddPlayerToGroup(dp, idGroup, idPlayer)</a>.
+<p>
+To delete a player from a group, call
+<a href="#dpDeletePlayerFromGroup">dpDeletePlayerFromGroup(dp, idGroup, idPlayer)</a>.
+<p>
+To get a list of the players in a particular group, call 
+<a href="#dpEnumGroupPlayers">dpEnumGroupPlayers(dp, idGroup, NULL, callback, context, timeout)</a>.  
+The callback 
+<a href="#dpEnumPlayersCallback_t">dpEnumPlayersCallback_t(id, name, flags, context)</a>
+returns a description of each player.  (Only players in groups in the
+current session can currently be listed.)
+
+<a name="datagrams"><h4>Sending/Receiving Datagrams</h4></a>
+dpSend() and dpReceive() provide a way to send data between players.
+Both source and destination are identified by the 16 bit player id number
+returned by dpCreatePlayer.
+
+<p>
+By default, packets are sent immediately.  To reduce network overhead,
+call <a href="#dpFlush">dpFlush()</a> at the end of each frame's network
+processing to send the current frame's packets and start buffering the next's.
+
+<p>
+To send a packet to a player, call 
+<a href="#dpSend">dpSend(dp, idFrom, idTo, flags, buf, &amp;msglen)</a>
+where idFrom is the id of the player sending the message,
+and idTo is the id of the player who should receive the message.
+
+<p>
+<i>Note:
+Currently, the first byte of buf must not be ASCII 'd',
+and there must be six bytes of extra space at buf[msglen] to buf[msglen+5].
+Do not report these extra bytes in the msglen parameter!
+</i>
+
+<p>
+The 'flags' parameter determines whether the packet will be sent 
+reliably (dp_SEND_RELIABLE) or unreliably (dp_SEND_UNRELIABLE).
+Packets sent reliably
+are guarenteed to be delivered correctly, and in the order originally sent.
+Packets sent unreliably will only be sent once, might arrive in the wrong
+order, and might not arrive at all.
+<p>
+<a name="deadReckoning">
+If your game is an action game that can use dead reckoning (aka interpolation)
+to recover from lost packets, you should use unreliable transmission,
+as it gives the best performance.</a>
+<p>
+If your game is a turn-based game internally, and requires all machines
+in the game to stay perfectly in sync, you probably need to use reliable
+transmission.  
+<p>
+There is a limited amount of space for buffering outgoing
+packets (currently, 16 packets' worth).  Be sure to check the return
+value of dpSend; if it returns dp_RES_FULL, your packet
+has not been accepted for transmission, and you need to send it later,
+after letting your main loop call dpReceive() for a while
+to empty the outgoing buffer.  <b>Many programmers are used
+to ignoring the return value of 'send' functions.  Don't assume you
+can get away with this.</b>
+<p>
+To receive a packet, set msglen to sizeof(buf), then call
+<a href="#dpReceive">dpReceive(dp, &amp;idFrom, &amp;idTo, flags, buf, &amp;msglen)</a>.
+The return value will be dp_RES_OK if a packet was received.
+In that case, msglen will contain the number of bytes received, and idFrom
+and idTo will be set to the id's of the sender and recipient.
+
+<p>
+Note: the buffer passed to dpReceive or dpSend should be 
+dpio_MAXLEN_UNRELIABLE bytes long, regardless
+of the size of the messages being sent or received.
+<p>
+<i><a name="loop">Note:</a>
+dpReceive must be called frequently, as it performs 
+internal housekeeping.  
+You should define a "doNetworking" function that loops,
+calling dpReceive and processing the messages it returns,
+until it returns dp_RES_EMPTY.
+doNetworking should be called at least once per frame.  If possible,
+try to arrange for doNetworking to be called once in the middle
+of your rendering code, to allow retransmission requests to be handled
+promptly. 
+</i>
+<p>
+<a name="variables"><h4>Shared Memory / Player Variables</h4></a>
+Each player (or group) may have associated with it any number of 
+variables.  Each variable is identified
+by an integer key between 0 and dp_PLAYERDATA_KEY_USERMAX,
+and can be up to dp_PLAYERDATA_LEN_MAX bytes long.  To set a variable, call
+<a href="#dpSetPlayerData">dpSetPlayerData(dp, id, key, buf, buflen, 0)</a>.
+That variable is then sent to all present and future <a href="dpio.htm#node">nodes</a> in
+the session.  When it arrives at each node, dpReceive returns
+a <a href="#USER_PLAYERDATA_PACKET">dp_user_playerData_packet_t</a> to
+announce the variable's value change.
+Variable values may be retrieved at any time by calling
+<a href="#dpGetPlayerData">dpGetPlayerData(dp, id, key, buf, &amp;buflen, 0)</a>.
+<p>
+Variables can also be sent to individual players, for instance, 
+variables holding entire game levels so large that they take a long time to 
+transfer might be sent only on demand.
+To do this, first set the variable as normal, but with a flags parameter of 
+dp_PLAYERDATA_FLAG_NOFLOOD, then call 
+<a href="#dpSendPlayerData">dpSendPlayerData(dp, idPlayer, key, idTo)</a>.
+<p>
+If a variable is set to a first one value, then another, 
+some nodes might never see the first value.
+<p>
+Variables can be small or large.  Good uses of player variables might
+include 
+<ul>
+<li>score info
+<li>custom vehicle info
+<li>maps / mission data
+<li>custom logos
+<li>voice taunts
+</ul>
+<p>
+Variable values are preserved across 
+<a href="#dpFreeze">dpFreeze</a>/<a href="#dpCreate">dpCreate</a> cycles
+(however, callbacks are not; set any necessary callbacks immediately
+after the call to dpCreate()).
+Variables are sent in a way that avoids monopolizing
+modem bandwidth.
+<p>
+<b>Note:</b> Player variables are not suitable for shared variables
+that are not clearly associated with a given player.  This is because
+when the player disappears, so do the variables.  Variables that are
+clearly associated with the game as a whole should probably be carried
+by normal packets rather than player variables.  A new kind of shared
+variable may be introduced in future releases to deal with this need.
+
+<a name="performance"><h4>Performance Measurement</h4></a>
+You can ask the system to actively measure the interplayer latency and packet
+loss by calling
+<a href="#dpSetPingIntervals">dpSetPingIntervals()</a>.
+The system also makes latency measurements whenever a reliable packet is acknowledged on the first try.
+<p>
+To receive continuous updates for all players in the current session, call
+<a href="#dpRequestObjectDeltas">dpRequestObjectDeltas()</a> with the key
+dp_KEY_PLAYER_LATENCIES while monitoring player deltas. 
+Then whenever a new latency/packet loss measurement is made,
+a player delta containing the new values is queued for pickup with
+dpReceive().
+<br>
+You can also retrieve the most recent measurement for a given player with
+<a href="#dpGetPlayerCaps">dpGetPlayerCaps()</a>.
+<p>
+An obsolete way to immediately trigger pings and report on the results of 
+previous pings is to pick a unique query id (or <i>karma</i>), and call
+<a href="#dpPingUser">dpPingUser(dp, dest, karma, cb)</a>.
+Later, the callback cb will be called like this:
+<a href="#dp_ping_callback_t">dp_ping_callback_t(karma, time_t avg_ms, int loss_pct)</a>
+giving the average delay in milliseconds and the average packet loss in percent.
+Ignore the callback if it has the wrong karma.
+Only one user at a time can be checked this way.<br>
+This interface is obsolete and may go away in a future release.
+<p>
+See also the <a href="#bandwidthReport">bandwidth report</a> produced in the <a href="#logfiles">log file</a>
+and the <a href="#pktloss">packet loss simulation</a> feature accessible
+via the <a href="#inifile">.ini file</a>.
+
+<a name="launching"><h4>Launching and Being Launched</h4></a>
+When the user picks a game in the <a href="shell.htm">Netshell</a>
+and says GO, that's called <i>launching the application</i>.
+The application that did the launching usually terminates immediately
+to free system memory for the application being launched.
+A tiny program called the Stub (which is part of the Netshell)
+then waits for the application to terminate, and starts the Netshell again
+if appropriate.
+Applications need to follow a few rules for this to work properly.  The rules
+are stated in <a href="shell.htm">the Netshell doc</a>, but briefly, they are:
+<ul>
+<li>During installation, the app must register itself as an Anet app.
+<li>On startup, if the file <i>freeze.dat</i> exists, the game knows
+it has been launched, and calls dpOpen(&mydp, NULL, NULL, "freeze.dat")
+rather than setting up the session itself.
+<li>On shutdown, the game calls dpExitFromApp(0) to terminate normally,
+and dpExitFromApp(1) (or some other nonzero value) to tell the stub
+to kill itself (for instance, if the user picked "Really Quit", or
+if the program crashes).
+</ul>
+<p>
+You can get a list of launchable applications by calling dpEnumApp(),
+which calls a callback once for each installed Anet-capable
+application.  The dp_appParam_t parameter of the callback can be used later
+to launch the app.
+<p>
+Programs that launch other Anet applications - and this can
+happen even inside a game, if the game is broken up into two executables -
+should call dpLaunchApp to start the second application, then immediately
+call dpDestroy(dp, TRUE) to close the network driver without hanging up
+the phone line, and then call dpExitFromApp(0).  
+<p>
+Programs launched by other Anet applications should call dpDestroy(),
+then call dpExitFromApp(int exit_status) when they want to terminate.
+<p>
+dpExitFromApp notifies the Anet Stub whether or not it should
+start Netshell again (yes if exit_status is nonzero), then terminates the 
+current program.  (Under Microsoft Windows, it calls exit(exit_status).
+Under MacOS, it sends an AppleEvent to the stub, then calls ExitToShell().)  
+<a name="patches"><h4>Downloading Patches</h4></a>
+The Anet library and the game servers together support downloading
+patches via the Internet.  This feature is commonly called <a
+href="updater.htm">the Updater</a>.
+To use this feature, a game using the Anet library
+connects to a game server, and calls 
+<a href="dp.htm#dpGetAppVersion">dpGetAppVersion</a>.
+The return code dp_RES_OK indicates an update is needed, and
+that the game should minimize, and call 
+<a href="dp.htm#dpDownloadUpdate">dpDownloadUpdate</a>, which reads
+a list of update servers from updaters.dat, connects to one at random
+(or to updater.activision.com, if the file is not found), downloads
+the patch, and runs it.  The game should exit if dpDownloadUpdate returns
+dp_RES_OK (indicating Patch Downloaded And Running).
+<hr>
+<a name="Debugging"><h1>Debugging Aides</h1></a>
+<h2>Checking return values</h2>
+Many programmers often forget to check return values, then have trouble
+figuring out where their program started to have problems.  An
+easy way to check Anet return values during development is
+to use the standard C library's <tt>assert</tt> function in those
+places where you normally would be tempted to ignore error codes.
+For instance,
+<pre>
+#include &lt;assert.h&gt;
+dp_result_t dperr;
+...
+   dperr = dpEnumPlayers(dp, ...);
+   assert(!dperr);
+</pre>
+When it's time to build the final version of the program, you can
+turn off the asserts by defining the NDEBUG preprocessor symbol,
+if assert's overhead is objectionable.
+<p>
+This works for programs trying to conform to both Anet and Microsoft's API, too, e.g.
+<pre>
+#include &lt;assert.h&gt;
+#include "<a href="../h/dpcompat.h">dpcompat.h</a>"
+DP_HRESULT dperr;
+...
+   dperr = DP2_EnumPlayers(dp, ...);
+   assert(!DP_FAILED(dperr));
+</pre>
+
+<a name="inifile"><h2>.ini (Configuration) files</h2></a>
+A few parameters are read in at startup time from a file, by
+default, <tt>dp.ini</tt>.  To change the name of the file that will
+be read, call <a href="../h/ini.h">dpini_SetFile(char *fname)</a>
+before the first call to DPRINT or to dpCreate.
+Here is an example .ini file:
+<pre>
+[DEBUG]
+pktloss=33     ; set to simulate Internet by dropping a % of incoming packets
+All=1          ; Turn on DPRINT
+ToLog=1        ; Set to 1 to send DPRINT messages to <a href="#logfiles">Logfile</a>
+ToALog=0       ; Set to 1 to flush after each DPRINT; helpful if crashing
+ToStdout=0     ; Set to 1 to send DPRINT messages to stdout
+Logfile=dp.log ; name of <a href="#logfiles">log file</a>
+nouploadcrash=1; don't upload any crash records found at dpSetGameServer time
+</pre>
+At the moment, you can read parameters from the .ini file by calling 
+<a href="../h/ini.h">findINISection(char *section)</a> to select
+a section, and <a href="../h/ini.h">readINIParameter(char *name, int keepWhitespace)</a>
+to read a parameter from the selected section.
+This interface will change in later releases.
+
+<a name="pktloss"><h2>Simulating Internet packet loss</h2></a>
+Many programs work fine on the LAN, but fail on the Internet,
+where packet loss under normal circumstances can reach 40%.
+The function call <a href="dpio.htm#dpio_forceRxDropPercent">dpio_forceRxDropPercent()</a>
+can be used to simulate packet loss.  
+dpio_forceRxDropPercent() will be called automatically on startup if
+the current <a href="#inifile">.ini file</a>
+contains a <b>pktloss</b> line in the <b>[Debug]</b> section, e.g.
+<pre>
+[DEBUG]
+pktloss=20			; one-way packet loss, percent
+</pre>
+In general, networked games should function correctly with pktloss set to 20
+even at their maxium number of players, and should be thoroughly 
+tested both with and without packet loss before release.
+<p>
+(Note: since pktloss controls one-way packet loss, it's related
+to round-trip packet loss with the formula rtpktloss = (1 - (1 - pktloss)^2);
+thus pktloss of 20 percent corresponds to a round-trip packet loss of 
+1 - (1 - .20)^2) = 1 - .64 = .36 = 36 percent.)
+
+<a name="latency"><h2>Simulating Internet latency</h2></a>
+Another reason games work poorly on the Internet is because packets
+take a while to get from here to there.  The biggest source of latency
+is player's modems.  Another source of latency is the Internet "backbone",
+the high-speed links between Internet Service Providers.
+<p>
+The dp library can simulate both of these effects, if desired.
+To turn these behaviors on, edit the current <a href="#inifile">.ini file</a>
+and in the <b>[Debug]</b> section, 
+insert a <b>bitsPerSec</b> line and a <b>backbone_ms</b> line, e.g.
+<pre>
+[DEBUG]
+bitsPerSec=28800    ; Simulated modem speed, in bits per second
+backbone_ms=50      ; Simulated non-modem latency, in milliseconds
+</pre>
+To disable modem delay simulation, don't set those parameters in
+the .ini file, or set them to zero.
+
+<a name="fault"><h2>Simulating Crashes or Program Faults</h2></a>
+To test how your program handles crashes, create a file dp.ini containing
+<pre>
+[DEBUG]
+fault=1				; Induce an invalid address exception
+</pre>
+Then start the multiplayer part of your program, and try to create a game.
+This causes the Anet library
+to try to access through a null pointer, so you can verify quickly that
+your debugger or <a href="aeh.htm">crash logger</a> is set up properly.
+
+
+<a name="loopback"><h2>Running Multiple Anet Programs on one machine</h2></a>
+Often, it is convenient to run more than one Anet program on
+your workstation at a time, for testing purposes.  For instance,
+if you want to stress-test your program, you might want to write a
+single batch file that simulates several players running your
+program on their computers and playing together.
+<p>
+This is currently supported with the internet, modem, serial, and
+loopback drivers, but not with the IPX driver, or with Heat, Mpath,
+or any other 3rd party gaming network driver.
+<p>
+See the example batch files LOOPD.BAT, SPAWN3.BAT, and SPAWN.BAT
+in the demo/gtest/tests folder.  Here's an example session.
+(The text in bold is what you type.)
+<pre>
+C:\anet> <b>cd demo\gtest\tests</b>
+C:\anet\demo\gtest\tests> <b>spawn3</b>      <i>Starts a three player gtest fest</i>
+C:\anet\demo\gtest\tests> <b>loopd</b>       <i>Starts gtest in this window</i>
+gtest> <b>sessions</b>             
+gtest> <b>join spawn3</b>                    <i>Join the game started by spawn3</i>
+gtest> <b>players</b>
+gtest> <b>ping user0</b>                     <i>Measure latency to one player</I>
+gtest> <b>newplayer me</b>
+gtest> <b>remotequit</b>                     <i>Tell all the windows to quit</I>
+</pre>
+When you try this example, you'll notice that ping reports about 200
+milliseconds of latency for each player, even if you don't have modem
+simulation turned on.  That's because the LOOP driver
+introduces about 100 milliseconds of latency in each direction.
+
+<a name="logfiles"><h2>Logfiles</h2></a>
+Built in to the dp library is a logfile system which can be quite
+helpful in resolving problems.  Often, when a dp, dpio, or comm dll function
+returns an error code, it puts a descriptive error message in the log file.
+Functions also generate log messages in normal operation, to help you
+understand the context when errors do occur.
+<p>
+The log file is enabled in the debugging version (anetdlld.dll)
+but not the production version (anetdll.dll) of the library.
+Also, you need to have a <a href="#inifile">.ini file</a>
+that has "All=1" and "Tolog=1" lines.
+The default name for the .ini file is "dp.ini".  This can be changed
+at runtime; for instance, the test program <a href="gtest.htm">gtest</a>
+uses <tt>gtest.ini</tt> as the name of its .ini file.
+
+To change the name of the .ini file, add the line
+<pre> dpini_SetFile("foo.ini");	/* optional; default is dp.ini */
+</pre>
+in your code near the beginning of the program.
+<p>
+You can add your own messages to the log file as follows:
+<pre> DPRINT(("Test Message: time of day is %d\n", clock()));
+</pre>
+and compiling with the preprocessor symbols DPRNT or _DEBUG defined.
+(If you don't define DPRNT or _DEBUG, the DPRINT macro doesn't generate any code.)
+<p>
+The debugging log file is a little cryptic, but usually has lines
+of the form
+<pre>
+FUNCTION NAME: message
+</pre>
+where FUNCTION NAME is the name of an Anet function your program
+called (or an internal function).
+The trick to tracking down problems is often to figure out which
+kind of lines you are interested in, then look at just those lines
+with a filter like egrep, e.g. if you are interested in all lines
+that have dpio_put or the word "session", you could use
+<tt>egrep&nbsp;"session|dpio_put"&nbsp;dp.log</tt> to see just those
+lines.  (A good egrep can be downloaded along with the rest of the Gnu
+tools at 
+<a href="ftp://ftp.cygnus.com/pub/gnu-win32/latest/">ftp://ftp.cygnus.com/pub/gnu-win32/latest/</a>.)
+<a name="bandwidthReport"><h2>Packet Trace Logfiles</h2></a>
+The debugging versions of most of the drivers, e.g. winets2d.dll, 
+will save a complete log of all packets sent and received to the ASCII 
+file output.1, and rename the previous output.1 to be output.2, etc.
+A perl script to analyse this output file is available <a
+href="mailto:dank-anet@kegel.com">upon request</a>;
+it shows the bandwidth used for each second of the game's run. 
+This is quite handy when trying to optimize your game's network performance.
+<h2>Mysterious crashes in release builds</h2>
+If your game runs well when compiled for debugging, but crashes
+mysteriously in release builds, it is probably due to a calling
+convention mismatch in a callback function.  Be sure you declare
+any callbacks using the dp_PASCAL keyword.
+<p>
+In nasty cases, we can provide a version of anet2.dll that has logging
+enabled but is not compiled for debugging; it sometimes
+helps resolve the mystery to see what Anet was trying to do
+when your program crashed.
+<hr>
+
+<a name="SysMsgs"><center><h1>System Message Reference</h1></a>
+<i>Last update: 1 Jul 1998</i></center>
+Note: this may lag slightly behind <a href="../h/anet.h">anet.h</a>.
+<p>
+System messages are messages returned by dpReceive() with a sender of
+dp_ID_NAMESERVER and a recipient of dp_ID_BROADCAST.
+The message data consists of a <b>dp_packetType_t</b> optionally followed
+by message-specific data.  The message types and their message-specific
+data (if any) are listed below.
+
+<h5>Message data common to several message types:</h5>
+<pre>
+typedef struct {
+    dpid_t      id;
+    dp_karma_t  karma;
+    byte        adr[dp_MAX_ADR_LEN];
+    char_t      name[dp_PNAMELEN];
+} dp_playerId_t;
+
+typedef struct dp_groupId_s {
+    dpid_t      id;                 /* msgs to id reach all members */
+    dp_karma_t  karma;              /* used to verify group identity */
+    char_t      name[dp_PNAMELEN];  /* name of group */
+    dp_karma_t  sessionKarma;       /* group only valid within this session */
+} dp_groupId_t;
+</pre>
+
+<hr>
+<h5> dp_USER_ADDPLAYER_PACKET_ID        </h5>
+<pre>typedef dp_playerId_t dp_user_addPlayer_packet_t;</pre>
+ Notification that a player has joined the currently open game. 
+ Returned by dpReceive whenever it notices a new player. 
+ This message is not handled by dp at all; it is simply a courtesy to the 
+ user program so it doesn't have to call dpEnumPlayers all the time. 
+
+<hr>
+<h5> dp_USER_DELPLAYER_PACKET_ID        </h5>
+<pre>typedef dp_playerId_t dp_user_delPlayer_packet_t;</pre>
+ Notification that a player has left the currently open game. 
+ Returned by dpReceive whenever it notices that a player has vanished. 
+ This message is not handled by dp at all; it is simply a courtesy to the 
+ user program so it doesn't have to call dpEnumPlayers all the time. 
+
+<hr>
+<h5> dp_USER_ADDGROUP_PACKET_ID     </h5>
+<pre>typedef struct dp_groupId_s dp_user_addGroup_packet_t;</pre>
+ Notification that a group has been created. 
+ Returned by dpReceive whenever it notices a new group. 
+
+<hr>
+<h5> dp_USER_DELGROUP_PACKET_ID     </h5>
+<pre>typedef struct dp_groupId_s dp_user_delGroup_packet_t;</pre>
+ Notification that a group has been deleted. 
+ Returned by dpReceive whenever it notices a group disappear. 
+
+<hr>
+<h5> dp_USER_ADDPLAYERTOGROUP_PACKET_ID     </h5>
+<pre>typedef struct {
+    dpid_t      dpIdGroup;
+    dpid_t      dpIdPlayer;
+    dp_karma_t  sessionKarma;       /* group only valid within this session  */
+} dp_addPlayerToGroup_packet_t;</pre>
+ Notification that a player has joined a group. 
+ Returned by dpReceive whenever it notices a new player in a group. 
+
+<hr>
+<h5> dp_USER_DELPLAYERFROMGROUP_PACKET_ID       </h5>
+<pre>typedef dp_addPlayerToGroup_packet_t dp_delPlayerFromGroup_packet_t;</pre>
+
+ Notification that a player has left a group. 
+ Returned by dpReceive whenever it notices that a player has vanished. 
+
+<hr>
+<h5> dp_USER_HOST_PACKET_ID     </h5>
+ Notification that the local machine is now the session host. There
+ is no payload data associated with this packet type.
+
+<hr>
+<a name="USER_PLAYERDATA_PACKET"><h5> dp_USER_PLAYERDATA_PACKET_ID</h5></a>
+ Notification that a group or player variable has been assigned a new
+ value.
+<pre>typedef struct {
+	size_t len;
+	dpid_t id;
+	unsigned short key;
+	void *data;
+} dp_user_playerData_packet_t;</pre>
+<hr>
+<a name="dp_objectDelta_packet"><h5> DP_OBJECTDELTA_PACKET_ID</h5></a>
+ Packet carrying object change info.
+<pre>
+
+/* Structure to hold info about a server.  To be used by a future
+ * dpEnumServersEx(), and by the Java interface.
+ */
+typedef struct dp_serverInfo_s {
+	short len;						/* length of this structure */
+	short rtt_ms_avg;				/* Average round trip time, millisec */
+	short loss_percent;				/* Average packet loss */
+	short cur_users;				/* people currently connected */
+	short max_users;				/* max # allowed to connect */
+
+	char hostname[64];				/* ASCII server name (often hostname) */
+	dp_species_t sessType;			/* session type given in dpEnumServersEx()*/
+	short cur_sessTypeUsers;		/* people currently in sessType sessions */
+	char reserved[16];				/* for internal use */
+} dp_serverInfo_t;
+
+/* The kinds of objects that can be monitored with dpRequestObjectDeltas(). */
+typedef union {
+	dp_playerId_t   p;
+	dp_session_t    sess;
+	dp_serverInfo_t serv;
+} dp_object_t;
+
+#define dp_OBJECTDELTA_PACKET_ID		dppt_MAKE(dp_PACKET_INITIALBYTE,'+')
+#define dp_KEY_MAXLEN 12    /* Keys must be 12 bytes in length or less. */
+#define dp_OBJECTDELTA_FLAG_LOCAL 1	/* set if object created by this machine */
+#define dp_OBJECTDELTA_FLAG_INOPENSESS 2	/* player in session hosted or joined by this machine */
+#define dp_OBJECTDELTA_FLAG_ISHOST 4	/* player is master of session */
+
+typedef struct {
+	short pktloss PACK;		/* player deltas include a loss in percent */
+	short latency PACK;     /* player deltas include a latency in ms */
+
+	long flags PACK;		/* one or more of dp_OBJECTDELTA_FLAG_* */
+
+	/* If an object is being created, status = dp_RES_CREATED.
+	 * If an object is being changed, status = dp_RES_CHANGED.
+	 * If an object is being deleted, status = dp_RES_DELETED.
+	 */
+	dp_result_t status PACK;
+
+	/* For players,  key is {dp_KEY_PLAYERS, reserved bytes... }
+	 * For sessions, key is {dp_KEY_SESSIONS, reserved bytes...}
+	 * For servers,  key is {dp_KEY_SERVERPINGS, reserved bytes...}
+	 */
+	short keylen PACK;
+	char key[dp_KEY_MAXLEN] PACK;/* long key of context for following data */
+
+	/* Subkey is reserved. */
+	short subkeylen PACK;
+	char subkey[dp_KEY_MAXLEN] PACK;
+
+	/* For players,  data is dp_playerId_t
+	 * For sessions, data is dp_session_t 
+	 * For servers,  data is dp_serverInfo_t
+	 * If status == dp_RES_CHANGED, data is after change.
+	 */
+	dp_object_t data;
+	/* nothing may go here; data is variable length */
+} dp_objectDelta_packet_t;
+</pre>
+<hr>
+<a name="APIFuncRef"><center><h1>Function Reference</h1></a>
+<i>Last update: 22 September 1998</i></center>
+Note: this may be somewhat incomplete; <a href="../h/anet.h">anet.h</a>
+contains the complete definitions (but is a little messier to read).
+
+
+<a name="dpAccountLogin"><h3>dpAccountLogin, dpAccountLoginA, dpAccountLoginW</h3></a>
+<pre>DP_API dp_result_t DP_APIX dpAccountLoginW(
+	dp_t *dp,
+	const wchar_t *username,
+	const wchar_t *password);
+
+DP_API dp_result_t DP_APIX dpAccountLoginA(
+	dp_t *dp,
+	const char *username,
+	const char *password);
+</pre>
+ After using dpSetGameServerEx(),
+ call this function to log in to an existing account on the server.
+ dpReceive() will later return a packet of type dp_ACCOUNT_PACKET_ID
+ to indicate success or failure, or to tell you to call dpAccountActivate().
+<p>
+ 'username' is the user name specified by the user in dpAccountCreate().
+ 'password' is the password set by the user in dpAccountCreate().
+
+<a name="dpAddPlayerToGroup"><h3>dpAddPlayerToGroup</h3></a>
+<pre>DP_API dp_result_t DP_APIX dpAddPlayerToGroup(
+	dp_t	*dp,
+	dpid_t	idGroup,
+	dpid_t	idPlayer);
+</pre>
+ Add player idPlayer to the group idGroup.
+
+<a name="dpCastoffSession"><h3>dpCastoffSession</h3></a>
+<pre>DP_API dp_result_t DP_APIX dpCastoffSession(dp_t *dp);
+</pre>
+ Cast off an open session - it stays open, but is no longer the
+ "current session".
+<br> After this, you can call dpOpen() to create a new session.
+<p>
+ Caveats:
+<br> Intended for use only on game servers.
+<br> Can only be called on the master.
+
+<a name="dpCheckAppVersion"><h3>dpCheckAppVersion</h3></a>
+<pre>DP_API dp_result_t DP_APIX dpCheckAppVersion(dp_t *dp, dp_appParam_t *app);
+</pre>
+ Determine whether application *app needs to be updated.
+<br> Returns latest app version from game server in *app.
+<br> Not needed by most user programs.
+<p>
+ Returns dp_RES_OK if update needed,
+<br> dp_RES_EMPTY if no update needed.
+
+<a name="dpClose"><h3>dpClose</h3></a>
+<pre>DP_API dp_result_t DP_APIX dpClose(
+	dp_t *dp);
+</pre>
+ Close an open session.
+
+<a name="dpCommThaw"><h3>dpCommThaw</h3></a>
+<pre>DP_API dp_result_t DP_APIX dpCommThaw(dp_t **pdp, FILE *thawfp, dpCommThawCallback_t cb, void *context);
+</pre>
+ Given a file pointer pointing to a dp_launchParams_t, initialize a
+ dp_t and connect to or create a game session specified by the file.
+<br> Do not return until the session has been established and a player has
+ been created.
+<br> During any delays, this function will call the given callback periodically
+ to both inform the caller of its progress joining the session and to
+ give the caller a chance to abort (by returning 0).
+
+<a name="dpCreate"><h3>dpCreate</h3></a>
+<pre>DP_API dp_result_t DP_APIX dpCreate(
+	dp_t **pdp,
+	dp_transport_t *transport,
+	commInitReq_t *params,
+	char *thawFilename);
+</pre>
+ Create a dp_t.
+<br> This is the very first step in using the dp layer.
+<br> Loads and initializes the given comm driver.
+<br> If thawFilename is NULL, use the params argument to initialize communications.
+ (Consult the comm_driverInfo_t.needs field returned by dpEnumTransports
+ to determine which fields of params must be filled in.)
+<p>
+ If thawFilename is not NULL, restore from disk the session previously saved
+ by dpFreeze or anetdrop.exe, and ignore the params argument.  Note: this
+ does not restore any callbacks or enumerations that were in progress
+ when dpFreeze was called.  Also, some transports (e.g. modem and Heat)
+ do not allow restoring frozen sessions.
+
+<a name="dpCreateGroup"><h3>dpCreateGroup</h3></a>
+<pre>DP_API dp_result_t DP_APIX dpCreateGroup(
+	dp_t	*dp,
+	dpid_t *id,
+	dp_char_t	*name);
+</pre>
+ Add a new group to the currently open session.
+<br> Can only be called on game host!
+
+<a name="dpCreatePlayer"><h3>dpCreatePlayer</h3></a>
+<pre>DP_API dp_result_t DP_APIX dpCreatePlayer(
+	dp_t	*dp,
+	dpEnumPlayersCallback_t cb,
+	void	*context,
+	dp_char_t	*name);
+</pre>
+ Add a new player to the currently open session.
+<br> Calls given function when user is created and its dpid becomes available.
+<br> On failure, either returns dp_RES_FULL immediately, or calls callback
+ with dp_ID_NONE during later call to dpReceive.
+
+<a name="dpDeclareLobby"><h3>dpDeclareLobby</h3></a>
+<pre>DP_API dp_result_t DP_APIX dpDeclareLobby(
+	dp_t *dp,
+	int flags);
+</pre>
+ Declare that the current session is a lobby.
+<br> May only be called by host.
+<br> The parameter 'flags' should be set to 0 for a peer lobby,
+ and to 1 for a server lobby.
+<br> Bug: This function is incorrect.  Please talk to Dan about how
+ to indicate that a session is a lobby.  The basic idea is to use the
+ dp_SESSION_FLAGS_ISLOBBY flag when creating the session.
+
+<a name="dpDeletePlayerFromGroup"><h3>dpDeletePlayerFromGroup</h3></a>
+<pre>DP_API dp_result_t DP_APIX dpDeletePlayerFromGroup(
+	dp_t	*dp,
+	dpid_t	idGroup,
+	dpid_t	idPlayer);
+</pre>
+ Delete player idPlayer from the group idGroup.
+
+<a name="dpDestroy"><h3>dpDestroy</h3></a>
+<pre>DP_API dp_result_t DP_APIX dpDestroy(
+	dp_t *dp,
+	int flags);
+</pre>
+ Destroy a dp_t.
+<br> Shuts down and unloads the comm driver (!).
+<br> If the flags argument is non-zero, does not hang up the phone line (if
+ any).
+
+<a name="dpDestroyGroup"><h3>dpDestroyGroup</h3></a>
+<pre>DP_API dp_result_t DP_APIX dpDestroyGroup(
+	dp_t   *dp,
+	dpid_t id);
+</pre>
+ Destroy the given group; removes the group from the game session.
+<br> The dpID will not be reused during the current session.
+<br> Can only be called on game host!
+
+<a name="dpDestroyPlayer"><h3>dpDestroyPlayer</h3></a>
+<pre>DP_API dp_result_t DP_APIX dpDestroyPlayer(
+	dp_t   *dp,
+	dpid_t id);
+</pre>
+ Destroy the given player; removes the player from the game session.
+<br> The dpID will not be reused during the current session.
+
+<a name="dpDownloadUpdate"><h3>dpDownloadUpdate</h3></a>
+<pre>DP_API dp_result_t DP_APIX dpDownloadUpdate(dp_t *dp, const dp_appParam_t *app);
+</pre>
+ Call to download the patch corresponding to the given product,
+ but only if dpGetAppVersion says you need to.
+ app is the structure filled in by dpGetAppVersion.
+<br> If it returns dp_RES_OK, you should exit your application immediately!
+<br> See also updater.htm (contact Dan Kegel if you need this).
+<p>
+ Returns dp_RES_OK if patch is downloaded and running;
+<br> dp_RES_EMPTY if no patch needed,
+<br> dp_RES_BAD if can't find updater dll (anet/dkupddll.dll).
+<br> dp_RES_USER_CANCELLED if user offered patch, but declined it.
+
+<a name="dpEnableNewPlayers"><h3>dpEnableNewPlayers</h3></a>
+<pre>DP_API dp_result_t DP_APIX dpEnableNewPlayers(
+	dp_t *dp,
+	int enable);
+</pre>
+ Enable or disable new players from entering the game.
+<br> May only be called by host.
+<br> If called with FALSE, session packets will no longer be broadcast,
+ and add player requests will be ignored.
+
+<a name="dpEnumApp"><h3>dpEnumApp</h3></a>
+/*----------------------------------------------------------------------
+ Function type called for each application enumerated by dpEnumApp().
+----------------------------------------------------------------------*/
+typedef void (dp_FAR dp_PASCAL *dpEnumAppCallback_t)(dp_appParam_t *appParam, void *context);
+</pre>
+ Callback used to list servers and the round trip delay to them.
+
+<a name="dpEnumApp"><h3>dpEnumApp</h3></a>
+<pre>DP_API dp_result_t DP_APIX dpEnumApp(dp_t *dp, dpEnumAppCallback_t cb, void *context);
+</pre>
+ Enumerate applications installed on this machine.
+<br> Callback is called once for each application found.
+<br> Callback ends when dpEnumApp() exits.
+
+<a name="dpEnumGroupPlayers"><h3>dpEnumGroupPlayers</h3></a>
+<pre>DP_API dp_result_t DP_APIX dpEnumGroupPlayers(
+	dp_t *dp,
+	dpid_t groupId,
+	dp_session_t *s,
+	dpEnumPlayersCallback_t cb,
+	void *context,
+	long timeout				/* How long in milliseconds to wait. */
+	);
+</pre>
+ Calls the given function once for each player in the given group, then
+ calls the given function once with dp_ID_NONE to indicate end of list.
+<br> If s is NULL, lists the players in the current session.
+<br> If s is not NULL, it must be a value from dpEnumSessions.
+<p>
+ s must currently be NULL - that is, you can't yet enumerate the group
+ members of sessions you haven't joined.
+
+<a name="dpEnumGroups"><h3>dpEnumGroups</h3></a>
+<pre>DP_API dp_result_t DP_APIX dpEnumGroups(
+	dp_t *dp,
+	dp_session_t *s,
+	dpEnumPlayersCallback_t cb,
+	void *context,
+	long timeout				/* How long in milliseconds to wait. */
+	);
+</pre>
+ Calls the given function once for each group in the given session, then
+ calls the given function once with dp_ID_NONE to indicate end of list.
+<br> If s is NULL, lists the group in the current session.
+<br> If s is not NULL, it must be a value from dpEnumSessions.
+<p>
+ s must currently be NULL - that is, you can't yet enumerate the groups
+ of sessions you haven't joined.
+
+<a name="dpEnumPlayers"><h3>dpEnumPlayers</h3></a>
+<pre>DP_API dp_result_t DP_APIX dpEnumPlayers(
+	dp_t *dp,
+	dp_session_t *s,
+	dpEnumPlayersCallback_t cb,
+	void *context,
+	long timeout				/* How long in milliseconds to wait. */
+	);
+</pre>
+ Calls the given function once for each player in the given session, then
+ calls the given function once with dp_ID_NONE to indicate end of list.
+<br> If s is NULL, lists the players in the current session.
+<br> If s is not NULL, it must be a value from dpEnumSessions.
+
+<a name="dpEnumPlayersEx"><h3>dpEnumPlayersEx</h3></a>
+<pre>DP_API dp_result_t DP_APIX dpEnumPlayersEx(
+	dp_t *dp,
+	dp_session_t *s,
+	dpEnumPlayersExCallback_t cb,
+	void *context,
+	long timeout				/* How long in milliseconds to wait. */
+	);
+</pre>
+ Calls the given function once for each player in the given session, then
+ calls the given function once with dp_ID_NONE to indicate end of list.
+<br> If s is NULL, lists the players in the current session.
+<br> If s is not NULL, it must be a value from dpEnumSessions.
+
+<a name="dpEnumPorts"><h3>dpEnumPorts</h3></a>
+<pre>DP_API dp_result_t DP_APIX dpEnumPorts(const dp_transport_t *transport, commPortName_t *ports, int maxports, int *pnPorts);
+</pre>
+ Call this during or after dpEnumTransports, but before dpCreate,
+ and only on transports which have the comm_INIT_NEEDS_PORTNUM bit set
+ in comm_driverInfo_t.needs.
+<br> Present the returned list of port names to the user, then use the
+ matching portnum as the value for commInitReq_t.portnum in dpCreate.
+<p>
+ On entry,
+ transport is the name (from dpEnumTransports) of the transport to query.
+ ports is an array to be filled with portnames.
+ maxports is the size of the ports array.
+<p>
+ On exit,
+ ports is filled with descriptions of the available ports.
+ *pnPorts is set to the number of portnames placed in the ports array.
+
+<a name="dpEnumServers"><h3>dpEnumServers</h3></a>
+<pre>DP_API dp_result_t DP_APIX dpEnumServers(
+	dp_t *dp,
+	long timeout,				/* How long in milliseconds to wait. */
+	dpEnumServersCallback_t cb,
+	void *context);
+</pre>
+ Calls the callback function (cb) once with a description,
+ including the server's hostname and delay,
+ of each game server that this object could connect to.
+<br> Servers may be reported multiple times.
+<br> Finishes by calling the callback with a null server pointer.
+<p>
+ Since our functions must be non-blocking, returns immediately,
+ before any calls to the callback. The callback is called by dpReceive,
+ which must be called frequently.
+
+<a name="dpEnumServersEx"><h3>dpEnumServersEx</h3></a>
+<pre>DP_API dp_result_t DP_APIX dpEnumServersEx(
+	dp_t *dp,
+	long timeout,				/* How long in milliseconds to wait. */
+	dp_species_t sessType,
+	dpEnumServersExCallback_t cb,
+	void *context);
+</pre>
+ Similar to dpEnumServers() but returns more server information during callback.
+<p>
+ dpEnumServersEx() takes an additional parameter for session type and returns
+ additional server information in a dp_serverInfo_t structure during callback.
+<br> This info includes latency, packet loss, number of users of given session
+ type, total number of users, and maximum allowed users.
+
+<a name="dpEnumSessions"><h3>dpEnumSessions</h3></a>
+<pre>DP_API dp_result_t DP_APIX dpEnumSessions(
+	dp_t *dp,
+	dp_session_t *sDesc,
+	char *mhn,					/* must be NULL */
+	long timeout,				/* How long in milliseconds to wait. */
+	dpEnumSessionsCallback_t cb,
+	void *context);
+</pre>
+ Calls the callback function once with a description of
+ each game session that this object could connect to,
+ finishes by calling the callback with a null session pointer.
+<p>
+ Since our functions must be non-blocking, returns immediately,
+ before any calls to the callback. The callback is called by dpReceive.
+
+<a name="dpEnumTransports"><h3>dpEnumTransports</h3></a>
+<pre>DP_API dp_result_t DP_APIX dpEnumTransports(
+	dp_transport_t *path,
+	dpEnumTransportCallback_t cb,
+	void *context);
+</pre>
+ Calls the given function once for each transport available.
+<br> All calls are made before dpEnumTransports returns.
+<br> Path argument is to directory to search for DLL's.
+<br> Eventually, will read description out of the DLL files.
+
+<a name="dpExitFromApp"><h3>dpExitFromApp</h3></a>
+<pre>DP_API void DP_APIX dpExitFromApp(int status);
+</pre>
+ Searches for stub and if it exists, notifies it of pending exit and if it
+  wants NetShell relaunched (yes if status is zero) then exits application.
+
+<a name="dpFlush"><h3>dpFlush</h3></a>
+<pre>DP_API dp_result_t dpFlush(dp_t *dp);
+</pre>
+ Send any unsent packets.  Call this after a bunch of dpSend's.
+<br> Once this is called the first time, dpSend no longer flushes its buffer
+ automatically; it waits for you to call this.
+
+<a name="dpFreeze"><h3>dpFreeze</h3></a>
+<pre>DP_API dp_result_t DP_APIX dpFreeze(
+	dp_t   *dp,
+	char *fName);
+</pre>
+ Freeze the current running game, and save it on disk for use during a
+ future dpCreate.
+<br> Returns dp_RES_BUSY if dp can't freeze due to ongoing reliable transmission.
+
+<a name="dpGetAppVersion"><h3>dpGetAppVersion</h3></a>
+<pre>DP_API dp_result_t DP_APIX dpGetAppVersion(dp_t* dp, dp_appParam_t *app);
+</pre>
+ Determine the current application's version, and whether it needs to be
+ updated.
+<br> Returns info about the current app in *app.  Strings are allocated with
+ strdup.
+<p>
+ Returns dp_RES_OK if update needed,
+<br> dp_RES_EMPTY if no update needed,
+ other values on failure.
+
+<a name="dpGetCaps"><h3>dpGetCaps</h3></a>
+<pre>DP_API dp_result_t DP_APIX dpGetCaps(
+	dp_t *dp,
+	dp_caps_t *info,
+	long flags);
+</pre>
+ Retrieve the capabilities of the currently loaded transport,
+ plus some info about the current session, especially whether this machine
+ is the host of the current session.
+<br> Flags is currently unused.
+
+<a name="dpGetCurrentHostId"><h3>dpGetCurrentHostId</h3></a>
+<pre>DP_API dp_result_t DP_APIX dpGetCurrentHostId(
+	dp_t *dp,
+	dpid_t *phid);
+</pre>
+ Get the id of the current host for the open session, if he has any
+ players.
+<br> Returns dp_RES_OK on success,
+<br> 		 dp_RES_CLOSED if no session is open,
+<br> 		 dp_RES_EMPTY if the host has no players.
+
+<a name="dpGetCurrentTransportInfo"><h3>dpGetCurrentTransportInfo</h3></a>
+<pre>DP_API dp_result_t DP_APIX dpGetCurrentTransportInfo(
+	dp_t *dp,
+	dp_transport_t *path,
+	comm_driverInfo_t *info);
+</pre>
+ Get path and info about of currently loaded transport.
+
+<a name="dpGetGameServerEx"><h3>dpGetGameServerEx</h3></a>
+<pre>DP_API dp_result_t DP_APIX dpGetGameServerEx(
+	dp_t *dp,
+	char *masterHostNameBuf,
+	size_t masterHostNameBufLen,
+	dp_species_t *psessionType);
+</pre>
+ Retrieve the current game server name and default session type.
+<br> Returns dp_RES_FULL if buffer too small,
+<br> dp_RES_NOTYET if no server has been set.
+
+<a name="dpGetParameterLong"><h3>dpGetParameterLong</h3></a>
+<pre>DP_API dp_result_t DP_APIX dpGetParameterLong(dp_t *dp, int paramId, long *pparamVal);
+</pre>
+ Retrieve a parameter set by an external game launcher, if any.
+<br> On success, places the value of the parameter into *pparamVal.
+<br> Returns dp_RES_OK on success.
+<br> Returns dp_RES_UNIMPLEMENTED if that parameter is not supported by this
+ driver.
+<br> May return other error codes as well; depends on the driver being used.
+
+<a name="dpGetPlayerBlob"><h3>dpGetPlayerBlob</h3></a>
+<pre>DP_API dp_result_t DP_APIX dpGetPlayerBlob(
+	dp_t *dp,
+	dpid_t id,
+	dp_char_t *buf,
+	size_t *pbuflen);
+</pre>
+ Retrieve the blob associated with player having the given id.
+<br> The blob is just a block of data that is carried with the player.
+<p>
+ On entry, *pbuflen holds the length of buf.
+<br> If *pbuflen is not big enough to hold the blob, the actual
+ size of the blob is placed in *pbuflen, and dp_RES_FULL is
+ returned.
+<p>
+ On exit, *pbuflen holds the actual length of the blob,
+ and the blob is copied into buf.
+<br> On success return dp_RES_OK
+
+<a name="dpGetPlayerCaps"><h3>dpGetPlayerCaps</h3></a>
+<pre>DP_API dp_result_t DP_APIX dpGetPlayerCaps(
+	dp_t *dp,
+	dpid_t id,
+	dp_caps_t *info,
+	long flags);
+</pre>
+ Retrieve the capabilities of the currently loaded transport,
+ plus some info about the given player, especially the current latency and
+ packet loss to that player.
+<br> If flags is dp_SEND_RELIABLE, retrieves info about reliable packet services
+ instead of unreliable services.
+
+<a name="dpGetPlayerData"><h3>dpGetPlayerData</h3></a>
+<pre>DP_API dp_result_t DP_APIX dpGetPlayerData(
+	dp_t   *dp,
+	dpid_t idPlayer,
+	int    key,
+	void   *buf,
+	size_t *pbuflen,
+	long   flags);
+</pre>
+ Get a variable for a player.
+<br> Caller must set *buflen before calling to the size of buf.
+<p>
+ If the player or variable does not exist, dp_RES_EMPTY is returned.
+<br> If *buflen is not big enough, *buflen is set to the current size,
+ and dp_res_FULL is returned.
+
+<a name="dpGetPlayerName"><h3>dpGetPlayerName</h3></a>
+<pre>DP_API dp_result_t DP_APIX dpGetPlayerName(
+	dp_t *dp,
+	dpid_t id,
+	dp_char_t *buf,
+	size_t bufLen);
+</pre>
+ Convert a dpid into a player name.
+<br> On success return dp_RES_OK, and copy at most bufLen-1 bytes of player
+ name into buf; always null terminate result.
+<br> On failure, return dp_RES_EMPTY.
+
+<a name="dpGetPlayerUid"><h3>dpGetPlayerUid</h3></a>
+<pre>DP_API dp_uid_t DP_APIX dpGetPlayerUid(dp_t *dp, dpid_t id);
+</pre>
+ Convert a player id (dpid_t) to a user id (dp_uid_t).
+<br> Returns dp_UID_NONE on any error.
+
+<a name="dpGetSessionDesc"><h3>dpGetSessionDesc</h3></a>
+<pre>DP_API dp_result_t DP_APIX dpGetSessionDesc(
+	dp_t *dp,
+	dp_session_t *buf,
+	size_t *pbuflen);
+</pre>
+ Retrieve the current session description.
+ *pbuflen must be filled with the size of the buffer before calling;
+ it will be set to sizeof(dp_session_t).
+<br> If pbuflen is NULL, it is assumed that the buffer is the right size.
+
+<a name="dpGetSessionId"><h3>dpGetSessionId</h3></a>
+<pre>DP_API dp_result_t DP_APIX dpGetSessionId(
+	dp_t *dp,
+	const dp_session_t *sess,	/* session to convert */
+	char *id,					/* resulting id stored here */
+	int *pidlen);				/* length of resulting id stored here */
+</pre>
+ Convert a session description to its unique id (aka key).
+ key must put to a buffer of length dp_KEY_MAXLEN;
+ the session's id will be copied to this buffer.
+ *pidlen will be filled with the number of bytes of id used.
+<p>
+ Session ids are unique, and do not change during the duration of
+ a game session.
+
+<a name="dpGetStats"><h3>dpGetStats</h3></a>
+<pre>DP_API dp_result_t DP_APIX dpGetStats(
+	dp_t *dp,
+	int statkind,
+	dp_stat_t *buf,
+	size_t buflen);
+</pre>
+ Retrieve statistics from dp about network traffic.
+<br> On entry,
+ statkind is one of dp_STAT_*; for example, if you want to know how many
+ reliable packets have been received by the underlying reliable transport
+ since dpCreate, use dp_STAT_DPIO_RX_REL_PKTS.
+ buf should be a pointer to a dp_stat_t.
+ buflen should be sizeof(dp_stat_t).
+<br> Return value is dp_RES_OK on success,
+ and dp_RES_BAD if dp is null or id is invalid.
+
+<a name="dpGetTransportInfo"><h3>dpGetTransportInfo</h3></a>
+<pre>DP_API dp_result_t DP_APIX dpGetTransportInfo(
+	dp_transport_t *path,
+	comm_driverInfo_t *info);
+</pre>
+ Read description out of the DLL file named by 'path'.
+
+<a name="dpLaunchApp"><h3>dpLaunchApp</h3></a>
+<pre>DP_API dp_result_t DP_APIX dpLaunchApp(dp_appParam_t *appParam);
+</pre>
+ Launches an application from another application and notifies stub
+  of the newly launched application, if stub exists.
+<br> If /NEWCONSOLE is found in appParam->shellOpts, a new console is created.
+<br> If /OLDCONSOLE is found in appParam->shellOpts, the old console is used.
+<p>
+ result may be NULL.  If result is not NULL, it is filled with system
+ dependant information about the newly launched app.  On Win32 systems,
+ if result is NULL, the handle to the newly created process is closed,
+ otherwise it is left open for the caller.
+
+<a name="dpNumPlayers"><h3>dpNumPlayers</h3></a>
+<pre>DP_API int DP_APIX dpNumPlayers(
+	dp_t *dp);
+</pre>
+ Return the number of players in the current session.
+
+<a name="dpOpen"><h3>dpOpen</h3></a>
+<pre>DP_API dp_result_t DP_APIX dpOpen(
+	dp_t *dp,
+	dp_session_t *s,
+	dpEnumSessionsCallback_t cb,
+	void *context);
+</pre>
+ Start a new session, or join an existing one.
+<br> If starting a new session, include dp_SESSION_FLAGS_CREATESESSION in
+  flags argument for s.
+<br> Otherwise if joining a specific session, pass that session in s.
+<br> Or if joining any session, either pass in NULL for s if joining
+  a lobby on the game server (dpSetGameServer must have been called)
+ or pass in address including port number (in format returned by
+  dpResolveHostname()) as well as the session type and
+  a flags argument (indicating lobby or game) in s.
+<br> Returns immediately.
+ dp_receive will call the callback when operation completes, and will
+ indicate success with a non-zero session description pointer.
+
+<a name="dpPingUser"><h3>dpPingUser</h3></a>
+<pre>DP_API dp_result_t DP_APIX dpPingUser(
+	dp_t *dp,
+	dpid_t dest,
+	short karma,
+	dp_ping_callback_t cb);
+</pre>
+ Measure round-trip transmission time to a player or the gamehost.
+<br> To ping the gamehost, use dest = 0.
+<br> Result is returned after a couple seconds via callback.
+<br> Call with a unique karma (say, 1 for first call, 2 for 2nd call, etc.)
+
+<a name="dpReadAnetInf"><h3>dpReadAnetInf</h3></a>
+<pre>DP_API dp_result_t DP_APIX dpReadAnetInf(const char *path, dp_appParam_t *pAppParam);
+</pre>
+ Gets appParam parameters from an anet.inf file.
+ path is name of directory containing anet.inf.
+<br> Not needed by most user programs.
+
+<a name="dpReadyToFreeze"><h3>dpReadyToFreeze</h3></a>
+<pre>DP_API dp_result_t DP_APIX dpReadyToFreeze(
+	dp_t   *dp);
+</pre>
+ Returns dp_RES_BUSY if dp can't freeze due to ongoing reliable transmission.
+
+<a name="dpReceive"><h3>dpReceive</h3></a>
+<pre>DP_API dp_result_t DP_APIX dpReceive(
+	dp_t   *dp,
+	dpid_t *idFrom,
+	dpid_t *idTo,
+	int    flags,
+	void *buffer,
+	size_t *size);
+</pre>
+ Receive a packet.
+<br> Also triggers internal housekeeping.  Must be called frequently.
+<br> Caller must initialize *size with the size of the buffer before calling.
+ idFrom and idTo must be set to the addresses of uninitialized dpid_t's.
+<br> On return, *size is set to the number of bytes received, and
+ *idFrom and *idTo are set to the dpid's of the sender and recipient.
+<br> Returns dp_RES_BUG if dp was invalid.
+<br> Returns dp_RES_OK if a user packet was receieved.
+<br> Returns dp_RES_EMPTY if NO user packet was receieved.
+<br> Returns dp_RES_BAD if a user packet with a bad envelope was receieved.
+<br> Returns dp_RES_NETWORK_NOT_RESPONDING if transmit buffers become too full.
+<br> Returns dp_RES_HOST_NOT_RESPONDING if game server handle resets.
+<br> Returns dp_RES_MODEM_NO_RESPONSE if modem connection lost is detected.
+<p>
+ NOTE:  It is best to always use a receive buffer of
+ size dpio_MAXLEN_UNRELIABLE (not dp_MAXLEN_RELIABLE, which is less).
+<br> This is because an extra sizeof_dp_envelope_t bytes at end of
+ buffer are sometimes used for dpid's.
+
+<a name="dpReportAssertionFailure"><h3>dpReportAssertionFailure</h3></a>
+<pre>DP_API dp_result_t DP_APIX dpReportAssertionFailure(int lineno, char *file, char *linetxt);
+</pre>
+ Records assertion failure to logfile.
+
+<a name="dpReportCrash"><h3>dpReportCrash</h3></a>
+<pre>DP_API dp_result_t DP_APIX dpReportCrash(LPEXCEPTION_POINTERS pException);
+</pre>
+ Records crash info to logfile. Designed to be called from an exception handler.
+<br> For Win32, pException is the LPEXCEPTION_POINTERS structure returned by
+  GetExceptionInformation().
+ crshtxt is included in the crash record; crshtxt is truncated if longer than
+  100 bytes or if the crash record is already 512 bytes.
+<br> Returns dp_RES_ALREADY if dpReportCrash(Ex) was called previously; in this
+  case, does not write a new crash record to log unless the crash was caused
+  during dpReportCrash(Ex).
+<br> See <a href="aeh.htm">aeh.htm</a> for more info.
+
+<a name="dpReportScore2"><h3>dpReportScore2</h3></a>
+<pre>DP_API dp_result_t DP_APIX dpReportScore2(dp_t *dp, dpid_t dpId, int scoreId, long scoreVal);
+</pre>
+ Old score reporting function, dummied out.
+
+<a name="dpReportScoreBuf"><h3>dpReportScoreBuf</h3></a>
+<pre>DP_API dp_result_t DP_APIX dpReportScoreBuf(dp_t *dp, dpid_t dpId, int scoreId, const char *scorebuf, int scorelen);
+</pre>
+ Report the score(s) for player dpId.  
+<p>
+ The idea is to pack all the score info of interest about a particular player
+ into a compact buffer, then call this function.  This should be done
+ periodically, e.g. after every major event.  
+<p>
+ You should use the first two bytes for a rough 'score', most significant
+ byte first, and the third byte should be 0 normally, and 1 if this player
+ has 'won'.
+ e.g.
+	buf[0] = dpGETSHORT_FIRSTBYTE(score);
+	buf[1] = dpGETSHORT_SECONDBYTE(score);
+	buf[2] = 0;
+<br> Additional details can be appended.  You should write up a spec on how
+ to interpret these bytes, and provide it to the game server administrators.
+<p>
+ scoreId should be zero.
+
+<a name="dpReportScoreEnd"><h3>dpReportScoreEnd</h3></a>
+<pre>DP_API dp_result_t DP_APIX dpReportScoreEnd(dp_t *dp);
+</pre>
+ End a score report.
+
+<a name="dpReportScoreStart"><h3>dpReportScoreStart</h3></a>
+<pre>DP_API dp_result_t DP_APIX dpReportScoreStart(dp_t *dp, int flag);
+</pre>
+ Begin a score report.
+<br> Flag must be zero.
+<br> This should only be called at the end of the game (but before dpClose).
+<p>
+ Call dpReportScoreStart before calling dpReportScore2, then
+ call dpReportScore2 to report as many scores as you like, then finally
+ call dpReportScoreEnd to finish sending the block of scores.
+
+<a name="dpRequestObjectDeltas"><h3>dpRequestObjectDeltas</h3></a>
+<pre>DP_API dp_result_t DP_APIX dpRequestObjectDeltas(
+	dp_t *dp,
+	int monitor,		/* TRUE to start, FALSE to stop */
+	const char *key,
+	int keylen);
+</pre>
+ Start or stop monitoring the given object table for changes.
+<br> Initially, and on any change to the given table, a dp_objectDelta_packet_t
+ is generated and placed in a queue for retrieval with dpReceive.
+<br> See anet.h for the definition of dp_objectDelta_packet_t.
+<p>
+ When called with monitor=TRUE, a burst of messages are generated giving 
+ the initial contents of the table.
+<br> When called with monitor=FALSE, no more messages of that sort will
+ be generated, although there may still be some in the queue; you can
+ call dpReceive until it returns empty to flush these out if desired.
+<p>
+ The key argument is a variable-length binary string that indicates
+ what objects to start or stop monitoring.
+<p>
+ To start or stop monitoring sessions, use 
+	keylen=1, key[0] = dp_KEY_SESSIONS
+<br> To stop monitoring servers, use 
+	keylen=1, key[0] = dp_KEY_SERVERPINGS,
+<br> To start monitoring servers, use 
+ 	keylen=3;
+	key[0] = dp_KEY_SERVERPINGS,
+	key[1] = (char) dpGETSHORT_FIRSTBYTE(sessiontype);
+	key[2] = (char) dpGETSHORT_SECONDBYTE(sessiontype);
+<br> To monitor players, use
+    char key[dp_KEY_MAXLEN+1];
+	key[0] = dp_KEY_PLAYERS;
+	dpGetSessionId(dp, &sess, &key[1], &keylen);
+	keylen++;
+<br> To request that latencies be included in player deltas for the current 
+	session, use
+	keylen = 1, key[0] = dp_KEY_PLAYER_LATENCIES;
+<br>	The latency in milliseconds will be placed in the latency field of
+	the object delta packet.
+<br>	The frequency of latency measurements is influenced by the intervals
+	set with dpSetPingIntervals.
+<br>	Deltas are synthesized locally and do not load the network.
+<p>
+ Note: keylen will be dp_KEY_MAXLEN+1 when requesting player deltas
+ in IPX sessions!
+
+<a name="dpResolveHostname"><h3>dpResolveHostname</h3></a>
+<pre>DP_API dp_result_t DP_APIX dpResolveHostname(
+	dp_t *dp,
+	char *hostname,
+	char adrbuf[dp_MAX_ADR_LEN]);
+</pre>
+ Convert an ASCII hostname into a binary address.
+
+<a name="dpSend"><h3>dpSend</h3></a>
+<pre>DP_API dp_result_t DP_APIX dpSend(
+	dp_t  *dp,
+	dpid_t idFrom,
+	dpid_t idTo,
+	int flags,
+	void *buffer,
+	size_t size);
+</pre>
+ Send a packet from one player to another.
+<br> First two bytes of the message must indicate the message type.
+<br> Users must not use any message type starting with dp_PACKET_INITIALBYTE.
+<br> Message types are created with the dppt_MAKE macro.
+<p>
+ If the flags argument is dp_SEND_RELIABLE, dp will continue trying
+ to send the packet until it is acknowledged.  Otherwise it will just
+ send it once.
+<p>
+ NOTE:  It is best to always use a send buffer of
+ size dpio_MAXLEN_UNRELIABLE (not dp_MAXLEN_RELIABLE, which is less).
+<br> This is because an extra sizeof_dp_envelope_t bytes at end of
+ buffer are sometimes used for dpid's.
+
+<a name="dpSendPlayerData"><h3>dpSendPlayerData</h3></a>
+<pre>DP_API dp_result_t DP_APIX dpSendPlayerData(
+	dp_t   *dp,
+	dpid_t idPlayer,
+	int    key,
+	dpid_t idTo);
+</pre>
+ Send a given player's variable 'key' to a player (or to everybody,
+ if idTo == dp_ID_BROADCAST).
+<br> Only used for variables that were not sent when they were set, i.e.
+ which were set with dpSendPlayerData(..., dp_PLAYERDATA_FLAG_NOFLOOD)
+
+<a name="dpSetActiveThread"><h3>dpSetActiveThread</h3></a>
+<pre>DP_API dp_result_t DP_APIX dpSetActiveThread(dp_t *dp);
+</pre>
+ Sets which thread is allowed to make dp calls.
+<br> Avoid using this call.  It's dangerous.
+
+<a name="dpSetClocksPerSec"><h3>dpSetClocksPerSec</h3></a>
+<pre>DP_API dp_result_t DP_APIX dpSetClocksPerSec(
+	dp_t *dp,
+	int cps);
+</pre>
+ If your program changes the speed of the system clock, pass in the new
+ value of the ANSI C constant CLOCKS_PER_SEC here.
+<br> This is used to along with the clock() function to set internal timeouts.
+<br> This is not needed under Windows 95.
+
+<a name="dpSetConnCallback"><h3>dpSetConnCallback</h3></a>
+<pre>DP_API dp_result_t DP_APIX dpSetConnCallback(
+	dp_t *dp, dpOpenConnCallback_t cb, void *context);
+</pre>
+ Sets a callback to be called for opening and closing of connections.
+<br> This is done via a callback translation of the dpio_setIncomingCallback
+ mechanism, and passing the callback translation to dpio_openHdl.
+
+<a name="dpSetGameServer"><h3>dpSetGameServer</h3></a>
+<pre>DP_API dp_result_t DP_APIX dpSetGameServer(
+	dp_t *dp,
+	char *masterHostName);	/* server's name, or NULL to clear */
+</pre>
+ Same as dpSetGameServerEx, but gets sessionType by calling dpReadAnetInf().
+<br> Obsolete.
+
+<a name="dpSetGameServerEx"><h3>dpSetGameServerEx</h3></a>
+<pre>DP_API dp_result_t DP_APIX dpSetGameServerEx(
+	dp_t *dp,
+	char *masterHostName,	/* server's name, or NULL to clear */
+	dp_species_t sessionType);
+</pre>
+ When using an Internet driver, call this function with the ascii name of
+ the server, and explicit requests for sessions will be sent to that server.
+<br> Closes any open sessions.
+<p>
+ Call with NULL to clear the game server.
+<p>
+ dpSetGameServerEx lets you specify the session type you will be calling
+ dpEnumSessions() later with.  This tells the game server to send only
+ information about that particular session type.
+<br> To get information about all session types, specify 0 for sessionType.
+<p>
+ Returns:
+<br> dp_RES_OK         Server set/cleared successfully
+<br> dp_RES_BUG        Internal error.
+<br> dp_RES_BAD        Called with invalid parameters, or internal error.
+<br> dp_RES_HOST_NOT_RESPONDING  Could not resolve new host name.
+<br> dp_RES_BUSY       Trying to open server that is being closed
+<br> dp_RES_FULL       Transmission queue full.
+ (Other values may also be returned.)
+
+<a name="dpSetPingIntervals"><h3>dpSetPingIntervals</h3></a>
+<pre>DP_API dp_result_t DP_APIX dpSetPingIntervals(
+	dp_t *dp,
+	int piggybackPingIntervalMS,
+	int forcedPingIntervalMS);
+</pre>
+ Set the intervals used by the latency measurement system.
+<br> If both intervals are 0, only ACKs of non-retransmitted reliable packets
+	will generate new measurements.  No extra bandwidth is used, but 
+	measurements may be infrequent if there are few reliable packets or
+	there is heavy packet loss.
+<br> If piggbackPingInterval is set, additional small ping packets and
+	responses will be piggybacked onto gathered packets every
+	piggybackPingInterval ms when possible.  No extra physical packets
+	will be generated, and any network traffic at all will generate
+	latency and packet loss measurements.
+<br> If forcedPingInterval is set and no piggybacked pings have been sent in
+	the past forcedPingInterval ms, an additional ping packet will be
+	sent to get a latency measurement.
+<p>
+ Pings will only be sent to players in the current session, and will
+ never be sent more than once per round trip time, regardless of the
+ intervals requested.
+<p>
+ Returns dp_RES_OK on success, or dp_RES_BAD on bad parameters.
+
+<a name="dpSetPlayerBlob"><h3>dpSetPlayerBlob</h3></a>
+<pre>DP_API dp_result_t DP_APIX dpSetPlayerBlob(
+	dp_t *dp,
+	dpid_t id,
+	void *blob,
+	size_t bloblen);
+</pre>
+ Set the blob for the player indicated by the given dpid.
+<br> If blob is too long, dp_RES_FULL is returned.
+<br> On success return dp_RES_OK
+
+<a name="dpSetPlayerData"><h3>dpSetPlayerData</h3></a>
+<pre>DP_API dp_result_t DP_APIX dpSetPlayerData(
+	dp_t   *dp,
+	dpid_t idPlayer,
+	int    key,
+	void   *buf,
+	size_t buflen,
+	long   flags);
+</pre>
+ Set variable 'key' for a player.  See <a href="dp.htm">dp.htm</a> for more info.
+
+<a name="dpSetPlayerName"><h3>dpSetPlayerName</h3></a>
+<pre>DP_API dp_result_t DP_APIX dpSetPlayerName(
+	dp_t *dp,
+	dpid_t id,
+	dp_char_t *name);
+</pre>
+ Set the name for the player indicated by the given dpid.
+<br> If name is too long, it will be truncated.
+<br> On success return dp_RES_OK
+<br> On failure, return dp_RES_EMPTY.
+
+<a name="dpSetSessionDesc"><h3>dpSetSessionDesc</h3></a>
+<pre>DP_API dp_result_t DP_APIX dpSetSessionDesc(
+	dp_t *dp,
+	const dp_session_t *buf,
+	long flags);
+</pre>
+ Change the name or user data of the current session.
+<br> May be called only by master.
+<br> Flags is currently unused.
+<br> The only fields of the dp_session_t that may be changed with this function
+ are dwUser1, maxPlayers, szUserField, and sessionName.
+<br> To set or clear the dp_SESSION_FLAGS_ENABLE_NEWPLAYERS flag bit, call
+ dpEnableNewPlayers().
+
+<a name="dpShutdown"><h3>dpShutdown</h3></a>
+<pre>DP_API dp_result_t dpShutdown(dp_t *dp, clock_t timeout, clock_t wait_after, int flags);
+</pre>
+ When you want to quit and terminate the game, you should poll this
+ routine in a loop with dpReceive.  This will close the connection to
+ the server and delete all sessions and players associated with it.
+<br> Flags should normally be zero.
+<p>
+ dpShutdown will wait an additional wait_after ms after closing the
+ connection to handle packet retries.
+<br> If flags is 1, the connection to the game server will not be closed.
+ 
+<br> Steps which are dependant on network events will time out in
+ timeout ms, if timeout is non-zero.  Since there are three such
+ states, the maximum total time for shut down is about
+ (timeout * 3 + wait_after) ms.
+<p>
+ Returns dp_RES_OK when finished,
+         dp_RES_BUSY while still shutting down.
+
+<a name="dp_enableDebugPrint"><h3>dp_enableDebugPrint</h3></a>
+<pre>DP_API void DP_APIX dp_enableDebugPrint(int enable);
+</pre>
+ Not normally needed.
+<p>
+ Call with 1 to increase debug printing level (i.e. show more info);
+ call with -1 to decrease debug printing level (i.e. show less info);
+ call with 0 to disable all debug printing.
+
+<a name="dp_enableDebugPrint"><h3>dp_enableDebugPrint</h3></a>
+<pre>DP_API void DP_APIX dp_enableDebugPrint(int enable);
+</pre>
+ Not normally needed.
+<p>
+ Call with 1 to increase debug printing level (i.e. show more info);
+ call with -1 to decrease debug printing level (i.e. show less info);
+ call with 0 to disable all debug printing.
+
+<a name="dp_flushLog"><h3>dp_flushLog</h3></a>
+<pre>DP_API void DP_APIX dp_flushLog(void);
+</pre>
+ Not normally needed.
+<p>
+ Call to flush log file.
+
+<a name="dp_getLogFP"><h3>dp_getLogFP</h3></a>
+<pre>DP_API FILE * DP_APIX dp_getLogFP(void);
+</pre>
+ Call this to retrieve the file pointer which dp is using for logging.
+<br> Most programs won't need this.
+<br> The only legal thing to do with the return value is to pass it to
+ dp_setLogFP().  This is handy for context switching when using
+ multiple dp_t's in the same program, as in our test bench.
+
+<a name="dp_pack_session"><h3>dp_pack_session</h3></a>
+<pre>DP_API int DP_APIX dp_pack_session(dp_t *dp, dp_species_t defaultSessionType, const dp_session_t *p, char *buf);
+</pre>
+ Pack a dp_session_t into a compact, uniform byte order form for transmission.
+<br> Doesn't need to send external address or karma, but
+ will need to send internal address if it's not the same as external.
+<br> If any field is too long, it is truncated.
+<br> Returns length used.
+
+<a name="dp_setLogFP"><h3>dp_setLogFP</h3></a>
+<pre>DP_API void DP_APIX dp_setLogFP(FILE *_fp);
+</pre>
+ Call this to set the file pointer which dp should use for logging.
+<br> Most programs won't need this.
+<br> If _fp is dp_LOG_FILE_NONE, this disables logging entirely.
+<br> This will override any filename specified by the .ini file.
+ (Note that dp_setLogFname closes the currently open log file, regardless
+ of whether it was passed in via this function, or opened by dp.)
+<br> WARNING: unless you're very sure your program is using the same C runtime
+ library instance as does this code, only use the return value of 
+ dp_getLogFP().
+
+<a name="dp_setLogFname"><h3>dp_setLogFname</h3></a>
+<pre>DP_API void DP_APIX dp_setLogFname(const char *fname);
+</pre>
+ Call to set default log filename.  (Default value is "dp.log".)
+<br> This value may be overridden by setting a log filename in the .ini file.
+<br> Note: no log file unless you are linked with the debugging version of
+ the library, and a .ini file with (for example) All=1 and ToLog=1 lines
+ in the [DEBUG] section exists (see <a href="dp.htm#inifile">dp.htm#inifile</a>).
+
+<a name="dp_unpack_session"><h3>dp_unpack_session</h3></a>
+<pre>DP_API int DP_APIX dp_unpack_session(dp_t *dp, const char *subkey, int subkeylen, const char *buf, size_t buflen, dp_session_t *p);
+</pre>
+ Unpack the compact, byte-order-uniform version of a dp_session_t
+ into the fluffy form we use internally.
+<br> Returns number of bytes used, or -1 on error.
+
+<a name="dpini_GetFile"><h3>dpini_GetFile</h3></a>
+<pre>DP_API const char * DP_APIX dpini_GetFile(void);
+</pre>
+ Return the name of the current .INI file.
+<br> Value is a pointer to a static string; the caller should copy it
+ to a buffer immediately.
+
+<a name="dpini_SetFile"><h3>dpini_SetFile</h3></a>
+<pre>DP_API void DP_APIX dpini_SetFile(char *iniFileName);
+</pre>
+ Change the .INI file accessed by future calls.
+
+<hr>
+<h1><center><a name="Compatibility">Compatibility with other API's</a></center></h1>
+<i>Last update: 22 September 1998</i></center>
+The Anet API was initially designed to be similar to the DirectPlay API.
+<p>
+Some sections of the game will need to be different for Anet's API
+(for instance, initial creation of the Anet object).
+<p>
+Windows programmers should note that the Anet API is currently 
+single-threaded.  Calls that might block (i.e. might not return immediately)
+use callback functions instead of blocking, letting the main thread issue
+a lengthy operation request without having to wait around for it to complete.
+It is suggested that the main idle loop of your Windows application
+have a call to <b>dpReceive</b>, that no other place in your program
+call <b>dpReceive</b>, and that only one thread ever issue calls to 
+the Anet API.
+<hr>
+<i>Dan Kegel, et al.</i>
+</body>
+</html>

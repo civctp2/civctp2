@@ -1,0 +1,2250 @@
+TILEIMP_ADVANCED_FARMS {
+   Icon ICON_TILEIMP_ADVANCED_FARMS
+   Tooltip TOOLTIP_TILEIMP_SELECT_FARM2_BUTTON
+   Statusbar STATUSBAR_TILEIMP_SELECT_FARM2_BUTTON
+   Level 2
+   Class:Farm
+
+   ConstructionTiles 1
+   ConstructionTiles 6
+   ConstructionTiles 7
+
+   CantBuildOn TERRAIN_BROWN_MOUNTAIN
+   CantBuildOn TERRAIN_GLACIER
+   CantBuildOn TERRAIN_MOUNTAIN
+   CantBuildOn TERRAIN_TUNDRA
+   CantBuildOn TERRAIN_WATER_BEACH
+   CantBuildOn TERRAIN_WATER_DEEP
+   CantBuildOn TERRAIN_WATER_RIFT
+   CantBuildOn TERRAIN_WATER_SHALLOW
+   CantBuildOn TERRAIN_WATER_SHELF
+   CantBuildOn TERRAIN_WATER_TRENCH
+   CantBuildOn TERRAIN_WATER_VOLCANO
+   CantBuildOn TERRAIN_WHITE_HILL
+   CantBuildOn TERRAIN_WHITE_MOUNTAIN
+
+   Excludes:ATM
+   Excludes:Farm
+   Excludes:LandDetector
+   Excludes:Mine
+   Excludes:OceanFarm
+   Excludes:OceanDetector
+   Excludes:OceanATM
+   Excludes:Structure1
+   Excludes:Structure2
+   Excludes:OceanMine
+
+   TerrainEffect {
+      Terrain TERRAIN_DESERT
+      Terrain TERRAIN_GRASSLAND
+      Terrain TERRAIN_PLAINS
+
+      BonusFood 20
+      EnableAdvance ADVANCE_AGRICULTURAL_REVOLUTION
+      ProductionCost 5000
+      ProductionTime 2
+      TilesetIndex 8
+   }
+}
+
+############################################################
+
+TILEIMP_ADVANCED_MINES {
+   Icon ICON_TILEIMP_ADVANCED_MINES
+   Tooltip TOOLTIP_TILEIMP_SELECT_MINE2_BUTTON
+   Statusbar STATUSBAR_TILEIMP_SELECT_MINE2_BUTTON
+   Level 2
+   Class:Mine
+
+   ConstructionTiles 1
+   ConstructionTiles 15
+   ConstructionTiles 16
+
+   CantBuildOn TERRAIN_WATER_BEACH
+   CantBuildOn TERRAIN_WATER_DEEP
+   CantBuildOn TERRAIN_WATER_RIFT
+   CantBuildOn TERRAIN_WATER_SHALLOW
+   CantBuildOn TERRAIN_WATER_SHELF
+   CantBuildOn TERRAIN_WATER_TRENCH
+   CantBuildOn TERRAIN_WATER_VOLCANO
+
+   Excludes:ATM
+   Excludes:Farm
+   Excludes:LandDetector
+   Excludes:Mine
+   Excludes:OceanFarm
+   Excludes:OceanDetector
+   Excludes:OceanATM
+   Excludes:Structure1
+   Excludes:Structure2
+   Excludes:OceanMine
+
+   TerrainEffect {
+      Terrain TERRAIN_DESERT
+      Terrain TERRAIN_GRASSLAND
+      Terrain TERRAIN_PLAINS
+
+      BonusProduction 10
+      BonusGold 5
+      EnableAdvance ADVANCE_EXPLOSIVES
+      ProductionCost 800
+      ProductionTime 2
+      TilesetIndex 17
+   }
+
+   TerrainEffect {
+      Terrain TERRAIN_BROWN_HILL
+      Terrain TERRAIN_HILL
+      Terrain TERRAIN_WHITE_HILL
+
+      BonusProduction 20
+      BonusGold 5
+      EnableAdvance ADVANCE_EXPLOSIVES
+      ProductionCost 10000
+      ProductionTime 2
+      TilesetIndex 17
+   }
+
+   TerrainEffect {
+      Terrain TERRAIN_BROWN_MOUNTAIN
+      Terrain TERRAIN_MOUNTAIN
+      Terrain TERRAIN_WHITE_MOUNTAIN
+
+      BonusProduction 30
+      BonusGold 5
+      EnableAdvance ADVANCE_EXPLOSIVES
+      ProductionCost 10000
+      ProductionTime 2
+      TilesetIndex 17
+   }
+}
+
+############################################################
+
+TILEIMP_ADVANCED_UNDERSEA_MINES {
+   Icon ICON_TILEIMP_ADVANCED_UNDERSEA_MINES
+   Tooltip TOOLTIP_TILEIMP_SELECT_RIG2_BUTTON
+   Statusbar STATUSBAR_TILEIMP_SELECT_RIG2_BUTTON
+   Level 2
+   Class:OceanMine
+
+   ConstructionTiles 1
+   ConstructionTiles 55
+   ConstructionTiles 56
+
+   CantBuildOn TERRAIN_BROWN_HILL
+   CantBuildOn TERRAIN_BROWN_MOUNTAIN
+   CantBuildOn TERRAIN_DESERT
+   CantBuildOn TERRAIN_FOREST
+   CantBuildOn TERRAIN_GLACIER
+   CantBuildOn TERRAIN_GRASSLAND
+   CantBuildOn TERRAIN_HILL
+   CantBuildOn TERRAIN_JUNGLE
+   CantBuildOn TERRAIN_MOUNTAIN
+   CantBuildOn TERRAIN_PLAINS
+   CantBuildOn TERRAIN_SWAMP
+   CantBuildOn TERRAIN_TUNDRA
+   CantBuildOn TERRAIN_WHITE_HILL
+   CantBuildOn TERRAIN_WHITE_MOUNTAIN
+
+   Excludes:ATM
+   Excludes:Farm
+   Excludes:LandDetector
+   Excludes:Mine
+   Excludes:OceanFarm
+   Excludes:OceanDetector
+   Excludes:OceanATM
+   Excludes:Structure1
+   Excludes:Structure2
+   Excludes:OceanMine
+
+   TerrainEffect {
+      Terrain TERRAIN_WATER_DEEP
+
+      BonusProduction 45
+      BonusGold 10
+      EnableAdvance ADVANCE_ULTRAPRESSURE_MACHINERY
+      ProductionCost 10000
+      ProductionTime 2
+      TilesetIndex 57
+   }
+
+   TerrainEffect {
+      Terrain TERRAIN_WATER_RIFT
+
+      BonusProduction 60
+      BonusGold 10
+      EnableAdvance ADVANCE_ULTRAPRESSURE_MACHINERY
+      ProductionCost 12000
+      ProductionTime 2
+      TilesetIndex 57
+   }
+
+   TerrainEffect {
+      Terrain TERRAIN_WATER_VOLCANO
+
+      BonusProduction 100
+      BonusGold 10
+      EnableAdvance ADVANCE_ULTRAPRESSURE_MACHINERY
+      ProductionCost 14000
+      ProductionTime 2
+      TilesetIndex 57
+   }
+}
+
+############################################################
+
+TILEIMP_AIR_BASES {
+   Icon ICON_TILEIMP_AIR_BASES
+   Tooltip TOOLTIP_TILEIMP_SELECT_AIRBASE_BUTTON
+   Statusbar STATUSBAR_TILEIMP_SELECT_AIRBASE_BUTTON
+   Level 2
+   Class:Structure1
+
+   ConstructionTiles 1
+   ConstructionTiles 1
+   ConstructionTiles 1
+
+   CantBuildOn TERRAIN_WATER_BEACH
+   CantBuildOn TERRAIN_WATER_DEEP
+   CantBuildOn TERRAIN_WATER_RIFT
+   CantBuildOn TERRAIN_WATER_SHALLOW
+   CantBuildOn TERRAIN_WATER_SHELF
+   CantBuildOn TERRAIN_WATER_TRENCH
+   CantBuildOn TERRAIN_WATER_VOLCANO
+
+   Excludes:ATM
+   Excludes:Farm
+   Excludes:LandDetector
+   Excludes:Mine
+   Excludes:OceanFarm
+   Excludes:OceanDetector
+   Excludes:OceanATM
+   Excludes:Structure1
+   Excludes:Structure2
+   Excludes:OceanMine
+
+   TerrainEffect {
+      Terrain TERRAIN_BROWN_HILL
+      Terrain TERRAIN_BROWN_MOUNTAIN
+      Terrain TERRAIN_DESERT
+      Terrain TERRAIN_FOREST
+      Terrain TERRAIN_GLACIER
+      Terrain TERRAIN_GRASSLAND
+      Terrain TERRAIN_HILL
+      Terrain TERRAIN_JUNGLE
+      Terrain TERRAIN_MOUNTAIN
+      Terrain TERRAIN_PLAINS
+      Terrain TERRAIN_SWAMP
+      Terrain TERRAIN_TUNDRA
+      Terrain TERRAIN_WHITE_HILL
+      Terrain TERRAIN_WHITE_MOUNTAIN
+
+      Airport
+      VisionRange 2
+      RadarRange 3
+      EnableAdvance ADVANCE_AERODYNAMICS
+      ProductionCost 10000
+      ProductionTime 4
+      TilesetIndex 32
+   }
+}
+
+############################################################
+
+TILEIMP_AUTOMATED_FISHERIES {
+   Icon ICON_TILEIMP_AUTOMATED_FISHERIES
+   Tooltip TOOLTIP_TILEIMP_SELECT_NET3_BUTTON
+   Statusbar STATUSBAR_TILEIMP_SELECT_NET3_BUTTON
+   Level 3
+   Class:OceanFarm
+
+   ConstructionTiles 1
+   ConstructionTiles 1
+   ConstructionTiles 1
+
+   CantBuildOn TERRAIN_BROWN_HILL
+   CantBuildOn TERRAIN_BROWN_MOUNTAIN
+   CantBuildOn TERRAIN_DESERT
+   CantBuildOn TERRAIN_FOREST
+   CantBuildOn TERRAIN_GLACIER
+   CantBuildOn TERRAIN_GRASSLAND
+   CantBuildOn TERRAIN_HILL
+   CantBuildOn TERRAIN_JUNGLE
+   CantBuildOn TERRAIN_MOUNTAIN
+   CantBuildOn TERRAIN_PLAINS
+   CantBuildOn TERRAIN_SWAMP
+   CantBuildOn TERRAIN_TUNDRA
+   CantBuildOn TERRAIN_WHITE_HILL
+   CantBuildOn TERRAIN_WHITE_MOUNTAIN
+
+   Excludes:ATM
+   Excludes:Farm
+   Excludes:LandDetector
+   Excludes:Mine
+   Excludes:OceanFarm
+   Excludes:OceanDetector
+   Excludes:OceanATM
+   Excludes:Structure1
+   Excludes:Structure2
+   Excludes:OceanMine
+
+   TerrainEffect {
+      Terrain TERRAIN_WATER_BEACH
+      Terrain TERRAIN_WATER_SHALLOW
+      Terrain TERRAIN_WATER_SHELF
+
+      BonusFood 30
+      EnableAdvance ADVANCE_ROBOTICS
+      ProductionCost 14000
+      ProductionTime 2
+      TilesetIndex 67
+   }
+
+   TerrainEffect {
+      Terrain TERRAIN_WATER_DEEP
+      Terrain TERRAIN_WATER_RIFT
+      Terrain TERRAIN_WATER_TRENCH
+
+      BonusFood 50
+      EnableAdvance ADVANCE_ROBOTICS
+      ProductionCost 18000
+      ProductionTime 2
+      TilesetIndex 67
+   }
+
+   TerrainEffect {
+      Terrain TERRAIN_WATER_VOLCANO
+
+      BonusFood 50
+      EnableAdvance ADVANCE_ROBOTICS
+      ProductionCost 20000
+      ProductionTime 2
+      TilesetIndex 67
+   }
+}
+
+############################################################
+
+TILEIMP_DRILLING_PLATFORM {
+   Icon ICON_TILEIMP_DRILLING_PLATFORM
+   Tooltip TOOLTIP_TILEIMP_SELECT_PIER2_BUTTON
+   Statusbar STATUSBAR_TILEIMP_SELECT_PIER2_BUTTON
+   Level 2
+   Class:OceanATM
+
+   ConstructionTiles 1
+   ConstructionTiles 74
+   ConstructionTiles 75
+
+   Excludes:ATM
+   Excludes:Farm
+   Excludes:LandDetector
+   Excludes:Mine
+   Excludes:OceanFarm
+   Excludes:OceanDetector
+   Excludes:OceanATM
+   Excludes:Structure1
+   Excludes:Structure2
+   Excludes:OceanMine
+
+   TerrainEffect {
+      Terrain TERRAIN_WATER_DEEP
+      Terrain TERRAIN_WATER_KELP
+      Terrain TERRAIN_WATER_REEF
+      Terrain TERRAIN_WATER_RIFT
+      Terrain TERRAIN_WATER_SHALLOW
+      Terrain TERRAIN_WATER_SHELF
+      Terrain TERRAIN_WATER_TRENCH
+      Terrain TERRAIN_WATER_VOLCANO
+
+      BonusGold 25
+      EnableAdvance ADVANCE_OIL_REFINING
+      ProductionCost 8000
+      ProductionTime 4
+      TilesetIndex 76
+   }
+}
+
+############################################################
+
+TILEIMP_FARMS {
+   Icon ICON_TILEIMP_FARMS
+   Tooltip TOOLTIP_TILEIMP_SELECT_FARM1_BUTTON
+   Statusbar STATUSBAR_TILEIMP_SELECT_FARM1_BUTTON
+   Level 1
+   Class:Farm
+
+   ConstructionTiles 1
+   ConstructionTiles 3
+   ConstructionTiles 4
+
+   CantBuildOn TERRAIN_BROWN_MOUNTAIN
+   CantBuildOn TERRAIN_GLACIER
+   CantBuildOn TERRAIN_MOUNTAIN
+   CantBuildOn TERRAIN_TUNDRA
+   CantBuildOn TERRAIN_WATER_BEACH
+   CantBuildOn TERRAIN_WATER_DEEP
+   CantBuildOn TERRAIN_WATER_RIFT
+   CantBuildOn TERRAIN_WATER_SHALLOW
+   CantBuildOn TERRAIN_WATER_SHELF
+   CantBuildOn TERRAIN_WATER_TRENCH
+   CantBuildOn TERRAIN_WATER_VOLCANO
+   CantBuildOn TERRAIN_WHITE_HILL
+   CantBuildOn TERRAIN_WHITE_MOUNTAIN
+
+   Excludes:ATM
+   Excludes:Farm
+   Excludes:LandDetector
+   Excludes:Mine
+   Excludes:OceanFarm
+   Excludes:OceanDetector
+   Excludes:OceanATM
+   Excludes:Structure1
+   Excludes:Structure2
+   Excludes:OceanMine
+
+   TerrainEffect {
+      Terrain TERRAIN_DESERT
+      Terrain TERRAIN_GRASSLAND
+      Terrain TERRAIN_PLAINS
+
+      BonusFood 10
+      EnableAdvance ADVANCE_AGRICULTURE
+      ProductionCost 2000
+      ProductionTime 2
+      TilesetIndex 5
+   }
+}
+
+############################################################
+
+TILEIMP_FISHERIES {
+   Icon ICON_TILEIMP_FISHERIES
+   Tooltip TOOLTIP_TILEIMP_SELECT_NET2_BUTTON
+   Statusbar STATUSBAR_TILEIMP_SELECT_NET2_BUTTON
+   Level 2
+   Class:OceanFarm
+
+   ConstructionTiles 1
+   ConstructionTiles 1
+   ConstructionTiles 1
+
+   CantBuildOn TERRAIN_BROWN_HILL
+   CantBuildOn TERRAIN_BROWN_MOUNTAIN
+   CantBuildOn TERRAIN_DESERT
+   CantBuildOn TERRAIN_FOREST
+   CantBuildOn TERRAIN_GLACIER
+   CantBuildOn TERRAIN_GRASSLAND
+   CantBuildOn TERRAIN_HILL
+   CantBuildOn TERRAIN_JUNGLE
+   CantBuildOn TERRAIN_MOUNTAIN
+   CantBuildOn TERRAIN_PLAINS
+   CantBuildOn TERRAIN_SWAMP
+   CantBuildOn TERRAIN_TUNDRA
+   CantBuildOn TERRAIN_WHITE_HILL
+   CantBuildOn TERRAIN_WHITE_MOUNTAIN
+
+   Excludes:ATM
+   Excludes:Farm
+   Excludes:LandDetector
+   Excludes:Mine
+   Excludes:OceanFarm
+   Excludes:OceanDetector
+   Excludes:OceanATM
+   Excludes:Structure1
+   Excludes:Structure2
+   Excludes:OceanMine
+
+   TerrainEffect {
+      Terrain TERRAIN_WATER_BEACH
+      Terrain TERRAIN_WATER_SHALLOW
+      Terrain TERRAIN_WATER_SHELF
+
+      BonusFood 20
+      EnableAdvance ADVANCE_OCEAN_FARING
+      ProductionCost 5000
+      ProductionTime 2
+      TilesetIndex 64
+   }
+
+   TerrainEffect {
+      Terrain TERRAIN_WATER_DEEP
+      Terrain TERRAIN_WATER_RIFT
+      Terrain TERRAIN_WATER_TRENCH
+
+      BonusFood 30
+      EnableAdvance ADVANCE_OCEAN_FARING
+      ProductionCost 7000
+      ProductionTime 2
+      TilesetIndex 64
+   }
+
+   TerrainEffect {
+      Terrain TERRAIN_WATER_VOLCANO
+
+      BonusFood 30
+      EnableAdvance ADVANCE_OCEAN_FARING
+      ProductionCost 9000
+      ProductionTime 2
+      TilesetIndex 64
+   }
+}
+
+############################################################
+
+TILEIMP_FORTIFICATIONS {
+   Icon ICON_TILEIMP_FORTIFICATIONS
+   Tooltip TOOLTIP_TILEIMP_SELECT_FORT_BUTTON
+   Statusbar STATUSBAR_TILEIMP_SELECT_FORT_BUTTON
+   Level 1
+   IntBorderRadius 2
+   SquaredBorderRadius 5
+   Class:Structure1
+
+   ConstructionTiles 1
+   ConstructionTiles 80
+   ConstructionTiles 81
+
+   CantBuildOn TERRAIN_WATER_BEACH
+   CantBuildOn TERRAIN_WATER_DEEP
+   CantBuildOn TERRAIN_WATER_RIFT
+   CantBuildOn TERRAIN_WATER_SHALLOW
+   CantBuildOn TERRAIN_WATER_SHELF
+   CantBuildOn TERRAIN_WATER_TRENCH
+   CantBuildOn TERRAIN_WATER_VOLCANO
+
+   Excludes:ATM
+   Excludes:Farm
+   Excludes:LandDetector
+   Excludes:Mine
+   Excludes:OceanFarm
+   Excludes:OceanDetector
+   Excludes:OceanATM
+   Excludes:Structure1
+   Excludes:Structure2
+   Excludes:OceanMine
+
+   TerrainEffect {
+      Terrain TERRAIN_BROWN_HILL
+      Terrain TERRAIN_BROWN_MOUNTAIN
+      Terrain TERRAIN_DESERT
+      Terrain TERRAIN_FOREST
+      Terrain TERRAIN_GLACIER
+      Terrain TERRAIN_GRASSLAND
+      Terrain TERRAIN_HILL
+      Terrain TERRAIN_JUNGLE
+      Terrain TERRAIN_MOUNTAIN
+      Terrain TERRAIN_PLAINS
+      Terrain TERRAIN_SWAMP
+      Terrain TERRAIN_TUNDRA
+      Terrain TERRAIN_WHITE_HILL
+      Terrain TERRAIN_WHITE_MOUNTAIN
+
+      VisionRange 2
+      DefenseBonus 1.5
+      EnableAdvance ADVANCE_STONE_WORKING
+      ProductionCost 10000
+      ProductionTime 4
+      TilesetIndex 82
+   }
+}
+
+############################################################
+
+TILEIMP_HYDROPONIC_FARMS {
+   Icon ICON_TILEIMP_HYDROPONIC_FARMS
+   Tooltip TOOLTIP_TILEIMP_SELECT_FARM3_BUTTON
+   Statusbar STATUSBAR_TILEIMP_SELECT_FARM3_BUTTON
+   Level 3
+   Class:Farm
+
+   ConstructionTiles 1
+   ConstructionTiles 9
+   ConstructionTiles 10
+
+   CantBuildOn TERRAIN_BROWN_MOUNTAIN
+   CantBuildOn TERRAIN_GLACIER
+   CantBuildOn TERRAIN_MOUNTAIN
+   CantBuildOn TERRAIN_TUNDRA
+   CantBuildOn TERRAIN_WATER_BEACH
+   CantBuildOn TERRAIN_WATER_DEEP
+   CantBuildOn TERRAIN_WATER_RIFT
+   CantBuildOn TERRAIN_WATER_SHALLOW
+   CantBuildOn TERRAIN_WATER_SHELF
+   CantBuildOn TERRAIN_WATER_TRENCH
+   CantBuildOn TERRAIN_WATER_VOLCANO
+   CantBuildOn TERRAIN_WHITE_HILL
+   CantBuildOn TERRAIN_WHITE_MOUNTAIN
+
+   Excludes:ATM
+   Excludes:Farm
+   Excludes:LandDetector
+   Excludes:Mine
+   Excludes:OceanFarm
+   Excludes:OceanDetector
+   Excludes:OceanATM
+   Excludes:Structure1
+   Excludes:Structure2
+   Excludes:OceanMine
+
+   TerrainEffect {
+      Terrain TERRAIN_DESERT
+      Terrain TERRAIN_GRASSLAND
+      Terrain TERRAIN_PLAINS
+
+      BonusFood 30
+      EnableAdvance ADVANCE_GENETICS
+      ProductionCost 14000
+      ProductionTime 2
+      TilesetIndex 11
+   }
+}
+
+############################################################
+
+TILEIMP_LISTENING_POSTS {
+   Icon ICON_TILEIMP_LISTENING_POSTS
+   Tooltip TOOLTIP_TILEIMP_SELECT_LISTENPOST_BUTTON
+   Statusbar STATUSBAR_TILEIMP_SELECT_LISTENPOST_BUTTON
+   Level 1
+   Class:LandDetector
+
+   ConstructionTiles 1
+   ConstructionTiles 1
+   ConstructionTiles 1
+
+   CantBuildOn TERRAIN_WATER_BEACH
+   CantBuildOn TERRAIN_WATER_DEEP
+   CantBuildOn TERRAIN_WATER_RIFT
+   CantBuildOn TERRAIN_WATER_SHALLOW
+   CantBuildOn TERRAIN_WATER_SHELF
+   CantBuildOn TERRAIN_WATER_TRENCH
+   CantBuildOn TERRAIN_WATER_VOLCANO
+
+   Excludes:ATM
+   Excludes:Farm
+   Excludes:LandDetector
+   Excludes:Mine
+   Excludes:OceanFarm
+   Excludes:OceanDetector
+   Excludes:OceanATM
+   Excludes:Structure1
+   Excludes:Structure2
+   Excludes:OceanMine
+
+   TerrainEffect {
+      Terrain TERRAIN_BROWN_HILL
+      Terrain TERRAIN_BROWN_MOUNTAIN
+      Terrain TERRAIN_DESERT
+      Terrain TERRAIN_FOREST
+      Terrain TERRAIN_GLACIER
+      Terrain TERRAIN_GRASSLAND
+      Terrain TERRAIN_HILL
+      Terrain TERRAIN_JUNGLE
+      Terrain TERRAIN_MOUNTAIN
+      Terrain TERRAIN_PLAINS
+      Terrain TERRAIN_SWAMP
+      Terrain TERRAIN_TUNDRA
+      Terrain TERRAIN_WHITE_HILL
+      Terrain TERRAIN_WHITE_MOUNTAIN
+
+      Radar
+      ListeningPost
+      VisionRange 3
+      RadarRange 3
+      EnableAdvance ADVANCE_ELECTRICITY
+      ProductionCost 8000
+      ProductionTime 4
+      TilesetIndex 30
+   }
+}
+
+############################################################
+
+TILEIMP_MAGLEV {
+   Icon ICON_TILEIMP_MAGLEV
+   Tooltip TOOLTIP_TILEIMP_SELECT_ROAD3_BUTTON
+   Statusbar STATUSBAR_TILEIMP_SELECT_ROAD3_BUTTON
+   Level 3
+   Class:Road
+
+   ConstructionTiles 1
+   ConstructionTiles 1
+   ConstructionTiles 1
+
+   CantBuildOn TERRAIN_WATER_BEACH
+   CantBuildOn TERRAIN_WATER_DEEP
+   CantBuildOn TERRAIN_WATER_RIFT
+   CantBuildOn TERRAIN_WATER_SHALLOW
+   CantBuildOn TERRAIN_WATER_SHELF
+   CantBuildOn TERRAIN_WATER_TRENCH
+   CantBuildOn TERRAIN_WATER_VOLCANO
+
+   Excludes:Road
+   Excludes:OceanRoad
+
+   TerrainEffect {
+      Terrain TERRAIN_DESERT
+      Terrain TERRAIN_GRASSLAND
+      Terrain TERRAIN_PLAINS
+
+      MoveCost 10
+      EnableAdvance ADVANCE_HT_SUPERCONDUCTOR
+      ProductionCost 2400
+      ProductionTime 4
+      TilesetIndex 400
+   }
+
+   TerrainEffect {
+      Terrain TERRAIN_BROWN_HILL
+      Terrain TERRAIN_FOREST
+      Terrain TERRAIN_HILL
+      Terrain TERRAIN_JUNGLE
+      Terrain TERRAIN_WHITE_HILL
+
+      MoveCost 10
+      EnableAdvance ADVANCE_HT_SUPERCONDUCTOR
+      ProductionCost 8000
+      ProductionTime 4
+      TilesetIndex 400
+   }
+
+   TerrainEffect {
+      Terrain TERRAIN_SWAMP
+      Terrain TERRAIN_TUNDRA
+
+      MoveCost 10
+      EnableAdvance ADVANCE_HT_SUPERCONDUCTOR
+      ProductionCost 12000
+      ProductionTime 4
+      TilesetIndex 400
+   }
+
+   TerrainEffect {
+      Terrain TERRAIN_BROWN_MOUNTAIN
+      Terrain TERRAIN_MOUNTAIN
+      Terrain TERRAIN_WHITE_MOUNTAIN
+
+      MoveCost 10
+      EnableAdvance ADVANCE_HT_SUPERCONDUCTOR
+      ProductionCost 16000
+      ProductionTime 4
+      TilesetIndex 400
+   }
+}
+
+############################################################
+
+TILEIMP_MEGA_MINES {
+   Icon ICON_TILEIMP_MEGA_MINES
+   Tooltip TOOLTIP_TILEIMP_SELECT_MINE3_BUTTON
+   Statusbar STATUSBAR_TILEIMP_SELECT_MINE3_BUTTON
+   Level 3
+   Class:Mine
+
+   ConstructionTiles 1
+   ConstructionTiles 18
+   ConstructionTiles 19
+
+   CantBuildOn TERRAIN_WATER_BEACH
+   CantBuildOn TERRAIN_WATER_DEEP
+   CantBuildOn TERRAIN_WATER_RIFT
+   CantBuildOn TERRAIN_WATER_SHALLOW
+   CantBuildOn TERRAIN_WATER_SHELF
+   CantBuildOn TERRAIN_WATER_TRENCH
+   CantBuildOn TERRAIN_WATER_VOLCANO
+
+   Excludes:ATM
+   Excludes:Farm
+   Excludes:LandDetector
+   Excludes:Mine
+   Excludes:OceanFarm
+   Excludes:OceanDetector
+   Excludes:OceanATM
+   Excludes:Structure1
+   Excludes:Structure2
+   Excludes:OceanMine
+
+   TerrainEffect {
+      Terrain TERRAIN_DESERT
+      Terrain TERRAIN_GRASSLAND
+      Terrain TERRAIN_PLAINS
+
+      BonusProduction 15
+      BonusGold 5
+      EnableAdvance ADVANCE_ADV_URBAN_PLANNING
+      ProductionCost 16000
+      ProductionTime 2
+      TilesetIndex 20
+   }
+
+   TerrainEffect {
+      Terrain TERRAIN_BROWN_HILL
+      Terrain TERRAIN_HILL
+      Terrain TERRAIN_WHITE_HILL
+
+      BonusProduction 30
+      BonusGold 15
+      EnableAdvance ADVANCE_ADV_URBAN_PLANNING
+      ProductionCost 22000
+      ProductionTime 2
+      TilesetIndex 20
+   }
+
+   TerrainEffect {
+      Terrain TERRAIN_BROWN_MOUNTAIN
+      Terrain TERRAIN_MOUNTAIN
+      Terrain TERRAIN_WHITE_MOUNTAIN
+
+      BonusProduction 45
+      BonusGold 15
+      EnableAdvance ADVANCE_ADV_URBAN_PLANNING
+      ProductionCost 22000
+      ProductionTime 2
+      TilesetIndex 20
+   }
+}
+
+############################################################
+
+TILEIMP_MEGA_UNDERSEA_MINES {
+   Icon ICON_TILEIMP_MEGA_UNDERSEA_MINES
+   Tooltip TOOLTIP_TILEIMP_SELECT_RIG3_BUTTON
+   Statusbar STATUSBAR_TILEIMP_SELECT_RIG3_BUTTON
+   Level 3
+   Class:OceanMine
+
+   ConstructionTiles 1
+   ConstructionTiles 58
+   ConstructionTiles 59
+
+   CantBuildOn TERRAIN_BROWN_HILL
+   CantBuildOn TERRAIN_BROWN_MOUNTAIN
+   CantBuildOn TERRAIN_DESERT
+   CantBuildOn TERRAIN_FOREST
+   CantBuildOn TERRAIN_GLACIER
+   CantBuildOn TERRAIN_GRASSLAND
+   CantBuildOn TERRAIN_HILL
+   CantBuildOn TERRAIN_JUNGLE
+   CantBuildOn TERRAIN_MOUNTAIN
+   CantBuildOn TERRAIN_PLAINS
+   CantBuildOn TERRAIN_SWAMP
+   CantBuildOn TERRAIN_TUNDRA
+   CantBuildOn TERRAIN_WHITE_HILL
+   CantBuildOn TERRAIN_WHITE_MOUNTAIN
+
+   Excludes:ATM
+   Excludes:Farm
+   Excludes:LandDetector
+   Excludes:Mine
+   Excludes:OceanFarm
+   Excludes:OceanDetector
+   Excludes:OceanATM
+   Excludes:Structure1
+   Excludes:Structure2
+   Excludes:OceanMine
+
+   TerrainEffect {
+      Terrain TERRAIN_WATER_DEEP
+
+      BonusProduction 90
+      BonusGold 15
+      EnableAdvance ADVANCE_SMART_MATERIALS
+      ProductionCost 22000
+      ProductionTime 2
+      TilesetIndex 60
+   }
+
+   TerrainEffect {
+      Terrain TERRAIN_WATER_RIFT
+
+      BonusProduction 120
+      BonusGold 15
+      EnableAdvance ADVANCE_SMART_MATERIALS
+      ProductionCost 24000
+      ProductionTime 2
+      TilesetIndex 60
+   }
+
+   TerrainEffect {
+      Terrain TERRAIN_WATER_VOLCANO
+
+      BonusProduction 150
+      BonusGold 15
+      EnableAdvance ADVANCE_SMART_MATERIALS
+      ProductionCost 28000
+      ProductionTime 2
+      TilesetIndex 60
+   }
+}
+
+############################################################
+
+TILEIMP_MINES {
+   Icon ICON_TILEIMP_MINES
+   Tooltip TOOLTIP_TILEIMP_SELECT_MINE1_BUTTON
+   Statusbar STATUSBAR_TILEIMP_SELECT_MINE1_BUTTON
+   Level 1
+   Class:Mine
+
+   ConstructionTiles 1
+   ConstructionTiles 12
+   ConstructionTiles 13
+
+   CantBuildOn TERRAIN_WATER_BEACH
+   CantBuildOn TERRAIN_WATER_DEEP
+   CantBuildOn TERRAIN_WATER_RIFT
+   CantBuildOn TERRAIN_WATER_SHALLOW
+   CantBuildOn TERRAIN_WATER_SHELF
+   CantBuildOn TERRAIN_WATER_TRENCH
+   CantBuildOn TERRAIN_WATER_VOLCANO
+
+   Excludes:ATM
+   Excludes:Farm
+   Excludes:LandDetector
+   Excludes:Mine
+   Excludes:OceanFarm
+   Excludes:OceanDetector
+   Excludes:OceanATM
+   Excludes:Structure1
+   Excludes:Structure2
+   Excludes:OceanMine
+
+   TerrainEffect {
+      Terrain TERRAIN_DESERT
+      Terrain TERRAIN_GRASSLAND
+      Terrain TERRAIN_PLAINS
+
+      BonusProduction 5
+      EnableAdvance ADVANCE_SLAVE_LABOR
+      ProductionCost 3000
+      ProductionTime 2
+      TilesetIndex 14
+   }
+
+   TerrainEffect {
+      Terrain TERRAIN_BROWN_HILL
+      Terrain TERRAIN_HILL
+      Terrain TERRAIN_WHITE_HILL
+
+      BonusProduction 10
+      EnableAdvance ADVANCE_SLAVE_LABOR
+      ProductionCost 4000
+      ProductionTime 2
+      TilesetIndex 14
+   }
+
+   TerrainEffect {
+      Terrain TERRAIN_BROWN_MOUNTAIN
+      Terrain TERRAIN_MOUNTAIN
+      Terrain TERRAIN_WHITE_MOUNTAIN
+
+      BonusProduction 15
+      EnableAdvance ADVANCE_SLAVE_LABOR
+      ProductionCost 4000
+      ProductionTime 2
+      TilesetIndex 14
+   }
+}
+
+############################################################
+
+TILEIMP_NATURE_PRESERVE {
+   Icon ICON_TILEIMP_NATURE_PRESERVE
+   Tooltip TOOLTIP_TILEIMP_SELECT_PIER3_BUTTON
+   Statusbar STATUSBAR_TILEIMP_SELECT_PIER3_BUTTON
+   Level 3
+   Class:ATM
+
+   ConstructionTiles 1
+   ConstructionTiles 29
+   ConstructionTiles 28
+
+   CantBuildOn TERRAIN_WATER_BEACH
+   CantBuildOn TERRAIN_WATER_DEEP
+   CantBuildOn TERRAIN_WATER_RIFT
+   CantBuildOn TERRAIN_WATER_SHALLOW
+   CantBuildOn TERRAIN_WATER_SHELF
+   CantBuildOn TERRAIN_WATER_TRENCH
+   CantBuildOn TERRAIN_WATER_VOLCANO
+
+   Excludes:ATM
+   Excludes:Farm
+   Excludes:LandDetector
+   Excludes:Mine
+   Excludes:OceanFarm
+   Excludes:OceanDetector
+   Excludes:OceanATM
+   Excludes:Structure1
+   Excludes:Structure2
+   Excludes:OceanMine
+
+   TerrainEffect {
+      Terrain TERRAIN_BROWN_HILL
+      Terrain TERRAIN_DESERT
+      Terrain TERRAIN_FOREST
+      Terrain TERRAIN_GRASSLAND
+      Terrain TERRAIN_HILL
+      Terrain TERRAIN_JUNGLE
+      Terrain TERRAIN_PLAINS
+
+      BonusGold 30
+      EnableAdvance ADVANCE_DIGITAL_ENCRYPTION
+      ProductionCost 14000
+      ProductionTime 2
+      TilesetIndex 27
+   }
+}
+
+############################################################
+
+TILEIMP_NETS {
+   Icon ICON_TILEIMP_NETS
+   Tooltip TOOLTIP_TILEIMP_SELECT_NET1_BUTTON
+   Statusbar STATUSBAR_TILEIMP_SELECT_NET1_BUTTON
+   Level 1
+   Class:OceanFarm
+
+   ConstructionTiles 1
+   ConstructionTiles 1
+   ConstructionTiles 61
+
+   CantBuildOn TERRAIN_BROWN_HILL
+   CantBuildOn TERRAIN_BROWN_MOUNTAIN
+   CantBuildOn TERRAIN_DESERT
+   CantBuildOn TERRAIN_FOREST
+   CantBuildOn TERRAIN_GLACIER
+   CantBuildOn TERRAIN_GRASSLAND
+   CantBuildOn TERRAIN_HILL
+   CantBuildOn TERRAIN_JUNGLE
+   CantBuildOn TERRAIN_MOUNTAIN
+   CantBuildOn TERRAIN_PLAINS
+   CantBuildOn TERRAIN_SWAMP
+   CantBuildOn TERRAIN_TUNDRA
+   CantBuildOn TERRAIN_WHITE_HILL
+   CantBuildOn TERRAIN_WHITE_MOUNTAIN
+
+   Excludes:ATM
+   Excludes:Farm
+   Excludes:LandDetector
+   Excludes:Mine
+   Excludes:OceanFarm
+   Excludes:OceanDetector
+   Excludes:OceanATM
+   Excludes:Structure1
+   Excludes:Structure2
+   Excludes:OceanMine
+
+   TerrainEffect {
+      Terrain TERRAIN_WATER_BEACH
+      Terrain TERRAIN_WATER_SHALLOW
+      Terrain TERRAIN_WATER_SHELF
+
+      BonusFood 10
+      EnableAdvance ADVANCE_SHIP_BUILDING
+      ProductionCost 2000
+      ProductionTime 2
+      TilesetIndex 62
+   }
+
+   TerrainEffect {
+      Terrain TERRAIN_WATER_DEEP
+      Terrain TERRAIN_WATER_RIFT
+      Terrain TERRAIN_WATER_TRENCH
+
+      BonusFood 10
+      EnableAdvance ADVANCE_SHIP_BUILDING
+      ProductionCost 3000
+      ProductionTime 2
+      TilesetIndex 62
+   }
+
+   TerrainEffect {
+      Terrain TERRAIN_WATER_VOLCANO
+
+      BonusFood 10
+      EnableAdvance ADVANCE_SHIP_BUILDING
+      ProductionCost 4000
+      ProductionTime 2
+      TilesetIndex 62
+   }
+}
+
+############################################################
+
+TILEIMP_OUTLET_MALL {
+   Icon ICON_TILEIMP_OUTLET_MALL
+   Tooltip TOOLTIP_TILEIMP_SELECT_ATM2_BUTTON
+   Statusbar STATUSBAR_TILEIMP_SELECT_ATM2_BUTTON
+   Level 2
+   Class:ATM
+
+   ConstructionTiles 1
+   ConstructionTiles 24
+   ConstructionTiles 25
+
+   CantBuildOn TERRAIN_WATER_BEACH
+   CantBuildOn TERRAIN_WATER_DEEP
+   CantBuildOn TERRAIN_WATER_RIFT
+   CantBuildOn TERRAIN_WATER_SHALLOW
+   CantBuildOn TERRAIN_WATER_SHELF
+   CantBuildOn TERRAIN_WATER_TRENCH
+   CantBuildOn TERRAIN_WATER_VOLCANO
+
+   Excludes:ATM
+   Excludes:Farm
+   Excludes:LandDetector
+   Excludes:Mine
+   Excludes:OceanFarm
+   Excludes:OceanDetector
+   Excludes:OceanATM
+   Excludes:Structure1
+   Excludes:Structure2
+   Excludes:OceanMine
+
+   TerrainEffect {
+      Terrain TERRAIN_BROWN_HILL
+      Terrain TERRAIN_DESERT
+      Terrain TERRAIN_FOREST
+      Terrain TERRAIN_GRASSLAND
+      Terrain TERRAIN_HILL
+      Terrain TERRAIN_JUNGLE
+      Terrain TERRAIN_PLAINS
+
+      BonusGold 20
+      EnableAdvance ADVANCE_ECONOMICS
+      ProductionCost 6000
+      ProductionTime 2
+      TilesetIndex 26
+   }
+}
+
+############################################################
+
+TILEIMP_PORT {
+   Icon ICON_TILEIMP_PORT
+   Tooltip TOOLTIP_TILEIMP_SELECT_PIER1_BUTTON
+   Statusbar STATUSBAR_TILEIMP_SELECT_PIER1_BUTTON
+   Level 1
+   Class:OceanATM
+
+   ConstructionTiles 1
+   ConstructionTiles 71
+   ConstructionTiles 72
+
+   CantBuildOn TERRAIN_BROWN_HILL
+   CantBuildOn TERRAIN_BROWN_MOUNTAIN
+   CantBuildOn TERRAIN_DEAD
+   CantBuildOn TERRAIN_DESERT
+   CantBuildOn TERRAIN_FOREST
+   CantBuildOn TERRAIN_GLACIER
+   CantBuildOn TERRAIN_GRASSLAND
+   CantBuildOn TERRAIN_HILL
+   CantBuildOn TERRAIN_JUNGLE
+   CantBuildOn TERRAIN_MOUNTAIN
+   CantBuildOn TERRAIN_PLAINS
+   CantBuildOn TERRAIN_SWAMP
+   CantBuildOn TERRAIN_TUNDRA
+   CantBuildOn TERRAIN_WATER_DEEP
+   CantBuildOn TERRAIN_WATER_RIFT
+   CantBuildOn TERRAIN_WATER_TRENCH
+   CantBuildOn TERRAIN_WATER_VOLCANO
+   CantBuildOn TERRAIN_WHITE_HILL
+   CantBuildOn TERRAIN_WHITE_MOUNTAIN
+
+   Excludes:ATM
+   Excludes:Farm
+   Excludes:LandDetector
+   Excludes:Mine
+   Excludes:OceanFarm
+   Excludes:OceanDetector
+   Excludes:OceanATM
+   Excludes:Structure1
+   Excludes:Structure2
+   Excludes:OceanMine
+
+   TerrainEffect {
+      Terrain TERRAIN_WATER_BEACH
+      Terrain TERRAIN_WATER_KELP
+      Terrain TERRAIN_WATER_REEF
+      Terrain TERRAIN_WATER_SHALLOW
+
+      BonusGold 15
+      EnableAdvance ADVANCE_HULL_MAKING
+      ProductionCost 3500
+      ProductionTime 2
+      TilesetIndex 73
+   }
+}
+
+############################################################
+
+TILEIMP_PROCESSING_TOWER {
+   Icon ICON_TILEIMP_PROCESSING_TOWER
+   Tooltip TOOLTIP_TILEIMP_SELECT_PIER3_BUTTON
+   Statusbar STATUSBAR_TILEIMP_SELECT_PIER3_BUTTON
+   Level 3
+   Class:Structure1
+
+   ConstructionTiles 1
+   ConstructionTiles 77
+   ConstructionTiles 78
+
+   Excludes:ATM
+   Excludes:Farm
+   Excludes:LandDetector
+   Excludes:Mine
+   Excludes:OceanATM
+   Excludes:OceanDetector
+   Excludes:OceanFarm
+   Excludes:OceanMine
+   Excludes:Structure1
+   Excludes:Structure2
+
+   TerrainEffect {
+      Terrain TERRAIN_BROWN_HILL
+      Terrain TERRAIN_BROWN_MOUNTAIN
+      Terrain TERRAIN_DEAD
+      Terrain TERRAIN_DESERT
+      Terrain TERRAIN_FOREST
+      Terrain TERRAIN_GLACIER
+      Terrain TERRAIN_GRASSLAND
+      Terrain TERRAIN_HILL
+      Terrain TERRAIN_JUNGLE
+      Terrain TERRAIN_MOUNTAIN
+      Terrain TERRAIN_PLAINS
+      Terrain TERRAIN_SWAMP
+      Terrain TERRAIN_TUNDRA
+      Terrain TERRAIN_WHITE_HILL
+      Terrain TERRAIN_WHITE_MOUNTAIN
+
+      Endgame
+      VisionRange 2
+      EnableAdvance ADVANCE_GAIA_CONTROLLER
+      ProductionCost 30000
+      ProductionTime 5
+      TilesetIndex 79
+   }
+}
+
+############################################################
+
+TILEIMP_RADAR_STATIONS {
+   Icon ICON_TILEIMP_RADAR_STATIONS
+   Tooltip TOOLTIP_TILEIMP_SELECT_RADARTOWER_BUTTON
+   Statusbar STATUSBAR_TILEIMP_SELECT_RADARTOWER_BUTTON
+   Level 2
+   Class:LandDetector
+
+   ConstructionTiles 1
+   ConstructionTiles 1
+   ConstructionTiles 1
+
+   CantBuildOn TERRAIN_WATER_BEACH
+   CantBuildOn TERRAIN_WATER_DEEP
+   CantBuildOn TERRAIN_WATER_RIFT
+   CantBuildOn TERRAIN_WATER_SHALLOW
+   CantBuildOn TERRAIN_WATER_SHELF
+   CantBuildOn TERRAIN_WATER_TRENCH
+   CantBuildOn TERRAIN_WATER_VOLCANO
+
+   Excludes:ATM
+   Excludes:Farm
+   Excludes:LandDetector
+   Excludes:Mine
+   Excludes:OceanFarm
+   Excludes:OceanDetector
+   Excludes:OceanATM
+   Excludes:Structure1
+   Excludes:Structure2
+   Excludes:OceanMine
+
+   TerrainEffect {
+      Terrain TERRAIN_BROWN_HILL
+      Terrain TERRAIN_BROWN_MOUNTAIN
+      Terrain TERRAIN_DESERT
+      Terrain TERRAIN_FOREST
+      Terrain TERRAIN_GLACIER
+      Terrain TERRAIN_GRASSLAND
+      Terrain TERRAIN_HILL
+      Terrain TERRAIN_JUNGLE
+      Terrain TERRAIN_MOUNTAIN
+      Terrain TERRAIN_PLAINS
+      Terrain TERRAIN_SWAMP
+      Terrain TERRAIN_TUNDRA
+      Terrain TERRAIN_WHITE_HILL
+      Terrain TERRAIN_WHITE_MOUNTAIN
+
+      Radar
+      ListeningPost
+      VisionRange 8
+      RadarRange 8
+      EnableAdvance ADVANCE_RADAR
+      ProductionCost 12000
+      ProductionTime 4
+      TilesetIndex 35
+   }
+}
+
+############################################################
+
+TILEIMP_RAILROAD {
+   Icon ICON_TILEIMP_RAILROAD
+   Tooltip TOOLTIP_TILEIMP_SELECT_ROAD2_BUTTON
+   Statusbar STATUSBAR_TILEIMP_SELECT_ROAD2_BUTTON
+   Level 2
+   Class:Road
+
+   ConstructionTiles 1
+   ConstructionTiles 1
+   ConstructionTiles 1
+
+   CantBuildOn TERRAIN_WATER_BEACH
+   CantBuildOn TERRAIN_WATER_DEEP
+   CantBuildOn TERRAIN_WATER_RIFT
+   CantBuildOn TERRAIN_WATER_SHALLOW
+   CantBuildOn TERRAIN_WATER_SHELF
+   CantBuildOn TERRAIN_WATER_TRENCH
+   CantBuildOn TERRAIN_WATER_VOLCANO
+
+   Excludes:Road
+   Excludes:OceanRoad
+
+   TerrainEffect {
+      Terrain TERRAIN_DESERT
+      Terrain TERRAIN_GRASSLAND
+      Terrain TERRAIN_PLAINS
+
+      MoveCost 20
+      EnableAdvance ADVANCE_RAILROAD
+      ProductionCost 1200
+      ProductionTime 3
+      TilesetIndex 300
+   }
+
+   TerrainEffect {
+      Terrain TERRAIN_BROWN_HILL
+      Terrain TERRAIN_FOREST
+      Terrain TERRAIN_HILL
+      Terrain TERRAIN_JUNGLE
+      Terrain TERRAIN_WHITE_HILL
+
+      MoveCost 20
+      EnableAdvance ADVANCE_RAILROAD
+      ProductionCost 4000
+      ProductionTime 3
+      TilesetIndex 300
+   }
+
+   TerrainEffect {
+      Terrain TERRAIN_SWAMP
+      Terrain TERRAIN_TUNDRA
+
+      MoveCost 20
+      EnableAdvance ADVANCE_RAILROAD
+      ProductionCost 6000
+      ProductionTime 3
+      TilesetIndex 300
+   }
+
+   TerrainEffect {
+      Terrain TERRAIN_BROWN_MOUNTAIN
+      Terrain TERRAIN_MOUNTAIN
+      Terrain TERRAIN_WHITE_MOUNTAIN
+
+      MoveCost 20
+      EnableAdvance ADVANCE_RAILROAD
+      ProductionCost 8000
+      ProductionTime 4
+      TilesetIndex 300
+   }
+}
+
+############################################################
+
+TILEIMP_ROAD {
+   Icon ICON_TILEIMP_ROAD
+   Tooltip TOOLTIP_TILEIMP_SELECT_ROAD1_BUTTON
+   Statusbar STATUSBAR_TILEIMP_SELECT_ROAD1_BUTTON
+   Level 1
+   Class:Road
+
+   ConstructionTiles 1
+   ConstructionTiles 1
+   ConstructionTiles 1
+
+   CantBuildOn TERRAIN_WATER_BEACH
+   CantBuildOn TERRAIN_WATER_DEEP
+   CantBuildOn TERRAIN_WATER_RIFT
+   CantBuildOn TERRAIN_WATER_SHALLOW
+   CantBuildOn TERRAIN_WATER_SHELF
+   CantBuildOn TERRAIN_WATER_TRENCH
+   CantBuildOn TERRAIN_WATER_VOLCANO
+
+   Excludes:Road
+   Excludes:OceanRoad
+
+   TerrainEffect {
+      Terrain TERRAIN_DESERT
+      Terrain TERRAIN_GRASSLAND
+      Terrain TERRAIN_PLAINS
+
+      MoveCost 33
+      EnableAdvance ADVANCE_TRADE
+      ProductionCost 600
+      ProductionTime 2
+      TilesetIndex 200
+   }
+
+   TerrainEffect {
+      Terrain TERRAIN_BROWN_HILL
+      Terrain TERRAIN_FOREST
+      Terrain TERRAIN_HILL
+      Terrain TERRAIN_JUNGLE
+      Terrain TERRAIN_WHITE_HILL
+
+      MoveCost 33
+      EnableAdvance ADVANCE_TRADE
+      ProductionCost 2000
+      ProductionTime 2
+      TilesetIndex 200
+   }
+
+   TerrainEffect {
+      Terrain TERRAIN_SWAMP
+      Terrain TERRAIN_TUNDRA
+
+      MoveCost 33
+      EnableAdvance ADVANCE_TRADE
+      ProductionCost 3000
+      ProductionTime 2
+      TilesetIndex 200
+   }
+
+   TerrainEffect {
+      Terrain TERRAIN_BROWN_MOUNTAIN
+      Terrain TERRAIN_MOUNTAIN
+      Terrain TERRAIN_WHITE_MOUNTAIN
+
+      MoveCost 33
+      EnableAdvance ADVANCE_TRADE
+      ProductionCost 4000
+      ProductionTime 4
+      TilesetIndex 200
+   }
+}
+
+############################################################
+
+TILEIMP_SONAR_BUOYS {
+   Icon ICON_TILEIMP_SONAR_BUOYS
+   Tooltip TOOLTIP_TILEIMP_SELECT_PIER3_BUTTON
+   Statusbar STATUSBAR_TILEIMP_SELECT_PIER3_BUTTON
+   Level 1
+   Class:OceanDetector
+
+   ConstructionTiles 1
+   ConstructionTiles 1
+   ConstructionTiles 1
+
+   CantBuildOn TERRAIN_BROWN_HILL
+   CantBuildOn TERRAIN_BROWN_MOUNTAIN
+   CantBuildOn TERRAIN_DESERT
+   CantBuildOn TERRAIN_FOREST
+   CantBuildOn TERRAIN_GLACIER
+   CantBuildOn TERRAIN_GRASSLAND
+   CantBuildOn TERRAIN_HILL
+   CantBuildOn TERRAIN_JUNGLE
+   CantBuildOn TERRAIN_MOUNTAIN
+   CantBuildOn TERRAIN_PLAINS
+   CantBuildOn TERRAIN_SWAMP
+   CantBuildOn TERRAIN_TUNDRA
+   CantBuildOn TERRAIN_WHITE_HILL
+   CantBuildOn TERRAIN_WHITE_MOUNTAIN
+
+   Excludes:ATM
+   Excludes:Farm
+   Excludes:LandDetector
+   Excludes:Mine
+   Excludes:OceanFarm
+   Excludes:OceanDetector
+   Excludes:OceanATM
+   Excludes:Structure1
+   Excludes:Structure2
+   Excludes:OceanMine
+
+   TerrainEffect {
+      Terrain TERRAIN_WATER_BEACH
+      Terrain TERRAIN_WATER_DEEP
+      Terrain TERRAIN_WATER_RIFT
+      Terrain TERRAIN_WATER_SHALLOW
+      Terrain TERRAIN_WATER_SHELF
+      Terrain TERRAIN_WATER_TRENCH
+      Terrain TERRAIN_WATER_VOLCANO
+
+      Radar
+      ListeningPost
+      VisionRange 4
+      RadarRange 4
+      EnableAdvance ADVANCE_MASS_PRODUCTION
+      ProductionCost 10000
+      ProductionTime 2
+      TilesetIndex 70
+   }
+}
+
+############################################################
+
+TILEIMP_TERRAFORM_BROWN_HILL {
+   Icon ICON_TILEIMP_FARMS
+   Tooltip TOOLTIP_TILEIMP_SELECT_DECIDUOUS_BUTTON
+   Statusbar STATUSBAR_TILEIMP_SELECT_DECIDUOUS_BUTTON
+   TerraformTerrain TERRAIN_BROWN_HILL
+   Level 2
+   Column 2
+   Class:Terraform
+   GLHidden
+
+   ConstructionTiles 1
+   ConstructionTiles 1
+   ConstructionTiles 1
+
+   CantBuildOn TERRAIN_WATER_BEACH
+   CantBuildOn TERRAIN_WATER_DEEP
+   CantBuildOn TERRAIN_WATER_KELP
+   CantBuildOn TERRAIN_WATER_REEF
+   CantBuildOn TERRAIN_WATER_RIFT
+   CantBuildOn TERRAIN_WATER_SHALLOW
+   CantBuildOn TERRAIN_WATER_SHELF
+   CantBuildOn TERRAIN_WATER_TRENCH
+   CantBuildOn TERRAIN_WATER_VOLCANO
+
+   Excludes:ATM
+   Excludes:Farm
+   Excludes:LandDetector
+   Excludes:Mine
+   Excludes:OceanATM
+   Excludes:OceanDetector
+   Excludes:OceanFarm
+   Excludes:OceanMine
+   Excludes:OceanRoad
+   Excludes:Road
+   Excludes:Structure1
+   Excludes:Structure2
+
+   TerrainEffect {
+      Terrain TERRAIN_BROWN_HILL
+
+      EnableAdvance ADVANCE_EXPLOSIVES
+      TilesetIndex 18
+   }
+}
+
+############################################################
+
+TILEIMP_TERRAFORM_BROWN_MOUNTAIN {
+   Icon ICON_TILEIMP_FARMS
+   Tooltip TOOLTIP_TILEIMP_SELECT_DECIDUOUS_BUTTON
+   Statusbar STATUSBAR_TILEIMP_SELECT_DECIDUOUS_BUTTON
+   TerraformTerrain TERRAIN_BROWN_MOUNTAIN
+   Level 2
+   Column 3
+   Class:Terraform
+   GLHidden
+
+   ConstructionTiles 1
+   ConstructionTiles 1
+   ConstructionTiles 1
+
+   CantBuildOn TERRAIN_WATER_BEACH
+   CantBuildOn TERRAIN_WATER_DEEP
+   CantBuildOn TERRAIN_WATER_KELP
+   CantBuildOn TERRAIN_WATER_REEF
+   CantBuildOn TERRAIN_WATER_RIFT
+   CantBuildOn TERRAIN_WATER_SHALLOW
+   CantBuildOn TERRAIN_WATER_SHELF
+   CantBuildOn TERRAIN_WATER_TRENCH
+   CantBuildOn TERRAIN_WATER_VOLCANO
+
+   Excludes:ATM
+   Excludes:LandDetector
+   Excludes:Farm
+   Excludes:Mine
+   Excludes:OceanATM
+   Excludes:OceanDetector
+   Excludes:OceanFarm
+   Excludes:OceanMine
+   Excludes:OceanRoad
+   Excludes:Road
+   Excludes:Structure1
+   Excludes:Structure2
+
+   TerrainEffect {
+      Terrain TERRAIN_BROWN_MOUNTAIN
+
+      EnableAdvance ADVANCE_FUSION
+      TilesetIndex 19
+   }
+}
+
+############################################################
+
+TILEIMP_TERRAFORM_DESERT {
+   Icon ICON_TILEIMP_FARMS
+   Tooltip TOOLTIP_TILEIMP_SELECT_DECIDUOUS_BUTTON
+   Statusbar STATUSBAR_TILEIMP_SELECT_DECIDUOUS_BUTTON
+   TerraformTerrain TERRAIN_DESERT
+   Level 3
+   Column 0
+   Class:Terraform
+   GLHidden
+
+   ConstructionTiles 1
+   ConstructionTiles 1
+   ConstructionTiles 1
+
+   CantBuildOn TERRAIN_WATER_BEACH
+   CantBuildOn TERRAIN_WATER_DEEP
+   CantBuildOn TERRAIN_WATER_KELP
+   CantBuildOn TERRAIN_WATER_REEF
+   CantBuildOn TERRAIN_WATER_RIFT
+   CantBuildOn TERRAIN_WATER_SHALLOW
+   CantBuildOn TERRAIN_WATER_SHELF
+   CantBuildOn TERRAIN_WATER_TRENCH
+   CantBuildOn TERRAIN_WATER_VOLCANO
+
+   Excludes:ATM
+   Excludes:Farm
+   Excludes:LandDetector
+   Excludes:Mine
+   Excludes:OceanATM
+   Excludes:OceanDetector
+   Excludes:OceanFarm
+   Excludes:OceanMine
+   Excludes:OceanRoad
+   Excludes:Road
+   Excludes:Structure1
+   Excludes:Structure2
+
+   TerrainEffect {
+      Terrain TERRAIN_DESERT
+
+      EnableAdvance ADVANCE_AGRICULTURAL_REVOLUTION
+      TilesetIndex 1
+   }
+}
+
+############################################################
+
+TILEIMP_TERRAFORM_FOREST {
+   Icon ICON_TILEIMP_FARMS
+   Tooltip TOOLTIP_TILEIMP_SELECT_DECIDUOUS_BUTTON
+   Statusbar STATUSBAR_TILEIMP_SELECT_DECIDUOUS_BUTTON
+   TerraformTerrain TERRAIN_FOREST
+   Level 1
+   Column 1
+   Class:Terraform
+   GLHidden
+
+   ConstructionTiles 1
+   ConstructionTiles 1
+   ConstructionTiles 1
+
+   CantBuildOn TERRAIN_WATER_BEACH
+   CantBuildOn TERRAIN_WATER_DEEP
+   CantBuildOn TERRAIN_WATER_KELP
+   CantBuildOn TERRAIN_WATER_REEF
+   CantBuildOn TERRAIN_WATER_RIFT
+   CantBuildOn TERRAIN_WATER_SHALLOW
+   CantBuildOn TERRAIN_WATER_SHELF
+   CantBuildOn TERRAIN_WATER_TRENCH
+   CantBuildOn TERRAIN_WATER_VOLCANO
+
+   Excludes:ATM
+   Excludes:Farm
+   Excludes:LandDetector
+   Excludes:Mine
+   Excludes:OceanATM
+   Excludes:OceanDetector
+   Excludes:OceanFarm
+   Excludes:OceanMine
+   Excludes:Structure1
+   Excludes:Structure2
+   Excludes:Road
+   Excludes:OceanRoad
+
+   TerrainEffect {
+      Terrain TERRAIN_FOREST
+
+      EnableAdvance ADVANCE_AGRICULTURAL_REVOLUTION
+      TilesetIndex 1
+   }
+}
+
+############################################################
+
+TILEIMP_TERRAFORM_GRASSLAND {
+   Icon ICON_TILEIMP_FARMS
+   Tooltip TOOLTIP_TILEIMP_SELECT_GRASSLND_BUTTON
+   Statusbar STATUSBAR_TILEIMP_SELECT_GRASSLND_BUTTON
+   TerraformTerrain TERRAIN_GRASSLAND
+   Level 1
+   Column 0
+   Class:Terraform
+   GLHidden
+
+   ConstructionTiles 1
+   ConstructionTiles 1
+   ConstructionTiles 1
+
+   CantBuildOn TERRAIN_WATER_BEACH
+   CantBuildOn TERRAIN_WATER_DEEP
+   CantBuildOn TERRAIN_WATER_KELP
+   CantBuildOn TERRAIN_WATER_REEF
+   CantBuildOn TERRAIN_WATER_RIFT
+   CantBuildOn TERRAIN_WATER_SHALLOW
+   CantBuildOn TERRAIN_WATER_SHELF
+   CantBuildOn TERRAIN_WATER_TRENCH
+   CantBuildOn TERRAIN_WATER_VOLCANO
+
+   Excludes:Structure2
+   Excludes:Structure1
+   Excludes:OceanMine
+   Excludes:OceanFarm
+   Excludes:OceanDetector
+   Excludes:OceanATM
+   Excludes:Mine
+   Excludes:LandDetector
+   Excludes:Farm
+   Excludes:ATM
+   Excludes:OceanRoad
+   Excludes:Road
+
+   TerrainEffect {
+      Terrain TERRAIN_GRASSLAND
+
+      EnableAdvance ADVANCE_AGRICULTURE
+      TilesetIndex 1
+   }
+}
+
+############################################################
+
+TILEIMP_TERRAFORM_HILL {
+   Icon ICON_TILEIMP_FARMS
+   Tooltip TOOLTIP_TILEIMP_SELECT_DECIDUOUS_BUTTON
+   Statusbar STATUSBAR_TILEIMP_SELECT_DECIDUOUS_BUTTON
+   TerraformTerrain TERRAIN_HILL
+   Level 1
+   Column 2
+   Class:Terraform
+   GLHidden
+
+   ConstructionTiles 1
+   ConstructionTiles 1
+   ConstructionTiles 1
+
+   CantBuildOn TERRAIN_WATER_BEACH
+   CantBuildOn TERRAIN_WATER_DEEP
+   CantBuildOn TERRAIN_WATER_KELP
+   CantBuildOn TERRAIN_WATER_REEF
+   CantBuildOn TERRAIN_WATER_RIFT
+   CantBuildOn TERRAIN_WATER_SHALLOW
+   CantBuildOn TERRAIN_WATER_SHELF
+   CantBuildOn TERRAIN_WATER_TRENCH
+   CantBuildOn TERRAIN_WATER_VOLCANO
+
+   Excludes:ATM
+   Excludes:Farm
+   Excludes:LandDetector
+   Excludes:Mine
+   Excludes:OceanATM
+   Excludes:OceanDetector
+   Excludes:OceanFarm
+   Excludes:OceanMine
+   Excludes:OceanRoad
+   Excludes:Road
+   Excludes:Structure1
+   Excludes:Structure2
+
+   TerrainEffect {
+      Terrain TERRAIN_HILL
+
+      EnableAdvance ADVANCE_EXPLOSIVES
+      TilesetIndex 1
+   }
+}
+
+############################################################
+
+TILEIMP_TERRAFORM_JUNGLE {
+   Icon ICON_TILEIMP_FARMS
+   Tooltip TOOLTIP_TILEIMP_SELECT_DECIDUOUS_BUTTON
+   Statusbar STATUSBAR_TILEIMP_SELECT_DECIDUOUS_BUTTON
+   TerraformTerrain TERRAIN_JUNGLE
+   Level 2
+   Column 1
+   Class:Terraform
+   GLHidden
+
+   ConstructionTiles 1
+   ConstructionTiles 1
+   ConstructionTiles 1
+
+   CantBuildOn TERRAIN_WATER_BEACH
+   CantBuildOn TERRAIN_WATER_DEEP
+   CantBuildOn TERRAIN_WATER_KELP
+   CantBuildOn TERRAIN_WATER_REEF
+   CantBuildOn TERRAIN_WATER_RIFT
+   CantBuildOn TERRAIN_WATER_SHALLOW
+   CantBuildOn TERRAIN_WATER_SHELF
+   CantBuildOn TERRAIN_WATER_TRENCH
+   CantBuildOn TERRAIN_WATER_VOLCANO
+
+   Excludes:ATM
+   Excludes:Farm
+   Excludes:LandDetector
+   Excludes:Mine
+   Excludes:OceanATM
+   Excludes:OceanDetector
+   Excludes:OceanFarm
+   Excludes:OceanMine
+   Excludes:OceanRoad
+   Excludes:Road
+   Excludes:Structure1
+   Excludes:Structure2
+
+   TerrainEffect {
+      Terrain TERRAIN_JUNGLE
+
+      EnableAdvance ADVANCE_AGRICULTURAL_REVOLUTION
+      TilesetIndex 1
+   }
+}
+
+############################################################
+
+TILEIMP_TERRAFORM_MOUNTAIN {
+   Icon ICON_TILEIMP_FARMS
+   Tooltip TOOLTIP_TILEIMP_SELECT_DECIDUOUS_BUTTON
+   Statusbar STATUSBAR_TILEIMP_SELECT_DECIDUOUS_BUTTON
+   TerraformTerrain TERRAIN_MOUNTAIN
+   Level 1
+   Column 3
+   Class:Terraform
+   GLHidden
+
+   ConstructionTiles 1
+   ConstructionTiles 1
+   ConstructionTiles 1
+
+   CantBuildOn TERRAIN_WATER_BEACH
+   CantBuildOn TERRAIN_WATER_DEEP
+   CantBuildOn TERRAIN_WATER_KELP
+   CantBuildOn TERRAIN_WATER_REEF
+   CantBuildOn TERRAIN_WATER_RIFT
+   CantBuildOn TERRAIN_WATER_SHALLOW
+   CantBuildOn TERRAIN_WATER_SHELF
+   CantBuildOn TERRAIN_WATER_TRENCH
+   CantBuildOn TERRAIN_WATER_VOLCANO
+
+   Excludes:ATM
+   Excludes:Farm
+   Excludes:LandDetector
+   Excludes:Mine
+   Excludes:OceanATM
+   Excludes:OceanDetector
+   Excludes:OceanFarm
+   Excludes:OceanMine
+   Excludes:OceanRoad
+   Excludes:Road
+   Excludes:Structure1
+   Excludes:Structure2
+
+   TerrainEffect {
+      Terrain TERRAIN_MOUNTAIN
+
+      EnableAdvance ADVANCE_FUSION
+      TilesetIndex 1
+   }
+}
+
+############################################################
+
+TILEIMP_TERRAFORM_PLAINS {
+   Icon ICON_TILEIMP_FARMS
+   Tooltip TOOLTIP_TILEIMP_SELECT_PIER3_BUTTON
+   Statusbar STATUSBAR_TILEIMP_SELECT_PIER3_BUTTON
+   TerraformTerrain TERRAIN_PLAINS
+   Level 2
+   Column 0
+   Class:Terraform
+   GLHidden
+
+   ConstructionTiles 1
+   ConstructionTiles 1
+   ConstructionTiles 1
+
+   CantBuildOn TERRAIN_WATER_BEACH
+   CantBuildOn TERRAIN_WATER_DEEP
+   CantBuildOn TERRAIN_WATER_KELP
+   CantBuildOn TERRAIN_WATER_REEF
+   CantBuildOn TERRAIN_WATER_RIFT
+   CantBuildOn TERRAIN_WATER_SHALLOW
+   CantBuildOn TERRAIN_WATER_SHELF
+   CantBuildOn TERRAIN_WATER_TRENCH
+   CantBuildOn TERRAIN_WATER_VOLCANO
+
+   Excludes:ATM
+   Excludes:Farm
+   Excludes:LandDetector
+   Excludes:Mine
+   Excludes:OceanATM
+   Excludes:OceanDetector
+   Excludes:OceanFarm
+   Excludes:OceanMine
+   Excludes:Structure1
+   Excludes:Structure2
+   Excludes:Road
+   Excludes:OceanRoad
+
+   TerrainEffect {
+      Terrain TERRAIN_PLAINS
+
+      EnableAdvance ADVANCE_AGRICULTURE
+      TilesetIndex 1
+   }
+}
+
+############################################################
+
+TILEIMP_TERRAFORM_SWAMP {
+   Icon ICON_TILEIMP_FARMS
+   Tooltip TOOLTIP_TILEIMP_SELECT_DECIDUOUS_BUTTON
+   Statusbar STATUSBAR_TILEIMP_SELECT_DECIDUOUS_BUTTON
+   TerraformTerrain TERRAIN_SWAMP
+   Level 3
+   Column 1
+   Class:Terraform
+   GLHidden
+
+   ConstructionTiles 1
+   ConstructionTiles 1
+   ConstructionTiles 1
+
+   CantBuildOn TERRAIN_WATER_BEACH
+   CantBuildOn TERRAIN_WATER_DEEP
+   CantBuildOn TERRAIN_WATER_KELP
+   CantBuildOn TERRAIN_WATER_REEF
+   CantBuildOn TERRAIN_WATER_RIFT
+   CantBuildOn TERRAIN_WATER_SHALLOW
+   CantBuildOn TERRAIN_WATER_SHELF
+   CantBuildOn TERRAIN_WATER_TRENCH
+   CantBuildOn TERRAIN_WATER_VOLCANO
+
+   Excludes:ATM
+   Excludes:Farm
+   Excludes:LandDetector
+   Excludes:Mine
+   Excludes:OceanATM
+   Excludes:OceanDetector
+   Excludes:OceanFarm
+   Excludes:OceanMine
+   Excludes:OceanRoad
+   Excludes:Road
+   Excludes:Structure1
+   Excludes:Structure2
+
+   TerrainEffect {
+      Terrain TERRAIN_SWAMP
+
+      EnableAdvance ADVANCE_INDUSTRIAL_REVOLUTION
+      TilesetIndex 1
+   }
+}
+
+############################################################
+
+TILEIMP_TERRAFORM_WHITE_HILL {
+   Icon ICON_TILEIMP_FARMS
+   Tooltip TOOLTIP_TILEIMP_SELECT_DECIDUOUS_BUTTON
+   Statusbar STATUSBAR_TILEIMP_SELECT_DECIDUOUS_BUTTON
+   TerraformTerrain TERRAIN_WHITE_HILL
+   Level 3
+   Column 2
+   Class:Terraform
+   GLHidden
+
+   ConstructionTiles 1
+   ConstructionTiles 1
+   ConstructionTiles 1
+
+   CantBuildOn TERRAIN_WATER_BEACH
+   CantBuildOn TERRAIN_WATER_DEEP
+   CantBuildOn TERRAIN_WATER_KELP
+   CantBuildOn TERRAIN_WATER_REEF
+   CantBuildOn TERRAIN_WATER_RIFT
+   CantBuildOn TERRAIN_WATER_SHALLOW
+   CantBuildOn TERRAIN_WATER_SHELF
+   CantBuildOn TERRAIN_WATER_TRENCH
+   CantBuildOn TERRAIN_WATER_VOLCANO
+
+   Excludes:ATM
+   Excludes:Farm
+   Excludes:LandDetector
+   Excludes:Mine
+   Excludes:OceanATM
+   Excludes:OceanDetector
+   Excludes:OceanFarm
+   Excludes:OceanMine
+   Excludes:OceanRoad
+   Excludes:Road
+   Excludes:Structure1
+   Excludes:Structure2
+
+   TerrainEffect {
+      Terrain TERRAIN_WHITE_HILL
+
+      EnableAdvance ADVANCE_EXPLOSIVES
+      TilesetIndex 1
+   }
+}
+
+############################################################
+
+TILEIMP_TERRAFORM_WHITE_MOUNTAIN {
+   Icon ICON_TILEIMP_FARMS
+   Tooltip TOOLTIP_TILEIMP_SELECT_DECIDUOUS_BUTTON
+   Statusbar STATUSBAR_TILEIMP_SELECT_DECIDUOUS_BUTTON
+   TerraformTerrain TERRAIN_WHITE_MOUNTAIN
+   Level 3
+   Column 3
+   Class:Terraform
+   GLHidden
+
+   ConstructionTiles 1
+   ConstructionTiles 1
+   ConstructionTiles 1
+
+   CantBuildOn TERRAIN_WATER_BEACH
+   CantBuildOn TERRAIN_WATER_DEEP
+   CantBuildOn TERRAIN_WATER_KELP
+   CantBuildOn TERRAIN_WATER_REEF
+   CantBuildOn TERRAIN_WATER_RIFT
+   CantBuildOn TERRAIN_WATER_SHALLOW
+   CantBuildOn TERRAIN_WATER_SHELF
+   CantBuildOn TERRAIN_WATER_TRENCH
+   CantBuildOn TERRAIN_WATER_VOLCANO
+
+   Excludes:ATM
+   Excludes:Farm
+   Excludes:LandDetector
+   Excludes:Mine
+   Excludes:OceanATM
+   Excludes:OceanDetector
+   Excludes:OceanFarm
+   Excludes:OceanMine
+   Excludes:OceanRoad
+   Excludes:Road
+   Excludes:Structure1
+   Excludes:Structure2
+
+   TerrainEffect {
+      Terrain TERRAIN_WHITE_MOUNTAIN
+
+      EnableAdvance ADVANCE_FUSION
+      TilesetIndex 1
+   }
+}
+
+############################################################
+
+TILEIMP_TRADING_POST {
+   Icon ICON_TILEIMP_TRADING_POST
+   Tooltip TOOLTIP_TILEIMP_SELECT_ATM1_BUTTON
+   Statusbar STATUSBAR_TILEIMP_SELECT_ATM1_BUTTON
+   Level 1
+   Class:ATM
+
+   ConstructionTiles 1
+   ConstructionTiles 21
+   ConstructionTiles 22
+
+   CantBuildOn TERRAIN_WATER_BEACH
+   CantBuildOn TERRAIN_WATER_DEEP
+   CantBuildOn TERRAIN_WATER_RIFT
+   CantBuildOn TERRAIN_WATER_SHALLOW
+   CantBuildOn TERRAIN_WATER_SHELF
+   CantBuildOn TERRAIN_WATER_TRENCH
+   CantBuildOn TERRAIN_WATER_VOLCANO
+
+   Excludes:ATM
+   Excludes:Farm
+   Excludes:LandDetector
+   Excludes:Mine
+   Excludes:OceanFarm
+   Excludes:OceanDetector
+   Excludes:OceanATM
+   Excludes:Structure1
+   Excludes:Structure2
+   Excludes:OceanMine
+
+   TerrainEffect {
+      Terrain TERRAIN_BROWN_HILL
+      Terrain TERRAIN_DESERT
+      Terrain TERRAIN_FOREST
+      Terrain TERRAIN_GRASSLAND
+      Terrain TERRAIN_HILL
+      Terrain TERRAIN_JUNGLE
+      Terrain TERRAIN_PLAINS
+
+      BonusGold 10
+      EnableAdvance ADVANCE_BANKING
+      ProductionCost 2500
+      ProductionTime 2
+      TilesetIndex 23
+   }
+}
+
+############################################################
+
+TILEIMP_UNDERSEA_MINES {
+   Icon ICON_TILEIMP_UNDERSEA_MINES
+   Tooltip TOOLTIP_TILEIMP_SELECT_RIG1_BUTTON
+   Statusbar STATUSBAR_TILEIMP_SELECT_RIG1_BUTTON
+   Level 1
+   Class:OceanMine
+
+   ConstructionTiles 1
+   ConstructionTiles 52
+   ConstructionTiles 53
+
+   CantBuildOn TERRAIN_BROWN_HILL
+   CantBuildOn TERRAIN_BROWN_MOUNTAIN
+   CantBuildOn TERRAIN_DESERT
+   CantBuildOn TERRAIN_FOREST
+   CantBuildOn TERRAIN_GLACIER
+   CantBuildOn TERRAIN_GRASSLAND
+   CantBuildOn TERRAIN_HILL
+   CantBuildOn TERRAIN_JUNGLE
+   CantBuildOn TERRAIN_MOUNTAIN
+   CantBuildOn TERRAIN_PLAINS
+   CantBuildOn TERRAIN_SWAMP
+   CantBuildOn TERRAIN_TUNDRA
+   CantBuildOn TERRAIN_WHITE_HILL
+   CantBuildOn TERRAIN_WHITE_MOUNTAIN
+
+   Excludes:ATM
+   Excludes:Farm
+   Excludes:LandDetector
+   Excludes:Mine
+   Excludes:OceanFarm
+   Excludes:OceanDetector
+   Excludes:OceanATM
+   Excludes:Structure1
+   Excludes:Structure2
+   Excludes:OceanMine
+
+   TerrainEffect {
+      Terrain TERRAIN_WATER_DEEP
+
+      BonusProduction 30
+      BonusGold 5
+      EnableAdvance ADVANCE_NANO_MACHINES
+      ProductionCost 4000
+      ProductionTime 2
+      TilesetIndex 54
+   }
+
+   TerrainEffect {
+      Terrain TERRAIN_WATER_RIFT
+
+      BonusProduction 40
+      BonusGold 5
+      EnableAdvance ADVANCE_NANO_MACHINES
+      ProductionCost 4000
+      ProductionTime 2
+      TilesetIndex 54
+   }
+
+   TerrainEffect {
+      Terrain TERRAIN_WATER_VOLCANO
+
+      BonusProduction 50
+      BonusGold 5
+      EnableAdvance ADVANCE_NANO_MACHINES
+      ProductionCost 6000
+      ProductionTime 2
+      TilesetIndex 54
+   }
+}
+
+############################################################
+
+TILEIMP_UNDERSEA_TUNNEL {
+   Icon ICON_TILEIMP_UNDERSEA_TUNNEL
+   Tooltip TOOLTIP_TILEIMP_SELECT_RIG3_BUTTON
+   Statusbar STATUSBAR_TILEIMP_SELECT_TUNNEL_BUTTON
+   Level 1
+   Class:OceanRoad
+
+   ConstructionTiles 1
+   ConstructionTiles 1
+   ConstructionTiles 1
+
+   CantBuildOn TERRAIN_BROWN_HILL
+   CantBuildOn TERRAIN_BROWN_MOUNTAIN
+   CantBuildOn TERRAIN_DESERT
+   CantBuildOn TERRAIN_FOREST
+   CantBuildOn TERRAIN_GLACIER
+   CantBuildOn TERRAIN_GRASSLAND
+   CantBuildOn TERRAIN_HILL
+   CantBuildOn TERRAIN_JUNGLE
+   CantBuildOn TERRAIN_MOUNTAIN
+   CantBuildOn TERRAIN_PLAINS
+   CantBuildOn TERRAIN_SWAMP
+   CantBuildOn TERRAIN_TUNDRA
+   CantBuildOn TERRAIN_WHITE_HILL
+   CantBuildOn TERRAIN_WHITE_MOUNTAIN
+
+   Excludes:Road
+   Excludes:OceanRoad
+
+   TerrainEffect {
+      Terrain TERRAIN_WATER_BEACH
+      Terrain TERRAIN_WATER_SHALLOW
+
+      MoveCost 10
+      EnableAdvance ADVANCE_NANO_ASSEMBLY
+      ProductionCost 12000
+      ProductionTime 2
+      TilesetIndex 500
+   }
+
+   TerrainEffect {
+      Terrain TERRAIN_WATER_DEEP
+      Terrain TERRAIN_WATER_RIFT
+      Terrain TERRAIN_WATER_SHELF
+      Terrain TERRAIN_WATER_TRENCH
+
+      MoveCost 10
+      EnableAdvance ADVANCE_NANO_ASSEMBLY
+      ProductionCost 12000
+      ProductionTime 4
+      TilesetIndex 500
+   }
+
+   TerrainEffect {
+      Terrain TERRAIN_WATER_VOLCANO
+
+      MoveCost 10
+      EnableAdvance ADVANCE_NANO_ASSEMBLY
+      ProductionCost 24000
+      ProductionTime 4
+      TilesetIndex 500
+   }
+}
+
+############################################################
+

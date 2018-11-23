@@ -1,0 +1,5 @@
+Icon {
+	File Icon, Movie, Gameplay, Historical, Prereq, Vari, FirstFrame, StatText
+	File LargeIcon, SmallIcon
+}
+

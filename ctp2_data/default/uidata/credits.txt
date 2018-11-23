@@ -1,0 +1,649 @@
+;
+;
+; Font definitions. You must define all of your fonts before you use them. 
+;
+; You can have up to 6 fonts.
+;
+; You have to specify the font size after you specify the font. All fonts of that number will be that size
+;
+; example: <fontdefX><sizeY>blah.ttf  - Font X is defined as blah.ttf, and it will be Y points in size
+;
+<fontdef0><size14>arialbd.ttf
+<fontdef1><size10>arialbd.ttf
+<fontdef2><size12>arialbd.ttf
+<fontdef3><size8>arial.ttf
+<fontdef4><size9>arialbd.ttf
+<fontdef5><size6>arial.ttf
+;
+; To put a line on the screen, you must first define which font it will use
+;
+; example: <fontX>Hi! I'm an example! - Font X (defined earlier) is to be used to print out the line "Hi! I'm an example" 
+;
+<font1>
+<font1>
+<font1>
+<font1>
+<font1>
+<font0>	CALL TO POWER II: APOLYTON EDITION
+<font1>
+<font1>
+<font1> Made possible by the generosity of
+<font2> ACTIVISION, INC
+<font1>
+<font1> and the selfless efforts of
+<font2> JOE "MR. OGRE" RUMSEY
+<font1>
+<font1>
+<font1>
+<font2> Thanks to APOLYTON CIVILIZATION SITE
+<font1> http://apolyton.net
+<font2> and its owners MARKOS GIANNOPOULOS and DANIEL QUICK
+<font1>
+<font1> for providing a platform for discussion and development
+<font1> and for supporting the Call to Power series for all these years
+;
+<page>
+<font1>
+<font1>
+<font0> ORGANISATION & MANAGEMENT
+<font1>   Asmodean   J Bytheway
+<font1>       kaan   Keygen
+<font1>    Locutus   MarkG  
+<font1>      Martin Gühmann
+<font3>	
+<font0>	PROGRAMMING
+<font1> ahenobarb
+<font1> ctplinuxfan
+<font1>	Fromafar
+<font1>	J Bytheway
+<font1> jonwil
+<font1> kaan
+<font1>	Martin Gühmann
+<font1> MrBaggins
+<font1> NelsonAndBronte
+<font1>	Peter Triggs
+<font3>	
+<font0>	ART
+<font1>	OnePresent
+<font1> Martin Gühmann
+<font1> The Big Mc
+;
+<page>
+<font1>		
+<font1>
+<font0>	MISCELLANEOUS
+<font1>      Admiral PJ   Dale           
+<font1>         DDowell   drulius        
+<font1>           Flinx   Gilgamensch    
+<font1>	Immortal Wombat   Keygen         
+<font1>       LDiCesare   Locutus        
+<font1>	    Maquiladora   Solver         
+<font1>        Tamerlin   The Big Mc     
+<font3>	
+<font0>	LOCALIZATION
+<font1>         4thmoon   Gilgamensch    
+<font1>      J Bytheway   Martin Gühmann 
+<font1>        Tamerlin   sandro         
+<font1>               Solver             
+<font3>
+<font0> MANUAL, FORUM & WEBSITE
+<font1>   child of Thor   Gilgamensch    
+<font1>      HuangShang   J Bytheway     
+<font1>          Keygen   Locutus        
+<font1>             MrBaggins
+<font3> 
+<font0> EXTERNAL CONSULTANTS
+<font1> Winnie "St. Swithin" Lee
+<font1> David "Pyaray" Ray
+<font1> Joe "Mr. Ogre" Rumsey
+;
+<page>
+<font1>
+<font1>
+<font0> COMPILATION
+<font1> Admiral PJ   Atahualpa
+<font1> berXpert   Dale
+<font1> DDowell   ErichG
+<font1> Fromafar   J Bytheway
+<font1> Joss   Locutus
+<font1> Martin Gühmann   mjs0
+<font1> MrBaggins   Peter Triggs
+<font1> RalphTrickey   Raster
+<font1> Solver   vovan
+<font3>
+<font0> LINUX PORT EFFORTS
+<font1> bfennema
+<font1> btb
+<font1> ctplinuxfan
+<font1> closms
+<font1> Leland
+<font1> Johannes Sixt
+<font1> uppi
+;
+<page>
+<font1>
+<font1>
+<font0> MULTIPLAYER PLAYTESTING
+<font1> drulius
+<font1> epeterson
+<font1> EPW
+<font1> Maquiladora
+<font3>
+<font0> PLAYTESTING
+<font1> 4thmoon   Admiral PJ   Aias   DDowell
+<font1> ahenobarb   beechworth   BureauBert   ctplinuxfan
+<font1> Dale   drulius   E   epeterson
+<font1> EPW   eRAZOR   Flinx   Frog_Gamer
+<font1> Fromafar   george03   Gilgamensch   GordonF
+<font1> Immortal Wombat   J Bytheway   Jedies   johnc214
+<font1> jonwil   kaan   Keygen   LDiCesare
+<font1> Locutus   Lui2   Maquiladora   Martin Gühmann
+<font1> mindlar   mog   MrBaggins   NelsonAndBronte
+<font1> Peter Triggs   SMIFFGIG   Solver   Tamerlin
+<font1> The Big Mc   tyrantpimp   visu
+<font1>
+<font1> Special thanks to everyone who posted on the CtP2 Source Code Project Forum
+<font1>  of Apolyton or who otherwise provided feedback or helped out
+;
+<page>
+<font1>
+<font1>
+<font1>
+<font1>
+<font1>
+<font1>
+<font1>
+<font1>
+<font1>
+<font1>
+<font1>
+<font0> CALL TO POWER II: ORIGINAL VERSION
+<font1>
+<font1>
+<font2>	IN MEMORY OF LEE BRISKEN
+;
+<page>
+<font1>		
+<font1>
+<font0>	DEVELOPMENT TEAM
+<font1>	PARKER A. DAVIS,	Senior Producer
+<font1>	CHRISTIAN ASTILLERO,	Line Producer
+<font1>	JONATHAN MOSES,	Associate Producer
+<font3>
+<font0>	PROGRAMMING
+<font1>	JOE RUMSEY,	Lead Programmer
+<font1>	RICHARD MYERS,	Senior Programmer
+<font1>	DAVID RAY,	Senior Programmer
+<font1>	STEVE MARIOTTI,	Technical Direction
+<font3>	
+<font0>	ART
+<font1>	DAVID DALZELL,	Art Director
+<font1>	FRANZ BOEHM,	Animator	
+<font1>	ARLENE SOMERS,	Digital Artist
+<font1>	JAMES MAYEDA,	Conceptual / Digital Artist
+<font1>	JODY MCMURRIAN,	Digital Artist
+<font1>	STANLEY WOO,	Animator
+<font3>
+<font0>	DESIGN
+<font1>	DAVID WHITE,	Lead Designer
+<font1>	WINNIE LEE,		Designer
+<font1>	DAN HAGERTY,	Designer
+<font1>	TONY EVANS,	Designer
+;
+<page>	
+<font1>
+<font1>				
+<font0>	PRODUCTION COORDINATOR
+<font1>	ERIC LEE
+<font3>	
+<font0>	PRODUCTION TESTERS
+<font1>	BRIAN DIGGS
+<font1>	CHAD BORDWELL
+<font1>	ERIC GROSSMAN
+<font1>	GLENN IGE
+<font1>	AARON GRAY
+<font3>			
+<font0>	ADDITIONAL PROGRAMMING		
+<font1>	BRIAN HAWKINS, CLANCY IMISLUND AND GEOFFREY PLITT					
+<font2>	MAD DOC SOFTWARE		
+<font1>	DR. IAN LANE DAVIS, TIM FARRAR, JAMES FLEMING, MATTHEW NORDHAUS,
+<font1>	KEVIN WASSERMAN, TARA TEICH, STEVE NADEAU
+<font3>
+<font0>	ADDITIONAL ART
+<font1>	CHRISTIAN BRADLEY
+<font1>	KEN FAIMAN
+<font1>	CHRISTOPHER O'NEIL (Mad Doc Software)
+<font3>			
+<font0>	PRELIMINARY ART DIRECTION
+<font1>	PHILIP SALAS, AND RICK GLENN
+<font3>			
+<font1>	MANDELBROT IMAGE COURTESY OF ED CLUNE
+;
+<page>	
+<font1>	
+<font1>
+<font1>
+<font1>
+<font1>				
+<font0>	ADDITIONAL SCENARIO DESIGN
+<font1>	HARLAN THOMPSON	
+<font1>	
+<font0>	MOVIES
+<font1>	CECILIA BARAJAS, Cinematic Direction
+<font1>			
+<font0>	CREAT STUDIO, LLC
+<font2>	ST. PETERSBURG, SAN FRANCISCO
+<font1>	DANIEL PROUSLINE,	Executive  Producer
+<font1>	VLADIMIR ALEXANDROV,	Project Leader/Director
+<font1>		
+<font0>	INTRO MOVIE
+<font1>	ANDREY KRAVCHUK, 	Co-Director
+<font1>	VITALIY ANIKIN,	Production Art
+<font1>	DMITRI HOLODOV,	Lighting
+<font1>	OLGA CHEREMISOVA,	Post Production
+;
+<page>	
+<font1>
+<font1>		
+<font0>	WONDER MOVIES AND OUTROS
+<font1>	MALIK HOTOSHAEV, Co-Executive Producer
+<font1>	SERGEI TITARENKO,	Assistant Producer
+<font1>				
+<font0>	MODELING
+<font1>	DMITRIY ASTAHOV		FEDAIL GILMUTDINOV
+<font1>	BLAGOI BORISOV		PAVEL ROSTOVCEV
+<font1>
+<font0>	ANIMATION
+<font1>	SRGEI BOGINSKY		ANNA KSENZ
+<font1>	ALEXANDER MIALA		IRINA NIKIFOROVA
+<font1>	DMITRIY USHANOV		DENIS DAVIDOV
+<font1>	ROMAN BERMAS		VASILI BOGDANOV
+<font1>	PAVEL GOLUBEV		PETR ANIKIN
+<font1>	ANNA ZIBROVA
+<font1>
+<font1>	ANDREI KALYUKIN,	Production Art & Animation	
+<font1>	YURIY TCHERNISH,	Modelling, Lighting & Animation
+<font1>	ANTON LOMAKIN,	Animation & Sound Effects	
+<font1>		
+<font0>	DIGITAL EDITING AND POST PRODUCTION
+<font1>	CHRIS HEPBURN PRODUCTIONS
+;
+<page>	
+<font1>	
+<font1>	
+<font0>	SOUND EFFECTS & VOICE OVER
+<font2>	BIG FAT KITTY PRODUCTIONS, HOLLYWOOD, CA
+<font1>	BILL BLACK,	Sound Editing & V.O. Direction
+<font1>			
+<font0>	UNIT AND MOVIE V.O.
+<font1>	CHRISTINE DUNFORD, DARAN NORRIS, DWIGHT SCHULTZ, GUY SINER
+<font1>	MARI WEISS, WAYNE GRACE, AND WILLIAM SCHILLING
+<font1>		
+<font0>	MUSIC COMPOSED BY
+<font1>	CAREY CHICO
+<font1>
+<font2>	TRACK 1 - A FORTIORI (LATIN)
+<font5>
+<font2>	TRACK 2 - PACARI TAMPU (INCAN)
+<font5>	
+<font2>	TRACK 3 - AMAETHON (WELSH)
+<font5>	
+<font2>	TRACK 4 - A'TUGEWINU (NATIVE AMERICAN)
+<font5>	
+<font2>	TRACK 5 - SUMMUM BONUM (LATIN)
+<font5>	
+<font2>	TRACK 6 - CASUS BELLI (LATIN)
+<font5>	
+<font2>	TRACK 7 - ANKH DJET (EGYPTIAN)
+<font5>	
+<font2>	TRACK 8 - SHAOLIN SAN (CHINESE)
+;
+<page>	
+<font1>	
+<font1>		
+<font0>	ADDITIONAL TRACKS 
+<font2>	TRACK 9 - QUIET OUTBACK
+<font1>	COMPOSED BY MICHAEL HARRITON 
+<font1>	DIDGERIDOO AND BULLROAR BY RANDY GRAVES
+<font5>			
+<font2>	TRACK 10 - KALI DANCE
+<font1> COMPOSED BY MICHAEL HARRITON
+<font1> VOCALS BY BHALOBASHA
+<font1>
+<font2>	ADDITIONAL SAMPLES PROVIDED BY BIG FISH AUDIO	
+<font1>
+<font0>	STOCK FOOTAGE
+<font1>		
+<font1>	Detail of Roman Statue - Corbis/Mimmo Jodice (c) 2000
+<font4>	
+<font1>	Nelson Mandela Speaking - Paul Velasco; Gallo Images/Corbis (c) 2000
+<font4>	
+<font1>	Portrait of Abraham Lincoln - Corbis-Bettmann (c) 2000
+<font4>	
+<font1>	John Barrymore and Carole Lombard
+<font1>	in "Twentieth Century" - Corbis-Bettmann (c) 2000
+<font4>
+<font1> Microscope - Viewpoint Digital (c) 2000
+;
+<page>	
+<font1>	
+<font1>	
+<font1>
+<font1>	
+<font1>	
+<font1>
+<font1>							
+<font0>	ACTIVISION STUDIOS
+<font1>	DOUG PEARSON,	Producer
+<font1>	MARK LAMIA,	Executive Producer
+<font1>	STEVE CRANE,	VP, North American Studios
+<font1>	LARRY GOLDBERG,	EVP, World-wide Studios
+<font1>
+<font0>	INSTALLER PROGRAMMING
+<font1>	ALEX ROHRA and DREW PETTERSON
+<font1>					
+<font0>	LOCALIZATION
+<font1>	STEPHANIE O'MALLEY,	Localization Manager
+;
+<page>	
+<font1>
+<font1>
+<font1>
+<font1>
+<font1>
+<font1>
+<font0>	INTERNATIONAL
+<font1>	NATHALIE DOVE,	Localization Supervisor
+<font1>	TAMSIN LUCAS,	Localization Supervisor	
+<font1>	PETER NIELSEN,	Localization Supervisor	
+<font1>	MARK NUTT,	Loacalization Assistant
+<font1>	SIMON DAWES,	Loacalization Assistant
+<font1>	EMILY KNIGHT,	Production Manager
+<font1>	JACKIE WHALE,	Craetive Services Manager
+<font1>			
+<font0>	GERMAN	LOCALIZATION
+<font1>	NATASCHA CONRAD,	Localization Director
+<font1>	BETTINA BUTCHER,	Localization Coordinator
+<font1>	KLAUS MÜLLER,	Localization Coordinator
+<font1>
+<font0>	LOCALIZATION BY
+<font1)	MB OFFICE SERVICE
+<font1>	EFFECTIVE MEDIA GMBH
+;
+<page>	
+<font1>
+<font1>						
+<font0>	INTERNATIONAL LOCALIZATIONS BY
+<font1>	EXEQUO (France)
+<font1>	DL MULTIMEDIA (Spain)
+<font1>	PROJECT SYNTHESIS (Italy)
+<font1>				
+<font0>	BRAND MANAGEMENT
+<font1>	JOHN HEINECKE,	Global Brand Manager
+<font1>	MATTI KUOREHJARVI,	Senior Brand Manager, UK & ROE
+<font1>	MANTEJ BRAR,	Associate Brand Manager, UK & ROE
+<font1>	GUILLAUME LAIRAN,	Brand Manager, France
+<font1>	CHRISTIAN STREIL,	Brand Manager, Germany
+<font1>	LEIGH GLOVER,	Brand Manager, Asia-Pacific
+<font1>	DUSTY WELCH,	Director, Global Brand Management
+<font1>	KATHY VRABECK,	EVP, Global Brand Management
+<font1>			
+<font0>	PUBLIC RELATIONS
+<font1>	MICHAEL JAMES LARSON,	Senior Publicist, US
+<font1>	GUY CUNIS,	PR Manager, UK
+<font1>	SARAH RICCHIUTI,	PR Manager, Europe
+<font1>	DIANE DE DOMECY,	PR Manager, France
+<font1>	MARKUS WILDING,	PR Manager, Germany	
+<font1>	AMY PYM,	Public Relations, Asia-Pacific
+;
+<page>	
+<font1>
+<font1>
+<font1>
+<font1>
+<font1>				
+<font0>	INTERNATIONAL SALES AND MARKETING
+<font1>	BERNARD SIZEY,	Marketing Director, France
+<font1>	GAUTIER ORMANCEY,	Marketing Assistant, France
+<font1>	ANTOINE SEUX,	Sales Manager, France
+<font1>	ACHIM KASPERS,	Marketing Manager, Germany
+<font1>			
+<font0>	IGNITED MINDS	
+<font1>	MIKE RIVERA,	Documentation Manager
+<font1>	RON GOULD,	Creative Director
+<font1>	VERONICA MILITO,	Associate Creative Director
+<font1>	BELINDA VAN SICKLE,	Copywriter
+<font1>	LORI ELLISON,	Copywriter
+<font1>	ERIK JENSEN,	Senior Designer
+<font1>	RON GRAENING,	Production Manager
+<font1>	CINDY WHITLOCK,	Senior Production Artist
+<font1>	CHRISTINE PAVLINA,	Traffic Manager
+<font1>	TERESA LANDGRAFF,	Asset Manager
+;
+<page>	
+<font1>
+<font1>
+<font1>
+<font1>
+<font1>		
+<font1>	
+<font1>
+<font1>				
+<font0>	CREATIVE SERVICES
+<font1>	DENISE WALSH,	VP, Creative Services
+<font1>	JILL BARRY,	Manager, Creative Services
+<font1>				
+<font0>	LEGAL
+<font1>	THAINE LYMAN,	Director, Product Development
+<font1>	GEORGE ROSE,	Senior VP & General Counsel
+<font1>	MICHAEL WALKER, Senior Manager, Business & Legal Affairs
+<font1>	MICHAEL LARSON,	Paralegal
+<font1>	ELLIOT BROWN
+<font1>	IRELL & MANELLA	
+;
+<page>	
+<font1>
+<font1>	
+<font1>	
+<font1>				
+<font0>	ACTIVISION QUALITY ASSURANCE
+<font1>	SIÔN RODRIGUEZ Y GIBSON,	Project Lead 
+<font1>	MATT POWERS,	Manager of PC Titles 
+<font1>	NADINE THEUZILLOT,	Senior Project Lead
+<font1>	JOHN SHERWOOD,	Acting Senior Lead
+<font1>	ADAM HARTSFIELD,	Night Crew Lead 
+<font1>	ERIC ZIMMERMAN,	Localization Project lead
+<font1>	ERIC ZALA,	Senior Manager Studio Support
+<font1>	JIM SUMMERS,	VP Quality Assurance
+<font1>		
+<font0>	FLOOR LEADS
+<font1>	JON VIRTES,	Single Player Lead
+<font1>	ALEX PLACHOWSKI,	Mulitplayer Lead
+<font1>	HENRY VILLANUEVA,	Scenario Lead
+<font1>	DOUG ROTHMAN,	Database Manager
+<font1>	ERIN MARTEL,	Night Crew Floor Lead
+<font1>	FRANK SO,	Lacalizations Floor Lead
+;
+<page>	
+<font1>
+<font1>					
+<font0>	QA TESTERS
+<font1>	CARLOS ESTIANDAN,	CARLOS MONROY
+<font1>	CHAD FARRARO,	CHARLES PRICE
+<font1>	CLAUDE CONKRITE,	DAN CARREKER
+<font1>	DAN ERICSSON,	DAVE MIAO
+<font1>	DAVID FEINBERG,	DAVID STOLFA
+<font1>	GARRETT OSHIRO,	J. RICHARDS
+<font1>	JASON GROSSMAN,	JEREMY GAGE
+<font1>	JEREMY G. EVANGELISTA,	JOHN YANG
+<font1>	JON HILBOURN,	JOSEPH LIMBAUGH
+<font1>	KIRK KOSINSKI,	MARCO SCATAGLINI
+<font1>	MARIO SANCHEZ,	MATTHEW BEAL
+<font1>	MICHAEL MARZOLA,	PAUL KENNEDY
+<font1>	PHILIP TOPHAM,	ROBERT FLEISCHACKER
+<font1>	ROBERT LAI,	TAFARAI BAYNE
+<font1>	THADDEUS SASSER,	THOMAS FLOOD
+<font1>	TODD BROWN,		DANIEL LEE
+<font1>	MICHAEL WADE,	GORDON READER
+<font1>	SAAM SHABAHANG,	HANS WAKELIN
+<font1>	JASON GROSSMAN,	MICHAEL WADE
+<font1>	MARK DOUGLAS
+;
+<page>	
+<font1>
+<font1>
+<font1>							
+<font0>	COMPATIBILITY TEAM LEAD
+<font1>	NEIL BARIZO
+<font1>
+<font0>	COMPATIBILITY TESTERS
+<font1>	JASON KIM,	SEAN OSBORN
+<font1>	CINDY LE
+<font1>			
+<font0>	NETWORK LAB LEAD
+<font1>	CHRIS KEIM
+<font1>						
+<font0>	CODE RELEASE GROUP MANAGERS
+<font1>	TIM VANLAW
+<font1>	JUAN VALDEZ
+<font1>			
+<font0>	CUSTOMER SUPPORT
+<font1>	BOB MCPHERSON,	Customer Support Manager
+<font1>	GARY BOLDUC,	Customer Support Lead
+<font1>	ROB LIM,	Customer Support Lead
+<font1>	MIKE HILL,	Customer Support Lead
+;
+<page>	
+<font1>	
+<font1>	
+<font1>	
+<font0>	EXTERNAL TEST COORDINATOR
+<font1>	LINDA LOZANO
+<font1>	
+<font0>	VISIONEERS
+<font1>	JOHN AUBIN, CJ BIRO, JOSPEPH BOTT, DAN CARTER	
+<font1>	PAUL CASTILLO, WAYNE CHANG, PAUL CHOUY
+<font1>	ARMOND B. CLARK, AKIVA CLARK, AARON COX
+<font1>	TJ CURRY, JASON DAVIS, JAMES DICKENS, BOB DUDLEY
+<font1>	RON DUNCAN, MIKE DUNN, MICHAEL DWIEL
+<font1>	TRAE FAUGHT, DAVID FINAN, SETH FLAUM
+<font1>	JIMMY GARDNER, GARY GRAY, KEITH L. GRAYDON
+<font1>	RANDY HANLEY, SCOTT HARLOW, IAN HAYES
+<font1>	ADAM HELLER, ANTHONY HELTON, IAIN HILL
+<font1>	JASON HITCHENS, SETH HOE, RICHARD HOGGREN
+<font1>	SCOTT HOWIE, LLOYD JESSEE, BEN JONES
+<font1>	ONAWAHYA JONES, DAVID M. JOY, ALLAN KLEIN
+<font1>	KEVIN KO, DAN KRAMER, ANDREW KUSCHNERAIT
+<font1>	GRANT LAFRANCE, WILLIAM LEPPALA
+<font1>	CHARLES LITTLE JR., PETER LOLLEY
+<font1>	IAN MACINNES, ROBERT MACKEY, DAVID MARCINOWSKI
+<font1>	CHRIS MASSEY, GARY MCCOY, MIKE MCCORDY
+;
+<page>	
+<font1>
+<font1>
+<font1>
+<font1>		
+<font2>	VISIONEERS (continued)
+<font1>	MATTHEW MONACO, ADRIAN MOSCHER, HEATHER MOSES
+<font1>	CHRISTIAN NASH, KARIM NOURI, DAN OLIVER
+<font1>	SIERRA OLSON, JORDAN OLSON, DARREL PANTALONE
+<font1>	JOSH POLLAK, JASON REID, ANGELO RICCI
+<font1>	JEFF RIZZO, JOSEPH RUFFOLO, KEN RUMSEY
+<font1>	JON SAVIN, DAVID SEALE, JOHN SEFCHICK
+<font1>	JOHN SHACKLETON, KUNAL SHAH, JOHN SILVA
+<font1>	DANIEL SMITH, RYAN SMOLAR, JEDD SNAID
+<font1>	DAVID SOOHOO, CHRIS SQUATRITTO, BRIAN STACY
+<font1>	ROBERT STENBERG, RYAN SUGIMOTO, BRIAN SUTTON
+<font1>	DON "MACHMAN" SWANNER JR., CLINT SWEREDA
+<font1>	JOSHUA TACEY, RUSSELL TAYLOR, DAVID TEAGUE
+<font1>	GLENN VISTANTE, AARON WADE, TIM WAITE
+<font1>	ANDREW WEBSTER, MICHAEL WEDGE
+<font1>	BRIAN WINSLOW, PHIL WORTHEN, JAMES WRIGHT JR.
+<font1>	OMAR YEHIA, BRENDAN YOUNG, LEE ZANE
+<font1>	MARC ZARITSKY, DIMITRI ZELEPUHIN, DOMINICK ZICCARELLI
+<font1>	GRAYDEN ZUVER	
+;
+<page>	
+<font1>
+<font1>
+<font1>
+<font1>		
+<font0>	CTP2 A-TEAM TESTING GROUP
+<font1>
+<font1>	DON BLEVENS, MARK CUMMINGS
+<font1> TOM DAVIES, THOMAS HEMPSTOCK
+<font1> LUKE LOH, THOMAS PELZ
+<font1> THOMAS PELZ, WOUTER SNIJDERS
+<font1> KATY SODEAU, PAUL VAN DEN BELT
+<font1>	WES WHITAKER
+<font1>
+<font0>	ABSOLUTE QUALITY, INC.
+<font1>
+<font1> CURTIS SHENTON, Account Manager
+<font1> ERIC "DA CAP'M" KONZAL, Project Lead
+<font1> BRIAN CHAPIN, Project Second
+<font1> 
+<font2> TESTERS
+<font1> BEN HARMEL, CLINT MCCAUL	
+<font1> DEBBY "TIGGER" S. DILLON, ED PIPER 
+<font1> GREG PEELER, JASON "DCM" DAVIS
+<font1> JODY SMITH, NILES "BIZZEBOI" PLANTE
+<font1> RICHARD PADILLA, SCOTT KRAMPERTH
+;
+<page>
+<font5>
+<font1>	
+<font0>	SPECIAL THANKS	
+<font1>	THE ORIGINAL CALL TO POWER TEAM
+<font1>	ALAN GERSHENFELD		BRIAN SIMKIN
+<font1>	CAROLYN PEDAGO		CLARENCE WASHINGTON
+<font1>	DION BRAIN		ED CLUNE
+<font1> MARIA FLAGG		MOLLY HINCHEY
+<font1>	EHTISHAM RABBANI		ERIC DALLAIRE
+<font1>	FRANK GALE		FRANK STANKOWSKY
+<font1>	GLENN BAPTISTE		JAMEY GOTTLIEB 
+<font1>	JASON WONG		JENNY CASSEL
+<font1>	JERMAINE CLARKE		LAURA WEISSMAN
+<font1>	JUDY NG			JUSTIN BERENBAUM
+<font1>	MERCEDES MCBRIDE		MICHAEL CARTER
+<font1>	MICHAEL HIGA		MICHAEL POLE
+<font1>	MICHAEL ROWE		MIKE RIXFORD
+<font1>	MITCH LASKY		NEIL LALWANI
+<font1>	NEYSA JACKSON		PAGE MORRIS
+<font1>	PETER KARPAS		PETER KIM
+<font1>	ROBERT KOTICK		ROBIN WOLLAEGER
+<font1>	RON DOORNINK		RONALD SCOTT
+<font1>	RUTH PEARSON		SCOTT LAHMAN
+<font1>	STACEY YTUARTE-BUSH		STACY SOOTER
+<font1>	STEPHEN WASHINGTON		SUZY LUKO
+<font1>	TANYA LANGSTON		TODD KOMESU
+<font1>	WILLIE BOLTON		RANDY D'AMORE
+<font1>	MARKOS GIANNOPOULOS 	DANIEL QUICK
+;
+<page>
+<font1>
+<font1>
+<font1>
+<font1>
+<font1>
+<font1>
+<font1>
+<font1>
+<font1>
+<font1>
+<font1>
+<font1>	Special thanks to the administrators and users of the APOLYTON
+<font1>	web-site for your continued feedback, support, and input.
+<font1>
+<font1>
+<font1>
+<font1>
+<font1>
+<font1>	
+<font1>	USES MILES SOUND SYSTEM.  
+<font1>	COPYRIGHT (C) 1991-2000 BY RAD GAME TOOLS, INC.
+<font1>
+<font1> Uses Freetype library
+<font1> Copyright 1996-1999 by David Turner, Robert Wilhelm, and Werner Lemberg
+<end>		

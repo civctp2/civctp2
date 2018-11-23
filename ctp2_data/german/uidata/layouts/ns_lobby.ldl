@@ -1,0 +1,492 @@
+##-----------------------------------##
+
+##              Data                 ##
+
+##-----------------------------------##
+
+lobbywindow:nswindow {
+
+
+	int	widthpix	640
+
+	int	heightpix	500
+
+	titlestatictext : nstitlestatictext {
+
+		string	text	"str_ldl_MAIN_CHAT"
+	}
+
+
+
+	gamesstatictext:nsstatictext {
+
+		int	xpix	270
+
+		int	ypix	67
+
+		int	widthpix	324
+
+		int	heightpix	20
+
+		string	text	"str_ldl_Games_COLON"
+
+
+		int	srcxpix	270
+
+		int	srcypix	57
+
+		int	srcwidthpix	324
+
+		int	srcheightpix	20
+
+	}
+
+
+
+	gameslistbox:nslistbox {
+
+		int	xpix	280
+
+		int	ypix	110
+
+		int	widthpix	324
+
+		int	heightpix	158
+
+		string	pattern	"uptg20ebig.tga"
+
+
+#		int	srcxpix	278
+
+#		int	srcypix	68
+
+#		int	srcwidthpix	328
+
+#		int	srcheightpix	202
+
+
+
+		header {
+
+			switch0:nsheaderswitch {
+
+				string	parent	"lobbywindow.gameslistbox"
+
+				int	widthpix	20
+
+				int	heightpix	20
+
+				string	icon	"ug022.tga"
+				string tipwindow "str_ldl_GAMELAUNCH"
+			}
+
+			switch1:nsheaderswitch {
+
+				string	parent	"lobbywindow.gameslistbox"
+
+				int	widthpix	214
+
+				int	heightpix	20
+
+				string	text	"str_ldl_Name"
+			}
+
+			switch2:nsheaderswitch {
+
+				string	parent	"lobbywindow.gameslistbox"
+
+				int	widthpix	20
+
+				int	heightpix	20
+				string tipwindow "str_ldl_PASSWORD"
+				string	icon	"ug023.tga"
+
+			}
+
+			switch3:nsheaderswitch {
+
+				string	parent	"lobbywindow.gameslistbox"
+
+				int	widthpix	20
+
+				int	heightpix	20
+				string tipwindow "str_ldl_GAMELOCK"
+				string	icon	"ug020.tga"
+
+			}
+
+			switch4:nsheaderswitch {
+
+				string	parent	"lobbywindow.gameslistbox"
+
+				int	widthpix	40
+
+				int	heightpix	20
+				string tipwindow "str_ldl_NUMBPLAYERS"
+				string	icon	"ug028.tga"
+				
+				int	state	2
+
+			}
+
+#			switch5:nsheaderswitch {
+
+#				string	parent	"lobbywindow.gameslistbox"
+
+#				int	widthpix	10	
+
+#				int	heightpix	20
+
+#				string	text	"Teams"
+
+#			}
+
+		}
+
+	}
+
+
+
+	chatbox:nschatbox {
+
+		int	xpix	149
+
+		int	ypix	327
+
+		int	widthpix	445
+
+		int	heightpix	101
+
+
+
+		# this art is too tall (covers textfield) but might work out ok.
+
+		string	image0	"upfg60.tga"
+
+	}
+
+
+
+	changebutton:nscommonbutton {
+
+		int	xpix	149
+
+		int	ypix	278
+
+		int	widthpix	123
+
+		int	heightpix	21
+
+		string	text	"str_ldl_Change_Lobby"
+
+	}
+
+
+
+	createbutton:nscommonbutton {
+
+		int	xpix	310
+
+		int	ypix	278
+
+		int	widthpix	123
+
+		int	heightpix	21
+
+		string	text	"str_ldl_Create_Game"
+
+	}
+
+
+
+	joinbutton:nscommonbutton {
+
+		int	xpix	469
+
+		int	ypix	278
+
+		int	widthpix	123
+
+		int	heightpix	21
+
+		string	text	"str_ldl_Join_Game"
+
+	}
+
+
+
+	currentlobbystatictext:nsstatictext {
+
+		int	xpix	50
+
+		int	ypix	40
+
+		int	widthpix	100
+
+		int	heightpix	20
+
+		string	text	"str_ldl_Lobby_Name_COLON"
+		string	just	"right"
+
+		bool	vertcenter	true
+
+
+
+		int	srcxpix	50
+
+		int	srcypix	40
+
+		int	srcwidthpix	100
+
+		int	srcheightpix	20
+
+	}
+
+
+
+	currentlobbytextfield:nsstatictext {
+
+		int	xpix	155
+
+		int	ypix	40
+
+		int	widthpix	120
+
+		int	heightpix	20
+
+		string	just	"left"
+
+		bool	vertcenter	true
+
+
+
+		int	srcxpix	155
+
+		int	srcypix	40
+
+		int	srcwidthpix	120
+
+		int	srcheightpix	20
+
+	}
+
+
+
+	currentserverstatictext:nsstatictext {
+
+		int	xpix	280
+
+		int	ypix	40
+
+		int	widthpix	100
+
+		int	heightpix	20
+
+		string	text	"str_ldl_Server_Name_COLON"
+		string	just	"right"
+
+		bool	vertcenter	true
+
+
+
+		int	srcxpix	280
+
+		int	srcypix	40
+
+		int	srcwidthpix	100
+
+		int	srcheightpix	20
+
+	}
+
+
+
+	currentservertextfield:nsstatictext {
+
+		int	xpix	385
+
+		int	ypix	40
+
+		int	widthpix	200
+
+		int	heightpix	20
+
+		string	just	"left"
+
+		bool	vertcenter	true
+
+
+
+		int	srcxpix	385
+
+		int	srcypix	40
+
+		int	srcwidthpix	200
+
+		int	srcheightpix	20
+
+	}
+
+
+
+	playerslistbox:nslistbox {
+
+		int	xpix	48
+
+		int	ypix	110
+
+		int	widthpix	202
+
+		int	heightpix	158
+
+
+		string	pattern	"uptg20ebig.tga"
+
+
+#		int	srcxpix	46
+
+#		int	srcypix	68
+
+#		int	srcwidthpix	206
+
+#		int	srcheightpix	202
+
+
+
+		playersstatictext:nsstatictext {
+
+			int	ypix	-43
+
+			int	widthpct	100
+
+			int	heightpix	20
+
+			string	text	"str_ldl_Players_COLON"
+
+
+			int	srcxpix	48
+
+			int	srcypix	47
+
+			int	srcwidthpix	202
+
+			int	srcheightpix	20
+
+		}
+
+		header {
+
+			switch0:nsheaderswitch {
+
+				string	parent	"lobbywindow.playerslistbox"
+
+				int	widthpix	20
+
+				int	heightpix	20
+				string tipwindow "str_ldl_MUTED"
+				string	icon	"ug024.tga"
+
+			}
+
+			switch1:nsheaderswitch {
+
+				string	parent	"lobbywindow.playerslistbox"
+
+				int	widthpix	142
+
+				int	heightpix	20
+
+				string	text	"str_ldl_Name"
+			}
+
+			switch2:nsheaderswitch {
+
+				string	parent	"lobbywindow.playerslistbox"
+
+				int	widthpix	40
+
+				int	heightpix	20
+
+				string	text	"str_ldl_Ping"
+				int	state	1
+
+			}
+
+		}
+
+	}
+
+
+
+	infobutton:nscommonbutton {
+
+		int	xpix	48
+
+		int	ypix	310
+
+
+		string	text	"str_ldl_Profile"
+
+	}
+
+	reviewbutton:nscommonbutton {
+
+		int	xpix	48
+
+		int	ypix	355
+
+		string	text	"str_ldl_Details"
+
+	}
+
+
+	muteswitch:nstoggleswitch {
+
+		int	xpix	38
+
+		int	ypix	400
+
+		int	widthpix	100
+
+		string	imageblttype	"stretch"
+		string	text	"str_ldl_Mute"
+
+
+	}
+
+
+
+	whisperswitch:nstoggleswitch {
+
+		int	xpix	38
+
+		int	ypix	425
+
+		int	widthpix	100
+
+		string	imageblttype	"stretch"
+		string	text	"str_ldl_Private"
+
+
+	}
+
+
+
+
+
+
+	closebutton:nsclosebutton {
+
+	}
+
+
+
+	backbutton:nsprevbutton {
+
+	}
+
+}
+
+
+
+$

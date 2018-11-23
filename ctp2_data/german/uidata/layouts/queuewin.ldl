@@ -1,0 +1,796 @@
+#######################################
+
+# File: queuewin.ldl
+
+# Last Access: Mon Jun 01 13:01:31 1998
+
+#######################################
+
+
+
+template QUEUE_RANGER {
+
+	bool alwaysranger	true
+
+	rangery {
+
+		int	widthpix	15
+
+		int	heigthpix	15
+
+		string	type	"scroller"
+
+		string	orientation	"vertical"
+
+		string	pattern	"upba5605.tga"
+
+		incy {
+
+			int	widthpix	15
+
+			int	heightpix	15
+
+			string	pattern	"upba5605.tga"
+
+		}
+
+		decy {
+
+			int	widthpix	15
+
+			int	heightpix	15
+
+			string	pattern	"upba5605.tga"
+
+		}
+
+#			thumb {
+
+#				string	image0	"upba5613.tga"
+
+#				string	imagebltflag	"chromakey"
+
+#			}
+
+	}
+
+}
+
+
+
+template QUEUE_MIDDLE_BUTTON:CTP2_STANDARD_FONT {
+
+	int	widthpix	89
+
+	int	heightpix	21
+
+	string	image0	"upba5702.tga"
+
+	string	image1	"upba5703.tga"
+
+	string	imagebltflag	"chromakey"
+
+	int	bevelwidth	0
+
+}
+
+
+
+template QUEUE_BUTTON:CTP2_STANDARD_FONT {
+
+	int	widthpix	89
+
+	int	heightpix	21
+
+	string	image0	"upba5702.tga"
+
+	string	image1	"upba5703.tga"
+
+	string	imagebltflag	"chromakey"
+
+	int	bevelwidth	0
+
+}
+
+
+
+##-----------------------------------##
+
+##              Data                 ##
+
+##-----------------------------------##
+
+
+
+QueueWindow {
+
+	string	xanchor		"center"
+
+	string	yanchor		"center"
+
+#	int		ypix	149
+
+	int		widthpix	449
+
+	int		heightpix	385
+
+	string	pattern	"upba5704.tga"
+
+
+
+	TitleLabel:CTP2_STANDARD_TITLE_FONT {
+
+		string xanchor "center"
+
+		int	ypix	3
+
+		int	widthpix	100
+
+		int heightpix	20
+
+		string	text	"str_ldl_"
+	}
+
+
+
+	QueueSheet {
+
+		int	xpix	0
+
+		int	ypix	0
+
+		int	widthpix	449
+
+		int	heightpix	385
+
+
+
+		CityLabel:CTP2_STANDARD_FONT {
+
+			int	xpix	244
+
+			int	ypix	40
+
+			int	widhtpix	40
+
+			int	heightpix	18
+
+			string	text	"str_ldl_CITY_NAME_COLON"
+		}
+
+		CityBox:CTP2_STANDARD_FONT {
+
+			int	xpix	284
+
+			int ypix	40
+
+			int widthpix	126
+
+			int heightpix	18
+
+			int bevelwidth	1
+
+			int beveltype	2
+
+			string	text	"str_ldl_"
+			string	pattern	"upba5704.tga"
+
+			int	srcxpix	284
+
+			int srcypix	40
+
+			int srcwidthpix		126
+
+			int srcheightpix	18
+
+		}
+
+
+
+		ProductionLabel:CTP2_STANDARD_FONT {
+
+			int	xpix	184
+
+			int	ypix	71
+
+			int	widthpix	139
+
+			int	heightpix	18
+
+			string	text	"str_ldl_PRODUCTIONTURN"
+		}
+
+		ProductionBox:CTP2_STANDARD_FONT {
+
+			int	xpix	323
+
+			int	ypix	71
+
+			int	widthpix	43
+
+			int	heightpix	18
+
+			string	pattern	"upba5704.tga"
+
+			int	srcxpix	323
+
+			int	srcypix	71
+
+			int	srcwidthpix		43
+
+			int	srcheightpix	18
+
+			int	beveltype	2
+
+			int	bevelwidth	1
+
+		}
+
+
+
+		AddButton:QUEUE_MIDDLE_BUTTON {
+
+			int	xpix	179
+
+			int	ypix	167
+
+			string	text	"str_ldl_ADD"
+		}
+
+		RemoveButton:QUEUE_MIDDLE_BUTTON {
+
+			int	xpix	179
+
+			int	ypix	193
+
+			string	text	"str_ldl_REMOVE"
+		}
+
+		ClearAllButton:QUEUE_MIDDLE_BUTTON {
+
+			int	xpix	178
+
+			int	ypix	221
+
+			string	text	"str_ldl_CLEAR_ALL"
+		}
+
+
+
+		QueueLabel:CTP2_STANDARD_FONT {
+
+			int xpix	283
+
+			int ypix	95
+
+			int widthpix 126
+
+			int heightpix 18
+
+			string	text	"str_ldl_QUEUE_NAME_COLON"
+		}
+
+
+
+		TextField {
+
+			int xpix	283
+
+			int ypix	117
+
+			int widthpix 126
+
+			int heightpix 18
+
+			int bevelwidth	1
+
+			int beveltype	2
+
+		}
+
+
+
+		BuildLabel:CTP2_STANDARD_FONT {
+
+			int xpix	26
+
+			int ypix	40
+
+			int widthpix 131
+
+			int heightpix 18
+
+			string	text	"str_ldl_BUILD_LIST"
+		}
+
+
+
+		BuildList:QUEUE_RANGER {
+
+			int	xpix	26
+
+			int	ypix	60
+
+			int	widthpix	131
+
+			int	heightpix	255
+
+			string	pattern	"upba5704.tga"
+
+			int beveltype	2
+
+			int bevelwidth	2
+
+			int	srcxpix	24
+
+			int	srcypix	58
+
+			int	srcwidthpix		135
+
+			int	srcheightpix	259
+
+
+
+			header {
+
+				switch0:CTP2_HEADER_FONT{
+
+					int	widthpix	100
+
+					int	heightpix	0
+
+#					string text "Purchase Options"
+
+					string	pattern	"upba3010.tga"
+
+					int bevelwidth 	1
+
+				}
+
+				switch1:CTP2_HEADER_FONT {
+
+					int	widthpix	31
+
+					int	heightpix	0
+
+#					string text "Cost"
+
+					string	pattern	"upba3010.tga"
+
+					int bevelwidth 	1
+
+				}
+
+			}
+
+		}
+
+
+
+		QueueList:QUEUE_RANGER {
+
+			int	xpix	273
+
+			int	ypix	140
+
+			int	widthpix	131
+
+			int	heightpix	175
+
+			string	pattern	"upba5704.tga"
+
+			int	srcxpix	273
+
+			int	srcypix	140
+
+			int	srcwidthpix	131
+
+			int	srcheightpix	175
+
+			int beveltype	2
+
+			int bevelwidth	2
+
+			int	columns		2
+
+
+
+			header {
+
+				switch0:CTP2_HEADER_FONT {
+
+					int	widthpix	111
+
+					int	heightpix	0
+
+					int bevelwidth 	0
+
+				}
+
+				switch1:CTP2_STANDARD_FONT {
+
+					int	widthpix	20
+
+					int	heightpix	0
+
+					int bevelwidth 	0
+
+				}
+
+			}
+
+		}
+
+
+
+		BuildImage {
+
+			int	xpix	330
+
+			int	ypix	100
+
+			int	widthpix	104
+
+			int	heightpix	78
+
+			string	image	"upba3010.tga"
+
+		}
+
+
+
+		BuildBox:CTP2_STANDARD_FONT {
+
+			int	xpix	26
+
+			int	ypix	40
+
+			int	widthpix	146
+
+			int	heightpix	84
+
+			string	pattern	"upba5704.tga"
+
+			int	srcxpix	26
+
+			int	srcypix	40
+
+			int	srcwidthpix		146
+
+			int	srcheightpix	84
+
+#			bool	wordwrap	TRUE
+
+			int	beveltype	2
+
+			int	bevelwidth	2
+
+		}
+
+
+
+		SaveButton:CTP2_STANDARD_FONT {
+
+			int	xpix	289
+
+			int	ypix	322
+
+			int	widthpix	123
+
+			int	heightpix	21
+
+			string	text	"str_ldl_SAVE_AS_TEMPLATE"
+			string	image0	"upba5700.tga"
+
+			string	image1	"upba5701.tga"
+
+			string	imagebltflag	"chromakey"
+
+			int	bevelwidth	0
+
+		}
+
+	}
+
+
+
+	TemplateSheet {
+
+		int	xpix	0
+
+		int	ypix	0
+
+		int	widthpix	449
+
+		int	heightpix	385
+
+		AssignLabel:CTP2_STANDARD_FONT {
+			string	xanchor	"center"
+			int	ypix	30
+			int	widthpix	219
+			int	heightpix	18
+			
+		}
+
+		LQueueLabel:CTP2_STANDARD_FONT {
+			int	xpix	103
+			int	ypix	55
+			int	widthpix	62
+			int	heightpix	18
+			string	text	"str_ldl_CAPS_QUEUE"
+		}
+
+		ContentsLabel:CTP2_STANDARD_FONT {
+			int	xpix	290
+			int	ypix	57
+			int	widthpix	88
+			int	heightpix	18
+			string	text	"str_ldl_CAPS_CONTENTS"
+		}
+
+
+
+		FileList:QUEUE_RANGER {
+
+			int	xpix	50
+
+			int	ypix	81
+
+			int	widthpix	149
+
+			int	heightpix	211
+
+			string	pattern	"upba5704.tga"
+
+			int beveltype	2
+
+			int bevelwidth	2
+
+			int	srcxpix	48
+
+			int	srcypix	79
+
+			int	srcwidthpix		153
+
+			int	srcheightpix	215
+
+
+
+			header {
+
+				switch0:CTP2_HEADER_FONT {
+
+					int	widthpix	149
+
+					int	heightpix	0
+
+#					string text "Queue Names"
+
+					string	pattern	"upba3010.tga"
+
+					int bevelwidth 	1
+
+				}
+
+			}
+
+		}
+
+
+
+		ContentList:QUEUE_RANGER {
+
+			int	xpix	255
+
+			int	ypix	81
+
+			int	widthpix	149
+
+			int	heightpix	211
+
+			string	pattern	"upba5704.tga"
+
+			int beveltype	2
+
+			int bevelwidth	2
+
+			int	srcxpix	253
+
+			int	srcypix	79
+
+			int	srcwidthpix		153
+
+			int	srcheightpix	215
+
+
+
+			header {
+
+				switch0:CTP2_HEADER_FONT {
+
+					int	widthpix	100
+
+					int	heightpix	0
+
+#					string text "Purchase Options"
+
+					string	pattern	"upba3010.tga"
+
+					int bevelwidth 	1
+
+				}
+
+				switch1:CTP2_STANDARD_FONT {
+
+					int	widthpix	49
+
+					int	heightpix	0
+
+#					string text "Cost"
+
+					string	pattern	"upba3010.tga"
+
+					int bevelwidth 	1
+
+				}
+
+			}
+
+		}
+
+
+
+		DeleteButton:CTP2_STANDARD_FONT {
+
+			int	xpix	67
+
+			int	ypix	313
+
+			int	widthpix	123
+
+			int	heightpix	21
+
+			string	text	"str_ldl_CAPS_DELETE_QUEUE"
+			string	image0	"upba5700.tga"
+
+			string	image1	"upba5701.tga"
+
+			string	imagebltflag	"chromakey"
+
+			int	bevelwidth	0
+
+		}
+
+
+
+		ApplyButton:QUEUE_BUTTON {
+
+			int	xpix	290
+
+			int	ypix	313
+
+			string	text	"str_ldl_LOAD"
+			int	bevelwidth	0
+
+		}
+
+	}
+
+}
+
+
+template QUEUE_BUILD_LIST_ITEM:CTP2_STANDARD_FONT {
+		int		xpix			0
+
+		int		ypix			0
+
+		int		heightpix		20
+
+}
+
+QueueBuildListItem {
+
+#	goodsType:QUEUE_BUILD_LIST_ITEM{
+
+#		int		widthpix		50
+
+#	}
+
+	goodsName:QUEUE_BUILD_LIST_ITEM{
+
+		int		widthpix		100
+
+	}
+
+	goodsCost:QUEUE_BUILD_LIST_ITEM{
+
+		int		widthpix		31
+
+	}
+
+}
+
+
+QueueListItem {
+
+	goodsName:CTP2_STANDARD_FONT {
+
+		int		xpix			0
+
+		int		ypix			0
+
+		int		widthpix		131
+
+		int		heightpix		20
+
+	}
+
+	goodsCost:CTP2_STANDARD_FONT {
+		int		xpix			0
+
+		int		ypix			0
+
+		int		widthpix		20
+
+		int		heightpix		20
+	}
+
+}
+
+
+
+QueueFileListItem {
+
+	Name:CTP2_STANDARD_FONT {
+
+		int		xpix			0
+
+		int		ypix			0
+
+		int		widthpix		149
+
+		int		heightpix		20
+
+	}
+
+}
+
+
+
+QueueCityListItem {
+
+	Name:CTP2_STANDARD_FONT {
+
+		int		xpix			0
+
+		int		ypix			0
+
+		int		widthpix		200
+
+		int		heightpix		20
+
+	}
+
+}
+
+
+
+#########################
+
+# strings
+
+#########################
+
+QueueStrings {
+
+	int	numstrings	4
+
+	string	string0	"str_ldl_CAPS_MAKE_QUEUE"
+	string	string1	"str_ldl_CAPS_LOAD_QUEUE"
+	string	string2	"str_tbl_ldl_Your_queue_has_been_saved"
+	string	string3	"str_ldl_Queue"
+}
+
+
+
+$

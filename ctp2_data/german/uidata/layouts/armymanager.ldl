@@ -1,0 +1,334 @@
+#######################################
+# File: armymanager.ldl
+# Last Access: Tue May 02 14:21:33 2000
+#######################################
+
+##-----------------------------------##
+##             Templates             ##
+##-----------------------------------##
+AM_UNIT_ICON:CTP2_SWITCH {
+	int	widthpix	36
+	int	heightpix	28
+	int	beveltype	1
+	int	bevelwidth	2
+	string	pattern	"uptg20e.tga"
+	string	image0	"upic15.tga"
+	string	image1	"upic15.tga"
+	UnitHealth:CTP2_STATIC_BASE {
+		int xpix 2
+		int ypix 25
+		int widthpix 32
+		int heightpix 1
+	}
+}
+
+AM_TEXT_FONT:CTP2_STANDARD_FONT {
+}
+
+AM_LIST_ITEM_FONT:CTP2_STANDARD_FONT {
+	#int	fontsize	9
+}
+
+
+##-----------------------------------##
+##                Data               ##
+##-----------------------------------##
+ArmyManager:CTP2_TITLE_WINDOW {
+	int	xpix	211
+	int	ypix	67
+	int	widthpix	485
+	int	heightpix	225
+	string title "str_ldl_ArmyManagement"
+	ArmiesLabel:CTP2_STATIC_BASE:AM_TEXT_FONT {
+		int	xpix	20
+		int	ypix	25
+		int	widthpix	80
+		string pattern "uptg20e.tga"
+		string	text	"str_ldl_Armies"
+		int	heightpix	20
+	}
+	ArmiesList:CTP2_LISTBOX {
+		int	xpix	23
+		int	ypix	50
+		int	heightpix	124
+		int	widthpix	66
+		rangery {
+		}
+	}
+#	CountLabel:CTP2_TEXT_BOX:AM_TEXT_FONT {
+#		string	fontname	"arial.ttf"
+#		int	fontcolorred	24
+#		int	fontcolorgreen	2
+#		int	fontcolorblue	2
+#		int	fontsize	8
+#		int	xpix	139
+#		int	ypix	30
+#		int	widthpix	116
+#		string	text	"str_ldl_ArmyCount"
+#		int	heightpix	20
+#	}
+	ArmyName:CTP2_TEXT_FIELD {
+		int xpix 120
+		int ypix 28
+		int widthpix 116
+		int heightpix 20
+	}
+	InArmyBox {
+		string	objecttype	"ctp2_static"
+		int	xpix	120
+		int	ypix	50
+		int	heightpix	124
+		int	widthpix	116
+		int	bevelwidth	1
+		Unit0:AM_UNIT_ICON {
+			int	xpix	2
+			int	ypix	2
+		}
+		Unit1:AM_UNIT_ICON {
+			int	xpix	40
+			int	ypix	2
+		}
+		Unit2:AM_UNIT_ICON {
+			int	xpix	78
+			int	ypix	2
+		}
+		Unit3:AM_UNIT_ICON {
+			int	xpix	2
+			int	ypix	32
+		}
+		Unit4:AM_UNIT_ICON {
+			int	xpix	40
+			int	ypix	32
+		}
+		Unit5:AM_UNIT_ICON {
+			int	xpix	78
+			int	ypix	32
+		}
+		Unit6:AM_UNIT_ICON {
+			int	xpix	2
+			int	ypix	62
+		}
+		Unit7:AM_UNIT_ICON {
+			int	xpix	40
+			int	ypix	62
+		}
+		Unit8:AM_UNIT_ICON {
+			int	xpix	78
+			int	ypix	62
+		}
+		Unit9:AM_UNIT_ICON {
+			int	xpix	2
+			int	ypix	92
+		}
+		Unit10:AM_UNIT_ICON {
+			int xpix    40
+			int ypix    92
+		}
+		Unit11:AM_UNIT_ICON {
+			int xpix   78
+			int ypix   92
+		}
+	}
+	AddButton:CTP2_GENERIC_SIZABLE_TEXT_BUTTON {
+		int	xpix	240
+		int	ypix	60
+		#string image40 "upic13.tga"
+		#int xpix40 7
+		#int ypix40 10
+		int	widthpix	100
+		int	heightpix	0
+		string	text	"str_ldl_Add"
+		string	statustext	"STATUSBAR_ARMYMAN_ADD_BUTTON"
+	}
+	RemoveButton:CTP2_GENERIC_SIZABLE_TEXT_BUTTON {
+		int	xpix	240
+		int	ypix	112
+		#string image40 "upic14.tga"
+		#int xpix40 7
+		#int ypix40 10
+		int	widthpix	100
+		int	heightpix	0
+		string	text	"str_ldl_Remove"
+		string	statustext	"STATUSBAR_ARMYMAN_REMOVE_BUTTON"
+	}
+	AddAllButton:CTP2_GENERIC_SIZABLE_TEXT_BUTTON {
+		int	xpix	240
+		int	ypix	84
+		#string image40 "upic15.tga"
+		#int xpix40 7
+		#int ypix40 10
+		int	widthpix	100
+		int	heightpix	0
+		string	text	"str_ldl_AddAll"
+		string	statustext	"STATUSBAR_ARMYMAN_ADD_ALL_BUTTON"
+	}
+	RemoveAllButton:CTP2_GENERIC_SIZABLE_TEXT_BUTTON {
+		int	xpix	240
+		int	ypix	136
+		#string image40 "upic16.tga"
+		#int xpix40 7
+		#int ypix40 10
+		int	widthpix	100
+		int	heightpix	0
+		string	text	"str_ldl_RemoveAll"
+		string	statustext	"STATUSBAR_ARMYMAN_REMOVE_ALL_BUTTON"
+	}
+	OutOfArmyLabel:CTP2_STATIC_BASE:AM_TEXT_FONT {
+		int	xpix	346
+		int	ypix	28
+		int	widthpix	116
+		string pattern "uptg20e.tga"
+		string	text	"str_ldl_SingleUnits"
+		int	heightpix	20
+	}
+	OutOfArmyBox {
+		string	objecttype	"ctp2_Static"
+		int	xpix	346
+		int	ypix	50
+		int	heightpix	124
+		int	widthpix	116
+		int	bevelwidth	1
+		Unit0:AM_UNIT_ICON {
+			int	xpix	2
+			int	ypix	2
+		}
+		Unit1:AM_UNIT_ICON {
+			int	xpix	40
+			int	ypix	2
+		}
+		Unit2:AM_UNIT_ICON {
+			int	xpix	78
+			int	ypix	2
+		}
+		Unit3:AM_UNIT_ICON {
+			int	xpix	2
+			int	ypix	32
+		}
+		Unit4:AM_UNIT_ICON {
+			int	xpix	40
+			int	ypix	32
+		}
+		Unit5:AM_UNIT_ICON {
+			int	xpix	78
+			int	ypix	32
+		}
+		Unit6:AM_UNIT_ICON {
+			int	xpix	2
+			int	ypix	62
+		}
+		Unit7:AM_UNIT_ICON {
+			int	xpix	40
+			int	ypix	62
+		}
+		Unit8:AM_UNIT_ICON {
+			int	xpix	78
+			int	ypix	62
+		}
+		Unit9:AM_UNIT_ICON {
+			int	xpix	2
+			int	ypix	92
+		}
+		Unit10:AM_UNIT_ICON {
+			int xpix    40
+			int ypix    92
+		}
+		Unit11:AM_UNIT_ICON {
+			int xpix   78
+			int ypix   92
+		}
+	}
+	NewArmyButton:CTP2_BUTTON_SMALL {
+		int	xpix	20
+		int	ypix	182
+		string	text	"str_ldl_NewArmy"
+		int	widthpix	97
+		int	heightpix	24
+		string	statustext	"STATUSBAR_ARMYMAN_NEW_ARMY_BUTTON"
+	}
+
+	CloseButton:CTP2_STANDARD_CLOSE {
+		int	xpix	380
+		int	ypix	182
+		string	statustext	"STATUSBAR_ARMYMAN_CLOSE_BUTTON"
+	}
+
+	Background {
+		string	objecttype	"ctp2_Static"
+
+		int	xpix	0
+		int	ypix	0
+		int	widthpix	485
+		int	heightpix	225
+		int numberoflayers 1
+		int imagesperlayer 9
+
+
+		bool layeralways0 true
+		string imagebltflag00 "chromakey"
+		string image00 "uptg03a.tga"
+		bool imagestretchx01 true
+		string imageblttype01 "tile"
+		string image01 "uptg03b.tga"
+		string imagebltflag02 "chromakey"
+		string image02 "uptg03c.tga"
+		bool imagenextrow03 true
+		bool imagestretchy03 true
+		string imageblttype03 "tile"
+		string image03 "uptg03d.tga"
+		bool imagestretchx04 true
+		bool imagestretchy04 true
+		string imageblttype04 "tile"
+		string image04 "uptg20e.tga"
+		bool imagestretchy05 true
+		string imageblttype05 "tile"
+		string image05 "uptg03f.tga"
+		bool imagenextrow06 true
+		string imagebltflag06 "chromakey"
+		string image06 "uptg03g.tga"
+		bool imagestretchx07 true
+		string imageblttype07 "tile"
+		string image07 "uptg03h.tga"
+		string imagebltflag08 "chromakey"
+		string image08 "uptg03i.tga"
+
+	}
+}
+
+ArmyManagerItem:CTP2_LIST_ITEM {
+	int xpix	14
+	int	widthpix	60
+	int	heightpix	18
+	box {
+		string	objecttype	"ctp2_Static"
+		int	xpix	12
+		int	ypix	0
+		int	widthpix	62
+		int	heightpix	18
+		string	pattern	"uptg06e.tga"
+
+		icon {
+			string	objecttype	"ctp2_Static"
+			int	xpix	10
+			int	ypix	2
+			int	widthpix	16
+			int	heightpix	16
+			string imagebltflag "chromakey"	
+
+		}
+		count:AM_LIST_ITEM_FONT {
+			string	objecttype	"ctp2_Static"
+			int	xpix	30
+			int	ypix	2
+			int	widthpix	28
+			int	heightpix	16
+			string	text	"str_ldl_0"
+			bool	vertcenter	TRUE
+			string	textblttype	"center"
+			string	just	"center"
+			string	pattern	"uptg06e.tga"
+		}
+	}
+}
+
+
+$

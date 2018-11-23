@@ -1,0 +1,7 @@
+#!/bin/sh
+# Clean for GTEST
+rm -fr normal
+rm -fr debug
+rm -fr profile
+rm -fr log
+rm *.log *output* gmon.out core

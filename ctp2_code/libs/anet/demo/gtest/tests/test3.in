@@ -1,0 +1,9 @@
+/s
+/wait
+/j d
+/wait
+/newp test3guy
+/wait
+/pl
+/wait
+/q

@@ -1,0 +1,47 @@
+	#-----------------------------------------------------------------------------
+#
+#  Project      : Call To Power 2
+#  File type    : dbgen input
+#  Description  : City style descriptor
+# 
+# ----------------------------------------------------------------------------
+# 
+#  Disclaimer
+# 
+#  THIS FILE IS NOT GENERATED OR SUPPORTED BY ACTIVISION.
+# 
+#  This material has been developed at apolyton.net by the Apolyton CtP2 
+#  Source Code Project. Contact the authors at ctp2source@apolyton.net.
+# 
+#-----------------------------------------------------------------------------
+# 
+#  Modifications from the original Activision code:
+# 
+#  - Added sprites for walls and forcefield per age (Martin Gühmann).
+#  - Added city icon file (Martin Gühmann).
+#  - Restored backwards compatibility (made city icon optional).
+# 
+#-----------------------------------------------------------------------------
+
+AgeCityStyle {
+	Struct SizeSprite {
+		Int Type # 0 = land, 1 = ocean
+		Int MinSize
+		Int MaxSize
+		Int Sprite
+#not ACTIVISION_ORIGINAL
+		Int Walls		= 38	// sprite (index) for walls
+		Int ForceField	= 154	// sprite (index) for a forcefield
+#end
+	}
+
+	Struct SizeSprite[] Sprites
+}
+
+CityStyle {
+	Record AgeCityStyle[] AgeStyle
+
+#not ACTIVISION_ORIGINAL
+	Bit (File) CPIcon			// city icon file
+#end
+}

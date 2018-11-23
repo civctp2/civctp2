@@ -1,0 +1,70 @@
+
+AGE_ONE {
+		Age 1
+		StartingRound 0
+		NeedAdvances 0 # Start in this age.
+		SlicObject "Age1Entered"
+}
+
+AGE_TWO {
+		Age 2
+		StartingRound 0
+		NeedAdvances 5
+		SlicObject "Age2Entered"
+}
+
+AGE_THREE {
+		Age 3
+		StartingRound 0
+		NeedAdvances 5
+		SlicObject "Age3Entered"
+}
+
+AGE_FOUR {
+		Age 4
+		StartingRound 0
+		NeedAdvances 5
+		SlicObject "Age4Entered"
+}
+
+AGE_FIVE {
+		Age 5
+		StartingRound 0
+		NeedAdvances 5
+		SlicObject "Age5Entered"
+}
+
+AGE_SIX {
+		Age 6
+		StartingRound 0
+		NeedAdvances 5
+		SlicObject "Age6Entered"
+}
+
+AGE_SEVEN {
+		Age 7
+		StartingRound 0
+		NeedAdvances 5
+		SlicObject "Age7Entered"
+}
+
+AGE_EIGHT {
+		Age 8
+		StartingRound 0
+		NeedAdvances 5
+		SlicObject "Age8Entered"
+}
+
+AGE_NINE {
+		Age 9
+		StartingRound 0
+		NeedAdvances 5
+		SlicObject "Age9Entered"
+}
+
+AGE_TEN {
+		Age 10
+		StartingRound 0
+		NeedAdvances 3
+		SlicObject "Age10Entered"
+}

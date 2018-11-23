@@ -1,0 +1,3286 @@
+# 24
+
+STRATEGY_DEFAULT {
+
+    //
+    // POPULATION ASSIGNMENTS
+    //
+
+    PopAssignmentElement {
+        // percent of workers after minimums have been achieved that
+        // should be used as specialists
+        Specialists         0.5
+
+        // Percent of allocation to different specialist types (total = 1.0)
+        FarmerPercent       0.3
+        LaborerPercent      0.1
+        MerchantPercent     0.1
+        EntertainerPercent  0.0
+        ScientistPercent    0.5
+
+        Top 0.2 ProductionCities
+    }
+
+    PopAssignmentElement {
+        // percent of workers after minimums have been achieved that
+        // should be used as specialists
+        Specialists         0.5
+
+        // Percent of allocation to different specialist types (total = 1.0)
+        FarmerPercent       0.4
+        LaborerPercent      0.2
+        MerchantPercent     0.1
+        EntertainerPercent  0.1
+        ScientistPercent    0.2
+
+        Bottom 0.2 GrowthCities
+    }
+
+    PopAssignmentElement {
+        // percent of workers after minimums have been achieved that
+        // should be used as specialists
+        Specialists         0.5
+
+        // Percent of allocation to different specialist types (total = 1.0)
+        FarmerPercent       0.2
+        LaborerPercent      0.2
+        MerchantPercent     0.2
+        EntertainerPercent  0.2
+        ScientistPercent    0.2
+
+        Default
+    }
+
+    //
+    // GOVERNMENT SETTING
+    //
+
+    Government  GOVERNMENT_TECHNOCRACY
+    Government  GOVERNMENT_CORPORATE_REPUBLIC
+    Government  GOVERNMENT_FASCISM
+    Government  GOVERNMENT_MONARCHY
+    Government  GOVERNMENT_TYRANNY
+
+    // other governments
+    // Government  GOVERNMENT_ECOTOPIA 
+    // Government  GOVERNMENT_VIRTUAL_DEMOCRACY
+    // Government  GOVERNMENT_DEMOCRACY
+    // Government  GOVERNMENT_COMMUNISM 
+    // Government  GOVERNMENT_REPUBLIC
+    // Government  GOVERNMENT_THEOCRACY 
+	
+    //
+    //  WORKDAY, GOLD, FOOD SLIDER SETTINGS (WGF)
+    //
+
+    // set how unhappy our most unhappy city be
+    MinimumHappiness    73
+
+    // set maximum deficit spending percent (ie. spend no more than
+    // 10% of our savings each turn)
+    DeficitSpending     0.1
+
+    // set maximum percent of gold that should ever be spent on wages to not choke science
+    MaximumWagePercent  0.25
+
+    // try to decrease food
+    SliderElement { Delta 2 Food }
+    SliderElement { Delta 1 Production }
+    SliderElement { Delta 1 Gold }
+
+    //
+    // SCIENCE SETTINGS
+    //
+
+    // percent of gold to put into science
+    SciencePercent      60
+
+    //
+    // MILITARY READINESS SETTING
+    //
+
+    // maximum percent of production used for military readiness
+    MaxSupportCostPercent 50
+
+    // Peace = 0, Alert = 1, War = 2
+    ReadinessLevel  2
+
+    //
+    // TERRAIN IMPROVEMENTS
+    //
+
+    // percent of production to put into public works/materials
+    PublicWorksPercent  30
+
+    // amount of public works (materials) to keep in reserve
+    PublicWorksReserve  100
+
+    // only consider building best n tile improvements
+    MaxEvalTileImprovements  50
+
+    // rounds to wait before fixing roads
+    TimeToFixRoads  10
+
+    // rounds to wait before fixing polluted tiles
+    TimeToFixPollution  20
+
+    // stored PW must exceed cost to fix + threshold
+    FixPollutionThreshold  2000
+
+    // bonus for building road tile improvements
+    RoadUtilityBonus  200
+      
+    // bonus for building production tile improvements
+    ImproveProductionBonus  150
+
+    // bonus for building growth tile improvements
+    ImproveGrowthBonus  100
+
+    // bonus to apply to cells with goods
+    ImproveGoodBonus  75
+
+    // bonus for growth improvements in smallest 20% of our cities
+    ImproveSmallCityGrowthBonus  100
+
+    // bonus for production improvements in most productive 20% of our cities
+    ImproveLargeCityProductionBonus  150
+
+    // ordered list of terrain improvements that increase growth
+    ImproveGrowthList  IMPROVEMENT_LIST_GROWTH
+
+    // ordered list of terrain improvements that increase production
+    ImproveProductionList IMPROVEMENT_LIST_PRODUCTION
+
+    // ordered list of terrain improvements to be randomly spread around
+    ImproveRandomList IMPROVEMENT_LIST_MISC
+
+    //
+    // GOALS
+    //
+
+    GoalElement { Goal GOAL_DEFEND              Priority   107000  MaxEval   2  MaxExec   1 PerCity }
+    GoalElement { Goal GOAL_SEIGE               Priority        0  MaxEval   0  MaxExec   0 }
+    GoalElement { Goal GOAL_ATTACK              Priority   905000  MaxEval  15 MaxExec   12 }
+    GoalElement { Goal GOAL_ATTACK1             Priority   904000  MaxEval  15 MaxExec   12 }
+    GoalElement { Goal GOAL_ATTACK2             Priority   903000  MaxEval  15 MaxExec   12 }
+    GoalElement { Goal GOAL_ATTACK3             Priority   902000  MaxEval  15 MaxExec   12 }
+    GoalElement { Goal GOAL_ATTACK4             Priority   901000  MaxEval  15 MaxExec   12 }
+    GoalElement { Goal GOAL_ATTACK5             Priority   900000  MaxEval  15 MaxExec   12 }
+    GoalElement { Goal GOAL_SETTLE_LAND         Priority        0  MaxEval   0  MaxExec   5 }
+    GoalElement { Goal GOAL_SETTLE_SEA          Priority        0  MaxEval   0  MaxExec   5 }
+    GoalElement { Goal GOAL_EXPLORE             Priority        0  MaxEval   0  MaxExec   5 }
+    GoalElement { Goal GOAL_ENSLAVE_SETTLER     Priority        0  MaxEval   0  MaxExec   3 }
+    GoalElement { Goal GOAL_SLAVE_RAID          Priority        0  MaxEval   0  MaxExec   3 }
+    GoalElement { Goal GOAL_CHOKEPOINT          Priority        0  MaxEval   0  MaxExec   1 }
+    GoalElement { Goal GOAL_PATROL              Priority     1000  MaxEval   5  MaxExec   1 }
+    GoalElement { Goal GOAL_CONVERT_CITY        Priority        0  MaxEval   0  MaxExec   0 }
+    GoalElement { Goal GOAL_BIOTERROR_CITY      Priority        0  MaxEval   0  MaxExec   0 }
+    GoalElement { Goal GOAL_NANOATTACK_CITY     Priority        0  MaxEval   0  MaxExec   0 }
+    GoalElement { Goal GOAL_HARASS_CITY         Priority        0  MaxEval   0  MaxExec   0 }
+    GoalElement { Goal GOAL_HARASS              Priority   200000  MaxEval   5  MaxExec   1 }
+    GoalElement { Goal GOAL_BOMBARD             Priority        0  MaxEval   0  MaxExec   0 }
+    GoalElement { Goal GOAL_EXPEL               Priority        0  MaxEval   0  MaxExec   0 }
+    GoalElement { Goal GOAL_PILLAGE             Priority     1000  MaxEval   1  MaxExec   1 PerCity }
+    GoalElement { Goal GOAL_PIRATE              Priority        0  MaxEval   0  MaxExec   0 PerCity }
+    GoalElement { Goal GOAL_COUNTER_STEALTH     Priority        0  MaxEval   0  MaxExec   0 PerCity }
+    GoalElement { Goal GOAL_GOODY_HUT           Priority        0  MaxEval   0  MaxExec   0 }
+    GoalElement { Goal GOAL_PLANT_NUKE          Priority        0  MaxEval   0  MaxExec   0 }
+    GoalElement { Goal GOAL_CREATE_PARK         Priority        0  MaxEval   0  MaxExec   0 }
+    GoalElement { Goal GOAL_SOOTHSAY			Priority        0  MaxEval   0  MaxExec   0 }
+    GoalElement { Goal GOAL_ESTABLISH_EMBASSY   Priority        0  MaxEval   0  MaxExec   0 }
+    GoalElement { Goal GOAL_FRANCHISING         Priority        0  MaxEval   0  MaxExec   0 }
+    GoalElement { Goal GOAL_STEAL_TECHNOLOGY    Priority        0  MaxEval   0  MaxExec   0 }
+	GoalElement { Goal GOAL_INVESTIGATE_CITY	Priority        0  MaxEval   0  MaxExec   0 }
+    GoalElement { Goal GOAL_INCITE_REVOLUTION   Priority        0  MaxEval   0  MaxExec   0 }
+    GoalElement { Goal GOAL_INJOIN              Priority        0  MaxEval   0  MaxExec   0 }
+    GoalElement { Goal GOAL_ASSASSINATE         Priority        0  MaxEval   0  MaxExec   0 }
+    GoalElement { Goal GOAL_UNDERGROUND_RAILWAY Priority        0  MaxEval   0  MaxExec   0 }
+    GoalElement { Goal GOAL_NUKE_CITY           Priority        0  MaxEval   0  MaxExec   0 }
+    GoalElement { Goal GOAL_WANDER              Priority        1  MaxEval   1  MaxExec   1 }
+    GoalElement { Goal GOAL_SALLY               Priority        0  MaxEval   0  MaxExec   0 }
+    GoalElement { Goal GOAL_REFORM              Priority        0  MaxEval   1  MaxExec 0.5 PerCity}
+    GoalElement { Goal GOAL_SUE_FRANCHISE       Priority        0  MaxEval   1  MaxExec 0.5 PerCity}
+    GoalElement { Goal GOAL_RETREAT             Priority        1  MaxEval   1  MaxExec   1 PerCity}
+    GoalElement { Goal GOAL_DESTROY_ENDGAME     Priority        0  MaxEval   0  MaxExec   0 }
+    GoalElement { Goal GOAL_PROTECT_ENDGAME     Priority        0  MaxEval   0  MaxExec   0 }
+
+    // multiplied by #rounds to target
+    DistanceModifierFactor  -50
+
+    // number of armies to try and disband units from per round
+    DisbandArmyCount    2
+
+    // minimum distance between settled cities 
+    // (eg. new cities must be founded atleast 2 cells from nearest cities collection border)
+    MinSettleDistance   4
+
+    // cells with settle scores below this threshold will not be used
+    MinSettleScore 600
+
+	//
+	// BUILD LISTS
+	//
+
+	// Scaled bonus (#turns) to reduce the estimated time to rush buy in most threatened city 
+	// used when deciding what city to rush buy in
+	RushBuyThreatBonus 10
+
+	// Percent of gold expenses last turn to keep in reserve when rush buying
+	RushBuyReservePercent 2.0
+
+    // Percent of civilization support dedicated to units
+    UnitSupportPercent      0.15
+
+	// Unit Percents must total to 1 (100%)
+	OffensiveUnitsPercent 0.20
+	DefensiveUnitsPercent 0.40
+	RangedUnitsPercent    0.40
+	SeaUnitsPercent       0.0
+	AirUnitsPercent       0.0
+
+    // Number of special units that should be built
+    SettlerUnitsCount       1
+    SeaTransportUnitsCount  1
+    AirTransportUnitsCount  1
+    SpecialUnitsCount       1
+
+	// Do not certain items in cities where if it takes too many turns
+	MaxSettlerBuildTurns 30
+	MaxUnitBuildTurns 20
+	MaxWonderBuildTurns 35
+
+	// maximum percent of conventional units to build before building
+	// special units of specified type
+	BuildTransportProductionLevel 0.25
+	BuildSettlerProductionLevel 0.25
+
+    // Types of standard units that should be built
+    OffensiveUnitList   UNIT_BUILD_LIST_OFFENSE
+    DefensiveUnitList   UNIT_BUILD_LIST_DEFENSE
+    RangedUnitList      UNIT_BUILD_LIST_RANGED
+    SeaUnitList         UNIT_BUILD_LIST_SEA
+    AirUnitList         UNIT_BUILD_LIST_AIR
+
+    // Types of special units that should be built
+    SettlerUnitList     UNIT_BUILD_LIST_LAND_SETTLER
+    SeaTransportUnitList UNIT_BUILD_LIST_SEA_TRANSPORT
+    AirTransportUnitList UNIT_BUILD_LIST_AIR_TRANSPORT
+    SpecialUnitList     UNIT_BUILD_LIST_SPECIAL
+    FreightUnitList     UNIT_BUILD_LIST_FREIGHT
+
+	// minimum number of units to keep in cities as a garrison
+    OffensiveGarrisonCount  0
+    DefensiveGarrisonCount  1
+    RangedGarrisonCount     1
+
+    // For each city with an empty build queue, build from
+    // first sequence that applies
+
+	BuildListSequenceElement {
+	  Priority 10000
+      BuildListSequence BUILD_LIST_SEQUENCE_GROWTH
+	  Bottom 0.2 
+	  GrowthCities
+	  Advice BUILD_GROWTH_ADVICE
+    }
+
+	BuildListSequenceElement {
+	  Priority 9000
+      BuildListSequence BUILD_LIST_SEQUENCE_PRODUCTION
+      Bottom 0.2
+	  ProductionCities
+	  Advice BUILD_PRODUCTION_ADVICE
+    }
+
+	BuildListSequenceElement {
+	  Priority 6000
+      BuildListSequence BUILD_LIST_SEQUENCE_GOLD
+      Bottom 0.2
+      CommerceCities
+	  Advice BUILD_GOLD_ADVICE
+    }
+
+	BuildListSequenceElement {
+	  Priority 4000
+      BuildListSequence BUILD_LIST_SEQUENCE_OFFENSE
+	  Top 0.2 
+      ThreatenedCities
+	  Advice BUILD_OFFENSE_ADVICE
+    }
+
+	BuildListSequenceElement {
+	  Priority 8000
+      BuildListSequence BUILD_LIST_SEQUENCE_SCIENCE
+	  Top 0.1 
+      ProductionCities
+	  Advice BUILD_SCIENCE_ADVICE
+    }
+
+	BuildListSequenceElement {
+	  Priority 5000
+      BuildListSequence BUILD_LIST_SEQUENCE_WONDERS
+	  Top 0.1 
+      ProductionCities
+	  Advice BUILD_WONDERS_ADVICE
+    }
+
+	BuildListSequenceElement {
+	  Priority 7000
+      BuildListSequence BUILD_LIST_SEQUENCE_DEFENSE
+	  Bottom 0.2
+      PowerCities	  
+	  Advice BUILD_DEFENSE_ADVICE
+    }
+
+	BuildListSequenceElement {
+	  Priority 3000
+      BuildListSequence BUILD_LIST_SEQUENCE_HAPPINESS
+	  Bottom 0.2
+	  HappyCities
+	  Advice BUILD_HAPPINESS_ADVICE
+    }
+
+	BuildListSequenceElement {
+	  Priority 2000
+      BuildListSequence BUILD_LIST_SEQUENCE_DEFAULT
+	  Default
+	  Advice BUILD_DEFAULT_ADVICE
+    }
+
+    //
+    //  ADVANCE LIST
+    //
+
+    Research        ADVANCE_LIST_DEFAULT
+    StopResearch    ADVANCE_LIST_STOP_RESEARCH
+
+    //
+    //  DIPLOMACY
+    //
+
+    // priority for fear motivations
+    FearInvasion        1000
+    FearCityDefense     1100
+    FearPiracy           900
+    FearScienceRank      800
+    FearMilitaryRank     800
+    FearTradeRank        800
+    FearPollution        900
+
+    // priority for desire motivations
+    DesireAttack         800
+    DesireGold           900
+    DesireScience        900
+    DesireMakeFriend    1000
+    DesireEnlistFriend  1100
+
+    //
+    // TRADE
+    //
+
+    // only accumulate count of piracy if it occurs within
+    // memory of last piracy
+    PiracyMemoryTurns 3
+
+    // number of piracy events to accumulate before we kill the route
+    MaxPiracyEvents 3
+
+    //
+    // FORCE MATCHING
+    //
+
+    // AttackMatch  - ratio of army's attack strength to target's defense strength
+    // DefenseMatch - ratio of army's defense strength to target's attack strength
+    // RangedMatch  - ratio of army's ranged strength to target's ranged strength
+    // BombardMatch - ratio of army's bombard strength to target's bombard strength
+    // ValueMatch   - ratio of army's value to target's value
+	
+    Offensive {
+        AttackMatch   0.0
+        DefenseMatch  0.0
+        RangedMatch   0.0
+        BombardMatch  0.0
+        ValueMatch    0.0
+    }
+
+    Defensive {
+        AttackMatch   0.0
+        DefenseMatch  0.0
+        RangedMatch   0.0
+        BombardMatch  0.0
+        ValueMatch    0.1
+    }
+
+    Harass {
+        AttackMatch   0.0
+        DefenseMatch  0.0
+        RangedMatch   0.0
+        BombardMatch  0.0
+        ValueMatch    0.2
+    }
+
+    StealthAttack {
+        AttackMatch   0.0
+        DefenseMatch  0.0
+        RangedMatch   0.0
+        BombardMatch  0.0
+        ValueMatch    0.3
+    }
+
+    Bombard {
+        AttackMatch   0.0
+        DefenseMatch  0.0
+        RangedMatch   0.0
+        BombardMatch  0.0
+        ValueMatch    0.4
+    }
+
+    Special {
+        // no force matching for special attacks
+        AttackMatch  0.0
+        DefenseMatch 0.0
+        RangedMatch  0.0
+        BombardMatch 0.0
+        ValueMatch   0.5
+    }
+}
+
+STRATEGY_BARBARIAN {
+
+    // must inherit from default
+    Inherit STRATEGY_DEFAULT
+
+	Government GOVERNMENT_ANARCHY
+	
+	// percent of gold to put into science
+	SciencePercent 0
+
+	// maximum percent of production used for military readiness
+	MaxSupportCostPercent 100
+
+	// Peace = 0, Alert = 1, War = 2
+	ReadinessLevel 2
+
+	// percent of production to put into public works/materials
+	PublicWorksPercent 0
+
+	//
+	// GOALS
+	//
+
+    GoalElement { Goal GOAL_DEFEND              Priority   107000  MaxEval   2  MaxExec   1 PerCity }
+    GoalElement { Goal GOAL_SEIGE               Priority        0  MaxEval   0  MaxExec   0 }
+    GoalElement { Goal GOAL_ATTACK              Priority   905000  MaxEval  15 MaxExec   12 }
+    GoalElement { Goal GOAL_ATTACK1             Priority   904000  MaxEval  15 MaxExec   12 }
+    GoalElement { Goal GOAL_ATTACK2             Priority   903000  MaxEval  15 MaxExec   12 }
+    GoalElement { Goal GOAL_ATTACK3             Priority   902000  MaxEval  15 MaxExec   12 }
+    GoalElement { Goal GOAL_ATTACK4             Priority   901000  MaxEval  15 MaxExec   12 }
+    GoalElement { Goal GOAL_ATTACK5             Priority   900000  MaxEval  15 MaxExec   12 }
+    GoalElement { Goal GOAL_SETTLE_LAND         Priority        0  MaxEval   0  MaxExec   5 }
+    GoalElement { Goal GOAL_SETTLE_SEA          Priority        0  MaxEval   0  MaxExec   5 }
+    GoalElement { Goal GOAL_EXPLORE             Priority        0  MaxEval   0  MaxExec   5 }
+    GoalElement { Goal GOAL_ENSLAVE_SETTLER     Priority        0  MaxEval   0  MaxExec   3 }
+    GoalElement { Goal GOAL_SLAVE_RAID          Priority        0  MaxEval   0  MaxExec   3 }
+    GoalElement { Goal GOAL_CHOKEPOINT          Priority        0  MaxEval   0  MaxExec   1 }
+    GoalElement { Goal GOAL_PATROL              Priority     1000  MaxEval   5  MaxExec   1 }
+    GoalElement { Goal GOAL_CONVERT_CITY        Priority        0  MaxEval   0  MaxExec   0 }
+    GoalElement { Goal GOAL_BIOTERROR_CITY      Priority        0  MaxEval   0  MaxExec   0 }
+    GoalElement { Goal GOAL_NANOATTACK_CITY     Priority        0  MaxEval   0  MaxExec   0 }
+    GoalElement { Goal GOAL_HARASS_CITY         Priority        0  MaxEval   0  MaxExec   0 }
+    GoalElement { Goal GOAL_HARASS              Priority   200000  MaxEval   5  MaxExec   1 }
+    GoalElement { Goal GOAL_BOMBARD             Priority        0  MaxEval   0  MaxExec   0 }
+    GoalElement { Goal GOAL_EXPEL               Priority        0  MaxEval   0  MaxExec   0 }
+    GoalElement { Goal GOAL_PILLAGE             Priority     1000  MaxEval   1  MaxExec   1 PerCity }
+    GoalElement { Goal GOAL_PIRATE              Priority        0  MaxEval   0  MaxExec   0 PerCity }
+    GoalElement { Goal GOAL_COUNTER_STEALTH     Priority        0  MaxEval   0  MaxExec   0 PerCity }
+    GoalElement { Goal GOAL_GOODY_HUT           Priority        0  MaxEval   0  MaxExec   0 }
+    GoalElement { Goal GOAL_PLANT_NUKE          Priority        0  MaxEval   0  MaxExec   0 }
+    GoalElement { Goal GOAL_CREATE_PARK         Priority        0  MaxEval   0  MaxExec   0 }
+    GoalElement { Goal GOAL_SOOTHSAY			Priority        0  MaxEval   0  MaxExec   0 }
+    GoalElement { Goal GOAL_ESTABLISH_EMBASSY   Priority        0  MaxEval   0  MaxExec   0 }
+    GoalElement { Goal GOAL_FRANCHISING         Priority        0  MaxEval   0  MaxExec   0 }
+    GoalElement { Goal GOAL_STEAL_TECHNOLOGY    Priority        0  MaxEval   0  MaxExec   0 }
+	GoalElement { Goal GOAL_INVESTIGATE_CITY	Priority        0  MaxEval   0  MaxExec   0 }
+    GoalElement { Goal GOAL_INCITE_REVOLUTION   Priority        0  MaxEval   0  MaxExec   0 }
+    GoalElement { Goal GOAL_INJOIN              Priority        0  MaxEval   0  MaxExec   0 }
+    GoalElement { Goal GOAL_ASSASSINATE         Priority        0  MaxEval   0  MaxExec   0 }
+    GoalElement { Goal GOAL_UNDERGROUND_RAILWAY Priority        0  MaxEval   0  MaxExec   0 }
+    GoalElement { Goal GOAL_NUKE_CITY           Priority        0  MaxEval   0  MaxExec   0 }
+    GoalElement { Goal GOAL_WANDER              Priority        1  MaxEval   1  MaxExec   1 }
+    GoalElement { Goal GOAL_SALLY               Priority        0  MaxEval   0  MaxExec   0 }
+    GoalElement { Goal GOAL_REFORM              Priority        0  MaxEval   1  MaxExec 0.5 PerCity}
+    GoalElement { Goal GOAL_SUE_FRANCHISE       Priority        0  MaxEval   1  MaxExec 0.5 PerCity}
+    GoalElement { Goal GOAL_RETREAT             Priority        1  MaxEval   1  MaxExec   1 PerCity}
+    GoalElement { Goal GOAL_DESTROY_ENDGAME     Priority        0  MaxEval   0  MaxExec   0 }
+    GoalElement { Goal GOAL_PROTECT_ENDGAME     Priority        0  MaxEval   0  MaxExec   0 }
+
+    // multiplied by #rounds to target
+	DistanceModifierFactor		     -50
+
+	// number of armies to try and disband units from per round
+	DisbandArmyCount				   0	
+
+	//
+	// BUILD LISTS
+	//
+
+	// Scaled bonus (#turns) to reduce the estimated time to rush buy in most threatened city 
+	// used when deciding what city to rush buy in
+	RushBuyThreatBonus 10
+
+	// Percent of gold expenses last turn to keep in reserve when rush buying
+	RushBuyReservePercent 0.0
+
+	// Percent of civilization support dedicated to units
+	UnitSupportPercent 1.0
+
+	// Unit Percents must total to 1 (100%)
+	OffensiveUnitsPercent 0.60
+	DefensiveUnitsPercent 0.00
+	RangedUnitsPercent    0.40
+	SeaUnitsPercent       0.00
+	AirUnitsPercent       0.00
+
+	// Number of special units that should be built
+	SettlerUnitsCount 0
+	SeaTransportUnitsCount 0
+	AirTransportUnitsCount 0
+	SpecialUnitsCount 0
+
+	// Do not certain items in cities where if it takes too many turns
+	MaxSettlerBuildTurns 0
+	MaxUnitBuildTurns 100
+	MaxWonderBuildTurns 0
+
+	// maximum percent of conventional units to build before building
+	// special units of specified type
+	BuildTransportProductionLevel 0.0
+	BuildSettlerProductionLevel 0.0
+
+	// minimum number of units to keep in cities as a garrison
+	OffensiveGarrisonCount 0
+	DefensiveGarrisonCount 0
+	RangedGarrisonCount 0
+
+	// For each city with an empty build queue, build from first sequence that applies
+
+	BuildListSequenceElement {
+      BuildListSequence BUILD_LIST_SEQUENCE_OFFENSE
+	  Top 1.0 
+      ProductionCities
+	  Advice BUILD_OFFENSE_ADVICE
+    }
+
+	//
+	// FORCE MATCHING
+	//
+	
+	Offensive {
+  	    // ratio of army's attack strength to target's defense strength
+	    AttackMatch  0.0
+	    // ratio of army's defense strength to target's attack strength
+	    DefenseMatch 0.0
+	    // ratio of army's ranged strength to target's ranged strength
+	    RangedMatch  0.0
+	    // ratio of army's bombard strength to target's bombard strength
+	    BombardMatch 0.0
+	    // ratio of army's value to target's value
+	    ValueMatch   0.0
+	}
+
+    Defensive {
+        AttackMatch   0.0
+        DefenseMatch  0.0
+        RangedMatch   0.0
+        BombardMatch  0.0
+        ValueMatch    0.1
+    }
+}
+
+STRATEGY_SEIGE {
+
+    // percent of gold to put into science
+    SciencePercent 60
+
+    //
+    // BUILD LISTS
+    //
+
+	// Scaled bonus (#turns) to reduce the estimated time to rush buy in most threatened city 
+	// used when deciding what city to rush buy in
+	RushBuyThreatBonus 10
+
+	// Percent of gold expenses last turn to keep in reserve when rush buying
+	RushBuyReservePercent 2.0
+
+    // Percent of civilization support dedicated to units
+    UnitSupportPercent 0.35
+
+    // Unit Percents must total to 1 (100%)
+    OffensiveUnitsPercent 0.30
+    DefensiveUnitsPercent 0.20
+    RangedUnitsPercent    0.30
+    SeaUnitsPercent       0.10
+    AirUnitsPercent       0.10
+
+    // Number of special units that should be built
+    SeaTransportUnitsCount 2
+    AirTransportUnitsCount 2
+
+    GoalElement { Goal GOAL_DEFEND              Priority   107000  MaxEval   2  MaxExec   1 PerCity }
+    GoalElement { Goal GOAL_HARASS_CITY         Priority        0  MaxEval   0  MaxExec   0 }
+    GoalElement { Goal GOAL_HARASS              Priority        0  MaxEval   0  MaxExec   0 }
+    GoalElement { Goal GOAL_BOMBARD             Priority        0  MaxEval   0  MaxExec   0 }
+    GoalElement { Goal GOAL_SEIGE               Priority        0  MaxEval   0  MaxExec   0 }
+    GoalElement { Goal GOAL_ATTACK              Priority   905000  MaxEval  10  MaxExec  10 }
+    GoalElement { Goal GOAL_ATTACK1             Priority   904000  MaxEval  15 MaxExec   12 }
+    GoalElement { Goal GOAL_ATTACK2             Priority   903000  MaxEval  15 MaxExec   12 }
+    GoalElement { Goal GOAL_ATTACK3             Priority   902000  MaxEval  15 MaxExec   12 }
+    GoalElement { Goal GOAL_ATTACK4             Priority   901000  MaxEval  15 MaxExec   12 }
+    GoalElement { Goal GOAL_ATTACK5             Priority   900000  MaxEval  15 MaxExec   12 }
+
+
+	BuildListSequenceElement {
+	  Priority 10500
+      BuildListSequence BUILD_LIST_SEQUENCE_OFFENSE
+      Top 0.35
+	  ProductionCities
+	  Advice BUILD_OFFENSE_ADVICE
+    }
+
+	BuildListSequenceElement {
+	  Priority 11000
+      BuildListSequence BUILD_LIST_SEQUENCE_DEFENSE
+	  Top 0.35 
+      ThreatenedCities
+	  Advice BUILD_DEFENSE_ADVICE
+    }
+
+    //
+    // FORCE MATCHING
+    //
+
+    Offensive {
+        AttackMatch   0.0
+        DefenseMatch  0.0
+        RangedMatch   0.0
+        BombardMatch  0.0
+        ValueMatch    0.0
+    }
+
+    Harass {
+        AttackMatch   0.0
+        DefenseMatch  0.0
+        RangedMatch   0.0
+        BombardMatch  0.0
+        ValueMatch    0.2
+    }
+}
+
+STRATEGY_ATTACK {
+
+    // percent of gold to put into science
+    SciencePercent 60
+
+    //
+    // BUILD LISTS
+    //
+
+	// Scaled bonus (#turns) to reduce the estimated time to rush buy in most threatened city 
+	// used when deciding what city to rush buy in
+	RushBuyThreatBonus 10
+
+	// Percent of gold expenses last turn to keep in reserve when rush buying
+	RushBuyReservePercent 2.0
+
+    // Percent of civilization support dedicated to units
+    UnitSupportPercent 0.35
+
+    // Unit Percents must total to 1 (100%)
+    OffensiveUnitsPercent 0.30
+    DefensiveUnitsPercent 0.20
+    RangedUnitsPercent    0.30
+    SeaUnitsPercent       0.10
+    AirUnitsPercent       0.10
+
+    // Number of special units that should be built
+    SeaTransportUnitsCount 2
+    AirTransportUnitsCount 2
+
+    GoalElement { Goal GOAL_DEFEND              Priority   107000  MaxEval   2  MaxExec   1 PerCity }
+    GoalElement { Goal GOAL_HARASS_CITY         Priority        0  MaxEval   0  MaxExec   0 }
+    GoalElement { Goal GOAL_HARASS              Priority        0  MaxEval   0  MaxExec   0 }
+    GoalElement { Goal GOAL_BOMBARD             Priority        0  MaxEval   0  MaxExec   0 }
+    GoalElement { Goal GOAL_SEIGE               Priority        0  MaxEval   0  MaxExec   0 }
+    GoalElement { Goal GOAL_ATTACK              Priority   900000  MaxEval  10  MaxExec  10 }
+    GoalElement { Goal GOAL_ATTACK1             Priority   904000  MaxEval  15 MaxExec   12 }
+    GoalElement { Goal GOAL_ATTACK2             Priority   903000  MaxEval  15 MaxExec   12 }
+    GoalElement { Goal GOAL_ATTACK3             Priority   902000  MaxEval  15 MaxExec   12 }
+    GoalElement { Goal GOAL_ATTACK4             Priority   901000  MaxEval  15 MaxExec   12 }
+    GoalElement { Goal GOAL_ATTACK5             Priority   900000  MaxEval  15 MaxExec   12 }
+    GoalElement { Goal GOAL_PILLAGE             Priority        0  MaxEval  0  MaxExec    0 }
+
+	NuclearFirstStrike: Disabled
+	NuclearTargeting: Enabled
+
+	// do not perform first strike if our regard is above some limit
+	PreemptiveStrikeRegard 100
+
+	// how many foreign boom booms are enough to wipe us off the map?
+	// (eg. if more than 1 foreign nuke to every 4 of our cities would be
+	//  enough to prevent us from launching, specify 0.25)
+	PreemptiveStrikeRiskRatio 0.25
+
+	// when do we have enough nukes to wipe them off the map?
+	// (eg. if having less than 3 nukes to every 4 enemy cities prevents 
+	//  us from launching, specify 0.75)
+	PreemptiveStrikeSuperiorityRatio 0.75
+
+	BuildListSequenceElement {
+	  Priority 10500
+      BuildListSequence BUILD_LIST_SEQUENCE_OFFENSE
+      Top 0.35
+	  ProductionCities
+	  Advice BUILD_OFFENSE_ADVICE
+    }
+
+	BuildListSequenceElement {
+	  Priority 11000
+      BuildListSequence BUILD_LIST_SEQUENCE_DEFENSE
+	  Top 0.35 
+      ThreatenedCities
+	  Advice BUILD_DEFENSE_ADVICE
+    }
+
+    //
+    // FORCE MATCHING
+    //
+
+    Offensive {
+        AttackMatch   0.0
+        DefenseMatch  0.0
+        RangedMatch   0.0
+        BombardMatch  0.0
+        ValueMatch    0.0
+    }
+
+    Harass {
+        AttackMatch   0.0
+        DefenseMatch  0.0
+        RangedMatch   0.0
+        BombardMatch  0.0
+        ValueMatch    0.2
+    }
+}
+
+STRATEGY_DEFEND {
+
+    // percent of gold to put into science
+    SciencePercent 60
+
+    //
+    // BUILD LISTS
+    //
+
+	// Scaled bonus (#turns) to reduce the estimated time to rush buy in most threatened city 
+	// used when deciding what city to rush buy in
+	RushBuyThreatBonus 10
+
+	// Percent of gold expenses last turn to keep in reserve when rush buying
+	RushBuyReservePercent 2.0
+
+    // Percent of civilization support dedicated to units
+    UnitSupportPercent 0.35
+
+    // Unit Percents must total to 1 (100%)
+    OffensiveUnitsPercent 0.10
+    DefensiveUnitsPercent 0.40
+    RangedUnitsPercent    0.40
+    SeaUnitsPercent       0.10
+    AirUnitsPercent       0.10
+
+    GoalElement { Goal GOAL_DEFEND              Priority   107000  MaxEval   2  MaxExec   1 PerCity }
+    GoalElement { Goal GOAL_BOMBARD             Priority        0  MaxEval   0  MaxExec   0 }
+    GoalElement { Goal GOAL_SEIGE               Priority        0  MaxEval   0  MaxExec   0 }
+    GoalElement { Goal GOAL_ATTACK              Priority   900000  MaxEval  10  MaxExec  10 }
+    GoalElement { Goal GOAL_ATTACK1             Priority   904000  MaxEval  15 MaxExec   12 }
+    GoalElement { Goal GOAL_ATTACK2             Priority   903000  MaxEval  15 MaxExec   12 }
+    GoalElement { Goal GOAL_ATTACK3             Priority   902000  MaxEval  15 MaxExec   12 }
+    GoalElement { Goal GOAL_ATTACK4             Priority   901000  MaxEval  15 MaxExec   12 }
+    GoalElement { Goal GOAL_ATTACK5             Priority   900000  MaxEval  15 MaxExec   12 }
+
+	BuildListSequenceElement {
+	  Priority 10500
+      BuildListSequence BUILD_LIST_SEQUENCE_OFFENSE
+      Top 0.35
+	  ProductionCities
+	  Advice BUILD_OFFENSE_ADVICE
+    }
+
+	BuildListSequenceElement {
+	  Priority 11000
+      BuildListSequence BUILD_LIST_SEQUENCE_DEFENSE
+	  Top 0.35 
+      ThreatenedCities
+	  Advice BUILD_DEFENSE_ADVICE
+    }
+
+    //
+    // FORCE MATCHING
+    //
+
+    Defensive {
+        AttackMatch   0.0
+        DefenseMatch  0.0
+        RangedMatch   0.0
+        BombardMatch  0.0
+        ValueMatch    0.0
+    }
+
+    Harass {
+        AttackMatch   0.0
+        DefenseMatch  0.0
+        RangedMatch   0.0
+        BombardMatch  0.0
+        ValueMatch    0.2
+    }
+}
+
+STRATEGY_CAREFUL_START {
+
+	// Percent of civilization support dedicated to units
+    UnitSupportPercent 0.30
+
+	// minimum number of units to keep in cities as a garrison
+    OffensiveGarrisonCount  0
+    DefensiveGarrisonCount  1
+    RangedGarrisonCount     1
+
+	// Set so early cities will build offensive units to explore with after a granary
+	BuildListSequenceElement {
+	  Priority 9100
+      BuildListSequence BUILD_LIST_SEQUENCE_OFFENSE
+	  Top 0.6 
+      ProductionCities
+	  Advice BUILD_OFFENSE_ADVICE
+    }
+}
+
+STRATEGY_AGRESSIVE_START {
+
+    // Percent of civilization support dedicated to units
+    UnitSupportPercent 0.30
+
+    // same as careful start, but with no garrison
+    OffensiveGarrisonCount  0
+    DefensiveGarrisonCount  1
+    RangedGarrisonCount     0
+
+	// Set so early cities will build offensive units to explore before a granary
+	BuildListSequenceElement {
+	  Priority 10100
+      BuildListSequence BUILD_LIST_SEQUENCE_OFFENSE
+	  Top 0.6 
+      ProductionCities
+	  Advice BUILD_OFFENSE_ADVICE
+    }
+}
+
+STRATEGY_ISLAND_NATION {
+	// Unit Percents must total to 1 (100%)
+	OffensiveUnitsPercent 0.30
+	DefensiveUnitsPercent 0.20
+	RangedUnitsPercent    0.20
+	SeaUnitsPercent       0.30
+	AirUnitsPercent       0.00
+
+	SeaTransportUnitsCount 3
+
+	// decreased maximum percent of conventional units to build before
+	// building special units of specified type
+	BuildTransportProductionLevel 0.20 
+	BuildSettlerProductionLevel	0.20 
+}
+
+
+////////////////////////////////////////
+//
+//  Exploration Attribute Strategies
+//
+////////////////////////////////////////
+
+STRATEGY_EXPLORE_NEAR {
+    GoalElement { Goal GOAL_EXPLORE				Priority        0  MaxEval   0  MaxExec   0 }
+    GoalElement { Goal GOAL_GOODY_HUT			Priority        0  MaxEval   0  MaxExec   0 }
+}
+
+STRATEGY_EXPLORE_FAR {
+
+    GoalElement { Goal GOAL_EXPLORE				Priority        0  MaxEval   0  MaxExec   0 }
+    GoalElement { Goal GOAL_GOODY_HUT			Priority        0  MaxEval   0  MaxExec   0 }
+}
+
+STRATEGY_EXPLORE_WIDE {
+    GoalElement { Goal GOAL_EXPLORE				Priority        0  MaxEval   0  MaxExec   0 }
+    GoalElement { Goal GOAL_GOODY_HUT			Priority        0  MaxEval   0  MaxExec   0 }
+}
+
+////////////////////////////////////////
+//
+// Expansion Attribute Strategies
+//
+////////////////////////////////////////
+
+STRATEGY_SETTLE_COMPACT {
+
+    // Number of special units that should be built
+    SettlerUnitsCount   2
+
+    GoalElement { Goal GOAL_SETTLE_LAND         Priority        0  MaxEval   0  MaxExec   0 }
+    GoalElement { Goal GOAL_SETTLE_SEA          Priority        0  MaxEval   0  MaxExec   0 }
+
+    // minimum distance between settled cities
+	// (eg. new cities must be founded atleast 2 cells from nearest cities collection border)
+    MinSettleDistance   5
+}
+
+STRATEGY_SETTLE_LARGE {
+
+    // Number of special units that should be built
+    SettlerUnitsCount   2
+    SeaTransportUnitsCount 1
+
+    GoalElement { Goal GOAL_SETTLE_LAND         Priority        0  MaxEval   0  MaxExec   0 }
+    GoalElement { Goal GOAL_SETTLE_SEA          Priority        0  MaxEval   0  MaxExec   0 }
+
+    // minimum distance between settled cities
+	// (eg. new cities must be founded atleast 2 cells from nearest cities collection border)
+    MinSettleDistance   7
+}
+
+////////////////////////////////////////
+//
+// Discovery Attribute Strategies
+//
+////////////////////////////////////////
+
+STRATEGY_SCIENTIST_DEFAULT {
+
+    //
+    // POPULATION ASSIGNMENTS
+    //
+
+    PopAssignmentElement {
+        // percent of workers after minimums have been achieved that
+        // should be used as specialists
+        Specialists         0.5
+
+        // Percent of allocation to different specialist types (total = 1.0)
+        FarmerPercent       0.2
+        LaborerPercent      0.2
+        MerchantPercent     0.1
+        EntertainerPercent  0.0
+        ScientistPercent    0.5
+
+        Top 0.2 ProductionCities
+    }
+
+    PopAssignmentElement {
+        // percent of workers after minimums have been achieved that
+        // should be used as specialists
+        Specialists         0.5
+
+        // Percent of allocation to different specialist types (total = 1.0)
+        FarmerPercent       0.5
+        LaborerPercent      0.3
+        MerchantPercent     0.1
+        EntertainerPercent  0.0
+        ScientistPercent    0.1
+
+        Bottom 0.2 GrowthCities
+    }
+
+    PopAssignmentElement {
+        // percent of workers after minimums have been achieved that
+        // should be used as specialists
+        Specialists         0.5
+
+        // Percent of allocation to different specialist types (total = 1.0)
+        FarmerPercent       0.3
+        LaborerPercent      0.2
+        MerchantPercent     0.1
+        EntertainerPercent  0.1
+        ScientistPercent    0.3
+
+        Default
+    }
+
+    //
+    // GOVERNMENT SETTING
+    //
+
+    Government  GOVERNMENT_VIRTUAL_DEMOCRACY 
+    Government  GOVERNMENT_DEMOCRACY
+    Government  GOVERNMENT_REPUBLIC
+    Government  GOVERNMENT_TYRANNY
+
+    // other governments
+    // Government  GOVERNMENT_ECOTOPIA
+    // Government  GOVERNMENT_TECHNOCRACY
+	// Government  GOVERNMENT_CORPORATE_REPUBLIC 
+    // Government  GOVERNMENT_COMMUNISM
+    // Government  GOVERNMENT_FASCISM
+    // Government  GOVERNMENT_THEOCRACY
+	// Government  GOVERNMENT_MONARCHY
+	
+    //
+    //  WORKDAY, GOLD, FOOD SLIDER SETTINGS (WGF)
+    //
+
+    // set how unhappy our most unhappy city be
+    MinimumHappiness    73
+
+    // set maximum deficit spending percent (ie. spend no more than
+    // 10% of our savings each turn)
+    DeficitSpending     0.1
+
+    // set maximum percent of gold that should ever be spent on wages to not choke science
+    MaximumWagePercent  0.25
+
+    // try to decrease food
+    SliderElement { Delta 2 Food }
+    SliderElement { Delta 1 Production }
+    SliderElement { Delta 1 Gold }
+
+    //
+    // SCIENCE SETTINGS
+    //
+
+    // percent of gold to put into science
+    SciencePercent      70
+
+    //
+    // MILITARY READINESS SETTING
+    //
+
+    // maximum percent of production used for military readiness
+    MaxSupportCostPercent 40
+
+    // Peace = 0, Alert = 1, War = 2
+    ReadinessLevel  2
+
+    //
+    // TERRAIN IMPROVEMENTS
+    //
+
+    // percent of production to put into public works/materials
+    PublicWorksPercent  30
+
+    // amount of public works (materials) to keep in reserve
+    PublicWorksReserve  100
+
+    // only consider building best n tile improvements
+    MaxEvalTileImprovements  50
+
+    // rounds to wait before fixing roads
+    TimeToFixRoads  10
+
+    // rounds to wait before fixing polluted tiles
+    TimeToFixPollution  20
+
+    // stored PW must exceed cost to fix + threshold
+    FixPollutionThreshold  2000
+
+    // bonus for building road tile improvements
+    RoadUtilityBonus  200
+      
+    // bonus for building production tile improvements
+    ImproveProductionBonus  150
+
+    // bonus for building growth tile improvements
+    ImproveGrowthBonus  100
+
+    // bonus to apply to cells with goods
+    ImproveGoodBonus  75
+
+    // bonus for growth improvements in smallest 20% of our cities
+    ImproveSmallCityGrowthBonus  100
+
+    // bonus for production improvements in most productive 20% of our cities
+    ImproveLargeCityProductionBonus  150
+
+    // ordered list of terrain improvements that increase growth
+    ImproveGrowthList  IMPROVEMENT_LIST_GROWTH
+
+    // ordered list of terrain improvements that increase production
+    ImproveProductionList IMPROVEMENT_LIST_PRODUCTION
+
+    // ordered list of terrain improvements to be randomly spread around
+    ImproveRandomList IMPROVEMENT_LIST_MISC
+
+    //
+    // GOALS
+    //
+
+    GoalElement { Goal GOAL_DEFEND              Priority   107000  MaxEval   2  MaxExec   1 PerCity }
+    GoalElement { Goal GOAL_SEIGE               Priority        0  MaxEval   0  MaxExec   0 }
+    GoalElement { Goal GOAL_ATTACK              Priority   905000  MaxEval  15 MaxExec   12 }
+    GoalElement { Goal GOAL_ATTACK1             Priority   904000  MaxEval  15 MaxExec   12 }
+    GoalElement { Goal GOAL_ATTACK2             Priority   903000  MaxEval  15 MaxExec   12 }
+    GoalElement { Goal GOAL_ATTACK3             Priority   902000  MaxEval  15 MaxExec   12 }
+    GoalElement { Goal GOAL_ATTACK4             Priority   901000  MaxEval  15 MaxExec   12 }
+    GoalElement { Goal GOAL_ATTACK5             Priority   900000  MaxEval  15 MaxExec   12 }
+    GoalElement { Goal GOAL_SETTLE_LAND         Priority        0  MaxEval   0  MaxExec   5 }
+    GoalElement { Goal GOAL_SETTLE_SEA          Priority        0  MaxEval   0  MaxExec   5 }
+    GoalElement { Goal GOAL_EXPLORE             Priority        0  MaxEval   0  MaxExec   5 }
+    GoalElement { Goal GOAL_ENSLAVE_SETTLER     Priority        0  MaxEval   0  MaxExec   3 }
+    GoalElement { Goal GOAL_SLAVE_RAID          Priority        0  MaxEval   0  MaxExec   3 }
+    GoalElement { Goal GOAL_CHOKEPOINT          Priority        0  MaxEval   0  MaxExec   1 }
+    GoalElement { Goal GOAL_PATROL              Priority     1000  MaxEval   5  MaxExec   1 }
+    GoalElement { Goal GOAL_CONVERT_CITY        Priority        0  MaxEval   0  MaxExec   0 }
+    GoalElement { Goal GOAL_BIOTERROR_CITY      Priority        0  MaxEval   0  MaxExec   0 }
+    GoalElement { Goal GOAL_NANOATTACK_CITY     Priority        0  MaxEval   0  MaxExec   0 }
+    GoalElement { Goal GOAL_HARASS_CITY         Priority        0  MaxEval   0  MaxExec   0 }
+    GoalElement { Goal GOAL_HARASS              Priority   200000  MaxEval   5  MaxExec   1 }
+    GoalElement { Goal GOAL_BOMBARD             Priority        0  MaxEval   0  MaxExec   0 }
+    GoalElement { Goal GOAL_EXPEL               Priority        0  MaxEval   0  MaxExec   0 }
+    GoalElement { Goal GOAL_PILLAGE             Priority     1000  MaxEval   1  MaxExec   1 PerCity }
+    GoalElement { Goal GOAL_PIRATE              Priority        0  MaxEval   0  MaxExec   0 PerCity }
+    GoalElement { Goal GOAL_COUNTER_STEALTH     Priority        0  MaxEval   0  MaxExec   0 PerCity }
+    GoalElement { Goal GOAL_GOODY_HUT           Priority        0  MaxEval   0  MaxExec   0 }
+    GoalElement { Goal GOAL_PLANT_NUKE          Priority        0  MaxEval   0  MaxExec   0 }
+    GoalElement { Goal GOAL_CREATE_PARK         Priority        0  MaxEval   0  MaxExec   0 }
+    GoalElement { Goal GOAL_SOOTHSAY			Priority        0  MaxEval   0  MaxExec   0 }
+    GoalElement { Goal GOAL_ESTABLISH_EMBASSY   Priority        0  MaxEval   0  MaxExec   0 }
+    GoalElement { Goal GOAL_FRANCHISING         Priority        0  MaxEval   0  MaxExec   0 }
+    GoalElement { Goal GOAL_STEAL_TECHNOLOGY    Priority        0  MaxEval   0  MaxExec   0 }
+	GoalElement { Goal GOAL_INVESTIGATE_CITY	Priority        0  MaxEval   0  MaxExec   0 }
+    GoalElement { Goal GOAL_INCITE_REVOLUTION   Priority        0  MaxEval   0  MaxExec   0 }
+    GoalElement { Goal GOAL_INJOIN              Priority        0  MaxEval   0  MaxExec   0 }
+    GoalElement { Goal GOAL_ASSASSINATE         Priority        0  MaxEval   0  MaxExec   0 }
+    GoalElement { Goal GOAL_UNDERGROUND_RAILWAY Priority        0  MaxEval   0  MaxExec   0 }
+    GoalElement { Goal GOAL_NUKE_CITY           Priority        0  MaxEval   0  MaxExec   0 }
+    GoalElement { Goal GOAL_WANDER              Priority        1  MaxEval   1  MaxExec   1 }
+    GoalElement { Goal GOAL_SALLY               Priority        0  MaxEval   0  MaxExec   0 }
+    GoalElement { Goal GOAL_REFORM              Priority        0  MaxEval   1  MaxExec 0.5 PerCity}
+    GoalElement { Goal GOAL_SUE_FRANCHISE       Priority        0  MaxEval   1  MaxExec 0.5 PerCity}
+    GoalElement { Goal GOAL_RETREAT             Priority        1  MaxEval   1  MaxExec   1 PerCity}
+    GoalElement { Goal GOAL_DESTROY_ENDGAME     Priority        0  MaxEval   0  MaxExec   0 }
+    GoalElement { Goal GOAL_PROTECT_ENDGAME     Priority        0  MaxEval   0  MaxExec   0 }
+
+    // multiplied by #rounds to target
+    DistanceModifierFactor  -50
+
+    // number of armies to try and disband units from per round
+    DisbandArmyCount    4
+
+	// minimum distance between settled cities 
+	// (eg. new cities must be founded atleast 2 cells from nearest cities collection border)
+    MinSettleDistance   4
+
+    // cells with settle scores below this threshold will not be used
+    MinSettleScore 600
+
+	//
+	// BUILD LISTS
+	//
+
+	// Scaled bonus (#turns) to reduce the estimated time to rush buy in most threatened city 
+	// used when deciding what city to rush buy in
+	RushBuyThreatBonus 10
+
+	// Percent of gold expenses last turn to keep in reserve when rush buying
+	RushBuyReservePercent 2.0
+
+    // Percent of civilization support dedicated to units
+    UnitSupportPercent      0.10
+
+	// Unit Percents must total to 1 (100%)
+	OffensiveUnitsPercent 0.20
+	DefensiveUnitsPercent 0.40
+	RangedUnitsPercent    0.40
+	SeaUnitsPercent       0.0
+	AirUnitsPercent       0.0
+
+    // Number of special units that should be built
+    SettlerUnitsCount       1
+    SeaTransportUnitsCount  2
+    AirTransportUnitsCount  2
+    SpecialUnitsCount       2
+
+	// Do not certain items in cities where if it takes too many turns
+	MaxSettlerBuildTurns 30
+	MaxUnitBuildTurns 20
+	MaxWonderBuildTurns 35
+
+	// maximum percent of conventional units to build before building
+	// special units of specified type
+	BuildTransportProductionLevel 0.25
+	BuildSettlerProductionLevel 0.25
+
+    // Types of standard units that should be built
+    OffensiveUnitList   UNIT_BUILD_LIST_OFFENSE
+    DefensiveUnitList   UNIT_BUILD_LIST_DEFENSE
+    RangedUnitList      UNIT_BUILD_LIST_RANGED
+    SeaUnitList         UNIT_BUILD_LIST_SEA
+    AirUnitList         UNIT_BUILD_LIST_AIR
+
+    // Types of special units that should be built
+    SettlerUnitList     UNIT_BUILD_LIST_LAND_SETTLER
+    SeaTransportUnitList   UNIT_BUILD_LIST_SEA_TRANSPORT
+    AirTransportUnitList   UNIT_BUILD_LIST_AIR_TRANSPORT
+    SpecialUnitList     UNIT_BUILD_LIST_SPECIAL_PEACEFUL
+    FreightUnitList     UNIT_BUILD_LIST_FREIGHT
+
+	// minimum number of units to keep in cities as a garrison
+    OffensiveGarrisonCount  0
+    DefensiveGarrisonCount  1
+    RangedGarrisonCount     1
+
+    // For each city with an empty build queue, build from
+    // first sequence that applies
+
+	BuildListSequenceElement {
+	  Priority 10000
+      BuildListSequence BUILD_LIST_SEQUENCE_GROWTH
+	  Bottom 0.2 
+	  GrowthCities
+	  Advice BUILD_GROWTH_ADVICE
+    }
+
+	BuildListSequenceElement {
+	  Priority 9000
+      BuildListSequence BUILD_LIST_SEQUENCE_PRODUCTION
+      Bottom 0.2
+	  ProductionCities
+	  Advice BUILD_PRODUCTION_ADVICE
+    }
+
+    BuildListSequenceElement {
+      Priority 8000
+      BuildListSequence BUILD_LIST_SEQUENCE_SCIENCE
+      Top 0.3
+      ProductionCities
+	  Advice BUILD_SCIENCE_ADVICE
+    }
+
+    BuildListSequenceElement {
+      Priority 6000
+      BuildListSequence BUILD_LIST_SEQUENCE_GOLD
+	  Top 0.2 
+      CommerceCities
+	  Advice BUILD_GOLD_ADVICE
+    }
+
+    BuildListSequenceElement {
+      Priority 7000
+      BuildListSequence BUILD_LIST_SEQUENCE_DEFENSE
+	  Bottom 0.2
+      PowerCities	  
+	  Advice BUILD_DEFENSE_ADVICE
+    }
+
+    BuildListSequenceElement {
+      Priority 4000
+      BuildListSequence BUILD_LIST_SEQUENCE_OFFENSE
+	  Top 0.2 
+      ThreatenedCities
+	  Advice BUILD_OFFENSE_ADVICE
+    }
+
+	BuildListSequenceElement {
+      Priority 5000
+      BuildListSequence BUILD_LIST_SEQUENCE_WONDERS
+	  Top 0.1 
+      ProductionCities
+	  Advice BUILD_WONDERS_ADVICE
+    }
+
+	BuildListSequenceElement {
+	  Priority 3000
+      BuildListSequence BUILD_LIST_SEQUENCE_HAPPINESS
+	  Bottom 0.2
+	  HappyCities
+	  Advice BUILD_HAPPINESS_ADVICE
+    }
+
+	BuildListSequenceElement {
+	  Priority 2000
+      BuildListSequence BUILD_LIST_SEQUENCE_DEFAULT
+	  Default
+	  Advice BUILD_DEFAULT_ADVICE
+    }
+
+    //
+    //  ADVANCE LIST
+    //
+
+    Research        ADVANCE_LIST_SCIENTIST
+    StopResearch    ADVANCE_LIST_STOP_RESEARCH
+
+    //
+    //  DIPLOMACY
+    //
+
+    // priority for fear motivations
+    FearInvasion        1000
+    FearCityDefense     1100
+    FearPiracy           900
+    FearScienceRank     1000
+    FearMilitaryRank     800
+    FearTradeRank        800
+    FearPollution        900
+
+    // priority for desire motivations
+    DesireAttack         800
+    DesireGold           900
+    DesireScience        900
+    DesireMakeFriend    1000
+    DesireEnlistFriend  1100
+
+    //
+    // TRADE
+    //
+
+    // only accumulate count of piracy if it occurs within
+    // memory of last piracy
+    PiracyMemoryTurns 3
+
+    // number of piracy events to accumulate before we kill the route
+    MaxPiracyEvents 3
+
+    //
+    // FORCE MATCHING
+    //
+
+    // AttackMatch  - ratio of army's attack strength to target's defense strength
+    // DefenseMatch - ratio of army's defense strength to target's attack strength
+    // RangedMatch  - ratio of army's ranged strength to target's ranged strength
+    // BombardMatch - ratio of army's bombard strength to target's bombard strength
+    // ValueMatch   - ratio of army's value to target's value
+	
+    Offensive {
+        AttackMatch   0.0
+        DefenseMatch  0.0
+        RangedMatch   0.0
+        BombardMatch  0.0
+        ValueMatch    0.0
+    }
+
+    Defensive {
+        AttackMatch   0.0
+        DefenseMatch  0.0
+        RangedMatch   0.0
+        BombardMatch  0.0
+        ValueMatch    0.1
+    }
+
+    Harass {
+        AttackMatch   0.0
+        DefenseMatch  0.0
+        RangedMatch   0.0
+        BombardMatch  0.0
+        ValueMatch    0.2
+    }
+
+    StealthAttack {
+        AttackMatch   0.0
+        DefenseMatch  0.0
+        RangedMatch   0.0
+        BombardMatch  0.0
+        ValueMatch    0.3
+    }
+
+    Bombard {
+        AttackMatch   0.0
+        DefenseMatch  0.0
+        RangedMatch   0.0
+        BombardMatch  0.0
+        ValueMatch    0.4
+    }
+
+    Special {
+        // no force matching for special attacks
+        AttackMatch  0.0
+        DefenseMatch 0.0
+        RangedMatch  0.0
+        BombardMatch 0.0
+        ValueMatch   0.5
+    }
+}
+
+STRATEGY_MILITARIST_DEFAULT {
+
+    //
+    // POPULATION ASSIGNMENTS
+    //
+
+    PopAssignmentElement {
+        // percent of workers after minimums have been achieved that
+        // should be used as specialists
+        Specialists         0.5
+
+        // Percent of allocation to different specialist types  (total = 1.0)
+        FarmerPercent       0.1
+        LaborerPercent      0.5
+        MerchantPercent     0.1
+        EntertainerPercent  0.1
+        ScientistPercent    0.2
+
+        Top 0.2 ProductionCities
+    }
+
+    PopAssignmentElement {
+        // percent of workers after minimums have been achieved that 
+        // should be used as specialists
+        Specialists         0.5
+
+        // Percent of allocation to different specialist types  (total = 1.0)
+        FarmerPercent       0.4
+        LaborerPercent      0.3
+        MerchantPercent     0.1
+        EntertainerPercent  0.1
+        ScientistPercent    0.1
+
+        Bottom 0.2 GrowthCities
+    }
+
+    PopAssignmentElement {
+        // percent of workers after minimums have been achieved that
+        // should be used as specialists
+        Specialists         0.5
+
+        // Percent of allocation to different specialist types (total = 1.0)
+        FarmerPercent       0.3
+        LaborerPercent      0.2
+        MerchantPercent     0.2
+        EntertainerPercent  0.1
+        ScientistPercent    0.2
+
+        Default
+    }
+
+    //
+    // GOVERNMENT SETTING
+    //
+
+    // good for war
+    Government  GOVERNMENT_TECHNOCRACY
+    Government  GOVERNMENT_CORPORATE_REPUBLIC
+    Government  GOVERNMENT_FASCISM
+    Government  GOVERNMENT_COMMUNISM
+    Government  GOVERNMENT_MONARCHY
+    Government  GOVERNMENT_TYRANNY
+
+    // other governments
+    // Government  GOVERNMENT_ECOTOPIA
+    // Government  GOVERNMENT_VIRTUAL_DEMOCRACY
+    // Government  GOVERNMENT_DEMOCRACY
+    // Government  GOVERNMENT_THEOCRACY
+    // Government  GOVERNMENT_REPUBLIC
+	
+    //
+    //  WORKDAY, GOLD, FOOD SLIDER SETTINGS (WGF)
+    //
+
+    // set how unhappy our most unhappy city be
+    MinimumHappiness    73
+
+    // set maximum deficit spending percent (ie. spend no more than
+    // 10% of our savings each turn)
+    DeficitSpending     0.1
+
+    // set maximum percent of gold that should ever be spent on wages to not choke science
+    MaximumWagePercent  0.25
+
+    // try to decrease food
+    SliderElement { Delta 2 Food }
+    SliderElement { Delta 1 Production }
+    SliderElement { Delta 1 Gold }
+
+    //
+    // SCIENCE SETTINGS
+    //
+
+    // percent of gold to put into science
+    SciencePercent      60
+
+    //
+    // MILITARY READINESS SETTING
+    //
+
+    // maximum percent of production used for military readiness
+    MaxSupportCostPercent 60
+
+    // Peace = 0, Alert = 1, War = 2
+    ReadinessLevel  2
+
+    //
+    // TERRAIN IMPROVEMENTS
+    //
+
+    // percent of production to put into public works/materials
+    PublicWorksPercent  20
+
+    // amount of public works (materials) to keep in reserve
+    PublicWorksReserve  100
+
+    // only consider building best n tile improvements
+    MaxEvalTileImprovements  50
+
+    // rounds to wait before fixing roads
+    TimeToFixRoads  10
+
+    // rounds to wait before fixing polluted tiles
+    TimeToFixPollution  20
+
+    // stored PW must exceed cost to fix + threshold
+    FixPollutionThreshold  2000
+
+    // bonus for building road tile improvements
+    RoadUtilityBonus  250
+      
+    // bonus for building production tile improvements
+    ImproveProductionBonus  150
+
+    // bonus for building growth tile improvements
+    ImproveGrowthBonus  100
+
+    // bonus to apply to cells with goods
+    ImproveGoodBonus  75
+
+    // bonus for growth improvements in smallest 20% of our cities
+    ImproveSmallCityGrowthBonus  100
+
+    // bonus for production improvements in most productive 20% of our cities
+    ImproveLargeCityProductionBonus  150
+
+    // ordered list of terrain improvements that increase growth
+    ImproveGrowthList  IMPROVEMENT_LIST_GROWTH
+
+    // ordered list of terrain improvements that increase production
+    ImproveProductionList IMPROVEMENT_LIST_PRODUCTION
+
+    // ordered list of terrain improvements to be randomly spread around
+    ImproveRandomList IMPROVEMENT_LIST_MISC
+
+    //
+    // GOALS
+    //
+
+    GoalElement { Goal GOAL_DEFEND              Priority   107000  MaxEval   2  MaxExec   1 PerCity }
+    GoalElement { Goal GOAL_SEIGE               Priority        0  MaxEval   0  MaxExec   0 }
+    GoalElement { Goal GOAL_ATTACK              Priority   905000  MaxEval  15 MaxExec   12 }
+    GoalElement { Goal GOAL_ATTACK1             Priority   904000  MaxEval  15 MaxExec   12 }
+    GoalElement { Goal GOAL_ATTACK2             Priority   903000  MaxEval  15 MaxExec   12 }
+    GoalElement { Goal GOAL_ATTACK3             Priority   902000  MaxEval  15 MaxExec   12 }
+    GoalElement { Goal GOAL_ATTACK4             Priority   901000  MaxEval  15 MaxExec   12 }
+    GoalElement { Goal GOAL_ATTACK5             Priority   900000  MaxEval  15 MaxExec   12 }
+    GoalElement { Goal GOAL_SETTLE_LAND         Priority        0  MaxEval   0  MaxExec   5 }
+    GoalElement { Goal GOAL_SETTLE_SEA          Priority        0  MaxEval   0  MaxExec   5 }
+    GoalElement { Goal GOAL_EXPLORE             Priority        0  MaxEval   0  MaxExec   5 }
+    GoalElement { Goal GOAL_ENSLAVE_SETTLER     Priority        0  MaxEval   0  MaxExec   3 }
+    GoalElement { Goal GOAL_SLAVE_RAID          Priority        0  MaxEval   0  MaxExec   3 }
+    GoalElement { Goal GOAL_CHOKEPOINT          Priority        0  MaxEval   0  MaxExec   1 }
+    GoalElement { Goal GOAL_PATROL              Priority     1000  MaxEval   5  MaxExec   1 }
+    GoalElement { Goal GOAL_CONVERT_CITY        Priority        0  MaxEval   0  MaxExec   0 }
+    GoalElement { Goal GOAL_BIOTERROR_CITY      Priority        0  MaxEval   0  MaxExec   0 }
+    GoalElement { Goal GOAL_NANOATTACK_CITY     Priority        0  MaxEval   0  MaxExec   0 }
+    GoalElement { Goal GOAL_HARASS_CITY         Priority        0  MaxEval   0  MaxExec   0 }
+    GoalElement { Goal GOAL_HARASS              Priority   200000  MaxEval   5  MaxExec   1 }
+    GoalElement { Goal GOAL_BOMBARD             Priority        0  MaxEval   0  MaxExec   0 }
+    GoalElement { Goal GOAL_EXPEL               Priority        0  MaxEval   0  MaxExec   0 }
+    GoalElement { Goal GOAL_PILLAGE             Priority     1000  MaxEval   1  MaxExec   1 PerCity }
+    GoalElement { Goal GOAL_PIRATE              Priority        0  MaxEval   0  MaxExec   0 PerCity }
+    GoalElement { Goal GOAL_COUNTER_STEALTH     Priority        0  MaxEval   0  MaxExec   0 PerCity }
+    GoalElement { Goal GOAL_GOODY_HUT           Priority        0  MaxEval   0  MaxExec   0 }
+    GoalElement { Goal GOAL_PLANT_NUKE          Priority        0  MaxEval   0  MaxExec   0 }
+    GoalElement { Goal GOAL_CREATE_PARK         Priority        0  MaxEval   0  MaxExec   0 }
+    GoalElement { Goal GOAL_SOOTHSAY			Priority        0  MaxEval   0  MaxExec   0 }
+    GoalElement { Goal GOAL_ESTABLISH_EMBASSY   Priority        0  MaxEval   0  MaxExec   0 }
+    GoalElement { Goal GOAL_FRANCHISING         Priority        0  MaxEval   0  MaxExec   0 }
+    GoalElement { Goal GOAL_STEAL_TECHNOLOGY    Priority        0  MaxEval   0  MaxExec   0 }
+	GoalElement { Goal GOAL_INVESTIGATE_CITY	Priority        0  MaxEval   0  MaxExec   0 }
+    GoalElement { Goal GOAL_INCITE_REVOLUTION   Priority        0  MaxEval   0  MaxExec   0 }
+    GoalElement { Goal GOAL_INJOIN              Priority        0  MaxEval   0  MaxExec   0 }
+    GoalElement { Goal GOAL_ASSASSINATE         Priority        0  MaxEval   0  MaxExec   0 }
+    GoalElement { Goal GOAL_UNDERGROUND_RAILWAY Priority        0  MaxEval   0  MaxExec   0 }
+    GoalElement { Goal GOAL_NUKE_CITY           Priority        0  MaxEval   0  MaxExec   0 }
+    GoalElement { Goal GOAL_WANDER              Priority        1  MaxEval   1  MaxExec   1 }
+    GoalElement { Goal GOAL_SALLY               Priority        0  MaxEval   0  MaxExec   0 }
+    GoalElement { Goal GOAL_REFORM              Priority        0  MaxEval   1  MaxExec 0.5 PerCity}
+    GoalElement { Goal GOAL_SUE_FRANCHISE       Priority        0  MaxEval   1  MaxExec 0.5 PerCity}
+    GoalElement { Goal GOAL_RETREAT             Priority        1  MaxEval   1  MaxExec   1 PerCity}
+    GoalElement { Goal GOAL_DESTROY_ENDGAME     Priority        0  MaxEval   0  MaxExec   0 }
+    GoalElement { Goal GOAL_PROTECT_ENDGAME     Priority        0  MaxEval   0  MaxExec   0 }
+
+    // multiplied by #rounds to target
+    DistanceModifierFactor  -50
+
+    // number of armies to try and disband units from per round
+    DisbandArmyCount    10
+
+	// minimum distance between settled cities 
+	// (eg. new cities must be founded atleast 2 cells from nearest cities collection border)
+    MinSettleDistance   4
+
+    // cells with settle scores below this threshold will not be used
+    MinSettleScore 600
+
+	//
+	// BUILD LISTS
+	//
+
+	// Scaled bonus (#turns) to reduce the estimated time to rush buy in most threatened city 
+	// used when deciding what city to rush buy in
+	RushBuyThreatBonus 10
+
+	// Percent of gold expenses last turn to keep in reserve when rush buying
+	RushBuyReservePercent 2.0
+
+    // Percent of civilization support dedicated to units
+    UnitSupportPercent      0.25
+
+	// Unit Percents must total to 1 (100%)
+    OffensiveUnitsPercent 0.25
+    DefensiveUnitsPercent 0.30
+    RangedUnitsPercent    0.25
+    SeaUnitsPercent       0.10
+    AirUnitsPercent       0.10
+
+    // Number of special units that should be built
+    SettlerUnitsCount       0
+    SeaTransportUnitsCount  2
+    AirTransportUnitsCount  2
+    SpecialUnitsCount       6
+
+	// Do not certain items in cities where if it takes too many turns
+	MaxSettlerBuildTurns 35
+	MaxUnitBuildTurns 25
+	MaxWonderBuildTurns 35
+
+	// maximum percent of conventional units to build before building
+	// special units of specified type
+	BuildTransportProductionLevel 0.25
+	BuildSettlerProductionLevel 0.25
+
+    // Types of standard units that should be built
+    OffensiveUnitList   UNIT_BUILD_LIST_OFFENSE
+    DefensiveUnitList   UNIT_BUILD_LIST_DEFENSE
+    RangedUnitList      UNIT_BUILD_LIST_RANGED
+    SeaUnitList         UNIT_BUILD_LIST_SEA
+    AirUnitList         UNIT_BUILD_LIST_AIR
+
+    // Types of special units that should be built
+    SettlerUnitList     UNIT_BUILD_LIST_LAND_SETTLER
+    SeaTransportUnitList   UNIT_BUILD_LIST_SEA_TRANSPORT
+    AirTransportUnitList   UNIT_BUILD_LIST_AIR_TRANSPORT
+    SpecialUnitList     UNIT_BUILD_LIST_SPECIAL_MILITARIST
+    FreightUnitList     UNIT_BUILD_LIST_FREIGHT
+
+	// minimum number of units to keep in cities as a garrison
+    OffensiveGarrisonCount  0
+    DefensiveGarrisonCount  2
+    RangedGarrisonCount     1
+
+    // For each city with an empty build queue, build from
+    // first sequence that applies
+
+	BuildListSequenceElement {
+	  Priority 10000
+      BuildListSequence BUILD_LIST_SEQUENCE_GROWTH
+	  Bottom 0.2 
+	  GrowthCities
+	  Advice BUILD_GROWTH_ADVICE
+    }
+
+    BuildListSequenceElement {
+      Priority 9000
+      BuildListSequence BUILD_LIST_SEQUENCE_PRODUCTION
+      Bottom 0.2
+	  ProductionCities
+	  Advice BUILD_PRODUCTION_ADVICE
+    }
+
+    BuildListSequenceElement {
+      Priority 8000
+      BuildListSequence BUILD_LIST_SEQUENCE_DEFENSE
+      Top 0.2
+      ThreatenedCities
+	  Advice BUILD_DEFENSE_ADVICE
+    }
+
+    BuildListSequenceElement {
+      Priority 7000
+      BuildListSequence BUILD_LIST_SEQUENCE_OFFENSE
+	  Top 0.2 
+      ProductionCities
+	  Advice BUILD_OFFENSE_ADVICE
+    }
+
+	BuildListSequenceElement {
+      Priority 5000
+      BuildListSequence BUILD_LIST_SEQUENCE_GOLD
+      Bottom 0.2
+      CommerceCities
+	  Advice BUILD_GOLD_ADVICE
+    }
+
+	BuildListSequenceElement {
+      Priority 6000
+      BuildListSequence BUILD_LIST_SEQUENCE_SCIENCE
+	  Top 0.1 
+      ProductionCities
+	  Advice BUILD_SCIENCE_ADVICE
+    }
+
+	BuildListSequenceElement {
+      Priority 4000
+      BuildListSequence BUILD_LIST_SEQUENCE_WONDERS
+	  Top 0.1 
+      ProductionCities
+	  Advice BUILD_WONDERS_ADVICE
+    }
+
+	BuildListSequenceElement {
+	  Priority 3000
+      BuildListSequence BUILD_LIST_SEQUENCE_HAPPINESS
+	  Bottom 0.2
+	  HappyCities
+	  Advice BUILD_HAPPINESS_ADVICE
+    }
+
+	BuildListSequenceElement {
+	  Priority 2000
+      BuildListSequence BUILD_LIST_SEQUENCE_DEFAULT
+	  Default
+	  Advice BUILD_DEFAULT_ADVICE
+    }
+
+    //
+    //  ADVANCE LIST
+    //
+
+    Research        ADVANCE_LIST_MILITARIST
+    StopResearch    ADVANCE_LIST_STOP_RESEARCH
+
+    //
+    //  DIPLOMACY
+    //
+
+    // priority for fear motivations
+    FearInvasion        1000
+    FearCityDefense     1100
+    FearPiracy           900
+    FearScienceRank      800
+    FearMilitaryRank    1000
+    FearTradeRank        800
+    FearPollution        900
+
+    // priority for desire motivations
+    DesireAttack         800
+    DesireGold           900
+    DesireScience        900
+    DesireMakeFriend    1000
+    DesireEnlistFriend  1100
+
+    //
+    // TRADE
+    //
+
+    // only accumulate count of piracy if it occurs within
+    // memory of last piracy
+    PiracyMemoryTurns 3
+
+    // number of piracy events to accumulate before we kill the route
+    MaxPiracyEvents 3
+
+    //
+    // FORCE MATCHING
+    //
+
+    // AttackMatch  - ratio of army's attack strength to target's defense strength
+    // DefenseMatch - ratio of army's defense strength to target's attack strength
+    // RangedMatch  - ratio of army's ranged strength to target's ranged strength
+    // BombardMatch - ratio of army's bombard strength to target's bombard strength
+    // ValueMatch   - ratio of army's value to target's value
+	
+    Offensive {
+        AttackMatch   0.0
+        DefenseMatch  0.0
+        RangedMatch   0.0
+        BombardMatch  0.0
+        ValueMatch    0.0
+    }
+
+    Defensive {
+        AttackMatch   0.0
+        DefenseMatch  0.0
+        RangedMatch   0.0
+        BombardMatch  0.0
+        ValueMatch    0.1
+    }
+
+    Harass {
+        AttackMatch   0.0
+        DefenseMatch  0.0
+        RangedMatch   0.0
+        BombardMatch  0.0
+        ValueMatch    0.2
+    }
+
+    StealthAttack {
+        AttackMatch   0.0
+        DefenseMatch  0.0
+        RangedMatch   0.0
+        BombardMatch  0.0
+        ValueMatch    0.3
+    }
+
+    Bombard {
+        AttackMatch   0.0
+        DefenseMatch  0.0
+        RangedMatch   0.0
+        BombardMatch  0.0
+        ValueMatch    0.4
+    }
+
+    Special {
+        // no force matching for special attacks
+        AttackMatch  0.0
+        DefenseMatch 0.0
+        RangedMatch  0.0
+        BombardMatch 0.0
+        ValueMatch   0.5
+    }
+}
+
+STRATEGY_ECONOMIC_DEFAULT {
+
+    //
+    // POPULATION ASSIGNMENTS
+    //
+
+    PopAssignmentElement {
+        // percent of workers after minimums have been achieved that
+        // should be used as specialists
+        Specialists         0.5
+
+        // Percent of allocation to different specialist types  (total = 1.0)
+        FarmerPercent       0.1
+        LaborerPercent      0.3
+        MerchantPercent     0.4
+        EntertainerPercent  0.0
+        ScientistPercent    0.2
+
+        Top 0.2 ProductionCities
+    }
+
+    PopAssignmentElement {
+        // percent of workers after minimums have been achieved that
+        // should be used as specialists
+        Specialists         0.5
+
+        // Percent of allocation to different specialist types (total = 1.0)
+        FarmerPercent       0.4
+        LaborerPercent      0.2
+        MerchantPercent     0.2
+        EntertainerPercent  0.0
+        ScientistPercent    0.2
+
+        Bottom 0.2 GrowthCities
+    }
+
+    PopAssignmentElement {
+        // percent of workers after minimums have been achieved that
+        // should be used as specialists
+        Specialists         0.5
+
+        // Percent of allocation to different specialist types (total = 1.0)
+        FarmerPercent       0.2
+        LaborerPercent      0.2
+        MerchantPercent     0.3
+        EntertainerPercent  0.1
+        ScientistPercent    0.2
+
+        Default
+    }
+
+    //
+    // GOVERNMENT SETTING
+    //
+
+    // good for war
+    Government  GOVERNMENT_VIRTUAL_DEMOCRACY 
+    Government  GOVERNMENT_CORPORATE_REPUBLIC
+    Government  GOVERNMENT_DEMOCRACY
+    Government  GOVERNMENT_THEOCRACY 
+    Government  GOVERNMENT_TYRANNY
+
+    // other governments
+    // Government  GOVERNMENT_ECOTOPIA 
+    // Government  GOVERNMENT_TECHNOCRACY
+    // Government  GOVERNMENT_COMMUNISM 
+    // Government  GOVERNMENT_FASCISM
+    // Government  GOVERNMENT_REPUBLIC
+    // Government  GOVERNMENT_MONARCHY
+	
+    //
+    //  WORKDAY, GOLD, FOOD SLIDER SETTINGS (WGF)
+    //
+
+    // set how unhappy our most unhappy city be
+    MinimumHappiness    73
+
+    // set maximum deficit spending percent (ie. spend no more than
+    // 10% of our savings each turn)
+    DeficitSpending     0.1
+
+    // set maximum percent of gold that should ever be spent on wages to not choke science
+    MaximumWagePercent  0.25
+
+    // try to decrease food
+    SliderElement { Delta 2 Food }
+    SliderElement { Delta 1 Production }
+    SliderElement { Delta 1 Gold }
+
+    //
+    // SCIENCE SETTINGS
+    //
+
+    // percent of gold to put into science
+    SciencePercent      70
+
+    //
+    // MILITARY READINESS SETTING
+    //
+
+    // maximum percent of production used for military readiness
+    MaxSupportCostPercent 50
+
+    // Peace = 0, Alert = 1, War = 2
+    ReadinessLevel  2
+
+    //
+    // TERRAIN IMPROVEMENTS
+    //
+
+    // percent of production to put into public works/materials
+    PublicWorksPercent  30
+
+    // amount of public works (materials) to keep in reserve
+    PublicWorksReserve  100
+
+    // only consider building best n tile improvements
+    MaxEvalTileImprovements  50
+
+    // rounds to wait before fixing roads
+    TimeToFixRoads  10
+
+    // rounds to wait before fixing polluted tiles
+    TimeToFixPollution  20
+
+    // stored PW must exceed cost to fix + threshold
+    FixPollutionThreshold  2000
+
+    // bonus for building road tile improvements
+    RoadUtilityBonus  200
+      
+    // bonus for building production tile improvements
+    ImproveProductionBonus  150
+
+    // bonus for building growth tile improvements
+    ImproveGrowthBonus  100
+
+    // bonus to apply to cells with goods
+    ImproveGoodBonus  75
+
+    // bonus for growth improvements in smallest 20% of our cities
+    ImproveSmallCityGrowthBonus  100
+
+    // bonus for production improvements in most productive 20% of our cities
+    ImproveLargeCityProductionBonus  150
+
+    // ordered list of terrain improvements that increase growth
+    ImproveGrowthList  IMPROVEMENT_LIST_GROWTH
+
+    // ordered list of terrain improvements that increase production
+    ImproveProductionList IMPROVEMENT_LIST_PRODUCTION
+
+    // ordered list of terrain improvements to be randomly spread around
+    ImproveRandomList IMPROVEMENT_LIST_MISC
+
+    //
+    // GOALS
+    //
+
+    GoalElement { Goal GOAL_DEFEND              Priority   107000  MaxEval   2  MaxExec   1 PerCity }
+    GoalElement { Goal GOAL_SEIGE               Priority        0  MaxEval   0  MaxExec   0 }
+    GoalElement { Goal GOAL_ATTACK              Priority   905000  MaxEval  15 MaxExec   12 }
+    GoalElement { Goal GOAL_ATTACK1             Priority   904000  MaxEval  15 MaxExec   12 }
+    GoalElement { Goal GOAL_ATTACK2             Priority   903000  MaxEval  15 MaxExec   12 }
+    GoalElement { Goal GOAL_ATTACK3             Priority   902000  MaxEval  15 MaxExec   12 }
+    GoalElement { Goal GOAL_ATTACK4             Priority   901000  MaxEval  15 MaxExec   12 }
+    GoalElement { Goal GOAL_ATTACK5             Priority   900000  MaxEval  15 MaxExec   12 }
+    GoalElement { Goal GOAL_SETTLE_LAND         Priority        0  MaxEval   0  MaxExec   5 }
+    GoalElement { Goal GOAL_SETTLE_SEA          Priority        0  MaxEval   0  MaxExec   5 }
+    GoalElement { Goal GOAL_EXPLORE             Priority        0  MaxEval   0  MaxExec   5 }
+    GoalElement { Goal GOAL_ENSLAVE_SETTLER     Priority        0  MaxEval   0  MaxExec   3 }
+    GoalElement { Goal GOAL_SLAVE_RAID          Priority        0  MaxEval   0  MaxExec   3 }
+    GoalElement { Goal GOAL_CHOKEPOINT          Priority        0  MaxEval   0  MaxExec   1 }
+    GoalElement { Goal GOAL_PATROL              Priority     1000  MaxEval   5  MaxExec   1 }
+    GoalElement { Goal GOAL_CONVERT_CITY        Priority        0  MaxEval   0  MaxExec   0 }
+    GoalElement { Goal GOAL_BIOTERROR_CITY      Priority        0  MaxEval   0  MaxExec   0 }
+    GoalElement { Goal GOAL_NANOATTACK_CITY     Priority        0  MaxEval   0  MaxExec   0 }
+    GoalElement { Goal GOAL_HARASS_CITY         Priority        0  MaxEval   0  MaxExec   0 }
+    GoalElement { Goal GOAL_HARASS              Priority   200000  MaxEval   5  MaxExec   1 }
+    GoalElement { Goal GOAL_BOMBARD             Priority        0  MaxEval   0  MaxExec   0 }
+    GoalElement { Goal GOAL_EXPEL               Priority        0  MaxEval   0  MaxExec   0 }
+    GoalElement { Goal GOAL_PILLAGE             Priority     1000  MaxEval   1  MaxExec   1 PerCity }
+    GoalElement { Goal GOAL_PIRATE              Priority        0  MaxEval   0  MaxExec   0 PerCity }
+    GoalElement { Goal GOAL_COUNTER_STEALTH     Priority        0  MaxEval   0  MaxExec   0 PerCity }
+    GoalElement { Goal GOAL_GOODY_HUT           Priority        0  MaxEval   0  MaxExec   0 }
+    GoalElement { Goal GOAL_PLANT_NUKE          Priority        0  MaxEval   0  MaxExec   0 }
+    GoalElement { Goal GOAL_CREATE_PARK         Priority        0  MaxEval   0  MaxExec   0 }
+    GoalElement { Goal GOAL_SOOTHSAY			Priority        0  MaxEval   0  MaxExec   0 }
+    GoalElement { Goal GOAL_ESTABLISH_EMBASSY   Priority        0  MaxEval   0  MaxExec   0 }
+    GoalElement { Goal GOAL_FRANCHISING         Priority        0  MaxEval   0  MaxExec   0 }
+    GoalElement { Goal GOAL_STEAL_TECHNOLOGY    Priority        0  MaxEval   0  MaxExec   0 }
+	GoalElement { Goal GOAL_INVESTIGATE_CITY	Priority        0  MaxEval   0  MaxExec   0 }
+    GoalElement { Goal GOAL_INCITE_REVOLUTION   Priority        0  MaxEval   0  MaxExec   0 }
+    GoalElement { Goal GOAL_INJOIN              Priority        0  MaxEval   0  MaxExec   0 }
+    GoalElement { Goal GOAL_ASSASSINATE         Priority        0  MaxEval   0  MaxExec   0 }
+    GoalElement { Goal GOAL_UNDERGROUND_RAILWAY Priority        0  MaxEval   0  MaxExec   0 }
+    GoalElement { Goal GOAL_NUKE_CITY           Priority        0  MaxEval   0  MaxExec   0 }
+    GoalElement { Goal GOAL_WANDER              Priority        1  MaxEval   1  MaxExec   1 }
+    GoalElement { Goal GOAL_SALLY               Priority        0  MaxEval   0  MaxExec   0 }
+    GoalElement { Goal GOAL_REFORM              Priority        0  MaxEval   1  MaxExec 0.5 PerCity}
+    GoalElement { Goal GOAL_SUE_FRANCHISE       Priority        0  MaxEval   1  MaxExec 0.5 PerCity}
+    GoalElement { Goal GOAL_RETREAT             Priority        1  MaxEval   1  MaxExec   1 PerCity}
+    GoalElement { Goal GOAL_DESTROY_ENDGAME     Priority        0  MaxEval   0  MaxExec   0 }
+    GoalElement { Goal GOAL_PROTECT_ENDGAME     Priority        0  MaxEval   0  MaxExec   0 }
+
+    // multiplied by #rounds to target
+    DistanceModifierFactor  -50
+
+    // number of armies to try and disband units from per round
+    DisbandArmyCount    3
+
+	// minimum distance between settled cities 
+	// (eg. new cities must be founded atleast 2 cells from nearest cities collection border)
+    MinSettleDistance   4
+
+    // cells with settle scores below this threshold will not be used
+    MinSettleScore 600
+
+	//
+	// BUILD LISTS
+	//
+
+	// Scaled bonus (#turns) to reduce the estimated time to rush buy in most threatened city 
+	// used when deciding what city to rush buy in
+	RushBuyThreatBonus 10
+
+	// Percent of gold expenses last turn to keep in reserve when rush buying
+	RushBuyReservePercent 2.0
+
+    // Percent of civilization support dedicated to units
+    UnitSupportPercent      0.20
+
+	// Unit Percents must total to 1 (100%)
+	OffensiveUnitsPercent 0.20
+	DefensiveUnitsPercent 0.40
+	RangedUnitsPercent    0.40
+	SeaUnitsPercent       0.0
+	AirUnitsPercent       0.0
+
+    // Number of special units that should be built
+    SettlerUnitsCount       1
+    SeaTransportUnitsCount  2
+    AirTransportUnitsCount  2
+    SpecialUnitsCount       4
+
+	// Do not certain items in cities where if it takes too many turns
+	MaxSettlerBuildTurns 35
+	MaxUnitBuildTurns 30
+	MaxWonderBuildTurns 40
+
+	// maximum percent of conventional units to build before building
+	// special units of specified type
+	BuildTransportProductionLevel 0.25
+	BuildSettlerProductionLevel 0.25
+
+    // Types of standard units that should be built
+    OffensiveUnitList   UNIT_BUILD_LIST_OFFENSE
+    DefensiveUnitList   UNIT_BUILD_LIST_DEFENSE
+    RangedUnitList      UNIT_BUILD_LIST_RANGED
+    SeaUnitList         UNIT_BUILD_LIST_SEA
+    AirUnitList         UNIT_BUILD_LIST_AIR
+
+    // Types of special units that should be built
+    SettlerUnitList     UNIT_BUILD_LIST_LAND_SETTLER
+    SeaTransportUnitList   UNIT_BUILD_LIST_SEA_TRANSPORT
+    AirTransportUnitList   UNIT_BUILD_LIST_AIR_TRANSPORT
+    SpecialUnitList     UNIT_BUILD_LIST_SPECIAL_PEACEFUL
+    FreightUnitList     UNIT_BUILD_LIST_FREIGHT
+
+	// minimum number of units to keep in cities as a garrison
+    OffensiveGarrisonCount  0
+    DefensiveGarrisonCount  1
+    RangedGarrisonCount     1
+
+    // For each city with an empty build queue, build from
+    // first sequence that applies
+
+	BuildListSequenceElement {
+	  Priority 10000
+      BuildListSequence BUILD_LIST_SEQUENCE_GROWTH
+	  Bottom 0.2 
+	  GrowthCities
+	  Advice BUILD_GROWTH_ADVICE
+    }
+
+	BuildListSequenceElement {
+	  Priority 9000
+      BuildListSequence BUILD_LIST_SEQUENCE_PRODUCTION
+      Bottom 0.2
+	  ProductionCities
+	  Advice BUILD_PRODUCTION_ADVICE
+    }
+
+	BuildListSequenceElement {
+	  Priority 6000
+      BuildListSequence BUILD_LIST_SEQUENCE_GOLD
+      Top 0.2
+      ProductionCities
+	  Advice BUILD_GOLD_ADVICE
+    }
+
+	BuildListSequenceElement {
+	  Priority 4000
+      BuildListSequence BUILD_LIST_SEQUENCE_OFFENSE
+	  Top 0.2 
+      ThreatenedCities
+	  Advice BUILD_OFFENSE_ADVICE
+    }
+
+	BuildListSequenceElement {
+	  Priority 7000
+      BuildListSequence BUILD_LIST_SEQUENCE_SCIENCE
+	  Top 0.1 
+      ProductionCities
+	  Advice BUILD_SCIENCE_ADVICE
+    }
+
+	BuildListSequenceElement {
+	  Priority 5000
+      BuildListSequence BUILD_LIST_SEQUENCE_WONDERS
+	  Top 0.1 
+      ProductionCities
+	  Advice BUILD_WONDERS_ADVICE
+    }
+
+	BuildListSequenceElement {
+	  Priority 8000
+      BuildListSequence BUILD_LIST_SEQUENCE_DEFENSE
+	  Bottom 0.2
+      PowerCities
+	  Advice BUILD_DEFENSE_ADVICE
+    }
+
+	BuildListSequenceElement {
+	  Priority 3000
+      BuildListSequence BUILD_LIST_SEQUENCE_HAPPINESS
+	  Bottom 0.2
+	  HappyCities
+	  Advice BUILD_HAPPINESS_ADVICE
+    }
+
+	BuildListSequenceElement {
+	  Priority 2000
+      BuildListSequence BUILD_LIST_SEQUENCE_DEFAULT
+	  Default
+	  Advice BUILD_DEFAULT_ADVICE
+    }
+
+    //
+    //  ADVANCE LIST
+    //
+
+    Research        ADVANCE_LIST_ECONOMIC
+    StopResearch    ADVANCE_LIST_STOP_RESEARCH
+
+    //
+    //  DIPLOMACY
+    //
+
+    // priority for fear motivations
+    FearInvasion        1000
+    FearCityDefense     1100
+    FearPiracy           900
+    FearScienceRank      800
+    FearMilitaryRank     800
+    FearTradeRank       1000
+    FearPollution        800
+
+    // priority for desire motivations
+    DesireAttack         800
+    DesireGold           900
+    DesireScience        900
+    DesireMakeFriend    1000
+    DesireEnlistFriend  1100
+
+    //
+    // TRADE
+    //
+
+    // only accumulate count of piracy if it occurs within
+    // memory of last piracy
+    PiracyMemoryTurns 3
+
+    // number of piracy events to accumulate before we kill the route
+    MaxPiracyEvents 3
+
+    //
+    // FORCE MATCHING
+    //
+
+    // AttackMatch  - ratio of army's attack strength to target's defense strength
+    // DefenseMatch - ratio of army's defense strength to target's attack strength
+    // RangedMatch  - ratio of army's ranged strength to target's ranged strength
+    // BombardMatch - ratio of army's bombard strength to target's bombard strength
+    // ValueMatch   - ratio of army's value to target's value
+	
+    Offensive {
+        AttackMatch   0.0
+        DefenseMatch  0.0
+        RangedMatch   0.0
+        BombardMatch  0.0
+        ValueMatch    0.0
+    }
+
+    Defensive {
+        AttackMatch   0.0
+        DefenseMatch  0.0
+        RangedMatch   0.0
+        BombardMatch  0.0
+        ValueMatch    0.1
+    }
+
+    Harass {
+        AttackMatch   0.0
+        DefenseMatch  0.0
+        RangedMatch   0.0
+        BombardMatch  0.0
+        ValueMatch    0.2
+    }
+
+    StealthAttack {
+        AttackMatch   0.0
+        DefenseMatch  0.0
+        RangedMatch   0.0
+        BombardMatch  0.0
+        ValueMatch    0.3
+    }
+
+    Bombard {
+        AttackMatch   0.0
+        DefenseMatch  0.0
+        RangedMatch   0.0
+        BombardMatch  0.0
+        ValueMatch    0.4
+    }
+
+    Special {
+        // no force matching for special attacks
+        AttackMatch  0.0
+        DefenseMatch 0.0
+        RangedMatch  0.0
+        BombardMatch 0.0
+        ValueMatch   0.5
+    }
+}
+
+STRATEGY_ECOTOPIAN_DEFAULT {
+
+    //
+    // POPULATION ASSIGNMENTS
+    //
+
+    PopAssignmentElement {
+        // percent of workers after minimums have been achieved that
+        // should be used as specialists
+        Specialists         0.5
+
+        // Percent of allocation to different specialist types  (total = 1.0)
+        FarmerPercent       0.3
+        LaborerPercent      0.2
+        MerchantPercent     0.1
+        EntertainerPercent  0.0
+        ScientistPercent    0.4
+
+        Top 0.2 ProductionCities
+    }
+
+    PopAssignmentElement {
+        // percent of workers after minimums have been achieved that
+        // should be used as specialists
+        Specialists         0.5
+
+        // Percent of allocation to different specialist types (total = 1.0)
+        FarmerPercent       0.5
+        LaborerPercent      0.1
+        MerchantPercent     0.1
+        EntertainerPercent  0.1
+        ScientistPercent    0.2
+
+        Bottom 0.2 GrowthCities
+    }
+
+    PopAssignmentElement {
+        // percent of workers after minimums have been achieved that
+        // should be used as specialists
+        Specialists         0.5
+
+        // Percent of allocation to different specialist types (total = 1.0)
+        FarmerPercent       0.2
+        LaborerPercent      0.3
+        MerchantPercent     0.1
+        EntertainerPercent  0.1
+        ScientistPercent    0.3
+
+        Default
+    }
+
+    //
+    // GOVERNMENT SETTING
+    //
+
+    Government GOVERNMENT_ECOTOPIA
+    Government GOVERNMENT_VIRTUAL_DEMOCRACY
+    Government GOVERNMENT_DEMOCRACY
+    Government GOVERNMENT_THEOCRACY
+    Government GOVERNMENT_TYRANNY
+
+    // other governments
+    // Government GOVERNMENT_TECHNOCRACY
+    // Government GOVERNMENT_CORPORATE_REPUBLIC
+    // Government GOVERNMENT_COMMUNISM
+    // Government GOVERNMENT_FASCISM
+    // Government GOVERNMENT_REPUBLIC
+    // Government GOVERNMENT_MONARCHY
+	
+    //
+    //  WORKDAY, GOLD, FOOD SLIDER SETTINGS (WGF)
+    //
+
+    // set how unhappy our most unhappy city be
+    MinimumHappiness    73
+
+    // set maximum deficit spending percent (ie. spend no more than
+    // 10% of our savings each turn)
+    DeficitSpending     0.1
+
+    // set maximum percent of gold that should ever be spent on wages to not choke science
+    MaximumWagePercent  0.25
+
+    // try to decrease food
+    SliderElement { Delta 2 Food }
+    SliderElement { Delta 1 Production }
+    SliderElement { Delta 1 Gold }
+
+    //
+    // SCIENCE SETTINGS
+    //
+
+    // percent of gold to put into science
+    SciencePercent      70
+
+    //
+    // MILITARY READINESS SETTING
+    //
+
+    // maximum percent of production used for military readiness
+    MaxSupportCostPercent 40
+
+    // Peace = 0, Alert = 1, War = 2
+    ReadinessLevel  2
+
+    //
+    // TERRAIN IMPROVEMENTS
+    //
+
+    // percent of production to put into public works/materials
+    PublicWorksPercent  30
+
+    // amount of public works (materials) to keep in reserve
+    PublicWorksReserve  100
+
+    // only consider building best n tile improvements
+    MaxEvalTileImprovements  50
+
+    // rounds to wait before fixing roads
+    TimeToFixRoads  10
+
+    // rounds to wait before fixing polluted tiles
+    TimeToFixPollution  20
+
+    // stored PW must exceed cost to fix + threshold
+    FixPollutionThreshold  2000
+
+    // bonus for building road tile improvements
+    RoadUtilityBonus  200
+      
+    // bonus for building production tile improvements
+    ImproveProductionBonus  150
+
+    // bonus for building growth tile improvements
+    ImproveGrowthBonus  100
+
+    // bonus to apply to cells with goods
+    ImproveGoodBonus  75
+
+    // bonus for growth improvements in smallest 20% of our cities
+    ImproveSmallCityGrowthBonus  100
+
+    // bonus for production improvements in most productive 20% of our cities
+    ImproveLargeCityProductionBonus  150
+
+    // ordered list of terrain improvements that increase growth
+    ImproveGrowthList  IMPROVEMENT_LIST_GROWTH
+
+    // ordered list of terrain improvements that increase production
+    ImproveProductionList IMPROVEMENT_LIST_PRODUCTION
+
+    // ordered list of terrain improvements to be randomly spread around
+    ImproveRandomList IMPROVEMENT_LIST_MISC
+
+    //
+    // GOALS
+    //
+
+    GoalElement { Goal GOAL_DEFEND              Priority   107000  MaxEval   2  MaxExec   1 PerCity }
+    GoalElement { Goal GOAL_SEIGE               Priority        0  MaxEval   0  MaxExec   0 }
+    GoalElement { Goal GOAL_ATTACK              Priority   905000  MaxEval  15 MaxExec   12 }
+    GoalElement { Goal GOAL_ATTACK1             Priority   904000  MaxEval  15 MaxExec   12 }
+    GoalElement { Goal GOAL_ATTACK2             Priority   903000  MaxEval  15 MaxExec   12 }
+    GoalElement { Goal GOAL_ATTACK3             Priority   902000  MaxEval  15 MaxExec   12 }
+    GoalElement { Goal GOAL_ATTACK4             Priority   901000  MaxEval  15 MaxExec   12 }
+    GoalElement { Goal GOAL_ATTACK5             Priority   900000  MaxEval  15 MaxExec   12 }
+    GoalElement { Goal GOAL_SETTLE_LAND         Priority        0  MaxEval   0  MaxExec   5 }
+    GoalElement { Goal GOAL_SETTLE_SEA          Priority        0  MaxEval   0  MaxExec   5 }
+    GoalElement { Goal GOAL_EXPLORE             Priority        0  MaxEval   0  MaxExec   5 }
+    GoalElement { Goal GOAL_ENSLAVE_SETTLER     Priority        0  MaxEval   0  MaxExec   3 }
+    GoalElement { Goal GOAL_SLAVE_RAID          Priority        0  MaxEval   0  MaxExec   3 }
+    GoalElement { Goal GOAL_CHOKEPOINT          Priority        0  MaxEval   0  MaxExec   1 }
+    GoalElement { Goal GOAL_PATROL              Priority     1000  MaxEval   5  MaxExec   1 }
+    GoalElement { Goal GOAL_CONVERT_CITY        Priority        0  MaxEval   0  MaxExec   0 }
+    GoalElement { Goal GOAL_BIOTERROR_CITY      Priority        0  MaxEval   0  MaxExec   0 }
+    GoalElement { Goal GOAL_NANOATTACK_CITY     Priority        0  MaxEval   0  MaxExec   0 }
+    GoalElement { Goal GOAL_HARASS_CITY         Priority        0  MaxEval   0  MaxExec   0 }
+    GoalElement { Goal GOAL_HARASS              Priority   200000  MaxEval   5  MaxExec   1 }
+    GoalElement { Goal GOAL_BOMBARD             Priority        0  MaxEval   0  MaxExec   0 }
+    GoalElement { Goal GOAL_EXPEL               Priority        0  MaxEval   0  MaxExec   0 }
+    GoalElement { Goal GOAL_PILLAGE             Priority     1000  MaxEval   1  MaxExec   1 PerCity }
+    GoalElement { Goal GOAL_PIRATE              Priority        0  MaxEval   0  MaxExec   0 PerCity }
+    GoalElement { Goal GOAL_COUNTER_STEALTH     Priority        0  MaxEval   0  MaxExec   0 PerCity }
+    GoalElement { Goal GOAL_GOODY_HUT           Priority        0  MaxEval   0  MaxExec   0 }
+    GoalElement { Goal GOAL_PLANT_NUKE          Priority        0  MaxEval   0  MaxExec   0 }
+    GoalElement { Goal GOAL_CREATE_PARK         Priority        0  MaxEval   0  MaxExec   0 }
+    GoalElement { Goal GOAL_SOOTHSAY			Priority        0  MaxEval   0  MaxExec   0 }
+    GoalElement { Goal GOAL_ESTABLISH_EMBASSY   Priority        0  MaxEval   0  MaxExec   0 }
+    GoalElement { Goal GOAL_FRANCHISING         Priority        0  MaxEval   0  MaxExec   0 }
+    GoalElement { Goal GOAL_STEAL_TECHNOLOGY    Priority        0  MaxEval   0  MaxExec   0 }
+	GoalElement { Goal GOAL_INVESTIGATE_CITY	Priority        0  MaxEval   0  MaxExec   0 }
+    GoalElement { Goal GOAL_INCITE_REVOLUTION   Priority        0  MaxEval   0  MaxExec   0 }
+    GoalElement { Goal GOAL_INJOIN              Priority        0  MaxEval   0  MaxExec   0 }
+    GoalElement { Goal GOAL_ASSASSINATE         Priority        0  MaxEval   0  MaxExec   0 }
+    GoalElement { Goal GOAL_UNDERGROUND_RAILWAY Priority        0  MaxEval   0  MaxExec   0 }
+    GoalElement { Goal GOAL_NUKE_CITY           Priority        0  MaxEval   0  MaxExec   0 }
+    GoalElement { Goal GOAL_WANDER              Priority        1  MaxEval   1  MaxExec   1 }
+    GoalElement { Goal GOAL_SALLY               Priority        0  MaxEval   0  MaxExec   0 }
+    GoalElement { Goal GOAL_REFORM              Priority        0  MaxEval   1  MaxExec 0.5 PerCity}
+    GoalElement { Goal GOAL_SUE_FRANCHISE       Priority        0  MaxEval   1  MaxExec 0.5 PerCity}
+    GoalElement { Goal GOAL_RETREAT             Priority        1  MaxEval   1  MaxExec   1 PerCity}
+    GoalElement { Goal GOAL_DESTROY_ENDGAME     Priority        0  MaxEval   0  MaxExec   0 }
+    GoalElement { Goal GOAL_PROTECT_ENDGAME     Priority        0  MaxEval   0  MaxExec   0 }
+
+    // multiplied by #rounds to target
+    DistanceModifierFactor  -50
+
+    // number of armies to try and disband units from per round
+    DisbandArmyCount    4
+
+	// minimum distance between settled cities 
+	// (eg. new cities must be founded atleast 2 cells from nearest cities collection border)
+    MinSettleDistance   4
+
+    // cells with settle scores below this threshold will not be used
+    MinSettleScore 600
+
+	//
+	// BUILD LISTS
+	//
+
+	// Scaled bonus (#turns) to reduce the estimated time to rush buy in most threatened city 
+	// used when deciding what city to rush buy in
+	RushBuyThreatBonus 10
+
+	// Percent of gold expenses last turn to keep in reserve when rush buying
+	RushBuyReservePercent 2.0
+
+    // Percent of civilization support dedicated to units
+    UnitSupportPercent      0.20
+
+	// Unit Percents must total to 1 (100%)
+	OffensiveUnitsPercent 0.20
+	DefensiveUnitsPercent 0.40
+	RangedUnitsPercent    0.40
+	SeaUnitsPercent       0.0
+	AirUnitsPercent       0.0
+
+    // Number of special units that should be built
+    SettlerUnitsCount       1
+    SeaTransportUnitsCount  2
+    AirTransportUnitsCount  2
+    SpecialUnitsCount       4
+
+	// Do not certain items in cities where if it takes too many turns
+	MaxSettlerBuildTurns 40
+	MaxUnitBuildTurns 35
+	MaxWonderBuildTurns 45
+
+	// maximum percent of conventional units to build before building
+	// special units of specified type
+	BuildTransportProductionLevel 0.25
+	BuildSettlerProductionLevel 0.25
+
+    // Types of standard units that should be built
+    OffensiveUnitList   UNIT_BUILD_LIST_OFFENSE
+    DefensiveUnitList   UNIT_BUILD_LIST_DEFENSE
+    RangedUnitList      UNIT_BUILD_LIST_RANGED
+    SeaUnitList         UNIT_BUILD_LIST_SEA
+    AirUnitList         UNIT_BUILD_LIST_AIR
+
+    // Types of special units that should be built
+    SettlerUnitList     UNIT_BUILD_LIST_LAND_SETTLER
+    SeaTransportUnitList   UNIT_BUILD_LIST_SEA_TRANSPORT
+    AirTransportUnitList   UNIT_BUILD_LIST_AIR_TRANSPORT
+    SpecialUnitList     UNIT_BUILD_LIST_SPECIAL
+    FreightUnitList     UNIT_BUILD_LIST_FREIGHT
+
+	// minimum number of units to keep in cities as a garrison
+    OffensiveGarrisonCount  0
+    DefensiveGarrisonCount  1
+    RangedGarrisonCount     1
+
+    // For each city with an empty build queue, build from
+    // first sequence that applies
+
+	BuildListSequenceElement {
+	  Priority 10000
+      BuildListSequence BUILD_LIST_SEQUENCE_GROWTH
+	  Bottom 0.2 
+	  GrowthCities
+	  Advice BUILD_GROWTH_ADVICE
+    }
+
+	BuildListSequenceElement {
+	  Priority 9000
+      BuildListSequence BUILD_LIST_SEQUENCE_PRODUCTION
+      Bottom 0.2
+	  ProductionCities
+	  Advice BUILD_PRODUCTION_ADVICE
+    }
+
+	BuildListSequenceElement {
+	  Priority 5000
+      BuildListSequence BUILD_LIST_SEQUENCE_GOLD
+      Bottom 0.2
+      CommerceCities
+	  Advice BUILD_GOLD_ADVICE
+    }
+
+	BuildListSequenceElement {
+	  Priority 4000
+      BuildListSequence BUILD_LIST_SEQUENCE_OFFENSE
+	  Top 0.2 
+      ThreatenedCities
+	  Advice BUILD_OFFENSE_ADVICE
+    }
+
+	BuildListSequenceElement {
+	  Priority 8000
+      BuildListSequence BUILD_LIST_SEQUENCE_SCIENCE
+	  Top 0.1 
+      ProductionCities
+	  Advice BUILD_SCIENCE_ADVICE
+    }
+
+	BuildListSequenceElement {
+	  Priority 6000
+      BuildListSequence BUILD_LIST_SEQUENCE_WONDERS
+	  Top 0.1 
+      ProductionCities
+	  Advice BUILD_WONDERS_ADVICE
+    }
+
+	BuildListSequenceElement {
+	  Priority 7000
+      BuildListSequence BUILD_LIST_SEQUENCE_DEFENSE
+	  Bottom 0.2
+      PowerCities
+	  Advice BUILD_DEFENSE_ADVICE
+    }
+
+	BuildListSequenceElement {
+	  Priority 3000
+      BuildListSequence BUILD_LIST_SEQUENCE_HAPPINESS
+	  Bottom 0.2
+	  HappyCities
+	  Advice BUILD_HAPPINESS_ADVICE
+    }
+
+	BuildListSequenceElement {
+	  Priority 2000
+      BuildListSequence BUILD_LIST_SEQUENCE_DEFAULT
+	  Default
+	  Advice BUILD_DEFAULT_ADVICE
+    }
+
+    //
+    //  ADVANCE LIST
+    //
+
+    Research        ADVANCE_LIST_ECOTOPIAN
+    StopResearch    ADVANCE_LIST_STOP_RESEARCH
+
+    //
+    //  DIPLOMACY
+    //
+
+    // priority for fear motivations
+    FearInvasion        1000
+    FearCityDefense     1100
+    FearPiracy           900
+    FearScienceRank      800
+    FearMilitaryRank     800
+    FearTradeRank        800
+    FearPollution       1200
+
+    // priority for desire motivations
+    DesireAttack         800
+    DesireGold           900
+    DesireScience        900
+    DesireMakeFriend    1000
+    DesireEnlistFriend  1100
+
+    //
+    // TRADE
+    //
+
+    // only accumulate count of piracy if it occurs within
+    // memory of last piracy
+    PiracyMemoryTurns 3
+
+    // number of piracy events to accumulate before we kill the route
+    MaxPiracyEvents 3
+
+    //
+    // FORCE MATCHING
+    //
+
+    // AttackMatch  - ratio of army's attack strength to target's defense strength
+    // DefenseMatch - ratio of army's defense strength to target's attack strength
+    // RangedMatch  - ratio of army's ranged strength to target's ranged strength
+    // BombardMatch - ratio of army's bombard strength to target's bombard strength
+    // ValueMatch   - ratio of army's value to target's value
+	
+    Offensive {
+        AttackMatch   0.0
+        DefenseMatch  0.0
+        RangedMatch   0.0
+        BombardMatch  0.0
+        ValueMatch    0.0
+    }
+
+    Defensive {
+        AttackMatch   0.0
+        DefenseMatch  0.0
+        RangedMatch   0.0
+        BombardMatch  0.0
+        ValueMatch    0.1
+    }
+
+    Harass {
+        AttackMatch   0.0
+        DefenseMatch  0.0
+        RangedMatch   0.0
+        BombardMatch  0.0
+        ValueMatch    0.2
+    }
+
+    StealthAttack {
+        AttackMatch   0.0
+        DefenseMatch  0.0
+        RangedMatch   0.0
+        BombardMatch  0.0
+        ValueMatch    0.3
+    }
+
+    Bombard {
+        AttackMatch   0.0
+        DefenseMatch  0.0
+        RangedMatch   0.0
+        BombardMatch  0.0
+        ValueMatch    0.4
+    }
+
+    Special {
+        // no force matching for special attacks
+        AttackMatch  0.0
+        DefenseMatch 0.0
+        RangedMatch  0.0
+        BombardMatch 0.0
+        ValueMatch   0.5
+    }
+}
+
+STRATEGY_DIPLOMATIC_DEFAULT {
+
+    //
+    // POPULATION ASSIGNMENTS
+    //
+
+    PopAssignmentElement {
+        // percent of workers after minimums have been achieved that
+        // should be used as specialists
+        Specialists         0.5
+
+        // Percent of allocation to different specialist types (total = 1.0)
+        FarmerPercent       0.3
+        LaborerPercent      0.4
+        MerchantPercent     0.1
+        EntertainerPercent  0.0
+        ScientistPercent    0.2
+
+        Top 0.2 ProductionCities
+    }
+
+    PopAssignmentElement {
+        // percent of workers after minimums have been achieved that
+        // should be used as specialists
+        Specialists         0.5
+
+        // Percent of allocation to different specialist types (total = 1.0)
+        FarmerPercent       0.4
+        LaborerPercent      0.2
+        MerchantPercent     0.2
+        EntertainerPercent  0.0
+        ScientistPercent    0.2
+
+        Bottom 0.2 GrowthCities
+    }
+
+    PopAssignmentElement {
+        // percent of workers after minimums have been achieved that
+        // should be used as specialists
+        Specialists         0.5
+
+        // Percent of allocation to different specialist types (total = 1.0)
+        FarmerPercent       0.3
+        LaborerPercent      0.3
+        MerchantPercent     0.2
+        EntertainerPercent  0.0
+        ScientistPercent    0.2
+
+        Default
+    }
+
+    //
+    // GOVERNMENT SETTING
+    //
+
+    Government  GOVERNMENT_VIRTUAL_DEMOCRACY
+    Government  GOVERNMENT_CORPORATE_REPUBLIC
+    Government  GOVERNMENT_DEMOCRACY
+    Government  GOVERNMENT_REPUBLIC
+    Government  GOVERNMENT_TYRANNY
+
+    // Government  GOVERNMENT_ECOTOPIA 
+    // Government  GOVERNMENT_TECHNOCRACY
+    // Government  GOVERNMENT_FASCISM
+    // Government  GOVERNMENT_THEOCRACY 
+    // Government  GOVERNMENT_COMMUNISM 
+    // Government  GOVERNMENT_MONARCHY
+	
+    //
+    //  WORKDAY, GOLD, FOOD SLIDER SETTINGS (WGF)
+    //
+
+    // set how unhappy our most unhappy city be
+    MinimumHappiness    73
+
+    // set maximum deficit spending percent (ie. spend no more than
+    // 10% of our savings each turn)
+    DeficitSpending     0.1
+
+    // set maximum percent of gold that should ever be spent on wages to not choke science
+    MaximumWagePercent  0.25
+
+    // try to decrease food
+    SliderElement { Delta 2 Food }
+    SliderElement { Delta 1 Production }
+    SliderElement { Delta 1 Gold }
+
+    //
+    // SCIENCE SETTINGS
+    //
+
+    // percent of gold to put into science
+    SciencePercent      60
+
+    //
+    // MILITARY READINESS SETTING
+    //
+
+    // maximum percent of production used for military readiness
+    MaxSupportCostPercent 50
+
+    // Peace = 0, Alert = 1, War = 2
+    ReadinessLevel  2
+
+    //
+    // TERRAIN IMPROVEMENTS
+    //
+
+    // percent of production to put into public works/materials
+    PublicWorksPercent  30
+
+    // amount of public works (materials) to keep in reserve
+    PublicWorksReserve  100
+
+    // only consider building best n tile improvements
+    MaxEvalTileImprovements  50
+
+    // rounds to wait before fixing roads
+    TimeToFixRoads  10
+
+    // rounds to wait before fixing polluted tiles
+    TimeToFixPollution  20
+
+    // stored PW must exceed cost to fix + threshold
+    FixPollutionThreshold  2000
+
+    // bonus for building road tile improvements
+    RoadUtilityBonus  200
+      
+    // bonus for building production tile improvements
+    ImproveProductionBonus  150
+
+    // bonus for building growth tile improvements
+    ImproveGrowthBonus  100
+
+    // bonus to apply to cells with goods
+    ImproveGoodBonus  75
+
+    // bonus for growth improvements in smallest 20% of our cities
+    ImproveSmallCityGrowthBonus  100
+
+    // bonus for production improvements in most productive 20% of our cities
+    ImproveLargeCityProductionBonus  150
+
+    // ordered list of terrain improvements that increase growth
+    ImproveGrowthList  IMPROVEMENT_LIST_GROWTH
+
+    // ordered list of terrain improvements that increase production
+    ImproveProductionList IMPROVEMENT_LIST_PRODUCTION
+
+    // ordered list of terrain improvements to be randomly spread around
+    ImproveRandomList IMPROVEMENT_LIST_MISC
+
+    //
+    // GOALS
+    //
+
+    GoalElement { Goal GOAL_DEFEND              Priority   107000  MaxEval   2  MaxExec   1 PerCity }
+    GoalElement { Goal GOAL_SEIGE               Priority        0  MaxEval   0  MaxExec   0 }
+    GoalElement { Goal GOAL_ATTACK              Priority   905000  MaxEval  15 MaxExec   12 }
+    GoalElement { Goal GOAL_ATTACK1             Priority   904000  MaxEval  15 MaxExec   12 }
+    GoalElement { Goal GOAL_ATTACK2             Priority   903000  MaxEval  15 MaxExec   12 }
+    GoalElement { Goal GOAL_ATTACK3             Priority   902000  MaxEval  15 MaxExec   12 }
+    GoalElement { Goal GOAL_ATTACK4             Priority   901000  MaxEval  15 MaxExec   12 }
+    GoalElement { Goal GOAL_ATTACK5             Priority   900000  MaxEval  15 MaxExec   12 }
+    GoalElement { Goal GOAL_SETTLE_LAND         Priority        0  MaxEval   0  MaxExec   5 }
+    GoalElement { Goal GOAL_SETTLE_SEA          Priority        0  MaxEval   0  MaxExec   5 }
+    GoalElement { Goal GOAL_EXPLORE             Priority        0  MaxEval   0  MaxExec   5 }
+    GoalElement { Goal GOAL_ENSLAVE_SETTLER     Priority        0  MaxEval   0  MaxExec   3 }
+    GoalElement { Goal GOAL_SLAVE_RAID          Priority        0  MaxEval   0  MaxExec   3 }
+    GoalElement { Goal GOAL_CHOKEPOINT          Priority        0  MaxEval   0  MaxExec   1 }
+    GoalElement { Goal GOAL_PATROL              Priority     1000  MaxEval   5  MaxExec   1 }
+    GoalElement { Goal GOAL_CONVERT_CITY        Priority        0  MaxEval   0  MaxExec   0 }
+    GoalElement { Goal GOAL_BIOTERROR_CITY      Priority        0  MaxEval   0  MaxExec   0 }
+    GoalElement { Goal GOAL_NANOATTACK_CITY     Priority        0  MaxEval   0  MaxExec   0 }
+    GoalElement { Goal GOAL_HARASS_CITY         Priority        0  MaxEval   0  MaxExec   0 }
+    GoalElement { Goal GOAL_HARASS              Priority   200000  MaxEval   5  MaxExec   1 }
+    GoalElement { Goal GOAL_BOMBARD             Priority        0  MaxEval   0  MaxExec   0 }
+    GoalElement { Goal GOAL_EXPEL               Priority        0  MaxEval   0  MaxExec   0 }
+    GoalElement { Goal GOAL_PILLAGE             Priority     1000  MaxEval   1  MaxExec   1 PerCity }
+    GoalElement { Goal GOAL_PIRATE              Priority        0  MaxEval   0  MaxExec   0 PerCity }
+    GoalElement { Goal GOAL_COUNTER_STEALTH     Priority        0  MaxEval   0  MaxExec   0 PerCity }
+    GoalElement { Goal GOAL_GOODY_HUT           Priority        0  MaxEval   0  MaxExec   0 }
+    GoalElement { Goal GOAL_PLANT_NUKE          Priority        0  MaxEval   0  MaxExec   0 }
+    GoalElement { Goal GOAL_CREATE_PARK         Priority        0  MaxEval   0  MaxExec   0 }
+    GoalElement { Goal GOAL_SOOTHSAY			Priority        0  MaxEval   0  MaxExec   0 }
+    GoalElement { Goal GOAL_ESTABLISH_EMBASSY   Priority        0  MaxEval   0  MaxExec   0 }
+    GoalElement { Goal GOAL_FRANCHISING         Priority        0  MaxEval   0  MaxExec   0 }
+    GoalElement { Goal GOAL_STEAL_TECHNOLOGY    Priority        0  MaxEval   0  MaxExec   0 }
+	GoalElement { Goal GOAL_INVESTIGATE_CITY	Priority        0  MaxEval   0  MaxExec   0 }
+    GoalElement { Goal GOAL_INCITE_REVOLUTION   Priority        0  MaxEval   0  MaxExec   0 }
+    GoalElement { Goal GOAL_INJOIN              Priority        0  MaxEval   0  MaxExec   0 }
+    GoalElement { Goal GOAL_ASSASSINATE         Priority        0  MaxEval   0  MaxExec   0 }
+    GoalElement { Goal GOAL_UNDERGROUND_RAILWAY Priority        0  MaxEval   0  MaxExec   0 }
+    GoalElement { Goal GOAL_NUKE_CITY           Priority        0  MaxEval   0  MaxExec   0 }
+    GoalElement { Goal GOAL_WANDER              Priority        1  MaxEval   1  MaxExec   1 }
+    GoalElement { Goal GOAL_SALLY               Priority        0  MaxEval   0  MaxExec   0 }
+    GoalElement { Goal GOAL_REFORM              Priority        0  MaxEval   1  MaxExec 0.5 PerCity}
+    GoalElement { Goal GOAL_SUE_FRANCHISE       Priority        0  MaxEval   1  MaxExec 0.5 PerCity}
+    GoalElement { Goal GOAL_RETREAT             Priority        1  MaxEval   1  MaxExec   1 PerCity}
+    GoalElement { Goal GOAL_DESTROY_ENDGAME     Priority        0  MaxEval   0  MaxExec   0 }
+    GoalElement { Goal GOAL_PROTECT_ENDGAME     Priority        0  MaxEval   0  MaxExec   0 }
+
+    // multiplied by #rounds to target
+    DistanceModifierFactor  -50
+
+    // number of armies to try and disband units from per round
+    DisbandArmyCount    2
+
+	// minimum distance between settled cities 
+	// (eg. new cities must be founded atleast 2 cells from nearest cities collection border)
+    MinSettleDistance   4
+
+    // cells with settle scores below this threshold will not be used
+    MinSettleScore 600
+
+	//
+	// BUILD LISTS
+	//
+
+	// Scaled bonus (#turns) to reduce the estimated time to rush buy in most threatened city 
+	// used when deciding what city to rush buy in
+	RushBuyThreatBonus 10
+
+	// Percent of gold expenses last turn to keep in reserve when rush buying
+	RushBuyReservePercent 2.0
+
+    // Percent of civilization support dedicated to units
+    UnitSupportPercent      0.20
+
+	// Unit Percents must total to 1 (100%)
+	OffensiveUnitsPercent 0.20
+	DefensiveUnitsPercent 0.40
+	RangedUnitsPercent    0.40
+	SeaUnitsPercent       0.0
+	AirUnitsPercent       0.0
+
+    // Number of special units that should be built
+    SettlerUnitsCount       1
+    SeaTransportUnitsCount  2
+    AirTransportUnitsCount  2
+    SpecialUnitsCount       4
+
+	// Do not certain items in cities where if it takes too many turns
+	MaxSettlerBuildTurns 30
+	MaxUnitBuildTurns 25
+	MaxWonderBuildTurns 35
+
+	// maximum percent of conventional units to build before building
+	// special units of specified type
+	BuildTransportProductionLevel 0.25
+	BuildSettlerProductionLevel 0.25
+
+    // Types of standard units that should be built
+    OffensiveUnitList   UNIT_BUILD_LIST_OFFENSE
+    DefensiveUnitList   UNIT_BUILD_LIST_DEFENSE
+    RangedUnitList      UNIT_BUILD_LIST_RANGED
+    SeaUnitList         UNIT_BUILD_LIST_SEA
+    AirUnitList         UNIT_BUILD_LIST_AIR
+
+    // Types of special units that should be built
+    SettlerUnitList     UNIT_BUILD_LIST_LAND_SETTLER
+    SeaTransportUnitList   UNIT_BUILD_LIST_SEA_TRANSPORT
+    AirTransportUnitList   UNIT_BUILD_LIST_AIR_TRANSPORT
+    SpecialUnitList     UNIT_BUILD_LIST_SPECIAL_PEACEFUL
+    FreightUnitList     UNIT_BUILD_LIST_FREIGHT
+
+	// minimum number of units to keep in cities as a garrison
+    OffensiveGarrisonCount  0
+    DefensiveGarrisonCount  1
+    RangedGarrisonCount     1
+
+    // For each city with an empty build queue, build from
+    // first sequence that applies
+
+	BuildListSequenceElement {
+	  Priority 10000
+      BuildListSequence BUILD_LIST_SEQUENCE_GROWTH
+	  Bottom 0.2 
+	  GrowthCities
+	  Advice BUILD_GROWTH_ADVICE
+    }
+
+	BuildListSequenceElement {
+	  Priority 9000
+      BuildListSequence BUILD_LIST_SEQUENCE_PRODUCTION
+      Bottom 0.2
+	  ProductionCities
+	  Advice BUILD_PRODUCTION_ADVICE
+    }
+
+	BuildListSequenceElement {
+	  Priority 6000
+      BuildListSequence BUILD_LIST_SEQUENCE_GOLD
+      Bottom 0.2
+      CommerceCities
+	  Advice BUILD_GOLD_ADVICE
+    }
+
+	BuildListSequenceElement {
+	  Priority 4000
+      BuildListSequence BUILD_LIST_SEQUENCE_OFFENSE
+	  Top 0.2 
+      ThreatenedCities
+	  Advice BUILD_OFFENSE_ADVICE
+    }
+
+	BuildListSequenceElement {
+	  Priority 8000
+      BuildListSequence BUILD_LIST_SEQUENCE_SCIENCE
+	  Top 0.1 
+      ProductionCities
+	  Advice BUILD_SCIENCE_ADVICE
+    }
+
+	BuildListSequenceElement {
+	  Priority 5000
+      BuildListSequence BUILD_LIST_SEQUENCE_WONDERS
+	  Top 0.1 
+      ProductionCities
+	  Advice BUILD_WONDERS_ADVICE
+    }
+
+	BuildListSequenceElement {
+	  Priority 7000
+      BuildListSequence BUILD_LIST_SEQUENCE_DEFENSE
+	  Bottom 0.2
+      PowerCities	  
+	  Advice BUILD_DEFENSE_ADVICE
+    }
+
+	BuildListSequenceElement {
+	  Priority 3000
+      BuildListSequence BUILD_LIST_SEQUENCE_HAPPINESS
+	  Bottom 0.2
+	  HappyCities
+	  Advice BUILD_HAPPINESS_ADVICE
+    }
+
+	BuildListSequenceElement {
+	  Priority 2000
+      BuildListSequence BUILD_LIST_SEQUENCE_DEFAULT
+	  Default
+	  Advice BUILD_DEFAULT_ADVICE
+    }
+
+    //
+    //  ADVANCE LIST
+    //
+
+    Research        ADVANCE_LIST_DIPLOMATIC
+    StopResearch    ADVANCE_LIST_STOP_RESEARCH
+
+    //
+    //  DIPLOMACY
+    //
+
+    // priority for fear motivations
+    FearInvasion        1000
+    FearCityDefense     1100
+    FearPiracy           900
+    FearScienceRank      800
+    FearMilitaryRank     800
+    FearTradeRank        800
+    FearPollution        900
+
+    // priority for desire motivations
+    DesireAttack         800
+    DesireGold           900
+    DesireScience        900
+    DesireMakeFriend    1000
+    DesireEnlistFriend  1100
+
+    //
+    // TRADE
+    //
+
+    // only accumulate count of piracy if it occurs within
+    // memory of last piracy
+    PiracyMemoryTurns 6
+
+    // number of piracy events to accumulate before we kill the route
+    MaxPiracyEvents 3
+
+    //
+    // FORCE MATCHING
+    //
+
+    // AttackMatch  - ratio of army's attack strength to target's defense strength
+    // DefenseMatch - ratio of army's defense strength to target's attack strength
+    // RangedMatch  - ratio of army's ranged strength to target's ranged strength
+    // BombardMatch - ratio of army's bombard strength to target's bombard strength
+    // ValueMatch   - ratio of army's value to target's value
+	
+    Offensive {
+        AttackMatch   0.0
+        DefenseMatch  0.0
+        RangedMatch   0.0
+        BombardMatch  0.0
+        ValueMatch    0.0
+    }
+
+    Defensive {
+        AttackMatch   0.0
+        DefenseMatch  0.0
+        RangedMatch   0.0
+        BombardMatch  0.0
+        ValueMatch    0.1
+    }
+
+    Harass {
+        AttackMatch   0.0
+        DefenseMatch  0.0
+        RangedMatch   0.0
+        BombardMatch  0.0
+        ValueMatch    0.2
+    }
+
+    StealthAttack {
+        AttackMatch   0.0
+        DefenseMatch  0.0
+        RangedMatch   0.0
+        BombardMatch  0.0
+        ValueMatch    0.3
+    }
+
+    Bombard {
+        AttackMatch   0.0
+        DefenseMatch  0.0
+        RangedMatch   0.0
+        BombardMatch  0.0
+        ValueMatch    0.4
+    }
+
+    Special {
+        // no force matching for special attacks
+        AttackMatch  0.0
+        DefenseMatch 0.0
+        RangedMatch  0.0
+        BombardMatch 0.0
+        ValueMatch   0.5
+    }
+}
+
+////////////////////////////////////////
+//
+// Defense Strategies
+//
+////////////////////////////////////////
+
+STRATEGY_DEFENSE_NONE {
+
+    // minimum number of units to keep in cities as a garrison
+    OffensiveGarrisonCount  0
+    DefensiveGarrisonCount  0
+    RangedGarrisonCount     0
+}
+
+STRATEGY_DEFENSE_VERY_LOW {
+
+    // minimum number of units to keep in cities as a garrison
+    OffensiveGarrisonCount  0
+    DefensiveGarrisonCount  1
+    RangedGarrisonCount     1
+}
+
+STRATEGY_DEFENSE_LOW {
+
+    // minimum number of units to keep in cities as a garrison
+    OffensiveGarrisonCount  0
+    DefensiveGarrisonCount  2
+    RangedGarrisonCount     2
+}
+
+STRATEGY_DEFENSE_MEDIUM {
+
+    // minimum number of units to keep in cities as a garrison
+    OffensiveGarrisonCount  0
+    DefensiveGarrisonCount  2
+    RangedGarrisonCount     3
+}
+
+STRATEGY_DEFENSE_HIGH {
+
+    // minimum number of units to keep in cities as a garrison
+    OffensiveGarrisonCount  0
+    DefensiveGarrisonCount  3
+    RangedGarrisonCount     3
+}
+
+STRATEGY_DEFENSE_VERY_HIGH {
+
+    // minimum number of units to keep in cities as a garrison
+    OffensiveGarrisonCount  0
+    DefensiveGarrisonCount  4
+    RangedGarrisonCount     4
+}
+
+////////////////////////////////////////
+//
+// Nuclear Strategies
+//
+////////////////////////////////////////
+
+STRATEGY_LAUNCH_NUKES {
+	NuclearFirstStrike: Enabled
+	NuclearTargeting: Enabled
+
+	// do not perform first strike if our regard is above some limit
+	PreemptiveStrikeRegard 100
+
+	// how many foreign boom booms are enough to wipe us off the map?
+	// (eg. if more than 1 foreign nuke to every 4 of our cities would be
+	//  enough to prevent us from launching, specify 0.25)
+	PreemptiveStrikeRiskRatio 0.35
+
+	// when do we have enough nukes to wipe them off the map?
+	// (eg. if having less than 3 nukes to every 4 enemy cities prevents 
+	//  us from launching, specify 0.75)
+	PreemptiveStrikeSuperiorityRatio 0.65
+
+}
+
+STRATEGY_MINIMAL_NUKES {
+    SpecialUnitList     UNIT_BUILD_LIST_SPECIAL_NUCLEAR
+    SpecialUnitsCount       10
+}
+
+STRATEGY_AVERAGE_NUKES {
+    SpecialUnitList     UNIT_BUILD_LIST_SPECIAL_NUCLEAR
+    SpecialUnitsCount       25
+}
+
+STRATEGY_MAXIMUM_NUKES {
+    SpecialUnitList     UNIT_BUILD_LIST_SPECIAL_NUCLEAR
+    SpecialUnitsCount       50
+}
+

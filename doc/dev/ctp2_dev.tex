@@ -1,0 +1,76 @@
+\documentclass[a4paper,11pt]{book}
+\usepackage[latin1]{inputenc}
+\usepackage{calc}
+\usepackage{longtable}
+\usepackage[english]{babel}
+\newif\ifpdf\ifx\pdfoutput\undefined\pdffalse\else\pdfoutput=1\pdftrue\fi
+
+\ifpdf
+   \usepackage[pdftex, bookmarks=true, pdfpagemode=None, pdfstartview=FitH, citecolor=blue, link
+color=blue, urlcolor=blue, colorlinks=true]{hyperref}
+   \usepackage[pdftex]{graphicx}
+%   \setlength{\pdfhorigin}{0pt}
+%   \setlength{\pdfvorigin}{0pt}
+   \pdfinfo{/Title      (CtP2 Source Code Project Documentation)
+   }
+\else
+   \usepackage[citecolor=blue, linkcolor=blue, urlcolor=blue, colorlinks=true]{hyperref}
+   \usepackage{graphicx}
+\fi
+
+\usepackage[a4paper,
+		top=20mm, bottom=20mm, left=25mm, right=25mm
+	]{geometry}
+
+\setlength{\parindent}{0pt}
+\setlength{\parskip}{1ex plus 0.5ex minus 0.2ex}
+
+\setcounter{tocdepth}{4}
+\setcounter{secnumdepth}{4}
+
+\newcommand{\commondir}{../common}
+
+\begin{document}
+
+\pagenumbering{roman}
+\title{CtP2 Source Code Project\\[5mm]
+Developer Documentation\\[20mm]
+\includegraphics[scale=0.5]{\commondir /images/wallpaper1_640x480_2}\\[5mm]}
+\author{\href{http://ctp2files.apolyton.net/source/}{Apolyton}}
+\date{\today}
+\maketitle
+\tableofcontents
+\newpage
+\pagenumbering{arabic}
+\mainmatter
+
+\chapter{Introduction\label{toc:introduction}}
+You should thoroughly read the EULA following this page; it contains important legal information on what you are allowed to do with the Civilization Call To Power 2 sources.
+
+\include{include/eula}
+%\newpage
+\include{include/setup_win32}
+
+\include{include/make_win32}
+
+%\newpage
+%\pagenumbering{Roman}
+\appendix
+\include{include/a_defines}
+\include{include/a_file_describe}
+
+\include{include/a_dspconfig}
+
+\include{include/a_deadcode}
+\include{include/a_misc}
+\chapter{FAQs}
+\newcommand{\addquestion}[2]{\subsection{#1}
+#2
+}
+\include{include/a_faq_project}
+\include{include/a_faq_licence}
+
+%\newpage
+\backmatter
+
+\end{document}

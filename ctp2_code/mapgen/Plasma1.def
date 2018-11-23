@@ -1,0 +1,4 @@
+LIBRARY Plasma1
+DESCRIPTION "Map Generator Plugin"
+EXPORTS
+	CoCreateMapGenerator @1

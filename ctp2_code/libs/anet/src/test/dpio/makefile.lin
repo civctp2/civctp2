@@ -1,0 +1,21 @@
+# Makefile for dpiot2, a unit test for dpio
+
+PACK=__attribute__ ((packed))
+OPT = -DUNIX -Dcdecl="" "-D__NO_ANONYMOUS_UNIONS__" "-DPACK=$(PACK)" -I. -I../../../../h -I../../../../demo/utils -I..
+COPT = $(FLAGS) $(OPT)
+OBJ_FILES = dpiot2.o /usr/lib/libm.a /usr/lib/libbsd.a ../../../../linux86/lib/$(dp_LIB)
+
+default: ../../../../linux86/bin/$(DEST) 
+
+../../../../linux86/bin/$(DEST): $(DEST)
+	if [ ! -d ../../../../linux86 ]; then mkdir ../../../../linux86; fi
+	if [ ! -d ../../../../linux86/bin ]; then mkdir ../../../../linux86/bin; fi
+	cp $(DEST) ../../../../linux86/bin
+
+$(DEST): $(OBJ_FILES)
+	gcc $(COPT) $(OBJ_FILES) $(LOPT) -o $(DEST)
+
+dpiot2.o: ../dpiot2.c ../../../../h/dp2.h
+	gcc -c $(COPT) ../dpiot2.c
+
+# end of MAKEFILE

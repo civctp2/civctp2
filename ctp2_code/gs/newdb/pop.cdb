@@ -1,0 +1,11 @@
+
+Pop {
+	Record Advance EnableAdvance
+	Record Government[] GovernmentsModified
+
+	Int Science = 0
+	Int Happiness = 0
+	Int Food = 0
+	Int Production = 0
+	Int Commerce = 0
+}

@@ -1,0 +1,92 @@
+
+CITYSIZE_ZERO {
+		Population	 0
+		SquaredRadius	 0
+		IntRadius	 0
+		MaxWorkers	 0
+		GrowthRate 	 15
+		MinGrowthRate 	 2500
+		MaxSurplusFood 	 250
+		BaseOvercrowding 4
+		BaseMaxPop 	 18
+		VisionRadius	 1.414
+}
+
+CITYSIZE_ONE {
+		Population	 6
+		SquaredRadius	 2
+		IntRadius	 1
+		MaxWorkers	 6
+		GrowthRate 	 15
+		MinGrowthRate 	 2500
+		MaxSurplusFood 	 250
+		BaseOvercrowding 4
+		BaseMaxPop 	 18
+		VisionRadius	 1.414
+}
+
+CITYSIZE_TWO {
+		Population	 18
+		SquaredRadius	 5
+		IntRadius	 2
+		MaxWorkers	 18
+		GrowthRate	 15
+		MinGrowthRate	 5000
+		MaxSurplusFood	 500
+		BaseOvercrowding 4
+		BaseMaxPop	 18
+		VisionRadius	 2.236
+}
+
+CITYSIZE_THREE {
+		Population	 32
+		SquaredRadius	 13
+		IntRadius	 3
+		MaxWorkers	 32
+		GrowthRate	 15
+		MinGrowthRate	 7500
+		MaxSurplusFood	 750
+		BaseOvercrowding 4
+		BaseMaxPop	 18
+		VisionRadius	 3.606
+}
+
+CITYSIZE_FOUR {
+		Population	 46
+		SquaredRadius	 17
+		IntRadius	 4
+		MaxWorkers	 46
+		GrowthRate	 15
+		MinGrowthRate	 10000
+		MaxSurplusFood	 1000
+		BaseOvercrowding 4
+		BaseMaxPop	 18
+		VisionRadius	 4.123
+}
+
+CITYSIZE_FIVE {
+		Population	 60
+		SquaredRadius	 20
+		IntRadius	 4
+		MaxWorkers	 60
+		GrowthRate	 15
+		MinGrowthRate	 15000
+		MaxSurplusFood	 1500
+		BaseOvercrowding 4
+		BaseMaxPop	 18
+		VisionRadius	 4.472
+}
+
+CITYSIZE_SIX {
+		Population	 60
+		SquaredRadius	 20
+		IntRadius	 4
+		MaxWorkers	 60
+		GrowthRate	 15
+		MinGrowthRate	 20000
+		MaxSurplusFood	 2000
+		BaseOvercrowding 4
+		BaseMaxPop	 18
+		VisionRadius	 4.472
+}
+

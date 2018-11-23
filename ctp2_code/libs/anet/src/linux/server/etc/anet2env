@@ -1,0 +1,24 @@
+#(shell script fragment)
+# Set the variables used by the ActiveNet server.
+#
+# Home directory and web directory (must be web accessible).
+# Customize for your system.
+ANET2_HOME=/home/alink
+ANET2_WEBHOME=$ANET2_HOME/public_html
+
+# Paths to files and directoryies used by anet server.
+# Generally, there will be no need to change anything below.
+ANET2_EXEC=$ANET2_HOME/etc/anet3srv
+ANET2_FREEZE=/tmp/anet3srv.dat
+ANET2_INI=
+ANET2_LOG=/tmp/anet3srv.log
+ANET2_CRASHLOG=$ANET2_WEBHOME/atvilog.bin
+ANET2_ROOM=$ANET2_HOME/etc/names.txt
+ANET2_SERVERS=$ANET2_HOME/etc/servers.txt
+ANET2_APPS=$ANET2_HOME/etc/apps.txt
+ANET2_WEB="$ANET2_WEBHOME/*.tpl"
+ANET2_WMQ_OUT=$ANET2_HOME/etc/wmqout
+
+#This is a shell script fragment.  It must be run by another
+#shell script, using the line (note the leading period):
+# . ~/etc/anet2env

@@ -1,0 +1,6 @@
+#!/bin/sh
+# Clean for AnalAEH
+rm -fr normal
+rm -fr debug
+rm -fr profile
+rm -fr log

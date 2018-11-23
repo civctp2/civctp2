@@ -1,0 +1,18 @@
+Welcome to the Call to Power 2(TM) editor!
+
+A few very important notes before you get started:
+
+
+PROGRAM UTILITIES. These files contain certain design, programming and processing utilities, tools, assets and other resources ("Program Utilities") for use with Call To Power 2 (the "Program") that allow you to create customized new game levels and other related game materials for personal use in connection with the Program ("New Game Materials"). Activision does not provide technical support for the Program Utilities or for New Game Materials created by using the Program Utilities.  The use of the Program Utilities is subject to the following additional license restrictions:
+
+You agree that, as a condition to your using the Program Utilities, you will not use or allow third parties to use the Program Utilities and the New Game Materials created by you for any commercial purposes, including but not limited to selling, renting, leasing, licensing, distributing, or otherwise transferring the ownership of such New Game Materials, whether on a stand alone basis or packaged in combination with the New Game Materials created by others, through any and all distribution channels, including, without limitation, retail sales and on-line electronic distribution. You agree not to solicit, initiate or encourage any proposal or offer from any person or entity to create any New Game Materials for commercial distribution. You agree to promptly inform Activision in writing of any instances of your receipt of any such proposal or offer.
+
+If you decide to make available the use of the New Game Materials created by you to other gamers, you agree to do so solely without charge. 
+
+New Game Materials shall not contain modifications to any COM, EXE or DLL files or to any other executable Product files.
+
+New Game Materials may be created only if such New Game Materials can be used exclusively in combination with the retail version of the Program. New Game Materials may not be designed to be used as a stand-alone product.
+
+New Game Materials must not contain any illegal, obscene or defamatory materials, materials that infringe rights of privacy and publicity of third parties or (without appropriate irrevocable licenses granted specifically for that purpose) any trademarks, copyright-protected works or other properties of third parties.
+
+All New Game Materials must contain prominent identification at least in any on-line description and with reasonable duration on the opening screen: (a) the name and E-mail address of the New Game Materials creator(s) and (b) the words "THIS MATERIAL IS NOT MADE OR SUPPORTED BY ACTIVISION."

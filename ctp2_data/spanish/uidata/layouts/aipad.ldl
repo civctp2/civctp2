@@ -1,0 +1,50 @@
+#######################################
+
+# File: aipad.ldl
+
+# Last Access: Mon Jun 01 13:01:31 1998
+
+#######################################
+
+
+
+##-----------------------------------##
+
+##              Data                 ##
+
+##-----------------------------------##
+
+AIPad {
+
+	string	pattern	"upba3010.tgaf"
+
+	int	xpix	0
+
+	int	ypix	0
+
+	int	widthpix	320
+
+	int	heightpix	400
+
+
+
+	ExitButton:CTP2_STANDARD_FONT {
+
+		int	xpix	300
+
+		int	ypix	5
+
+		int	widthpix	15
+
+		int	heightpix	15
+
+		string	text	"str_ldl_X"
+		string	pattern	"upba3010.tga"
+
+	}
+
+}
+
+
+
+$

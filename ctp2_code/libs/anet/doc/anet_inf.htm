@@ -1,0 +1,362 @@
+<html>
+<head>
+<title>Anet.inf - Anet Game Information File Format</title>
+</head>
+<body>
+<h1>Anet.inf - Anet Game Information File Format</h1>
+<h2>Contents</h2>
+<ul>
+<li><a href="#Introduction">Introduction</a>
+<li><a href="#Activenet">[Activenet]</a>
+<li><a href="#Version Info">[Version Info]</a>
+<li><a href="#Product Info">[Product Info]</a>
+<li><a href="#Registry">Registry</a>
+<li><a href="#Example">Example</a>
+<li><a href="#Notes">Notes</a>
+<li><a href="#Recent_History">Recent Usage History</a>
+</ul>
+
+<a name="Introduction"><h2>Introduction</h2></a>
+
+This file is used by <a href="index.html">Anet</a>,
+by patch programs, and by the standard splash 
+screen's Customer Support function.  
+<p>
+The file is divided into three sections: 
+<a href="#Activenet"> [Activenet]</a>,
+<a href="#Version Info">[Version Info]</a>,
+and 
+<a href="#Product Info">[Product Info]</a>.
+<p>
+Some of these sections contain numbers or codes assigned by a
+central authority.  In these cases, the authority to contact
+to get a new code is clearly identified.
+
+<h2><a name="Activenet">[Activenet]</a></h2>
+The [ActiveNet] section is used by the Anet library, which handles
+crash reporting, online gaming, and autoupdating.  It is also used
+when launching into the game from <a href="services.htm">third-party
+shells</a>.
+<p>
+It contains the following fields:
+<ul>
+<li>
+<a name="Activenet_Version">
+<b><a name="patchversion">Version</a></b>
+</a>
+is a two-part build identifier; it consists of a the major build number
+followed by a period and then the minor build number.  Both
+numbers must be integers in the range 0 to 255.
+<p>
+These version numbers can be compared between any two
+games which have the same Sessiontype.  When comparing
+version numbers, the major number is compared first.
+If that is the same, the minor number is compared.
+<p>
+When Production changes a product and sends it to QA for testing,
+to outside beta testers, or anywhere outside their immediate control,
+they must increment the version number.  Once a product has been
+sent outside the Production area, the Version number it carried should
+never be reused (except by localizations that only add localized files
+without modifying any code files).
+<p>
+<li>
+<b><a name="sessiontype">Sessiontype</a></b> is a number that identifies both the product and the
+"compatibility group" of the product.  If you come out with ten
+versions of a game that can all play against each other on the network,
+they all get the same sessiontype.  A table giving 
+sessiontype, URL for the related game, and game name is at
+<a href="http://updater.activision.com/updater/etc/types.txt">
+http://updater.activision.com/updater/etc/types.txt</a>.
+See below <a href="#ActivenetAuthority">for how to get a new sessionType
+assigned for your game</a>.
+<p>
+<li>
+<b><a name="language">Language</a></b> is a number indicating what language-specific patch
+should be downloaded if a patch is needed.  Choices are:
+<ul>
+<li>  1       = English
+<li>  2       = German
+<li>  4       = French
+<li>  8       = Spanish
+<li>  16      = Italian
+<li>  32      = Portuguese
+<li>  64      = Japanese
+</ul>
+See below <a href="#ActivenetAuthority">for how to get a new language code
+assigned, if you're localizing to a language not in that list</a>.
+<p>Note: this field should not be used to indicate whether a
+product has been censored to meet a particular country's violence
+requirements.
+<p>Note: QA currently requires a single patch .exe to patch 
+all languages, so this feature has not yet been useful.  When we are able to
+structure our patches to meet QA's needs, yet not be bloated with
+unused languages, this feature may become useful.  In anticipation
+that a future patch will do this, you should be careful to put the
+right language code in this field of anet.inf.
+<p>Two-character ISO standard language codes are also available, and
+a mapping between them and the above numerical codes has been defined.
+Ask Dan Kegel for info if you want to use these.
+<p>
+<li>
+<b><a name="platform">Platform</a></b> is a number indicating what platform-specific patch
+should be downloaded if a patch is needed.  A new code will need to be allocated for each 
+platform that requires a different downloaded patch.  Choices are presently limited:
+<ul>
+<li>1 = Win95
+<li>2 = Win95/Pentium III Only (First used by Heavy Gear 2)
+</ul>
+Other values might be used for, e.g. large asset install options,
+unlockable products, Macintosh
+products, Linux products, or product versions which are highly specific to
+a particular graphics card.  If you're doing anything like that,
+see below 
+<a href="#ActivenetAuthority">for how to get a new platform code assigned</a>.
+Don't make up new platform codes without getting them assigned first!
+<p>
+<li>
+<B>Name</B> is the name of the game, for displaying to the user in
+a menu of all installed games.
+<p>
+<li>
+<b><a name="run">Run</a></b>
+is the executable file to run when launching from a third party shell.  It is a
+path relative to the anet.inf file.  This should not contain spaces (under Win95, you can use the 8.3 alias
+if the real filename contains spaces or punctuation).  Using this line without 'Cmdline' is equivalent to
+launching the game the way the user would launch it through windows.  
+<p>
+<li>
+<b>Cmdline</b>
+is the commandline to pass to the executable when launching from a
+third party shell.
+</ul>
+
+<h3><a name="ActivenetAuthority">Assigned Numbers Authority</a></h3>
+To get new sessionType, Language, or Platform codes assigned,
+or to get answers to questions about them,
+contact <a href="mailto:dank-anet@kegel.com">Dan Kegel,
+dank-anet@kegel.com</a>.
+
+<h2><a name="Version Info">[Version Info]</a></h2>
+This section contains information used by the 'CS' screen 
+and by patch programs.
+(This used to be found in the file ver.txt.)
+<p>
+This contains the following fields:
+
+<ul>
+<li>
+<b><a name="displayversion">Version</a></b>
+is the external, or displayed, version of the product, 
+as determined by marketing. 
+It is referred to by register.exe, the CS screen, and patch programs.
+It can be an arbitrary unquoted string, e.g. <tt>Version=1.1a Beta</tt>
+<li>
+<b>QA</b>
+is a value assigned by QA.  It was originally intended to
+identify the product uniquely among all of its release forms.
+This has to some extent been replaced by the 
+<a href="#Activenet_Version">[Activenet] section's Version field</a>.
+</ul>
+
+<h2><a name="Product Info">[Product Info]</a></h2>
+This section is used by register.exe.  
+(This info used to be the product.ini file.)
+<p>
+It contains the following fields:
+<ul>
+<li>
+<b>ProductID</b>
+is a unique id string to identify the product.  In the past, it was
+a function of cross-production to determine this string.  Currently, it is the
+responsibility of the production team to invent a string and communicate it to
+Bob Jensen or David Vonderhaar, who are in charge of handling the registration 
+information sent to our servers.
+
+<li>
+<b>ProductName</b>
+used to be a string for display purposes.  For versions of register.exe after 23 Nov 1998,
+this field is unnecessary.  E-Reg looks to Name in the ActiveNet block instead.
+
+<li>
+<b>RegNum</b>
+is a ten-digit phone number used for dialup connections.  For versions of register.exe after 23 Nov 1998,
+this field is unnecessary, as dialup is no longer supported.  This value of this field has remained
+constant for a long while now.  To contrast, information sent via webreg is posted to our servers at the url:
+http://cgi.activision.com/cgi/webreg/webreg.  This URL string is not in the
+anet.inf.  It is hardcoded into register.exe.  You can browse to this URL, but
+you won't see anything interesting there.  It's only there to receive posted
+information, not send.
+
+<li>
+<b>WebReg</b>
+was the full URL used when submitting registration information via http to 
+the game vendor.  
+</ul>
+
+<a name="Registry"><h2>Registry Usage</H2></a>
+<h3>Game Browser Registry Usage</h3>
+Games that can be launched by third-party game networks should
+have their installers create a key in the Registry under 
+HKEY_LOCAL_MACHINE/SOFTWARE/Activision/Activenet/Applications/
+containing a subkey named 'Cwd' containing the absolute path to the 
+directory the game is installed in. 
+This allows us to browse the installed launchable games on this system.
+<p>
+If we wanted to allow multiple versions of a game to be installed on the
+same machine, this key should have a different name for each 
+sessionType/language/platform combination.
+The suggested registry key in that case would be 
+SessionType.Platform.Language, e.g. 1101.1.2 for Heavy Gear version 1.0 / Win95 / German, and patches should rename this registry key 
+if they change the sessionType.  That is, the Heavy Gear 1.1 -> 1.2 patch
+should change the registry key from 1101.1.2 to 1102.1.2,
+because Heavy Gear 1.2's SessionType is 1102.
+<p>
+If we don't want to allow multiple versions of a game to be installed,
+this key should be the unvarying unique key for the product.  For example, this key could use the
+same name as the subkey created under the Uninstall key (described below).
+<h3>Uninstaller / Splash Screen Registry Usage</h3>
+Product installers must create a subkey under
+HKEY_LOCAL_MACHINE/SOFTWARE/Microsoft/Windows/CurrentVersion/Uninstall/, such as
+Activision_HeavyGear2UninstallKey.
+<p>
+Note that this key identifier is yet another identifier for the product.
+It has the following requirements: it cannot change from version to version
+of the product, since it is hardcoded in the CD-ROM.
+<p>
+The values contained in this key are:
+<ul>
+<li>
+<b>UninstallString</b>
+This is required by Win95.  
+It is the command line to be executed to uninstall the product, and
+is of the form
+'short-path-to-uninstall.exe long-path-of-uninstall-logfile-for-product',
+and can also be used to determine the installed directory of the product,
+since the uninstall logfile is always placed in 
+TARGETDIR:/uninstall/
+<p>
+<li>
+<b>EXE</b>
+This is the full path to the product's main executable.
+<p>
+This is used by the CD-ROM splash screen to decide whether the product
+is installed.  If the file exists, the product is installed.  However, the
+installer uses information hardcoded into the CD-ROM to decide which files to run,
+and how to run them, not this registry value.
+<p>
+<li>
+<b>DisplayName</b>
+This is required by Win95.
+It is how the product is displayed in Add/Remove Programs in the control
+panel.  The installer sets this to be the same string added to the line 'Name' in
+block 'ActiveNet'.
+<p>
+</ul>
+<p>
+Other than these two registry keys, nothing else should be added by
+installers and patching programs, if avoidable, as it is wise not to
+rely on the registry to store any valuable information other than the
+location of the installed product.
+
+<p>
+
+<a name="Example"><h2>Example</h2></a>
+Here is the ANET.INF for an installation of a hypothetical German
+version 1.3 (build 2.44) of Heavy Gear:
+<pre>
+[ActiveNet]
+Cmdline=
+Name=Heavy Gear
+Run=heavyg~1.exe
+SessionType=1103
+Platform=1
+Language=2
+Version=2.44
+
+[Version Info]
+Version=1.3
+QA=1179
+
+[Product Info]
+ProductID=HGEARW95
+ProductName=Heavy Gear
+RegNum=8005079063
+</pre>
+
+To have the installer install this anet.inf file, it would be recommended to put the following partial
+anet.inf file in the same directory as the installer's setup.exe file (and have no other instances of the
+anet.inf file on the CD-ROM):
+
+<pre>
+[ActiveNet]
+Cmdline=
+Run=heavyg~1.exe
+SessionType=1103
+Version=2.44
+
+[Version Info]
+Version=1.3
+QA=1179
+
+[Product Info]
+ProductID=HGEARW95
+ProductName=Heavy Gear
+RegNum=8005079063
+</pre>
+
+and then have the installer install this file and have it add the following lines:
+
+<pre>
+[ActiveNet]
+Name=X
+Platform=X
+Language=X
+</pre>
+
+the values of these lines are best added by the installer at install time because:
+
+<ul>
+<li>
+'Name' is localized text, which is also written to the Uninstall key in the registry.
+
+<li>
+'Platform' may depend on install choices made by the user.
+
+<li>
+'Language' is a language dependent number, as described earlier.
+
+</ul>
+
+At run time, the installer would also create the the Registry key 
+HKEY_LOCAL_MACHINE/SOFTWARE/Activision/Activenet/Applications/'UninstallKey',
+
+where 'UninstallKey' is the CD-ROM hardcoded subkey name also used under the Uninstall registry key described above.
+The single string value "Cwd" in this key would be set to "C:\Programm Dateien\Activision\Heavy Gear",
+or whatever the user chose as a target directory.  
+
+<a name="Notes"><h2>Notes</h2></a>
+There is some duplication between the sections of this file.
+Duplication should be reduced in the future, and 
+some of these fields be made obsolete, by changing the fields
+used by some of our programs to match the fields used by other
+programs.
+
+<p>
+There are many different versions of the human-readable product name.
+<p>
+There are many different versions of a unique key identifying the product.
+Some must change from version to version; some must remain the same.
+<p>
+The notion of version number is under debate.  Some people want it to be
+a floating-point number; others want it to be two integers separate by
+a period.  This is not a trivial distinction, as it radically changes
+how one compares version numbers.
+
+<hr>
+<i>Dan Kegel</i>
+
+<p>
+<i>Ben Siron</i>
+</body>
+</html>
