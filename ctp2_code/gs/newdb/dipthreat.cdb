@@ -1,0 +1,15 @@
+
+DiplomacyThreat {
+	StringID Title
+	String Type
+
+	Bits Arg1 {
+		ThirdParty,
+		HisCity,
+		SpecialAttack,
+		AgreementId
+	}
+
+	StringID Details
+		
+}

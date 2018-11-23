@@ -1,0 +1,19 @@
+<HTML>
+<HEAD>
+<META HTTP-EQUIV="Refresh" CONTENT="60">
+<TITLE>Game Server Status</TITLE>
+</HEAD>
+<BODY>
+<h2>Activision Game Server Status</h2>
+
+<table>
+<tr><th>Server<th>Most recent connect status<th>Last successful join time<th>#failures in past 24 hrs.
+<tr><td>
+SERVLIST sep=<tr><td> after={MOSTRECENT}<td>{TOTTIME}<td>{FAILURE}
+</table>
+
+<br>
+This page last updated {TIME}.<br>
+Page will reload automatically if your browser supports this feature.
+</BODY>
+</HTML>

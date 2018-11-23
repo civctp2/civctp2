@@ -1,0 +1,46 @@
+//terrain type scores for finding out where a good place to settle is
+//holds all the scores for all terrain types
+
+int_t TERRAIN_SCORE[];
+
+void_f FillUpTerrainScores()
+{
+	TERRAIN_SCORE[0] = 65;		//forest	
+	TERRAIN_SCORE[1] = 65;		//plains
+	TERRAIN_SCORE[2] = -20;		//tundra
+	TERRAIN_SCORE[3] = -40;		//glacier	
+	TERRAIN_SCORE[4] = 80;		//grassland
+	TERRAIN_SCORE[5] = -10;		//desert
+	TERRAIN_SCORE[6] = -10;		//swamp
+	TERRAIN_SCORE[7] = 50;		//jungle
+	TERRAIN_SCORE[8] = 60;		//mountain
+	TERRAIN_SCORE[9] = 65;		//hill	
+	TERRAIN_SCORE[10] = 75;		//shallow water	
+	TERRAIN_SCORE[11] = 0;		//deep water
+	TERRAIN_SCORE[12] = 0;		//water volcano
+	TERRAIN_SCORE[13] = 85;		//beach
+	TERRAIN_SCORE[14] = 0;		//shelf
+	TERRAIN_SCORE[15] = 0;		//trench
+	TERRAIN_SCORE[16] = 0;		//rift
+	TERRAIN_SCORE[17] = 0;		//dead
+	TERRAIN_SCORE[18] = 30;		//desert hill
+	TERRAIN_SCORE[19] = 40;		//desert mountain
+	TERRAIN_SCORE[20] = 10;		//polar hill
+	TERRAIN_SCORE[21] = 30;		//polar mountain
+	TERRAIN_SCORE[22] = 0;		//kelp
+	TERRAIN_SCORE[23] = 0;		//reef
+}
+
+//this won't work - copy/paste this into the messageox before the text
+void_f SetDirStrings() 
+{
+	SetString(0, ID_T_NORTH);
+	SetString(1, ID_T_NORTHEAST);
+	SetString(2, ID_T_EAST);
+	SetString(3, ID_T_NORTHWEST);
+	SetString(4, ID_T_SOUTHEAST);
+	SetString(5, ID_T_WEST);
+	SetString(6, ID_T_SOUTHWEST);
+	SetString(7, ID_T_SOUTH);
+	SetString(8, ID_T_SELF);
+}	 

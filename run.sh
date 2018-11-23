@@ -14,6 +14,6 @@ docker run -it \
        --env="XAUTHORITY=${XAUTH}" \
        --env="DISPLAY" \
        --user="diUser" \
-       registry.gitlab.com/lynxabraxas/ctp2df/linux:builder-latest $@
+       registry.gitlab.com/civctp2/civctp2/linux:builder-latest $@
 
 rm $XAUTH # remove to avoid accumulation of xauth settings

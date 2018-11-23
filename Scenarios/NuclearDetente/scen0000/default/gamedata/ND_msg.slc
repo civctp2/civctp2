@@ -1,0 +1,231 @@
+// Messages for the Nuclear Detente scenario
+
+messagebox 'NDStartMessageA' {
+	player[0] = 1;
+	Show();
+	Title(ID_ND_START_TITLE);
+	Text(ID_ND_START_MESSAGE_A);
+	Button(ID_ND_BUTTON_NEXT) {
+		Kill();
+		Message(1, 'NDStartMessageB');
+	}
+}
+
+messagebox 'NDStartMessageB' {
+	Show();  Title(ID_ND_LAUNCH_CODE_TURNS2);
+	Text(ID_ND_START_MESSAGE_B);
+	Button(ID_ND_BUTTON_RULES) {
+		Kill();
+		LibraryConcept(71);		// Display the Scenario Rules entry of the Great Library
+	}
+	Button(ID_ND_BUTTON_BACK) {
+		Kill();
+		Message(1, 'NDStartMessageA');
+	}
+}
+
+alertbox 'NDCantMoveNukes' {
+	Show();  Title(ID_ND_LAUNCH_CODE_TURNS2);
+	Text(ID_ND_CANT_MOVE_NUKES);
+	Button(ID_ND_BUTTON_OK) {
+		Kill();
+	}
+}
+
+alertbox 'NDDisbandNukeWarning' {
+	Show();  Title(ID_ND_LAUNCH_CODE_TURNS2);
+	Text(ID_ND_DISBAND_NUKE_WARNING);
+	Button(ID_ND_BUTTON_YES) {
+		Kill();
+		Event:DisbandArmyOrder(nukeArmy);
+	}
+	Button(ID_ND_BUTTON_NO) {
+		Kill();
+		EnableTrigger('NDDisbandNukeWarning_F');	
+		EnableTrigger('NDDisbandNukeWarning2_F');
+	}
+}
+
+alertbox 'NDDisbandNukeWarning2' {
+	Show();  Title(ID_ND_LAUNCH_CODE_TURNS2);
+	Text(ID_ND_DISBAND_NUKE_WARNING);
+	Button(ID_ND_BUTTON_YES) {
+		Kill();
+		Event:DisbandUnit(nukeUnit);
+	}
+	Button(ID_ND_BUTTON_NO) {
+		Kill();
+		EnableTrigger('NDDisbandNukeWarning_F');	
+		EnableTrigger('NDDisbandNukeWarning2_F');
+	}
+}
+
+alertbox 'NDLoseNuclearWarA' {
+	Show();  Title(ID_ND_LAUNCH_CODE_TURNS2);
+	Text(ID_ND_LOSE_NUCLEAR_WAR_A);
+	Button(ID_ND_BUTTON_NEXT) {
+		Kill();
+		Message(1, 'NDLoseNuclearWarB');
+	}
+}
+
+alertbox 'NDLoseNuclearWarB' {
+
+    int_t strategyindex;
+	strategyindex = StrategyDB(STRATEGY_LAUNCH_NUKES);
+
+	Show();  Title(ID_ND_LAUNCH_CODE_TURNS2);
+	Text(ID_ND_LOSE_NUCLEAR_WAR_B);
+	Button(ID_ND_BUTTON_OK) {
+		Kill();
+	    ConsiderStrategicState(1, 9999, strategyindex,-1,-1,-1);
+		ComputeCurrentStrategy(1);
+		TargetNuclearAttack(1, 2, 1);
+	}
+	Button(ID_ND_BUTTON_BACK) {
+		Kill();
+		Message(1, 'NDLoseNuclearWarA');
+	}
+}
+
+
+messagebox 'NDDefuserWarning' {
+	Show();  Title(ID_ND_LAUNCH_CODE_TURNS2);
+	Text(ID_ND_DEFUSER_WARNING);
+}
+
+alertbox 'NDLoseDefuser' {
+	Show();  Title(ID_ND_LAUNCH_CODE_TURNS2);
+	Text(ID_ND_LOSE_DEFUSER);
+	Button(ID_ND_BUTTON_OK) {
+		Kill();
+		player[0] = 1;
+			GameOver(1, 2);
+	}
+}
+
+alertbox 'NDWinDefuser' {
+	Show();  Title(ID_ND_LAUNCH_CODE_TURNS2);
+	Text(ID_ND_WIN_DEFUSER);
+	Button(ID_ND_BUTTON_OK) {
+		Kill();
+		GameOver(1, 1);
+	}
+}
+
+messagebox 'NDLaunchCode1' {
+	Show();  Title(ID_ND_LAUNCH_CODE_TURNS2);
+	if (codeCounter != 1) {
+		SetString(0, ID_ND_LAUNCH_CODE_TURNS);
+	} else {
+		SetString(0, ID_ND_LAUNCH_CODE_TURNS2);
+	}
+	Text(ID_ND_LAUNCH_CODE_1);
+	Button(ID_ND_BUTTON_OK) {
+		Kill();
+	}
+}
+
+messagebox 'NDLaunchCode2' {
+	Show();  Title(ID_ND_LAUNCH_CODE_TURNS2);
+	if (codeCounter != 1) {
+		SetString(0, ID_ND_LAUNCH_CODE_TURNS);
+	} else {
+		SetString(0, ID_ND_LAUNCH_CODE_TURNS2);
+	}
+	Text(ID_ND_LAUNCH_CODE_2);
+	Button(ID_ND_BUTTON_OK) {
+		Kill();
+	}
+}
+
+messagebox 'NDLaunchCodeReset' {
+	Show();  Title(ID_ND_LAUNCH_CODE_TURNS2);
+	Text(ID_ND_LAUNCH_CODE_RESET);
+}
+
+alertbox 'NDWinLaunchCode' {
+	Show();  Title(ID_ND_LAUNCH_CODE_TURNS2);
+	Text(ID_ND_WIN_LAUNCH_CODE);
+	Button(ID_ND_BUTTON_OK) {
+		Kill();
+		GameOver(1, 1);
+	}
+}
+
+messagebox 'NDTemp' {
+	Show();  Title(ID_ND_LAUNCH_CODE_TURNS2);
+	Text(ID_ND_TEMP);
+}
+
+messagebox 'NDTemp2' {
+	Show();  Title(ID_ND_LAUNCH_CODE_TURNS2);
+	Text(ID_ND_TEMP2);
+}
+
+messagebox 'NDNuclearSubWarning' {
+	Show();  Title(ID_ND_LAUNCH_CODE_TURNS2);
+	Text(ID_ND_NUCLEAR_SUB_WARNING);
+	Button(ID_ND_BUTTON_YES) {
+		Kill();
+		DisableTrigger('NDNuclearSubWarning_F');
+		Event:Battle(warnArmy, warnLoc);
+	}
+	Button(ID_ND_BUTTON_NO) {
+		Kill();
+	}
+}
+
+alertbox 'NDNuclearSubWarningBombard' {
+	Show();  Title(ID_ND_LAUNCH_CODE_TURNS2);
+	Text(ID_ND_NUCLEAR_SUB_WARNING);
+	Button(ID_ND_BUTTON_YES) {
+		Kill();
+		DisableTrigger('NDBombardWarning_F');
+		Event:BombardOrder(warnArmy, warnLoc);
+	}
+	Button(ID_ND_BUTTON_NO) {
+		Kill();
+	}
+}
+
+
+alertbox 'NDNuclearSubDestroy' {
+	Show();  Title(ID_ND_LAUNCH_CODE_TURNS2);
+	Text(ID_ND_NUCLEAR_SUB_DESTROY);
+	Button(ID_ND_BUTTON_OK) {
+		Kill();
+		redButton = 1;
+	}
+}
+
+alertbox 'NDWinNuclearSub' {
+	Show();  Title(ID_ND_LAUNCH_CODE_TURNS2);
+	Text(ID_ND_WIN_NUCLEAR_SUB);
+	Button(ID_ND_BUTTON_OK) {
+		Kill();
+		GameOver(1, 1);
+	}
+}
+
+alertbox 'NDWinDiplomacy' {
+	Show();  Title(ID_ND_LAUNCH_CODE_TURNS2);
+	Text(ID_ND_WIN_DIPLOMACY);
+	Button(ID_ND_BUTTON_OK) {
+		Kill();
+		GameOver(1, 1);
+	}
+}
+
+alertbox 'NDLoseStupidity' {
+	if (gameEnded == 0) {
+		gameEnded = 1;
+		Show();  Title(ID_ND_LAUNCH_CODE_TURNS2);
+		Text(ID_ND_LOSE_STUPIDITY);
+		Button(ID_ND_BUTTON_OK) {
+			Kill();
+			GameOver(1, 2);
+		}
+	}
+}
+

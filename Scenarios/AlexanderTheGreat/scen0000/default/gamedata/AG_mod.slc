@@ -1,0 +1,1766 @@
+
+  ///////////////////
+ // Mod Functions //
+///////////////////
+
+// Players are can not research past Feudalism, Hullmaking, Theology and Classical Education
+int_f mod_CanPlayerHaveAdvance (int_t thePlayer, int_t theAdvance)
+{
+	if (theAdvance == AdvanceDB(ADVANCE_BANKING) ||
+		theAdvance == AdvanceDB(ADVANCE_GUNPOWDER) ||
+		theAdvance == AdvanceDB(ADVANCE_PRINTING_PRESS) ||
+		theAdvance == AdvanceDB(ADVANCE_AGRICULTURAL_REVOLUTION) ||
+		theAdvance == AdvanceDB(ADVANCE_CLASSICAL_EDUCATION) ||
+		theAdvance == AdvanceDB(ADVANCE_BUREAUCRACY)) {
+		return 0;
+	} else {
+		return 1;
+	}
+}
+
+// No Civilization can build any wonders
+int_f mod_CanCityBuildWonder(city_t theCity, int_t theWonder) 
+{ 	
+	return 0;
+}
+
+// Limits units buildable by each city in the game
+int_f mod_CanCityBuildUnit(city_t theCity, int_t theUnit)
+{
+city_t	tmpCity;
+
+// Macedonian cities
+	GetCityByLocation(amphipolisLoc, tmpCity);
+	if (CityIsValid(tmpCity)) {  if (tmpCity == theCity) {
+		if (theUnit == UnitDB(UNIT_MOUNTED_ARCHER2)) {
+			return 0;
+		} elseif (theUnit == UnitDB(UNIT_PHALANX)) {
+			return 0;
+		} elseif (theUnit == UnitDB(UNIT_WARRIOR)) {
+			return 0;
+		} elseif (theUnit == UnitDB(UNIT_ARCHER2)) {
+			return 0;
+		} elseif (theUnit == UnitDB(UNIT_ELEPHANT_WARRIOR)) {
+			return 0;
+		} elseif (theUnit == UnitDB(UNIT_FIRE_TRIREME)) {
+			return 0;
+		}
+	}}
+	GetCityByLocation(larissaLoc, tmpCity);
+	if (CityIsValid(tmpCity)) {  if (tmpCity == theCity) {
+		if (theUnit == UnitDB(UNIT_MOUNTED_ARCHER2)) {
+			return 0;
+		} elseif (theUnit == UnitDB(UNIT_PHALANX)) {
+			return 0;
+		} elseif (theUnit == UnitDB(UNIT_WARRIOR)) {
+			return 0;
+		} elseif (theUnit == UnitDB(UNIT_ARCHER2)) {
+			return 0;
+		} elseif (theUnit == UnitDB(UNIT_ELEPHANT_WARRIOR)) {
+			return 0;
+		} elseif (theUnit == UnitDB(UNIT_FIRE_TRIREME)) {
+			return 0;
+		}
+	}}
+	GetCityByLocation(pellaLoc, tmpCity);
+	if (CityIsValid(tmpCity)) {  if (tmpCity == theCity) {
+		if (theUnit == UnitDB(UNIT_MOUNTED_ARCHER2)) {
+			return 0;
+		} elseif (theUnit == UnitDB(UNIT_PHALANX)) {
+			return 0;
+		} elseif (theUnit == UnitDB(UNIT_WARRIOR)) {
+			return 0;
+		} elseif (theUnit == UnitDB(UNIT_ARCHER2)) {
+			return 0;
+		} elseif (theUnit == UnitDB(UNIT_ELEPHANT_WARRIOR)) {
+			return 0;
+		} elseif (theUnit == UnitDB(UNIT_FIRE_TRIREME)) {
+			return 0;
+		}
+	}}
+	GetCityByLocation(perinthusLoc, tmpCity);
+	if (CityIsValid(tmpCity)) {  if (tmpCity == theCity) {
+		if (theUnit == UnitDB(UNIT_MOUNTED_ARCHER2)) {
+			return 0;
+		} elseif (theUnit == UnitDB(UNIT_PHALANX)) {
+			return 0;
+		} elseif (theUnit == UnitDB(UNIT_WARRIOR)) {
+			return 0;
+		} elseif (theUnit == UnitDB(UNIT_ARCHER2)) {
+			return 0;
+		} elseif (theUnit == UnitDB(UNIT_ELEPHANT_WARRIOR)) {
+			return 0;
+		} elseif (theUnit == UnitDB(UNIT_FIRE_TRIREME)) {
+			return 0;
+		}
+	}}
+	GetCityByLocation(philipLoc, tmpCity);
+	if (CityIsValid(tmpCity)) {  if (tmpCity == theCity) {
+		if (theUnit == UnitDB(UNIT_MOUNTED_ARCHER2)) {
+			return 0;
+		} elseif (theUnit == UnitDB(UNIT_PHALANX)) {
+			return 0;
+		} elseif (theUnit == UnitDB(UNIT_WARRIOR)) {
+			return 0;
+		} elseif (theUnit == UnitDB(UNIT_ARCHER2)) {
+			return 0;
+		} elseif (theUnit == UnitDB(UNIT_ELEPHANT_WARRIOR)) {
+			return 0;
+		} elseif (theUnit == UnitDB(UNIT_FIRE_TRIREME)) {
+			return 0;
+		}
+	}}
+	GetCityByLocation(sardisLoc, tmpCity);
+	if (CityIsValid(tmpCity)) {  if (tmpCity == theCity) {
+		if (theUnit == UnitDB(UNIT_MOUNTED_ARCHER2)) {
+			return 0;
+		} elseif (theUnit == UnitDB(UNIT_PHALANX)) {
+			return 0;
+		} elseif (theUnit == UnitDB(UNIT_WARRIOR)) {
+			return 0;
+		} elseif (theUnit == UnitDB(UNIT_ARCHER2)) {
+			return 0;
+		} elseif (theUnit == UnitDB(UNIT_ELEPHANT_WARRIOR)) {
+			return 0;
+		} elseif (theUnit == UnitDB(UNIT_FIRE_TRIREME)) {
+			return 0;
+		}
+	}}
+
+// Corinthian League cities
+	GetCityByLocation(athensLoc, tmpCity);
+	if (CityIsValid(tmpCity)) {  if (tmpCity == theCity) {
+		if (theUnit == UnitDB(UNIT_MOUNTED_ARCHER2)) {
+			return 0;
+		} elseif (theUnit == UnitDB(UNIT_PHALANX)) {
+			return 0;
+		} elseif (theUnit == UnitDB(UNIT_WARRIOR)) {
+			return 0;
+		} elseif (theUnit == UnitDB(UNIT_ARCHER2)) {
+			return 0;
+		} elseif (theUnit == UnitDB(UNIT_ELEPHANT_WARRIOR)) {
+			return 0;
+		}
+	}}
+	GetCityByLocation(chalcisLoc, tmpCity);
+	if (CityIsValid(tmpCity)) {  if (tmpCity == theCity) {
+		if (theUnit == UnitDB(UNIT_MOUNTED_ARCHER2)) {
+			return 0;
+		} elseif (theUnit == UnitDB(UNIT_PHALANX)) {
+			return 0;
+		} elseif (theUnit == UnitDB(UNIT_WARRIOR)) {
+			return 0;
+		} elseif (theUnit == UnitDB(UNIT_ARCHER2)) {
+			return 0;
+		} elseif (theUnit == UnitDB(UNIT_ELEPHANT_WARRIOR)) {
+			return 0;
+		}
+	}}
+	GetCityByLocation(corcyraLoc, tmpCity);
+	if (CityIsValid(tmpCity)) {  if (tmpCity == theCity) {
+		if (theUnit == UnitDB(UNIT_MOUNTED_ARCHER2)) {
+			return 0;
+		} elseif (theUnit == UnitDB(UNIT_PHALANX)) {
+			return 0;
+		} elseif (theUnit == UnitDB(UNIT_WARRIOR)) {
+			return 0;
+		} elseif (theUnit == UnitDB(UNIT_ARCHER2)) {
+			return 0;
+		} elseif (theUnit == UnitDB(UNIT_ELEPHANT_WARRIOR)) {
+			return 0;
+		} elseif (theUnit == UnitDB(UNIT_FIRE_TRIREME)) {
+			return 0;
+		}
+	}}	
+	GetCityByLocation(corinthLoc, tmpCity);
+	if (CityIsValid(tmpCity)) {  if (tmpCity == theCity) {
+		if (theUnit == UnitDB(UNIT_MOUNTED_ARCHER2)) {
+			return 0;
+		} elseif (theUnit == UnitDB(UNIT_PHALANX)) {
+			return 0;
+		} elseif (theUnit == UnitDB(UNIT_WARRIOR)) {
+			return 0;
+		} elseif (theUnit == UnitDB(UNIT_ARCHER2)) {
+			return 0;
+		} elseif (theUnit == UnitDB(UNIT_ELEPHANT_WARRIOR)) {
+			return 0;
+		}
+	}}
+	GetCityByLocation(epidamnusLoc, tmpCity);
+	if (CityIsValid(tmpCity)) {  if (tmpCity == theCity) {
+		if (theUnit == UnitDB(UNIT_MOUNTED_ARCHER2)) {
+			return 0;
+		} elseif (theUnit == UnitDB(UNIT_PHALANX)) {
+			return 0;
+		} elseif (theUnit == UnitDB(UNIT_WARRIOR)) {
+			return 0;
+		} elseif (theUnit == UnitDB(UNIT_ARCHER2)) {
+			return 0;
+		} elseif (theUnit == UnitDB(UNIT_ELEPHANT_WARRIOR)) {
+			return 0;
+		} elseif (theUnit == UnitDB(UNIT_FIRE_TRIREME)) {
+			return 0;
+		}
+	}}		
+	GetCityByLocation(knossosLoc, tmpCity);
+	if (CityIsValid(tmpCity)) {  if (tmpCity == theCity) {
+		if (theUnit == UnitDB(UNIT_MOUNTED_ARCHER2)) {
+			return 0;
+		} elseif (theUnit == UnitDB(UNIT_PHALANX)) {
+			return 0;
+		} elseif (theUnit == UnitDB(UNIT_WARRIOR)) {
+			return 0;
+		} elseif (theUnit == UnitDB(UNIT_ARCHER2)) {
+			return 0;
+		} elseif (theUnit == UnitDB(UNIT_ELEPHANT_WARRIOR)) {
+			return 0;
+		} elseif (theUnit == UnitDB(UNIT_FIRE_TRIREME)) {
+			return 0;
+		}
+	}}		
+	GetCityByLocation(myliteneLoc, tmpCity);
+	if (CityIsValid(tmpCity)) {  if (tmpCity == theCity) {
+		if (theUnit == UnitDB(UNIT_MOUNTED_ARCHER2)) {
+			return 0;
+		} elseif (theUnit == UnitDB(UNIT_PHALANX)) {
+			return 0;
+		} elseif (theUnit == UnitDB(UNIT_WARRIOR)) {
+			return 0;
+		} elseif (theUnit == UnitDB(UNIT_ARCHER2)) {
+			return 0;
+		} elseif (theUnit == UnitDB(UNIT_ELEPHANT_WARRIOR)) {
+			return 0;
+		} elseif (theUnit == UnitDB(UNIT_FIRE_TRIREME)) {
+			return 0;
+		}
+	}}
+	
+// Greek State cities
+	GetCityByLocation(chersonesusLoc, tmpCity);
+	if (CityIsValid(tmpCity)) {  if (tmpCity == theCity) {
+		if (theUnit == UnitDB(UNIT_MOUNTED_ARCHER2)) {
+			return 0;
+		} elseif (theUnit == UnitDB(UNIT_PHALANX)) {
+			return 0;
+		} elseif (theUnit == UnitDB(UNIT_WARRIOR)) {
+			return 0;
+		} elseif (theUnit == UnitDB(UNIT_ARCHER2)) {
+			return 0;
+		} elseif (theUnit == UnitDB(UNIT_ELEPHANT_WARRIOR)) {
+			return 0;
+		} elseif (theUnit == UnitDB(UNIT_FIRE_TRIREME)) {
+			return 0;
+		}
+	}}
+	GetCityByLocation(cyeneLoc, tmpCity);
+	if (CityIsValid(tmpCity)) {  if (tmpCity == theCity) {
+		if (theUnit == UnitDB(UNIT_MOUNTED_ARCHER2)) {
+			return 0;
+		} elseif (theUnit == UnitDB(UNIT_PHALANX)) {
+			return 0;
+		} elseif (theUnit == UnitDB(UNIT_WARRIOR)) {
+			return 0;
+		} elseif (theUnit == UnitDB(UNIT_ARCHER2)) {
+			return 0;
+		} elseif (theUnit == UnitDB(UNIT_ELEPHANT_WARRIOR)) {
+			return 0;
+		} elseif (theUnit == UnitDB(UNIT_FIRE_TRIREME)) {
+			return 0;
+		}
+	}}
+	GetCityByLocation(phasisLoc, tmpCity);
+	if (CityIsValid(tmpCity)) {  if (tmpCity == theCity) {
+		if (theUnit == UnitDB(UNIT_MOUNTED_ARCHER2)) {
+			return 0;
+		} elseif (theUnit == UnitDB(UNIT_PHALANX)) {
+			return 0;
+		} elseif (theUnit == UnitDB(UNIT_WARRIOR)) {
+			return 0;
+		} elseif (theUnit == UnitDB(UNIT_ARCHER2)) {
+			return 0;
+		} elseif (theUnit == UnitDB(UNIT_ELEPHANT_WARRIOR)) {
+			return 0;
+		} elseif (theUnit == UnitDB(UNIT_FIRE_TRIREME)) {
+			return 0;
+		}
+	}}
+	GetCityByLocation(sinopeLoc, tmpCity);
+	if (CityIsValid(tmpCity)) {  if (tmpCity == theCity) {
+		if (theUnit == UnitDB(UNIT_MOUNTED_ARCHER2)) {
+			return 0;
+		} elseif (theUnit == UnitDB(UNIT_PHALANX)) {
+			return 0;
+		} elseif (theUnit == UnitDB(UNIT_WARRIOR)) {
+			return 0;
+		} elseif (theUnit == UnitDB(UNIT_ARCHER2)) {
+			return 0;
+		} elseif (theUnit == UnitDB(UNIT_ELEPHANT_WARRIOR)) {
+			return 0;
+		} elseif (theUnit == UnitDB(UNIT_FIRE_TRIREME)) {
+			return 0;
+		}
+	}}
+	GetCityByLocation(spartaLoc, tmpCity);
+	if (CityIsValid(tmpCity)) {  if (tmpCity == theCity) {
+		if (theUnit == UnitDB(UNIT_MOUNTED_ARCHER2)) {
+			return 0;
+		} elseif (theUnit == UnitDB(UNIT_PHALANX)) {
+			return 0;
+		} elseif (theUnit == UnitDB(UNIT_WARRIOR)) {
+			return 0;
+		} elseif (theUnit == UnitDB(UNIT_ARCHER2)) {
+			return 0;
+		} elseif (theUnit == UnitDB(UNIT_ELEPHANT_WARRIOR)) {
+			return 0;
+		} elseif (theUnit == UnitDB(UNIT_MOUNTED_ARCHER)) {
+			return 0;
+		} elseif (theUnit == UnitDB(UNIT_ARCHER)) {
+			return 0;
+		} elseif (theUnit == UnitDB(UNIT_CATAPULT)) {
+			return 0;
+		} elseif (theUnit == UnitDB(UNIT_FIRE_TRIREME)) {
+			return 0;
+		}
+	}}
+	GetCityByLocation(syracuseLoc, tmpCity);
+	if (CityIsValid(tmpCity)) {  if (tmpCity == theCity) {
+		if (theUnit == UnitDB(UNIT_MOUNTED_ARCHER2)) {
+			return 0;
+		} elseif (theUnit == UnitDB(UNIT_PHALANX)) {
+			return 0;
+		} elseif (theUnit == UnitDB(UNIT_WARRIOR)) {
+			return 0;
+		} elseif (theUnit == UnitDB(UNIT_ARCHER2)) {
+			return 0;
+		} elseif (theUnit == UnitDB(UNIT_ELEPHANT_WARRIOR)) {
+			return 0;
+		}
+	}}
+	GetCityByLocation(tarentumLoc, tmpCity);
+	if (CityIsValid(tmpCity)) {  if (tmpCity == theCity) {
+		if (theUnit == UnitDB(UNIT_MOUNTED_ARCHER2)) {
+			return 0;
+		} elseif (theUnit == UnitDB(UNIT_PHALANX)) {
+			return 0;
+		} elseif (theUnit == UnitDB(UNIT_WARRIOR)) {
+			return 0;
+		} elseif (theUnit == UnitDB(UNIT_ARCHER2)) {
+			return 0;
+		} elseif (theUnit == UnitDB(UNIT_ELEPHANT_WARRIOR)) {
+			return 0;
+		} elseif (theUnit == UnitDB(UNIT_FIRE_TRIREME)) {
+			return 0;
+		}
+	}}
+	GetCityByLocation(trapezusLoc, tmpCity);
+	if (CityIsValid(tmpCity)) {  if (tmpCity == theCity) {
+		if (theUnit == UnitDB(UNIT_MOUNTED_ARCHER2)) {
+			return 0;
+		} elseif (theUnit == UnitDB(UNIT_PHALANX)) {
+			return 0;
+		} elseif (theUnit == UnitDB(UNIT_WARRIOR)) {
+			return 0;
+		} elseif (theUnit == UnitDB(UNIT_ARCHER2)) {
+			return 0;
+		} elseif (theUnit == UnitDB(UNIT_ELEPHANT_WARRIOR)) {
+			return 0;
+		} elseif (theUnit == UnitDB(UNIT_FIRE_TRIREME)) {
+			return 0;
+		}
+	}}	
+	
+// Persian cities
+	GetCityByLocation(arachosiaLoc, tmpCity);
+	if (CityIsValid(tmpCity)) {  if (tmpCity == theCity) {
+		if (theUnit == UnitDB(UNIT_HOPLITE)) {
+			return 0;
+		} elseif (theUnit == UnitDB(UNIT_MOUNTED_ARCHER)) {
+			return 0;
+		} elseif (theUnit == UnitDB(UNIT_WARRIOR)) {
+			return 0;
+		} elseif (theUnit == UnitDB(UNIT_ARCHER2)) {
+			return 0;
+		} elseif (theUnit == UnitDB(UNIT_ELEPHANT_WARRIOR)) {
+			return 0;
+		} elseif (theUnit == UnitDB(UNIT_FIRE_TRIREME)) {
+			return 0;
+		}
+	}}
+	GetCityByLocation(aradusLoc, tmpCity);
+	if (CityIsValid(tmpCity)) {  if (tmpCity == theCity) {
+		if (theUnit == UnitDB(UNIT_HOPLITE)) {
+			return 0;
+		} elseif (theUnit == UnitDB(UNIT_MOUNTED_ARCHER)) {
+			return 0;
+		} elseif (theUnit == UnitDB(UNIT_WARRIOR)) {
+			return 0;
+		} elseif (theUnit == UnitDB(UNIT_ARCHER2)) {
+			return 0;
+		} elseif (theUnit == UnitDB(UNIT_ELEPHANT_WARRIOR)) {
+			return 0;
+		}
+	}}	
+	GetCityByLocation(artakoanaLoc, tmpCity);
+	if (CityIsValid(tmpCity)) {  if (tmpCity == theCity) {
+		if (theUnit == UnitDB(UNIT_HOPLITE)) {
+			return 0;
+		} elseif (theUnit == UnitDB(UNIT_MOUNTED_ARCHER)) {
+			return 0;
+		} elseif (theUnit == UnitDB(UNIT_WARRIOR)) {
+			return 0;
+		} elseif (theUnit == UnitDB(UNIT_ARCHER2)) {
+			return 0;
+		} elseif (theUnit == UnitDB(UNIT_ELEPHANT_WARRIOR)) {
+			return 0;
+		} elseif (theUnit == UnitDB(UNIT_FIRE_TRIREME)) {
+			return 0;
+		}
+	}}	
+	GetCityByLocation(babylonLoc, tmpCity);
+	if (CityIsValid(tmpCity)) {  if (tmpCity == theCity) {
+		if (theUnit == UnitDB(UNIT_HOPLITE)) {
+			return 0;
+		} elseif (theUnit == UnitDB(UNIT_MOUNTED_ARCHER)) {
+			return 0;
+		} elseif (theUnit == UnitDB(UNIT_WARRIOR)) {
+			return 0;
+		} elseif (theUnit == UnitDB(UNIT_ARCHER2)) {
+			return 0;
+		} elseif (theUnit == UnitDB(UNIT_ELEPHANT_WARRIOR)) {
+			return 0;
+		} elseif (theUnit == UnitDB(UNIT_FIRE_TRIREME)) {
+			return 0;
+		}
+	}}	
+	GetCityByLocation(baktraLoc, tmpCity);
+	if (CityIsValid(tmpCity)) {  if (tmpCity == theCity) {
+		if (theUnit == UnitDB(UNIT_HOPLITE)) {
+			return 0;
+		} elseif (theUnit == UnitDB(UNIT_MOUNTED_ARCHER)) {
+			return 0;
+		} elseif (theUnit == UnitDB(UNIT_WARRIOR)) {
+			return 0;
+		} elseif (theUnit == UnitDB(UNIT_ARCHER2)) {
+			return 0;
+		} elseif (theUnit == UnitDB(UNIT_ELEPHANT_WARRIOR)) {
+			return 0;
+		} elseif (theUnit == UnitDB(UNIT_FIRE_TRIREME)) {
+			return 0;
+		}
+	}}	
+	GetCityByLocation(dascyliumLoc, tmpCity);
+	if (CityIsValid(tmpCity)) {  if (tmpCity == theCity) {
+		if (theUnit == UnitDB(UNIT_HOPLITE)) {
+			return 0;
+		} elseif (theUnit == UnitDB(UNIT_MOUNTED_ARCHER)) {
+			return 0;
+		} elseif (theUnit == UnitDB(UNIT_WARRIOR)) {
+			return 0;
+		} elseif (theUnit == UnitDB(UNIT_ARCHER2)) {
+			return 0;
+		} elseif (theUnit == UnitDB(UNIT_ELEPHANT_WARRIOR)) {
+			return 0;
+		} elseif (theUnit == UnitDB(UNIT_FIRE_TRIREME)) {
+			return 0;
+		}
+	}}	
+	GetCityByLocation(ecbatanaLoc, tmpCity);
+	if (CityIsValid(tmpCity)) {  if (tmpCity == theCity) {
+		if (theUnit == UnitDB(UNIT_HOPLITE)) {
+			return 0;
+		} elseif (theUnit == UnitDB(UNIT_MOUNTED_ARCHER)) {
+			return 0;
+		} elseif (theUnit == UnitDB(UNIT_WARRIOR)) {
+			return 0;
+		} elseif (theUnit == UnitDB(UNIT_ARCHER2)) {
+			return 0;
+		} elseif (theUnit == UnitDB(UNIT_ELEPHANT_WARRIOR)) {
+			return 0;
+		} elseif (theUnit == UnitDB(UNIT_FIRE_TRIREME)) {
+			return 0;
+		}
+	}}	
+	GetCityByLocation(ephesusLoc, tmpCity);
+	if (CityIsValid(tmpCity)) {  if (tmpCity == theCity) {
+		if (theUnit == UnitDB(UNIT_HOPLITE)) {
+			return 0;
+		} elseif (theUnit == UnitDB(UNIT_MOUNTED_ARCHER)) {
+			return 0;
+		} elseif (theUnit == UnitDB(UNIT_WARRIOR)) {
+			return 0;
+		} elseif (theUnit == UnitDB(UNIT_ARCHER2)) {
+			return 0;
+		} elseif (theUnit == UnitDB(UNIT_ELEPHANT_WARRIOR)) {
+			return 0;
+		}
+	}}	
+	GetCityByLocation(gazaLoc, tmpCity);
+	if (CityIsValid(tmpCity)) {  if (tmpCity == theCity) {
+		if (theUnit == UnitDB(UNIT_HOPLITE)) {
+			return 0;
+		} elseif (theUnit == UnitDB(UNIT_MOUNTED_ARCHER)) {
+			return 0;
+		} elseif (theUnit == UnitDB(UNIT_WARRIOR)) {
+			return 0;
+		} elseif (theUnit == UnitDB(UNIT_ARCHER2)) {
+			return 0;
+		} elseif (theUnit == UnitDB(UNIT_ELEPHANT_WARRIOR)) {
+			return 0;
+		} elseif (theUnit == UnitDB(UNIT_FIRE_TRIREME)) {
+			return 0;
+		}
+	}}	
+	GetCityByLocation(gordiumLoc, tmpCity);
+	if (CityIsValid(tmpCity)) {  if (tmpCity == theCity) {
+		if (theUnit == UnitDB(UNIT_HOPLITE)) {
+			return 0;
+		} elseif (theUnit == UnitDB(UNIT_MOUNTED_ARCHER)) {
+			return 0;
+		} elseif (theUnit == UnitDB(UNIT_WARRIOR)) {
+			return 0;
+		} elseif (theUnit == UnitDB(UNIT_ARCHER2)) {
+			return 0;
+		} elseif (theUnit == UnitDB(UNIT_ELEPHANT_WARRIOR)) {
+			return 0;
+		} elseif (theUnit == UnitDB(UNIT_FIRE_TRIREME)) {
+			return 0;
+		}
+	}}	
+	GetCityByLocation(halicarnassusLoc, tmpCity);
+	if (CityIsValid(tmpCity)) {  if (tmpCity == theCity) {
+		if (theUnit == UnitDB(UNIT_HOPLITE)) {
+			return 0;
+		} elseif (theUnit == UnitDB(UNIT_MOUNTED_ARCHER)) {
+			return 0;
+		} elseif (theUnit == UnitDB(UNIT_WARRIOR)) {
+			return 0;
+		} elseif (theUnit == UnitDB(UNIT_ARCHER2)) {
+			return 0;
+		} elseif (theUnit == UnitDB(UNIT_ELEPHANT_WARRIOR)) {
+			return 0;
+		}
+	}}	
+	GetCityByLocation(issusLoc, tmpCity);
+	if (CityIsValid(tmpCity)) {  if (tmpCity == theCity) {
+		if (theUnit == UnitDB(UNIT_HOPLITE)) {
+			return 0;
+		} elseif (theUnit == UnitDB(UNIT_MOUNTED_ARCHER)) {
+			return 0;
+		} elseif (theUnit == UnitDB(UNIT_WARRIOR)) {
+			return 0;
+		} elseif (theUnit == UnitDB(UNIT_ARCHER2)) {
+			return 0;
+		} elseif (theUnit == UnitDB(UNIT_ELEPHANT_WARRIOR)) {
+			return 0;
+		} elseif (theUnit == UnitDB(UNIT_FIRE_TRIREME)) {
+			return 0;
+		}
+	}}	
+	GetCityByLocation(kyreskhataLoc, tmpCity);
+	if (CityIsValid(tmpCity)) {  if (tmpCity == theCity) {
+		if (theUnit == UnitDB(UNIT_HOPLITE)) {
+			return 0;
+		} elseif (theUnit == UnitDB(UNIT_MOUNTED_ARCHER)) {
+			return 0;
+		} elseif (theUnit == UnitDB(UNIT_WARRIOR)) {
+			return 0;
+		} elseif (theUnit == UnitDB(UNIT_ARCHER2)) {
+			return 0;
+		} elseif (theUnit == UnitDB(UNIT_ELEPHANT_WARRIOR)) {
+			return 0;
+		} elseif (theUnit == UnitDB(UNIT_FIRE_TRIREME)) {
+			return 0;
+		}
+	}}	
+	GetCityByLocation(marakandaLoc, tmpCity);
+	if (CityIsValid(tmpCity)) {  if (tmpCity == theCity) {
+		if (theUnit == UnitDB(UNIT_HOPLITE)) {
+			return 0;
+		} elseif (theUnit == UnitDB(UNIT_MOUNTED_ARCHER)) {
+			return 0;
+		} elseif (theUnit == UnitDB(UNIT_WARRIOR)) {
+			return 0;
+		} elseif (theUnit == UnitDB(UNIT_ARCHER2)) {
+			return 0;
+		} elseif (theUnit == UnitDB(UNIT_ELEPHANT_WARRIOR)) {
+			return 0;
+		} elseif (theUnit == UnitDB(UNIT_FIRE_TRIREME)) {
+			return 0;
+		}
+	}}	
+	GetCityByLocation(mazakaLoc, tmpCity);
+	if (CityIsValid(tmpCity)) {  if (tmpCity == theCity) {
+		if (theUnit == UnitDB(UNIT_HOPLITE)) {
+			return 0;
+		} elseif (theUnit == UnitDB(UNIT_MOUNTED_ARCHER)) {
+			return 0;
+		} elseif (theUnit == UnitDB(UNIT_WARRIOR)) {
+			return 0;
+		} elseif (theUnit == UnitDB(UNIT_ARCHER2)) {
+			return 0;
+		} elseif (theUnit == UnitDB(UNIT_ELEPHANT_WARRIOR)) {
+			return 0;
+		} elseif (theUnit == UnitDB(UNIT_FIRE_TRIREME)) {
+			return 0;
+		}
+	}}
+	GetCityByLocation(memphisLoc, tmpCity);
+	if (CityIsValid(tmpCity)) {  if (tmpCity == theCity) {
+		if (theUnit == UnitDB(UNIT_HOPLITE)) {
+			return 0;
+		} elseif (theUnit == UnitDB(UNIT_MOUNTED_ARCHER)) {
+			return 0;
+		} elseif (theUnit == UnitDB(UNIT_WARRIOR)) {
+			return 0;
+		} elseif (theUnit == UnitDB(UNIT_ARCHER2)) {
+			return 0;
+		} elseif (theUnit == UnitDB(UNIT_ELEPHANT_WARRIOR)) {
+			return 0;
+		} elseif (theUnit == UnitDB(UNIT_FIRE_TRIREME)) {
+			return 0;
+		}
+	}}	
+	GetCityByLocation(pelusiumLoc, tmpCity);
+	if (CityIsValid(tmpCity)) {  if (tmpCity == theCity) {
+		if (theUnit == UnitDB(UNIT_HOPLITE)) {
+			return 0;
+		} elseif (theUnit == UnitDB(UNIT_MOUNTED_ARCHER)) {
+			return 0;
+		} elseif (theUnit == UnitDB(UNIT_WARRIOR)) {
+			return 0;
+		} elseif (theUnit == UnitDB(UNIT_ARCHER2)) {
+			return 0;
+		} elseif (theUnit == UnitDB(UNIT_ELEPHANT_WARRIOR)) {
+			return 0;
+		} elseif (theUnit == UnitDB(UNIT_FIRE_TRIREME)) {
+			return 0;
+		}
+	}}	
+	GetCityByLocation(persepolisLoc, tmpCity);
+	if (CityIsValid(tmpCity)) {  if (tmpCity == theCity) {
+		if (theUnit == UnitDB(UNIT_HOPLITE)) {
+			return 0;
+		} elseif (theUnit == UnitDB(UNIT_MOUNTED_ARCHER)) {
+			return 0;
+		} elseif (theUnit == UnitDB(UNIT_WARRIOR)) {
+			return 0;
+		} elseif (theUnit == UnitDB(UNIT_ARCHER2)) {
+			return 0;
+		} elseif (theUnit == UnitDB(UNIT_ELEPHANT_WARRIOR)) {
+			return 0;
+		} elseif (theUnit == UnitDB(UNIT_FIRE_TRIREME)) {
+			return 0;
+		}
+	}}	
+	GetCityByLocation(salamisLoc, tmpCity);
+	if (CityIsValid(tmpCity)) {  if (tmpCity == theCity) {
+		if (theUnit == UnitDB(UNIT_HOPLITE)) {
+			return 0;
+		} elseif (theUnit == UnitDB(UNIT_MOUNTED_ARCHER)) {
+			return 0;
+		} elseif (theUnit == UnitDB(UNIT_WARRIOR)) {
+			return 0;
+		} elseif (theUnit == UnitDB(UNIT_ARCHER2)) {
+			return 0;
+		} elseif (theUnit == UnitDB(UNIT_ELEPHANT_WARRIOR)) {
+			return 0;
+		}
+	}}	
+	GetCityByLocation(sharudLoc, tmpCity);
+	if (CityIsValid(tmpCity)) {  if (tmpCity == theCity) {
+		if (theUnit == UnitDB(UNIT_HOPLITE)) {
+			return 0;
+		} elseif (theUnit == UnitDB(UNIT_MOUNTED_ARCHER)) {
+			return 0;
+		} elseif (theUnit == UnitDB(UNIT_WARRIOR)) {
+			return 0;
+		} elseif (theUnit == UnitDB(UNIT_ARCHER2)) {
+			return 0;
+		} elseif (theUnit == UnitDB(UNIT_ELEPHANT_WARRIOR)) {
+			return 0;
+		}
+	}}	
+	GetCityByLocation(sidonLoc, tmpCity);
+	if (CityIsValid(tmpCity)) {  if (tmpCity == theCity) {
+		if (theUnit == UnitDB(UNIT_HOPLITE)) {
+			return 0;
+		} elseif (theUnit == UnitDB(UNIT_MOUNTED_ARCHER)) {
+			return 0;
+		} elseif (theUnit == UnitDB(UNIT_WARRIOR)) {
+			return 0;
+		} elseif (theUnit == UnitDB(UNIT_ARCHER2)) {
+			return 0;
+		} elseif (theUnit == UnitDB(UNIT_ELEPHANT_WARRIOR)) {
+			return 0;
+		}
+	}}	
+	GetCityByLocation(susaLoc, tmpCity);
+	if (CityIsValid(tmpCity)) {  if (tmpCity == theCity) {
+		if (theUnit == UnitDB(UNIT_HOPLITE)) {
+			return 0;
+		} elseif (theUnit == UnitDB(UNIT_MOUNTED_ARCHER)) {
+			return 0;
+		} elseif (theUnit == UnitDB(UNIT_WARRIOR)) {
+			return 0;
+		} elseif (theUnit == UnitDB(UNIT_ARCHER2)) {
+			return 0;
+		} elseif (theUnit == UnitDB(UNIT_ELEPHANT_WARRIOR)) {
+			return 0;
+		} elseif (theUnit == UnitDB(UNIT_FIRE_TRIREME)) {
+			return 0;
+		}
+	}}	
+	GetCityByLocation(susiaLoc, tmpCity);
+	if (CityIsValid(tmpCity)) {  if (tmpCity == theCity) {
+		if (theUnit == UnitDB(UNIT_HOPLITE)) {
+			return 0;
+		} elseif (theUnit == UnitDB(UNIT_MOUNTED_ARCHER)) {
+			return 0;
+		} elseif (theUnit == UnitDB(UNIT_WARRIOR)) {
+			return 0;
+		} elseif (theUnit == UnitDB(UNIT_ARCHER2)) {
+			return 0;
+		} elseif (theUnit == UnitDB(UNIT_ELEPHANT_WARRIOR)) {
+			return 0;
+		} elseif (theUnit == UnitDB(UNIT_FIRE_TRIREME)) {
+			return 0;
+		}
+	}}	
+	GetCityByLocation(tarsusLoc, tmpCity);
+	if (CityIsValid(tmpCity)) {  if (tmpCity == theCity) {
+		if (theUnit == UnitDB(UNIT_HOPLITE)) {
+			return 0;
+		} elseif (theUnit == UnitDB(UNIT_MOUNTED_ARCHER)) {
+			return 0;
+		} elseif (theUnit == UnitDB(UNIT_WARRIOR)) {
+			return 0;
+		} elseif (theUnit == UnitDB(UNIT_ARCHER2)) {
+			return 0;
+		} elseif (theUnit == UnitDB(UNIT_ELEPHANT_WARRIOR)) {
+			return 0;
+		} elseif (theUnit == UnitDB(UNIT_FIRE_TRIREME)) {
+			return 0;
+		}
+	}}	
+	GetCityByLocation(thapsacusLoc, tmpCity);
+	if (CityIsValid(tmpCity)) {  if (tmpCity == theCity) {
+		if (theUnit == UnitDB(UNIT_HOPLITE)) {
+			return 0;
+		} elseif (theUnit == UnitDB(UNIT_MOUNTED_ARCHER)) {
+			return 0;
+		} elseif (theUnit == UnitDB(UNIT_WARRIOR)) {
+			return 0;
+		} elseif (theUnit == UnitDB(UNIT_ARCHER2)) {
+			return 0;
+		} elseif (theUnit == UnitDB(UNIT_ELEPHANT_WARRIOR)) {
+			return 0;
+		} elseif (theUnit == UnitDB(UNIT_FIRE_TRIREME)) {
+			return 0;
+		}
+	}}	
+	GetCityByLocation(thebesLoc, tmpCity);
+	if (CityIsValid(tmpCity)) {  if (tmpCity == theCity) {
+		if (theUnit == UnitDB(UNIT_HOPLITE)) {
+			return 0;
+		} elseif (theUnit == UnitDB(UNIT_MOUNTED_ARCHER)) {
+			return 0;
+		} elseif (theUnit == UnitDB(UNIT_WARRIOR)) {
+			return 0;
+		} elseif (theUnit == UnitDB(UNIT_ARCHER2)) {
+			return 0;
+		} elseif (theUnit == UnitDB(UNIT_ELEPHANT_WARRIOR)) {
+			return 0;
+		} elseif (theUnit == UnitDB(UNIT_FIRE_TRIREME)) {
+			return 0;
+		}
+	}}	
+	GetCityByLocation(tyreLoc, tmpCity);
+	if (CityIsValid(tmpCity)) {  if (tmpCity == theCity) {
+		if (theUnit == UnitDB(UNIT_HOPLITE)) {
+			return 0;
+		} elseif (theUnit == UnitDB(UNIT_MOUNTED_ARCHER)) {
+			return 0;
+		} elseif (theUnit == UnitDB(UNIT_WARRIOR)) {
+			return 0;
+		} elseif (theUnit == UnitDB(UNIT_ARCHER2)) {
+			return 0;
+		} elseif (theUnit == UnitDB(UNIT_ELEPHANT_WARRIOR)) {
+			return 0;
+		}
+	}}	
+
+// Carthaginian Cities
+	GetCityByLocation(carthageLoc, tmpCity);
+	if (CityIsValid(tmpCity)) {  if (tmpCity == theCity) {
+		if (theUnit == UnitDB(UNIT_HOPLITE)) {
+			return 0;
+		} elseif (theUnit == UnitDB(UNIT_MOUNTED_ARCHER)) {
+			return 0;
+		} elseif (theUnit == UnitDB(UNIT_WARRIOR)) {
+			return 0;
+		} elseif (theUnit == UnitDB(UNIT_ARCHER2)) {
+			return 0;
+		} elseif (theUnit == UnitDB(UNIT_ELEPHANT_WARRIOR)) {
+			return 0;
+		}
+	}}	
+	GetCityByLocation(hadrumentumLoc, tmpCity);
+	if (CityIsValid(tmpCity)) {  if (tmpCity == theCity) {
+		if (theUnit == UnitDB(UNIT_HOPLITE)) {
+			return 0;
+		} elseif (theUnit == UnitDB(UNIT_MOUNTED_ARCHER)) {
+			return 0;
+		} elseif (theUnit == UnitDB(UNIT_WARRIOR)) {
+			return 0;
+		} elseif (theUnit == UnitDB(UNIT_ARCHER2)) {
+			return 0;
+		} elseif (theUnit == UnitDB(UNIT_ELEPHANT_WARRIOR)) {
+			return 0;
+		}
+	}}	
+	GetCityByLocation(hippoLoc, tmpCity);
+	if (CityIsValid(tmpCity)) {  if (tmpCity == theCity) {
+		if (theUnit == UnitDB(UNIT_HOPLITE)) {
+			return 0;
+		} elseif (theUnit == UnitDB(UNIT_MOUNTED_ARCHER)) {
+			return 0;
+		} elseif (theUnit == UnitDB(UNIT_WARRIOR)) {
+			return 0;
+		} elseif (theUnit == UnitDB(UNIT_ARCHER2)) {
+			return 0;
+		} elseif (theUnit == UnitDB(UNIT_ELEPHANT_WARRIOR)) {
+			return 0;
+		}
+	}}	
+	GetCityByLocation(leptisLoc, tmpCity);
+	if (CityIsValid(tmpCity)) {  if (tmpCity == theCity) {
+		if (theUnit == UnitDB(UNIT_HOPLITE)) {
+			return 0;
+		} elseif (theUnit == UnitDB(UNIT_MOUNTED_ARCHER)) {
+			return 0;
+		} elseif (theUnit == UnitDB(UNIT_WARRIOR)) {
+			return 0;
+		} elseif (theUnit == UnitDB(UNIT_ARCHER2)) {
+			return 0;
+		} elseif (theUnit == UnitDB(UNIT_ELEPHANT_WARRIOR)) {
+			return 0;
+		}
+	}}	
+	GetCityByLocation(motyaLoc, tmpCity);
+	if (CityIsValid(tmpCity)) {  if (tmpCity == theCity) {
+		if (theUnit == UnitDB(UNIT_HOPLITE)) {
+			return 0;
+		} elseif (theUnit == UnitDB(UNIT_MOUNTED_ARCHER)) {
+			return 0;
+		} elseif (theUnit == UnitDB(UNIT_WARRIOR)) {
+			return 0;
+		} elseif (theUnit == UnitDB(UNIT_ARCHER2)) {
+			return 0;
+		} elseif (theUnit == UnitDB(UNIT_ELEPHANT_WARRIOR)) {
+			return 0;
+		} elseif (theUnit == UnitDB(UNIT_FIRE_TRIREME)) {
+			return 0;
+		}
+	}}	
+
+// Roman Cities
+	GetCityByLocation(capuaLoc, tmpCity);
+	if (CityIsValid(tmpCity)) {  if (tmpCity == theCity) {
+		if (theUnit == UnitDB(UNIT_MOUNTED_ARCHER2)) {
+			return 0;
+		} elseif (theUnit == UnitDB(UNIT_PHALANX)) {
+			return 0;
+		} elseif (theUnit == UnitDB(UNIT_WARRIOR)) {
+			return 0;
+		} elseif (theUnit == UnitDB(UNIT_ARCHER2)) {
+			return 0;
+		} elseif (theUnit == UnitDB(UNIT_ELEPHANT_WARRIOR)) {
+			return 0;
+		} elseif (theUnit == UnitDB(UNIT_FIRE_TRIREME)) {
+			return 0;
+		}
+	}}	
+	GetCityByLocation(cumaeLoc, tmpCity);
+	if (CityIsValid(tmpCity)) {  if (tmpCity == theCity) {
+		if (theUnit == UnitDB(UNIT_MOUNTED_ARCHER2)) {
+			return 0;
+		} elseif (theUnit == UnitDB(UNIT_PHALANX)) {
+			return 0;
+		} elseif (theUnit == UnitDB(UNIT_WARRIOR)) {
+			return 0;
+		} elseif (theUnit == UnitDB(UNIT_ARCHER2)) {
+			return 0;
+		} elseif (theUnit == UnitDB(UNIT_ELEPHANT_WARRIOR)) {
+			return 0;
+		} elseif (theUnit == UnitDB(UNIT_FIRE_TRIREME)) {
+			return 0;
+		}
+	}}	
+	GetCityByLocation(romeLoc, tmpCity);
+	if (CityIsValid(tmpCity)) {  if (tmpCity == theCity) {
+		if (theUnit == UnitDB(UNIT_MOUNTED_ARCHER2)) {
+			return 0;
+		} elseif (theUnit == UnitDB(UNIT_PHALANX)) {
+			return 0;
+		} elseif (theUnit == UnitDB(UNIT_WARRIOR)) {
+			return 0;
+		} elseif (theUnit == UnitDB(UNIT_ARCHER2)) {
+			return 0;
+		} elseif (theUnit == UnitDB(UNIT_ELEPHANT_WARRIOR)) {
+			return 0;
+		} elseif (theUnit == UnitDB(UNIT_FIRE_TRIREME)) {
+			return 0;
+		}
+	}}	
+
+// Magadhan Cities	
+	GetCityByLocation(bharuchLoc, tmpCity);
+	if (CityIsValid(tmpCity)) {  if (tmpCity == theCity) {
+		if (theUnit == UnitDB(UNIT_HOPLITE)) {
+			return 0;
+		} elseif (theUnit == UnitDB(UNIT_MOUNTED_ARCHER)) {
+			return 0;
+		} elseif (theUnit == UnitDB(UNIT_ARCHER)) {
+			return 0;
+		} elseif (theUnit == UnitDB(UNIT_FIRE_TRIREME)) {
+			return 0;
+		}
+	}}	
+	GetCityByLocation(campaLoc, tmpCity);
+	if (CityIsValid(tmpCity)) {  if (tmpCity == theCity) {
+		if (theUnit == UnitDB(UNIT_HOPLITE)) {
+			return 0;
+		} elseif (theUnit == UnitDB(UNIT_MOUNTED_ARCHER)) {
+			return 0;
+		} elseif (theUnit == UnitDB(UNIT_ARCHER)) {
+			return 0;
+		} elseif (theUnit == UnitDB(UNIT_FIRE_TRIREME)) {
+			return 0;
+		}
+	}}		
+	GetCityByLocation(kasiLoc, tmpCity);
+	if (CityIsValid(tmpCity)) {  if (tmpCity == theCity) {
+		if (theUnit == UnitDB(UNIT_HOPLITE)) {
+			return 0;
+		} elseif (theUnit == UnitDB(UNIT_MOUNTED_ARCHER)) {
+			return 0;
+		} elseif (theUnit == UnitDB(UNIT_ARCHER)) {
+			return 0;
+		} elseif (theUnit == UnitDB(UNIT_FIRE_TRIREME)) {
+			return 0;
+		}
+	}}		
+	GetCityByLocation(kausambiLoc, tmpCity);
+	if (CityIsValid(tmpCity)) {  if (tmpCity == theCity) {
+		if (theUnit == UnitDB(UNIT_HOPLITE)) {
+			return 0;
+		} elseif (theUnit == UnitDB(UNIT_MOUNTED_ARCHER)) {
+			return 0;
+		} elseif (theUnit == UnitDB(UNIT_ARCHER)) {
+			return 0;
+		} elseif (theUnit == UnitDB(UNIT_FIRE_TRIREME)) {
+			return 0;
+		}
+	}}	
+	GetCityByLocation(kusinaraLoc, tmpCity);
+	if (CityIsValid(tmpCity)) {  if (tmpCity == theCity) {
+		if (theUnit == UnitDB(UNIT_HOPLITE)) {
+			return 0;
+		} elseif (theUnit == UnitDB(UNIT_MOUNTED_ARCHER)) {
+			return 0;
+		} elseif (theUnit == UnitDB(UNIT_ARCHER)) {
+			return 0;
+		} elseif (theUnit == UnitDB(UNIT_FIRE_TRIREME)) {
+			return 0;
+		}
+	}}	
+	GetCityByLocation(mathuraLoc, tmpCity);
+	if (CityIsValid(tmpCity)) {  if (tmpCity == theCity) {
+		if (theUnit == UnitDB(UNIT_HOPLITE)) {
+			return 0;
+		} elseif (theUnit == UnitDB(UNIT_MOUNTED_ARCHER)) {
+			return 0;
+		} elseif (theUnit == UnitDB(UNIT_ARCHER)) {
+			return 0;
+		} elseif (theUnit == UnitDB(UNIT_FIRE_TRIREME)) {
+			return 0;
+		}
+	}}	
+	GetCityByLocation(pataliputraLoc, tmpCity);
+	if (CityIsValid(tmpCity)) {  if (tmpCity == theCity) {
+		if (theUnit == UnitDB(UNIT_HOPLITE)) {
+			return 0;
+		} elseif (theUnit == UnitDB(UNIT_MOUNTED_ARCHER)) {
+			return 0;
+		} elseif (theUnit == UnitDB(UNIT_ARCHER)) {
+			return 0;
+		} elseif (theUnit == UnitDB(UNIT_FIRE_TRIREME)) {
+			return 0;
+		}
+	}}	
+	GetCityByLocation(saketaLoc, tmpCity);
+	if (CityIsValid(tmpCity)) {  if (tmpCity == theCity) {
+		if (theUnit == UnitDB(UNIT_HOPLITE)) {
+			return 0;
+		} elseif (theUnit == UnitDB(UNIT_MOUNTED_ARCHER)) {
+			return 0;
+		} elseif (theUnit == UnitDB(UNIT_ARCHER)) {
+			return 0;
+		} elseif (theUnit == UnitDB(UNIT_FIRE_TRIREME)) {
+			return 0;
+		}
+	}}	
+	GetCityByLocation(tamraliptiLoc, tmpCity);
+	if (CityIsValid(tmpCity)) {  if (tmpCity == theCity) {
+		if (theUnit == UnitDB(UNIT_HOPLITE)) {
+			return 0;
+		} elseif (theUnit == UnitDB(UNIT_MOUNTED_ARCHER)) {
+			return 0;
+		} elseif (theUnit == UnitDB(UNIT_ARCHER)) {
+			return 0;
+		} elseif (theUnit == UnitDB(UNIT_FIRE_TRIREME)) {
+			return 0;
+		}
+	}}	
+	GetCityByLocation(ujjayiniLoc, tmpCity);
+	if (CityIsValid(tmpCity)) {  if (tmpCity == theCity) {
+		if (theUnit == UnitDB(UNIT_HOPLITE)) {
+			return 0;
+		} elseif (theUnit == UnitDB(UNIT_MOUNTED_ARCHER)) {
+			return 0;
+		} elseif (theUnit == UnitDB(UNIT_ARCHER)) {
+			return 0;
+		} elseif (theUnit == UnitDB(UNIT_FIRE_TRIREME)) {
+			return 0;
+		}
+	}}	
+
+// Independent States Cities
+	GetCityByLocation(adanaLoc, tmpCity);
+	if (CityIsValid(tmpCity)) {  if (tmpCity == theCity) {
+		if (theUnit == UnitDB(UNIT_MOUNTED_ARCHER2)) {
+			return 0;
+		} elseif (theUnit == UnitDB(UNIT_HOPLITE)) {
+			return 0;
+		} elseif (theUnit == UnitDB(UNIT_MOUNTED_ARCHER)) {
+			return 0;
+		} elseif (theUnit == UnitDB(UNIT_ELEPHANT_WARRIOR)) {
+			return 0;
+		} elseif (theUnit == UnitDB(UNIT_FIRE_TRIREME)) {
+			return 0;
+		}
+	}}	
+	GetCityByLocation(andhapuraLoc, tmpCity);
+	if (CityIsValid(tmpCity)) {  if (tmpCity == theCity) {
+		if (theUnit == UnitDB(UNIT_HOPLITE)) {
+			return 0;
+		} elseif (theUnit == UnitDB(UNIT_MOUNTED_ARCHER)) {
+			return 0;
+		} elseif (theUnit == UnitDB(UNIT_ARCHER)) {
+			return 0;
+		} elseif (theUnit == UnitDB(UNIT_FIRE_TRIREME)) {
+			return 0;
+		}
+	}}	
+	GetCityByLocation(dhufarLoc, tmpCity);
+	if (CityIsValid(tmpCity)) {  if (tmpCity == theCity) {
+		if (theUnit == UnitDB(UNIT_HOPLITE)) {
+			return 0;
+		} elseif (theUnit == UnitDB(UNIT_MOUNTED_ARCHER2)) {
+			return 0;
+		} elseif (theUnit == UnitDB(UNIT_ARCHER2)) {
+			return 0;
+		} elseif (theUnit == UnitDB(UNIT_ELEPHANT_WARRIOR)) {
+			return 0;
+		} elseif (theUnit == UnitDB(UNIT_FIRE_TRIREME)) {
+			return 0;
+		}
+	}}	
+	GetCityByLocation(maribLoc, tmpCity);
+	if (CityIsValid(tmpCity)) {  if (tmpCity == theCity) {
+		if (theUnit == UnitDB(UNIT_HOPLITE)) {
+			return 0;
+		} elseif (theUnit == UnitDB(UNIT_MOUNTED_ARCHER2)) {
+			return 0;
+		} elseif (theUnit == UnitDB(UNIT_ARCHER2)) {
+			return 0;
+		} elseif (theUnit == UnitDB(UNIT_ELEPHANT_WARRIOR)) {
+			return 0;
+		} elseif (theUnit == UnitDB(UNIT_FIRE_TRIREME)) {
+			return 0;
+		}
+	}}	
+	GetCityByLocation(meroeLoc, tmpCity);
+	if (CityIsValid(tmpCity)) {  if (tmpCity == theCity) {
+		if (theUnit == UnitDB(UNIT_HOPLITE)) {
+			return 0;
+		} elseif (theUnit == UnitDB(UNIT_MOUNTED_ARCHER2)) {
+			return 0;
+		} elseif (theUnit == UnitDB(UNIT_ARCHER2)) {
+			return 0;
+		} elseif (theUnit == UnitDB(UNIT_FIRE_TRIREME)) {
+			return 0;
+		}
+	}}	
+	GetCityByLocation(mulasthanLoc, tmpCity);
+	if (CityIsValid(tmpCity)) {  if (tmpCity == theCity) {
+		if (theUnit == UnitDB(UNIT_HOPLITE)) {
+			return 0;
+		} elseif (theUnit == UnitDB(UNIT_MOUNTED_ARCHER)) {
+			return 0;
+		} elseif (theUnit == UnitDB(UNIT_ARCHER)) {
+			return 0;
+		} elseif (theUnit == UnitDB(UNIT_FIRE_TRIREME)) {
+			return 0;
+		}
+	}}	
+	GetCityByLocation(pattalaLoc, tmpCity);
+	if (CityIsValid(tmpCity)) {  if (tmpCity == theCity) {
+		if (theUnit == UnitDB(UNIT_HOPLITE)) {
+			return 0;
+		} elseif (theUnit == UnitDB(UNIT_MOUNTED_ARCHER)) {
+			return 0;
+		} elseif (theUnit == UnitDB(UNIT_ARCHER)) {
+			return 0;
+		} elseif (theUnit == UnitDB(UNIT_FIRE_TRIREME)) {
+			return 0;
+		}
+	}}
+	GetCityByLocation(rorukaLoc, tmpCity);
+	if (CityIsValid(tmpCity)) {  if (tmpCity == theCity) {
+		if (theUnit == UnitDB(UNIT_HOPLITE)) {
+			return 0;
+		} elseif (theUnit == UnitDB(UNIT_MOUNTED_ARCHER)) {
+			return 0;
+		} elseif (theUnit == UnitDB(UNIT_ARCHER)) {
+			return 0;
+		} elseif (theUnit == UnitDB(UNIT_FIRE_TRIREME)) {
+			return 0;
+		}
+	}}
+	GetCityByLocation(sakalaLoc, tmpCity);
+	if (CityIsValid(tmpCity)) {  if (tmpCity == theCity) {
+		if (theUnit == UnitDB(UNIT_HOPLITE)) {
+			return 0;
+		} elseif (theUnit == UnitDB(UNIT_MOUNTED_ARCHER)) {
+			return 0;
+		} elseif (theUnit == UnitDB(UNIT_ARCHER)) {
+			return 0;
+		} elseif (theUnit == UnitDB(UNIT_FIRE_TRIREME)) {
+			return 0;
+		}
+	}}
+	GetCityByLocation(shabwahLoc, tmpCity);
+	if (CityIsValid(tmpCity)) {  if (tmpCity == theCity) {
+		if (theUnit == UnitDB(UNIT_HOPLITE)) {
+			return 0;
+		} elseif (theUnit == UnitDB(UNIT_MOUNTED_ARCHER2)) {
+			return 0;
+		} elseif (theUnit == UnitDB(UNIT_ARCHER2)) {
+			return 0;
+		} elseif (theUnit == UnitDB(UNIT_ELEPHANT_WARRIOR)) {
+			return 0;
+		} elseif (theUnit == UnitDB(UNIT_FIRE_TRIREME)) {
+			return 0;
+		}
+	}}	
+	GetCityByLocation(suvarnagiriLoc, tmpCity);
+	if (CityIsValid(tmpCity)) {  if (tmpCity == theCity) {
+		if (theUnit == UnitDB(UNIT_HOPLITE)) {
+			return 0;
+		} elseif (theUnit == UnitDB(UNIT_MOUNTED_ARCHER)) {
+			return 0;
+		} elseif (theUnit == UnitDB(UNIT_ARCHER)) {
+			return 0;
+		} elseif (theUnit == UnitDB(UNIT_FIRE_TRIREME)) {
+			return 0;
+		}
+	}}
+	GetCityByLocation(taksasilaLoc, tmpCity);
+	if (CityIsValid(tmpCity)) {  if (tmpCity == theCity) {
+		if (theUnit == UnitDB(UNIT_HOPLITE)) {
+			return 0;
+		} elseif (theUnit == UnitDB(UNIT_MOUNTED_ARCHER)) {
+			return 0;
+		} elseif (theUnit == UnitDB(UNIT_ARCHER)) {
+			return 0;
+		} elseif (theUnit == UnitDB(UNIT_FIRE_TRIREME)) {
+			return 0;
+		}
+	}}
+	GetCityByLocation(udumbarikaLoc, tmpCity);
+	if (CityIsValid(tmpCity)) {  if (tmpCity == theCity) {
+		if (theUnit == UnitDB(UNIT_HOPLITE)) {
+			return 0;
+		} elseif (theUnit == UnitDB(UNIT_MOUNTED_ARCHER)) {
+			return 0;
+		} elseif (theUnit == UnitDB(UNIT_ARCHER)) {
+			return 0;
+		} elseif (theUnit == UnitDB(UNIT_FIRE_TRIREME)) {
+			return 0;
+		}
+	}}
+	return 1;
+}
+
+// Limits buildings buildable by each city in the game
+int_f mod_CanCityBuildBuilding(city_t theCity, int_t theBuilding)
+{
+city_t	tmpCity;
+
+// Macedonian cities
+	GetCityByLocation(amphipolisLoc, tmpCity);
+	if (CityIsValid(tmpCity)) {  if (tmpCity == theCity) {
+		if (theBuilding == BuildingDB(IMPROVE_BALLISTA_TOWERS)) {
+			return 0;
+		}
+	}}
+	GetCityByLocation(larissaLoc, tmpCity);
+	if (CityIsValid(tmpCity)) {  if (tmpCity == theCity) {
+		if (theBuilding == BuildingDB(IMPROVE_BALLISTA_TOWERS)) {
+			return 0;
+		}
+	}}
+	GetCityByLocation(perinthusLoc, tmpCity);
+	if (CityIsValid(tmpCity)) {  if (tmpCity == theCity) {
+		if (theBuilding == BuildingDB(IMPROVE_BALLISTA_TOWERS)) {
+			return 0;
+		}
+	}}
+	GetCityByLocation(philipLoc, tmpCity);
+	if (CityIsValid(tmpCity)) {  if (tmpCity == theCity) {
+		if (theBuilding == BuildingDB(IMPROVE_BALLISTA_TOWERS)) {
+			return 0;
+		}
+	}}
+
+// Corinthian League cities
+	GetCityByLocation(chalcisLoc, tmpCity);
+	if (CityIsValid(tmpCity)) {  if (tmpCity == theCity) {
+		if (theBuilding == BuildingDB(IMPROVE_BALLISTA_TOWERS)) {
+			return 0;
+		}
+	}}
+	GetCityByLocation(corcyraLoc, tmpCity);
+	if (CityIsValid(tmpCity)) {  if (tmpCity == theCity) {
+		if (theBuilding == BuildingDB(IMPROVE_BALLISTA_TOWERS)) {
+			return 0;
+		}
+	}}	
+	GetCityByLocation(epidamnusLoc, tmpCity);
+	if (CityIsValid(tmpCity)) {  if (tmpCity == theCity) {
+		if (theBuilding == BuildingDB(IMPROVE_BALLISTA_TOWERS)) {
+			return 0;
+		}
+	}}		
+	GetCityByLocation(knossosLoc, tmpCity);
+	if (CityIsValid(tmpCity)) {  if (tmpCity == theCity) {
+		if (theBuilding == BuildingDB(IMPROVE_BALLISTA_TOWERS)) {
+			return 0;
+		}
+	}}		
+	GetCityByLocation(myliteneLoc, tmpCity);
+	if (CityIsValid(tmpCity)) {  if (tmpCity == theCity) {
+		if (theBuilding == BuildingDB(IMPROVE_BALLISTA_TOWERS)) {
+			return 0;
+		}
+	}}
+
+// Greek State cities
+	GetCityByLocation(chersonesusLoc, tmpCity);
+	if (CityIsValid(tmpCity)) {  if (tmpCity == theCity) {
+		if (theBuilding == BuildingDB(IMPROVE_BALLISTA_TOWERS)) {
+			return 0;
+		}
+	}}
+	GetCityByLocation(cyeneLoc, tmpCity);
+	if (CityIsValid(tmpCity)) {  if (tmpCity == theCity) {
+		if (theBuilding == BuildingDB(IMPROVE_BALLISTA_TOWERS)) {
+			return 0;
+		}
+	}}
+	GetCityByLocation(tarentumLoc, tmpCity);
+	if (CityIsValid(tmpCity)) {  if (tmpCity == theCity) {
+		if (theBuilding == BuildingDB(IMPROVE_BALLISTA_TOWERS)) {
+			return 0;
+		}
+	}}
+
+// Persian cities
+	GetCityByLocation(arachosiaLoc, tmpCity);
+	if (CityIsValid(tmpCity)) {  if (tmpCity == theCity) {
+		if (theBuilding == BuildingDB(IMPROVE_THEATER)) {
+			return 0;
+		} elseif (theBuilding == BuildingDB(IMPROVE_ACADEMY)) {
+			return 0;
+		} elseif (theBuilding == BuildingDB(IMPROVE_BALLISTA_TOWERS)) {
+			return 0;
+		}
+	}}
+	GetCityByLocation(aradusLoc, tmpCity);
+	if (CityIsValid(tmpCity)) {  if (tmpCity == theCity) {
+		if (theBuilding == BuildingDB(IMPROVE_THEATER)) {
+			return 0;
+		} elseif (theBuilding == BuildingDB(IMPROVE_ACADEMY)) {
+			return 0;
+		} elseif (theBuilding == BuildingDB(IMPROVE_BALLISTA_TOWERS)) {
+			return 0;
+		}
+	}}
+	GetCityByLocation(artakoanaLoc, tmpCity);
+	if (CityIsValid(tmpCity)) {  if (tmpCity == theCity) {
+		if (theBuilding == BuildingDB(IMPROVE_THEATER)) {
+			return 0;
+		} elseif (theBuilding == BuildingDB(IMPROVE_ACADEMY)) {
+			return 0;
+		} elseif (theBuilding == BuildingDB(IMPROVE_BALLISTA_TOWERS)) {
+			return 0;
+		}
+	}}	
+	GetCityByLocation(babylonLoc, tmpCity);
+	if (CityIsValid(tmpCity)) {  if (tmpCity == theCity) {
+		if (theBuilding == BuildingDB(IMPROVE_THEATER)) {
+			return 0;
+		} elseif (theBuilding == BuildingDB(IMPROVE_ACADEMY)) {
+			return 0;
+		}
+	}}	
+	GetCityByLocation(baktraLoc, tmpCity);
+	if (CityIsValid(tmpCity)) {  if (tmpCity == theCity) {
+		if (theBuilding == BuildingDB(IMPROVE_THEATER)) {
+			return 0;
+		} elseif (theBuilding == BuildingDB(IMPROVE_ACADEMY)) {
+			return 0;
+		}
+	}}	
+	GetCityByLocation(dascyliumLoc, tmpCity);
+	if (CityIsValid(tmpCity)) {  if (tmpCity == theCity) {
+		if (theBuilding == BuildingDB(IMPROVE_THEATER)) {
+			return 0;
+		} elseif (theBuilding == BuildingDB(IMPROVE_ACADEMY)) {
+			return 0;
+		}
+	}}	
+	GetCityByLocation(ecbatanaLoc, tmpCity);
+	if (CityIsValid(tmpCity)) {  if (tmpCity == theCity) {
+		if (theBuilding == BuildingDB(IMPROVE_THEATER)) {
+			return 0;
+		} elseif (theBuilding == BuildingDB(IMPROVE_ACADEMY)) {
+			return 0;
+		}
+	}}	
+	GetCityByLocation(ephesusLoc, tmpCity);
+	if (CityIsValid(tmpCity)) {  if (tmpCity == theCity) {
+		if (theBuilding == BuildingDB(IMPROVE_THEATER)) {
+			return 0;
+		} elseif (theBuilding == BuildingDB(IMPROVE_ACADEMY)) {
+			return 0;
+		} elseif (theBuilding == BuildingDB(IMPROVE_BALLISTA_TOWERS)) {
+			return 0;
+		}
+	}}	
+	GetCityByLocation(gazaLoc, tmpCity);
+	if (CityIsValid(tmpCity)) {  if (tmpCity == theCity) {
+		if (theBuilding == BuildingDB(IMPROVE_THEATER)) {
+			return 0;
+		} elseif (theBuilding == BuildingDB(IMPROVE_ACADEMY)) {
+			return 0;
+		}
+	}}	
+	GetCityByLocation(gordiumLoc, tmpCity);
+	if (CityIsValid(tmpCity)) {  if (tmpCity == theCity) {
+		if (theBuilding == BuildingDB(IMPROVE_THEATER)) {
+			return 0;
+		} elseif (theBuilding == BuildingDB(IMPROVE_ACADEMY)) {
+			return 0;
+		} elseif (theBuilding == BuildingDB(IMPROVE_BALLISTA_TOWERS)) {
+			return 0;
+		}
+	}}	
+	GetCityByLocation(halicarnassusLoc, tmpCity);
+	if (CityIsValid(tmpCity)) {  if (tmpCity == theCity) {
+		if (theBuilding == BuildingDB(IMPROVE_THEATER)) {
+			return 0;
+		} elseif (theBuilding == BuildingDB(IMPROVE_ACADEMY)) {
+			return 0;
+		}
+	}}	
+	GetCityByLocation(issusLoc, tmpCity);
+	if (CityIsValid(tmpCity)) {  if (tmpCity == theCity) {
+		if (theBuilding == BuildingDB(IMPROVE_THEATER)) {
+			return 0;
+		} elseif (theBuilding == BuildingDB(IMPROVE_ACADEMY)) {
+			return 0;
+		} elseif (theBuilding == BuildingDB(IMPROVE_BALLISTA_TOWERS)) {
+			return 0;
+		}
+	}}	
+	GetCityByLocation(kyreskhataLoc, tmpCity);
+	if (CityIsValid(tmpCity)) {  if (tmpCity == theCity) {
+		if (theBuilding == BuildingDB(IMPROVE_THEATER)) {
+			return 0;
+		} elseif (theBuilding == BuildingDB(IMPROVE_ACADEMY)) {
+			return 0;
+		}
+	}}	
+	GetCityByLocation(marakandaLoc, tmpCity);
+	if (CityIsValid(tmpCity)) {  if (tmpCity == theCity) {
+		if (theBuilding == BuildingDB(IMPROVE_THEATER)) {
+			return 0;
+		} elseif (theBuilding == BuildingDB(IMPROVE_ACADEMY)) {
+			return 0;
+		}
+	}}	
+	GetCityByLocation(mazakaLoc, tmpCity);
+	if (CityIsValid(tmpCity)) {  if (tmpCity == theCity) {
+		if (theBuilding == BuildingDB(IMPROVE_THEATER)) {
+			return 0;
+		} elseif (theBuilding == BuildingDB(IMPROVE_ACADEMY)) {
+			return 0;
+		} elseif (theBuilding == BuildingDB(IMPROVE_BALLISTA_TOWERS)) {
+			return 0;
+		}
+	}}
+	GetCityByLocation(memphisLoc, tmpCity);
+	if (CityIsValid(tmpCity)) {  if (tmpCity == theCity) {
+		if (theBuilding == BuildingDB(IMPROVE_THEATER)) {
+			return 0;
+		} elseif (theBuilding == BuildingDB(IMPROVE_ACADEMY)) {
+			return 0;
+		} elseif (theBuilding == BuildingDB(IMPROVE_BALLISTA_TOWERS)) {
+			return 0;
+		}
+	}}	
+	GetCityByLocation(pelusiumLoc, tmpCity);
+	if (CityIsValid(tmpCity)) {  if (tmpCity == theCity) {
+		if (theBuilding == BuildingDB(IMPROVE_THEATER)) {
+			return 0;
+		} elseif (theBuilding == BuildingDB(IMPROVE_ACADEMY)) {
+			return 0;
+		} elseif (theBuilding == BuildingDB(IMPROVE_BALLISTA_TOWERS)) {
+			return 0;
+		}
+	}}	
+	GetCityByLocation(persepolisLoc, tmpCity);
+	if (CityIsValid(tmpCity)) {  if (tmpCity == theCity) {
+		if (theBuilding == BuildingDB(IMPROVE_THEATER)) {
+			return 0;
+		} elseif (theBuilding == BuildingDB(IMPROVE_ACADEMY)) {
+			return 0;
+		}
+	}}	
+	GetCityByLocation(salamisLoc, tmpCity);
+	if (CityIsValid(tmpCity)) {  if (tmpCity == theCity) {
+		if (theBuilding == BuildingDB(IMPROVE_THEATER)) {
+			return 0;
+		} elseif (theBuilding == BuildingDB(IMPROVE_ACADEMY)) {
+			return 0;
+		} elseif (theBuilding == BuildingDB(IMPROVE_BALLISTA_TOWERS)) {
+			return 0;
+		}
+	}}	
+	GetCityByLocation(sharudLoc, tmpCity);
+	if (CityIsValid(tmpCity)) {  if (tmpCity == theCity) {
+		if (theBuilding == BuildingDB(IMPROVE_THEATER)) {
+			return 0;
+		} elseif (theBuilding == BuildingDB(IMPROVE_ACADEMY)) {
+			return 0;
+		}
+	}}	
+	GetCityByLocation(sidonLoc, tmpCity);
+	if (CityIsValid(tmpCity)) {  if (tmpCity == theCity) {
+		if (theBuilding == BuildingDB(IMPROVE_THEATER)) {
+			return 0;
+		} elseif (theBuilding == BuildingDB(IMPROVE_ACADEMY)) {
+			return 0;
+		} elseif (theBuilding == BuildingDB(IMPROVE_BALLISTA_TOWERS)) {
+			return 0;
+		}
+	}}	
+	GetCityByLocation(susaLoc, tmpCity);
+	if (CityIsValid(tmpCity)) {  if (tmpCity == theCity) {
+		if (theBuilding == BuildingDB(IMPROVE_THEATER)) {
+			return 0;
+		} elseif (theBuilding == BuildingDB(IMPROVE_ACADEMY)) {
+			return 0;
+		} elseif (theBuilding == BuildingDB(IMPROVE_BALLISTA_TOWERS)) {
+			return 0;
+		}
+	}}	
+	GetCityByLocation(susiaLoc, tmpCity);
+	if (CityIsValid(tmpCity)) {  if (tmpCity == theCity) {
+		if (theBuilding == BuildingDB(IMPROVE_THEATER)) {
+			return 0;
+		} elseif (theBuilding == BuildingDB(IMPROVE_ACADEMY)) {
+			return 0;
+		} elseif (theBuilding == BuildingDB(IMPROVE_BALLISTA_TOWERS)) {
+			return 0;
+		}
+	}}	
+	GetCityByLocation(tarsusLoc, tmpCity);
+	if (CityIsValid(tmpCity)) {  if (tmpCity == theCity) {
+		if (theBuilding == BuildingDB(IMPROVE_THEATER)) {
+			return 0;
+		} elseif (theBuilding == BuildingDB(IMPROVE_ACADEMY)) {
+			return 0;
+		} elseif (theBuilding == BuildingDB(IMPROVE_BALLISTA_TOWERS)) {
+			return 0;
+		}
+	}}	
+	GetCityByLocation(thapsacusLoc, tmpCity);
+	if (CityIsValid(tmpCity)) {  if (tmpCity == theCity) {
+		if (theBuilding == BuildingDB(IMPROVE_THEATER)) {
+			return 0;
+		} elseif (theBuilding == BuildingDB(IMPROVE_ACADEMY)) {
+			return 0;
+		} elseif (theBuilding == BuildingDB(IMPROVE_BALLISTA_TOWERS)) {
+			return 0;
+		}
+	}}	
+	GetCityByLocation(thebesLoc, tmpCity);
+	if (CityIsValid(tmpCity)) {  if (tmpCity == theCity) {
+		if (theBuilding == BuildingDB(IMPROVE_THEATER)) {
+			return 0;
+		} elseif (theBuilding == BuildingDB(IMPROVE_ACADEMY)) {
+			return 0;
+		} elseif (theBuilding == BuildingDB(IMPROVE_BALLISTA_TOWERS)) {
+			return 0;
+		}
+	}}	
+	GetCityByLocation(tyreLoc, tmpCity);
+	if (CityIsValid(tmpCity)) {  if (tmpCity == theCity) {
+		if (theBuilding == BuildingDB(IMPROVE_THEATER)) {
+			return 0;
+		} elseif (theBuilding == BuildingDB(IMPROVE_ACADEMY)) {
+			return 0;
+		}
+	}}	
+
+// Carthaginian Cities
+	GetCityByLocation(hadrumentumLoc, tmpCity);
+	if (CityIsValid(tmpCity)) {  if (tmpCity == theCity) {
+		if (theBuilding == BuildingDB(IMPROVE_BALLISTA_TOWERS)) {
+			return 0;
+		}
+	}}	
+	GetCityByLocation(hippoLoc, tmpCity);
+	if (CityIsValid(tmpCity)) {  if (tmpCity == theCity) {
+		if (theBuilding == BuildingDB(IMPROVE_BALLISTA_TOWERS)) {
+			return 0;
+		}
+	}}	
+	GetCityByLocation(leptisLoc, tmpCity);
+	if (CityIsValid(tmpCity)) {  if (tmpCity == theCity) {
+		if (theBuilding == BuildingDB(IMPROVE_BALLISTA_TOWERS)) {
+			return 0;
+		}
+	}}	
+
+// Roman Cities
+	GetCityByLocation(capuaLoc, tmpCity);
+	if (CityIsValid(tmpCity)) {  if (tmpCity == theCity) {
+		if (theBuilding == BuildingDB(IMPROVE_BALLISTA_TOWERS)) {
+			return 0;
+		}
+	}}	
+	GetCityByLocation(cumaeLoc, tmpCity);
+	if (CityIsValid(tmpCity)) {  if (tmpCity == theCity) {
+		if (theBuilding == BuildingDB(IMPROVE_BALLISTA_TOWERS)) {
+			return 0;
+		}
+	}}	
+
+// Magadhan Cities	
+	GetCityByLocation(bharuchLoc, tmpCity);
+	if (CityIsValid(tmpCity)) {  if (tmpCity == theCity) {
+		if (theBuilding == BuildingDB(IMPROVE_THEATER)) {
+			return 0;
+		} elseif (theBuilding == BuildingDB(IMPROVE_BALLISTA_TOWERS)) {
+			return 0;
+		}
+	}}	
+	GetCityByLocation(campaLoc, tmpCity);
+	if (CityIsValid(tmpCity)) {  if (tmpCity == theCity) {
+		if (theBuilding == BuildingDB(IMPROVE_THEATER)) {
+			return 0;
+		} elseif (theBuilding == BuildingDB(IMPROVE_BALLISTA_TOWERS)) {
+			return 0;
+		}
+	}}		
+	GetCityByLocation(kasiLoc, tmpCity);
+	if (CityIsValid(tmpCity)) {  if (tmpCity == theCity) {
+		if (theBuilding == BuildingDB(IMPROVE_THEATER)) {
+			return 0;
+		} elseif (theBuilding == BuildingDB(IMPROVE_BALLISTA_TOWERS)) {
+			return 0;
+		}
+	}}		
+	GetCityByLocation(kausambiLoc, tmpCity);
+	if (CityIsValid(tmpCity)) {  if (tmpCity == theCity) {
+		if (theBuilding == BuildingDB(IMPROVE_THEATER)) {
+			return 0;
+		} elseif (theBuilding == BuildingDB(IMPROVE_BALLISTA_TOWERS)) {
+			return 0;
+		}
+	}}	
+	GetCityByLocation(kusinaraLoc, tmpCity);
+	if (CityIsValid(tmpCity)) {  if (tmpCity == theCity) {
+		if (theBuilding == BuildingDB(IMPROVE_THEATER)) {
+			return 0;
+		} elseif (theBuilding == BuildingDB(IMPROVE_BALLISTA_TOWERS)) {
+			return 0;
+		}
+	}}	
+	GetCityByLocation(mathuraLoc, tmpCity);
+	if (CityIsValid(tmpCity)) {  if (tmpCity == theCity) {
+		if (theBuilding == BuildingDB(IMPROVE_THEATER)) {
+			return 0;
+		} elseif (theBuilding == BuildingDB(IMPROVE_BALLISTA_TOWERS)) {
+			return 0;
+		}
+	}}	
+	GetCityByLocation(pataliputraLoc, tmpCity);
+	if (CityIsValid(tmpCity)) {  if (tmpCity == theCity) {
+		if (theBuilding == BuildingDB(IMPROVE_THEATER)) {
+			return 0;
+		} elseif (theBuilding == BuildingDB(IMPROVE_BALLISTA_TOWERS)) {
+			return 0;
+		}
+	}}	
+	GetCityByLocation(saketaLoc, tmpCity);
+	if (CityIsValid(tmpCity)) {  if (tmpCity == theCity) {
+		if (theBuilding == BuildingDB(IMPROVE_THEATER)) {
+			return 0;
+		} elseif (theBuilding == BuildingDB(IMPROVE_BALLISTA_TOWERS)) {
+			return 0;
+		}
+	}}	
+	GetCityByLocation(tamraliptiLoc, tmpCity);
+	if (CityIsValid(tmpCity)) {  if (tmpCity == theCity) {
+		if (theBuilding == BuildingDB(IMPROVE_THEATER)) {
+			return 0;
+		} elseif (theBuilding == BuildingDB(IMPROVE_BALLISTA_TOWERS)) {
+			return 0;
+		}
+	}}	
+	GetCityByLocation(ujjayiniLoc, tmpCity);
+	if (CityIsValid(tmpCity)) {  if (tmpCity == theCity) {
+		if (theBuilding == BuildingDB(IMPROVE_THEATER)) {
+			return 0;
+		}
+	}}	
+
+// Independent States Cities
+	GetCityByLocation(adanaLoc, tmpCity);
+	if (CityIsValid(tmpCity)) {  if (tmpCity == theCity) {
+		if (theBuilding == BuildingDB(IMPROVE_THEATER)) {
+			return 0;
+		} elseif (theBuilding == BuildingDB(IMPROVE_ACADEMY)) {
+			return 0;
+		} elseif (theBuilding == BuildingDB(IMPROVE_BALLISTA_TOWERS)) {
+			return 0;
+		}
+	}}	
+	GetCityByLocation(andhapuraLoc, tmpCity);
+	if (CityIsValid(tmpCity)) {  if (tmpCity == theCity) {
+		if (theBuilding == BuildingDB(IMPROVE_THEATER)) {
+			return 0;
+		} elseif (theBuilding == BuildingDB(IMPROVE_ACADEMY)) {
+			return 0;
+		} elseif (theBuilding == BuildingDB(IMPROVE_BALLISTA_TOWERS)) {
+			return 0;
+		}
+	}}	
+	GetCityByLocation(dhufarLoc, tmpCity);
+	if (CityIsValid(tmpCity)) {  if (tmpCity == theCity) {
+		if (theBuilding == BuildingDB(IMPROVE_THEATER)) {
+			return 0;
+		} elseif (theBuilding == BuildingDB(IMPROVE_ACADEMY)) {
+			return 0;
+		} elseif (theBuilding == BuildingDB(IMPROVE_BALLISTA_TOWERS)) {
+			return 0;
+		}
+	}}	
+	GetCityByLocation(maribLoc, tmpCity);
+	if (CityIsValid(tmpCity)) {  if (tmpCity == theCity) {
+		if (theBuilding == BuildingDB(IMPROVE_THEATER)) {
+			return 0;
+		} elseif (theBuilding == BuildingDB(IMPROVE_ACADEMY)) {
+			return 0;
+		}
+	}}	
+	GetCityByLocation(meroeLoc, tmpCity);
+	if (CityIsValid(tmpCity)) {  if (tmpCity == theCity) {
+		if (theBuilding == BuildingDB(IMPROVE_THEATER)) {
+			return 0;
+		} elseif (theBuilding == BuildingDB(IMPROVE_ACADEMY)) {
+			return 0;
+		} elseif (theBuilding == BuildingDB(IMPROVE_BALLISTA_TOWERS)) {
+			return 0;
+		}
+	}}	
+	GetCityByLocation(mulasthanLoc, tmpCity);
+	if (CityIsValid(tmpCity)) {  if (tmpCity == theCity) {
+		if (theBuilding == BuildingDB(IMPROVE_THEATER)) {
+			return 0;
+		}
+	}}	
+	GetCityByLocation(pattalaLoc, tmpCity);
+	if (CityIsValid(tmpCity)) {  if (tmpCity == theCity) {
+		if (theBuilding == BuildingDB(IMPROVE_THEATER)) {
+			return 0;
+		} elseif (theBuilding == BuildingDB(IMPROVE_BALLISTA_TOWERS)) {
+			return 0;
+		}
+	}}
+	GetCityByLocation(rorukaLoc, tmpCity);
+	if (CityIsValid(tmpCity)) {  if (tmpCity == theCity) {
+		if (theBuilding == BuildingDB(IMPROVE_THEATER)) {
+			return 0;
+		} elseif (theBuilding == BuildingDB(IMPROVE_BALLISTA_TOWERS)) {
+			return 0;
+		}
+	}}
+	GetCityByLocation(sakalaLoc, tmpCity);
+	if (CityIsValid(tmpCity)) {  if (tmpCity == theCity) {
+		if (theBuilding == BuildingDB(IMPROVE_THEATER)) {
+			return 0;
+		} elseif (theBuilding == BuildingDB(IMPROVE_BALLISTA_TOWERS)) {
+			return 0;
+		}
+	}}
+	GetCityByLocation(shabwahLoc, tmpCity);
+	if (CityIsValid(tmpCity)) {  if (tmpCity == theCity) {
+		if (theBuilding == BuildingDB(IMPROVE_THEATER)) {
+			return 0;
+		} elseif (theBuilding == BuildingDB(IMPROVE_ACADEMY)) {
+			return 0;
+		} elseif (theBuilding == BuildingDB(IMPROVE_BALLISTA_TOWERS)) {
+			return 0;
+		}
+	}}	
+	GetCityByLocation(suvarnagiriLoc, tmpCity);
+	if (CityIsValid(tmpCity)) {  if (tmpCity == theCity) {
+		if (theBuilding == BuildingDB(IMPROVE_THEATER)) {
+			return 0;
+		}
+	}}
+	GetCityByLocation(taksasilaLoc, tmpCity);
+	if (CityIsValid(tmpCity)) {  if (tmpCity == theCity) {
+		if (theBuilding == BuildingDB(IMPROVE_THEATER)) {
+			return 0;
+		} elseif (theBuilding == BuildingDB(IMPROVE_BALLISTA_TOWERS)) {
+			return 0;
+		}
+	}}
+	GetCityByLocation(udumbarikaLoc, tmpCity);
+	if (CityIsValid(tmpCity)) {  if (tmpCity == theCity) {
+		if (theBuilding == BuildingDB(IMPROVE_THEATER)) {
+			return 0;
+		} elseif (theBuilding == BuildingDB(IMPROVE_BALLISTA_TOWERS)) {
+			return 0;
+		}
+	}}
+	return 1;
+}
+

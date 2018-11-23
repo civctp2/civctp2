@@ -1,0 +1,11 @@
+# Script to start the build server
+# First arg is where to put source .zip file;
+# second is what to suck back,
+# third is what to run to turn 1st into 2nd
+# fourth is the port number to listen to.
+
+JAVADIR=/usr/local/jdk
+
+cd ~/build
+$JAVADIR/bin/javac Server.java >> /tmp/bldlinux.log 2>&1
+$JAVADIR/bin/java Server anetlin.zip commdll/linux86.zip `pwd`/buildlinux 6789 >> /tmp/bldlinux.log 2>&1 < /dev/null &

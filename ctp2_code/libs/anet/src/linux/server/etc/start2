@@ -1,0 +1,23 @@
+#!/bin/sh
+# Start (or restart) the ActiveNet game server
+#
+# You should not need to edit this file.  All modifiable
+# fields are controlled by the file ~/etc/anet2env
+#
+
+# Set the variables
+. ~/etc/anet2env
+
+# Stop the existing server
+. ~/etc/stop2
+
+# Save one level of old log
+echo Starting game server at `date`
+rm -f $ANET2_LOG.old
+if [ -f $ANET2_LOG ]; then
+   mv $ANET2_LOG $ANET2_LOG.old
+fi
+
+# Start the server
+. ~/etc/runAnet2
+

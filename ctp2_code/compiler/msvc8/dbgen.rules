@@ -1,0 +1,21 @@
+﻿<?xml version="1.0" encoding="utf-8"?>
+<VisualStudioToolFile
+	Name="CtP2 Code Generation"
+	Version="8.00"
+	>
+	<Rules>
+		<CustomBuildRule
+			Name="CtP2 Database Code Generation"
+			DisplayName="CtP2 Database Code Generator"
+			CommandLine="&quot;$(ProjectDir)..\gs\dbgen\ctpdb&quot; &quot;$(InputDir).&quot; &lt; &quot;$(InputPath)&quot;"
+			Outputs="$(InputDir)$(InputName)Record.stamp"
+			AdditionalDependencies="&quot;$(ProjectDir)..\gs\dbgen\ctpdb.exe&quot;"
+			FileExtensions="*.cdb"
+			ExecutionDescription="Generating database code for $(InputFileName)"
+			ShowOnlyRuleProperties="false"
+			>
+			<Properties>
+			</Properties>
+		</CustomBuildRule>
+	</Rules>
+</VisualStudioToolFile>

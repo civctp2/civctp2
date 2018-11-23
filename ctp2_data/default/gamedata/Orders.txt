@@ -1,0 +1,986 @@
+//----------------------------------------------------------------------------
+//
+// Project      : Call To Power 2
+// File type    : Text file
+// Description  : The data for orders
+//
+//----------------------------------------------------------------------------
+//
+// Disclaimer
+//
+// THIS FILE IS NOT GENERATED OR SUPPORTED BY ACTIVISION.
+//
+// This material has been developed at apolyton.net by the Apolyton CtP2 
+// Source Code Project. Contact the authors at ctp2source@apolyton.net.
+//
+//----------------------------------------------------------------------------
+//
+// Modifications from the original Activision code:
+//
+// - UnitPretest of ORDER_REFUEL is now NoFuelThenCrash (outcommented until it works)
+// - UnitPretest of ORDER_PARADROP is now CanParadrop
+//   - April 24th 2005 Martin Gühmann
+//
+//----------------------------------------------------------------------------
+
+# 47 Total Orders
+
+# Standard Orders
+
+ORDER_MOVE {
+  Gold 0
+  Move 100
+  // just move	
+  EventName "" 
+  GLHidden
+
+  LocalizedName str_ldl_order_move
+  StatusText str_ldl_order_move
+
+  TargetPretest:MovePosition
+  UnitPretest_None
+
+  CPIcon "upsi26.tga"
+  ButtonLocation 0
+  DefaultIcon ICON_ORDER_MOVE
+  
+  Cursor 1
+  InvalidCursor 2
+}
+
+ORDER_ATTACK {
+  Gold 0
+  Move 100
+  // just move	
+  EventName "" 
+
+  LocalizedName str_ldl_order_attack
+  StatusText str_ldl_order_attack
+
+  TargetPretest:AttackPosition
+  UnitPretest_CanAttack
+
+  CPIcon "upsi27.tga"
+  ButtonLocation 1
+  DefaultIcon ICON_ORDER_ATTACK
+
+  Cursor 3
+  InvalidCursor 4
+}
+
+ORDER_FORTIFY {
+  Gold 0
+  Move 100
+  // just move	
+  EventName "EntrenchOrder" 
+
+  LocalizedName str_ldl_order_fortify
+  StatusText str_ldl_order_fortify
+
+  UnitPretest_CanEntrench
+  TargetPretest:None
+
+  CPIcon "upsi28.tga"
+  ButtonLocation 2
+  DefaultIcon ICON_ORDER_FORTIFY
+  Cursor 62
+  InvalidCursor 63
+}
+
+ORDER_SLEEP {
+  Gold 0
+  Move 100
+  // just move	
+  EventName "SleepOrder" 
+
+  LocalizedName str_ldl_order_sleep
+  StatusText str_ldl_order_sleep
+
+  UnitPretest_None
+  TargetPretest:None
+
+  CPIcon "upsi29.tga"
+  ButtonLocation 3
+  DefaultIcon ICON_ORDER_SLEEP
+  Cursor 28
+  InvalidCursor 29
+}
+
+ORDER_PILLAGE {
+  Gold 0
+  Move 100
+  EventName "PillageOrder"
+
+  LocalizedName str_ldl_order_pillage
+  StatusText str_ldl_order_pillage
+
+  TargetPretest:TerrainImprovement
+  UnitPretest_CanPillage  
+
+  Range 0
+
+  CPIcon "upsi32.tga"
+  ButtonLocation 4
+  DefaultIcon ICON_ORDER_PILLAGE
+  Cursor 18
+  InvalidCursor 19
+}
+
+ORDER_INTERCEPT_TRADE {
+  Gold 0
+  Move 100
+  EventName "PirateOrder"
+
+  LocalizedName str_ldl_order_intercept_trade
+  StatusText str_ldl_order_intercept_trade
+
+  TargetPretest:TradeRoute
+  UnitPretest_CanInterceptTrade  
+
+  Range 0
+
+  CPIcon "upsi34.tga"
+  ButtonLocation 5
+  DefaultIcon ICON_ORDER_INTERCEPT_TRADE
+  Cursor 74
+  InvalidCursor 75
+}
+
+ORDER_EXPEL {
+  Gold 0
+  Move 100
+  EventName "ExpelOrder"
+
+  LocalizedName str_ldl_order_expel
+  StatusText str_ldl_order_expel
+
+  TargetPretest:EnemySpecialUnit
+  UnitPretest_CanExpel
+
+  Range 1
+
+  CPIcon "upsi31.tga"
+  ButtonLocation 6
+  DefaultIcon ICON_ORDER_EXPEL
+  Cursor 16
+  InvalidCursor 17
+}
+
+ORDER_REFORM {
+  Gold 1000
+  Move 100
+  EventName "ReformCityOrder"
+
+  LocalizedName str_ldl_order_reform
+  StatusText str_ldl_order_reform
+
+  TargetPretest:OwnCity
+  UnitPretest_CanReformCity
+
+  Range 0
+
+  CPIcon "upsi33.tga"
+  ButtonLocation 7
+  DefaultIcon ICON_ORDER_REFORM
+  Cursor 22
+  InvalidCursor 23
+}
+
+
+ORDER_BOMBARD {
+  Gold 0
+  Move 100
+  EventName "BombardOrder"
+
+  LocalizedName str_ldl_order_bombard
+  StatusText str_ldl_order_bombard
+
+  TargetPretest:EnemyCity
+  UnitPretest_CanBombard  
+
+  Range 1
+
+  CPIcon "upsi01.tga"
+  ButtonLocation 8
+  DefaultIcon ICON_ORDER_BOMBARD
+  # FIXME - these are the default special action cursors
+  Cursor 7
+  InvalidCursor 8
+}
+
+
+ORDER_BOARD_TRANSPORT {
+  Gold 0
+  Move 0
+  EventName "BoardTransportOrder"
+
+  LocalizedName str_ldl_order_board_transport
+  StatusText str_ldl_order_board_transport
+
+  TargetPretest:Transport
+  UnitPretest_CanBeTransported
+
+  Range 0	
+
+  CPIcon "upsi02.tga"
+  ButtonLocation 9
+  DefaultIcon ICON_ORDER_BOARD_TRANSPORT
+  Cursor 66
+  InvalidCursor 67
+}
+
+
+ORDER_UNLOAD {
+  Gold 0
+  Move 0
+  EventName "UnloadOrder"
+
+  LocalizedName str_ldl_order_unload
+  StatusText str_ldl_order_unload
+
+  TargetPretest:AdjacentPosition
+  UnitPretest_CanTransport
+
+  Range 1
+
+  CPIcon "upsi03.tga"
+  ButtonLocation 10
+  DefaultIcon ICON_ORDER_UNLOAD
+  Cursor 68
+  InvalidCursor 69
+}
+
+
+ORDER_DISBAND_ARMY {
+  Gold 0
+  Move 100
+  EventName "DisbandArmyOrder"
+
+  LocalizedName str_ldl_order_disband_army
+  StatusText str_ldl_order_disband_army
+
+  TargetPretest:None
+  UnitPretest_None
+
+  Range 0	
+
+  CPIcon "upsi30.tga"
+  ButtonLocation 11
+  DefaultIcon ICON_ORDER_DISBAND_ARMY
+  Cursor 24
+  InvalidCursor 25
+}
+
+ORDER_SPACE_LAUNCH {
+  Gold 0
+  Move 0
+  EventName "LaunchOrder"
+
+  LocalizedName str_ldl_order_launch
+  StatusText str_ldl_order_launch
+
+  TargetPretest:OwnCity
+  UnitPretest_CanLaunch
+
+  Range 1
+  IsTeleport
+  CPIcon "upsi37.tga"
+  ButtonLocation 5
+  DefaultIcon ICON_ORDER_LAUNCH
+  Cursor 80
+  InvalidCursor 81
+}
+
+# Settler Orders
+
+ORDER_SETTLE {
+  Gold 0
+  Move 100
+  EventName "SettleOrder"
+
+  LocalizedName str_ldl_order_settle
+  StatusText str_ldl_order_settle
+
+  TargetPretest:None
+  UnitPretest_CanSettle  
+
+  Range 0
+
+  CPIcon "upsi04.tga"
+  ButtonLocation 4
+  DefaultIcon ICON_ORDER_SETTLE
+  Cursor 70
+  InvalidCursor 71
+}
+  
+
+# Diplomatic Orders
+
+ORDER_ESTABLISH_EMBASSY {
+  Gold 0
+  Move 100
+  EventName "EstablishEmbassyOrder"
+
+  LocalizedName str_ldl_order_establish_embassy
+  StatusText str_ldl_order_establish_embassy
+
+  TargetPretest:EnemyCity
+  UnitPretest_EstablishEmbassy
+
+  Range 1
+
+  CPIcon "upsi05.tga"
+  ButtonLocation 1
+  DefaultIcon ICON_ORDER_ESTABLISH_EMBASSY
+  Cursor 20
+  InvalidCursor 21
+}
+
+
+ORDER_THROW_PARTY {
+  Gold 500
+  Move 100
+  EventName "ThrowPartyOrder"
+
+  LocalizedName str_ldl_order_throw_party
+  StatusText str_ldl_order_throw_party
+
+  TargetPretest:EnemyCity
+  UnitPretest_ThrowParty
+
+  Range 1
+
+  CPIcon "upsi35.tga"
+  ButtonLocation 5
+  DefaultIcon ICON_ORDER_THROW_PARTY
+  Cursor 76
+  InvalidCursor 77
+}
+
+
+# Espionage Orders
+
+ORDER_INVESTIGATE_CITY {
+  Gold 0
+  Move 100
+  EventName "InvestigateCityOrder"
+
+  LocalizedName str_ldl_order_investigate_city
+  StatusText str_ldl_order_investigate_city
+
+  TargetPretest:EnemyCity
+  UnitPretest_CanInvestigateCity
+
+  Range 1
+
+  CPIcon "upsi06.tga"
+  ButtonLocation 4
+  DefaultIcon ICON_ORDER_INVESTIGATE_CITY
+  Cursor 30
+  InvalidCursor 31
+}
+
+
+ORDER_STEAL_TECHNOLOGY {
+  Gold 2000
+  Move 100
+  EventName "StealTechnologyOrder"
+
+  LocalizedName str_ldl_order_steal_technology
+  StatusText str_ldl_order_steal_technology
+
+  TargetPretest:EnemyCity
+  UnitPretest_CanStealTechnology
+
+  Range 1
+
+  CPIcon "upsi14.tga"
+  ButtonLocation 5
+  DefaultIcon ICON_ORDER_STEAL_TECHNOLOGY
+  Cursor 42
+  InvalidCursor 43
+}
+
+
+ORDER_INCITE_REVOLUTION {
+  Gold 100
+  Move 100
+  EventName "InciteRevolutionOrder"
+
+  LocalizedName str_ldl_order_incite_revolution
+  StatusText str_ldl_order_incite_revolution
+
+  TargetPretest:EnemyCity
+  UnitPretest_CanInciteRevolution
+
+  Range 1
+
+  CPIcon "upsi13.tga"
+  ButtonLocation 6
+  DefaultIcon ICON_ORDER_INCITE_REVOLUTION
+  Cursor 40
+  InvalidCursor 41
+}
+
+
+ORDER_PLANT_NUKE {
+  Gold 5000
+  Move 100
+  EventName "PlantNukeOrder"
+
+  LocalizedName str_ldl_order_plant_nuke
+  StatusText str_ldl_order_plant_nuke
+
+  TargetPretest:EnemyCity
+  UnitPretest_CanPlantNuke
+
+  Range 1
+
+  CPIcon "upsi16.tga"
+  ButtonLocation 7
+  DefaultIcon ICON_ORDER_PLANT_NUKE
+  Cursor 46
+  InvalidCursor 47
+}
+
+
+# Religious Orders
+
+ORDER_CONVERT {
+  Gold 100
+  Move 100
+  EventName "ConvertCityOrder"
+
+  LocalizedName str_ldl_order_convert
+  StatusText str_ldl_order_convert
+
+  TargetPretest:EnemyCity
+  UnitPretest_CanConvertCity
+
+  Range 1
+
+  CPIcon "upsi10.tga"
+  ButtonLocation 4
+  DefaultIcon ICON_ORDER_CONVERT
+  Cursor 34
+  InvalidCursor 35
+}
+
+
+ORDER_SOOTHSAY {
+  Gold 500
+  Move 100
+  EventName "SoothsayOrder"
+
+  LocalizedName str_ldl_order_soothsay
+  StatusText str_ldl_order_soothsay
+
+  TargetPretest:EnemyCity
+  UnitPretest_CanSoothsay
+
+  Range 1
+
+  CPIcon "upsi12.tga"
+  ButtonLocation 5
+  DefaultIcon ICON_ORDER_SOOTHSAY
+  Cursor 38
+  InvalidCursor 39
+}
+
+
+ORDER_INDULGENCE {
+  Gold 0
+  Move 100
+  EventName "SellIndulgencesOrder"
+
+  LocalizedName str_ldl_order_indulgence
+  StatusText str_ldl_order_indulgence
+
+  TargetPretest:EnemyCity
+  UnitPretest_CanSellIndulgences
+
+  Range 1
+
+  CPIcon "upsi11.tga"
+  ButtonLocation 6
+  DefaultIcon ICON_ORDER_INDULGENCE
+  Cursor 36
+  InvalidCursor 37
+}
+
+
+ORDER_FAITH_HEALING {
+  Gold 500
+  Move 100
+  EventName "FaithHealOrder"
+
+  LocalizedName str_ldl_order_faith_healing
+  StatusText str_ldl_order_faith_healing
+
+  TargetPretest:EnemyCity
+  UnitPretest_CanFaithHeal
+
+  Range 1
+
+  CPIcon "upsi11.tga"
+  ButtonLocation 6
+  DefaultIcon ICON_ORDER_FAITH_HEALING
+  Cursor 86
+  InvalidCursor 87
+}
+
+
+# Slavery Orders
+
+ORDER_SLAVE_RAID {
+  Gold 250
+  Move 100
+  EventName "SlaveRaidOrder"
+
+  LocalizedName str_ldl_order_slave_raid
+  StatusText str_ldl_order_slave_raid
+
+  TargetPretest:EnemyCity
+  UnitPretest_CanSlaveRaid
+
+  Range 1
+
+  CPIcon "upsi07.tga"
+  ButtonLocation 4
+  DefaultIcon ICON_ORDER_SLAVE_RAID
+  Cursor 26
+  InvalidCursor 27
+}
+
+
+ORDER_ENSLAVE_SETTLER {
+  Gold 250
+  Move 100
+  EventName "EnslaveSettlerOrder"
+  GLHidden
+
+  LocalizedName str_ldl_order_enslave_settler
+  StatusText str_ldl_order_enslave_settler
+
+  TargetPretest:EnemySettler
+  UnitPretest_CanEnslaveSettler
+
+  Range 1
+
+  CPIcon "upsi07.tga"
+  ButtonLocation 5
+  DefaultIcon ICON_ORDER_ENSLAVE_SETTLER
+  Cursor 26
+  InvalidCursor 27
+}
+
+
+ORDER_INCITE_UPRISING {
+  Gold 0
+  Move 100
+  EventName "InciteUprisingOrder"
+
+  LocalizedName str_ldl_order_incite_uprising
+  StatusText str_ldl_order_incite_uprising
+
+  TargetPretest:EnemyCity
+  UnitPretest_CanInciteUprising
+
+  Range 1
+
+  CPIcon "upsi09.tga"
+  ButtonLocation 4
+  DefaultIcon ICON_ORDER_INCITE_UPRISING
+  Cursor 32
+  InvalidCursor 33
+}
+
+
+ORDER_UNDERGROUND_RAILWAY {
+  Gold 50
+  Move 100
+  EventName "UndergroundRailwayOrder"
+
+  LocalizedName str_ldl_order_underground_railway
+  StatusText str_ldl_order_underground_railway
+
+  TargetPretest:EnemyCity
+  UnitPretest_CanUndergroundRailway
+
+  Range 1
+
+  CPIcon "upsi08.tga"
+  ButtonLocation 5
+  DefaultIcon ICON_ORDER_UNDERGROUND_RAILWAY
+  Cursor 72
+  InvalidCursor 73
+}
+
+
+# Economic Orders
+
+ORDER_FRANCHISE {
+  Gold 250
+  Move 100
+  EventName "FranchiseOrder"
+
+  LocalizedName str_ldl_order_franchise
+  StatusText str_ldl_order_franchise
+
+  TargetPretest:EnemyCity
+  UnitPretest_CanCreateFranchise
+
+  Range 1
+
+  CPIcon "upsi19.tga"
+  ButtonLocation 4
+  DefaultIcon ICON_ORDER_FRANCHISE
+  Cursor 64
+  InvalidCursor 65
+}
+
+
+ORDER_ADVERTISE {
+  Gold 500
+  Move 100
+  EventName "AdvertiseOrder"
+
+  LocalizedName str_ldl_order_advertise
+  StatusText str_ldl_order_advertise
+
+  TargetPretest:EnemyCity
+  UnitPretest_CanAdvertise
+
+  Range 1
+
+  CPIcon "upsi20.tga"
+  ButtonLocation 5
+  DefaultIcon ICON_ORDER_ADVERTISE
+  Cursor 78
+  InvalidCursor 79
+}
+
+
+ORDER_INJOIN {
+  Gold 300
+  Move 100
+  EventName "InjoinOrder"
+
+  LocalizedName str_ldl_order_injoin
+  StatusText str_ldl_order_injoin
+
+  TargetPretest:EnemyTradeUnit
+  UnitPretest_CanInjoin
+
+  Range 1
+
+  CPIcon "upsi17.tga"
+  ButtonLocation 4
+  DefaultIcon ICON_ORDER_INJOIN
+  Cursor 48
+  InvalidCursor 49
+}
+
+
+ORDER_SUE {
+  Gold 500
+  Move 100
+  EventName "SueOrder"
+
+  LocalizedName str_ldl_order_sue
+  StatusText str_ldl_order_sue
+
+  TargetPretest:EnemyCity
+  UnitPretest_CanSue
+
+  Range 1
+
+  CPIcon "upsi18.tga"
+  ButtonLocation 5
+  DefaultIcon ICON_ORDER_SUE
+  Cursor 50
+  InvalidCursor 51
+}
+
+
+ORDER_SUE_FRANCHISE {
+  Gold 500
+  Move 100
+  EventName "SueFranchiseOrder"
+  GLHidden
+
+  LocalizedName str_ldl_order_sue_franchise
+  StatusText str_ldl_order_sue_franchise
+
+  TargetPretest:OwnCity
+  UnitPretest_CanSueFranchise
+
+  Range 1
+
+  CPIcon "upsi21.tga"
+  ButtonLocation 6
+  DefaultIcon ICON_ORDER_SUE_FRANCHISE
+  Cursor 52
+  InvalidCursor 53
+}
+
+
+# Nuke Orders
+
+ORDER_TARGET {
+  Gold 0
+  Move 0
+  EventName "TargetOrder"
+
+  LocalizedName str_ldl_order_target
+  StatusText str_ldl_order_target
+
+  TargetPretest:EnemyCity
+  UnitPretest_CanNukeCity
+
+  Range 1
+  IsTarget
+  CPIcon "upsi38.tga"
+  ButtonLocation 4
+  DefaultIcon ICON_ORDER_TARGET
+  Cursor 82
+  InvalidCursor 83
+}
+
+			
+ORDER_CLEAR_TARGET {
+  Gold 0
+  Move 0
+  EventName "ClearTargetOrder"
+
+  LocalizedName str_ldl_order_clear_target
+  StatusText str_ldl_order_clear_target
+
+  UnitPretest_CanTarget
+
+  Range 0
+  CPIcon "upsi39.tga"
+  ButtonLocation 5
+  DefaultIcon ICON_ORDER_CLEAR_TARGET
+  Cursor 88 // incorrect cursors
+  InvalidCursor 89
+}
+
+# Futuristic Orders
+
+ORDER_BIO_INFECT {
+  Gold 1000
+  Move 100
+  EventName "BioInfectOrder"
+
+  LocalizedName str_ldl_order_bio_infect
+  StatusText str_ldl_order_bio_infect
+
+  TargetPretest:EnemyCity
+  UnitPretest_CanBioTerror
+
+  Range 1
+
+  CPIcon "upsi24.tga"
+  ButtonLocation 4
+  DefaultIcon ICON_ORDER_BIO_INFECT
+  Cursor 58
+  InvalidCursor 59
+}
+
+
+ORDER_PLAGUE {
+  Gold 1000
+  Move 100
+  EventName "PlagueOrder"
+
+  LocalizedName str_ldl_order_plague
+  StatusText str_ldl_order_plague
+
+  TargetPretest:EnemyCity
+  UnitPretest_CanPlague
+
+  Range 1
+
+  CPIcon "upsi41.tga"
+  ButtonLocation 5
+  DefaultIcon ICON_ORDER_PLAGUE
+  Cursor 84
+  InvalidCursor 85
+}
+
+
+ORDER_NANO_INFECT {
+  Gold 4000
+  Move 100
+  EventName "NanoInfectOrder"
+
+  LocalizedName str_ldl_order_nano_infect
+  StatusText str_ldl_order_nano_infect
+
+  TargetPretest:EnemyCity
+  UnitPretest_CanNanoInfect
+
+  Range 1
+
+  CPIcon "upsi23.tga"
+  ButtonLocation 4
+  DefaultIcon ICON_ORDER_NANO_INFECT
+  Cursor 56
+  InvalidCursor 57
+}
+
+
+ORDER_ASSASSINATE {
+  Gold 1000
+  Move 100
+  EventName "AssassinateRulerOrder"
+
+  LocalizedName str_ldl_order_assassinate
+  StatusText str_ldl_order_assassinate
+
+  TargetPretest:EnemyCity
+  UnitPretest_CanAssassinateRuler
+
+  Range 1
+
+  CPIcon "upsi22.tga"
+  ButtonLocation 5
+  DefaultIcon ICON_ORDER_ASSASSINATE
+  Cursor 54
+  InvalidCursor 55
+}
+
+
+ORDER_CREATE_PARK {
+  Gold 0
+  Move 100
+  EventName "CreateParkOrder"
+
+  LocalizedName str_ldl_order_create_park
+  StatusText str_ldl_order_create_park
+
+  TargetPretest:EnemyCity
+  UnitPretest_CanCreatePark
+
+  Range 1
+
+  CPIcon "upsi25.tga"
+  ButtonLocation 4
+  DefaultIcon ICON_ORDER_CREATE_PARK
+  Cursor 60
+  InvalidCursor 61
+}
+
+
+# Hidden Orders (For GL)
+
+ORDER_RANGED_ATTACK {
+  Gold 0
+  Move 100
+  EventName "" 
+
+  LocalizedName str_ldl_order_ranged_attack
+  StatusText str_ldl_order_ranged_attack
+
+  UnitPretest_Invalid
+
+  CPIcon "upsi27.tga"
+  ButtonLocation 10
+  DefaultIcon ICON_ORDER_RANGED_ATTACK
+  # FIXME - these are the default special action cursors
+  Cursor 7
+  InvalidCursor 8
+}
+
+
+ORDER_REFUEL {
+  Gold 0
+  Move 100
+  EventName ""
+
+  LocalizedName str_ldl_order_refuel
+  StatusText str_ldl_order_refuel
+
+//  TargetPretest:OwnCity // Should be replaced by CanRefuel
+//  UnitPretest_NoFuelThenCrash // Should be enabled when everything is working
+  UnitPretest_Invalid
+
+  CPIcon "upsi47.tga"
+  ButtonLocation 10
+  DefaultIcon ICON_ORDER_REFUEL
+  Cursor 90
+  InvalidCursor 91
+}
+
+
+# Orders To Be Cut
+
+ORDER_PARADROP {
+  Gold 0
+  Move 100
+  EventName "ParadropOrder"
+  GLHidden
+
+  LocalizedName str_ldl_order_paradrop
+  StatusText str_ldl_order_paradrop
+
+  TargetPretest:EnemyCity
+  UnitPretest_CanParadrop
+
+  Range 20  
+
+  CPIcon "upsi03.tga"
+  ButtonLocation 10
+  DefaultIcon ICON_ORDER_PARADROP
+  # FIXME - these are the default special action cursors
+  Cursor 7
+  InvalidCursor 8
+}
+
+
+ORDER_INVESTIGATE_READINESS {
+  Gold 0
+  Move 100
+  EventName "InvestigateReadinessOrder"
+  GLHidden
+
+  LocalizedName str_ldl_order_investigate_readiness
+  StatusText str_ldl_order_investigate_readiness
+
+  TargetPretest:EnemyCity
+  UnitPretest_Invalid
+
+  Range 1
+
+  CPIcon "upsi06.tga"
+  ButtonLocation 10
+  DefaultIcon ICON_ORDER_INVESTIGATE_READINESS
+  # FIXME - these are the default special action cursors
+  Cursor 7
+  InvalidCursor 8
+}
+
+
+ORDER_AIRLIFT {
+  Gold 0
+  Move 100
+  EventName "AirliftOrder"
+  GLHidden
+
+  LocalizedName str_ldl_order_airlift
+  StatusText str_ldl_order_airlift
+
+  TargetPretest:None
+  UnitPretest_Invalid
+  
+  Range 0
+
+  CPIcon "upsi02.tga"
+  ButtonLocation 10
+  DefaultIcon ICON_ORDER_AIRLIFT
+  # FIXME - these are the default special action cursors
+  Cursor 7
+  InvalidCursor 8
+}
+

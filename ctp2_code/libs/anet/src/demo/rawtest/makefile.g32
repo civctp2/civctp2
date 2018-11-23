@@ -1,0 +1,39 @@
+# Makefile for ActiveNet raw packet test under win32 with gnu c
+# $Log: makefile.g32 $
+# Revision 1.2  1996/12/16 03:37:20  dkegel
+# Don't need io.h
+# Revision 1.1  1996/12/16 03:36:27  dkegel
+# Initial revision
+
+.c.o:
+	gcc -c -DUNIX -Dcdecl="" -I. -I../../h -Ijunk -g $*.c
+
+default: junk/conio.h rawtest.exe
+
+junk/conio.h:
+	-mkdir junk
+	echo "/* Created by makefile.g32 */"         > junk/conio.h
+	echo "#define putch(c) putchar(c)"           >> junk/conio.h
+	echo "#define getch() getchar()"             >> junk/conio.h
+	echo "#define stricmp(s,t) strcasecmp(s,t)"  >> junk/conio.h
+	
+#--------------------------------------------------------------
+# rawtest is rawtest.c linked statically to the real comm layer.
+
+rawtest_OBJ_FILES =	rawtest.o ../../win/lib/dp.a
+
+# Set target dependencies to generate necessary re-compiles.
+rawtest.exe : $(rawtest_OBJ_FILES)
+	echo .
+	echo Linking rawtest executable.
+	gcc $(rawtest_OBJ_FILES) -o rawtest
+
+clean: 
+	rm -f *.err
+	rm -f *.exe
+	rm -f *.o
+	rm -f *.log
+	rm -rf junk
+
+# end of MAKEFILE
+

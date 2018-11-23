@@ -1,0 +1,40 @@
+host
+
+newplayer a
+pset 3 0 foo
+sleep 0.4
+fpset 3 1 gtest.ini
+sleep 0.4
+
+newplayer b
+pset 3 0 foo
+sleep 0.4
+fpset 3 1 gtest.ini
+sleep 0.4
+
+newplayer c
+pset 3 0 foo
+sleep 0.4
+fpset 3 1 gtest.ini
+sleep 0.4
+
+newplayer d
+pset 3 0 foo
+sleep 0.4
+fpset 3 1 gtest.ini
+sleep 0.4
+
+newplayer e
+pset 3 0 foo
+sleep 0.4
+fpset 3 1 gtest.ini
+sleep 0.4
+
+newplayer f
+pset 3 0 foo
+sleep 0.4
+fpset 3 1 gtest.ini
+sleep 0.4
+
+sleep 20
+quit

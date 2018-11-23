@@ -1,0 +1,6 @@
+#!/bin/sh
+
+JDKPATH=/usr/local/jdk
+LD_LIBRARY_PATH="."
+export LD_LIBRARY_PATH
+${JDKPATH}/bin/java -classpath ${JDKPATH}/lib/classes.zip:score.jar:mysql.jar Activision.score_init $*

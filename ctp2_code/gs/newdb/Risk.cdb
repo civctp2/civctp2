@@ -1,0 +1,48 @@
+#-----------------------------------------------------------------------------
+#
+#  Project      : Call To Power 2
+#  File type    : dbgen input
+#  Description  : Risk type descriptor
+#  Id           : $Id:$
+#
+#----------------------------------------------------------------------------
+#
+#  Disclaimer
+#
+#  THIS FILE IS NOT GENERATED OR SUPPORTED BY ACTIVISION.
+#
+#  This material has been developed at apolyton.net by the Apolyton CtP2 
+#  Source Code Project. Contact the authors at ctp2source@apolyton.net.
+#
+#-----------------------------------------------------------------------------
+#
+#  Modifications from the original Activision code:
+#
+# - Created file. (Aug 29th 2005 Martin Gühmann)
+#
+#-----------------------------------------------------------------------------
+
+Risk{
+    float   HutChanceBarbarian          aka BARBARIAN_HUT_CHANCE
+    float   HutChanceAdvance            aka ADVANCE_HUT_CHANCE
+    float   HutChanceUnit               aka UNIT_HUT_CHANCE
+    float   HutChanceCity               aka CITY_HUT_CHANCE
+    float   HutChanceSettler            aka SETTLER_HUT_CHANCE
+    float   HutChanceGold               aka GOLD_HUT_CHANCE
+    int     HutMaxBarbarians            aka MAX_HUT_BARBARIANS
+    int     HutMaxAdvancePrerequisites  aka MAX_HUT_ADVANCE_PREREQUISITES
+    int     HutMaxUnitPrerequisites     aka MAX_UNIT_PREREQUISITES
+    int     HutMaxGold                  aka MAX_HUT_GOLD
+    int     HutMinGold                  aka MIN_HUT_GOLD
+
+    #Chance of barbarians appearing at random
+    float   BarbarianChance             aka BARBARIAN_CHANCE
+
+    int     BarbarianUnitRankMax        aka BARBARIAN_RANK_MAX
+    int     BarbarianUnitRankMin        aka BARBARIAN_RANK_MIN
+    int     MaxSpontaniousBarbarians    aka MAX_SPONTANEOUS_BARBARIANS
+    int     BarbarianFirstTurn          aka FIRST_BARBARIAN_TURN
+    int     BarbarianLastTurn           aka LAST_BARBARIAN_TURN
+    int     BarbarianMinimumDistance    aka MINIMUM_BARBARIAN_DISTANCE
+}
+

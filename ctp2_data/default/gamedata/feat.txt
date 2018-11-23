@@ -1,0 +1,109 @@
+
+FEAT_ADVANCE_CONCRETE {
+	Duration 15
+	Description str_ldl_0
+	EffectIncreaseProduction 5
+	SlicMessage "FeatGotConcrete"
+}
+
+FEAT_ADVANCE_GUNPOWDER {
+	Duration 25
+	Description str_ldl_0
+	EffectReduceCityWalls -5
+	SlicMessage "FeatGotGunPowder"
+}
+
+FEAT_ADVANCE_MASS_PRODUCTION {
+	Duration 15
+	Description str_ldl_0
+	EffectIncreaseProduction 5
+	SlicMessage "FeatGotMassProduction"
+}
+
+FEAT_ADVANCE_COMPUTERS {
+	Duration 15
+	Description str_ldl_0
+	EffectIncreaseScience 5
+	SlicMessage "FeatGotComputers"
+}
+
+FEAT_ADVANCE_ROBOTICS {
+	Duration 15
+	Description str_ldl_0
+	EffectIncreaseProduction 5
+	SlicMessage "FeatGotRobotics"
+}
+
+FEAT_ADVANCE_LIFE_EXTENSION {
+	Duration 15
+	Description str_ldl_0
+	EffectIncreaseHappiness 2
+	SlicMessage "FeatGotLifeExtension"
+}
+
+FEAT_THEATERS {
+	Duration 15
+	Description str_ldl_0
+	EffectIncreaseHappiness 5
+	SlicMessage "FeatBuiltTheaters"
+
+	Building { Building IMPROVE_THEATER Num 8 }
+}
+
+FEAT_BROKERAGES {
+	Duration 20
+	Description str_ldl_0
+	EffectIncreaseCommerce 10
+	SlicMessage "FeatBuiltBrokerages"
+
+	Building { Building IMPROVE_BROKERAGE Num 10 }
+}
+
+FEAT_INTERNET {
+	Duration 25
+	Description str_ldl_0
+	EffectIncreaseScience 10
+	SlicMessage "FeatBuiltInternet"
+
+	Building { Building IMPROVE_COMPUTER_CENTER Num 12 }
+}
+
+FEAT_SYNDICATE {
+	Duration 25
+	Description str_ldl_0
+	EffectIncreaseHappiness 5
+	SlicMessage "FeatBuiltSyndicate"
+
+	Building { Building IMPROVE_TELEVISION Num 15 }
+}
+
+FEAT_ORBITAL_LABS {
+	Duration 25
+	Description str_ldl_0
+	EffectIncreaseScience 10
+	SlicMessage "FeatBuiltOrbitalLabs"
+
+	Building { Building IMPROVE_ORBITAL_LABORATORY Num 20 }
+}
+
+FEAT_SAILED_AROUND_WORLD {
+	Duration 25
+	Description str_ldl_0
+	EffectBoatMovement 100
+	SlicMessage "SailedAroundTheWorld"
+}
+
+FEAT_CONQUERED_BY_FORCE {
+	Duration 25
+	Description str_ldl_0
+	EffectIncreaseHitPoints	1
+	MinimumSizeOfCiv 5
+	SlicMessage "FeatConqueredByForce"
+}
+
+FEAT_CITY_RECAPTURED {
+	Duration 10
+	Description str_ldl_0
+	EffectIncreaseHappiness 1
+	SlicMessage "FeatRecapturedCity"
+}

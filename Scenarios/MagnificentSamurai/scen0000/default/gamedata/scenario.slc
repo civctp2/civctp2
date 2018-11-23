@@ -1,0 +1,1505 @@
+   /////////////////////////////////////////////////
+  // Script for the Magnificent Samurai scenario //
+ //     last update 11-29-00 by Tony Evans      //
+/////////////////////////////////////////////////
+
+#include "SS_func.slc"		// Functions
+
+
+  //////////////
+ // Handlers //
+//////////////
+
+
+  //---------------------------------
+ // Stuff to do when the game starts 
+//-----------------------------------
+
+HandleEvent(BeginTurn) 'SSStart_F' post {
+int_t i;
+	if(player[0] == 1) {
+		// Initialize Akimbo and other Samurai
+		FindSamurai (UnitDB(UNIT_AKIMBO));
+		sevenSamurai[0] = specUnit;
+
+		// Initialize Locations
+		InitLocations();
+
+		// Make the enemy really hate you
+		LogRegardEvent(3, 1, -9999, 0, ID_SS_REGARD_EVENT, 9999);
+
+		// Init Pass Clear timer
+		passClear = 108;
+
+		// Disable Shichinen messages until after you visit the star Road
+		DisableTrigger('SSShichinenAfter_F');
+		DisableTrigger('SSShichinenRaided_F');
+
+		// Disable Volcano Stop Movement until you land on Oatakark
+		DisableTrigger('SSVolcanoMoveStop_F');
+
+		// Enable you to move on bridge until it is destroyed
+		DisableTrigger('SSSBridge_F');
+		DisableTrigger('SSBridge_F');
+		DisableTrigger('SSBridgeStop_F');
+
+		// Unloading onto Oatakark
+		DisableTrigger('SSUnload_F');
+
+		// Start Message
+		Message (1, 'SSStartA');
+		DisableTrigger('SSStart_F');
+	}
+}
+
+
+  //----------------------
+ // Stuff to do each turn 
+//------------------------
+
+HandleEvent(BeginTurn) 'SSEachTurn_F' post {
+int_t	i;
+int_t	unitType;
+int_t	tmpNum;
+unit_t	tmpUnit;
+army_t	tmpArmy;
+
+	if(player[0] == 1) {
+		if (turnCount >= 0) {
+			turnCount = turnCount + 1;
+		}
+		if (shichinenReturn != 1) {
+			if (turnCount == 365) {
+				villageDestroyed = 1;
+				Message (1, 'SSTimeUp');
+			}
+			if (turnCount == 60 ||
+				turnCount == 122 ||
+				turnCount == 180 ||
+				turnCount == 241 ||
+				turnCount == 302) {
+				Message (1, 'SSBimonthly');
+			}
+		}
+		if (turnCount == 547) {
+			Message (1, 'SSLoseGame2');		// Lose after a year and a half
+		}
+
+		// Regroup your samurai
+		makeArmies(1);
+
+		// Oatakark warning counter
+		if (oatakarkWarn > 0) {
+			oatakarkWarn = oatakarkWarn + 1;
+			if (oatakarkWarn == 3) {
+				Message (1, 'SSOatakarkWarn1');
+			} elseif (oatakarkWarn == 5) {
+				Message (1, 'SSOatakarkWarn2');			
+				oatakarkWarn = -1;
+			}
+		}
+
+		// Oatakark sinks over the course of 10 turns
+		if (oatSinkCount > 0) {
+			oatSinkCount = oatSinkCount + 1;
+			if (oatSinkCount == 3) {
+				OatakarkPassTwo();
+			} elseif (oatSinkCount == 4) {
+				OatakarkPassThree();
+			} elseif (oatSinkCount == 6) {
+				OatakarkPassFour();
+			} elseif (oatSinkCount == 8) {
+				OatakarkPassFive();
+			} elseif (oatSinkCount == 10) {
+				OatakarkPassSix();
+				oatSinkCount = 0;
+			}
+		}
+				
+		// Decrement Kau Pi Pass Clear timer
+		if (passClear > 0) {
+			passClear = passClear - 1;
+			if (passClear == 0) {
+				DisableTrigger('SSMountainStop_F');		// Mountain pass is passable now
+			}
+		}
+
+		if (metGonza == 2) {
+			metGonza = 1;
+		}
+
+		if (winGame == 1) {
+			Message (1, 'SSWinGame');
+		}
+
+//		for(i = 0; i < 7; i = i + 1) {
+//			location[i] = sevenSamurai[i].location;
+//		}
+//		Message (1, 'SSTemp');
+	}
+}
+
+
+  //-------------------------
+ // Stuff to do when you move
+//----------------------------
+
+// 2% chance cumulative per step that you will be attacked by bandits.
+HandleEvent(MoveUnits) 'SSMoveStuff_F' pre {
+	if (army[0].owner == 1) {
+		if (TerrainType(sevenSamurai[0].location) != 10 &&	
+			TerrainType(sevenSamurai[0].location) != 13 &&
+			TerrainType(sevenSamurai[0].location) != 23 &&
+			TerrainType(sevenSamurai[0].location) != 24) { // If you're not in the water
+			if (levelUp != 1) {
+				if (Random(50) < attackChance) {
+					attackChance = 0;
+					SpawnBandits(army[0].location, 1);
+					makeArmies(3);
+					Message (1, 'SSAmbush');
+					return STOP;
+				} else {
+					attackChance = attackChance + 1;
+				}
+			} else { 	// If you've just gained a level, stop move, so it doesn't look so darn cheesy
+				levelUp = 0;
+				return STOP;
+			}
+		}
+	}
+}
+
+// Disable Moving in proximity to Bandit Leader.  Stop player 2 from moving at all
+HandleEvent(MoveUnits) 'SSMoveAI_F' pre {
+unit_t	tmpUnit;
+int_t	unitType;
+
+	if (army[0].owner == 3) {
+		if (Distance(army[0].location, banditLoc) < 3) { // If near Bandit Leader, stop movement
+			return STOP;
+		} else {
+			GetUnitFromCell(army[0].location, 0, tmpUnit);
+			unitType = tmpUnit.type;
+			if (unitType == UnitDB(UNIT_CARRACK)) {
+				return STOP;
+			}
+		}
+	} elseif (army[0].owner == 2) {		// Neutral players cannot move
+		return STOP;
+	}
+}
+
+  //--------------------------------
+ // Keeps you from disbanding units
+//----------------------------------
+
+HandleEvent(DisbandArmyOrder) 'SSDisbandStop_F' pre {
+	if (army[0].owner == 1) {
+		return STOP;
+	}
+}
+
+HandleEvent(DisbandUnit) 'SSDisbandStop2_F' pre {
+	if (unit[0].owner == 1) {
+		return STOP;
+	}
+}
+
+
+  //--------------------------
+ // Stuff to do before combat
+//----------------------------
+
+HandleEvent(Battle) 'SSBattle_F' pre {
+	attackChance = 0;		// reset attack chance
+}
+
+
+  //----------------------------------------------------------------
+ // Clear Battle Flag so samurai can attack multiple times per turn
+//------------------------------------------------------------------
+
+HandleEvent(BattleAfterMath) 'SSAfterBattle_F' post {
+	afterBattle = 1;
+}
+
+HandleEvent(MoveUnits) 'SSClearBattleFlag_f' pre {
+int_t		i;
+
+	if (afterBattle == 1) {
+		afterBattle = 0;
+		for(i = 0; i < 7; i = i + 1) {
+			if (sevenSamurai[i].valid) {
+				ClearBattleFlag(sevenSamurai[i]);
+			}
+		}
+	}
+}
+
+
+  //----------------------------------
+ // Tests if party members are killed
+//------------------------------------
+
+HandleEvent(KillUnit) 'SSKillUnit_F' pre {
+int_t		tmpValue;
+int_t		unitType;
+int_t		i;
+unit_t		tmpUnit;
+location_t	tmpLoc;
+location_t	tmpLoc2;
+army_t		tmpArmy;
+
+	tmpValue = value[0];
+	killCause = tmpValue;
+	tmpUnit = unit[0];
+	unitType = tmpUnit.type;
+	
+	if (tmpUnit.owner == 1 && tmpValue != 0 && tmpValue != 1) {
+		if (unitType >= 72 && unitType <= 88) {			// If Akimbo dies
+			Message (1, 'SSLoseGame');
+		} elseif (unitType >= 89 && unitType <= 96) {	// If Katchu dies
+			Message (1, 'SSKatchuDies');
+		} elseif (unitType >= 97 && unitType <= 103) {	// If Chun Ling dies
+			Message (1, 'SSChunLingDies');
+		} elseif (unitType >= 104 && unitType <= 109) {	// If Gonza dies
+			Message (1, 'SSGonzaDies');
+		} elseif (unitType >= 110 && unitType <= 114) {	// If Chikamatsu dies
+			Message (1, 'SSChikamatsuDies');
+		} elseif (unitType >= 115 && unitType <= 118) {	// If J-chan dies
+			Message (1, 'SSJchanDies');
+		} elseif (unitType >= 119 && unitType <= 121) {	
+			if (metMimiyota == 2) {
+				Message (1, 'SSMimiyotaDies2');	// If Mimiyota dies (after opening the Star Road)
+			} else {
+				Message (1, 'SSMimiyotaDies');	// If Mimiyota dies before opening the Star Road, you lose!
+			}
+		}
+	} elseif (tmpUnit.owner == 3) {
+		if (unitType == UnitDB(UNIT_BANDIT_LEADER)) {
+			winGame = 1;
+		} elseif (unitType == UnitDB(UNIT_MORARU_KYONSHI) ||
+				unitType == UnitDB(UNIT_WARRIOR) ||
+				unitType == UnitDB(UNIT_BANDIT) ||
+				unitType == UnitDB(UNIT_BANDIT_ARCHER) ||
+				unitType == UnitDB(UNIT_BANDIT_HORSEMAN)) {
+			battleExp = 10;
+		} elseif (unitType == UnitDB(UNIT_SAMURAI)) {
+			battleExp = 20;
+		} elseif (unitType == UnitDB(UNIT_BANDIT_MUSKETEER)) {
+			battleExp = 25;
+		} elseif (unitType == UnitDB(UNIT_RESWOB)) {
+			battleExp = 100;
+		}
+		// Increment Experience and Level Up
+		tmpLoc = tmpUnit.location;
+		for(i = 0; i < 7; i = i + 1) {
+			if (sevenSamurai[i].valid) {
+				tmpLoc2 = sevenSamurai[i].location;
+				if (Distance (tmpLoc2, tmpLoc) <= 1) {
+					expPoints[i] = expPoints[i] + battleExp;
+					if ((expPoints[i] >= 50 && (expPoints[i] - battleExp) < 50) ||
+					    (expPoints[i] >= 500 && (expPoints[i] - battleExp) < 500) ||
+					    (expPoints[i] >= 1400 && (expPoints[i] - battleExp) < 1400)) {
+						unit[0] = sevenSamurai[i];
+						SetString(0, ID_SS_LEVEL_DEFENSE);
+						Message (1, 'SSLevelUp');
+						LevelUp = 1;
+						LevelChange(i, tmpLoc2);
+						GetArmyFromUnit (sevenSamurai[i], tmpArmy);
+						Event:GroupOrder(tmpArmy);
+					} elseif ((expPoints[i] >= 150 && (expPoints[i] - battleExp) < 150) || 
+				 			  (expPoints[i] >= 750 && (expPoints[i] - battleExp) < 750) ||
+							  (expPoints[i] >= 1800 && (expPoints[i] - battleExp) < 1800)) {
+						unit[0] = sevenSamurai[i];
+						SetString(0, ID_SS_LEVEL_ATTACK);
+						Message (1, 'SSLevelUp');
+						LevelUp = 1;
+						LevelChange(i, tmpLoc2);
+						GetArmyFromUnit (sevenSamurai[i], tmpArmy);
+						Event:GroupOrder(tmpArmy);
+					} elseif ((expPoints[i] >= 300 && (expPoints[i] - battleExp) < 300) ||
+							  (expPoints[i] >= 1050 && (expPoints[i] - battleExp) < 1050)) {
+						unit[0] = sevenSamurai[i];
+						SetString(0, ID_SS_LEVEL_MOVEMENT);
+						Message (1, 'SSLevelUp');
+						LevelUp = 1;
+						LevelChange(i, tmpLoc2);
+						GetArmyFromUnit (sevenSamurai[i], tmpArmy);
+						Event:GroupOrder(tmpArmy);
+					}
+				}
+			}
+		}
+		battleExp = 0;			// Reset Battle Experience
+		if (banditCount >= 1) {
+			if (unitType == UnitDB(UNIT_BANDIT) ||
+				unitType == UnitDB(UNIT_BANDIT_ARCHER) ||
+				unitType == UnitDB(UNIT_BANDIT_HORSEMAN) ||
+				unitType == UnitDB(UNIT_BANDIT_MUSKETEER)) {
+				banditCount = banditCount + 1;
+			}
+		}
+		if (banditCount == 33) {
+			banditCount = -1;
+			Message (1, 'SSBanditsDefeated');
+			EnableTrigger('SSMoveStuff_F');		// Re-enable random combat encounters
+		}
+	}
+}
+
+  //------------------------------------
+ // Regroup army after CreateUnit event
+//--------------------------------------
+
+HandleEvent(CreateUnit) 'SSMakeArmies_F' post {
+int_t	thePlayer;
+int_t	i;
+army_t	tmpArmy;
+
+	thePlayer = player[0];
+	
+	if (thePlayer == 1) {
+		for(i = 0; i < 7; i = i + 1) {
+			if (sevenSamurai[i].valid) {
+				GetArmyFromUnit (sevenSamurai[i], tmpArmy);
+				Event:GroupOrder(tmpArmy);
+			}
+		}
+	} else {
+		DetachRobot(thePlayer);		// Detach AI so you can group units into armies
+		MakeArmies (thePlayer);		// Group units on the same tile into armies
+		AttachRobot(thePlayer);		// Reattach the AI
+	}
+}
+
+
+  //----------------
+ // Scenario Events
+//------------------
+
+// Entering a tavern
+HandleEvent(MoveUnits) 'SSTavern_F' post {
+location_t	tmpLoc;
+army_t		tmpArmy;
+
+	tmpArmy = army[0];
+	player[0] = tmpArmy.owner;
+	
+	if (player[0] == 1) {
+		tmpLoc = location[1];
+		
+		if (tmpLoc == tavernLoc || 
+			tmpLoc == tavern2Loc ||
+			tmpLoc == tavern3Loc ||
+			tmpLoc == tavern5Loc ||
+			tmpLoc == tavern6Loc) {
+			atTavernLoc = tmpLoc;	// set temp tavern locator
+			Message(1, 'SSTavern');
+		}
+	}
+}
+
+
+// if you try to return to Shichinen before entering the Star Road
+HandleEvent(MoveUnits) 'SSShichinenReturn_F' pre {
+location_t	tmpLoc;
+army_t		tmpArmy;
+
+	tmpArmy = army[0];
+	player[0] = tmpArmy.owner;
+	
+	if (player[0] == 1) {
+		tmpLoc = location[1];
+		if (tmpLoc == shichinenLoc) {
+			Message(1, 'SSShichinenReturn');
+			return STOP;
+		}
+	}
+}
+
+// Stop Akimbo on the bridge once
+HandleEvent(MoveUnits) 'SSNBridge_F' pre {
+army_t		tmpArmy;
+location_t	tmpLoc;
+unit_t		tmpUnit;
+
+	tmpArmy = army[0];
+	player[0] = tmpArmy.owner;
+
+	if (player[0] == 1) {
+		tmpLoc = location[1];
+		if (tmpLoc == nbridgeLoc) {
+			EnableTrigger('SSSBridge_F');
+		}
+	}
+}
+
+
+// Stop Akimbo on the bridge and enable Bandit Bridge attack
+HandleEvent(MoveUnits) 'SSSBridge_F' pre {
+army_t		tmpArmy;
+location_t	tmpLoc;
+unit_t		tmpUnit;
+
+	tmpArmy = army[0];
+	player[0] = tmpArmy.owner;
+
+	if (player[0] == 1) {
+		tmpLoc = location[1];
+		if (tmpLoc == sbridgeLoc) {
+			DisableTrigger('SSSBridge_F');
+			EnableTrigger('SSBridge_F');
+			return STOP;
+		}
+	}
+}
+
+// if Akimbo crosses the bridge south of Shichinen, display message FTO
+HandleEvent(MoveUnits) 'SSBridge_F' post {
+army_t		tmpArmy;
+location_t	tmpLoc;
+unit_t		tmpUnit;
+
+	tmpArmy = army[0];
+	player[0] = tmpArmy.owner;
+
+	if (player[0] == 1) {
+		tmpLoc = location[1];
+		if (tmpLoc == sbridgeLoc) {
+			attackChance = 0;
+			bridgeFlag = 1;
+			Message(1, 'SSBridgeBurned');
+			DisableTrigger('SSBridge_F');
+			DisableTrigger('SSNBridge_F');
+			EnableTrigger('SSBridgeStop_F');	// Make the bridge impassable
+			CreateUnit(3, UnitDB(UNIT_BANDIT), ssbridgeLoc, 0);	// Spawn Bandits
+			CreateUnit(3, UnitDB(UNIT_BANDIT), ssbridgeLoc, 0);
+			makeArmies(3);
+			Terraform(nbridgeLoc, 5);		// Transform Bridge to broken by teraforming the tile northeast of the bridge from special tile to desert tile
+			AddEffect(bridgeLoc, "SPECEFFECT_EXPLOSION_LAND_2", "SOUND_ID_UNHAPPINESS_LAND");	// Add a special effect for the bridge being destroyed
+		}
+	}
+}
+
+
+// Keeps you from moving on the destroyed bridge
+HandleEvent(MoveUnits) 'SSBridgeStop_F' pre {
+location_t	tmpLoc;
+	
+	tmpLoc = location[1];
+
+	if (tmpLoc == bridgeLoc) {
+		return STOP;
+	}
+}
+
+
+// After battle at the bridge, display message, FTO
+HandleEvent(KillUnit) 'SSBridgeBattle_F' pre {
+unit_t	tmpUnit;
+int_t	unitType;
+
+	if (bridgeFlag > 0) {
+		tmpUnit = unit[0];
+		unitType = tmpUnit.type;
+		if (unitType == UnitDB(UNIT_BANDIT)) {
+			bridgeFlag = bridgeFlag + 1;
+			if (bridgeFlag == 3) {
+				Message(1, 'SSBridgeBurned2');
+				DisableTrigger('SSBridgeBattle_F');
+			}
+		}
+	}
+}
+
+
+// When you find the Scurvy Maiden, FTO
+HandleEvent(MoveUnits) 'SSScurvyMaiden_F' pre {
+location_t	tmpLoc;
+army_t		tmpArmy;
+unit_t		tmpUnit;
+
+	tmpArmy = army[0];
+	tmpLoc = location[1];
+	player[0] = tmpArmy.owner;
+	
+	if (player[0] == 1) {
+		if (tmpLoc == scurvyLoc) {
+			GetUnitFromCell(scurvy2Loc, 0, tmpUnit);
+			KillUnit(tmpUnit);
+			CreateUnit(1, UnitDB(UNIT_SCURVY_MAIDEN), scurvy2Loc, 0);
+			DisableTrigger('SSScurvyMaiden_F');
+			Event:MovePathOrder(tmpArmy, scurvyLoc);
+			Message(1, 'SSScurvyMaidenA');
+			return STOP;
+		}
+	}
+}
+
+
+// Handle Scurvy Maiden Transport
+HandleEvent(MoveIntoTransport) 'SSTransport_F' post {
+location_t	tmpLoc;
+army_t		tmpArmy;
+unit_t		tmpUnit;
+int_t		tmpNum;
+int_t		unitType;
+int_t		i;
+
+	DisableTrigger('SSMoveStuff_F');		// Disables Random encounters while in transit
+	attackChance = 0;
+}
+
+
+// Halfway to Oatakark, FTO
+HandleEvent(MoveUnits) 'SSGoingToOatakark_F' post {
+army_t		tmpArmy;
+location_t	tmpLoc;
+	tmpArmy = army[0];
+	player[0] = tmpArmy.owner;
+	if (player[0] == 1) {
+		tmpLoc = location[0];
+		if (Distance(tmpLoc, toOatakarkLoc) < 4) {
+			Message(1, 'SSGoingToOatakark');
+			DisableTrigger('SSGoingToOatakark_F');
+		}
+	}
+}
+
+
+// In sight of the Oatakark Shore, FTO
+HandleEvent(MoveUnits) 'SSNextToOatakark_F' pre {
+army_t		tmpArmy;
+location_t	tmpLoc;
+	tmpArmy = army[0];
+	player[0] = tmpArmy.owner;
+	if (player[0] == 1) {
+		tmpLoc = location[0];
+		if (Distance(tmpLoc, oatakarkLoc) < 3) {
+			Message(1, 'SSNextToOatakark');
+			DisableTrigger('SSNextToOatakark_F');
+			EnableTrigger('SSUnload_F');
+			return STOP;
+		}
+	}
+}
+
+
+// Handles unloading of Scurvy Maiden
+HandleEvent(MoveUnits) 'SSUnload_F' post {
+army_t		tmpArmy;
+unit_t		tmpUnit;
+location_t	tmpLoc;
+location_t	tmpLoc2;
+int_t		tmpNum;
+int_t		i;
+int_t		unitType;
+
+	tmpArmy = army[0];
+	tmpLoc = location[1];
+	tmpLoc2 = tmpArmy.location;
+	
+	if (oatakarkWarn == 1) {
+		tmpNum = tmpArmy.size;
+		for(i = 0; i < tmpNum; i = i + 1) {
+			GetUnitByIndex(1, i, tmpUnit);
+			unitType = tmpUnit.type;
+			if (unitType >= 72 && unitType <= 88) {	// If unit is Akimbo
+				if (TerrainType(tmpLoc) != 10 &&	// If not Beach, Shallow Water, Coral Reef or Kelp
+					TerrainType(tmpLoc) != 13 &&
+					TerrainType(tmpLoc) != 23 &&
+					TerrainType(tmpLoc) != 24) {
+					attackChance = 0;
+					oatakarkWarn = 2;							// Initialize warning messages
+					player[0] = 1;
+					tmpNum = player[0].units;
+					for(i = 0; i < tmpNum; i = i + 1) {
+						GetUnitByIndex(1, i, tmpUnit);
+						unitType = tmpUnit.type;
+						if (unitType == UnitDB(UNIT_SCURVY_MAIDEN)) {
+							Event: KillUnit(tmpUnit, 0, 1);		// Remove Scurvy Maiden
+						}
+					}
+					CreateUnit(3, UnitDB(UNIT_WARRIOR), tmpLoc, 1);	// Create soldiers
+					CreateUnit(3, UnitDB(UNIT_WARRIOR), tmpLoc, 1);
+					CreateUnit(3, UnitDB(UNIT_WARRIOR), tmpLoc, 1);
+					makeArmies(3);
+					Message(1, 'SSOatakarkShoreA');
+					DisableTrigger('SSUnload_F');
+					EnableTrigger('SSVolcanoMoveStop_F');
+				}
+			}
+		}
+	}
+}
+
+
+HandleEvent(UnloadOrder) 'SSMoveUnload2_F' post {
+location_t	tmpLoc;
+
+	tmpLoc = location[0];
+
+	EnableTrigger('SSMoveStuff_F');				// Enable Random encounters after transit
+	if (Distance(tmpLoc, katchuLoc) < 13) {
+		oatakarkWarn = 1;
+	}
+}
+
+HandleEvent(MoveUnloadOrder) 'SSMoveUnload_F' post {
+location_t	tmpLoc;
+
+	tmpLoc = location[0];
+	
+	EnableTrigger('SSMoveStuff_F');				// Enable Random encounters after transit
+	if (Distance(tmpLoc, katchuLoc) < 13) {
+		oatakarkWarn = 1;
+	}
+}
+
+
+// Keeps you from Moving on the Volcano tile
+HandleEvent(MoveUnits) 'SSVolcanoMoveStop_F' pre {
+location_t	tmpLoc;
+	
+	tmpLoc = location[1];
+
+	if (tmpLoc == volcanoLoc[0] || 
+		tmpLoc == volcanoLoc[1] ||
+		tmpLoc == volcanoLoc[2] ||
+		tmpLoc == volcanoLoc[3]) {
+		return STOP;
+	}
+}
+
+
+// After the battle on the shore
+HandleEvent(BattleAfterMath) 'SSOatakarkShore_F' post {
+int_t		i;
+location_t	tmpLoc;
+location_t	tmpLoc2;
+	if (oatakarkWarn == 2) {
+		Message(1, 'SSOatakarkShore');
+		DisableTrigger('SSOatakarkShore_F');
+	}
+}
+
+
+// Meeting Katchu
+HandleEvent(MoveUnits) 'SSKatchu_F' pre {
+location_t	tmpLoc;
+army_t		tmpArmy;
+
+	tmpArmy = army[0];
+	player[0] = tmpArmy.owner;
+
+	if (player[0] == 1) {
+		tmpLoc = location[1];
+		if (tmpLoc == katchuLoc) {
+			Message(1, 'SSKatchuA');
+			CreateUnit(1, UnitDB(UNIT_KATCHU2), tmpLoc, 0);
+			FindSamurai (UnitDB(UNIT_KATCHU2));
+			sevenSamurai[1] = specUnit;
+			expPoints[1] = 51;
+			metKatchu = 1;
+			GetArmyFromUnit(sevenSamurai[0], tmpArmy);
+			DisableTrigger('SSKatchu_F');
+			return STOP;
+		}
+	}
+}
+
+
+// Oatakark starts sinking
+HandleEvent(MoveUnits) 'SSOatakarkSink_F' post {
+location_t	tmpLoc;
+army_t		tmpArmy;
+unit_t		tmpUnit;
+int_t		unitType;
+int_t		i;
+int_t		tmpNum;
+
+	tmpArmy = army[0];
+	player[0] = tmpArmy.owner;
+
+	if (player[0] == 1) {
+		if (metKatchu == 1) {
+			tmpLoc = location[1];
+			if (tmpLoc == oatsinkLoc && tmpArmy.location == sevenSamurai[0].location) {
+				oatakarkWarn = -1;
+				Message(1, 'SSOatakarkSinking');
+				AddEffect(volcanoLoc[2], "SPECEFFECT_EXPLOSION_LAND_1", "SOUND_ID_EXPLOSION_LAND_1");	// Add a special effect for the volcano erupting
+				OatakarkPassOne();
+				oatSinkCount = 1;
+				DisableTrigger('SSOatakarkSink_F');
+			}
+		}
+	}
+}
+
+
+// The Balloon Hut
+HandleEvent(MoveUnits) 'SSBalloon_F' pre {
+location_t	tmpLoc;
+army_t		tmpArmy;
+unit_t		tmpUnit;
+int_t		tmpNum;
+int_t		i;
+int_t		unitType;
+
+	tmpArmy = army[0];
+	player[0] = tmpArmy.owner;
+
+	if (player[0] == 1) {
+		tmpLoc = location[1];
+		if (tmpLoc == balloonLoc) {
+			if (metKatchu == 1) {
+				if (sevenSamurai[0].location == tmpArmy.location) {
+					Message(1, 'SSBalloonA');
+					Terraform(balloonLoc, 4);	// Show Balloon 'good' by transforming the tile to Grassland
+					findBalloon = 1;
+					DisableTrigger('SSBalloon_F');
+					return STOP;
+				}
+			} else {
+				Message(1, 'SSHutEmpty');
+			}
+		}
+	}
+}
+
+
+// Balloon transportation
+HandleEvent(MoveUnits) 'SSTransportPost_F' post {
+	if (findBalloon == 1) {
+		if (sevenSamurai[0].location == balloonLoc) {			// If Akimbo is 'boarded'
+			if (sevenSamurai[1].valid) {
+				if (sevenSamurai[1].location == balloonLoc) {	// If Katchu is 'boarded'
+					TeleportSamurai (balloonLoc, balloonDestLoc2, 0);
+					Terraform(balloonLoc, 24);		// Remove Balloon 'good' by terraforming to Special1 tile
+					PlantGood(balloonDestLoc);		// Place Balloon 'good' at destination
+					Message(1, 'SSBalloonEndA');
+					AddCenter(balloonDestLoc);
+					DisableTrigger('SSTransportPost_F');		// Disable handler after Balloon trip
+				}
+			} else {
+				TeleportSamurai (balloonLoc, balloonDestLoc2, 0);
+				Terraform(balloonLoc, 24);		// Remove Balloon 'good' by terraforming to Special1 tile
+				PlantGood(balloonDestLoc);		// Place Balloon 'good' at destination
+				Message(1, 'SSBalloonEndA');
+				AddCenter(balloonDestLoc);
+				DisableTrigger('SSTransportPost_F');		// Disable handler after Balloon trip
+			}
+		}
+	}
+}
+
+
+// Kau Pi village
+HandleEvent(MoveUnits) 'SSKauPi_F' post {
+location_t	tmpLoc;
+army_t		tmpArmy;
+int_t		tmpNum;
+
+	tmpArmy = army[0];
+	player[0] = tmpArmy.owner;
+
+	if (player[0] == 1) {
+		tmpLoc = location[1];
+		if (tmpLoc == kaupiLoc) {
+			if (passClear > 0 ) {
+				HealAll(kaupiLoc);
+				if (sevenSamurai[0].location == tmpArmy.location) {
+					tmpNum = sevenSamurai[0].type;
+					if (kaupiVisit == 0) {
+						kaupiVisit = 1;
+						if (tmpNum >= 72 && tmpNum <= 80) {		// Akimbo has a horse
+							Message(1, 'SSKaupiA');
+						} else {
+							Message(1, 'SSKaupiA2');
+						}
+					} else {
+						if (tmpNum >= 72 && tmpNum <= 80) {		// Akimbo has a horse
+							Message(1, 'SSKaupiReturnA');
+						} else {
+							Message(1, 'SSKaupiReturnA2');
+						}
+					}
+				} else {
+					if (kaupiVisit == 0) {
+						kaupiVisit = 1;
+						Message(1, 'SSKaupi');
+					} else {
+						Message(1, 'SSKaupiReturn');
+					}
+				}
+			} else {
+				if (passClear == 0) {
+					Message(1, 'SSKauPiPassClear');
+					passClear = -1;
+				} else {
+					Message(1, 'SSKauPiRest');			
+				}
+			}
+		}
+	}
+}
+
+// Keeps mounted units from crossing the mountain pass before the way is cleared.
+HandleEvent(MoveUnits) 'SSMountainStop_F' pre {
+location_t	tmpLoc;
+army_t		tmpArmy;
+unit_t		tmpUnit;
+int_t		i;
+int_t		armySize;
+int_t		unitType;
+
+
+	tmpLoc = location[1];
+
+	if (tmpLoc == skaupiLoc) {
+		tmpArmy = army[0];
+		armySize = tmpArmy.size;		
+		for (i = 0; i < armySize; i = i + 1) {
+			GetUnitFromArmy(tmpArmy, i, tmpUnit);
+			unitType = tmpUnit.type;
+			if (unitType == UnitDB(UNIT_BANDIT_HORSEMAN) ||  // If the unit is mounted
+				unitType == UnitDB(UNIT_CHIKAMATSU5) ||
+				unitType == UnitDB(UNIT_CHIKAMATSU6) ||
+				unitType == UnitDB(UNIT_CHIKAMATSU7) ||
+				unitType == UnitDB(UNIT_CHIKAMATSU8) ||
+				unitType == UnitDB(UNIT_CHIKAMATSU9) ||
+				unitType == UnitDB(UNIT_AKIMBO) ||
+				unitType == UnitDB(UNIT_AKIMBO2) ||
+				unitType == UnitDB(UNIT_AKIMBO3) ||
+				unitType == UnitDB(UNIT_AKIMBO4) ||
+				unitType == UnitDB(UNIT_AKIMBO5) ||
+				unitType == UnitDB(UNIT_AKIMBO6) ||
+				unitType == UnitDB(UNIT_AKIMBO7) ||
+				unitType == UnitDB(UNIT_AKIMBO8) ||
+				unitType == UnitDB(UNIT_AKIMBO9)) {
+				return STOP;
+			}
+		}
+	}
+}
+
+// Sar-do village
+HandleEvent(MoveUnits) 'SSSardo_F' post {
+location_t	tmpLoc;
+army_t		tmpArmy;
+int_t		tmpNum;
+
+	tmpArmy = army[0];
+	player[0] = tmpArmy.owner;
+
+	if (player[0] == 1) {
+		tmpLoc = location[1];
+		if (tmpLoc == sardoLoc) {
+			HealAll(sardoLoc);
+			if (sardoVisit == 1 && kyonshiVisit != 1) {
+				Message(1, 'SSSardoRest');
+			} elseif (sardoVisit == 0) {
+				Message(1, 'SSSardoA');
+				EndTurn();
+				sardoVisit = 1;
+			} elseif (kyonshiVisit == 1) {
+				Message(1, 'SSSardoDoneA');
+				EndTurn();
+				kyonshiVisit = -1;
+			}
+		}
+	}
+}
+
+
+// Kyonshi village
+HandleEvent(MoveUnits) 'SSKyonshi_F' post {
+location_t	tmpLoc;
+army_t		tmpArmy;
+int_t		tmpNum;
+
+	tmpArmy = army[0];
+	player[0] = tmpArmy.owner;
+
+	if (player[0] == 1) {
+		tmpLoc = location[1];
+		if (tmpLoc == kyonshiLoc) {
+			if (sardoVisit == 0 || kyonshiVisit == 1) {
+				villageAbandoned = villageAbandoned + 1;
+				if (villageAbandoned != 4) {
+					Message(1, 'SSKyonshi');
+				} else {
+					Message(1, 'SSKyonshi2');
+					villageAbandoned = 0;
+				}
+			} elseif (sardoVisit == 1 && kyonshiVisit == 0) {
+				kyonshiVisit = 1;
+				if (sevenSamurai[1].valid) {
+					if (sevenSamurai[1].location == kyonshiLoc && 
+						sevenSamurai[0].location == kyonshiLoc) {
+						Message(1, 'SSKyonshiA');
+						TeleportSamurai (kyonshiLoc, wkyonshiLoc, 0);
+						CreateUnit(1, UnitDB(UNIT_CHUN_LING3), wkyonshiLoc, 0);
+						FindSamurai (UnitDB(UNIT_CHUN_LING3));
+						sevenSamurai[2] = specUnit;
+						expPoints[2] = 151;
+						CreateUnit(3, UnitDB(UNIT_MORARU_KYONSHI), kyonshiLoc, 1);	// Spawn Moraru Kyonshi
+						CreateUnit(3, UnitDB(UNIT_MORARU_KYONSHI), kyonshiLoc, 1);	// Spawn Moraru Kyonshi
+						CreateUnit(3, UnitDB(UNIT_MORARU_KYONSHI), kyonshiLoc, 1);	// Spawn Moraru Kyonshi
+						CreateUnit(3, UnitDB(UNIT_MORARU_KYONSHI), kyonshiLoc, 1);	// Spawn Moraru Kyonshi
+						CreateUnit(3, UnitDB(UNIT_MORARU_KYONSHI), kyonshiLoc, 1);	// Spawn Moraru Kyonshi
+						CreateUnit(3, UnitDB(UNIT_MORARU_KYONSHI), kyonshiLoc, 1);	// Spawn Moraru Kyonshi
+						makeArmies(3);
+					} elseif (sevenSamurai[0].location == kyonshiLoc) {
+						Message(1, 'SSKyonshiANoK');
+						TeleportSamurai (kyonshiLoc, wkyonshiLoc, 0);
+						CreateUnit(1, UnitDB(UNIT_CHUN_LING3), wkyonshiLoc, 0);
+						FindSamurai (UnitDB(UNIT_CHUN_LING3));
+						sevenSamurai[2] = specUnit;
+						CreateUnit(3, UnitDB(UNIT_MORARU_KYONSHI), kyonshiLoc, 1);	// Spawn Moraru Kyonshi
+						CreateUnit(3, UnitDB(UNIT_MORARU_KYONSHI), kyonshiLoc, 1);	// Spawn Moraru Kyonshi
+						CreateUnit(3, UnitDB(UNIT_MORARU_KYONSHI), kyonshiLoc, 1);	// Spawn Moraru Kyonshi
+						CreateUnit(3, UnitDB(UNIT_MORARU_KYONSHI), kyonshiLoc, 1);	// Spawn Moraru Kyonshi
+						CreateUnit(3, UnitDB(UNIT_MORARU_KYONSHI), kyonshiLoc, 1);	// Spawn Moraru Kyonshi
+						CreateUnit(3, UnitDB(UNIT_MORARU_KYONSHI), kyonshiLoc, 1);	// Spawn Moraru Kyonshi
+						makeArmies(3);
+					}
+				} elseif (sevenSamurai[0].location == kyonshiLoc) {
+					Message(1, 'SSKyonshiANoK');
+					TeleportSamurai (kyonshiLoc, wkyonshiLoc, 0);
+					CreateUnit(1, UnitDB(UNIT_CHUN_LING3), wkyonshiLoc, 0);
+					FindSamurai (UnitDB(UNIT_CHUN_LING3));
+					sevenSamurai[2] = specUnit;
+					CreateUnit(3, UnitDB(UNIT_MORARU_KYONSHI), kyonshiLoc, 1);	// Spawn Moraru Kyonshi
+					CreateUnit(3, UnitDB(UNIT_MORARU_KYONSHI), kyonshiLoc, 1);	// Spawn Moraru Kyonshi
+					CreateUnit(3, UnitDB(UNIT_MORARU_KYONSHI), kyonshiLoc, 1);	// Spawn Moraru Kyonshi
+					CreateUnit(3, UnitDB(UNIT_MORARU_KYONSHI), kyonshiLoc, 1);	// Spawn Moraru Kyonshi
+					CreateUnit(3, UnitDB(UNIT_MORARU_KYONSHI), kyonshiLoc, 1);	// Spawn Moraru Kyonshi
+					CreateUnit(3, UnitDB(UNIT_MORARU_KYONSHI), kyonshiLoc, 1);	// Spawn Moraru Kyonshi
+					makeArmies(3);
+				} else {
+					villageAbandoned = villageAbandoned + 1;
+					if (villageAbandoned != 4) {
+						Message(1, 'SSKyonshi');
+						villageAbandoned = 0;
+					} else {
+						Message(1, 'SSKyonshi2');
+					}
+				}
+			}
+		}
+	}
+}
+
+
+// Meeting Gonza at a tavern
+HandleEvent(MoveUnits) 'SSGonzaTavern_F' pre {
+location_t	tmpLoc;
+army_t		tmpArmy;
+
+	tmpArmy = army[0];
+	player[0] = tmpArmy.owner;
+	
+	if (player[0] == 1) {
+		tmpLoc = location[1];
+		
+		if (tmpLoc == tavern4Loc) {
+			if (metGonza != 0) {
+				atTavernLoc = tmpLoc;	// set temp tavern locator
+				Message(1, 'SSTavern');
+			} else {
+				metGonza = 2;
+				Message(1, 'SSGonzaA');
+				CreateUnit(1, UnitDB(UNIT_GONZA4), tavern4Loc, 0);
+				FindSamurai (UnitDB(UNIT_GONZA4));
+				sevenSamurai[3] = specUnit;
+				DamageUnit(sevenSamurai[3], 5);
+				expPoints[3] = 301;
+				return STOP;
+			}
+		}
+	}
+}
+
+
+// While Gonza is alive and within 20 square radius, 4% chance cumulative per step that you will be attacked by Samurai
+HandleEvent(MoveUnits) 'SSSamuraiAttack_F' pre {
+
+	if (army[0].owner == 1) {
+		if (metGonza == 1) {							// If you've met Gonza
+			if (sevenSamurai[3].valid) {				// If Gonza is alive
+	 			if (Distance (sevenSamurai[3].location, tavern4Loc) <= 20) {	// If within 20 square radius
+					if (Random(25) < samuraiChance) {
+						samuraiChance = 0;
+						attackChance = 0;
+						SpawnSamurai(sevenSamurai[3].location, 1);
+						makeArmies(3);
+						Message (1, 'SSAmbushGonza');
+						return STOP;
+					} else {
+						samuraiChance = samuraiChance + 1;
+					}
+				}
+			} else {
+				DisableTrigger('SSSamuraiAttack_F');	// Disable Samurai attacks if Gonza is dead
+			}
+		}	
+	}
+}
+
+
+// Meeting Chikamatsu
+HandleEvent(MoveUnits) 'SSChikamatsu_F' pre {
+location_t	tmpLoc;
+army_t		tmpArmy;
+unit_t		tmpUnit;
+int_t		tmpNum;
+int_t		i;
+int_t		unitType;
+
+	tmpArmy = army[0];
+	player[0] = tmpArmy.owner;
+	
+	if (player[0] == 1) {
+		tmpLoc = location[1];
+		
+		if (tmpLoc == chikamatsuLoc) {
+			if (metGonza == 0) {
+				Message(1, 'SSHutEmpty');
+			} else {
+				if (sevenSamurai[3].valid) {
+					if (sevenSamurai[3].location == tmpArmy.location) {
+						Message(1, 'SSChikamatsuA');
+						CreateUnit(1, UnitDB(UNIT_CHIKAMATSU5), chikamatsuLoc, 0);
+						FindSamurai (UnitDB(UNIT_CHIKAMATSU5));
+						sevenSamurai[4] = specUnit;
+						expPoints[4] = 501;
+						player[0] = 3;
+						tmpNum = player[0].units;
+						for(i = 0; i < tmpNum; i = i + 1) {		// Search player 3's units for Samurai
+							GetUnitByIndex(3, i, tmpUnit);
+							unitType = tmpUnit.type;
+							if (unitType == UnitDB(UNIT_SAMURAI)) {
+								Event: KillUnit(tmpUnit, 0, 3);	// Kill all enemy Samurai
+							}
+						}
+					} else {
+						Message(1, 'SSHutEmpty');
+					}
+				} else {
+					Message(1, 'SSChikamatsuANoG');
+					CreateUnit(1, UnitDB(UNIT_CHIKAMATSU5), chikamatsuLoc, 0);
+					FindSamurai (UnitDB(UNIT_CHIKAMATSU5));
+					sevenSamurai[4] = specUnit;
+					player[0] = 3;
+					tmpNum = player[0].units;
+					for(i = 0; i < tmpNum; i = i + 1) {		// Search player 3's units for Samurai
+						GetUnitByIndex(3, i, tmpUnit);
+						unitType = tmpUnit.type;
+						if (unitType == UnitDB(UNIT_SAMURAI)) {
+							Event:KillUnit(tmpUnit, 0, 3);	// Kill all enemy Samurai
+						}
+					}
+				}
+				DisableTrigger('SSSamuraiAttack_F');
+				DisableTrigger('SSChikamatsu_F');
+				return STOP;
+			}
+		}
+	}
+}
+
+
+// Chikamatsu gives Akimbo a spare horse if Akimbo doesn't have one
+HandleEvent(MoveUnits) 'SSChikamatsuHorse_F' post {
+location_t	tmpLoc;
+army_t		tmpArmy;
+int_t		tmpNum;
+
+	if (sevenSamurai[4].valid) {
+		if (sevenSamurai[0].location == sevenSamurai[4].location) {	// If Akimbo and Chikamatsu are on the same square
+			tmpNum = sevenSamurai[0].type;
+			if (tmpNum >= 81 && tmpNum <= 88) {						// If Akimbo has no horse
+				Message(1, 'SSChikamatsuHorse');
+				TransformAkimbo(sevenSamurai[0].location);
+				GetArmyFromUnit (sevenSamurai[0], tmpArmy);
+				Event:GroupOrder(tmpArmy);
+				DisableTrigger('SSChikamatsuHorse_F');
+			} else {
+				DisableTrigger('SSChikamatsuHorse_F');
+			}
+		}
+	}
+}
+
+
+// Found some bunny tracks
+HandleEvent(MoveUnits) 'SSBunny_F' post {
+army_t		tmpArmy;
+location_t	tmpLoc;
+	tmpArmy = army[0];
+	player[0] = tmpArmy.owner;
+	if (player[0] == 1) {
+		tmpLoc = location[1];
+		if (Distance(tmpLoc, bunnyLoc) < 3) {
+			bunnyTracks = 1;
+			Message(1, 'SSBunny');
+			DisableTrigger('SSBunny_F');
+		}
+	}
+}
+
+
+// More bunny tracks
+HandleEvent(MoveUnits) 'SSBunny2_F' post {
+army_t		tmpArmy;
+location_t	tmpLoc;
+	tmpArmy = army[0];
+	player[0] = tmpArmy.owner;
+
+	if (player[0] == 1) {
+		if (bunnyTracks == 1) {
+			tmpLoc = location[1];
+			if (Distance(tmpLoc, bunny2Loc) < 2) {
+				bunnyTracks = 2;
+				Message(1, 'SSBunny2');
+				DisableTrigger('SSBunny2_F');
+			}
+		}
+	}
+}
+
+
+// Still more bunny tracks
+HandleEvent(MoveUnits) 'SSBunny3_F' post {
+army_t		tmpArmy;
+location_t	tmpLoc;
+	tmpArmy = army[0];
+	player[0] = tmpArmy.owner;
+	if (player[0] == 1) {
+		if (bunnyTracks == 2) {
+			tmpLoc = location[1];
+			if (Distance(tmpLoc, bunny3Loc) < 2) {
+				bunnyTracks = 3;
+				Message(1, 'SSBunny3');
+				DisableTrigger('SSBunny3_F');
+			}
+		}
+	}
+}
+
+
+// Found J-chan
+HandleEvent(MoveUnits) 'SSJchan_F' pre {
+army_t		tmpArmy;
+location_t	tmpLoc;
+	tmpArmy = army[0];
+	player[0] = tmpArmy.owner;
+	if (player[0] == 1) {
+		if (bunnyTracks == 3) {
+			tmpLoc = location[1];
+			if (tmpLoc == jchanLoc) {
+				Message(1, 'SSJchanA');
+				CreateUnit(1, UnitDB(UNIT_JCHAN6), jchanLoc, 0);
+				FindSamurai (UnitDB(UNIT_JCHAN6));
+				sevenSamurai[5] = specUnit;
+				expPoints[5] = 751;
+				DisableTrigger('SSJchan_F');
+				return STOP;
+			}
+		}
+	}
+}
+
+
+// Meeting Mimiyota
+HandleEvent(MoveUnits) 'SSMimiyota_F' pre {
+army_t		tmpArmy;
+location_t	tmpLoc;
+unit_t		tmpUnit;
+int_t		tmpNum;
+int_t		unitType;
+int_t		i;
+
+	tmpArmy = army[0];
+	player[0] = tmpArmy.owner;
+
+	if (player[0] == 1) {
+		tmpLoc = location[1];
+		if (Distance(tmpLoc, mimiyotaLoc) < 2) {
+			metMimiyota = 1;
+			Message(1, 'SSMimiyotaA');
+			GetUnitFromCell(mimiyotaLoc, 0, tmpUnit);
+			KillUnit(tmpUnit);
+			CreateUnit(1, UnitDB(UNIT_MIMIYOTA7), mimiyotaLoc, 0);
+			FindSamurai (UnitDB(UNIT_MIMIYOTA7));
+			sevenSamurai[6] = specUnit;
+			expPoints[6] = 1051;
+			DisableTrigger('SSMimiyota_F');
+			player[0] = 2;
+			tmpNum = player[0].units;
+			return STOP;
+		}
+	}
+}
+
+
+// If Mimiyota is valid when you go into battle set flag to heal at the beginning of the next turn
+HandleEvent(Battle) 'SSMimiyotaBattle_F' post {
+int_t	i;
+unit_t	tmpUnit;
+
+	if (metMimiyota >= 1) {
+		if (sevenSamurai[6].valid ) {
+				mimiyotaBattle = 1;
+		} else {
+			DisableTrigger('SSMimiyotaBattle_F');		
+			DisableTrigger('SSMimiyotaHeal_F');
+		}
+	}
+}
+
+
+// Mimiyota heals everyone with him at the beginning of each turn in which the party has seen combat
+HandleEvent(BeginTurn) 'SSMimiyotaHeal_F' post {
+	if (player[0] == 1) {
+		if (mimiyotaBattle == 1) {
+			mimiyotaBattle = 0;
+			if (sevenSamurai[6].valid) {
+				HealAll(sevenSamurai[6].location);
+				if (GetUnitsAtLocation(sevenSamurai[6].location) > 1) {
+					Message(1, 'SSMimiyotaHeal');
+					AddEffect(sevenSamurai[6].location, "SPECEFFECT_CLERIC", "SOUND_ID_CLERIC");	// Add a special effect for Mimiyota Healing
+				}
+			} else {
+				DisableTrigger('SSMimiyotaHeal_F');
+				DisableTrigger('SSMimiyotaBattle_F');		
+			}
+		}
+	}
+}
+
+
+// Enter The Reswob
+HandleEvent(MoveUnits) 'SSReswob_F' pre {
+army_t		tmpArmy;
+location_t	tmpLoc;
+	tmpArmy = army[0];
+	player[0] = tmpArmy.owner;
+	if (player[0] == 1) {
+		tmpLoc = location[1];
+		if (tmpLoc == reswobLoc) {
+			if (metMimiyota == 1) {
+				Message(1, 'SSReswob');
+				CreateUnit(3, UnitDB(UNIT_RESWOB), reswobLoc, 0);
+				DisableTrigger('SSReswob_F');
+				return STOP;
+			}
+		}
+	}
+}
+
+
+// The Star Road Portal - before you meet Mimiyota
+HandleEvent(MoveUnits) 'SSStarRoadBefore_F' pre {
+army_t		tmpArmy;
+location_t	tmpLoc;
+	tmpArmy = army[0];
+	player[0] = tmpArmy.owner;
+	if (player[0] == 1) {
+		tmpLoc = location[1];
+		if (tmpLoc == starRoadLoc) {
+			if (metMimiyota == 0 || sevenSamurai[6].location != tmpArmy.location) {
+				Message(1, 'SSStarRoad');
+				return STOP;
+			}
+		}
+	}
+}
+
+
+// The Star Road Portal - after meeting Mimiyota
+HandleEvent(MoveUnits) 'SSStarRoad_F' post {
+army_t		tmpArmy;
+location_t	tmpLoc;
+unit_t		tmpUnit;
+
+	tmpArmy = army[0];
+	player[0] = tmpArmy.owner;
+	if (player[0] == 1) {
+		tmpLoc = location[1];
+		if (tmpLoc == starRoadLoc) {
+			if (metMimiyota == 1) {
+				if (sevenSamurai[6].location == starRoadLoc) {
+					Message(1, 'SSStarRoadA');
+					metMimiyota = 2;
+					TeleportSamurai (starRoadLoc, starDestLoc, 0);
+					GetArmyFromUnit (sevenSamurai[0], tmpArmy);
+					Event:GroupOrder(tmpArmy);
+					AddCenter(starDestLoc);
+					DisableTrigger('SSShichinenReturn_F');
+					DisableTrigger('SSStarRoadBefore_F');
+					EnableTrigger('SSShichinenAfter_F');
+				}
+			} elseif (metMimiyota == 2) {
+				TeleportSamurai (starRoadLoc, starDestLoc, 0);
+				GetUnitFromCell(starDestLoc, 0, tmpUnit);
+				GetArmyFromUnit (tmpUnit, tmpArmy);
+				Event:GroupOrder(tmpArmy);
+				AddCenter(starDestLoc);
+			}
+		}
+	}
+}
+
+
+// Return to Shichinen after entering the Star Road
+HandleEvent(MoveUnits) 'SSShichinenAfter_F' post {
+int_t	i;
+int_t	numUnits;
+unit_t	tmpUnit;
+
+	if (sevenSamurai[0].location == shichinenLoc) {
+		shichinenReturn = 1;
+		if (villageDestroyed == 0) {
+			Message(1, 'SSReturnToShichinen');
+		//	Fixed by Martin Gühmann the Fort has index 8 in the database not 7, 
+		//	with the TerrainImprovementDB it is not a problem if it is changed again.
+		//	Event:CreateImprovement(1, shichinenLoc, 7, 0);	// Create Fort in Shichinen
+		//	Create Fort in Shichinen
+			Event:CreateImprovement(1, shichinenLoc, TerrainImprovementDB(TILEIMP_FORTIFICATIONS), 0);
+			DisableTrigger('SSMoveStuff_F');				// Turn off random combat encounters
+			EnableTrigger('SSShichinenRaided_F');
+			for (i = 0; i < 7; i = i + 1) {					// Bring all your units together in Shichinen for the Bandit attack
+				if (sevenSamurai[i].valid) {
+					if (sevenSamurai[i].location != shichinenLoc) {
+						TeleportSamurai (sevenSamurai[i].location, shichinenLoc, 0);
+					}
+				}
+			}
+			HealAll(shichinenLoc);
+			makeArmies(1);
+			// Disband all Enemy units that aren't part of the Bandit Leader's army or in the raid
+			player[0] = 3;
+			numUnits = player[0].units;
+			for (i = 0; i < numUnits; i = i + 1) { 
+				GetUnitByIndex(3, i, tmpUnit);
+				if (tmpUnit.location != banditLoc &&
+					tmpUnit.location != bArmiesLoc[0] &&
+					tmpUnit.location != bArmiesLoc[1] &&
+					tmpUnit.location != bArmiesLoc[2] &&
+					tmpUnit.location != bArmiesLoc[3] &&
+					tmpUnit.location != carrackLoc) {
+					Event: DisbandUnit(tmpUnit);
+				}
+			}
+			banditCount = 1;
+			TeleportUnits (carrackLoc, carrackDestLoc, 3);
+			for (i = 0; i < 4; i = i + 1) {					// Bring in Units for the Bandit attack
+				TeleportUnits (bArmiesLoc[i], bDestLoc[i], 3);
+			}
+			villageDestroyed = -1;
+			banditCount = 1;
+			makeArmies(3);
+		} elseif (villageDestroyed == 1) {
+			Message(1, 'SSShichinenRuined');
+			TeleportUnits (bArmiesLoc[3], bDestLoc[3], 3);
+			TeleportUnits (carrackLoc, carrackDestLoc, 3);
+			makeArmies(3);
+			DisableTrigger('SSMoveStuff_F');				// Turn off random combat encounters
+			villageDestroyed = 2;
+		}
+		DisableTrigger('SSShichinenAfter_F');
+	}
+}
+
+
+// If you flee from Shichinen during bandit attack, message appears FTO
+HandleEvent(MoveUnits) 'SSShichinenFlee_F' pre {
+location_t	tmpLoc;
+army_t		tmpArmy;
+int_t		numUnits;
+int_t		tmpNum;
+
+	if (banditCount > 0) {
+		tmpArmy = army[0];
+		player[0] = tmpArmy.owner;
+		if (player[0] == 1) {
+			tmpLoc = location[1];
+			if (tmpLoc == sshichinenLoc) {
+				tmpNum = tmpArmy.size;
+				numUnits = GetUnitsAtLocation(shichinenLoc);
+				if (tmpNum == numUnits) {	// if you are leaving Shichinen defenseless
+					Message(1, 'SSShichinenFlee');
+					DisableTrigger('SSShichinenFlee_F');
+					return STOP;
+				}
+			}
+		}
+	}
+}
+
+
+// If Bandits occupy Shichinen after you've returned, destroy village
+HandleEvent(MoveUnits) 'SSShichinenRaided_F' post {
+int_t		numUnits;
+int_t		i;
+unit_t		tmpUnit;
+army_t		tmpArmy;
+location_t	tmpLoc;
+	if (shichinenReturn == 1 && villageDestroyed != 2) {
+		tmpArmy = army[0];
+		player[0] = tmpArmy.owner;
+		
+		if (tmpArmy.owner == 3) {
+			tmpLoc = tmpArmy.location;
+			if (tmpLoc == shichinenLoc) {
+				banditCount = -1;
+				villageDestroyed = 1;
+				EnableTrigger('SSShichinenAfter_F');
+				DisableTrigger('SSShichinenRaided_F');
+			}
+		}
+	}
+}
+
+// When you find the bandit carrack, FTO
+HandleEvent(MoveUnits) 'SSBanditCarrack_F' pre {
+location_t	tmpLoc;
+army_t		tmpArmy;
+unit_t		tmpUnit;
+
+	tmpArmy = army[0];
+	tmpLoc = location[1];
+	player[0] = tmpArmy.owner;
+	
+	if (player[0] == 1) {
+		if (tmpLoc == bDestLoc[3]) {
+			GetUnitFromCell(carrackDestLoc, 0, tmpUnit);
+			KillUnit(tmpUnit);
+			CreateUnit(1, UnitDB(UNIT_CARRACK), carrackDestLoc, 0);
+			DisableTrigger('SSBanditCarrack_F');
+			Event:MovePathOrder(tmpArmy, bDestLoc[3]);
+			Message(1, 'SSBanditCarrack');
+			return STOP;
+		}
+	}
+}
+
+// The message before the showdown with the Big Bad Bandit Boss
+HandleEvent(MoveUnits) 'SSBanditLeader_F' pre {
+army_t	tmpArmy;
+	tmpArmy = army[0];
+	if (tmpArmy.owner == 1) {
+		if (Distance(tmpArmy.location, banditLoc) < 2) {
+			Message(1, 'SSBanditLeader');
+			DisableTrigger('SSBanditLeader_F');
+			return STOP;
+		}
+	}
+}
+
+
+#include "SS_msg.slc"		// Messageboxes 
+

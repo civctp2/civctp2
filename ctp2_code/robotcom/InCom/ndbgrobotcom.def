@@ -1,0 +1,5 @@
+LIBRARY    NDBGrobotCOM
+DESCRIPTION "Civilization 3 robot interface"
+EXPORTS   
+	CoCreateInstanceRobotCom	@1
+	InitDLLDebugging			@2

@@ -1,0 +1,2180 @@
+   /////////////////////////////////////////////////
+  // Script for the Alexander the Great scenario //
+ //     last update 11-17-00 by Tony Evans      //
+/////////////////////////////////////////////////
+// Apolyton modifications
+// - Center on Alexander at the start
+// - Repaired Sidon event
+// - Repaired Babylon coronation event
+/////////////////////////////////////////////////
+
+#include "AG_func.slc"		// Functions
+#include "AG_mod.slc"		// Mod Functions
+
+// Player 1 - Macedonians
+// Player 2 - Corinthian League
+// Player 3 - Greek States
+// Player 4 - Persians
+// Player 5 - Carthaginians
+// Player 6 - Romans
+// Player 7 - Magadhan Empire
+// Player 8 - Independents
+
+
+// Misc variables
+
+int_t		firstYear;				// Keeps generals from dying of old age in the first year
+int_t		firstSettler;			// Flag for the first time CL gives you a settler
+int_t		barsineMistress;		// counts 24 months after Barsine is your mistress
+int_t		poisonCounter;			// counts 6 months after marrying Barsine until poison attempt
+int_t		dariusBattle;			// Tells which player has gone to battle with Darius
+int_t		barbSpawn;				// a timer for when to spawn Barbarians from Barbarian Leaders
+int_t		indiaCity;				// keeps track of the number of time you've captured a Magadhan city
+int_t		magadhanDeal;			// Tells if you have a deal with the Magadhan nobility or not
+int_t		chandraCount;			// Counter until Chandragupta's uprising
+unit_t		barbLeaders[13];		// keeps track of Barbarian Leaders
+location_t	barbLoc[13];			// keeps track of the starting Location of Barbarian Leaders
+int_t		barbNum;				// Number of barbarian Leaders
+int_t		pamperCost;				// A flag for whether you are pampering the captured Persian royalty
+int_t		statieraCount;			// Marriage counter for Statiera
+int_t		parmenionChance;		// Chance of Parmenion betraying you
+int_t		generalDeaths;			// Keeps track of the number of generals you've lost
+int_t		generalDied;			// Flag if a general died
+int_t		babylonCoronation;		// If you have defeated the persian Empire and are ready to be coronated in Babylon
+unit_t		drownedGeneral;			// If a general drowns
+int_t		egyptFlag;				// Flag for visiting Egypt
+int_t		egyptFlag2;				// Flag for visiting Egypt
+int_t		aradusOnce;				// Flag for Aradus message
+int_t		sidonOnce;				// Flag for Sidon message
+int_t		afterBattle;			// Flag for after a battle
+
+  //////////////
+ // Handlers //
+//////////////
+
+  //---------------------------------
+ // Stuff to do when the game starts 
+//-----------------------------------
+
+HandleEvent(BeginTurn) 'AGStart_F' pre {
+int_t	i;
+int_t	j;
+int_t	tmpNum;
+int_t	tmpNum2;
+unit_t	tmpUnit;
+
+	// Initialize Special Unit locators
+	FindSpecialUnit (UnitDB(UNIT_ALEXANDER), 1);
+	alexUnit = specUnit;
+	alexHP = alexUnit.hp;
+	FindSpecialUnit (UnitDB(UNIT_PARMENION), 1);
+	parmenUnit = specUnit;
+	FindSpecialUnit (UnitDB(UNIT_ANTIPATER), 1);
+	antipUnit = specUnit;
+	FindSpecialUnit (UnitDB(UNIT_CRATERUS), 1);
+	cratUnit = specUnit;
+	FindSpecialUnit (UnitDB(UNIT_DARIUS), 4);
+	dariusUnit = specUnit;
+	FindSpecialUnit (UnitDB(UNIT_MEMNON), 4);
+	memnonUnit = specUnit;
+
+	// no sons yet
+	oldestSon = -1;	
+	heirBorn[0] = -1;
+	heirBorn[1] = -1;
+	heirBorn[2] = -1;
+
+	// Initialize Event locators
+	InitLocations();
+
+	// Initialize Barbarian leaders
+	player[0] = 0;
+	tmpNum = player[0].units;
+	barbNum = 13;
+	for(i = 0; i < tmpNum; i = i + 1) {
+		GetUnitByIndex(0, i, tmpUnit);
+		tmpNum2 = tmpUnit.type;
+		if(tmpNum == 89) {	// If unit is a Barbarian Leader
+			barbLeaders[j] = tmpUnit;
+			barbLoc[j] = tmpUnit.location;
+			j = j + 1;
+		}
+	}
+
+	// Make the Persians and Independents REALLY hate you
+	if(IsPlayerAlive(4)) {				// if Persians aren't dead
+		LogRegardEvent(4, 1, -9999, 0, ID_AG_REGARD_EVENT_NEG, 9999);
+	}
+	if(IsPlayerAlive(8)) {				// if Independents aren't dead
+		LogRegardEvent(8, 1, -9999, 0, ID_AG_REGARD_EVENT_NEG, 9999);
+	}
+
+
+	// Display start message
+	if(IsHumanPlayer(g.player)) {
+		Message (1, 'AGStartA');
+		DisableTrigger('AGStart_F');
+	}
+}
+
+
+  //-----------------------
+ // Stuff to do every turn 
+//-------------------------
+
+HandleEvent(BeginTurn) 'AGEachTurn_F' post {
+city_t		tmpCity;
+int_t		tmpDmg;
+int_t		tmpNum;
+int_t		tmpNum2;
+int_t		i;
+int_t		tmpPlayer;
+army_t		tmpArmy;
+location_t	tmpLoc;
+unit_t		tmpUnit;
+
+	generalDied = 0;
+	tmpPlayer = player[0];
+	if (tmpPlayer == 1) {
+//		if (firstTurn != 1) {
+//			alexHP = alexUnit.hp;
+			// Center on and select Alexander 
+//			SelectUnit(alexUnit);
+//			AddCenter(alexUnit.location);
+//		}
+
+		// Wife pregnancy and Heir handling
+		if (heirScore != 17) {			// Calculate only until a son reaches 12 years old
+			if (heirBorn[2] == -1) { 	// If all three sons aren't born yet
+				if (wife[0] > 0 || wife[1] > 0 || wife[2] > 0 || wife[3] > 0) {
+					HandlePregnancy();
+				}
+			}
+			if (oldestSon != -1) {
+				HeirDie();
+				HeirGrowth();
+			}
+		}
+	
+		// Refresh Veteran effect for Alexander
+		if (alexUnit.valid) {
+			VeteranEffect (alexUnit.location, 1);
+		}
+		
+		// increment Alexander's health timer 
+		alexCount = alexCount + 5;
+
+		if (TerrainType(alexUnit.location) != 10 &&	
+			TerrainType(alexUnit.location) != 11 &&
+			TerrainType(alexUnit.location) != 12 &&	
+			TerrainType(alexUnit.location) != 13 &&
+			TerrainType(alexUnit.location) != 14 &&
+			TerrainType(alexUnit.location) != 15 &&
+			TerrainType(alexUnit.location) != 16 &&
+			TerrainType(alexUnit.location) != 23 &&
+			TerrainType(alexUnit.location) != 24) { // If alex not in the water
+		// Check to see if Alex is due for a health stage change
+			if (alexStage == 0 && alexCount >= 600) {
+				ChangeAlexander(1);
+			} elseif (alexStage == 1 && alexCount >= 900) {
+				ChangeAlexander(2);
+			} elseif (alexStage == 2 && alexCount >= 1200) {
+				ChangeAlexander(3);
+			} elseif (alexStage == 4 && alexCount >= 1500) {
+				ChangeAlexander(4);
+			}
+		}
+
+		// Test for 1% chance of Generals dying of old age
+		if (firstYear < 12) {
+			firstYear = firstYear + 1;
+		} else {
+			if (parmenUnit.valid && parmenUnit.owner == 1) {
+				if (Random(100) == 1) {
+					Event:KillUnit(parmenUnit, 0, 1);
+					Message(1, 'AGParmenionOld');
+					generalDied = 1;
+				}
+			}
+			if (generalDied != 1) {
+				if (antipUnit.valid) {
+					if (Random(100) == 1) {
+						Event:KillUnit(antipUnit, 0, 1);
+						Message(1, 'AGAntipaterOld');
+						generalDied = 1;	
+					}
+				}
+			}
+			if (generalDied != 1) {
+				if (cratUnit.valid) {
+					if (Random(100) == 1) {
+						Event: KillUnit(cratUnit, 0, 1);
+						Message(1, 'AGCraterusOld');
+						generalDied = 1;
+					}
+				}
+			}
+			if (generalDied != 1) {
+				if (hephUnit.valid) {
+					if (Random(100) == 1) {
+						Event: KillUnit(hephUnit, 0, 1);
+						Message(1, 'AGHephaestionOld');
+						generalDied = 1;
+					}
+				}
+			}
+			if (generalDied != 1) {
+				if (ptolUnit.valid) {
+					if (Random(100) == 1) {
+						Event: KillUnit(ptolUnit, 0, 1);
+						Message(1, 'AGPtolemyOld');
+						generalDied = 1;
+					}
+				}
+			}
+			if (generalDied != 1) {
+				if (seleucUnit.valid) {
+					if (Random(100) == 1) {
+						Event: KillUnit(seleucUnit, 0, 1);
+						Message(1, 'AGSeleucusOld');
+						generalDied = 1;
+					}
+				}
+			}
+			if (generalDied != 1) {
+				if (memnonUnit.valid) {
+					if (Random(100) == 1) {
+						Event: KillUnit(memnonUnit, 0, 4);
+						Message(1, 'AGMemnonOld');
+						generalDied = 1;
+					}
+				}
+			}
+			if (generalDied != 1) {
+				if (bessusUnit.valid) {
+					if (Random(100) == 1) {
+						Event: KillUnit(bessusUnit, 0, 4);
+						Message(1, 'AGBessusOld');
+						generalDied = 1;
+					}
+				}
+			}
+			if (generalDied != 1) {
+				if (chandUnit.valid) {
+					if (Random(100) == 1) {
+						Event: KillUnit(chandUnit, 0, chandUnit.owner);
+						Message(1, 'AGChandraOld');
+						generalDied = 1;
+					}
+				}
+			}
+			if (generalDied != 1) {
+				if (porusUnit.valid) {
+					if (Random(100) == 1) {
+						Event: KillUnit(porusUnit, 0, 8);
+						Message(1, 'AGPorusOld');
+						generalDied = 1;
+					}
+				}
+			}
+		}
+		
+		
+		// add 5% chance per turn that Parmenion traitor event happens after the conquest of Babylon
+		if (parmenUnit.valid) {
+			if (parmenionChance == 0) {
+				GetCityByLocation(babylonLoc, tmpCity);
+				if (CityIsValid(tmpCity)) {
+					player[0] = tmpCity.owner;
+					if (player[0] == 1) {
+						parmenionChance = 1;
+					}
+				}
+			} else {
+				if (Random(20) < parmenionChance) {
+					Message(1, 'AGParmenionPlot');
+					parmenionChance = -1;
+				} else {
+					parmenionChance = parmenionChance + 5;
+				}
+			}
+		}
+		
+		// If Alex is seeking treatement, deduct 1000 gold per turn
+		if (alexTreatment == 1) {
+			if (PlayerGold(1) >= 1000) {		// If you have 1000 gold
+				AddGold(1, -1000);				// Subtract 1000 GP
+			} else {
+				alexTreatment = 0;
+			}
+		}
+
+		// If Alex is decrepid, test for chance of dying by disease and increment 1% each turn
+		if (alexStage == 4) {
+			if (alexTreatment == 1) {				// if Alex is seeking treatment, halve the odds of dying of disease
+				if (Random(200) <= alexDisease) {
+					Message(1, 'AGAlexDisease2');
+				}
+			} else {
+				if (Random(100) <= alexDisease) {
+					Message(1, 'AGAlexDisease');
+				}			
+			}
+			alexDisease = alexDisease + 1;
+		}
+	
+		// if CL is allied to M, 4% chance per turn a new Settler unit is created in Pella
+		if (HasAgreement(1, 2, 38)) {					// If Macedonia and Corinthian League have an Alliance
+			if (Random(25) == 1) {						// 4% chance
+				CreateUnitNearestCity (UnitDB(UNIT_SETTLER), pellaLoc, 1, 0);
+				if (firstSettler == 1) {
+					Message(1, 'AGCorinthSettler2');
+				} else {
+					Message(1, 'AGCorinthSettler');
+					firstSettler = 1;
+				}
+			}
+		}
+	
+		// Barsine mistress counter
+		if (barsineMistress > 0 && barsineMistress < 24) {
+			barsineMistress = barsineMistress + 1;
+			if (barsineMistress == 24) {
+				barsineMistress = 0;
+				Message(1, 'AGBarsine2Years');
+			}
+		} elseif (barsineMistress < 0  && barsineMistress > -24) {
+			barsineMistress = barsineMistress - 1;
+			if (barsineMistress == -24) {
+				barsineMistress = 0;
+				Message(1, 'AGBarsine2Years2');
+			}
+		}
+	
+		// poison counter
+		if (poisonCounter > 0 && poisonCounter < 7) {
+			poisonCounter = poisonCounter + 1;
+			if (poisonCounter == 7) {
+				poisonCounter = 0;
+				Message(1, 'AGBarsinePoison');
+				alexCount = alexCount + 120;		// Alex takes damage from poison
+				tmpNum2 = alexUnit.hp;
+				if (tmpNum2 > 5) {
+					tmpDmg = tmpNum2 - 5;
+					DamageUnit(alexUnit, tmpDmg);	// Drop Alex to 5 HP
+					alexHP = specUnit.hp;
+				}
+			}
+		}
+
+		// Barbarian Leader spawn units once per year and limit movement
+		barbSpawn = barbSpawn + 1;
+//		for(i = 0; i < 13; i = i + 1) {
+//			if (barbLeaders[i].valid) {
+//				// Move barbarian back to original spot
+//				tmpLoc = barbLeaders[i].location;
+//				if (Distance(barbLoc[i], tmpLoc) > 4) {
+//					GetArmyFromUnit(barbLeaders[i], tmpArmy);
+//					Event:MovePathOrder(tmpArmy, barbLoc[i]);
+//				}
+//			}
+//		}
+		if (barbSpawn >= 12) {
+			barbSpawn = 0;
+			for(i = 0; i < 13; i = i + 1) {
+				if (barbLeaders[i].valid) {
+					SpawnHordes (6, barbLeaders[i].location, 0, 1);  // Spawn between 1 and 6 Barbarian Warriors and Mounted Archers 1 square away from leaders
+				}
+			}
+		}
+		
+		// If Baktra and Marakanda are owned by M, start rebellion counter
+		if(!rebellionOver) {
+			GetCityByLocation(baktraLoc, tmpCity);
+			if (CityIsValid(tmpCity)) {
+				player[0] = tmpCity.owner;
+				if (player[0] == 1) {
+					GetCityByLocation(marakandaLoc, tmpCity);
+					if (CityIsValid(tmpCity)) {
+						if (player[0] == 1) {
+							sogdiaRebel = sogdiaRebel + 1;
+						}
+					}
+				}
+			}
+			if (sogdiaRebel == 4 && rebelFlag != 1) {
+				Message(1, 'AGSogdiaRebel');
+				sogdiaRebel = 1;
+				rebelFlag = 1;
+				// All cities in the Sogdia region revolt and Spawn Units if owned by M
+				GetCityByLocation(baktraLoc, tmpCity);
+				if (CityIsValid(tmpCity)) {
+					if (tmpCity.owner == 1) {
+						SwapCity(tmpCity, 0, 1);
+						SpawnHordes (4, tmpCity.location, 0, 1);
+					}
+				}
+				GetCityByLocation(marakandaLoc, tmpCity);
+				if (CityIsValid(tmpCity)) {
+					if (tmpCity.owner == 1) {
+						SwapCity(tmpCity, 0, 1);
+						SpawnHordes (4, tmpCity.location, 0, 1);
+					}
+				}
+				GetCityByLocation(kyreskhataLoc, tmpCity);
+				if (CityIsValid(tmpCity)) {
+					if (tmpCity.owner == 1) {
+						SwapCity(tmpCity, 0, 1);
+						SpawnHordes (12, tmpCity.location, 0, 1);
+					}
+				}
+			}
+			if (sogdiaRebel == 4 && rebelFlag == 1) {
+				Message(1, 'AGSogdiaReport');
+				sogdiaRebel = 0;
+				// All cities in the Sogdia region revolt and Spawn Units if owned by M
+				GetCityByLocation(baktraLoc, tmpCity);
+				if (CityIsValid(tmpCity)) {
+					if (tmpCity.owner == 1) {
+						SwapCity(tmpCity, 0, 1);
+						SpawnHordes (4, tmpCity.location, 0, 1);
+					}
+				}
+				GetCityByLocation(marakandaLoc, tmpCity);
+				if (CityIsValid(tmpCity)) {
+					if (tmpCity.owner == 1) {
+						SwapCity(tmpCity, 0, 1);
+						SpawnHordes (4, tmpCity.location, 0, 1);
+					}
+				}
+				GetCityByLocation(kyreskhataLoc, tmpCity);
+				if (CityIsValid(tmpCity)) {
+					if (tmpCity.owner == 1) {
+						SwapCity(tmpCity, 0, 1);
+						SpawnHordes (12, tmpCity.location, 0, 1);
+					}
+				}
+			}
+			if (sogdiaRebel == 3 && rebelFlag == 2) {
+				Message(1, 'AGSogdiaBribe');
+			}
+			if (sogdiaRebel == 4 && rebelFlag == 3) {
+				sogdiaRebel = 0;
+				// All cities in the Sogdia region revolt and Spawn Units if owned by M
+				GetCityByLocation(baktraLoc, tmpCity);
+				if (CityIsValid(tmpCity)) {
+					if (tmpCity.owner == 1) {
+						SwapCity(tmpCity, 0, 1);
+						SpawnHordes (4, tmpCity.location, 0, 1);
+					}
+				}
+				GetCityByLocation(marakandaLoc, tmpCity);
+				if (CityIsValid(tmpCity)) {
+					if (tmpCity.owner == 1) {
+						SwapCity(tmpCity, 0, 1);
+						SpawnHordes (4, tmpCity.location, 0, 1);
+					}
+				}
+				GetCityByLocation(kyreskhataLoc, tmpCity);
+				if (CityIsValid(tmpCity)) {
+					if (tmpCity.owner == 1) {
+						SwapCity(tmpCity, 0, 1);
+						SpawnHordes (12, tmpCity.location, 0, 1);
+					}
+				}
+			}
+		}
+		
+		// Chandragupta handling
+		if (chandraCount == 136) {	// Rumors of Chandragupta's uprising
+			GetCityByLocation(pataliputraLoc, tmpCity);
+			if (CityIsValid(tmpCity)) {
+				player[0] = tmpCity.owner;
+				if (player[0] == 1) {
+					Message(1, 'AGChandraRumor');
+				}
+			}
+		} elseif (chandraCount >= 142 && alexUnit.location != pataliputraLoc) { 
+			chandraCount = 200;
+			GetCityByLocation(pataliputraLoc, tmpCity);
+			if (CityIsValid(tmpCity)) {
+				player[0] = tmpCity.owner;
+				if (player[0] == 1) {
+					SetString(0, ID_AG_CHANDRA_PT2A);
+					SetString(1, ID_AG_CHANDRA_PT2B);
+					SwapCity(tmpCity, 7, 1);
+					CreateUnit(7, UnitDB(UNIT_CHANDRAGUPTA), pataliputraLoc, 0);
+					FindSpecialUnit (UnitDB(UNIT_CHANDRAGUPTA), 7);
+					chandUnit = specUnit;
+					CreateUnit(7, UnitDB(UNIT_ELEPHANT_WARRIOR), pataliputraLoc, 0);
+					CreateUnit(7, UnitDB(UNIT_ELEPHANT_WARRIOR), pataliputraLoc, 0);
+					CreateUnit(7, UnitDB(UNIT_ELEPHANT_WARRIOR), pataliputraLoc, 0);
+					CreateUnit(7, UnitDB(UNIT_ELEPHANT_WARRIOR), pataliputraLoc, 0);
+					CreateUnit(7, UnitDB(UNIT_ELEPHANT_WARRIOR), pataliputraLoc, 0);
+					CreateUnit(7, UnitDB(UNIT_ARCHER2), pataliputraLoc, 0);
+					CreateUnit(7, UnitDB(UNIT_ARCHER2), pataliputraLoc, 0);
+					CreateUnit(7, UnitDB(UNIT_ARCHER2), pataliputraLoc, 0);
+					CreateUnit(7, UnitDB(UNIT_ARCHER2), pataliputraLoc, 0);	
+					CreateUnit(7, UnitDB(UNIT_ARCHER2), pataliputraLoc, 0);	
+					GetArmyFromUnit(chandUnit, tmpArmy);
+					Event: GroupOrder(tmpArmy);
+				} else {
+					SetString(0, ID_AG_CHANDRA_PT1A);
+					SetString(1, ID_AG_BLANK);
+					SwapCity(tmpCity, 8, 1);
+					CreateUnit(8, UnitDB(UNIT_CHANDRAGUPTA), pataliputraLoc, 0);
+					FindSpecialUnit (UnitDB(UNIT_CHANDRAGUPTA), 8);
+					chandUnit = specUnit;
+					CreateUnit(8, UnitDB(UNIT_ELEPHANT_WARRIOR), pataliputraLoc, 0);
+					CreateUnit(8, UnitDB(UNIT_ELEPHANT_WARRIOR), pataliputraLoc, 0);
+					CreateUnit(8, UnitDB(UNIT_ELEPHANT_WARRIOR), pataliputraLoc, 0);
+					CreateUnit(8, UnitDB(UNIT_ELEPHANT_WARRIOR), pataliputraLoc, 0);
+					CreateUnit(8, UnitDB(UNIT_ELEPHANT_WARRIOR), pataliputraLoc, 0);
+					CreateUnit(8, UnitDB(UNIT_ARCHER2), pataliputraLoc, 0);
+					CreateUnit(8, UnitDB(UNIT_ARCHER2), pataliputraLoc, 0);
+					CreateUnit(8, UnitDB(UNIT_ARCHER2), pataliputraLoc, 0);
+					CreateUnit(8, UnitDB(UNIT_ARCHER2), pataliputraLoc, 0);	
+					CreateUnit(8, UnitDB(UNIT_ARCHER2), pataliputraLoc, 0);	
+					GetArmyFromUnit(chandUnit, tmpArmy);
+					Event: GroupOrder(tmpArmy);
+				}
+				Message(1, 'AGChandra');
+			}
+		} elseif (chandraCount <= 142) {			// In 142 turns Chandragupta will rise up and fight the imperialists!
+			chandraCount = chandraCount + 1;
+		} 		
+
+		// If you choose to pamper the Persian nobility, it will cost 250 GP per turn
+		if (pamperCost == 1) {
+			AddGold(1, -250);				// Subtract 250 GP
+		}
+
+		// Counter for Statiera marriage
+		if (statieraCount > 0 ) {
+			if (statieraCount == 18) {
+				Message(1, 'AGStatA');
+			} elseif (statieraCount == 30) {
+				Message(1, 'AGStatMarry2');
+			}
+			statieraCount = statieraCount + 1;
+		} elseif (statieraCount < 0 ) {
+			if (statieraCount < -6 && PlayerGold(1) >= 5000) {
+				Message(1, 'AGStatMarry2');
+			}
+			statieraCount = statieraCount - 1;
+		}
+
+		// if Darius is dead, Bessus appears in Persia
+		if (bessusFlag > 0) {
+			player[0] = 4;
+			if (IsPlayerAlive(player[0])) {
+				if (CreateUnitNearestCity (UnitDB(UNIT_BESSUS), baktraLoc, 4, 1)) {
+					FindSpecialUnit (UnitDB(UNIT_BESSUS), 4);
+					bessusUnit = specUnit;
+					SpawnHordes (10, bessusUnit.location, 4, 0);
+					if (bessusFlag == 1){
+						Message(1, 'AGBessus');
+					} else {
+						Message(1, 'AGBessus2');
+					}
+				}
+			}
+		}
+
+		// If Greek regard for M drops below 350, Sparta defects to Persia.
+		GetCityByLocation(spartaLoc, tmpCity);
+		if (CityIsValid(tmpCity)) {
+			player[0] = tmpCity.owner;
+			if (player[0] == 2) {
+				if (GetEffectiveRegard(2, 1) < 350) {
+					SwapCity(tmpCity, 4, 0);				// Convert Athens to Persian
+					CreateUnit(4, UnitDB(UNIT_HOPLITE), spartaLoc, 0);
+					CreateUnit(4, UnitDB(UNIT_HOPLITE), spartaLoc, 0);
+					CreateUnit(4, UnitDB(UNIT_HOPLITE), spartaLoc, 0);
+					CreateUnit(4, UnitDB(UNIT_CATAPULT), spartaLoc, 0);
+					Message(1, 'AGSpartaDefect');
+				}
+			}
+		}
+
+//		location[0] = alexUnit.location;
+//		location[1] = dariusUnit.location;
+//		Message (1, 'AGTemp');
+
+	} elseif (tmpPlayer == 4) {
+		// Refresh Veteran effect for Darius
+		if (dariusUnit.valid) {
+			VeteranEffect (dariusUnit.location, 4);
+		}
+	}
+} 
+// End BeginTurn Handlers 
+
+  //--------------------------------------------------------------------------------
+ // Center on Alexander at the beginning of the first turn - doesn't work, grrr....
+//----------------------------------------------------------------------------------
+
+HandleEvent(ArmySelected) 'AGCenterOnAlexander_F' post {
+    if (IsHumanPlayer(g.player))
+    {
+        if (g.player == 1) 
+        {
+	      SelectUnit(alexUnit);
+	      AddCenter(alexUnit);
+	      DisableTrigger('AGCenterOnAlexander_F');
+        }
+    }
+}
+
+
+  //------------------------------------------------------------------
+ // Clear Battle Flag so all units may attack multiple times per turn
+//--------------------------------------------------------------------
+
+HandleEvent(BattleAfterMath) 'AGAfterBattle_F' post {
+	afterBattle = 1;
+}
+
+HandleEvent(MoveUnits) 'AGClearBattleFlag_F' pre {
+int_t		i;
+int_t		numUnits;
+unit_t		tmpUnit;
+	if (afterBattle == 1) {
+		afterBattle = 0;
+		player[0] = army[0].owner;
+		numUnits = player[0].units;
+		for(i = 0; i < numUnits; i = i + 1) {
+			GetUnitByIndex(player[0], i, tmpUnit);
+			ClearBattleFlag(tmpUnit);
+		}
+	}
+}
+
+
+  //----------------------------------
+ // Stops disbanding of Special Units
+//------------------------------------
+
+HandleEvent(DisbandArmyOrder) 'AGDisbandFail_F' pre {
+int_t	i;
+int_t	tmpNum;
+unit_t	tmpUnit;
+army_t	tmpArmy;
+	tmpArmy = army[0];
+	tmpNum = tmpArmy.size;
+	for(i = 0; i < tmpNum; i = i + 1) {
+		GetUnitFromArmy(tmpArmy, i, tmpUnit);
+		if (IsSpecialUnit(tmpUnit)) {
+			player[0] = tmpUnit.owner;
+			if(player[0] == 1) {
+				unit[0] = tmpUnit;
+				Message(1, 'AGDisbandFail');
+			}
+			return STOP;
+		}
+	}
+}
+
+HandleEvent(DisbandUnit) 'AGDisbandFail2_F' pre {
+unit_t	tmpUnit;
+	tmpUnit = unit[0];
+	if (IsSpecialUnit(tmpUnit)) {
+		player[0] = tmpUnit.owner;
+		if(player[0] == 1) {
+			Message(1, 'AGDisbandFail');
+		}
+		return STOP;
+	}
+}
+// End Disband handlers
+
+
+  //-----------------------------------
+ // Message when you discover Theology
+//-------------------------------------
+
+HandleEvent(GrantAdvance) 'AGTheocracy_F' post {
+int_t	tmpAdvance;
+int_t	tmpNum;
+
+	if (player[0] == 1) {
+		advance[0] = value[0];
+		tmpNum = advance[0].type;
+		if (tmpNum == AdvanceDB(ADVANCE_THEOLOGY)) {	// If Advance is Theology
+			Message(1, 'AGTheocracy');
+			DisableTrigger('AGTheocracy_F');
+		}
+	}
+}
+
+
+  //------------------
+ // Ethiopia handlers
+//--------------------
+
+HandleEvent(MoveUnits) 'AGEthiopia_F' post {
+army_t		tmpArmy;
+city_t		tmpCity;
+location_t	tmpLoc;
+	tmpArmy = army[0];
+	player[0] = tmpArmy.owner;
+	if (player[0] == 1) {
+		tmpLoc = location[1];
+		if (Distance(tmpLoc, ethiopiaLoc) < 3) {
+			Message(1, 'AGEthiopia');
+			DisableTrigger('AGEthiopia_F');
+		}
+	}
+}
+
+// if Meroe is captured by M
+HandleEvent(CaptureCity) 'AGMeroe_F' pre {
+int_t		tmpPlayer;
+city_t		tmpCity;
+location_t	tmpLoc;
+	tmpPlayer = player[0];
+	tmpCity = city[0];
+	tmpLoc = tmpCity.location;
+	if (tmpPlayer == 1 && tmpLoc == meroeLoc) {
+		AddGold(1, 5000);				// Add 5000 Gold to M
+		Message(1, 'AGMeroe');
+		DisableTrigger('AGMeroe_F');
+	}
+}
+
+
+  //----------------
+ // Persia handlers
+//------------------
+
+// Appears if you move a unit within 3 squares of Sardis
+HandleEvent(MoveUnits) 'AGScoutReport_F' post {
+army_t		tmpArmy;
+location_t	tmpLoc;
+	tmpArmy = army[0];
+	player[0] = tmpArmy.owner;
+	if (player[0] == 1) {
+		tmpLoc = location[1];
+		if (Distance(tmpLoc, sardisLoc) < 4) {
+			Message(1, 'AGScoutReportA');
+			DisableTrigger('AGScoutReport_F');
+		}
+	}
+}
+
+// If M units move 3 squares from Tyre FTO
+HandleEvent(MoveUnits) 'AGTyreApproach_F' pre {
+army_t		tmpArmy;
+location_t	tmpLoc;
+	tmpArmy = army[0];
+	player[0] = tmpArmy.owner;
+	if (player[0] == 1) {
+		tmpLoc = location[1];
+		if (Distance(tmpLoc, tyreLoc) < 3) {
+			Message(1, 'AGTyreApproach');
+			DisableTrigger('AGTyreApproach_F');
+			return STOP;
+		}
+	}
+}
+
+// If M units move 2 square away from Tyre FTO
+HandleEvent(MoveUnits) 'AGTyreBeside_F' pre {
+army_t		tmpArmy;
+location_t	tmpLoc;
+	tmpArmy = army[0];
+	player[0] = tmpArmy.owner;
+	if (player[0] == 1) {
+		tmpLoc = location[1];
+		if (Distance(tmpLoc, tyreLoc) < 3) {
+			Message(1, 'AGTyreBeside');
+			DisableTrigger('AGTyreBeside_F');
+			return STOP;
+		}
+	}
+}
+
+// if Tyre is captured by M
+HandleEvent(CaptureCity) 'AGTyreConquer_F' pre {
+int_t		tmpPlayer;
+city_t		tmpCity;
+location_t	tmpLoc;
+	tmpPlayer = player[0];
+	tmpCity = city[0];
+	tmpLoc = tmpCity.location;
+	if (tmpPlayer == 1 && tmpLoc == tyreLoc) {
+		if(IsPlayerAlive(2)) {					// if the Corinthian League isn't dead
+			LogRegardEvent(2, 1, 400, 0, ID_AG_REGARD_EVENT_POS, 0);	// increase reputation with CL by 400
+		}
+		if(IsPlayerAlive(3)) {					// if the Greeks aren't dead
+			LogRegardEvent(3, 1, 200, 0, ID_AG_REGARD_EVENT_POS, 0);	// increase reputation with G by 200
+		}
+		if(IsPlayerAlive(5)) {					// if the Carthaginians aren't dead
+			LogRegardEvent(5, 1, 200, 0, ID_AG_REGARD_EVENT_POS, 0);	// increase reputation with G by 100
+		}
+		Message(1, 'AGTyreConquer');
+		DisableTrigger('AGTyreConquer_F');
+	}
+}
+
+
+// if Alexander enters Gordium, display message FTO
+HandleEvent(MoveUnits) 'AGGordium_F' post {
+army_t		tmpArmy;
+location_t	tmpLoc;
+	tmpArmy = army[0];
+	player[0] = tmpArmy.owner;
+	if (player[0] == 1) {
+		tmpLoc = alexUnit.location;
+		if (tmpLoc == gordiumLoc) {
+			if(IsPlayerAlive(2)) {					// if the Corinthian League isn't dead
+				LogRegardEvent(2, 1, 200, 0, ID_AG_REGARD_EVENT_POS, 0);	// increase reputation with CL by 200
+			}
+			if(IsPlayerAlive(3)) {					// if the Greeks aren't dead
+				LogRegardEvent(3, 1, 200, 0, ID_AG_REGARD_EVENT_POS, 0);	// increase reputation with G by 200
+			}
+			Message(1, 'AGGordiumA');
+			DisableTrigger('AGGordium_F');
+		}
+	}
+}
+
+
+// when you enter the area of Phoenica
+HandleEvent(MoveUnits) 'AGPhoenicaEnter_F' post {
+city_t		tmpCity;
+army_t		tmpArmy;
+location_t	tmpLoc;
+int_t		pCities;
+int_t		i;
+	tmpArmy = army[0];
+
+	player[0] = tmpArmy.owner;
+	if (player[0] == 1) {
+		tmpLoc = location[1];
+		if (Distance(tmpLoc, phoenLoc) < 3 ) {
+			GetCityByLocation(aradusLoc, tmpCity);
+			if (CityIsValid(tmpCity)) {
+				player[1] = tmpCity.owner;
+				if (player[1] == 4) {
+					GetCityByLocation(issusLoc, tmpCity);
+					if (CityIsValid(tmpCity)) {
+						player[1] = tmpCity.owner;
+						if (player[1] == 4) {
+							pCities = 1;			// Aradus and Issus are controlled by P
+						}
+					}
+				}
+			}
+			if (pCities == 1) {
+				if (dariusUnit.valid) {
+					Message(1, 'AGPhoenEnter');
+				} else {
+					Message(1, 'AGPhoenEnter2');
+				}
+			}
+			DisableTrigger('AGPhoenicaEnter_F');
+		}
+	}
+}
+
+// If you come within two spaces of Aradus
+HandleEvent(MoveUnits) 'AGAradusEnter_F' pre {
+city_t		tmpCity;
+army_t		tmpArmy;
+location_t	tmpLoc;
+	tmpArmy = army[0];
+	player[0] = tmpArmy.owner;
+	if (player[0] == 1) {
+		tmpLoc = location[1];
+		if (Distance(tmpLoc, aradusLoc) < 3 ) {
+			GetCityByLocation(aradusLoc, tmpCity);	
+			if (CityIsValid(tmpCity)) {
+				player[0] = tmpCity.owner;
+				if (player[0] == 4) {
+					if (dariusUnit.valid) {
+						if (aradusOnce != 1) {
+							Message(1, 'AGPhoenAradus');
+							aradusOnce = 1;
+							return STOP;
+						}
+					} else {
+						Message(1, 'AGPhoenAradus2');
+						SwapCity(tmpCity, 1, 1);
+						Event:AddHappyTimer(tmpCity, 50, 3, 14);	// +3 happiness for 50 turns due to Conquest
+						DisableTrigger('AGAradusEnter_F');
+						return STOP;
+					}
+				} else { 
+					DisableTrigger('AGAradusEnter_F');
+				}
+			}
+		}
+	}
+}
+
+// If you come within two spaces of Sidon
+HandleEvent(MoveUnits) 'AGSidonEnter_F' pre {
+city_t		tmpCity;
+army_t		tmpArmy;
+location_t	tmpLoc;
+	tmpArmy = army[0];
+	player[0] = tmpArmy.owner;
+	if (player[0] == 1) {
+		tmpLoc = location[1];
+		if (Distance(tmpLoc, sidonLoc) < 3 ) {
+			GetCityByLocation(sidonLoc, tmpCity);	
+			if (CityIsValid(tmpCity)) {
+				player[0] = tmpCity.owner;
+				if (player[0] == 4) {
+					if (dariusUnit.valid) {
+						if (sidonOnce != 1) {
+							Message(1, 'AGPhoenSidon');
+							sidonOnce = 1;
+							return STOP;
+						}
+					} else {
+						Message(1, 'AGPhoenSidon2');
+						SwapCity(tmpCity, 1, 1);
+						Event:AddHappyTimer(tmpCity, 50, 3, 14);	// +3 happiness for 50 turns due to Conquest
+						DisableTrigger('AGSidonEnter_F');
+						return STOP;
+					}
+				} else { 
+					DisableTrigger('AGSidonEnter_F');
+				}
+			}
+		}
+	}
+}
+
+// if any M unit enters Persepolis road, display message FTO
+HandleEvent(MoveUnits) 'AGpersepRoad_F' post {
+army_t		tmpArmy;
+location_t	tmpLoc;
+	tmpArmy = army[0];
+	player[0] = tmpArmy.owner;
+	if (player[0] == 1) {
+		tmploc = location[1];
+		if (Distance(tmpLoc, persepRoadLoc) < 3) {
+			Message(1, 'AGpersepRoad');
+			DisableTrigger('AGpersepRoad_F');
+		}
+	}
+}
+
+
+  //----------------------
+ // Carthaginian handlers
+//------------------------
+
+// Appears if you move a unit within 2 squares of Carthage
+HandleEvent(MoveUnits) 'AGCarthage_F' pre {
+army_t		tmpArmy;
+location_t	tmpLoc;
+	tmpArmy = army[0];
+	if (tmpArmy.owner == 1) {
+		tmpLoc = location[1];
+		if (Distance(tmpLoc, carthageLoc) < 3) {
+			Message(1, 'AGCarthage');
+			DisableTrigger('AGCarthage_F');
+			return STOP;
+		}
+	}
+}
+
+// if Carthage is captured by M
+HandleEvent(CaptureCity) 'AGCarthageConquer_F' pre {
+int_t		tmpPlayer;
+city_t		tmpCity;
+location_t	tmpLoc;
+
+	tmpPlayer = player[0];
+	tmpCity = city[0];
+	tmpLoc = tmpCity.location;
+
+	if (tmpPlayer == 1 && tmpLoc == carthageLoc) {
+		AddGold(1, 3000);				// Add 3000 GP
+		Message(1, 'AGCarthageConquer');
+		DisableTrigger('AGCarthageConquer_F');
+	}
+}
+
+  //---------------
+ // Egypt handlers
+//-----------------
+
+// M units move near Gaza
+HandleEvent(MoveUnits) 'AGGazaBeside_F' pre {
+army_t		tmpArmy;
+location_t	tmpLoc;
+	tmpArmy = army[0];
+	player[0] = tmpArmy.owner;
+	if (player[0] == 1) {
+		tmpLoc = location[1];
+		if (Distance(tmpLoc, gazaLoc) < 3) {
+			Message(1, 'AGGazaBeside');
+			DisableTrigger('AGGazaBeside_F');
+			return STOP;
+		}
+	}
+}
+
+// if Gaza is captured by M
+HandleEvent(CaptureCity) 'AGGazaConquer_F' pre {
+int_t		tmpPlayer;
+city_t		tmpCity;
+location_t	tmpLoc;
+	tmpPlayer = player[0];
+	tmpCity = city[0];
+	tmpLoc = tmpCity.location;
+	if (tmpPlayer == 1 && tmpLoc == gazaLoc) {
+		AddGold(1, 1500);				// Add 1500 GP
+		Message(1, 'AGGazaConquer');
+		DisableTrigger('AGGazaConquer_F');
+	}
+}
+
+// Messages for when M units come near Pelusium, Memphis or Thebes
+HandleEvent(MoveUnits) 'AGEgyptEnter_F' post {
+army_t		tmpArmy;
+city_t		tmpCity;
+location_t	tmpLoc;
+location_t	tmpLoc2;
+location_t	tmpLoc3;
+unit_t		tmpUnit;
+int_t		tmpNum;
+int_t		i;
+	tmpArmy = army[0];
+	player[0] = tmpArmy.owner;
+	if (player[0] == 1) {
+		tmpLoc = location[1];
+		if (Distance(tmpLoc, pelusiumLoc) < 3 ||
+			Distance(tmpLoc, memphisLoc) < 3 || 
+			Distance(tmpLoc, thebesLoc) < 3) {
+			GetCityByLocation(tyreLoc, tmpCity);
+			if (CityIsValid(tmpCity)) {
+				player[0] = tmpCity.owner;
+				tmpLoc2 = alexUnit.location;
+				tmpLoc3 = tmpArmy.location;
+				if (player[0] == 4) {
+					if (egyptFlag == 0) {
+						Message(1, 'AGEgyptTyre');
+						egyptFlag = 1;
+					}
+				} elseif (tmpLoc2 == tmpLoc3) {
+					Message(1, 'AGEgyptDefect');
+					GetCityByLocation(pelusiumLoc, tmpCity);	// Convert Cities to M
+					if (CityIsValid(tmpCity)) {
+						SwapCity(tmpCity, 1, 1);
+					}
+					GetCityByLocation(memphisLoc, tmpCity);
+					if (CityIsValid(tmpCity)) {
+						SwapCity(tmpCity, 1, 1);
+					}
+					GetCityByLocation(thebesLoc, tmpCity);
+					if (CityIsValid(tmpCity)) {
+						SwapCity(tmpCity, 1, 1);
+					}
+					player[0] = 4;
+					if (IsPlayerAlive(player[0])) {
+						tmpNum = player[0].units;
+						for(i = 0; i < tmpNum; i = i + 1) {		// Kill all Persian Units (except Special units) near Egyptian Cities
+							GetUnitByIndex(4, i, tmpUnit);
+							tmpLoc = tmpunit.location;
+							if (Distance(tmpLoc, memphisLoc) < 7 ||
+								Distance(tmpLoc, thebesLoc) < 7) {
+								if (IsSpecialUnit(tmpUnit) == 0) {
+									Event: KillUnit(tmpUnit, 0, 4);
+								}
+							}
+						}
+					}
+					DisableTrigger('AGEgyptEnter_F');
+				} else {
+					if (egyptFlag2 == 0) {
+						Message(1, 'AGEgyptCantDefect');
+						egyptFlag2 = 1;
+					}
+				}
+			}
+		}
+	}
+}
+
+
+  //----------------
+ // Arabia handlers
+//------------------
+
+// M units are at the start of the road to South Arabia
+HandleEvent(MoveUnits) 'AGArabiaRoad_F' pre {
+army_t		tmpArmy;
+location_t	tmpLoc;
+	tmpArmy = army[0];
+	player[0] = tmpArmy.owner;
+	if (player[0] == 1) {
+		tmpLoc = location[1];
+		if (Distance(tmpLoc, arabiaLoc) < 3) {
+			Message(1, 'AGArabiaRoad');
+			DisableTrigger('AGArabiaRoad_F');
+			return STOP;
+		}
+	}
+}
+
+// M units move near Marib
+HandleEvent(MoveUnits) 'AGMarib_F' pre {
+army_t		tmpArmy;
+location_t	tmpLoc;
+	tmpArmy = army[0];
+	player[0] = tmpArmy.owner;
+	if (player[0] == 1) {
+		tmpLoc = location[1];
+		if (Distance(tmpLoc, maribLoc) < 3) {
+			Message(1, 'AGMarib');
+			DisableTrigger('AGMarib_F');
+			return STOP;
+		}
+	}
+}
+
+// if Marib is captured by M
+HandleEvent(CaptureCity) 'AGMaribConquer_F' pre {
+int_t		tmpPlayer;
+city_t		tmpCity;
+location_t	tmpLoc;
+	tmpPlayer = player[0];
+	tmpCity = city[0];
+	tmpLoc = tmpCity.location;
+	if (tmpPlayer == 1 && tmpLoc == maribLoc) {
+		AddGold(1, 10000);				// Add 10000 GP
+		Message(1, 'AGMaribConquer');
+		DisableTrigger('AGMaribConquer_F');
+	}
+}
+
+// if Shabwah is captured by M
+HandleEvent(CaptureCity) 'AGShabwahConquer_F' pre {
+int_t	tmpPlayer;
+city_t	tmpCity;
+location_t	tmpLoc;
+	tmpPlayer = player[0];
+	tmpCity = city[0];
+	tmpLoc = tmpCity.location;
+	if (tmpPlayer == 1 && tmpLoc == shabwahLoc) {
+		AddGold(1, 6000);				// Add 6000 GP
+		Message(1, 'AGShabwahConquer');
+		DisableTrigger('AGShabwahConquer_F');
+	}
+}
+
+// if Dhufar is captured by M
+HandleEvent(CaptureCity) 'AGDhufarConquer_F' pre {
+int_t	tmpPlayer;
+city_t	tmpCity;
+location_t	tmpLoc;
+	tmpPlayer = player[0];
+	tmpCity = city[0];
+	tmpLoc = tmpCity.location;
+	if (tmpPlayer == 1 && tmpLoc.location == dhufarLoc) {
+		AddGold(1, 3000);				// Add 3000 GP
+		Message(1, 'AGDhufarConquer');
+		DisableTrigger('AGDhufarConquer_F');
+	}
+}
+
+HandleEvent(MoveUnits) 'AGArabiaBySea1_F' post {
+army_t		tmpArmy;
+city_t		tmpCity1;
+city_t		tmpCity2;
+city_t		tmpCity3;
+location_t	tmpLoc;
+	tmpArmy = army[0];
+	player[0] = tmpArmy.owner;
+	if (player[0] == 1) {
+		tmpLoc = location[1];
+		if (Distance(tmpLoc, arabiaBySeaPLoc) < 8) {
+			if (TerrainType(tmpLoc) >= 10 && TerrainType(tmpLoc) <= 16 || TerrainType(tmpLoc) == 23 || TerrainType(tmpLoc) == 24) {
+				GetCityByLocation(maribLoc, tmpCity1);
+				GetCityByLocation(adanaLoc, tmpCity2);
+				GetCityByLocation(shabwahLoc, tmpCity3);
+				if (CityIsValid(tmpCity1) && CityIsValid(tmpCity2) && CityIsValid(tmpCity3)) {
+					player[0] = tmpCity1.owner;
+					player[1] = tmpCity2.owner;
+					player[2] = tmpCity3.owner;
+					if (player[0] != 1 && player[0] != 1 && player[0] != 1) {
+						Message(1, 'AGArabiaBySea1');
+					}
+				}
+				DisableTrigger('AGArabiaBySea1_F');
+			}
+		}
+	}
+}
+
+HandleEvent(MoveUnits) 'AGArabiaBySea2_F' post {
+army_t		tmpArmy;
+city_t		tmpCity1;
+city_t		tmpCity2;
+city_t		tmpCity3;
+location_t	tmpLoc;
+	tmpArmy = army[0];
+	player[0] = tmpArmy.owner;
+	if (player[0] == 1) {
+		tmpLoc = location[1];
+		if (Distance(tmpLoc, arabiaBySeaELoc) < 3) {
+			if (TerrainType(tmpLoc) >= 10 && TerrainType(tmpLoc) <= 16 || TerrainType(tmpLoc) == 23 || TerrainType(tmpLoc) == 24) {
+				GetCityByLocation(maribLoc, tmpCity1);
+				GetCityByLocation(adanaLoc, tmpCity2);
+				GetCityByLocation(shabwahLoc, tmpCity3);
+					player[0] = tmpCity1.owner;
+					player[1] = tmpCity2.owner;
+					player[2] = tmpCity3.owner;
+					if (player[0] != 1 && player[0] != 1 && player[0] != 1) {
+					Message(1, 'AGArabiaBySea2');
+				}
+				DisableTrigger('AGArabiaBySea2_F');
+			}
+		}
+	}
+}
+
+HandleEvent(MoveUnits) 'AGRoadToMarib1_F' post {
+army_t		tmpArmy;
+city_t		tmpCity;
+location_t	tmpLoc;
+	tmpArmy = army[0];
+	player[0] = tmpArmy.owner;
+	if (player[0] == 1) {
+		tmpLoc = location[1];
+		if (Distance(tmpLoc, roadToMarib1Loc) < 3) {
+			GetCityByLocation(shabwahLoc, tmpCity);
+			if (CityIsValid(tmpCity)) {
+				player[0] = tmpCity.owner;
+				if (player[0] != 1) {
+					Message(1, 'AGRoadToMarib1');
+				}
+			}
+			DisableTrigger('AGRoadToMarib1_F');
+		}
+	}
+}
+
+HandleEvent(MoveUnits) 'AGRoadToMarib2_F' post {
+army_t		tmpArmy;
+city_t		tmpCity;
+location_t	tmpLoc;
+	tmpArmy = army[0];
+	player[0] = tmpArmy.owner;
+	if (player[0] == 1) {
+		tmpLoc = location[1];
+		if (Distance(tmpLoc, roadToMarib2Loc) < 3) {
+			GetCityByLocation(maribLoc, tmpCity);
+			if (CityIsValid(tmpCity)) {
+				player[0] = tmpCity.owner;
+				if (player[0] != 1) {
+					Message(1, 'AGRoadToMarib2');
+				}
+			}
+			DisableTrigger('AGRoadToMarib2_F');
+		}
+	}
+}
+
+  //----------------
+ // Sogdia handlers
+//------------------
+
+// if Kyreskhata is captured by M
+HandleEvent(CaptureCity) 'AGKyreskhataEnter_F' pre {
+int_t		tmpPlayer;
+city_t		tmpCity;
+location_t	tmpLoc;
+	tmpPlayer = player[0];
+	tmpCity = city[0];
+	tmpLoc = tmpCity.location;
+	if (tmpPlayer == 1 && rebelFlag == 1 && tmpLoc == kyreskhataLoc) {
+		Message(1, 'AGSogdiaDefeatA');
+		DisableTrigger('AGKyreskhataEnter_F');
+	}
+}
+
+HandleEvent(MoveUnits) 'AGSogdiaEnter_F' post {
+army_t		tmpArmy;
+location_t	tmpLoc;
+	tmpArmy = army[0];
+	player[0] = tmpArmy.owner;
+	if (player[0] == 1) {
+		tmpLoc = location[1];
+		if (Distance(tmpLoc, sogdiaLoc) < 5 || Distance(tmpLoc, sogdia2Loc) < 3) {
+			Message(1, 'AGSogdiaEnter');
+			DisableTrigger('AGSogdiaEnter_F');
+		}
+	}
+}
+
+
+  //---------------
+ // Seres handlers
+//-----------------
+
+// if an M unit enters Seres, display message FTO
+HandleEvent(MoveUnits) 'AGSeres_F' post {
+army_t		tmpArmy;
+location_t	tmpLoc;
+	tmpArmy = army[0];
+	player[0] = tmpArmy.owner;
+	if (player[0] == 1) {
+		tmpLoc = tmpArmy.location;
+		if (Distance(tmpLoc, seresLoc) < 5) {
+			Message(1, 'AGSeres');
+			DisableTrigger('AGSeres_F');
+		}
+	}
+}
+
+// if an M unit goes East into Seres, display message FTO
+HandleEvent(MoveUnits) 'AGSeres2_F' post {
+army_t		tmpArmy;
+location_t	tmpLoc;
+	tmpArmy = army[0];
+	player[0] = tmpArmy.owner;
+	if (player[0] == 1) {
+		tmpLoc = tmpArmy.location;
+		if (Distance(tmpLoc, seres2Loc) < 5) {
+			Message(1, 'AGSeres2');
+			DisableTrigger('AGSeres2_F');
+		}
+	}
+}
+
+  //---------------
+ // India handlers
+//-----------------
+
+HandleEvent(MoveUnits) 'AGNearCrossRoad_F' post {
+army_t		tmpArmy;
+city_t		tmpCity;
+location_t	tmpLoc;
+	tmpArmy = army[0];
+	if (tmpArmy.owner == 1) {
+		tmpLoc = location[1];
+		if (Distance(tmpLoc, crossroad2Loc) < 1) {
+			GetCityByLocation(puskaravatiLoc, tmpCity);
+			if (CityIsValid(tmpCity)) {
+				if (tmpCity.owner != 1) {
+					Message(1, 'AGNearCrossRoad');
+				}
+			}
+			DisableTrigger('AGNearCrossRoad_F');
+		}
+	}
+}
+
+HandleEvent(MoveUnits) 'AGCaspianGate_F' post {
+
+army_t	tmpArmy;
+city_t	tmpCity;
+	tmpArmy = army[0];
+	if (tmpArmy.owner == 1) {
+		if (tmpArmy.location == caspianGateLoc) {
+			GetCityByLocation(sharudLoc, tmpCity);
+			if (CityIsValid(tmpCity)) {
+				if (tmpCity.owner != 1) {
+					Message(1, 'AGCaspianGate');
+				}
+			}
+			DisableTrigger('AGCaspianGate_F');
+		}
+	}
+}
+
+// If M unit enters Crossroads of Persia, display message FTO
+HandleEvent(MoveUnits) 'AGCrossroads_F' post {
+army_t	tmpArmy;
+	tmpArmy = army[0];
+	if (tmpArmy.owner == 1) {
+		if (tmpArmy.location == crossroadsLoc) {
+			Message(1, 'AGCrossroads');
+			DisableTrigger('AGCrossroads_F');
+		}
+	}
+}
+
+// If M unit enters southern route between India and Persia, display message FTO
+HandleEvent(MoveUnits) 'AGIndiaRoute_F' post {
+army_t	tmpArmy;
+city_t	tmpCity;
+	tmpArmy = army[0];
+	if (tmpArmy.owner == 1) {
+		GetCityByLocation(pattalaLoc, tmpCity);
+		if (CityIsValid(tmpCity)) {
+			if (tmpCity.owner != 1) {
+				if (Distance(tmpArmy.location, indiaLoc) < 4) {
+					Message(1, 'AGIndiaRoute');
+					DisableTrigger('AGIndiaRoute_F');
+				}
+			}
+		}
+	}
+}
+
+// If M unit enters central route between India and Persia, display message FTO
+HandleEvent(MoveUnits) 'AGIndiaRoute2_F' post {
+army_t	tmpArmy;
+	tmpArmy = army[0];
+	if (tmpArmy.owner == 1) {
+		if (Distance(tmpArmy.location, india2Loc) < 3) {
+			Message(1, 'AGIndiaRoute2');
+			DisableTrigger('AGIndiaRoute2_F');
+		}
+	}
+}
+
+// If M unit enters northern route between India and Persia, display message FTO
+HandleEvent(MoveUnits) 'AGIndiaRoute3_F' post {
+army_t	tmpArmy;
+city_t	tmpCity;
+	tmpArmy = army[0];
+	if (tmpArmy.owner == 1) {
+		GetCityByLocation(taksasilaLoc, tmpCity);
+		if (CityIsValid(tmpCity)) {
+			if (tmpCity.owner != 1) {
+				if (Distance(tmpArmy.location, india3Loc) < 4) {
+					Message(1, 'AGIndiaRoute3');
+					DisableTrigger('AGIndiaRoute3_F');
+				}
+			}
+		}
+	}
+}
+
+// If M unit enters Wilderness of Persia, display message FTO
+HandleEvent(MoveUnits) 'AGWilderness_F' post {
+army_t	tmpArmy;
+city_t	tmpCity;
+	tmpArmy = army[0];
+	if (tmpArmy.owner == 1) {
+		GetCityByLocation(susiaLoc, tmpCity);
+		if (CityIsValid(tmpCity)) {
+			if (tmpCity.owner != 1) {
+				if (tmpArmy.location == wildernessLoc) {
+					Message(1, 'AGWilderness');
+					DisableTrigger('AGWilderness_F');
+				}
+			}
+		}
+	}
+}
+
+// If M unit comes close to Taksisila, display message FTO
+HandleEvent(MoveUnits) 'AGTaksasila_F' pre {
+army_t	tmpArmy;
+city_t	tmpCity;
+unit_t	tmpUnit;
+int_t	tmpNum;
+int_t	i;
+	tmpArmy = army[0];
+	if (tmpArmy.owner == 1) {
+		if (Distance(tmpArmy.location, taksasilaLoc) < 3) {
+			Message(1, 'AGTaksasilaA');
+			GetCityByLocation(taksasilaLoc, tmpCity);
+			if (CityIsValid(tmpCity)) {
+				SwapCity(tmpCity, 1, 0);
+				Event:AddHappyTimer(tmpCity, 50, 4, 14);	// +4 happiness for 50 turns due to Conquest	
+				// Create Porus and his army
+				CreateUnit(8, UnitDB(UNIT_PORUS), porusLoc, 0);
+				FindSpecialUnit (UnitDB(UNIT_PORUS), 8);
+				porusUnit = specUnit;
+				CreateUnit(8, UnitDB(UNIT_ELEPHANT_WARRIOR), porusLoc, 0);
+				CreateUnit(8, UnitDB(UNIT_ELEPHANT_WARRIOR), porusLoc, 0);
+				CreateUnit(8, UnitDB(UNIT_ELEPHANT_WARRIOR), porusLoc, 0);
+				CreateUnit(8, UnitDB(UNIT_ELEPHANT_WARRIOR), porusLoc, 0);
+				CreateUnit(8, UnitDB(UNIT_ARCHER2), porusLoc, 0);
+				CreateUnit(8, UnitDB(UNIT_ARCHER2), porusLoc, 0);
+				CreateUnit(8, UnitDB(UNIT_ARCHER2), porusLoc, 0);
+				CreateUnit(8, UnitDB(UNIT_PHALANX), porusLoc, 0);
+				CreateUnit(8, UnitDB(UNIT_PHALANX), porusLoc, 0);
+				CreateUnit(8, UnitDB(UNIT_PHALANX), porusLoc, 0);
+				GetArmyFromUnit(porusUnit, tmpArmy);
+				Event: GroupOrder(tmpArmy);
+				DisableTrigger('AGTaksasila_F');
+				return STOP;
+			}
+		}
+	}
+}
+
+// If M unit enters Taksasila, display message FTO
+HandleEvent(MoveUnits) 'AGTaksasila2_F' post {
+army_t	tmpArmy;
+	tmpArmy = army[0];
+	if (tmpArmy.owner == 1) {
+		if (tmpArmy.location == taksasilaLoc) {
+			Message(1, 'AGTaksasila2A');
+			DisableTrigger('AGTaksasila2_F');
+		}
+	}
+}
+
+// if any M unit gets close to Magadhan Empire, display message FTO
+HandleEvent(MoveUnits) 'AGMagadhan_F' post {
+army_t	tmpArmy;
+	tmpArmy = army[0];
+	if (tmpArmy.owner == 1) {
+		if (Distance(tmpArmy.location, magadhanLoc) < 6) {
+			Message(1, 'AGMagadhan');
+			DisableTrigger('AGMagadhan_F');
+		}
+	}
+}
+
+// if any M unit enters Magadhan Empire, display message FTO
+HandleEvent(MoveUnits) 'AGMagadhan2_F' post {
+army_t	tmpArmy;
+	tmpArmy = army[0];
+	if (tmpArmy.owner == 1) {
+		if (Distance(tmpArmy.location, magadhan2Loc) < 6) {
+			Message(1, 'AGMagadhan2');
+			DisableTrigger('AGMagadhan2_F');
+		}
+	}
+}
+
+// if any M unit enters Southern India, display message FTO
+HandleEvent(MoveUnits) 'AGSouthIndia_F' post {
+army_t	tmpArmy;
+	tmpArmy = army[0];
+	if (tmpArmy.owner == 1) {
+		if (Distance(tmpArmy.location, southIndiaLoc) < 10) {
+			Message(1, 'AGSouthIndia');
+			DisableTrigger('AGSouthIndia_F');
+		}
+	}
+}
+
+// The first Magadhan city Alex comes across with 3 or less defenders is converted automatically
+HandleEvent(MoveUnits) 'AGMagadhanFlee_F' post {
+int_t	i;
+int_t	numCities;
+city_t	tmpCity;
+army_t	tmpArmy;
+	tmpArmy = army[0];
+	if (tmpArmy.owner == 1) {
+		player[0] = 7;
+		if (IsPlayerAlive(player[0])) {
+			numCities = player[0].cities;
+			for (i = 0; i < numCities; i = i + 1) {
+				GetCityByIndex(7, i, tmpCity);
+				if (Distance(alexUnit.location, tmpCity.location) < 3) {
+					if (GetUnitsAtLocation(tmpCity.location) < 4) {
+						Message(1, 'AGMagadhanFlee');
+						SwapCity(tmpCity, 1, 1);
+						DisableTrigger('AGMagadhanFlee_F');
+					}
+				}
+			}
+		}
+	}
+}
+
+// if Kausambi is captured by M, convert Kasi and Saketa
+HandleEvent(CaptureCity) 'AGKausambi_F' pre {
+city_t	tmpCity;
+city_t	tmpCity2;
+int_t	tmpPlayer;
+	tmpPlayer = player[0];
+	tmpCity2 = city[0];
+	if (tmpPlayer == 1 && tmpCity2.owner == 7 && tmpCity2.location == kausambiLoc) {
+		Message(1, 'AGKausambi');
+		GetCityByLocation(kasiLoc, tmpCity);
+		if (CityIsValid(tmpCity)) {
+			if (tmpCity.owner == 7) {
+				SwapCity(tmpCity, 1, 1);
+				CreateUnit(1, UnitDB(UNIT_PHALANX), tmpCity.location, 0);
+			}
+		}
+		GetCityByLocation(saketaLoc, tmpCity);
+		if (CityIsValid(tmpCity)) {
+			if (tmpCity.owner == 7) {
+				SwapCity(tmpCity, 1, 1);
+				CreateUnit(1, UnitDB(UNIT_PHALANX), tmpCity.location, 0);
+			}
+		}
+		DisableTrigger('AGKausambi_F');
+	}
+}
+
+// if Ujjayini is captured by M, convert Bharuch
+HandleEvent(CaptureCity) 'AGUjjayini_F' pre {
+city_t	tmpCity;
+city_t	tmpCity2;
+int_t	tmpPlayer;
+	tmpPlayer = player[0];
+	tmpCity2 = city[0];
+	if (tmpPlayer == 1 && tmpCity2.owner == 7 && tmpCity2.location == ujjayiniLoc) {
+		Message(1, 'AGUjjayini');
+		GetCityByLocation(bharuchLoc, tmpCity);
+		if (CityIsValid(tmpCity)) {
+			if (tmpCity.owner == 7) {
+				SwapCity(tmpCity, 1, 1);
+				CreateUnit(1, UnitDB(UNIT_PHALANX), tmpCity.location, 0);
+			}
+		}
+		DisableTrigger('AGUjjayini_F');
+	}
+}
+
+// if Pataliputra is captured by M, convert Kusinara, Campa and Tamralipti
+HandleEvent(CaptureCity) 'AGPataliputra_F' pre { 
+city_t	tmpCity;
+city_t	tmpCity2;
+int_t	tmpPlayer;
+	tmpPlayer = player[0];
+	tmpCity2 = city[0];
+	if (tmpPlayer == 1 && tmpCity2.owner == 7 && tmpCity2.location == pataliputraLoc) {
+		Message(1, 'AGPataliputraA');
+		AddGold(1, 8000);				// Add 8000 Gold to M
+		GetCityByLocation(kusinaraLoc, tmpCity);
+		if (CityIsValid(tmpCity)) {
+			if (tmpCity.owner == 7) {
+				SwapCity(tmpCity, 1, 1);
+				CreateUnit(1, UnitDB(UNIT_PHALANX), tmpCity.location, 0);
+			}
+		}
+		GetCityByLocation(campaLoc, tmpCity);
+		if (CityIsValid(tmpCity)) {
+			if (tmpCity.owner == 7) {
+				SwapCity(tmpCity, 1, 1);
+				CreateUnit(1, UnitDB(UNIT_PHALANX), tmpCity.location, 0);
+			}
+		}
+		GetCityByLocation(tamraliptiLoc, tmpCity);
+		if (CityIsValid(tmpCity)) {
+			if (tmpCity.owner == 7) {
+				SwapCity(tmpCity, 1, 1);
+				CreateUnit(1, UnitDB(UNIT_PHALANX), tmpCity.location, 0);
+			}
+		}
+		DisableTrigger('AGPataliputra_F');
+	}
+}
+
+// if Alexander enters Kasi, display message FTO
+HandleEvent(MoveUnits) 'AGKasi_F' post {
+	if (alexUnit.location == kasiLoc) {
+		Message(1, 'AGKasi');
+		DisableTrigger('AGKasi_F');
+	}
+}
+
+// Handles Sindu deal. Triggers the first time you capture a Magadhan City
+HandleEvent(CaptureCity) 'AGSindu_F' pre { 
+int_t	tmpPlayer;
+city_t	tmpCity;
+	tmpPlayer = player[0];
+	tmpCity = city[0];
+	if (tmpPlayer == 1 && magadhanDeal == 1 && tmpCity.owner == 7) {
+		Event:AddHappyTimer(tmpCity, 50, 3, 14);	// +3 happiness for 50 turns due to Conquest
+	} elseif (tmpPlayer == 1 && tmpCity.owner == 7) {
+		if (magadhanDeal == 0) {
+			Message(1, 'AGSindu');
+		}
+	}
+	if (magadhanDeal == -1) {
+		DisableTrigger('AGSindu_F');
+	}
+}
+// End India Handlers
+
+
+  //----------------------
+ // Various city handlers
+//------------------------
+
+
+HandleEvent(MoveUnits) 'AGBabylonCoronation_F' post {
+	if (babylonCoronation == 1) {
+		if (alexUnit.location == babylonLoc) {
+			HappyEmpire();				// Makes former Persian cities really happy
+			Message(1, 'AGHappyEmpire');
+			DisableTrigger('AGBabylonCoronation_F');
+		}
+	}
+}
+
+
+HandleEvent(MoveUnits) 'AGBabylon_F' pre {
+army_t	tmpArmy;
+	tmpArmy = army[0];
+	if (tmpArmy.owner == 1) {
+		if (Distance(tmpArmy.location, babylonLoc) < 3) {
+			if (TerrainType(tmpArmy.location) < 10 || TerrainType(tmpArmy.location) > 16 && TerrainType(tmpArmy.location) != 23 && TerrainType(tmpArmy.location) != 24) {
+				Message(1, 'AGBabylon');
+				DisableTrigger('AGBabylon_F');
+				return STOP;
+			}
+		}
+	}
+}
+
+HandleEvent(MoveUnits) 'AGEcbatana_F' pre {
+army_t	tmpArmy;
+	tmpArmy = army[0];
+	if (tmpArmy.owner == 1) {
+		if (Distance(tmpArmy.location, ecbatanaLoc) < 3) {
+			if (TerrainType(tmpArmy.location) < 10 || TerrainType(tmpArmy.location) > 16 && TerrainType(tmpArmy.location) != 23 && TerrainType(tmpArmy.location) != 24) {
+				Message(1, 'AGEcbatana');
+				DisableTrigger('AGEcbatana_F');
+				return STOP;
+			}
+		}
+	}
+}
+
+HandleEvent(MoveUnits) 'AGSyracuse_F' pre {
+army_t	tmpArmy;
+	tmpArmy = army[0];
+	if (tmpArmy.owner == 1) {
+		if (Distance(tmpArmy.location, syracuseLoc) < 3) {
+			if (TerrainType(tmpArmy.location) < 10 || TerrainType(tmpArmy.location) > 16 && TerrainType(tmpArmy.location) != 23 && TerrainType(tmpArmy.location) != 24) {
+				Message(1, 'AGSyracuse');
+				DisableTrigger('AGSyracuse_F');
+				return STOP;
+			}
+		}
+	}
+}
+
+HandleEvent(MoveUnits) 'AGAthens_F' pre {
+army_t	tmpArmy;
+	tmpArmy = army[0];
+	if (tmpArmy.owner == 1) {
+		if (Distance(tmpArmy.location, athensLoc) < 3) {
+			if (TerrainType(tmpArmy.location) < 10 || TerrainType(tmpArmy.location) > 16 && TerrainType(tmpArmy.location) != 23 && TerrainType(tmpArmy.location) != 24) {
+				Message(1, 'AGAthens');
+				DisableTrigger('AGAthens_F');
+				return STOP;
+			}
+		}
+	}
+}
+
+HandleEvent(MoveUnits) 'AGSparta_F' pre {
+army_t	tmpArmy;
+	tmpArmy = army[0];
+	if (tmpArmy.owner == 1) {
+		if (Distance(tmpArmy.location, spartaLoc) < 3) {
+			if (TerrainType(tmpArmy.location) < 10 || TerrainType(tmpArmy.location) > 16 && TerrainType(tmpArmy.location) != 23 && TerrainType(tmpArmy.location) != 24) {
+				Message(1, 'AGSparta');
+				DisableTrigger('AGSparta_F');
+				return STOP;
+			}
+		}
+	}
+}
+
+HandleEvent(MoveUnits) 'AGSusa_F' pre {
+army_t	tmpArmy;
+	tmpArmy = army[0];
+	if (tmpArmy.owner == 1) {
+		if (Distance(tmpArmy.location, susaLoc) < 3) {
+			if (TerrainType(tmpArmy.location) < 10 || TerrainType(tmpArmy.location) > 16 && TerrainType(tmpArmy.location) != 23 && TerrainType(tmpArmy.location) != 24) {
+				Message(1, 'AGSusa');
+				DisableTrigger('AGSusa_F');
+				return STOP;
+			}
+		}
+	}
+}
+
+HandleEvent(MoveUnits) 'AGRome_F' pre {
+army_t	tmpArmy;
+	tmpArmy = army[0];
+	if (tmpArmy.owner == 1) {
+		if (Distance(tmpArmy.location, romeLoc) < 3) {
+			if (TerrainType(tmpArmy.location) < 10 || TerrainType(tmpArmy.location) > 16 && TerrainType(tmpArmy.location) != 23 && TerrainType(tmpArmy.location) != 24) {
+				Message(1, 'AGRome');
+				DisableTrigger('AGRome_F');
+				return STOP;
+			}
+		}
+	}
+}
+
+HandleEvent(CaptureCity) 'AGPersepolis2_F' pre { 
+int_t	tmpPlayer;
+city_t	tmpCity;
+	tmpCity = city[0];
+	tmpPlayer = player[0];
+	if (tmpCity.location == persepolisLoc) {
+		if (tmpPlayer == 1) {
+			AddGold(1, 15000);			// add 15000 gold
+			Message(1, 'AGPersepolis2');
+			DisableTrigger('AGPersepolis2_F');
+		}
+	}
+}
+
+HandleEvent(CaptureCity) 'AGSusa2_F' pre { 
+int_t	tmpPlayer;
+city_t	tmpCity;
+	tmpCity = city[0];
+	tmpPlayer = player[0];
+	if (tmpCity.location == susaLoc) {
+		if (tmpPlayer == 1) {
+			AddGold(1, 4000);			// add 4000 gold
+			Message(1, 'AGSusa2');
+			DisableTrigger('AGSusa2_F');
+		}
+	}
+}
+
+HandleEvent(CaptureCity) 'AGEcbatana2_F' pre { 
+int_t	tmpPlayer;
+city_t	tmpCity;
+	tmpCity = city[0];
+	tmpPlayer = player[0];
+	if (tmpCity.location == ecbatanaLoc) {
+		if (tmpPlayer == 1) {
+			AddGold(1, 4000);			// add 4000 gold
+			Message(1, 'AGEcbatana2');
+			DisableTrigger('AGEcbatana2_F');
+		}
+	}
+}
+
+HandleEvent(CaptureCity) 'AGBabylon2_F' pre { 
+int_t	tmpPlayer;
+city_t	tmpCity;
+	tmpCity = city[0];
+	tmpPlayer = player[0];
+	if (tmpCity.location == babylonLoc) {
+		if (tmpPlayer == 1) {
+			AddGold(1, 5000);			// add 5000 gold
+			Message(1, 'AGBabylon2');
+			DisableTrigger('AGBabylon2_F');
+		}
+	}
+}
+
+HandleEvent(CaptureCity) 'AGAthens2_F' pre { 
+int_t	tmpPlayer;
+city_t	tmpCity;
+	tmpCity = city[0];
+	tmpPlayer = player[0];
+	if (tmpCity.location == athensLoc) {
+		if (tmpPlayer == 1) {
+			// Lower reputation with nearby civilizations
+			if(IsPlayerAlive(2)) {				// if Corinthian League isn't dead
+				LogRegardEvent(2, 1, -100, 0, ID_AG_REGARD_EVENT, 0);
+			}
+			if(IsPlayerAlive(3)) {				// if Greeks aren't dead
+				LogRegardEvent(3, 1, -100, 0, ID_AG_REGARD_EVENT, 0);
+			}
+			if(IsPlayerAlive(5)) {				// if Carthaginians aren't dead
+				LogRegardEvent(5, 1, -100, 0, ID_AG_REGARD_EVENT, 0);
+			}
+			if(IsPlayerAlive(6)) {				// if Romans aren't dead
+				LogRegardEvent(6, 1, -100, 0, ID_AG_REGARD_EVENT, 0);
+			}
+			Message(1, 'AGAthens2');
+			DisableTrigger('AGAthens2_F');
+		}
+	}
+}
+
+
+  //-----------------------------------------------------
+ // If Alexander destroys a Civilization he gets a point
+//-------------------------------------------------------
+ 
+HandleEvent(KillPlayer) 'AGCivDefeat_F' pre {
+int_t	tmpPlayer;
+int_t	tmpPlayer2;
+	tmpPlayer = player[0];
+	tmpPlayer2 = player[1];
+	if (tmpPlayer2 == 1) {
+		civScore = civScore + 1;
+		if (tmpPlayer == 2) {
+			Message(1, 'AGCLDefeat');
+		} elseif (tmpPlayer == 3) {
+			Message(1, 'AGGreekDefeat');
+		} elseif (tmpPlayer == 4) {
+			Message(1, 'AGPersiaDefeat');
+			babylonCoronation = 1;
+		} elseif (tmpPlayer == 5) {
+			Message(1, 'AGCarthageDefeat');
+		} elseif (tmpPlayer == 6) {
+			Message(1, 'AGRomanDefeat');
+		} elseif (tmpPlayer == 7) {
+			Message(1, 'AGMagadhanDefeat');
+		} elseif (tmpPlayer == 8) {
+			Message(1, 'AGIndepDefeat');
+		}
+	}
+}
+
+
+  //---------------------------------------
+ // Handles Events triggered before Battle
+//-----------------------------------------
+
+// Checks if Darius is in an attacking army and finds out what army he is battling
+HandleEvent (Battle) 'AGPreBattle_F' pre {
+army_t		tmpArmy;
+location_t	tmpLoc;
+unit_t		tmpUnit;
+int_t		i;
+	tmpArmy = army[0];
+	tmpLoc = location[0];
+	if (dariusUnit.location == tmpLoc || dariusUnit.location == tmpArmy.location) {
+		GetUnitFromCell(tmpLoc, 0, tmpUnit);
+		if (tmpArmy.owner == 1 || tmpUnit.owner == 1) {
+			dariusBattle = 1;
+		} elseif (tmpArmy.owner == 2 || tmpUnit.owner == 2) {
+			dariusBattle = 2;
+		} elseif (tmpArmy.owner == 3 || tmpUnit.owner == 3) {
+			dariusBattle = 3;
+		} elseif (tmpArmy.owner == 5 || tmpUnit.owner == 5) {
+			dariusBattle = 5;
+		} elseif (tmpArmy.owner == 6 || tmpUnit.owner == 6) {
+			dariusBattle = 6;
+		} elseif (tmpArmy.owner == 7 || tmpUnit.owner == 7) {
+			dariusBattle = 7;
+		} elseif (tmpArmy.owner == 8 || tmpUnit.owner == 8) {
+			dariusBattle = 8;
+		} elseif (tmpArmy.owner == 0 || tmpUnit.owner == 0) {
+			dariusBattle = 4;
+		}
+	}
+}
+
+
+  //--------------------------------------
+ // Handles Events triggered after Battle
+//----------------------------------------
+
+HandleEvent (BattleAftermath) 'AGAfterBattle_F' post { 
+int_t	tmpDmg;
+int_t	i;
+	// Check if Alexander has taken damage in battle
+	if (alexUnit.valid) {
+		if (alexHP > alexUnit.hp) {
+			tmpDmg = alexHP - alexUnit.hp;
+			tmpDmg = tmpDmg * 3;		// Each point of damage increments Alexander's life counter by 3
+			alexCount = alexCount + tmpDmg;
+			alexHP = alexUnit.hp;
+		}
+	}
+}
+// End BattleAftermath Handler
+
+
+  //---------------------------------------------------
+ // Tests if Alexander, Darius and Generals are killed
+//-----------------------------------------------------
+
+HandleEvent(KillUnit) 'AGKillUnit_F' pre {
+int_t	tmpDmg;
+int_t	tmpValue;
+int_t	tmpNum;
+unit_t	tmpUnit;
+	tmpValue = value[0];
+	tmpUnit = unit[0];
+	tmpNum = tmpUnit.type;
+	if (IsSpecialUnit(tmpUnit)) {
+		if (tmpValue != 0) {							// if not unknown death
+			if (tmpUnit.owner == 1) {					// If the unit is Macedonian	
+				if (tmpNum >= 72 && tmpNum <= 75) {  	// If the unit is Alexander
+					//Alexander gets a second chance
+					if (tmpValue == 35) {						//if by boat
+						if (CreateUnitNearestCity (UnitDB(UNIT_ALEXANDER5), tmpUnit.location, 1, 1) == 1) {
+							city[0] = drownCity;
+							Message (1, 'AGAlexShipA');
+							FindSpecialUnit (UnitDB(UNIT_ALEXANDER5), 1);
+							alexStage = 4;
+							if (alexHP < specUnit.hp) {
+								if (alexHP < 1) {
+									alexHP = 1;
+								}
+								tmpDmg = specUnit.hp - alexHP;
+								DamageUnit(specUnit, tmpDmg);
+							}
+							alexHP = specUnit.hp;
+							alexUnit = specUnit;
+							AddCenter(alexUnit.location);
+						} else {
+							Message (1, 'AGAlexDrown');		// if no cities left, he dies a final death
+						}
+					} else {								//if by combat
+						if (CreateUnitNearestCity (UnitDB(UNIT_ALEXANDER5), tmpUnit.location, 1, 4) == 1) {
+							Message (1, 'AGAlexDefeatA');
+							FindSpecialUnit (UnitDB(UNIT_ALEXANDER5), 1);
+							alexStage = 4;
+							if (alexHP < specUnit.hp) {
+								if (alexHP < 1) {
+									alexHP = 1;
+								}
+								tmpDmg = specUnit.hp - alexHP;
+								DamageUnit(specUnit, tmpDmg);
+							}
+							alexHP = specUnit.hp;
+							alexUnit = specUnit;
+							AddCenter(alexUnit.location);
+						} else {
+							Message (1, 'AGAlexDead');		// if no cities left, he dies a final death
+						}
+					}
+				} elseif (tmpNum == 76) {
+					//Alexander final Death
+					if (tmpValue == 35) {				//if by boat
+						Message (1, 'AGAlexDrown');
+					} else {							//if by combat
+						Message (1, 'AGAlexDead');
+					}
+				} elseif (tmpNum == UnitDB(UNIT_PARMENION)) {
+					if (tmpValue == 2) {				//if by combat
+						Message (1, 'AGParmenionBattle');
+					} elseif (tmpValue == 35) {			//if by boat
+						drownedGeneral = tmpUnit;
+						Message (1, 'AGGeneralDrown');
+					}
+				} elseif (tmpNum == UnitDB(UNIT_ANTIPATER)) {
+					if (tmpValue == 2) {				//if by combat
+						Message (1, 'AGAntipaterBattle');
+					} elseif (tmpValue == 35) {			//if by boat
+						drownedGeneral = tmpUnit;
+						Message (1, 'AGGeneralDrown');
+					}
+				} elseif (tmpNum == UnitDB(UNIT_CRATERUS)) {
+					if (tmpValue == 2) {				//if by combat
+						Message (1, 'AGCraterusBattle');
+					} elseif (tmpValue == 35) {			//if by boat
+						drownedGeneral = tmpUnit;
+						Message (1, 'AGGeneralDrown');
+					}
+				} elseif (tmpNum == UnitDB(UNIT_HEPHAESTION)) {
+					if (tmpValue == 2) {				//if by combat
+						Message (1, 'AGHephaestionBattle');
+					} elseif (tmpValue == 35) {			//if by boat
+						drownedGeneral = tmpUnit;
+						Message (1, 'AGGeneralDrown');
+					}
+				} elseif (tmpNum == UnitDB(UNIT_PTOLEMY)) {
+					if (tmpValue == 2) {				//if by combat
+						Message (1, 'AGPtolemyBattle');
+					} elseif (tmpValue == 35) {			//if by boat
+						drownedGeneral = tmpUnit;
+						Message (1, 'AGGeneralDrown');
+					}
+				} elseif (tmpNum == UnitDB(UNIT_SELEUCUS)) {
+					if (tmpValue == 2) {				//if by combat
+						Message (1, 'AGSeleucusBattle');
+					} elseif (tmpValue == 35) {			//if by boat
+						drownedGeneral = tmpUnit;
+						Message (1, 'AGGeneralDrown');
+					}
+				}
+			} elseif (tmpUnit.owner == 4) {					// If the unit is Persian
+				if (tmpNum == UnitDB(UNIT_DARIUS)) {
+					if (dariusBattle == 1) {
+						Message (1, 'AGDariusDefeatA');
+						HappyMacedonians();				// Makes your main M cities really happy.
+						AddGold(1, 30000);				// Add 30000 Gold to M
+					} else {
+						if (dariusBattle != 4) { 
+							player[0] = dariusBattle;
+						} else {
+							player[0] = 0;
+						}
+						Message (1, 'AGDariusDefeatOther');
+					}
+					CreateUnit(4, UnitDB(UNIT_DARIUS2), sogdiaLoc, 1);
+					FindSpecialUnit (UnitDB(UNIT_DARIUS2), 4);
+					dariusUnit = specUnit;
+				} elseif (tmpNum == UnitDB(UNIT_DARIUS2)) {
+					bessusFlag = 1;					// Bessus will appear to replace Darius
+					if (dariusBattle == 1) {
+						Message (1, 'AGDariusDeadA');
+						AddGold(1, 20000);				// Add 20000 Gold to M
+					} else {
+						if (dariusBattle != 4) { 
+							player[0] = dariusBattle;
+						} else {
+							player[0] = 0;
+						}
+						Message (1, 'AGDariusDeadOther');
+					}
+				} elseif (tmpNum == UnitDB(UNIT_MEMNON)) {
+						Message (1, 'AGMemnonBattle');
+					if (barsineMistress > 0) {
+						Message (1, 'AGBarsineWidowA');
+					}
+				} elseif (tmpNum == UnitDB(UNIT_BESSUS)) {
+						Message (1, 'AGBessusBattle');
+				}
+			} elseif (tmpNum == UnitDB(UNIT_CHANDRAGUPTA)) {
+				Message (1, 'AGChandraDead');
+			} elseif (tmpNum == UnitDB(UNIT_PORUS)) {
+				Message (1, 'AGPorusBattle');
+			}
+		}
+	}
+}
+
+
+// First time an army moves after a battle, reset dariusBattle
+//HandleEvent(MoveUnits) 'AGDariusBattleReset_F' post {
+//	if (dariusBattle > 1) {
+//		dariusBattle = 0;
+//	}
+//}
+
+  //------------------------------------------
+ // Keeps Barbarian Leaders from moving
+//--------------------------------------------
+
+HandleEvent(MoveUnits) 'AGBarbStop_F' pre {
+army_t	tmpArmy;
+unit_t	tmpUnit;
+int_t	unitType;
+	tmpArmy = army[0];
+	if (army[0].owner == 0) {
+		GetUnitFromCell(army[0].location, 0, tmpUnit);
+		unitType = tmpUnit.type;
+		if (unitType == UnitDB(UNIT_BARBARIAN_LEADER)) {
+			return STOP;
+		}
+	}
+}
+
+  //------------------------------------------
+ // Tests if all Barbarian Leaders are killed
+//--------------------------------------------
+
+HandleEvent(KillUnit) 'AGKillBarb_F' pre {
+int_t	i;
+int_t	unitType;
+unit_t	tmpUnit;
+
+	tmpUnit = unit[0];
+	unitType = tmpUnit.type;
+
+	if (unitType == UnitDB(UNIT_BARBARIAN_LEADER)) {
+		barbNum = barbNum - 1;
+		if (barbNum == 0) {
+			Message (1, 'AGBarbDefeat');
+			civScore = civScore + 2;
+			DisableTrigger('AGKillBarb_F');
+		} else {
+			Message (1, 'AGLeadDefeat');		
+		}
+	}
+}
+// End KillUnit Handler
+
+
+#include "AG_msg.slc"		// Messageboxes 
+

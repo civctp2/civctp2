@@ -1,0 +1,26 @@
+<table border cellspacing=0 cellpadding=5>
+  <tr align=center>
+    <th>Session Type</th><th>Game</th><th>Session Type</th><th>Game</th><th>Session Type</th><th>Game</th>
+  </tr>
+LS  <tr align=center>
+LS    <td>dpSESSTYPE</td><td>dpGAME</td><td>dpSESSTYPE</td><td>dpGAME</td><td>dpSESSTYPE</td><td>dpGAME</td>
+LS  </tr>
+endLS
+</table>
+<br><br><br>
+<table border cellspacing=0 cellpadding=5>
+  <caption><h2>aeh Exception Information</h2></caption>
+  <tr align=center>
+    <td></td>
+    <th colspan=dpNSESSTYPE align=center>Session Type</th>
+  </tr>
+  <tr align=center>
+    <td></td>  
+    <th><a href="dpSESSTYPE/dpSESSTYPE.bin">dpSESSTYPE.bin</a><br><a href="dpSESSTYPE/dpSESSTYPE.txt">dpNINST</a></th>
+  </tr> 
+LD  <tr align=center>
+LD    <th><a href="dpDATE.bin">dpDATE.bin</a><br><a href="dpDATE.txt">dpNINST</a></th>
+LD    <td><a href="dpSESSTYPE/dpDATE.bin">bin</a><br><a href="dpSESSTYPE/dpDATE.txt">dpNINST</a></td>
+LD  </tr>
+endLD
+</table>

@@ -1,0 +1,50 @@
+#!/bin/sh
+# GTEST Build Script
+set -e
+
+FLAGS_NORMAL="-DNDEBUG -O3 -Werror"
+FLAGS_DEBUG="-D_DEBUG -g -Werror"
+FLAGS_PROFILE="-DNDEBUG -D_PROFILE -O3 -pg -Werror"
+FLAGS_LOG="-DNDEBUG -DDPRNT -O3 -Werror"
+
+echo -n "Library: "
+
+# Default is to do the all
+case $1 in "" )
+	./build NORMAL
+	./build DEBUG
+	./build PROFILE
+	./build LOG
+esac
+
+# Normal Build
+case $1 in normal | NORMAL ) 
+	echo "NORMAL"
+	if [ ! -d normal ]; then mkdir normal; fi
+	cd normal
+	make -f ../makefile "FLAGS=${FLAGS_NORMAL}" DEST=dp2.a
+esac
+
+# Debugging Build
+case $1 in debug | DEBUG ) 
+	echo "DEBUG"
+	if [ ! -d debug ]; then mkdir debug; fi
+	cd debug
+	make -f ../makefile "FLAGS=${FLAGS_DEBUG}" DEST=dp2d.a
+esac
+
+# Profiling Build
+case $1 in profile | PROFILE ) 
+	echo "PROFILE"
+	if [ ! -d profile ]; then mkdir profile; fi
+	cd profile
+	make -f ../makefile "FLAGS=${FLAGS_PROFILE}" DEST=dp2p.a
+esac
+
+# Logging Build
+case $1 in log | LOG ) 
+	echo "LOG"
+	if [ ! -d log ]; then mkdir log; fi
+	cd log
+	make -f ../makefile "FLAGS=${FLAGS_LOG}" DEST=dp2l.a
+esac

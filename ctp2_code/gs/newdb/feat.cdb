@@ -1,0 +1,44 @@
+
+Feat {
+	Int Duration
+	StringId Description
+
+	Bit(String) SlicMessage
+
+	Bit(Int) EffectBoatMovement
+	Bit(Int) EffectCityDefenseBonus
+	Bit(Int) EffectReduceCityWalls
+	Bit(Int) EffectIncreaseCityVision
+	Bit(Int) EffectIncreaseProduction
+	Bit(Int) EffectIncreaseCommerce
+	Bit(Int) EffectIncreaseHappiness
+	Bit(Int) EffectEliminateDistancePenalty
+	Bit(Int) EffectIncreaseBoatVision
+	Bit(Int) EffectIncreaseScience
+	Bit EffectGiveMaps
+	Bit(Int) EffectIncreaseHitPoints
+	Bit(String) EffectScriptedTurn
+	Bit(String) EffectScriptedCity
+
+	# Things that make this feat unobtainable
+	Record Advance[] ExcludeAdvance
+	Record Wonder[] ExcludeWonder
+	Record Feat[] ExcludeFeat
+	Record Government[] GovernmentsModified
+	Bit(String) ExcludeFunction # A SLIC function name, if(ExcludeFunction(featindex)) { don't allow feat }
+
+	# Things that cancel the effect of this feat (see also duration)
+	Record Advance[] CancelAdvance
+	Record Wonder[] CancelWonder
+	Record Feat[] CancelFeat
+	Bit(String) CancelFunction # A SLIC function name, if(CancelFunction(featindex)) { remove feat effects }
+
+    Struct BuildingFeat {
+        Record Building Building
+        Bit(Int) Num
+        Bit(Int) PercentCities
+    }
+    Bit(struct BuildingFeat) Building
+
+	Bit(Int) MinimumSizeOfCiv
+}

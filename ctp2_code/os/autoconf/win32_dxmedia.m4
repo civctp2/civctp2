@@ -1,0 +1,21 @@
+dnl This file is published under LGPL
+
+AC_DEFUN([AM_PATH_DXMEDIA],[
+	AC_PREREQ(2.13)
+	AC_REQUIRE([AC_CANONICAL_HOST])
+	AC_REQUIRE([AM_PATH_DIRECTX])
+
+case $host in
+*-cygwin*)
+	DXMEDIA_SDKDIR="C:\\DXMedia"
+	DXMEDIA_INCLUDES="-I \"${DXMEDIA_SDKDIR}\\include\" -I \"${DXMEDIA_SDKDIR}\\classes\\base\""
+	DXMEDIA_LDADD=""
+	DXMEDIA_SDKDIR="${DIRECTX_SDKDIR}\\Samples\\C++\\DirectShow"
+	DXMEDIA_INCLUDE="-I \"${DXMEDIA_SDKDIR}\\BaseClasses\""
+
+	AC_SUBST(DXMEDIA_SDKDIR)
+	AC_SUBST(DXMEDIA_INCLUDES)
+	AC_SUBST(DXMEDIA_LDADD)
+	;;
+esac
+])

@@ -1,0 +1,200 @@
+# template for our font settings
+template T_FONT5_12:CTP2_STANDARD_FONT {
+	int fontsize				10
+}
+
+template T_FONT5_10:CTP2_STANDARD_FONT {
+	string fontname 			"arialbd.ttf"
+	int fontsize				7
+}
+
+template T_FONT5_MODED:CTP2_STANDARD_FONT  {
+	int fontsize				8
+}
+
+
+template T_FONT5_9:CTP2_STANDARD_FONT  {
+	string fontname 			"arialbd.ttf"
+	int fontsize				7
+}
+
+template T_FONT5_POLLUTER:CTP2_STANDARD_FONT  {
+	int fontsize				6
+}
+
+template T_FONT5_TEST:CTP2_STANDARD_FONT  {
+	int fontsize				8
+}
+
+template T_FONT5_VARIES:CTP2_STANDARD_FONT  {
+	int fontsize				8
+}
+
+
+template T_FONT5_READY:CTP2_STANDARD_FONT  {
+	int fontsize				8
+}
+
+
+
+template T_FONT5_8:CTP2_STANDARD_FONT  {
+	int fontsize				8
+}
+
+template T_FONT5_CHEAT:CTP2_STANDARD_FONT  {
+	int fontsize				9
+}
+
+template T_FONT5_DIPLOMACY:CTP2_STANDARD_FONT  {
+	int fontsize				8
+}
+
+template T_FONT5_DIPLOMACY2:CTP2_STANDARD_FONT  {
+	string fontname 			"arialbd.ttf"
+	int fontsize				7
+}
+
+
+template T_FONT5_STATS:CTP2_STANDARD_FONT  {
+	string fontname 			"arialbd.ttf"
+	int fontsize				7
+}
+
+template T_FONT5_CARGO:CTP2_STANDARD_FONT  {
+	int fontsize				8
+}
+
+template T_FONT5_CARGO2:CTP2_STANDARD_FONT  {
+	string fontname 			"arialbd.ttf"
+	int fontsize				7
+}
+
+template T_FONT5_CITYBUTTON:CTP2_STANDARD_FONT  {
+	int fontsize				8
+}
+
+
+template T_FONT5_DISBAND:CTP2_STANDARD_FONT  {
+	int fontsize				8
+}
+
+template T_FONT5_DELETE:CTP2_STANDARD_FONT  {
+	int fontsize				8
+}
+
+
+template T_FONT5_TRADE:CTP2_STANDARD_FONT  {
+	int fontsize				8
+}
+
+template T_FONT5_TRADE2:CTP2_STANDARD_FONT  {
+	int fontsize				8
+}
+
+
+template T_FONT5_INFOBUTTON:CTP2_STANDARD_FONT {
+	int fontsize				8
+}
+
+
+
+template T_FONT5_63:CTP2_STANDARD_FONT  {
+	int fontsize				8
+}
+
+
+template T_FONT5_CITYNAME:CTP2_STANDARD_FONT  {
+	int fontsize				9
+}
+
+template T_FONT5_50:CTP2_STANDARD_FONT  {
+	string fontname 			"arial.ttf"
+	int fontsize				6
+}
+
+template T_FONT5_51:CTP2_STANDARD_FONT  {
+	string fontname 			"arial.ttf"
+	int fontsize				7
+}
+
+
+template T_FONT5_7:CTP2_STANDARD_FONT  {
+	string fontname 			"arialbd.ttf"
+	int fontsize				4
+}
+
+template T_FONT5_UNITLABEL:CTP2_STANDARD_FONT  {
+	int fontsize				8
+}
+
+template T_FONT5_6:CTP2_STANDARD_FONT  {
+	string fontname 			"arialbd.ttf"
+	int fontsize				3
+}
+
+template T_FONT5_3:CTP2_STANDARD_FONT  {
+	string fontname 			"arialbd.ttf"
+	int fontsize				6
+}
+
+
+template T_FONT5_2:CTP2_STANDARD_FONT  {
+	int fontsize				8
+}
+
+template T_FONT5_1:CTP2_STANDARD_FONT  {
+	string fontname 			"arialbd.ttf"
+	int fontsize				7
+
+}
+
+template T_FONT5_44:CTP2_STANDARD_FONT  {
+	int fontsize				8
+
+}
+
+template T_FONT5_11:CTP2_STANDARD_FONT  {
+	string fontname 			"arialbd.ttf"
+	int fontsize				7
+}
+
+template T_FONT5_SLAVEWORKER:CTP2_STANDARD_FONT  {
+	string fontname 			"arialbd.ttf"
+	int fontsize				6
+}
+
+template T_FONT5_OVERTIME:CTP2_STANDARD_FONT  {
+	string fontname 			"arialbd.ttf"
+	int fontsize				7
+}
+
+
+
+
+template T_FONT5_NOTHING:CTP2_STANDARD_FONT  {
+	string fontname 			"arial.ttf"
+	int fontsize				7
+}
+
+template T_FONT5_55:CTP2_STANDARD_FONT  {
+	string fontname 			"arial.ttf"
+	int fontsize				7
+}
+
+
+template T_FONT5_66:CTP2_STANDARD_FONT  {
+	string fontname 			"arial.ttf"
+	int fontsize				7
+}
+
+template T_FONT5_88:CTP2_STANDARD_FONT  {
+	int fontsize				8
+}
+
+
+
+
+
+
+
+$

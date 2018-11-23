@@ -1,0 +1,170 @@
+// Customized diplomacy rules
+
+//
+//  Regard
+//
+//  Used to log events with the diplomacy system that influence the
+//  Regard and Trust that a player feels towards another.
+
+//HandleEvent(KillUnit) 'TestKillUnit_RegardEvent' pre {
+//	LogRegardEvent(player, foreigner, regardDelta, regardEventType, explainstr)
+//}
+
+//
+//  Motivation
+//
+//  Motivations to consider.
+
+//HandleEvent(ComputeMotivations) 'Test_MotivationEvent' pre {
+//	ConsiderMotivation(player[0].owner, 10, 1);
+//}
+
+//
+//  New Proposal
+//
+//  New proposals to consider that address specific fears and desires.
+
+//HandleEvent(DesireMotivation) 'TestDesire_NewProposalEvent' pre {
+//	ConsiderNewProposal(player[0].owner, player[1].owner, 10, 1, 1, 1, 1);
+//}
+
+//HandleEvent(FearMotivation) 'TestFear_NewProposalEvent' pre {
+//	ConsiderNewProposal(player[0].owner, player[1].owner, 10, 1, 1, 1, 1);
+//}
+
+//
+//  Proposal Responses
+//
+//  Responses to consider for a new proposal.
+
+HandleEvent(NewProposal) 'Default_ProposalResponseEvent' pre {
+	// reject new proposal by default
+	ConsiderResponse(player[0].owner, player[1].owner, 10, 1, 1, 1, 1);
+}
+
+// Example proposal response:
+// when a foreigner asks for gold and AI can take a city from the foreigner, ask for the city
+//HandleEvent(NewProposal) 'Example_ProposalResponseEvent' pre {
+//
+//	// INT GetLastNewProposalType(sender, receiver, second_type)
+//	int_t first_type;
+//	int_t second_type;
+//	first_type = GetLastNewProposalType(player[0], player[1], 0);
+//	second_type = GetLastNewProposalType(player[0], player[1], 1);
+//
+//	// INT GetNewProposalResult(sender,receiver,player,type)
+//	// type: 0 = science, 1 = gold, 2 = production, 3 = regard
+//	int_t sender_science_result;
+//	int_t receiver_science_result;
+//	sender_science_result = GetNewProposalResult(player[0], player[1], player[0], 0);
+//	receiver_science_result = GetNewProposalResult(player[0], player[1], player[1], 0);
+//
+//	int_t sender_gold_result;
+//	int_t receiver_gold_result;
+//	sender_gold_result = GetNewProposalResult(player[0], player[1], player[0], 1);
+//	receiver_gold_result = GetNewProposalResult(player[0], player[1], player[1], 1);
+//
+//	int_t sender_production_result;
+//	int_t receiver_production_result;
+//	sender_production_result = GetNewProposalResult(player[0], player[1], player[0], 2);
+//	receiver_production_result = GetNewProposalResult(player[0], player[1], player[1], 2);
+//
+//	int_t total_sender_result;
+//	total_sender_result = sender_science_result + sender_gold_result + sender_production_result;
+//
+//	int_t total_receiver_result;
+//	total_receiver_result = receiver_science_result + receiver_gold_result + receiver_production_result;
+//
+//	// INT FindCityToExtortFrom(player, foreigner, max_value, &cityvar) 
+//	city_t city;
+//	FindCityToExtortFrom(player[1], player[0], total_sender_result, city);
+//
+//	// PROPOSAL_REQUEST_GIVE_GOLD == 20
+//	// PROPOSAL_OFFER_GIVE_CITY == 1
+//	if (CityIsValid(city) && first_type == 20 && total_receiver_result < 0 && total_sender_result > 0)
+//	{
+//		// VOID ConsiderResponse(sender, receiver, priority, response_type, [counter/threat type], [param1], [tone])
+//		// PROPOSAL_OFFER_GIVE_CITY = 1 and DIPLOMATIC_TONE_ANGRY = 4
+//		// RESPONSE_COUNTER == 3
+//		ConsiderResponse(player[0], player[1], 100, 3, 1, city, 4);
+//	}
+//	else
+//	{
+//		// VOID ConsiderResponse(sender, receiver, priority, response_type, [counter/threat type], [param1], [tone])
+//		// RESPONSE_REJECT == 1
+//		// RESPONSE_ACCEPT == 2
+//		ConsiderResponse(player[0], player[1], 10, 1);
+//	}
+//}
+
+//
+//  Counter Response
+//
+//  Responses to consider for a counter proposal.
+
+HandleEvent(Counter) 'Default_CounterResponseEvent' pre {
+	// reject counter proposal by default
+	ConsiderResponse(player[0].owner, player[1].owner, 10, 1, 1, 1, 1);
+}
+
+//
+//  Threat Response
+//
+//  Responses to consider for a threat.
+
+HandleEvent(Threaten) 'Default_ThreatResponseEvent' pre {
+	// reject threat by default
+	ConsiderResponse(player[0].owner, player[1].owner, 10, 1, 1, 1, 1);
+}
+
+//
+//  Reject Response
+//
+//  Responses to consider for a proposal rejection.
+
+HandleEvent(Reject) 'Default_ThreatResponseEvent' pre {
+	// do not threaten by default
+	ConsiderResponse(player[0].owner, player[1].owner, 10, 1, 1, 1, 1);
+}
+
+// FEARS
+
+// DESIRES
+
+// ask for the next advance on our list of gold enhancing advances
+// if the target player has it, and we are on good terms with them.
+int_t dipAdvance;
+HandleEvent(DesireMotivation) 'WantGoldAdvance_NewProposalEvent' pre {
+	// get the next unknown gold advance on our advance list that
+	// has already been discovered by the target player.
+	// dipAdvance = GetDesiredAdvance(player[0].owner, 
+	//                             player[1].owner, 
+	//                             GOLD_LIST);
+	// dipAdvance = 5;
+	//ConsiderNewProposal(player[0].owner, // sender
+	//					player[1].owner, // receiver
+	//					1000,			 // priority
+	//					PROPOSAL_REQUEST_GIVE_ADVANCE, // param1
+	//					dipAdvance, 		      // param2
+	//					ID_EXPLAIN_WANT_GOLD_ADVANCE,
+	//					ID_ADVICE_WANT_GOLD_ADVANCE,
+	//					ID_NEWS_WANT_GOLD_ADVANCE);
+}
+
+//
+//  Strategic State
+//
+//  Consider transitionining to a new strategic state.
+
+
+
+//
+//  Diplomatic State Callbacks
+//
+//  Consider transitioning to a new diplomatic state
+
+//
+//  Used for assesment and E3 demos
+//
+MessageBox 'DIPLOMACY_POPUP_DECLARE_WAR' { Text(ID_POPUP_DECLARE_WAR_ANNC); Show(); }
+MessageBox 'DIPLOMACY_POPUP_GREETING' { Text(ID_ACTION_STRING); Show(); }

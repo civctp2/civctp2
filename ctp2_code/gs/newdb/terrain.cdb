@@ -1,0 +1,97 @@
+Resource {
+	Int Gold
+	Int Food = 0
+	Int Production = 0
+	Int SpriteID
+	Float Probability
+//	Bit CantTrade
+	Record Advance             AvailableAdvance  //added by E FutureUse
+	Record Advance[0..5]        VanishAdvance    //added by E FutureUse
+	Record Sound Sound
+	Record Icon Icon
+	Record Government[] GovernmentsModified	
+	Bit GLHidden
+}
+	
+Terrain {
+	# Int                   TerrainType
+	Record Icon           Icon
+	Record Advance        AddAdvance
+	Record Advance        RemoveAdvance
+	Bit                   CanDie
+	Bit GLHidden
+
+	Struct TransformData {
+		Int Time
+		Int Materials
+	}
+
+	Bit(Struct TransformData) TransformAdd, TransformRemove
+
+	Struct Modifiers {
+		Int Score
+		Int Gold
+		Int DeadGold
+		Int Food
+		Int Shield
+		Bit(Int) Movement
+		Int Freight
+		Int Materials
+		Int Time
+		Float Defense
+		Int DeadFood
+		Int DeadShield
+	} 
+
+	Struct Modifiers EnvBase
+	Bit(Struct Modifiers) EnvCity
+	Bit(Struct Modifiers) EnvRiver
+
+	Record Resource[0..4] Resources
+	Bit NoIndex
+
+	Bits MovementType {
+		Land,
+		Sea,
+		Air,
+		Mountain,
+		Trade,
+		ShallowWater,
+		Space
+	}		
+
+	# Map record to the pseudo-enum (TERRAIN_*, not an enum any more)
+	Bits InternalType {
+		Forest,
+		Plains,
+		Tundra,
+		Glacier,
+		Grassland,
+		Desert,
+		Swamp,
+		Jungle,
+		Mountain,
+		Hill,
+		WaterShallow,
+		WaterDeep,
+		WaterVolcano,
+		WaterBeach,
+		WaterShelf,
+		WaterTrench,
+		WaterRift,
+		Dead,
+		BrownHill,
+		BrownMountain,
+		WhiteHill,
+		WhiteMountain,
+		WaterKelp,
+		WaterReef,
+		Special
+	}
+
+	# For gfx system use
+	Int TilesetIndex
+	# Added by Martin Gühmann to allow modders to costumize ruin/hut graphics
+	Int HutTilesetIndexA = 150
+	Int HutTilesetIndexB = 151
+}

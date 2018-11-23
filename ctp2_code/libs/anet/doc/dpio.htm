@@ -1,0 +1,177 @@
+<HTML>
+<H1 ALIGN="CENTER">Anet Reliable Packet Delivery API</H1>
+<P ALIGN="CENTER">Copyright 1995-2001, <A HREF="http://www.activision.com/">Activision</A></P>
+<P ALIGN="CENTER">Last updated: 7 May 1998</P>
+<H2 ALIGN="CENTER">Dpio: lightweight reliable and unreliable packet delivery</H2>
+<H2>Purpose</H2>
+<P>The dpio package is not normally used directly by the programmer;
+it is normally used internally by the DP package. It handles loading and
+unloading transport DLLs, sending and receiving packets between nodes,
+retransmitting packets if desired, and timing out inactive nodes. It
+does not distinguish between different endpoints at a single node. </P>
+<P><A NAME="node">The term "node"</A> will be used in this document
+to denote a computer running an Anet game or an Anet server. Other
+documents may refer to nodes by any of the synonyms "host", "computer",
+or "machine". They all mean the same thing, since this is a peer-to-peer
+oriented system. The terms "Master" and "Slave" will be used when there
+is any asymmetry between the machines. </P>
+<H2>Where does it fit in?</H2>
+<P>dpio sits between the <A HREF="commdll.htm">transport DLL's</A>
+and upper level code (such as the <A HREF="dp.htm">dp package</A> or
+a user program). It was created to provide a tidy wrapper around the
+transport DLL functions, and to allow the dp package to use reliable
+packet transmission for its own private system messages. However, it is
+quite practical to use it and not the rest of the Anet API, if you don't
+need the player and session management functions. You can even use the
+full Anet API in your game setup shell, and just the dpio package in
+your game proper, if you want to keep overhead to a minimum. </P>
+<P>The dpio package is a part of the AneAnet library, because it is used
+by the Anet API. </P>
+<P>The dpio package doesn't quite stand on its own; you still
+use <A HREF="dp.htm#dpEnumTransports">dpEnumTransports(path,
+callback, context)</A> to list available transport DLL's,
+and <A HREF="commdll.htm">commScanAddr(), commPrintAddr(), and
+commPlayerInfo()</A> to get access to network addresses and convert them
+between ASCII and binary form. </P>
+<H2>Function Reference</H2>
+<P>For the moment, refer to <A HREF="../h/dpio.h">dpio.h</A>. </P>
+<H2>Overview</H2>
+<P>The following paragraphs describe the major functions of the dpio
+package. All calls to the library are nonblocking; that is, they return
+within a few hundred microseconds. </P>
+<H3>Startup and Shutdown</H3>
+<P>Once a transport DLL has been chosen, the DPIO package is initialized
+by calling <A HREF="#dpio_create">dpio_create(&amp;dpio, transportName,
+params, &amp;hMaster, &amp;now, NULL)</A> This loads the selected
+transport DLL, and passes it the given <I>params</I>. (Dpio will use
+<TT>&amp;hMaster</TT> and <TT>&amp;now</TT> as pointers to where it can
+look for the comm handle of the 'master' and the current return value of
+clock(). You should update <TT>now</TT> before each call to most dpio
+functions. Your code should set <TT>hMaster</TT> to PLAYER_ME if you
+are the master, or the comm handle for the master if it is some other
+node. Yes, this is a bit messy.) </P>
+<P>When the user wants to quit the program, the dpio package should be
+shut down by calling <A HREF="#dpio_destroy">dpio_destroy(dp)</A>. This
+unloads the transport DLL and frees memory. </P>
+<H3>Opening and closing connections</H3>
+<P>A connection to another computer is represented by a 32-bit
+playerHdl_t, known as a 'comm handle' or 'connection handle'. </P>
+<P>dpio_openHdl() takes a node's network address, establishes a
+connection to it, and returns a playerHdl_t. <I>(Note: dpio_get()
+will call dpio_openHdl() if needed when a new node tries to connect
+to this node using dpio_openHdl(), so servers may not need to call
+dpio_openHdl().)</I> </P>
+<P>dpio_closeHdl() frees up the connection represented by the given
+playerHdl_t. </P>
+<I><P>dpio_openHdl2()</I> takes a pair of network addresses, establishes a
+connection to it and returns a playerHdl_t. A pair of addresses is useful
+when the underlying network can be multi-homed. The Internet is the
+good example, in the case where a machine has multiple Ethernet cards,
+an Ethernet card and a dial-up modem or multiple dial-up modems. By
+supplying two addresses, dpio will attempt to connect to both addresses,
+the first address to respond to will be the one which is used. It may
+be possible to see both addresses on the network but by using the one
+which responds first, fastest connection will established.</P>
+<P>Even if you are only opening a handle to one network address,
+<I>dpio_openHdl2()</I> can still be used by setting the second network
+address to NULL.</P>
+<P>There are a number of special modifications to <I>winets</I> to make use of two addresses.  When two addresses are supplied to <I>winets </I>via <I>dpio_openHdl2()</I>, packets will be sent to both addresses.  When a packet is retrieved from one of the addresses, packets will only be sent to that address henceforth.  There are only two packet types, which allowed to be sent to multiple addresses, these are SYN and ACK packets, which implies that two addresses can only exist whilst a connection is being established.&nbsp;</P>
+<H3>Receiving packets</H3>
+<P>To receive a packet, set size to sizeof(buffer), then call
+<A HREF="#dpio_get">dpio_get(dpio, &amp;src, flags, buffer,
+&amp;size)</A>. The return value will be dp_RES_OK if a packet
+was received. In that case, msglen will contain the number of bytes
+received, and idFrom and idTo will be set to the id's of the sender and
+recipient. </P>
+<H3>Sending packets</H3>
+<P>To send a packet unreliably but quickly to one or more nodes, call 
+<A HREF="#dpio_put_unreliable">dpio_put_unreliable( dpio, &amp;dests[0],
+nDests, buffer, size, &amp;errDest)</A> where dests is an array of
+playerHdl_t's you'd like to send the packet to, nDests is how many places
+you'd like to send it, buffer and size are the data to send and its size,
+and errDest is either NULL, or the address of a playerHdl_t where the
+handle of the offending partner will be placed upon error. </P>
+<P>To send a packet reliably but slowly to one or more nodes, call 
+<A HREF="#dpio_put_reliable">dpio_put_reliable( dpio, &amp;dests[0], nDests,
+buffer, size, &amp;errDest)</A> instead. </P>
+<I><P>Currently, the first byte of buffer must not be ASCII 'd'.</I> </P>
+<P>Most game data should be sent unreliably, as it gives the best
+performance. Packets sent unreliably will only be sent once, might
+arrive in the wrong order, and might not arrive at all. An upper level
+protocol should be used to recover from lost packets; for instance, the
+game should be written to guess reasonable values by interpolation. </P>
+<P>Packets sent reliably are guarenteed to be delivered correctly, and
+in the order originally sent. Only very important non-recurring data
+should be sent in reliable packets. There is a limited amount of space
+for buffering outgoing packets (currently, 16 packets' worth). Be sure to
+check the return value of dpio_put_reliable; if it returns dp_RES_FULL,
+your packet has not been accepted for transmission, and you need to send
+it later, after letting your main loop call dpio_get() and dpio_update()
+for a while to empty the outgoing buffer. </P>
+<P>If you send two packets, one reliably and one unreliably, they may
+arrive in either order. </P>
+<P>Reliable mode retransmissions are currently restricted to a small
+part of available bandwidth. The retransmission algorithm is currently
+naive. </P>
+<H3>Timeouts</H3>
+<P>The only difference between Master and Slave in the dpio package is
+that the Master times out any node which does not send it packets often
+enough, whereas the Slaves only time out the Master if it does not send
+packets often enough. This is how the Anet library likes it. It makes
+sense because in a normal game, Slaves don't always have anything to
+say to each other (e.g. when they are on opposite sides of a simulated
+mountain). </P>
+<P>In practice, each node calls dpio_findTimedOutHost() periodically to
+notice nodes which have gone dead, as mentioned below in Housekeeping. It
+is the duty of the Master to somehow inform the other nodes of dead
+players. </P>
+<H3>Passing an Open Session Between Programs</H3>
+<P>A program can save the state of a session by calling 
+<A HREF="#dpio_freeze">dpio_freeze(dpio_t *dpio, FILE *fp)</A>. To restore
+the state of the session, pass a file pointer to the same file as the
+last parameter to <A HREF="#dpio_create">dpio_create()</A> instead of
+NULL. </P>
+<P>This makes it possible to create separate lobby programs that set up games, and pass them to the game program proper. </P>
+<P>Programmers wanting to avoid the overhead of the full 
+<A HREF="dp.htm">Anet API</A> will be happy to know that sessions saved with
+<A HREF="dp.htm#dpFreeze">dpFreeze(dp, fname)</A> can be restored with
+<A HREF="#dpio_create">dpio_create()</A>. This lets the lobby program
+use dpFreeze() to pass a session to a game regardless of whether
+the game uses the full Anet API or just the dpio package. However,
+the opposite is not the case; a game cannot freeze the state with 
+<A HREF="#dpio_freeze">dpio_freeze()</A> and later restore it with 
+<A HREF="dp.htm#dpCreate">dpCreate()</A>. For example, suppose a custom
+shell program wishes to launch the game, and then provide a debriefing
+room after the game is done. If the game uses dpio instead of Anet, and
+does a <A HREF="#dpio_freeze">dpio_freeze()</A> to save its state before
+returning control to the shell for debriefing, the shell <I>must</I>
+use <A HREF="#dpio_create">dpio_create()</A> to restore state. </P>
+<H3>Housekeeping</H3>
+<P>Housekeeping must be done manually, and includes </P>
+
+<UL>
+<LI>Calling dpio_get() periodically, which has the side-effect of silently
+processing ACK and keepalive packets; </LI>
+<LI>Calling dpio_update() periodically to retransmit packets which have
+not been acknowledged; </LI>
+<LI>Calling dpio_findTimedOutHost() periodically to notice nodes which
+have gone dead; </LI>
+<LI>Calling dpio_closeHdl() when nodes go dead or are no longer needed;
+and </LI>
+<LI>Selecting a new master if the old master dies. </LI>
+</UL>
+
+<P>All this is normally done inside dp.c, and is only mentioned here
+for the benefit of programmers writing test programs or games that for
+some reason want to bypass the Anet API and write straight to the dpio
+api. </P>
+<H3>Future enhancements</H3>
+<P>The retransmission algorithm will be made smarter. A side effect will
+be that an estimate of the current round-trip latency will be available
+for each host, which may be quite useful for games. </P>
+<P>The keepalive method will probably be rewritten in terms of the
+reliable transmission stuff. </P>
+<P><HR>
+<I>Dan Kegel, et. al.</I> 
+</BODY>
+</HTML>

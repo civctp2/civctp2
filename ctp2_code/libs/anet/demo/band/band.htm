@@ -1,0 +1,224 @@
+<center>
+<h1>Bandwidth Management Demo</h1>
+<font size="-1">
+<i>Copyright Activision</i><br>
+<i>Last update: 7 July 1998</i>
+</font>
+</center>
+<p>
+This document describes a bandwidth management scheme applicable to 
+action games that use periodic broadcasts of position packets.
+
+<h2>The problem</h2>
+A real question confronting the game programmer is - <i>How often should I
+send updates?</i>  Too slow, and the motion will be jerky; too fast, and
+the network will get overloaded.  Worse, the answer depends on the networking
+equipment involved at the moment, some of which may be thousands of miles
+away...
+<p>
+Early networked games used a simple algorithm: send an
+update packet five times per second for IPX, three times per second for modem
+or Internet.  This worked fairly well most of the time.  However, it doesn't
+take advantage of fast Internet connections when available, and
+on slow Internet connections, it tended to cause modem overload and therefore
+very high latency.
+
+<h2>One possible solution</h2>
+A better way is to adapt the update interval to the current network
+conditions - i.e. to make it depend on the observed latency, the
+observed packet loss, or some other observable characteristic of the
+network traffic.
+<p>
+One product that applied an adaptive algorithm, Interstate '76, suffered from 
+terrible latency until the night before it shipped.  
+Ping time reached three seconds, which meant that nine position updates
+were underway at any one time.  This was clearly a waste- after all, only one of
+those updates was current; the rest were out of date.  It seems unreasonable 
+to have more than two stale position updates underway.
+So I threw in code that implemented the simple formula 
+<blockquote> Tsendinterval = Taverage_round_trip_latency/3 </blockquote>
+and voila! no more nasty pings.
+<p>
+This scheme works properly for games which have a fixed size periodic
+broadcast.  In games where the periodic broadcast grows or shrinks
+depending on how many vehicles are active, it doesn't cope well.
+It might be better to let the send interval vary depending on how
+many bytes were sent, i.e.
+<blockquote> ms_to_next_send = bytes_sent_this_time / (Taverage_round_trip_latency_in_ms/300) </blockquote>
+The divisors in the above formulae are poorly-understood fudge factors.
+They determine the latency your game will tend to settle into and 
+the bandwidth it tends to use.  Too high, and your game might overload modems.
+Too low, and it will not use the modems enough.
+<p>
+This scheme is fairly stable, even if you get the parameters somewhat wrong,
+but it still pays to experiment.  You can use <a href="#demo">the demo program
+below</a> as a base for experimentation.
+<p>
+It's not clear whether average round trip latency is the best measure of lag.
+Max round trip latency might be better.  Somewhere in between the two might
+even be a good idea.
+
+<h2>Calculating Latency</h2>
+Although game networking APIs often have functions that report player-to-player
+latency, games should probably handle their own latency calculations, because 
+they can often take advantage of their existing network traffic to calculate
+latency accurately to incurring less extra overhead than the generic API can.
+<p>
+One algorithm that works nicely for games that send position packets frequently
+is to include a serial number or local send time in each packet.  
+Every second, when the next position packet from a particular node is
+recieved, a reply packet is sent containing the serial number or local send 
+time.  (A different node is replied to each second.)
+The node receiving the reply can easily compute his round-trip latency
+to that node that sent the reply.
+
+<h2>Sharing the latency estimate</h2>
+The latency calculation algorithm above works fairly well, and delivers
+one latency measurement per second.  In an eight player game, however,
+it will take seven or so seconds to get a complete set of measurements.
+Sending the average or maximum observed ping along in the ping reply 
+lets nodes share latency measurements, and find out about latency problems
+sooner.
+
+<h2>Global Network Dropouts caused by TCP</h2>
+Note: some 3rd party gaming networks default to TCP rather than UDP,
+require you to ask in person that the game use UDP,
+and sometimes forget that you asked.
+<p>
+We won't <a href="http://www.heat.net">name</a> any <a href="http://www.mplayer.com">names</a>.
+<p>
+The problem with this is that if a packet is lost, all the other packets
+behind it sit... and wait... until the original packet is successfully
+retransmitted.  This can lead to ten - second dropouts- after which
+all the delayed packets are delivered all at once!
+<p>
+To combat this, print out a debug warning if no packets at all are received
+from anyone for a long time (e.g. 1 second).  If you see these warnings
+appear when dialed up to a 3rd party gaming service, check to make sure
+they're using UDP for your game!
+
+<h2>Slow Start</h2>
+Be sure to start off assuming a slow connection, otherwise you may flood
+the network before you have time to adapt.
+
+<h2>Count those packets!</h2>
+When trying to get a game to perform well, it is terribly important to
+only send out needed packets.  If possible, combine several kinds of
+info into a single packet to reduce overhead.  Once you've coded your
+scheme, watch the packets it actually sends- you don't want to be suprised
+by an unintended waste of bandwidth.
+
+<a name="demo"><h2>An example implementation</h2></a>
+The file <a href="band.c">band.c</a> behaves like an action game, in
+that it broadcasts a packet periodically.  The period of the broadcast
+is set in a text file specified with the -f commandline option.  For
+example, <a href="band.in">band.in</a> contains
+<pre>
+400 100 20
+0 100 60
+10000 10 1
+</pre>
+Each line of this file specifies 
+the interpacket interval in milliseconds (e.g. 400ms),
+the size of the broadcast packet in bytes (e.g. 100),
+and how long to apply those two parameters (e.g. 20 seconds).
+The special values 0 and -1 for interpacket interval specify 
+"everyone adapts" and "only the host adapts, and tells everyone what
+interval to use".
+You can use this text file to set up various degrees of modem overload,
+and watch what happens to the latency.  
+<p>
+This demo uses a simple adaptation scheme that uses max ping but
+not packet size.  It reads fudge factors from an .ini file with the 
+same name as the comm driver dll in use.  See the source code for details.
+<p>
+Batch files pushband.bat and getlog.bat are provided as examples of
+how to conveniently copy the demo program to four computers and
+retrieve results.  
+<p>The batch file build2.bat compiles the demo; the batch file getdll.bat
+grabs the dll's needed to run it; the batch files host.bat and join.bat
+are used to actually start a host or client node.
+<p>
+The same batch files with a 'd' on the end of the name build or run
+debugging versions.  
+hostd.bat and joind.bat use the debug transport
+drivers, which create the file output.1 containing a log of all packets 
+sent or received from a particular node.
+The perl script annotate.pl helps interpret this log, and prints out
+latency measurements, etc.
+<p>
+The output of the perl script has annotations on the left, and the packet
+on the right.  One important annotation is the value DT.  If this appears,
+it indicates that it has been a long time since *any* update packets
+have been received from anyone.  This should not appear often, nor with
+a value greater than about 1000 milliseconds.  Higher values indicate 
+serious problems either in the game or in the network.
+Another interesting annotation is the
+value dt (in lowercase); this is how long since the last update from
+the peer that sent this packet.
+<p>
+<h4>Using Band - a Rough Guide</h4>
+<ol>
+  <li>Run dbuild2.bat to compile bandd.exe.
+  <li>Run getdll.bat to get the needed anet exe's and dll's from
+    elsewhere in the anet SDK.
+  <li>Copy anetd.inf to anet.inf, so the debugging versions of all
+    dll's and exe's are run.
+  <li>Edit band.in or copy one of the example .in files to band.in.
+  <li>Modify pushband.bat to push to all the computers you will be
+    using in the test.  It should call 'pushband1.bat path' to copy
+    the needed files to a working directory on each computer.  Run 
+    the batch file.
+  <li>Run hostd.bat on one computer and joind.bat on any others.
+    This will run a test session using the parameters in the
+    band.in file on the host and using the winets2d.dll driver.  
+    An output.1 file will be created containing a log of packets sent
+    and received.  Old output files will be moved to output.2, 3, etc.
+    If there is an appropriate dp.ini file in the directory, a dp.log
+    file containing debugging output will be also be created.
+  <li>Modify getlog.bat to collect the output.1 files to one location.
+    It should call 'getlog1.bat path tag' to get the dp.log and
+    output.1 files from each to to the local filenames
+    dp&lt;tag&gt;.log and out&lt;tag&gt;.1.  Run the batch file.
+  <li>Run 'perl annotate.pl output.1 > out.log' to process the output
+    logs.  This will add useful comments to the packet log, including
+    bandwidth usage, latency, and some packet content info.
+  <li>'perl annotate.pl output1.1 output2.1 > out12.log' for output
+    logs from two computers in the same session will produce some
+    additional packet loss annotation to the output1.1 log file.
+  <li>Read or grep the annotated logs to see what happened.
+</ol>
+
+<h4>File list</h4>
+
+<pre>
+(may be out of date)
+All the files you will need are included in the anet SDK:
+
+band.exe, bandd.exe              the demo executable and debug version
+fixed.in, adaptive.in            sample test parameter input files
+annotate.pl                      perl script to process packet log files
+anetdrop.exe, anetdropd.exe      the anet launcher and debug version
+anet.inf, anetd.inf              launch parameter file for anetdrop
+                                 and debug version
+anet2.dll, anet2d.dll            the anet library and debug version
+anet/winets2.dll, winets2d.dll   the internet driver and debug version
+anet/winets2.ini, winets2d.ini   tuning parameters for these drivers
+anet/wheat2.dll, wheat2d.dll     the HEAT driver and debug version
+anet/wheat2.ini, wheat2d.ini     tuning parameters for these drivers
+                                 debug drivers produce packet logs
+	                         other anet drivers may also be used
+host.bat, hostd.bat              sample batch files to launch an
+                                 internet session as host, w/wo
+                                 debugging drivers.
+join.bat, joind.bat              sample batch files to join an existing
+                                 internet session, w/wo debugging
+                                 drivers.
+</pre>
+
+<h2>Future directions</h2>
+The demo should be modified to use the adaption scheme that takes
+packet size into account, and to allow setting different packet sizes
+on different machines.
+<hr>
+<i>Dan Kegel and Jason Scanlin</i>

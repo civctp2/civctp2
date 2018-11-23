@@ -1,0 +1,89 @@
+#-----------------------------------------------------------------------------
+#
+#  Project      : Call To Power 2
+#  File type    : dbgen input
+#  Description  : Building type descriptor
+# 
+# ----------------------------------------------------------------------------
+# 
+#  Disclaimer
+# 
+#  THIS FILE IS NOT GENERATED OR SUPPORTED BY ACTIVISION.
+# 
+#  This material has been developed at apolyton.net by the Apolyton CtP2 
+#  Source Code Project. Contact the authors at ctp2source@apolyton.net.
+# 
+#-----------------------------------------------------------------------------
+# 
+#  Modifications from the original Activision code:
+# 
+#  - CultureOnly //added by E -- can only build buildings if civ has certain citystyle
+#  - CityStyleOnly //added by E--can only build buildings at cities with certain citystyle 
+#  - GovernmentType //added by E --- a copy of unit Government type code
+#  - OnePerCiv //FU; For "smallwonders"
+# 
+#-----------------------------------------------------------------------------
+Building {
+	# stuff every building has
+	Record Icon DefaultIcon
+	StringId Description
+	Record Advance EnableAdvance
+	Record Advance[0..5] ObsoleteAdvance
+	Record Building[] PrerequisiteBuilding
+	Record Government[] GovernmentsModified
+	Record CityStyle[] CultureOnly //added by E -- can only build buildings if civ has certain citystyle
+	Record CityStyle[] CityStyleOnly //added by E--can only build buildings at cities with certain citystyle 
+	Record Government[] GovernmentType //added by E --- a copy of unit Government type code
+	Int ProductionCost
+	Int Upkeep
+
+    # flags 
+    Bit        Capitol
+    Bit(Float) DefendersPercent
+    Bit(Int)   HappyInc
+    Bit        DoubleTelevangelists
+    Bit(Float) ProductionPercent
+	Bit(Float) FoodPercent
+	Bit(Float) CommercePercent
+	Bit(Float) SciencePercent
+    Bit(Int)   IncreaseBaseOvercrowding
+	Bit(Int)   IncreaseMaxPopulation
+	Bit(Float) FoodVat
+    Bit        Airport
+    Bit        NoUnhappyPeople
+    Bit        NoRushBuyPenalty
+	Bit(Float) LowerCrime
+	Bit(Float) PreventConversion
+	Bit(Float) PreventSlavery
+	Bit        AllowGrunts
+	Bit(Float) LowerPeaceMovement
+	Bit(Int)   GoldPerCitizen
+	Bit        ProtectFromNukes
+	Bit(Float) ProtectFromBioAgents
+	Bit(Float) ProtectFromNanoVirus
+	Bit        Television
+	Bit        CityWalls
+	Bit        IsReligious
+	Bit        ForceField
+	Bit        CantBuildInSea
+	Bit        CantBuildOnLand
+	Bit        Cathedral
+	Bit        Brokerage
+	Bit        NuclearPlant
+	Bit(Float) SciencePerPop
+	Bit(Int)   RaiseOvercrowdingLevel
+	Bit(Int)   RaiseMaxPopulation
+	Bit(Int)   StarvationProtection
+	Bit        CoastalBuilding				//DW - Added to fix bug #895
+      Bit        OnePerCiv
+
+	Bit(Float) OffenseBonusLand
+	Bit(Float) OffenseBonusWater
+	Bit(Float) OffenseBonusAir
+
+	Bit(Float) PopulationPollutionPercent
+	Bit(Float) ProductionPollutionPercent
+	Bit(Float) PollutionAmount
+
+	Bit GLHidden
+}

@@ -1,0 +1,117 @@
+\chapter{Build system\label{cha:buildsystem}}
+\begin{section}{Windows - Visual C++ Configurations}
+
+\newlength{\cdspcfgheading}
+\setlength{\cdspcfgheading}{30mm}
+\newlength{\cdspcfgtext}
+\setlength{\cdspcfgtext}{\textwidth}
+\addtolength{\cdspcfgtext}{-\cdspcfgheading}
+\addtolength{\cdspcfgtext}{-\tabcolsep}
+\addtolength{\cdspcfgtext}{-\tabcolsep}
+
+\newcommand{\begindspconfigs}[1]{
+	\begin{subsection}{#1}
+	\begin{longtable}{p{\cdspcfgheading}@{}p{\cdspcfgtext}}
+}
+\newcommand{\adddspconfig}[4]{\hypertarget{cfg:#1}{}\\*
+	\multicolumn{2}{l}{\textbf{#1}}\\*
+	\textit{Target:}&#2\\*
+	\textit{Description:}&#3\\*
+	\textit{Defines used:}&#4\\
+}
+\newcommand{\termdspconfigs}[0]{
+	\end{longtable}
+	\end{subsection}
+}
+
+Every windows configuration contains at least these macro definitions: \hyperlink{def:_WINDOWS}{\_WINDOWS}, \hyperlink{def:WIN32}{WIN32}.
+
+\begindspconfigs{ctp/civctp.dsp}
+\adddspconfig{ctp2 - Win32 Debug}{CivCTP\_dbg.exe}{
+Standard Win32 Configuration for building an executable with debug information.
+}{
+\hyperlink{def:__GW_USE_IMPORT}{\_\_GW\_USE\_IMPORT},
+\hyperlink{def:__GWCIV_USE_IMPORT}{\_\_GWCIV\_USE\_IMPORT},
+\hyperlink{def:_AI_BACKDOOR}{\_AI\_BACKDOOR},
+\hyperlink{def:_DEBUG}{\_DEBUG},
+\hyperlink{def:_DEBUG_MEMORY}{\_DEBUG\_MEMORY},
+\hyperlink{def:_DEBUGTOOLS}{\_DEBUGTOOLS},
+\hyperlink{def:_PLAYTEST}{\_PLAYTEST}
+}% ctp2 - Win32 Debug
+\adddspconfig{ctp2 - Win32 Debug Browse}{CivCTP\_dbg.exe}{
+This configuration builds the same executable like \hyperlink{cfg:ctp2 - Win32 Debug}{ctp2 - Win32 Debug}, but copies the files on drive R (has been used by activision for remote debugging).
+}{
+\hyperlink{def:__GW_USE_IMPORT}{\_\_GW\_USE\_IMPORT},
+\hyperlink{def:__GWCIV_USE_IMPORT}{\_\_GWCIV\_USE\_IMPORT},
+\hyperlink{def:_AI_BACKDOOR}{\_AI\_BACKDOOR},
+\hyperlink{def:_DEBUG}{\_DEBUG},
+\hyperlink{def:_DEBUG_MEMORY}{\_DEBUG\_MEMORY},
+\hyperlink{def:_DEBUGTOOLS}{\_DEBUGTOOLS},
+\hyperlink{def:_PLAYTEST}{\_PLAYTEST}
+}% ctp2 - Win32 Debug Browse
+\adddspconfig{ctp2 - Win32 Final}{ctp2.exe}{
+Builds a final release like the executable shipped on the CtP2 CD.
+}{
+\hyperlink{def:__GW_USE_IMPORT}{\_\_GW\_USE\_IMPORT},
+\hyperlink{def:__GWCIV_USE_IMPORT}{\_\_GWCIV\_USE\_IMPORT},
+\hyperlink{def:_BFR_}{\_BFR\_},
+\hyperlink{def:NDEBUG}{NDEBUG}
+}% ctp2 - Win32 Final
+\adddspconfig{ctp2 - Win32 NDebug}{CivCTP\_ndbg.exe}{
+???
+}{
+\hyperlink{def:__GW_USE_IMPORT}{\_\_GW\_USE\_IMPORT},
+\hyperlink{def:__GWCIV_USE_IMPORT}{\_\_GWCIV\_USE\_IMPORT},
+\hyperlink{def:_AI_BACKDOOR}{\_AI\_BACKDOOR},
+\hyperlink{def:_DEBUG}{\_DEBUG},
+\hyperlink{def:NDEBUG}{NDEBUG},
+\hyperlink{def:USE_NDBG}{USE\_NDBG}
+}% ctp2 - Win32 NDebug
+\adddspconfig{ctp2 - Win32 Optimized Test}{ctp2.exe}{
+Builds a playtest executable without debugging information (overwrites final target).
+}{
+\hyperlink{def:__GW_USE_IMPORT}{\_\_GW\_USE\_IMPORT},
+\hyperlink{def:__GWCIV_USE_IMPORT}{\_\_GWCIV\_USE\_IMPORT},
+\hyperlink{def:_PLAYTEST}{\_PLAYTEST},
+\hyperlink{def:NDEBUG}{NDEBUG}
+}% ctp2 - Win32 Optimized Test
+\adddspconfig{ctp2 - Win32 Release}{ctp2r.exe}{
+Standard Win32 Configuration for building an executable without debug information.
+}{
+\hyperlink{def:__GW_USE_IMPORT}{\_\_GW\_USE\_IMPORT},
+\hyperlink{def:__GWCIV_USE_IMPORT}{\_\_GWCIV\_USE\_IMPORT},
+\hyperlink{def:NDEBUG}{NDEBUG}
+}% ctp2 - Win32 Release
+\adddspconfig{ctp2 - Win32 Test}{CivCTP\_test.exe}{
+Build a Test release.
+}{
+\hyperlink{def:__GW_USE_IMPORT}{\_\_GW\_USE\_IMPORT},
+\hyperlink{def:__GWCIV_USE_IMPORT}{\_\_GWCIV\_USE\_IMPORT},
+\hyperlink{def:_AI_BACKDOOR}{\_AI\_BACKDOOR},
+\hyperlink{def:_DEBUG}{\_DEBUG},
+\hyperlink{def:_PLAYTEST}{\_PLAYTEST}
+}% ctp2 - Win32 Test
+\adddspconfig{ctp2 - SDL Debug}{CivCTP\_SDL\_dbg.exe}{
+This builds the debug version of CtP2 using SDL instead of DirectX (sound only, so far; the remaining configuration is the same as \hyperlink{cfg:ctp2 - Win32 Debug}{ctp2 - Win32 Debug}.
+}{
+\hyperlink{def:__GW_USE_IMPORT}{\_\_GW\_USE\_IMPORT},
+\hyperlink{def:__GWCIV_USE_IMPORT}{\_\_GWCIV\_USE\_IMPORT},
+\hyperlink{def:_AI_BACKDOOR}{\_AI\_BACKDOOR},
+\hyperlink{def:_DEBUG}{\_DEBUG},
+\hyperlink{def:_DEBUG_MEMORY}{\_DEBUG\_MEMORY},
+\hyperlink{def:_DEBUGTOOLS}{\_DEBUGTOOLS},
+\hyperlink{def:_PLAYTEST}{\_PLAYTEST},
+\hyperlink{def:USE_SDL}{USE\_SDL}
+}% ctp2 - SDL Debug
+\adddspconfig{ctp2 - SDL Final}{ctp2\_SDL.exe}{
+This builds the final version of CtP2 using SDL instead of DirectX (sound only, so far; the remaining configuration is the same as \hyperlink{cfg:ctp2 - Win32 Final}{ctp2 - Win32 Final}.
+}{
+\hyperlink{def:__GW_USE_IMPORT}{\_\_GW\_USE\_IMPORT},
+\hyperlink{def:__GWCIV_USE_IMPORT}{\_\_GWCIV\_USE\_IMPORT},
+\hyperlink{def:_BFR_}{\_BFR\_},
+\hyperlink{def:NDEBUG}{NDEBUG},
+\hyperlink{def:USE_SDL}{USE\_SDL}
+}% ctp2 - SDL Final
+\termdspconfigs{}
+
+\end{section}% Windows - VC++ Configurations

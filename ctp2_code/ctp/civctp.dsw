@@ -1,0 +1,128 @@
+Microsoft Developer Studio Workspace File, Format Version 6.00
+# WARNING: DO NOT EDIT OR DELETE THIS WORKSPACE FILE!
+
+###############################################################################
+
+Project: "Crater"=..\mapgen\Crater.dsp - Package Owner=<4>
+
+Package=<5>
+{{{
+    begin source code control
+    "$/ctp", BAAAAAAA
+    .
+    end source code control
+}}}
+
+Package=<4>
+{{{
+}}}
+
+###############################################################################
+
+Project: "Plasma2"=..\mapgen\Plasma2.dsp - Package Owner=<4>
+
+Package=<5>
+{{{
+    begin source code control
+    "$/ctp", BAAAAAAA
+    .
+    end source code control
+}}}
+
+Package=<4>
+{{{
+}}}
+
+###############################################################################
+
+Project: "ctp2"=.\civctp.dsp - Package Owner=<4>
+
+Package=<5>
+{{{
+    begin source code control
+    "$/ctp", BAAAAAAA
+    .
+    end source code control
+}}}
+
+Package=<4>
+{{{
+    Begin Project Dependency
+    Project_Dep_Name Crater
+    End Project Dependency
+    Begin Project Dependency
+    Project_Dep_Name fault
+    End Project Dependency
+    Begin Project Dependency
+    Project_Dep_Name geometric
+    End Project Dependency
+    Begin Project Dependency
+    Project_Dep_Name Plasma2
+    End Project Dependency
+    Begin Project Dependency
+    Project_Dep_Name dbgen
+    End Project Dependency
+}}}
+
+###############################################################################
+
+Project: "dbgen"=..\GS\DBGEN\dbgen.dsp - Package Owner=<4>
+
+Package=<5>
+{{{
+    begin source code control
+    "$/ctp", BAAAAAAA
+    .
+    end source code control
+}}}
+
+Package=<4>
+{{{
+}}}
+
+###############################################################################
+
+Project: "fault"=..\mapgen\fault.dsp - Package Owner=<4>
+
+Package=<5>
+{{{
+    begin source code control
+    "$/ctp", BAAAAAAA
+    .
+    end source code control
+}}}
+
+Package=<4>
+{{{
+}}}
+
+###############################################################################
+
+Project: "geometric"=..\mapgen\geometric.dsp - Package Owner=<4>
+
+Package=<5>
+{{{
+    begin source code control
+    "$/ctp", BAAAAAAA
+    .
+    end source code control
+}}}
+
+Package=<4>
+{{{
+}}}
+
+###############################################################################
+
+Global:
+
+Package=<5>
+{{{
+}}}
+
+Package=<3>
+{{{
+}}}
+
+###############################################################################
+

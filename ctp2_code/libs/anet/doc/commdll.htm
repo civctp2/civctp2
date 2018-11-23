@@ -1,0 +1,434 @@
+<HTML>
+<HEAD>
+<TITLE>Untitled</TITLE>
+</HEAD>
+<BODY>
+<H1>Anet Transport DLL API</h1>
+<br>
+<i>note: parts of this document are still out of date</i>
+<h2>Introduction</h2>
+Anet can support different communications media and protocols
+because the subroutines that actually send and receive raw packets
+are kept in drivers (also known as transport DLL's).  
+Each driver has a name (e.g. "Internet", "Modem", "IPX").
+The function <a href="dp.htm#dpEnumTransports">dpEnumTransports</a>
+gives a list of the available transports and their names, and is used
+by the <a href="shell.htm">shell</a> to let the user choose a connection
+method.
+Anet ships with four transports: IPX, Internet, serial, and modem.
+<p>
+New network protocols or connection methods can be supported by
+writing new driver DLL's.  
+A separate DLL must be written for the desired communication medium and protocol
+for each platform you wish to support - DOS, Win32, Mac, or Unix.
+For instance, under DOS, we wrote a new transport DLL to support 
+<a href="http://www.dwango.com">Dwango</a>, and under Windows, we wrote
+a loopback driver which lets you develop games without having to
+connect to a second computer.
+
+<h2>Software Architecture</h2>
+<h3>The Stub and Netshell</h3>
+The first thing that starts when the user clicks on a game icon on
+the Windows or Mac desktop is the <b>stub</b>, a program
+whose purpose is to load the shell (which sets up the game session)
+and then the selected game.
+The shell prompts the user
+to select one of the available transport layers,
+then loads the appropriate comm DLL(s) and prompts the user to start
+or join a game.
+
+<P>
+Once a game has been selected, the shell shuts down
+the comm DLLs and exits, and the game program itself starts.
+(This is handled by dpLaunchApp().  
+In DOS, dpLaunchApp() tells the stub to 
+launch the game program, then terminates itself; 
+in Windows and Mac, dpLaunchApp() directly launches the game program,
+then teriminates itself).
+The game program loads the same comm DLLs as the shell,
+plays the game, shuts down the
+comm DLLs, and exits.  The stub starts the shell again and the user
+is prompted to join another game.
+
+<P>
+The comm DLLs cannot persist across invocations of
+the shell and the game program because the shell exits before the game program starts
+up, and vice versa.  The dpio layer has a function dpio_freeze()
+which writes out enough information to set up the connections
+again; the function dpio_create() can read that file and reinitialize
+the comm DLL's.
+<p>
+A trick will be used on Win95 to keep
+the handle to the modem's comm port open - it will be marked as inheritable
+by the netshell, and the value of the handle will be written to disk
+by dpio_freeze().  A similar trick will also be needed on the Mac
+for the modem driver.
+<p>
+Games can also run standalone without the stub and netshell, but
+they then have to implement those functions themselves.
+
+<h3>Messages </h3>
+All communication is performed in terms of messages.
+Message types and contents are defined by upper layers (dpio, dp, and
+the game itself).
+
+<P>
+The actual way in which a message is transmitted
+is defined by the transport layer.  For instance, the point-to-point
+null-modem DLL supplied with Anet performs its own data compression
+and error correction.
+
+<P>
+<i>The whole point of the transport DLL is the pair of functions
+<b>CommTxPkt</b> and <b>CommRxPkt</b>.</i><br>
+The upper layer sends a message by calling the transport
+layer's <b>CommTxPkt</B> routine.
+Each arriving message is queued up for retrieval
+by the upper layer.  The upper layer retrieves a message (and
+the player handle of the node which sent it) by calling the DLL's
+<b>CommRxPkt</B> routine.
+
+<P>
+The transport layer cannot handle an unlimited number
+of simultaneous messages.  Therefore, it is possible for messages
+to be dropped silently, if memory begins to run low.
+
+
+<h3>Player Handles</h3>
+Messages are directed to and from nodes via &quot;player handles.&quot;
+A player handle can refer to a single node, or to all nodes 
+within earshot (where the exact meaning of &quot;within earshot&quot;
+is defined by the particular comm medium and protocol).
+<p>
+<i>Note: these really should be called node handles.</i>
+
+<P>
+Communication between the dpio layer
+and the transport layer is done in terms of player handles.  A
+player handle is an integer.  Player handles are
+assigned dynamically by the transport layer and are valid <I>only
+until the transport layer is unloaded</I> (typically when the
+upper layer exits).
+
+<P>
+Two nodes may refer to a third node via player handles which are
+not identical.  That is, player handles are assigned independently
+by each node; often, the first node you connect to gets handle 1, 
+the second node gets handle 2, etc.  But some drivers assign
+handles differently, e.g. the UUDP driver under Linux returns
+the IP address as the handle.
+
+<P>
+The transport layer learns about nodes in only one way: when the
+upper layer calls the <b>commSayHi</b> function.  If a packet has
+been received from a node for which a player handle has not yet been 
+allocated with <b>commSayHi</b>, the source node will be identified
+as <b>PLAYER_UNKNOWN</b>.  The upper layer should get the address
+of the current node using <b>commPlayerInfo</b>, then embed that
+address in a packet, and broadcast it (or send it to a well-known
+game server).  When packets containing addresses are received,
+the upper layer can call <b>commSayHi</b> if it wishes to send packets 
+to the nodes which advertized their address.
+
+<h3>Predefined Handles </h3>
+Not all player handles refer to individual players.
+ There are also &quot;non-player handles.&quot;  There are also certain predefined
+handles.
+
+A <I>node handle</I> is a single handle referring to a single node
+(computer).  This is the normal case, and the only one currently implemented.
+<P>
+The <I>predefined handles</I> include:
+<ul>
+<li><B>PLAYER_BROADCAST</B> (which sends to everyone in the local area, where &quot;local
+area&quot; is a DLL-dependent term),
+<li><B>PLAYER_ME</B> (which sends to the sender&nbsp;- without
+actually going out on the wire, in most cases),
+<li><B>PLAYER_UNKNOWN</B> (which
+is used for error conditions or senders not yet registered with commSayHi), and
+<li><B>PLAYER_NONE</B> (which is probably redundant, and means the same thing
+as PLAYER_UNKNOWN).
+</ul>
+
+
+<h3>Network Addresses </h3>
+Transport DLLs normally have access to a network address (e.g.
+the computer's IPX address).  The API requires and relies on network
+addresses.  So, what should a transport DLL for a <b>non-addressed</b>
+communications medium, such as null modem, modem, or loopback driver do?
+It turns to the <b>sessionID</b> field of the <b>commInitReq_t</b>
+structure passed to <b>commInit</b>, which is a 32 bit random number
+which should be assigned by the shell on initial startup, and
+passed to each succeeding program that needs to call <b>commInit</b>
+in the current game session.
+
+
+<h2>Connections</h2>
+A node cannot send to another node unless it has opened a connection
+handle to the other node.
+Each DLL has its own concept of what it
+means to be &quot;connected&quot; to a node.
+
+<P>
+In some cases, such as a local IP network, two nodes
+can communicate without any setup.  In other cases, such as a
+modem-to-modem link, a node cannot communicate with another node
+until it has dialed the phone.  In still other cases, such as
+a dial-up hub service, it is possible for a node with a modem
+to communicate with two or more other nodes without hanging up
+and redialing.
+
+
+<h3>Establishing a Connection </h3>
+When a node wishes to communicate with another node,
+it can simply call the appropriate DLL's <b>CommTxPkt</B> routine,
+<I>if the DLL has already assigned a player handle to the destination
+node.</I>
+
+<P>
+If the DLL has not assigned a player handle to the
+destination node, the upper layer cannot yet use <b>CommTxPkt,</B> since
+<b>CommTxPkt</B> expects a player handle.  There are at least four
+ways around this situation:
+<ul>
+<li>Wait for a message from the destination node
+containing its address, then call <b>commSayHi</b>.
+
+<li>Send the outbound message to a &quot;special&quot;
+player handle which guarantees that the intended recipient will
+see it (e.g., the <B>PLAYER_BROADCAST</B> handle).  This
+approach might not work on wide-area networks.
+
+<li>Select a node for which a player handle does
+exist, and ask it whether it can forward the outbound message
+to the intended recipient.
+
+<li>Call the DLL's <B>commSayHi</B> routine, which
+takes a network address, attempts
+to establish a connection, returning a player handle if successful.
+</ul>
+
+
+
+<h3>Breaking a Connection </h3>
+The DLL's <B>commSayBye</B> routine allows the upper
+layer to terminate any connection explicitly.  This is rarely
+needed, except at the end of the game or when it is fairly certain
+that the user will not need to communicate with a particular node
+any more.  Upon disconnection, the node's player handle becomes
+available for reuse.
+
+<P>
+Disconnecting from predefined handles is not allowed.
+
+<h3>Connection Information </h3>
+Data passed to <B>commSayHi</B> must be in the format
+expected by the DLL&nbsp;- often an unprintable data stream.
+
+<P>
+However, users may need to view or edit connection
+information, which means it must be presented in a readable format.
+ Certain communications media cannot even be bootstrapped until
+connection information is provided by the user.  For instance,
+without a phone number to dial, a modem transport layer cannot
+originate even a single connection.
+
+<P>
+To format a connection information block into a readable
+string, the upper layer can call the DLL's <b>CommPrintAddr</B> routine.
+To convert readable data to a connection information block, the
+upper layer can call the DLL's <b>CommScanAddr</B> routine.
+
+
+<h2>Setting Up a Game</h2>
+It is important to remember that many of the concepts
+traditionally associated with a game are the responsibility of
+the shell and/or the game, not the transport layer.  A transport
+layer DLL exists principally for the purpose of sending and receiving
+messages.
+
+<P>
+In that sense, it is like a file I/O package, which
+reads and writes data and refers to its targets (files) via handles.
+ Neither the file I/O package nor the transport layer is particularly
+concerned with the contents of the data streams it manipulates.
+
+
+<P>
+The following is a brief synopsis of the steps needed
+to establish a game using Anet's transport DLLs.
+<p><i>Note: this is normally left to 
+<a href="dp.htm">the DP package</a>.  The following section is
+mostly of interest for people trying to understand how DP and dpio use
+the comm dll's.</i>
+
+<h3>Choosing the Media </h3>
+The user starts up the pre-executable.  The pre-execuble
+searches in the local directory for transport layer DLL files
+and reports each one to the user.  In this way, the user can select
+one (or more) transport layers.
+
+<P>
+The pre-executable launches the shell, passing it
+a command-line switch indicating the selected comm medium and
+protocol.  The shell reads this switch, loads the appropriate
+comm DLL using dpLoadDLL(), and calls the DLL's <b>CommInit</B> routine, 
+to perform DLL-specific initializations.
+
+<P>
+If the <b>CommInit</B> routine returns a failure status,
+the DLL is unusable and the shell complains and exits.
+
+
+<h3>Enumerating the Sessions </h3>
+The first order of business for the shell is to find
+out which games are being set up &quot;out there&quot; in the
+big wide world.  This is done by sending a &quot;who's there&quot;
+message, which is passed to the DLL's <b>CommTxPkt</B> routine along
+with the <B>PLAYER_BROADCAST</B> player handle.
+
+<P>
+Since the concept of broadcasting is protocol-dependent,
+the transport layer sends out the &quot;who's there&quot; message
+in whatever manner, and to whatever destination(s), it chooses.
+ In some cases, such as modem, the message may go to at most a
+single node.  In other cases, such as IP, the message may be broadcast
+over a local network.
+
+<P>
+When a &quot;who's there&quot; message arrives at
+a node, the transport layer passes it up to the shell.  Any node's
+shell can respond to a &quot;who's there&quot;, but typically
+only the hosts of games will do so.  If a non-host responds, this
+is usually because it suspects that the host of its game is not
+directly reachable by the sender of the &quot;who's there.&quot;
+
+
+<P>
+It is not necessary for every node that hears the
+&quot;who's there&quot; to respond, but those that do not respond
+run the risk of never being contacted by the sender again (not
+always a disadvantage).
+
+<P>
+To respond to a &quot;who's there&quot; message,
+a node's shell sends an &quot;I'm here&quot; message.  The &quot;I'm
+here&quot; message may include such information as whether the
+node is hosting a game (and the name of the game), other media
+supported by the node, and the node's physical location.
+
+
+<h3>Joining a Game </h3>
+As each &quot;I'm here&quot; message comes in to
+the original sender, the transport layer assigns a new player
+handle to the sender (if it has not seen a message from that node
+before) and queues the message for delivery to the shell.  In
+this way, the shell learns which nodes are &quot;out there.&quot;
+
+
+<P>
+Over time, the shell acquires a list of active game
+hosts, which it can present to the user.  If the user selects
+a host to query, the shell can transmit messages to that host
+to get further information (such as the number of available spaces
+on the game, the mission, and the names of the other players).
+ It may also attempt to contact each of the other players in that
+game, in an effort to determine whether throughput and connectivity
+will hinder game play.
+
+<P>
+Finally, the user selects a game to play.  The shell
+sends a message to the host to indicate that it wants to join
+the game, and the host responds (presumably in the affirmative).
+ Before the user's shell exits, it saves the connection information
+for the host (and for as many other nodes as it needs to, including
+non-players) in a file and unloads the transport layer DLL.  When
+the game is launched, it reloads the transport layer DLL, reads
+the connection information back in from the file, establishes
+connections to as many of the nodes as it needs to, and begins
+the game.
+
+
+<h3>Hosting a Game </h3>
+To host a game, the shell can broadcast an &quot;I
+am hosting&quot; messaage or not, as it chooses.  Nodes coming
+on-line will eventually broadcast &quot;who's there&quot; messages,
+which are received and given player handles by the host's transport
+layer.  The host responds with an &quot;I'm here&quot; message
+indicating that he is a host, the new node sends a &quot;may I
+join&quot; message, and the game is gradually built up.  
+
+
+<h3>Quitting </h3>
+At shutdown time, the upper layer calls the DLL's
+<b>CommTerm</B> routine, to perform DLL-specific terminations.  It
+can then unload the DLL.
+
+
+<P>
+<h2>Miscellany</h2>
+<h3>MS-DOS DLL's and the C Runtime Library </h3>
+Under MS-DOS, transport layer DLLs can make calls to the standard
+C runtime library.  The library is linked in with the DLL, making
+self-contained routines such as <B>strcpy()</B> available.
+
+<P>
+However, many routines require access to system-wide
+resources.  For example, <B>malloc()</B> expects that DOS has
+given it a pointer to available memory.  Since DOS knows nothing
+about the DLL, this will fail.
+
+<P>
+To get around many of these problems, the DLL can
+include a jump table which vectors into the various entry points
+in the executable's version of the C runtime library.  That is,
+to call <B>malloc(),</B> the DLL would actually call a thunk of
+code which jumps through the jump table into the <B>malloc()</B>
+in the C runtime library linked in by the executable that loaded
+the DLL.
+
+<P>
+There are a few exceptions to this, however.  The
+most notable is file I/O, which does not work because it depends
+on startup code (which is never run in the DLL) and on __iob[],
+a constant.
+
+
+<h3>Other API Calls </h3>
+The API includes a <b>CommNoOp</B> routine, whose purpose
+is to verify that the DLL is accessible.  This is mostly useful
+during debugging.
+
+<P>
+The <b>CommDriverInfo</B> routine returns dynamic information
+about the DLL.
+
+<P>
+The <b>CommPlayerInfo</B> routine returns dynamic information
+about the given player handle.  
+
+<p>
+There is a way to report scores to the underlying network.
+See the Dwango driver and 
+<a href="dp.htm#dpReportScore">dpReportScore</a> for an example.
+
+<h3>User interface inside Transport DLL's</h3>
+Under Windows and DOS, the transport DLL's do not provide any
+user interface.  Well, that's not quite true: hitting the ESCAPE
+key during modem dialing will abort the dialing process, but no
+feedback is given to the user about this.
+<p>
+On the Mac, Howard Shere implemented a scheme whereby the transport DLL
+was passed a screen rectangle which it could use, and used this
+for the user interface associated with CommToolbox calls.
+This scheme currently lies dormant in the Mac code for the modem
+and serial drivers; when we try to get those drivers working again,
+we might need to add a screen rectangle and/or window handle
+field into the commInitReq_t passed to commInit().
+This needs to be better defined, probably with help from the fellow doing the 
+Netshell.
+<h2>API</h2>
+The complete API for the Anet transport layer DLLs
+is defined by <a href="../h/commapi.h">commapi.h</a>.
+</BODY>
+</HTML>

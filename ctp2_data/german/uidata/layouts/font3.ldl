@@ -1,0 +1,158 @@
+# template for our font settings
+template T_FONT3_24 {
+#	string fontname				"Times New Roman Bold"
+	string fontname 			"arialbd.ttf"
+
+	bool shadowfont				true
+	int fontcolorred			255
+	int fontcolorgreen			255
+	int fontcolorblue			255
+	int fontshadowcolorred 		0			
+	int fontshadowcolorgreen 	0
+	int fontshadowcolorblue 	0
+	int fontsize				12
+}
+
+template T_FONT3_18 {
+#	string fontname				"Times New Roman Bold"
+	string fontname 			"arialbd.ttf"
+
+	bool shadowfont				true
+	int fontcolorred			255
+	int fontcolorgreen			255
+	int fontcolorblue			255
+	int fontshadowcolorred 		0			
+	int fontshadowcolorgreen 	0
+	int fontshadowcolorblue 	0
+	int fontsize				10
+}
+
+template T_FONT3_17 {
+#	string fontname				"Times New Roman Bold"
+	string fontname 			"arialbd.ttf"
+
+	bool shadowfont				true
+	int fontcolorred			255
+	int fontcolorgreen			255
+	int fontcolorblue			255
+	int fontshadowcolorred 		0			
+	int fontshadowcolorgreen 	0
+	int fontshadowcolorblue 	0
+	int fontsize				11
+}
+
+template T_FONT3_15 {
+#	string fontname				"Times New Roman Bold"
+	string fontname 			"arialbd.ttf"
+
+	bool shadowfont				true
+	int fontcolorred			255
+	int fontcolorgreen			255
+	int fontcolorblue			255
+	int fontshadowcolorred 		0			
+	int fontshadowcolorgreen 	0
+	int fontshadowcolorblue 	0
+	int fontsize				8
+}
+
+template T_FONT3_14 {
+#	string fontname				"Times New Roman Bold"
+	string fontname 			"arialbd.ttf"
+
+	bool shadowfont				true
+	int fontcolorred			255
+	int fontcolorgreen			255
+	int fontcolorblue			255
+	int fontshadowcolorred 		0			
+	int fontshadowcolorgreen 	0
+	int fontshadowcolorblue 	0
+	int fontsize				7
+}
+
+template T_FONT3_9 {
+#	string fontname				"Times New Roman Bold"
+	string fontname 			"arialbd.ttf"
+
+#	bool shadowfont				true
+	int fontcolorred			255
+	int fontcolorgreen			255
+	int fontcolorblue			255
+	int fontshadowcolorred 		0			
+	int fontshadowcolorgreen 	0
+	int fontshadowcolorblue 	0
+	int fontsize				6
+}
+
+
+template T_FONT3_TREEBUTTON {
+#	string fontname				"Times New Roman Bold"
+	string fontname 			"arialbd.ttf"
+
+#	bool shadowfont				true
+	int fontcolorred			255
+	int fontcolorgreen			255
+	int fontcolorblue			255
+	int fontshadowcolorred 		0			
+	int fontshadowcolorgreen 	0
+	int fontshadowcolorblue 	0
+	int fontsize				8
+}
+
+template T_FONT3_8 {
+#	string fontname				"Times New Roman Bold"
+	string fontname 			"arialbd.ttf"
+
+#	bool shadowfont				false
+	int fontcolorred			255
+	int fontcolorgreen			255
+	int fontcolorblue			255
+	int fontshadowcolorred 		0			
+	int fontshadowcolorgreen 	0
+	int fontshadowcolorblue 	0
+	int fontsize				8
+}
+
+template T_FONT3_SCIPOP {
+#	string fontname				"Times New Roman Bold"
+	string fontname 			"arialbd.ttf"
+
+#	bool shadowfont				true
+	int fontcolorred			255
+	int fontcolorgreen			255
+	int fontcolorblue			255
+	int fontshadowcolorred 		0			
+	int fontshadowcolorgreen 	0
+	int fontshadowcolorblue 	0
+	int fontsize				8
+}
+
+template T_FONT_SCREEN_TITLE {
+#	string fontname				"Times New Roman Bold"
+	string fontname 			"arialbd.ttf"
+
+	bool shadowfont				true
+	int fontcolorred			255
+	int fontcolorgreen			255
+	int fontcolorblue			255
+	int fontshadowcolorred 		0			
+	int fontshadowcolorgreen 	0
+	int fontshadowcolorblue 	0
+	int fontsize				11
+}
+
+template T_FONT_POPUP_TITLE {
+#	string fontname				"Times New Roman Bold"
+	string fontname 			"arialbd.ttf"
+
+	bool shadowfont				true
+	int fontcolorred			255
+	int fontcolorgreen			255
+	int fontcolorblue			255
+	int fontshadowcolorred 		0			
+	int fontshadowcolorgreen 	0
+	int fontshadowcolorblue 	0
+	int fontsize				8
+}
+
+$
+

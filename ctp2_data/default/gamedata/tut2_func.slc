@@ -1,0 +1,561 @@
+
+#include "tut2_terrain.slc"  //terrain scoring for what's a good place to settle
+
+
+//////////////////////////////
+// Global variables go here://
+//////////////////////////////
+
+unit_t SETTLERS[];					//I hold all of the player's settlers
+int_t NUM_SETTLERS;
+city_t FIRST_CITY;					//I'm the first city the player's built
+city_t FIRST_CITY_WITH_GOOD;		//the first city which is collecting a good
+
+int_t MOVED_UNIT_ONCE_FLAG;		//I check to see if the unit's been moved
+int_t RADIUS_SCORE;					//gets used by int_f CheckSettlerRadius()
+int_t ARBITRARY_TERRAIN_VALUE;		//used to see if the settler is on a good location to build a city
+
+int_t TILE_SCORE[];
+int_t MAX_DIR;
+int_t GOOD_BONUS;					//multiplier for good
+int_t RIVER_BONUS;					//multiplier for river
+
+int_t GOOD_DIR;						//direction of the nearest good
+int_t GOOD_NAME;					//the type of good
+int_t RIVER_DIR;					//direction of the nearest river
+
+int_t RIOT_LEVEL;					//from constDB
+int_t REVOLUTION_LEVEL;				//from constDB
+
+int_t WAGES_EXP;
+int_t WORKDAY_EXP;
+int_t RATIONS_EXP;
+int_t RATIONS_LEVEL;
+int_t WORKDAY_LEVEL;
+int_t WAGES_LEVEL;
+
+int_t CITY_STARVATION_TURNS;
+
+int_t CITIES_BUILDING;
+int_t CITY_BUILDING_BUILDING;
+int_t CITY_BUILDING_WONDER;
+
+city_t BUILDING_BUILDING;
+city_t BUILDING_WONDER;
+
+/////////////////////
+//Functions go here//
+/////////////////////
+
+//find a specific unit in an army
+
+int_f CheckForUnit(army_t tmpArmy, unit_t chkUnit) 
+{
+unit_t tmpUnit;
+int_t i;
+int_t verifyUnit;
+verifyUnit = 0;	
+
+	for(i = 0; i < tmpArmy.size; i = i + 1) {
+		if(GetUnitFromArmy(tmpArmy, i, tmpUnit)) {
+			if(tmpUnit == chkUnit) {
+				verifyUnit = 1;
+				return verifyUnit;
+			} else {
+				verifyUnit = 0;
+			}
+		}
+	}
+	return verifyUnit;
+}
+
+//check to see if a given unit is in a city
+
+int_f CheckCityLoc(int_t playerCities, location_t unitLoc) 
+{
+int_t i;
+city_t tmpCity;
+int_t verifyLoc;
+verifyLoc = 0; 
+
+	for(i = 0; i < playerCities; i = i + 1) {
+		GetCityByIndex(player[0], i, tmpCity);
+		if(tmpCity.location == unitLoc && CityIsValid(tmpCity)) {
+			verifyLoc = 1;
+			return verifyLoc;
+		} else {
+			verifyLoc = 0;
+		}
+	}
+	return verifyLoc;
+}
+
+//reinitialize SETTLERS[]
+
+void_f ReinitializeSettlerArray()
+{
+int_t i;
+
+	if(SETTLERS.# > 0) {
+		for(i = 0; i < SETTLERS.#; i = i + 1) {
+			SETTLERS[i] = 0;
+		}
+	}
+}
+
+//reinitialize TILE_SCORE[]
+
+void_f ReinitializeTileScoreArray()
+{
+int_t i;
+
+	if(TILE_SCORE.# > 0) {
+		for(i = 0; i < TILE_SCORE.#; i = i + 1) {
+			TILE_SCORE[i] = 0;
+		}
+	}
+}
+
+//count the number of settlers the player has
+//****can't pass unit types to functions****
+
+int_f CountSettlers(int_t num_armies)
+{
+army_t tmpArmy;
+unit_t tmpUnit;
+int_t i;
+int_t j;
+int_t k;
+k = 0;
+ReinitializeSettlerArray();
+
+	for(i = 0; i < num_armies; i = i + 1) {
+		GetArmyByIndex(player[0], i, tmpArmy);
+		for(j = 0; j < tmpArmy.size; j = j + 1) {
+			if(GetUnitFromArmy(tmpArmy, j, tmpUnit)) {
+				if(tmpUnit.type == UnitDB(UNIT_SETTLER)) {
+					SETTLERS[k] = tmpUnit;
+					k = k + 1;	
+				}
+			}
+		}
+	}
+	return SETTLERS.#;
+}
+
+//see if a settler in the Settler array is in the army that just got moved
+//****size of an array is "array_name.#"****
+
+int_f IsSettlerInArmy(unit_t tmpUnit)
+{
+int_t j;
+int_t SettlerCheck;
+SettlerCheck = 0;	
+
+	for(j = 0; j < SETTLERS.#; j = j + 1) {
+		if(tmpUnit == SETTLERS[j]) {
+			SettlerCheck = 1;
+			return SettlerCheck;	
+		} else {
+			SettlerCheck = 0;
+		}
+	}					 	
+	return SettlerCheck;
+}
+
+//check to see what kinds of terrain are around the settler 
+
+int_f CheckSettlerRadius(location_t checkLoc) 
+{
+ReinitializeTileScoreArray();
+int_t i;
+location_t tmpLoc;
+int_t tmpScore;
+
+RADIUS_SCORE = TERRAIN_SCORE[TerrainType(checkLoc)];	//start with the tile the settler's standing on	
+if(HasRiver(checkLoc)) {
+	RADIUS_SCORE = RADIUS_SCORE + RIVER_BONUS;
+}
+if(HasGood(checkLoc)) {
+	RADIUS_SCORE = RADIUS_SCORE*GOOD_BONUS;
+}
+
+TILE_SCORE[MAX_DIR] = RADIUS_SCORE;
+	
+	for(i = 0; i < MAX_DIR; i = i + 1) {
+		GetNeighbor(checkLoc, i, tmpLoc);
+		tmpScore = TERRAIN_SCORE[TerrainType(tmpLoc)]; 
+		if(HasRiver(tmpLoc)) {
+			tmpScore = tmpScore + RIVER_BONUS;
+		}
+		if(HasGood(tmpLoc) >= 0) {
+			tmpScore = tmpScore*GOOD_BONUS;
+		}
+		RADIUS_SCORE = RADIUS_SCORE + tmpScore;
+		TILE_SCORE[i] = tmpScore;
+	}
+	return RADIUS_SCORE;
+}
+
+//point out the river
+
+int_f FindRiver(location_t checkLoc) 
+{
+int_t i;
+location_t tmpLoc;
+int_t tmpScore;
+MAX_DIR = 8;
+
+if(HasRiver(checkLoc)) {
+	RIVER_DIR = MAX_DIR;
+	return RIVER_DIR;
+}
+	
+	for(i = 0; i < MAX_DIR; i = i + 1) {
+		GetNeighbor(checkLoc, i, tmpLoc);
+		if(HasRiver(tmpLoc)) {
+			RIVER_DIR = i;
+			return RIVER_DIR;
+		}
+	}
+	return RIVER_DIR;
+}
+
+//check to see if there's a good nearby
+
+int_f FindGood(location_t checkLoc) 
+{
+int_t i;
+location_t tmpLoc;
+int_t tmpScore;
+MAX_DIR = 8;
+GOOD_NAME = -1;
+
+	if(HasGood(checkLoc) >= 0) {
+		GOOD_DIR = MAX_DIR;
+		GOOD_NAME = HasGood(checkLoc);
+		return GOOD_NAME;
+	} else {	
+		for(i = 0; i < MAX_DIR; i = i + 1) {
+			GetNeighbor(checkLoc, i, tmpLoc);
+			if(HasGood(tmpLoc) >= 0) {
+				GOOD_DIR = i;
+				GOOD_NAME = HasGood(tmpLoc);
+				return GOOD_NAME;
+			} else {
+				GOOD_DIR = -1;
+				GOOD_NAME = -1;
+			}		
+		}
+		return GOOD_NAME;
+	}
+}
+
+//when a settler moves, check whether or not the place they're on is good to build a city on
+int_f SettlerMoved()
+{
+int_t i; 
+army_t tmpArmy;
+unit_t tmpSettler;
+int_t SettlerMoved;
+SettlerMoved = 0;
+
+	for(i = 0; i < army[0].size; i = i + 1) {
+		GetUnitFromArmy(army[0], i, tmpSettler);
+		if(IsSettlerInArmy(tmpSettler)) {
+			SettlerMoved = 1;
+			return SettlerMoved;
+		} else {
+			SettlerMoved = 0;
+		}
+	}
+	return SettlerMoved;
+}
+
+//when a settler moves, check whether or not there's a river nearby
+void_f SettlerRiver()
+{
+int_t i; 
+army_t tmpArmy;
+unit_t tmpSettler;
+
+	for(i = 0; i < army[0].size; i = i + 1) {
+		GetUnitFromArmy(army[0], i, tmpSettler);
+		if(IsSettlerInArmy(tmpSettler)) {
+			if(FindRiver(tmpSettler.location)) {
+				Message(g.player, 'TMCheckRiver');
+				return CONTINUE;	
+			} else {
+				Message(g.player, 'TMNoRiver');
+			}
+		}
+	}
+}
+
+//when a settler moves, check whether or not the place they're on is good to build a city on
+void_f SettlerGood()
+{
+int_t i; 
+army_t tmpArmy;
+unit_t tmpSettler;
+
+	for(i = 0; i < army[0].size; i = i + 1) {
+		GetUnitFromArmy(army[0], i, tmpSettler);
+		if(IsSettlerInArmy(tmpSettler)) {
+			if(FindGood(tmpSettler.location) >= 0) {
+				Message(g.player, 'TMCheckGood');
+				return CONTINUE;
+			} else {
+				Message(g.player, 'TMNoGoods');
+			}
+		}
+	}
+}
+
+//check to see if any cities are NOT building something
+int_f AllCitiesBuilding(int_t plr)
+{
+int_t i;
+int_t j;
+city_t tmpCity;
+j = 0;		//just need to see how many cities we're talking about 
+int_t all_cities_building;
+all_cities_building = 0;
+player[0] = plr;
+
+	for(i = 0; i < player[0].cities; i = i + 1) {
+		GetCityByIndex(player[0], i, tmpCity);
+		if(!tmpCity.buildqueuelength && CityIsValid(tmpCity)) {
+			city[0] = tmpCity;
+			j = j + 1;
+		}
+	}
+
+	if(j == 1) {
+		Message(g.player, 'TMBuildQueueEmpty');
+		return all_cities_building;
+	} elseif(j > 1) {
+		Message(g.player, 'TMCitiesNotBuilding');	
+		return all_cities_building;
+	} else {
+		all_cities_building = 1;
+		return all_cities_building;
+	}
+}
+
+void_f AllCitiesHappy()
+{
+int_t i;
+int_t j;
+city_t tmpCity;
+j = 0;		//just need to see how many cities we're talking about 
+
+	for(i = 0; i < player[0].cities; i = i + 1) {
+		GetCityByIndex(player[0], i, tmpCity);
+		if(tmpCity.happiness < RIOT_LEVEL + 1 && CityIsValid(tmpCity)) {
+			city[0] = tmpCity;
+			j = j + 1;
+			if(j <= 1) {
+				Message(g.player, 'TAOneUnhappyCity');
+				return CONTINUE;
+			} else {
+				Message(g.player, 'TAUnhappyCities');
+			}
+		}
+	}
+}
+
+void_f AllCitiesFood()
+{
+int_t i;
+int_t j;
+city_t tmpCity;
+j = 0;		//just need to see how many cities we're talking about 
+
+	for(i = 0; i < player[0].cities; i = i + 1) {
+		GetCityByIndex(player[0], i, tmpCity );
+		if(CityFoodDelta(tmpCity) < 0 && CityIsValid(tmpCity)) {
+			city[0] = tmpCity;
+			j = j + 1;
+			if(j <= 1) {
+				CITY_STARVATION_TURNS = CityStarvationTurns(city[0]);
+				Message(g.player, 'TAOneStarvingCity');
+				return CONTINUE;
+			} else {
+				Message(g.player, 'TAStarvingCities');
+			}
+		}
+	}
+}
+
+int_f abs(int_t value)
+{
+	if(value < 0) {
+		return -value;
+	} else {
+		return value;
+	}
+}
+
+int_f opp(int_t value) 
+{
+	return -value;
+}
+
+void_f GetLevels() 
+{
+	WAGES_EXP = opp(PlayerWagesExp(player[0]));
+	WORKDAY_EXP = opp(PlayerWorkdayExp(player[0]));
+	RATIONS_EXP = opp(PlayerRationsExp(player[0]));
+	RATIONS_LEVEL = opp(PlayerRationsLevel(player[0]));
+	WORKDAY_LEVEL = opp(PlayerWorkdayLevel(player[0]));
+	WAGES_LEVEL = opp(PlayerWagesLevel(player[0]));
+}
+
+int_f UnitLocCompare(unit_t tmpUnit) 
+{
+int_t i;
+int_t UnitInCity;
+city_t tmpCity;
+player[0] = tmpUnit.owner;
+UnitInCity = 0;
+
+	for(i = 0; i < player[0].cities; i = i + 1) {
+		GetCityByIndex(player[0], i, tmpCity);
+		if(tmpCity.location == tmpUnit.location && CityIsValid(tmpCity)) {
+			city[0] = tmpCity;
+			UnitInCity = 1;
+		} else {
+			UnitInCity = 0;
+		}
+	}
+	return UnitInCity;
+}		
+					
+int_f LocCompare(location_t tmpLoc) 
+{
+int_t i;
+int_t locOK;
+city_t tmpCity;
+locOK = 0;
+
+	for(i = 0; i < player[0].cities; i = i + 1) {
+		GetCityByIndex(player[0], i, tmpCity);
+		if(tmpCity.location == tmpLoc && CityIsValid(tmpCity)) {
+			city[0] = tmpCity;
+			locOK = 1;
+			return locOK;
+		} else {
+			locOK = 0;
+		}
+	}
+	return locOK;
+}
+
+int_f CheckForPlanes(army_t tmpArmy) 
+{
+int_t i;
+int_t noPlanes;
+unit_t tmpUnit;
+noPlanes = 0;
+
+//	for (i = 0; i < tmpArmy.size; i = i + 1) {
+//		GetUnitFromArmy(tmpArmy, i, tmpUnit);
+//		if(UnitHasFlag(tmpUnit, NoFuelThenCrash)) {
+//			noPlanes = 1;
+//			return noPlanes;
+//		} else {
+//			noPlanes = 0;
+//		}
+//	}
+	return noPlanes;
+}
+
+int_f CitiesAreBuilding(int_t plr)
+{
+int_t i;
+city_t tmpCity;
+player[0] = plr;
+CITIES_BUILDING = 0;
+
+	for(i = 0; i < player[0].cities; i = i + 1) {
+		GetCityByIndex(player[0], i, tmpCity);
+		if(CityIsValid(tmpCity) && tmpCity.buildqueuelength) {
+			CITIES_BUILDING = 1;
+			return CITIES_BUILDING;
+		}
+	}
+	return CITIES_BUILDING;
+}
+
+int_f CityBuildingBuilding(int_t plr)
+{
+int_t i;
+int_t blah;
+int_t yes_building_building;
+city_t tmpCity;
+CITY_BUILDING_BUILDING = 0;
+yes_building_building = 0;
+blah = -1;
+player[0] = plr;
+
+	for(i = 0; i < player[0].cities; i = i + 1) {
+		GetCityByIndex(player[0], i, tmpCity);
+		blah = IsBuildingAtHead(tmpCity);	
+		if(blah >= 0) {
+			BUILDING_BUILDING = tmpCity;
+			yes_building_building = 1;
+			CITY_BUILDING_BUILDING = blah;
+			message(player[0], 'TMKeepHittingEndBuilding');
+			return yes_building_building;
+		}
+	}
+
+	return yes_building_building;
+}
+
+int_f CityBuildingWonder(int_t plr)
+{
+int_t i;
+int_t blah;
+int_t yes_building_wonder;
+city_t tmpCity;
+yes_building_wonder = 0;
+CITY_BUILDING_WONDER = 0;
+blah = -1;
+player[0] = plr;
+
+	for(i = 0; i < player[0].cities; i = i + 1) {
+		GetCityByIndex(player[0], i, tmpCity);
+		blah = IsWonderAtHead(tmpCity);	
+		if(blah >= 0) {
+			BUILDING_WONDER = tmpCity;
+			CITY_BUILDING_WONDER = blah;
+			yes_building_wonder = 1;
+			message(g.player, 'TMKeepHittingEndWonder');
+			return yes_building_wonder;
+		}
+	}
+	return yes_building_wonder;
+}
+
+int_f CityNameCheck(int_t plr)
+{
+int_t i;
+city_t tmpCity;
+int_t CITY_NAME_CHECK;
+CITY_NAME_CHECK = 0;
+player[0] = plr;
+
+	for(i = 0; i < player[0].cities; i = i + 1) {
+		GetCityByIndex(player[0], i, tmpCity);
+		city[0] = tmpCity;
+		if(CityIsNamed(city[0], "POO")) {
+			CITY_NAME_CHECK = 1;
+			Message(player[0], 'TAPOO');
+			return CITY_NAME_CHECK;
+		}
+	}
+	return CITY_NAME_CHECK;
+}
+

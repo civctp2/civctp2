@@ -1,0 +1,167 @@
+##-----------------------------------##
+
+##              Data                 ##
+
+##-----------------------------------##
+
+lobbychangewindow:nswindow {
+
+	int	widthpix	450
+
+	int	heightpix	385
+
+#	string	pattern	"error.tga"
+
+
+
+	titlestatictext : nstitlestatictext {
+
+		string	text	"str_ldl_CAPS_CHANGE_LOBBY"
+	}
+
+
+
+	currentlobbystatictext:nsstatictext {
+
+		int	xpix	145
+
+		int	ypix	52
+
+		int	widthpix	156
+
+		int	heightpix	20
+
+		string	text	"str_ldl_Current_Lobby_COLON"
+
+
+#		string	pattern	"error.tga"
+
+		int	srcxpix	145
+
+		int	srcypix	52
+
+		int	srcwidthpix	156
+
+		int	srcheightpix	20
+
+	}
+
+
+
+	currentlobbytextfield {
+
+		int	xpix	145
+
+		int	ypix	75
+
+		int	widthpix	156
+
+		int	heightpix	20
+
+	}
+
+
+
+#	lobbiesstatictext:nsstatictext {
+
+#		int	xpix	102
+
+#		int	ypix	96
+
+#		int	widthpix	238
+
+#		int	heightpix	20
+
+#		string	text	"Available Lobbies:"
+
+#	}
+
+
+
+	lobbieslistbox:nslistbox {
+
+		int	xpix	102
+
+		int	ypix	139
+
+		int	widthpix	238
+
+		int	heightpix	197
+
+		string	pattern	"uptg20ebig.tga"
+
+
+		int	srcxpix	100
+
+		int	srcypix	117
+
+		int	srcwidthpix	242
+
+		int	srcheightpix	221
+
+
+
+		header {
+
+			int	widthpct	100
+
+			int	heightpix	20
+
+			switch0:nsheaderswitch {
+
+				int	widthpix	20	
+
+				int	heightpix	20
+
+				string	icon	"ug020.tga"
+
+			}
+
+			switch1:nsheaderswitch {
+
+				int	widthpix	178
+
+				int	heightpix	20
+
+				string	text	"str_ldl_Lobby_Name"
+			}
+
+			switch2:nsheaderswitch {
+
+				int	widthpix	40
+
+				int	heightpix	20
+
+				string	icon	"ug028.tga"
+
+				int	state	2
+
+			}
+
+		}
+
+	}
+
+
+
+	closebutton:nsclosebutton {
+
+	}
+
+
+
+	cancelbutton:nsprevbutton {
+
+	}
+
+
+
+	okbutton:nsnextbutton {
+
+	}
+
+}
+
+
+
+$

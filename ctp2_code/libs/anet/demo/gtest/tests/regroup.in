@@ -1,0 +1,84 @@
+# Script to cause out-of-synch conditions between player database
+# and group database.
+# Run with 30% packet loss; run two copies of this script against
+# a simple host script that creates a single group.
+# After sleeping at end, all players should be valid and the group
+# should contain all players.
+# 
+# $Log: regroup.in $
+# Revision 1.3  1997/07/27 01:22:50  dkegel
+# Check to make sure we could create each player, too.
+# Revision 1.2  1997/03/13 03:54:33  dkegel
+# Increased timeouts to allow success at pktloss=30 with new, reliable,
+# slower dpSendRemotePlayerList code.
+# Revision 1.1  1997/03/12 22:23:46  dkegel
+# Initial revision
+
+# Join the game.
+sessions
+wait
+assert n_sessions > 0
+join d
+wait
+assert theError == 0
+
+# List the groups
+# Note: at 30% (=50%) packet loss, and two clients, I
+# have seen it take 7 seconds for group to propagate.
+sleep 9
+groups
+assert anyGroup != 64001
+
+# create a player and add him to a group.
+newplayer foo
+wait
+assert theError == 0
+gaddplayer anyGroup thisPlayer
+
+# create a player and add him to a group.
+newplayer foo2
+wait
+assert theError == 0
+gaddplayer anyGroup thisPlayer
+
+# create a player and add him to a group.
+newplayer foo3
+wait
+assert theError == 0
+gaddplayer anyGroup thisPlayer
+
+# create a player and add him to a group.
+newplayer foo4
+wait
+assert theError == 0
+gaddplayer anyGroup thisPlayer
+
+# create a player and add him to a group.
+newplayer foo5
+wait
+assert theError == 0
+gaddplayer anyGroup thisPlayer
+
+# create a player and add him to a group.
+newplayer foo6
+wait
+assert theError == 0
+gaddplayer anyGroup thisPlayer
+
+# create a player and add him to a group.
+newplayer foo7
+wait
+assert theError == 0
+gaddplayer anyGroup thisPlayer
+gplayers anyGroup
+
+# Wait, then make sure all the players are in the group.
+# Double the number if running two clients against the same server;
+# must make sure you sleep long enough for groups to propagate.
+#  Wouldn't have to wait so long if we didn't wait after each
+#  newplayer above.
+sleep 25
+gplayers anyGroup
+assert n_players == 14
+
+quit

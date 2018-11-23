@@ -1,0 +1,123 @@
+
+Overview of the steps in a scheduling cycle:
+
+//////////////////////////////////////////////////////////////////////////
+//
+//  Process_Squad_Changes
+//
+//  When: Squads Change
+//
+//  Iterate: m_squads_of_class
+//
+//  1. Remove any empty squads and any matches that reference them.
+//
+//  2. Recompute squad class for all squads with changed/killed agents.
+//
+//  3. If squad class of squad changes, move to new
+//    squads_of_class list.
+//
+//  4. Create new squads from new agents, add to squads_of_class
+//	  list and create new matches from pruned_goals_list.
+//
+//  5. Count up total number of agents available to match
+//
+
+//////////////////////////////////////////////////////////////////////////
+//
+//  Process_Goal_Changes
+//
+//  When: Goals Change
+//
+//  Iterate: sorted_goals_of_class, pruned_goals_of_class
+//
+//  1. Prioritize_Goals
+//
+//  2. Prune_Goals
+//
+
+//////////////////////////////////////////////////////////////////////////
+//
+//  Prioritize_Goals
+//
+//  Called by Process_Goal_Changes
+// 
+//  II. goals_of_class
+// 
+//  1. Add new_goals into appropriate goals_of_class list.
+// 
+//  2. Remove all invalid/complete goals from goals_of_class list.
+//
+//  3. Recompute raw priority of all new/changed goals from
+//     sorted_goals_of_class list.
+// 
+//  4. Sort goals_of_class lists.
+//
+
+//////////////////////////////////////////////////////////////////////////
+//
+//  Prune_Goals
+//
+//  Called by Process_Goals
+//
+//  IV. pruned_goals_of_class
+// 
+//  1. Iterate over all (sorted) goals in each goal class
+//
+//  2. Count out maximum number of each goal type.
+//
+//  3. If pruned_goals_count for a particular goal exceedes allowed count, 
+//     or the goal is complete, then remove matches for that goal 
+//     and splice onto end of list.
+//
+//  4. Otherwise, if not matches exist for this goal, add them.
+//
+
+//////////////////////////////////////////////////////////////////////////
+// 
+//  Sort_Matches
+//
+//  When: Matches Change
+//
+//  Iterate: matches
+//
+//  1. For each match, compute the utility value between the
+//     goal and each component agent in the squad.
+//
+//  2. Compute average match value from agent utility values and
+//     goal raw priority.
+//
+//  3. Sort matches list.
+//
+
+//////////////////////////////////////////////////////////////////////////
+//
+//  Match_Resources 
+//  
+//  When: Goals need to be executed 
+// 
+//  Iterate: matches
+//
+//  1. For each match, move agents from donor squad to goal.
+//
+//  2. If goal is in progress, execute goal and check status.
+//
+//  3. If goal is completed, create a new squad from agents that
+//     completed the goal.
+//
+//  4. If goal failed, rollback agents to donor squads.
+//     Rollback marks agents in matches as invalid for the goal.
+//
+//  5. When all agents have been committed, check all goals on
+//     pruned_goals_class list.  If under committed, rollback
+//     all agents to donor squads. If over committed, rollback
+//     excess agents to donor squads.
+//
+
+//////////////////////////////////////////////////////////////////////////
+// 
+//  Free_Undercommitted_Goal
+// 
+//  Find the undercommitted goal with the lowest raw priority, and
+//  Free all agents for this goal.  Remove the goal as a potential
+//  target for the freed agents in this phase.
+//

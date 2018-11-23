@@ -1,0 +1,2104 @@
+//--------------------------------------------------------------------------
+// InstallShield script for Windows 95 install (template)
+// Chat
+//--------------------------------------------------------------------------
+declare
+
+
+#include "sddialog.h"
+#include "resource.h"
+#include "dsetup.h"
+
+#define SD_SINGLE_DIALOGS 1
+#define SD_SHOWMSG		  1
+#define SD_SHOWINFOLIST	  1
+#define SD_FINISHREBOOT 1
+
+// Map numbers from the help file.
+#define HELP_IDX_WRONG_OS           4
+#define HELP_IDX_NOT_ENOUGH_RAM     2
+#define HELP_IDX_CPUCLASS           2
+#define HELP_IDX_NUM_COLORS		3
+#define HELP_IDX_BAD_VIDEO_CARDS    1
+
+// Constant declarations.
+#define APP_NAME                "Chat"                  //productname
+#define PROGRAM_FOLDER_NAME     "Chat"			  //productname (foldername)	
+#define APPBASE_PATH            "\\demochat" //productname (installation directory name)
+#define COMPANY_NAME            "Activision"
+#define PRODUCT_NAME            "Chat"			//productname
+#define PRODUCT_VERSION         "1.0"
+#define DEINSTALL_KEY           "ChatDeinstKey"		//productname (uninstall name for the registry entry)
+#define UNINSTALL_NAME          "Chat"			//productname (uninstall name)
+#define PRODUCT_KEY             "chat.exe"			//productname (executable name)
+#define BGBITMAPID				25
+
+// Pasted from winuser.h to use WinHelp
+#define HELP_CONTEXT			1
+#define HELP_QUIT         		2
+
+#define FS_ROOT					"GeneralFS"
+#define FS_BEST					"BestFS"
+#define FS_ORIDE				"OrideFS"
+#define FS_ZIX					"Hello"
+#define FS_MINRAW				"Bill,"
+#define FS_ZFS					"Thanks"
+#define FS_ZASSETS				"for"	
+#define FS_CURSOR               "the"
+#define FS_HELP                 "help."
+
+
+// for directx 3
+//uncomment the line which define UNICODE and comment the line which 
+// define ANSI_ONLY if it is running on unicode system
+//#define UNICODE 	9
+#define ANSI_ONLY 	10
+
+STRING nPath, nProductKey, tType;
+NUMBER nType, nSize;
+
+//special for Quake
+STRING   svResultPath, szDefPath, szQuake, szProgram1;
+NUMBER   nvFileHandle;
+
+STRING  svFolder, svDir, szMsg, svUninstLogFile, svTarget,  szProgram, szParam, szTemp, scratchStr, szOrigTargetDir, 
+	    szOrigSourceDir, szMidiFile, szLockout, szUninstallString, szInstallSize, szQSound,MessageStr, scratch, svString, szInfo, szTitle;
+
+STRING szSoundDLLName, szDirectXDLLName, szMidiDLLName, szLanguageDLLName, szGetInfoDLLName, szCDUtilDLLName;
+STRING svString1, svString2, svString3, szTextFile, svInstall, svCreate, 
+	svDirectX1, svDirectX2, svDirectX3, svDirectX4, svReboot, svCopy, 
+	svProgram, svUnable, svCheck, svGeneral, svCheck2, svError, svRelated,
+	svInternal, svMS, szKey, szClass, szNumName, svHDPath, svWrongOS, svSetup, svDouble, svRebootTitle, svOne, svRemoveDisk,
+	svRebootFail, svNotSupport;
+LIST listID, ListInfo;
+NUMBER  nResult, nSetupType, nSpaceRequired, nMidiDeviceID, nCdromPercent1, 
+        nCdromPercent2, nOridePercent,nCPU, nLang, nError, sysInfResult, nNoCD;
+POINTER pMidiFile, pMidiDeviceID;
+BOOL    bSpaceOk, bMidiErr, bSoundPlaying, bHas486, bHas8Meg, bLang, bWantsNetMech;
+HWND    hMainWindow;
+BOOL    bvFrench, bvSpanish, bvEnglish, bvItalian, bvGerman;
+NUMBER  sysInfResult1, sysInfResult2;
+STRING  scratch1, scratch2, szCmdLine, szGet3DDLLName;;
+NUMBER  nReboot, nDirectXParam;
+STRING szRKey;
+
+
+BOOL bWantDirectX, bOK;
+BOOL bLessThan24MB, b24MB, b32MB, bRunningNT;
+BOOL bMeetMinReq;
+STRING szIconPath;
+
+STRING szFile;
+POINTER pFile;
+NUMBER nCDROMSpeed;
+
+	LONG numTrack;
+//BOOL    b3DCard;
+BOOL bDirectXInstalled;
+BOOL bOpenCD;
+NUMBER nCDDeviceID;
+POINTER pCDDeviceID;
+
+prototype SmallFileTransfer();
+prototype MediumFileTransfer();
+prototype LargeFileTransfer();
+prototype SetupScreen();
+prototype DirectXDlg();
+prototype SysReqTable();
+prototype CheckFileTransferResult();
+prototype WarnAboutVirtualMemory();
+prototype GetSetupType();
+prototype GetOnlineOptions();
+prototype FactFictionDlg();
+prototype WantOnlineDlg();
+prototype NoNetscapeDlg();
+prototype LockOutDlg();
+prototype DoDoneDlg();
+prototype DosSetupDlg();
+prototype SetupMIDI();
+prototype CloseDownMIDI();
+prototype ModifyIniFile();
+prototype CleanUp();
+prototype ChooseLanguage();
+prototype DoMechCDDlg();
+prototype DoNoMechCDDlg();
+prototype CheckSecretFile();
+prototype FinishDlg();
+prototype NetMech();
+prototype AskIfTheyWantNetMech();
+prototype ExitSetup();
+prototype DirectXHelpDlg();
+
+prototype SetupMusic();
+prototype CloseDownMusic();
+
+prototype NTRDlg();
+prototype NTDlg();
+prototype NotMeetReqDlg();
+prototype CreateBatchFile();
+
+prototype BOOL MIDIDLL.OpenMIDI(STRING, POINTER);
+prototype BOOL MIDIDLL.PlayMIDI(HWND, NUMBER);
+prototype BOOL MIDIDLL.StopMIDI(NUMBER);
+prototype BOOL MIDIDLL.CloseMIDI(NUMBER);
+
+prototype BOOL SOUNDDLL.StartTheSound(STRING);
+prototype BOOL SOUNDDLL.StopTheSound();
+
+prototype NUMBER NETLAYER.NumNetworkTransportLayers();
+
+
+
+prototype NUMBER LANGUAGE.ValidLanguage();
+
+prototype BOOL USER.SetWindowContextHelpId(HWND, LONG);
+prototype BOOL USER.WinHelp(HWND, STRING, INT, LONG);
+
+//prototype NUMBER ADSET.SetupDirectX(HWND, STRING, NUMBER);
+
+
+prototype NUMBER DSETUP.DirectXSetupA(HWND, STRING, NUMBER);
+prototype NUMBER DSETUP.DirectXSetupW(HWND, STRING, NUMBER);
+
+//prototype NUMBER DSETUP.DirectXSetup(HWND, STRING, NUMBER);
+
+
+prototype BOOL GET3D.Get3DHardware();
+
+prototype NUMBER GETINFO.GetProcessorSpeed();
+prototype GETINFO.GetDisplay(POINTER);
+prototype GETINFO.GetMonitor(POINTER);
+prototype GETINFO.GetCDROM(POINTER);
+prototype GETINFO.GetSoundCard(POINTER);
+prototype GETINFO.GetScreenResolution(POINTER);
+prototype GETINFO.GetNetwork(POINTER);
+prototype GETINFO.GetMouse(POINTER);
+prototype GETINFO.GetModem(POINTER);
+prototype BOOL GETINFO.DirectXInstalled();
+prototype NUMBER GETINFO.CheckCDRomSpeed(POINTER);
+prototype GETINFO.FindVideoMemory(POINTER);
+
+
+prototype BOOL CDUTIL.HasDiskInserted(NUMBER);
+prototype BOOL CDUTIL.OpenCD(POINTER);
+prototype CDUTIL.PlayMciCD(NUMBER, NUMBER, HWND, NUMBER);
+prototype CDUTIL.PlayCDOneTrack(NUMBER);
+prototype BOOL CDUTIL.PauseCDMCI();
+prototype BOOL CDUTIL.StopCDMCI(NUMBER);
+prototype BOOL CDUTIL.CloseCDMCI(NUMBER);
+prototype LONG CDUTIL.GetCDNumTracks(NUMBER);
+prototype CDUTIL.SetTMSFasFormat(NUMBER);
+
+
+// Start the program here
+program
+
+StartHere:     	 
+
+	  Handler(EXIT, Exit_Handler);
+	  szFile = "CDRom.spd";
+		
+	
+	  // Set up text file to retrieve string 
+	  listID = ListCreate (STRINGLIST);
+        szTextFile = SUPPORTDIR ^ "STRING.TXT";
+	  ListReadFromFile(listID, szTextFile);
+	  ListGetFirstString(listID, svString1);
+	  ListGetNextString(listID, svString2);
+	  ListGetNextString(listID, svString3);
+	  ListGetNextString(listID, svInstall);
+	  ListGetNextString(listID, svCreate);
+	  ListGetNextString(listID, svDirectX1);
+	  ListGetNextString(listID, svDirectX2);
+	  ListGetNextString(listID, svDirectX3);
+	  ListGetNextString(listID, svDirectX4);
+	  ListGetNextString(listID, svRebootTitle);
+	  ListGetNextString(listID, svReboot);
+	  ListGetNextString(listID, svRemoveDisk);
+	  ListGetNextString(listID, svCopy);
+	  ListGetNextString(listID, svProgram);
+	  ListGetNextString(listID, svUnable);
+	  ListGetNextString(listID, svCheck);
+	  ListGetNextString(listID, svGeneral);
+	  ListGetNextString(listID, svCheck2);
+	  ListGetNextString(listID, svError);
+	  ListGetNextString(listID, svRelated);
+	  ListGetNextString(listID, svInternal);
+	  ListGetNextString(listID, svMS);
+	  ListGetNextString(listID, svWrongOS);
+	  ListGetNextString(listID, svOne);
+	  ListGetNextString(listID, svRebootFail);
+	  ListGetNextString(listID, svNotSupport);
+
+
+
+		bRunningNT = FALSE;
+        GetSystemInfo(OS, sysInfResult1, scratch1);
+      
+        if (sysInfResult1 = IS_WINDOWSNT) then
+		bRunningNT = TRUE;
+//	nResult = NTDlg();
+//		switch (nResult)
+//			case IDNO:
+//				CleanUp();	
+//				Exit;
+//				
+//			case DLG_ERR:
+//				// Some kind of big error has happened!
+//				CleanUp();
+//				Exit;
+//		endswitch;
+//
+//           GetSystemInfo(WINMAJOR, sysInfResult2, scratch2);
+//		if (sysInfResult2 < 4) then
+  //     	MessageBox(svNotSupport, SEVERE);
+//		    exit;
+//		endif;
+
+	endif;
+
+//	b3DCard = FALSE;
+
+      Disable( BACKBUTTON );
+
+   // Check for NetShell
+
+        RegDBSetDefaultRoot(HKEY_LOCAL_MACHINE);
+	  szRKey = "Software\\Activision\\Activenet\\Applications\\NetShell";
+   		if (RegDBKeyExist(szRKey) = 1) then
+			if(RegDBGetKeyValueEx(szRKey, "Path", nType, nProductKey, nSize) = 0) then
+				if(RegDBGetKeyValueEx(szRKey, "Cwd", nType, nPath, nSize) = 0) then
+					goto nfound;
+				endif;
+			endif;
+		endif;
+  	    MessageBox("NetShell not found", SEVERE);
+		CleanUp();
+		exit;
+
+		
+	nfound:
+
+
+   // Get the Installtion language
+
+        // Set installation info., which is required for registry entries.
+        InstallationInfo(COMPANY_NAME, PRODUCT_NAME, PRODUCT_VERSION, 
+        				 PRODUCT_KEY);
+
+          nReboot = 1;				 
+	    svTarget = TARGETDISK ^ APPBASE_PATH;
+	    szOrigTargetDir = svTarget;
+	    szOrigSourceDir = SRCDIR;
+	    
+		bSoundPlaying = FALSE;
+		szMidiDLLName = SUPPORTDIR ^ "\\mididll.dll";
+		szSoundDLLName = SUPPORTDIR ^ "\\sounddll.dll";
+//		szDirectXDLLName = SUPPORTDIR ^ "\\adset.dll";
+		szDirectXDLLName = SUPPORTDIR ^ "\\dsetup.dll";
+		//szLanguageDLLName = SUPPORTDIR ^ "\\language.dll";
+		szGetInfoDLLName = SUPPORTDIR ^ "\\getinfo.dll";
+		szCDUtilDLLName = SUPPORTDIR ^ "\\cdutil.dll";
+//		szGet3DDLLName = SUPPORTDIR ^ "\\Get3D.dll";
+		UseDLL(szMidiDLLName);
+		UseDLL(szSoundDLLName);
+		UseDLL(szDirectXDLLName);
+		UseDLL(szGetInfoDLLName);
+		UseDLL(szCDUtilDLLName);
+		
+//         nError =	UseDLL(szLanguageDLLName);
+//	if (nError)then
+//        MessageBox("can not use language dll!", WARNING);
+// 	endif;
+
+  //       nError =	UseDLL(szGet3DDLLName);
+//	if (nError)then
+//        MessageBox("can not use 3D dll!", WARNING);
+// 	endif;
+    		
+	  nLang = ValidLanguage();
+        if (!nLang) then
+           MessageBox(svWrongOS, WARNING);
+  		CleanUp();
+		Exit;
+        endif;
+
+	nCDROMSpeed = 0;
+	pFile = AddressString(szFile);
+	nCDROMSpeed = CheckCDRomSpeed(pFile);	
+
+//        SetupMIDI();
+
+//	   SetupMusic();
+	   Enable(BITMAPFADE);
+
+//	bDirectXInstalled = DirectXInstalled();
+//      if (bDirectXInstalled) then
+//	MessageBox("Installed", INFORMATION);
+//	else
+//	MessageBox("Not Installed", INFORMATION);
+//	endif;
+
+//        Disable(BACKGROUND);
+
+        // Set up the installation screen.
+        SetupScreen();
+        Enable(DIALOGCACHE);
+
+						   
+nDirectXParam =   DSETUP_DSOUND | DSETUP_DSOUNDDRV ;
+
+LABEL_Welcome:
+   // Create a Welcome dialog.
+   WelcomeDlg:
+//		PlaceBitmap(SUPPORTDIR ^ "\\2.bmp", BGBITMAPID, 
+//					CENTERED, CENTERED, CENTERED);
+        Disable(BACKBUTTON);
+        Welcome("", 0);
+
+
+
+nSpaceRequired = 200000;
+
+   // Ask user for a destination location for the installation.
+   GetTargetDirectory:
+
+   		Enable(BACKBUTTON);
+	    svTarget = TARGETDISK ^ APPBASE_PATH;
+        if (AskDestPath("", szMsg, svTarget, 0) = 12) goto LABEL_Welcome;
+	    szOrigTargetDir = svTarget;
+        
+        // Perform space check of target drive.
+        bSpaceOk = TRUE;
+        if (GetDiskSpace(svTarget) < nSpaceRequired) then
+//	szMsg = svString1 + "\n" + "'" + svTarget + "'.\n" + svString2 + "\n" + 
+//		  svString3;
+	szMsg = "The required 40MB of uncompressed hard disk space is not available. Please click OK to make space available and try again.";
+
+           MessageBox(szMsg, WARNING);
+           bSpaceOk = FALSE;
+	    else
+	    	// There is enough space, now check to see if there is enough
+	    	// space with the virtual memory requirement.
+      if (GetDiskSpace(svTarget) < (nSpaceRequired+00485760)) then
+	    		if (WarnAboutVirtualMemory() = IDNO) then
+	    			goto LABEL_Welcome;
+	    		endif;	
+	    	endif;
+        endif;
+
+        bSpaceOk = TRUE;
+        if (GetDiskSpace(svTarget) < nSpaceRequired) then
+	szMsg = svString1 + "\n" + "'" + svTarget + "'.\n" + svString2 + "\n" + 
+		  svString3;
+
+           MessageBox(szMsg, WARNING);
+           bSpaceOk = FALSE;
+	  endif;
+
+         // If not enough space, ask user to try again.
+        if (bSpaceOk = FALSE) then
+		Exit;
+	  endif;
+
+		//goto GetTargetDirectory;
+
+	    svHDPath = svTarget;
+
+        // Set the App Paths key for the main program.
+        RegDBSetItem(REGDB_APPPATH, svTarget);
+      scratchStr = szOrigTargetDir ^ PRODUCT_KEY;
+
+	// special for time commando
+//        RegDBSetItem(REGDB_APPPATH, SRCDIR);
+//        scratchStr = SRCDIR ^ PRODUCT_KEY;
+  
+        LongPathToShortPath(scratchStr);
+        RegDBSetItem(REGDB_APPPATH_DEFAULT, scratchStr);
+        
+
+   TransferFiles:
+//		PlaceBitmap(SUPPORTDIR ^ "\\bit5.bmp", BGBITMAPID, 
+//					CENTERED, CENTERED, CENTERED);
+        // Prepare InstallSHIELD to record deinstallation information.
+        LongPathToShortPath(svTarget);
+        LongPathToShortPath(svUninstLogFile);
+        DeinstallStart(svTarget, svUninstLogFile, DEINSTALL_KEY, 0);
+        RegDBSetItem(REGDB_UNINSTALL_NAME, UNINSTALL_NAME);
+                                                       
+        // Set up progress indicator and information gauge.
+        Disable(DIALOGCACHE);
+        
+	PlaceWindow(STATUSDLG, 0, 0, LOWER_RIGHT);
+		
+        // Create icon for uninstall just in case they abort 
+        // while the files are being copied.
+
+		svFolder = PROGRAM_FOLDER_NAME;
+		CreateProgramFolder(svFolder);
+        szProgram = WINDIR ^ "UNINST.exe";
+		LongPathToShortPath(szProgram);
+		LongPathToShortPath(svUninstLogFile);
+		szProgram = szProgram + " -f" + svUninstLogFile;
+
+	  szTemp = PRODUCT_NAME + " Uninstall";
+        AddFolderIcon(svFolder, szTemp, szProgram,
+					  WINDIR, "", 0, "", REPLACE);
+
+        
+        Enable(STATUSDLG);
+//        if (nSetupType = IDC_BEST) then
+//        	LargeFileTransfer();
+//        elseif (nSetupType = IDC_MEDIUM) then
+//        	MediumFileTransfer();
+//        elseif (nSetupType = IDC_MINIMUM) then
+        	SmallFileTransfer();
+//        endif;
+
+//	  CreateBatchFile();
+	  szTemp = PRODUCT_NAME + " " + svInstall + " .";
+        SetStatusWindow(100, szTemp);
+   		
+        Disable(STATUSDLG);
+        
+		
+   // Create program folders and icons.
+   InstallProgramItems:
+        SetStatusWindow(95, svCreate);
+
+		AppCommand(PROGMAN, CMD_RESTORE);
+		ShowProgramFolder(svFolder, 0);
+		LongPathToShortPath(svTarget);
+
+		svFolder = PROGRAM_FOLDER_NAME;
+		CreateProgramFolder(svFolder);
+
+		// Get info from .inf file
+	scratchStr = szOrigSourceDir ^ "\\chat\\anet.inf";
+	GetProfString(scratchStr, "ActiveNet", "SessionType", tType);
+
+		// Create appropriate icon
+
+		szProgram = nProductKey;
+		LongPathToShortPath(szProgram);
+		szProgram = szProgram + " -t:" + tType;
+		scratchStr = nPath;
+		LongPathToShortPath(scratchStr);
+        AddFolderIcon(svFolder,"Chat",szProgram,scratchStr,"",0,"",REPLACE);
+
+//		SRCDIR = szOrigSourceDir;
+//		szProgram = szOrigTargetDir ^ "\\chat.exe";
+//		scratchStr = szOrigTargetDir;
+//       AddFolderIcon(svFolder,"Chat",szProgram,
+//                  scratchStr,"",0,"",REPLACE);
+
+
+
+        // Now too late for uninstall, thanks to George 3/13/96
+        // Create icon for uninstall just in case they abort
+        // while the files are being copied.
+		svFolder = PROGRAM_FOLDER_NAME;
+		szProgram = WINDIR ^ "UNINST.EXE";
+		LongPathToShortPath(szProgram);
+		LongPathToShortPath(svUninstLogFile);
+		szProgram = szProgram + " -f" + svUninstLogFile;
+	  szTemp = APP_NAME + " Uninstall";
+
+        AddFolderIcon(svFolder, szTemp, szProgram,
+					  WINDIR, "", 0, "", REPLACE);
+
+
+   // Announce setup complete and offer to read README file.e
+   FinalInstallProcess:
+
+        
+
+		// Add a bunch of extra registry entries.
+        RegDBSetDefaultRoot(HKEY_LOCAL_MACHINE);
+		Disable(LOGGING);
+        RegDBCreateKeyEx("software\\Activision\\Activenet\\Applications", "");
+		Enable(LOGGING);
+	  szRKey = "software\\Activision\\Activenet\\Applications\\" + PRODUCT_NAME;
+        RegDBCreateKeyEx(szRKey, "");
+
+
+//        RegDBSetKeyValueEx(szRKey, "Name", REGDB_STRING, PRODUCT_NAME, -1);
+//	  scratchStr = szOrigTargetDir + "\\" + PRODUCT_KEY;
+//        RegDBSetKeyValueEx(szRKey, "Run", REGDB_STRING, scratchStr, -1);
+//        RegDBSetKeyValueEx(szRKey, "Cmdline", REGDB_STRING, "", -1);
+        RegDBSetKeyValueEx(szRKey, "Cwd", REGDB_STRING, szOrigTargetDir, -1);
+//        RegDBSetKeyValueEx(szRKey, "SessionType", REGDB_NUMBER, tType, -1);
+
+
+
+
+MessageBox("Install is done!!", INFORMATION);
+
+		CleanUp();
+        exit;
+
+Exit_Handler:
+  		nResult = ExitSetup();
+		switch (nResult)
+			case IDC_EXITSETUP:
+				CleanUp();	
+				exit;
+
+			case IDC_RESUMESETUP:
+				return;
+				
+			case DLG_ERR:
+				// Some kind of big error has happened!
+				CleanUp();
+				Exit;
+		endswitch;
+        
+
+
+//--------------------------------------------------------------------------
+function CleanUp()
+begin
+//	CloseDownMIDI();
+//	CloseDownMusic();
+	UnUseDLL(szMidiDLLName);
+	UnUseDLL(szSoundDLLName);
+	UnUseDLL(szDirectXDLLName);
+ 	//UnUseDLL(szLanguageDLLName);
+	UnUseDLL(szGetInfoDLLName);
+	UnUseDLL(szCDUtilDLLName);
+//	UnUseDLL(szGet3DDLLName);
+	// Just in case someone pressed 'Cancel' while the fact or fiction
+	// narration is playing.
+	if (bSoundPlaying) then
+		StopTheSound();
+		bSoundPlaying = FALSE;
+	endif;
+end;
+
+//--------------------------------------------------------------------------
+function SetupScreen()
+begin
+//		PlaceBitmap(SUPPORTDIR ^ "\\comp1.bmp", BGBITMAPID, 
+//					CENTERED, CENTERED, CENTERED);
+		
+        Enable(INDVFILESTATUS);
+        Enable(BITMAP256COLORS);
+
+        SetColor(BACKGROUND, RGB(0, 0, 0)); // Black
+//        SetColor(BACKGROUND, BK_BLUE); // Dark blue.
+        SetColor(STATUSBAR, BLUE);     // Bright blue.
+        szTemp = "Windows95 " + PRODUCT_NAME;			
+SetTitle(szTemp, 0, BACKGROUNDCAPTION); // Caption bar text.
+
+        Enable(BACKGROUND);
+end;
+
+//--------------------------------------------------------------------------
+function SetupMusic()
+	STRING temp;
+begin
+	// Set up all the pointers so we can use the CDUTIL dll functions
+	nCDDeviceID = 0;
+	pCDDeviceID = AddressNumber(nCDDeviceID);
+
+	hMainWindow = GetWindowHandle(HWND_INSTALL);
+	if (hMainWindow > 0) then
+	bOpenCD = OpenCD(pCDDeviceID);	
+        if (bOpenCD) then
+		if (HasDiskInserted(nCDDeviceID)) then
+		numTrack = GetCDNumTracks(nCDDeviceID);
+		NumToStr(temp, numTrack);
+		MessageBox(temp, INFORMATION);
+		SetTMSFasFormat(nCDDeviceID);
+//		PlayCDOneTrack(1);
+		PlayMciCD(0, numTrack - 1, hMainWindow ,nCDDeviceID);
+		endif;
+	  endif;
+	endif;
+end;
+
+//--------------------------------------------------------------------------
+function CloseDownMusic()
+begin
+if (bOpenCD) then
+	StopCDMCI(nCDDeviceID);
+	CloseCDMCI(nCDDeviceID);
+endif;
+
+end;
+//--------------------------------------------------------------------------
+function SetupMIDI()
+begin
+	// Set up all the pointers so we can use the MIDI dll functions
+	szMidiFile = SUPPORTDIR ^ "\\music.mid";
+	nMidiDeviceID = 0;
+	pMidiDeviceID = AddressNumber(nMidiDeviceID);
+	hMainWindow = GetWindowHandle(HWND_INSTALL);
+	if (hMainWindow > 0) then
+		OpenMIDI(szMidiFile, pMidiDeviceID);
+		PlayMIDI(hMainWindow, nMidiDeviceID);
+	endif;
+end;
+
+//--------------------------------------------------------------------------
+function CloseDownMIDI()
+begin
+	StopMIDI(nMidiDeviceID);
+	CloseMIDI(nMidiDeviceID);
+end;
+//--------------------------------------------------------------------------
+function CreateBatchFile()
+	STRING szTempDir;
+begin
+	szTempDir = szOrigTargetDir ^ "\\hipnotic";
+
+	if (CreateFile(nvFileHandle, szTempDir, "Armagon.bat") < 0) then
+		MessageBox("Failed to open armagon.bat", SEVERE);
+	else
+	   scratchStr = szOrigTargetDir + "quake.exe -game hipnotic -hipnotic";		
+	   WriteLine(nvFileHandle, scratchStr);
+	endif;
+
+	if (CreateFile(nvFileHandle, szTempDir, "Dedicate.bat") < 0) then
+		MessageBox("Failed to open dedicate.bat", SEVERE);
+	else
+	   scratchStr = szOrigTargetDir + "quake.exe -game hipnotic -hipnotic -dedicated 8";		
+	   WriteLine(nvFileHandle, scratchStr);
+	endif;
+
+	if (CreateFile(nvFileHandle, szTempDir, "Listen.bat") < 0) then
+		MessageBox("Failed to open listen.bat", SEVERE);
+	else
+	   scratchStr = szOrigTargetDir + "quake.exe -game hipnotic -hipnotic -listen 8";		
+	   WriteLine(nvFileHandle, scratchStr);
+	endif;
+end;
+
+//--------------------------------------------------------------------------
+function SmallFileTransfer()
+	STRING scratch2;
+begin
+	szTemp = svCopy + " " + PRODUCT_NAME + " " + svProgram;
+
+	SetStatusWindow(0, szTemp);
+
+
+
+//		PlaceBitmap(SUPPORTDIR ^ "\\3.bmp", BGBITMAPID, 
+//					CENTERED, CENTERED, CENTERED);
+
+
+
+	StatusUpdate(ON, 90);
+	scratchStr = "Plans";	
+	TARGETDIR = szOrigTargetDir;
+	SRCDIR    = szOrigSourceDir ^ "\\chat";
+    FileSetBeginDefine(scratchStr);
+	XCopyFile("*.*","*.*", INCLUDE_SUBDIR);
+
+ 	FileSetEndDefine(scratchStr);
+	nResult = FileSetPerformEz(scratchStr, 0);
+	FileSetEndPerform(scratchStr);
+	CheckFileTransferResult();
+	StatusUpdate(OFF, 0);
+
+
+end;
+
+//--------------------------------------------------------------------------
+function MediumFileTransfer()
+begin
+	szTemp = svCopy + " " + PRODUCT_NAME + " " + svProgram;
+
+	SetStatusWindow(0, szTemp);
+
+
+		PlaceBitmap(SUPPORTDIR ^ "\\2.bmp", BGBITMAPID, 
+					CENTERED, CENTERED, CENTERED);
+
+
+	StatusUpdate(ON, 52);
+	scratchStr = "Assets8";	
+	TARGETDIR = szOrigTargetDir ^ "\\data";
+	SRCDIR    = szOrigSourceDir ^ "\\data";
+    FileSetBeginDefine(scratchStr);
+XCopyFile("*.*","*.*", EXCLUDE_SUBDIR);
+ 	FileSetEndDefine(scratchStr);
+	nResult = FileSetPerformEz(scratchStr, 0);
+	FileSetEndPerform(scratchStr);
+	CheckFileTransferResult();
+	StatusUpdate(OFF, 0);
+
+
+
+		PlaceBitmap(SUPPORTDIR ^ "\\4.bmp", BGBITMAPID, 
+					CENTERED, CENTERED, CENTERED);
+
+
+
+
+end;
+
+//--------------------------------------------------------------------------
+function LargeFileTransfer()
+begin
+	szTemp = svCopy + " " + PRODUCT_NAME + " " + svProgram;
+
+	SetStatusWindow(0, szTemp);
+
+
+
+		PlaceBitmap(SUPPORTDIR ^ "\\2.bmp", BGBITMAPID, 
+					CENTERED, CENTERED, CENTERED);
+
+
+
+		PlaceBitmap(SUPPORTDIR ^ "\\3.bmp", BGBITMAPID, 
+					CENTERED, CENTERED, CENTERED);
+
+
+
+
+
+		PlaceBitmap(SUPPORTDIR ^ "\\4.bmp", BGBITMAPID, 
+					CENTERED, CENTERED, CENTERED);
+
+
+	StatusUpdate(ON, 100);
+	scratchStr = "Textures";	
+	TARGETDIR = szOrigTargetDir ^ "\\data";
+	SRCDIR    = szOrigSourceDir ^ "\\data";
+    FileSetBeginDefine(scratchStr);
+XCopyFile("*.*","*.*", EXCLUDE_SUBDIR);
+
+ 	FileSetEndDefine(scratchStr);
+	nResult = FileSetPerformEz(scratchStr, 0);
+	FileSetEndPerform(scratchStr);
+	CheckFileTransferResult();
+	StatusUpdate(OFF, 0);
+
+
+end;
+
+//--------------------------------------------------------------------------
+function CheckFileTransferResult()
+begin
+	switch (nResult)
+		case FS_DONE: // Successful completion.
+		
+		case FS_CREATEDIR: // Create directory error.
+			 MessageBox(svUnable +" " + TARGETDIR + "."+ svCheck, SEVERE);
+
+			 CleanUp();
+			 exit;
+			 
+		 case FS_PACKAGING:
+			 CleanUp();
+			 exit;
+
+		default: // Group all other errors under default label.
+			 NumToStr(szTemp, nResult);
+MessageBox(svGeneral + svCheck2 + "\n\n " + svError + szTemp
+                                        + "\n " + svRelated + " " + ERRORFILENAME,
+						 SEVERE);
+
+			 CleanUp();
+			 exit;
+	endswitch;
+end;
+
+
+//--------------------------------------------------------------------------
+// Create a custom dialog to ask the user what kind of setup they want.
+function GetSetupType()
+	NUMBER nRetval, nCmdValue;
+	STRING boxname;
+	BOOL done;
+begin
+	boxname = "MySetupTypeBox";
+	done = FALSE;
+	nRetval = 1;
+	
+	// Register the dialog with InstallShield
+	EzDefineDialog(boxname, SUPPORTDIR ^ "DIALOG.DLL", 
+				   "SETUP_TYPE_DLG", 0);
+	
+	while (done = FALSE)
+		nCmdValue = WaitOnDialog(boxname);			   
+		
+		switch (nCmdValue)
+		case DLG_ERR:
+			nRetval = DLG_ERR;
+//			MessageBox("Internal Dialog Box Error", SEVERE);
+			MessageBox(svInternal, SEVERE);
+
+			done = TRUE;
+			
+		case DLG_INIT:
+			CtrlSetState(boxname, IDC_BEST, BUTTON_CHECKED);
+			
+		case SD_PBUT_BACK:
+			nRetval = SD_PBUT_BACK;
+			done = TRUE;
+			
+		case SD_PBUT_CONTINUE:
+			if (CtrlGetState(boxname, IDC_BEST) = BUTTON_CHECKED) then
+				nRetval = IDC_BEST;	
+			elseif (CtrlGetState(boxname, IDC_MEDIUM) = BUTTON_CHECKED) then
+				nRetval = IDC_MEDIUM;
+			elseif (CtrlGetState(boxname, IDC_MINIMUM) = BUTTON_CHECKED) then
+				nRetval = IDC_MINIMUM;
+			endif;
+			done = TRUE;
+			
+		case SD_PBUT_EXITSETUP:
+			nRetval = SD_PBUT_EXITSETUP;
+			done = TRUE;
+			
+		// User chose close in the system menu
+		case DLG_CLOSE:
+			nRetval = SD_PBUT_EXITSETUP;
+			done = TRUE;
+			
+		endswitch;
+	endwhile;
+	
+	EndDialog(boxname);
+	ReleaseDialog(boxname);
+	
+	return nRetval;
+end;
+//--------------------------------------------------------------------------
+// Create a custom dialog to tell use the problem they might have in directx
+function DirectXHelpDlg()
+	NUMBER nRetval, nCmdValue;
+	STRING boxname;
+	BOOL done;
+begin
+	boxname = "MySetupTypeBox";
+	done = FALSE;
+	nRetval = 1;
+	
+	// Register the dialog with InstallShield
+	EzDefineDialog(boxname, SUPPORTDIR ^ "DIALOG.DLL", 
+				   "DIRECTX_HELP_DLG", 0);
+	
+	while (done = FALSE)
+		nCmdValue = WaitOnDialog(boxname);			   
+		
+		switch (nCmdValue)
+		case DLG_ERR:
+			nRetval = DLG_ERR;
+			MessageBox(svInternal, SEVERE);
+
+			done = TRUE;
+			
+		
+		case IDOK:
+                                done = TRUE;
+				nRetval = IDOK;
+			
+		// User chose close in the system menu
+		case DLG_CLOSE:
+			nRetval = SD_PBUT_EXITSETUP;
+			done = TRUE;
+			
+		endswitch;
+	endwhile;
+	
+	EndDialog(boxname);
+	ReleaseDialog(boxname);
+	
+	return nRetval;
+end;
+
+
+//--------------------------------------------------------------------------
+// Create a custom dialog to ask the user whether they want to quit.
+function ExitSetup()
+	NUMBER nRetval, nCmdValue;
+	STRING boxname;
+	BOOL done;
+begin
+	boxname = "MyExitBox";
+	done = FALSE;
+	nRetval = 1;
+	
+	// Register the dialog with InstallShield
+	EzDefineDialog(boxname, SUPPORTDIR ^ "DIALOG.DLL", 
+				   "EXIT_DIALOG", 0);
+	
+	while (done = FALSE)
+		nCmdValue = WaitOnDialog(boxname);			   
+		
+		switch (nCmdValue)
+		case DLG_ERR:
+			nRetval = DLG_ERR;
+			MessageBox(svInternal, SEVERE);
+			done = TRUE;
+						
+		case IDC_EXITSETUP:
+			nRetval = IDC_EXITSETUP;
+			done = TRUE;
+			
+		case IDC_RESUMESETUP:
+			nRetval = IDC_RESUMESETUP;
+			done = TRUE;
+						
+		// User chose close in the system menu
+		case DLG_CLOSE:
+			nRetval = SD_PBUT_EXITSETUP;
+			done = TRUE;
+			
+		endswitch;
+	endwhile;
+	
+	EndDialog(boxname);
+	ReleaseDialog(boxname);
+	
+	return nRetval;
+end;
+
+//--------------------------------------------------------------------------
+// Create a custom dialog to ask the user they want to start the game or not
+function FinishDlg()
+	NUMBER nRetval, nCmdValue;
+	STRING boxname;
+	BOOL done;
+begin
+	boxname = "MySetupTypeBox";
+	done = FALSE;
+	nRetval = 1;
+	
+	// Register the dialog with InstallShield
+	EzDefineDialog(boxname, SUPPORTDIR ^ "DIALOG.DLL", 
+				   "FINISH_DIALOG", 0);
+	
+	while (done = FALSE)
+		nCmdValue = WaitOnDialog(boxname);			   
+		
+		switch (nCmdValue)
+		case DLG_ERR:
+			nRetval = DLG_ERR;
+			MessageBox(svInternal, SEVERE);
+
+			done = TRUE;
+			
+			
+		case IDOK:
+			nRetval = IDOK;
+			done = TRUE;
+			
+			
+		case IDCANCEL:
+			nRetval = IDCANCEL;
+			done = TRUE;
+			
+		// User chose close in the system menu
+		case DLG_CLOSE:
+			nRetval = IDCANCEL;
+			done = TRUE;
+			
+		endswitch;
+	endwhile;
+	
+	EndDialog(boxname);
+	ReleaseDialog(boxname);
+	
+	return nRetval;
+end;
+//--------------------------------------------------------------------------
+// Create a custom dialog to ask the user they want to start the game or not
+function NTRDlg()
+	NUMBER nRetval, nCmdValue;
+	STRING boxname;
+	BOOL done;
+begin
+	boxname = "MySetupTypeBox";
+	done = FALSE;
+	nRetval = 1;
+	
+	// Register the dialog with InstallShield
+	EzDefineDialog(boxname, SUPPORTDIR ^ "DIALOG.DLL", 
+				   "NTR_DIALOG", 0);
+	
+	while (done = FALSE)
+		nCmdValue = WaitOnDialog(boxname);			   
+		
+		switch (nCmdValue)
+		case DLG_ERR:
+			nRetval = DLG_ERR;
+			MessageBox(svInternal, SEVERE);
+
+			done = TRUE;
+			
+			
+		case IDOK:
+			nRetval = IDOK;
+			done = TRUE;
+
+		case IDCANCEL:
+			nRetval = IDCANCEL;
+			done = TRUE;
+			
+		// User chose close in the system menu
+		case DLG_CLOSE:
+			nRetval = IDCANCEL;
+			done = TRUE;
+			
+		endswitch;
+	endwhile;
+	
+	EndDialog(boxname);
+	ReleaseDialog(boxname);
+	
+	return nRetval;
+end;
+
+//------------------------------------------------------------------------------
+// Create a custom dialog to ask the user they want to install game on NT or not
+function NTDlg()
+	NUMBER nRetval, nCmdValue;
+	STRING boxname;
+	BOOL done;
+begin
+	boxname = "MySetupTypeBox";
+	done = FALSE;
+	nRetval = 1;
+	
+	// Register the dialog with InstallShield
+	EzDefineDialog(boxname, SUPPORTDIR ^ "DIALOG.DLL", 
+				   "NT_DIALOG", 0);
+	
+	while (done = FALSE)
+		nCmdValue = WaitOnDialog(boxname);			   
+		
+		switch (nCmdValue)
+		case DLG_ERR:
+			nRetval = DLG_ERR;
+			MessageBox(svInternal, SEVERE);
+
+			done = TRUE;
+			
+			
+		case IDYES:
+			nRetval = IDYES;
+			done = TRUE;
+			
+			
+		case IDNO:
+			nRetval = IDNO;
+			done = TRUE;
+			
+		// User chose close in the system menu
+		case DLG_CLOSE:
+			nRetval = IDCANCEL;
+			done = TRUE;
+			
+		endswitch;
+	endwhile;
+	
+	EndDialog(boxname);
+	ReleaseDialog(boxname);
+	
+	return nRetval;
+end;
+//------------------------------------------------------------------------------
+// Create a custom dialog to ask the user they want to install game on NT or not
+function NotMeetReqDlg()
+	NUMBER nRetval, nCmdValue;
+	STRING boxname;
+	BOOL done;
+begin
+	boxname = "MySetupTypeBox";
+	done = FALSE;
+	nRetval = 1;
+	
+	// Register the dialog with InstallShield
+	EzDefineDialog(boxname, SUPPORTDIR ^ "DIALOG.DLL", 
+				   "NOTMEETREQ_DIALOG", 0);
+	
+	while (done = FALSE)
+		nCmdValue = WaitOnDialog(boxname);			   
+		
+		switch (nCmdValue)
+		case DLG_ERR:
+			nRetval = DLG_ERR;
+			MessageBox(svInternal, SEVERE);
+
+			done = TRUE;
+			
+			
+		case IDYES:
+			nRetval = IDYES;
+			done = TRUE;
+			
+			
+		case IDNO:
+			nRetval = IDNO;
+			done = TRUE;
+			
+		// User chose close in the system menu
+		case DLG_CLOSE:
+			nRetval = IDCANCEL;
+			done = TRUE;
+			
+		endswitch;
+	endwhile;
+	
+	EndDialog(boxname);
+	ReleaseDialog(boxname);
+	
+	return nRetval;
+end;
+//--------------------------------------------------------------------------
+// Create a custom dialog to show the user the game requirements vs. what's
+// on their system.
+//--------------------------------------------------------------------------
+function SysReqTable()
+	NUMBER nRetval, nCmdValue, nvResult;
+	STRING svResult, boxname, szMem, szOS, szCPU, szColors,
+		   szMemOK, szOSOK, szCPUOK, szColorsOK, svWarning, svOK,
+		   szCurSel;
+	STRING szProcessorSpeed, szVideoCard, szSoundCard, szCDROM, szResolution,
+		 szMonitor, szNetwork, szMouse, szModem, szCDROMSpeed, szVram;
+	POINTER pVideoCard, pSoundCard, pCDROM, pResolution,
+		 pMonitor, pNetwork, pMouse, pModem, pVram;
+	STRING szVideoCardOK, szSoundCardOK, szCDROMOK;
+	NUMBER nSpeed, nVram, nSpeed2;
+	BOOL done; 
+	LIST lYourSystem, lYourStatus;
+	LONG dwHelpId;
+	HWND hDialogHandle;
+begin
+    // My test number for CPU
+    bLessThan24MB = FALSE;
+    b24MB = FALSE;
+    b32MB = FALSE;
+    nCPU=0;
+	// Say "Scanning for compliance..."
+//	scratchStr = szOrigSourceDir ^ "\\scanning.wav";
+//	StartTheSound(scratchStr);
+	bSoundPlaying = TRUE;
+	
+	boxname = "MySysReqBox";
+	svWarning = "WARNING!!!";
+	svOK = "OK";
+	done = FALSE;
+	nRetval = 1;
+	
+	// Create the strings for the "Your System" listbox.
+	GetSystemInfo(EXTENDEDMEMORY, nvResult, svResult);
+	
+	// Report memory in K instead of MB.
+	nvResult = nvResult * 1024 / 1000000;
+	
+	if (nvResult <= 16) then
+		bLessThan24MB = TRUE;
+	endif;
+
+	if ((nvResult > 22) && (nvResult < 26)) then
+		b24MB = TRUE;
+	endif;
+
+	if ((nvResult > 31) && (nvResult < 34)) then
+		b32MB = TRUE;
+	endif;
+
+	NumToStr(scratchStr, nvResult);
+	szMem = scratchStr + " MB";
+	if (nvResult < 16) then
+		szMemOK = svWarning;
+		bHas8Meg = FALSE;
+		bMeetMinReq = FALSE;
+
+	else
+		bHas8Meg = TRUE;
+		szMemOK = svOK;
+	endif;
+	
+	GetSystemInfo(CPU, nvResult, svResult);
+	switch (nvResult)
+		case IS_286:
+			szCPU = "286 Class";
+			szCPUOK = svWarning;
+			bMeetMinReq = FALSE;
+
+            nCPU=0;
+		case IS_386:
+			szCPU = "386 Class";
+			szCPUOK = svWarning;
+			bMeetMinReq = FALSE;
+
+            nCPU=0;
+		case IS_486:
+			szCPU = "486 Class";
+			szCPUOK = svWarning;
+			bMeetMinReq = FALSE;
+            nCPU=0;
+		case IS_PENTIUM:
+			szCPU = "Pentium Class";
+			szCPUOK = svOK;
+		nSpeed = GetProcessorSpeed();
+		nSpeed2 = GetProcessorSpeed();
+		nSpeed = (nSpeed + nSpeed2) / 2;
+	      NumToStr(szProcessorSpeed, nSpeed);	
+     		szProcessorSpeed = szProcessorSpeed + " MHz";
+            nCPU=1;
+		case IS_UNKNOWN:
+			szCPU = "Unknown Class";
+			szCPUOK = svWarning;
+			bMeetMinReq = FALSE;
+
+            nCPU=1;
+		case IS_ALPHA:
+			szCPU = "Alpha";
+			szCPUOK = svWarning;
+			bMeetMinReq = FALSE;
+
+            nCPU=1;
+		case IS_MIPS:
+			szCPU = "MIPS";
+			szCPUOK = svWarning;
+			bMeetMinReq = FALSE;
+
+            nCPU=1;
+		case IS_POWERPC:
+			szCPU = "PowerPC";
+			szCPUOK = svWarning;
+			bMeetMinReq = FALSE;
+
+            nCPU=1;
+	endswitch;
+	if (szCPU != "Pentium Class") then
+		bHas486 = TRUE;
+		szQSound = "0";
+	else
+		szQSound = "1";
+	endif;
+	
+	GetSystemInfo(OS, nvResult, svResult);
+	switch (nvResult)
+		case IS_WINDOWSNT:
+			szOS = "WindowsNT";
+			szOSOK = svWarning;
+			bMeetMinReq = FALSE;
+
+		case IS_WINDOWS95:
+			szOS = "Windows 95";
+			szOSOK = svOK;
+	endswitch;
+	
+	GetSystemInfo(COLORS, nvResult, svResult);
+	NumToStr(szColors, nvResult);
+	if (nvResult < 256) then
+		szColorsOK = svWarning;
+		bMeetMinReq = FALSE;
+	else
+		szColorsOK = svOK;
+	endif;
+
+	
+	pVideoCard = AddressString(szVideoCard);
+	GetDisplay(pVideoCard);
+
+	pSoundCard = AddressString(szSoundCard);
+	GetSoundCard(pSoundCard);
+	pCDROM = AddressString(szCDROM);
+	GetCDROM(pCDROM);
+	pResolution = AddressString(szResolution);
+	GetScreenResolution(pResolution);
+	pMonitor = AddressString(szMonitor);
+	GetMonitor(pMonitor);
+	pNetwork = AddressString(szNetwork);
+	GetNetwork(pNetwork);
+	pMouse = AddressString(szMouse);
+	GetMouse(pMouse);
+	pModem = AddressString(szModem);
+	GetModem(pModem);
+	pVram = AddressString(szVram);
+	FindVideoMemory(pVram);
+	StrToNum(nVram, szVram);
+
+	if (nVram < 1) then
+//		szVideoCardOK = svWarning;
+		;
+	else
+		szVideoCard = szVideoCard + " with " + szVram + " MB video RAM";
+	endif;
+
+		szVideoCardOK = svOK;
+
+
+
+	if (nCDROMSpeed = 0) then
+		;
+	else
+	   NumToStr(szCDROMSpeed, nCDROMSpeed);
+	   szCDROMSpeed = szCDROMSpeed + "X";
+	   szCDROM = szCDROM + " " + szCDROMSpeed;
+		szCDROMOK = svOK;	
+	endif;
+
+//	if (nCDROMSpeed < 2) then
+//		szCDROMOK = svWarning;
+//	else
+//		szCDROMOK = svOK;
+//	endif;	
+
+	
+	
+	szCPU = szCPU + " " + szProcessorSpeed;
+//	szCDROM = szCDROM + " " + szCDROMSpeed;
+
+	// Create the "Your System" listbox
+	lYourSystem = ListCreate(STRINGLIST);
+	ListAddString(lYourSystem, " ", AFTER);
+	ListAddString(lYourSystem, szCPU, AFTER);
+	ListAddString(lYourSystem, " ", AFTER);
+	ListAddString(lYourSystem, szMem, AFTER);
+	ListAddString(lYourSystem, " ", AFTER);
+	ListAddString(lYourSystem, szOS, AFTER);
+	ListAddString(lYourSystem, " ", AFTER);
+	ListAddString(lYourSystem, szColors, AFTER);
+	ListAddString(lYourSystem, " ", AFTER);
+	ListAddString(lYourSystem, szVideoCard, AFTER);	
+	ListAddString(lYourSystem, " ", AFTER);
+	ListAddString(lYourSystem, szSoundCard, AFTER);
+	ListAddString(lYourSystem, " ", AFTER);
+	ListAddString(lYourSystem, szCDROM, AFTER);
+
+//	ListAddString(lYourSystem, szResolution, AFTER);
+//	ListAddString(lYourSystem, szMonitor, AFTER);
+//	ListAddString(lYourSystem, szNetwork, AFTER);
+//	ListAddString(lYourSystem, szMouse, AFTER);
+//	ListAddString(lYourSystem, szModem, AFTER);
+//	ListAddString(lYourSystem, szCDROMSpeed, AFTER);
+//	ListAddString(lYourSystem, szProcessorSpeed, AFTER);
+
+
+      // Create Status listbox
+      lYourStatus = ListCreate(STRINGLIST);
+	ListAddString(lYourStatus, " ", AFTER);
+	ListAddString(lYourStatus, szCPUOK, AFTER);
+	ListAddString(lYourStatus, " ", AFTER);
+	ListAddString(lYourStatus, szMemOK, AFTER);
+	ListAddString(lYourStatus, " ", AFTER);
+	ListAddString(lYourStatus, szOSOK, AFTER);
+	ListAddString(lYourStatus, " ", AFTER);
+	ListAddString(lYourStatus, szColorsOK, AFTER);
+	ListAddString(lYourStatus, " ", AFTER);
+	ListAddString(lYourStatus, szVideoCardOK, AFTER);
+	ListAddString(lYourStatus, " ", AFTER);
+	ListAddString(lYourStatus, szSoundCardOK, AFTER);
+	ListAddString(lYourStatus, " ", AFTER);
+	ListAddString(lYourStatus, szCDROMOK, AFTER);
+
+
+
+	// Register the dialog with InstallShield
+	EzDefineDialog(boxname, SUPPORTDIR ^ "DIALOG.DLL",  "SYSREQ_DLG", 0);
+	
+	while (done = FALSE)
+		nCmdValue = WaitOnDialog(boxname);			   
+		
+		switch (nCmdValue)
+		case DLG_ERR:
+			nRetval = DLG_ERR;
+			MessageBox("Internal Dialog Box Error", SEVERE);
+			done = TRUE;
+			
+		case DLG_INIT:
+			CtrlSetList(boxname, IDC_YOURSYSTEM, lYourSystem);
+			CtrlSetList(boxname, IDC_YOURSTATUS, lYourStatus);
+		//	CtrlSetText(boxname, IDC_CPUSTATUS, szCPUOK);
+		//	CtrlSetText(boxname, IDC_RAMSTATUS, szMemOK);
+		//	CtrlSetText(boxname, IDC_OSSTATUS, szOSOK);
+		//	CtrlSetText(boxname, IDC_COLORSTATUS, szColorsOK);
+			
+		case IDC_HELPBUTTON:	
+			// Find out what item is currently highlighted in the
+			// "Your System" listbox.
+			CtrlGetCurSel(boxname, IDC_YOURSYSTEM, szCurSel);
+			
+			// Decide which item the user selected, then display the
+			// correct help for it.
+			if (szCurSel % "Windows") then
+				// Operating System
+				dwHelpId = HELP_IDX_WRONG_OS;
+            elseif (szCurSel % "K") then
+				// RAM
+				dwHelpId = HELP_IDX_NOT_ENOUGH_RAM;
+			elseif (szCurSel % "Class") then
+				// CPU Class
+				dwHelpId = HELP_IDX_CPUCLASS;
+			else
+				// Number of Colors
+				dwHelpId = HELP_IDX_NUM_COLORS;
+			endif;
+			
+//			SdShowMsg("Launching Microsoft Help ...", TRUE);
+//			hDialogHandle = CmdGetHwndDlg(boxname);
+//			SetWindowContextHelpId(hDialogHandle, dwHelpId);
+//			scratchStr = szOrigSourceDir ^ "help.hlp";
+//			WinHelp(hDialogHandle, scratchStr, HELP_CONTEXT, dwHelpId);
+//			SdShowMsg("Launching Microsoft Help ...", FALSE);
+			scratchStr = szOrigSourceDir ^ "\\readme.txt";
+			LaunchAppAndWait("notepad.exe", scratchStr, WAIT);
+				
+			
+		case SD_PBUT_CONTINUE:
+			nRetval = SD_PBUT_CONTINUE;
+			done = TRUE;
+		
+		case SD_PBUT_BACK:
+			nRetval = SD_PBUT_BACK;
+			done = TRUE;
+	
+		case SD_PBUT_EXITSETUP:
+			nRetval = SD_PBUT_EXITSETUP;
+			done = TRUE;
+			
+		// User chose close in the system menu
+		case DLG_CLOSE:
+			nRetval = SD_PBUT_EXITSETUP;
+			done = TRUE;
+			
+		endswitch;
+	endwhile;
+	
+	StopTheSound();
+	bSoundPlaying = FALSE;
+	
+	// Clean up the help mess if there is one.
+//	WinHelp(hDialogHandle, "help.hlp", HELP_QUIT, dwHelpId);
+	EndDialog(boxname);
+	ReleaseDialog(boxname);
+	
+	return nRetval;
+end;
+
+//--------------------------------------------------------------------------
+function NetMech();
+	STRING szIniPath;
+	STRING szSection;
+begin
+
+#if 1
+
+szTitle="Net Mech Agreement";
+szMsg="Please read this before you install NetMech.";
+ListInfo=ListCreate(STRINGLIST);
+szInfo="BY CLICKING ON THE 'YES' BUTTON IN THE";
+ListAddString(ListInfo,szInfo,AFTER);
+szInfo="FOLLOWING SCREEN, YOU ARE CONSENTING";
+ListAddString(ListInfo,szInfo,AFTER);
+szInfo="TO BE BOUND BY AND ARE BECOMING A PARTY";
+ListAddString(ListInfo,szInfo,AFTER);
+szInfo="TO THIS AGREEMENT.  IF YOU DO NOT AGREE TO ";
+ListAddString(ListInfo,szInfo,AFTER);
+szInfo="ALL OF THE TERMS OF THIS AGREEMENT, CLICK THE ";
+ListAddString(ListInfo,szInfo,AFTER);
+szInfo="'NO' BUTTON IN THE NEXT SCREEN AND";
+ListAddString(ListInfo,szInfo,AFTER);
+szInfo="NETMECH WILL NOT BE INSTALLED.";
+ListAddString(ListInfo,szInfo,AFTER);
+szInfo="";
+ListAddString(ListInfo,szInfo,AFTER);
+
+szInfo="IF YOU WANT TO INSTALL NETMECH AT";
+ListAddString(ListInfo,szInfo,AFTER);
+szInfo="A LATER TIME, YOU CAN DO SO BY";
+ListAddString(ListInfo,szInfo,AFTER);
+szInfo="UNINSTALLING AND REINSTALLING";
+ListAddString(ListInfo,szInfo,AFTER);
+szInfo="MECHWARRIOR 2.";
+ListAddString(ListInfo,szInfo,AFTER);
+szInfo="";
+ListAddString(ListInfo,szInfo,AFTER);
+szInfo="NETMECH END USER LICENSE AGREEMENT";
+ListAddString(ListInfo,szInfo,AFTER);
+szInfo="";
+ListAddString(ListInfo,szInfo,AFTER);
+szInfo="GRANT.  Activision, Inc. ('Inc.') hereby grants you a ";
+ListAddString(ListInfo,szInfo,AFTER);
+szInfo="non-exclusive license to use its ";
+ListAddString(ListInfo,szInfo,AFTER);
+szInfo="accompanying software product ('Software'), provided ";
+ListAddString(ListInfo,szInfo,AFTER);
+szInfo="that you may not:";
+ListAddString(ListInfo,szInfo,AFTER);
+szInfo="(a) modify, translate, reverse engineer, ";
+ListAddString(ListInfo,szInfo,AFTER);
+szInfo="decompile, disassemble (except to the extent applicable ";
+ListAddString(ListInfo,szInfo,AFTER);
+szInfo="laws specifically prohibit such restriction), or ";
+ListAddString(ListInfo,szInfo,AFTER);
+szInfo="create derivative works based on the Software;";
+ListAddString(ListInfo,szInfo,AFTER);
+szInfo="(b)  copy the Software (except for back-up purposes);";
+ListAddString(ListInfo,szInfo,AFTER);
+szInfo="(c)  rent, lease, transfer or otherwise transfer ";
+ListAddString(ListInfo,szInfo,AFTER);
+szInfo="rights to the Software;";
+ListAddString(ListInfo,szInfo,AFTER);
+szInfo="(d)  or remove any proprietary notices or ";
+ListAddString(ListInfo,szInfo,AFTER);
+szInfo="labels on the Software.";
+ListAddString(ListInfo,szInfo,AFTER);
+szInfo="";
+ListAddString(ListInfo,szInfo,AFTER);
+szInfo="SOFTWARE.  If you receive your first copy of ";
+ListAddString(ListInfo,szInfo,AFTER);
+szInfo="the Software electronically, and a second";
+ListAddString(ListInfo,szInfo,AFTER);
+szInfo="copy on media, the second copy may be ";
+ListAddString(ListInfo,szInfo,AFTER);
+szInfo="used for archival purposes only.  This license ";
+ListAddString(ListInfo,szInfo,AFTER);
+szInfo="does not grant you any right to any enhancement";
+ListAddString(ListInfo,szInfo,AFTER);
+szInfo="or update.";
+ListAddString(ListInfo,szInfo,AFTER);
+szInfo="";
+ListAddString(ListInfo,szInfo,AFTER);
+szInfo="TITLE.  Title, ownership rights, and intellectual ";
+ListAddString(ListInfo,szInfo,AFTER);
+szInfo="property rights in and to the Software shall ";
+ListAddString(ListInfo,szInfo,AFTER);
+szInfo="remain in Activision and/or its licensors.  The ";
+ListAddString(ListInfo,szInfo,AFTER);
+szInfo="Software is protected by the copyright laws of ";
+ListAddString(ListInfo,szInfo,AFTER);
+szInfo="the United States and international copyright treaties.";
+ListAddString(ListInfo,szInfo,AFTER);
+szInfo="Title, ownership rights, and intellectual ";
+ListAddString(ListInfo,szInfo,AFTER);
+szInfo="property rights in and to the content accessed ";
+ListAddString(ListInfo,szInfo,AFTER);
+szInfo="through the Software is the property of the applicable";
+ListAddString(ListInfo,szInfo,AFTER);
+szInfo="content owner and may be protected by ";
+ListAddString(ListInfo,szInfo,AFTER);
+szInfo="applicable copyright or other law.  This License ";
+ListAddString(ListInfo,szInfo,AFTER);
+szInfo="gives you no rights to such content.";
+ListAddString(ListInfo,szInfo,AFTER);
+szInfo="";
+ListAddString(ListInfo,szInfo,AFTER);
+szInfo="DISCLAIMER OF WARRANTY. Since the Software ";
+ListAddString(ListInfo,szInfo,AFTER);
+szInfo="is provided free of charge, the Software";
+ListAddString(ListInfo,szInfo,AFTER);
+szInfo="is provided on an 'AS IS' basis, without ";
+ListAddString(ListInfo,szInfo,AFTER);
+szInfo="warranty of any kind, including without ";
+ListAddString(ListInfo,szInfo,AFTER);
+szInfo="limitation the warranties of merchantability, fitness";
+ListAddString(ListInfo,szInfo,AFTER);
+szInfo="for a particular purpose and non-infringement.  ";
+ListAddString(ListInfo,szInfo,AFTER);
+szInfo="The entire risk as to the quality and performance ";
+ListAddString(ListInfo,szInfo,AFTER);
+szInfo="of the Software is borne by you.";
+ListAddString(ListInfo,szInfo,AFTER);
+szInfo="Should the Software prove ";
+ListAddString(ListInfo,szInfo,AFTER);
+szInfo="defective, you and not Activision, assume";
+ListAddString(ListInfo,szInfo,AFTER);
+szInfo="the entire cost of any service and repair.  In ";
+ListAddString(ListInfo,szInfo,AFTER);
+szInfo="addition, the security mechanism implemented ";
+ListAddString(ListInfo,szInfo,AFTER);
+szInfo="by the Software has inherent limitations, and";
+ListAddString(ListInfo,szInfo,AFTER);
+szInfo="you must determine that the software ";
+ListAddString(ListInfo,szInfo,AFTER);
+szInfo="sufficiently meets your requirements. ";
+ListAddString(ListInfo,szInfo,AFTER);
+szInfo="This disclaimer of warranty constitutes an essential";
+ListAddString(ListInfo,szInfo,AFTER);
+szInfo="part of this license agreement.  SOME ";
+ListAddString(ListInfo,szInfo,AFTER);
+szInfo="STATES DO NOT ALLOW EXCLUSIONS ";
+ListAddString(ListInfo,szInfo,AFTER);
+szInfo="OF AN IMPLIED WARRANTY, SO THIS";
+ListAddString(ListInfo,szInfo,AFTER);
+szInfo="DISCLAIMER MAY NOT APPLY TO YOU ";
+ListAddString(ListInfo,szInfo,AFTER);
+szInfo="AND YOU MAY HAVE OTHER LEGAL ";
+ListAddString(ListInfo,szInfo,AFTER);
+szInfo="RIGHTS THAT VARY FROM STATE TO";
+ListAddString(ListInfo,szInfo,AFTER);
+szInfo="STATE OR BY JURISDICTION.";
+ListAddString(ListInfo,szInfo,AFTER);
+szInfo="";
+ListAddString(ListInfo,szInfo,AFTER);
+szInfo="LIMITATION OF LIABILITY.  UNDER ";
+ListAddString(ListInfo,szInfo,AFTER);
+szInfo="NO CIRCUMSTANCES AND UNDER NO LEGAL";
+ListAddString(ListInfo,szInfo,AFTER);
+szInfo="THEORY, TORT, CONTRACT, OR ";
+ListAddString(ListInfo,szInfo,AFTER);
+szInfo="OTHERWISE, SHALL ACTIVISION OR ";
+ListAddString(ListInfo,szInfo,AFTER);
+szInfo="ITS LICENSORS OR SUPPLIERS BE LIABLE";
+ListAddString(ListInfo,szInfo,AFTER);
+szInfo="TO YOU OR ANY OTHER PERSON FOR ";
+ListAddString(ListInfo,szInfo,AFTER);
+szInfo="ANY INDIRECT, SPECIAL, INCIDENTAL, ";
+ListAddString(ListInfo,szInfo,AFTER);
+szInfo="OR CONSEQUENTIAL DAMAGES OF";
+ListAddString(ListInfo,szInfo,AFTER);
+szInfo="ANY KIND INCLUDING, WITHOUT ";
+ListAddString(ListInfo,szInfo,AFTER);
+szInfo="LIMITATION, DAMAGES FOR LOSS ";
+ListAddString(ListInfo,szInfo,AFTER);
+szInfo="OF GOODWILL, WORK STOPPAGE, COMPUTER";
+ListAddString(ListInfo,szInfo,AFTER);
+szInfo="FAILURE OR MALFUNCTION, OR ";
+ListAddString(ListInfo,szInfo,AFTER);
+szInfo="ANY AND ALL OTHER COMMERCIAL ";
+ListAddString(ListInfo,szInfo,AFTER);
+szInfo="DAMAGES OR LOSSES. IN NO EVENT WILL";
+ListAddString(ListInfo,szInfo,AFTER);
+szInfo="ANY SUCH PARTY BE LIABLE TO YOU FOR ";
+ListAddString(ListInfo,szInfo,AFTER);
+szInfo="ANY DAMAGES IN EXCESS OF ACTIVISION'S ";
+ListAddString(ListInfo,szInfo,AFTER);
+szInfo="LIST PRICE FOR A LICENSE TO";
+ListAddString(ListInfo,szInfo,AFTER);
+szInfo="THE SOFTWARE, EVEN IF ACTIVISION SHALL ";
+ListAddString(ListInfo,szInfo,AFTER);
+szInfo="HAVE BEEN INFORMED OF THE POSSIBILITY ";
+ListAddString(ListInfo,szInfo,AFTER);
+szInfo="OF SUCH DAMAGES, OR FOR";
+ListAddString(ListInfo,szInfo,AFTER);
+szInfo="ANY CLAIM BY ANY OTHER PARTY.  ";
+ListAddString(ListInfo,szInfo,AFTER);
+szInfo="THIS LIMITATION OF LIABILITY SHALL ";
+ListAddString(ListInfo,szInfo,AFTER);
+szInfo="NOT APPLY TO LIABILITY FOR DEATH";
+ListAddString(ListInfo,szInfo,AFTER);
+szInfo="OR PERSONAL INJURY TO THE ";
+ListAddString(ListInfo,szInfo,AFTER);
+szInfo="EXTENT APPLICABLE LAW PROHIBITS";
+ListAddString(ListInfo,szInfo,AFTER);
+szInfo="SUCH LIMITATION.";
+ListAddString(ListInfo,szInfo,AFTER);
+szInfo="TERMINATION.  This license will terminate ";
+ListAddString(ListInfo,szInfo,AFTER);
+szInfo="automatically if you fail to comply with the";
+ListAddString(ListInfo,szInfo,AFTER);
+szInfo="limitations described above.  On termination, you ";
+ListAddString(ListInfo,szInfo,AFTER);
+szInfo="must destroy all copies of the Software.  ";
+ListAddString(ListInfo,szInfo,AFTER);
+szInfo="";
+ListAddString(ListInfo,szInfo,AFTER);
+szInfo="EXPORT CONTROLS.  None of the Software ";
+ListAddString(ListInfo,szInfo,AFTER);
+szInfo="or underlying information or technology";
+ListAddString(ListInfo,szInfo,AFTER);
+szInfo="may be downloaded or otherwise exported or ";
+ListAddString(ListInfo,szInfo,AFTER);
+szInfo="reexported (i) into (or to a national or resident of) ";
+ListAddString(ListInfo,szInfo,AFTER);
+szInfo="Cuba, Iraq, Libya, Yugoslavia, North Korea,";
+ListAddString(ListInfo,szInfo,AFTER);
+szInfo="Iran, Syria or any other country to which the ";
+ListAddString(ListInfo,szInfo,AFTER);
+szInfo="U.S. has embargoed goods; or (ii) to anyone ";
+ListAddString(ListInfo,szInfo,AFTER);
+szInfo="on the U.S. Treasury Department's list of";
+ListAddString(ListInfo,szInfo,AFTER);
+szInfo="Specially Designated Nationals or the U.S. ";
+ListAddString(ListInfo,szInfo,AFTER);
+szInfo="Commerce Department's Table of Deny Orders. ";
+ListAddString(ListInfo,szInfo,AFTER);
+szInfo="By downloading or using the Software,";
+ListAddString(ListInfo,szInfo,AFTER);
+szInfo="you are agreeing to the foregoing and you are ";
+ListAddString(ListInfo,szInfo,AFTER);
+szInfo="representing and warranting that you are not ";
+ListAddString(ListInfo,szInfo,AFTER);
+szInfo="located in, under the control of, or a national";
+ListAddString(ListInfo,szInfo,AFTER);
+szInfo="resident of any such country or on any such list.";
+ListAddString(ListInfo,szInfo,AFTER);
+szInfo="";
+ListAddString(ListInfo,szInfo,AFTER);
+szInfo="MISCELLANEOUS.  This Agreement represents ";
+ListAddString(ListInfo,szInfo,AFTER);
+szInfo="the complete agreement concerning";
+ListAddString(ListInfo,szInfo,AFTER);
+szInfo="this license between the parties and supersedes ";
+ListAddString(ListInfo,szInfo,AFTER);
+szInfo="all prior agreements and representations between ";
+ListAddString(ListInfo,szInfo,AFTER);
+szInfo="them.  It may be amended only by a";
+ListAddString(ListInfo,szInfo,AFTER);
+szInfo="writing executed by both parties.  If any provision";
+ListAddString(ListInfo,szInfo,AFTER);
+szInfo="of this Agreement is held to be unenforceable ";
+ListAddString(ListInfo,szInfo,AFTER);
+szInfo="for any reason, such provision shall be";
+ListAddString(ListInfo,szInfo,AFTER);
+szInfo="reformed only to the extent necessary to make it ";
+ListAddString(ListInfo,szInfo,AFTER);
+szInfo="enforceable.  This Agreement shall be governed ";
+ListAddString(ListInfo,szInfo,AFTER);
+szInfo="by and construed under California law as such";
+ListAddString(ListInfo,szInfo,AFTER);
+szInfo="law applied to agreements between California ";
+ListAddString(ListInfo,szInfo,AFTER);
+szInfo="residents entered into and to be performed within ";
+ListAddString(ListInfo,szInfo,AFTER);
+szInfo="California, except as governed by Federal";
+ListAddString(ListInfo,szInfo,AFTER);
+szInfo="law.  The application of the United Nations ";
+ListAddString(ListInfo,szInfo,AFTER);
+szInfo="Convention of Contracts for the International ";
+ListAddString(ListInfo,szInfo,AFTER);
+szInfo="Sale of Goods is expressly excluded."; 
+ListAddString(ListInfo,szInfo,AFTER);
+
+Disable(BACKBUTTON);
+SdShowInfoList(szTitle,szMsg,ListInfo);
+
+	if (AskIfTheyWantNetMech() = IDYES) then
+		bWantsNetMech = TRUE;
+		SetStatusWindow(0, "Copying NetMech files...");
+		Enable(STATUSDLG);
+		StatusUpdate(ON, 100);
+		TARGETDIR = szOrigTargetDir;
+		SRCDIR    = szOrigSourceDir;
+		CopyFile("netmechw.dll", "netmechw.dll");
+		StatusUpdate(OFF, 0);
+		
+		// Add something to the registry for the splash screen to read
+		RegDBSetDefaultRoot(HKEY_LOCAL_MACHINE);
+		RegDBCreateKeyEx("software\\Activision\\NetMech", "");
+	endif;
+#endif
+end;
+
+//--------------------------------------------------------------------------
+function AskIfTheyWantNetMech()
+	NUMBER nRetval, nCmdValue;
+	STRING boxname;
+	BOOL done;
+begin
+	boxname = "MyAskingBox";
+	done = FALSE;
+	nRetval = 1;
+	
+	// Register the dialog with InstallShield
+	EzDefineDialog(boxname, SUPPORTDIR ^ "DIALOG.DLL", 
+				   "ASKNET_DIALOG", 0);
+	
+	while (done = FALSE)
+		nCmdValue = WaitOnDialog(boxname);			   
+		
+		switch (nCmdValue)
+		case DLG_ERR:
+			MessageBox("Internal Dialog Box Error", SEVERE);
+			done = TRUE;
+			
+		case IDYES:
+			nRetval = IDYES;
+			done = TRUE;
+			
+		case IDNO:
+			nRetval = IDNO;
+			done = TRUE;
+			
+		// User chose close in the system menu
+		case DLG_CLOSE:
+			nRetval = IDNO;
+			done = TRUE;
+			
+		endswitch;
+	endwhile;
+	
+	EndDialog(boxname);
+	ReleaseDialog(boxname);
+	
+	return nRetval;
+end;
+
+
+//--------------------------------------------------------------------------
+function ModifyIniFile();
+	STRING szIniPath;
+	STRING szSection;
+begin
+	szIniPath = szOrigTargetDir ^ "\\znemesis.ini";
+	szSection = "ZorkNemesis";
+	
+	WriteProfString(szIniPath, szSection, "VenusEnabled", szLockout);
+	WriteProfString(szIniPath, szSection, "InstallLevel", szInstallSize);
+	WriteProfString(szIniPath, szSection, "QSoundEnabled", szQSound);
+	
+	// Write out the whole .ini file cuz InstallShield sux.
+	WriteProfString(szIniPath, szSection, "KeyboardTurnSpeed", "0");
+	//WriteProfString(szIniPath, szSection, "SubtitleFlag", "0");
+	//WriteProfString(szIniPath, szSection, "ExitAnimKeyCode", "27");
+    if nCPU=0 then // 486 class processor
+      WriteProfString(szIniPath, szSection, "PanaRotateSpeed", "720");
+    else  // Pentium or unknown 686 etc.. 
+      WriteProfString(szIniPath, szSection, "PanaRotateSpeed", "540");
+    endif;
+	//WriteProfString(szIniPath, szSection, "DigitalAudioVolume", "4");
+	//WriteProfString(szIniPath, szSection, "MIDIVolume", "4");
+	//WriteProfString(szIniPath, szSection, "MasterVolume", "4");
+	WriteProfString(szIniPath, szSection, "HighQuality", "0");
+	//WriteProfString(szIniPath, szSection, "PauseKeyCode", "0");
+	//WriteProfString(szIniPath, szSection, "LeftKeyCode", "0");
+	//WriteProfString(szIniPath, szSection, "RightKeyCode", "0");
+	//WriteProfString(szIniPath, szSection, "UpKeyCode", "0");
+	//WriteProfString(szIniPath, szSection, "DownKeyCode", "0");
+	WriteProfString(szIniPath, szSection, "LineSkipVideo", "0");
+	
+    // For now, since we're installing in Windows, we assume the platform is Windows
+	WriteProfString(szIniPath, szSection, "Platform", "0");
+    if (!bHas8Meg) then
+		WriteProfString(szIniPath, szSection, "Win958", "1");
+	else
+		WriteProfString(szIniPath, szSection, "Win958", "0");
+	endif;
+	
+	WriteProfString(szIniPath, szSection, "NoAnimWhileTurning", "0");
+    if nCPU=0 then   // 486 class processor
+      WriteProfString(szIniPath, szSection, "CPU", "0");
+      WriteProfString(szIniPath, szSection, "MovieCursor", "0");
+    else   // Pentium or unknown i.e. 686.. 786
+      WriteProfString(szIniPath, szSection, "CPU", "1");
+      WriteProfString(szIniPath, szSection, "MovieCursor", "0");
+      // Movie cursor is now "0" for off on Pentiums as well as 486s per C.C. Barajas
+    endif;
+end;
+
+
+//--------------------------------------------------------------------------
+function DoDoneDlg()
+	NUMBER nRetval, nCmdValue;
+	STRING szBoxName;
+	BOOL bDone;
+begin
+	szBoxName = "MyYouAreDoneBox";
+	bDone = FALSE;
+	
+//	scratchStr = szOrigSourceDir ^ "\\complete.wav";
+//	StartTheSound(scratchStr);
+	bSoundPlaying = TRUE;
+	
+	EzDefineDialog(szBoxName, SUPPORTDIR ^ "DIALOG.DLL", "DONE_DIALOG", 0);
+	               
+	while (bDone = FALSE)
+		nCmdValue = WaitOnDialog(szBoxName);
+		switch (nCmdValue)
+			case DLG_ERR:
+				bDone = TRUE;
+				nRetval = DLG_ERR;
+				
+			case IDOK:
+				bDone = TRUE;
+				nRetval = IDOK;
+				
+			case DLG_CLOSE:
+				bDone = TRUE;
+				nRetval = IDOK;
+		endswitch;
+	endwhile;
+	
+	StopTheSound();
+	bSoundPlaying = FALSE;
+	EndDialog(szBoxName);
+	ReleaseDialog(szBoxName);
+end;
+
+//--------------------------------------------------------------------------
+function DosSetupDlg()
+	NUMBER nRetval, nCmdValue;
+	STRING szBoxName;
+	BOOL bDone;
+begin
+	szBoxName = "MyYouAreDoneBox";
+	bDone = FALSE;
+	
+//	scratchStr = szOrigSourceDir ^ "\\complete.wav";
+//	StartTheSound(scratchStr);
+	bSoundPlaying = TRUE;
+	
+	EzDefineDialog(szBoxName, SUPPORTDIR ^ "DIALOG.DLL", "DOSSETUP_DIALOG", 0);
+	               
+	while (bDone = FALSE)
+		nCmdValue = WaitOnDialog(szBoxName);
+		switch (nCmdValue)
+			case DLG_ERR:
+				bDone = TRUE;
+				nRetval = DLG_ERR;
+				
+			case IDOK:
+				bDone = TRUE;
+				nRetval = IDOK;
+				
+			case DLG_CLOSE:
+				bDone = TRUE;
+				nRetval = IDOK;
+		endswitch;
+	endwhile;
+	
+	StopTheSound();
+	bSoundPlaying = FALSE;
+	EndDialog(szBoxName);
+	ReleaseDialog(szBoxName);
+end;
+
+//--------------------------------------------------------------------------
+// This is a dialog box asking the user if they don't mind seeing torture.
+//--------------------------------------------------------------------------
+function LockOutDlg()
+	NUMBER nRetval, nCmdValue;
+	STRING szBoxName;
+	BOOL bDone;
+begin
+	szBoxName = "MyLockOutBox";
+	bDone = FALSE;
+	
+	EzDefineDialog(szBoxName, SUPPORTDIR ^ "DIALOG.DLL", "LOCKOUT_DLG", 0);
+	bSoundPlaying = TRUE;
+	               
+	while (bDone = FALSE)
+		nCmdValue = WaitOnDialog(szBoxName);
+		switch (nCmdValue)
+			case DLG_ERR:
+//				MessageBox("Internal Dialog Box Error", SEVERE);
+				MessageBox(svInternal, SEVERE);
+
+				bDone = TRUE;
+				nRetval = DLG_ERR;
+				
+			case DLG_INIT:
+				CtrlSetState(szBoxName, IDC_NOLOCKOUT, BUTTON_CHECKED);
+				
+			case SD_PBUT_CONTINUE:
+				if (CtrlGetState(szBoxName, IDC_LOCKOUT) = BUTTON_CHECKED) then
+					szLockout = "2";
+				elseif (CtrlGetState(szBoxName, IDC_NOLOCKOUT) = BUTTON_CHECKED) then
+					szLockout = "1";
+				endif;
+				bDone = TRUE;
+				
+			case SD_PBUT_EXITSETUP:
+				bDone = TRUE;
+				nRetval = SD_PBUT_EXITSETUP;
+				
+			case DLG_CLOSE:
+				bDone = TRUE;
+				nRetval = SD_PBUT_EXITSETUP;
+		endswitch;
+	endwhile;
+	
+	StopTheSound();
+	bSoundPlaying = FALSE;
+	EndDialog(szBoxName);
+	ReleaseDialog(szBoxName);
+	return nRetval;
+end;
+
+//--------------------------------------------------------------------------
+function WarnAboutVirtualMemory()
+	NUMBER nRetval, nCmdValue;
+	STRING szBoxName;
+	BOOL bDone;
+begin
+	szBoxName = "MyWarnAboutVirtualMemoryBox";
+	bDone = FALSE;
+	
+	EzDefineDialog(szBoxName, SUPPORTDIR ^ "DIALOG.DLL", "NOTENOUGHVIRTUAL", 0);
+	               
+	while (bDone = FALSE)
+		nCmdValue = WaitOnDialog(szBoxName);
+		switch (nCmdValue)
+			case DLG_ERR:
+//				MessageBox("Internal Dialog Box Error", SEVERE);
+				MessageBox(svInternal, SEVERE);
+
+				bDone = TRUE;
+				
+			case IDYES:
+				bDone = TRUE;
+				nRetval = IDYES;
+             
+			case IDNO:
+				bDone = TRUE;
+				nRetval = IDNO;
+		endswitch;
+	endwhile;
+	
+	EndDialog(szBoxName);
+	ReleaseDialog(szBoxName);
+	return nRetval;
+end;
+
+//--------------------------------------------------------------------------
+function DirectXDlg()
+	NUMBER nCmdValue, nRetval;
+	STRING szBoxName;
+	BOOL bDone;
+	HWND hDialogHandle;
+begin
+	szBoxName = "MyAboutDirectXBox";
+	bDone = FALSE;
+	
+	EzDefineDialog(szBoxName, SUPPORTDIR ^ "DIALOG.DLL", "DIRECTX_DLG", 0);
+	               
+	while (bDone = FALSE)
+		nCmdValue = WaitOnDialog(szBoxName);
+		switch (nCmdValue)
+			case DLG_ERR:
+//				MessageBox("Internal Dialog Box Error", SEVERE);
+				MessageBox(svInternal, SEVERE);
+
+				bDone = TRUE;
+				nRetval = DLG_ERR;
+				
+			case ID_DIRECTXHELP:
+				SdShowMsg(svMS, TRUE);
+				hDialogHandle = CmdGetHwndDlg(szBoxName);
+				SetWindowContextHelpId(hDialogHandle, HELP_IDX_BAD_VIDEO_CARDS);
+				scratchStr = szOrigSourceDir ^ "help.hlp";
+				WinHelp(hDialogHandle, scratchStr, HELP_CONTEXT, HELP_IDX_BAD_VIDEO_CARDS);
+				SdShowMsg(svMS, FALSE);
+
+
+				
+
+			case SD_PBUT_EXITSETUP:
+				bDone = TRUE;
+				nRetval = SD_PBUT_EXITSETUP;
+				
+			case SD_PBUT_CONTINUE:
+				bDone = TRUE;
+				nRetval = SD_PBUT_CONTINUE;
+			
+			case SD_PBUT_BACK:
+				bDone = TRUE;
+				nRetval = SD_PBUT_BACK;
+		
+			case DLG_CLOSE:
+				bDone = TRUE;
+				nRetval = SD_PBUT_EXITSETUP;
+		endswitch;
+	endwhile;
+	
+	EndDialog(szBoxName);
+	ReleaseDialog(szBoxName);
+	return nRetval;
+end;
+
+
+
+#include "sddialog.rul"

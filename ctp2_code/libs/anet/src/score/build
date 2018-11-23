@@ -1,0 +1,28 @@
+#!/bin/sh
+set -e
+set -x
+
+cd Activision
+MYJDKPATH=/usr/local/jdk
+MYCLASSPATH=..:${MYJDKPATH}/lib/classes.zip
+
+${MYJDKPATH}/bin/javac -classpath ${MYCLASSPATH} myLoader.java
+${MYJDKPATH}/bin/javac -classpath ${MYCLASSPATH} ScoreServletHandler.java
+${MYJDKPATH}/bin/javac -classpath ${MYCLASSPATH} score_init.java
+${MYJDKPATH}/bin/javac -classpath ${MYCLASSPATH} ScoreReport.java
+${MYJDKPATH}/bin/javac -classpath ${MYCLASSPATH} ScoreServlet.java
+${MYJDKPATH}/bin/javah -classpath ${MYCLASSPATH} -jni Activision.score_init
+
+cd ..
+${MYJDKPATH}/bin/jar -cvf0 score.jar Activision/{myLoader,ScoreServletHandler*,score_init,ScoreReport,ScoreServlet}.class
+
+MYCLASSPATH=.:score.jar:${MYJDKPATH}/lib/classes.zip
+${MYJDKPATH}/bin/javac -classpath ${MYCLASSPATH} score_65.java
+${MYJDKPATH}/bin/javac -classpath ${MYCLASSPATH} session_65.java
+${MYJDKPATH}/bin/javac -classpath ${MYCLASSPATH} scoreset_65.java
+${MYJDKPATH}/bin/javac -classpath ${MYCLASSPATH} scorerep_65.java
+${MYJDKPATH}/bin/jar -cvf0 score_65.jar *_65.class *_65$*.class
+
+rm -rf servjar
+mkdir servjar
+mv score_*.jar servjar

@@ -1,0 +1,22 @@
+#!/bin/sh
+# Stop the build server
+#
+
+# Find and stop the buildserver
+ps auxww | grep "java Server" | grep -v grep | awk '{print $2}' > /tmp/bldserv.pid 
+if [ -s /tmp/bldserv.pid ]; then
+   echo Stopping build server at `date`
+   kill -TERM `cat /tmp/bldserv.pid`
+   i=30
+   while [ -s /tmp/bldserv.pid -a $i -ne 0 ]; do
+       i=$[$i-1]
+       sleep 1
+       ps auxww | grep `cat /tmp/bldserv.pid` | grep -v grep | awk '{print $2}' > /tmp/bldserv.pid 
+   done
+   if [ $i -eq 0 ]; then
+       kill -9 `cat /tmp/bldserv.pid`
+   fi
+else
+   echo No old build server daemon running at `date`
+fi
+

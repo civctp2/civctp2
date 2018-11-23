@@ -1,0 +1,5 @@
+LIBRARY Plasma2
+DESCRIPTION "Plasma Generator (any map size)"
+EXPORTS
+	CoCreateMapGenerator @1
+

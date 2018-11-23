@@ -1,0 +1,16 @@
+#!/bin/sh
+# restart the build server
+# Don't disturb it if it's up.
+#
+
+# Check for existing server
+ps auxww | grep "java Server" | grep -v grep | awk '{print $2}' > /tmp/bldserv.pid 
+if [ -s /tmp/bldserv.pid ]; then
+   # Already running; do nothing
+   echo Build server already running at `date`
+   true
+else
+   # Run build server
+   ~/build/runbuild
+fi
+

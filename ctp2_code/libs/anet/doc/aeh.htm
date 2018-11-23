@@ -1,0 +1,392 @@
+<h1>Anet exception handler </h1>
+<i>Last updated: 8 February 1998</i>
+
+<p>The Anet Exception Handler, or crash logger for short, is a convenient
+way for game programmers to collect information about crashes and warnings
+logged by dpReportCrash() experienced by QA testers, beta testers,
+or even end users.</br>
+<i>Note: all the following regarding crashes also hold true for warnings
+logged by dpReportAssertionFailure().</i></p>
+<i>Note: dpReportAssertionFailure() is currently stubbed out.</i></p>
+<p>When a program using it crashes, the helper app sendcrsh.exe is run, 
+which prompts the user for a comment, then uploads the crash description to
+a central server.
+The developer can then download the crash description from the central server
+and use the program analcrsh.exe to display the call
+stack a the time of the crash.
+The tester can wait until the end of the day to send the file,
+because each crash appends to the file. After the file is sent, the tester
+should delete it.</p>
+<p>Because it is a pain to constantly be emailing crash files to the
+developer, the Anet libray will automatically upload the log file the
+next time the user connects to an Anet game server.  If the upload
+succeeds, the log file is deleted, to prevent duplication.</P>
+<p>Binary and text files for crashes received by Anet game servers
+are displayed in table format at
+<a href="http://iserv.activision.com/anet2/merglogs">
+http://iserv.activision.com/anet2/merglogs</a> along with a count of the total
+number of crashes recorded in the given file.</p>
+<p>
+Currently, the crash logger only supports Windows 95 and Windows NT 5.0.
+If run under Windows NT 4.0, it will not crash, but many of its methods
+will just return an error code.
+
+<h2>How to Use It</h2>
+<h3>How to Call dpReportAssertionFailure()</h3>
+<p>Redefine your asserts to something similar to DP_ASSERT in
+<a href="../h/anet.h">anet.h</a>
+<pre><code>
+#define DP_ASSERT(exp) \
+ (void)((exp) || dpReportAssertionFailure(__LINE__, __FILE__, #exp), assert(exp), exit(1), 0) 
+</code></pre>
+In your exception filter, check if the exception return code is
+<tt>aeh_ASSERTION_CODE</tt> (defined in <a href="../h/anet.h">anet.h</a>);
+if yes, return EXCEPTION_CONTINUE_EXECUTION from your filter. If this check
+is not done, all dpReportAssertionFailure() calls will be fatal.
+<a name="handler"><h3>How to Call dpReportCrash()</h3></a>
+<p>From a Win32 exception handler, call
+the Win32 function GetExceptionInformation() and pass its result to
+dpReportCrash(LPEXCEPTION_POINTERS pException).
+This creates a record describing the crash, including the stack trace, 
+info from the game's anet.inf, and the user's graphics driver name and version
+number.  The record is appended to the file atvilog.bin on the central 
+server.
+<p>
+For example, <pre><code>#ifndef _DEBUG
+LONG __cdecl Debug_ExceptionFilter(LPEXCEPTION_POINTERS pException)
+{
+    /* your own stuff */
+    dpReportCrash(pException);
+    /* more of your own stuff */
+
+    /* include the following 2 lines if using dpReportAssertionFailure or
+     * if using activenet stuff since activenet uses it */
+    if (pException->ExceptionRecord->ExceptionCode == aeh_ASSERTION_CODE)
+        return (EXCEPTION_CONTINUE_EXECUTION);
+
+    return EXCEPTION_CONTINUE_SEARCH; /* or EXCEPTION_EXECUTE_HANDLER etc */
+}
+#endif
+
+/* A wrapper around the original WinMain */
+int PASCAL WinMain(HANDLE hInstance, HANDLE hPrevInstance, LPSTR lpszCmdParam, int nCmdShow)
+{
+#ifndef _DEBUG
+    __try {
+#endif
+        return oldWinMain(hInstance, hPrevInstance, lpszCmdParam, nCmdShow);
+#ifndef _DEBUG
+    } __except (Debug_ExceptionFilter(GetExceptionInformation())) {
+        /* your exception handling code; should restore display mode. */
+    }
+#endif
+}
+</code></pre>
+For a complete example, see the chat demo application in the <a href="../demo/chat/">chat</a> directory
+(<a href="../demo/chat/chat.c">chat.c</a> and <a href="../demo/chat/build2.bat">a batch file to compile it</a>).
+
+<h3>Compile and run time specifics</h3>
+<ol>
+<li>Compile your code without enabling frame pointer omission.  If you're
+compiling with /O2 optimization to maximize speed, you need to add /Oy- option
+after it.  In Visual C 5.0, you turn on stack frames in Project / Settings
+/ C/C++ / Category:Optimization as follows: choose Optimizations:Customize,
+then scroll down to the bottom of the list and make sure "frame pointer
+omission" is not checked.
+<br>Note: you should verify that turning off this optimization does not
+decrease your game's frame rate.  If it does, you may need to turn this 
+optimization on for a few critical modules.
+<li>When linking .exe's or .dll's, be sure to generate a mapfile.
+This is needed later to get the function names for the symbolic stack dump.
+<li>Set up a <a href="#mapinfo">Mapfile Directory as described below</a>.
+<li>Test your crash handler by setting <a href="dp.htm#fault">fault=1 in
+dp.ini</a>.  This should cause an exception when you call dpCreate.
+<li>Find the resulting atvilog.bin; it should be appended after approximately
+one minute to the file on the central server (currently
+aeh.activision.com at
+<a href="http://aeh.activision.com/anet2/atvilog.bin">
+http://aeh.activision.com/anet2/atvilog.bin</a>).
+<li>Run <tt>c:\maps\analcrsh.exe -e atvilog.bin</tt><br>
+This will produce a human readable crash log in atvilog.txt.  Your crash
+should be one of the last in the file.
+<li>If you are looking for a crash that was uploaded some time ago, you can
+search for the comment you entered in the sendcrsh.exe dialog box.
+</ol>
+
+<a name="mapinfo"><h3>The Mapfile Directory</h3></a>
+Games using the crash logger put numerical info about the crash into
+atvilog.bin, and you use the program analcrsh.exe to convert this to 
+a human-readable form showing the crash address.
+To get the names of the functions involved in the crash, you need
+the executables and dll's that were involved in the crash, and their
+.mapfiles.  Because you might need to interpret crashes from several
+releases of a game, all with slightly different versions of the .exe's and 
+.dll's, analcrsh supports a Mapfile Directory scheme that lets 
+.mapfiles for different versions of the same program coexist.
+Here's how to set one up:
+<ol>
+<li>Make a directory named c:\maps, and copy the programs modcrc.exe and 
+analcrsh.exe there.    You might even want to put c:\maps on your
+PATH, by adding the line <tt>PATH %path%;c:\maps</tt> in your AUTOEXEC.BAT.
+<li>Underneath c:\maps, create another directory for each release of your program,
+and copy the .dll's, .exe's, and their .mapfiles into that directory.
+The name of this directory doesn't matter;
+modcrc.exe will look in all subdirectories
+of c:\maps to find the right .mapfile for you.
+A good choice for the name might be the build number or the date.
+(You need to repeat this step every time you ship a new build to your
+testers.)
+<li>Run c:\maps\modcrc.exe.  This creates a catalog of the contents of c:\maps
+needed by analcrsh.exe.  (You need to repeat this step whenever you add new
+versions of your .dll .exe .mapfiles to c:\maps.)
+</ol>
+<h3>Programs Used to Manipulate Mapfiles and Crash Files</h3>
+The following three programs are used to manipulate mapfiles and crash files.
+They should be copied from win\bin into to a mapfile directory where you
+keep all the .mapfiles from the programs you want to analyse crash dumps for.
+
+<h4>Modcrc.exe: Mapfile Catalog Builder</h4>
+Modcrc.exe should be run every time you add a new mapfile/executable to the
+mapfile directory.
+It assumes that it is located in the mapfile directory.
+It maintains a catalog of .mapfiles for use by analcrsh.exe.
+The catalog is kept in the file modcrc.txt, also in the mapfile directory.
+It contains one line for each mapfile found in the mapfile directory
+or any subdirectory thereof, but only if the corresponding executable or 
+dll has the same name and is in the same directory as the mapfile.
+<br>
+It prints a brief usage message if invoked with command-line argument -h.
+
+<h4>Analcrsh.exe: Crash File Analyser</h4>
+The program analcrsh.exe reads the crash file and the mapfile catalog
+modcrc.txt (in the mapfile directory), finds and reads the mapfiles for
+the .dll's and .exe involved in the crash, looks up the function names
+in the call stack, and outputs an ASCII file.
+<br>
+It prints a brief usage message if invoked with command-line argument -h.
+
+<h4>Procserv.exe: Crash File Compacter</h4>
+The program procserv.exe compacts binary crash files, and filters and sorts
+crash records according to command-line arguments
+This is generally only needed when combining crash files from different
+machines, or on crash files downloaded from the game server.
+<br>
+It prints a brief usage message if invoked with command-line argument -h.
+
+<a name="demo"><h3>Example</h3></a>
+You can try out the exception handler using the files in anetsdk.zip as
+follows. 
+
+<ol>
+<li>Make a Mapfile Directory<br>
+See <a href="aeh.htm#mapinfo">Building a Mapfile Directory</a> above.
+<ol>
+<li>Create the directory c:\maps and copy these files into it:
+<ul>
+<li>win/bin/anetdrop.exe
+<li>win/bin/modcrc.exe
+<li>win/bin/analcrsh.exe
+</ul>
+<li>then create a subdirectory in c:\maps using the date of anetsdk.zip 
+(eg. c:\maps\00-01-01) and copy these files into it:
+<ul>
+<li>win\bin\*.* 
+<li>win\bin\chat\*.* 
+<li>win\dll\*.*
+</ul>
+<li>In c:\maps, run modcrc.exe.  
+This will create a mapfile catalog named modcrc.txt,
+which should look something like this:
+<pre><code>
+1cf85718 00-01-01\anet2.map
+97610581 00-01-01\anet2d.map
+4e52497c 00-01-01\winets2.map
+f43b0762 00-01-01\winets2d.map
+b0f25ab6 00-01-01\gtest2dd.map
+976d5f0b 00-01-01\gtest2dr.map
+5d2c19d4 00-01-01\anetdrop.map
+1a984d63 00-01-01\anetdropd.map
+93f49896 00-01-01\chat.map
+49d46fe4 00-01-01\chatd.map
+</code></pre>
+<li>Add c:\maps to your path 
+by running <tt>PATH %path%;c:\maps</tt> , or, if you hate command
+lines, set Windows Explorer to open .bin files with c:\maps\analcrsh.exe.
+</ol>
+<li>Make a directory somewhere, e.g. \demo, and copy these files into it:
+<ul>
+<li>win/bin/anetdrop.exe
+<li>win/bin/chat/anet.inf
+<li>win/bin/chat/chat.exe
+<li>win/dll/anet2.dll
+<li>win/dll/wipx2.dll
+</ul>
+<li>In \demo, run "anetdrop -n=wipx2.dll -h".  
+This runs anetdrop.exe which reads anet.inf and launches chat.exe.
+<br>
+In the chat program, type Ctrl-A. 
+<br>
+Chat will call dpReportAssertionFailure() which should
+create the crash file atvilog.bin (usually in c:\windows\temp on Windows 95
+machines; you can look for it if you like but it's not necessary for you to
+know where it is, unless you're going to email it to somebody).  The assertion
+warning is recorded and chat's exception handler allows the program to continue
+executing.
+<br>
+Still in the chat program, type Ctrl-X. 
+<br>
+Chat should try to divide by zero, and crash.
+<br>
+On its way to the grave, chat will call dpReportCrash(), which should
+append the crash record to atvilog.bin.
+<li>Run analcrsh.exe.  This will read the crash file (atvilog.bin, wherever
+it is) that was created by dpReportCrash, and write the file atvilog.txt 
+into the current directory.  atvilog.txt should look something like this:
+<pre><code>
+******* Crash stat *******
+Number of cases: 1
+excDesc: assertion failure, retAddr:bff9a07c
+assert: line 299, file chat.c, text ASSERT!
+SessType: 65, Plat: 1, Lang: 1, Vers: 0.9
+System Description:
+ ATI Graphics Pro Turbo PCI (mach64): atim64.drv (4.10.0.1555)
+
+Call stack:
+ abs_addr  mod_off func_off
+ bff9a07c        0        0  (kernel)  (kernel)  (unknown)
+ 1000d77f     d77f       2f  ANET2.DLL  _dpReportAssertionFailure  00-01-01
+   401879     1879       39  CHAT.EXE  _main  00-01-01
+   401aec     1aec       fc  CHAT.EXE  _mainCRTStartup  00-01-01
+
+******* Crash stat *******
+Number of cases: 1
+excDesc: Integer divide by zero, retFlag:0, retAddr:4014ee
+SessType: 65, Plat: 1, Lang: 1, Vers: 0.9
+System Description:
+ ATI Graphics Pro Turbo PCI (mach64): atim64.drv (4.10.0.1555)
+
+Call stack:
+ abs_addr  mod_off func_off
+   4014ee     14ee      21e  CHAT.EXE  @chat@8  00-01-01
+   401879     1879       39  CHAT.EXE  _main  00-01-01
+   401aec     1aec       fc  CHAT.EXE  _mainCRTStartup  00-01-01
+</code></pre>
+This is read as follows:
+<ul>
+<li>Number of cases - number of instances of this crash in atvilog.bin.
+If you re-run anetdrop.exe as before and cause another crash, then run analcrsh,
+you will see this number becomes 2.
+<li>excDesc, retFlag, retAddr - this is info about the crash; excDesc
+describes the exception, retFlag is a Microsoft defined variable and retAddr
+is the address where the crash occurred.
+<li>SessType, Plat, Lang, Vers - this is information from the anet.inf file of
+the crashing application for the session type, platform, language
+and version number.
+<li>System Description - this contains graphics driver info and 3D card info
+for the machine where the crash occurred.
+<li>Call stack - this is the stack trace for the crash.  The first column
+if the absolute address; the second is the address offset into the module; the
+third is the address offset into the function; the fourth is the module name;
+the fifth is the function name; and the last is the mapfile directory
+containing the module used. If any of the values in the first three columns
+can't be determined, 0 is put into that column; similarly, if any of the
+values in the last three columns can't be determined, unknown or kernel is
+placed there.
+</ul>
+</ol>
+
+<h2>Internal Implementation Details</h2>
+For hardcore hackers only.  Most game programmers won't need to read this.
+<p>
+Refer to <a href="../src/aeh/aeh.h">aeh.h</a> and
+<a href="../src/aeh/aehlog.h">aehlog.h</a> for function definitions.
+</p>
+<p>The crash handling/analyzing process can be divided up into three parts:
+<ul>
+<li>one that directly uses the crash data (aeh.c)
+<li>one that transfers the crash data to/from file (aehlog.c)
+<li>one that transfers the crash data to/from network (dpexcept.c)
+</ul> 
+The latter two ignore the actual contents of the data so it's the first part
+that does most of the work in getting the data during the crash and in
+analyzing it afterwards.
+</p>
+<p>What dpReportCrash calls:
+<ul>
+<li> aehCreate - designed to be called by an exception handler, it returns
+information about the crash included exception code, stack trace, and modules
+involved in the crash in an aeh_t structure that is used by all other functions.
+Inputs to aehCreate include information about the application that crashed
+(gotten for instance by a call to dpReadAnetInf) and information about the
+user's system (gotten by a call to getDispProfileInfo in getdisp.c).
+<li> aeh_writeOutputStream - converts information in aeh_t structure to binary
+form that can be used by file or network operations
+<li> aehlog_writeExceptionRecord - takes the information in binary form and
+writes it to file.
+</ul>
+</p>
+<p>What the crash analyzer calls:
+<ul>
+<li> aehlog_readExceptionRecord - reads binary info on one crash from file
+<li> aeh_readInputStream - converts information in binary form to aeh_t
+structure
+<li> aeh_getAllInfo - this gets the module functions involved in a crash using
+the crash information already available along with information from the
+mapfiles for the modules involved in the crash.
+<li> aeh_toString - if you're too lazy to format the info in aeh_t, this will
+print the info out in an ASCII string
+</ul>
+</p>
+<p>What current versions of anet do internally to send a packet to the game
+server, and what happens afterwards:
+<ul>
+<li>When dpReportCrash() is called, the helper application sendcrsh.exe is
+run, and the crash description and central server hostname are passed on the
+command line.
+<li>sendcrsh prompts the user for a comment.  When the user clicks OK or hits
+enter, it connects to the game server specified on the command line
+(currently aeh.activision.com), and uploads the crash description via
+TCP. 
+<li>The game server appends the record to atvilog.bin within a minute.  This
+can be downloaded from the central server (currently at
+<a href="http://aeh.activision.com/anet2/atvilog.bin">
+http://aeh.activision.com/anet2/atvilog.bin</a>).
+<li>Nightly, the central server will copy the crash files it received
+that day to a file [date].bin; these can be downloaded using a web browser at
+[server_URL]/anet2/atvilog,
+eg. <a href="http://aeh.activision.com/anet2/atvilog">
+http://aeh.activision.com/anet2/atvilog</a>.
+iserv.activision.com grabs these daily .bin files from each game server
+and merges them together.  It then uses the merged files to create daily
+.bin files for each session type as well as a merged .bin file covering all
+dates for each session type. The log files are converted to text format also.
+</ul></p>
+
+<p>What old versions of anet do internally to send a packet to the game
+server, and what happens afterwards:
+<ul>
+<li>When dpSetGameServer() is called on a game server, dp_publishExceptions()
+is called which reads in a specified number of bytes from the exception log
+file and uses the info to set a dptab entry in the exception table as well as
+setting the game server as a subscriber.  On the other hand, when the game
+server is notified of a new host, it subscribes to that host's exception table
+and when it receives a dptab exception entry, it stores the data in its own
+exception log file, deleting the table entry afterwards.
+<li>Nightly, each Anet game server will copy the crash files it received
+that day to a file [date].bin; these can be downloaded using a web browser at
+[server_URL]/anet2/atvilog,
+eg. <a href="http://california3.activision.com/anet2/atvilog">
+http://california3.activision.com/anet2/atvilog</a>.
+A local report server grabs these daily .bin files from each game server
+and merges them together. It then uses the merged files to create daily
+.bin files for each session type as well as a merged .bin file covering all
+dates for each session type. The log files are converted to text format also.
+</ul></p>
+
+<h2>Localizing the Helper App</h2>
+The helper app gets its dialog box description, including strings and layout,
+from a windows resource compiled into sendcrsh.exe.  If you have access to the
+source, this is at src/win/sendcrsh/sendbox.rc.  Since windows can retrieve
+different resources based on the current language, we should be able to just
+keep adding languages to sendbox.rc, and end up with a sendcrsh.exe which has
+all languages compiled into it, and can be shipped anywhere in the world.

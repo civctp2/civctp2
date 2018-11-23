@@ -1,0 +1,54 @@
+#!/bin/sh
+# server Build Script
+set -e
+die() {
+	echo "Build failed; $0"
+	exit 1
+}
+
+FLAGS_NORMAL="-DNDEBUG -O3 -Werror"
+FLAGS_DEBUG="-D_DEBUG -g -Werror"
+FLAGS_PROFILE="-DNDEBUG -D_PROFILE -O3 -pg -Werror"
+FLAGS_LOG="-DNDEBUG -DDPRNT -O3 -Werror"
+
+echo -n "server: "
+
+# Default is to do the all
+case $1 in "" )
+	./build NORMAL || die
+	./build DEBUG || die
+	./build PROFILE || die
+	./build LOG || die
+esac
+
+# Normal Build
+case $1 in normal | NORMAL ) 
+	echo "NORMAL"
+	if [ ! -d normal ]; then mkdir normal; fi
+	cd normal
+	make -f ../makefile "FLAGS=${FLAGS_NORMAL}" DEST=server dp_LIB=dp2.a || die
+esac
+
+# Debugging Build
+case $1 in debug | DEBUG ) 
+	echo "DEBUG"
+	if [ ! -d debug ]; then mkdir debug; fi
+	cd debug
+	make -f ../makefile "FLAGS=${FLAGS_DEBUG}" DEST=serverd dp_LIB=dp2d.a || die
+esac
+
+# Profiling Build
+case $1 in profile | PROFILE ) 
+	echo "PROFILE"
+	if [ ! -d profile ]; then mkdir profile; fi
+	cd profile
+	make -f ../makefile "FLAGS=${FLAGS_PROFILE}" DEST=serverp dp_LIB=dp2p.a || die
+esac
+
+# Logging Build
+case $1 in log | LOG ) 
+	echo "LOG"
+	if [ ! -d log ]; then mkdir log; fi
+	cd log
+	make -f ../makefile "FLAGS=${FLAGS_LOG}" DEST=serverl dp_LIB=dp2l.a || die
+esac

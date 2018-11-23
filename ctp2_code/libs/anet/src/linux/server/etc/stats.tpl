@@ -1,0 +1,14 @@
+<HTML>
+<HEAD>
+<META HTTP-EQUIV="Refresh" CONTENT="{UPDATE}">
+<META HTTP-EQUIV="Expires" CONTENT="{EXPTIME}">
+<TITLE>Activision Game Server</TITLE>
+</HEAD>
+<BODY>
+
+<PRE>
+{STATS}
+</PRE>
+
+</BODY>
+</HTML> 

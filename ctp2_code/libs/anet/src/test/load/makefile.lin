@@ -1,0 +1,21 @@
+PACK=__attribute__ ((packed))
+OPT=-DUNIX -Dcdecl="" "-D__NO_ANONYMOUS_UNIONS__" "-DPACK=$(PACK)" -Dstrnicmp=strncasecmp -Dstricmp=strcasecmp -Ddp_ANET2 -I. -I../../../../h -I../../../dp -I../../../../demo/utils
+COPT=$(FLAGS) $(OPT)
+BUILD=../../../../linux86
+CC=gcc
+
+default: $(BUILD)/bin/$(DEST)
+
+$(BUILD)/bin/$(DEST): $(DEST)
+	-mkdir $(BUILD)
+	-mkdir $(BUILD)/bin
+	cp $(DEST) $(BUILD)/bin
+
+$(DEST): load.o eclock.o $(BUILD)/lib/$(dp_LIB)
+	$(CC) $(COPT) load.o eclock.o $(BUILD)/lib/$(dp_LIB) -o $(DEST)
+
+load.o: ../load.c
+	gcc -c $(COPT) ../load.c
+
+eclock.o: ../../../../demo/utils/eclock.c
+	gcc -c $(COPT) ../../../../demo/utils/eclock.c

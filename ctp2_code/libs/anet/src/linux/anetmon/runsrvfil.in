@@ -1,0 +1,9 @@
+<html><head><title>Update server text files</title></head>
+<body><pre>
+<table> 
+LF<tr><td><form method="post" action="http://dpSERVER/cgi-bin/runsrvfil.cgi">
+LF  <a href="http://dpSERVER/anet2/">dpSERVNAME</a>(<a href="http://dpSERVER/anet2/etc/">etc</a>)<td>password: <input type="password" name="password" size=20><td><table><tr><td><input type="checkbox" name="reload" value="true">reload<tr><td><input type="checkbox" name="restart" value="true">restart</table><td><input type="submit" value="Submit">
+LF</form>
+endLF
+</table>
+</pre></body></html>

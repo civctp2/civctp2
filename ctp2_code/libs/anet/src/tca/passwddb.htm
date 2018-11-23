@@ -1,0 +1,95 @@
+
+<h2>ActiveNet Distributed Password Database</h2>
+
+To support user login across multiple servers, ActiveNet requires a
+distributed password database.  This will be implemented in two steps.
+We will start with a one way system in which all account changes are
+made at a central account server and are simply mirrored by the game
+servers.  Eventually, we would like to allow account changes through the
+games' netshells, which will require a system for the game servers to
+proxy account change requests back to the central account server.
+
+<h3>Stage 1 Organization</h3>
+
+<b>On the account server machine:</b>
+<ul>
+  <li>acctserv.cgi - parses cgi input, attempts to create/change/delete/
+	validate accounts in database (tcapw), returns html response.  If
+	successful, writes account change data to the message queue (using
+	pwq interface to wmq).
+  <li>antpserv - serves file transfer requests for files in the acctserv
+	wmq or for the last freeze file.  Resides on account server machine.
+  <li>wmqmaint (script or program) - One freeze file containing the entire
+	database in net transferable form is kept around for restarts (tcapw). 
+	The message queue is kept as far back as the date of the last freeze.
+	Maintenance program handles freezing and deleting of wmq files older than
+	the freeze file as a regularly scheduled (monthly?) cron job.
+</ul>
+
+<b>On the game server machine:</b>
+<ul>
+  <li>antpclnt - mirrors the latest freeze file and all message queue files
+	to the game server machine.
+  <li>game server - server code in servpw handles restarts (using tcapw), 
+	watching the incoming wmq for new account changes (using the pwq
+	interface to wmq), and processing these changes into the local database
+	(using tcapw).
+  <li>wmqmaint (script or program) - One freeze file containing the entire
+	database in net transferable form is kept around for restarts (tcapw). 
+	The message queue is kept as far back as the date of the last freeze.
+	Maintenance program handles deleting of wmq files older than
+	the freeze file as a regularly scheduled (monthly?) cron job.
+</ul>
+
+<h3>Requirements for Stage 1</h3>
+
+<ul>
+  <li>password database interface (tcapw) - Currently, this is implemented
+	as an assoctab with the addition of the tcapwtab routines to freeze it to
+	disk in an encrypted format.<br>
+	<ul>
+	  <li>Fix new UID generation/handling.  (< 1 day - done?)
+	  <li>Switch from assoctab to a real database format for efficiency.
+		Use old tcapwtab_freeze/thaw functions to allow net transfer of the
+		whole database.  Without this change, the rest of the systes should
+		still work. (3 days)
+	</ul>
+  <li>Message queue (wmq, pwq, antp) - An on disk message queue and an http-
+	like file transfer system (antp) is used to reliably and securely transfer
+	account change data from the account server to the game servers.
+	<ul>
+	  <li>Write a wrapper (pwq) for the generic wmq that knows the internal
+		format of account data sent through the wmq.  (< 1 day more - done)
+	  <li>antpserv/antpclnt need to allow the transfer of the entire database
+		in some form to allow new game servers to start up and old ones to
+		sync up occasionally.
+		Add an optional startup parameter 'dbfile'.  This should be the
+		filename of a file with a tcapwtab-style header (an 8 byte wmq pointer
+		(time/offset) starting at offset 0), and should contain the status of
+		the full database at the time the wmq message coresponding to that
+		pointer was written.  If the parameter is present, antpserv should
+		respond to FIRST requests with this file first, followed by the
+		wmqfiles at or later than the pointer.  (1 day to write - done?)
+	</ul>
+  <li>Game server (server, servpw) - Code in the game server to handle
+	account database related processing.
+	<ul>
+	  <li>server needs a few more command line parameters for the incoming
+		wmq directory, etc.  (done?)
+	  <li>All database processing should be handled in servpw.  Watch the
+		incoming wmq and process account changes.  Handle restarting.
+		(wmq done. tcapw end of restarting needs 1 day to write)
+	</ul>
+  <li>Account server (acctserv) - Code for central account server.
+	<ul>
+	  <li>Interface to tcapw needs to be designed and written.  (1 day - done)
+	  <li>Account server and interface to CGI/other input programs needs to
+		be designed and written. (1 day? - done)
+	  <li>Need CGI front-end to allow creation/validation of new accounts.
+		(1 day to write - done)
+	  <li>HTML forms for CGI.  (1 day)
+	</ul>
+  <li>Wmq maintenance program (wmqmaint) - Code to handle keeping the wmq
+	directory clean.  (2 days?)
+  <li>Testing, integration (2-3 days)
+</ul>

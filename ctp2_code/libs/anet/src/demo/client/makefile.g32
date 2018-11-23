@@ -1,0 +1,42 @@
+# Makefile for ActiveNet client/server test under win32 with gnu c
+# $Log: makefile.g32 $
+# Revision 1.1  1997/01/02 19:22:31  dkegel
+# Initial revision
+
+PACK=__attribute__ ((packed))
+
+COPT = -DUNIX -Dcdecl="" "-DPACK=$(PACK)" -Dstricmp=strcasecmp -Dstrnicmp=strncasecmp -I. -I../../h -Ijunk -g
+.c.o:
+	gcc -c $(COPT) $*.c
+
+default: junk/conio.h client.exe
+
+#--------------------------------------------------------------
+# client is client.c linked statically to the real comm layer.
+
+junk/conio.h:
+	-mkdir junk
+	echo "/* Created by makefile.g32 */"         > junk/conio.h
+	echo "#define putch(c) putchar(c)"           >> junk/conio.h
+	echo "#define getche() getchar()"            >> junk/conio.h
+	
+client_OBJ_FILES =	client.o ../../win/lib/dp.a
+
+# Set target dependencies to generate necessary re-compiles.
+client.exe : $(client_OBJ_FILES)
+	echo .
+	echo Linking client executable.
+	gcc $(client_OBJ_FILES) -o client
+	
+client.o: client.c ../../h/dp.h
+	gcc -c $(COPT) $*.c
+
+clean: 
+	rm -f *.err
+	rm -f *.exe
+	rm -f *.o
+	rm -f *.log
+	rm -rf junk
+
+# end of MAKEFILE
+

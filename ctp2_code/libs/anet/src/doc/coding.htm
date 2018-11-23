@@ -1,0 +1,192 @@
+<h1>Programming for Clarity and Reuse</h1>
+<i>Last update 12 Aug 1997</i>
+<p>
+Here are a few notes on how to write code so others here at Activision
+can use it easily.
+<h2>Basics</h2>
+Everyone who's going to be sharing code should agree on a few
+basic things, like tabstops and indenting. (I think most people 
+at Activision use tabstops=4, and indent each new level of code by
+one more tab.  If you like something else, give me a yell, let's come
+to a consensus.)
+
+<h2>Things to watch out for</h2>
+<ul>
+<li>
+Be careful when creating new sections of code via cutting and pasting
+code code.  Copying a big block of code into several places in a hurry
+can lead to hard-to-maintain code.
+<li>
+Don't let your functions get too long - it's hard to have really
+well-understood functions that are longer than a hundred or so lines.
+</ul>
+
+<h2>Good things</h2>
+<ul>
+<li>Well-understood code!  (Read <a href="http://www.west.net/~steveco/ic.html">http://www.west.net/~steveco/ic.html</a> for much more on this subject.)
+
+<li>Design-driven - I tend to write the interfaces first,
+and document them with <a href="#design_comments">design comments</a>. 
+before starting on the code.
+This means writing the .h file before the .c file (of course, the .h file
+gets revised when you write the .c file, since you always learn more about
+the design as you implement it).
+
+<li>Brief but good documentation in the code itself.
+    <ul>
+    <li><a href="#design_comments">Design comments</a> above each function 
+	in the .h file and .c file.
+
+    <li>The .h file contains enough documentation for people to use the module without looking at the .c.
+    </ul>
+
+<li>Unit test; the .c file should have a main() which you can compile to 
+test the code.  This test is developed right after or while you write the 
+module, and is the first program that you compile and link with the module.  
+It will help you find the really stupid bugs before you go on to use
+the module with a real program.
+
+<li>Object oriented code - although I write system routines like this in C, I 
+nonetheless obey an object paradigm which says:
+    <ul>
+
+    <li>The module has a name, and that name is used as a prefix in front 
+	of every identifier.
+	e.g. in the delay module, all public identifiers start with delay_.
+
+    <li>There should be a struct that holds everything you might be tempted 
+	to make static, and it should be named modulename_t (e.g. delay_t).  
+	(If there is no static data, you don't need to declare a modulename_t type).
+
+    <li>The functions of the module that need access to static data all take 
+	a modulename_t * argument.
+
+    <li>Callers don't access the insides of the structure themselves; 
+	they call functions to do that.
+
+	<li>The .h file should only define things having to do with how users
+	call the module; it should not declare anything used only by the inside of
+	the module.
+
+	<li>The .h file for the module <a href="#protect">protects itself from 
+	how it might be included</a>, and should be usable from either C or C++.
+
+</ul>
+<li>Compiler Portability
+- .c and .h files should not use C++ constructs like //comments
+because they are not accepted by some C compilers.
+<li>Consistent Packing of Message Structures - 
+Structures which are to be sent out over the network should be
+compiled with one-byte packing to avoid wasted space, and should
+be organized with all structs first, then four-byte items, then two-byte items,
+then random-sized items.  (See <a href="../../h/dppack1.h">dppack1.h</a>
+for info on how to pack structs.)
+<li>Consistent Byte-Ordering of Messages - 
+Multibyte items sent out over the network should be in the same byte order 
+regardless of what kind
+of machine they are compiled on. (see the SwapBytes macros in <a
+href="../../h/anet.h">anet.h</a>
+for an example of how to do this.)
+</ul>
+
+<h2>Questions</h2>
+<h3>Doesn't it waste time to design and document the interfaces before
+writing the code?</h3>
+Not really - I find that writing and documenting the .h file clarifies
+my thinking so much that the .c file is a lot easier to write.
+In fact, if you can't write and document the .h file, you probably
+don't understand the module you're about to write well enough!
+
+<h3>Isn't it a waste of time to write a unit test?  Can't I test it by
+using it in an application I'm writing?</h3>
+You could, but then you'd be debugging two things at once - the new module,
+and the application.  Plus, if you ever make changes to your module,
+it's really nice to have that unit test around to verify you didn't screw it
+up.
+
+<h3>If you're writing object-oriented code, why don't you just use C++?</h3>
+Because my code gets used in a lot of environments where C++ isn't
+convenient (e.g. device drivers, InstallShield, DLL's), and I don't
+expect people to need to subclass most of my objects.  I would love
+to use C++ for this stuff, and will probably switch to C++ sometime.
+
+<h3>What is that _t on the end of type names for?</h3>
+It's just a convention to show that it's a type name rather than
+a variable name.
+
+<h2>Examples</h2>
+<h3><a name="protect">How to protect your .h file from how it will be included</a></h3>
+<ul>
+
+<li>To guard against multiple inclusion, it is surrounded with 
+<pre>#ifndef _MODULENAME_H_
+#define _MODULENAME_H_
+
+<i>your code here...</i>
+
+#endif</pre>
+
+<li>To allow it to be included either from C or C++, inside the above
+#ifdef/#endif pair, it surrounds your code with
+<pre>#ifdef __cplusplus
+extern "C" {
+#endif
+
+<i>your code here...</i>
+
+#ifdef __cplusplus
+}
+#endif</pre>
+
+<li>If the code declares struct's, and is meant to describe the interface 
+to a DLL, it might need to use pragma's to dictate structure packing,
+since users may choose different structure packing options than you
+expect; see the ActiveNet SDK "dppackn.h" and "dpunpack.h" for an example.  
+Don't do this unless you understand the pragmas, though.
+
+</ul>
+
+<h3><a name="design_comments">Design Comments</a></h3>
+A design comment is a paragraph of text above a function
+which describes how it behaves in just the right amount of detail
+for somebody to use it correctly.  It does not go into too much detail
+about how the function works internally.
+Here's an example:
+
+<pre>
+/*--------------------------------------------------------------------
+ Open a shrouded file for reading or writing.  Just like fopen().
+ Returns NULL on error.
+--------------------------------------------------------------------*/
+shroud_t *shroud_open(char *fname, char *mode);
+</pre>
+
+<h3>Data file shrouder</h3>
+A data file shrouder might have a .h file that has functions something like this:
+<pre>
+/*--------------------------------------------------------------------
+ Open a shrouded file for reading or writing.  Just like fopen().
+ Returns NULL on error.
+--------------------------------------------------------------------*/
+shroud_t *shroud_open(char *fname, char *mode);
+
+/*--------------------------------------------------------------------
+ Read len bytes from a shrouded file into buf, very much like fread().
+--------------------------------------------------------------------*/
+size_t shroud_read(shroud_t *sfile, char *buf, size_t len);
+
+/*--------------------------------------------------------------------
+ Close a shrouded file.
+ Returns 0 on success, nonzero on error (e.g. disk full).
+--------------------------------------------------------------------*/
+int shroud_close(shroud_t *sfile);
+</pre>
+etc.
+You can cheat and read the whole file in at shroud_open time if you like -
+no rule against that!  The idea is to make the interface clean.
+<h3>Modem delay simulator</h3>
+See <a href="delay.h">delay.h</a> and <a href="delay.c">delay.c</a>
+for a real working example including unit test.
+
+<hr>
+<i>Dan Kegel</i>

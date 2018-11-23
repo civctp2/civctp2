@@ -1,0 +1,121 @@
+#-----------------------------------------------------------------------------
+#
+#  Project      : Call To Power 2
+#  File type    : dbgen input
+#  Description  : Goals descriptor
+# 
+# ----------------------------------------------------------------------------
+# 
+#  Disclaimer
+# 
+#  THIS FILE IS NOT GENERATED OR SUPPORTED BY ACTIVISION.
+# 
+#  This material has been developed at apolyton.net by the Apolyton CtP2 
+#  Source Code Project. Contact the authors at ctp2source@apolyton.net.
+# 
+#-----------------------------------------------------------------------------
+# 
+#  Modifications from the original Activision code:
+# 
+#  - Added UngroupFirst & NoRollback Token
+#  - Added Bonuses depending on territory owner
+#  - Added IsVisible Bonus
+#  - Added IsWounded Bonus
+#  - Added TargetType:PetrolStation - April 30th 2005 Martin Gühmann
+#
+#-----------------------------------------------------------------------------
+
+Goal {
+	Bit NeedsEscort
+	Bit IsSally
+	Bit AvoidWatchfulCity       // do not target watchful cities
+	Bit ExecuteIncrementally    // execute while undercommited
+	Bit NeverSatisfied          // retreat goals are never satisfied
+	Bit RemoveWhenComplete
+	Bit RallyFirst              // armies need to rally before going to target
+	Bit NoTransport             // do not use transports to satisfy this goal
+	Bit UnGroupFirst
+	Bit NoRollback
+
+	Bits SquadClass {
+		CanExplore,
+		CanAttack,
+		CanDefend,
+		HasZoc,
+		CanCaptureCity,
+		CanBombard,
+		Special,
+		Stealth,
+		CanTransport
+	}
+
+	Bits TargetType {
+		AttackUnit,
+		SpecialUnit,
+		SettleLand,
+		SettleSea,
+		City,
+		ChokePoint,
+		GoodyHut,
+		TradeRoute,
+		Improvement,
+		Unexplored,
+		Border,
+		Endgame,
+		PetrolStation,
+		Random
+	}
+
+	Bits TargetOwner {
+		Self,
+		Ally,
+		Neutral,
+		ColdEnemy,
+		HotEnemy,
+		NoContact
+	}
+
+	Record Order Execute
+
+	Int ThreatBonus
+	Int EnemyValueBonus
+	Int AlliedValueBonus
+	Int PowerBonus 
+	Int DistanceToHomeBonus 
+	Int DistanceToEnemyBonus
+	Int InHomeTerritoryBonus = 0
+	Int NoOwnerTerritoryBonus = 0
+	Int InEnemyTerritoryBonus = 0
+	Int WoundedArmyBonus = 0
+	Int NotVisibleBonus = 0
+
+	Int ChokePointBonus 
+	Int UnexploredBonus 
+	Int ObsoleteArmyBonus
+	Int TreaspassingArmyBonus
+
+	// type of threat this goal follows through
+	Bits ThreatenType {
+		AttackCity,
+		Pirate,
+		SpecialAttackCity,
+		DestroyCity,
+		None
+	}
+
+	// amount of bonus to give for goals that follow through threats
+	Int ThreatenBonus
+
+	// type of force matching ratio to use
+	Bits ForceMatch {
+		Offensive,
+		Defensive,
+		StealthAttack,
+		Bombard,
+		Special,
+		Harass
+	}
+
+	// wonders of this type protect owner against this goal
+	Bit (Record Wonder) TargetProtectionWonder
+}

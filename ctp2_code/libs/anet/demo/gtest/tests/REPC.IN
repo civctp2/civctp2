@@ -1,0 +1,25 @@
+# Remote enum player client
+# Make sure we can do it twice with a 60 sec sleep inbetween
+sessions
+w
+assert n_sessions > 0
+sleep 10
+sessions
+w
+assert n_sessions == 2
+
+rplayers d
+w
+assert n_players == 1
+sleep 60
+
+rplayers d
+w
+assert n_players == 1
+sleep 60
+
+rplayers d
+w
+assert n_players == 1
+
+quit

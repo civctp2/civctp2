@@ -1,0 +1,690 @@
+#######################################
+
+# File: playerpad.ldl
+
+# Last Access: Mon Jun 01 13:01:31 1998
+
+#######################################
+
+
+
+##-----------------------------------##
+
+##              Data                 ##
+
+##-----------------------------------##
+
+PlayerPad {
+
+	string	xanchor	"left"
+
+	string	yanchor	"top"
+
+	string	pattern	"error.tga"
+
+	int	xpix	90
+
+	int	ypix	175
+
+	int	widthpix	530
+
+	int	heightpix	130
+
+	ExitButton {
+
+		int	xpix	510
+
+		int	ypix	5
+
+		int	widthpix	15
+
+		int	heightpix	15
+
+		string	text	"str_ldl_X"
+		string	pattern	"error.tga"
+
+	}
+
+	PlayerNumber:CTP2_STANDARD_FONT {
+
+		int	xpix	10
+
+		int	ypix	10
+
+		int	widthpix	100
+
+		int	heightpix	20
+
+		string	pattern	"error.tga"
+
+		string	text	"str_ldl_Player_number"
+		Item:CTP2_STANDARD_FONT {
+
+			int xpix	0
+
+			int ypix	0
+
+			int widthpix	100
+
+			int heightpix	16
+
+			string	pattern	"error.tga"
+
+			string	text	"str_ldl_"
+		}
+
+	}
+
+	PlayerName:CTP2_STANDARD_FONT {
+
+		int	xpix	10
+
+		int	ypix	40
+
+		int	widthpix	100
+
+		int	heightpix	20
+
+		string	pattern	"error.tga"
+
+		string	text	"str_ldl_Player_Name"
+		Item:CTP2_STANDARD_FONT {
+
+			int xpix	0
+
+			int ypix	0
+
+			int widthpix	100
+
+			int heightpix	16
+
+			string	pattern	"error.tga"
+
+			string	text	"str_ldl_"
+		}
+
+	}
+
+	Character:CTP2_STANDARD_FONT {
+
+		int	xpix	10
+
+		int	ypix	100
+
+		int	widthpix	100
+
+		int	heightpix	20
+
+		string	pattern	"error.tga"
+
+		string	text	"str_ldl_Character"
+		ItemOne:CTP2_STANDARD_FONT {
+
+			int xpix	0
+
+			int ypix	0
+
+			int widthpix	100
+
+			int heightpix	16
+
+			string	pattern	"error.tga"
+
+			string	text	"str_ldl_Untarnished"
+		}
+
+		ItemTwo:CTP2_STANDARD_FONT {
+
+			int xpix	0
+
+			int ypix	0
+
+			int widthpix	100
+
+			int heightpix	16
+
+			string	pattern	"error.tga"
+
+			string	text	"str_ldl_Reliable"
+		}
+
+		ItemThree:CTP2_STANDARD_FONT {
+
+			int xpix	0
+
+			int ypix	0
+
+			int widthpix	100
+
+			int heightpix	16
+
+			string	pattern	"error.tga"
+
+			string	text	"str_ldl_Questionable"
+		}
+
+		ItemFour:CTP2_STANDARD_FONT {
+
+			int xpix	0
+
+			int ypix	0
+
+			int widthpix	100
+
+			int heightpix	16
+
+			string	pattern	"error.tga"
+
+			string	text	"str_ldl_Underhanded"
+		}
+
+		ItemFive:CTP2_STANDARD_FONT {
+
+			int xpix	0
+
+			int ypix	0
+
+			int widthpix	100
+
+			int heightpix	16
+
+			string	pattern	"error.tga"
+
+			string	text	"str_ldl_Deplorable"
+		}
+
+		ItemSix:CTP2_STANDARD_FONT {
+
+			int xpix	0
+
+			int ypix	0
+
+			int widthpix	100
+
+			int heightpix	16
+
+			string	pattern	"error.tga"
+
+			string	text	"str_ldl_Pairah"
+		}
+
+	}
+
+	PersonalitySheet {
+
+		int	xpix	135
+
+		int	ypix	5
+
+		int	widthpix	260
+
+		int	heightpix	120
+
+		string	pattern	"error.tga"
+
+		
+
+		PersonalityText:CTP2_STANDARD_FONT {
+
+			int	xpix	10
+
+			int	ypix	10
+
+			int	widthpix	240
+
+			int	heightpix	20
+
+			string	pattern	"error.tga"
+
+			string	text	"str_ldl_Personality"
+		}
+
+
+
+		Reliability:CTP2_STANDARD_FONT {
+
+			int	xpix	5
+
+			int	ypix	35
+
+			int	widthpix	100
+
+			int	heightpix	20
+
+			string	pattern	"error.tga"
+
+			string	text	"str_ldl_Reliability"
+			Steadfast:CTP2_STANDARD_FONT {
+
+				int xpix	0
+
+				int ypix	0
+
+				int widthpix	100
+
+				int heightpix	16
+
+				string	pattern	"error.tga"
+
+				string	text	"str_ldl_Steadfast"
+			}
+
+			SelfInterested:CTP2_STANDARD_FONT {
+
+				int xpix	0
+
+				int ypix	0
+
+				int widthpix	100
+
+				int heightpix	16
+
+				string	pattern	"error.tga"
+
+				string	text	"str_ldl_Self_interested"
+			}
+
+			Treacherous:CTP2_STANDARD_FONT {
+
+				int xpix	0
+
+				int ypix	0
+
+				int widthpix	100
+
+				int heightpix	16
+
+				string	pattern	"error.tga"
+
+				string	text	"str_ldl_Treacherous"
+			}
+
+		}
+
+
+
+		GrowthStyle:CTP2_STANDARD_FONT {
+
+			int	xpix	5
+
+			int	ypix	65
+
+			int	widthpix	100
+
+			int	heightpix	20
+
+			string	pattern	"error.tga"
+
+			string	text	"str_ldl_GrwothStyle"
+			LandGrabber:CTP2_STANDARD_FONT {
+
+				int xpix	0
+
+				int ypix	0
+
+				int widthpix	100
+
+				int heightpix	16
+
+				string	pattern	"error.tga"
+
+				string	text	"str_ldl_Land_Grabber"
+			}
+
+			CityBuilder:CTP2_STANDARD_FONT {
+
+				int xpix	0
+
+				int ypix	0
+
+				int widthpix	100
+
+				int heightpix	16
+
+				string	pattern	"error.tga"
+
+				string	text	"str_ldl_City_Builder"
+			}
+
+		}
+
+
+
+		Aggression:CTP2_STANDARD_FONT {
+
+			int	xpix	5
+
+			int	ypix	95
+
+			int	widthpix	100
+
+			int	heightpix	20
+
+			string	pattern	"error.tga"
+
+			string	text	"str_ldl_Aggression"
+			Warlike:CTP2_STANDARD_FONT {
+
+				int xpix	0
+
+				int ypix	0
+
+				int widthpix	100
+
+				int heightpix	16
+
+				string	pattern	"error.tga"
+
+				string	text	"str_ldl_Warlike"
+			}
+
+			Cautious:CTP2_STANDARD_FONT {
+
+				int xpix	0
+
+				int ypix	0
+
+				int widthpix	100
+
+				int heightpix	16
+
+				string	pattern	"error.tga"
+
+				string	text	"str_ldl_Cautious"
+			}
+
+			PeaceMaker:CTP2_STANDARD_FONT {
+
+				int xpix	0
+
+				int ypix	0
+
+				int widthpix	100
+
+				int heightpix	16
+
+				string	pattern	"error.tga"
+
+				string	text	"str_ldl_Peace_Maker"
+			}
+
+		}
+
+
+
+		Style:CTP2_STANDARD_FONT {
+
+			int	xpix	135
+
+			int	ypix	35
+
+			int	widthpix	100
+
+			int	heightpix	20
+
+			string	pattern	"error.tga"
+
+			string	text	"str_ldl_Style"
+			Bold:CTP2_STANDARD_FONT {
+
+				int xpix	0
+
+				int ypix	0
+
+				int widthpix	100
+
+				int heightpix	16
+
+				string	pattern	"error.tga"
+
+				string	text	"str_ldl_Bold"
+			}
+
+			Unpredictable:CTP2_STANDARD_FONT {
+
+				int xpix	0
+
+				int ypix	0
+
+				int widthpix	100
+
+				int heightpix	16
+
+				string	pattern	"error.tga"
+
+				string	text	"str_ldl_Unpredictable"
+			}
+
+			Cautious:CTP2_STANDARD_FONT {
+
+				int xpix	0
+
+				int ypix	0
+
+				int widthpix	100
+
+				int heightpix	16
+
+				string	pattern	"error.tga"
+
+				string	text	"str_ldl_Cautious"
+			}
+
+		}
+
+
+
+		Intelligence:CTP2_STANDARD_FONT {
+
+			int	xpix	135
+
+			int	ypix	65
+
+			int	widthpix	100
+
+			int	heightpix	20
+
+			string	pattern	"error.tga"
+
+			string	text	"str_ldl_Intelligence"
+			Dumb:CTP2_STANDARD_FONT {
+
+				int xpix	0
+
+				int ypix	0
+
+				int widthpix	100
+
+				int heightpix	16
+
+				string	pattern	"error.tga"
+
+				string	text	"str_ldl_Dumb"
+			}
+
+			Average:CTP2_STANDARD_FONT {
+
+				int xpix	0
+
+				int ypix	0
+
+				int widthpix	100
+
+				int heightpix	16
+
+				string	pattern	"error.tga"
+
+				string	text	"str_ldl_Average"
+			}
+
+			Cunning:CTP2_STANDARD_FONT {
+
+				int xpix	0
+
+				int ypix	0
+
+				int widthpix	100
+
+				int heightpix	16
+
+				string	pattern	"error.tga"
+
+				string	text	"str_ldl_Cunning"
+			}
+
+		}
+
+
+
+		Environmentalism:CTP2_STANDARD_FONT {
+
+			int	xpix	135
+
+			int	ypix	95
+
+			int	widthpix	100
+
+			int	heightpix	20
+
+			string	pattern	"error.tga"
+
+			string	text	"str_ldl_Environmentalism"
+			Uncaring:CTP2_STANDARD_FONT {
+
+				int xpix	0
+
+				int ypix	0
+
+				int widthpix	100
+
+				int heightpix	16
+
+				string	pattern	"error.tga"
+
+				string	text	"str_ldl_Polluter"
+			}
+
+			Protective:CTP2_STANDARD_FONT {
+
+				int xpix	0
+
+				int ypix	0
+
+				int widthpix	100
+
+				int heightpix	16
+
+				string	pattern	"error.tga"
+
+				string	text	"str_ldl_NonPolluter"
+			}
+
+		}
+
+
+
+	}
+
+
+
+	RegardText:CTP2_STANDARD_FONT {
+
+		int	xpix	400
+
+		int	ypix	10
+
+		int	widthpix	100
+
+		int	heightpix	20
+
+		string	pattern	"error.tga"
+
+		string	text	"str_ldl_Regard_Towards_COLON"
+	}
+
+	PlayerNN:CTP2_STANDARD_FONT {
+
+		int	xpix	400
+
+		int	ypix	40
+
+		int	widthpix	100
+
+		int	heightpix	20
+
+		string	pattern	"error.tga"
+
+		string	text	"str_ldl_Player_3_Caesar"
+		Item:CTP2_STANDARD_FONT {
+
+			int xpix	0
+
+			int ypix	0
+
+			int widthpix	100
+
+			int heightpix	16
+
+			string	pattern	"error.tga"
+
+			string	text	"str_ldl_"
+		}
+
+	}
+
+	RegardWord:CTP2_STANDARD_FONT {
+
+		int	xpix	430
+
+		int	ypix	70
+
+		int	widthpix	90
+
+		int	heightpix	20
+
+		string	pattern	"error.tga"
+
+		string	text	"str_ldl_Neutral"
+		int bevelwidth	2
+
+		int	beveltype	1
+
+	}
+
+	Patience:CTP2_STANDARD_FONT {
+
+		int	xpix	400
+
+		int	ypix	100
+
+		int	widthpix	100
+
+		int	heightpix	20
+
+		string	pattern	"error.tga"
+
+		string	text	"str_ldl_Impatient"
+		Item:CTP2_STANDARD_FONT {
+
+			int xpix	0
+
+			int ypix	0
+
+			int widthpix	100
+
+			int heightpix	16
+
+			string	pattern	"error.tga"
+
+			string	text	"str_ldl_"
+		}
+
+	}
+
+
+
+}
+
+
+
+$

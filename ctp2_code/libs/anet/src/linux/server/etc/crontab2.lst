@@ -1,0 +1,10 @@
+# crontab entries for ActiveNet server code
+# Checks the server every 5 minutes; restarts if not running.
+# Restarts the server every day; resets the server every Monday.
+# Loads the names and servers files every day.
+# (This is an example; customize for your conditions).
+#
+*/5 * * * * ~/etc/restart2 >> /tmp/anet2cron.log
+1 4 * * * ~/etc/daily2 >> /tmp/anet2cron.log
+31 3 * * * ~/etc/servfil >> /tmp/anet2cron.log
+#1 0-23 * * * ~/etc/reset2 >> /tmp/anet2cron.log

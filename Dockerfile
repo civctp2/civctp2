@@ -25,7 +25,7 @@ ENV LD_LIBRARY_PATH "${LD_LIBRARY_PATH}:/usr/local/lib"
 ### freetype-1.3.1 built
 
 
-COPY ctp2/ /ctp2/
+COPY ./ /ctp2/
 
 RUN cd /ctp2 && \
     make bootstrap && \

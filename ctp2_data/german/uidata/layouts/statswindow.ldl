@@ -1,0 +1,345 @@
+# statswindow.ldl
+
+
+template STATS_BUTTON0:CTP2_STANDARD_FONT{
+
+	int	ypix	1
+
+	int	widthpix	57
+
+	int	heightpix	22
+
+	string	image0	"error.tga"
+
+}
+
+
+
+template STATS_BUTTON1:CTP2_STANDARD_FONT{
+
+	int	xpix	3
+
+	int	widthpix	78
+
+	int	heightpix	22
+
+	int	bevelwidth	0
+
+}
+
+
+
+StatsWindow {
+
+
+	string	xanchor	"left"
+
+	string	yanchor	"top"
+
+	int	xpix	0
+	int	ypix	5
+
+	int	widthpix	799
+	int	heightpix	22
+
+ #	string	pattern	"main_titlebar_bg.tga"
+
+	ScreensSwitch {
+
+		int	xpix	0
+
+		int	ypix	0
+
+		int	widthpix	78
+
+		int	heightpix	28
+
+		int	bevelwidth	0
+
+#		string	image0	"error.tga"
+
+#		string	image1	"error.tga"
+
+	}
+
+	CivButton:CTP2_BUTTON_TITLE_BAR {
+
+		int nodatabase 1
+		int	xpix	0
+		int	ypix	0
+		string text "DOMESTIC  "
+
+	}
+
+	TradeButton:CTP2_BUTTON_TITLE_BAR {
+
+		int nodatabase 1
+		int	xpix	100
+		int	ypix	0
+		string text "FOREIGN  "
+	}
+
+	SciButton:CTP2_BUTTON_TITLE_BAR {
+
+		int nodatabase 1
+		int	xpix	200
+		int	ypix	0
+		string text "SCIENCE  "
+	}
+
+
+
+	UnitButton:CTP2_BUTTON_TITLE_BAR {
+
+		int nodatabase 1
+		int	xpix	300
+		int	ypix	0
+		string text "MILITARY "
+
+
+	}
+
+	LibButton:CTP2_BUTTON_TITLE_BAR {
+
+		int nodatabase 1
+		int	xpix	400
+		int	ypix	0
+		string text "LIBRARY  "
+	}
+
+	DipButton:CTP2_BUTTON_TITLE_BAR {
+
+		int nodatabase 1
+		int	xpix	500
+		int	ypix	0
+		string text "INTEL    "
+	}
+
+	OptionsButton:CTP2_BUTTON_TITLE_BAR {
+
+		int nodatabase 1
+		int	xpix	600
+		int	ypix	0
+		string text "OPTIONS  "
+	}
+
+	CityButton:CTP2_BUTTON_TITLE_BAR {
+
+		int nodatabase 1
+		int	xpix	700
+		int	ypix	0
+		string text "VIEW CITY "
+	}
+
+	InfoButton:CTP2_BUTTON_TITLE_BAR {
+
+		int nodatabase 1
+		int	xpix	700
+		int	ypix	0
+		string text "Info"
+	}
+
+	SpaceDropDown:CTP2_STANDARD_FONT{
+
+		int	xpix		293
+
+		int	ypix		4
+
+		int	widthpix	99
+
+		int	heightpix	20
+
+		string	pattern	"error.tga"
+
+		staticpane:CTP2_STANDARD_FONT{
+
+			int widthpix 99
+
+			int heightpix 20
+
+			string text "str_ldl_Screens"
+		}
+
+		
+
+		button {
+
+			string image0	"error.tga"
+
+			string image1	"error.tga"
+
+			int widthpix	20
+
+		}
+
+		window {
+
+			int heightpix 200
+
+			listbox {
+
+				string pattern "error.tga"
+
+			}
+
+		}
+
+	
+
+	}
+
+
+
+	StatusDropDown:CTP2_STANDARD_FONT{
+
+		int	xpix		420
+
+		int	ypix		4
+
+		int	widthpix	250
+
+		int	heightpix	20
+
+		string pattern "error.tga"
+
+		staticpane:CTP2_STANDARD_FONT{
+
+			int widthpix 99
+
+			int heightpix 20
+
+			string text "str_ldl_Great_Library"
+		}
+
+		button {
+
+			string image0	"error.tga"
+
+			string image1	"error.tga"
+
+			int widthpix	20
+
+		}
+
+		window {
+
+			int heightpix 200
+
+			listbox {
+
+				string pattern "error.tga"
+
+			}
+
+		}
+
+	}
+
+
+
+}
+
+
+
+StatusDropDownItem {
+
+	name:CTP2_STANDARD_FONT{
+
+		int		xpix			0
+
+		int		ypix			0
+
+		int		widthpix		248
+
+		int		heightpix		16
+
+	}
+
+}
+
+
+
+StatusDropDownStrings {
+
+	int		numstrings	25
+
+	
+
+	string	string0		"str_tbl_ldl_Great_Library_Screen"
+	string	string1		"str_tbl_ldl_FIVE_HYPHENS"
+	string	string2		"str_tbl_ldl_Great_Library_Biowarfare_Filter"
+	string	string3		"str_tbl_ldl_Great_Library_Cathedral"
+	string	string4		"str_tbl_ldl_Great_Library_Consumer_Electronics"
+	string	string5		"str_tbl_ldl_Great_Library_Eco_Terrorist"
+	string	string6		"str_tbl_ldl_Great_Library_Ecotopia"
+	string	string7		"str_tbl_ldl_Great_Library_Genetics"
+	string	string8		"str_tbl_ldl_Great_Library_Global_Defense_Initiative"
+	string	string9		"str_tbl_ldl_Great_Library_House_of_Freezing"
+	string	string10	"str_tbl_ldl_Great_Library_Life_Extension"
+	string	string11	"str_tbl_ldl_Great_Library_Printing_Press"
+	string	string12	"str_tbl_ldl_Great_Library_Subneural_Ads"
+	string	string13	"str_tbl_ldl_Great_Library_Technocracy"
+	string	string14	"str_tbl_ldl_Great_Library_Television"
+	string	string15	"str_tbl_ldl_Great_Library_Theocracy"
+	string	string16	"str_tbl_ldl_Great_Library_Virtual_Democracy"
+	string	string17	"str_tbl_ldl_Great_Library_Wilderness_Preservation"
+	string	string18	"str_tbl_ldl_Great_Library_Cleric"
+	string	string19	"str_tbl_ldl_Great_Library_Corporate_Branch"
+	string	string20	"str_tbl_ldl_Great_Library_Lawyer"
+	string	string21	"str_tbl_ldl_Great_Library_Multinationalism"
+	string	string22	"str_tbl_ldl_Great_Library_Personal_Encryption"
+	string	string23	"str_tbl_ldl_Great_Library_Televangelist"
+	string	string24	"str_tbl_ldl_Great_Library_Infector"
+}
+
+
+
+SpaceDropDownStrings {
+
+	int	numstrings	12
+
+	
+
+	string string0 		"str_tbl_ldl_Debug"
+	string string1 		"str_tbl_ldl_FIVE_HYPHENS"
+	string string2 		"str_tbl_ldl_City_Status"
+	string string3 		"str_tbl_ldl_Unit_Status"
+	string string4		"str_tbl_ldl_Civ_Status"
+	string string5		"str_tbl_ldl_Knowledge_Status"
+	string string6		"str_tbl_ldl_Diplomacy_Status"
+	string string7		"str_tbl_ldl_Trade_Status"
+	string string8		"str_tbl_ldl_Cheat_Mode"
+	string string9		"str_tbl_ldl_Play_Options"
+	string string10		"str_tbl_ldl_Happiness_Status"
+	string string11		"str_tbl_ldl_Info_Screen"
+}
+
+
+
+SpaceDropDownItem {
+
+	name:CTP2_STANDARD_FONT {
+
+		int xpix	0
+
+		int ypix	0
+
+		int widthpix	99
+
+		int heightpix	16
+
+	}
+
+}
+
+StatsStrings {
+	int	numStrings	3
+	string	string0	"CITY_STATUS_DISABLED"
+	string	string1	"UNIT_STATUS_DISABLED"
+	string	string2	"DIPLOMACY_STATUS_DISABLED"
+}
+
+
+$
+
+

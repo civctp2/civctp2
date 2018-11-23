@@ -1,0 +1,37 @@
+- The text in text controls is the wrong size (see HACK message in
+  ui/aui_common/aui_textfield.cpp)
+- Something in the CD code generates an 'Operation not permitted' message
+  whenever there is a CD in the drive, and a 'No medium found' message when
+  there isn't (I suspect the CD music-related code)
+- The intro movie doesn't play
+- It is necessary to click somewhere after the 'Loading' dialog to reach the
+  main menu (this is probably related to the intro movie, since the problem
+  goes away when the 'nointromovie' argument is passed to ctp2)
+- No screen resolution options appear in the graphics options
+- I get a message saying 'open /dev/sequencer: No such device' during startup,
+  even though /dev/sequencer does exist on my machine
+- When trying to start a network game, the game freezes whilst searching for
+  servers and is very difficult to kill
+- There are frequent minor graphics glitches, including:
+  - The cursor colours are messed up
+  - The colours of the city improvement picutures (but not those of units or
+    wonders) are similarly messed up
+  - On the credits screen the flames are framed by black boxes, rather than the
+    background showing through -- this is probably some kind of alpha channel
+    problem
+  - The drawing of map tiles isn't working properly (although it *does* work
+    properly when under the fog of war)
+  - Pixels have a tendency to be shifted around by the cursor - I feel this is
+    another symptom of whatever problem is causing the cursor colours to be
+    mesed up.
+  - The numbers along the path that shows when a unit is being given a move
+    order are missing
+  - There are sometimes gaps in the lines on the ranking graphs
+- The game uses a lot of CPU all the time
+- The window of the game has no title
+- Keyboard input doesn't work
+- The mousewheel does nothing
+- If only the first map plugin is loadable, then the game gets stuck in an
+  infinite loop when creating a new game
+- The SDL keyboard support assumes that the user has a British keyboard
+

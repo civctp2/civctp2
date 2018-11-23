@@ -1,0 +1,123 @@
+#-----------------------------------------------------------------------------
+#
+#  Project      : Call To Power 2
+#  File type    : dbgen input
+#  Description  : Unit type descriptor
+#
+# ----------------------------------------------------------------------------
+#
+#  Disclaimer
+# 
+#  THIS FILE IS NOT GENERATED OR SUPPORTED BY ACTIVISION.
+#
+#  This material has been developed at apolyton.net by the Apolyton CtP2 
+#  Source Code Project. Contact the authors at ctp2source@apolyton.net.
+#
+#-----------------------------------------------------------------------------
+#
+#  Modifications from the original Activision code:
+#
+#  - Added new unit pretests:
+#    - UnitPretest_NoFuelThenCrash: To allow the AI to order planes back 
+#                                   when fuel is low.
+#    - UnitPretest_CanParadrop:     To allow paradropping.
+#    - April 23rd 2005 Martin Gühmann
+#  - Added TargetPretest:CanRefuel - April 30th 2005 Martin Gühmann
+#
+#-----------------------------------------------------------------------------
+
+Order {
+  // gold needed
+  Int Gold
+
+  // movement points needed
+  Int Move
+
+  // Name of game event
+  String EventName
+
+  // localized order name (context menu, tooltip on button)
+  StringId LocalizedName
+
+  // Status bar text
+  StringId StatusText
+
+  // valid target for order
+  Bits TargetPretest {
+    None,
+    EnemyCity,
+    OwnCity,
+    EnemyArmy,
+    EnemySpecialUnit,
+    EnemySettler,
+    EnemyTradeUnit,
+    TradeRoute,
+    TerrainImprovement,
+    MovePosition,
+    AttackPosition,
+    Transport,
+    CanRefuel,
+    AdjacentPosition
+  }
+
+  // relevant unit ability
+  // Bits UnitPretest { Doh! 32 bit limit
+  Bit UnitPretest_None
+  Bit UnitPretest_CanAttack
+  Bit UnitPretest_CanEntrench
+  Bit UnitPretest_CanSueFranchise
+  Bit UnitPretest_CanSue
+  Bit UnitPretest_CanCreateFranchise
+  Bit UnitPretest_CanInvestigateCity
+  Bit UnitPretest_CanBombard
+  Bit UnitPretest_CanSettle
+  Bit UnitPretest_CanStealTechnology
+  Bit UnitPretest_CanInciteRevolution
+  Bit UnitPretest_CanAssassinateRuler
+  Bit UnitPretest_CanExpel
+  Bit UnitPretest_EstablishEmbassy
+  Bit UnitPretest_ThrowParty
+  Bit UnitPretest_CanCauseUnhappiness
+  Bit UnitPretest_CanPlantNuke
+  Bit UnitPretest_CanSlaveRaid
+  Bit UnitPretest_CanEnslaveSettler
+  Bit UnitPretest_CanUndergroundRailway
+  Bit UnitPretest_CanInciteUprising
+  Bit UnitPretest_CanBioTerror
+  Bit UnitPretest_CanPlague
+  Bit UnitPretest_CanNanoInfect
+  Bit UnitPretest_CanConvertCity
+  Bit UnitPretest_CanReformCity
+  Bit UnitPretest_CanSellIndulgences
+  Bit UnitPretest_CanFaithHeal
+  Bit UnitPretest_CanSoothsay
+  Bit UnitPretest_CanCreatePark
+  Bit UnitPretest_CanPillage
+  Bit UnitPretest_CanInjoin
+  Bit UnitPretest_CanInterceptTrade
+  Bit UnitPretest_CanAdvertise
+  Bit UnitPretest_CanNukeCity
+  Bit UnitPretest_CanTransport
+  Bit UnitPretest_CanBeTransported
+  Bit UnitPretest_CanLaunch
+  Bit UnitPretest_CanTarget
+  Bit UnitPretest_NoFuelThenCrash
+  Bit UnitPretest_CanParadrop
+  Bit UnitPretest_Invalid
+
+  Bit(Int) Range
+
+  Bit IsTeleport
+  Bit IsTarget
+  Bit GLHidden
+
+  // Button panel information
+  File CPIcon
+  Record Icon DefaultIcon
+  Int ButtonLocation
+
+  Int Cursor
+  Int InvalidCursor
+  Bit(Int) FailSound
+  Bit(Int) Sound
+}

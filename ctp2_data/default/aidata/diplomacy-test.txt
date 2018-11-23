@@ -1,0 +1,132 @@
+				T E S T I N G   D I P L O M A C Y
+
+Commands for helping to test the diplomacy system:
+
+  chooseproposal [<player>] <foreigner> - choose a new proposal from
+  motivation.
+
+  proposal <sender> <receiver> <request_type> <offer_type>
+  [<request_arg>] - set the new top proposal from sender to receiver.
+
+  response <sender> <receiver> <type> [<type> <arg>] - set the top
+  response from sender or receiver depending on initiative.
+
+  execproposal <sender> <receiver> - execute the top proposal from
+  sender to receiver.
+
+  execresponse <sender> <receiver> <player with initiative> - execute
+  the top response from sender or receiver depending on initiative.
+
+  showdip <player> [<foreigner>] - show diplomatic state of player
+  towards a foreigner (or all foreigners)
+
+---- 
+
+To cause the AI player 2 to send a REQUEST_GIVE_GOLD proposal to
+player 1, type:
+
+~chooseproposal 2 1 20 0 -1
+~execproposal 2 1 2
+
+The number 20 is found by consulting the PROPOSAL_TYPE list below and
+selecting a PROPOSAL_REQUEST_* number.  The arguments are not set.
+
+----
+To cause the AI player 2 to counter your proposal by requesting you offer
+them your map, type:
+
+~detach 2
+(send your new proposal to them using the UI)
+~response 1 2 3 23 -1
+~hasinit 1 2 0
+~execresponse 1 2
+~attach 2
+(respond to counter their counter using the UI)
+
+The number 23 is found by consulting the PROPOSAL_TYPE list below and
+selecting a PROPOSAL_OFFER_* number.
+
+----
+
+enum RESPONSE_TYPE {
+	RESPONSE_INVALID, // 0
+	RESPONSE_REJECT,  // 1
+	RESPONSE_ACCEPT,  // 2
+	RESPONSE_COUNTER, // 3
+	RESPONSE_THREATEN, // 4
+	RESPONSE_MAX // 5
+
+
+// Types of proposal
+enum PROPOSAL_TYPE {
+	PROPOSAL_NONE,
+	// Transfer city from one player to another [param: cityId]
+	PROPOSAL_OFFER_GIVE_CITY,			// 1
+	PROPOSAL_REQUEST_GIVE_CITY,			// 2
+	// Withdraw troops from our nation
+	PROPOSAL_OFFER_WITHDRAW_TROOPS,			// 3
+	PROPOSAL_REQUEST_WITHDRAW_TROOPS,		// 4
+	// Stop piracy of nations trade routes
+	PROPOSAL_OFFER_STOP_PIRACY,			// 5
+	PROPOSAL_REQUEST_STOP_PIRACY,		// 6
+	// Break treaty/agreement with nation [param: agreementId]
+	PROPOSAL_OFFER_BREAK_AGREEMENT,			// 7
+	PROPOSAL_REQUEST_BREAK_AGREEMENT,		// 8
+	// Stop researching advance [param: advanceType]
+	PROPOSAL_OFFER_STOP_RESEARCH,			// 9
+	PROPOSAL_REQUEST_STOP_RESEARCH,			// 10
+	// Reduce the number of nuclear weapons (Nukes) in your arsenal
+	PROPOSAL_OFFER_REDUCE_NUCLEAR_WEAPONS,	// 11
+	PROPOSAL_REQUEST_REDUCE_NUCLEAR_WEAPONS,// 12
+	// Reduce the number of bio-tech weapons (Nukes) in your arsenal
+	PROPOSAL_OFFER_REDUCE_BIO_WEAPONS,		// 13
+	PROPOSAL_REQUEST_REDUCE_BIO_WEAPONS,	// 14
+	// Reduce the number of nano-tech weapons (Nukes) in your arsenal
+	PROPOSAL_OFFER_REDUCE_NANO_WEAPONS,		// 15
+	PROPOSAL_REQUEST_REDUCE_NANO_WEAPONS,	// 16
+	// Give an Advance [param: advanceType]
+	PROPOSAL_OFFER_GIVE_ADVANCE,			// 17
+	PROPOSAL_REQUEST_GIVE_ADVANCE,			// 18
+	// Give Aid/Tribute (once) [param: gold]
+	PROPOSAL_OFFER_GIVE_GOLD,				// 19
+	PROPOSAL_REQUEST_GIVE_GOLD,				// 20
+	// Reduce Pollution [param: %]
+	PROPOSAL_OFFER_REDUCE_POLLUTION,		// 21
+	PROPOSAL_REQUEST_REDUCE_POLLUTION,		// 22
+	// Give Map
+	PROPOSAL_OFFER_MAP,						// 23
+	PROPOSAL_REQUEST_MAP,					// 24
+	// Honor Military Agreement [param: player to declare war on]
+	PROPOSAL_OFFER_HONOR_MILITARY_AGREEMENT,	// 25
+	PROPOSAL_REQUEST_HONOR_MILITARY_AGREEMENT,	// 26
+	// Honor Pollution Agreement [param: % to reduce]
+	PROPOSAL_OFFER_HONOR_POLLUTION_AGREEMENT,	// 27
+	PROPOSAL_REQUEST_HONOR_POLLUTION_AGREEMENT,	// 28
+	// End threatened embargo
+	PROPOSAL_OFFER_END_EMBARGO,				// 29
+	PROPOSAL_REQUEST_END_EMBARGO,			// 30
+	
+	// Treaties
+	PROPOSAL_TREATY_DECLARE_WAR,			// 31
+	PROPOSAL_TREATY_CEASEFIRE,				// 32
+	PROPOSAL_TREATY_PEACE,					// 33
+	PROPOSAL_TREATY_TRADE_PACT,				// 34
+	PROPOSAL_TREATY_RESEARCH_PACT,			// 35
+	PROPOSAL_TREATY_MILITARY_PACT,			// 36
+	PROPOSAL_TREATY_POLLUTION_PACT,			// 37
+	PROPOSAL_TREATY_ALLIANCE,				// 38
+	PROPOSAL_MAX
+};
+
+// Types of threat
+enum THREAT_TYPE {
+	THREAT_NONE,
+	THREAT_ATTACK_CITY,
+	THREAT_PIRATE,
+	THREAT_SPECIAL_ATTACK_CITY,
+	THREAT_DESTROY_CITY,
+	THREAT_END_AGREEMENT,
+	THREAT_TRADE_EMBARGO,
+	THREAT_DECLARE_WAR,
+	THREAT_MAX
+};

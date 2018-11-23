@@ -1,0 +1,84 @@
+#!/bin/sh
+# Download new configuration files from master server,
+# rebuild html template files, and restart server if asked.
+#
+# You should not need to edit this file. 
+
+# Set the variables
+. ~/etc/anet2env
+
+SRVDIR=$ANET2_HOME/etc
+
+# But you really shouldn't edit anything below here.
+PERLDIR=/usr/bin
+TMPDIR=/tmp
+status=0
+typechngd=0
+
+echo starting servfil `date`
+for file in names servers apps types; do
+   $PERLDIR/perl $SRVDIR/htget -o $TMPDIR/$file.tmp -q -t 300 http://updater.activision.com/updater/etc/$file.txt
+   if [ -s $TMPDIR/$file.tmp ]; then
+      i=`grep -c "<HTML>" $TMPDIR/$file.tmp`
+      if [ $i -eq 0 ]; then
+         if [ -s $SRVDIR/$file.txt ]; then
+            mv $SRVDIR/$file.txt $TMPDIR/$file.old
+         else
+            rm -f $SRVDIR/$file.txt
+         fi
+         if [ -f $SRVDIR/local-$file.txt ]; then
+            cat $SRVDIR/local-$file.txt | sort -u >> $TMPDIR/$file.tmp
+         fi
+         mv $TMPDIR/$file.tmp $SRVDIR/$file.txt
+         if [ ! -s $SRVDIR/$file.txt ]; then
+            echo could not move updated $file.txt into directory
+            if [ -s $TMPDIR/$file.old ]; then
+               mv $TMPDIR/$file.old $SRVDIR/$file.txt
+            fi
+            status=1
+         else
+            echo $file.txt updated successfully
+            if [ $file = "types" ]; then
+               typechngd=1
+            fi
+         fi
+      else
+         echo $file.txt download timed out
+         rm $TMPDIR/$file.tmp
+         status=1
+      fi
+   else
+      echo $file.txt download unsuccessful
+      if [ -f $TMPDIR/$file.tmp ]; then
+         rm $TMPDIR/$file.tmp
+      fi
+      status=1
+   fi
+done
+if [ $typechngd -eq 1 ]; then
+   cd $SRVDIR
+   $PERLDIR/perl $SRVDIR/mkpages.pl
+   ntpl=`find . -maxdepth 1 -name "*.tpl" | wc -w`
+   if [ $ntpl -gt 0 ]; then
+     rm -f $ANET2_WEBHOME/*.tpl
+     mv -f $SRVDIR/*.tpl $ANET2_WEBHOME
+     echo generated new template files
+   fi
+fi
+if [ $# -gt 0 ]; then
+   if [ $1 -eq 1 ]; then
+      $SRVDIR/reset2
+      echo reset server
+   elif [ $1 -eq 2 ]; then
+      if [ -f $SRVDIR/webpg.new ]; then
+         rm $SRVDIR/webpg.new
+      fi
+      ls -1 $ANET2_WEBHOME/*.tpl > $SRVDIR/webpg.new
+      $SRVDIR/reload2
+      echo reloaded server
+   fi
+fi
+
+echo servfil finished `date`
+rm -f $TMPDIR/servfil.running
+exit $status

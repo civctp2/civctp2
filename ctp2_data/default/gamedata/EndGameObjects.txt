@@ -1,0 +1,46 @@
+
+ENDGAME_GAIA_CONTROLLER_CORE {
+    Wonder WONDER_THE_SOLARIS_PROJECT
+	
+	TurnsToActivate	10
+}
+
+ENDGAME_GAIA_COMPUTER {
+    Building IMPROVE_GAIA_COMPUTER
+
+	MinNeeded 10
+}
+
+ENDGAME_POWER_SATELLITE {
+    Building IMPROVE_POWER_SATELLITE
+	
+	MinNeeded 10
+	MaxNeeded 20
+}
+
+ENDGAME_PROCESSING_TOWER {
+    TerrainImprovement TILEIMP_PROCESSING_TOWER
+	
+	MinNeeded 5
+
+	PowerSource ENDGAME_POWER_SATELLITE
+
+	// use min radius when min power sources are built
+	MinRadius 5
+
+	// use max radius when max power sources are built
+	MaxRadius 8
+
+	// need to have 60% of the map area covered
+	MinCoverage 0.6
+}
+ 
+ENDGAME_WORLD_UNION {
+    // Wonder WONDER_WORLD_COUNCIL ?
+
+	// need to have 100% of the worlds population in our alliance
+	MinCoverage 1.0
+
+	// turns before world union is complete
+	TurnsToActivate	0
+}

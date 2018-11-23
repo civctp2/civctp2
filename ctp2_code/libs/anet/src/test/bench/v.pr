@@ -1,0 +1,518 @@
+# host migration test
+# usage : bench v.pr maxexec nplayers nruns
+#
+# maxexec - maximum amount of time between processing the steps
+# nplayers - number of players in test 
+# nruns - number of random scenarios to run
+
+# Global variable usage
+# $G0...nplayers-1  Current behavior for clients with rank 0..nplayers-1
+# $G97              Session name
+# $G98              Current hostid
+# $G99              Current phase (set by timekeeper task)
+# $T0				Counter incremented by each client when done with phase
+# $T1               Expected number of players after migration
+# $T2               Expected hostid after migration
+#
+# Local variable usage - client
+# $I4               Desired phase (while client task waiting)
+# $I7               1 for first client, 0 for all others
+# 
+# Local variable usage - timekeeper
+# $I3               Run count
+
+Print Host migration test.  nplayers %1, nruns %2
+
+# Generate random session name in $G97
+SetGlobal 97 $R50000
+Print Chose session name $G97
+
+# There is one timekeeper thread, and nplayers client threads.
+# The timekeeper thread uses G99 to hold the current phase
+# number; everyone else waits for G99 to change when they're
+# done with the current phase.
+# The first client thread doubles as a host thread if a 
+# new session must be created.
+# Scenarios are read in from stdin, executed, and verified
+# repeatedly.
+#
+# On startup, T1 is set to zero.
+#
+# Phase 0:
+# The timekeeper thread reads the current behaviors into globals 0..%1-1.
+# If T1 is zero, the first client hosts a session.
+#
+# Everyone waits for phase 1, which starts 15 seconds later:
+# T1 and T2 are set to zero.
+# Everyone joins the session.
+# When each player sees %1 players, he increments T0
+
+# Everyone waits for phase 2, which starts when T0 gets to %1:
+# Everyone picks one of four behaviors:
+#  act normal
+#  shutdown nicely
+#  shutdown abruptly
+#  lose connection to host (if not host)
+# Those who chose to be normal increment T1.
+# Everyone increments T0.
+
+# Everyone waits for phase 3, which starts when T0 gets to %1:
+# If T1 < 2 * %1 / 3, then the session should be lost,
+# so T1 and T2 are set to 0; else
+# T2 is set to the ID of the expected new master.
+# 
+# Then everyone executes the behavior chosen above.
+
+# Everyone waits for phase 4, which starts 60 seconds later:
+# those who chose to act normal verify that they 
+# see T1 players, and that the current host id is T2.
+# Everyone then increments T0.
+#
+# Everyone then waits for phase 0, which starts when T0 gets to %1.
+
+# Set I8 to the WARNING level of time allowed per step (ms)
+SET I8 10000
+# Set I9 to the FATAL level of time allowed per step (ms)
+SET I9 10000
+
+GOTO @A_BEGIN
+
+#--------------------------------------------------------------------------
+
+LABEL @ASSERT_FAIL
+Print @@ $procid $uptime : "Assertion failed."
+# Exit with fail code
+
+LABEL @FAIL
+Eval $dp 0
+SET I1 0
+IF I0 = I1 @FAIL_NODP
+# Force log file flush
+dpDestroy
+LABEL @FAIL_NODP
+
+# Exit with fail code
+EXIT 1
+
+LABEL @PASS
+Print @@ Test passed.
+EXIT 0
+
+#--------------------------------------------------------------------------
+
+# Timekeeper Thread
+LABEL @A_BEGIN
+Verbosity 2
+
+# Start off in phase 0, with no session
+SetGlobal 99 0
+Timer 0 ZERO
+Timer 1 ZERO
+Timer 2 ZERO
+
+# Create one special player
+Spawn @C_HOST 1
+
+# Create %1-1 normal players
+SET I0 -1
+SET I1 %1
+ADD I0 I1
+Spawn @C_CLIENT $I0
+
+# And now, the repetitive part.
+
+SET I3 0
+LABEL @A_PHASE0_START
+SET I1 %2
+# Exit test after %2 runs
+IF I3 = I1 @PASS
+SET I0 1
+ADD I3 I0
+
+
+Print @@ Timekeeper: Phase 0, run $I3
+# In phase zero, just wait 15 seconds, and advance to phase 1.
+# Also zero G98, so it can be set by the host in phase 3.
+Wait 15000
+Timer 0 ZERO
+Timer 1 ZERO
+Timer 2 ZERO
+SetGlobal 99 1
+SetGlobal 98 0
+
+Print @@ Timekeeper: Phase 1, run $I3
+# In phase one, wait until all %1 tasks have incremented T0.
+# then read in behaviors, clear T0, and go on to phase 2.
+
+# Wait for T0 to reach %1
+Verbosity 1
+SET I1 %1
+LABEL @A_PHASE1_WAIT
+Timer 0 COPY NUMBER
+IF I0 ! I1 @A_PHASE1_WAIT
+Verbosity 2
+
+# Read current behaviors into globals 0..
+# First, clear them, so upper columns default to 'normal behavior'
+SET I0 0
+SET I1 1
+SET I2 %1
+LABEL @A_PHASE1_CLEAR
+SetGlobal $I0 0
+ADD I0 I1
+IF I0 < I2 @A_PHASE1_CLEAR
+ReadLineIntoGlobals 0
+SET I0 0
+SET I1 1
+SET I2 %1
+LABEL @A_PHASE1_PRINT
+Print Behavior for $I0 'th peer is $G$I0
+ADD I0 I1
+IF I0 < I2 @A_PHASE1_PRINT
+
+# Clear T0 and go to phase 2.
+Timer 0 ZERO
+SetGlobal 99 2
+
+Print @@ Timekeeper: Phase 2, run $I3
+# In phase 2, wait until all %1 tasks have incremented T0.
+# During this phase, the tasks read their behavior and
+# start figuring out who will end up as master.
+Verbosity 1
+SET I1 %1
+LABEL @A_PHASE2_WAIT
+Timer 0 COPY NUMBER
+IF I0 ! I1 @A_PHASE2_WAIT
+Verbosity 2
+SetGlobal 99 3
+
+Print @@ Timekeeper: Phase 3, run $I3
+# In phase 3, reset T0, 
+# if session expected to be lost, clear Timer 1 and Global 2,
+# wait 100 seconds, and advance to phase 4.
+Timer 0 ZERO
+
+# If session loss expected, clear Global 2 and Timer 1.
+# The session will be lost if T1 < (2 * %1) / 3, i.e. if more than
+# a third of the players are leaving.
+SET I1 %1
+ADD I1 I1
+SET I0 3
+DIV I1 I0
+Timer 1 COPY NUMBER
+Print @@ $procid $uptime : expected numplayers $I0; min numplayers $I1
+IF I0 < I1 @A_PHASE3_SESSLOSS
+GOTO @A_PHASE3_SESSOK
+LABEL @A_PHASE3_SESSLOSS
+Print @@ $procid $uptime : Session loss expected ( $I0 < $I1 ).  Clearing hostid and player count.
+SetGlobal 98 0
+Timer 1 ZERO
+LABEL @A_PHASE3_SESSOK
+
+Wait 100000
+SetGlobal 99 4
+
+Print @@ Timekeeper: Phase 4, run $I3
+# In phase 4, wait until all %1 tasks have incremented T0, 
+# then go to phase 0.
+Verbosity 1
+SET I1 %1
+LABEL @A_PHASE4_WAIT
+Timer 0 COPY NUMBER
+IF I0 ! I1 @A_PHASE4_WAIT
+Verbosity 2
+SetGlobal 99 0
+GOTO @A_PHASE0_START
+
+
+#----------------------------------------------------------------
+# The client thread.
+#
+# Client and host are same, except host has I7=1
+# Never change I7!
+
+LABEL @C_HOST
+SET I7 1
+LABEL @C_CLIENT
+Verbosity 2
+ONERROR @TERMINATE
+
+#----------------------------------------------------------------
+# Phase 0.  
+# When Phase 0 starts, Timer 1 is the number of players still in session.
+#
+# On exit:
+# connection to game server exists, and there is a session to join.
+
+LABEL @C_PHASE0
+
+# If we don't already have a dp and a connection to the game server,
+# get one.
+Eval $dp 0
+SET I1 0
+IF I0 ! I1 @C_PHASE0_GOTDP
+dpCreate winets2.dll
+LABEL @C_PHASE0_GOTDP
+
+dpSetGameServer us3.alink.activision.com 65
+
+# Wait until Phase 0
+Verbosity 1
+SET I4 0
+Print @@ $procid $uptime : waiting for phase $I4
+LABEL @C_PHASE0_WAIT1
+dpReceive
+Eval $G99 0
+IF I0 < I4 @C_PHASE0_WAIT1
+Print @@ $procid $uptime : phase $I4 started
+Verbosity 2
+
+# Timer 1 was set in phase 4 to the number of players still in session.
+# If timer 1 is zero, and we're the special client,
+# host a session - otherwise just wait.
+SET I1 0
+IF I7 = I1 @C_PHASE0_END
+Timer 0 COPY NUMBER
+IF I0 ! I1 @C_PHASE0_END
+
+dpOpen CREATE $G97
+dpCreatePlayer Host
+Print @@ $procid $uptime : Created session.  Hostid $hostid  myid $myid
+
+LABEL @C_PHASE0_END
+
+#----------------------------------------------------------------
+# Phase 1.  
+# When Phase 1 starts, Timers 0 and 1 are zero, and Global 2 is zero.
+#
+# On exit:
+# all the players are in the session, and can see all other players.
+
+# Wait until Phase 1
+Verbosity 1
+SET I4 1
+Print @@ $procid $uptime : waiting for phase $I4.
+LABEL @C_PHASE1_WAIT1
+dpReceive
+Eval $G99 0
+IF I0 < I4 @C_PHASE1_WAIT1
+Print @@ $procid $uptime : phase $I4 started
+Verbosity 2
+
+# If we're not in a session, join the session
+Eval $hostid 0
+SET I1 0
+Print @@ $procid $uptime : hostid is $I0
+IF I0 ! I1 @C_PHASE1_JOINED
+dpOpen $G97
+Wait
+dpCreatePlayer Player
+Wait
+LABEL @C_PHASE1_JOINED
+
+# Wait until we have %1 players
+Verbosity 1
+Print @@ $procid $uptime : waiting for %1 players.  
+SET I1 %1
+LABEL @C_PHASE1_WAIT2
+dpReceive
+Eval $numPlayers 0
+IF I0 < I1 @C_PHASE1_WAIT2
+Verbosity 2
+Print @@ $procid $uptime : Got all %1 players
+
+# Increment global count of tasks who have full player roster
+Timer 0 START
+Timer 0 END
+
+#----------------------------------------------------------------
+# Phase 2.  
+# When Phase 2 starts, 
+# all the players are in the session, and can see all other players.
+#
+# On exit:
+# I2 is this player's planned behavior,
+# Timer 1 is expected # of players (0 if session loss expected)
+# Global 2 is $hostid if host expects to be in session, else 0
+
+# Wait until Phase 2
+Verbosity 1
+SET I4 2
+Print @@ $procid $uptime : waiting for phase $I4
+LABEL @C_PHASE2_WAIT1
+dpReceive
+Eval $G99 0
+IF I0 < I4 @C_PHASE2_WAIT1
+Print @@ $procid $uptime : phase $I4 started.  myid $myId hostid $hostId rank $rank
+Verbosity 2
+
+# Retrieve behavior from globals.
+Eval $G$rank 2
+Print @@ $procid $uptime : Rank $rank behavior $G$rank = $I2
+
+# If our behavior is "act normal", increment Timer 1, and
+# do our part to computer Timer 2 = new hostid.
+# 0..29 = normal
+SET I0 29
+IF I2 > I0 @C_PHASE2_ABNORMAL
+Print @@ $procid $uptime : my behavior is $I2 : normal
+Timer 1 START
+Timer 1 END
+
+Eval $amHost 0
+SET I1 0
+IF I0 = I1 @C_PHASE2_DONE
+Print I am the host; setting G98 to $hostid
+SetGlobal 98 $hostid
+GOTO @C_PHASE2_DONE
+
+LABEL @C_PHASE2_ABNORMAL
+Print @@ $procid $uptime : my behavior is $I2 : abnormal
+
+LABEL @C_PHASE2_DONE
+
+Timer 0 START
+Timer 0 END
+
+#----------------------------------------------------------------
+# Phase 3.  
+# When Phase 3 starts, 
+# I2 is this player's planned behavior,
+# Timer 1 is expected # of players (0 if session loss expected)
+# Global 2 is $hostid if host expects to be in session, else 0
+#
+# On exit:
+# Timer 1 is unchanged.
+# Global 2 is the expected value of $hostid after migration
+# The behavior in I2 has been executed.
+
+# Wait until Phase 3
+Verbosity 1
+SET I4 3
+Print @@ $procid $uptime : waiting for phase $I4
+LABEL @C_PHASE3_WAIT1
+dpReceive
+Eval $G99 0
+IF I0 < I4 @C_PHASE3_WAIT1
+Print @@ $procid $uptime : phase $I4 started.  myid $myId hostid $hostId rank $rank
+Verbosity 2
+
+# If host is not staying in, and we have the lowest id, put that in Global 2.
+SET I0 0
+Eval $G98 1
+IF I0 ! I1 @C_PHASE3_HOSTSET
+Eval $myId 0
+IF I0 > I1 @C_PHASE3_HOSTSET
+Print The host will leave; myId $myId seems lowest, maybe I'll be the new host.
+SetGlobal 98 $myId
+LABEL @C_PHASE3_HOSTSET
+# After this phase is over, Global 2 will contain the expected host id.
+
+# Sleep a random amount of time between 0 and 3 seconds.
+Wait 100
+Wait 0 3000
+
+# Execute the planned behavior!
+# 0..29 = normal
+# 30..59 = leave gracefully
+# 60..89 = leave abruptly
+# 90..99 = lose connection to host (or, if host, leave abruptly)
+SET I0 30
+IF I2 < I0 @C_PHASE3_DONE
+SET I0 60
+IF I2 < I0 @C_PHASE3_EXEC_GRACEFUL
+SET I0 90
+IF I2 < I0 @C_PHASE3_EXEC_ABRUPT
+Eval $amHost 0
+SET I1 1
+IF I2 = I0 @C_PHASE3_EXEC_ABRUPT
+
+Print @@ $procid $uptime : Losing connection to host now
+LoseHost
+GOTO @C_PHASE3_DONE
+
+LABEL @C_PHASE3_EXEC_ABRUPT
+Print @@ $procid $uptime : Closing abruptly now
+dpDestroy
+GOTO @C_PHASE3_DONE
+
+LABEL @C_PHASE3_EXEC_GRACEFUL
+Print @@ $procid $uptime : Closing gracefully now
+Wait 2000 2000 Shutdown
+#GOTO @C_PHASE3_DONE
+
+LABEL @C_PHASE3_DONE
+
+#----------------------------------------------------------------
+# Phase 4.  
+# When Phase 4 starts, 
+# the host migration should have completed,
+# Timer 1 is expected # of players (0 if session loss expected)
+# Global 2 is the expected value of $hostid after migration
+# I2 is this player's planned behavior,
+#
+# On exit,
+# those who chose to act normal verify that they 
+# see T1 players, and that the current host id is G98.
+# Everyone has incremented T0.
+
+LABEL @C_PHASE4
+
+# Wait until Phase 4
+Verbosity 1
+SET I4 4
+Eval $dp 5
+SET I6 0
+Print @@ $procid $uptime : waiting for phase $I4
+
+LABEL @C_PHASE4_WAIT1
+IF I5 = I6 @C_PHASE4_NODP
+dpReceive
+LABEL @C_PHASE4_NODP
+Eval $G99 0
+IF I0 < I4 @C_PHASE4_WAIT1
+
+Print @@ $procid $uptime : phase $I4 started
+Verbosity 2
+
+# If our behavior was normal, make sure numPlayers == T1.
+# Else make sure numPlayers == 0.
+# 0..29 = normal
+SET I0 29
+IF I2 > I0 @C_PHASE4_ABNORMAL
+Timer 1 COPY NUMER
+Eval $numPlayers 1
+Print @@ $procid $uptime : Normal behaviour ($I3); numPlayers after is $I1, want $I0
+IF I0 ! I1 @ASSERT_FAIL
+GOTO @C_PHASE4_DONE
+
+LABEL @C_PHASE4_ABNORMAL
+SET I0 0
+Eval $numPlayers 1
+Print @@ $procid $uptime : Abnormal behaviour ($I3); numPlayers after is $I1, want $I0
+IF I0 ! I1 @ASSERT_FAIL
+
+LABEL @C_PHASE4_DONE
+
+# Bug workaround: if we lost our connection to the host, destroy dp
+# (This is 'cause dpClose doesn't restore session subscription)
+SET I0 90
+IF I2 < I0 @C_PHASE4_NODESTROY
+dpDestroy
+LABEL @C_PHASE4_NODESTROY
+
+# Increment timer 0 to signal timekeeper thread we're done
+Timer 0 START
+Timer 0 END
+
+# Return to phase 0
+GOTO @C_PHASE0
+
+#---------------------------------------
+# Termination
+LABEL @TERMINATE
+Print @@ $procid $uptime : "This task terminated because of an unexpected error."
+GOTO @ASSERT_FAIL
+
+# Terminate threads normally by jumping here
+LABEL @EXIT

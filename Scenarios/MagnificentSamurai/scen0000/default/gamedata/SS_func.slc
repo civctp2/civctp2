@@ -1,0 +1,2946 @@
+  ////////////////////////////////////////////////////
+ // Functions for The Magnificent Samurai scenario //
+////////////////////////////////////////////////////
+
+
+  //////////////////////
+ // Global variables //
+//////////////////////
+
+
+// Samurai variables
+int_t		expPoints[7];		// records Experience Points for your units
+int_t   	battleExp;			// Experience earned after each combat
+unit_t		sevenSamurai[7];	// stores values of your units
+unit_t		specUnit;
+
+// Misc variables
+int_t		turnCount;			// Counts the turns until the end of the year
+int_t		afterBattle;		// Flag for after a battle ends
+int_t		levelUp;			// Flag for level up
+int_t		villageDestroyed;	// Flag for if Shichinen has been destroyed
+int_t		attackChance;		// Chance of being attacked
+int_t		bridgeFlag;			// Flag for the bridge combat
+int_t		oatakarkWarn;		// Oatakark Warning counter
+int_t		oatSinkCount;		// Oatakark Sinking Counter
+int_t		metKatchu;			// Flag for meeting Katchu
+int_t		findBalloon;		// Flag for finding the balloon
+int_t		kaupiVisit;			// Flag for if you've been to Kaupi before
+int_t		passClear;			// Timer for the pass being cleared
+int_t		sardoVisit;			// Flag for if you've been to Sardo before
+int_t		kyonshiVisit;		// Flag for if you've been to the Kyonshi village before
+int_t		villageAbandoned;	// Flag for Kyonshi village abandoned
+int_t		metGonza;			// Flag for meeting Gonza
+int_t		samuraiChance;		// Chance of being attacked by samurai
+int_t		bunnyTracks;		// Keeps track of the bunny tracks you've found
+int_t		metMimiyota;		// Flag for meeting Mimiyota
+int_t		mimiyotaBattle;		// Flag for if you battle while Mimiyota is valid
+int_t		shichinenReturn;	// Flag for returning to shichinen
+int_t		banditCount;		// Counts the number of Bandits you've killed
+unit_t		thisUnit;			// Temporary unit variable
+int_t		killCause;
+int_t		winGame;
+
+// Location variables
+location_t	shichinenLoc;	// starting village of Shichinen
+location_t	sshichinenLoc;	// south of Shichinen
+location_t	bridgeLoc;		// the Shichinen bridge
+location_t	nbridgeLoc;		// north of the Shichinen bridge
+location_t	sbridgeLoc;		// south of the Shichinen bridge
+location_t	ssbridgeLoc;	// south of south of the Shichinen bridge
+location_t	scurvyLoc;		// Next to the Scurvy Maiden
+location_t	scurvy2Loc;		// the Scurvy Maiden
+location_t	toOatakarkLoc;	// halfway to Oatakark	(3 squares radius)
+location_t	oatakarkLoc;	// next to Oatakark (2 square radius)
+location_t	volcanoLoc[4];	// Location of Volcano megatile
+location_t	katchuLoc;		// where you find Katchu
+location_t	oatSinkLoc;		// trigger for Oatakark sinking
+location_t	balloonLoc;		// where you find the Balloon
+location_t	balloonDestLoc;	// Destination of the Balloon
+location_t	balloonDestLoc2;// Where the balloon drops the Samurai off
+location_t	kaupiLoc;		// mountain village of Kau Pi 
+location_t	skaupiLoc;		// The mountain pass
+location_t	sardoLoc;		// village of Sar-do
+location_t	kyonshiLoc;		// village of the Moraru Kyonshi
+location_t	wkyonshiLoc;	// west of village of the Moraru Kyonshi
+location_t	chikamatsuLoc;	// where you meet Chikamatsu 
+location_t	bunnyLoc;		// you find some bunny tracks here (3 squares radius)
+location_t	bunny2Loc;		// more bunny tracks here
+location_t	bunny3Loc;		// even more bunny tracks here
+location_t	jchanLoc;		// where you meet Jchan
+location_t	mimiyotaLoc;	// where you meet Mimiyota
+location_t	reswobLoc;		// destination of the Reswob
+location_t	starRoadLoc;	// the entrance to the Star Road
+location_t	starDestLoc;	// destination of the Star Road
+location_t	banditLoc;		// the final fight with the Big, Bad Bandit Leader
+location_t	bArmiesLoc[4];	// Locations of Bandit armies
+location_t	bDestLoc[4];	// Destinations of Bandit Armies
+location_t	carrackLoc;		// Location of Bandit Carrack
+location_t	carrackDestLoc;	// Convert Bandit Carrack at this location
+location_t	tavernLoc;		// a tavern
+location_t	tavern2Loc;		// a tavern
+location_t	tavern3Loc;		// a tavern
+location_t	tavern4Loc;		// a tavern - the one where you meet Gonza
+location_t	tavern5Loc;		// a tavern
+location_t	tavern6Loc;		// a tavern
+location_t	atTavernLoc;	// temporary locator for tavern visited
+
+  ///////////////
+ // Functions //
+///////////////
+
+// Initialize Event Locators
+void_f InitLocations()
+{
+	MakeLocation(shichinenLoc, 38, 28);
+	MakeLocation(sshichinenLoc, 37, 29);
+	MakeLocation(bridgeLoc, 17, 46);
+	MakeLocation(nbridgeLoc, 18, 45);
+	MakeLocation(sbridgeLoc, 16, 47);
+	MakeLocation(ssbridgeLoc, 15, 48);
+	MakeLocation(scurvyLoc, 15, 55);
+	MakeLocation(scurvy2Loc, 15, 56);
+	MakeLocation(toOatakarkLoc, 21, 56);
+	MakeLocation(oatakarkLoc, 26, 55);
+	MakeLocation(volcanoLoc[0], 33, 53);	// Volcano Tile
+	MakeLocation(volcanoLoc[1], 33, 52);	// Volcano Tile
+	MakeLocation(volcanoLoc[2], 34, 51);	// Volcano Tile
+	MakeLocation(volcanoLoc[3], 34, 52);	// Volcano Tile
+	MakeLocation(katchuLoc, 32, 55);
+	MakeLocation(oatSinkLoc, 28, 63);
+	MakeLocation(balloonLoc, 24, 69);
+	MakeLocation(balloonDestLoc, 6, 58);
+	MakeLocation(balloonDestLoc2, 5, 58);
+	MakeLocation(kaupiLoc, 4, 55);
+	MakeLocation(skaupiLoc, 3, 56);
+	MakeLocation(sardoLoc, 6, 40);
+	MakeLocation(kyonshiLoc, 1, 31);
+	MakeLocation(wkyonshiLoc, 0, 31);
+	MakeLocation(chikamatsuLoc, 39, 72);
+	MakeLocation(bunnyLoc, 45, 79);
+	MakeLocation(bunny2Loc, 45, 83);
+	MakeLocation(bunny3Loc, 46, 86);
+	MakeLocation(jchanLoc, 49, 84);
+	MakeLocation(mimiyotaLoc, 24, 107);
+	MakeLocation(starRoadLoc, 28, 111);
+	MakeLocation(reswobLoc, 28, 110);
+	MakeLocation(starDestLoc, 19, 48);
+	MakeLocation(banditLoc, 51, 11);
+	MakeLocation(bArmiesLoc[0], 52, 10);
+	MakeLocation(bArmiesLoc[1], 51, 12);
+	MakeLocation(bArmiesLoc[2], 50, 12);
+	MakeLocation(bArmiesLoc[3], 51, 10);
+	MakeLocation(bDestLoc[0], 42, 23);
+	MakeLocation(bDestLoc[1], 42, 22);
+	MakeLocation(bDestLoc[2], 43, 21);
+	MakeLocation(bDestLoc[3], 44, 21);
+	MakeLocation(carrackLoc, 50, 15);
+	MakeLocation(carrackDestLoc, 45, 21);
+	MakeLocation(tavernLoc, 27, 37);
+	MakeLocation(tavern2Loc, 9, 41);
+	MakeLocation(tavern3Loc, 61, 63);
+	MakeLocation(tavern4Loc, 50, 68);
+	MakeLocation(tavern5Loc, 39, 81);
+	MakeLocation(tavern6Loc, 28, 97);
+}
+
+// Functions to handle the sinking of Oatakark
+void_f OatakarkPassOne()
+{
+location_t	oatVolcLoc;			// 1st pass - change to undersea volcano
+location_t	oatReef1Loc[13];	// 1st pass - change to coral reef
+location_t	oatShal1Loc[12];	// 1st pass - change to Shallow Water
+location_t	tmpLoc;
+unit_t		tmpUnit;
+int_t		unitType;
+int_t		unitType2;
+int_t		numUnits;
+int_t		i;
+int_t		sinkSamurai;
+
+	// Make the locations for 1st pass
+	MakeLocation(oatVolcLoc, 33, 53);		// Volcano Tile
+	MakeLocation(oatReef1Loc[0], 30, 53);
+	MakeLocation(oatReef1Loc[1], 31, 52);
+	MakeLocation(oatReef1Loc[2], 31, 53);
+	MakeLocation(oatReef1Loc[3], 31, 54);
+	MakeLocation(oatReef1Loc[4], 32, 52);
+	MakeLocation(oatReef1Loc[5], 32, 53);
+	MakeLocation(oatReef1Loc[6], 32, 54);
+	MakeLocation(oatReef1Loc[7], 32, 55);
+	MakeLocation(oatReef1Loc[8], 33, 52);	// Volcano Tile
+	MakeLocation(oatReef1Loc[9], 33, 54);
+	MakeLocation(oatReef1Loc[10], 34, 51);	// Volcano Tile
+	MakeLocation(oatReef1Loc[11], 34, 52);	// Volcano Tile
+	MakeLocation(oatReef1Loc[12], 34, 53);
+	MakeLocation(oatShal1Loc[0], 30, 55);
+	MakeLocation(oatShal1Loc[1], 30, 56);
+	MakeLocation(oatShal1Loc[2], 31, 55);
+	MakeLocation(oatShal1Loc[3], 33, 51);
+	MakeLocation(oatShal1Loc[4], 33, 55);
+	MakeLocation(oatShal1Loc[5], 34, 50);
+	MakeLocation(oatShal1Loc[6], 34, 54);
+	MakeLocation(oatShal1Loc[7], 35, 49);
+	MakeLocation(oatShal1Loc[8], 35, 50);
+	MakeLocation(oatShal1Loc[9], 35, 51);
+	MakeLocation(oatShal1Loc[10], 35, 52);
+	MakeLocation(oatShal1Loc[11], 36, 49);
+
+	// Check if Akimbo or Katchu are on a tile to be sunk
+	for (i = 0; i < 12; i = i + 1) {
+		if (oatShal1Loc[i] == sevenSamurai[0].location) {
+			if (sevenSamurai[1].valid) {
+				sinkSamurai = 3;
+			} else {
+				sinkSamurai = 2;
+			}
+		} elseif (sevenSamurai[1].valid && oatShal1Loc[i] == sevenSamurai[1].location) {
+			sinkSamurai = 1;
+		}
+	}
+	for (i = 0; i < 13; i = i + 1) {
+		if (oatReef1Loc[i] == sevenSamurai[0].location) {
+			if (sevenSamurai[1].valid) {
+				sinkSamurai = 3;
+			} else {
+				sinkSamurai = 2;
+			}
+		} elseif (sevenSamurai[1].valid && oatReef1Loc[i] == sevenSamurai[1].location) {
+			sinkSamurai = 1;
+		}
+	}
+
+	if (sinkSamurai == 2 || sinkSamurai == 3) {
+		if (sinkSamurai == 3) {
+			KillUnit(sevenSamurai[1]);	// Katchu Drowns
+			Message (1, 'SSKatchuDrowns');
+		}
+		// Akimbo Floats to shore without his horse	
+		unitType = sevenSamurai[0].type;
+		tmpLoc = balloonDestLoc;
+		if (unitType == UnitDB(UNIT_AKIMBO) ||
+			unitType == UnitDB(UNIT_AKIMBO2)) {
+			CreateUnit(1, UnitDB(UNIT_AKIMBO2H), tmpLoc, 0);
+			KillUnit(sevenSamurai[0]);
+			// Find samurai in player army
+			player[0] = 1;
+			numUnits = player[0].units;
+			for(i = 0; i < numUnits; i = i + 1) {
+				GetUnitByIndex(1, i, tmpUnit);
+				unitType2 = tmpUnit.type;
+				if (unitType2 == UnitDB(UNIT_AKIMBO2H)) {
+					sevenSamurai[0] = tmpUnit;
+				}
+			}
+		} elseif (unitType == UnitDB(UNIT_AKIMBO3)) {
+			CreateUnit(1, UnitDB(UNIT_AKIMBO3H), tmpLoc, 0);
+			KillUnit(sevenSamurai[0]);
+			// Find samurai in player army
+			player[0] = 1;
+			numUnits = player[0].units;
+			for(i = 0; i < numUnits; i = i + 1) {
+				GetUnitByIndex(1, i, tmpUnit);
+				unitType2 = tmpUnit.type;
+				if (unitType2 == UnitDB(UNIT_AKIMBO3H)) {
+					sevenSamurai[0] = tmpUnit;
+				}
+			}
+		} elseif (unitType == UnitDB(UNIT_AKIMBO4)) {
+			CreateUnit(1, UnitDB(UNIT_AKIMBO4H), tmpLoc, 0);
+			KillUnit(sevenSamurai[0]);
+			// Find samurai in player army
+			player[0] = 1;
+			numUnits = player[0].units;
+			for(i = 0; i < numUnits; i = i + 1) {
+				GetUnitByIndex(1, i, tmpUnit);
+				unitType2 = tmpUnit.type;
+				if (unitType2 == UnitDB(UNIT_AKIMBO4H)) {
+					sevenSamurai[0] = tmpUnit;
+				}
+			}
+		} elseif (unitType == UnitDB(UNIT_AKIMBO5)) {
+			CreateUnit(1, UnitDB(UNIT_AKIMBO5H), tmpLoc, 0);
+			KillUnit(sevenSamurai[0]);
+			// Find samurai in player army
+			player[0] = 1;
+			numUnits = player[0].units;
+			for(i = 0; i < numUnits; i = i + 1) {
+				GetUnitByIndex(1, i, tmpUnit);
+				unitType2 = tmpUnit.type;
+				if (unitType2 == UnitDB(UNIT_AKIMBO5H)) {
+					sevenSamurai[0] = tmpUnit;
+				}
+			}
+		} elseif (unitType == UnitDB(UNIT_AKIMBO6)) {
+			CreateUnit(1, UnitDB(UNIT_AKIMBO6H), tmpLoc, 0);
+			KillUnit(sevenSamurai[0]);
+			// Find samurai in player army
+			player[0] = 1;
+			numUnits = player[0].units;
+			for(i = 0; i < numUnits; i = i + 1) {
+				GetUnitByIndex(1, i, tmpUnit);
+				unitType2 = tmpUnit.type;
+				if (unitType2 == UnitDB(UNIT_AKIMBO6H)) {
+					sevenSamurai[0] = tmpUnit;
+				}
+			}
+		} elseif (unitType == UnitDB(UNIT_AKIMBO7)) {
+			CreateUnit(1, UnitDB(UNIT_AKIMBO7H), tmpLoc, 0);
+			KillUnit(sevenSamurai[0]);
+			// Find samurai in player army
+			player[0] = 1;
+			numUnits = player[0].units;
+			for(i = 0; i < numUnits; i = i + 1) {
+				GetUnitByIndex(1, i, tmpUnit);
+				unitType2 = tmpUnit.type;
+				if (unitType2 == UnitDB(UNIT_AKIMBO7H)) {
+					sevenSamurai[0] = tmpUnit;
+				}
+			}
+		} elseif (unitType == UnitDB(UNIT_AKIMBO8)) {
+			CreateUnit(1, UnitDB(UNIT_AKIMBO8H), tmpLoc, 0);
+			KillUnit(sevenSamurai[0]);
+			// Find samurai in player army
+			player[0] = 1;
+			numUnits = player[0].units;
+			for(i = 0; i < numUnits; i = i + 1) {
+				GetUnitByIndex(1, i, tmpUnit);
+				unitType2 = tmpUnit.type;
+				if (unitType2 == UnitDB(UNIT_AKIMBO8H)) {
+					sevenSamurai[0] = tmpUnit;
+				}
+			}
+		} elseif (unitType == UnitDB(UNIT_AKIMBO9)) {
+			CreateUnit(1, UnitDB(UNIT_AKIMBO9H), tmpLoc, 0);
+			KillUnit(sevenSamurai[0]);
+			// Find samurai in player army
+			player[0] = 1;
+			numUnits = player[0].units;
+			for(i = 0; i < numUnits; i = i + 1) {
+				GetUnitByIndex(1, i, tmpUnit);
+				unitType2 = tmpUnit.type;
+				if (unitType2 == UnitDB(UNIT_AKIMBO9H)) {
+					sevenSamurai[0] = tmpUnit;
+				}
+			}
+		} elseif (unitType == UnitDB(UNIT_AKIMBO2H)) {
+			CreateUnit(1, UnitDB(UNIT_AKIMBO2), tmpLoc, 0);
+			KillUnit(sevenSamurai[0]);
+			// Find samurai in player army
+			player[0] = 1;
+			numUnits = player[0].units;
+			for(i = 0; i < numUnits; i = i + 1) {
+				GetUnitByIndex(1, i, tmpUnit);
+				unitType2 = tmpUnit.type;
+				if (unitType2 == UnitDB(UNIT_AKIMBO2)) {
+					sevenSamurai[0] = tmpUnit;
+				}
+			}
+		} elseif (unitType == UnitDB(UNIT_AKIMBO3H)) {
+			CreateUnit(1, UnitDB(UNIT_AKIMBO3), tmpLoc, 0);
+			KillUnit(sevenSamurai[0]);
+			// Find samurai in player army
+			player[0] = 1;
+			numUnits = player[0].units;
+			for(i = 0; i < numUnits; i = i + 1) {
+				GetUnitByIndex(1, i, tmpUnit);
+				unitType2 = tmpUnit.type;
+				if (unitType2 == UnitDB(UNIT_AKIMBO3)) {
+					sevenSamurai[0] = tmpUnit;
+				}
+			}
+		} elseif (unitType == UnitDB(UNIT_AKIMBO4H)) {
+			CreateUnit(1, UnitDB(UNIT_AKIMBO4), tmpLoc, 0);
+			KillUnit(sevenSamurai[0]);
+			// Find samurai in player army
+			player[0] = 1;
+			numUnits = player[0].units;
+			for(i = 0; i < numUnits; i = i + 1) {
+				GetUnitByIndex(1, i, tmpUnit);
+				unitType2 = tmpUnit.type;
+				if (unitType2 == UnitDB(UNIT_AKIMBO4)) {
+					sevenSamurai[0] = tmpUnit;
+				}
+			}
+		} elseif (unitType == UnitDB(UNIT_AKIMBO5H)) {
+			CreateUnit(1, UnitDB(UNIT_AKIMBO5), tmpLoc, 0);
+			KillUnit(sevenSamurai[0]);
+			// Find samurai in player army
+			player[0] = 1;
+			numUnits = player[0].units;
+			for(i = 0; i < numUnits; i = i + 1) {
+				GetUnitByIndex(1, i, tmpUnit);
+				unitType2 = tmpUnit.type;
+				if (unitType2 == UnitDB(UNIT_AKIMBO5)) {
+					sevenSamurai[0] = tmpUnit;
+				}
+			}
+		} elseif (unitType == UnitDB(UNIT_AKIMBO6H)) {
+			CreateUnit(1, UnitDB(UNIT_AKIMBO6), tmpLoc, 0);
+			KillUnit(sevenSamurai[0]);
+			// Find samurai in player army
+			player[0] = 1;
+			numUnits = player[0].units;
+			for(i = 0; i < numUnits; i = i + 1) {
+				GetUnitByIndex(1, i, tmpUnit);
+				unitType2 = tmpUnit.type;
+				if (unitType2 == UnitDB(UNIT_AKIMBO6)) {
+					sevenSamurai[0] = tmpUnit;
+				}
+			}
+		} elseif (unitType == UnitDB(UNIT_AKIMBO7H)) {
+			CreateUnit(1, UnitDB(UNIT_AKIMBO7), tmpLoc, 0);
+			KillUnit(sevenSamurai[0]);
+			// Find samurai in player army
+			player[0] = 1;
+			numUnits = player[0].units;
+			for(i = 0; i < numUnits; i = i + 1) {
+				GetUnitByIndex(1, i, tmpUnit);
+				unitType2 = tmpUnit.type;
+				if (unitType2 == UnitDB(UNIT_AKIMBO7)) {
+					sevenSamurai[0] = tmpUnit;
+				}
+			}
+		} elseif (unitType == UnitDB(UNIT_AKIMBO8H)) {
+			CreateUnit(1, UnitDB(UNIT_AKIMBO8), tmpLoc, 0);
+			KillUnit(sevenSamurai[0]);
+			// Find samurai in player army
+			player[0] = 1;
+			numUnits = player[0].units;
+			for(i = 0; i < numUnits; i = i + 1) {
+				GetUnitByIndex(1, i, tmpUnit);
+				unitType2 = tmpUnit.type;
+				if (unitType2 == UnitDB(UNIT_AKIMBO8)) {
+					sevenSamurai[0] = tmpUnit;
+				}
+			}
+		} elseif (unitType == UnitDB(UNIT_AKIMBO9H)) {
+			CreateUnit(1, UnitDB(UNIT_AKIMBO9), tmpLoc, 0);
+			KillUnit(sevenSamurai[0]);
+			// Find samurai in player army
+			player[0] = 1;
+			numUnits = player[0].units;
+			for(i = 0; i < numUnits; i = i + 1) {
+				GetUnitByIndex(1, i, tmpUnit);
+				unitType2 = tmpUnit.type;
+				if (unitType2 == UnitDB(UNIT_AKIMBO9)) {
+					sevenSamurai[0] = tmpUnit;
+				}
+			}
+		}
+		Message (1, 'SSOatakarkDrownA');
+		DisableTrigger('SSTransportPost_F');	
+	} elseif (sinkSamurai == 1) {
+		KillUnit(sevenSamurai[1]);			// Katchu Drowns
+		Message (1, 'SSKatchuDrowns');
+		if (sevenSamurai[0].location == balloonLoc) {	// If Akimbo is 'boarded'
+			Terraform(balloonLoc, 24);		// Remove Balloon 'good' by terraforming to Special1 tile
+			PlantGood(balloonDestLoc);		// Place Balloon 'good' at destination
+			GetUnitFromCell(balloonLoc, 0, tmpUnit);
+			unitType = tmpUnit.type;
+			CreateUnit(1, unitType, balloonDestLoc2, 0);	// 'Teleport' unit
+			KillUnit(tmpUnit);
+			GetUnitFromCell(balloonDestLoc2, 0, sevenSamurai[0]);
+			Message(1, 'SSBalloonEndA');
+			AddCenter(balloonDestLoc);
+			DisableTrigger('SSTransportPost_F');
+		}
+	}
+	for (i = 0; i < 12; i = i + 1) {
+		Terraform(oatShal1Loc[i], 10);		// Transform to Shallow Water
+	}
+	for (i = 0; i < 13; i = i + 1) {
+		Terraform(oatReef1Loc[i], 23);		// Transform to Coral Reef (might be 23,24)
+	}
+	Terraform(oatVolcLoc, 23);				// Transform to Coral Reef (might be 23,24)
+	DisableTrigger('SSVolcanoMoveStop_F');
+}
+
+void_f OatakarkPassTwo()
+{
+location_t	oatShal2Loc[27];	// 2nd pass - change to Shallow Water
+location_t	tmpLoc;
+unit_t		tmpUnit;
+int_t		unitType;
+int_t		unitType2;
+int_t		numUnits;
+int_t		i;
+int_t		sinkSamurai;
+
+	// Make the locations for 2nd pass
+
+	MakeLocation(oatShal2Loc[0], 27, 55);
+	MakeLocation(oatShal2Loc[1], 27, 56);
+	MakeLocation(oatShal2Loc[2], 28, 54);
+	MakeLocation(oatShal2Loc[3], 29, 53);
+	MakeLocation(oatShal2Loc[4], 29, 54);	
+	MakeLocation(oatShal2Loc[5], 30, 52);
+	MakeLocation(oatShal2Loc[6], 30, 54);
+	MakeLocation(oatShal2Loc[7], 32, 50);
+	MakeLocation(oatShal2Loc[8], 32, 51);
+	MakeLocation(oatShal2Loc[9], 33, 50);
+	MakeLocation(oatShal2Loc[10], 34, 49);
+	MakeLocation(oatShal2Loc[11], 34, 55);
+	MakeLocation(oatShal2Loc[12], 35, 53);
+	MakeLocation(oatShal2Loc[13], 35, 54);
+	MakeLocation(oatShal2Loc[14], 36, 50);
+	MakeLocation(oatShal2Loc[15], 36, 51);
+	MakeLocation(oatShal2Loc[16], 36, 52);
+	MakeLocation(oatShal2Loc[17], 36, 53);
+	MakeLocation(oatShal2Loc[18], 30, 58);
+	MakeLocation(oatShal2Loc[19], 30, 59);
+	MakeLocation(oatShal2Loc[20], 31, 58);
+	MakeLocation(oatShal2Loc[21], 31, 59);
+	MakeLocation(oatShal2Loc[22], 30, 57);
+	MakeLocation(oatShal2Loc[23], 31, 57);
+	MakeLocation(oatShal2Loc[24], 32, 57);
+	MakeLocation(oatShal2Loc[25], 31, 56);
+	MakeLocation(oatShal2Loc[26], 32, 56);
+
+	// Check if Akimbo or Katchu are on a tile to be sunk
+	for (i = 0; i < 27; i = i + 1) {
+		if (oatShal2Loc[i] == sevenSamurai[0].location) {
+			if (sevenSamurai[1].valid) {
+				sinkSamurai = 3;
+			} else {
+				sinkSamurai = 2;
+			}
+		} elseif (sevenSamurai[1].valid && oatShal2Loc[i] == sevenSamurai[1].location) {
+			sinkSamurai = 1;
+		}
+	}
+	if (sinkSamurai == 2 || sinkSamurai == 3) {
+		if (sinkSamurai == 3) {
+			KillUnit(sevenSamurai[1]);	// Katchu Drowns
+			Message (1, 'SSKatchuDrowns');
+		}
+		// Akimbo Floats to shore without his horse	
+		unitType = sevenSamurai[0].type;
+		tmpLoc = balloonDestLoc;
+		if (unitType == UnitDB(UNIT_AKIMBO) ||
+			unitType == UnitDB(UNIT_AKIMBO2)) {
+			CreateUnit(1, UnitDB(UNIT_AKIMBO2H), tmpLoc, 0);
+			KillUnit(sevenSamurai[0]);
+			// Find samurai in player army
+			player[0] = 1;
+			numUnits = player[0].units;
+			for(i = 0; i < numUnits; i = i + 1) {
+				GetUnitByIndex(1, i, tmpUnit);
+				unitType2 = tmpUnit.type;
+				if (unitType2 == UnitDB(UNIT_AKIMBO2H)) {
+					sevenSamurai[0] = tmpUnit;
+				}
+			}
+		} elseif (unitType == UnitDB(UNIT_AKIMBO3)) {
+			CreateUnit(1, UnitDB(UNIT_AKIMBO3H), tmpLoc, 0);
+			KillUnit(sevenSamurai[0]);
+			// Find samurai in player army
+			player[0] = 1;
+			numUnits = player[0].units;
+			for(i = 0; i < numUnits; i = i + 1) {
+				GetUnitByIndex(1, i, tmpUnit);
+				unitType2 = tmpUnit.type;
+				if (unitType2 == UnitDB(UNIT_AKIMBO3H)) {
+					sevenSamurai[0] = tmpUnit;
+				}
+			}
+		} elseif (unitType == UnitDB(UNIT_AKIMBO4)) {
+			CreateUnit(1, UnitDB(UNIT_AKIMBO4H), tmpLoc, 0);
+			KillUnit(sevenSamurai[0]);
+			// Find samurai in player army
+			player[0] = 1;
+			numUnits = player[0].units;
+			for(i = 0; i < numUnits; i = i + 1) {
+				GetUnitByIndex(1, i, tmpUnit);
+				unitType2 = tmpUnit.type;
+				if (unitType2 == UnitDB(UNIT_AKIMBO4H)) {
+					sevenSamurai[0] = tmpUnit;
+				}
+			}
+		} elseif (unitType == UnitDB(UNIT_AKIMBO5)) {
+			CreateUnit(1, UnitDB(UNIT_AKIMBO5H), tmpLoc, 0);
+			KillUnit(sevenSamurai[0]);
+			// Find samurai in player army
+			player[0] = 1;
+			numUnits = player[0].units;
+			for(i = 0; i < numUnits; i = i + 1) {
+				GetUnitByIndex(1, i, tmpUnit);
+				unitType2 = tmpUnit.type;
+				if (unitType2 == UnitDB(UNIT_AKIMBO5H)) {
+					sevenSamurai[0] = tmpUnit;
+				}
+			}
+		} elseif (unitType == UnitDB(UNIT_AKIMBO6)) {
+			CreateUnit(1, UnitDB(UNIT_AKIMBO6H), tmpLoc, 0);
+			KillUnit(sevenSamurai[0]);
+			// Find samurai in player army
+			player[0] = 1;
+			numUnits = player[0].units;
+			for(i = 0; i < numUnits; i = i + 1) {
+				GetUnitByIndex(1, i, tmpUnit);
+				unitType2 = tmpUnit.type;
+				if (unitType2 == UnitDB(UNIT_AKIMBO6H)) {
+					sevenSamurai[0] = tmpUnit;
+				}
+			}
+		} elseif (unitType == UnitDB(UNIT_AKIMBO7)) {
+			CreateUnit(1, UnitDB(UNIT_AKIMBO7H), tmpLoc, 0);
+			KillUnit(sevenSamurai[0]);
+			// Find samurai in player army
+			player[0] = 1;
+			numUnits = player[0].units;
+			for(i = 0; i < numUnits; i = i + 1) {
+				GetUnitByIndex(1, i, tmpUnit);
+				unitType2 = tmpUnit.type;
+				if (unitType2 == UnitDB(UNIT_AKIMBO7H)) {
+					sevenSamurai[0] = tmpUnit;
+				}
+			}
+		} elseif (unitType == UnitDB(UNIT_AKIMBO8)) {
+			CreateUnit(1, UnitDB(UNIT_AKIMBO8H), tmpLoc, 0);
+			KillUnit(sevenSamurai[0]);
+			// Find samurai in player army
+			player[0] = 1;
+			numUnits = player[0].units;
+			for(i = 0; i < numUnits; i = i + 1) {
+				GetUnitByIndex(1, i, tmpUnit);
+				unitType2 = tmpUnit.type;
+				if (unitType2 == UnitDB(UNIT_AKIMBO8H)) {
+					sevenSamurai[0] = tmpUnit;
+				}
+			}
+		} elseif (unitType == UnitDB(UNIT_AKIMBO9)) {
+			CreateUnit(1, UnitDB(UNIT_AKIMBO9H), tmpLoc, 0);
+			KillUnit(sevenSamurai[0]);
+			// Find samurai in player army
+			player[0] = 1;
+			numUnits = player[0].units;
+			for(i = 0; i < numUnits; i = i + 1) {
+				GetUnitByIndex(1, i, tmpUnit);
+				unitType2 = tmpUnit.type;
+				if (unitType2 == UnitDB(UNIT_AKIMBO9H)) {
+					sevenSamurai[0] = tmpUnit;
+				}
+			}
+		} elseif (unitType == UnitDB(UNIT_AKIMBO2H)) {
+			CreateUnit(1, UnitDB(UNIT_AKIMBO2), tmpLoc, 0);
+			KillUnit(sevenSamurai[0]);
+			// Find samurai in player army
+			player[0] = 1;
+			numUnits = player[0].units;
+			for(i = 0; i < numUnits; i = i + 1) {
+				GetUnitByIndex(1, i, tmpUnit);
+				unitType2 = tmpUnit.type;
+				if (unitType2 == UnitDB(UNIT_AKIMBO2)) {
+					sevenSamurai[0] = tmpUnit;
+				}
+			}
+		} elseif (unitType == UnitDB(UNIT_AKIMBO3H)) {
+			CreateUnit(1, UnitDB(UNIT_AKIMBO3), tmpLoc, 0);
+			KillUnit(sevenSamurai[0]);
+			// Find samurai in player army
+			player[0] = 1;
+			numUnits = player[0].units;
+			for(i = 0; i < numUnits; i = i + 1) {
+				GetUnitByIndex(1, i, tmpUnit);
+				unitType2 = tmpUnit.type;
+				if (unitType2 == UnitDB(UNIT_AKIMBO3)) {
+					sevenSamurai[0] = tmpUnit;
+				}
+			}
+		} elseif (unitType == UnitDB(UNIT_AKIMBO4H)) {
+			CreateUnit(1, UnitDB(UNIT_AKIMBO4), tmpLoc, 0);
+			KillUnit(sevenSamurai[0]);
+			// Find samurai in player army
+			player[0] = 1;
+			numUnits = player[0].units;
+			for(i = 0; i < numUnits; i = i + 1) {
+				GetUnitByIndex(1, i, tmpUnit);
+				unitType2 = tmpUnit.type;
+				if (unitType2 == UnitDB(UNIT_AKIMBO4)) {
+					sevenSamurai[0] = tmpUnit;
+				}
+			}
+		} elseif (unitType == UnitDB(UNIT_AKIMBO5H)) {
+			CreateUnit(1, UnitDB(UNIT_AKIMBO5), tmpLoc, 0);
+			KillUnit(sevenSamurai[0]);
+			// Find samurai in player army
+			player[0] = 1;
+			numUnits = player[0].units;
+			for(i = 0; i < numUnits; i = i + 1) {
+				GetUnitByIndex(1, i, tmpUnit);
+				unitType2 = tmpUnit.type;
+				if (unitType2 == UnitDB(UNIT_AKIMBO5)) {
+					sevenSamurai[0] = tmpUnit;
+				}
+			}
+		} elseif (unitType == UnitDB(UNIT_AKIMBO6H)) {
+			CreateUnit(1, UnitDB(UNIT_AKIMBO6), tmpLoc, 0);
+			KillUnit(sevenSamurai[0]);
+			// Find samurai in player army
+			player[0] = 1;
+			numUnits = player[0].units;
+			for(i = 0; i < numUnits; i = i + 1) {
+				GetUnitByIndex(1, i, tmpUnit);
+				unitType2 = tmpUnit.type;
+				if (unitType2 == UnitDB(UNIT_AKIMBO6)) {
+					sevenSamurai[0] = tmpUnit;
+				}
+			}
+		} elseif (unitType == UnitDB(UNIT_AKIMBO7H)) {
+			CreateUnit(1, UnitDB(UNIT_AKIMBO7), tmpLoc, 0);
+			KillUnit(sevenSamurai[0]);
+			// Find samurai in player army
+			player[0] = 1;
+			numUnits = player[0].units;
+			for(i = 0; i < numUnits; i = i + 1) {
+				GetUnitByIndex(1, i, tmpUnit);
+				unitType2 = tmpUnit.type;
+				if (unitType2 == UnitDB(UNIT_AKIMBO7)) {
+					sevenSamurai[0] = tmpUnit;
+				}
+			}
+		} elseif (unitType == UnitDB(UNIT_AKIMBO8H)) {
+			CreateUnit(1, UnitDB(UNIT_AKIMBO8), tmpLoc, 0);
+			KillUnit(sevenSamurai[0]);
+			// Find samurai in player army
+			player[0] = 1;
+			numUnits = player[0].units;
+			for(i = 0; i < numUnits; i = i + 1) {
+				GetUnitByIndex(1, i, tmpUnit);
+				unitType2 = tmpUnit.type;
+				if (unitType2 == UnitDB(UNIT_AKIMBO8)) {
+					sevenSamurai[0] = tmpUnit;
+				}
+			}
+		} elseif (unitType == UnitDB(UNIT_AKIMBO9H)) {
+			CreateUnit(1, UnitDB(UNIT_AKIMBO9), tmpLoc, 0);
+			KillUnit(sevenSamurai[0]);
+			// Find samurai in player army
+			player[0] = 1;
+			numUnits = player[0].units;
+			for(i = 0; i < numUnits; i = i + 1) {
+				GetUnitByIndex(1, i, tmpUnit);
+				unitType2 = tmpUnit.type;
+				if (unitType2 == UnitDB(UNIT_AKIMBO9)) {
+					sevenSamurai[0] = tmpUnit;
+				}
+			}
+		}
+		Message (1, 'SSOatakarkDrownA');
+		DisableTrigger('SSTransportPost_F');	
+	} elseif (sinkSamurai == 1) {
+		KillUnit(sevenSamurai[1]);			// Katchu Drowns
+		Message (1, 'SSKatchuDrowns');
+		if (sevenSamurai[0].location == balloonLoc) {	// If Akimbo is 'boarded'
+			Terraform(balloonLoc, 24);		// Remove Balloon 'good' by terraforming to Special1 tile
+			PlantGood(balloonDestLoc);		// Place Balloon 'good' at destination
+			GetUnitFromCell(balloonLoc, 0, tmpUnit);
+			unitType = tmpUnit.type;
+			CreateUnit(1, unitType, balloonDestLoc2, 0);	// 'Teleport' unit
+			KillUnit(tmpUnit);
+			GetUnitFromCell(balloonDestLoc2, 0, sevenSamurai[0]);
+			Message(1, 'SSBalloonEndA');
+			AddCenter(balloonDestLoc);
+			DisableTrigger('SSTransportPost_F');
+		}
+	}
+	for (i = 0; i < 27; i = i + 1) {
+		Terraform(oatShal2Loc[i], 10);		// Transform to Shallow Water
+	}
+}
+
+void_f OatakarkPassThree()
+{
+location_t	oatShal3Loc[4];		// 3rd pass - change to Shallow Water
+location_t	tmpLoc;
+unit_t		tmpUnit;
+int_t		unitType;
+int_t		unitType2;
+int_t		numUnits;
+int_t		i;
+int_t		sinkSamurai;
+
+	// Make the locations for 3rd pass
+	MakeLocation(oatShal3Loc[0], 28, 62);
+	MakeLocation(oatShal3Loc[1], 29, 60);
+	MakeLocation(oatShal3Loc[2], 29, 61);
+	MakeLocation(oatShal3Loc[3], 30, 60);
+
+	// Check if Akimbo or Katchu are on a tile to be sunk
+	for (i = 0; i < 4; i = i + 1) {
+		if (oatShal3Loc[i] == sevenSamurai[0].location) {
+			if (sevenSamurai[1].valid) {
+				sinkSamurai = 3;
+			} else {
+				sinkSamurai = 2;
+			}
+		} elseif (sevenSamurai[1].valid && oatShal3Loc[i] == sevenSamurai[1].location) {
+			sinkSamurai = 1;
+		}
+	}
+	if (sinkSamurai == 2 || sinkSamurai == 3) {
+		if (sinkSamurai == 3) {
+			KillUnit(sevenSamurai[1]);	// Katchu Drowns
+			Message (1, 'SSKatchuDrowns');
+		}
+		// Akimbo Floats to shore without his horse	
+		unitType = sevenSamurai[0].type;
+		tmpLoc = balloonDestLoc;
+		if (unitType == UnitDB(UNIT_AKIMBO) ||
+			unitType == UnitDB(UNIT_AKIMBO2)) {
+			CreateUnit(1, UnitDB(UNIT_AKIMBO2H), tmpLoc, 0);
+			KillUnit(sevenSamurai[0]);
+			// Find samurai in player army
+			player[0] = 1;
+			numUnits = player[0].units;
+			for(i = 0; i < numUnits; i = i + 1) {
+				GetUnitByIndex(1, i, tmpUnit);
+				unitType2 = tmpUnit.type;
+				if (unitType2 == UnitDB(UNIT_AKIMBO2H)) {
+					sevenSamurai[0] = tmpUnit;
+				}
+			}
+		} elseif (unitType == UnitDB(UNIT_AKIMBO3)) {
+			CreateUnit(1, UnitDB(UNIT_AKIMBO3H), tmpLoc, 0);
+			KillUnit(sevenSamurai[0]);
+			// Find samurai in player army
+			player[0] = 1;
+			numUnits = player[0].units;
+			for(i = 0; i < numUnits; i = i + 1) {
+				GetUnitByIndex(1, i, tmpUnit);
+				unitType2 = tmpUnit.type;
+				if (unitType2 == UnitDB(UNIT_AKIMBO3H)) {
+					sevenSamurai[0] = tmpUnit;
+				}
+			}
+		} elseif (unitType == UnitDB(UNIT_AKIMBO4)) {
+			CreateUnit(1, UnitDB(UNIT_AKIMBO4H), tmpLoc, 0);
+			KillUnit(sevenSamurai[0]);
+			// Find samurai in player army
+			player[0] = 1;
+			numUnits = player[0].units;
+			for(i = 0; i < numUnits; i = i + 1) {
+				GetUnitByIndex(1, i, tmpUnit);
+				unitType2 = tmpUnit.type;
+				if (unitType2 == UnitDB(UNIT_AKIMBO4H)) {
+					sevenSamurai[0] = tmpUnit;
+				}
+			}
+		} elseif (unitType == UnitDB(UNIT_AKIMBO5)) {
+			CreateUnit(1, UnitDB(UNIT_AKIMBO5H), tmpLoc, 0);
+			KillUnit(sevenSamurai[0]);
+			// Find samurai in player army
+			player[0] = 1;
+			numUnits = player[0].units;
+			for(i = 0; i < numUnits; i = i + 1) {
+				GetUnitByIndex(1, i, tmpUnit);
+				unitType2 = tmpUnit.type;
+				if (unitType2 == UnitDB(UNIT_AKIMBO5H)) {
+					sevenSamurai[0] = tmpUnit;
+				}
+			}
+		} elseif (unitType == UnitDB(UNIT_AKIMBO6)) {
+			CreateUnit(1, UnitDB(UNIT_AKIMBO6H), tmpLoc, 0);
+			KillUnit(sevenSamurai[0]);
+			// Find samurai in player army
+			player[0] = 1;
+			numUnits = player[0].units;
+			for(i = 0; i < numUnits; i = i + 1) {
+				GetUnitByIndex(1, i, tmpUnit);
+				unitType2 = tmpUnit.type;
+				if (unitType2 == UnitDB(UNIT_AKIMBO6H)) {
+					sevenSamurai[0] = tmpUnit;
+				}
+			}
+		} elseif (unitType == UnitDB(UNIT_AKIMBO7)) {
+			CreateUnit(1, UnitDB(UNIT_AKIMBO7H), tmpLoc, 0);
+			KillUnit(sevenSamurai[0]);
+			// Find samurai in player army
+			player[0] = 1;
+			numUnits = player[0].units;
+			for(i = 0; i < numUnits; i = i + 1) {
+				GetUnitByIndex(1, i, tmpUnit);
+				unitType2 = tmpUnit.type;
+				if (unitType2 == UnitDB(UNIT_AKIMBO7H)) {
+					sevenSamurai[0] = tmpUnit;
+				}
+			}
+		} elseif (unitType == UnitDB(UNIT_AKIMBO8)) {
+			CreateUnit(1, UnitDB(UNIT_AKIMBO8H), tmpLoc, 0);
+			KillUnit(sevenSamurai[0]);
+			// Find samurai in player army
+			player[0] = 1;
+			numUnits = player[0].units;
+			for(i = 0; i < numUnits; i = i + 1) {
+				GetUnitByIndex(1, i, tmpUnit);
+				unitType2 = tmpUnit.type;
+				if (unitType2 == UnitDB(UNIT_AKIMBO8H)) {
+					sevenSamurai[0] = tmpUnit;
+				}
+			}
+		} elseif (unitType == UnitDB(UNIT_AKIMBO9)) {
+			CreateUnit(1, UnitDB(UNIT_AKIMBO9H), tmpLoc, 0);
+			KillUnit(sevenSamurai[0]);
+			// Find samurai in player army
+			player[0] = 1;
+			numUnits = player[0].units;
+			for(i = 0; i < numUnits; i = i + 1) {
+				GetUnitByIndex(1, i, tmpUnit);
+				unitType2 = tmpUnit.type;
+				if (unitType2 == UnitDB(UNIT_AKIMBO9H)) {
+					sevenSamurai[0] = tmpUnit;
+				}
+			}
+		} elseif (unitType == UnitDB(UNIT_AKIMBO2H)) {
+			CreateUnit(1, UnitDB(UNIT_AKIMBO2), tmpLoc, 0);
+			KillUnit(sevenSamurai[0]);
+			// Find samurai in player army
+			player[0] = 1;
+			numUnits = player[0].units;
+			for(i = 0; i < numUnits; i = i + 1) {
+				GetUnitByIndex(1, i, tmpUnit);
+				unitType2 = tmpUnit.type;
+				if (unitType2 == UnitDB(UNIT_AKIMBO2)) {
+					sevenSamurai[0] = tmpUnit;
+				}
+			}
+		} elseif (unitType == UnitDB(UNIT_AKIMBO3H)) {
+			CreateUnit(1, UnitDB(UNIT_AKIMBO3), tmpLoc, 0);
+			KillUnit(sevenSamurai[0]);
+			// Find samurai in player army
+			player[0] = 1;
+			numUnits = player[0].units;
+			for(i = 0; i < numUnits; i = i + 1) {
+				GetUnitByIndex(1, i, tmpUnit);
+				unitType2 = tmpUnit.type;
+				if (unitType2 == UnitDB(UNIT_AKIMBO3)) {
+					sevenSamurai[0] = tmpUnit;
+				}
+			}
+		} elseif (unitType == UnitDB(UNIT_AKIMBO4H)) {
+			CreateUnit(1, UnitDB(UNIT_AKIMBO4), tmpLoc, 0);
+			KillUnit(sevenSamurai[0]);
+			// Find samurai in player army
+			player[0] = 1;
+			numUnits = player[0].units;
+			for(i = 0; i < numUnits; i = i + 1) {
+				GetUnitByIndex(1, i, tmpUnit);
+				unitType2 = tmpUnit.type;
+				if (unitType2 == UnitDB(UNIT_AKIMBO4)) {
+					sevenSamurai[0] = tmpUnit;
+				}
+			}
+		} elseif (unitType == UnitDB(UNIT_AKIMBO5H)) {
+			CreateUnit(1, UnitDB(UNIT_AKIMBO5), tmpLoc, 0);
+			KillUnit(sevenSamurai[0]);
+			// Find samurai in player army
+			player[0] = 1;
+			numUnits = player[0].units;
+			for(i = 0; i < numUnits; i = i + 1) {
+				GetUnitByIndex(1, i, tmpUnit);
+				unitType2 = tmpUnit.type;
+				if (unitType2 == UnitDB(UNIT_AKIMBO5)) {
+					sevenSamurai[0] = tmpUnit;
+				}
+			}
+		} elseif (unitType == UnitDB(UNIT_AKIMBO6H)) {
+			CreateUnit(1, UnitDB(UNIT_AKIMBO6), tmpLoc, 0);
+			KillUnit(sevenSamurai[0]);
+			// Find samurai in player army
+			player[0] = 1;
+			numUnits = player[0].units;
+			for(i = 0; i < numUnits; i = i + 1) {
+				GetUnitByIndex(1, i, tmpUnit);
+				unitType2 = tmpUnit.type;
+				if (unitType2 == UnitDB(UNIT_AKIMBO6)) {
+					sevenSamurai[0] = tmpUnit;
+				}
+			}
+		} elseif (unitType == UnitDB(UNIT_AKIMBO7H)) {
+			CreateUnit(1, UnitDB(UNIT_AKIMBO7), tmpLoc, 0);
+			KillUnit(sevenSamurai[0]);
+			// Find samurai in player army
+			player[0] = 1;
+			numUnits = player[0].units;
+			for(i = 0; i < numUnits; i = i + 1) {
+				GetUnitByIndex(1, i, tmpUnit);
+				unitType2 = tmpUnit.type;
+				if (unitType2 == UnitDB(UNIT_AKIMBO7)) {
+					sevenSamurai[0] = tmpUnit;
+				}
+			}
+		} elseif (unitType == UnitDB(UNIT_AKIMBO8H)) {
+			CreateUnit(1, UnitDB(UNIT_AKIMBO8), tmpLoc, 0);
+			KillUnit(sevenSamurai[0]);
+			// Find samurai in player army
+			player[0] = 1;
+			numUnits = player[0].units;
+			for(i = 0; i < numUnits; i = i + 1) {
+				GetUnitByIndex(1, i, tmpUnit);
+				unitType2 = tmpUnit.type;
+				if (unitType2 == UnitDB(UNIT_AKIMBO8)) {
+					sevenSamurai[0] = tmpUnit;
+				}
+			}
+		} elseif (unitType == UnitDB(UNIT_AKIMBO9H)) {
+			CreateUnit(1, UnitDB(UNIT_AKIMBO9), tmpLoc, 0);
+			KillUnit(sevenSamurai[0]);
+			// Find samurai in player army
+			player[0] = 1;
+			numUnits = player[0].units;
+			for(i = 0; i < numUnits; i = i + 1) {
+				GetUnitByIndex(1, i, tmpUnit);
+				unitType2 = tmpUnit.type;
+				if (unitType2 == UnitDB(UNIT_AKIMBO9)) {
+					sevenSamurai[0] = tmpUnit;
+				}
+			}
+		}
+		Message (1, 'SSOatakarkDrownA');
+		DisableTrigger('SSTransportPost_F');	
+	} elseif (sinkSamurai == 1) {
+		KillUnit(sevenSamurai[1]);			// Katchu Drowns
+		Message (1, 'SSKatchuDrowns');
+		if (sevenSamurai[0].location == balloonLoc) {	// If Akimbo is 'boarded'
+			Terraform(balloonLoc, 24);		// Remove Balloon 'good' by terraforming to Special1 tile
+			PlantGood(balloonDestLoc);		// Place Balloon 'good' at destination
+			GetUnitFromCell(balloonLoc, 0, tmpUnit);
+			unitType = tmpUnit.type;
+			CreateUnit(1, unitType, balloonDestLoc2, 0);	// 'Teleport' unit
+			KillUnit(tmpUnit);
+			GetUnitFromCell(balloonDestLoc2, 0, sevenSamurai[0]);
+			Message(1, 'SSBalloonEndA');
+			AddCenter(balloonDestLoc);
+			DisableTrigger('SSTransportPost_F');
+		}
+	}
+
+	for (i = 0; i < 4; i = i + 1) {
+		Terraform(oatShal3Loc[i], 10);		// Transform to Shallow Water
+	}
+}
+
+void_f OatakarkPassFour()
+{
+location_t	oatShal4Loc[3];		// 4th pass - change to Shallow Water
+location_t	tmpLoc;
+unit_t		tmpUnit;
+int_t		unitType;
+int_t		unitType2;
+int_t		numUnits;
+int_t		i;
+int_t		sinkSamurai;
+
+	// Make the locations for 4th pass
+	MakeLocation(oatShal4Loc[0], 27, 65);
+	MakeLocation(oatShal4Loc[1], 28, 63);
+	MakeLocation(oatShal4Loc[2], 28, 64);
+
+	// Check if Akimbo or Katchu are on a tile to be sunk
+	for (i = 0; i < 3; i = i + 1) {
+		if (oatShal4Loc[i] == sevenSamurai[0].location) {
+			if (sevenSamurai[1].valid) {
+				sinkSamurai = 3;
+			} else {
+				sinkSamurai = 2;
+			}
+		} elseif (sevenSamurai[1].valid && oatShal4Loc[i] == sevenSamurai[1].location) {
+			sinkSamurai = 1;
+		}
+	}
+	if (sinkSamurai == 2 || sinkSamurai == 3) {
+		if (sinkSamurai == 3) {
+			KillUnit(sevenSamurai[1]);	// Katchu Drowns
+			Message (1, 'SSKatchuDrowns');
+		}
+		// Akimbo Floats to shore without his horse	
+		unitType = sevenSamurai[0].type;
+		tmpLoc = balloonDestLoc;
+		if (unitType == UnitDB(UNIT_AKIMBO) ||
+			unitType == UnitDB(UNIT_AKIMBO2)) {
+			CreateUnit(1, UnitDB(UNIT_AKIMBO2H), tmpLoc, 0);
+			KillUnit(sevenSamurai[0]);
+			// Find samurai in player army
+			player[0] = 1;
+			numUnits = player[0].units;
+			for(i = 0; i < numUnits; i = i + 1) {
+				GetUnitByIndex(1, i, tmpUnit);
+				unitType2 = tmpUnit.type;
+				if (unitType2 == UnitDB(UNIT_AKIMBO2H)) {
+					sevenSamurai[0] = tmpUnit;
+				}
+			}
+		} elseif (unitType == UnitDB(UNIT_AKIMBO3)) {
+			CreateUnit(1, UnitDB(UNIT_AKIMBO3H), tmpLoc, 0);
+			KillUnit(sevenSamurai[0]);
+			// Find samurai in player army
+			player[0] = 1;
+			numUnits = player[0].units;
+			for(i = 0; i < numUnits; i = i + 1) {
+				GetUnitByIndex(1, i, tmpUnit);
+				unitType2 = tmpUnit.type;
+				if (unitType2 == UnitDB(UNIT_AKIMBO3H)) {
+					sevenSamurai[0] = tmpUnit;
+				}
+			}
+		} elseif (unitType == UnitDB(UNIT_AKIMBO4)) {
+			CreateUnit(1, UnitDB(UNIT_AKIMBO4H), tmpLoc, 0);
+			KillUnit(sevenSamurai[0]);
+			// Find samurai in player army
+			player[0] = 1;
+			numUnits = player[0].units;
+			for(i = 0; i < numUnits; i = i + 1) {
+				GetUnitByIndex(1, i, tmpUnit);
+				unitType2 = tmpUnit.type;
+				if (unitType2 == UnitDB(UNIT_AKIMBO4H)) {
+					sevenSamurai[0] = tmpUnit;
+				}
+			}
+		} elseif (unitType == UnitDB(UNIT_AKIMBO5)) {
+			CreateUnit(1, UnitDB(UNIT_AKIMBO5H), tmpLoc, 0);
+			KillUnit(sevenSamurai[0]);
+			// Find samurai in player army
+			player[0] = 1;
+			numUnits = player[0].units;
+			for(i = 0; i < numUnits; i = i + 1) {
+				GetUnitByIndex(1, i, tmpUnit);
+				unitType2 = tmpUnit.type;
+				if (unitType2 == UnitDB(UNIT_AKIMBO5H)) {
+					sevenSamurai[0] = tmpUnit;
+				}
+			}
+		} elseif (unitType == UnitDB(UNIT_AKIMBO6)) {
+			CreateUnit(1, UnitDB(UNIT_AKIMBO6H), tmpLoc, 0);
+			KillUnit(sevenSamurai[0]);
+			// Find samurai in player army
+			player[0] = 1;
+			numUnits = player[0].units;
+			for(i = 0; i < numUnits; i = i + 1) {
+				GetUnitByIndex(1, i, tmpUnit);
+				unitType2 = tmpUnit.type;
+				if (unitType2 == UnitDB(UNIT_AKIMBO6H)) {
+					sevenSamurai[0] = tmpUnit;
+				}
+			}
+		} elseif (unitType == UnitDB(UNIT_AKIMBO7)) {
+			CreateUnit(1, UnitDB(UNIT_AKIMBO7H), tmpLoc, 0);
+			KillUnit(sevenSamurai[0]);
+			// Find samurai in player army
+			player[0] = 1;
+			numUnits = player[0].units;
+			for(i = 0; i < numUnits; i = i + 1) {
+				GetUnitByIndex(1, i, tmpUnit);
+				unitType2 = tmpUnit.type;
+				if (unitType2 == UnitDB(UNIT_AKIMBO7H)) {
+					sevenSamurai[0] = tmpUnit;
+				}
+			}
+		} elseif (unitType == UnitDB(UNIT_AKIMBO8)) {
+			CreateUnit(1, UnitDB(UNIT_AKIMBO8H), tmpLoc, 0);
+			KillUnit(sevenSamurai[0]);
+			// Find samurai in player army
+			player[0] = 1;
+			numUnits = player[0].units;
+			for(i = 0; i < numUnits; i = i + 1) {
+				GetUnitByIndex(1, i, tmpUnit);
+				unitType2 = tmpUnit.type;
+				if (unitType2 == UnitDB(UNIT_AKIMBO8H)) {
+					sevenSamurai[0] = tmpUnit;
+				}
+			}
+		} elseif (unitType == UnitDB(UNIT_AKIMBO9)) {
+			CreateUnit(1, UnitDB(UNIT_AKIMBO9H), tmpLoc, 0);
+			KillUnit(sevenSamurai[0]);
+			// Find samurai in player army
+			player[0] = 1;
+			numUnits = player[0].units;
+			for(i = 0; i < numUnits; i = i + 1) {
+				GetUnitByIndex(1, i, tmpUnit);
+				unitType2 = tmpUnit.type;
+				if (unitType2 == UnitDB(UNIT_AKIMBO9H)) {
+					sevenSamurai[0] = tmpUnit;
+				}
+			}
+		} elseif (unitType == UnitDB(UNIT_AKIMBO2H)) {
+			CreateUnit(1, UnitDB(UNIT_AKIMBO2), tmpLoc, 0);
+			KillUnit(sevenSamurai[0]);
+			// Find samurai in player army
+			player[0] = 1;
+			numUnits = player[0].units;
+			for(i = 0; i < numUnits; i = i + 1) {
+				GetUnitByIndex(1, i, tmpUnit);
+				unitType2 = tmpUnit.type;
+				if (unitType2 == UnitDB(UNIT_AKIMBO2)) {
+					sevenSamurai[0] = tmpUnit;
+				}
+			}
+		} elseif (unitType == UnitDB(UNIT_AKIMBO3H)) {
+			CreateUnit(1, UnitDB(UNIT_AKIMBO3), tmpLoc, 0);
+			KillUnit(sevenSamurai[0]);
+			// Find samurai in player army
+			player[0] = 1;
+			numUnits = player[0].units;
+			for(i = 0; i < numUnits; i = i + 1) {
+				GetUnitByIndex(1, i, tmpUnit);
+				unitType2 = tmpUnit.type;
+				if (unitType2 == UnitDB(UNIT_AKIMBO3)) {
+					sevenSamurai[0] = tmpUnit;
+				}
+			}
+		} elseif (unitType == UnitDB(UNIT_AKIMBO4H)) {
+			CreateUnit(1, UnitDB(UNIT_AKIMBO4), tmpLoc, 0);
+			KillUnit(sevenSamurai[0]);
+			// Find samurai in player army
+			player[0] = 1;
+			numUnits = player[0].units;
+			for(i = 0; i < numUnits; i = i + 1) {
+				GetUnitByIndex(1, i, tmpUnit);
+				unitType2 = tmpUnit.type;
+				if (unitType2 == UnitDB(UNIT_AKIMBO4)) {
+					sevenSamurai[0] = tmpUnit;
+				}
+			}
+		} elseif (unitType == UnitDB(UNIT_AKIMBO5H)) {
+			CreateUnit(1, UnitDB(UNIT_AKIMBO5), tmpLoc, 0);
+			KillUnit(sevenSamurai[0]);
+			// Find samurai in player army
+			player[0] = 1;
+			numUnits = player[0].units;
+			for(i = 0; i < numUnits; i = i + 1) {
+				GetUnitByIndex(1, i, tmpUnit);
+				unitType2 = tmpUnit.type;
+				if (unitType2 == UnitDB(UNIT_AKIMBO5)) {
+					sevenSamurai[0] = tmpUnit;
+				}
+			}
+		} elseif (unitType == UnitDB(UNIT_AKIMBO6H)) {
+			CreateUnit(1, UnitDB(UNIT_AKIMBO6), tmpLoc, 0);
+			KillUnit(sevenSamurai[0]);
+			// Find samurai in player army
+			player[0] = 1;
+			numUnits = player[0].units;
+			for(i = 0; i < numUnits; i = i + 1) {
+				GetUnitByIndex(1, i, tmpUnit);
+				unitType2 = tmpUnit.type;
+				if (unitType2 == UnitDB(UNIT_AKIMBO6)) {
+					sevenSamurai[0] = tmpUnit;
+				}
+			}
+		} elseif (unitType == UnitDB(UNIT_AKIMBO7H)) {
+			CreateUnit(1, UnitDB(UNIT_AKIMBO7), tmpLoc, 0);
+			KillUnit(sevenSamurai[0]);
+			// Find samurai in player army
+			player[0] = 1;
+			numUnits = player[0].units;
+			for(i = 0; i < numUnits; i = i + 1) {
+				GetUnitByIndex(1, i, tmpUnit);
+				unitType2 = tmpUnit.type;
+				if (unitType2 == UnitDB(UNIT_AKIMBO7)) {
+					sevenSamurai[0] = tmpUnit;
+				}
+			}
+		} elseif (unitType == UnitDB(UNIT_AKIMBO8H)) {
+			CreateUnit(1, UnitDB(UNIT_AKIMBO8), tmpLoc, 0);
+			KillUnit(sevenSamurai[0]);
+			// Find samurai in player army
+			player[0] = 1;
+			numUnits = player[0].units;
+			for(i = 0; i < numUnits; i = i + 1) {
+				GetUnitByIndex(1, i, tmpUnit);
+				unitType2 = tmpUnit.type;
+				if (unitType2 == UnitDB(UNIT_AKIMBO8)) {
+					sevenSamurai[0] = tmpUnit;
+				}
+			}
+		} elseif (unitType == UnitDB(UNIT_AKIMBO9H)) {
+			CreateUnit(1, UnitDB(UNIT_AKIMBO9), tmpLoc, 0);
+			KillUnit(sevenSamurai[0]);
+			// Find samurai in player army
+			player[0] = 1;
+			numUnits = player[0].units;
+			for(i = 0; i < numUnits; i = i + 1) {
+				GetUnitByIndex(1, i, tmpUnit);
+				unitType2 = tmpUnit.type;
+				if (unitType2 == UnitDB(UNIT_AKIMBO9)) {
+					sevenSamurai[0] = tmpUnit;
+				}
+			}
+		}
+		Message (1, 'SSOatakarkDrownA');
+		DisableTrigger('SSTransportPost_F');	
+	} elseif (sinkSamurai == 1) {
+		KillUnit(sevenSamurai[1]);			// Katchu Drowns
+		Message (1, 'SSKatchuDrowns');
+		if (sevenSamurai[0].location == balloonLoc) {	// If Akimbo is 'boarded'
+			Terraform(balloonLoc, 24);		// Remove Balloon 'good' by terraforming to Special1 tile
+			PlantGood(balloonDestLoc);		// Place Balloon 'good' at destination
+			GetUnitFromCell(balloonLoc, 0, tmpUnit);
+			unitType = tmpUnit.type;
+			CreateUnit(1, unitType, balloonDestLoc2, 0);	// 'Teleport' unit
+			KillUnit(tmpUnit);
+			GetUnitFromCell(balloonDestLoc2, 0, sevenSamurai[0]);
+			Message(1, 'SSBalloonEndA');
+			AddCenter(balloonDestLoc);
+			DisableTrigger('SSTransportPost_F');
+		}
+	}
+
+	for (i = 0; i < 3; i = i + 1) {
+		Terraform(oatShal4Loc[i], 10);		// Transform to Shallow Water
+	}
+}
+
+void_f OatakarkPassFive()
+{
+location_t	oatShal5Loc[3];		// 5th pass - change to Shallow Water
+location_t	tmpLoc;
+unit_t		tmpUnit;
+int_t		unitType;
+int_t		unitType2;
+int_t		numUnits;
+int_t		i;
+int_t		sinkSamurai;
+
+	// Make the locations for 5th pass
+	MakeLocation(oatShal5Loc[0], 25, 67);
+	MakeLocation(oatShal5Loc[1], 25, 68);
+	MakeLocation(oatShal5Loc[2], 26, 66);
+
+	// Check if Akimbo or Katchu are on a tile to be sunk
+	for (i = 0; i < 3; i = i + 1) {
+		if (oatShal5Loc[i] == sevenSamurai[0].location) {
+			if (sevenSamurai[1].valid) {
+				sinkSamurai = 3;
+			} else {
+				sinkSamurai = 2;
+			}
+		} elseif (sevenSamurai[1].valid && oatShal5Loc[i] == sevenSamurai[1].location) {
+			sinkSamurai = 1;
+		}
+	}
+	if (sinkSamurai == 2 || sinkSamurai == 3) {
+		if (sinkSamurai == 3) {
+			KillUnit(sevenSamurai[1]);	// Katchu Drowns
+			Message (1, 'SSKatchuDrowns');
+		}
+		// Akimbo Floats to shore without his horse	
+		unitType = sevenSamurai[0].type;
+		tmpLoc = balloonDestLoc;
+		if (unitType == UnitDB(UNIT_AKIMBO) ||
+			unitType == UnitDB(UNIT_AKIMBO2)) {
+			CreateUnit(1, UnitDB(UNIT_AKIMBO2H), tmpLoc, 0);
+			KillUnit(sevenSamurai[0]);
+			// Find samurai in player army
+			player[0] = 1;
+			numUnits = player[0].units;
+			for(i = 0; i < numUnits; i = i + 1) {
+				GetUnitByIndex(1, i, tmpUnit);
+				unitType2 = tmpUnit.type;
+				if (unitType2 == UnitDB(UNIT_AKIMBO2H)) {
+					sevenSamurai[0] = tmpUnit;
+				}
+			}
+		} elseif (unitType == UnitDB(UNIT_AKIMBO3)) {
+			CreateUnit(1, UnitDB(UNIT_AKIMBO3H), tmpLoc, 0);
+			KillUnit(sevenSamurai[0]);
+			// Find samurai in player army
+			player[0] = 1;
+			numUnits = player[0].units;
+			for(i = 0; i < numUnits; i = i + 1) {
+				GetUnitByIndex(1, i, tmpUnit);
+				unitType2 = tmpUnit.type;
+				if (unitType2 == UnitDB(UNIT_AKIMBO3H)) {
+					sevenSamurai[0] = tmpUnit;
+				}
+			}
+		} elseif (unitType == UnitDB(UNIT_AKIMBO4)) {
+			CreateUnit(1, UnitDB(UNIT_AKIMBO4H), tmpLoc, 0);
+			KillUnit(sevenSamurai[0]);
+			// Find samurai in player army
+			player[0] = 1;
+			numUnits = player[0].units;
+			for(i = 0; i < numUnits; i = i + 1) {
+				GetUnitByIndex(1, i, tmpUnit);
+				unitType2 = tmpUnit.type;
+				if (unitType2 == UnitDB(UNIT_AKIMBO4H)) {
+					sevenSamurai[0] = tmpUnit;
+				}
+			}
+		} elseif (unitType == UnitDB(UNIT_AKIMBO5)) {
+			CreateUnit(1, UnitDB(UNIT_AKIMBO5H), tmpLoc, 0);
+			KillUnit(sevenSamurai[0]);
+			// Find samurai in player army
+			player[0] = 1;
+			numUnits = player[0].units;
+			for(i = 0; i < numUnits; i = i + 1) {
+				GetUnitByIndex(1, i, tmpUnit);
+				unitType2 = tmpUnit.type;
+				if (unitType2 == UnitDB(UNIT_AKIMBO5H)) {
+					sevenSamurai[0] = tmpUnit;
+				}
+			}
+		} elseif (unitType == UnitDB(UNIT_AKIMBO6)) {
+			CreateUnit(1, UnitDB(UNIT_AKIMBO6H), tmpLoc, 0);
+			KillUnit(sevenSamurai[0]);
+			// Find samurai in player army
+			player[0] = 1;
+			numUnits = player[0].units;
+			for(i = 0; i < numUnits; i = i + 1) {
+				GetUnitByIndex(1, i, tmpUnit);
+				unitType2 = tmpUnit.type;
+				if (unitType2 == UnitDB(UNIT_AKIMBO6H)) {
+					sevenSamurai[0] = tmpUnit;
+				}
+			}
+		} elseif (unitType == UnitDB(UNIT_AKIMBO7)) {
+			CreateUnit(1, UnitDB(UNIT_AKIMBO7H), tmpLoc, 0);
+			KillUnit(sevenSamurai[0]);
+			// Find samurai in player army
+			player[0] = 1;
+			numUnits = player[0].units;
+			for(i = 0; i < numUnits; i = i + 1) {
+				GetUnitByIndex(1, i, tmpUnit);
+				unitType2 = tmpUnit.type;
+				if (unitType2 == UnitDB(UNIT_AKIMBO7H)) {
+					sevenSamurai[0] = tmpUnit;
+				}
+			}
+		} elseif (unitType == UnitDB(UNIT_AKIMBO8)) {
+			CreateUnit(1, UnitDB(UNIT_AKIMBO8H), tmpLoc, 0);
+			KillUnit(sevenSamurai[0]);
+			// Find samurai in player army
+			player[0] = 1;
+			numUnits = player[0].units;
+			for(i = 0; i < numUnits; i = i + 1) {
+				GetUnitByIndex(1, i, tmpUnit);
+				unitType2 = tmpUnit.type;
+				if (unitType2 == UnitDB(UNIT_AKIMBO8H)) {
+					sevenSamurai[0] = tmpUnit;
+				}
+			}
+		} elseif (unitType == UnitDB(UNIT_AKIMBO9)) {
+			CreateUnit(1, UnitDB(UNIT_AKIMBO9H), tmpLoc, 0);
+			KillUnit(sevenSamurai[0]);
+			// Find samurai in player army
+			player[0] = 1;
+			numUnits = player[0].units;
+			for(i = 0; i < numUnits; i = i + 1) {
+				GetUnitByIndex(1, i, tmpUnit);
+				unitType2 = tmpUnit.type;
+				if (unitType2 == UnitDB(UNIT_AKIMBO9H)) {
+					sevenSamurai[0] = tmpUnit;
+				}
+			}
+		} elseif (unitType == UnitDB(UNIT_AKIMBO2H)) {
+			CreateUnit(1, UnitDB(UNIT_AKIMBO2), tmpLoc, 0);
+			KillUnit(sevenSamurai[0]);
+			// Find samurai in player army
+			player[0] = 1;
+			numUnits = player[0].units;
+			for(i = 0; i < numUnits; i = i + 1) {
+				GetUnitByIndex(1, i, tmpUnit);
+				unitType2 = tmpUnit.type;
+				if (unitType2 == UnitDB(UNIT_AKIMBO2)) {
+					sevenSamurai[0] = tmpUnit;
+				}
+			}
+		} elseif (unitType == UnitDB(UNIT_AKIMBO3H)) {
+			CreateUnit(1, UnitDB(UNIT_AKIMBO3), tmpLoc, 0);
+			KillUnit(sevenSamurai[0]);
+			// Find samurai in player army
+			player[0] = 1;
+			numUnits = player[0].units;
+			for(i = 0; i < numUnits; i = i + 1) {
+				GetUnitByIndex(1, i, tmpUnit);
+				unitType2 = tmpUnit.type;
+				if (unitType2 == UnitDB(UNIT_AKIMBO3)) {
+					sevenSamurai[0] = tmpUnit;
+				}
+			}
+		} elseif (unitType == UnitDB(UNIT_AKIMBO4H)) {
+			CreateUnit(1, UnitDB(UNIT_AKIMBO4), tmpLoc, 0);
+			KillUnit(sevenSamurai[0]);
+			// Find samurai in player army
+			player[0] = 1;
+			numUnits = player[0].units;
+			for(i = 0; i < numUnits; i = i + 1) {
+				GetUnitByIndex(1, i, tmpUnit);
+				unitType2 = tmpUnit.type;
+				if (unitType2 == UnitDB(UNIT_AKIMBO4)) {
+					sevenSamurai[0] = tmpUnit;
+				}
+			}
+		} elseif (unitType == UnitDB(UNIT_AKIMBO5H)) {
+			CreateUnit(1, UnitDB(UNIT_AKIMBO5), tmpLoc, 0);
+			KillUnit(sevenSamurai[0]);
+			// Find samurai in player army
+			player[0] = 1;
+			numUnits = player[0].units;
+			for(i = 0; i < numUnits; i = i + 1) {
+				GetUnitByIndex(1, i, tmpUnit);
+				unitType2 = tmpUnit.type;
+				if (unitType2 == UnitDB(UNIT_AKIMBO5)) {
+					sevenSamurai[0] = tmpUnit;
+				}
+			}
+		} elseif (unitType == UnitDB(UNIT_AKIMBO6H)) {
+			CreateUnit(1, UnitDB(UNIT_AKIMBO6), tmpLoc, 0);
+			KillUnit(sevenSamurai[0]);
+			// Find samurai in player army
+			player[0] = 1;
+			numUnits = player[0].units;
+			for(i = 0; i < numUnits; i = i + 1) {
+				GetUnitByIndex(1, i, tmpUnit);
+				unitType2 = tmpUnit.type;
+				if (unitType2 == UnitDB(UNIT_AKIMBO6)) {
+					sevenSamurai[0] = tmpUnit;
+				}
+			}
+		} elseif (unitType == UnitDB(UNIT_AKIMBO7H)) {
+			CreateUnit(1, UnitDB(UNIT_AKIMBO7), tmpLoc, 0);
+			KillUnit(sevenSamurai[0]);
+			// Find samurai in player army
+			player[0] = 1;
+			numUnits = player[0].units;
+			for(i = 0; i < numUnits; i = i + 1) {
+				GetUnitByIndex(1, i, tmpUnit);
+				unitType2 = tmpUnit.type;
+				if (unitType2 == UnitDB(UNIT_AKIMBO7)) {
+					sevenSamurai[0] = tmpUnit;
+				}
+			}
+		} elseif (unitType == UnitDB(UNIT_AKIMBO8H)) {
+			CreateUnit(1, UnitDB(UNIT_AKIMBO8), tmpLoc, 0);
+			KillUnit(sevenSamurai[0]);
+			// Find samurai in player army
+			player[0] = 1;
+			numUnits = player[0].units;
+			for(i = 0; i < numUnits; i = i + 1) {
+				GetUnitByIndex(1, i, tmpUnit);
+				unitType2 = tmpUnit.type;
+				if (unitType2 == UnitDB(UNIT_AKIMBO8)) {
+					sevenSamurai[0] = tmpUnit;
+				}
+			}
+		} elseif (unitType == UnitDB(UNIT_AKIMBO9H)) {
+			CreateUnit(1, UnitDB(UNIT_AKIMBO9), tmpLoc, 0);
+			KillUnit(sevenSamurai[0]);
+			// Find samurai in player army
+			player[0] = 1;
+			numUnits = player[0].units;
+			for(i = 0; i < numUnits; i = i + 1) {
+				GetUnitByIndex(1, i, tmpUnit);
+				unitType2 = tmpUnit.type;
+				if (unitType2 == UnitDB(UNIT_AKIMBO9)) {
+					sevenSamurai[0] = tmpUnit;
+				}
+			}
+		}
+		Message (1, 'SSOatakarkDrownA');
+		DisableTrigger('SSTransportPost_F');	
+	} elseif (sinkSamurai == 1) {
+		KillUnit(sevenSamurai[1]);			// Katchu Drowns
+		Message (1, 'SSKatchuDrowns');
+		if (sevenSamurai[0].location == balloonLoc) {	// If Akimbo is 'boarded'
+			Terraform(balloonLoc, 24);		// Remove Balloon 'good' by terraforming to Special1 tile
+			PlantGood(balloonDestLoc);		// Place Balloon 'good' at destination
+			GetUnitFromCell(balloonLoc, 0, tmpUnit);
+			unitType = tmpUnit.type;
+			CreateUnit(1, unitType, balloonDestLoc2, 0);	// 'Teleport' unit
+			KillUnit(tmpUnit);
+			GetUnitFromCell(balloonDestLoc2, 0, sevenSamurai[0]);
+			Message(1, 'SSBalloonEndA');
+			AddCenter(balloonDestLoc);
+			DisableTrigger('SSTransportPost_F');
+		}
+	}
+
+	for (i = 0; i < 3; i = i + 1) {
+		Terraform(oatShal5Loc[i], 10);		// Transform to Shallow Water
+	}
+}
+
+void_f OatakarkPassSix()
+{
+location_t	oatShal6Loc[7];		// 6th and final pass - change to Shallow Water
+location_t	tmpLoc;
+unit_t		tmpUnit;
+int_t		unitType;
+int_t		unitType2;
+int_t		numUnits;
+int_t		i;
+int_t		sinkSamurai;
+
+	// Make the locations for 6th pass
+	MakeLocation(oatShal6Loc[0], 23, 69);
+	MakeLocation(oatShal6Loc[1], 23, 70);
+	MakeLocation(oatShal6Loc[2], 23, 71);
+	MakeLocation(oatShal6Loc[3], 24, 68);
+	MakeLocation(oatShal6Loc[4], 24, 69);
+	MakeLocation(oatShal6Loc[5], 24, 70);
+	MakeLocation(oatShal6Loc[6], 25, 69);
+
+	// Check if Akimbo or Katchu are on a tile to be sunk
+	for (i = 0; i < 7; i = i + 1) {
+		if (oatShal6Loc[i] == sevenSamurai[0].location) {
+			if (sevenSamurai[1].valid) {
+				sinkSamurai = 3;
+			} else {
+				sinkSamurai = 2;
+			}
+		} elseif (sevenSamurai[1].valid && oatShal6Loc[i] == sevenSamurai[1].location) {
+			sinkSamurai = 1;
+		}
+	}
+	if (sinkSamurai == 2 || sinkSamurai == 3) {
+		if (sinkSamurai == 3) {
+			KillUnit(sevenSamurai[1]);	// Katchu Drowns
+			Message (1, 'SSKatchuDrowns');
+		}
+		// Akimbo Floats to shore without his horse	
+		unitType = sevenSamurai[0].type;
+		tmpLoc = balloonDestLoc;
+		if (unitType == UnitDB(UNIT_AKIMBO) ||
+			unitType == UnitDB(UNIT_AKIMBO2)) {
+			CreateUnit(1, UnitDB(UNIT_AKIMBO2H), tmpLoc, 0);
+			KillUnit(sevenSamurai[0]);
+			// Find samurai in player army
+			player[0] = 1;
+			numUnits = player[0].units;
+			for(i = 0; i < numUnits; i = i + 1) {
+				GetUnitByIndex(1, i, tmpUnit);
+				unitType2 = tmpUnit.type;
+				if (unitType2 == UnitDB(UNIT_AKIMBO2H)) {
+					sevenSamurai[0] = tmpUnit;
+				}
+			}
+		} elseif (unitType == UnitDB(UNIT_AKIMBO3)) {
+			CreateUnit(1, UnitDB(UNIT_AKIMBO3H), tmpLoc, 0);
+			KillUnit(sevenSamurai[0]);
+			// Find samurai in player army
+			player[0] = 1;
+			numUnits = player[0].units;
+			for(i = 0; i < numUnits; i = i + 1) {
+				GetUnitByIndex(1, i, tmpUnit);
+				unitType2 = tmpUnit.type;
+				if (unitType2 == UnitDB(UNIT_AKIMBO3H)) {
+					sevenSamurai[0] = tmpUnit;
+				}
+			}
+		} elseif (unitType == UnitDB(UNIT_AKIMBO4)) {
+			CreateUnit(1, UnitDB(UNIT_AKIMBO4H), tmpLoc, 0);
+			KillUnit(sevenSamurai[0]);
+			// Find samurai in player army
+			player[0] = 1;
+			numUnits = player[0].units;
+			for(i = 0; i < numUnits; i = i + 1) {
+				GetUnitByIndex(1, i, tmpUnit);
+				unitType2 = tmpUnit.type;
+				if (unitType2 == UnitDB(UNIT_AKIMBO4H)) {
+					sevenSamurai[0] = tmpUnit;
+				}
+			}
+		} elseif (unitType == UnitDB(UNIT_AKIMBO5)) {
+			CreateUnit(1, UnitDB(UNIT_AKIMBO5H), tmpLoc, 0);
+			KillUnit(sevenSamurai[0]);
+			// Find samurai in player army
+			player[0] = 1;
+			numUnits = player[0].units;
+			for(i = 0; i < numUnits; i = i + 1) {
+				GetUnitByIndex(1, i, tmpUnit);
+				unitType2 = tmpUnit.type;
+				if (unitType2 == UnitDB(UNIT_AKIMBO5H)) {
+					sevenSamurai[0] = tmpUnit;
+				}
+			}
+		} elseif (unitType == UnitDB(UNIT_AKIMBO6)) {
+			CreateUnit(1, UnitDB(UNIT_AKIMBO6H), tmpLoc, 0);
+			KillUnit(sevenSamurai[0]);
+			// Find samurai in player army
+			player[0] = 1;
+			numUnits = player[0].units;
+			for(i = 0; i < numUnits; i = i + 1) {
+				GetUnitByIndex(1, i, tmpUnit);
+				unitType2 = tmpUnit.type;
+				if (unitType2 == UnitDB(UNIT_AKIMBO6H)) {
+					sevenSamurai[0] = tmpUnit;
+				}
+			}
+		} elseif (unitType == UnitDB(UNIT_AKIMBO7)) {
+			CreateUnit(1, UnitDB(UNIT_AKIMBO7H), tmpLoc, 0);
+			KillUnit(sevenSamurai[0]);
+			// Find samurai in player army
+			player[0] = 1;
+			numUnits = player[0].units;
+			for(i = 0; i < numUnits; i = i + 1) {
+				GetUnitByIndex(1, i, tmpUnit);
+				unitType2 = tmpUnit.type;
+				if (unitType2 == UnitDB(UNIT_AKIMBO7H)) {
+					sevenSamurai[0] = tmpUnit;
+				}
+			}
+		} elseif (unitType == UnitDB(UNIT_AKIMBO8)) {
+			CreateUnit(1, UnitDB(UNIT_AKIMBO8H), tmpLoc, 0);
+			KillUnit(sevenSamurai[0]);
+			// Find samurai in player army
+			player[0] = 1;
+			numUnits = player[0].units;
+			for(i = 0; i < numUnits; i = i + 1) {
+				GetUnitByIndex(1, i, tmpUnit);
+				unitType2 = tmpUnit.type;
+				if (unitType2 == UnitDB(UNIT_AKIMBO8H)) {
+					sevenSamurai[0] = tmpUnit;
+				}
+			}
+		} elseif (unitType == UnitDB(UNIT_AKIMBO9)) {
+			CreateUnit(1, UnitDB(UNIT_AKIMBO9H), tmpLoc, 0);
+			KillUnit(sevenSamurai[0]);
+			// Find samurai in player army
+			player[0] = 1;
+			numUnits = player[0].units;
+			for(i = 0; i < numUnits; i = i + 1) {
+				GetUnitByIndex(1, i, tmpUnit);
+				unitType2 = tmpUnit.type;
+				if (unitType2 == UnitDB(UNIT_AKIMBO9H)) {
+					sevenSamurai[0] = tmpUnit;
+				}
+			}
+		} elseif (unitType == UnitDB(UNIT_AKIMBO2H)) {
+			CreateUnit(1, UnitDB(UNIT_AKIMBO2), tmpLoc, 0);
+			KillUnit(sevenSamurai[0]);
+			// Find samurai in player army
+			player[0] = 1;
+			numUnits = player[0].units;
+			for(i = 0; i < numUnits; i = i + 1) {
+				GetUnitByIndex(1, i, tmpUnit);
+				unitType2 = tmpUnit.type;
+				if (unitType2 == UnitDB(UNIT_AKIMBO2)) {
+					sevenSamurai[0] = tmpUnit;
+				}
+			}
+		} elseif (unitType == UnitDB(UNIT_AKIMBO3H)) {
+			CreateUnit(1, UnitDB(UNIT_AKIMBO3), tmpLoc, 0);
+			KillUnit(sevenSamurai[0]);
+			// Find samurai in player army
+			player[0] = 1;
+			numUnits = player[0].units;
+			for(i = 0; i < numUnits; i = i + 1) {
+				GetUnitByIndex(1, i, tmpUnit);
+				unitType2 = tmpUnit.type;
+				if (unitType2 == UnitDB(UNIT_AKIMBO3)) {
+					sevenSamurai[0] = tmpUnit;
+				}
+			}
+		} elseif (unitType == UnitDB(UNIT_AKIMBO4H)) {
+			CreateUnit(1, UnitDB(UNIT_AKIMBO4), tmpLoc, 0);
+			KillUnit(sevenSamurai[0]);
+			// Find samurai in player army
+			player[0] = 1;
+			numUnits = player[0].units;
+			for(i = 0; i < numUnits; i = i + 1) {
+				GetUnitByIndex(1, i, tmpUnit);
+				unitType2 = tmpUnit.type;
+				if (unitType2 == UnitDB(UNIT_AKIMBO4)) {
+					sevenSamurai[0] = tmpUnit;
+				}
+			}
+		} elseif (unitType == UnitDB(UNIT_AKIMBO5H)) {
+			CreateUnit(1, UnitDB(UNIT_AKIMBO5), tmpLoc, 0);
+			KillUnit(sevenSamurai[0]);
+			// Find samurai in player army
+			player[0] = 1;
+			numUnits = player[0].units;
+			for(i = 0; i < numUnits; i = i + 1) {
+				GetUnitByIndex(1, i, tmpUnit);
+				unitType2 = tmpUnit.type;
+				if (unitType2 == UnitDB(UNIT_AKIMBO5)) {
+					sevenSamurai[0] = tmpUnit;
+				}
+			}
+		} elseif (unitType == UnitDB(UNIT_AKIMBO6H)) {
+			CreateUnit(1, UnitDB(UNIT_AKIMBO6), tmpLoc, 0);
+			KillUnit(sevenSamurai[0]);
+			// Find samurai in player army
+			player[0] = 1;
+			numUnits = player[0].units;
+			for(i = 0; i < numUnits; i = i + 1) {
+				GetUnitByIndex(1, i, tmpUnit);
+				unitType2 = tmpUnit.type;
+				if (unitType2 == UnitDB(UNIT_AKIMBO6)) {
+					sevenSamurai[0] = tmpUnit;
+				}
+			}
+		} elseif (unitType == UnitDB(UNIT_AKIMBO7H)) {
+			CreateUnit(1, UnitDB(UNIT_AKIMBO7), tmpLoc, 0);
+			KillUnit(sevenSamurai[0]);
+			// Find samurai in player army
+			player[0] = 1;
+			numUnits = player[0].units;
+			for(i = 0; i < numUnits; i = i + 1) {
+				GetUnitByIndex(1, i, tmpUnit);
+				unitType2 = tmpUnit.type;
+				if (unitType2 == UnitDB(UNIT_AKIMBO7)) {
+					sevenSamurai[0] = tmpUnit;
+				}
+			}
+		} elseif (unitType == UnitDB(UNIT_AKIMBO8H)) {
+			CreateUnit(1, UnitDB(UNIT_AKIMBO8), tmpLoc, 0);
+			KillUnit(sevenSamurai[0]);
+			// Find samurai in player army
+			player[0] = 1;
+			numUnits = player[0].units;
+			for(i = 0; i < numUnits; i = i + 1) {
+				GetUnitByIndex(1, i, tmpUnit);
+				unitType2 = tmpUnit.type;
+				if (unitType2 == UnitDB(UNIT_AKIMBO8)) {
+					sevenSamurai[0] = tmpUnit;
+				}
+			}
+		} elseif (unitType == UnitDB(UNIT_AKIMBO9H)) {
+			CreateUnit(1, UnitDB(UNIT_AKIMBO9), tmpLoc, 0);
+			KillUnit(sevenSamurai[0]);
+			// Find samurai in player army
+			player[0] = 1;
+			numUnits = player[0].units;
+			for(i = 0; i < numUnits; i = i + 1) {
+				GetUnitByIndex(1, i, tmpUnit);
+				unitType2 = tmpUnit.type;
+				if (unitType2 == UnitDB(UNIT_AKIMBO9)) {
+					sevenSamurai[0] = tmpUnit;
+				}
+			}
+		}
+		Message (1, 'SSOatakarkDrownA');
+		DisableTrigger('SSTransportPost_F');	
+	} elseif (sinkSamurai == 1) {
+		KillUnit(sevenSamurai[1]);			// Katchu Drowns
+		Message (1, 'SSKatchuDrowns');
+		if (sevenSamurai[0].location == balloonLoc) {	// If Akimbo is 'boarded'
+			Terraform(balloonLoc, 24);		// Remove Balloon 'good' by terraforming to Special1 tile
+			PlantGood(balloonDestLoc);		// Place Balloon 'good' at destination
+			GetUnitFromCell(balloonLoc, 0, tmpUnit);
+			unitType = tmpUnit.type;
+			CreateUnit(1, unitType, balloonDestLoc2, 0);	// 'Teleport' unit
+			KillUnit(tmpUnit);
+			GetUnitFromCell(balloonDestLoc2, 0, sevenSamurai[0]);
+			Message(1, 'SSBalloonEndA');
+			AddCenter(balloonDestLoc);
+			DisableTrigger('SSTransportPost_F');
+		}
+	}
+
+	for (i = 0; i < 7; i = i + 1) {
+		Terraform(oatShal6Loc[i], 10);		// Transform to Shallow Water
+	}
+}
+// End Oatakark Sinking Functions
+
+
+// Spawns a random number and type of Bandits at a location within a certain distance
+void_f SpawnBandits (location_t tmpLoc, int_t tmpDist)
+{
+int_t	tmpRand;
+int_t	tmpRand2;
+int_t	tmpNum;
+int_t	samCount;
+int_t	i;
+
+	// Find out how many Samurai you have and spawn units accordingly.
+	samCount = 0;
+	for(i = 0; i < 7; i = i + 1) {
+		if (sevenSamurai[i].valid) {
+			samCount = samCount + 1;
+		}
+	}
+	if (samCount == 1) {
+		tmpNum = 2;
+	} elseif (samCount == 2) {
+		tmpNum = 4;
+	} elseif (samCount == 3) {
+		tmpNum = 6;
+	} elseif (samCount == 4) {
+		tmpNum = 8;
+	} elseif (samCount == 5) {
+		tmpNum = 10;
+	} elseif (samCount == 6) {
+		tmpNum = 12;
+	} elseif (samCount == 7) {
+		tmpNum = 14;
+	}
+	tmpRand = Random(tmpNum) + 1;			// Spawn between (1 and tmpNum) + 1 units
+
+	for(i = 0; i < tmpNum; i = i + 1) {
+		tmpRand2 = Random(20);						// Random type of bandit
+		if (tmpRand2 < 8) {							// 40% chance of Bandit
+			CreateUnit(3, UnitDB(UNIT_BANDIT), tmpLoc, tmpDist);
+		} elseif (tmpRand2 >= 8 && tmpRand2 < 14) {	// 30% chance of Bandit Horseman
+			CreateUnit(3, UnitDB(UNIT_BANDIT_HORSEMAN), tmpLoc, tmpDist);
+		} elseif (tmpRand2 >= 14 && tmpRand2 < 19) {	// 25% chance of Bandit Archer
+			CreateUnit(3, UnitDB(UNIT_BANDIT_ARCHER), tmpLoc, tmpDist);
+		} elseif (tmpRand2 == 19) {					// 5% chance of Bandit Musketeer
+			CreateUnit(3, UnitDB(UNIT_BANDIT_MUSKETEER), tmpLoc, tmpDist);
+		}
+	}
+}
+
+
+// Spawns a random number of Samurai at a location within a certain distance
+void_f SpawnSamurai (location_t tmpLoc, int_t tmpDist)
+{
+int_t	tmpRand;
+int_t	tmpRand2;
+int_t	tmpNum;
+int_t	samCount;
+int_t	i;
+
+	// Find out how many Samurai you have and spawn units accordingly.
+	samCount = 0;
+	for(i = 0; i < 7; i = i + 1) {
+		if (sevenSamurai[i].valid) {
+			samCount = samCount + 1;
+		}
+	}
+	if (samCount == 1) {
+		tmpNum = 1;
+	} elseif (samCount == 2) {
+		tmpNum = 3;
+	} elseif (samCount == 3) {
+		tmpNum = 4;
+	} elseif (samCount == 4) {
+		tmpNum = 6;
+	} elseif (samCount == 5) {
+		tmpNum = 8;
+	} elseif (samCount == 6) {
+		tmpNum = 10;
+	} elseif (samCount == 7) {
+		tmpNum = 12;
+	}
+	tmpRand = Random(tmpNum) + 1;			// Spawn between (1 and tmpNum) + 1 units
+
+	for(i = 0; i < tmpNum; i = i + 1) {
+		CreateUnit(3, UnitDB(UNIT_SAMURAI), tmpLoc, tmpDist);
+	}
+}
+
+
+// If more than one unit in a player's army is on a tile, group it into an army
+int_f MakeArmies (int_t tmpPlayer)
+{
+unit_t	tmpUnit;
+army_t	tmpArmy;
+int_t	i;
+int_t	j;
+int_t	tmpPlayer2;
+int_t	numUnits;
+int_t	tmpNum;
+int_t	foundLoc;
+int_t	indexLoc;
+location_t	tmpLoc[100];
+
+	tmpPlayer2 = tmpPlayer;
+	player[0] = tmpPlayer2;
+	numUnits = player[0].units;
+	foundLoc = 0;
+			
+	for (i = 0; i < numUnits; i = i + 1) {
+		GetUnitByIndex(tmpPlayer2, i, tmpUnit);
+		tmpNum = GetUnitsAtLocation(tmpUnit.location);
+		if (tmpNum >= 2) {
+			if (indexLoc >= 100 ) {
+				return -1;
+			}
+			for (j = 0; j < indexLoc; j = j + 1) {
+				if (tmpUnit.location == tmpLoc[i]) {
+					foundLoc = 1;
+				}
+			}
+			if (foundLoc == 1) {
+				foundLoc = 0;
+			} else {
+				tmpLoc[indexLoc] = tmpUnit.location;
+				indexLoc = indexLoc + 1;
+				GetArmyFromUnit (tmpUnit, tmpArmy);
+				Event:GroupOrder(tmpArmy);
+			}
+		}
+	}
+}
+
+
+// Heals all units at a given location
+void_f HealAll (location_t tmpLoc)
+{
+location_t	healLoc;
+unit_t		tmpUnit;
+int_t		numUnits;
+int_t		i;
+
+	healLoc = tmpLoc;
+	numUnits = GetUnitsAtLocation(healLoc);
+
+	for (i = 0; i < numUnits; i = i + 1) {
+		GetUnitFromCell(healLoc, i, tmpUnit);
+		Heal(tmpUnit);
+	}
+}
+
+// Finds one of your Samurai
+int_f FindSamurai (int_t unitType) 
+{
+int_t	i;
+int_t	numUnits;
+int_t	unitType2;
+int_t	unitType3;
+
+	player[0] = 1;
+	numUnits = player[0].units;
+	for(i = 0; i < numUnits; i = i + 1) {
+		GetUnitByIndex(1, i, specUnit);
+		unitType2 = specUnit.type;
+		unitType3 = unitType;
+		if(unitType2 == unitType3) {
+			return 1;
+		}
+	}
+}
+
+
+// Teleports units from a given location to a given location
+void_f TeleportUnits (location_t tmpLoc, location_t tmpDest, int_t tmpPlayer)
+{
+int_t		unitTypes[12];
+int_t		tmpNum;
+int_t		playerNum;
+int_t 		i;
+location_t	tmpLoc2;
+location_t	tmpDest2;
+unit_t		tmpUnit;
+
+	playerNum = tmpPlayer;
+	tmpLoc2 = tmpLoc;
+	tmpDest2 = tmpDest;
+	tmpNum = GetUnitsAtLocation(tmpDest2);
+	if (tmpNum > 0) {
+		for (i = 0; i < tmpNum; i = i + 1) {
+			GetUnitFromCell(tmpLoc2, i, tmpUnit);
+			if (tmpUnit.owner != playerNum) {
+				Event:KillUnit(tmpUnit, 0, playerNum);		// Kill units in the destination square not belonging to teleporting units
+			}
+		}
+	}
+	tmpNum = GetUnitsAtLocation(tmpLoc2);
+	if (tmpNum > 0) {
+		for (i = 0; i < tmpNum; i = i + 1) {
+			GetUnitFromCell(tmpLoc2, i, tmpUnit);
+			unitTypes[i] = tmpUnit.type;
+		}
+		for (i = 0; i < tmpNum; i = i + 1) {
+			if (unitTypes[i] != 0) {
+				CreateUnit(playerNum, unitTypes[i], tmpDest2, 0);	// 'Teleport' new unit
+			}
+		}
+		for (i = 0; i < tmpNum; i = i + 1) {
+			GetUnitFromCell(tmpLoc2, i, tmpUnit);
+			Event:KillUnit(tmpUnit, 0, playerNum);				// Kill old unit
+		}
+	}
+}
+
+
+// Teleports your Samurai from a given location to a given location
+void_f TeleportSamurai (location_t tmpLoc, location_t tmpDest, int_t tmpDist)
+{
+int_t		tmpNum;
+int_t		tmpNum2;
+int_t		unitType;
+int_t		unitType2;
+int_t		i;
+int_t		distance;
+unit_t		tmpUnit;
+unit_t		tmpUnit2;
+location_t	tmpLoc2;
+location_t	tmpDest2;
+
+	distance = tmpDist;
+	tmpLoc2 = tmpLoc;
+	tmpDest2 = tmpDest;
+	tmpNum = GetUnitsAtLocation(tmpDest2);	// Kill units at destination point
+	if (tmpNum > 0) {
+		for (i = 0; i < tmpNum; i = i + 1) {
+			GetUnitFromCell(tmpLoc2, i, tmpUnit);
+			if (tmpUnit.owner != 1) {	
+				Event:KillUnit(tmpUnit, 0, 1);
+			}
+		}
+	}
+	tmpNum = GetUnitsAtLocation(tmpLoc2);
+	if (tmpNum > 0) {
+		for (i = 0; i < tmpNum; i = i + 1) {
+			GetUnitFromCell(tmpLoc2, i, tmpUnit);
+			unitType = tmpUnit.type;
+			CreateUnit(1, unitType, tmpDest2, distance);	// 'Teleport' unit
+		}
+		// Remove old units
+		for (i = 0; i < tmpNum; i = i + 1) {
+			GetUnitFromCell(tmpLoc2, i, tmpUnit);
+			Event:KillUnit(tmpUnit, 0, 1);
+		}
+		// Find and re-assign samurai to the sevenSamurai array
+		player[0] = 1;
+		tmpNum2 = player[0].units;
+		for(i = 0; i < tmpNum2; i = i + 1) {
+			GetUnitByIndex(1, i, tmpUnit2);
+			unitType2 = tmpUnit2.type;
+			if (unitType2 >= 72 && unitType2 <= 88) {				// If unit is Akimbo
+				sevenSamurai[0] = tmpUnit2;
+			} elseif (unitType2 >= 89 && unitType2 <= 96) {		// If unit is Katchu
+				sevenSamurai[1] = tmpUnit2;
+			} elseif (unitType2 >= 97 && unitType2 <= 103) {	// If unit is Chun Ling
+				sevenSamurai[2] = tmpUnit2;
+			} elseif (unitType2 >= 104 && unitType2 <= 109) {	// If unit is Gonza
+				sevenSamurai[3] = tmpUnit2;
+			} elseif (unitType2 >= 110 && unitType2 <= 114) {	// If unit is Chikamatsu
+				sevenSamurai[4] = tmpUnit2;
+			} elseif (unitType2 >= 115 && unitType2 <= 118) {	// If unit is J-chan
+				sevenSamurai[5] = tmpUnit2;
+			} elseif (unitType2 >= 119 && unitType2 <= 121) {	// If unit is Mimiyota
+				sevenSamurai[6] = tmpUnit2;
+			}
+		}
+	}
+}
+
+
+// Transforms Akimbo from a Mounted Archer to an Archer and vice versa
+void_f TransformAkimbo (location_t tmpLoc)
+{
+int_t	unitType;
+int_t	unitType2;
+int_t	i;
+int_t	numUnits;
+unit_t	tmpUnit;
+
+	unitType = sevenSamurai[0].type;
+
+	if (unitType == UnitDB(UNIT_AKIMBO) ||
+		unitType == UnitDB(UNIT_AKIMBO2)) {
+		CreateUnit(1, UnitDB(UNIT_AKIMBO2H), tmpLoc, 0);
+		Event:KillUnit(sevenSamurai[0], 0, 1);
+		// Find samurai in player army
+		player[0] = 1;
+		numUnits = player[0].units;
+		for(i = 0; i < numUnits; i = i + 1) {
+			GetUnitByIndex(1, i, tmpUnit);
+			unitType2 = tmpUnit.type;
+			if (unitType2 == UnitDB(UNIT_AKIMBO2H)) {
+				sevenSamurai[0] = tmpUnit;
+			}
+		}
+	} elseif (unitType == UnitDB(UNIT_AKIMBO3)) {
+		CreateUnit(1, UnitDB(UNIT_AKIMBO3H), tmpLoc, 0);
+		Event:KillUnit(sevenSamurai[0], 0, 1);
+		// Find samurai in player army
+		player[0] = 1;
+		numUnits = player[0].units;
+		for(i = 0; i < numUnits; i = i + 1) {
+			GetUnitByIndex(1, i, tmpUnit);
+			unitType2 = tmpUnit.type;
+			if (unitType2 == UnitDB(UNIT_AKIMBO3H)) {
+				sevenSamurai[0] = tmpUnit;
+			}
+		}
+	} elseif (unitType == UnitDB(UNIT_AKIMBO4)) {
+		CreateUnit(1, UnitDB(UNIT_AKIMBO4H), tmpLoc, 0);
+		Event:KillUnit(sevenSamurai[0], 0, 1);
+		// Find samurai in player army
+		player[0] = 1;
+		numUnits = player[0].units;
+		for(i = 0; i < numUnits; i = i + 1) {
+			GetUnitByIndex(1, i, tmpUnit);
+			unitType2 = tmpUnit.type;
+			if (unitType2 == UnitDB(UNIT_AKIMBO4H)) {
+				sevenSamurai[0] = tmpUnit;
+			}
+		}
+	} elseif (unitType == UnitDB(UNIT_AKIMBO5)) {
+		CreateUnit(1, UnitDB(UNIT_AKIMBO5H), tmpLoc, 0);
+		Event:KillUnit(sevenSamurai[0], 0, 1);
+		// Find samurai in player army
+		player[0] = 1;
+		numUnits = player[0].units;
+		for(i = 0; i < numUnits; i = i + 1) {
+			GetUnitByIndex(1, i, tmpUnit);
+			unitType2 = tmpUnit.type;
+			if (unitType2 == UnitDB(UNIT_AKIMBO5H)) {
+				sevenSamurai[0] = tmpUnit;
+			}
+		}
+	} elseif (unitType == UnitDB(UNIT_AKIMBO6)) {
+		CreateUnit(1, UnitDB(UNIT_AKIMBO6H), tmpLoc, 0);
+		Event:KillUnit(sevenSamurai[0], 0, 1);
+		// Find samurai in player army
+		player[0] = 1;
+		numUnits = player[0].units;
+		for(i = 0; i < numUnits; i = i + 1) {
+			GetUnitByIndex(1, i, tmpUnit);
+			unitType2 = tmpUnit.type;
+			if (unitType2 == UnitDB(UNIT_AKIMBO6H)) {
+				sevenSamurai[0] = tmpUnit;
+			}
+		}
+	} elseif (unitType == UnitDB(UNIT_AKIMBO7)) {
+		CreateUnit(1, UnitDB(UNIT_AKIMBO7H), tmpLoc, 0);
+		Event:KillUnit(sevenSamurai[0], 0, 1);
+		// Find samurai in player army
+		player[0] = 1;
+		numUnits = player[0].units;
+		for(i = 0; i < numUnits; i = i + 1) {
+			GetUnitByIndex(1, i, tmpUnit);
+			unitType2 = tmpUnit.type;
+			if (unitType2 == UnitDB(UNIT_AKIMBO7H)) {
+				sevenSamurai[0] = tmpUnit;
+			}
+		}
+	} elseif (unitType == UnitDB(UNIT_AKIMBO8)) {
+		CreateUnit(1, UnitDB(UNIT_AKIMBO8H), tmpLoc, 0);
+		Event:KillUnit(sevenSamurai[0], 0, 1);
+		// Find samurai in player army
+		player[0] = 1;
+		numUnits = player[0].units;
+		for(i = 0; i < numUnits; i = i + 1) {
+			GetUnitByIndex(1, i, tmpUnit);
+			unitType2 = tmpUnit.type;
+			if (unitType2 == UnitDB(UNIT_AKIMBO8H)) {
+				sevenSamurai[0] = tmpUnit;
+			}
+		}
+	} elseif (unitType == UnitDB(UNIT_AKIMBO9)) {
+		CreateUnit(1, UnitDB(UNIT_AKIMBO9H), tmpLoc, 0);
+		Event:KillUnit(sevenSamurai[0], 0, 1);
+		// Find samurai in player army
+		player[0] = 1;
+		numUnits = player[0].units;
+		for(i = 0; i < numUnits; i = i + 1) {
+			GetUnitByIndex(1, i, tmpUnit);
+			unitType2 = tmpUnit.type;
+			if (unitType2 == UnitDB(UNIT_AKIMBO9H)) {
+				sevenSamurai[0] = tmpUnit;
+			}
+		}
+	} elseif (unitType == UnitDB(UNIT_AKIMBO2H)) {
+		CreateUnit(1, UnitDB(UNIT_AKIMBO2), tmpLoc, 0);
+		Event:KillUnit(sevenSamurai[0], 0, 1);
+		// Find samurai in player army
+		player[0] = 1;
+		numUnits = player[0].units;
+		for(i = 0; i < numUnits; i = i + 1) {
+			GetUnitByIndex(1, i, tmpUnit);
+			unitType2 = tmpUnit.type;
+			if (unitType2 == UnitDB(UNIT_AKIMBO2)) {
+				sevenSamurai[0] = tmpUnit;
+			}
+		}
+	} elseif (unitType == UnitDB(UNIT_AKIMBO3H)) {
+		CreateUnit(1, UnitDB(UNIT_AKIMBO3), tmpLoc, 0);
+		Event:KillUnit(sevenSamurai[0], 0, 1);
+		// Find samurai in player army
+		player[0] = 1;
+		numUnits = player[0].units;
+		for(i = 0; i < numUnits; i = i + 1) {
+			GetUnitByIndex(1, i, tmpUnit);
+			unitType2 = tmpUnit.type;
+			if (unitType2 == UnitDB(UNIT_AKIMBO3)) {
+				sevenSamurai[0] = tmpUnit;
+			}
+		}
+	} elseif (unitType == UnitDB(UNIT_AKIMBO4H)) {
+		CreateUnit(1, UnitDB(UNIT_AKIMBO4), tmpLoc, 0);
+		Event:KillUnit(sevenSamurai[0], 0, 1);
+		// Find samurai in player army
+		player[0] = 1;
+		numUnits = player[0].units;
+		for(i = 0; i < numUnits; i = i + 1) {
+			GetUnitByIndex(1, i, tmpUnit);
+			unitType2 = tmpUnit.type;
+			if (unitType2 == UnitDB(UNIT_AKIMBO4)) {
+				sevenSamurai[0] = tmpUnit;
+			}
+		}
+	} elseif (unitType == UnitDB(UNIT_AKIMBO5H)) {
+		CreateUnit(1, UnitDB(UNIT_AKIMBO5), tmpLoc, 0);
+		Event:KillUnit(sevenSamurai[0], 0, 1);
+		// Find samurai in player army
+		player[0] = 1;
+		numUnits = player[0].units;
+		for(i = 0; i < numUnits; i = i + 1) {
+			GetUnitByIndex(1, i, tmpUnit);
+			unitType2 = tmpUnit.type;
+			if (unitType2 == UnitDB(UNIT_AKIMBO5)) {
+				sevenSamurai[0] = tmpUnit;
+			}
+		}
+	} elseif (unitType == UnitDB(UNIT_AKIMBO6H)) {
+		CreateUnit(1, UnitDB(UNIT_AKIMBO6), tmpLoc, 0);
+		Event:KillUnit(sevenSamurai[0], 0, 1);
+		// Find samurai in player army
+		player[0] = 1;
+		numUnits = player[0].units;
+		for(i = 0; i < numUnits; i = i + 1) {
+			GetUnitByIndex(1, i, tmpUnit);
+			unitType2 = tmpUnit.type;
+			if (unitType2 == UnitDB(UNIT_AKIMBO6)) {
+				sevenSamurai[0] = tmpUnit;
+			}
+		}
+	} elseif (unitType == UnitDB(UNIT_AKIMBO7H)) {
+		CreateUnit(1, UnitDB(UNIT_AKIMBO7), tmpLoc, 0);
+		Event:KillUnit(sevenSamurai[0], 0, 1);
+		// Find samurai in player army
+		player[0] = 1;
+		numUnits = player[0].units;
+		for(i = 0; i < numUnits; i = i + 1) {
+			GetUnitByIndex(1, i, tmpUnit);
+			unitType2 = tmpUnit.type;
+			if (unitType2 == UnitDB(UNIT_AKIMBO7)) {
+				sevenSamurai[0] = tmpUnit;
+			}
+		}
+	} elseif (unitType == UnitDB(UNIT_AKIMBO8H)) {
+		CreateUnit(1, UnitDB(UNIT_AKIMBO8), tmpLoc, 0);
+		Event:KillUnit(sevenSamurai[0], 0, 1);
+		// Find samurai in player army
+		player[0] = 1;
+		numUnits = player[0].units;
+		for(i = 0; i < numUnits; i = i + 1) {
+			GetUnitByIndex(1, i, tmpUnit);
+			unitType2 = tmpUnit.type;
+			if (unitType2 == UnitDB(UNIT_AKIMBO8)) {
+				sevenSamurai[0] = tmpUnit;
+			}
+		}
+	} elseif (unitType == UnitDB(UNIT_AKIMBO9H)) {
+		CreateUnit(1, UnitDB(UNIT_AKIMBO9), tmpLoc, 0);
+		Event:KillUnit(sevenSamurai[0], 0, 1);
+		// Find samurai in player army
+		player[0] = 1;
+		numUnits = player[0].units;
+		for(i = 0; i < numUnits; i = i + 1) {
+			GetUnitByIndex(1, i, tmpUnit);
+			unitType2 = tmpUnit.type;
+			if (unitType2 == UnitDB(UNIT_AKIMBO9)) {
+				sevenSamurai[0] = tmpUnit;
+			}
+		}
+	}
+}
+
+
+// Returns an experience value depending on the unit
+int_f ExperienceFromUnit(unit_t tmpUnit)
+{
+int_t	unitType;
+
+	unitType = tmpUnit.type;
+	if (unitType == UnitDB(UNIT_MORARU_KYONSHI) ||
+		unitType == UnitDB(UNIT_WARRIOR) ||
+		unitType == UnitDB(UNIT_BANDIT) ||
+		unitType == UnitDB(UNIT_BANDIT_ARCHER) ||
+		unitType == UnitDB(UNIT_BANDIT_HORSEMAN)) {
+		return 10;
+	} elseif (unitType == UnitDB(UNIT_SAMURAI)) {
+		return 20;
+	} elseif (unitType == UnitDB(UNIT_BANDIT_MUSKETEER)) {
+		return 25;
+	} elseif (unitType == UnitDB(UNIT_RESWOB)) {
+		return 100;
+//	} elseif (unitType == UnitDB(UNIT_BANDIT_LEADER)) {
+//		return 50;
+	} else {
+		return 0;
+	}
+}
+
+
+// Level up Handling (characters may advance to 9th level in this scenario)
+void_f LevelChange (int_t tmpNum, location_t tmpLoc2) 
+{
+int_t	unitType;
+int_t	unitType2;
+int_t	numUnits;
+int_t	i;
+int_t	j;
+int_t	firstUnit;
+unit_t	tmpUnit;
+army_t	tmpArmy;
+location_t	tmpLoc;
+
+	i = tmpNum;
+	unitType = sevenSamurai[i].type;
+	tmpLoc = tmpLoc2;
+	
+	if (i == 0) {		// Akimbo level up
+		if (unitType == UnitDB(UNIT_AKIMBO)) {
+			CreateUnit(1, UnitDB(UNIT_AKIMBO2), tmpLoc, 0);
+			KillUnit(sevenSamurai[0]);
+			// Find samurai in player army
+			player[0] = 1;
+			numUnits = player[0].units;
+			for(j = 0; j < numUnits; j = j + 1) {
+				GetUnitByIndex(1, j, tmpUnit);
+				unitType2 = tmpUnit.type;
+				if (unitType2 == UnitDB(UNIT_AKIMBO2)) {
+					sevenSamurai[0] = tmpUnit;
+				}
+			}
+		} elseif (unitType == UnitDB(UNIT_AKIMBO2)) {
+			CreateUnit(1, UnitDB(UNIT_AKIMBO3), tmpLoc, 0);
+			KillUnit(sevenSamurai[0]);
+			// Find samurai in player army
+			player[0] = 1;
+			numUnits = player[0].units;
+			for(j = 0; j < numUnits; j = j + 1) {
+				GetUnitByIndex(1, j, tmpUnit);
+				unitType2 = tmpUnit.type;
+				if (unitType2 == UnitDB(UNIT_AKIMBO3)) {
+					sevenSamurai[0] = tmpUnit;
+				}
+			}
+		} elseif (unitType == UnitDB(UNIT_AKIMBO3)) {
+			CreateUnit(1, UnitDB(UNIT_AKIMBO4), tmpLoc, 0);
+			KillUnit(sevenSamurai[0]);
+			// Find samurai in player army
+			player[0] = 1;
+			numUnits = player[0].units;
+			for(j = 0; j < numUnits; j = j + 1) {
+				GetUnitByIndex(1, j, tmpUnit);
+				unitType2 = tmpUnit.type;
+				if (unitType2 == UnitDB(UNIT_AKIMBO4)) {
+					sevenSamurai[0] = tmpUnit;
+				}
+			}
+		} elseif (unitType == UnitDB(UNIT_AKIMBO4)) {
+			CreateUnit(1, UnitDB(UNIT_AKIMBO5), tmpLoc, 0);
+			KillUnit(sevenSamurai[0]);
+			// Find samurai in player army
+			player[0] = 1;
+			numUnits = player[0].units;
+			for(j = 0; j < numUnits; j = j + 1) {
+				GetUnitByIndex(1, j, tmpUnit);
+				unitType2 = tmpUnit.type;
+				if (unitType2 == UnitDB(UNIT_AKIMBO5)) {
+					sevenSamurai[0] = tmpUnit;
+				}
+			}
+		} elseif (unitType == UnitDB(UNIT_AKIMBO5)) {
+			CreateUnit(1, UnitDB(UNIT_AKIMBO6), tmpLoc, 0);
+			KillUnit(sevenSamurai[0]);
+			// Find samurai in player army
+			player[0] = 1;
+			numUnits = player[0].units;
+			for(j = 0; j < numUnits; j = j + 1) {
+				GetUnitByIndex(1, j, tmpUnit);
+				unitType2 = tmpUnit.type;
+				if (unitType2 == UnitDB(UNIT_AKIMBO6)) {
+					sevenSamurai[0] = tmpUnit;
+				}
+			}
+		} elseif (unitType == UnitDB(UNIT_AKIMBO6)) {
+			CreateUnit(1, UnitDB(UNIT_AKIMBO7), tmpLoc, 0);
+			KillUnit(sevenSamurai[0]);
+			// Find samurai in player army
+			player[0] = 1;
+			numUnits = player[0].units;
+			for(j = 0; j < numUnits; j = j + 1) {
+				GetUnitByIndex(1, j, tmpUnit);
+				unitType2 = tmpUnit.type;
+				if (unitType2 == UnitDB(UNIT_AKIMBO7)) {
+					sevenSamurai[0] = tmpUnit;
+				}
+			}
+		} elseif (unitType == UnitDB(UNIT_AKIMBO7)) {
+			CreateUnit(1, UnitDB(UNIT_AKIMBO8), tmpLoc, 0);
+			KillUnit(sevenSamurai[0]);
+			// Find samurai in player army
+			player[0] = 1;
+			numUnits = player[0].units;
+			for(j = 0; j < numUnits; j = j + 1) {
+				GetUnitByIndex(1, j, tmpUnit);
+				unitType2 = tmpUnit.type;
+				if (unitType2 == UnitDB(UNIT_AKIMBO8)) {
+					sevenSamurai[0] = tmpUnit;
+				}
+			}
+		} elseif (unitType == UnitDB(UNIT_AKIMBO8)) {
+			CreateUnit(1, UnitDB(UNIT_AKIMBO9), tmpLoc, 0);
+			KillUnit(sevenSamurai[0]);
+			// Find samurai in player army
+			player[0] = 1;
+			numUnits = player[0].units;
+			for(j = 0; j < numUnits; j = j + 1) {
+				GetUnitByIndex(1, j, tmpUnit);
+				unitType2 = tmpUnit.type;
+				if (unitType2 == UnitDB(UNIT_AKIMBO9)) {
+					sevenSamurai[0] = tmpUnit;
+				}
+			}
+		} elseif (unitType == UnitDB(UNIT_AKIMBO2H)) {
+			CreateUnit(1, UnitDB(UNIT_AKIMBO3H), tmpLoc, 0);
+			KillUnit(sevenSamurai[0]);
+			// Find samurai in player army
+			player[0] = 1;
+			numUnits = player[0].units;
+			for(j = 0; j < numUnits; j = j + 1) {
+				GetUnitByIndex(1, j, tmpUnit);
+				unitType2 = tmpUnit.type;
+				if (unitType2 == UnitDB(UNIT_AKIMBO3H)) {
+					sevenSamurai[0] = tmpUnit;
+				}
+			}
+		} elseif (unitType == UnitDB(UNIT_AKIMBO3H)) {
+			CreateUnit(1, UnitDB(UNIT_AKIMBO4H), tmpLoc, 0);
+			KillUnit(sevenSamurai[0]);
+			// Find samurai in player army
+			player[0] = 1;
+			numUnits = player[0].units;
+			for(j = 0; j < numUnits; j = j + 1) {
+				GetUnitByIndex(1, j, tmpUnit);
+				unitType2 = tmpUnit.type;
+				if (unitType2 == UnitDB(UNIT_AKIMBO4H)) {
+					sevenSamurai[0] = tmpUnit;
+				}
+			}
+		} elseif (unitType == UnitDB(UNIT_AKIMBO4H)) {
+			CreateUnit(1, UnitDB(UNIT_AKIMBO5H), tmpLoc, 0);
+			KillUnit(sevenSamurai[0]);
+			// Find samurai in player army
+			player[0] = 1;
+			numUnits = player[0].units;
+			for(j = 0; j < numUnits; j = j + 1) {
+				GetUnitByIndex(1, j, tmpUnit);
+				unitType2 = tmpUnit.type;
+				if (unitType2 == UnitDB(UNIT_AKIMBO5H)) {
+					sevenSamurai[0] = tmpUnit;
+				}
+			}
+		} elseif (unitType == UnitDB(UNIT_AKIMBO5H)) {
+			CreateUnit(1, UnitDB(UNIT_AKIMBO6H), tmpLoc, 0);
+			KillUnit(sevenSamurai[0]);
+			// Find samurai in player army
+			player[0] = 1;
+			numUnits = player[0].units;
+			for(j = 0; j < numUnits; j = j + 1) {
+				GetUnitByIndex(1, j, tmpUnit);
+				unitType2 = tmpUnit.type;
+				if (unitType2 == UnitDB(UNIT_AKIMBO6H)) {
+					sevenSamurai[0] = tmpUnit;
+				}
+			}
+		} elseif (unitType == UnitDB(UNIT_AKIMBO6H)) {
+			CreateUnit(1, UnitDB(UNIT_AKIMBO7H), tmpLoc, 0);
+			KillUnit(sevenSamurai[0]);
+			// Find samurai in player army
+			player[0] = 1;
+			numUnits = player[0].units;
+			for(j = 0; j < numUnits; j = j + 1) {
+				GetUnitByIndex(1, j, tmpUnit);
+				unitType2 = tmpUnit.type;
+				if (unitType2 == UnitDB(UNIT_AKIMBO7H)) {
+					sevenSamurai[0] = tmpUnit;
+				}
+			}
+		} elseif (unitType == UnitDB(UNIT_AKIMBO7H)) {
+			CreateUnit(1, UnitDB(UNIT_AKIMBO8H), tmpLoc, 0);
+			KillUnit(sevenSamurai[0]);
+			// Find samurai in player army
+			player[0] = 1;
+			numUnits = player[0].units;
+			for(j = 0; j < numUnits; j = j + 1) {
+				GetUnitByIndex(1, j, tmpUnit);
+				unitType2 = tmpUnit.type;
+				if (unitType2 == UnitDB(UNIT_AKIMBO8H)) {
+					sevenSamurai[0] = tmpUnit;
+				}
+			}
+		} elseif (unitType == UnitDB(UNIT_AKIMBO8H)) {
+			CreateUnit(1, UnitDB(UNIT_AKIMBO9H), tmpLoc, 0);
+			KillUnit(sevenSamurai[0]);
+			// Find samurai in player army
+			player[0] = 1;
+			numUnits = player[0].units;
+			for(j = 0; j < numUnits; j = j + 1) {
+				GetUnitByIndex(1, j, tmpUnit);
+				unitType2 = tmpUnit.type;
+				if (unitType2 == UnitDB(UNIT_AKIMBO9H)) {
+					sevenSamurai[0] = tmpUnit;
+				}
+			}
+		}
+	} elseif (i == 1) {		// Katchu level up
+		if (unitType == UnitDB(UNIT_KATCHU2)) {
+			CreateUnit(1, UnitDB(UNIT_KATCHU3), tmpLoc, 0);
+			KillUnit(sevenSamurai[1]);
+			// Find samurai in player army
+			player[0] = 1;
+			numUnits = player[0].units;
+			for(j = 0; j < numUnits; j = j + 1) {
+				GetUnitByIndex(1, j, tmpUnit);
+				unitType2 = tmpUnit.type;
+				if (unitType2 == UnitDB(UNIT_KATCHU3)) {
+					sevenSamurai[1] = tmpUnit;
+				}
+			}
+		} elseif (unitType == UnitDB(UNIT_KATCHU3)) {
+			CreateUnit(1, UnitDB(UNIT_KATCHU4), tmpLoc, 0);
+			KillUnit(sevenSamurai[1]);
+			// Find samurai in player army
+			player[0] = 1;
+			numUnits = player[0].units;
+			for(j = 0; j < numUnits; j = j + 1) {
+				GetUnitByIndex(1, j, tmpUnit);
+				unitType2 = tmpUnit.type;
+				if (unitType2 == UnitDB(UNIT_KATCHU4)) {
+					sevenSamurai[1] = tmpUnit;
+				}
+			}
+		} elseif (unitType == UnitDB(UNIT_KATCHU4)) {
+			CreateUnit(1, UnitDB(UNIT_KATCHU5), tmpLoc, 0);
+			KillUnit(sevenSamurai[1]);
+			// Find samurai in player army
+			player[0] = 1;
+			numUnits = player[0].units;
+			for(j = 0; j < numUnits; j = j + 1) {
+				GetUnitByIndex(1, j, tmpUnit);
+				unitType2 = tmpUnit.type;
+				if (unitType2 == UnitDB(UNIT_KATCHU5)) {
+					sevenSamurai[1] = tmpUnit;
+				}
+			}
+		} elseif (unitType == UnitDB(UNIT_KATCHU5)) {
+			CreateUnit(1, UnitDB(UNIT_KATCHU6), tmpLoc, 0);
+			KillUnit(sevenSamurai[1]);
+			// Find samurai in player army
+			player[0] = 1;
+			numUnits = player[0].units;
+			for(j = 0; j < numUnits; j = j + 1) {
+				GetUnitByIndex(1, j, tmpUnit);
+				unitType2 = tmpUnit.type;
+				if (unitType2 == UnitDB(UNIT_KATCHU6)) {
+					sevenSamurai[1] = tmpUnit;
+				}
+			}
+		} elseif (unitType == UnitDB(UNIT_KATCHU6)) {
+			CreateUnit(1, UnitDB(UNIT_KATCHU7), tmpLoc, 0);
+			KillUnit(sevenSamurai[1]);
+			// Find samurai in player army
+			player[0] = 1;
+			numUnits = player[0].units;
+			for(j = 0; j < numUnits; j = j + 1) {
+				GetUnitByIndex(1, j, tmpUnit);
+				unitType2 = tmpUnit.type;
+				if (unitType2 == UnitDB(UNIT_KATCHU7)) {
+					sevenSamurai[1] = tmpUnit;
+				}
+			}
+		} elseif (unitType == UnitDB(UNIT_KATCHU7)) {
+			CreateUnit(1, UnitDB(UNIT_KATCHU8), tmpLoc, 0);
+			KillUnit(sevenSamurai[1]);
+			// Find samurai in player army
+			player[0] = 1;
+			numUnits = player[0].units;
+			for(j = 0; j < numUnits; j = j + 1) {
+				GetUnitByIndex(1, j, tmpUnit);
+				unitType2 = tmpUnit.type;
+				if (unitType2 == UnitDB(UNIT_KATCHU8)) {
+					sevenSamurai[1] = tmpUnit;
+				}
+			}
+		} elseif (unitType == UnitDB(UNIT_KATCHU8)) {
+			CreateUnit(1, UnitDB(UNIT_KATCHU9), tmpLoc, 0);
+			KillUnit(sevenSamurai[1]);
+			// Find samurai in player army
+			player[0] = 1;
+			numUnits = player[0].units;
+			for(j = 0; j < numUnits; j = j + 1) {
+				GetUnitByIndex(1, j, tmpUnit);
+				unitType2 = tmpUnit.type;
+				if (unitType2 == UnitDB(UNIT_KATCHU9)) {
+					sevenSamurai[1] = tmpUnit;
+				}
+			}
+		}
+	} elseif (i == 2) {		// Chun Ling level up
+		if (unitType == UnitDB(UNIT_CHUN_LING3)) {
+			CreateUnit(1, UnitDB(UNIT_CHUN_LING4), tmpLoc, 0);
+			KillUnit(sevenSamurai[2]);
+			// Find samurai in player army
+			player[0] = 1;
+			numUnits = player[0].units;
+			for(j = 0; j < numUnits; j = j + 1) {
+				GetUnitByIndex(1, j, tmpUnit);
+				unitType2 = tmpUnit.type;
+				if (unitType2 == UnitDB(UNIT_CHUN_LING4)) {
+					sevenSamurai[2] = tmpUnit;
+				}
+			}
+		} elseif (unitType == UnitDB(UNIT_CHUN_LING4)) {
+			CreateUnit(1, UnitDB(UNIT_CHUN_LING5), tmpLoc, 0);
+			KillUnit(sevenSamurai[2]);
+			// Find samurai in player army
+			player[0] = 1;
+			numUnits = player[0].units;
+			for(j = 0; j < numUnits; j = j + 1) {
+				GetUnitByIndex(1, j, tmpUnit);
+				unitType2 = tmpUnit.type;
+				if (unitType2 == UnitDB(UNIT_CHUN_LING5)) {
+					sevenSamurai[2] = tmpUnit;
+				}
+			}
+		} elseif (unitType == UnitDB(UNIT_CHUN_LING5)) {
+			CreateUnit(1, UnitDB(UNIT_CHUN_LING6), tmpLoc, 0);
+			KillUnit(sevenSamurai[2]);
+			// Find samurai in player army
+			player[0] = 1;
+			numUnits = player[0].units;
+			for(j = 0; j < numUnits; j = j + 1) {
+				GetUnitByIndex(1, j, tmpUnit);
+				unitType2 = tmpUnit.type;
+				if (unitType2 == UnitDB(UNIT_CHUN_LING6)) {
+					sevenSamurai[2] = tmpUnit;
+				}
+			}
+		} elseif (unitType == UnitDB(UNIT_CHUN_LING6)) {
+			CreateUnit(1, UnitDB(UNIT_CHUN_LING7), tmpLoc, 0);
+			KillUnit(sevenSamurai[2]);
+			// Find samurai in player army
+			player[0] = 1;
+			numUnits = player[0].units;
+			for(j = 0; j < numUnits; j = j + 1) {
+				GetUnitByIndex(1, j, tmpUnit);
+				unitType2 = tmpUnit.type;
+				if (unitType2 == UnitDB(UNIT_CHUN_LING7)) {
+					sevenSamurai[2] = tmpUnit;
+				}
+			}
+		} elseif (unitType == UnitDB(UNIT_CHUN_LING7)) {
+			CreateUnit(1, UnitDB(UNIT_CHUN_LING8), tmpLoc, 0);
+			KillUnit(sevenSamurai[2]);
+			// Find samurai in player army
+			player[0] = 1;
+			numUnits = player[0].units;
+			for(j = 0; j < numUnits; j = j + 1) {
+				GetUnitByIndex(1, j, tmpUnit);
+				unitType2 = tmpUnit.type;
+				if (unitType2 == UnitDB(UNIT_CHUN_LING8)) {
+					sevenSamurai[2] = tmpUnit;
+				}
+			}
+		} elseif (unitType == UnitDB(UNIT_CHUN_LING8)) {
+			CreateUnit(1, UnitDB(UNIT_CHUN_LING9), tmpLoc, 0);
+			KillUnit(sevenSamurai[2]);
+			// Find samurai in player army
+			player[0] = 1;
+			numUnits = player[0].units;
+			for(j = 0; j < numUnits; j = j + 1) {
+				GetUnitByIndex(1, j, tmpUnit);
+				unitType2 = tmpUnit.type;
+				if (unitType2 == UnitDB(UNIT_CHUN_LING9)) {
+					sevenSamurai[2] = tmpUnit;
+				}
+			}
+		}
+	} elseif (i == 3) {		// Gonza level up
+		if (unitType == UnitDB(UNIT_GONZA4)) {
+			CreateUnit(1, UnitDB(UNIT_GONZA5), tmpLoc, 0);
+			KillUnit(sevenSamurai[3]);
+			// Find samurai in player army
+			player[0] = 1;
+			numUnits = player[0].units;
+			for(j = 0; j < numUnits; j = j + 1) {
+				GetUnitByIndex(1, j, tmpUnit);
+				unitType2 = tmpUnit.type;
+				if (unitType2 == UnitDB(UNIT_GONZA5)) {
+					sevenSamurai[3] = tmpUnit;
+				}
+			}
+		} elseif (unitType == UnitDB(UNIT_GONZA5)) {
+			CreateUnit(1, UnitDB(UNIT_GONZA6), tmpLoc, 0);
+			KillUnit(sevenSamurai[3]);
+			// Find samurai in player army
+			player[0] = 1;
+			numUnits = player[0].units;
+			for(j = 0; j < numUnits; j = j + 1) {
+				GetUnitByIndex(1, j, tmpUnit);
+				unitType2 = tmpUnit.type;
+				if (unitType2 == UnitDB(UNIT_GONZA6)) {
+					sevenSamurai[3] = tmpUnit;
+				}
+			}
+		} elseif (unitType == UnitDB(UNIT_GONZA6)) {
+			CreateUnit(1, UnitDB(UNIT_GONZA7), tmpLoc, 0);
+			KillUnit(sevenSamurai[3]);
+			// Find samurai in player army
+			player[0] = 1;
+			numUnits = player[0].units;
+			for(j = 0; j < numUnits; j = j + 1) {
+				GetUnitByIndex(1, j, tmpUnit);
+				unitType2 = tmpUnit.type;
+				if (unitType2 == UnitDB(UNIT_GONZA7)) {
+					sevenSamurai[3] = tmpUnit;
+				}
+			}
+		} elseif (unitType == UnitDB(UNIT_GONZA7)) {
+			CreateUnit(1, UnitDB(UNIT_GONZA8), tmpLoc, 0);
+			KillUnit(sevenSamurai[3]);
+			// Find samurai in player army
+			player[0] = 1;
+			numUnits = player[0].units;
+			for(j = 0; j < numUnits; j = j + 1) {
+				GetUnitByIndex(1, j, tmpUnit);
+				unitType2 = tmpUnit.type;
+				if (unitType2 == UnitDB(UNIT_GONZA8)) {
+					sevenSamurai[3] = tmpUnit;
+				}
+			}
+		} elseif (unitType == UnitDB(UNIT_GONZA8)) {
+			CreateUnit(1, UnitDB(UNIT_GONZA9), tmpLoc, 0);
+			KillUnit(sevenSamurai[3]);
+			// Find samurai in player army
+			player[0] = 1;
+			numUnits = player[0].units;
+			for(j = 0; j < numUnits; j = j + 1) {
+				GetUnitByIndex(1, j, tmpUnit);
+				unitType2 = tmpUnit.type;
+				if (unitType2 == UnitDB(UNIT_GONZA9)) {
+					sevenSamurai[3] = tmpUnit;
+				}
+			}
+		}
+	} elseif (i == 4) {		// Chikamatsu level up
+		if (unitType == UnitDB(UNIT_CHIKAMATSU5)) {
+			CreateUnit(1, UnitDB(UNIT_CHIKAMATSU6), tmpLoc, 0);
+			KillUnit(sevenSamurai[4]);
+			// Find samurai in player army
+			player[0] = 1;
+			numUnits = player[0].units;
+			for(j = 0; j < numUnits; j = j + 1) {
+				GetUnitByIndex(1, j, tmpUnit);
+				unitType2 = tmpUnit.type;
+				if (unitType2 == UnitDB(UNIT_CHIKAMATSU6)) {
+					sevenSamurai[4] = tmpUnit;
+				}
+			}
+		} elseif (unitType == UnitDB(UNIT_CHIKAMATSU6)) {
+			CreateUnit(1, UnitDB(UNIT_CHIKAMATSU7), tmpLoc, 0);
+			KillUnit(sevenSamurai[4]);
+			// Find samurai in player army
+			player[0] = 1;
+			numUnits = player[0].units;
+			for(j = 0; j < numUnits; j = j + 1) {
+				GetUnitByIndex(1, j, tmpUnit);
+				unitType2 = tmpUnit.type;
+				if (unitType2 == UnitDB(UNIT_CHIKAMATSU7)) {
+					sevenSamurai[4] = tmpUnit;
+				}
+			}
+		} elseif (unitType == UnitDB(UNIT_CHIKAMATSU7)) {
+			CreateUnit(1, UnitDB(UNIT_CHIKAMATSU8), tmpLoc, 0);
+			KillUnit(sevenSamurai[4]);
+			// Find samurai in player army
+			player[0] = 1;
+			numUnits = player[0].units;
+			for(j = 0; j < numUnits; j = j + 1) {
+				GetUnitByIndex(1, j, tmpUnit);
+				unitType2 = tmpUnit.type;
+				if (unitType2 == UnitDB(UNIT_CHIKAMATSU8)) {
+					sevenSamurai[4] = tmpUnit;
+				}
+			}
+		} elseif (unitType == UnitDB(UNIT_CHIKAMATSU8)) {
+			CreateUnit(1, UnitDB(UNIT_CHIKAMATSU9), tmpLoc, 0);
+			KillUnit(sevenSamurai[4]);
+			// Find samurai in player army
+			player[0] = 1;
+			numUnits = player[0].units;
+			for(j = 0; j < numUnits; j = j + 1) {
+				GetUnitByIndex(1, j, tmpUnit);
+				unitType2 = tmpUnit.type;
+				if (unitType2 == UnitDB(UNIT_CHIKAMATSU9)) {
+					sevenSamurai[4] = tmpUnit;
+				}
+			}
+		}
+	} elseif (i == 5) {		// J-chan level up
+		if (unitType == UnitDB(UNIT_JCHAN6)) {
+			CreateUnit(1, UnitDB(UNIT_JCHAN7), tmpLoc, 0);
+			KillUnit(sevenSamurai[5]);
+			// Find samurai in player army
+			player[0] = 1;
+			numUnits = player[0].units;
+			for(j = 0; j < numUnits; j = j + 1) {
+				GetUnitByIndex(1, j, tmpUnit);
+				unitType2 = tmpUnit.type;
+				if (unitType2 == UnitDB(UNIT_JCHAN7)) {
+					sevenSamurai[5] = tmpUnit;
+				}
+			}
+		} elseif (unitType == UnitDB(UNIT_JCHAN7)) {
+			CreateUnit(1, UnitDB(UNIT_JCHAN8), tmpLoc, 0);
+			KillUnit(sevenSamurai[5]);
+			// Find samurai in player army
+			player[0] = 1;
+			numUnits = player[0].units;
+			for(j = 0; j < numUnits; j = j + 1) {
+				GetUnitByIndex(1, j, tmpUnit);
+				unitType2 = tmpUnit.type;
+				if (unitType2 == UnitDB(UNIT_JCHAN8)) {
+					sevenSamurai[5] = tmpUnit;
+				}
+			}
+		} elseif (unitType == UnitDB(UNIT_JCHAN8)) {
+			CreateUnit(1, UnitDB(UNIT_JCHAN9), tmpLoc, 0);
+			KillUnit(sevenSamurai[5]);
+			// Find samurai in player army
+			player[0] = 1;
+			numUnits = player[0].units;
+			for(j = 0; j < numUnits; j = j + 1) {
+				GetUnitByIndex(1, j, tmpUnit);
+				unitType2 = tmpUnit.type;
+				if (unitType2 == UnitDB(UNIT_JCHAN9)) {
+					sevenSamurai[5] = tmpUnit;
+				}
+			}
+		}
+	} elseif (i == 6) {		// Mimiyota level up
+		if (unitType == UnitDB(UNIT_MIMIYOTA7)) {
+			CreateUnit(1, UnitDB(UNIT_MIMIYOTA8), tmpLoc, 0);
+			KillUnit(sevenSamurai[6]);
+			// Find samurai in player army
+			player[0] = 1;
+			numUnits = player[0].units;
+			for(j = 0; j < numUnits; j = j + 1) {
+				GetUnitByIndex(1, j, tmpUnit);
+				unitType2 = tmpUnit.type;
+				if (unitType2 == UnitDB(UNIT_MIMIYOTA8)) {
+					sevenSamurai[6] = tmpUnit;
+				}
+			}
+		} elseif (unitType == UnitDB(UNIT_MIMIYOTA8)) {
+			CreateUnit(1, UnitDB(UNIT_MIMIYOTA9), tmpLoc, 0);
+			KillUnit(sevenSamurai[6]);
+			// Find samurai in player army
+			player[0] = 1;
+			numUnits = player[0].units;
+			for(j = 0; j < numUnits; j = j + 1) {
+				GetUnitByIndex(1, j, tmpUnit);
+				unitType2 = tmpUnit.type;
+				if (unitType2 == UnitDB(UNIT_MIMIYOTA9)) {
+					sevenSamurai[6] = tmpUnit;
+				}
+			}
+		} 
+	} 
+}
+
+
+

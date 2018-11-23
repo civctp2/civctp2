@@ -1,0 +1,145 @@
+# Server Reliability Program
+# Paramaters :
+# Verbosity - 0 prints nothing 1 prints out flow information 2 prints out even more
+# Dwell Time - Time in ms to wait to be disconnected
+
+Verbosity %1
+
+# Start Spawning off for each server we wish to test
+Spawn @SERVER:california3 1
+#Spawn @SERVER:california4 1
+#Spawn @SERVER:california6 1
+Spawn @SERVER:california12 1
+Spawn @SERVER:newjersey1 1
+Spawn @SERVER:uk1 1
+Spawn @SERVER:australia1 1
+Spawn @SERVER:stockholm 1
+Wait Solitary
+
+Print Connections $TC1 attempts $TC2 connects $TC3 players
+Print Time to Connect $TA2 [ $Tm2 - $TM2 ] connect $TA3 [ $Tm3 - $TM3 ] player
+Print Reliability $TC4 of $TC1
+
+EXIT 0
+
+
+LABEL @SERVER:california3
+#Verbosity %1
+ONERROR @TERMINATE
+dpCreate winets2.dll
+ONERROR @DESTROY
+dpSetGameServer california3.activision.com 65
+GOTO @JOIN
+
+LABEL @SERVER:california4
+Verbosity %1
+ONERROR @TERMINATE
+dpCreate winets2d.dll
+ONERROR @DESTROY
+dpSetGameServer california4.activision.com 65
+GOTO @JOIN
+
+LABEL @SERVER:california6
+Verbosity %1
+ONERROR @TERMINATE
+dpCreate winets2d.dll
+ONERROR @DESTROY
+dpSetGameServer california6.activision.com 65
+GOTO @JOIN
+
+LABEL @SERVER:california12
+Verbosity %1
+ONERROR @TERMINATE
+dpCreate winets2d.dll
+ONERROR @DESTROY
+dpSetGameServer california12.activision.com 65
+GOTO @JOIN
+
+LABEL @SERVER:newjersey1
+Verbosity %1
+ONERROR @TERMINATE
+dpCreate winets2d.dll
+ONERROR @DESTROY
+dpSetGameServer newjersey1.activision.com 65
+GOTO @JOIN
+
+LABEL @SERVER:uk1
+Verbosity %1
+ONERROR @TERMINATE
+dpCreate winets2d.dll
+ONERROR @DESTROY
+dpSetGameServer uk1.activision.co.uk 65
+GOTO @JOIN
+
+LABEL @SERVER:australia1
+Verbosity %1
+ONERROR @TERMINATE
+dpCreate winets2d.dll
+ONERROR @DESTROY
+dpSetGameServer australia1.activision.com 65
+GOTO @JOIN
+
+LABEL @SERVER:stockholm
+Verbosity %1
+ONERROR @TERMINATE
+dpCreate winets2d.dll
+ONERROR @DESTROY
+dpSetGameServer stockholm.alink.fragzone.se 65
+GOTO @JOIN
+
+# Join any session on the server
+LABEL @JOIN
+
+SET I2 10
+SET I3 -1
+SET I4 0
+
+LABEL @JOINLOOP
+
+Timer 1 START
+Timer 1 END
+
+SET I0 0
+ONERROR @CLOSE
+
+Timer 2 START
+dpOpen ANY
+Wait
+Timer 2 END
+
+Timer 3 START
+dpCreatePlayer MrReliable
+Wait
+Timer 3 END
+
+# Set Flag indicating we made it in to the session
+SET I0 1
+
+# Wait until we get kicked off the server
+Timer 4 START
+Wait %2
+Timer 4 END
+
+# Close the session
+LABEL @CLOSE
+ONERROR @DESTROY
+dpClose
+
+# If we did not get into a session, try try again
+SET I1 0
+IF I0 == I1 @JOINLOOP
+
+# Loop around
+ADD I2 I3
+IF I2 > I4 @JOINLOOP
+
+dpSetGameServer
+Wait 2000 Freeze
+
+# Destroy dp
+LABEL @DESTROY
+ONERROR @TERMINATE
+
+dpDestroy
+
+LABEL @TERMINATE

@@ -1,0 +1,525 @@
+
+TradeManager:CTP2_DIALOG_WINDOW {
+	int xpix 200
+	int ypix 50
+	int widthpix 576
+	int heightpix 384
+	string title "str_ldl_TradeTitle"
+
+	TradeTabs:CTP2_TAB_GROUP {
+		int xpix 36
+		int ypix 29
+		int widthpix 500
+		int heightpix 320
+
+		Market:CTP2_TAB{
+			TabButton:CTP2_SIMPLE_TAB_BUTTON {
+				string text "str_ldl_TradeMarket"
+				string image00 "upct21ul.tga"
+				string image10 "upct21u.tga"
+				string image20 "upct21ul.tga"
+				bool nohighlight true
+				# Tooltip
+				string	statustext	"STATUSBAR_TRADEMAN_OPEN_GOTO_MARKET_BUTTON"
+			}
+			TabPanel:CTP2_DIALOG_WINDOW_TAB_HELPER {
+			
+				Filters:CTP2_STATIC_BASE {
+					int xpix 4
+					int ypix 4
+					int widthpix 470
+					int heightpix 24
+					CitiesLabel:CTP2_STATIC_BASE {
+						int xpix 0
+						int ypix 0
+						int widthpix 80
+						int heightpix 24
+						string text "str_ldl_TradeManagerCities"
+					}
+					OwnButton:CTP2_CHECKBOX {
+						int xpix 80
+						int widthpix 60
+						string text "str_ldl_TradeManagerOwnCities"
+					}
+					FriendlyButton:CTP2_CHECKBOX {
+						int xpix 144
+						int widthpix 60
+						string text "str_ldl_TradeManagerFriendlyCities"
+					}
+					AllButton:CTP2_CHECKBOX {
+						int xpix 208
+						int widthpix 60
+						string text "str_ldl_TradeManagerAllCities"
+					}
+
+					CitiesPerGoodLabel:CTP2_STATIC_BASE {
+						int xpix 272
+						int widthpix 100
+						int heightpix 24
+						string text "str_ldl_TradeManagerCitiesPerGood"
+					}
+
+					# Pasted slider from civstatus.ldl
+					CitiesSlider:CTP2_STANDARD_FONT {	
+						# Runtime type.
+						string	objecttype		"C3Slider"
+						bool	atomic			true
+
+						# Format.
+						string	type			"slider"
+						string	orientation		"horizontal"
+						bool	rigidthumb		TRUE
+						bool	quantizedrag	TRUE
+
+						# Location.
+						int		xpix		372
+						int		ypix		2
+						int		widthpix	84
+						int		heightpix	20
+
+						# Background.
+						string	pattern		"uptg20e.tga"
+
+						# Values.
+						int		xval		0
+						int		maxxval		4
+						int		maxyval		0
+						int		pagexval	1
+						int		pageyval	1
+
+						# Thumb button.
+						int		minthumbsize	9
+						thumb {
+							int		widthpix		9
+							int		heightpix		20
+							string	image0			"upba2512.tga"
+							string	imagebltflag	"chromakey"
+		
+						# Tooltip
+						string	statustext	"STATUSBAR_TRADEMAN_OPEN_CITIES_SLIDER"
+						}
+					}
+					NumCities:CTP2_TEXT_BOX {
+						int xpix 458
+						int ypix 0
+						int widthpix 18
+						int heightpix 24
+						string text "str_ldl_0"
+					}
+				}
+				List:CTP2_LISTBOX {
+					int xpix 10
+					int ypix 56
+					int widthpix 470
+					int heightpix 204
+					header {
+						switch0:CTP2_HEADER_FONT {
+							int widthpix 100
+							int heightpix 20
+							string pattern "uptg04e.tga"
+							int bevelwidth 1
+							string text "str_ldl_TradeYourCity"
+							int numimagegroups 3
+							# Tooltip
+							string	statustext	"STATUSBAR_TRADEMAN_OPEN_SORTBY_YOURCITY_BUTTON"
+						}
+						switch1:CTP2_HEADER_FONT {
+							int widthpix 20
+							int heightpix 20
+							string pattern "uptg04e.tga"
+							int bevelwidth 1
+							string text "str_ldl_G"
+							int numimagegroups 3
+							# Tooltip
+							string	statustext	"STATUSBAR_TRADEMAN_OPEN_SORTBY_HASGOOD_BUTTON"
+						}
+						switch2:CTP2_HEADER_FONT {
+							int widthpix 100
+							int heightpix 20
+							string pattern "uptg04e.tga"
+							int bevelwidth 1
+							string text "str_ldl_TradeGood"
+							int numimagegroups 3
+							# Tooltip
+							string	statustext	"STATUSBAR_TRADEMAN_OPEN_SORTBY_HASGOOD_BUTTON"
+						}
+						switch3:CTP2_HEADER_FONT {
+							int xpix 0
+							int widthpix 120
+							int heightpix 20
+							string pattern "uptg04e.tga"
+							int bevelwidth 1
+							string text "str_ldl_TradeSendCity"
+							int numimagegroups 3
+							# Tooltip
+							string	statustext	"STATUSBAR_TRADEMAN_OPEN_SORTBY_THISCITY_BUTTON"
+						}
+						switch4:CTP2_HEADER_FONT {
+							int xpix 0
+							int widthpix 40
+							int heightpix 20
+							string pattern "uptg04e.tga"
+							int bevelwidth 1
+							string text "str_ldl_TradeNation"
+							int numimagegroups 3
+							# Tooltip
+							string	statustext	"STATUSBAR_TRADEMAN_OPEN_SORTBY_NATION_BUTTON"
+						}
+						switch5:CTP2_HEADER_FONT {
+							int xpix 0
+							int widthpix 40
+							int heightpix 20
+							string pattern "uptg04e.tga"
+							int bevelwidth 1
+							string text "str_ldl_TradePrice"
+							int numimagegroups 3
+							# Tooltip
+							string	statustext	"STATUSBAR_TRADEMAN_OPEN_SORTBY_COST_BUTTON"
+						}
+						switch6:CTP2_HEADER_FONT {
+							int xpix 0
+							int widthpix 50
+							int heightpix 20
+							string pattern "uptg04e.tga"
+							int bevelwidth 1
+							string text "str_ldl_TradeCaravans"
+							int numimagegroups 3
+							# Tooltip
+							string	statustext	"STATUSBAR_TRADEMAN_OPEN_SORTBY_CRVN_BUTTON"
+						}
+					}
+				}
+				CreateRouteButton:CTP2_BUTTON_SMALL {
+					int xpix 170
+					int ypix 267
+					int widthpix 160
+					string text "str_ldl_CreateRoute"
+				}
+			}
+		}
+	
+		Summary:CTP2_TAB {
+			TabButton:CTP2_SIMPLE_TAB_BUTTON {
+				int xpix 240
+				string text "str_ldl_TradeSummary"
+				string image00 "upct22ul.tga"
+				string image10 "upct22u.tga"
+				string image20 "upct22ul.tga"
+				bool nohighlight true
+				# Tooltip
+				string	statustext	"STATUSBAR_TRADEMAN_OPEN_GOTO_TRADESUMM_BUTTON"
+			}
+
+			TabPanel:CTP2_DIALOG_WINDOW_TAB_HELPER {
+
+				List:CTP2_LISTBOX {
+					int xpix 10
+					int widthpix 470
+					int heightpix 236
+					int ypix 24
+					header {
+						switch0:CTP2_HEADER_FONT {
+							int widthpix 100
+							int heightpix 20
+							string pattern "uptg04e.tga"
+							int bevelwidth 1
+							string text "str_ldl_TradeYourCity"
+							int numimagegroups 3
+							# Tooltip
+							string	statustext	"STATUSBAR_TRADEMAN_OPEN_SORTBY_YOURCITY_BUTTON"
+						}
+						switch1:CTP2_HEADER_FONT {
+							int widthpix 20
+							int heightpix 20				
+							string pattern "uptg04e.tga"
+							int bevelwidth 1
+							string imagebltflag "chromakey"
+							string image0 "upic02.tga"
+							string image1 "upic02.tga"
+							string image2 "upic02.tga"
+							# Tooltip
+							string	tipwindow	"TOOLTIP_TRADEMAN_OPEN_PIRACY_DISPLAY"
+							string	statustext	"STATUSBAR_TRADEMAN_OPEN_PIRACY_DISPLAY"
+						}
+		
+						switch2:CTP2_HEADER_FONT {
+							int widthpix 20
+							int heightpix 20
+							string pattern "uptg04e.tga"
+							int bevelwidth 1
+							string text "str_ldl_G"
+							int numimagegroups 3
+						}
+						switch3:CTP2_HEADER_FONT {
+							int widthpix 100
+							int heightpix 20
+							string pattern "uptg04e.tga"
+							int bevelwidth 1
+							string text "str_ldl_TradeSellingGood"
+							int numimagegroups 3
+							# Tooltip
+							string	statustext	"STATUSBAR_TRADEMAN_OPEN_SORTBY_HASGOOD_BUTTON"
+						}
+						switch4:CTP2_HEADER_FONT {
+							int xpix 0
+							int widthpix 100
+							int heightpix 20
+							string pattern "uptg04e.tga"
+							int bevelwidth 1
+							string text "str_ldl_TradeSellingToCity"
+							int numimagegroups 3
+						}
+						switch5:CTP2_HEADER_FONT {
+							int xpix 0
+							int widthpix 40
+							int heightpix 20
+							string pattern "uptg04e.tga"
+							int bevelwidth 1
+							string text "str_ldl_TradeNation"
+							int numimagegroups 3
+						}
+						switch6:CTP2_HEADER_FONT {
+							int xpix 0
+							int widthpix 40
+							int heightpix 20
+							string pattern "uptg04e.tga"
+							int bevelwidth 1
+							string text "str_ldl_TradePrice"
+							int numimagegroups 3
+							# Tooltip
+							string	statustext	"STATUSBAR_TRADEMAN_OPEN_SORTBY_COST_BUTTON"
+						}
+						switch7:CTP2_HEADER_FONT {
+							int xpix 0
+							int widthpix 50
+							int heightpix 20
+							string pattern "uptg04e.tga"
+							int bevelwidth 1
+							string text "str_ldl_TradeCaravans"
+							int numimagegroups 3
+							# Tooltip
+							string	statustext	"STATUSBAR_TRADEMAN_OPEN_SORTBY_CRVN_BUTTON"
+						}
+					}
+				}
+				BreakRouteButton:CTP2_BUTTON_SMALL {
+					int xpix 170
+					int ypix 267
+					int widthpix 160
+					string text "str_ldl_BreakRoute"
+					# Tooltip
+					string	statustext	"STATUSBAR_TRADEMAN_OPEN_BREAK_ROUTE_BUTTON"
+				}
+			}
+		}
+	}
+	
+	CloseButton:CTP2_STANDARD_CLOSE {
+		# Tooltip
+		string	statustext	"STATUSBAR_TRADEMAN_OPEN_CLOSE_BUTTON"
+	}
+
+	ShowAdviceButton:CTP2_STANDARD_ADVISOR {
+		# Tooltip
+		string	statustext	"STATUSBAR_TRADEMAN_OPEN_SHOWADV_BUTTON"
+	}
+
+#	SummaryButton:CTP2_BUTTON_SMALL {
+#		int xpix 110
+#		int ypix 390
+#		int widthpix 90
+#		string text "str_ldl_TradeSummary"
+#	}
+
+	Background:CTP2_DIALOG_BG {
+		string image00 "uptg27a.tga"
+		string image02 "uptg27c.tga"
+		string image03 "uptg27d.tga"
+		string image05 "uptg27f.tga"
+	}
+}
+
+template TRADE_MANAGER_COLUMN:CTP2_STANDARD_FONT {
+	string objecttype "ctp2_Static"
+	int heightpix 20
+}
+
+CreateRouteItem:CTP2_LIST_ITEM {
+	int widthpix 470
+	int heightpix 20
+	City : TRADE_MANAGER_COLUMN {
+		int widthpix 100
+	}
+	GoodIcon:TRADE_MANAGER_COLUMN {
+		int widthpix 20
+		string imagebltflag "chromakey"
+	}
+	Good : TRADE_MANAGER_COLUMN {
+		int widthpix 100
+	}
+	ToCity:TRADE_MANAGER_COLUMN {
+		int widthpix 120
+	}
+	Nation:TRADE_MANAGER_COLUMN {
+		int widthpix 40
+	}
+	Price:TRADE_MANAGER_COLUMN {
+		int widthpix 40
+	}
+	Caravans:TRADE_MANAGER_COLUMN {
+		int widthpix 50
+	}
+}
+
+TradeSummaryItem:CTP2_LIST_ITEM {
+	int widthpix 470
+	int heightpix 20
+	City : TRADE_MANAGER_COLUMN {
+		int widthpix 100
+	}
+	Piracy : TRADE_MANAGER_COLUMN {
+		int widthpix 20
+	}
+	GoodIcon:TRADE_MANAGER_COLUMN {
+		int widthpix 20
+		string imagebltflag "chromakey"
+	}
+	Good : TRADE_MANAGER_COLUMN {
+		int widthpix 100
+	}
+	ToCity:TRADE_MANAGER_COLUMN {
+		int widthpix 100
+	}
+	Nation:TRADE_MANAGER_COLUMN {
+		int widthpix 40
+	}
+	Price:TRADE_MANAGER_COLUMN {
+		int widthpix 40
+	}
+	Caravans:TRADE_MANAGER_COLUMN {
+		int widthpix 50
+	}
+}
+
+TradeAdvice:CTP2_WINDOW {
+	int widthpix 224
+	int heightpix 350
+	int ypix 50
+#	string title "str_ldl_Advice"
+
+	Title:CTP2_STATIC_BASE:CTP_GREY_TITLE_FONT {
+		int xpix 33
+		int ypix 48
+		int widthpix 161
+		int heightpix 16
+		int fontsize 10
+		string text "str_ldl_TradeAdvisor"
+	}
+
+	Advice:CTP2_HYPER_TEXT_BOX {
+		int xpix 36
+		int ypix 84
+		int widthpix 140
+		int heightpix 140
+		string pattern "uptg20e.tga"
+		int bevelwidth 0
+	}
+
+	AvailableLabel:CTP2_HEADER_FONT {
+		string objecttype "ctp2_Static"
+		int xpix 30
+		int ypix 229
+		int widthpix 108
+		int heightpix 20
+		string just "right"
+		string pattern "uptg20e.tga"
+		string text "str_ldl_CaravansAvailable"
+		# Tooltip
+		string	statustext	"STATUSBAR_TRADEMAN_ADV_CRVNS_AVAIL_DISPLAY"
+	}
+
+	Available:CTP2_HEADER_FONT:CTP2_STATIC_BASE {
+		int xpix 138
+		int ypix 228
+		int widthpix 58
+		int heightpix 20
+		string pattern "uptg20e.tga"
+		int bevelwidth 0
+		string text "str_ldl_0"
+	}
+
+	InUseLabel:CTP2_HEADER_FONT {
+		string objecttype "ctp2_Static"
+		int xpix 30
+		int ypix 249
+		int widthpix 108
+		int heightpix 20
+		string just "right"
+		string pattern "uptg20e.tga"
+		string text "str_ldl_CaravansInUse"
+		# Tooltip
+		string	statustext	"STATUSBAR_TRADEMAN_ADV_CRVNS_INUSE_DISPLAY"
+	}
+	InUse:CTP2_HEADER_FONT:CTP2_STATIC_BASE {
+		int xpix 138
+		int ypix 248
+		int widthpix 58
+		int heightpix 20
+		string pattern "uptg20e.tga"
+		int bevelwidth 0
+		string text "str_ldl_0"
+	}
+
+	ProfitLabel:CTP2_HEADER_FONT {
+		string objecttype "ctp2_Static"
+		int xpix 30
+		int ypix 269
+		int widthpix 108
+		int heightpix 20
+		string just "right"
+		string pattern "uptg20e.tga"
+		string text "str_ldl_TotalTradeProfit"
+		# Tooltip
+		string	statustext	"STATUSBAR_TRADEMAN_ADV_TOTAL_PROFIT_DISPLAY"
+	}
+	Profit:CTP2_HEADER_FONT:CTP2_STATIC_BASE {
+		int xpix 138
+		int ypix 268
+		int widthpix 58
+		int heightpix 20
+		string pattern "uptg20e.tga"
+		int bevelwidth 0
+		string text "str_ldl_0"
+	}
+
+	RoutesLabel:CTP2_HEADER_FONT {
+		string objecttype "ctp2_Static"
+		int xpix 30
+		int ypix 289
+		int widthpix 108
+		int heightpix 20
+		string just "right"
+		string pattern "uptg20e.tga"
+		string text "str_ldl_TotalTradeRoutes"
+		# Tooltip
+		string	statustext	"STATUSBAR_TRADEMAN_ADV_TOTAL_ROUTES_DISPLAY"
+	}
+	Routes:CTP2_HEADER_FONT:CTP2_STATIC_BASE {
+		int xpix 138
+		int ypix 288
+		int widthpix 58
+		int heightpix 20
+		string pattern "uptg20e.tga"
+		int bevelwidth 0
+		string text "str_ldl_0"
+	}
+
+	Background {
+		string objecttype "ctp2_Static"
+		int widthpix 224
+		int heightpix 350
+		string pattern "upfg400.tga"
+	}
+}
+	
+$

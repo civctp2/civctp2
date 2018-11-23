@@ -1,0 +1,181 @@
+#
+# Source player list layout
+#
+template SOURCE_RANGER {
+	rangery {
+		int	widthpix	15
+		int	heigthpix	15
+		string	type	"scroller"
+		string	orientation	"vertical"
+		string	pattern	"error.tga"
+		incy {
+			int	widthpix	15
+			int	heightpix	15
+			string	pattern	"error.tga"
+		}
+		decy {
+			int	widthpix	15
+			int	heightpix	15
+			string	pattern	"error.tga"
+		}
+#			thumb {
+#				string	image0	"error.tga"
+#				string	imagebltflag	"chromakey"
+#			}
+	}
+}
+SourceListPopup {
+	string	xanchor		"left"
+	string	yanchor		"top"
+	int		widthpix	640
+	int		heightpix	480
+	string	pattern	"error.tga"
+
+	Status:CTP2_STANDARD_FONT {
+		int     xpix            15
+		int     ypix            415
+		int     widthpix        600
+		int     heightpix       20
+		string  just            "left"
+		string pattern "error.tga"
+	}
+
+	ExitButton {
+
+		int	xpix	615
+
+		int	ypix	14
+
+		int	widthpix	18
+
+		int	heightpix	14
+
+		string	image0	"upbb1811.tga"
+		string	image1	"upbb1811.tga"
+
+	}
+
+	ContinueButton:CTP2_STANDARD_FONT {
+		int xpix 20
+		int ypix 440
+		int widthpix  100
+		int heightpix 20
+		string text "str_ldl_Continue"
+		string	pattern	"error.tga"
+	}
+
+	StepButton:CTP2_STANDARD_FONT {
+		int xpix 120
+		int ypix 440
+		int widthpix 100
+		int heightpix 20
+		string text "str_ldl_Step"
+		string pattern "error.tga"
+	}
+
+	StepIntoButton:CTP2_STANDARD_FONT {
+		int xpix 220
+		int ypix 440
+		int widthpix 100
+		int heightpix 20
+		string text "str_ldl_StepInto"
+		string pattern "error.tga"
+	}
+
+#	OkButton:ABORT_BUTTON {
+#		int	xpix	560
+#		int	ypix	210
+#		string	text	"str_ldl_Ok"
+#	}
+	SourceList:SOURCE_RANGER {
+		bool	shadowfont	true
+		int	xpix	15
+		int	ypix	60
+		int	widthpix	600
+		int	heightpix	350
+		int columns		2
+		int bevelwidth	1
+		int beveltype	2
+		string	pattern	"error.tga"
+		int	srcxpix	88
+		int	srcypix	78
+		int	srcwidthpix	204
+		int	srcheightpix	204
+		header {
+			switch0:CTP2_HEADER_FONT {
+				int widthpix    20
+				int heightpix   20
+				string text     "str_ldl_B"
+				string pattern  "error.tga"
+				string just     "left"
+				int bevelwidth  1
+			}
+				
+			switch1:CTP2_STANDARD_FONT {
+				int	widthpix	580
+				int	heightpix	20
+				string text     "str_ldl_Source"
+				string	pattern	"error.tga"
+				string  just    "left"
+				int bevelwidth 	1
+			}
+		}
+	}
+}
+
+SourceListItem {
+	Break:CTP2_STANDARD_FONT {
+		int     xpix            4
+		int     ypix            0
+		int     widthpix        16
+		int     heightpix       18
+		string  just            "center"
+		string	pattern	"error.tga"
+	}
+
+	Line:CTP2_STANDARD_FONT {
+		int		xpix			4
+		int		ypix			0
+		int		widthpix		572
+		int		heightpix		18
+		string  just            "left"
+	}
+}
+
+SourceListConditionalPopup {
+	string	xanchor		"center"
+	string	yanchor		"center"
+	int		widthpix	400
+	int		heightpix	120
+	string	pattern	"error.tga"
+	TitleLabel:CTP2_STANDARD_TITLE_FONT {
+		int	xpix	0
+		string yanchor "top"
+		int widthpix 167
+		int heightpix 20
+		string	text	"str_ldl_Set_Conditional"
+	}
+
+	TextMessage:CTP2_STANDARD_FONT {
+		int	xpix	10
+		int ypix 	30
+		int widthpix 380
+		int heightpix 40
+		string	text	"str_ldl_Set_Conditional_Message"
+	}
+
+	TextField {
+		int	xpix	100
+		int	ypix	80
+		int	widthpix	200
+		int	heightpix	20
+		string	pattern	"error.tga"
+		# Make sure that maxfieldlen same as used in:
+	    #    CityStatusWin:CityName 
+		#    CityPad:CityNameField 
+	    #    NameTheCityPop:TextField (640 and normal)
+		int	maxfieldlen	50
+	}
+}
+
+$

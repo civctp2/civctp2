@@ -1,0 +1,35 @@
+# Makefile for ActiveNet demo game server under Linux on intel
+# $Log: makefile.lin $
+# Revision 1.2  1997/03/07 02:23:35  geychaner
+# Now includes the raw directory properly
+
+PACK=__attribute__ ((packed))
+
+COPT = -DUNIX -Dcdecl="" "-D__NO_ANONYMOUS_UNIONS__" "-DPACK=$(PACK)" -Dstricmp=strcasecmp -I. -I../../h -I../utils -g
+.c.o:
+	gcc -c $(COPT) $*.c
+	gcc -c $(COPT) ../utils/raw.c
+
+default: iotest
+
+#--------------------------------------------------------------
+# server is server.c linked statically to the real comm layer.
+
+iotest_OBJ_FILES =	iotest.o raw.o /usr/lib/libbsd.a ../../linux/lib/dp.a
+
+# Set target dependencies to generate necessary re-compiles.
+iotest : $(iotest_OBJ_FILES)
+	echo .
+	echo Linking server executable.
+	gcc $(iotest_OBJ_FILES) -o iotest
+
+iotest.o: ../../h/dp.h
+
+clean:
+	rm -f *.err
+	rm -f *
+	rm -f *.o
+	rm -f *.log
+	rm -rf junk
+
+# end of MAKEFILE
