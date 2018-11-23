@@ -140,11 +140,13 @@ LoadSaveWindow::LoadSaveWindow(AUI_ERRCODE *retval, uint32 id,
 
 	m_gameTextBox = spNewTextEntry(retval, block, "GameTextBox");
 	m_gameTextBox->SetIsFileName(TRUE);
+	m_gameTextBox->SetActionFuncAndCookie(loadsavescreen_executePress, NULL); // set action callback function such that hitting enter in text field executes OK button event, see above in AddOk(
 
 	m_saveText = spNew_c3_Static(retval, block, "SaveText");
 
 	m_saveTextBox = spNewTextEntry(retval, block, "SaveTextBox");
 	m_saveTextBox->SetIsFileName(TRUE);
+	m_saveTextBox->SetActionFuncAndCookie(loadsavescreen_executePress, NULL); // set action callback function such that hitting enter in text field executes OK button event, see above in AddOk(
 
 	m_noteText = spNew_c3_Static(retval, block, "NoteText");
 
