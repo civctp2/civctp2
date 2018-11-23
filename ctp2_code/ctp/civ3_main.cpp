@@ -1800,26 +1800,20 @@ int SDLMessageHandler(const SDL_Event &event)
 	switch(event.type) {
 	case SDL_KEYDOWN:
 		{
-                	SDLKey key = event.key.keysym.sym;
+			// TODO: Determine what the 'swallowNextChar' variable
+			// is for, and, if necessary, implement appropriate
+			// code in the SDL sections to perform the same function.
+			SDLKey key = event.key.keysym.sym;
 			SDLMod mod = event.key.keysym.mod;
 			WPARAM wp = '\0';
 			switch (key) {
-
-//for the keys below check swallowNextChar if char should be ignored
-
 #define SDLKCONV(sdl_name, char) \
 			case (sdl_name): \
 				wp = (char); \
-                                if(!swallowNextChar) \
-				  ui_HandleKeypress(wp, 0);	\
-                                swallowNextChar = false; \
 				break;
 #define SDLKCONVSHIFT(sdl_name, charWoShift, charWShift) \
 			case (sdl_name): \
 				wp = ( (mod & KMOD_SHIFT) ? (charWShift) : (charWoShift) ); \
-                                if(!swallowNextChar) \
-				  ui_HandleKeypress(wp, 0);	\
-                                swallowNextChar = false; \
 				break;
 // For the purposes of this macro, shift is ignored when ctrl is pressed
 #define SDLKCONVSHIFTCTRL(sdl_name, charWoShift, charWShift, charWCtrl) \
@@ -1827,13 +1821,10 @@ int SDLMessageHandler(const SDL_Event &event)
 				wp = ( (mod & KMOD_CTRL) ? (charWCtrl) : \
 						( (mod & KMOD_SHIFT) ? (charWShift) : (charWoShift) ) \
 					); \
-                                if(!swallowNextChar) \
-				  ui_HandleKeypress(wp, 0);	\
-                                swallowNextChar = false; \
 				break;
-//                         SDLKCONV(SDLK_BACKSPACE, '\b' + 128);
-//                         SDLKCONV(SDLK_TAB, '\t' + 128);
-//                         SDLKCONV(SDLK_RETURN, '\r' + 128);
+			SDLKCONV(SDLK_BACKSPACE, '\b' + 128);
+			SDLKCONV(SDLK_TAB, '\t' + 128);
+			SDLKCONV(SDLK_RETURN, '\r' + 128);
 			SDLKCONV(SDLK_ESCAPE, SDLK_ESCAPE + 256);
 			SDLKCONV(SDLK_SPACE, ' ');
 			SDLKCONV(SDLK_EXCLAIM, '!');
@@ -1862,23 +1853,23 @@ int SDLMessageHandler(const SDL_Event &event)
 			SDLKCONVSHIFT(SDLK_BACKSLASH, '\\', '|');
 			SDLKCONV(SDLK_CARET, '^');
 			SDLKCONV(SDLK_UNDERSCORE, '_');
-			SDLKCONVSHIFT(SDLK_BACKQUOTE, '`', '%G�%@');
-//  			SDLKCONV(SDLK_UP, SDLK_UP + 256);
-//  			SDLKCONV(SDLK_DOWN, SDLK_DOWN + 256);
-//  			SDLKCONV(SDLK_LEFT, SDLK_LEFT + 256);
-//  			SDLKCONV(SDLK_RIGHT, SDLK_RIGHT + 256);
-//  			SDLKCONVSHIFT(SDLK_F1, '1' + 128, '\0');
-//  			SDLKCONVSHIFT(SDLK_F2, '2' + 128, '\0');
-//  			SDLKCONVSHIFT(SDLK_F3, '3' + 128, '\0');
-//  			SDLKCONVSHIFT(SDLK_F4, '4' + 128, '\0');
-//  			SDLKCONVSHIFT(SDLK_F5, '5' + 128, '\0');
-//  			SDLKCONVSHIFT(SDLK_F6, '6' + 128, '\0');
-//  			SDLKCONVSHIFT(SDLK_F7, '7' + 128, '\0');
-//  			SDLKCONVSHIFT(SDLK_F8, '8' + 128, '\0');
-//  			SDLKCONVSHIFT(SDLK_F9, '9' + 128, '\0');
-//  			SDLKCONVSHIFT(SDLK_F10, '0' + 128, '\0');
-//  			SDLKCONVSHIFT(SDLK_F11, '!' + 128, '\0');
-//  			SDLKCONVSHIFT(SDLK_F12, '@' + 128, '\0');
+			SDLKCONVSHIFT(SDLK_BACKQUOTE, '`', '¬');
+			SDLKCONV(SDLK_UP, SDLK_UP + 256);
+			SDLKCONV(SDLK_DOWN, SDLK_DOWN + 256);
+			SDLKCONV(SDLK_LEFT, SDLK_LEFT + 256);
+			SDLKCONV(SDLK_RIGHT, SDLK_RIGHT + 256);
+			SDLKCONVSHIFT(SDLK_F1, '1' + 128, '\0');
+			SDLKCONVSHIFT(SDLK_F2, '2' + 128, '\0');
+			SDLKCONVSHIFT(SDLK_F3, '3' + 128, '\0');
+			SDLKCONVSHIFT(SDLK_F4, '4' + 128, '\0');
+			SDLKCONVSHIFT(SDLK_F5, '5' + 128, '\0');
+			SDLKCONVSHIFT(SDLK_F6, '6' + 128, '\0');
+			SDLKCONVSHIFT(SDLK_F7, '7' + 128, '\0');
+			SDLKCONVSHIFT(SDLK_F8, '8' + 128, '\0');
+			SDLKCONVSHIFT(SDLK_F9, '9' + 128, '\0');
+			SDLKCONVSHIFT(SDLK_F10, '0' + 128, '\0');
+			SDLKCONVSHIFT(SDLK_F11, '!' + 128, '\0');
+			SDLKCONVSHIFT(SDLK_F12, '@' + 128, '\0');
 			// Given the bizarre choices for F11 and F12, I am reluctant to
 			// extrapolate to F15
 			//SDLKCONVSHIFT(SDLK_F13, '' + 128, '\0');
@@ -1903,7 +1894,7 @@ int SDLMessageHandler(const SDL_Event &event)
 			SDLKCONV(SDLK_KP_EQUALS, '=');
 			SDLKCONVSHIFT(SDLK_1, '1', '!');
 			SDLKCONVSHIFT(SDLK_2, '2', '"');
-			SDLKCONVSHIFT(SDLK_3, '3', '%G�%@');
+			SDLKCONVSHIFT(SDLK_3, '3', '£');
 			SDLKCONVSHIFT(SDLK_4, '4', '$');
 			SDLKCONVSHIFT(SDLK_5, '5', '%');
 			SDLKCONVSHIFT(SDLK_6, '6', '^');
@@ -1940,75 +1931,14 @@ int SDLMessageHandler(const SDL_Event &event)
 #undef SDLKCONV
 #undef SDLKCONVSHIFT
 #undef SDLKCONVSHIFTCTRL
-
-//for the keys below set swallowNextChar
-
-                        case SDLK_BACKSPACE:
-				wp = '\b' + 128;
-                                ui_HandleKeypress(wp, 0);
-                                swallowNextChar = TRUE;
-				break;
-                        case SDLK_TAB:
-				wp = '\t' + 128;
-                                ui_HandleKeypress(wp, 0);
-                                swallowNextChar = TRUE;
-				break;
-                        case SDLK_RETURN:
-				wp = '\r' + 128;
-                                ui_HandleKeypress(wp, 0);
-                                swallowNextChar = TRUE;
-				break;
-
-//for the keys below don't regard swallowNextChar
-
-#define SDLKCONV(sdl_name, char) \
-			case (sdl_name): \
-				wp = (char); \
-			ui_HandleKeypress(wp, 0); \
-				break;
-#define SDLKCONVSHIFT(sdl_name, charWoShift, charWShift) \
-			case (sdl_name): \
-				wp = ( (mod & KMOD_SHIFT) ? (charWShift) : (charWoShift) ); \
-			ui_HandleKeypress(wp, 0);				\
-				break;
-// For the purposes of this macro, shift is ignored when ctrl is pressed
-#define SDLKCONVSHIFTCTRL(sdl_name, charWoShift, charWShift, charWCtrl) \
-			case (sdl_name): \
-				wp = ( (mod & KMOD_CTRL) ? (charWCtrl) : \
-						( (mod & KMOD_SHIFT) ? (charWShift) : (charWoShift) ) \
-					); \
-			ui_HandleKeypress(wp, 0); \
-				break;
-
-  			SDLKCONV(SDLK_UP, SDLK_UP + 256);
-  			SDLKCONV(SDLK_DOWN, SDLK_DOWN + 256);
-  			SDLKCONV(SDLK_LEFT, SDLK_LEFT + 256);
-  			SDLKCONV(SDLK_RIGHT, SDLK_RIGHT + 256);
-  			SDLKCONVSHIFT(SDLK_F1, '1' + 128, '\0');
-  			SDLKCONVSHIFT(SDLK_F2, '2' + 128, '\0');
-  			SDLKCONVSHIFT(SDLK_F3, '3' + 128, '\0');
-  			SDLKCONVSHIFT(SDLK_F4, '4' + 128, '\0');
-  			SDLKCONVSHIFT(SDLK_F5, '5' + 128, '\0');
-  			SDLKCONVSHIFT(SDLK_F6, '6' + 128, '\0');
-  			SDLKCONVSHIFT(SDLK_F7, '7' + 128, '\0');
-  			SDLKCONVSHIFT(SDLK_F8, '8' + 128, '\0');
-  			SDLKCONVSHIFT(SDLK_F9, '9' + 128, '\0');
-  			SDLKCONVSHIFT(SDLK_F10, '0' + 128, '\0');
-  			SDLKCONVSHIFT(SDLK_F11, '!' + 128, '\0');
-  			SDLKCONVSHIFT(SDLK_F12, '@' + 128, '\0');
-
-#undef SDLKCONV
-#undef SDLKCONVSHIFT
-#undef SDLKCONVSHIFTCTRL
-
 			default:
 				break;
+			} // end of switch (key)
+			if (wp != '\0') {
+			  ui_HandleKeypress(wp, 0); 
 			}
-// 			if (wp != '\0') {
-//                             ui_HandleKeypress(wp, 0);
-// 			}
 			break;
-		}
+		} // end of case SDL_KEYDOWN
 	case SDL_QUIT:
 		gDone = TRUE;
 
