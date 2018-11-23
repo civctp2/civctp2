@@ -735,7 +735,6 @@ where first HandleKey of the topWindow is called, which passes HandleKey to chil
 here in aui_TextField HandleKey of aui_control is overwritten such that the keys are appended to the current text field string
  */
 bool aui_TextField::HandleKey(uint32 wParam){
-  printf("%s L%d: HandleKey called!\n", __FILE__, __LINE__);
 
   switch ( wParam ){
     // Have to handle the enter key here so that buffered input will
@@ -745,6 +744,7 @@ bool aui_TextField::HandleKey(uint32 wParam){
     break;
     // No tags allowed, they are for "tabbing focus" between controls.
   case VK_TAB:
+    printf("%s L%d: Tab ignored in TextField!\n", __FILE__, __LINE__);
     return false;
   case VK_BACK: {
     std::string str(m_Text); // char array to c++ string
