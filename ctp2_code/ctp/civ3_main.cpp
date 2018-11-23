@@ -1793,12 +1793,6 @@ int SDLMessageHandler(const SDL_Event &event)
 {
 	// Merge into WndProc with keycode converter and
 	// unchanged ui_HandleKeypress(wParam, lParam)
-#ifndef __AUI_USE_SDL__
-	if (!gDone && g_c3ui)
-	{
-		(void) g_c3ui->HandleWindowsMessage(hwnd, iMsg, wParam, lParam);
-	}
-#endif
 
 	static bool swallowNextChar = false;
 //could not find ui_HandleKeypress(wParam, lParm)! Could this mean this code was under reconstruction in trunk when the clone for linux was made???
@@ -2020,56 +2014,13 @@ int SDLMessageHandler(const SDL_Event &event)
 
 		DoFinalCleanup();
 
-#ifndef __AUI_USE_SDL__
-		DestroyWindow( hwnd );
-		gHwnd = NULL;
-#endif
-
 		return 0;
-#ifndef __AUI_USE_SDL__
-	case k_MSWHEEL_ROLLMSG :
-		{
-			sint16 dir = HIWORD(wParam);
-			if (dir >= 0) dir = 1;
-			if (dir < 0) dir = -1;
-			ui_HandleMouseWheel(dir);
-		}
-
-	case WM_VSCROLL:
-		{
-		sint16 scrollCode = LOWORD(wParam);
-		if (scrollCode == SB_LINEDOWN) {
-			ui_HandleMouseWheel((sint16)-1);
-		}
-		else
-			if (scrollCode == SB_LINEUP) {
-				ui_HandleMouseWheel((sint16)1);
-			}
-		}
- 		break;
-	case WM_MOUSEWHEEL:
-		ui_HandleMouseWheel((sint16)HIWORD(wParam));
-		break;
+// SDL_MOUSEBUTTONDOWN event is handled in aui_sdlmouse.cpp
 	}
 
-	return DefWindowProc(hwnd, iMsg, wParam, lParam);
-#else
-// this event is handled in aui_sdlmouse.cpp
-//          case SDL_MOUSEBUTTONDOWN:
-//              if (event.button.button == SDL_BUTTON_WHEELUP){
-//                   printf("%s L%d: Mouse wheel up handled!\n", __FILE__, __LINE__);
-//                   ui_HandleMouseWheel((sint16)1);
-//                  }
-//              else if (event.button.button == SDL_BUTTON_WHEELDOWN)
-//  			ui_HandleMouseWheel((sint16)-1);
-
-             break;
-	}
-
-        //lynx: is a last default handling missing here??? DefWindowProc()
+        //lynx: in the code without SDL the event (if not processed up to here) is passed to the OS handler with DefWindowProc()
 
 	return 0;
-#endif
 }
 
 #elif defined(__AUI_USE_DIRECTX__)
