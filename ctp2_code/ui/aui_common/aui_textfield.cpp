@@ -222,7 +222,6 @@ AUI_ERRCODE aui_TextField::InitCommon(
 		*m_Text = '\0';
 	else
 		strncpy(m_Text, text, m_maxFieldLen);
-        //printf("%s L%d: aui_textfield text assigned: %s!\n", __FILE__, __LINE__, m_Text);
 
 	// select nothing, move insertion point to end
 	m_selStart = m_selEnd = strlen(m_Text);
@@ -240,7 +239,6 @@ AUI_ERRCODE aui_TextField::InitCommon(
             m_textHeight = fontheight;
 	else
             m_textHeight = m_Font->GetMaxHeight(); //well, let's set at least the box height to something
-        //printf("%s L%d: aui_textfield text height: %d!\n", __FILE__, __LINE__, m_textHeight);
 
 #endif
 
@@ -311,7 +309,6 @@ BOOL aui_TextField::SetFieldText( const MBCHAR *text )
 	return success;
 #else
 	strncpy(m_Text, text, m_maxFieldLen);
-        //printf("%s L%d: aui_textfield text assigned: %s!\n", __FILE__, __LINE__, m_Text);
 
 	// select nothing, move insertion point to end
 	m_selStart = m_selEnd = strlen(m_Text);
@@ -389,7 +386,7 @@ aui_Control *aui_TextField::SetKeyboardFocus( void )
 		m_blinkThisFrame = FALSE;
 		m_startWaitTime = 0;
 	}
-
+	//printf("%s L%d: aui_TextField::SetKeyboardFocus!\n", __FILE__, __LINE__);
 	return aui_Win::SetKeyboardFocus();
 }
 
@@ -744,7 +741,7 @@ bool aui_TextField::HandleKey(uint32 wParam){
     break;
     // No tags allowed, they are for "tabbing focus" between controls.
   case VK_TAB:
-    printf("%s L%d: Tab ignored in TextField!\n", __FILE__, __LINE__);
+    // printf("%s L%d: Tab ignored in TextField!\n", __FILE__, __LINE__);
     return false;
   case VK_BACK: {
     std::string str(m_Text); // char array to c++ string
