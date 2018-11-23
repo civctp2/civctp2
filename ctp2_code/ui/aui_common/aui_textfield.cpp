@@ -750,6 +750,8 @@ bool aui_TextField::HandleKey(uint32 wParam){
     SetFieldText(str.c_str()); // c++ string to char array, use SetFieldText (not just modify m_Text) to cause re-drawing
     break;
     }
+  case ' ':
+    // printf("%s L%d: space!\n", __FILE__, __LINE__);
   default: { // append char to char array, apparently easiest with std::string
 
     static MBCHAR text[ 1025 ];

@@ -791,11 +791,13 @@ bool aui_Window::HandleKey(uint32 wParam)
 			ShouldDraw(TRUE);
 			return true;
 			break;
+/* commented, because it seems to have no effect except that it eats up space that shoudl go into e.g. a text field
 		case ' ':
 			if(m_focusControl) {
 				m_focusControl->SendKeyboardAction();
 			}
 			break;
+*/
 		default:
 			if(m_focusControl && m_focusControl->HandleKey(wParam))
 				return true;
