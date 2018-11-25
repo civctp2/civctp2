@@ -36,6 +36,10 @@
 
 #include "dynarr.h"
 
+#ifdef _DEBUG
+#include "World.h"                  // g_theWorld;
+#endif
+
 template <class T> class DAPriorityQueue {
 	DynamicArray<T*> m_queue;
 
