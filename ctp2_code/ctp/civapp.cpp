@@ -2067,6 +2067,7 @@ sint32 InitializeSpriteEditorUI(void)
 
 	HideControlPanel();
 	g_statusWindow->Hide();
+	radarwindow_Hide();
 
 	g_theProgressWindow->StartCountingTo( 120 );
 
