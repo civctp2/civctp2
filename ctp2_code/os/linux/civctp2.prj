@@ -1014,7 +1014,7 @@ module.include.files=\
 	../../../ctp2_code/user-robotcom/shared/improvementtypes.h\
 	../../../ctp2_code/user-robotcom/shared/globals.h\
 	../../../ctp2_code/user-robotcom/shared/order.h\
-	../../../ctp2_code/user-robotcom/shared/aicause.h\
+	../../../ctp2_code/user-robotcom/shared/AICause.h\
 	../../../ctp2_code/robotcom/Top/strategic_map.h\
 	../../../ctp2_code/robotcom/Top/Cont.h\
 	../../../ctp2_code/robotcom/Top/CityVertex.h\

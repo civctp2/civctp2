@@ -7,7 +7,7 @@
 #include "Unit.h"
 #include "UnitDynArr.h"
 #include "MapPoint.h"
-#include "aicause.h"
+#include "AICause.h"
 #include "MaterialPool.h"
 #include "XY_Coordinates.h"
 #include "World.h"

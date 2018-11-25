@@ -15,7 +15,7 @@
 #include "aicell.h"
 #include "AiMap.h"
 #include "airndcnt.h"
-#include "aicause.h"
+#include "AICause.h"
 
 #include "scienceagent.h"
 

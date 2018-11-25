@@ -4,7 +4,7 @@
 #define __AI_MAIN_H__ 1
 
 #include "ctp.h"
-#include "aicause.h"
+#include "AICause.h"
 #include "order.h"
 
 #include "ic3GameState.h"

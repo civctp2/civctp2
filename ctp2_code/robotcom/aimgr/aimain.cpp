@@ -13,7 +13,7 @@
 #include "C3Player.h"
 
 #include "IMapPointData.h"
-#include "aicause.h"
+#include "AICause.h"
 #include "order.h"
 
 #include "ic3GameState.h"
