@@ -570,6 +570,10 @@ ui/ldl/ldl.tab.h: ui/ldl/ldl.tab.c ui/ldl
 ui/ldl/ldl.tab.c: $(ctp2_code)/ui/ldl/ldl.y ui/ldl
 	$(YACC) $(YFLAGS) $(AM_YFLAGS) -bui/ldl/ldl $<
 
+
+ctp/ctp2_utils/c3cmdline.cpp: gs/slic/ysc.tab.h
+
+
 AM_CFLAGS=\
 	$(CTP2_CFLAGS)
 
