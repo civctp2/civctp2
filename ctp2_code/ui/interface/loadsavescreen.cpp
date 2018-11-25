@@ -1048,8 +1048,6 @@ void loadsavescreen_executePress(aui_Control *control, uint32 action, uint32 dat
 
 	// need to check for file overwrite before closing the window if we're saving
 
-        if ( action == (uint32)AUI_TEXTFIELD_ACTION_EXECUTE ) action = AUI_BUTTON_ACTION_EXECUTE; // make Enter in text-field a button event (checked for below by loadsavescreen_removeMyWindow(action)
-
 	if ( action == (uint32)AUI_BUTTON_ACTION_EXECUTE ) {
 		switch ( g_loadsaveWindow->GetType() ) {
 		case LSS_SAVE_GAME:
