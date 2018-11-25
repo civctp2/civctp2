@@ -70,7 +70,7 @@ RUN cd /ctp2 \
     CFLAGS="$CFLAGS -w -fuse-ld=gold" \
     CXXFLAGS="$CXXFLAGS -fpermissive -w -fuse-ld=gold" \
     LDFLAGS="$LDFLAGS -L/usr/local/lib" \
-    ./configure --prefix=/opt/ctp2 --bindir=/opt/ctp2/ctp2_program/ctp --enable-silent-rules \
+    ./configure --prefix=/opt/ctp2 --bindir=/opt/ctp2/ctp2_program/ctp --enable-silent-rules --enable-debug \
     && make -j"$(nproc)" \
     && make -j"$(nproc)" install \
     && cp -r /ctp2/ctp2_data/ /opt/ctp2/ \
