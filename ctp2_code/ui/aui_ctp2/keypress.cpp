@@ -206,6 +206,9 @@ extern DebugWindow		*g_debugWindow;
 #include "battleviewwindow.h"
 extern BattleViewWindow *g_battleViewWindow;
 
+#include "spriteeditor.h"  // g_spriteEditWindow
+extern SpriteEditWindow     *g_spriteEditWindow;
+
 PointerList<KeyboardHandler> g_keyboardHandlers;
 
 void keypress_QuitCallback( sint32 val )
@@ -384,6 +387,9 @@ sint32 ui_HandleKeypress(WPARAM wParam, LPARAM lParam)
 			return 0;
 	}
 
+	if(g_spriteEditWindow->HandleKey(wParam)){ // pass keys to text field in sprite edit bar (open/save sprites)
+			return 0;
+		}
 
 	if (!theKeyMap) return 0;
 
