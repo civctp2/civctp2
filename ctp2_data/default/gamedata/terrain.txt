@@ -238,6 +238,9 @@ TERRAIN_GLACIER {
       Freight 70
    }
 
+   Resources TERRAIN_GLACIER_GOOD_ONE
+   Resources TERRAIN_GLACIER_GOOD_TWO
+
    MovementType: Air
    MovementType: Land
 }
