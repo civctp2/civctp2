@@ -386,7 +386,6 @@ aui_Control *aui_TextField::SetKeyboardFocus( void )
 		m_blinkThisFrame = FALSE;
 		m_startWaitTime = 0;
 	}
-	//printf("%s L%d: aui_TextField::SetKeyboardFocus!\n", __FILE__, __LINE__);
 	return aui_Win::SetKeyboardFocus();
 }
 
@@ -732,40 +731,45 @@ where first HandleKey of the topWindow is called, which passes HandleKey to chil
 here in aui_TextField HandleKey of aui_control is overwritten such that the keys are appended to the current text field string
  */
 bool aui_TextField::HandleKey(uint32 wParam){
-  printf("%s L%d: HandleKey called!\n", __FILE__, __LINE__);
 
-  switch ( wParam ){
-    // Have to handle the enter key here so that buffered input will
-    // be handled correctly with the Windows message queue.
-  case VK_RETURN:
-    aui_TextField::HitEnter();
-    break;
-    // No tags allowed, they are for "tabbing focus" between controls.
-  case VK_TAB:
-    printf("%s L%d: Tab ignored in TextField!\n", __FILE__, __LINE__);
-    return false;
-  case VK_BACK: {
-    std::string str(m_Text); // char array to c++ string
-    if( str.length() > 0 )
-      str.pop_back(); //lop off character
-    SetFieldText(str.c_str()); // c++ string to char array, use SetFieldText (not just modify m_Text) to cause re-drawing
-    break;
+  if ( GetKeyboardFocus() == this ){
+    switch ( wParam ){
+      // Have to handle the enter key here so that buffered input will
+      // be handled correctly with the Windows message queue.
+    case VK_RETURN:
+      aui_TextField::HitEnter();
+      break;
+      // No tags allowed, they are for "tabbing focus" between controls.
+    case VK_TAB:
+      printf("%s L%d: Tab ignored in TextField!\n", __FILE__, __LINE__);
+      return false;
+    case VK_BACK: {
+      std::string str(m_Text); // char array to c++ string
+      if( str.length() > 0 )
+	str.pop_back(); //lop off character
+      SetFieldText(str.c_str()); // c++ string to char array, use SetFieldText (not just modify m_Text) to cause re-drawing
+      break;
     }
-  case ' ':
-    // printf("%s L%d: space!\n", __FILE__, __LINE__);
-  default: { // append char to char array, apparently easiest with std::string
-
-    static MBCHAR text[ 1025 ];
-    GetFieldText( text, 1024 );
-    // Don't let any more characters in if you're at the max.
-    if ( (sint32)strlen( text ) >= GetMaxFieldLen() ) return 0;
-    
-    std::string str(m_Text); // char array to c++ string
-    str += static_cast<char>(wParam); // append char to string
-    SetFieldText(str.c_str()); // c++ string to char array, use SetFieldText (not just modify m_Text) to cause re-drawing
-    g_soundManager->AddGameSound(GAMESOUNDS_EDIT_TEXT);// play key sound ;-)
-    break;
+    case ' ':
+      // printf("%s L%d: space!\n", __FILE__, __LINE__);
+    default: { // append char to char array, apparently easiest with std::string
+      
+      static MBCHAR text[ 1025 ];
+      GetFieldText( text, 1024 );
+      // Don't let any more characters in if you're at the max.
+      if ( (sint32)strlen( text ) >= GetMaxFieldLen() ) return 0;
+      
+      std::string str(m_Text); // char array to c++ string
+      str += static_cast<char>(wParam); // append char to string
+      SetFieldText(str.c_str()); // c++ string to char array, use SetFieldText (not just modify m_Text) to cause re-drawing
+      g_soundManager->AddGameSound(GAMESOUNDS_EDIT_TEXT);// play key sound ;-)
+      break;
+      }
     }
+    return true;
   }
-  return true;
+  else {
+    return false;
+  }
+  
 }
