@@ -360,6 +360,8 @@ sint32 ui_HandleKeypress(WPARAM wParam, LPARAM lParam)
 						data->GetButton(0)->Callback();
 					}
 				}
+			} else if (g_chatBox) {
+			        g_chatBox->SetActive(false);
 			} else if (g_optionsWindow && g_c3ui->GetWindow(g_optionsWindow->Id())) {
 
 				optionsscreen_removeMyWindow(AUI_BUTTON_ACTION_EXECUTE);

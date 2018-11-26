@@ -222,7 +222,6 @@ AUI_ERRCODE aui_TextField::InitCommon(
 		*m_Text = '\0';
 	else
 		strncpy(m_Text, text, m_maxFieldLen);
-        //printf("%s L%d: aui_textfield text assigned: %s!\n", __FILE__, __LINE__, m_Text);
 
 	// select nothing, move insertion point to end
 	m_selStart = m_selEnd = strlen(m_Text);
@@ -240,7 +239,6 @@ AUI_ERRCODE aui_TextField::InitCommon(
             m_textHeight = fontheight;
 	else
             m_textHeight = m_Font->GetMaxHeight(); //well, let's set at least the box height to something
-        //printf("%s L%d: aui_textfield text height: %d!\n", __FILE__, __LINE__, m_textHeight);
 
 #endif
 
@@ -311,7 +309,6 @@ BOOL aui_TextField::SetFieldText( const MBCHAR *text )
 	return success;
 #else
 	strncpy(m_Text, text, m_maxFieldLen);
-        //printf("%s L%d: aui_textfield text assigned: %s!\n", __FILE__, __LINE__, m_Text);
 
 	// select nothing, move insertion point to end
 	m_selStart = m_selEnd = strlen(m_Text);
@@ -389,7 +386,7 @@ aui_Control *aui_TextField::SetKeyboardFocus( void )
 		m_blinkThisFrame = FALSE;
 		m_startWaitTime = 0;
 	}
-
+	//printf("%s L%d: aui_TextField::SetKeyboardFocus!\n", __FILE__, __LINE__);
 	return aui_Win::SetKeyboardFocus();
 }
 
@@ -720,3 +717,54 @@ int CALLBACK EnumTextFontsProc( LOGFONT *lplf, TEXTMETRIC *lptm, DWORD dwType, L
 	return TRUE;
 }
 #endif // __AUI_USE_DIRECTX__
+
+/* 
+Handling key input for text field with SDL
+
+while it seems that directx/windows can provide a callback function (TextFieldWindowProc) to the window manager input callback (CallWindowProc)
+SDL needs basic key handling (or use GUI lib), see e.g.:
+http://lazyfoo.net/tutorials/SDL/32_text_input_and_clipboard_handling/index.php
+https://wiki.libsdl.org/Tutorials/TextInput
+
+civ3_main.cpp has the SDLMessageHandler which extracts the char from the key pressed from SDL_Event &event and converts to wParam
+this is then processed by ui_HandleKeypress (keypress.cpp)
+where first HandleKey of the topWindow is called, which passes HandleKey to child elements of aui_control, as is aui_win and parent of aui_textfield
+here in aui_TextField HandleKey of aui_control is overwritten such that the keys are appended to the current text field string
+ */
+bool aui_TextField::HandleKey(uint32 wParam){
+
+  switch ( wParam ){
+    // Have to handle the enter key here so that buffered input will
+    // be handled correctly with the Windows message queue.
+  case VK_RETURN:
+    aui_TextField::HitEnter();
+    break;
+    // No tags allowed, they are for "tabbing focus" between controls.
+  case VK_TAB:
+    // printf("%s L%d: Tab ignored in TextField!\n", __FILE__, __LINE__);
+    return false;
+  case VK_BACK: {
+    std::string str(m_Text); // char array to c++ string
+    if( str.length() > 0 )
+      str.pop_back(); //lop off character
+    SetFieldText(str.c_str()); // c++ string to char array, use SetFieldText (not just modify m_Text) to cause re-drawing
+    break;
+    }
+  case ' ':
+    // printf("%s L%d: space!\n", __FILE__, __LINE__);
+  default: { // append char to char array, apparently easiest with std::string
+
+    static MBCHAR text[ 1025 ];
+    GetFieldText( text, 1024 );
+    // Don't let any more characters in if you're at the max.
+    if ( (sint32)strlen( text ) >= GetMaxFieldLen() ) return 0;
+    
+    std::string str(m_Text); // char array to c++ string
+    str += static_cast<char>(wParam); // append char to string
+    SetFieldText(str.c_str()); // c++ string to char array, use SetFieldText (not just modify m_Text) to cause re-drawing
+    g_soundManager->AddGameSound(GAMESOUNDS_EDIT_TEXT);// play key sound ;-)
+    break;
+    }
+  }
+  return true;
+}
