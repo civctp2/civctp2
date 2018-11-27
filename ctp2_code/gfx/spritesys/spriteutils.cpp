@@ -239,6 +239,7 @@ char spriteutils_EncodeScanline(Pixel32 *scanline, sint32 width, Pixel16 **outBu
 
 
 
+		printf("%s L%d: %08X %04X %02X \n", __FILE__, __LINE__, pix32, pix16, alpha);
 
 
 
@@ -268,6 +269,7 @@ char spriteutils_EncodeScanline(Pixel32 *scanline, sint32 width, Pixel16 **outBu
 			else
 			{
 
+			  printf("%s L%d: ", __FILE__, __LINE__);
 				printf("\nError in bitmap data.  Pixel with no associated alpha.\n");
 
 				exit(-1);
@@ -327,6 +329,7 @@ char spriteutils_EncodeScanlineWshadow(Pixel32 *scanline, sint32 width, Pixel16 
 			if (alpha == k_ALL_ALPHA)
 				spriteutils_EncodeCopyRun(&scanPtr, &pos, width, outBufPtr);
 			else {
+			  printf("%s L%d: ", __FILE__, __LINE__);
 				printf("\nError in bitmap data.  Pixel with no associated alpha.\n");
 				exit(-1);
 			}
@@ -341,14 +344,22 @@ void spriteutils_MergeShadowMap(Pixel32 *buf, Pixel32 *shadowBuf, uint16 width, 
 	Pixel32     *pixPtr, pix;
 	Pixel32     *shadowPixPtr, shadowPix;
 
+	printf("%s L%d: %08X %08X !\n", __FILE__, __LINE__, *buf, *shadowBuf);
+	Pixel16     R, G, B, A;
+
+	RGB32Components(*buf, &R, &G, &B, &A);
+	printf("%s L%d: %d %d %d %d !\n", __FILE__, __LINE__, R,G,B,A);
+	RGB32Components(*shadowBuf, &R, &G, &B, &A);
+	printf("%s L%d: %d %d %d %d !\n", __FILE__, __LINE__, R,G,B,A);
 
 	BOOL        whiteBackground = FALSE;
 	if ((*shadowBuf & 0x00FFFFFF) == 0x00FFFFFF) { // only first pixel (disregarding alpha) in shadow image is used to determin bg!
 		whiteBackground = TRUE;
+	printf("%s L%d: whiteBackground!\n", __FILE__, __LINE__);
 	} else {
 		if ((*shadowBuf & 0x00FFFFFF) != 0x00000000) { // first pixel in shadow must be black (disregarding alpha)!
 			printf("\nShadow file is in invalid format.\n");
-			exit(-1);
+			//			exit(-1);
 		}
 	}
 
@@ -371,6 +382,7 @@ void spriteutils_MergeShadowMap(Pixel32 *buf, Pixel32 *shadowBuf, uint16 width, 
 
 					if (a != 0xFF) { // if pix is not fully opaque
 						*pixPtr = 0x00FF00FF; // assign magenta to pix, for which RGB32Info yields 0xF81F (k_SHADOW_PIXEL_565)
+	printf("%s L%d: \n", __FILE__, __LINE__);
 					}
 				}
 			} else { // black bg
@@ -383,6 +395,7 @@ void spriteutils_MergeShadowMap(Pixel32 *buf, Pixel32 *shadowBuf, uint16 width, 
 
 					if (a != 0xFF) { // if pix is not fully opaque
 						*pixPtr = shadowPix; // assign color from shadow pixel
+	printf("%s L%d: \n", __FILE__, __LINE__);
 					}
 				}
 			}
@@ -402,6 +415,7 @@ Pixel16 * spriteutils_RGB32ToEncoded(Pixel32 *buf, Pixel32 *shadowBuf, uint16 wi
 	BOOL                empty;
 
 
+	printf("%s L%d: \n", __FILE__, __LINE__);
 	if (shadowBuf != NULL)
 		spriteutils_MergeShadowMap(buf, shadowBuf, width, height);
 
@@ -410,6 +424,7 @@ Pixel16 * spriteutils_RGB32ToEncoded(Pixel32 *buf, Pixel32 *shadowBuf, uint16 wi
 	startOfData = outBuf + 1 + height;
 	dataPtr = startOfData;
 
+	printf("%s L%d: \n", __FILE__, __LINE__);
 	for(sint32 y=0; y<height; y++)
 	{
 

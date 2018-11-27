@@ -76,7 +76,8 @@ void RGB32Info(Pixel32 pixel, Pixel16 *outPixel, uint8_t *alpha)
 	RGB32Components(pixel, &r, &g, &b, &a);
 
 	*alpha = (uint8_t) a;
-
+	//printf("%s L%d: %d %d %d %d !\n", __FILE__, __LINE__, r,g,b,a);
+	
 	if (g_is565Format)
 		*outPixel = (Pixel16) (((r & 0xF8) << 8) | ((g & 0xFC) << 3) | ((b & 0xF8) >> 3));
 	else
