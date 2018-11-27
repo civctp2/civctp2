@@ -201,10 +201,10 @@ sint32 GoodSpriteGroup::Parse(uint16 id,GROUPTYPE group)
 		for(i=0; i<idleSprite->GetNumFrames(); i++) {
 			MBCHAR			name[k_MAX_NAME_LENGTH];
 
-			sprintf(name, "%sGG%.2dS.%d.tif", prefixStr, id, i+idleSprite->GetFirstFrame());
+			sprintf(name, "%sGG%.2dS.%02d.tif", prefixStr, id, i+idleSprite->GetFirstFrame());
 			strcpy(shadowNames[i], name);
 
-			sprintf(name, "%sGG%.2dA.%d.tif", prefixStr, id, i+idleSprite->GetFirstFrame());
+			sprintf(name, "%sGG%.2dA.%02d.tif", prefixStr, id, i+idleSprite->GetFirstFrame());
 			strcpy(imageNames[i], name);
 		}
 
@@ -257,7 +257,7 @@ void GoodSpriteGroup::ExportScript(MBCHAR const * name)
 	fprintf(file, "%s\n", g_allTokens[TOKEN_GOOD_SPRITE].keyword);
 	fprintf(file, "{\n");
 
-	ExportSpriteGroup(file,(GAME_ACTION)GOODACTION_IDLE,TOKEN_UNIT_SPRITE_IDLE,TOKEN_MAX);
+	ExportSpriteGroup(file,(GAME_ACTION)GOODACTION_IDLE,TOKEN_GOOD_SPRITE_IDLE,TOKEN_MAX);
 
 
 
