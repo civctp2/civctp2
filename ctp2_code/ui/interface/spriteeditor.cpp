@@ -364,7 +364,7 @@ SpriteEditWindow::SpriteEditWindow(
 	m_spriteSurface=NULL;
 
 	g_compression_buff = new unsigned char[COM_BUFF_SIZE];
-	LoadSprite("GG001"); //alligator
+	LoadSprite("GG001.spr"); //alligator
 }
 
 SpriteEditWindow::~SpriteEditWindow()
@@ -619,10 +619,7 @@ SpriteEditWindow::LoadSprite(char *name)
 	if (name==NULL)
 		return;
 
-	sprintf(tbuffer,"%s.SPR",name);
-
-	if (!FileExists(tbuffer))
-		return;
+	sprintf(tbuffer,"%s",name);
 
 	m_frame=0;
 	m_facing=k_DEFAULTSPRITEFACING;
@@ -631,8 +628,27 @@ SpriteEditWindow::LoadSprite(char *name)
     delete m_spriteSurface;
 
 	m_currentSprite = new GoodSpriteGroup(GROUPTYPE_UNIT);
-	m_currentSprite->LoadFull(tbuffer);
 
+	if(strcasestr(tbuffer, ".SPR")){
+	  printf("%s L%d: name= %s!\n", __FILE__, __LINE__, tbuffer);
+	  if (!FileExists(tbuffer))
+	    return;
+	  m_currentSprite->LoadFull(tbuffer);
+	  }
+	else if(strcasestr(tbuffer, ".TXT")){
+	  if (!FileExists(tbuffer))
+	    return;
+	  printf("%s L%d: name= %s!\n", __FILE__, __LINE__, strupr(tbuffer));
+	  sint16 id= -1;
+	  sscanf(strupr(tbuffer), "GG%d.TXT", &id);
+	  printf("%s L%d: id= %d!\n", __FILE__, __LINE__, id);
+	  m_currentSprite->Parse(id, NULL);
+	  }
+	else{
+	  printf("%s L%d: name= %s!\n", __FILE__, __LINE__, tbuffer);
+	  return;
+	}
+	
 	uint32		i;
 	uint16		w = 0, h = 0;
 
