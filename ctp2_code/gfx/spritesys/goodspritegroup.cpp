@@ -88,6 +88,13 @@ POINT GoodSpriteGroup::GetHotPoint(GOODACTION action)
 	return m_sprites[action] ? m_sprites[action]->GetHotPoint() : nullPoint;
 }
 
+void GoodSpriteGroup::SetHotPoint(GOODACTION action, POINT pt)
+{
+	if (m_sprites[action] != NULL){
+	  m_sprites[action]->SetHotPoint(pt.x,pt.y);
+	}
+}
+
 void GoodSpriteGroup::LoadBasic(MBCHAR const * filename)
 {
 	std::auto_ptr<SpriteFile>	file(new SpriteFile(filename));
