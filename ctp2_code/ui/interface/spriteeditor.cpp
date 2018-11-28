@@ -708,7 +708,6 @@ void
 SpriteEditWindow::SaveSprite(char *name)
 {
 	char tbuffer[256];
-	char *fname=name;
 
 	if (name==NULL)
 	{
@@ -719,13 +718,14 @@ SpriteEditWindow::SaveSprite(char *name)
 	if ((m_currentSprite==NULL)||(name==NULL))
 		return;
 
-	sprintf(tbuffer,"%s.SPR",name);
-
-	m_currentSprite->Save(name,k_SPRITEFILE_VERSION2,SPRDATA_LZW1);
-
-	sprintf(tbuffer,"%s.TXT",fname);
-
-	m_currentSprite->ExportScript(name);
+	if(strcasestr(tbuffer, ".SPR")){
+	  printf("%s L%d: name= %s!\n", __FILE__, __LINE__, tbuffer);
+	  m_currentSprite->Save(name,k_SPRITEFILE_VERSION2,SPRDATA_LZW1);
+	  }
+	else if(strcasestr(tbuffer, ".TXT")){
+	  printf("%s L%d: name= %s!\n", __FILE__, __LINE__, tbuffer);
+	  m_currentSprite->ExportScript(name);
+	}
 }
 
 
