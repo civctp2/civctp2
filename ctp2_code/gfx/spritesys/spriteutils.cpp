@@ -219,9 +219,9 @@ char spriteutils_EncodeScanline(Pixel32 *scanline, sint32 width, Pixel16 **outBu
 	Pixel16         shadowPixel;
 
 	if (g_is565Format) {
-		shadowPixel = k_SHADOW_PIXEL_565;
+		shadowPixel = k_SHADOW_PIXEL_565; // 0xF81F
 	} else {
-		shadowPixel = k_SHADOW_PIXEL_555;
+		shadowPixel = k_SHADOW_PIXEL_555; // 0x7C1F
 	}
 
 	pos = 0;
@@ -242,7 +242,7 @@ char spriteutils_EncodeScanline(Pixel32 *scanline, sint32 width, Pixel16 **outBu
 
 
 
-
+		// k_CHROMAKEY_PIXEL  0x0000   k_NO_ALPHA  0x00   k_ALL_ALPHA  0xFF
 		if ((pix16 == k_CHROMAKEY_PIXEL)&&(alpha == k_NO_ALPHA))
 
 		{
@@ -250,20 +250,20 @@ char spriteutils_EncodeScanline(Pixel32 *scanline, sint32 width, Pixel16 **outBu
 			empty = spriteutils_EncodeChromakeyRun(&scanPtr, &pos, width, outBufPtr);
 		}
 		else
-		if (pix16 == shadowPixel)
+		if (pix16 == shadowPixel) // i.e. pix32 == 0x..FF00FF (magenta)
 		{
 
 			spriteutils_EncodeShadowRun(&scanPtr, &pos, width, outBufPtr);
 		}
 		else
-		if ((alpha!=k_NO_ALPHA) && (alpha!=k_ALL_ALPHA))
+		if ((alpha!=k_NO_ALPHA) && (alpha!=k_ALL_ALPHA)) // 0x00   0xFF
 		{
 
 			spriteutils_EncodeFeatheredRun(&scanPtr, &pos, width, outBufPtr);
 		}
 		else {
 
-			if (alpha == k_ALL_ALPHA)
+			if (alpha == k_ALL_ALPHA) // 0xFF
 				spriteutils_EncodeCopyRun(&scanPtr, &pos, width, outBufPtr);
 			else
 			{
