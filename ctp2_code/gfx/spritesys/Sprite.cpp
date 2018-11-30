@@ -140,8 +140,11 @@ void Sprite::Save(char const * filename)
 void Sprite::ImportTIFF(uint16 index, char **imageFiles,Pixel32 **imageData, size_t *size)
 {
 
-		*imageData = (Pixel32 *)StripTIF2Mem(imageFiles[index], &m_width, &m_height, size);
+		*imageData = (Pixel32 *)StripTIF2Mem(imageFiles[index], &m_width, &m_height, size); // if TIF encoding is wrong/unsupported this can yield pixel values of 0x00FF00FF (magenta) even if there is no magenta in the image!!!
 }
+// the following code is nearly the same as in Sprite::Import(size_t nframes, char **imageFiles, char **shadowFiles), there:
+// tif == image
+// minishadow is generated after spriteutils_RGB32ToEncoded(image,shadow
 #if 0
 
 		if (tif)
