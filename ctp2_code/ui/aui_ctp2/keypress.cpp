@@ -387,7 +387,7 @@ sint32 ui_HandleKeypress(WPARAM wParam, LPARAM lParam)
 			return 0;
 	}
 
-	if(g_spriteEditWindow->HandleKey(wParam)){ // pass keys to text field in sprite edit bar (open/save sprites)
+	if(g_spriteEditWindow && g_spriteEditWindow->HandleKey(wParam)){ // pass keys to text field in sprite edit bar (open/save sprites)
 			return 0;
 		}
 
