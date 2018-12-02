@@ -231,7 +231,6 @@ void Sprite::Import(size_t nframes, char **imageFiles, char **shadowFiles)
 {
 	m_numFrames = static_cast<uint16>(nframes);
 
-	printf("%s L%d: !\n", __FILE__, __LINE__);
 	if (m_frames) {
 		delete [] m_frames;
 	}
@@ -271,7 +270,6 @@ void Sprite::Import(size_t nframes, char **imageFiles, char **shadowFiles)
 		minishadowSize  = 0;
 
 		_splitpath(imageFiles[i],NULL,NULL,NULL,ext);
-		printf("%s L%d: ext %s!\n", __FILE__, __LINE__, ext);
 
 		if (strstr(strupr(ext),"TIF"))
 			ImportTIFF(i,imageFiles,&image,&imageSize);
@@ -295,20 +293,50 @@ void Sprite::Import(size_t nframes, char **imageFiles, char **shadowFiles)
 
 		if (image)
 		{
-	printf("%s L%d: \n", __FILE__, __LINE__);
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
 			spriteutils_CreateQuarterSize(image, m_width, m_height,&miniimage, TRUE);
-	printf("%s L%d: \n", __FILE__, __LINE__);
 
 			data = spriteutils_RGB32ToEncoded(image,shadow, m_width, m_height, &dataSize);
 			SetFrameData(i, data, dataSize);
 
-	printf("%s L%d: \n", __FILE__, __LINE__);
 			if (shadow)
 				spriteutils_CreateQuarterSize(shadow, m_width, m_height,&minishadow, FALSE);
-	printf("%s L%d: \n", __FILE__, __LINE__);
 
 			data = spriteutils_RGB32ToEncoded(miniimage, minishadow, m_width >> 1, m_height >> 1, &dataSize);
-	printf("%s L%d: \n", __FILE__, __LINE__);
 			SetMiniFrameData(i, data, dataSize);
 		}
 
