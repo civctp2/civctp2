@@ -162,8 +162,8 @@ sint32 GoodSpriteGroup::Parse(uint16 id,GROUPTYPE group)
 	MBCHAR			scriptName[k_MAX_NAME_LENGTH];
 	char			prefixStr[80];
 
-	sprintf(prefixStr, ".%s%d%s", FILE_SEP, id, FILE_SEP);
-	sprintf(scriptName, "GG%.2d.txt", id);
+	sprintf(prefixStr, ".%s%03d%s", FILE_SEP, id, FILE_SEP);
+	sprintf(scriptName, "GG%03d.txt", id);
 
 	Token * theToken = new Token(scriptName, C3DIR_SPRITES);
 	Assert(theToken);
@@ -201,10 +201,10 @@ sint32 GoodSpriteGroup::Parse(uint16 id,GROUPTYPE group)
 		for(i=0; i<idleSprite->GetNumFrames(); i++) {
 			MBCHAR			name[k_MAX_NAME_LENGTH];
 
-			sprintf(name, "%sGG%.2dS.%02d.tif", prefixStr, id, i+idleSprite->GetFirstFrame());
+			sprintf(name, "%sGG%03dS.%03d.tif", prefixStr, id, i+idleSprite->GetFirstFrame());
 			strcpy(shadowNames[i], name);
 
-			sprintf(name, "%sGG%.2dA.%02d.tif", prefixStr, id, i+idleSprite->GetFirstFrame());
+			sprintf(name, "%sGG%03dA.%03d.tif", prefixStr, id, i+idleSprite->GetFirstFrame());
 			strcpy(imageNames[i], name);
 		}
 
