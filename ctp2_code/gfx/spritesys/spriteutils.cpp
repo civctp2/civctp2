@@ -269,6 +269,9 @@ char spriteutils_EncodeScanline(Pixel32 *scanline, sint32 width, Pixel16 **outBu
 			{
 
 				printf("\nError in bitmap data.  Pixel with no associated alpha.\n");
+			        printf("%s L%d: pix32: %08X pix16: %04X alpha: %02X \n", __FILE__, __LINE__, pix32, pix16, alpha);
+				printf("\nMake sure to assign black to fully transparent pixels!\n");
+				printf("\nUse e.g. ImageMagick: mogrify -background black -alpha Background -type TrueColorMatte *.TIF\n");
 
 				exit(-1);
 			}
@@ -328,6 +331,9 @@ char spriteutils_EncodeScanlineWshadow(Pixel32 *scanline, sint32 width, Pixel16 
 				spriteutils_EncodeCopyRun(&scanPtr, &pos, width, outBufPtr);
 			else {
 				printf("\nError in bitmap data.  Pixel with no associated alpha.\n");
+			        printf("%s L%d: pix32: %08X pix16: %04X alpha: %02X \n", __FILE__, __LINE__, pix32, pix16, alpha);
+				printf("\nMake sure to assign black to fully transparent pixels!\n");
+				printf("\nUse e.g. ImageMagick: mogrify -background black -alpha Background -type TrueColorMatte *.TIF\n");
 				exit(-1);
 			}
 		}
