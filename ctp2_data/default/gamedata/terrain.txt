@@ -180,6 +180,9 @@ TERRAIN_TUNDRA {
    }
 
    Resources TERRAIN_TUNDRA_GOOD_ONE
+   Resources TERRAIN_TUNDRA_GOOD_TWO
+   Resources TERRAIN_TUNDRA_GOOD_THREE
+   Resources TERRAIN_TUNDRA_GOOD_FOUR
 
    MovementType: Air
    MovementType: Land
@@ -240,6 +243,8 @@ TERRAIN_GLACIER {
 
    Resources TERRAIN_GLACIER_GOOD_ONE
    Resources TERRAIN_GLACIER_GOOD_TWO
+   Resources TERRAIN_GLACIER_GOOD_THREE
+   Resources TERRAIN_GLACIER_GOOD_FOUR
 
    MovementType: Air
    MovementType: Land
@@ -690,9 +695,10 @@ TERRAIN_WATER_DEEP {
       CanUpgrade
    }
 
-   Resources TERRAIN_WATER_DEEP_GOOD_TWO
    Resources TERRAIN_WATER_DEEP_GOOD_ONE
+   Resources TERRAIN_WATER_DEEP_GOOD_TWO
    Resources TERRAIN_WATER_DEEP_GOOD_THREE
+   Resources TERRAIN_WATER_DEEP_GOOD_FOUR
 
    MovementType: Air
    MovementType: Sea
@@ -770,6 +776,7 @@ TERRAIN_WATER_BEACH {
    Resources TERRAIN_WATER_BEACH_GOOD_ONE
    Resources TERRAIN_WATER_BEACH_GOOD_TWO
    Resources TERRAIN_WATER_BEACH_GOOD_THREE
+   Resources TERRAIN_WATER_BEACH_GOOD_FOUR
 
    MovementType: Air
    MovementType: Sea
@@ -805,10 +812,10 @@ TERRAIN_WATER_SHELF {
       CanUpgrade
    }
 
-   Resources TERRAIN_WATER_SHALLOW_GOOD_ONE
-   Resources TERRAIN_WATER_SHALLOW_GOOD_TWO
-   Resources TERRAIN_WATER_SHALLOW_GOOD_THREE
-   Resources TERRAIN_WATER_SHALLOW_GOOD_FOUR
+   Resources TERRAIN_WATER_SHELF_GOOD_ONE
+   Resources TERRAIN_WATER_SHELF_GOOD_TWO
+   Resources TERRAIN_WATER_SHELF_GOOD_THREE
+   Resources TERRAIN_WATER_SHELF_GOOD_FOUR
 
    MovementType: Air
    MovementType: Sea
@@ -844,9 +851,10 @@ TERRAIN_WATER_TRENCH {
       CanUpgrade
    }
 
-   Resources TERRAIN_WATER_DEEP_GOOD_TWO
    Resources TERRAIN_WATER_DEEP_GOOD_ONE
+   Resources TERRAIN_WATER_DEEP_GOOD_TWO
    Resources TERRAIN_WATER_DEEP_GOOD_THREE
+   Resources TERRAIN_WATER_DEEP_GOOD_FOUR
 
    MovementType: Air
    MovementType: Sea
@@ -881,9 +889,10 @@ TERRAIN_WATER_RIFT {
       CanUpgrade
    }
 
-   Resources TERRAIN_WATER_DEEP_GOOD_TWO
    Resources TERRAIN_WATER_DEEP_GOOD_ONE
+   Resources TERRAIN_WATER_DEEP_GOOD_TWO
    Resources TERRAIN_WATER_DEEP_GOOD_THREE
+   Resources TERRAIN_WATER_DEEP_GOOD_FOUR
 
    MovementType: Air
    MovementType: Sea
@@ -977,8 +986,8 @@ TERRAIN_BROWN_HILL {
 
    Resources TERRAIN_BROWN_HILL_GOOD_ONE
    Resources TERRAIN_BROWN_HILL_GOOD_TWO
-   Resources TERRAIN_DESERT_GOOD_ONE
-   Resources TERRAIN_DESERT_GOOD_FOUR
+   Resources TERRAIN_BROWN_HILL_GOOD_THREE
+   Resources TERRAIN_BROWN_HILL_GOOD_FOUR
 
    MovementType: Air
    MovementType: Land
@@ -1039,6 +1048,8 @@ TERRAIN_BROWN_MOUNTAIN {
 
    Resources TERRAIN_BROWN_MOUNTAIN_GOOD_ONE
    Resources TERRAIN_BROWN_MOUNTAIN_GOOD_TWO
+   Resources TERRAIN_BROWN_MOUNTAIN_GOOD_THREE
+   Resources TERRAIN_BROWN_MOUNTAIN_GOOD_FOUR
 
    MovementType: Air
    MovementType: Mountain
@@ -1099,6 +1110,8 @@ TERRAIN_WHITE_HILL {
 
    Resources TERRAIN_WHITE_HILL_GOOD_ONE
    Resources TERRAIN_WHITE_HILL_GOOD_TWO
+   Resources TERRAIN_WHITE_HILL_GOOD_THREE
+   Resources TERRAIN_WHITE_HILL_GOOD_FOUR
 
    MovementType: Air
    MovementType: Land
