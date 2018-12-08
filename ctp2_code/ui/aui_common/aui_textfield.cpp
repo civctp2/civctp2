@@ -15,6 +15,7 @@
 
 #ifdef __AUI_USE_SDL__
 #include "aui_sdlsurface.h"
+#include <string>
 #endif
 
 WNDPROC aui_TextField::m_windowProc = NULL;
