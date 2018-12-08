@@ -84,7 +84,9 @@ TradeActor::TradeActor(TradeRoute newRoute)
 
 	sint32 index = g_theResourceDB->Get(m_routeResource)->GetSpriteID();
 
-	m_goodSpriteGroup = (GoodSpriteGroup *)g_goodSpriteGroupList->GetSprite(index, type, LOADTYPE_BASIC,(GAME_ACTION)0);
+	m_goodSpriteGroup = (GoodSpriteGroup *)g_goodSpriteGroupList->GetSprite(index, type, LOADTYPE_FULL,(GAME_ACTION)0);
+	if (m_goodSpriteGroup == NULL)
+	    m_goodSpriteGroup = (GoodSpriteGroup *)g_goodSpriteGroupList->GetSprite(index, type, LOADTYPE_BASIC,(GAME_ACTION)0);
 
 	m_currentPos = m_sourcePos = m_routePath->Get(m_currentPosID);
 	m_destPos = m_routePath->Get(m_destPosID);
