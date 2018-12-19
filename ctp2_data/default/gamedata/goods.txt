@@ -761,15 +761,15 @@ TERRAIN_WATER_SHELF_GOOD_ONE {
   Icon ICON_GOOD_GLACIER_ONE
 }
 
-# Oil
+# Octopus
 TERRAIN_WATER_SHELF_GOOD_TWO {
-  SpriteID 16
-  Sound SOUND_ID_PEARLS
-  Gold 1
+  SpriteID 71
+  Sound SOUND_ID_GIANT_SQUID
+  Gold 20
   Food 10
-  Production 10
+  Production 5
   Probability 0.25
-  Icon ICON_GOOD_GLACIER_TWO
+  Icon ICON_GOOD_WATER_SHELF_TWO
 }
 
 # Crabs
@@ -783,15 +783,15 @@ TERRAIN_WATER_SHELF_GOOD_THREE {
   Icon ICON_GOOD_GLACIER_THREE
 }
 
-# Pearls
+# Octopus
 TERRAIN_WATER_SHELF_GOOD_FOUR {
-  SpriteID 17
-  Sound SOUND_ID_PEARLS
-  Gold 1
+  SpriteID 71
+  Sound SOUND_ID_GIANT_SQUID
+  Gold 20
   Food 10
-  Production 10
+  Production 5
   Probability 0.25
-  Icon ICON_GOOD_GLACIER_FOUR
+  Icon ICON_GOOD_WATER_SHELF_TWO
 }
 
 #Silk
