@@ -783,15 +783,15 @@ TERRAIN_WATER_SHELF_GOOD_THREE {
   Icon ICON_GOOD_GLACIER_THREE
 }
 
-# Octopus
+# Turtle
 TERRAIN_WATER_SHELF_GOOD_FOUR {
-  SpriteID 71
+  SpriteID 72
   Sound SOUND_ID_GIANT_SQUID
-  Gold 20
-  Food 10
-  Production 5
+  Gold 35
+  Food 5
+  Production 10
   Probability 0.25
-  Icon ICON_GOOD_WATER_SHELF_TWO
+  Icon ICON_GOOD_WATER_SHELF_FOUR
 }
 
 #Silk
