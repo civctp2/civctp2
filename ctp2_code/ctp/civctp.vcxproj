@@ -43,7 +43,7 @@
     <SccProjectName>"$/ctp", BAAAAAAA</SccProjectName>
     <SccLocalPath>.</SccLocalPath>
     <ProjectGuid>{0C6156E8-5642-49AB-BEEF-FAB68482E986}</ProjectGuid>
-    <WindowsTargetPlatformVersion>10.0.16299.0</WindowsTargetPlatformVersion>
+    <WindowsTargetPlatformVersion>10.0.17763.0</WindowsTargetPlatformVersion>
   </PropertyGroup>
   <Import Project="$(VCTargetsPath)\Microsoft.Cpp.Default.props" />
   <PropertyGroup Condition="'$(Configuration)|$(Platform)'=='Template|Win32'" Label="Configuration">
@@ -318,9 +318,9 @@
       <GenerateDebugInformation>true</GenerateDebugInformation>
       <SubSystem>Windows</SubSystem>
       <IgnoreSpecificDefaultLibraries>LIBC.lib;%(IgnoreSpecificDefaultLibraries)</IgnoreSpecificDefaultLibraries>
-      <OutputFile>CivCTP_dbg.exe</OutputFile>
       <AdditionalDependencies>..\libs\anet\win\lib\anet2.lib;imagehlp.lib;..\libs\GameWatch\gamewatch.lib;..\libs\GameWatch\gwciv.lib;amstrmid.lib;quartz.lib;winmm.lib;dxguid.lib;ddraw.lib;dinput8.lib;dsound.lib;..\libs\tiff\libtiff.lib;..\ui\freetype\freetype.lib;vfw32.lib;..\libs\miles\mss32.lib;..\libs\zlib\zlib.lib;wsock32.lib;%(AdditionalDependencies)</AdditionalDependencies>
       <ImageHasSafeExceptionHandlers>false</ImageHasSafeExceptionHandlers>
+      <OutputFile>CivCTP_dbg.exe</OutputFile>
     </Link>
   </ItemDefinitionGroup>
   <ItemDefinitionGroup Condition="'$(Configuration)|$(Platform)'=='Final|Win32'">
@@ -334,12 +334,12 @@
       <FavorSizeOrSpeed>Speed</FavorSizeOrSpeed>
       <IntrinsicFunctions>true</IntrinsicFunctions>
       <OmitFramePointers>false</OmitFramePointers>
-      <AdditionalIncludeDirectories>..\os\include\;..\os\common;..\os\win32;..\ctp\ctp2_utils\;..\ctp\ctp2_rsrc\;..\ctp\debugtools;..\libs\freetype\lib;..\libs\freetype\utils\;..\libs\freetype\win32\;..\libs\freetype\utils;..\libs\freetype\win32;..\ui\interface;..\ui\netshell;..\robot\utility;..\robot\pathing;..\robot\aibackdoor;..\libs\freetype\;..\gfx\spritesys\;..\gfx\tilesys\;..\gfx\gfx_utils\;..\gs\database;..\gs\fileio\;..\gs\gameobj\;..\gs\utility\;..\gs\world\;..\net\io\;..\net\general\;..\ui\aui_utils\;..\ui\aui_sdl\;..\ui\aui_directx\;..\ui\aui_ctp2\;..\ui\aui_common\;..\libs\tiff\;..\libs\anet\h\;..\mm\;..\robotcom\backdoor;..\gs\slic;..\gfx\layers;..\mapgen;..\ui\freetype;..\sound;..\GameWatch\gamewatch;..\GameWatch\gwciv;..\libs\miles;..\ctp\fingerprint;..\libs\zlib;..\ui\slic_debug;..\gs\outcom;..\ctp\;..\ui\aui_common;..\ui\ldl;..\gs\events;..\gs\newdb;..\ai\diplomacy;..\ai;..\ai\mapanalysis;..\ai\strategy\scheduler;..\ai\strategy\agents;..\ai\strategy\goals;..\ai\strategy\squads;..\ai\citymanagement;%(AdditionalIncludeDirectories)</AdditionalIncludeDirectories>
+      <AdditionalIncludeDirectories>..\;..\libs\freetype\lib;..\libs\freetype\utils\;..\libs\freetype\win32\;..\libs\freetype\utils;..\libs\freetype\win32;..\libs\freetype\;..\libs\tiff\;..\libs\anet\h\;..\mm\;..\libs\miles;..\libs\zlib;%(AdditionalIncludeDirectories)</AdditionalIncludeDirectories>
       <PreprocessorDefinitions>__GW_USE_IMPORT;__GWCIV_USE_IMPORT;WIN32;NDEBUG;_WINDOWS;_BFR_;%(PreprocessorDefinitions)</PreprocessorDefinitions>
       <AssemblerListingLocation>.\final\</AssemblerListingLocation>
       <PrecompiledHeaderOutputFile>.\final\civctp.pch</PrecompiledHeaderOutputFile>
       <PrecompiledHeader>Use</PrecompiledHeader>
-      <PrecompiledHeaderFile>c3.h</PrecompiledHeaderFile>
+      <PrecompiledHeaderFile>ctp/c3.h</PrecompiledHeaderFile>
       <ObjectFileName>.\final\</ObjectFileName>
       <ProgramDataBaseFileName>.\final\</ProgramDataBaseFileName>
     </ClCompile>
@@ -365,7 +365,8 @@
       <SubSystem>Windows</SubSystem>
       <IgnoreSpecificDefaultLibraries>libcd.lib;libc.lib;libcmtd.lib;libcmt.lib;%(IgnoreSpecificDefaultLibraries)</IgnoreSpecificDefaultLibraries>
       <OutputFile>ctp2.exe</OutputFile>
-      <AdditionalDependencies>..\libs\anet\win\lib\anet2.lib;..\libs\GameWatch\gamewatch.lib;..\libs\GameWatch\gwciv.lib;amstrmid.lib;strmbasd.lib;quartz.lib;winmm.lib;dxguid.lib;ddraw.lib;dinput.lib;dsound.lib;..\libs\tiff\libtiff.lib;..\ui\freetype\freetype.lib;vfw32.lib;..\libs\miles\mss32.lib;..\libs\zlib\zlib.lib;wsock32.lib;%(AdditionalDependencies)</AdditionalDependencies>
+      <AdditionalDependencies>..\libs\anet\win\lib\anet2.lib;..\libs\GameWatch\gamewatch.lib;..\libs\GameWatch\gwciv.lib;amstrmid.lib;quartz.lib;winmm.lib;dxguid.lib;ddraw.lib;dinput8.lib;dsound.lib;..\libs\tiff\libtiff.lib;..\ui\freetype\freetype.lib;vfw32.lib;..\libs\miles\mss32.lib;..\libs\zlib\zlib.lib;wsock32.lib;%(AdditionalDependencies)</AdditionalDependencies>
+      <ImageHasSafeExceptionHandlers>false</ImageHasSafeExceptionHandlers>
     </Link>
   </ItemDefinitionGroup>
   <ItemDefinitionGroup Condition="'$(Configuration)|$(Platform)'=='Test|Win32'">
@@ -3330,28 +3331,28 @@ rem                                                 if                          
       <Outputs Condition="'$(Configuration)|$(Platform)'=='Debug Browse|Win32'">$(ProjectDir)..\gs\newdb\CultureRecord.stamp;%(Outputs)</Outputs>
     </CustomBuild>
     <CustomBuild Include="..\gs\newdb\DBLexer.l">
-      <Command Condition="'$(Configuration)|$(Platform)'=='Final with Logging|Win32'">"c:\Program Files (x86)\GnuWin32\bin\flex.exe" -i -Pdbl -o$(ProjectDir)..\gs\newdb\lex.dbl.c %(FullPath)</Command>
+      <Command Condition="'$(Configuration)|$(Platform)'=='Final with Logging|Win32'">"$(CDKDIR)\flex.exe" -i -Pdbl -o$(ProjectDir)..\gs\newdb\lex.dbl.c %(FullPath)</Command>
       <Message Condition="'$(Configuration)|$(Platform)'=='Final with Logging|Win32'">pummeling DBLexer.l</Message>
       <Outputs Condition="'$(Configuration)|$(Platform)'=='Final with Logging|Win32'">$(ProjectDir)..\gs\newdb\lex.dbl.c;%(Outputs)</Outputs>
-      <Command Condition="'$(Configuration)|$(Platform)'=='NDebug|Win32'">"c:\Program Files (x86)\GnuWin32\bin\flex.exe" -i -Pdbl -o$(ProjectDir)..\gs\newdb\lex.dbl.c %(FullPath)</Command>
+      <Command Condition="'$(Configuration)|$(Platform)'=='NDebug|Win32'">"$(CDKDIR)\flex.exe" -i -Pdbl -o$(ProjectDir)..\gs\newdb\lex.dbl.c %(FullPath)</Command>
       <Message Condition="'$(Configuration)|$(Platform)'=='NDebug|Win32'">pummeling DBLexer.l</Message>
       <Outputs Condition="'$(Configuration)|$(Platform)'=='NDebug|Win32'">$(ProjectDir)..\gs\newdb\lex.dbl.c;%(Outputs)</Outputs>
-      <Command Condition="'$(Configuration)|$(Platform)'=='Debug|Win32'">"c:\Program Files (x86)\GnuWin32\bin\flex.exe" -i -Pdbl -o$(ProjectDir)..\gs\newdb\lex.dbl.c %(FullPath)</Command>
+      <Command Condition="'$(Configuration)|$(Platform)'=='Debug|Win32'">"$(CDKDIR)\flex.exe" -i -Pdbl -o$(ProjectDir)..\gs\newdb\lex.dbl.c %(FullPath)</Command>
       <Message Condition="'$(Configuration)|$(Platform)'=='Debug|Win32'">pummeling DBLexer.l</Message>
       <Outputs Condition="'$(Configuration)|$(Platform)'=='Debug|Win32'">$(ProjectDir)..\gs\newdb\lex.dbl.c;%(Outputs)</Outputs>
-      <Command Condition="'$(Configuration)|$(Platform)'=='Final|Win32'">"c:\Program Files (x86)\GnuWin32\bin\flex.exe" -i -Pdbl -o$(ProjectDir)..\gs\newdb\lex.dbl.c %(FullPath)</Command>
+      <Command Condition="'$(Configuration)|$(Platform)'=='Final|Win32'">"$(CDKDIR)\flex.exe" -i -Pdbl -o$(ProjectDir)..\gs\newdb\lex.dbl.c %(FullPath)</Command>
       <Message Condition="'$(Configuration)|$(Platform)'=='Final|Win32'">pummeling DBLexer.l</Message>
       <Outputs Condition="'$(Configuration)|$(Platform)'=='Final|Win32'">$(ProjectDir)..\gs\newdb\lex.dbl.c;%(Outputs)</Outputs>
-      <Command Condition="'$(Configuration)|$(Platform)'=='Test|Win32'">"c:\Program Files (x86)\GnuWin32\bin\flex.exe" -i -Pdbl -o$(ProjectDir)..\gs\newdb\lex.dbl.c %(FullPath)</Command>
+      <Command Condition="'$(Configuration)|$(Platform)'=='Test|Win32'">"$(CDKDIR)\flex.exe" -i -Pdbl -o$(ProjectDir)..\gs\newdb\lex.dbl.c %(FullPath)</Command>
       <Message Condition="'$(Configuration)|$(Platform)'=='Test|Win32'">pummeling DBLexer.l</Message>
       <Outputs Condition="'$(Configuration)|$(Platform)'=='Test|Win32'">$(ProjectDir)..\gs\newdb\lex.dbl.c;%(Outputs)</Outputs>
-      <Command Condition="'$(Configuration)|$(Platform)'=='Release|Win32'">"c:\Program Files (x86)\GnuWin32\bin\flex.exe" -i -Pdbl -o$(ProjectDir)..\gs\newdb\lex.dbl.c %(FullPath)</Command>
+      <Command Condition="'$(Configuration)|$(Platform)'=='Release|Win32'">"$(CDKDIR)\flex.exe" -i -Pdbl -o$(ProjectDir)..\gs\newdb\lex.dbl.c %(FullPath)</Command>
       <Message Condition="'$(Configuration)|$(Platform)'=='Release|Win32'">pummeling DBLexer.l</Message>
       <Outputs Condition="'$(Configuration)|$(Platform)'=='Release|Win32'">$(ProjectDir)..\gs\newdb\lex.dbl.c;%(Outputs)</Outputs>
-      <Command Condition="'$(Configuration)|$(Platform)'=='Optimized Test|Win32'">"c:\Program Files (x86)\GnuWin32\bin\flex.exe" -i -Pdbl -o$(ProjectDir)..\gs\newdb\lex.dbl.c %(FullPath)</Command>
+      <Command Condition="'$(Configuration)|$(Platform)'=='Optimized Test|Win32'">"$(CDKDIR)\flex.exe" -i -Pdbl -o$(ProjectDir)..\gs\newdb\lex.dbl.c %(FullPath)</Command>
       <Message Condition="'$(Configuration)|$(Platform)'=='Optimized Test|Win32'">Pummeling DBLexer.l</Message>
       <Outputs Condition="'$(Configuration)|$(Platform)'=='Optimized Test|Win32'">$(ProjectDir)..\gs\newdb\lex.dbl.c;%(Outputs)</Outputs>
-      <Command Condition="'$(Configuration)|$(Platform)'=='Debug Browse|Win32'">"c:\Program Files (x86)\GnuWin32\bin\flex.exe" -i -Pdbl -o$(ProjectDir)..\gs\newdb\lex.dbl.c %(FullPath)</Command>
+      <Command Condition="'$(Configuration)|$(Platform)'=='Debug Browse|Win32'">"$(CDKDIR)\flex.exe" -i -Pdbl -o$(ProjectDir)..\gs\newdb\lex.dbl.c %(FullPath)</Command>
       <Message Condition="'$(Configuration)|$(Platform)'=='Debug Browse|Win32'">pummeling DBLexer.l</Message>
       <Outputs Condition="'$(Configuration)|$(Platform)'=='Debug Browse|Win32'">$(ProjectDir)..\gs\newdb\lex.dbl.c;%(Outputs)</Outputs>
     </CustomBuild>
@@ -3948,145 +3949,145 @@ rem                                                 if                          
       <AdditionalInputs Condition="'$(Configuration)|$(Platform)'=='Debug Browse|Win32'">$(ProjectDir)..\gs\dbgen\ctpdb.exe;%(AdditionalInputs)</AdditionalInputs>
     </CustomBuild>
     <CustomBuild Include="..\gs\slic\slic.l">
-      <Command Condition="'$(Configuration)|$(Platform)'=='Final with Logging|Win32'">"c:\Program Files (x86)\GnuWin32\bin\flex.exe" -i -o$(ProjectDir)..\gs\slic\lex.yy.c %(FullPath)</Command>
+      <Command Condition="'$(Configuration)|$(Platform)'=='Final with Logging|Win32'">"$(CDKDIR)\flex.exe" -i -o$(ProjectDir)..\gs\slic\lex.yy.c %(FullPath)</Command>
       <Message Condition="'$(Configuration)|$(Platform)'=='Final with Logging|Win32'">snorkeling...</Message>
       <Outputs Condition="'$(Configuration)|$(Platform)'=='Final with Logging|Win32'">$(ProjectDir)..\gs\slic\lex.yy.c;%(Outputs)</Outputs>
-      <Command Condition="'$(Configuration)|$(Platform)'=='NDebug|Win32'">"c:\Program Files (x86)\GnuWin32\bin\flex.exe" -i -o$(ProjectDir)..\gs\slic\lex.yy.c %(FullPath)</Command>
+      <Command Condition="'$(Configuration)|$(Platform)'=='NDebug|Win32'">"$(CDKDIR)\flex.exe" -i -o$(ProjectDir)..\gs\slic\lex.yy.c %(FullPath)</Command>
       <Message Condition="'$(Configuration)|$(Platform)'=='NDebug|Win32'">snorkeling...</Message>
       <Outputs Condition="'$(Configuration)|$(Platform)'=='NDebug|Win32'">$(ProjectDir)..\gs\slic\lex.yy.c;%(Outputs)</Outputs>
-      <Command Condition="'$(Configuration)|$(Platform)'=='Debug|Win32'">"c:\Program Files (x86)\GnuWin32\bin\flex.exe" -i -o$(ProjectDir)..\gs\slic\lex.yy.c %(FullPath)</Command>
+      <Command Condition="'$(Configuration)|$(Platform)'=='Debug|Win32'">"$(CDKDIR)\flex.exe" -i -o$(ProjectDir)..\gs\slic\lex.yy.c %(FullPath)</Command>
       <Message Condition="'$(Configuration)|$(Platform)'=='Debug|Win32'">snorkeling slic.l</Message>
       <Outputs Condition="'$(Configuration)|$(Platform)'=='Debug|Win32'">$(ProjectDir)..\gs\slic\lex.yy.c;%(Outputs)</Outputs>
-      <Command Condition="'$(Configuration)|$(Platform)'=='Final|Win32'">"c:\Program Files (x86)\GnuWin32\bin\flex.exe" -i -o$(ProjectDir)..\gs\slic\lex.yy.c %(FullPath)</Command>
+      <Command Condition="'$(Configuration)|$(Platform)'=='Final|Win32'">"$(CDKDIR)\flex.exe" -i -o$(ProjectDir)..\gs\slic\lex.yy.c %(FullPath)</Command>
       <Message Condition="'$(Configuration)|$(Platform)'=='Final|Win32'">snorkeling...</Message>
       <Outputs Condition="'$(Configuration)|$(Platform)'=='Final|Win32'">$(ProjectDir)..\gs\slic\lex.yy.c;%(Outputs)</Outputs>
-      <Command Condition="'$(Configuration)|$(Platform)'=='Test|Win32'">"c:\Program Files (x86)\GnuWin32\bin\flex.exe" -i -o$(ProjectDir)..\gs\slic\lex.yy.c %(FullPath)</Command>
+      <Command Condition="'$(Configuration)|$(Platform)'=='Test|Win32'">"$(CDKDIR)\flex.exe" -i -o$(ProjectDir)..\gs\slic\lex.yy.c %(FullPath)</Command>
       <Message Condition="'$(Configuration)|$(Platform)'=='Test|Win32'">snorkeling...</Message>
       <Outputs Condition="'$(Configuration)|$(Platform)'=='Test|Win32'">$(ProjectDir)..\gs\slic\lex.yy.c;%(Outputs)</Outputs>
-      <Command Condition="'$(Configuration)|$(Platform)'=='Release|Win32'">"c:\Program Files (x86)\GnuWin32\bin\flex.exe" -i -o$(ProjectDir)..\gs\slic\lex.yy.c %(FullPath)</Command>
+      <Command Condition="'$(Configuration)|$(Platform)'=='Release|Win32'">"$(CDKDIR)\flex.exe" -i -o$(ProjectDir)..\gs\slic\lex.yy.c %(FullPath)</Command>
       <Outputs Condition="'$(Configuration)|$(Platform)'=='Release|Win32'">$(ProjectDir)..\gs\slic\lex.yy.c;%(Outputs)</Outputs>
-      <Command Condition="'$(Configuration)|$(Platform)'=='Optimized Test|Win32'">"c:\Program Files (x86)\GnuWin32\bin\flex.exe" -i -o$(ProjectDir)..\gs\slic\lex.yy.c %(FullPath)</Command>
+      <Command Condition="'$(Configuration)|$(Platform)'=='Optimized Test|Win32'">"$(CDKDIR)\flex.exe" -i -o$(ProjectDir)..\gs\slic\lex.yy.c %(FullPath)</Command>
       <Outputs Condition="'$(Configuration)|$(Platform)'=='Optimized Test|Win32'">$(ProjectDir)..\gs\slic\lex.yy.c;%(Outputs)</Outputs>
-      <Command Condition="'$(Configuration)|$(Platform)'=='Debug Browse|Win32'">"c:\Program Files (x86)\GnuWin32\bin\flex.exe" -i -o$(ProjectDir)..\gs\slic\lex.yy.c %(FullPath)</Command>
+      <Command Condition="'$(Configuration)|$(Platform)'=='Debug Browse|Win32'">"$(CDKDIR)\flex.exe" -i -o$(ProjectDir)..\gs\slic\lex.yy.c %(FullPath)</Command>
       <Message Condition="'$(Configuration)|$(Platform)'=='Debug Browse|Win32'">snorkeling slic.l</Message>
       <Outputs Condition="'$(Configuration)|$(Platform)'=='Debug Browse|Win32'">$(ProjectDir)..\gs\slic\lex.yy.c;%(Outputs)</Outputs>
     </CustomBuild>
     <CustomBuild Include="..\gs\slic\slic.y">
-      <Command Condition="'$(Configuration)|$(Platform)'=='Final with Logging|Win32'">"c:\Program Files (x86)\GnuWin32\bin\yacc.exe" -d -b..\\gs\\slic\\y  ..\\gs\\slic\\slic.y</Command>
+      <Command Condition="'$(Configuration)|$(Platform)'=='Final with Logging|Win32'">"$(CDKDIR)\byacc.exe" -d -b..\\gs\\slic\\y  ..\\gs\\slic\\slic.y</Command>
       <Message Condition="'$(Configuration)|$(Platform)'=='Final with Logging|Win32'">burgling...</Message>
       <Outputs Condition="'$(Configuration)|$(Platform)'=='Final with Logging|Win32'">$(ProjectDir)..\gs\slic\y.tab.c;$(ProjectDir)..\gs\slic\y.tab.h;%(Outputs)</Outputs>
-      <Command Condition="'$(Configuration)|$(Platform)'=='NDebug|Win32'">"c:\Program Files (x86)\GnuWin32\bin\yacc.exe" -d -b..\\gs\\slic\\y  ..\\gs\\slic\\slic.y</Command>
+      <Command Condition="'$(Configuration)|$(Platform)'=='NDebug|Win32'">"$(CDKDIR)\byacc.exe" -d -b..\\gs\\slic\\y  ..\\gs\\slic\\slic.y</Command>
       <Message Condition="'$(Configuration)|$(Platform)'=='NDebug|Win32'">burgling...</Message>
       <Outputs Condition="'$(Configuration)|$(Platform)'=='NDebug|Win32'">$(ProjectDir)..\gs\slic\y.tab.c;$(ProjectDir)..\gs\slic\y.tab.h;%(Outputs)</Outputs>
-      <Command Condition="'$(Configuration)|$(Platform)'=='Debug|Win32'">"c:\Program Files (x86)\GnuWin32\bin\yacc.exe" -d -b..\\gs\\slic\\y  ..\\gs\\slic\\slic.y</Command>
+      <Command Condition="'$(Configuration)|$(Platform)'=='Debug|Win32'">"$(CDKDIR)\byacc.exe" -d -b..\\gs\\slic\\y  ..\\gs\\slic\\slic.y</Command>
       <Message Condition="'$(Configuration)|$(Platform)'=='Debug|Win32'">burgling slic.y</Message>
       <Outputs Condition="'$(Configuration)|$(Platform)'=='Debug|Win32'">$(ProjectDir)..\gs\slic\y.tab.c;$(ProjectDir)..\gs\slic\y.tab.h;%(Outputs)</Outputs>
-      <Command Condition="'$(Configuration)|$(Platform)'=='Final|Win32'">"c:\Program Files (x86)\GnuWin32\bin\yacc.exe" -d -b..\\gs\\slic\\y  ..\\gs\\slic\\slic.y</Command>
+      <Command Condition="'$(Configuration)|$(Platform)'=='Final|Win32'">"$(CDKDIR)\byacc.exe" -d -b..\\gs\\slic\\y  ..\\gs\\slic\\slic.y</Command>
       <Message Condition="'$(Configuration)|$(Platform)'=='Final|Win32'">burgling...</Message>
       <Outputs Condition="'$(Configuration)|$(Platform)'=='Final|Win32'">$(ProjectDir)..\gs\slic\y.tab.c;$(ProjectDir)..\gs\slic\y.tab.h;%(Outputs)</Outputs>
-      <Command Condition="'$(Configuration)|$(Platform)'=='Test|Win32'">"c:\Program Files (x86)\GnuWin32\bin\yacc.exe" -d -b..\\gs\\slic\\y  ..\\gs\\slic\\slic.y</Command>
+      <Command Condition="'$(Configuration)|$(Platform)'=='Test|Win32'">"$(CDKDIR)\byacc.exe" -d -b..\\gs\\slic\\y  ..\\gs\\slic\\slic.y</Command>
       <Message Condition="'$(Configuration)|$(Platform)'=='Test|Win32'">burgling...</Message>
       <Outputs Condition="'$(Configuration)|$(Platform)'=='Test|Win32'">$(ProjectDir)..\gs\slic\y.tab.c;$(ProjectDir)..\gs\slic\y.tab.h;%(Outputs)</Outputs>
-      <Command Condition="'$(Configuration)|$(Platform)'=='Release|Win32'">"c:\Program Files (x86)\GnuWin32\bin\yacc.exe" -d -b..\\gs\\slic\\y  ..\\gs\\slic\\slic.y</Command>
+      <Command Condition="'$(Configuration)|$(Platform)'=='Release|Win32'">"$(CDKDIR)\byacc.exe" -d -b..\\gs\\slic\\y  ..\\gs\\slic\\slic.y</Command>
       <Outputs Condition="'$(Configuration)|$(Platform)'=='Release|Win32'">$(ProjectDir)..\gs\slic\y.tab.c;$(ProjectDir)..\gs\slic\y.tab.h;%(Outputs)</Outputs>
-      <Command Condition="'$(Configuration)|$(Platform)'=='Optimized Test|Win32'">"c:\Program Files (x86)\GnuWin32\bin\yacc.exe" -d -b..\\gs\\slic\\y  ..\\gs\\slic\\slic.y</Command>
+      <Command Condition="'$(Configuration)|$(Platform)'=='Optimized Test|Win32'">"$(CDKDIR)\byacc.exe" -d -b..\\gs\\slic\\y  ..\\gs\\slic\\slic.y</Command>
       <Outputs Condition="'$(Configuration)|$(Platform)'=='Optimized Test|Win32'">$(ProjectDir)..\gs\slic\y.tab.c;$(ProjectDir)..\gs\slic\y.tab.h;%(Outputs)</Outputs>
-      <Command Condition="'$(Configuration)|$(Platform)'=='Debug Browse|Win32'">"c:\Program Files (x86)\GnuWin32\bin\yacc.exe" -d -b..\\gs\\slic\\y  ..\\gs\\slic\\slic.y</Command>
+      <Command Condition="'$(Configuration)|$(Platform)'=='Debug Browse|Win32'">"$(CDKDIR)\byacc.exe" -d -b..\\gs\\slic\\y  ..\\gs\\slic\\slic.y</Command>
       <Message Condition="'$(Configuration)|$(Platform)'=='Debug Browse|Win32'">burgling slic.y</Message>
       <Outputs Condition="'$(Configuration)|$(Platform)'=='Debug Browse|Win32'">$(ProjectDir)..\gs\slic\y.tab.c;$(ProjectDir)..\gs\slic\y.tab.h;%(Outputs)</Outputs>
     </CustomBuild>
     <CustomBuild Include="..\gs\slic\sliccmd.l">
-      <Command Condition="'$(Configuration)|$(Platform)'=='Final with Logging|Win32'">"c:\Program Files (x86)\GnuWin32\bin\flex.exe" -i -Psc -o$(ProjectDir)..\gs\slic\lex.sc.c %(FullPath)</Command>
+      <Command Condition="'$(Configuration)|$(Platform)'=='Final with Logging|Win32'">"$(CDKDIR)\flex.exe" -i -Psc -o$(ProjectDir)..\gs\slic\lex.sc.c %(FullPath)</Command>
       <Message Condition="'$(Configuration)|$(Platform)'=='Final with Logging|Win32'">combobulating sliccmd.l</Message>
       <Outputs Condition="'$(Configuration)|$(Platform)'=='Final with Logging|Win32'">$(ProjectDir)..\gs\slic\lex.sc.c;%(Outputs)</Outputs>
-      <Command Condition="'$(Configuration)|$(Platform)'=='NDebug|Win32'">"c:\Program Files (x86)\GnuWin32\bin\flex.exe" -i -Psc -o$(ProjectDir)..\gs\slic\lex.sc.c %(FullPath)</Command>
+      <Command Condition="'$(Configuration)|$(Platform)'=='NDebug|Win32'">"$(CDKDIR)\flex.exe" -i -Psc -o$(ProjectDir)..\gs\slic\lex.sc.c %(FullPath)</Command>
       <Message Condition="'$(Configuration)|$(Platform)'=='NDebug|Win32'">combobulating sliccmd.l</Message>
       <Outputs Condition="'$(Configuration)|$(Platform)'=='NDebug|Win32'">$(ProjectDir)..\gs\slic\lex.sc.c;%(Outputs)</Outputs>
-      <Command Condition="'$(Configuration)|$(Platform)'=='Debug|Win32'">"c:\Program Files (x86)\GnuWin32\bin\flex.exe" -i -Psc -o$(ProjectDir)..\gs\slic\lex.sc.c %(FullPath)</Command>
+      <Command Condition="'$(Configuration)|$(Platform)'=='Debug|Win32'">"$(CDKDIR)\flex.exe" -i -Psc -o$(ProjectDir)..\gs\slic\lex.sc.c %(FullPath)</Command>
       <Message Condition="'$(Configuration)|$(Platform)'=='Debug|Win32'">combobulating sliccmd.l</Message>
       <Outputs Condition="'$(Configuration)|$(Platform)'=='Debug|Win32'">$(ProjectDir)..\gs\slic\lex.sc.c;%(Outputs)</Outputs>
-      <Command Condition="'$(Configuration)|$(Platform)'=='Final|Win32'">"c:\Program Files (x86)\GnuWin32\bin\flex.exe" -i -Psc -o$(ProjectDir)..\gs\slic\lex.sc.c %(FullPath)</Command>
+      <Command Condition="'$(Configuration)|$(Platform)'=='Final|Win32'">"$(CDKDIR)\flex.exe" -i -Psc -o$(ProjectDir)..\gs\slic\lex.sc.c %(FullPath)</Command>
       <Message Condition="'$(Configuration)|$(Platform)'=='Final|Win32'">combobulating sliccmd.l</Message>
       <Outputs Condition="'$(Configuration)|$(Platform)'=='Final|Win32'">$(ProjectDir)..\gs\slic\lex.sc.c;%(Outputs)</Outputs>
-      <Command Condition="'$(Configuration)|$(Platform)'=='Test|Win32'">"c:\Program Files (x86)\GnuWin32\bin\flex.exe" -i -Psc -o$(ProjectDir)..\gs\slic\lex.sc.c %(FullPath)</Command>
+      <Command Condition="'$(Configuration)|$(Platform)'=='Test|Win32'">"$(CDKDIR)\flex.exe" -i -Psc -o$(ProjectDir)..\gs\slic\lex.sc.c %(FullPath)</Command>
       <Message Condition="'$(Configuration)|$(Platform)'=='Test|Win32'">combobulating sliccmd.l</Message>
       <Outputs Condition="'$(Configuration)|$(Platform)'=='Test|Win32'">$(ProjectDir)..\gs\slic\lex.sc.c;%(Outputs)</Outputs>
-      <Command Condition="'$(Configuration)|$(Platform)'=='Release|Win32'">"c:\Program Files (x86)\GnuWin32\bin\flex.exe" -i -Psc -o$(ProjectDir)..\gs\slic\lex.sc.c %(FullPath)</Command>
+      <Command Condition="'$(Configuration)|$(Platform)'=='Release|Win32'">"$(CDKDIR)\flex.exe" -i -Psc -o$(ProjectDir)..\gs\slic\lex.sc.c %(FullPath)</Command>
       <Message Condition="'$(Configuration)|$(Platform)'=='Release|Win32'">combobulating sliccmd.l</Message>
       <Outputs Condition="'$(Configuration)|$(Platform)'=='Release|Win32'">$(ProjectDir)..\gs\slic\lex.sc.c;%(Outputs)</Outputs>
-      <Command Condition="'$(Configuration)|$(Platform)'=='Optimized Test|Win32'">"c:\Program Files (x86)\GnuWin32\bin\flex.exe" -i -Psc -o$(ProjectDir)..\gs\slic\lex.sc.c %(FullPath)</Command>
+      <Command Condition="'$(Configuration)|$(Platform)'=='Optimized Test|Win32'">"$(CDKDIR)\flex.exe" -i -Psc -o$(ProjectDir)..\gs\slic\lex.sc.c %(FullPath)</Command>
       <Message Condition="'$(Configuration)|$(Platform)'=='Optimized Test|Win32'">Combobulating sliccmd.l</Message>
       <Outputs Condition="'$(Configuration)|$(Platform)'=='Optimized Test|Win32'">$(ProjectDir)..\gs\slic\lex.sc.c;%(Outputs)</Outputs>
-      <Command Condition="'$(Configuration)|$(Platform)'=='Debug Browse|Win32'">"c:\Program Files (x86)\GnuWin32\bin\flex.exe" -i -Psc -o$(ProjectDir)..\gs\slic\lex.sc.c %(FullPath)</Command>
+      <Command Condition="'$(Configuration)|$(Platform)'=='Debug Browse|Win32'">"$(CDKDIR)\flex.exe" -i -Psc -o$(ProjectDir)..\gs\slic\lex.sc.c %(FullPath)</Command>
       <Message Condition="'$(Configuration)|$(Platform)'=='Debug Browse|Win32'">combobulating sliccmd.l</Message>
       <Outputs Condition="'$(Configuration)|$(Platform)'=='Debug Browse|Win32'">$(ProjectDir)..\gs\slic\lex.sc.c;%(Outputs)</Outputs>
     </CustomBuild>
     <CustomBuild Include="..\gs\slic\sliccmd.y">
-      <Command Condition="'$(Configuration)|$(Platform)'=='Final with Logging|Win32'">"c:\Program Files (x86)\GnuWin32\bin\yacc.exe" -d -b..\\gs\\slic\\sc  ..\\gs\\slic\\sliccmd.y</Command>
+      <Command Condition="'$(Configuration)|$(Platform)'=='Final with Logging|Win32'">"$(CDKDIR)\byacc.exe" -d -b..\\gs\\slic\\sc  ..\\gs\\slic\\sliccmd.y</Command>
       <Message Condition="'$(Configuration)|$(Platform)'=='Final with Logging|Win32'">discombobulating sliccmd.y</Message>
       <Outputs Condition="'$(Configuration)|$(Platform)'=='Final with Logging|Win32'">$(ProjectDir)..\gs\slic\sc.tab.c;$(ProjectDir)..\gs\slic\sc.tab.h;%(Outputs)</Outputs>
-      <Command Condition="'$(Configuration)|$(Platform)'=='NDebug|Win32'">"c:\Program Files (x86)\GnuWin32\bin\yacc.exe" -d -b..\\gs\\slic\\sc  ..\\gs\\slic\\sliccmd.y</Command>
+      <Command Condition="'$(Configuration)|$(Platform)'=='NDebug|Win32'">"$(CDKDIR)\byacc.exe" -d -b..\\gs\\slic\\sc  ..\\gs\\slic\\sliccmd.y</Command>
       <Message Condition="'$(Configuration)|$(Platform)'=='NDebug|Win32'">discombobulating sliccmd.y</Message>
       <Outputs Condition="'$(Configuration)|$(Platform)'=='NDebug|Win32'">$(ProjectDir)..\gs\slic\sc.tab.c;$(ProjectDir)..\gs\slic\sc.tab.h;%(Outputs)</Outputs>
-      <Command Condition="'$(Configuration)|$(Platform)'=='Debug|Win32'">"c:\Program Files (x86)\GnuWin32\bin\yacc.exe" -d -b..\\gs\\slic\\sc  ..\\gs\\slic\\sliccmd.y</Command>
+      <Command Condition="'$(Configuration)|$(Platform)'=='Debug|Win32'">"$(CDKDIR)\byacc.exe" -d -b..\\gs\\slic\\sc  ..\\gs\\slic\\sliccmd.y</Command>
       <Message Condition="'$(Configuration)|$(Platform)'=='Debug|Win32'">discombobulating sliccmd.y</Message>
       <Outputs Condition="'$(Configuration)|$(Platform)'=='Debug|Win32'">$(ProjectDir)..\gs\slic\sc.tab.c;$(ProjectDir)..\gs\slic\sc.tab.h;%(Outputs)</Outputs>
-      <Command Condition="'$(Configuration)|$(Platform)'=='Final|Win32'">"c:\Program Files (x86)\GnuWin32\bin\yacc.exe" -d -b..\\gs\\slic\\sc  ..\\gs\\slic\\sliccmd.y</Command>
+      <Command Condition="'$(Configuration)|$(Platform)'=='Final|Win32'">"$(CDKDIR)\byacc.exe" -d -b..\\gs\\slic\\sc  ..\\gs\\slic\\sliccmd.y</Command>
       <Message Condition="'$(Configuration)|$(Platform)'=='Final|Win32'">discombobulating sliccmd.y</Message>
       <Outputs Condition="'$(Configuration)|$(Platform)'=='Final|Win32'">$(ProjectDir)..\gs\slic\sc.tab.c;$(ProjectDir)..\gs\slic\sc.tab.h;%(Outputs)</Outputs>
-      <Command Condition="'$(Configuration)|$(Platform)'=='Test|Win32'">"c:\Program Files (x86)\GnuWin32\bin\yacc.exe" -d -b..\\gs\\slic\\sc  ..\\gs\\slic\\sliccmd.y</Command>
+      <Command Condition="'$(Configuration)|$(Platform)'=='Test|Win32'">"$(CDKDIR)\byacc.exe" -d -b..\\gs\\slic\\sc  ..\\gs\\slic\\sliccmd.y</Command>
       <Message Condition="'$(Configuration)|$(Platform)'=='Test|Win32'">discombobulating sliccmd.y</Message>
       <Outputs Condition="'$(Configuration)|$(Platform)'=='Test|Win32'">$(ProjectDir)..\gs\slic\sc.tab.c;$(ProjectDir)..\gs\slic\sc.tab.h;%(Outputs)</Outputs>
-      <Command Condition="'$(Configuration)|$(Platform)'=='Release|Win32'">"c:\Program Files (x86)\GnuWin32\bin\yacc.exe" -d -b..\\gs\\slic\\sc  ..\\gs\\slic\\sliccmd.y</Command>
+      <Command Condition="'$(Configuration)|$(Platform)'=='Release|Win32'">"$(CDKDIR)\byacc.exe" -d -b..\\gs\\slic\\sc  ..\\gs\\slic\\sliccmd.y</Command>
       <Message Condition="'$(Configuration)|$(Platform)'=='Release|Win32'">discombobulating sliccmd.y</Message>
       <Outputs Condition="'$(Configuration)|$(Platform)'=='Release|Win32'">$(ProjectDir)..\gs\slic\sc.tab.c;$(ProjectDir)..\gs\slic\sc.tab.h;%(Outputs)</Outputs>
-      <Command Condition="'$(Configuration)|$(Platform)'=='Optimized Test|Win32'">"c:\Program Files (x86)\GnuWin32\bin\yacc.exe" -d -b..\\gs\\slic\\sc  ..\\gs\\slic\\sliccmd.y</Command>
+      <Command Condition="'$(Configuration)|$(Platform)'=='Optimized Test|Win32'">"$(CDKDIR)\byacc.exe" -d -b..\\gs\\slic\\sc  ..\\gs\\slic\\sliccmd.y</Command>
       <Message Condition="'$(Configuration)|$(Platform)'=='Optimized Test|Win32'">discombobulating sliccmd.y</Message>
       <Outputs Condition="'$(Configuration)|$(Platform)'=='Optimized Test|Win32'">$(ProjectDir)..\gs\slic\sc.tab.c;$(ProjectDir)..\gs\slic\sc.tab.h;%(Outputs)</Outputs>
-      <Command Condition="'$(Configuration)|$(Platform)'=='Debug Browse|Win32'">"c:\Program Files (x86)\GnuWin32\bin\yacc.exe" -d -b..\\gs\\slic\\sc  ..\\gs\\slic\\sliccmd.y</Command>
+      <Command Condition="'$(Configuration)|$(Platform)'=='Debug Browse|Win32'">"$(CDKDIR)\byacc.exe" -d -b..\\gs\\slic\\sc  ..\\gs\\slic\\sliccmd.y</Command>
       <Message Condition="'$(Configuration)|$(Platform)'=='Debug Browse|Win32'">discombobulating sliccmd.y</Message>
       <Outputs Condition="'$(Configuration)|$(Platform)'=='Debug Browse|Win32'">$(ProjectDir)..\gs\slic\sc.tab.c;$(ProjectDir)..\gs\slic\sc.tab.h;%(Outputs)</Outputs>
     </CustomBuild>
     <CustomBuild Include="..\ui\ldl\ldl.l">
-      <Command Condition="'$(Configuration)|$(Platform)'=='Final with Logging|Win32'">"c:\Program Files (x86)\GnuWin32\bin\flex.exe" -i -Pldl -o$(ProjectDir)..\ui\ldl\lex.ldl.c %(FullPath)</Command>
+      <Command Condition="'$(Configuration)|$(Platform)'=='Final with Logging|Win32'">"$(CDKDIR)\flex.exe" -i -Pldl -o$(ProjectDir)..\ui\ldl\lex.ldl.c %(FullPath)</Command>
       <Outputs Condition="'$(Configuration)|$(Platform)'=='Final with Logging|Win32'">$(ProjectDir)..\ui\ldl\lex.ldl.c;%(Outputs)</Outputs>
       <AdditionalInputs Condition="'$(Configuration)|$(Platform)'=='Final with Logging|Win32'">..\ui\ldl\ldl.y;%(AdditionalInputs)</AdditionalInputs>
-      <Command Condition="'$(Configuration)|$(Platform)'=='NDebug|Win32'">"c:\Program Files (x86)\GnuWin32\bin\flex.exe" -i -Pldl -o$(ProjectDir)..\ui\ldl\lex.ldl.c %(FullPath)</Command>
+      <Command Condition="'$(Configuration)|$(Platform)'=='NDebug|Win32'">"$(CDKDIR)\flex.exe" -i -Pldl -o$(ProjectDir)..\ui\ldl\lex.ldl.c %(FullPath)</Command>
       <Outputs Condition="'$(Configuration)|$(Platform)'=='NDebug|Win32'">$(ProjectDir)..\ui\ldl\lex.ldl.c;%(Outputs)</Outputs>
       <AdditionalInputs Condition="'$(Configuration)|$(Platform)'=='NDebug|Win32'">..\ui\ldl\ldl.y;%(AdditionalInputs)</AdditionalInputs>
-      <Command Condition="'$(Configuration)|$(Platform)'=='Debug|Win32'">"c:\Program Files (x86)\GnuWin32\bin\flex.exe" -i -Pldl -o$(ProjectDir)..\ui\ldl\lex.ldl.c %(FullPath)</Command>
+      <Command Condition="'$(Configuration)|$(Platform)'=='Debug|Win32'">"$(CDKDIR)\flex.exe" -i -Pldl -o$(ProjectDir)..\ui\ldl\lex.ldl.c %(FullPath)</Command>
       <Outputs Condition="'$(Configuration)|$(Platform)'=='Debug|Win32'">$(ProjectDir)..\ui\ldl\lex.ldl.c;%(Outputs)</Outputs>
       <AdditionalInputs Condition="'$(Configuration)|$(Platform)'=='Debug|Win32'">..\ui\ldl\ldl.y;%(AdditionalInputs)</AdditionalInputs>
-      <Command Condition="'$(Configuration)|$(Platform)'=='Final|Win32'">"c:\Program Files (x86)\GnuWin32\bin\flex.exe" -i -Pldl -o$(ProjectDir)..\ui\ldl\lex.ldl.c %(FullPath)</Command>
+      <Command Condition="'$(Configuration)|$(Platform)'=='Final|Win32'">"$(CDKDIR)\flex.exe" -i -Pldl -o$(ProjectDir)..\ui\ldl\lex.ldl.c %(FullPath)</Command>
       <Outputs Condition="'$(Configuration)|$(Platform)'=='Final|Win32'">$(ProjectDir)..\ui\ldl\lex.ldl.c;%(Outputs)</Outputs>
       <AdditionalInputs Condition="'$(Configuration)|$(Platform)'=='Final|Win32'">..\ui\ldl\ldl.y;%(AdditionalInputs)</AdditionalInputs>
-      <Command Condition="'$(Configuration)|$(Platform)'=='Test|Win32'">"c:\Program Files (x86)\GnuWin32\bin\flex.exe" -i -Pldl -o$(ProjectDir)..\ui\ldl\lex.ldl.c %(FullPath)</Command>
+      <Command Condition="'$(Configuration)|$(Platform)'=='Test|Win32'">"$(CDKDIR)\flex.exe" -i -Pldl -o$(ProjectDir)..\ui\ldl\lex.ldl.c %(FullPath)</Command>
       <Outputs Condition="'$(Configuration)|$(Platform)'=='Test|Win32'">$(ProjectDir)..\ui\ldl\lex.ldl.c;%(Outputs)</Outputs>
       <AdditionalInputs Condition="'$(Configuration)|$(Platform)'=='Test|Win32'">..\ui\ldl\ldl.y;%(AdditionalInputs)</AdditionalInputs>
-      <Command Condition="'$(Configuration)|$(Platform)'=='Release|Win32'">"c:\Program Files (x86)\GnuWin32\bin\flex.exe" -i -Pldl -o$(ProjectDir)..\ui\ldl\lex.ldl.c %(FullPath)</Command>
+      <Command Condition="'$(Configuration)|$(Platform)'=='Release|Win32'">"$(CDKDIR)\flex.exe" -i -Pldl -o$(ProjectDir)..\ui\ldl\lex.ldl.c %(FullPath)</Command>
       <Outputs Condition="'$(Configuration)|$(Platform)'=='Release|Win32'">$(ProjectDir)..\ui\ldl\lex.ldl.c;%(Outputs)</Outputs>
       <AdditionalInputs Condition="'$(Configuration)|$(Platform)'=='Release|Win32'">..\ui\ldl\ldl.y;%(AdditionalInputs)</AdditionalInputs>
-      <Command Condition="'$(Configuration)|$(Platform)'=='Optimized Test|Win32'">"c:\Program Files (x86)\GnuWin32\bin\flex.exe" -i -Pldl -o$(ProjectDir)..\ui\ldl\lex.ldl.c %(FullPath)</Command>
+      <Command Condition="'$(Configuration)|$(Platform)'=='Optimized Test|Win32'">"$(CDKDIR)\flex.exe" -i -Pldl -o$(ProjectDir)..\ui\ldl\lex.ldl.c %(FullPath)</Command>
       <Outputs Condition="'$(Configuration)|$(Platform)'=='Optimized Test|Win32'">$(ProjectDir)..\ui\ldl\lex.ldl.c;%(Outputs)</Outputs>
-      <Command Condition="'$(Configuration)|$(Platform)'=='Debug Browse|Win32'">"c:\Program Files (x86)\GnuWin32\bin\flex.exe" -i -Pldl -o$(ProjectDir)..\ui\ldl\lex.ldl.c %(FullPath)</Command>
+      <Command Condition="'$(Configuration)|$(Platform)'=='Debug Browse|Win32'">"$(CDKDIR)\flex.exe" -i -Pldl -o$(ProjectDir)..\ui\ldl\lex.ldl.c %(FullPath)</Command>
       <Outputs Condition="'$(Configuration)|$(Platform)'=='Debug Browse|Win32'">$(ProjectDir)..\ui\ldl\lex.ldl.c;%(Outputs)</Outputs>
     </CustomBuild>
     <CustomBuild Include="..\ui\ldl\ldl.y">
-      <Command Condition="'$(Configuration)|$(Platform)'=='Final with Logging|Win32'">"c:\Program Files (x86)\GnuWin32\bin\yacc.exe" -d -v -b..\\ui\\ldl\\ldl  ..\\ui\\ldl\\ldl.y</Command>
+      <Command Condition="'$(Configuration)|$(Platform)'=='Final with Logging|Win32'">"$(CDKDIR)\byacc.exe" -d -v -b..\\ui\\ldl\\ldl  ..\\ui\\ldl\\ldl.y</Command>
       <Outputs Condition="'$(Configuration)|$(Platform)'=='Final with Logging|Win32'">$(ProjectDir)..\ui\ldl\ldl.tab.c;$(ProjectDir)..\ui\ldl\ldl.tab.h;%(Outputs)</Outputs>
-      <Command Condition="'$(Configuration)|$(Platform)'=='NDebug|Win32'">"c:\Program Files (x86)\GnuWin32\bin\yacc.exe" -d -v -b..\\ui\\ldl\\ldl  ..\\ui\\ldl\\ldl.y</Command>
+      <Command Condition="'$(Configuration)|$(Platform)'=='NDebug|Win32'">"$(CDKDIR)\byacc.exe" -d -v -b..\\ui\\ldl\\ldl  ..\\ui\\ldl\\ldl.y</Command>
       <Outputs Condition="'$(Configuration)|$(Platform)'=='NDebug|Win32'">$(ProjectDir)..\ui\ldl\ldl.tab.c;$(ProjectDir)..\ui\ldl\ldl.tab.h;%(Outputs)</Outputs>
-      <Command Condition="'$(Configuration)|$(Platform)'=='Debug|Win32'">"c:\Program Files (x86)\GnuWin32\bin\yacc.exe" -d -v -b..\\ui\\ldl\\ldl  ..\\ui\\ldl\\ldl.y</Command>
+      <Command Condition="'$(Configuration)|$(Platform)'=='Debug|Win32'">"$(CDKDIR)\byacc.exe" -d -v -b..\\ui\\ldl\\ldl  ..\\ui\\ldl\\ldl.y</Command>
       <Outputs Condition="'$(Configuration)|$(Platform)'=='Debug|Win32'">$(ProjectDir)..\ui\ldl\ldl.tab.c;$(ProjectDir)..\ui\ldl\ldl.tab.h;%(Outputs)</Outputs>
-      <Command Condition="'$(Configuration)|$(Platform)'=='Final|Win32'">"c:\Program Files (x86)\GnuWin32\bin\yacc.exe" -d -v -b..\\ui\\ldl\\ldl  ..\\ui\\ldl\\ldl.y</Command>
+      <Command Condition="'$(Configuration)|$(Platform)'=='Final|Win32'">"$(CDKDIR)\byacc.exe" -d -v -b..\\ui\\ldl\\ldl  ..\\ui\\ldl\\ldl.y</Command>
       <Outputs Condition="'$(Configuration)|$(Platform)'=='Final|Win32'">$(ProjectDir)..\ui\ldl\ldl.tab.c;$(ProjectDir)..\ui\ldl\ldl.tab.h;%(Outputs)</Outputs>
-      <Command Condition="'$(Configuration)|$(Platform)'=='Test|Win32'">"c:\Program Files (x86)\GnuWin32\bin\yacc.exe" -d -v -b..\\ui\\ldl\\ldl  ..\\ui\\ldl\\ldl.y</Command>
+      <Command Condition="'$(Configuration)|$(Platform)'=='Test|Win32'">"$(CDKDIR)\byacc.exe" -d -v -b..\\ui\\ldl\\ldl  ..\\ui\\ldl\\ldl.y</Command>
       <Outputs Condition="'$(Configuration)|$(Platform)'=='Test|Win32'">$(ProjectDir)..\ui\ldl\ldl.tab.c;$(ProjectDir)..\ui\ldl\ldl.tab.h;%(Outputs)</Outputs>
-      <Command Condition="'$(Configuration)|$(Platform)'=='Release|Win32'">"c:\Program Files (x86)\GnuWin32\bin\yacc.exe" -d -v -b..\\ui\\ldl\\ldl  ..\\ui\\ldl\\ldl.y</Command>
+      <Command Condition="'$(Configuration)|$(Platform)'=='Release|Win32'">"$(CDKDIR)\byacc.exe" -d -v -b..\\ui\\ldl\\ldl  ..\\ui\\ldl\\ldl.y</Command>
       <Outputs Condition="'$(Configuration)|$(Platform)'=='Release|Win32'">$(ProjectDir)..\ui\ldl\ldl.tab.c;$(ProjectDir)..\ui\ldl\ldl.tab.h;%(Outputs)</Outputs>
-      <Command Condition="'$(Configuration)|$(Platform)'=='Optimized Test|Win32'">"c:\Program Files (x86)\GnuWin32\bin\yacc.exe" -d -v -b..\\ui\\ldl\\ldl  ..\\ui\\ldl\\ldl.y</Command>
+      <Command Condition="'$(Configuration)|$(Platform)'=='Optimized Test|Win32'">"$(CDKDIR)\byacc.exe" -d -v -b..\\ui\\ldl\\ldl  ..\\ui\\ldl\\ldl.y</Command>
       <Outputs Condition="'$(Configuration)|$(Platform)'=='Optimized Test|Win32'">$(ProjectDir)..\ui\ldl\ldl.tab.c;$(ProjectDir)..\ui\ldl\ldl.tab.h;%(Outputs)</Outputs>
-      <Command Condition="'$(Configuration)|$(Platform)'=='Debug Browse|Win32'">"c:\Program Files (x86)\GnuWin32\bin\yacc.exe" -d -v -b..\\ui\\ldl\\ldl  ..\\ui\\ldl\\ldl.y</Command>
+      <Command Condition="'$(Configuration)|$(Platform)'=='Debug Browse|Win32'">"$(CDKDIR)\byacc.exe" -d -v -b..\\ui\\ldl\\ldl  ..\\ui\\ldl\\ldl.y</Command>
       <Outputs Condition="'$(Configuration)|$(Platform)'=='Debug Browse|Win32'">$(ProjectDir)..\ui\ldl\ldl.tab.c;$(ProjectDir)..\ui\ldl\ldl.tab.h;%(Outputs)</Outputs>
     </CustomBuild>
   </ItemGroup>

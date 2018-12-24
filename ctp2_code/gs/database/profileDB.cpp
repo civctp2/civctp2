@@ -548,7 +548,7 @@ BOOL ProfileDB::Parse(FILE *file)
 		linenum++;
 		sint32 len = strlen(line);
 
-		while(isspace(line[len - 1])) {
+		while(len > 0 && isspace(line[len - 1])) {
 			line[len - 1] = 0;
 			len--;
 		}
