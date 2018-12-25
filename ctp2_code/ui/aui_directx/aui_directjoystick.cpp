@@ -42,7 +42,7 @@ AUI_ERRCODE aui_DirectJoystick::CreateDirectJoystick( void )
 {
 	HRESULT hr;
 
-	hr = m_lpdi->EnumDevices( DIDEVTYPE_JOYSTICK, (LPDIENUMDEVICESCALLBACK)enumMyJoystickCallback, this, DIEDFL_ATTACHEDONLY );
+	hr = m_lpdi->EnumDevices( DI8DEVTYPE_JOYSTICK, (LPDIENUMDEVICESCALLBACK)enumMyJoystickCallback, this, DIEDFL_ATTACHEDONLY );
 	if ( hr != DI_OK ) return AUI_ERRCODE_CREATEFAILED;
 
 	if ( m_lpdid )
@@ -183,7 +183,7 @@ AUI_ERRCODE aui_DirectJoystick::GetInput( void )
 BOOL CALLBACK enumMyJoystickCallback( LPDIDEVICEINSTANCE lpDeviceInst, LPVOID data )
 {
 	DIPROPRANGE				diprg;
-	LPDIRECTINPUTDEVICE		lpTempJoystick;
+	LPDIRECTINPUTDEVICE8		lpTempJoystick;
 	aui_DirectJoystick *    joy = (aui_DirectJoystick *) data;
 
 	if( DI_OK != (joy->DI())->CreateDevice( lpDeviceInst->guidInstance, &lpTempJoystick, NULL ) )

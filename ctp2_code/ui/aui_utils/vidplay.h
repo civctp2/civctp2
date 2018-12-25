@@ -36,13 +36,14 @@
 // Copyright (c) Microsoft Corporation.  All rights reserved.
 //------------------------------------------------------------------------------
 
+// This file should go!
 #ifdef HAVE_PRAGMA_ONCE
 #pragma once
 #endif
 
 #ifndef VIDPLAY_H
 #define VIDPLAY_H
-
+/*
 //----------------------------------------------------------------------------
 // Library imports
 //----------------------------------------------------------------------------
@@ -185,3 +186,4 @@ private:  // internal state info
 } ;
 
 #endif
+*/

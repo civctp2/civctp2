@@ -21,10 +21,10 @@ public:
 	}
 
 	LPDIRECTDRAW		DD( void ) const { return m_lpdd; }
-	LPDIRECTINPUT		DI( void ) const { return m_lpdi; }
+	LPDIRECTINPUT8		DI( void ) const { return m_lpdi; }
 
 	static void DD( LPDIRECTDRAW lpdd );
-	static void DI( LPDIRECTINPUT lpdi );
+	static void DI( LPDIRECTINPUT8 lpdi );
 
 	static uint32 m_directXClassId;
 
@@ -32,7 +32,7 @@ public:
 
 protected:
 	static LPDIRECTDRAW		m_lpdd;
-	static LPDIRECTINPUT	m_lpdi;
+	static LPDIRECTINPUT8	m_lpdi;
 	static BOOL m_b_created_dd;
 	static BOOL m_b_created_di;
 

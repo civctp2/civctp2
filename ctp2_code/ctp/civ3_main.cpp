@@ -281,9 +281,9 @@ BOOL g_runInBackground = FALSE;
 BOOL g_eventLog = FALSE;
 
 #if 0
-Uint32 g_SDL_flags = SDL_DOUBLEBUF | SDL_HWSURFACE; 
+uint32 g_SDL_flags = SDL_DOUBLEBUF | SDL_HWSURFACE; 
 #else
-Uint32 g_SDL_flags = 0; //See ctp2_code/ui/aui_common/aui_ui.cpp //SEB Pandora
+uint32 g_SDL_flags = 0; //See ctp2_code/ui/aui_common/aui_ui.cpp //SEB Pandora
 #endif
 
 BOOL g_use_profile_process = FALSE;

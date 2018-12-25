@@ -37,6 +37,7 @@
 
 #include "c3.h"
 #include "netfunc.h"
+#include <algorithm>
 
 #if defined(_DEBUG)
 #include "debug.h"      	// Os::SetThreadName

@@ -696,7 +696,9 @@ DWORD WINAPI MouseThreadProc( LPVOID param )
 			}
 			g_oldX = dX; g_oldY = dY; g_oldW = dW; g_oldH = dH;
 #endif
+#ifdef __AUI_USE_SDL__
 		}
+#endif
 #ifdef WIN32
 		Sleep( k_AUI_MOUSE_THREAD_SLEEP_TIME );
 #elif defined(LINUX)
