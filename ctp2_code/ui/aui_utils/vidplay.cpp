@@ -34,12 +34,13 @@
 // Copyright (c) Microsoft Corporation.  All rights reserved.
 //------------------------------------------------------------------------------
 
+// This file should go!
 #include "c3.h"
-
+/*
 #ifdef __AUI_USE_DIRECTX__
 
 #define STRSAFE_NO_DEPRECATE
-
+/*
 #include "streams.h"
 
 #include "mpconfig.h"
@@ -408,7 +409,7 @@ HRESULT CDVDPlayer::ClearGraph()
 // CDVDPlayer::GetColorKeyInternal(): Retrieves color key and stores it for later
 // queries from the app.
 //
-HRESULT CDVDPlayer::GetColorKeyInternal(IBaseFilter *pOvM /* = NULL */)
+HRESULT CDVDPlayer::GetColorKeyInternal(IBaseFilter *pOvM /* = NULL *//*)
 {
     ASSERT(NULL == pOvM) ; // we don't need pOvM passed in
 
@@ -1120,3 +1121,4 @@ HRESULT CFilePlayer::SetOverlayCallback(IDDrawExclModeVideoCallback *pCallback)
 }
 
 #endif // __AUI_USE_DIRECTX__
+*/

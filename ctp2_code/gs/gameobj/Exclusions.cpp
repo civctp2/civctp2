@@ -31,6 +31,7 @@
 #include "WonderRecord.h"
 #include "civarchive.h"
 #include "UnitRecord.h"
+#include <algorithm>
 
 Exclusions *g_exclusions = NULL;
 

@@ -43,6 +43,7 @@
 #include "pixelutils.h"
 #include <stdexcept>    // std::exception, std::runtime_error
 #include "Token.h"
+#include <algorithm>
 
 extern sint32 g_is565Format;
 

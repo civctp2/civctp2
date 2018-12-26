@@ -17,12 +17,23 @@ addons:
 compiler:
     - g++
 
+services:
+    - docker
+
 #Build steps
 before_install:
     - sudo unlink /usr/bin/gcc && sudo ln -s /usr/bin/gcc-5 /usr/bin/gcc
     - sudo unlink /usr/bin/g++ && sudo ln -s /usr/bin/g++-5 /usr/bin/g++
 
-script: 
-    - ./autogen.sh
-    - CFLAGS="$CFLAGS -w -fuse-ld=gold" CXXFLAGS="$CXXFLAGS -fpermissive -w -fuse-ld=gold" ./configure --enable-silent-rules
-    - make
+jobs:
+  include:
+    - stage: build
+      name: "direct build"
+      script:
+        - ./autogen.sh
+        - CFLAGS="$CFLAGS -w -fuse-ld=gold" CXXFLAGS="$CXXFLAGS -fpermissive -w -fuse-ld=gold" ./configure --enable-silent-rules
+        - make -j"$(nproc)
+    - stage: build
+      name: "docker build"
+      script:
+        - docker build --pull .

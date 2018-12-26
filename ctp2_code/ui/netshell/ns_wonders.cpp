@@ -34,6 +34,7 @@
 #include "aui_stringtable.h"
 #include "StrDB.h"              // g_theStringDB
 #include "WonderRecord.h"       // g_theWonderDB
+#include <algorithm>
 
 ns_Wonders *    g_nsWonders = NULL;
 

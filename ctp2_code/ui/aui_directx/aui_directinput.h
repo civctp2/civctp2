@@ -26,7 +26,7 @@ public:
 	virtual AUI_ERRCODE Unacquire( void );
 
 protected:
-	LPDIRECTINPUTDEVICE	m_lpdid;
+	LPDIRECTINPUTDEVICE8	m_lpdid;
 	HANDLE				m_inputEvent;
 };
 

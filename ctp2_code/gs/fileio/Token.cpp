@@ -552,7 +552,7 @@ sint32 Token::Next()
 	if(GetType() == TOKEN_DO_NOT_IMPORT_DEFAULTS
 	|| GetType() == TOKEN_SCENARIO_DO_NOT_IMPORT_DEFAULTS
 	){
-#warning TODO
+//#warning "TODO" // Not c++ standart, so VS does not have this
 #if 1//0
 		
 		if(g_civPaths->GetCurScenarioPath()     == NULL        // Load only defaults if this isn't a scenario

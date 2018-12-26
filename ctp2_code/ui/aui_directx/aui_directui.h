@@ -36,8 +36,10 @@
 #include "aui_ui.h"
 #include "aui_directx.h"
 
-
-
+//Definitions from obsolete reftime.h
+const LONGLONG MILLISECONDS = (1000);            // 10 ^ 3
+const LONGLONG NANOSECONDS = (1000000000);       // 10 ^ 9
+const LONGLONG UNITS = (NANOSECONDS / 100);      // 10 ^ 7
 
 class aui_DirectUI : public aui_UI, public aui_DirectX
 {

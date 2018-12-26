@@ -34,6 +34,7 @@
 #include "aui_stringtable.h"
 #include "BuildingRecord.h"     // g_theBuildingDB
 #include "StrDB.h"              // g_theStringDB
+#include <algorithm>
 
 ns_Improvements * g_nsImprovements = NULL;
 

@@ -25,10 +25,10 @@
 //
 // Modifications from the original Activision code:
 //
-// - Added some casts. (Aug 7th 2005 Martin G�hmann)
-// - Removed unused local variables. (Sep 9th 2005 Martin G�hmann)
+// - Added some casts. (Aug 7th 2005 Martin Gühmann)
+// - Removed unused local variables. (Sep 9th 2005 Martin Gühmann)
 // - Improved CTP2 disk detection.
-// - c3files_fopen can now ignore scenario paths. (9-Apr-2007 Martin G�hmann)
+// - c3files_fopen can now ignore scenario paths. (9-Apr-2007 Martin Gühmann)
 //
 //----------------------------------------------------------------------------
 
@@ -107,7 +107,11 @@ FILE* c3files_fopen(C3DIR dirID, MBCHAR const * s1, MBCHAR const * s2, bool chec
 
 FILE* c3files_freopen(const MBCHAR *s1, const MBCHAR *s2, FILE *file)
 {
+#ifdef __linux__
 	return freopen(CI_FixName(s1), s2, file);
+#else
+	return freopen(s1, s2, file);
+#endif
 }
 
 sint32 c3files_fclose(FILE *file)
