@@ -5174,7 +5174,7 @@ bool CityData::ChangeCurrentlyBuildingItem(sint32 category, sint32 item_type)
 	{
 		double penalty = static_cast<double>(g_theConstDB->Get(0)->GetChangeCurrentlyBuildingItemPenalty());
 
-		penalty = std::min<float>
+		penalty = std::min<double>
 		                  (
 		                   1.0,
 		                   std::max<float>(0.0, 1.0 - penalty * 0.01)
@@ -6143,10 +6143,10 @@ void CityData::CheckSwitchProductionPenalty(sint32 newCat)
 
 		double penalty = static_cast<double>(g_theConstDB->Get(0)->GetChangeCurrentlyBuildingItemPenalty());
 
-		penalty = std::min<float>
+		penalty = std::min<double>
 						  (
 						   1.0,
-						   std::max<float>(0.0, 1.0 - penalty * 0.01)
+						   std::max<double>(0.0, 1.0 - penalty * 0.01)
 						  );
 
 		s = static_cast<sint32>(static_cast<double>(GetStoredCityProduction()) * penalty);
