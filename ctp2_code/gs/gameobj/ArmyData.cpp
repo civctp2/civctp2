@@ -1860,12 +1860,13 @@ ORDER_RESULT ArmyData::StealTechnology(const MapPoint &point)
             sint32 num;
             uint8 *canSteal = g_player[m_owner]->m_advances->CanAskFor(g_player[c.GetOwner()]->m_advances,
                                                                        num);
-            if(num > 0) {
-
+            if(num > 0)
+            {
                 if(g_player[m_owner]->IsRobot()
                 &&(!g_network.IsClient()
                 || !g_network.IsLocalPlayer(m_owner))
                 ){
+                    delete [] canSteal;
                     return m_array[i].StealTechnology(c, -1);
                 }
 
