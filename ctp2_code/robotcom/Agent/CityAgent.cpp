@@ -19,7 +19,7 @@
 #include "civarchive.h"
 
 #include "ic3GameState.h"
-#include "aicause.h"
+#include "AICause.h"
 #include "aicell.h"
 
 #include "aimain.h"

@@ -25,7 +25,7 @@ extern TurnCount *g_turn;
 #include "IRobot.h"
 #include "C3GameState.h"
 
-#include "aicause.h"
+#include "AICause.h"
 
 #include "IMapGen.h"
 #include "ic3BlgDB.h"

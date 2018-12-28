@@ -12,7 +12,7 @@
 #include "airndcnt.h"
 #include "TerrImproveData.h"
 #include "scienceagent.h"
-#include "aicause.h"
+#include "AICause.h"
 
 extern double fz_min_num_dirty_tiles;
 

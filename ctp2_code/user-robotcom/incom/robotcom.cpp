@@ -2,7 +2,7 @@
 
 #include "ctp.h"
 #include "globals.h"
-#include "aicause.h"
+#include "AICause.h"
 #include "order.h"
 
 #include "RobotCOM.h"

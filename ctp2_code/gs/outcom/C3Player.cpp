@@ -52,7 +52,7 @@
 #include "DB.h"
 #include "WonderRecord.h"
 #include "ConstDB.h"
-#include "aicause.h"
+#include "AICause.h"
 
 
 #include "TradeRoute.h"

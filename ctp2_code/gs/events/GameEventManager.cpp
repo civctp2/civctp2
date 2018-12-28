@@ -579,7 +579,9 @@ bool GameEventManager::CheckArg(sint32 num, char got, char want)
 
 	if(got != want) {
 #ifdef _DEBUG
+#ifdef WIN32
 		c3errors_ErrorDialog("GameEventManager", "Argument %d should be of type %s.  Stack: %s", num, ArgCharToName(want), c3debug_StackTrace());
+#endif
 #endif
 		return false;
 	}
@@ -795,7 +797,9 @@ bool GameEventManager::VerifyArgs(GAME_EVENT type, const GAME_EVENT_ARGUMENT* ar
 			case GEA_End:
 				if(*(argString) != 0) {
 #ifdef _DEBUG
+#ifdef WIN32
 					c3errors_ErrorDialog("GameEventManager", "Not enough arguments.  Stack: %s", c3debug_StackTrace());
+#endif
 #endif
 					return false;
 				}

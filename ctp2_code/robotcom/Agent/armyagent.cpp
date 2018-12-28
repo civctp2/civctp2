@@ -47,7 +47,7 @@
 extern Wall_Clock *g_wall_clock;
 
 #include "order.h"
-#include "aicause.h"
+#include "AICause.h"
 #include "C3Player.h"
 #include "Foreigner.h"
 #include "ForeignCity.h"

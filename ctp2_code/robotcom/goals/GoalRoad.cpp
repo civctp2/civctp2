@@ -11,7 +11,7 @@
 #include "CityAgent.h"
 #include "ic3RobotAstar.h"
 #include "aimain.h"
-#include "aicause.h"
+#include "AICause.h"
 #include "scienceagent.h"
 
 extern double fz_inst_threat_threshold;
