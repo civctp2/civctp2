@@ -716,8 +716,7 @@ int CALLBACK EnumTextFontsProc( LOGFONT *lplf, TEXTMETRIC *lptm, DWORD dwType, L
 
 	return TRUE;
 }
-#endif // __AUI_USE_DIRECTX__
-
+#elif defined(__AUI_USE_SDL__)
 /* 
 Handling key input for text field with SDL
 
@@ -774,3 +773,4 @@ bool aui_TextField::HandleKey(uint32 wParam){
   }
   
 }
+#endif
