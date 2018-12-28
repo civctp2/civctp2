@@ -285,7 +285,10 @@ BOOL ChatWindow::CheckForEasterEggs(MBCHAR *s)
 	else if (!strncmp(s, "/rnd", 4) && !g_network.IsActive())
 	{
 		extern BOOL gDone;
-#ifdef __AUI_USE_DIRECTX__
+#if defined(__AUI_USE_SDL__) // In other cases, replaced by SDL
+#warning ChatWindow command /rnd is not implemented on Linux
+// Implement below and then remove the guards here
+#else
 		MSG	msg;
 
 		MBCHAR * temp = s+4;
@@ -305,6 +308,11 @@ BOOL ChatWindow::CheckForEasterEggs(MBCHAR *s)
 				if (g_civApp)
 					g_civApp->Process();
 
+#if defined(__AUI_USE_SDL__)
+				// Implement SDL code here
+				// Remove outer preprocessor derectives, when done
+#else
+				// Windows code start
 				while (PeekMessage(&msg, gHwnd, 0, 0, PM_REMOVE) && !g_letUIProcess)
 				{
 					if (msg.message == WM_QUIT)
@@ -319,6 +327,8 @@ BOOL ChatWindow::CheckForEasterEggs(MBCHAR *s)
 
 					DispatchMessage(&msg);
 				}
+				// Windoes code end
+#endif
 
 				g_letUIProcess = FALSE;
 
@@ -604,6 +614,20 @@ BOOL ChatWindow::CheckForEasterEggs(MBCHAR *s)
 			sint32 player = atoi(arg);
 
 			CtpAiDebug::SetDebugPlayer(player);
+		}
+	}
+#endif
+
+#if 0 // Probably a bit to heavy to just leave it in
+	// That is a bit crazy just to check whether the thing
+	// creates a crash.txt, normally.
+	else if (!strcmp(s, "/crash") && !g_network.IsActive())
+	{
+		Player* invalid = NULL;
+		sint32 crash = invalid->GetAverageEventPollution();
+		if (crash > 0)
+		{
+			return FALSE;
 		}
 	}
 #endif
