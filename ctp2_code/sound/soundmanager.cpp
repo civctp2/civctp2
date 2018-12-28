@@ -1078,20 +1078,26 @@ void SoundManager::StupidPlaySound(const sint32 &soundID)
     char const *        soundValue  = soundRecord ? soundRecord->GetValue() : NULL;
 
 	if (soundValue && (strlen(soundValue) > 0))
-    {
+	{
 		MBCHAR		fullPath[_MAX_PATH];
 		fullPath[0] = 0;
 
 		g_civPaths->FindFile(C3DIR_SOUNDS, soundValue, fullPath);
 
-#if !defined(USE_SDL)
-		PlaySound(fullPath, NULL, (SND_ASYNC | SND_FILENAME | SND_NOWAIT));
-#else
-		std::cerr << "SoundManager::StupidPlaySound("
-		          << soundID
-		          << ") called." << std::endl;
-#endif
+		PlayManagedSound(fullPath, true);
 	}
+}
+
+void SoundManager::PlayManagedSound(const MBCHAR *fullFilename, const bool &bNoWait)
+{
+#if !defined(USE_SDL)
+	PlaySound(fullFilename, NULL,
+		(SND_ASYNC | SND_FILENAME | (bNoWait ? SND_NOWAIT : 0)));
+#else
+	std::cerr << "SoundManager::StupidPlaySound("
+		<< fullFilename
+		<< ") called." << std::endl;
+#endif
 }
 
 void SoundManager::ReleaseSoundDriver()

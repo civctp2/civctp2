@@ -36,7 +36,7 @@ The build itself is pretty classing and straight forward:
 
 ```
 ./autogen.sh
-CFLAGS="$CFLAGS -w -fuse-ld=gold" CXXFLAGS="$CXXFLAGS -w -fuse-ld=gold" ./configure --enable-silent-rules
+CFLAGS="$CFLAGS -w -fuse-ld=gold" CXXFLAGS="$CXXFLAGS -fpermissive -w -fuse-ld=gold" ./configure --enable-silent-rules
 make
 ```
 

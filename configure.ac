@@ -107,8 +107,8 @@ CXX_WARNINGS="$COMMON_WARNINGS -Winvalid-offsetof"
 C_WARNINGS="-Wall -Wno-unused-variable"
 CXX_WARNINGS="-Wall -Wno-unused-variable"
 
-CFLAGS="$C_WARNINGS -fms-extensions -fmessage-length=0 $CFLAGS"
-CXXFLAGS="$CXX_WARNINGS -fms-extensions -fmessage-length=0 -frtti -fexceptions $CXXFLAGS"
+CFLAGS="$C_WARNINGS -fpermissive -fms-extensions -fmessage-length=0 $CFLAGS"
+CXXFLAGS="$CXX_WARNINGS -fpermissive -fms-extensions -fmessage-length=0 -frtti -fexceptions $CXXFLAGS"
 AC_SUBST(CFLAGS)
 AC_SUBST(CPPFLAGS)
 AC_SUBST(CXXFLAGS)
