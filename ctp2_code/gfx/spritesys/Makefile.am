@@ -23,7 +23,7 @@ libgfxspritesys_la_SOURCES = \
 	Anim.cpp \
 	battleviewactor.cpp \
 	EffectActor.cpp \
-	goodactor.cpp \
+	GoodActor.cpp \
 	TradeActor.cpp \
 	UnitActor.cpp \
 	workeractor.cpp \
@@ -31,7 +31,7 @@ libgfxspritesys_la_SOURCES = \
 	effectspritegroup.cpp \
 	FacedSprite.cpp \
 	FacedSpriteWshadow.cpp \
-	goodspritegroup.cpp \
+	GoodSpriteGroup.cpp \
 	Sprite.cpp \
 	spritefile.cpp \
 	SpriteGroup.cpp \

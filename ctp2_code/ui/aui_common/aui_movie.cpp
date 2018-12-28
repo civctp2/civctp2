@@ -232,6 +232,52 @@ uint32 aui_Movie::SetTimePerFrame( uint32 timePerFrame )
 	return prevTimePerFrame;
 }
 
+#ifdef USE_SDL_FFMPEG
+void audioCallback(void *udata, Uint8 *stream, int len){
+
+    // unpack our void pointer
+    SDL_ffmpegFile *file = (SDL_ffmpegFile*)udata;
+
+    int bytesUsed;
+
+    SDL_ffmpegAudioFrame *frame;
+
+    while(len > 0) {
+
+        // try to get a new frame
+        frame = SDL_ffmpegGetAudioFrame(file);
+
+        // we could not receive a new frame, break from loop
+        if(!frame) break;
+
+        if(frame->size <= len) {
+            // this frame is smaller or equal to the amount of data needed.
+            bytesUsed = frame->size;
+            } else {
+                // this frame has more data than needed
+                bytesUsed = len;
+                }
+
+        // copy the correct amount of data
+        memcpy(stream, frame->buffer, bytesUsed);
+
+        // adjust the needed length accordingly
+        len -= bytesUsed;
+
+        // adjust stream offset
+        stream += bytesUsed;
+
+        // adjust size of frame to prevent reusing the same data
+        frame->size -= bytesUsed;
+
+        // adjust buffer of frame for the same reason
+        frame->buffer += bytesUsed;
+        }
+
+    return;
+    }
+
+#endif
 
 AUI_ERRCODE aui_Movie::Open(
 	uint32 flags,
@@ -303,6 +349,31 @@ AUI_ERRCODE aui_Movie::Open(
 
 		m_rect.right = m_rect.left + m_aviStreamInfo.rcFrame.right;
 		m_rect.bottom = m_rect.top + m_aviStreamInfo.rcFrame.bottom;
+#elif defined(USE_SDL_FFMPEG) //replaces a aui_sdlmovie::Open(
+
+		//stop game sound
+		g_soundManager->ReleaseSoundDriver(); //if CD is mounted music keeps playing...
+		
+		//code from SDL_ffmpeg example:
+		film= SDL_ffmpegOpen(m_filename);
+		if (film){
+		    SDL_ffmpegSelectVideoStream(film, 0);
+		    SDL_ffmpegSelectAudioStream(film, 0);
+		    
+		    int w,h;
+		    // we get the size from our active video stream
+		    if(SDL_ffmpegGetVideoSize(film, &w, &h))
+			printf("%s L%d: Could not determin movie size!\n", __FILE__, __LINE__);
+		    else{
+			m_rect.right = m_rect.left + w;
+			m_rect.bottom = m_rect.top + h;
+			}
+		    }
+		else{
+		    printf("%s L%d: Could not open %s!\n", __FILE__, __LINE__, m_filename);
+		    Assert( film != NULL );
+		    return AUI_ERRCODE_HACK;
+		    }
 #endif
 		m_isOpen = TRUE;
 		m_isPlaying = FALSE;
@@ -338,6 +409,12 @@ AUI_ERRCODE aui_Movie::Close( void )
 			AVIFileRelease( m_aviFile );
 			m_aviFile = NULL;
 		}
+#elif defined(USE_SDL_FFMPEG)
+                if(film){
+                    Mix_HookMusic(NULL,NULL); //switch on the general callback function (sound and music)
+                    SDL_ffmpegStopDecoding(film);
+                    SDL_ffmpegFree(film);
+                    }
 #endif
 
 		m_isOpen = FALSE;
@@ -362,6 +439,15 @@ AUI_ERRCODE aui_Movie::Play( void )
 			1000 );
 		Assert( err == 0 );
 		if ( err ) return AUI_ERRCODE_HACK;
+
+#elif defined(USE_SDL_FFMPEG)
+
+		// we start our decode thread, this always tries to buffer in some frames
+		// so we can enjoy smooth playback
+		Mix_HookMusic(audioCallback, film);
+		SDL_ffmpegStartDecoding(film); //returns always 0!
+		SDL_ffmpegPlay(film, 1);//unpause film sdl_ffmpeg > 0.7.1
+		
 #endif
 		m_isPlaying = TRUE;
 		m_isPaused = FALSE;
@@ -460,6 +546,9 @@ AUI_ERRCODE aui_Movie::Stop( void )
 		uint32 err = AVIStreamEndStreaming( m_aviStream );
 		Assert( err == 0 );
 		if ( err ) return AUI_ERRCODE_HACK;
+#elif defined(USE_SDL_FFMPEG)
+		SDL_ffmpegPlay(film, 0);//pause film sdl_ffmpeg > 0.7.1
+		g_soundManager->ReacquireSoundDriver(); //no function with SDL, see soundmanager.cpp
 #endif
 
 		m_isPlaying = FALSE;
@@ -498,6 +587,7 @@ AUI_ERRCODE aui_Movie::Process( void )
 
 	if ( m_isPlaying && !m_isPaused )
 	{
+#ifdef __AUI_USE_DIRECTX__
 		uint32 time = GetTickCount();
 		if ( time - m_lastFrameTime > m_timePerFrame )
 		{
@@ -506,7 +596,6 @@ AUI_ERRCODE aui_Movie::Process( void )
 				( m_flags & k_AUI_MOVIE_PLAYFLAG_ONSCREEN ) ?
 				g_ui->Secondary() :
 				m_surface;
-#ifdef __AUI_USE_DIRECTX__
 			uint8 *frame = (uint8 *)AVIStreamGetFrame( m_getFrame, m_curFrame );
 			Assert( frame != NULL );
 			if ( !frame ) return AUI_ERRCODE_HACK;
@@ -562,16 +651,41 @@ AUI_ERRCODE aui_Movie::Process( void )
 				if ( !(m_flags & k_AUI_MOVIE_PLAYFLAG_LOOP) )
 					m_isFinished = TRUE;
 			}
-#else
-			m_isFinished = TRUE;
-#endif
 
 			m_lastFrameTime = time;
 
 			retval = AUI_ERRCODE_HANDLED;
 		}
+#elif defined(USE_SDL_FFMPEG)
+		aui_Surface *surface = ( m_flags & k_AUI_MOVIE_PLAYFLAG_ONSCREEN ) ?
+		    g_ui->Primary() :
+		    m_surface;
+		
+		int s;
+		SDL_ffmpegStream *str;
+		SDL_ffmpegVideoFrame* frame= 0;
+		SDL_Rect sdl_rect = { m_rect.left, m_rect.top, m_rect.right-m_rect.left, m_rect.bottom-m_rect.top };
+		aui_SDLSurface* sdl_surf = static_cast<aui_SDLSurface*>(surface);
+		int64_t duration= SDL_ffmpegGetDuration(film);
+		
+		while(!frame && !m_isFinished){ //wait until there is a frame to be shown
+		    frame = SDL_ffmpegGetVideoFrame(film);
+		    SDL_Delay(5); //too much for 25 fps but here we have only 15 fps
+		    
+		    if(frame){
+			// we got a frame, so we better show this one
+			SDL_BlitSurface(frame->buffer, 0, sdl_surf->DDS(), &sdl_rect);
+			// we flip the double buffered screen so we might actually see something
+			SDL_Flip(sdl_surf->DDS());
+			}
+		    m_isFinished= SDL_ffmpegGetPosition(film) >= duration;
+		    }
+#else
+		m_isFinished = TRUE;
+		retval = AUI_ERRCODE_HANDLED;
+#endif
 	}
-
+	
 	return retval;
 }
 

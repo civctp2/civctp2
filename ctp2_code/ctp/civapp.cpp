@@ -2806,6 +2806,7 @@ sint32 CivApp::LoadSavedGame(MBCHAR const * name)
 
 	g_theProgressWindow->StartCountingTo( 1290 );
 
+	g_tiledMap->ReloadGoodActors(); // reloads goods according to g_theProfileDB->IsGoodAnim()
 	g_tiledMap->InvalidateMap();
 
 	g_theProgressWindow->StartCountingTo( 1300 );
