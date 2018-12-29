@@ -1377,6 +1377,7 @@ bool GameFile::LoadBasicGameInfo(FILE *saveFile, SaveInfo *info)
 	if (g_saveFileVersion >= 46) {
 
 		MBCHAR name[k_SCENARIO_NAME_MAX];
+		memset(name, 0, k_SCENARIO_NAME_MAX);
 		n = c3files_fread(name, sizeof(MBCHAR), k_SCENARIO_NAME_MAX, saveFile);
 		if(n != k_SCENARIO_NAME_MAX) {
 			c3files_fclose(saveFile);
@@ -1386,7 +1387,7 @@ bool GameFile::LoadBasicGameInfo(FILE *saveFile, SaveInfo *info)
 		delete [] info->scenarioName;
 		info->scenarioName = NULL;
 
-		if (strlen(name) > 0) {
+		if (strlen(name) > 0 && isalpha(name[0])) { // Non alpha-numeric characters may have been saved
 			info->scenarioName = new MBCHAR[strlen(name)+1];
 			strcpy(info->scenarioName, name);
 		}
@@ -1974,7 +1975,7 @@ PointerList<GameInfo> *GameFile::BuildSaveList(C3SAVEDIR dir)
 						continue;
 					}
 
-					gameInfo->files->AddTail(saveInfo);
+					gameInfo->files->AddTail(saveInfo);// Crash here
 				}
 #ifdef WIN32
 			} while (FindNextFile(lpFileList, &fileData2));

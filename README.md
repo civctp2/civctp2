@@ -50,7 +50,7 @@ Finally, you may have to use gold instead of ld for link (add `-fuse-ld=gold` to
 Since CTP2 was originally a Windows game and CTP2 is not free even if its source code has been released, the installation process is a bit complicated.
 
 ### Prepare the data
-First, you need the orignal game files of CTP2.
+First, you need the original game files of CTP2.
 If you have the CD version, it's better to install it on a Windows machine / using Wine and copy over the files. You need the folders `ctp2_data`, `ctp2_program` and `Scenarios`.
 
 If you have the GoG version, use `innoextract` to extract all the required files (you can `sudo apt install innoextract` if you need) from the `setup_call_to_power2_2.0.0.13.exe` windows installer.
@@ -67,6 +67,8 @@ When the build is over, you need to copy the main CTP2 executable, plus the mapg
 for the executable, and the command is something like: `cp -v ctp2_code/ctp2 ~/ctp2/ctp2_program/ctp/`
 The mapgen libraries will go to `ctp2_program/ctp/dll/map/` .
 So do something like `cp -v ctp2_code/mapgen/.libs/*.so ~/ctp2/ctp2_program/ctp/dll/map/`
+
+If you get the message on the terminal: `Failed to load module "atk-bridge"`. Install at-spi with `sudo apt install at-spi`.
 
 ## Running
 When everything is setup, simply go to the program folder, for example with `cd ~/ctp2/ctp2_program/ctp` and launch the game with `./ctp2`. There are a few command line option like `-fullscreen` that can be useful.
