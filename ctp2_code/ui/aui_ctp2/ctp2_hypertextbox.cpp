@@ -295,8 +295,6 @@ ctp2_HyperTextBox::ctp2_HyperTextBox(
 	aui_HyperTextBox(),
 	PatternBase(ldlBlock, NULL)
 {
-
-
 	*retval = aui_Region::InitCommonLdl(id, ldlBlock);
 	Assert( AUI_SUCCESS(*retval) );
 	if ( !AUI_SUCCESS(*retval) ) return;
@@ -325,7 +323,6 @@ ctp2_HyperTextBox::ctp2_HyperTextBox(
 	Assert( AUI_SUCCESS(*retval) );
 }
 
-
 ctp2_HyperTextBox::ctp2_HyperTextBox(
 	AUI_ERRCODE *retval,
 	uint32 id,
@@ -353,7 +350,6 @@ ctp2_HyperTextBox::ctp2_HyperTextBox(
 	Assert( AUI_SUCCESS(*retval) );
 }
 
-
 AUI_ERRCODE ctp2_HyperTextBox::InitCommonLdl( MBCHAR *ldlBlock )
 {
     ldl_datablock * block = aui_Ldl::FindDataBlock(ldlBlock);
@@ -372,7 +368,6 @@ AUI_ERRCODE ctp2_HyperTextBox::InitCommonLdl( MBCHAR *ldlBlock )
 
 	return AUI_ERRCODE_OK;
 }
-
 
 AUI_ERRCODE ctp2_HyperTextBox::InitCommon( void )
 {
@@ -394,7 +389,6 @@ ctp2_HyperTextBox::~ctp2_HyperTextBox()
 	}
 }
 
-
 AUI_ERRCODE ctp2_HyperTextBox::CreateRanger( MBCHAR *ldlBlock )
 {
 	AUI_ERRCODE errcode = AUI_ERRCODE_OK;
@@ -405,7 +399,7 @@ AUI_ERRCODE ctp2_HyperTextBox::CreateRanger( MBCHAR *ldlBlock )
 	{
 		sprintf( block, "%s.%s", ldlBlock, k_AUI_HYPERTEXTBOX_LDL_RANGERY );
 
-        if (aui_Ldl::FindDataBlock( block ) )
+		if (aui_Ldl::FindDataBlock( block ) )
 			m_ranger = new c3_Ranger(
 				&errcode,
 				aui_UniqueId(),
@@ -414,7 +408,7 @@ AUI_ERRCODE ctp2_HyperTextBox::CreateRanger( MBCHAR *ldlBlock )
 				this );
 	}
 
-    MBCHAR * pattern = (m_pattern) ? m_pattern->GetFilename() : NULL;
+	MBCHAR * pattern = (m_pattern) ? m_pattern->GetFilename() : NULL;
 
 	if ( !m_ranger )
 		m_ranger = new c3_Ranger(
@@ -457,7 +451,6 @@ AUI_ERRCODE ctp2_HyperTextBox::AddHyperStatics( const MBCHAR *hyperText )
 	const MBCHAR *ptr = hyperText;
 	const MBCHAR *stop = ptr + len;
 
-
 	sint32      hyperLinkDB     = 0;
 	sint32      hyperLinkIndex  = CTPRecord::INDEX_INVALID;
 	bool        isHyperLink     = false;
@@ -488,7 +481,7 @@ AUI_ERRCODE ctp2_HyperTextBox::AddHyperStatics( const MBCHAR *hyperText )
 
 			case 'c':
 			{
-				uint8 r, g, b;
+				uint32 r, g, b;
 				sscanf( ++ptr, ":%u,%u,%u>", &r, &g, &b );
 				m_hyperColorOld = m_hyperColor;
 				m_hyperColor    = RGB(r,g,b);
@@ -501,7 +494,7 @@ AUI_ERRCODE ctp2_HyperTextBox::AddHyperStatics( const MBCHAR *hyperText )
 
 			case 'h':
 			{
-				uint8 r, g, b;
+				uint32 r, g, b;
 				sscanf( ++ptr, ":%u,%u,%u>", &r, &g, &b );
 				m_hyperShadowColor = RGB(r,g,b);
 			}
@@ -522,7 +515,6 @@ AUI_ERRCODE ctp2_HyperTextBox::AddHyperStatics( const MBCHAR *hyperText )
 				m_hyperColor        = RGB(0,0,100);
 				isHyperLink         = true;
 				break;
-
 
 			case 'L':
 				{
@@ -556,9 +548,9 @@ AUI_ERRCODE ctp2_HyperTextBox::AddHyperStatics( const MBCHAR *hyperText )
 				ptr			= std::find(copyEnd, stop, '>');
 
 				hyperLinkDB         =
-                    GreatLibrary::Get_Database_From_Name(hyperLinkDB_name);
+				    GreatLibrary::Get_Database_From_Name(hyperLinkDB_name);
 				hyperLinkIndex      =
-					GreatLibrary::Get_Object_Index_From_Name(hyperLinkDB, hyperLinkIndex_name);
+				    GreatLibrary::Get_Object_Index_From_Name(hyperLinkDB, hyperLinkIndex_name);
 				oldUnderline        = m_hyperUnderline;
 				oldColor            = m_hyperColor;
 				m_hyperColorOld     = m_hyperColor;
@@ -621,7 +613,7 @@ AUI_ERRCODE ctp2_HyperTextBox::AddHyperStatics( const MBCHAR *hyperText )
 			ptr	= nextStop;
 
 			if (isHyperLink)
-            {
+			{
 				isHyperLink         = false;
 				m_hyperUnderline    = oldUnderline;
 				m_hyperColor        = oldColor;
@@ -638,10 +630,10 @@ AUI_ERRCODE ctp2_HyperTextBox::AddHyperStatics( const MBCHAR *hyperText )
 void ctp2_HyperTextBox::RemoveHyperLinks( void )
 {
 	for (sint32 i = m_hyperLinkList->L(); i; --i)
-    {
+	{
 		delete m_hyperLinkList->RemoveTail();
-    }
-    m_selectedHyperLink = NULL;
+	}
+	m_selectedHyperLink = NULL;
 }
 
 AUI_ERRCODE ctp2_HyperTextBox::DrawThis(
@@ -649,7 +641,6 @@ AUI_ERRCODE ctp2_HyperTextBox::DrawThis(
 	sint32 x,
 	sint32 y )
 {
-
 	if ( IsHidden() ) return AUI_ERRCODE_OK;
 
 	if ( !surface ) surface = m_window->TheSurface();
@@ -676,9 +667,6 @@ AUI_ERRCODE ctp2_HyperTextBox::DrawThis(
 
 	}
 
-
-
-
 	DrawThisStateImage(
 		0,
 		surface,
@@ -694,28 +682,9 @@ AUI_ERRCODE ctp2_HyperTextBox::DrawThis(
 		0,
 		-m_ranger->GetValueY() );
 
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
 	rect.left -= k_CTP2_HYPERTEXTBOX_INSETWIDTH;
 	rect.top -= k_CTP2_HYPERTEXTBOX_INSETWIDTH;
 	rect.bottom += k_CTP2_HYPERTEXTBOX_INSETWIDTH;
-
-
-
 
 	if ( surface == m_window->TheSurface() )
 		m_window->AddDirtyRect( &rect );
@@ -733,18 +702,11 @@ void ctp2_HyperTextBox::MouseLDropInside( aui_MouseEvent *mouseData )
 
 		if ( GetMouseOwnership() == this )
 		{
-
 			ReleaseMouseOwnership();
 
 			PlaySound( AUI_SOUNDBASE_SOUND_EXECUTE );
 
 			m_mouseCode = AUI_ERRCODE_HANDLEDEXCLUSIVE;
-
-
-
-
-
-
 
 			m_attributes &= ~k_CONTROL_ATTRIBUTE_ACTIVE;
 
@@ -757,7 +719,8 @@ void ctp2_HyperTextBox::MouseLDropInside( aui_MouseEvent *mouseData )
 			m_selectedHyperLink = NULL;
 
 			ListPos lp = m_hyperLinkList->GetHeadPosition();
-			for ( uint32 i = 0;i < m_hyperLinkList->L();i++ ) {
+			for (uint32 i = 0; i < m_hyperLinkList->L(); i++)
+			{
 				ctp2_HyperLink *hl = m_hyperLinkList->GetNext( lp );
 				RECT rect;
 				rect.left = hl->m_static->X();
@@ -778,7 +741,6 @@ void ctp2_HyperTextBox::MouseLDropInside( aui_MouseEvent *mouseData )
 			if ( m_selectedHyperLink ) {
 
 				m_draw |= m_drawMask & k_AUI_REGION_DRAWFLAG_MOUSELDROPINSIDE;
-
 
 				if ( !HandleGameSpecificLeftClick( this ) )
 				if ( m_ActionFunc )
@@ -877,14 +839,6 @@ void ctp2_HyperTextBox::MouseLGrabInside( aui_MouseEvent *mouseData )
 				hl->m_static->SetTextColor( hl->m_oldColor );
 			}
 		}
-
-
-
-
-
-
-
-
 	}
 	else
 		MouseLGrabOutside( mouseData );
