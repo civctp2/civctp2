@@ -30,9 +30,11 @@
 //
 // - Modified GetSettleTargets so that no settle targets are found that cannot
 //   be settled, because the player does not has any units for the tile in
-//   question. (May 20th 2006 Martin G�hmann)
+//   question. (May 20th 2006 Martin Gühmann)
 // - Corrected delete operator for array.
 // - Improved settle radius determination on city growth.
+// - Added player argument to AddTextToCell, so that we can select whose
+//   stuff is shown. (30-Dec-2018 Martin Gühmann)
 //
 //----------------------------------------------------------------------------
 
@@ -554,7 +556,7 @@ void SettleMap::GetSettleTargets(const PLAYER_INDEX &playerId,
 		{
 			char buf[16];
 			sprintf(buf,"*%4.0f*",settle_target.m_value);
-			g_graphicsOptions->AddTextToCell(rc_pos, buf, 255);
+			g_graphicsOptions->AddTextToCell(rc_pos, buf, 255, playerId);
 		}
 
 		if(!CanSettlePos(rc_pos))
@@ -566,7 +568,7 @@ void SettleMap::GetSettleTargets(const PLAYER_INDEX &playerId,
 			{
 				char buf[16];
 				sprintf(buf,"(%4.0f)",settle_target.m_value);
-				g_graphicsOptions->AddTextToCell(rc_pos, buf, 255);
+				g_graphicsOptions->AddTextToCell(rc_pos, buf, 255, playerId);
 			}
 
 			continue;
@@ -579,7 +581,7 @@ void SettleMap::GetSettleTargets(const PLAYER_INDEX &playerId,
 		{
 			char buf[16];
 			sprintf(buf,"%4.0f",settle_target.m_value);
-			g_graphicsOptions->AddTextToCell(rc_pos, buf, 255);
+			g_graphicsOptions->AddTextToCell(rc_pos, buf, 255, playerId);
 		}
 
 		targets.push_back(settle_target);

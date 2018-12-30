@@ -361,7 +361,7 @@ STDEHANDLER(CtpAi_KillCityEvent)
 
 				scheduler.Add_New_Goal( goal_ptr );
 
-				g_graphicsOptions->AddTextToCell(u.RetPos(), "KILLED", 0);
+				g_graphicsOptions->AddTextToCell(u.RetPos(), "KILLED", 0, PLAYER_UNASSIGNED);
 			}
 		}
 	}
@@ -414,7 +414,7 @@ STDEHANDLER(CtpAi_NukeCityUnit)
 
 					scheduler.Add_New_Goal( goal_ptr );
 
-					g_graphicsOptions->AddTextToCell(city.RetPos(), "NUKED", 0);
+					g_graphicsOptions->AddTextToCell(city.RetPos(), "NUKED", 0, PLAYER_UNASSIGNED);
 				}
 			}
 		}
@@ -1840,7 +1840,7 @@ void CtpAi::AddSettleTargets(const PLAYER_INDEX playerId)
 				uint8   magnitude = (uint8) (((max_desired_goals - desired_goals) * 255) / max_desired_goals);
 				char buf[10];
 				sprintf(buf, "%4.0f", settle_target.m_value);
-				g_graphicsOptions->AddTextToCell(settle_target.m_pos, buf, magnitude);
+				g_graphicsOptions->AddTextToCell(settle_target.m_pos, buf, magnitude, playerId);
 
 				desired_goals--;
 			}

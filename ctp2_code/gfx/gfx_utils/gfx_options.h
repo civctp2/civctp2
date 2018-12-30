@@ -25,6 +25,8 @@
 // Modifications from the original Activision code:
 //
 // - The army text now appears in the debug log. (13-Aug-2008 Martin Gühmann)
+// - Added a debug player for the debug cell text, so that we can select whose
+//   stuff is shown. (30-Dec-2018 Martin Gühmann)
 //
 //----------------------------------------------------------------------------
 
@@ -72,17 +74,18 @@ public:
 	void ArmyNameOff(void);
 
 	bool IsCellTextOn(void) const { return m_cellTextOn; }
-	void CellTextOn(void);
+	void CellTextOn(PLAYER_INDEX debugCellPlayer);
 	void CellTextOff(void);
 
 	CellText * GetCellText(MapPoint const & pos);
-	bool AddTextToCell(const MapPoint &pos, const char * text, const uint8 & colorMagnitude);
+	bool AddTextToCell(const MapPoint &pos, const char * text, const uint8 & colorMagnitude, const PLAYER_INDEX playerId);
 	void ResetCellText(const MapPoint &pos);
 
 private:
 	bool                      m_armyTextOn;
 	bool                      m_cellTextOn;
 	bool                      m_armyNameOn;
+	PLAYER_INDEX              m_debugCellPlayer;
 	AvlTree<CellText *> *     m_cellAVL;
 };
 

@@ -27,6 +27,10 @@
 // - Added toggles for army and cell text graphic options. PFT, 07 Mar 05
 // - Added /debugplayer command, to be able to set the log player during
 //   execution even in non-debug sessions. (13-Aug-2008 Martin Gühmann)
+// - Added feedback for the easter eggs. (30-Dec-2018 Martin Gühmann)
+// - Seperated /debugcells on and off. (30-Dec-2018 Martin Gühmann)
+// - Added player option to /debugcells easter egg, to look only on the
+//   settle cells of one player instead of all players. (30-Dec-2018 Martin Gühmann)
 //
 //----------------------------------------------------------------------------
 
@@ -628,7 +632,7 @@ BOOL ChatWindow::CheckForEasterEggs(MBCHAR *s)
 			if (g_selected_item != NULL)
 			{
 				char buf[1024];
-				sprintf(buf, "Army names are shown on the map");
+				sprintf(buf, "Army names are hidden");
 				g_chatBox->AddLine(g_selected_item->GetCurPlayer(), buf);
 			}
 		}
@@ -639,7 +643,7 @@ BOOL ChatWindow::CheckForEasterEggs(MBCHAR *s)
 			if (g_selected_item != NULL)
 			{
 				char buf[1024];
-				sprintf(buf, "Army names are hidden");
+				sprintf(buf, "Army names are shown on the map");
 				g_chatBox->AddLine(g_selected_item->GetCurPlayer(), buf);
 			}
 		}
@@ -655,7 +659,7 @@ BOOL ChatWindow::CheckForEasterEggs(MBCHAR *s)
 			if (g_selected_item != NULL)
 			{
 				char buf[1024];
-				sprintf(buf, "Army goals are shown on the map (needs a turn)");
+				sprintf(buf, "Army goals are hidden");
 				g_chatBox->AddLine(g_selected_item->GetCurPlayer(), buf);
 			}
 		}
@@ -666,36 +670,57 @@ BOOL ChatWindow::CheckForEasterEggs(MBCHAR *s)
 			if (g_selected_item != NULL)
 			{
 				char buf[1024];
-				sprintf(buf, "Army goals are hidden");
+				sprintf(buf, "Army goals are shown on the map (needs a turn)");
 				g_chatBox->AddLine(g_selected_item->GetCurPlayer(), buf);
 			}
 		}
 	}
 
 	// Displays the AI settle value of a cell on the map
-	else if(!strncmp(s, "/debugcells", 11)  && !g_network.IsActive())
+	else if(!strncmp(s, "/debugcells", 13)  && !g_network.IsActive())
 	{
-		if(g_graphicsOptions->IsCellTextOn())
+		MBCHAR *arg = s + 13;
+		while (isspace(*arg))
+			arg++;
+
+		if (isdigit(*arg))
 		{
-			g_graphicsOptions->CellTextOff();
+			PLAYER_INDEX player = atoi(arg);
+
+			g_graphicsOptions->CellTextOn(player);
 
 			if (g_selected_item != NULL)
 			{
+				//			g_graphicsOptions->CellTextOn(g_selected_item->GetCurPlayer());
 				char buf[1024];
-				sprintf(buf, "Settle values for cells are shown on the map");
-				g_chatBox->AddLine(g_selected_item->GetCurPlayer(), buf);
+				sprintf(buf, "Settle cell values are shown for player %d on the map", player);
+				g_chatBox->AddLine(player, buf);
 			}
 		}
 		else
 		{
-			g_graphicsOptions->CellTextOn();
+			g_graphicsOptions->CellTextOn(PLAYER_UNASSIGNED);
 
 			if (g_selected_item != NULL)
 			{
+				//			g_graphicsOptions->CellTextOn(g_selected_item->GetCurPlayer());
 				char buf[1024];
-				sprintf(buf, "Settle values for cells are hidden");
+				sprintf(buf, "Settle cell values are shown for all players on the map");
 				g_chatBox->AddLine(g_selected_item->GetCurPlayer(), buf);
 			}
+		}
+	}
+
+	// Displays the AI settle value of a cell on the map
+	else if (!strncmp(s, "/debugcellsoff", 14) && !g_network.IsActive())
+	{
+		g_graphicsOptions->CellTextOff();
+
+		if (g_selected_item != NULL)
+		{
+			char buf[1024];
+			sprintf(buf, "Settle values for cells are hidden");
+			g_chatBox->AddLine(g_selected_item->GetCurPlayer(), buf);
 		}
 	}
 

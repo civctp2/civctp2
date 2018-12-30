@@ -123,14 +123,14 @@ private:
     sint32                     m_reentryTurn;          // Used
     MapPoint                   m_reentryPos;           // Used
 
-    uint8                      m_debugStringColor;     // Unused
+    uint8                      m_debugStringColor;     // Used for debugging
 
     PointerList<KillRecord>   *m_killMeSoon;           // Used
 
     uint8                      m_dontKillCount;        // Used and serialized
     bool                       m_needToKill;           // Used and serialized (uint8)
 
-    MBCHAR                    *m_debugString;          // Unused
+    MBCHAR                    *m_debugString;          // Used for debugging
 
 public:
 
