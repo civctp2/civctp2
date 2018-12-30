@@ -1327,7 +1327,7 @@ void CityWindow::WorkerSpinnerCallback(aui_Control *control, uint32 action, uint
 	}
 
 	if(popType != POP_MAX) {
-		oldnum = s_cityWindow->m_cityData->SpecialistCount(popType);
+		oldnum = s_cityWindow->m_cityData->SpecialistCount(popType);// Segfault location, probably m_cityData is invalid, after city disband
 		sint32 delta = num - oldnum;
 		if(delta > 0 && delta > s_cityWindow->m_cityData->WorkerCount()) {
 			settingValueAutomatically = true;
