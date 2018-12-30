@@ -102,7 +102,7 @@ ChatBox::ChatBox()
 	Assert(AUI_NEWOK(m_chatWindow, errcode));
 	if (!m_chatWindow || errcode != AUI_ERRCODE_OK) return;
 
-	m_active = FALSE;
+	m_active = false;
 }
 
 ChatBox::~ChatBox()
@@ -123,7 +123,7 @@ void ChatBox::AddText(MBCHAR *text)
 	ranger->SetValue(ranger->GetValueX(), ranger->GetMaximumY());
 }
 
-void ChatBox::SetActive(BOOL active)
+void ChatBox::SetActive(bool active)
 {
 	if (!m_chatWindow) return;
 
@@ -146,6 +146,7 @@ void ChatBox::AddLine(sint32 playerNum, MBCHAR *text)
 	COLORREF	colorRef = g_colorSet->GetColorRef(color);
 
 	MBCHAR			coloredText[_MAX_PATH];
+	memset(coloredText, 0, _MAX_PATH);
 
 	m_chatWindow->ColorizeString(coloredText, text, colorRef);
 
@@ -255,7 +256,7 @@ void ChatWindow::ChatCallback(aui_Control *control, uint32 action, uint32 data, 
 
 	if (strlen(str) == 0 || !strcmp(str, "\n"))
 	{
-		chatWindow->GetChatBox()->SetActive(FALSE);
+		chatWindow->GetChatBox()->SetActive(false);
 		return;
 	}
 
@@ -297,6 +298,13 @@ BOOL ChatWindow::CheckForEasterEggs(MBCHAR *s)
 
 		sint32 n = atoi(temp);
 
+		if (g_selected_item != NULL)
+		{
+			char buf[1024];
+			sprintf(buf, "The games runs for %d turns automatically", n);
+			g_chatBox->AddLine(g_selected_item->GetCurPlayer(), buf);
+		}
+
 		for (sint32 i = 0; i < n && !gDone; i++)
 		{
 			NewTurnCount::StartNextPlayer(false);
@@ -312,6 +320,7 @@ BOOL ChatWindow::CheckForEasterEggs(MBCHAR *s)
 				// Implement SDL code here
 				// Remove outer preprocessor derectives, when done
 #else
+				// Make it abort if you press for instance the ESC key
 				// Windows code start
 				while (PeekMessage(&msg, gHwnd, 0, 0, PM_REMOVE) && !g_letUIProcess)
 				{
@@ -386,6 +395,13 @@ BOOL ChatWindow::CheckForEasterEggs(MBCHAR *s)
 			}
 		}
 		g_director->AddCopyVision();
+
+		if (g_selected_item != NULL)
+		{
+			char buf[1024];
+			sprintf(buf, "Everybody has explored the whole world");
+			g_chatBox->AddLine(g_selected_item->GetCurPlayer(), buf);
+		}
 	}
 #if 0
 	else if(!strcmp(s, "/goodmode") && !g_network.IsActive())
@@ -407,12 +423,25 @@ BOOL ChatWindow::CheckForEasterEggs(MBCHAR *s)
 		}
 
 		SlicEngine::Reload(g_slic_filename);
+
+		if (g_selected_item != NULL)
+		{
+			char buf[1024];
+			sprintf(buf, "Reloaded slic");
+			g_chatBox->AddLine(g_selected_item->GetCurPlayer(), buf);
+		}
 	}
 
 	// Exports the current map to a text file
 	else if (!strncmp(s, "/exportmap", 10))
 	{
 		g_theWorld->ExportMap(s + 11);
+		if (g_selected_item != NULL)
+		{
+			char buf[1024];
+			sprintf(buf, "A map has been exported");
+			g_chatBox->AddLine(g_selected_item->GetCurPlayer(), buf);
+		}
 		return TRUE;
 	}
 
@@ -423,7 +452,23 @@ BOOL ChatWindow::CheckForEasterEggs(MBCHAR *s)
 		{
 			g_tiledMap->PostProcessMap();
 			g_tiledMap->Refresh();
+			if (g_selected_item != NULL)
+			{
+				char buf[1024];
+				sprintf(buf, "A map has been imported");
+				g_chatBox->AddLine(g_selected_item->GetCurPlayer(), buf);
+			}
 		}
+		else
+		{
+			if (g_selected_item != NULL)
+			{
+				char buf[1024];
+				sprintf(buf, "Map import failed");
+				g_chatBox->AddLine(g_selected_item->GetCurPlayer(), buf);
+			}
+		}
+
 		return TRUE;
 	}
 
@@ -447,7 +492,24 @@ BOOL ChatWindow::CheckForEasterEggs(MBCHAR *s)
 			}
 
 			if (player >= 0 && player < k_MAX_PLAYERS && g_player[player])
+			{
 				g_player[player]->m_playerType = PLAYER_TYPE_ROBOT;
+				if (g_selected_item != NULL)
+				{
+					char buf[1024];
+					sprintf(buf, "Player %d is a robot", player);
+					g_chatBox->AddLine(g_selected_item->GetCurPlayer(), buf);
+				}
+			}
+			else
+			{
+				if (g_selected_item != NULL)
+				{
+					char buf[1024];
+					sprintf(buf, "Player %d does not exist", player);
+					g_chatBox->AddLine(g_selected_item->GetCurPlayer(), buf);
+				}
+			}
 		}
 	}
 
@@ -472,8 +534,25 @@ BOOL ChatWindow::CheckForEasterEggs(MBCHAR *s)
 			}
 			else
 			{
-				if(player >= 0 && player < k_MAX_PLAYERS && g_player[player])
+				if (player >= 0 && player < k_MAX_PLAYERS && g_player[player])
+				{
 					g_player[player]->m_playerType = PLAYER_TYPE_HUMAN;
+					if (g_selected_item != NULL)
+					{
+						char buf[1024];
+						sprintf(buf, "Player %d is now human", player);
+						g_chatBox->AddLine(g_selected_item->GetCurPlayer(), buf);
+					}
+				}
+				else
+				{
+					if (g_selected_item != NULL)
+					{
+						char buf[1024];
+						sprintf(buf, "Player %d does not exist", player);
+						g_chatBox->AddLine(g_selected_item->GetCurPlayer(), buf);
+					}
+				}
 			}
 		}
 	}
@@ -530,6 +609,13 @@ BOOL ChatWindow::CheckForEasterEggs(MBCHAR *s)
 				g_player[i]->m_civilisation->AccessData()->ResetStrings();
 			}
 		}
+
+		if (g_selected_item != NULL)
+		{
+			char buf[1024];
+			sprintf(buf, "Leader and empire names have been reset to the database");
+			g_chatBox->AddLine(g_selected_item->GetCurPlayer(), buf);
+		}
 	}
 
 	// Displays the army names on the map
@@ -538,10 +624,24 @@ BOOL ChatWindow::CheckForEasterEggs(MBCHAR *s)
 		if(g_graphicsOptions->IsArmyNameOn())
 		{
 			g_graphicsOptions->ArmyNameOff();
+
+			if (g_selected_item != NULL)
+			{
+				char buf[1024];
+				sprintf(buf, "Army names are shown on the map");
+				g_chatBox->AddLine(g_selected_item->GetCurPlayer(), buf);
+			}
 		}
 		else
 		{
 			g_graphicsOptions->ArmyNameOn();
+
+			if (g_selected_item != NULL)
+			{
+				char buf[1024];
+				sprintf(buf, "Army names are hidden");
+				g_chatBox->AddLine(g_selected_item->GetCurPlayer(), buf);
+			}
 		}
 	}
 
@@ -551,10 +651,24 @@ BOOL ChatWindow::CheckForEasterEggs(MBCHAR *s)
 		if(g_graphicsOptions->IsArmyTextOn())
 		{
 			g_graphicsOptions->ArmyTextOff();
+
+			if (g_selected_item != NULL)
+			{
+				char buf[1024];
+				sprintf(buf, "Army goals are shown on the map (needs a turn)");
+				g_chatBox->AddLine(g_selected_item->GetCurPlayer(), buf);
+			}
 		}
 		else
 		{
 			g_graphicsOptions->ArmyTextOn();
+
+			if (g_selected_item != NULL)
+			{
+				char buf[1024];
+				sprintf(buf, "Army goals are hidden");
+				g_chatBox->AddLine(g_selected_item->GetCurPlayer(), buf);
+			}
 		}
 	}
 
@@ -564,10 +678,24 @@ BOOL ChatWindow::CheckForEasterEggs(MBCHAR *s)
 		if(g_graphicsOptions->IsCellTextOn())
 		{
 			g_graphicsOptions->CellTextOff();
+
+			if (g_selected_item != NULL)
+			{
+				char buf[1024];
+				sprintf(buf, "Settle values for cells are shown on the map");
+				g_chatBox->AddLine(g_selected_item->GetCurPlayer(), buf);
+			}
 		}
 		else
 		{
 			g_graphicsOptions->CellTextOn();
+
+			if (g_selected_item != NULL)
+			{
+				char buf[1024];
+				sprintf(buf, "Settle values for cells are hidden");
+				g_chatBox->AddLine(g_selected_item->GetCurPlayer(), buf);
+			}
 		}
 	}
 
@@ -597,6 +725,31 @@ BOOL ChatWindow::CheckForEasterEggs(MBCHAR *s)
 				                       GEA_Player, player,
 				                       GEA_End);
 				g_gevManager->Resume();
+
+				if (g_selected_item != NULL)
+				{
+					char buf[1024];
+					sprintf(buf, "Begin scheduler for player %d", player);
+					g_chatBox->AddLine(g_selected_item->GetCurPlayer(), buf);
+				}
+			}
+			else
+			{
+				if (g_selected_item != NULL)
+				{
+					char buf[1024];
+					sprintf(buf, "Player %d does not exist", player);
+					g_chatBox->AddLine(g_selected_item->GetCurPlayer(), buf);
+				}
+			}
+		}
+		else
+		{
+			if (g_selected_item != NULL)
+			{
+				char buf[1024];
+				sprintf(buf, "This is not a player number");
+				g_chatBox->AddLine(g_selected_item->GetCurPlayer(), buf);
 			}
 		}
 	}
@@ -614,6 +767,22 @@ BOOL ChatWindow::CheckForEasterEggs(MBCHAR *s)
 			sint32 player = atoi(arg);
 
 			CtpAiDebug::SetDebugPlayer(player);
+
+			if (g_selected_item != NULL)
+			{
+				char buf[1024];
+				sprintf(buf, "Player %d is filling the log for debugging", player);
+				g_chatBox->AddLine(g_selected_item->GetCurPlayer(), buf);
+			}
+		}
+		else
+		{
+			if (g_selected_item != NULL)
+			{
+				char buf[1024];
+				sprintf(buf, "This is not a player number");
+				g_chatBox->AddLine(g_selected_item->GetCurPlayer(), buf);
+			}
 		}
 	}
 #endif
