@@ -200,10 +200,13 @@ public:
 
 	BuildQueue & operator= (const BuildQueue &copy);
 
+	bool IsHeadUnit() const;
+	sint32 GetHeadType() const;
+
 private:
 	void SynchroniseNetworkData(void) const;
 };
 
-uint32 BldQue_BuildQueue_GetVersion(void) ;
+uint32 BldQue_BuildQueue_GetVersion(void);
 
 #endif

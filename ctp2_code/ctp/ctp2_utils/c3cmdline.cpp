@@ -1526,7 +1526,7 @@ void ToggleCellText::Execute(sint32 argc, char **argv)
 	if (g_graphicsOptions->IsCellTextOn()) {
 		g_graphicsOptions->CellTextOff();
 	} else {
-		g_graphicsOptions->CellTextOn();
+		g_graphicsOptions->CellTextOn(PLAYER_UNASSIGNED);
 	}
 }
 

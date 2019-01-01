@@ -50,6 +50,8 @@
 // - Simplified the design the number of committed agents and number of
 //   agents are now calculated inside the Match_Resources method. (21-Aug-2008 Martin Gühmann)
 // - Fixed unit garrison assignment. (23-Jan-2009 Martin Gühmann)
+// - Fixed a crash in Remove_Goal. The goal is also removed from m_goals
+//   before deleted. (31-Dec-2018 Martin Gühmann)
 //
 //----------------------------------------------------------------------------
 
@@ -940,7 +942,7 @@ void Scheduler::Add_New_Agent(const Agent_ptr & new_agent)
 
 ////////////////////////////////////////////////////////////////////////////////////////////////
 //
-//    Add_Agent
+//  Add_Agent
 //
 //
 // Add a new agent to the m_agents Agent_List
@@ -967,6 +969,32 @@ Agent_List::iterator Scheduler::Add_Agent(const Agent_ptr & agent)
 //
 //  Remove_Goal
 //
+//  called by CtpAi::AddSettleTargets
+//
+////////////////////////////////////////////////////////////
+void Scheduler::Remove_Goal(const Goal_ptr & goal)
+{
+	sint32 goal_type = goal->Get_Goal_Type();
+
+	Sorted_Goal_Iter tmp_goal_iter =
+		m_goals_of_type[goal_type].begin();
+
+	while (tmp_goal_iter != m_goals_of_type[goal_type].end())
+	{
+		Goal_ptr old_goal = tmp_goal_iter->second;
+		if (*old_goal == *goal)
+		{
+			Remove_Goal(tmp_goal_iter);
+			return;
+		}
+		tmp_goal_iter++;
+	}
+}
+
+////////////////////////////////////////////////////////////
+//
+//  Remove_Goal
+//
 //  called by Scheduler::Prioritize_Goals() when
 //
 ////////////////////////////////////////////////////////////
@@ -976,11 +1004,32 @@ Scheduler::Sorted_Goal_Iter Scheduler::Remove_Goal(const Scheduler::Sorted_Goal_
 
 	Remove_Matches_For_Goal(sorted_goal_iter->second);
 
+	for
+	(
+	    Goal_List::iterator goal_iter  = m_goals.begin();
+	                        goal_iter != m_goals.end();
+	                      ++goal_iter
+	)
+	{
+		if (*(*goal_iter) == (*sorted_goal_iter->second))
+		{
+			m_goals.erase(goal_iter);
+			break;
+		}
+	}
+
 	delete sorted_goal_iter->second;
 
 	return m_goals_of_type[goal_type].erase(sorted_goal_iter);
 }
 
+////////////////////////////////////////////////////////////
+//
+//  Remove_Goals_Type
+//
+//  called by CtpAi::AddSettleTargets
+//
+////////////////////////////////////////////////////////////
 void Scheduler::Remove_Goals_Type(const GoalRecord *rec)
 {
 	Sorted_Goal_List & goalList = m_goals_of_type[rec->GetIndex()];
@@ -1303,7 +1352,7 @@ bool Scheduler::Prioritize_Goals()
 //     or the goal is complete, then remove matches for that goal
 //     and splice onto end of list.
 //
-//  4. Otherwise, if not matches exist for this goal, add them.
+//  4. Otherwise, if no matches exist for this goal, add them.
 //
 //////////////////////////////////////////////////////////////////////////
 bool Scheduler::Prune_Goals()

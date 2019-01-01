@@ -170,6 +170,7 @@ public:
 	Agent_List::iterator Add_Agent(const Agent_ptr & agent);
 
 	Sorted_Goal_Iter Remove_Goal(const Sorted_Goal_Iter & sorted_goal_iter);
+	void Remove_Goal(const Goal_ptr & goal);
 
 	void Remove_Goals_Type(const GoalRecord *rec);
 
@@ -195,6 +196,8 @@ public:
 	void Sort_Goal_Matches_If_Necessary();
 	void Assign_Garrison();
 	void ResetTransport();
+
+	Sorted_Goal_List GetGoalsOfType(const GOAL_TYPE & type) { return m_goals_of_type[type]; };
 
 	static bool                  s_needAnotherCycle;
 

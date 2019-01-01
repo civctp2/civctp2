@@ -91,6 +91,7 @@ private:
 	SettleMap();
 
 	double ComputeSettleValue(const MapPoint & pos) const;
+	void CanUnitRecordSettle(const UnitRecord* rec, bool* settleTerrainTypes, bool &noSettleUnits) const;
 
 	MapGrid<double> m_settleValues;
 	Bit_Table m_invalidCells;

@@ -677,11 +677,11 @@ BOOL ChatWindow::CheckForEasterEggs(MBCHAR *s)
 	}
 
 	// Displays the AI settle value of a cell on the map
-	else if(!strncmp(s, "/debugcells", 13)  && !g_network.IsActive())
+	else if(!strncmp(s, "/debugcells", 11)  && !g_network.IsActive())
 	{
-		MBCHAR *arg = s + 13;
+		MBCHAR *arg = s + 11;
 		while (isspace(*arg))
-			arg++;
+				arg++;
 
 		if (isdigit(*arg))
 		{
@@ -691,7 +691,6 @@ BOOL ChatWindow::CheckForEasterEggs(MBCHAR *s)
 
 			if (g_selected_item != NULL)
 			{
-				//			g_graphicsOptions->CellTextOn(g_selected_item->GetCurPlayer());
 				char buf[1024];
 				sprintf(buf, "Settle cell values are shown for player %d on the map", player);
 				g_chatBox->AddLine(player, buf);
@@ -703,7 +702,6 @@ BOOL ChatWindow::CheckForEasterEggs(MBCHAR *s)
 
 			if (g_selected_item != NULL)
 			{
-				//			g_graphicsOptions->CellTextOn(g_selected_item->GetCurPlayer());
 				char buf[1024];
 				sprintf(buf, "Settle cell values are shown for all players on the map");
 				g_chatBox->AddLine(g_selected_item->GetCurPlayer(), buf);
