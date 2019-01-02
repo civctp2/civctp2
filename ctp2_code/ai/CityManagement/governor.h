@@ -50,6 +50,7 @@
 // - Corrected iterator problems (detected with _HAS_ITERATOR_DEBUGGING).
 // - If the AI loses its Capitol it builds a new one in its most productive
 //   city. (08-Sep-2008 Martin Gühmann)
+// - Initialzed all members of BuildUnitList. (02-Jan-2019 Martin Gühmann)
 //
 //----------------------------------------------------------------------------
 
@@ -145,19 +146,9 @@ public:
 
 	void Save(CivArchive & archive) const;
 
-
-
-
-
-
-
 	sint32 ComputeBestGovernment() const;
 
 	StringId GetGovernmentAdvice() const;
-
-
-
-
 
 	struct SlidersSetting
 	{
@@ -204,13 +195,16 @@ public:
 
 	};
 
-	struct SliderTests{
-		SliderTests(){
+	struct SliderTests
+	{
+		SliderTests()
+		{
 			m_production = m_gold = m_food = m_happiness = 0;
 			m_productionTest = m_goldTest = m_foodTest = m_happinessTest = true;
 		}
 
-		const SliderTests & operator=(const SliderTests & rval){
+		const SliderTests & operator=(const SliderTests & rval)
+		{
 			m_production = rval.m_production;
 			m_gold = rval.m_gold;
 			m_food = rval.m_food;
@@ -243,7 +237,6 @@ public:
 
 	void GetSliders(SlidersSetting & sliders_setting) const;
 
-
 	bool ComputeMinimumSliders( SlidersSetting & sliders_setting ) const;
 
 	bool ComputeBestSliders( SlidersSetting & sliders_setting ) const;
@@ -260,19 +253,11 @@ public:
 
 	// End of sliders
 
-
-
-
 	bool AddRoadPriority(Path & path, const double & priority_delta);
 
 	void ComputeRoadPriorities();
 
 	void PlaceTileImprovements();
-
-
-
-
-
 
 	void AssignPopulations();
 
@@ -308,19 +293,9 @@ public:
 
 	StringId GetUnitsAdvice(SlicContext & sc) const;
 
-
-
-
-
-
 	sint32 ComputeBestMilitaryReadiness() const;
 
 	StringId GetTacticalAdvice(SlicContext & sc) const;
-
-
-
-
-
 
 	void ManageGoodsTradeRoutes();
 	void ComputeNextBuildItem(CityData *city, sint32 & cat, sint32 & type)
@@ -335,18 +310,19 @@ private:
 
 	static GovernorVector s_theGovernors;
 
-
-
-
-
-	struct BuildUnitList {
-		BuildUnitList() {
-			m_bestType = -1;
-			m_desiredCount = -1;
-			m_maximumCount = -1;
-			m_garrisonCount = -1;
-			m_perCityGarrison = -1;
+	struct BuildUnitList
+	{
+		BuildUnitList()
+		:
+		    m_bestType             (-1),
+		    m_desiredCount         (-1),
+		    m_maximumCount         (-1),
+		    m_garrisonCount        (-1),
+		    m_maximumGarrisonCount (-1),
+		    m_perCityGarrison      (-1)
+		{
 		}
+
 		sint32 m_bestType;
 		sint16 m_desiredCount;
 		sint16 m_maximumCount;
@@ -406,17 +382,7 @@ private:
 
 	sint32 ComputeBestUnitType(const UnitBuildListRecord *build_list_rec, const CityData *city = NULL) const;
 
-
-
-
-
-
 	const StrategyRecord::PopAssignmentElement *GetMatchingPopAssignment(const CityData *city) const;
-
-
-
-
-
 
 	struct TiGoal
 	{

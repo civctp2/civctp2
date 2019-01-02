@@ -8502,11 +8502,11 @@ void CityData::InsertBuildItem(sint32 index, uint32 category, sint32 type)
 {
 	if(index < 0) {
 		switch(category) {
-			case k_GAME_OBJ_TYPE_UNIT: BuildUnit(type); return;
-			case k_GAME_OBJ_TYPE_IMPROVEMENT: BuildImprovement(type); return;
-			case k_GAME_OBJ_TYPE_WONDER: BuildWonder(type); return;
-			case k_GAME_OBJ_TYPE_CAPITALIZATION: InsertCapitalization(); return;
-			case k_GAME_OBJ_TYPE_INFRASTRUCTURE: InsertInfrastructure(); return;
+			case k_GAME_OBJ_TYPE_UNIT:           BuildUnit           (type); return;
+			case k_GAME_OBJ_TYPE_IMPROVEMENT:    BuildImprovement    (type); return;
+			case k_GAME_OBJ_TYPE_WONDER:         BuildWonder         (type); return;
+			case k_GAME_OBJ_TYPE_CAPITALIZATION: InsertCapitalization();     return;
+			case k_GAME_OBJ_TYPE_INFRASTRUCTURE: InsertInfrastructure();     return;
 			default:
 				Assert(false);
 				return;
@@ -8514,7 +8514,8 @@ void CityData::InsertBuildItem(sint32 index, uint32 category, sint32 type)
 	}
 
 	BuildNode *node = m_build_queue.GetNodeByIndex(index);
-	if(!node) {
+	if(!node)
+	{
 		InsertBuildItem(-1, category, type);
 		return;
 	}

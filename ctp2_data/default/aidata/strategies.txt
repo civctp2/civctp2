@@ -419,7 +419,7 @@ STRATEGY_DEFAULT {
         Priority 11000
         BuildListSequence BUILD_LIST_SEQUENCE_WONDERS
         MinNumUnits 2
-	MinNumCities 4
+        MinNumCities 4
         Top 0.1
         ProductionCities
         Advice BUILD_WONDERS_ADVICE

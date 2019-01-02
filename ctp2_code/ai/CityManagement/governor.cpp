@@ -100,7 +100,7 @@
 // - Allow spending all unused freight
 // - Improved handling when no suitable item of a category is available
 //   (including settlers, to support mods).
-// - Replaced old const database by new one. (5-Aug-2007 Martin Gühmann)
+// - Replaced old const database by new one. (05-Aug-2007 Martin Gühmann)
 // - AIs now consider path between more than one city. (17-Jan-2008 Martin Gühmann)
 // - The AI now builds settlers, ships, and special units, while it is
 //   replacing its garrison units. (30-Jun-2008 Martin Gühmann)
@@ -118,7 +118,10 @@
 // - The AI can now select a special build list for small cities with enough
 //   garrison units, and can use a special build list for maximum size
 //   increasing increasing buildings. (20-Aug-2009 Martin Gühmann)
-// - Fixed AI city rank calculation. (9-Nov-2009 Martin Gühmann)
+// - Fixed AI city rank calculation. (09-Nov-2009 Martin Gühmann)
+// - The AI does not build more settlers than it needs. (02-Jan-2018 Martin Gühmann)
+// - The AI does not build settlers or transporters if the minimum garrison
+//   strength has not been met. More to do here. (02-Jan-2018 Martin Gühmann)
 //
 //----------------------------------------------------------------------------
 
@@ -3463,7 +3466,7 @@ void Governor::ComputeDesiredUnits()
 	sint32 max_cities =
 		g_theGovernmentDB->Get(player_ptr->GetGovernmentType())->GetTooManyCitiesThreshold();
 	sint32 num_cities = player_ptr->GetNumCities();
-	sint32 needed_cities = (max_cities - num_cities);
+	sint16 needed_cities = static_cast<sint16>(max_cities - num_cities);
 	sint32 total_unallocated_support = 0;
 
 	double unit_support_percent = 0.0;
@@ -3624,7 +3627,10 @@ void Governor::ComputeDesiredUnits()
 		}
 
 		if(build_list_rec == NULL)
+		{
+			DPRINTF(k_DBG_AI, ("// No build list record for list: %d\n", list_num));
 			continue;
+		}
 
 		sint32 best_unit_type = ComputeBestUnitType(build_list_rec);
 		m_buildUnitList[list_num].m_bestType = best_unit_type;
@@ -3683,21 +3689,21 @@ void Governor::ComputeDesiredUnits()
 		case BUILD_UNIT_LIST_SETTLER:
 		case BUILD_UNIT_LIST_SEA_SETTLER:
 
-			if (    (best_unit_type >= 0)
-			     && (desired_count > m_currentUnitCount[best_unit_type])
-			   )
+			if(best_unit_type >= 0)
 			{
 				m_buildUnitList[list_num].m_maximumCount =
-					static_cast<sint16>(needed_cities);
+					std::min<sint16>(m_buildUnitList[list_num].m_maximumCount, needed_cities);
 
 				m_buildUnitList[list_num].m_desiredCount =
 					m_buildUnitList[list_num].m_maximumCount -
 					m_currentUnitCount[best_unit_type];
+				DPRINTF(k_DBG_AI, ("// Best settler unit: %s needed: %d, max: %d, current: %d\n", g_theUnitDB->GetNameStr(best_unit_type), m_buildUnitList[list_num].m_desiredCount, m_buildUnitList[list_num].m_maximumCount, m_currentUnitCount[best_unit_type]));
 			}
 			else
 			{
 				m_buildUnitList[list_num].m_maximumCount = 0;
 				m_buildUnitList[list_num].m_desiredCount = 0;
+				DPRINTF(k_DBG_AI, ("// No settler units: needed: %d, max: %d, current: %d\n", m_buildUnitList[list_num].m_desiredCount, m_buildUnitList[list_num].m_maximumCount, m_currentUnitCount[best_unit_type]));
 			}
 
 		case BUILD_UNIT_LIST_SLAVERY:
@@ -3748,7 +3754,7 @@ void Governor::ComputeDesiredUnits()
 
 	m_buildUnitList[BUILD_UNIT_LIST_OFFENSE].m_garrisonCount = 0;
 	m_buildUnitList[BUILD_UNIT_LIST_DEFENSE].m_garrisonCount = 0;
-	m_buildUnitList[BUILD_UNIT_LIST_RANGED].m_garrisonCount = 0;
+	m_buildUnitList[BUILD_UNIT_LIST_RANGED ].m_garrisonCount = 0;
 
 	sint32 desired_offense;
 	sint32 desired_defense;
@@ -3816,6 +3822,28 @@ void Governor::ComputeDesiredUnits()
 				static_cast<sint16>(desired_ranged);
 		}
 	}
+
+#if defined(_DEBUG) || defined(USE_LOGGING)
+	DPRINTF(k_DBG_AI, ("// Desired units for player %d\n", m_playerId));
+	for(int list_num = 0; list_num < BUILD_UNIT_LIST_MAX; list_num++)
+	{
+		sint32 type        = m_buildUnitList[list_num].m_bestType;
+		sint16 needed      = m_buildUnitList[list_num].m_desiredCount;
+		sint16 max         = m_buildUnitList[list_num].m_maximumCount;
+		sint16 garrison    = m_buildUnitList[list_num].m_garrisonCount;
+		sint16 garrisonMax = m_buildUnitList[list_num].m_maximumGarrisonCount;
+		sint16 perCity     = m_buildUnitList[list_num].m_perCityGarrison;
+
+		if(type >= 0)
+		{
+			DPRINTF(k_DBG_AI, ("// List %d, Best unit: %s, current: %d, needed: %d, max: %d, garrison: %d, garrison max: %d, per city: %d \n", list_num, g_theUnitDB->GetNameStr(type), m_currentUnitCount[type], needed, max, garrison, garrisonMax, perCity));
+		}
+		else
+		{
+			DPRINTF(k_DBG_AI, ("// List %d, Best unit: %s, current: %d, needed: %d, max: %d, garrison: %d, garrison max: %d, per city: %d \n", list_num, "Invalid", m_currentUnitCount[type], needed, max, garrison, garrisonMax, perCity));
+		}
+	}
+#endif
 }
 
 void Governor::FillEmptyBuildQueues(bool noWarChange)
@@ -4004,6 +4032,7 @@ void Governor::ComputeNextBuildItem(CityData *city, sint32 & cat, sint32 & type,
 			if (elem->GetAllUnitBuildList())
 			{
 				type = GetNeededUnitType(city, list_num);
+				DPRINTF(k_DBG_AI, ("Unit build list is: %d", list_num));
 
 				if (type >= 0)
 				{
@@ -4066,7 +4095,7 @@ void Governor::ComputeNextBuildItem(CityData *city, sint32 & cat, sint32 & type,
 		// else try next element
 	}
 
-	DPRINTF(k_DBG_AI, ("Nothing valid found to build in city at (%d,%d), increase production allocated to units?\n"));
+	DPRINTF(k_DBG_AI, ("Nothing valid found to build in %s, increase production allocated to units?\n", city->GetName()));
 	cat = k_GAME_OBJ_TYPE_UNIT;
 	type = m_buildUnitList[BUILD_UNIT_LIST_DEFENSE].m_bestType;
 }
@@ -4366,18 +4395,7 @@ sint32 Governor::GetNeededUnitType(const CityData *city, sint32 & list_num) cons
 
 		turns_to_build = city->HowMuchLonger(needed_production);
 
-		if
-		  (
-		       static_cast<BUILD_UNIT_LIST>(list_num) == BUILD_UNIT_LIST_SETTLER
-		    || static_cast<BUILD_UNIT_LIST>(list_num) == BUILD_UNIT_LIST_SEA_SETTLER
-		  )
-		{
-			needed_production *= list_ref.m_maximumCount;
-		}
-		else
-		{
-			needed_production *= list_ref.m_desiredCount;
-		}
+		needed_production *= list_ref.m_desiredCount;
 
 		if ( needed_production > 0 )
 		{
@@ -4447,10 +4465,9 @@ sint32 Governor::GetNeededUnitType(const CityData *city, sint32 & list_num) cons
 		}
 	}
 
-#if defined(_DEBUG)
+#if defined(_DEBUG) || defined(USE_LOGGING)
 	UnitRecord const *	unit	= (type < 0) ? NULL : GetDBUnitRec(type);
-	DPRINTF(k_DBG_GAMESTATE, ("Selected unit type: %s\n", unit ? unit->GetNameText() : "none"));
-	DPRINTF(k_DBG_GAMESTATE, ("Player: %lx\n", m_playerId));
+	DPRINTF(k_DBG_GAMESTATE, ("Player: %lx, Selected unit type: %s\n", m_playerId, unit ? unit->GetNameText() : "none"));
 #endif
 
 	return type;
@@ -4542,6 +4559,7 @@ double Governor::MaxiumGarrisonDefence(const MapPoint & pos) const
 	return garrisonDefence;
 }
 
+// @ToDo Cleanup this function, duplicated, and superflous code, and fix it
 sint32 Governor::GetNeededGarrisonUnitType(const CityData * city, sint32 & list_num) const
 {
 	Assert( city );
@@ -4569,7 +4587,6 @@ sint32 Governor::GetNeededGarrisonUnitType(const CityData * city, sint32 & list_
 
 	for (list_num = BUILD_UNIT_LIST_SEA_TRANSPORT; list_num < BUILD_UNIT_LIST_MAX; list_num++)
 	{
-
 		const BuildUnitList & list_ref = m_buildUnitList[list_num];
 
 		if(static_cast<BUILD_UNIT_LIST>(list_num) == BUILD_UNIT_LIST_SEA_TRANSPORT
@@ -4589,17 +4606,17 @@ sint32 Governor::GetNeededGarrisonUnitType(const CityData * city, sint32 & list_
 			needed_production = 0;
 			continue;
 		}
-		else if ( city->GetGarrisonComplete() )
+		else if ( /*!city->GetGarrisonComplete()*/ garrisonComplte < 1.0)
 		{
 			// @ToDo: Merge duplicated code
-			double garrisonPercent = list_ref.m_maximumGarrisonCount > 0 ? static_cast<double>(list_ref.m_garrisonCount) / static_cast<double>(list_ref.m_maximumGarrisonCount) : 1.0;
+	//		double garrisonPercent = list_ref.m_maximumGarrisonCount > 0 ? static_cast<double>(list_ref.m_garrisonCount) / static_cast<double>(list_ref.m_maximumGarrisonCount) : 1.0;
 			if
 			  (
 			   (
 			         static_cast<BUILD_UNIT_LIST>(list_num) == BUILD_UNIT_LIST_SEA_TRANSPORT
 			      || static_cast<BUILD_UNIT_LIST>(list_num) == BUILD_UNIT_LIST_SEA
 			   )
-			   && garrisonPercent > build_transport_production_level // This may be exposed extra
+			   && garrisonComplte > build_transport_production_level // This may be exposed extra
 			   // This does not work so well yet
 //			   && (PercentUnbuilt(static_cast<BUILD_UNIT_LIST>(list_num)) > PercentUnbuilt(BUILD_UNIT_LIST_SETTLER)     || m_currentUnitCount[m_buildUnitList[BUILD_UNIT_LIST_SETTLER].m_bestType]     > 2)
 //			   && (PercentUnbuilt(static_cast<BUILD_UNIT_LIST>(list_num)) > PercentUnbuilt(BUILD_UNIT_LIST_SEA_SETTLER) || m_currentUnitCount[m_buildUnitList[BUILD_UNIT_LIST_SEA_SETTLER].m_bestType] > 2)
@@ -4619,7 +4636,7 @@ sint32 Governor::GetNeededGarrisonUnitType(const CityData * city, sint32 & list_
 			else if
 			  (
 			      static_cast<BUILD_UNIT_LIST>(list_num) == BUILD_UNIT_LIST_SETTLER
-			   && garrisonPercent > build_settler_production_level
+			   && garrisonComplte > build_settler_production_level
 			  )
 			{
 				if(!m_canBuildLandSettlers)
@@ -4631,7 +4648,7 @@ sint32 Governor::GetNeededGarrisonUnitType(const CityData * city, sint32 & list_
 					GetDBUnitRec(list_ref.m_bestType)->GetShieldCost();
 
 				sint32 turns_to_build = city->HowMuchLonger(needed_production);
-				needed_production *= list_ref.m_maximumCount;
+				needed_production *= list_ref.m_desiredCount;
 				if(needed_production > 0)
 				{
 					max_list = (BUILD_UNIT_LIST) list_num;
@@ -4641,7 +4658,7 @@ sint32 Governor::GetNeededGarrisonUnitType(const CityData * city, sint32 & list_
 			else if
 			  (
 			      static_cast<BUILD_UNIT_LIST>(list_num) == BUILD_UNIT_LIST_SEA_SETTLER
-			   && garrisonPercent > build_settler_production_level
+			   && garrisonComplte > build_settler_production_level
 			   && this->m_canBuildSeaSettlers
 			  )
 			{
@@ -4654,7 +4671,7 @@ sint32 Governor::GetNeededGarrisonUnitType(const CityData * city, sint32 & list_
 					GetDBUnitRec(list_ref.m_bestType)->GetShieldCost();
 
 				sint32 turns_to_build = city->HowMuchLonger(needed_production);
-				needed_production *= list_ref.m_maximumCount;
+				needed_production *= list_ref.m_desiredCount;
 				if(needed_production > 0)
 				{
 					max_list = (BUILD_UNIT_LIST) list_num;
@@ -4667,7 +4684,7 @@ sint32 Governor::GetNeededGarrisonUnitType(const CityData * city, sint32 & list_
 			     || static_cast<BUILD_UNIT_LIST>(list_num) == BUILD_UNIT_LIST_SPY
 			     || static_cast<BUILD_UNIT_LIST>(list_num) == BUILD_UNIT_LIST_SPECIAL
 			   )
-			   && garrisonPercent > build_settler_production_level
+			   && garrisonComplte > build_settler_production_level
 			  )
 			{
 				needed_production =
@@ -4714,6 +4731,8 @@ sint32 Governor::GetNeededGarrisonUnitType(const CityData * city, sint32 & list_
 						break;
 					}
 				}
+
+				Assert(garrisonComplte >= 1.0);
 			}
 			else if(static_cast<BUILD_UNIT_LIST>(list_num) == BUILD_UNIT_LIST_SETTLER)
 			{
@@ -4728,13 +4747,15 @@ sint32 Governor::GetNeededGarrisonUnitType(const CityData * city, sint32 & list_
 						GetDBUnitRec(list_ref.m_bestType)->GetShieldCost();
 
 					sint32 turns_to_build = city->HowMuchLonger(needed_production);
-					needed_production *= list_ref.m_maximumCount;
+					needed_production *= list_ref.m_desiredCount;
 					if(needed_production > 0)
 					{
 						max_list = (BUILD_UNIT_LIST) list_num;
 						break;
 					}
 				}
+
+				Assert(garrisonComplte >= 1.0);
 			}
 			else if(static_cast<BUILD_UNIT_LIST>(list_num) == BUILD_UNIT_LIST_SEA_SETTLER)
 			{
@@ -4749,13 +4770,15 @@ sint32 Governor::GetNeededGarrisonUnitType(const CityData * city, sint32 & list_
 						GetDBUnitRec(list_ref.m_bestType)->GetShieldCost();
 
 					sint32 turns_to_build = city->HowMuchLonger(needed_production);
-					needed_production *= list_ref.m_maximumCount;
+					needed_production *= list_ref.m_desiredCount;
 					if(needed_production > 0)
 					{
 						max_list = (BUILD_UNIT_LIST) list_num;
 						break;
 					}
 				}
+
+				Assert(garrisonComplte >= 1.0);
 			}
 			else if
 			  (
@@ -4777,6 +4800,8 @@ sint32 Governor::GetNeededGarrisonUnitType(const CityData * city, sint32 & list_
 						break;
 					}
 				}
+
+				Assert(garrisonComplte >= 1.0);
 			}
 			else
 			{

@@ -1348,20 +1348,21 @@ void terrainutil_RemoveBorders(const MapPoint &center, sint32 owner, sint32 intR
 
 	RadiusIterator it(center, intRad, sqRad);
 
-	for(it.Start(); !it.End(); it.Next()) {
+	for(it.Start(); !it.End(); it.Next())
+	{
 		Cell *cell = g_theWorld->GetCell(it.Pos());
 		if(cell->GetOwner() != owner)
 			continue;
 
-		if(cell->GetCityOwner().IsValid() &&
-		   cell->GetCityOwner().m_id != ignoreCity.m_id) {
-
+		if(cell->GetCityOwner().IsValid()
+		&& cell->GetCityOwner().m_id != ignoreCity.m_id)
+		{
 			continue;
 		}
 
 		bool stillOwned = terrainutil_GetSomethingOwnsCell(it.Pos(), owner, ignoreCity);
-		if (!stillOwned) {
-
+		if(!stillOwned) // Has to check influence from other cities
+		{
 			cell->SetOwner(PLAYER_UNASSIGNED);
 		}
 
@@ -1370,6 +1371,7 @@ void terrainutil_RemoveBorders(const MapPoint &center, sint32 owner, sint32 intR
 		g_network.Unblock(owner);
 
 	}
+
 	g_tiledMap->Refresh();
 }
 

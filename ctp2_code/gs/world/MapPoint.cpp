@@ -999,7 +999,7 @@ void SquareIterator::Next()
 			m_testXY.Move(SOUTHWEST, m_endX - m_startX);
 		}
 
-		isValid	= IsIncluded();
+		isValid = IsIncluded();
 	}
 
 	if (isValid)
