@@ -215,15 +215,13 @@ STDEHANDLER(CtpAi_CreateCityEvent)
 	}
 	CtpAi::AddOwnerGoalsForCity(city, city.GetOwner());
 
-	SettleMap::s_settleMap.HandleCityGrowth(city);
-
 	return GEV_HD_Continue;
 }
 
 void CtpAi::AddOwnerGoalsForCity(const Unit &city, const PLAYER_INDEX ownerId)
 {
 	if(g_player[ownerId] == NULL)
-        return;
+	    return;
 
 	Assert(city.IsValid());
 
@@ -320,7 +318,11 @@ STDEHANDLER(CtpAi_GrowCityEvent)
 	if(!args->GetCity(0, city))
 		return GEV_HD_Continue;
 
-	SettleMap::s_settleMap.HandleCityGrowth(city);
+	sint32 oldSizeIndex;
+	if(!args->GetInt(0, oldSizeIndex))
+		return GEV_HD_Continue;
+
+	SettleMap::s_settleMap.HandleCityGrowth(city, oldSizeIndex);
 
 	return GEV_HD_Continue;
 }
@@ -338,8 +340,6 @@ STDEHANDLER(CtpAi_KillCityEvent)
 	sint32 killer;
 	if(!args->GetPlayer(0, killer))
 		killer = -1;
-
-	SettleMap::s_settleMap.SetCanSettlePos(u.RetPos(), true);
 
 	for (sint32 playerId = 1; playerId < CtpAi::s_maxPlayers; playerId++)
 	{
@@ -394,8 +394,6 @@ STDEHANDLER(CtpAi_NukeCityUnit)
 
 	if (population <= 0)
 	{
-		SettleMap::s_settleMap.SetCanSettlePos(city.RetPos(), true);
-
 		for (sint32 playerId = 1; playerId < CtpAi::s_maxPlayers; playerId++)
 		{
 			if (playerId != killer && playerId != city_owner)
@@ -1104,7 +1102,7 @@ void CtpAi::Load(CivArchive & archive)
 			}
 			AddOwnerGoalsForCity(city, city.GetOwner());
 
-			SettleMap::s_settleMap.HandleCityGrowth(city);
+			SettleMap::s_settleMap.HandleCityGrowth(city, city.CD()->GetSizeIndex());
 
 			city.CD()->AdjustSizeIndices();
 		}

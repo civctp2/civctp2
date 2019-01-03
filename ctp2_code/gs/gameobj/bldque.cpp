@@ -1647,7 +1647,7 @@ void BuildQueue::FinishCreatingUnit(Unit &u)
 		CityData *cd = m_city.CD();
 		const UnitRecord *rec = u.GetDBRec();
 
-		if(  !g_player[m_owner]->IsRobot()
+		if(  !g_player[m_owner]->IsRobot() // The AI is cheating
 		|| (  g_network.IsClient()
 		&&    g_network.IsLocalPlayer(m_owner)
 		||  (!g_network.IsActive()

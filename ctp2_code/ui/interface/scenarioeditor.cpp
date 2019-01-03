@@ -1483,7 +1483,7 @@ void ScenarioEditor::CityPopSpinner(aui_Control *control, uint32 action, uint32 
 
 	if(!spinner) return;
 	sint32 newPop = spinner->GetValueX();
-	//Added by Martin Gühmann to make shure
+	//Added by Martin Gühmann to make sure
 	//newly created cities have the same pop
 	//size as displayed in the CityPopSpinner
 	s_scenarioEditor->m_newPopSize = newPop;

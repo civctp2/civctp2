@@ -173,7 +173,7 @@ WORLD_DIRECTION MapPoint::GetOppsositeDirection(WORLD_DIRECTION const & directio
 //
 // Name       : MapPoint::HasUnexploredNeighbor
 //
-// Description: Check whther this MapPoint has an unexplored tile for the
+// Description: Check whether this MapPoint has an unexplored tile for the
 //              given player nearby.
 //
 // Parameters : player       : The player for that the the unexplored test is done.

@@ -8222,7 +8222,7 @@ void CityData::AdjustSizeIndices()
 	{
 		g_gevManager->AddEvent(GEV_INSERT_AfterCurrent, GEV_CityInfluenceChanged,
 								   GEA_City, m_home_city.m_id,
-								   GEA_Int, (oldSizeIndex - m_sizeIndex),
+								   GEA_Int, oldSizeIndex,
 								   GEA_End);
 
 		if(oldVision != GetVisionRadius()) {

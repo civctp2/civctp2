@@ -37,6 +37,17 @@
 //   stuff is shown. (30-Dec-2018 Martin Gühmann)
 // - The AI starts to consider settle targets when a settler is almost
 //   finished. (31-Dec-2018 Martin Gühmann)
+// - Removed m_invalidCells, cells not suited for settling have a value of
+//   zero. (03-Jan-2018 Martin Gühmann)
+// - Invalid cells are owned by a city or adjacent to those. Do not use for
+//   the settle map that is used for all civs the settle distance preferences
+//   for one civ. The preferences are only used when selecting a settle
+//   target or for checking whether there are targets. (03-Jan-2018 Martin Gühmann)
+// - If a city has a population size of zero than all cells owned by this
+//   city are treated as without a city owner. This frees the cells if a city
+//   is being removed. When we are updating the cells, the city is officially
+//   still on the map. (03-Jan-2018 Martin Gühmann)
+// - The settle map is now also updated after city shrinking. (03-Jan-2018 Martin Gühmann)
 //
 //----------------------------------------------------------------------------
 
@@ -70,8 +81,7 @@ MapGrid<double>::MapGridArray MapGrid<double>::s_scratch = {};
 
 SettleMap::SettleMap()
 :
-	m_settleValues	(),
-	m_invalidCells	()
+	m_settleValues()
 {
 }
 
@@ -94,15 +104,34 @@ SettleMap::SettleMap()
 // Remark(s)  : -
 //
 //----------------------------------------------------------------------------
-double SettleMap::ComputeSettleValue(const MapPoint & pos) const
+double SettleMap::ComputeSettleValue(const MapPoint & pos, const Unit &city) const
 {
+	// Cannot be settled if this is already claimed by a city
+	if(g_theWorld->GetCell(pos)->GetCityOwner().IsValid()
+	&& g_theWorld->GetCell(pos)->GetCityOwner() != city)
+		return 0.0;
+
+	// Get a square containing 9 cells.
+	// So that we can check all the neighbors.
+	SquareIterator itNext(pos, 1);
+
+	// Invalidate if a neighbor is owned by a city
+	for(itNext.Start(); !itNext.End(); itNext.Next())
+	{
+		const Cell * cell = g_theWorld->GetCell(itNext.Pos());
+		if(cell->GetCityOwner().IsValid() && cell->GetCityOwner() != city)
+		{
+			return 0.0;
+		}
+	}
+
 	sint32 score = 0;
 	RadiusIterator it(pos, k_minimum_settle_city_size);
 
 	for(it.Start(); !it.End(); it.Next())
 	{
 		const Cell * cell = g_theWorld->GetCell(it.Pos());
-		if(!cell->GetCityOwner())
+		if(!cell->GetCityOwner() || cell->GetCityOwner() == city)
 		{
 			score += cell->GetScore();
 		}
@@ -114,7 +143,6 @@ double SettleMap::ComputeSettleValue(const MapPoint & pos) const
 void SettleMap::Cleanup()
 {
 	m_settleValues.Cleanup();
-	m_invalidCells.Resize(0, 0, false);
 }
 
 void SettleMap::Initialize()
@@ -126,7 +154,6 @@ void SettleMap::Initialize()
 
 	m_settleValues.Clear();
 	m_settleValues.Resize(x_size, y_size, 1);
-	m_invalidCells.Resize(x_size, y_size, 0);
 
 	for(rc_pos.x = 0; static_cast<size_t>(rc_pos.x) < x_size; rc_pos.x++)
 	{
@@ -152,7 +179,7 @@ void SettleMap::Initialize()
 			     )
 			   )
 			{
-				value = ComputeSettleValue(rc_pos);
+				value = ComputeSettleValue(rc_pos, Unit());
 			}
 
 			m_settleValues.AddValue(rc_pos, value);
@@ -164,37 +191,26 @@ void SettleMap::Initialize()
 
 /// Update the settle target information when a city grows
 /// \param city The city
-void SettleMap::HandleCityGrowth(const Unit & city)
+void SettleMap::HandleCityGrowth(const Unit & city, sint32 oldSizeIndex)
 {
 	Assert(city.IsValid());
-	MapPoint        cityPos     = city.RetPos();
-	CityData *      citydata    = city.GetCityData();
-	PLAYER_INDEX    playerId    = city.GetOwner();
-	sint32          radius      = g_theCitySizeDB->Get(citydata->GetSizeIndex())->GetIntRadius();
-	/// @todo Check functionality. Using "2 * current radius + 1" looks arbitrary.
-	/// This does not account for future growth (city spacing may become too tight), but it also
-	/// prevents any overlap.
-	radius += radius + 1;
+	MapPoint        cityPos   = city.RetPos();
+	CityData *      citydata  = city.GetCityData();
+	sint32          sizeIndex = citydata->GetSizeIndex() >= oldSizeIndex ? citydata->GetSizeIndex() : oldSizeIndex;
+	sint32          radius    = g_theCitySizeDB->Get(sizeIndex)->GetIntRadius();
 
-	// Mark tiles near to the grown city as not worth to settle at all
-	RadiusIterator it(cityPos, radius);
-	for(it.Start(); !it.End(); it.Next())
-	{
-		MapPoint    clearPos = it.Pos();
-		m_invalidCells.Set(clearPos.x, clearPos.y, TRUE);
-	}
+	// Make the radius one bigger to recalculate the 
+	// values outside of the adjacent cells
+	radius++;
 
-	const StrategyRecord & strategy = Diplomat::GetDiplomat(playerId).GetCurrentStrategy();
-	sint32                  min_settle_distance = 0;
-	strategy.GetMinSettleDistance(min_settle_distance);
+	Unit ignoreCity = city.PopCount() > 0 ? Unit() : city;
 
-	// Mark tiles further away as having only half the usual value
-	/// \todo Optimise using CircleIterator, to skip computing values for the already invalidated tiles.
-	RadiusIterator settleIt(cityPos, min_settle_distance);
+	// Recalculate the settle values around the city
+	SquareIterator settleIt(cityPos, radius);
 	for(settleIt.Start(); !settleIt.End(); settleIt.Next())
 	{
 		MapPoint        claimPos    = settleIt.Pos();
-		double const    new_value   = ComputeSettleValue(claimPos) * 0.5;
+		double const    new_value   = ComputeSettleValue(claimPos, ignoreCity);
 		m_settleValues.SetGridValue(claimPos, new_value);
 	}
 
@@ -218,8 +234,12 @@ bool SettleMap::HasSettleTargets(const PLAYER_INDEX &playerId, bool isWater) con
 	sint16 rows = rect.GetMaxRows();
 	sint16 cols = rect.GetMaxCols();
 
-	sint32 settle_threshold = 0;
-	(void) Diplomat::GetDiplomat(playerId).GetCurrentStrategy().GetMinSettleScore(settle_threshold);
+	sint32 settle_threshold         = 0;
+	sint32 min_settle_distance      = 0;
+	const StrategyRecord & strategy = Diplomat::GetDiplomat(playerId).GetCurrentStrategy();
+
+	(void)strategy.GetMinSettleScore   (settle_threshold);
+	(void)strategy.GetMinSettleDistance(min_settle_distance);
 
 	for(sint32 i = 0; rect.Get(i, xy_pos, rows, cols); i++)
 	{
@@ -237,8 +257,9 @@ bool SettleMap::HasSettleTargets(const PLAYER_INDEX &playerId, bool isWater) con
 			continue;
 		}
 
-		if(g_theWorld->IsWater(rc_pos) == isWater)
-		{
+		if(g_theWorld->IsWater(rc_pos) == isWater
+		&& !this->HasCityInSettleDistance(rc_pos, min_settle_distance)
+		){
 			return true;
 		}
 	}
@@ -354,7 +375,7 @@ void SettleMap::GetSettleTargets(const PLAYER_INDEX &playerId,
 		if(!settleTerrainTypes[g_theWorld->GetTerrainType(rc_pos)])
 			continue;
 
-		if(!noSettleUnits) // Should be superflous
+		if(!noSettleUnits) // The condition should be superflous
 		{
 			targets.push_back(settle_target);
 		}
@@ -385,7 +406,6 @@ void SettleMap::GetSettleTargets(const PLAYER_INDEX &playerId,
 	SettleMap::SettleTargetList::iterator tmp_iter;
 
 	settle_target = *iter;  // non-emptyness verified before
-	++iter;
 
 	while(iter != targets.end())
 	{
@@ -406,6 +426,12 @@ void SettleMap::GetSettleTargets(const PLAYER_INDEX &playerId,
 		}
 		else
 		{
+			if(HasCityInSettleDistance(iter->m_pos, min_settle_distance))
+			{
+				iter = targets.erase(iter);
+				continue;
+			}
+
 			for(tmp_iter = targets.begin(); tmp_iter != iter; ++tmp_iter)
 			{
 				if(MapPoint::GetSquaredDistance(iter->m_pos, tmp_iter->m_pos) <
@@ -448,6 +474,25 @@ void SettleMap::GetSettleTargets(const PLAYER_INDEX &playerId,
 	targets.sort(std::greater<SettleTarget>());
 }
 
+bool SettleMap::HasCityInSettleDistance(const MapPoint & pos, sint32 min_settle_distance) const
+{
+	RadiusIterator it(pos, min_settle_distance);
+
+	bool hasCityNearBy = false;
+
+	for(it.Start(); !it.End(); it.Next())
+	{
+		const Cell * cell = g_theWorld->GetCell(it.Pos());
+	//	if(g_player[playerId]->IsExplored(it.Pos()) && cell->HasCity()) // Logically correct, but not so nice
+		if(cell->HasCity())
+		{
+			return true;
+		}
+	}
+
+	return false;
+}
+
 void SettleMap::CanUnitRecordSettle(const UnitRecord* rec, bool* settleTerrainTypes, bool &noSettleUnits) const
 {
 	Assert(rec);
@@ -480,12 +525,7 @@ void SettleMap::CanUnitRecordSettle(const UnitRecord* rec, bool* settleTerrainTy
 
 bool SettleMap::CanSettlePos(const MapPoint & rc_pos) const
 {
-	return !m_invalidCells.Get(rc_pos.x, rc_pos.y);
-}
-
-void SettleMap::SetCanSettlePos(const MapPoint & rc_pos, const bool can_settle)
-{
-	m_invalidCells.Set(rc_pos.x, rc_pos.y, !can_settle);
+	return m_settleValues.GetGridValue(rc_pos) > 0.0;
 }
 
 double SettleMap::GetValue(const MapPoint &rc_pos) const

@@ -417,8 +417,8 @@ void Governor::SetPlayerId(const PLAYER_INDEX &playerId)
 }
 
 void Governor::Resize( const sint16 & xSize,
-					   const sint16 & ySize,
-					   const sint16 & resolution )
+                       const sint16 & ySize,
+                       const sint16 & resolution )
 {
 }
 

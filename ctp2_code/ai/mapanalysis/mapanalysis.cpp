@@ -795,7 +795,7 @@ void MapAnalysis::UpdateBoundingRectangle(const Unit & city)
     }
 
     sint32 city_size = city->GetCityData()->GetSizeIndex();
-    if (city_size >= g_theCitySizeDB->NumRecords())
+    if (city_size >= g_theCitySizeDB->NumRecords()) // I can arrange the sizes as I want in that file, but it seems to be about just to have one size
 	{
 		city_size = g_theCitySizeDB->NumRecords() - 1;
 	}
