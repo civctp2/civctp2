@@ -1,10 +1,106 @@
 #
 # $Id: $
 #
+# Makefile for third party code used by tca
 
-SUBDIRS = \
-	src \
-	demo
+noinst_DATA = src/3rdparty/d3des src/3rdparty/md5
+
+src/3rdparty/d3des/d3des.h: src/3rdparty/d3des.zip
+	$(UNZIP) -o -a src/3rdparty/d3des.zip -d src/3rdparty
+	patch -p0 -d src/3rdparty < src/3rdparty/d3des.const.patch
+	touch $@
+
+src/3rdparty/md5/md5.h: src/3rdparty/md5.zip
+	$(UNZIP) -o -a src/3rdparty/md5.zip -d src/3rdparty
+	touch $@
+
+BUILT_SOURCES = src/3rdparty/d3des/d3des.h src/3rdparty/md5/md5.h
+
+AM_CFLAGS = \
+	-DUNIX \
+	-Dcdecl="" \
+	"-D__NO_ANONYMOUS_UNIONS__" \
+	"-DPACK=__attribute__ ((packed))" \
+	-Dstrnicmp=strncasecmp \
+	-Dstricmp=strcasecmp \
+	-Ddp_ANET2 \
+	-DCOMM_INST
+AM_CPPFLAGS = \
+	-Ih \
+	-Isrc \
+	-Isrc/aeh \
+	-Isrc/linux/dp \
+	-Idemo/gtest \
+	-Idemo/utils \
+	-Isrc/3rdparty/d3des \
+	-Isrc/3rdparty/md5
+
+#
+# Normal:    libdp2.la
+# Debug:     libdp2d.la
+# Profiling: libdp2p.la
+# Logging:   libdp2l.la
+#
+
+libdp2_la_SOURCES = \
+	src/linux/uudp/uudps.c src/dp/dictset.c demo/utils/logpkt.c \
+	src/dp/dp2.c src/linux/dp/dpmem.c src/linux/dp/dpdll.c src/dp/dynatab.c src/dp/assoctab.c \
+	src/dp/dprint.c src/dp/q.c src/dp/ini.c src/dp/dpuser.c \
+	src/dp/dpio.c src/dp/hkeytab.c src/dp/dptab.c \
+	demo/utils/dpcrc32.c src/dp/delay.c src/dp/enumsrv2.c \
+	src/linux/dp/enumapp.c src/linux/dp/launchap.c src/dp/dpexcept.c src/aeh/aeh.c src/aeh/aehmap.c \
+	src/aeh/aehlog.c src/dp/dpprivy.c \
+	src/dp/dpscore.c src/dp/deltas.c src/tca/tserv.c src/tca/tserva.c \
+	src/tca/tca.c src/tca/tcapw.c src/tca/crypttab.c \
+	src/score/scorerep.c demo/utils/mywcs.c src/3rdparty/md5/md5c.c \
+	src/3rdparty/d3des/d3des.c src/dp/dpshutdn.c src/dp/launchparams.c
+libdp2_la_CFLAGS = $(AM_CPPFLAGS) $(AM_CFLAGS) $(ANET_CFLAGS_NORMAL)
+
+gtest_SOURCES = demo/gtest/gtest.c demo/utils/raw.c demo/utils/avgstat.c
+gtest_CFLAGS = $(AM_CPPFLAGS) $(AM_CFLAGS) $(ANET_CFLAGS_NORMAL)
+gtest_LDADD = libdp2.la
+
+if ANET_BUILD_DEBUG
+DEBUG_LIB = libdp2d.la
+DEBUG_GTEST = gtestd
+libdp2d_la_SOURCES = $(libdp2_la_SOURCES)
+libdp2d_la_CFLAGS = $(AM_CPPFLAGS) $(AM_CFLAGS) $(ANET_CFLAGS_DEBUG)
+gtestd_SOURCES = $(gtest_SOURCES)
+gtestd_CFLAGS = $(AM_CPPFLAGS) $(AM_CFLAGS) $(ANET_CFLAGS_DEBUG)
+gtestd_LDADD = libdp2d.la
+endif
+
+if ANET_BUILD_PROFILING
+PROFILING_LIB = libdp2p.la
+PROFILING_GTEST = gtestp
+libdp2p_la_SOURCES = $(libdp2_la_SOURCES)
+libdp2p_la_CFLAGS = $(AM_CPPFLAGS) $(AM_CFLAGS) $(ANET_CFLAGS_PROFILE)
+gtestp_SOURCES = $(gtest_SOURCES)
+gtestp_CFLAGS = $(AM_CPPFLAGS) $(AM_CFLAGS) $(ANET_CFLAGS_PROFILING)
+gtestp_LDADD = libdp2p.la
+endif
+
+if ANET_BUILD_LOG
+LOG_LIB = libdp2l.la
+LOG_GTEST = gtestl
+libdp2l_la_SOURCES = $(libdp2_la_SOURCES)
+libdp2l_la_CFLAGS = $(AM_CPPFLAGS) $(AM_CFLAGS) $(ANET_CFLAGS_LOG)
+gtestl_SOURCES = $(gtest_SOURCES)
+gtestl_CFLAGS = $(AM_CPPFLAGS) $(AM_CFLAGS) $(ANET_CFLAGS_LOG)
+gtestl_LDADD = libdp2l.la
+endif
+
+lib_LTLIBRARIES = \
+	libdp2.la \
+	$(DEBUG_LIB) \
+	$(PROFILING_LIB) \
+	$(LOG_LIB)
+
+noinst_PROGRAMS = \
+	gtest \
+	$(DEBUG_GTEST) \
+	$(PROFILING_GTEST) \
+	$(LOG_GTEST)
 
 bootstrap: Makefile
 	$(MAKE) -f Makefile $@

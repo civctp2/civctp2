@@ -15,23 +15,23 @@ AC_DEFUN([AC_LIBANET_INTERNAL],[
 dnl      Anonymous unions must be disabled via AM_CPPFLAGS
 dnl         AC_DEFINE(__NO_ANONYMOUS_UNIONS__,1,[Define to 1 if anonymous unions should be disabled])
 
-	 AC_MSG_CHECKING([for location of libbsd.a])
-         for libdir in $LD_LIBRARY_PATH /lib /usr/lib /usr/local/lib /mnt/utmp/codeblocks/usr/lib ; do
-            if test -f $libdir/libbsd.a; then
-               LIBBSD_COMPAT=$libdir/libbsd.a
-               break
-            fi
-            if test -f $libdir/libbsd-compat.a; then
-               LIBBSD_COMPAT=$libdir/libbsd-compat.a
-               break
-            fi
-         done
-         if test -n "$LIBBSD_COMPAT"; then
-            AC_MSG_RESULT([$LIBBSD_COMPAT])
-         else
-            AC_MSG_RESULT([not found])
-         fi
-	 
+dnl	 AC_MSG_CHECKING([for location of libbsd.a])
+dnl         for libdir in $LD_LIBRARY_PATH /lib /usr/lib /usr/local/lib ; do
+dnl            if test -f $libdir/libbsd.a; then
+dnl               LIBBSD_COMPAT=$libdir/libbsd.a
+dnl               break
+dnl            fi
+dnl            if test -f $libdir/libbsd-compat.a; then
+dnl               LIBBSD_COMPAT=$libdir/libbsd-compat.a
+dnl               break
+dnl            fi
+dnl         done
+dnl         if test -n "$LIBBSD_COMPAT"; then
+dnl            AC_MSG_RESULT([$LIBBSD_COMPAT])
+dnl         else
+dnl            AC_MSG_ERROR([not found])
+dnl         fi
+
          ac_OpSystem="LINUX"
 	 ac_OpClass="UNIX"
    esac
