@@ -3418,10 +3418,8 @@ void TiledMap::ScrollPixels(sint32 deltaX, sint32 deltaY, aui_Surface *surf)
 			srcPtr =	(uint32 *)(buffer + (w - dx) * 2 - 4);
 			destPtr =	(uint32 *)(buffer + w * 2 - 4);
 
-#ifdef WIN32
-			_ASSERTE((unsigned)srcPtr >=(unsigned)buffer);
-			_ASSERTE((unsigned)destPtr>=(unsigned)buffer);
-#endif
+			Assert((unsigned)srcPtr >=(unsigned)buffer);
+			Assert((unsigned)destPtr>=(unsigned)buffer);
 
 			slop = (pitch>>2) + copyWidth;
 

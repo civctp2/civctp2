@@ -16,13 +16,6 @@
 #include "mapanalysis.h"
 #include "player.h"
 
-
-
-
-
-
-
-
 STDEHANDLER(NoThreat_RejectResponseEvent)
 {
 	PLAYER_INDEX sender;
