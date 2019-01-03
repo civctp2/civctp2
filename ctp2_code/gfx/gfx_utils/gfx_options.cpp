@@ -76,7 +76,7 @@ GraphicsOptions::GraphicsOptions()
 
 GraphicsOptions::~GraphicsOptions()
 {
-    delete m_cellAVL;
+	delete m_cellAVL;
 }
 
 void GraphicsOptions::Initialize(void)

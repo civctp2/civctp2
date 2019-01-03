@@ -27,6 +27,9 @@
 // - The army text now appears in the debug log. (13-Aug-2008 Martin Gühmann)
 // - Added a debug player for the debug cell text, so that we can select whose
 //   stuff is shown. (30-Dec-2018 Martin Gühmann)
+// - Added constructors and a destructor for CellText, to fix memory leaks.
+//   This should improve the handling, but it is still leaky, but obviously
+//   only with cell text on. (03-Jan-2019 Martin Gühmann)
 //
 //----------------------------------------------------------------------------
 
@@ -49,8 +52,16 @@ class CellText
 {
 public:
 	uint32        m_key;
-	uint8	      m_color;
+	uint8         m_color;
 	MBCHAR *      m_text;
+
+	CellText() : m_key(0), m_color(0), m_text(NULL) {};
+	CellText(const CellText &copyMe) : m_key(copyMe.m_key), m_color(copyMe.m_color), m_text(NULL)
+	{
+		m_text = new MBCHAR[strlen(copyMe.m_text) + 1];
+		strcpy(m_text, copyMe.m_text);
+	}
+	~CellText() { delete[] m_text; }
 };
 
 class GraphicsOptions
