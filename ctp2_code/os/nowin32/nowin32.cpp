@@ -19,73 +19,68 @@
 #include <gtk/gtk.h>
 #endif
 
+// @ToDo: _fullpath is the version of ptitSeb's branch, check whether there
+// is anything usefull from RolandTaverner's branch
 char* _fullpath(char* absolute, const char* relative, size_t bufsize)
 {
-	static char ret[MAX_PATH] = { 0 };
+	static char ret[MAX_PATH] = {0};
 	char *dest = (absolute == NULL) ? ret : absolute;
 	size_t size = (absolute == NULL) ? MAX_PATH : bufsize;
 
-	if (!relative) {
+	if(!relative)
+	{
 		getcwd(dest, size - 1);
 		dest[size - 1] = '\0';
-	} else if (relative[0] == FILE_SEPC) {
+	}
+	else if(relative[0] == FILE_SEPC)
+	{
 		strncpy(dest, CI_FixName(relative), size - 1);
 		dest[size - 1] = '\0';
-	} else {
+	}
+	else
+	{
 #ifdef __USE_GNU
 		char *abs = canonicalize_file_name(CI_FixName(relative));
-		if (abs) {
+		if(abs)
+		{
 			strncpy(dest, abs, size - 1);
 			dest[size - 1] = '\0';
 			free(abs);
-		} else {
+		}
+		else
+		{
 			return NULL;
 		}
 #elif defined(BSD) || defined(__USE_BSD)
-		char rlpath[PATH_MAX] = { 0 };
+		char rlpath[PATH_MAX] = {0};
 		char *abs = realpath(CI_FixName(relative), rlpath);
-		if (abs) {
-			if (!absolute) {
+		if(abs)
+		{
+			if(!absolute)
+			{
 				return strdup(rlpath);
-			} else {
+			}
+			else
+			{
 				strncpy(dest, rlpath, size - 1);
 				dest[size - 1] = '\0';
 				return dest;
 			}
-		if(i > 0 && hasPoint) {
-			const char * path = strndup(relative, i);
-			const char * filename = strdup(relative + i + 1);
-
-			DIR * dir = opendir(path);
-			if (dir) {
-				struct dirent * entry;
-				while ((entry = readdir(dir))) {
-					if (!strcasecmp(filename, entry->d_name)) {
-						size_t plen = strlen(path);
-						size_t nlen = strlen(entry->d_name);
-						char target[plen + nlen + 2];
-						strncpy(target, path, plen);
-						target[plen] = FILE_SEPC;
-						strncpy(target + plen + 1, entry->d_name, nlen + 1);
-						ret = realpath(target, NULL);
-						break;
-					}
-				}
-				closedir(dir);
-			}
 		}
-	}
-
-	if(ret) {
-		strncpy(absolute, ret, bufsize);
-		absolute[bufsize - 1] = '\0';
-		free(ret);
-		return absolute;
-		} else {
-		absolute[0] = 0;
+		else
+		{
 			return NULL;
 		}
+#else
+#error "_fullpath() not implemented for this platform."
+#endif
 	}
+
+	if(absolute)
+		return dest;
+	else
+		return strdup(dest);
+}
 
 void _splitpath(const char*,char*,char*,char*,char*)
 {
@@ -106,20 +101,30 @@ sint32 MessageBox(HWND parent, const CHAR* msg, const CHAR* title, sint32 flags)
 	fprintf(stderr, "Messagebox(%s): %s\n", (title ? title : "null"), (msg ? msg : "null"));
 #ifdef USE_GTK
 	GtkWidget *dialog;
-	dialog = gtk_message_dialog_new(NULL,
+	dialog = gtk_message_dialog_new(
+		NULL,
 		GTK_DIALOG_DESTROY_WITH_PARENT,
 		GTK_MESSAGE_ERROR,
-			(flags & MB_YESNO) == MB_YESNO ? GTK_BUTTONS_YES_NO : GTK_BUTTONS_OK,
-			"%s\n\n%s", title, msg);
-	gint result = gtk_dialog_run(GTK_DIALOG(dialog));
-	gtk_widget_destroy(dialog);
-	switch (result)
+		GTK_BUTTONS_NONE,
+		"%s\n\n%s",
+		title,
+		msg
+	);
+	if((flags & MB_YESNO) == MB_YESNO)
 	{
-		case GTK_RESPONSE_YES:
-			return MB_OK;
-		default:
-			return IDNO;
+		gtk_dialog_add_buttons(GTK_DIALOG(dialog),
+							   GTK_STOCK_YES,
+							   GTK_STOCK_NO,
+							   NULL);
 	}
+	else
+	{
+		gtk_dialog_add_buttons(GTK_DIALOG(dialog),
+							   GTK_STOCK_OK,
+							   NULL);
+	}
+	gtk_dialog_run(GTK_DIALOG(dialog));
+	gtk_widget_destroy(dialog);
 #endif
 	return 0;
 }
@@ -216,7 +221,8 @@ uint8 GetBValue(COLORREF c)
 }
 void InflateRect(RECT *pr, int x, int y)
 {
-	if (!pr) {
+	if (!pr)
+	{
 		return;
 	}
 
@@ -240,7 +246,7 @@ void OffsetRect(RECT *pr, int x, int y)
 BOOL PtInRect(RECT* pr, struct POINT m)
 {
 	if (!pr) {
-		return false;
+		return FALSE;
 	}
 
 	return pr->left <= m.x && m.x < pr->right && pr->top <= m.y && m.y < pr->bottom;
@@ -268,13 +274,41 @@ int strnicmp(const char *str1, const char *str2, size_t n)
 
 int _stricoll(const char *str1, const char *str2)
 {
-	Assert(str1);
-	Assert(str2);
-	if(str1 == str2) {
-		return 0;
+	char *sl1 = NULL;
+	char *sl2 = NULL;
+
+	if(str1)
+	{
+		size_t s1 = strxfrm(sl1, str1, 0);
+		s1++;
+		sl1 = (char *)malloc(s1);
+		if(!sl1)
+			return -1;
+		strxfrm(sl1, str1, --s1);
+		sl1[s1] = '\0';
+	}
+	if(str2)
+	{
+		size_t s2 = strxfrm(sl2, str2, 0);
+		s2++;
+		sl2 = (char *)malloc(s2);
+		if(!sl2)
+		{
+			if(sl1)
+				free(sl1);
+			return 1;
+		}
+		strxfrm(sl2, str2, --s2);
+		sl2[s2] = '\0';
 	}
 
-	return strcasecmp(str1, str2);
-}
+	int ret = strcasecmp(sl1, sl2);
 
+	if(sl1)
+		free(sl1);
+	if(sl2)
+		free(sl2);
+
+	return ret;
+}
 #endif // !WIN32

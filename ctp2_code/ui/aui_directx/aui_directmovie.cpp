@@ -33,10 +33,6 @@
 #include "CivPaths.h"			// g_civPaths
 #include "soundmanager.h"		// g_soundManager
 
-const LONGLONG MILLISECONDS = (1000);            // 10 ^ 3
-const LONGLONG NANOSECONDS = (1000000000);       // 10 ^ 9
-const LONGLONG UNITS = (NANOSECONDS / 100);      // 10 ^ 7
-
 extern C3UI		*g_c3ui;
 
 aui_DirectMovie::aui_DirectMovie(

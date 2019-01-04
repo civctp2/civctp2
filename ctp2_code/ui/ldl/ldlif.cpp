@@ -12,6 +12,7 @@
 #include "ldl_data.hpp"
 #include "ldl_attr.hpp"
 #include "c3errors.h"
+#include <inttypes.h>
 
 class LDLString {
 	char *m_name;

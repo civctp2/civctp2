@@ -68,6 +68,8 @@
 #include "c3.h"
 #include "tiledmap.h"               // tiledraw.h does not exist
 
+#include <inttypes.h>
+
 #include "aui.h"
 #include "aui_sdlsurface.h"
 #include "aui_bitmapfont.h"

@@ -4,7 +4,7 @@
 #ifndef PIXEL_TYPES_H__
 #define PIXEL_TYPES_H__
 
-//#include <stdint.h> // Not needed?
+#include <stdint.h>
 typedef uint32_t Pixel32;
 typedef uint16_t Pixel16;
 typedef uint8_t  Pixel8;
