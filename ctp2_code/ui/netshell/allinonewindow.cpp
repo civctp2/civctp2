@@ -28,20 +28,23 @@
 // Modifications from the original Activision code:
 //
 // - Memory leak repaired.
-// - Replaced old civilisation database by new one. (Aug 21st 2005 Martin G�hmann)
+// - Replaced old civilisation database by new one. (Aug 21st 2005 Martin G?hmann)
 // - The ages in the summary are now displayed correctly.
-// - Initialized local variables. (Sep 9th 2005 Martin G�hmann)
-// - Standardized code. (May 29th 2006 Martin G�hmann)
-// - Replaced old civ selection button bank by list box. (2-Jan-2008 Martin G�hmann)
+// - Initialized local variables. (Sep 9th 2005 Martin G?hmann)
+// - Standardized code. (May 29th 2006 Martin G?hmann)
+// - Replaced old civ selection button bank by list box. (2-Jan-2008 Martin G?hmann)
 //
 //----------------------------------------------------------------------------
 
 #include "c3.h"
 #include "allinonewindow.h"
 
+#include <algorithm>
+#include <chrono>
+#include <thread>
+
 #include "AgeRecord.h"
 #include "agesscreen.h"
-#include <algorithm>
 #include "aui_blitter.h"
 #include "aui_ldl.h"
 #include "aui_radio.h"
@@ -4083,12 +4086,7 @@ void AllinoneWindow::CancelButtonAction::Execute(
 			g_gamesetup.SetClosed( FALSE );
 			g_gamesetup.SetSize( k_NS_MAX_HUMANS );
 
-			/// @todo Use Os::Sleep
-#ifdef WIN32
-			Sleep( k_PACKET_DELAY );
-#else
-			usleep( k_PACKET_DELAY * 1000 );
-#endif
+			std::this_thread::sleep_for(std::chrono::milliseconds(k_PACKET_DELAY));
 			w->UpdateGameSetup();
 		}
 		g_netfunc->Leave();

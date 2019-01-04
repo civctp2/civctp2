@@ -29,7 +29,6 @@
 //----------------------------------------------------------------------------
 
 #include "c3.h"
-#include "c3math.h"
 #include "installation.h"
 #include "ID.h"
 #include "civarchive.h"
@@ -42,7 +41,6 @@
 #include "XY_Coordinates.h"
 #include "World.h"
 #include "player.h"
-#include "c3math.h"
 #include "Cell.h"
 #include "TurnCnt.h"
 #include "SelItem.h"
@@ -285,15 +283,15 @@ sint32 InstallationData::GetDistance(InstallationData* inst1,
 	sint32 dx, dy;
 	dx = inst1->m_point.x - inst2->m_point.x;
 	dy = inst1->m_point.y - inst2->m_point.y;
-	dx = ABS(dx);
-	dy = ABS(dy);
+	dx = abs(dx);
+	dy = abs(dy);
 	if(dx > wrapRange) {
 		if(inst1->m_point.x > inst2->m_point.x) {
 			dx = (inst1->m_point.x - g_theWorld->GetXWidth()) - inst2->m_point.x;
 		} else {
 			dx = inst1->m_point.x - (inst2->m_point.x - g_theWorld->GetXWidth());
 		}
-		dx = ABS(dx);
+		dx = abs(dx);
 	}
 	dy -= dx;
 

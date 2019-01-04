@@ -3,7 +3,7 @@
 
 #if defined(__AUI_USE_SDL__)
 
-#include <SDL.h>
+#include <SDL/SDL.h>
 #include "aui_sdlkeyboard.h"
 #include "aui_ui.h"
 #include "c3ui.h"

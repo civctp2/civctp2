@@ -74,7 +74,6 @@
 #include "CTPDatabase.h"
 #include "GoalRecord.h"
 #include "ctpaidebug.h"
-#include "c3math.h"
 #include "AgreementMatrix.h"
 #include "gfx_options.h"
 #include "Army.h"
@@ -135,7 +134,7 @@ void Scheduler::ResizeAll(const PLAYER_INDEX & newMaxPlayerId)
 	}
 }
 
-#if 0
+/*
 // no longer used "Reason: should be able to regenerate state from game objects."
 void Scheduler::LoadAll(CivArchive & archive)
 {
@@ -154,7 +153,7 @@ void Scheduler::SaveAll(CivArchive & archive)
 		s_theSchedulers[i].Save(archive);
 	}
 }
-#endif
+*/
 
 //////////////////////////////
 //

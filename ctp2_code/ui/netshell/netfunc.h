@@ -15,8 +15,8 @@
 #include <list>
 
 #ifdef USE_SDL
-#include <SDL.h>
-#include <SDL_thread.h>
+#include <SDL/SDL.h>
+#include <SDL/SDL_thread.h>
 #endif
 
 #if defined(WIN32)

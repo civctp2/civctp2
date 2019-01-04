@@ -25,7 +25,7 @@
 //
 // - Option added to close a message box automatically on eyepoint clicking.
 // - Messages are closed if an open command is executed and there is already
-//   an open messages, enables left click close. (Oct 16th 2005 Martin G�hmann)
+//   an open messages, enables left click close. (Oct 16th 2005 Martin G?hmann)
 //
 //----------------------------------------------------------------------------
 

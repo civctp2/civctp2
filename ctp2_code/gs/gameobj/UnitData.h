@@ -238,7 +238,7 @@ private:
 
 public:
 
-#if _DEBUG
+#ifdef _DEBUG
 	char m_text[80];
 #endif
 

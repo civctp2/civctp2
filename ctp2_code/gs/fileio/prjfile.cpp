@@ -32,11 +32,11 @@
 #endif
 struct ZFS_RENTRY {
     char      rname[MAX_RECORDNAME_LENGTH];
-    int32_t   offset;
-    int32_t   rnum;
-    int32_t   size;
-    int32_t   time;
-    int32_t   flags;
+    uint32_t  offset;
+    uint32_t  rnum;
+    uint32_t  size;
+    uint32_t  time;
+    uint32_t  flags;
 };
 
 struct ZFS_DTABLE {

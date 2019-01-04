@@ -11,7 +11,6 @@
 
 #include "aui_surface.h"
 #include "aui_sdl.h"
-#include <SDL.h>
 
 class aui_SDLSurface : public aui_Surface, public aui_SDL {
 public:

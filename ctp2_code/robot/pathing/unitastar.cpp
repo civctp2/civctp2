@@ -44,8 +44,6 @@
 #include "c3.h"
 #include "UnitAstar.h"
 
-#include "c3math.h"
-#include "c3errors.h"
 #include "Globals.h"
 
 #include "dynarr.h"
@@ -138,8 +136,8 @@ bool UnitAstar::StraightLine
 		(EAST == dirX) ? ((SOUTH == dirY) ? SOUTHEAST : NORTHEAST)
 					   : ((SOUTH == dirY) ? SOUTHWEST : NORTHWEST);
 
-	sint32					absdx		= ABS(diff.x);
-	sint32					absdy		= ABS(diff.y);
+	sint32					absdx		= abs(diff.x);
+	sint32					absdy		= abs(diff.y);
 
 	// Start with diagonal moves to make the path straight.
 	for ( ;	(absdx > 0) && (absdy > 0); --absdx, --absdy)
