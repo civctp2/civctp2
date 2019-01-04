@@ -181,7 +181,7 @@ public:
 
 	Goal_ptr GetHighestPriorityGoal(const GOAL_TYPE & type, const bool satisfied) const;
 
-	sint16 CountGoalsOfType(const GOAL_TYPE & type) const;
+	size_t CountGoalsOfType(const GOAL_TYPE & type) const;
 
 	void DisbandObsoleteArmies(const sint16 max_count);
 

@@ -1152,7 +1152,7 @@ Goal_ptr Scheduler::GetHighestPriorityGoal(const GOAL_TYPE & type, const bool sa
 // Used in ctpai when adding Explore, Settle, and MiscMap targets for goals
 //
 ///////////////////////////////////////////////////////////////////////////
-sint16 Scheduler::CountGoalsOfType(const GOAL_TYPE & type) const
+size_t Scheduler::CountGoalsOfType(const GOAL_TYPE & type) const
 {
 	return IsValid(type, m_goals_of_type)
 	       ? m_goals_of_type[type].size()
@@ -1993,8 +1993,8 @@ void Scheduler::Assign_Garrison()
 		  )
 		{
 
-			sint8 defense_count;
-			sint8 tmp_count;
+			uint8 defense_count;
+			uint8 tmp_count;
 			float tmp;
 			float defense_strength;
 			army->ComputeStrength(tmp,
@@ -2009,7 +2009,7 @@ void Scheduler::Assign_Garrison()
 			                      false
 			                     );
 
-			defense_strength += city.GetDefendersBonus() * static_cast<double>(defense_count);
+			defense_strength += static_cast<float>(city.GetDefendersBonus() * static_cast<double>(defense_count));
 
 			sint32 idx = -1;
 			if(g_player[m_playerId]->GetCityIndex(city, idx))

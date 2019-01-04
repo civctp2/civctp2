@@ -295,7 +295,7 @@ double Happy::CalcDistanceFromCapitol(CityData & cd, Player * p)
 		}
 
 		m_dist_to_capitol =
-		    std::max<float>(0.0,
+		    std::max<double>(0.0,
 		             cost - g_theGovernmentDB->Get(p->GetGovernmentType())->
 		                        GetMinEmpireDistance()
 		            );

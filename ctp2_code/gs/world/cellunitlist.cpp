@@ -979,8 +979,8 @@ void CellUnitList::UpdateMoveIntersection()
 void CellUnitList::ComputeStrength(float & attack,
                                    float & defense,
                                    float & ranged,
-                                   sint8 & defend_unit_count,
-                                   sint8 & ranged_unit_count,
+                                   uint8 & defend_unit_count,
+                                   uint8 & ranged_unit_count,
                                    float & land_bombard,
                                    float & water_bombard,
                                    float & air_bombard,
@@ -1120,7 +1120,7 @@ void CellUnitList::ComputeStrength(float & attack,
 
 //----------------------------------------------------------------------------
 //
-// Name       : CellUnitList::ComputeStrength
+// Name       : CellUnitList::ComputeCargoStrength
 //
 // Description: Get data for army and fill in given parameters.
 //
@@ -1144,8 +1144,8 @@ void CellUnitList::ComputeStrength(float & attack,
 void CellUnitList::ComputeCargoStrength(float & attack,
                                         float & defense,
                                         float & ranged,
-                                        sint8 & defend_unit_count,
-                                        sint8 & ranged_unit_count,
+                                        uint8 & defend_unit_count,
+                                        uint8 & ranged_unit_count,
                                         float & land_bombard,
                                         float & water_bombard,
                                         float & air_bombard,

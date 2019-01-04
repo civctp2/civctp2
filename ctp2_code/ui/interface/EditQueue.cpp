@@ -2233,7 +2233,7 @@ void EditQueue::Save(const MBCHAR *saveFileName)
 					c3files_fprintf(saveFile, "W %s\n", g_theWonderDB->Get(walk.GetObj()->m_type)->GetIDText());
 					break;
 				case k_GAME_OBJ_TYPE_INFRASTRUCTURE:
-					c3files_fprintf(saveFile, "INF\n");
+					c3files_fprintfsaveFile, "INF\n");
 					break;
 				case k_GAME_OBJ_TYPE_CAPITALIZATION:
 					c3files_fprintf(saveFile, "CAP\n");

@@ -83,7 +83,7 @@ sint32 tradeutil_GetAccurateTradeDistance(Unit &source, Unit &destination)
             (source.GetOwner(), source.RetPos(), destination.RetPos(), path, cost, FALSE)
        )
     {
-        return static_cast<sint32>(std::max<float>(tradeutil_GetNetTradeCosts(cost), 1.0));
+        return static_cast<sint32>(std::max<double>(tradeutil_GetNetTradeCosts(cost), 1.0));
     }
 
 	return DISTANCE_UNKNOWN;
@@ -95,7 +95,7 @@ sint32 tradeutil_GetTradeDistance(Unit &source, Unit &destination)
 	              static_cast<double>
 	                (source.RetPos().NormalizedDistance(destination.RetPos()));
 
-	return static_cast<sint32>(std::max<float>(tradeutil_GetNetTradeCosts(cost), 1.0));
+	return static_cast<sint32>(std::max<double>(tradeutil_GetNetTradeCosts(cost), 1.0));
 }
 
 // Maybe move the following to worldutils

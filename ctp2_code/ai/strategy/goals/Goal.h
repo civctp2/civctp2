@@ -101,7 +101,7 @@ public:
 
     bool Is_Goal_Undercommitted() const { return (!Is_Satisfied() && m_agents.size() > 0); };
 
-    sint16 Get_Agent_Count() const { return m_agents.size(); };
+    size_t Get_Agent_Count() const { return m_agents.size(); };
 
     bool Is_Single_Agent() const { return m_agents.size() == 1; };
 

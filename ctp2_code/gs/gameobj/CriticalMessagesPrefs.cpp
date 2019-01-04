@@ -171,7 +171,7 @@ void CriticalMessagesPrefs::Save()
 		curDataPtr=m_messagesList->GetHeadNode();
 		while(curDataPtr)
 		{
-			fprintf(filePtr,"%s:%i\n",curDataPtr->GetObj()->m_messageName,
+			fprintf_s(filePtr,"%s:%i\n",curDataPtr->GetObj()->m_messageName,
 				curDataPtr->GetObj()->m_messageEnabled);
 			curDataPtr = curDataPtr->GetNext();
 		}

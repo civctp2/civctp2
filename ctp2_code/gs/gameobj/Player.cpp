@@ -5170,9 +5170,9 @@ void Player::AddMessage(Message &msg)
 			if(mfile) {
 				if(msg.AccessData()->GetSlicSegment() &&
 				   msg.AccessData()->GetSlicSegment()->GetName()) {
-					fprintf(mfile, "%s\n", msg.AccessData()->GetSlicSegment()->GetName());
+					fprintf_s(mfile, "%s\n", msg.AccessData()->GetSlicSegment()->GetName());
 				} else {
-					fprintf(mfile, "bug\n");
+					fprintf_s(mfile, "bug\n");
 				}
 				fclose(mfile);
 			}

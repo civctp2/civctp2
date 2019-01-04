@@ -859,21 +859,21 @@ void tileutils_DumpStencil(MBCHAR *filename)
 		else nudge = (i-24)*2;
 
 		for (j=0; j<nudge; j++)
-			fprintf(file," ");
+			fprintf_s(file," ");
 
 		for (j=0; j<32; j++) {
-			if (accum & 1) fprintf(file,"1");
-			else fprintf(file,"0");
+			if (accum & 1) fprintf_s(file,"1");
+			else fprintf_s(file,"0");
 			accum>>=1;
 		}
-		fprintf(file,"\n");
+		fprintf_s(file,"\n");
 	}
 
 	for (i=0; i<k_TILE_PIXEL_HEIGHT; i++) {
 		for (j=0; j<32; j++) {
-			fprintf(file, "\t%d", g_offsets[i*32+j]);
+			fprintf_s(file, "\t%d", g_offsets[i*32+j]);
 		}
-		fprintf(file, "\n");
+		fprintf_s(file, "\n");
 	}
 
 	fclose(file);
@@ -1168,64 +1168,64 @@ void tileutils_DumpAllTransitions(MBCHAR *filename, Pixel16 *t0, Pixel16 *t1, Pi
 	sint32		index;
 	FILE *      file = fopen(filename, "w");
 
-	fprintf(file, "\n Transition 0\n\n");
+	fprintf_s(file, "\n Transition 0\n\n");
 	for (i=0; i<48; i++) {
 		accum = g_bitsTable[i];
 
 		index = 0;
 		for (j=0; j<32; j++) {
 			if (accum & 1) {
-				fprintf(file, "\t%#.4x", t0[g_offsets[i*32+index]]);
+				fprintf_s(file, "\t%#.4x", t0[g_offsets[i*32+index]]);
 				index++;
 			}
 			accum>>=1;
 		}
-		fprintf(file,"\n");
+		fprintf_s(file,"\n");
 	}
 
-	fprintf(file, "\n Transition 1\n\n");
+	fprintf_s(file, "\n Transition 1\n\n");
 	for (i=0; i<48; i++) {
 		accum = g_bitsTable[47-i];
 
 		index = 0;
 		for (j=0; j<32; j++) {
 			if (accum & 1) {
-				fprintf(file, "\t%#.4x", t1[g_offsets[(47-i)*32+index]]);
+				fprintf_s(file, "\t%#.4x", t1[g_offsets[(47-i)*32+index]]);
 				index++;
 			}
 			accum>>=1;
 		}
-		fprintf(file,"\n");
+		fprintf_s(file,"\n");
 	}
 
-	fprintf(file, "\n Transition 2\n\n");
+	fprintf_s(file, "\n Transition 2\n\n");
 	for (i=0; i<48; i++) {
 		accum = g_bitsTable[47-i];
 
 		index = 0;
 		for (j=0; j<32; j++) {
 			if (accum & 1) {
-				fprintf(file, "\t%#.4x", t2[g_offsets[(47-i)*32+index]]);
+				fprintf_s(file, "\t%#.4x", t2[g_offsets[(47-i)*32+index]]);
 				index++;
 			}
 			accum>>=1;
 		}
-		fprintf(file,"\n");
+		fprintf_s(file,"\n");
 	}
 
-	fprintf(file, "\n Transition 3\n\n");
+	fprintf_s(file, "\n Transition 3\n\n");
 	for (i=0; i<48; i++) {
 		accum = g_bitsTable[i];
 
 		index = 0;
 		for (j=0; j<32; j++) {
 			if (accum & 1) {
-				fprintf(file, "\t%#.4x", t3[g_offsets[i*32+index]]);
+				fprintf_s(file, "\t%#.4x", t3[g_offsets[i*32+index]]);
 				index++;
 			}
 			accum>>=1;
 		}
-		fprintf(file,"\n");
+		fprintf_s(file,"\n");
 	}
 
 	fclose(file);

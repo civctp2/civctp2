@@ -3245,7 +3245,7 @@ sint32 Governor::ComputeMinimumWorkers(CityData *city,
 		popResources = city->GetSpecialistsResources(POP_LABORER);
 		if(popResources != 0 && part_size_pop > 0)
 		{
-			popProd = popResources * part_size_pop * city->GetBonusProdCoeff();
+			popProd = static_cast<sint32>(popResources * part_size_pop * city->GetBonusProdCoeff());
 			popProd = city->ComputeProductionLosses(popProd, crimeLoss, specialLoss);
 			popProd -= (crimeLoss + specialLoss);
 			if(part_radii_prod <= popProd)
@@ -3264,7 +3264,7 @@ sint32 Governor::ComputeMinimumWorkers(CityData *city,
 		popResources = city->GetSpecialistsResources(POP_MERCHANT);
 		if(popResources != 0 && part_size_pop > 0)
 		{
-			popGold = popResources * part_size_pop * city->GetBonusGoldCoeff();
+			popGold = static_cast<sint32>(popResources * part_size_pop * city->GetBonusGoldCoeff());
 			city->CalcGoldLoss(true, popGold, specialLoss, crimeLoss);
 
 			if(part_radii_gold <= popGold)
@@ -3283,7 +3283,7 @@ sint32 Governor::ComputeMinimumWorkers(CityData *city,
 		popResources = city->GetSpecialistsResources(POP_SCIENTIST);
 		if(popResources != 0 && part_size_pop > 0)
 		{
-			popScience = popResources * part_size_pop * city->GetBonusScieCoeff();
+			popScience = static_cast<sint32>(popResources * part_size_pop * city->GetBonusScieCoeff());
 			popScience -= city->CrimeLoss(popScience);
 
 			if(part_radii_science <= popScience)

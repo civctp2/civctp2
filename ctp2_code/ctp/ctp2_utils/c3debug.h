@@ -67,7 +67,7 @@
 #if defined(WIN32)
 #define Report(x)				{_RPT0(_CRT_WARN, x);}
 #else
-#define Report(x) { fprintf(stderr, "%s\n", x); }
+#define Report(x) { fprintf_s(stderr, "%s\n", x); }
 #endif
 
 typedef void (* CivExceptionFunction) (void);

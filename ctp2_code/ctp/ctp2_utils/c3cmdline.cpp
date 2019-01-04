@@ -5325,7 +5325,7 @@ void DumpCallStackCommand::Execute(sint32 argc, char **)
 
 	Assert(callstack_file);
 
-	fprintf(callstack_file, "The Stack\n\n%s\n\n___________\n",
+	fprintf_s(callstack_file, "The Stack\n\n%s\n\n___________\n",
 		c3debug_StackTrace());
 
 	fclose(callstack_file);
@@ -5854,7 +5854,7 @@ void FastRoundCommand::Execute(sint32 argc, char **argv)
 						~(SDL_EVENTMASK(SDL_MOUSEMOTION) | SDL_EVENTMASK(SDL_MOUSEBUTTONDOWN) |
 							SDL_EVENTMASK(SDL_MOUSEBUTTONUP)));
 				if (0 > n) {
-					fprintf(stderr, "[FastRoundCommand::Execute] PeepEvents failed: %s\n",
+					fprintf_s(stderr, "[FastRoundCommand::Execute] PeepEvents failed: %s\n",
 					    SDL_GetError());
 					break;
 				}

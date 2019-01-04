@@ -171,9 +171,9 @@ public:
 			if(mtfile) {
 				sint32 i;
 				for(i = 0; i < m_packetsize; i++) {
-					fprintf(mtfile, "%02lx ", buf[i]);
+					fprintf_s(mtfile, "%02lx ", buf[i]);
 				}
-				fprintf(mtfile, "\n");
+				fprintf_s(mtfile, "\n");
 				fclose(mtfile);
 			}
 #endif

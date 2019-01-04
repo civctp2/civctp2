@@ -873,19 +873,19 @@ void Sprite::Export(FILE *file)
 {
 	extern TokenData	g_allTokens[];
 
-	fprintf(file, "\t{\n");
+	fprintf_s(file, "\t{\n");
 
-	fprintf(file, "\t\t%s\t%d\n", g_allTokens[TOKEN_SPRITE_NUM_FRAMES].keyword, m_numFrames);
+	fprintf_s(file, "\t\t%s\t%d\n", g_allTokens[TOKEN_SPRITE_NUM_FRAMES].keyword, m_numFrames);
 
-	fprintf(file, "\t\t%s\t%d\n", g_allTokens[TOKEN_SPRITE_FIRST_FRAME].keyword, m_firstFrame);
+	fprintf_s(file, "\t\t%s\t%d\n", g_allTokens[TOKEN_SPRITE_FIRST_FRAME].keyword, m_firstFrame);
 
-	fprintf(file, "\t\t%s\t%d\n", g_allTokens[TOKEN_SPRITE_WIDTH].keyword, m_width);
+	fprintf_s(file, "\t\t%s\t%d\n", g_allTokens[TOKEN_SPRITE_WIDTH].keyword, m_width);
 
-	fprintf(file, "\t\t%s\t%d\n", g_allTokens[TOKEN_SPRITE_HEIGHT].keyword, m_height);
+	fprintf_s(file, "\t\t%s\t%d\n", g_allTokens[TOKEN_SPRITE_HEIGHT].keyword, m_height);
 
-	fprintf(file, "\t\t%s\t%d %d\n", g_allTokens[TOKEN_SPRITE_HOT_POINT].keyword, m_hotPoint.x, m_hotPoint.y);
+	fprintf_s(file, "\t\t%s\t%d %d\n", g_allTokens[TOKEN_SPRITE_HOT_POINT].keyword, m_hotPoint.x, m_hotPoint.y);
 
-	fprintf(file, "\t}\n\n");
+	fprintf_s(file, "\t}\n\n");
 
 	return;
 }

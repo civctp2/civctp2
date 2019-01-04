@@ -147,8 +147,9 @@ int ldl_open_first_file(char *file)
 	if(!ldlif_find_file(file, buf))
 		return 0;
 
-	ldl_include_filename_stack[0] = malloc(strlen(buf) + 1);
-	strcpy(ldl_include_filename_stack[0], buf);
+	size_t size = strlen(buf) + 1;
+	ldl_include_filename_stack[0] = malloc(size);
+	strcpy_s(ldl_include_filename_stack[0], size, buf);
 
 	yyin = fopen(buf, "r");
 	if(!yyin) {

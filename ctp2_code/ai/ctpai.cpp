@@ -1591,8 +1591,8 @@ void CtpAi::MakeRoomForNewUnits(const PLAYER_INDEX playerId)
 
 						g_graphicsOptions->AddTextToArmy(move_army, "MakeRoom", 255);
 
-						sint8 defense_count;
-						sint8 tmp_count;
+						uint8 defense_count;
+						uint8 tmp_count;
 						float tmp;
 						float defense_strength;
 						move_army->ComputeStrength(tmp,
@@ -2034,8 +2034,8 @@ void CtpAi::ComputeCityGarrisons(const PLAYER_INDEX playerId )
 		if (army->GetCargo(transports, max, empty))
 			continue;
 
-		sint8 defense_count;
-		sint8 tmp_count;
+		uint8 defense_count;
+		uint8 tmp_count;
 		float tmp;
 		float defense_strength;
 		army->ComputeStrength(tmp,

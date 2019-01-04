@@ -632,35 +632,35 @@ void print_dip_details(FILE *dipFile, const DiplomacyProposalRecord::StrengthStr
 	if(strings1->GetDetailsEven(str1)) {
 		if(rec2->GetDetailsEx0(strings2)) {
 			if(strings2->GetDetailsEven(str2)) {
-				fprintf(dipFile, "%s %s (%s/%s)\n\n",
+				fprintf_s(dipFile, "%s %s (%s/%s)\n\n",
 						g_theStringDB->GetNameStr(str1), g_theStringDB->GetNameStr(str2),
 						g_theStringDB->GetIdStr(str1), g_theStringDB->GetIdStr(str2));
 			}
 		}
 		if(rec2->GetDetailsEx1(strings2)) {
 			if(strings2->GetDetailsEven(str2)) {
-				fprintf(dipFile, "%s %s (%s/%s)\n\n",
+				fprintf_s(dipFile, "%s %s (%s/%s)\n\n",
 						g_theStringDB->GetNameStr(str1), g_theStringDB->GetNameStr(str2),
 						g_theStringDB->GetIdStr(str1), g_theStringDB->GetIdStr(str2));
 			}
 		}
 		if(rec2->GetDetailsEx2(strings2)) {
 			if(strings2->GetDetailsEven(str2)) {
-				fprintf(dipFile, "%s %s (%s/%s)\n\n",
+				fprintf_s(dipFile, "%s %s (%s/%s)\n\n",
 						g_theStringDB->GetNameStr(str1), g_theStringDB->GetNameStr(str2),
 						g_theStringDB->GetIdStr(str1), g_theStringDB->GetIdStr(str2));
 			}
 		}
 		if(rec2->GetDetailsEx3(strings2)) {
 			if(strings2->GetDetailsEven(str2)) {
-				fprintf(dipFile, "%s %s (%s/%s)\n\n",
+				fprintf_s(dipFile, "%s %s (%s/%s)\n\n",
 						g_theStringDB->GetNameStr(str1), g_theStringDB->GetNameStr(str2),
 						g_theStringDB->GetIdStr(str1), g_theStringDB->GetIdStr(str2));
 			}
 		}
 		if(rec2->GetDetailsEx4(strings2)) {
 			if(strings2->GetDetailsEven(str2)) {
-				fprintf(dipFile, "%s %s (%s/%s)\n\n",
+				fprintf_s(dipFile, "%s %s (%s/%s)\n\n",
 						g_theStringDB->GetNameStr(str1), g_theStringDB->GetNameStr(str2),
 						g_theStringDB->GetIdStr(str1), g_theStringDB->GetIdStr(str2));
 			}
@@ -1186,7 +1186,7 @@ bool CivApp::InitializeAppDB(void)
 					if(strings1->GetDetailsEven(str1)) {
 						if(rec2->GetDetailsEx0(strings2)) {
 							if(strings2->GetDetailsEven(str2)) {
-								fprintf(dipFile, "%s %s (%s/%s)\n\n",
+								fprintf_s(dipFile, "%s %s (%s/%s)\n\n",
 										g_theStringDB->GetNameStr(str1), g_theStringDB->GetNameStr(str2),
 										g_theStringDB->GetIdStr(str1), g_theStringDB->GetIdStr(str2));
 							}
@@ -1197,7 +1197,7 @@ bool CivApp::InitializeAppDB(void)
 					if(strings1->GetDetailsEven(str1)) {
 						if(rec2->GetDetailsEx1(strings2)) {
 							if(strings2->GetDetailsEven(str2)) {
-								fprintf(dipFile, "%s %s (%s/%s)\n\n",
+								fprintf_s(dipFile, "%s %s (%s/%s)\n\n",
 										g_theStringDB->GetNameStr(str1), g_theStringDB->GetNameStr(str2),
 										g_theStringDB->GetIdStr(str1), g_theStringDB->GetIdStr(str2));
 							}
@@ -1208,7 +1208,7 @@ bool CivApp::InitializeAppDB(void)
 					if(strings1->GetDetailsEven(str1)) {
 						if(rec2->GetDetailsEx2(strings2)) {
 							if(strings2->GetDetailsEven(str2)) {
-								fprintf(dipFile, "%s %s (%s/%s)\n\n",
+								fprintf_s(dipFile, "%s %s (%s/%s)\n\n",
 										g_theStringDB->GetNameStr(str1), g_theStringDB->GetNameStr(str2),
 										g_theStringDB->GetIdStr(str1), g_theStringDB->GetIdStr(str2));
 							}
@@ -1219,7 +1219,7 @@ bool CivApp::InitializeAppDB(void)
 					if(strings1->GetDetailsEven(str1)) {
 						if(rec2->GetDetailsEx3(strings2)) {
 							if(strings2->GetDetailsEven(str2)) {
-								fprintf(dipFile, "%s %s (%s/%s)\n\n",
+								fprintf_s(dipFile, "%s %s (%s/%s)\n\n",
 										g_theStringDB->GetNameStr(str1), g_theStringDB->GetNameStr(str2),
 										g_theStringDB->GetIdStr(str1), g_theStringDB->GetIdStr(str2));
 							}
@@ -1230,7 +1230,7 @@ bool CivApp::InitializeAppDB(void)
 					if(strings1->GetDetailsEven(str1)) {
 						if(rec2->GetDetailsEx4(strings2)) {
 							if(strings2->GetDetailsEven(str2)) {
-								fprintf(dipFile, "%s %s (%s/%s)\n\n",
+								fprintf_s(dipFile, "%s %s (%s/%s)\n\n",
 										g_theStringDB->GetNameStr(str1), g_theStringDB->GetNameStr(str2),
 										g_theStringDB->GetIdStr(str1), g_theStringDB->GetIdStr(str2));
 							}
@@ -1269,7 +1269,7 @@ sint32 CivApp::InitializeApp(HINSTANCE hInstance, int iCmdShow)
 #endif// _DEBUG || DEBUG
         int rc = SDL_Init(flags);
         if (rc != 0) {
-                fprintf(stderr, "Could not initialize SDL:\n%s\n", SDL_GetError());
+                fprintf_s(stderr, "Could not initialize SDL:\n%s\n", SDL_GetError());
                 return -1;
         }
 #endif

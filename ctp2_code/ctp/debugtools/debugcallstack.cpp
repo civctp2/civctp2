@@ -437,7 +437,7 @@ void Debug_FunctionNameClose (void)
 
   while (pointer) {
 #ifdef GENERATE_ADDRESS_LOG
-    fprintf(fh,"%08X %s\n",pointer->address,pointer->name);
+    fprintf_s(fh,"%08X %s\n",pointer->address,pointer->name);
 #endif
 
     next = pointer->next;
@@ -870,13 +870,13 @@ void DebugCallStack_ShowToFile  (LogClass log_class, unsigned *call_stack, int n
 			strcpy(allocator_name, caller_name);
 		}
 
-		fprintf(file, "0x%08x [%s+0x%x] / ", caller, caller_name, offset);
+		fprintf_s(file, "0x%08x [%s+0x%x] / ", caller, caller_name, offset);
 
 
 		index ++;
 	}
 
-	fprintf(file, "\t%s\n", allocator_name);
+	fprintf_s(file, "\t%s\n", allocator_name);
 #endif
 }
 
@@ -926,8 +926,8 @@ void DebugCallStack_ShowToAltFile  (LogClass log_class, unsigned *call_stack, in
 		index++;
 	}
 
-	fprintf(file, "%s", buff);
-	fprintf(file, "\n");
+	fprintf_s(file, "%s", buff);
+	fprintf_s(file, "\n");
 }
 
 char * c3debug_StackTrace(void)
@@ -1156,17 +1156,17 @@ void cDebugCallStackSet::Dump(const char *filename)
 		totalCalls += m_stacks[m_blockSize*i];
 	}
 
-	fprintf(fp,"callstack dump for function:\n%s\ncalled %d times\n",caller_name,totalCalls);
+	fprintf_s(fp,"callstack dump for function:\n%s\ncalled %d times\n",caller_name,totalCalls);
 
 	for (i=0;i<m_numStacks;++i) {
 		int called = m_stacks[m_blockSize*i];
 		float perCalled = (float)(100 * called)/(float)totalCalls;
-		fprintf(fp,"\nnum times called: %d, %.2f percent\n",called,perCalled);
+		fprintf_s(fp,"\nnum times called: %d, %.2f percent\n",called,perCalled);
 		int j;
 		for (j=0;j<m_depth;++j) {
 			unsigned caller = m_stacks[(m_blockSize*i)+1+j];
 			caller_name = Debug_FunctionNameAndOffsetGet (caller, &offset);
-			fprintf(fp,"%s\n",caller_name);
+			fprintf_s(fp,"%s\n",caller_name);
 		}
 	}
 	fclose(fp);

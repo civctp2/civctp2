@@ -1994,7 +1994,7 @@ void World::Dump(FILE *fout)
          } else {
 
             if (IsGood(k,i, 0)) {
-               fprintf(fout, "+");
+               fprintf_s(fout, "+");
             } else {
 
                if (IsRiver(k,i)) {
@@ -2063,7 +2063,7 @@ void World::Dump(FILE *fout)
 
                }
             }
-            fprintf(fout, " ");
+            fprintf_s(fout, " ");
          }
 
       }
@@ -2228,7 +2228,7 @@ void World::Mdump(FILE *fout)
 					fprintf (fout, "@");
 				} else {
 					if (IsGood(k,i, 0)) {
-						fprintf(fout, "+");
+						fprintf_s(fout, "+");
 					} else {
 
 						if (IsRiver(k,i)) {
@@ -2307,7 +2307,7 @@ void World::Mdump(FILE *fout)
 						}
 					}
 				}
-				fprintf(fout, " ");
+				fprintf_s(fout, " ");
 
 			}
 		}
@@ -2545,7 +2545,7 @@ IMapGenerator *World::LoadMapPlugin(sint32 pass)
 #ifndef USE_COM_REPLACEMENT
 		c3errors_ErrorDialog("Map Generator", "Could not load library %s, using builtin map generator", name);
 #else
-		fprintf(stderr, "Could not load library %s, using builtin map generator: %s", name, dlerror());
+		fprintf_s(stderr, "Could not load library %s, using builtin map generator: %s", name, dlerror());
 #endif
 		return NULL;
 	}
@@ -3036,7 +3036,7 @@ bool World::ExportMap(MBCHAR const *filename)
 	Assert(outfile);
 	if (!outfile) return false;
 
-	fprintf(outfile, "%d,%d\n", m_size.x, m_size.y);
+	fprintf_s(outfile, "%d,%d\n", m_size.x, m_size.y);
 
 	for (sint16 y = 0; y < m_size.y; y++)
     {
@@ -3050,7 +3050,7 @@ bool World::ExportMap(MBCHAR const *filename)
 			BOOL hasRiver = IsRiver(pos);
 			BOOL hasGood = GetGood(pos, good);
 
-			fprintf(outfile, "%d,%d,%d,%d,%ld\t",
+			fprintf_s(outfile, "%d,%d,%d,%d,%ld\t",
 					cell->GetTerrain(),
 					hasHut,
 					hasRiver,
@@ -3058,7 +3058,7 @@ bool World::ExportMap(MBCHAR const *filename)
 					cell->GetEnv()
                    );
 		}
-		fprintf(outfile, "\n");
+		fprintf_s(outfile, "\n");
 	}
 
 	fclose(outfile);

@@ -1561,9 +1561,9 @@ void Debug_MemNodeList (int turn_count)
 	MemNode *node;
 
 	char fname[120];
-	sprintf(fname, "CTP_LEAKS_%#.3ld.TXT", turn_count);
+	sprintf_s(fname, "CTP_LEAKS_%#.3ld.TXT", turn_count);
 	FILE *leakFile = fopen(fname, "w");
-	sprintf(fname, "CTP_LEAKS_ALT_%#.3ld.TXT", turn_count);
+	sprintf_s(fname, "CTP_LEAKS_ALT_%#.3ld.TXT", turn_count);
 	FILE *leakAltFile = fopen(fname, "w");
 
 	if (!leakFile)
@@ -1573,18 +1573,18 @@ void Debug_MemNodeList (int turn_count)
 	int counter = 0;
 
 	if (node == NULL) {
-		fprintf(leakFile, "None.\n");
+		fprintf_s(leakFile, "None.\n");
 		fclose(leakFile);
 		return;
 	}
 
-	fprintf(leakFile, "Num\tSize\tTotal\tStack\tAllocator\n");
-	fprintf(leakAltFile, "Num\tSize\tTotal\tStack\n");
+	fprintf_s(leakFile, "Num\tSize\tTotal\tStack\tAllocator\n");
+	fprintf_s(leakAltFile, "Num\tSize\tTotal\tStack\n");
 
 	while (node) {
-		fprintf(leakFile, "%ld\t%ld\t%ld\t", node->reference_count, node->size,
+		fprintf_s(leakFile, "%ld\t%ld\t%ld\t", node->reference_count, node->size,
 												node->reference_count * node->size);
-		fprintf(leakAltFile, "%ld\t%ld\t%ld\t", node->reference_count, node->size,
+		fprintf_s(leakAltFile, "%ld\t%ld\t%ld\t", node->reference_count, node->size,
 												node->reference_count * node->size);
 
 
@@ -1838,11 +1838,10 @@ void *DebugMemory_GuardedRealloc (const char *file, int line, void *memory_block
 
 char *DebugMemory_GuardedStrdup  (const char *file, int line, const char *string)
 {
-	char  *ptr;
-
 	DebugMemory_EnsureInitialised();
-	ptr = (char *) DebugMemory_GuardedBlockAlloc (file, line, debug_memory->default_heap, strlen (string) + 1, true, FILL_BYTE_STRDUP, debug_memory->open);
-	strcpy (ptr, string);
+	size_t size = strlen(string) + 1;
+	char   *ptr = (char *) DebugMemory_GuardedBlockAlloc (file, line, debug_memory->default_heap, size, true, FILL_BYTE_STRDUP, debug_memory->open);
+	strcpy_s(ptr, size, string);
 	return (ptr);
 }
 
@@ -1888,12 +1887,11 @@ void *DebugMemoryHeap_GuardedRealloc (const char *file, int line, MemoryHeap hea
 
 char *DebugMemoryHeap_GuardedStrdup  (const char *file, int line, MemoryHeap heap, const char *string)
 {
-	char  *ptr;
-
 	DebugMemory_EnsureInitialised();
 
-	ptr = (char *) DebugMemory_GuardedBlockAlloc (file, line, heap, strlen (string) + 1, true, FILL_BYTE_STRDUP, debug_memory->open);
-	strcpy (ptr, string);
+	size_t size = strlen(string) + 1;
+	char  *ptr = (char *) DebugMemory_GuardedBlockAlloc (file, line, heap, size, true, FILL_BYTE_STRDUP, debug_memory->open);
+	strcpy_s(ptr, size, string);
 	return (ptr);
 }
 

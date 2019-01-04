@@ -408,42 +408,42 @@ void Anim::Export(FILE *file)
 	extern TokenData	g_allTokens[];
 	sint32				i;
 
-	fprintf(file, "\t%s\t1\n", g_allTokens[TOKEN_ANIM].keyword);
+	fprintf_s(file, "\t%s\t1\n", g_allTokens[TOKEN_ANIM].keyword);
 
-	fprintf(file, "\t{\n");
+	fprintf_s(file, "\t{\n");
 
-	fprintf(file, "\t\t%s\t%d\n", g_allTokens[TOKEN_ANIM_TYPE].keyword, m_type);
+	fprintf_s(file, "\t\t%s\t%d\n", g_allTokens[TOKEN_ANIM_TYPE].keyword, m_type);
 
-	fprintf(file, "\t\t%s\t%d\n", g_allTokens[TOKEN_ANIM_NUM_FRAMES].keyword, m_numFrames);
+	fprintf_s(file, "\t\t%s\t%d\n", g_allTokens[TOKEN_ANIM_NUM_FRAMES].keyword, m_numFrames);
 
-	fprintf(file, "\t\t%s\t%ld\n", g_allTokens[TOKEN_ANIM_PLAYBACK_TIME].keyword, m_playbackTime);
+	fprintf_s(file, "\t\t%s\t%ld\n", g_allTokens[TOKEN_ANIM_PLAYBACK_TIME].keyword, m_playbackTime);
 
-	fprintf(file, "\t\t%s\t%ld\n", g_allTokens[TOKEN_ANIM_DELAY].keyword, m_delay);
+	fprintf_s(file, "\t\t%s\t%ld\n", g_allTokens[TOKEN_ANIM_DELAY].keyword, m_delay);
 
-	fprintf(file, "\t\t%s", g_allTokens[TOKEN_ANIM_FRAME_DATA].keyword);
+	fprintf_s(file, "\t\t%s", g_allTokens[TOKEN_ANIM_FRAME_DATA].keyword);
 	for (i=0; i<m_numFrames; i++)
 	{
-		if (i%5 == 0) fprintf(file, "\n\t\t\t");
-		fprintf(file, "%d\t", m_frames[i]);
+		if (i%5 == 0) fprintf_s(file, "\n\t\t\t");
+		fprintf_s(file, "%d\t", m_frames[i]);
 	}
-	fprintf(file, "\n\n");
+	fprintf_s(file, "\n\n");
 
-	fprintf(file, "\t\t%s\t1\n\t\t{\n", g_allTokens[TOKEN_ANIM_MOVE_DELTAS].keyword);
+	fprintf_s(file, "\t\t%s\t1\n\t\t{\n", g_allTokens[TOKEN_ANIM_MOVE_DELTAS].keyword);
 	for (i=0; i<m_numFrames; i++)
 	{
-		fprintf(file, "\t\t\t%d %d\n", m_moveDeltas[i].x, m_moveDeltas[i].y);
+		fprintf_s(file, "\t\t\t%d %d\n", m_moveDeltas[i].x, m_moveDeltas[i].y);
 	}
-	fprintf(file, "\n\t\t}\n");
+	fprintf_s(file, "\n\t\t}\n");
 
-	fprintf(file, "\t\t%s\t1\n\t\t{", g_allTokens[TOKEN_ANIM_TRANSPARENCIES].keyword);
+	fprintf_s(file, "\t\t%s\t1\n\t\t{", g_allTokens[TOKEN_ANIM_TRANSPARENCIES].keyword);
 	for (i=0; i<m_numFrames; i++)
 	{
-		if (i%5 == 0) fprintf(file, "\n\t\t\t");
-		fprintf(file, "%d\t", m_transparencies[i]);
+		if (i%5 == 0) fprintf_s(file, "\n\t\t\t");
+		fprintf_s(file, "%d\t", m_transparencies[i]);
 	}
-	fprintf(file, "\n\t\t}\n\n");
+	fprintf_s(file, "\n\t\t}\n\n");
 
-	fprintf(file, "\t}\n\n");
+	fprintf_s(file, "\t}\n\n");
 
 	return;
 }

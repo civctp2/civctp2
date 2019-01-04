@@ -152,7 +152,7 @@ void c3debug_dprintfPrefix
 				sprintf(s_logFileName, k_FILENAME, s_logFileNumber);
 				fclose(g_theLogFile);
 				g_theLogFile = fopen(s_logFileName, "a");
-				fprintf(g_theLogFile, "[Continued from Part %#.3d]\n\n", s_logFileNumber-1);
+				fprintf_s(g_theLogFile, "[Continued from Part %#.3d]\n\n", s_logFileNumber-1);
 			}
 
 			char const * filename = strrchr(file, FILE_SEPC);
@@ -165,7 +165,7 @@ void c3debug_dprintfPrefix
 				filename = file;
 			}
 
-			fprintf(g_theLogFile, "%15.15s@%-4d: ", filename, line);
+			fprintf_s(g_theLogFile, "%15.15s@%-4d: ", filename, line);
 
 			s_logLinesThisFile++;
 
@@ -188,7 +188,7 @@ void c3debug_dprintf(char const * format, ...)
 				sprintf(s_logFileName, k_FILENAME, s_logFileNumber);
 				fclose(g_theLogFile);
 				g_theLogFile = fopen(s_logFileName, "a");
-				fprintf(g_theLogFile, "[Continued from Part %#.3d]\n\n", s_logFileNumber-1);
+				fprintf_s(g_theLogFile, "[Continued from Part %#.3d]\n\n", s_logFileNumber-1);
 			}
 
 			va_start(list, format);
@@ -201,7 +201,7 @@ void c3debug_dprintf(char const * format, ...)
 			va_end(list);
 
 			va_start(list, format);
-			vfprintf(g_theLogFile, format, list);
+			vfprintf_s(g_theLogFile, format, list);
 			va_end(list);
 
 			s_logLinesThisFile++;

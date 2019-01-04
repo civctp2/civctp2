@@ -164,7 +164,7 @@ sint32 c3files_fprintf(FILE *file, const MBCHAR *s, ...)
 	sint32      val;
 
 	va_start(valist, s);
-	val = (sint32)vfprintf(file, s, valist);
+	val = (sint32)vfprintf_s(file, s, valist);
 	va_end(valist);
 
 	return val;
@@ -634,14 +634,14 @@ MBCHAR const * c3files_GetVolumeName(DriveIdType id)
 	int lerrno= errno;
 	if (cd == NULL)
 	{
-		fprintf(stderr, "%s\n", strerror(lerrno));
+		fprintf_s(stderr, "%s\n", strerror(lerrno));
 		return NULL;
 	}
 	int rc = fseek(cd, 0x8000, SEEK_SET);
 	lerrno= errno;
 	if (rc != 0)
 	{
-		fprintf(stderr, "%s\n", strerror(lerrno));
+		fprintf_s(stderr, "%s\n", strerror(lerrno));
 		fclose(cd);
 		return NULL;
 	}
@@ -651,7 +651,7 @@ MBCHAR const * c3files_GetVolumeName(DriveIdType id)
 	lerrno= errno;
 	if (s != sizeof(ipd))
 	{
-		fprintf(stderr, "Failed reading %d bytes: %s\n", sizeof(ipd),
+		fprintf_s(stderr, "Failed reading %d bytes: %s\n", sizeof(ipd),
 		        strerror(lerrno));
 		fclose(cd);
 		return NULL;

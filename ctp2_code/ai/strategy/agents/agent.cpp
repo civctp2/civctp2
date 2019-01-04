@@ -226,8 +226,8 @@ const Squad_Strength & Agent::Compute_Squad_Strength()
 	sint32 transports, max_slots, empty_slots;
 	m_army->GetCargo(transports, max_slots, empty_slots);
 
-	sint8 defense_count;
-	sint8 ranged_count;
+	uint8 defense_count;
+	uint8 ranged_count;
 	float attack_strength;
 	float defense_strength;
 	float ranged_strength;

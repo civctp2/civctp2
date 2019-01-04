@@ -110,7 +110,7 @@ void Diplomacy_Log::BeginTurn()
 
             }
 
-            fprintf(fout, "\n");
+            fprintf_s(fout, "\n");
         }
         fclose(fout);
     }
@@ -140,7 +140,7 @@ void Diplomacy_Log::EndTurn()
 
             }
 
-            fprintf(fout, "\n");
+            fprintf_s(fout, "\n");
 
 
         }

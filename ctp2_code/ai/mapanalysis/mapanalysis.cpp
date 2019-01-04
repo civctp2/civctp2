@@ -26,12 +26,12 @@
 //
 // - Relaxed an Assert to prevent lots of popups with e.g. the CTC mod.
 // - Corrected the Distance To Empire Center computation
-// - Initialized local variables. (Sep 9th 2005 Martin G�hmann)
-// - Standartized code (May 21st 2006 Martin G�hmann)
-// - Standartized army strength computation. (30-Apr-2008 Martin G�hmann)
+// - Initialized local variables. (Sep 9th 2005 Martin Gühmann)
+// - Standartized code (May 21st 2006 Martin Gühmann)
+// - Standartized army strength computation. (30-Apr-2008 Martin Gühmann)
 // - Added AI attack, defense, ranged, land bombard, sea bombard, and air bombard
-//   player power grids to the mapanalysis. (30-Apr-2008 Martin G�hmann)
-// - Fixed AI city rank calculation. (9-Nov-2009 Martin G�hmann)
+//   player power grids to the mapanalysis. (30-Apr-2008 Martin Gühmann)
+// - Fixed AI city rank calculation. (9-Nov-2009 Martin Gühmann)
 //
 //----------------------------------------------------------------------------
 
@@ -273,8 +273,8 @@ void MapAnalysis::BeginTurn()
             Assert(army.IsValid());
             army->GetPos(pos);
 
-            sint8 defense_count;
-            sint8 ranged_count;
+            uint8 defense_count;
+            uint8 ranged_count;
             float attack_strength;
             float defense_strength;
             float ranged_strength;
@@ -741,7 +741,7 @@ double MapAnalysis::GetPowerRank(const CityData * city) const
 
 void MapAnalysis::CalcEmpireCenter(const PLAYER_INDEX playerId)
 {
-	// For now disabled
+	// For now disabled // why?
 //	m_empireCenter[playerId] = g_player[playerId]->CalcEmpireCenter();
 
 	DPRINTF(k_DBG_SCHEDULER, ("Empire Center for player %d :  rc(%3d,%3d)   \n",

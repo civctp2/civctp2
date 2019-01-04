@@ -829,7 +829,7 @@ void GameEventManager::Log(const char *fmt, ...)
 
 	FILE *f = fopen(EVENTLOGNAME, "a");
 	if(f) {
-		fprintf(f, "%s", text);
+		fprintf_s(f, "%s", text);
 		fclose(f);
 	}
 
@@ -842,7 +842,7 @@ void GameEventManager::Dump()
 	GAME_EVENT ev;
 	for(ev = (GAME_EVENT)0; ev < GEV_MAX; ev = GAME_EVENT((sint32)ev + 1)) {
 
-		fprintf(f, "%d: GEV_%s(", (sint32)ev, g_eventDescriptions[ev].name);
+		fprintf_s(f, "%d: GEV_%s(", (sint32)ev, g_eventDescriptions[ev].name);
 
 		char *argString = g_eventDescriptions[ev].args;
 		BOOL first = TRUE;
@@ -854,7 +854,7 @@ void GameEventManager::Dump()
 			BOOL  optional= *argString=='&';
 			if(optional)
 				{
-				fprintf(f, " [");
+				fprintf_s(f, " [");
 				}
 
 
@@ -864,27 +864,27 @@ void GameEventManager::Dump()
 				break;
 			}
 			if(!first) {
-				fprintf(f, ", ");
+				fprintf_s(f, ", ");
 			}
 			first = FALSE;
-			fprintf(f, "%s", ArgCharToName(*argString));
+			fprintf_s(f, "%s", ArgCharToName(*argString));
 			argString++;
 
 			if(optional)
 				{
-				fprintf(f, "]");
+				fprintf_s(f, "]");
 				}
 
 		}
 
-		fprintf(f, "): %s\n", g_eventDescriptions[ev].description);
+		fprintf_s(f, "): %s\n", g_eventDescriptions[ev].description);
 
 		if(m_hooks[ev]) {
 			m_hooks[ev]->Dump(f);
 		} else {
-			fprintf(f, "  <empty>\n");
+			fprintf_s(f, "  <empty>\n");
 		}
-		fprintf(f, "\n");
+		fprintf_s(f, "\n");
 	}
 	fclose(f);
 }

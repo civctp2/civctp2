@@ -63,7 +63,7 @@ aui_SDLMouse::GetInput(void)
             SDL_EVENTMASK(SDL_MOUSEMOTION) | SDL_EVENTMASK(SDL_MOUSEBUTTONDOWN) |
                   SDL_EVENTMASK(SDL_MOUSEBUTTONUP));
    if (0 > numElements) {
-      fprintf(stderr, "Mouse PeepEvents failed: %s\n", SDL_GetError());
+      fprintf_s(stderr, "Mouse PeepEvents failed: %s\n", SDL_GetError());
       return AUI_ERRCODE_GETDEVICEDATAFAILED;
    }
    if (0 == numElements) {

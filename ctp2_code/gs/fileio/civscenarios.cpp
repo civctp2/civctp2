@@ -477,9 +477,9 @@ CIV_SCEN_ERR CivScenarios::MakeNewPack(MBCHAR *dirName, MBCHAR *packName, MBCHAR
 	if(!packlist)
 		return CIV_SCEN_CANT_CREATE_FILE;
 
-	fprintf(packlist, "%s\n", packName);
-	fprintf(packlist, "%s\n", packDesc);
-	fprintf(packlist, "0\n");
+	fprintf_s(packlist, "%s\n", packName);
+	fprintf_s(packlist, "%s\n", packDesc);
+	fprintf_s(packlist, "0\n");
 
 	fclose(packlist);
 
@@ -500,9 +500,9 @@ CIV_SCEN_ERR CivScenarios::UpdatePacklist(ScenarioPack *pack)
 		return CIV_SCEN_CANT_CREATE_FILE;
 	}
 
-	fprintf(packList, "%s\n", pack->m_name);
-	fprintf(packList, "%s\n", pack->m_description);
-	fprintf(packList, "%d\n", pack->m_numScenarios);
+	fprintf_s(packList, "%s\n", pack->m_name);
+	fprintf_s(packList, "%s\n", pack->m_description);
+	fprintf_s(packList, "%d\n", pack->m_numScenarios);
 
 	fclose(packList);
 
@@ -537,8 +537,8 @@ CIV_SCEN_ERR CivScenarios::MakeNewScenario(ScenarioPack *pack, MBCHAR *scenName,
 	if(!scenFile)
 		return CIV_SCEN_CANT_CREATE_FILE;
 
-	fprintf(scenFile, "%s\n", scenName);
-	fprintf(scenFile, "%s\n", scenDesc);
+	fprintf_s(scenFile, "%s\n", scenName);
+	fprintf_s(scenFile, "%s\n", scenDesc);
 	fclose(scenFile);
 
 	MBCHAR dataPath[_MAX_PATH];
@@ -556,7 +556,7 @@ CIV_SCEN_ERR CivScenarios::MakeNewScenario(ScenarioPack *pack, MBCHAR *scenName,
 	if(!script)
 		return CIV_SCEN_CANT_CREATE_FILE;
 
-	fprintf(script, "// Scenario script for %s\n", scenName);
+	fprintf_s(script, "// Scenario script for %s\n", scenName);
 	fclose(script);
 
 	pack->m_numScenarios++;

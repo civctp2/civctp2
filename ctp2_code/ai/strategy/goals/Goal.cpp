@@ -1164,7 +1164,7 @@ sint32 Goal::Get_Target_Value() const
 	|| rec->GetTargetTypeSpecialUnit()
 	){
 		const Army &    army = Get_Target_Army();
-		sint8           tmpCount;
+		uint8           tmpCount;
 		float           tmp;
 		float           tmpValue;
 		army->ComputeStrength(tmp,tmp,tmp,tmpCount,tmpCount,tmp,tmp,tmp,tmpValue, false);

@@ -5178,7 +5178,7 @@ bool CityData::ChangeCurrentlyBuildingItem(sint32 category, sint32 item_type)
 		penalty = std::min<double>
 		                  (
 		                   1.0,
-		                   std::max<float>(0.0, 1.0 - penalty * 0.01)
+		                   std::max<double>(0.0, 1.0 - penalty * 0.01)
 		                  );
 
 		m_shieldstore = static_cast<sint32>(static_cast<double>(m_shieldstore_at_begin_turn) * penalty);

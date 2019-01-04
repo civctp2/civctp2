@@ -164,7 +164,7 @@ Return      { return KW_RETURN; }
 					yylval.dbptr = dbptr;
 					return DBREF;
 				} else {
-				    yylval.name = (char*)strdup(yytext);
+				    yylval.name = (char*)_strdup(yytext);
 				    return NAME;
 				}
 			}
