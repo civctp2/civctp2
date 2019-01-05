@@ -44,14 +44,14 @@ class MapPoint;
 #include "ctp2_inttypes.h"      // sintN
 #include "scheduler_types.h"
 
-class Squad_Strength
+class Squad_Strength final
 {
 public:
 	Squad_Strength(sint8 agent_count = 0)
 	: m_attack_str       (0.0),
 	  m_defense_str      (0.0),
 	  m_ranged_str       (0.0),
-	  m_value            (0),
+	  m_value            (0.0),
 	  m_land_bombard_str (0.0),
 	  m_water_bombard_str(0.0),
 	  m_air_bombard_str  (0.0),
@@ -116,7 +116,7 @@ public:
 	bool HasEnough(const Squad_Strength & otherStrength, bool ignoreBombard = false) const;
 	float GetTotalMissing(const Squad_Strength & otherStrength) const;
 
-protected:
+private:
 
 	float m_attack_str;
 	float m_defense_str;
@@ -130,6 +130,28 @@ protected:
 	uint8 m_transport;
 	uint8 m_defenders;
 	uint8 m_ranged;
+
+#if defined(_DEBUG) || defined(USE_LOGGING)
+public:
+	void PrintSizeOfSqudStrengthClass()
+	{
+		DPRINTF(k_DBG_AI, ("Size of Squad_Strength class:\n"));
+		DPRINTF(k_DBG_AI, ("Goal: %d\n", sizeof(Squad_Strength)));
+		DPRINTF(k_DBG_AI, ("m_attack_str: %d\n", sizeof(m_attack_str)));
+		DPRINTF(k_DBG_AI, ("m_defense_str: %d\n", sizeof(m_defense_str)));
+		DPRINTF(k_DBG_AI, ("m_ranged_str: %d\n", sizeof(m_ranged_str)));
+		DPRINTF(k_DBG_AI, ("m_land_bombard_str: %d\n", sizeof(m_land_bombard_str)));
+		DPRINTF(k_DBG_AI, ("m_water_bombard_str: %d\n", sizeof(m_water_bombard_str)));
+		DPRINTF(k_DBG_AI, ("m_air_bombard_str: %d\n", sizeof(m_air_bombard_str)));
+		DPRINTF(k_DBG_AI, ("m_value: %d\n", sizeof(m_value)));
+		DPRINTF(k_DBG_AI, ("m_agent_count: %d\n", sizeof(m_agent_count)));
+		DPRINTF(k_DBG_AI, ("m_transport: %d\n", sizeof(m_transport)));
+		DPRINTF(k_DBG_AI, ("m_defenders: %d\n", sizeof(m_defenders)));
+		DPRINTF(k_DBG_AI, ("m_ranged: %d\n", sizeof(m_ranged)));
+		DPRINTF(k_DBG_AI, ("\n"));
+		DPRINTF(k_DBG_AI, ("\n"));
+	}
+#endif
 };
 
 #endif // __AGENT_STRENGTH_H__

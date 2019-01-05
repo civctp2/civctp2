@@ -136,9 +136,6 @@ public:
 	uint32 m_visibility;
 };
 
-
-
-
 class UnseenCell
 {
 	friend class NetUnseenCell;
@@ -148,21 +145,6 @@ public:
 
 	sint16  m_terrain_type;
 	sint16  m_move_cost;
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
 
 	uint16  m_flags;
 	sint8   m_bioInfectedOwner;
@@ -177,19 +159,7 @@ public:
 	sint16  m_cityOwner;
 	sint16  m_citySpriteIndex;
 
-
-
-
-
-
-
-
-
 	sint8   m_cell_owner;
-
-
-
-
 	uint32  m_slaveBits;
 
 private:
@@ -202,9 +172,6 @@ private:
 
 	PointerList<UnseenInstallationInfo> *m_installations;
 	PointerList<UnseenImprovementInfo> *m_improvements;
-
-
-
 
 	MBCHAR *m_cityName;
 	UnitActor *m_actor;

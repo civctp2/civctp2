@@ -233,56 +233,6 @@ void Governor::ResizeAll(const PLAYER_INDEX & newMaxPlayerId)
 
 //----------------------------------------------------------------------------
 //
-// Name       : Governor::LoadAll
-//
-// Description: Restore the Governor data from an archived stream
-//
-// Parameters : archive         : stream to restore from
-//
-// Globals    : s_theGovernors  : updated
-//
-// Returns    : -
-//
-// Remark(s)  : static function
-//              Assumption: The size of s_theGovernors has been updated
-//                          (read from stream) before calling this function.
-//
-//----------------------------------------------------------------------------
-void Governor::LoadAll(CivArchive & archive)
-{
-	for (size_t i = 0; i < s_theGovernors.size(); ++i)
-	{
-		s_theGovernors[i].Load(archive);
-	}
-}
-
-//----------------------------------------------------------------------------
-//
-// Name       : Governor::SaveAll
-//
-// Description: Save the Governor data to an archived stream
-//
-// Parameters : archive         : stream to save to
-//
-// Globals    : s_theGovernors  : input (not modified)
-//
-// Returns    : -
-//
-// Remark(s)  : static function
-//              Assumption: The size of s_theGovernors has been saved
-//                          (written to stream) before calling this function.
-//
-//----------------------------------------------------------------------------
-void Governor::SaveAll(CivArchive & archive)
-{
-	for (size_t i = 0; i < s_theGovernors.size(); ++i)
-	{
-		s_theGovernors[i].Save(archive);
-	}
-}
-
-//----------------------------------------------------------------------------
-//
 // Name       : Governor::Cleanup
 //
 // Description: Release the memory of the Governor data.
@@ -299,8 +249,8 @@ void Governor::SaveAll(CivArchive & archive)
 void Governor::Cleanup(void)
 {
 	GovernorVector().swap(s_theGovernors);
-    CityPairList  ().swap(s_CityPairList);
-    CityDistQueue ().swap(s_CityDistQueue);
+	CityPairList  ().swap(s_CityPairList);
+	CityDistQueue ().swap(s_CityDistQueue);
 }
 
 //----------------------------------------------------------------------------
@@ -418,14 +368,6 @@ void Governor::SetPlayerId(const PLAYER_INDEX &playerId)
 void Governor::Resize( const sint16 & xSize,
                        const sint16 & ySize,
                        const sint16 & resolution )
-{
-}
-
-void Governor::Load(CivArchive & archive)
-{
-}
-
-void Governor::Save(CivArchive & archive) const
 {
 }
 

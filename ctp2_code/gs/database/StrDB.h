@@ -70,11 +70,11 @@
 // Class declarations
 //----------------------------------------------------------------------------
 
-class StringDB
+class StringDB final
 {
 public:
 	StringDB();
-    virtual ~StringDB();
+	~StringDB();
 
 	// Modifiers
 	bool					InsertStr

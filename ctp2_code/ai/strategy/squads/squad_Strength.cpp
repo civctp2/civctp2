@@ -249,7 +249,7 @@ void Squad_Strength::Set_Pos_Strength(const MapPoint & pos)
 
 	m_value = 0.0;
 	m_transport = 0;
-	for(sint8 i = m_agent_count; i > 0; --i)
+	for(uint8 i = m_agent_count; i > 0; --i)
 	{
 		Unit const &	unit	= army->Get(i - 1);
 

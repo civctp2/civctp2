@@ -4872,13 +4872,15 @@ bool CityData::BuildUnit(sint32 type)
 
 	if(g_player[m_owner]->HasAdvance(rec->GetEnableAdvanceIndex()))
 	{
-		DPRINTF(k_DBG_GAMESTATE, ("City: Building %s\n",
-								  g_theStringDB->GetNameStr(rec->m_name)));
+		DPRINTF(k_DBG_GAMESTATE, ("%s is buildig a unit: %s\n",
+		                          m_home_city.CD()->GetName(),
+		                          g_theStringDB->GetNameStr(rec->m_name)));
 		return m_build_queue.InsertTail(k_GAME_OBJ_TYPE_UNIT, type, rec->GetShieldCost());
 	}
 	else
 	{
-		DPRINTF(k_DBG_GAMESTATE, ("City: Can't build %s until %s is discovered\n",
+		DPRINTF(k_DBG_GAMESTATE, ("%s can't build %s until %s is discovered\n",
+		                          m_home_city.CD()->GetName(),
 		                          g_theStringDB->GetNameStr(rec->m_name),
 		                          g_theAdvanceDB->GetNameStr(rec->GetEnableAdvanceIndex())));
 		return false;
@@ -4910,7 +4912,8 @@ bool CityData::BuildImprovement(sint32 type)
 		return false;
 
 	if(g_player[m_owner]->HasAdvance(irec->GetEnableAdvanceIndex())) {
-		DPRINTF(k_DBG_GAMESTATE, ("City: Building improvement %s\n",
+		DPRINTF(k_DBG_GAMESTATE, ("%s is building an improvement: %s\n",
+		                          m_home_city.CD()->GetName(),
 		                          g_theStringDB->GetNameStr(irec->GetName())));
 
 		//ProductionCostPopModifier m_city.CD()->PopCount()
@@ -4928,7 +4931,8 @@ bool CityData::BuildImprovement(sint32 type)
 		//sint32 cost = irec->GetProductionCost(); //original
 		return m_build_queue.InsertTail(k_GAME_OBJ_TYPE_IMPROVEMENT, type, cost);
 	} else {
-		DPRINTF(k_DBG_GAMESTATE, ("City: Can't build %s until %s is discovered\n",
+		DPRINTF(k_DBG_GAMESTATE, ("%s can't build %s until %s is discovered\n",
+		                          m_home_city.CD()->GetName(),
 		                          g_theStringDB->GetNameStr(irec->GetName()),
 		                          g_theAdvanceDB->GetNameStr(irec->GetEnableAdvanceIndex())));
 		return false;
@@ -4970,7 +4974,7 @@ bool CityData::BuildWonder(sint32 type)
 	if(rec == NULL)
 		return false;
 
-	DPRINTF(k_DBG_GAMESTATE, ("City %lx: building wonder %s\n", (uint32)m_home_city,
+	DPRINTF(k_DBG_GAMESTATE, ("%s is building a wonder: %s\n", m_home_city.CD()->GetName(),
 	                          g_theStringDB->GetNameStr(rec->m_name)));
 
 	if(g_player[m_owner]->HasAdvance(rec->GetEnableAdvanceIndex())) {

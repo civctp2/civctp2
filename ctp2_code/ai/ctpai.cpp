@@ -1117,6 +1117,13 @@ void CtpAi::Load(CivArchive & archive)
 		}
 	}
 
+#if defined(_DEBUG) || defined(USE_LOGGING)
+	// Let's see how much memory this takes
+	// The class Goal has the most instances in the whole game
+	Goal goal;
+	goal.PrintSizeOfGoalClass();
+#endif
+
 	SPLASH_STRING("Analyse Map...");
 	MapAnalysis::GetMapAnalysis().BeginTurn();
 }
