@@ -151,7 +151,7 @@ messagebox: KW_MESSAGEBOX IDENTIFIER { slicif_start_segment($2.name); } body
 	{
 		struct PSlicObject *obj = malloc(sizeof(struct PSlicObject));
 #ifdef _DEBUG
-		fprintf_s(debuglog, "Parsed MessageBox %s\n", $2);
+		fprintf(debuglog, "Parsed MessageBox %s\n", $2);
 #endif
 		obj->m_type = SLIC_OBJECT_MESSAGEBOX;
 		obj->m_id = $2.name;
@@ -163,7 +163,7 @@ messagebox: KW_MESSAGEBOX IDENTIFIER { slicif_start_segment($2.name); } body
 	{
 		struct PSlicObject *obj = malloc(sizeof(struct PSlicObject));
 #ifdef _DEBUG
-		fprintf_s(debuglog, "Parsed AlertBox %s\n", $2);
+		fprintf(debuglog, "Parsed AlertBox %s\n", $2);
 #endif
 		obj->m_type = SLIC_OBJECT_MESSAGEBOX;
 		obj->m_id = $2.name;
@@ -175,7 +175,7 @@ messagebox: KW_MESSAGEBOX IDENTIFIER { slicif_start_segment($2.name); } body
 	{
 		struct PSlicObject *obj = malloc(sizeof(struct PSlicObject));
 #ifdef _DEBUG
-		fprintf_s(debuglog, "Parsed HelpBox %s\n", $2);
+		fprintf(debuglog, "Parsed HelpBox %s\n", $2);
 #endif
 		obj->m_type = SLIC_OBJECT_MESSAGEBOX;
 		obj->m_id = $2.name;
@@ -189,7 +189,7 @@ trigger: KW_TRIGGER IDENTIFIER { slicif_start_segment($2.name); } KW_WHEN trigge
 	{
 		struct PSlicObject *obj = malloc(sizeof(struct PSlicObject));
 #ifdef _DEBUG
-		fprintf_s(debuglog, "Parsed Trigger %s\n", $2);
+		fprintf(debuglog, "Parsed Trigger %s\n", $2);
 #endif
 
 		obj->m_is_alert = 0;
@@ -203,7 +203,7 @@ trigger: KW_TRIGGER IDENTIFIER { slicif_start_segment($2.name); } KW_WHEN trigge
 	{
 		struct PSlicObject *obj = malloc(sizeof(struct PSlicObject));
 #ifdef _DEBUG
-		fprintf_s(debuglog, "Parsed Trigger %s\n", $2);
+		fprintf(debuglog, "Parsed Trigger %s\n", $2);
 #endif
 		obj->m_is_alert = 0;
 		obj->m_is_help = 0;
@@ -223,7 +223,7 @@ eventhandler: KW_HANDLEEVENT '(' NAME ')'
     {
 		struct PSlicObject *obj = malloc(sizeof(struct PSlicObject));
 #ifdef _DEBUG
-	    fprintf_s(debuglog, "Parsed HandleEvent %s\n", $3.name);
+	    fprintf(debuglog, "Parsed HandleEvent %s\n", $3.name);
 #endif
 		obj->m_is_alert = 0;
 		obj->m_is_help = 0;
@@ -247,7 +247,7 @@ eventhandler: KW_HANDLEEVENT '(' NAME ')'
     {
 		struct PSlicObject *obj = malloc(sizeof(struct PSlicObject));
 #ifdef _DEBUG
-	    fprintf_s(debuglog, "Parsed HandleEvent %s '%s'\n", $3.name, $6.name);
+	    fprintf(debuglog, "Parsed HandleEvent %s '%s'\n", $3.name, $6.name);
 #endif
 		obj->m_is_alert = 0;
 		obj->m_is_help = 0;
@@ -289,7 +289,7 @@ function: functionhead '(' functionarglist ')' body
 	{
 		struct PSlicObject *obj = malloc(sizeof(struct PSlicObject));
 #ifdef _DEBUG
-		fprintf_s(debuglog, "Parsed Function %s\n", $1.name);
+		fprintf(debuglog, "Parsed Function %s\n", $1.name);
 #endif
 		obj->m_type = SLIC_OBJECT_FUNCTION;
 		obj->m_id = $1.name;
@@ -497,9 +497,9 @@ void yyerror(char *s)
     extern int line;
 #ifdef _DEBUG
     if(debuglog)
-		fprintf_s(debuglog, "line %d: %s\n", g_slicLineNumber, s);
+		fprintf(debuglog, "line %d: %s\n", g_slicLineNumber, s);
 #endif
-	sprintf_s(slic_parser_error_text, "%s:%d: %s",
+	sprintf(slic_parser_error_text, "%s:%d: %s",
 			slicif_get_filename(), g_slicLineNumber, s);
 	slicif_report_error(slic_parser_error_text);
 	/*slic_parse_error = SLIC_ERROR_SYNTAX;*/

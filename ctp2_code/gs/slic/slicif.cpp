@@ -1166,19 +1166,19 @@ void slicif_dump_code(unsigned char* code, int codeSize)
 
 	while(codePtr < code + codeSize) {
 		SOP op = (SOP)*codePtr;
-		fprintf_s(debuglog, "%04lx: ", codePtr - code);
+		fprintf(debuglog, "%04lx: ", codePtr - code);
 		codePtr++;
 		switch(op) {
 			case SOP_PUSHI:
-				fprintf_s(debuglog, "pushi ");
+				fprintf(debuglog, "pushi ");
 				ival = *((int*)codePtr);
-				fprintf_s(debuglog, "%d\n", ival);
+				fprintf(debuglog, "%d\n", ival);
 				codePtr += sizeof(int);
 				break;
 			case SOP_PUSHD:
-				fprintf_s(debuglog, "pushd ");
+				fprintf(debuglog, "pushd ");
 				dval = *((double*)codePtr);
-				fprintf_s(debuglog, "%lf\n", dval);
+				fprintf(debuglog, "%lf\n", dval);
 				codePtr += sizeof(int);
 				break;
 			case SOP_PUSHV:
@@ -1190,10 +1190,10 @@ void slicif_dump_code(unsigned char* code, int codeSize)
 
 				symval = g_slicEngine->GetSymbol(ival);
 				if(!symval) {
-					fprintf_s(debuglog, "Bad mojo, NULL symbol %d\n", ival);
+					fprintf(debuglog, "Bad mojo, NULL symbol %d\n", ival);
 					return;
 				}
-				fprintf_s(debuglog, "pushv %s(%d)\n", symval->GetName(), ival);
+				fprintf(debuglog, "pushv %s(%d)\n", symval->GetName(), ival);
 				break;
 			case SOP_PUSHA:
 				ival = *((int *)codePtr);
@@ -1204,10 +1204,10 @@ void slicif_dump_code(unsigned char* code, int codeSize)
 
 				symval = g_slicEngine->GetSymbol(ival);
 				if(!symval) {
-					fprintf_s(debuglog, "Bad mojo, NULL symbol %d\n", ival);
+					fprintf(debuglog, "Bad mojo, NULL symbol %d\n", ival);
 					return;
 				}
-				fprintf_s(debuglog, "pusha %s(%d)\n", symval->GetName(), ival);
+				fprintf(debuglog, "pusha %s(%d)\n", symval->GetName(), ival);
 				break;
 			case SOP_PUSHM:
 				{
@@ -1223,7 +1223,7 @@ void slicif_dump_code(unsigned char* code, int codeSize)
                         gotStruct
                         ? gotStruct->GetDescription()->GetMemberName(ival2)
                         : NAME_STRUCT_INVALID;
-			        fprintf_s(debuglog, "pushm %s(%d).%s(%d)\n",
+			        fprintf(debuglog, "pushm %s(%d).%s(%d)\n",
                             symval->GetName(), symval->GetIndex(), memberName, ival2
                            );
                 }
@@ -1235,35 +1235,35 @@ void slicif_dump_code(unsigned char* code, int codeSize)
 				symval = g_slicEngine->GetSymbol(ival);
 
 				if(!symval) {
-					fprintf_s(debuglog, "Bad mojo, NULL symbol %d\n", ival);
+					fprintf(debuglog, "Bad mojo, NULL symbol %d\n", ival);
 					return;
 				}
 
 				ival2 = *((int *)codePtr);
 				codePtr += sizeof(int);
-				fprintf_s(debuglog, "pusham %s(%d)[].%s(%d)\n", symval->GetName(), symval->GetIndex(),
+				fprintf(debuglog, "pusham %s(%d)[].%s(%d)\n", symval->GetName(), symval->GetIndex(),
 						symval->GetArray()->GetStructTemplate()->GetMemberName(ival2), ival2);
 				break;
-			case SOP_AINDX: fprintf_s(debuglog, "aindx\n"); break;
-			case SOP_ADD:  fprintf_s(debuglog, "add\n"); break;
-			case SOP_SUB:  fprintf_s(debuglog, "sub\n"); break;
-			case SOP_MULT: fprintf_s(debuglog, "mult\n"); break;
-			case SOP_EXP: fprintf_s(debuglog, "pow\n"); break;
-			case SOP_BAND: fprintf_s(debuglog, "band\n"); break;
-			case SOP_BOR: fprintf_s(debuglog, "bor\n"); break;
-			case SOP_BXOR: fprintf_s(debuglog, "bxor\n"); break;
-			case SOP_BNOT: fprintf_s(debuglog, "bnot\n"); break;
-			case SOP_DIV:  fprintf_s(debuglog, "div\n"); break;
-			case SOP_MOD:  fprintf_s(debuglog, "mod\n"); break;
-			case SOP_EQ:   fprintf_s(debuglog, "eq\n"); break;
-			case SOP_GT:   fprintf_s(debuglog, "gt\n"); break;
-			case SOP_LT:   fprintf_s(debuglog, "lt\n"); break;
-			case SOP_GTE:  fprintf_s(debuglog, "gte\n"); break;
-			case SOP_LTE:  fprintf_s(debuglog, "lte\n"); break;
-			case SOP_POP:  fprintf_s(debuglog, "pop\n"); break;
-			case SOP_TRIG: fprintf_s(debuglog, "trig\n"); break;
-			case SOP_ARGE: fprintf_s(debuglog, "arge\n"); break;
-			case SOP_NEQ:  fprintf_s(debuglog, "neq\n"); break;
+			case SOP_AINDX: fprintf(debuglog, "aindx\n"); break;
+			case SOP_ADD:  fprintf(debuglog, "add\n"); break;
+			case SOP_SUB:  fprintf(debuglog, "sub\n"); break;
+			case SOP_MULT: fprintf(debuglog, "mult\n"); break;
+			case SOP_EXP: fprintf(debuglog, "pow\n"); break;
+			case SOP_BAND: fprintf(debuglog, "band\n"); break;
+			case SOP_BOR: fprintf(debuglog, "bor\n"); break;
+			case SOP_BXOR: fprintf(debuglog, "bxor\n"); break;
+			case SOP_BNOT: fprintf(debuglog, "bnot\n"); break;
+			case SOP_DIV:  fprintf(debuglog, "div\n"); break;
+			case SOP_MOD:  fprintf(debuglog, "mod\n"); break;
+			case SOP_EQ:   fprintf(debuglog, "eq\n"); break;
+			case SOP_GT:   fprintf(debuglog, "gt\n"); break;
+			case SOP_LT:   fprintf(debuglog, "lt\n"); break;
+			case SOP_GTE:  fprintf(debuglog, "gte\n"); break;
+			case SOP_LTE:  fprintf(debuglog, "lte\n"); break;
+			case SOP_POP:  fprintf(debuglog, "pop\n"); break;
+			case SOP_TRIG: fprintf(debuglog, "trig\n"); break;
+			case SOP_ARGE: fprintf(debuglog, "arge\n"); break;
+			case SOP_NEQ:  fprintf(debuglog, "neq\n"); break;
 			case SOP_ARGID:
 				ival = *((int *)codePtr);
 				codePtr += sizeof(int);
@@ -1273,15 +1273,15 @@ void slicif_dump_code(unsigned char* code, int codeSize)
 
 				symval = g_slicEngine->GetSymbol(ival);
 				if(!symval) {
-					fprintf_s(debuglog, "Bad Mojo, NULL symbol %d\n", ival);
+					fprintf(debuglog, "Bad Mojo, NULL symbol %d\n", ival);
 					return;
 				}
 				if(symval->GetType() != SLIC_SYM_ID) {
-					fprintf_s(debuglog, "Bad Mojo, symbol %s is not of type ID\n",
+					fprintf(debuglog, "Bad Mojo, symbol %s is not of type ID\n",
 							symval->GetName());
 					return;
 				}
-				fprintf_s(debuglog, "argid %s(%d)\n", symval->GetName(), ival);
+				fprintf(debuglog, "argid %s(%d)\n", symval->GetName(), ival);
 				break;
 			case SOP_ARGS:
 				ival = *((int *)codePtr);
@@ -1292,10 +1292,10 @@ void slicif_dump_code(unsigned char* code, int codeSize)
 
 				symval = g_slicEngine->GetSymbol(ival);
 				if(symval->GetType() != SLIC_SYM_SVAR) {
-					fprintf_s(debuglog, "Bad Mojo, string id arg doesn't have string id type\n");
+					fprintf(debuglog, "Bad Mojo, string id arg doesn't have string id type\n");
 					return;
 				}
-				fprintf_s(debuglog, "args  %d(%s)\n", ival, symval->GetName());
+				fprintf(debuglog, "args  %d(%s)\n", ival, symval->GetName());
 				break;
 			case SOP_ARGST:
 				ival = *((int *)codePtr);
@@ -1306,10 +1306,10 @@ void slicif_dump_code(unsigned char* code, int codeSize)
 
 				symval = g_slicEngine->GetSymbol(ival);
 				if(symval->GetType() != SLIC_SYM_STRING) {
-					fprintf_s(debuglog, "Bad Mojo, string arg doesn't have string type\n");
+					fprintf(debuglog, "Bad Mojo, string arg doesn't have string type\n");
 					return;
 				}
-				fprintf_s(debuglog, "argst %d(%s)\n", ival, symval->GetName());
+				fprintf(debuglog, "argst %d(%s)\n", ival, symval->GetName());
 				break;
 			case SOP_CALL:
 			case SOP_CALLR:
@@ -1321,45 +1321,45 @@ void slicif_dump_code(unsigned char* code, int codeSize)
 
 				symval = g_slicEngine->GetSymbol(ival);
 				if(!symval) {
-					fprintf_s(debuglog, "Bad Mojo, NULL symbol %d\n", ival);
+					fprintf(debuglog, "Bad Mojo, NULL symbol %d\n", ival);
 					return;
 				}
 				if(symval->GetType() != SLIC_SYM_FUNC &&
 				   symval->GetType() != SLIC_SYM_UFUNC) {
-					fprintf_s(debuglog, "Bad Mojo, symbol %s is not a function\n",
+					fprintf(debuglog, "Bad Mojo, symbol %s is not a function\n",
 							symval->GetName());
 					return;
 				}
-				fprintf_s(debuglog, "call%c %s(%d)\n", (op == SOP_CALL) ? ' ' : 'r',
+				fprintf(debuglog, "call%c %s(%d)\n", (op == SOP_CALL) ? ' ' : 'r',
 						symval->GetName(), ival);
 				break;
 			case SOP_EVENT:
 				ival = *((int *)codePtr);
 				codePtr += sizeof(int);
 
-				fprintf_s(debuglog, "event %s\n", g_gevManager->GetEventName((GAME_EVENT)ival));
+				fprintf(debuglog, "event %s\n", g_gevManager->GetEventName((GAME_EVENT)ival));
 				break;
 			case SOP_SBLK:
-				fprintf_s(debuglog, "dangling SBLK\n");
+				fprintf(debuglog, "dangling SBLK\n");
 				return;
 			case SOP_END:
-				fprintf_s(debuglog, "end\n");
+				fprintf(debuglog, "end\n");
 				codePtr += sizeof(int);
 				break;
 			case SOP_JMP:
 				ival = *((int *)codePtr);
 				codePtr += sizeof(int);
-				fprintf_s(debuglog, "jmp   0x%04lx\n", ival);
+				fprintf(debuglog, "jmp   0x%04lx\n", ival);
 				break;
 			case SOP_BNT:
 				ival = *((int *)codePtr);
 				codePtr += sizeof(int);
-				fprintf_s(debuglog, "bnt   0x%04lx\n", ival);
+				fprintf(debuglog, "bnt   0x%04lx\n", ival);
 				break;
 			case SOP_BNEV:
 				ival = *((int *)codePtr);
 				codePtr += sizeof(int);
-				fprintf_s(debuglog, "bnev  0x%04lx\n", ival);
+				fprintf(debuglog, "bnev  0x%04lx\n", ival);
 				break;
 			case SOP_BUTN:
 				ival = *((int *)codePtr);
@@ -1373,22 +1373,22 @@ void slicif_dump_code(unsigned char* code, int codeSize)
 
 				symval = g_slicEngine->GetSymbol(ival2);
 				if(symval->GetType() != SLIC_SYM_SVAR) {
-					fprintf_s(debuglog, "Bad Mojo, button string arg doesn't have string type\n");
+					fprintf(debuglog, "Bad Mojo, button string arg doesn't have string type\n");
 					return;
 				}
-				fprintf_s(debuglog, "butn  0x%04lx,%d(%s)\n", ival,
+				fprintf(debuglog, "butn  0x%04lx,%d(%s)\n", ival,
 						symval->GetIndex(), symval->GetName());
 				break;
 			case SOP_OCLS:
 				ival = *((int *)codePtr);
 				codePtr += sizeof(int);
-				fprintf_s(debuglog, "ocls  0x%04lx\n", ival);
+				fprintf(debuglog, "ocls  0x%04lx\n", ival);
 				break;
 			case SOP_STOP:
-				fprintf_s(debuglog, "stop\n");
+				fprintf(debuglog, "stop\n");
 				break;
 			case SOP_NEG:
-				fprintf_s(debuglog, "neg\n");
+				fprintf(debuglog, "neg\n");
 				break;
 			case SOP_ASSN:
 				ival = *((int*)codePtr);
@@ -1399,10 +1399,10 @@ void slicif_dump_code(unsigned char* code, int codeSize)
 
 				symval = g_slicEngine->GetSymbol(ival);
 				if(!symval) {
-					fprintf_s(debuglog, "Bad mojo, NULL symbol %d\n", ival);
+					fprintf(debuglog, "Bad mojo, NULL symbol %d\n", ival);
 					return;
 				}
-				fprintf_s(debuglog, "assn  %s(%d)\n", symval->GetName(), ival);
+				fprintf(debuglog, "assn  %s(%d)\n", symval->GetName(), ival);
 				break;
 			case SOP_ASSNA:
 				ival = *((int*)codePtr);
@@ -1413,16 +1413,16 @@ void slicif_dump_code(unsigned char* code, int codeSize)
 
 				symval = g_slicEngine->GetSymbol(ival);
 				if(!symval) {
-					fprintf_s(debuglog, "Bad mojo, NULL symbol %d\n", ival);
+					fprintf(debuglog, "Bad mojo, NULL symbol %d\n", ival);
 				} else {
-					fprintf_s(debuglog, "assna %s(%d)\n", symval->GetName(), ival);
+					fprintf(debuglog, "assna %s(%d)\n", symval->GetName(), ival);
 				}
 				break;
-			case SOP_AND: fprintf_s(debuglog, "and\n"); break;
-			case SOP_OR:  fprintf_s(debuglog, "or\n"); break;
-			case SOP_NOT: fprintf_s(debuglog, "not\n"); break;
-			case SOP_SARGS: fprintf_s(debuglog, "sargs\n"); break;
-			case SOP_RET:   fprintf_s(debuglog, "ret\n"); break;
+			case SOP_AND: fprintf(debuglog, "and\n"); break;
+			case SOP_OR:  fprintf(debuglog, "or\n"); break;
+			case SOP_NOT: fprintf(debuglog, "not\n"); break;
+			case SOP_SARGS: fprintf(debuglog, "sargs\n"); break;
+			case SOP_RET:   fprintf(debuglog, "ret\n"); break;
 			case SOP_LINE:
 				ival = *((int *)codePtr);
 				codePtr += sizeof(int);
@@ -1431,16 +1431,16 @@ void slicif_dump_code(unsigned char* code, int codeSize)
 				codePtr += sizeof(int);
 
 				codePtr += sizeof(void *);
-				fprintf_s(debuglog, "line  %d/%d\n", ival, ival2);
+				fprintf(debuglog, "line  %d/%d\n", ival, ival2);
 				break;
 			case SOP_ASIZE:
 				ival = *((int *)codePtr);
 				codePtr += sizeof(int);
 				symval = g_slicEngine->GetSymbol(ival);
 				if(!symval) {
-					fprintf_s(debuglog, "Bad mojo, NULL symbol %d\n", ival);
+					fprintf(debuglog, "Bad mojo, NULL symbol %d\n", ival);
 				} else {
-					fprintf_s(debuglog, "asize %s(%d)\n", symval->GetName(), ival);
+					fprintf(debuglog, "asize %s(%d)\n", symval->GetName(), ival);
 				}
 				break;
 //Added by Martin Gühmann for database support
@@ -1458,17 +1458,17 @@ void slicif_dump_code(unsigned char* code, int codeSize)
 				codePtr += sizeof(int);
 
 				if(!g_slicEngine->GetDBConduit(dbName)) {
-					fprintf_s(debuglog, "%s\n", dbName);
-					fprintf_s(debuglog, "Bad mojo, NULL db\n");
+					fprintf(debuglog, "%s\n", dbName);
+					fprintf(debuglog, "Bad mojo, NULL db\n");
 				} else {
 
 					symval = g_slicEngine->GetSymbol(ival);
 					if(!symval) {
-						fprintf_s(debuglog, "%s\n", dbName);
-						fprintf_s(debuglog, "Bad mojo, NULL symbol %d\n", ival);
+						fprintf(debuglog, "%s\n", dbName);
+						fprintf(debuglog, "Bad mojo, NULL symbol %d\n", ival);
 						return;
 					}
-					fprintf_s(debuglog, "%s %s(%d)\n", dbName, symval->GetName(), ival);
+					fprintf(debuglog, "%s %s(%d)\n", dbName, symval->GetName(), ival);
 				}
 				break;
 			}
@@ -1493,17 +1493,17 @@ void slicif_dump_code(unsigned char* code, int codeSize)
 				codePtr += sizeof(char);
 
 				if(!g_slicEngine->GetDBConduit(dbName)) {
-					fprintf_s(debuglog, "%s\n", dbName);
-					fprintf_s(debuglog, "Bad mojo, NULL db\n");
+					fprintf(debuglog, "%s\n", dbName);
+					fprintf(debuglog, "Bad mojo, NULL db\n");
 				} else {
 
 					symval = g_slicEngine->GetSymbol(ival);
 					if(!symval) {
-						fprintf_s(debuglog, "%s\n", dbName);
-						fprintf_s(debuglog, "Bad mojo, NULL symbol %d\n", ival);
+						fprintf(debuglog, "%s\n", dbName);
+						fprintf(debuglog, "Bad mojo, NULL symbol %d\n", ival);
 						return;
 					}
-					fprintf_s(debuglog, "%s(%s).%s, %s == (%d)\n", dbName, symval->GetName(), name, symval->GetName(), ival);
+					fprintf(debuglog, "%s(%s).%s, %s == (%d)\n", dbName, symval->GetName(), name, symval->GetName(), ival);
 				}
 				break;
 			}
@@ -1528,16 +1528,16 @@ void slicif_dump_code(unsigned char* code, int codeSize)
 				codePtr += sizeof(char);
 
 				if(!g_slicEngine->GetDBConduit(dbName)) {
-					fprintf_s(debuglog, "%s\n", dbName);
-					fprintf_s(debuglog, "Bad mojo, NULL db\n");
+					fprintf(debuglog, "%s\n", dbName);
+					fprintf(debuglog, "Bad mojo, NULL db\n");
 				} else {
 					symval = g_slicEngine->GetSymbol(ival);
 					if(!symval) {
-						fprintf_s(debuglog, "%s\n", dbName);
-						fprintf_s(debuglog, "Bad mojo, NULL symbol %d\n", ival);
+						fprintf(debuglog, "%s\n", dbName);
+						fprintf(debuglog, "Bad mojo, NULL symbol %d\n", ival);
 						return;
 					}
-					fprintf_s(debuglog, "%s(%s).%s[], %s == (%d)\n", dbName, symval->GetName(), name, symval->GetName(), ival);
+					fprintf(debuglog, "%s(%s).%s[], %s == (%d)\n", dbName, symval->GetName(), name, symval->GetName(), ival);
 				}
 				break;
 			}
@@ -1562,10 +1562,10 @@ void slicif_dump_code(unsigned char* code, int codeSize)
 				codePtr += sizeof(char);
 
 				if(!g_slicEngine->GetDBConduit(dbName)) {
-					fprintf_s(debuglog, "%s\n", dbName);
-					fprintf_s(debuglog, "Bad mojo, NULL db\n");
+					fprintf(debuglog, "%s\n", dbName);
+					fprintf(debuglog, "Bad mojo, NULL db\n");
 				} else {
-					fprintf_s(debuglog, "%s(%s).%s[]\n", dbName, g_slicEngine->GetDBConduit(dbName)->GetRecordNameByIndex(ival), name);
+					fprintf(debuglog, "%s(%s).%s[]\n", dbName, g_slicEngine->GetDBConduit(dbName)->GetRecordNameByIndex(ival), name);
 				}
 				break;
 			}
@@ -1580,10 +1580,10 @@ void slicif_dump_code(unsigned char* code, int codeSize)
 				codePtr += sizeof(char);
 
 				if(!g_slicEngine->GetDBConduit(dbName)) {
-					fprintf_s(debuglog, "%s\n", dbName);
-					fprintf_s(debuglog, "Bad mojo, NULL db\n");
+					fprintf(debuglog, "%s\n", dbName);
+					fprintf(debuglog, "Bad mojo, NULL db\n");
 				} else {
-					fprintf_s(debuglog, "%s\n", dbName);
+					fprintf(debuglog, "%s\n", dbName);
 				}
 				break;
 			}
@@ -1605,10 +1605,10 @@ void slicif_dump_code(unsigned char* code, int codeSize)
 				codePtr += sizeof(char);
 
 				if(!g_slicEngine->GetDBConduit(dbName)) {
-					fprintf_s(debuglog, "%s\n", dbName);
-					fprintf_s(debuglog, "Bad mojo, NULL db\n");
+					fprintf(debuglog, "%s\n", dbName);
+					fprintf(debuglog, "Bad mojo, NULL db\n");
 				} else {
-					fprintf_s(debuglog, "%s(..).%s\n", dbName, name);
+					fprintf(debuglog, "%s(..).%s\n", dbName, name);
 				}
 				break;
 			}
@@ -1630,10 +1630,10 @@ void slicif_dump_code(unsigned char* code, int codeSize)
 				codePtr += sizeof(char);
 
 				if(!g_slicEngine->GetDBConduit(dbName)) {
-					fprintf_s(debuglog, "%s\n", dbName);
-					fprintf_s(debuglog, "Bad mojo, NULL db\n");
+					fprintf(debuglog, "%s\n", dbName);
+					fprintf(debuglog, "Bad mojo, NULL db\n");
 				} else {
-					fprintf_s(debuglog, "%s(..).%s[]\n", dbName, name);
+					fprintf(debuglog, "%s(..).%s[]\n", dbName, name);
 				}
 				break;
 			}
@@ -1650,15 +1650,15 @@ void slicif_dump_code(unsigned char* code, int codeSize)
 				codePtr += sizeof(char);
 
 				if(!g_slicEngine->GetDBConduit(dbName)) {
-					fprintf_s(debuglog, "%s\n", dbName);
-					fprintf_s(debuglog, "Bad mojo, NULL db\n");
+					fprintf(debuglog, "%s\n", dbName);
+					fprintf(debuglog, "Bad mojo, NULL db\n");
 				} else {
-					fprintf_s(debuglog, "%s\n", dbName);
+					fprintf(debuglog, "%s\n", dbName);
 				}
 				break;
 			}
 			default:
-				fprintf_s(debuglog, "???\n");
+				fprintf(debuglog, "???\n");
 				break;
 		}
 	}
@@ -1697,7 +1697,7 @@ void slicif_add_region(char *name, int x1, int y1, int x2, int y2)
 
 #ifdef _DEBUG
 	extern FILE *debuglog;
-	fprintf_s(debuglog, "Adding region %s: (%d,%d)-(%d,%d)\n", name,
+	fprintf(debuglog, "Adding region %s: (%d,%d)-(%d,%d)\n", name,
 			x1,y1,x2,y2);
 #endif
 
@@ -1723,7 +1723,7 @@ void slicif_start_complex_region(char *name)
 
 #ifdef _DEBUG
 	extern FILE *debuglog;
-	fprintf_s(debuglog, "Complex region %s: ", name);
+	fprintf(debuglog, "Complex region %s: ", name);
 #endif
 	rgnsym = slicif_lookup_sym(name);
 	if(!rgnsym || rgnsym->m_type != SLIC_SYM_UNDEFINED) {
@@ -1740,7 +1740,7 @@ void slicif_finish_complex_region()
 #if 0
 #ifdef _DEBUG
 	extern FILE *debuglog;
-	fprintf_s(debuglog, "\n");
+	fprintf(debuglog, "\n");
 #endif
 
 	s_current_complex_region = NULL;
@@ -1777,7 +1777,7 @@ void slicif_add_region_to_complex(char *name)
 	if(addregion->m_type == SLIC_SYM_REGION) {
 
 #ifdef _DEBUG
-		fprintf_s(debuglog, "[%d,%d - %d,%d] ",
+		fprintf(debuglog, "[%d,%d - %d,%d] ",
 				addregion->m_region->x1,
 				addregion->m_region->y1,
 				addregion->m_region->x2,
@@ -1792,7 +1792,7 @@ void slicif_add_region_to_complex(char *name)
 		for(chk = addregion->m_complex_region; chk; chk = chk->next) {
 			struct PSlicComplexRegion *last = s_current_complex_region->m_complex_region;
 #ifdef _DEBUG
-			fprintf_s(debuglog, "[%d,%d - %d,%d] ",
+			fprintf(debuglog, "[%d,%d - %d,%d] ",
 					chk->x1, chk->y1, chk->x2, chk->y2);
 #endif
 			s_current_complex_region->m_complex_region = (PSlicComplexRegion *)malloc(sizeof(struct PSlicComplexRegion));

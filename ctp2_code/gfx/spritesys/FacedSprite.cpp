@@ -585,22 +585,22 @@ void FacedSprite::Export(FILE *file)
 	extern TokenData	g_allTokens[];
 	sint32				i;
 
-	fprintf_s(file, "\t{\n");
+	fprintf(file, "\t{\n");
 
-	fprintf_s(file, "\t\t%s\t%d\n", g_allTokens[TOKEN_SPRITE_NUM_FRAMES].keyword, m_facedFrameCount);
+	fprintf(file, "\t\t%s\t%d\n", g_allTokens[TOKEN_SPRITE_NUM_FRAMES].keyword, m_facedFrameCount);
 
-	fprintf_s(file, "\t\t%s\t%d\n", g_allTokens[TOKEN_SPRITE_FIRST_FRAME].keyword, m_firstFrame);
+	fprintf(file, "\t\t%s\t%d\n", g_allTokens[TOKEN_SPRITE_FIRST_FRAME].keyword, m_firstFrame);
 
-	fprintf_s(file, "\t\t%s\t%d\n", g_allTokens[TOKEN_SPRITE_WIDTH].keyword, m_width);
+	fprintf(file, "\t\t%s\t%d\n", g_allTokens[TOKEN_SPRITE_WIDTH].keyword, m_width);
 
-	fprintf_s(file, "\t\t%s\t%d\n", g_allTokens[TOKEN_SPRITE_HEIGHT].keyword, m_height);
+	fprintf(file, "\t\t%s\t%d\n", g_allTokens[TOKEN_SPRITE_HEIGHT].keyword, m_height);
 
-	fprintf_s(file, "\t\t%s\n", g_allTokens[TOKEN_SPRITE_HOT_POINTS].keyword);
+	fprintf(file, "\t\t%s\n", g_allTokens[TOKEN_SPRITE_HOT_POINTS].keyword);
 	for (i=0; i<k_NUM_FACINGS; i++) {
-		fprintf_s(file, "\t\t\t%ld %ld\n", m_hotPoints[i].x, m_hotPoints[i].y);
+		fprintf(file, "\t\t\t%ld %ld\n", m_hotPoints[i].x, m_hotPoints[i].y);
 	}
 
-	fprintf_s(file, "\t}\n\n");
+	fprintf(file, "\t}\n\n");
 
 	return;
 }

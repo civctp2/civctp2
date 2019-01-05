@@ -42,8 +42,8 @@
 //  add
 //      aui_BitmapFont::GlyphInfo *aui_BitmapFont::GetGlyphInfo2( MBCHAR *c )
 //
-// - Initialized local variables. (Sep 9th 2005 Martin Gühmann)
-// - Standardized code (May 21th 2006 Martin Gühmann)
+// - Initialized local variables. (Sep 9th 2005 Martin G�hmann)
+// - Standardized code (May 21th 2006 Martin G�hmann)
 //
 //----------------------------------------------------------------------------
 
@@ -243,7 +243,7 @@ AUI_ERRCODE aui_BitmapFont::Load( void )
 	sint32 error = TT_Open_Face(s_ttEngine, m_ttffile, &m_ttFace);
 #endif
 	Assert( error == 0 );
-	if ( error ) { fprintf_s(stderr, "Font %s (%s) failled\n", m_ttffile, fullPath); AUI_ERRCODE_HACK;}
+	if ( error ) { fprintf(stderr, "Font %s (%s) failled\n", m_ttffile, fullPath); AUI_ERRCODE_HACK;}
 
 	error = TT_Get_Face_Properties( m_ttFace, &m_ttFaceProperties );
 	Assert( error == 0 );

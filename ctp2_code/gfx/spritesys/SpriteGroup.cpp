@@ -132,15 +132,15 @@ void SpriteGroup::ReleaseFullLoad(void)
 void SpriteGroup::ExportSpriteGroup(FILE *file,GAME_ACTION action,TOKEN_TYPES main_token,TOKEN_TYPES sub_token,BOOL sub_value)
 {
 	extern TokenData	g_allTokens[];
-	fprintf_s(file,"\t%s", g_allTokens[main_token].keyword);
+	fprintf(file,"\t%s", g_allTokens[main_token].keyword);
 
     Sprite *    sprite  = GetGroupSprite(action);
 	if (sprite!=NULL)
 	{
-		fprintf_s(file, "\t1\n");
+		fprintf(file, "\t1\n");
 
 		if((sub_token>=0)&&(sub_token<TOKEN_MAX))
-		   fprintf_s(file, "\t%s\t%d\n", g_allTokens[sub_token].keyword,sub_value);
+		   fprintf(file, "\t%s\t%d\n", g_allTokens[sub_token].keyword,sub_value);
 
 		sprite->Export(file);
 
@@ -149,5 +149,5 @@ void SpriteGroup::ExportSpriteGroup(FILE *file,GAME_ACTION action,TOKEN_TYPES ma
 		   anim->Export(file);
 	}
 	else
-		fprintf_s(file, "\t0\n\n");
+		fprintf(file, "\t0\n\n");
 }

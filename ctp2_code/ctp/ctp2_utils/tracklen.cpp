@@ -77,9 +77,9 @@ char *tracklen_cryptAscii(char *s)
 }
 
 #ifdef tracklen_CRYPTLOG
-#define tracklen_DPRINT(ss) fprintf_s(tracklen_fp, "%s:%d ", "tar", 1000+__LINE__); sprintf ss; fprintf_s(tracklen_fp, "%s", tracklen_cryptAscii(tracklen_buf))
+#define tracklen_DPRINT(ss) fprintf(tracklen_fp, "%s:%d ", "tar", 1000+__LINE__); sprintf ss; fprintf(tracklen_fp, "%s", tracklen_cryptAscii(tracklen_buf))
 #else
-#define tracklen_DPRINT(ss) fprintf_s(tracklen_fp, "%s:%d ", "tar", 1000+__LINE__); sprintf ss; fprintf_s(tracklen_fp, "%s", tracklen_buf)
+#define tracklen_DPRINT(ss) fprintf(tracklen_fp, "%s:%d ", "tar", 1000+__LINE__); sprintf ss; fprintf(tracklen_fp, "%s", tracklen_buf)
 #endif
 
 static void DMCIError(int error)

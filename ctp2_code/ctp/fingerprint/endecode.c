@@ -177,7 +177,7 @@ int main( void )
 	assert( memcmp( bytes, ebytesA, LENGTH1 + LENGTH2 ) == 0 );
 
 	/* At this point, all is well. */
-	fprintf_s( stdout, "Succeess!\nEndecode module test complete.\n" );
+	fprintf( stdout, "Succeess!\nEndecode module test complete.\n" );
 
 	return 0;
 }

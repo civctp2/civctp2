@@ -99,6 +99,6 @@ extern void ldlif_report_error(char *text);
 void yyerror(char *s)
 {
 	char buf[1024];
-	sprintf_s(buf, "%s:%d: %s", ldlif_get_filename(), g_ldlLineNumber, s);
+	sprintf(buf, "%s:%d: %s", ldlif_get_filename(), g_ldlLineNumber, s);
 	ldlif_report_error(buf);
 }

@@ -429,7 +429,7 @@ int main( void )
 	free( morebytes );
 
 	/* If we're here, all was successful. */
-	fprintf_s( stdout, "Succeess!\nShroud module test complete.\n" );
+	fprintf( stdout, "Succeess!\nShroud module test complete.\n" );
 
 	return 0;
 }

@@ -382,34 +382,34 @@ void KEYMAP::save()
 		if(code != 0) {
 			switch(code) {
 				case ' ':
-					fprintf_s(file, "SPACE ");
+					fprintf(file, "SPACE ");
 					break;
 				case '\r' + 128:
-					fprintf_s(file, "ENTER ");
+					fprintf(file, "ENTER ");
 					break;
 				case '\t' + 128:
-					fprintf_s(file, "TAB ");
+					fprintf(file, "TAB ");
 					break;
 				case 8 + 128:
-					fprintf_s(file, "BACKSPACE ");
+					fprintf(file, "BACKSPACE ");
 					break;
 				default:
 					if(isprint(code) && !(code & 0x80)) {
-						fprintf_s(file, "%c ", code);
+						fprintf(file, "%c ", code);
 					} else if(code >= 'a' - 'a' + 1 && code <= 'z' - 'a' + 1) {
-						fprintf_s(file, "^%c ", code + 'a' - 1);
+						fprintf(file, "^%c ", code + 'a' - 1);
 					} else if(code >= ('0' | 0x80) && code <= ('9' | 0x80)) {
-						fprintf_s(file, "^%c ", code & 0x7f);
+						fprintf(file, "^%c ", code & 0x7f);
 					} else if(code == '!' + 128) {
-						fprintf_s(file, "^! ");
+						fprintf(file, "^! ");
 					} else if(code == '@' + 128) {
-						fprintf_s(file, "^@ ");
+						fprintf(file, "^@ ");
 					} else {
-						fprintf_s(file, "^# ");
+						fprintf(file, "^# ");
 					}
 					break;
 			}
-			fprintf_s(file, "%s\n", func2key[i].str);
+			fprintf(file, "%s\n", func2key[i].str);
 		}
 	}
 	fclose(file);

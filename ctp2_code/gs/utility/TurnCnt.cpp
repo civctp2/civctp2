@@ -1040,7 +1040,7 @@ void TurnCount::LogPlayerStats(void)
 		logfile = fopen(filename, "wt");
 		if (!logfile) return;
 
-		fprintf_s(logfile, "%s\t%s\t%s\t%s\t%s\t%s\t%s\t%s\t%s\t%s\t%s\t%s\t%s\t%s\t%s\t%s\t%s\t%s\t%s\t%s\t%s\t%s\t\n",
+		fprintf(logfile, "%s\t%s\t%s\t%s\t%s\t%s\t%s\t%s\t%s\t%s\t%s\t%s\t%s\t%s\t%s\t%s\t%s\t%s\t%s\t%s\t%s\t%s\t\n",
 		        "Turn #",
 		        "# Cities",
 		        "Total Prod/Turn",
@@ -1097,39 +1097,39 @@ void TurnCount::LogPlayerStats(void)
 
 	}
 
-	fprintf_s(logfile, "%d\t", m_round);
-	fprintf_s(logfile, "%d\t", g_player[playerNum]->GetNumCities());
-	fprintf_s(logfile, "%d\t", totalProduction);
-	fprintf_s(logfile, "%d\t", totalFood);
-	fprintf_s(logfile, "%d\t", totalGold);
-	fprintf_s(logfile, "%d\t", g_player[playerNum]->m_gold->GetScience());
-	fprintf_s(logfile, "%d\t", numCitiesRioting);
-	fprintf_s(logfile, "%d\t", g_player[playerNum]->GetNumRevolted());
-	fprintf_s(logfile, "%d\t", g_player[playerNum]->GetGovernmentType());
-	fprintf_s(logfile, "%#.3f\t", g_player[playerNum]->GetWorkdayPerPerson());
-	fprintf_s(logfile, "%#.3f\t", g_player[playerNum]->GetWagesPerPerson());
-	fprintf_s(logfile, "%#.3f\t", g_player[playerNum]->GetRationsPerPerson());
+	fprintf(logfile, "%d\t", m_round);
+	fprintf(logfile, "%d\t", g_player[playerNum]->GetNumCities());
+	fprintf(logfile, "%d\t", totalProduction);
+	fprintf(logfile, "%d\t", totalFood);
+	fprintf(logfile, "%d\t", totalGold);
+	fprintf(logfile, "%d\t", g_player[playerNum]->m_gold->GetScience());
+	fprintf(logfile, "%d\t", numCitiesRioting);
+	fprintf(logfile, "%d\t", g_player[playerNum]->GetNumRevolted());
+	fprintf(logfile, "%d\t", g_player[playerNum]->GetGovernmentType());
+	fprintf(logfile, "%#.3f\t", g_player[playerNum]->GetWorkdayPerPerson());
+	fprintf(logfile, "%#.3f\t", g_player[playerNum]->GetWagesPerPerson());
+	fprintf(logfile, "%#.3f\t", g_player[playerNum]->GetRationsPerPerson());
 
 	double taxRate;
 	g_player[playerNum]->GetScienceTaxRate(taxRate);
-	fprintf_s(logfile, "%#.2f\t", taxRate);
+	fprintf(logfile, "%#.2f\t", taxRate);
 
-	fprintf_s(logfile, "%#.2f\t", g_player[playerNum]->m_materialsTax);
-	fprintf_s(logfile, "%d\t", g_player[playerNum]->GetAllUnitList()->Num());
-	fprintf_s(logfile, "%d\t", g_player[playerNum]->GetReadinessCost());
-	fprintf_s(logfile, "%d\t", totalPop);
-	fprintf_s(logfile, "%d\t", maxCitySize);
-	fprintf_s(logfile, "%d\t", g_player[playerNum]->GetCurrentPollution());
-	fprintf_s(logfile, "%#.3f\t", g_player[playerNum]->GetIncomePercent());
+	fprintf(logfile, "%#.2f\t", g_player[playerNum]->m_materialsTax);
+	fprintf(logfile, "%d\t", g_player[playerNum]->GetAllUnitList()->Num());
+	fprintf(logfile, "%d\t", g_player[playerNum]->GetReadinessCost());
+	fprintf(logfile, "%d\t", totalPop);
+	fprintf(logfile, "%d\t", maxCitySize);
+	fprintf(logfile, "%d\t", g_player[playerNum]->GetCurrentPollution());
+	fprintf(logfile, "%#.3f\t", g_player[playerNum]->GetIncomePercent());
 
 	sint32 numAdvances = 0;
 	for (sint32 adv=0; adv<g_player[playerNum]->NumAdvances(); adv++)
 		if (g_player[playerNum]->HasAdvance(adv)) {
 			numAdvances++;
 		}
-	fprintf_s(logfile, "%d\t", numAdvances);
+	fprintf(logfile, "%d\t", numAdvances);
 
-    fprintf_s(logfile, "\n");
+    fprintf(logfile, "\n");
 	fclose(logfile);
 }
 

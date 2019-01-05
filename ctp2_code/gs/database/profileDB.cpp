@@ -732,21 +732,21 @@ void ProfileDB::Save()
 		PointerList<ProfileVar>::Walker walk(m_vars);
 		while(walk.IsValid()) {
 			ProfileVar *var = walk.GetObj();
-			fprintf_s(file, "%s=", var->m_name);
+			fprintf(file, "%s=", var->m_name);
 
 			switch(var->m_type) {
 				case PV_BOOL:
 					if(*var->m_numValue) {
-						fprintf_s(file, "Yes\n");
+						fprintf(file, "Yes\n");
 					} else {
-						fprintf_s(file, "No\n");
+						fprintf(file, "No\n");
 					}
 					break;
 				case PV_NUM:
-					fprintf_s(file, "%d\n", *var->m_numValue);
+					fprintf(file, "%d\n", *var->m_numValue);
 					break;
 				case PV_STRING:
-					fprintf_s(file, "%s\n", var->m_stringValue);
+					fprintf(file, "%s\n", var->m_stringValue);
 					break;
 			}
 			walk.Next();

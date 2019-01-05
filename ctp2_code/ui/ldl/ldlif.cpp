@@ -91,7 +91,7 @@ void ldlif_init_log()
 #ifdef _DEBUG
 	FILE *f = fopen("ldlparselog.txt", "w");
 	if(f) {
-		fprintf_s(f, "%" PRId64 "\n", time(0));
+		fprintf(f, "%" PRId64 "\n", time(0));
 		fclose(f);
 	}
 #endif
@@ -103,7 +103,7 @@ void ldlif_log(char *format, ...)
 	va_start(list, format);
 
 	FILE *f = fopen("ldlparselog.txt", "a");
-	vfprintf_s(f, format, list);
+	vfprintf(f, format, list);
 	fclose(f);
 	va_end(list);
 #endif

@@ -20,7 +20,7 @@ AUI_ERRCODE aui_SDL::InitCommon(BOOL useExclusiveMode)
 	                  SDL_INIT_AUDIO | SDL_INIT_TIMER);
 
 	if (0 != rc) {
-		fprintf_s(stderr, "SDL_Init failed: %s\n", SDL_GetError());
+		fprintf(stderr, "SDL_Init failed: %s\n", SDL_GetError());
 		return AUI_ERRCODE_CREATEFAILED;
 	}
 */

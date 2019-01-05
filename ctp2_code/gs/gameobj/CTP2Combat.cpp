@@ -99,7 +99,7 @@ static void combat_print(sint32 level, const char *fmt, ...)
 	vsprintf(text, fmt, vl);
 	va_end(vl);
 
-	fprintf_s(s_output, "%s", text);
+	fprintf(s_output, "%s", text);
 }
 
 #define k_MAX_TRACKED_UNITS 255

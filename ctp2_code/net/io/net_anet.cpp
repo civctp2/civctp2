@@ -412,12 +412,12 @@ ActivNetIO::Send(uint16 id,
 #ifdef LOG_NETWORK_OUTPUT
 		FILE *ntfile = fopen("netnetthread.log", "a");
 		if(ntfile) {
-			fprintf_s(ntfile, "%c%c ", buf[0], buf[1]);
+			fprintf(ntfile, "%c%c ", buf[0], buf[1]);
 			sint32 i;
 			for(i = 0; i < len; i++) {
-				fprintf_s(ntfile, "%02lx ", buf[i]);
+				fprintf(ntfile, "%02lx ", buf[i]);
 			}
-			fprintf_s(ntfile, "\n");
+			fprintf(ntfile, "\n");
 			fclose(ntfile);
 		}
 #endif
@@ -513,12 +513,12 @@ ActivNetIO::Idle()
 			if(buf[0] >= 'A' && buf[0] <= 'Z') {
 				FILE *ntifile = fopen("netthreadinput.log", "a");
 				if(ntifile) {
-					fprintf_s(ntifile, "%c%c ", buf[0], buf[1]);
+					fprintf(ntifile, "%c%c ", buf[0], buf[1]);
 					sint32 i;
 					for(i = 0; i < size; i++) {
-						fprintf_s(ntifile, "%02lx ", buf[i]);
+						fprintf(ntifile, "%02lx ", buf[i]);
 					}
-					fprintf_s(ntifile, "\n");
+					fprintf(ntifile, "\n");
 					fclose(ntifile);
 				}
 			}

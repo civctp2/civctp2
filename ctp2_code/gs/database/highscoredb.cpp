@@ -220,7 +220,7 @@ void HighScoreDB::SaveHighScores( void )
 	for ( sint32 i = 0 ; i < m_nHighScores ; i++)
 	{
 
-		fprintf_s(fp, "{%s} %d\n", nextScore->m_name, nextScore->m_score);
+		fprintf(fp, "{%s} %d\n", nextScore->m_name, nextScore->m_score);
 		nextScore = nextScore->m_next;
 	}
 

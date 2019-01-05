@@ -122,8 +122,8 @@ void MapCopyBuffer::Save(const MBCHAR *fileName)
 	Assert(f);
 	if(!f) return;
 
-	fprintf_s(f, "CTP2CLIP\n");
-	fprintf_s(f, "%d,%d\n", m_width, m_height);
+	fprintf(f, "CTP2CLIP\n");
+	fprintf(f, "%d,%d\n", m_width, m_height);
 	sint32 x, y;
 	for(x = 0; x < m_width; x++) {
 		for(y = 0; y < m_height; y++) {

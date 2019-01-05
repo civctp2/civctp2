@@ -50,42 +50,42 @@ extern char *szAppName;
 #endif
 
 #ifdef LPRNT
-#define LPRINT_INIT lprint_fout=fopen("civlog.txt","w");fprintf_s(lprint_fout,"%s\n",szAppName);fclose(lprint_fout);
+#define LPRINT_INIT lprint_fout=fopen("civlog.txt","w");fprintf(lprint_fout,"%s\n",szAppName);fclose(lprint_fout);
 #else
 #define LPRINT_INIT
 #endif
 
 #ifdef LPRNT
-#define LSTART lprint_fout=fopen("civlog.txt","a");fprintf_s(lprint_fout," %3d-%d:%12s %4d: ",turn_count, my_team, strrchr(__FILE__,'\\')+1,__LINE__);
-#define LEND fprintf_s(lprint_fout,"\n");fclose(lprint_fout);
+#define LSTART lprint_fout=fopen("civlog.txt","a");fprintf(lprint_fout," %3d-%d:%12s %4d: ",turn_count, my_team, strrchr(__FILE__,'\\')+1,__LINE__);
+#define LEND fprintf(lprint_fout,"\n");fclose(lprint_fout);
 #endif
 
 #ifdef LPRNT
-#define LPRINT0(lprint_string)  LSTART;fprintf_s(lprint_fout,lprint_string);LEND
+#define LPRINT0(lprint_string)  LSTART;fprintf(lprint_fout,lprint_string);LEND
 #else
 #define LPRINT0(lprint_string)
 #endif
 
 #ifdef LPRNT
-#define LPRINT1(lprint_string, lprint_first)  LSTART;fprintf_s(lprint_fout,lprint_string,lprint_first);LEND
+#define LPRINT1(lprint_string, lprint_first)  LSTART;fprintf(lprint_fout,lprint_string,lprint_first);LEND
 #else
 #define LPRINT1(lprint_string, lprint_first)
 #endif
 
 #ifdef LPRNT
-#define LPRINT2(lprint_string, lprint_first, lprint_second)  LSTART;fprintf_s(lprint_fout,lprint_string,lprint_first, lprint_second);LEND
+#define LPRINT2(lprint_string, lprint_first, lprint_second)  LSTART;fprintf(lprint_fout,lprint_string,lprint_first, lprint_second);LEND
 #else
 #define LPRINT2(lprint_string, lprint_first, lprint_second)
 #endif
 
 #ifdef LPRNT
-#define LPRINT3(lprint_string, lprint_first, lprint_second, lprint_third)  LSTART;fprintf_s(lprint_fout,lprint_string,lprint_first, lprint_second, lprint_third);LEND
+#define LPRINT3(lprint_string, lprint_first, lprint_second, lprint_third)  LSTART;fprintf(lprint_fout,lprint_string,lprint_first, lprint_second, lprint_third);LEND
 #else
 #define LPRINT3(lprint_string, lprint_first, lprint_second, lprint_third)
 #endif
 
 #ifdef LPRNT
-#define LPRINT4(lprint_string, lprint_first, lprint_second, lprint_third, lprint_fourth)  LSTART;fprintf_s(lprint_fout,lprint_string,lprint_first, lprint_second, lprint_third, lprint_fourth);LEND
+#define LPRINT4(lprint_string, lprint_first, lprint_second, lprint_third, lprint_fourth)  LSTART;fprintf(lprint_fout,lprint_string,lprint_first, lprint_second, lprint_third, lprint_fourth);LEND
 #else
 #define LPRINT4(lprint_string, lprint_first, lprint_second, lprint_third, lprint_fourth)
 #endif

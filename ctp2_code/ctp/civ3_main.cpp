@@ -1085,7 +1085,7 @@ void ParseCommandLine(PSTR szCmdLine)
 #ifndef _BFR_
 	if(stricmp(szCmdLine, "crash.txt") == 0) {
 		FILE *txt = fopen("crashmap.txt", "w");
-		fprintf_s(txt, "%s\n", c3debug_ExceptionStackTraceFromFile(fopen("crash.txt", "r")));
+		fprintf(txt, "%s\n", c3debug_ExceptionStackTraceFromFile(fopen("crash.txt", "r")));
 		fclose(txt);
 		exit(0);
 	}
@@ -1288,8 +1288,8 @@ static LONG _cdecl main_CivExceptionHandler(LPEXCEPTION_POINTERS pException)
 
 		if (crashLog)
         {
-            fprintf_s(crashLog, "Version %s\n", Os::GetExeVersion().c_str());
-			fprintf_s(crashLog, "%s\n", c3debug_ExceptionStackTrace(pException));
+            fprintf(crashLog, "Version %s\n", Os::GetExeVersion().c_str());
+			fprintf(crashLog, "%s\n", c3debug_ExceptionStackTrace(pException));
 		    fclose(crashLog);
 		}
 	}
@@ -1699,7 +1699,7 @@ int WINAPI CivMain(HINSTANCE hInstance, HINSTANCE hPrevInstance, PSTR szCmdLine,
 			int n = SDL_PeepEvents(&event, 1, SDL_GETEVENT,
                             ~(SDL_EVENTMASK(SDL_MOUSEMOTION) | SDL_EVENTMASK(SDL_MOUSEBUTTONDOWN) | SDL_EVENTMASK(SDL_MOUSEBUTTONUP)));
 			if (0 > n) {
-                            //fprintf_s(stderr, "[CivMain] PeepEvents failed: %s\n", SDL_GetError());
+                            //fprintf(stderr, "[CivMain] PeepEvents failed: %s\n", SDL_GetError());
                             printf("%s L%d: SDL_PeepEvents: Still events stored! Error?: %s\n", __FILE__, __LINE__, SDL_GetError());
 
 				break;
@@ -1715,14 +1715,14 @@ int WINAPI CivMain(HINSTANCE hInstance, HINSTANCE hPrevInstance, PSTR szCmdLine,
 			// If a keyboard event then we must reenqueue it so that aui_sdlkeyboard has a chance to look at it
 			if (event.type == SDL_KEYDOWN || event.type == SDL_KEYUP) {
 				if (-1==SDL_LockMutex(g_secondaryKeyboardEventQueueMutex)) {
-					fprintf_s(stderr, "[CivMain] SDL_LockMutex failed: %s\n", SDL_GetError());
+					fprintf(stderr, "[CivMain] SDL_LockMutex failed: %s\n", SDL_GetError());
 					break;
 				}
 
 				g_secondaryKeyboardEventQueue.push(event);
 
 				if (-1==SDL_UnlockMutex(g_secondaryKeyboardEventQueueMutex)) {
-					fprintf_s(stderr, "[CivMain] SDL_UnlockMutex failed: %s\n", SDL_GetError());
+					fprintf(stderr, "[CivMain] SDL_UnlockMutex failed: %s\n", SDL_GetError());
 					break;
 				}
 			}

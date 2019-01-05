@@ -53,7 +53,7 @@ AUI_ERRCODE aui_SDLKeyboard::GetInput( void )
 
 	if (g_secondaryKeyboardEventQueueMutex != NULL) {
 		if (-1==SDL_LockMutex(g_secondaryKeyboardEventQueueMutex)) {
-			fprintf_s(stderr, "[aui_SDLKeyboard::GetInput] SDL_LockMutex failed: %s\n", SDL_GetError());
+			fprintf(stderr, "[aui_SDLKeyboard::GetInput] SDL_LockMutex failed: %s\n", SDL_GetError());
 			return AUI_ERRCODE_NODIRECTINPUTDEVICE;
 		}
 		if (!g_secondaryKeyboardEventQueue.empty()) {
@@ -63,7 +63,7 @@ AUI_ERRCODE aui_SDLKeyboard::GetInput( void )
 		}
 
 		if (-1==SDL_UnlockMutex(g_secondaryKeyboardEventQueueMutex)) {
-			fprintf_s(stderr, "[aui_SDLKeyboard::GetInput] SDL_UnlockMutex failed: %s\n", SDL_GetError());
+			fprintf(stderr, "[aui_SDLKeyboard::GetInput] SDL_UnlockMutex failed: %s\n", SDL_GetError());
 			return AUI_ERRCODE_NODIRECTINPUTDEVICE;
 		}
 	}

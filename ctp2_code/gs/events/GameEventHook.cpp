@@ -64,7 +64,7 @@ public:
     {
         char str[1024];
         object.m_cb->GetDescription(str, 1024);
-        fprintf_s(m_file, "  %s\n", str);
+        fprintf(m_file, "  %s\n", str);
     };
 
 private:
@@ -295,7 +295,7 @@ void GameEventHook::Dump(FILE * f) const
 {
     if (m_callbacks.empty())
     {
-		fprintf_s(f, "  <empty>\n");
+		fprintf(f, "  <empty>\n");
 	}
     else
     {

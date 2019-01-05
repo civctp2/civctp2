@@ -43,7 +43,7 @@
 extern "C" {
 #endif
 
-#define Assert(x) { if(!(x)) { fprintf_s(stderr, "Assert %s:%d: %s\n", __FILE__, __LINE__, #x); } }
+#define Assert(x) { if(!(x)) { fprintf(stderr, "Assert %s:%d: %s\n", __FILE__, __LINE__, #x); } }
 
 typedef enum {
 	DATUM_INT,
