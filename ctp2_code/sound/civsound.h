@@ -49,7 +49,7 @@
 #endif
 
 #if defined(USE_SDL)
-#include <SDL/SDL_mixer.h>
+#include <SDL_mixer.h>
 #else
 #include "mss.h"
 #endif

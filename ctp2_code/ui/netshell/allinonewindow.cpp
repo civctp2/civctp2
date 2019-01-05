@@ -4086,7 +4086,13 @@ void AllinoneWindow::CancelButtonAction::Execute(
 			g_gamesetup.SetClosed( FALSE );
 			g_gamesetup.SetSize( k_NS_MAX_HUMANS );
 
-			std::this_thread::sleep_for(std::chrono::milliseconds(k_PACKET_DELAY));
+			/// @todo Use Os::Sleep
+#ifdef WIN32
+			Sleep(k_PACKET_DELAY);
+#else
+			usleep(k_PACKET_DELAY * 1000);
+#endif
+//			std::this_thread::sleep_for(std::chrono::milliseconds(k_PACKET_DELAY));
 			w->UpdateGameSetup();
 		}
 		g_netfunc->Leave();

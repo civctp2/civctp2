@@ -6,7 +6,7 @@
 #include "aui_ui.h"
 #include "aui_uniqueid.h"
 #include "aui_sdlsurface.h"
-#include <SDL/SDL_thread.h>
+#include <SDL_thread.h>
 
 uint32 aui_SDLSurface::m_SDLSurfaceClassId = aui_UniqueId();
 

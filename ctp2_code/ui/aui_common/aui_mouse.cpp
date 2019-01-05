@@ -698,7 +698,13 @@ DWORD WINAPI MouseThreadProc( LPVOID param )
 		}
 #endif
 
-		std::this_thread::sleep_for(std::chrono::milliseconds(k_AUI_MOUSE_THREAD_SLEEP_TIME));
+#ifdef WIN32
+		Sleep(k_AUI_MOUSE_THREAD_SLEEP_TIME);
+#elif defined(LINUX)
+		usleep(k_AUI_MOUSE_THREAD_SLEEP_TIME);
+#endif
+		// For that something is wrong with the mouse delay
+//		std::this_thread::sleep_for(std::chrono::milliseconds(k_AUI_MOUSE_THREAD_SLEEP_TIME));
 	}
 
 	return 0;

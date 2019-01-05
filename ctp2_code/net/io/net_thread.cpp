@@ -226,8 +226,12 @@ void NetThread::Run()
 #endif
 
 	while(!m_exit) {
-		std::this_thread::sleep_for(std::chrono::microseconds(100));
-
+//		std::this_thread::sleep_for(std::chrono::microseconds(100));
+#ifdef WIN32
+		Sleep(100);
+#else
+		usleep(100 * 1000);
+#endif
 		if(m_anet) {
 			if(m_dp) {
 
