@@ -500,18 +500,18 @@ TERRAIN_WATER_SHALLOW_GOOD_TWO {
    Gold 5
    Food 5
    Production 0
-   Probability 0.25
+   Probability 0.1
    Icon ICON_GOOD_SHALLOW_WATER_TWO
 }
 
-# Salmon #42
+# Fish #47
 TERRAIN_WATER_SHALLOW_GOOD_THREE {
-   SpriteID 37
-   Sound SOUND_ID_SALMON
+   SpriteID 36
+   Sound SOUND_ID_FISH
    Gold 5
    Food 15
    Production 0
-   Probability 0.25
+   Probability 0.4
    Icon ICON_GOOD_SHALLOW_WATER_THREE
 }
 
@@ -584,10 +584,10 @@ TERRAIN_WATER_BEACH_GOOD_ONE {
    GLHidden
 }
 
-# Fish #47
+# Salmon #42
 TERRAIN_WATER_BEACH_GOOD_TWO {
-   SpriteID 36
-   Sound SOUND_ID_FISH
+   SpriteID 37
+   Sound SOUND_ID_SALMON
    Gold 5
    Food 15
    Production 0
