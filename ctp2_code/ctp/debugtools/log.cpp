@@ -131,7 +131,7 @@ void Hash_Add (const char *hash_key)
 		hash_value = Hash (hash_key);
 		hash_entry = (HashTableEntry_Ptr) malloc (sizeof (HashTableEntry));
 
-		hash_entry->key = _strdup (hash_key);
+		hash_entry->key = strdup (hash_key);
 		hash_entry->next = hash_table.bucket[hash_value];
 
 		hash_table.bucket[hash_value] = hash_entry;
@@ -303,7 +303,7 @@ static void	Log_InitReadConfig (const char *config_filename, const char *log_fil
 
 	if (logging->to_file)
 	{
-		logging->log_filename = _strdup (log_filename);
+		logging->log_filename = strdup (log_filename);
 	}
 }
 
@@ -508,7 +508,7 @@ static inline void Log_MiddleCreateMessage (char *message, const char *message_t
 
 	elapsed_time = timeGetTime() - logging->base_time;
 
-	adjusted_module = _strdup (logging->module_name);
+	adjusted_module = strdup (logging->module_name);
 	adjusted_module_scan = adjusted_module + (strlen (adjusted_module));
 
 	while ((adjusted_module != adjusted_module_scan) &&
@@ -523,7 +523,7 @@ static inline void Log_MiddleCreateMessage (char *message, const char *message_t
 		adjusted_module_scan--;
 	}
 
-	adjusted_text = _strdup (message_text);
+	adjusted_text = strdup (message_text);
 	for (adjusted_text_scan = adjusted_text; *adjusted_text_scan; adjusted_text_scan++)
 	{
 		if (*adjusted_text_scan < ' ')

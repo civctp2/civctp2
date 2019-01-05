@@ -31,7 +31,7 @@ prebody       { return PREBODY; }
 alsire        { return ALLOWS_SINGLE_RECORD; }
 
 {name}        {
-			      yylval.name = (char*)_strdup(yytext);
+			      yylval.name = (char*)strdup(yytext);
 				  return NAME;
 			  }
 {string}      {

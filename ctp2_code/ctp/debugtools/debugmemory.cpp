@@ -180,7 +180,7 @@ static void DebugMemory_CreateDefaultHeap (void)
 
 	heap = (MemoryHeap) malloc (sizeof (MemoryHeapDescriptor));
 
-	heap->name = _strdup ("Default Heap");
+	heap->name = strdup ("Default Heap");
 
 	heap->type = 'HEAP';
 
@@ -422,7 +422,7 @@ char *DebugMemory_FastStrdup  (const char *string)
 {
 	char *memory;
 
-	memory = _strdup (string);
+	memory = strdup (string);
 
 	if (!memory)
 	{
@@ -1260,7 +1260,7 @@ MemoryHeap DebugMemoryHeap_GuardedOpen (const char *file, int line, const char *
 
 	heap = (MemoryHeap) malloc (sizeof (MemoryHeapDescriptor));
 
-	heap->name = _strdup (name);
+	heap->name = strdup (name);
 
 	heap->type = 'HEAP';
 

@@ -177,7 +177,7 @@
 #include <X11/Xlib.h>
 #endif
 #ifdef USE_GTK
-#include <gtk-3.0/gtk/gtk.h>
+#include <gtk/gtk.h>
 #endif
 
 #if defined(_DEBUG)

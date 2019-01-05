@@ -279,16 +279,16 @@ bool db_files_differ(char const * newFilePath, char const * oldFilePath)
 void db_maybe_copy(char * newFilePath)
 {
 	char oldpath[PATH_MAX];
-	_getcwd(oldpath, PATH_MAX);
+	getcwd(oldpath, PATH_MAX);
 
-	_chdir(db_get_code_directory());
+	chdir(db_get_code_directory());
 
 	char oldFilePath[PATH_MAX];
 	strcpy(oldFilePath, newFilePath);
 
 	char *dot = strrchr(oldFilePath, '.');
 	if(!dot) {
-		_chdir(oldpath);
+		chdir(oldpath);
 		return;
 	}
 	*dot = 0;
@@ -329,8 +329,8 @@ void db_maybe_copy(char * newFilePath)
 		}
     }
 
-	_unlink(newFilePath);
-	_chdir(oldpath);
+	unlink(newFilePath);
+	chdir(oldpath);
 }
 
 void db_end_record(char *name)
