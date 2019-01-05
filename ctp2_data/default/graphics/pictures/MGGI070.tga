@@ -12,7 +12,7 @@
 <meta content="https://assets.gitlab-static.net/assets/gitlab_logo-7ae504fe4f68fdebb3c2034e36621930cd36ea87924c11ff65dbcb8ed50dca58.png" property="og:image">
 <meta content="64" property="og:image:width">
 <meta content="64" property="og:image:height">
-<meta content="https://gitlab.com/LynxAbraxas/ctp2DF/-/jobs/141896571/artifacts/file/TGAs/MGGP039L.tga" property="og:url">
+<meta content="https://gitlab.com/LynxAbraxas/ctp2DF/-/jobs/141896571/artifacts/file/TGAs/MGGI070.tga" property="og:url">
 <meta content="summary" property="twitter:card">
 <meta content="Artifacts · buildSprites (#141896571) · Jobs · Lynx Abraxas / ctp2DF" property="twitter:title">
 <meta content="GitLab.com" property="twitter:description">
@@ -42,7 +42,7 @@ window.gon={};gon.api_version="v4";gon.default_avatar_url="https://gitlab.com/ht
 </script>
 
 <meta name="csrf-param" content="authenticity_token" />
-<meta name="csrf-token" content="Be0FNlwsJJfVZWmzUGhPRmOhXd72BXMR3OmPsih1t41LW0uT3wjQb7ri/DO0eXu+ino93emmn7uq82Ala/3fmA==" />
+<meta name="csrf-token" content="JjBCAho7bnYqRJNeAWTAj2UUZIskjMh0fB2qht7jF5ZohgynmR+ajkXDBt7ldfR3jM8EiDsvJN4KB0URnWt/gw==" />
 <meta content="origin-when-cross-origin" name="referrer">
 <meta content="width=device-width, initial-scale=1, maximum-scale=1" name="viewport">
 <meta content="#474D57" name="theme-color">
@@ -580,7 +580,7 @@ Activity
 <li><a href="/LynxAbraxas">Lynx Abraxas</a><svg class="s8 breadcrumbs-list-angle"><use xlink:href="https://gitlab.com/assets/icons-1bbf3f0e2e8f631ea6006c647f843db214684476054223102c16630dabc450d4.svg#angle-right"></use></svg></li> <li><a href="/LynxAbraxas/ctp2DF"><span class="breadcrumb-item-text js-breadcrumb-item-text">ctp2DF</span></a><svg class="s8 breadcrumbs-list-angle"><use xlink:href="https://gitlab.com/assets/icons-1bbf3f0e2e8f631ea6006c647f843db214684476054223102c16630dabc450d4.svg#angle-right"></use></svg></li>
 
 <li>
-<h2 class="breadcrumbs-sub-title"><a href="/LynxAbraxas/ctp2DF/-/jobs/141896571/artifacts/file/TGAs/MGGP039L.tga">Jobs</a></h2>
+<h2 class="breadcrumbs-sub-title"><a href="/LynxAbraxas/ctp2DF/-/jobs/141896571/artifacts/file/TGAs/MGGI070.tga">Jobs</a></h2>
 </li>
 </ul>
 </div>
@@ -646,27 +646,27 @@ Lynx Abraxas
 <div class="file-header-content">
 <i aria-hidden="true" data-hidden="true" class="fa fa-file-text-o fa-fw"></i>
 <strong class="file-title-name">
-MGGP039L.tga
+MGGI070.tga
 </strong>
-<button class="btn btn-clipboard btn-transparent prepend-left-5" data-toggle="tooltip" data-placement="bottom" data-container="body" data-class="btn-clipboard btn-transparent prepend-left-5" data-title="Copy file path to clipboard" data-clipboard-text="{&quot;text&quot;:&quot;TGAs/MGGP039L.tga&quot;,&quot;gfm&quot;:&quot;`TGAs/MGGP039L.tga`&quot;}" type="button" title="Copy file path to clipboard" aria-label="Copy file path to clipboard"><svg><use xlink:href="https://gitlab.com/assets/icons-1bbf3f0e2e8f631ea6006c647f843db214684476054223102c16630dabc450d4.svg#duplicate"></use></svg></button>
+<button class="btn btn-clipboard btn-transparent prepend-left-5" data-toggle="tooltip" data-placement="bottom" data-container="body" data-class="btn-clipboard btn-transparent prepend-left-5" data-title="Copy file path to clipboard" data-clipboard-text="{&quot;text&quot;:&quot;TGAs/MGGI070.tga&quot;,&quot;gfm&quot;:&quot;`TGAs/MGGI070.tga`&quot;}" type="button" title="Copy file path to clipboard" aria-label="Copy file path to clipboard"><svg><use xlink:href="https://gitlab.com/assets/icons-1bbf3f0e2e8f631ea6006c647f843db214684476054223102c16630dabc450d4.svg#duplicate"></use></svg></button>
 <small>
-37.5 KB
+846 Bytes
 </small>
 </div>
 
 <div class="file-actions d-none d-sm-block">
 
-<div class="btn-group" role="group"><a class="btn btn-sm has-tooltip" target="_blank" rel="noopener noreferrer" title="Download" data-container="body" href="/LynxAbraxas/ctp2DF/-/jobs/141896571/artifacts/raw/TGAs/MGGP039L.tga?inline=false"><svg><use xlink:href="https://gitlab.com/assets/icons-1bbf3f0e2e8f631ea6006c647f843db214684476054223102c16630dabc450d4.svg#download"></use></svg></a></div>
+<div class="btn-group" role="group"><a class="btn btn-sm has-tooltip" target="_blank" rel="noopener noreferrer" title="Download" data-container="body" href="/LynxAbraxas/ctp2DF/-/jobs/141896571/artifacts/raw/TGAs/MGGI070.tga?inline=false"><svg><use xlink:href="https://gitlab.com/assets/icons-1bbf3f0e2e8f631ea6006c647f843db214684476054223102c16630dabc450d4.svg#download"></use></svg></a></div>
 </div>
 </div>
 <div class="blob-viewer" data-type="simple">
 <div class="file-content blob_file blob-no-preview">
 <div class="center render-error">
-<a href="/LynxAbraxas/ctp2DF/-/jobs/141896571/artifacts/raw/TGAs/MGGP039L.tga"><h1 class="light">
+<a href="/LynxAbraxas/ctp2DF/-/jobs/141896571/artifacts/raw/TGAs/MGGI070.tga"><h1 class="light">
 <svg><use xlink:href="https://gitlab.com/assets/icons-1bbf3f0e2e8f631ea6006c647f843db214684476054223102c16630dabc450d4.svg#download"></use></svg>
 </h1>
 <h4>
-Download (37.5 KB)
+Download (846 Bytes)
 </h4>
 </a></div>
 </div>
