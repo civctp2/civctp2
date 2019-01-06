@@ -201,6 +201,10 @@ public:
 
 	static bool                  s_needAnotherCycle;
 
+#if defined(_DEBUG) || defined(USE_LOGGING)
+	void PrintAllGoals() const;
+#endif
+
 protected:
 
 	void Add_New_Matches_For_Goal

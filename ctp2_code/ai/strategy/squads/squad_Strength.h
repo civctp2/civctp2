@@ -71,7 +71,7 @@ public:
 	Squad_Strength & operator+=(const Squad_Strength & add_me);
 	Squad_Strength & operator-=(const Squad_Strength & remove_me);
 
-	uint8 Get_Agent_Count()                    const { return m_agent_count; };
+	sint8 Get_Agent_Count()                    const { return m_agent_count; };
 	void  Set_Agent_Count(const sint32 & count)      { m_agent_count = count; };
 
 	void Add_Agent_Strength(const Agent_ptr & agent);
@@ -89,9 +89,9 @@ public:
 	float Get_Bombard_Sea () const { return m_water_bombard_str; };
 	float Get_Bombard_Air () const { return m_air_bombard_str;   };
 	float Get_Value       () const { return m_value;             };
-	uint8 Get_Transport   () const { return m_transport;         };
-	uint8 Get_Defenders   () const { return m_defenders;         };
-	uint8 Get_Ranged_Units() const { return m_ranged;            };
+	sint8 Get_Transport   () const { return m_transport;         };
+	sint8 Get_Defenders   () const { return m_defenders;         };
+	sint8 Get_Ranged_Units() const { return m_ranged;            };
 
 	void Set_Attack       (const float & attack)  { m_attack_str        = attack;  };
 	void Set_Defense      (const float & defense) { m_defense_str       = defense; };
@@ -118,6 +118,7 @@ public:
 
 private:
 
+	// Can get negative in the sense what is missing
 	float m_attack_str;
 	float m_defense_str;
 	float m_ranged_str;
@@ -126,10 +127,11 @@ private:
 	float m_air_bombard_str;
 	float m_value;
 
-	uint8 m_agent_count;
-	uint8 m_transport;
-	uint8 m_defenders;
-	uint8 m_ranged;
+	// Can get negative in the sense what is missing
+	sint8 m_agent_count;
+	sint8 m_transport;
+	sint8 m_defenders;
+	sint8 m_ranged;
 
 #if defined(_DEBUG) || defined(USE_LOGGING)
 public:

@@ -273,8 +273,8 @@ void MapAnalysis::BeginTurn()
             Assert(army.IsValid());
             army->GetPos(pos);
 
-            uint8 defense_count;
-            uint8 ranged_count;
+            sint8 defense_count;
+            sint8 ranged_count;
             float attack_strength;
             float defense_strength;
             float ranged_strength;

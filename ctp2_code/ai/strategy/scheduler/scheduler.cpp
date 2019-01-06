@@ -892,6 +892,14 @@ void Scheduler::Match_Resources(const bool move_armies)
 ///////////////////////////////////////////////////////////////////////////////////////////////////////
 void Scheduler::Add_New_Goal(const Goal_ptr & new_goal)
 {
+	// Do not add goals that cannot executed anyway
+	// Too experimental for now
+	//if(new_goal->Get_Totally_Complete())
+	//{
+	//	delete new_goal;
+	//	return;
+	//}
+
 	sint32 goal_type    = new_goal->Get_Goal_Type();
 
 	Sorted_Goal_Iter tmp_goal_iter =
@@ -1993,8 +2001,8 @@ void Scheduler::Assign_Garrison()
 		  )
 		{
 
-			uint8 defense_count;
-			uint8 tmp_count;
+			sint8 defense_count;
+			sint8 tmp_count;
 			float tmp;
 			float defense_strength;
 			army->ComputeStrength(tmp,
@@ -2089,3 +2097,27 @@ void Scheduler::Assign_Garrison()
 
 	AI_DPRINTF(k_DBG_SCHEDULER_DETAIL, m_playerId, -1, -1,("\n"));
 }
+
+#if defined(_DEBUG) || defined(USE_LOGGING)
+void Scheduler::PrintAllGoals() const
+{
+	AI_DPRINTF(k_DBG_SCHEDULER, m_playerId, -1, -1, ("\n"));
+	AI_DPRINTF(k_DBG_SCHEDULER, m_playerId, -1, -1,
+		("Number of goals in goal database: %d\n", g_theGoalDB->NumRecords()));
+	AI_DPRINTF(k_DBG_SCHEDULER, m_playerId, -1, -1,
+		("Goals for player %d: %d\n", m_playerId, m_goals.size()));
+	AI_DPRINTF(k_DBG_SCHEDULER, m_playerId, -1, -1, ("\n"));
+
+	Sorted_Goal_Iter sorted_goal_iter;
+	for(size_t    goal_type = 0;
+		goal_type < m_goals_of_type.size();
+		goal_type++
+		)
+	{
+		AI_DPRINTF(k_DBG_SCHEDULER, m_playerId, -1, -1,
+			("%s: %d\n", g_theGoalDB->GetNameStr(goal_type), m_goals_of_type[goal_type].size()));
+	}
+
+	AI_DPRINTF(k_DBG_SCHEDULER, m_playerId, -1, -1, ("\n"));
+}
+#endif

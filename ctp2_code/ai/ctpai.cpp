@@ -1078,6 +1078,9 @@ void CtpAi::Load(CivArchive & archive)
 	SPLASH_STRING("Compute good values...");
 	g_theWorld->ComputeGoodsValues();
 
+	SPLASH_STRING("Analyse Map...");
+	MapAnalysis::GetMapAnalysis().BeginTurn();
+
 	SPLASH_STRING("Assign goals...");
 	for (PLAYER_INDEX playerId = 0; playerId < s_maxPlayers; playerId++)
 	{
@@ -1123,9 +1126,6 @@ void CtpAi::Load(CivArchive & archive)
 	Goal goal;
 	goal.PrintSizeOfGoalClass();
 #endif
-
-	SPLASH_STRING("Analyse Map...");
-	MapAnalysis::GetMapAnalysis().BeginTurn();
 }
 
 void CtpAi::Save(CivArchive & archive)
@@ -1386,6 +1386,9 @@ void CtpAi::BeginTurn(const PLAYER_INDEX player)
 			CtpAi::SellRandomBuildings(city, 0.3);
 		}
 	}
+#if defined(_DEBUG) || defined(USE_LOGGING)
+	Scheduler::GetScheduler(player).PrintAllGoals();
+#endif
 }
 
 //----------------------------------------------------------------------------
@@ -1598,8 +1601,8 @@ void CtpAi::MakeRoomForNewUnits(const PLAYER_INDEX playerId)
 
 						g_graphicsOptions->AddTextToArmy(move_army, "MakeRoom", 255);
 
-						uint8 defense_count;
-						uint8 tmp_count;
+						sint8 defense_count;
+						sint8 tmp_count;
 						float tmp;
 						float defense_strength;
 						move_army->ComputeStrength(tmp,
@@ -2041,8 +2044,8 @@ void CtpAi::ComputeCityGarrisons(const PLAYER_INDEX playerId )
 		if (army->GetCargo(transports, max, empty))
 			continue;
 
-		uint8 defense_count;
-		uint8 tmp_count;
+		sint8 defense_count;
+		sint8 tmp_count;
 		float tmp;
 		float defense_strength;
 		army->ComputeStrength(tmp,

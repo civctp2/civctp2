@@ -271,7 +271,7 @@ void Goal::Commit_Agent(const Agent_ptr & agent)
 
 		agent->Set_Goal(this);
 
-		Assert(m_current_attacking_strength.Get_Agent_Count() >= m_agents.size());
+		Assert(m_current_attacking_strength.Get_Agent_Count() >= static_cast<sint8>(m_agents.size()));
 	}
 }
 
@@ -321,7 +321,7 @@ void Goal::Rollback_Agent(Agent_List::iterator & agent_iter)
 
 	agent_iter = m_agents.erase(agent_iter);
 
-	Assert(m_current_attacking_strength.Get_Agent_Count() >= m_agents.size());
+	Assert(m_current_attacking_strength.Get_Agent_Count() >= static_cast<sint8>(m_agents.size()));
 
 	agent_ptr->Set_Goal(NULL);
 }
@@ -1164,7 +1164,7 @@ sint32 Goal::Get_Target_Value() const
 	|| rec->GetTargetTypeSpecialUnit()
 	){
 		const Army &    army = Get_Target_Army();
-		uint8           tmpCount;
+		sint8           tmpCount;
 		float           tmp;
 		float           tmpValue;
 		army->ComputeStrength(tmp,tmp,tmp,tmpCount,tmpCount,tmp,tmp,tmp,tmpValue, false);
@@ -1281,7 +1281,7 @@ void Goal::Compute_Needed_Troop_Flow()
 		// tweak to obtain RETREAT Goal definition : TO DO - 'cleaner' method - Calvitix
 		// Set to 2 to so that units with no goals will retreat to the nearest city
 		// (I Prefer that method than the GARRISON troops, that are not able to leave the city)
-		// cities will be better defended if their is enough units, otherwise units will be
+		// cities will be better defended if there are enough units, otherwise units will be
 		// affected to relevant goals
 		if(g_theGoalDB->Get(m_goal_type)->GetTargetTypeCity()
 		&& g_theGoalDB->Get(m_goal_type)->GetTargetOwnerSelf()
@@ -2607,14 +2607,14 @@ bool Goal::Get_Totally_Complete() const
 				 && !goal_record->GetSquadClassStealth())
 			{
 				AI_DPRINTF(k_DBG_SCHEDULER, m_playerId, m_goal_type, 0,
-				    ("\t  GOAL %x (%s) (%3d,%3d): Diplomacy match failed : No permission to enter territory\n", this, g_theGoalDB->Get(m_goal_type)->GetNameText(),target_pos.x,target_pos.y));
+				    ("\t  GOAL %x (%s) (%3d,%3d): Diplomacy match failed : No permission to enter territory of player %d\n", this, g_theGoalDB->Get(m_goal_type)->GetNameText(),target_pos.x, target_pos.y, target_owner));
 				return true;
 			}
 
 			if(!diplomacy_match)
 			{
 				AI_DPRINTF(k_DBG_SCHEDULER, m_playerId, m_goal_type, 0,
-				    ("\t  GOAL %x (%s) (%3d,%3d): Diplomacy match failed.\n", this, g_theGoalDB->Get(m_goal_type)->GetNameText(),target_pos.x,target_pos.y));
+				    ("\t  GOAL %x (%s) (%3d,%3d): Diplomacy match failed with player %d.\n", this, g_theGoalDB->Get(m_goal_type)->GetNameText(),target_pos.x,target_pos.y, target_owner));
 
 				return true;
 			}
@@ -2622,7 +2622,7 @@ bool Goal::Get_Totally_Complete() const
 		else if(!goal_record->GetTargetOwnerNoContact())
 		{
 			AI_DPRINTF(k_DBG_SCHEDULER, m_playerId, m_goal_type, 0,
-			    ("\t  GOAL %x (%s) (%3d,%3d): Target owner not contacted.\n", this, g_theGoalDB->Get(m_goal_type)->GetNameText(),target_pos.x,target_pos.y));
+			    ("\t  GOAL %x (%s) (%3d,%3d): Target owner %d not contacted.\n", this, g_theGoalDB->Get(m_goal_type)->GetNameText(),target_pos.x,target_pos.y, target_owner));
 
 			return true;
 		}

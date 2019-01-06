@@ -3459,7 +3459,7 @@ void Governor::ComputeDesiredUnits()
 	m_currentUnitShieldCost = 0;
 
 	sint32 needed_transport = Scheduler::GetScheduler(m_playerId).
-		                        GetMostNeededStrength().Get_Transport();
+	                            GetMostNeededStrength().Get_Transport();
 
 	for (int list_num = 0; list_num < BUILD_UNIT_LIST_MAX; list_num++)
 	{
@@ -3663,10 +3663,13 @@ void Governor::ComputeDesiredUnits()
 		case BUILD_UNIT_LIST_SEA_TRANSPORT:
 			if (best_unit_type >= 0)
 			{
-				m_buildUnitList[list_num].m_maximumCount = desired_count + needed_transport;
+				Assert(g_theUnitDB->Get(best_unit_type)->HasCargoData());
+				needed_transport /= g_theUnitDB->Get(best_unit_type)->GetCargoDataPtr()->GetMaxCargo();
+				desired_count = std::max<sint32>(desired_count, needed_transport);
+
+				m_buildUnitList[list_num].m_maximumCount = desired_count;
 				m_buildUnitList[list_num].m_desiredCount =
 				    static_cast<sint16>(desired_count
-				                        + needed_transport
 				                        - m_currentUnitCount[best_unit_type]
 				                       );
 			}
