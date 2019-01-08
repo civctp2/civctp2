@@ -1967,6 +1967,8 @@ str_ldl_ScenMode "模式："
 #
 # Sprite editor stuff
 #
+str_SprEd_Load					"  加载"
+str_SprEd_Save					"  储存"
 str_SprEd_Move "  移动"
 str_SprEd_Attack "  攻击"
 str_SprEd_Idle "  闲置"
