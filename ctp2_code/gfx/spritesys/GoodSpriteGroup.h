@@ -94,6 +94,7 @@ public:
 	void			DrawText(sint32 x, sint32 y, MBCHAR const * s);
 
 	POINT			GetHotPoint(GOODACTION action);
+	void			SetHotPoint(GOODACTION action, POINT pt);
 
 
 	sint32			Parse(uint16 id,GROUPTYPE group);

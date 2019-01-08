@@ -278,6 +278,7 @@ BOOL g_hideTaskBar = FALSE;
 BOOL g_useIntroMovie = TRUE;
 BOOL g_noAssertDialogs = FALSE;
 BOOL g_runInBackground = FALSE;
+BOOL g_runSpriteEditor = FALSE;
 BOOL g_eventLog = FALSE;
 
 #if 0
@@ -1177,6 +1178,7 @@ void ParseCommandLine(PSTR szCmdLine)
 		g_useIntroMovie = !(NULL != strstr(szCmdLine, "nointromovie"));
 	g_noAssertDialogs = (NULL != strstr(szCmdLine, "noassertdialogs"));
 	g_runInBackground = (NULL != strstr(szCmdLine, "runinbackground"));
+	g_runSpriteEditor = (NULL != strstr(szCmdLine, "runspriteeditor"));
 
 #if defined(__AUI_USE_SDL__)
 	if (strstr(szCmdLine, "fullscreen"))

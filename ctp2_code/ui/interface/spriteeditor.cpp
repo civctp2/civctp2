@@ -88,7 +88,7 @@
 
 
 
-#include "UnitSpriteGroup.h"
+#include "GoodSpriteGroup.h"
 #include "FacedSprite.h"
 #include "Sprite.h"
 #include "screenmanager.h"
@@ -321,7 +321,7 @@ SpriteEditWindow::SpriteEditWindow(
 
 	m_facing		=k_DEFAULTSPRITEFACING;
 	m_frame			=0;
-	m_animation		=UNITACTION_MOVE;
+	m_animation		=GOODACTION_IDLE;
 	m_currentAnim	=NULL;
 
 	m_actionObj		= new Action();
@@ -364,7 +364,7 @@ SpriteEditWindow::SpriteEditWindow(
 	m_spriteSurface=NULL;
 
 	g_compression_buff = new unsigned char[COM_BUFF_SIZE];
-	LoadSprite("GU02");
+	LoadSprite("GG001.spr"); //alligator
 }
 
 SpriteEditWindow::~SpriteEditWindow()
@@ -466,11 +466,11 @@ SpriteEditWindow::InitializeControls(AUI_ERRCODE *errcode,MBCHAR *windowBlock)
 	m_VICTORYAnim	=spNew_ctp2_Button(errcode,windowBlock,"STVICTORYAnim","No Data",NULL,"CTP2_BUTTON_TITLE_BAR");
 	m_WORKAnim		=spNew_ctp2_Button(errcode,windowBlock,"STWORKAnim"   ,"No Data",NULL,"CTP2_BUTTON_TITLE_BAR");
 
-	m_MOVEAnim		->SetActionFuncAndCookie(AnimCallback,(void *)UNITACTION_MOVE   );
-	m_ATTACKAnim	->SetActionFuncAndCookie(AnimCallback,(void *)UNITACTION_ATTACK );
-	m_IDLEAnim		->SetActionFuncAndCookie(AnimCallback,(void *)UNITACTION_IDLE   );
-	m_VICTORYAnim	->SetActionFuncAndCookie(AnimCallback,(void *)UNITACTION_VICTORY);
-	m_WORKAnim		->SetActionFuncAndCookie(AnimCallback,(void *)UNITACTION_WORK   );
+	m_MOVEAnim		->SetActionFuncAndCookie(AnimCallback,(void *)GOODACTION_MAX   );
+	m_ATTACKAnim	->SetActionFuncAndCookie(AnimCallback,(void *)GOODACTION_MAX );
+	m_IDLEAnim		->SetActionFuncAndCookie(AnimCallback,(void *)GOODACTION_IDLE   );
+	m_VICTORYAnim	->SetActionFuncAndCookie(AnimCallback,(void *)GOODACTION_MAX );
+	m_WORKAnim		->SetActionFuncAndCookie(AnimCallback,(void *)GOODACTION_MAX   );
 
 	m_stepPlus		=spNew_ctp2_Button(errcode,windowBlock,"STPlayStepPlus"	,"No Data",NULL,"CTP2_BUTTON_TITLE_BAR");
 	m_stepMinus		=spNew_ctp2_Button(errcode,windowBlock,"STPlayStepMinus","No Data",NULL,"CTP2_BUTTON_TITLE_BAR");
@@ -619,10 +619,7 @@ SpriteEditWindow::LoadSprite(char *name)
 	if (name==NULL)
 		return;
 
-	sprintf(tbuffer,"%s.SPR",name);
-
-	if (!FileExists(tbuffer))
-		return;
+	sprintf(tbuffer,"%s",name);
 
 	m_frame=0;
 	m_facing=k_DEFAULTSPRITEFACING;
@@ -630,9 +627,28 @@ SpriteEditWindow::LoadSprite(char *name)
 	delete m_currentSprite;
     delete m_spriteSurface;
 
-	m_currentSprite = new UnitSpriteGroup(GROUPTYPE_UNIT);
-	m_currentSprite->LoadFull(tbuffer);
+	m_currentSprite = new GoodSpriteGroup(GROUPTYPE_UNIT);
 
+	if(strcasestr(tbuffer, ".SPR")){
+	  printf("%s L%d: name= %s!\n", __FILE__, __LINE__, tbuffer);
+	  if (!FileExists(tbuffer))
+	    return;
+	  m_currentSprite->LoadFull(tbuffer);
+	  }
+	else if(strcasestr(tbuffer, ".TXT")){
+	  if (!FileExists(tbuffer))
+	    return;
+	  printf("%s L%d: name= %s!\n", __FILE__, __LINE__, strupr(tbuffer));
+	  sint16 id= -1;
+	  sscanf(strupr(tbuffer), "GG%d.TXT", &id);
+	  printf("%s L%d: id= %d!\n", __FILE__, __LINE__, id);
+	  m_currentSprite->Parse(id, NULL);
+	  }
+	else{
+	  printf("%s L%d: name= %s!\n", __FILE__, __LINE__, tbuffer);
+	  return;
+	}
+	
 	uint32		i;
 	uint16		w = 0, h = 0;
 
@@ -641,7 +657,7 @@ SpriteEditWindow::LoadSprite(char *name)
 	m_spriteRect.top	= 0;
 	m_spriteRect.bottom = 100;
 
-	for (i=0;i<UNITACTION_MAX;i++)
+	for (i=0;i<GOODACTION_MAX;i++)
 	{
 		m_spriteData = m_currentSprite->GetGroupSprite((GAME_ACTION)i);
 
@@ -692,7 +708,6 @@ void
 SpriteEditWindow::SaveSprite(char *name)
 {
 	char tbuffer[256];
-	char *fname=name;
 
 	if (name==NULL)
 	{
@@ -703,13 +718,14 @@ SpriteEditWindow::SaveSprite(char *name)
 	if ((m_currentSprite==NULL)||(name==NULL))
 		return;
 
-	sprintf(tbuffer,"%s.SPR",name);
-
-	m_currentSprite->Save(name,k_SPRITEFILE_VERSION2,SPRDATA_LZW1);
-
-	sprintf(tbuffer,"%s.TXT",fname);
-
-	m_currentSprite->ExportScript(name);
+	if(strcasestr(tbuffer, ".SPR")){
+	  printf("%s L%d: name= %s!\n", __FILE__, __LINE__, tbuffer);
+	  m_currentSprite->Save(name,k_SPRITEFILE_VERSION2,SPRDATA_LZW1);
+	  }
+	else if(strcasestr(tbuffer, ".TXT")){
+	  printf("%s L%d: name= %s!\n", __FILE__, __LINE__, tbuffer);
+	  m_currentSprite->ExportScript(name);
+	}
 }
 
 
@@ -806,17 +822,11 @@ SpriteEditWindow::DrawSprite( )
 		rect.bottom = m_drawY+m_spriteRect.bottom;
 
 		if (m_drawFlag)
-			m_currentSprite->Draw((UNITACTION)m_animation,m_frame,m_drawX,m_drawY,m_facing,1.0,15,0,k_DRAWFLAGS_NORMAL,false,false);
+			m_currentSprite->Draw((GOODACTION)m_animation,m_frame,m_drawX,m_drawY,m_facing,1.0,15,0,k_DRAWFLAGS_NORMAL);
 
 		POINT flag;
 		maputils_MapXY2PixelXY(m_drawPoint.x, m_drawPoint.y, flag);
 
-		POINT *hPoint = m_currentSprite->GetShieldPoints((UNITACTION)m_animation);
-		if (hPoint)
-        {
-			flag.x += hPoint->x;
-			flag.y += hPoint->y;
-		}
 
 		MAPICON icon = MAPICON_HERALD;
 
@@ -855,10 +865,11 @@ SpriteEditWindow::ReDrawLargeSprite( )
 		if (m_facing >= k_NUM_FACINGS)
 			pt.x =m_spriteData->GetWidth();
 
-		sav=m_currentSprite->GetHotPoint((UNITACTION)m_animation,m_facing);
-		m_currentSprite->SetHotPoint((UNITACTION)m_animation,m_facing,pt);
-		m_currentSprite->DrawDirect(m_spriteSurface,(UNITACTION)m_animation,m_frame,0,0,m_facing,1.0,15,0,k_DRAWFLAGS_NORMAL,false,false);
-		m_currentSprite->SetHotPoint((UNITACTION)m_animation,m_facing,sav);
+		sav=m_currentSprite->GetHotPoint((GOODACTION)m_animation);
+		m_currentSprite->SetHotPoint((GOODACTION)m_animation,pt); // set only for large view
+		m_currentSprite->DrawDirect(m_spriteSurface,(GOODACTION)m_animation,m_frame,0,0,m_facing,1.0,15,0,k_DRAWFLAGS_NORMAL);
+		m_currentSprite->SetHotPoint((GOODACTION)m_animation,sav); // reset for drawing on map
+
 
 		g_c3ui->TheBlitter()->StretchBlt(m_largeSurface,&m_largeRect,m_spriteSurface,&m_spriteRect,k_AUI_BLITTER_FLAG_COPY);
 
@@ -867,7 +878,7 @@ SpriteEditWindow::ReDrawLargeSprite( )
 		sprintf(tbuffer,"HotSpot:\t%d,%d",sav.x,sav.y);
 		m_hotCoordsCurrent  ->SetText(tbuffer);
 
-		RECT HotRect;
+		RECT HotRect; // rect to indicate hot spot position in large view
 
 		HotRect.left    = (int)(m_oneOverWidthRatio*(float)sav.x)-3;
 		HotRect.top     = (int)(m_oneOverHeightRatio*(float)sav.y)-3;
@@ -878,11 +889,6 @@ SpriteEditWindow::ReDrawLargeSprite( )
 
 		g_c3ui->TheBlitter()->ColorBlt(m_largeSurface,&HotRect,color,k_AUI_BLITTER_FLAG_COPY);
 
-		POINT *hPoint = m_currentSprite->GetShieldPoints((UNITACTION)m_animation);
-		if(hPoint) {
-			sprintf(tbuffer, "Herald:\t%d,%d", hPoint->x, hPoint->y);
-			m_hotCoordsHerald->SetText(tbuffer);
-		}
 		m_largeImage->ShouldDraw(TRUE);
 		m_largeImage->Invalidate(&m_largeRect);
 
@@ -925,18 +931,6 @@ AUI_ERRCODE SpriteEditWindow::Idle( void )
 		m_hotCoordsMouse  ->SetText(tbuffer);
 	}
 
-	if (me->rbutton) {
-
-			POINT new_herald = me->position;
-			new_herald.x -= m_largeRectAbs.left;
-			new_herald.y -= m_largeRectAbs.top;
-			new_herald.x = (int)((float)new_herald.x*m_widthRatio);
-			new_herald.y = (int)((float)new_herald.y*m_heightRatio);
-
-			*m_currentSprite->GetShieldPoints((UNITACTION)m_animation) = new_herald;
-
-	}
-
 	if (!me->lbutton)
 		return AUI_ERRCODE_OK;
 
@@ -962,7 +956,7 @@ AUI_ERRCODE SpriteEditWindow::Idle( void )
 			new_hot.x = (int)((float)new_hot.x*m_widthRatio);
 			new_hot.y = (int)((float)new_hot.y*m_heightRatio);
 
-			m_currentSprite->SetHotPoint((UNITACTION)m_animation,m_facing,new_hot);
+			m_currentSprite->SetHotPoint((GOODACTION)m_animation,new_hot);
 		}
 	}
 

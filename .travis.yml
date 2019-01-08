@@ -32,7 +32,7 @@ jobs:
       script:
         - ./autogen.sh
         - CFLAGS="$CFLAGS -w -fuse-ld=gold" CXXFLAGS="$CXXFLAGS -fpermissive -w -fuse-ld=gold" ./configure --enable-silent-rules
-        - make -j"$(nproc)
+        - make
     - stage: build
       name: "docker build"
       script:

@@ -63,6 +63,7 @@
 
 extern  C3UI				*g_c3ui;
 extern  CivApp				*g_civApp;
+extern  BOOL                             g_runSpriteEditor;
 
 namespace Os
 {
@@ -108,11 +109,11 @@ AUI_ERRCODE initialplayscreen_Initialize( void )
 										spritetest_spPress, NULL);
 	Assert(errcode == AUI_ERRCODE_OK);
 
-#ifndef _DEBUG
-	ctp2_Button *spriteTest = (ctp2_Button *)aui_Ldl::GetObject(s_initplayWindowLDLBlock, "SpriteTestButton");
- 	spriteTest->Hide();
-#endif
-
+	if (!g_runSpriteEditor){
+	  ctp2_Button *spriteTest = (ctp2_Button *)aui_Ldl::GetObject(s_initplayWindowLDLBlock, "SpriteTestButton");
+	  spriteTest->Hide();
+	}
+	
 	errcode = aui_Ldl::SetActionFuncAndCookie(s_initplayWindowLDLBlock, "EmailButton",
 											initialplayscreen_emailPress, NULL);
 	Assert(errcode == AUI_ERRCODE_OK);

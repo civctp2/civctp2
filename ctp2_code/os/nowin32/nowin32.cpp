@@ -7,6 +7,8 @@
 #include <dirent.h>
 #include <stdio.h>
 #include <stdlib.h>
+#include <libgen.h>
+#ifdef HAVE_STRING_H
 #include <string.h>
 #include <strings.h>
 #include <unistd.h>
@@ -82,9 +84,30 @@ char* _fullpath(char* absolute, const char* relative, size_t bufsize)
 		return strdup(dest);
 }
 
-void _splitpath(const char*,char*,char*,char*,char*)
+void _splitpath( const char *path,
+                       char *drive,
+                       char *dir,
+                       char *fname,
+                       char *ext 
+               ) // http://msdn.microsoft.com/en-us/library/e737s6tf%28v=VS.100%29.aspx
 {
-	assert(0);
+  drive= NULL;
+  char *dirc, *basc, *extc;
+  dirc = strdup(path);
+  basc = strdup(path);
+  extc = strdup(path);
+  if(dir)
+    strcpy(dir, dirname(dirc)); // expecting pre-allocted array by caller
+  if(fname)
+    strcpy(fname, basename(basc)); // expecting pre-allocted array by caller
+  const char *dot = strrchr(basename(extc), '.');
+  if(ext){
+    if(!dot || dot == fname)
+      ext= "";
+    else
+      strcpy(ext, dot + 1); // expecting pre-allocted array by caller
+}
+  // printf("%s L%d: %s %s %s %s!\n", __FILE__, __LINE__, drive, dir, fname, ext);
 }
 
 uint32 GetTickCount()
