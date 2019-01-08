@@ -123,9 +123,9 @@ public:
 
     GOAL_RESULT Execute_Task();
 
-    bool Get_Invalid() const;
+    bool IsInvalid() const;
 
-    bool Get_Removal_Time() const;
+    bool IsTimeToRemove() const;
 
     bool Can_Be_Executed() const;
 
@@ -215,11 +215,15 @@ public:
 
     void ResetNeededTransport();
 
+    bool IsTotallyComplete() const;
+    bool IsComplete() const;
+    bool IsCurrentlyUnavailable() const;
+    bool IsTargetImmune() const;
+    bool IsInvalidByDiplomacy() const;
+
 private:
 
     void Rollback_Agent(Agent_List::iterator & agent_iter);
-
-    bool Get_Totally_Complete() const;
 
     bool FindPathToTask(Agent_ptr the_army,
                         const MapPoint & goal_pos,

@@ -3312,6 +3312,11 @@ ORDER_RESULT ArmyData::EnslaveSettler(const MapPoint &point, const sint32 uindex
 	return ORDER_RESULT_SUCCEEDED;
 }
 
+bool ArmyData::CanBeEnslaved() const
+{
+	return m_nElements == 1 && m_array[0].GetDBRec()->GetSettle();
+}
+
 bool ArmyData::CanUndergroundRailway(double &success, double &death,
 						   sint32 &uindex) const
 {

@@ -3989,8 +3989,6 @@ void Player::AttemptRevolt(void)
 		if (revolution[i])
 		{
 			cityData->Revolt(m_civRevoltingCitiesShouldJoin);
-			CtpAi::AddOwnerGoalsForCity(u, u.GetOwner());
-			CtpAi::AddForeignerGoalsForCity(u, m_owner);
 			m_num_revolted++;
 		}
 		else
@@ -5928,6 +5926,11 @@ void Player::RemoveWonder(sint32 which, bool destroyed)
 	}
 }
 
+bool Player::HasWonder(sint32 wonder) const
+{
+	return m_builtWonders & ((uint64)1 << (uint64)wonder);
+}
+
 uint64 Player::GetBuiltWonders()
 {
 	return m_builtWonders;
@@ -5945,10 +5948,6 @@ void Player::Entrench(sint32 army_idx)
 		return;
 
 	m_all_armies->Access(army_idx).AddOrders(UNIT_ORDER_ENTRENCH);
-
-
-
-
 
 	m_all_armies->Access(army_idx).ClearOrders();
 

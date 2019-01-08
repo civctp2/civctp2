@@ -10702,7 +10702,7 @@ Erhöhung des <L:DATABASE_CONCEPTS,CONCEPT_REGARD>Ansehens<e> bei anderen Natione
 
 [WONDER_THE_FORBIDDEN_CITY_GAMEPLAY]
 Die Verbotene Stadt leitet eine neue Ära der Isolation ein, indem weltweit alle Botschaften der Nation, in deren Besitz sich das Weltwunder befindet, geschlossen werden. Darüber hinaus verhindert es auch, dass fremde Nationen der eigenen Nation den Krieg erklären können.
-Mit der Endeckung der <L:DATABASE_ADVANCES,ADVANCE_RAILROAD>Eisenbahn<e> ist die Verbotene Stadt überholt und wird daher hinfällig.
+Mit der Endeckung der <L:DATABASE_ADVANCES,ADVANCE_RAILROAD>Eisenbahn<e> verliert die Verbotene Stadt ihre Wirkung.
 [END]
 
 [WONDER_THE_FORBIDDEN_CITY_HISTORICAL]

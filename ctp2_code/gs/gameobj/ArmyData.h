@@ -248,6 +248,7 @@ public:
 
     bool CanEnslaveSettler(sint32 &uindex) const;
     ORDER_RESULT EnslaveSettler(const MapPoint &point, const sint32 uindex, Unit home_city);
+	bool CanBeEnslaved() const;
     bool CanUndergroundRailway(double &success, double &death,
                                sint32 &uindex) const;
     bool CanUndergroundRailway(double &success, double &death) const;

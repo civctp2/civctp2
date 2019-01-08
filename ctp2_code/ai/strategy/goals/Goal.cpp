@@ -91,6 +91,11 @@
 //   improvement. (28-Jan-2009 Martin Gühmann)
 // - Changed occurances of UnitRecord::GetMaxHP to
 //   UnitData::CalculateTotalHP. (Aug 3rd 2009 Maq)
+// - Renamed Get_Totally_Complete to IsTotallyComplete and split it into subfunctions
+//   so that we can distinquish between goals with invalid target, goals that cannot
+//   be executed, goals without a diplomacy fit and goals that cannot be executed now. (08-Jan-2019 Martin Gühmann)
+// - Slavey goals cannot be executed either if slavery has been abolished.(08-Jan-2019 Martin Gühmann)
+// - The AI does not incite revolutions in 1 city civs. (08-Jan-2019 Martin Gühmann)
 //
 //----------------------------------------------------------------------------
 
@@ -114,6 +119,7 @@ const Utility Goal::MAX_UTILITY =  99999999;
 #include "advanceutil.h"
 #include "terrainutil.h"
 #include "wonderutil.h"
+#include "WonderTracker.h"
 
 #include "squad_Strength.h"
 #include "agent.h"
@@ -462,6 +468,27 @@ const Squad_Strength Goal::Get_Strength_Needed() const // Rename to missing stre
 
 Utility Goal::Compute_Matching_Value(Plan_List & matches, const bool update)
 {
+	if(IsInvalid())
+	{
+		AI_DPRINTF
+		          (
+		           k_DBG_SCHEDULER_ALL,
+		           m_playerId,
+		           m_goal_type,
+		           -1,
+		           (
+		            "\tCompute Matching Value for goal: %s, raw_match: %i (%s)\n",
+		            g_theGoalDB->Get(m_goal_type)->GetNameText(),
+		            m_raw_priority,
+		            "Invalid"
+		           )
+		          );
+
+		m_combinedUtility = Goal::BAD_UTILITY;
+
+		return m_combinedUtility;
+	}
+
 	AI_DPRINTF
 	          (
 	           k_DBG_SCHEDULER_ALL,
@@ -475,13 +502,6 @@ Utility Goal::Compute_Matching_Value(Plan_List & matches, const bool update)
 	            (g_theWorld->HasCity(Get_Target_Pos()) ? g_theWorld->GetCity(Get_Target_Pos()).GetName() : "field")
 	           )
 	          );
-
-	if(this->Get_Invalid())
-	{
-		m_combinedUtility = Goal::BAD_UTILITY;
-
-		return m_combinedUtility;
-	}
 
 	sint32 count = 0;
 
@@ -735,7 +755,7 @@ void Goal::Commit_Agents()
 		{
 			break;
 		}
-		else if(Is_Satisfied() || Get_Totally_Complete())
+		else if(Is_Satisfied() || IsTotallyComplete())
 		{
 			AI_DPRINTF(k_DBG_SCHEDULER_DETAIL, m_playerId, m_goal_type, -1,
 				("\t\tNO AGENTS COMMITTED:           (goal: %x agent: %x, id: 0%x)\n", this, match_iter->Get_Agent(), match_iter->Get_Agent()->Get_Army().m_id));
@@ -776,7 +796,7 @@ void Goal::Commit_Transport_Agents()
 		{
 			break;
 		}
-		else if(!Needs_Transporter() || Get_Totally_Complete())
+		else if(!Needs_Transporter() || IsTotallyComplete())
 		{
 			AI_DPRINTF(k_DBG_SCHEDULER_DETAIL, m_playerId, m_goal_type, -1,
 				("\t\tNO TRANSPORT AGENTS COMMITTED: (goal: %x agent: %x, id: 0%x)\n", this, match_iter->Get_Agent(), match_iter->Get_Agent()->Get_Army().m_id));
@@ -1192,23 +1212,33 @@ PLAYER_INDEX Goal::Get_Target_Owner() const
 	GoalRecord const * goal_record  = g_theGoalDB->Get(m_goal_type);
 	Assert(goal_record);
 
-	if(goal_record->GetTargetTypeAttackUnit()
-	|| goal_record->GetTargetTypeSpecialUnit()
-	)
+	if(
+	      m_target_army.m_id != 0
+	   &&
+	   (
+	       goal_record->GetTargetTypeAttackUnit()
+	    || goal_record->GetTargetTypeSpecialUnit()
+	   )
+	  )
 	{
 		target_owner = m_target_army.GetOwner();
 	}
-	else if(goal_record->GetTargetTypePetrolStation()){
-		if(m_target_city != ID() || g_theWorld->IsAirfield(Get_Target_Pos())){
+	else if(goal_record->GetTargetTypePetrolStation())
+	{
+		if(m_target_city != ID() || g_theWorld->IsAirfield(Get_Target_Pos()))
+		{
 			target_owner = g_theWorld->GetOwner(Get_Target_Pos());
 		}
-		else if(m_target_army != ID()){
+		else if(m_target_army != ID())
+		{
 			target_owner = m_target_army.GetOwner();
 		}
 	}
-	else{
+	else
+	{
 		MapPoint pos(Get_Target_Pos());
-		if(pos.x >= 0){
+		if(pos.x >= 0)
+		{
 			target_owner = g_theWorld->GetOwner(Get_Target_Pos());
 		}
 	}
@@ -1814,7 +1844,7 @@ Utility Goal::Compute_Raw_Priority()
 	Player *    player_ptr = g_player[m_playerId];
 	Assert(player_ptr);
 
-	if (!player_ptr || Get_Totally_Complete())
+	if (!player_ptr || IsTotallyComplete())
 	{
 		m_raw_priority = Goal::BAD_UTILITY;
 		return m_raw_priority;
@@ -2229,7 +2259,7 @@ Utility Goal::Compute_Raw_Priority()
 	{
 		char buff[1024];
 		sprintf(buff, "\t %9" PRIXPTR ",\t%s,\t%i, \t\trc(%3d,%3d),\t%8f,\t%8f,\t%8f,\t%8f,\t%8f,\t%8f,\t%8f, rc(%3d,%3d),\t%8f, rc(%3d,%3d), \t%8f,\t%8f,\t%8f,\t%8f,\t%8f,\t%8f,\t%8f,",
-            (uintptr_t)this,
+		    (uintptr_t)this,
 		        goal_rec->GetNameText(),
 		        m_raw_priority,
 		        target_pos.x,
@@ -2299,7 +2329,7 @@ Utility Goal::Compute_Raw_Priority()
 
 GOAL_RESULT Goal::Execute_Task()
 {
-	if(Get_Totally_Complete())
+	if(IsTotallyComplete())
 		return GOAL_COMPLETE;
 
 	if(!Can_Be_Executed())
@@ -2467,18 +2497,126 @@ GOAL_RESULT Goal::Execute_Task()
 	return GOAL_IN_PROGRESS; // Maybe this is good as it is
 }
 
-bool Goal::Get_Totally_Complete() const
+bool Goal::IsTotallyComplete() const
 {
-	if (Get_Invalid())
-		return true;
+	return IsComplete() || IsCurrentlyUnavailable();
+}
 
+bool Goal::IsComplete() const
+{
+	return IsInvalid() || IsTargetImmune() || IsInvalidByDiplomacy();
+}
+
+bool Goal::IsInvalidByDiplomacy() const
+{
 	const GoalRecord *goal_record = g_theGoalDB->Get(m_goal_type);
-	Diplomat & diplomat           = Diplomat::GetDiplomat(m_playerId);
-	PLAYER_INDEX target_owner     = Get_Target_Owner();
-	MapPoint target_pos           = Get_Target_Pos();
+	Diplomat & diplomat = Diplomat::GetDiplomat(m_playerId);
+	PLAYER_INDEX target_owner = Get_Target_Owner();
+	MapPoint target_pos = Get_Target_Pos();
 
-	Player *player_ptr = g_player[ m_playerId ];
+	Player *player_ptr = g_player[m_playerId];
 	Assert(player_ptr != NULL);
+
+	if(m_playerId != 0 && target_owner > 0 && target_owner != m_playerId)
+	{
+		bool regard_checked = false;
+		bool diplomacy_match = true;
+
+		if(player_ptr->HasContactWith(target_owner))
+		{
+			bool iscivilian = false;
+			if(
+			       m_target_army.m_id != 0
+			   &&
+			    (
+			         goal_record->GetTargetTypeAttackUnit()
+			      || goal_record->GetTargetTypeSpecialUnit()
+			    )
+			  )
+			{
+				iscivilian = m_target_army->IsCivilian();
+			}
+
+			if(iscivilian &&
+			   !goal_record->GetExecute()->GetUnitPretest_CanEnslaveSettler() &&
+			   goal_record->GetTargetOwnerHotEnemy() &&
+			   (diplomat.GetPersonality()->GetAlignmentGood() ||
+				diplomat.GetPersonality()->GetAlignmentNeutral()))
+				return true;
+
+			if(goal_record->GetTargetOwnerNeutral())
+			{
+				diplomacy_match =
+					diplomat.TestEffectiveRegard(target_owner, NEUTRAL_REGARD);
+
+				regard_checked = true;
+			}
+
+			if((!regard_checked || !diplomacy_match) &&
+			   goal_record->GetTargetOwnerColdEnemy())
+			{
+				diplomacy_match =
+					diplomat.TestEffectiveRegard(target_owner, COLDWAR_REGARD);
+
+				regard_checked = true;
+			}
+
+			if((!regard_checked || !diplomacy_match) &&
+			   goal_record->GetTargetOwnerHotEnemy())
+			{
+				diplomacy_match =
+					diplomat.TestEffectiveRegard(target_owner, HOTWAR_REGARD);
+
+				regard_checked = true;
+			}
+
+			if((!regard_checked || !diplomacy_match) &&
+			   goal_record->GetTargetOwnerAlly())
+			{
+				diplomacy_match =
+					diplomat.TestEffectiveRegard(target_owner, ALLIED_REGARD);
+
+				regard_checked = true;
+			}
+			// If the goal is not executed by stealth units, forbid to
+			// execute it if there is no incursion permission
+			// (depending on alignement) - Calvitix
+			if((!diplomat.IncursionPermission(target_owner) &&
+				(diplomat.GetPersonality()->GetAlignmentGood() ||
+				 diplomat.GetPersonality()->GetAlignmentNeutral()))
+			   && !goal_record->GetSquadClassStealth())
+			{
+				AI_DPRINTF(k_DBG_SCHEDULER, m_playerId, m_goal_type, 0,
+					("\t Player %d GOAL %x (%s) (%3d,%3d): Diplomacy match failed : No permission to enter territory of player %d\n", m_playerId, this, g_theGoalDB->Get(m_goal_type)->GetNameText(), target_pos.x, target_pos.y, target_owner));
+				return true;
+			}
+
+			if(!diplomacy_match)
+			{
+				AI_DPRINTF(k_DBG_SCHEDULER, m_playerId, m_goal_type, 0,
+					("\t Player %d GOAL %x (%s) (%3d,%3d): Diplomacy match failed with player %d.\n", m_playerId, this, g_theGoalDB->Get(m_goal_type)->GetNameText(), target_pos.x, target_pos.y, target_owner));
+
+				return true;
+			}
+		}
+		else if(!goal_record->GetTargetOwnerNoContact())
+		{
+			AI_DPRINTF(k_DBG_SCHEDULER, m_playerId, m_goal_type, 0,
+				("\t Player %d GOAL %x (%s) (%3d,%3d): Target owner %d not contacted.\n", m_playerId, this, g_theGoalDB->Get(m_goal_type)->GetNameText(), target_pos.x, target_pos.y, target_owner));
+
+			return true;
+		}
+	}
+
+	return false;
+}
+
+bool Goal::IsTargetImmune() const
+{
+	const GoalRecord *goal_record = g_theGoalDB->Get(m_goal_type);
+	const OrderRecord * order_record = goal_record->GetExecute();
+	PLAYER_INDEX target_owner = Get_Target_Owner();
+	MapPoint target_pos = Get_Target_Pos();
 
 	// Don't attack as Barbarian a target that is protected by the Great Wall
 	if
@@ -2494,25 +2632,26 @@ bool Goal::Get_Totally_Complete() const
 	{
 		const WonderRecord *wonder_rec = goal_record->GetTargetProtectionWonderPtr();
 
-		if ((AgreementMatrix::s_agreements.TurnsAtWar(m_playerId, target_owner) < 0) &&
-			g_player[target_owner] &&
-			(g_player[target_owner]->GetBuiltWonders() & ((uint64)1 << (uint64)(wonder_rec->GetIndex()))))
+		if(AgreementMatrix::s_agreements.TurnsAtWar(m_playerId, target_owner) < 0
+		&& g_player[target_owner]->HasWonder(wonder_rec->GetIndex()))
 			return true;
 	}
 
-	if(!MapAnalysis::GetMapAnalysis().PlayerCanEnter(m_playerId, target_pos))
-		return true;
-
-	bool isspecial;
-	bool isstealth = false;
-	sint32 maxattack = 0;
-	bool iscivilian = false;
-	if ( goal_record->GetTargetTypeAttackUnit() ||
-		goal_record->GetTargetTypeSpecialUnit() )
+	if(
+	      m_target_army.m_id != 0
+	   &&
+	   (
+	       goal_record->GetTargetTypeAttackUnit()
+	    || goal_record->GetTargetTypeSpecialUnit()
+	   )
+	  )
 	{
 		if(g_theWorld->GetCity(m_target_army->RetPos()).m_id != 0)
 			return true;
 
+		bool isspecial;
+		bool isstealth;
+		sint32 maxattack;
 		sint32 maxdefense;
 		bool cancapture;
 		bool haszoc;
@@ -2529,106 +2668,28 @@ bool Goal::Get_Totally_Complete() const
 		                                canbombard
 		                               );
 
-		iscivilian = m_target_army->IsCivilian();
-
 		if(isspecial && !m_target_army->IsVisible(m_playerId))
 			return true;
+
+		if(!goal_record->GetTargetTypeAttackUnit()
+		&&  maxattack > 0
+		){
+			return true;
+		}
 	}
 
-	if( goal_record->GetTargetTypeSpecialUnit()
-	&& !goal_record->GetTargetTypeAttackUnit()
-	&& maxattack > 0
-	){
+	if(!MapAnalysis::GetMapAnalysis().PlayerCanEnter(m_playerId, target_pos))
 		return true;
-	}
 
-	if(goal_record->GetTargetTypeUnexplored())
+	// Will be explored once there
+/*	if(goal_record->GetTargetTypeUnexplored())
 	{
 		Unit city = g_theWorld->GetCity(target_pos);
 		CellUnitList army;
-		g_theWorld->GetArmy(target_pos,army);
-		if (army.Num() > 0 || city.m_id != 0x0)
+		g_theWorld->GetArmy(target_pos, army);
+		if(army.Num() > 0 || city.m_id != 0x0)
 			return true;
-	}
-
-	if(m_playerId != 0 && target_owner > 0  && target_owner != m_playerId)
-	{
-		bool regard_checked = false;
-		bool diplomacy_match = true;
-
-		if ( player_ptr->HasContactWith(target_owner))
-		{
-			if (iscivilian &&
-				goal_record->GetTargetOwnerHotEnemy() &&
-				(diplomat.GetPersonality()->GetAlignmentGood() ||
-				 diplomat.GetPersonality()->GetAlignmentNeutral()))
-				 return true;
-
-			if (goal_record->GetTargetOwnerNeutral())
-			{
-				diplomacy_match =
-					diplomat.TestEffectiveRegard(target_owner, NEUTRAL_REGARD);
-
-				regard_checked = true;
-			}
-
-			if ( (!regard_checked || !diplomacy_match) &&
-				goal_record->GetTargetOwnerColdEnemy() )
-			{
-				diplomacy_match =
-					diplomat.TestEffectiveRegard(target_owner, COLDWAR_REGARD);
-
-				regard_checked = true;
-			}
-
-			if ( (!regard_checked || !diplomacy_match) &&
-				goal_record->GetTargetOwnerHotEnemy() )
-			{
-				diplomacy_match =
-					diplomat.TestEffectiveRegard(target_owner, HOTWAR_REGARD);
-
-				regard_checked = true;
-			}
-
-			if ( (!regard_checked || !diplomacy_match) &&
-				goal_record->GetTargetOwnerAlly() )
-			{
-				diplomacy_match =
-					diplomat.TestEffectiveRegard(target_owner, ALLIED_REGARD);
-
-				regard_checked = true;
-			}
-			// If the goal is not executed by stealth units, forbid to
-			// execute it if there is no incursion permission
-			// (depending on alignement) - Calvitix
-			if ((!diplomat.IncursionPermission(target_owner) &&
-				(diplomat.GetPersonality()->GetAlignmentGood() ||
-				 diplomat.GetPersonality()->GetAlignmentNeutral()))
-				 && !goal_record->GetSquadClassStealth())
-			{
-				AI_DPRINTF(k_DBG_SCHEDULER, m_playerId, m_goal_type, 0,
-				    ("\t  GOAL %x (%s) (%3d,%3d): Diplomacy match failed : No permission to enter territory of player %d\n", this, g_theGoalDB->Get(m_goal_type)->GetNameText(),target_pos.x, target_pos.y, target_owner));
-				return true;
-			}
-
-			if(!diplomacy_match)
-			{
-				AI_DPRINTF(k_DBG_SCHEDULER, m_playerId, m_goal_type, 0,
-				    ("\t  GOAL %x (%s) (%3d,%3d): Diplomacy match failed with player %d.\n", this, g_theGoalDB->Get(m_goal_type)->GetNameText(),target_pos.x,target_pos.y, target_owner));
-
-				return true;
-			}
-		}
-		else if(!goal_record->GetTargetOwnerNoContact())
-		{
-			AI_DPRINTF(k_DBG_SCHEDULER, m_playerId, m_goal_type, 0,
-			    ("\t  GOAL %x (%s) (%3d,%3d): Target owner %d not contacted.\n", this, g_theGoalDB->Get(m_goal_type)->GetNameText(),target_pos.x,target_pos.y, target_owner));
-
-			return true;
-		}
-	}
-
-	const OrderRecord * order_record = goal_record->GetExecute();
+	}*/
 
 	switch(order_record->GetTargetPretest())
 	{
@@ -2637,7 +2698,7 @@ bool Goal::Get_Totally_Complete() const
 		case k_Order_TargetPretest_EnemySettler_Bit:
 		case k_Order_TargetPretest_EnemyTradeUnit_Bit:
 		case k_Order_TargetPretest_AttackPosition_Bit:
-			if ((m_target_army.m_id != 0) && (m_target_army.GetOwner() == m_playerId))
+			if((m_target_army.m_id != 0) && (m_target_army.GetOwner() == m_playerId))
 			{
 				Assert(false);
 				return true;
@@ -2645,35 +2706,194 @@ bool Goal::Get_Totally_Complete() const
 			break;
 		case k_Order_TargetPretest_TradeRoute_Bit:
 
-			Assert( m_target_city.m_id != 0);
-			if ((m_target_city.m_id == 0) ||
-				 (m_target_city.GetCityData()->GetTradeSourceList() == NULL) ||
-				 (m_target_city.GetCityData()->GetTradeSourceList()->Num() <= 0))
+			Assert(m_target_city.m_id != 0);
+			if((m_target_city.m_id == 0) ||
+				(m_target_city.GetCityData()->GetTradeSourceList() == NULL) ||
+			   (m_target_city.GetCityData()->GetTradeSourceList()->Num() <= 0))
 				return true;
 			break;
 		case k_Order_TargetPretest_TerrainImprovement_Bit:
 
-			if (goal_record->GetTargetTypeImprovement())
+			if(goal_record->GetTargetTypeImprovement())
 			{
-				Assert( m_target_city.m_id != 0);
-				if (m_target_city.m_id == 0 ||
-					!m_target_city->GetCityData()->WasTerrainImprovementBuilt())
+				Assert(m_target_city.m_id != 0);
+				if(m_target_city.m_id == 0 ||
+				   !m_target_city->GetCityData()->WasTerrainImprovementBuilt())
 					return true;
 			}
 			else
 			{
-				if (g_theWorld->GetCell(target_pos)->GetNumDBImprovements() <= 0)
+				if(g_theWorld->GetCell(target_pos)->GetNumDBImprovements() <= 0)
 					return true;
 			}
 			break;
 	}
 
-	if(g_player[m_playerId]->GetGold() < order_record->GetGold())
+	if(    !order_record->GetTargetPretestTerrainImprovement()
+	    && !order_record->GetTargetPretestTradeRoute()
+	  )
+	{
+		if(!ArmyData::TargetValidForOrder(order_record, target_pos))
+			return true;
+	}
+
+	// Just exchanges the player, at that size you should conquer
+	// @ToDo adapt for players that have the give city wonder and that have not
+	// @ToDo adapt if no new civ is created but Barbarians.
+	if(order_record->GetUnitPretest_CanInciteRevolution())
+	{
+		if(g_player[m_playerId] ->GetNumCities() == 1)
+			return true;
+	}
+
+	if(order_record->GetUnitPretest_CanPlantNuke())
+	{
+		if(!g_player[m_playerId]->HasAdvance(advanceutil_GetNukeAdvance()))
+			return true;
+	}
+
+	if(order_record->GetTargetPretestEnemySpecialUnit())
+	{
+		if(g_theWorld->GetOwner(target_pos) != m_playerId)
+			return true;
+	}
+
+	if(order_record->GetTargetPretestEnemySpecialUnit()
+	&& m_target_army.m_id != 0
+	&& m_target_army->CanBeExpelled()
+	  )
+	{
+		return true;
+	}
+
+	if(order_record->GetUnitPretest_CanReformCity())
+	{
+		if(!m_target_city.GetCityData()->IsConverted())
+			return true;
+	}
+
+	if(order_record->GetUnitPretest_CanSueFranchise())
+	{
+		if(!m_target_city.GetCityData()->IsFranchised())
+			return true;
+	}
+
+	if(order_record->GetUnitPretest_EstablishEmbassy())
+	{
+		if(g_player[m_playerId]->HasEmbassyWith(m_target_city->GetOwner()))
+			return true;
+	}
+
+	if(order_record->GetUnitPretest_CanCreateFranchise())
+	{
+		if(m_target_city.GetCityData()->GetFranchiseTurnsRemaining() <= 0)
+			return true;
+	}
+
+	if(order_record->GetUnitPretest_CanBioTerror())
+	{
+		if(m_target_city.GetCityData()->IsBioInfected())
+			return true;
+	}
+
+	if(order_record->GetUnitPretest_CanNanoInfect())
+	{
+		if(m_target_city.GetCityData()->IsNanoInfected())
+			return true;
+	}
+
+	if(order_record->GetUnitPretest_CanConvertCity())
+	{
+		if(m_target_city.GetCityData()->GetConvertedTo() == m_playerId)
+			return true;
+	}
+
+	if(order_record->GetUnitPretest_CanInterceptTrade())
+	{
+		Assert(m_target_city.m_id != 0);
+		if((m_target_city.m_id == 0) ||
+		  ((m_target_city.GetCityData()->GetTradeSourceList()) &&
+		   (m_target_city.GetCityData()->GetTradeSourceList()->Num() <= 0)))
+			return true;
+	}
+
+	// Try to steal technology only if the other civ has more advances than player
+	// Otherwise, spy can do anything else
+	if(order_record->GetUnitPretest_CanStealTechnology())
+	{
+		sint32 num = 0;
+		delete[] g_player[m_playerId]->m_advances->CanAskFor(g_player[target_owner]->m_advances, num);
+
+		if(num <= 0)
+			return true;
+	}
+
+	if(!wonderutil_GetProhibitSlavers(g_theWonderTracker->GetBuiltWonders()))
+	{
+		// Abolitionist has to go to cities with slaves
+		if(    order_record->GetUnitPretest_CanInciteUprising()
+		    || order_record->GetUnitPretest_CanUndergroundRailway()
+		  )
+		{
+			if(m_target_city.GetCityData()->SlaveCount() == 0)
+				return true;
+		}
+
+		if(order_record->GetUnitPretest_CanSlaveRaid())
+		{
+			sint32 popCount;
+			m_target_city.GetCityData()->GetPop(popCount);
+
+			// Slavers must go to cities with population to enslave, give an extra point so that the city isn't killed on conquest
+			if(popCount <= 2)
+				return true;
+		}
+
+		if(      order_record->GetUnitPretest_CanEnslaveSettler()
+		     &&  m_target_army.m_id != 0
+		     && !m_target_army->CanBeEnslaved()
+		   )
+		{
+			return true;
+		}
+	}
+	else
+	{
+		if(order_record->GetUnitPretest_CanInciteUprising()
+		|| order_record->GetUnitPretest_CanUndergroundRailway()
+		|| order_record->GetUnitPretest_CanSlaveRaid()
+		|| order_record->GetUnitPretest_CanEnslaveSettler()
+		  )
+		{
+			return true;
+		}
+	}
+
+	return false;
+}
+
+bool Goal::IsCurrentlyUnavailable() const
+{
+	const GoalRecord *goal_record = g_theGoalDB->Get(m_goal_type);
+	Diplomat & diplomat = Diplomat::GetDiplomat(m_playerId);
+	PLAYER_INDEX target_owner = Get_Target_Owner();
+	MapPoint target_pos = Get_Target_Pos();
+
+	const OrderRecord * order_record = g_theGoalDB->Get(m_goal_type)->GetExecute();
+
+	if(g_player[m_playerId]->GetGold() < order_record->GetGold()) // Keep
 	{
 		AI_DPRINTF(k_DBG_SCHEDULER, m_playerId, m_goal_type, 0,
 		    ("GOAL %x (%s): Not enough gold to perform goal.\n", this, g_theGoalDB->Get(m_goal_type)->GetNameText()));
 
 		return true;
+	}
+
+	// Questionable whether it should be here, looks like we have also only one launch target, shouldn't there be more?
+	if(order_record->GetUnitPretest_CanNukeCity())
+	{
+		if(diplomat.GetNuclearLaunchTarget() == target_owner)
+			return true;
 	}
 
 	if(goal_record->GetAvoidWatchfulCity())
@@ -2696,123 +2916,11 @@ bool Goal::Get_Totally_Complete() const
 			return true;
 	}
 
-	if(order_record->GetUnitPretest_CanPlantNuke())
-	{
-		if (!g_player[m_playerId]->HasAdvance(advanceutil_GetNukeAdvance()))
-			return true;
-	}
-
-	if(order_record->GetTargetPretestEnemySpecialUnit())
-	{
-		if(g_theWorld->GetOwner(target_pos) != m_playerId)
-			return true;
-	}
-
-	if(!order_record->GetTargetPretestTerrainImprovement()
-	&& !order_record->GetTargetPretestTradeRoute()
-	){
-		if(!ArmyData::TargetValidForOrder(order_record, target_pos))
-			return true;
-	}
-
-	if(order_record->GetTargetPretestEnemySpecialUnit()
-	&& m_target_army.m_id != 0
-	&& m_target_army->CanBeExpelled()
-	){
-		return true;
-	}
-
-	if (order_record->GetUnitPretest_CanReformCity())
-	{
-		if (!m_target_city.GetCityData()->IsConverted())
-			return true;
-	}
-
-	if (order_record->GetUnitPretest_CanSueFranchise())
-	{
-		if (!m_target_city.GetCityData()->IsFranchised())
-			return true;
-	}
-
-	if (order_record->GetUnitPretest_EstablishEmbassy())
-	{
-		if (g_player[m_playerId]->HasEmbassyWith(m_target_city->GetOwner()))
-			return true;
-	}
-
-	if (order_record->GetUnitPretest_CanCreateFranchise())
-	{
-		if (m_target_city.GetCityData()->GetFranchiseTurnsRemaining() <= 0)
-			return true;
-	}
-
-	if (order_record->GetUnitPretest_CanBioTerror())
-	{
-		if (m_target_city.GetCityData()->IsBioInfected())
-			return true;
-	}
-
-	if (order_record->GetUnitPretest_CanNanoInfect())
-	{
-		if (m_target_city.GetCityData()->IsNanoInfected())
-			return true;
-	}
-
-	if (order_record->GetUnitPretest_CanConvertCity())
-	{
-		if (m_target_city.GetCityData()->GetConvertedTo() == m_playerId)
-			return true;
-	}
-
-	if (order_record->GetUnitPretest_CanInterceptTrade())
-	{
-		Assert( m_target_city.m_id != 0);
-		if ((m_target_city.m_id == 0) ||
-			((m_target_city.GetCityData()->GetTradeSourceList()) &&
-			(m_target_city.GetCityData()->GetTradeSourceList()->Num() <= 0)))
-			return true;
-	}
-
-	if (order_record->GetUnitPretest_CanInciteRevolution())
+	if(order_record->GetUnitPretest_CanInciteRevolution())
 	{
 		sint32 cost;
-		if (ArmyData::GetInciteRevolutionCost(target_pos, cost) &&
-			( cost > g_player[m_playerId]->GetGold()))
-			return true;
-	}
-
-	if (order_record->GetUnitPretest_CanNukeCity())
-	{
-		if (diplomat.GetNuclearLaunchTarget() == target_owner)
-			return true;
-	}
-
-	// Try to steal technology only if the other civ has more advances than player
-	// Otherwise, spy can do anything else
-	if (order_record->GetUnitPretest_CanStealTechnology())
-	{
-		sint32 num = 0;
-		delete [] g_player[m_playerId]->m_advances->CanAskFor(g_player[target_owner]->m_advances, num);
-
-		if(num <= 0)
-			return true;
-	}
-
-	// Abolisionist has to go to cities with slaves
-	if(order_record->GetUnitPretest_CanInciteUprising()
-	|| order_record->GetUnitPretest_CanUndergroundRailway ()
-	){
-		if (m_target_city.GetCityData()->SlaveCount() == 0)
-			return true;
-	}
-
-	if(order_record->GetUnitPretest_CanSlaveRaid())
-	{
-		sint32 popCount;
-		m_target_city.GetCityData()->GetPop(popCount);
-
-		// Slavers must to go to cities with population to enslave, give an extra point so that the city isn't killed on conquest
-		if(popCount <= 2)
+		if(ArmyData::GetInciteRevolutionCost(target_pos, cost) &&
+			(cost > g_player[m_playerId]->GetGold()))
 			return true;
 	}
 
@@ -2820,15 +2928,18 @@ bool Goal::Get_Totally_Complete() const
 	{
 		if(g_theUnitPool->IsValid(m_target_city)
 		&& target_owner != m_playerId
-		){
+		  )
+		{
 			return true;
 		}
 		else if(g_theArmyPool->IsValid(m_target_army)
 		     && target_owner != m_playerId
-		     ){
+		       )
+		{
 			return true;
 		}
-		else if(!g_theWorld->IsAirfield(target_pos)){
+		else if(!g_theWorld->IsAirfield(target_pos)) // Changes if units are there
+		{
 			return true;
 		}
 	}
@@ -2836,7 +2947,7 @@ bool Goal::Get_Totally_Complete() const
 	return false;
 }
 
-bool Goal::Get_Invalid() const
+bool Goal::IsInvalid() const
 {
 	if(m_playerId < 0)
 	{
@@ -2844,11 +2955,18 @@ bool Goal::Get_Invalid() const
 		return true;
 	}
 
+	bool isArmy = m_target_army.m_id != 0;
+
 	const GoalRecord *goal_record = g_theGoalDB->Get(m_goal_type);
 
-	if(goal_record->GetTargetTypeAttackUnit()
-	|| goal_record->GetTargetTypeSpecialUnit()
-	){
+	if(   isArmy
+	   &&
+	      (
+	          goal_record->GetTargetTypeAttackUnit()
+	       || goal_record->GetTargetTypeSpecialUnit()
+	      )
+	  )
+	{
 		if(!g_theArmyPool->IsValid(m_target_army))
 			return true;
 		else if(m_target_army->Num() <= 0)
@@ -2871,12 +2989,16 @@ bool Goal::Get_Invalid() const
 			return true;
 		}
 
-		if(goal_record->GetTargetOwnerSelf()
-		&& city->GetOwner() != m_playerId)
-			return true;
-		else if(!goal_record->GetTargetOwnerSelf()
-		     &&  city->GetOwner() == m_playerId)
-			return true;
+		if(goal_record->GetTargetOwnerSelf())
+		{
+			if(city->GetOwner() != m_playerId)
+				return true;
+		}
+		else
+		{
+			if(city->GetOwner() == m_playerId)
+				return true;
+		}
 	}
 
 	if(goal_record->GetTargetTypeEndgame())
@@ -2927,11 +3049,11 @@ bool Goal::Get_Invalid() const
 	return false;
 }
 
-bool Goal::Get_Removal_Time() const
+bool Goal::IsTimeToRemove() const
 {
-	if ( Get_Invalid() ||
+	if ( IsInvalid() || IsComplete() ||
 		 (g_theGoalDB->Get(m_goal_type)->GetRemoveWhenComplete() &&
-		  Get_Totally_Complete() ) )
+		  IsTotallyComplete() ) )
 		 return true;
 	return false;
 }

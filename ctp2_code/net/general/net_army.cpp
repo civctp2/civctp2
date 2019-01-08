@@ -227,7 +227,7 @@ void NetArmy::Unpacketize(uint16 id, uint8 *buf, uint16 size)
 		g_theArmyPool->HackSetKey(((uint32)m_data->m_id & k_ID_KEY_MASK) + 1);
 		g_theArmyPool->Insert(m_data);
 
-		CtpAi::AddGoalsForArmy(army);
+		CtpAi::AddAgentForArmy(army);
 	}
 }
 

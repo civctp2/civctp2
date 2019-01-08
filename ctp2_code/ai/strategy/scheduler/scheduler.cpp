@@ -52,6 +52,7 @@
 // - Fixed unit garrison assignment. (23-Jan-2009 Martin Gühmann)
 // - Fixed a crash in Remove_Goal. The goal is also removed from m_goals
 //   before deleted. (31-Dec-2018 Martin Gühmann)
+// - New goals are only added if the AI can achieve them. (08-Jan-2018 Martin Gühmann)
 //
 //----------------------------------------------------------------------------
 
@@ -799,7 +800,7 @@ void Scheduler::Match_Resources(const bool move_armies)
 				{
 				}
 #endif
-				if(goal_ptr->Get_Removal_Time())
+				if(goal_ptr->IsTimeToRemove())
 				{
 					AI_DPRINTF(k_DBG_SCHEDULER, m_playerId, goal_ptr->Get_Goal_Type(), -1,
 						("\t\tGOAL_COMPLETE (goal: %x) -- Removing matches for goal.\n",
@@ -892,13 +893,11 @@ void Scheduler::Match_Resources(const bool move_armies)
 ///////////////////////////////////////////////////////////////////////////////////////////////////////
 void Scheduler::Add_New_Goal(const Goal_ptr & new_goal)
 {
-	// Do not add goals that cannot executed anyway
-	// Too experimental for now
-	//if(new_goal->Get_Totally_Complete())
-	//{
-	//	delete new_goal;
-	//	return;
-	//}
+	if(new_goal->IsComplete())
+	{
+		delete new_goal;
+		return;
+	}
 
 	sint32 goal_type    = new_goal->Get_Goal_Type();
 
@@ -1083,9 +1082,9 @@ sint32 Scheduler::GetValueUnsatisfiedGoals(const GOAL_TYPE & type) const
 			Goal_ptr const goal_ptr =
 				static_cast<Goal_ptr const>(sorted_goal_iter->second);
 
-			if(goal_ptr->Get_Invalid()		||
-			   goal_ptr->Is_Satisfied()	||
-			   goal_ptr->ArmiesAtGoal()
+			if(goal_ptr->IsInvalid()
+			|| goal_ptr->Is_Satisfied()
+			|| goal_ptr->ArmiesAtGoal()
 			  )
 			{
 				// Goal has become invalid or has been satisfied: try next.
@@ -1136,7 +1135,7 @@ Goal_ptr Scheduler::GetHighestPriorityGoal(const GOAL_TYPE & type, const bool sa
 			Goal_ptr	const	goal_ptr =
 				static_cast<Goal_ptr const>(sorted_goal_iter->second);
 
-			if(goal_ptr->Get_Invalid()                  ||
+			if(goal_ptr->IsInvalid()                    ||
 			    (satisfied != goal_ptr->Is_Satisfied()) ||
 			    goal_ptr->ArmiesAtGoal()
 			   )
@@ -1199,7 +1198,7 @@ bool Scheduler::Prioritize_Goals()
 		AI_DPRINTF(k_DBG_SCHEDULER, m_playerId, goal_type, -1,("\n"));
 		AI_DPRINTF(k_DBG_SCHEDULER, m_playerId, goal_type, -1,("\n"));
 		AI_DPRINTF(k_DBG_SCHEDULER, m_playerId, goal_type, -1,("//\n"));
-		AI_DPRINTF(k_DBG_SCHEDULER, m_playerId, goal_type, -1,("// Calculate raw priority for %s (%d)\n", g_theGoalDB->Get(goal_type)->GetNameText(), m_goals_of_type[goal_type].size()));
+		AI_DPRINTF(k_DBG_SCHEDULER, m_playerId, goal_type, -1,("// Calculate raw priority for %d goals of %s\n", m_goals_of_type[goal_type].size(), g_theGoalDB->Get(goal_type)->GetNameText()));
 		AI_DPRINTF(k_DBG_SCHEDULER, m_playerId, goal_type, -1,("//\n"));
 		AI_DPRINTF(k_DBG_SCHEDULER, m_playerId, goal_type, -1,("\n"));
 		AI_DPRINTF(k_DBG_SCHEDULER, m_playerId, goal_type, -1,
@@ -1220,10 +1219,10 @@ bool Scheduler::Prioritize_Goals()
 			}
 #endif
 
-			if(goal_ptr->Get_Removal_Time())
+			if(goal_ptr->IsTimeToRemove())
 			{
 				AI_DPRINTF(k_DBG_SCHEDULER, m_playerId, goal_ptr->Get_Goal_Type(), -1,
-					("\tRemoving Invalid/Completed Goal: %x\n", goal_ptr));
+					("\tRemoving Invalid/Completed Goal: %x,\t%s\n", goal_ptr, g_theGoalDB->Get(goal_ptr->Get_Goal_Type())->GetNameText()));
 
 				sorted_goal_iter = Remove_Goal(sorted_goal_iter);
 			}
@@ -1252,7 +1251,12 @@ bool Scheduler::Prioritize_Goals()
 				{
 					if(goal_ptr->Get_Matches_Num() > 0)
 					{
+						AI_DPRINTF(k_DBG_SCHEDULER_DETAIL, m_playerId, goal_ptr->Get_Goal_Type(), -1, ("%x\t,%s,\tGoal::BAD_UTILITY,\tRemoving matches\n", goal_ptr, g_theGoalDB->Get(goal_ptr->Get_Goal_Type())->GetNameText()));
 						Remove_Matches_For_Goal(goal_ptr);
+					}
+					else
+					{
+						AI_DPRINTF(k_DBG_SCHEDULER_DETAIL, m_playerId, goal_ptr->Get_Goal_Type(), -1, ("%x\t,%s,\tGoal::BAD_UTILITY,\tNo matches to remove\n", goal_ptr, g_theGoalDB->Get(goal_ptr->Get_Goal_Type())->GetNameText()));
 					}
 				}
 
@@ -1538,7 +1542,7 @@ void Scheduler::Add_New_Matches_For_Agent
 			if(goal_iter->second->Get_Matches_Num() == 0)
 				continue;
 
-			if(goal_iter->second->Get_Invalid())
+			if(goal_iter->second->IsInvalid())
 				continue;
 
 			goal_iter->second->Add_Match(agent);

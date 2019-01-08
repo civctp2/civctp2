@@ -937,7 +937,7 @@ void Agent::ClearOrders()
 
 		MapPoint pos;
 		m_army->GetPos(pos);
-		if(!m_goal->Get_Invalid())
+		if(!m_goal->IsInvalid())
 		{
 			MapPoint dest_pos = m_goal->Get_Target_Pos();
 

@@ -547,6 +547,7 @@ void Diplomat::Load(CivArchive & archive)
 
 	archive >> count;
 
+	// That's actually OK for dead player
 	Assert(count == CtpAi::s_maxPlayers);
 
 	if (count > CtpAi::s_maxPlayers)
@@ -4214,6 +4215,7 @@ sint32 Diplomat::GetGoldSurplusPercent() const
 	return static_cast<sint32>(floor( (current_savings / goldSpent) * 100.0 ));
 }
 
+// Not used
 bool Diplomat::CanBuySurplus(const PLAYER_INDEX &foreignId) const {
     /// @todo Check meaning: always returns false now.
 	sint32 goldReserve = 100;
@@ -4256,7 +4258,7 @@ sint32 Diplomat::EffectiveAtWarCount() const
 	int atWarCount = 0;
 
     /// @todo Check inconsistent inclusion of 0 (barbarians), see AtWarCount
-	for (size_t foreigner = 0; foreigner < m_foreigners.size(); ++foreigner)
+    for (size_t foreigner = 0; foreigner < m_foreigners.size(); ++foreigner)
     {
         PLAYER_INDEX const  foreignerId  = static_cast<PLAYER_INDEX>(foreigner);
         if (    (foreignerId != m_playerId)
@@ -5634,6 +5636,7 @@ bool Diplomat::ShouldEscortSettlers() const
 	if (AtWarCount() <= 0)
 		return false;
 
+	// That's stupid
 	if (g_player[m_playerId] &&
 		g_player[m_playerId]->GetCargoCapacity() < 2)
 		return false;
