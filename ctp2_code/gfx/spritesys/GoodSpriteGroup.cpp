@@ -51,7 +51,7 @@ extern CivPaths *g_civPaths;
 extern ScreenManager *g_screenManager;
 
 void GoodSpriteGroup::Draw(GOODACTION action, sint32 frame, sint32 drawX, sint32 drawY,
-						   sint32 facing, double scale, uint16 transparency, Pixel16 outlineColor, uint16 flags)
+                           sint32 facing, double scale, uint16 transparency, Pixel16 outlineColor, uint16 flags)
 {
 	Assert(action > GOODACTION_NONE &&
 			action < GOODACTION_MAX);
@@ -59,11 +59,11 @@ void GoodSpriteGroup::Draw(GOODACTION action, sint32 frame, sint32 drawX, sint32
 	if (m_sprites[action] == NULL) return;
 
 	if ((frame < 0) ||
-        (static_cast<size_t>(frame) >= m_sprites[action]->GetNumFrames())
-       )
-    {
+	    (static_cast<size_t>(frame) >= m_sprites[action]->GetNumFrames())
+	   )
+	{
 		frame = 0;
-    }
+	}
 
 	m_sprites[action]->SetCurrentFrame((uint16)frame);
 	m_sprites[action]->Draw(drawX, drawY, facing, scale, transparency, outlineColor, flags);
@@ -90,8 +90,9 @@ POINT GoodSpriteGroup::GetHotPoint(GOODACTION action)
 
 void GoodSpriteGroup::SetHotPoint(GOODACTION action, POINT pt)
 {
-	if (m_sprites[action] != NULL){
-	  m_sprites[action]->SetHotPoint(pt.x,pt.y);
+	if (m_sprites[action] != NULL)
+	{
+		m_sprites[action]->SetHotPoint(pt.x,pt.y);
 	}
 }
 
@@ -112,7 +113,7 @@ void GoodSpriteGroup::LoadFull(MBCHAR const * filename)
 {
 	std::unique_ptr<SpriteFile>	file(new SpriteFile(filename));
 
-	SPRITEFILETYPE	type;
+	SPRITEFILETYPE type;
 	if (SPRITEFILEERR_OK == file->Open(&type))
 	{
 		file->ReadFull(this);
@@ -126,8 +127,8 @@ void GoodSpriteGroup::Save(MBCHAR const * filename, unsigned int version_id, uns
 	std::unique_ptr<SpriteFile>	file(new SpriteFile(filename));
 
 	if (SPRITEFILEERR_OK ==
-			file->Create(SPRITEFILETYPE_GOOD, version_id, compression_mode)
-       )
+	       file->Create(SPRITEFILETYPE_GOOD, version_id, compression_mode)
+	   )
 	{
 		file->Write(this);
 		file->CloseWrite();
@@ -136,20 +137,20 @@ void GoodSpriteGroup::Save(MBCHAR const * filename, unsigned int version_id, uns
 
 void GoodSpriteGroup::DeallocateStorage(void)
 {
-    for (int i = GOODACTION_IDLE; i < GOODACTION_MAX; i++)
-    {
-	    delete m_sprites[i];
-        m_sprites[i] = NULL;
-    }
+	for (int i = GOODACTION_IDLE; i < GOODACTION_MAX; i++)
+	{
+		delete m_sprites[i];
+		m_sprites[i] = NULL;
+	}
 }
 
 void GoodSpriteGroup::DeallocateFullLoadAnims(void)
 {
-    for (int i = GOODACTION_IDLE; i < GOODACTION_MAX; i++)
-    {
-        delete m_anims[i];
-        m_anims[i] = NULL;
-    }
+	for (int i = GOODACTION_IDLE; i < GOODACTION_MAX; i++)
+	{
+		delete m_anims[i];
+		m_anims[i] = NULL;
+	}
 }
 
 void GoodSpriteGroup::DrawText(sint32 x, sint32 y, MBCHAR const * s)
@@ -157,7 +158,7 @@ void GoodSpriteGroup::DrawText(sint32 x, sint32 y, MBCHAR const * s)
 	primitives_DrawText(g_screenManager->GetSurface(), x, y, s, 0, 0);
 }
 
-sint32 GoodSpriteGroup::Parse(uint16 id,GROUPTYPE group)
+sint32 GoodSpriteGroup::Parse(uint16 id, GROUPTYPE group)
 {
 	MBCHAR			scriptName[k_MAX_NAME_LENGTH];
 	char			prefixStr[80];
@@ -178,19 +179,20 @@ sint32 GoodSpriteGroup::Parse(uint16 id,GROUPTYPE group)
 
 	MBCHAR *    imageNames[k_MAX_NAMES];
 	MBCHAR *    shadowNames[k_MAX_NAMES];
-	size_t		i;
+	size_t      i;
 
-    for (i = 0; i < k_MAX_NAMES; i++)
-    {
-        imageNames[i] =  new MBCHAR[k_MAX_NAME_LENGTH];
-        shadowNames[i] = new MBCHAR[k_MAX_NAME_LENGTH];
-    }
+	for (i = 0; i < k_MAX_NAMES; i++)
+	{
+		imageNames[i] =  new MBCHAR[k_MAX_NAME_LENGTH];
+		shadowNames[i] = new MBCHAR[k_MAX_NAME_LENGTH];
+	}
 
 	if (!token_ParseAnOpenBraceNext(theToken)) return FALSE;
 
 	sint32 tmp;
 	if (!token_ParseValNext(theToken, TOKEN_GOOD_SPRITE_IDLE, tmp)) return FALSE;
-	if (tmp) {
+	if (tmp)
+	{
 		Sprite *idleSprite = new Sprite;
 		Assert(idleSprite);
 		if(!idleSprite) return FALSE;
@@ -198,7 +200,8 @@ sint32 GoodSpriteGroup::Parse(uint16 id,GROUPTYPE group)
 		idleSprite->ParseFromTokens(theToken);
 
 		printf(" [Idle");
-		for(i=0; i<idleSprite->GetNumFrames(); i++) {
+		for(i=0; i<idleSprite->GetNumFrames(); i++)
+		{
 			MBCHAR			name[k_MAX_NAME_LENGTH];
 
 			sprintf(name, "%sGG%03dS.%03d.tif", prefixStr, id, i+idleSprite->GetFirstFrame());
@@ -219,14 +222,13 @@ sint32 GoodSpriteGroup::Parse(uint16 id,GROUPTYPE group)
 		m_anims[GOODACTION_IDLE] = idleAnim;
 	}
 
-
 	delete theToken;
 
-    for (i = 0; i < k_MAX_NAMES; i++)
-    {
-        delete [] imageNames[i];
-        delete [] shadowNames[i];
-    }
+	for (i = 0; i < k_MAX_NAMES; i++)
+	{
+		delete [] imageNames[i];
+		delete [] shadowNames[i];
+	}
 
 	return TRUE;
 }
@@ -258,15 +260,6 @@ void GoodSpriteGroup::ExportScript(MBCHAR const * name)
 	fprintf(file, "{\n");
 
 	ExportSpriteGroup(file,(GAME_ACTION)GOODACTION_IDLE,TOKEN_GOOD_SPRITE_IDLE,TOKEN_MAX);
-
-
-
-
-
-
-
-
-
 
 	fprintf(file, "}\n");
 
