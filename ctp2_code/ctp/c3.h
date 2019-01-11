@@ -115,7 +115,10 @@
 #include <time.h>
 
 #if defined(__GNUC__)
-#define _MAX_PATH PATH_MAX
+//#define _MAX_PATH PATH_MAX
+// Needs to be 260 otherwise you cannot load savegames from Windows.
+// Maybe this screws up something else.
+#define _MAX_PATH   260 // max. length of full pathname
 
 #endif // __GNUC__
 
@@ -125,7 +128,7 @@
 #include "aui.h"
 #endif
 
-#ifdef __linux__
+#if defined(__linux__)
 // try to handle Case insisentive stuff globaly here
 #include "cifm.h"
 #define fopen(a, b) ci_fopen(a, b)

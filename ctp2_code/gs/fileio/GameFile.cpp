@@ -1370,7 +1370,6 @@ bool GameFile::LoadBasicGameInfo(FILE *saveFile, SaveInfo *info)
 		}
 	}
 
-
 	if (g_saveFileVersion >= 47)
 	{
 		n = c3files_fread(info->playerCivIndexList, sizeof(sint32), k_MAX_PLAYERS, saveFile);
@@ -1899,7 +1898,7 @@ PointerList<GameInfo> *GameFile::BuildSaveList(C3SAVEDIR dir)
 
 			gameInfo->files = new PointerList<SaveInfo>;
 
-			list->AddTail(gameInfo); // Crash here on Linux
+			list->AddTail(gameInfo);
 
 #ifdef WIN32
 			WIN32_FIND_DATA		fileData2;
@@ -1914,7 +1913,7 @@ PointerList<GameInfo> *GameFile::BuildSaveList(C3SAVEDIR dir)
 			struct dirent *dent2 = 0;
 
 			if (!dir2) continue;
-#endif
+ #endif
 			do
 			{
 #ifndef WIN32
@@ -1943,8 +1942,9 @@ PointerList<GameInfo> *GameFile::BuildSaveList(C3SAVEDIR dir)
 						continue;
 					}
 
-					gameInfo->files->AddTail(saveInfo);// Crash here
+					gameInfo->files->AddTail(saveInfo);
 				}
+			
 #ifdef WIN32
 			} while (FindNextFile(lpFileList, &fileData2));
 			FindClose(lpFileList);
@@ -1958,7 +1958,6 @@ PointerList<GameInfo> *GameFile::BuildSaveList(C3SAVEDIR dir)
 	} while(dent);
 	closedir(d);
 #endif
-
 	return list;
 }
 
