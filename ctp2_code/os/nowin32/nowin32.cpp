@@ -10,7 +10,10 @@
 #include <libgen.h>
 #ifdef HAVE_STRING_H
 #include <string.h>
+#endif
+#ifdef HAVE_STRINGS_H
 #include <strings.h>
+#endif
 #include <unistd.h>
 #include <ctype.h>
 #include <SDL/SDL_timer.h>
