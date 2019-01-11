@@ -223,6 +223,15 @@ const Squad_Strength & Agent::Compute_Squad_Strength()
 {
 	Assert(m_army.IsValid());
 
+/*	if(!m_army->HasCargo())
+	{
+		m_squad_strength.Set_Army_Strength(m_army, true);
+	}
+	else
+	{
+		m_squad_strength.Set_Cargo_Strength(m_army);
+	}*/
+
 	sint32 transports, max_slots, empty_slots;
 	m_army->GetCargo(transports, max_slots, empty_slots);
 

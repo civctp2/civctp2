@@ -840,10 +840,35 @@ void Scheduler::Match_Resources(const bool move_armies)
 				} // if out_of_transports is true, we just fail like in the original code
 			}
 			case GOAL_FAILED:
+			case GOAL_FAILED_TOO_EXPENSIVE:
+			case GOAL_FAILED_UNGROUP:
+			case GOAL_FAILED_RALLY:
+			case GOAL_FAILED_NEEDS_TRANSPORT:
 			{
-				AI_DPRINTF(k_DBG_SCHEDULER, m_playerId, goal_ptr->Get_Goal_Type(), -1,
-					("\t\tGOAL_FAILED (goal: %x)\n", goal_ptr));
+#if defined(_DEBUG) || defined(USE_LOGGING)
+				char buffer[255];
+				sprintf(buffer, "\t\tGOAL_FAILED");
+				switch(result)
+				{
+					case GOAL_FAILED:
+						break;
+					case GOAL_FAILED_TOO_EXPENSIVE:
+						sprintf(buffer, "%s_TOO_EXPENSIVE", buffer);
+						break;
+					case GOAL_FAILED_UNGROUP:
+						sprintf(buffer, "%s_UNGROUP", buffer);
+						break;
+					case GOAL_FAILED_RALLY:
+						sprintf(buffer, "%s_RALLY", buffer);
+						break;
+					case GOAL_FAILED_NEEDS_TRANSPORT:
+						sprintf(buffer, "%s_TRANSPORT", buffer);
+						break;
+				}
 
+				AI_DPRINTF(k_DBG_SCHEDULER, m_playerId, goal_ptr->Get_Goal_Type(), -1,
+					("%s (goal: %x)\n", buffer, goal_ptr));
+#endif
 				committed_agents -= goal_ptr->Get_Agent_Count();
 				Rollback_Matches_For_Goal(goal_ptr);
 
@@ -1287,7 +1312,7 @@ bool Scheduler::Prioritize_Goals()
 //		("\t %9x,\tGOAL\t\t,\tRAW_PRIORITY,\tCOORDS\t,\tINIT_VALUE,\tLAST_VALUE,\tTHREAT,\t\tENEMYVAL,\tALLIEDVAL,\tMAXPOW,\t\tHOMEDIST\t(   )\t,\tENEMYDIST (    ),\t\tSETTLE,\t\tCHOKE,\t\tUNEXPLORED,\tNOT_VISIBLE,\tTHREATEN\n",
 //		this));
 
-		Remove_Matches_For_Goal(*generic_goal_iter);
+		Remove_Matches_For_Goal(*generic_goal_iter); // Expensive
 		Add_New_Matches_For_Goal(*generic_goal_iter, false);
 
 		for
@@ -1375,9 +1400,7 @@ bool Scheduler::Prune_Goals()
 
 	const StrategyRecord &strategy = Diplomat::GetDiplomat(m_playerId).GetCurrentStrategy();
 
-	m_goals.resize(0);
-
-	Goal_Vector::iterator generic_goal_iter = m_generic_goals.begin();
+	m_goals.resize(0); // Empty this earlier or after all the matches, so that the memory is not wasted over the turns
 
 	for(sint32 i = 0; i < strategy.GetNumGoalElement(); i++)
 	{
@@ -1395,28 +1418,25 @@ bool Scheduler::Prune_Goals()
 #if defined(_DEBUG) || defined(USE_LOGGING)
 		sint32 count = 0;
 
+		char buffer[255];
 		AI_DPRINTF(k_DBG_SCHEDULER_ALL, m_playerId, goal_type, -1, ("\n\n"));
 		AI_DPRINTF(k_DBG_SCHEDULER_ALL, m_playerId, goal_type, -1, ("\t//\n"));
-		AI_DPRINTF(k_DBG_SCHEDULER_ALL, m_playerId, goal_type, -1, ("\t// PRUNED GOALS: %s (type %d)\n",
+		AI_DPRINTF(k_DBG_SCHEDULER_ALL, m_playerId, goal_type, -1, ("\t// PRUNED GOALS: %s (type %d, original num %d)\n",
 			g_theGoalDB->Get(goal_type)->GetNameText(),
-			goal_type));
-		AI_DPRINTF(k_DBG_SCHEDULER_ALL, m_playerId, goal_type, -1,
-			("\t// max eval = %3.2f, max_exec = %3.2f",
-			goal_element_ptr->GetMaxEval(),
-			goal_element_ptr->GetMaxExec()));
+			goal_type,
+			m_goals_of_type[goal_type].size()));
+
+		sprintf(buffer, "\t// max eval = %3.2f, max_exec = %3.2f", goal_element_ptr->GetMaxEval(), goal_element_ptr->GetMaxExec());
+
 		if(goal_element_ptr->GetExecPerCity())
-			AI_DPRINTF(k_DBG_SCHEDULER_ALL, m_playerId, goal_type, -1,
-				(" (ExecPerCity)"));
+			sprintf(buffer, "%s (ExecPerCity)", buffer);
 		if(goal_element_ptr->GetEvalPerCity())
-			AI_DPRINTF(k_DBG_SCHEDULER_ALL, m_playerId, goal_type, -1,
-				(" (EvalPerCity)"));
+			sprintf(buffer, "%s (EvalPerCity)", buffer);
 		if(goal_element_ptr->GetPerCity())
-			AI_DPRINTF(k_DBG_SCHEDULER_ALL, m_playerId, goal_type, -1,
-				(" (PerCity)"));
-		AI_DPRINTF(k_DBG_SCHEDULER_ALL, m_playerId, goal_type, -1,
-			("\n"));
-		AI_DPRINTF(k_DBG_SCHEDULER_ALL, m_playerId, goal_type, -1,
-			("\t//\n\n"));
+			sprintf(buffer, "%s (PerCity)", buffer);
+		AI_DPRINTF(k_DBG_SCHEDULER_ALL, m_playerId, goal_type, -1, ("%s\n", buffer));
+		AI_DPRINTF(k_DBG_SCHEDULER_ALL, m_playerId, goal_type, -1, ("\t//\n"));
+		AI_DPRINTF(k_DBG_SCHEDULER_ALL, m_playerId, goal_type, -1, ("\n"));
 #endif
 
 		sint32 goals_added = 0;
@@ -1440,6 +1460,10 @@ bool Scheduler::Prune_Goals()
 
 				m_goals.push_back(goal_ptr);
 
+				AI_DPRINTF(k_DBG_SCHEDULER_ALL, m_playerId, goal_type, -1,
+					("\t%3d: [%x] Is added", goals_added, goal_ptr_iter->second));
+				goal_ptr_iter->second->Log_Debug_Info(k_DBG_SCHEDULER_ALL);
+
 				goals_added++;
 				goal_ptr_iter++;
 			}
@@ -1452,7 +1476,7 @@ bool Scheduler::Prune_Goals()
 
 #if defined(_DEBUG) || defined(USE_LOGGING)
 				AI_DPRINTF(k_DBG_SCHEDULER_ALL, m_playerId, goal_type, -1,
-					("\t%3d: [%x]", count, goal_ptr_iter->second));
+					("\t%3d: [%x] Is removed", count, goal_ptr_iter->second));
 				goal_ptr_iter->second->Log_Debug_Info(k_DBG_SCHEDULER_ALL);
 
 				count++;
@@ -2018,7 +2042,7 @@ void Scheduler::Assign_Garrison()
 			                      tmp,
 			                      tmp,
 			                      tmp,
-			                      false
+			                      false // check
 			                     );
 
 			defense_strength += static_cast<float>(city.GetDefendersBonus() * static_cast<double>(defense_count));

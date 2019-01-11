@@ -96,6 +96,7 @@
 //   be executed, goals without a diplomacy fit and goals that cannot be executed now. (08-Jan-2019 Martin Gühmann)
 // - Slavey goals cannot be executed either if slavery has been abolished.(08-Jan-2019 Martin Gühmann)
 // - The AI does not incite revolutions in 1 city civs. (08-Jan-2019 Martin Gühmann)
+// - Execute_Task is now more explicit why a goal failed. (11-Jan-2019 Martin Gühmann)
 //
 //----------------------------------------------------------------------------
 
@@ -584,7 +585,7 @@ Utility Goal::Recompute_Matching_Value(Plan_List & matches, const bool update, c
 			else
 			{
 				AI_DPRINTF(k_DBG_SCHEDULER_ALL, m_playerId, m_goal_type, -1,
-					("\t\t[%3d]First match with bad utility for goal %s, stop matching, last match in list: %i\n", count, g_theGoalDB->Get(m_goal_type)->GetNameText(), matches.rbegin()->Get_Matching_Value()));
+					("\t\t[%3d]First match with bad utility for goal %s, not enough, stop matching, last match in list: %i\n", count, g_theGoalDB->Get(m_goal_type)->GetNameText(), matches.rbegin()->Get_Matching_Value()));
 				if(count == 0)
 				{
 					Log_Debug_Info(k_DBG_SCHEDULER_ALL);
@@ -604,14 +605,16 @@ Utility Goal::Recompute_Matching_Value(Plan_List & matches, const bool update, c
 	if(CtpAiDebug::DebugLogCheck(m_playerId, -1, -1))
 	{
 		AI_DPRINTF(k_DBG_SCHEDULER_ALL, m_playerId, m_goal_type, -1, ("\n"));
-		projected_strength          .Log_Debug_Info(k_DBG_SCHEDULER_ALL, m_playerId, m_goal_type, "The Projected Strength:  ");
-		m_current_needed_strength   .Log_Debug_Info(k_DBG_SCHEDULER_ALL, m_playerId, m_goal_type, "The Needed Strength:     ");
+		projected_strength          .Log_Debug_Info(k_DBG_SCHEDULER_ALL, m_playerId, m_goal_type, "The Projected Strength:          ");
+		m_current_needed_strength   .Log_Debug_Info(k_DBG_SCHEDULER_ALL, m_playerId, m_goal_type, "The Needed Strength:             ");
 		Squad_Strength strength;
 		strength.Set_Pos_Strength(Get_Target_Pos());
-		strength                    .Log_Debug_Info(k_DBG_SCHEDULER_ALL, m_playerId, m_goal_type, "The Target Pos Strength: ");
+		strength                    .Log_Debug_Info(k_DBG_SCHEDULER_ALL, m_playerId, m_goal_type, "The Target Pos Strength:         ");
 		Squad_Strength grid_strength;
 		grid_strength.Set_Enemy_Grid_Strength(Get_Target_Pos(), m_playerId);
-		grid_strength               .Log_Debug_Info(k_DBG_SCHEDULER_ALL, m_playerId, m_goal_type, "The Target Grid Strength:");
+		grid_strength               .Log_Debug_Info(k_DBG_SCHEDULER_ALL, m_playerId, m_goal_type, "The Target Enemy Grid Strength:  ");
+		grid_strength.Set_Allied_Grid_Strength(Get_Target_Pos(), m_playerId);
+		grid_strength               .Log_Debug_Info(k_DBG_SCHEDULER_ALL, m_playerId, m_goal_type, "The Target Allied Grid Strength: ");
 	}
 #endif
 
@@ -1372,7 +1375,7 @@ void Goal::Compute_Needed_Troop_Flow()
 		    || strength.Get_Agent_Count() > 0
 		  )
 		{
-			// Set this to zero, since the units we need doesn't depent on the number of units at the target.
+			// Set this to zero, since how many units we need doesn't depent on the number of units at the target.
 			strength.Set_Agent_Count(0);
 			strength.Set_Defenders(0);
 			strength.Set_Ranged_Units(0);
@@ -1380,7 +1383,6 @@ void Goal::Compute_Needed_Troop_Flow()
 			m_current_needed_strength.Set_Force_Matching(0.5,0.5,0.5,0.5,0.5);
 		}
 	}
-
 	else if(goal_record->GetTargetTypeBorder())
 	{
 		// assuming threat is the global strength to use (to be coherent with other changes) - Calvitix
@@ -1934,11 +1936,11 @@ Utility Goal::Compute_Raw_Priority()
 #endif //_DEBUG
 	}
 
-	double maxEnemyValue = static_cast<double>(map.GetMaxEnemyValue(m_playerId));
+	double maxEnemyValue = static_cast<double>(map.GetMaxEnemyCityValue(m_playerId));
 	if(maxEnemyValue > 0.0)
 	{
 		cell_value +=
-		( ( static_cast<double>(map.GetEnemyValue( m_playerId, target_pos)) /
+		( ( static_cast<double>(map.GetEnemyCityValue( m_playerId, target_pos)) /
 		    maxEnemyValue ) *
 		  goal_rec->GetEnemyValueBonus() );
 
@@ -1948,11 +1950,11 @@ Utility Goal::Compute_Raw_Priority()
 #endif //_DEBUG
 	}
 
-	double maxAlliedValue = static_cast<double>(map.GetMaxAlliedValue(m_playerId));
+	double maxAlliedValue = static_cast<double>(map.GetMaxAlliedCityValue(m_playerId));
 	if ( maxAlliedValue > 0)
 	{
 		cell_value +=
-		( ( static_cast<double>(map.GetAlliedValue(m_playerId, target_pos)) /
+		( ( static_cast<double>(map.GetAlliedCityValue(m_playerId, target_pos)) /
 		    maxAlliedValue ) *
 		  goal_rec->GetAlliedValueBonus() );
 
@@ -2404,7 +2406,7 @@ GOAL_RESULT Goal::Execute_Task()
 		if(goal_record->GetRallyFirst())
 		{
 			if(Goal_Too_Expensive())
-				return GOAL_FAILED;
+				return GOAL_FAILED_TOO_EXPENSIVE;
 
 			if(!RallyComplete())
 			{
@@ -2414,7 +2416,7 @@ GOAL_RESULT Goal::Execute_Task()
 				{
 					if(!RallyTroops())
 					{
-						return GOAL_FAILED;
+						return GOAL_FAILED_RALLY;
 					}
 					else
 					{
@@ -2445,7 +2447,7 @@ GOAL_RESULT Goal::Execute_Task()
 			Set_Sub_Task(SUB_TASK_UNGROUP);
 			if (!UnGroupTroops())
 			{
-				return GOAL_FAILED;
+				return GOAL_FAILED_UNGROUP;
 			}
 
 			if (!UnGroupComplete())
@@ -2488,7 +2490,7 @@ GOAL_RESULT Goal::Execute_Task()
 				}
 				else
 				{
-					return GOAL_FAILED;
+					return GOAL_FAILED_NEEDS_TRANSPORT;
 				}
 			}
 		}
@@ -3751,7 +3753,7 @@ bool Goal::GotoGoalTaskSolution(Agent_ptr the_army, MapPoint & goal_pos)
 
 		found = the_army->FindPathToBoard(move_intersection, goal_pos, false, found_path);
 
-		Assert(found);
+		Assert(found); // Problem
 
 		if (found)
 		{
@@ -4652,7 +4654,22 @@ sint32 Goal::GetThreatenBonus() const
 
 bool Goal::Goal_Too_Expensive() const
 {
-	return (m_current_attacking_strength.Get_Agent_Count() > k_MAX_ARMY_SIZE)
+#if defined(_DEBUG) || defined(USE_LOGGING)
+	if(    (m_current_attacking_strength.Get_Agent_Count() > k_MAX_ARMY_SIZE)
+	    && (m_current_attacking_strength.Get_Value() >
+	            m_current_needed_strength.Get_Value() * 3
+	       )
+	  )
+	{
+		AI_DPRINTF(k_DBG_SCHEDULER, m_playerId, m_goal_type, -1,
+			("\t\tGOAL (goal: %x of %s) too expensive, agent count %d, current value %f, needed value %f\n",
+			 this, g_theGoalDB->Get(m_goal_type)->GetNameText(), m_current_attacking_strength.Get_Agent_Count(), m_current_attacking_strength.Get_Value(), m_current_needed_strength.Get_Value()));
+	}
+#endif
+
+	return (g_theGoalDB->Get(m_goal_type)->GetTargetOwnerSelf()
+	    &&  g_theGoalDB->Get(m_goal_type)->GetTargetTypeCity()
+	    &&  m_current_attacking_strength.Get_Agent_Count() > k_MAX_ARMY_SIZE)
 	    && (m_current_attacking_strength.Get_Value() >
 	            m_current_needed_strength.Get_Value() * 3
 	       );

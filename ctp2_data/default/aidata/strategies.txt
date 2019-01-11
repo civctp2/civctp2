@@ -500,21 +500,15 @@ STRATEGY_DEFAULT {
     MaxPiracyEvents 3
 
     //
-    // FORCE MATCHING
+    // FORCE MATCHING STRATEGY_DEFAULT
     //
 
-    // AttackMatch  - ratio of army's attack strength to target's defense strength
-    // DefenseMatch - ratio of army's defense strength to target's attack strength
-    // RangedMatch  - ratio of army's ranged strength to target's ranged strength
-    // BombardMatch - ratio of army's bombard strength to target's bombard strength
-    // ValueMatch   - ratio of army's value to target's value
-	
     Offensive {
-        AttackMatch   0.6
-        DefenseMatch  0.2
-        RangedMatch   0.5
-        BombardMatch  0.0
-        ValueMatch    0.4
+        AttackMatch   0.6 // ratio of army's attack strength to target's defense strength
+        DefenseMatch  0.2 // ratio of army's defense strength to target's attack strength
+        RangedMatch   0.5 // ratio of army's ranged strength to target's ranged strength
+        BombardMatch  0.0 // ratio of army's bombard strength to target's bombard strength
+        ValueMatch    0.4 // ratio of army's value to target's value
     }
 
     Defensive {
@@ -708,22 +702,17 @@ STRATEGY_BARBARIAN {
         Advice BUILD_OFFENSE_ADVICE
     }
 
-	//
-	// FORCE MATCHING
-	//
-	
-	Offensive {
-	    // ratio of army's attack strength to target's defense strength
-	    AttackMatch  0.0
-	    // ratio of army's defense strength to target's attack strength
-	    DefenseMatch 0.0
-	    // ratio of army's ranged strength to target's ranged strength
-	    RangedMatch  0.0
-	    // ratio of army's bombard strength to target's bombard strength
-	    BombardMatch 0.0
-	    // ratio of army's value to target's value
-	    ValueMatch   0.0
-	}
+    //
+    // FORCE MATCHING STRATEGY_BARBARIAN
+    //
+
+    Offensive {
+        AttackMatch   0.0 // ratio of army's attack strength to target's defense strength
+        DefenseMatch  0.0 // ratio of army's defense strength to target's attack strength
+        RangedMatch   0.0 // ratio of army's ranged strength to target's ranged strength
+        BombardMatch  0.0 // ratio of army's bombard strength to target's bombard strength
+        ValueMatch    0.0 // ratio of army's value to target's value
+    }
 
     Harass {
         AttackMatch   0.0
@@ -804,13 +793,13 @@ STRATEGY_SEIGE {
     }
 
     //
-    // FORCE MATCHING
+    // FORCE MATCHING STRATEGY_SEIGE
     //
 
     Offensive {
         AttackMatch   0.7
         DefenseMatch  0.3
-        RangedMatch   0.9
+        RangedMatch   0.7
         BombardMatch  0.0
         ValueMatch    0.5
     }
@@ -908,13 +897,13 @@ STRATEGY_ATTACK {
     }
 
     //
-    // FORCE MATCHING
+    // FORCE MATCHING STRATEGY_ATTACK
     //
 
     Offensive {
         AttackMatch   0.7
         DefenseMatch  0.3
-        RangedMatch   0.9
+        RangedMatch   0.7
         BombardMatch  0.0
         ValueMatch    0.5
     }
@@ -979,7 +968,7 @@ STRATEGY_DEFEND {
     }
 
     //
-    // FORCE MATCHING
+    // FORCE MATCHING STRATEGY_DEFEND
     //
 
     Defensive {
@@ -1669,21 +1658,15 @@ STRATEGY_SCIENTIST_DEFAULT {
     MaxPiracyEvents 3
 
     //
-    // FORCE MATCHING
+    // FORCE MATCHING STRATEGY_SCIENTIST_DEFAULT
     //
 
-    // AttackMatch  - ratio of army's attack strength to target's defense strength
-    // DefenseMatch - ratio of army's defense strength to target's attack strength
-    // RangedMatch  - ratio of army's ranged strength to target's ranged strength
-    // BombardMatch - ratio of army's bombard strength to target's bombard strength
-    // ValueMatch   - ratio of army's value to target's value
-	
     Offensive {
-        AttackMatch   0.6
-        DefenseMatch  0.3
-        RangedMatch   0.8
-        BombardMatch  0.0
-        ValueMatch    0.4
+        AttackMatch   0.6 // ratio of army's attack strength to target's defense strength
+        DefenseMatch  0.3 // ratio of army's defense strength to target's attack strength
+        RangedMatch   0.6 // ratio of army's ranged strength to target's ranged strength
+        BombardMatch  0.0 // ratio of army's bombard strength to target's bombard strength
+        ValueMatch    0.4 // ratio of army's value to target's value
     }
 
     Defensive {
@@ -2171,21 +2154,15 @@ STRATEGY_MILITARIST_DEFAULT {
     MaxPiracyEvents 3
 
     //
-    // FORCE MATCHING
+    // FORCE MATCHING STRATEGY_MILITARIST_DEFAULT
     //
 
-    // AttackMatch  - ratio of army's attack strength to target's defense strength
-    // DefenseMatch - ratio of army's defense strength to target's attack strength
-    // RangedMatch  - ratio of army's ranged strength to target's ranged strength
-    // BombardMatch - ratio of army's bombard strength to target's bombard strength
-    // ValueMatch   - ratio of army's value to target's value
-
     Offensive {
-        AttackMatch   0.6
-        DefenseMatch  0.2
-        RangedMatch   0.7
-        BombardMatch  0.0
-        ValueMatch    0.4
+        AttackMatch   0.6 // ratio of army's attack strength to target's defense strength
+        DefenseMatch  0.2 // ratio of army's defense strength to target's attack strength
+        RangedMatch   0.5 // ratio of army's ranged strength to target's ranged strength
+        BombardMatch  0.0 // ratio of army's bombard strength to target's bombard strength
+        ValueMatch    0.4 // ratio of army's value to target's value
     }
 
     Defensive {
@@ -2681,21 +2658,15 @@ STRATEGY_ECONOMIC_DEFAULT {
     MaxPiracyEvents 3
 
     //
-    // FORCE MATCHING
+    // FORCE MATCHING STRATEGY_ECONOMIC_DEFAULT
     //
 
-    // AttackMatch  - ratio of army's attack strength to target's defense strength
-    // DefenseMatch - ratio of army's defense strength to target's attack strength
-    // RangedMatch  - ratio of army's ranged strength to target's ranged strength
-    // BombardMatch - ratio of army's bombard strength to target's bombard strength
-    // ValueMatch   - ratio of army's value to target's value
-	
     Offensive {
-        AttackMatch   0.6
-        DefenseMatch  0.3
-        RangedMatch   0.9
-        BombardMatch  0.0
-        ValueMatch    0.4
+        AttackMatch   0.6 // ratio of army's attack strength to target's defense strength
+        DefenseMatch  0.3 // ratio of army's defense strength to target's attack strength
+        RangedMatch   0.7 // ratio of army's ranged strength to target's ranged strength
+        BombardMatch  0.0 // ratio of army's bombard strength to target's bombard strength
+        ValueMatch    0.4 // ratio of army's value to target's value
     }
 
     Defensive {
@@ -3182,21 +3153,15 @@ STRATEGY_ECOTOPIAN_DEFAULT {
     MaxPiracyEvents 3
 
     //
-    // FORCE MATCHING
+    // FORCE MATCHING STRATEGY_ECOTOPIAN_DEFAULT
     //
 
-    // AttackMatch  - ratio of army's attack strength to target's defense strength
-    // DefenseMatch - ratio of army's defense strength to target's attack strength
-    // RangedMatch  - ratio of army's ranged strength to target's ranged strength
-    // BombardMatch - ratio of army's bombard strength to target's bombard strength
-    // ValueMatch   - ratio of army's value to target's value
-	
     Offensive {
-        AttackMatch   0.6
-        DefenseMatch  0.2
-        RangedMatch   0.9
-        BombardMatch  0.0
-        ValueMatch    0.4
+        AttackMatch   0.6 // ratio of army's attack strength to target's defense strength
+        DefenseMatch  0.2 // ratio of army's defense strength to target's attack strength
+        RangedMatch   0.7 // ratio of army's ranged strength to target's ranged strength
+        BombardMatch  0.0 // ratio of army's bombard strength to target's bombard strength
+        ValueMatch    0.4 // ratio of army's value to target's value
     }
 
     Defensive {
@@ -3683,21 +3648,15 @@ STRATEGY_DIPLOMATIC_DEFAULT {
     MaxPiracyEvents 3
 
     //
-    // FORCE MATCHING
+    // FORCE MATCHING STRATEGY_DIPLOMATIC_DEFAULT
     //
 
-    // AttackMatch  - ratio of army's attack strength to target's defense strength
-    // DefenseMatch - ratio of army's defense strength to target's attack strength
-    // RangedMatch  - ratio of army's ranged strength to target's ranged strength
-    // BombardMatch - ratio of army's bombard strength to target's bombard strength
-    // ValueMatch   - ratio of army's value to target's value
-
     Offensive {
-        AttackMatch   0.6
-        DefenseMatch  0.2
-        RangedMatch   0.9
-        BombardMatch  0.0
-        ValueMatch    0.4
+        AttackMatch   0.6 // ratio of army's attack strength to target's defense strength
+        DefenseMatch  0.2 // ratio of army's defense strength to target's attack strength
+        RangedMatch   0.7 // ratio of army's ranged strength to target's ranged strength
+        BombardMatch  0.0 // ratio of army's bombard strength to target's bombard strength
+        ValueMatch    0.4 // ratio of army's value to target's value
     }
 
     Defensive {

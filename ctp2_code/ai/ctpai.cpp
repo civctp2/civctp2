@@ -1494,7 +1494,7 @@ void CtpAi::MakeRoomForNewUnits(const PLAYER_INDEX playerId)
 						                           tmp,
 						                           tmp,
 						                           tmp,
-						                           false
+						                           false // Check
 						                          );
 
 						defense_strength -= static_cast<float>(city.GetDefendersBonus() * static_cast<double>(defense_count));
@@ -1938,7 +1938,7 @@ void CtpAi::ComputeCityGarrisons(const PLAYER_INDEX playerId )
 		                      tmp,
 		                      tmp,
 		                      tmp,
-		                      false
+		                      false // check
 		                     );
 
 		defense_strength += static_cast<float>(city.GetDefendersBonus() * static_cast<double>(defense_count));

@@ -32,6 +32,7 @@
 // - Added AI attack, defense, ranged, land bombard, sea bombard, and air bombard
 //   player power grids to the mapanalysis. (30-Apr-2008 Martin Gühmann)
 // - Fixed AI city rank calculation. (9-Nov-2009 Martin Gühmann)
+// - Separated the value map from the city value map. (11-Nov-2019 Martin Gühmann)
 //
 //----------------------------------------------------------------------------
 
@@ -87,6 +88,7 @@ void MapAnalysis::Resize
     m_bombardLandGrid   .resize(maxPlayerId);
     m_bombardSeaGrid    .resize(maxPlayerId);
     m_bombardAirGrid    .resize(maxPlayerId);
+    m_cityValueGrid     .resize(maxPlayerId);
     m_valueGrid         .resize(maxPlayerId);
 
     m_tradeAtRiskGrid   .resize(maxPlayerId);
@@ -103,6 +105,7 @@ void MapAnalysis::Resize
         m_bombardLandGrid[player].Resize(xSize, ySize, resolution);
         m_bombardSeaGrid [player].Resize(xSize, ySize, resolution);
         m_bombardAirGrid [player].Resize(xSize, ySize, resolution);
+        m_cityValueGrid  [player].Resize(xSize, ySize, resolution);
         m_valueGrid      [player].Resize(xSize, ySize, resolution);
         m_tradeAtRiskGrid[player].Resize(xSize, ySize, resolution);
         m_piracyLossGrid [player].Resize(xSize, ySize, resolution);
@@ -219,6 +222,7 @@ void MapAnalysis::BeginTurn()
         m_bombardLandGrid  [player].Clear();
         m_bombardSeaGrid   [player].Clear();
         m_bombardAirGrid   [player].Clear();
+        m_cityValueGrid    [player].Clear();
         m_valueGrid        [player].Clear();
         m_tradeAtRiskGrid  [player].Clear();
         m_piracyLossGrid   [player].Clear();
@@ -317,6 +321,7 @@ void MapAnalysis::BeginTurn()
 			m_bombardLandGrid [player].AddValue(pos, static_cast<sint32>(bombard_land_strength));
 			m_bombardSeaGrid  [player].AddValue(pos, static_cast<sint32>(bombard_sea_strength));
 			m_bombardAirGrid  [player].AddValue(pos, static_cast<sint32>(bombard_air_strength));
+			m_cityValueGrid   [player].AddValue(pos, static_cast<sint32>(total_value));
 			m_valueGrid       [player].AddValue(pos, static_cast<sint32>(total_value));
 
 			bool    is_land;
@@ -342,6 +347,7 @@ void MapAnalysis::BeginTurn()
             Assert(m_bombardLandGrid [player].GetTotalValue()  >= 0);
             Assert(m_bombardSeaGrid  [player].GetTotalValue()  >= 0);
             Assert(m_bombardAirGrid  [player].GetTotalValue()  >= 0);
+            Assert(m_cityValueGrid   [player].GetTotalValue()  >= 0);
             Assert(m_valueGrid       [player].GetTotalValue()  >= 0);
             Assert(m_nuclearWeapons  [player]                  >= 0);
             Assert(m_bioWeapons      [player]                  >= 0);
@@ -363,7 +369,7 @@ void MapAnalysis::BeginTurn()
 
             m_totalTrade[player] += city->GetCityData()->GetGoldFromTradeRoutes();
 
-            m_valueGrid[player].AddValue(pos, total_value);
+            m_cityValueGrid[player].AddValue(pos, total_value);
 
             TradeDynamicArray * trade_routes = city.CD()->GetTradeSourceList();
             Assert(trade_routes != NULL);
@@ -380,7 +386,7 @@ void MapAnalysis::BeginTurn()
 
                     AddPiracyIncome(pirate_army.GetOwner(), player, static_cast<sint16>(route_value));
 
-                    m_valueGrid[pirate_army.GetOwner()].
+                    m_cityValueGrid[pirate_army.GetOwner()].
                     AddValue(pirate_army->RetPos(), route_value);
                 }
 
@@ -422,6 +428,7 @@ void MapAnalysis::BeginTurn()
         m_bombardLandGrid [player].Relax(cycles, coef);
         m_bombardSeaGrid  [player].Relax(cycles, coef);
         m_bombardAirGrid  [player].Relax(cycles, coef);
+        m_cityValueGrid   [player].Relax(cycles, coef);
         m_valueGrid       [player].Relax(cycles, coef);
     }
 
@@ -528,130 +535,6 @@ sint32 MapAnalysis::GetMaxEnemyGrid(const MapGridVector & gridVector, const sint
 	return value;
 }
 
-#if !defined(SOME_EXPERIMENTAL_STUFF_IN_MAPANALYSIS)
-
-sint32 MapAnalysis::GetThreat(const PLAYER_INDEX & player, const MapPoint & pos) const
-{
-	sint32 threat = 0;
-
-	for(sint32 opponent = m_threatGrid.size() - 1; opponent >= 0; opponent--)
-	{
-		if (    (player == opponent)
-		     || !Scheduler::CachedHasContactWithExceptSelf(player, opponent)
-		   )
-		{
-			continue;
-		}
-
-		if (!Scheduler::CachedIsNeutralRegard(player, opponent))
-			threat += m_threatGrid[opponent].GetGridValue(pos);
-	}
-
-	return threat;
-}
-
-sint32 MapAnalysis::GetMaxThreat(const PLAYER_INDEX & player) const
-{
-	sint32 threat = 0;
-
-	for (int opponent = m_threatGrid.size() - 1; opponent >= 0; opponent--)
-	{
-		if (opponent != player &&
-		    !Scheduler::CachedIsNeutralRegard(player, opponent)
-		   )
-		{
-			threat += m_threatGrid[opponent].GetMaxGridValue();
-		}
-	}
-	return threat;
-}
-
-sint32 MapAnalysis::GetPower(const PLAYER_INDEX & player, const MapPoint & pos) const
-{
-	sint32 power = 0;
-
-	for (int ally = m_threatGrid.size() - 1; ally >= 0; ally--)
-	{
-		if (Scheduler::CachedIsAllyRegard(player, ally))
-		{
-			power += m_threatGrid[ally].GetGridValue(pos);
-		}
-	}
-	return power;
-}
-
-sint32 MapAnalysis::GetMaxPower(const PLAYER_INDEX & player) const
-{
-	sint32 power = 0;
-
-	for (int ally = m_threatGrid.size() - 1; ally >= 0; ally--)
-	{
-		if (Scheduler::CachedIsAllyRegard(player, ally))
-		{
-			power += m_threatGrid[ally].GetMaxGridValue();
-		}
-	}
-
-	return power;
-}
-
-sint32 MapAnalysis::GetAlliedValue(const PLAYER_INDEX & player, const MapPoint & pos) const
-{
-	sint32 value = 0;
-
-	for (int ally = m_threatGrid.size() - 1; ally >= 0; ally--)
-	{
-		if (Scheduler::CachedIsAllyRegard(player, ally))
-		{
-			value += m_valueGrid[ally].GetGridValue(pos);
-		}
-	}
-
-	return value;
-}
-
-sint32 MapAnalysis::GetMaxAlliedValue(const PLAYER_INDEX & player) const
-{
-	sint32 value = 0;
-
-	for (int ally = m_threatGrid.size() - 1; ally >= 0; ally--)
-	{
-		if (Scheduler::CachedIsAllyRegard(player, ally))
-			value += m_threatGrid[ally].GetMaxGridValue();
-	}
-
-	return value;
-}
-
-sint32 MapAnalysis::GetEnemyValue(const PLAYER_INDEX & player, const MapPoint & pos) const
-{
-	sint32 value = 0;
-
-	for (int opponent = m_valueGrid.size() - 1; opponent >= 0; opponent--)
-	{
-		if (!Scheduler::CachedIsNeutralRegard(player, opponent))
-			value += m_valueGrid[opponent].GetGridValue(pos);
-
-	}
-
-	return value;
-}
-
-sint32 MapAnalysis::GetMaxEnemyValue(const PLAYER_INDEX & player) const
-{
-	sint32 value = 0;
-
-	for (int opponent = m_threatGrid.size() - 1; opponent >= 0; opponent--)
-	{
-		if (!Scheduler::CachedIsNeutralRegard(player, opponent))
-			value += m_threatGrid[opponent].GetMaxGridValue();
-	}
-
-	return value;
-}
-
-#endif // SOME_EXPERIMENTAL_STUFF_IN_MAPANALYSIS
-
 double MapAnalysis::GetProductionRank(const CityData * city) const
 {
 	Assert(city);
@@ -741,7 +624,7 @@ double MapAnalysis::GetPowerRank(const CityData * city) const
 
 void MapAnalysis::CalcEmpireCenter(const PLAYER_INDEX playerId)
 {
-	// For now disabled // why?
+	// For now disabled // why? //
 //	m_empireCenter[playerId] = g_player[playerId]->CalcEmpireCenter();
 
 	DPRINTF(k_DBG_SCHEDULER, ("Empire Center for player %d :  rc(%3d,%3d)   \n",
@@ -966,9 +849,9 @@ sint32 MapAnalysis::AtRiskCitiesValue
         at_risk_value += city->GetCityData()->GetValue() * ratio;
     }
 
-    if (m_valueGrid[playerId].GetTotalValue() > 0.0)
+    if (m_cityValueGrid[playerId].GetTotalValue() > 0.0)
 
-        return (sint32)(((double)at_risk_value / m_valueGrid[playerId].GetTotalValue()) * 100.0);
+        return (sint32)(((double)at_risk_value / m_cityValueGrid[playerId].GetTotalValue()) * 100.0);
     else
 
         return 100;
@@ -1303,6 +1186,13 @@ void MapAnalysis::DebugLog() const
             m_bombardAirGrid[player].GetDebugString().c_str()));
         }
 
+        if (m_cityValueGrid[player].GetMaxValue() > 0)
+        {
+            DPRINTF(k_DBG_MAPANALYSIS, ("CITY VALUE Map (player = %d): \n", player));
+            DPRINTF(k_DBG_MAPANALYSIS, ("%s",
+            m_cityValueGrid[player].GetDebugString().c_str()));
+        }
+
         if (m_valueGrid[player].GetMaxValue() > 0)
         {
             DPRINTF(k_DBG_MAPANALYSIS, ("VALUE Map (player = %d): \n", player));
@@ -1331,6 +1221,7 @@ void MapAnalysis::Cleanup()
     MapGridVector().swap(m_bombardSeaGrid);
     MapGridVector().swap(m_bombardAirGrid);
     MapGridVector().swap(m_valueGrid);
+    MapGridVector().swap(m_cityValueGrid);
     MapGridVector().swap(m_tradeAtRiskGrid);
     MapGridVector().swap(m_piracyLossGrid);
     BoundingRectVector().swap(m_empireBoundingRect);

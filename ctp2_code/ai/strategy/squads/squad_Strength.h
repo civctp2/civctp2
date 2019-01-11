@@ -77,10 +77,11 @@ public:
 	void Add_Agent_Strength(const Agent_ptr & agent);
 	void Remove_Agent_Strength(const Agent_ptr & agent);
 
-	void Set_Pos_Strength       (const MapPoint & pos);
-	void Set_Army_Strength      (const Army & army, bool noCargo = false);
-	void Set_Cargo_Strength     (const Army & army);
-	void Set_Enemy_Grid_Strength(const MapPoint & pos, const sint32 & playerId);
+	void Set_Pos_Strength        (const MapPoint & pos);
+	void Set_Army_Strength       (const Army & army, bool noCargo = false);
+	void Set_Cargo_Strength      (const Army & army);
+	void Set_Enemy_Grid_Strength (const MapPoint & pos, const sint32 & playerId);
+	void Set_Allied_Grid_Strength(const MapPoint & pos, const sint32 & playerId);
 
 	float Get_Attack      () const { return m_attack_str;        };
 	float Get_Defense     () const { return m_defense_str;       };
