@@ -1,5 +1,0 @@
-LIBRARY		RobotCOM
-DESCRIPTION "Call To Power robot interface"
-EXPORTS   
-	CoCreateInstanceRobotCom	@1
-	InitDLLDebugging			@2

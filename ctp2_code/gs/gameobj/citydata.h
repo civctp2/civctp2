@@ -77,7 +77,6 @@ class CityData;
 #include "UnitDynArr.h"
 #include "TradeDynArr.h"
 #include "Resources.h"
-#include "GWRecord.h"
 
 #include "CityRadius.h"
 

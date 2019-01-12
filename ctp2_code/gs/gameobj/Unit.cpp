@@ -61,7 +61,6 @@
 #include "Unit.h"
 
 #include "Globals.h"
-#include "GWRecord.h"
 #include "ConstRecord.h"        // g_theConstDB
 #include "StrDB.h"              // g_theStringDB
 #include "DB.h"
