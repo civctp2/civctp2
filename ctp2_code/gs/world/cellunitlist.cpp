@@ -844,10 +844,29 @@ bool CellUnitList::IsIgnoresZOC() const
 
 void CellUnitList::Serialize(CivArchive &archive)
 {
-	if(archive.IsStoring()) {
-		archive.StoreChunk((uint8*)&m_array[0], (uint8*)&m_nElements + sizeof(m_nElements));
-	} else {
-		archive.LoadChunk((uint8*)&m_array[0], (uint8*)&m_nElements + sizeof(m_nElements));
+	if(archive.IsStoring())
+	{
+		archive.StoreChunk((uint8*)&m_array[0], (uint8*)&m_array[0] + sizeof(m_array));
+
+		uint8 empty = 0; // Needed to keep the save game format compatible.
+		archive.PutUINT32(m_moveIntersection);
+		archive.PutUINT8(m_flags);
+		archive.PutUINT8(empty);
+		archive.PutUINT8(empty);
+		archive.PutUINT8(empty);
+		archive.PutSINT32(m_nElements);
+	}
+	else
+	{
+		archive.LoadChunk((uint8*)&m_array[0], (uint8*)&m_array[0] + sizeof(m_array));
+
+		uint8 empty        = 0; // Needed to keep the save game format compatible.
+		m_moveIntersection = archive.GetUINT32();
+		m_flags            = archive.GetUINT8();
+		empty              = archive.GetUINT8();
+		empty              = archive.GetUINT8();
+		empty              = archive.GetUINT8();
+		m_nElements        = archive.GetSINT32();
 	}
 }
 

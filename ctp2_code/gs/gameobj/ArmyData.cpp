@@ -344,11 +344,6 @@ bool IsSolist(Unit const & u)
 
 sint32 * ArmyData::s_orderDBToEventMap = NULL;
 
-
-
-
-
-
 ArmyData::ArmyData(const Army &army, const UnitDynamicArray &units)
 :   GameObj                 (army.m_id),
     m_tempKillList          (NULL),

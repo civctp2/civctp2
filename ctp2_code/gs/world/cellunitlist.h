@@ -221,12 +221,12 @@ public:
 protected:
 	/// List of units - implemented as a fixed size array
 	Unit    m_array[k_MAX_ARMY_SIZE];
-	/// Common move properties of all units
-	uint32  m_moveIntersection;
-	/// Properties of the group - see the k_CULF_... constants.
-	uint8   m_flags;
 	/// Number of units (valid entries in m_array)
 	sint32  m_nElements;
+	/// Properties of the group - see the k_CULF_... constants.
+	uint8   m_flags;
+	/// Common move properties of all units
+	uint32  m_moveIntersection;
 };
 
 #endif

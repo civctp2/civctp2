@@ -72,12 +72,9 @@ class Order;
 enum CAUSE_REMOVE_ARMY;
 enum ORDER_RESULT;
 
-
-
-
-
 class OrderRecord;
-enum ORDER_TEST {
+enum ORDER_TEST
+{
     ORDER_TEST_OK,
     ORDER_TEST_ILLEGAL,
     ORDER_TEST_LACKS_GOLD,
@@ -88,7 +85,8 @@ enum ORDER_TEST {
 
 #include "Army.h"
 
-class KillRecord {
+class KillRecord
+{
 public:
     Unit m_unit;
     CAUSE_REMOVE_ARMY m_cause;
@@ -109,33 +107,33 @@ class ArmyData : public GameObj,
 private:
     friend class NetArmy;
 
-    UnitDynamicArray          *m_tempKillList;         // Not really used
-
+    // Order the members by size for efficient memory storage
+    // Start with the pointers: 32 bit in a 32 bit program, 64 bit in a 64 bit program
+    UnitDynamicArray          *m_tempKillList;         // Not really used, but needs some work to remove savely
     UnitDynamicArray          *m_attackedByDefenders;  // Unused but serialized
     PointerList<Order>        *m_orders;               // Used and serialized
-    PLAYER_INDEX               m_owner;                // Used and serialized
-    MapPoint                   m_pos;                  // Used and serialized
-    CAUSE_REMOVE_ARMY          m_removeCause;          // Used and serialized (sint32)
-    PLAYER_INDEX               m_killer;               // In unused methods used and is serialized
-    bool                       m_hasBeenAdded;         // Used and serialized (uint8)
-    bool                       m_isPirating;           // Used and serialized (uint8)
-    MBCHAR                    *m_name;                 // Used and serialized
-    sint32                     m_reentryTurn;          // Used
-    MapPoint                   m_reentryPos;           // Used
-
-    uint8                      m_debugStringColor;     // Used for debugging
-
     PointerList<KillRecord>   *m_killMeSoon;           // Used
-
-    uint8                      m_dontKillCount;        // Used and serialized
-    bool                       m_needToKill;           // Used and serialized (uint8)
-
+    MBCHAR                    *m_name;                 // Used and serialized
     MBCHAR                    *m_debugString;          // Used for debugging
 
+    // enums 32 bit, hopefully not something else on other systems
+    CAUSE_REMOVE_ARMY          m_removeCause;          // Used and serialized (sint32)
+
+    // Should be all 32 bit on all systems
+    PLAYER_INDEX               m_owner;                // Used and serialized
+    PLAYER_INDEX               m_killer;               // In unused methods used and is serialized
+    sint32                     m_reentryTurn;          // Used
+    MapPoint                   m_pos;                  // Used and serialized
+    MapPoint                   m_reentryPos;           // Used
+
+    // 8 bit
+    uint8                      m_debugStringColor;     // Used for debugging
+    uint8                      m_dontKillCount;        // Used and serialized
+    bool                       m_hasBeenAdded;         // Used and serialized (uint8)
+    bool                       m_isPirating;           // Used and serialized (uint8)
+    bool                       m_needToKill;           // Used and serialized (uint8)
+
 public:
-
-
-
 
     ArmyData(const Army &army, const UnitDynamicArray &units);
     ArmyData(const Army &army, const CellUnitList &units);
@@ -149,7 +147,6 @@ public:
 
     PLAYER_INDEX GetOwner() const { return m_owner; }
     void SetOwner(PLAYER_INDEX p);
-
 
     bool Insert(const Unit &id);
     void GetPos(MapPoint &pos) const { pos = m_pos; }
@@ -248,7 +245,7 @@ public:
 
     bool CanEnslaveSettler(sint32 &uindex) const;
     ORDER_RESULT EnslaveSettler(const MapPoint &point, const sint32 uindex, Unit home_city);
-	bool CanBeEnslaved() const;
+    bool CanBeEnslaved() const;
     bool CanUndergroundRailway(double &success, double &death,
                                sint32 &uindex) const;
     bool CanUndergroundRailway(double &success, double &death) const;
@@ -340,15 +337,11 @@ public:
 
     void ThisMeansWAR(PLAYER_INDEX denfender);
 
-
     bool GetBombardRange(sint32 & min_rge, sint32 & max_rge);
     bool CanBombard(const MapPoint &point) const;
     bool CanBombard() const;
     bool BombardCity(const MapPoint &point, bool doAnimations);
     ORDER_RESULT Bombard(const MapPoint &point);
-
-
-
 
     sint32 NumOrders() const;
     const Order *GetOrder(sint32 index) const;
@@ -435,12 +428,6 @@ public:
     static bool GetInciteRevolutionCost( const MapPoint &point, sint32 &attackCost );
     static bool GetInciteUprisingCost( const MapPoint &point, sint32 &attackCost );
 
-
-
-
-
-
-
     bool ExecuteMoveOrder(Order *order);
 
     void CheckLoadSleepingCargoFromCity(Order *order);
@@ -470,9 +457,6 @@ public:
     void Settle();
     void SettleInCity();
 
-
-
-
     bool ExecuteUnloadOrder(Order *order);
 
     void UpdateZOCForRemoval();
@@ -489,9 +473,6 @@ public:
     bool DoLeaveOurLandsCheck(const MapPoint &newPos, UNIT_ORDER_TYPE order_type);
 
     void FinishUnloadOrder(Army &unloadingArmy, MapPoint &to_pt);
-
-
-
 
     Path *RemovePathedOrder();
 
@@ -520,12 +501,6 @@ public:
     bool CanPerformSpecialAction() const;
     void CheckAddEventOrder();
     void IncrementOrderPath();
-
-
-
-
-
-
 
     bool CheckValidDestination(const MapPoint &dest) const;
 
@@ -598,6 +573,61 @@ public:
     bool IsInVisionRangeAndCanEnter(MapPoint &pos) const;
 
     void Battle(const MapPoint &pos, CellUnitList & defender);
+
+#if 0
+public:
+	void PrintSizeOfClass()
+	{
+		UnitDynamicArray          *m_tempKillList;         // Not really used, but needs some work to remove savely
+		UnitDynamicArray          *m_attackedByDefenders;  // Unused but serialized
+		PointerList<Order>        *m_orders;               // Used and serialized
+		PointerList<KillRecord>   *m_killMeSoon;           // Used
+		MBCHAR                    *m_name;                 // Used and serialized
+		MBCHAR                    *m_debugString;          // Used for debugging
+
+		// enums 32 bit, hopefully not something else on other systems
+		CAUSE_REMOVE_ARMY          m_removeCause;          // Used and serialized (sint32)
+
+		// Should be all 32 bit on all systems
+		PLAYER_INDEX               m_owner;                // Used and serialized
+		PLAYER_INDEX               m_killer;               // In unused methods used and is serialized
+		sint32                     m_reentryTurn;          // Used
+
+		// MapPoint two sin16, so they are also 32 bit
+		MapPoint                   m_pos;                  // Used and serialized
+		MapPoint                   m_reentryPos;           // Used
+
+		// 8 bit
+		uint8                      m_debugStringColor;     // Used for debugging
+		uint8                      m_dontKillCount;        // Used and serialized
+		bool                       m_hasBeenAdded;         // Used and serialized (uint8)
+		bool                       m_isPirating;           // Used and serialized (uint8)
+		bool                       m_needToKill;           // Used and serialized (uint8)
+
+		DPRINTF(k_DBG_AI, ("\n"));
+		DPRINTF(k_DBG_AI, ("Size of ArmyData class:\n"));
+		DPRINTF(k_DBG_AI, ("ArmyData: %d\n",              sizeof(ArmyData)));
+		DPRINTF(k_DBG_AI, ("m_tempKillList: %d\n",        sizeof(m_tempKillList)));
+		DPRINTF(k_DBG_AI, ("m_attackedByDefenders: %d\n", sizeof(m_attackedByDefenders)));
+		DPRINTF(k_DBG_AI, ("m_orders: %d\n",              sizeof(m_orders)));
+		DPRINTF(k_DBG_AI, ("m_killMeSoon: %d\n",          sizeof(m_killMeSoon)));
+		DPRINTF(k_DBG_AI, ("m_name: %d\n",                sizeof(m_name)));
+		DPRINTF(k_DBG_AI, ("m_debugString: %d\n",         sizeof(m_debugString)));
+		DPRINTF(k_DBG_AI, ("m_removeCause: %d\n",         sizeof(m_removeCause)));
+		DPRINTF(k_DBG_AI, ("m_owner: %d\n",               sizeof(m_owner)));
+		DPRINTF(k_DBG_AI, ("m_pos: %d\n",                 sizeof(m_pos)));
+		DPRINTF(k_DBG_AI, ("m_killer: %d\n",              sizeof(m_killer)));
+		DPRINTF(k_DBG_AI, ("m_reentryTurn: %d\n",         sizeof(m_reentryTurn)));
+		DPRINTF(k_DBG_AI, ("m_pos: %d\n",                 sizeof(m_pos)));
+		DPRINTF(k_DBG_AI, ("m_reentryPos: %d\n",          sizeof(m_reentryPos)));
+		DPRINTF(k_DBG_AI, ("m_debugStringColor: %d\n",    sizeof(m_debugStringColor)));
+		DPRINTF(k_DBG_AI, ("m_dontKillCount: %d\n",       sizeof(m_dontKillCount)));
+		DPRINTF(k_DBG_AI, ("m_hasBeenAdded: %d\n",        sizeof(m_hasBeenAdded)));
+		DPRINTF(k_DBG_AI, ("m_isPirating: %d\n",          sizeof(m_isPirating)));
+		DPRINTF(k_DBG_AI, ("m_needToKill: %d\n",          sizeof(m_needToKill)));
+		DPRINTF(k_DBG_AI, ("\n"));
+	}
+#endif
 
 private:
     size_t CargoCountIf(UnitRecord::BoolAccessor a_Property) const;

@@ -681,7 +681,7 @@ bool CivApp::InitializeAppDB(void)
 	ProgressWindow::BeginProgress
 		(g_theProgressWindow, "InitProgressWindow", 520);
 
-    // Create a set of empty databases
+	// Create a set of empty databases
 	g_theAdvanceDB              = new CTPDatabase<AdvanceRecord>;
 	g_theAdvanceBranchDB        = new CTPDatabase<AdvanceBranchRecord>;
 	g_theAdvanceListDB          = new CTPDatabase<AdvanceListRecord>;
@@ -694,7 +694,7 @@ bool CivApp::InitializeAppDB(void)
 	g_theCityStyleDB            = new CTPDatabase<CityStyleRecord>;
 	g_theCivilisationDB         = new CTPDatabase<CivilisationRecord>;
 	g_theConceptDB              = new CTPDatabase<ConceptRecord>;
-    g_theConstDB                = new CTPDatabase<ConstRecord>;
+	g_theConstDB                = new CTPDatabase<ConstRecord>;
 	g_theDifficultyDB           = new CTPDatabase<DifficultyRecord>;
 	g_theDiplomacyDB            = new CTPDatabase<DiplomacyRecord>;
 	g_theDiplomacyProposalDB    = new CTPDatabase<DiplomacyProposalRecord>;
@@ -733,19 +733,19 @@ bool CivApp::InitializeAppDB(void)
 	g_theWonderBuildListDB      = new CTPDatabase<WonderBuildListRecord>;
 	g_theWonderMovieDB          = new CTPDatabase<WonderMovieRecord>;
 
-    // Firstly get the string database up and running - so we can display texts
-    if (!g_theStringDB->Parse(g_stringdb_filename))
-    {
-        return false;
-    }
+	// Firstly get the string database up and running - so we can display texts
+	if (!g_theStringDB->Parse(g_stringdb_filename))
+	{
+		return false;
+	}
 
 	// Has to be done after the initialization of the string database
 	g_theProgressWindow->StartCountingTo(10, g_theStringDB->GetNameStr("LOADING"));
 
-    // Fill the databases from file
+	// Fill the databases from file
 
 	if (!g_theSoundDB->Parse(C3DIR_GAMEDATA, g_sounddb_filename))
-    {
+	{
 		return false;
 	}
 
@@ -762,63 +762,63 @@ bool CivApp::InitializeAppDB(void)
 	g_theProgressWindow->StartCountingTo( 30 );
 
 	if (!g_theIconDB->Parse(C3DIR_GAMEDATA, g_uniticondb_filename))
-    {
+	{
 		return false;
 	}
 
 	g_theProgressWindow->StartCountingTo( 40 );
 
 	if (!g_theConstDB->Parse(C3DIR_GAMEDATA, g_constdb_filename))
-    {
+	{
 		return false;
 	}
 
 	g_theProgressWindow->StartCountingTo( 50 );
 
 	if (!g_theWonderMovieDB->Parse(C3DIR_GAMEDATA, g_wondermoviedb_filename))
-    {
+	{
 		return false;
 	}
 
 	g_theProgressWindow->StartCountingTo( 60 );
 
 	if (!g_theVictoryMovieDB->Parse(g_victorymoviedb_filename))
-    {
-	    return false;
+	{
+		return false;
 	}
 
 	g_theProgressWindow->StartCountingTo( 70 );
 
 	if (!g_thePlayListDB->Parse(g_playlistdb_filename))
-    {
+	{
 		return false;
 	}
 
 	g_theProgressWindow->StartCountingTo( 80 );
 
 	if (!g_theSpriteDB->Parse(C3DIR_GAMEDATA, "newsprite.txt"))
-    {
+	{
 		return false;
 	}
 
 	g_theProgressWindow->StartCountingTo( 90 );
 
 	if (!g_theSpecialEffectDB->Parse(C3DIR_GAMEDATA, g_specialeffectdb_filename))
-    {
+	{
 		return false;
 	}
 
 	g_theProgressWindow->StartCountingTo( 100 );
 
 	if (!g_theSpecialAttackInfoDB->Parse(C3DIR_GAMEDATA, g_specialattackinfodb_filename))
-    {
+	{
 		return false;
 	}
 
 	g_theProgressWindow->StartCountingTo( 110 );
 
 	if (!g_theAdvanceBranchDB->Parse(C3DIR_GAMEDATA, g_branchdb_filename))
-    {
+	{
 		return false;
 	}
 
@@ -832,21 +832,21 @@ bool CivApp::InitializeAppDB(void)
 	g_theProgressWindow->StartCountingTo( 130 );
 
 	if (!g_theGovernmentDB->Parse(C3DIR_GAMEDATA, g_government_filename))
-    {
-	    return false;
+	{
+		return false;
 	}
 
 	g_theProgressWindow->StartCountingTo( 140 );
 
 	if (!g_theUnitDB->Parse(C3DIR_GAMEDATA, g_unitdb_filename))
-    {
+	{
 		return false;
 	}
 
 	g_theProgressWindow->StartCountingTo( 150 );
 
 	if (!g_theDifficultyDB->Parse(C3DIR_GAMEDATA, g_difficultydb_filename))
-    {
+	{
 		ExitGame();
 		return false;
 	}
@@ -854,7 +854,7 @@ bool CivApp::InitializeAppDB(void)
 	g_theProgressWindow->StartCountingTo( 160 );
 
 	if (!g_theAgeDB->Parse(C3DIR_GAMEDATA, g_agedb_filename))
-    {
+	{
 		ExitGame();
 		return false;
 	}
@@ -866,7 +866,7 @@ bool CivApp::InitializeAppDB(void)
 	g_theProgressWindow->StartCountingTo( 180 );
 
 	if (!g_theConceptDB->Parse(C3DIR_GAMEDATA, g_conceptdb_filename))
-    {
+	{
 		ExitGame();
 		return false;
 	}
@@ -874,7 +874,7 @@ bool CivApp::InitializeAppDB(void)
 	g_theProgressWindow->StartCountingTo( 190 );
 
 	if (!g_theTerrainImprovementDB->Parse(C3DIR_GAMEDATA, g_tileimprovementdb_filename))
-    {
+	{
 		ExitGame();
 		return false;
 	}
@@ -882,7 +882,7 @@ bool CivApp::InitializeAppDB(void)
 	g_theProgressWindow->StartCountingTo( 200 );
 
 	if (!g_theResourceDB->Parse(C3DIR_GAMEDATA, g_goods_filename))
-    {
+	{
 		ExitGame();
 		return false;
 	}
@@ -890,7 +890,7 @@ bool CivApp::InitializeAppDB(void)
 	g_theProgressWindow->StartCountingTo( 210 );
 
 	if (!g_theTerrainDB->Parse(C3DIR_GAMEDATA, g_terrain_filename))
-    {
+	{
 		ExitGame();
 		return false;
 	}
@@ -898,21 +898,21 @@ bool CivApp::InitializeAppDB(void)
 	g_theProgressWindow->StartCountingTo( 220 );
 
 	if (!g_theBuildingDB->Parse(C3DIR_GAMEDATA, g_improve_filename))
-    {
+	{
 		return false;
 	}
 
 	g_theProgressWindow->StartCountingTo( 230 );
 
 	if (!g_thePollutionDB->Parse(C3DIR_GAMEDATA, g_pollution_filename))
-    {
+	{
 		return false;
 	}
 
 	g_theProgressWindow->StartCountingTo( 240 );
 
 	if (!g_theGlobalWarmingDB->Parse(C3DIR_GAMEDATA, g_global_warming_filename))
-    {
+	{
 		return false;
 	}
 
@@ -927,7 +927,7 @@ bool CivApp::InitializeAppDB(void)
 	g_theProgressWindow->StartCountingTo( 260 );
 
 	if (!g_theCivilisationDB->Parse(C3DIR_GAMEDATA, g_civilisation_filename))
-    {
+	{
 		return false;
 	}
 
@@ -938,21 +938,21 @@ bool CivApp::InitializeAppDB(void)
 	g_theProgressWindow->StartCountingTo( 270 );
 
 	if (!g_theWonderDB->Parse(C3DIR_GAMEDATA, g_wonder_filename))
-    {
+	{
 		return false;
 	}
 
 	g_theProgressWindow->StartCountingTo( 280 );
 
 	if (!g_theRiskDB->Parse(C3DIR_GAMEDATA, g_risk_filename))
-    {
+	{
 		return false;
 	}
 
 	g_theProgressWindow->StartCountingTo( 290 );
 
 	if (!g_theMessageIconFileDB->Parse(g_messageiconfdb_filename))
-    {
+	{
 		ExitGame();
 		return false;
 	}
@@ -960,133 +960,133 @@ bool CivApp::InitializeAppDB(void)
 	g_theProgressWindow->StartCountingTo( 300 );
 
 	if (!g_theMapDB->Parse(C3DIR_GAMEDATA, g_mapdb_filename))
-    {
+	{
 		return false;
 	}
 
 	g_theProgressWindow->StartCountingTo( 310 );
 
 	if (!g_theOrderDB->Parse(C3DIR_GAMEDATA, g_orderdb_filename))
-    {
+	{
 		return false;
 	}
 
 	g_theProgressWindow->StartCountingTo( 320 );
 
 	if (!g_theFeatDB->Parse(C3DIR_GAMEDATA, g_featdb_filename))
-    {
+	{
 		return false;
 	}
 
 	g_theProgressWindow->StartCountingTo( 330 );
 
 	if (!g_theEndGameObjectDB->Parse(C3DIR_GAMEDATA, g_endgameobject_filename))
-    {
+	{
 		return false;
 	}
 
 	g_theProgressWindow->StartCountingTo( 340 );
 
 	if (!g_theGoalDB->Parse(C3DIR_AIDATA, g_goal_db_filename))
-    {
+	{
 		return false;
 	}
 
 	g_theProgressWindow->StartCountingTo( 350 );
 
 	if (!g_thePersonalityDB->Parse(C3DIR_AIDATA, g_personality_db_filename))
-    {
+	{
 		return false;
 	}
 
 	g_theProgressWindow->StartCountingTo( 360 );
 
 	if (!g_theUnitBuildListDB->Parse(C3DIR_AIDATA, g_unit_buildlist_db_filename))
-    {
+	{
 		return false;
 	}
 
 	g_theProgressWindow->StartCountingTo( 370 );
 
 	if (!g_theWonderBuildListDB->Parse(C3DIR_AIDATA, g_wonder_buildlist_db_filename))
-    {
+	{
 		return false;
 	}
 
 	g_theProgressWindow->StartCountingTo( 380 );
 
 	if (!g_theBuildingBuildListDB->Parse(C3DIR_AIDATA, g_building_buildlist_db_filename))
-    {
+	{
 		return false;
 	}
 
 	g_theProgressWindow->StartCountingTo( 390 );
 
 	if (!g_theImprovementListDB->Parse(C3DIR_AIDATA, g_improvement_list_db_filename))
-    {
+	{
 		return false;
 	}
 
 	g_theProgressWindow->StartCountingTo( 400 );
 
 	if (!g_theStrategyDB->Parse(C3DIR_AIDATA, g_strategy_db_filename))
-    {
+	{
 		return false;
 	}
 
 	g_theProgressWindow->StartCountingTo( 410 );
 
 	if (!g_theBuildListSequenceDB->Parse(C3DIR_AIDATA, g_buildlist_sequence_db_filename))
-    {
+	{
 		return false;
 	}
 
 	g_theProgressWindow->StartCountingTo( 420 );
 
 	if (!g_theDiplomacyDB->Parse(C3DIR_AIDATA, g_diplomacy_db_filename))
-    {
+	{
 		return false;
 	}
 
 	g_theProgressWindow->StartCountingTo( 430 );
 
 	if (!g_theDiplomacyProposalDB->Parse(C3DIR_AIDATA, g_diplomacy_proposal_filename))
-    {
+	{
 		return false;
 	}
 
 	g_theProgressWindow->StartCountingTo( 440 );
 
 	if (!g_theDiplomacyThreatDB->Parse(C3DIR_AIDATA, g_diplomacy_threat_filename))
-    {
+	{
 		return false;
 	}
 
 	g_theProgressWindow->StartCountingTo( 450 );
 
 	if (!g_theAdvanceListDB->Parse(C3DIR_AIDATA, g_advance_list_db_filename))
-    {
+	{
 		return false;
 	}
 
 	g_theProgressWindow->StartCountingTo( 460 );
 
 	if (!g_theCityStyleDB->Parse(C3DIR_GAMEDATA, g_city_style_db_filename))
-    {
+	{
 		return false;
 	}
 
 	g_theProgressWindow->StartCountingTo( 470 );
 
 	if (!g_theAgeCityStyleDB->Parse(C3DIR_GAMEDATA, g_age_city_style_db_filename))
-    {
+	{
 		return false;
 	}
 
 	g_theProgressWindow->StartCountingTo( 480 );
 
-    {
-        char *lastdot = strrchr(g_citysize_filename, '.');
+	{
+		char *lastdot = strrchr(g_citysize_filename, '.');
 		Assert(lastdot);
 
 		if(!lastdot)
@@ -1103,13 +1103,13 @@ bool CivApp::InitializeAppDB(void)
 	g_theProgressWindow->StartCountingTo( 490 );
 
 	if (!g_thePopDB->Parse(C3DIR_GAMEDATA, g_pop_filename))
-    {
+	{
 		return false;
 	}
 
 	g_theProgressWindow->StartCountingTo( 500 );
 
-    g_exclusions = new Exclusions();
+	g_exclusions = new Exclusions();
 
 	if(!g_theUnitDB->ResolveReferences())               return false;
 	if(!g_theAdvanceDB->ResolveReferences())            return false;
@@ -1249,13 +1249,6 @@ bool CivApp::InitializeAppDB(void)
 	return true;
 }
 
-
-
-
-
-
-
-
 sint32 CivApp::InitializeApp(HINSTANCE hInstance, int iCmdShow)
 {
 #ifdef WIN32
@@ -1318,19 +1311,19 @@ sint32 CivApp::InitializeApp(HINSTANCE hInstance, int iCmdShow)
 	g_theProgressWindow->StartCountingTo( 10 );
 
 	if (!gameinit_InitializeGameFiles())
-    {
-        ExitGame();
-        return -1;
-    }
+	{
+		ExitGame();
+		return -1;
+	}
 
-    SPLASH_STRING(g_theProfileDB->IsAIOn() ? "AI is ON" : "AI is OFF");
+	SPLASH_STRING(g_theProfileDB->IsAIOn() ? "AI is ON" : "AI is OFF");
 
 	g_theProgressWindow->StartCountingTo( 20 );
 
 	g_theProgressWindow->StartCountingTo( 540 );
 
 	if (!InitializeAppDB())
-    {
+	{
 		c3errors_FatalDialog("CivApp", "Unable to Init the Databases.");
 		return -1;
 	}
@@ -1404,7 +1397,7 @@ sint32 CivApp::InitializeApp(HINSTANCE hInstance, int iCmdShow)
 	g_theProgressWindow->StartCountingTo( 620 );
 
 	if (g_c3ui->TheMouse())
-    {
+	{
 		double const sensitivity = 0.25 * (1 + g_theProfileDB->GetMouseSpeed());
 		g_c3ui->TheMouse()->Sensitivity() = sensitivity;
 	}
@@ -1417,11 +1410,6 @@ sint32 CivApp::InitializeApp(HINSTANCE hInstance, int iCmdShow)
 
 	return 0;
 }
-
-
-
-
-
 
 sint32 CivApp::QuickInit(HINSTANCE hInstance, int iCmdShow)
 {
@@ -1452,7 +1440,7 @@ void CivApp::CleanupAppUI(void)
 	graphicsresscreen_Cleanup();
 	km_screen_Cleanup();
 
-    allocated::clear(g_c3ui);
+	allocated::clear(g_c3ui);
 
 #if defined(_DEBUG) && !defined(__AUI_USE_SDL__)
 	sint32 const cleanBaseRefCount = aui_Base::GetBaseRefCount();
@@ -1463,11 +1451,6 @@ void CivApp::CleanupAppUI(void)
 	allocated::clear(g_ImageMapPF);
 	allocated::clear(g_SoundPF);
 }
-
-
-
-
-
 
 void CivApp::CleanupAppDB(void)
 {
@@ -1527,9 +1510,6 @@ void CivApp::CleanupAppDB(void)
     m_dbLoaded = false;
 }
 
-
-
-
 void CivApp::CleanupApp(void)
 {
 	if (m_appLoaded)
@@ -1569,12 +1549,6 @@ void CivApp::CleanupApp(void)
 
 	m_appLoaded = false;
 }
-
-
-
-
-
-
 
 sint32 CivApp::InitializeGameUI(void)
 {
@@ -1644,7 +1618,7 @@ sint32 CivApp::InitializeGameUI(void)
 
 	g_theProgressWindow->StartCountingTo( 90 );
 
-    AUI_ERRCODE auiErr = g_c3ui->AddWindow( g_background );
+	AUI_ERRCODE auiErr = g_c3ui->AddWindow( g_background );
 	Assert(auiErr == AUI_ERRCODE_OK);
 	if ( auiErr != AUI_ERRCODE_OK ) return 11;
 
@@ -1673,11 +1647,6 @@ sint32 CivApp::InitializeGameUI(void)
 	return 0;
 }
 
-
-
-
-
-
 sint32 CivApp::InitializeGame(CivArchive &archive)
 {
 #ifndef _NO_GAME_WATCH
@@ -1703,33 +1672,33 @@ sint32 CivApp::InitializeGame(CivArchive &archive)
 
 	g_theProgressWindow->StartCountingTo( 540 );
 
-    if (m_dbLoaded && g_theProfileDB->IsScenario())
-    {
-        CleanupAppDB();
-        InitializeAppDB();
+	if (m_dbLoaded && g_theProfileDB->IsScenario())
+	{
+		CleanupAppDB();
+		InitializeAppDB();
 
-        // The cached patterns of the allocated windows have to be unloaded to
-        // be able to reinitialise the image maps safely.
-        // InitializeGameUI will take care of this by closing most windows, but
-        // the progress window stays open. It has to be handled manually to
-        // prevent possible corruption of its background and border patterns.
-        g_theProgressWindow->PatternInfoSave();
+		// The cached patterns of the allocated windows have to be unloaded to
+		// be able to reinitialise the image maps safely.
+		// InitializeGameUI will take care of this by closing most windows, but
+		// the progress window stays open. It has to be handled manually to
+		// prevent possible corruption of its background and border patterns.
+		g_theProgressWindow->PatternInfoSave();
 
-        InitializeImageMaps();
-        InitializeSoundPF();
+		InitializeImageMaps();
+		InitializeSoundPF();
 
 		// Restore the progress window background
-        g_theProgressWindow->PatternInfoRestore();
+		g_theProgressWindow->PatternInfoRestore();
 
-        InitializeGameUI();
-        greatlibrary_Cleanup();
-        InitializeGreatLibrary();
-        GreatLibrary::Initialize_Great_Library_Data();
-    }
-    else
-    {
-    	InitializeGameUI();
-    }
+		InitializeGameUI();
+		greatlibrary_Cleanup();
+		InitializeGreatLibrary();
+		GreatLibrary::Initialize_Great_Library_Data();
+	}
+	else
+	{
+		InitializeGameUI();
+	}
 
 	g_theProgressWindow->StartCountingTo( 560 );
 
@@ -1778,8 +1747,8 @@ sint32 CivApp::InitializeGame(CivArchive &archive)
 			}
 		}
 
-        delete g_theMessagePool;
-        g_theMessagePool = new MessagePool();
+		delete g_theMessagePool;
+		g_theMessagePool = new MessagePool();
 
 		SlicEngine::Reload(g_slic_filename);
 
@@ -1788,7 +1757,7 @@ sint32 CivApp::InitializeGame(CivArchive &archive)
 		   g_theCivilisationDB && g_theProfileDB) {
 			Player *        p       = g_player[g_scenarioUsePlayerNumber];
 			StringId        id      =
-                (p->m_civilisation->GetDBRec())->GetLeaderNameMale();
+			    (p->m_civilisation->GetDBRec())->GetLeaderNameMale();
 			const MBCHAR *name = g_theStringDB->GetNameStr(id);
 			if(name) {
 				p->m_civilisation->AccessData()->SetLeaderName(name);
@@ -1800,11 +1769,6 @@ sint32 CivApp::InitializeGame(CivArchive &archive)
 	g_theProgressWindow->StartCountingTo( 620 );
 
 	if(g_isScenario && !g_oldRandSeed) {
-
-
-
-
-
 
 		g_rand->Initialize(static_cast<sint32>(time(0)));
 	}
@@ -1883,13 +1847,8 @@ sint32 CivApp::InitializeGame(CivArchive &archive)
 	if(!g_network.IsActive()) {
 		if (NULL == &archive ||
 			(g_saveFileVersion >= 42 &&
-
-
-
-
-
 			(g_isScenario && g_startInfoType != STARTINFOTYPE_NOLOCS)))
-        {
+		{
 			if (g_director)
 				g_director->AddCopyVision();
 		}
@@ -1925,16 +1884,16 @@ sint32 CivApp::InitializeGame(CivArchive &archive)
 	g_theProgressWindow->StartCountingTo( 760 );
 
 	if ((&archive) && g_turn->IsHotSeat())
-    {
-	    // Indicate the resuming player when loading a saved hotseat game
-	    g_turn->SendNextPlayerMessage();
-    }
+	{
+		// Indicate the resuming player when loading a saved hotseat game
+		g_turn->SendNextPlayerMessage();
+	}
 	else if (g_selected_item)
-    {
-        if (!&archive)
-        {
-            g_selected_item->Refresh();
-        }
+	{
+		if (!&archive)
+		{
+			g_selected_item->Refresh();
+		}
 
 		if (g_director)
 			g_director->AddCenterMap(g_selected_item->GetCurSelectPos());
@@ -1949,10 +1908,10 @@ sint32 CivApp::InitializeGame(CivArchive &archive)
 		MainControlPanel::UpdatePlayer(g_selected_item->GetCurPlayer());
 	}
 
-    if (g_launchIntoCheatMode)
-    {
-        ScenarioEditor::Display();
-    }
+	if (g_launchIntoCheatMode)
+	{
+		ScenarioEditor::Display();
+	}
 
 	if (    g_turn->IsEmail()
 	     && g_player[g_selected_item->GetCurPlayer()]->IsTurnOver()
@@ -1968,10 +1927,6 @@ sint32 CivApp::InitializeGame(CivArchive &archive)
 
 	return 0;
 }
-
-
-
-
 
 sint32 InitializeSpriteEditorUI(void)
 {
@@ -2070,10 +2025,6 @@ sint32 InitializeSpriteEditorUI(void)
 	return 0;
 }
 
-
-
-
-
 sint32 CivApp::InitializeSpriteEditor(CivArchive &archive)
 {
 	ProgressWindow::BeginProgress(
@@ -2129,12 +2080,12 @@ sint32 CivApp::InitializeSpriteEditor(CivArchive &archive)
 	g_theProgressWindow->StartCountingTo( 720 );
 
 	if (    (&archive != NULL)
-         && (g_startInfoType != STARTINFOTYPE_NONE ||
-		     g_saveFileVersion < gamefile_CurrentVersion()
-            )
-       )
-    {
-        SlicEngine::Reload(g_slic_filename);
+	     && (g_startInfoType != STARTINFOTYPE_NONE ||
+	         g_saveFileVersion < gamefile_CurrentVersion()
+	        )
+	   )
+	{
+		SlicEngine::Reload(g_slic_filename);
 	}
 	g_slicEngine->RunTrigger(TRIGGER_LIST_GAME_LOADED, ST_END);
 
@@ -2176,16 +2127,7 @@ sint32 CivApp::InitializeSpriteEditor(CivArchive &archive)
 	if(!g_network.IsActive()) {
 		if (NULL == &archive ||
 			(g_saveFileVersion >= 42 &&
-
-
-
-
-
 			(g_isScenario && g_startInfoType != STARTINFOTYPE_NOLOCS))) {
-
-
-
-
 
 			if(g_scenarioUsePlayerNumber == 0 && !g_turn->IsHotSeat() &&
 				!g_turn->IsEmail()) {
@@ -2194,7 +2136,7 @@ sint32 CivApp::InitializeSpriteEditor(CivArchive &archive)
 			if (g_director)
 				g_director->AddCopyVision();
 		}
-    }
+	}
 
 	g_theProgressWindow->StartCountingTo( 800 );
 
@@ -2225,20 +2167,12 @@ sint32 CivApp::InitializeSpriteEditor(CivArchive &archive)
 
 	if (g_launchIntoCheatMode) {
 		ScenarioEditor::Display();
-
-
-
-
-
-
-
 	}
 
 	ProgressWindow::EndProgress( g_theProgressWindow );
 
 	return 0;
 }
-
 
 void CivApp::CleanupGameUI(void)
 {
@@ -2281,10 +2215,6 @@ void CivApp::CleanupGameUI(void)
 
 	workwin_Cleanup();
 
-
-
-
-
 	ScenarioEditor::Cleanup();
 	CityWindow::Cleanup();
 	DiplomacyWindow::Cleanup();
@@ -2295,18 +2225,12 @@ void CivApp::CleanupGameUI(void)
 	EditQueue::Cleanup();
 	ProfileEdit::Cleanup();
 
-
 	DipWizard::Cleanup();
 	DomesticManagementDialog::Cleanup();
 	initialplayscreen_Cleanup();
 
 	DiplomacyDetails::Cleanup();
 }
-
-
-
-
-
 
 void CivApp::CleanupGame(bool keepScenInfo)
 {
@@ -2318,7 +2242,6 @@ void CivApp::CleanupGame(bool keepScenInfo)
 	g_network.Cleanup();
 
 	radarwindow_Cleanup();
-
 
 	GraphicsOptions::Cleanup();
 
@@ -2340,13 +2263,6 @@ void CivApp::CleanupGame(bool keepScenInfo)
 
 	if (g_soundManager)
 		g_soundManager->DumpAllSounds();
-
-
-
-
-
-
-
 
 	if(!keepScenInfo) {
 
@@ -2400,13 +2316,13 @@ void CivApp::CleanupGame(bool keepScenInfo)
 void CivApp::StartMessageSystem()
 {
 	if (!m_dbLoaded)
-    {
+	{
 		InitializeAppDB();
-    }
+	}
 
-    delete g_theMessagePool;
-    g_theMessagePool = new MessagePool();
-    SlicEngine::Reload(g_slic_filename);
+	delete g_theMessagePool;
+	g_theMessagePool = new MessagePool();
+	SlicEngine::Reload(g_slic_filename);
 }
 
 void CivApp::BeginKeyboardScrolling(sint32 key)
@@ -2421,16 +2337,9 @@ void CivApp::StopKeyboardScrolling(sint32 key)
 	m_isKeyboardScrolling   = false;
 }
 
-
-
-
-
-
-
-
 void CivApp::ProcessGraphicsCallback(void)
 {
-    static bool s_inCallback = false;
+	static bool s_inCallback = false;
 
 	if (s_inCallback)   return;
 
@@ -2447,17 +2356,12 @@ void CivApp::ProcessGraphicsCallback(void)
 	g_c3ui->Process();
 
 	if (!g_network.IsActive() || g_network.ReadyToStart())
-    {
+	{
 		g_director->Process();
-    }
+	}
 
 	s_inCallback = false;
 }
-
-
-
-
-
 
 sint32 CivApp::ProcessUI(const uint32 target_milliseconds, uint32 &used_milliseconds)
 {
@@ -2515,8 +2419,8 @@ sint32 CivApp::ProcessUI(const uint32 target_milliseconds, uint32 &used_millisec
 				g_tiledMap->InvalidateMap();
 				g_tiledMap->ValidateMix();
 			}
-            else
-            {
+			else
+			{
 				if(g_tiledMap) {
 					g_tiledMap->RestoreMixFromMap(g_background->TheSurface());
 				}
@@ -2606,15 +2510,15 @@ sint32 CivApp::ProcessSLIC(void)
 	g_slicEngine->ProcessUITriggers();
 
 	static time_t   lastRanSlicTimers   = 0;
-    time_t          now                 = time(0);
+	time_t          now                 = time(0);
 	if (now > lastRanSlicTimers + g_slicEngine->GetTimerGranularity())
-    {
+	{
 		g_slicEngine->RunTimerTriggers();
-        /// @todo Check lastRanSlicTimers = now;
+		/// @todo Check lastRanSlicTimers = now;
 	}
 
 	if (g_slicEngine->WaitingForLoad())
-    {
+	{
 		main_RestoreGame(g_slicEngine->GetLoadName());
 	}
 
@@ -2638,7 +2542,7 @@ sint32 CivApp::ProcessProfile(void)
 	if (g_soundManager)
 		g_soundManager->Process(target_milliseconds, used_milliseconds);
 
-    return 0;
+	return 0;
 }
 
 sint32 CivApp::Process(void)
@@ -2652,8 +2556,8 @@ sint32 CivApp::Process(void)
 	}
 #endif
 
-
-	if(g_netConsole) {
+	if(g_netConsole)
+	{
 		static uint32 last_tick = 0;
 
 		if (Os::GetTicks() > last_tick + 250)
@@ -2670,12 +2574,13 @@ sint32 CivApp::Process(void)
 		return 0;
 	}
 
-	if (g_use_profile_process) {
+	if (g_use_profile_process)
+	{
 		ProcessProfile();
 		return 0;
 	}
 
-    uint32 target_milliseconds = (g_no_timeslice) ? 10000000 : 30;
+	uint32 target_milliseconds = (g_no_timeslice) ? 10000000 : 30;
 	uint32 used_milliseconds;
 
 	ProcessNet(target_milliseconds, used_milliseconds);
@@ -2684,7 +2589,6 @@ sint32 CivApp::Process(void)
 
 	if(g_attractWindow)
 		g_attractWindow->AppIdle();
-
 
 	ProcessSLIC();
 
@@ -2696,20 +2600,19 @@ sint32 CivApp::Process(void)
 	if(g_gevManager)
 		g_gevManager->Process();
 
-
 	if (m_gameLoaded && g_savedGameRequest && g_selected_item)
-    {
-        Player *    p = g_player[g_selected_item->GetCurPlayer()];
+	{
+		Player *    p = g_player[g_selected_item->GetCurPlayer()];
 		if(p && !p->IsRobot()
 		|| g_selected_item->GetVisiblePlayer() == g_selected_item->GetCurPlayer())
-        {
+		{
 			if (g_director)
 				g_director->CatchUp();
 
 			if (g_launchIntoCheatMode)
 				g_theGameSettings->SetKeepScore(TRUE);
 
-    		GameFile::SaveGame(g_savedGameRequest->pathName, g_savedGameRequest);
+			GameFile::SaveGame(g_savedGameRequest->pathName, g_savedGameRequest);
 
 			if (g_launchIntoCheatMode)
 				g_theGameSettings->SetKeepScore(FALSE);
@@ -2718,7 +2621,7 @@ sint32 CivApp::Process(void)
 		}
 	}
 
-    return 0;
+	return 0;
 }
 
 sint32 CivApp::StartGame(void)
@@ -2730,12 +2633,6 @@ sint32 CivApp::StartSpriteEditor(void)
 {
 	return InitializeSpriteEditor((*(CivArchive *)(NULL)));
 }
-
-
-
-
-
-
 
 sint32 CivApp::EndGame(void)
 {
@@ -2752,7 +2649,6 @@ sint32 CivApp::EndGame(void)
 
 sint32 CivApp::LoadSavedGame(MBCHAR const * name)
 {
-
 	ProgressWindow::BeginProgress(
 		g_theProgressWindow,
 		"InitProgressWindow",
@@ -2815,21 +2711,20 @@ sint32 CivApp::LoadSavedGameMap(MBCHAR const * name)
 {
 	FILE * fin = fopen(name, "r");
 
-    if (fin)
-    {
-    	fclose(fin);
-	    GameMapFile::RestoreGameMap(name);
-	    g_tiledMap->InvalidateMap();
-	    g_selected_item->NextUnmovedUnit(TRUE, FALSE);
-    }
-    else
-    {
+	if (fin)
+	{
+		fclose(fin);
+		GameMapFile::RestoreGameMap(name);
+		g_tiledMap->InvalidateMap();
+		g_selected_item->NextUnmovedUnit(TRUE, FALSE);
+	}
+	else
+	{
 		c3errors_ErrorDialog("Load save game map", "Could not open %s", name);
 	}
 
 	return 0;
 }
-
 
 sint32 CivApp::LoadScenarioGame(MBCHAR const * file)
 {
@@ -2910,7 +2805,6 @@ void CivApp::QuitGame(void)
 
 	CleanupApp();
 }
-
 
 void CivApp::AutoSave(sint32 player, bool isQuickSave)
 {
@@ -3108,36 +3002,33 @@ void LoadScenarioGameAction::Execute(aui_Control *control, uint32 action, uint32
 	g_civApp->LoadScenarioGame(m_filename);
 }
 
-
-
-
 void InitializeGreatLibrary()
 {
-    delete g_GreatLibPF;
-    g_GreatLibPF = new ProjectFile();
-    AddSearchDirectories(g_GreatLibPF, C3DIR_GL, "gl.zfs");
+	delete g_GreatLibPF;
+	g_GreatLibPF = new ProjectFile();
+	AddSearchDirectories(g_GreatLibPF, C3DIR_GL, "gl.zfs");
 }
 
 void InitializeSoundPF()
 {
-    delete g_SoundPF;
-    g_SoundPF = new ProjectFile();
-    AddSearchDirectories(g_SoundPF, C3DIR_SOUNDS, "sound.zfs");
+	delete g_SoundPF;
+	g_SoundPF = new ProjectFile();
+	AddSearchDirectories(g_SoundPF, C3DIR_SOUNDS, "sound.zfs");
 }
 
 void InitializeImageMaps()
 {
-    delete g_ImageMapPF;
-    g_ImageMapPF = new ProjectFile();
+	delete g_ImageMapPF;
+	g_ImageMapPF = new ProjectFile();
 
-    if (g_c3ui->PixelFormat() == AUI_SURFACE_PIXELFORMAT_555)
-    {
-        AddSearchPacks(g_ImageMapPF, C3DIR_PATTERNS, "pat555.zfs");
-        AddSearchPacks(g_ImageMapPF, C3DIR_PICTURES, "pic555.zfs");
-    }
-    else
-    {
-        AddSearchPacks(g_ImageMapPF, C3DIR_PATTERNS, "pat565.zfs");
-        AddSearchPacks(g_ImageMapPF, C3DIR_PICTURES, "pic565.zfs");
-    }
+	if (g_c3ui->PixelFormat() == AUI_SURFACE_PIXELFORMAT_555)
+	{
+		AddSearchPacks(g_ImageMapPF, C3DIR_PATTERNS, "pat555.zfs");
+		AddSearchPacks(g_ImageMapPF, C3DIR_PICTURES, "pic555.zfs");
+	}
+	else
+	{
+		AddSearchPacks(g_ImageMapPF, C3DIR_PATTERNS, "pat565.zfs");
+		AddSearchPacks(g_ImageMapPF, C3DIR_PICTURES, "pic565.zfs");
+	}
 }
