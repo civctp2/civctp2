@@ -609,8 +609,8 @@ bool UnitAstar::EntryCost(const MapPoint &prev, const MapPoint &pos,
 		if(g_player[m_owner]->GetLastSeen(pos, ucell))
 		{
 			// Ugly
-			the_pos_cell->SetEnvFast(ucell.m_unseenCell->m_env);
-			the_pos_cell->SetMoveCost(double(ucell.m_unseenCell->m_move_cost));
+			the_pos_cell->SetEnvFast(ucell.m_unseenCell->GetEnv());
+			the_pos_cell->SetMoveCost(double(ucell.m_unseenCell->GetMoveCost()));
 			restore = true;
 		}
 	}

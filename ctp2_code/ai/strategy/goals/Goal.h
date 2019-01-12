@@ -280,7 +280,7 @@ private:
     sint8                             m_playerId;
     bool                              m_needs_sorting;
 
-#if defined(_DEBUG) || defined(USE_LOGGING)
+#if 0
 public:
 	void PrintSizeOfGoalClass()
 	{

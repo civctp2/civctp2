@@ -3449,12 +3449,12 @@ void TiledMap::DrawCityNames(aui_Surface * surf, sint32 layer)
 
 					isWatchful           = ucell.m_unseenCell->IsWatchful();
 
-					bioInfectedOwner     = (sint32)ucell.m_unseenCell->m_bioInfectedOwner;
-					nanoInfectedOwner    = ucell.m_unseenCell->m_nanoInfectedOwner;
-					convertedOwner       = ucell.m_unseenCell->m_convertedOwner;
-					franchiseOwner       = ucell.m_unseenCell->m_franchiseOwner;
-					injoinedOwner        = ucell.m_unseenCell->m_injoinedOwner;
-					happinessAttackOwner = ucell.m_unseenCell->m_happinessAttackOwner;
+					bioInfectedOwner     = (sint32)ucell.m_unseenCell->GetBioInfectedOwner();
+					nanoInfectedOwner    = ucell.m_unseenCell->GetNanoInfectedOwner();
+					convertedOwner       = ucell.m_unseenCell->GetConvertedOwer();
+					franchiseOwner       = ucell.m_unseenCell->GetFranchiseOwner();
+					injoinedOwner        = ucell.m_unseenCell->GetInjoinedOwner();
+					happinessAttackOwner = ucell.m_unseenCell->GetHappinessAttackOwner();
 
 					slaveBits            = ucell.m_unseenCell->GetSlaveBits();
 					isCapitol            = ucell.m_unseenCell->IsCapitol(); //emod
@@ -4624,7 +4624,7 @@ sint32 TiledMap::GetVisibleCellOwner(const MapPoint &pos) const
 		UnseenCellCarton ucell;
 		if(m_localVision->GetLastSeen(pos, ucell))
 		{
-			return ucell.m_unseenCell->m_cell_owner;
+			return ucell.m_unseenCell->GetCellOwner();
 		}
 	}
 

@@ -485,14 +485,22 @@ void World::GlobalWarmingEvent(const sint32 phase)
 				{
 					if(!theCell->GetCity().GetMovementTypeSea())
 					{
-						theCell->GetCity().Kill(CAUSE_REMOVE_ARMY_FLOOD, -1);
+						g_gevManager->AddEvent(GEV_INSERT_Tail, GEV_KillCity,
+											   GEA_City, theCell->GetCity().m_id,
+											   GEA_Int, CAUSE_REMOVE_ARMY_FLOOD,
+											   GEA_Player, PLAYER_UNASSIGNED,
+											   GEA_End);
 					}
 				}
 				else
 				{
 					if(!theCell->GetCity().GetMovementTypeLand())
 					{
-						theCell->GetCity().Kill(CAUSE_REMOVE_ARMY_FLOOD, -1);
+						g_gevManager->AddEvent(GEV_INSERT_Tail, GEV_KillCity,
+											   GEA_City, theCell->GetCity().m_id,
+											   GEA_Int, CAUSE_REMOVE_ARMY_FLOOD,
+											   GEA_Player, PLAYER_UNASSIGNED,
+											   GEA_End);
 					}
 				}
 			}

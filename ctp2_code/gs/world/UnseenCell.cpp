@@ -134,7 +134,6 @@ UnseenCell::UnseenCell(const MapPoint & point)
 	m_improvements                  (new PointerList<UnseenImprovementInfo>),
 	m_cityName                      (NULL),
 	m_actor                         (NULL),
-	m_poolIndex                     (-1),
 	m_visibleCityOwner              (0)
 {
 	if (g_theWorld->GetTileInfo(point))
@@ -304,7 +303,6 @@ UnseenCell::UnseenCell()
 	m_improvements                  (new PointerList<UnseenImprovementInfo>),
 	m_cityName                      (NULL),
 	m_actor                         (NULL),
-	m_poolIndex                     (-1),
 	m_visibleCityOwner              (0)
 {
 }
@@ -326,9 +324,7 @@ UnseenCell::UnseenCell()
 //----------------------------------------------------------------------------
 UnseenCell::UnseenCell(UnseenCell *old)
 {
-	int realPoolIndex = m_poolIndex;
 	*this = *old;
-	m_poolIndex = realPoolIndex;
 
 	if(m_actor) {
 		m_actor->m_refCount++;
@@ -404,7 +400,6 @@ UnseenCell::UnseenCell(CivArchive &archive)
 	m_improvements                  (NULL),
 	m_cityName                      (NULL),
 	m_actor                         (NULL),
-	m_poolIndex                     (-1),
 	m_visibleCityOwner              (0)
 {
 	Serialize(archive);
@@ -427,18 +422,18 @@ UnseenCell::UnseenCell(CivArchive &archive)
 //----------------------------------------------------------------------------
 UnseenCell::~UnseenCell()
 {
-    ReleaseActor(m_actor);
+	ReleaseActor(m_actor);
 
-    delete m_tileInfo;
+	delete m_tileInfo;
 
 	if (m_installations)
-    {
+	{
 		m_installations->DeleteAll();
 		delete m_installations;
 	}
 
 	if (m_improvements)
-    {
+	{
 		m_improvements->DeleteAll();
 		delete m_improvements;
 	}
@@ -827,9 +822,34 @@ sint32 UnseenCell::GetGoldProduced() const
 void UnseenCell::Serialize(CivArchive &archive)
 {
 	sint32 l;
-	if(archive.IsStoring()) {
+	if(archive.IsStoring())
+	{
+		// Needed for data padding in the original implementation
+		sint8  empty = 0;
+
 		m_point.Serialize(archive);
-		archive.StoreChunk((uint8 *)&m_env, ((uint8 *)&m_slaveBits)+sizeof(m_slaveBits));
+
+		archive.PutUINT32(m_env);
+
+		archive.PutSINT16(m_terrain_type);
+		archive.PutSINT16(m_move_cost);
+
+		archive.PutUINT16(m_flags);
+		archive.PutSINT8(m_bioInfectedOwner);
+		archive.PutSINT8(m_nanoInfectedOwner);
+
+		archive.PutSINT8(m_convertedOwner);
+		archive.PutSINT8(m_franchiseOwner);
+		archive.PutSINT8(m_injoinedOwner);
+		archive.PutSINT8(m_happinessAttackOwner);
+
+		archive.PutSINT16(m_citySize);
+		archive.PutSINT16(m_cityOwner);
+		archive.PutSINT16(m_citySpriteIndex);
+
+		archive.PutSINT8(m_cell_owner);
+		archive.PutSINT8(empty);
+		archive.PutUINT32(m_slaveBits);
 
 		{
 			// A dirty workaround in order not to change the save game format.
@@ -857,7 +877,6 @@ void UnseenCell::Serialize(CivArchive &archive)
 			}
 		}
 
-
 		if (m_cityName)
 		{
 			l = strlen(m_cityName) + 1;
@@ -878,8 +897,32 @@ void UnseenCell::Serialize(CivArchive &archive)
 	}
 	else
 	{
+		// Needed for data padding in the original implementation
+		sint8 empty = 0;
+
 		m_point.Serialize(archive);
-		archive.LoadChunk((uint8 *)&m_env, ((uint8 *)&m_slaveBits)+sizeof(m_slaveBits));
+
+		m_env                  = archive.GetUINT32();
+
+		m_terrain_type         = archive.GetSINT16();
+		m_move_cost            = archive.GetSINT16();
+
+		m_flags                = archive.GetUINT16();
+		m_bioInfectedOwner     = archive.GetSINT8();
+		m_nanoInfectedOwner    = archive.GetSINT8();
+
+		m_convertedOwner       = archive.GetSINT8();
+		m_franchiseOwner       = archive.GetSINT8();
+		m_injoinedOwner        = archive.GetSINT8();
+		m_happinessAttackOwner = archive.GetSINT8();
+
+		m_citySize             = archive.GetSINT16();
+		m_cityOwner            = archive.GetSINT16();
+		m_citySpriteIndex      = archive.GetSINT16();
+
+		m_cell_owner           = archive.GetSINT8();
+		empty                  = archive.GetSINT8();
+		m_slaveBits            = archive.GetUINT32();
 
 		if (m_installations)
 		{

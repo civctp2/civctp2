@@ -578,32 +578,6 @@ public:
 public:
 	void PrintSizeOfClass()
 	{
-		UnitDynamicArray          *m_tempKillList;         // Not really used, but needs some work to remove savely
-		UnitDynamicArray          *m_attackedByDefenders;  // Unused but serialized
-		PointerList<Order>        *m_orders;               // Used and serialized
-		PointerList<KillRecord>   *m_killMeSoon;           // Used
-		MBCHAR                    *m_name;                 // Used and serialized
-		MBCHAR                    *m_debugString;          // Used for debugging
-
-		// enums 32 bit, hopefully not something else on other systems
-		CAUSE_REMOVE_ARMY          m_removeCause;          // Used and serialized (sint32)
-
-		// Should be all 32 bit on all systems
-		PLAYER_INDEX               m_owner;                // Used and serialized
-		PLAYER_INDEX               m_killer;               // In unused methods used and is serialized
-		sint32                     m_reentryTurn;          // Used
-
-		// MapPoint two sin16, so they are also 32 bit
-		MapPoint                   m_pos;                  // Used and serialized
-		MapPoint                   m_reentryPos;           // Used
-
-		// 8 bit
-		uint8                      m_debugStringColor;     // Used for debugging
-		uint8                      m_dontKillCount;        // Used and serialized
-		bool                       m_hasBeenAdded;         // Used and serialized (uint8)
-		bool                       m_isPirating;           // Used and serialized (uint8)
-		bool                       m_needToKill;           // Used and serialized (uint8)
-
 		DPRINTF(k_DBG_AI, ("\n"));
 		DPRINTF(k_DBG_AI, ("Size of ArmyData class:\n"));
 		DPRINTF(k_DBG_AI, ("ArmyData: %d\n",              sizeof(ArmyData)));

@@ -78,12 +78,9 @@ class BitMask;
 class VisibilityDurationArray
 {
 public:
-	VisibilityDurationArray() {
+	VisibilityDurationArray()
+	{
 		sint32 i;
-
-
-
-
 
 		m_array_index = 0;
 		for(i = 0; i < k_DEFAULT_VIS_DURATION_SIZE; i++) {
@@ -111,13 +108,6 @@ public:
 		Assert(duration >= 0);
 
 		Assert(duration <= k_DEFAULT_VIS_DURATION_SIZE);
-
-
-
-
-
-
-
 
 		sint32 index = GetArrayIndex(player);
 		for(sint32 i = 0; i < duration; i++) {
@@ -184,47 +174,45 @@ class UnitData : public GameObj,
 
 private:
 
+	//
+	// Sort the members by size to save memory
+	// Size of UnitData before sorting: 120 byte
+	// Size after sorting: 120 byte
+	//
 
+	// 20 byte from GameObj
+	// 4 byte from CityRadiusCallback
 
+	// 8 byte
+	double              m_hp;
+	double              m_movement_points;
 
-	PLAYER_INDEX m_owner;
-	sint32 m_fuel;
-
-	double m_hp;
-	double m_movement_points;
-
-	sint32 m_type;
-	uint32 m_visibility;
-	uint32 m_ever_visible;
-	uint32 m_temp_visibility;
-
-	uint32 m_radar_visibility;
-	uint32 m_flags;
-
-
-
-
-
-
-
-
-
-	Army m_army;
-	MapPoint m_pos;
+	// 4 byte in a 32 bit program, 8 byte in a 64 bit program
 	UnitDynamicArray   *m_cargo_list;
-	CityData *m_city_data;
+	CityData           *m_city_data;
+	SpriteState        *m_sprite_state;
+	UnitActor          *m_actor;
+	BitMask            *m_roundTheWorldMask;
 
-	SpriteState *m_sprite_state;
+	// 4 byte
+	Unit                m_transport;
+	Unit                m_target_city;
+	Army                m_army;
 
-	UnitActor *m_actor;
+	PLAYER_INDEX        m_owner;
+	sint32              m_fuel;
+	sint32              m_type;
+	uint32              m_visibility;
+	uint32              m_ever_visible;
+	uint32              m_temp_visibility;
+	uint32              m_radar_visibility;
+	uint32              m_flags;
 
+	MapPoint            m_pos;
+
+	// 12 byte
+	// Putting this before it screws up the alignment and we need more
 	VisibilityDurationArray m_temp_visibility_array;
-	Unit m_transport;
-
-	Unit m_target_city;
-
-	BitMask *m_roundTheWorldMask;
-
 
 	friend class NetCity;
 	friend class NetPop;
@@ -387,17 +375,6 @@ public:
 
 	void SetSpriteState(SpriteState *s) { m_sprite_state = s; };
 	SpriteState * GetSpriteState() const { return m_sprite_state; };
-
-
-
-
-
-
-
-
-
-
-
 
 	void SetActor(UnitActor *a) { m_actor = a; };
 	UnitActor * GetActor() const { return m_actor; };
@@ -730,6 +707,38 @@ private:
         UnitRecord::BoolAccessor    a_Function
     ) const;
 
+#if 0
+	void PrintSizeOfClass()
+	{
+		DPRINTF(k_DBG_AI, ("\n"));
+		DPRINTF(k_DBG_AI, ("Size of UnitData class:\n"));
+		DPRINTF(k_DBG_AI, ("GameObj: %d\n",                 sizeof(GameObj)));
+		DPRINTF(k_DBG_AI, ("CityRadiusCallback: %d\n",      sizeof(CityRadiusCallback)));
+
+		DPRINTF(k_DBG_AI, ("UnitData: %d\n",                sizeof(UnitData)));
+		DPRINTF(k_DBG_AI, ("m_hp: %d\n",                    sizeof(m_hp)));
+		DPRINTF(k_DBG_AI, ("m_movement_points: %d\n",       sizeof(m_movement_points)));
+		DPRINTF(k_DBG_AI, ("m_cargo_list: %d\n",            sizeof(m_cargo_list)));
+		DPRINTF(k_DBG_AI, ("m_city_data: %d\n",             sizeof(m_city_data)));
+		DPRINTF(k_DBG_AI, ("m_sprite_state: %d\n",          sizeof(m_sprite_state)));
+		DPRINTF(k_DBG_AI, ("m_actor: %d\n",                 sizeof(m_actor)));
+		DPRINTF(k_DBG_AI, ("m_roundTheWorldMask: %d\n",     sizeof(m_roundTheWorldMask)));
+		DPRINTF(k_DBG_AI, ("m_army: %d\n",                  sizeof(m_army)));
+		DPRINTF(k_DBG_AI, ("m_transport: %d\n",             sizeof(m_transport)));
+		DPRINTF(k_DBG_AI, ("m_target_city: %d\n",           sizeof(m_target_city)));
+		DPRINTF(k_DBG_AI, ("m_owner: %d\n",                 sizeof(m_owner)));
+		DPRINTF(k_DBG_AI, ("m_fuel: %d\n",                  sizeof(m_fuel)));
+		DPRINTF(k_DBG_AI, ("m_type: %d\n",                  sizeof(m_type)));
+		DPRINTF(k_DBG_AI, ("m_visibility: %d\n",            sizeof(m_visibility)));
+		DPRINTF(k_DBG_AI, ("m_ever_visible: %d\n",          sizeof(m_ever_visible)));
+		DPRINTF(k_DBG_AI, ("m_temp_visibility: %d\n",       sizeof(m_temp_visibility)));
+		DPRINTF(k_DBG_AI, ("m_radar_visibility: %d\n",      sizeof(m_radar_visibility)));
+		DPRINTF(k_DBG_AI, ("m_flags: %d\n",                 sizeof(m_flags)));
+		DPRINTF(k_DBG_AI, ("m_pos: %d\n",                   sizeof(m_pos)));
+		DPRINTF(k_DBG_AI, ("m_temp_visibility_array: %d\n", sizeof(m_temp_visibility_array)));
+		DPRINTF(k_DBG_AI, ("\n"));
+	}
+#endif
 };
 
 uint32 UnitData_UnitData_GetVersion(void);

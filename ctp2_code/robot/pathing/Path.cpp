@@ -41,7 +41,6 @@
 #include "ArmyData.h"
 
 void Direction::Serialize(CivArchive &archive)
-
 {
      if (archive.IsStoring()) {
         archive << dir;

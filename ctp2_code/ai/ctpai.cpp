@@ -991,7 +991,7 @@ void CtpAi::Load(CivArchive & archive)
 		}
 	}
 
-#if defined(_DEBUG) || defined(USE_LOGGING)
+#if 0
 	// Let's see how much memory this takes
 	// The class Goal has the most instances in the whole game
 	Goal goal;
