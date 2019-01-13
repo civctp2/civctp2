@@ -108,12 +108,12 @@ TERRAIN_FOREST_GOOD_TWO {
    Icon ICON_GOOD_FOREST_TWO
 }
 
-# Apples #10
+# Mushrooms #10
 TERRAIN_FOREST_GOOD_THREE {
-   SpriteID 56
+   SpriteID 70
    Sound SOUND_ID_APPELS
-   Gold 5
-   Food 10
+   Gold 10
+   Food 15
    Production 0
    Probability 0.25
    Icon ICON_GOOD_FOREST_THREE

@@ -3695,15 +3695,16 @@ Location:
 [END]
 
 [TERRAIN_FOREST_GOOD_THREE_STATISTICS]
-+10 <L:DATABASE_CONCEPTS,CONCEPT_FOOD>Food<e>
++15 <L:DATABASE_CONCEPTS,CONCEPT_FOOD>Food<e>
++10 <L:DATABASE_CONCEPTS,CONCEPT_COMMERCE>Commerce<e>
 [END]
 
 [TERRAIN_FOREST_GOOD_THREE_GAMEPLAY]
-Apples are the tree (and the fruit) of the genus Malus from the ROSE family. Since the fruit grows on trees, apples can only be found on <L:DATABASE_TERRAIN,TERRAIN_FOREST>Forest<e> tiles.
+Mushrooms of various types can be found on <L:DATABASE_TERRAIN,TERRAIN_FOREST>Forest<e> tiles. They can grow rapidly and -if not poisonous- serve as food. They can be traded fresh, pickled or dried and precious types can be very expensive.
 [END]
 
 [TERRAIN_FOREST_GOOD_THREE_HISTORICAL]
-Apples are any tree (and its fruit) of the genus Malus of the rose family. The common apple (M. sylvestris) is the best known and the most important commercial temperate fruit. It is native to Western Asia, but has been widely cultivated since prehistoric times. Thousands of varieties of apples exist, such as Golden Delicious, Winesap, Jonathan, and McIntosh. The fruit is consumed fresh or cooked, or is used for juice. Partial fermentation of apple juice (sweet cider) produces hard cider (from which applejack liquor is made); fully fermented juice yields vinegar. The hardwood is used in cabinet making and as fuel. The fruit of crab apple trees (which are cultivated as ornamentals) is used for preserves and jellies.
+A mushroom, or toadstool, is the fleshy, spore-bearing fruiting body of a fungus, typically produced above ground on soil or on its food source. The standard for the name "mushroom" is the cultivated white button mushroom, Agaricus bisporus; hence the word "mushroom" is most often applied to those fungi (Basidiomycota, Agaricomycetes) that have a stem (stipe), a cap (pileus), and gills (lamellae, sing. lamella) on the underside of the cap. "Mushroom" also describes a variety of other gilled fungi, with or without stems, therefore the term is used to describe the fleshy fruiting bodies of some Ascomycota. These gills produce microscopic spores that help the fungus spread across the ground or its occupant surface. Forms deviating from the standard morphology usually have more specific names, such as "bolete", "puffball", "stinkhorn", and "morel", and gilled mushrooms themselves are often called "agarics" in reference to their similarity to Agaricus or their order Agaricales. By extension, the term "mushroom" can also designate the entire fungus when in culture; the thallus (called a mycelium) of species forming the fruiting bodies called mushrooms; or the species itself. 
 [END]
 
 [TERRAIN_JUNGLE_GOOD_THREE_PREREQ]
