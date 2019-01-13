@@ -1353,8 +1353,9 @@ SPRITEFILEERR SpriteFile::Open(SPRITEFILETYPE *type)
 
 	if (data != k_SPRITEFILE_TAG)
 	{
-		c3errors_ErrorDialog("SpriteFile", "BAD FILE.  Looking for valid SPR.");
-		return SPRITEFILEERR_BADTAG;
+		// c3errors_ErrorDialog(m_filename, "SpriteFile: BAD FILE.  Looking for valid SPR.");
+		// return SPRITEFILEERR_BADTAG;
+		printf("%s L%d: %s SpriteFile: k_SPRITEFILE_TAG wrong!\n", __FILE__, __LINE__, m_filename);
 	}
 
 	err = ReadData((void *)&data, sizeof(data));
