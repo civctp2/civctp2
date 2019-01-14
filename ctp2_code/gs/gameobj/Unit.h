@@ -427,10 +427,6 @@ public:
 
 	bool CanSee(const Army &army) const;
 
-#ifdef _DEBUG
-	void SetIgnoreHappiness(bool v);
-#endif
-
 	void MakeCitizen(PopDBIndex pi, const MapPoint &pos, sint32 origOwner = -1);
 
 	sint32 PopCount() const;

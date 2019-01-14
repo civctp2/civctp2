@@ -29,6 +29,8 @@
 // Modifications from the original Activision code:
 //
 // - Added assignment operator. - Jul 16th 2005 Martin Gühmann
+// - m_name is now a pointer, so that we do not use up so much memory. (13-Jan-2019 Martin Gühmann)
+// - Ordered the members by size. (13-Jan-2019 Martin Gühmann)
 //
 //----------------------------------------------------------------------------
 
@@ -91,26 +93,31 @@ struct BuildNode
 class BuildQueue
 {
 private:
+//----------------------------------------------------------------------------
+// Sort the member variables by size to save memory
+// Before sorting the size was 36 bytes
+// After sorting 36 bytes
+//----------------------------------------------------------------------------
+
+	// The pointers 4 bytes in a 32 bit and 8 bytes in a 64 bit program
 	PointerList<BuildNode> *    m_list;
+	MBCHAR *                    m_name;            // Probably unused
+	BuildNode *                 m_frontWhenBuilt;
 
-//----------------------------------------------------------------------------
-// Do not change anything in the types or order of the following variable
-// declarations. Doing so will break reading in of save files.
-// See the Serialize implementation for more details.
-//----------------------------------------------------------------------------
-
+	// 4 bytes
 	PLAYER_INDEX                m_owner;
 	Unit                        m_city;
 	sint32                      m_wonderStarted;
 	sint32                      m_wonderStopped;
-	MBCHAR                      m_name[256];
-
-//----------------------------------------------------------------------------
-// Changing the order below this line should not break anything.
-//----------------------------------------------------------------------------
-
 	sint32                      m_wonderComplete;
-	BuildNode *                 m_frontWhenBuilt;
+
+	// 1 byte
+	bool                        m_settler_pending;
+	bool                        m_popcoststobuild_pending;   //EMOD
+
+//----------------------------------------------------------------------------
+// End member variable section
+//----------------------------------------------------------------------------
 
 	void HandleProductionComplete(void);
 	void HandleProductionStart(void);
@@ -129,11 +136,11 @@ private:
 
 public:
 
-	bool m_settler_pending;
-	bool m_popcoststobuild_pending;   //EMOD
-
 	BuildQueue();
 	~BuildQueue();
+
+	bool IsSettlerPending() const { return m_settler_pending; }
+	bool IsPopCostToBuildPending() const { return m_popcoststobuild_pending; }   //EMOD
 
 	void SendMsgWonderComplete(CityData *cd, sint32 wonder);
 
@@ -205,6 +212,38 @@ public:
 
 private:
 	void SynchroniseNetworkData(void) const;
+#if 0
+	void PrintSizeOfClass()
+	{
+		DPRINTF(k_DBG_AI, ("\n"));
+		DPRINTF(k_DBG_AI, ("Size of BuildQueue class:\n"));
+		DPRINTF(k_DBG_AI, ("BuildQueue: %d\n", sizeof(BuildQueue)));
+		DPRINTF(k_DBG_AI, ("m_list: %d\n", sizeof(m_list)));
+		DPRINTF(k_DBG_AI, ("m_owner: %d\n", sizeof(m_owner)));
+		DPRINTF(k_DBG_AI, ("m_city: %d\n", sizeof(m_city)));
+		DPRINTF(k_DBG_AI, ("m_wonderStarted: %d\n", sizeof(m_wonderStarted)));
+		DPRINTF(k_DBG_AI, ("m_wonderStopped: %d\n", sizeof(m_wonderStopped)));
+		DPRINTF(k_DBG_AI, ("m_name: %d\n", sizeof(m_name)));
+		DPRINTF(k_DBG_AI, ("m_wonderComplete: %d\n", sizeof(m_wonderComplete)));
+		DPRINTF(k_DBG_AI, ("m_frontWhenBuilt: %d\n", sizeof(m_frontWhenBuilt)));
+		DPRINTF(k_DBG_AI, ("\n"));
+	}
+
+	void PrintData()
+	{
+		DPRINTF(k_DBG_AI, ("\n"));
+		DPRINTF(k_DBG_AI, ("Data of BuildQueue class:\n"));
+		DPRINTF(k_DBG_AI, ("m_list: %x\n", m_list));
+		DPRINTF(k_DBG_AI, ("m_owner: %d\n", m_owner));
+		DPRINTF(k_DBG_AI, ("m_city: %d\n", m_city));
+		DPRINTF(k_DBG_AI, ("m_wonderStarted: %d\n", m_wonderStarted));
+		DPRINTF(k_DBG_AI, ("m_wonderStopped: %d\n", m_wonderStopped));
+		DPRINTF(k_DBG_AI, ("m_name: %s\n", m_name));
+		DPRINTF(k_DBG_AI, ("m_wonderComplete: %x\n", m_wonderComplete));
+		DPRINTF(k_DBG_AI, ("m_frontWhenBuilt: %x\n", m_frontWhenBuilt));
+		DPRINTF(k_DBG_AI, ("\n"));
+	}
+#endif
 };
 
 uint32 BldQue_BuildQueue_GetVersion(void);

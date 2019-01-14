@@ -81,29 +81,34 @@ private:
 	};
 
 //----------------------------------------------------------------------------
-// Do not change anything in the types or order of the following variable
-// declarations. Doing so will break reading in of save files.
-// See the Serialize implementation for more details.
+// Sort the member variables by size to save memory
+// Before sorting the size was 32 bytes
+// After sorting and BOOL to bool conversion 24 bytes
 //----------------------------------------------------------------------------
 
-	sint16 m_width;
-	sint16 m_height;
-	sint32 m_owner;
-	sint16 m_xyConversion;   // Unused
-	BOOL   m_isYwrap;
-	BOOL   m_amOnScreen;
-
-//----------------------------------------------------------------------------
-// Changing the order below this should not break anything.
-//----------------------------------------------------------------------------
-
+	// The pointers 4 bytes in a 32 bit and 8 bytes in a 64 bit program
 	uint16 **m_array;
 	UnseenCellQuadTree *m_unseenCells;
+	Vision *m_mergeFrom;
+
+	// 4 bytes
+	sint32 m_owner;
+
+	// 2 bytes
+	sint16 m_width; // Size 32 bytes
+	sint16 m_height;
+	sint16 m_xyConversion;   // Unused
+
+	// 1 byte
+	bool   m_isYwrap;
+	bool   m_amOnScreen;
+
+//----------------------------------------------------------------------------
+// End member variable section
+//----------------------------------------------------------------------------
 
 	friend class NetVision;
 	friend class MapFile;
-
-	Vision *m_mergeFrom;
 
 	void FillCircle
 	(
@@ -189,6 +194,41 @@ public:
 	sint32 GetOwner() const { return m_owner; }
 
 	void SetAmOnScreen(bool amOnScreen) { m_amOnScreen = amOnScreen; };
+
+#if 0
+	void PrintSizeOfClass()
+	{
+		DPRINTF(k_DBG_AI, ("\n"));
+		DPRINTF(k_DBG_AI, ("Size of Vision class:\n"));
+		DPRINTF(k_DBG_AI, ("Vision:                 %d\n", sizeof(Vision)));
+		DPRINTF(k_DBG_AI, ("m_width:                %d\n", sizeof(m_width)));
+		DPRINTF(k_DBG_AI, ("m_height:               %d\n", sizeof(m_height)));
+		DPRINTF(k_DBG_AI, ("m_owner:                %d\n", sizeof(m_owner)));
+		DPRINTF(k_DBG_AI, ("m_xyConversion:         %d\n", sizeof(m_xyConversion)));
+		DPRINTF(k_DBG_AI, ("m_isYwrap:              %d\n", sizeof(m_isYwrap)));
+		DPRINTF(k_DBG_AI, ("m_amOnScreen:           %d\n", sizeof(m_amOnScreen)));
+		DPRINTF(k_DBG_AI, ("m_array:                %d\n", sizeof(m_array)));
+		DPRINTF(k_DBG_AI, ("m_unseenCells:          %d\n", sizeof(m_unseenCells)));
+		DPRINTF(k_DBG_AI, ("m_mergeFrom:            %d\n", sizeof(m_mergeFrom)));
+		DPRINTF(k_DBG_AI, ("\n"));
+	}
+
+	void PrintData()
+	{
+		DPRINTF(k_DBG_AI, ("\n"));
+		DPRINTF(k_DBG_AI, ("Data of Vision class:\n"));
+		DPRINTF(k_DBG_AI, ("m_width:                 %d\n", m_width));
+		DPRINTF(k_DBG_AI, ("m_height:                %d\n", m_height));
+		DPRINTF(k_DBG_AI, ("m_owner:                 %d\n", m_owner));
+		DPRINTF(k_DBG_AI, ("m_xyConversion:          %d\n", m_xyConversion));
+		DPRINTF(k_DBG_AI, ("m_isYwrap:               %d\n", m_isYwrap));
+		DPRINTF(k_DBG_AI, ("m_amOnScreen:            %d\n", m_amOnScreen));
+	//	DPRINTF(k_DBG_AI, ("m_array:                 %d\n", m_array));
+	//	DPRINTF(k_DBG_AI, ("m_unseenCells:           %d\n", m_unseenCells));
+	//	DPRINTF(k_DBG_AI, ("m_mergeFrom:             %d\n", m_mergeFrom));
+		DPRINTF(k_DBG_AI, ("\n"));
+	}
+#endif
 };
 
 #endif

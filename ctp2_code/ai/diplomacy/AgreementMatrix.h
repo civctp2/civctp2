@@ -65,7 +65,7 @@ class AgreementMatrix
 {
 public:
 
-    static ai::Agreement s_badAgreement;
+	static ai::Agreement s_badAgreement;
 	static AgreementMatrix s_agreements;
 
 	typedef std::vector<ai::Agreement> AgreementVector;
@@ -87,9 +87,6 @@ public:
 								 const PROPOSAL_TYPE type ) const;
 
 	void SetAgreement( const ai::Agreement & agreement );
-
-
-
 
 	bool HasAgreement(const PLAYER_INDEX & sender_player,
 					  const PLAYER_INDEX & receiver_player,

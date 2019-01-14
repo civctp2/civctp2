@@ -215,7 +215,6 @@ private:
 	VisibilityDurationArray m_temp_visibility_array;
 
 	friend class NetCity;
-	friend class NetPop;
 	friend class NetUnit;
 	friend class NetUnitMove;
 
@@ -522,10 +521,6 @@ public:
 	void SetFranchiseTurnsRemaining(sint32 turns);
 
 	bool CanSee(const Army &al) const;
-
-#ifdef _DEBUG
-	void SetIgnoreHappiness(bool v);
-#endif
 
 	void MakeCitizen(PopDBIndex pi, const MapPoint &point, sint32 origOwner);
 

@@ -328,7 +328,8 @@ STDEHANDLER(CityBuildFrontEvent)
 	city.CD()->BuildFront();
 
 	// EMOD for popcoststo build attempt to fix 6-01-2006 works but you must have that pop number to build then disband
-	if (city.CD()->GetBuildQueue()->m_popcoststobuild_pending) {
+	if (city.CD()->GetBuildQueue()->IsPopCostToBuildPending())
+	{// Missing city size check, of course if the city is bigger than the pop cost, we have no problem
 		SlicObject *so = new SlicObject("111BuildingSettlerCityOfOne");
 		so->AddCity(city);
 		so->AddUnitRecord(city.CD()->GetBuildQueue()->GetHead()->m_type);
@@ -337,8 +338,10 @@ STDEHANDLER(CityBuildFrontEvent)
 	}
 	// End EMOD
 
-	if (city.CD()->GetBuildQueue()->m_settler_pending) {
-		if (city.CD()->PopCount() == 1) {  //Isn't this already reflected in bldque.cpp(407)?
+	if (city.CD()->GetBuildQueue()->IsSettlerPending())
+	{
+		if (city.CD()->PopCount() == 1)
+		{  //Isn't this already reflected in bldque.cpp(407)?
 			SlicObject *so = new SlicObject("111BuildingSettlerCityOfOne");
 			so->AddCity(city);
 			so->AddUnitRecord(city.CD()->GetBuildQueue()->GetHead()->m_type);

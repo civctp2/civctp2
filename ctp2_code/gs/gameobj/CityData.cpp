@@ -36,7 +36,7 @@
 //
 // - Fix sea city sprite bug. (7.11.2003) by NelsonAndBronte.
 // - Make sure cities created by the scenario editor keep their size and
-//   style. (9.11.2003) by Martin G�hmann.
+//   style. (9.11.2003) by Martin Gühmann.
 // - Enable log generation for the non-debug versions.
 // - Enable reading of files created with the Activision 1.1 patch.
 // - Prevent crash when settling in the Alexander scenario.
@@ -51,24 +51,24 @@
 // - Standardised min/max usage.
 // - Addition of new NeedMoreFood function to figure out wheather a city
 //   needs more food, so that the AI can build new food tile improvements,
-//   by Martin G�hmann.
+//   by Martin Gühmann.
 // - Possible solution for bug #14 by Klaus Kaan
 // - Make city growth/starvation work for PBEM.
 // - Modified the bug #14 solution: use a new - debugger confirmed - message.
 // - Recompute the defense bonus when selling a building.
 // - Splitted and cleaned various functions to have better access to resource
 //   estimation without the need to recalculate everything when adjusting
-//   population assignment for instnce. - April 4th 2005 Martin G�hmann
+//   population assignment for instnce. - April 4th 2005 Martin Gühmann
 // - Updated NeedMoreFood function for better estimation.
-//   - April 4th 2005 Martin G�hmann
+//   - April 4th 2005 Martin Gühmann
 // - Changed CollectResources to add in the food, production, and gold from the resource.
 // - Moved Peter's last modification to Cell.cpp and UnseenCell.cpp, ideally
-//   such code should only be put at one place. - April 12th 2005 Martin G�hmann
+//   such code should only be put at one place. - April 12th 2005 Martin Gühmann
 // - Track city growth with updated TurnsToNextPop method - PFT 29 mar 05
 // - Improved running time of TurnsToNextPop method and removed superflous call
 //   of TurnsToNextPop methods, as private member m_turnsNextPop was never
 //   accessed by a get method or was used in any other method.
-//   - April 23rd 2005 Martin G�hmann
+//   - April 23rd 2005 Martin Gühmann
 // - CityStyleOnly code added to CanBuildUnit, CanBuildBuilding, CanBuildWonder;
 //   Checks if the style of city matches the citystyle flag for the unit,
 //   building, or wonder - by E April 20th 2005
@@ -82,27 +82,27 @@
 //   city has a building required to build the unit or wonder. - by E
 //   April 30th 2005
 // - Moved m_distanceToGood reinitialization to serialize method, to handle
-//   modified Ressource database on reload. - May 19th 2005 Martin G�hmann
+//   modified Ressource database on reload. - May 19th 2005 Martin Gühmann
 // - Fixed reload of savegames with different number of goods in their
-//   database than in the games database. - June 5th 2005 Martin G�hmann
+//   database than in the games database. - June 5th 2005 Martin Gühmann
 // - Fixed the large memory leaks - when opening the city window - that were
 //   introduced by Martin's fix.
 // - Prevent crashes when killing a city twice.
 // - Redesigned Copy method so that it doesn't abuse the serialize method
 //   anymore. Replaces Fromafar's large memory fix, for some reason it made
-//   crash the game anyway. - Jul. 5th 2005 Martin G�hmann
+//   crash the game anyway. - Jul. 5th 2005 Martin Gühmann
 // - If capitalisation or infrastructure first item in the build queue, an
-//   item can now rush bought that is inserted before. - Jul. 23rd 2005 Martin G�hmann
-// - Replaced some member names for clarity. - Aug 6th 2005 Martin G�hmann
-// - Removed a bunch of unused and incomplete methods. - Aug 6th 2005 Martin G�hmann
-// - Fixed Gold isn't added twice to income. - Aug 6th 2005 Martin G�hmann
-// - Added new code as preparation for resource calculation redesign.- Aug 6th 2005 Martin G�hmann
-// - Added code for new city resource calculation. (Aug 12th 2005 Martin G�hmann)
-// - Removed more unused methods. (Aug 12th 2005 Martin G�hmann)
+//   item can now rush bought that is inserted before. - Jul. 23rd 2005 Martin Gühmann
+// - Replaced some member names for clarity. - Aug 6th 2005 Martin Gühmann
+// - Removed a bunch of unused and incomplete methods. - Aug 6th 2005 Martin Gühmann
+// - Fixed Gold isn't added twice to income. - Aug 6th 2005 Martin  Gühmann
+// - Added new code as preparation for resource calculation redesign.- Aug 6th 2005 Martin Gühmann
+// - Added code for new city resource calculation. (Aug 12th 2005 Martin Gühmann)
+// - Removed more unused methods. (Aug 12th 2005 Martin Gühmann)
 // - NeedsCityGood added to CanBuildUnit, CanBuildBuilding, and CanBuild Wonder
 //   requiring a good in the radius or if the city is buying it before a it can be
 //   built. (Sept 29nd 2005 by E)
-// - Added city style specific happiness bonus method. (Oct 7th 2005 Martin G�hmann)
+// - Added city style specific happiness bonus method. (Oct 7th 2005 Martin Gühmann)
 // - Implemented EnablesGood for buildings, wonders and tile improvements now they
 //   give goods to a city by E November 5th 2005
 // - Goodexport Bonuses - To ProcessFood,ProcessProduction,ProcessGold, ProcessScience
@@ -127,11 +127,11 @@
 // - CantTrade flag for Goods now works by E 4-26-2006 (outcomment to allow for CanCollectGood)
 // - CanCollectGood bool added by E to check goods for
 //   CantTrade or Available and Vanish Advances 4-27-2006
-// - Replaced old difficulty database by new one. (April 29th 2006 Martin G�hmann)
-// - Made AI deficit gold spending depending on the dificulty settings. (April 29th 2006 Martin G�hmann)
+// - Replaced old difficulty database by new one. (April 29th 2006 Martin Gühmann)
+// - Made AI deficit gold spending depending on the dificulty settings. (April 29th 2006 Martin Gühmann)
 // - Made good requirements consistent with each, all requirements are now
 //   the same: The city needs more goods that it buys and collects than it
-//   sells. (April 30th 2006 Martin G�hmann)
+//   sells. (April 30th 2006 Martin Gühmann)
 // - Add AddsASlave to goods for beginturn. If you have the good then a slave
 //   is added each turn you have that good. E 5-12-2006
 // - CivilisationOnly added to CanBuildBuilding and CnBuildWonder E 5-12-2006
@@ -188,11 +188,11 @@
 // - Added code so cities with a trade route through them can collect some gold
 //   this could be implemented by a wonder of feat (in the future) or should it
 //   be standard? it would add value to cities. - E 6.10.2007
-// - Replaced old const database by new one. (5-Aug-2007 Martin G�hmann)
+// - Replaced old const database by new one. (5-Aug-2007 Martin Gühmann)
 // - Added CityExpansion and CitySlum code
 // - The CityInfluenceChanged event is now valid after conquest that destroyed
-//   the city. (26-Jan-2008 Martin G�hmann)
-// - USE_LOGGING now works in a final version. (30-Jun-2008 Martin G�hmann)
+//   the city. (26-Jan-2008 Martin Gühmann)
+// - USE_LOGGING now works in a final version. (30-Jun-2008 Martin Gühmann)
 // - Added GetCityLandAttackBonus, GetCityAirAttackBonus and
 //   GetCitySeaAttackBonus for battleview window. (07-Mar-2009 Maq)
 // - Added functions to find total that each specialist type gives to a city,
@@ -202,11 +202,15 @@
 // - Prevented city from building gaia controller buildings unless science
 //   victory race has started. (01-Jul-2009 Maq)
 // - When a city is settled in foreign territory, its the national borders
-//   will expand as they should be. (13-Jul-2009 Martin G�hmann)
+//   will expand as they should be. (13-Jul-2009 Martin Gühmann)
 // - Changed science formula to deduct crime after the government coefficient
 //   like all other resources. (22-Jul-2009 Maq)
 // - Added methods to find food and production before deductions. (22-Jul-2009 Maq)
 // - Added stuff for reimplementing switch production penalty. (22-Jul-2009 Maq)
+// - Loading of build queues that only contain illigal items do not make 
+//   the game crash anymore. (13-Jan-2019 Martin Gühmann)
+// - Reorderd the member variables and converted m_name to a pointer to reduce
+//   the needed memory. Updated for that the copy and serialize methods. (13-Jan-2019 Martin Gühmann)
 //
 //----------------------------------------------------------------------------
 
@@ -474,7 +478,7 @@ CityData::CityData(PLAYER_INDEX owner, Unit hc, const MapPoint &center_point)
 	m_buyingResources                   (),
 #endif
 	m_happy                             (new Happy()),
-//	MBCHAR    m_name[k_MAX_NAME_LEN];
+	m_name                              (NULL),
 //	sint32    *m_distanceToGood;
 	m_defensiveBonus                    (0.0),
 //	sint32    *m_ringFood;
@@ -530,12 +534,7 @@ CityData::CityData(PLAYER_INDEX owner, Unit hc, const MapPoint &center_point)
 	m_bonusProd                         (0.0),
 	m_bonusGoldCoeff                    (0.0),
 	m_bonusGold                         (0.0)
-
-#ifdef _DEBUG
-  , m_ignore_happiness                  (false)
-#endif
 {
-	m_name[0] = 0;
 	m_build_queue.SetOwner(m_owner);
 	m_build_queue.SetCity(m_home_city);
 	g_theWorld->SetCapitolDistanceDirtyFlags(1 << owner);
@@ -624,11 +623,282 @@ void CityData::Serialize(CivArchive &archive)
 
 	if (archive.IsStoring())
 	{
-		archive.StoreChunk((uint8 *)&m_owner, ((uint8 *)&m_is_rioting)+sizeof(m_is_rioting));
+		sint8  empty = 0;
+		sint32 tmp   = 0;
+
+		archive.PutSINT32(m_owner);
+		archive.PutUINT32(m_slaveBits);
+		archive.PutSINT32(m_accumulated_food);
+		archive.PutSINT32(m_shieldstore);
+		archive.PutSINT32(m_shieldstore_at_begin_turn);
+		archive.PutSINT32(m_build_category_at_begin_turn);
+		archive.PutSINT32(m_net_gold);
+		archive.PutSINT32(m_gold_lost_to_crime);
+		archive.PutSINT32(m_gross_gold);
+		archive.PutSINT32(m_goldFromTradeRoutes);
+		archive.PutSINT32(m_goldLostToPiracy);
+		archive.PutSINT32(m_science);
+		archive.PutSINT32(m_luxury);
+		tmp = static_cast<sint32>(m_city_attitude);
+		archive.PutSINT32(tmp);
+		archive.PutSINT32(m_collected_production_this_turn);
+		archive.PutSINT32(m_gross_production);
+		archive.PutSINT32(m_net_production);
+		archive.PutSINT32(m_production_lost_to_crime);
+		archive.PutSINT8(empty);
+		archive.PutSINT8(empty);
+		archive.PutSINT8(empty);
+		archive.PutSINT8(empty);
+
+		archive.PutUINT64(m_built_improvements);
+		archive.PutUINT64(m_builtWonders);
+
+		archive.PutDOUBLE(m_food_delta);
+		archive.PutDOUBLE(m_gross_food);
+		archive.PutDOUBLE(m_net_food);
+		archive.PutDOUBLE(m_food_lost_to_crime);
+		archive.PutDOUBLE(m_food_consumed_this_turn);
+
+		archive.PutSINT32(m_total_pollution);
+		archive.PutSINT32(m_cityPopulationPollution);
+		archive.PutSINT32(m_cityIndustrialPollution);
+		archive.PutSINT32(m_foodVatPollution);
+		archive.PutSINT32(m_cityPollutionCleaner);
+		tmp = static_cast<BOOL>(m_contribute_materials);
+		archive.PutSINT32(tmp); // Was BOOL
+		tmp = static_cast<BOOL>(m_contribute_military);
+		archive.PutSINT32(tmp); // Was BOOL
+
+		tmp = static_cast<BOOL>(m_capturedThisTurn);
+		archive.PutSINT32(tmp); // Was BOOL
+
+		archive.PutSINT32(m_spied_upon);
+		tmp = static_cast<BOOL>(m_walls_nullified);
+		archive.PutSINT32(tmp); // Was BOOL
+		archive.PutSINT32(m_franchise_owner);
+		archive.PutSINT32(m_franchiseTurnsRemaining);
+		archive.PutSINT32(m_watchfulTurns);
+		archive.PutSINT32(m_bioInfectionTurns);
+		archive.PutSINT32(m_bioInfectedBy);
+		archive.PutSINT32(m_nanoInfectionTurns);
+		archive.PutSINT32(m_nanoInfectedBy);
+		archive.PutSINT32(m_convertedTo);
+		archive.PutSINT32(m_convertedGold);
+
+		tmp = static_cast<sint32>(m_convertedBy);
+		archive.PutSINT32(tmp);
+		tmp = static_cast<BOOL>(m_terrainWasPolluted);
+		archive.PutSINT32(tmp); // Was BOOL
+		tmp = static_cast<BOOL>(m_happinessAttacked);
+		archive.PutSINT32(tmp); // Was BOOL
+		tmp = static_cast<BOOL>(m_terrainImprovementWasBuilt);
+		archive.PutSINT32(tmp); // Was BOOL
+		tmp = static_cast<BOOL>(m_improvementWasBuilt);
+		archive.PutSINT32(tmp); // Was BOOL
+
+		tmp = static_cast<BOOL>(m_isInjoined);
+		archive.PutSINT32(tmp); // Was BOOL
+		archive.PutSINT32(m_injoinedBy);
+
+		archive.PutSINT32(m_airportLastUsed);
+
+		archive.PutSINT32(m_founder);
+
+		archive.PutSINT32(m_wages_paid);
+
+		archive.PutSINT32(m_pw_from_infrastructure);
+		archive.PutSINT32(m_gold_from_capitalization);
+		tmp = static_cast<BOOL>(m_buildInfrastructure);
+		archive.PutSINT32(tmp); // Was BOOL
+		tmp = static_cast<BOOL>(m_buildCapitalization);
+		archive.PutSINT32(tmp); // Was BOOL
+
+		tmp = static_cast<BOOL>(m_paidForBuyFront);
+		archive.PutSINT32(tmp); // Was BOOL
+
+		tmp = static_cast<sint32>(m_doUprising);
+		archive.PutSINT32(tmp);
+
+		archive.PutSINT32(m_turnFounded);
+
+		archive.PutSINT32(m_productionLostToFranchise);
+
+		archive.PutUINT8(m_probeRecoveredHere);
+		archive.PutUINT8(empty);// pad
+
+		archive.PutSINT16(m_lastCelebrationMsg);
+		archive.PutUINT8(m_alreadySoldABuilding);
+		archive.PutUINT8(empty);// pad
+		archive.PutUINT8(empty);// pad
+		archive.PutUINT8(empty);// pad
+
+		archive.PutSINT32(m_population);
+		archive.PutSINT32(m_partialPopulation);
+
+		// Invalid for Big Endian
+		archive.StoreChunk((uint8 *)&m_numSpecialists, ((uint8 *)&m_numSpecialists) + sizeof(m_numSpecialists));
+		archive.PutUINT8(empty);// pad
+		archive.PutUINT8(empty);// pad
+
+		// Invalid for Big Endian
+		archive.StoreChunk((uint8 *)&m_specialistDBIndex, ((uint8 *)&m_specialistDBIndex) + sizeof(m_specialistDBIndex));
+
+		archive.PutSINT32(m_sizeIndex);
+		archive.PutSINT32(m_workerFullUtilizationIndex);
+		archive.PutSINT32(m_workerPartialUtilizationIndex);
+
+		tmp = static_cast<BOOL>(m_useGovernor);
+		archive.PutSINT32(tmp); // Was BOOL
+		archive.PutSINT32(m_buildListSequenceIndex);
+		tmp = static_cast<BOOL>(m_garrisonOtherCities);
+		archive.PutSINT32(tmp); // Was BOOL
+		tmp = static_cast<BOOL>(m_garrisonComplete);
+		archive.PutSINT32(tmp); // Was BOOL
+
+		archive.PutSINT8(m_currentGarrison);
+		archive.PutSINT8(m_neededGarrison);
+		archive.PutUINT8(empty);// pad
+		archive.PutUINT8(empty);// pad
+		archive.PutDOUBLE(m_currentGarrisonStrength);
+		archive.PutDOUBLE(m_neededGarrisonStrength);
+
+		archive.PutSINT32(m_sellBuilding);
+		archive.PutUINT8(m_buyFront);
+		archive.PutUINT8(empty);// pad
+		archive.PutUINT8(empty);// pad
+		archive.PutUINT8(empty);// pad
+
+		archive.PutSINT32(m_max_food_from_terrain);
+		archive.PutSINT32(m_max_prod_from_terrain);
+		archive.PutSINT32(m_max_gold_from_terrain);
+
+		archive.PutSINT32(m_growth_rate);
+		archive.PutDOUBLE(m_overcrowdingCoeff);
+
+		archive.PutSINT32(m_starvation_turns);
+
+		archive.PutSINT32(m_cityStyle);
+
+		m_pos.Serialize(archive);
+
+		tmp = static_cast<BOOL>(m_is_rioting);
+		archive.PutSINT32(tmp); // Was BOOL
 	}
 	else
 	{
-		archive.LoadChunk((uint8 *)&m_owner, ((uint8 *)&m_is_rioting)+sizeof(m_is_rioting));
+		sint8 empty = 0;
+
+		m_owner                          = archive.GetSINT32();
+		m_slaveBits                      = archive.GetUINT32();
+		m_accumulated_food               = archive.GetSINT32();
+		m_shieldstore                    = archive.GetSINT32();
+		m_shieldstore_at_begin_turn      = archive.GetSINT32();
+		m_build_category_at_begin_turn   = archive.GetSINT32();
+		m_net_gold                       = archive.GetSINT32();
+		m_gold_lost_to_crime             = archive.GetSINT32();
+		m_gross_gold                     = archive.GetSINT32();
+		m_goldFromTradeRoutes            = archive.GetSINT32();
+		m_goldLostToPiracy               = archive.GetSINT32();
+		m_science                        = archive.GetSINT32();
+		m_luxury                         = archive.GetSINT32();
+		m_city_attitude                  = static_cast<CITY_ATTITUDE>(archive.GetSINT32());
+		m_collected_production_this_turn = archive.GetSINT32();
+		m_gross_production               = archive.GetSINT32();
+		m_net_production                 = archive.GetSINT32();
+		m_production_lost_to_crime       = archive.GetSINT32();
+		empty                            = archive.GetSINT8();
+		empty                            = archive.GetSINT8();
+		empty                            = archive.GetSINT8();
+		empty                            = archive.GetSINT8();
+		m_built_improvements             = archive.GetUINT64();
+		m_builtWonders                   = archive.GetUINT64();
+		m_food_delta                     = archive.GetDOUBLE();
+		m_gross_food                     = archive.GetDOUBLE();
+		m_net_food                       = archive.GetDOUBLE();
+		m_food_lost_to_crime             = archive.GetDOUBLE();
+		m_food_consumed_this_turn        = archive.GetDOUBLE();
+		m_total_pollution                = archive.GetSINT32();
+		m_cityPopulationPollution        = archive.GetSINT32();
+		m_cityIndustrialPollution        = archive.GetSINT32();
+		m_foodVatPollution               = archive.GetSINT32();
+		m_cityPollutionCleaner           = archive.GetSINT32();
+		m_contribute_materials           = archive.GetSINT32() != FALSE; // Was BOOL
+		m_contribute_military            = archive.GetSINT32() != FALSE; // Was BOOL
+		m_capturedThisTurn               = archive.GetSINT32() != FALSE; // Was BOOL
+		m_spied_upon                     = archive.GetSINT32();
+		m_walls_nullified                = archive.GetSINT32() != FALSE; // Was BOOL
+		m_franchise_owner                = archive.GetSINT32();
+		m_franchiseTurnsRemaining        = archive.GetSINT32();
+		m_watchfulTurns                  = archive.GetSINT32();
+		m_bioInfectionTurns              = archive.GetSINT32();
+		m_bioInfectedBy                  = archive.GetSINT32();
+		m_nanoInfectionTurns             = archive.GetSINT32();
+		m_nanoInfectedBy                 = archive.GetSINT32();
+		m_convertedTo                    = archive.GetSINT32();
+		m_convertedGold                  = archive.GetSINT32();
+		m_convertedBy                    = static_cast<CONVERTED_BY>(archive.GetSINT32());
+		m_terrainWasPolluted             = archive.GetSINT32() != FALSE; // Was BOOL
+		m_happinessAttacked              = archive.GetSINT32() != FALSE; // Was BOOL
+		m_terrainImprovementWasBuilt     = archive.GetSINT32() != FALSE; // Was BOOL
+		m_improvementWasBuilt            = archive.GetSINT32() != FALSE; // Was BOOL
+		m_isInjoined                     = archive.GetSINT32() != FALSE; // Was BOOL
+		m_injoinedBy                     = archive.GetSINT32();
+		m_airportLastUsed                = archive.GetSINT32();
+		m_founder                        = archive.GetSINT32();
+		m_wages_paid                     = archive.GetSINT32();
+		m_pw_from_infrastructure         = archive.GetSINT32();
+		m_gold_from_capitalization       = archive.GetSINT32();
+		m_buildInfrastructure            = archive.GetSINT32() != FALSE; // Was BOOL
+		m_buildCapitalization            = archive.GetSINT32() != FALSE; // Was BOOL
+		m_paidForBuyFront                = archive.GetSINT32() != FALSE; // Was BOOL
+		m_doUprising                     = static_cast<UPRISING_CAUSE>(archive.GetSINT32());
+		m_turnFounded                    = archive.GetSINT32();
+		m_productionLostToFranchise      = archive.GetSINT32();
+		m_probeRecoveredHere             = archive.GetUINT8();
+		empty                            = archive.GetUINT8();// pad
+		m_lastCelebrationMsg             = archive.GetSINT16();
+		m_alreadySoldABuilding           = archive.GetUINT8();
+		empty                            = archive.GetUINT8();// pad
+		empty                            = archive.GetUINT8();// pad
+		empty                            = archive.GetUINT8();// pad
+		m_population                     = archive.GetSINT32();
+		m_partialPopulation              = archive.GetSINT32();
+
+		archive.LoadChunk((uint8 *)&m_numSpecialists, ((uint8 *)&m_numSpecialists) + sizeof(m_numSpecialists));
+		empty                            = archive.GetUINT8();// pad
+		empty                            = archive.GetUINT8();// pad
+
+		archive.LoadChunk((uint8 *)&m_specialistDBIndex, ((uint8 *)&m_specialistDBIndex) + sizeof(m_specialistDBIndex));
+
+		m_sizeIndex                      = archive.GetSINT32();
+		m_workerFullUtilizationIndex     = archive.GetSINT32();
+		m_workerPartialUtilizationIndex  = archive.GetSINT32();
+		m_useGovernor                    = archive.GetSINT32() != FALSE; // Was BOOL
+		m_buildListSequenceIndex         = archive.GetSINT32();
+		m_garrisonOtherCities            = archive.GetSINT32() != FALSE; // Was BOOL
+		m_garrisonComplete               = archive.GetSINT32() != FALSE; // Was BOOL
+		m_currentGarrison                = archive.GetSINT8();
+		m_neededGarrison                 = archive.GetSINT8();
+		empty                            = archive.GetUINT8();// pad
+		empty                            = archive.GetUINT8();// pad
+		m_currentGarrisonStrength        = archive.GetDOUBLE();
+		m_neededGarrisonStrength         = archive.GetDOUBLE();
+		m_sellBuilding                   = archive.GetSINT32();
+		m_buyFront                       = archive.GetUINT8();
+		empty                            = archive.GetUINT8();// pad
+		empty                            = archive.GetUINT8();// pad
+		empty                            = archive.GetUINT8();// pad
+		m_max_food_from_terrain          = archive.GetSINT32();
+		m_max_prod_from_terrain          = archive.GetSINT32();
+		m_max_gold_from_terrain          = archive.GetSINT32();
+		m_growth_rate                    = archive.GetSINT32();
+		m_overcrowdingCoeff              = archive.GetDOUBLE();
+		m_starvation_turns               = archive.GetSINT32();
+		m_cityStyle                      = archive.GetSINT32();
+
+		m_pos.Serialize(archive);
+
+		m_is_rioting                     = archive.GetSINT32() != FALSE; // Was BOOL
 	}
 
 	// Create and read files in the format as created with the Activision 1.1 patch.
@@ -667,11 +937,12 @@ void CityData::Serialize(CivArchive &archive)
 		archive.Store((uint8*)m_name, len * sizeof(MBCHAR));
 
 		archive.Store((uint8*)m_distanceToGood, sizeof(sint32) * g_theResourceDB->NumRecords());
-		archive.Store((uint8*)&m_defensiveBonus, sizeof(double));
+		archive.Store((uint8*)&m_defensiveBonus, sizeof(double)); // Should be PutDOUBLE
 	}
 	else
 	{
 		archive >> len;
+		m_name = new MBCHAR[len];
 		archive.Load((uint8*)m_name, len * sizeof(MBCHAR));
 
 		sint32 const    ressourceNum    = m_collectingResources.GetNum();
@@ -743,7 +1014,7 @@ void CityData::Serialize(CivArchive &archive)
 			delete[] tmpDistanceToGood;
 		}
 
-		archive.Load((uint8*)&m_defensiveBonus, sizeof(double));
+		archive.Load((uint8*)&m_defensiveBonus, sizeof(double)); // Should be GetDOUBLE
 
 		m_ringFood  = new sint32[g_theCitySizeDB->NumRecords()];
 		m_ringProd  = new sint32[g_theCitySizeDB->NumRecords()];
@@ -759,7 +1030,6 @@ void CityData::Serialize(CivArchive &archive)
 		memset(&m_max_processed_terrain_food, 0, (uint32)&m_science_lost_to_crime + sizeof(m_science_lost_to_crime) - (uint32)&m_max_processed_terrain_food);
 #endif
 	}
-
 }
 
 //----------------------------------------------------------------------------
@@ -844,13 +1114,13 @@ void CityData::Initialize(sint32 settlerType)
 	}
 	else
 	{
-		//Added by Martin G�hmann to make sure that also cities
+		//Added by Martin  Gühmann to make sure that also cities
 		//created by the Scenario editor have a size
 		if(settlerType == -2 && ScenarioEditor::PlaceCityMode() && ScenarioEditor::CitySize() > 0)
 			numPops = ScenarioEditor::CitySize();
 	}
 
-	//Added by Martin G�hmann to make sure that also cities created by the editor
+	//Added by Martin  Gühmann to make sure that also cities created by the editor
 	//have a size.
 	if((settlerType != -2) || ScenarioEditor::PlaceCityMode())
 	{
@@ -952,7 +1222,7 @@ void CityData::Initialize(sint32 settlerType)
 	else
 		name = civData->GetAnyCityName();
 
-	//Added by Martin G�hmann to make sure that cities created
+	//Added by Martin  Gühmann to make sure that cities created
 	//by the scenario editor keep their style
 	if ((settlerType == CITY_STYLE_EDITOR) && ScenarioEditor::PlaceCityMode())
 	{
@@ -1030,17 +1300,6 @@ void CityData::NetworkInitialize()
 	FindBestSpecialists();
 }
 
-
-
-
-
-
-
-
-
-
-
-
 CityData::CityData(CivArchive &archive)
 {
 	m_happy = new Happy;
@@ -1094,25 +1353,118 @@ CityData::CityData(CityData *copy)
 //----------------------------------------------------------------------------
 void CityData::Copy(CityData *copy)
 {
-
-	if(g_network.IsActive()) {
-
+	if(g_network.IsActive())
+	{
 		sint32 i;
-		for(i = copy->m_tradeSourceList.Num() - 1; i >= 0; i--) {
-			if(!g_theTradePool->IsValid(copy->m_tradeSourceList[i])) {
+		for(i = copy->m_tradeSourceList.Num() - 1; i >= 0; i--)
+		{
+			if(!g_theTradePool->IsValid(copy->m_tradeSourceList[i]))
+			{
 				copy->m_tradeSourceList.DelIndex(i);
 			}
 		}
 
-		for(i = copy->m_tradeDestinationList.Num() - 1; i >= 0; i--) {
-			if(!g_theTradePool->IsValid(copy->m_tradeDestinationList[i])) {
+		for(i = copy->m_tradeDestinationList.Num() - 1; i >= 0; i--)
+		{
+			if(!g_theTradePool->IsValid(copy->m_tradeDestinationList[i]))
+			{
 				copy->m_tradeDestinationList.DelIndex(i);
 			}
 		}
 	}
 
-	Assert((size_t)&copy->m_is_rioting + sizeof(copy->m_is_rioting) - (size_t)&copy->m_owner == (size_t)&m_is_rioting + sizeof(m_is_rioting) - (size_t)&m_owner);
-	memcpy(&m_owner, &copy->m_owner, (size_t)&copy->m_is_rioting + sizeof(copy->m_is_rioting) - (size_t)&copy->m_owner);
+	m_owner                              = copy->m_owner;
+	m_slaveBits                          = copy->m_slaveBits;
+	m_accumulated_food                   = copy->m_accumulated_food;
+	m_shieldstore                        = copy->m_shieldstore;
+	m_shieldstore_at_begin_turn          = copy->m_shieldstore_at_begin_turn;
+	m_build_category_at_begin_turn       = copy->m_build_category_at_begin_turn;
+	m_net_gold                           = copy->m_net_gold;
+	m_gold_lost_to_crime                 = copy->m_gold_lost_to_crime;
+	m_gross_gold                         = copy->m_gross_gold;
+	m_goldFromTradeRoutes                = copy->m_goldFromTradeRoutes;
+	m_goldLostToPiracy                   = copy->m_goldLostToPiracy;
+	m_science                            = copy->m_science;
+	m_luxury                             = copy->m_luxury;
+	m_city_attitude                      = copy->m_city_attitude;
+	m_collected_production_this_turn     = copy->m_collected_production_this_turn;
+	m_gross_production                   = copy->m_gross_production;
+	m_net_production                     = copy->m_net_production;
+	m_production_lost_to_crime           = copy->m_production_lost_to_crime;
+	m_built_improvements                 = copy->m_built_improvements;
+	m_builtWonders                       = copy->m_builtWonders;
+	m_food_delta                         = copy->m_food_delta;
+	m_gross_food                         = copy->m_gross_food;
+	m_net_food                           = copy->m_net_food;
+	m_food_lost_to_crime                 = copy->m_food_lost_to_crime;
+	m_food_consumed_this_turn            = copy->m_food_consumed_this_turn;
+	m_total_pollution                    = copy->m_total_pollution;
+	m_cityPopulationPollution            = copy->m_cityPopulationPollution;
+	m_cityIndustrialPollution            = copy->m_cityIndustrialPollution;
+	m_foodVatPollution                   = copy->m_foodVatPollution;
+	m_cityPollutionCleaner               = copy->m_cityPollutionCleaner;
+	m_contribute_materials               = copy->m_contribute_materials;
+	m_contribute_military                = copy->m_contribute_military;
+	m_capturedThisTurn                   = copy->m_capturedThisTurn;
+	m_spied_upon                         = copy->m_spied_upon;
+	m_walls_nullified                    = copy->m_walls_nullified;
+	m_franchise_owner                    = copy->m_franchise_owner;
+	m_franchiseTurnsRemaining            = copy->m_franchiseTurnsRemaining;
+	m_watchfulTurns                      = copy->m_watchfulTurns;
+	m_bioInfectionTurns                  = copy->m_bioInfectionTurns;
+	m_bioInfectedBy                      = copy->m_bioInfectedBy;
+	m_nanoInfectionTurns                 = copy->m_nanoInfectionTurns;
+	m_nanoInfectedBy                     = copy->m_nanoInfectedBy;
+	m_convertedTo                        = copy->m_convertedTo;
+	m_convertedGold                      = copy->m_convertedGold;
+	m_convertedBy                        = copy->m_convertedBy;
+	m_terrainWasPolluted                 = copy->m_terrainWasPolluted;
+	m_happinessAttacked                  = copy->m_happinessAttacked;
+	m_terrainImprovementWasBuilt         = copy->m_terrainImprovementWasBuilt;
+	m_improvementWasBuilt                = copy->m_improvementWasBuilt;
+	m_isInjoined                         = copy->m_isInjoined;
+	m_injoinedBy                         = copy->m_injoinedBy;
+	m_airportLastUsed                    = copy->m_airportLastUsed;
+	m_founder                            = copy->m_founder;
+	m_wages_paid                         = copy->m_wages_paid;
+	m_pw_from_infrastructure             = copy->m_pw_from_infrastructure;
+	m_gold_from_capitalization           = copy->m_gold_from_capitalization;
+	m_buildInfrastructure                = copy->m_buildInfrastructure;
+	m_buildCapitalization                = copy->m_buildCapitalization;
+	m_paidForBuyFront                    = copy->m_paidForBuyFront;
+	m_doUprising                         = copy->m_doUprising;
+	m_turnFounded                        = copy->m_turnFounded;
+	m_productionLostToFranchise          = copy->m_productionLostToFranchise;
+	m_probeRecoveredHere                 = copy->m_probeRecoveredHere;
+	m_lastCelebrationMsg                 = copy->m_lastCelebrationMsg;
+	m_alreadySoldABuilding               = copy->m_alreadySoldABuilding;
+	m_population                         = copy->m_population;
+	m_partialPopulation                  = copy->m_partialPopulation;
+	m_sizeIndex                          = copy->m_sizeIndex;
+	m_workerFullUtilizationIndex         = copy->m_workerFullUtilizationIndex;
+	m_workerPartialUtilizationIndex      = copy->m_workerPartialUtilizationIndex;
+	m_useGovernor                        = copy->m_useGovernor;
+	m_buildListSequenceIndex             = copy->m_buildListSequenceIndex;
+	m_garrisonOtherCities                = copy->m_garrisonOtherCities;
+	m_garrisonComplete                   = copy->m_garrisonComplete;
+	m_currentGarrison                    = copy->m_currentGarrison;
+	m_neededGarrison                     = copy->m_neededGarrison;
+	m_currentGarrisonStrength            = copy->m_currentGarrisonStrength;
+	m_neededGarrisonStrength             = copy->m_neededGarrisonStrength;
+	m_sellBuilding                       = copy->m_sellBuilding;
+	m_buyFront                           = copy->m_buyFront;
+	m_max_food_from_terrain              = copy->m_max_food_from_terrain;
+	m_max_prod_from_terrain              = copy->m_max_prod_from_terrain;
+	m_max_gold_from_terrain              = copy->m_max_gold_from_terrain;
+	m_growth_rate                        = copy->m_growth_rate;
+	m_overcrowdingCoeff                  = copy->m_overcrowdingCoeff;
+	m_starvation_turns                   = copy->m_starvation_turns;
+	m_cityStyle                          = copy->m_cityStyle;
+	m_pos                                = copy->m_pos;
+	m_is_rioting                         = copy->m_is_rioting;
+
+	memcpy(&m_numSpecialists,    &copy->m_numSpecialists,    sizeof(copy->m_numSpecialists));
+	memcpy(&m_specialistDBIndex, &copy->m_specialistDBIndex, sizeof(copy->m_specialistDBIndex));
 
 	m_min_turns_revolt = copy->m_min_turns_revolt;
 
@@ -1129,7 +1481,9 @@ void CityData::Copy(CityData *copy)
 
 	m_happy->Copy(copy->m_happy);
 
-	memcpy(m_name, copy->m_name, (strlen(copy->m_name) + 1) * sizeof(MBCHAR));
+	size_t len = (strlen(copy->m_name) + 1) * sizeof(MBCHAR);
+	m_name = new MBCHAR[len];
+	memcpy(m_name, copy->m_name, len);
 	memcpy(m_distanceToGood, copy->m_distanceToGood, sizeof(sint32) * g_theResourceDB->NumRecords());
 	m_defensiveBonus = copy->m_defensiveBonus;
 
@@ -1150,10 +1504,14 @@ void CityData::Copy(CityData *copy)
 
 	m_secthappy = 0; //emod - didn't crash but always set to 0 at -1 it showed up but begin turn didn't work nor did it process
 
-	if(this == m_home_city.CD()) {
-		if(g_network.IsHost()) {
+	if(this == m_home_city.CD())
+	{
+		if(g_network.IsHost())
+		{
 			g_network.Enqueue(this);
-		} else if(g_network.IsClient()) {
+		}
+		else if(g_network.IsClient())
+		{
 			g_network.SendCity(this);
 		}
 	}
@@ -1447,9 +1805,10 @@ void CityData::Revolt(sint32 &playerToJoin, bool causeIsExternal)
 	AddHappyTimer(50, 100, HAPPY_REASON_POST_REVOULTION_BLISS);
 #endif
 
-	g_theWorld->GetCell(city_pos)->GetArmy(army) ;
-	n=army.Num() ;
-	for (i=0; i<n; i++) {
+	g_theWorld->GetCell(city_pos)->GetArmy(army);
+	n = army.Num();
+	for (i=0; i<n; i++)
+	{
 		g_gevManager->AddEvent(GEV_INSERT_AfterCurrent, GEV_KillUnit,
 		                       GEA_Unit, army[i].m_id,
 		                       GEA_Int, CAUSE_REMOVE_ARMY_UPRISING,
@@ -4508,14 +4867,14 @@ void CityData::CheatBuildFirstItem()
 
 void CityData::InitBeginTurnVariables()
 {
-	m_capturedThisTurn           = FALSE;
-	m_terrainWasPolluted         = FALSE;
-	m_happinessAttacked          = FALSE;
-	m_terrainImprovementWasBuilt = FALSE;
-	m_improvementWasBuilt        = FALSE;
+	m_capturedThisTurn           = false;
+	m_terrainWasPolluted         = false;
+	m_happinessAttacked          = false;
+	m_terrainImprovementWasBuilt = false;
+	m_improvementWasBuilt        = false;
 
-	m_alreadySoldABuilding       = FALSE;
-	m_walls_nullified            = FALSE;
+	m_alreadySoldABuilding       = false;
+	m_walls_nullified            = false;
 	//m_secthappy = 0;
 }
 
@@ -4582,10 +4941,10 @@ void CityData::TryToBuild()
 		}
 		else
 		{
-			m_buildCapitalization = FALSE;
+			m_buildCapitalization = false;
 			m_gold_from_capitalization = 0;
 
-			m_buildInfrastructure = FALSE;
+			m_buildInfrastructure = false;
 			m_pw_from_infrastructure = 0;
 
 			g_gevManager->AddEvent(GEV_INSERT_AfterCurrent,
@@ -4596,7 +4955,7 @@ void CityData::TryToBuild()
 	}
 	m_shieldstore_at_begin_turn = m_shieldstore;
 
-	m_isInjoined = FALSE;
+	m_isInjoined = false;
 }
 
 //----------------------------------------------------------------------------
@@ -4716,7 +5075,7 @@ bool CityData::BeginTurn()
 		&& cell->GetNumDBImprovements() > 0
 		&& cell->GetCityOwner() == GetHomeCity()
 		){
-			m_terrainImprovementWasBuilt = TRUE;
+			m_terrainImprovementWasBuilt = true;
 		}
 	}
 
@@ -4850,8 +5209,8 @@ bool CityData::BuildUnit(sint32 type)
 	if(!CanBuildUnit(type))
 		return false;
 
-	m_buildInfrastructure = FALSE;
-	m_buildCapitalization = FALSE;
+	m_buildInfrastructure = false;
+	m_buildCapitalization = false;
 
 	if(g_network.IsClient() && g_network.IsLocalPlayer(m_owner))
 	{
@@ -4893,8 +5252,8 @@ bool CityData::BuildImprovement(sint32 type)
 	if(!CanBuildBuilding(type))
 		return false;
 
-	m_buildInfrastructure = FALSE;
-	m_buildCapitalization = FALSE;
+	m_buildInfrastructure = false;
+	m_buildCapitalization = false;
 
 	if(g_network.IsClient() && g_network.IsLocalPlayer(m_owner)) {
 		g_network.SendAction(new NetAction(NET_ACTION_BUILD_IMP, type,
@@ -4956,8 +5315,8 @@ bool CityData::BuildWonder(sint32 type)
 		return false;
 	}
 
-	m_buildInfrastructure = FALSE;
-	m_buildCapitalization = FALSE;
+	m_buildInfrastructure = false;
+	m_buildCapitalization = false;
 
 	if(g_network.IsClient() && g_network.IsLocalPlayer(m_owner)) {
 		g_network.SendAction(new NetAction(NET_ACTION_BUILD_WONDER,
@@ -5057,8 +5416,8 @@ void CityData::AddWonder(sint32 type)
 // Not used.
 bool CityData::ChangeCurrentlyBuildingItem(sint32 category, sint32 item_type)
 {
-	m_buildInfrastructure = FALSE;
-	m_buildCapitalization = FALSE;
+	m_buildInfrastructure = false;
+	m_buildCapitalization = false;
 
 	if(g_network.IsClient() && g_network.IsLocalPlayer(m_owner)) {
 		g_network.SendAction(new NetAction(NET_ACTION_CHANGE_BUILD,
@@ -5574,7 +5933,7 @@ void CityData::SetSpiedUpon()
 //see ORDER_RESULT UnitData::NullifyWalls
 void CityData::CityNullifyWalls()
 {
-	m_walls_nullified = TRUE;
+	m_walls_nullified = true;
 }
 
 bool CityData::IsCapitol() const
@@ -6064,16 +6423,16 @@ bool CityData::HasAnyTileImpInRadiusAndIsExploredBy(const sint32 player) const
 bool CityData::GetResourceTradeRoute(sint32 resource, TradeRoute & route) const
 {
 	for (sint32 i = 0; i < m_tradeSourceList.Num(); i++)
-    {
+	{
 		ROUTE_TYPE type;
 		sint32 rr;
 		m_tradeSourceList[i].GetSourceResource(type, rr);
 
 		if ((type == ROUTE_TYPE_RESOURCE) && (rr == resource))
-        {
-		    route = m_tradeSourceList[i];
-		    return true;
-        }
+		{
+			route = m_tradeSourceList[i];
+			return true;
+		}
 	}
 	return false;
 }
@@ -6082,16 +6441,16 @@ bool CityData::GetResourceTradeRoute(sint32 resource, TradeRoute & route) const
 bool CityData::IsSellingResourceTo(sint32 resource, Unit & destination) const
 {
 	for (sint32 i = 0; i < m_tradeSourceList.Num(); i++)
-    {
+	{
 		ROUTE_TYPE type;
 		sint32 rr;
 		m_tradeSourceList[i].GetSourceResource(type, rr);
 
 		if ((type == ROUTE_TYPE_RESOURCE) && (rr == resource))
-        {
-		    destination = m_tradeSourceList[i].GetDestination();
-		    return true;
-        }
+		{
+			destination = m_tradeSourceList[i].GetDestination();
+			return true;
+		}
 	}
 	destination.m_id = 0;
 	return false;
@@ -6105,13 +6464,21 @@ sint32 CityData::LoadQueue(const MBCHAR *file)
 
 	m_build_queue.SetOwner(m_owner);
 
-	// Get new queue top item
-	sint32 newCat = GetBuildQueue()->GetHead()->m_category;
-	if (newCat != GetBuildCategoryBeforeLoadQueue()
+	BuildNode* head = GetBuildQueue()->GetHead();
+	if(head != NULL)
+	{
+		// Get new queue top item
+		sint32 newCat = GetBuildQueue()->GetHead()->m_category;
+		if(newCat != GetBuildCategoryBeforeLoadQueue()
 		&& GetStoredCityProduction() > 0
 		&& m_build_category_at_begin_turn != -5)// -5 is the no penalty type.
+		{
+			CheckSwitchProductionPenalty(newCat);
+		}
+	}
+	else
 	{
-		CheckSwitchProductionPenalty(newCat);
+		// ToDo: Check whether the player should be informed or informed one function above
 	}
 
 	return r;
@@ -6196,7 +6563,7 @@ void CityData::ResetCityOwner(sint32 owner)
 {
 	sint32	i, n;
 
-	m_capturedThisTurn = TRUE;
+	m_capturedThisTurn = true;
 
 	m_cityRadiusOp = RADIUS_OP_RESET_OWNER;
 	m_radiusNewOwner = owner;
@@ -6207,7 +6574,8 @@ void CityData::ResetCityOwner(sint32 owner)
 	m_doUprising = UPRISING_CAUSE_NONE;
 
 	CityInfluenceIterator it(pos, m_sizeIndex);
-	for(it.Start(); !it.End(); it.Next()) {
+	for(it.Start(); !it.End(); it.Next())
+	{
 		g_theWorld->GetCell(it.Pos())->SetCityOwner(m_home_city);
 		g_theWorld->GetCell(it.Pos())->SetOwner(owner);
 		g_network.Block(owner);
@@ -6235,7 +6603,7 @@ void CityData::ResetCityOwner(sint32 owner)
 
 	NewGovernment(g_player[m_owner]->m_government_type);
 
-	m_walls_nullified = FALSE;
+	m_walls_nullified = false;
 	m_franchiseTurnsRemaining = 0;
 	m_franchise_owner = -1;
 	m_watchfulTurns = 0;
@@ -6243,11 +6611,12 @@ void CityData::ResetCityOwner(sint32 owner)
 	m_bioInfectedBy = -1;
 	m_nanoInfectionTurns = 0;
 	m_nanoInfectedBy = -1;
-	if(m_convertedTo == m_owner) {
+	if(m_convertedTo == m_owner)
+	{
 		m_convertedTo = -1;
 	}
-	m_happinessAttacked = 0;
-	m_isInjoined = FALSE;
+	m_happinessAttacked = false;
+	m_isInjoined = false;
 
 	m_happy->ClearTimedChanges();
 
@@ -6263,7 +6632,7 @@ void CityData::ResetCityOwner(sint32 owner)
 	}
 
 	m_lastCelebrationMsg = -1;
-//emod TODO maybe borders should be set to zero once captured and restored after conquestdistress?
+	//emod TODO maybe borders should be set to zero once captured and restored after conquestdistress?
 	GenerateBorders(m_home_city.RetPos(), m_owner, g_theConstDB->Get(0)->GetBorderIntRadius(), g_theConstDB->Get(0)->GetBorderSquaredRadius());
 
 	if(m_owner == m_founder) {
@@ -6272,13 +6641,22 @@ void CityData::ResetCityOwner(sint32 owner)
 	}
 }
 
+void CityData::SetNameLocal(const MBCHAR *name)
+{
+	delete[] m_name;
+	m_name = new MBCHAR[strlen(name) + 1];
+	strncpy(m_name, name, strlen(name) + 1);
+}
+
 void CityData::SetName(const MBCHAR *name)
 {
-	Assert(strlen(name)<k_MAX_NAME_LEN);
-	strncpy(m_name, name, k_MAX_NAME_LEN);
-	if(g_network.IsHost()) {
+	SetNameLocal(name);
+	if(g_network.IsHost())
+	{
 		g_network.SendCityName(this);
-	} else if(g_network.IsClient() && g_network.IsLocalPlayer(m_owner)) {
+	}
+	else if(g_network.IsClient() && g_network.IsLocalPlayer(m_owner))
+	{
 		g_network.SendCityName(this);
 	}
 }
@@ -6410,12 +6788,14 @@ sint32 CityData::HowMuchLonger() const
 
 	sint32 prod = GetNetCityProduction();
 
-	if(m_contribute_military) {
+	if(m_contribute_military)
+	{
 		sint32 mil = (sint32)ceil((double)prod * g_player[m_owner]->m_readiness->GetPecentLastTurn());
 		prod -= mil;
 	}
 
-	if(m_contribute_materials) {
+	if(m_contribute_materials)
+	{
 		sint32 mat = (sint32)ceil((double)prod * g_player[m_owner]->m_materialsTax);
 		prod -= mat;
 	}
@@ -6425,11 +6805,13 @@ sint32 CityData::HowMuchLonger() const
 
 	sint32 turns_remaining = (sint32)ceil((double)prod_remaining / prod);
 
-	if ( turns_remaining < 1 ) {
+	if ( turns_remaining < 1 )
+	{
 		return 1;
 	}
 
-	if(m_buyFront && m_paidForBuyFront) {
+	if(m_buyFront && m_paidForBuyFront)
+	{
 		return 1;
 	}
 
@@ -6443,12 +6825,14 @@ sint32 CityData::HowMuchLonger(sint32 productionRemaining) const
 
 	sint32 prod = GetNetCityProduction();
 
-	if(m_contribute_military) {
+	if(m_contribute_military)
+	{
 		sint32 mil = (sint32)ceil((double)prod * g_player[m_owner]->m_readiness->GetPecentLastTurn());
 		prod -= mil;
 	}
 
-	if(m_contribute_materials) {
+	if(m_contribute_materials)
+	{
 		sint32 mat = (sint32)ceil((double)prod * g_player[m_owner]->m_materialsTax);
 		prod -= mat;
 	}
@@ -6458,7 +6842,8 @@ sint32 CityData::HowMuchLonger(sint32 productionRemaining) const
 
 	sint32 turns_remaining = (sint32)ceil((double)prod_remaining / prod);
 
-	if ( turns_remaining < 1 ) {
+	if ( turns_remaining < 1 )
+	{
 		return 1;
 	}
 
@@ -6467,8 +6852,10 @@ sint32 CityData::HowMuchLonger(sint32 productionRemaining) const
 
 void CityData::SellBuilding(sint32 which, bool byChoice)
 {
-	if((m_built_improvements & ((uint64)1 << uint64(which)))) {
-		if(byChoice) {
+	if((m_built_improvements & ((uint64)1 << uint64(which))))
+	{
+		if(byChoice)
+		{
 			if(m_alreadySoldABuilding)
 				return;
 
@@ -6476,17 +6863,20 @@ void CityData::SellBuilding(sint32 which, bool byChoice)
 			if(buildingutil_Get(which, m_owner)->GetCantSell())
 				return;
 
-			if(g_network.IsClient() && g_network.IsLocalPlayer(m_owner)) {
+			if(g_network.IsClient() && g_network.IsLocalPlayer(m_owner))
+			{
 				g_network.SendAction(new NetAction(NET_ACTION_SELL_BUILDING,
 					(uint32)m_home_city,
 					which));
-			} else if(g_network.IsHost()) {
+			}
+			else if(g_network.IsHost())
+			{
 				g_network.Block(m_owner);
 				g_network.Enqueue(new NetInfo(NET_INFO_CODE_SOLD_BUILDING,
 											  (uint32)m_home_city, which));
 			}
 
-			m_alreadySoldABuilding = TRUE;
+			m_alreadySoldABuilding = true;
 		}
 		sint32 gold = sint32(double(buildingutil_Get(which, m_owner)->GetProductionCost()) *
 			g_theConstDB->Get(0)->GetBuildingProductionToValueModifier());
@@ -6498,9 +6888,11 @@ void CityData::SellBuilding(sint32 which, bool byChoice)
 
 //		g_player[m_owner]->RegisterLostBuilding(m_home_city, which); Maybe worth of reimplementation
 		m_build_queue.RemoveIllegalItems(true);
-		if(buildingutil_GetDesignatesCapitol(((uint64)1 << (uint64)which), m_owner)) {
+		if(buildingutil_GetDesignatesCapitol(((uint64)1 << (uint64)which), m_owner))
+		{
 			Assert(g_player[m_owner]->m_capitol->m_id == m_home_city.m_id);
-			if(g_player[m_owner]->m_capitol->m_id == m_home_city.m_id) {
+			if(g_player[m_owner]->m_capitol->m_id == m_home_city.m_id)
+			{
 				g_player[m_owner]->m_capitol->m_id = 0;
 			}
 		}
@@ -6521,9 +6913,9 @@ void CityData::SetRoad() const
 	Cell *      cell    = g_theWorld->GetCell(pos);
 
 	TerrainImprovementRecord const *
-                rec     = terrainutil_GetBestRoad(m_owner, pos);
+	            rec     = terrainutil_GetBestRoad(m_owner, pos);
 	if (rec)
-    {
+	{
 		cell->InsertDBImprovement(rec->GetIndex());
 	}
 #if 0
@@ -6568,7 +6960,7 @@ void CityData::AddTradedResources(Resources &resources)
 	sint32 res;
 
 	for (sint32 i = 0; i < m_tradeSourceList.Num(); i++)
-    {
+	{
 		m_tradeSourceList[i].GetSourceResource(type, res);
 		if(type == ROUTE_TYPE_RESOURCE) {
 			resources.AddResource(res);
@@ -6585,7 +6977,8 @@ sint32 CityData::GetCombatUnits() const
 	Cell *cell = g_theWorld->GetCell(pos);
 	sint32 count = 0;
 
-	for(sint32 i = 0; i < cell->GetNumUnits(); i++) {
+	for(sint32 i = 0; i < cell->GetNumUnits(); i++)
+	{
 		if(cell->AccessUnit(i).GetDBRec()->GetAttack() > 0)
 			count++;
 	}
@@ -6765,14 +7158,17 @@ bool CityData::CanBuildUnit(sint32 type) const
 			return true;
 		}
 
-		if(rec->GetMovementTypeSea() || rec->GetMovementTypeShallowWater()) {
-			if(g_theWorld->IsNextToWater(pos.x, pos.y)) {
+		if(rec->GetMovementTypeSea() || rec->GetMovementTypeShallowWater())
+		{
+			if(g_theWorld->IsNextToWater(pos.x, pos.y))
+			{
 				return true;
 			}
 
 			return false;
 		}
-		else if(rec->GetMovementTypeAir()) {
+		else if(rec->GetMovementTypeAir())
+		{
 			return true;
 		}
 		return false;
@@ -6954,14 +7350,18 @@ bool CityData::CanBuildBuilding(sint32 type) const
 			bool enoughNum     = false;
 			bool enoughPercent = false;
 
-			if(bf->GetNum(num)) {
-				if(numCities >= num) {
+			if(bf->GetNum(num))
+			{
+				if(numCities >= num)
+				{
 					enoughNum = true;
 				}
 			}
-			if(bf->GetPercentCities(percent)) {
+			if(bf->GetPercentCities(percent))
+			{
 				sint32 havePercent = (numCities * 100) / g_player[m_owner]->m_all_cities->Num();
-				if(havePercent >= percent) {
+				if(havePercent >= percent)
+				{
 					enoughPercent = true;
 				}
 			}
@@ -7119,14 +7519,18 @@ bool CityData::CanBuildBuilding(sint32 type) const
 
 	// added by E - some buildings can only be built once city reaches certain size
 	sint32 pop;
-	if(rec->GetNeedsPopCountToBuild(pop)) {
-		if(PopCount() <= pop) {
+	if(rec->GetNeedsPopCountToBuild(pop))
+	{
+		if(PopCount() <= pop)
+		{
 			return false;
 		}
 	}
 
-	if(rec->GetPopCountBuildLimit(pop)) {
-		if(PopCount() >= pop) {
+	if(rec->GetPopCountBuildLimit(pop))
+	{
+		if(PopCount() >= pop)
+		{
 			return false;
 		}
 	}
@@ -7261,15 +7665,19 @@ bool CityData::CanBuildWonder(sint32 type) const
 
 			sint32 num, percent;
 
-			if(bf->GetNum(num)) {
-				if(numCities >= num) {
+			if(bf->GetNum(num))
+			{
+				if(numCities >= num)
+				{
 					return true;
 				}
 				return false;
 			}
-			else if(bf->GetPercentCities(percent)) {
+			else if(bf->GetPercentCities(percent))
+			{
 				sint32 havePercent = (numCities * 100) / g_player[m_owner]->m_all_cities->Num();
-				if(havePercent >= percent) {
+				if(havePercent >= percent)
+				{
 					return true;
 				}
 				return false;
@@ -7423,13 +7831,13 @@ bool CityData::CanBuildWonder(sint32 type) const
 
 void CityData::Injoin(sint32 player)
 {
-	m_isInjoined = TRUE;
+	m_isInjoined = true;
 	m_injoinedBy = player;
 }
 
 bool CityData::IsInjoined() const
 {
-	return m_isInjoined != 0;
+	return m_isInjoined;
 }
 
 void CityData::ResetConquestDistress(double new_distress) { m_happy->ResetConquestDistress(new_distress); }
@@ -7685,8 +8093,8 @@ bool CityData::CanBuildInfrastructure() const
 
 void CityData::StopInfrastructureCapitalization()
 {
-	m_buildInfrastructure = FALSE;
-	m_buildCapitalization = FALSE;
+	m_buildInfrastructure = false;
+	m_buildCapitalization = false;
 }
 
 void CityData::InsertInfrastructure()
@@ -7721,8 +8129,8 @@ void CityData::BuildInfrastructure()
 		g_network.Unblock(m_owner);
 	}
 
-	m_buildInfrastructure = TRUE;
-	m_buildCapitalization = FALSE;
+	m_buildInfrastructure = true;
+	m_buildCapitalization = false;
 
 }
 
@@ -7744,8 +8152,8 @@ void CityData::BuildCapitalization()
 		g_network.Enqueue(new NetInfo(NET_INFO_CODE_BUILD_CAPITALIZATION, m_home_city));
 		g_network.Unblock(m_owner);
 	}
-	m_buildInfrastructure = FALSE;
-	m_buildCapitalization = TRUE;
+	m_buildInfrastructure = false;
+	m_buildCapitalization = true;
 
 }
 
@@ -8433,22 +8841,22 @@ void CityData::SetBuildListSequenceIndex(const sint32 &value)
 	}
 }
 
-sint32 CityData::GetGarrisonOtherCities() const
+bool CityData::GetGarrisonOtherCities() const
 {
 	return m_garrisonOtherCities;
 }
 
-void CityData::SetGarrisonOtherCities(const sint32 &value)
+void CityData::SetGarrisonOtherCities(const bool &value)
 {
 	m_garrisonOtherCities = value;
 }
 
-sint32 CityData::GetGarrisonComplete() const
+bool CityData::GetGarrisonComplete() const
 {
 	return m_garrisonComplete;
 }
 
-void CityData::SetGarrisonComplete(const sint32 &value)
+void CityData::SetGarrisonComplete(const bool &value)
 {
 	m_garrisonComplete = value;
 }

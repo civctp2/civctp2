@@ -46,6 +46,7 @@
 //   population cost to be removed from a city.
 // - Replaced old difficulty database by new one. (April 29th 2006 Martin Gühmann)
 // - Replaced old const database by new one. (5-Aug-2007 Martin Gühmann)
+// - Reimplmented the Serialize method to shrink the size of instances. (13-Jan-2019 Martin Gühmann)
 //
 //----------------------------------------------------------------------------
 
@@ -118,52 +119,77 @@ BuildQueue::BuildQueue()
 	m_wonderComplete            (NOTHING_THIS_TURN),
 	m_frontWhenBuilt            (NULL),
 	m_settler_pending           (false),
-	m_popcoststobuild_pending   (false)          // EMOD
+	m_popcoststobuild_pending   (false),          // EMOD
+	m_name                      (NULL)
 {
-	m_name[0] = 0;
 }
 
 BuildQueue::~BuildQueue()
 {
-    // m_frontWhenBuilt not deleted: reference only
+	// m_frontWhenBuilt not deleted: reference only
 
 	if (m_list)
-    {
+	{
 		m_list->DeleteAll();
 		delete m_list;
 	}
+
+	delete[] m_name;
 }
 
 void BuildQueue::Serialize(CivArchive &archive)
 {
 	if (archive.IsStoring())
-    {
-		archive.StoreChunk((uint8*)&m_owner, (uint8*)&m_name + sizeof(m_name));
+	{
+		archive.PutSINT32(m_owner);
+		m_city.Serialize(archive);
+		archive.PutSINT32(m_wonderStarted);
+		archive.PutSINT32(m_wonderStopped);
+
+		MBCHAR name[256]; // Replace an unused but saved member
+		memset(name, '\0', sizeof(name));
+		strcpy(name, m_name);
+
+		archive.StoreChunk((uint8*)&name, (uint8*)&name + sizeof(name));
+
 		archive << m_wonderComplete;
 		sint32 c = m_list->GetCount();
-        Assert(c >= 0);
+		Assert(c >= 0);
 		archive << c;
 		PointerList<BuildNode>::Walker walk(m_list);
-		while(walk.IsValid()) {
+		while(walk.IsValid())
+		{
 			archive.Store((uint8*)walk.GetObj(), sizeof(BuildNode));
 			walk.Next();
 		}
 	}
-    else
-    {
-		archive.LoadChunk((uint8*)&m_owner, (uint8*)&m_name + sizeof(m_name));
-		if(g_saveFileVersion >= 62) {
+	else
+	{
+		m_owner = archive.GetSINT32();
+		m_city.Serialize(archive);
+		m_wonderStarted = archive.GetSINT32();
+		m_wonderStopped = archive.GetSINT32();
+
+		MBCHAR name[256]; // Replace an unused but saved member
+		archive.LoadChunk((uint8*)&name, (uint8*)&name + sizeof(name));
+		m_name = new MBCHAR[strlen(name) + 1];
+		strcpy(m_name, name);
+
+		if(g_saveFileVersion >= 62)
+		{
 			archive >> m_wonderComplete;
-		} else {
+		}
+		else
+		{
 			m_wonderComplete = NOTHING_THIS_TURN;
 		}
 
-        uint32 c;
+		uint32 c;
 		archive >> c;
 
 		m_list->DeleteAll();
 		for (uint32 i = 0; i < c; ++i)
-        {
+		{
 			BuildNode *node = new BuildNode;
 			archive.Load((uint8*)node, sizeof(BuildNode));
 			m_list->AddTail(node);
@@ -1482,7 +1508,17 @@ bool BuildQueue::RemoveNodeByIndex(sint32 index,
 
 void BuildQueue::SetName(MBCHAR *name)
 {
-	if (name) strcpy(m_name,name);
+	delete[] m_name;
+
+	if(name != NULL)
+	{
+		m_name = new MBCHAR[strlen(name) + 1];
+		strcpy(m_name, name);
+	}
+	else
+	{
+		m_name = NULL;
+	}
 }
 
 void BuildQueue::RemoveObjectsOfType(sint32 cat, sint32 type,

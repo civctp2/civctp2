@@ -68,8 +68,8 @@ void AgreementMatrix::Resize(const PLAYER_INDEX & newMaxPlayers)
 	m_agreements.swap(old_agreements);
 
 	if (m_maxPlayers > 0)
-    {
-        m_agreements.resize(m_maxPlayers * m_maxPlayers * PROPOSAL_MAX, s_badAgreement);
+	{
+		m_agreements.resize(m_maxPlayers * m_maxPlayers * PROPOSAL_MAX, s_badAgreement);
 
 		for (size_t index = 0; index < old_agreements.size(); ++index)
 		{

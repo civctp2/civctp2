@@ -683,7 +683,17 @@ void Vision::Serialize(CivArchive &archive)
 
 	if(archive.IsStoring())
 	{
-		archive.StoreChunk((uint8 *)&m_width, ((uint8 *)&m_amOnScreen)+sizeof(m_amOnScreen));
+		sint8 empty = 0; // Needed for the padding in the original implementation
+		archive.PutSINT16(m_width);
+		archive.PutSINT16(m_height);
+		archive.PutSINT32(m_owner);
+		archive.PutSINT16(m_xyConversion);   // Unused
+		archive.PutSINT8(empty);
+		archive.PutSINT8(empty);
+		sint32 tmp = static_cast<sint32>(m_isYwrap);
+		archive.PutSINT32(tmp);
+		tmp = static_cast<sint32>(m_amOnScreen);
+		archive.PutSINT32(tmp);
 
 		for (sint32 x = 0; x < m_width; x++)
 		{
@@ -708,7 +718,15 @@ void Vision::Serialize(CivArchive &archive)
 		DeleteUnseenCells();
 		delete m_unseenCells;
 
-		archive.LoadChunk((uint8 *)&m_width, ((uint8 *)&m_amOnScreen)+sizeof(m_amOnScreen));
+		sint8 empty    = 0; // Needed for the padding in the original implementation
+		m_width        = archive.GetSINT16();
+		m_height       = archive.GetSINT16();
+		m_owner        = archive.GetSINT32();
+		m_xyConversion = archive.GetSINT16();   // Unused
+		empty          = archive.GetSINT8();
+		empty          = archive.GetSINT8();
+		m_isYwrap      = archive.GetSINT32() != FALSE;
+		m_amOnScreen   = archive.GetSINT32() != FALSE;
 
 		m_array         = new uint16*[m_width];
 		for (sint16 y = 0; y < m_width; y++)

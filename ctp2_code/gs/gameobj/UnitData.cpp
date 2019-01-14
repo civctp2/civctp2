@@ -4768,13 +4768,6 @@ bool UnitData::CanSee(const Army &al) const
 	return false;
 }
 
-#ifdef _DEBUG
-void UnitData::SetIgnoreHappiness(bool v)
-{
-	m_city_data->SetIgnoreHappiness(v);
-}
-#endif
-
 void UnitData::MakeCitizen(PopDBIndex pi, const MapPoint &point, sint32 origOwner)
 {
 	Assert(m_city_data);

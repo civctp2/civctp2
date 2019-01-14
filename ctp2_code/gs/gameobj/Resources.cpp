@@ -69,11 +69,14 @@ Resources::Resources(const Resources &copyme)
 //----------------------------------------------------------------------------
 void Resources::Serialize(CivArchive &archive)
 {
-	if(archive.IsStoring()) {
+	if(archive.IsStoring())
+	{
 		archive << m_numGoods;
 		archive.Store((uint8*)m_supply, m_numGoods * sizeof(sint32));
 		archive << m_totalResources;
-	} else {
+	}
+	else
+	{
 		archive >> m_numGoods;
 		delete [] m_supply;
 		m_supply = new sint32[m_numGoods];
