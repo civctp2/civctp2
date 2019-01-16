@@ -41,7 +41,6 @@
 typedef char CHAR;
 typedef char TCHAR;
 typedef uint32 COLORREF;
-typedef sint32 GUID;
 typedef sint32 HRESULT;
 typedef sint32 LPARAM;
 typedef const CHAR *LPCSTR;
@@ -67,14 +66,37 @@ typedef uint32 UINT;
 typedef uint32 ULONG;
 
 /* Structs */
-typedef struct tagBITMAPFILEHEADER {
+#ifdef __cplusplus
+typedef struct _GUID
+{
+    uint32 Data1;
+    uint16 Data2;
+    uint16 Data3;
+    uint8  Data4[8];
+} GUID;
+
+inline bool operator==(const GUID & guidOne, const GUID & guidOther)
+{
+	return memcmp(&guidOne, &guidOther, sizeof(GUID)) == 0;
+}
+
+inline bool operator!=(const GUID & guidOne, const GUID & guidOther)
+{
+	return memcmp(&guidOne, &guidOther, sizeof(GUID)) != 0;
+}
+#endif
+
+typedef struct tagBITMAPFILEHEADER
+{
 	WORD    bfType;
 	DWORD   bfSize;
 	WORD    bfReserved1;
 	WORD    bfReserved2;
 	DWORD   bfOffBits;
 } BITMAPFILEHEADER;
-typedef struct tagRGBQUAD {
+
+typedef struct tagRGBQUAD
+{
 	uint8 rgbBlue;
 	uint8 rgbGreen;
 	uint8 rgbRed;
@@ -86,7 +108,8 @@ struct POINT {
 };
 typedef struct POINT * LPPOINT;
 
-typedef struct tagRECT {
+typedef struct tagRECT
+{
   sint32 left;
   sint32 top;
   sint32 right;

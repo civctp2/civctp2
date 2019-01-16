@@ -32,11 +32,14 @@
 // - Replaced typename T in specialized template member function by the
 //   the type for that the function is specialized, by Martin G�hmann.
 // - Display the main thread function name in the debugger.
+// - Make the Linux version loading and producing Windows compatible
+//   savegames. (16-Jan-2019 Martin Gühmann)
 //
 //----------------------------------------------------------------------------
 
 #include "c3.h"
 #include "netfunc.h"
+#include "c3files.h"
 #include <algorithm>
 
 #if defined(_DEBUG)
@@ -184,16 +187,6 @@ int adialup_willdial(void)
 {
 	return adialup_autodial_enabled() && !adialup_is_active();
 }
-
-
-
-
-
-
-
-
-
-
 
 void NETFunc::StringMix(int c, char *mix, char *msg, ...) {
 	va_list al;
@@ -381,6 +374,23 @@ NETFunc::Key::Key(Key *k) {
 
 NETFunc::Key::Key(KeyStruct *k) {
 	key = *k;
+}
+void NETFunc::Key::WriteToFile(FILE *saveFile) const
+{
+	sint32 first = 0; // For bytes to the first real data
+	c3files_fwrite(&first, sizeof(first), 1, saveFile);
+
+	c3files_fwrite(&key.len, sizeof(key.len), 1, saveFile);
+	c3files_fwrite(&key.buf, sizeof(key.buf), 1, saveFile);
+}
+
+void NETFunc::Key::ReadFromFile(FILE *saveFile)
+{
+	sint32 first = 0; // For bytes to the first real data
+	c3files_fread(&first, sizeof(first), 1, saveFile);
+
+	c3files_fread(&key.len, sizeof(key.len), 1, saveFile);
+	c3files_fread(&key.buf, sizeof(key.buf), 1, saveFile);
 }
 
 bool NETFunc::Key::Equals(Key *k) {
@@ -1521,6 +1531,68 @@ NETFunc::Session::Session(dp_object_t *o, KeyStruct *k, long f):Key(k) {
 	flags = f;
 }
 
+void NETFunc::Session::WriteToFile(FILE *saveFile) const
+{
+	NETFunc::Key::WriteToFile(saveFile);
+	sint32 tmp = 0;
+
+	c3files_fwrite(&session.dwSize, sizeof(session.dwSize), 1, saveFile);
+	c3files_fwrite(&session.adrMaster, sizeof(session.adrMaster), 1, saveFile); // 10
+	c3files_fwrite(&session.masterPseudoplayer, sizeof(session.masterPseudoplayer), 1, saveFile);
+	c3files_fwrite(&session.sessionType, sizeof(session.sessionType), 1, saveFile);
+	c3files_fwrite(&session.dwSession, sizeof(session.dwSession), 1, saveFile);
+	c3files_fwrite(&session.dwMaxPlayers, sizeof(session.dwMaxPlayers), 1, saveFile);
+	c3files_fwrite(&session.dwCurrentPlayers, sizeof(session.dwCurrentPlayers), 1, saveFile);
+	c3files_fwrite(&session.dwFlags, sizeof(session.dwFlags), 1, saveFile);
+	c3files_fwrite(&session.sessionName, sizeof(session.sessionName), 1, saveFile);
+	c3files_fwrite(&session.szUserField, sizeof(session.szUserField), 1, saveFile);
+	c3files_fwrite(&session.szPassword, sizeof(session.szPassword), 1, saveFile);
+
+	tmp = static_cast<sint32>(session.dwReserved1); // Long 4 byte or 8 byte
+	c3files_fwrite(&tmp, sizeof(tmp), 1, saveFile);
+
+	tmp = static_cast<sint32>(session.dwUser1); // Long 4 byte or 8 byte
+	c3files_fwrite(&tmp, sizeof(tmp), 1, saveFile);
+
+	c3files_fwrite(&session.reserved2, sizeof(session.reserved2), 1, saveFile);
+
+	sint8 space = 0; // Spacing in the original implementation
+	c3files_fwrite(&space, sizeof(space), 1, saveFile);
+
+	tmp = static_cast<sint32>(flags);
+	c3files_fwrite(&tmp, sizeof(tmp), 1, saveFile); // Long 4 byte or 8 byte
+}
+
+void NETFunc::Session::ReadFromFile(FILE *saveFile)
+{
+	NETFunc::Key::ReadFromFile(saveFile);
+	sint32 tmp = 0;
+
+	c3files_fread(&session.dwSize, sizeof(session.dwSize), 1, saveFile);
+	c3files_fread(&session.adrMaster, sizeof(session.adrMaster), 1, saveFile);
+	c3files_fread(&session.masterPseudoplayer, sizeof(session.masterPseudoplayer), 1, saveFile);
+	c3files_fread(&session.sessionType, sizeof(session.sessionType), 1, saveFile);
+	c3files_fread(&session.dwSession, sizeof(session.dwSession), 1, saveFile);
+	c3files_fread(&session.dwMaxPlayers, sizeof(session.dwMaxPlayers), 1, saveFile);
+	c3files_fread(&session.dwCurrentPlayers, sizeof(session.dwCurrentPlayers), 1, saveFile);
+	c3files_fread(&session.dwFlags, sizeof(session.dwFlags), 1, saveFile);
+	c3files_fread(&session.sessionName, sizeof(session.sessionName), 1, saveFile);
+	c3files_fread(&session.szUserField, sizeof(session.szUserField), 1, saveFile);
+	c3files_fread(&session.szPassword, sizeof(session.szPassword), 1, saveFile);
+
+	c3files_fread(&tmp, sizeof(tmp), 1, saveFile);
+	session.dwReserved1 = tmp; // Long 4 byte or 8 byte, for that the anet code must be fixed
+	c3files_fread(&tmp, sizeof(tmp), 1, saveFile);
+	session.dwUser1 = tmp; // Long 4 byte or 8 byte
+	c3files_fread(&session.reserved2, sizeof(session.reserved2), 1, saveFile);
+
+	sint8 space = 0; // Spacing in the original implementation
+	c3files_fread(&space, sizeof(space), 1, saveFile);
+
+	c3files_fread(&tmp, sizeof(tmp), 1, saveFile);
+	flags = tmp; // Long 4 byte or 8 byte
+}
+
 char *NETFunc::Session::GetName(void) {
 	return session.sessionName;
 }
@@ -1624,11 +1696,64 @@ NETFunc::Game::Game(Session *s): Session(*s) {
 	hostile = false;
 }
 
-char NETFunc::Game::GetGroups(void) {
+void NETFunc::Game::WriteToFile(FILE *saveFile) const
+{
+	NETFunc::Session::WriteToFile(saveFile);
+	c3files_fwrite(&hostile, sizeof(hostile), 1, saveFile);
+}
+
+void NETFunc::Game::ReadFromFile(FILE *saveFile)
+{
+	NETFunc::Session::ReadFromFile(saveFile);
+	c3files_fread(&hostile, sizeof(hostile), 1, saveFile);
+}
+
+void NETFunc::Packet::WriteToFile(FILE *saveFile) const
+{
+	sint32 space = 0; // Add the space from the original implementation
+	c3files_fwrite(&space, sizeof(space), 1, saveFile);
+
+	c3files_fwrite(&size, sizeof(size), 1, saveFile);
+	c3files_fwrite(&body, sizeof(body), 1, saveFile);
+
+	sint8 littleSpace = 0;
+	c3files_fwrite(&littleSpace, sizeof(littleSpace), 1, saveFile);
+	c3files_fwrite(&littleSpace, sizeof(littleSpace), 1, saveFile);
+	c3files_fwrite(&littleSpace, sizeof(littleSpace), 1, saveFile);
+	// Has another size on a 64 bit system, pointers cannot be saved this way anyway
+//	c3files_fwrite(&first, sizeof(first), 1, saveFile); // Problem
+	sint32 replace = 0;
+	c3files_fwrite(&replace, sizeof(replace), 1, saveFile); // Problem
+}
+
+void NETFunc::Packet::ReadFromFile(FILE *saveFile)
+{
+	sint32 space = 0; // Add the space from the original implementation
+	c3files_fread(&space, sizeof(space), 1, saveFile);
+
+	c3files_fread(&size, sizeof(size), 1, saveFile);
+	c3files_fread(&body, sizeof(body), 1, saveFile);
+
+	sint8 littleSpace = 0;
+	c3files_fread(&littleSpace, sizeof(littleSpace), 1, saveFile);
+	c3files_fread(&littleSpace, sizeof(littleSpace), 1, saveFile);
+	c3files_fread(&littleSpace, sizeof(littleSpace), 1, saveFile);
+	// Has another size on a 64 bit system, pointers cannot be saved this way anyway
+//	c3files_fread(&first, sizeof(first), 1, saveFile); // Problem
+	sint32 replace = 0;
+	c3files_fread(&replace, sizeof(replace), 1, saveFile); // Problem
+
+	first = body + size;
+}
+
+
+char NETFunc::Game::GetGroups(void)
+{
 	return static_cast<char>(session.dwUser1 & nf_GROUPNUMBER);
 }
 
-void NETFunc::Game::Set(dp_session_t *s) {
+void NETFunc::Game::Set(dp_session_t *s)
+{
 	session = *s;
 }
 
@@ -1787,9 +1912,6 @@ NETFunc::Player *NETFunc::PlayerList::FindPlayer(dpid_t id) {
 NETFunc::PlayerList::Players *NETFunc::PlayerList::players = 0;
 int NETFunc::PlayerList::count = 0;
 
-
-
-
 NETFunc::GameSetup::GameSetup() {
 	description[0] = 0;
 }
@@ -1799,6 +1921,28 @@ NETFunc::GameSetup::GameSetup(Game *g):Game(*g), Packet() {
 }
 
 NETFunc::GameSetup::~GameSetup() {
+}
+
+void NETFunc::GameSetup::WriteToFile(FILE *saveFile) const
+{
+	NETFunc::Game::WriteToFile(saveFile);
+	sint8 space = 0; // Add the space from the original implementation
+	c3files_fwrite(&space, sizeof(space), 1, saveFile);
+	c3files_fwrite(&space, sizeof(space), 1, saveFile);
+	c3files_fwrite(&space, sizeof(space), 1, saveFile);
+	NETFunc::Packet::WriteToFile(saveFile);
+	c3files_fwrite(&description, sizeof(description), 1, saveFile);
+}
+
+void NETFunc::GameSetup::ReadFromFile(FILE *saveFile)
+{
+	NETFunc::Game::ReadFromFile(saveFile);
+	sint8 space = 0; // Add the space from the original implementation
+	c3files_fread(&space, sizeof(space), 1, saveFile);
+	c3files_fread(&space, sizeof(space), 1, saveFile);
+	c3files_fread(&space, sizeof(space), 1, saveFile);
+	NETFunc::Packet::ReadFromFile(saveFile);
+	c3files_fread(&description, sizeof(description), 1, saveFile);
 }
 
 char *NETFunc::GameSetup::GetDescription(void) {

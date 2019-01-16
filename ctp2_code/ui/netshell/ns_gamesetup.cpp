@@ -26,6 +26,8 @@
 //
 // - Corrected strange access of non-static members from static data.
 // - Removed new rules attempt - E 12.27.2006
+// - Make the Linux version loading and producing Windows compatible
+//   savegames. (16-Jan-2019 Martin Gühmann)
 //
 //----------------------------------------------------------------------------
 
@@ -235,20 +237,6 @@ void nf_GameSetup::Unpack()
 		Pop( m_excludedWonders[ i ] );
 }
 
-
-
-
-
-
-
-
-
-
-
-
-
-
-
 void nf_GameSetup::SetSavedId( uint32 savedId )
 {
 	uint32 *buff = (uint32 *)GetUserField();
@@ -262,12 +250,111 @@ uint32 nf_GameSetup::GetSavedId( void )
 	return buff[ 1 ];
 }
 
+void nf_GameSetup::WriteToFile(FILE *saveFile) const
+{
+	sint8 space = 0; // For the original implmentation
+
+	NETFunc::GameSetup::WriteToFile(saveFile);
+
+	c3files_fwrite(&m_playstyle, sizeof(m_playstyle), 1, saveFile);
+	c3files_fwrite(&m_playstylevalue, sizeof(m_playstylevalue), 1, saveFile);
+
+	c3files_fwrite(&m_handicapping, sizeof(m_handicapping), 1, saveFile);
+	c3files_fwrite(&m_dynamicJoin, sizeof(m_dynamicJoin), 1, saveFile);
+
+	c3files_fwrite(&m_bloodlust, sizeof(m_bloodlust), 1, saveFile);
+
+	c3files_fwrite(&m_pollution, sizeof(m_pollution), 1, saveFile);
+	c3files_fwrite(&m_civPoints, sizeof(m_civPoints), 1, saveFile);
+	c3files_fwrite(&m_pwPoints, sizeof(m_pwPoints), 1, saveFile);
+
+	c3files_fwrite(&m_startAge, sizeof(m_startAge), 1, saveFile);
+	c3files_fwrite(&m_endAge, sizeof(m_endAge), 1, saveFile);
+	c3files_fwrite(&m_mapSize, sizeof(m_mapSize), 1, saveFile);
+	c3files_fwrite(&m_worldType1, sizeof(m_worldType1), 1, saveFile);
+	c3files_fwrite(&m_worldType2, sizeof(m_worldType2), 1, saveFile);
+	c3files_fwrite(&m_worldType3, sizeof(m_worldType3), 1, saveFile);
+	c3files_fwrite(&m_worldType4, sizeof(m_worldType4), 1, saveFile);
+	c3files_fwrite(&m_worldType5, sizeof(m_worldType5), 1, saveFile);
+	c3files_fwrite(&m_worldType6, sizeof(m_worldType6), 1, saveFile);
+	c3files_fwrite(&m_worldShape, sizeof(m_worldShape), 1, saveFile);
+	c3files_fwrite(&m_difficulty1, sizeof(m_difficulty1), 1, saveFile);
+	c3files_fwrite(&m_difficulty2, sizeof(m_difficulty2), 1, saveFile);
+
+	c3files_fwrite(&m_tribeSlots, sizeof(m_tribeSlots), 1, saveFile);
+	c3files_fwrite(&m_savedTribeSlots, sizeof(m_savedTribeSlots), 1, saveFile);
+
+	c3files_fwrite(&m_numAvailUnits, sizeof(m_numAvailUnits), 1, saveFile);
+	c3files_fwrite(&m_excludedUnits, sizeof(m_excludedUnits), 1, saveFile);
+	c3files_fwrite(&space, sizeof(space), 1, saveFile);
+	c3files_fwrite(&space, sizeof(space), 1, saveFile);
+
+	c3files_fwrite(&m_numAvailImprovements, sizeof(m_numAvailImprovements), 1, saveFile);
+	c3files_fwrite(&m_excludedImprovements, sizeof(m_excludedImprovements), 1, saveFile);
+	c3files_fwrite(&space, sizeof(space), 1, saveFile);
+	c3files_fwrite(&space, sizeof(space), 1, saveFile);
+	c3files_fwrite(&space, sizeof(space), 1, saveFile);
+	c3files_fwrite(&m_numAvailWonders, sizeof(m_numAvailWonders), 1, saveFile);
+	c3files_fwrite(&m_excludedWonders, sizeof(m_excludedWonders), 1, saveFile);
+
+	c3files_fwrite(&space, sizeof(space), 1, saveFile);
+}
+
+void nf_GameSetup::ReadFromFile(FILE *saveFile)
+{
+	sint8 space = 0; // For the original implementation
+
+	NETFunc::GameSetup::ReadFromFile(saveFile);
+
+	c3files_fread(&m_playstyle, sizeof(m_playstyle), 1, saveFile);
+	c3files_fread(&m_playstylevalue, sizeof(m_playstylevalue), 1, saveFile);
+
+	c3files_fread(&m_handicapping, sizeof(m_handicapping), 1, saveFile);
+	c3files_fread(&m_dynamicJoin, sizeof(m_dynamicJoin), 1, saveFile);
+
+	c3files_fread(&m_bloodlust, sizeof(m_bloodlust), 1, saveFile);
+
+	c3files_fread(&m_pollution, sizeof(m_pollution), 1, saveFile);
+	c3files_fread(&m_civPoints, sizeof(m_civPoints), 1, saveFile);
+	c3files_fread(&m_pwPoints, sizeof(m_pwPoints), 1, saveFile);
+
+	c3files_fread(&m_startAge, sizeof(m_startAge), 1, saveFile);
+	c3files_fread(&m_endAge, sizeof(m_endAge), 1, saveFile);
+	c3files_fread(&m_mapSize, sizeof(m_mapSize), 1, saveFile);
+	c3files_fread(&m_worldType1, sizeof(m_worldType1), 1, saveFile);
+	c3files_fread(&m_worldType2, sizeof(m_worldType2), 1, saveFile);
+	c3files_fread(&m_worldType3, sizeof(m_worldType3), 1, saveFile);
+	c3files_fread(&m_worldType4, sizeof(m_worldType4), 1, saveFile);
+	c3files_fread(&m_worldType5, sizeof(m_worldType5), 1, saveFile);
+	c3files_fread(&m_worldType6, sizeof(m_worldType6), 1, saveFile);
+	c3files_fread(&m_worldShape, sizeof(m_worldShape), 1, saveFile);
+	c3files_fread(&m_difficulty1, sizeof(m_difficulty1), 1, saveFile);
+	c3files_fread(&m_difficulty2, sizeof(m_difficulty2), 1, saveFile);
+
+	c3files_fread(&m_tribeSlots, sizeof(m_tribeSlots), 1, saveFile);
+	c3files_fread(&m_savedTribeSlots, sizeof(m_savedTribeSlots), 1, saveFile);
+
+	c3files_fread(&m_numAvailUnits, sizeof(m_numAvailUnits), 1, saveFile);
+	c3files_fread(&m_excludedUnits, sizeof(m_excludedUnits), 1, saveFile);
+	c3files_fread(&space, sizeof(space), 1, saveFile);
+	c3files_fread(&space, sizeof(space), 1, saveFile);
+
+	c3files_fread(&m_numAvailImprovements, sizeof(m_numAvailImprovements), 1, saveFile);
+	c3files_fread(&m_excludedImprovements, sizeof(m_excludedImprovements), 1, saveFile);
+	c3files_fread(&space, sizeof(space), 1, saveFile);
+	c3files_fread(&space, sizeof(space), 1, saveFile);
+	c3files_fread(&space, sizeof(space), 1, saveFile);
+	c3files_fread(&m_numAvailWonders, sizeof(m_numAvailWonders), 1, saveFile);
+	c3files_fread(&m_excludedWonders, sizeof(m_excludedWonders), 1, saveFile);
+
+	c3files_fread(&space, sizeof(space), 1, saveFile);
+}
 
 ns_GameSetup::ns_GameSetup(nf_GameSetup * game)
 :	ns_Object<nf_GameSetup, ns_GameSetup>(game)
 {
 	list.push_back(Struct(STRING,	&m_name));
-};
+}
 
 void ns_GameSetup::Update( nf_GameSetup *gamesetup ) {
 	SetMine(false);

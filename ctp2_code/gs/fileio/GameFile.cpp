@@ -37,6 +37,8 @@
 // - Removed old concept database. (31-Mar-2007 Martin Gühmann)
 // - Removed old const database. (5-Aug-2007 Martin Gühmann)
 // - Replaced CIV_INDEX by sint32. (2-Jan-2008 Martin Gühmann)
+// - Make the Linux version loading and producing Windows compatible
+//   savegames. (16-Jan-2019 Martin Gühmann)
 //
 //----------------------------------------------------------------------------
 
@@ -1096,19 +1098,14 @@ bool GameFile::LoadExtendedGameInfo(FILE *saveFile, SaveInfo *info)
 		info->networkGUID[i].guid = guid;
 	}
 
-	n = c3files_fread(&info->gameSetup, sizeof(nf_GameSetup), 1, saveFile);
-	if (n != 1)
-	{
-		c3files_fclose(saveFile);
-		return false;
-	}
+	info->gameSetup.ReadFromFile(saveFile);
 
 	NETFunc::Session *  s       = (NETFunc::Session *) &info->gameSetup;
 	dp_session_t *      sess    =
-	    (dp_session_t *)((uint8*)s + sizeof(NETFunc::Key));
+	    (dp_session_t *)((uint8*)s + sizeof(NETFunc::Key)); // Problem
 	sess->sessionType = GAMEID;
 
-	n = c3files_fread(&info->options, sizeof(SaveInfo::OptionScreenSettings), 1, saveFile);
+	n = c3files_fread(&info->options, sizeof(SaveInfo::OptionScreenSettings), 1, saveFile); // No problem, unless BOOL is not 4 bytes
 	if (n != 1)
 	{
 		c3files_fclose(saveFile);
@@ -1139,7 +1136,7 @@ bool GameFile::LoadExtendedGameInfo(FILE *saveFile, SaveInfo *info)
 		return false;
 	}
 
-	n = c3files_fread(&info->positions, sizeof(StartingPosition), k_MAX_START_POINTS, saveFile);
+	n = c3files_fread(&info->positions, sizeof(StartingPosition), k_MAX_START_POINTS, saveFile); // Problem, but should be OK
 	if(n != k_MAX_START_POINTS)
 	{
 		c3files_fclose(saveFile);
@@ -1320,14 +1317,9 @@ bool GameFile::LoadBasicGameInfo(FILE *saveFile, SaveInfo *info)
 			info->networkGUID[i].guid = guid;
 		}
 
-		n = c3files_fread(&info->gameSetup, sizeof(nf_GameSetup), 1, saveFile);
-		if (n != 1)
-		{
-			c3files_fclose(saveFile);
-			return false;
-		}
+		info->gameSetup.ReadFromFile(saveFile); // 720 bytes
 
-		n = c3files_fread(&info->options, sizeof(SaveInfo::OptionScreenSettings), 1, saveFile);
+		n = c3files_fread(&info->options, sizeof(SaveInfo::OptionScreenSettings), 1, saveFile); // Problem, seems to be OK unless BOOL is not 4 bytes
 		if (n != 1)
 		{
 			c3files_fclose(saveFile);
@@ -1523,15 +1515,10 @@ void GameFile::SaveExtendedGameInfo(FILE *saveFile, SaveInfo *info)
 			civindex = -1;
 		}
 		c3files_fwrite(&civindex, 1, sizeof(sint32), saveFile);
-		c3files_fwrite(&guid, 1, sizeof(GUID), saveFile);
+		c3files_fwrite(&guid, 1, sizeof(GUID), saveFile); // Check Linux implementation, should have 16 bytes
 	}
 
-	n = c3files_fwrite(&info->gameSetup, sizeof(nf_GameSetup), 1, saveFile);
-	if (n != 1)
-	{
-		c3errors_FatalDialog(functionName, errorString);
-		return;
-	}
+	info->gameSetup.WriteToFile(saveFile);
 
 	n = c3files_fwrite(&info->options, sizeof(SaveInfo::OptionScreenSettings), 1, saveFile);
 	if (n != 1)
