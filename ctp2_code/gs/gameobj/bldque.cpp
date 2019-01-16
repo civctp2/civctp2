@@ -148,7 +148,10 @@ void BuildQueue::Serialize(CivArchive &archive)
 
 		MBCHAR name[256]; // Replace an unused but saved member
 		memset(name, '\0', sizeof(name));
-		strcpy(name, m_name);
+		if(m_name != NULL)
+		{
+			strcpy(name, m_name);
+		}
 
 		archive.StoreChunk((uint8*)&name, (uint8*)&name + sizeof(name));
 

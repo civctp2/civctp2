@@ -258,7 +258,6 @@ void LoadSaveWindow::FillListOne(void)
 	}
 }
 
-
 void LoadSaveWindow::FillListTwo(GameInfo *info)
 {
 	Assert(m_listTwo);
@@ -456,7 +455,6 @@ void LoadSaveWindow::SetType(uint32 type)
 
 	SelectCurrentGame();
 	SelectCurrentSave();
-
 }
 
 bool LoadSaveWindow::CreateSaveInfoIfNeeded( SaveInfo *&info )
@@ -553,7 +551,7 @@ void LoadSaveWindow::GetPowerGraph(SaveInfo *info)
 	sint32      halfPitch       = surf->Pitch() / 2;
 
 	for (sint32 i = 0; i < height; i++)
-    {
+	{
 		Pixel16 *   bufferDataPtr = buffer + i * halfPitch;
 		memcpy(graphDataPtr, bufferDataPtr, width * sizeof(Pixel16));
 		graphDataPtr += width;
