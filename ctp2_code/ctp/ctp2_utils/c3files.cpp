@@ -262,12 +262,12 @@ uint8 *c3files_loadbinaryfile(C3DIR dir, MBCHAR const * filename, sint32 *size)
 	if (c3files_fseek(f, 0, SEEK_END) == 0) {
 		filesize = c3files_ftell(f);
 	} else {
-		fclose(f);
+		c3files_fclose(f);
 		return NULL;
 	}
 
 	if (c3files_fseek(f, 0, SEEK_SET) != 0) {
-		fclose(f);
+		c3files_fclose(f);
 		return NULL;
 	}
 
@@ -292,7 +292,7 @@ uint8 *c3files_loadbinaryfile(C3DIR dir, MBCHAR const * filename, sint32 *size)
 	return bits;
 }
 
-bool c3files_PathIsValid(MBCHAR *path)
+bool c3files_PathIsValid(const MBCHAR *path)
 {
 #if defined(_WIN32)
 	struct _stat tmpstat;
@@ -303,7 +303,7 @@ bool c3files_PathIsValid(MBCHAR *path)
 #endif
 }
 
-bool c3files_CreateDirectory(MBCHAR *path)
+bool c3files_CreateDirectory(const MBCHAR *path)
 {
 #if defined(_WIN32)
 	return CreateDirectory(path, NULL) != FALSE; // BOOL to bool conversion
@@ -339,9 +339,6 @@ void c3files_StripSpaces(MBCHAR * s)
 		s[copied] = 0;
 	}
 }
-
-
-
 
 bool c3files_getfilelist(C3SAVEDIR dirID, MBCHAR *ext, PointerList<MBCHAR> *list)
 {
@@ -446,11 +443,68 @@ bool c3files_getfilelist_ex(C3SAVEDIR dirID, MBCHAR *ext, PointerList<WIN32_FIND
 }
 #endif // _WIN32
 
+const MBCHAR *c3files_GetCTPHomeDir()
+{
+	static MBCHAR ctphome[MAX_PATH] = {0};
+	static BOOL init = FALSE;
+
+	if(!init)
+	{
+		init = TRUE;
+#ifdef LINUX
+		MBCHAR tmp[MAX_PATH] = {0};
+		uid_t uid = getuid();
+		struct passwd *pwent = getpwuid(uid);
+		if(!pwent)
+			return NULL;
+
+		if(!pwent->pw_dir)
+			return NULL;
+
+		if(!*pwent->pw_dir)
+			return NULL;
+
+		size_t s = snprintf(tmp, MAX_PATH, "%s" FILE_SEP "%s",
+							pwent->pw_dir, ".civctp2");
+		if(s > MAX_PATH)
+		{
+			return NULL;
+		}
+		struct stat st = {0};
+		if(stat(tmp, &st) == 0)
+		{
+			if(S_ISDIR(st.st_mode))
+			{
+				strncpy(ctphome, tmp, MAX_PATH);
+				return ctphome;
+			}
+			else
+			{
+				return NULL;
+			}
+		}
+		mode_t mode = 0777;
+		if(mkdir(tmp, mode) == 0)
+		{
+			strncpy(ctphome, tmp, MAX_PATH);
+			return ctphome;
+		}
+
+		return NULL;
+#endif
+	}
+
+	if(ctphome[0])
+		return ctphome;
+	else
+		return NULL;
+}
+
 bool c3files_HasLegalCD()
 {
-#if defined(__linux__)
-	bool success = true;
-#else
+//#if defined(__linux__)
+//	bool success = true;
+//#else
 	bool success = false;
 
 	if (g_soundManager)
@@ -506,13 +560,19 @@ bool c3files_HasLegalCD()
 	{
 		g_soundManager->InitRedbook();
 	}
-#endif
+//#endif
 	return success;
 }
 
 void c3files_InitializeCD(void)
 {
 #if defined(__linux__)
+	int rc = SDL_Init(SDL_INIT_CDROM);
+	if(0 != rc)
+	{
+		fprintf(stderr, "Could not initialize CDROM:\n%s\n", SDL_GetError());
+		return;
+	}
 #else
 	c3files_GetCDDrives();
 	(void) c3files_FindCDByName(k_CTP_CD_VOLUME_NAME);
@@ -521,11 +581,7 @@ void c3files_InitializeCD(void)
 
 bool c3files_HasCD(void)
 {
-#if defined(__linux__)
 	return g_hasCD;
-#else
-	return g_hasCD;
-#endif
 }
 
 DriveIdType c3files_GetCtpCdId(void)
@@ -626,6 +682,9 @@ MBCHAR const * c3files_GetVolumeName(DriveIdType id)
 	{
 		return VolumeName;
 	}
+
+	return NULL;
+
 #elif defined(LINUX)
 	/// \todo Add code to determine beginsector of iso_primary_sector
 	/// On german ctp2 cd, it starts on sector 16 (byte 16 << 11 = 0x8000)
@@ -684,8 +743,6 @@ MBCHAR const * c3files_GetVolumeName(DriveIdType id)
 
 	return VolumeName;
 #endif
-
-	return NULL;
 }
 
 //----------------------------------------------------------------------------

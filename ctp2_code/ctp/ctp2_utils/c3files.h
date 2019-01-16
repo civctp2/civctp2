@@ -133,8 +133,8 @@ sint32		c3files_fflush(FILE *);
 sint32		c3files_getfilesize(C3DIR dir, MBCHAR const * filename);
 uint8 *     c3files_loadbinaryfile(C3DIR dir, MBCHAR const *filename, sint32 *size);
 
-bool		c3files_PathIsValid(MBCHAR *path);
-bool		c3files_CreateDirectory(MBCHAR *path);
+bool		c3files_PathIsValid(const MBCHAR *path);
+bool		c3files_CreateDirectory(const MBCHAR *path);
 
 void		c3files_StripSpaces(MBCHAR *s);
 
@@ -142,6 +142,8 @@ bool		c3files_getfilelist(C3SAVEDIR dirID, MBCHAR *ext, PointerList<MBCHAR> *pli
 #ifdef _WIN32
 bool		c3files_getfilelist_ex(C3SAVEDIR dirID, MBCHAR *ext, PointerList<WIN32_FIND_DATA> *plist);
 #endif
+
+const MBCHAR *c3files_GetCTPHomeDir();
 
 DriveIdType c3files_GetCtpCdId(void);
 bool		c3files_HasCD(void);
