@@ -5,10 +5,6 @@
 - original hosting: https://ctp2.darkdust.net/
 - forums: https://apolyton.net/forum/other-games/call-to-power-2/ctp2-source-code-project
 
-# Project maintainer wanted!
-All contributions are on-hold until a project maintainer for this github repo has been found.
-For details please follow the discussion here: https://github.com/ptitSeb/ctp2/issues/3#issuecomment-427801575
-
 ### Original readme files
 - [Activision CTP2 Source Code_Readme.txt](https://github.com/civctp2/civctp2/blob/master/Activision%20CTP2%20Source%20Code_Readme.txt)
 - [Apolyton CTP2 Source Code_Readme.txt](https://github.com/civctp2/civctp2/blob/master/Apolyton%20CTP2%20Source%20Code_Readme.txt)
