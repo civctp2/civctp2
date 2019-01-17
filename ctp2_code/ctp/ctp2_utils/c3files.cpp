@@ -57,11 +57,16 @@
 #ifdef HAVE_SYS_PARAM_H
 #include <sys/param.h>
 #endif
+#ifdef HAVE_UNISTD_H
+#include <unistd.h>
+#endif
 #ifdef __linux__
 #include <linux/fs.h>
 #include <linux/iso_fs.h>
 #include <errno.h>
 #include <dirent.h>
+#include <paths.h>
+#include <pwd.h>
 #include "cifm.h"
 #define fopen(a, b) ci_fopen(a, b)
 #endif
@@ -451,10 +456,10 @@ const MBCHAR *c3files_GetCTPHomeDir()
 	if(!init)
 	{
 		init = TRUE;
-#ifdef LINUX
+/*#ifdef LINUX
 		MBCHAR tmp[MAX_PATH] = {0};
-		uid_t uid = getuid();
-		struct passwd *pwent = getpwuid(uid);
+		uid_t uid = getuid(); // Not declared
+		struct passwd *pwent = getpwuid(uid); // Not declared
 		if(!pwent)
 			return NULL;
 
@@ -491,7 +496,7 @@ const MBCHAR *c3files_GetCTPHomeDir()
 		}
 
 		return NULL;
-#endif
+#endif*/
 	}
 
 	if(ctphome[0])

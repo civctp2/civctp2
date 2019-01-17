@@ -4512,7 +4512,7 @@ sint32 Governor::GetNeededGarrisonUnitType(const CityData * city, sint32 & list_
 
 	double garrisonStrength       = city->GetCurrentGarrisonStrength();
 	double neededGarrisonStrength = MaxiumGarrisonDefence(city->GetHomeCity().RetPos());
-	double garrisonComplte        = (neededGarrisonStrength > 0.0) ? garrisonStrength / neededGarrisonStrength : 1.0;
+	double garrisonComplete       = (neededGarrisonStrength > 0.0) ? garrisonStrength / neededGarrisonStrength : 1.0;
 
 	double          build_transport_production_level;
 	double          build_settler_production_level;
@@ -4550,7 +4550,7 @@ sint32 Governor::GetNeededGarrisonUnitType(const CityData * city, sint32 & list_
 			needed_production = 0;
 			continue;
 		}
-		else if ( /*!city->GetGarrisonComplete()*/ garrisonComplte < 1.0)
+		else if ( /*!city->GetGarrisonComplete()*/ garrisonComplete < 1.0)
 		{
 			// @ToDo: Merge duplicated code
 	//		double garrisonPercent = list_ref.m_maximumGarrisonCount > 0 ? static_cast<double>(list_ref.m_garrisonCount) / static_cast<double>(list_ref.m_maximumGarrisonCount) : 1.0;
@@ -4560,7 +4560,7 @@ sint32 Governor::GetNeededGarrisonUnitType(const CityData * city, sint32 & list_
 			         static_cast<BUILD_UNIT_LIST>(list_num) == BUILD_UNIT_LIST_SEA_TRANSPORT
 			      || static_cast<BUILD_UNIT_LIST>(list_num) == BUILD_UNIT_LIST_SEA
 			   )
-			   && garrisonComplte > build_transport_production_level // This may be exposed extra
+			   && garrisonComplete > build_transport_production_level // This may be exposed extra
 			   // This does not work so well yet
 //			   && (PercentUnbuilt(static_cast<BUILD_UNIT_LIST>(list_num)) > PercentUnbuilt(BUILD_UNIT_LIST_SETTLER)     || m_currentUnitCount[m_buildUnitList[BUILD_UNIT_LIST_SETTLER].m_bestType]     > 2)
 //			   && (PercentUnbuilt(static_cast<BUILD_UNIT_LIST>(list_num)) > PercentUnbuilt(BUILD_UNIT_LIST_SEA_SETTLER) || m_currentUnitCount[m_buildUnitList[BUILD_UNIT_LIST_SEA_SETTLER].m_bestType] > 2)
@@ -4580,7 +4580,7 @@ sint32 Governor::GetNeededGarrisonUnitType(const CityData * city, sint32 & list_
 			else if
 			  (
 			      static_cast<BUILD_UNIT_LIST>(list_num) == BUILD_UNIT_LIST_SETTLER
-			   && garrisonComplte > build_settler_production_level
+			   && garrisonComplete > build_settler_production_level
 			  )
 			{
 				if(!m_canBuildLandSettlers)
@@ -4602,7 +4602,7 @@ sint32 Governor::GetNeededGarrisonUnitType(const CityData * city, sint32 & list_
 			else if
 			  (
 			      static_cast<BUILD_UNIT_LIST>(list_num) == BUILD_UNIT_LIST_SEA_SETTLER
-			   && garrisonComplte > build_settler_production_level
+			   && garrisonComplete > build_settler_production_level
 			   && this->m_canBuildSeaSettlers
 			  )
 			{
@@ -4628,7 +4628,7 @@ sint32 Governor::GetNeededGarrisonUnitType(const CityData * city, sint32 & list_
 			     || static_cast<BUILD_UNIT_LIST>(list_num) == BUILD_UNIT_LIST_SPY
 			     || static_cast<BUILD_UNIT_LIST>(list_num) == BUILD_UNIT_LIST_SPECIAL
 			   )
-			   && garrisonComplte > build_settler_production_level
+			   && garrisonComplete > build_settler_production_level
 			  )
 			{
 				needed_production =
@@ -4650,88 +4650,27 @@ sint32 Governor::GetNeededGarrisonUnitType(const CityData * city, sint32 & list_
 		}
 		else
 		{
-			// @ToDo: Cleanup duplicated code
-			if
-			  (
-			   (
-			         static_cast<BUILD_UNIT_LIST>(list_num) == BUILD_UNIT_LIST_SEA_TRANSPORT
-			      || static_cast<BUILD_UNIT_LIST>(list_num) == BUILD_UNIT_LIST_AIR_TRANSPORT
-			   )
-			   // This does not work so well yet
-//			   && (PercentUnbuilt(static_cast<BUILD_UNIT_LIST>(list_num)) > PercentUnbuilt(BUILD_UNIT_LIST_SETTLER)     || m_currentUnitCount[m_buildUnitList[BUILD_UNIT_LIST_SETTLER].m_bestType]     > 2)
-//			   && (PercentUnbuilt(static_cast<BUILD_UNIT_LIST>(list_num)) > PercentUnbuilt(BUILD_UNIT_LIST_SEA_SETTLER) || m_currentUnitCount[m_buildUnitList[BUILD_UNIT_LIST_SEA_SETTLER].m_bestType] > 2)
-			  )
+			if(static_cast<BUILD_UNIT_LIST>(list_num) == BUILD_UNIT_LIST_SETTLER)
 			{
-				if(garrisonComplte >= 1.0) // Don't merge this part, since it may be exposed for the three types
-				{
-					needed_production =
-						GetDBUnitRec(list_ref.m_bestType)->GetShieldCost();
-
-					sint32 turns_to_build = city->HowMuchLonger(needed_production);
-					needed_production *= list_ref.m_desiredCount;
-					if(needed_production > 0)
-					{
-						max_list = (BUILD_UNIT_LIST) list_num;
-						break;
-					}
-				}
-
-				Assert(garrisonComplte >= 1.0);
-			}
-			else if(static_cast<BUILD_UNIT_LIST>(list_num) == BUILD_UNIT_LIST_SETTLER)
-			{
-				if(!m_canBuildLandSettlers)
-				{
-					continue;
-				}
-
-				if(garrisonComplte >= 1.0)
-				{
-					needed_production =
-						GetDBUnitRec(list_ref.m_bestType)->GetShieldCost();
-
-					sint32 turns_to_build = city->HowMuchLonger(needed_production);
-					needed_production *= list_ref.m_desiredCount;
-					if(needed_production > 0)
-					{
-						max_list = (BUILD_UNIT_LIST) list_num;
-						break;
-					}
-				}
-
-				Assert(garrisonComplte >= 1.0);
+				if(!m_canBuildLandSettlers) continue;
 			}
 			else if(static_cast<BUILD_UNIT_LIST>(list_num) == BUILD_UNIT_LIST_SEA_SETTLER)
 			{
-				if(!m_canBuildSeaSettlers)
-				{
-					continue;
-				}
-
-				if(garrisonComplte >= 1.0)
-				{
-					needed_production =
-						GetDBUnitRec(list_ref.m_bestType)->GetShieldCost();
-
-					sint32 turns_to_build = city->HowMuchLonger(needed_production);
-					needed_production *= list_ref.m_desiredCount;
-					if(needed_production > 0)
-					{
-						max_list = (BUILD_UNIT_LIST) list_num;
-						break;
-					}
-				}
-
-				Assert(garrisonComplte >= 1.0);
+				if(!m_canBuildSeaSettlers) continue;
 			}
-			else if
-			  (
-			       static_cast<BUILD_UNIT_LIST>(list_num) == BUILD_UNIT_LIST_SLAVERY
+
+			// @ToDo: Cleanup duplicated code
+			if(
+			       static_cast<BUILD_UNIT_LIST>(list_num) == BUILD_UNIT_LIST_SEA_TRANSPORT
+			    || static_cast<BUILD_UNIT_LIST>(list_num) == BUILD_UNIT_LIST_AIR_TRANSPORT
+			    || static_cast<BUILD_UNIT_LIST>(list_num) == BUILD_UNIT_LIST_SETTLER
+			    || static_cast<BUILD_UNIT_LIST>(list_num) == BUILD_UNIT_LIST_SEA_SETTLER
+			    || static_cast<BUILD_UNIT_LIST>(list_num) == BUILD_UNIT_LIST_SLAVERY
 			    || static_cast<BUILD_UNIT_LIST>(list_num) == BUILD_UNIT_LIST_SPY
 			    || static_cast<BUILD_UNIT_LIST>(list_num) == BUILD_UNIT_LIST_SPECIAL
 			  )
 			{
-				if(garrisonComplte >= 1.0)
+			//	if(garrisonComplete >= 1.0) // Should be irrelevant
 				{
 					needed_production =
 						GetDBUnitRec(list_ref.m_bestType)->GetShieldCost();
@@ -4745,7 +4684,7 @@ sint32 Governor::GetNeededGarrisonUnitType(const CityData * city, sint32 & list_
 					}
 				}
 
-				Assert(garrisonComplte >= 1.0);
+			//	Assert(garrisonComplete >= 1.0);
 			}
 			else
 			{
