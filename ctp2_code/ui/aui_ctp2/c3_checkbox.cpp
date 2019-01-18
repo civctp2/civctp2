@@ -113,8 +113,8 @@ AUI_ERRCODE c3_CheckBox::DrawThis(
 	if (m_bevelWidth > 0)
 		primitives_BevelRect16( surface, &rect, m_bevelWidth, IsOn()?1:0, 16, 16 );
 
-	uint32 bordWidth = m_bevelWidth ? m_bevelWidth*2 : 2;
-	RECT checkrect = { bordWidth,bordWidth, m_height - bordWidth, m_height - bordWidth };
+	sint32 bordWidth = m_bevelWidth ? m_bevelWidth * 2 : 2;
+	RECT checkrect = { bordWidth, bordWidth, m_height - bordWidth, m_height - bordWidth };
 	OffsetRect(&checkrect, m_x+x, m_y+y);
 	ToWindow(&checkrect);
 	primitives_BevelRect16(surface, &checkrect, m_bevelWidth, 1, 16,16);
@@ -127,7 +127,7 @@ AUI_ERRCODE c3_CheckBox::DrawThis(
 										 checkrect.right-off,checkrect.top+off, g_colorSet->GetColor(COLOR_RED));
 	}
 
-	RECT textrect = { m_height+bordWidth,0, m_width-bordWidth-m_height, m_height };
+	RECT textrect = { m_height + bordWidth, 0, m_width - bordWidth - m_height, m_height };
 	OffsetRect(&textrect, m_x+x, m_y+y);
 	ToWindow(&textrect);
 	DrawThisText(

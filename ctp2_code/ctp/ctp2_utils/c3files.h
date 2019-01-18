@@ -51,9 +51,9 @@ enum C3DIR {
 	C3DIR_DIRECT	= -1,
 
 	C3DIR_GAMEDATA,
-  	C3DIR_GL,
+	C3DIR_GL,
 	C3DIR_AIDATA,
-    C3DIR_UIDATA,
+	C3DIR_UIDATA,
 	C3DIR_LAYOUT,
 	C3DIR_FONTS,
 	C3DIR_GRAPHICS,
@@ -63,7 +63,7 @@ enum C3DIR {
 	C3DIR_PICTURES,
 	C3DIR_ICONS,
 	C3DIR_CURSORS,
-    C3DIR_SOUNDS,
+	C3DIR_SOUNDS,
 	C3DIR_VIDEOS,
 
 	C3DIR_MAX
@@ -90,7 +90,7 @@ typedef MBCHAR      DriveIdType;
 #else
 
 typedef MBCHAR      WIN32_FIND_DATA;
-typedef int         DriveIdType;
+typedef sint32      DriveIdType;
 
 #endif  // _WIN32
 
@@ -143,8 +143,29 @@ bool		c3files_getfilelist(C3SAVEDIR dirID, MBCHAR *ext, PointerList<MBCHAR> *pli
 bool		c3files_getfilelist_ex(C3SAVEDIR dirID, MBCHAR *ext, PointerList<WIN32_FIND_DATA> *plist);
 #endif
 
+/** Returns the users CTP2 directory within his/her home.
+ * On windows, NULL is returned. On linux, $HOME/.civctp2 will be returned.
+ *
+ * If the directory does not exist, it'll be created. If the creation
+ * fails, NULL is returned instead.
+ *
+ * @returns Path to existing CTP2 directory within users' home
+ */
 const MBCHAR *c3files_GetCTPHomeDir();
 
+/** Returns the system-dependent mount point of the CD drive number cdIndex,
+ * i.e. the path to the root directory of the cd.
+ *
+ * If cdIndex is negative or greater than the number of cd drives available,
+ * NULL is returned.
+ * If the cd drive has no cd mounted, NULL is returned.
+ *
+ * @param buf Buffer for mount point retrieval
+ * @param size Size of that buffer
+ * @param cdIndex Index # of CD
+ * @returns CD Mount
+ */
+const MBCHAR *c3files_GetCDDriveMount(MBCHAR *buf, size_t size, DriveIdType cdIndex);
 DriveIdType c3files_GetCtpCdId(void);
 bool		c3files_HasCD(void);
 bool		c3files_HasLegalCD(void);
