@@ -451,7 +451,7 @@ double Happy::CalcMartialLaw(CityData &cd, Player *p)
 		sint32 count = 0;
 
 		if (a)
-        {
+		{
 			sint32 n = a->Num();
 			for (sint32 i = 0; i < n; i++) {
 				if ((*a)[i].ExertsMartialLaw()) {
@@ -459,21 +459,16 @@ double Happy::CalcMartialLaw(CityData &cd, Player *p)
 				}
 			}
 		}
-        m_martial_law = std::min(mu, count) * me;
+		m_martial_law = std::min(mu, count) * me;
 	}
 
 	m_tracker->SetHappiness(HAPPY_REASON_MARTIAL_LAW, m_martial_law);
 	return m_martial_law;
 }
 
-
-
-
 double Happy::CalcPopEntertain(CityData &cd, Player *p)
 {
-	double increaseSpecialists = wonderutil_GetIncreaseSpecialists(p->m_builtWonders);
-
-	m_pop_ent = cd.GetHappinessFromPops();
+	m_pop_ent  = cd.GetHappinessFromPops();
 	m_tracker->SetHappiness(HAPPY_REASON_ENTERTAINERS, m_pop_ent);
 	return m_pop_ent;
 }

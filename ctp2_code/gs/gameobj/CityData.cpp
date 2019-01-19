@@ -211,6 +211,7 @@
 //   the game crash anymore. (13-Jan-2019 Martin Gühmann)
 // - Reorderd the member variables and converted m_name to a pointer to reduce
 //   the needed memory. Updated for that the copy and serialize methods. (13-Jan-2019 Martin Gühmann)
+// - Implemented specialist increase of wonders for entertainers. (20-Jan-2019 Martin Gühmann)
 //
 //----------------------------------------------------------------------------
 
@@ -4999,7 +5000,6 @@ bool CityData::BeginTurn()
 	DoSupport(false);
 #else
 
-	sint32 temper = g_rand->Next(50);
 	TryToBuild(); // Deal with capitalization/infrastructure. Otherwise, build the front item in this city's buildqueue.
 	//TryToBuild must before capitalisation computation and after production computation
 
@@ -5375,8 +5375,6 @@ void CityData::AddWonder(sint32 type)
 		const TerrainImprovementRecord *trec = g_theTerrainImprovementDB->Get(s);
 		for(it.Start(); !it.End(); it.Next())
 		{
-			Cell *ncell = g_theWorld->GetCell(it.Pos());
-			Cell *ocell = g_theWorld->GetCell(SpotFound);
 			if(point == it.Pos())
 				continue;
 
@@ -5388,8 +5386,8 @@ void CityData::AddWonder(sint32 type)
 
 			if(terrainutil_CanPlayerSpecialBuildAt(trec, m_owner, it.Pos())
 			){
-			//	SpotFound = it.Pos();
-			//}
+				Cell *ncell = g_theWorld->GetCell(it.Pos());
+				Cell *ocell = g_theWorld->GetCell(SpotFound);
 
 				if ((!SpotFound.IsValid())
 				|| ((ncell->GetNumDBImprovements() < ocell->GetNumDBImprovements())
@@ -8004,10 +8002,10 @@ sint32 CityData::GetHappinessFromPops() const
 {
 	return (m_specialistDBIndex[POP_ENTERTAINER] < 0)
            ? 0
-           : EntertainerCount() * g_thePopDB->Get
+           : EntertainerCount() * (g_thePopDB->Get
                                     (m_specialistDBIndex[POP_ENTERTAINER],
                                      g_player[m_owner]->GetGovernmentType()
-                                    )->GetHappiness();
+                                    )->GetHappiness() + wonderutil_GetIncreaseSpecialists(g_player[m_owner]->m_builtWonders));
 }
 
 sint32 CityData::GetNumPop() const
@@ -11422,15 +11420,13 @@ void CityData::AddCitySlum()
 
 	if (g_theConstDB->Get(0)->GetCityExpansionDenominator() > 0) //this checks if its specified in constDB
 	{
-
 		sint32 UrbanTile = PopCount()/(g_theConstDB->Get(0)->GetCityExpansionDenominator());
 
 		if(GetNumUrbanTile(m_home_city.RetPos()) < UrbanTile)
 			return;
 
-		for(it.Start(); !it.End(); it.Next()) {
-			Cell *ncell = g_theWorld->GetCell(it.Pos());
-			Cell *ocell = g_theWorld->GetCell(SpotFound);
+		for(it.Start(); !it.End(); it.Next())
+		{
 			sint32 UrbanImp = GetSlumTileAvailable(it.Pos());
 			if (UrbanImp < 0)
 				return;
@@ -11443,7 +11439,6 @@ void CityData::AddCitySlum()
 
 			if(terrainutil_CanPlayerSpecialBuildAt(UrbanImp, m_owner, it.Pos())
 			){
-
 				if (
 				   (!SpotFound.IsValid())
 				&& (terrainutil_HasUrban(it.Pos()))
@@ -11451,9 +11446,9 @@ void CityData::AddCitySlum()
 					SpotFound = it.Pos();
 				}
 			}
-			if(GetNumUrbanTile(m_home_city.RetPos()) > UrbanTile) {
+			if(GetNumUrbanTile(m_home_city.RetPos()) > UrbanTile)
+			{
 				g_player[m_owner]->CreateSpecialImprovement(UrbanImp, SpotFound, 0);
-
 			}
 		}
 	}
