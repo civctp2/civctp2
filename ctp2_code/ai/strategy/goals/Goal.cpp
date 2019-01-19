@@ -2169,7 +2169,7 @@ Utility Goal::Compute_Raw_Priority()
 	}
 
 	const sint32 doubleDistanceFactor = 4;
-	sint32 distance;
+	sint32 distance = std::numeric_limits<sint32>::max();
 	bool isLandConnected = goal_rec->HasConnectionBoni() && player_ptr->IsConnected(target_pos, doubleDistanceFactor * g_theConstDB->Get(0)->GetBorderSquaredRadius(), distance);
 	bool isConnected     = goal_rec->HasConnectionBoni() && player_ptr->IsConnected(target_pos, doubleDistanceFactor * g_theConstDB->Get(0)->GetBorderSquaredRadius(), distance, false);
 
@@ -3450,8 +3450,6 @@ bool Goal::FollowPathToTask( Agent_ptr first_army,
 
 		return false;
 	}
-
-	return true;
 }
 
 bool Goal::GotoTransportTaskSolution(Agent_ptr the_army, Agent_ptr the_transport, MapPoint & pos)
@@ -4469,8 +4467,6 @@ bool Goal::TryTransport(Agent_ptr agent_ptr, const MapPoint & goal_pos)
 bool Goal::FindTransporters(const Agent_ptr & agent_ptr, std::list< std::pair<Utility, Agent_ptr> > & transporter_list)
 {
 	std::pair<Utility, Agent_ptr> transporter;
-
-	double          max_utility         = Goal::BAD_UTILITY;
 
 	for
 	(

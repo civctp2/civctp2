@@ -77,7 +77,6 @@ AUI_ERRCODE aui_DirectBlitter::ColorBlt16(
 	uint32 color,
 	uint32 flags )
 {
-	AUI_ERRCODE retcode = AUI_ERRCODE_OK;
 
 	if ( !destSurf->Buffer()
 	&&   destSurf->IsThisA( aui_DirectSurface::m_directSurfaceClassId ) )
@@ -137,8 +136,6 @@ AUI_ERRCODE aui_DirectBlitter::StretchBlt16To16(
 	RECT *srcRect,
 	uint32 flags )
 {
-	AUI_ERRCODE retcode = AUI_ERRCODE_OK;
-
 	if ( !destSurf->Buffer()
 	&&   !srcSurf->Buffer()
 	&&   destSurf->IsThisA( aui_DirectSurface::m_directSurfaceClassId )

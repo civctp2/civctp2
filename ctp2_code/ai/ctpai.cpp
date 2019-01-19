@@ -184,8 +184,6 @@ STDEHANDLER(CtpAi_CaptureCityEvent)
 	if(!args->GetInt(0, cause))
 		return GEV_HD_Continue;
 
-	PLAYER_INDEX    originalOwner = city.GetOwner();
-
 	return GEV_HD_Continue;
 }
 

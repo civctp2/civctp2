@@ -2376,13 +2376,13 @@ void TiledMap::PaintUnitActor(UnitActor *actor, bool fog)
 				sint32		tx = (sint32)(actor->GetX()+GetZoomTilePixelWidth()/2),
 							ty = (sint32)(actor->GetY()+GetZoomTileHeadroom());
 
-				sint32		r,g,b;
+/*				sint32		r,g,b;
 				uint8		col = a.GetData()->GetDebugStringColor();
 
 				ColorMagnitudeToRGB(col, &r, &g, &b);
 
 				COLORREF	fgColor = RGB(r, g, b),
-							bgColor = RGB(0,0,0);
+							bgColor = RGB(0,0,0);*/
 
 				DrawSomeText(true, s, tx, ty+40, g_colorSet->GetColorRef(COLOR_BLACK), g_colorSet->GetColorRef(COLOR_WHITE));
 			}

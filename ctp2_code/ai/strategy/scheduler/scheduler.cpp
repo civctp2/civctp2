@@ -1404,8 +1404,6 @@ bool Scheduler::Prune_Goals()
 
 	for(sint32 i = 0; i < strategy.GetNumGoalElement(); i++)
 	{
-		time_t t1 = GetTickCount();
-
 		const StrategyRecord::GoalElement* goal_element_ptr = strategy.GetGoalElement(i);
 
 		GOAL_TYPE goal_type = GetMaxEvalExec(goal_element_ptr, max_eval, max_exec);
@@ -1512,7 +1510,6 @@ void Scheduler::Add_New_Matches_For_Goal
     const bool       update_match_value
 )
 {
-	sint32      count            = 0;
 	GOAL_TYPE   type             = goal_ptr->Get_Goal_Type();
 	SQUAD_CLASS goal_squad_class = g_theGoalDB->Get(type)->GetSquadClass();
 
@@ -1543,8 +1540,6 @@ void Scheduler::Add_New_Matches_For_Agent
     const Agent_ptr & agent
 )
 {
-	sint32 count = 0;
-
 	SQUAD_CLASS squad_class = agent->Get_Squad_Class();
 
 	for(sint32 i = 0; i < g_theGoalDB->NumRecords(); i++)
@@ -2083,7 +2078,7 @@ void Scheduler::Assign_Garrison()
 			   || current_garrison          < needed_garrison
 			  )
 			{
-				AI_DPRINTF(k_DBG_SCHEDULER_DETAIL, m_playerId, -1, -1,("%9x\t %9x\t %s\n", agent_iter->second, agent_iter->second->Get_Army(), city.GetName()));
+				AI_DPRINTF(k_DBG_SCHEDULER_DETAIL, m_playerId, -1, -1,("%9x\t %9x\t %s\n", agent_iter->second, agent_iter->second->Get_Army().m_id, city.GetName()));
 
 				current_garrison_strength += agent_iter->first;
 				current_garrison          += agent_iter->second->Get_Army()->Num();
@@ -2118,7 +2113,7 @@ void Scheduler::Assign_Garrison()
 					}
 				}
 
-				AI_DPRINTF(k_DBG_SCHEDULER_DETAIL, m_playerId, -1, -1,("%9x\t %9x\t %s (Not needed for city garrison)\n", agent_iter->second, agent_iter->second->Get_Army(), city.GetName()));
+				AI_DPRINTF(k_DBG_SCHEDULER_DETAIL, m_playerId, -1, -1,("%9x\t %9x\t %s (Not needed for city garrison)\n", agent_iter->second, agent_iter->second->Get_Army().m_id, city.GetName()));
 			}
 		}
 	}

@@ -575,7 +575,7 @@ void UnitActor::ChangeType(SpriteState *ss, sint32 type,  Unit id, BOOL updateVi
 		   !m_isUnseenCellActor)
 		{
 			DPRINTF(k_DBG_INFO, ("Adding vision for %lx, owner %d, range %lf, center: %d,%d\n",
-								 m_unitID, m_playerNum, m_unitVisionRange,
+								 m_unitID.m_id, m_playerNum, m_unitVisionRange,
 								 m_pos.x, m_pos.y));
 
 		}
@@ -2752,7 +2752,7 @@ void UnitActor::DrawCityImprovements(bool fogged)
 void UnitActor::DumpActor(void)
 {
 	DPRINTF(k_DBG_UI, ("Actor %#.8lx\n", this));
-	DPRINTF(k_DBG_UI, ("  m_unitID           :%#.8lx\n", m_unitID));
+	DPRINTF(k_DBG_UI, ("  m_unitID           :%#.8lx\n", m_unitID.m_id));
 	DPRINTF(k_DBG_UI, ("  m_unitDBIndex      :%d\n", m_unitDBIndex));
 	DPRINTF(k_DBG_UI, ("  m_curAction        :%#.8lx\n", m_curAction));
 

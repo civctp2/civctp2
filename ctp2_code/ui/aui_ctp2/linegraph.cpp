@@ -150,8 +150,6 @@ sint32 GetCombinedStrength(Strengths const & a_Strengths, sint32 a_Turn, sint32 
 			     + a_Strengths.GetTurnStrength(STRENGTH_CAT_PRODUCTION,   a_Turn);
 		}
 	}
-
-	return 0;
 }
 
 } // namespace

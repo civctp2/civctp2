@@ -59,6 +59,10 @@
 
 #if defined(_MSC_VER)
 
+// There seems to be a problem with disabling these things, e.g. 4996 is disabled but still shows up
+
+#pragma warning(disable:4996)   // (Level 3)   (At least) Depricated (e.g. strdup) and unsave (e.g. sprintf) functions 
+
 #pragma warning(disable:4100)   // (Level 4)   'identifier' : unreferenced formal parameter
 #pragma warning(disable:4127)   // (Level 4)   conditional expression is constant
 #pragma warning(disable:4786)   // (Level ?)   identifier length over 255 (with templates)

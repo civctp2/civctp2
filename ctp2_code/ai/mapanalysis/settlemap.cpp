@@ -480,8 +480,6 @@ bool SettleMap::HasCityInSettleDistance(const MapPoint & pos, sint32 min_settle_
 {
 	RadiusIterator it(pos, min_settle_distance);
 
-	bool hasCityNearBy = false;
-
 	for(it.Start(); !it.End(); it.Next())
 	{
 		const Cell * cell = g_theWorld->GetCell(it.Pos());

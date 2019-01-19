@@ -346,9 +346,6 @@ void World::GWPhase(const sint32 phase)
 {
 	Cell	*c;
 
-	sint32 x;
-	sint32 y;
-
 	sint32 newtype;
 	sint32 terrain;
 
@@ -359,9 +356,9 @@ void World::GWPhase(const sint32 phase)
 	sint32 const    w = GetWidth();
 	sint32 const    h = GetHeight();
 
-	for (y=0; y<h; y++)
+	for (sint32 y = 0; y < h; y++)
 	{
-		for (x=0; x<w; x++)
+		for (sint32 x = 0; x < w; x++)
 		{
 			c = GetCell(x, y);
 			terrain = sint32(c->m_terrain_type);

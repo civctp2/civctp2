@@ -2801,8 +2801,6 @@ bool Player::GetSlaveCity(const MapPoint &pos, Unit &city)
 	sint32 d;
 	sint32 i, j;
 
-	sint32 minDistance = 0x7fffffff;
-
 	CityDistQueue cityDistQueue;
 
 	city.m_id = (0);
@@ -4354,7 +4352,7 @@ Agreement Player::MakeCaptureCityPact(PLAYER_INDEX player, Unit &city)
 
 	a.SetExpires(g_theConstDB->Get(0)->GetPactCaptureCityExpires()) ;
 	a.SetTarget(city) ;
-	DPRINTF(k_DBG_INFO, ("Player #%d agrees with Player #%d to capture city id %d as part of a pact\n", m_owner, player, city)) ;
+	DPRINTF(k_DBG_INFO, ("Player #%d agrees with Player #%d to capture city id %d as part of a pact\n", m_owner, player, city.m_id)) ;
 
 	return a;
 }
@@ -7174,7 +7172,7 @@ void Player::RemoveDeadPlayers()
 #ifdef _DEBUG
 			for(j = 0; j < g_player[i]->m_all_units->Num(); j++) {
 				DPRINTF(k_DBG_GAMESTATE, ("Unit %lx still alive\n",
-										  g_player[i]->m_all_units->Access(j)));
+										  g_player[i]->m_all_units->Access(j).m_id));
 			}
 
 			Assert(g_player[i]->m_all_units->Num() == 0);
@@ -9241,8 +9239,6 @@ double Player::EnergySupply()
 				CityInfluenceIterator it(inst.RetPos(), radius);
 				for(it.Start(); !it.End(); it.Next())
 				{
-					Cell *radiuscell = g_theWorld->GetCell(it.Pos());
-
 					if (rec->GetProducesEnergy())
 					{
 						civenergy += rec->GetProducesEnergy();
@@ -9670,7 +9666,7 @@ void Player::MergeCivs(sint32 Merger, sint32 Mergee)  //Merger is the civ gainin
 	{
 		Unit	c = g_player[Mergee]->m_all_cities->Get(i).m_id ;
 
-		CityData	*cityData = m_all_cities->Get(c).GetData()->GetCityData() ;
+	//	CityData	*cityData = m_all_cities->Get(c).GetData()->GetCityData() ;
 
 		MapPoint newPos ;
 		double dist;

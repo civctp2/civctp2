@@ -54,7 +54,7 @@ extern ProjectFile *g_ImageMapPF;
 
 void CivPaths_InitCivPaths()
 {
-	AUI_ERRCODE err;
+	AUI_ERRCODE err = AUI_ERRCODE_OK;
 
 	delete g_civPaths;
 	g_civPaths = new CivPaths(err);
