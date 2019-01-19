@@ -585,11 +585,12 @@ CityData::~CityData()
 	}
 
 	delete m_happy;
-	delete m_distanceToGood;
-	delete m_ringFood;
-	delete m_ringProd;
-	delete m_ringGold;
-	delete m_ringSizes;
+	delete[] m_distanceToGood;
+	delete[] m_ringFood;
+	delete[] m_ringProd;
+	delete[] m_ringGold;
+	delete[] m_ringSizes;
+	delete[] m_name;
 
 #if defined(NEW_RESOURCE_PROCESS)
 	delete m_farmersEff;
@@ -1470,7 +1471,7 @@ void CityData::Copy(CityData *copy)
 
 	m_home_city = copy->m_home_city;
 
-	m_build_queue = copy->m_build_queue;
+	m_build_queue = BuildQueue(copy->m_build_queue);
 	m_tradeSourceList = copy->m_tradeSourceList;
 	m_tradeDestinationList = copy->m_tradeDestinationList;
 

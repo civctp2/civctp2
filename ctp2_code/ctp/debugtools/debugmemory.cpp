@@ -37,9 +37,9 @@
 //
 // Modifications from the original Activision code:
 //
-// - Added alternative leak report. (Sep 9th 2005 Martin G�hmann)
-// - Increased the stack size to be reported. (Sep 9th 2005 Martin G�hmann)
-// - Added more fill bytes for enhanced memory reporting. (1-Jan-2010 Martin G�hmann)
+// - Added alternative leak report. (Sep 9th 2005 Martin Gühmann)
+// - Increased the stack size to be reported. (Sep 9th 2005 Martin Gühmann)
+// - Added more fill bytes for enhanced memory reporting. (1-Jan-2010 Martin Gühmann)
 //
 //////////////////////////////////////////////////////////////////////////////
 
@@ -58,28 +58,13 @@
 #define fopen(a, b) ci_fopen(a, b)
 #endif
 
-
-
-
-
 struct DebugMemory;
 struct MemoryHeapDescriptor;
 struct AllocHeader;
 
-
-
-
-
-
-
 struct DebugMemory
 {
-
 	bool open;
-
-
-
-
 
 	bool initialised;
 
@@ -100,37 +85,15 @@ struct DebugMemory
 	int total_from_exe;
 };
 
-
-
-
-
 static DebugMemory *debug_memory = NULL;
-
-
-
-
-
-
-
-
-
-
-
-
 
 struct MemoryHeapDescriptor
 {
-
-
 	int type;
 
 	HANDLE handle;
 
 	const char *name;
-
-
-
-
 
 #ifdef MEMORY_LOGGED
 
@@ -138,7 +101,6 @@ struct MemoryHeapDescriptor
 	int module_line;
 
 	bool is_default_heap;
-
 
 	bool is_open;
 
@@ -155,24 +117,6 @@ struct MemoryHeapDescriptor
 	MemoryHeap last;
 #endif
 };
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
 
 static void DebugMemory_CreateDefaultHeap (void)
 {
@@ -208,18 +152,8 @@ static void DebugMemory_CreateDefaultHeap (void)
 	debug_memory->default_heap = heap;
 }
 
-
-
-
-
-
-
-
-
-
 void DebugMemory_Initialise (void)
 {
-
 	DebugMemory_CreateDefaultHeap();
 	debug_memory->initialised = true;
 }
@@ -251,17 +185,6 @@ static inline void DebugMemory_EnsureAllocated(void)
 		DebugMemory_Allocate();
 }
 
-
-
-
-
-
-
-
-
-
-
-
 static inline void DebugMemory_EnsureInitialised (void)
 {
 	DebugMemory_EnsureAllocated();
@@ -272,22 +195,8 @@ static inline void DebugMemory_EnsureInitialised (void)
 	}
 }
 
-
-
-
-
-
-
-
-
-
-
-
-
-
 void DebugMemory_Open (void)
 {
-
 	DebugMemory_EnsureAllocated();
 
 	ASSERT (!debug_memory->open);
@@ -296,19 +205,6 @@ void DebugMemory_Open (void)
 
 	DebugMemory_EnsureInitialised();
 }
-
-
-
-
-
-
-
-
-
-
-
-
-
 
 bool g_quitfast = false;
 
@@ -329,17 +225,6 @@ void DebugMemory_Close (void)
 	debug_memory = NULL;
 }
 
-
-
-
-
-
-
-
-
-
-
-
 void DebugMemory_SetDebugMemoryPtr(void *ptr)
 {
 	debug_memory = (DebugMemory *)ptr;
@@ -359,15 +244,6 @@ int DebugMemory_GetTotalFromDLL(void)
 {
 	return debug_memory->total_from_dll;
 }
-
-
-
-
-
-
-
-
-
 
 void *DebugMemory_FastMalloc  (unsigned size)
 {
@@ -417,7 +293,6 @@ void *DebugMemory_FastRealloc (void *memory_block, unsigned size)
 	return (memory);
 }
 
-
 char *DebugMemory_FastStrdup  (const char *string)
 {
 	char *memory;
@@ -442,31 +317,7 @@ void  DebugMemory_FastFree    (void **memory_block_ptr)
 	*memory_block_ptr = NULL;
 }
 
-
-
-
-
-
-
 #ifdef MEMORY_FAST
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
 
 MemoryHeap DebugMemoryHeap_FastOpen (const char *name, unsigned size_initial, unsigned size_maximum)
 {
@@ -485,20 +336,6 @@ MemoryHeap DebugMemoryHeap_FastOpen (const char *name, unsigned size_initial, un
 	return (heap);
 }
 
-
-
-
-
-
-
-
-
-
-
-
-
-
-
 void DebugMemoryHeap_FastClose (MemoryHeap heap)
 {
 	BOOL ok;
@@ -516,19 +353,6 @@ void DebugMemoryHeap_FastClose (MemoryHeap heap)
 
 	FREE (heap);
 }
-
-
-
-
-
-
-
-
-
-
-
-
-
 
 void *DebugMemoryHeap_FastMalloc  (MemoryHeap heap, unsigned size)
 {
@@ -550,11 +374,6 @@ void *DebugMemoryHeap_FastMalloc  (MemoryHeap heap, unsigned size)
 	return (memory);
 }
 
-
-
-
-
-
 void *DebugMemoryHeap_FastCalloc  (MemoryHeap heap, unsigned size)
 {
 	void *memory;
@@ -574,10 +393,6 @@ void *DebugMemoryHeap_FastCalloc  (MemoryHeap heap, unsigned size)
 
 	return (memory);
 }
-
-
-
-
 
 void *DebugMemoryHeap_FastRealloc (MemoryHeap heap, void *memory_block, unsigned size)
 {
@@ -599,10 +414,6 @@ void *DebugMemoryHeap_FastRealloc (MemoryHeap heap, void *memory_block, unsigned
 	return (memory);
 }
 
-
-
-
-
 char *DebugMemoryHeap_FastStrdup  (MemoryHeap heap, const char *string)
 {
 	char *copy_of_string;
@@ -617,10 +428,6 @@ char *DebugMemoryHeap_FastStrdup  (MemoryHeap heap, const char *string)
 
 	return (copy_of_string);
 }
-
-
-
-
 
 void  DebugMemoryHeap_FastFree    (MemoryHeap heap, void **memory_block_ptr)
 {
@@ -637,43 +444,8 @@ void  DebugMemoryHeap_FastFree    (MemoryHeap heap, void **memory_block_ptr)
 	*memory_block_ptr = NULL;
 }
 
-
-
-
-
-
-
-
-
-
-
 #endif // MEMORY_FAST
 #ifdef MEMORY_LOGGED
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
 
 typedef void *MemPtr;
 
@@ -695,9 +467,6 @@ struct CallStack
   unsigned function[CALL_STACK_SIZE];
 };
 
-
-
-
 struct AllocHeader
 {
 	unsigned char	block_marker_begin[HEADER_GUARD_SIZE];
@@ -714,184 +483,110 @@ struct AllocHeader
 	unsigned char	block_marker_end[HEADER_GUARD_SIZE];
 };
 
-
 struct AllocBuffer
 {
-  unsigned char alloc_buffer[DATA_GUARD_SIZE];
+	unsigned char alloc_buffer[DATA_GUARD_SIZE];
 };
-
-
-
-
-
-
-
-
-
-
-
 
 unsigned Debug_MemoryAllocated (void)
 {
-  return (debug_memory->total_user_memory);
+	return (debug_memory->total_user_memory);
 }
-
-
-
-
-
-
-
-
-
-
-
-
 
 static inline MemPtr Debug_HeaderToData (AllocHeader *alloc_header)
 {
-  return ((MemPtr) ((unsigned) alloc_header + sizeof (AllocHeader) + sizeof (AllocBuffer)));
+	return ((MemPtr) ((unsigned) alloc_header + sizeof (AllocHeader) + sizeof (AllocBuffer)));
 }
 
 static inline AllocBuffer *Debug_HeaderToFirstBuffer (AllocHeader *alloc_header)
 {
-  return ((AllocBuffer *) ((unsigned) alloc_header + sizeof (AllocHeader)));
+	return ((AllocBuffer *) ((unsigned) alloc_header + sizeof (AllocHeader)));
 }
 
 static inline AllocBuffer *Debug_HeaderToSecondBuffer (AllocHeader *alloc_header)
 {
-  return ((AllocBuffer *) ((unsigned) alloc_header + sizeof (AllocHeader) + sizeof (AllocBuffer) + alloc_header->size));
+	return ((AllocBuffer *) ((unsigned) alloc_header + sizeof (AllocHeader) + sizeof (AllocBuffer) + alloc_header->size));
 }
 
 static inline AllocHeader *Debug_DataToHeader (MemPtr user_data)
 {
-  return ((AllocHeader *) ((unsigned) user_data - sizeof (AllocHeader) - sizeof (AllocBuffer)));
+	return ((AllocHeader *) ((unsigned) user_data - sizeof (AllocHeader) - sizeof (AllocBuffer)));
 }
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
 
 int Debug_GuardedDataTest (AllocHeader * header, const char *file, int line_number)
 {
-  AllocBuffer *buffer_begin;
-  AllocBuffer *buffer_end;
-  int begin_ok;
-  int end_ok;
-  int i;
+	AllocBuffer *buffer_begin = Debug_HeaderToFirstBuffer (header);
+	AllocBuffer *buffer_end = Debug_HeaderToSecondBuffer (header);
 
-  buffer_begin = Debug_HeaderToFirstBuffer (header);
-  buffer_end = Debug_HeaderToSecondBuffer (header);
+	int begin_ok = 1;
+	int end_ok = 1;
+	for (int i = 0; i < DATA_GUARD_SIZE; i++)
+	{
+		if (buffer_begin->alloc_buffer[i] != i)
+			begin_ok = 0;
+		if (buffer_end->alloc_buffer[i] != i)
+			end_ok = 0;
+	}
 
-  begin_ok = 1;
-  end_ok = 1;
-  for (i = 0; i < DATA_GUARD_SIZE; i++) {
-    if (buffer_begin->alloc_buffer[i] != i)
-      begin_ok = 0;
-    if (buffer_end->alloc_buffer[i] != i)
-      end_ok = 0;
-  }
+	if (!begin_ok)
+	{
+		LOG_INDIRECT(header->filename, header->line_number, (LOG_MEMORY_FAIL, "(Allocator) Beginning of memory block corrupted"));
+		DebugCallStack_Show (LOG_MEMORY_FAIL, header->call_stack.function, CALL_STACK_SIZE);
+		LOG_INDIRECT(file, line_number, (LOG_MEMORY_FAIL, "(Freeer)    Beginning of memory block corrupted"));
+		DebugCallStack_Dump (LOG_MEMORY_FAIL);
+	}
+	if (!end_ok)
+	{
+		LOG_INDIRECT(header->filename, header->line_number, (LOG_MEMORY_FAIL, "(Allocator) End of memory block corrupted"));
+		DebugCallStack_Show (LOG_MEMORY_FAIL, header->call_stack.function, CALL_STACK_SIZE);
+		LOG_INDIRECT(file, line_number, (LOG_MEMORY_FAIL, "(Freeer)    End of memory block corrupted"));
+		DebugCallStack_Dump (LOG_MEMORY_FAIL);
+	}
 
-  if (!begin_ok) {
-    LOG_INDIRECT(header->filename, header->line_number, (LOG_MEMORY_FAIL, "(Allocator) Beginning of memory block corrupted"));
-    DebugCallStack_Show (LOG_MEMORY_FAIL, header->call_stack.function, CALL_STACK_SIZE);
-    LOG_INDIRECT(file, line_number, (LOG_MEMORY_FAIL, "(Freeer)    Beginning of memory block corrupted"));
-    DebugCallStack_Dump (LOG_MEMORY_FAIL);
-  }
-  if (!end_ok) {
-    LOG_INDIRECT(header->filename, header->line_number, (LOG_MEMORY_FAIL, "(Allocator) End of memory block corrupted"));
-    DebugCallStack_Show (LOG_MEMORY_FAIL, header->call_stack.function, CALL_STACK_SIZE);
-    LOG_INDIRECT(file, line_number, (LOG_MEMORY_FAIL, "(Freeer)    End of memory block corrupted"));
-    DebugCallStack_Dump (LOG_MEMORY_FAIL);
-  }
-
-  return (begin_ok && end_ok);
+	return (begin_ok && end_ok);
 }
-
-
-
-
-
-
-
-
-
-
-
 
 LONG _cdecl MemoryAccessExceptionFilter (LPEXCEPTION_POINTERS ep)
 {
+	if (ep->ExceptionRecord->ExceptionCode == EXCEPTION_ACCESS_VIOLATION)
+		return (EXCEPTION_EXECUTE_HANDLER);
 
-  if (ep->ExceptionRecord->ExceptionCode == EXCEPTION_ACCESS_VIOLATION)
-    return (EXCEPTION_EXECUTE_HANDLER);
-
-  if (ep->ExceptionRecord->ExceptionCode == EXCEPTION_STACK_OVERFLOW)
-    return (EXCEPTION_EXECUTE_HANDLER);
+	if (ep->ExceptionRecord->ExceptionCode == EXCEPTION_STACK_OVERFLOW)
+		return (EXCEPTION_EXECUTE_HANDLER);
 
 
-  return (EXCEPTION_CONTINUE_SEARCH);
+	return (EXCEPTION_CONTINUE_SEARCH);
 }
-
-
-
-
-
-
 
 int Debug_GuardedHeaderTest (AllocHeader * header, const char *file, int line_number)
 {
-  __try {
-    int ok;
-    int i;
+	__try
+	{
+		int ok = (header->reference_count == 1) && (header->filename);
 
-    ok = (header->reference_count == 1) && (header->filename);
+		for (int i = 0; i < HEADER_GUARD_SIZE; i++)
+		{
+			if ((header->block_marker_begin[i] != i) ||
+			   (header->block_marker_end[i] != i))
+				ok = 0;
+		}
 
-    for (i = 0; i < HEADER_GUARD_SIZE; i++) {
-      if ((header->block_marker_begin[i] != i) ||
-          (header->block_marker_end[i] != i))
-        ok = 0;
-    }
+		if (!ok)
+		{
+			LOG_INDIRECT(file, line_number, (LOG_MEMORY_FAIL, "(Invalid)    Operation on unallocated or corrupted memory block"));
+			DebugCallStack_Dump (LOG_MEMORY_FAIL);
+		}
 
-    if (!ok) {
-      LOG_INDIRECT(file, line_number, (LOG_MEMORY_FAIL, "(Invalid)    Operation on unallocated or corrupted memory block"));
-      DebugCallStack_Dump (LOG_MEMORY_FAIL);
-    }
+		return (ok);
+	}
+	__except (MemoryAccessExceptionFilter (GetExceptionInformation()))
+	{
+		LOG_INDIRECT (file, line_number, (LOG_MEMORY_FAIL, "(Invalid)    Operation on unallocated or corrupted memory block"));
+		DebugCallStack_Dump (LOG_MEMORY_FAIL);
 
-    return (ok);
-  }
-
-  __except (MemoryAccessExceptionFilter (GetExceptionInformation()))
-  {
-
-    LOG_INDIRECT (file, line_number, (LOG_MEMORY_FAIL, "(Invalid)    Operation on unallocated or corrupted memory block"));
-    DebugCallStack_Dump (LOG_MEMORY_FAIL);
-
-    return (0);
-  }
+		return (0);
+	}
 }
-
-
-
-
-
-
-
-
 
 bool DebugMemoryHeapContainsBlock (MemoryHeap heap, MemPtr memory_block_ptr)
 {
@@ -908,15 +603,6 @@ bool DebugMemoryHeapContainsBlock (MemoryHeap heap, MemPtr memory_block_ptr)
 	}
 }
 
-
-
-
-
-
-
-
-
-
 bool DebugMemoryHeapValid (MemoryHeap heap)
 {
 	__try
@@ -929,20 +615,6 @@ bool DebugMemoryHeapValid (MemoryHeap heap)
 		return (false);
 	}
 }
-
-
-
-
-
-
-
-
-
-
-
-
-
-
 
 MemPtr DebugMemory_GuardedBlockAlloc (
 	const char *module_name,
@@ -975,11 +647,6 @@ MemPtr DebugMemory_GuardedBlockAlloc (
 #else
 	debug_memory->total_from_exe += size;
 #endif
-
-
-
-
-
 
 	header->heap = heap;
 
@@ -1058,16 +725,6 @@ MemPtr DebugMemory_GuardedBlockAlloc (
 	return (Debug_HeaderToData (header));
 }
 
-
-
-
-
-
-
-
-
-
-
 void  DebugMemory_GuardedBlockFree    (
 	const char *module_name,
 	int module_line,
@@ -1089,10 +746,6 @@ void  DebugMemory_GuardedBlockFree    (
 
 	ASSERT_CLASS (LOG_MEMORY_FAIL, DebugMemoryHeapValid (heap));
 
-
-
-
-
 	if (!DebugMemoryHeapContainsBlock(heap, *memory_block_ptr)) return;
 
 	header = Debug_DataToHeader (mem);
@@ -1102,11 +755,6 @@ void  DebugMemory_GuardedBlockFree    (
 	if (Debug_GuardedHeaderTest (header, module_name, module_line))
 	{
 		Debug_GuardedDataTest (header, module_name, module_line);
-
-
-
-
-
 
 		if (header->next)
 		{
@@ -1163,18 +811,6 @@ void  DebugMemory_GuardedBlockFree    (
 
 	*memory_block_ptr = NULL;
 }
-
-
-
-
-
-
-
-
-
-
-
-
 
 MemPtr DebugMemory_GuardedBlockRealloc (
 	const char *module_name,
@@ -1239,20 +875,6 @@ MemPtr DebugMemory_GuardedBlockRealloc (
 	return (new_mem);
 }
 
-
-
-
-
-
-
-
-
-
-
-
-
-
-
 MemoryHeap DebugMemoryHeap_GuardedOpen (const char *file, int line, const char *name, unsigned size_initial, unsigned size_maximum)
 {
 	MemoryHeap heap;
@@ -1279,9 +901,6 @@ MemoryHeap DebugMemoryHeap_GuardedOpen (const char *file, int line, const char *
 	heap->max_user_memory = 0;
 	heap->max_overhead_memory = 0;
 
-
-
-
 	descriptor_ptr = debug_memory->default_heap;
 	while (descriptor_ptr->next)
 	{
@@ -1293,21 +912,6 @@ MemoryHeap DebugMemoryHeap_GuardedOpen (const char *file, int line, const char *
 
 	return (heap);
 }
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
 
 void DebugMemoryHeap_GuardedClose
 (
@@ -1327,49 +931,21 @@ void DebugMemoryHeap_GuardedClose
 	}
 }
 
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
 int Debug_GuardedValidate (const char *file, int line, void *p)
 {
-  AllocHeader *header;
+	AllocHeader *header;
 
-  header = Debug_DataToHeader (p);
+	header = Debug_DataToHeader (p);
 
-  if (! Debug_GuardedHeaderTest (header, file, line))
-    return (0);
+	if (! Debug_GuardedHeaderTest (header, file, line))
+		return (0);
 
-  else if (! Debug_GuardedDataTest (header, file, line))
-    return (0);
+	else if (! Debug_GuardedDataTest (header, file, line))
+		return (0);
 
-  else
-    return (1);
+	else
+		return (1);
 }
-
-
-
-
-
-
-
 
 int Debug_GuardedValidateHeap
 (
@@ -1378,69 +954,41 @@ int Debug_GuardedValidateHeap
     MemoryHeap *    /* heap */
 )
 {
-  MemPtr mem;
-  int ok                = 1;
-  AllocHeader * header  = debug_memory->default_heap->first_memory_block;
+	MemPtr mem;
+	int ok                = 1;
+	AllocHeader * header  = debug_memory->default_heap->first_memory_block;
 
-  while (header) {
-    mem = Debug_HeaderToData (header);
-    if (!Debug_GuardedValidate (file, line, mem))
-      ok = 0;
+	while (header)
+	{
+		mem = Debug_HeaderToData (header);
+		if (!Debug_GuardedValidate (file, line, mem))
+			ok = 0;
 
-    header = header->next;
-  }
+		header = header->next;
+	}
 
-  return ok;
+	return ok;
 }
-
-
-
-
-
-
-
-
 
 int Debug_GuardedValidateAll (const char *file, int line)
 {
-  AllocHeader *header;
-  MemPtr mem;
-  int ok;
+	AllocHeader *header;
+	MemPtr mem;
+	int ok = 1;
 
-  ok = 1;
+	header = debug_memory->default_heap->first_memory_block;
 
-  header = debug_memory->default_heap->first_memory_block;
+	while (header)
+	{
+		mem = Debug_HeaderToData (header);
+		if (!Debug_GuardedValidate (file, line, mem))
+		ok = 0;
 
-  while (header) {
-    mem = Debug_HeaderToData (header);
-    if (!Debug_GuardedValidate (file, line, mem))
-      ok = 0;
+		header = header->next;
+	}
 
-    header = header->next;
-  }
-
-  return (ok);
+	return (ok);
 }
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
 
 struct MemNode
 {
@@ -1454,107 +1002,77 @@ struct MemNode
 
 static MemNode *mem_node = NULL;
 
-
-
-
-
-
-
-
-
-
-
 void Debug_MemNodeAdd (const char *filename, int line_number, int size, CallStack call_stack)
 {
-  MemNode *node;
-  MemNode *new_node;
+	MemNode *node;
+	MemNode *new_node;
 
-  if (!mem_node) {
-    new_node = (MemNode *) malloc (sizeof (MemNode));
+	if (!mem_node)
+	{
+		new_node = (MemNode *) malloc (sizeof (MemNode));
 
-    if (!new_node)
-    {
-		LOG ((LOG_FATAL, "Out of Memory"));
-    }
-
-    new_node->next = NULL;
-    new_node->filename = filename;
-    new_node->line_number = line_number;
-    new_node->reference_count = 1;
-    new_node->call_stack = call_stack;
-	new_node->size = size;
-    mem_node = new_node;
-    return;
-  }
-
-
-  node = mem_node;
-  while (node) {
-    int match = 0;
-    int i;
-
-
-
-
-	if (node->size == size) {
-		match = 1;
-
-		for (i = 0; i < CALL_STACK_SIZE; i++) {
-			if (node->call_stack.function[i] != call_stack.function[i]) {
-				match = 0;
-				break;
-			}
+		if (!new_node)
+		{
+			LOG ((LOG_FATAL, "Out of Memory"));
 		}
+
+		new_node->next = NULL;
+		new_node->filename = filename;
+		new_node->line_number = line_number;
+		new_node->reference_count = 1;
+		new_node->call_stack = call_stack;
+		new_node->size = size;
+		mem_node = new_node;
+		return;
 	}
 
+	node = mem_node;
+	while (node)
+	{
+		int match = 0;
+		int i;
 
+		if (node->size == size)
+		{
+			match = 1;
 
+			for (int i = 0; i < CALL_STACK_SIZE; i++)
+			{
+				if (node->call_stack.function[i] != call_stack.function[i])
+				{
+					match = 0;
+					break;
+				}
+			}
+		}
 
+		if (match)
+		{
+			node->reference_count ++;
+			return;
+		}
 
+		if (node->next == NULL)
+		{
+			new_node = (MemNode *) malloc (sizeof (MemNode));
+			if (!new_node)
+			{
+				LOG ((LOG_FATAL, "Out of Memory"));
+			}
 
+			new_node->next = NULL;
+			new_node->filename = filename;
+			new_node->line_number = line_number;
+			new_node->reference_count = 1;
+			new_node->call_stack = call_stack;
+			new_node->size = size;
+			node->next = new_node;
+			return;
+		}
 
-
-
-
-
-
-
-
-
-
-
-
-    if (match) {
-      node->reference_count ++;
-      return;
-    }
-
-    if (node->next == NULL) {
-      new_node = (MemNode *) malloc (sizeof (MemNode));
-      if (!new_node)
-      {
-		LOG ((LOG_FATAL, "Out of Memory"));
-      }
-      new_node->next = NULL;
-      new_node->filename = filename;
-      new_node->line_number = line_number;
-      new_node->reference_count = 1;
-      new_node->call_stack = call_stack;
-	  new_node->size = size;
-      node->next = new_node;
-      return;
-    }
-
-    node = node->next;
-  }
+		node = node->next;
+	}
 }
-
-
-
-
-
-
-
 
 void Debug_MemNodeList (int turn_count)
 {
@@ -1572,7 +1090,8 @@ void Debug_MemNodeList (int turn_count)
 	node = mem_node;
 	int counter = 0;
 
-	if (node == NULL) {
+	if (node == NULL)
+	{
 		fprintf(leakFile, "None.\n");
 		fclose(leakFile);
 		return;
@@ -1581,12 +1100,12 @@ void Debug_MemNodeList (int turn_count)
 	fprintf(leakFile, "Num\tSize\tTotal\tStack\tAllocator\n");
 	fprintf(leakAltFile, "Num\tSize\tTotal\tStack\n");
 
-	while (node) {
+	while (node)
+	{
 		fprintf(leakFile, "%ld\t%ld\t%ld\t", node->reference_count, node->size,
 												node->reference_count * node->size);
 		fprintf(leakAltFile, "%ld\t%ld\t%ld\t", node->reference_count, node->size,
 												node->reference_count * node->size);
-
 
 		DebugCallStack_ShowToFile(LOG_MEMORY_LEAK, node->call_stack.function, CALL_STACK_SIZE, leakFile);
 		DebugCallStack_ShowToAltFile(LOG_MEMORY_LEAK, node->call_stack.function, CALL_STACK_SIZE, leakAltFile);
@@ -1597,46 +1116,26 @@ void Debug_MemNodeList (int turn_count)
 
 	fclose(leakFile);
 	fclose(leakAltFile);
-
 }
-
-
-
-
-
 
 void Debug_MemNodeOpen (void)
 {
-  mem_node = NULL;
+	mem_node = NULL;
 }
-
-
-
-
-
-
 
 void Debug_MemNodeClose ()
 {
-  MemNode *node;
-  MemNode *next_node;
+	MemNode *node;
+	MemNode *next_node;
 
-  node = mem_node;
-  while (node) {
-    next_node = node->next;
-    free (node);
-    node = next_node;
-  }
+	node = mem_node;
+	while (node)
+	{
+		next_node = node->next;
+		free (node);
+		node = next_node;
+	}
 }
-
-
-
-
-
-
-
-
-
 
 void DebugMemoryHeap_LeaksShow (MemoryHeap heap, int turn_count)
 {
@@ -1664,7 +1163,6 @@ void DebugMemoryHeap_LeaksShow (MemoryHeap heap, int turn_count)
 	Debug_MemNodeOpen();
 	header = heap->first_memory_block;
 
-
 	int counter = 0;
 	while (header)
 	{
@@ -1682,14 +1180,6 @@ void DebugMemoryHeap_LeaksShow (MemoryHeap heap, int turn_count)
 	Debug_MemNodeClose();
 }
 
-
-
-
-
-
-
-
-
 void DebugMemoryHeap_LeaksClear(MemoryHeap heap)
 {
 	AllocHeader		*header;
@@ -1700,7 +1190,6 @@ void DebugMemoryHeap_LeaksClear(MemoryHeap heap)
 
 		if (header->allocated_after_open)
 		{
-
 			header->allocated_after_open = FALSE;
 
 			debug_memory->total_user_memory -= header->size;
@@ -1733,10 +1222,6 @@ void DebugMemoryHeap_LeaksClear(MemoryHeap heap)
 	heap->max_user_memory = 0;
 	heap->max_overhead_memory = 0;
 }
-
-
-
-
 
 void DebugMemory_LeaksShow (int turn_count)
 {
@@ -1771,11 +1256,6 @@ void DebugMemory_LeaksShow (int turn_count)
 	}
 }
 
-
-
-
-
-
 void DebugMemory_LeaksClear(void)
 {
 	MemoryHeap heap;
@@ -1789,34 +1269,6 @@ void DebugMemory_LeaksClear(void)
 		heap = heap->next;
 	}
 }
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
 
 void *DebugMemory_GuardedMalloc  (const char *file, int line, unsigned size)
 {
@@ -1838,10 +1290,8 @@ void *DebugMemory_GuardedRealloc (const char *file, int line, void *memory_block
 
 char *DebugMemory_GuardedStrdup  (const char *file, int line, const char *string)
 {
-	char  *ptr;
-
 	DebugMemory_EnsureInitialised();
-	ptr = (char *) DebugMemory_GuardedBlockAlloc (file, line, debug_memory->default_heap, strlen (string) + 1, true, FILL_BYTE_STRDUP, debug_memory->open);
+	char  *ptr = (char *) DebugMemory_GuardedBlockAlloc (file, line, debug_memory->default_heap, strlen (string) + 1, true, FILL_BYTE_STRDUP, debug_memory->open);
 	strcpy (ptr, string);
 	return (ptr);
 }
@@ -1851,22 +1301,6 @@ void  DebugMemory_GuardedFree    (const char *file, int line, void **memory_bloc
 	DebugMemory_EnsureInitialised();
 	DebugMemory_GuardedBlockFree (file, line, debug_memory->default_heap, memory_block_ptr);
 }
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
 
 void *DebugMemoryHeap_GuardedMalloc  (const char *file, int line, MemoryHeap heap, unsigned size)
 {
@@ -1903,20 +1337,6 @@ void  DebugMemoryHeap_GuardedFree    (const char *file, int line, MemoryHeap hea
 	DebugMemory_GuardedBlockFree (file, line, heap, memory_block_ptr);
 }
 
-
-
-
-
-
-
-
-
-
-
-
-
-
-
 #ifdef _DEBUG_MEMORY
 
 void * CDECL operator new (size_t size)
@@ -1924,31 +1344,16 @@ void * CDECL operator new (size_t size)
 	return (MALLOC (size));
 }
 
-
-
-
-
-
 void CDECL operator delete (void *mem)
 {
-
 	if (mem)
 	{
 		FREE (mem);
 	}
-
-
-
-
-
-
 }
 
-#endif
+#endif // _DEBUG_MEMORY
 
+#endif // MEMORY_LOGGED
 
-
-
-#endif MEMORY_LOGGED
-
-#endif
+#endif // _DEBUG

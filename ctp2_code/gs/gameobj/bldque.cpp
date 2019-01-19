@@ -124,6 +124,27 @@ BuildQueue::BuildQueue()
 {
 }
 
+BuildQueue::BuildQueue(BuildQueue & copy)
+:
+	m_list(copy.m_list),
+	m_owner(copy.m_owner),
+	m_city(copy.m_owner),
+	m_wonderStarted(copy.m_owner),
+	m_wonderStopped(copy.m_owner),
+	m_wonderComplete(copy.m_owner),
+	m_frontWhenBuilt(NULL),
+	m_settler_pending(copy.m_owner),
+	m_popcoststobuild_pending(copy.m_owner),          // EMOD
+	m_name(NULL)
+{
+	SetName(copy.m_name);
+	if(copy.m_frontWhenBuilt != NULL)
+	{
+		m_frontWhenBuilt = m_list->GetHead();
+	}
+}
+
+
 BuildQueue::~BuildQueue()
 {
 	// m_frontWhenBuilt not deleted: reference only

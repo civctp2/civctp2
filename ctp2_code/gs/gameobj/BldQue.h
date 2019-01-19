@@ -137,6 +137,7 @@ private:
 public:
 
 	BuildQueue();
+	BuildQueue(BuildQueue & copy);
 	~BuildQueue();
 
 	bool IsSettlerPending() const { return m_settler_pending; }
