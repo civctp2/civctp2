@@ -222,6 +222,7 @@
       <DataExecutionPrevention />
       <ImportLibrary>.\Crater_0/Crater.lib</ImportLibrary>
       <TargetMachine>MachineX86</TargetMachine>
+      <ImageHasSafeExceptionHandlers>false</ImageHasSafeExceptionHandlers>
     </Link>
     <Bscmake>
       <SuppressStartupBanner>true</SuppressStartupBanner>
