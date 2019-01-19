@@ -1448,6 +1448,7 @@ void main_InitializeLogs(void)
 
 int main(int argc, char **argv)
 {
+	atexit(AtExitProc);
 	int const   r = CivMain(argc, argv);
 
 	if (r < 0)

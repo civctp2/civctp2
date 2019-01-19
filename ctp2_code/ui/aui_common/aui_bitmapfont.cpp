@@ -61,7 +61,7 @@
 #if defined(_JAPANESE)
 #include "japanese.h"
 #endif
-#pragma GCC optimize 0
+
 namespace
 {
     bool    SUPPORT_MBCS      = false;

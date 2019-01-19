@@ -586,7 +586,6 @@ CivApp::CivApp()
     m_appLoaded             (false),
     m_dbLoaded              (false),
     m_gameLoaded            (false),
-    m_saveDBInGameFile      (false),
     m_aiFinishedThisTurn    (true),
     m_inBackground          (false),
     m_isKeyboardScrolling   (false),
@@ -602,8 +601,8 @@ void CivApp::InitializeAppUI(void)
 
 	if (g_useIntroMovie && !g_no_shell)
 	{
-  		intromoviewin_Initialize();
-    	intromoviewin_DisplayIntroMovie();
+		intromoviewin_Initialize();
+		intromoviewin_DisplayIntroMovie();
 	}
 	else
 	{

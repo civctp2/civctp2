@@ -123,14 +123,11 @@ public:
 	sint32		QuitToSPShell(void);
 	sint32		RestartGame(void);
 	sint32		RestartGameSameMap(void);
-	bool		SaveDBInGameFile(void) const
-    {
-        return m_saveDBInGameFile;
-    }
+
 	void		SetInBackground(bool in = true)
-    {
-        m_inBackground = in;
-    }
+	{
+		m_inBackground = in;
+	}
 	sint32		StartSpriteEditor(void);
 	sint32		StartGame(void);
 	void		StopKeyboardScrolling(sint32 key);
@@ -155,7 +152,6 @@ private:
 	bool		m_appLoaded;
 	bool		m_dbLoaded;
 	bool		m_gameLoaded;
-	bool		m_saveDBInGameFile;
 	bool		m_aiFinishedThisTurn;
 	bool		m_inBackground;
 	bool		m_isKeyboardScrolling;

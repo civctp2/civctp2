@@ -170,7 +170,6 @@ class GameFile
 public:
 	GameFile();
 
-	uint32 SaveDB(CivArchive &archive);
 	uint32 Save(MBCHAR const * filepath, SaveInfo *info);
 	uint32 Restore(MBCHAR const * filepath);
 
