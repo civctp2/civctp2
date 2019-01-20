@@ -37,8 +37,6 @@
 #define k_TICKS_PER_GENERIC_FRAME	100
 #define k_TICKS_PER_SCROLL_FRAME	50
 
-#define _NO_GAME_WATCH
-
 class aui_Surface;
 
 int ui_Initialize(void);

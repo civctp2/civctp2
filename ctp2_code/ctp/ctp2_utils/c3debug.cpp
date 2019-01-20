@@ -19,7 +19,6 @@
 // Compiler flags
 //
 // _DEBUG           (automatically set when choosing the Debug configuration)
-// _NO_GAME_WATCH
 // USE_LOGGING      Enable logging for the release/final version.
 //                  The debug version has logging enabled always.
 //
@@ -46,13 +45,6 @@
 #include "civ3_main.h"
 #include "netconsole.h"
 #include "c3files.h"
-
-#ifndef _NO_GAME_WATCH
-
-#include "GameWatch.h"
-
-extern int g_gameWatchID;
-#endif
 
 uint32 g_debug_mask = k_DBG_NONE;
 static int g_useMask;
@@ -91,15 +83,10 @@ sint32 *c3debug_GetLogLinesThisFile(void)
 
 void c3debug_InitDebugLog()
 {
-	SECURITY_ATTRIBUTES		sa;
+	c3files_CreateDirectory("logs");
 
-	sa.nLength = sizeof(sa);
-	sa.lpSecurityDescriptor = NULL;
-	sa.bInheritHandle = TRUE;
-
-	CreateDirectory((LPCTSTR)"logs", &sa);
-
-	WIN32_FIND_DATA	fileData;
+#if defined(WIN32)
+	WIN32_FIND_DATA fileData;
 	MBCHAR path[_MAX_PATH];
 
 	strcpy(path, "logs" FILE_SEP "*.*");
@@ -117,6 +104,21 @@ void c3debug_InitDebugLog()
 
 		FindClose(lpFileList);
 	}
+#else
+	DIR *dir = opendir("logs");
+	Assert(dir);
+	struct dirent *dent = NULL;
+
+	while((dent = readdir(dir)))
+	{
+		int unlinkRetVal;
+		sprintf(fileName, "logs%s%s", FILE_SEP, dent->d_name);
+		unlinkRetVal = unlink(fileName);
+		Assert(unlinkRetVal == 0);
+	}
+
+	closedir(dir);
+#endif
 
 	s_logFileNumber = 0;
 	s_logLinesThisFile = 0;
@@ -271,30 +273,6 @@ static LONG _cdecl c3debug_CivExceptionHandler (LPEXCEPTION_POINTERS exception_p
 
 	DPRINTF(k_DBG_FIX, ("Exception Stack Trace:\n%s\n", s));
 
-#ifndef _NO_GAME_WATCH
-
-	char userName[256];
-	DWORD size = 256;
-	userName[0] = '\0';
-	GetUserName(userName, &size);
-
-	char computerName[256];
-	size = 256;
-	computerName[0] = '\0';
-	GetComputerName(computerName, &size);
-
-	SYSTEMTIME localTime;
-	memset(&localTime, 0, sizeof(localTime));
-	GetLocalTime(&localTime);
-
-	char stamp[1024];
-	sprintf(stamp, "Civilization III CTP - %s on %s at %d/%d/%d %d:%d:%d", userName, computerName,
-		localTime.wMonth, localTime.wDay, localTime.wYear, localTime.wHour,
-		localTime.wMinute, localTime.wSecond);
-
-	gameWatch.EndGame(g_gameWatchID, stamp);
-#endif
-
 	return EXCEPTION_CONTINUE_SEARCH;
 }
 
@@ -309,7 +287,7 @@ void c3debug_ExceptionExecute(CivExceptionFunction function)
 		DoFinalCleanup();
 	}
 }
-#endif
+#endif // WIN32
 
 void c3debug_Assert(char const *s, char const * file, int line)
 {
@@ -317,6 +295,7 @@ void c3debug_Assert(char const *s, char const * file, int line)
 	DPRINTF(k_DBG_FIX, ("Stack Trace: '%s'\n", c3debug_StackTrace()));
 
 #if defined(_DEBUG)
+#if defined(WIN32)
 	do
 	{
 		if (_CrtDbgReport(_CRT_ASSERT, file, line, NULL, s) == 1)
@@ -325,6 +304,10 @@ void c3debug_Assert(char const *s, char const * file, int line)
 		}
 	}
 	while (0);
+#else
+	fprintf(stderr, "Assertion (%s) Failed in File:%s, Line:%ld\n", s, file, line);
+	assert(0);
+#endif
 #endif
 }
 

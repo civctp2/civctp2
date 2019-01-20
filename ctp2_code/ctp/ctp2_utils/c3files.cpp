@@ -238,7 +238,7 @@ sint32 c3files_fflush(FILE *file)
 }
 
 
-sint32 c3files_getfilesize(C3DIR dir, MBCHAR const *filename)
+sint32 c3files_getfilesize(C3DIR dir, const MBCHAR *filename)
 {
 	sint32 filesize = 0;
 
@@ -307,7 +307,7 @@ uint8 *c3files_loadbinaryfile(C3DIR dir, MBCHAR const * filename, sint32 *size)
 
 bool c3files_PathIsValid(const MBCHAR *path)
 {
-#if defined(_WIN32)
+#if defined(WIN32)
 	struct _stat tmpstat;
 	return !_stat(path, &tmpstat);
 #else
@@ -318,7 +318,7 @@ bool c3files_PathIsValid(const MBCHAR *path)
 
 bool c3files_CreateDirectory(const MBCHAR *path)
 {
-#if defined(_WIN32)
+#if defined(WIN32)
 	return CreateDirectory(path, NULL) != FALSE; // BOOL to bool conversion
 #else
 	mode_t mask = 0777;
@@ -355,14 +355,14 @@ void c3files_StripSpaces(MBCHAR * s)
 
 bool c3files_getfilelist(C3SAVEDIR dirID, MBCHAR *ext, PointerList<MBCHAR> *list)
 {
-#ifdef _WIN32
+#if defined(WIN32)
 	MBCHAR strbuf[256];
 #endif
 	MBCHAR path[_MAX_PATH];
 
 	g_civPaths->GetSavePath(dirID, path);
 
-#ifdef _WIN32
+#if defined(WIN32)
 	if (ext) sprintf(strbuf,"*.%s",ext);
 	else strcpy(strbuf, "*.*");
 
@@ -418,7 +418,7 @@ bool c3files_getfilelist(C3SAVEDIR dirID, MBCHAR *ext, PointerList<MBCHAR> *list
 	return true;
 }
 
-#ifdef _WIN32
+#if defined(WIN32)
 bool c3files_getfilelist_ex(C3SAVEDIR dirID, MBCHAR *ext, PointerList<WIN32_FIND_DATA> *list)
 {
 	MBCHAR strbuf[256];
@@ -515,9 +515,6 @@ const MBCHAR *c3files_GetCTPHomeDir()
 
 bool c3files_HasLegalCD()
 {
-//#if defined(__linux__)
-//	bool success = true;
-//#else
 	bool success = false;
 
 	if (g_soundManager)
@@ -536,7 +533,7 @@ bool c3files_HasLegalCD()
 
 		if (!success)
 		{
-#ifdef _WIN32
+#if defined(WIN32)
 			int const rval = MessageBox
 			                    (g_c3ui ? g_c3ui->TheHWND() : NULL,
 			                     appstrings_GetString(APPSTR_INSERTCDROM),
@@ -558,7 +555,7 @@ bool c3files_HasLegalCD()
 
 				// Do not annoy the user with more messages after cancelling
 				exit(-1);
-#ifdef _WIN32
+#if defined(WIN32)
 			}
 #endif
 
@@ -573,7 +570,7 @@ bool c3files_HasLegalCD()
 	{
 		g_soundManager->InitRedbook();
 	}
-//#endif
+
 	return success;
 }
 
@@ -809,7 +806,7 @@ namespace
 //----------------------------------------------------------------------------
 void c3files_GetCDDrives(void)
 {
-#ifdef _WIN32 // #ifndef USE_SDL
+#if defined(WIN32) // #ifndef USE_SDL
 	MBCHAR          drivepath[4];   // letter + : + dir seperator + zero
 	strcpy(drivepath, " :" FILE_SEP);
 
@@ -859,7 +856,7 @@ void c3files_GetCDDrives(void)
 //----------------------------------------------------------------------------
 MBCHAR * c3files_GetVolumeName(DriveIdType id)
 {
-#ifdef WIN32
+#if defined(WIN32)
 	MBCHAR          drivepath[4];   // letter + : + dir seperator + zero
 	strcpy(drivepath, " :" FILE_SEP);
 	drivepath[0] = id;
@@ -974,7 +971,7 @@ bool c3files_FindCDByName(MBCHAR const * name)
 
 	for (DriveIdType i = DRIVE_FIRST; (i <= DRIVE_LAST) && !g_hasCD; ++i)
 	{
-#ifdef _WIN32 // #ifndef USE_SDL
+#if defined(WIN32) // #ifndef USE_SDL
 		if (IsCD[static_cast<int>(i - DRIVE_FIRST)])
 		{
 #endif
@@ -991,7 +988,7 @@ bool c3files_FindCDByName(MBCHAR const * name)
 					g_hasCD = true;
 				}
 			}
-#ifdef _WIN32 // #ifndef USE_SDL
+#if defined(WIN32) // #ifndef USE_SDL
 		}
 #endif
 	}

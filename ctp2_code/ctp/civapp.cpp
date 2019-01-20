@@ -25,9 +25,6 @@
 // _MEMORYLOGGING
 // - Generates extra memory debug information when both set, and _DEBUG set.
 //
-// _NO_GAME_WATCH
-// - Generates a game watch file when not set.
-//
 // USE_SDL
 // - Use SDL as replacement for DirectX.
 //
@@ -273,11 +270,6 @@
 #include "WonderMovieRecord.h"
 #include "workwin.h"
 
-#ifndef _NO_GAME_WATCH
-#include "GameWatch.h"
-#include "GWCiv.h"
-#endif
-
 #include <thread>
 #include <chrono>
 
@@ -393,10 +385,6 @@ sint32 g_oldRandSeed = FALSE;
 ProgressWindow *g_theProgressWindow = NULL;
 
 bool    g_tempLeakCheck = false;
-
-#ifndef _NO_GAME_WATCH
-int g_gameWatchID = -1;
-#endif
 
 void InitializeGreatLibrary();
 void InitializeSoundPF();
@@ -1283,11 +1271,6 @@ sint32 CivApp::InitializeApp(HINSTANCE hInstance, int iCmdShow)
 	g_civPaths->InitCDPath();
 	GreatLibrary::Initialize_Great_Library_Data();
 
-#ifndef _NO_GAME_WATCH
-	gameWatch.DeliverySystem("gwfile", g_theProfileDB->GetGameWatchDirectory());
-	gameWatch.RecordingSystem("gwciv");
-#endif
-
 	display_Initialize(hInstance, iCmdShow);
 	init_keymap();
 	(void) ui_Initialize();
@@ -1648,11 +1631,6 @@ sint32 CivApp::InitializeGameUI(void)
 
 sint32 CivApp::InitializeGame(CivArchive &archive)
 {
-#ifndef _NO_GAME_WATCH
-	SPLASH_STRING("Initializing Game Watch...");
-	g_gameWatchID = gameWatch.StartGame();
-#endif // _NO_GAME_WATCH
-
 	ProgressWindow::BeginProgress(
 		g_theProgressWindow,
 		"InitProgressWindow",
@@ -2275,32 +2253,6 @@ void CivApp::CleanupGame(bool keepScenInfo)
 
 #if defined(_DEBUG) && defined(_MEMORYLOGGING) && defined(_DEBUG_MEMORY)
 	DebugMemory_LeaksShow(8675209);
-#endif
-
-#ifndef _NO_GAME_WATCH
-
-	if (!g_no_exit_action) {
-		char userName[256];
-		DWORD size = 256;
-		userName[0] = '\0';
-		GetUserName(userName, &size);
-
-		char computerName[256];
-		size = 256;
-		computerName[0] = '\0';
-		GetComputerName(computerName, &size);
-
-		SYSTEMTIME localTime;
-		memset(&localTime, 0, sizeof(localTime));
-		GetLocalTime(&localTime);
-
-		char stamp[1024];
-		sprintf(stamp, "Civilization III CTP - %s on %s at %d/%d/%d %d:%d:%d", userName, computerName,
-		        localTime.wMonth, localTime.wDay, localTime.wYear, localTime.wHour,
-		        localTime.wMinute, localTime.wSecond);
-
-		gameWatch.EndGame(g_gameWatchID, stamp);
-	}
 #endif
 
 	m_gameLoaded            = false;

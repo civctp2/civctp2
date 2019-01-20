@@ -108,11 +108,6 @@
 #include "Wormhole.h"
 #include <zlib.h>
 
-#ifndef _NO_GAME_WATCH
-#include "GameWatch.h"
-extern int g_gameWatchID;
-#endif
-
 #ifndef WIN32
 #include <sys/types.h>
 #include <dirent.h>
@@ -509,13 +504,6 @@ uint32 GameFile::Save(const MBCHAR *filepath, SaveInfo *info)
 
 	c3files_fclose(fpSave);
 
-#ifndef _NO_GAME_WATCH
-	char gameWatchFilename[_MAX_PATH];
-	sprintf(gameWatchFilename, "%s.gw", filepath);
-
-	gameWatch.SaveGame(g_gameWatchID, gameWatchFilename);
-#endif
-
 	DPRINTF(k_DBG_FILE,
 	        ("Time to save game data = %4.2f seconds\n", (double)(clock() - start) / CLOCKS_PER_SEC)
 	       );
@@ -860,13 +848,6 @@ uint32 GameFile::Restore(const MBCHAR *filepath)
 	g_civApp->InitializeGame(archive);
 
 	g_theProgressWindow->StartCountingTo( 1090 );
-
-#ifndef _NO_GAME_WATCH
-	char gameWatchFilename[_MAX_PATH];
-	sprintf(gameWatchFilename, "%s.gw", filepath);
-
-	g_gameWatchID = gameWatch.LoadGame(gameWatchFilename);
-#endif
 
 	DPRINTF(k_DBG_FILE,
 	        ("Time to load game data = %4.2f seconds\n", (double)(clock() - start) / CLOCKS_PER_SEC)

@@ -106,7 +106,7 @@ template <class T> class PointerList;
 // Class declarations
 //----------------------------------------------------------------------------
 
-FILE*		c3files_fopen(C3DIR dirID, MBCHAR const *, MBCHAR const *, bool checkScenario = true);
+FILE*		c3files_fopen(C3DIR dirID, const MBCHAR *, const MBCHAR *, bool checkScenario = true);
 FILE*		c3files_freopen(const MBCHAR *, const MBCHAR *, FILE *);
 sint32		c3files_fclose(FILE *);
 
@@ -130,8 +130,8 @@ sint32		c3files_ferror(FILE *);
 void		c3files_clearerr(FILE *);
 sint32		c3files_fflush(FILE *);
 
-sint32		c3files_getfilesize(C3DIR dir, MBCHAR const * filename);
-uint8 *     c3files_loadbinaryfile(C3DIR dir, MBCHAR const *filename, sint32 *size);
+sint32		c3files_getfilesize(C3DIR dir, const MBCHAR * filename);
+uint8 *     c3files_loadbinaryfile(C3DIR dir, const MBCHAR *filename, sint32 *size);
 
 bool		c3files_PathIsValid(const MBCHAR *path);
 bool		c3files_CreateDirectory(const MBCHAR *path);
@@ -139,7 +139,7 @@ bool		c3files_CreateDirectory(const MBCHAR *path);
 void		c3files_StripSpaces(MBCHAR *s);
 
 bool		c3files_getfilelist(C3SAVEDIR dirID, MBCHAR *ext, PointerList<MBCHAR> *plist);
-#ifdef _WIN32
+#if defined(WIN32)
 bool		c3files_getfilelist_ex(C3SAVEDIR dirID, MBCHAR *ext, PointerList<WIN32_FIND_DATA> *plist);
 #endif
 

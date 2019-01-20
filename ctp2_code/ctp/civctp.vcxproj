@@ -175,7 +175,7 @@
       <InlineFunctionExpansion>AnySuitable</InlineFunctionExpansion>
       <FavorSizeOrSpeed>Speed</FavorSizeOrSpeed>
       <AdditionalIncludeDirectories>..\os\include;..\os\common;..\os\win32;..\ctp\ctp2_utils\;..\ctp\ctp2_rsrc\;..\ctp\debugtools;..\libs\freetype\lib;..\libs\freetype\utils\;..\libs\freetype\win32\;..\libs\freetype\utils;..\libs\freetype\win32;..\ui\interface;..\ui\netshell;..\robotcom\incom;..\robot\utility;..\robot\pathing;..\libs\freetype\;..\gfx\spritesys\;..\gfx\tilesys\;..\gfx\gfx_utils\;..\gs\newdb;..\gs\database;..\gs\events;..\gs\fileio\;..\gs\gameobj\;..\gs\utility\;..\gs\world\;..\net\io\;..\net\general\;..\ui\aui_utils\;..\ui\aui_sdl\;..\ui\aui_directx\;..\ui\aui_ctp2\;..\ui\aui_common\;..\libs\tiff\;..\libs\anet\h\;..\mm\;..\robotcom\backdoor;..\gs\slic;..\gfx\layers;..\mapgen;..\ui\freetype;..\sound;..\GameWatch\gamewatch;..\GameWatch\gwciv;..\libs\miles;..\ctp\fingerprint;..\libs\zlib;..\gs\outcom;..\ctp\;..\ui\aui_common;..\ui\ldl;..\ui\slic_debug;..\ai;..\ai\CityManagement;..\ai\diplomacy;..\ai\mapanalysis;..\ai\strategy\agents;..\ai\strategy\goals;..\ai\strategy\scheduler;..\ai\strategy\squads;%(AdditionalIncludeDirectories)</AdditionalIncludeDirectories>
-      <PreprocessorDefinitions>_PLAYTEST;_AI_BACKDOOR;_DEBUG;_TEST;WIN32;_WINDOWS;__GW_USE_IMPORT;__GWCIV_USE_IMPORT;%(PreprocessorDefinitions)</PreprocessorDefinitions>
+      <PreprocessorDefinitions>_PLAYTEST;_AI_BACKDOOR;_DEBUG;_TEST;WIN32;_WINDOWS;%(PreprocessorDefinitions)</PreprocessorDefinitions>
       <MinimalRebuild>true</MinimalRebuild>
       <RuntimeLibrary>MultiThreadedDLL</RuntimeLibrary>
       <PrecompiledHeader>Use</PrecompiledHeader>
@@ -221,7 +221,7 @@
     <ClCompile>
       <Optimization>Disabled</Optimization>
       <AdditionalIncludeDirectories>..\os\include;..\os\common;..\os\win32;..\ctp\ctp2_utils\;..\ctp\ctp2_rsrc\;..\ctp\debugtools;..\libs\freetype\lib;..\libs\freetype\utils\;..\libs\freetype\win32\;..\libs\freetype\utils;..\libs\freetype\win32;..\ui\interface;..\ui\netshell;..\robot\utility;..\robot\pathing;..\robot\aibackdoor;..\libs\freetype\;..\gfx\spritesys\;..\gfx\tilesys\;..\gfx\gfx_utils\;..\gs\database;..\gs\fileio\;..\gs\gameobj\;..\gs\utility\;..\gs\world\;..\net\io\;..\net\general\;..\ui\aui_utils\;..\ui\aui_sdl\;..\ui\aui_directx\;..\ui\aui_ctp2\;..\ui\aui_common\;..\libs\tiff\;..\libs\anet\h\;..\mm\;..\robotcom\backdoor;..\gs\slic;..\gfx\layers;..\mapgen;..\ui\freetype;..\sound;..\GameWatch\gamewatch;..\GameWatch\gwciv;..\libs\miles;..\ctp\fingerprint;..\libs\zlib;..\ui\slic_debug;..\gs\outcom;..\ctp\;..\ui\aui_common;..\ui\ldl;..\gs\events;..\gs\newdb;..\ai\diplomacy;..\ai;..\ai\mapanalysis;..\ai\strategy\scheduler;..\ai\strategy\agents;..\ai\strategy\goals;..\ai\strategy\squads;..\ai\citymanagement;%(AdditionalIncludeDirectories)</AdditionalIncludeDirectories>
-      <PreprocessorDefinitions>_PLAYTEST;_DEBUG;_AI_BACKDOOR;WIN32;_WINDOWS;__GW_USE_IMPORT;__GWCIV_USE_IMPORT;_DEBUGTOOLS;_DEBUG_MEMORY;%(PreprocessorDefinitions)</PreprocessorDefinitions>
+      <PreprocessorDefinitions>_PLAYTEST;_DEBUG;_AI_BACKDOOR;WIN32;_WINDOWS;_DEBUGTOOLS;_DEBUG_MEMORY;%(PreprocessorDefinitions)</PreprocessorDefinitions>
       <MinimalRebuild>true</MinimalRebuild>
       <BasicRuntimeChecks>EnableFastChecks</BasicRuntimeChecks>
       <SmallerTypeCheck>false</SmallerTypeCheck>
@@ -276,7 +276,7 @@
       <IntrinsicFunctions>true</IntrinsicFunctions>
       <FavorSizeOrSpeed>Speed</FavorSizeOrSpeed>
       <AdditionalIncludeDirectories>..\os\include\;..\os\common;..\os\win32;..\ctp\ctp2_utils\;..\ctp\ctp2_rsrc\;..\ctp\debugtools;..\libs\freetype\lib;..\libs\freetype\utils\;..\libs\freetype\win32\;..\libs\freetype\utils;..\libs\freetype\win32;..\ui\interface;..\ui\netshell;..\robot\utility;..\robot\pathing;..\robot\aibackdoor;..\libs\freetype\;..\gfx\spritesys\;..\gfx\tilesys\;..\gfx\gfx_utils\;..\gs\database;..\gs\fileio\;..\gs\gameobj\;..\gs\utility\;..\gs\world\;..\net\io\;..\net\general\;..\ui\aui_utils\;..\ui\aui_sdl\;..\ui\aui_directx\;..\ui\aui_ctp2\;..\ui\aui_common\;..\libs\tiff\;..\libs\anet\h\;..\mm\;..\robotcom\backdoor;..\gs\slic;..\gfx\layers;..\mapgen;..\ui\freetype;..\sound;..\GameWatch\gamewatch;..\GameWatch\gwciv;..\libs\miles;..\ctp\fingerprint;..\libs\zlib;..\ui\slic_debug;..\gs\outcom;..\ctp\;..\ui\aui_common;..\ui\ldl;..\gs\events;..\gs\newdb;..\ai\diplomacy;..\ai;..\ai\mapanalysis;..\ai\strategy\scheduler;..\ai\strategy\agents;..\ai\strategy\goals;..\ai\strategy\squads;..\ai\citymanagement;%(AdditionalIncludeDirectories)</AdditionalIncludeDirectories>
-      <PreprocessorDefinitions>__GW_USE_IMPORT;__GWCIV_USE_IMPORT;WIN32;NDEBUG;_WINDOWS;_BFR_;%(PreprocessorDefinitions)</PreprocessorDefinitions>
+      <PreprocessorDefinitions>WIN32;NDEBUG;_WINDOWS;_BFR_;%(PreprocessorDefinitions)</PreprocessorDefinitions>
       <RuntimeLibrary>MultiThreadedDLL</RuntimeLibrary>
       <PrecompiledHeader>Use</PrecompiledHeader>
       <PrecompiledHeaderFile>c3.h</PrecompiledHeaderFile>
@@ -322,7 +322,7 @@
     <ClCompile>
       <Optimization>Disabled</Optimization>
       <AdditionalIncludeDirectories>..\os\include;..\os\common;..\os\win32;..\ctp\ctp2_utils\;..\ctp\ctp2_rsrc\;..\ctp\debugtools;..\libs\freetype\lib;..\libs\freetype\utils\;..\libs\freetype\win32\;..\libs\freetype\utils;..\libs\freetype\win32;..\ui\interface;..\ui\netshell;..\robot\utility;..\robot\pathing;..\robot\aibackdoor;..\libs\freetype\;..\gfx\spritesys\;..\gfx\tilesys\;..\gfx\gfx_utils\;..\gs\database;..\gs\fileio\;..\gs\gameobj\;..\gs\utility\;..\gs\world\;..\net\io\;..\net\general\;..\ui\aui_utils\;..\ui\aui_sdl\;..\ui\aui_directx\;..\ui\aui_ctp2\;..\ui\aui_common\;..\libs\tiff\;..\libs\anet\h\;..\mm\;..\robotcom\backdoor;..\gs\slic;..\gfx\layers;..\mapgen;..\ui\freetype;..\sound;..\GameWatch\gamewatch;..\GameWatch\gwciv;..\libs\miles;..\ctp\fingerprint;..\libs\zlib;..\ui\slic_debug;..\gs\outcom;..\ctp\;..\ui\aui_common;..\ui\ldl;..\gs\events;..\gs\newdb;..\ai\diplomacy;..\ai;..\ai\mapanalysis;..\ai\strategy\scheduler;..\ai\strategy\agents;..\ai\strategy\goals;..\ai\strategy\squads;..\ai\citymanagement;%(AdditionalIncludeDirectories)</AdditionalIncludeDirectories>
-      <PreprocessorDefinitions>__GW_USE_IMPORT;__GWCIV_USE_IMPORT;WIN32;NDEBUG;_WINDOWS;USE_NDBG;%(PreprocessorDefinitions)</PreprocessorDefinitions>
+      <PreprocessorDefinitions>WIN32;NDEBUG;_WINDOWS;USE_NDBG;%(PreprocessorDefinitions)</PreprocessorDefinitions>
       <MinimalRebuild>true</MinimalRebuild>
       <RuntimeLibrary>MultiThreadedDebugDLL</RuntimeLibrary>
       <PrecompiledHeader>Use</PrecompiledHeader>
@@ -372,7 +372,7 @@
       <IntrinsicFunctions>true</IntrinsicFunctions>
       <FavorSizeOrSpeed>Speed</FavorSizeOrSpeed>
       <AdditionalIncludeDirectories>..\os\include\;..\os\common;..\os\win32;..\ctp\ctp2_utils\;..\ctp\ctp2_rsrc\;..\ctp\debugtools;..\libs\freetype\lib;..\libs\freetype\utils\;..\libs\freetype\win32\;..\libs\freetype\utils;..\libs\freetype\win32;..\ui\interface;..\ui\netshell;..\robot\utility;..\robot\pathing;..\robot\aibackdoor;..\libs\freetype\;..\gfx\spritesys\;..\gfx\tilesys\;..\gfx\gfx_utils\;..\gs\database;..\gs\fileio\;..\gs\gameobj\;..\gs\utility\;..\gs\world\;..\net\io\;..\net\general\;..\ui\aui_utils\;..\ui\aui_sdl\;..\ui\aui_directx\;..\ui\aui_ctp2\;..\ui\aui_common\;..\libs\tiff\;..\libs\anet\h\;..\mm\;..\robotcom\backdoor;..\gs\slic;..\gfx\layers;..\mapgen;..\ui\freetype;..\sound;..\GameWatch\gamewatch;..\GameWatch\gwciv;..\libs\miles;..\ctp\fingerprint;..\libs\zlib;..\ui\slic_debug;..\gs\outcom;..\ctp\;..\ui\aui_common;..\ui\ldl;..\gs\events;..\gs\newdb;..\ai\diplomacy;..\ai;..\ai\mapanalysis;..\ai\strategy\scheduler;..\ai\strategy\agents;..\ai\strategy\goals;..\ai\strategy\squads;..\ai\citymanagement;%(AdditionalIncludeDirectories)</AdditionalIncludeDirectories>
-      <PreprocessorDefinitions>__GW_USE_IMPORT;__GWCIV_USE_IMPORT;WIN32;NDEBUG;_WINDOWS;_BFR_;USE_LOGGING;%(PreprocessorDefinitions)</PreprocessorDefinitions>
+      <PreprocessorDefinitions>WIN32;NDEBUG;_WINDOWS;_BFR_;USE_LOGGING;%(PreprocessorDefinitions)</PreprocessorDefinitions>
       <RuntimeLibrary>MultiThreadedDLL</RuntimeLibrary>
       <PrecompiledHeader>Use</PrecompiledHeader>
       <PrecompiledHeaderFile>c3.h</PrecompiledHeaderFile>
@@ -418,7 +418,7 @@
     <ClCompile>
       <Optimization>Disabled</Optimization>
       <AdditionalIncludeDirectories>..\os\include;..\os\common;..\os\win32;..\ctp\ctp2_utils\;..\ctp\ctp2_rsrc\;..\ctp\debugtools;..\libs\freetype\lib;..\libs\freetype\utils\;..\libs\freetype\win32\;..\libs\freetype\utils;..\libs\freetype\win32;..\ui\interface;..\ui\netshell;..\robot\utility;..\robot\pathing;..\robot\aibackdoor;..\libs\freetype\;..\gfx\spritesys\;..\gfx\tilesys\;..\gfx\gfx_utils\;..\gs\database;..\gs\fileio\;..\gs\gameobj\;..\gs\utility\;..\gs\world\;..\net\io\;..\net\general\;..\ui\aui_utils\;..\ui\aui_sdl\;..\ui\aui_directx\;..\ui\aui_ctp2\;..\ui\aui_common\;..\libs\tiff\;..\libs\anet\h\;..\mm\;..\robotcom\backdoor;..\gs\slic;..\gfx\layers;..\mapgen;..\ui\freetype;..\sound;..\GameWatch\gamewatch;..\GameWatch\gwciv;..\libs\miles;..\ctp\fingerprint;..\libs\zlib;..\ui\slic_debug;..\gs\outcom;..\ctp\;..\ui\aui_common;..\ui\ldl;..\gs\events;..\gs\newdb;..\ai\diplomacy;..\ai;..\ai\mapanalysis;..\ai\strategy\scheduler;..\ai\strategy\agents;..\ai\strategy\goals;..\ai\strategy\squads;..\ai\citymanagement;%(AdditionalIncludeDirectories)</AdditionalIncludeDirectories>
-      <PreprocessorDefinitions>_PLAYTEST;_DEBUG;_AI_BACKDOOR;WIN32;_WINDOWS;__GW_USE_IMPORT;__GWCIV_USE_IMPORT;_DEBUGTOOLS;_DEBUG_MEMORY;%(PreprocessorDefinitions)</PreprocessorDefinitions>
+      <PreprocessorDefinitions>_PLAYTEST;_DEBUG;_AI_BACKDOOR;WIN32;_WINDOWS;_DEBUGTOOLS;_DEBUG_MEMORY;%(PreprocessorDefinitions)</PreprocessorDefinitions>
       <MinimalRebuild>true</MinimalRebuild>
       <RuntimeLibrary>MultiThreadedDebugDLL</RuntimeLibrary>
       <PrecompiledHeader>Use</PrecompiledHeader>
@@ -477,7 +477,7 @@ rem                                                if                           
       <IntrinsicFunctions>true</IntrinsicFunctions>
       <FavorSizeOrSpeed>Size</FavorSizeOrSpeed>
       <AdditionalIncludeDirectories>..\os\include;..\os\common;..\os\win32;..\ctp\ctp2_utils\;..\ctp\ctp2_rsrc\;..\ctp\debugtools;..\libs\freetype\lib;..\libs\freetype\utils\;..\libs\freetype\win32\;..\libs\freetype\utils;..\libs\freetype\win32;..\ui\interface;..\ui\netshell;..\robot\utility;..\robot\pathing;..\robot\aibackdoor;..\libs\freetype\;..\gfx\spritesys\;..\gfx\tilesys\;..\gfx\gfx_utils\;..\gs\database;..\gs\fileio\;..\gs\gameobj\;..\gs\utility\;..\gs\world\;..\net\io\;..\net\general\;..\ui\aui_utils\;..\ui\aui_sdl\;..\ui\aui_directx\;..\ui\aui_ctp2\;..\ui\aui_common\;..\libs\tiff\;..\libs\anet\h\;..\mm\;..\robotcom\backdoor;..\gs\slic;..\gfx\layers;..\mapgen;..\ui\freetype;..\sound;..\GameWatch\gamewatch;..\GameWatch\gwciv;..\libs\miles;..\ctp\fingerprint;..\libs\zlib;..\ui\slic_debug;..\gs\outcom;..\ctp\;..\ui\aui_common;..\ui\ldl;..\gs\events;..\gs\newdb;..\ai\diplomacy;..\ai;..\ai\mapanalysis;..\ai\strategy\scheduler;..\ai\strategy\agents;..\ai\strategy\goals;..\ai\strategy\squads;..\ai\citymanagement;%(AdditionalIncludeDirectories)</AdditionalIncludeDirectories>
-      <PreprocessorDefinitions>NDEBUG;WIN32;_WINDOWS;__GW_USE_IMPORT;__GWCIV_USE_IMPORT;%(PreprocessorDefinitions)</PreprocessorDefinitions>
+      <PreprocessorDefinitions>NDEBUG;WIN32;_WINDOWS;%(PreprocessorDefinitions)</PreprocessorDefinitions>
       <RuntimeLibrary>MultiThreadedDLL</RuntimeLibrary>
       <PrecompiledHeader>Use</PrecompiledHeader>
       <PrecompiledHeaderFile>c3.h</PrecompiledHeaderFile>
@@ -526,7 +526,7 @@ rem                                                if                           
       <IntrinsicFunctions>true</IntrinsicFunctions>
       <FavorSizeOrSpeed>Size</FavorSizeOrSpeed>
       <AdditionalIncludeDirectories>..\os\include;..\os\common;..\os\win32;..\ctp\ctp2_utils\;..\ctp\ctp2_rsrc\;..\ctp\debugtools;..\libs\freetype\lib;..\libs\freetype\utils\;..\libs\freetype\win32\;..\libs\freetype\utils;..\libs\freetype\win32;..\ui\interface;..\ui\netshell;..\robot\utility;..\robot\pathing;..\robot\aibackdoor;..\libs\freetype\;..\gfx\spritesys\;..\gfx\tilesys\;..\gfx\gfx_utils\;..\gs\database;..\gs\fileio\;..\gs\gameobj\;..\gs\utility\;..\gs\world\;..\net\io\;..\net\general\;..\ui\aui_utils\;..\ui\aui_sdl\;..\ui\aui_directx\;..\ui\aui_ctp2\;..\ui\aui_common\;..\libs\tiff\;..\libs\anet\h\;..\mm\;..\robotcom\backdoor;..\gs\slic;..\gfx\layers;..\mapgen;..\ui\freetype;..\sound;..\GameWatch\gamewatch;..\GameWatch\gwciv;..\libs\miles;..\ctp\fingerprint;..\libs\zlib;..\ui\slic_debug;..\gs\outcom;..\ctp\;..\ui\aui_common;..\ui\ldl;..\gs\events;..\gs\newdb;..\ai\diplomacy;..\ai;..\ai\mapanalysis;..\ai\strategy\scheduler;..\ai\strategy\agents;..\ai\strategy\goals;..\ai\strategy\squads;..\ai\citymanagement;%(AdditionalIncludeDirectories)</AdditionalIncludeDirectories>
-      <PreprocessorDefinitions>NDEBUG;WIN32;_WINDOWS;__GW_USE_IMPORT;__GWCIV_USE_IMPORT;_PLAYTEST;%(PreprocessorDefinitions)</PreprocessorDefinitions>
+      <PreprocessorDefinitions>NDEBUG;WIN32;_WINDOWS;_PLAYTEST;%(PreprocessorDefinitions)</PreprocessorDefinitions>
       <RuntimeLibrary>MultiThreadedDLL</RuntimeLibrary>
       <PrecompiledHeader>Use</PrecompiledHeader>
       <PrecompiledHeaderFile>c3.h</PrecompiledHeaderFile>

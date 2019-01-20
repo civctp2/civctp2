@@ -1840,29 +1840,32 @@ void CleanSpritesCommand::Execute(sint32 argc, char **argv)
 	MBCHAR *name;
 	MBCHAR saveName[_MAX_PATH];
 
-	for (i=0; i<numUnits; i++) {
+	for (i = 0; i < numUnits; i++)
+	{
 		usg = new UnitSpriteGroup(GROUPTYPE_UNIT);
 		name = unitFileNames[i];
 		usg->LoadFull(name);
-		sprintf(saveName, "Output\\%s", name);
+		sprintf(saveName, "Output%s%s", FILE_SEP, name);
 		usg->Save(saveName,k_SPRITEFILE_VERSION0,SPRDATA_REGULAR);
 		delete usg;
 	}
 
-	for (i=0; i<numGoods; i++) {
+	for (i = 0; i < numGoods; i++)
+	{
 		gsg = new GoodSpriteGroup(GROUPTYPE_GOOD);
 		name = goodFileNames[i];
 		gsg->LoadFull(name);
-		sprintf(saveName, "Output\\%s", name);
+		sprintf(saveName, "Output%s%s", FILE_SEP, name);
 		gsg->Save(saveName,k_SPRITEFILE_VERSION0,SPRDATA_REGULAR);
 		delete gsg;
 	}
 
-	for (i=0; i<numCities; i++) {
+	for (i = 0; i < numCities; i++)
+	{
 		usg = new UnitSpriteGroup(GROUPTYPE_CITY);
 		name = cityFileNames[i];
 		usg->LoadFull(name);
-		sprintf(saveName, "Output\\%s", name);
+		sprintf(saveName, "Output" FILE_SEP "%s", name);
 		usg->Save(saveName,k_SPRITEFILE_VERSION0,SPRDATA_REGULAR);
 		delete usg;
 	}
