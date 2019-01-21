@@ -318,20 +318,46 @@ void World::SetRandomGood(const sint32 x, const sint32 y)
 	Cell *cell = m_map[x][y];
 
 	sint32 i;
-	for(i = 0; i < k_MAX_GOODS_TYPES_PER_TERRAIN; i++) {
-		if(g_theTerrainDB->Get(cell->m_terrain_type)->GetNumResources() > i) {
+	for(i = 0; i < k_MAX_GOODS_TYPES_PER_TERRAIN; i++)
+	{
+		if(g_theTerrainDB->Get(cell->m_terrain_type)->GetNumResources() > i)
+		{
 			prob[i] = g_theTerrainDB->Get(cell->m_terrain_type)->GetResources(i)->GetProbability();
 			totalProb += prob[i];
-		} else {
+		}
+		else
+		{
 			prob[i] = 0;
 		}
 	}
 
-	Assert(totalProb <= 1.0);
+#if defined(_DEBUG) || defined(USE_LOGGING)
+	// Rounding error
+	if(static_cast<sint32>(totalProb *100) > 100)
+	{
+		DPRINTF(k_DBG_FIX, ("The acummulated probability of goods on terrain %s is to with %f too high. The goods are:\n", g_theTerrainDB->Get(cell->m_terrain_type)->GetNameText(), totalProb));
+		for(i = 0; i < k_MAX_GOODS_TYPES_PER_TERRAIN; i++)
+		{
+			if(g_theTerrainDB->Get(cell->m_terrain_type)->GetNumResources() > i)
+			{
+				DPRINTF(k_DBG_FIX, ("Good: %s Probability: %f\n", g_theTerrainDB->Get(cell->m_terrain_type)->GetResources(i)->GetNameText(), g_theTerrainDB->Get(cell->m_terrain_type)->GetResources(i)->GetProbability()));
+			}
+			else
+			{
+				break;
+			}
+		}
+	}
+
+	Assert(static_cast<sint32>(totalProb * 100) <= 100);
+#endif
+
 	totalProb = 0;
 	sint32 val = g_rand->Next(1000);
-	for(i = 0; i < k_MAX_GOODS_TYPES_PER_TERRAIN; i++) {
-		if(val < (totalProb + prob[i]) * 1000) {
+	for(i = 0; i < k_MAX_GOODS_TYPES_PER_TERRAIN; i++)
+	{
+		if(val < (totalProb + prob[i]) * 1000)
+		{
 			SetGood(x,y,i+1);
 			return;
 		}

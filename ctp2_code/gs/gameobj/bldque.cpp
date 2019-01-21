@@ -123,7 +123,7 @@ BuildQueue::BuildQueue()
 	m_name                      (NULL)
 {
 }
-
+/* Doesn't seem to copy m_list properly
 BuildQueue::BuildQueue(BuildQueue & copy)
 :
 	m_list(copy.m_list),
@@ -142,7 +142,7 @@ BuildQueue::BuildQueue(BuildQueue & copy)
 	{
 		m_frontWhenBuilt = m_list->GetHead();
 	}
-}
+}*/
 
 
 BuildQueue::~BuildQueue()
