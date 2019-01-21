@@ -254,7 +254,7 @@ int tracklen_GetTrackLengths(DWORD *trackLenBuf, char whichDrive)
 	tracklen_DPRINT((tracklen_buf,  "GetTrackLengths: Opened cdrom device\n" ));
 
 #ifdef USE_SDL
-	iRet = tracklen_GetTrackLengthsViaHandle( trackLenBuf, cdrom );
+	int iRet = tracklen_GetTrackLengthsViaHandle( trackLenBuf, cdrom );
 	SDL_CDClose(cdrom);
 #else
 	iRet = tracklen_GetTrackLengthsViaHandle( trackLenBuf, mop.wDeviceID);
