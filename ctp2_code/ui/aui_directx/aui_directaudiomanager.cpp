@@ -9,12 +9,10 @@
 DS3DLISTENER	listenerTemplate;
 DS3DBUFFER		ds3dBufferTemplate;
 
-
 aui_DirectAudioManager::aui_DirectAudioManager( sint32 maxNumSounds )
 {
 	InitCommon( maxNumSounds );
 }
-
 
 AUI_ERRCODE aui_DirectAudioManager::InitCommon( sint32 maxNumOfActiveSounds )
 {
@@ -55,7 +53,6 @@ AUI_ERRCODE aui_DirectAudioManager::InitCommon( sint32 maxNumOfActiveSounds )
 	return AUI_ERRCODE_OK;
 }
 
-
 aui_DirectAudioManager::~aui_DirectAudioManager()
 {
 	if( m_dsHandle )
@@ -76,7 +73,6 @@ aui_DirectAudioManager::~aui_DirectAudioManager()
 		m_inactiveSoundResource = NULL;
 	}
 }
-
 
 BOOL aui_DirectAudioManager::CreateDSInterface( HWND hwnd )
 {
@@ -155,13 +151,7 @@ BOOL aui_DirectAudioManager::InitDS( HWND hwnd )
 	return ( 0 );
 }
 
-
-
-
-
-
-
-aui_Sound *aui_DirectAudioManager::AttachSound( MBCHAR *fileName, sint32 flag )
+aui_Sound *aui_DirectAudioManager::AttachSound( const MBCHAR *fileName, sint32 flag )
 {
 	if( !m_useAudio ) return NULL;
 
@@ -172,13 +162,12 @@ aui_Sound *aui_DirectAudioManager::AttachSound( MBCHAR *fileName, sint32 flag )
 	return newSoundObject;
 }
 
-aui_Sound *aui_DirectAudioManager::Load( MBCHAR *filename )
+aui_Sound *aui_DirectAudioManager::Load( const MBCHAR *filename )
 {
 	return AttachSound( filename, 0 );
 }
 
-
-AUI_ERRCODE aui_DirectAudioManager::DetachSound( MBCHAR *fileName )
+AUI_ERRCODE aui_DirectAudioManager::DetachSound( const MBCHAR *fileName )
 {
 	return Unload( fileName );
 }
@@ -188,8 +177,7 @@ LPDIRECTSOUND aui_DirectAudioManager::GetdDSHandle()
 	return m_dsHandle;
 }
 
-
-AUI_ERRCODE aui_DirectAudioManager::PlaySound( MBCHAR *name )
+AUI_ERRCODE aui_DirectAudioManager::PlaySound( const MBCHAR *name )
 {
 	DWORD dwStatus;
 	aui_DirectSound *soundObject = NULL;
@@ -210,5 +198,4 @@ AUI_ERRCODE aui_DirectAudioManager::PlaySound( MBCHAR *name )
 
 	return AUI_ERRCODE_OK;
 }
-
 #endif

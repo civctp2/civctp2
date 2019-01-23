@@ -40,7 +40,7 @@
 aui_TabGroup::aui_TabGroup(
 	AUI_ERRCODE *retval,
 	uint32 id,
-	MBCHAR *ldlBlock )
+	const MBCHAR *ldlBlock )
 	:
 	aui_ImageBase( ldlBlock ),
 	aui_TextBase( ldlBlock, (const MBCHAR *)NULL ),
@@ -78,9 +78,9 @@ aui_TabGroup::aui_TabGroup(
 }
 
 
-AUI_ERRCODE aui_TabGroup::InitCommonLdl( MBCHAR *ldlBlock )
+AUI_ERRCODE aui_TabGroup::InitCommonLdl( const MBCHAR *ldlBlock )
 {
-    ldl_datablock * block = aui_Ldl::FindDataBlock(ldlBlock);
+	ldl_datablock * block = aui_Ldl::FindDataBlock(ldlBlock);
 	Assert( block != NULL );
 	if ( !block ) return AUI_ERRCODE_LDLFINDDATABLOCKFAILED;
 

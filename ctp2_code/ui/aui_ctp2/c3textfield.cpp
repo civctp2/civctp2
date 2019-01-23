@@ -18,7 +18,7 @@ extern C3UI			*g_c3ui;
 C3TextField::C3TextField(
 	AUI_ERRCODE *retval,
 	uint32 id,
-	MBCHAR *ldlBlock,
+	const MBCHAR *ldlBlock,
 	ControlActionCallback *ActionFunc,
 	void *cookie )
 	:
@@ -41,8 +41,8 @@ C3TextField::C3TextField(
 	sint32 y,
 	sint32 width,
 	sint32 height,
-	MBCHAR *pattern,
-	MBCHAR *text,
+	const MBCHAR *pattern,
+	const MBCHAR *text,
 	ControlActionCallback *ActionFunc,
 	void *cookie )
 :
@@ -58,7 +58,7 @@ C3TextField::C3TextField(
 	Assert( AUI_SUCCESS(*retval) );
 }
 
-AUI_ERRCODE C3TextField::InitCommonLdl( MBCHAR *ldlBlock )
+AUI_ERRCODE C3TextField::InitCommonLdl( const MBCHAR *ldlBlock )
 {
     ldl_datablock * block = aui_Ldl::FindDataBlock(ldlBlock);
 	Assert( block != NULL );

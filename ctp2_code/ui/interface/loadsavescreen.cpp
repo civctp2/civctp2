@@ -232,31 +232,10 @@ static SaveInfo	*s_tempSaveInfo = NULL;
 
 void loadsavescreen_HotseatCallback(sint32 launch, sint32 player,
 									 sint32 civ, BOOL human,
-									 MBCHAR *name, MBCHAR *email)
+									 const MBCHAR *name, const MBCHAR *email)
 {
 	if(launch) {
 		g_civApp->PostLoadSaveGameAction(s_tempPath);
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
 	} else {
 
 		g_hsPlayerSetup[player].civ = civ;
@@ -344,11 +323,11 @@ void loadsavescreen_TribeScreenActionCallback(aui_Control *control, uint32 actio
 
 			for(sint32 i = 0; i < k_MAX_PLAYERS; i++)
 			{
-				MBCHAR		*civName;
-				MBCHAR		*dbString;
+				const MBCHAR		*civName;
+				const MBCHAR		*dbString;
 
 				civName = s_tempSaveInfo->civList[i];
-				dbString = (MBCHAR *)g_theStringDB->GetNameStr(g_theCivilisationDB->Get(tribeIndex)->GetPluralCivName());
+				dbString = g_theStringDB->GetNameStr(g_theCivilisationDB->Get(tribeIndex)->GetPluralCivName());
 				if(strlen(civName) > 0)
 				{
 					if(!stricmp(dbString, civName))
@@ -500,7 +479,7 @@ void loadsavescreen_PlayersScreenActionCallback(aui_Control *control, uint32 act
 
 							for (size_t i = 0; i < k_MAX_PLAYERS; ++i)
 							{
-								MBCHAR *    civName = s_tempSaveInfo->civList[i];
+								const MBCHAR *    civName = s_tempSaveInfo->civList[i];
 
 								if (strlen(civName) > 0)
 								{
@@ -561,19 +540,13 @@ void loadsavescreen_PlayersScreenActionCallback(aui_Control *control, uint32 act
 	allocated::clear(s_tempSaveInfo);
 }
 
-void loadsavescreen_BeginLoadProcess(SaveInfo *saveInfo, MBCHAR *directoryPath)
+void loadsavescreen_BeginLoadProcess(SaveInfo *saveInfo,  const MBCHAR *directoryPath)
 {
 	MBCHAR		path[_MAX_PATH];
 	sprintf(path, "%s%s%s", directoryPath, FILE_SEP, saveInfo->fileName);
 
-	if (saveInfo->startInfoType != STARTINFOTYPE_NONE) {
-
-
-
-
-
-
-
+	if (saveInfo->startInfoType != STARTINFOTYPE_NONE)
+	{
 		if (saveInfo->scenarioName != NULL && strlen(saveInfo->scenarioName) > 0) {
 
 			Scenario		*scen;
@@ -642,11 +615,6 @@ void loadsavescreen_BeginLoadProcess(SaveInfo *saveInfo, MBCHAR *directoryPath)
 		 saveInfo->startInfoType == STARTINFOTYPE_CIVSFIXED ||
 		 saveInfo->startInfoType == STARTINFOTYPE_NOLOCS)) {
 
-
-
-
-
-
 		strcpy(s_tempPath, path);
 		allocated::reassign(s_tempSaveInfo, new SaveInfo(saveInfo));
 
@@ -686,7 +654,7 @@ void loadsavescreen_LoadGame(void)
 	}
 }
 
-void loadsavescreen_SaveGame(MBCHAR *usePath, MBCHAR *useName)
+void loadsavescreen_SaveGame(const MBCHAR *usePath, const MBCHAR *useName)
 {
 
 	SaveInfo		*saveInfo = g_loadsaveWindow->GetSaveInfoToSave();

@@ -29,7 +29,7 @@ aui_Ranger *aui_Ranger::ms_mouseFocusRanger = NULL;
 aui_Ranger::aui_Ranger(
 	AUI_ERRCODE *retval,
 	uint32 id,
-	MBCHAR *ldlBlock,
+	const MBCHAR *ldlBlock,
 	ControlActionCallback *ActionFunc,
 	void *cookie )
 	:
@@ -77,7 +77,7 @@ aui_Ranger::aui_Ranger(
 }
 
 
-AUI_ERRCODE aui_Ranger::InitCommonLdl( MBCHAR *ldlBlock )
+AUI_ERRCODE aui_Ranger::InitCommonLdl( const MBCHAR *ldlBlock )
 {
     ldl_datablock * block = aui_Ldl::FindDataBlock(ldlBlock);
 	Assert( block != NULL );
@@ -247,7 +247,7 @@ aui_Button *aui_Ranger::CreateArrowButton(const MBCHAR *ldlBlock,
 	return arrowButton;
 }
 
-AUI_ERRCODE aui_Ranger::CreateButtonsAndThumb(MBCHAR *ldlBlock)
+AUI_ERRCODE aui_Ranger::CreateButtonsAndThumb(const MBCHAR *ldlBlock)
 {
 	static MBCHAR block[k_AUI_LDL_MAXBLOCK + 1];
 

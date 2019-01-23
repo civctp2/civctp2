@@ -20,29 +20,29 @@ class aui_StringTable : aui_Base
 {
 public:
 	aui_StringTable
-    (
+	(
 		AUI_ERRCODE *   retval,
-		MBCHAR const *  ldlBlock
-    );
+		const MBCHAR *  ldlBlock
+	);
 	aui_StringTable
-    (
+	(
 		AUI_ERRCODE *   retval,
 		size_t          numStrings = 0
-    );
+	);
 	virtual ~aui_StringTable();
 
 	sint32	    GetNumStrings( void ) const
-    {
-        return static_cast<sint32>(m_Strings.size());
-    };
+	{
+		return static_cast<sint32>(m_Strings.size());
+	};
 
-	MBCHAR *    GetString(sint32 index) const;
+	const MBCHAR *    GetString(sint32 index) const;
 	AUI_ERRCODE	SetString(const MBCHAR * text, sint32 index);
 
 private:
 	size_t		FindNumStringsFromLdl(ldl_datablock * block);
 
-    std::vector<MBCHAR *>   m_Strings;
+	std::vector<MBCHAR *>   m_Strings;
 };
 
 #endif

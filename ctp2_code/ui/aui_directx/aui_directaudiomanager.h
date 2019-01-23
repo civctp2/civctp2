@@ -27,11 +27,6 @@
 #define DEFAULT_NUMBER_OF_ACTIVE_SOUND 16
 #define MAX_NUMBER_OF_INACTIVE_SOUND 255
 
-
-
-
-
-
 class aui_DirectAudioManager : public aui_AudioManager
 {
 public:
@@ -43,7 +38,7 @@ protected:
 	AUI_ERRCODE InitCommon( sint32 maxNumSounds );
 
 public:
-	virtual aui_Sound	*Load( MBCHAR *filename );
+	virtual aui_Sound	*Load( const MBCHAR *filename );
 
 	virtual AUI_ERRCODE Unload( aui_Sound *sound )
 	{
@@ -51,27 +46,27 @@ public:
 			m_activeSoundResource->Unload( (aui_DirectSound *)sound ) :
 			AUI_ERRCODE_OK;
 	}
-	virtual AUI_ERRCODE Unload( MBCHAR *sound )
+	virtual AUI_ERRCODE Unload( const MBCHAR *sound )
 	{
 		return m_useAudio ?
 			m_activeSoundResource->Unload( sound ) :
 			AUI_ERRCODE_OK;
 	}
 
-	virtual AUI_ERRCODE AddSearchPath( MBCHAR *path )
+	virtual AUI_ERRCODE AddSearchPath( const MBCHAR *path )
 	{
 		return m_useAudio ?
 			m_activeSoundResource->AddSearchPath( path ) :
 			AUI_ERRCODE_OK;
 	}
-	virtual AUI_ERRCODE RemoveSearchPath( MBCHAR *path )
+	virtual AUI_ERRCODE RemoveSearchPath( const MBCHAR *path )
 	{
 		return m_useAudio ?
 			m_activeSoundResource->RemoveSearchPath( path ) :
 			AUI_ERRCODE_OK;
 	}
 
-	virtual AUI_ERRCODE PlaySound( MBCHAR *name );
+	virtual AUI_ERRCODE PlaySound( const MBCHAR *name );
 
 	void Update( void );
 
@@ -79,8 +74,8 @@ public:
 	void StartMusic( sint32 trackNumber ) {};
 
 	LPDIRECTSOUND GetdDSHandle( void );
-	aui_Sound *AttachSound( MBCHAR *filename, sint32 flag );
-	AUI_ERRCODE DetachSound( MBCHAR *filename );
+	aui_Sound *AttachSound( const MBCHAR *filename, sint32 flag );
+	AUI_ERRCODE DetachSound( const MBCHAR *filename );
 
 protected:
 	aui_Resource<aui_DirectSound>	*m_activeSoundResource;

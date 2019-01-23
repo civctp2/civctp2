@@ -45,14 +45,14 @@
 ns_CivListBox::ns_CivListBox(
 	AUI_ERRCODE *retval,
 	uint32 id,
-	MBCHAR *ldlBlock,
+	const MBCHAR *ldlBlock,
 	ControlActionCallback *ActionFunc,
 	void *cookie )
 	:
 	aui_ImageBase( ldlBlock),
-	aui_TextBase( ldlBlock, (MBCHAR *)NULL ),
+	aui_TextBase( ldlBlock, (const MBCHAR *)NULL ),
 	aui_ListBox(),
-	PatternBase(ldlBlock, (MBCHAR *)NULL)
+	PatternBase(ldlBlock, (const MBCHAR *)NULL)
 {
 	*retval = aui_Region::InitCommonLdl( id, ldlBlock );
 	Assert( AUI_SUCCESS(*retval) );
@@ -87,7 +87,7 @@ ns_CivListBox::ns_CivListBox(
 	sint32 y,
 	sint32 width,
 	sint32 height,
-	MBCHAR *pattern,
+	const MBCHAR *pattern,
 	sint32 bevelWidth,
 	sint32 bevelType,
 	ControlActionCallback *ActionFunc,
@@ -102,7 +102,7 @@ ns_CivListBox::ns_CivListBox(
 	Assert( AUI_SUCCESS(*retval) );
 	if ( !AUI_SUCCESS(*retval) ) return;
 
-	*retval = aui_SoundBase::InitCommon( (MBCHAR **)NULL );
+	*retval = aui_SoundBase::InitCommon( (const MBCHAR **)NULL );
 	Assert( AUI_SUCCESS(*retval) );
 	if ( !AUI_SUCCESS(*retval) ) return;
 
@@ -124,7 +124,7 @@ ns_CivListBox::ns_CivListBox(
 }
 
 
-AUI_ERRCODE ns_CivListBox::InitCommonLdl( MBCHAR *ldlBlock )
+AUI_ERRCODE ns_CivListBox::InitCommonLdl(const MBCHAR *ldlBlock )
 {
 	ldl_datablock * block = aui_Ldl::FindDataBlock(ldlBlock);
 	Assert( block != NULL );
@@ -154,10 +154,10 @@ AUI_ERRCODE ns_CivListBox::InitCommon( sint32 bevelWidth, sint32 bevelType )
 }
 
 
-AUI_ERRCODE ns_CivListBox::CreateRangersAndHeader( MBCHAR *ldlBlock )
+AUI_ERRCODE ns_CivListBox::CreateRangersAndHeader( const MBCHAR *ldlBlock )
 {
 	AUI_ERRCODE errcode = AUI_ERRCODE_OK;
-	MBCHAR		*patternFilename = NULL;
+	const MBCHAR		*patternFilename = NULL;
 
 	if (m_pattern)
 		patternFilename = m_pattern->GetFilename();
@@ -412,7 +412,7 @@ AUI_ERRCODE ns_CivListBox::DrawThis(
 ns_HPlayerListBox::ns_HPlayerListBox(
 	AUI_ERRCODE *retval,
 	uint32 id,
-	MBCHAR *ldlBlock,
+	const MBCHAR *ldlBlock,
 	ControlActionCallback *ActionFunc,
 	void *cookie )
 	:
@@ -436,7 +436,7 @@ ns_HPlayerListBox::ns_HPlayerListBox(
 	sint32 y,
 	sint32 width,
 	sint32 height,
-	MBCHAR *pattern,
+	const MBCHAR *pattern,
 	sint32 bevelWidth,
 	sint32 bevelType,
 	ControlActionCallback *ActionFunc,
@@ -467,14 +467,10 @@ ns_HPlayerListBox::~ns_HPlayerListBox()
 	m_pane->ChildList()->DeleteAll();
 }
 
-
-
-
-AUI_ERRCODE ns_HPlayerListBox::InitCommonLdl( MBCHAR *ldlBlock )
+AUI_ERRCODE ns_HPlayerListBox::InitCommonLdl( const MBCHAR *ldlBlock )
 {
 	return InitCommon();
 }
-
 
 AUI_ERRCODE ns_HPlayerListBox::InitCommon( void )
 {

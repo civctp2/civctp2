@@ -70,7 +70,7 @@ c3_ListBox *c3_ListBox::ms_mouseFocusListBox = NULL;
 c3_ListBox::c3_ListBox(
 	AUI_ERRCODE *retval,
 	uint32 id,
-	MBCHAR *ldlBlock,
+	const MBCHAR *ldlBlock,
 	ControlActionCallback *ActionFunc,
 	void *cookie )
 	:
@@ -111,7 +111,7 @@ c3_ListBox::c3_ListBox(
 	sint32 y,
 	sint32 width,
 	sint32 height,
-	MBCHAR *pattern,
+	const MBCHAR *pattern,
 	sint32 bevelWidth,
 	sint32 bevelType,
 	ControlActionCallback *ActionFunc,
@@ -126,7 +126,7 @@ c3_ListBox::c3_ListBox(
 	Assert( AUI_SUCCESS(*retval) );
 	if ( !AUI_SUCCESS(*retval) ) return;
 
-	*retval = aui_SoundBase::InitCommon( (MBCHAR **)NULL );
+	*retval = aui_SoundBase::InitCommon( (const MBCHAR **)NULL );
 	Assert( AUI_SUCCESS(*retval) );
 	if ( !AUI_SUCCESS(*retval) ) return;
 
@@ -165,9 +165,9 @@ c3_ListBox::~c3_ListBox()
 }
 
 
-AUI_ERRCODE c3_ListBox::InitCommonLdl( MBCHAR *ldlBlock )
+AUI_ERRCODE c3_ListBox::InitCommonLdl(const MBCHAR *ldlBlock )
 {
-    ldl_datablock * block = aui_Ldl::FindDataBlock(ldlBlock);
+	ldl_datablock * block = aui_Ldl::FindDataBlock(ldlBlock);
 	Assert( block != NULL );
 	if ( !block ) return AUI_ERRCODE_LDLFINDDATABLOCKFAILED;
 
@@ -195,10 +195,10 @@ AUI_ERRCODE c3_ListBox::InitCommon(sint32 bevelWidth, sint32 bevelType)
 
 
 
-AUI_ERRCODE c3_ListBox::CreateRangersAndHeader( MBCHAR *ldlBlock )
+AUI_ERRCODE c3_ListBox::CreateRangersAndHeader(const MBCHAR *ldlBlock )
 {
 	AUI_ERRCODE errcode         = AUI_ERRCODE_OK;
-    MBCHAR *    patternFilename = (m_pattern) ? m_pattern->GetFilename() : NULL;
+	const MBCHAR *    patternFilename = (m_pattern) ? m_pattern->GetFilename() : NULL;
 
 	static MBCHAR block[ k_AUI_LDL_MAXBLOCK + 1 ];
 

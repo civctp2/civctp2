@@ -24,7 +24,7 @@ extern aui_Win* g_winFocus;
 aui_TextField::aui_TextField(
 	AUI_ERRCODE *retval,
 	uint32 id,
-	MBCHAR *ldlBlock,
+	const MBCHAR *ldlBlock,
 	ControlActionCallback *ActionFunc,
 	void *cookie )
 	:
@@ -51,7 +51,7 @@ aui_TextField::aui_TextField(
 	sint32 y,
 	sint32 width,
 	sint32 height,
-	MBCHAR const * text,
+	const MBCHAR * text,
 	ControlActionCallback *ActionFunc,
 	void *cookie )
 	:
@@ -72,13 +72,13 @@ aui_TextField::aui_TextField(
 }
 
 
-AUI_ERRCODE aui_TextField::InitCommonLdl( MBCHAR *ldlBlock )
+AUI_ERRCODE aui_TextField::InitCommonLdl( const MBCHAR *ldlBlock )
 {
-    ldl_datablock * block = aui_Ldl::FindDataBlock(ldlBlock);
+	ldl_datablock * block = aui_Ldl::FindDataBlock(ldlBlock);
 	Assert( block != NULL );
 	if ( !block ) return AUI_ERRCODE_LDLFINDDATABLOCKFAILED;
 
-	MBCHAR *text = block->GetString( k_AUI_TEXTFIELD_LDL_TEXT );
+	const MBCHAR *text = block->GetString( k_AUI_TEXTFIELD_LDL_TEXT );
 	BOOL multiLine = block->GetBool( k_AUI_TEXTFIELD_LDL_MULTILINE );
 	BOOL autovscroll =
 		block->GetAttributeType( k_AUI_TEXTFIELD_LDL_AUTOVSCROLL ) == ATTRIBUTE_TYPE_BOOL ?
@@ -90,7 +90,7 @@ AUI_ERRCODE aui_TextField::InitCommonLdl( MBCHAR *ldlBlock )
 		TRUE;
 	BOOL isfilename = block->GetBool( k_AUI_TEXTFIELD_LDL_ISFILENAME );
 	BOOL passwordReady = block->GetBool( k_AUI_TEXTFIELD_LDL_PASSWORD );
-	MBCHAR *font = block->GetString( k_AUI_TEXTFIELD_LDL_FONT );
+	const MBCHAR *font = block->GetString( k_AUI_TEXTFIELD_LDL_FONT );
 	sint32 fontheight = block->GetInt( k_AUI_TEXTFIELD_LDL_FONT );
 
 	sint32 maxFieldLen =
@@ -109,7 +109,6 @@ AUI_ERRCODE aui_TextField::InitCommonLdl( MBCHAR *ldlBlock )
 	Assert( AUI_SUCCESS(errcode) );
 	return errcode;
 }
-
 
 AUI_ERRCODE aui_TextField::InitCommon(
 	const MBCHAR *text,
@@ -181,9 +180,6 @@ AUI_ERRCODE aui_TextField::InitCommon(
 
 	g_ui->AddWin( m_hwnd );
 
-
-
-
 	if ( !m_windowProc )
 		m_windowProc = (WNDPROC)GetWindowLong( m_hwnd, GWL_WNDPROC );
 
@@ -234,13 +230,12 @@ AUI_ERRCODE aui_TextField::InitCommon(
 	// With this fix they do display text, but it's usually of the wrong size.
 	// More needs to be done on this problem
 
-        //m_Font->SetMaxHeight(m_textHeight); //adjusting font to boxhight does not work
+	//m_Font->SetMaxHeight(m_textHeight); //adjusting font to boxhight does not work
 	m_Font->SetPointSize(k_AUI_TEXTBASE_DEFAULT_FONTSIZE);
 	if (fontheight)
-            m_textHeight = fontheight;
+		m_textHeight = fontheight;
 	else
-            m_textHeight = m_Font->GetMaxHeight(); //well, let's set at least the box height to something
-
+		m_textHeight = m_Font->GetMaxHeight(); //well, let's set at least the box height to something
 #endif
 
 	sint32 newHeight = m_height - Mod(m_height,m_textHeight);
@@ -252,19 +247,16 @@ AUI_ERRCODE aui_TextField::InitCommon(
 	return AUI_ERRCODE_OK;
 }
 
-
 aui_TextField::~aui_TextField()
 {
 #ifdef __AUI_USE_DIRECTX__
 	if ( m_hfont )
 	{
-
 		SendMessage( m_hwnd, WM_SETFONT, (WPARAM)m_holdfont, MAKELPARAM(TRUE,0));
 
 		DeleteObject( m_hfont );
 		m_hfont = NULL;
 	}
-
 
 	if ( m_winRefCount == 1 && m_windowProc )
 		SetWindowLong( m_hwnd, GWL_WNDPROC, (LONG)m_windowProc );
@@ -281,11 +273,10 @@ aui_TextField::~aui_TextField()
 #endif
 }
 
-
 sint32 aui_TextField::GetFieldText( MBCHAR *text, sint32 maxCount )
 {
 #ifdef __AUI_USE_DIRECTX__
-        return GetWindowText(m_hwnd, text, std::min(m_maxFieldLen, maxCount));
+	return GetWindowText(m_hwnd, text, std::min(m_maxFieldLen, maxCount));
 #else
 	sint32 n = std::min(m_maxFieldLen,maxCount);
 	if (n <= 0)
@@ -294,9 +285,7 @@ sint32 aui_TextField::GetFieldText( MBCHAR *text, sint32 maxCount )
 	text[n] = '\0';
 	return strlen(text);
 #endif
-
 }
-
 
 BOOL aui_TextField::SetFieldText( const MBCHAR *text )
 {
@@ -334,7 +323,6 @@ BOOL aui_TextField::SetMultiLine( BOOL multiLine )
 	return wasMultiLine;
 }
 
-
 BOOL aui_TextField::SetPasswordReady( BOOL passwordReady )
 {
 	BOOL wasPasswordReady = m_passwordReady;
@@ -347,7 +335,7 @@ BOOL aui_TextField::SetPasswordReady( BOOL passwordReady )
 
 	return wasPasswordReady;
 }
-#endif
+#endif // __AUI_USE_DIRECTX__
 
 BOOL aui_TextField::SetIsFileName( BOOL isFileName )
 {
@@ -361,7 +349,6 @@ BOOL aui_TextField::SetIsFileName( BOOL isFileName )
 	return wasFileName;
 }
 
-
 sint32 aui_TextField::SetMaxFieldLen( sint32 maxFieldLen )
 {
 	sint32 prevMaxFieldLen = m_maxFieldLen;
@@ -373,11 +360,19 @@ sint32 aui_TextField::SetMaxFieldLen( sint32 maxFieldLen )
 	{
 
 	}
+#ifndef __AUI_USE_DIRECTX__ // Merged in from Linux branch but I leave it as it was for Windows, see above
+	char* newText = new char[maxFieldLen + 1];
+	strncpy(newText, m_Text, maxFieldLen);
+	newText[maxFieldLen] = '\0';
+	delete[] m_Text;
+	m_Text = newText;
+#else
+	printf("%s L%d: SetMaxFieldLen doing nothing here!\n", __FILE__, __LINE__);
+#endif
 #endif
 
 	return prevMaxFieldLen;
 }
-
 
 aui_Control *aui_TextField::SetKeyboardFocus( void )
 {
@@ -389,7 +384,6 @@ aui_Control *aui_TextField::SetKeyboardFocus( void )
 	}
 	return aui_Win::SetKeyboardFocus();
 }
-
 
 AUI_ERRCODE aui_TextField::ReleaseKeyboardFocus( void )
 {
@@ -429,7 +423,6 @@ void aui_TextField::HitEnter() // Is this ; intended?
 			0 );
 }
 
-
 BOOL aui_TextField::IsFileName( HWND hwnd )
 {
 	aui_TextField *textfield = (aui_TextField *)GetWinFromHWND( hwnd );
@@ -438,7 +431,6 @@ BOOL aui_TextField::IsFileName( HWND hwnd )
 
 	return textfield->IsFileName();
 }
-
 
 sint32 aui_TextField::GetMaxFieldLen( HWND hwnd )
 {
@@ -449,10 +441,8 @@ sint32 aui_TextField::GetMaxFieldLen( HWND hwnd )
 	return textfield->GetMaxFieldLen();
 }
 
-
 AUI_ERRCODE aui_TextField::DrawThis( aui_Surface *surface, sint32 x, sint32 y )
 {
-
 	if ( IsHidden() ) return AUI_ERRCODE_OK;
 
 	if ( !surface ) surface = m_window->TheSurface();
@@ -539,20 +529,11 @@ AUI_ERRCODE aui_TextField::DrawThis( aui_Surface *surface, sint32 x, sint32 y )
 	return AUI_ERRCODE_OK;
 }
 
-
-
-
-
-
-
-
 void aui_TextField::PostChildrenCallback( aui_MouseEvent *mouseData )
 {
-
 	if ( !mouseData->framecount
 	&&   GetKeyboardFocus() == this )
 	{
-
 #ifdef __AUI_USE_DIRECTX__
 		if ( GetFocus() != m_hwnd ) SetFocus( m_hwnd );
 #else
@@ -570,7 +551,6 @@ void aui_TextField::PostChildrenCallback( aui_MouseEvent *mouseData )
 		m_blink = !m_blink;
 	}
 }
-
 
 void aui_TextField::MouseLGrabOutside( aui_MouseEvent *mouseData )
 {
@@ -616,18 +596,9 @@ void aui_TextField::SelectAll(void)
 	SetSelection(9999, 9999);
 }
 
-
-
-
-
-
 #ifdef __AUI_USE_DIRECTX__
 LRESULT CALLBACK TextFieldWindowProc( HWND hwnd, UINT message, WPARAM wParam, LPARAM lParam )
 {
-
-
-
-
 	switch ( message )
 	{
 	case WM_CHAR:
@@ -730,47 +701,51 @@ this is then processed by ui_HandleKeypress (keypress.cpp)
 where first HandleKey of the topWindow is called, which passes HandleKey to child elements of aui_control, as is aui_win and parent of aui_textfield
 here in aui_TextField HandleKey of aui_control is overwritten such that the keys are appended to the current text field string
  */
-bool aui_TextField::HandleKey(uint32 wParam){
+bool aui_TextField::HandleKey(uint32 wParam)
+{
+	if ( GetKeyboardFocus() == this )
+	{
+		switch ( wParam )
+		{
+			// Have to handle the enter key here so that buffered input will
+			// be handled correctly with the Windows message queue.
+			case VK_RETURN:
+				aui_TextField::HitEnter();
+				break;
+			// No tags allowed, they are for "tabbing focus" between controls.
+			case VK_TAB:
+				printf("%s L%d: Tab ignored in TextField!\n", __FILE__, __LINE__);
+				return false;
+			case VK_BACK:
+			{
+				std::string str(m_Text); // char array to c++ string
+				if( str.length() > 0 )
+					str.pop_back(); //lop off character
+					SetFieldText(str.c_str()); // c++ string to char array, use SetFieldText (not just modify m_Text) to cause re-drawing
+					break;
+			}
+			case ' ':
+			// printf("%s L%d: space!\n", __FILE__, __LINE__);
+			default:
+			{ // append char to char array, apparently easiest with std::string
 
-  if ( GetKeyboardFocus() == this ){
-    switch ( wParam ){
-      // Have to handle the enter key here so that buffered input will
-      // be handled correctly with the Windows message queue.
-    case VK_RETURN:
-      aui_TextField::HitEnter();
-      break;
-      // No tags allowed, they are for "tabbing focus" between controls.
-    case VK_TAB:
-      printf("%s L%d: Tab ignored in TextField!\n", __FILE__, __LINE__);
-      return false;
-    case VK_BACK: {
-      std::string str(m_Text); // char array to c++ string
-      if( str.length() > 0 )
-	str.pop_back(); //lop off character
-      SetFieldText(str.c_str()); // c++ string to char array, use SetFieldText (not just modify m_Text) to cause re-drawing
-      break;
-    }
-    case ' ':
-      // printf("%s L%d: space!\n", __FILE__, __LINE__);
-    default: { // append char to char array, apparently easiest with std::string
-      
-      static MBCHAR text[ 1025 ];
-      GetFieldText( text, 1024 );
-      // Don't let any more characters in if you're at the max.
-      if ( (sint32)strlen( text ) >= GetMaxFieldLen() ) return 0;
-      
-      std::string str(m_Text); // char array to c++ string
-      str += static_cast<char>(wParam); // append char to string
-      SetFieldText(str.c_str()); // c++ string to char array, use SetFieldText (not just modify m_Text) to cause re-drawing
-      g_soundManager->AddGameSound(GAMESOUNDS_EDIT_TEXT);// play key sound ;-)
-      break;
-      }
-    }
-    return true;
-  }
-  else {
-    return false;
-  }
-  
+				static MBCHAR text[ 1025 ];
+				GetFieldText( text, 1024 );
+				// Don't let any more characters in if you're at the max.
+				if ( (sint32)strlen( text ) >= GetMaxFieldLen() ) return 0;
+
+				std::string str(m_Text); // char array to c++ string
+				str += static_cast<char>(wParam); // append char to string
+				SetFieldText(str.c_str()); // c++ string to char array, use SetFieldText (not just modify m_Text) to cause re-drawing
+				g_soundManager->AddGameSound(GAMESOUNDS_EDIT_TEXT);// play key sound ;-)
+				break;
+			}
+		}
+		return true;
+	}
+	else
+	{
+		return false;
+	}
 }
 #endif

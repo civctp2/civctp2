@@ -13,7 +13,7 @@
 C3Window::C3Window(
 	AUI_ERRCODE *retval,
 	uint32 id,
-	MBCHAR *ldlBlock,
+	const MBCHAR *ldlBlock,
 	sint32 bpp,
 	AUI_WINDOW_TYPE type,
 	bool bevel)
@@ -37,7 +37,7 @@ C3Window::C3Window(
 	sint32 width,
 	sint32 height,
 	sint32 bpp,
-	MBCHAR *pattern,
+	const MBCHAR *pattern,
 	AUI_WINDOW_TYPE type,
 	bool bevel)
 	:
@@ -63,7 +63,6 @@ AUI_ERRCODE C3Window::InitCommon( void )
 
 AUI_ERRCODE C3Window::DrawThis( aui_Surface *surface, sint32 x, sint32 y )
 {
-
 	if ( IsHidden() ) return AUI_ERRCODE_OK;
 
 	RECT rect = { 0, 0, m_width, m_height };
@@ -73,11 +72,6 @@ AUI_ERRCODE C3Window::DrawThis( aui_Surface *surface, sint32 x, sint32 y )
 
 	if(m_bevel)
 		primitives_BevelRect16( m_surface, &rect, 3, 0, 16, 16 );
-
-
-
-
-
 
 	m_dirtyList->AddRect( &rect );
 

@@ -16,10 +16,10 @@
 ns_ListItem::ns_ListItem(
 	AUI_ERRCODE *retval,
 	const MBCHAR *name,
-	MBCHAR *ldlBlock )
+	const MBCHAR *ldlBlock )
 	:
 	aui_ImageBase(ldlBlock),
-	aui_TextBase(ldlBlock, (MBCHAR *)NULL),
+	aui_TextBase(ldlBlock, (const MBCHAR *)NULL),
 	c3_ListItem( retval, ldlBlock)
 {
 	Assert( AUI_SUCCESS(*retval) );
@@ -33,7 +33,7 @@ ns_ListItem::ns_ListItem(
 
 AUI_ERRCODE ns_ListItem::InitCommonLdl(
 	const MBCHAR *name,
-	MBCHAR *ldlBlock)
+	const MBCHAR *ldlBlock)
 {
 	MBCHAR			block[ k_AUI_LDL_MAXBLOCK + 1 ];
 	AUI_ERRCODE		retval;
@@ -54,7 +54,7 @@ ns_HPlayerItem::ns_HPlayerItem(
 	AUI_ERRCODE *retval,
 	void *player,
 	BOOL isAI,
-	MBCHAR *ldlBlock)
+	const MBCHAR *ldlBlock)
 	:
 	aui_ImageBase(ldlBlock),
 	aui_TextBase(ldlBlock, (MBCHAR *)NULL),
@@ -70,11 +70,6 @@ ns_HPlayerItem::ns_HPlayerItem(
 
 ns_HPlayerItem::~ns_HPlayerItem()
 {
-
-
-
-
-
 	if (m_civpointsButton)
 		delete m_civpointsButton;
 
@@ -86,21 +81,13 @@ ns_HPlayerItem::~ns_HPlayerItem()
 AUI_ERRCODE ns_HPlayerItem::InitCommonLdl(
 	void *player,
 	BOOL isAI,
-	MBCHAR *ldlBlock)
+	const MBCHAR *ldlBlock)
 {
 	m_player = player;
 	m_isAI = isAI;
 
 	MBCHAR			block[ k_AUI_LDL_MAXBLOCK + 1 ];
 	AUI_ERRCODE		retval;
-
-
-
-
-
-
-
-
 
 	SetBlindness( TRUE );
 	SetImageBltFlag( AUI_IMAGEBASE_BLTFLAG_CHROMAKEY );
@@ -137,25 +124,6 @@ AUI_ERRCODE ns_HPlayerItem::InitCommonLdl(
 	m_tribeItem->AddChild(m_tribeButton);
 
 	AddChild(m_tribeItem);
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
 
 	sprintf(block, "%s.%s", ldlBlock, "civpoints");
 	m_civpointsItem = new c3_Static(&retval, aui_UniqueId(),block);
@@ -194,7 +162,6 @@ AUI_ERRCODE ns_HPlayerItem::InitCommonLdl(
 	return AUI_ERRCODE_OK;
 }
 
-
 void ns_HPlayerItem::SetTribe( sint32 tribe )
 {
 	m_tribeButton->SetText( g_nsTribes->GetStrings()->GetString( tribe ) );
@@ -206,21 +173,6 @@ void ns_HPlayerItem::SetTribe( sint32 tribe )
 			strlen( w->m_lname ) ? w->m_lname : NULL );
 }
 
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
 void ns_HPlayerItem::SetCivpoints( sint32 civpoints )
 {
 	aui_Control::ControlActionCallback *actionFunc =
@@ -231,7 +183,6 @@ void ns_HPlayerItem::SetCivpoints( sint32 civpoints )
 	m_civpointsButton->SetValue( civpoints );
 	m_civpointsButton->SetActionFuncAndCookie( actionFunc, cookie );
 }
-
 
 void ns_HPlayerItem::SetPwpoints( sint32 pwpoints )
 {

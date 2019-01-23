@@ -29,9 +29,9 @@ AUI_ERRCODE loadsavescreen_Initialize( aui_Control::ControlActionCallback
 									   *callback = NULL );
 void loadsavescreen_Cleanup(void);
 
-void loadsavescreen_SaveGame(MBCHAR *usePath = NULL, MBCHAR *useName = NULL);
+void loadsavescreen_SaveGame(const MBCHAR *usePath = NULL, const MBCHAR *useName = NULL);
 
-void loadsavescreen_BeginLoadProcess(SaveInfo *saveInfo, MBCHAR *directoryPath);
+void loadsavescreen_BeginLoadProcess(SaveInfo *saveInfo, const MBCHAR *directoryPath);
 
 void loadsavescreen_LoadMPGame( void );
 void loadsavescreen_LoadSCENGame(void);
@@ -74,7 +74,7 @@ public:
 	LoadSaveWindow(
 		AUI_ERRCODE *retval,
 		uint32 id,
-		MBCHAR *ldlBlock,
+		const MBCHAR *ldlBlock,
 		sint32 bpp,
 		AUI_WINDOW_TYPE type = AUI_WINDOW_TYPE_STANDARD,
 		bool bevel = true);
@@ -97,16 +97,16 @@ public:
 	void SetType(uint32 type);
 	uint32 GetType() { return m_type; }
 
-	void SetGameName(MBCHAR *name);
-	void SetSaveName(MBCHAR *name);
-	void SetLeaderName(MBCHAR *name);
-	void SetCivName(MBCHAR *name);
-	void SetNote(MBCHAR *note);
+	void SetGameName(const MBCHAR *name);
+	void SetSaveName(const MBCHAR *name);
+	void SetLeaderName(const MBCHAR *name);
+	void SetCivName(const MBCHAR *name);
+	void SetNote(const MBCHAR *note);
 
 	BOOL GetGameName(MBCHAR *name);
 	BOOL GetSaveName(MBCHAR *name);
-	MBCHAR *GetLeaderName(void);
-	MBCHAR *GetCivName(void);
+	const MBCHAR *GetLeaderName(void);
+	const MBCHAR *GetCivName(void);
 	BOOL GetNote(MBCHAR *note);
 
 	void EnableFields( BOOL enable );
@@ -119,7 +119,7 @@ public:
 	void CleanUpSaveInfo( void );
 	SaveInfo *GetSaveInfoToSave( void ) const { return m_saveInfoToSave; }
 
-	void BuildDefaultSaveName(MBCHAR *gameName, MBCHAR *name);
+	void BuildDefaultSaveName(const MBCHAR *gameName, MBCHAR *name);
 
 	C3TextField* GetTextField() { return m_gameTextBox; }
 
@@ -182,13 +182,10 @@ private:
 	MBCHAR			m_mostRecentName[_MAX_PATH];
 };
 
-
-
-
 class LSCivsListItem : public c3_ListItem
 {
 public:
-	LSCivsListItem(AUI_ERRCODE *retval, MBCHAR *ldlBlock, const MBCHAR *name);
+	LSCivsListItem(AUI_ERRCODE *retval, const MBCHAR *ldlBlock, const MBCHAR *name);
 	~LSCivsListItem();
 
 	sint32 Compare(c3_ListItem *item2, uint32 column);
@@ -200,7 +197,7 @@ private:
 class LSGamesListItem : public c3_ListItem
 {
 public:
-	LSGamesListItem(AUI_ERRCODE *retval, MBCHAR *ldlBlock, GameInfo *info);
+	LSGamesListItem(AUI_ERRCODE *retval, const MBCHAR *ldlBlock, GameInfo *info);
 	~LSGamesListItem();
 
 	sint32 Compare(c3_ListItem *item2, uint32 column);
@@ -217,12 +214,12 @@ private:
 class LSSavesListItem : public c3_ListItem
 {
 public:
-	LSSavesListItem(AUI_ERRCODE *retval, MBCHAR *ldlBlock, SaveInfo *info);
+	LSSavesListItem(AUI_ERRCODE *retval, const MBCHAR *ldlBlock, SaveInfo *info);
 	~LSSavesListItem();
 
 	sint32 Compare(c3_ListItem *item2, uint32 column);
 
-	MBCHAR *GetText( void ) const { return m_itemText->GetText(); }
+	const MBCHAR *GetText( void ) const { return m_itemText->GetText(); }
 
 	SaveInfo	*GetSaveInfo(void) const { return m_info; }
 

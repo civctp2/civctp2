@@ -81,15 +81,6 @@ sint32						aui_Ldl::s_ldlRefCount = 0;
 aui_LdlObject				*aui_Ldl::s_objectList = NULL;
 aui_LdlObject				*aui_Ldl::s_objectListTail = NULL;
 
-
-
-
-
-
-
-
-
-
 static cmp_t CompareByObject(aui_LdlObject *obj1, aui_LdlObject *obj2)
 {
 	if (obj1->object < obj2->object) return MIN_CMP;
@@ -108,8 +99,8 @@ static cmp_t CompareByString(aui_LdlObject *obj1, aui_LdlObject *obj2)
 
 aui_Ldl::aui_Ldl
 (
-	AUI_ERRCODE *   retval,
-	MBCHAR const *  ldlFilename
+	AUI_ERRCODE  *  retval,
+	const MBCHAR *  ldlFilename
 )
 :
 	aui_Base    ()
@@ -117,8 +108,7 @@ aui_Ldl::aui_Ldl
 	*retval = InitCommon( ldlFilename );
 }
 
-
-AUI_ERRCODE aui_Ldl::InitCommon( MBCHAR const *ldlFilename )
+AUI_ERRCODE aui_Ldl::InitCommon( const MBCHAR *ldlFilename )
 {
 	Assert(ldlFilename != NULL);
 	if (!ldlFilename) return AUI_ERRCODE_INVALIDPARAM;
@@ -128,10 +118,10 @@ AUI_ERRCODE aui_Ldl::InitCommon( MBCHAR const *ldlFilename )
 		s_objectListByObject = new AvlTree<aui_LdlObject *>;
 		Assert( s_objectListByObject != NULL );
 		if ( !s_objectListByObject ) return AUI_ERRCODE_MEMALLOCFAILED;
-    }
+	}
 
-    if (!s_objectListByString)
-    {
+	if (!s_objectListByString)
+	{
 		s_objectListByString = new AvlTree<aui_LdlObject *>;
 		Assert( s_objectListByString != NULL );
 		if ( !s_objectListByString ) return AUI_ERRCODE_MEMALLOCFAILED;
@@ -145,7 +135,7 @@ AUI_ERRCODE aui_Ldl::InitCommon( MBCHAR const *ldlFilename )
 #endif
 	strcat(outDir, FILE_SEP "ldl_out");
 
-    delete s_ldl;
+	delete s_ldl;
 	s_ldl = new ldl( ldlFilename, outDir );
 	Assert( s_ldl != NULL );
 	if ( !s_ldl ) return AUI_ERRCODE_MEMALLOCFAILED;
@@ -155,35 +145,32 @@ AUI_ERRCODE aui_Ldl::InitCommon( MBCHAR const *ldlFilename )
 	return AUI_ERRCODE_OK;
 }
 
-
 aui_Ldl::~aui_Ldl()
 {
-    if (0 == --s_ldlRefCount)
-    {
-    	delete s_ldl;
-        s_ldl = NULL;
-	    delete s_objectListByObject;
-        s_objectListByObject = NULL;
-	    delete s_objectListByString;
-        s_objectListByString = NULL;
+	if (0 == --s_ldlRefCount)
+	{
+		delete s_ldl;
+		s_ldl = NULL;
+		delete s_objectListByObject;
+		s_objectListByObject = NULL;
+		delete s_objectListByString;
+		s_objectListByString = NULL;
 
-        aui_LdlObject * nextObject  = NULL;
-	    for (aui_LdlObject * curObject = s_objectList; curObject; curObject = nextObject)
-	    {
-		    nextObject = curObject->next;
-		    DeleteLdlObject(curObject);
-	    }
-    }
+		aui_LdlObject * nextObject  = NULL;
+		for (aui_LdlObject * curObject = s_objectList; curObject; curObject = nextObject)
+		{
+			nextObject = curObject->next;
+			DeleteLdlObject(curObject);
+		}
+	}
 }
 
-
-bool aui_Ldl::IsValid(MBCHAR const * ldlBlock)
+bool aui_Ldl::IsValid(const MBCHAR * ldlBlock)
 {
 	return FindDataBlock(ldlBlock) != NULL;
 }
 
-
-AUI_ERRCODE aui_Ldl::MakeSureBlockExists(MBCHAR const *ldlBlock)
+AUI_ERRCODE aui_Ldl::MakeSureBlockExists(const MBCHAR *ldlBlock)
 {
 	Assert( ldlBlock != NULL );
 	if ( !ldlBlock ) return AUI_ERRCODE_INVALIDPARAM;
@@ -192,16 +179,7 @@ AUI_ERRCODE aui_Ldl::MakeSureBlockExists(MBCHAR const *ldlBlock)
 	if ( !block )
 	{
 
-
-
-
-
 #if 1
-
-
-
-
-
 		block = new ldl_datablock(s_ldl, ldlBlock);
 		Assert( block != NULL );
 		if ( !block ) return AUI_ERRCODE_MEMALLOCFAILED;
@@ -225,7 +203,6 @@ AUI_ERRCODE aui_Ldl::MakeSureBlockExists(MBCHAR const *ldlBlock)
 
 	return AUI_ERRCODE_OK;
 }
-
 
 AUI_ERRCODE aui_Ldl::MakeSureDefaultTemplateExists( void )
 {
@@ -259,8 +236,7 @@ AUI_ERRCODE aui_Ldl::MakeSureDefaultTemplateExists( void )
 	return AUI_ERRCODE_OK;
 }
 
-
-AUI_ERRCODE aui_Ldl::Associate(void *object, MBCHAR const * ldlBlock)
+AUI_ERRCODE aui_Ldl::Associate(void *object, const MBCHAR * ldlBlock)
 {
 
 	if ( !s_objectListByObject || !s_objectListByString ) return AUI_ERRCODE_INVALIDPARAM;
@@ -284,9 +260,6 @@ AUI_ERRCODE aui_Ldl::Associate(void *object, MBCHAR const * ldlBlock)
 	strcpy( ldlObject->ldlBlock, ldlBlock );
 	ldlObject->hash = aui_UI::CalculateHash( ldlBlock );
 
-
-
-
 	Comparable<aui_LdlObject *> *objByObject = new Comparable<aui_LdlObject *>(ldlObject, CompareByObject);
 	if(s_objectListByObject->Insert(objByObject))
 		delete objByObject;
@@ -307,11 +280,11 @@ AUI_ERRCODE aui_Ldl::AppendLdlObject(aui_LdlObject *object)
 	object->prev = s_objectListTail;
 
 	if (s_objectListTail)
-    {
+	{
 		s_objectListTail->next = object;
-    }
-    else
-    {
+	}
+	else
+	{
 		s_objectList = object;
 	}
 
@@ -320,44 +293,42 @@ AUI_ERRCODE aui_Ldl::AppendLdlObject(aui_LdlObject *object)
 	return AUI_ERRCODE_OK;
 }
 
-
 AUI_ERRCODE aui_Ldl::RemoveLdlObject(aui_LdlObject *object)
 {
-    if (NULL == object)
+	if (NULL == object)
 		return AUI_ERRCODE_INVALIDPARAM;
 
 	if (s_objectList == object)
-    {
-        // Object at begin
-        s_objectList = object->next;
+	{
+		// Object at begin
+		s_objectList = object->next;
 
 		if (s_objectList)
-        {
+		{
 			s_objectList->prev  = NULL;
 		}
-        else
-        {
+		else
+		{
 			s_objectListTail    = NULL;
 		}
 	}
-    else if (s_objectListTail == object)
-    {
-        // Object at end
+	else if (s_objectListTail == object)
+	{
+		// Object at end
 		s_objectListTail = object->prev;
-	    s_objectListTail->next  = object->next;
-    }
-    else
-    {
-        // Object in between
+		s_objectListTail->next  = object->next;
+	}
+	else
+	{
+		// Object in between
 		object->prev->next = object->next;
 		object->next->prev = object->prev;
 	}
 
-    object->next    = NULL;
-    object->prev    = NULL;
+	object->next    = NULL;
+	object->prev    = NULL;
 	return AUI_ERRCODE_OK;
 }
-
 
 void aui_Ldl::DeleteLdlObject( aui_LdlObject *ldlObject )
 {
@@ -367,7 +338,6 @@ void aui_Ldl::DeleteLdlObject( aui_LdlObject *ldlObject )
 		delete ldlObject;
 	}
 }
-
 
 AUI_ERRCODE aui_Ldl::Remove( void *object )
 {
@@ -381,7 +351,7 @@ AUI_ERRCODE aui_Ldl::Remove( void *object )
 	dummyObject.object = object;
 
 	Comparable<aui_LdlObject *>	*   myKey =
-        s_objectListByObject->Search(&dummyObject);
+	    s_objectListByObject->Search(&dummyObject);
 
 	if (myKey) {
 		aui_LdlObject		*foundObject = myKey->Key();
@@ -401,15 +371,11 @@ AUI_ERRCODE aui_Ldl::Remove( void *object )
 	return AUI_ERRCODE_OK;
 }
 
-
-AUI_ERRCODE aui_Ldl::Remove(MBCHAR const * ldlBlock)
+AUI_ERRCODE aui_Ldl::Remove(const MBCHAR * ldlBlock)
 {
-
 	if ( !s_objectListByObject || !s_objectListByString) return AUI_ERRCODE_INVALIDPARAM;
 
-
 	uint32 hash = aui_UI::CalculateHash( ldlBlock );
-
 
 	aui_LdlObject		myObject;
 	myObject.hash = hash;
@@ -434,7 +400,6 @@ AUI_ERRCODE aui_Ldl::Remove(MBCHAR const * ldlBlock)
 	return AUI_ERRCODE_OK;
 }
 
-
 MBCHAR *aui_Ldl::GetBlock( void *object )
 {
 
@@ -445,7 +410,7 @@ MBCHAR *aui_Ldl::GetBlock( void *object )
 	dummyObject.object = object;
 
 	Comparable<aui_LdlObject *> *myKey =
-        s_objectListByObject->Search(&dummyObject);
+	    s_objectListByObject->Search(&dummyObject);
 
 	if (myKey) {
 
@@ -459,7 +424,6 @@ MBCHAR *aui_Ldl::GetBlock( void *object )
 	return NULL;
 }
 
-
 void *aui_Ldl::GetObject( const MBCHAR *ldlBlock )
 {
 
@@ -471,10 +435,10 @@ void *aui_Ldl::GetObject( const MBCHAR *ldlBlock )
 	dummyObject.hash = hash;
 
 	Comparable<aui_LdlObject *>	*myKey =
-        s_objectListByString->Search(&dummyObject);
+	    s_objectListByString->Search(&dummyObject);
 
-	if (myKey) {
-
+	if (myKey)
+	{
 		aui_LdlObject *obj = myKey->Key();
 		Assert(obj);
 		if (obj) {
@@ -497,10 +461,8 @@ void *aui_Ldl::GetObject(const MBCHAR *parentBlock, const MBCHAR *regionBlock)
 	return GetObject(ldlBlock);
 }
 
-
-AUI_ERRCODE aui_Ldl::SetupHeirarchyFromRoot(MBCHAR const * rootBlock )
+AUI_ERRCODE aui_Ldl::SetupHeirarchyFromRoot(const MBCHAR * rootBlock )
 {
-
 	if ( !s_objectListByString ) return AUI_ERRCODE_INVALIDPARAM;
 
 	Assert( rootBlock != NULL );
@@ -512,25 +474,24 @@ AUI_ERRCODE aui_Ldl::SetupHeirarchyFromRoot(MBCHAR const * rootBlock )
 	dummyObject.hash = hash;
 
 	Comparable<aui_LdlObject *> *myKey =
-        s_objectListByString->Search(&dummyObject);
+	    s_objectListByString->Search(&dummyObject);
 
 	if (myKey) {
 		aui_LdlObject	*obj = myKey->Key();
 
 		if (obj)
-        {
+		{
 			size_t len = strlen( rootBlock );
 
 			for
-            (
-                aui_LdlObject * curObject = obj->next;
-                curObject;
-                curObject = curObject->next
-            )
-            {
+			(
+			    aui_LdlObject * curObject = obj->next;
+			    curObject;
+			    curObject = curObject->next
+			)
+			{
 				if ( strnicmp( rootBlock, curObject->ldlBlock, len ) == 0 )
 				{
-
 					AUI_ERRCODE errcode = SetupHeirarchyFromLeaf(
 						curObject->ldlBlock,
 						(aui_Region *)curObject->object );
@@ -547,10 +508,8 @@ AUI_ERRCODE aui_Ldl::SetupHeirarchyFromRoot(MBCHAR const * rootBlock )
 	return AUI_ERRCODE_HACK;
 }
 
-
 AUI_ERRCODE aui_Ldl::SetupHeirarchyFromLeaf(MBCHAR * leafBlock, aui_Region * object)
 {
-
 	if ( !s_objectListByObject || !s_objectListByString ) return AUI_ERRCODE_INVALIDPARAM;
 
 	Assert( leafBlock != NULL && object != NULL );
@@ -583,16 +542,8 @@ AUI_ERRCODE aui_Ldl::SetupHeirarchyFromLeaf(MBCHAR * leafBlock, aui_Region * obj
 	return AUI_ERRCODE_OK;
 }
 
-
-
-
-
-
-
-
-aui_Region *aui_Ldl::BuildHierarchyFromRoot(MBCHAR const * rootBlock)
+aui_Region *aui_Ldl::BuildHierarchyFromRoot(const MBCHAR * rootBlock)
 {
-
 	Assert(s_objectListByObject);
 	Assert(s_objectListByString);
 
@@ -613,9 +564,7 @@ aui_Region *aui_Ldl::BuildHierarchyFromRoot(MBCHAR const * rootBlock)
 	if (!objTypeString)
 		return NULL;
 
-
 	bool			isAtomic = dataBlock->GetBool(k_AUI_LDL_ATOMIC);
-
 
 	char fullname[256];
 	dataBlock->GetFullName(fullname);
@@ -639,19 +588,14 @@ aui_Region *aui_Ldl::BuildHierarchyFromRoot(MBCHAR const * rootBlock)
 		return NULL;
 
 	if (dataBlock->GetBool(k_AUI_LDL_DETACH))
-    {
+	{
 		DetachHierarchy(myRegion);
 	}
 
-    myRegion->DoneInstantiating();
+	myRegion->DoneInstantiating();
 
 	return myRegion;
 }
-
-
-
-
-
 
 AUI_ERRCODE aui_Ldl::BuildHierarchyFromLeaf(ldl_datablock *parent, aui_Region *region)
 {
@@ -661,27 +605,22 @@ AUI_ERRCODE aui_Ldl::BuildHierarchyFromLeaf(ldl_datablock *parent, aui_Region *r
 
 	PointerList<ldl_datablock> *    childList = parent->GetChildList();
 	for
-    (
+	(
 	    PointerList<ldl_datablock>::Walker walk(childList);
-        walk.IsValid();
-        walk.Next()
-    )
-    {
-	    ldl_datablock * dataBlock = walk.GetObj();
+	    walk.IsValid();
+	    walk.Next()
+	)
+	{
+		ldl_datablock * dataBlock = walk.GetObj();
 		Assert(dataBlock);
 		if (dataBlock == NULL)
 			return AUI_ERRCODE_INVALIDPARAM;
 
-
-
-
-		MBCHAR			*objTypeString = dataBlock->GetString(k_AUI_LDL_OBJECTTYPE);
+		const MBCHAR			*objTypeString = dataBlock->GetString(k_AUI_LDL_OBJECTTYPE);
 		if (!objTypeString)
 			return AUI_ERRCODE_INVALIDPARAM;
 
-
 		BOOL			isAtomic = dataBlock->GetBool(k_AUI_LDL_ATOMIC);
-
 
 		char fullname[256];
 		dataBlock->GetFullName(fullname);
@@ -692,10 +631,8 @@ AUI_ERRCODE aui_Ldl::BuildHierarchyFromLeaf(ldl_datablock *parent, aui_Region *r
 		if (err != AUI_ERRCODE_OK)
 			return AUI_ERRCODE_INVALIDPARAM;
 
-
-
-
-		if (!isAtomic) {
+		if (!isAtomic)
+		{
 			err = BuildHierarchyFromLeaf(dataBlock, myRegion);
 			Assert(err == AUI_ERRCODE_OK);
 			if (err != AUI_ERRCODE_OK)
@@ -708,38 +645,8 @@ AUI_ERRCODE aui_Ldl::BuildHierarchyFromLeaf(ldl_datablock *parent, aui_Region *r
 	return AUI_ERRCODE_OK;
 }
 
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-AUI_ERRCODE aui_Ldl::BuildObjectFromType(MBCHAR *typeString,
-										 MBCHAR *ldlName,
+AUI_ERRCODE aui_Ldl::BuildObjectFromType(const MBCHAR *typeString,
+										 const MBCHAR *ldlName,
 										 aui_Region **theObject)
 {
 	AUI_ERRCODE		retval = AUI_ERRCODE_OK;
@@ -834,14 +741,8 @@ AUI_ERRCODE aui_Ldl::BuildObjectFromType(MBCHAR *typeString,
 	return AUI_ERRCODE_OK;
 }
 
-
-
-
-
-
-AUI_ERRCODE aui_Ldl::DeleteHierarchyFromRoot(MBCHAR const * rootBlock)
+AUI_ERRCODE aui_Ldl::DeleteHierarchyFromRoot(const MBCHAR * rootBlock)
 {
-
 	Assert(s_objectListByObject);
 	Assert(s_objectListByString);
 
@@ -851,11 +752,9 @@ AUI_ERRCODE aui_Ldl::DeleteHierarchyFromRoot(MBCHAR const * rootBlock)
 	Assert(rootBlock);
 	if (rootBlock == NULL) return AUI_ERRCODE_INVALIDPARAM;
 
-
 	ldl_datablock * dataBlock   = s_ldl->FindDataBlock(rootBlock, NULL);
 	Assert(dataBlock);
 	if (!dataBlock) return AUI_ERRCODE_INVALIDPARAM;
-
 
 	AUI_ERRCODE		errcode     = DeleteHierarchyFromLeaf(dataBlock);
 	Assert(errcode == AUI_ERRCODE_OK);
@@ -866,20 +765,17 @@ AUI_ERRCODE aui_Ldl::DeleteHierarchyFromRoot(MBCHAR const * rootBlock)
 	dataBlock->GetFullName(fullname);
 	aui_Region *region = (aui_Region *)GetObject(fullname);
 	Assert(region);
-	if (region) {
+	if (region)
+	{
 		delete region;
-	} else {
+	}
+	else
+	{
 		return AUI_ERRCODE_INVALIDPARAM;
 	}
 
 	return AUI_ERRCODE_OK;
 }
-
-
-
-
-
-
 
 AUI_ERRCODE aui_Ldl::DeleteHierarchyFromLeaf(ldl_datablock *parent)
 {
@@ -891,15 +787,14 @@ AUI_ERRCODE aui_Ldl::DeleteHierarchyFromLeaf(ldl_datablock *parent)
 
 	PointerList<ldl_datablock> *childList = parent->GetChildList();
 	PointerList<ldl_datablock>::Walker walk(childList);
-	while(walk.IsValid()) {
+	while(walk.IsValid())
+	{
 		dataBlock = walk.GetObj();
 
+		bool			isAtomic = dataBlock->GetBool(k_AUI_LDL_ATOMIC);
 
-
-
-		BOOL			isAtomic = dataBlock->GetBool(k_AUI_LDL_ATOMIC);
-
-		if (!isAtomic) {
+		if (!isAtomic)
+		{
 			errcode = DeleteHierarchyFromLeaf(dataBlock);
 			Assert(errcode == AUI_ERRCODE_OK);
 			if (errcode != AUI_ERRCODE_OK)
@@ -919,24 +814,17 @@ AUI_ERRCODE aui_Ldl::DeleteHierarchyFromLeaf(ldl_datablock *parent)
 	return errcode;
 }
 
-
-
-
-
-
-
-
 AUI_ERRCODE aui_Ldl::SetActionFuncAndCookie
 (
-    MBCHAR const *                          ldlBlock,
-	aui_Control::ControlActionCallback *    actionFunc,
-	void *                                  cookie
+    const MBCHAR *                          ldlBlock,
+    aui_Control::ControlActionCallback *    actionFunc,
+    void *                                  cookie
 )
 {
 	aui_Control	*   control = (aui_Control *) aui_Ldl::GetObject(ldlBlock);
-    AUI_ERRCODE		errcode = control
-                              ? control->SetActionFuncAndCookie(actionFunc, cookie)
-                              : AUI_ERRCODE_NOCONTROL;
+	AUI_ERRCODE		errcode = control
+	                          ? control->SetActionFuncAndCookie(actionFunc, cookie)
+	                          : AUI_ERRCODE_NOCONTROL;
 	Assert(errcode == AUI_ERRCODE_OK);
 
 	return errcode;
@@ -944,8 +832,8 @@ AUI_ERRCODE aui_Ldl::SetActionFuncAndCookie
 
 AUI_ERRCODE aui_Ldl::SetActionFuncAndCookie
 (
-    MBCHAR const *                          parentBlock,
-    MBCHAR const *                          regionBlock,
+	const MBCHAR *                          parentBlock,
+	const MBCHAR *                          regionBlock,
 	aui_Control::ControlActionCallback *    actionFunc,
 	void *                                  cookie
 )
@@ -964,16 +852,16 @@ AUI_ERRCODE aui_Ldl::SetActionFuncAndCookie
 AUI_ERRCODE aui_Ldl::DetachHierarchy(aui_Region *region)
 {
 	if (region)
-    {
-	    sint32 numChildren = region->NumChildren();
+	{
+		sint32 numChildren = region->NumChildren();
 
-	    for (sint32 i = 0; i < numChildren; i++)
-        {
-		    DetachHierarchy(region->GetChildByIndex(i));
-	    }
+		for (sint32 i = 0; i < numChildren; i++)
+		{
+			DetachHierarchy(region->GetChildByIndex(i));
+		}
 
-	    Remove((void *)region);
-    }
+		Remove((void *)region);
+	}
 
 	return AUI_ERRCODE_OK;
 }
@@ -995,18 +883,18 @@ sint32 aui_Ldl::GetIntDependent(MBCHAR const * strPtr)
 
 		if ( w == width && h == height ) return value;
 
-        strPtr = strchr(strPtr, ':');
+		strPtr = strchr(strPtr, ':');
 	}
 
 	return 0;
 }
 
-void aui_Ldl::ModifyAttributes( MBCHAR const * ldlBlock, aui_Dimension * dimension)
+void aui_Ldl::ModifyAttributes( const MBCHAR * ldlBlock, aui_Dimension * dimension)
 {
 	ldl_datablock * format = s_ldl->FindDataBlock(ldlBlock);
 
 	if (format && dimension)
-    {
+	{
 		sint32 x      = dimension->HorizontalPositionData();
 		sint32 y      = dimension->VerticalPositionData();
 		sint32 width  = dimension->HorizontalSizeData();
@@ -1059,11 +947,10 @@ void aui_Ldl::ModifyAttributes( MBCHAR const * ldlBlock, aui_Dimension * dimensi
 			else
 				format->AddAttribute( k_AUI_LDL_VRELSIZE, height );
 		}
-
 	}
 }
 
-ldl_datablock * aui_Ldl::FindDataBlock(MBCHAR const * ldlBlock)
+ldl_datablock * aui_Ldl::FindDataBlock(const MBCHAR * ldlBlock)
 {
-    return s_ldl ? s_ldl->FindDataBlock(ldlBlock) : NULL;
+	return s_ldl ? s_ldl->FindDataBlock(ldlBlock) : NULL;
 }

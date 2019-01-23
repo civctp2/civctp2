@@ -42,23 +42,22 @@
 
 aui_TextBase::aui_TextBase
 (
-	MBCHAR const *  ldlBlock,
-	MBCHAR const *  text
+	const MBCHAR *  ldlBlock,
+	const MBCHAR *  text
 )
 {
 	InitCommonLdl(ldlBlock,	text);
 }
 
-
 aui_TextBase::aui_TextBase
 (
-	MBCHAR const *  text,
+	const MBCHAR *  text,
 	uint32          maxLength
 )
 {
 	InitCommon
-    (
-        text,
+	(
+		text,
 		maxLength,
 		k_AUI_TEXTBASE_DEFAULT_FONTNAME,
 		k_AUI_TEXTBASE_DEFAULT_FONTSIZE,
@@ -69,13 +68,12 @@ aui_TextBase::aui_TextBase
 		k_AUI_TEXTBASE_DEFAULT_UNDERLINE,
 		k_AUI_TEXTBASE_DEFAULT_SHADOW,
 		k_AUI_BITMAPFONT_DRAWFLAG_JUSTCENTER | k_AUI_BITMAPFONT_DRAWFLAG_VERTCENTER
-    );
+	);
 }
-
 
 AUI_ERRCODE aui_TextBase::InitCommonLdl(MBCHAR const * ldlBlock, MBCHAR const * text)
 {
-    ldl_datablock * block = aui_Ldl::FindDataBlock(ldlBlock);
+	ldl_datablock * block = aui_Ldl::FindDataBlock(ldlBlock);
 	Assert( block != NULL );
 	if ( !block ) return AUI_ERRCODE_LDLFINDDATABLOCKFAILED;
 
@@ -147,7 +145,6 @@ AUI_ERRCODE aui_TextBase::InitCommonLdl(MBCHAR const * ldlBlock, MBCHAR const * 
 	BOOL wordwrap = block->GetBool( k_AUI_TEXTBASE_LDL_WORDWRAP );
 	if ( type || vertcenter || wordwrap )
 	{
-
 		flags = 0;
 
 		if ( type )
@@ -207,7 +204,7 @@ AUI_ERRCODE aui_TextBase::InitCommonLdl(MBCHAR const * ldlBlock, MBCHAR const * 
 AUI_ERRCODE aui_TextBase::InitCommon(
 	const MBCHAR *text,
 	uint32 maxLength,
-	MBCHAR *fontname,
+	const MBCHAR *fontname,
 	sint32 fontsize,
 	COLORREF color,
 	COLORREF shadowcolor,
@@ -268,7 +265,6 @@ AUI_ERRCODE aui_TextBase::InitCommon(
 	return AUI_ERRCODE_OK;
 }
 
-
 aui_TextBase::~aui_TextBase()
 {
 	delete [] m_text;
@@ -278,7 +274,6 @@ aui_TextBase::~aui_TextBase()
 		g_ui->UnloadBitmapFont(m_textfont);
 	}
 }
-
 
 AUI_ERRCODE aui_TextBase::SetText(
 	const MBCHAR *text,
@@ -296,36 +291,31 @@ AUI_ERRCODE aui_TextBase::SetText(
 
 	return AUI_ERRCODE_OK;
 }
-
-AUI_ERRCODE	aui_TextBase::SetText2(MBCHAR *fmt,...)
+AUI_ERRCODE	aui_TextBase::SetText2(const MBCHAR *fmt,...)
 {
 
 	Assert(fmt != NULL );
 	if ( !fmt )
 		return AUI_ERRCODE_INVALIDPARAM;
 
-   	va_list          v_args;
+	va_list          v_args;
 
 	MBCHAR			 buff[256];
 
 	buff[255]='\0';
 
-    va_start(v_args, fmt);
+	va_start(v_args, fmt);
 #ifdef WIN32
-    _vsnprintf(buff,sizeof(buff) - 1, fmt, v_args);
+	_vsnprintf(buff,sizeof(buff) - 1, fmt, v_args);
 #else
-    vsnprintf(buff,sizeof(buff) - 1, fmt, v_args);
+	vsnprintf(buff,sizeof(buff) - 1, fmt, v_args);
 #endif
-    va_end( v_args );
+	va_end( v_args );
 
 	SetText(buff);
 
 	return AUI_ERRCODE_OK;
 }
-
-
-
-
 
 AUI_ERRCODE aui_TextBase::AppendText(MBCHAR const * text)
 {
@@ -494,16 +484,16 @@ uint32 aui_TextBase::FindNextWordBreak
 
 MBCHAR const * aui_TextBase::FindNextToken
 (
-	MBCHAR const *  text,
-    MBCHAR *        tokenList,
-    sint32          count
+	const MBCHAR *  text,
+	const MBCHAR *  tokenList,
+	sint32          count
 )
 {
 	Assert(text && tokenList);
 	if (!text || !tokenList) return NULL;
 
-	MBCHAR const *  tokenPtr    = NULL;
-	MBCHAR *        charPtr     = tokenList;
+	const MBCHAR *  tokenPtr    = NULL;
+	const MBCHAR *  charPtr     = tokenList;
 
 	for (size_t i = strlen(tokenList); i; i--)
 	{

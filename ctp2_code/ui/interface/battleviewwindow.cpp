@@ -119,11 +119,11 @@ void BattleViewWindow::Cleanup(void)
 
 BattleViewWindow::BattleViewWindow
 (
-    AUI_ERRCODE *   retval,
+	AUI_ERRCODE *   retval,
 	uint32          id,
-    MBCHAR *        ldlBlock,
-    sint32          bpp,
-    AUI_WINDOW_TYPE type
+	const MBCHAR *  ldlBlock,
+	sint32          bpp,
+	AUI_WINDOW_TYPE type
 )
 :
 	C3Window                (retval, id, ldlBlock, bpp, type),
@@ -163,7 +163,6 @@ BattleViewWindow::BattleViewWindow
 	InitCommonLdl(ldlBlock);
 }
 
-
 BattleViewWindow::~BattleViewWindow()
 {
 	delete m_battleView;
@@ -199,13 +198,12 @@ BattleViewWindow::~BattleViewWindow()
 
 	Assert(this == g_battleViewWindow);
 	if (this == g_battleViewWindow)
-    {
+	{
 		g_battleViewWindow = NULL;
-    }
+	}
 }
 
-
-AUI_ERRCODE BattleViewWindow::InitCommonLdl(MBCHAR *ldlBlock)
+AUI_ERRCODE BattleViewWindow::InitCommonLdl(const MBCHAR *ldlBlock)
 {
 	MBCHAR			buttonBlock[ k_AUI_LDL_MAXBLOCK + 1 ];
 	AUI_ERRCODE		errcode;
@@ -333,7 +331,7 @@ AUI_ERRCODE BattleViewWindow::InitCommonLdl(MBCHAR *ldlBlock)
 
 	sprintf(buttonBlock, "%s.%s", ldlBlock, "BattleViewArea");
 
-    ldl_datablock *block = aui_Ldl::GetLdl()->FindDataBlock( buttonBlock );
+	ldl_datablock *block = aui_Ldl::GetLdl()->FindDataBlock( buttonBlock );
 	Assert(block);
 	if (!block) return AUI_ERRCODE_OK;
 
@@ -370,13 +368,13 @@ void BattleViewWindow::SetupBattle(Battle *battle)
 	if (g_theCurrentBattle->GetAttacker() ==
 		    g_selected_item->GetVisiblePlayer()
 	    && !g_network.IsActive()
-       )
-    {
+	   )
+	{
 		m_retreatButton->Show();
 		m_retreatButton->Enable(true);
 	}
-    else
-    {
+	else
+	{
 		m_retreatButton->Hide();
 	}
 
@@ -392,7 +390,7 @@ void BattleViewWindow::SetupBattle(Battle *battle)
 	AUI_ERRCODE	errcode = AUI_ERRCODE_OK;
 	aui_StringTable	*table = new aui_StringTable(&errcode, "BattleViewTerrainTable");
 	Assert(errcode == AUI_ERRCODE_OK);
-	MBCHAR *imageName = NULL;
+	const MBCHAR *imageName = NULL;
 
 	const TerrainRecord *defTerrRec = g_theTerrainDB->Get(terrainType);
 	const TerrainRecord *attackTerrRec = g_theTerrainDB->Get(attackerTerrain);
@@ -423,10 +421,6 @@ void BattleViewWindow::SetupBattle(Battle *battle)
 		aui_StringTable	*cityTable = new aui_StringTable(&errcode, "BattleViewCityTable");
 		Assert(errcode == AUI_ERRCODE_OK);
 		Assert(cityTable);
-
-
-
-
 
 		aui_Image *cityImage = g_c3ui->LoadImage(useSplit ? "UPBO006.tga" : cityTable->GetString(terrainType));
 		m_battleView->SetCityImage(cityImage);

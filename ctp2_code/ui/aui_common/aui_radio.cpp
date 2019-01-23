@@ -4,11 +4,10 @@
 
 #include "aui_radio.h"
 
-
 aui_Radio::aui_Radio(
 	AUI_ERRCODE *retval,
 	uint32 id,
-	MBCHAR *ldlBlock,
+	const MBCHAR *ldlBlock,
 	ControlActionCallback *ActionFunc,
 	void *cookie )
 	:
@@ -22,7 +21,6 @@ aui_Radio::aui_Radio(
 		cookie )
 {
 }
-
 
 aui_Radio::aui_Radio(
 	AUI_ERRCODE *retval,
@@ -51,7 +49,6 @@ aui_Radio::aui_Radio(
 		numStates )
 {
 }
-
 
 void aui_Radio::MouseLDropInside( aui_MouseEvent *mouseData )
 {

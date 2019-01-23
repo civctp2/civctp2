@@ -44,7 +44,7 @@ public:
 
 	ctp2_Button(AUI_ERRCODE *retval,
 				uint32 id,
-				MBCHAR *ldlBlock,
+				const MBCHAR *ldlBlock,
 				ControlActionCallback *ActionFunc = NULL,
 				void *cookie = NULL) :
 		aui_ImageBase(ldlBlock),
@@ -54,8 +54,8 @@ public:
 
 	ctp2_Button(AUI_ERRCODE *retval,
 				uint32 id,
-				MBCHAR *ldlBlock,
-				MBCHAR *ldlTemplate,
+				const MBCHAR *ldlBlock,
+				const MBCHAR *ldlTemplate,
 				sint32 x,
 				sint32 y,
 				sint32 width,
@@ -70,7 +70,7 @@ public:
 
 	virtual ~ctp2_Button();
 
-	AUI_ERRCODE InitCommonLdl(MBCHAR *ldlBlock, MBCHAR *ldlTemplate,
+	AUI_ERRCODE InitCommonLdl(const MBCHAR *ldlBlock, const MBCHAR *ldlTemplate,
 		sint32 x, sint32 y, sint32 width, sint32 height);
 
 

@@ -502,7 +502,7 @@ AUI_ERRCODE IntelligenceWindow::DrawPlayerStrength(ctp2_Static *control,
 		InitImageTables();
 	}
 
-	MBCHAR * imageName = NULL;
+	const MBCHAR * imageName = NULL;
 	if (relativeStrength < DIPLOMATIC_STRENGTH_WEAK)            imageName = sm_strengthImages->GetString(0);
 	else if(relativeStrength < DIPLOMATIC_STRENGTH_AVERAGE)     imageName = sm_strengthImages->GetString(1);
 	else if(relativeStrength < DIPLOMATIC_STRENGTH_STRONG)      imageName = sm_strengthImages->GetString(2);
@@ -554,7 +554,7 @@ AUI_ERRCODE IntelligenceWindow::DrawEmbassy(ctp2_Static *control,
 		InitImageTables();
 	}
 
-	MBCHAR *imageName = NULL;
+	const MBCHAR *imageName = NULL;
 
 #if defined(_DEBUG)
 	if(sm_embassyImages->GetNumStrings() > 1 && Diplomat::GetDiplomat(g_selected_item->GetVisiblePlayer()).DesireWarWith(p))

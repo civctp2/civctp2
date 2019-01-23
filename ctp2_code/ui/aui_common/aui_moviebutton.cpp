@@ -17,7 +17,7 @@ extern ProfileDB	*g_theProfileDB;
 aui_MovieButton::aui_MovieButton(
 	AUI_ERRCODE *retval,
 	uint32 id,
-	MBCHAR *ldlBlock,
+	const MBCHAR *ldlBlock,
 	ControlActionCallback *ActionFunc,
 	void *cookie )
 	:
@@ -36,7 +36,6 @@ aui_MovieButton::aui_MovieButton(
 	if ( !AUI_SUCCESS(*retval) ) return;
 }
 
-
 aui_MovieButton::aui_MovieButton(
 	AUI_ERRCODE *retval,
 	uint32 id,
@@ -44,7 +43,7 @@ aui_MovieButton::aui_MovieButton(
 	sint32 y,
 	sint32 width,
 	sint32 height,
-	MBCHAR *movie,
+	const MBCHAR *movie,
 	ControlActionCallback *ActionFunc,
 	void *cookie )
 	:
@@ -63,10 +62,9 @@ aui_MovieButton::aui_MovieButton(
 	if ( !AUI_SUCCESS(*retval) ) return;
 }
 
-
-AUI_ERRCODE aui_MovieButton::InitCommonLdl( MBCHAR *ldlBlock )
+AUI_ERRCODE aui_MovieButton::InitCommonLdl( const MBCHAR *ldlBlock )
 {
-    ldl_datablock * block = aui_Ldl::FindDataBlock(ldlBlock);
+	ldl_datablock * block = aui_Ldl::FindDataBlock(ldlBlock);
 	Assert( block != NULL );
 	if ( !block ) return AUI_ERRCODE_LDLFINDDATABLOCKFAILED;
 
@@ -76,8 +74,7 @@ AUI_ERRCODE aui_MovieButton::InitCommonLdl( MBCHAR *ldlBlock )
 	return errcode;
 }
 
-
-AUI_ERRCODE aui_MovieButton::InitCommon( MBCHAR *movie )
+AUI_ERRCODE aui_MovieButton::InitCommon( const MBCHAR *movie )
 {
 	m_movie = NULL;
 
@@ -89,7 +86,6 @@ AUI_ERRCODE aui_MovieButton::InitCommon( MBCHAR *movie )
 	return AUI_ERRCODE_OK;
 }
 
-
 aui_MovieButton::~aui_MovieButton()
 {
 	if ( m_movie )
@@ -98,7 +94,6 @@ aui_MovieButton::~aui_MovieButton()
 		m_movie = NULL;
 	}
 }
-
 
 aui_Movie *aui_MovieButton::SetMovie( const MBCHAR *movie )
 {
@@ -114,22 +109,8 @@ aui_Movie *aui_MovieButton::SetMovie( const MBCHAR *movie )
 			return NULL;
 		}
 
-
 		m_movie->SetDestSurface( m_window ? m_window->TheSurface() : NULL );
 		m_movie->SetDestRect( m_x, m_y, m_x + m_width, m_y + m_height );
-
-
-
-
-
-
-
-
-
-
-
-
-
 
 		if (m_window) {
 			m_window->SetDynamic(FALSE);
@@ -147,20 +128,21 @@ aui_Movie *aui_MovieButton::SetMovie( const MBCHAR *movie )
 	return prevMovie;
 }
 
-
 AUI_ERRCODE aui_MovieButton::Idle( void )
 {
 	if ( m_movie )
 	{
-
-		if ( !m_movie->GetDestSurface() ) {
+		if ( !m_movie->GetDestSurface() )
+		{
 			m_movie->SetDestSurface( m_window->TheSurface() );
 		}
 
-		if ( !m_movie->IsOpen() ) {
+		if ( !m_movie->IsOpen() )
+		{
 			uint32 flags = m_flags;
 
-			if (m_fullScreen) {
+			if (m_fullScreen)
+			{
 				flags |= k_AUI_MOVIE_PLAYFLAG_ONSCREEN;
 			}
 

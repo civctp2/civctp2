@@ -48,15 +48,15 @@ public:
 		sint32 width,
 		sint32 height,
 		sint32 bpp,
-		MBCHAR *ldlFilename = NULL,
+		const MBCHAR *ldlFilename = NULL,
 		BOOL useExclusiveMode = FALSE );
 	virtual ~aui_SDLUI();
 
 protected:
 	aui_SDLUI()
-    :   aui_UI              (),
-        aui_SDL             ()
-    { ; };
+	:   aui_UI              (),
+	    aui_SDL             ()
+	{ ; };
 
 	AUI_ERRCODE InitCommon( void );
 

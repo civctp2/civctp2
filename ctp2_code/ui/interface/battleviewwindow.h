@@ -4,11 +4,6 @@
 #include "c3window.h"
 #include "aui_action.h"
 
-
-
-
-
-
 class Battle;
 class BattleView;
 class ctp2_Static;
@@ -25,7 +20,7 @@ public:
 	BattleViewWindow(
 		AUI_ERRCODE *retval,
 		uint32 id,
-		MBCHAR *ldlBlock,
+		const MBCHAR *ldlBlock,
 		sint32 bpp,
 		AUI_WINDOW_TYPE type = AUI_WINDOW_TYPE_STANDARD );
 
@@ -49,7 +44,7 @@ public:
 	const BattleView *GetBattleView() const { return(m_battleView); }
 
 protected:
-	AUI_ERRCODE InitCommonLdl(MBCHAR *ldlBlock);
+	AUI_ERRCODE InitCommonLdl(const MBCHAR *ldlBlock);
 
 public:
 	virtual AUI_ERRCODE DrawThis(
@@ -108,14 +103,13 @@ private:
 
 };
 
-
 class RemoveBattleViewAction : public aui_Action
 {
 public:
 	RemoveBattleViewAction(bool kill)
-    :   aui_Action      (),
-        m_killBattle    (kill)
-    { ; };
+	:   aui_Action      (),
+	    m_killBattle    (kill)
+	{ ; };
 
 	virtual void	Execute
 	(

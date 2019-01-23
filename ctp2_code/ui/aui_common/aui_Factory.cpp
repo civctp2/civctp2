@@ -60,8 +60,8 @@ aui_Factory::new_Surface(AUI_ERRCODE &retval,
 	aui_DirectSurface *surface = 0;
 
 	surface = new aui_DirectSurface(&retval, width, height, g_c3ui->BitsPerPixel(), g_c3ui->DD(),
-				  (LPDIRECTDRAWSURFACE) data,
-				  isPrimary, useVideoMemory);
+	             (LPDIRECTDRAWSURFACE) data,
+	              isPrimary, useVideoMemory);
 #endif
 	Assert( AUI_NEWOK(surface, retval) );
 
@@ -69,19 +69,15 @@ aui_Factory::new_Surface(AUI_ERRCODE &retval,
 }
 
 aui_Mouse *
-aui_Factory::new_Mouse(AUI_ERRCODE &retval,
-                       MBCHAR      *ldlBlock,
-                       const BOOL  &useExclusiveMode
+aui_Factory::new_Mouse(AUI_ERRCODE  &retval,
+                       const MBCHAR *ldlBlock,
+                       const BOOL   &useExclusiveMode
                       )
 {
 #if defined(__AUI_USE_SDL__)
-	aui_SDLMouse *mouse = 0;
-
-	mouse = new aui_SDLMouse(&retval, ldlBlock, useExclusiveMode);
+	aui_SDLMouse *mouse = new aui_SDLMouse(&retval, ldlBlock, useExclusiveMode);
 #elif defined(__AUI_USE_DIRECTX__)
-	aui_DirectMouse *mouse = 0;
-
-	mouse = new aui_DirectMouse(&retval, ldlBlock, useExclusiveMode);
+	aui_DirectMouse *mouse = new aui_DirectMouse(&retval, ldlBlock, useExclusiveMode);
 #endif
 	Assert( AUI_NEWOK(mouse, retval) );
 
@@ -92,13 +88,9 @@ aui_Keyboard *
 aui_Factory::new_Keyboard(AUI_ERRCODE &retval)
 {
 #if defined(__AUI_USE_SDL__)
-	aui_SDLKeyboard *keyboard = 0;
-
-	keyboard = new aui_SDLKeyboard(&retval);
+	aui_SDLKeyboard *keyboard = new aui_SDLKeyboard(&retval);
 #elif defined(__AUI_USE_DIRECTX__)
-	aui_DirectKeyboard *keyboard = 0;
-
-	keyboard = new aui_DirectKeyboard(&retval);
+	aui_DirectKeyboard *keyboard = new aui_DirectKeyboard(&retval);
 #endif
 	Assert( AUI_NEWOK(keyboard, retval) );
 

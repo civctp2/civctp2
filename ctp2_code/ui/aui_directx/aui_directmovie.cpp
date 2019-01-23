@@ -37,7 +37,7 @@ extern C3UI		*g_c3ui;
 
 aui_DirectMovie::aui_DirectMovie(
 	AUI_ERRCODE *retval,
-	MBCHAR const * filename )
+	const MBCHAR * filename )
 	:
 	aui_Movie( retval, filename )
 {

@@ -13,7 +13,7 @@
 aui_TipWindow::aui_TipWindow(
 	AUI_ERRCODE *retval,
 	uint32 id,
-	MBCHAR *ldlBlock )
+	const MBCHAR *ldlBlock )
 	:
 	aui_Window( retval, id, ldlBlock, 0, AUI_WINDOW_TYPE_TIP )
 {
@@ -24,7 +24,6 @@ aui_TipWindow::aui_TipWindow(
 	Assert( AUI_SUCCESS(*retval) );
 	if ( !AUI_SUCCESS(*retval) ) return;
 }
-
 
 aui_TipWindow::aui_TipWindow(
 	AUI_ERRCODE *retval,
@@ -44,10 +43,9 @@ aui_TipWindow::aui_TipWindow(
 	if ( !AUI_SUCCESS(*retval) ) return;
 }
 
-
-AUI_ERRCODE aui_TipWindow::InitCommonLdl( MBCHAR *ldlBlock )
+AUI_ERRCODE aui_TipWindow::InitCommonLdl( const MBCHAR *ldlBlock )
 {
-    ldl_datablock * block = aui_Ldl::FindDataBlock(ldlBlock);
+	ldl_datablock * block = aui_Ldl::FindDataBlock(ldlBlock);
 	Assert( block != NULL );
 	if ( !block ) return AUI_ERRCODE_LDLFINDDATABLOCKFAILED;
 
@@ -58,8 +56,7 @@ AUI_ERRCODE aui_TipWindow::InitCommonLdl( MBCHAR *ldlBlock )
 	MBCHAR tipBlock[ k_AUI_LDL_MAXBLOCK + 1 ];
 	sprintf( tipBlock, "%s.%s", ldlBlock, k_AUI_TIPWINDOW_LDL_TIP );
 
-
-    if (aui_Ldl::FindDataBlock(tipBlock))
+	if (aui_Ldl::FindDataBlock(tipBlock))
 	{
 		m_staticTip = new aui_Static(
 			&errcode,
@@ -82,7 +79,7 @@ AUI_ERRCODE aui_TipWindow::InitCommonLdl( MBCHAR *ldlBlock )
 	return AUI_ERRCODE_OK;
 }
 
-AUI_ERRCODE aui_TipWindow::SetTipText(MBCHAR *text)
+AUI_ERRCODE aui_TipWindow::SetTipText(const MBCHAR *text)
 {
 	m_staticTip->SetText(text);
 	aui_BitmapFont	*font = m_staticTip->GetTextFont();
@@ -110,7 +107,6 @@ AUI_ERRCODE aui_TipWindow::InitCommon( void )
 	return AUI_ERRCODE_OK;
 }
 
-
 aui_TipWindow::~aui_TipWindow()
 {
 	if ( m_allocatedTip && m_staticTip )
@@ -123,7 +119,6 @@ aui_TipWindow::~aui_TipWindow()
 
 AUI_ERRCODE aui_TipWindow::DrawThis( aui_Surface *surface, sint32 x, sint32 y )
 {
-
 	if ( IsHidden() ) return AUI_ERRCODE_OK;
 
 	if ( !surface ) surface = m_surface;

@@ -248,18 +248,18 @@ TiledMap::TiledMap(MapPoint &size)
 
 	AUI_ERRCODE         errcode     = AUI_ERRCODE_OK;
 	aui_StringTable	*   stringTable =
-        new aui_StringTable(&errcode, "TiledMapFontStringTable");
+	    new aui_StringTable(&errcode, "TiledMapFontStringTable");
 
 	if (AUI_NEWOK(stringTable, errcode))
-    {
-		MBCHAR *    fontNameString  = stringTable->GetString(0);
-		MBCHAR *    fontSizeString  = stringTable->GetString(1);
+	{
+		const MBCHAR *    fontNameString  = stringTable->GetString(0);
+		const MBCHAR *    fontSizeString  = stringTable->GetString(1);
 
 		m_font = g_c3ui->LoadBitmapFont(fontNameString);
 		Assert(m_font);
 		m_font->SetPointSize(atoi(fontSizeString));
 
-		MBCHAR *    fString         = stringTable->GetString(2);
+		const MBCHAR *    fString         = stringTable->GetString(2);
 		strncpy(m_fortifyString, fString, 3);
 	}
 

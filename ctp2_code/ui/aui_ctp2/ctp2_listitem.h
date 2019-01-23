@@ -54,31 +54,12 @@ public:
 	void *                      m_userData;
 	CTP2ItemCompareCallback *   m_compareCallback;
 
-	ctp2_ListItem(AUI_ERRCODE *retval, MBCHAR *ldlBlock);
+	ctp2_ListItem(AUI_ERRCODE *retval, const MBCHAR *ldlBlock);
 	virtual ~ctp2_ListItem();
 
 	virtual AUI_ERRCODE Draw( aui_Surface *surface, sint32 x, sint32 y );
-
-
-
-
-
 	virtual void Update(void) {}
-
-
-
-
-
-
-
-
-
-
-
-
-
 	virtual sint32 Compare(ctp2_ListItem *item2, uint32 column);
-
 
 	void SetUserData(void *data) { m_userData = data; }
 	void *GetUserData() { return m_userData; }

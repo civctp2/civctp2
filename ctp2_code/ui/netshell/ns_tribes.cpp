@@ -44,7 +44,6 @@ ns_Tribes *g_nsTribes = NULL;
 
 extern StringDB *g_theStringDB;
 
-
 ns_Tribes::ns_Tribes()
 {
 	Assert( g_nsTribes == NULL );
@@ -61,7 +60,6 @@ ns_Tribes::ns_Tribes()
 		Assert( AUI_NEWOK(m_stringtable,errcode) );
 		if ( !AUI_NEWOK(m_stringtable,errcode) ) return;
 
-
 		m_stringtable->SetString( (char *)g_theStringDB->GetNameStr("str_tbl_ldl_None"), 0 );
 
 		for ( sint32 i = 0; i < numCivs; i++ )
@@ -77,7 +75,6 @@ ns_Tribes::ns_Tribes()
 	}
 }
 
-
 ns_Tribes::~ns_Tribes()
 {
 	if ( m_stringtable )
@@ -88,7 +85,6 @@ ns_Tribes::~ns_Tribes()
 
 	g_nsTribes = NULL;
 }
-
 
 ns_TribesDropDown::ns_TribesDropDown(
 	AUI_ERRCODE *retval,
@@ -113,7 +109,7 @@ ns_TribesDropDown::ns_TribesDropDown(
 	sint32 numCivs = g_nsTribes->GetStrings()->GetNumStrings();
 	for ( sint32 i = 0; i < numCivs; i++ )
 	{
-		MBCHAR *name = g_nsTribes->GetStrings()->GetString( i );
+		const MBCHAR *name = g_nsTribes->GetStrings()->GetString( i );
 
 		ns_ListItem *item = new ns_ListItem(
 			retval,
@@ -125,7 +121,6 @@ ns_TribesDropDown::ns_TribesDropDown(
 		AddItem( (aui_Item *)item );
 	}
 }
-
 
 ns_TribesDropDown::~ns_TribesDropDown()
 {

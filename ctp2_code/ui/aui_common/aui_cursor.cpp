@@ -24,7 +24,7 @@
 //
 // Modifications from the original Activision code:
 //
-// - Initialized local variables. (Sep 9th 2005 Martin G�hmann)
+// - Initialized local variables. (Sep 9th 2005 Martin Gühmann)
 //
 //----------------------------------------------------------------------------
 
@@ -35,7 +35,7 @@
 
 aui_Cursor::aui_Cursor(
 	AUI_ERRCODE *retval,
-	MBCHAR const *filename )
+	const MBCHAR *filename )
 	:
 	aui_Image( retval, filename )
 {

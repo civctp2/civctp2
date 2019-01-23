@@ -81,7 +81,6 @@ struct aui_ResourceElement
 	sint32	refcount;
 };
 
-
 template<class T>
 class aui_Resource
 {
@@ -103,18 +102,10 @@ public:
 protected:
 	tech_WLList<aui_ResourceElement<T> *>	*m_resourceList;
 
-
 	static tech_WLList<MBCHAR *>			*m_pathList;
 
 	static sint32							m_resourceRefCount;
 };
-
-
-
-
-
-
-
 
 template<class TT>
 aui_ResourceElement<TT>::aui_ResourceElement(
@@ -126,7 +117,6 @@ aui_ResourceElement<TT>::aui_ResourceElement(
 	pathhash(aui_Base::CalculateHash(fullPath)),
 	refcount(1)
 {
-
 	Assert( newName != NULL && fullPath != NULL );
 	if ( !newName || !fullPath ) return;
 	// Temporary patch: modern code would use std::string and initialiser
@@ -149,17 +139,9 @@ aui_ResourceElement<TT>::aui_ResourceElement(
 template<class TT>
 aui_ResourceElement<TT>::~aui_ResourceElement()
 {
-    delete resource;
+	delete resource;
 	delete [] name;
 }
-
-
-
-
-
-
-
-
 
 template<class T> tech_WLList<MBCHAR *> *aui_Resource<T>::m_pathList = NULL;
 template<class T> sint32 aui_Resource<T>::m_resourceRefCount = 0;
@@ -182,7 +164,7 @@ aui_Resource<T>::~aui_Resource()
 {
 	Assert(!m_resourceList || (m_resourceList->L() == 0));
 	delete m_resourceList;
-    m_resourceList = NULL;
+	m_resourceList = NULL;
 
 	if (!--m_resourceRefCount)
 	{
@@ -196,13 +178,6 @@ aui_Resource<T>::~aui_Resource()
 		m_pathList = NULL;
 	}
 }
-
-
-
-
-
-
-
 
 template<class T>
 AUI_ERRCODE aui_Resource<T>::AddSearchPath( const MBCHAR *path )
@@ -239,7 +214,6 @@ AUI_ERRCODE aui_Resource<T>::AddSearchPath( const MBCHAR *path )
 template<class T>
 AUI_ERRCODE aui_Resource<T>::RemoveSearchPath( const MBCHAR *path )
 {
-
 	ListPos position = m_pathList->GetHeadPosition();
 	for ( sint32 i = m_pathList->L(); i; i-- )
 	{
@@ -266,18 +240,6 @@ T *aui_Resource<T>::Load( const MBCHAR *resName, C3DIR dir, uint32 size)
 	const MBCHAR *name;
 	MBCHAR tempName[MAX_PATH + 1];
 
-
-
-
-
-
-
-
-
-
-
-
-
 	if (size)
 	{
 		sprintf(tempName, "%s%d", resName, size);
@@ -296,27 +258,20 @@ T *aui_Resource<T>::Load( const MBCHAR *resName, C3DIR dir, uint32 size)
 		aui_ResourceElement<T> *re = m_resourceList->GetNext( position );
 		if (((hash == re->hash) && (strcmp(name, re->name) == 0))   ||
 		    ((hash == re->pathhash) &&
-             (!re->resource || (strcmp(name, re->resource->GetFilename()) == 0))
-            )
-           )
+		     (!re->resource || (strcmp(name, re->resource->GetFilename()) == 0))
+		    )
+		   )
 		{
 			re->refcount++;
 			return re->resource;
 		}
 	}
 
-
-
-
 	if (size)
 		name = resName;
 
 	static MBCHAR fullPath[ MAX_PATH + 1 ];
 	strncpy( fullPath, name, MAX_PATH );
-
-
-
-
 
 	if (dir != C3DIR_DIRECT) {
 
@@ -365,17 +320,17 @@ BOOL aui_Resource<T>::FindFile( MBCHAR *fullPath, const MBCHAR *name )
 		{
 			for ( sint32 i = m_pathList->L(); i; i-- )
 			{
-				MBCHAR *path = m_pathList->GetNext( position );
+				const MBCHAR *path = m_pathList->GetNext( position );
 				sprintf( fullPath, "%s%s%s", path, FILE_SEP, name );
 
 #if defined(WIN32)
 				if ( GetFileAttributes( fullPath ) != 0xffffffff )
 #else
-            struct stat st;
-            if (0 == stat(fullPath, &st))
+				struct stat st;
+				if (0 == stat(fullPath, &st))
 #endif
 				{
-                    return TRUE;
+					return TRUE;
 				}
 			}
 
@@ -383,7 +338,7 @@ BOOL aui_Resource<T>::FindFile( MBCHAR *fullPath, const MBCHAR *name )
 		}
 	}
 
-    return FALSE;
+	return FALSE;
 }
 
 template<class T>
@@ -396,12 +351,12 @@ AUI_ERRCODE aui_Resource<T>::Unload( T *resource )
 
 		aui_ResourceElement<T> *re = m_resourceList->GetNext( position );
 		if (resource == re->resource)
-        {
-            if (!--re->refcount)
-            {
+		{
+			if (!--re->refcount)
+			{
 				m_resourceList->DeleteAt(prevPosition);
-			    delete re;
-            }
+				delete re;
+			}
 			return AUI_ERRCODE_OK;
 		}
 	}
@@ -422,15 +377,15 @@ AUI_ERRCODE aui_Resource<T>::Unload( const MBCHAR *name )
 		aui_ResourceElement<T> *re = m_resourceList->GetNext( position );
 		if (((hash == re->hash) && (strcmp(name, re->name) == 0))   ||
 		    ((hash == re->pathhash) &&
-             (!re->resource || (strcmp(name, re->resource->GetFilename()) == 0))
-            )
-           )
+		     (!re->resource || (strcmp(name, re->resource->GetFilename()) == 0))
+		    )
+		   )
 		{
 			if (!--re->refcount)
 			{
 				m_resourceList->DeleteAt(prevPosition);
 			    delete re;
-            }
+			}
 			return AUI_ERRCODE_OK;
 		}
 	}

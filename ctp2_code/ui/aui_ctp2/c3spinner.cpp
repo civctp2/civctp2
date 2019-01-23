@@ -100,7 +100,7 @@ C3Spinner::C3Spinner(
 	Assert( AUI_SUCCESS(*retval) );
 	if ( !AUI_SUCCESS(*retval) ) return;
 
-	*retval = aui_SoundBase::InitCommon((MBCHAR **)NULL);
+	*retval = aui_SoundBase::InitCommon((const MBCHAR **)NULL);
 	Assert( AUI_SUCCESS(*retval) );
 	if ( !AUI_SUCCESS(*retval) ) return;
 

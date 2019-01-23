@@ -13,7 +13,7 @@ public:
 
 	aui_DirectMovie(
 		AUI_ERRCODE *retval,
-		MBCHAR const * filename = NULL );
+		const MBCHAR * filename = NULL );
 	virtual ~aui_DirectMovie();
 
 protected:

@@ -20,7 +20,7 @@ c3_Static::c3_Static
 (
 	AUI_ERRCODE *   retval,
 	uint32          id,
-	MBCHAR *        ldlBlock
+	const MBCHAR *  ldlBlock
 )
 :
 	aui_ImageBase   (ldlBlock),
@@ -34,7 +34,6 @@ c3_Static::c3_Static
 	}
 }
 
-
 c3_Static::c3_Static
 (
 	AUI_ERRCODE *   retval,
@@ -43,8 +42,8 @@ c3_Static::c3_Static
 	sint32          y,
 	sint32          width,
 	sint32          height,
-	MBCHAR *        pattern,
-	MBCHAR *        text,
+	const MBCHAR *  pattern,
+	const MBCHAR *  text,
 	uint32          maxLength,
 	uint32          bevelWidth,
 	uint32          bevelType
@@ -61,8 +60,7 @@ c3_Static::c3_Static
 	}
 }
 
-
-AUI_ERRCODE c3_Static::InitCommonLdl( MBCHAR *ldlBlock )
+AUI_ERRCODE c3_Static::InitCommonLdl( const MBCHAR *ldlBlock )
 {
 	ldl_datablock * block = aui_Ldl::FindDataBlock(ldlBlock);
 	Assert( block != NULL );
@@ -82,7 +80,6 @@ AUI_ERRCODE c3_Static::InitCommonLdl( MBCHAR *ldlBlock )
 
 	return AUI_ERRCODE_OK;
 }
-
 
 AUI_ERRCODE c3_Static::InitCommon(uint32 bevelWidth, uint32 bevelType )
 {
@@ -121,14 +118,6 @@ AUI_ERRCODE c3_Static::DrawThis(
 		surface,
 		&rect );
 
-
-
-
-
-
-
-
-
 	if (m_bevelWidth > 0) {
 		if ( m_bevelType == 2 ) {
 			primitives_FrameThickRect16( surface, &rect, g_colorSet->GetColor( COLOR_UI_BOX ), m_bevelWidth );
@@ -166,7 +155,6 @@ void c3_Static::MouseRGrabInside( aui_MouseEvent *mouseData)
 	m_mouseCode = AUI_ERRCODE_HANDLED;
 }
 
-
 void c3_Static::MouseLDropInside( aui_MouseEvent *mouseData )
 {
 	if (IsDisabled()) return;
@@ -192,13 +180,6 @@ void c3_Static::MouseRDropInside( aui_MouseEvent *mouseData )
 
 	HandleGameSpecificRightClick((void *)this);
 	m_mouseCode = AUI_ERRCODE_HANDLED;
-
-
-
-
-
-
-
 
 #else
 	if ( !GetWhichSeesMouse() || GetWhichSeesMouse() == this ) {

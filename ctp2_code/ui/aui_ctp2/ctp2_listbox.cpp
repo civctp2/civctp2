@@ -63,7 +63,7 @@ uint32 ctp2_ListBox::m_ctp2_listboxClassId = aui_UniqueId();
 ctp2_ListBox::ctp2_ListBox(
 	AUI_ERRCODE *retval,
 	uint32 id,
-	MBCHAR *ldlBlock,
+	const MBCHAR *ldlBlock,
 	ControlActionCallback *ActionFunc,
 	void *cookie )
 	:
@@ -97,7 +97,6 @@ ctp2_ListBox::ctp2_ListBox(
 	if ( !AUI_SUCCESS(*retval) ) return;
 }
 
-
 ctp2_ListBox::ctp2_ListBox(
 	AUI_ERRCODE *retval,
 	uint32 id,
@@ -105,7 +104,7 @@ ctp2_ListBox::ctp2_ListBox(
 	sint32 y,
 	sint32 width,
 	sint32 height,
-	MBCHAR *pattern,
+	const MBCHAR *pattern,
 	sint32 bevelWidth,
 	sint32 bevelType,
 	ControlActionCallback *ActionFunc,
@@ -120,7 +119,7 @@ ctp2_ListBox::ctp2_ListBox(
 	Assert( AUI_SUCCESS(*retval) );
 	if ( !AUI_SUCCESS(*retval) ) return;
 
-	*retval = aui_SoundBase::InitCommon( (MBCHAR **)NULL );
+	*retval = aui_SoundBase::InitCommon( (const MBCHAR **)NULL );
 	Assert( AUI_SUCCESS(*retval) );
 	if ( !AUI_SUCCESS(*retval) ) return;
 
@@ -141,9 +140,6 @@ ctp2_ListBox::ctp2_ListBox(
 	if ( !AUI_SUCCESS(*retval) ) return;
 }
 
-
-
-
 ctp2_ListBox::~ctp2_ListBox()
 {
 	if (this == ms_mouseFocusListBox)
@@ -160,10 +156,9 @@ ctp2_ListBox::~ctp2_ListBox()
 	m_pane->ChildList()->DeleteAll();
 }
 
-
-AUI_ERRCODE ctp2_ListBox::InitCommonLdl( MBCHAR *ldlBlock )
+AUI_ERRCODE ctp2_ListBox::InitCommonLdl( const MBCHAR *ldlBlock )
 {
-    ldl_datablock * block = aui_Ldl::FindDataBlock(ldlBlock);
+	ldl_datablock * block = aui_Ldl::FindDataBlock(ldlBlock);
 	Assert( block != NULL );
 	if ( !block ) return AUI_ERRCODE_LDLFINDDATABLOCKFAILED;
 
@@ -173,10 +168,8 @@ AUI_ERRCODE ctp2_ListBox::InitCommonLdl( MBCHAR *ldlBlock )
 	return InitCommon(bevelWidth, bevelType);
 }
 
-
 AUI_ERRCODE ctp2_ListBox::InitCommon(sint32 bevelWidth, sint32 bevelType)
 {
-
 	m_drawMask = k_AUI_REGION_DRAWFLAG_UPDATE
 		| k_AUI_REGION_DRAWFLAG_MOUSELGRABINSIDE
 		| k_AUI_REGION_DRAWFLAG_MOUSELDROPINSIDE
@@ -193,13 +186,10 @@ AUI_ERRCODE ctp2_ListBox::InitCommon(sint32 bevelWidth, sint32 bevelType)
 	return AUI_ERRCODE_OK;
 }
 
-
-
-
-AUI_ERRCODE ctp2_ListBox::CreateRangersAndHeader( MBCHAR *ldlBlock )
+AUI_ERRCODE ctp2_ListBox::CreateRangersAndHeader( const MBCHAR *ldlBlock )
 {
 	AUI_ERRCODE errcode = AUI_ERRCODE_OK;
-	MBCHAR		*patternFilename = NULL;
+	const MBCHAR		*patternFilename = NULL;
 
 	if (m_pattern)
 		patternFilename = m_pattern->GetFilename();
@@ -218,7 +208,7 @@ AUI_ERRCODE ctp2_ListBox::CreateRangersAndHeader( MBCHAR *ldlBlock )
 
 		sprintf( block, "%s.%s", ldlBlock, k_AUI_LISTBOX_LDL_HEADER );
 
-        if (aui_Ldl::FindDataBlock(block))
+		if (aui_Ldl::FindDataBlock(block))
 			m_header = new c3_Header(
 				&errcode,
 				aui_UniqueId(),
@@ -245,7 +235,7 @@ AUI_ERRCODE ctp2_ListBox::CreateRangersAndHeader( MBCHAR *ldlBlock )
 	{
 		sprintf( block, "%s.%s", ldlBlock, k_AUI_LISTBOX_LDL_RANGERY );
 
-        if (aui_Ldl::FindDataBlock(block))
+		if (aui_Ldl::FindDataBlock(block))
 			m_verticalRanger = new c3_Ranger(
 				&errcode,
 				aui_UniqueId(),

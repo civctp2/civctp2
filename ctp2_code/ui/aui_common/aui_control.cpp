@@ -85,7 +85,7 @@ aui_Control::aui_Control
 (
 	AUI_ERRCODE *           retval,
 	uint32                  id,
-	MBCHAR *                ldlBlock,
+	const MBCHAR *          ldlBlock,
 	ControlActionCallback * ActionFunc,
 	void *                  cookie
 )
@@ -125,7 +125,7 @@ aui_Control::aui_Control
 	aui_ImageBase           ((sint32) 0),
 	aui_TextBase            (NULL),
 	aui_Region              (retval, id, x, y, width, height),
-	aui_SoundBase           ((MBCHAR **) NULL),
+	aui_SoundBase           ((const MBCHAR **) NULL),
 	m_stringTable           (NULL),
 	m_allocatedTip          (false),
 	m_statusText            (NULL),
@@ -144,11 +144,11 @@ aui_Control::aui_Control
 
 
 AUI_ERRCODE aui_Control::InitCommonLdl(
-	MBCHAR *ldlBlock,
+	const MBCHAR *ldlBlock,
 	ControlActionCallback *ActionFunc,
 	void *cookie )
 {
-    ldl_datablock * block = aui_Ldl::FindDataBlock(ldlBlock);
+	ldl_datablock * block = aui_Ldl::FindDataBlock(ldlBlock);
 	Assert( block != NULL );
 	if ( !block ) return AUI_ERRCODE_LDLFINDDATABLOCKFAILED;
 
@@ -156,7 +156,7 @@ AUI_ERRCODE aui_Control::InitCommonLdl(
 	Assert( AUI_SUCCESS(errcode) );
 	if ( !AUI_SUCCESS(errcode) ) return errcode;
 
-	MBCHAR *tip = block->GetString(k_AUI_CONTROL_LDL_TIPWINDOW);
+	const MBCHAR *tip = block->GetString(k_AUI_CONTROL_LDL_TIPWINDOW);
 	if (tip) {
 		m_tip = new aui_TipWindow(&errcode, aui_UniqueId(), "DefaultTipWindow");
 		Assert( AUI_NEWOK(m_tip,errcode) );
@@ -175,7 +175,7 @@ AUI_ERRCODE aui_Control::InitCommonLdl(
 		SetTipWindow( m_tip );
 	}
 
-	MBCHAR *shortcut = block->GetString(k_AUI_CONTROL_SHORTCUT);
+	const MBCHAR *shortcut = block->GetString(k_AUI_CONTROL_SHORTCUT);
 	m_keyboardAction = 0;
 	if(shortcut) {
 		if(shortcut[0] == '^') {
@@ -204,7 +204,7 @@ AUI_ERRCODE aui_Control::InitCommonLdl(
 
 	static MBCHAR stblock[ k_AUI_LDL_MAXBLOCK + 1 ];
 	sprintf( stblock, "%s.%s", ldlBlock, k_AUI_CONTROL_LDL_STRINGTABLE );
-    ldl_datablock *ldlblock = aui_Ldl::GetLdl()->FindDataBlock( stblock );
+	ldl_datablock *ldlblock = aui_Ldl::GetLdl()->FindDataBlock( stblock );
 	if ( ldlblock )
 	{
 		m_stringTable = new aui_StringTable( &errcode, stblock );
@@ -216,13 +216,13 @@ AUI_ERRCODE aui_Control::InitCommonLdl(
 	InitializeImageLayers(block);
 
 	if (block->GetAttributeType(k_AUI_CONTROL_CANFOCUS) == ATTRIBUTE_TYPE_INT)
-    {
+	{
 		m_focusIndex = block->GetInt(k_AUI_CONTROL_CANFOCUS);
-    }
-    else
-    {
+	}
+	else
+	{
 		m_focusIndex = -1;
-    }
+	}
 
 	return AUI_ERRCODE_OK;
 }
@@ -232,7 +232,7 @@ AUI_ERRCODE aui_Control::InitCommon(
 	ControlActionCallback *ActionFunc,
 	void *cookie )
 {
-    m_window = NULL,
+	m_window = NULL,
 	m_allocatedTip = FALSE,
 	m_tip = NULL,
 	m_showingTip = FALSE,
@@ -962,13 +962,6 @@ void aui_Control::MouseNoChange( aui_MouseEvent *mouseData )
 	}
 }
 
-
-
-
-
-
-
-
 void aui_Control::ExchangeImage(sint32 layerIndex, sint32 imageIndex,
 								const MBCHAR *imageName)
 {
@@ -978,7 +971,6 @@ void aui_Control::ExchangeImage(sint32 layerIndex, sint32 imageIndex,
 	m_imageLayerList->ExchangeImage(layerIndex, imageIndex, imageName);
 }
 
-
 AUI_ERRCODE	aui_Control::Resize(sint32 width, sint32 height)
 {
 	uint32 oldRenderFlags = m_renderFlags;
@@ -986,7 +978,7 @@ AUI_ERRCODE	aui_Control::Resize(sint32 width, sint32 height)
 	AUI_ERRCODE errorCode = aui_Region::Resize(width, height);
 
 	if(m_numberOfLayers) {
-		MBCHAR *ldlBlock = (MBCHAR *)GetLdlBlock();
+		const MBCHAR *ldlBlock = GetLdlBlock();
 		if(!ldlBlock)
 
 			ldlBlock = aui_Ldl::GetBlock(this);
@@ -995,9 +987,6 @@ AUI_ERRCODE	aui_Control::Resize(sint32 width, sint32 height)
 
 			delete m_imageLayerList;
 			m_imageLayerList = NULL;
-
-
-
 
 			InitializeImageLayers(g_ui->GetLdl()->GetLdl()->FindDataBlock(ldlBlock));
 		}
@@ -1008,25 +997,19 @@ AUI_ERRCODE	aui_Control::Resize(sint32 width, sint32 height)
 	return(errorCode);
 }
 
-
 void aui_Control::InitializeLayerFlag(ldl_datablock *theBlock, sint32 layerIndex,
 									  const MBCHAR *flagString, sint32 flag,
 									  const MBCHAR *layerIndexString)
 {
-
 	static const sint32 LAYER_INDEX_STRING_SIZE = 16;
 	static char localLayerIndexString[LAYER_INDEX_STRING_SIZE];
 
-	if(!layerIndexString) {
-
-
+	if(!layerIndexString)
+	{
 		sprintf(localLayerIndexString, "%d", layerIndex);
 
 		layerIndexString = localLayerIndexString;
 	}
-
-
-
 
 	std::string layerFlagString;
 	if(theBlock->GetAttributeType(layerFlagString.assign(

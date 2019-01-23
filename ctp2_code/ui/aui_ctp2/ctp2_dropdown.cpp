@@ -58,7 +58,7 @@ ctp2_DropDown::ctp2_DropDown(
 	sint32 y,
 	sint32 width,
 	sint32 height,
-	MBCHAR *pattern,
+	const MBCHAR *pattern,
 	sint32 buttonSize,
 	sint32 windowSize,
 	ControlActionCallback *ActionFunc,
@@ -77,7 +77,7 @@ ctp2_DropDown::ctp2_DropDown(
 	Assert( AUI_SUCCESS(*retval) );
 	if ( !AUI_SUCCESS(*retval) ) return;
 
-	*retval = aui_SoundBase::InitCommon( (MBCHAR **)NULL );
+	*retval = aui_SoundBase::InitCommon( (const MBCHAR **)NULL );
 	Assert( AUI_SUCCESS(*retval) );
 	if ( !AUI_SUCCESS(*retval) ) return;
 
@@ -92,7 +92,7 @@ ctp2_DropDown::ctp2_DropDown(
 ctp2_DropDown::ctp2_DropDown(
 	AUI_ERRCODE *retval,
 	uint32 id,
-	MBCHAR *ldlBlock,
+	const MBCHAR *ldlBlock,
 	ControlActionCallback *ActionFunc,
 	void *cookie)
 	:
@@ -122,18 +122,18 @@ ctp2_DropDown::ctp2_DropDown(
 }
 
 
-AUI_ERRCODE ctp2_DropDown::CreateComponents( MBCHAR *ldlBlock )
+AUI_ERRCODE ctp2_DropDown::CreateComponents( const MBCHAR *ldlBlock )
 {
 	static MBCHAR block[ k_AUI_LDL_MAXBLOCK + 1 ];
 
 	AUI_ERRCODE errcode = AUI_ERRCODE_OK;
-    MBCHAR *    pattern = (m_pattern) ? m_pattern->GetFilename() : NULL;
+	const MBCHAR *    pattern = (m_pattern) ? m_pattern->GetFilename() : NULL;
 
 	if ( ldlBlock )
 	{
 		sprintf( block, "%s.%s", ldlBlock, k_AUI_DROPDOWN_LDL_STATICPANE );
 
-        if (aui_Ldl::FindDataBlock( block ) )
+		if (aui_Ldl::FindDataBlock( block ) )
 		{
 			m_staticPane = new c3_Static(
 				&errcode,
@@ -148,17 +148,17 @@ AUI_ERRCODE ctp2_DropDown::CreateComponents( MBCHAR *ldlBlock )
 			AddChild(m_staticPane);
 		}
 
-        sprintf(block, "%s.%s", ldlBlock, k_AUI_DROPDOWN_LDL_BUTTON );
+		sprintf(block, "%s.%s", ldlBlock, k_AUI_DROPDOWN_LDL_BUTTON );
 		aui_Ldl::BuildHierarchyFromRoot(std::string(ldlBlock).append(".autobutton").c_str());
-        m_button = static_cast<aui_Button*>(aui_Ldl::GetObject(ldlBlock, "autobutton"));
+		m_button = static_cast<aui_Button*>(aui_Ldl::GetObject(ldlBlock, "autobutton"));
 
 		if (m_button)
-        {
+		{
 			m_button->SetActionFuncAndCookie(DropDownButtonActionCallback, this);
 			m_buttonSize = 0;
-        }
-        else if (aui_Ldl::FindDataBlock(block))
-        {
+		}
+		else if (aui_Ldl::FindDataBlock(block))
+		{
 			m_button = new aui_Button(
 				&errcode,
 				aui_UniqueId(),
@@ -187,7 +187,7 @@ AUI_ERRCODE ctp2_DropDown::CreateComponents( MBCHAR *ldlBlock )
 	{
 		sprintf( block, "%s.%s", ldlBlock, k_AUI_DROPDOWN_LDL_WINDOW );
 
-        if (aui_Ldl::FindDataBlock( block ) ) {
+		if (aui_Ldl::FindDataBlock( block ) ) {
 			m_listBoxWindow = new aui_Window(
 				&errcode,
 				aui_UniqueId(),
@@ -205,7 +205,7 @@ AUI_ERRCODE ctp2_DropDown::CreateComponents( MBCHAR *ldlBlock )
 
 			sprintf( block, "%s.%s.%s", ldlBlock, k_AUI_DROPDOWN_LDL_WINDOW, k_AUI_DROPDOWN_LDL_LISTBOX );
 
-            if (aui_Ldl::FindDataBlock( block ) )
+			if (aui_Ldl::FindDataBlock( block ) )
 				m_listBox = new ctp2_ListBox(
 					&errcode,
 					aui_UniqueId(),
@@ -256,8 +256,6 @@ AUI_ERRCODE ctp2_DropDown::CreateComponents( MBCHAR *ldlBlock )
 
 AUI_ERRCODE ctp2_DropDown::RepositionListBoxWindow( void )
 {
-
-
 	if ( m_window )
 	{
 		POINT screenLocation = { m_x, m_y + m_height };
@@ -268,7 +266,6 @@ AUI_ERRCODE ctp2_DropDown::RepositionListBoxWindow( void )
 
 		m_listBoxWindow->Move( screenLocation.x, screenLocation.y );
 	}
-
 
 	sint32 listBoxWidth = m_listBoxWindow->Width();
 	if ( m_listBox->GetVerticalRanger()->GetMaximumY() )
@@ -302,13 +299,6 @@ AUI_ERRCODE ctp2_DropDown::DrawThis( aui_Surface *surface, sint32 x, sint32 y )
 	RECT rect = { 0, 0, m_width, m_height };
 	OffsetRect( &rect, m_x + x, m_y + y );
 	ToWindow( &rect );
-
-
-
-
-
-
-
 
 	DrawSelectedItem( surface, 2, 2 );
 

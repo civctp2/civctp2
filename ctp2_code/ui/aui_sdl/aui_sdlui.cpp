@@ -63,7 +63,7 @@ aui_SDLUI::aui_SDLUI
 	sint32 width,
 	sint32 height,
 	sint32 bpp,
-	MBCHAR *ldlFilename,
+	const MBCHAR *ldlFilename,
 	BOOL useExclusiveMode
 )
 :   aui_UI              (),
@@ -107,7 +107,6 @@ aui_SDLUI::aui_SDLUI
 #endif
 }
 
-
 AUI_ERRCODE aui_SDLUI::InitCommon()
 {
 	m_savedMouseAnimFirstIndex = 0;
@@ -116,7 +115,6 @@ AUI_ERRCODE aui_SDLUI::InitCommon()
 
 	return AUI_ERRCODE_OK;
 }
-
 
 AUI_ERRCODE aui_SDLUI::DestroyNativeScreen(void)
 {
@@ -137,7 +135,7 @@ AUI_ERRCODE aui_SDLUI::CreateNativeScreen( BOOL useExclusiveMode )
 	assert( AUI_SUCCESS(errcode) );
 	if ( !AUI_SUCCESS(errcode) ) return errcode;
 
-       	m_lpdds = SDL_SetVideoMode(m_width, m_height, m_bpp, g_SDL_flags); // mod by lynx |SDL_FULLSCREEN);
+	m_lpdds = SDL_SetVideoMode(m_width, m_height, m_bpp, g_SDL_flags); // mod by lynx |SDL_FULLSCREEN);
 	if (!m_lpdds) {
 		c3errors_FatalDialog("aui_SDLUI", SDL_GetError());
 	}
@@ -195,7 +193,6 @@ aui_SDLUI::~aui_SDLUI( void )
 
 AUI_ERRCODE aui_SDLUI::TearDownMouse(void)
 {
-
 	if (m_mouse) {
 		m_mouse->GetAnimIndexes(&m_savedMouseAnimFirstIndex, &m_savedMouseAnimLastIndex);
 		m_savedMouseAnimCurIndex = m_mouse->GetCurrentCursorIndex();
@@ -215,7 +212,6 @@ AUI_ERRCODE aui_SDLUI::TearDownMouse(void)
 
 	return AUI_ERRCODE_OK;
 }
-
 
 AUI_ERRCODE aui_SDLUI::RestoreMouse(void)
 {
@@ -290,7 +286,6 @@ AUI_ERRCODE aui_SDLUI::AltTabOut( void )
 	return AUI_ERRCODE_OK;
 }
 
-
 AUI_ERRCODE aui_SDLUI::AltTabIn( void )
 {
 	assert(0);
@@ -331,9 +326,9 @@ AUI_ERRCODE aui_SDLUI::AltTabIn( void )
 	if (m_keyboard) m_keyboard->Acquire();
 
 	if (g_civApp)
-    {
-        g_civApp->SetInBackground(FALSE);
-    }
+	{
+		g_civApp->SetInBackground(FALSE);
+	}
 
 	return FlushDirtyList();
 }

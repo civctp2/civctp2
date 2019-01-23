@@ -10,12 +10,12 @@
 
 ControlSheet::ControlSheet(AUI_ERRCODE *retval,
 					   uint32 id,
-					   MBCHAR *ldlBlock,
+					   const MBCHAR *ldlBlock,
 					   ControlActionCallback *ActionFunc,
 					   void *cookie)
 	:
 	aui_ImageBase( ldlBlock ),
-	aui_TextBase(ldlBlock, (MBCHAR *)NULL),
+	aui_TextBase(ldlBlock, (const MBCHAR *)NULL),
 	aui_Control(retval, id, ldlBlock, ActionFunc, cookie),
 	PatternBase(ldlBlock, NULL)
 {
@@ -30,7 +30,7 @@ ControlSheet::ControlSheet(AUI_ERRCODE *retval,
 					   sint32 y,
 					   sint32 width,
 					   sint32 height,
-					   MBCHAR *pattern,
+					   const MBCHAR *pattern,
 					   ControlActionCallback *ActionFunc,
 					   void *cookie)
 	:
