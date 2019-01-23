@@ -48,7 +48,7 @@ public:
 	aui_MovieFormat() {}
 	virtual ~aui_MovieFormat() {}
 
-	virtual AUI_ERRCODE	Load( MBCHAR const *filename, aui_Movie *movie )
+	virtual AUI_ERRCODE	Load( const MBCHAR *filename, aui_Movie *movie )
 		{ return AUI_ERRCODE_OK; }
 };
 
@@ -59,19 +59,19 @@ public:
 
 	aui_Movie(
 		AUI_ERRCODE *retval,
-		MBCHAR const * filename = NULL );
+		const MBCHAR * filename = NULL );
 	virtual ~aui_Movie();
 
 protected:
-	AUI_ERRCODE InitCommon( MBCHAR const * filename );
+	AUI_ERRCODE InitCommon( const MBCHAR * filename );
 
 public:
 
 	AUI_ERRCODE Load( void );
 	AUI_ERRCODE Unload( void );
 
-	AUI_ERRCODE	SetFilename( MBCHAR const * filename );
-	MBCHAR		*GetFilename( void ) const { return (MBCHAR *)m_filename; }
+	AUI_ERRCODE   SetFilename( const MBCHAR * filename );
+	const MBCHAR *GetFilename( void ) const { return m_filename; }
 
 	aui_Surface	*SetDestSurface( aui_Surface *surface );
 	aui_Surface	*GetDestSurface( void ) const { return m_surface; }
@@ -154,14 +154,6 @@ protected:
 	uint32				m_curFrame;
 };
 
-
-
-
-
-
-
-
-
 class aui_AviMovieFormat : public aui_MovieFormat
 {
 public:
@@ -169,12 +161,9 @@ public:
 	aui_AviMovieFormat() {}
 	virtual ~aui_AviMovieFormat() {}
 
-	virtual AUI_ERRCODE	Load( MBCHAR const * filename, aui_Movie *movie )
+	virtual AUI_ERRCODE	Load( const MBCHAR * filename, aui_Movie *movie )
 	{ return AUI_ERRCODE_OK; }
 };
-
-
-
 
 LRESULT CALLBACK OnScreenMovieWindowProc(
 	HWND hwnd,
