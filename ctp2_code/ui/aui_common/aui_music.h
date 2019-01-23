@@ -18,7 +18,6 @@ enum AUI_MUSIC_CODE
 	AUI_MUSIC_CODE_COUNT
 };
 
-
 enum AUI_MUSIC_ERRCODE
 {
 	AUI_MUSIC_ERRCODE_UNKNOWN = -1,
@@ -37,7 +36,6 @@ enum AUI_MUSIC_ERRCODE
 
 	AUI_MUSIC_ERRCODE_COUNT
 };
-
 
 class aui_Music : public aui_Base
 {
@@ -72,7 +70,6 @@ protected:
 
 };
 
-
 class aui_Redbook : public aui_Music
 {
 public:
@@ -104,9 +101,8 @@ protected:
 	SDL_CD*m_cd_device_id;
 #endif
 	int    m_cd_drive_num;
-	MBCHAR m_cd_drive_letter;
 	sint32 m_cd_drive_index;
-	BOOL m_cd_ok;
+	BOOL   m_cd_ok;
 	sint32 m_aux_cdrom_id;
 
 };
