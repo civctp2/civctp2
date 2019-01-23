@@ -43,6 +43,11 @@
 #include "soundmanager.h"		// g_soundManager
 #include "aui_sdlsurface.h"
 
+#ifdef USE_SDL_FFMPEG
+#include <SDL_ffmpeg.h>
+SDL_ffmpegFile* film;
+#endif
+
 Mix_Chunk achunk;
 
 int m_moviechannel;
