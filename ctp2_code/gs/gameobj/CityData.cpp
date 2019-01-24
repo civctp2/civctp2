@@ -1472,7 +1472,9 @@ void CityData::Copy(CityData *copy)
 
 	m_home_city = copy->m_home_city;
 
-	m_build_queue = BuildQueue(copy->m_build_queue);
+	// Let's copy the buld queue the old way. Anyway, this CityData copying looks very dubious
+	m_build_queue = copy->m_build_queue;
+	m_build_queue.SetName(copy->m_build_queue.GetName());
 	m_tradeSourceList = copy->m_tradeSourceList;
 	m_tradeDestinationList = copy->m_tradeDestinationList;
 
