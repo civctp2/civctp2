@@ -40,8 +40,8 @@ AUI_ERRCODE aui_SDLBlitter::Blt16To16(
         // lock both surfaces
         // note that there is a chance of a deadlock if a different
         // thread locks the two surfaces in the opposite order
-        SDL_LockMutex(sdlDest->m_bltMutex); //http://www.libsdl.org/cgi/docwiki.cgi/SDL_5fBlitSurface says don't lock surface! mutex lock OK but seems not needed
-        SDL_LockMutex(sdlSrc->m_bltMutex);
+        /*SDL_LockMutex(sdlDest->m_bltMutex); //http://www.libsdl.org/cgi/docwiki.cgi/SDL_5fBlitSurface says don't lock surface! mutex lock OK but seems not needed
+        SDL_LockMutex(sdlSrc->m_bltMutex);*/
         SDL_Rect ssrc = { srcRect->left, srcRect->top, srcRect->right-srcRect->left, srcRect->bottom-srcRect->top };
         SDL_Rect sdst = { destRect->left, destRect->top, 0, 0 };
 
@@ -59,8 +59,8 @@ AUI_ERRCODE aui_SDLBlitter::Blt16To16(
             }
 
         // unlock in the opposite order
-        SDL_UnlockMutex(sdlSrc->m_bltMutex);
-        SDL_UnlockMutex(sdlDest->m_bltMutex);
+        /*SDL_UnlockMutex(sdlSrc->m_bltMutex);
+        SDL_UnlockMutex(sdlDest->m_bltMutex);*/
 
         if(err != AUI_ERRCODE_OK) {
             DPRINTF(k_DBG_UI, ("%s:%d: err = %d\n", __FILE__, __LINE__, err));
@@ -94,7 +94,7 @@ AUI_ERRCODE aui_SDLBlitter::ColorBlt16(
          &&   destSurf->IsThisA( aui_SDLSurface::m_SDLSurfaceClassId ) )
 	{
         aui_SDLSurface* sdlDest = static_cast<aui_SDLSurface*>(destSurf);
-        SDL_LockMutex(sdlDest->m_bltMutex);
+        /*SDL_LockMutex(sdlDest->m_bltMutex);*/
 
         SDL_Rect sdst = { destRect->left, destRect->top,
                           destRect->right-destRect->left, destRect->bottom-destRect->top
@@ -104,7 +104,7 @@ AUI_ERRCODE aui_SDLBlitter::ColorBlt16(
             fprintf(stderr, "FillRect failed: %s\n", SDL_GetError());
             retcode = AUI_ERRCODE_BLTFAILED;
 	    }
-        SDL_UnlockMutex(sdlDest->m_bltMutex);
+        /*SDL_UnlockMutex(sdlDest->m_bltMutex);*/
 	}
     else
         return aui_Blitter::ColorBlt16(
@@ -269,8 +269,8 @@ AUI_ERRCODE aui_SDLBlitter::StretchBlt16To16(
         // lock both surfaces
         // note that there is a chance of a deadlock if a different
         // thread locks the two surfaces in the opposite order
-        SDL_LockMutex(sdlDest->m_bltMutex); //http://www.libsdl.org/cgi/docwiki.cgi/SDL_5fBlitSurface says don't lock surface! mutex lock OK but seems not needed
-        SDL_LockMutex(sdlSrc->m_bltMutex);
+        /*SDL_LockMutex(sdlDest->m_bltMutex); //http://www.libsdl.org/cgi/docwiki.cgi/SDL_5fBlitSurface says don't lock surface! mutex lock OK but seems not needed
+        SDL_LockMutex(sdlSrc->m_bltMutex);*/
 
         SDL_Rect ssrc = { srcRect->left, srcRect->top, srcRect->right-srcRect->left, srcRect->bottom-srcRect->top };
         SDL_Rect sdst = { destRect->left, destRect->top, destRect->right-destRect->left, destRect->bottom-destRect->top };
@@ -298,8 +298,8 @@ AUI_ERRCODE aui_SDLBlitter::StretchBlt16To16(
             }
 
         // unlock in the opposite order
-        SDL_UnlockMutex(sdlSrc->m_bltMutex);
-        SDL_UnlockMutex(sdlDest->m_bltMutex);
+        /*SDL_UnlockMutex(sdlSrc->m_bltMutex);
+        SDL_UnlockMutex(sdlDest->m_bltMutex);*/
 
         Assert( err == DD_OK );
         if ( err != DD_OK ) retcode = AUI_ERRCODE_BLTFAILED;
