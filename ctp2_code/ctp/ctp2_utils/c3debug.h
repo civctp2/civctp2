@@ -106,8 +106,8 @@ void	c3debug_CloseDebugLog();
 void	c3debug_dprintf(char const * format, ...);
 void	c3debug_dprintfPrefix(sint32 mask, char const * file, sint32 line);
 void	c3debug_SetDebugMask(sint32 mask, sint32 set);
-#if defined(WIN32)
 char	*c3debug_StackTrace(void);
+#if defined(WIN32)
 char	*c3debug_ExceptionStackTrace(LPEXCEPTION_POINTERS exception);
 static LONG _cdecl c3debug_CivExceptionHandler (LPEXCEPTION_POINTERS exception_pointers);
 #endif

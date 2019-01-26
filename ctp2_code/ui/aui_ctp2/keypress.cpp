@@ -134,6 +134,7 @@
 #include "ArmyData.h"
 #include "MainControlPanel.h"
 #include "UnitControlPanel.h"
+#include "segmentlist.h"
 
 extern C3UI			*g_c3ui;
 extern BOOL			gSuspended;
@@ -420,9 +421,11 @@ sint32 ui_HandleKeypress(WPARAM wParam, LPARAM lParam)
 
 	switch (kf) {
 #ifdef _PLAYTEST
+#ifdef CTP2_ENABLE_SLICDEBUG // Should be enabled in the debug version
 	case KEY_FUNCTION_ENTER_COMMAND:
 		segmentlist_Display();
 		break;
+#endif // CTP2_ENABLE_SLICDEBUG
 	case KEY_FUNCTION_ENTER_COMMAND_ALTERNATE:
 		commandMode = TRUE;
 		move = FALSE;

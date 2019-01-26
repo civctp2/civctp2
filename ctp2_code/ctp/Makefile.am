@@ -46,6 +46,7 @@ ctp2_SOURCES = \
 	debugtools/debugexception.cpp \
 	debugtools/debugmemory.cpp \
 	debugtools/log.cpp \
+	debugtools/Timer.cpp \
 	fingerprint/ctp_finger.cpp \
 	fingerprint/endecode.c \
 	fingerprint/shroud.c \

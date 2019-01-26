@@ -44,9 +44,9 @@ extern "C" {
 void DebugCallStack_Open (void);
 void DebugCallStack_Close (void);
 void DebugCallStack_Dump (LogClass log_class);
-void DebugCallStack_DumpFrom (LogClass log_class, unsigned base_pointer);
-void DebugCallStack_DumpAddress (LogClass log_class, unsigned address);
-void DebugCallStack_Save  (unsigned *call_stack, int number, unsigned long Ebp);
+void DebugCallStack_DumpFrom (LogClass log_class, size_t base_pointer);
+void DebugCallStack_DumpAddress (LogClass log_class, size_t address);
+void DebugCallStack_Save  (unsigned *call_stack, int number, size_t Ebp);
 
 void DebugCallStack_Show  (LogClass log_class, unsigned *call_stack, int number);
 void DebugCallStack_ShowToFile  (LogClass log_class, unsigned *call_stack, int number, FILE *file);

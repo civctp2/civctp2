@@ -28,14 +28,17 @@
  *
  *----------------------------------------------------------------------------
  */
-#pragma once
-
-#include "ctp2_config.h"
-
-#ifdef _DEBUG
 
 #ifndef __DEBUG_H
 #define __DEBUG_H
+
+#ifdef HAVE_PRAGMA_ONCE
+#pragma once
+#endif
+
+#include "ctp2_config.h" // Defines _DEBUG on Linux
+
+#ifdef _DEBUG
 
 #if defined(WIN32)
 #include <windows.h>	/* LPCSTR, DWORD */
@@ -69,8 +72,8 @@ namespace Os
     };
 } // namespace Os
 
-#endif /* __cplusplus */
+#endif // __cplusplus
 
-#endif /* Multiple include guard */
+#endif // _DEBUG
 
-#endif /* _DEBUG */
+#endif // __DEBUG_H

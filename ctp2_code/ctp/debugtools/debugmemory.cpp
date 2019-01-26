@@ -30,9 +30,6 @@
 // _AIDLL
 // - ??
 //
-// MEMORY_LOGGED
-// - ??
-//
 //----------------------------------------------------------------------------
 //
 // Modifications from the original Activision code:
@@ -44,9 +41,9 @@
 //
 //////////////////////////////////////////////////////////////////////////////
 
-#ifdef _DEBUG
-
 #include "debugmemory.h"	// own declarations
+
+#ifdef _DEBUG
 
 #include "log.h"
 #include "debugcallstack.h"
@@ -54,6 +51,7 @@
 #include "breakpoint.h"
 #include <windows.h>
 #include <string.h>
+#include <stdlib.h> 
 #ifdef __linux__
 #include "../cifm.h"
 #define fopen(a, b) ci_fopen(a, b)
@@ -128,7 +126,9 @@ static void DebugMemory_CreateDefaultHeap (void)
 
 	heap->type = 'HEAP';
 
+#ifdef WIN32 // 0 seems also be good
 	heap->handle = GetProcessHeap();
+#endif
 
 #ifdef MEMORY_LOGGED
 
@@ -524,6 +524,7 @@ bool Debug_GuardedDataTest (AllocHeader * header, const char *file, int line_num
 	return (begin_ok && end_ok);
 }
 
+#ifdef WIN32
 LONG _cdecl MemoryAccessExceptionFilter (LPEXCEPTION_POINTERS ep)
 {
 	if (ep->ExceptionRecord->ExceptionCode == EXCEPTION_ACCESS_VIOLATION)
@@ -535,11 +536,14 @@ LONG _cdecl MemoryAccessExceptionFilter (LPEXCEPTION_POINTERS ep)
 
 	return (EXCEPTION_CONTINUE_SEARCH);
 }
+#endif
 
 bool Debug_GuardedHeaderTest (AllocHeader * header, const char *file, int line_number)
 {
+#ifdef WIN32
 	__try
 	{
+#endif
 		bool ok = (header->reference_count == 1) && (header->filename != NULL);
 
 		for (unsigned char i = 0; i < HEADER_GUARD_SIZE; i++)
@@ -556,6 +560,7 @@ bool Debug_GuardedHeaderTest (AllocHeader * header, const char *file, int line_n
 		}
 
 		return ok;
+#ifdef WIN32
 	}
 	__except (MemoryAccessExceptionFilter (GetExceptionInformation()))
 	{
@@ -564,10 +569,12 @@ bool Debug_GuardedHeaderTest (AllocHeader * header, const char *file, int line_n
 
 		return false;
 	}
+#endif
 }
 
 bool DebugMemoryHeapContainsBlock (MemoryHeap heap, MemPtr memory_block_ptr)
 {
+#ifdef WIN32
 	__try
 	{
 		AllocHeader *header = Debug_DataToHeader (memory_block_ptr);
@@ -579,10 +586,15 @@ bool DebugMemoryHeapContainsBlock (MemoryHeap heap, MemPtr memory_block_ptr)
 	{
 		return (false);
 	}
+#else
+	AllocHeader *header = Debug_DataToHeader (memory_block_ptr);
+	return (header->heap == heap);
+#endif
 }
 
 bool DebugMemoryHeapValid (MemoryHeap heap)
 {
+#ifdef WIN32
 	__try
 	{
 		return ((heap->type == 'HEAP') && (heap->is_open));
@@ -592,6 +604,9 @@ bool DebugMemoryHeapValid (MemoryHeap heap)
 	{
 		return (false);
 	}
+#else
+	return ((heap->type == 'HEAP') && (heap->is_open));
+#endif
 }
 
 MemPtr DebugMemory_GuardedBlockAlloc (
@@ -841,6 +856,7 @@ MemPtr DebugMemory_GuardedBlockRealloc (
 	return (new_mem);
 }
 
+#ifdef WIN32 // 0 seems also be good
 MemoryHeap DebugMemoryHeap_GuardedOpen (const char *file, int line, const char *name, size_t size_initial, size_t size_maximum)
 {
 	MemoryHeap heap;
@@ -896,6 +912,7 @@ void DebugMemoryHeap_GuardedClose
 		ASSERT_CLASS (LOG_MEMORY_FAIL, ok);
 	}
 }
+#endif
 
 int Debug_GuardedValidate (const char *file, int line, void *p)
 {
@@ -1302,6 +1319,7 @@ void  DebugMemoryHeap_GuardedFree    (const char *file, int line, MemoryHeap hea
 
 #ifdef _DEBUG_MEMORY
 
+#ifdef WIN32
 void * CDECL operator new (size_t size)
 {
 	return (MALLOC (size));
@@ -1314,6 +1332,20 @@ void CDECL operator delete (void *mem)
 		FREE (mem);
 	}
 }
+#else
+void * operator new (size_t size)
+{
+	return (MALLOC (size));
+}
+
+void operator delete (void *mem)
+{
+	if (mem)
+	{
+		FREE (mem);
+	}
+}
+#endif
 
 #endif // _DEBUG_MEMORY
 

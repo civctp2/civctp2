@@ -38,6 +38,8 @@
 #include <sys/types.h>
 #if !defined(WIN32)
 #include <dirent.h>
+#include <unistd.h>
+#include <csignal>
 #endif
 
 #include "aui.h"
@@ -108,6 +110,7 @@ void c3debug_InitDebugLog()
 	DIR *dir = opendir("logs");
 	Assert(dir);
 	struct dirent *dent = NULL;
+	MBCHAR fileName[256];
 
 	while((dent = readdir(dir)))
 	{
@@ -306,7 +309,7 @@ void c3debug_Assert(char const *s, char const * file, int line)
 	while (0);
 #else
 	fprintf(stderr, "Assertion (%s) Failed in File:%s, Line:%ld\n", s, file, line);
-	assert(0);
+	std::raise(SIGINT);
 #endif
 #endif
 }

@@ -30,6 +30,7 @@
 #define HAVE_UNISTD_H
 
 #include <assert.h>
+#include <string.h>
 #include <strings.h>
 #include <limits.h>
 #include "ctp2_inttypes.h"
