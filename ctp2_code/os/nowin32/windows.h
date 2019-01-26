@@ -66,7 +66,7 @@ typedef uint32 UINT;
 typedef uint32 ULONG;
 
 /* Structs */
-#ifdef __cplusplus
+#ifdef 0 // __cplusplus
 typedef struct _GUID
 {
     uint32 Data1;
@@ -84,6 +84,8 @@ inline bool operator!=(const GUID & guidOne, const GUID & guidOther)
 {
 	return memcmp(&guidOne, &guidOther, sizeof(GUID)) != 0;
 }
+#else
+typedef sint32 GUID;
 #endif
 
 typedef struct tagBITMAPFILEHEADER
