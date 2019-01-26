@@ -1002,7 +1002,11 @@ bool GameFile::LoadExtendedGameInfo(FILE *saveFile, SaveInfo *info)
 		info->networkGUID[i].guid = guid;
 	}
 
-	info->gameSetup.ReadFromFile(saveFile);
+	n = c3files_fread(&info->gameSetup, sizeof(nf_GameSetup), 1, saveFile);
+	if(n != 1)
+	{
+		return false;
+	}
 
 	NETFunc::Session *  s       = (NETFunc::Session *) &info->gameSetup;
 	dp_session_t *      sess    =
@@ -1201,7 +1205,11 @@ bool GameFile::LoadBasicGameInfo(FILE *saveFile, SaveInfo *info)
 			info->networkGUID[i].guid = guid;
 		}
 
-		info->gameSetup.ReadFromFile(saveFile); // 720 bytes
+		n = c3files_fread(&info->gameSetup, sizeof(nf_GameSetup), 1, saveFile);
+		if(n != 1)
+		{
+			return false;
+		}
 
 		n = c3files_fread(&info->options, sizeof(SaveInfo::OptionScreenSettings), 1, saveFile); // Problem, seems to be OK unless BOOL is not 4 bytes
 		if (n != 1)
@@ -1398,7 +1406,11 @@ void GameFile::SaveExtendedGameInfo(FILE *saveFile, SaveInfo *info)
 		c3files_fwrite(&guid, 1, sizeof(GUID), saveFile); // Check Linux implementation, should have 16 bytes
 	}
 
-	info->gameSetup.WriteToFile(saveFile);
+	n = c3files_fwrite(&info->gameSetup, sizeof(nf_GameSetup), 1, saveFile);
+	if(n != 1)
+	{
+		return;
+	}
 
 	n = c3files_fwrite(&info->options, sizeof(SaveInfo::OptionScreenSettings), 1, saveFile);
 	if (n != 1)
