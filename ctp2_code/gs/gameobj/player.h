@@ -873,6 +873,7 @@ public:
 	void   BuildWonder(Unit city, sint32 wonder);
 	void   AddWonder(sint32 wonder, Unit &city);
 	void   RemoveWonder(sint32 wonder, bool destroyed);
+	bool   HasWonder(sint32 wonder) const;
 	uint64 GetBuiltWonders();
 	uint64 GetWonderBuildings();
 

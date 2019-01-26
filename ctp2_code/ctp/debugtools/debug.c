@@ -31,21 +31,14 @@
  *
  *----------------------------------------------------------------------------
  */
+#include "debug.h"  // Own declarations: consistency check
 
 #ifdef _DEBUG
 
-#include "debug.h"  // Own declarations: consistency check
-
 #include <stdio.h>
-#ifdef HAVE_STRING_H
 #include <string.h>
-#endif
-#ifdef LINUX
-#include <linux/version.h>
-#if LINUX_VERSION_CODE >= KERNEL_VERSION(2, 6, 9)
-#include <linux/prctl.h>
-#endif // Kernelversion >= 2.6.9
-#include <sys/utsname.h>
+#if defined(LINUX)
+#include <sys/prctl.h>
 #endif // LINUX
 
 #include "debugassert.h"
@@ -155,32 +148,7 @@ void Debug_SetThreadName(LPCSTR szThreadName, DWORD dwThreadID)
 #ifdef LINUX
 void Debug_SetProcessName(char const * szProcessName)
 {
-// Kernel on compilation platform *was* recent enough
-#if LINUX_VERSION_CODE >= KERNEL_VERSION(2, 6, 9)
-    struct utsname buf = { 0 };
-    int rc = uname(&buf);
-    if (rc == 0) {
-        char *pVer = buf.release;
-        int maj, min, mic;
-        maj = min = mic = 0;
-        maj = atoi(pVer);
-        pVer = strchr(pVer, '.');
-        if (pVer) {
-            pVer++;
-            min = atoi(pVer);
-
-            pVer = strchr(pVer, '.');
-            if (pVer) {
-                pVer++;
-                mic = atoi(pVer);
-            }
-        }
-        // Kernel on current platform *is* recent enough
-        if (KERNEL_VERSION(maj, min, mic) >= KERNEL_VERSION(2, 6, 9)) {
-            rc = prctl(PR_SET_NAME, szProcessName);
-        }
-    }
-#endif
+	prctl(PR_SET_NAME, szProcessName);
 }
 #endif
 

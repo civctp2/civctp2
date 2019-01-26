@@ -44,14 +44,14 @@ class MapPoint;
 #include "ctp2_inttypes.h"      // sintN
 #include "scheduler_types.h"
 
-class Squad_Strength
+class Squad_Strength final
 {
 public:
 	Squad_Strength(sint8 agent_count = 0)
 	: m_attack_str       (0.0),
 	  m_defense_str      (0.0),
 	  m_ranged_str       (0.0),
-	  m_value            (0),
+	  m_value            (0.0),
 	  m_land_bombard_str (0.0),
 	  m_water_bombard_str(0.0),
 	  m_air_bombard_str  (0.0),
@@ -71,16 +71,17 @@ public:
 	Squad_Strength & operator+=(const Squad_Strength & add_me);
 	Squad_Strength & operator-=(const Squad_Strength & remove_me);
 
-	sint32 Get_Agent_Count()                    const { return m_agent_count; };
-	void   Set_Agent_Count(const sint32 & count)      { m_agent_count = count; };
+	sint8 Get_Agent_Count()                    const { return m_agent_count; };
+	void  Set_Agent_Count(const sint32 & count)      { m_agent_count = count; };
 
 	void Add_Agent_Strength(const Agent_ptr & agent);
 	void Remove_Agent_Strength(const Agent_ptr & agent);
 
-	void Set_Pos_Strength       (const MapPoint & pos);
-	void Set_Army_Strength      (const Army & army, bool noCargo = false);
-	void Set_Cargo_Strength     (const Army & army);
-	void Set_Enemy_Grid_Strength(const MapPoint & pos, const sint32 & playerId);
+	void Set_Pos_Strength        (const MapPoint & pos);
+	void Set_Army_Strength       (const Army & army, bool noCargo = false);
+	void Set_Cargo_Strength      (const Army & army);
+	void Set_Enemy_Grid_Strength (const MapPoint & pos, const sint32 & playerId);
+	void Set_Allied_Grid_Strength(const MapPoint & pos, const sint32 & playerId);
 
 	float Get_Attack      () const { return m_attack_str;        };
 	float Get_Defense     () const { return m_defense_str;       };
@@ -116,8 +117,9 @@ public:
 	bool HasEnough(const Squad_Strength & otherStrength, bool ignoreBombard = false) const;
 	float GetTotalMissing(const Squad_Strength & otherStrength) const;
 
-protected:
+private:
 
+	// Can get negative in the sense what is missing
 	float m_attack_str;
 	float m_defense_str;
 	float m_ranged_str;
@@ -126,10 +128,33 @@ protected:
 	float m_air_bombard_str;
 	float m_value;
 
+	// Can get negative in the sense what is missing
 	sint8 m_agent_count;
 	sint8 m_transport;
 	sint8 m_defenders;
 	sint8 m_ranged;
+
+#if defined(_DEBUG) || defined(USE_LOGGING)
+public:
+	void PrintSizeOfSqudStrengthClass()
+	{
+		DPRINTF(k_DBG_AI, ("Size of Squad_Strength class:\n"));
+		DPRINTF(k_DBG_AI, ("Goal: %d\n", sizeof(Squad_Strength)));
+		DPRINTF(k_DBG_AI, ("m_attack_str: %d\n", sizeof(m_attack_str)));
+		DPRINTF(k_DBG_AI, ("m_defense_str: %d\n", sizeof(m_defense_str)));
+		DPRINTF(k_DBG_AI, ("m_ranged_str: %d\n", sizeof(m_ranged_str)));
+		DPRINTF(k_DBG_AI, ("m_land_bombard_str: %d\n", sizeof(m_land_bombard_str)));
+		DPRINTF(k_DBG_AI, ("m_water_bombard_str: %d\n", sizeof(m_water_bombard_str)));
+		DPRINTF(k_DBG_AI, ("m_air_bombard_str: %d\n", sizeof(m_air_bombard_str)));
+		DPRINTF(k_DBG_AI, ("m_value: %d\n", sizeof(m_value)));
+		DPRINTF(k_DBG_AI, ("m_agent_count: %d\n", sizeof(m_agent_count)));
+		DPRINTF(k_DBG_AI, ("m_transport: %d\n", sizeof(m_transport)));
+		DPRINTF(k_DBG_AI, ("m_defenders: %d\n", sizeof(m_defenders)));
+		DPRINTF(k_DBG_AI, ("m_ranged: %d\n", sizeof(m_ranged)));
+		DPRINTF(k_DBG_AI, ("\n"));
+		DPRINTF(k_DBG_AI, ("\n"));
+	}
+#endif
 };
 
 #endif // __AGENT_STRENGTH_H__

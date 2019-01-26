@@ -266,7 +266,7 @@ void ProposalAnalysis::ComputeResult( const PLAYER_INDEX &sender,
 	switch (proposal_type)
     {
 	case PROPOSAL_OFFER_GIVE_CITY:
-        {
+        { // Map position is missing in the calculation
 	        Unit city   = Unit(proposal_arg.cityId);
 
 		    Assert(city.IsValid());
@@ -281,8 +281,8 @@ void ProposalAnalysis::ComputeResult( const PLAYER_INDEX &sender,
 		        receiverResult.science += city.CD()->GetScience() * 10;
 
 		        scale_regard =
-			        (double) map.GetAlliedValue(sender, city.RetPos()) /
-					         map.GetMaxAlliedValue(sender);
+			        (double) map.GetAlliedCityValue(sender, city.RetPos()) /
+					         map.GetMaxAlliedCityValue(sender);
             }
         }
 		break;
@@ -303,8 +303,8 @@ void ProposalAnalysis::ComputeResult( const PLAYER_INDEX &sender,
 		        receiverResult.science -= city.CD()->GetScience() * 10;
 
 		        scale_regard =
-			        (double) map.GetAlliedValue(receiver, city.RetPos()) /
-					         map.GetMaxAlliedValue(receiver);
+			        (double) map.GetAlliedCityValue(receiver, city.RetPos()) /
+					         map.GetMaxAlliedCityValue(receiver);
             }
         }
 		break;

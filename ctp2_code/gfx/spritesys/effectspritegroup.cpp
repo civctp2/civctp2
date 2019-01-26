@@ -32,9 +32,10 @@
 #include "c3.h"
 #include "EffectSpriteGroup.h"
 
+#include <memory>	                // std::unique_ptr
+
 #include "Actor.h"
 #include "Anim.h"
-#include <memory>	                // std::auto_ptr
 #include "SpriteFile.h"
 #include "Sprite.h"
 #include "Token.h"
@@ -93,7 +94,7 @@ void EffectSpriteGroup::DrawDirect(aui_Surface *surf, EFFECTACTION action, sint3
 
 void EffectSpriteGroup::Load(MBCHAR const * filename)
 {
-	std::auto_ptr<SpriteFile>	file(new SpriteFile(filename));
+	std::unique_ptr<SpriteFile>	file(new SpriteFile(filename));
 
 	SPRITEFILETYPE				type;
 	if (SPRITEFILEERR_OK == file->Open(&type))
@@ -111,7 +112,7 @@ void EffectSpriteGroup::Save
     unsigned int    compression_mode
 )
 {
-	std::auto_ptr<SpriteFile>	file(new SpriteFile(filename));
+	std::unique_ptr<SpriteFile>	file(new SpriteFile(filename));
 
 	if (SPRITEFILEERR_OK ==
 			file->Create(SPRITEFILETYPE_EFFECT, version_id, compression_mode)

@@ -27,6 +27,9 @@
 // - Added back buffering capability. (1-Jan-2010 Martin Gühmann)
 //
 //----------------------------------------------------------------------------
+#if defined(HAVE_PRAGMA_ONCE)
+#pragma once
+#endif
 
 #ifndef __AUI_SURFACE_H__
 #define __AUI_SURFACE_H__

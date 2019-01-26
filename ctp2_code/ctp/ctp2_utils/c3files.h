@@ -51,9 +51,9 @@ enum C3DIR {
 	C3DIR_DIRECT	= -1,
 
 	C3DIR_GAMEDATA,
-  	C3DIR_GL,
+	C3DIR_GL,
 	C3DIR_AIDATA,
-    C3DIR_UIDATA,
+	C3DIR_UIDATA,
 	C3DIR_LAYOUT,
 	C3DIR_FONTS,
 	C3DIR_GRAPHICS,
@@ -63,7 +63,7 @@ enum C3DIR {
 	C3DIR_PICTURES,
 	C3DIR_ICONS,
 	C3DIR_CURSORS,
-    C3DIR_SOUNDS,
+	C3DIR_SOUNDS,
 	C3DIR_VIDEOS,
 
 	C3DIR_MAX
@@ -90,7 +90,7 @@ typedef MBCHAR      DriveIdType;
 #else
 
 typedef MBCHAR      WIN32_FIND_DATA;
-typedef int         DriveIdType;
+typedef sint32      DriveIdType;
 
 #endif  // _WIN32
 
@@ -106,7 +106,7 @@ template <class T> class PointerList;
 // Class declarations
 //----------------------------------------------------------------------------
 
-FILE*		c3files_fopen(C3DIR dirID, MBCHAR const *, MBCHAR const *, bool checkScenario = true);
+FILE*		c3files_fopen(C3DIR dirID, const MBCHAR *, const MBCHAR *, bool checkScenario = true);
 FILE*		c3files_freopen(const MBCHAR *, const MBCHAR *, FILE *);
 sint32		c3files_fclose(FILE *);
 
@@ -130,19 +130,42 @@ sint32		c3files_ferror(FILE *);
 void		c3files_clearerr(FILE *);
 sint32		c3files_fflush(FILE *);
 
-sint32		c3files_getfilesize(C3DIR dir, MBCHAR const * filename);
-uint8 *     c3files_loadbinaryfile(C3DIR dir, MBCHAR const *filename, sint32 *size);
+sint32		c3files_getfilesize(C3DIR dir, const MBCHAR * filename);
+uint8 *     c3files_loadbinaryfile(C3DIR dir, const MBCHAR *filename, sint32 *size);
 
-bool		c3files_PathIsValid(MBCHAR *path);
-bool		c3files_CreateDirectory(MBCHAR *path);
+bool		c3files_PathIsValid(const MBCHAR *path);
+bool		c3files_CreateDirectory(const MBCHAR *path);
 
 void		c3files_StripSpaces(MBCHAR *s);
 
 bool		c3files_getfilelist(C3SAVEDIR dirID, MBCHAR *ext, PointerList<MBCHAR> *plist);
-#ifdef _WIN32
+#if defined(WIN32)
 bool		c3files_getfilelist_ex(C3SAVEDIR dirID, MBCHAR *ext, PointerList<WIN32_FIND_DATA> *plist);
 #endif
 
+/** Returns the users CTP2 directory within his/her home.
+ * On windows, NULL is returned. On linux, $HOME/.civctp2 will be returned.
+ *
+ * If the directory does not exist, it'll be created. If the creation
+ * fails, NULL is returned instead.
+ *
+ * @returns Path to existing CTP2 directory within users' home
+ */
+const MBCHAR *c3files_GetCTPHomeDir();
+
+/** Returns the system-dependent mount point of the CD drive number cdIndex,
+ * i.e. the path to the root directory of the cd.
+ *
+ * If cdIndex is negative or greater than the number of cd drives available,
+ * NULL is returned.
+ * If the cd drive has no cd mounted, NULL is returned.
+ *
+ * @param buf Buffer for mount point retrieval
+ * @param size Size of that buffer
+ * @param cdIndex Index # of CD
+ * @returns CD Mount
+ */
+const MBCHAR *c3files_GetCDDriveMount(MBCHAR *buf, size_t size, DriveIdType cdIndex);
 DriveIdType c3files_GetCtpCdId(void);
 bool		c3files_HasCD(void);
 bool		c3files_HasLegalCD(void);

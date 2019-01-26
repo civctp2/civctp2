@@ -19,7 +19,7 @@ class c3_Static;
 class C3TextField;
 class ctp2_Button;
 class Sprite;
-class UnitSpriteGroup;
+class GoodSpriteGroup;
 
 class SpriteEditWindow : public C3Window
 {
@@ -114,7 +114,7 @@ private:
 
 
 
-	UnitSpriteGroup		*m_currentSprite;
+	GoodSpriteGroup		*m_currentSprite;
 	Anim				*m_currentAnim;
 	Sprite				*m_spriteData;
 	aui_Surface			*m_spriteSurface;

@@ -346,9 +346,6 @@ void World::GWPhase(const sint32 phase)
 {
 	Cell	*c;
 
-	sint32 x;
-	sint32 y;
-
 	sint32 newtype;
 	sint32 terrain;
 
@@ -359,9 +356,9 @@ void World::GWPhase(const sint32 phase)
 	sint32 const    w = GetWidth();
 	sint32 const    h = GetHeight();
 
-	for (y=0; y<h; y++)
+	for (sint32 y = 0; y < h; y++)
 	{
-		for (x=0; x<w; x++)
+		for (sint32 x = 0; x < w; x++)
 		{
 			c = GetCell(x, y);
 			terrain = sint32(c->m_terrain_type);
@@ -485,14 +482,22 @@ void World::GlobalWarmingEvent(const sint32 phase)
 				{
 					if(!theCell->GetCity().GetMovementTypeSea())
 					{
-						theCell->GetCity().Kill(CAUSE_REMOVE_ARMY_FLOOD, -1);
+						g_gevManager->AddEvent(GEV_INSERT_Tail, GEV_KillCity,
+											   GEA_City, theCell->GetCity().m_id,
+											   GEA_Int, CAUSE_REMOVE_ARMY_FLOOD,
+											   GEA_Player, PLAYER_UNASSIGNED,
+											   GEA_End);
 					}
 				}
 				else
 				{
 					if(!theCell->GetCity().GetMovementTypeLand())
 					{
-						theCell->GetCity().Kill(CAUSE_REMOVE_ARMY_FLOOD, -1);
+						g_gevManager->AddEvent(GEV_INSERT_Tail, GEV_KillCity,
+											   GEA_City, theCell->GetCity().m_id,
+											   GEA_Int, CAUSE_REMOVE_ARMY_FLOOD,
+											   GEA_Player, PLAYER_UNASSIGNED,
+											   GEA_End);
 					}
 				}
 			}

@@ -45,17 +45,17 @@
 // - Merged GNU and MSVC code (DoFinalCleanup, CivMain).
 // - Option added to include multiple data directories.
 // - Display the main thread function name in the debugger.
-// - Removed references to CivilisationDB. (Aug 20th 2005 Martin Gï¿½hmann)
-// - Removed references to old SpriteStateDBs. (Aug 29th 2005 Martin Gï¿½hmann)
-// - Initialized local variables. (Sep 9th 2005 Martin Gï¿½hmann)
-// - Removed unused local variables. (Sep 9th 2005 Martin Gï¿½hmann)
-// - Removed some unreachable code. (Sep 9th 2005 Martin Gï¿½hmann)
+// - Removed references to CivilisationDB. (Aug 20th 2005 Martin G?hmann)
+// - Removed references to old SpriteStateDBs. (Aug 29th 2005 Martin G?hmann)
+// - Initialized local variables. (Sep 9th 2005 Martin G?hmann)
+// - Removed unused local variables. (Sep 9th 2005 Martin G?hmann)
+// - Removed some unreachable code. (Sep 9th 2005 Martin G?hmann)
 // - Moved debug tools handling to c3.h, so that the leak reporter doesn't
-//   report leaks that aren't leaks. (Oct 3rd 2005 Matzin Gï¿½hmann)
+//   report leaks that aren't leaks. (Oct 3rd 2005 Matzin G?hmann)
 // - Added version to crash.txt
-// - USE_LOGGING now works in a final version. (30-Jun-2008 Martin Gï¿½hmann)
+// - USE_LOGGING now works in a final version. (30-Jun-2008 Martin G?hmann)
 // - The log files are now only opened and closed once, this speeds up
-//   debugging significantly. (09-Aug-2008 Martin Gï¿½hmann)
+//   debugging significantly. (09-Aug-2008 Martin G?hmann)
 //
 //----------------------------------------------------------------------------
 //
@@ -278,12 +278,13 @@ BOOL g_hideTaskBar = FALSE;
 BOOL g_useIntroMovie = TRUE;
 BOOL g_noAssertDialogs = FALSE;
 BOOL g_runInBackground = FALSE;
+BOOL g_runSpriteEditor = FALSE;
 BOOL g_eventLog = FALSE;
 
 #if 0
-Uint32 g_SDL_flags = SDL_DOUBLEBUF | SDL_HWSURFACE; 
+uint32 g_SDL_flags = SDL_DOUBLEBUF | SDL_HWSURFACE; 
 #else
-Uint32 g_SDL_flags = 0; //See ctp2_code/ui/aui_common/aui_ui.cpp //SEB Pandora
+uint32 g_SDL_flags = 0; //See ctp2_code/ui/aui_common/aui_ui.cpp //SEB Pandora
 #endif
 
 BOOL g_use_profile_process = FALSE;
@@ -1177,6 +1178,7 @@ void ParseCommandLine(PSTR szCmdLine)
 		g_useIntroMovie = !(NULL != strstr(szCmdLine, "nointromovie"));
 	g_noAssertDialogs = (NULL != strstr(szCmdLine, "noassertdialogs"));
 	g_runInBackground = (NULL != strstr(szCmdLine, "runinbackground"));
+	g_runSpriteEditor = (NULL != strstr(szCmdLine, "runspriteeditor"));
 
 #if defined(__AUI_USE_SDL__)
 	if (strstr(szCmdLine, "fullscreen"))
@@ -1446,6 +1448,7 @@ void main_InitializeLogs(void)
 
 int main(int argc, char **argv)
 {
+	atexit(AtExitProc);
 	int const   r = CivMain(argc, argv);
 
 	if (r < 0)
@@ -1583,6 +1586,9 @@ int WINAPI CivMain(HINSTANCE hInstance, HINSTANCE hPrevInstance, PSTR szCmdLine,
 			SetCurrentDirectory(exepath);
 		}
 	}
+#endif
+#ifdef USE_GTK
+	gtk_init(&iCmdShow, &pSzCmdLine);
 #endif
 
 	appstrings_Initialize();
@@ -1793,39 +1799,26 @@ int SDLMessageHandler(const SDL_Event &event)
 {
 	// Merge into WndProc with keycode converter and
 	// unchanged ui_HandleKeypress(wParam, lParam)
-#ifndef __AUI_USE_SDL__
-	if (!gDone && g_c3ui)
-	{
-		(void) g_c3ui->HandleWindowsMessage(hwnd, iMsg, wParam, lParam);
-	}
-#endif
 
 	static bool swallowNextChar = false;
-//could not find ui_HandleKeypress(wParam, lParm)! Could this mean this code was under reconstruction in trunk when the clone for linux was made???
 
 	switch(event.type) {
 	case SDL_KEYDOWN:
 		{
-                	SDLKey key = event.key.keysym.sym;
+			// TODO: Determine what the 'swallowNextChar' variable
+			// is for, and, if necessary, implement appropriate
+			// code in the SDL sections to perform the same function.
+			SDLKey key = event.key.keysym.sym;
 			SDLMod mod = event.key.keysym.mod;
 			WPARAM wp = '\0';
 			switch (key) {
-
-//for the keys below check swallowNextChar if char should be ignored
-
 #define SDLKCONV(sdl_name, char) \
 			case (sdl_name): \
 				wp = (char); \
-                                if(!swallowNextChar) \
-				  ui_HandleKeypress(wp, 0);	\
-                                swallowNextChar = false; \
 				break;
 #define SDLKCONVSHIFT(sdl_name, charWoShift, charWShift) \
 			case (sdl_name): \
 				wp = ( (mod & KMOD_SHIFT) ? (charWShift) : (charWoShift) ); \
-                                if(!swallowNextChar) \
-				  ui_HandleKeypress(wp, 0);	\
-                                swallowNextChar = false; \
 				break;
 // For the purposes of this macro, shift is ignored when ctrl is pressed
 #define SDLKCONVSHIFTCTRL(sdl_name, charWoShift, charWShift, charWCtrl) \
@@ -1833,14 +1826,11 @@ int SDLMessageHandler(const SDL_Event &event)
 				wp = ( (mod & KMOD_CTRL) ? (charWCtrl) : \
 						( (mod & KMOD_SHIFT) ? (charWShift) : (charWoShift) ) \
 					); \
-                                if(!swallowNextChar) \
-				  ui_HandleKeypress(wp, 0);	\
-                                swallowNextChar = false; \
 				break;
-//                         SDLKCONV(SDLK_BACKSPACE, '\b' + 128);
-//                         SDLKCONV(SDLK_TAB, '\t' + 128);
-//                         SDLKCONV(SDLK_RETURN, '\r' + 128);
-			SDLKCONV(SDLK_ESCAPE, SDLK_ESCAPE + 256);
+			SDLKCONV(SDLK_BACKSPACE, VK_BACK); // set to VK_BACK to hit escape rules in aui_textfield.cpp
+			SDLKCONV(SDLK_TAB, '\t' + 128);
+			SDLKCONV(SDLK_RETURN, VK_RETURN); // set to VK_RETURN to hit escape rules in aui_textfield.cpp
+			SDLKCONV(SDLK_ESCAPE, VK_ESCAPE); // set to VK_ESCAPE to hit escape rules in keypress.cpp
 			SDLKCONV(SDLK_SPACE, ' ');
 			SDLKCONV(SDLK_EXCLAIM, '!');
 			SDLKCONV(SDLK_QUOTEDBL, '"');
@@ -1868,23 +1858,23 @@ int SDLMessageHandler(const SDL_Event &event)
 			SDLKCONVSHIFT(SDLK_BACKSLASH, '\\', '|');
 			SDLKCONV(SDLK_CARET, '^');
 			SDLKCONV(SDLK_UNDERSCORE, '_');
-			SDLKCONVSHIFT(SDLK_BACKQUOTE, '`', '%Gï¿½%@');
-//  			SDLKCONV(SDLK_UP, SDLK_UP + 256);
-//  			SDLKCONV(SDLK_DOWN, SDLK_DOWN + 256);
-//  			SDLKCONV(SDLK_LEFT, SDLK_LEFT + 256);
-//  			SDLKCONV(SDLK_RIGHT, SDLK_RIGHT + 256);
-//  			SDLKCONVSHIFT(SDLK_F1, '1' + 128, '\0');
-//  			SDLKCONVSHIFT(SDLK_F2, '2' + 128, '\0');
-//  			SDLKCONVSHIFT(SDLK_F3, '3' + 128, '\0');
-//  			SDLKCONVSHIFT(SDLK_F4, '4' + 128, '\0');
-//  			SDLKCONVSHIFT(SDLK_F5, '5' + 128, '\0');
-//  			SDLKCONVSHIFT(SDLK_F6, '6' + 128, '\0');
-//  			SDLKCONVSHIFT(SDLK_F7, '7' + 128, '\0');
-//  			SDLKCONVSHIFT(SDLK_F8, '8' + 128, '\0');
-//  			SDLKCONVSHIFT(SDLK_F9, '9' + 128, '\0');
-//  			SDLKCONVSHIFT(SDLK_F10, '0' + 128, '\0');
-//  			SDLKCONVSHIFT(SDLK_F11, '!' + 128, '\0');
-//  			SDLKCONVSHIFT(SDLK_F12, '@' + 128, '\0');
+			SDLKCONVSHIFT(SDLK_BACKQUOTE, '`', '¬');
+			SDLKCONV(SDLK_UP, SDLK_UP + 256);
+			SDLKCONV(SDLK_DOWN, SDLK_DOWN + 256);
+			SDLKCONV(SDLK_LEFT, SDLK_LEFT + 256);
+			SDLKCONV(SDLK_RIGHT, SDLK_RIGHT + 256);
+			SDLKCONVSHIFT(SDLK_F1, '1' + 128, '\0');
+			SDLKCONVSHIFT(SDLK_F2, '2' + 128, '\0');
+			SDLKCONVSHIFT(SDLK_F3, '3' + 128, '\0');
+			SDLKCONVSHIFT(SDLK_F4, '4' + 128, '\0');
+			SDLKCONVSHIFT(SDLK_F5, '5' + 128, '\0');
+			SDLKCONVSHIFT(SDLK_F6, '6' + 128, '\0');
+			SDLKCONVSHIFT(SDLK_F7, '7' + 128, '\0');
+			SDLKCONVSHIFT(SDLK_F8, '8' + 128, '\0');
+			SDLKCONVSHIFT(SDLK_F9, '9' + 128, '\0');
+			SDLKCONVSHIFT(SDLK_F10, '0' + 128, '\0');
+			SDLKCONVSHIFT(SDLK_F11, '!' + 128, '\0');
+			SDLKCONVSHIFT(SDLK_F12, '@' + 128, '\0');
 			// Given the bizarre choices for F11 and F12, I am reluctant to
 			// extrapolate to F15
 			//SDLKCONVSHIFT(SDLK_F13, '' + 128, '\0');
@@ -1909,7 +1899,7 @@ int SDLMessageHandler(const SDL_Event &event)
 			SDLKCONV(SDLK_KP_EQUALS, '=');
 			SDLKCONVSHIFT(SDLK_1, '1', '!');
 			SDLKCONVSHIFT(SDLK_2, '2', '"');
-			SDLKCONVSHIFT(SDLK_3, '3', '%Gï¿½%@');
+			SDLKCONVSHIFT(SDLK_3, '3', '£');
 			SDLKCONVSHIFT(SDLK_4, '4', '$');
 			SDLKCONVSHIFT(SDLK_5, '5', '%');
 			SDLKCONVSHIFT(SDLK_6, '6', '^');
@@ -1946,130 +1936,26 @@ int SDLMessageHandler(const SDL_Event &event)
 #undef SDLKCONV
 #undef SDLKCONVSHIFT
 #undef SDLKCONVSHIFTCTRL
-
-//for the keys below set swallowNextChar
-
-                        case SDLK_BACKSPACE:
-				wp = '\b' + 128;
-                                ui_HandleKeypress(wp, 0);
-                                swallowNextChar = TRUE;
-				break;
-                        case SDLK_TAB:
-				wp = '\t' + 128;
-                                ui_HandleKeypress(wp, 0);
-                                swallowNextChar = TRUE;
-				break;
-                        case SDLK_RETURN:
-				wp = '\r' + 128;
-                                ui_HandleKeypress(wp, 0);
-                                swallowNextChar = TRUE;
-				break;
-
-//for the keys below don't regard swallowNextChar
-
-#define SDLKCONV(sdl_name, char) \
-			case (sdl_name): \
-				wp = (char); \
-			ui_HandleKeypress(wp, 0); \
-				break;
-#define SDLKCONVSHIFT(sdl_name, charWoShift, charWShift) \
-			case (sdl_name): \
-				wp = ( (mod & KMOD_SHIFT) ? (charWShift) : (charWoShift) ); \
-			ui_HandleKeypress(wp, 0);				\
-				break;
-// For the purposes of this macro, shift is ignored when ctrl is pressed
-#define SDLKCONVSHIFTCTRL(sdl_name, charWoShift, charWShift, charWCtrl) \
-			case (sdl_name): \
-				wp = ( (mod & KMOD_CTRL) ? (charWCtrl) : \
-						( (mod & KMOD_SHIFT) ? (charWShift) : (charWoShift) ) \
-					); \
-			ui_HandleKeypress(wp, 0); \
-				break;
-
-  			SDLKCONV(SDLK_UP, SDLK_UP + 256);
-  			SDLKCONV(SDLK_DOWN, SDLK_DOWN + 256);
-  			SDLKCONV(SDLK_LEFT, SDLK_LEFT + 256);
-  			SDLKCONV(SDLK_RIGHT, SDLK_RIGHT + 256);
-  			SDLKCONVSHIFT(SDLK_F1, '1' + 128, '\0');
-  			SDLKCONVSHIFT(SDLK_F2, '2' + 128, '\0');
-  			SDLKCONVSHIFT(SDLK_F3, '3' + 128, '\0');
-  			SDLKCONVSHIFT(SDLK_F4, '4' + 128, '\0');
-  			SDLKCONVSHIFT(SDLK_F5, '5' + 128, '\0');
-  			SDLKCONVSHIFT(SDLK_F6, '6' + 128, '\0');
-  			SDLKCONVSHIFT(SDLK_F7, '7' + 128, '\0');
-  			SDLKCONVSHIFT(SDLK_F8, '8' + 128, '\0');
-  			SDLKCONVSHIFT(SDLK_F9, '9' + 128, '\0');
-  			SDLKCONVSHIFT(SDLK_F10, '0' + 128, '\0');
-  			SDLKCONVSHIFT(SDLK_F11, '!' + 128, '\0');
-  			SDLKCONVSHIFT(SDLK_F12, '@' + 128, '\0');
-
-#undef SDLKCONV
-#undef SDLKCONVSHIFT
-#undef SDLKCONVSHIFTCTRL
-
 			default:
 				break;
+			} // end of switch (key)
+			if (wp != '\0') {
+			  ui_HandleKeypress(wp, 0); 
 			}
-// 			if (wp != '\0') {
-//                             ui_HandleKeypress(wp, 0);
-// 			}
 			break;
-		}
+		} // end of case SDL_KEYDOWN
 	case SDL_QUIT:
 		gDone = TRUE;
 
 		DoFinalCleanup();
 
-#ifndef __AUI_USE_SDL__
-		DestroyWindow( hwnd );
-		gHwnd = NULL;
-#endif
-
 		return 0;
-#ifndef __AUI_USE_SDL__
-	case k_MSWHEEL_ROLLMSG :
-		{
-			sint16 dir = HIWORD(wParam);
-			if (dir >= 0) dir = 1;
-			if (dir < 0) dir = -1;
-			ui_HandleMouseWheel(dir);
-		}
-
-	case WM_VSCROLL:
-		{
-		sint16 scrollCode = LOWORD(wParam);
-		if (scrollCode == SB_LINEDOWN) {
-			ui_HandleMouseWheel((sint16)-1);
-		}
-		else
-			if (scrollCode == SB_LINEUP) {
-				ui_HandleMouseWheel((sint16)1);
-			}
-		}
- 		break;
-	case WM_MOUSEWHEEL:
-		ui_HandleMouseWheel((sint16)HIWORD(wParam));
-		break;
+// SDL_MOUSEBUTTONDOWN event is handled in aui_sdlmouse.cpp
 	}
 
-	return DefWindowProc(hwnd, iMsg, wParam, lParam);
-#else
-// this event is handled in aui_sdlmouse.cpp
-//          case SDL_MOUSEBUTTONDOWN:
-//              if (event.button.button == SDL_BUTTON_WHEELUP){
-//                   printf("%s L%d: Mouse wheel up handled!\n", __FILE__, __LINE__);
-//                   ui_HandleMouseWheel((sint16)1);
-//                  }
-//              else if (event.button.button == SDL_BUTTON_WHEELDOWN)
-//  			ui_HandleMouseWheel((sint16)-1);
-
-             break;
-	}
-
-        //lynx: is a last default handling missing here??? DefWindowProc()
+        //lynx: in the code without SDL the event (if not processed up to here) is passed to the OS handler with DefWindowProc()
 
 	return 0;
-#endif
 }
 
 #elif defined(__AUI_USE_DIRECTX__)

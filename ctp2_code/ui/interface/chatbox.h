@@ -40,14 +40,14 @@ class ChatWindow : public C3Window
 {
 public:
 	ChatWindow
-    (
+	(
 		AUI_ERRCODE *   retval,
 		uint32          id,
 		MBCHAR *        ldlBlock,
 		sint32          bpp,
 		AUI_WINDOW_TYPE type    = AUI_WINDOW_TYPE_STANDARD,
-        ChatBox *       parent  = NULL
-    );
+		ChatBox *       parent  = NULL
+	);
 	virtual ~ChatWindow();
 
 	virtual AUI_ERRCODE InitCommonLdl(MBCHAR *ldlBlock);
@@ -80,8 +80,8 @@ public:
 	ChatBox();
 	~ChatBox();
 
-	BOOL IsActive(void) { return m_active; }
-	void SetActive(BOOL active);
+	bool IsActive(void) { return m_active; }
+	void SetActive(bool active);
 
 	void AddText(MBCHAR *text);
 	void AddLine(sint32 playerNum, MBCHAR *text);
@@ -89,7 +89,7 @@ public:
 private:
 
 	ChatWindow			*m_chatWindow;
-	BOOL				m_active;
+	bool				m_active;
 };
 
 #endif

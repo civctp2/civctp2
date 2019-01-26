@@ -25,6 +25,8 @@
 // Modifications from the original Activision code:
 //
 // - The army text now appears in the debug log. (13-Aug-2008 Martin Gühmann)
+// - Added a debug player for the debug cell text, so that we can select whose
+//   stuff is shown. (30-Dec-2018 Martin Gühmann)
 //
 //----------------------------------------------------------------------------
 
@@ -37,6 +39,7 @@
 #include "ArmyData.h"
 #include "Globals.h"
 #include "ctpaidebug.h"
+#include "SelItem.h"                // g_selected_item
 
 GraphicsOptions * g_graphicsOptions = NULL;
 
@@ -66,13 +69,14 @@ GraphicsOptions::GraphicsOptions()
     m_armyTextOn              (false),
     m_cellTextOn              (false),
     m_armyNameOn              (false),
+    m_debugCellPlayer         (PLAYER_UNASSIGNED),
     m_cellAVL                 (new AvlTree<CellText *>())
 {
 }
 
 GraphicsOptions::~GraphicsOptions()
 {
-    delete m_cellAVL;
+	delete m_cellAVL;
 }
 
 void GraphicsOptions::Initialize(void)
@@ -128,13 +132,15 @@ void GraphicsOptions::ResetArmyText(Army army)
 	}
 }
 
-void GraphicsOptions::CellTextOn(void)
+void GraphicsOptions::CellTextOn(PLAYER_INDEX debugCellPlayer)
 {
+	m_debugCellPlayer = debugCellPlayer;
 	m_cellTextOn = true;
 }
 
 void GraphicsOptions::CellTextOff(void)
 {
+	m_debugCellPlayer = PLAYER_UNASSIGNED;
 	m_cellTextOn = false;
 }
 
@@ -148,9 +154,13 @@ CellText *GraphicsOptions::GetCellText(MapPoint const &pos)
 }
 
 bool GraphicsOptions::AddTextToCell(const MapPoint &pos, const char *text,
-									const uint8 &colorMagnitude)
+                                    const uint8 &colorMagnitude,
+                                    const PLAYER_INDEX playerId)
 {
 	if (!m_cellTextOn) return false;
+
+	if (m_debugCellPlayer != PLAYER_UNASSIGNED && m_debugCellPlayer != playerId && playerId != PLAYER_UNASSIGNED)
+		return false;
 
 	CellText * cellText = GetCellText(pos);
 	if (cellText)

@@ -223,6 +223,15 @@ const Squad_Strength & Agent::Compute_Squad_Strength()
 {
 	Assert(m_army.IsValid());
 
+/*	if(!m_army->HasCargo())
+	{
+		m_squad_strength.Set_Army_Strength(m_army, true);
+	}
+	else
+	{
+		m_squad_strength.Set_Cargo_Strength(m_army);
+	}*/
+
 	sint32 transports, max_slots, empty_slots;
 	m_army->GetCargo(transports, max_slots, empty_slots);
 
@@ -438,8 +447,8 @@ double Agent::GetRoundsPrecise(const MapPoint & pos, sint32 & cells) const
 	{
 		///Improvement of rounds evaluation (based on minimum cost point between
 		///start and destination mappoints. - Calvitix
-		Cell *          myCell      = g_theWorld->GetCell(pos);
-		Cell *          otherCell   = g_theWorld->GetCell(Get_Pos());
+	//	Cell *          myCell      = g_theWorld->GetCell(pos);
+	//	Cell *          otherCell   = g_theWorld->GetCell(Get_Pos());
 		double const    movement    = 100.0;
 		// This does not do the trick, better avaerage
 		// over all tiles from pos to target, unfortunately this
@@ -937,7 +946,7 @@ void Agent::ClearOrders()
 
 		MapPoint pos;
 		m_army->GetPos(pos);
-		if(!m_goal->Get_Invalid())
+		if(!m_goal->IsInvalid())
 		{
 			MapPoint dest_pos = m_goal->Get_Target_Pos();
 

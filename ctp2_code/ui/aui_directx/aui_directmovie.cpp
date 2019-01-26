@@ -31,9 +31,7 @@
 #include "aui_directmovie.h"
 
 #include "CivPaths.h"			// g_civPaths
-#include "RefTime.h"			// UNITS, MILLISECONDS
 #include "soundmanager.h"		// g_soundManager
-
 
 extern C3UI		*g_c3ui;
 

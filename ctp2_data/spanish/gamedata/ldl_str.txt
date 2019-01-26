@@ -1967,6 +1967,8 @@ str_ldl_ScenMode				"Modo:"
 #
 # Sprite editor stuff
 #
+str_SprEd_Load					"  Cargar"
+str_SprEd_Save					"  Guardar"
 str_SprEd_Move					"  Move"
 str_SprEd_Attack				"  Atttack"
 str_SprEd_Idle					"  Idle"

@@ -219,9 +219,9 @@ char spriteutils_EncodeScanline(Pixel32 *scanline, sint32 width, Pixel16 **outBu
 	Pixel16         shadowPixel;
 
 	if (g_is565Format) {
-		shadowPixel = k_SHADOW_PIXEL_565;
+		shadowPixel = k_SHADOW_PIXEL_565; // 0xF81F
 	} else {
-		shadowPixel = k_SHADOW_PIXEL_555;
+		shadowPixel = k_SHADOW_PIXEL_555; // 0x7C1F
 	}
 
 	pos = 0;
@@ -242,7 +242,7 @@ char spriteutils_EncodeScanline(Pixel32 *scanline, sint32 width, Pixel16 **outBu
 
 
 
-
+		// k_CHROMAKEY_PIXEL  0x0000   k_NO_ALPHA  0x00   k_ALL_ALPHA  0xFF
 		if ((pix16 == k_CHROMAKEY_PIXEL)&&(alpha == k_NO_ALPHA))
 
 		{
@@ -250,25 +250,28 @@ char spriteutils_EncodeScanline(Pixel32 *scanline, sint32 width, Pixel16 **outBu
 			empty = spriteutils_EncodeChromakeyRun(&scanPtr, &pos, width, outBufPtr);
 		}
 		else
-		if (pix16 == shadowPixel)
+		if (pix16 == shadowPixel) // i.e. pix32 == 0x..FF00FF (magenta)
 		{
 
 			spriteutils_EncodeShadowRun(&scanPtr, &pos, width, outBufPtr);
 		}
 		else
-		if ((alpha!=k_NO_ALPHA) && (alpha!=k_ALL_ALPHA))
+		if ((alpha!=k_NO_ALPHA) && (alpha!=k_ALL_ALPHA)) // 0x00   0xFF
 		{
 
 			spriteutils_EncodeFeatheredRun(&scanPtr, &pos, width, outBufPtr);
 		}
 		else {
 
-			if (alpha == k_ALL_ALPHA)
+			if (alpha == k_ALL_ALPHA) // 0xFF
 				spriteutils_EncodeCopyRun(&scanPtr, &pos, width, outBufPtr);
 			else
 			{
 
 				printf("\nError in bitmap data.  Pixel with no associated alpha.\n");
+			        printf("%s L%d: pix32: %08X pix16: %04X alpha: %02X \n", __FILE__, __LINE__, pix32, pix16, alpha);
+				printf("\nMake sure to assign black to fully transparent pixels!\n");
+				printf("\nUse e.g. ImageMagick: mogrify -background black -alpha Background -type TrueColorMatte *.TIF\n");
 
 				exit(-1);
 			}
@@ -328,6 +331,9 @@ char spriteutils_EncodeScanlineWshadow(Pixel32 *scanline, sint32 width, Pixel16 
 				spriteutils_EncodeCopyRun(&scanPtr, &pos, width, outBufPtr);
 			else {
 				printf("\nError in bitmap data.  Pixel with no associated alpha.\n");
+			        printf("%s L%d: pix32: %08X pix16: %04X alpha: %02X \n", __FILE__, __LINE__, pix32, pix16, alpha);
+				printf("\nMake sure to assign black to fully transparent pixels!\n");
+				printf("\nUse e.g. ImageMagick: mogrify -background black -alpha Background -type TrueColorMatte *.TIF\n");
 				exit(-1);
 			}
 		}
@@ -343,10 +349,10 @@ void spriteutils_MergeShadowMap(Pixel32 *buf, Pixel32 *shadowBuf, uint16 width, 
 
 
 	BOOL        whiteBackground = FALSE;
-	if ((*shadowBuf & 0x00FFFFFF) == 0x00FFFFFF) {
+	if ((*shadowBuf & 0x00FFFFFF) == 0x00FFFFFF) { // only first pixel (disregarding alpha) in shadow image is used to determin bg!
 		whiteBackground = TRUE;
 	} else {
-		if ((*shadowBuf & 0x00FFFFFF) != 0x00000000) {
+		if ((*shadowBuf & 0x00FFFFFF) != 0x00000000) { // first pixel in shadow must be black (disregarding alpha)!
 			printf("\nShadow file is in invalid format.\n");
 			exit(-1);
 		}
@@ -359,30 +365,30 @@ void spriteutils_MergeShadowMap(Pixel32 *buf, Pixel32 *shadowBuf, uint16 width, 
 
 			pix = *pixPtr;
 			shadowPix = *shadowPixPtr;
-			shadowPix = shadowPix & 0x00FFFFFF;
+			shadowPix = shadowPix & 0x00FFFFFF; // mask away alpha value, keep only the color
 
 			if (whiteBackground) {
 
-				if (shadowPix != 0x00FFFFFF) {
+				if (shadowPix != 0x00FFFFFF) { // if shadowPix is not white
 
 					Pixel16     r, g, b, a;
 
-					RGB32Components(pix, &r, &g, &b, &a);
+					RGB32Components(pix, &r, &g, &b, &a); // get alpha of image pixel (not shadow)
 
-					if (a != 0xFF) {
-						*pixPtr = 0x00FF00FF;
+					if (a != 0xFF) { // if pix is not fully opaque
+						*pixPtr = 0x00FF00FF; // assign magenta to pix, for which RGB32Info yields 0xF81F (k_SHADOW_PIXEL_565)
 					}
 				}
-			} else {
+			} else { // black bg
 
-				if (shadowPix) {
+				if (shadowPix) { // if shadowPix is not black
 
 					Pixel16     r, g, b, a;
 
-					RGB32Components(pix, &r, &g, &b, &a);
+					RGB32Components(pix, &r, &g, &b, &a); // get alpha of image pixel (not shadow)
 
-					if (a != 0xFF) {
-						*pixPtr = shadowPix;
+					if (a != 0xFF) { // if pix is not fully opaque
+						*pixPtr = shadowPix; // assign color from shadow pixel
 					}
 				}
 			}

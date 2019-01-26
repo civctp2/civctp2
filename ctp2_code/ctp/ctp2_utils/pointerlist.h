@@ -125,7 +125,7 @@ public:
 	void InsertBefore(PointerListNode *node, T *obj);
 
 	void Remove(PointerListNode* node);
-	BOOL  IsEmpty() const { return m_head == NULL; };
+	bool  IsEmpty() const { return m_head == NULL; };
 	sint32 GetCount() const { return m_count; }
 
 	PointerListNode *Find(T *obj);

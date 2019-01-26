@@ -27,12 +27,15 @@
 //
 // Modifications from the original Activision code:
 //
-// - Initialized local variables. (Sep 9th 2005 Martin G�hmann)
+// - Initialized local variables. (Sep 9th 2005 Martin G?hmann)
 //
 //----------------------------------------------------------------------------
 
 #include "c3.h"
 #include "aui_mouse.h"
+
+#include <chrono>
+#include <thread>
 
 #include "aui_Factory.h"
 #include "aui_ui.h"
@@ -67,11 +70,6 @@ SDL_mutex *aui_Mouse::m_lpcs = NULL;
 
 #include "civapp.h"
 extern CivApp		*g_civApp;
-
-#ifdef USE_SDL
-#include <SDL.h>
-#include <SDL_thread.h>
-#endif
 
 #ifdef LINUX
 #include <unistd.h>
@@ -696,12 +694,17 @@ DWORD WINAPI MouseThreadProc( LPVOID param )
 			}
 			g_oldX = dX; g_oldY = dY; g_oldW = dW; g_oldH = dH;
 #endif
+#ifdef __AUI_USE_SDL__
 		}
-#ifdef WIN32
-		Sleep( k_AUI_MOUSE_THREAD_SLEEP_TIME );
-#elif defined(LINUX)
-		usleep( k_AUI_MOUSE_THREAD_SLEEP_TIME );
 #endif
+
+#ifdef WIN32
+		Sleep(k_AUI_MOUSE_THREAD_SLEEP_TIME);
+#elif defined(LINUX)
+		usleep(k_AUI_MOUSE_THREAD_SLEEP_TIME);
+#endif
+		// For that something is wrong with the mouse delay
+//		std::this_thread::sleep_for(std::chrono::milliseconds(k_AUI_MOUSE_THREAD_SLEEP_TIME));
 	}
 
 	return 0;

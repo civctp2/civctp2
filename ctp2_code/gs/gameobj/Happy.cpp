@@ -203,7 +203,7 @@ double Happy::CalcBase(Player *p)
 
 double Happy::CalcSize(CityData &cd, Player *p)
 {
-	m_size	= p->GetBigCityScale() * std::min<float>(p->GetBigCityOffset(), 0.0);
+	m_size	= p->GetBigCityScale() * std::min<double>(p->GetBigCityOffset(), 0.0);
 	m_tracker->SetHappiness(HAPPY_REASON_CITY_SIZE, m_size);
 	return m_size;
 }
@@ -295,7 +295,7 @@ double Happy::CalcDistanceFromCapitol(CityData & cd, Player * p)
 		}
 
 		m_dist_to_capitol =
-		    std::max<float>(0.0,
+		    std::max<double>(0.0,
 		             cost - g_theGovernmentDB->Get(p->GetGovernmentType())->
 		                        GetMinEmpireDistance()
 		            );
@@ -451,7 +451,7 @@ double Happy::CalcMartialLaw(CityData &cd, Player *p)
 		sint32 count = 0;
 
 		if (a)
-        {
+		{
 			sint32 n = a->Num();
 			for (sint32 i = 0; i < n; i++) {
 				if ((*a)[i].ExertsMartialLaw()) {
@@ -459,21 +459,16 @@ double Happy::CalcMartialLaw(CityData &cd, Player *p)
 				}
 			}
 		}
-        m_martial_law = std::min(mu, count) * me;
+		m_martial_law = std::min(mu, count) * me;
 	}
 
 	m_tracker->SetHappiness(HAPPY_REASON_MARTIAL_LAW, m_martial_law);
 	return m_martial_law;
 }
 
-
-
-
 double Happy::CalcPopEntertain(CityData &cd, Player *p)
 {
-	double increaseSpecialists = wonderutil_GetIncreaseSpecialists(p->m_builtWonders);
-
-	m_pop_ent = cd.GetHappinessFromPops();
+	m_pop_ent  = cd.GetHappinessFromPops();
 	m_tracker->SetHappiness(HAPPY_REASON_ENTERTAINERS, m_pop_ent);
 	return m_pop_ent;
 }
@@ -511,7 +506,7 @@ double Happy::CalcCrime(CityData &cd, Player *p)
 					  (double)(wonderutil_GetDecreaseCrimePercentage(p->GetBuiltWonders()) / 100.0);
 		double total_crime = 0.01 * base_crime;
 		total_crime += cops * total_crime;
-		m_crime = std::min<float>(1.0, total_crime * p->GetCrimeCoef());
+		m_crime = std::min<double>(1.0, total_crime * p->GetCrimeCoef());
 		if(m_crime < 0.0)
 			m_crime = 0.0;
 	}

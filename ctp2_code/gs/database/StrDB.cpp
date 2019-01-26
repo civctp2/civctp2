@@ -194,7 +194,7 @@ bool StringDB::InsertStr
 			// Create a new special key, initialised with count 1.
 			AddStrNode(GetHead(tempstr), tempstr, "1     ", newRec);
 			GetStrNode(GetHead(tempstr), tempstr, &countstr);
-        }
+		}
 
 		// Create a new numbered key.
 		int const	count	= atoi(countstr);

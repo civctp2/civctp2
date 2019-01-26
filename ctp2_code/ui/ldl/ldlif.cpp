@@ -12,6 +12,7 @@
 #include "ldl_data.hpp"
 #include "ldl_attr.hpp"
 #include "c3errors.h"
+#include <inttypes.h>
 
 class LDLString {
 	char *m_name;
@@ -90,7 +91,7 @@ void ldlif_init_log()
 #ifdef _DEBUG
 	FILE *f = fopen("ldlparselog.txt", "w");
 	if(f) {
-		fprintf(f, "%d\n", time(0));
+		fprintf(f, "%" PRId64 "\n", time(0));
 		fclose(f);
 	}
 #endif

@@ -1,0 +1,2 @@
+option('slicdebug', type : 'boolean', value : false, description : 'Enable slic debugging code')
+option('anet', type : 'boolean', value : true, description : 'enable external anet library')

@@ -243,12 +243,7 @@ void EndGame::BeginTurn()
 void EndGame::AdvanceStage()
 {
 	SlicObject *so;
-
-
-
-
-#if 0
-
+/*
 	sint32 cataclysm_chance = GetCataclysmChance();
 	if(cataclysm_chance > 0) {
 		if(g_rand->Next(100) < cataclysm_chance) {
@@ -256,8 +251,7 @@ void EndGame::AdvanceStage()
 			return;
 		}
 	}
-#endif
-
+*/
 	bool openScreen = true;
 
 	m_currentStage++;

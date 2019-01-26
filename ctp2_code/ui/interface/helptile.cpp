@@ -264,7 +264,7 @@ void helptile_displayData(const MapPoint &p)
 		s_tileSaleV->SetText("\0");
 		s_tileSale->SetText("\0");
 
-		sprintf( mytext , "%.1f\n", (float)(ucell.m_unseenCell->m_move_cost / 100.0) );
+		sprintf( mytext , "%.1f\n", (float)(ucell.m_unseenCell->GetMoveCost() / 100.0) );
 		s_tileMoveV->SetText(mytext);
 	}
 	else

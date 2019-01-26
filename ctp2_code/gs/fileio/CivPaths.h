@@ -26,7 +26,7 @@
 // Modifications from the original Activision code:
 //
 // - Added option to use multiple data directories.
-// - FindFile can ignore files in scenario paths. (9-Apr-2007 Martin G�hmann)
+// - FindFile can ignore files in scenario paths. (9-Apr-2007 Martin Gühmann)
 //
 //----------------------------------------------------------------------------
 
@@ -77,7 +77,7 @@ private:
 
 public:
 
-	CivPaths ();
+	CivPaths(AUI_ERRCODE &errcode);
 
 	virtual ~CivPaths();
 

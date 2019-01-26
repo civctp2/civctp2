@@ -1526,7 +1526,7 @@ void ToggleCellText::Execute(sint32 argc, char **argv)
 	if (g_graphicsOptions->IsCellTextOn()) {
 		g_graphicsOptions->CellTextOff();
 	} else {
-		g_graphicsOptions->CellTextOn();
+		g_graphicsOptions->CellTextOn(PLAYER_UNASSIGNED);
 	}
 }
 
@@ -1840,29 +1840,32 @@ void CleanSpritesCommand::Execute(sint32 argc, char **argv)
 	MBCHAR *name;
 	MBCHAR saveName[_MAX_PATH];
 
-	for (i=0; i<numUnits; i++) {
+	for (i = 0; i < numUnits; i++)
+	{
 		usg = new UnitSpriteGroup(GROUPTYPE_UNIT);
 		name = unitFileNames[i];
 		usg->LoadFull(name);
-		sprintf(saveName, "Output\\%s", name);
+		sprintf(saveName, "Output%s%s", FILE_SEP, name);
 		usg->Save(saveName,k_SPRITEFILE_VERSION0,SPRDATA_REGULAR);
 		delete usg;
 	}
 
-	for (i=0; i<numGoods; i++) {
+	for (i = 0; i < numGoods; i++)
+	{
 		gsg = new GoodSpriteGroup(GROUPTYPE_GOOD);
 		name = goodFileNames[i];
 		gsg->LoadFull(name);
-		sprintf(saveName, "Output\\%s", name);
+		sprintf(saveName, "Output%s%s", FILE_SEP, name);
 		gsg->Save(saveName,k_SPRITEFILE_VERSION0,SPRDATA_REGULAR);
 		delete gsg;
 	}
 
-	for (i=0; i<numCities; i++) {
+	for (i = 0; i < numCities; i++)
+	{
 		usg = new UnitSpriteGroup(GROUPTYPE_CITY);
 		name = cityFileNames[i];
 		usg->LoadFull(name);
-		sprintf(saveName, "Output\\%s", name);
+		sprintf(saveName, "Output" FILE_SEP "%s", name);
 		usg->Save(saveName,k_SPRITEFILE_VERSION0,SPRDATA_REGULAR);
 		delete usg;
 	}
@@ -6397,7 +6400,7 @@ void CommandLine::DisplayOutput(aui_Surface* surf)
 						break;
 				}
 				strcat(buf, buf2);
-				sprintf(buf2, " to city %d", tradeOffers->Get(j).GetToCity());
+				sprintf(buf2, " to city %d", (int)tradeOffers->Get(j).GetToCity());
 
 				strcat(buf, buf2);
 				primitives_DrawText(surf, k_LEFT_EDGE, k_TOP_EDGE + l * k_TEXT_SPACING,

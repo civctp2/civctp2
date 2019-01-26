@@ -163,13 +163,13 @@ public:
 
 	void Match_Resources(const bool move_armies);
 
-
 	void Add_New_Goal(const Goal_ptr & new_goal);
 
 	void Add_New_Agent(const Agent_ptr & new_agent);
 	Agent_List::iterator Add_Agent(const Agent_ptr & agent);
 
 	Sorted_Goal_Iter Remove_Goal(const Sorted_Goal_Iter & sorted_goal_iter);
+	void Remove_Goal(const Goal_ptr & goal);
 
 	void Remove_Goals_Type(const GoalRecord *rec);
 
@@ -180,7 +180,7 @@ public:
 
 	Goal_ptr GetHighestPriorityGoal(const GOAL_TYPE & type, const bool satisfied) const;
 
-	sint16 CountGoalsOfType(const GOAL_TYPE & type) const;
+	size_t CountGoalsOfType(const GOAL_TYPE & type) const;
 
 	void DisbandObsoleteArmies(const sint16 max_count);
 
@@ -196,7 +196,13 @@ public:
 	void Assign_Garrison();
 	void ResetTransport();
 
+	Sorted_Goal_List GetGoalsOfType(const GOAL_TYPE & type) { return m_goals_of_type[type]; };
+
 	static bool                  s_needAnotherCycle;
+
+#if defined(_DEBUG) || defined(USE_LOGGING)
+	void PrintAllGoals() const;
+#endif
 
 protected:
 

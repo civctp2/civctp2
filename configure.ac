@@ -107,8 +107,8 @@ CXX_WARNINGS="$COMMON_WARNINGS -Winvalid-offsetof"
 C_WARNINGS="-Wall -Wno-unused-variable"
 CXX_WARNINGS="-Wall -Wno-unused-variable"
 
-CFLAGS="$C_WARNINGS -fms-extensions -fmessage-length=0 $CFLAGS"
-CXXFLAGS="$CXX_WARNINGS -fms-extensions -fmessage-length=0 -frtti -fexceptions $CXXFLAGS"
+CFLAGS="$C_WARNINGS -fpermissive -fms-extensions -fmessage-length=0 $CFLAGS"
+CXXFLAGS="$CXX_WARNINGS -fpermissive -fms-extensions -fmessage-length=0 -frtti -fexceptions $CXXFLAGS"
 AC_SUBST(CFLAGS)
 AC_SUBST(CPPFLAGS)
 AC_SUBST(CXXFLAGS)
@@ -130,6 +130,13 @@ package_sysconfdir=$(eval echo $sysconfdir)
 AC_DEFINE_UNQUOTED(PACKAGE_DATADIR,"${package_datadir}",[read-only architecture-independent data [PREFIX/share]])
 AC_DEFINE_UNQUOTED(PACKAGE_SYSCONFDIR,"${package_sysconfdir}",[read-only single-machine data [PREFIX/etc]])
 
+AC_ARG_ENABLE([logging],
+              AC_HELP_STRING([--enable-logging],[enable logging]),,
+	      [enable_logging=no])
+if test x$enable_logging = xyes  || test x$enable_logging = xfull; then
+	AC_DEFINE(USE_LOGGING,1,[Enable logging])
+fi
+
 AC_ARG_ENABLE([debug],
               AC_HELP_STRING([--enable-debug],[enable debugging]),,
 	      [enable_debug=no])
@@ -145,7 +152,7 @@ enable_anet=no
 AC_ARG_ENABLE([anet],
               AC_HELP_STRING([--enable-anet],[enable external anet library]),,
 	      [enable_anet=no])
-AC_MSG_CHECKING([wether to build with internal anet library])
+AC_MSG_CHECKING([whether to build with internal anet library])
 if test x$enable_anet == xno; then
 	AC_MSG_RESULT([yes])
 	AC_CONFIG_SUBDIRS([ctp2_code/libs/anet])

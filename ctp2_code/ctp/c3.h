@@ -47,7 +47,7 @@
 //
 //----------------------------------------------------------------------------
 
-#if defined(_MSC_VER) && (_MSC_VER > 1000)
+#if defined(HAVE_PRAGMA_ONCE)
 #pragma once
 #endif
 
@@ -58,6 +58,10 @@
 #include "c3types.h"
 
 #if defined(_MSC_VER)
+
+// There seems to be a problem with disabling these things, e.g. 4996 is disabled but still shows up
+
+#pragma warning(disable:4996)   // (Level 3)   (At least) Depricated (e.g. strdup) and unsave (e.g. sprintf) functions 
 
 #pragma warning(disable:4100)   // (Level 4)   'identifier' : unreferenced formal parameter
 #pragma warning(disable:4127)   // (Level 4)   conditional expression is constant
@@ -94,24 +98,19 @@
 // Do not define the min and max *macros* in <windows.h>.
 #define NOMINMAX
 #include <windows.h>
-#else
-#include "windows.h"
-#endif // WIN32
 
-#include "minmax.h"
-
-#if defined(WIN32)
 #include <tchar.h>
 
 #include <ddraw.h>
 #include <dinput.h>
-#endif
+#else
+#include "windows.h"
+#endif // WIN32
 
 #include <stdio.h>
 #include <stdlib.h>
 #include <string.h>
 #include <math.h>
-#include <malloc.h>
 #include <ctype.h>
 #include <sys/types.h>
 #include <sys/stat.h>
@@ -119,14 +118,20 @@
 #include <time.h>
 
 #if defined(__GNUC__)
-#define _MAX_PATH PATH_MAX
+//#define _MAX_PATH PATH_MAX
+// Needs to be 260 otherwise you cannot load savegames from Windows.
+// Maybe this screws up something else.
+#define _MAX_PATH   260 // max. length of full pathname
 
 #endif // __GNUC__
+
+#if defined(__cplusplus)
 #include "c3debug.h"
 #include "c3errors.h"
 #include "aui.h"
+#endif
 
-#ifdef __linux__
+#if defined(__linux__)
 // try to handle Case insisentive stuff globaly here
 #include "cifm.h"
 #define fopen(a, b) ci_fopen(a, b)

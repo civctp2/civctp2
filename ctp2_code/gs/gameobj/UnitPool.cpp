@@ -44,13 +44,6 @@ extern StringDB     *g_theStringDB;
 
 #include "civ3_main.h"
 
-#ifndef _NO_GAME_WATCH
-
-#include "GWCiv.h"
-
-extern int g_gameWatchID;
-#endif
-
 UnitPool::UnitPool () : ObjPool (k_BIT_GAME_OBJ_TYPE_UNIT)
 {
 }
@@ -77,17 +70,6 @@ Unit UnitPool::Create (
 	ptr = new UnitData(t, trans_t, id, owner, pos, hc, actor);
 
 	Assert(ptr);
-
-#ifndef _NO_GAME_WATCH
-
-	static char unitName[256];
-	strcpy(unitName, g_theStringDB->GetNameStr(g_theUnitDB->Get(t)->GetName()));
-	sint32 unitCost = g_theUnitDB->Get(t, g_player[owner]->GetGovernmentType())->GetShieldCost();
-
-	char *aipName = NULL;
-
-	gwCiv.UnitBuilt(g_gameWatchID, unitName, unitCost, aipName);
-#endif
 
 	Insert(ptr);
 	return id;

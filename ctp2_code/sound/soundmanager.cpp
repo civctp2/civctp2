@@ -897,7 +897,11 @@ void SoundManager::StartMusic(const sint32 &InTrackNum)
 {
 	m_stopRedbookTemporarily = FALSE;
 
+#if !defined(USE_SDL)
+	if (!g_theProfileDB->IsUseRedbookAudio() || !c3files_HasCD()) return;
+#else
 	if (!g_theProfileDB->IsUseRedbookAudio() || !c3files_HasCD() || !m_useOggTracks) return;
+#endif
 
 	if (m_noSound) return;
 
@@ -1001,14 +1005,14 @@ void SoundManager::TerminateMusic(void)
 
 	if (m_usePlaySound) return;
 
-#if !defined(USE_SDL)
-	if (m_useOggTracks) {
-		Mix_StopMUS();
-		if(m_oggTrack) {
-			Mix_FreeMusic(m_oggTrack);
-			m_oggTrack = NULL;
-		}
-	}
+#if !defined(USE_SDL) // Does not compile and why the hell is this here?
+//	if (m_useOggTracks) {
+//		Mix_StopMUS();
+//		if(m_oggTrack) {
+//			Mix_FreeMusic(m_oggTrack);
+//			m_oggTrack = NULL;
+//		}
+//	}
 	if (!m_redbook) return;
 #else
     if (!m_cdrom) return;
@@ -1066,33 +1070,33 @@ void SoundManager::PickNextTrack(void)
 	m_lastTrack = m_curTrack;
 }
 
+// This is StupidPlaySound, because you cannot name it PlaySound,
+// otherwise you get intro trouble the define from windows.
 void SoundManager::StupidPlaySound(const sint32 &soundID)
 {
     SoundRecord const * soundRecord = g_theSoundDB->Get(soundID);
     char const *        soundValue  = soundRecord ? soundRecord->GetValue() : NULL;
 
 	if (soundValue && (strlen(soundValue) > 0))
-    {
+	{
 		MBCHAR		fullPath[_MAX_PATH];
 		fullPath[0] = 0;
 
 		g_civPaths->FindFile(C3DIR_SOUNDS, soundValue, fullPath);
-#ifndef USE_SDL
-		PlaySound(fullPath, NULL, (SND_ASYNC | SND_FILENAME | SND_NOWAIT));
-#else
-		std::cerr << "SoundManager::StupidPlaySound("
-		          << soundID
-		          << ") called." << std::endl;
-#endif
+
+		PlayManagedSound(fullPath, true);
 	}
 }
 
-void
-SoundManager::PlaySound(const MBCHAR *fullFilename, const bool &bNoWait)
+void SoundManager::PlayManagedSound(const MBCHAR *fullFilename, const bool &bNoWait)
 {
 #if !defined(USE_SDL)
-	PlaySound(fullname, NULL,
-	          (SND_ASYNC | SND_FILENAME | (bNoWait ? SND_NOWAIT : 0)));
+	PlaySound(fullFilename, NULL,
+		(SND_ASYNC | SND_FILENAME | (bNoWait ? SND_NOWAIT : 0)));
+#else
+	std::cerr << "SoundManager::StupidPlaySound("
+		<< fullFilename
+		<< ") called." << std::endl;
 #endif
 }
 

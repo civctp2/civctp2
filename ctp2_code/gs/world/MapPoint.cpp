@@ -35,6 +35,8 @@
 #include "c3.h"                 // pre-compiled header
 #include "MapPoint.h"           // own declarations: consistency check
 
+#include <algorithm>
+
 #include "civarchive.h"
 #include "XY_Coordinates.h"
 #include "World.h"              // g_theWorld
@@ -173,7 +175,7 @@ WORLD_DIRECTION MapPoint::GetOppsositeDirection(WORLD_DIRECTION const & directio
 //
 // Name       : MapPoint::HasUnexploredNeighbor
 //
-// Description: Check whther this MapPoint has an unexplored tile for the
+// Description: Check whether this MapPoint has an unexplored tile for the
 //              given player nearby.
 //
 // Parameters : player       : The player for that the the unexplored test is done.
@@ -525,7 +527,7 @@ sint32 OldSquaredDistance(const MapPoint &uPos, const MapPoint &pos)
 
 	dx1 = uPos.x - pos.x;
 
-	if(w - ABS(dx1) < ABS(dx1)) {
+	if(w - abs(dx1) < abs(dx1)) {
 		if(dx1 < 0) {
 			dx1 += w;
 		} else {
@@ -544,7 +546,7 @@ sint32 OldSquaredDistance(const MapPoint &uPos, const MapPoint &pos)
 		topPos.y -= h;
 		dx2 = uPos.x - topPos.x;
 
-		if(w - ABS(dx2) < ABS(dx2)) {
+		if(w - abs(dx2) < abs(dx2)) {
 			if(dx2 < 0) {
 				dx2 += w;
 			} else {
@@ -561,7 +563,7 @@ sint32 OldSquaredDistance(const MapPoint &uPos, const MapPoint &pos)
 		bottomPos.y += h;
 		dx3 = uPos.x - bottomPos.x;
 
-		if(w - ABS(dx3) < ABS(dx3)) {
+		if(w - abs(dx3) < abs(dx3)) {
 			if(dx3 < 0) {
 				dx3 += w;
 			} else {
@@ -999,7 +1001,7 @@ void SquareIterator::Next()
 			m_testXY.Move(SOUTHWEST, m_endX - m_startX);
 		}
 
-		isValid	= IsIncluded();
+		isValid = IsIncluded();
 	}
 
 	if (isValid)

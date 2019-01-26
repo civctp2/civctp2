@@ -5,6 +5,13 @@
 
 #include "aui_sdlmouse.h"
 
+#include "ctp2_listbox.h"
+#include "c3_listbox.h"
+#include "aui_ranger.h"
+
+#include "civapp.h"
+extern CivApp           *g_civApp;
+
 aui_SDLMouse::aui_SDLMouse(
    AUI_ERRCODE *retval,
    MBCHAR *ldlBlock,
@@ -21,6 +28,26 @@ aui_SDLMouse::aui_SDLMouse(
 aui_SDLMouse::~aui_SDLMouse()
 {
 }
+
+
+void HandleMouseWheel(sint16 delta){
+    if (!g_civApp) return;
+
+    aui_Ranger *box2 = aui_Ranger::GetMouseFocusRanger();
+    if (box2 != NULL) {
+	if (delta) {
+	    if (delta < 0) {
+		box2->ForceScroll(0, 1);
+		}
+	    else {
+		box2->ForceScroll(0, -1);
+		}
+	    return;
+	    }
+	}
+    else
+	printf("%s L%d: Mouse wheel for SDL not handled!\n", __FILE__, __LINE__);
+    }
 
 AUI_ERRCODE
 aui_SDLMouse::GetInput(void)
@@ -56,6 +83,14 @@ aui_SDLMouse::GetInput(void)
             break;
          case SDL_MOUSEBUTTONDOWN:
          case SDL_MOUSEBUTTONUP:
+	    if (od[ev].button.button == SDL_BUTTON_WHEELUP){
+		HandleMouseWheel((sint16)1);
+		break;
+	    }
+	    else if (od[ev].button.button == SDL_BUTTON_WHEELDOWN){
+		HandleMouseWheel((sint16)-1);
+		break;
+	    }
             m_data.position.x = od[ev].button.x;
             m_data.position.y = od[ev].button.y;
             if (od[ev].button.button == SDL_BUTTON_LEFT) {

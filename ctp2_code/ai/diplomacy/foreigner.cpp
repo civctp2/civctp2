@@ -34,6 +34,8 @@
 #include "c3.h"
 #include "Foreigner.h"
 
+#include <functional>
+
 #include "player.h"
 #include "Army.h"
 #include "ArmyData.h"
@@ -485,7 +487,7 @@ void Foreigner::AddNewNegotiationEvent(const NegotiationEvent & event)
 	m_negotiationEvents.push_front(event);
 
 	sint32 numberOfNegotiatedEvents = 0;
-	for(sint32 i = 0; i < m_negotiationEvents.size(); ++i)
+	for(size_t i = 0; i < m_negotiationEvents.size(); ++i)
 	{
 		if(m_negotiationEvents[i].round >= 0)
 			numberOfNegotiatedEvents++;
@@ -495,7 +497,7 @@ void Foreigner::AddNewNegotiationEvent(const NegotiationEvent & event)
 	{
 		Assert(numberOfNegotiatedEvents <= 4);
 
-		for(sint32 i = m_negotiationEvents.size() - 1; i >= 0; --i)
+		for(size_t i = m_negotiationEvents.size() - 1; i >= 0; --i)
 		{
 			if(m_negotiationEvents[i].round >= 0)
 			{

@@ -63,6 +63,7 @@
 #endif
 #include <time.h>
 #include <errno.h>
+#include <inttypes.h>
 
 #include "RecordDescription.h"
 
@@ -79,6 +80,62 @@ RecordDescription * g_record = NULL;
 #ifndef FREAD_BUF_SIZE
 #define FREAD_BUF_SIZE 16384
 #endif
+
+// located in ctpdb.y and ctpdb.l
+extern "C" int yyparse();
+extern "C" void yyrestart(FILE * input);
+extern "C" int s_done;
+extern "C" int g_line_number;
+extern "C" int g_generateRequirementWarnings;
+
+/*
+	Usage: ctpdb [-r] [outputdir | -i inputfile]
+*/
+int main(int argc, const char **argv)
+{
+	int	errorFound	= 1;	/* Not started yet */
+	int arg;
+	const char *outputDir = NULL;
+	bool output_into_working_dir = false;
+	g_generateRequirementWarnings = 1;
+
+	for(arg = 1; arg < argc; arg++) {
+		if(argv[arg][0] == '-') {
+			if(strcmp(argv[arg], "-r") == 0) {
+				g_generateRequirementWarnings = 0;
+			}
+			if(strcmp(argv[arg], "-i") == 0) {
+				output_into_working_dir = true;
+			}
+		} else {
+			outputDir = argv[arg];
+		}
+	}
+
+	if(!outputDir) {
+		fprintf(stderr, "Usage: %s [-r] [outputdir | -i inputfile]\n", argv[0]);
+		exit(errorFound);
+	}
+
+	if(output_into_working_dir) {
+		FILE * input = fopen(outputDir, "r");
+		if (input == NULL)
+		{
+			printf("Coundn't open file: %s", outputDir);
+			exit(errorFound);
+		}
+    yyrestart(input);
+		outputDir = ".";
+	}
+	db_set_output_dir(outputDir);
+
+	g_line_number = 1;
+	for (s_done = 0; !s_done; /* s_done updated in yyparse */ )
+	{
+		errorFound = yyparse();
+	}
+	exit(errorFound);
+}
 
 namespace
 {
@@ -140,7 +197,7 @@ bool copy_file(char const * srcFName, char const * dstFName)
 
 } // namespace
 
-void db_set_output_dir(char *dir)
+void db_set_output_dir(const char *dir)
 {
     memset(s_output_dir, '\0', sizeof(s_output_dir));
 	strncpy(s_output_dir, dir, PATH_MAX);
@@ -309,7 +366,7 @@ void db_end_record(char *name)
 	FILE * stamp = fopen(filename, "w");
 	Assert(stamp);
 	if(stamp) {
-		fprintf(stamp, "//%d\n", time(0));
+		fprintf(stamp, "//%" PRId64 "\n", time(0));
 		fclose(stamp);
 	}
 

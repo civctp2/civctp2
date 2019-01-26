@@ -29,7 +29,7 @@
 
 #include <stdio.h>
 
-#ifdef _WIN32
+#if defined(WIN32)
 #include "windows.h"
 #include "mbstring.h"
 #include "mmsystem.h"
@@ -39,17 +39,17 @@
 #include <linux/iso_fs.h>
 #include <sys/ioctl.h>
 #endif
-#ifdef HAVE_UNISTD_H
+#if defined(HAVE_UNISTD_H)
 #include <unistd.h>
 #endif
-#ifdef USE_SDL
+#if defined(USE_SDL)
 #include <SDL_cdrom.h>
 #endif
 #include "cheatkey.h"
 
 #include "tracklen.h"
 
-#ifdef tracklen_LOGGING
+#if defined(tracklen_LOGGING)
 
 FILE *tracklen_fp = NULL;
 
@@ -117,19 +117,17 @@ static int tracklen_GetTrackLengthsViaHandle( DWORD *trackLenBuf, unsigned int w
 #if defined(WIN32) && !defined(USE_SDL)
 	MCI_STATUS_PARMS msp;
 	MCI_SET_PARMS mp;
-	long totalLen_ms;
+	long totalLen_ms = 0;
 #else
-	uint64 totalLen_ms;
+	uint64 totalLen_ms = 0;
 #endif
 	DWORD i;
-	int iRet;
 
 #if defined(WIN32) && !defined(USE_SDL)
 	memset(&mp, 0, sizeof(mp));
 	mp.dwTimeFormat = MCI_FORMAT_MILLISECONDS;
-	iRet = mciSendCommand(wDeviceID, MCI_SET, MCI_SET_TIME_FORMAT, (DWORD_PTR)&mp);
-	if (iRet)
-    {
+	if (mciSendCommand(wDeviceID, MCI_SET, MCI_SET_TIME_FORMAT, (DWORD_PTR)&mp))
+	{
 		tracklen_DPRINT((tracklen_buf, "GetTrackLengths: failed to set time format.\n" ));
 		return __LINE__;
 	}
@@ -137,8 +135,7 @@ static int tracklen_GetTrackLengthsViaHandle( DWORD *trackLenBuf, unsigned int w
 
 	memset(&msp, 0, sizeof(msp));
 	msp.dwItem = MCI_STATUS_NUMBER_OF_TRACKS;
-	iRet = mciSendCommand( wDeviceID, MCI_STATUS, MCI_STATUS_ITEM, (DWORD_PTR)&msp );
-	if (iRet)
+	if (mciSendCommand(wDeviceID, MCI_STATUS, MCI_STATUS_ITEM, (DWORD_PTR)&msp))
 	{
 		tracklen_DPRINT((tracklen_buf,  "GetTrackLengths: failed to read # of tracks\n"));
 		DMCIError( iRet );
@@ -153,8 +150,6 @@ static int tracklen_GetTrackLengthsViaHandle( DWORD *trackLenBuf, unsigned int w
 		return __LINE__;
 	}
 	trackLenBuf[0] = cdrom->numtracks;
-#else
-	return __LINE__;
 #endif
 	tracklen_DPRINT((tracklen_buf, "GetTrackLengths: %d tracks\n", trackLenBuf[0]));
 	if (trackLenBuf[0] > tracklen_MAXTRACKS) {
@@ -167,8 +162,8 @@ static int tracklen_GetTrackLengthsViaHandle( DWORD *trackLenBuf, unsigned int w
 		memset(&msp, 0, sizeof(msp));
 		msp.dwItem = MCI_STATUS_LENGTH;
 		msp.dwTrack = i;
-		iRet = mciSendCommand( wDeviceID, MCI_STATUS, MCI_STATUS_ITEM | MCI_TRACK, (DWORD_PTR)&msp );
-		if ( iRet ) {
+		if (mciSendCommand(wDeviceID, MCI_STATUS, MCI_STATUS_ITEM | MCI_TRACK, (DWORD_PTR)&msp))
+		{
 			tracklen_DPRINT((tracklen_buf,  "GetTrackLengths: can't get track %d len\n", i));
 			DMCIError( iRet );
 			trackLenBuf[i] = 0;
@@ -181,24 +176,20 @@ static int tracklen_GetTrackLengthsViaHandle( DWORD *trackLenBuf, unsigned int w
 		// ALL tracks on CTP2 CD are one ms shorter due to rounding
 		trackLenBuf[i] = ++ui;
 		totalLen_ms += cdrom->track[i - 1].length * 1000;
-#else
-		return __LINE__;
 #endif
 		tracklen_DPRINT((tracklen_buf,  "GetTrackLengths: track %d len %d\n", i, trackLenBuf[i]));
 	}
-#if defined(WIN32) && !defined(USE_SDL)
+#if defined(USE_SDL)
+	totalLen_ms = totalLen_ms / CD_FPS + 1;
+#elif defined(WIN32)
 	msp.dwItem = MCI_STATUS_LENGTH;
-	iRet = mciSendCommand(wDeviceID, MCI_STATUS, MCI_STATUS_ITEM, (DWORD_PTR)&msp);
-	if( iRet ) {
+	if(mciSendCommand(wDeviceID, MCI_STATUS, MCI_STATUS_ITEM, (DWORD_PTR)&msp))
+	{
 		tracklen_DPRINT((tracklen_buf, "GetTrackLengths: Can't get disc len.\n" ));
 		DMCIError( iRet );
 		return __LINE__;
 	}
 	totalLen_ms = msp.dwReturn;
-#elif defined(USE_SDL)
-	totalLen_ms = totalLen_ms / CD_FPS + 1;
-#else
-	return __LINE__;
 #endif
 	tracklen_DPRINT((tracklen_buf,  "GetTrackLengths: got disc len %d\n", totalLen_ms ));
 
@@ -219,14 +210,13 @@ int tracklen_GetTrackLengths(DWORD *trackLenBuf, int iDrive)
 int tracklen_GetTrackLengths(DWORD *trackLenBuf, char whichDrive)
 #endif
 {
-        int iRet = 0;
-#ifdef USE_SDL
+#if defined(USE_SDL)
 	const char *driveName = SDL_CDName(iDrive);
 	if (!driveName)
 		return __LINE__;
 #endif
-#ifdef WIN32
-#ifdef USE_SDL
+#if defined(WIN32)
+#if defined(USE_SDL)
 	char whichDrive = driveName[0];
 #endif
 	MCI_OPEN_PARMS mop;
@@ -248,29 +238,23 @@ int tracklen_GetTrackLengths(DWORD *trackLenBuf, char whichDrive)
 	mop.dwCallback = NULL;
 	mop.wDeviceID = 0;
 
-	iRet = mciSendCommand
-                    (0, MCI_OPEN,
-                     MCI_WAIT | MCI_OPEN_ELEMENT | MCI_OPEN_TYPE | MCI_OPEN_TYPE_ID | MCI_OPEN_SHAREABLE,
-                     (DWORD_PTR) &mop
-                    );
+	int iRet = mciSendCommand(0, MCI_OPEN, MCI_WAIT | MCI_OPEN_ELEMENT | MCI_OPEN_TYPE | MCI_OPEN_TYPE_ID | MCI_OPEN_SHAREABLE, (DWORD_PTR)&mop);
 	if (iRet)
 #elif defined(USE_SDL)
 	SDL_CD *cdrom = SDL_CDOpen(iDrive);
 	if (cdrom == NULL)
-#else
-	if (1)
 #endif
 	{
-		tracklen_DPRINT((tracklen_buf,  "GetTrackLengths: failed to open MCI device.\n" ));
+		tracklen_DPRINT((tracklen_buf,  "GetTrackLengths: failed to open cdrom device.\n" ));
 #ifndef USE_SDL
 		DMCIError( iRet );
 #endif
 		return __LINE__;
 	}
-	tracklen_DPRINT((tracklen_buf,  "GetTrackLengths: Opened MCI device\n" ));
+	tracklen_DPRINT((tracklen_buf,  "GetTrackLengths: Opened cdrom device\n" ));
 
 #ifdef USE_SDL
-	iRet = tracklen_GetTrackLengthsViaHandle( trackLenBuf, cdrom );
+	int iRet = tracklen_GetTrackLengthsViaHandle( trackLenBuf, cdrom );
 	SDL_CDClose(cdrom);
 #else
 	iRet = tracklen_GetTrackLengthsViaHandle( trackLenBuf, mop.wDeviceID);
@@ -292,29 +276,29 @@ static int tracklen_CheckTrackLengths2( DWORD *trackLenBuf)
 	int i = 0;
 #if defined(WIN32) && !defined(USE_SDL)
 	HWND hCD;
-	for (i=0; (hCD=FindWindow( "SJE_CdPlayerClass",NULL)) && i<100; i++) {
+	for (i = 0; (hCD=FindWindow( "SJE_CdPlayerClass",NULL)) && i < 100; i++)
+	{
 		tracklen_DPRINT((tracklen_buf,  "CheckTrackLengths2: Shutting down CD player\n" ));
 		SendMessage( hCD, WM_CLOSE, 0, 0 );
 	}
 #endif
 
 	int iDrive;
-#ifdef USE_SDL
-	for (iDrive=0; iDrive<SDL_CDNumDrives(); iDrive++) {
+#if defined(USE_SDL)
+	for (iDrive = 0; iDrive < SDL_CDNumDrives(); iDrive++) {
 #else
-	for (iDrive=0; iDrive<26; iDrive++) {
+	for (iDrive = 0; iDrive < 26; iDrive++) {
 #endif
-#ifdef USE_SDL
+#if defined(USE_SDL)
 		const char *driveName = SDL_CDName(iDrive);
 		if (!driveName)
 			continue;
 #endif
-		int iRet;
-#ifdef WIN32
+#if defined(WIN32)
 		char szDrive[ MAX_PATH ];
 		int iDriveType;
 
-#ifdef USE_SDL
+#if defined(USE_SDL)
 		if (driveName)
 			szDrive[0] = driveName[0];
 		else
@@ -333,29 +317,33 @@ static int tracklen_CheckTrackLengths2( DWORD *trackLenBuf)
 		tracklen_DPRINT((tracklen_buf,  "CheckTrackLengths2: device %s is cd.\n", szDrive ));
 #endif
 		DWORD newbuf[tracklen_MAXTRACKS];
-#ifdef USE_SDL
-		iRet = tracklen_GetTrackLengths(newbuf, iDrive);
+#if defined(USE_SDL)
+		int iRet = tracklen_GetTrackLengths(newbuf, iDrive);
 #else
-		iRet = tracklen_GetTrackLengths(newbuf, szDrive[0]);
+		int iRet = tracklen_GetTrackLengths(newbuf, szDrive[0]);
 #endif
-		if (iRet) {
+		if (iRet)
+		{
 			tracklen_DPRINT((tracklen_buf,  "CheckTrackLengths2: drive %s fails check %d\n", szDrive, iRet ));
 			continue;
 		}
-		if (newbuf[0] != trackLenBuf[0]) {
+		if (newbuf[0] != trackLenBuf[0])
+		{
 			tracklen_DPRINT((tracklen_buf,  "CheckTrackLengths2: drive %s has %d tracks, wanted %d\n", szDrive, newbuf[0], trackLenBuf[0] ));
 			continue;
 		}
 
-
-		for (i=2; i< (int)(newbuf[0]); i++) {
-			if (newbuf[i] != trackLenBuf[i]) {
+		for (i = 2; i < (int)(newbuf[0]); i++)
+		{
+			if (newbuf[i] != trackLenBuf[i])
+			{
 				tracklen_DPRINT((tracklen_buf,  "CheckTrackLengths2: drive %s track %d has len %d, wanted %d\n", szDrive, i, newbuf[i], trackLenBuf[i]));
 				break;
 			}
 		}
 
-		if (i == ((int) newbuf[0])) {
+		if (i == ((int) newbuf[0]))
+		{
 			tracklen_DPRINT((tracklen_buf,  "CheckTrackLengths2: success!\n"));
 			return 0;
 		}
@@ -367,18 +355,11 @@ static int tracklen_CheckTrackLengths2( DWORD *trackLenBuf)
 
 DWORD *tracklen_LoadEncryptedKey( DWORD *trackLenBuf, const char *szFile )
 {
-	char szTemp[ MAX_PATH ];
-#ifdef WIN32
-	if( !_mbschr( (BYTE*)szFile, ':' ) && strncmp( szFile, "\\\\", 2 ) )
-#else
+	char szTemp[MAX_PATH] = {0};
 	if( !strchr(szFile, ':' ) && strncmp( szFile, FILE_SEP FILE_SEP, 2 ) )
-#endif
 	{
 #if defined(WIN32)
 		GetModuleFileName( NULL, szTemp, MAX_PATH );
-		*(char*)_mbsrchr( (BYTE*)szTemp, '\\' ) = 0;
-		strcat( szTemp, "\\" );
-		strcat( szTemp, szFile );
 #elif defined(HAVE_UNISTD_H) && defined(LINUX)
 		char szLink[MAX_PATH] = { 0 };
 		struct stat st = { 0 };
@@ -398,17 +379,15 @@ DWORD *tracklen_LoadEncryptedKey( DWORD *trackLenBuf, const char *szFile )
 		if ((size < 0) || (static_cast<size_t>(size) > sizeof(szTemp)))
 			return NULL;
 		szTemp[size] = 0;
-
+#endif
 		char *pos = (char*)strrchr(szTemp, FILE_SEPC);
 		if (pos) {
-       			*pos = '\0';
+			*pos = '\0';
 			strcat(szTemp, FILE_SEP);
 			strcat(szTemp, szFile);
 		} else {
-			strncpy(szTemp, szFile, sizeof(szTemp));
-			szTemp[sizeof(szTemp) - 1] = '\0';
+			strcpy(szTemp, szFile);
 		}
-#endif
 	}
 	else
 		strcpy( szTemp, szFile );
@@ -471,11 +450,6 @@ DWORD *tracklen_LoadEncryptedKey( DWORD *trackLenBuf, const char *szFile )
 	tracklen_DPRINT((tracklen_buf, "tracklen_LoadEncryptedKey: success\n"));
 	return trackLenBuf;
 }
-
-
-
-
-
 
 char *GetVersionInfo( DWORD *trackLenBuffer )
 {
@@ -554,11 +528,13 @@ BYTE tracklen_CheckTrackLengths( char *szVersionInfoBuffer )
 #define AUTORUN_DEFAULT 0x95
 #define AUTORUN_DISABLE 0xff
 
+#if defined(WIN32)
 static ULONG s_oldAutoRunValue = AUTORUN_UNKNOWN;
+#endif
 
 void tracklen_AutoPlay_Disable()
 {
-#ifdef _WIN32
+#if defined(WIN32)
 	int res;
 	HKEY hkey;
 
@@ -582,7 +558,7 @@ void tracklen_AutoPlay_Disable()
 
 void tracklen_AutoPlay_Restore()
 {
-#ifdef _WIN32
+#if defined(WIN32)
 	int res;
 	HKEY hkey = NULL;
 

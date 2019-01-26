@@ -181,16 +181,6 @@ void NetUnit::Unpacketize(uint16 id, uint8* buf, uint16 size)
 					revealedActors = NULL;
 				}
 
-
-
-
-
-
-
-
-
-
-
 				g_director->AddMove(uid, pnt, m_unitData->m_pos, numRevealed, revealedActors,
 										NULL, NULL, FALSE, uid.GetMoveSoundID());
 			}
@@ -221,15 +211,6 @@ void NetUnit::Unpacketize(uint16 id, uint8* buf, uint16 size)
 		}
 	} else {
 		if(g_network.DeadUnit(uint32(uid))) {
-
-
-
-
-
-
-
-
-
 			return;
 		}
 
@@ -285,13 +266,6 @@ void NetUnit::Unpacketize(uint16 id, uint8* buf, uint16 size)
 			g_player[m_unitData->m_owner]->AddCityReferenceToPlayer(
 				uid, CAUSE_NEW_CITY_UNKNOWN);
 			g_theWorld->InsertCity(m_unitData->m_pos, uid);
-
-			for(sint32 p = 0; p < CtpAi::s_maxPlayers; p++) {
-				if(p == uid.GetOwner()) continue;
-
-				CtpAi::AddForeignerGoalsForCity(uid, p);
-			}
-			CtpAi::AddOwnerGoalsForCity(uid, uid.GetOwner());
 
 		} else if(m_unitData->GetDBRec()->GetIsTrader()) {
 			g_player[m_unitData->m_owner]->AddTrader(uid);

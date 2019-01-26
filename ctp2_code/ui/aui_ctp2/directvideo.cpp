@@ -28,7 +28,6 @@
 #include "aui_directsurface.h"
 #include "c3errors.h"
 #include "errors.h"
-#include "RefTime.h"
 
 DirectVideo::DirectVideo()
 :

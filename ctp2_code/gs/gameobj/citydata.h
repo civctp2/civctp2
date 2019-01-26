@@ -52,11 +52,13 @@
 // - Added GetCityLandAttackBonus, GetCityAirAttackBonus and
 //   GetCitySeaAttackBonus for battleview window. (07-Mar-2009 Maq)
 // - Added functions to find total that each specialist type gives to a city,
-//	 after crime and other modifiers. (28-Mar-2009 Maq)
+//   after crime and other modifiers. (28-Mar-2009 Maq)
 // - Changed science formula to deduct crime after the government coefficient
 //   like all other resources. (22-Jul-2009 Maq)
 // - Added methods to find food and production before deductions. (22-Jul-2009 Maq)
 // - Added stuff for reimplementing switch production penalty. (22-Jul-2009 Maq)
+// - Reorderd the member variables and converted m_name to a pointer to reduce
+//   the needed memory. (13-Jan-2019 Martin Gühmann)
 //
 //----------------------------------------------------------------------------
 
@@ -77,7 +79,6 @@ class CityData;
 #include "UnitDynArr.h"
 #include "TradeDynArr.h"
 #include "Resources.h"
-#include "GWRecord.h"
 
 #include "CityRadius.h"
 
@@ -96,243 +97,217 @@ class Cell;
 #define k_PEOPLE_PER_POPULATION 10000
 //#define NEW_RESOURCE_PROCESS 1
 
-struct TerrainValue;
+//struct TerrainValue;
 
 class CityData : public CityRadiusCallback
 {
 private:
 
 //----------------------------------------------------------------------------
-// Do not change anything in the types or order of the following variable
-// declarations. Doing so will break reading in of save files.
-// See the Serialize implementation for more details.
+// Sort the member variables by size to save memory
+// Before sorting the size was 1248 bytes
+// After sorting, converting BOOL to bool, and revoing
+// m_name as buffer: 672 bytes
 //----------------------------------------------------------------------------
 
-	PLAYER_INDEX m_owner;
-	uint32 m_slaveBits;
-	sint32 m_accumulated_food;
-	sint32 m_shieldstore;
-	sint32 m_shieldstore_at_begin_turn;
-	sint32 m_build_category_at_begin_turn;
-	sint32 m_net_gold;
-	sint32 m_gold_lost_to_crime;
-	sint32 m_gross_gold;
-	sint32 m_goldFromTradeRoutes;
-	sint32 m_goldLostToPiracy;
-	sint32 m_science;
-	sint32 m_luxury;
-	CITY_ATTITUDE m_city_attitude;
+	// 8 bit
+	double            m_food_delta;
+	double            m_gross_food;
+	double            m_net_food;
+	double            m_food_lost_to_crime;
+	double            m_food_consumed_this_turn;
+	double            m_currentGarrisonStrength;
+	double            m_neededGarrisonStrength;
+	double            m_gross_food_before_bonuses;
+	double            m_overcrowdingCoeff;
+	double            m_defensiveBonus;
+	double            m_bonusFoodCoeff;
+	double            m_bonusFood;
+	double            m_bonusProdCoeff;
+	double            m_bonusProd;
+	double            m_bonusGoldCoeff;
+	double            m_bonusGold;
+	double            m_bonusScieCoeff;
+	double            m_bonusScie;
 
-	sint32 m_collected_production_this_turn; // Will be unused
-	sint32 m_gross_production;
-	sint32 m_net_production;
-	sint32 m_production_lost_to_crime;
+#if defined(NEW_RESOURCE_PROCESS)
+	double            m_max_processed_terrain_food;
+	double            m_max_processed_terrain_prod;
+	double            m_max_processed_terrain_gold;
+	double            m_max_processed_terrain_scie;
 
-	uint64 m_built_improvements;
-	uint64 m_builtWonders;
+	double            m_grossFoodCrimeLoss;
+	double            m_grossProdCrimeLoss;
+	double            m_grossGoldCrimeLoss;
+	double            m_grossScieCrimeLoss;
 
-	double m_food_delta;
-	double m_gross_food;
-	double m_net_food;
-	double m_food_lost_to_crime;
-	double m_food_consumed_this_turn;
+	double            m_grossProdBioinfectionLoss;
+	double            m_grossProdFranchiseLoss;
+	double            m_grossGoldConversionLoss;
 
-	sint32 m_total_pollution;
-	sint32 m_cityPopulationPollution;
-	sint32 m_cityIndustrialPollution;
-	sint32 m_foodVatPollution;
-	sint32 m_cityPollutionCleaner;
-	BOOL m_contribute_materials;
-	BOOL m_contribute_military;
+	double            m_foodFromOnePop;
+	double            m_prodFromOnePop;
+	double            m_goldFromOnePop;
+	double            m_scieFromOnePop;
 
+	double            m_crimeFoodLossOfOnePop;
+	double            m_crimeProdLossOfOnePop;
+	double            m_crimeGoldLossOfOnePop;
+	double            m_crimeScieLossOfOnePop;
 
-	BOOL m_capturedThisTurn;
+	double            m_bioinfectionProdLossOfOnePop;
+	double            m_franchiseProdLossOfOnePop;
+	double            m_conversionGoldLossOfOnePop;
 
-	sint32 m_spied_upon;
-	BOOL m_walls_nullified;
-	sint32 m_franchise_owner;
-	sint32 m_franchiseTurnsRemaining;
-	sint32 m_watchfulTurns;
-	sint32 m_bioInfectionTurns;
-	sint32 m_bioInfectedBy;
-	sint32 m_nanoInfectionTurns;
-	sint32 m_nanoInfectedBy;
-	sint32 m_convertedTo;
-	sint32 m_convertedGold;
-	CONVERTED_BY m_convertedBy;
-	BOOL	m_terrainWasPolluted,
-			m_happinessAttacked,
-			m_terrainImprovementWasBuilt,
-			m_improvementWasBuilt;
+	double            m_gross_science;
+	double            m_science_lost_to_crime;
+#endif
 
-	BOOL m_isInjoined;
-	sint32 m_injoinedBy;
+	// 8 Bit
+	uint64            m_built_improvements;
+	uint64            m_builtWonders;
 
-	sint32 m_airportLastUsed;
+	// Pointers 4 byte in a 32 bit program, 8 byte in a 64 bit program
+	Happy            *m_happy;
+	MBCHAR           *m_name;
+	sint32           *m_distanceToGood;
+	sint32           *m_ringFood;
+	sint32           *m_ringProd;
+	sint32           *m_ringGold;
+	sint32           *m_ringSizes;
+	SlicObject       *m_tempGoodAdder;
+	UnitDynamicArray *m_killList;
+#if defined(NEW_RESOURCE_PROCESS)
+	double           *m_farmersEff;
+	double           *m_laborersEff;
+	double           *m_merchantsEff;
+	double           *m_scientistsEff;
 
-	sint32 m_founder;
+	// 4 Bit
+	sint32    m_productionLostToBioinfection;
+	sint32    m_max_scie_from_terrain;
+#endif
 
-	sint32 m_wages_paid;
+	// 4 Bit
+	RADIUS_OP         m_cityRadiusOp;
+	UPRISING_CAUSE    m_doUprising;
+	CONVERTED_BY      m_convertedBy;
+	CITY_ATTITUDE     m_city_attitude;
+	MapPoint          m_pos;
+	Unit              m_home_city;
+	PLAYER_INDEX      m_owner;
+	uint32            m_slaveBits;
 
-	sint32 m_pw_from_infrastructure;
-	sint32 m_gold_from_capitalization;
-	BOOL m_buildInfrastructure;
-	BOOL m_buildCapitalization;
+	sint32            m_accumulated_food;
+	sint32            m_shieldstore;
+	sint32            m_shieldstore_at_begin_turn;
+	sint32            m_build_category_at_begin_turn;
+	sint32            m_net_gold;
+	sint32            m_gold_lost_to_crime;
+	sint32            m_gross_gold;
+	sint32            m_goldFromTradeRoutes;
+	sint32            m_goldLostToPiracy;
+	sint32            m_science;
+	sint32            m_luxury;
+	sint32            m_collected_production_this_turn;  // Will be unused
+	sint32            m_gross_production;
+	sint32            m_net_production;
+	sint32            m_production_lost_to_crime;
+	sint32            m_total_pollution;
+	sint32            m_cityPopulationPollution;
+	sint32            m_cityIndustrialPollution;
+	sint32            m_foodVatPollution;
+	sint32            m_cityPollutionCleaner;
+	sint32            m_spied_upon;                      // A counter
+	sint32            m_franchise_owner;
+	sint32            m_franchiseTurnsRemaining;
+	sint32            m_watchfulTurns;
+	sint32            m_bioInfectionTurns;
+	sint32            m_bioInfectedBy;
+	sint32            m_nanoInfectionTurns;
+	sint32            m_nanoInfectedBy;
+	sint32            m_convertedTo;
+	sint32            m_convertedGold;
+	sint32            m_injoinedBy;
+	sint32            m_airportLastUsed;
+	sint32            m_founder;
+	sint32            m_wages_paid;                      // The wages that were paid
+	sint32            m_pw_from_infrastructure;
+	sint32            m_gold_from_capitalization;
+	sint32            m_turnFounded;
+	sint32            m_productionLostToFranchise;
+	sint32            m_population;
+	sint32            m_partialPopulation;
+	sint32            m_sizeIndex;
+	sint32            m_workerFullUtilizationIndex;
+	sint32            m_workerPartialUtilizationIndex;
+	sint32            m_buildListSequenceIndex;
+	sint32            m_sellBuilding;                    // The building that will be sold
+	sint32            m_max_food_from_terrain;
+	sint32            m_max_prod_from_terrain;
+	sint32            m_max_gold_from_terrain;
+	sint32            m_growth_rate;
+	sint32            m_starvation_turns;
+	sint32            m_cityStyle;
+	sint32            m_build_category_before_load_queue;
+	sint32            m_scie_lost_to_crime;
+	sint32            m_gross_prod_before_bonuses;
+	sint32            m_happinessAttackedBy;
+	sint32            m_radiusNewOwner;
+	sint32            m_tilecount;
+	sint32            m_whichtile;
+	sint32            m_tempGood;
+	sint32            m_tempGoodCount;
+	sint32            m_culture;   //emod
+	sint32            m_secthappy; //emod
 
-	BOOL m_paidForBuyFront;
+	// 2 bit
+	sint16            m_lastCelebrationMsg;
 
-	UPRISING_CAUSE m_doUprising;
+	// 1 bit
+	uint8             m_min_turns_revolt;        // Number of revolt risk free turns.
+	sint8             m_currentGarrison;
+	sint8             m_neededGarrison;
+	bool              m_alreadySoldABuilding;
+	bool              m_probeRecoveredHere;
+	bool              m_buyFront;
+	bool              m_sentInefficientMessageAlready;
+	bool              m_garrisonOtherCities;
+	bool              m_contribute_materials;
+	bool              m_contribute_military;
+	bool              m_capturedThisTurn;
+	bool              m_walls_nullified;         // Not used?
+	bool              m_terrainWasPolluted;
+	bool              m_happinessAttacked;
+	bool              m_terrainImprovementWasBuilt;
+	bool              m_improvementWasBuilt;
+	bool              m_isInjoined;
+	bool              m_buildInfrastructure;
+	bool              m_buildCapitalization;
+	bool              m_paidForBuyFront;
+	bool              m_garrisonComplete;
+	bool              m_useGovernor;
+	bool              m_is_rioting;
 
-	sint32 m_turnFounded;
-
-	sint32 m_productionLostToFranchise;
-
-	bool m_probeRecoveredHere;
-
-	sint16 m_lastCelebrationMsg;
-	uint8 m_alreadySoldABuilding;
-
-
-
-
-
-	sint32 m_population;
-	sint32 m_partialPopulation;
-	sint16 m_numSpecialists[POP_MAX];
-	sint32 m_specialistDBIndex[POP_MAX];
-	sint32 m_sizeIndex;
-	sint32 m_workerFullUtilizationIndex;
-	sint32 m_workerPartialUtilizationIndex;
-
-	BOOL m_useGovernor;
-	sint32 m_buildListSequenceIndex;
-	sint32 m_garrisonOtherCities;
-	BOOL m_garrisonComplete;
-
-	sint8 m_currentGarrison;
-	sint8 m_neededGarrison;
-	double m_currentGarrisonStrength;
-	double m_neededGarrisonStrength;
-
-	sint32 m_sellBuilding;
-	bool m_buyFront;
-
-	sint32 m_max_food_from_terrain;
-	sint32 m_max_prod_from_terrain;
-	sint32 m_max_gold_from_terrain;
-
-	sint32 m_growth_rate;
-	double m_overcrowdingCoeff;
-
-	sint32 m_starvation_turns;
-
-	sint32 m_cityStyle;
-
-	MapPoint m_pos;
-
-	BOOL m_is_rioting;
-
-//----------------------------------------------------------------------------
-// Changing the order below this line should not break anything.
-//----------------------------------------------------------------------------
-
-	sint32 m_build_category_before_load_queue;
-	sint32 m_scie_lost_to_crime;
-	double m_gross_food_before_bonuses;
-	sint32 m_gross_prod_before_bonuses;
-	sint32 m_happinessAttackedBy;
-	Unit m_home_city;
-	uint8 m_min_turns_revolt; // Number of revolt risk free turns.
-	BuildQueue m_build_queue;
+	BuildQueue        m_build_queue;
 
 	TradeDynamicArray m_tradeSourceList;
 	TradeDynamicArray m_tradeDestinationList;
 #ifdef CTP1_TRADE
-	Resources m_resources;
-	Resources m_localResources;
+	Resources         m_resources;
+	Resources         m_localResources;
 #else
-	Resources m_collectingResources;
-	Resources m_sellingResources;
-	Resources m_buyingResources;
+	Resources         m_collectingResources;
+	Resources         m_sellingResources;
+	Resources         m_buyingResources;
 #endif
-	Happy     *m_happy;
+	sint16            m_numSpecialists[POP_MAX];
+	sint32            m_specialistDBIndex[POP_MAX];
 
-	MBCHAR    m_name[k_MAX_NAME_LEN] ;
+//----------------------------------------------------------------------------
+// End member variable section
+//----------------------------------------------------------------------------
 
-	sint32    *m_distanceToGood;
-
-	double    m_defensiveBonus;
-
-	sint32    *m_ringFood;
-	sint32    *m_ringProd;
-	sint32    *m_ringGold;
-	sint32    *m_ringSizes;
-
-#if defined(NEW_RESOURCE_PROCESS)
-	double    *m_farmersEff;
-	double    *m_laborersEff;
-	double    *m_merchantsEff;
-	double    *m_scientistsEff;
-
-	double    m_max_processed_terrain_food;
-	double    m_max_processed_terrain_prod;
-	double    m_max_processed_terrain_gold;
-	double    m_max_processed_terrain_scie;
-
-	double    m_grossFoodCrimeLoss;
-	double    m_grossProdCrimeLoss;
-	double    m_grossGoldCrimeLoss;
-	double    m_grossScieCrimeLoss;
-
-	double    m_grossProdBioinfectionLoss;
-	double    m_grossProdFranchiseLoss;
-	double    m_grossGoldConversionLoss;
-
-	double    m_foodFromOnePop;
-	double    m_prodFromOnePop;
-	double    m_goldFromOnePop;
-	double    m_scieFromOnePop;
-
-	double    m_crimeFoodLossOfOnePop;
-	double    m_crimeProdLossOfOnePop;
-	double    m_crimeGoldLossOfOnePop;
-	double    m_crimeScieLossOfOnePop;
-
-	double    m_bioinfectionProdLossOfOnePop;
-	double    m_franchiseProdLossOfOnePop;
-	double    m_conversionGoldLossOfOnePop;
-
-	sint32    m_productionLostToBioinfection;
-	sint32    m_max_scie_from_terrain;
-	double    m_gross_science;
-	double    m_science_lost_to_crime;
-#endif
-
-	double    m_bonusFoodCoeff;
-	double    m_bonusFood;
-	double    m_bonusProdCoeff;
-	double    m_bonusProd;
-	double    m_bonusGoldCoeff;
-	double    m_bonusGold;
-	double    m_bonusScieCoeff;
-	double    m_bonusScie;
-
-	RADIUS_OP m_cityRadiusOp;
-	UnitDynamicArray *m_killList;
-	sint32    m_radiusNewOwner;
-	sint32    m_tilecount, m_whichtile;
-	SlicObject *m_tempGoodAdder;
-	sint32    m_tempGood, m_tempGoodCount;
-	bool      m_sentInefficientMessageAlready;
-//emod
-	sint32    m_culture;
-	sint32    m_secthappy;
-
-#ifdef _DEBUG
-	bool m_ignore_happiness;
-#endif
-
-	friend class NetPop;
 	friend class NetCity;
 	friend class NetCity2;
 	friend class NetCityName;
@@ -341,8 +316,6 @@ private:
 	friend class Happy;
 	friend class NetHappy;
 	friend class NetCityBuildQueue;
-	friend class C3Player;
-	friend class C3Population;
 
 #ifdef _PLAYTEST
 	friend class CreateImprovementCommand;
@@ -412,12 +385,11 @@ public:
 	void AddShieldsToBuilding();
 
 	void SetMaterialContribution(bool on) { m_contribute_materials = on;}
-	bool GetMaterialContribution() const { return m_contribute_materials != FALSE;}
+	bool GetMaterialContribution() const { return m_contribute_materials;}
 
 	void SetMilitaryContribution(bool on) { m_contribute_military = on; }
-	bool GetMilitaryContribution() { return m_contribute_military != FALSE; }
+	bool GetMilitaryContribution() { return m_contribute_military; }
 
-	void IncrementBuildQueue();
 	sint32 LoadQueue(const MBCHAR *file);
 	sint32 SaveQueue(const MBCHAR *file);
 
@@ -462,15 +434,6 @@ public:
 	sint32 GetAccumulatedFood() { return m_accumulated_food; }
 	sint32 SubtractAccumulatedFood(sint32 amount);
 
-
-	void SetTerrainEmptyRow(const sint32 row_len, sint32 &n, DynamicArray<TerrainValue> &val);
-	void GotoRowStart(const MapPoint &center, const WORLD_DIRECTION d1,
-	                  const WORLD_DIRECTION d2, const sint32 row_len,
-	                  sint32 &n, DynamicArray<TerrainValue> &val);
-	void GetOpenTerrainValuesRow(sint32 len, MapPoint &pos, sint32 &n, DynamicArray<TerrainValue> &val);
-	void GetOpenTerrainValues(const MapPoint &center, sint32 &n, DynamicArray<TerrainValue> &val);
-	bool CityCanHavePopAt(MapPoint &pos) const;
-
 	void UpdateSprite(void);
 
 	bool IsWatchful() const;
@@ -478,7 +441,6 @@ public:
 	void ModifySpecialAttackChance(UNIT_ORDER_TYPE attack, double &chance);
 
 	void RemoveOneSlave(PLAYER_INDEX p);
-	bool AdjustedBestTile(const double foodCoef, const double productionCoef, const double resourceCoef, MapPoint &bestPos);
 
 #if !defined(NEW_RESOURCE_PROCESS)
 	void CollectOtherTrade(const bool projectedOnly);
@@ -591,7 +553,7 @@ public:
 		foodCrime = (sint32)(m_food_lost_to_crime);
 	}
 
-	bool GetIsRioting(void) const { return m_is_rioting != FALSE; }
+	bool GetIsRioting(void) const { return m_is_rioting; }
 
 	void CalcHappiness(sint32 &virtualGoldSpent, bool isFirstPass);
 	void CheckRiot();
@@ -641,10 +603,6 @@ public:
 	sint32 GetFranchiseOwner() const { return m_franchise_owner;}
 	sint32 GetFranchiseTurnsRemaining() const;
 	void SetFranchiseTurnsRemaining(sint32 turns);
-
-#ifdef _DEBUG
-	void SetIgnoreHappiness(bool v) { m_ignore_happiness = v; }
-#endif
 
 	void DoUprising(UPRISING_CAUSE cause);
 	void FinishUprising(Army &sa, UPRISING_CAUSE cause);
@@ -719,17 +677,17 @@ public:
 #endif
 
 	sint32 GetCombatUnits() const;
-	void IndicateImprovementBuilt(void) { m_improvementWasBuilt = TRUE ; }
-	BOOL WasImprovementBuilt(void) const { return (m_improvementWasBuilt) ; }
-	void IndicateTerrainImprovementBuilt(void) { m_terrainImprovementWasBuilt=TRUE ; }
-	BOOL WasTerrainImprovementBuilt(void) const { return (m_terrainImprovementWasBuilt) ; }
-	void IndicateHappinessAttacked(void) { m_happinessAttacked = TRUE ; }
+	void IndicateImprovementBuilt(void) { m_improvementWasBuilt = true; }
+	bool WasImprovementBuilt(void) const { return m_improvementWasBuilt; }
+	void IndicateTerrainImprovementBuilt(void) { m_terrainImprovementWasBuilt = true; }
+	bool WasTerrainImprovementBuilt(void) const { return m_terrainImprovementWasBuilt; }
+	void IndicateHappinessAttacked(void) { m_happinessAttacked = true; }
 	bool WasHappinessAttacked(void) const;
 	void HappinessAttackedBy(sint32 player);
 	sint32 GetHappinessAttackedBy() const { return m_happinessAttackedBy;}
-	void IndicateTerrainPolluted(void) { m_terrainWasPolluted = TRUE ; }
-	BOOL WasTerrainPolluted(void) const { return (m_terrainWasPolluted) ; }
-	sint32 GetScience(void) const { return (m_science) ; }
+	void IndicateTerrainPolluted(void) { m_terrainWasPolluted = true; }
+	bool WasTerrainPolluted(void) const { return m_terrainWasPolluted; }
+	sint32 GetScience(void) const { return m_science; }
 	sint32 GetScienceFromCommerce(void) const;
 	bool CanBuildUnit(sint32 type) const;
 	bool CanBuildBuilding(sint32 type) const;
@@ -769,8 +727,8 @@ public:
 	bool CanBuildCapitalization() const;
 	void BuildInfrastructure();
 	bool CanBuildInfrastructure() const;
-	bool IsBuildingCapitalization() { return m_buildCapitalization != FALSE; }
-	bool IsBuildingInfrastructure() { return m_buildInfrastructure != FALSE; }
+	bool IsBuildingCapitalization() { return m_buildCapitalization; }
+	bool IsBuildingInfrastructure() { return m_buildInfrastructure; }
 	void StopInfrastructureCapitalization();
 	void EliminateNukes();
 
@@ -806,7 +764,7 @@ public:
 	sint32 CityGrowthCoefficient();
 	void DestroyWonder(sint32 which);
 
-	bool CapturedThisTurn() const { return m_capturedThisTurn != FALSE; }
+	bool CapturedThisTurn() const { return m_capturedThisTurn != false; }
 	void SetSentInefficientMessage() { m_sentInefficientMessageAlready = true; }
 
 	void BuildFront();
@@ -851,11 +809,11 @@ public:
 	sint32 GetBuildListSequenceIndex() const;
 	void SetBuildListSequenceIndex(const sint32 &value);
 
-	sint32 GetGarrisonOtherCities() const;
-	void SetGarrisonOtherCities(const sint32 &value);
+	bool GetGarrisonOtherCities() const;
+	void SetGarrisonOtherCities(const bool &value);
 
-	sint32 GetGarrisonComplete() const;
-	void SetGarrisonComplete(const sint32 &value);
+	bool GetGarrisonComplete() const;
+	void SetGarrisonComplete(const bool &value);
 
 	sint8 GetCurrentGarrison() const;
 	void SetCurrentGarrison(const sint8 & value);
@@ -1031,8 +989,300 @@ public:
 	double  GetBonusScieCoeff() const { return m_bonusScieCoeff; };
 
 private:
+	void    SetNameLocal(const MBCHAR *name);
 	bool    IsBankrupting(void) const;
 	bool    PayWages(bool projectedOnly);
+
+#if 0
+	void PrintSizeOfClass()
+	{
+		DPRINTF(k_DBG_AI, ("\n"));
+		DPRINTF(k_DBG_AI, ("Size of CityData class:\n"));
+		DPRINTF(k_DBG_AI, ("CityData: %d\n", sizeof(CityData)));
+		DPRINTF(k_DBG_AI, ("m_owner: %d\n", sizeof(m_owner)));
+		DPRINTF(k_DBG_AI, ("m_slaveBits: %d\n", sizeof(m_slaveBits)));
+		DPRINTF(k_DBG_AI, ("m_accumulated_food: %d\n", sizeof(m_accumulated_food)));
+		DPRINTF(k_DBG_AI, ("m_shieldstore: %d\n", sizeof(m_shieldstore)));
+		DPRINTF(k_DBG_AI, ("m_shieldstore_at_begin_turn: %d\n", sizeof(m_shieldstore_at_begin_turn)));
+		DPRINTF(k_DBG_AI, ("m_build_category_at_begin_turn: %d\n", sizeof(m_build_category_at_begin_turn)));
+		DPRINTF(k_DBG_AI, ("m_net_gold: %d\n", sizeof(m_net_gold)));
+		DPRINTF(k_DBG_AI, ("m_gold_lost_to_crime: %d\n", sizeof(m_gold_lost_to_crime)));
+		DPRINTF(k_DBG_AI, ("m_gross_gold: %d\n", sizeof(m_gross_gold)));
+		DPRINTF(k_DBG_AI, ("m_goldFromTradeRoutes: %d\n", sizeof(m_goldFromTradeRoutes)));
+		DPRINTF(k_DBG_AI, ("m_goldLostToPiracy: %d\n", sizeof(m_goldLostToPiracy)));
+		DPRINTF(k_DBG_AI, ("m_science: %d\n", sizeof(m_science)));
+		DPRINTF(k_DBG_AI, ("m_luxury: %d\n", sizeof(m_luxury)));
+		DPRINTF(k_DBG_AI, ("m_city_attitude: %d\n", sizeof(m_city_attitude)));
+		DPRINTF(k_DBG_AI, ("m_collected_production_this_turn: %d\n", sizeof(m_collected_production_this_turn)));
+		DPRINTF(k_DBG_AI, ("m_gross_production: %d\n", sizeof(m_gross_production)));
+		DPRINTF(k_DBG_AI, ("m_net_production: %d\n", sizeof(m_net_production)));
+		DPRINTF(k_DBG_AI, ("m_production_lost_to_crime: %d\n", sizeof(m_production_lost_to_crime)));
+		DPRINTF(k_DBG_AI, ("m_built_improvements: %d\n", sizeof(m_built_improvements)));
+		DPRINTF(k_DBG_AI, ("m_builtWonders: %d\n", sizeof(m_builtWonders)));
+		DPRINTF(k_DBG_AI, ("m_food_delta: %d\n", sizeof(m_food_delta)));
+		DPRINTF(k_DBG_AI, ("m_gross_food: %d\n", sizeof(m_gross_food)));
+		DPRINTF(k_DBG_AI, ("m_net_food: %d\n", sizeof(m_net_food)));
+		DPRINTF(k_DBG_AI, ("m_food_lost_to_crime: %d\n", sizeof(m_food_lost_to_crime)));
+		DPRINTF(k_DBG_AI, ("m_food_consumed_this_turn: %d\n", sizeof(m_food_consumed_this_turn)));
+		DPRINTF(k_DBG_AI, ("m_total_pollution: %d\n", sizeof(m_total_pollution)));
+		DPRINTF(k_DBG_AI, ("m_cityPopulationPollution: %d\n", sizeof(m_cityPopulationPollution)));
+		DPRINTF(k_DBG_AI, ("m_cityIndustrialPollution: %d\n", sizeof(m_cityIndustrialPollution)));
+		DPRINTF(k_DBG_AI, ("m_foodVatPollution: %d\n", sizeof(m_foodVatPollution)));
+		DPRINTF(k_DBG_AI, ("m_cityPollutionCleaner: %d\n", sizeof(m_cityPollutionCleaner)));
+		DPRINTF(k_DBG_AI, ("m_contribute_materials: %d\n", sizeof(m_contribute_materials)));
+		DPRINTF(k_DBG_AI, ("m_contribute_military: %d\n", sizeof(m_contribute_military)));
+		DPRINTF(k_DBG_AI, ("m_capturedThisTurn: %d\n", sizeof(m_capturedThisTurn)));
+		DPRINTF(k_DBG_AI, ("m_spied_upon: %d\n", sizeof(m_spied_upon)));
+		DPRINTF(k_DBG_AI, ("m_walls_nullified: %d\n", sizeof(m_walls_nullified)));
+		DPRINTF(k_DBG_AI, ("m_franchise_owner: %d\n", sizeof(m_franchise_owner)));
+		DPRINTF(k_DBG_AI, ("m_franchiseTurnsRemaining: %d\n", sizeof(m_franchiseTurnsRemaining)));
+		DPRINTF(k_DBG_AI, ("m_watchfulTurns: %d\n", sizeof(m_watchfulTurns)));
+		DPRINTF(k_DBG_AI, ("m_bioInfectionTurns: %d\n", sizeof(m_bioInfectionTurns)));
+		DPRINTF(k_DBG_AI, ("m_bioInfectedBy: %d\n", sizeof(m_bioInfectedBy)));
+		DPRINTF(k_DBG_AI, ("m_nanoInfectionTurns: %d\n", sizeof(m_nanoInfectionTurns)));
+		DPRINTF(k_DBG_AI, ("m_nanoInfectedBy: %d\n", sizeof(m_nanoInfectedBy)));
+		DPRINTF(k_DBG_AI, ("m_convertedTo: %d\n", sizeof(m_convertedTo)));
+		DPRINTF(k_DBG_AI, ("m_convertedGold: %d\n", sizeof(m_convertedGold)));
+		DPRINTF(k_DBG_AI, ("m_convertedBy: %d\n", sizeof(m_convertedBy)));
+		DPRINTF(k_DBG_AI, ("m_terrainWasPolluted: %d\n", sizeof(m_terrainWasPolluted)));
+		DPRINTF(k_DBG_AI, ("m_happinessAttacked: %d\n", sizeof(m_happinessAttacked)));
+		DPRINTF(k_DBG_AI, ("m_terrainImprovementWasBuilt: %d\n", sizeof(m_terrainImprovementWasBuilt)));
+		DPRINTF(k_DBG_AI, ("m_improvementWasBuilt: %d\n", sizeof(m_improvementWasBuilt)));
+		DPRINTF(k_DBG_AI, ("m_isInjoined: %d\n", sizeof(m_isInjoined)));
+		DPRINTF(k_DBG_AI, ("m_injoinedBy: %d\n", sizeof(m_injoinedBy)));
+		DPRINTF(k_DBG_AI, ("m_airportLastUsed: %d\n", sizeof(m_airportLastUsed)));
+		DPRINTF(k_DBG_AI, ("m_founder: %d\n", sizeof(m_founder)));
+		DPRINTF(k_DBG_AI, ("m_wages_paid: %d\n", sizeof(m_wages_paid)));
+		DPRINTF(k_DBG_AI, ("m_pw_from_infrastructure: %d\n", sizeof(m_pw_from_infrastructure)));
+		DPRINTF(k_DBG_AI, ("m_gold_from_capitalization: %d\n", sizeof(m_gold_from_capitalization)));
+		DPRINTF(k_DBG_AI, ("m_buildInfrastructure: %d\n", sizeof(m_buildInfrastructure)));
+		DPRINTF(k_DBG_AI, ("m_buildCapitalization: %d\n", sizeof(m_buildCapitalization)));
+		DPRINTF(k_DBG_AI, ("m_paidForBuyFront: %d\n", sizeof(m_paidForBuyFront)));
+		DPRINTF(k_DBG_AI, ("m_doUprising: %d\n", sizeof(m_doUprising)));
+		DPRINTF(k_DBG_AI, ("m_turnFounded: %d\n", sizeof(m_turnFounded)));
+		DPRINTF(k_DBG_AI, ("m_productionLostToFranchise: %d\n", sizeof(m_productionLostToFranchise)));
+		DPRINTF(k_DBG_AI, ("m_probeRecoveredHere: %d\n", sizeof(m_probeRecoveredHere)));
+		DPRINTF(k_DBG_AI, ("m_lastCelebrationMsg: %d\n", sizeof(m_lastCelebrationMsg)));
+		DPRINTF(k_DBG_AI, ("m_alreadySoldABuilding: %d\n", sizeof(m_alreadySoldABuilding)));
+		DPRINTF(k_DBG_AI, ("m_population: %d\n", sizeof(m_population)));
+		DPRINTF(k_DBG_AI, ("m_partialPopulation: %d\n", sizeof(m_partialPopulation)));
+		DPRINTF(k_DBG_AI, ("m_numSpecialists: %d\n", sizeof(m_numSpecialists)));
+		DPRINTF(k_DBG_AI, ("m_specialistDBIndex: %d\n", sizeof(m_specialistDBIndex)));
+		DPRINTF(k_DBG_AI, ("m_sizeIndex: %d\n", sizeof(m_sizeIndex)));
+		DPRINTF(k_DBG_AI, ("m_workerFullUtilizationIndex: %d\n", sizeof(m_workerFullUtilizationIndex)));
+		DPRINTF(k_DBG_AI, ("m_workerPartialUtilizationIndex: %d\n", sizeof(m_workerPartialUtilizationIndex)));
+		DPRINTF(k_DBG_AI, ("m_useGovernor: %d\n", sizeof(m_useGovernor)));
+		DPRINTF(k_DBG_AI, ("m_buildListSequenceIndex: %d\n", sizeof(m_buildListSequenceIndex)));
+		DPRINTF(k_DBG_AI, ("m_garrisonOtherCities: %d\n", sizeof(m_garrisonOtherCities)));
+		DPRINTF(k_DBG_AI, ("m_garrisonComplete: %d\n", sizeof(m_garrisonComplete)));
+		DPRINTF(k_DBG_AI, ("m_currentGarrison: %d\n", sizeof(m_currentGarrison)));
+		DPRINTF(k_DBG_AI, ("m_neededGarrison: %d\n", sizeof(m_neededGarrison)));
+		DPRINTF(k_DBG_AI, ("m_currentGarrisonStrength: %d\n", sizeof(m_currentGarrisonStrength)));
+		DPRINTF(k_DBG_AI, ("m_neededGarrisonStrength: %d\n", sizeof(m_neededGarrisonStrength)));
+		DPRINTF(k_DBG_AI, ("m_sellBuilding: %d\n", sizeof(m_sellBuilding)));
+		DPRINTF(k_DBG_AI, ("m_buyFront: %d\n", sizeof(m_buyFront)));
+		DPRINTF(k_DBG_AI, ("m_max_food_from_terrain: %d\n", sizeof(m_max_food_from_terrain)));
+		DPRINTF(k_DBG_AI, ("m_max_prod_from_terrain: %d\n", sizeof(m_max_prod_from_terrain)));
+		DPRINTF(k_DBG_AI, ("m_max_gold_from_terrain: %d\n", sizeof(m_max_gold_from_terrain)));
+		DPRINTF(k_DBG_AI, ("m_growth_rate: %d\n", sizeof(m_growth_rate)));
+		DPRINTF(k_DBG_AI, ("m_overcrowdingCoeff: %d\n", sizeof(m_overcrowdingCoeff)));
+		DPRINTF(k_DBG_AI, ("m_starvation_turns: %d\n", sizeof(m_starvation_turns)));
+		DPRINTF(k_DBG_AI, ("m_cityStyle: %d\n", sizeof(m_cityStyle)));
+		DPRINTF(k_DBG_AI, ("m_pos: %d\n", sizeof(m_pos)));
+		DPRINTF(k_DBG_AI, ("m_is_rioting: %d\n", sizeof(m_is_rioting)));
+		DPRINTF(k_DBG_AI, ("m_build_category_before_load_queue: %d\n", sizeof(m_build_category_before_load_queue)));
+		DPRINTF(k_DBG_AI, ("m_scie_lost_to_crime: %d\n", sizeof(m_scie_lost_to_crime)));
+		DPRINTF(k_DBG_AI, ("m_gross_food_before_bonuses: %d\n", sizeof(m_gross_food_before_bonuses)));
+		DPRINTF(k_DBG_AI, ("m_gross_prod_before_bonuses: %d\n", sizeof(m_gross_prod_before_bonuses)));
+		DPRINTF(k_DBG_AI, ("m_happinessAttackedBy: %d\n", sizeof(m_happinessAttackedBy)));
+		DPRINTF(k_DBG_AI, ("m_home_city: %d\n", sizeof(m_home_city)));
+		DPRINTF(k_DBG_AI, ("m_min_turns_revolt: %d\n", sizeof(m_min_turns_revolt)));
+		DPRINTF(k_DBG_AI, ("m_build_queue: %d\n", sizeof(m_build_queue)));
+		DPRINTF(k_DBG_AI, ("m_tradeSourceList: %d\n", sizeof(m_tradeSourceList)));
+		DPRINTF(k_DBG_AI, ("m_tradeDestinationList: %d\n", sizeof(m_tradeDestinationList)));
+		DPRINTF(k_DBG_AI, ("m_collectingResources: %d\n", sizeof(m_collectingResources)));
+		DPRINTF(k_DBG_AI, ("m_sellingResources: %d\n", sizeof(m_sellingResources)));
+		DPRINTF(k_DBG_AI, ("m_buyingResources: %d\n", sizeof(m_buyingResources)));
+		DPRINTF(k_DBG_AI, ("m_happy: %d\n", sizeof(m_happy)));
+		DPRINTF(k_DBG_AI, ("m_name: %d\n", sizeof(m_name)));
+		DPRINTF(k_DBG_AI, ("m_distanceToGood: %d\n", sizeof(m_distanceToGood)));
+		DPRINTF(k_DBG_AI, ("m_defensiveBonus: %d\n", sizeof(m_defensiveBonus)));
+		DPRINTF(k_DBG_AI, ("m_ringFood: %d\n", sizeof(m_ringFood)));
+		DPRINTF(k_DBG_AI, ("m_ringProd: %d\n", sizeof(m_ringProd)));
+		DPRINTF(k_DBG_AI, ("m_ringGold: %d\n", sizeof(m_ringGold)));
+		DPRINTF(k_DBG_AI, ("m_ringSizes: %d\n", sizeof(m_ringSizes)));
+		DPRINTF(k_DBG_AI, ("m_bonusFoodCoeff: %d\n", sizeof(m_bonusFoodCoeff)));
+		DPRINTF(k_DBG_AI, ("m_bonusFood: %d\n", sizeof(m_bonusFood)));
+		DPRINTF(k_DBG_AI, ("m_bonusProdCoeff: %d\n", sizeof(m_bonusProdCoeff)));
+		DPRINTF(k_DBG_AI, ("m_bonusProd: %d\n", sizeof(m_bonusProd)));
+		DPRINTF(k_DBG_AI, ("m_bonusGoldCoeff: %d\n", sizeof(m_bonusGoldCoeff)));
+		DPRINTF(k_DBG_AI, ("m_bonusGold: %d\n", sizeof(m_bonusGold)));
+		DPRINTF(k_DBG_AI, ("m_bonusScieCoeff: %d\n", sizeof(m_bonusScieCoeff)));
+		DPRINTF(k_DBG_AI, ("m_bonusScie: %d\n", sizeof(m_bonusScie)));
+		DPRINTF(k_DBG_AI, ("m_cityRadiusOp: %d\n", sizeof(m_cityRadiusOp)));
+		DPRINTF(k_DBG_AI, ("m_killList: %d\n", sizeof(m_killList)));
+		DPRINTF(k_DBG_AI, ("m_radiusNewOwner: %d\n", sizeof(m_radiusNewOwner)));
+		DPRINTF(k_DBG_AI, ("m_tilecount: %d\n", sizeof(m_tilecount)));
+		DPRINTF(k_DBG_AI, ("m_whichtile: %d\n", sizeof(m_whichtile)));
+		DPRINTF(k_DBG_AI, ("m_tempGoodAdder: %d\n", sizeof(m_tempGoodAdder)));
+		DPRINTF(k_DBG_AI, ("m_tempGood: %d\n", sizeof(m_tempGood)));
+		DPRINTF(k_DBG_AI, ("m_tempGoodCount: %d\n", sizeof(m_tempGoodCount)));
+		DPRINTF(k_DBG_AI, ("m_sentInefficientMessageAlready: %d\n", sizeof(m_sentInefficientMessageAlready)));
+		DPRINTF(k_DBG_AI, ("m_culture: %d\n", sizeof(m_culture)));
+		DPRINTF(k_DBG_AI, ("m_secthappy: %d\n", sizeof(m_secthappy)));
+		DPRINTF(k_DBG_AI, ("\n"));
+	}
+
+	void PrintData()
+	{
+		DPRINTF(k_DBG_AI, ("\n"));
+		DPRINTF(k_DBG_AI, ("Data of CityData class:\n"));
+		DPRINTF(k_DBG_AI, ("m_owner: %d\n", m_owner));
+		DPRINTF(k_DBG_AI, ("m_slaveBits: %d\n", m_slaveBits));
+		DPRINTF(k_DBG_AI, ("m_accumulated_food: %d\n", m_accumulated_food));
+		DPRINTF(k_DBG_AI, ("m_shieldstore: %d\n", m_shieldstore));
+		DPRINTF(k_DBG_AI, ("m_shieldstore_at_begin_turn: %d\n", m_shieldstore_at_begin_turn));
+		DPRINTF(k_DBG_AI, ("m_build_category_at_begin_turn: %d\n", m_build_category_at_begin_turn));
+		DPRINTF(k_DBG_AI, ("m_net_gold: %d\n", m_net_gold));
+		DPRINTF(k_DBG_AI, ("m_gold_lost_to_crime: %d\n", m_gold_lost_to_crime));
+		DPRINTF(k_DBG_AI, ("m_gross_gold: %d\n", m_gross_gold));
+		DPRINTF(k_DBG_AI, ("m_goldFromTradeRoutes: %d\n", m_goldFromTradeRoutes));
+		DPRINTF(k_DBG_AI, ("m_goldLostToPiracy: %d\n", m_goldLostToPiracy));
+		DPRINTF(k_DBG_AI, ("m_science: %d\n", m_science));
+		DPRINTF(k_DBG_AI, ("m_luxury: %d\n", m_luxury));
+		DPRINTF(k_DBG_AI, ("m_city_attitude: %d\n", m_city_attitude));
+		DPRINTF(k_DBG_AI, ("m_collected_production_this_turn: %d\n", m_collected_production_this_turn));
+		DPRINTF(k_DBG_AI, ("m_gross_production: %d\n", m_gross_production));
+		DPRINTF(k_DBG_AI, ("m_net_production: %d\n", m_net_production));
+		DPRINTF(k_DBG_AI, ("m_production_lost_to_crime: %d\n", m_production_lost_to_crime));
+		DPRINTF(k_DBG_AI, ("m_built_improvements: %d\n", m_built_improvements));
+		DPRINTF(k_DBG_AI, ("m_builtWonders: %d\n", m_builtWonders));
+		DPRINTF(k_DBG_AI, ("m_food_delta: %f\n", m_food_delta));
+		DPRINTF(k_DBG_AI, ("m_gross_food: %f\n", m_gross_food));
+		DPRINTF(k_DBG_AI, ("m_net_food: %f\n", m_net_food));
+		DPRINTF(k_DBG_AI, ("m_food_lost_to_crime: %f\n", m_food_lost_to_crime));
+		DPRINTF(k_DBG_AI, ("m_food_consumed_this_turn: %f\n", m_food_consumed_this_turn));
+		DPRINTF(k_DBG_AI, ("m_total_pollution: %d\n", m_total_pollution));
+		DPRINTF(k_DBG_AI, ("m_cityPopulationPollution: %d\n", m_cityPopulationPollution));
+		DPRINTF(k_DBG_AI, ("m_cityIndustrialPollution: %d\n", m_cityIndustrialPollution));
+		DPRINTF(k_DBG_AI, ("m_foodVatPollution: %d\n", m_foodVatPollution));
+		DPRINTF(k_DBG_AI, ("m_cityPollutionCleaner: %d\n", m_cityPollutionCleaner));
+		DPRINTF(k_DBG_AI, ("m_contribute_materials: %d\n", m_contribute_materials));
+		DPRINTF(k_DBG_AI, ("m_contribute_military: %d\n", m_contribute_military));
+		DPRINTF(k_DBG_AI, ("m_capturedThisTurn: %d\n", m_capturedThisTurn));
+		DPRINTF(k_DBG_AI, ("m_spied_upon: %d\n", m_spied_upon));
+		DPRINTF(k_DBG_AI, ("m_walls_nullified: %d\n", m_walls_nullified));
+		DPRINTF(k_DBG_AI, ("m_franchise_owner: %d\n", m_franchise_owner));
+		DPRINTF(k_DBG_AI, ("m_franchiseTurnsRemaining: %d\n", m_franchiseTurnsRemaining));
+		DPRINTF(k_DBG_AI, ("m_watchfulTurns: %d\n", m_watchfulTurns));
+		DPRINTF(k_DBG_AI, ("m_bioInfectionTurns: %d\n", m_bioInfectionTurns));
+		DPRINTF(k_DBG_AI, ("m_bioInfectedBy: %d\n", m_bioInfectedBy));
+		DPRINTF(k_DBG_AI, ("m_nanoInfectionTurns: %d\n", m_nanoInfectionTurns));
+		DPRINTF(k_DBG_AI, ("m_nanoInfectedBy: %d\n", m_nanoInfectedBy));
+		DPRINTF(k_DBG_AI, ("m_convertedTo: %d\n", m_convertedTo));
+		DPRINTF(k_DBG_AI, ("m_convertedGold: %d\n", m_convertedGold));
+		DPRINTF(k_DBG_AI, ("m_convertedBy: %d\n", m_convertedBy));
+		DPRINTF(k_DBG_AI, ("m_terrainWasPolluted: %d\n", m_terrainWasPolluted));
+		DPRINTF(k_DBG_AI, ("m_happinessAttacked: %d\n", m_happinessAttacked));
+		DPRINTF(k_DBG_AI, ("m_terrainImprovementWasBuilt: %d\n", m_terrainImprovementWasBuilt));
+		DPRINTF(k_DBG_AI, ("m_improvementWasBuilt: %d\n", m_improvementWasBuilt));
+		DPRINTF(k_DBG_AI, ("m_isInjoined: %d\n", m_isInjoined));
+		DPRINTF(k_DBG_AI, ("m_injoinedBy: %d\n", m_injoinedBy));
+		DPRINTF(k_DBG_AI, ("m_airportLastUsed: %d\n", m_airportLastUsed));
+		DPRINTF(k_DBG_AI, ("m_founder: %d\n", m_founder));
+		DPRINTF(k_DBG_AI, ("m_wages_paid: %d\n", m_wages_paid));
+		DPRINTF(k_DBG_AI, ("m_pw_from_infrastructure: %d\n", m_pw_from_infrastructure));
+		DPRINTF(k_DBG_AI, ("m_gold_from_capitalization: %d\n", m_gold_from_capitalization));
+		DPRINTF(k_DBG_AI, ("m_buildInfrastructure: %d\n", m_buildInfrastructure));
+		DPRINTF(k_DBG_AI, ("m_buildCapitalization: %d\n", m_buildCapitalization));
+		DPRINTF(k_DBG_AI, ("m_paidForBuyFront: %d\n", m_paidForBuyFront));
+		DPRINTF(k_DBG_AI, ("m_doUprising: %d\n", m_doUprising));
+		DPRINTF(k_DBG_AI, ("m_turnFounded: %d\n", m_turnFounded));
+		DPRINTF(k_DBG_AI, ("m_productionLostToFranchise: %d\n", m_productionLostToFranchise));
+		DPRINTF(k_DBG_AI, ("m_probeRecoveredHere: %d\n", m_probeRecoveredHere));
+		DPRINTF(k_DBG_AI, ("m_lastCelebrationMsg: %d\n", m_lastCelebrationMsg));
+		DPRINTF(k_DBG_AI, ("m_alreadySoldABuilding: %d\n", m_alreadySoldABuilding));
+		DPRINTF(k_DBG_AI, ("m_population: %d\n", m_population));
+		DPRINTF(k_DBG_AI, ("m_partialPopulation: %d\n", m_partialPopulation));
+		DPRINTF(k_DBG_AI, ("m_numSpecialists[0]: %d\n", m_numSpecialists[0]));
+		DPRINTF(k_DBG_AI, ("m_numSpecialists[1]: %d\n", m_numSpecialists[1]));
+		DPRINTF(k_DBG_AI, ("m_numSpecialists[2]: %d\n", m_numSpecialists[2]));
+		DPRINTF(k_DBG_AI, ("m_numSpecialists[3]: %d\n", m_numSpecialists[3]));
+		DPRINTF(k_DBG_AI, ("m_numSpecialists[4]: %d\n", m_numSpecialists[4]));
+		DPRINTF(k_DBG_AI, ("m_numSpecialists[5]: %d\n", m_numSpecialists[5]));
+		DPRINTF(k_DBG_AI, ("m_numSpecialists[6]: %d\n", m_numSpecialists[6]));
+		DPRINTF(k_DBG_AI, ("m_specialistDBIndex[0]: %d\n", m_specialistDBIndex[0]));
+		DPRINTF(k_DBG_AI, ("m_specialistDBIndex[1]: %d\n", m_specialistDBIndex[1]));
+		DPRINTF(k_DBG_AI, ("m_specialistDBIndex[2]: %d\n", m_specialistDBIndex[2]));
+		DPRINTF(k_DBG_AI, ("m_specialistDBIndex[3]: %d\n", m_specialistDBIndex[3]));
+		DPRINTF(k_DBG_AI, ("m_specialistDBIndex[4]: %d\n", m_specialistDBIndex[4]));
+		DPRINTF(k_DBG_AI, ("m_specialistDBIndex[5]: %d\n", m_specialistDBIndex[5]));
+		DPRINTF(k_DBG_AI, ("m_specialistDBIndex[6]: %d\n", m_specialistDBIndex[6]));
+		DPRINTF(k_DBG_AI, ("m_sizeIndex: %d\n", m_sizeIndex));
+		DPRINTF(k_DBG_AI, ("m_workerFullUtilizationIndex: %d\n", m_workerFullUtilizationIndex));
+		DPRINTF(k_DBG_AI, ("m_workerPartialUtilizationIndex: %d\n", m_workerPartialUtilizationIndex));
+		DPRINTF(k_DBG_AI, ("m_useGovernor: %d\n", m_useGovernor));
+		DPRINTF(k_DBG_AI, ("m_buildListSequenceIndex: %d\n", m_buildListSequenceIndex));
+		DPRINTF(k_DBG_AI, ("m_garrisonOtherCities: %d\n", m_garrisonOtherCities));
+		DPRINTF(k_DBG_AI, ("m_garrisonComplete: %d\n", m_garrisonComplete));
+		DPRINTF(k_DBG_AI, ("m_currentGarrison: %d\n", m_currentGarrison));
+		DPRINTF(k_DBG_AI, ("m_neededGarrison: %d\n", m_neededGarrison));
+		DPRINTF(k_DBG_AI, ("m_currentGarrisonStrength: %f\n", m_currentGarrisonStrength));
+		DPRINTF(k_DBG_AI, ("m_neededGarrisonStrength: %f\n", m_neededGarrisonStrength));
+		DPRINTF(k_DBG_AI, ("m_sellBuilding: %d\n", m_sellBuilding));
+		DPRINTF(k_DBG_AI, ("m_buyFront: %d\n", m_buyFront));
+		DPRINTF(k_DBG_AI, ("m_max_food_from_terrain: %d\n", m_max_food_from_terrain));
+		DPRINTF(k_DBG_AI, ("m_max_prod_from_terrain: %d\n", m_max_prod_from_terrain));
+		DPRINTF(k_DBG_AI, ("m_max_gold_from_terrain: %d\n", m_max_gold_from_terrain));
+		DPRINTF(k_DBG_AI, ("m_growth_rate: %d\n", m_growth_rate));
+		DPRINTF(k_DBG_AI, ("m_overcrowdingCoeff: %d\n", m_overcrowdingCoeff));
+		DPRINTF(k_DBG_AI, ("m_starvation_turns: %d\n", m_starvation_turns));
+		DPRINTF(k_DBG_AI, ("m_cityStyle: %d\n", m_cityStyle));
+		DPRINTF(k_DBG_AI, ("m_pos: %d\n", m_pos));
+		DPRINTF(k_DBG_AI, ("m_is_rioting: %d\n", m_is_rioting));
+		DPRINTF(k_DBG_AI, ("m_build_category_before_load_queue: %d\n", m_build_category_before_load_queue));
+		DPRINTF(k_DBG_AI, ("m_scie_lost_to_crime: %d\n", m_scie_lost_to_crime));
+		DPRINTF(k_DBG_AI, ("m_gross_food_before_bonuses: %d\n", m_gross_food_before_bonuses));
+		DPRINTF(k_DBG_AI, ("m_gross_prod_before_bonuses: %d\n", m_gross_prod_before_bonuses));
+		DPRINTF(k_DBG_AI, ("m_happinessAttackedBy: %d\n", m_happinessAttackedBy));
+		DPRINTF(k_DBG_AI, ("m_home_city: %d\n", m_home_city));
+		DPRINTF(k_DBG_AI, ("m_min_turns_revolt: %d\n", m_min_turns_revolt));
+		DPRINTF(k_DBG_AI, ("m_build_queue: %x\n", m_build_queue));
+		DPRINTF(k_DBG_AI, ("m_tradeSourceList: %x\n", m_tradeSourceList));
+		DPRINTF(k_DBG_AI, ("m_tradeDestinationList: %x\n", m_tradeDestinationList));
+		DPRINTF(k_DBG_AI, ("m_collectingResources: %x\n", m_collectingResources));
+		DPRINTF(k_DBG_AI, ("m_sellingResources: %x\n", m_sellingResources));
+		DPRINTF(k_DBG_AI, ("m_buyingResources: %x\n", m_buyingResources));
+		DPRINTF(k_DBG_AI, ("m_happy: %x\n", m_happy));
+		DPRINTF(k_DBG_AI, ("m_name: %x\n", m_name));
+		DPRINTF(k_DBG_AI, ("m_distanceToGood: %x\n", m_distanceToGood));
+		DPRINTF(k_DBG_AI, ("m_defensiveBonus: %f\n", m_defensiveBonus));
+		DPRINTF(k_DBG_AI, ("m_ringFood: %d\n", m_ringFood));
+		DPRINTF(k_DBG_AI, ("m_ringProd: %d\n", m_ringProd));
+		DPRINTF(k_DBG_AI, ("m_ringGold: %d\n", m_ringGold));
+		DPRINTF(k_DBG_AI, ("m_ringSizes: %d\n", m_ringSizes));
+		DPRINTF(k_DBG_AI, ("m_bonusFoodCoeff: %f\n", m_bonusFoodCoeff));
+		DPRINTF(k_DBG_AI, ("m_bonusFood: %f\n", m_bonusFood));
+		DPRINTF(k_DBG_AI, ("m_bonusProdCoeff: %f\n", m_bonusProdCoeff));
+		DPRINTF(k_DBG_AI, ("m_bonusProd: %f\n", m_bonusProd));
+		DPRINTF(k_DBG_AI, ("m_bonusGoldCoeff: %f\n", m_bonusGoldCoeff));
+		DPRINTF(k_DBG_AI, ("m_bonusGold: %f\n", m_bonusGold));
+		DPRINTF(k_DBG_AI, ("m_bonusScieCoeff: %f\n", m_bonusScieCoeff));
+		DPRINTF(k_DBG_AI, ("m_bonusScie: %f\n", m_bonusScie));
+		DPRINTF(k_DBG_AI, ("m_cityRadiusOp: %d\n", m_cityRadiusOp));
+		DPRINTF(k_DBG_AI, ("m_killList: %x\n", m_killList));
+		DPRINTF(k_DBG_AI, ("m_radiusNewOwner: %d\n", m_radiusNewOwner));
+		DPRINTF(k_DBG_AI, ("m_tilecount: %d\n", m_tilecount));
+		DPRINTF(k_DBG_AI, ("m_whichtile: %d\n", m_whichtile));
+		DPRINTF(k_DBG_AI, ("m_tempGoodAdder: %x\n", m_tempGoodAdder));
+		DPRINTF(k_DBG_AI, ("m_tempGood: %d\n", m_tempGood));
+		DPRINTF(k_DBG_AI, ("m_tempGoodCount: %d\n", m_tempGoodCount));
+		DPRINTF(k_DBG_AI, ("m_sentInefficientMessageAlready: %d\n", m_sentInefficientMessageAlready));
+		DPRINTF(k_DBG_AI, ("m_culture: %d\n", m_culture));
+		DPRINTF(k_DBG_AI, ("m_secthappy: %d\n", m_secthappy));
+		DPRINTF(k_DBG_AI, ("\n"));
+	}
+#endif
 };
 
 uint32 CityData_CityData_GetVersion(void);

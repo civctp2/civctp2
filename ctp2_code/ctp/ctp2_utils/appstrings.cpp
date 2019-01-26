@@ -20,12 +20,13 @@
 #include "c3types.h"
 
 static MBCHAR **    s_appStrings        = NULL;
-static size_t	    s_numAppStrings     = 0;
+static size_t       s_numAppStrings     = 0;
 
 void appstrings_Initialize(void)
 {
 	FILE *inFile = fopen("appstr.txt", "rt");
-	if (!inFile) {
+	if (!inFile)
+	{
 		c3errors_FatalDialog("appstr.txt", "Unable to open appstr.txt. Terminating app.");
 	}
 
@@ -34,34 +35,44 @@ void appstrings_Initialize(void)
 
 	MBCHAR inStr[_MAX_PATH];
 
-	for (size_t i=0; i<s_numAppStrings; i++) {
-		if (!fgets(inStr, _MAX_PATH, inFile)) {
+	for (size_t i=0; i<s_numAppStrings; i++)
+	{
+		if (!fgets(inStr, _MAX_PATH, inFile))
+		{
 			c3errors_FatalDialog("appstr.txt", "Error in appstr.txt.  Terminating app.");
 		}
-		inStr[strlen(inStr)-1] = '\0';
-		s_appStrings[i] = new MBCHAR[sizeof(inStr) + 1];
+
+		size_t len = strlen(inStr);
+		inStr[--len] = '\0';
+		if(inStr[len - 1] == '\r')
+			inStr[--len] = '\0';
+		s_appStrings[i] = new MBCHAR[len + 1];
 		strcpy(s_appStrings[i], inStr);
 	}
-
 }
 
 void appstrings_Cleanup(void)
 {
 	if (!s_appStrings) return;
 
-	for (size_t i=0; i<s_numAppStrings; i++) {
-		if (s_appStrings[i])
+	for (size_t i = 0; i < s_numAppStrings; i++)
+	{
 		delete [] s_appStrings[i];
 	}
+
+	delete[] s_appStrings;
 	s_appStrings    = NULL;
 	s_numAppStrings = 0;
 }
 
 MBCHAR *appstrings_GetString(APPSTR stringID)
 {
-	if (stringID >= 0 && static_cast<size_t>(stringID) < s_numAppStrings) {
+	if (stringID >= 0 && static_cast<size_t>(stringID) < s_numAppStrings)
+	{
 		return s_appStrings[stringID];
-	} else {
+	}
+	else
+	{
 		return NULL;
 	}
 }

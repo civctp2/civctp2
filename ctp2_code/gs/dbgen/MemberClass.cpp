@@ -376,7 +376,7 @@ void MemberClass::ExportInitialization(FILE *outfile, char *recordName)
         // No action: use compiler provided default
     }
 
-	fprintf(outfile, "void %sRecord::%s::Serialize(CivArchive &archive)\n", recordName, m_name, m_name);
+	fprintf(outfile, "void %sRecord::%s::Serialize(CivArchive &archive)\n", recordName, m_name);
 	fprintf(outfile, "{\n");
 
 	fprintf(outfile, "    if(archive.IsStoring()) {\n");
@@ -414,7 +414,7 @@ void MemberClass::ExportParser(FILE *outfile, char *recordName)
 
 	// TODO add aka and default names.
 
-	fprintf(outfile, "static char *s_%s_%s_Tokens[] = {\n", recordName, m_name);
+	fprintf(outfile, "static const char *s_%s_%s_Tokens[] = {\n", recordName, m_name);
 	PointerList<Datum>::Walker walk(&m_datumList);
 	while(walk.IsValid()) {
 		fprintf(outfile, "    \"%s\",\n", walk.GetObj()->m_name);

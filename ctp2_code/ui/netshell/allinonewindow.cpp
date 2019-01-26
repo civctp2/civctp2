@@ -28,20 +28,23 @@
 // Modifications from the original Activision code:
 //
 // - Memory leak repaired.
-// - Replaced old civilisation database by new one. (Aug 21st 2005 Martin Gï¿½hmann)
+// - Replaced old civilisation database by new one. (Aug 21st 2005 Martin Gühmann)
 // - The ages in the summary are now displayed correctly.
-// - Initialized local variables. (Sep 9th 2005 Martin Gï¿½hmann)
-// - Standardized code. (May 29th 2006 Martin Gï¿½hmann)
-// - Replaced old civ selection button bank by list box. (2-Jan-2008 Martin Gï¿½hmann)
+// - Initialized local variables. (Sep 9th 2005 Martin Gühmann)
+// - Standardized code. (May 29th 2006 Martin Gühmann)
+// - Replaced old civ selection button bank by list box. (2-Jan-2008 Martin Gühmann)
 //
 //----------------------------------------------------------------------------
 
 #include "c3.h"
 #include "allinonewindow.h"
 
+#include <algorithm>
+#include <chrono>
+#include <thread>
+
 #include "AgeRecord.h"
 #include "agesscreen.h"
-#include <algorithm>
 #include "aui_blitter.h"
 #include "aui_ldl.h"
 #include "aui_radio.h"
@@ -4085,10 +4088,11 @@ void AllinoneWindow::CancelButtonAction::Execute(
 
 			/// @todo Use Os::Sleep
 #ifdef WIN32
-			Sleep( k_PACKET_DELAY );
+			Sleep(k_PACKET_DELAY);
 #else
-			usleep( k_PACKET_DELAY * 1000 );
+			usleep(k_PACKET_DELAY * 1000);
 #endif
+//			std::this_thread::sleep_for(std::chrono::milliseconds(k_PACKET_DELAY));
 			w->UpdateGameSetup();
 		}
 		g_netfunc->Leave();
@@ -5443,12 +5447,12 @@ void AllinoneWorldTypeCallback(
 	{
 		sint32 val1, val2, val3, val4, val5, val6;
 		custommapscreen_getValues( val1, val2, val3, val4, val5, val6 );
-		g_gamesetup.SetWorldType1(static_cast<char>(val1));
-		g_gamesetup.SetWorldType2(static_cast<char>(val2));
-		g_gamesetup.SetWorldType3(static_cast<char>(val3));
-		g_gamesetup.SetWorldType4(static_cast<char>(val4));
-		g_gamesetup.SetWorldType5(static_cast<char>(val5));
-		g_gamesetup.SetWorldType6(static_cast<char>(val6));
+		g_gamesetup.SetWorldType1(static_cast<sint8>(val1));
+		g_gamesetup.SetWorldType2(static_cast<sint8>(val2));
+		g_gamesetup.SetWorldType3(static_cast<sint8>(val3));
+		g_gamesetup.SetWorldType4(static_cast<sint8>(val4));
+		g_gamesetup.SetWorldType5(static_cast<sint8>(val5));
+		g_gamesetup.SetWorldType6(static_cast<sint8>(val6));
 		w->UpdateGameSetup(true);
 	}
 }
@@ -5572,7 +5576,7 @@ void AllinoneWindow::WonderExclusionAction::Execute(
 		g_exclusions->ExcludeWonder( m_index, sw->GetState() );
 
 		{
-			g_gamesetup.SetWonder( (char)sw->GetState(), m_index );
+			g_gamesetup.SetWonder( (sint8)sw->GetState(), m_index );
 			w->UpdateGameSetup(true);
 		}
 	}

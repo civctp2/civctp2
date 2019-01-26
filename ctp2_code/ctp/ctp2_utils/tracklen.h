@@ -62,7 +62,7 @@ char *tracklen_cryptAscii(char *s);
 
 void tracklen_cryptBinary(char *data, size_t len);
 DWORD *tracklen_LoadEncryptedKey( DWORD *trackLenBuf, const char *szFile );
-#ifdef _WIN32
+#if defined(WIN32)
 int tracklen_GetTrackLengths(DWORD *trackLenBuf, char whichDrive);
 #else
 int tracklen_GetTrackLengths(DWORD *trackLenBuf, int iDrive);

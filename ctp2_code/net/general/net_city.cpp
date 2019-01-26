@@ -270,7 +270,7 @@ void NetCityName::Packetize(uint8* buf, uint16 &size)
 	size = 0;
 	PUSHID(k_PACKET_CITY_NAME_ID);
 	PUSHLONG((uint32)m_cityData->m_home_city);
-	PUSHSTRING(m_cityData->m_name);
+	PUSHSTRING(m_cityData->GetName());
 }
 
 void NetCityName::Unpacketize(uint16 id, uint8* buf, uint16 size)
@@ -283,28 +283,31 @@ void NetCityName::Unpacketize(uint16 id, uint8* buf, uint16 size)
 	PULLLONGTYPE(home_city, Unit);
 	char name[k_MAX_NAME_LEN];
 	PULLSTRING(name);
-	if(g_theUnitPool->IsValid(home_city)) {
-		if(!home_city->GetCityData()) {
-
-
-
-
-
-
-			if(g_network.IsHost()) {
+	if(g_theUnitPool->IsValid(home_city))
+	{
+		if(!home_city->GetCityData())
+		{
+			if(g_network.IsHost())
+			{
 				g_network.Resync(g_network.IdToIndex(id));
-			} else {
+			}
+			else
+			{
 				g_network.RequestResync(RESYNC_INVALID_UNIT);
 			}
-		} else {
-			strcpy(home_city.GetData()->GetCityData()->m_name, name);
-			if(g_network.IsHost()) {
+		}
+		else
+		{
+			home_city.GetData()->GetCityData()->SetNameLocal(name);
+			if(g_network.IsHost())
+			{
 				g_network.Block(home_city.GetOwner());
 				g_network.SendCityName(home_city.GetData()->GetCityData());
 				g_network.Unblock(home_city.GetOwner());
 			}
 
-			if(home_city.GetOwner() == g_selected_item->GetVisiblePlayer()) {
+			if(home_city.GetOwner() == g_selected_item->GetVisiblePlayer())
+			{
 				MainControlPanel::UpdateCityList();
 			}
 		}

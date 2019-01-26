@@ -139,7 +139,10 @@ bool CityAstar::EntryCost
 			// "Hostile" territory
 			cost *= 20000.0; // Should be calculated from most expensive tile improvement + 20 percent and everything times 2
 		}
-
+		else if(m_dest != pos && entryCell->HasCity())
+		{
+			cost *= 100.0F;
+		}
 		entry = ASTAR_CAN_ENTER;
 	}
 	else

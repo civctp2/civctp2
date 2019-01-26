@@ -34,8 +34,6 @@
 #include "c3.h"
 #include "robotastar2.h"
 
-#include "c3math.h"
-#include "c3errors.h"
 #include "Globals.h"
 
 #include "dynarr.h"

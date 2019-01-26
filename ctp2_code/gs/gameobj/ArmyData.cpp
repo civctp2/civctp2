@@ -344,11 +344,6 @@ bool IsSolist(Unit const & u)
 
 sint32 * ArmyData::s_orderDBToEventMap = NULL;
 
-
-
-
-
-
 ArmyData::ArmyData(const Army &army, const UnitDynamicArray &units)
 :   GameObj                 (army.m_id),
     m_tempKillList          (NULL),
@@ -1141,7 +1136,7 @@ void ArmyData::GetActors(Unit &excludeMe, UnitActor **restOfStack)
 void ArmyData::GroupArmy(Army &army)
 {
     sint32 i;
-    DPRINTF(k_DBG_GAMESTATE, ("Army 0x%lx grouping army 0x%lx", m_id, army));
+    DPRINTF(k_DBG_GAMESTATE, ("Army 0x%lx grouping army 0x%lx", m_id, army.m_id));
 
     // PFT 17 Mar 05, E 18-Oct-2005:
     // Prevent some categories of units from grouping.
@@ -1169,7 +1164,7 @@ void ArmyData::GroupArmy(Army &army)
     bool atLeastOneAsleep = false;
 
     for(i = army.Num() - 1; i >= 0; i--) {
-        DPRINTF(k_DBG_GAMESTATE, ("Inserting unit 0x%lx\n", army[i]));
+        DPRINTF(k_DBG_GAMESTATE, ("Inserting unit 0x%lx\n", army[i].m_id));
         g_gevManager->AddEvent(GEV_INSERT_AfterCurrent, GEV_AddUnitToArmy,
                                GEA_Unit, army[i],
                                GEA_Army, m_id,
@@ -1236,7 +1231,7 @@ void ArmyData::GroupAllUnits()
                 ul->Access(i).GetArmy().SetRemoveCause(CAUSE_REMOVE_ARMY_GROUPING);
                 ul->Access(i).ChangeArmy(Army(m_id), CAUSE_NEW_ARMY_GROUPING);
                 DPRINTF(k_DBG_GAMESTATE, ("Grouped unit 0x%lx\n",
-                                          ul->Access(i)));
+                                          ul->Access(i).m_id));
             }
         }
     }
@@ -1275,7 +1270,7 @@ void ArmyData::GroupAllUnits()
 //----------------------------------------------------------------------------
 void ArmyData::GroupUnit(Unit unit)
 {
-    DPRINTF(k_DBG_GAMESTATE, ("Army 0x%lx grouping unit 0x%lx\n", m_id, unit));
+    DPRINTF(k_DBG_GAMESTATE, ("Army 0x%lx grouping unit 0x%lx\n", m_id, unit.m_id));
 
     Assert(unit.IsValid());
     if (!unit.IsValid())
@@ -1860,12 +1855,13 @@ ORDER_RESULT ArmyData::StealTechnology(const MapPoint &point)
             sint32 num;
             uint8 *canSteal = g_player[m_owner]->m_advances->CanAskFor(g_player[c.GetOwner()]->m_advances,
                                                                        num);
-            if(num > 0) {
-
+            if(num > 0)
+            {
                 if(g_player[m_owner]->IsRobot()
                 &&(!g_network.IsClient()
                 || !g_network.IsLocalPlayer(m_owner))
                 ){
+                    delete [] canSteal;
                     return m_array[i].StealTechnology(c, -1);
                 }
 
@@ -3309,6 +3305,11 @@ ORDER_RESULT ArmyData::EnslaveSettler(const MapPoint &point, const sint32 uindex
 	AddSpecialActionUsed(m_array[uindex]);
 
 	return ORDER_RESULT_SUCCEEDED;
+}
+
+bool ArmyData::CanBeEnslaved() const
+{
+	return m_nElements == 1 && m_array[0].GetDBRec()->GetSettle();
 }
 
 bool ArmyData::CanUndergroundRailway(double &success, double &death,
@@ -7771,7 +7772,7 @@ void ArmyData::MoveUnits(const MapPoint &pos)
 			}
 
 			g_theWorld->RemoveUnitReference(m_pos, m_array[i]);
-			bool r = m_array[i].MoveToPosition(pos, revealedUnits);
+			m_array[i].MoveToPosition(pos, revealedUnits);
 
 			if(m_array[i].GetNumCarried() > 0)
 			{
@@ -9137,6 +9138,9 @@ void ArmyData::ActionSuccessful(SPECATTACK attack, Unit &unit, Unit const & c)
 		if(soundID != -1)
 		{
 			sint32 visiblePlayer = g_selected_item->GetVisiblePlayer();
+
+			if(visiblePlayer == m_owner
+			|| unit.GetVisibility() & (1 << visiblePlayer))
 			{
 				g_soundManager->AddSound(SOUNDTYPE_SFX, (uint32)0, 	soundID, m_pos.x, m_pos.y);
 			}
@@ -11294,23 +11298,27 @@ void ArmyData::CheckHostileTerrain()
 
 void ArmyData::CheckMineField()
 {
-	const RiskRecord *risk = g_theRiskDB->Get(g_theGameSettings->GetRisk());
-	Cell *cell = g_theWorld->GetCell(m_pos);
-	sint32 CellOwner = cell->GetOwner();
+//	const RiskRecord *risk = g_theRiskDB->Get(g_theGameSettings->GetRisk());
+//	Cell *cell = g_theWorld->GetCell(m_pos);
+//	sint32 CellOwner = cell->GetOwner();
 		//EMOD If tile has tileimp that is a minefield then deduct HP
 	if(terrainutil_HasMinefield(m_pos)
 	){
 		//TerrainRecord const * tirec = g_theTerrainImprovementDB->Get(g_theWorld->GetCell(m_pos)->GetDBImprovement());
 		double hpcost2;
 		/// @todo use standard identifiers for index variables like i and j
-		for(sint32 ti = 0; ti < g_theWorld->GetCell(m_pos)->GetNumDBImprovements(); ++ti){ /// @todo use i instead of ti
+		for(sint32 ti = 0; ti < g_theWorld->GetCell(m_pos)->GetNumDBImprovements(); ++ti)
+		{ /// @todo use i instead of ti
 			const TerrainImprovementRecord * tirec = g_theTerrainImprovementDB->Get(g_theWorld->GetCell(m_pos)->GetDBImprovement(ti));
 			const TerrainImprovementRecord::Effect *effect = terrainutil_GetTerrainEffect(tirec, m_pos);
-			for(sint32 u = 0; u < m_nElements; u++) { /// @todo use j instead of u
-				if(effect->GetMinefield(hpcost2) && !m_array[u].GetMovementTypeAir()) { //EMOD
+			for(sint32 u = 0; u < m_nElements; u++)
+			{ /// @todo use j instead of u
+				if(effect->GetMinefield(hpcost2) && !m_array[u].GetMovementTypeAir())
+				{ //EMOD
 					m_array[u].DeductHP(hpcost2); // This should go into the MoveUnits event
 				}
-				if(m_array[u].GetHP() < 0.999){
+				if(m_array[u].GetHP() < 0.999)
+				{
 					m_array[u].Kill(CAUSE_REMOVE_ARMY_DISBANDED, -1);
 				}
 			}

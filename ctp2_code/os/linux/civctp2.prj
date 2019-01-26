@@ -1014,7 +1014,7 @@ module.include.files=\
 	../../../ctp2_code/user-robotcom/shared/improvementtypes.h\
 	../../../ctp2_code/user-robotcom/shared/globals.h\
 	../../../ctp2_code/user-robotcom/shared/order.h\
-	../../../ctp2_code/user-robotcom/shared/aicause.h\
+	../../../ctp2_code/user-robotcom/shared/AICause.h\
 	../../../ctp2_code/robotcom/Top/strategic_map.h\
 	../../../ctp2_code/robotcom/Top/Cont.h\
 	../../../ctp2_code/robotcom/Top/CityVertex.h\
@@ -1853,7 +1853,7 @@ module.source.files=\
 	../../../ctp2_code/gfx/spritesys/CitySpriteGroup.cpp\
 	../../../ctp2_code/gfx/spritesys/spritelow.cpp\
 	../../../ctp2_code/gfx/spritesys/UnitSpriteGroup.cpp\
-	../../../ctp2_code/gfx/spritesys/goodspritegroup.cpp\
+	../../../ctp2_code/gfx/spritesys/GoodSpriteGroup.cpp\
 	../../../ctp2_code/gfx/spritesys/action.cpp\
 	../../../ctp2_code/gfx/spritesys/SpriteStateDB.cpp\
 	../../../ctp2_code/gfx/spritesys/UnitActor.cpp\
@@ -1868,7 +1868,7 @@ module.source.files=\
 	../../../ctp2_code/gfx/spritesys/EffectActor.cpp\
 	../../../ctp2_code/gfx/spritesys/Actor.cpp\
 	../../../ctp2_code/gfx/spritesys/ProjectileSpriteGroup.cpp\
-	../../../ctp2_code/gfx/spritesys/goodactor.cpp\
+	../../../ctp2_code/gfx/spritesys/GoodActor.cpp\
 	../../../ctp2_code/gfx/spritesys/TradeActor.cpp\
 	../../../ctp2_code/gfx/spritesys/effectspritegroup.cpp\
 	../../../ctp2_code/gfx/spritesys/spriteutils.cpp\

@@ -244,12 +244,12 @@ void Squad_Strength::Set_Pos_Strength(const MapPoint & pos)
 						  m_water_bombard_str,
 						  m_air_bombard_str,
 						  m_value,
-						  false
+						  false // Check, we add also the stuff of the cargo
 						  );
 
 	m_value = 0.0;
 	m_transport = 0;
-	for(sint8 i = m_agent_count; i > 0; --i)
+	for(uint8 i = m_agent_count; i > 0; --i)
 	{
 		Unit const &	unit	= army->Get(i - 1);
 
@@ -276,6 +276,17 @@ void Squad_Strength::Set_Enemy_Grid_Strength(const MapPoint & pos, const sint32 
 	m_water_bombard_str = MapAnalysis::GetMapAnalysis().GetEnemyBombardSea (playerId, pos);
 	m_air_bombard_str   = MapAnalysis::GetMapAnalysis().GetEnemyBombardAir (playerId, pos);
 	m_value             = MapAnalysis::GetMapAnalysis().GetEnemyValue      (playerId, pos);
+}
+
+void Squad_Strength::Set_Allied_Grid_Strength(const MapPoint & pos, const sint32 & playerId)
+{
+	m_attack_str        = MapAnalysis::GetMapAnalysis().GetAlliedAttack     (playerId, pos);
+	m_defense_str       = MapAnalysis::GetMapAnalysis().GetAlliedDefense    (playerId, pos);
+	m_ranged_str        = MapAnalysis::GetMapAnalysis().GetAlliedRanged     (playerId, pos);
+	m_land_bombard_str  = MapAnalysis::GetMapAnalysis().GetAlliedBombardLand(playerId, pos);
+	m_water_bombard_str = MapAnalysis::GetMapAnalysis().GetAlliedBombardSea (playerId, pos);
+	m_air_bombard_str   = MapAnalysis::GetMapAnalysis().GetAlliedBombardAir (playerId, pos);
+	m_value             = MapAnalysis::GetMapAnalysis().GetAlliedValue      (playerId, pos);
 }
 
 void Squad_Strength::Set_Force_Matching( const float attack_ratio,

@@ -42,13 +42,6 @@
 #ifndef __CIV3_MATH_H__
 #define __CIV3_MATH_H__
 
-#include <algorithm>		// std::max, std::min
-
-#define ABS(x) (((x) > 0) ? (x) : -(x))
-#define SGN(x) (((x) >= 0) ? 1 : -1)
-#define MAX(x, y) std::max(x, y)
-#define MIN(x, y) std::min(x, y)
-
 //----------------------------------------------------------------------------
 //
 // Name       : AsPercentage
@@ -72,8 +65,7 @@
 //              compiler.
 //
 //----------------------------------------------------------------------------
-
-inline int AsPercentage(double const a_Factor)
+constexpr int AsPercentage(double const a_Factor)
 {
 	return static_cast<int>((a_Factor * 100.0) + 0.5);
 }

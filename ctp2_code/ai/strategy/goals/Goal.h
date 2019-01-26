@@ -43,6 +43,7 @@
 #ifndef __GOAL_H__
 #define __GOAL_H__
 
+#include <functional>
 #include <list>
 #include <string>
 
@@ -58,7 +59,7 @@ class Goal;
 class Agent;
 
 //Now the enum is global and can be accessed by other objects
-enum SUB_TASK_TYPE
+enum SUB_TASK_TYPE : uint8
 {
     SUB_TASK_GOAL,
     SUB_TASK_RALLY,
@@ -73,11 +74,11 @@ class Goal
 {
 public:
 
-    enum REMOVAL_TIME
-    {
-        REMOVE_WHEN_COMPLETE,
-        DONT_REMOVE,
-    };
+//    enum REMOVAL_TIME
+//    {
+//        REMOVE_WHEN_COMPLETE,
+//        DONT_REMOVE,
+//    };
 
     const static Utility BAD_UTILITY;
     const static Utility MAX_UTILITY;
@@ -100,7 +101,7 @@ public:
 
     bool Is_Goal_Undercommitted() const { return (!Is_Satisfied() && m_agents.size() > 0); };
 
-    sint16 Get_Agent_Count() const { return m_agents.size(); };
+    size_t Get_Agent_Count() const { return m_agents.size(); };
 
     bool Is_Single_Agent() const { return m_agents.size() == 1; };
 
@@ -122,9 +123,9 @@ public:
 
     GOAL_RESULT Execute_Task();
 
-    bool Get_Invalid() const;
+    bool IsInvalid() const;
 
-    bool Get_Removal_Time() const;
+    bool IsTimeToRemove() const;
 
     bool Can_Be_Executed() const;
 
@@ -214,11 +215,15 @@ public:
 
     void ResetNeededTransport();
 
+    bool IsTotallyComplete() const;
+    bool IsComplete() const;
+    bool IsCurrentlyUnavailable() const;
+    bool IsTargetImmune() const;
+    bool IsInvalidByDiplomacy() const;
+
 private:
 
     void Rollback_Agent(Agent_List::iterator & agent_iter);
-
-    bool Get_Totally_Complete() const;
 
     bool FindPathToTask(Agent_ptr the_army,
                         const MapPoint & goal_pos,
@@ -265,7 +270,6 @@ private:
     Squad_Strength                    m_current_attacking_strength;
     Plan_List                         m_matches;
     Agent_List                        m_agents;
-    PLAYER_INDEX                      m_playerId;
     Utility                           m_raw_priority;
     Utility                           m_combinedUtility;
     MapPoint                          m_target_pos;
@@ -273,7 +277,33 @@ private:
     Army                              m_target_army;
     SUB_TASK_TYPE                     m_sub_task;
     GOAL_TYPE                         m_goal_type;
+    sint8                             m_playerId;
     bool                              m_needs_sorting;
+
+#if 0
+public:
+	void PrintSizeOfGoalClass()
+	{
+		DPRINTF(k_DBG_AI, ("\n"));
+		DPRINTF(k_DBG_AI, ("Size of Goal class:\n"));
+		DPRINTF(k_DBG_AI, ("Goal: %d\n", sizeof(Goal)));
+		DPRINTF(k_DBG_AI, ("m_current_needed_strength: %d\n", sizeof(m_current_needed_strength)));
+		DPRINTF(k_DBG_AI, ("m_current_attacking_strength: %d\n", sizeof(m_current_attacking_strength)));
+		DPRINTF(k_DBG_AI, ("m_matches: %d\n", sizeof(m_matches)));
+		DPRINTF(k_DBG_AI, ("m_agents: %d\n", sizeof(m_agents)));
+		DPRINTF(k_DBG_AI, ("m_raw_priority: %d\n", sizeof(m_raw_priority)));
+		DPRINTF(k_DBG_AI, ("m_combinedUtility: %d\n", sizeof(m_combinedUtility)));
+		DPRINTF(k_DBG_AI, ("m_target_pos: %d\n", sizeof(m_target_pos)));
+		DPRINTF(k_DBG_AI, ("m_target_city: %d\n", sizeof(m_target_city)));
+		DPRINTF(k_DBG_AI, ("m_target_army: %d\n", sizeof(m_target_army)));
+		DPRINTF(k_DBG_AI, ("m_sub_task: %d\n", sizeof(m_sub_task)));
+		DPRINTF(k_DBG_AI, ("m_goal_type: %d\n", sizeof(m_goal_type)));
+		DPRINTF(k_DBG_AI, ("m_playerId: %d\n", sizeof(m_playerId)));
+		DPRINTF(k_DBG_AI, ("m_needs_sorting: %d\n", sizeof(m_needs_sorting)));
+		DPRINTF(k_DBG_AI, ("\n"));
+		m_current_needed_strength.PrintSizeOfSqudStrengthClass();
+	}
+#endif
 };
 
 namespace std {

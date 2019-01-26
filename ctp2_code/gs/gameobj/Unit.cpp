@@ -61,7 +61,6 @@
 #include "Unit.h"
 
 #include "Globals.h"
-#include "GWRecord.h"
 #include "ConstRecord.h"        // g_theConstDB
 #include "StrDB.h"              // g_theStringDB
 #include "DB.h"
@@ -1652,15 +1651,6 @@ bool Unit::CanSee(const Army &al) const
 {
 	return GetData()->CanSee(al);
 }
-
-#ifdef _DEBUG
-void Unit::SetIgnoreHappiness(bool v)
-
-{
-	AccessData()->SetIgnoreHappiness(v);
-}
-
-#endif
 
 void Unit::MakeCitizen(PopDBIndex pi, const MapPoint &pos, sint32 origOwner)
 {

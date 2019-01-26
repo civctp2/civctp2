@@ -1380,74 +1380,84 @@ void SlicContext::DelAge()
 #ifdef _DEBUG
 void SlicContext::Dump()
 {
-	sint32 i, n;
-	if(m_cityList) {
-		n = m_cityList->Num();
-		for(i = 0; i < n; i++) {
-			DPRINTF(k_DBG_INFO, (" City.%d: %lx\n", i, m_cityList->Access(i)));
+	if(m_cityList)
+	{
+		for(sint32 i = 0; i < m_cityList->Num(); i++)
+		{
+			DPRINTF(k_DBG_INFO, (" City.%d: %lx\n", i, m_cityList->Access(i).m_id));
 		}
 	}
 
-	if(m_unitList) {
-		n = m_unitList->Num();
-		for(i = 0; i < n; i++) {
-			DPRINTF(k_DBG_INFO, (" Unit.%d: %lx\n", i, m_unitList->Access(i)));
+	if(m_unitList)
+	{
+		for(sint32 i = 0; i < m_unitList->Num(); i++)
+		{
+			DPRINTF(k_DBG_INFO, (" Unit.%d: %lx\n", i, m_unitList->Access(i).m_id));
 		}
 	}
 
-	if(m_playerList) {
-		n = m_playerList->Num();
-		for(i = 0; i < n; i++) {
+	if(m_playerList)
+	{
+		for(sint32 i = 0; i < m_playerList->Num(); i++)
+		{
 			DPRINTF(k_DBG_INFO, (" Civ.%d: %lx\n", i, (*m_playerList)[i]));
 		}
 	}
 
-	if(m_locationList) {
-		n = m_locationList->Num();
-		for(i = 0; i < n; i++) {
+	if(m_locationList)
+	{
+		for(sint32 i = 0; i < m_locationList->Num(); i++)
+		{
 			MapPoint pos = m_locationList->Access(i);
 			DPRINTF(k_DBG_INFO, (" Location.%d: (%d,%d)\n", i,
 								 pos.x, pos.y));
 		}
 	}
 
-	if(m_calamityList) {
-		n = m_numCalamities;
-		for(i = 0; i < n; i++) {
+	if(m_calamityList)
+	{
+		for(sint32 i = 0; i < m_numCalamities; i++)
+		{
 			DPRINTF(k_DBG_INFO, (" Calamity.%d: %d\n",i, m_calamityList[i]));
 		}
 	}
 
-	if(m_goldList) {
-		n = m_numGolds;
-		for(i = 0; i < n; i++) {
+	if(m_goldList)
+	{
+		for(sint32 i = 0; i < m_numGolds; i++)
+		{
 			DPRINTF(k_DBG_INFO, (" Gold.%d: %d\n", i, m_goldList[i]));
 		}
 	}
 
-	if(m_goodList) {
-		n = m_goodList->Num();
-		for(i = 0; i < n; i++) {
+	if(m_goodList)
+	{
+		for(sint32 i = 0; i < m_goodList->Num(); i++)
+		{
 			DPRINTF(k_DBG_INFO, (" Good.%d: %d\n", i, m_goodList->Access(i)));
 		}
 	}
 
-	if(m_rankList) {
-		n = m_numRanks;
-		for(i = 0; i < n; i++) {
+	if(m_rankList)
+	{
+		for(sint32 i = 0; i < m_numRanks; i++)
+		{
 			DPRINTF(k_DBG_INFO, (" Rank.%d: %d\n", i, m_rankList[i]));
 		}
 	}
 
-	if(m_wonderList) {
-		n = m_numWonders;
-		for(i = 0; i < n; i++) {
+	if(m_wonderList)
+	{
+		for(sint32 i = 0; i < m_numWonders; i++)
+		{
 			DPRINTF(k_DBG_INFO, (" Wonder.%d: %d\n", i, m_wonderList[i]));
 		}
 	}
 
-	if(m_actionList) {
-		for(sint32 i = 0; i < m_numActions; i++) {
+	if(m_actionList)
+	{
+		for(sint32 i = 0; i < m_numActions; i++)
+		{
 			DPRINTF(k_DBG_INFO, (" Action.%d: %s\n", i, m_actionList[i]));
 		}
 	}

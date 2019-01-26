@@ -31,6 +31,7 @@
 // - Standartized code (May 2006 Martin Gühmann)
 // - Moved graph functionality to LineGraph (30-Sep-2007 Martin Gühmann)
 // - Replaced CIV_INDEX by sint32. (2-Jan-2008 Martin Gühmann)
+// - The civ list has no empty rows, anymore. (19-Jan-2019 Martin Gühmann)
 //
 //----------------------------------------------------------------------------
 
@@ -73,28 +74,19 @@ extern sint32						g_is565Format;
 
 #define k_LOADSAVE_AUTOSORT_COL		-2
 
-
-
-
-
-
-
-
-
-
 LoadSaveWindow::LoadSaveWindow(AUI_ERRCODE *retval, uint32 id,
 		MBCHAR *ldlBlock, sint32 bpp, AUI_WINDOW_TYPE type, bool bevel)
 :
     c3_PopupWindow              (retval, id, ldlBlock, bpp, type, bevel),
     m_type                      (LSS_TOTAL),
-	m_nameString                (NULL),
-	m_gameInfo                  (NULL),
-	m_saveInfo                  (NULL),
-	m_saveInfoRemember          (NULL),
+    m_nameString                (NULL),
+    m_gameInfo                  (NULL),
+    m_saveInfo                  (NULL),
+    m_saveInfoRemember          (NULL),
     m_saveInfoToSave            (NULL),
-	m_fileList                  (NULL),
-	m_titlePanel                (NULL),
-	m_gameText                  (NULL),
+    m_fileList                  (NULL),
+    m_titlePanel                (NULL),
+    m_gameText                  (NULL),
     m_gameTextBox               (NULL),
     m_saveText                  (NULL),
     m_saveTextBox               (NULL),
@@ -114,11 +106,11 @@ LoadSaveWindow::LoadSaveWindow(AUI_ERRCODE *retval, uint32 id,
     m_civsTab                   (NULL),
     m_civsList                  (NULL),
     m_deleteButton              (NULL)
-	// MBCHAR m_mostRecentName[_MAX_PATH]
+    // MBCHAR m_mostRecentName[_MAX_PATH]
 {
 	sprintf(m_mostRecentName, "");
 
-    MBCHAR  block[k_AUI_LDL_MAXBLOCK + 1];
+	MBCHAR  block[k_AUI_LDL_MAXBLOCK + 1];
 	sprintf(block, "%s.%s", ldlBlock, "Name");
 	AddTitle(block);
 	AddCancel(loadsavescreen_backPress);
@@ -248,24 +240,23 @@ void LoadSaveWindow::FillListOne(void)
 {
 	if (!m_fileList) return;
 	if (m_fileList->GetCount() <= 0) return;
-    if (!m_listOne) return;
+	if (!m_listOne) return;
 
-    m_listOne->Clear();
+	m_listOne->Clear();
 
 	AUI_ERRCODE		errcode = AUI_ERRCODE_OK;
 
-    for
-    (
+	for
+	(
 	    PointerList<GameInfo>::Walker walker = PointerList<GameInfo>::Walker(m_fileList);
-        walker.IsValid();
-        walker.Next()
-    )
-    {
+	    walker.IsValid();
+	    walker.Next()
+	)
+	{
 		m_listOne->AddItem
-            (new LSGamesListItem(&errcode, "LSGamesListItem", walker.GetObj()));
+		    (new LSGamesListItem(&errcode, "LSGamesListItem", walker.GetObj()));
 	}
 }
-
 
 void LoadSaveWindow::FillListTwo(GameInfo *info)
 {
@@ -292,21 +283,20 @@ void LoadSaveWindow::FillListTwo(GameInfo *info)
 
 	if (info)
 	{
-    	AUI_ERRCODE		errcode = AUI_ERRCODE_OK;
+		AUI_ERRCODE		errcode = AUI_ERRCODE_OK;
 
-        for
-        (
+		for
+		(
 		    PointerList<SaveInfo>::Walker walker = PointerList<SaveInfo>::Walker(info->files);
-            walker.IsValid();
-            walker.Next()
-        )
-        {
+		    walker.IsValid();
+		    walker.Next()
+		)
+		{
 			m_listTwo->AddItem
-                (new LSSavesListItem(&errcode, "LSSavesListItem", walker.GetObj()));
+			    (new LSSavesListItem(&errcode, "LSSavesListItem", walker.GetObj()));
 		}
 	}
 }
-
 
 void LoadSaveWindow::FillCivList(SaveInfo *info)
 {
@@ -317,12 +307,15 @@ void LoadSaveWindow::FillCivList(SaveInfo *info)
 
 	if (info)
 	{
-    	AUI_ERRCODE		errcode = AUI_ERRCODE_OK;
+		AUI_ERRCODE		errcode = AUI_ERRCODE_OK;
 
-		for (int i = 0; i < info->numCivs; i++)
-        {
-			m_civsList->AddItem
-                (new LSCivsListItem(&errcode, "LSCivsListItem", info->civList[i]));
+		for (sint32 i = 0; i < info->numCivs; i++)
+		{
+			if(info->networkGUID[i].civIndex != -1)
+			{
+				m_civsList->AddItem
+				(new LSCivsListItem(&errcode, "LSCivsListItem", info->civList[i]));
+			}
 		}
 	}
 }
@@ -331,55 +324,53 @@ void LoadSaveWindow::SelectCurrentGame(void)
 {
 	if (!m_listOne) return;
 
-    MBCHAR		currentGame[k_MAX_NAME_LEN] = {0};
+	MBCHAR currentGame[k_MAX_NAME_LEN] = {0};
 	if (GetGameName(currentGame))
-    {
-        for (sint32 i = 0; i < m_listOne->NumItems(); i++)
-        {
-	        LSGamesListItem	*   item = (LSGamesListItem *) m_listOne->GetItemByIndex(i);
-            GameInfo *          info = item ? item->GetGameInfo() : NULL;
+	{
+		for (sint32 i = 0; i < m_listOne->NumItems(); i++)
+		{
+			LSGamesListItem	*   item = (LSGamesListItem *) m_listOne->GetItemByIndex(i);
+			GameInfo *          info = item ? item->GetGameInfo() : NULL;
 
-	        if (info && (0 == strcmp(info->name, currentGame)))
-            {
-		        m_listOne->SelectItem(i);
-		        return;
-	        }
-        }
-    }
+			if (info && (0 == strcmp(info->name, currentGame)))
+			{
+				m_listOne->SelectItem(i);
+				return;
+			}
+		}
+	}
 }
 
 void LoadSaveWindow::SelectCurrentSave(void)
 {
 	if (!m_listTwo) return;
 
-	MBCHAR		saveName[_MAX_PATH] = {0};
+	MBCHAR saveName[_MAX_PATH] = {0};
 	if (GetSaveName(saveName))
-    {
-	    for (sint32 i = 0; i < m_listTwo->NumItems(); i++)
-        {
-		    LSSavesListItem	*   item = (LSSavesListItem *) m_listTwo->GetItemByIndex(i);
-            SaveInfo *          info = item ? item->GetSaveInfo() : NULL;
+	{
+		for (sint32 i = 0; i < m_listTwo->NumItems(); i++)
+		{
+			LSSavesListItem	*   item = (LSSavesListItem *) m_listTwo->GetItemByIndex(i);
+			SaveInfo *          info = item ? item->GetSaveInfo() : NULL;
 
-		    if (info && (0 == strcmp(info->fileName, saveName)))
-            {
-			    m_listTwo->SelectItem(i);
-			    return;
-		    }
-	    }
-    }
+			if (info && (0 == strcmp(info->fileName, saveName)))
+			{
+				m_listTwo->SelectItem(i);
+				return;
+			}
+		}
+	}
 }
-
-
-
 
 void LoadSaveWindow::SetType(uint32 type)
 {
-
 	m_type = type;
 
-	if((m_type>=LSS_FIRST) && (m_type<LSS_TOTAL)) {
+	if((m_type>=LSS_FIRST) && (m_type<LSS_TOTAL))
+	{
 		TitleText()->SetText(m_nameString->GetString(m_type));
-	} else
+	}
+	else
 		Assert(0);
 
 	switch (m_type)
@@ -396,11 +387,13 @@ void LoadSaveWindow::SetType(uint32 type)
 		break;
 	}
 
-	switch (m_type) {
+	switch (m_type)
+	{
 	case LSS_LOAD_GAME :
 	case LSS_SAVE_GAME :
 
-		if (m_fileList) {
+		if (m_fileList)
+		{
 			m_fileList->DeleteAll();
 			FillListOne();
 		}
@@ -411,7 +404,8 @@ void LoadSaveWindow::SetType(uint32 type)
 	case LSS_LOAD_MP :
 	case LSS_SAVE_MP :
 
-		if (m_fileList) {
+		if (m_fileList)
+		{
 			m_fileList->DeleteAll();
 		}
 		delete m_fileList;
@@ -422,7 +416,8 @@ void LoadSaveWindow::SetType(uint32 type)
 	case LSS_SAVE_SCEN :
 	case LSS_LOAD_SCEN_MP :
 
-		if (m_fileList) {
+		if (m_fileList)
+		{
 			m_fileList->DeleteAll();
 		}
 		delete m_fileList;
@@ -433,11 +428,10 @@ void LoadSaveWindow::SetType(uint32 type)
 
 	FillListOne();
 
-	if ((m_type == LSS_SAVE_GAME || m_type == LSS_SAVE_MP || m_type == LSS_SAVE_SCEN)) {
-
+	if ((m_type == LSS_SAVE_GAME || m_type == LSS_SAVE_MP || m_type == LSS_SAVE_SCEN))
+	{
 		if ( CreateSaveInfoIfNeeded( m_saveInfoRemember ) )
 			m_saveInfo = m_saveInfoRemember;
-
 
 		CreateSaveInfoIfNeeded( m_saveInfoToSave );
 
@@ -446,19 +440,21 @@ void LoadSaveWindow::SetType(uint32 type)
 			m_saveInfoToSave->fileName);
 
 		FillCivList(m_saveInfoToSave);
-	} else {
-
-		if ( m_listTwo->NumItems() > 0 && m_listTwo->GetSelectedItem() ) {
+	}
+	else
+	{
+		if ( m_listTwo->NumItems() > 0 && m_listTwo->GetSelectedItem() )
+		{
 			Ok()->Enable( TRUE );
 		}
-		else {
+		else
+		{
 			Ok()->Enable( FALSE );
 		}
 	}
 
 	SelectCurrentGame();
 	SelectCurrentSave();
-
 }
 
 bool LoadSaveWindow::CreateSaveInfoIfNeeded( SaveInfo *&info )
@@ -476,13 +472,15 @@ bool LoadSaveWindow::CreateSaveInfoIfNeeded( SaveInfo *&info )
 
 		sint32 numCivs = 0;
 		sint32 i;
-		for (i=1; i<k_MAX_PLAYERS; i++) {
-
+		for (i=1; i<k_MAX_PLAYERS; i++)
+		{
 			MBCHAR			s[_MAX_PATH];
 			PLAYER_INDEX	currentCiv = g_selected_item->GetVisiblePlayer();
 
-			if ((g_player[i]) && (!g_player[i]->IsDead()) && (i!=currentCiv)) {
-				if (g_player[currentCiv]->HasContactWith(i)) {
+			if ((g_player[i]) && (!g_player[i]->IsDead()) && (i!=currentCiv))
+			{
+				if (g_player[currentCiv]->HasContactWith(i))
+				{
 					g_player[i]->GetSingularCivName(s) ;
 
 					strcpy(info->civList[numCivs], s);
@@ -511,7 +509,7 @@ void LoadSaveWindow::CleanUpSaveInfo( void )
 	delete m_saveInfoToSave;
 	m_saveInfoToSave = NULL;
 
-    delete m_saveInfoRemember;
+	delete m_saveInfoRemember;
 	m_saveInfoRemember = NULL;
 
 	m_saveInfo = NULL;
@@ -553,7 +551,7 @@ void LoadSaveWindow::GetPowerGraph(SaveInfo *info)
 	sint32      halfPitch       = surf->Pitch() / 2;
 
 	for (sint32 i = 0; i < height; i++)
-    {
+	{
 		Pixel16 *   bufferDataPtr = buffer + i * halfPitch;
 		memcpy(graphDataPtr, bufferDataPtr, width * sizeof(Pixel16));
 		graphDataPtr += width;
@@ -563,16 +561,15 @@ void LoadSaveWindow::GetPowerGraph(SaveInfo *info)
 
 	delete myGraph;
 
-    if (graphData)
-    {
+	if (graphData)
+	{
 		for (int i = 0; i < yCount; i++)
-        {
+		{
 			delete [] graphData[i];
 		}
 		delete [] graphData;
 	}
 }
-
 
 void LoadSaveWindow::GetRadarMap(SaveInfo *info)
 {
@@ -580,13 +577,13 @@ void LoadSaveWindow::GetRadarMap(SaveInfo *info)
 	sint32 const    width       = m_powerTabImage->Width();
 	sint32 const    height      = m_powerTabImage->Height();
 	RadarMap *      radarMap    =
-        new RadarMap(&errcode, aui_UniqueId(), 0, 0, width, height, m_pattern->GetFilename());
+	    new RadarMap(&errcode, aui_UniqueId(), 0, 0, width, height, m_pattern->GetFilename());
 	aui_Surface	*   surf        = radarMap->GetMapSurface();
 	radarMap->RenderMap(surf);
 
 	if (info->radarMapWidth > 0 &&
 		info->radarMapHeight > 0)
-    {
+	{
 		delete [] info->radarMapData;
 	}
 
@@ -594,14 +591,14 @@ void LoadSaveWindow::GetRadarMap(SaveInfo *info)
 	info->radarMapHeight    = height;
 	info->radarMapData      = new Pixel16[width*height];
 
-    Pixel16 *   buffer;
+	Pixel16 *   buffer;
 	if (surf->Lock(NULL, (LPVOID *)&buffer, 0) != AUI_ERRCODE_OK) return;
 
 	sint32      halfPitch       = surf->Pitch() / 2;
 	Pixel16 *   radarDataPtr    = info->radarMapData;
 
 	for (sint32 i = 0; i < height; i++)
-    {
+	{
 		Pixel16 * bufferDataPtr = buffer + i * halfPitch;
 		memcpy(radarDataPtr, bufferDataPtr, width * sizeof(Pixel16));
 
@@ -619,7 +616,6 @@ void LoadSaveWindow::GetRadarMap(SaveInfo *info)
 	delete radarMap;
 }
 
-
 void LoadSaveWindow::SetPowerGraph(SaveInfo *info)
 {
 	aui_Image * image = m_powerTabImage->GetImage();
@@ -636,7 +632,6 @@ void LoadSaveWindow::SetPowerGraph(SaveInfo *info)
 
 	if ( !info )
 	{
-
 		g_c3ui->TheBlitter()->Blt(
 			m_powerTabImage->GetImage()->TheSurface(),
 			0, 0,
@@ -657,11 +652,11 @@ void LoadSaveWindow::SetPowerGraph(SaveInfo *info)
 	Assert( height <= rect.bottom );
 	if ( height > rect.bottom ) return;
 
-
 	aui_Surface	*   surface = image->TheSurface();
 	Pixel16 *       buffer;
 
-	if (surface->Lock(NULL, (LPVOID *)&buffer, 0) != AUI_ERRCODE_OK) {
+	if (surface->Lock(NULL, (LPVOID *)&buffer, 0) != AUI_ERRCODE_OK)
+	{
 		delete surface;
 		delete image;
 		return;
@@ -671,18 +666,9 @@ void LoadSaveWindow::SetPowerGraph(SaveInfo *info)
 	sint32      pitch = surface->Pitch();
 
 	for (sint32 i = 0; i < height; i++)
-    {
+	{
 		Pixel16 * bufferDataPtr = buffer + i * (pitch/2);
 		memcpy(bufferDataPtr, radarDataPtr, width * sizeof(Pixel16));
-
-
-
-
-
-
-
-
-
 
 		radarDataPtr += width;
 	}
@@ -692,7 +678,6 @@ void LoadSaveWindow::SetPowerGraph(SaveInfo *info)
 
 void LoadSaveWindow::SetRadarMap(SaveInfo *info)
 {
-
 	aui_Image		*image = m_mapTabImage->GetImage();
 
 	Assert( image != NULL );
@@ -708,7 +693,6 @@ void LoadSaveWindow::SetRadarMap(SaveInfo *info)
 
 	if ( !info )
 	{
-
 		g_c3ui->TheBlitter()->Blt(
 			m_mapTabImage->GetImage()->TheSurface(),
 			0, 0,
@@ -729,11 +713,11 @@ void LoadSaveWindow::SetRadarMap(SaveInfo *info)
 	Assert( height <= rect.bottom );
 	if ( height > rect.bottom ) return;
 
-
 	aui_Surface	*   surface = image->TheSurface();
 
 	Pixel16	*       buffer;
-	if (surface->Lock(NULL, (LPVOID *)&buffer, 0) != AUI_ERRCODE_OK) {
+	if (surface->Lock(NULL, (LPVOID *)&buffer, 0) != AUI_ERRCODE_OK)
+	{
 		delete surface;
 		delete image;
 		return;
@@ -742,18 +726,10 @@ void LoadSaveWindow::SetRadarMap(SaveInfo *info)
 	Pixel16 *   radarDataPtr = info->radarMapData;
 	sint32      pitch = surface->Pitch();
 
-	for (sint32 i=0; i<height; i++) {
+	for (sint32 i=0; i<height; i++)
+	{
 		Pixel16 * bufferDataPtr = buffer + i * (pitch/2);
 		memcpy(bufferDataPtr, radarDataPtr, width * sizeof(Pixel16));
-
-
-
-
-
-
-
-
-
 
 		radarDataPtr += width;
 	}
@@ -790,10 +766,6 @@ void LoadSaveWindow::SetNote(MBCHAR *note)
 	if (!m_noteTextBox) return;
 	m_noteTextBox->SetFieldText(note);
 }
-
-
-
-
 
 BOOL LoadSaveWindow::GetGameName(MBCHAR *name)
 {
@@ -845,7 +817,7 @@ void LoadSaveWindow::SetGameInfo(GameInfo *info)
 {
 	m_gameInfo = info;
 	MBCHAR *noname = "";
-    SetGameName(info ? info->name : noname);
+	SetGameName(info ? info->name : noname);
 	FillListTwo(info);
 }
 
@@ -901,7 +873,6 @@ void LoadSaveWindow::SetSaveInfo(SaveInfo *info)
 	m_tabGroup->ShouldDraw(TRUE);
 }
 
-
 void LoadSaveWindow::BuildDefaultSaveName(MBCHAR *gameName, MBCHAR *name)
 {
 	MBCHAR		civName[k_MAX_NAME_LEN];
@@ -917,12 +888,17 @@ void LoadSaveWindow::BuildDefaultSaveName(MBCHAR *gameName, MBCHAR *name)
 	if (gameName == NULL)
 	{
 		if (g_startInfoType == STARTINFOTYPE_CIVS ||
-			g_startInfoType == STARTINFOTYPE_POSITIONSFIXED) {
+			g_startInfoType == STARTINFOTYPE_POSITIONSFIXED)
+		{
 			strcpy(theGameName, g_theProfileDB->GetGameName());
-		} else {
+		}
+		else
+		{
 			strcpy(theGameName, g_theProfileDB->GetLeaderName());
 		}
-	} else {
+	}
+	else
+	{
 		strcpy(theGameName, gameName);
 	}
 #if !defined(_JAPANESE)
@@ -937,14 +913,17 @@ void LoadSaveWindow::BuildDefaultSaveName(MBCHAR *gameName, MBCHAR *name)
 
 	MBCHAR		saveName[_MAX_PATH];
 	if (g_startInfoType == STARTINFOTYPE_CIVS ||
-		g_startInfoType == STARTINFOTYPE_POSITIONSFIXED) {
+		g_startInfoType == STARTINFOTYPE_POSITIONSFIXED)
+	{
 		MBCHAR tempName[k_MAX_NAME_LEN];
 		strcpy(tempName, g_theProfileDB->GetLeaderName());
 #if !defined(_JAPANESE)
 		tempName[SAVE_LEADER_NAME_SIZE] = '\0';
 		c3files_StripSpaces(tempName);
 		sprintf(saveName, "%s-%s-%s", tempName, civName, theYear);
-	} else {
+	}
+	else
+	{
 		sprintf(saveName, "%s-%s-%s", theGameName, civName, theYear);
 #else
 		c3files_StripSpaces(tempName);
@@ -975,15 +954,6 @@ bool LoadSaveWindow::NoName( void )
 	return 0 == strcmp(s, "");
 }
 
-
-
-
-
-
-
-
-
-
 LSCivsListItem::LSCivsListItem(AUI_ERRCODE *retval, MBCHAR *ldlBlock, const MBCHAR *name)
 :
 	aui_ImageBase(ldlBlock),
@@ -991,7 +961,6 @@ LSCivsListItem::LSCivsListItem(AUI_ERRCODE *retval, MBCHAR *ldlBlock, const MBCH
 	c3_ListItem( retval, ldlBlock),
 	m_myItem(NULL)
 {
-
 	m_myItem = spNew_c3_Static(retval, ldlBlock, "CivText");
 	if(m_myItem) {
 
@@ -1021,23 +990,22 @@ sint32 LSCivsListItem::Compare(c3_ListItem *item2, uint32 column)
 	return 0;
 }
 
-
 LSGamesListItem::LSGamesListItem(AUI_ERRCODE *retval, MBCHAR *ldlBlock, GameInfo *info)
 :
 	c3_ListItem     (retval, ldlBlock),
 	m_itemIcon      (NULL),
 	m_itemText      (NULL),
-    m_info          (info)
+	m_info          (info)
 {
 	m_itemIcon = spNew_c3_Static(retval, ldlBlock, "GamesIcon");
 	if (m_itemIcon)
-    {
+	{
 		AddChild(m_itemIcon);
 	}
 
 	m_itemText = spNew_c3_Static(retval, ldlBlock, "GamesText");
 	if (m_itemText)
-    {
+	{
 		m_itemText->Resize(Width()-m_itemIcon->Width()-5, Height());
 		m_itemText->Move(m_itemIcon->Width()+5, m_itemText->Y());
 
@@ -1072,23 +1040,22 @@ sint32 LSGamesListItem::Compare(c3_ListItem *item2, uint32 column)
 	return 0;
 }
 
-
 LSSavesListItem::LSSavesListItem(AUI_ERRCODE *retval, MBCHAR *ldlBlock, SaveInfo *info)
 :
-	c3_ListItem (retval, ldlBlock),
-	m_itemIcon  (NULL),
-	m_itemText  (NULL),
+    c3_ListItem (retval, ldlBlock),
+    m_itemIcon  (NULL),
+    m_itemText  (NULL),
     m_info      (info)
 {
 	m_itemIcon = spNew_c3_Static(retval, ldlBlock, "SavesIcon");
 	if (m_itemIcon)
-    {
+	{
 		AddChild(m_itemIcon);
 	}
 
 	m_itemText = spNew_c3_Static(retval, ldlBlock, "SavesText");
 	if (m_itemText)
-    {
+	{
 		m_itemText->Resize(Width()-m_itemIcon->Width()-5, Height());
 		m_itemText->Move(m_itemIcon->Width()+5, m_itemText->Y());
 
@@ -1105,21 +1072,20 @@ LSSavesListItem::LSSavesListItem(AUI_ERRCODE *retval, MBCHAR *ldlBlock, SaveInfo
 		m_itemText->SetText(name);
 
 		if (strstr(name, g_theStringDB->GetNameStr("AUTOSAVE_NAME")))
-        {
+		{
 			m_itemText->SetTextColor(g_colorSet->GetColorRef(COLOR_GRAY));
 		}
 		else if (info->isScenario)
-        {
+		{
 			m_itemText->SetTextColor(g_colorSet->GetColorRef(COLOR_DARK_GREEN));
 		}
-        else if (info->startInfoType != STARTINFOTYPE_NONE)
-        {
+		else if (info->startInfoType != STARTINFOTYPE_NONE)
+		{
 			m_itemText->SetTextColor(g_colorSet->GetColorRef(COLOR_BLUE));
 		}
-        // else No action: Keep default color
+		// else No action: Keep default color
 
 		m_itemIcon->AddChild(m_itemText);
-
 	}
 }
 

@@ -101,9 +101,6 @@ AUI_ERRCODE VideoWindow::CreateVideoSurface(MBCHAR *name, BOOL modal)
 
 	m_video->GetVideoRect(&rect);
 
-
-
-
 	Resize(rect.right-rect.left+20, rect.bottom-rect.top+40);
 
 	m_surface = aui_Factory::new_Surface(errcode, m_width, m_height);

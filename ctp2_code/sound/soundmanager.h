@@ -137,8 +137,7 @@ public:
 	void             SetLastTrack(const sint32 &track);
 
 	void StupidPlaySound(const sint32 &soundID);
-	void PlaySound(const MBCHAR *fullFilename, const bool &bNoWait);
-
+	void PlayManagedSound(const MBCHAR *fullFilename, const bool &bNoWait);
 	void ReleaseSoundDriver();
 	void ReacquireSoundDriver();
 

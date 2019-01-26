@@ -278,7 +278,7 @@ void DiplomaticRequestData::Dump(const sint32 i)
 			break ;
 
 		case REQUEST_TYPE_DEMAND_CITY :
-			DPRINTF(k_DBG_INFO, ("%d - From P%d to P%d : demand City #%d\n", i, m_owner, m_recipient, m_targetCity)) ;
+			DPRINTF(k_DBG_INFO, ("%d - From P%d to P%d : demand City #%d\n", i, m_owner, m_recipient, m_targetCity.m_id)) ;
 			break ;
 
 		case REQUEST_TYPE_DEMAND_MAP :
@@ -310,7 +310,7 @@ void DiplomaticRequestData::Dump(const sint32 i)
 			break ;
 
 		case REQUEST_TYPE_OFFER_CITY :
-			DPRINTF(k_DBG_INFO, ("%d - From P%d to P%d : offer of City #%d\n", i, m_owner, m_recipient, m_targetCity)) ;
+			DPRINTF(k_DBG_INFO, ("%d - From P%d to P%d : offer of City #%d\n", i, m_owner, m_recipient, m_targetCity.m_id)) ;
 			break ;
 
 		case REQUEST_TYPE_OFFER_MAP :
@@ -330,7 +330,7 @@ void DiplomaticRequestData::Dump(const sint32 i)
 			break ;
 
 		case REQUEST_TYPE_OFFER_PACT_CAPTURE_CITY :
-			DPRINTF(k_DBG_INFO, ("%d - From P%d to P%d : offer pact to capture City #%d\n", i, m_owner, m_recipient, m_targetCity)) ;
+			DPRINTF(k_DBG_INFO, ("%d - From P%d to P%d : offer pact to capture City #%d\n", i, m_owner, m_recipient, m_targetCity.m_id)) ;
 			break ;
 
 		case REQUEST_TYPE_OFFER_PACT_END_POLLUTION :
@@ -342,7 +342,7 @@ void DiplomaticRequestData::Dump(const sint32 i)
 			break ;
 
 		case REQUEST_TYPE_EXCHANGE_CITY :
-			DPRINTF(k_DBG_INFO, ("%d - From P%d to P%d : exchange City #%d for City #%d\n", i, m_owner, m_recipient, m_reciprocalCity, m_targetCity)) ;
+			DPRINTF(k_DBG_INFO, ("%d - From P%d to P%d : exchange City #%d for City #%d\n", i, m_owner, m_recipient, m_reciprocalCity.m_id, m_targetCity.m_id)) ;
 			break ;
 
 		case REQUEST_TYPE_EXCHANGE_MAP :

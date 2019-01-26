@@ -4,17 +4,18 @@
 
 sint32 g_check_mem;
 
-#ifndef _DEBUG_MEMORY
+#if !defined(_DEBUG_MEMORY) // || !defined(_BFR_) // Some error checking for the final version, but probably should be disabled in the final version, can be done withe the comment
 
 void* operator new(const size_t size)
 {
-    Assert (0 < size);
+	Assert (0 < size);
 	void* ptr = malloc(size);
 	Assert(ptr != NULL);
 
-	if(ptr == NULL) {
-#ifdef _AIDLL
-#ifdef _DEBUG
+	if(ptr == NULL)
+	{
+#if defined(_AIDLL)
+#if defined(_DEBUG)
 		MBCHAR s[256];
 		sprintf(s, "EXE: Failed to allocate Block of size %ld\n", size);
 		c3ai_Log(s);
@@ -25,24 +26,30 @@ void* operator new(const size_t size)
 		exit(-1);
 	}
 
-	if (g_check_mem) {
-        Assert(_CrtCheckMemory());
-    }
+#if defined(WIN32)
+	if (g_check_mem)
+	{
+		Assert(_CrtCheckMemory());
+	}
+#endif
 
 	return ptr;
 }
 
 void operator delete(void *ptr)
 {
-
 	if(ptr == NULL)
 		return;
-	free(ptr);
-    ptr = NULL;
 
-    if (g_check_mem) {
-        Assert(_CrtCheckMemory());
-    }
+	free(ptr);
+	ptr = NULL;
+
+#if defined(WIN32)
+	if (g_check_mem)
+	{
+		Assert(_CrtCheckMemory());
+	}
+#endif
 }
 
 #endif

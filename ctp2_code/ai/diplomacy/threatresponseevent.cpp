@@ -91,8 +91,8 @@ STDEHANDLER(DestroyCityAccept_ThreatResponseEvent)
 	if (!g_theUnitPool->IsValid(city.m_id))
 		return GEV_HD_Continue;
 
-	sint32 value_at_risk = MapAnalysis::GetMapAnalysis().GetAlliedValue(receiver,city.RetPos());
-	sint32 max_value = MapAnalysis::GetMapAnalysis().GetMaxAlliedValue(receiver);
+	sint32 value_at_risk = MapAnalysis::GetMapAnalysis().GetAlliedCityValue(receiver,city.RetPos());
+	sint32 max_value = MapAnalysis::GetMapAnalysis().GetMaxAlliedCityValue(receiver);
 
 	if (sender_nukes > 0 || sender_nano > 0)
 	{
@@ -208,7 +208,7 @@ STDEHANDLER(DeclareWarAccept_ThreatResponseEvent)
 									 sender_result,
 									 receiver_result );
 
-	sint32 max_value = MapAnalysis::GetMapAnalysis().GetMaxAlliedValue(receiver);
+	sint32 max_value = MapAnalysis::GetMapAnalysis().GetMaxAlliedCityValue(receiver);
 
 	sint32 value_at_stake =
 		(-1 * receiver_result.gold) +

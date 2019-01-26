@@ -55,6 +55,9 @@
 #include "ctp2_Static.h"
 #include "spnewgamewindow.h"        // spNew_ctp2_Button
 
+
+extern  BOOL  g_runSpriteEditor;
+
 InitPlayWindow::InitPlayWindow
 (
     AUI_ERRCODE *       retval,
@@ -120,7 +123,7 @@ InitPlayWindow::InitPlayWindow
                         (retval, aui_UniqueId(), "InitPlayWindow.TestTextBox")
                     )
 {
-#ifndef _DEBUG
+  if (!g_runSpriteEditor){
     m_spriteTest->Hide();
-#endif
+  }
 }

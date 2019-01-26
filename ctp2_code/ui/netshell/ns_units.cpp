@@ -27,13 +27,15 @@
 // - Initialized local variables. (Sep 9th 2005 Martin Gühmann)
 //
 //----------------------------------------------------------------------------
-
 #include "c3.h"
+#include <algorithm>
+
 #include "ns_units.h"
 
 #include "aui_stringtable.h"
 #include "StrDB.h"              // g_theStringDB
 #include "UnitRecord.h"         // g_theUnitDB
+#include <algorithm>
 
 ns_Units *  g_nsUnits = NULL;
 

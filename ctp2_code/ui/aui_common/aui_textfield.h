@@ -123,6 +123,7 @@ public:
 	static void HitEnter( HWND hwnd );
 #else
 	void HitEnter();
+	virtual bool HandleKey(uint32 wParam);
 #endif
 	static BOOL IsFileName( HWND hwnd );
 	static sint32 GetMaxFieldLen( HWND hwnd );
@@ -162,11 +163,11 @@ public:
 };
 
 
-#ifdef __AUI_USE_DIRECTX__
+#if defined(__AUI_USE_DIRECTX__)
 LRESULT CALLBACK TextFieldWindowProc( HWND hwnd, UINT message, WPARAM wParam, LPARAM lParam );
 int CALLBACK EnumTextFontsProc( LOGFONT *lplf, TEXTMETRIC *lptm, DWORD dwType, LPARAM lParam );
 #elif defined(__AUI_USE_SDL__)
-void TextFieldWindowProc(SDL_Event &event);
+void TextFieldWindowProc(SDL_Event &event); //this does not exist and should process key-press events, using HandleKey instead similar to SDLMessageHandler (civ3_main.cpp) and aui_ListBox::HandleKey
 #endif
 
 #endif

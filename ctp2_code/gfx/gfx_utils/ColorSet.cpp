@@ -38,11 +38,14 @@
 #include "c3.h"
 #include "colorset.h"
 
+#include <algorithm>
+
 #include "c3errors.h"
 #include "c3files.h"
 #include "pixelutils.h"
 #include <stdexcept>    // std::exception, std::runtime_error
 #include "Token.h"
+#include <algorithm>
 
 extern sint32 g_is565Format;
 

@@ -41,7 +41,7 @@
 // Library dependencies
 //----------------------------------------------------------------------------
 
-#include <memory>          // std::auto_ptr
+#include <memory>          // std::unique_ptr
 
 //----------------------------------------------------------------------------
 // Export overview
@@ -82,18 +82,18 @@ public:
     );
 
 private:
-    std::auto_ptr<ctp2_Button>  m_spriteTest;
-    std::auto_ptr<ctp2_Button>  m_email;
-    std::auto_ptr<ctp2_Button>  m_hotseat;
-    std::auto_ptr<ctp2_Button>  m_mp;
-    std::auto_ptr<ctp2_Button>  m_credits;
-    std::auto_ptr<ctp2_Button>  m_quit;
-    std::auto_ptr<ctp2_Button>  m_tutorial;
-    std::auto_ptr<ctp2_Button>  m_newgame;
-    std::auto_ptr<ctp2_Button>  m_loadgame;
-    std::auto_ptr<ctp2_Button>  m_options;
-    std::auto_ptr<c3_Static>    m_background;
-    std::auto_ptr<ctp2_Static>  m_testBox;
+    std::unique_ptr<ctp2_Button>  m_spriteTest;
+    std::unique_ptr<ctp2_Button>  m_email;
+    std::unique_ptr<ctp2_Button>  m_hotseat;
+    std::unique_ptr<ctp2_Button>  m_mp;
+    std::unique_ptr<ctp2_Button>  m_credits;
+    std::unique_ptr<ctp2_Button>  m_quit;
+    std::unique_ptr<ctp2_Button>  m_tutorial;
+    std::unique_ptr<ctp2_Button>  m_newgame;
+    std::unique_ptr<ctp2_Button>  m_loadgame;
+    std::unique_ptr<ctp2_Button>  m_options;
+    std::unique_ptr<c3_Static>    m_background;
+    std::unique_ptr<ctp2_Static>  m_testBox;
 };
 
 //----------------------------------------------------------------------------

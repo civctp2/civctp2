@@ -85,11 +85,11 @@ public:
 
 	static void AddForeignerGoalsForCity(const Unit & city, const PLAYER_INDEX ownerId);
 
-	static void AddOwnerGoalsForCity(const Unit & city, const PLAYER_INDEX foreignerId);
+	static void AddGoalsForCitiesAndArmies(const PLAYER_INDEX player);
 
 	static void GroupWithEscort(const Army & army);
 
-	static void AddGoalsForArmy(const Army & army);
+	static void AddAgentForArmy(const Army & army);
 
 	static bool GetNearestRefuel(const Army & army, const MapPoint & start_pos, MapPoint & refueling_pos, sint32 & refueling_distance);
 

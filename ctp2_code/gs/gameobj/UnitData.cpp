@@ -1405,7 +1405,6 @@ double UnitData::GetAttack(const UnitRecord *rec, const Unit defender) const
 void UnitData::Bombard(const UnitRecord *rec, Unit defender,
 					   bool isCounterBombardment)
 {
-	Cell *	cell    = g_theWorld->GetCell(m_pos);
 	sint32 f = (sint32)(rec->GetFirepower() /
 		defender.GetDBRec()->GetArmor());
 	sint32 n;
@@ -2350,9 +2349,9 @@ void UnitData::Serialize(CivArchive &archive)
 
 		archive>>tmp ;
 		delete m_city_data;
-        m_city_data = (tmp) ? new CityData(archive) : NULL;
+		m_city_data = (tmp) ? new CityData(archive) : NULL;
 
-        delete m_actor;
+		delete m_actor;
 		m_actor = new UnitActor(archive);
 
 		m_sprite_state = m_actor->GetSpriteState();
@@ -4767,13 +4766,6 @@ bool UnitData::CanSee(const Army &al) const
 	}
 	return false;
 }
-
-#ifdef _DEBUG
-void UnitData::SetIgnoreHappiness(bool v)
-{
-	m_city_data->SetIgnoreHappiness(v);
-}
-#endif
 
 void UnitData::MakeCitizen(PopDBIndex pi, const MapPoint &point, sint32 origOwner)
 {

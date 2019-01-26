@@ -27,10 +27,14 @@
 
 #include "c3.h"
 #include "Exclusions.h"
+
+#include <algorithm>
+
 #include "BuildingRecord.h"
 #include "WonderRecord.h"
 #include "civarchive.h"
 #include "UnitRecord.h"
+#include <algorithm>
 
 Exclusions *g_exclusions = NULL;
 

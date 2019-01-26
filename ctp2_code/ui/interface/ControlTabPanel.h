@@ -75,13 +75,13 @@ public:
 
 private:
 
-	std::auto_ptr<MBCHAR> m_ldlBlock;
+	std::unique_ptr<MBCHAR> m_ldlBlock;
 
-	std::auto_ptr<DomesticControlPanel>	m_domesticControlPanel;
-	std::auto_ptr<CityControlPanel>		m_cityControlPanel;
-	std::auto_ptr<UnitControlPanel>		m_unitControlPanel;
-	std::auto_ptr<MessageControlPanel>	m_messageControlPanel;
-	std::auto_ptr<TilesControlPanel>	m_tilesControlPanel;
+	std::unique_ptr<DomesticControlPanel>	m_domesticControlPanel;
+	std::unique_ptr<CityControlPanel>		m_cityControlPanel;
+	std::unique_ptr<UnitControlPanel>		m_unitControlPanel;
+	std::unique_ptr<MessageControlPanel>	m_messageControlPanel;
+	std::unique_ptr<TilesControlPanel>	m_tilesControlPanel;
 };
 
 #endif

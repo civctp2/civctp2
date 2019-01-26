@@ -27,6 +27,9 @@
 //----------------------------------------------------------------------------
 
 #include "c3.h"
+
+#include <functional>
+
 #include "FeatTracker.h"
 #include "newturncount.h"
 #include "player.h"

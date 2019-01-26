@@ -1,3 +1,39 @@
+//----------------------------------------------------------------------------
+//
+// Project      : Call To Power 2
+// File type    : C++ source
+// Description  : Net functionality (find something better if you don't like this description ;))
+//
+//----------------------------------------------------------------------------
+//
+// Disclaimer
+//
+// THIS FILE IS NOT GENERATED OR SUPPORTED BY ACTIVISION.
+//
+// This material has been developed at apolyton.net by the Apolyton CtP2
+// Source Code Project. Contact the authors at ctp2source@apolyton.net.
+//
+//----------------------------------------------------------------------------
+//
+// Compiler flags
+//
+// _DEBUG
+// Generate debug information.
+// USE_SDL
+// Use SDL API calls
+// WIN32
+// Use MS Windows32 API calls
+//
+//----------------------------------------------------------------------------
+//
+// Modifications from the original Activision code:
+//
+// - Added SDL support.
+// - Make the Linux version loading and producing Windows compatible
+//   savegames. (16-Jan-2019 Martin Gühmann)
+//
+//----------------------------------------------------------------------------
+
 #ifdef HAVE_PRAGMA_ONCE
 #pragma once
 #endif
@@ -30,7 +66,8 @@
 #define NETFUNC_CONNECT_PARAMETER       void *
 #endif
 
-class NETFunc {
+class NETFunc
+{
 public:
 
 	static dp_species_t GameType;
@@ -44,7 +81,8 @@ public:
 	static	char	sessionname[dp_SNAMELEN];
 
 
-enum STATUS {
+enum STATUS
+{
 	OK = 0,
 	ERR,
 	BADPASSWORD,
@@ -72,17 +110,11 @@ enum STATUS {
 	RESET
 };
 
-
-
-
-
 static void StringMix(int c, char *mix, char *msg, ...);
-
-
 static char *StringDup(char *s);
 
-
-class Timer {
+class Timer
+{
 	DWORD	start;
 	DWORD	finish;
 	bool	done;
@@ -97,12 +129,11 @@ public:
 Timer timer;
 Timer timeout;
 
-
-struct KeyStruct {
+struct KeyStruct
+{
 	short len;
 	char buf[dp_KEY_MAXLEN + 2];
 };
-
 
 class Keys {
 friend class NETFunc;
@@ -114,8 +145,8 @@ public:
 	void NextKey(void);
 };
 
-
-class Key {
+class Key
+{
 friend class NETFunc;
 protected:
 	KeyStruct key;
@@ -127,6 +158,9 @@ public:
 
 	Key(KeyStruct *k);
 
+	void WriteToFile(FILE *saveFile) const;
+	void ReadFromFile(FILE *saveFile);
+
 	bool Equals(Key *k);
 
 	bool Equals(KeyStruct *k);
@@ -136,12 +170,9 @@ public:
 	KeyStruct *GetKey(void);
 };
 
-
-
-
-
 template<class T>
-class List:public std::list<T *> {
+class List:public std::list<T *>
+{
 friend class NETFunc;
 public:
 	typename List<T>::iterator Find(T *t)
@@ -234,10 +265,8 @@ public:
 
 class Messages;
 
-
-
-
-class Message:public Key {
+class Message:public Key
+{
 friend class NETFunc;
 	char *body;
 	dpid_t sender;
@@ -247,7 +276,6 @@ friend class NETFunc;
 #define nf_PACKET_INITIALBYTE 'n'
 #define ns_PACKET_INITIALBYTE 's'
 public:
-
 
 	enum Code {
 		ENTERGAME			= dppt_MAKE(nf_PACKET_INITIALBYTE, 0),
@@ -320,7 +348,8 @@ friend class Message;
 
 
 
-class Messages:public List<Message> {
+class Messages:public List<Message>
+{
 public:
 
 	Messages(void);
@@ -333,13 +362,8 @@ public:
 };
 static Messages messages;
 
-
-
-
-
-
-
-class Packet {
+class Packet
+{
 #define nf_MAX_PACKETSIZE dpio_MAXLEN_RELIABLE - sizeof(Message::CODE)
 public:
 	typedef unsigned char SizeT;
@@ -350,6 +374,9 @@ protected:
 
 	char	*first;
 public:
+
+	void WriteToFile(FILE *saveFile) const;
+	void ReadFromFile(FILE *saveFile);
 
 	char *GetBody(void) {
 		return body;
@@ -429,7 +456,8 @@ public:
 
 
 
-class MessageHandler {
+class MessageHandler
+{
 #define nf_MAX_HANDLERS 128
 
 	static MessageHandler *hList[nf_MAX_HANDLERS];
@@ -456,7 +484,8 @@ public:
 
 
 template<class T>
-class ListHandler:public MessageHandler, public List<T>, public Key {
+class ListHandler:public MessageHandler, public List<T>, public Key
+{
 	STATUS status;
 public:
 
@@ -513,7 +542,8 @@ static STATUS EnumPlayers(bool b, KeyStruct *k);
 
 
 
-class Server:public Key {
+class Server:public Key
+{
 	dp_serverInfo_t server;
 public:
 
@@ -538,7 +568,8 @@ public:
 
 
 
-class Contact:public Key {
+class Contact:public Key
+{
 	char	*name;
 	char	*number;
 public:
@@ -561,7 +592,8 @@ public:
 
 
 
-class ContactList:public List<Contact> {
+class ContactList:public List<Contact>
+{
 public:
 
 	ContactList(void);
@@ -573,7 +605,8 @@ ContactList	contactList;
 
 
 
-class Port:public Key {
+class Port:public Key
+{
 #define nf_PORTINITLEN 128
 	commPortName_t port;
 	int		baud;
@@ -600,7 +633,8 @@ public:
 class Transport;
 
 
-class PortList:public List<Port> {
+class PortList:public List<Port>
+{
 public:
 
 	PortList(Transport *t);
@@ -620,7 +654,8 @@ static NETFUNC_CONNECT_RESULT ReConnectThread(NETFUNC_CONNECT_PARAMETER);
 
 
 
-class Transport:public Key {
+class Transport:public Key
+{
 friend class PortList;
 protected:
 	dp_transport_t		transport;
@@ -630,7 +665,8 @@ protected:
 	STATUS status;
 public:
 
-	enum TYPE {
+	enum TYPE
+	{
 		UNKNOWN,
 		INTERNET,
 		IPX,
@@ -667,7 +703,8 @@ public:
 
 
 
-class TransportSetup {
+class TransportSetup
+{
 	dp_transport_t		transport;
 	commInitReq_t		parameters;
 
@@ -694,7 +731,8 @@ friend class TransportSetup;
 static Transport::TYPE GetTransportType(const comm_driverInfo_t *c);
 
 
-class Internet:public Transport {
+class Internet:public Transport
+{
 public:
 
 	Internet(const comm_driverInfo_t *d, const dp_transport_t *t, KeyStruct *k);
@@ -708,7 +746,8 @@ public:
 friend class Internet;
 
 
-class IPX:public Transport {
+class IPX:public Transport
+{
 public:
 
 	IPX(const comm_driverInfo_t *d, const dp_transport_t *t, KeyStruct *k);
@@ -720,7 +759,8 @@ public:
 friend class IPX;
 
 
-class Modem:public Transport {
+class Modem:public Transport
+{
 public:
 
 	Modem(const comm_driverInfo_t *d, const dp_transport_t *t, KeyStruct *k);
@@ -736,7 +776,8 @@ public:
 friend class Modem;
 
 
-class NullModem:public Transport {
+class NullModem:public Transport
+{
 public:
 
 	NullModem(const comm_driverInfo_t *d, const dp_transport_t *t, KeyStruct *k);
@@ -750,7 +791,8 @@ public:
 friend class NullModem;
 
 
-class TransportList:public List<Transport> {
+class TransportList:public List<Transport>
+{
 	KeyStruct key;
 
 	static NETFUNC_CALLBACK_RESULT(void)
@@ -773,7 +815,8 @@ friend class TransportList;
 
 
 
-class AIPlayer:public Key, public Packet {
+class AIPlayer:public Key, public Packet
+{
 friend class NETFunc;
 protected:
 	char	name[dp_PNAMELEN];
@@ -805,7 +848,8 @@ public:
 friend class AIPlayer;
 
 
-class AIPlayers:public List<AIPlayer>, public Keys {
+class AIPlayers:public List<AIPlayer>, public Keys
+{
 protected:
 
 	STATUS Send(dp_t *p, dpid_t id, dpid_t from = dp_ID_BROADCAST);
@@ -825,7 +869,8 @@ class Players;
 
 
 
-class Player:public Key {
+class Player:public Key
+{
 friend class NETFunc;
 friend class Players;
 #define nf_GROUPMASTER	0x40
@@ -881,7 +926,8 @@ static Player player;
 static dp_uid_t userId;
 
 
-class Players:public List<Player> {
+class Players:public List<Player>
+{
 public:
 
 	Players(Players *l = NULL);
@@ -900,7 +946,8 @@ Players players;
 friend class Players;
 
 
-class PlayerStat:public Key, public Packet {
+class PlayerStat:public Key, public Packet
+{
 friend class NETFunc;
 protected:
 	char	name[dp_PNAMELEN];
@@ -942,7 +989,8 @@ public:
 friend class PlayerStat;
 
 
-class PlayerStats:public List<PlayerStat> {
+class PlayerStats:public List<PlayerStat>
+{
 protected:
 
 	STATUS Send(dp_t *p, dpid_t id, dpid_t from = dp_ID_BROADCAST);
@@ -959,18 +1007,8 @@ public:
 PlayerStats *playerStats;
 friend class PlayerStats;
 
-
-
-
-
-
-
-
-
-
-
-
-class PlayerSetup:public Player, public Packet {
+class PlayerSetup:public Player, public Packet
+{
 friend class NETFunc;
 #define nf_PLAYERDESCLEN 128
 private:
@@ -1013,20 +1051,10 @@ public:
 };
 friend class PlayerSetup;
 
-
-
-
-
-
-
-
-
-
-
-
 class Game;
 class Lobby;
-class Session:public Key {
+class Session:public Key
+{
 friend class NETFunc;
 friend class ListHandler<Game>;
 friend class ListHandler<Lobby>;
@@ -1041,6 +1069,9 @@ public:
 	Session(void);
 
 	Session(dp_object_t *o, KeyStruct *k, long f);
+
+	void WriteToFile(FILE *saveFile) const;
+	void ReadFromFile(FILE *saveFile);
 
 	char *GetName(void);
 
@@ -1070,7 +1101,8 @@ static Session session;
 friend class Session;
 
 
-class Game:public Session {
+class Game:public Session
+{
 friend class NETFunc;
 #define nf_LAUNCHED 0x40
 #define nf_SYNCLAUNCH 0x20
@@ -1083,6 +1115,9 @@ public:
 	Game(dp_object_t *o, KeyStruct *k, long f);
 
 	Game(Session *s);
+
+	void WriteToFile(FILE *saveFile) const;
+	void ReadFromFile(FILE *saveFile);
 
 	char GetGroups();
 
@@ -1115,10 +1150,8 @@ public:
 static Lobby lobby;
 friend class Lobby;
 
-
-
-
-class PlayerList {
+class PlayerList
+{
 	public:
 	class Players:public ListHandler<Player> {
 		void Insert(Player *) {};
@@ -1138,14 +1171,8 @@ class PlayerList {
 	Player *FindPlayer(dpid_t id);
 };
 
-
-
-
-
-
-
-
-class GameSetup:public Game, public Packet {
+class GameSetup : public Game, public Packet
+{
 friend class NETFunc;
 #define nf_GAMEDESCLEN 128
 	char	description[nf_GAMEDESCLEN];
@@ -1166,6 +1193,9 @@ public:
 	GameSetup(Game *g);
 
 	~GameSetup();
+
+	void WriteToFile(FILE *saveFile) const;
+	void ReadFromFile(FILE *saveFile);
 
 	char *GetDescription(void);
 
