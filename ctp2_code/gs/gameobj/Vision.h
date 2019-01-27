@@ -228,6 +228,24 @@ public:
 	//	DPRINTF(k_DBG_AI, ("m_mergeFrom:             %d\n", m_mergeFrom));
 		DPRINTF(k_DBG_AI, ("\n"));
 	}
+
+	#include <stdio.h>
+	
+	void PrintDataTerminal()
+	{
+		printf("\n");
+		printf("Data of Vision class:\n");
+		printf("m_width:                 %d\n", m_width);
+		printf("m_height:                %d\n", m_height);
+		printf("m_owner:                 %d\n", m_owner);
+		printf("m_xyConversion:          %d\n", m_xyConversion);
+		printf("m_isYwrap:               %d\n", m_isYwrap);
+		printf("m_amOnScreen:            %d\n", m_amOnScreen);
+	//	printf("m_array:                 %d\n", m_array);
+	//	printf("m_unseenCells:           %d\n", m_unseenCells);
+	//	printf("m_mergeFrom:             %d\n", m_mergeFrom);
+		printf("\n");
+	}
 #endif
 };
 
