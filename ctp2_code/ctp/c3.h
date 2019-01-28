@@ -118,10 +118,10 @@
 #include <time.h>
 
 #if defined(__GNUC__)
-//#define _MAX_PATH PATH_MAX
+#define _MAX_PATH PATH_MAX
 // Needs to be 260 otherwise you cannot load savegames from Windows.
 // Maybe this screws up something else.
-#define _MAX_PATH   260 // max. length of full pathname
+//#define _MAX_PATH   260 // max. length of full pathname
 
 #endif // __GNUC__
 

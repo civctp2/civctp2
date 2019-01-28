@@ -733,6 +733,38 @@ private:
 		DPRINTF(k_DBG_AI, ("m_temp_visibility_array: %d\n", sizeof(m_temp_visibility_array)));
 		DPRINTF(k_DBG_AI, ("\n"));
 	}
+
+	#include <stdio.h>
+
+	void PrintDataTerminal()
+	{
+		printf("\n");
+		printf("Data of the UnitData class:\n");
+		printf("m_id: %d\n",                    m_id);
+		printf("m_hp: %f\n",                    m_hp);
+		printf("m_movement_points: %f\n",       m_movement_points);
+		printf("m_cargo_list: %x\n",            m_cargo_list);
+		printf("m_city_data: %x\n",             m_city_data);
+		printf("m_sprite_state: %x\n",          m_sprite_state);
+		printf("m_actor: %x\n",                 m_actor);
+		printf("m_roundTheWorldMask: %x\n",     m_roundTheWorldMask);
+		printf("m_army: %x\n",                  m_army.m_id);
+		printf("m_transport: %d\n",             m_transport.m_id);
+		printf("m_target_city: %d\n",           m_target_city.m_id);
+		printf("m_owner: %d\n",                 m_owner);
+		printf("m_fuel: %d\n",                  m_fuel);
+		printf("m_type: %d\n",                  m_type);
+		printf("m_visibility: %d\n",            m_visibility);
+		printf("m_ever_visible: %d\n",          m_ever_visible);
+		printf("m_temp_visibility: %d\n",       m_temp_visibility);
+		printf("m_radar_visibility: %d\n",      m_radar_visibility);
+		printf("m_flags: %d\n",                 m_flags);
+		printf("m_pos: %d, %d\n",               m_pos.x, m_pos.y);
+		printf("m_temp_visibility_array: %d\n", m_temp_visibility_array);
+		printf("m_lesser: %x\n",                m_lesser);
+		printf("m_greater: %x\n",               m_greater);
+		printf("\n");
+}
 #endif
 };
 
