@@ -1748,7 +1748,7 @@ messagebox '044TradePirateGold' {
 messagebox '045TradePirated' {
 	Text(ID_TRADE_PIRATED) ;
 	MessageType("PIRATE");
-}// String is not part of the ctp2.exe
+}
 
 messagebox '045aTradePiratedUnknown' {
 	Text(ID_TRADE_PIRATED_UNKOWN);
