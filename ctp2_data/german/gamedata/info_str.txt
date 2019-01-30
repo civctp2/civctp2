@@ -152,6 +152,7 @@ WAR_OVER				"Die {player[0].civ_name_plural} führen keinen Krieg mehr gegen die 
 
 ## Trade Messages ##
 TRADE_PIRATED				"{player[0].leader_name#SIR_CAP}, unser Handelsweg von {city[0].name} nach {city[1].name} wurde von den {player[1].civ_name_plural#DAT} überfallen."
+TRADE_PIRATE_GOLD			"Wir erbeuteten {gold[0].value} Gold als wir den Handelsweg von {city[0].name} nach {city[1].name} von {player[0].civ_name_plural#DAT} überfiehlen."
 TRADE_ROUTES_BROKEN_BY_EMBARGO		"{player[0].leader_name#SIR_CAP}, die {player[1].civ_name_plural} haben ein Handelsembargo gegen uns verhengt. Der Handel auf allen Handelswege {player[1].country_name#TOWARDS} wurde eingestellt! Außerdem haben wir alle Karawanen auf diesen Routen verloren."
 TRADE_ROUTES_BROKEN_BY_WAR		"Es gibt beunruhigende Neuigkeiten, {player[0].leader_name#SIR_CAP}. Wegen des zwischen uns und {player[1].country_name#DAT} entbrannten Konflikts wurde der Handel auf unseren Handelswegen, die in {player[1].civ_name_singular#UNDEF_PLURAL_ACC} Städte führen, eingestellt. Außerdem haben wir alle Karawanen, die dort unterwegs waren, verloren."
 SENDER_KILLED_TRADE_ROUTE		"{player[0].leader_name} hat den Handelsweg für den Handel mit {good[0].name#PLURAL} von {city[0].name} nach {city[1].name} eingestellt."

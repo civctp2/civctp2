@@ -102,8 +102,7 @@
 #include <ddraw.h>
 #include <dinput.h>
 #else
-#include "windows.h" // Defines HAVE_CONFIG_H
-#include "ctp2_config.h" // Needs HAVE_CONFIG_H defined, defines HAVE_INTTYPES_H and HAVE_STDINT_H
+#include "windows.h" // Defines HAVE_CONFIG_H, HAVE_INTTYPES_H and HAVE_STDINT_H
 #endif // WIN32
 
 #include "c3types.h" // Needs HAVE_INTTYPES_H and HAVE_STDINT_H defined

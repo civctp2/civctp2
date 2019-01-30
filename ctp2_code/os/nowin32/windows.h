@@ -29,6 +29,8 @@
 
 #define HAVE_UNISTD_H
 
+#include "ctp2_config.h" // Needs HAVE_CONFIG_H defined, defines HAVE_INTTYPES_H and HAVE_STDINT_H
+
 #include <assert.h>
 #include <string.h>
 #include <strings.h>
