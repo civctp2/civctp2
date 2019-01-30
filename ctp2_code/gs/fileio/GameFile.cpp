@@ -1443,16 +1443,16 @@ void GameFile::SaveExtendedGameInfo(FILE *saveFile, SaveInfo *info)
 		return;
 	}
 
-	MBCHAR name[k_SCENARIO_NAME_MAX];
-	memset(name, 0, k_SCENARIO_NAME_MAX);
+	MBCHAR name[260];
+	memset(name, 0, 260);
 
 	if(strlen(g_scenarioName) > 0) // Problem in Multiplayer
 	{
-		strcpy(name, g_scenarioName);
+		strncpy(name, g_scenarioName, 260);
 	}
 
-	n = c3files_fwrite(name, sizeof(MBCHAR), k_SCENARIO_NAME_MAX, saveFile);
-	if(n != k_SCENARIO_NAME_MAX)
+	n = c3files_fwrite(name, sizeof(MBCHAR), 260, saveFile);
+	if(n != 260)
 	{
 		c3errors_FatalDialog(functionName, errorString);
 		return;
