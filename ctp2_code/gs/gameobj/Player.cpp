@@ -750,8 +750,8 @@ void Player::Serialize(CivArchive &archive)
 		m_networkGuid.Data1 = static_cast<uint32>(archive.GetSINT32());
 
 		archive.LoadChunk((uint8 *)&m_networkId, ((uint8 *)&m_broken_alliances_and_cease_fires)
-			+ sizeof(m_broken_alliances_and_cease_fires));
-
+						  + sizeof(m_broken_alliances_and_cease_fires));
+		
 //		archive.LoadChunk((uint8 *)&m_owner, ((uint8 *)&m_broken_alliances_and_cease_fires)
 //			+ sizeof(m_broken_alliances_and_cease_fires));
 
