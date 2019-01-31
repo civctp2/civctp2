@@ -395,9 +395,13 @@ MBCHAR *CivPaths::MakeAssetPath
 
 	sprintf(tempPath, "%s%s%s%s%s%s%s%s%s",
 	        s1, FILE_SEP, s2, FILE_SEP, s3, FILE_SEP, s4, FILE_SEP, s5);
-
+	
 	s = _fullpath(fullPath, tempPath, _MAX_PATH);
+#if defined(WIN32)
+	// The Linux version of _fullpath returns NULL
+	// if the path does not exist. This is valid behavior.
 	Assert(s != NULL);
+#endif
 	if(!s) return NULL;
 
 #ifdef WIN32
