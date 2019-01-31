@@ -647,10 +647,10 @@ void CityData::Serialize(CivArchive &archive)
 		archive.PutSINT32(m_gross_production);
 		archive.PutSINT32(m_net_production);
 		archive.PutSINT32(m_production_lost_to_crime);
-//		archive.PutSINT8(empty);
-//		archive.PutSINT8(empty);
-//		archive.PutSINT8(empty);
-//		archive.PutSINT8(empty);
+		archive.PutSINT8(empty);
+		archive.PutSINT8(empty);
+		archive.PutSINT8(empty);
+		archive.PutSINT8(empty);
 
 		archive.PutUINT64(m_built_improvements);
 		archive.PutUINT64(m_builtWonders);
