@@ -34,18 +34,14 @@
 //
 // Modifications from the original Activision code:
 //
-// - Debug memory uses size_t for things that are memory sizes (20-Jan-2019 Martin Gühmann)
+// - Debug memory uses size_t for things that are memory sizes (20-Jan-2019 Martin GÃ¼hmann)
 //
 //////////////////////////////////////////////////////////////////////////////
 
 #ifndef __DEBUGMEMORY_H
 #define __DEBUGMEMORY_H
 
-#include "ctp2_config.h" // Figures out if _DEBUG is defined on Linux
-
 #ifdef _DEBUG
-
-#include "windows.h"
 
 #ifdef __cplusplus
 extern "C" {

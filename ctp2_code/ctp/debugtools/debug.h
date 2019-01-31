@@ -36,8 +36,6 @@
 #pragma once
 #endif
 
-#include "ctp2_config.h" // Defines _DEBUG on Linux
-
 #ifdef _DEBUG
 
 #if defined(WIN32)

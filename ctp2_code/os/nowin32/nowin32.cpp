@@ -126,33 +126,81 @@ sint32 MessageBox(HWND parent, const CHAR* msg, const CHAR* title, sint32 flags)
 {
 	fprintf(stderr, "Messagebox(%s): %s\n", (title ? title : "null"), (msg ? msg : "null"));
 #ifdef USE_GTK
-	GtkWidget *dialog;
-	dialog = gtk_message_dialog_new(
-		NULL,
-		GTK_DIALOG_DESTROY_WITH_PARENT,
-		GTK_MESSAGE_ERROR,
-		GTK_BUTTONS_NONE,
-		"%s\n\n%s",
-		title,
-		msg
-	);
-	if((flags & MB_YESNO) == MB_YESNO)
+	GtkWidget *dialog = gtk_message_dialog_new
+	                     (
+	                      NULL,
+	                      GTK_DIALOG_DESTROY_WITH_PARENT,
+	                      GTK_MESSAGE_ERROR,
+	                      GTK_BUTTONS_NONE,
+	                      msg
+	                     );
+	gtk_window_set_title(GTK_WINDOW(dialog), title);
+	
+	if (flags & MB_OK)
 	{
 		gtk_dialog_add_buttons(GTK_DIALOG(dialog),
-							   GTK_STOCK_YES,
-							   GTK_STOCK_NO,
+							   GTK_STOCK_OK, IDOK,
+							   NULL);
+	}
+	else if(flags & MB_OKCANCEL)
+	{
+		gtk_dialog_add_buttons(GTK_DIALOG(dialog),
+							   GTK_STOCK_OK, IDOK,
+							   GTK_STOCK_CANCEL, IDCANCEL,
+							   NULL);
+	}
+	else if(flags & MB_ABORTRETRYIGNORE)
+	{
+		gtk_dialog_add_buttons(GTK_DIALOG(dialog),
+							   "_Abort", IDABORT,
+							   "_Retry", IDRETRY,
+							   "_Ignore", IDIGNORE,
+							   NULL);
+	}
+	else if(flags & MB_YESNOCANCEL)
+	{
+		gtk_dialog_add_buttons(GTK_DIALOG(dialog),
+							   GTK_STOCK_YES, IDYES,
+							   GTK_STOCK_NO, IDNO,
+							   GTK_STOCK_CANCEL, IDCANCEL,
+							   NULL);
+	}
+	else if(flags & MB_YESNO)
+	{
+		gtk_dialog_add_buttons(GTK_DIALOG(dialog),
+							   GTK_STOCK_YES, IDYES,
+							   GTK_STOCK_NO, IDNO,
+							   NULL);
+	}
+	else if(flags & MB_RETRYCANCEL)
+	{
+		gtk_dialog_add_buttons(GTK_DIALOG(dialog),
+							   "_Retry", IDRETRY,
+							   GTK_STOCK_CANCEL, IDCANCEL,
+							   NULL);
+	}
+	else if(flags & MB_CANCELTRYCONTINUE)
+	{
+		gtk_dialog_add_buttons(GTK_DIALOG(dialog),
+							   GTK_STOCK_CANCEL, IDCANCEL,
+							   "_Try", IDTRYAGAIN,
+							   "_Continue", IDCONTINUE,
 							   NULL);
 	}
 	else
 	{
 		gtk_dialog_add_buttons(GTK_DIALOG(dialog),
-							   GTK_STOCK_OK,
+							   GTK_STOCK_OK, IDOK,
 							   NULL);
 	}
-	gtk_dialog_run(GTK_DIALOG(dialog));
+
+	sint32 result = gtk_dialog_run(GTK_DIALOG(dialog));
 	gtk_widget_destroy(dialog);
+
+	return result;
+#else
+	return IDFAIL;
 #endif
-	return 0;
 }
 
 void SubtractRect(RECT* dst, const RECT* r1, const RECT* r2)

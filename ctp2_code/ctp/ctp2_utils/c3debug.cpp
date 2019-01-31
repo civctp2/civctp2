@@ -32,6 +32,7 @@
 //----------------------------------------------------------------------------
 
 #include "c3.h"
+#include "c3debug.h"
 
 #if defined(_DEBUG) || defined(USE_LOGGING)
 
@@ -308,8 +309,19 @@ void c3debug_Assert(char const *s, char const * file, int line)
 	}
 	while (0);
 #else
-	fprintf(stderr, "Assertion (%s) Failed in File:%s, Line:%ld\n", s, file, line);
-	std::raise(SIGINT);
+	MBCHAR str[64];
+	sprintf(str, "Assertion (%s) Failed in File:%s, Line:%ld\n", s, file, line);
+	fprintf(stderr, str);
+	sint32 result = MessageBox(NULL, str, "Assert", MB_ABORTRETRYIGNORE | MB_ICONEXCLAMATION);
+	
+	if(result == IDRETRY)
+	{
+		std::raise(SIGINT);
+	}
+	else if(result == IDABORT)
+	{
+		exit(-1);
+	}
 #endif
 #endif
 }

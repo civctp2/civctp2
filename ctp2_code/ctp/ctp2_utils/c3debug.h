@@ -47,8 +47,6 @@
 #ifndef __C3DEBUG_H__
 #define __C3DEBUG_H__
 
-#include "ctp2_config.h"
-#include "c3.h"
 #undef Assert
 
 #if defined(_DEBUG) || defined(SHOW_ASSERTS)

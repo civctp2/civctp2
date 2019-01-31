@@ -1,8 +1,6 @@
 #ifndef DEBUG_ASSERT_H
 #define DEBUG_ASSERT_H
 
-#include "ctp2_config.h" // Figures out if _DEBUG is defined on Linux
-
 #ifdef _DEBUG
 
 #ifdef __cplusplus

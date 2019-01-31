@@ -5,8 +5,6 @@
 #pragma once
 #endif
 
-#include "ctp2_config.h" // Defines _DEBUG on Linux if it is not defined and should be defined
-
 #ifdef _DEBUG
 
 #ifdef __cplusplus

@@ -31,6 +31,8 @@
  *
  *----------------------------------------------------------------------------
  */
+
+#include "c3.h"
 #include "debug.h"  // Own declarations: consistency check
 
 #ifdef _DEBUG

@@ -1,3 +1,4 @@
+#include "c3.h"
 #include "debugassert.h"
 
 #ifdef _DEBUG

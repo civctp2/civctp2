@@ -2,9 +2,6 @@
 #define LOG_H
 
 #include "log_on.h"
-#include "ctp2_config.h" // Figures out if _DEBUG is defined on Linux
-
-#if defined(_DEBUG) || defined(USE_LOGGING)
 
 #ifdef __cplusplus
 extern "C" {
@@ -51,5 +48,4 @@ void Log_End (void);
 #ifdef __cplusplus
 }
 #endif
-#endif // _DEBUG
 #endif // LOG_H
