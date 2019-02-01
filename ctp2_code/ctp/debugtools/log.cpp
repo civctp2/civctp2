@@ -565,10 +565,8 @@ static inline void Log_MiddleCreateMessage (char *message, const char *message_t
 	adjusted_module_scan = adjusted_module + (strlen (adjusted_module));
 
 	while ((adjusted_module != adjusted_module_scan) &&
-	       (* (adjusted_module_scan - 1) != '\\')
-	    || (* (adjusted_module_scan - 1) != FILE_SEPC)) // Taken from the Linux branch, maybe just enough
+	       (* (adjusted_module_scan - 1) != FILE_SEPC))
 	{
-
 		if (*adjusted_module_scan == '.')
 		{
 			*adjusted_module_scan = 0;

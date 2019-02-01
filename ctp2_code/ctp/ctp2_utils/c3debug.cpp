@@ -116,9 +116,13 @@ void c3debug_InitDebugLog()
 	while((dent = readdir(dir)))
 	{
 		int unlinkRetVal;
-		sprintf(fileName, "logs%s%s", FILE_SEP, dent->d_name);
-		unlinkRetVal = unlink(fileName);
-		Assert(unlinkRetVal == 0);
+		if(strcmp(dent->d_name, "." ) != 0
+		&& strcmp(dent->d_name, "..") != 0)
+		{
+			sprintf(fileName, "logs%s%s", FILE_SEP, dent->d_name);
+			unlinkRetVal = unlink(fileName);
+			Assert(unlinkRetVal == 0);
+		}
 	}
 
 	closedir(dir);
@@ -309,7 +313,7 @@ void c3debug_Assert(char const *s, char const * file, int line)
 	}
 	while (0);
 #else
-	MBCHAR str[64];
+	MBCHAR str[1024];
 	sprintf(str, "Assertion (%s) Failed in File:%s, Line:%ld\n", s, file, line);
 	fprintf(stderr, str);
 	sint32 result = MessageBox(NULL, str, "Assert", MB_ABORTRETRYIGNORE | MB_ICONEXCLAMATION);
