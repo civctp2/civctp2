@@ -985,7 +985,7 @@ bool GameFile::LoadExtendedGameInfo(FILE *saveFile, SaveInfo *info)
 		}
 
 		sint32 civindex;
-		GUID guid;
+		sint32 guid; // In principle it could already be declared as uint32, but originally it was saved as sint32
 		n = c3files_fread(&civindex, 1, sizeof(sint32), saveFile);
 		if(n != sizeof(sint32))
 		{
@@ -999,10 +999,14 @@ bool GameFile::LoadExtendedGameInfo(FILE *saveFile, SaveInfo *info)
 		}
 
 		info->networkGUID[i].civIndex = civindex;
-		info->networkGUID[i].guid = guid;
+		info->networkGUID[i].guid.Data1 = static_cast<uint32>(guid);
 	}
 
-	info->gameSetup.ReadFromFile(saveFile);
+	n = c3files_fread(&info->gameSetup, sizeof(nf_GameSetup), 1, saveFile);
+	if(n != 1)
+	{
+		return false;
+	}
 
 	NETFunc::Session *  s       = (NETFunc::Session *) &info->gameSetup;
 	dp_session_t *      sess    =
@@ -1184,7 +1188,7 @@ bool GameFile::LoadBasicGameInfo(FILE *saveFile, SaveInfo *info)
 			}
 
 			sint32 civindex;
-			GUID guid;
+			sint32 guid;
 			n = c3files_fread(&civindex, 1, sizeof(sint32), saveFile);
 			if(n != sizeof(sint32))
 			{
@@ -1198,10 +1202,14 @@ bool GameFile::LoadBasicGameInfo(FILE *saveFile, SaveInfo *info)
 			}
 
 			info->networkGUID[i].civIndex = civindex;
-			info->networkGUID[i].guid = guid;
+			info->networkGUID[i].guid.Data1 = static_cast<uint32>(guid);
 		}
 
-		info->gameSetup.ReadFromFile(saveFile); // 720 bytes
+		n = c3files_fread(&info->gameSetup, sizeof(nf_GameSetup), 1, saveFile);
+		if(n != 1)
+		{
+			return false;
+		}
 
 		n = c3files_fread(&info->options, sizeof(SaveInfo::OptionScreenSettings), 1, saveFile); // Problem, seems to be OK unless BOOL is not 4 bytes
 		if (n != 1)
@@ -1261,8 +1269,8 @@ void GameFile::SaveExtendedGameInfo(FILE *saveFile, SaveInfo *info)
 
 	sint32		n;
 
-	n = c3files_fwrite(info->gameName, sizeof(MBCHAR), _MAX_PATH, saveFile);
-	if (n != _MAX_PATH)
+	n = c3files_fwrite(info->gameName, sizeof(MBCHAR), 260, saveFile);
+	if (n != 260)
 	{
 		c3errors_FatalDialog(functionName, errorString);
 		return;
@@ -1282,8 +1290,8 @@ void GameFile::SaveExtendedGameInfo(FILE *saveFile, SaveInfo *info)
 		return;
 	}
 
-	n = c3files_fwrite(info->note, sizeof(MBCHAR), _MAX_PATH, saveFile);
-	if (n != _MAX_PATH)
+	n = c3files_fwrite(info->note, sizeof(MBCHAR), 260, saveFile);
+	if (n != 260)
 	{
 		c3errors_FatalDialog(functionName, errorString);
 		return;
@@ -1435,16 +1443,16 @@ void GameFile::SaveExtendedGameInfo(FILE *saveFile, SaveInfo *info)
 		return;
 	}
 
-	MBCHAR name[k_SCENARIO_NAME_MAX];
-	memset(name, 0, k_SCENARIO_NAME_MAX);
+	MBCHAR name[260];
+	memset(name, 0, 260);
 
 	if(strlen(g_scenarioName) > 0) // Problem in Multiplayer
 	{
-		strcpy(name, g_scenarioName);
+		strncpy(name, g_scenarioName, 260);
 	}
 
-	n = c3files_fwrite(name, sizeof(MBCHAR), k_SCENARIO_NAME_MAX, saveFile);
-	if(n != k_SCENARIO_NAME_MAX)
+	n = c3files_fwrite(name, sizeof(MBCHAR), 260, saveFile);
+	if(n != 260)
 	{
 		c3errors_FatalDialog(functionName, errorString);
 		return;
@@ -2218,15 +2226,15 @@ void GameMapFile::SaveExtendedGameMapInfo(FILE *saveFile, SaveMapInfo *info)
 
 	sint32		n;
 
-	n = c3files_fwrite(info->gameMapName, sizeof(MBCHAR), _MAX_PATH, saveFile);
-	if (n != _MAX_PATH)
+	n = c3files_fwrite(info->gameMapName, sizeof(MBCHAR), 260, saveFile);
+	if (n != 260)
 	{
 		c3errors_FatalDialog(functionName, errorString);
 		return;
 	}
 
-	n = c3files_fwrite(info->note, sizeof(MBCHAR), _MAX_PATH, saveFile);
-	if (n != _MAX_PATH)
+	n = c3files_fwrite(info->note, sizeof(MBCHAR), 260, saveFile);
+	if (n != 260)
 	{
 		c3errors_FatalDialog(functionName, errorString);
 		return;

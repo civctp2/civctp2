@@ -808,10 +808,10 @@ void CityData::Serialize(CivArchive &archive)
 		m_gross_production               = archive.GetSINT32();
 		m_net_production                 = archive.GetSINT32();
 		m_production_lost_to_crime       = archive.GetSINT32();
-		empty                            = archive.GetSINT8();
-		empty                            = archive.GetSINT8();
-		empty                            = archive.GetSINT8();
-		empty                            = archive.GetSINT8();
+	//	empty                            = archive.GetSINT8();
+	//	empty                            = archive.GetSINT8();
+	//	empty                            = archive.GetSINT8();
+	//	empty                            = archive.GetSINT8();
 		m_built_improvements             = archive.GetUINT64();
 		m_builtWonders                   = archive.GetUINT64();
 		m_food_delta                     = archive.GetDOUBLE();
@@ -1031,6 +1031,20 @@ void CityData::Serialize(CivArchive &archive)
 
 		memset(&m_max_processed_terrain_food, 0, (uint32)&m_science_lost_to_crime + sizeof(m_science_lost_to_crime) - (uint32)&m_max_processed_terrain_food);
 #endif
+		
+		// Not serialized
+		m_radiusNewOwner = 0;
+		m_culture        = 0; // Emod
+		m_secthappy      = 0; // Emod
+		m_bonusFood      = 0.0;
+		m_bonusFoodCoeff = 0.0;
+		m_bonusProdCoeff = 0.0;
+		m_bonusProd      = 0.0;
+		m_bonusGoldCoeff = 0.0;
+		m_bonusGold      = 0.0;
+		m_bonusScieCoeff = 0.0;
+		m_bonusScie      = 0.0;
+		m_cityRadiusOp   = RADIUS_OP_UKNOWN;
 	}
 }
 

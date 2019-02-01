@@ -741,9 +741,19 @@ void Player::Serialize(CivArchive &archive)
 	}
 	else
 	{
+		// 	GUID             m_networkGuid;
+
 		archive.TestMagic(PLAYER_MAGIC) ;
-		archive.LoadChunk((uint8 *)&m_owner, ((uint8 *)&m_broken_alliances_and_cease_fires)
-			+ sizeof(m_broken_alliances_and_cease_fires));
+		archive.LoadChunk((uint8 *)&m_owner, ((uint8 *)&m_can_use_space_button)
+						  + sizeof(m_can_use_space_button));
+
+		m_networkGuid.Data1 = static_cast<uint32>(archive.GetSINT32());
+
+		archive.LoadChunk((uint8 *)&m_networkId, ((uint8 *)&m_broken_alliances_and_cease_fires)
+						  + sizeof(m_broken_alliances_and_cease_fires));
+		
+//		archive.LoadChunk((uint8 *)&m_owner, ((uint8 *)&m_broken_alliances_and_cease_fires)
+//			+ sizeof(m_broken_alliances_and_cease_fires));
 
 		if(g_numGoods == g_theResourceDB->NumRecords()){
 			archive.Load((uint8*)m_goodSalePrices, g_theResourceDB->NumRecords() * sizeof(sint32));

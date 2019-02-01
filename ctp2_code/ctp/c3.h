@@ -54,9 +54,6 @@
 #ifndef __C3_H__
 #define __C3_H__
 
-#include "ctp2_config.h"
-#include "c3types.h"
-
 #if defined(_MSC_VER)
 
 // There seems to be a problem with disabling these things, e.g. 4996 is disabled but still shows up
@@ -97,6 +94,7 @@
 
 // Do not define the min and max *macros* in <windows.h>.
 #define NOMINMAX
+#include "ctp2_config.h" // Needs to define the DirectX version first
 #include <windows.h>
 
 #include <tchar.h>
@@ -104,8 +102,10 @@
 #include <ddraw.h>
 #include <dinput.h>
 #else
-#include "windows.h"
+#include "windows.h" // Defines HAVE_CONFIG_H, HAVE_INTTYPES_H and HAVE_STDINT_H
 #endif // WIN32
+
+#include "c3types.h" // Needs HAVE_INTTYPES_H and HAVE_STDINT_H defined
 
 #include <stdio.h>
 #include <stdlib.h>
@@ -118,10 +118,10 @@
 #include <time.h>
 
 #if defined(__GNUC__)
-//#define _MAX_PATH PATH_MAX
+#define _MAX_PATH PATH_MAX
 // Needs to be 260 otherwise you cannot load savegames from Windows.
 // Maybe this screws up something else.
-#define _MAX_PATH   260 // max. length of full pathname
+//#define _MAX_PATH   260 // max. length of full pathname
 
 #endif // __GNUC__
 
