@@ -400,7 +400,7 @@ sint32 Governor::ComputeBestGovernment() const
 		if (player_ptr->GetNumCities() > newCityLimit)
 		{
 			sint32 const oldCityLimit =
-				strategy.GetGovernment(player_ptr->GetGovernmentType())->
+				g_theGovernmentDB->Get(player_ptr->GetGovernmentType())->
 					GetTooManyCitiesThreshold();
 
 			if (newCityLimit > oldCityLimit)
