@@ -4492,20 +4492,23 @@ sint32 CityData::SupportBuildings(bool projectedOnly)
 			sint32 const    wonderLevel =
 			    wonderutil_GetDecreaseMaintenance(g_player[m_owner]->m_builtWonders);
 
-			while (IsBankrupting() && (m_built_improvements != 0))
+			if(buildingUpkeep > 0)
 			{
-				sint32 const    cheapBuilding =
-				    buildingutil_GetCheapestBuilding(m_built_improvements, wonderLevel, m_owner);
-				Assert(cheapBuilding >= 0);
-				if (cheapBuilding < 0)
-					break;
+				while(IsBankrupting() && (m_built_improvements != 0))
+				{
+					sint32 const    cheapBuilding =
+						buildingutil_GetCheapestBuilding(m_built_improvements, wonderLevel, m_owner);
+					Assert(cheapBuilding >= 0);
+					if(cheapBuilding < 0)
+						break;
 
-				SellBuilding(cheapBuilding, false);
-				SlicObject * so = new SlicObject("029NoMaint");
-				so->AddRecipient(GetOwner());
-				so->AddCity(m_home_city);
-				so->AddBuilding(cheapBuilding);
-				g_slicEngine->Execute(so);
+					SellBuilding(cheapBuilding, false);
+					SlicObject * so = new SlicObject("029NoMaint");
+					so->AddRecipient(GetOwner());
+					so->AddCity(m_home_city);
+					so->AddBuilding(cheapBuilding);
+					g_slicEngine->Execute(so);
+				}
 			}
 
 			if(IsBankrupting())
