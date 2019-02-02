@@ -113,20 +113,20 @@ void Debug_Close (void)
 #ifdef WIN32
 void Debug_SetThreadName(LPCSTR szThreadName, DWORD dwThreadID)
 {
-    THREADNAME_INFO info;
-    info.dwType     = 0x1000;
-    info.szName     = szThreadName;
-    info.dwThreadID = dwThreadID;
-    info.dwFlags    = 0;
+	THREADNAME_INFO info;
+	info.dwType     = 0x1000;
+	info.szName     = szThreadName;
+	info.dwThreadID = dwThreadID;
+	info.dwFlags    = 0;
 
 #if defined(_MSC_VER)
-    __try
-    {
-        RaiseException(0x406D1388, 0, sizeof(info)/sizeof(DWORD), (DWORD*) &info);
-    }
-    __except(EXCEPTION_CONTINUE_EXECUTION)
-    {
-    }
+	__try
+	{
+		RaiseException(0x406D1388, 0, sizeof(info)/sizeof(DWORD), (DWORD*) &info);
+	}
+	__except(EXCEPTION_CONTINUE_EXECUTION)
+	{
+	}
 #endif
 }
 #endif // WIN32

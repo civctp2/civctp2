@@ -211,7 +211,6 @@ bool g_quitfast = false;
 
 void DebugMemory_Close (void)
 {
-
 	ASSERT (debug_memory->open);
 
 #if defined(MEMORY_LOGGED)

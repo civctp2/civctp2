@@ -25,12 +25,10 @@ void DebugAssert_Open (
 
 void DebugAssert_Close (void)
 {
-
 }
 
 void DebugAssert_Assert (const char *module_name, int module_line, const char *log_class, const char *condition_string)
 {
-
 	Log_Enable (log_class);
 
 	LOG_INDIRECT (module_name, module_line, (log_class, "ASSERT (%s)", condition_string));
@@ -49,5 +47,4 @@ void DebugAssert_Assert (const char *module_name, int module_line, const char *l
 		debug_assert.DebugAssert_Leave();
 	}
 }
-
 #endif

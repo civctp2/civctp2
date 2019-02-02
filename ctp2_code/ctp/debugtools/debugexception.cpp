@@ -26,7 +26,6 @@ void DebugException_Open (DebugExceptionClientFunction function_enter)
 
 void DebugException_Close (void)
 {
-
 }
 
 #ifdef WIN32
@@ -144,7 +143,6 @@ inline static void DebugExceptionFilter_LogRegisterState (LPEXCEPTION_POINTERS e
 
 static LONG _cdecl DebugException_Filter (LPEXCEPTION_POINTERS exception_pointers)
 {
-
 	DebugExceptionFilter_LogExceptionType (exception_pointers);
 	DebugExceptionFilter_LogRegisterState (exception_pointers);
 
@@ -167,11 +165,9 @@ void DebugException_Execute (DebugExceptionClientFunction function_monitored)
 	{
 		function_monitored();
 	}
-
 	__except (DebugException_Filter (GetExceptionInformation()))
 	{
 	}
 #endif	
 }
-
 #endif
