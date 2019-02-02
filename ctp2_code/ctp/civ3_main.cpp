@@ -395,6 +395,11 @@ namespace Os
 	}
 }
 
+std::basic_string<TCHAR> main_GetExeName()
+{
+	return Os::GetExeName();
+}
+
 int ui_Initialize(void)
 {
 	AUI_ERRCODE auiErr = AUI_ERRCODE_OK;

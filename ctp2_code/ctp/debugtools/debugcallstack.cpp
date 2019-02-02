@@ -60,10 +60,14 @@
 #ifndef _DEBUG
 #include "log_off.h"
 #endif
+
 #ifdef __linux__
+#include "civ3_main.h"
 #include "../cifm.h"
 #define fopen(a, b) ci_fopen(a, b)
 #endif
+
+
 
 static bool debug_dump_whole_stack = false;
 
@@ -73,6 +77,8 @@ static bool debug_dump_whole_stack = false;
 
 void Debug_FunctionNameInit (void);
 int Debug_FunctionNameOpen (char *map_file_name);
+void Debug_FunctionNameClose (void);
+const char *Debug_FunctionNameGet (size_t address);
 
 #ifdef WIN32
 
@@ -85,9 +91,6 @@ BOOL CALLBACK	Debug_EnumModulesCallback(LPSTR moduleName, ULONG dllBase, PVOID u
 #endif
 
 int				Debug_FunctionNameOpenFromPDB(void);
-
-void Debug_FunctionNameClose (void);
-const char *Debug_FunctionNameGet (size_t address);
 
 #ifdef _DEBUG
 #define k_MAP_FILE "civctp_dbg.map"
@@ -102,6 +105,9 @@ const char *Debug_FunctionNameGet (size_t address);
 #endif
 #endif
 #endif
+
+#else // WIN32
+#define k_MAP_FILE "ctp2linux.map"
 #endif // WIN32
 
 #define DEBUG_CODE_LIMIT 0x80000000
@@ -115,23 +121,25 @@ static MBCHAR s_stackTraceString[k_STACK_TRACE_LEN];
 
 void DebugCallStack_Open (void)
 {
-#ifdef WIN32	
+#if !defined(WIN32)
+	std::basic_string<TCHAR> exeName = main_GetExeName();
+	std::basic_string<TCHAR> command = "nm --demangle --defined-only " + exeName + " > " + k_MAP_FILE;
+
+	system(command.c_str());
+#endif
+
 	Debug_FunctionNameOpen (k_MAP_FILE);
-#endif	
 }
 
 void DebugCallStack_Close (void)
 {
-#ifdef WIN32	
 	Debug_FunctionNameClose();
-#endif	
 }
 
 #if defined(WIN32)
 
 static LONG _cdecl MemoryAccessExceptionFilter (LPEXCEPTION_POINTERS ep)
 {
-
   if (ep->ExceptionRecord->ExceptionCode == EXCEPTION_ACCESS_VIOLATION)
     return (EXCEPTION_EXECUTE_HANDLER);
 
@@ -238,7 +246,11 @@ int Debug_FunctionNameOpen (char *map_file_name)
   FILE *fp;
   char buffer[BUFFER_SIZE];
   int done;
+#if defined(WIN32)
   int crap;
+#else
+  char symbol[BUFFER_SIZE];
+#endif
   char name[BUFFER_SIZE];
   size_t address;
 #ifdef REQUIRE_CORRECT_LOG
@@ -254,6 +266,7 @@ int Debug_FunctionNameOpen (char *map_file_name)
 #endif
   }
 
+#if defined(WIN32)
   done = 0;
   while (!done) {
     fgets (buffer, BUFFER_SIZE, fp);
@@ -268,20 +281,25 @@ int Debug_FunctionNameOpen (char *map_file_name)
   }
 
   fgets (buffer, BUFFER_SIZE, fp);
-
+#endif
+  
   done = 0;
   while (!done) {
 
     fgets (buffer, BUFFER_SIZE, fp);
 
+#if defined(WIN32)
     if ((buffer[0] == ' ') &&
         (buffer[1] == '0') &&
         (buffer[5] == ':') &&
 
         (sscanf (buffer, "%x:%x %s %x", &crap, &crap, name, &address) == 4))
-    {
-      Debug_AddFunction (name, address);
-    }
+#else
+	if(sscanf (buffer, "%zx %s %s", &address, symbol, name) == 3)
+#endif
+	{
+		Debug_AddFunction (name, address);
+	}
 
     if (feof (fp))
       done = 1;
