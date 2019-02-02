@@ -57,6 +57,7 @@ typedef sint32 (*WNDPROC)();
 typedef sint32 WPARAM;
 typedef void * HMONITOR;
 typedef void * LPDDSURFACEDESC;
+typedef void * PVOID;
 
 /* Standard datatypes */
 typedef uint8  BYTE;

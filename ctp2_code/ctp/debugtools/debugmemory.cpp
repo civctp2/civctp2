@@ -443,7 +443,7 @@ const int CALL_STACK_SIZE = 60;
 
 struct CallStack
 {
-	unsigned function[CALL_STACK_SIZE];
+	size_t function[CALL_STACK_SIZE];
 };
 
 struct AllocHeader
