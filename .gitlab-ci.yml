@@ -16,8 +16,8 @@ variables:
 
 build:
   stage: build
-  tags:
-    - multicore
+# tags:
+#   - multicore
   variables:
     GIT_SUBMODULE_STRATEGY: recursive
   script:
