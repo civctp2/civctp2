@@ -11,3 +11,6 @@
 !Makefile
 !ctp2_code/
 !ctp2_data/
+
+## files essential for testing
+!ctp2CD/

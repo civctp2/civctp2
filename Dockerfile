@@ -90,6 +90,9 @@ RUN apt-get update && apt-get install -y --no-install-recommends \
     apt-get clean && \
     rm -rf /var/lib/apt/lists/*
  
+## ctp2CD/ copy done in install stage such that stages before are compatible with travis docker build, results in one additional layer in the final DI (incr. DI download size)
+COPY ctp2CD/ /opt/ctp2/
+## ctp2/ copy has to be after ctp2CD/ to overwrite with newer versions from civctp2
 COPY --from=builder /opt/ctp2/ /opt/ctp2/
 
 COPY --from=builder /usr/local/lib /usr/local/lib
