@@ -36,4 +36,4 @@ jobs:
     - stage: build
       name: "docker build"
       script:
-        - docker build --pull .
+        - docker build --pull --target builder .

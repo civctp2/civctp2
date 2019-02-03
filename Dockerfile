@@ -58,24 +58,26 @@ RUN git clone -b v0.9.0 http://github.com/lynxabraxas/SDL_ffmpeg && \
 
 ENV LD_LIBRARY_PATH "${LD_LIBRARY_PATH}:/usr/local/lib"
 
-## ctp2CD/ copy not done in install stage to have one layer less in the final DI to decrease DI download size
-COPY ctp2CD/ /opt/ctp2/
-## ctp2CD/ before ctp2/ as it changes less often
-COPY ctp2/ /ctp2/
+## ctp2CD/ copy not done in builder stage such that stages before are compatible with travis docker build
+## not using `COPY  ./ /ctp2/` to avoid cache out-dating when ctp2CD/ is populated for 3rd stage
+COPY autogen.sh configure.ac GNUmakefile.am Makefile   /ctp2/
+COPY ctp2_code/  /ctp2/ctp2_code/
+COPY ctp2_data/  /ctp2/ctp2_data/
 
-RUN cd /ctp2 && \
-    ./autogen.sh && \
-    CPPFLAGS="-I/usr/local/include/SDL/" \
+RUN cd /ctp2 \
+    && ./autogen.sh \
+    && CPPFLAGS="-I/usr/local/include/SDL/" \
     CC=/usr/bin/gcc-5 \
     CXX=/usr/bin/g++-5 \
     CFLAGS="$CFLAGS -w -fuse-ld=gold" \
     CXXFLAGS="$CXXFLAGS -fpermissive -w -fuse-ld=gold" \
     LDFLAGS="$LDFLAGS -L/usr/local/lib" \
-    ./configure --prefix=/opt/ctp2 --bindir=/opt/ctp2/ctp2_program/ctp --enable-silent-rules && \
-    make -j"$(nproc)" && \
-    make -j"$(nproc)" install && \
-    cp -r /ctp2/ctp2_data/ /opt/ctp2/ && \
-    cp -v /ctp2/ctp2_code/mapgen/.libs/*.so /opt/ctp2/ctp2_program/ctp/dll/map/
+    ./configure --prefix=/opt/ctp2 --bindir=/opt/ctp2/ctp2_program/ctp --enable-silent-rules \
+    && make -j"$(nproc)" \
+    && make -j"$(nproc)" install \
+    && cp -r /ctp2/ctp2_data/ /opt/ctp2/ \
+    && mkdir -p /opt/ctp2/ctp2_program/ctp/dll/map/ \
+    && cp -v /ctp2/ctp2_code/mapgen/.libs/*.so /opt/ctp2/ctp2_program/ctp/dll/map/
 
 
 ################################################################################
@@ -98,12 +100,3 @@ USER $USERNAME
 WORKDIR /opt/ctp2/ctp2_program/ctp/
 
 CMD ["./ctp2"]
-
-
-################################################################################
-# install new sprites
-################################################################################
-FROM install
-
-COPY newSprites/ /opt/ctp2/ctp2_data/default/graphics/sprites/
-COPY TGAs/       /opt/ctp2/ctp2_data/default/graphics/pictures/
