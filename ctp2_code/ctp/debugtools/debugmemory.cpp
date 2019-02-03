@@ -998,6 +998,7 @@ void Debug_MemNodeAdd (const char *filename, int line_number, size_t size, CallS
 		new_node->call_stack = call_stack;
 		new_node->size = size;
 		mem_node = new_node;
+
 		return;
 	}
 
@@ -1140,7 +1141,6 @@ void DebugMemoryHeap_LeaksShow (MemoryHeap heap, int turn_count)
 	int counter = 0;
 	while (header)
 	{
-
 		if (header->allocated_after_open)
 		{
 			Debug_MemNodeAdd (header->filename, header->line_number, header->size, header->call_stack);

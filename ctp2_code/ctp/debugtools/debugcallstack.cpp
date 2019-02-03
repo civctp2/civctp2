@@ -62,6 +62,8 @@
 #endif
 
 #ifdef __linux__
+#include <execinfo.h>
+#include <dlfcn.h>
 #include "civ3_main.h"
 #include "../cifm.h"
 #define fopen(a, b) ci_fopen(a, b)
@@ -104,7 +106,11 @@ int             Debug_FunctionNameOpenFromPDB(void);
 #define k_MAP_FILE "ctp2linux.map"
 #endif // WIN32
 
+#if defined(WIN32)
 #define DEBUG_CODE_LIMIT 0x80000000
+#else
+#define DEBUG_CODE_LIMIT 0x8000000000000000
+#endif
 #define BUFFER_SIZE      (2000)
 
 #define k_STACK_TRACE_LEN 32768
@@ -117,7 +123,7 @@ void DebugCallStack_Open (void)
 {
 #if !defined(WIN32)
 	std::basic_string<TCHAR> exeName = main_GetExeName();
-	std::basic_string<TCHAR> command = "nm --demangle --defined-only " + exeName + " > " + k_MAP_FILE;
+	std::basic_string<TCHAR> command = "nm --demangle --defined-only --numeric-sort " + exeName + " > " + k_MAP_FILE;
 
 	system(command.c_str());
 #endif
@@ -292,7 +298,7 @@ int Debug_FunctionNameOpen (char *map_file_name)
 		    (buffer[5] == ':') &&
 		    (sscanf (buffer, "%x:%x %s %x", &crap, &crap, name, &address) == 4))
 #else
-		if(sscanf (buffer, "%zx %s %s", &address, symbol, name) == 3)
+		if(sscanf (buffer, "%zx %s %[^\n]", &address, symbol, name) == 3)
 #endif
 		{
 			Debug_AddFunction (name, address);
@@ -465,6 +471,8 @@ void DebugCallStack_DumpAddress (LogClass log_class, size_t address)
 
 void DebugCallStack_Dump (LogClass log_class)
 {
+// Disabled for anything else than WIN32, because the assembler code does not seem to be save
+#ifdef WIN32
 	size_t base_pointer;
 #ifdef WIN32
 	__asm mov base_pointer, ebp;
@@ -473,10 +481,14 @@ void DebugCallStack_Dump (LogClass log_class)
 #endif // WIN32
 
 	DebugCallStack_DumpFrom (log_class, base_pointer);
+#endif
 }
 
 void DebugCallStack_DumpFrom (LogClass log_class, size_t base_pointer)
 {
+// Disabled for anything than WIN32, because the code segfaults, which can only be catched on Windows.
+// Beside that, this is not a good design anyway.
+#if defined(WIN32)
 	size_t frame_limit;
 	size_t frame_pointer;
 	size_t caller;
@@ -518,6 +530,7 @@ void DebugCallStack_DumpFrom (LogClass log_class, size_t base_pointer)
 	registers_printed = 0;
 	while (!finished)
 	{
+// This is code that segfaults, both on Windows and Linux, that's why we have the __try in the Windows code
 #ifdef WIN32
 		__try
 		{
@@ -525,10 +538,17 @@ void DebugCallStack_DumpFrom (LogClass log_class, size_t base_pointer)
 		}
 		__except (MemoryAccessExceptionFilter (GetExceptionInformation()))
 		{
-		finished = 1;
+			finished = 1;
 		}
 #else
-		caller = *((size_t *) (base_pointer + 4));
+		try
+		{
+			caller = *((size_t *) (base_pointer + 8)); // or 8 for 64 bit
+		}
+		catch(...)
+		{
+			finished = 1;
+		}
 #endif // WIN32
 
 		if (caller >= DEBUG_CODE_LIMIT)
@@ -580,10 +600,24 @@ void DebugCallStack_DumpFrom (LogClass log_class, size_t base_pointer)
 			base_pointer = frame_limit;
 		}
 	}
+#endif
 }
 
 void DebugCallStack_Save  (size_t *call_stack, int number, size_t Ebp)
 {
+#if !defined(WIN32)
+	size_t num = backtrace((void**)call_stack, number);
+
+	for(sint32 i = 0; i < num; ++i)
+	{
+		Dl_info info;
+		if(dladdr((void*)call_stack[i], &info) != 0)
+		{
+			call_stack[i] -= (size_t)info.dli_fbase;
+		}
+	}
+
+#else
 	size_t base_pointer;
 	size_t caller;
 	int finished;
@@ -605,6 +639,7 @@ void DebugCallStack_Save  (size_t *call_stack, int number, size_t Ebp)
 	finished = 0;
 	caller = 0;
 	index = 0;
+
 	while ((!finished) && ( index < number))
 	{
 
@@ -624,7 +659,17 @@ void DebugCallStack_Save  (size_t *call_stack, int number, size_t Ebp)
 				finished = 1;
 			}
 #else
-			caller = *((size_t *) (base_pointer + 4));
+			// This does not catch segfaults like the Windows counterpart, only exceptions.
+			// Of course, writing such code is bad style.
+			// Fortunately, all this can be replaced by backtrace.
+			try
+			{
+				caller = *((size_t *) (base_pointer + 8)); // 8 bytes for 64 bit
+			}
+			catch(...)
+			{
+				finished = 1;
+			}
 #endif // WIN32
 		}
 
@@ -643,13 +688,13 @@ void DebugCallStack_Save  (size_t *call_stack, int number, size_t Ebp)
 			}
 		}
 	}
-
 	while (index < number)
 	{
 		call_stack[index] = 0;
 
 		index ++;
 	}
+#endif
 }
 
 void DebugCallStack_Show  (LogClass log_class, size_t *call_stack, int number)
