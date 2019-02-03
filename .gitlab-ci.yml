@@ -1,0 +1,137 @@
+image: docker:stable
+
+services:
+  - docker:dind
+
+before_script:
+  - docker login -u gitlab-ci-token -p $CI_JOB_TOKEN $CI_REGISTRY
+
+stages:
+  - build
+  - test
+  - release
+
+variables:
+  IMAGE_TAG: $CI_REGISTRY_IMAGE/$CI_COMMIT_REF_SLUG
+
+build:
+  stage: build
+  tags:
+    - multicore
+  variables:
+    GIT_SUBMODULE_STRATEGY: recursive
+  script:
+    - docker pull $IMAGE_TAG:system-latest || true
+    ## 1st stage build using system-latest for caching
+    - docker build --pull
+                   --cache-from $IMAGE_TAG:system-latest
+                   --tag $IMAGE_TAG:system-latest
+                   --target system
+                   .
+    - docker push $IMAGE_TAG:system-latest
+    ## 2nd stage build using builder-latest for caching
+    - docker pull $IMAGE_TAG:builder-latest || true
+    - docker build --pull
+                   --cache-from $IMAGE_TAG:system-latest
+                   --cache-from $IMAGE_TAG:builder-latest
+                   --tag $IMAGE_TAG:builder-latest
+                   --target builder 
+                   .
+    - docker push $IMAGE_TAG:builder-latest
+    ## 3rd stage build using system-latest and builder-latest for caching
+    - docker pull $IMAGE_TAG:test || true
+    - docker build --pull
+                   --cache-from $IMAGE_TAG:system-latest
+                   --cache-from $IMAGE_TAG:builder-latest
+                   --cache-from $IMAGE_TAG:test
+                   --tag $IMAGE_TAG:test
+                   --target install
+                   .
+    - docker push $IMAGE_TAG:test
+  retry: 2
+
+.test: &test
+  stage: test
+  dependencies: []
+  image: registry.gitlab.com/lynxabraxas/dind-sikuli/master:latest
+  variables:
+    RES_FILE: ${CI_JOB_NAME}.png
+    DOCKER_PARAMS: ""
+  artifacts:
+    untracked: true
+    when: always
+  script:
+    - export SHARED_PATH="$(dirname ${CI_PROJECT_DIR})/shared"
+    - mkdir -p ${SHARED_PATH}/.X11-unix/
+    - mkdir -p /tmp/.X11-unix/
+    - mount --bind ${SHARED_PATH}/.X11-unix/ /tmp/.X11-unix/
+    - export DISPLAY=:99.0
+    - Xvfb $DISPLAY -screen 0 1280x1024x24 &
+    - pidX=$!
+    - sleep 3
+    - docker pull $IMAGE_TAG:$CI_JOB_STAGE
+    - echo $DOCKER_PARAMS
+    - echo $CTP_PARAMS
+    - docker run
+             --env DISPLAY
+             -v ${SHARED_PATH}/.X11-unix/:/tmp/.X11-unix/
+             -v $(pwd)/.civctp2/save/:/opt/ctp2/ctp2_program/ctp/save/
+             $DOCKER_PARAMS
+             $IMAGE_TAG:$CI_JOB_STAGE
+             ./ctp2 $CTP_PARAMS &
+    - pidD=$!
+    - java -cp "/opt/sikulixapi.jar:/opt/jython-standalone-2.7.1.jar" org.python.util.jython tests/${CI_JOB_NAME}.sikuli/${CI_JOB_NAME}.py
+    - kill $pidD
+    - kill $pidX
+    - test -f $RES_FILE
+  retry: 2
+  except:
+    - /^debug-.*$/
+
+start-game:
+  <<: *test
+  variables:
+    CTP_PARAMS: "nointromovie"
+
+new-game:
+  <<: *test
+  variables:
+    CTP_PARAMS: "nointromovie"
+
+load-game:
+  <<: *test
+  variables:
+    CTP_PARAMS: "nointromovie"
+
+name-game:
+  <<: *test
+  variables:
+    CTP_PARAMS: "nointromovie"
+
+play-game_build-city:
+  <<: *test
+  variables:
+    CTP_PARAMS: "nointromovie"
+
+load-sprite:
+  <<: *test
+  variables:
+    CTP_PARAMS: "nointromovie runspriteeditor"
+
+loop-sprite:
+  <<: *test
+  variables:
+    CTP_PARAMS: "nointromovie runspriteeditor"
+
+release:
+  variables:
+    GIT_STRATEGY: none
+  stage: release
+  dependencies: []
+  script:
+    - docker pull $IMAGE_TAG:test
+    - docker tag  $IMAGE_TAG:test $IMAGE_TAG:latest
+    - docker push $IMAGE_TAG:latest
+    - docker tag  $IMAGE_TAG:test $IMAGE_TAG:$CI_COMMIT_SHORT_SHA
+    - docker push $IMAGE_TAG:$CI_COMMIT_SHORT_SHA
+    - docker rmi $(docker images | awk -v IMG=$IMAGE_TAG '$1 ~ (IMG) && $2 ~ /[0-9a-f]{8}/' | tail -n +6) || true  # keep last 5 images: https://stackoverflow.com/questions/40891610/docker-remove-all-but-last-n-images#40892314
