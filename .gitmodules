@@ -1,6 +1,0 @@
-[submodule "ctp2"]
-	path = ctp2
-	url = https://github.com/LynxAbraxas/civctp2
-[submodule "ctp2CD"]
-	path = ctp2CD
-	url = ../ctp2CD.git
