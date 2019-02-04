@@ -196,6 +196,9 @@ sint32 MessageBox(HWND parent, const CHAR* msg, const CHAR* title, sint32 flags)
 
 	sint32 result = gtk_dialog_run(GTK_DIALOG(dialog));
 	gtk_widget_destroy(dialog);
+	
+	while(g_main_iteration(FALSE)) 
+		gtk_main_quit();
 
 	return result;
 #else
