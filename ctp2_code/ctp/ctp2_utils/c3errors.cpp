@@ -47,7 +47,7 @@ void c3errors_FatalDialog(const char* module, const char* fmt, ...)
 	va_list		list;
 	char str[_MAX_PATH];
 
-    va_start(list, fmt);
+	va_start(list, fmt);
 	vsprintf(str, fmt, list);
 	va_end(list);
 
@@ -112,11 +112,11 @@ void c3errors_FatalDialogFromDB(const char *module, const char *err, ...)
 
 void c3errors_ErrorDialogFromDB(const char *module, const char *err, ...)
 {
-    MBCHAR *    dbTitle;
+	MBCHAR *    dbTitle;
 	if (!g_theStringDB->GetText(module, &dbTitle))
 		c3errors_FatalDialog("string db", "%s missing from string db", module) ;
 
-    MBCHAR *    dbError;
+	MBCHAR *    dbError;
 	if (!g_theStringDB->GetText(err, &dbError))
 		c3errors_FatalDialog("string db", "%s missing from string db", err) ;
 
@@ -134,23 +134,23 @@ void c3errors_ErrorDialog(const char* module, const char* fmt, ...)
 	LPTSTR			szTitle;
 	LPCTSTR			szTitleText = "%s Error";
 
-    LPCTSTR  szTmp = (module) ? (LPCTSTR) module : (LPCTSTR) "CTP 2";
+	LPCTSTR  szTmp = (module) ? (LPCTSTR) module : (LPCTSTR) "CTP 2";
 
 #if defined(WIN32)
 	if ((szTitle = (LPTSTR)LocalAlloc(LMEM_FIXED, (lstrlen(szTmp) +
 			lstrlen(szTitleText) + lstrlen(fmt) + 33000)*sizeof(TCHAR))) == NULL)
 		return;
 
-   wsprintf(szTitle, szTitleText, szTmp);
+	wsprintf(szTitle, szTitleText, szTmp);
 #else
-   if ((szTitle = (LPTSTR)malloc((lstrlen(szTmp) + lstrlen(szTitleText) +
-                                  lstrlen(fmt) + 33000
-                                 )*sizeof(TCHAR)
-                                )
-       ) == NULL)
-      return;
+	if ((szTitle = (LPTSTR)malloc((lstrlen(szTmp) + lstrlen(szTitleText) +
+	                               lstrlen(fmt) + 33000
+	                              )*sizeof(TCHAR)
+	                             )
+	   ) == NULL)
+		return;
 
-   sprintf(szTitle, szTitleText, szTmp);
+	sprintf(szTitle, szTitleText, szTmp);
 #endif
 
 	LPTSTR  szFmtTmp    = szTitle + (lstrlen(szTitle)+2)*sizeof(TCHAR);
@@ -171,7 +171,7 @@ void c3errors_ErrorDialog(const char* module, const char* fmt, ...)
 #if defined(WIN32)
 	LocalFree(szTitle);
 #else
-   free(szTitle);
+	free(szTitle);
 #endif
 
 #ifndef _DEBUG
