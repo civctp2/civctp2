@@ -7,8 +7,6 @@
 #ifndef __os_include_ctp2_inttypes_h__
 #define __os_include_ctp2_inttypes_h__ 1
 
-#include "ctp2_config.h"
-
 #if defined(_MSC_VER)
 
 typedef char          schar;

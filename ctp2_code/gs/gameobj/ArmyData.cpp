@@ -1656,9 +1656,22 @@ void ArmyData::BeginTurn()
             for(i = 0; i < cell->GetNumTradeRoutes(); i++) {
                 TradeRoute route = cell->GetTradeRoute(i);
                 if(route->GetPiratingArmy().m_id == m_id) {
-                    g_player[m_owner]->AddGold(static_cast<sint32>(route->GetValue() * g_theConstDB->Get(0)->GetPiracyWasteCoefficient()));
+		    sint32 pgold = static_cast<sint32>(route->GetValue() * g_theConstDB->Get(0)->GetPiracyWasteCoefficient());
+                    g_player[m_owner]->AddGold(pgold);
 					//added pirated strategic good?
                     piratedByMe++;
+
+		    Unit fromCity, toCity;
+		    fromCity = route.GetSource();
+		    toCity = route.GetDestination();
+
+		    SlicObject * so = new SlicObject("044TradePirateGold");
+		    so->AddRecipient(GetOwner());
+		    so->AddGold(pgold) ;
+		    so->AddCity(fromCity);
+		    so->AddCity(toCity);
+		    so->AddCivilisation(fromCity.GetOwner());
+		    g_slicEngine->Execute(so);
                 }
             }
             if(piratedByMe < 1) {
