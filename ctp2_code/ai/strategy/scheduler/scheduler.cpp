@@ -135,27 +135,6 @@ void Scheduler::ResizeAll(const PLAYER_INDEX & newMaxPlayerId)
 	}
 }
 
-/*
-// no longer used "Reason: should be able to regenerate state from game objects."
-void Scheduler::LoadAll(CivArchive & archive)
-{
-	AI_DPRINTF(k_DBG_AI, m_playerId, -1, -1, ("\n\ncalling Scheduler::LoadAll\n\n"));
-	for(size_t i = 0; i < s_theSchedulers.size(); i++)
-	{
-		s_theSchedulers[i].Load(archive);
-	}
-}
-
-// no longer used "Reason: should be able to regenerate state from game objects."
-void Scheduler::SaveAll(CivArchive & archive)
-{
-	for(size_t i = 0; i < s_theSchedulers.size(); i++)
-	{
-		s_theSchedulers[i].Save(archive);
-	}
-}
-*/
-
 //////////////////////////////
 //
 // used mainly in ctpai to get the player's scheduler

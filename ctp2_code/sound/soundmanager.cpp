@@ -900,7 +900,8 @@ void SoundManager::StartMusic(const sint32 &InTrackNum)
 #if !defined(USE_SDL)
 	if (!g_theProfileDB->IsUseRedbookAudio() || !c3files_HasCD()) return;
 #else
-	if (!g_theProfileDB->IsUseRedbookAudio() || !c3files_HasCD() || !m_useOggTracks) return;
+	if (!g_theProfileDB->IsUseRedbookAudio()) return;
+	if (!(c3files_HasCD() || m_useOggTracks)) return;
 #endif
 
 	if (m_noSound) return;

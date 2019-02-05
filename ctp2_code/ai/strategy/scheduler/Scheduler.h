@@ -115,11 +115,6 @@ public:
 
 	static void ResizeAll(const PLAYER_INDEX & newMaxPlayerId);
 
-#if 0
-	static void LoadAll(CivArchive & archive);
-	static void SaveAll(CivArchive & archive);
-#endif
-
 	static Scheduler & GetScheduler(const sint32 & playerId);
 
 	static void CleanupAll(void);
