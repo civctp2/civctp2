@@ -36,6 +36,14 @@ CFLAGS="$CFLAGS -w -fuse-ld=gold" CXXFLAGS="$CXXFLAGS -fpermissive -w -fuse-ld=g
 make
 ```
 
+If you want to build a debug version it is:
+
+```
+./autogen.sh
+CFLAGS="$CFLAGS -w -fuse-ld=gold" CXXFLAGS="$CXXFLAGS -fpermissive -w -fuse-ld=gold" ./configure --enable-silent-rules --enable-debug
+make
+```
+
 You can look at `./configure` for options, but there aren't many.
 
 Also, note that `make -j4` may fail the first time. Some files are auto-generated and the make dependencies don't catch that.
@@ -68,7 +76,6 @@ If you get the message on the terminal: `Failed to load module "atk-bridge"`. In
 
 ## Running
 When everything is setup, simply go to the program folder, for example with `cd ~/ctp2/ctp2_program/ctp` and launch the game with `./ctp2`. There are a few command line option like `-fullscreen` that can be useful.
-
 
 ### Converting old Linux save-games to new unified format
 The old format of Linux save-games was not compatible with that of windows save-games. The format is now unified such that each OS can open save-games from the other. However, due to this, old Linux save-games need to be converted to the new format if you want to continue with those under the new ctp2 version (after [22dd1804804](https://github.com/civctp2/civctp2/commit/22dd180480445561bbbcd3efc60f08d2fe5c53e5)). A [game-converter-version](https://github.com/civctp2/civctp2/releases/tag/GameConverter) was created for this purpose (see, [#77](https://github.com/civctp2/civctp2/pull/77)), which can load the old format but saves games to the new format.
