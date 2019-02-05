@@ -66,7 +66,7 @@ aui_DirectUI::aui_DirectUI
 	sint32 width,
 	sint32 height,
 	sint32 bpp,
-	MBCHAR *ldlFilename,
+	const MBCHAR *ldlFilename,
 	BOOL useExclusiveMode
 )
 :
@@ -94,10 +94,10 @@ AUI_ERRCODE aui_DirectUI::InitCommon()
 
 #ifdef __AUI_USE_DIRECTMEDIA__
 	if (!m_isCoinitialized)
-    {
-    	HRESULT const   hr  = CoInitialize(NULL);
-        m_isCoinitialized   = (S_OK == hr) || (S_FALSE == hr);
-    }
+	{
+		HRESULT const   hr  = CoInitialize(NULL);
+		m_isCoinitialized   = (S_OK == hr) || (S_FALSE == hr);
+	}
 #endif
 
 	return AUI_ERRCODE_OK;

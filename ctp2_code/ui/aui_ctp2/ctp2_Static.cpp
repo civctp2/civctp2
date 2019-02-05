@@ -17,7 +17,7 @@
 ctp2_Static::ctp2_Static(
 	AUI_ERRCODE *retval,
 	uint32 id,
-	MBCHAR *ldlBlock )
+	const MBCHAR *ldlBlock )
 	:
 	aui_ImageBase( ldlBlock ),
 	aui_TextBase( ldlBlock, (MBCHAR *)NULL ),
@@ -39,7 +39,6 @@ ctp2_Static::ctp2_Static(
 	if ( !AUI_SUCCESS(*retval) ) return;
 }
 
-
 ctp2_Static::ctp2_Static(
 	AUI_ERRCODE *retval,
 	uint32 id,
@@ -47,8 +46,8 @@ ctp2_Static::ctp2_Static(
 	sint32 y,
 	sint32 width,
 	sint32 height,
-	MBCHAR *pattern,
-	MBCHAR *text,
+	const MBCHAR *pattern,
+	const MBCHAR *text,
 	uint32 maxLength,
 	uint32 bevelWidth,
 	uint32 bevelType)
@@ -70,10 +69,9 @@ ctp2_Static::ctp2_Static(
 	if ( !AUI_SUCCESS(*retval) ) return;
 }
 
-
-AUI_ERRCODE ctp2_Static::InitCommonLdl( MBCHAR *ldlBlock )
+AUI_ERRCODE ctp2_Static::InitCommonLdl( const MBCHAR *ldlBlock )
 {
-    ldl_datablock * block = aui_Ldl::FindDataBlock(ldlBlock);
+	ldl_datablock * block = aui_Ldl::FindDataBlock(ldlBlock);
 	Assert( block != NULL );
 	if ( !block )
 		return AUI_ERRCODE_LDLFINDDATABLOCKFAILED;

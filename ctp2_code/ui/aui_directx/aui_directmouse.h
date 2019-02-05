@@ -15,7 +15,7 @@ public:
 
 	aui_DirectMouse(
 		AUI_ERRCODE *retval,
-		MBCHAR *ldlBlock,
+		const MBCHAR *ldlBlock,
 		BOOL useExclusiveMode = FALSE );
 	virtual ~aui_DirectMouse() {}
 

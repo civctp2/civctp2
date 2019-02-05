@@ -14,40 +14,44 @@ extern CivApp           *g_civApp;
 
 aui_SDLMouse::aui_SDLMouse(
    AUI_ERRCODE *retval,
-   MBCHAR *ldlBlock,
+   const MBCHAR *ldlBlock,
    BOOL useExclusiveMode)
    :
    aui_Input(),
    aui_Mouse(retval, ldlBlock),
    aui_SDLInput(retval, useExclusiveMode)
 {
-   Assert(AUI_SUCCESS(*retval));
-   if (!AUI_SUCCESS(*retval)) return;
+	Assert(AUI_SUCCESS(*retval));
+	if (!AUI_SUCCESS(*retval)) return;
 }
 
 aui_SDLMouse::~aui_SDLMouse()
 {
 }
 
+void HandleMouseWheel(sint16 delta)
+{
+	if (!g_civApp) return;
 
-void HandleMouseWheel(sint16 delta){
-    if (!g_civApp) return;
-
-    aui_Ranger *box2 = aui_Ranger::GetMouseFocusRanger();
-    if (box2 != NULL) {
-	if (delta) {
-	    if (delta < 0) {
-		box2->ForceScroll(0, 1);
+	aui_Ranger *box2 = aui_Ranger::GetMouseFocusRanger();
+	if (box2 != NULL)
+	{
+		if (delta)
+		{
+			if (delta < 0)
+			{
+				box2->ForceScroll(0, 1);
+			}
+			else
+			{
+				box2->ForceScroll(0, -1);
+			}
+			return;
 		}
-	    else {
-		box2->ForceScroll(0, -1);
-		}
-	    return;
-	    }
 	}
-    else
-	printf("%s L%d: Mouse wheel for SDL not handled!\n", __FILE__, __LINE__);
-    }
+	else
+		printf("%s L%d: Mouse wheel for SDL not handled!\n", __FILE__, __LINE__);
+}
 
 AUI_ERRCODE
 aui_SDLMouse::GetInput(void)

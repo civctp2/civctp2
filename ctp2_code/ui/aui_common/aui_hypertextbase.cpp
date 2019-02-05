@@ -24,7 +24,7 @@
 //
 // Modifications from the original Activision code:
 //
-// - Initialized local variables. (Sep 9th 2005 Martin G?hmann)
+// - Initialized local variables. (Sep 9th 2005 Martin Gühmann)
 //
 //----------------------------------------------------------------------------
 
@@ -40,7 +40,7 @@
 
 aui_HyperTextBase::aui_HyperTextBase(
 	AUI_ERRCODE *retval,
-	MBCHAR *ldlBlock )
+	const MBCHAR *ldlBlock )
 {
 	*retval = InitCommonLdl( ldlBlock );
 	Assert( AUI_SUCCESS(*retval) );
@@ -49,7 +49,7 @@ aui_HyperTextBase::aui_HyperTextBase(
 
 aui_HyperTextBase::aui_HyperTextBase(
 	AUI_ERRCODE *retval,
-	MBCHAR *hyperText,
+	const MBCHAR *hyperText,
 	uint32 hyperMaxLen )
 {
 	*retval = InitCommon( hyperText, hyperMaxLen );
@@ -57,7 +57,7 @@ aui_HyperTextBase::aui_HyperTextBase(
 }
 
 
-AUI_ERRCODE aui_HyperTextBase::InitCommonLdl( MBCHAR *ldlBlock )
+AUI_ERRCODE aui_HyperTextBase::InitCommonLdl( const MBCHAR *ldlBlock )
 {
     ldl_datablock * block = aui_Ldl::FindDataBlock(ldlBlock);
 	Assert( block != NULL );
@@ -73,7 +73,7 @@ AUI_ERRCODE aui_HyperTextBase::InitCommonLdl( MBCHAR *ldlBlock )
 
 
 AUI_ERRCODE aui_HyperTextBase::InitCommon(
-	MBCHAR *hyperText,
+	const MBCHAR *hyperText,
 	uint32 hyperMaxLen )
 {
 	m_hyperText = NULL,

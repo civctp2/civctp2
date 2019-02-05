@@ -71,7 +71,7 @@
 
 BattleOrderBox::BattleOrderBox(AUI_ERRCODE *retval,
 					   uint32 id,
-					   MBCHAR *ldlBlock,
+					   const MBCHAR *ldlBlock,
 					   ControlActionCallback *ActionFunc,
 					   void *cookie)
 	:
@@ -88,7 +88,7 @@ BattleOrderBox::BattleOrderBox(AUI_ERRCODE *retval,
 					   sint32 y,
 					   sint32 width,
 					   sint32 height,
-					   MBCHAR *pattern,
+					   const MBCHAR *pattern,
 					   ControlActionCallback *ActionFunc,
 					   void *cookie)
 	:
@@ -99,7 +99,7 @@ BattleOrderBox::BattleOrderBox(AUI_ERRCODE *retval,
 	InitCommon(NULL);
 }
 
-AUI_ERRCODE BattleOrderBox::InitCommon( MBCHAR *ldlBlock)
+AUI_ERRCODE BattleOrderBox::InitCommon( const MBCHAR *ldlBlock)
 {
 	sint32			buttonBorder = 2;
 	sint32			cellWidth = (Width()-buttonBorder*2)/3;
@@ -440,14 +440,14 @@ void BattleOrderBox::SetSingleUnit(Unit theUnit)
 		m_unitImage->RemoveSubControl( m_unitFortify->Id() );
 	}
 
-	sprintf(s, "%ld/%ld/%ld", (sint32)(theUnit.GetAttack() / 10.0),
+	sprintf(s, "%d/%d/%d", (sint32)(theUnit.GetAttack() / 10.0),
 		(sint32)(theUnit.GetZBRange() / 10.0), (sint32)(theUnit.GetDefense() / 10.0) );
 	m_unitARD->SetText(s);
 
-	sprintf(s, "%ld/%ld", (sint32)(theUnit.GetMovementPoints() / 100.0), (sint32)(theUnit.GetMaxMovePoints() / 100.0));
+	sprintf(s, "%d/%d", (sint32)(theUnit.GetMovementPoints() / 100.0), (sint32)(theUnit.GetMaxMovePoints() / 100.0));
 	m_unitMovement->SetText(s);
 
-	sint32 healthPercent  = (sint32)( theUnit.GetHP() * 100  / theUnit->CalculateTotalHP());//.GetDBRec()->GetMaxHP() );
+	sint32 healthPercent  = (sint32)( theUnit.GetHP() * 100  / theUnit->CalculateTotalHP());
 	m_unitHealthBar->SetPercentFilled( healthPercent );
 
 	m_unitName->SetText(theUnit.GetDisplayName().c_str());

@@ -17,7 +17,7 @@ extern C3UI			*g_c3ui;
 
 MessageAdvice		*g_adviceMessageWindow = NULL;
 
-int messageadvice_AddText( MBCHAR *text )
+int messageadvice_AddText(const MBCHAR *text )
 {
 	AUI_ERRCODE	errcode = AUI_ERRCODE_OK;
 	MBCHAR		windowBlock[ k_AUI_LDL_MAXBLOCK + 1 ];
@@ -61,7 +61,7 @@ int messageadvice_DestroyWindow( void )
 MessageAdvice::MessageAdvice(
 	AUI_ERRCODE *retval,
 	uint32 id,
-	MBCHAR *ldlBlock,
+	const MBCHAR *ldlBlock,
 	sint32 bpp,
 	AUI_WINDOW_TYPE type )
 	:
@@ -73,7 +73,7 @@ MessageAdvice::MessageAdvice(
 }
 
 
-AUI_ERRCODE MessageAdvice::InitCommon( MBCHAR *ldlBlock )
+AUI_ERRCODE MessageAdvice::InitCommon(const MBCHAR *ldlBlock )
 {
 	AUI_ERRCODE errcode = AUI_ERRCODE_OK;
 
@@ -102,7 +102,7 @@ AUI_ERRCODE MessageAdvice::InitCommon( MBCHAR *ldlBlock )
 	return AUI_ERRCODE_OK;
 }
 
-AUI_ERRCODE MessageAdvice::CreateWindowEdges( MBCHAR *ldlBlock )
+AUI_ERRCODE MessageAdvice::CreateWindowEdges(const MBCHAR *ldlBlock )
 {
 	MBCHAR		imageBlock[ k_AUI_LDL_MAXBLOCK + 1 ];
 	AUI_ERRCODE		errcode = AUI_ERRCODE_OK;
@@ -145,7 +145,7 @@ AUI_ERRCODE MessageAdvice::CreateWindowEdges( MBCHAR *ldlBlock )
 	return AUI_ERRCODE_OK;
 }
 
-AUI_ERRCODE MessageAdvice::AppendText( MBCHAR *text )
+AUI_ERRCODE MessageAdvice::AppendText(const MBCHAR *text )
 {
 	AUI_ERRCODE errcode = AUI_ERRCODE_OK;
 	aui_Static *item;
@@ -163,7 +163,7 @@ AUI_ERRCODE MessageAdvice::AppendText( MBCHAR *text )
 }
 
 
-AUI_ERRCODE MessageAdvice::CreateDismissButton( MBCHAR *ldlBlock )
+AUI_ERRCODE MessageAdvice::CreateDismissButton(const MBCHAR *ldlBlock )
 {
 	AUI_ERRCODE		errcode = AUI_ERRCODE_OK;
 	MBCHAR			buttonBlock[ k_AUI_LDL_MAXBLOCK + 1 ];
@@ -186,8 +186,7 @@ AUI_ERRCODE MessageAdvice::CreateDismissButton( MBCHAR *ldlBlock )
 	return AUI_ERRCODE_OK;
 }
 
-
-AUI_ERRCODE MessageAdvice::CreateTextBox( MBCHAR *ldlBlock )
+AUI_ERRCODE MessageAdvice::CreateTextBox(const MBCHAR *ldlBlock )
 {
 	MBCHAR			textBlock[ k_AUI_LDL_MAXBLOCK + 1 ];
 	AUI_ERRCODE		errcode = AUI_ERRCODE_OK;
@@ -204,7 +203,6 @@ AUI_ERRCODE MessageAdvice::CreateTextBox( MBCHAR *ldlBlock )
 
 	return AUI_ERRCODE_OK;
 }
-
 
 MessageAdvice::~MessageAdvice()
 {
@@ -246,7 +244,6 @@ MessageAdvice::~MessageAdvice()
 	}
 
 }
-
 
 void MessageAdvice::MouseLGrabInside (aui_MouseEvent *mouseData)
 {

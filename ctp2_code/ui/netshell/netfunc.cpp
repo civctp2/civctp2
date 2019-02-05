@@ -949,11 +949,11 @@ NETFunc::AIPlayer::AIPlayer(void) {
 NETFunc::AIPlayer::~AIPlayer(void) {
 }
 
-char *NETFunc::AIPlayer::GetName(void) {
+const char *NETFunc::AIPlayer::GetName(void) {
 	return name;
 }
 
-void NETFunc::AIPlayer::SetName(char *n) {
+void NETFunc::AIPlayer::SetName(const char *n) {
 	strncpy(name, n, dp_PNAMELEN - 1);
 	name[dp_PNAMELEN - 1] = 0;
 }

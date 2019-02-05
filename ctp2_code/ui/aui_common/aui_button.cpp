@@ -13,7 +13,7 @@ extern SoundManager		*g_soundManager;
 aui_Button::aui_Button(
 	AUI_ERRCODE *retval,
 	uint32 id,
-	MBCHAR *ldlBlock,
+	const MBCHAR *ldlBlock,
 	ControlActionCallback *ActionFunc,
 	void *cookie )
 :
@@ -29,7 +29,6 @@ aui_Button::aui_Button(
 	*retval = InitCommonLdl( ldlBlock );
 	Assert( AUI_SUCCESS(*retval) );
 }
-
 
 aui_Button::aui_Button(
 	AUI_ERRCODE *retval,
@@ -54,16 +53,14 @@ aui_Button::aui_Button(
 	Assert( AUI_SUCCESS(*retval) );
 }
 
-
-AUI_ERRCODE aui_Button::InitCommonLdl( MBCHAR *ldlBlock )
+AUI_ERRCODE aui_Button::InitCommonLdl( const MBCHAR *ldlBlock )
 {
 	return InitCommon();
 }
 
-
 AUI_ERRCODE aui_Button::InitCommon(void)
 {
-	m_isRepeating = FALSE;
+	m_isRepeating = false;
 	m_repeatCount = 0;
 	m_attributes &= ~k_CONTROL_ATTRIBUTE_DOWN;
 	m_keyboardAction = AUI_BUTTON_ACTION_EXECUTE;
@@ -71,15 +68,13 @@ AUI_ERRCODE aui_Button::InitCommon(void)
 	return AUI_ERRCODE_OK;
 }
 
-
 AUI_ERRCODE aui_Button::ResetThis( void )
 {
-	m_isRepeating = FALSE;
+	m_isRepeating = false;
 	m_repeatCount = 0;
 
 	return aui_Control::ResetThis();
 }
-
 
 AUI_ERRCODE aui_Button::DrawThis(
 	aui_Surface *surface,
@@ -110,22 +105,8 @@ AUI_ERRCODE aui_Button::DrawThis(
 	return AUI_ERRCODE_OK;
 }
 
-
-
-
-
-
-
-
 void aui_Button::KeyboardCallback( aui_KeyboardEvent *keyboardData )
 {
-
-
-
-
-
-
-
 	if ( !GetMouseOwnership() && ( keyboardData->key == AUI_KEYBOARD_KEY_RETURN)) {
 
 		if ( keyboardData->down && !m_keyboardEvent.down )
@@ -169,7 +150,6 @@ void aui_Button::KeyboardCallback( aui_KeyboardEvent *keyboardData )
 	}
 }
 
-
 void aui_Button::PostChildrenCallback( aui_MouseEvent *mouseData )
 {
 	if ( m_isRepeating && mouseData->time - m_startWaitTime > m_timeOut )
@@ -193,10 +173,8 @@ void aui_Button::PostChildrenCallback( aui_MouseEvent *mouseData )
 	}
 }
 
-
 void aui_Button::MouseLDragOver( aui_MouseEvent *mouseData )
 {
-
 	aui_Control::MouseLDragOver(mouseData);
 
 	if (IsDisabled()) return;
@@ -216,18 +194,16 @@ void aui_Button::MouseLDragOver( aui_MouseEvent *mouseData )
 			m_attributes |= k_CONTROL_ATTRIBUTE_ACTIVE;
 			m_draw |= m_drawMask & k_AUI_REGION_DRAWFLAG_MOUSELDRAGOVER;
 
-			m_isRepeating = TRUE;
+			m_isRepeating = true;
 		}
 	}
 	else
 		MouseLDragOutside( mouseData );
 }
 
-
 void aui_Button::MouseLDragAway( aui_MouseEvent *mouseData )
 {
-
-	aui_Control::MouseLDragAway(mouseData);
+		aui_Control::MouseLDragAway(mouseData);
 
 	if (IsDisabled()) return;
 
@@ -242,14 +218,13 @@ void aui_Button::MouseLDragAway( aui_MouseEvent *mouseData )
 		m_attributes &= ~k_CONTROL_ATTRIBUTE_ACTIVE;
 		m_draw |= m_drawMask & k_AUI_REGION_DRAWFLAG_MOUSELDRAGAWAY;
 
-		m_isRepeating = FALSE;
+		m_isRepeating = false;
 		if ( m_ActionFunc )
 			m_ActionFunc( this, AUI_BUTTON_ACTION_RELEASE, 0, m_cookie );
 		else if ( m_action )
 			m_action->Execute( this, AUI_BUTTON_ACTION_RELEASE, 0 );
 	}
 }
-
 
 void aui_Button::MouseLGrabInside( aui_MouseEvent *mouseData )
 {
@@ -278,7 +253,7 @@ void aui_Button::MouseLGrabInside( aui_MouseEvent *mouseData )
 		m_attributes |= k_CONTROL_ATTRIBUTE_ACTIVE;
 		m_draw |= m_drawMask & k_AUI_REGION_DRAWFLAG_MOUSELGRABINSIDE;
 
-		m_isRepeating = TRUE;
+		m_isRepeating = true;
 		m_repeatCount = 0;
 		m_startWaitTime = mouseData->time;
 		if ( m_ActionFunc )
@@ -289,7 +264,6 @@ void aui_Button::MouseLGrabInside( aui_MouseEvent *mouseData )
 	else
 		MouseLGrabOutside( mouseData );
 }
-
 
 void aui_Button::MouseLDropInside( aui_MouseEvent *mouseData )
 {
@@ -303,7 +277,6 @@ void aui_Button::MouseLDropInside( aui_MouseEvent *mouseData )
 
 		if ( GetMouseOwnership() == this )
 		{
-
 			ReleaseMouseOwnership();
 
 			PlaySound( AUI_SOUNDBASE_SOUND_EXECUTE );
@@ -312,14 +285,11 @@ void aui_Button::MouseLDropInside( aui_MouseEvent *mouseData )
 
 			m_attributes &= ~k_CONTROL_ATTRIBUTE_DOWN;
 
-
-
-
 			m_attributes &= ~k_CONTROL_ATTRIBUTE_ACTIVE;
 
 			m_draw |= m_drawMask & k_AUI_REGION_DRAWFLAG_MOUSELDROPINSIDE;
 
-			m_isRepeating = FALSE;
+			m_isRepeating = false;
 
 			if(GetAttracting()) {
 				SetAttract(false, 0);
@@ -346,14 +316,12 @@ void aui_Button::MouseLDropInside( aui_MouseEvent *mouseData )
 		MouseLDropOutside( mouseData );
 }
 
-
 void aui_Button::MouseLDropOutside( aui_MouseEvent *mouseData )
 {
 	if (IsDisabled()) return;
 
 	if ( GetMouseOwnership() == this )
 	{
-
 		ReleaseMouseOwnership();
 
 		if ( m_mouseCode == AUI_ERRCODE_UNHANDLED )

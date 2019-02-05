@@ -4,8 +4,8 @@
 
 
 aui_Font::aui_Font(
-	AUI_ERRCODE *retval,
-	MBCHAR *descriptor )
+	AUI_ERRCODE  *retval,
+	const MBCHAR *descriptor )
 	:
 	aui_Base()
 {
@@ -15,7 +15,7 @@ aui_Font::aui_Font(
 }
 
 
-AUI_ERRCODE aui_Font::InitCommon( MBCHAR *descriptor )
+AUI_ERRCODE aui_Font::InitCommon( const MBCHAR *descriptor )
 {
 	m_hfont = NULL;
 
@@ -47,7 +47,7 @@ aui_Font::~aui_Font()
 }
 
 
-AUI_ERRCODE aui_Font::SetDescriptor( MBCHAR *descriptor )
+AUI_ERRCODE aui_Font::SetDescriptor( const MBCHAR *descriptor )
 {
 	memset( m_descriptor, '\0', sizeof( m_descriptor ) );
 

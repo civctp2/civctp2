@@ -54,7 +54,7 @@ extern C3UI *g_c3ui;
 ctp2_Spinner::ctp2_Spinner(
 	AUI_ERRCODE *retval,
 	uint32 id,
-	MBCHAR *ldlBlock,
+	const MBCHAR *ldlBlock,
 	ControlActionCallback *ActionFunc,
 	void *cookie,
 	bool displayValue )

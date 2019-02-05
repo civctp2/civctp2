@@ -56,7 +56,7 @@ c3_DropDown::c3_DropDown(
 	sint32 y,
 	sint32 width,
 	sint32 height,
-	MBCHAR *pattern,
+	const MBCHAR *pattern,
 	sint32 buttonSize,
 	sint32 windowSize,
 	ControlActionCallback *ActionFunc,
@@ -75,7 +75,7 @@ c3_DropDown::c3_DropDown(
 	Assert( AUI_SUCCESS(*retval) );
 	if ( !AUI_SUCCESS(*retval) ) return;
 
-	*retval = aui_SoundBase::InitCommon( (MBCHAR **)NULL );
+	*retval = aui_SoundBase::InitCommon( (const MBCHAR **)NULL );
 	Assert( AUI_SUCCESS(*retval) );
 	if ( !AUI_SUCCESS(*retval) ) return;
 
@@ -91,7 +91,7 @@ c3_DropDown::c3_DropDown(
 c3_DropDown::c3_DropDown(
 	AUI_ERRCODE *retval,
 	uint32 id,
-	MBCHAR *ldlBlock,
+	const MBCHAR *ldlBlock,
 	ControlActionCallback *ActionFunc,
 	void *cookie)
 	:
@@ -122,19 +122,19 @@ c3_DropDown::c3_DropDown(
 }
 
 
-AUI_ERRCODE c3_DropDown::CreateComponents( MBCHAR *ldlBlock )
+AUI_ERRCODE c3_DropDown::CreateComponents(const MBCHAR *ldlBlock )
 {
 	AUI_ERRCODE errcode = AUI_ERRCODE_OK;
 
 	static MBCHAR block[ k_AUI_LDL_MAXBLOCK + 1 ];
 
-    MBCHAR * pattern = (m_pattern) ? m_pattern->GetFilename() : NULL;
+	const MBCHAR * pattern = (m_pattern) ? m_pattern->GetFilename() : NULL;
 
 	if ( ldlBlock )
 	{
 		sprintf( block, "%s.%s", ldlBlock, k_AUI_DROPDOWN_LDL_STATICPANE );
 
-        if (aui_Ldl::FindDataBlock(block))
+		if (aui_Ldl::FindDataBlock(block))
 		{
 			m_staticPane = new c3_Static(
 				&errcode,
@@ -154,7 +154,7 @@ AUI_ERRCODE c3_DropDown::CreateComponents( MBCHAR *ldlBlock )
 	{
 		sprintf( block, "%s.%s", ldlBlock, k_AUI_DROPDOWN_LDL_BUTTON );
 
-        if (aui_Ldl::FindDataBlock(block))
+		if (aui_Ldl::FindDataBlock(block))
 		{
 
 			m_button = new aui_Button(
@@ -183,7 +183,7 @@ AUI_ERRCODE c3_DropDown::CreateComponents( MBCHAR *ldlBlock )
 	{
 		sprintf( block, "%s.%s", ldlBlock, k_AUI_DROPDOWN_LDL_WINDOW );
 
-        if ( aui_Ldl::FindDataBlock(block))
+		if ( aui_Ldl::FindDataBlock(block))
 		{
 			m_listBoxWindow = new aui_Window(
 				&errcode,
@@ -203,7 +203,7 @@ AUI_ERRCODE c3_DropDown::CreateComponents( MBCHAR *ldlBlock )
 
 			sprintf( block, "%s.%s.%s", ldlBlock, k_AUI_DROPDOWN_LDL_WINDOW, k_AUI_DROPDOWN_LDL_LISTBOX );
 
-            if (aui_Ldl::FindDataBlock(block))
+			if (aui_Ldl::FindDataBlock(block))
 				m_listBox = new c3_ListBox(
 					&errcode,
 					aui_UniqueId(),
@@ -248,8 +248,6 @@ AUI_ERRCODE c3_DropDown::CreateComponents( MBCHAR *ldlBlock )
 
 AUI_ERRCODE c3_DropDown::RepositionListBoxWindow( void )
 {
-
-
 	if ( m_window )
 	{
 		POINT screenLocation = { m_x, m_y + m_height };

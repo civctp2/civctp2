@@ -285,7 +285,7 @@ void ctp2_HyperTextBox::FormatText
 ctp2_HyperTextBox::ctp2_HyperTextBox(
 	AUI_ERRCODE *retval,
 	uint32 id,
-	MBCHAR *ldlBlock,
+	const MBCHAR *ldlBlock,
 	ControlActionCallback *ActionFunc,
 	void *cookie )
 	:
@@ -330,7 +330,7 @@ ctp2_HyperTextBox::ctp2_HyperTextBox(
 	sint32 y,
 	sint32 width,
 	sint32 height,
-	MBCHAR *pattern,
+	const MBCHAR *pattern,
 	ControlActionCallback *ActionFunc,
 	void *cookie )
 	:
@@ -350,7 +350,7 @@ ctp2_HyperTextBox::ctp2_HyperTextBox(
 	Assert( AUI_SUCCESS(*retval) );
 }
 
-AUI_ERRCODE ctp2_HyperTextBox::InitCommonLdl( MBCHAR *ldlBlock )
+AUI_ERRCODE ctp2_HyperTextBox::InitCommonLdl( const MBCHAR *ldlBlock )
 {
     ldl_datablock * block = aui_Ldl::FindDataBlock(ldlBlock);
 	Assert( block != NULL );
@@ -389,7 +389,7 @@ ctp2_HyperTextBox::~ctp2_HyperTextBox()
 	}
 }
 
-AUI_ERRCODE ctp2_HyperTextBox::CreateRanger( MBCHAR *ldlBlock )
+AUI_ERRCODE ctp2_HyperTextBox::CreateRanger( const MBCHAR *ldlBlock )
 {
 	AUI_ERRCODE errcode = AUI_ERRCODE_OK;
 
@@ -408,7 +408,7 @@ AUI_ERRCODE ctp2_HyperTextBox::CreateRanger( MBCHAR *ldlBlock )
 				this );
 	}
 
-	MBCHAR * pattern = (m_pattern) ? m_pattern->GetFilename() : NULL;
+	const MBCHAR * pattern = (m_pattern) ? m_pattern->GetFilename() : NULL;
 
 	if ( !m_ranger )
 		m_ranger = new c3_Ranger(

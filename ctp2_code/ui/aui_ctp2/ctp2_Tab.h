@@ -22,7 +22,7 @@ public:
 		ACTION_LAST
 	};
 
-	ctp2_Tab(AUI_ERRCODE *retval, uint32 id, MBCHAR *ldlBlock,
+	ctp2_Tab(AUI_ERRCODE *retval, uint32 id, const MBCHAR *ldlBlock,
 		ControlActionCallback *ActionFunc = NULL, void *cookie = NULL);
 
 	virtual ~ctp2_Tab();

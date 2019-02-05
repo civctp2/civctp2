@@ -61,7 +61,7 @@ aui_ListBox *aui_ListBox::ms_mouseFocusListBox = NULL;
 aui_ListBox::aui_ListBox(
 	AUI_ERRCODE *retval,
 	uint32 id,
-	MBCHAR *ldlBlock,
+	const MBCHAR *ldlBlock,
 	ControlActionCallback *ActionFunc,
 	void *cookie )
 	:
@@ -109,7 +109,7 @@ aui_ListBox::aui_ListBox(
 }
 
 
-AUI_ERRCODE aui_ListBox::InitCommonLdl( MBCHAR *ldlBlock )
+AUI_ERRCODE aui_ListBox::InitCommonLdl( const MBCHAR *ldlBlock )
 {
 	ldl_datablock * block = aui_Ldl::FindDataBlock(ldlBlock);
 	Assert( block != NULL );
@@ -211,7 +211,7 @@ AUI_ERRCODE aui_ListBox::InitCommon( void )
 }
 
 
-AUI_ERRCODE aui_ListBox::CreateRangersAndHeader( MBCHAR *ldlBlock )
+AUI_ERRCODE aui_ListBox::CreateRangersAndHeader( const MBCHAR *ldlBlock )
 {
 	AUI_ERRCODE errcode = AUI_ERRCODE_OK;
 

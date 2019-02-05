@@ -3008,7 +3008,7 @@ void AllinoneWindow::UpdateConfig( void )
 	if ( index < 0 || index >= m_playStyleValueStrings->GetNumStrings() )
 		return;
 
-	MBCHAR *string = m_playStyleValueStrings->GetString( index );
+	const MBCHAR *string = m_playStyleValueStrings->GetString( index );
 
 
 	if ( strlen( string ) )
@@ -4507,7 +4507,7 @@ void AllinoneWindow::SpitOutGameSetup( void )
 
 
 
-	static aui_TextBase textStyle( "styles.system", (MBCHAR *)NULL );
+	static aui_TextBase textStyle( "styles.system", (const MBCHAR *)NULL );
 	((ns_ChatBox *)m_controls[ CONTROL_CHATBOX ])->
 		AppendText( info, textStyle.GetTextColor(), FALSE, FALSE );
 }

@@ -50,31 +50,31 @@ aui_StringTable::aui_StringTable
 :
 	m_Strings       (numStrings, (MBCHAR *) NULL)
 {
-    *retval = AUI_ERRCODE_OK;
+	*retval = AUI_ERRCODE_OK;
 }
 
 aui_StringTable::aui_StringTable
 (
-	AUI_ERRCODE *   retval,
-	MBCHAR const *  ldlBlock
+	AUI_ERRCODE  *   retval,
+	const MBCHAR *  ldlBlock
 )
 :
 	m_Strings       ()
 {
-    ldl_datablock * block = aui_Ldl::FindDataBlock(ldlBlock);
+	ldl_datablock * block = aui_Ldl::FindDataBlock(ldlBlock);
 	Assert(block);
 	if (!block)
-    {
-        *retval = AUI_ERRCODE_LDLFINDDATABLOCKFAILED;
-        return;
-    }
+	{
+		*retval = AUI_ERRCODE_LDLFINDDATABLOCKFAILED;
+		return;
+	}
 
 	m_Strings.resize(FindNumStringsFromLdl(block), (MBCHAR *) NULL);
 
-    MBCHAR temp[k_AUI_LDL_MAXBLOCK + 1];
+	MBCHAR temp[k_AUI_LDL_MAXBLOCK + 1];
 
 	if ( block->GetBool(k_AUI_STRINGTABLE_LDL_NODATABASE) )
-    {
+	{
 		for (size_t i = 0; i < m_Strings.size(); ++i)
 		{
 			sprintf(temp, "%s%d", k_AUI_STRINGTABLE_LDL_STRING, i);
@@ -82,7 +82,7 @@ aui_StringTable::aui_StringTable
 		}
 	}
 	else
-    {
+	{
 		for (size_t i = 0; i < m_Strings.size(); ++i)
 		{
 			sprintf(temp, "%s%d", k_AUI_STRINGTABLE_LDL_STRING, i);
@@ -95,60 +95,54 @@ aui_StringTable::aui_StringTable
 
 aui_StringTable::~aui_StringTable()
 {
-    for
-    (
-        std::vector<MBCHAR *>::iterator p = m_Strings.begin();
-        p != m_Strings.end();
-        ++p
-    )
+	for
+	(
+		std::vector<MBCHAR *>::iterator p = m_Strings.begin();
+		p != m_Strings.end();
+		++p
+	)
 	{
 		delete [] *p;
 	}
 
-    std::vector<MBCHAR *>().swap(m_Strings);
+	std::vector<MBCHAR *>().swap(m_Strings);
 }
 
 size_t aui_StringTable::FindNumStringsFromLdl(ldl_datablock * block)
 {
-    sint32  stringCount = 0;
+	sint32  stringCount = 0;
 
 	if (ATTRIBUTE_TYPE_INT ==
-            block->GetAttributeType(k_AUI_STRINGTABLE_LDL_NUMSTRINGS)
-       )
-    {
-        // Use the numstrings entry
+	        block->GetAttributeType(k_AUI_STRINGTABLE_LDL_NUMSTRINGS)
+	   )
+	{
+		// Use the numstrings entry
 		stringCount = block->GetInt(k_AUI_STRINGTABLE_LDL_NUMSTRINGS);
-        Assert(stringCount >= 0);
-    }
-    else
-    {
-        // Look for string0, string1, etc. entries and count
-	    MBCHAR  temp[k_AUI_LDL_MAXBLOCK + 1];
-	    bool    isAtEnd = false;
+		Assert(stringCount >= 0);
+	}
+	else
+	{
+		// Look for string0, string1, etc. entries and count
+		MBCHAR  temp[k_AUI_LDL_MAXBLOCK + 1];
+		bool    isAtEnd = false;
 
-        while (!isAtEnd)
-        {
-		    sprintf(temp, "%s%d", k_AUI_STRINGTABLE_LDL_STRING, stringCount);
-            if (block->GetString(temp))
-            {
-                ++stringCount;
-            }
-            else
-            {
-                isAtEnd = true;
-            }
-	    }
-    }
+		while (!isAtEnd)
+		{
+			sprintf(temp, "%s%d", k_AUI_STRINGTABLE_LDL_STRING, stringCount);
+			if (block->GetString(temp))
+			{
+				++stringCount;
+			}
+			else
+			{
+				isAtEnd = true;
+			}
+		}
+	}
 
 	return static_cast<size_t>(stringCount);
 }
-
-
-
-
-
-
-MBCHAR * aui_StringTable::GetString( sint32 index ) const
+const MBCHAR * aui_StringTable::GetString( sint32 index ) const
 {
 	Assert(index >= 0 && static_cast<size_t>(index) < m_Strings.size());
 	if (index < 0 || static_cast<size_t>(index) >= m_Strings.size()) return NULL;
@@ -156,12 +150,11 @@ MBCHAR * aui_StringTable::GetString( sint32 index ) const
 	return m_Strings[index];
 }
 
-
 AUI_ERRCODE aui_StringTable::SetString(const MBCHAR *text, sint32 index)
 {
 	Assert(index >= 0 && static_cast<size_t>(index) < m_Strings.size());
 	if (index < 0 || static_cast<size_t>(index) >= m_Strings.size())
-        return AUI_ERRCODE_INVALIDPARAM;
+		return AUI_ERRCODE_INVALIDPARAM;
 
 	if (text)
 	{

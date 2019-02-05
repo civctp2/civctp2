@@ -14,7 +14,7 @@
 aui_HyperTextBox::aui_HyperTextBox(
 	AUI_ERRCODE *retval,
 	uint32 id,
-	MBCHAR *ldlBlock,
+	const MBCHAR *ldlBlock,
 	ControlActionCallback *ActionFunc,
 	void *cookie )
 	:
@@ -62,8 +62,7 @@ aui_HyperTextBox::aui_HyperTextBox(
 	if ( !AUI_SUCCESS(*retval) ) return;
 }
 
-
-AUI_ERRCODE aui_HyperTextBox::InitCommonLdl( MBCHAR *ldlBlock )
+AUI_ERRCODE aui_HyperTextBox::InitCommonLdl( const MBCHAR *ldlBlock )
 {
 	ldl_datablock * block = aui_Ldl::FindDataBlock(ldlBlock);
 	Assert( block != NULL );
@@ -77,7 +76,6 @@ AUI_ERRCODE aui_HyperTextBox::InitCommonLdl( MBCHAR *ldlBlock )
 
 	return AUI_ERRCODE_OK;
 }
-
 
 AUI_ERRCODE aui_HyperTextBox::InitCommon( void )
 {
@@ -104,8 +102,7 @@ AUI_ERRCODE aui_HyperTextBox::InitCommon( void )
 	return AUI_ERRCODE_OK;
 }
 
-
-AUI_ERRCODE aui_HyperTextBox::CreateRanger( MBCHAR *ldlBlock )
+AUI_ERRCODE aui_HyperTextBox::CreateRanger( const MBCHAR *ldlBlock )
 {
 	AUI_ERRCODE errcode = AUI_ERRCODE_OK;
 
@@ -145,12 +142,10 @@ AUI_ERRCODE aui_HyperTextBox::CreateRanger( MBCHAR *ldlBlock )
 	return RepositionRanger();
 }
 
-
 aui_HyperTextBox::~aui_HyperTextBox()
 {
 	delete m_ranger;
 }
-
 
 AUI_ERRCODE aui_HyperTextBox::SetHyperText( const MBCHAR *hyperText )
 {
@@ -161,7 +156,6 @@ AUI_ERRCODE aui_HyperTextBox::SetHyperText( const MBCHAR *hyperText )
 	return RepositionRanger();
 }
 
-
 AUI_ERRCODE aui_HyperTextBox::AppendHyperText( const MBCHAR *hyperText )
 {
 	AUI_ERRCODE errcode = aui_HyperTextBase::AppendHyperText( hyperText );
@@ -171,12 +165,10 @@ AUI_ERRCODE aui_HyperTextBox::AppendHyperText( const MBCHAR *hyperText )
 	return RepositionRanger();
 }
 
-
 AUI_ERRCODE aui_HyperTextBox::AddHyperStatics( const MBCHAR *hyperText )
 {
 	if ( !hyperText )
 	{
-
 		RemoveHyperStatics();
 		m_virtualHeight = 0;
 		m_curStaticPos.x = m_curStaticPos.y = 0;
@@ -395,7 +387,6 @@ AUI_ERRCODE aui_HyperTextBox::AddHyperStatics( const MBCHAR *hyperText )
 	return AUI_ERRCODE_OK;
 }
 
-
 AUI_ERRCODE aui_HyperTextBox::Resize( sint32 width, sint32 height )
 {
 	aui_Control::Resize( width, height );
@@ -406,7 +397,6 @@ AUI_ERRCODE aui_HyperTextBox::Resize( sint32 width, sint32 height )
 	return AUI_ERRCODE_OK;
 }
 
-
 AUI_ERRCODE aui_HyperTextBox::Show( void )
 {
 	aui_Control::Show();
@@ -415,7 +405,6 @@ AUI_ERRCODE aui_HyperTextBox::Show( void )
 
 	return AUI_ERRCODE_OK;
 }
-
 
 AUI_ERRCODE aui_HyperTextBox::RepositionRanger( void )
 {
@@ -451,13 +440,11 @@ AUI_ERRCODE aui_HyperTextBox::RepositionRanger( void )
 	return AUI_ERRCODE_OK;
 }
 
-
 AUI_ERRCODE aui_HyperTextBox::DrawThis(
 	aui_Surface *surface,
 	sint32 x,
 	sint32 y )
 {
-
 	if ( IsHidden() ) return AUI_ERRCODE_OK;
 
 	if ( !surface ) surface = m_window->TheSurface();
@@ -483,21 +470,12 @@ AUI_ERRCODE aui_HyperTextBox::DrawThis(
 	return AUI_ERRCODE_OK;
 }
 
-
 AUI_ERRCODE aui_HyperTextBox::RangerMoved( void )
 {
-
 	m_draw |= m_drawMask & k_AUI_REGION_DRAWFLAG_UPDATE;
 
 	return AUI_ERRCODE_OK;
 }
-
-
-
-
-
-
-
 
 void HyperTextBoxRangerActionCallback(
 	aui_Control *control,
@@ -505,7 +483,6 @@ void HyperTextBoxRangerActionCallback(
 	uint32 data,
 	void *cookie )
 {
-
 	if ( action == (uint32)AUI_RANGER_ACTION_VALUECHANGE )
 	{
 		aui_HyperTextBox *hypertextbox = (aui_HyperTextBox *)cookie;

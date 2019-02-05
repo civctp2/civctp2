@@ -595,7 +595,7 @@ void DipWizard::FillRecipientLists()
 		Assert(item);
 		if(item) {
 			ctp2_Static *label = (ctp2_Static *)item->GetChildByIndex(0);
-			label->SetText((MBCHAR *)g_theStringDB->GetNameStr("str_ldl_DipWizNoNation"));
+			label->SetText(g_theStringDB->GetNameStr("str_ldl_DipWizNoNation"));
 			item->SetUserData((void *)-1);
 			m_nations->AddItem(item);
 		}
@@ -1144,7 +1144,7 @@ void DipWizard::UpdateExchangeStage()
 
 		const MBCHAR *labelText = g_theStringDB->GetNameStr(labelStrName);
 		if(labelText)
-			label->SetText((MBCHAR *)labelText);
+			label->SetText(labelText);
 	}
 }
 
@@ -2625,7 +2625,7 @@ void DipWizard::DisplayDiplomat(sint32 player)
 	//Added by Martin Gühmann to display the emissary photo of recipient
 	if (m_emissary_photo)
 	{
-		MBCHAR const *	fileName	= NULL;
+		const MBCHAR *	fileName	= NULL;
 		if ((player >= 0) && (player < k_MAX_PLAYERS) && g_player[player])
 		{
 			StringId strID;

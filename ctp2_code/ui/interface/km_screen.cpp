@@ -80,15 +80,15 @@ namespace
     public:
         TabDescriptor
         (
-            MBCHAR const *      name,
+            const MBCHAR *      name,
             size_t              count
         )
         :   Name                (name),
             Count               (count)
         { ; };
 
-        MBCHAR const *          Name;
-        size_t const            Count;
+        const MBCHAR *          Name;
+        const size_t            Count;
 
     private:
 #ifdef _MSC_VER
@@ -580,10 +580,10 @@ sint32 km_screen_remapKey( WPARAM wParam, LPARAM lParam )
 	return 1;
 }
 
-KeyListItem::KeyListItem(AUI_ERRCODE *retval, sint32 index, uint32 keycode, MBCHAR *ldlBlock)
+KeyListItem::KeyListItem(AUI_ERRCODE *retval, sint32 index, uint32 keycode, const MBCHAR *ldlBlock)
 	:
 	aui_ImageBase(ldlBlock),
-	aui_TextBase(ldlBlock, (MBCHAR *)NULL),
+	aui_TextBase(ldlBlock, (const MBCHAR *)NULL),
 	c3_ListItem( retval, ldlBlock)
 {
 	Assert( AUI_SUCCESS(*retval) );
@@ -594,7 +594,7 @@ KeyListItem::KeyListItem(AUI_ERRCODE *retval, sint32 index, uint32 keycode, MBCH
 	if ( !AUI_SUCCESS(*retval) ) return;
 }
 
-AUI_ERRCODE KeyListItem::InitCommonLdl(sint32 index, uint32 keycode, MBCHAR *ldlBlock)
+AUI_ERRCODE KeyListItem::InitCommonLdl(sint32 index, uint32 keycode, const MBCHAR *ldlBlock)
 {
 	MBCHAR			block[ k_AUI_LDL_MAXBLOCK + 1 ];
 	AUI_ERRCODE		retval;
@@ -636,7 +636,7 @@ AUI_ERRCODE KeyListItem::InitCommonLdl(sint32 index, uint32 keycode, MBCHAR *ldl
 //                    rid of this life-time problem.
 //
 //----------------------------------------------------------------------------
-MBCHAR const * km_GetKeyName(uint32 code)
+const MBCHAR * km_GetKeyName(uint32 code)
 {
 	static MBCHAR str[_MAX_PATH];
 	const char *ctrl = g_theStringDB->GetNameStr("str_control_key");
@@ -669,7 +669,7 @@ MBCHAR const * km_GetKeyName(uint32 code)
 			break;
 	}
 
-	return const_cast<MBCHAR const *>(str);
+	return str;
 }
 
 void KeyListItem::Update(void)
@@ -709,7 +709,7 @@ void KeyListItem::UpdateKey( uint32 keycode )
 //                    rid of this life-time problem.
 //
 //----------------------------------------------------------------------------
-MBCHAR const * KeyListItem::GetKeyFromKMScreen(uint32 keycode)
+const MBCHAR * KeyListItem::GetKeyFromKMScreen(uint32 keycode)
 {
 	return km_GetKeyName(keycode);
 }

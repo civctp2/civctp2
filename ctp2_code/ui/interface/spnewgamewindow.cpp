@@ -71,46 +71,8 @@ extern LoadSaveMapWindow			*g_loadSaveMapWindow;
 
 extern MBCHAR g_scenarioName[k_SCENARIO_NAME_MAX];
 
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
 SPNewGameWindow::SPNewGameWindow(AUI_ERRCODE *retval, uint32 id,
-		MBCHAR *ldlBlock, sint32 bpp, AUI_WINDOW_TYPE type, bool bevel)
+		const MBCHAR *ldlBlock, sint32 bpp, AUI_WINDOW_TYPE type, bool bevel)
 :
     C3Window                (retval, id, ldlBlock, bpp, type, bevel),
 	m_spStart               (NULL),
@@ -379,7 +341,7 @@ void SPNewGameWindow::Update( void )
 
 
 
-SPProfileBox::SPProfileBox ( AUI_ERRCODE *retval, uint32 id, MBCHAR *ldlBlock ) :
+SPProfileBox::SPProfileBox ( AUI_ERRCODE *retval, uint32 id, const MBCHAR *ldlBlock ) :
 	m_spClan(NULL),m_spGender(NULL),m_spName(NULL),
 	m_spPreferences(NULL),m_spCustom(NULL),
 	m_PTOP(NULL),
@@ -465,7 +427,7 @@ void SPProfileBox::SetLeader(uint32 index)
 
 
 
-SPWorldBox::SPWorldBox ( AUI_ERRCODE *retval, uint32 id, MBCHAR *ldlBlock ) :
+SPWorldBox::SPWorldBox ( AUI_ERRCODE *retval, uint32 id, const MBCHAR *ldlBlock ) :
 	m_mapSize(NULL), m_worldType(NULL), m_worldShape(NULL),
 	m_difficulty(NULL), m_riskLevel(NULL), m_opponent(NULL), m_spCustom(NULL),
 	m_WTOP(NULL),
@@ -547,15 +509,7 @@ SPWorldBox::~SPWorldBox()
 	delete m_WRIGHT;
 }
 
-
-
-
-
-
-
-
-
-SPRulesBox::SPRulesBox ( AUI_ERRCODE *retval, uint32 id, MBCHAR *ldlBlock ) :
+SPRulesBox::SPRulesBox ( AUI_ERRCODE *retval, uint32 id, const MBCHAR *ldlBlock ) :
 	m_spGenocide(NULL), m_spTrade(NULL), m_spCombat(NULL),
 	m_spPollution(NULL),
 	m_RTOP(NULL),
@@ -564,7 +518,6 @@ SPRulesBox::SPRulesBox ( AUI_ERRCODE *retval, uint32 id, MBCHAR *ldlBlock ) :
 	m_RLEFT(NULL),
 	m_RRIGHT(NULL)
 {
-
 	m_spGenocide	= spNew_c3_CheckBox(retval,ldlBlock,"GenocideButton",0,spnewgamescreen_genocidePress);
 	m_spTrade		= spNew_c3_CheckBox(retval,ldlBlock,"TradeButton",0,spnewgamescreen_tradePress);
 	m_spCombat		= spNew_c3_CheckBox(retval,ldlBlock,"CombatButton",0,spnewgamescreen_combatPress);
@@ -580,7 +533,6 @@ SPRulesBox::SPRulesBox ( AUI_ERRCODE *retval, uint32 id, MBCHAR *ldlBlock ) :
 	m_RBOT			= spNew_c3_Static(retval,ldlBlock, "RBOT");
 	m_RLEFT			= spNew_c3_Static(retval,ldlBlock, "RLEFT");
 	m_RRIGHT		= spNew_c3_Static(retval,ldlBlock, "RRIGHT");
-
 }
 
 SPRulesBox::~SPRulesBox()
@@ -602,17 +554,7 @@ uint32 SPRulesBox::GetTradeRules() { return m_spGenocide->IsOn(); }
 uint32 SPRulesBox::GetCombatRules() { return m_spGenocide->IsOn(); }
 uint32 SPRulesBox::GetPollutionRules() { return m_spGenocide->IsOn(); }
 
-
-
-
-
-
-
-
-
-
-
-SPDropDownListItem::SPDropDownListItem(AUI_ERRCODE *retval, MBCHAR *ldlBlock,MBCHAR *type,const MBCHAR *name)
+SPDropDownListItem::SPDropDownListItem(AUI_ERRCODE *retval, const MBCHAR *ldlBlock, const MBCHAR *type, const MBCHAR *name)
 :
 	aui_ImageBase(ldlBlock),
 	aui_TextBase(ldlBlock, (MBCHAR *)NULL),
@@ -638,25 +580,15 @@ sint32 SPDropDownListItem::Compare(c3_ListItem *item2, uint32 column)
 }
 #endif
 
-
-
-
-
-
-
-
-
-
-
 TwoChoiceButton::TwoChoiceButton(
 		AUI_ERRCODE *retval,
 		uint32 id,
-		MBCHAR *ldlBlock,
-		MBCHAR *choiceOff, MBCHAR *choiceOn, uint32 onoff,
+		const MBCHAR *ldlBlock,
+		const MBCHAR *choiceOff, const MBCHAR *choiceOn, uint32 onoff,
 		ControlActionCallback *ActionFunc,
 		void *cookie) :
 	aui_ImageBase( ldlBlock ),
-	aui_TextBase( ldlBlock, (MBCHAR *)NULL ),
+	aui_TextBase( ldlBlock, (const MBCHAR *)NULL ),
 	ctp2_Button(retval,id,ldlBlock,ActionFunc,cookie),
 	m_choice(0)
 {

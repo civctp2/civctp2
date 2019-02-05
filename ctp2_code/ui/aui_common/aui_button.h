@@ -56,7 +56,7 @@ public:
 	aui_Button(
 		AUI_ERRCODE *retval,
 		uint32 id,
-		MBCHAR *ldlBlock,
+		const MBCHAR *ldlBlock,
 		ControlActionCallback *ActionFunc = NULL,
 		void *cookie = NULL );
 	aui_Button(
@@ -68,6 +68,7 @@ public:
 		sint32 height,
 		ControlActionCallback *ActionFunc = NULL,
 		void *cookie = NULL );
+	virtual ~aui_Button() {}
 
 	virtual AUI_ERRCODE ResetThis( void );
 
@@ -86,7 +87,7 @@ protected:
         m_repeatCount   (0)
     {};
 
-	AUI_ERRCODE InitCommonLdl( MBCHAR *ldlBlock );
+	AUI_ERRCODE InitCommonLdl( const MBCHAR *ldlBlock );
 
 	virtual void	KeyboardCallback(aui_KeyboardEvent * keyboardData);
 
@@ -99,7 +100,7 @@ protected:
 	virtual void	MouseLDropOutside(aui_MouseEvent * mouseData);
 	virtual void	MouseRDropInside(aui_MouseEvent * mouseData);
 
-	BOOL	m_isRepeating;
+	bool	m_isRepeating;
 	sint32	m_repeatCount;
 
 private:

@@ -8,7 +8,6 @@ class aui_Static;
 
 #define k_AUI_TIPWINDOW_LDL_TIP		"tip"
 
-
 class aui_TipWindow : public aui_Window
 {
 public:
@@ -16,7 +15,7 @@ public:
 	aui_TipWindow(
 		AUI_ERRCODE *retval,
 		uint32 id,
-		MBCHAR *ldlBlock );
+		const MBCHAR *ldlBlock );
 	aui_TipWindow(
 		AUI_ERRCODE *retval,
 		uint32 id,
@@ -28,13 +27,13 @@ public:
 
 protected:
 	aui_TipWindow() : aui_Window() {}
-	AUI_ERRCODE InitCommonLdl( MBCHAR *ldlBlock );
+	AUI_ERRCODE InitCommonLdl( const MBCHAR *ldlBlock );
 	AUI_ERRCODE InitCommon( void );
 
 public:
 
 	aui_Static *GetStatic( void ) const { return m_staticTip; }
-	AUI_ERRCODE SetTipText(MBCHAR *text);
+	AUI_ERRCODE SetTipText(const MBCHAR *text);
 
 	virtual AUI_ERRCODE DrawThis(
 		aui_Surface *surface = NULL,

@@ -51,11 +51,10 @@
 
 extern aui_UI		*g_ui;
 
-
 c3_Ranger::c3_Ranger(
 	AUI_ERRCODE *retval,
 	uint32 id,
-	MBCHAR *ldlBlock,
+	const MBCHAR *ldlBlock,
 	ControlActionCallback *ActionFunc,
 	void *cookie )
 	:
@@ -92,7 +91,6 @@ c3_Ranger::c3_Ranger(
 	if ( !AUI_SUCCESS(*retval) ) return;
 }
 
-
 c3_Ranger::c3_Ranger(
 	AUI_ERRCODE *retval,
 	uint32 id,
@@ -102,7 +100,7 @@ c3_Ranger::c3_Ranger(
 	sint32 height,
 	AUI_RANGER_TYPE type,
 	AUI_RANGER_ORIENTATION orientation,
-	MBCHAR *pattern,
+	const MBCHAR *pattern,
 	ControlActionCallback *ActionFunc,
 	void *cookie )
 	:
@@ -122,7 +120,7 @@ c3_Ranger::c3_Ranger(
 	Assert( AUI_SUCCESS(*retval) );
 	if ( !AUI_SUCCESS(*retval) ) return;
 
-	*retval = aui_SoundBase::InitCommon((MBCHAR **) NULL);
+	*retval = aui_SoundBase::InitCommon((const MBCHAR **) NULL);
 	Assert( AUI_SUCCESS(*retval) );
 	if ( !AUI_SUCCESS(*retval) ) return;
 
@@ -139,8 +137,7 @@ c3_Ranger::c3_Ranger(
 	if ( !AUI_SUCCESS(*retval) ) return;
 }
 
-
-AUI_ERRCODE c3_Ranger::InitCommonLdl( MBCHAR *ldlBlock )
+AUI_ERRCODE c3_Ranger::InitCommonLdl( const MBCHAR *ldlBlock )
 {
 	AUI_ERRCODE errcode = InitCommon();
 	Assert( AUI_SUCCESS(errcode) );
@@ -149,7 +146,6 @@ AUI_ERRCODE c3_Ranger::InitCommonLdl( MBCHAR *ldlBlock )
 	return AUI_ERRCODE_OK;
 }
 
-
 AUI_ERRCODE c3_Ranger::InitCommon( void )
 {
 	memset( m_arrows, 0, sizeof( m_arrows ) );
@@ -157,11 +153,10 @@ AUI_ERRCODE c3_Ranger::InitCommon( void )
 	return AUI_ERRCODE_OK;
 }
 
-
-AUI_ERRCODE c3_Ranger::CreateButtonsAndThumb( MBCHAR *ldlBlock )
+AUI_ERRCODE c3_Ranger::CreateButtonsAndThumb( const MBCHAR *ldlBlock )
 {
 	AUI_ERRCODE errcode = AUI_ERRCODE_OK;
-    MBCHAR *    patternFilename = (m_pattern) ? m_pattern->GetFilename() : NULL;
+	const MBCHAR *    patternFilename = (m_pattern) ? m_pattern->GetFilename() : NULL;
 
 	static MBCHAR block[ k_AUI_LDL_MAXBLOCK + 1 ];
 
@@ -211,7 +206,7 @@ AUI_ERRCODE c3_Ranger::CreateButtonsAndThumb( MBCHAR *ldlBlock )
 			{
 				sprintf( block, "%s.%s", ldlBlock, k_AUI_RANGER_LDL_INCX );
 
-                if (aui_Ldl::GetLdl()->FindDataBlock( block ) )
+				if (aui_Ldl::GetLdl()->FindDataBlock( block ) )
 					m_incXButton = new c3_Button(
 						&errcode,
 						aui_UniqueId(),
@@ -236,7 +231,7 @@ AUI_ERRCODE c3_Ranger::CreateButtonsAndThumb( MBCHAR *ldlBlock )
 
 			sint32 i = 2;
 			sprintf(block, "RangerRight");
-            if (aui_Ldl::GetLdl()->FindDataBlock(block))
+			if (aui_Ldl::GetLdl()->FindDataBlock(block))
 			{
 				m_arrows[ i ] = new aui_Static(
 					&errcode,
@@ -261,7 +256,7 @@ AUI_ERRCODE c3_Ranger::CreateButtonsAndThumb( MBCHAR *ldlBlock )
 			{
 				sprintf( block, "%s.%s", ldlBlock, k_AUI_RANGER_LDL_DECX );
 
-                if (aui_Ldl::GetLdl()->FindDataBlock( block ) )
+				if (aui_Ldl::GetLdl()->FindDataBlock( block ) )
 					m_decXButton = new c3_Button(
 						&errcode,
 						aui_UniqueId(),
@@ -286,7 +281,7 @@ AUI_ERRCODE c3_Ranger::CreateButtonsAndThumb( MBCHAR *ldlBlock )
 
 			i = 3;
 			sprintf( block, "RangerLeft" );
-            if (aui_Ldl::GetLdl()->FindDataBlock(block))
+			if (aui_Ldl::GetLdl()->FindDataBlock(block))
 			{
 				m_arrows[ i ] = new aui_Static(
 					&errcode,
@@ -315,7 +310,7 @@ AUI_ERRCODE c3_Ranger::CreateButtonsAndThumb( MBCHAR *ldlBlock )
 			{
 				sprintf( block, "%s.%s", ldlBlock, k_AUI_RANGER_LDL_INCY );
 
-                if (aui_Ldl::GetLdl()->FindDataBlock( block ) )
+				if (aui_Ldl::GetLdl()->FindDataBlock( block ) )
 					m_incYButton = new c3_Button(
 						&errcode,
 						aui_UniqueId(),
@@ -339,7 +334,7 @@ AUI_ERRCODE c3_Ranger::CreateButtonsAndThumb( MBCHAR *ldlBlock )
 
 			sint32 i = 0;
 			sprintf(block, "RangerDown");
-            if (aui_Ldl::GetLdl()->FindDataBlock(block))
+			if (aui_Ldl::GetLdl()->FindDataBlock(block))
 			{
 				m_arrows[ i ] = new aui_Static(
 					&errcode,
@@ -364,7 +359,7 @@ AUI_ERRCODE c3_Ranger::CreateButtonsAndThumb( MBCHAR *ldlBlock )
 			{
 				sprintf( block, "%s.%s", ldlBlock, k_AUI_RANGER_LDL_DECY );
 
-                if (aui_Ldl::GetLdl()->FindDataBlock( block ) )
+				if (aui_Ldl::GetLdl()->FindDataBlock( block ) )
 					m_decYButton = new c3_Button(
 						&errcode,
 						aui_UniqueId(),
@@ -388,7 +383,7 @@ AUI_ERRCODE c3_Ranger::CreateButtonsAndThumb( MBCHAR *ldlBlock )
 
 			i = 1;
 			sprintf(block, "RangerUp");
-            if (aui_Ldl::GetLdl()->FindDataBlock(block))
+			if (aui_Ldl::GetLdl()->FindDataBlock(block))
 			{
 				m_arrows[ i ] = new aui_Static(
 					&errcode,
@@ -419,25 +414,22 @@ AUI_ERRCODE c3_Ranger::CreateButtonsAndThumb( MBCHAR *ldlBlock )
 	return AUI_ERRCODE_OK;
 }
 
-
 c3_Ranger::~c3_Ranger()
 {
 	for ( sint32 i = 0; i < 4; i++ )
-    {
-	    if ( m_arrows[ i ] )
-	    {
-		    aui_Ldl::Remove(m_arrows[i]);
+	{
+		if ( m_arrows[ i ] )
+		{
+			aui_Ldl::Remove(m_arrows[i]);
 
-		    delete m_arrows[ i ];
-	    }
-    }
+			delete m_arrows[ i ];
+		}
+	}
 }
-
 
 AUI_ERRCODE c3_Ranger::RepositionButtons( void )
 {
 	AUI_ERRCODE errcode = aui_Ranger::RepositionButtons();
-
 
 	for ( sint32 i = 0; i < 4; i++ )
 	if ( m_arrows[ i ] )
@@ -445,7 +437,6 @@ AUI_ERRCODE c3_Ranger::RepositionButtons( void )
 
 	return errcode;
 }
-
 
 AUI_ERRCODE c3_Ranger::DrawThis( aui_Surface *surface, sint32 x, sint32 y )
 {

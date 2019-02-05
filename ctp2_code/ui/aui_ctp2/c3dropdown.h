@@ -21,7 +21,7 @@ public:
 		sint32 y,
 		sint32 width,
 		sint32 height,
-		MBCHAR *pattern,
+		const MBCHAR *pattern,
 		sint32 buttonSize = k_CONTROL_DEFAULT_SIZE,
 		sint32 windowSize = 0,
 		ControlActionCallback *ActionFunc = NULL,
@@ -29,7 +29,7 @@ public:
 	C3DropDown(
 		AUI_ERRCODE *retval,
 		uint32 id,
-		MBCHAR *ldlBlock,
+		const MBCHAR *ldlBlock,
 		ControlActionCallback *ActionFunc = NULL,
 		void *cookie = NULL);
 

@@ -11,20 +11,15 @@
 class aui_Surface;
 class aui_Image;
 
-
-
-
 class aui_ImageFormat : public aui_FileFormat
 {
 public:
 
-	aui_ImageFormat() {}
+	aui_ImageFormat() : aui_FileFormat() {}
 	virtual ~aui_ImageFormat() {}
 
-	virtual AUI_ERRCODE	Load(MBCHAR const * filename, aui_Image *image )
-		{ return AUI_ERRCODE_OK; }
+	virtual AUI_ERRCODE Load(const MBCHAR * filename, aui_Image *image) = 0;
 };
-
 
 class aui_Image : public aui_Base
 {
@@ -32,17 +27,14 @@ public:
 
 	aui_Image(
 		AUI_ERRCODE *retval,
-		MBCHAR const *filename = NULL );
+		const MBCHAR *filename = NULL );
 	virtual ~aui_Image();
-
-
-
 
 	void SetChromakey(sint32 r, sint32 g, sint32 b);
 
 protected:
 	aui_Image() : aui_Base() {}
-	AUI_ERRCODE InitCommon( MBCHAR const * filename );
+	AUI_ERRCODE InitCommon( const MBCHAR * filename );
 
 public:
 
@@ -51,14 +43,14 @@ public:
 
 	virtual AUI_ERRCODE LoadEmpty( sint32 width, sint32 height, sint32 bpp );
 
-    AUI_ERRCODE LoadFileMapped( sint32 width, sint32 height,
-                                sint32 bpp, sint32 pitch,
-                                uint8 *buffer );
+	AUI_ERRCODE LoadFileMapped( sint32 width, sint32 height,
+	                            sint32 bpp, sint32 pitch,
+	                            uint8 *buffer );
 
-	aui_Surface	*TheSurface( void ) const { return m_surface; }
-	MBCHAR		*GetFilename( void ) const { return (MBCHAR *)m_filename; }
+	aui_Surface  *TheSurface ( void ) const { return m_surface; }
+	const MBCHAR *GetFilename( void ) const { return m_filename; }
 
-	AUI_ERRCODE	SetFilename( MBCHAR const *filename );
+	AUI_ERRCODE	SetFilename( const MBCHAR *filename );
 
 protected:
 	MBCHAR			m_filename[ MAX_PATH + 1 ];
@@ -67,22 +59,13 @@ protected:
 	aui_Surface		*m_surface;
 };
 
-
-
-
-
-
-
-
-
 class aui_BmpImageFormat : public aui_ImageFormat
 {
 public:
 
-	aui_BmpImageFormat() {}
+	aui_BmpImageFormat() : aui_ImageFormat() {}
 	virtual ~aui_BmpImageFormat() {}
 
-	virtual AUI_ERRCODE	Load(MBCHAR const * filename, aui_Image *image );
+	virtual AUI_ERRCODE	Load(const MBCHAR * filename, aui_Image *image );
 };
-
 #endif

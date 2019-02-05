@@ -69,7 +69,7 @@ public:
 	ns_AIPlayerSetup(NETFunc::AIPlayer * player);
 	void Update( NETFunc::AIPlayer *aiplayer );
 
-	char *m_name;
+	const char *m_name;
 };
 
 #endif

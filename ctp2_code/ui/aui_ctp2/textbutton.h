@@ -19,7 +19,7 @@ public:
 	TextButton(
 		AUI_ERRCODE *retval,
 		uint32 id,
-		MBCHAR *ldlBlock,
+		const MBCHAR *ldlBlock,
 		ControlActionCallback *ActionFunc = NULL,
 		void *cookie = NULL );
 	TextButton(
@@ -29,8 +29,8 @@ public:
 		sint32 y,
 		sint32 width,
 		sint32 height,
-		MBCHAR *pattern = NULL,
-		MBCHAR *text = NULL,
+		const MBCHAR *pattern = NULL,
+		const MBCHAR *text = NULL,
 		ControlActionCallback *ActionFunc = NULL,
 		void *cookie = NULL );
 	virtual ~TextButton() {}

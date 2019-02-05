@@ -99,7 +99,7 @@ public:
 
 	Chart *Tree( void ) { return m_tree; }
 
-	MBCHAR *GetString( sint32 index ) { return m_string->GetString(index); }
+	const MBCHAR *GetString( sint32 index ) { return m_string->GetString(index); }
 
 };
 

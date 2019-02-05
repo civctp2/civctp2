@@ -761,13 +761,6 @@ AUI_ERRCODE DiplomacyDetails::DrawPlayerStrength(ctp2_Static *control,
 	if(!g_player[p]) return AUI_ERRCODE_OK;
 	if(!g_player[detailPlayer]) return AUI_ERRCODE_OK;
 
-
-
-
-
-
-
-
 	sint32 myTotalStrength = 0;
 	sint32 hisTotalStrength = 0;
 
@@ -780,7 +773,7 @@ AUI_ERRCODE DiplomacyDetails::DrawPlayerStrength(ctp2_Static *control,
 		InitImageTables();
 	}
 
-	MBCHAR *imageName = NULL;
+	const MBCHAR *imageName = NULL;
 	if(relativeStrength < k_WEAK_STRENGTH) imageName = sm_strengthImages->GetString(0);
 	else if(relativeStrength < k_EQUAL_STRENGTH) imageName = sm_strengthImages->GetString(1);
 	else if(relativeStrength < k_STRONG_STRENGTH) imageName = sm_strengthImages->GetString(2);

@@ -42,9 +42,6 @@
 #include "aui_action.h"
 #include "ctp2_MenuButton.h"
 
-
-
-
 extern sint32 g_ScreenWidth;
 extern sint32 g_ScreenHeight;
 
@@ -58,9 +55,9 @@ class OpenMenuAction : public aui_Action
 {
 public:
 	OpenMenuAction(ctp2_Menu * menu)
-    :   aui_Action  (),
-        m_menu      (menu)
-    { ; };
+	:   aui_Action  (),
+	    m_menu      (menu)
+	{ ; };
 
 	virtual void	Execute
 	(
@@ -68,12 +65,12 @@ public:
 		uint32			action,
 		uint32			data
 	)
-    {
-        if (m_menu)
-        {
-	        m_menu->Open();
-        }
-    };
+	{
+		if (m_menu)
+		{
+			m_menu->Open();
+		}
+	};
 
 protected:
 	ctp2_Menu *     m_menu;
@@ -98,11 +95,10 @@ static void ButtonCallback	(aui_Control *control, uint32 action, uint32 data, vo
 	g_ui->AddAction(new OpenMenuAction(menu));
 }
 
-
 ctp2_MenuBar::ctp2_MenuBar(
 	AUI_ERRCODE *retval,
 	uint32 id,
-	MBCHAR *ldlBlock,
+	const MBCHAR *ldlBlock,
 	sint32 bpp,
 	AUI_WINDOW_TYPE type,
 	bool bevel)
@@ -118,7 +114,6 @@ ctp2_MenuBar::ctp2_MenuBar(
 
 }
 
-
 ctp2_MenuBar::ctp2_MenuBar(
 	AUI_ERRCODE *retval,
 	uint32 id,
@@ -127,7 +122,7 @@ ctp2_MenuBar::ctp2_MenuBar(
 	sint32 width,
 	sint32 height,
 	sint32 bpp,
-	MBCHAR *pattern,
+	const MBCHAR *pattern,
 	AUI_WINDOW_TYPE type,
 	bool bevel)
 	:
@@ -140,7 +135,6 @@ ctp2_MenuBar::ctp2_MenuBar(
 	Assert( AUI_SUCCESS(*retval) );
 	if ( !AUI_SUCCESS(*retval) ) return;
 }
-
 
 AUI_ERRCODE ctp2_MenuBar::InitCommon( void )
 {
@@ -157,10 +151,8 @@ AUI_ERRCODE ctp2_MenuBar::InitCommon( void )
 	return AUI_ERRCODE_OK;
 }
 
-AUI_ERRCODE
-ctp2_MenuBar::AddChild(aui_Region *in_child)
+AUI_ERRCODE ctp2_MenuBar::AddChild(aui_Region *in_child)
 {
-
 	aui_Control *child=(aui_Control *)in_child;
 
 	if (child==NULL)
@@ -218,8 +210,7 @@ AUI_ERRCODE ctp2_MenuBar::DrawThis( aui_Surface *surface, sint32 x, sint32 y )
 	return AUI_ERRCODE_OK;
 }
 
-ctp2_Menu *
-ctp2_MenuBar::GetMenu(MBCHAR *ldlParent,MBCHAR *menuname)
+ctp2_Menu * ctp2_MenuBar::GetMenu(const MBCHAR *ldlParent, const MBCHAR *menuname)
 {
 	aui_Control *button=(aui_Control *)aui_Ldl::GetObject(ldlParent,menuname);
 
@@ -242,15 +233,15 @@ ctp2_MenuBar::SetMenuCallback(ctp2_Menu *menu,CTP2MenuCallback *callback)
 void ctp2_MenuBar::AddMenuItem
 (
     ctp2_Menu *     menu,
-    MBCHAR const *  itemID,
-    MBCHAR const *  shortcut,
+    const MBCHAR *  itemID,
+    const MBCHAR *  shortcut,
     void *          cookie
 )
 {
 	if (menu)
-    {
-        menu->AddItem(itemID, shortcut, cookie);
-    }
+	{
+		menu->AddItem(itemID, shortcut, cookie);
+	}
 }
 
 void ctp2_MenuBar::BuildNeighbors()

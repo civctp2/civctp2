@@ -3,10 +3,9 @@
 
 #include "aui_sound.h"
 
-
 aui_Sound::aui_Sound(
 	AUI_ERRCODE *retval,
-	MBCHAR const * filename )
+	const MBCHAR * filename )
 	:
 	aui_Base()
 {
@@ -14,14 +13,12 @@ aui_Sound::aui_Sound(
 	Assert ( AUI_SUCCESS (*retval) );
 }
 
-
 aui_Sound::~aui_Sound()
 {
 	Unload();
 }
 
-
-AUI_ERRCODE aui_Sound::InitCommon( MBCHAR const *filename )
+AUI_ERRCODE aui_Sound::InitCommon( const MBCHAR *filename )
 {
 	m_format = NULL;
 	m_data = NULL;
@@ -31,8 +28,7 @@ AUI_ERRCODE aui_Sound::InitCommon( MBCHAR const *filename )
 	return errcode;
 }
 
-
-AUI_ERRCODE aui_Sound::SetFilename( MBCHAR const *filename)
+AUI_ERRCODE aui_Sound::SetFilename( const MBCHAR *filename)
 {
 	Unload();
 
@@ -51,9 +47,8 @@ AUI_ERRCODE aui_Sound::SetFilename( MBCHAR const *filename)
 		g_ui->TheMemMap()->GetFileFormat ( m_filename );
 	Assert(m_format);
 
-    return m_format ? AUI_ERRCODE_OK : AUI_ERRCODE_MEMALLOCFAILED;
+	return m_format ? AUI_ERRCODE_OK : AUI_ERRCODE_MEMALLOCFAILED;
 }
-
 
 AUI_ERRCODE aui_Sound::Load( void )
 {
@@ -66,7 +61,6 @@ AUI_ERRCODE aui_Sound::Load( void )
 	return m_format->LoadSoundData( m_filename, &m_data, &m_size );
 }
 
-
 AUI_ERRCODE aui_Sound::Unload( void )
 {
 	g_ui->TheMemMap()->ReleaseFileFormat(m_format);
@@ -76,7 +70,7 @@ AUI_ERRCODE aui_Sound::Unload( void )
 
 AUI_ERRCODE aui_WavSoundFormat::LoadSoundData
 (
-	MBCHAR const *  filename,
+	const MBCHAR *  filename,
 	uint8 **        wavdata,
 	size_t *        size
 )
@@ -97,20 +91,19 @@ void aui_SoundFormat::ReleaseSoundData() {
 		g_ui->TheMemMap()->ReleaseFileBits(m_data);
 }
 
-
 void aui_WavSoundFormat::TrimWavHeader(uint8 **wavedata, size_t *size)
 {
 	int i;
 	uint8 *data;
-	long raw_data_size=0;
+	size_t raw_data_size=0;
 
 	data = *wavedata;
 	for(i=0;i<(int)*size;i++)
 	{
-		if(*(long *)data == *(long *)"data")
+		if(*(sint32 *)data == *(sint32 *)"data")
 		{
 		data += 4;
-		raw_data_size = *(long *)data;
+		raw_data_size = *(sint32 *)data;
 		data += 4;
 		break;
 		}

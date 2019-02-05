@@ -40,7 +40,7 @@ public:
 	char *m_launched;
 	char *m_name;
 	int m_ping;
-	char *m_tribe;
+	const char *m_tribe;
 
 	int m_civpoints;
 	int m_pwpoints;

@@ -95,7 +95,7 @@ static const unsigned char k_SOUTH_WEST_BORDER_FLAG	= 0x20;
 //---------------------------------------------------------------------------
 RadarMap::RadarMap(AUI_ERRCODE *retval,
 							sint32 id,
-							MBCHAR *ldlBlock,
+							const MBCHAR *ldlBlock,
 							ControlActionCallback *ActionFunc,
 							void *cookie)
 	:
@@ -118,7 +118,7 @@ RadarMap::RadarMap(AUI_ERRCODE *retval,
 							sint32 y,
 							sint32 width,
 							sint32 height,
-							MBCHAR *pattern,
+							const MBCHAR *pattern,
 							ControlActionCallback *ActionFunc,
 							void *cookie)
 	:
@@ -148,9 +148,9 @@ RadarMap::~RadarMap()
 //	RadarMap::InitCommonLdl
 //
 //---------------------------------------------------------------------------
-void RadarMap::InitCommonLdl(MBCHAR *ldlBlock)
+void RadarMap::InitCommonLdl(const MBCHAR *ldlBlock)
 {
-    ldl_datablock * block = aui_Ldl::FindDataBlock(ldlBlock);
+	ldl_datablock * block = aui_Ldl::FindDataBlock(ldlBlock);
 	Assert( block != NULL );
 	if ( !block ) return;
 

@@ -51,7 +51,7 @@ c3_Button::c3_Button
 (
 	AUI_ERRCODE *retval,
 	uint32 id,
-	MBCHAR *ldlBlock,
+	const MBCHAR *ldlBlock,
 	ControlActionCallback *ActionFunc,
 	void *cookie
 )
@@ -80,7 +80,7 @@ c3_Button::c3_Button(
 	sint32 y,
 	sint32 width,
 	sint32 height,
-	MBCHAR *pattern,
+	const MBCHAR *pattern,
 	ControlActionCallback *ActionFunc,
 	void *cookie )
 :
@@ -97,27 +97,27 @@ c3_Button::c3_Button(
 }
 
 
-AUI_ERRCODE c3_Button::InitCommonLdl( MBCHAR *ldlBlock )
+AUI_ERRCODE c3_Button::InitCommonLdl( const MBCHAR *ldlBlock )
 {
-    ldl_datablock * block = aui_Ldl::FindDataBlock(ldlBlock);
+	ldl_datablock * block = aui_Ldl::FindDataBlock(ldlBlock);
 	Assert( block != NULL );
 	if ( !block ) return AUI_ERRCODE_LDLFINDDATABLOCKFAILED;
 
 	if (block->GetAttributeType( k_C3_BUTTON_LDL_BEVELWIDTH) == ATTRIBUTE_TYPE_INT)
-    {
+	{
 		m_bevelWidth = block->GetInt( k_C3_BUTTON_LDL_BEVELWIDTH );
 	}
-    else
-    {
-        m_bevelWidth = k_C3_BUTTON_DEFAULT_BEVELWIDTH;
-    }
+	else
+	{
+		m_bevelWidth = k_C3_BUTTON_DEFAULT_BEVELWIDTH;
+	}
 
 	if (block->GetAttributeType( k_C3_BUTTON_LDL_BEVELTYPE ) == ATTRIBUTE_TYPE_INT)
-    {
+	{
 		m_bevelType = block->GetInt( k_C3_BUTTON_LDL_BEVELTYPE );
 	}
-    else
-    {
+	else
+	{
 		m_bevelType = 0;
 	}
 
@@ -183,7 +183,7 @@ c3_EditButton::c3_EditButton
 (
 	AUI_ERRCODE *retval,
 	uint32 id,
-	MBCHAR *ldlBlock,
+	const MBCHAR *ldlBlock,
 	ControlActionCallback *ActionFunc,
 	void *cookie
 )
@@ -220,7 +220,7 @@ c3_EditButton::c3_EditButton
 	sint32 y,
 	sint32 width,
 	sint32 height,
-	MBCHAR *pattern,
+	const MBCHAR *pattern,
 	ControlActionCallback *ActionFunc,
 	void *cookie
 )
@@ -245,7 +245,7 @@ c3_EditButton::c3_EditButton
 }
 
 
-AUI_ERRCODE c3_EditButton::InitCommonLdl( MBCHAR *ldlBlock )
+AUI_ERRCODE c3_EditButton::InitCommonLdl( const MBCHAR *ldlBlock )
 {
     ldl_datablock * block = aui_Ldl::FindDataBlock(ldlBlock);
 	Assert( block != NULL );
@@ -264,10 +264,10 @@ AUI_ERRCODE c3_EditButton::InitCommonLdl( MBCHAR *ldlBlock )
 			block->GetInt( k_C3_EDITBUTTON_LDL_MAXVAL ) :
 			k_C3_EDITBUTTON_DEFAULTMAX;
 
-    return AUI_ERRCODE_OK;
+	return AUI_ERRCODE_OK;
 }
 
-AUI_ERRCODE c3_EditButton::CreateFieldAndActions( MBCHAR *ldlBlock )
+AUI_ERRCODE c3_EditButton::CreateFieldAndActions( const MBCHAR *ldlBlock )
 {
 	AUI_ERRCODE errcode = AUI_ERRCODE_OK;
 
@@ -277,7 +277,7 @@ AUI_ERRCODE c3_EditButton::CreateFieldAndActions( MBCHAR *ldlBlock )
 	{
 		sprintf( block, "%s.%s", ldlBlock, k_C3_EDITBUTTON_LDL_FIELD );
 
-        if (aui_Ldl::FindDataBlock( block ) )
+		if (aui_Ldl::FindDataBlock( block ) )
 			m_field = new C3TextField(
 				&errcode,
 				aui_UniqueId(),

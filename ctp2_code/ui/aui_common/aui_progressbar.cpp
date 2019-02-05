@@ -40,7 +40,7 @@
 aui_ProgressBar::aui_ProgressBar(
 	AUI_ERRCODE *retval,
 	uint32 id,
-	MBCHAR *ldlBlock )
+	const MBCHAR *ldlBlock )
 	:
 	aui_ImageBase( ldlBlock ),
 	aui_TextBase( ldlBlock, (const MBCHAR *)NULL ),
@@ -53,7 +53,6 @@ aui_ProgressBar::aui_ProgressBar(
 	Assert( AUI_SUCCESS(*retval) );
 	if ( !AUI_SUCCESS(*retval) ) return;
 }
-
 
 aui_ProgressBar::aui_ProgressBar(
 	AUI_ERRCODE *retval,
@@ -82,15 +81,14 @@ aui_ProgressBar::aui_ProgressBar(
 	if ( !AUI_SUCCESS(*retval) ) return;
 }
 
-
-AUI_ERRCODE aui_ProgressBar::InitCommonLdl( MBCHAR *ldlBlock )
+AUI_ERRCODE aui_ProgressBar::InitCommonLdl( const MBCHAR *ldlBlock )
 {
-    ldl_datablock * block = aui_Ldl::FindDataBlock(ldlBlock);
+	ldl_datablock * block = aui_Ldl::FindDataBlock(ldlBlock);
 	Assert( block != NULL );
 	if ( !block ) return AUI_ERRCODE_LDLFINDDATABLOCKFAILED;
 
 	AUI_PROGRESSBAR_ORIENTATION orientation;
-	MBCHAR *keyword = block->GetString( k_AUI_PROGRESSBAR_LDL_ORIENTATION );
+	const MBCHAR *keyword = block->GetString( k_AUI_PROGRESSBAR_LDL_ORIENTATION );
 	if ( !keyword )
 		orientation = AUI_PROGRESSBAR_ORIENTATION_HORIZONTAL;
 	else
@@ -145,12 +143,11 @@ AUI_ERRCODE aui_ProgressBar::InitCommonLdl( MBCHAR *ldlBlock )
 	return AUI_ERRCODE_OK;
 }
 
-
 AUI_ERRCODE aui_ProgressBar::InitCommon(
 	AUI_PROGRESSBAR_ORIENTATION orientation,
 	AUI_PROGRESSBAR_TYPE type,
 	sint32 vps,
-	MBCHAR *image,
+	const MBCHAR *image,
 	COLORREF color,
 	sint32 curValue,
 	sint32 maxValue )
@@ -172,7 +169,6 @@ AUI_ERRCODE aui_ProgressBar::InitCommon(
 	return AUI_ERRCODE_OK;
 }
 
-
 aui_ProgressBar::~aui_ProgressBar()
 {
 	if ( m_barImage )
@@ -181,7 +177,6 @@ aui_ProgressBar::~aui_ProgressBar()
 		m_barImage = NULL;
 	}
 }
-
 
 AUI_PROGRESSBAR_ORIENTATION aui_ProgressBar::SetOrientation(
 	AUI_PROGRESSBAR_ORIENTATION orientation )
@@ -194,7 +189,6 @@ AUI_PROGRESSBAR_ORIENTATION aui_ProgressBar::SetOrientation(
 	return prevOrientation;
 }
 
-
 AUI_PROGRESSBAR_TYPE aui_ProgressBar::SetProgressType(
 	AUI_PROGRESSBAR_TYPE type )
 {
@@ -202,7 +196,6 @@ AUI_PROGRESSBAR_TYPE aui_ProgressBar::SetProgressType(
 	m_type = type;
 	return prevType;
 }
-
 
 sint32 aui_ProgressBar::SetValuesPerSecond( sint32 vps )
 {
@@ -225,7 +218,6 @@ sint32 aui_ProgressBar::SetCurValue( sint32 value )
 	return prevValue;
 }
 
-
 sint32 aui_ProgressBar::SetMaxValue( sint32 value )
 {
 	if ( value < m_curValue ) value = m_curValue;
@@ -238,8 +230,7 @@ sint32 aui_ProgressBar::SetMaxValue( sint32 value )
 	return prevValue;
 }
 
-
-aui_Image *aui_ProgressBar::SetBarImage( MBCHAR *image )
+aui_Image *aui_ProgressBar::SetBarImage( const MBCHAR *image )
 {
 	aui_Image *prevImage = m_barImage;
 
@@ -261,7 +252,6 @@ aui_Image *aui_ProgressBar::SetBarImage( MBCHAR *image )
 	return prevImage;
 }
 
-
 COLORREF aui_ProgressBar::SetBarColor( COLORREF color )
 {
 	COLORREF prevColor = m_barColor;
@@ -271,19 +261,9 @@ COLORREF aui_ProgressBar::SetBarColor( COLORREF color )
 	return prevColor;
 }
 
-
 AUI_ERRCODE aui_ProgressBar::CalculateIntervals( double *start, double *stop )
 {
 	double x = (double)m_curValue / (double)m_maxValue;
-
-
-
-
-
-
-
-
-
 
 	static POINT startKeyFrames[ 5 ] =
 	{
@@ -314,7 +294,6 @@ AUI_ERRCODE aui_ProgressBar::CalculateIntervals( double *start, double *stop )
 	return AUI_ERRCODE_OK;
 }
 
-
 AUI_ERRCODE aui_ProgressBar::DrawBar( aui_Surface *surface, RECT *bound )
 {
 	if (!(g_ui && g_ui->TheBlitter()))
@@ -326,9 +305,6 @@ AUI_ERRCODE aui_ProgressBar::DrawBar( aui_Surface *surface, RECT *bound )
 
 	RECT destRect = *bound;
 	double dimension = 0.0;
-
-
-
 
 	double start, stop;
 	CalculateIntervals( &start, &stop );
@@ -422,14 +398,11 @@ AUI_ERRCODE aui_ProgressBar::DrawBar( aui_Surface *surface, RECT *bound )
 	return errcode;
 }
 
-
 AUI_ERRCODE aui_ProgressBar::DrawThis(
 	aui_Surface *surface,
 	sint32 x,
 	sint32 y )
 {
-
-
 	if ( IsHidden() ) return AUI_ERRCODE_OK;
 
 	if ( !surface ) surface = m_window->TheSurface();
@@ -456,9 +429,6 @@ AUI_ERRCODE aui_ProgressBar::DrawThis(
 
 	return AUI_ERRCODE_OK;
 }
-
-
-
 
 AUI_ERRCODE aui_ProgressBar::Idle( void )
 {
