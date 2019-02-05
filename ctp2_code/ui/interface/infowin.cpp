@@ -1425,10 +1425,10 @@ sint32 infowin_GetWonderCityName( sint32 index, MBCHAR *name)
 
 
 
-InfoBigListItem::InfoBigListItem(AUI_ERRCODE *retval, Unit *city, sint32 index, MBCHAR *ldlBlock)
+InfoBigListItem::InfoBigListItem(AUI_ERRCODE *retval, Unit *city, sint32 index, const MBCHAR *ldlBlock)
 	:
 	aui_ImageBase(ldlBlock),
-	aui_TextBase(ldlBlock, (MBCHAR *)NULL),
+	aui_TextBase(ldlBlock, (const MBCHAR *)NULL),
 	c3_ListItem( retval, ldlBlock)
 {
 	Assert( AUI_SUCCESS(*retval) );
@@ -1459,7 +1459,7 @@ InfoBigListItem::~InfoBigListItem()
 	m_childList->DeleteAll();
 }
 
-AUI_ERRCODE InfoBigListItem::InitCommonLdl(Unit *city, sint32 index, MBCHAR *ldlBlock)
+AUI_ERRCODE InfoBigListItem::InitCommonLdl(Unit *city, sint32 index, const MBCHAR *ldlBlock)
 {
 	MBCHAR			block[ k_AUI_LDL_MAXBLOCK + 1 ];
 	MBCHAR			subBlock[ k_AUI_LDL_MAXBLOCK + 1 ];
@@ -1635,10 +1635,10 @@ sint32 InfoBigListItem::Compare(c3_ListItem *item2, uint32 column)
 
 
 
-InfoWonderListItem::InfoWonderListItem(AUI_ERRCODE *retval, sint32 player, sint32 index, MBCHAR *ldlBlock)
+InfoWonderListItem::InfoWonderListItem(AUI_ERRCODE *retval, sint32 player, sint32 index, const MBCHAR *ldlBlock)
 	:
 	aui_ImageBase(ldlBlock),
-	aui_TextBase(ldlBlock, (MBCHAR *)NULL),
+	aui_TextBase(ldlBlock, (const MBCHAR *)NULL),
 	c3_ListItem( retval, ldlBlock)
 {
 	Assert( AUI_SUCCESS(*retval) );
@@ -1648,7 +1648,7 @@ InfoWonderListItem::InfoWonderListItem(AUI_ERRCODE *retval, sint32 player, sint3
 	Assert( AUI_SUCCESS(*retval) );
 }
 
-AUI_ERRCODE InfoWonderListItem::InitCommonLdl(sint32 player, sint32 index, MBCHAR *ldlBlock)
+AUI_ERRCODE InfoWonderListItem::InitCommonLdl(sint32 player, sint32 index, const MBCHAR *ldlBlock)
 {
 	MBCHAR			block[ k_AUI_LDL_MAXBLOCK + 1 ];
 	AUI_ERRCODE		retval;
@@ -1732,10 +1732,10 @@ sint32 InfoWonderListItem::Compare(c3_ListItem *item2, uint32 column)
 
 
 
-InfoScoreListItem::InfoScoreListItem(AUI_ERRCODE *retval, sint32 player, sint32 index, MBCHAR *ldlBlock)
+InfoScoreListItem::InfoScoreListItem(AUI_ERRCODE *retval, sint32 player, sint32 index, const MBCHAR *ldlBlock)
 	:
 	aui_ImageBase(ldlBlock),
-	aui_TextBase(ldlBlock, (MBCHAR *)NULL),
+	aui_TextBase(ldlBlock, (const MBCHAR *)NULL),
 	c3_ListItem( retval, ldlBlock)
 {
 	Assert( AUI_SUCCESS(*retval) );
@@ -1745,7 +1745,7 @@ InfoScoreListItem::InfoScoreListItem(AUI_ERRCODE *retval, sint32 player, sint32 
 	Assert( AUI_SUCCESS(*retval) );
 }
 
-AUI_ERRCODE InfoScoreListItem::InitCommonLdl(sint32 player, sint32 index, MBCHAR *ldlBlock)
+AUI_ERRCODE InfoScoreListItem::InitCommonLdl(sint32 player, sint32 index, const MBCHAR *ldlBlock)
 {
 	MBCHAR			block[ k_AUI_LDL_MAXBLOCK + 1 ];
 	AUI_ERRCODE		retval;
@@ -1812,7 +1812,7 @@ sint32 InfoScoreListItem::Compare(c3_ListItem *item2, uint32 column)
 
 
 
-InfoScoreLabelListItem::InfoScoreLabelListItem(AUI_ERRCODE *retval, MBCHAR *label, MBCHAR *text, MBCHAR *ldlBlock)
+InfoScoreLabelListItem::InfoScoreLabelListItem(AUI_ERRCODE *retval, const MBCHAR *label, const MBCHAR *text, const MBCHAR *ldlBlock)
 	:
 	aui_ImageBase(ldlBlock),
 	aui_TextBase(ldlBlock, (MBCHAR *)NULL),
@@ -1825,7 +1825,7 @@ InfoScoreLabelListItem::InfoScoreLabelListItem(AUI_ERRCODE *retval, MBCHAR *labe
 	Assert( AUI_SUCCESS(*retval) );
 }
 
-AUI_ERRCODE InfoScoreLabelListItem::InitCommonLdl(MBCHAR *label, MBCHAR *text, MBCHAR *ldlBlock)
+AUI_ERRCODE InfoScoreLabelListItem::InitCommonLdl(const MBCHAR *label, const MBCHAR *text, const MBCHAR *ldlBlock)
 {
 	MBCHAR			block[ k_AUI_LDL_MAXBLOCK + 1 ];
 	AUI_ERRCODE		retval;
@@ -1869,14 +1869,10 @@ sint32 InfoScoreLabelListItem::Compare(c3_ListItem *item2, uint32 column)
 	return 0;
 }
 
-
-
-
-
-InfoPlayerListItem::InfoPlayerListItem(AUI_ERRCODE *retval, MBCHAR *name, sint32 index, MBCHAR *ldlBlock)
+InfoPlayerListItem::InfoPlayerListItem(AUI_ERRCODE *retval, const MBCHAR *name, sint32 index, const MBCHAR *ldlBlock)
 	:
 	aui_ImageBase(ldlBlock),
-	aui_TextBase(ldlBlock, (MBCHAR *)NULL),
+	aui_TextBase(ldlBlock, (const MBCHAR *)NULL),
 	c3_ListItem( retval, ldlBlock)
 {
 	Assert( AUI_SUCCESS(*retval) );
@@ -1886,7 +1882,7 @@ InfoPlayerListItem::InfoPlayerListItem(AUI_ERRCODE *retval, MBCHAR *name, sint32
 	Assert( AUI_SUCCESS(*retval) );
 }
 
-AUI_ERRCODE InfoPlayerListItem::InitCommonLdl(MBCHAR *name, sint32 index, MBCHAR *ldlBlock)
+AUI_ERRCODE InfoPlayerListItem::InitCommonLdl(const MBCHAR *name, sint32 index, const MBCHAR *ldlBlock)
 {
 	MBCHAR			block[ k_AUI_LDL_MAXBLOCK + 1 ];
 	AUI_ERRCODE		retval;
@@ -1909,9 +1905,6 @@ void InfoPlayerListItem::Update(void)
 {
 
 	c3_Static *subItem;
-
-
-
 
 	subItem = (c3_Static *)GetChildByIndex(0);
 

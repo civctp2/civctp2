@@ -44,7 +44,7 @@ extern ProfileDB *g_theProfileDB;
 
 aui_DirectMouse::aui_DirectMouse(
 	AUI_ERRCODE *retval,
-	MBCHAR *ldlBlock,
+	const MBCHAR *ldlBlock,
 	BOOL useExclusiveMode )
 :
 	aui_Mouse		(retval, ldlBlock),

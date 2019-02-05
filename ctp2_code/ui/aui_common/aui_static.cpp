@@ -7,7 +7,7 @@ aui_Static::aui_Static
 (
 	AUI_ERRCODE *   retval,
 	uint32          id,
-	MBCHAR *        ldlBlock
+	const MBCHAR *        ldlBlock
 )
 :
 	aui_ImageBase( ldlBlock ),
@@ -15,9 +15,9 @@ aui_Static::aui_Static
 	aui_Control( retval, id, ldlBlock )
 {
 	if (AUI_SUCCESS(*retval))
-    {
-	    *retval = InitCommonLdl(ldlBlock);
-    }
+	{
+		*retval = InitCommonLdl(ldlBlock);
+	}
 }
 
 aui_Static::aui_Static
@@ -37,23 +37,18 @@ aui_Static::aui_Static
 	aui_Control( retval, id, x, y, width, height )
 {
 	if (AUI_SUCCESS(*retval))
-    {
-	    *retval = InitCommon();
-    }
+	{
+		*retval = InitCommon();
+	}
 }
 
-AUI_ERRCODE aui_Static::InitCommonLdl( MBCHAR *ldlBlock )
+AUI_ERRCODE aui_Static::InitCommonLdl( const MBCHAR *ldlBlock )
 {
 	return InitCommon();
 }
 
-
 AUI_ERRCODE aui_Static::InitCommon( void )
 {
-
-
-
-
 	SetDrawMask( k_AUI_REGION_DRAWFLAG_UPDATE );
 
 	return AUI_ERRCODE_OK;

@@ -14,25 +14,25 @@ class KeyListItem;
 class KeyListItem : public c3_ListItem
 {
 public:
-	KeyListItem(AUI_ERRCODE *retval, sint32 index, uint32 keycode, MBCHAR *ldlBlock);
+	KeyListItem(AUI_ERRCODE *retval, sint32 index, uint32 keycode, const MBCHAR *ldlBlock);
 
 	virtual void    Update(void);
 	void            UpdateKey(uint32 keycode);
 
 	sint32	        GetKey(void) const      { return m_index; };
 	sint32	        GetKeycode(void) const  { return m_keycode; };
-    MBCHAR *        GetName(void) const     { return m_name; };
+	const MBCHAR *  GetName(void) const     { return m_name; };
 
 	virtual sint32  Compare(c3_ListItem *item2, uint32 column);
 
-	static MBCHAR const * GetKeyFromKMScreen(uint32 keycode);
+	static const MBCHAR * GetKeyFromKMScreen(uint32 keycode);
 
 private:
-	AUI_ERRCODE InitCommonLdl(sint32 index, uint32 keycode, MBCHAR *ldlBlock);
+	AUI_ERRCODE InitCommonLdl(sint32 index, uint32 keycode, const MBCHAR *ldlBlock);
 
-	MBCHAR *    m_name;
-	sint32      m_index;
-	uint32	    m_keycode;
+	const MBCHAR * m_name;
+	sint32         m_index;
+	uint32         m_keycode;
 };
 
 sint32      km_screen_displayMyWindow();

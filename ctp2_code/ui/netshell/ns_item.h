@@ -21,16 +21,13 @@
 class c3_EditButton;
 class c3_Button;
 
-
-
-
 class ns_ListItem : public c3_ListItem
 {
 public:
 	ns_ListItem(
 		AUI_ERRCODE *retval,
 		const MBCHAR *name,
-		MBCHAR *ldlBlock);
+		const MBCHAR *ldlBlock);
 	~ns_ListItem() {}
 
 	virtual void Update(void) {}
@@ -41,9 +38,8 @@ protected:
 
 	AUI_ERRCODE InitCommonLdl(
 		const MBCHAR *name,
-		MBCHAR *ldlBlock);
+		const MBCHAR *ldlBlock);
 };
-
 
 class ns_HPlayerItem : public c3_ListItem
 {
@@ -52,7 +48,7 @@ public:
 		AUI_ERRCODE *retval,
 		void *player,
 		BOOL isAI,
-		MBCHAR *ldlBlock);
+		const MBCHAR *ldlBlock);
 
 	~ns_HPlayerItem();
 
@@ -76,11 +72,6 @@ public:
 	{ return m_tribeButton; }
 	void SetTribe( sint32 tribe );
 
-
-
-
-
-
 	aui_Control *GetCivpointsItem( void ) const { return m_civpointsItem; }
 	c3_EditButton *GetCivpointsButton( void ) const { return m_civpointsButton;}
 	void SetCivpoints( sint32 civpoints );
@@ -95,7 +86,7 @@ protected:
 	AUI_ERRCODE InitCommonLdl(
 		void *player,
 		BOOL isAI,
-		MBCHAR *ldlBlock);
+		const MBCHAR *ldlBlock);
 
 	void *m_player;
 	BOOL m_isAI;
@@ -107,18 +98,12 @@ protected:
 	c3_Static *m_tribeItem;
 	c3_Button *m_tribeButton;
 
-
-
-
 	c3_Static *m_civpointsItem;
 	c3_EditButton *m_civpointsButton;
 
 	c3_Static *m_pwpointsItem;
 	c3_EditButton *m_pwpointsButton;
 };
-
-
-
 
 template<class T,class NetShellT>
 class ns_Item : public aui_Item
@@ -128,7 +113,7 @@ public:
 	ns_Item(
 		AUI_ERRCODE *retval,
 		uint32 id,
-		MBCHAR *ldlBlock,
+		const MBCHAR *ldlBlock,
 		T *object = NULL );
 	ns_Item(
 		AUI_ERRCODE *retval,
@@ -142,14 +127,14 @@ public:
 
 protected:
 	ns_Item() : aui_Item() {}
-	AUI_ERRCODE InitCommonLdl( MBCHAR *ldlBlock );
+	AUI_ERRCODE InitCommonLdl(const MBCHAR *ldlBlock );
 	AUI_ERRCODE InitCommon( void );
 	AUI_ERRCODE CreateNetShellObject( T *object );
 
 public:
 	NetShellT	*GetNetShellObject( void ) const { return m_netShellT; }
 
-	AUI_ERRCODE	SetIcon( MBCHAR *icon );
+	AUI_ERRCODE	SetIcon(const MBCHAR *icon );
 	aui_Image	*GetIcon( void ) const { return m_icon; }
 
 	virtual AUI_ERRCODE DrawThis(
@@ -162,19 +147,15 @@ protected:
 	aui_Image	*m_icon;
 };
 
-
-
-
-
 template<class T,class NetShellT>
 ns_Item<T,NetShellT>::ns_Item(
 	AUI_ERRCODE *retval,
 	uint32 id,
-	MBCHAR *ldlBlock,
+	const MBCHAR *ldlBlock,
 	T *object )
 	:
 	aui_ImageBase( ldlBlock ),
-	aui_TextBase( ldlBlock, (MBCHAR *)NULL ),
+	aui_TextBase( ldlBlock, (const MBCHAR *)NULL ),
 	aui_Item( retval, id, ldlBlock )
 {
 	Assert( AUI_SUCCESS(*retval) );
@@ -188,7 +169,6 @@ ns_Item<T,NetShellT>::ns_Item(
 	Assert( AUI_SUCCESS(*retval) );
 	if ( !AUI_SUCCESS(*retval) ) return;
 }
-
 
 template<class T,class NetShellT>
 ns_Item<T,NetShellT>::ns_Item(
@@ -216,14 +196,11 @@ ns_Item<T,NetShellT>::ns_Item(
 	if ( !AUI_SUCCESS(*retval) ) return;
 }
 
-
 template<class T,class NetShellT>
-AUI_ERRCODE ns_Item<T,NetShellT>::InitCommonLdl( MBCHAR *ldlBlock )
+AUI_ERRCODE ns_Item<T,NetShellT>::InitCommonLdl(const MBCHAR *ldlBlock )
 {
-
 	return InitCommon();
 }
-
 
 template<class T,class NetShellT>
 AUI_ERRCODE ns_Item<T,NetShellT>::InitCommon( void )
@@ -234,13 +211,8 @@ AUI_ERRCODE ns_Item<T,NetShellT>::InitCommon( void )
 	m_textflags = k_AUI_BITMAPFONT_DRAWFLAG_JUSTLEFT |
 		k_AUI_BITMAPFONT_DRAWFLAG_VERTCENTER;
 
-
-
-
-
 	return AUI_ERRCODE_OK;
 }
-
 
 template<class T,class NetShellT>
 AUI_ERRCODE ns_Item<T,NetShellT>::CreateNetShellObject( T *object )
@@ -254,7 +226,6 @@ AUI_ERRCODE ns_Item<T,NetShellT>::CreateNetShellObject( T *object )
 
 	return AUI_ERRCODE_OK;
 }
-
 
 template<class T,class NetShellT>
 ns_Item<T,NetShellT>::~ns_Item()
@@ -272,9 +243,8 @@ ns_Item<T,NetShellT>::~ns_Item()
 	}
 }
 
-
 template<class T,class NetShellT>
-AUI_ERRCODE ns_Item<T,NetShellT>::SetIcon( MBCHAR *icon )
+AUI_ERRCODE ns_Item<T,NetShellT>::SetIcon(const MBCHAR *icon )
 {
 	aui_Image *prevImage = m_icon;
 
@@ -296,17 +266,12 @@ AUI_ERRCODE ns_Item<T,NetShellT>::SetIcon( MBCHAR *icon )
 	return AUI_ERRCODE_OK;
 }
 
-
-
-
-
 template <class T,class NetShellT>
 AUI_ERRCODE ns_Item<T,NetShellT>::DrawThis(
 	aui_Surface *surface,
 	sint32 x,
 	sint32 y )
 {
-
 	if ( IsHidden() ) return AUI_ERRCODE_OK;
 
 	if ( !surface ) surface = m_window->TheSurface();
@@ -317,30 +282,9 @@ AUI_ERRCODE ns_Item<T,NetShellT>::DrawThis(
 
 	InflateRect( &rect, -2, -2 );
 
-
-
-
-
-
-
-
-
 	if ( m_icon )
 	{
-
-
-
-
 		RECT destRect = rect;
-
-
-
-
-
-
-
-
-
 
 		RECT srcRect =
 		{

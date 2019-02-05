@@ -156,9 +156,9 @@ sint32 GetCombinedStrength(Strengths const & a_Strengths, sint32 a_Turn, sint32 
 
 LineGraph::LineGraph
 (
-    AUI_ERRCODE *           retval,
+	AUI_ERRCODE *           retval,
 	sint32                  id,
-	MBCHAR *                ldlBlock,
+	const MBCHAR *                ldlBlock,
 	ControlActionCallback * ActionFunc,
 	void *                  cookie,
 	EventTracker *          events
@@ -283,7 +283,7 @@ AUI_ERRCODE LineGraph::DrawThis(aui_Surface *surface, sint32 x,	sint32 y )
 	if ( !m_draw )
 		m_draw = k_AUI_REGION_DRAWFLAG_UPDATE;
 
-	if (!(m_draw && k_AUI_REGION_DRAWFLAG_UPDATE)) return AUI_ERRCODE_OK;
+	if (!(m_draw & k_AUI_REGION_DRAWFLAG_UPDATE)) return AUI_ERRCODE_OK;
 
 	if ( !surface )
 		surface = m_window->TheSurface();
@@ -304,7 +304,7 @@ void LineGraph::UpdateGraph(aui_Surface * surface, sint32 x, sint32 y)
 {
 	RECT		rect = {0, 0, m_width, m_height};
 
-    g_c3ui->TheBlitter()->Blt(surface, x, y, m_surface, &rect, k_AUI_BLITTER_FLAG_COPY);
+	g_c3ui->TheBlitter()->Blt(surface, x, y, m_surface, &rect, k_AUI_BLITTER_FLAG_COPY);
 }
 
 void LineGraph::LabelAxes(void)
@@ -322,7 +322,7 @@ void LineGraph::LabelAxes(void)
 		if (m_enablePrecision) sprintf(s, "%#.3f", m_xmax);
 		else sprintf(s, "%d", (sint32)m_xmax);
 
-        primitives_DrawText(m_surface, std::max(0L, m_graphRect.right-35L), m_graphRect.bottom + (m_events?20:0),
+		primitives_DrawText(m_surface, std::max(0L, m_graphRect.right-35L), m_graphRect.bottom + (m_events?20:0),
 								s, g_colorSet->GetColorRef(COLOR_WHITE), TRUE);
 	}
 
@@ -560,7 +560,7 @@ void LineGraph::SetGraphBounds(double minx, double maxx, double miny, double max
 	m_ymax = maxy;
 }
 
-void LineGraph::SetXAxisName(MBCHAR *name)
+void LineGraph::SetXAxisName(const MBCHAR *name)
 {
 	Assert(name);
 	if (!name) return;
@@ -570,7 +570,7 @@ void LineGraph::SetXAxisName(MBCHAR *name)
 	strcpy(m_xAxisName, name);
 }
 
-void LineGraph::SetYAxisName(MBCHAR *name)
+void LineGraph::SetYAxisName(const MBCHAR *name)
 {
 	Assert(name);
 	if (!name) return;

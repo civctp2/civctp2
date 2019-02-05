@@ -11,11 +11,11 @@ public:
 	aui_Item(
 		AUI_ERRCODE *retval,
 		uint32 id,
-		MBCHAR const *ldlBlock )
+		const MBCHAR *ldlBlock )
 		:
 		aui_ImageBase( ldlBlock ),
 		aui_TextBase( ldlBlock, (const MBCHAR *)NULL ),
-		aui_Control( retval, id, (MBCHAR *) ldlBlock ) {}
+		aui_Control( retval, id, ldlBlock ) {}
 	aui_Item(
 		AUI_ERRCODE *retval,
 		uint32 id,

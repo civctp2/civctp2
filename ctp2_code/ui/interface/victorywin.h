@@ -43,7 +43,7 @@ class WonderIconListItem : public ctp2_ListItem
 {
 public:
 
-	WonderIconListItem(AUI_ERRCODE *retval, sint32 age, sint32 *array, MBCHAR *ldlBlock);
+	WonderIconListItem(AUI_ERRCODE *retval, sint32 age, sint32 *array, const MBCHAR *ldlBlock);
 
 
 	virtual void Update(void);
@@ -54,7 +54,7 @@ protected:
 	WonderIconListItem() : ctp2_ListItem() {}
 
 
-	AUI_ERRCODE InitCommonLdl(sint32 age, sint32 *array, MBCHAR *ldlBlock);
+	AUI_ERRCODE InitCommonLdl(sint32 age, sint32 *array, const MBCHAR *ldlBlock);
 
 public:
 
@@ -71,7 +71,7 @@ private:
 class WonderListItem : public ctp2_ListItem
 {
 public:
-	WonderListItem(AUI_ERRCODE *retval, MBCHAR *name, sint32 score, MBCHAR *ldlBlock);
+	WonderListItem(AUI_ERRCODE *retval, const MBCHAR *name, sint32 score, const MBCHAR *ldlBlock);
 protected:
 	WonderListItem() : ctp2_ListItem() { }
 };
@@ -83,19 +83,19 @@ class HighScoreListItem : public ctp2_ListItem
 {
 public:
 
-	HighScoreListItem(AUI_ERRCODE *retval, MBCHAR *name, sint32 score, MBCHAR *ldlBlock);
+	HighScoreListItem(AUI_ERRCODE *retval, const MBCHAR *name, sint32 score, const MBCHAR *ldlBlock);
 
 
 	virtual void Update(void);
 
-	MBCHAR	*GetName( void ) { return m_name; }
-	sint32	GetScore( void ) { return m_score; }
+	const MBCHAR	*GetName( void ) { return m_name; }
+	sint32			GetScore( void ) { return m_score; }
 
 protected:
 	HighScoreListItem() : ctp2_ListItem() {}
 
 
-	AUI_ERRCODE InitCommonLdl(MBCHAR *name, sint32 score, MBCHAR *ldlBlock);
+	AUI_ERRCODE InitCommonLdl(const MBCHAR *name, sint32 score, const MBCHAR *ldlBlock);
 
 public:
 
@@ -127,7 +127,7 @@ public:
 	HighScoreDB		*m_highScoreDB;
 
 public:
-	sint32  Initialize ( MBCHAR *windowBlock );
+	sint32  Initialize (const MBCHAR *windowBlock );
 	void    Cleanup(void);
 	sint32  UpdateData ( void );
 
@@ -138,10 +138,10 @@ public:
 
 AUI_ACTION_BASIC(CloseVictoryWindowAction);
 
-sint32 victorywin_AddWonders( MBCHAR* windowBlock );
+sint32 victorywin_AddWonders(const MBCHAR* windowBlock );
 sint32 victorywin_Initialize( sint32 type = 0 );
-sint32 victorywin_Init_Controls( MBCHAR* windowBlock );
-sint32 victorywin_Init_TabGroups( MBCHAR* windowBlock );
+sint32 victorywin_Init_Controls(const MBCHAR* windowBlock );
+sint32 victorywin_Init_TabGroups(const MBCHAR* windowBlock );
 
 sint32 victorywin_DisplayWindow( sint32 type = 0 );
 void   victorywin_Cleanup( void );

@@ -25,7 +25,7 @@ extern SlicEngine	*g_slicEngine;
 TextButton::TextButton(
 	AUI_ERRCODE *retval,
 	uint32 id,
-	MBCHAR *ldlBlock,
+	const MBCHAR *ldlBlock,
 	ControlActionCallback *ActionFunc,
 	void *cookie )
 	:
@@ -43,8 +43,8 @@ TextButton::TextButton(
 	sint32 y,
 	sint32 width,
 	sint32 height,
-	MBCHAR *pattern,
-	MBCHAR *text,
+	const MBCHAR *pattern,
+	const MBCHAR *text,
 	ControlActionCallback *ActionFunc,
 	void *cookie )
 	:
@@ -57,10 +57,6 @@ TextButton::TextButton(
 
 AUI_ERRCODE TextButton::DrawThis( aui_Surface *surface, sint32 x, sint32 y )
 {
-
-
-
-
 	if ( IsHidden() ) return AUI_ERRCODE_OK;
 
 	if ( !surface ) surface = m_window->TheSurface();

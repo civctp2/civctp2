@@ -827,9 +827,9 @@ public:
 
 	~AIPlayer(void);
 
-	char *GetName(void);
+	const char *GetName(void);
 
-	void SetName(char *name);
+	void SetName(const char *name);
 
 	unsigned char GetGroup(void);
 

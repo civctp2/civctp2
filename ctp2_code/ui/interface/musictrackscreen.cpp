@@ -200,7 +200,7 @@ void musictrackscreen_acceptPress(aui_Control *control, uint32 action, uint32 da
 
 
 
-MusicTrackListItem::MusicTrackListItem(AUI_ERRCODE *retval, sint32 trackNum, MBCHAR *name, MBCHAR *ldlBlock)
+MusicTrackListItem::MusicTrackListItem(AUI_ERRCODE *retval, sint32 trackNum, const MBCHAR *name, const MBCHAR *ldlBlock)
 	:
 	aui_ImageBase(ldlBlock),
 	aui_TextBase(ldlBlock, (MBCHAR *)NULL),
@@ -214,7 +214,7 @@ MusicTrackListItem::MusicTrackListItem(AUI_ERRCODE *retval, sint32 trackNum, MBC
 	if ( !AUI_SUCCESS(*retval) ) return;
 }
 
-AUI_ERRCODE MusicTrackListItem::InitCommonLdl(sint32 trackNum, MBCHAR *name, MBCHAR *ldlBlock)
+AUI_ERRCODE MusicTrackListItem::InitCommonLdl(sint32 trackNum, const MBCHAR *name, const MBCHAR *ldlBlock)
 {
 	MBCHAR			block[ k_AUI_LDL_MAXBLOCK + 1 ];
 	AUI_ERRCODE		retval;

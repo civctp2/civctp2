@@ -51,7 +51,7 @@ c3_PopupWindow::c3_PopupWindow
 (
 	AUI_ERRCODE *   retval,
 	uint32          id,
-	MBCHAR *        ldlBlock,
+	const MBCHAR *        ldlBlock,
 	sint32          bpp,
 	AUI_WINDOW_TYPE type,
 	bool            bevel
@@ -77,7 +77,7 @@ c3_PopupWindow::c3_PopupWindow
 	sint32 width,
 	sint32 height,
 	sint32 bpp,
-	MBCHAR *pattern,
+	const MBCHAR *pattern,
 	AUI_WINDOW_TYPE type,
 	bool bevel
 )
@@ -213,7 +213,7 @@ AUI_ERRCODE c3_PopupWindow::DrawThis( aui_Surface *surface, sint32 x, sint32 y )
 }
 
 
-sint32 c3_PopupWindow::AddTitle( MBCHAR *titleBlock )
+sint32 c3_PopupWindow::AddTitle(const MBCHAR *titleBlock )
 {
 	if (m_title)
 	{
@@ -249,7 +249,7 @@ sint32 c3_PopupWindow::AddCancel
 (
 	void (*actionFunc)( aui_Control *, uint32, uint32, void *),
 	void *cookie,
-	MBCHAR *buttonBlock
+	const MBCHAR *buttonBlock
 )
 {
 	if (m_cancel)
@@ -274,7 +274,7 @@ sint32 c3_PopupWindow::AddOk
 (
 	void (*actionFunc)( aui_Control *, uint32, uint32, void *),
 	void *cookie,
-	MBCHAR *buttonBlock
+	const MBCHAR *buttonBlock
 )
 {
 	if (m_ok)
@@ -298,7 +298,7 @@ sint32 c3_PopupWindow::AddClose
 (
 	void (*actionFunc)( aui_Control *, uint32, uint32, void *),
 	void *cookie,
-	MBCHAR *buttonBlock
+	const MBCHAR *buttonBlock
 )
 {
 	return AddOk(actionFunc, cookie, buttonBlock);
@@ -308,7 +308,7 @@ sint32 c3_PopupWindow::AddYes
 (
 	void (*actionFunc)( aui_Control *, uint32, uint32, void *),
 	void *cookie,
-	MBCHAR *buttonBlock
+	const MBCHAR *buttonBlock
 )
 {
 	return AddOk(actionFunc, cookie, buttonBlock);
@@ -318,7 +318,7 @@ sint32 c3_PopupWindow::AddNo
 (
 	void (*actionFunc)( aui_Control *, uint32, uint32, void *),
 	void *cookie,
-	MBCHAR *buttonBlock
+	const MBCHAR *buttonBlock
 )
 {
 	return AddCancel(actionFunc, cookie, buttonBlock);

@@ -112,12 +112,12 @@ class aui_Dimension;
 class aui_Region : public aui_Base
 {
 public:
-    aui_Region
-    (
-        AUI_ERRCODE *   retval,
+	aui_Region
+	(
+	    AUI_ERRCODE *   retval,
 	    uint32          id,
-        MBCHAR const *  ldlBlock
-    );
+	    const MBCHAR *  ldlBlock
+	);
 	aui_Region(
 		AUI_ERRCODE *retval,
 		uint32 id,
@@ -307,7 +307,7 @@ protected:
         InitCommon();
     };
     // @todo Remove later
-	AUI_ERRCODE InitCommonLdl(uint32 id, MBCHAR const * ldlBlock)
+	AUI_ERRCODE InitCommonLdl(uint32 id, const MBCHAR * ldlBlock)
     {
         m_id = id;
         return InitCommonLdl(ldlBlock);
@@ -462,7 +462,7 @@ protected:
 	void			MouseRDoubleClickOutsideEdit(aui_MouseEvent * mouseData) {};
 
 private:
-	AUI_ERRCODE InitCommonLdl(MBCHAR const * ldlBlock);
+	AUI_ERRCODE InitCommonLdl(const MBCHAR * ldlBlock);
 	void        InitCommon(void);
 
 	static aui_Region *                 s_whichSeesMouse;

@@ -9,11 +9,10 @@
 
 #include "aui_textbox.h"
 
-
 aui_TextBox::aui_TextBox(
 	AUI_ERRCODE *retval,
 	uint32 id,
-	MBCHAR *ldlBlock,
+	const MBCHAR *ldlBlock,
 	ControlActionCallback *ActionFunc,
 	void *cookie )
 	:
@@ -29,7 +28,6 @@ aui_TextBox::aui_TextBox(
 	if ( !AUI_SUCCESS(*retval) ) return;
 }
 
-
 aui_TextBox::aui_TextBox(
 	AUI_ERRCODE *retval,
 	uint32 id,
@@ -37,7 +35,7 @@ aui_TextBox::aui_TextBox(
 	sint32 y,
 	sint32 width,
 	sint32 height,
-	MBCHAR *text,
+	const MBCHAR *text,
 	ControlActionCallback *ActionFunc,
 	void *cookie )
 	:
@@ -53,12 +51,10 @@ aui_TextBox::aui_TextBox(
 	if ( !AUI_SUCCESS(*retval) ) return;
 }
 
-
-AUI_ERRCODE aui_TextBox::InitCommonLdl( MBCHAR *ldlBlock )
+AUI_ERRCODE aui_TextBox::InitCommonLdl( const MBCHAR *ldlBlock )
 {
 	return InitCommon();
 }
-
 
 AUI_ERRCODE aui_TextBox::InitCommon( void )
 {
@@ -92,14 +88,12 @@ AUI_ERRCODE aui_TextBox::InitCommon( void )
 	return AUI_ERRCODE_OK;
 }
 
-
 aui_TextBox::~aui_TextBox()
 {
 	aui_Static **itemPtr = m_items;
 	for ( uint32 i = k_AUI_TEXTBOX_MAXITEMS; i; i-- )
 		delete *itemPtr++;
 }
-
 
 AUI_ERRCODE aui_TextBox::SetText(
 	const MBCHAR *text,
@@ -112,16 +106,14 @@ AUI_ERRCODE aui_TextBox::SetText(
 	return errcode;
 }
 
-
-AUI_ERRCODE aui_TextBox::AppendText( MBCHAR const *text )
+AUI_ERRCODE aui_TextBox::AppendText( const MBCHAR *text )
 {
 	return AppendText(text, k_AUI_UI_NOCOLOR);
 }
 
-
 AUI_ERRCODE aui_TextBox::AppendText
 (
-	MBCHAR const *  text,
+	const MBCHAR *  text,
 	COLORREF        color,
 	sint32          bold,
 	sint32          italic
@@ -136,7 +128,6 @@ AUI_ERRCODE aui_TextBox::AppendText
 	m_curBold = bold;
 	m_curItalic = italic;
 
-
 	CalculateAppendedItems( text );
 
 	Assert( m_curLength + strlen( text ) <= m_maxLength );
@@ -148,8 +139,7 @@ AUI_ERRCODE aui_TextBox::AppendText
 	return AUI_ERRCODE_OK;
 }
 
-
-AUI_ERRCODE aui_TextBox::CalculateItems(MBCHAR const * text)
+AUI_ERRCODE aui_TextBox::CalculateItems(const MBCHAR * text)
 {
 	sint32 rangerValue = m_verticalRanger->GetValueY();
 	BOOL moveToEnd = rangerValue == m_verticalRanger->GetMaximumY();
@@ -166,19 +156,17 @@ AUI_ERRCODE aui_TextBox::CalculateItems(MBCHAR const * text)
 		m_curItem = 0;
 	}
 
-	MBCHAR const *  cur     = text;
-	MBCHAR const *  stop    = text + strlen( text );
+	const MBCHAR *  cur     = text;
+	const MBCHAR *  stop    = text + strlen( text );
 
 	if ( cur == stop ) return AUI_ERRCODE_OK;
 
 	uint32 length = 0;
 	aui_Static **itemPtr = m_items + m_curItem;
 
-
 	{
 		do
 		{
-
 			const MBCHAR *start = cur;
 			RECT wrap = { 0, 0, m_width, 0 };
 			POINT penPos = { 0, 0 };
@@ -196,7 +184,7 @@ AUI_ERRCODE aui_TextBox::CalculateItems(MBCHAR const * text)
 
 			if ( !length )
 			{
-				MBCHAR const * token = FindNextToken(cur, " \t\n", 1);
+				const MBCHAR * token = FindNextToken(cur, " \t\n", 1);
 				if ( token )
 					length = token - cur + 1;
 				else
@@ -207,8 +195,8 @@ AUI_ERRCODE aui_TextBox::CalculateItems(MBCHAR const * text)
 			if ( cur + length > stop ) length = stop - cur;
 
 			MBCHAR * tempCopy = new MBCHAR[length + 1];
-            std::copy(cur, cur + length, tempCopy);
-            tempCopy[length] = '0';
+			std::copy(cur, cur + length, tempCopy);
+			tempCopy[length] = '0';
 
 			if ( ++m_numItems > k_AUI_TEXTBOX_MAXITEMS )
 			{
@@ -247,29 +235,22 @@ AUI_ERRCODE aui_TextBox::CalculateItems(MBCHAR const * text)
 		} while ( (cur += length) < stop );
 	}
 
-
-
-
-
 	if ( moveToEnd ) rangerValue = m_verticalRanger->GetMaximumY();
 	m_verticalRanger->SetValue( 0, rangerValue );
 
 	return AUI_ERRCODE_OK;
 }
 
-
-AUI_ERRCODE aui_TextBox::CalculateAppendedItems(MBCHAR const * text)
+AUI_ERRCODE aui_TextBox::CalculateAppendedItems(const MBCHAR * text)
 {
 	return CalculateItems(text);
 }
-
 
 AUI_ERRCODE aui_TextBox::DrawThis(
 	aui_Surface *surface,
 	sint32 x,
 	sint32 y )
 {
-
 	if ( IsHidden() ) return AUI_ERRCODE_OK;
 
 	if ( !surface ) surface = m_window->TheSurface();
@@ -289,10 +270,7 @@ AUI_ERRCODE aui_TextBox::DrawThis(
 	return AUI_ERRCODE_OK;
 }
 
-
-
-
-void aui_TextBox::SetTextFont(MBCHAR const *ttffile )
+void aui_TextBox::SetTextFont(const MBCHAR *ttffile )
 {
 	aui_TextBase::SetTextFont( ttffile );
 
@@ -303,9 +281,6 @@ void aui_TextBox::SetTextFont(MBCHAR const *ttffile )
 
 	CalculateItems();
 }
-
-
-
 
 void aui_TextBox::SetTextFontSize( sint32 pointSize )
 {

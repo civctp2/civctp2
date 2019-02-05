@@ -357,7 +357,7 @@ void victorywin_Cleanup( void )
 #undef mycleanup
 }
 
-sint32 victorywin_AddWonders( MBCHAR *windowBlock )
+sint32 victorywin_AddWonders(const MBCHAR *windowBlock )
 {
 	AUI_ERRCODE		errcode = AUI_ERRCODE_OK;
 	MBCHAR			controlBlock[ k_AUI_LDL_MAXBLOCK + 1 ];
@@ -416,7 +416,7 @@ sint32 victorywin_AddWonders( MBCHAR *windowBlock )
 	return 0;
 
 }
-sint32 victorywin_Init_Controls( MBCHAR *windowBlock )
+sint32 victorywin_Init_Controls(const MBCHAR *windowBlock )
 {
 	MBCHAR			controlBlock[ k_AUI_LDL_MAXBLOCK + 1 ];
 	MBCHAR			tabBlock[ k_AUI_LDL_MAXBLOCK + 1 ];
@@ -710,7 +710,7 @@ sint32 victorywin_DisplayHighScore( void )
 
 
 
-HighScoreListItem::HighScoreListItem(AUI_ERRCODE *retval, MBCHAR *name, sint32 score, MBCHAR *ldlBlock)
+HighScoreListItem::HighScoreListItem(AUI_ERRCODE *retval, const MBCHAR *name, sint32 score, const MBCHAR *ldlBlock)
 	:
 	aui_ImageBase(ldlBlock),
 	aui_TextBase(ldlBlock, (MBCHAR *)NULL),
@@ -724,7 +724,7 @@ HighScoreListItem::HighScoreListItem(AUI_ERRCODE *retval, MBCHAR *name, sint32 s
 	if ( !AUI_SUCCESS(*retval) ) return;
 }
 
-AUI_ERRCODE HighScoreListItem::InitCommonLdl(MBCHAR *name, sint32 score, MBCHAR *ldlBlock)
+AUI_ERRCODE HighScoreListItem::InitCommonLdl(const MBCHAR *name, sint32 score, const MBCHAR *ldlBlock)
 {
 	MBCHAR			block[ k_AUI_LDL_MAXBLOCK + 1 ];
 	AUI_ERRCODE		retval;
@@ -827,7 +827,7 @@ HighScoreWindowPopup::HighScoreWindowPopup( sint32 type )
 
 }
 
-sint32 HighScoreWindowPopup::Initialize( MBCHAR *windowBlock )
+sint32 HighScoreWindowPopup::Initialize(const MBCHAR *windowBlock )
 {
 	AUI_ERRCODE errcode = AUI_ERRCODE_OK;
 	MBCHAR		controlBlock[ k_AUI_LDL_MAXBLOCK + 1 ];

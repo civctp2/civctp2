@@ -15,7 +15,7 @@
 aui_Switch::aui_Switch(
 	AUI_ERRCODE *retval,
 	uint32 id,
-	MBCHAR *ldlBlock,
+	const MBCHAR *ldlBlock,
 	ControlActionCallback *ActionFunc,
 	void *cookie )
 	:
@@ -65,7 +65,7 @@ aui_Switch::aui_Switch(
 }
 
 
-AUI_ERRCODE aui_Switch::InitCommonLdl( MBCHAR *ldlBlock )
+AUI_ERRCODE aui_Switch::InitCommonLdl( const MBCHAR *ldlBlock )
 {
     ldl_datablock * block = aui_Ldl::FindDataBlock(ldlBlock);
 	Assert( block != NULL );

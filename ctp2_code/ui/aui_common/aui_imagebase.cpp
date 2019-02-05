@@ -50,7 +50,7 @@ MBCHAR const *  aui_ImageBase::m_substateLdlKeywords[AUI_IMAGEBASE_SUBSTATE_LAST
 
 aui_ImageBase::aui_ImageBase
 (
-	MBCHAR const *  ldlBlock,
+	const MBCHAR *  ldlBlock,
 	bool            loadOnDemand
 )
 :
@@ -90,9 +90,9 @@ aui_ImageBase::aui_ImageBase
 }
 
 
-AUI_ERRCODE aui_ImageBase::InitCommonLdl(MBCHAR const *ldlBlock)
+AUI_ERRCODE aui_ImageBase::InitCommonLdl(const MBCHAR *ldlBlock)
 {
-    ldl_datablock * block = aui_Ldl::FindDataBlock(ldlBlock);
+	ldl_datablock * block = aui_Ldl::FindDataBlock(ldlBlock);
 	Assert(block);
 	if (!block) return AUI_ERRCODE_LDLFINDDATABLOCKFAILED;
 
@@ -115,8 +115,8 @@ AUI_ERRCODE aui_ImageBase::InitCommonLdl(MBCHAR const *ldlBlock)
 	}
 
 	AUI_IMAGEBASE_BLTFLAG imagebltflag = (m_chromaSpecified)
-                                         ? AUI_IMAGEBASE_BLTFLAG_CHROMAKEY
-                                         : AUI_IMAGEBASE_BLTFLAG_COPY;
+	                                     ? AUI_IMAGEBASE_BLTFLAG_CHROMAKEY
+	                                     : AUI_IMAGEBASE_BLTFLAG_COPY;
 
 	AUI_IMAGEBASE_BLTTYPE imageblttype = AUI_IMAGEBASE_BLTTYPE_COPY;
 	MBCHAR *type = block->GetString( k_AUI_IMAGEBASE_LDL_BLTTYPE );
@@ -128,7 +128,7 @@ AUI_ERRCODE aui_ImageBase::InitCommonLdl(MBCHAR const *ldlBlock)
 			imageblttype = AUI_IMAGEBASE_BLTTYPE_TILE;
 	}
 
-	MBCHAR *flags = block->GetString(k_AUI_IMAGEBASE_LDL_BLTFLAG);
+	const MBCHAR *flags = block->GetString(k_AUI_IMAGEBASE_LDL_BLTFLAG);
 	if ((flags)&&(!m_chromaSpecified))
 	{
 		if (!stricmp(flags, k_AUI_IMAGEBASE_LDL_BLTFLAG_CHROMAKEY))
@@ -231,11 +231,11 @@ AUI_ERRCODE aui_ImageBase::InitCommon(
 aui_ImageBase::~aui_ImageBase()
 {
 	if (m_stateImageNames)
-    {
+	{
 		for (int index = 0; index < m_numberOfStateImageNames; index++)
-        {
+		{
 			delete m_stateImageNames[index];
-        }
+		}
 
 		delete [] m_stateImageNames;
 	}
@@ -251,7 +251,6 @@ aui_ImageBase::~aui_ImageBase()
 	}
 }
 
-
 aui_Image *aui_ImageBase::GetImage(
 	sint32 state,
 	AUI_IMAGEBASE_SUBSTATE substate ) const
@@ -266,10 +265,9 @@ aui_Image *aui_ImageBase::GetImage(
 		return NULL;
 
 
-	if(m_loadOnDemand) {
-
+	if(m_loadOnDemand)
+	{
 		sint32 index = (state * AUI_IMAGEBASE_SUBSTATE_LAST) + substate;
-
 
 		if(m_stateImageNames[index] && (!m_stateImageGroups[state][substate]))
 		{
@@ -284,7 +282,6 @@ aui_Image *aui_ImageBase::GetImage(
 	return m_stateImageGroups[ state ][ substate ];
 }
 
-
 AUI_IMAGEBASE_BLTTYPE aui_ImageBase::SetImageBltType(
 	AUI_IMAGEBASE_BLTTYPE imageblttype )
 {
@@ -293,7 +290,6 @@ AUI_IMAGEBASE_BLTTYPE aui_ImageBase::SetImageBltType(
 	return prevtype;
 }
 
-
 AUI_IMAGEBASE_BLTFLAG aui_ImageBase::SetImageBltFlag(
 	AUI_IMAGEBASE_BLTFLAG imagebltflag )
 {
@@ -301,7 +297,6 @@ AUI_IMAGEBASE_BLTFLAG aui_ImageBase::SetImageBltFlag(
 	m_imagebltflag = imagebltflag;
 	return prevtype;
 }
-
 
 aui_Image *aui_ImageBase::SetImage
 (
@@ -326,7 +321,7 @@ aui_Image *aui_ImageBase::SetImage
 	if (image)
 	{
 		if (m_loadOnDemand)
-        {
+		{
 			Assert( state >= 0 && state < m_numStateImageGroups );
 
 			sint32 index = (state * AUI_IMAGEBASE_SUBSTATE_LAST) + substate;
@@ -351,9 +346,9 @@ aui_Image *aui_ImageBase::SetImage
 		}
 	}
 	else
-    {
+	{
 		if (m_loadOnDemand)
-        {
+		{
 			Assert( state >= 0 && state < m_numStateImageGroups );
 
 			sint32 index = (state * AUI_IMAGEBASE_SUBSTATE_LAST) + substate;
@@ -370,14 +365,12 @@ aui_Image *aui_ImageBase::SetImage
 	return prevImage;
 }
 
-
 AUI_ERRCODE aui_ImageBase::DrawImage(
 	aui_Surface *destSurf,
 	RECT *destRect,
 	sint32 state,
 	AUI_IMAGEBASE_SUBSTATE substate )
 {
-
 	aui_Image *image = GetImage( state, substate );
 	if ( !image ) return AUI_ERRCODE_OK;
 

@@ -10,7 +10,7 @@ public:
 
 	aui_Cursor(
 		AUI_ERRCODE *retval,
-		MBCHAR const * filename = NULL );
+		const MBCHAR * filename = NULL );
 	virtual ~aui_Cursor() {}
 
 protected:

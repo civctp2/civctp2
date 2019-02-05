@@ -39,7 +39,7 @@
 
 aui_Image::aui_Image(
 	AUI_ERRCODE *retval,
-	MBCHAR const * filename )
+	const MBCHAR * filename )
 	:
 	aui_Base()
 {
@@ -55,7 +55,7 @@ aui_Image::aui_Image(
 	if ( !AUI_SUCCESS(*retval) ) return;
 }
 
-AUI_ERRCODE aui_Image::InitCommon( MBCHAR const *filename )
+AUI_ERRCODE aui_Image::InitCommon( const MBCHAR *filename )
 {
 	m_surface = NULL,
 	m_format = NULL;
@@ -72,7 +72,7 @@ aui_Image::~aui_Image()
 	Unload();
 }
 
-AUI_ERRCODE aui_Image::SetFilename( MBCHAR const *filename )
+AUI_ERRCODE aui_Image::SetFilename( const MBCHAR *filename )
 {
 	Unload();	// deletes and NULLs m_format and m_surface
 
@@ -315,11 +315,6 @@ AUI_ERRCODE aui_BmpImageFormat::Load(MBCHAR const * filename, aui_Image *image )
 	SDL_Surface *bmp = SDL_LoadBMP(filename);
 	SDL_Surface *surf = NULL;
 	SDL_PixelFormat fmt = { 0 };
-//#if 0
-//	if (aui_image_SDLPixelFormat(image, &fmt)) {
-//		surf = SDL_ConvertSurface(bmp, &fmt, 0);
-//	}
-//#endif
 
         printf("%s L%d: image %s!\n", __FILE__, __LINE__, filename);
         if (g_ui->Primary()->BitsPerPixel() != 16)

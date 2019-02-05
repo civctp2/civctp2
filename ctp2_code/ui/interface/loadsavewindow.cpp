@@ -75,7 +75,7 @@ extern sint32						g_is565Format;
 #define k_LOADSAVE_AUTOSORT_COL		-2
 
 LoadSaveWindow::LoadSaveWindow(AUI_ERRCODE *retval, uint32 id,
-		MBCHAR *ldlBlock, sint32 bpp, AUI_WINDOW_TYPE type, bool bevel)
+		const MBCHAR *ldlBlock, sint32 bpp, AUI_WINDOW_TYPE type, bool bevel)
 :
     c3_PopupWindow              (retval, id, ldlBlock, bpp, type, bevel),
     m_type                      (LSS_TOTAL),
@@ -737,37 +737,37 @@ void LoadSaveWindow::SetRadarMap(SaveInfo *info)
 	surface->Unlock(buffer);
 }
 
-void LoadSaveWindow::SetGameName(MBCHAR *name)
+void LoadSaveWindow::SetGameName(const MBCHAR *name)
 {
 	if (!m_gameTextBox) return;
 	m_gameTextBox->SetFieldText(name);
 }
 
-void LoadSaveWindow::SetSaveName(MBCHAR *name)
+void LoadSaveWindow::SetSaveName(const MBCHAR *name)
 {
 	if (!m_saveTextBox) return;
 	m_saveTextBox->SetFieldText(name);
 }
 
-void LoadSaveWindow::SetLeaderName(MBCHAR *name)
+void LoadSaveWindow::SetLeaderName(const MBCHAR *name)
 {
 	if (!m_playerText) return;
 	m_playerText->SetText(name);
 }
 
-void LoadSaveWindow::SetCivName(MBCHAR *name)
+void LoadSaveWindow::SetCivName(const MBCHAR *name)
 {
 	if (!m_civText) return;
 	m_civText->SetText(name);
 }
 
-void LoadSaveWindow::SetNote(MBCHAR *note)
+void LoadSaveWindow::SetNote( const MBCHAR *note)
 {
 	if (!m_noteTextBox) return;
 	m_noteTextBox->SetFieldText(note);
 }
 
-BOOL LoadSaveWindow::GetGameName(MBCHAR *name)
+BOOL LoadSaveWindow::GetGameName( MBCHAR *name)
 {
 	Assert(m_gameTextBox);
 	if (!m_gameTextBox) return FALSE;
@@ -777,7 +777,7 @@ BOOL LoadSaveWindow::GetGameName(MBCHAR *name)
 	return TRUE;
 }
 
-BOOL LoadSaveWindow::GetSaveName(MBCHAR *name)
+BOOL LoadSaveWindow::GetSaveName( MBCHAR *name)
 {
 	Assert(m_saveTextBox);
 	if (!m_saveTextBox) return FALSE;
@@ -787,7 +787,7 @@ BOOL LoadSaveWindow::GetSaveName(MBCHAR *name)
 	return TRUE;
 }
 
-MBCHAR *LoadSaveWindow::GetLeaderName(void)
+const MBCHAR *LoadSaveWindow::GetLeaderName(void)
 {
 	Assert(m_playerText);
 	if (!m_playerText) return NULL;
@@ -795,7 +795,7 @@ MBCHAR *LoadSaveWindow::GetLeaderName(void)
 	return m_playerText->GetText();
 }
 
-MBCHAR *LoadSaveWindow::GetCivName(void)
+const MBCHAR *LoadSaveWindow::GetCivName(void)
 {
 	Assert(m_civText);
 	if (!m_civText) return NULL;
@@ -873,7 +873,7 @@ void LoadSaveWindow::SetSaveInfo(SaveInfo *info)
 	m_tabGroup->ShouldDraw(TRUE);
 }
 
-void LoadSaveWindow::BuildDefaultSaveName(MBCHAR *gameName, MBCHAR *name)
+void LoadSaveWindow::BuildDefaultSaveName(const MBCHAR *gameName, MBCHAR *name)
 {
 	MBCHAR		civName[k_MAX_NAME_LEN];
 	g_player[g_selected_item->GetVisiblePlayer()]->m_civilisation->GetSingularCivName(civName);
@@ -954,7 +954,7 @@ bool LoadSaveWindow::NoName( void )
 	return 0 == strcmp(s, "");
 }
 
-LSCivsListItem::LSCivsListItem(AUI_ERRCODE *retval, MBCHAR *ldlBlock, const MBCHAR *name)
+LSCivsListItem::LSCivsListItem(AUI_ERRCODE *retval, const MBCHAR *ldlBlock, const MBCHAR *name)
 :
 	aui_ImageBase(ldlBlock),
 	aui_TextBase(ldlBlock, (MBCHAR *)NULL),
@@ -990,7 +990,7 @@ sint32 LSCivsListItem::Compare(c3_ListItem *item2, uint32 column)
 	return 0;
 }
 
-LSGamesListItem::LSGamesListItem(AUI_ERRCODE *retval, MBCHAR *ldlBlock, GameInfo *info)
+LSGamesListItem::LSGamesListItem(AUI_ERRCODE *retval, const MBCHAR *ldlBlock, GameInfo *info)
 :
 	c3_ListItem     (retval, ldlBlock),
 	m_itemIcon      (NULL),
@@ -1040,7 +1040,7 @@ sint32 LSGamesListItem::Compare(c3_ListItem *item2, uint32 column)
 	return 0;
 }
 
-LSSavesListItem::LSSavesListItem(AUI_ERRCODE *retval, MBCHAR *ldlBlock, SaveInfo *info)
+LSSavesListItem::LSSavesListItem(AUI_ERRCODE *retval, const MBCHAR *ldlBlock, SaveInfo *info)
 :
     c3_ListItem (retval, ldlBlock),
     m_itemIcon  (NULL),

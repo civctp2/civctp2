@@ -47,6 +47,12 @@ class aui_Image;
 class aui_DirtyList;
 class ldl_datablock;
 
+#ifdef USE_SDL
+// HACK: Use this global variable to halt mouse event handling
+// thread on game exit
+extern BOOL g_mouseShouldTerminateThread;
+#endif
+
 #define k_MOUSE_LDL_NUMCURSORS	"numcursors"
 #define k_MOUSE_LDL_ANIM		"anim"
 #define k_MOUSE_LDL_CURSOR		"cursor"
@@ -86,24 +92,18 @@ struct aui_MouseEvent
 
 #define k_MOUSE_DEFAULTANIMDELAY	100
 
-#ifdef USE_SDL
-// HACK: Use this global variable to halt mouse event handling
-// thread on game exit
-extern BOOL g_mouseShouldTerminateThread;
-#endif
-
 class aui_Mouse : public aui_Base, public virtual aui_Input
 {
 public:
 
 	aui_Mouse(
-		AUI_ERRCODE *retval,
-		MBCHAR *ldlBlock );
+		AUI_ERRCODE  *retval,
+		const MBCHAR *ldlBlock );
 	virtual ~aui_Mouse();
 
 protected:
 	aui_Mouse() {}
-	AUI_ERRCODE InitCommonLdl( MBCHAR *ldlBlock );
+	AUI_ERRCODE InitCommonLdl( const MBCHAR *ldlBlock );
 	AUI_ERRCODE InitCommon( void );
 
 	sint32 FindNumCursorsFromLdl( ldl_datablock *block );
@@ -132,8 +132,8 @@ public:
 		return AUI_ERRCODE_OK;
 	}
 
-	BOOL IsSuspended( void ) const { return m_suspendCount; }
-	BOOL IsHidden( void ) const { return m_showCount < 0; }
+	BOOL IsSuspended( void ) const { return m_suspendCount;  }
+	BOOL IsHidden   ( void ) const { return m_showCount < 0; }
 
 	sint32	X( void ) { return m_data.position.x; }
 	sint32	Y( void ) { return m_data.position.y; }
@@ -147,7 +147,7 @@ public:
 	AUI_ERRCODE SetPosition( POINT *point );
 
 	AUI_ERRCODE	GetHotspot( sint32 *x, sint32 *y, sint32 index = 0 );
-	AUI_ERRCODE	SetHotspot( sint32 x, sint32 y, sint32 index = 0 );
+	AUI_ERRCODE	SetHotspot( sint32  x, sint32  y, sint32 index = 0 );
 
 	double		&Sensitivity( void ) { return m_sensitivity; }
 
@@ -164,7 +164,7 @@ public:
 	void GetAnimIndexes( sint32 *firstIndex, sint32 *lastIndex )
 	{
 		if ( firstIndex ) *firstIndex = m_firstIndex;
-		if ( lastIndex ) *lastIndex = m_lastIndex;
+		if (  lastIndex ) * lastIndex =  m_lastIndex;
 	}
 	void SetAnimIndexes( sint32 firstIndex, sint32 lastIndex );
 
@@ -235,7 +235,6 @@ protected:
 
 #ifdef __AUI_USE_SDL__
 	SDL_Thread     *m_thread;
-	uint32          m_threadId;
 #elif defined(__AUI_USE_DIRECTX__)
 	HANDLE		m_thread;
 	DWORD		m_threadId;

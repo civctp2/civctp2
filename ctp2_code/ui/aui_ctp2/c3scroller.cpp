@@ -105,7 +105,7 @@ C3Scroller::C3Scroller
 	Assert( AUI_SUCCESS(*retval) );
 	if ( !AUI_SUCCESS(*retval) ) return;
 
-	*retval = aui_SoundBase::InitCommon((MBCHAR **) NULL);
+	*retval = aui_SoundBase::InitCommon((const MBCHAR **) NULL);
 	Assert( AUI_SUCCESS(*retval) );
 	if ( !AUI_SUCCESS(*retval) ) return;
 
@@ -121,11 +121,6 @@ C3Scroller::C3Scroller
 	Assert( AUI_SUCCESS(*retval) );
 }
 
-
-
-
-
-
 AUI_ERRCODE C3Scroller::InitCommon()
 {
 	if (m_isVertical)
@@ -139,7 +134,6 @@ AUI_ERRCODE C3Scroller::InitCommon()
 
 	return AUI_ERRCODE_OK;
 }
-
 
 AUI_ERRCODE C3Scroller::CreateButtonsAndThumb( void )
 {
@@ -175,13 +169,8 @@ AUI_ERRCODE C3Scroller::CreateButtonsAndThumb( void )
 	return AUI_ERRCODE_OK;
 }
 
-
 AUI_ERRCODE C3Scroller::DrawThis( aui_Surface *surface, sint32 x, sint32 y )
 {
-
-
-
-
 	if ( IsHidden() ) return AUI_ERRCODE_OK;
 
 	if ( !surface ) surface = m_window->TheSurface();

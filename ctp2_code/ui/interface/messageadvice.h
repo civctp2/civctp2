@@ -43,27 +43,27 @@ public:
 	MessageAdvice(
 		AUI_ERRCODE *retval,
 		uint32 id,
-		MBCHAR *ldlBlock,
+		const MBCHAR *ldlBlock,
 		sint32 bpp,
 		AUI_WINDOW_TYPE type = AUI_WINDOW_TYPE_FLOATING );
 
 	virtual ~MessageAdvice();
 
-	virtual AUI_ERRCODE InitCommon( MBCHAR *ldlBlock );
+	virtual AUI_ERRCODE InitCommon(const MBCHAR *ldlBlock );
 
 	void BringBorderToTop();
 	AUI_ERRCODE AddBordersToUI();
 	AUI_ERRCODE RemoveBordersFromUI();
 
-	AUI_ERRCODE AppendText( MBCHAR *text );
+	AUI_ERRCODE AppendText(const MBCHAR *text );
 
 protected:
     virtual void	MouseLGrabInside(aui_MouseEvent * data);
     virtual void	MouseLDragAway(aui_MouseEvent * data);
 
-	AUI_ERRCODE CreateWindowEdges( MBCHAR *ldlBlock );
-	AUI_ERRCODE CreateTextBox( MBCHAR *ldlBlock );
-	AUI_ERRCODE CreateDismissButton( MBCHAR *ldlBlock );
+	AUI_ERRCODE CreateWindowEdges(const MBCHAR *ldlBlock );
+	AUI_ERRCODE CreateTextBox(const MBCHAR *ldlBlock );
+	AUI_ERRCODE CreateDismissButton(const MBCHAR *ldlBlock );
 
 private:
 	aui_Static						*m_leftBar;
@@ -80,7 +80,7 @@ private:
 
 };
 
-int messageadvice_AddText( MBCHAR *text );
+int messageadvice_AddText(const MBCHAR *text );
 int messageadvice_DestroyWindow( void );
 
 #endif

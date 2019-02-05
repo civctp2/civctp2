@@ -31,27 +31,18 @@ ctp2_Button::~ctp2_Button()
 {
 }
 
-
-
-
-
-
-
-
-
-
-AUI_ERRCODE ctp2_Button::InitCommonLdl(MBCHAR *ldlBlock, MBCHAR *ldlTemplate,
+AUI_ERRCODE ctp2_Button::InitCommonLdl(const MBCHAR *ldlBlock, const MBCHAR *ldlTemplate,
 									   sint32 x, sint32 y,
 									   sint32 width, sint32 height)
 {
-    ldl_datablock * theBlock = aui_Ldl::FindDataBlock(ldlBlock);
+	ldl_datablock * theBlock = aui_Ldl::FindDataBlock(ldlBlock);
 
-    if (!theBlock)
+	if (!theBlock)
 	{
-        theBlock = aui_Ldl::FindDataBlock(ldlTemplate);
+		theBlock = aui_Ldl::FindDataBlock(ldlTemplate);
 		if (!theBlock)
-        {
-            return AUI_ERRCODE_HACK;
+		{
+			return AUI_ERRCODE_HACK;
 		}
 	}
 
@@ -106,7 +97,6 @@ AUI_ERRCODE ctp2_Button::InitCommonLdl(MBCHAR *ldlBlock, MBCHAR *ldlTemplate,
 
 	return AUI_ERRCODE_OK;
 }
-
 
 AUI_ERRCODE ctp2_Button::DrawThis(aui_Surface *surface,
 								  sint32 x,
