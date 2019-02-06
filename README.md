@@ -40,7 +40,7 @@ If you want to build a debug version it is:
 
 ```
 ./autogen.sh
-CFLAGS="$CFLAGS -w -fuse-ld=gold" CXXFLAGS="$CXXFLAGS -fpermissive -w -fuse-ld=gold" ./configure --enable-silent-rules --enable-debug
+CFLAGS="$CFLAGS -w -fno-omit-frame-pointer -fuse-ld=gold" CXXFLAGS="$CXXFLAGS -fpermissive -w -fno-omit-frame-pointer -fuse-ld=gold" ./configure --enable-silent-rules --enable-debug
 make
 ```
 

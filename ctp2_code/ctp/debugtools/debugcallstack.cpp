@@ -608,9 +608,9 @@ void DebugCallStack_Save  (size_t *call_stack, int number, size_t Ebp)
 #if !defined(WIN32)
 	size_t num = backtrace((void**)call_stack, number);
 
+	Dl_info info;
 	for(sint32 i = 0; i < num; ++i)
 	{
-		Dl_info info;
 		if(dladdr((void*)call_stack[i], &info) != 0)
 		{
 			call_stack[i] -= (size_t)info.dli_fbase;
