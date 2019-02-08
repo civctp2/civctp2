@@ -393,6 +393,12 @@ const char *Debug_FunctionNameGet (size_t address)
 {
 	FUNCTION_ADDRESS *pointer;
 
+	Dl_info info;
+	if(dladdr((void*)address, &info) != 0)
+	{
+		address -= (size_t)info.dli_fbase;
+	}
+
 	if (address > DEBUG_CODE_LIMIT)
 	{
 		return (kernel);
@@ -422,6 +428,12 @@ const char *Debug_FunctionNameAndOffsetGet (size_t address, int *offset)
 {
 	FUNCTION_ADDRESS *pointer;
 	*offset = 0;
+	
+	Dl_info info;
+	if(dladdr((void*)address, &info) != 0)
+	{
+		address -= (size_t)info.dli_fbase;
+	}
 
 	if (address > DEBUG_CODE_LIMIT)
 	{
@@ -606,17 +618,7 @@ void DebugCallStack_DumpFrom (LogClass log_class, size_t base_pointer)
 void DebugCallStack_Save  (size_t *call_stack, int number, size_t Ebp)
 {
 #if !defined(WIN32)
-	size_t num = backtrace((void**)call_stack, number);
-
-	Dl_info info;
-	for(sint32 i = 0; i < num; ++i)
-	{
-		if(dladdr((void*)call_stack[i], &info) != 0)
-		{
-			call_stack[i] -= (size_t)info.dli_fbase;
-		}
-	}
-
+	backtrace((void**)call_stack, number);
 #else
 	size_t base_pointer;
 	size_t caller;
