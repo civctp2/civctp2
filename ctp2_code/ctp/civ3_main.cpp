@@ -298,57 +298,57 @@ bool g_autoAltTab = false;
 
 namespace Os
 {
-    /// Get the name of the executable
-    /// \remarks Including the full path
-    std::basic_string<TCHAR> GetExeName(void)
-    {
+	/// Get the name of the executable
+	/// \remarks Including the full path
+	std::basic_string<TCHAR> GetExeName(void)
+	{
 #if defined(WIN32)
 		TCHAR   filepath[MAX_PATH];
 		DWORD   filepathLength      = GetModuleFileName(NULL, filepath, MAX_PATH);
 
-        return std::basic_string<TCHAR>(filepath, filepathLength);
+		return std::basic_string<TCHAR>(filepath, filepathLength);
 #elif defined(HAVE_UNISTD_H) && defined(LINUX)
-	char szLink[MAX_PATH] = { 0 };
-	char szTemp[MAX_PATH] = { 0 };
-	struct stat st = { 0 };
-	pid_t pid = getpid();
-	if (pid < 0)
-	    return std::basic_string<TCHAR>();
+		char szLink[MAX_PATH] = { 0 };
+		char szTemp[MAX_PATH] = { 0 };
+		struct stat st = { 0 };
+		pid_t pid = getpid();
+		if (pid < 0)
+			return std::basic_string<TCHAR>();
 
-	snprintf(szLink, sizeof(szLink) - 1, "/proc/%ld/exe", static_cast<long int>(pid));
-	int rc = lstat(szLink, &st);
-	// szLink must be a link...
-	if (rc != 0)
-	    return std::basic_string<TCHAR>();
+		snprintf(szLink, sizeof(szLink) - 1, "/proc/%ld/exe", static_cast<long int>(pid));
+		int rc = lstat(szLink, &st);
+		// szLink must be a link...
+		if (rc != 0)
+			return std::basic_string<TCHAR>();
 
-	if (!S_ISLNK(st.st_mode))
-	    return std::basic_string<TCHAR>();
+		if (!S_ISLNK(st.st_mode))
+			return std::basic_string<TCHAR>();
 
-	ssize_t size = readlink(szLink, szTemp, sizeof(szTemp));
-	if ((size < 0) || (static_cast<size_t>(size) > sizeof(szTemp)))
-	    return std::basic_string<TCHAR>();
-	szTemp[size] = 0;
+		ssize_t size = readlink(szLink, szTemp, sizeof(szTemp));
+		if ((size < 0) || (static_cast<size_t>(size) > sizeof(szTemp)))
+			return std::basic_string<TCHAR>();
+		szTemp[size] = 0;
 
-	return std::basic_string<TCHAR>(szTemp, size);
+		return std::basic_string<TCHAR>(szTemp, size);
 #else
-	//#ifdef HAVE_UNISTD_H
-	// Copy argv[0] and getwd() to global buffer within main(),
-	// recursively readlink() path to executable until last link reached
-	// concat cwd and path found to return an absolute path, if needed
-	// return absolute path to executable
-	//#endif
-        return std::basic_string<TCHAR>();
+		//#ifdef HAVE_UNISTD_H
+		// Copy argv[0] and getwd() to global buffer within main(),
+		// recursively readlink() path to executable until last link reached
+		// concat cwd and path found to return an absolute path, if needed
+		// return absolute path to executable
+		//#endif
+		return std::basic_string<TCHAR>();
 #endif
-    }
+	}
 
-    /// Get the version of the executable
-    /// \remarks Using the last modification date as version
-    std::basic_string<TCHAR> GetExeVersion(void)
-    {
-        std::basic_stringstream<TCHAR>  exeVersion;
+	/// Get the version of the executable
+	/// \remarks Using the last modification date as version
+	std::basic_string<TCHAR> GetExeVersion(void)
+	{
+		std::basic_stringstream<TCHAR>  exeVersion;
 
 #if defined(WIN32)
-        HANDLE		fileHandle	= CreateFile(Os::GetExeName().c_str(),
+		HANDLE		fileHandle	= CreateFile(Os::GetExeName().c_str(),
 											 GENERIC_READ,
 			                                 FILE_SHARE_READ,
 											 NULL,
@@ -362,14 +362,14 @@ namespace Os
 			FILETIME	lastWrite;
 			SYSTEMTIME	systemTime;
 
-			if (GetFileTime(fileHandle, NULL, NULL, &lastWrite)		&&
-				FileTimeToSystemTime(&lastWrite, &systemTime)
+			if (GetFileTime(fileHandle, NULL, NULL, &lastWrite) &&
+			    FileTimeToSystemTime(&lastWrite, &systemTime)
 			   )
 			{
-                exeVersion << std::setfill('0')
-                           << std::setw(4) << systemTime.wYear  << '-'
-                           << std::setw(2) << systemTime.wMonth << '-'
-                           << std::setw(2) << systemTime.wDay;
+				exeVersion << std::setfill('0')
+				           << std::setw(4) << systemTime.wYear  << '-'
+				           << std::setw(2) << systemTime.wMonth << '-'
+				           << std::setw(2) << systemTime.wDay;
 			}
 
 			CloseHandle(fileHandle);
@@ -382,9 +382,9 @@ namespace Os
 
 		struct tm *t = localtime(&st.st_mtime);
 		exeVersion << std::setfill('0')
-                           << std::setw(4) << (t->tm_year + 1900)  << '-'
-                           << std::setw(2) << (t->tm_mon + 1)    << '-'
-                           << std::setw(2) << (t->tm_mday);
+		           << std::setw(4) << (t->tm_year + 1900)  << '-'
+		           << std::setw(2) << (t->tm_mon + 1)    << '-'
+		           << std::setw(2) << (t->tm_mday);
 #endif  // WIN32
 
 		return exeVersion.str();
@@ -421,7 +421,7 @@ int ui_Initialize(void)
 	g_is565Format = AUI_SURFACE_PIXELFORMAT_565 == g_c3ui->PixelFormat();
 
 	ColorSet::Initialize();
-    g_c3ui->RegisterCleanup(&ColorSet::Cleanup);
+	g_c3ui->RegisterCleanup(&ColorSet::Cleanup);
 
 	SPLASH_STRING("Creating Blitter...");
 
@@ -430,58 +430,59 @@ int ui_Initialize(void)
 
 	SPLASH_STRING("Initializing Paths...");
 
-    int     i;
+	int     i;
 	char s[_MAX_PATH+1];
 
-    for (i = 0; g_civPaths->FindPath(C3DIR_PATTERNS, i, s); ++i)
-    {
-        if (s[0])
-        {
-            g_c3ui->AddPatternSearchPath(s);
-            g_c3ui->AddImageSearchPath(s);
-        }
-    }
+	for (i = 0; g_civPaths->FindPath(C3DIR_PATTERNS, i, s); ++i)
+	{
+		if (s[0])
+		{
+			g_c3ui->AddPatternSearchPath(s);
+			g_c3ui->AddImageSearchPath(s);
+		}
+	}
 
-    for (i = 0; g_civPaths->FindPath(C3DIR_ICONS, i, s); ++i)
-    {
-        if (s[0])
-        {
-            g_c3ui->AddIconSearchPath(s);
-            g_c3ui->AddImageSearchPath(s);
-        }
-    }
+	for (i = 0; g_civPaths->FindPath(C3DIR_ICONS, i, s); ++i)
+	{
+		if (s[0])
+		{
+			g_c3ui->AddIconSearchPath(s);
+			g_c3ui->AddImageSearchPath(s);
+		}
+	}
 
-    for (i = 0; g_civPaths->FindPath(C3DIR_PICTURES, i, s); ++i)
-    {
-        if (s[0])
-        {
-            g_c3ui->AddPatternSearchPath(s);
-            g_c3ui->AddPictureSearchPath(s);
-            g_c3ui->AddImageSearchPath(s);
-        }
-    }
+	for (i = 0; g_civPaths->FindPath(C3DIR_PICTURES, i, s); ++i)
+	{
+		if (s[0])
+		{
+			g_c3ui->AddPatternSearchPath(s);
+			g_c3ui->AddPictureSearchPath(s);
+			g_c3ui->AddImageSearchPath(s);
+		}
+	}
 
-    for (i = 0; g_civPaths->FindPath(C3DIR_CURSORS, i, s); ++i)
-    {
-        if (s[0])
-        {
-            g_c3ui->AddCursorSearchPath(s);
-            g_c3ui->AddImageSearchPath(s);
-        }
-    }
+	for (i = 0; g_civPaths->FindPath(C3DIR_CURSORS, i, s); ++i)
+	{
+		if (s[0])
+		{
+			g_c3ui->AddCursorSearchPath(s);
+			g_c3ui->AddImageSearchPath(s);
+		}
+	}
 
-    for (i = 0; g_civPaths->FindPath(C3DIR_FONTS, i, s); ++i)
-    {
-        if (s[0])
-        {
-            g_c3ui->AddBitmapFontSearchPath(s);
-        }
-    }
+	for (i = 0; g_civPaths->FindPath(C3DIR_FONTS, i, s); ++i)
+	{
+		if (s[0])
+		{
+			g_c3ui->AddBitmapFontSearchPath(s);
+		}
+	}
 
 #ifdef WIN32
-	if (!GetWindowsDirectory(s, _MAX_PATH)) {
+	if (!GetWindowsDirectory(s, _MAX_PATH))
+	{
 		c3errors_FatalDialog(appstrings_GetString(APPSTR_FONTS),
-								appstrings_GetString(APPSTR_NOWINDOWSDIR));
+		                     appstrings_GetString(APPSTR_NOWINDOWSDIR));
 	}
 	strcat(s, FILE_SEP "fonts");
 	g_c3ui->AddBitmapFontSearchPath(s);
@@ -490,11 +491,14 @@ int ui_Initialize(void)
 	int ndirs;
 	bool noPath = true;
 	char **fontpaths = XGetFontPath(display, &ndirs);
-	if (fontpaths) {
+	if (fontpaths)
+	{
 		struct stat st = { 0 };
-		for (int i = 0; i < ndirs; i++) {
+		for (int i = 0; i < ndirs; i++)
+		{
 			int rc = stat(fontpaths[i], &st);
-			if ((rc == 0) && (S_ISDIR(st.st_mode))) {
+			if ((rc == 0) && (S_ISDIR(st.st_mode)))
+			{
 				g_c3ui->AddBitmapFontSearchPath(fontpaths[i]);
 				// Make some default paths get added, too
 				//noPath = false;
@@ -503,7 +507,8 @@ int ui_Initialize(void)
 		XFreeFontPath(fontpaths);
 	}
 	// Fontpath just contains server(s)?
-	if (noPath) {
+	if (noPath)
+	{
 		const int maxPaths = 3;
 		const char* fontPaths[maxPaths] = {
 			"/usr/share/fonts",
@@ -517,13 +522,16 @@ int ui_Initialize(void)
 			"truetype",
 			"truetype/msttcorefonts"
 		};
-		for (int pIdx = 0; pIdx < maxPaths; pIdx++) {
-			for (int dIdx = 0; dIdx < maxDirs; dIdx++) {
+		for (int pIdx = 0; pIdx < maxPaths; pIdx++)
+		{
+			for (int dIdx = 0; dIdx < maxDirs; dIdx++)
+			{
 				struct stat st = { 0 };
 				snprintf(s, sizeof(s), "%s/%s",
 					fontPaths[pIdx], fontDirs[dIdx]);
 				int rc = stat(s, &st);
-				if ((rc == 0) && (S_ISDIR(st.st_mode))) {
+				if ((rc == 0) && (S_ISDIR(st.st_mode)))
+				{
 					g_c3ui->AddBitmapFontSearchPath(s);
 				}
 			}
@@ -531,13 +539,13 @@ int ui_Initialize(void)
 	}
 #endif
 
-    for (i = 0; g_civPaths->FindPath(C3DIR_VIDEOS, i, s); ++i)
-    {
-        if (s[0])
-        {
-            g_c3ui->AddMovieSearchPath(s);
-        }
-    }
+	for (i = 0; g_civPaths->FindPath(C3DIR_VIDEOS, i, s); ++i)
+	{
+		if (s[0])
+		{
+			g_c3ui->AddMovieSearchPath(s);
+		}
+	}
 
 	SPLASH_STRING("Creating Mouse...");
 
@@ -603,7 +611,6 @@ void ui_HandleMouseWheel(sint16 delta)
 
 bool compute_scroll_deltas(sint32 time,sint32 &deltaX,sint32 &deltaY)
 {
-
 	bool retval = true;
 
 	float real_time=(float)time/(1000.0f);
@@ -674,14 +681,6 @@ bool ui_CheckForScroll(void)
 
 	CURSORINDEX		scrollCursor = CURSORINDEX_DEFAULT;
 
-
-
-
-
-
-
-
-
 	bool        scrolled = false;
 
 	if (g_civApp->IsKeyboardScrolling() &&
@@ -716,13 +715,13 @@ bool ui_CheckForScroll(void)
 			aui_Window *topWindow = g_c3ui ? g_c3ui->TopWindow() : NULL;
 
 			if (topWindow && g_controlPanel)
-            {
+			{
 				if (topWindow != g_controlPanel->GetWindow() &&
-                    topWindow != g_statusWindow &&
-                    topWindow != g_radarWindow &&
-                    topWindow != g_controlPanel->GetMenuBar()
-                   )
-                {
+				    topWindow != g_statusWindow &&
+				    topWindow != g_radarWindow &&
+				    topWindow != g_controlPanel->GetMenuBar()
+				   )
+				{
 					return false;
 				}
 			}
@@ -755,7 +754,7 @@ bool ui_CheckForScroll(void)
 			deltaY = 0;
 			scrolled = true;
 			scrollCursor = CURSORINDEX_SCROLLRIGHT;
-		    isMouseScrolling = true;
+			isMouseScrolling = true;
 		}
 
 		if (y <= 2)
@@ -772,7 +771,7 @@ bool ui_CheckForScroll(void)
 			deltaY = 1;
 			scrolled = true;
 			scrollCursor = CURSORINDEX_SCROLLDOWN;
-		    isMouseScrolling = true;
+			isMouseScrolling = true;
 		}
 
 
@@ -797,7 +796,6 @@ bool ui_CheckForScroll(void)
 
 	if (scrolled)
 	{
-
 		if (deltaX)
 			smoothY = deltaY = 0;
 		else
@@ -806,16 +804,12 @@ bool ui_CheckForScroll(void)
 		lastdeltaX = deltaX;
 		lastdeltaY = deltaY;
 
-
-
-
 		g_tiledMap->SetScrolling(true);
 
 		uint32 accellTickDelta = s_scrollcurtick - s_accelTickStart;
 
 		if ((smoothY == 0) && (smoothX == 0))
 		{
-
 			s_accelTickStart = s_scrollcurtick;
 
 			accellTickDelta = 0;
@@ -823,11 +817,10 @@ bool ui_CheckForScroll(void)
 
 		sint32 accel = (accellTickDelta/k_TICKS_PER_ACCELERATION)+1;
 
+		smoothX = std::min<sint32>(deltaX * accel, hscroll);
+		smoothY = std::min<sint32>(deltaY * accel, vscroll);
 
-        smoothX = std::min<sint32>(deltaX * accel, hscroll);
-        smoothY = std::min<sint32>(deltaY * accel, vscroll);
-
-        if (smoothX < -hscroll)
+		if (smoothX < -hscroll)
 			smoothX = -hscroll;
 		if (smoothY < -vscroll)
 			smoothY = -vscroll;
@@ -835,17 +828,17 @@ bool ui_CheckForScroll(void)
 		if (g_smoothScroll)
 			g_tiledMap->ScrollMapSmooth(smoothX, smoothY);
 		else
-	  		g_tiledMap->ScrollMap(deltaX, deltaY);
+			g_tiledMap->ScrollMap(deltaX, deltaY);
 
 	}
 	else
-    {
+	{
 		s_scrolltime = k_SMOOTH_START_TIME;
 
 		if (isMouseScrolling)
-        {
+		{
 			g_cursorManager->SetCursor(CURSORINDEX_DEFAULT);
-		    isMouseScrolling = false;
+			isMouseScrolling = false;
 		}
 
 		smoothX = smoothY = 0;
@@ -859,17 +852,17 @@ int ui_Process(void)
 {
 	if ( g_c3ui->TheMouse()->IsSuspended() ) return 0;
 
-    uint32			curTicks    = Os::GetTicks();
+	uint32			curTicks    = Os::GetTicks();
 	static uint32	lastTicks   = curTicks;
 
 	if (ui_CheckForScroll())
-    {
+	{
 		do
-        {
+		{
 			g_tiledMap->CopyMixDirtyRects(g_background->GetDirtyList());
 			g_c3ui->Draw();
 		}
-        while (ui_CheckForScroll());
+		while (ui_CheckForScroll());
 
 		g_tiledMap->RetargetTileSurface(NULL);
 		g_tiledMap->Refresh();
@@ -877,8 +870,8 @@ int ui_Process(void)
 
 		lastTicks = curTicks;
 	}
-    else if (curTicks > lastTicks + k_TICKS_PER_GENERIC_FRAME)
-    {
+	else if (curTicks > lastTicks + k_TICKS_PER_GENERIC_FRAME)
+	{
 		g_tiledMap->RestoreMixFromMap(g_background->TheSurface());
 		g_background->Draw();
 
@@ -890,10 +883,8 @@ int ui_Process(void)
 	return 0;
 }
 
-
 sint32 sharedsurface_Initialize( void )
 {
-
 	AUI_ERRCODE errcode = AUI_ERRCODE_OK;
 	return errcode; // Return ends code here needs to be considered if g_sharedSurface is really needed
 
@@ -929,8 +920,6 @@ int sprite_Initialize(void)
 
 int sprite_Update(aui_Surface *surf)
 {
-
-
 	return 0;
 }
 
@@ -938,13 +927,12 @@ void sprite_Cleanup(void)
 {
 	spritegrouplist_Cleanup();
 
-    allocated::clear(g_director);
-    allocated::clear(g_screenManager);
+	allocated::clear(g_director);
+	allocated::clear(g_screenManager);
 }
 
 void ZoomPad_ZoomCallback()
 {
-
 	MainControlPanel::UpdateZoom();
 }
 
@@ -977,7 +965,7 @@ int tile_Initialize(BOOL isRestoring)
 
 void tile_Cleanup(void)
 {
-    allocated::clear(g_tiledMap);
+	allocated::clear(g_tiledMap);
 }
 
 int radar_Initialize(void)
@@ -1041,8 +1029,8 @@ void AtExitProc(void)
 
 #if defined(USE_SDL)
 # if 0
-    // What about this?
-    Mix_CloseAudio();
+	// What about this?
+	Mix_CloseAudio();
 # endif
 	g_mouseShouldTerminateThread = TRUE;
 
@@ -1052,7 +1040,7 @@ void AtExitProc(void)
 	g_secondaryKeyboardEventQueueMutex = NULL;
 #endif
 
-    SDL_Quit();
+	SDL_Quit();
 #endif
 }
 
@@ -1062,9 +1050,6 @@ BOOL g_no_exit_action;
 BOOL g_cmdline_load;
 char g_cmdline_load_filename[160];
 sint32 g_cheat_age;
-
-
-
 
 BOOL g_launchScenario = FALSE;
 
@@ -1123,8 +1108,9 @@ void ParseCommandLine(PSTR szCmdLine)
 
 		// space or end of string mark end of the file name
 		for (i=0; i<160 &&  (0 != *archive_file) &&
-				 (((!gotQuote && ' ' != *archive_file)) ||
-				  (gotQuote && '"' != *archive_file)); i++, archive_file++) {
+		     (((!gotQuote && ' ' != *archive_file)) ||
+		        (gotQuote && '"' != *archive_file)); i++, archive_file++)
+		{
 			g_cmdline_load_filename[i] = *archive_file;
 		}
 
@@ -1140,9 +1126,8 @@ void ParseCommandLine(PSTR szCmdLine)
 
 	MBCHAR * scenName = strstr(szCmdLine, "-s");
 
-	if (NULL != scenName) {
-
-
+	if (NULL != scenName)
+	{
 		scenName += 2;
 
 		sint32		i;
@@ -1285,10 +1270,10 @@ static LONG _cdecl main_CivExceptionHandler(LPEXCEPTION_POINTERS pException)
 			crashLog = fopen("crash.txt", "w");
 
 		if (crashLog)
-        {
-            fprintf(crashLog, "Version %s\n", Os::GetExeVersion().c_str());
+		{
+			fprintf(crashLog, "Version %s\n", Os::GetExeVersion().c_str());
 			fprintf(crashLog, "%s\n", c3debug_ExceptionStackTrace(pException));
-		    fclose(crashLog);
+			fclose(crashLog);
 		}
 	}
 
@@ -1339,7 +1324,7 @@ void main_InitializeLogs(void)
 #endif
 
 #if defined(_DEBUG)
-    g_splash_old = GetTickCount();
+	g_splash_old = GetTickCount();
 #endif
 
 	char		timebuf[100];
@@ -1627,54 +1612,65 @@ int WINAPI CivMain(HINSTANCE hInstance, HINSTANCE hPrevInstance, PSTR szCmdLine,
 
 	allocated::reassign(g_civApp, new CivApp());
 
-	if (g_cmdline_load) {
+	if (g_cmdline_load)
+	{
 		g_civApp->InitializeApp(hInstance, iCmdShow);
 
 		ScenarioPack	*pack;
 		Scenario		*scen;
 
-		if (g_civScenarios->FindScenarioFromSaveFile(g_cmdline_load_filename, &pack, &scen)) {
-
+		if (g_civScenarios->FindScenarioFromSaveFile(g_cmdline_load_filename, &pack, &scen))
+		{
 			g_civPaths->SetCurScenarioPath(scen->m_path);
 
 			g_civPaths->SetCurScenarioPackPath(pack->m_path);
 
 			g_theProfileDB->SetIsScenario(TRUE);
 
-			if (g_civScenarios->ScenarioHasSavedGame(scen)) {
-
+			if (g_civScenarios->ScenarioHasSavedGame(scen))
+			{
 				spnewgamescreen_scenarioExitCallback(NULL, 0, NULL, NULL);
-			} else {
-
+			}
+			else
+			{
 				spnewgamescreen_displayMyWindow();
 			}
-		} else {
+		}
+		else
+		{
 			main_RestoreGame(g_cmdline_load_filename);
 		}
-	} else if (g_no_shell) {
+	}
+	else if (g_no_shell)
+	{
 		g_civApp->QuickInit(hInstance, iCmdShow);
-	} else if (g_launchScenario) {
+	}
+	else if (g_launchScenario)
+	{
 		g_civApp->InitializeApp(hInstance, iCmdShow);
 		ScenarioPack	*pack;
 		Scenario		*scen;
 
-		if (g_civScenarios->FindScenario(g_scenarioName, &pack, &scen)) {
-
+		if (g_civScenarios->FindScenario(g_scenarioName, &pack, &scen))
+		{
 			g_civPaths->SetCurScenarioPath(scen->m_path);
 
 			g_civPaths->SetCurScenarioPackPath(pack->m_path);
 
 			g_theProfileDB->SetIsScenario(TRUE);
 
-			if (g_civScenarios->ScenarioHasSavedGame(scen)) {
-
+			if (g_civScenarios->ScenarioHasSavedGame(scen))
+			{
 				spnewgamescreen_scenarioExitCallback(NULL, 0, NULL, NULL);
-			} else {
-
+			}
+			else
+			{
 				spnewgamescreen_displayMyWindow();
 			}
 		}
-	} else {
+	}
+	else
+	{
 		g_civApp->InitializeApp(hInstance, iCmdShow);
 	}
 
@@ -1689,21 +1685,24 @@ int WINAPI CivMain(HINSTANCE hInstance, HINSTANCE hPrevInstance, PSTR szCmdLine,
 	for (gDone = FALSE; !gDone; )
 	{
 		g_civApp->Process();
-                //printf("%s L%d: g_civApp->Process() done!\n", __FILE__, __LINE__);
+		//printf("%s L%d: g_civApp->Process() done!\n", __FILE__, __LINE__);
 
 #ifdef __AUI_USE_SDL__
 		SDL_Event event;
 		while (!g_letUIProcess) { // There are breaks, too ;)
 			SDL_PumpEvents();
 			int n = SDL_PeepEvents(&event, 1, SDL_GETEVENT,
-                            ~(SDL_EVENTMASK(SDL_MOUSEMOTION) | SDL_EVENTMASK(SDL_MOUSEBUTTONDOWN) | SDL_EVENTMASK(SDL_MOUSEBUTTONUP)));
-			if (0 > n) {
-                            //fprintf(stderr, "[CivMain] PeepEvents failed: %s\n", SDL_GetError());
-                            printf("%s L%d: SDL_PeepEvents: Still events stored! Error?: %s\n", __FILE__, __LINE__, SDL_GetError());
+			                       ~(SDL_EVENTMASK(SDL_MOUSEMOTION) | SDL_EVENTMASK(SDL_MOUSEBUTTONDOWN) | SDL_EVENTMASK(SDL_MOUSEBUTTONUP)));
+			if (0 > n)
+			{
+				//fprintf(stderr, "[CivMain] PeepEvents failed: %s\n", SDL_GetError());
+				printf("%s L%d: SDL_PeepEvents: Still events stored! Error?: %s\n", __FILE__, __LINE__, SDL_GetError());
 
 				break;
 			}
-			if (0 == n) {
+
+			if (0 == n)
+			{
 				// other events are handled in other threads
 				// or no more events
 				break;
@@ -1712,15 +1711,18 @@ int WINAPI CivMain(HINSTANCE hInstance, HINSTANCE hPrevInstance, PSTR szCmdLine,
 				gDone = TRUE;
 
 			// If a keyboard event then we must reenqueue it so that aui_sdlkeyboard has a chance to look at it
-			if (event.type == SDL_KEYDOWN || event.type == SDL_KEYUP) {
-				if (-1==SDL_LockMutex(g_secondaryKeyboardEventQueueMutex)) {
+			if (event.type == SDL_KEYDOWN || event.type == SDL_KEYUP)
+			{
+				if (-1==SDL_LockMutex(g_secondaryKeyboardEventQueueMutex))
+				{
 					fprintf(stderr, "[CivMain] SDL_LockMutex failed: %s\n", SDL_GetError());
 					break;
 				}
 
 				g_secondaryKeyboardEventQueue.push(event);
 
-				if (-1==SDL_UnlockMutex(g_secondaryKeyboardEventQueueMutex)) {
+				if (-1==SDL_UnlockMutex(g_secondaryKeyboardEventQueueMutex))
+				{
 					fprintf(stderr, "[CivMain] SDL_UnlockMutex failed: %s\n", SDL_GetError());
 					break;
 				}
@@ -1798,7 +1800,8 @@ int SDLMessageHandler(const SDL_Event &event)
 
 	static bool swallowNextChar = false;
 
-	switch(event.type) {
+	switch(event.type)
+	{
 	case SDL_KEYDOWN:
 		{
 			// TODO: Determine what the 'swallowNextChar' variable
@@ -1949,7 +1952,7 @@ int SDLMessageHandler(const SDL_Event &event)
 // SDL_MOUSEBUTTONDOWN event is handled in aui_sdlmouse.cpp
 	}
 
-        //lynx: in the code without SDL the event (if not processed up to here) is passed to the OS handler with DefWindowProc()
+	//lynx: in the code without SDL the event (if not processed up to here) is passed to the OS handler with DefWindowProc()
 
 	return 0;
 }

@@ -225,9 +225,6 @@ extern ProgressWindow *g_theProgressWindow;
 
 #define k_CONTEXT_MISC_TILE_INFO 30000
 
-
-
-
 extern sint32               g_ScreenWidth;
 extern sint32               g_ScreenHeight;
 extern C3UI                 *g_c3ui;
@@ -264,18 +261,13 @@ void UnitPanelListBoxCallback (aui_Control *control, uint32 action, uint32 data,
 
 void TurnNextUnitButtonActionCallback( aui_Control *control, uint32 action, uint32 data, void *cookie )
 {
-
 	if ( action != (uint32)AUI_BUTTON_ACTION_EXECUTE ) return;
-
-
-
 
 	g_selected_item->NextUnmovedUnit();
 }
 
 void TurnNextCityButtonActionCallback( aui_Control *control, uint32 action, uint32 data, void *cookie )
 {
-
 	if ( action != (uint32)AUI_BUTTON_ACTION_EXECUTE ) return;
 	if ( g_selected_item->GetState() == SELECT_TYPE_LOCAL_CITY )
 	{
@@ -283,25 +275,23 @@ void TurnNextCityButtonActionCallback( aui_Control *control, uint32 action, uint
 	}
 	else
 	{
-
 		if (!g_player[g_selected_item->GetVisiblePlayer()] ||
 			!g_player[g_selected_item->GetVisiblePlayer()]->GetNumCities())
 			return;
 
 		Unit city = g_player[g_selected_item->GetVisiblePlayer()]->GetCityFromIndex(0);
 		g_selected_item->SetSelectUnit(city);
-		if(g_selected_item->IsAutoCenterOn()) {
+		if(g_selected_item->IsAutoCenterOn())
+		{
 			MapPoint pos;
 			city.GetPos(pos);
 			if(!g_tiledMap->TileIsVisible(pos.x, pos.y))
 				g_director->AddCenterMap(pos);
 		}
-
 	}
 
 	controlpanelwindow_Update();
 }
-
 
 void CityManagerButtonCallback(aui_Control *control, uint32 action, uint32 data, void *cookie)
 {
@@ -318,8 +308,8 @@ void CityManagerButtonCallback(aui_Control *control, uint32 action, uint32 data,
 		selection = city.CD();
 	}
 	else if (g_selected_item->GetSelectedArmy(a) &&
-		     g_theWorld->HasCity(a->RetPos())
-            )
+	         g_theWorld->HasCity(a->RetPos())
+	        )
 	{
 		selection = g_theWorld->GetCity(a->RetPos()).CD();
 	}
@@ -327,68 +317,28 @@ void CityManagerButtonCallback(aui_Control *control, uint32 action, uint32 data,
 	CityWindow::Display(selection);
 }
 
-
-
-
-
-
 void TabGroupButtonCallback(aui_Control *control, uint32 action, uint32 data, void *cookie)
 {
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
 }
 
-
-
-
-void
-CityPanelDropDownCallback( aui_Control *control, uint32 action, uint32 data, void *cookie )
+void CityPanelDropDownCallback( aui_Control *control, uint32 action, uint32 data, void *cookie )
 {
-
 	if ( action != (uint32)AUI_DROPDOWN_ACTION_SELECT )
 		return;
 
 	g_controlPanel->CityPanelRedisplay();
 }
 
-void
-CityPanelNextCityCallback( aui_Control *control, uint32 action, uint32 data, void *cookie )
+void CityPanelNextCityCallback( aui_Control *control, uint32 action, uint32 data, void *cookie )
 {
-
 	if ( action != (uint32)AUI_BUTTON_ACTION_EXECUTE )
 		return;
 
 	g_controlPanel->CityPanelNextCity();
 }
 
-void
-UnitPanelNextUnitCallback( aui_Control *control, uint32 action, uint32 data, void *cookie )
+void UnitPanelNextUnitCallback( aui_Control *control, uint32 action, uint32 data, void *cookie )
 {
-
 	if ( action != (uint32)AUI_BUTTON_ACTION_EXECUTE )
 		return;
 
@@ -397,31 +347,17 @@ UnitPanelNextUnitCallback( aui_Control *control, uint32 action, uint32 data, voi
 	g_controlPanel->UnitPanelRedisplay();
 }
 
-void
-UnitPanelListBoxCallback ( aui_Control *control, uint32 action, uint32 data, void *cookie )
+void UnitPanelListBoxCallback ( aui_Control *control, uint32 action, uint32 data, void *cookie )
 {
-
 	if ( action != (uint32)AUI_LISTBOX_ACTION_SELECT)
 		return;
 
 	g_controlPanel->BeginOrderDelivery();
-
-
-
-
-
-
-
 	g_controlPanel->UnitPanelRedisplay();
 }
 
-
-
-
-void
-TileImpSelectionCallback(aui_Control *control, uint32 action, uint32 data, void *cookie)
+void TileImpSelectionCallback(aui_Control *control, uint32 action, uint32 data, void *cookie)
 {
-
 	if (action != (uint32)AUI_SWITCH_ACTION_ON)
 		return;
 
@@ -433,26 +369,14 @@ TileImpSelectionCallback(aui_Control *control, uint32 action, uint32 data, void 
 	g_controlPanel->ActivateTileImpBank(index);
 }
 
-
-
-
-void
-TerraformToggleCallback(aui_Control *control, uint32 action, uint32 data, void *cookie)
+void TerraformToggleCallback(aui_Control *control, uint32 action, uint32 data, void *cookie)
 {
-
 	if ( action != (uint32)AUI_BUTTON_ACTION_EXECUTE )
 		return;
-
-
 }
 
-
-
-
-void
-TileImpButtonCallback2(aui_Control *control, uint32 action, uint32 data, void *cookie)  //emod1 tileimps
+void TileImpButtonCallback2(aui_Control *control, uint32 action, uint32 data, void *cookie)  //emod1 tileimps
 {
-
 	if ( action != (uint32)AUI_BUTTON_ACTION_EXECUTE ) return;
 
 	const TerrainImprovementRecord *rec =g_theTerrainImprovementDB->Get(sint32(cookie));
@@ -461,7 +385,6 @@ TileImpButtonCallback2(aui_Control *control, uint32 action, uint32 data, void *c
 		return;
 
 	g_controlPanel->BeginImprovementCycle((void *)rec);
-
 }
 
 void GotoCityUtilityDialogBoxCallback(Unit city, sint32 val2)
@@ -479,14 +402,14 @@ void controlpanelwindow_MessageListCallback(aui_Control *control, uint32 action,
 {
 	if ((action != AUI_LISTBOX_ACTION_SELECT) &&
 	    (action != AUI_LISTBOX_ACTION_RMOUSESELECT)
-         )
+	     )
 	{
 		return;
 	}
 
 	ctp2_ListBox *	l_List  = reinterpret_cast<ctp2_ListBox *>(control);
 	ctp2_ListItem *	item    = static_cast<ctp2_ListItem *>
-                                (l_List ? l_List->GetSelectedItem() : NULL);
+	                            (l_List ? l_List->GetSelectedItem() : NULL);
 
 	if (item)
 	{
@@ -505,7 +428,7 @@ void controlpanelwindow_MessageListCallback(aui_Control *control, uint32 action,
 			else // action == AUI_LISTBOX_ACTION_RMOUSESELECT
 			{
 				theMessage.Kill();
- 			}
+			}
 
 			ctp2_Static *   tabLabel = reinterpret_cast<ctp2_Static *>
 				(aui_Ldl::GetObject("ControlPanelWindow.ControlPanel.ControlTabPanel.MessageTab.TabButton.Label"));
@@ -519,16 +442,15 @@ void controlpanelwindow_MessageListCallback(aui_Control *control, uint32 action,
 }
 
 AUI_ERRCODE controlpanelwindow_HappinessDrawCallback(ctp2_Static *control,
-															 aui_Surface *surface,
-															 RECT &rect,
-															 void *cookie)
+                                                     aui_Surface *surface,
+                                                     RECT &rect,
+                                                     void *cookie)
 {
 	if (g_controlPanel)
 		g_controlPanel->HappinessRedisplay(surface,rect,cookie);
 
 	return AUI_ERRCODE_OK;
 }
-
 
 sint32 controlpanelwindow_Initialize()
 {
@@ -550,7 +472,6 @@ sint32 controlpanelwindow_Initialize()
 
 sint32 controlpanelwindow_InitializeHats()
 {
-
 	return 0;
 }
 
@@ -564,30 +485,24 @@ void controlpanelwindow_Cleanup(void)
 	g_controlPanel = NULL;
 }
 
-
-
-
-void
-HideElement(aui_Region *element)
+void HideElement(aui_Region *element)
 {
 	if (element!=NULL)
 		element->Hide();
 }
 
-
-
-
-void
-HideControlPanel()
+void HideControlPanel()
 {
 	HideElement((aui_Window*)g_controlPanel->GetWindow());
 }
 
 void controlpanelwindow_DisbandCity(bool response, void *userData)
 {
-	if(response) {
+	if(response)
+	{
 		Unit city(reinterpret_cast<uint32>(userData));
-		if(city.IsValid()) {
+		if(city.IsValid())
+		{
 			g_gevManager->AddEvent(GEV_INSERT_Tail, GEV_DisbandCity, GEA_City, city, GEA_End);
 		}
 	}
@@ -595,19 +510,21 @@ void controlpanelwindow_DisbandCity(bool response, void *userData)
 
 void ContextMenuCallback(ctp2_Menu *menu, CTP2_MENU_ACTION action, sint32 itemIndex, void *cookie)
 {
-
 	if (action!= (uint32)CTP2_MENU_ACTION_SELECT)
 		return;
 
 	Unit city;
 	bool haveCity = g_selected_item->GetSelectedCity(city) != FALSE;
 
-	if(!haveCity) {
+	if(!haveCity)
+	{
 		city = g_theWorld->GetCity(g_selected_item->GetCurSelectPos());
-		if(city.IsValid()) {
+		if(city.IsValid())
+		{
 			haveCity = true;
-
-		} else if(g_player[g_selected_item->GetVisiblePlayer()]->GetNumCities()) {
+		}
+		else if(g_player[g_selected_item->GetVisiblePlayer()]->GetNumCities())
+		{
 			city = g_player[g_selected_item->GetVisiblePlayer()]->m_all_cities->Access(0);
 
 			if(city.IsValid())
@@ -615,14 +532,17 @@ void ContextMenuCallback(ctp2_Menu *menu, CTP2_MENU_ACTION action, sint32 itemIn
 		}
 	}
 
-	switch((sint32)cookie) {
+	switch((sint32)cookie)
+	{
 		case k_CONTEXT_CITY_VIEW:
 			if(haveCity) CityWindow::Display(city.CD());
 			break;
 		case k_CONTEXT_CITY_BUILD:
-			if(g_network.IsClient() && g_network.GetSensitiveUIBlocked()) {
-
-			} else {
+			if(g_network.IsClient() && g_network.GetSensitiveUIBlocked())
+			{
+			}
+			else
+			{
 				EditQueue::Display(CityWindow::GetCityData(city));
 			}
 			break;
@@ -633,12 +553,10 @@ void ContextMenuCallback(ctp2_Menu *menu, CTP2_MENU_ACTION action, sint32 itemIn
 			{
 				if(city->PopCount() > g_theConstDB->Get(0)->GetMaxDisbandSize())
 				{
-
 					MessageBoxDialog::Information("str_ldl_CantDisbandCitySize", "InfoCantDisCitySz");
 				}
 				else if(g_player[city->GetOwner()]->m_all_cities->Num() < 2)
 				{
-
 					MessageBoxDialog::Information("str_ldl_CantDisbandLastCity", "InfoCantDisLastCity");
 				}
 				else
@@ -649,8 +567,8 @@ void ContextMenuCallback(ctp2_Menu *menu, CTP2_MENU_ACTION action, sint32 itemIn
 			}
 		case k_CONTEXT_CITY_ACTIVATE_UNITS:
 			g_gevManager->AddEvent(GEV_INSERT_Tail, GEV_ActivateAllUnits,
-								   GEA_MapPoint, city.RetPos(),
-								   GEA_End);
+			                       GEA_MapPoint, city.RetPos(),
+			                       GEA_End);
 			break;
 		case k_CONTEXT_CITY_TOGGLE_GOVERNOR:
 			if(haveCity) city.CD()->SetUseGovernor(!city.CD()->GetUseGovernor());
@@ -661,27 +579,34 @@ void ContextMenuCallback(ctp2_Menu *menu, CTP2_MENU_ACTION action, sint32 itemIn
 		default:
 		{
 			Army a;
-			if(!g_selected_item->GetSelectedArmy(a)) {
+			if(!g_selected_item->GetSelectedArmy(a))
+			{
 				MapPoint pos = g_selected_item->GetCurSelectPos();
 				Cell *cell = g_theWorld->GetCell(pos);
-				if(cell->UnitArmy()) {
+				if(cell->UnitArmy())
+				{
 					g_selected_item->SetSelectUnit(cell->UnitArmy()->GetTopVisibleUnit(g_selected_item->GetVisiblePlayer()));
 					g_selected_item->GetSelectedArmy(a);
 				}
 			}
 
 			sint32 orderIndex = (sint32)cookie;
-			if(orderIndex >= 0 && orderIndex < g_theOrderDB->NumRecords()) {
+			if(orderIndex >= 0 && orderIndex < g_theOrderDB->NumRecords())
+			{
 				const OrderRecord *order=g_theOrderDB->Get(orderIndex);
 				g_controlPanel->BeginOrderDelivery((OrderRecord *)order);
-			} else {
-				switch(orderIndex) {
+			}
+			else
+			{
+				switch(orderIndex)
+				{
 					case k_UNIT_CONTEXT_ARMY_MANAGER:
 						ArmyManagerWindow::Display();
 						break;
 					case k_UNIT_CONTEXT_CLEAR_ORDERS:
 					{
-						if(a.IsValid()) {
+						if(a.IsValid())
+						{
 							g_gevManager->AddEvent(GEV_INSERT_Tail, GEV_ClearOrders,
 												   GEA_Army, a.m_id,
 												   GEA_End);
@@ -691,42 +616,51 @@ void ContextMenuCallback(ctp2_Menu *menu, CTP2_MENU_ACTION action, sint32 itemIn
 					case k_UNIT_CONTEXT_GROUP_ALL:
 					{
 						if(a.IsValid()) {
-							if(g_network.IsClient()) {
+							if(g_network.IsClient())
+							{
 								CellUnitList units;
-								sint32 i;
 								Cell *cell = g_theWorld->GetCell(a->RetPos());
-								for(i = 0; i < cell->GetNumUnits(); i++) {
-									if(cell->AccessUnit(i).GetArmy().m_id != a.m_id) {
+								for(sint32 i = 0; i < cell->GetNumUnits(); i++)
+								{
+									if(cell->AccessUnit(i).GetArmy().m_id != a.m_id)
+									{
 										units.Insert(cell->AccessUnit(i));
 									}
 								}
-								if(units.Num() > 0) {
+								if(units.Num() > 0)
+								{
 									g_network.SendGroupRequest(units, a);
 								}
-							} else {
+							} else
+							{
 								g_gevManager->AddEvent(GEV_INSERT_Tail, GEV_GroupOrder,
-													   GEA_Army, a.m_id,
-													   GEA_End);
+								                       GEA_Army, a.m_id,
+								                       GEA_End);
 							}
 						}
 					}
 					break;
 					case k_UNIT_CONTEXT_UNGROUP_ALL:
 					{
-						if(a.IsValid()) {
-							if(g_network.IsClient()) {
+						if(a.IsValid())
+						{
+							if(g_network.IsClient())
+							{
 								g_network.SendUngroupRequest(a, *a.AccessData());
-							} else {
+							}
+							else
+							{
 								g_gevManager->AddEvent(GEV_INSERT_Tail, GEV_UngroupOrder,
-													   GEA_Army, a.m_id,
-													   GEA_End);
+								                       GEA_Army, a.m_id,
+								                       GEA_End);
 							}
 						}
 					}
 					break;
 					case k_UNIT_CONTEXT_TRANSPORT_VIEW:
 					{
-						if(a.IsValid()) {
+						if(a.IsValid())
+						{
 							g_controlPanel->SetTab(CP_TAB_UNIT);
 							MainControlPanel::SwitchToTransportView();
 						}
@@ -770,7 +704,6 @@ void CivMenuCallback(ctp2_Menu *menu, CTP2_MENU_ACTION action, sint32 itemIndex,
 
 void CityMenuCallback(ctp2_Menu *menu, CTP2_MENU_ACTION action, sint32 itemIndex, void *cookie)
 {
-
 	if (action!= (uint32)CTP2_MENU_ACTION_SELECT)
 		return;
 
@@ -779,32 +712,44 @@ void CityMenuCallback(ctp2_Menu *menu, CTP2_MENU_ACTION action, sint32 itemIndex
 	Unit city;
 	bool haveCity = g_selected_item->GetSelectedCity(city) != FALSE;
 
-	if(!haveCity) {
+	if(!haveCity)
+	{
 		city = g_theWorld->GetCity(g_selected_item->GetCurSelectPos());
 		if(city.IsValid())
 			haveCity = true;
 
-	} else if(g_player[g_selected_item->GetVisiblePlayer()]->GetNumCities()) {
+	}
+	else if(g_player[g_selected_item->GetVisiblePlayer()]->GetNumCities())
+	{
 		city = g_player[g_selected_item->GetVisiblePlayer()]->m_all_cities->Access(0);
 		g_selected_item->SetSelectCity(city);
-			if(city.IsValid())
-				haveCity = true;
+
+		if(city.IsValid())
+			haveCity = true;
 	}
 
 	switch (itemIndex)
 	{
 		case CP_MENU_ITEM_0:
-			if(g_selected_item->GetSelectedCity(city)) {
-				if(g_network.IsClient() && g_network.GetSensitiveUIBlocked()) {
-
-				} else {
+			if(g_selected_item->GetSelectedCity(city))
+			{
+				if(g_network.IsClient() && g_network.GetSensitiveUIBlocked())
+				{
+				}
+				else
+				{
 					EditQueue::Display(CityWindow::GetCityData(city));
 				}
-			} else if(g_player[g_selected_item->GetVisiblePlayer()]->m_all_cities->Num() > 0) {
-				if(g_network.IsClient() && g_network.GetSensitiveUIBlocked()) {
-				} else {
+			}
+			else if(g_player[g_selected_item->GetVisiblePlayer()]->m_all_cities->Num() > 0)
+			{
+				if(g_network.IsClient() && g_network.GetSensitiveUIBlocked())
+				{
+				}
+				else
+				{
 					EditQueue::Display(CityWindow::GetCityData(g_player[g_selected_item->GetVisiblePlayer()]->
-															   m_all_cities->Access(0)));
+					                                           m_all_cities->Access(0)));
 				}
 			}
 			break;
@@ -825,7 +770,6 @@ void CityMenuCallback(ctp2_Menu *menu, CTP2_MENU_ACTION action, sint32 itemIndex
 
 void UnitMenuCallback(ctp2_Menu *menu, CTP2_MENU_ACTION action, sint32 itemIndex, void *cookie)
 {
-
 	if (action!= (uint32)CTP2_MENU_ACTION_SELECT)
 		return;
 
@@ -833,15 +777,15 @@ void UnitMenuCallback(ctp2_Menu *menu, CTP2_MENU_ACTION action, sint32 itemIndex
 
 	switch (itemIndex)
 	{
-   	case	CP_MENU_ITEM_0:
+	case	CP_MENU_ITEM_0:
 			open_UnitStatus();
 			break;
 	case	CP_MENU_ITEM_1:
 			ArmyManagerWindow::Display();
 			break;
-   	case	CP_MENU_ITEM_2:
+	case	CP_MENU_ITEM_2:
 	case	CP_MENU_ITEM_3:
-   	case	CP_MENU_ITEM_4:
+	case	CP_MENU_ITEM_4:
 	case	CP_MENU_ITEM_5:
 	case	CP_MENU_ITEM_6:
 	case	CP_MENU_ITEM_7:
@@ -851,7 +795,6 @@ void UnitMenuCallback(ctp2_Menu *menu, CTP2_MENU_ACTION action, sint32 itemIndex
 
 void DiplomacyMenuCallback(ctp2_Menu *menu, CTP2_MENU_ACTION action, sint32 itemIndex, void *cookie)
 {
-
 	if (action!= (uint32)CTP2_MENU_ACTION_SELECT)
 		return;
 
@@ -859,10 +802,6 @@ void DiplomacyMenuCallback(ctp2_Menu *menu, CTP2_MENU_ACTION action, sint32 item
 
 	switch (itemIndex)
 	{
-
-
-
-
 		case CP_MENU_ITEM_0:
 
 			DiplomacyWindow::Display();
@@ -870,9 +809,12 @@ void DiplomacyMenuCallback(ctp2_Menu *menu, CTP2_MENU_ACTION action, sint32 item
 			break;
 		case CP_MENU_ITEM_1:
 
-			if(DipWizard::CanInitiateRightNow()) {
+			if(DipWizard::CanInitiateRightNow())
+			{
 				DipWizard::Display();
-			} else {
+			}
+			else
+			{
 				Assert(g_network.IsActive());
 				MessageBoxDialog::Information("str_code_CantInitiateDiplomacyNow", "WhyNoDiplomacy", NULL, NULL, "str_ldl_MB_OK", false);
 			}
@@ -897,7 +839,7 @@ void SciMenuCallback(ctp2_Menu *menu, CTP2_MENU_ACTION action, sint32 itemIndex,
 
 	switch (itemIndex)
 	{
-   	case	CP_MENU_ITEM_0:
+	case	CP_MENU_ITEM_0:
 			open_ScienceStatus();
 			break;
 	case	CP_MENU_ITEM_1:
@@ -910,7 +852,6 @@ void SciMenuCallback(ctp2_Menu *menu, CTP2_MENU_ACTION action, sint32 itemIndex,
 
 void TradeMenuCallback(ctp2_Menu *menu, CTP2_MENU_ACTION action, sint32 itemIndex, void *cookie)
 {
-
 	if (action!= (uint32)CTP2_MENU_ACTION_SELECT)
 		return;
 
@@ -918,7 +859,7 @@ void TradeMenuCallback(ctp2_Menu *menu, CTP2_MENU_ACTION action, sint32 itemInde
 
 	switch (itemIndex)
 	{
-   	case	CP_MENU_ITEM_0:
+	case	CP_MENU_ITEM_0:
 	case	CP_MENU_ITEM_1:
 			open_TradeStatus();
 			break;
@@ -927,7 +868,6 @@ void TradeMenuCallback(ctp2_Menu *menu, CTP2_MENU_ACTION action, sint32 itemInde
 
 void GLMenuCallback(ctp2_Menu *menu, CTP2_MENU_ACTION action, sint32 itemIndex, void *cookie)
 {
-
 	if (action!= (uint32)CTP2_MENU_ACTION_SELECT)
 		return;
 
@@ -938,19 +878,18 @@ void GLMenuCallback(ctp2_Menu *menu, CTP2_MENU_ACTION action, sint32 itemIndex, 
 
 void StatsMenuCallback(ctp2_Menu *menu, CTP2_MENU_ACTION action, sint32 itemIndex, void *cookie)
 {
-
 	if (action!= (uint32)CTP2_MENU_ACTION_SELECT)
 		return;
 
 	switch (itemIndex)
 	{
-   	case	CP_MENU_ITEM_0:
+	case	CP_MENU_ITEM_0:
 			open_GreatLibrary();
 			break;
 	case	CP_MENU_ITEM_1:
 			InfoWindow::SelectRankingTab();
 			break;
-   	case	CP_MENU_ITEM_2:
+	case	CP_MENU_ITEM_2:
 			InfoWindow::SelectScoreTab();
 			break;
 	case	CP_MENU_ITEM_3:
@@ -968,7 +907,7 @@ void OptionsMenuCallback(ctp2_Menu *menu, CTP2_MENU_ACTION action, sint32 itemIn
 
 	switch ((sint32)cookie)
 	{
-   	case	CP_MENU_ITEM_0:
+	case	CP_MENU_ITEM_0:
 			gameplayoptions_displayMyWindow();
 			break;
 	case	CP_MENU_ITEM_1:
@@ -977,28 +916,30 @@ void OptionsMenuCallback(ctp2_Menu *menu, CTP2_MENU_ACTION action, sint32 itemIn
 	case	CP_MENU_ITEM_2:
 			soundscreen_displayMyWindow();
 			break;
-	case    CP_MENU_ITEM_3:
-		    ProfileEdit::Display();
+	case	CP_MENU_ITEM_3:
+			ProfileEdit::Display();
 			break;
-   	case	CP_MENU_ITEM_4:
-		    optionsscreen_mapeditorPress(NULL, AUI_BUTTON_ACTION_EXECUTE, 0, NULL);
+	case	CP_MENU_ITEM_4:
+			optionsscreen_mapeditorPress(NULL, AUI_BUTTON_ACTION_EXECUTE, 0, NULL);
 
 			break;
-   	case	CP_MENU_ITEM_5:
-		    if (!g_network.IsClient())
-            {
-                uint32 type = (g_network.IsActive()) ? LSS_SAVE_MP : LSS_SAVE_GAME;
+	case	CP_MENU_ITEM_5:
+			if (!g_network.IsClient())
+			{
+				uint32 type = (g_network.IsActive()) ? LSS_SAVE_MP : LSS_SAVE_GAME;
 				g_isScenario = FALSE;
 				loadsavescreen_displayMyWindow( type );
 			}
 			break;
 	case	CP_MENU_ITEM_6:
-		    if(!g_network.IsClient()) {
+			if(!g_network.IsClient())
+			{
 				optionwarningscreen_displayMyWindow(OWS_LOAD);
 			}
 			break;
 	case	CP_MENU_ITEM_7:
-		    if(!g_network.IsActive()) {
+			if(!g_network.IsActive())
+			{
 				optionwarningscreen_displayMyWindow(OWS_RESTART);
 			}
 			break;
@@ -1010,12 +951,14 @@ void OptionsMenuCallback(ctp2_Menu *menu, CTP2_MENU_ACTION action, sint32 itemIn
 			break;
 
 	case CP_MENU_ITEM_10:
-		if(g_tiledMap) {
+		if(g_tiledMap)
+		{
 			g_tiledMap->ZoomOut();
 		}
 		break;
 	case CP_MENU_ITEM_11:
-		if(g_tiledMap) {
+		if(g_tiledMap)
+		{
 			g_tiledMap->ZoomIn();
 		}
 		break;
@@ -1025,13 +968,11 @@ void OptionsMenuCallback(ctp2_Menu *menu, CTP2_MENU_ACTION action, sint32 itemIn
 	case	CP_MENU_ITEM_13:
 		if(g_chatBox) g_chatBox->SetActive(!g_chatBox->IsActive());;
 		break;
-
 	}
 }
 
 void EspionageMenuCallback(ctp2_Menu *menu, CTP2_MENU_ACTION action, sint32 itemIndex, void *cookie)
 {
-
 	if (action!= (uint32)CTP2_MENU_ACTION_SELECT)
 		return;
 
@@ -1040,20 +981,19 @@ void EspionageMenuCallback(ctp2_Menu *menu, CTP2_MENU_ACTION action, sint32 item
 	switch (itemIndex)
 	{
 	case CP_MENU_ITEM_0:
-        {
-            Unit    city;
-            if (g_selected_item->GetSelectedCity(city))
-            {
-                CityEspionage::Display(city);
-            }
-        }
+		{
+			Unit    city;
+			if (g_selected_item->GetSelectedCity(city))
+			{
+				CityEspionage::Display(city);
+			}
+		}
 		break;
 
 	default:
 		break;
 	}
 }
-
 
 void cpw_DisbandCallback( sint32 val )
 {
@@ -1062,8 +1002,7 @@ void cpw_DisbandCallback( sint32 val )
 	}
 }
 
-void
-controlPanel_popupPress(aui_Control *control, uint32 action, uint32 data, void *cookie )
+void controlPanel_popupPress(aui_Control *control, uint32 action, uint32 data, void *cookie )
 {
 	if ( action != (uint32)AUI_LISTBOX_ACTION_SELECT )
 		return;
@@ -1085,29 +1024,17 @@ m_targetingMode(CP_TARGETING_MODE_OFF),
 m_currentOrder(NULL),
 m_terraFormMode(false)
 {
-
 	*retval = AUI_ERRCODE_OK;
-
-
-
-
 
 	BuildMainMenu();
 
-
-
-
-
 	m_contextMenu = new ctp2_Menu(true, ContextMenuCallback);
-
-
-
-
-
 	m_mainWindow = static_cast<ctp2_Window*>(
 		aui_Ldl::BuildHierarchyFromRoot(ldlBlock));
+
 	Assert(m_mainWindow);
-	if(!m_mainWindow) {
+	if(!m_mainWindow)
+	{
 		*retval = AUI_ERRCODE_INVALIDPARAM;
 		return;
 	}
@@ -1116,34 +1043,14 @@ m_terraFormMode(false)
 	m_mainWindow->SetType(AUI_WINDOW_TYPE_SINKING);
 	m_mainWindow->SetDynamic(FALSE);
 
-
-
-
-
-
 	m_currentProgress = 0;
 
 	static MBCHAR *ldlControlBlock = "ControlPanelWindow.ControlPanel";
 	MainControlPanel::Initialize(ldlControlBlock);
 
-
-
-
-
-
-
-
 	AdjustToScreen();
 
-
-
-
-
 	CreateTabGroup(ldlControlBlock);
-
-
-
-
 
 	m_mainWindow->SetTransparent(TRUE);
 	m_mainWindow->SetStencilFromImage("control_panel_stencil.tga");
@@ -1162,23 +1069,14 @@ m_terraFormMode(false)
 
 }
 
-
 ControlPanelWindow::~ControlPanelWindow()
 {
 	AUI_ERRCODE errcode;
 
-
-
-
-
-
-
-
-
 	MainControlPanel::CleanUp();
 
-	if (m_mainWindow) {
-
+	if (m_mainWindow)
+	{
 		errcode = g_c3ui->RemoveWindow(m_mainWindow->Id());
 		Assert(errcode == AUI_ERRCODE_OK);
 
@@ -1188,7 +1086,8 @@ ControlPanelWindow::~ControlPanelWindow()
 		m_mainWindow = NULL;
 	}
 
-	if (m_mainMenuBar) {
+	if (m_mainMenuBar)
+	{
 		errcode = g_c3ui->RemoveWindow(m_mainMenuBar->Id());
 		Assert(errcode == AUI_ERRCODE_OK);
 
@@ -1201,11 +1100,7 @@ ControlPanelWindow::~ControlPanelWindow()
 	delete m_contextMenu;
 }
 
-
-
-
-void
-ControlPanelWindow::BuildMainMenu()
+void ControlPanelWindow::BuildMainMenu()
 {
 	m_mainMenuBar=(ctp2_MenuBar *)aui_Ldl::BuildHierarchyFromRoot("MainMenu");
 
@@ -1358,8 +1253,7 @@ void ControlPanelWindow::RebuildMenus()
 		KeyListItem::GetKeyFromKMScreen(theKeyMap->get_keycode(KEY_FUNCTION_QUIT)),(void *)CP_MENU_ITEM_9);
 }
 
-void
-ControlPanelWindow::BuildCivMenu()
+void ControlPanelWindow::BuildCivMenu()
 {
 	Assert(m_mainMenuBar!=NULL);
 
@@ -1387,8 +1281,7 @@ ControlPanelWindow::BuildCivMenu()
 		KeyListItem::GetKeyFromKMScreen(theKeyMap->get_keycode(KEY_FUNCTION_GAIA)), (void *)CP_MENU_ITEM_4);
 }
 
-void
-ControlPanelWindow::BuildCityMenu	()
+void ControlPanelWindow::BuildCityMenu()
 {
 	Assert(m_mainMenuBar!=NULL);
 
@@ -1412,8 +1305,7 @@ ControlPanelWindow::BuildCityMenu	()
 		KeyListItem::GetKeyFromKMScreen(theKeyMap->get_keycode(KEY_FUNCTION_OPEN_CITY_STATUS)),(void *)CP_MENU_ITEM_2);
 }
 
-void
-ControlPanelWindow::BuildUnitMenu	()
+void ControlPanelWindow::BuildUnitMenu()
 {
 	Assert(m_mainMenuBar!=NULL);
 
@@ -1435,8 +1327,7 @@ ControlPanelWindow::BuildUnitMenu	()
 		KeyListItem::GetKeyFromKMScreen(theKeyMap->get_keycode(KEY_FUNCTION_OPEN_WORK_VIEW)),(void *)CP_MENU_ITEM_1);
 }
 
-void
-ControlPanelWindow::BuildDipMenu	()
+void ControlPanelWindow::BuildDipMenu()
 {
 	Assert(m_mainMenuBar!=NULL);
 
@@ -1458,8 +1349,7 @@ ControlPanelWindow::BuildDipMenu	()
 		KeyListItem::GetKeyFromKMScreen(theKeyMap->get_keycode(KEY_FUNCTION_NEW_PROPOSAL)),(void *)CP_MENU_ITEM_1);
 }
 
-void
-ControlPanelWindow::BuildSciMenu	()
+void ControlPanelWindow::BuildSciMenu()
 {
 	Assert(m_mainMenuBar!=NULL);
 
@@ -1481,8 +1371,7 @@ ControlPanelWindow::BuildSciMenu	()
 		KeyListItem::GetKeyFromKMScreen(theKeyMap->get_keycode(KEY_FUNCTION_OPEN_GREAT_LIBRARY)),(void *)CP_MENU_ITEM_1);
 }
 
-void
-ControlPanelWindow::BuildTradeMenu	()
+void ControlPanelWindow::BuildTradeMenu()
 {
 	Assert(m_mainMenuBar!=NULL);
 
@@ -1502,8 +1391,7 @@ ControlPanelWindow::BuildTradeMenu	()
 		KeyListItem::GetKeyFromKMScreen(theKeyMap->get_keycode(KEY_FUNCTION_OPEN_TRADE_STATUS)),(void *)CP_MENU_ITEM_0);
 }
 
-void
-ControlPanelWindow::BuildGLMenu		()
+void ControlPanelWindow::BuildGLMenu()
 {
 	Assert(m_mainMenuBar!=NULL);
 
@@ -1523,8 +1411,7 @@ ControlPanelWindow::BuildGLMenu		()
 		KeyListItem::GetKeyFromKMScreen(theKeyMap->get_keycode(KEY_FUNCTION_OPEN_GREAT_LIBRARY)),(void *)CP_MENU_ITEM_0);
 }
 
-void
-ControlPanelWindow::BuildStatsMenu()
+void ControlPanelWindow::BuildStatsMenu()
 {
 	Assert(m_mainMenuBar!=NULL);
 
@@ -1550,8 +1437,7 @@ ControlPanelWindow::BuildStatsMenu()
 		KeyListItem::GetKeyFromKMScreen(theKeyMap->get_keycode(KEY_FUNCTION_TIMELINE)),(void *)CP_MENU_ITEM_3);
 }
 
-void
-ControlPanelWindow::BuildOptionsMenu()
+void ControlPanelWindow::BuildOptionsMenu()
 {
 	Assert(m_mainMenuBar!=NULL);
 
@@ -1631,10 +1517,8 @@ ControlPanelWindow::BuildOptionsMenu()
 		KeyListItem::GetKeyFromKMScreen(theKeyMap->get_keycode(KEY_FUNCTION_QUIT)),(void *)CP_MENU_ITEM_9);
 }
 
-void
-ControlPanelWindow::BuildEspionageMenu	()
+void ControlPanelWindow::BuildEspionageMenu()
 {
-
 	Assert(m_mainMenuBar!=NULL);
 
 	if (m_mainMenuBar==NULL)
@@ -1653,16 +1537,8 @@ ControlPanelWindow::BuildEspionageMenu	()
 									(char*)g_theStringDB->GetNameStr("str_ldl_CityEspionageHotKey"),(void *)CP_MENU_ITEM_0);
 }
 
-
-
-
-
-
-
-void
-ControlPanelWindow::BeginOrderDelivery()
+void ControlPanelWindow::BeginOrderDelivery()
 {
-
 	if (m_unitOrders==NULL)
 		return;
 
@@ -1676,23 +1552,14 @@ ControlPanelWindow::BeginOrderDelivery()
 	BeginOrderDelivery(order);
 }
 
-
-
-
-
-
-
-
 struct OrderDataRec
 {
 	ArmyData *data;
 	OrderRecord *rec;
 };
 
-void
-ControlPanelWindow::BeginOrderDelivery(OrderRecord *rec)
+void ControlPanelWindow::BeginOrderDelivery(OrderRecord *rec)
 {
-
 	m_currentOrder = NULL;
 	m_targetingMode= CP_TARGETING_MODE_OFF;
 
@@ -1717,7 +1584,6 @@ ControlPanelWindow::BeginOrderDelivery(OrderRecord *rec)
 
 	if ((test==ORDER_TEST_OK || test == ORDER_TEST_NO_MOVEMENT) && (!rec->GetTargetPretestMovePosition() && !rec->GetTargetPretestAttackPosition() && !rec->GetUnitPretest_CanTransport()))
 	{
-
 		if(strcmp(rec->GetEventName(),"DisbandArmyOrder")==0)
 		{
 			OrderDataRec *callbackorder=new OrderDataRec;
@@ -1747,21 +1613,13 @@ void ControlPanelWindow::PerformOrderAfterConfirmation(bool response, void *user
 	delete (OrderDataRec*) userData;
 }
 
-
-
-
-void
-ControlPanelWindow::BeginImprovementCycle(void *rawrec)  //emod2 what does this do?
+void ControlPanelWindow::BeginImprovementCycle(void *rawrec)  //emod2 what does this do?
 {
-
-
 	BeginImprovementCycle((TerrainImprovementRecord *)rawrec);
 }
 
-void
-ControlPanelWindow::BeginImprovementCycle(TerrainImprovementRecord *rec) //emod3 is this the check? i think it misses obsoletes here
+void ControlPanelWindow::BeginImprovementCycle(TerrainImprovementRecord *rec) //emod3 is this the check? i think it misses obsoletes here
 {
-
 	if ((rec==NULL)||(g_selected_item==NULL))
 		return;
 
@@ -1775,22 +1633,14 @@ ControlPanelWindow::BeginImprovementCycle(TerrainImprovementRecord *rec) //emod3
 	m_currentTerrainImpRec	= rec;
 }
 
-void
-ControlPanelWindow::BeginImprovementCycle(TerrainRecord *rec)
+void ControlPanelWindow::BeginImprovementCycle(TerrainRecord *rec)
 {
 	m_targetingMode		= CP_TARGETING_MODE_TERRAFORM_PENDING;
 	m_currentTerrainRec	= rec;
 }
 
-
-
-
-
-
-void
-ControlPanelWindow::TargetingMode()
+void ControlPanelWindow::TargetingMode()
 {
-
 	switch (m_targetingMode)
 	{
 	case	CP_TARGETING_MODE_ORDER_PENDING:
@@ -1807,13 +1657,8 @@ ControlPanelWindow::TargetingMode()
 	}
 }
 
-
-
-
-void
-ControlPanelWindow::OrderDeliveryUpdate()
+void ControlPanelWindow::OrderDeliveryUpdate()
 {
-
 	MapPoint pos;
 
 	g_tiledMap->GetMouseTilePos(pos);
@@ -1831,7 +1676,8 @@ ControlPanelWindow::OrderDeliveryUpdate()
 
 	ArmyData *data=army.AccessData();
 
-	if(data==NULL){
+	if(data==NULL)
+	{
 		specialAttackWindow_DisplayData(pos, -1);
 		return;
 	}
@@ -1839,19 +1685,23 @@ ControlPanelWindow::OrderDeliveryUpdate()
 	ORDER_TEST test=army->TestOrderHere(m_currentOrder,pos);
 
 	if (test != ORDER_TEST_INVALID_TARGET &&
-		test != ORDER_TEST_NEEDS_TARGET ) {
-		if(m_currentOrder->GetTargetPretestMovePosition()) {
-			if(army->IsOccupiedByForeigner(pos) && army->CheckWasEnemyVisible(pos, true)) {
-
+	    test != ORDER_TEST_NEEDS_TARGET )
+	{
+		if(m_currentOrder->GetTargetPretestMovePosition())
+		{
+			if(army->IsOccupiedByForeigner(pos) && army->CheckWasEnemyVisible(pos, true))
+			{
 				static CellUnitList defender;
 				defender.Clear();
 				g_theWorld->GetArmy(pos, defender);
-				if(army->CanAtLeastOneCaptureCity() || army->CanFight(defender)) {
+				if(army->CanAtLeastOneCaptureCity() || army->CanFight(defender))
+				{
 					g_cursorManager->SetCursor(CURSORINDEX_ASSAULT);
-				} else {
+				}
+				else
+				{
 					g_cursorManager->SetCursor(CURSORINDEX_NOMOVE);
 				}
-// Added by Martin Gühmann to fix the crossed sword bug
 			}
 			else if(g_theWorld->HasCity(pos)
 			&&      g_theWorld->GetCity(pos)->GetOwner() != army->GetOwner()
@@ -1859,37 +1709,42 @@ ControlPanelWindow::OrderDeliveryUpdate()
 			&&      army->CheckWasEnemyVisible(pos, true)
 			){
 				g_cursorManager->SetCursor(CURSORINDEX_ASSAULT);
-			} else {
+			}
+			else
+			{
 				g_cursorManager->SetCursor(CURSORINDEX_MOVE);
 			}
 			specialAttackWindow_DisplayData(pos, -1);
-		} else {
+		}
+		else
+		{
 			g_cursorManager->SetCursor(Order::GetCursor(m_currentOrder));
-			if(army->CheckWasEnemyVisible(pos, true)){
+			if(army->CheckWasEnemyVisible(pos, true))
+			{
 				specialAttackWindow_DisplayData(pos, m_currentOrder->GetIndex());
 			}
-			else{
+			else
+			{
 				specialAttackWindow_DisplayData(pos, -1);
 			}
 		}
-	} else {
-		if(m_currentOrder->GetTargetPretestMovePosition()) {
+	}
+	else
+	{
+		if(m_currentOrder->GetTargetPretestMovePosition())
+		{
 			g_cursorManager->SetCursor(CURSORINDEX_NOMOVE);
-		} else {
+		}
+		else
+		{
 			g_cursorManager->SetCursor(Order::GetCursor(m_currentOrder));
 		}
 		specialAttackWindow_DisplayData(pos, -1);
 	}
-
 }
 
-
-
-
-void
-ControlPanelWindow::TileImpUpdate()  //emod4 defientely need this but schould it look like sce
+void ControlPanelWindow::TileImpUpdate()  //emod4 defientely need this but schould it look like sce
 {
-
 	if ((m_currentTerrainImpRec==NULL)||(g_selected_item==NULL))
 		return;
 
@@ -1923,9 +1778,10 @@ ControlPanelWindow::TileImpUpdate()  //emod4 defientely need this but schould it
 	{
 		g_cursorManager->SetCursor(CURSORINDEX_DEFAULT);
 		tileimptracker_DisplayData(pos, -1);
-	} else
+	}
+	else
 	{
-		if (player->CanCreateImprovement(m_currentTerrainImpRec->GetIndex(),pos,0,true,err))
+		if (player->CanCreateImprovement(m_currentTerrainImpRec->GetIndex(), pos, 0, true, err))
 		{
 			g_cursorManager->SetCursor(CURSORINDEX_MOVE);
 			color = g_colorSet->GetColor(COLOR_GREEN);
@@ -1935,19 +1791,20 @@ ControlPanelWindow::TileImpUpdate()  //emod4 defientely need this but schould it
 			g_cursorManager->SetCursor(CURSORINDEX_NOMOVE);
 			color = g_colorSet->GetColor(COLOR_RED);
 		}
-		if(g_player[player_id]->IsExplored(pos)) {
 
+		if(g_player[player_id]->IsExplored(pos))
+		{
 			g_tiledMap->SetTerrainOverlay(m_currentTerrainImpRec,pos,color);
 			tileimptracker_DisplayData(pos, m_currentTerrainImpRec->GetIndex());
-		} else {
+		}
+		else
+		{
 			tileimptracker_DisplayData(pos, -1);
 		}
 	}
 }
 
-
-void
-ControlPanelWindow::TerraFormUpdate() //emod5
+void ControlPanelWindow::TerraFormUpdate() //emod5
 {
 	if ((m_currentTerrainRec==NULL)||(g_selected_item==NULL))
 		return;
@@ -1955,13 +1812,8 @@ ControlPanelWindow::TerraFormUpdate() //emod5
 	ClearTargetingMode();
 }
 
-
-
-
-bool
-ControlPanelWindow::ExecuteTargetingModeClick(const MapPoint &pos)
+bool ControlPanelWindow::ExecuteTargetingModeClick(const MapPoint &pos)
 {
-
 	switch (m_targetingMode)
 	{
 	case	CP_TARGETING_MODE_ORDER_PENDING:
@@ -1976,11 +1828,7 @@ ControlPanelWindow::ExecuteTargetingModeClick(const MapPoint &pos)
 	return false;
 }
 
-
-
-
-bool
-ControlPanelWindow::OrderDeliveryClick(const MapPoint &pos)
+bool ControlPanelWindow::OrderDeliveryClick(const MapPoint &pos)
 {
 	if(!m_currentOrder)
 	{
@@ -2007,66 +1855,67 @@ ControlPanelWindow::OrderDeliveryClick(const MapPoint &pos)
 
 	if (!m_currentOrder->GetTargetPretestMovePosition() )
 	{
-
 		if (army->RetPos() == pos &&
 			( m_currentOrder->GetTargetPretestTerrainImprovement() ||  //emod6
 			  m_currentOrder->GetTargetPretestTradeRoute() ||
 			  m_currentOrder->GetTargetPretestAdjacentPosition() ) )
 		{
-
 			army->PerformOrder(m_currentOrder);
 			handled = true;
 		}
-		else if(test == ORDER_TEST_INVALID_TARGET) {
-
+		else if(test == ORDER_TEST_INVALID_TARGET)
+		{
 			g_soundManager->AddGameSound(GAMESOUNDS_ILLEGAL_SPECIAL);
 			handled = true;
 		}
 		else if (g_selected_item->GetGoodPath()->GetMovesRemaining() <= 0 &&
-				 g_selected_item->GetBadPath().GetMovesRemaining() > 0) {
-
-			if(m_currentOrder->GetUnitPretest_CanTransport()) {
+				 g_selected_item->GetBadPath().GetMovesRemaining() > 0)
+		{
+			if(m_currentOrder->GetUnitPretest_CanTransport())
+			{
 				static CellUnitList cargoToUnload;
-				if(MainControlPanel::GetSelectedCargo(cargoToUnload)) {
-					sint32 i;
-					for(i = 0; i < cargoToUnload.Num(); i++) {
-						if(cargoToUnload[i].IsValid()) {
+				if(MainControlPanel::GetSelectedCargo(cargoToUnload))
+				{
+					for(sint32 i = 0; i < cargoToUnload.Num(); i++)
+					{
+						if(cargoToUnload[i].IsValid())
+						{
 							cargoToUnload[i].SetFlag(k_UDF_TEMP_TRANSPORT_SELECT);
 						}
 					}
 				}
 			}
 
-            Path    badPath = g_selected_item->GetBadPath();
+			Path    badPath = g_selected_item->GetBadPath();
 			army->PerformOrderHere(m_currentOrder, &badPath);
 			handled = true;
 		}
-		else if (g_selected_item->GetGoodPath()->GetMovesRemaining() > 0 ) {
-
+		else if (g_selected_item->GetGoodPath()->GetMovesRemaining() > 0 )
+		{
 			Path path(g_selected_item->GetGoodPath());
 
 			path.Concat(g_selected_item->GetBadPath());
-			if(m_currentOrder->GetUnitPretest_CanTransport()) {
+			if(m_currentOrder->GetUnitPretest_CanTransport())
+			{
 				static CellUnitList cargoToUnload;
-				if(MainControlPanel::GetSelectedCargo(cargoToUnload)) {
-					sint32 i;
-					for(i = 0; i < cargoToUnload.Num(); i++) {
+				if(MainControlPanel::GetSelectedCargo(cargoToUnload))
+				{
+					for(sint32 i = 0; i < cargoToUnload.Num(); i++)
+					{
 						if(cargoToUnload[i].IsValid()) {
 							cargoToUnload[i].SetFlag(k_UDF_TEMP_TRANSPORT_SELECT);
 						}
 					}
 				}
 			}
-			if(pos == army->RetPos()) {
 
-
-
-
-
+			if(pos == army->RetPos())
+			{
 				army->PerformOrder(m_currentOrder);
-			} else {
+			}
+			else
+			{
 				Assert(path.GetEnd() == pos);
-
 
 				g_gevManager->Pause();
 				army->PerformOrderHere(m_currentOrder, &path);
@@ -2074,8 +1923,8 @@ ControlPanelWindow::OrderDeliveryClick(const MapPoint &pos)
 			}
 			handled = true;
 		}
-		else {
-
+		else
+		{
 			Assert(0);
 		}
 
@@ -2085,13 +1934,8 @@ ControlPanelWindow::OrderDeliveryClick(const MapPoint &pos)
 	return handled;
 }
 
-
-
-
-bool
-ControlPanelWindow::TileImpClick(const MapPoint &pos) //emod7
+bool ControlPanelWindow::TileImpClick(const MapPoint &pos) //emod7
 {
-
 	if ((m_currentTerrainImpRec==NULL)||(g_selected_item==NULL))
 	{
 		ClearTargetingMode();
@@ -2107,21 +1951,16 @@ ControlPanelWindow::TileImpClick(const MapPoint &pos) //emod7
 		return true;
 
 	g_gevManager->AddEvent(GEV_INSERT_Tail, GEV_CreateImprovement,
-						   GEA_Player,player,
-						   GEA_MapPoint, pos,
-						   GEA_Int,m_currentTerrainImpRec->GetIndex(),
-						   GEA_Int,0,
-						   GEA_End);
+	                       GEA_Player,player,
+	                       GEA_MapPoint, pos,
+	                       GEA_Int,m_currentTerrainImpRec->GetIndex(),
+	                       GEA_Int,0,
+	                       GEA_End);
 
 	return true;
 }
 
-
-
-
-
-bool
-ControlPanelWindow::TerraFormClick(const MapPoint &pos)
+bool ControlPanelWindow::TerraFormClick(const MapPoint &pos)
 {
 	if ((m_currentTerrainRec==NULL)||(g_selected_item==NULL))
 	{
@@ -2133,7 +1972,6 @@ ControlPanelWindow::TerraFormClick(const MapPoint &pos)
 
 void ControlPanelWindow::ClearTargetingMode()
 {
-
 	m_targetingMode= CP_TARGETING_MODE_OFF;
 
 	m_currentOrder		   = NULL;
@@ -2141,7 +1979,6 @@ void ControlPanelWindow::ClearTargetingMode()
 	m_currentTerrainImpRec = NULL;
 
 	if(g_cursorManager)
-
 		g_cursorManager->SetCursor(CURSORINDEX_DEFAULT);
 
 	if(!g_tiledMap) return;
@@ -2152,8 +1989,7 @@ void ControlPanelWindow::ClearTargetingMode()
 	specialAttackWindow_DisplayData(pos, -1);
 }
 
-void
-ControlPanelWindow::CreateTabGroup(MBCHAR *ldlBlock)
+void ControlPanelWindow::CreateTabGroup(MBCHAR *ldlBlock)
 {
 	aui_Ldl::SetActionFuncAndCookie("ControlPanelWindow.ControlPanel.ControlTabPanel.DomesticTab", TabCallback, (void *)CP_TAB_CIV);
 	aui_Ldl::SetActionFuncAndCookie("ControlPanelWindow.ControlPanel.ControlTabPanel.CityTab",     TabCallback, (void *)CP_TAB_CITY);
@@ -2175,13 +2011,10 @@ ControlPanelWindow::CreateTabGroup(MBCHAR *ldlBlock)
 	m_tabs[CP_TAB_TILEIMP] = (ctp2_Tab *)aui_Ldl::GetObject("ControlPanelWindow.ControlPanel.ControlTabPanel.TilesTab");
 }
 
-void
-ControlPanelWindow::CreateTab(sint32 which,MBCHAR *name)
+void ControlPanelWindow::CreateTab(sint32 which,MBCHAR *name)
 {
-
 	if ((which<0)||(which>=CP_TAB_LAST)||(name==NULL))
 		return;
-
 
 	switch (which)
 	{
@@ -2203,19 +2036,8 @@ ControlPanelWindow::CreateTab(sint32 which,MBCHAR *name)
 	}
 }
 
-
-
-
-
-
-
-
-
-
-
 void ControlPanelWindow::InitCivTab(void)
 {
-
 	m_numCities			= (ctp2_Static *)aui_Ldl::GetObject("ControlPanelWindow.ControlPanel.ControlTabPanel.DomesticTab.TabPanel.CityIconText"		);
 	m_totalPop			= (ctp2_Static *)aui_Ldl::GetObject("ControlPanelWindow.ControlPanel.ControlTabPanel.DomesticTab.TabPanel.LockIconText"		);
 	m_currentAdvance	= (ctp2_Static *)aui_Ldl::GetObject("ControlPanelWindow.ControlPanel.ControlTabPanel.DomesticTab.TabPanel.AdvanceText"		);
@@ -2238,13 +2060,10 @@ void ControlPanelWindow::InitCivTab(void)
 
 	if (m_currentHappiness!=NULL)
 		m_currentHappiness->SetDrawCallbackAndCookie(controlpanelwindow_HappinessDrawCallback, NULL);
-
 }
-
 
 void ControlPanelWindow::InitMessageTab(void)
 {
-
 	m_messageList = (ctp2_ListBox *)aui_Ldl::GetObject("ControlPanelWindow.ControlPanel.ControlTabPanel.MessageTab.TabPanel.MessageListBox");
 	Assert(m_messageList != NULL);
 	if (m_messageList == NULL)
@@ -2252,7 +2071,6 @@ void ControlPanelWindow::InitMessageTab(void)
 
 	m_messageList->SetActionFuncAndCookie(controlpanelwindow_MessageListCallback, NULL);
 }
-
 
 void ControlPanelWindow::AddMessage(Message &message,bool initializing)
 {
@@ -2262,7 +2080,6 @@ void ControlPanelWindow::AddMessage(Message &message,bool initializing)
 	if (!g_theMessagePool->IsValid(message))
 		return;
 
-
 	if (message.GetOwner() != g_selected_item->GetVisiblePlayer())
 		return;
 
@@ -2270,7 +2087,6 @@ void ControlPanelWindow::AddMessage(Message &message,bool initializing)
 	item = (ctp2_ListItem *) aui_Ldl::BuildHierarchyFromRoot("MessagePanelListItem");
 
 	ctp2_Static *staticContainer = (ctp2_Static *)item->GetChildByIndex(0);
-
 
 	ctp2_Static *staticThing = (ctp2_Static *)staticContainer->GetChildByIndex(0);
 
@@ -2280,7 +2096,6 @@ void ControlPanelWindow::AddMessage(Message &message,bool initializing)
 	staticThing->SetImage(iconName);
 
 	staticThing = (ctp2_Static *)staticContainer->GetChildByIndex(1);
-
 
 	MBCHAR tempStr[k_MAX_MSG_LEN];
 	memset((char *)tempStr, 0, k_MAX_MSG_LEN);
@@ -2302,7 +2117,9 @@ void ControlPanelWindow::AddMessage(Message &message,bool initializing)
 			break;
 		}
 	}
-	begin=tempStr;
+
+	begin = tempStr;
+
 	while(*begin)
 	{
 		if(*begin < ' ' && *begin>0)
@@ -2324,13 +2141,10 @@ void ControlPanelWindow::AddMessage(Message &message,bool initializing)
 	{
 		tabLabel->SetTextColor(g_colorSet->GetColorRef(COLOR_RED));
 	}
+
 	tabLabel->ShouldDraw(TRUE);
 
-
 	item->SetActionFuncAndCookie(controlpanelwindow_MessageListCallback, (void *)(uint32)message);
-
-
-
 
 	bool const 	isAddBottom	= !g_theProfileDB->GetValueByName("RecentAtTop");
 	m_messageList->InsertItem(item, isAddBottom ? m_messageList->NumItems() : 0);
@@ -2356,29 +2170,29 @@ void ControlPanelWindow::AddMessage(Message &message,bool initializing)
 
 void ControlPanelWindow::SetMessageRead(Message const & msg)
 {
-	sint32 n;
-	for(n = 0; n < m_messageList->NumItems(); n++) {
+	for(sint32 n = 0; n < m_messageList->NumItems(); n++)
+	{
 		ctp2_ListItem *item = (ctp2_ListItem *)m_messageList->GetItemByIndex(n);
 
 		if(!item)
 			break;
+
 		Message imsg; imsg.m_id = (uint32)item->GetCookie();
-		if(imsg.m_id == msg.m_id) {
+		if(imsg.m_id == msg.m_id)
+		{
 			ctp2_Static *staticContainer = (ctp2_Static *)item->GetChildByIndex(0);
 			if(!staticContainer)
 				break;
+
 			ctp2_Static *staticThing = (ctp2_Static *)staticContainer->GetChildByIndex(1);
 			if(!staticThing)
 				break;
+
 			staticThing->SetTextColor(g_colorSet->GetColorRef(COLOR_GRAY));
 			staticThing->ShouldDraw(TRUE);
 		}
 	}
 }
-
-
-
-
 
 void ControlPanelWindow::RemoveMessage(Message &message)
 {
@@ -2387,21 +2201,18 @@ void ControlPanelWindow::RemoveMessage(Message &message)
 
 	sint32			numItems = m_messageList->NumItems();
 	ctp2_ListItem	*listItem = NULL;
-	sint32			i;
 
-	for (i=0; i<numItems; i++) {
+	for (sint32 i = 0; i < numItems; i++)
+	{
 		listItem = (ctp2_ListItem *)m_messageList->GetItemByIndex(i);
-		if (listItem->GetCookie() == (void *)(uint32)message) {
+		if (listItem->GetCookie() == (void *)(uint32)message)
+		{
 			m_messageList->RemoveItemByIndex(i);
 			delete listItem;
 			break;
 		}
 	}
 }
-
-
-
-
 
 void ControlPanelWindow::PopulateMessageList(PLAYER_INDEX player)
 {
@@ -2414,9 +2225,6 @@ void ControlPanelWindow::PopulateMessageList(PLAYER_INDEX player)
 	Assert(g_player[player]);
 	if (!g_player[player])
 		return;
-
-
-
 
 	if (player == oldIndex) return;
 
@@ -2451,9 +2259,6 @@ void ControlPanelWindow::PopulateMessageList(PLAYER_INDEX player)
 	m_messageList->BuildListEnd(isAddBottom);
 }
 
-
-
-
 void ControlPanelWindow::InitCityTab(void)
 {
 	aui_Ldl::SetActionFuncAndCookie("ControlPanelWindow.ControlPanel.ControlTabPanel.CityTab.TabPanel.MainDropdown"  ,CityPanelDropDownCallback,NULL);
@@ -2468,28 +2273,22 @@ void ControlPanelWindow::InitCityTab(void)
 	m_turnsRemaining  =(ctp2_Static *)aui_Ldl::GetObject("ControlPanelWindow.ControlPanel.ControlTabPanel.CityTab.TabPanel", "TurnsRemaining");
 }
 
-
-
-
 void ControlPanelWindow::InitUnitTab(void)
 {
 	aui_Ldl::SetActionFuncAndCookie("ControlPanelWindow.ControlPanel.ControlTabPanel.UnitTab.TabPanel.NextUnit",UnitPanelNextUnitCallback,NULL);
 
-	m_unitImage	  = (ctp2_Static*)aui_Ldl::GetObject("ControlPanelWindow.ControlPanel.ControlTabPanel.UnitTab.TabPanel","UnitIcon");
+	m_unitImage   = (ctp2_Static*)aui_Ldl::GetObject("ControlPanelWindow.ControlPanel.ControlTabPanel.UnitTab.TabPanel","UnitIcon");
 
-	m_unitType	  = (ctp2_Static*)aui_Ldl::GetObject("ControlPanelWindow.ControlPanel.ControlTabPanel.UnitTab.TabPanel","UnitData");
-	m_unitMove	  = (ctp2_Static*)aui_Ldl::GetObject("ControlPanelWindow.ControlPanel.ControlTabPanel.UnitTab.TabPanel","MoveData");
+	m_unitType    = (ctp2_Static*)aui_Ldl::GetObject("ControlPanelWindow.ControlPanel.ControlTabPanel.UnitTab.TabPanel","UnitData");
+	m_unitMove    = (ctp2_Static*)aui_Ldl::GetObject("ControlPanelWindow.ControlPanel.ControlTabPanel.UnitTab.TabPanel","MoveData");
 	m_unitAttack  = (ctp2_Static*)aui_Ldl::GetObject("ControlPanelWindow.ControlPanel.ControlTabPanel.UnitTab.TabPanel","AttackData");
 	m_unitDefense = (ctp2_Static*)aui_Ldl::GetObject("ControlPanelWindow.ControlPanel.ControlTabPanel.UnitTab.TabPanel","DefenseData");
 	m_unitStatus  = (ctp2_Static*)aui_Ldl::GetObject("ControlPanelWindow.ControlPanel.ControlTabPanel.UnitTab.TabPanel","StatusData");
 	m_unitOrders  = (ctp2_ListBox*)aui_Ldl::GetObject("ControlPanelWindow.ControlPanel.ControlTabPanel.UnitTab.TabPanel","OrderListBox");
-//emod added unitaction here?
+	// Added by E: unitaction here?
 	if (m_unitOrders!=NULL)
 		m_unitOrders->SetActionFuncAndCookie(UnitPanelListBoxCallback,NULL);
 }
-
-
-
 
 void ControlPanelWindow::InitTileImpTab(void)
 {
@@ -2501,13 +2300,8 @@ void ControlPanelWindow::InitTileImpTab(void)
 	TileImpPanelRedisplay();
 }
 
-
-
-
-bool
-ControlPanelWindow::IsLand(const TerrainRecord *rec)
+bool ControlPanelWindow::IsLand(const TerrainRecord *rec)
 {
-
 	if (rec==NULL)
 		return false;
 
@@ -2518,10 +2312,8 @@ ControlPanelWindow::IsLand(const TerrainRecord *rec)
 	return false;
 }
 
-bool
-ControlPanelWindow::IsOcean(const TerrainRecord *rec)
+bool ControlPanelWindow::IsOcean(const TerrainRecord *rec)
 {
-
 	if (rec==NULL)
 		return false;
 
@@ -2532,16 +2324,13 @@ ControlPanelWindow::IsOcean(const TerrainRecord *rec)
 	return false;
 }
 
-void
-ControlPanelWindow::CreateTileImpBanks()
+void ControlPanelWindow::CreateTileImpBanks()
 {
-
-
 	m_activatorButtons[CP_TILEIMP_LAND   ]=(ctp2_Button*)aui_Ldl::GetObject("ControlPanelWindow.ControlPanel.ControlTabPanel.TilesTab.TabPanel.LandImpButton"	);
 	m_activatorButtons[CP_TILEIMP_OCEAN  ]=(ctp2_Button*)aui_Ldl::GetObject("ControlPanelWindow.ControlPanel.ControlTabPanel.TilesTab.TabPanel.OceanImpButton"	);
 	m_activatorButtons[CP_TILEIMP_SPECIAL]=(ctp2_Button*)aui_Ldl::GetObject("ControlPanelWindow.ControlPanel.ControlTabPanel.TilesTab.TabPanel.SpecialImpButton");
 	m_activatorButtons[CP_TERRAFORM_LAND] = (ctp2_Button *)aui_Ldl::GetObject("ControlPanelWindow.ControlPanel.ControlTabPanel.TilesTab.TabPanel.TerraformLandButton");
-//emod to utilize all 64 slots for tileimps
+	//emod to utilize all 64 slots for tileimps
 	m_activatorButtons[CP_TERRAFORM_OCEAN] = (ctp2_Button *)aui_Ldl::GetObject("ControlPanelWindow.ControlPanel.ControlTabPanel.TilesTab.TabPanel.TerraformOceanButton");
 //	m_activatorButtons[CP_EXTRA] = (ctp2_Button *)aui_Ldl::GetObject("ControlPanelWindow.ControlPanel.ControlTabPanel.TilesTab.TabPanel.ExtraButton");
 
@@ -2550,12 +2339,11 @@ ControlPanelWindow::CreateTileImpBanks()
 	m_tileImpPanes[CP_TILEIMP_OCEAN  ]=(ctp2_Static*)aui_Ldl::GetObject("ControlPanelWindow.ControlPanel.ControlTabPanel.TilesTab.TabPanel.tiOceanButtonBank"  );
 	m_tileImpPanes[CP_TILEIMP_SPECIAL]=(ctp2_Static*)aui_Ldl::GetObject("ControlPanelWindow.ControlPanel.ControlTabPanel.TilesTab.TabPanel.tiSpecialButtonBank");
 	m_tileImpPanes[CP_TERRAFORM_LAND ]=(ctp2_Static*)aui_Ldl::GetObject("ControlPanelWindow.ControlPanel.ControlTabPanel.TilesTab.TabPanel.tfLandButtonBank"   );
-//emod to utilize all 64 spaces
+	//emod to utilize all 64 spaces
 	m_tileImpPanes[CP_TERRAFORM_OCEAN ]=(ctp2_Static*)aui_Ldl::GetObject("ControlPanelWindow.ControlPanel.ControlTabPanel.TilesTab.TabPanel.tfOceanButtonBank"   );
 //	m_tileImpPanes[CP_EXTRA ]=(ctp2_Static*)aui_Ldl::GetObject("ControlPanelWindow.ControlPanel.ControlTabPanel.TilesTab.TabPanel.tfExtraButtonBank"   );
 
-	sint32 i;
-	for(i=0;i<CP_TILEIMP_MAX;i++)
+	for(sint32 i = 0; i < CP_TILEIMP_MAX; i++)
 	{
 		if ((m_activatorButtons[i]!=NULL)&&(i<CP_TILEIMP_MAX))
 			m_activatorButtons[i]->SetActionFuncAndCookie(TileImpSelectionCallback,(void *)i);
@@ -2577,9 +2365,6 @@ ControlPanelWindow::CreateTileImpBanks()
 	bool	found;
 	uint32	row = 0, column = 0, theClass = 0, group_id = 0;
 
-
-
-
 	char *panels[CP_TILEIMP_MAX] = {
 			"tiLandButtonBank",
 			"tiSpecialButtonBank",
@@ -2590,14 +2375,18 @@ ControlPanelWindow::CreateTileImpBanks()
 
 	};
 	sint32 panel;
-	for(panel = 0; panel < CP_TILEIMP_MAX; panel++) {
-		for(column = 0; column < CP_TILEIMP_COLS; column++) {
-			for(row = 0; row < CP_TILEIMP_ROWS; row++) {
+	for(panel = 0; panel < CP_TILEIMP_MAX; panel++)
+	{
+		for(column = 0; column < CP_TILEIMP_COLS; column++)
+		{
+			for(row = 0; row < CP_TILEIMP_ROWS; row++)
+			{
 				sprintf(button_id,"ControlPanelWindow.ControlPanel.ControlTabPanel.TilesTab.TabPanel.%s.b%d%d",panels[panel],column+1,row+1);
 
 				a_button=(ctp2_Button*)aui_Ldl::GetObject(button_id);
 				Assert(a_button);
-				if(a_button) {
+				if(a_button)
+				{
 					a_button->ExchangeImage(4,0,NULL);
 					a_button->Enable(FALSE);
 				}
@@ -2605,7 +2394,7 @@ ControlPanelWindow::CreateTileImpBanks()
 		}
 	}
 
-	for(sint32 current=0;current<g_theTerrainImprovementDB->NumRecords();current++)
+	for(sint32 current = 0; current < g_theTerrainImprovementDB->NumRecords(); current++)
 	{
 		found		= false;
 		group_id	= 0;
@@ -2619,29 +2408,29 @@ ControlPanelWindow::CreateTileImpBanks()
 
 			switch(theClass)
 			{
-			case    k_TerrainImprovement_Class_Terraform_Bit    :
-			case    k_TerrainImprovement_Class_Oceanform_Bit    :
+			case	k_TerrainImprovement_Class_Terraform_Bit    :
+			case	k_TerrainImprovement_Class_Oceanform_Bit    :
 					timpRec->GetColumn((sint32 &)column);
 					break;
 			case	k_TerrainImprovement_Class_Farm_Bit			:
 			case	k_TerrainImprovement_Class_OceanFarm_Bit	:
 			case	k_TerrainImprovement_Class_Structure1_Bit	:
-				   	column = 0;
+					column = 0;
 					break;
 			case	k_TerrainImprovement_Class_Road_Bit			:
 			case	k_TerrainImprovement_Class_OceanMine_Bit	:
 			case	k_TerrainImprovement_Class_Structure2_Bit	:
-				   	column = 1;
+					column = 1;
 					break;
 			case	k_TerrainImprovement_Class_Mine_Bit			:
 			case	k_TerrainImprovement_Class_OceanATM_Bit	:
 			case	k_TerrainImprovement_Class_LandDetector_Bit :
-				   	column = 2;
+					column = 2;
 					break;
 			case	k_TerrainImprovement_Class_ATM_Bit			:
 			case	k_TerrainImprovement_Class_OceanRoad_Bit		:
 			case	k_TerrainImprovement_Class_OceanDetector_Bit:
-				   	column = 3;
+					column = 3;
 					break;
 			default:
 					found = false;
@@ -2704,11 +2493,11 @@ ControlPanelWindow::CreateTileImpBanks()
 			if (a_button==NULL)
 			{
 #if defined(_DEBUG)
-                if (row < CP_TILEIMP_MAX)
-                {
-				    Assert(button_id=="Could not find button");
-                }
-                // else: No report. Used by a lot of mods for inaccessible tile improvements.
+				if (row < CP_TILEIMP_MAX)
+				{
+					Assert(button_id=="Could not find button");
+				}
+				// else: No report. Used by a lot of mods for inaccessible tile improvements.
 #endif // _DEBUG
 				continue;
 			}
@@ -2718,28 +2507,23 @@ ControlPanelWindow::CreateTileImpBanks()
 
 				irec = timpRec->GetIcon();
 
-
-
-
 				a_button->SetStatusText(g_theStringDB->GetNameStr( timpRec->GetStatusbar() ));
 				aui_TipWindow *tipwin = (aui_TipWindow *)a_button->GetTipWindow();
-				if(!tipwin) {
+				if(!tipwin)
+				{
 					AUI_ERRCODE errcode = AUI_ERRCODE_OK;
 					tipwin = new aui_TipWindow(&errcode, aui_UniqueId(), "DefaultTipWindow");
 					Assert( AUI_NEWOK(tipwin,errcode) );
-					if ( AUI_NEWOK(tipwin,errcode) ) {
-
+					if ( AUI_NEWOK(tipwin,errcode) )
+					{
 						aui_Ldl::Remove( tipwin );
 
-
 						a_button->SetTipWindow( tipwin);
-
 					}
 				}
+
 				if(tipwin)
 					tipwin->SetTipText((char *)g_theStringDB->GetNameStr( timpRec->GetTooltip() ));
-
-
 			}
 
 			if (row>0)
@@ -2773,12 +2557,6 @@ ControlPanelWindow::CreateTileImpBanks()
 		if ((!IsLand(terraRec))&&(!IsOcean(terraRec)))
 			continue;
 
-
-
-
-
-
-
 		sprintf(button_id,"ControlPanelWindow.ControlPanel.ControlTabPanel.TilesTab.TabPanel.%s.b%d%d",thePaneLDL,column+1,row+1);
 
 		a_button=(ctp2_Button*)aui_Ldl::GetObject(button_id);
@@ -2798,8 +2576,8 @@ ControlPanelWindow::CreateTileImpBanks()
 
 				irec = timpRec->GetIcon();
 
-   				if (irec!=NULL)
-   		 			a_button->ExchangeImage(4, 0, irec->GetIcon());
+				if (irec!=NULL)
+					a_button->ExchangeImage(4, 0, irec->GetIcon());
 
 				m_terraFormButtons[index] = a_button;
 
@@ -2816,11 +2594,8 @@ ControlPanelWindow::CreateTileImpBanks()
 #endif
 }
 
-
-void
-ControlPanelWindow::ActivateTileImpBank(unsigned int group_id)
+void ControlPanelWindow::ActivateTileImpBank(unsigned int group_id)
 {
-
 	if (m_terraFormMode)
 	   group_id += CP_TERRAFORM_LAND;
 
@@ -2828,11 +2603,9 @@ ControlPanelWindow::ActivateTileImpBank(unsigned int group_id)
 		return;
 
 	if ( (m_activatorButtons[group_id]->GetToggleState() == 0) &&
-		  m_tileImpPanes[group_id] )
+	      m_tileImpPanes[group_id] )
 	{
-
 		m_tileImpPanes[group_id]->Hide();
-
 	}
 	else
 	{
@@ -2860,11 +2633,9 @@ ControlPanelWindow::ActivateTileImpBank(unsigned int group_id)
 	TileImpPanelRedisplay();
 }
 
-void
-ControlPanelWindow::AppendItem(ctp2_ListBox * a_List, MBCHAR *string)
+void ControlPanelWindow::AppendItem(ctp2_ListBox * a_List, MBCHAR *string)
 //void ScenarioEditor::AddAddItem(ctp2_ListBox * a_List, const MBCHAR *text, sint32 userData)
 //void ScenarioEditor::AddAddItem(ctp2_ListBox *list, const MBCHAR *text, sint32 userData)
-
 {
 	if ((a_List==NULL)||(string==NULL))
 		return;
@@ -2883,25 +2654,26 @@ ControlPanelWindow::AppendItem(ctp2_ListBox * a_List, MBCHAR *string)
 	a_List->AddItem(item);
 }
 
-void
-ControlPanelWindow::BuildUnitList ()
+void ControlPanelWindow::BuildUnitList()
 {
 	if (m_contextMenu==NULL)
 		return;
 
-
 	Army army=UnitPanelGetCurrent();
 
-	if (!army.IsValid()) {
+	if (!army.IsValid())
+	{
 		MapPoint pos = g_selected_item->GetCurSelectPos();
 		Cell *cell = g_theWorld->GetCell(pos);
-		if(cell->AccessUnit(0).GetOwner() == g_selected_item->GetVisiblePlayer()) {
+		if(cell->AccessUnit(0).GetOwner() == g_selected_item->GetVisiblePlayer())
+		{
 			Unit top = cell->UnitArmy()->GetTopVisibleUnit(g_selected_item->GetVisiblePlayer());
 
 			if(!top.IsValid())
 				return;
 
-			if(top.IsEntrenched()) {
+			if(top.IsEntrenched())
+			{
 				return;
 			}
 
@@ -2909,12 +2681,12 @@ ControlPanelWindow::BuildUnitList ()
 		}
 
 		if (!army.IsValid())
-        {
+		{
 			return;
 		}
 	}
 
-   	if (army.Num())
+	if (army.Num())
 	{
 		m_contextMenu->AddItem(g_theStringDB->GetNameStr("CONTEXT_ARMY_MANAGEMENT"), NULL, (void *)k_UNIT_CONTEXT_ARMY_MANAGER);
 		if(army->NumOrders() > 0) {
@@ -2922,30 +2694,30 @@ ControlPanelWindow::BuildUnitList ()
 		}
 
 		ArmyData *  data = army.AccessData();
-        Assert(data);
+		Assert(data);
 		Cell *      cell = g_theWorld->GetCell(data->RetPos());
-		if(cell->GetNumUnits() != data->Num()) {
-
+		if(cell->GetNumUnits() != data->Num())
+		{
 			m_contextMenu->AddItem(g_theStringDB->GetNameStr("CONTEXT_GROUP_ALL"), NULL, (void *)k_UNIT_CONTEXT_GROUP_ALL);
 		}
 
-		sint32 i;
-		for(i = 0; i < cell->GetNumUnits(); i++) {
-
-			if(cell->AccessUnit(i).GetArmy().Num() > 1) {
-
+		for(sint32 i = 0; i < cell->GetNumUnits(); i++)
+		{
+			if(cell->AccessUnit(i).GetArmy().Num() > 1)
+			{
 				m_contextMenu->AddItem(g_theStringDB->GetNameStr("CONTEXT_UNGROUP_ALL"), NULL, (void *)k_UNIT_CONTEXT_UNGROUP_ALL);
 				break;
 			}
 		}
 
-		if(data->HasCargo()) {
+		if(data->HasCargo())
+		{
 			m_contextMenu->AddItem(g_theStringDB->GetNameStr("CONTEXT_VIEW_CARGO"), NULL, (void *)k_UNIT_CONTEXT_TRANSPORT_VIEW);
 		}
 
-   		for (i=0;i<g_theOrderDB->NumRecords();i++)
-   		{
-		    OrderRecord const * rec = g_theOrderDB->Get(i);
+		for (sint32 i = 0; i < g_theOrderDB->NumRecords(); i++)
+		{
+			OrderRecord const * rec = g_theOrderDB->Get(i);
 
 			if (rec==NULL)
 				continue;
@@ -2969,8 +2741,7 @@ ControlPanelWindow::BuildUnitList ()
 	}
 }
 
-void
-ControlPanelWindow::BuildUnitListBox ()
+void ControlPanelWindow::BuildUnitListBox()
 {
 	if (m_unitOrders==NULL)
 		return;
@@ -2982,7 +2753,7 @@ ControlPanelWindow::BuildUnitListBox ()
 	if (!army.IsValid())
 		return;
 
-   	if (army.Num())
+	if (army.Num())
 	{
 		const OrderRecord	*rec;
 		ArmyData			*data;
@@ -2991,9 +2762,9 @@ ControlPanelWindow::BuildUnitListBox ()
 
 		m_unitOrders->BuildListStart();
 
-   		for (sint32 i=0;i<g_theOrderDB->NumRecords();i++)
-   		{
-   			rec=g_theOrderDB->Get(i);
+		for (sint32 i=0;i<g_theOrderDB->NumRecords();i++)
+		{
+			rec=g_theOrderDB->Get(i);
 
 			data = army.AccessData();
 
@@ -3023,9 +2794,7 @@ ControlPanelWindow::BuildUnitListBox ()
 	m_unitOrders->BuildListEnd();
 }
 
-
-void
-ControlPanelWindow::BuildCityList (const MapPoint &pos)
+void ControlPanelWindow::BuildCityList (const MapPoint &pos)
 {
 	if (m_contextMenu==NULL)
 		return;
@@ -3037,9 +2806,11 @@ ControlPanelWindow::BuildCityList (const MapPoint &pos)
 
 	Cell *cell = g_theWorld->GetCell(pos);
 	sint32 i;
-	for(i = 0; i < cell->GetNumUnits(); i++) {
+	for(i = 0; i < cell->GetNumUnits(); i++)
+	{
 		if(cell->AccessUnit(i).IsEntrenched() ||
-		   cell->AccessUnit(i).IsAsleep()) {
+		   cell->AccessUnit(i).IsAsleep())
+		{
 			m_contextMenu->AddItem(g_theStringDB->GetNameStr("CONTEXT_CITY_ACTIVATE"), NULL, (void *)k_CONTEXT_CITY_ACTIVATE_UNITS);
 			break;
 		}
@@ -3047,23 +2818,21 @@ ControlPanelWindow::BuildCityList (const MapPoint &pos)
 
 	Unit city = cell->GetCity();
 	Assert(city.IsValid());
-	if(city.IsValid()) {
-		if(city.CD()->GetUseGovernor()) {
+	if(city.IsValid())
+	{
+		if(city.CD()->GetUseGovernor())
+		{
 			m_contextMenu->AddItem(g_theStringDB->GetNameStr("CONTEXT_CITY_MAYOR_OFF"), NULL, (void *)k_CONTEXT_CITY_TOGGLE_GOVERNOR);
-		} else {
+		}
+		else
+		{
 			m_contextMenu->AddItem(g_theStringDB->GetNameStr("CONTEXT_CITY_MAYOR_ON"), NULL, (void *)k_CONTEXT_CITY_TOGGLE_GOVERNOR);
 		}
 	}
-
-
-
-
 }
 
-void
-ControlPanelWindow::BuildList (sint32 index)
+void ControlPanelWindow::BuildList (sint32 index)
 {
-
 	m_targetingMode=CP_TARGETING_MODE_OFF;
 	m_currentOrder =NULL;
 
@@ -3080,32 +2849,35 @@ ControlPanelWindow::BuildList (sint32 index)
 
 	MapPoint pos = g_selected_item->GetCurSelectPos();
 	Cell *cell = g_theWorld->GetCell(pos);
-	if(cell->GetNumUnits() > 0) {
-		if(cell->AccessUnit(0).GetOwner() == g_selected_item->GetVisiblePlayer()) {
+	if(cell->GetNumUnits() > 0)
+	{
+		if(cell->AccessUnit(0).GetOwner() == g_selected_item->GetVisiblePlayer())
+		{
 			BuildUnitList();
 		}
 	}
 
-	if(cell->HasCity()) {
-		if(cell->GetCity().GetOwner() == g_selected_item->GetVisiblePlayer()) {
+	if(cell->HasCity())
+	{
+		if(cell->GetCity().GetOwner() == g_selected_item->GetVisiblePlayer())
+		{
 			BuildCityList(pos);
 		}
 	}
 
-	if(g_theStringDB->GetNameStr("CONTEXT_TILE_INFO")) {
+	if(g_theStringDB->GetNameStr("CONTEXT_TILE_INFO"))
+	{
 		m_contextMenu->AddItem(g_theStringDB->GetNameStr("CONTEXT_TILE_INFO"), NULL, (void *)k_CONTEXT_MISC_TILE_INFO);
 	}
 }
 
-void
-ControlPanelWindow::DeActivateSelectedInfo()
+void ControlPanelWindow::DeActivateSelectedInfo()
 {
 	if (m_contextMenu!=NULL)
 		m_contextMenu->Close();
 }
 
-void
-ControlPanelWindow::ActivateSelectedInfo(sint32 type)
+void ControlPanelWindow::ActivateSelectedInfo(sint32 type)
 {
 	if (m_contextMenu!=NULL)
 	{
@@ -3115,20 +2887,17 @@ ControlPanelWindow::ActivateSelectedInfo(sint32 type)
 	}
 }
 
-void
-ControlPanelWindow::Select	()
+void ControlPanelWindow::Select	()
 {
 	UnitPanelRedisplay();
 }
 
-void
-ControlPanelWindow::Deselect()
+void ControlPanelWindow::Deselect()
 {
 	UnitPanelRedisplay();
 }
 
-sint32
-ControlPanelWindow::X()
+sint32 ControlPanelWindow::X()
 {
 	if (m_mainWindow!=NULL)
 		return m_mainWindow->X();
@@ -3136,8 +2905,7 @@ ControlPanelWindow::X()
 	return 0;
 }
 
-sint32
-ControlPanelWindow::Y()
+sint32 ControlPanelWindow::Y()
 {
 	if (m_mainWindow!=NULL)
 		return m_mainWindow->Y();
@@ -3145,8 +2913,7 @@ ControlPanelWindow::Y()
 	return 0;
 }
 
-sint32
-ControlPanelWindow::Width()
+sint32 ControlPanelWindow::Width()
 {
 	if (m_mainWindow!=NULL)
 		return m_mainWindow->Width();
@@ -3154,8 +2921,7 @@ ControlPanelWindow::Width()
 	return 0;
 }
 
-sint32
-ControlPanelWindow::Height()
+sint32 ControlPanelWindow::Height()
 {
 	if (m_mainWindow!=NULL)
 		return m_mainWindow->Height();
@@ -3163,13 +2929,10 @@ ControlPanelWindow::Height()
 	return 0;
 }
 
-void
-ControlPanelWindow::Idle()
+void ControlPanelWindow::Idle()
 {
-
 	if(g_tiledMap && !g_tiledMap->ReadyToDraw())
 		return;
-
 
 	MainControlPanel::Update();
 
@@ -3194,58 +2957,50 @@ ControlPanelWindow::Idle()
 		g_cursorManager->SetCursor(CURSORINDEX_DEFAULT);
 }
 
-void
-ControlPanelWindow::Move( sint32 x, sint32 y )
+void ControlPanelWindow::Move( sint32 x, sint32 y )
 {
 	if (m_mainWindow!=NULL)
 		m_mainWindow->Move(x,y);
 }
 
-void	ControlPanelWindow::Offset( sint32 dx, sint32 dy )
+void ControlPanelWindow::Offset( sint32 dx, sint32 dy )
 {
 	if (m_mainWindow!=NULL)
 		m_mainWindow->Offset(dx,dy);
-
 }
 
-void	ControlPanelWindow::Resize( sint32 width, sint32 height )
+void ControlPanelWindow::Resize( sint32 width, sint32 height )
 {
 	if (m_mainWindow!=NULL)
 		m_mainWindow->Resize(width,height);
 }
 
-void
-ControlPanelWindow::AdjustToScreen()
+void ControlPanelWindow::AdjustToScreen()
 {
-
 	sint32 basex=g_ScreenWidth - Width();
 	sint32 basey=g_ScreenHeight - Height();
 	Move(basex,basey);
 }
 
-void
-ControlPanelWindow::SetControlText(aui_Control *control,MBCHAR *fmt,...)
+void ControlPanelWindow::SetControlText(aui_Control *control,MBCHAR *fmt,...)
 {
-
 	if ((control==NULL)||(fmt==NULL))
 		return;
 
-   	va_list          v_args;
+	va_list          v_args;
 	char			 text[512];
 
-    va_start(v_args, fmt);
-    vsprintf(text,fmt,v_args);
-    va_end( v_args );
+	va_start(v_args, fmt);
+	vsprintf(text,fmt,v_args);
+	va_end( v_args );
 
 	control->SetText(text);
 	control->ShouldDraw(TRUE);
 }
 
-void
-ControlPanelWindow::PollCIVStatus()
+void ControlPanelWindow::PollCIVStatus()
 {
-
-	if ((g_selected_item==NULL)||(g_player==NULL))
+	if ((g_selected_item==NULL) || (g_player==NULL))
 		return;
 
 	sint32 p_index = g_selected_item->GetVisiblePlayer();
@@ -3260,7 +3015,7 @@ ControlPanelWindow::PollCIVStatus()
 	sint32		turnLeft =current->m_advances->TurnsToNextAdvance();
 	AdvanceType	advance	 =current->m_advances->GetResearching();
 
-   	const AdvanceRecord *rec=g_theAdvanceDB->Get(advance);
+	const AdvanceRecord *rec=g_theAdvanceDB->Get(advance);
 
 	SetControlText((aui_Control *)m_numCities	  ,"%d",numCities);
 	SetControlText((aui_Control *)m_totalPop	  ,"%d",totalPop );
@@ -3268,19 +3023,16 @@ ControlPanelWindow::PollCIVStatus()
 
 	if (rec!=NULL)
 		SetControlText((aui_Control *)m_currentAdvance,"%s",rec->GetNameText());
-
 }
 
-void
-ControlPanelWindow::PollUNITStatus()
+void ControlPanelWindow::PollUNITStatus()
 {
 }
 
-void
-ControlPanelWindow::PollTILEIMPStatus()
+void ControlPanelWindow::PollTILEIMPStatus()
 {
 #if 0   /// @todo Find out what this code was supposed to do
-    if ((g_selected_item==NULL)||(g_player==NULL))
+	if ((g_selected_item==NULL)||(g_player==NULL))
 		return;
 
 	sint32 p_index = g_selected_item->GetVisiblePlayer();
@@ -3294,8 +3046,7 @@ ControlPanelWindow::PollTILEIMPStatus()
 #endif
 }
 
-void
-ControlPanelWindow::HappinessRedisplay(aui_Surface *surface,RECT &rect,void *cookie)
+void ControlPanelWindow::HappinessRedisplay(aui_Surface *surface,RECT &rect,void *cookie)
 {
 	if (g_selected_item==NULL)
 		return;
@@ -3331,26 +3082,24 @@ ControlPanelWindow::HappinessRedisplay(aui_Surface *surface,RECT &rect,void *coo
 	}
 }
 
-Unit
-ControlPanelWindow::CityPanelGetCurrent()
+Unit ControlPanelWindow::CityPanelGetCurrent()
 {
-    Unit    city;
+	Unit    city;
 
-    if (m_mainDropDown)
-    {
-	    Player * current = g_player[g_selected_item->GetVisiblePlayer()];
+	if (m_mainDropDown)
+	{
+		Player * current = g_player[g_selected_item->GetVisiblePlayer()];
 
-	    if (current && current->GetNumCities())
-        {
-	        city = current->GetCityFromIndex(m_mainDropDown->GetSelectedItem());
-        }
-    }
+		if (current && current->GetNumCities())
+		{
+			city = current->GetCityFromIndex(m_mainDropDown->GetSelectedItem());
+		}
+	}
 
 	return city;
 }
 
-void
-ControlPanelWindow::CityPanelRebuild()
+void ControlPanelWindow::CityPanelRebuild()
 {
 	return;
 #if 0   // Unreachable
@@ -3370,11 +3119,6 @@ ControlPanelWindow::CityPanelRebuild()
 
 	if (num<1)
 		return;
-
-
-
-
-
 
 	Unit city;
 	const MBCHAR *name;
@@ -3397,7 +3141,6 @@ ControlPanelWindow::CityPanelRebuild()
 	}
 #endif
 }
-
 
 void
 ControlPanelWindow::CityPanelRedisplay()
@@ -3424,14 +3167,10 @@ ControlPanelWindow::CityPanelRedisplay()
 	SetControlText((aui_Control *)m_cityGrowth	   ,"%d",growth);
 	SetControlText((aui_Control *)m_buildingItem   ,buildName);
 	SetControlText((aui_Control *)m_turnsRemaining ,"%d",buildRemaining);
-
 }
 
-
-void
-ControlPanelWindow::CityPanelNextCity()
+void ControlPanelWindow::CityPanelNextCity()
 {
-
 	if (m_mainDropDown==NULL)
 		return;
 
@@ -3459,10 +3198,8 @@ ControlPanelWindow::CityPanelNextCity()
 	CityPanelRedisplay();
 }
 
-Army
-ControlPanelWindow::UnitPanelGetCurrent()
+Army ControlPanelWindow::UnitPanelGetCurrent()
 {
-
 	Army army;
 
 	sint32 p_index = g_selected_item->GetVisiblePlayer();
@@ -3478,17 +3215,15 @@ ControlPanelWindow::UnitPanelGetCurrent()
 
 	g_selected_item->GetTopCurItem(pIndex,id,sType);
 
-  	if(sType==SELECT_TYPE_LOCAL_ARMY )
+	if(sType==SELECT_TYPE_LOCAL_ARMY )
 	{
-
-			return Army(id);
-
+		return Army(id);
 	}
+
 	return army;
 }
 
-void
-ControlPanelWindow::UnitPanelRedisplay()
+void ControlPanelWindow::UnitPanelRedisplay()
 {
 	return;
 #if 0   // Unreachable
@@ -3522,10 +3257,10 @@ ControlPanelWindow::UnitPanelRedisplay()
 	BuildUnitListBox();
 
 	SetControlText((aui_Control *)m_unitType	,"%s"	,name.c_str());
- 	SetControlText((aui_Control *)m_unitAttack	,"%3.2f",attack  );
+	SetControlText((aui_Control *)m_unitAttack	,"%3.2f",attack  );
 	SetControlText((aui_Control *)m_unitDefense	,"%3.2f",defense );
 	SetControlText((aui_Control *)m_unitMove	,"%3.2f",movement);
-   	SetControlText((aui_Control *)m_unitStatus	,"%s"	,order);
+	SetControlText((aui_Control *)m_unitStatus	,"%s"	,order);
 
 	if (unit.IsValid())
 	{
@@ -3533,15 +3268,17 @@ ControlPanelWindow::UnitPanelRedisplay()
 
 		const MBCHAR *unitIconName = irec->GetLargeIcon();
 
-
-		if(unitIconName && strcmp(unitIconName, "NULL")) {
+		if(unitIconName && strcmp(unitIconName, "NULL"))
+		{
 			m_unitImage->SetImage((char *)unitIconName,
 				0, AUI_IMAGEBASE_SUBSTATE_STATE);
 			m_unitImage->SetImage((char *)unitIconName,
 				0, AUI_IMAGEBASE_SUBSTATE_STATEACTIVE);
 			m_unitImage->Enable(TRUE);
 			m_unitImage->ShouldDraw(TRUE);
-		} else {
+		}
+		else
+		{
 			m_unitImage->SetImage((char *)irec->GetIcon(),
 				0, AUI_IMAGEBASE_SUBSTATE_STATE);
 			m_unitImage->SetImage((char *)irec->GetIcon(),
@@ -3551,11 +3288,6 @@ ControlPanelWindow::UnitPanelRedisplay()
 		}
 	}
 
-
-
-
-
-
 	static_cast<aui_Control*>(
 		aui_Ldl::GetObject(
 		"ControlPanelWindow.ControlPanel.ControlTabPanel.UnitTab.TabPanel"
@@ -3563,11 +3295,9 @@ ControlPanelWindow::UnitPanelRedisplay()
 #endif
 }
 
-
-void
-ControlPanelWindow::TileImpButtonRedisplay(uint32 player_id,uint32 button)
+void ControlPanelWindow::TileImpButtonRedisplay(uint32 player_id,uint32 button)
 {
-//emod TODO  removing obsolete tileimps
+	//emod TODO  removing obsolete tileimps
 
 	if (button>=CP_MAX_TILEIMPBUTTONS)
 		return;
@@ -3622,32 +3352,29 @@ ControlPanelWindow::TileImpButtonRedisplay(uint32 player_id,uint32 button)
 	m_tileImpButtons[button]->Enable(!grey_button);
 }
 
-void
-ControlPanelWindow::TerraformButtonRedisplay(uint32 player_id,uint32 button)
+void ControlPanelWindow::TerraformButtonRedisplay(uint32 player_id,uint32 button)
 {
-
 	if (button>=CP_MAX_TILEIMPBUTTONS)
 		return;
 
-   	if (m_terraFormButtons[button]==NULL)
-   		return;
+	if (m_terraFormButtons[button]==NULL)
+		return;
 
-	const	TerrainRecord *rec;
-	const	IconRecord *irec;
+	const	TerrainRecord *rec = g_theTerrainDB->Get(sint32(m_terraFormButtons[button]->GetCookie()));
 
-   	rec = g_theTerrainDB->Get(sint32(m_terraFormButtons[button]->GetCookie()));
+	Assert(rec != NULL);
 
-   	Assert(rec != NULL);
-
-   	if (rec==NULL) {
-   		m_tileImpButtons[button]->Enable(false);
-   		return;
+	if (rec==NULL)
+	{
+		m_tileImpButtons[button]->Enable(false);
+		return;
 	}
 
-   	irec = rec->GetIcon();
+	const	IconRecord *irec = rec->GetIcon();
 
-   	if (irec!=NULL) {
-   		m_terraFormButtons[button]->ExchangeImage(4, 0, irec->GetIcon());
+	if (irec!=NULL)
+	{
+		m_terraFormButtons[button]->ExchangeImage(4, 0, irec->GetIcon());
 #if 0
 		aui_TipWindow *tipwin = (aui_TipWindow *)m_terraFormButtons[button]->GetTipWindow();
 		if(tipwin) {
@@ -3656,16 +3383,10 @@ ControlPanelWindow::TerraformButtonRedisplay(uint32 player_id,uint32 button)
 #endif
 	}
 
-   	m_tileImpButtons[button]->Enable(true);
-
-
+	m_tileImpButtons[button]->Enable(true);
 }
 
-
-
-
-void
-ControlPanelWindow::TileImpPanelRedisplay()
+void ControlPanelWindow::TileImpPanelRedisplay()
 {
 	ctp2_Static *tileImpPanel = static_cast<ctp2_Static*>(
 		aui_Ldl::GetObject(
@@ -3713,8 +3434,7 @@ ControlPanelWindow::TileImpPanelRedisplay()
 	m_tileImpPanes[m_currentTerrainSelection]->ShouldDraw();
 }
 
-void
-ControlPanelWindow::ToggleTerraforming()
+void ControlPanelWindow::ToggleTerraforming()
 {
 	m_terraFormMode	= !m_terraFormMode;
 
@@ -3725,11 +3445,9 @@ ControlPanelWindow::ToggleTerraforming()
 	TileImpPanelRedisplay();
 }
 
-
 void
 ControlPanelWindow::SetStack(Army const &selectedArmy, CellUnitList *fullArmy, Unit singleUnit)
 {
-
 }
 
 void ThrowPartyUtilityDialogBoxCallback(MBCHAR *text, sint32 val2, void *data)
@@ -3755,19 +3473,24 @@ void cpw_NumberToCommas( uint64 number, MBCHAR *s )
 	MBCHAR c[_MAX_PATH];
 	sprintf( c, g_theStringDB->GetNameStr("str_ldl_comma") );
 
-	if ( trillion ) {
+	if ( trillion )
+	{
 		sprintf( s, "%ld%s%.3ld%s%.3ld%s%.3ld%s%.3" PRIu64, trillion, c, billion, c, million, c, thousand, c, temp );
 	}
-	else if ( billion ) {
+	else if ( billion )
+	{
 		sprintf( s, "%ld%s%.3ld%s%.3ld%s%.3" PRIu64, billion, c, million, c, thousand, c, temp );
 	}
-	else if ( million ) {
+	else if ( million )
+	{
 		sprintf( s, "%ld%s%.3ld%s%.3" PRIu64, million, c, thousand, c, temp );
 	}
-	else if ( thousand ) {
+	else if ( thousand )
+	{
 		sprintf( s, "%ld%s%.3" PRIu64, thousand, c, temp );
 	}
-	else {
+	else
+	{
 		sprintf( s, "%" PRIu64, temp );
 	}
 }
@@ -3777,11 +3500,12 @@ void ControlPanelWindow::TabCallback(aui_Control *control, uint32 action,
 {
 	CP_TAB tab = (CP_TAB)(sint32)cookie;
 
-	if(action == ctp2_Tab::ACTION_ACTIVATED) {
-
+	if(action == ctp2_Tab::ACTION_ACTIVATED)
+	{
 		g_controlPanel->ClearTargetingMode();
 
-		switch(tab) {
+		switch(tab)
+		{
 			case CP_TAB_UNIT:
 				g_mainControlPanel->UnitPanelActivated();
 				break;
@@ -3812,33 +3536,19 @@ void ControlPanelWindow::SetTab(CP_TAB tab)
 	m_tabGroup->SelectTab(m_tabs[tab]);
 }
 
-
-
-
-
-
 AUI_ERRCODE ControlPanelWindow::UpdatePlayerBeginProgress(sint32 currentPlayer)
 {
-
 	sint32 visiblePlayer = g_selected_item->GetVisiblePlayer();
 
-
-	if(currentPlayer == visiblePlayer || g_network.IsActive()) {
-
-
-
-
-	} else {
-
+	if(currentPlayer == visiblePlayer || g_network.IsActive())
+	{
+	}
+	else
+	{
 		Assert(1 || g_theProgressWindow);
 		if (g_theProgressWindow)
 			g_theProgressWindow->SetBarColor(g_colorSet->GetColorRef(g_colorSet->ComputePlayerColor(currentPlayer)));
 	}
-
-
-
-
-
 
 	return AUI_ERRCODE_OK;
 }
@@ -3847,21 +3557,16 @@ static sint32 s_totalPlayers = 0;
 
 AUI_ERRCODE ControlPanelWindow::UpdatePlayerEndProgress(sint32 currentPlayer)
 {
-
 	sint32 visiblePlayer = g_selected_item->GetVisiblePlayer();
 
-
-	if(currentPlayer == visiblePlayer) {
-
-
-
-
+	if(currentPlayer == visiblePlayer)
+	{
 		s_totalPlayers = 0;
 		for(int i = 0; i < k_MAX_PLAYERS; i++)
 			if(g_player[i]) s_totalPlayers++;
 
-		if(0 && !g_network.IsActive()) {
-
+		if(0 && !g_network.IsActive()) // Never true
+		{
 			ProgressWindow::BeginProgress(
 				g_theProgressWindow,
 				"TurnProgressWindow",
@@ -3870,53 +3575,44 @@ AUI_ERRCODE ControlPanelWindow::UpdatePlayerEndProgress(sint32 currentPlayer)
 			g_theProgressWindow->SetType(AUI_WINDOW_TYPE_SINKING);
 
 			g_theProgressWindow->Move(0, g_radarWindow->Y() - g_theProgressWindow->Height());
-
 		}
 
 		m_currentProgress = 1;
 
-
-
-
-		if(g_theProgressWindow) {
+		if(g_theProgressWindow)
+		{
 			g_theProgressWindow->SetStronglyModal(false);
 			g_theProgressWindow->StartCountingTo(m_currentProgress, (char*)g_theStringDB->GetNameStr("str_COMPUTER_TURNS"));
 		}
-	} else {
-
+	}
+	else
+	{
 		m_currentProgress++;
 
-
-		if(g_theProgressWindow && 0 && !g_network.IsActive()) {
+		if(g_theProgressWindow && 0 && !g_network.IsActive())
+		{
 			g_theProgressWindow->StartCountingTo(m_currentProgress);
 		}
 	}
 
-
-
-
-
-	if(0 && !g_network.IsActive()) {
-		if (g_selected_item->GetCurPlayer() == NewTurnCount::GetStopPlayer()) {
+	if(0 && !g_network.IsActive()) // Never true
+	{
+		if (g_selected_item->GetCurPlayer() == NewTurnCount::GetStopPlayer())
+		{
 			ProgressWindow::EndProgress( g_theProgressWindow );
 
-			if(g_theProgressWindow) {
+			if(g_theProgressWindow)
+			{
 				g_theProgressWindow->SetType(AUI_WINDOW_TYPE_FLOATING);
 			}
 		}
 	}
 
-
-
-
-
 	return AUI_ERRCODE_OK;
 }
 
-
 BOOL ControlPanelWindow::CursorOverControlPanel()
 {
-
 	sint32 x = g_c3ui->TheMouse()->X();
 	sint32 y = g_c3ui->TheMouse()->Y();
 
@@ -3924,7 +3620,6 @@ BOOL ControlPanelWindow::CursorOverControlPanel()
 	sint32 basey=g_ScreenHeight - Height();
 
 	return ( (x > basex) && (x < g_ScreenWidth) && (y > basey) && (y < g_ScreenHeight) );
-
 }
 
 void ControlPanelWindow::Toggle()
@@ -3932,9 +3627,12 @@ void ControlPanelWindow::Toggle()
 	if(!m_mainWindow)
 		return;
 
-	if(g_c3ui->GetWindow(m_mainWindow->Id())) {
+	if(g_c3ui->GetWindow(m_mainWindow->Id()))
+	{
 		g_c3ui->RemoveWindow(m_mainWindow->Id());
-	} else {
+	}
+	else
+	{
 		g_c3ui->AddWindow(m_mainWindow);
 		m_mainWindow->ShouldDraw(TRUE);
 	}
@@ -3952,7 +3650,8 @@ void ControlPanelWindow::Show()
 {
 	if(!m_mainWindow) return;
 
-	if(!g_c3ui->GetWindow(m_mainWindow->Id())) {
+	if(!g_c3ui->GetWindow(m_mainWindow->Id()))
+	{
 		g_c3ui->AddWindow(m_mainWindow);
 	}
 }

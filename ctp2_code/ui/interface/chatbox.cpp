@@ -166,7 +166,8 @@ void ChatBox::AddLine(sint32 playerNum, MBCHAR *text)
 	aui_Ranger *ranger = m_chatWindow->GetTextBox()->GetRanger();
 	ranger->SetValue(ranger->GetValueX(), ranger->GetMaximumY());
 
-	if (g_c3ui->GetWindow(m_chatWindow->Id()) == NULL) {
+	if (g_c3ui->GetWindow(m_chatWindow->Id()) == NULL)
+	{
 		g_soundManager->AddSound(SOUNDTYPE_SFX, (uint32)0,
 									gamesounds_GetGameSoundID(GAMESOUNDS_CHAT_MESSAGE),
 									0,
@@ -309,7 +310,7 @@ BOOL ChatWindow::CheckForEasterEggs(MBCHAR *s)
 		if (g_selected_item != NULL)
 		{
 			char buf[1024];
-			sprintf(buf, "The games runs for %d turns automatically.\n Press ESC to stop.", n);
+			sprintf(buf, "The games runs for %d turns automatically.\nPress ESC to stop.", n);
 			g_chatBox->AddLine(g_selected_item->GetCurPlayer(), buf);
 		}
 
@@ -571,8 +572,8 @@ BOOL ChatWindow::CheckForEasterEggs(MBCHAR *s)
 		}
 	}
 #if 0
-    else if (!strncmp(s, "/demo", 5) && !g_network.IsActive())
-    {
+	else if (!strncmp(s, "/demo", 5) && !g_network.IsActive())
+	{
 		sint32 i, n;
 		extern BOOL gDone;
 		MSG	msg;
@@ -583,20 +584,23 @@ BOOL ChatWindow::CheckForEasterEggs(MBCHAR *s)
 
 		n = atoi(temp);
 
-		for (i=0; i<(n) && !gDone; i++) {
+		for (i=0; i<(n) && !gDone; i++)
+		{
 			g_turn->NextRound();
 			do {
 				g_controlPanel->Idle();
 				if (g_civApp)
 					g_civApp->Process();
 
-				while (PeekMessage(&msg, gHwnd, 0, 0, PM_REMOVE) ) {
+				while (PeekMessage(&msg, gHwnd, 0, 0, PM_REMOVE) )
+				{
 					if (msg.message == WM_QUIT)
 						gDone = TRUE;
 
 					TranslateMessage(&msg);
 
-					if (msg.message == WM_CHAR) {
+					if (msg.message == WM_CHAR)
+					{
 						if ((MBCHAR)msg.wParam == 0x1B)
 							i = n;
 					}
