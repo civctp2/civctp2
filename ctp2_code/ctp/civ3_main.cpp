@@ -257,10 +257,6 @@ CivApp                              *g_civApp = NULL;
 
 LRESULT CALLBACK WndProc(HWND hwnd, UINT iMsg, WPARAM wParam, LPARAM lParam);
 
-#ifdef __AUI_USE_SDL__
-int SDLMessageHandler(const SDL_Event &event);
-#endif
-
 #if defined(__GNUC__)
 int CivMain(int argc, char **argv);
 #else
@@ -1697,7 +1693,7 @@ int WINAPI CivMain(HINSTANCE hInstance, HINSTANCE hPrevInstance, PSTR szCmdLine,
 
 #ifdef __AUI_USE_SDL__
 		SDL_Event event;
-		while (1) { //there is a break;)
+		while (!g_letUIProcess) { // There are breaks, too ;)
 			SDL_PumpEvents();
 			int n = SDL_PeepEvents(&event, 1, SDL_GETEVENT,
                             ~(SDL_EVENTMASK(SDL_MOUSEMOTION) | SDL_EVENTMASK(SDL_MOUSEBUTTONDOWN) | SDL_EVENTMASK(SDL_MOUSEBUTTONUP)));

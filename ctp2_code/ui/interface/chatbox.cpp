@@ -71,6 +71,11 @@
 #include "gfx_options.h"
 #include "GameEventManager.h"
 
+#if defined(__AUI_USE_SDL__)
+#include "SDL.h"
+#include "civ3_main.h"
+#endif
+
 #if defined (_DEBUG) || defined(USE_LOGGING)
 #include "ctpaidebug.h"
 #endif
@@ -290,11 +295,10 @@ BOOL ChatWindow::CheckForEasterEggs(MBCHAR *s)
 	else if (!strncmp(s, "/rnd", 4) && !g_network.IsActive())
 	{
 		extern BOOL gDone;
-#if defined(__AUI_USE_SDL__) // In other cases, replaced by SDL
-#warning ChatWindow command /rnd is not implemented on Linux
-// Implement below and then remove the guards here
-#else
+
+#if !defined(__AUI_USE_SDL__)
 		MSG	msg;
+#endif
 
 		MBCHAR * temp = s+4;
 		while (isspace(*temp))
@@ -305,7 +309,7 @@ BOOL ChatWindow::CheckForEasterEggs(MBCHAR *s)
 		if (g_selected_item != NULL)
 		{
 			char buf[1024];
-			sprintf(buf, "The games runs for %d turns automatically", n);
+			sprintf(buf, "The games runs for %d turns automatically.\n Press ESC to stop.", n);
 			g_chatBox->AddLine(g_selected_item->GetCurPlayer(), buf);
 		}
 
@@ -321,8 +325,21 @@ BOOL ChatWindow::CheckForEasterEggs(MBCHAR *s)
 					g_civApp->Process();
 
 #if defined(__AUI_USE_SDL__)
-				// Implement SDL code here
-				// Remove outer preprocessor derectives, when done
+				SDL_Event event;
+				while(SDL_PollEvent(&event) && !g_letUIProcess)
+				{
+					if(event.type == SDL_QUIT)
+					{
+						gDone = TRUE;
+					}
+
+					if(event.type == SDL_KEYDOWN && event.key.keysym.sym == SDLK_ESCAPE)
+					{
+						i = n;
+					}
+
+					SDLMessageHandler(event);
+				}
 #else
 				// Make it abort if you press for instance the ESC key
 				// Windows code start
@@ -333,18 +350,18 @@ BOOL ChatWindow::CheckForEasterEggs(MBCHAR *s)
 
 					TranslateMessage(&msg);
 
-					if (msg.message == WM_CHAR) {
-						if ((MBCHAR)msg.wParam == 0x1B)
+					if (msg.message == WM_CHAR)
+					{
+						if ((MBCHAR)msg.wParam == 0x1B) // The ESC key
 							i = n;
 					}
 
 					DispatchMessage(&msg);
 				}
-				// Windoes code end
+				// Windows code end
 #endif
 
 				g_letUIProcess = FALSE;
-
 			}
 			while
 			     (
@@ -353,7 +370,6 @@ BOOL ChatWindow::CheckForEasterEggs(MBCHAR *s)
 			      && !gDone
 			     );
 		}
-#endif
 
 		return TRUE;
 	}
@@ -791,12 +807,9 @@ BOOL ChatWindow::CheckForEasterEggs(MBCHAR *s)
 
 			CtpAiDebug::SetDebugPlayer(player);
 
-			if (g_selected_item != NULL)
-			{
-				char buf[1024];
-				sprintf(buf, "Player %d is filling the log for debugging", player);
-				g_chatBox->AddLine(player, buf);
-			}
+			char buf[1024];
+			sprintf(buf, "Player %d is filling the log for debugging", player);
+			g_chatBox->AddLine(player, buf);
 		}
 		else
 		{
