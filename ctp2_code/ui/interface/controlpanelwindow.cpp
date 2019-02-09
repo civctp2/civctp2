@@ -205,6 +205,9 @@
 #include "gameinit.h"                   // g_startHotseatGame
 #include <string>                       // std::string
 
+#include "chatbox.h"
+extern ChatBox        *g_chatBox;
+
 extern ProgressWindow *g_theProgressWindow;
 
 #define k_UNIT_CONTEXT_ARMY_MANAGER 10000
@@ -1019,6 +1022,10 @@ void OptionsMenuCallback(ctp2_Menu *menu, CTP2_MENU_ACTION action, sint32 itemIn
 	case	CP_MENU_ITEM_12:
 		musicscreen_displayMyWindow();
 		break;
+	case	CP_MENU_ITEM_13:
+		if(g_chatBox) g_chatBox->SetActive(!g_chatBox->IsActive());;
+		break;
+
 	}
 }
 
@@ -1307,17 +1314,29 @@ void ControlPanelWindow::RebuildMenus()
 	mb->AddMenuItem(menu, g_theStringDB->GetNameStr("str_ldl_Sound"),
 		KeyListItem::GetKeyFromKMScreen(theKeyMap->get_keycode(KEY_FUNCTION_SOUND_OPTIONS)),(void *)CP_MENU_ITEM_2);
 
-    MBCHAR const *  musicItemText   = g_theStringDB->GetNameStr("str_ldl_Music");
-    if (musicItemText)
-    {
-    	mb->AddMenuItem(menu,
-                        musicItemText,
+	MBCHAR const *  musicItemText   = g_theStringDB->GetNameStr("str_ldl_Music");
+	if (musicItemText)
+	{
+		mb->AddMenuItem(menu,
+		                musicItemText,
 		                KeyListItem::GetKeyFromKMScreen
-                            (theKeyMap->get_keycode(KEY_FUNCTION_MUSIC_OPTIONS)),
-                        (void *) CP_MENU_ITEM_12
-                       );
-    }
-    // else: No action: backwards compatibility for Mods.
+		                    (theKeyMap->get_keycode(KEY_FUNCTION_MUSIC_OPTIONS)),
+		                (void *) CP_MENU_ITEM_12
+		               );
+	}
+	// else: No action: backwards compatibility for Mods.
+
+	MBCHAR const *  chatBoxText   = g_theStringDB->GetNameStr("str_tbl_ldl_Open_Chat");
+	if (chatBoxText)
+	{
+		mb->AddMenuItem(menu,
+		                chatBoxText,
+		                KeyListItem::GetKeyFromKMScreen
+		                    (theKeyMap->get_keycode(KEY_FUNCTION_CHAT_KEY)),
+		                (void *) CP_MENU_ITEM_13
+		               );
+	}
+	// else: No action: backwards compatibility for Mods.
 
 	mb->AddMenuItem(menu, g_theStringDB->GetNameStr("str_ldl_Advanced"),
 		KeyListItem::GetKeyFromKMScreen(theKeyMap->get_keycode(KEY_FUNCTION_ADVANCED_OPTIONS)),(void *)CP_MENU_ITEM_3);
@@ -1342,7 +1361,6 @@ void ControlPanelWindow::RebuildMenus()
 void
 ControlPanelWindow::BuildCivMenu()
 {
-
 	Assert(m_mainMenuBar!=NULL);
 
 	if (m_mainMenuBar==NULL)
@@ -1372,7 +1390,6 @@ ControlPanelWindow::BuildCivMenu()
 void
 ControlPanelWindow::BuildCityMenu	()
 {
-
 	Assert(m_mainMenuBar!=NULL);
 
 	if (m_mainMenuBar==NULL)
@@ -1398,7 +1415,6 @@ ControlPanelWindow::BuildCityMenu	()
 void
 ControlPanelWindow::BuildUnitMenu	()
 {
-
 	Assert(m_mainMenuBar!=NULL);
 
 	if (m_mainMenuBar==NULL)
@@ -1422,7 +1438,6 @@ ControlPanelWindow::BuildUnitMenu	()
 void
 ControlPanelWindow::BuildDipMenu	()
 {
-
 	Assert(m_mainMenuBar!=NULL);
 
 	if (m_mainMenuBar==NULL)
@@ -1446,7 +1461,6 @@ ControlPanelWindow::BuildDipMenu	()
 void
 ControlPanelWindow::BuildSciMenu	()
 {
-
 	Assert(m_mainMenuBar!=NULL);
 
 	if (m_mainMenuBar==NULL)
@@ -1470,7 +1484,6 @@ ControlPanelWindow::BuildSciMenu	()
 void
 ControlPanelWindow::BuildTradeMenu	()
 {
-
 	Assert(m_mainMenuBar!=NULL);
 
 	if (m_mainMenuBar==NULL)
@@ -1492,7 +1505,6 @@ ControlPanelWindow::BuildTradeMenu	()
 void
 ControlPanelWindow::BuildGLMenu		()
 {
-
 	Assert(m_mainMenuBar!=NULL);
 
 	if (m_mainMenuBar==NULL)
@@ -1511,11 +1523,9 @@ ControlPanelWindow::BuildGLMenu		()
 		KeyListItem::GetKeyFromKMScreen(theKeyMap->get_keycode(KEY_FUNCTION_OPEN_GREAT_LIBRARY)),(void *)CP_MENU_ITEM_0);
 }
 
-
 void
 ControlPanelWindow::BuildStatsMenu()
 {
-
 	Assert(m_mainMenuBar!=NULL);
 
 	if (m_mainMenuBar==NULL)
@@ -1543,7 +1553,6 @@ ControlPanelWindow::BuildStatsMenu()
 void
 ControlPanelWindow::BuildOptionsMenu()
 {
-
 	Assert(m_mainMenuBar!=NULL);
 
 	if (m_mainMenuBar==NULL)
@@ -1557,7 +1566,6 @@ ControlPanelWindow::BuildOptionsMenu()
 		return;
 
 	m_mainMenuBar->SetMenuCallback	(menu,OptionsMenuCallback);
-
 
 	m_mainMenuBar->AddMenuItem(menu, g_theStringDB->GetNameStr("str_ldl_ZoomOut"),
 							   KeyListItem::GetKeyFromKMScreen(theKeyMap->get_keycode(KEY_FUNCTION_ZOOM_OUT1)),
@@ -1573,21 +1581,35 @@ ControlPanelWindow::BuildOptionsMenu()
 	m_mainMenuBar->AddMenuItem(menu, g_theStringDB->GetNameStr("str_ldl_Sound"),
 		KeyListItem::GetKeyFromKMScreen(theKeyMap->get_keycode(KEY_FUNCTION_SOUND_OPTIONS)),(void *)CP_MENU_ITEM_2);
 
-    {
-        MBCHAR const *  musicItemText   = g_theStringDB->GetNameStr("str_ldl_Music");
+	{
+		MBCHAR const *  musicItemText   = g_theStringDB->GetNameStr("str_ldl_Music");
 
-        if (musicItemText)
-        {
-            // MUSIC added by ahenobarb
-	        m_mainMenuBar->AddMenuItem
-                (menu,
-                 musicItemText,
-                 KeyListItem::GetKeyFromKMScreen(theKeyMap->get_keycode(KEY_FUNCTION_MUSIC_OPTIONS)),
-                 (void *) CP_MENU_ITEM_12
-                );
-        }
-        // else: No action: backwards compatibility for Mods.
-    }
+		if (musicItemText)
+		{
+			// MUSIC added by ahenobarb
+			m_mainMenuBar->AddMenuItem
+			    (menu,
+			     musicItemText,
+			     KeyListItem::GetKeyFromKMScreen(theKeyMap->get_keycode(KEY_FUNCTION_MUSIC_OPTIONS)),
+			     (void *) CP_MENU_ITEM_12
+			    );
+		}
+		// else: No action: backwards compatibility for Mods.
+	}
+	{
+		MBCHAR const *  chatBoxText = g_theStringDB->GetNameStr("str_tbl_ldl_Open_Chat");
+
+		if(chatBoxText)
+		{
+			m_mainMenuBar->AddMenuItem
+			(menu,
+			 chatBoxText,
+			 KeyListItem::GetKeyFromKMScreen(theKeyMap->get_keycode(KEY_FUNCTION_CHAT_KEY)),
+			 (void *)CP_MENU_ITEM_13
+			);
+		}
+		// else: No action: backwards compatibility for Mods.
+	}
 
 	m_mainMenuBar->AddMenuItem(menu, g_theStringDB->GetNameStr("str_ldl_Advanced"),
 		KeyListItem::GetKeyFromKMScreen(theKeyMap->get_keycode(KEY_FUNCTION_ADVANCED_OPTIONS)),(void *)CP_MENU_ITEM_3);
