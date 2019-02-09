@@ -16,7 +16,7 @@ RUN useradd -m $USERNAME && \
 FROM system as builder
 
 RUN apt-get update && apt-get install -y --no-install-recommends \
-    yasm libsdl1.2-dev libsdl-mixer1.2-dev libsdl-image1.2-dev byacc libgtk2.0-dev gcc-5 g++-5 \
+    libsdl1.2-dev libsdl-mixer1.2-dev libsdl-image1.2-dev libavformat-dev libswscale-dev byacc libgtk2.0-dev gcc-5 g++-5 \
     automake libtool unzip flex git ca-certificates cmake
 
 ### set default compilers
@@ -28,24 +28,6 @@ RUN update-alternatives --install /usr/bin/gcc gcc /usr/bin/gcc-5 100 && \
     cc --version && \
     c++ --version && \
     cpp --version
-
-### build ffmpeg
-RUN git clone --depth 1 -b n3.3.6 http://github.com/FFmpeg/FFmpeg/ && \
-    cd FFmpeg && \
-    ./configure \
-    	--prefix=/usr/local/ \
-	--enable-shared \
-	--disable-static \
-	--disable-doc \
-	--disable-avdevice \
-	--disable-ffprobe \
-	--disable-ffmpeg \
-	--disable-ffplay \
-	--disable-ffserver && \
-    make -j"$(nproc)" && \
-    make install
-
-### ffmpeg built
 
 ### build SDL_ffmpeg
 RUN git clone -b FFmpeg-2018 http://github.com/lynxabraxas/SDL_ffmpeg && \
