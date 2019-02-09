@@ -393,11 +393,13 @@ const char *Debug_FunctionNameGet (size_t address)
 {
 	FUNCTION_ADDRESS *pointer;
 
+#ifdef __linux__
 	Dl_info info;
 	if(dladdr((void*)address, &info) != 0)
 	{
 		address -= (size_t)info.dli_fbase;
 	}
+#endif
 
 	if (address > DEBUG_CODE_LIMIT)
 	{
@@ -428,12 +430,14 @@ const char *Debug_FunctionNameAndOffsetGet (size_t address, int *offset)
 {
 	FUNCTION_ADDRESS *pointer;
 	*offset = 0;
-	
+
+#ifdef __linux__
 	Dl_info info;
 	if(dladdr((void*)address, &info) != 0)
 	{
 		address -= (size_t)info.dli_fbase;
 	}
+#endif
 
 	if (address > DEBUG_CODE_LIMIT)
 	{
