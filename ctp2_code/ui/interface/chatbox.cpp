@@ -498,12 +498,9 @@ BOOL ChatWindow::CheckForEasterEggs(MBCHAR *s)
 			if (player >= 0 && player < k_MAX_PLAYERS && g_player[player])
 			{
 				g_player[player]->m_playerType = PLAYER_TYPE_ROBOT;
-				if (g_selected_item != NULL)
-				{
-					char buf[1024];
-					sprintf(buf, "Player %d is a robot", player);
-					g_chatBox->AddLine(g_selected_item->GetCurPlayer(), buf);
-				}
+				char buf[1024];
+				sprintf(buf, "Player %d is a robot", player);
+				g_chatBox->AddLine(player, buf);
 			}
 			else
 			{
@@ -541,12 +538,9 @@ BOOL ChatWindow::CheckForEasterEggs(MBCHAR *s)
 				if (player >= 0 && player < k_MAX_PLAYERS && g_player[player])
 				{
 					g_player[player]->m_playerType = PLAYER_TYPE_HUMAN;
-					if (g_selected_item != NULL)
-					{
-						char buf[1024];
-						sprintf(buf, "Player %d is now human", player);
-						g_chatBox->AddLine(g_selected_item->GetCurPlayer(), buf);
-					}
+					char buf[1024];
+					sprintf(buf, "Player %d is now human", player);
+					g_chatBox->AddLine(player, buf);
 				}
 				else
 				{
@@ -689,11 +683,20 @@ BOOL ChatWindow::CheckForEasterEggs(MBCHAR *s)
 
 			g_graphicsOptions->CellTextOn(player);
 
-			if (g_selected_item != NULL)
+			if(player >= 0 && player < k_MAX_PLAYERS && g_player[player])
 			{
 				char buf[1024];
 				sprintf(buf, "Settle cell values are shown for player %d on the map", player);
 				g_chatBox->AddLine(player, buf);
+			}
+			else
+			{
+				if(g_selected_item != NULL)
+				{
+					char buf[1024];
+					sprintf(buf, "Player %d does not exist", player);
+					g_chatBox->AddLine(g_selected_item->GetCurPlayer(), buf);
+				}
 			}
 		}
 		else
@@ -749,12 +752,9 @@ BOOL ChatWindow::CheckForEasterEggs(MBCHAR *s)
 				                       GEA_End);
 				g_gevManager->Resume();
 
-				if (g_selected_item != NULL)
-				{
-					char buf[1024];
-					sprintf(buf, "Begin scheduler for player %d", player);
-					g_chatBox->AddLine(g_selected_item->GetCurPlayer(), buf);
-				}
+				char buf[1024];
+				sprintf(buf, "Begin scheduler for player %d", player);
+				g_chatBox->AddLine(player, buf);
 			}
 			else
 			{
@@ -795,7 +795,7 @@ BOOL ChatWindow::CheckForEasterEggs(MBCHAR *s)
 			{
 				char buf[1024];
 				sprintf(buf, "Player %d is filling the log for debugging", player);
-				g_chatBox->AddLine(g_selected_item->GetCurPlayer(), buf);
+				g_chatBox->AddLine(player, buf);
 			}
 		}
 		else
