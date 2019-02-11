@@ -1,86 +1,36 @@
+#include "c3.h"
+#include "debugexception.h"
+
 #ifdef _DEBUG
 
-#include "debugexception.h"
 #include "debugassert.h"
 #include "debugcallstack.h"
 #include "breakpoint.h"
 #include "log.h"
+
+#if defined(WIN32)
 #include <windows.h>
-
-
-
-
-
-
-
+#endif
 
 struct DebugException
 {
-
-
 	DebugAssertClientFunction DebugException_Enter;
 };
 
 static DebugException debug_exception = {0};
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
 
 void DebugException_Open (DebugExceptionClientFunction function_enter)
 {
 	debug_exception.DebugException_Enter = function_enter;
 }
 
-
-
-
-
-
-
-
-
-
-
-
-
-
 void DebugException_Close (void)
 {
-
 }
 
-
-
-
-
-
-
-
-
-
-
-
+#ifdef WIN32
 inline static void DebugExceptionFilter_LogExceptionType (LPEXCEPTION_POINTERS ep)
 {
-
-
-
-
 	switch(ep->ExceptionRecord->ExceptionCode)
 	{
 	case EXCEPTION_ACCESS_VIOLATION:
@@ -171,10 +121,6 @@ inline static void DebugExceptionFilter_LogExceptionType (LPEXCEPTION_POINTERS e
 
 inline static void DebugExceptionFilter_LogRegisterState (LPEXCEPTION_POINTERS ep)
 {
-
-
-
-
 	LOG ((LOG_EXCEPTION, "  EAX: %08xh      ESI: %08xh", (DWORD) ep->ContextRecord->Eax, (DWORD) ep->ContextRecord->Esi));
 	LOG ((LOG_EXCEPTION, "  EBX: %08xh      EDI: %08xh", (DWORD) ep->ContextRecord->Ebx, (DWORD) ep->ContextRecord->Edi));
 	LOG ((LOG_EXCEPTION, "  ECX: %08xh", (DWORD) ep->ContextRecord->Ecx));
@@ -197,7 +143,6 @@ inline static void DebugExceptionFilter_LogRegisterState (LPEXCEPTION_POINTERS e
 
 static LONG _cdecl DebugException_Filter (LPEXCEPTION_POINTERS exception_pointers)
 {
-
 	DebugExceptionFilter_LogExceptionType (exception_pointers);
 	DebugExceptionFilter_LogRegisterState (exception_pointers);
 
@@ -211,31 +156,18 @@ static LONG _cdecl DebugException_Filter (LPEXCEPTION_POINTERS exception_pointer
 
 	return (EXCEPTION_CONTINUE_SEARCH);
 }
-
-
-
-
-
-
-
-
-
-
-
-
+#endif
 
 void DebugException_Execute (DebugExceptionClientFunction function_monitored)
 {
-
+#ifdef WIN32
 	__try
 	{
 		function_monitored();
 	}
-
 	__except (DebugException_Filter (GetExceptionInformation()))
 	{
 	}
+#endif	
 }
-
-
 #endif

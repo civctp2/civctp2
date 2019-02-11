@@ -395,6 +395,11 @@ namespace Os
 	}
 }
 
+std::basic_string<TCHAR> main_GetExeName()
+{
+	return Os::GetExeName();
+}
+
 int ui_Initialize(void)
 {
 	AUI_ERRCODE auiErr = AUI_ERRCODE_OK;
@@ -1044,10 +1049,10 @@ void AtExitProc(void)
 	printf("At exit.\n");
 
 #if defined(USE_SDL)
-# if 0
-    // What about this?
-    Mix_CloseAudio();
-# endif
+#if 0
+	// What about this?
+	Mix_CloseAudio();
+#endif
 	g_mouseShouldTerminateThread = TRUE;
 
 	// Destroy the mutex used for the secondary keyboard event queue
@@ -1056,7 +1061,7 @@ void AtExitProc(void)
 	g_secondaryKeyboardEventQueueMutex = NULL;
 #endif
 
-    SDL_Quit();
+	SDL_Quit();
 #endif
 }
 
@@ -1066,9 +1071,6 @@ BOOL g_no_exit_action;
 BOOL g_cmdline_load;
 char g_cmdline_load_filename[160];
 sint32 g_cheat_age;
-
-
-
 
 BOOL g_launchScenario = FALSE;
 
@@ -1337,7 +1339,6 @@ void main_InitializeLogs(void)
 	time(&ltime);
 	struct tm * now = localtime(&ltime);
 
-#ifdef WIN32
 #if defined(_DEBUG) && defined(_DEBUGTOOLS)
 	Debug_Open();
 #endif
@@ -1359,8 +1360,10 @@ void main_InitializeLogs(void)
 	c3debug_SetDebugMask(k_DBG_FIX | k_DBG_DATABASE | k_DBG_NET | k_DBG_GAMESTATE | k_DBG_UI | k_DBG_SLIC | k_DBG_AI | k_DBG_SCHEDULER, 1);
 #endif
 
-	DPRINTF(k_DBG_FIX, ("** BUILD EXE :%s\n", Os::GetExeName().c_str()));
+	DPRINTF(k_DBG_FIX, ("** BUILD executible :%s\n", Os::GetExeName().c_str()));
 
+// Nice to have, but not necessary
+#ifdef WIN32
 	HANDLE fileHandle = CreateFile(Os::GetExeName().c_str(),
 	                               GENERIC_READ,
 	                               FILE_SHARE_READ,
