@@ -115,6 +115,7 @@ public:
 	sint32 GetTrend(void) const;
 	void   BeginTurn(void);
 	void   EndRound(void);
+	bool   RunNextDesaster();
 
 	sint32 GetPhase(void) { return m_phase; }
 

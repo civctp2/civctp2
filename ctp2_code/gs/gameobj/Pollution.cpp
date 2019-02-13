@@ -284,23 +284,7 @@ void Pollution::BeginTurn(void)
 
 	if(AtTriggerLevel())
 	{
-		if(m_phase < g_thePollutionDB->Get(g_theProfileDB->GetMapSize())->GetNumPhase())
-		{
-			const PollutionRecord::Phase* pprec = g_thePollutionDB->Get(g_theProfileDB->GetMapSize())->GetPhase(m_phase);
-
-			if(pprec->GetOzoneDisaster())
-			{
-				g_theWorld->OzoneDepletion();
-			}
-			if(pprec->GetFloodDisaster())
-			{
-				g_theWorld->GlobalWarming(m_gwPhase);
-				m_gwPhase++;
-			}
-
-			GotoNextLevel();
-			m_eventTriggered = TRUE;
-		}
+		RunNextDesaster();
 
 		m_eventTriggerNextRound = 0;
 	}
@@ -310,6 +294,33 @@ void Pollution::BeginTurn(void)
 	if(g_network.IsHost())
 	{
 		g_network.EnqueuePollution();
+	}
+}
+
+bool Pollution::RunNextDesaster()
+{
+	if(m_phase < g_thePollutionDB->Get(g_theProfileDB->GetMapSize())->GetNumPhase())
+	{
+		const PollutionRecord::Phase* pprec = g_thePollutionDB->Get(g_theProfileDB->GetMapSize())->GetPhase(m_phase);
+
+		if(pprec->GetOzoneDisaster())
+		{
+			g_theWorld->OzoneDepletion();
+		}
+		if(pprec->GetFloodDisaster())
+		{
+			g_theWorld->GlobalWarming(m_gwPhase);
+			m_gwPhase++;
+		}
+
+		GotoNextLevel();
+		m_eventTriggered = TRUE;
+
+		return true;
+	}
+	else
+	{
+		return false;
 	}
 }
 
