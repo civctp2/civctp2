@@ -168,10 +168,7 @@ void World::FloodImprovements(sint32 x, sint32 y, Cell *c)
 
 void World::FloodGoodyHut(Cell *c)
 {
-#if 0
-		delete c->m_jabba ;
-		c->m_jabba = NULL ;
-#endif
+	c->DeleteGoodyHut();
 }
 
 void World::FloodCity(Cell *c)
