@@ -69,6 +69,7 @@
 #include "terrainutil.h"
 #include "tradeutil.h"
 #include "GameEventManager.h"           // g_gevManager
+#include "settlemap.h"
 
 extern  OzoneDatabase   *g_theUVDB ;
 extern  RadarMap        *g_radarMap;
@@ -474,6 +475,8 @@ void World::GlobalWarmingEvent(const sint32 phase)
 	NumberContinents();
 	SetAllMoveCost();
 	ClearScratch();
+
+	SettleMap::s_settleMap.Initialize();
 }
 
 void World::InformPlayersOfFloodingCatastrophe(void)
