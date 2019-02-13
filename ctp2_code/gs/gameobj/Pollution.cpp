@@ -326,7 +326,7 @@ bool Pollution::RunNextDesaster()
 
 void Pollution::GotoNextLevel(void)
 {
-	if(m_phase < (g_thePollutionDB->Get(g_theProfileDB->GetMapSize())->GetNumPhase() - 1))
+	if(m_phase < g_thePollutionDB->Get(g_theProfileDB->GetMapSize())->GetNumPhase())
 		m_phase++;
 }
 
