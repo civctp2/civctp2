@@ -162,28 +162,7 @@ void World::FloodEverythingInCell(sint32 x, sint32 y, Cell *c)
 void World::FloodImprovements(sint32 x, sint32 y, Cell *c)
 {
 	MapPoint    pos    (x, y);
-	Cell *cell = GetCell(x, y);
-
-	if (cell->GetNumDBImprovements() > 0 || cell->GetNumImprovements() > 0)
-	{
-		g_theWorld->CutImprovements(pos);
-		if(g_network.IsHost())
-		{
-			g_network.Enqueue(c, pos.x, pos.y);
-		}
-
-		DynamicArray<Installation> instArray;
-		g_theInstallationTree->GetAt(pos, instArray);
-		instArray.KillList();
-	}
-
-	if(cell->GetNumImprovements())
-	{
-		for(sint32 i = cell->GetNumImprovements() - 1; i >= 0; i--)
-		{
-			cell->AccessImprovement(i).Kill();
-		}
-	}
+	CutImprovements(pos);
 }
 
 void World::FloodGoodyHut(Cell *c)
@@ -367,6 +346,7 @@ void World::GWPhase(const sint32 phase)
 				if(g_theTerrainDB->Get(terrain)->GetInternalTypeSwamp())
 				{
 					ConvertToShallowWater(x, y, c);
+					FloodEverythingInCell(x, y, c);
 				}
 			}
 			else
@@ -464,46 +444,6 @@ void World::GlobalWarmingEvent(const sint32 phase)
 		}
 	}
 
-	sint32 x, y;
-	for(x = 0; x < m_size.x; x++)
-	{
-		for(y = 0; y < m_size.y; y++)
-		{
-			Cell *theCell = GetCell(x,y);
-			MapPoint pos(x,y);
-			if(theCell->UnitArmy())
-			{
-				if(!theCell->UnitArmy()->CanEnter(pos))
-					theCell->UnitArmy()->KillList(CAUSE_REMOVE_ARMY_FLOOD, -1);
-			}
-			if(theCell->GetCity().IsValid())
-			{
-				if((IsWater(pos) || IsShallowWater(pos)))
-				{
-					if(!theCell->GetCity().GetMovementTypeSea())
-					{
-						g_gevManager->AddEvent(GEV_INSERT_Tail, GEV_KillCity,
-											   GEA_City, theCell->GetCity().m_id,
-											   GEA_Int, CAUSE_REMOVE_ARMY_FLOOD,
-											   GEA_Player, PLAYER_UNASSIGNED,
-											   GEA_End);
-					}
-				}
-				else
-				{
-					if(!theCell->GetCity().GetMovementTypeLand())
-					{
-						g_gevManager->AddEvent(GEV_INSERT_Tail, GEV_KillCity,
-											   GEA_City, theCell->GetCity().m_id,
-											   GEA_Int, CAUSE_REMOVE_ARMY_FLOOD,
-											   GEA_Player, PLAYER_UNASSIGNED,
-											   GEA_End);
-					}
-				}
-			}
-		}
-	}
-
 	g_tiledMap->PostProcessMap();
 	g_tiledMap->Refresh();
 	g_radarMap->Update();
@@ -517,9 +457,9 @@ void World::GlobalWarmingEvent(const sint32 phase)
 		}
 	}
 
-	for(x = 0; x < m_size.x; x++)
+	for(sint32 x = 0; x < m_size.x; x++)
 	{
-		for(y = 0; y < m_size.y; y++)
+		for(sint32 y = 0; y < m_size.y; y++)
 		{
 			if(m_map[x][y]->GetCity().m_id != 0)
 			{
