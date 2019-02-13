@@ -58,6 +58,7 @@ STDEHANDLER(CutImprovementsEvent)
 		{
 			g_tiledMap->PostProcessTile(npos, g_theWorld->GetTileInfo(npos));
 			g_tiledMap->TileChanged(npos);
+			g_tiledMap->RedrawTile(&npos);
 		}
 	}
 
