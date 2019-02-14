@@ -8,16 +8,6 @@
 		Log_End();											\
 	}
 
-
-
-
-
-
-
-
-
-
-
 #ifdef LOG_INDIRECT
 #undef LOG_INDIRECT
 #endif

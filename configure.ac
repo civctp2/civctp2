@@ -143,6 +143,8 @@ AC_ARG_ENABLE([debug],
 if test x$enable_debug = xyes  || test x$enable_debug = xfull; then
 	AC_DEFINE(_DEBUG,1,[Enable debugging code])
 	AC_DEFINE(_PLAYTEST,1,[Enable playtesting features])# _DEBUG requires this
+	AC_DEFINE(_DEBUGTOOLS,1,[Enable debug tools])# _DEBUG requires this
+	AC_DEFINE(_DEBUG_MEMORY,1,[Enable the leak reporter])# _DEBUG requires this
 fi
 
 if test 0 -eq 1; then
@@ -165,9 +167,12 @@ AM_CONDITIONAL(INTERNAL_ANET, test x$enable_anet == xno)
 
 AX_SUBDIRS_CONFIGURE([ctp2_code/libs/freetype-1.3.1], [--enable-shared=no], [], [], [])
 
-AC_DEFINE(_BFR_,1,[Build final release])
-AC_SUBST(_BFR_)
-AC_SUBST(CTP2_ENABLE_SLICDEBUG)
+if test x$enable_debug = xno; then
+	AC_DEFINE(_BFR_,1,[Build final release])
+	AC_SUBST(_BFR_) # What is this good for?
+fi	
+AC_DEFINE(CTP2_ENABLE_SLICDEBUG,1,[In every version])
+AC_SUBST(CTP2_ENABLE_SLICDEBUG) # What is this good for?
 
 AC_OUTPUT([
    GNUmakefile

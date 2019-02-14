@@ -34,6 +34,8 @@
 #ifndef __CIV3_MAIN_H__
 #define __CIV3_MAIN_H__
 
+#include <string>
+
 #define k_TICKS_PER_GENERIC_FRAME	100
 #define k_TICKS_PER_SCROLL_FRAME	50
 
@@ -64,6 +66,8 @@ int main_RestoreGame(const MBCHAR *filename);
 
 void main_HideTaskBar(void);
 void main_RestoreTaskBar(void);
+
+std::basic_string<TCHAR> main_GetExeName();
 
 int radar_Initialize(void);
 

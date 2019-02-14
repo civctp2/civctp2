@@ -34,6 +34,12 @@ jobs:
         - CFLAGS="$CFLAGS -w -fuse-ld=gold" CXXFLAGS="$CXXFLAGS -fpermissive -w -fuse-ld=gold" ./configure --enable-silent-rules
         - make
     - stage: build
+      name: "direct debug build"
+      script:
+        - ./autogen.sh
+        - CFLAGS="$CFLAGS -w -fno-omit-frame-pointer -fuse-ld=gold" CXXFLAGS="$CXXFLAGS -fno-omit-frame-pointer -fpermissive -w -fuse-ld=gold" ./configure --enable-silent-rules --enable-debug
+        - make
+    - stage: build
       name: "docker build"
       script:
         - docker build --pull .

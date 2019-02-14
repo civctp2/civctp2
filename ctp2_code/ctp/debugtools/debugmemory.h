@@ -30,21 +30,18 @@
 // _AIDLL
 // - ??
 //
-// MEMORY_LOGGED
-// - ??
-//
 //----------------------------------------------------------------------------
 //
 // Modifications from the original Activision code:
 //
-// - Debug memory uses size_t for things that are memory sizes (20-Jan-2019 Martin Gühmann)
+// - Debug memory uses size_t for things that are memory sizes (20-Jan-2019 Martin GÃ¼hmann)
 //
 //////////////////////////////////////////////////////////////////////////////
 
-#ifdef _DEBUG
-
 #ifndef __DEBUGMEMORY_H
 #define __DEBUGMEMORY_H
+
+#ifdef _DEBUG
 
 #ifdef __cplusplus
 extern "C" {
@@ -118,8 +115,10 @@ void *DebugMemoryHeap_GuardedCalloc    (const char *file, int line, MemoryHeap h
 void *DebugMemoryHeap_GuardedRealloc   (const char *file, int line, MemoryHeap heap, void *memory_block, size_t size);
 char *DebugMemoryHeap_GuardedStrdup    (const char *file, int line, MemoryHeap heap, const char *string);
 void  DebugMemoryHeap_GuardedFree      (const char *file, int line, MemoryHeap heap, void **memory_block_ptr);
+#ifdef WIN32
 MemoryHeap DebugMemoryHeap_GuardedOpen (const char *file, int line, const char *name, size_t size_initial, size_t size_maximum);
 void DebugMemoryHeap_GuardedClose      (const char *file, int line, MemoryHeap heap);
+#endif
 
 #ifdef MEMORY_FAST
 
@@ -147,6 +146,6 @@ void DebugMemoryHeap_GuardedClose      (const char *file, int line, MemoryHeap h
 }
 #endif
 
-#endif
+#endif // __DEBUGMEMORY_H
 
-#endif
+#endif // _DEBUG

@@ -3,13 +3,6 @@
 #endif
 #define LOG(log_parameters)
 
-
-
-
-
-
-
-
 #ifdef LOG_INDIRECT
 #undef LOG_INDIRECT
 #endif
