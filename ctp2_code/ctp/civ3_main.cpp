@@ -257,6 +257,10 @@ CivApp                              *g_civApp = NULL;
 
 LRESULT CALLBACK WndProc(HWND hwnd, UINT iMsg, WPARAM wParam, LPARAM lParam);
 
+#ifdef __AUI_USE_SDL__
+int SDLMessageHandler(const SDL_Event &event);
+#endif
+
 #if defined(__GNUC__)
 int CivMain(int argc, char **argv);
 #else
@@ -389,6 +393,11 @@ namespace Os
 
 		return exeVersion.str();
 	}
+}
+
+std::basic_string<TCHAR> main_GetExeName()
+{
+	return Os::GetExeName();
 }
 
 int ui_Initialize(void)
@@ -1318,7 +1327,6 @@ void main_InitializeLogs(void)
 	time(&ltime);
 	struct tm * now = localtime(&ltime);
 
-#ifdef WIN32
 #if defined(_DEBUG) && defined(_DEBUGTOOLS)
 	Debug_Open();
 #endif
@@ -1340,8 +1348,10 @@ void main_InitializeLogs(void)
 	c3debug_SetDebugMask(k_DBG_FIX | k_DBG_DATABASE | k_DBG_NET | k_DBG_GAMESTATE | k_DBG_UI | k_DBG_SLIC | k_DBG_AI | k_DBG_SCHEDULER, 1);
 #endif
 
-	DPRINTF(k_DBG_FIX, ("** BUILD EXE :%s\n", Os::GetExeName().c_str()));
+	DPRINTF(k_DBG_FIX, ("** BUILD executible :%s\n", Os::GetExeName().c_str()));
 
+// Nice to have, but not necessary
+#ifdef WIN32
 	HANDLE fileHandle = CreateFile(Os::GetExeName().c_str(),
 	                               GENERIC_READ,
 	                               FILE_SHARE_READ,

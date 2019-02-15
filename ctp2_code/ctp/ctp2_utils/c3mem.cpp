@@ -4,7 +4,7 @@
 
 sint32 g_check_mem;
 
-#if !defined(_DEBUG_MEMORY) // || !defined(_BFR_) // Some error checking for the final version, but probably should be disabled in the final version, can be done withe the comment
+#if !defined(_DEBUG_MEMORY) // Some error checking for the final version
 
 void* operator new(const size_t size)
 {

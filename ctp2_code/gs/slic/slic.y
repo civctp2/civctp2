@@ -58,6 +58,7 @@
 #include <stdlib.h>
 #include <string.h>
 #include "slicif.h"
+#include "ctp2_config.h" // Defines _DEBUG on Linux
 
 /* Avoid silly warnings */
 #ifdef _MSC_VER

@@ -32,12 +32,15 @@
 //----------------------------------------------------------------------------
 
 #include "c3.h"
+#include "c3debug.h"
 
 #if defined(_DEBUG) || defined(USE_LOGGING)
 
 #include <sys/types.h>
 #if !defined(WIN32)
 #include <dirent.h>
+#include <unistd.h>
+#include <csignal>
 #endif
 
 #include "aui.h"
@@ -108,13 +111,18 @@ void c3debug_InitDebugLog()
 	DIR *dir = opendir("logs");
 	Assert(dir);
 	struct dirent *dent = NULL;
+	MBCHAR fileName[256];
 
 	while((dent = readdir(dir)))
 	{
 		int unlinkRetVal;
-		sprintf(fileName, "logs%s%s", FILE_SEP, dent->d_name);
-		unlinkRetVal = unlink(fileName);
-		Assert(unlinkRetVal == 0);
+		if(strcmp(dent->d_name, "." ) != 0
+		&& strcmp(dent->d_name, "..") != 0)
+		{
+			sprintf(fileName, "logs%s%s", FILE_SEP, dent->d_name);
+			unlinkRetVal = unlink(fileName);
+			Assert(unlinkRetVal == 0);
+		}
 	}
 
 	closedir(dir);
@@ -305,8 +313,19 @@ void c3debug_Assert(char const *s, char const * file, int line)
 	}
 	while (0);
 #else
-	fprintf(stderr, "Assertion (%s) Failed in File:%s, Line:%ld\n", s, file, line);
-	assert(0);
+	MBCHAR str[1024];
+	sprintf(str, "Assertion (%s) Failed in File:%s, Line:%ld\n", s, file, line);
+	fprintf(stderr, str);
+	sint32 result = MessageBox(NULL, str, "Assert", MB_ABORTRETRYIGNORE | MB_ICONEXCLAMATION);
+	
+	if(result == IDRETRY)
+	{
+		std::raise(SIGINT);
+	}
+	else if(result == IDABORT)
+	{
+		exit(-1);
+	}
 #endif
 #endif
 }

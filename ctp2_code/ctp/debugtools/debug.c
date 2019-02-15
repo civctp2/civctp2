@@ -31,6 +31,8 @@
  *
  *----------------------------------------------------------------------------
  */
+
+#include "c3.h"
 #include "debug.h"  // Own declarations: consistency check
 
 #ifdef _DEBUG
@@ -38,7 +40,9 @@
 #include <stdio.h>
 #include <string.h>
 #if defined(LINUX)
-#include <sys/prctl.h>
+#include "windows.h"
+#include <linux/prctl.h> // <sys/prctl.h>   // or #include 
+#include <linux/version.h>
 #endif // LINUX
 
 #include "debugassert.h"
@@ -47,7 +51,6 @@
 #include "debugmemory.h"
 #include "log.h"
 
-#ifdef WIN32
 typedef struct tagTHREADNAME_INFO
 {
     DWORD           dwType;     // must be 0x1000
@@ -55,7 +58,6 @@ typedef struct tagTHREADNAME_INFO
     DWORD           dwThreadID; // thread ID (-1=caller thread)
     DWORD           dwFlags;    // reserved for future use, must be zero
 }   THREADNAME_INFO;
-#endif
 
 void Debug_SystemCleanup (void)
 {
@@ -71,15 +73,15 @@ void Debug_SystemRestore (void)
 
 void Debug_Open (void)
 {
-#ifdef WIN32
 	DebugCallStack_Open();
 
-	Log_Open ("CTP_debug.cfg", 0);
+	Log_Open ("CTP_debug.cfg", 0); // CTP_debug.cfg is a config file, which however does not exit
 
 	DebugAssert_Open (Debug_SystemCleanup, Debug_SystemRestore);
+#ifdef WIN32
 	DebugException_Open (Debug_SystemCleanup);
-	DebugMemory_Open();
 #endif
+	DebugMemory_Open();
 }
 
 //
@@ -87,10 +89,8 @@ void Debug_Open (void)
 //
 void Debug_Close (void)
 {
-#ifdef WIN32
 	DebugMemory_Close();
 	Log_Close();
-#endif
 }
 
 /*----------------------------------------------------------------------------
@@ -113,20 +113,20 @@ void Debug_Close (void)
 #ifdef WIN32
 void Debug_SetThreadName(LPCSTR szThreadName, DWORD dwThreadID)
 {
-    THREADNAME_INFO info;
-    info.dwType     = 0x1000;
-    info.szName     = szThreadName;
-    info.dwThreadID = dwThreadID;
-    info.dwFlags    = 0;
+	THREADNAME_INFO info;
+	info.dwType     = 0x1000;
+	info.szName     = szThreadName;
+	info.dwThreadID = dwThreadID;
+	info.dwFlags    = 0;
 
 #if defined(_MSC_VER)
-    __try
-    {
-        RaiseException(0x406D1388, 0, sizeof(info)/sizeof(DWORD), (DWORD*) &info);
-    }
-    __except(EXCEPTION_CONTINUE_EXECUTION)
-    {
-    }
+	__try
+	{
+		RaiseException(0x406D1388, 0, sizeof(info)/sizeof(DWORD), (DWORD*) &info);
+	}
+	__except(EXCEPTION_CONTINUE_EXECUTION)
+	{
+	}
 #endif
 }
 #endif // WIN32
@@ -148,7 +148,9 @@ void Debug_SetThreadName(LPCSTR szThreadName, DWORD dwThreadID)
 #ifdef LINUX
 void Debug_SetProcessName(char const * szProcessName)
 {
+#if LINUX_VERSION_CODE >= KERNEL_VERSION(2, 6, 9)
 	prctl(PR_SET_NAME, szProcessName);
+#endif
 }
 #endif
 

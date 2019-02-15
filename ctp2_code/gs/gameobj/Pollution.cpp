@@ -31,13 +31,13 @@
 //
 //----------------------------------------------------------------------------
 
-#include "c3debug.h"
 #include "c3.h"
+#include "pollution.h"
+
 #include "Globals.h"
 
 #include "XY_Coordinates.h"
 #include "World.h"
-#include "pollution.h"
 #include "player.h"
 #include "WonderRecord.h"
 #include "civarchive.h"

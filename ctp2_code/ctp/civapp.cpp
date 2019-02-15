@@ -561,12 +561,14 @@ void check_leak()
 #ifdef _DEBUG
 	if (g_tempLeakCheck)
 	{
+#if defined(WIN32)		
 		_CrtMemState new_state;
 		_CrtMemCheckpoint(&new_state);
 		Assert(g_allocatedAtStart == new_state.lSizes[1]);
 		g_allocatedAtStart = new_state.lSizes[1];
+#endif // WIN32	
 	}
-#endif
+#endif // _DEBUG
 }
 
 CivApp::CivApp()
@@ -2500,12 +2502,14 @@ sint32 CivApp::Process(void)
 {
 #ifdef _DEBUG
 	if(g_tempLeakCheck) {
+#if defined(WIN32)	
 		_CrtMemState new_state;
 		_CrtMemCheckpoint(&new_state);
 
 		g_allocatedAtStart = new_state.lSizes[1];
+#endif // WIN32
 	}
-#endif
+#endif // _DEBUG
 
 	if(g_netConsole)
 	{
