@@ -182,7 +182,7 @@ void World::FloodCity(Cell *c)
 		so->AddRecipient(u.GetOwner());
 		g_slicEngine->Execute(so);
 
-		u.KillUnit(CAUSE_REMOVE_ARMY_POLLUTION, -1);
+		u.KillUnit(CAUSE_REMOVE_ARMY_FLOOD, -1);
 	}
 }
 
@@ -196,7 +196,7 @@ void World::FloodArmies(Cell *c)
 		Unit u  = c->AccessUnit(i);
 		if (u.IsValid() && !u.GetMovementTypeSea())
 		{
-			u.KillUnit(CAUSE_REMOVE_ARMY_POLLUTION, -1);
+			u.KillUnit(CAUSE_REMOVE_ARMY_FLOOD, -1);
 		}
 	}
 }
