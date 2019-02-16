@@ -134,8 +134,6 @@ AUI_ERRCODE aui_BitmapFont::InitCommon( const MBCHAR *descriptor )
 		&m_bold,
 		&m_italic );
 
-	m_surfaceList = NULL;
-
 #if defined(_MBCS)
     Assert(SUPPORT_MBCS);
 #endif
@@ -612,7 +610,7 @@ aui_BitmapFont::GlyphInfo *aui_BitmapFont::GetGlyphInfo( MBCHAR c )
 }
 
 #if defined(_JAPANESE)
-// alternative method for mult-ibyte c
+// alternative method for multi-byte c
 aui_BitmapFont::GlyphInfo *aui_BitmapFont::GetGlyphInfo( const MBCHAR *pc )
 {
 	// assume uni-code ttf
