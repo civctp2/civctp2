@@ -76,10 +76,12 @@ build:
     - docker pull $IMAGE_TAG:$CI_JOB_STAGE
     - echo $DOCKER_PARAMS
     - echo $CTP_PARAMS
+    - mkdir -p $(pwd)/logs/ && chmod a+rw $(pwd)/logs/ # needs to be rw for diUser
     - docker run
              --env DISPLAY
              -v ${SHARED_PATH}/.X11-unix/:/tmp/.X11-unix/
              -v $(pwd)/.civctp2/save/:/opt/ctp2/ctp2_program/ctp/save/
+             -v $(pwd)/logs/:/opt/ctp2/ctp2_program/ctp/logs/
              $DOCKER_PARAMS
              $IMAGE_TAG:$CI_JOB_STAGE
              ./ctp2 $CTP_PARAMS &
