@@ -604,7 +604,7 @@ bool Governor::FoodSliderReachedMin(SlidersSetting & sliders_setting) const
 //              Consequently this isn't used.
 //
 //----------------------------------------------------------------------------
-sint32 Governor::SetSliders(const SlidersSetting & sliders_setting, const bool & update_cities) const
+sint32 Governor::SetSliders(const SlidersSetting & sliders_setting, const bool & update_cities, bool hasAllAdvances) const
 {
 	Player * player_ptr = g_player[m_playerId];
 	Assert(player_ptr != NULL);
@@ -630,9 +630,9 @@ sint32 Governor::SetSliders(const SlidersSetting & sliders_setting, const bool &
 		//Added by Martin Gühmann to take specialists into account.
 		//Well this has an effect but the AI seems to perform worse with it.
 		//Right direction but more debug work is needed.
-		AssignPopulation(city);
+		AssignPopulation(city, hasAllAdvances);
 
-		// Force happiness recalculation as crime losses depend on happiness.
+		// Force happiness recalculation as crime losses depends on happiness.
 		sint32 gold;
 		city->CalcHappiness(gold, false);
 
@@ -689,7 +689,7 @@ void Governor::GetSliders(SlidersSetting & sliders_setting) const
 // Remark(s)  : Removed
 //
 //----------------------------------------------------------------------------
-bool Governor::ComputeMinimumSliders( SlidersSetting & sliders_setting ) const
+bool Governor::ComputeMinimumSliders(SlidersSetting & sliders_setting, bool hasAllAdvances) const
 {
 	bool production_test;
 	bool gold_test;
@@ -703,7 +703,8 @@ bool Governor::ComputeMinimumSliders( SlidersSetting & sliders_setting ) const
 	                                gold_test,
 	                                food_test,
 	                                happiness_test,
-	                                prod, gold, food);
+	                                prod, gold, food,
+	                                hasAllAdvances);
 
 	if(found)
 		return false;
@@ -727,7 +728,8 @@ bool Governor::ComputeMinimumSliders( SlidersSetting & sliders_setting ) const
 		                           gold_test,
 		                           food_test,
 		                           happiness_test,
-		                           prod, gold, food);
+		                           prod, gold, food,
+		                           hasAllAdvances);
 		changed = false;
 
 		if(happiness_test == false)
@@ -778,7 +780,8 @@ bool Governor::ComputeMinimumSliders( SlidersSetting & sliders_setting ) const
 	                           gold_test,
 	                           food_test,
 	                           happiness_test,
-	                           prod, gold, food);
+	                           prod, gold, food,
+	                           hasAllAdvances);
 
 	return !found || (sliders_setting != orig_sliders_setting);
 }
@@ -798,7 +801,7 @@ bool Governor::ComputeMinimumSliders( SlidersSetting & sliders_setting ) const
 // Remark(s)  : Seems to do some shit, actual not worth to be understand.
 //
 //----------------------------------------------------------------------------
-bool Governor::ComputeBestSliders(SlidersSetting & sliders_setting) const
+bool Governor::ComputeBestSliders(SlidersSetting & sliders_setting, bool hasAllAdvances) const
 {
 	const StrategyRecord & strategy =
 		Diplomat::GetDiplomat(m_playerId).GetCurrentStrategy();
@@ -827,7 +830,7 @@ bool Governor::ComputeBestSliders(SlidersSetting & sliders_setting) const
 				sliders_setting.m_deltaFood = -1 * elem->GetDelta();
 			}
 
-			found = FitSlidersToCities( sliders_setting );
+			found = FitSlidersToCities(sliders_setting, hasAllAdvances);
 
 			sliders_setting.m_optimizeProduction = false;
 		}
@@ -845,7 +848,7 @@ bool Governor::ComputeBestSliders(SlidersSetting & sliders_setting) const
 				sliders_setting.m_deltaFood = -1 * elem->GetDelta();
 			}
 
-			found = FitSlidersToCities( sliders_setting );
+			found = FitSlidersToCities(sliders_setting, hasAllAdvances);
 
 			sliders_setting.m_optimizeGold = false;
 		}
@@ -863,7 +866,7 @@ bool Governor::ComputeBestSliders(SlidersSetting & sliders_setting) const
 				sliders_setting.m_deltaGold = -1 * elem->GetDelta();
 			}
 
-			found = FitSlidersToCities( sliders_setting );
+			found = FitSlidersToCities(sliders_setting, hasAllAdvances);
 
 			sliders_setting.m_optimizeFood = false;
 		}
@@ -904,7 +907,7 @@ bool Governor::ComputeBestSliders(SlidersSetting & sliders_setting) const
 // Remark(s)  : Seems to do some shit, actual not worth to be understand.
 //
 //----------------------------------------------------------------------------
-bool Governor::FitSlidersToCities( SlidersSetting & sliders_setting ) const
+bool Governor::FitSlidersToCities(SlidersSetting & sliders_setting, bool hasAllAdvances) const
 {
 	Assert(m_playerId >= 0);
 	Player *player_ptr = g_player[m_playerId];
@@ -936,7 +939,8 @@ bool Governor::FitSlidersToCities( SlidersSetting & sliders_setting ) const
 		                           gold_test,
 		                           food_test,
 		                           happiness_test,
-		                           prod, gold, food);
+		                           prod, gold, food,
+		                           hasAllAdvances);
 		changed = false;
 
 		if(happiness_test == false)
@@ -1047,7 +1051,8 @@ bool Governor::TestSliderSettings(const SlidersSetting & sliders_setting,
                                   bool   & happiness_test,
                                   sint32 & total_production,
                                   sint32 & total_gold,
-                                  sint32 & total_food) const
+                                  sint32 & total_food,
+                                  bool     hasAllAdvances) const
 {
 #if defined(_DEBUG) || defined(USE_LOGGING)
 	Timer t1;
@@ -1086,7 +1091,7 @@ bool Governor::TestSliderSettings(const SlidersSetting & sliders_setting,
 	Player * player_ptr = g_player[m_playerId];
 	Assert(player_ptr);
 
-	SetSliders(sliders_setting, false);
+	SetSliders(sliders_setting, false, hasAllAdvances);
 
 	UnitDynamicArray *  city_list   = player_ptr->GetAllCitiesList();
 	sint32              num_cities  = city_list ? city_list->Num() : 0;
@@ -1105,7 +1110,7 @@ bool Governor::TestSliderSettings(const SlidersSetting & sliders_setting,
 		//Added by Martin Gühmann to take specialists into account.
 		//Well this has an effect but the AI seems to perform worse with it.
 		//Right direction but more debug work is needed.
-		AssignPopulation(city);
+		AssignPopulation(city, hasAllAdvances);
 
 #if defined(_DEBUG) || defined(USE_LOGGING)
 		DPRINTF(k_DBG_GOVERNOR, ("//  elapsed time per city and pop asignment = %f ms\n", t2.getElapsedTimeInMilliSec()));
@@ -1205,9 +1210,10 @@ StringId Governor::GetSlidersAdvice() const
 
 	SlidersSetting current_sliders_setting;
 	GetSliders(current_sliders_setting);
+	bool hasAllAdvances = g_player[m_playerId]->m_advances->HasAllAdvances();
 
 	SlidersSetting new_sliders_setting;
-	if (ComputeMinimumSliders(new_sliders_setting))
+	if (ComputeMinimumSliders(new_sliders_setting, hasAllAdvances))
 	{
 		if (new_sliders_setting.m_deltaGold < 0)
 		{
@@ -1224,7 +1230,7 @@ StringId Governor::GetSlidersAdvice() const
 	}
 	else
 	{
-		if (Governor::GetGovernor(m_playerId).ComputeBestSliders(new_sliders_setting))
+		if (Governor::GetGovernor(m_playerId).ComputeBestSliders(new_sliders_setting, hasAllAdvances))
 		{
 			if (new_sliders_setting.m_deltaProduction < 0)
 			{
@@ -1276,19 +1282,20 @@ void Governor::OptimizeSliders(SlidersSetting & sliders_setting) const
 	SlidersSetting food_sliders_setting;
 
 	g_player[m_playerId]->PreResourceCalculation();
+	bool hasAllAdvances = g_player[m_playerId]->m_advances->HasAllAdvances();
 
 	while( !ProdSliderReachedMin(sliders_setting)
 	||     !GoldSliderReachedMin(sliders_setting)
 	||     !FoodSliderReachedMin(sliders_setting)
 	){
-		TestSliderSettings(sliders_setting, slider_tests);
+		TestSliderSettings(sliders_setting, slider_tests, hasAllAdvances);
 		value     =      slider_tests.GetValue();
 
 		if(!ProdSliderReachedMin(sliders_setting))
 		{
 			prod_sliders_setting = sliders_setting;
 			prod_sliders_setting.m_deltaProduction--;
-			TestSliderSettings(prod_sliders_setting, prod_slider_tests);
+			TestSliderSettings(prod_sliders_setting, prod_slider_tests, hasAllAdvances);
 			valueProd = prod_slider_tests.GetValue();
 		}
 		else
@@ -1300,7 +1307,7 @@ void Governor::OptimizeSliders(SlidersSetting & sliders_setting) const
 		{
 			gold_sliders_setting = sliders_setting;
 			gold_sliders_setting.m_deltaGold--;
-			TestSliderSettings(gold_sliders_setting, gold_slider_tests);
+			TestSliderSettings(gold_sliders_setting, gold_slider_tests, hasAllAdvances);
 			valueGold = gold_slider_tests.GetValue();
 		}
 		else
@@ -1312,7 +1319,7 @@ void Governor::OptimizeSliders(SlidersSetting & sliders_setting) const
 		{
 			food_sliders_setting = sliders_setting;
 			food_sliders_setting.m_deltaFood--;
-			TestSliderSettings(food_sliders_setting, food_slider_tests);
+			TestSliderSettings(food_sliders_setting, food_slider_tests, hasAllAdvances);
 			valueFood = food_slider_tests.GetValue();
 		}
 		else
@@ -1571,7 +1578,7 @@ void Governor::PlaceTileImprovements()
 
 			Cell const * cell = g_theWorld->GetCell(it.Pos());
 
-			if(!(cell->GetCityOwner() == unit))
+			if(cell->GetCityOwner() != unit)
 				continue;
 
 			if(cell->GetNumImprovements() > 0)
@@ -1677,7 +1684,7 @@ bool Governor::FindBestTileImprovement(const MapPoint &pos, TiGoal &goal, sint32
 	sint32 best_growth_improvement;
 	sint32 best_production_improvement;
 	sint32 best_gold_improvement;
-	GetBestFoodProdGoldImprovement(pos,best_growth_improvement, best_production_improvement, best_gold_improvement);
+	GetBestFoodProdGoldImprovement(pos, best_growth_improvement, best_production_improvement, best_gold_improvement);
 
 	goal.pos = pos;
 
@@ -2240,6 +2247,8 @@ void Governor::AssignPopulations()
 
 	g_player[m_playerId]->PreResourceCalculation();
 
+	bool hasAllAdvances = g_player[m_playerId]->m_advances->HasAllAdvances();
+
 	UnitDynamicArray * city_list = g_player[m_playerId]->GetAllCitiesList();
 	for (sint32 i = 0; i < city_list->Num(); i++) // city_list->Num() returns a sint32
 	{
@@ -2247,7 +2256,7 @@ void Governor::AssignPopulations()
 
 		if (city && city->GetUseGovernor() && (city->GetSizeIndex() > 0))
 		{
-			AssignPopulation(city);
+			AssignPopulation(city, hasAllAdvances);
 		}
 	}
 }
@@ -2326,7 +2335,7 @@ const StrategyRecord::PopAssignmentElement *Governor::GetMatchingPopAssignment(c
 //              or science is needed must still be added.
 //
 //----------------------------------------------------------------------------
-void Governor::AssignPopulation(CityData *city) const
+void Governor::AssignPopulation(CityData *city, bool hasAllAdvances) const
 {
 #if defined(_DEBUG) || defined(USE_LOGGING)
 	Timer t1;
@@ -2633,6 +2642,11 @@ void Governor::AssignPopulation(CityData *city) const
 	if(count > city->WorkerCount())
 	{
 		count = city->WorkerCount();
+	}
+
+	if(hasAllAdvances)
+	{
+		count = 0;
 	}
 
 	//////////////////////////////////

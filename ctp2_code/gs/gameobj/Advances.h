@@ -140,6 +140,7 @@ public:
 	uint8* CanOffer(Advances* otherCivAdvances, sint32 &num) const;
 
 	sint32 GetDiscovered() const { return m_discovered; }
+	bool HasAllAdvances() const;
 
 	sint32 GetMinPrerequisites(sint32 adv) const;
 	sint32 GetMinPrerequisites(sint32 adv, sint32 limit) const;

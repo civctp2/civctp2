@@ -1216,7 +1216,7 @@ void CtpAi::BeginTurn(const PLAYER_INDEX player)
 		Governor::SlidersSetting sliders_setting;
 
 		Governor::GetGovernor(player).OptimizeSliders(sliders_setting);
-		Governor::GetGovernor(player).SetSliders(sliders_setting, true);
+		Governor::GetGovernor(player).SetSliders(sliders_setting, true, player_ptr->m_advances->HasAllAdvances());
 
 		DPRINTF(k_DBG_AI, ("//  elapsed time = %d ms\n", (GetTickCount() - t1)));
 
@@ -1604,7 +1604,7 @@ void CtpAi::NetworkClientBeginTurn(PLAYER_INDEX player)
 		Governor::SlidersSetting sliders_setting;
 
 		Governor::GetGovernor(player).OptimizeSliders(sliders_setting);
-		Governor::GetGovernor(player).SetSliders(sliders_setting, true);
+		Governor::GetGovernor(player).SetSliders(sliders_setting, true, player_ptr->m_advances->HasAllAdvances());
 
 		DPRINTF(k_DBG_AI, (LOG_SECTION_START));
 		DPRINTF(k_DBG_AI, ("// COMPUTE GOODS TRADE ROUTES -- Turn %d\n", g_player[player]->m_current_round));
@@ -2253,10 +2253,8 @@ void CtpAi::SetResearch(const PLAYER_INDEX player)
 		}
 	}
 
-	if (advance_index < g_theAdvanceDB->NumRecords())
+	if (advance_index < g_theAdvanceDB->NumRecords() && player_ptr->m_advances->CanResearch(advance_index))
 	{
-		Assert(player_ptr->m_advances->CanResearch(advance_index));
-
 		if (player_ptr->m_advances->GetResearching() != advance_index)
 			player_ptr->SetResearching(advance_index);
 	}

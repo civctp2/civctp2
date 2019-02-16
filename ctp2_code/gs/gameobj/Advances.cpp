@@ -840,28 +840,29 @@ void Advances::ResetCanResearch(sint32 justGot)
 			m_turnsSinceOffered[i] = 0;
 		}
 	}
+}
 
+bool Advances::HasAllAdvances() const
+{
+	for(sint32 i = 0; i < m_size; i++)
+	{
+		if(m_canResearch[i])
+		{
+			return false;
+		}
+	}
+
+	return true;
 }
 
 void Advances::AddAlienLifeAdvance()
 {
-
-
-
-
-
-
-
-
-
-
 }
 
 uint8*
 Advances::CanAskFor(Advances* otherCivAdvances, sint32 &num) const
 {
-
-    Assert(0<m_size);
+	Assert(0<m_size);
 	uint8* askFor = new uint8[m_size];
 
 	num = 0;
@@ -882,8 +883,7 @@ Advances::CanAskFor(Advances* otherCivAdvances, sint32 &num) const
 uint8*
 Advances::CanOffer(Advances* otherCivAdvances, sint32 &num) const
 {
-
-    Assert(0<m_size);
+	Assert(0<m_size);
 	uint8* offer = new uint8[m_size];
 
 	num = 0;
@@ -901,17 +901,6 @@ Advances::CanOffer(Advances* otherCivAdvances, sint32 &num) const
 	return offer;
 }
 
-
-
-
-
-
-
-
-
-
-
-
 double Advances::GetPollutionSizeModifier(void) const
 {
 	double bonus = 0.0;
@@ -924,7 +913,7 @@ double Advances::GetPollutionSizeModifier(void) const
 		){
 			bonus += value;
 		}
-    }
+	}
 
 	return bonus;
 }
