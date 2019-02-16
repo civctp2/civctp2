@@ -84,7 +84,7 @@ RUN cd /ctp2 \
 FROM system as install
 
 RUN apt-get update && apt-get install -y --no-install-recommends \
-    libsdl1.2debian libsdl-mixer1.2 libsdl-image1.2 libgtk2.0-0 && \
+    libsdl1.2debian libsdl-mixer1.2 libsdl-image1.2 libgtk2.0-0 binutils && \
     apt-get clean && \
     rm -rf /var/lib/apt/lists/*
  
