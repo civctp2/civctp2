@@ -80,22 +80,22 @@ private:
 
 	PLAYER_INDEX m_owner;
 
-	sint32 m_size;
-	AdvanceType m_researching;
+	sint32       m_size;
+	AdvanceType  m_researching;
 
-	sint32	m_age;
+	sint32       m_age;
 
-	sint32 m_theLastAdvanceEnabledThisManyAdvances;
+	sint32       m_theLastAdvanceEnabledThisManyAdvances;
 
-	sint32 m_total_cost;
-	sint32 m_discovered;
+	sint32       m_total_cost;
+	sint32       m_discovered;
 
 //----------------------------------------------------------------------------
 // End of fixed variable list. Changing below this line is less dangerous.
 //----------------------------------------------------------------------------
 
-	uint8* m_hasAdvance;
-	uint8 *m_canResearch;
+	uint8  *m_hasAdvance;
+	uint8  *m_canResearch;
 	uint16 *m_turnsSinceOffered;
 
 	friend class NetInfo;
