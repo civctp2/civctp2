@@ -4777,6 +4777,14 @@ sint32 Governor::GetNeededBuildingType(const CityData *city, const BuildingBuild
 	{
 		sint32 const building_type = build_list_rec->GetBuildingIndex(i);
 
+		if(GaiaController::IsSatellite(building_type)
+		&& g_player[m_playerId]->GetGaiaController()->HasMaxSatsBuilt())
+			continue;
+
+		if(GaiaController::IsMainframeBuilding(building_type)
+		&& g_player[m_playerId]->GetGaiaController()->HasMinCoresBuilt())
+			continue;
+
 		if ( city->CanBuildBuilding(building_type) )
 			return building_type;
 	}
