@@ -9,8 +9,6 @@ RUN useradd -m $USERNAME && \
     usermod --shell /bin/bash $USERNAME && \
     usermod -aG video,audio $USERNAME
 
-ENV HOME /opt
-
 
 ################################################################################
 # builder
