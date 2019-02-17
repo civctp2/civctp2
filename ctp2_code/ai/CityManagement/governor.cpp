@@ -1615,6 +1615,7 @@ void Governor::PlaceTileImprovements()
 	{
 		sint32 const needed_pw =
 		       terrainutil_GetProductionCost(iter->type, iter->pos, 0);
+
 		if (needed_pw <= avail_pw)
 		{
 			g_gevManager->AddEvent(GEV_INSERT_Tail,
@@ -1724,16 +1725,15 @@ bool Governor::FindBestTileImprovement(const MapPoint &pos, TiGoal &goal, sint32
 		}
 	}
 
-	sint32 foodMissing;
+	sint32 foodMissing = 0;
 	bool moreFoodNeeded = city->NeedMoreFood(bonusFood, foodMissing, true);
-//	bool moreProdNeeded = city->NeedMoreProdOrGold(bonusProd, bonusGold, true);
+//	bool moreProdNeeded = city->NeedMoreProdOr(bonusCommerce, goldMissing, true);
 
 	if((moreFoodNeeded
 	|| (best_production_improvement < 0
 	&&  best_gold_improvement < 0))
 	&& (best_growth_improvement >= 0)
 	){
-
 		rec = g_theTerrainImprovementDB->Get(best_growth_improvement);
 		effect = terrainutil_GetTerrainEffect(rec, pos);
 
@@ -1762,6 +1762,7 @@ bool Governor::FindBestTileImprovement(const MapPoint &pos, TiGoal &goal, sint32
 		}
 	}
 	else if(moreFoodNeeded
+	&&     !g_theWorld->IsGood(pos)
 	&&      food_ter >= 0
 	){
 		if(g_theTerrainImprovementDB->Get(food_ter)->GetTerraformTerrainIndex(terrain))
@@ -1779,17 +1780,15 @@ bool Governor::FindBestTileImprovement(const MapPoint &pos, TiGoal &goal, sint32
 
 				if(growth_rank < 0.2)
 				{
-				    strategy.GetImproveSmallCityGrowthBonus(bonus);
+					strategy.GetImproveSmallCityGrowthBonus(bonus);
 					goal.utility +=  bonus * (1.0 - growth_rank);
 				}
-
 			}
 			else
 			{
 				goal.utility = 9999.0;
 			}
 		}
-
 	}
 //	else if(moreProdNeeded
 //	|| best_gold_improvement < 0
@@ -1859,7 +1858,57 @@ bool Governor::FindBestTileImprovement(const MapPoint &pos, TiGoal &goal, sint32
 			goal.utility += bonus;
 		}
 	}
-	else if(g_theWorld->IsGood(pos) == FALSE)
+	else if(city->GetNetCityGold() <= 0 // Improve even at zero
+	&&     !g_theWorld->IsGood(pos)
+	&&      gold_ter >= 0)
+	{
+		if(g_theTerrainImprovementDB->Get(gold_ter)->GetTerraformTerrainIndex(terrain))
+		{
+			bonusFood += g_theWorld->GetCell(pos)->GetFoodFromTerrain((sint8)terrain) - g_theWorld->GetCell(pos)->GetFoodFromTerrain();
+			bonusProduction += g_theWorld->GetCell(pos)->GetShieldsFromTerrain((sint8)terrain) - g_theWorld->GetCell(pos)->GetShieldsFromTerrain();
+			bonusCommerce += g_theWorld->GetCell(pos)->GetGoldFromTerrain((sint8)terrain) - g_theWorld->GetCell(pos)->GetGoldFromTerrain();
+
+			goal.type = gold_ter;
+
+			if(terrain_type != terrainutil_GetDead())
+			{
+				strategy.GetImproveProductionBonus(bonus);
+				goal.utility = bonus * terr_gold_rank;
+
+				if(production_rank > 0.8)
+				{
+					strategy.GetImproveLargeCityProductionBonus(bonus);
+					goal.utility += bonus * production_rank;
+				}
+			}
+			else
+			{
+				goal.utility = 9999.0;
+			}
+		}
+	}
+	// Moved almost to the end, so that if no terraform improvement is selected
+	// the dead tiles are removed.
+	else if(terrain_type == terrainutil_GetDead())
+	{
+		if(food_ter >= 0)
+		{
+			goal.type = food_ter;
+			goal.utility = 9999.0;
+		}
+		else if(prod_ter >= 0)
+		{
+			goal.type = prod_ter;
+			goal.utility = 9999.0;
+		}
+		else if(gold_ter >= 0)
+		{
+			goal.type = gold_ter;
+			goal.utility = 9999.0;
+		}
+	}
+	// Now at the end because otherwise it catches before the dead tiles
+	else if(!g_theWorld->IsGood(pos))
 	{ // Should be removed
 		ERR_BUILD_INST err;
 		if(terrain_type == terrainutil_GetGlacier()
@@ -1883,27 +1932,6 @@ bool Governor::FindBestTileImprovement(const MapPoint &pos, TiGoal &goal, sint32
 		}
 	}
 
-	// Moved to the end, so that if no terraform improvement selected
-	// the dead tiles are removed.
-	else if(terrain_type == terrainutil_GetDead())
-	{
-		if(food_ter >= 0)
-		{
-			goal.type = food_ter;
-			goal.utility = 9999.0;
-		}
-		else if(prod_ter >= 0)
-		{
-			goal.type = prod_ter;
-			goal.utility = 9999.0;
-		}
-		else if(gold_ter >= 0)
-		{
-			goal.type = gold_ter;
-			goal.utility = 9999.0;
-		}
-	}
-
 #if defined(CTP1_HAS_RISEN_FROM_THE_GRAVE)
 	// CTP1: utilisation depends on worker placement, and is either 0 or 1.
 #else
@@ -1916,13 +1944,17 @@ bool Governor::FindBestTileImprovement(const MapPoint &pos, TiGoal &goal, sint32
 		// Only decrease utility if the city has grown beyond the first ring.
 		if(citySize > unitutil_GetSmallCityMaxSize())
 		{
+			// Also cleanup if the city does not use the tile
+			if(terrain_type != terrainutil_GetDead())
+			{
 #if defined(NEW_RESOURCE_PROCESS)
-			sint32 ring = city->GetRing(pos);
-			goal.utility *= static_cast<double>(city->GetWorkingPeopleInRing(ring)) / static_cast<double>(city->GetRingSize(ring));
+				sint32 ring = city->GetRing(pos);
+				goal.utility *= static_cast<double>(city->GetWorkingPeopleInRing(ring)) / static_cast<double>(city->GetRingSize(ring));
 #else
-			sint32 const	sqDist	= MapPoint::GetSquaredDistance(city_owner.RetPos(), pos);
-			goal.utility *= city->GetUtilisationRatio(sqDist);
+				sint32 const sqDist = MapPoint::GetSquaredDistance(city_owner.RetPos(), pos);
+				goal.utility *= city->GetUtilisationRatio(sqDist);
 #endif
+			}
 		}
 		else
 		{
@@ -2763,8 +2795,8 @@ void Governor::ComputeMinMaxEntertainers(const CityData *city, sint32 & a_Min, s
 	if (per_pop_happiness <= 0)
 	{
 		DPRINTF(k_DBG_GAMESTATE,
-                ("Entertainer pop type: %i, happiness: %i\n", entertainer_type, per_pop_happiness)
-               );
+		        ("Entertainer pop type: %i, happiness: %i\n", entertainer_type, per_pop_happiness)
+		       );
 		Assert(0);
 		return;
 	}
