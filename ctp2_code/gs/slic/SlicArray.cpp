@@ -122,13 +122,20 @@ void SlicArray::Serialize(CivArchive &archive)
 		archive << m_arraySize;
 		archive.PutUINT8((uint8)m_sizeIsFixed);
 
-		if(m_varType == SLIC_SYM_STRUCT) {
+		if(m_varType == SLIC_SYM_STRUCT)
+		{
 			archive.PutUINT8(static_cast<uint8>(m_structTemplate->GetType()));
 		}
 
-		if(m_type == SS_TYPE_INT) {
-			archive.Store((uint8*)m_array, m_arraySize * sizeof(SlicStackValue));
-		} else {
+		if(m_type == SS_TYPE_INT)
+		{
+			for(i = 0; i < m_arraySize; i++)
+			{
+				archive.PutSINT32(m_array[i].m_int);
+			}
+		}
+		else
+		{
 			Assert(m_type == SS_TYPE_SYM);
 			for(i = 0; i < m_arraySize; i++) {
 				haveSym = m_array[i].m_sym != NULL;
@@ -155,9 +162,15 @@ void SlicArray::Serialize(CivArchive &archive)
 		m_array = new SlicStackValue[m_allocatedSize];
 		memset(m_array, 0, m_allocatedSize * sizeof(SlicStackValue));
 
-		if(m_type == SS_TYPE_INT) {
-			archive.Load((uint8 *)m_array, m_arraySize * sizeof(SlicStackValue));
-		} else {
+		if(m_type == SS_TYPE_INT)
+		{
+			for(i = 0; i < m_arraySize; i++)
+			{
+				m_array[i].m_int = archive.GetSINT32();
+			}
+		}
+		else
+		{
 			Assert(m_type == SS_TYPE_SYM);
 			for(i = 0; i < m_arraySize; i++) {
 				archive >> haveSym;
@@ -171,7 +184,6 @@ void SlicArray::Serialize(CivArchive &archive)
 
 BOOL SlicArray::Lookup(sint32 index, SS_TYPE &type, SlicStackValue &value)
 {
-
 	type = m_type;
 
 	if(index < 0 || index >= m_arraySize) {
@@ -210,7 +222,6 @@ BOOL SlicArray::Insert(sint32 untestedIndex, SS_TYPE type, SlicStackValue value)
 	switch(m_type) {
 		case SS_TYPE_VAR:
 		{
-
 			Assert(type == SS_TYPE_VAR || type == SS_TYPE_SYM);
 			if(type != SS_TYPE_VAR && type != SS_TYPE_SYM) {
 				return FALSE;

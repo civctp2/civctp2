@@ -523,7 +523,7 @@ void SpriteEditWindow::LoadSprite(char *name)
 	if(strstr(tbuffer, ".SPR")) // Obviously, this is crap on Windows, but for now it compiles, and is not a feature of the release version.
 #endif
 	{
-		printf("%s L%d: name= %s!\n", __FILE__, __LINE__, tbuffer);
+		fprintf(stderr, "%s L%d: name= %s!\n", __FILE__, __LINE__, tbuffer);
 		if (!FileExists(tbuffer))
 			return;
 
@@ -538,15 +538,15 @@ void SpriteEditWindow::LoadSprite(char *name)
 		if (!FileExists(tbuffer))
 			return;
 
-		printf("%s L%d: name= %s!\n", __FILE__, __LINE__, strupr(tbuffer));
+		fprintf(stderr, "%s L%d: name= %s!\n", __FILE__, __LINE__, strupr(tbuffer));
 		sint16 id = -1;
 		sscanf(strupr(tbuffer), "GG%d.TXT", &id);
-		printf("%s L%d: id= %d!\n", __FILE__, __LINE__, id);
+		fprintf(stderr, "%s L%d: id= %d!\n", __FILE__, __LINE__, id);
 		m_currentSprite->Parse(id, GROUPTYPE_GROUP); // GROUPTYPE is not used
 	}
 	else
 	{
-		printf("%s L%d: name= %s!\n", __FILE__, __LINE__, tbuffer);
+		fprintf(stderr, "%s L%d: name= %s!\n", __FILE__, __LINE__, tbuffer);
 		return;
 	}
 
@@ -622,7 +622,7 @@ void SpriteEditWindow::SaveSprite(char *name)
 	if(strstr(tbuffer, ".SPR"))
 #endif
 	{
-		printf("%s L%d: name= %s!\n", __FILE__, __LINE__, tbuffer); // Actually debug printing, should be go through the system
+		fprintf(stderr, "%s L%d: name= %s!\n", __FILE__, __LINE__, tbuffer); // Actually debug printing, should be go through the system
 		m_currentSprite->Save(name,k_SPRITEFILE_VERSION2,SPRDATA_LZW1);
 	}
 #if defined(LINUX)
@@ -631,7 +631,7 @@ void SpriteEditWindow::SaveSprite(char *name)
 	else if(strstr(tbuffer, ".TXT"))
 #endif
 	{
-		printf("%s L%d: name= %s!\n", __FILE__, __LINE__, tbuffer); // Actually debug printing, should be go through the system
+		fprintf(stderr, "%s L%d: name= %s!\n", __FILE__, __LINE__, tbuffer); // Actually debug printing, should be go through the system
 		m_currentSprite->ExportScript(name);
 	}
 }

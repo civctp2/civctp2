@@ -39,6 +39,10 @@
 #define k_TICKS_PER_GENERIC_FRAME	100
 #define k_TICKS_PER_SCROLL_FRAME	50
 
+#ifdef __AUI_USE_SDL__
+union SDL_Event;
+#endif
+
 class aui_Surface;
 
 int ui_Initialize(void);
@@ -70,5 +74,9 @@ int radar_Initialize(void);
 void DoFinalCleanup(int exitCode = -1);
 
 BOOL ExitGame(void);
+
+#ifdef __AUI_USE_SDL__
+int SDLMessageHandler(const SDL_Event &event);
+#endif
 
 #endif
