@@ -246,14 +246,14 @@ void reload_audio(int channel)
 
 			m_moviechannel= Mix_PlayChannel(channel, &achunk , 0);
 			if(m_moviechannel < 0)
-				printf("%s L%d: Error initializing SDL_mixer: %s\n", __FILE__, __LINE__, Mix_GetError());
+				fprintf(stderr, "%s L%d: Error initializing SDL_mixer: %s\n", __FILE__, __LINE__, Mix_GetError());
 			//else
 			//    Mix_ChannelFinished(reload_audio);
 			SDL_ffmpegReleaseAudio(film, aframe, achunk.alen);
 		}
 	}
 	else
-		printf("%s L%d: Not a movie audio channel!\n", __FILE__, __LINE__);
+		fprintf(stderr, "%s L%d: Not a movie audio channel!\n", __FILE__, __LINE__);
 
 	return;
 }
@@ -437,7 +437,7 @@ AUI_ERRCODE aui_Movie::Open(
 			int w, h;
 			// we get the size from our active video stream
 			if(SDL_ffmpegGetVideoSize(film, &w, &h))
-				printf("%s L%d: Could not determin movie size!\n", __FILE__, __LINE__);
+				fprintf(stderr, "%s L%d: Could not determin movie size!\n", __FILE__, __LINE__);
 			else
 			{
 				m_rect.right = m_rect.left + w;
@@ -446,7 +446,7 @@ AUI_ERRCODE aui_Movie::Open(
 		}
 		else
 		{
-			printf("%s L%d: Could not open %s!\n", __FILE__, __LINE__, m_filename);
+			fprintf(stderr, "%s L%d: Could not open %s!\n", __FILE__, __LINE__, m_filename);
 		}
 #endif
 		m_isOpen = TRUE; //even if open failed, loops otherwise
@@ -524,8 +524,8 @@ AUI_ERRCODE aui_Movie::Play( void )
 		snprintf(cmd, sizeof(cmd), "mplayer -vo xv -wid 0x%lx /media/cdrom/Setup/data/Max/ctp2_data/default/videos/%s", info.info.x11.window, m_filename);
 		else
 		snprintf(cmd, sizeof(cmd), "mplayer -vo sdl /media/cdrom/Setup/data/Max/ctp2_data/default/videos/%s", m_filename);
-		printf("%s L%d: Trying to execute: %s!\n", __FILE__, __LINE__, cmd);
-		printf("%s L%d: The path to the movies is hard coded! Solve it! ;)\n", __FILE__, __LINE__);
+		fprintf(stderr, "%s L%d: Trying to execute: %s!\n", __FILE__, __LINE__, cmd);
+		fprintf(stderr, "%s L%d: The path to the movies is hard coded! Solve it! ;)\n", __FILE__, __LINE__);
 		g_soundManager->ReleaseSoundDriver();
 		system(cmd);
 		g_soundManager->ReacquireSoundDriver();//no function with SDL, see soundmanager.cpp
@@ -538,7 +538,7 @@ AUI_ERRCODE aui_Movie::Play( void )
 			Mix_HookMusic(audioCallback, film);
 
 		//	if(Mix_OpenAudio(48000, AUDIO_S16SYS, 2, 512)==-1)
-		//		printf("%s L%d: Mix_OpenAudio: %s\n", __FILE__, __LINE__, Mix_GetError());
+		//		fprintf(stderr, "%s L%d: Mix_OpenAudio: %s\n", __FILE__, __LINE__, Mix_GetError());
 
 			SDL_ffmpegStartDecoding(film); //returns always 0!
 			//SDL_ffmpegPause(film, 0);//unpause film sdl_ffmpeg <= 0.7.1
@@ -561,7 +561,7 @@ AUI_ERRCODE aui_Movie::Play( void )
 			Mix_VolumeChunk(&achunk, MIX_MAX_VOLUME);
 			m_moviechannel= Mix_PlayChannel(-1, &achunk , 0);
 			if(m_moviechannel < 0)
-				printf("%s L%d: Error initializing SDL_mixer: %s\n", __FILE__, __LINE__, Mix_GetError());
+				fprintf(stderr, "%s L%d: Error initializing SDL_mixer: %s\n", __FILE__, __LINE__, Mix_GetError());
 			else
 				Mix_ChannelFinished(reload_audio);
 			SDL_ffmpegReleaseAudio(film, aframe, achunk.alen);
@@ -637,7 +637,7 @@ AUI_ERRCODE aui_Movie::PlayOnScreenMovie( void )
 	SetWindowLong( g_ui->TheHWND(), GWL_WNDPROC, (LONG)m_windowProc );
 	m_windowProc = NULL;
 #else
-	printf("%s L%d: SDL mouse code is missing here!\n", __FILE__, __LINE__);
+	fprintf(stderr, "%s L%d: SDL mouse code is missing here!\n", __FILE__, __LINE__);
 	//m_onScreenMovie = this;
 
 	while(!m_isFinished && m_isPlaying)
@@ -664,7 +664,7 @@ AUI_ERRCODE aui_Movie::Stop( void )
 		Assert(err == 0);
 		if(err) return AUI_ERRCODE_HACK;
 #elif defined(USE_SDL_FFMPEG)
-		printf("%s L%d: Stopping movie!\n", __FILE__, __LINE__);
+		fprintf(stderr, "%s L%d: Stopping movie!\n", __FILE__, __LINE__);
 		if(film)
 		{
 			//SDL_ffmpegPause(film, 1);//pause film film sdl_ffmpeg <= 0.7.1
@@ -838,7 +838,7 @@ AUI_ERRCODE aui_Movie::Process( void )
 
 				if(frame)
 				{
-					//printf("%s L%d: Got frame!\n", __FILE__, __LINE__);
+					//fprintf(stderr, "%s L%d: Got frame!\n", __FILE__, __LINE__);
 
 					// we got a frame, so we better show this one
 					SDL_BlitSurface(frame->buffer, 0, sdl_surf->DDS(), &sdl_rect);
@@ -857,7 +857,7 @@ AUI_ERRCODE aui_Movie::Process( void )
 
 			if(m_isFinished)
 			{
-				//printf("%s L%d: Done displaying movie!\n", __FILE__, __LINE__);
+				//fprintf(stderr, "%s L%d: Done displaying movie!\n", __FILE__, __LINE__);
 				m_isPlaying = FALSE;
 			}
 	}

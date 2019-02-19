@@ -223,14 +223,16 @@ AUI_ERRCODE aui_TextField::InitCommon(
 	// select nothing, move insertion point to end
 	m_selStart = m_selEnd = strlen(m_Text);
 
-	m_Font = g_ui->LoadBitmapFont(m_desiredFont);
+	// This supposed to set the font size as far as I understand it. However,
+	// it doesn't do it without SetPointSize. At least it fixes an assert.
+	m_Font = g_ui->LoadBitmapFont(m_desiredFont, k_AUI_TEXTBASE_DEFAULT_FONTSIZE);
 	Assert(m_Font);
 	// FIXME: HACK: I'm setting the font size here because it doesn't seem to be
 	// being set anywhere else, which was causing textboxes to display no text.
 	// With this fix they do display text, but it's usually of the wrong size.
 	// More needs to be done on this problem
 
-	//m_Font->SetMaxHeight(m_textHeight); //adjusting font to boxhight does not work
+	// m_Font->SetMaxHeight(m_textHeight); //adjusting font to boxhight does not work
 	m_Font->SetPointSize(k_AUI_TEXTBASE_DEFAULT_FONTSIZE);
 	if (fontheight)
 		m_textHeight = fontheight;
@@ -367,7 +369,7 @@ sint32 aui_TextField::SetMaxFieldLen( sint32 maxFieldLen )
 	delete[] m_Text;
 	m_Text = newText;
 #else
-	printf("%s L%d: SetMaxFieldLen doing nothing here!\n", __FILE__, __LINE__);
+	fprintf(stderr, "%s L%d: SetMaxFieldLen doing nothing here!\n", __FILE__, __LINE__);
 #endif
 #endif
 
@@ -714,7 +716,7 @@ bool aui_TextField::HandleKey(uint32 wParam)
 				break;
 			// No tags allowed, they are for "tabbing focus" between controls.
 			case VK_TAB:
-				printf("%s L%d: Tab ignored in TextField!\n", __FILE__, __LINE__);
+				fprintf(stderr, "%s L%d: Tab ignored in TextField!\n", __FILE__, __LINE__);
 				return false;
 			case VK_BACK:
 			{
@@ -725,7 +727,7 @@ bool aui_TextField::HandleKey(uint32 wParam)
 					break;
 			}
 			case ' ':
-			// printf("%s L%d: space!\n", __FILE__, __LINE__);
+			// fprintf(stderr, "%s L%d: space!\n", __FILE__, __LINE__);
 			default:
 			{ // append char to char array, apparently easiest with std::string
 

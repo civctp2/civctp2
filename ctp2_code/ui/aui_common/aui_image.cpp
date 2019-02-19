@@ -310,19 +310,19 @@ AUI_ERRCODE aui_BmpImageFormat::Load(MBCHAR const * filename, aui_Image *image )
 
 	return retcode;
 #elif defined(__AUI_USE_SDL__)
-        printf("%s L%d: image %s!\n", __FILE__, __LINE__, filename); //is this ever called?
+        fprintf(stderr, "%s L%d: image %s!\n", __FILE__, __LINE__, filename); //is this ever called?
 	assert(0);
 	SDL_Surface *bmp = SDL_LoadBMP(filename);
 	SDL_Surface *surf = NULL;
 	SDL_PixelFormat fmt = { 0 };
 
-        printf("%s L%d: image %s!\n", __FILE__, __LINE__, filename);
+        fprintf(stderr, "%s L%d: image %s!\n", __FILE__, __LINE__, filename);
         if (g_ui->Primary()->BitsPerPixel() != 16)
-            printf("%s L%d: bpp %d", __FILE__, __LINE__,  g_ui->Primary()->BitsPerPixel());
+            fprintf(stderr, "%s L%d: bpp %d", __FILE__, __LINE__,  g_ui->Primary()->BitsPerPixel());
         if (bmp->format->Gmask >> bmp->format->Gshift == 0x3F)
-            printf("%s L%d: 565 image!\n", __FILE__, __LINE__);
+            fprintf(stderr, "%s L%d: 565 image!\n", __FILE__, __LINE__);
         if (bmp->format->Gmask >> bmp->format->Gshift == 0x1F)
-            printf("%s L%d: 555 image!\n", __FILE__, __LINE__);
+            fprintf(stderr, "%s L%d: 555 image!\n", __FILE__, __LINE__);
 	if (NULL == surf) {
 		surf = SDL_DisplayFormat(bmp);
 	}
