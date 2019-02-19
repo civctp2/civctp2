@@ -1696,7 +1696,7 @@ int WINAPI CivMain(HINSTANCE hInstance, HINSTANCE hPrevInstance, PSTR szCmdLine,
 	for (gDone = FALSE; !gDone; )
 	{
 		g_civApp->Process();
-                //printf("%s L%d: g_civApp->Process() done!\n", __FILE__, __LINE__);
+                //fprintf(stderr, "%s L%d: g_civApp->Process() done!\n", __FILE__, __LINE__);
 
 #ifdef __AUI_USE_SDL__
 		SDL_Event event;
@@ -1706,7 +1706,7 @@ int WINAPI CivMain(HINSTANCE hInstance, HINSTANCE hPrevInstance, PSTR szCmdLine,
                             ~(SDL_EVENTMASK(SDL_MOUSEMOTION) | SDL_EVENTMASK(SDL_MOUSEBUTTONDOWN) | SDL_EVENTMASK(SDL_MOUSEBUTTONUP)));
 			if (0 > n) {
                             //fprintf(stderr, "[CivMain] PeepEvents failed: %s\n", SDL_GetError());
-                            printf("%s L%d: SDL_PeepEvents: Still events stored! Error?: %s\n", __FILE__, __LINE__, SDL_GetError());
+                            fprintf(stderr, "%s L%d: SDL_PeepEvents: Still events stored! Error?: %s\n", __FILE__, __LINE__, SDL_GetError());
 
 				break;
 			}

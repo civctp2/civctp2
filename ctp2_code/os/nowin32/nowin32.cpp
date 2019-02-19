@@ -110,7 +110,7 @@ void _splitpath( const char *path,
     else
       strcpy(ext, dot + 1); // expecting pre-allocted array by caller
 }
-  // printf("%s L%d: %s %s %s %s!\n", __FILE__, __LINE__, drive, dir, fname, ext);
+  // fprintf(stderr, "%s L%d: %s %s %s %s!\n", __FILE__, __LINE__, drive, dir, fname, ext);
 }
 
 uint32 GetTickCount()

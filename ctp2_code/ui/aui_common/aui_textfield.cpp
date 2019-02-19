@@ -369,7 +369,7 @@ sint32 aui_TextField::SetMaxFieldLen( sint32 maxFieldLen )
 	delete[] m_Text;
 	m_Text = newText;
 #else
-	printf("%s L%d: SetMaxFieldLen doing nothing here!\n", __FILE__, __LINE__);
+	fprintf(stderr, "%s L%d: SetMaxFieldLen doing nothing here!\n", __FILE__, __LINE__);
 #endif
 #endif
 
@@ -716,7 +716,7 @@ bool aui_TextField::HandleKey(uint32 wParam)
 				break;
 			// No tags allowed, they are for "tabbing focus" between controls.
 			case VK_TAB:
-				printf("%s L%d: Tab ignored in TextField!\n", __FILE__, __LINE__);
+				fprintf(stderr, "%s L%d: Tab ignored in TextField!\n", __FILE__, __LINE__);
 				return false;
 			case VK_BACK:
 			{
@@ -727,7 +727,7 @@ bool aui_TextField::HandleKey(uint32 wParam)
 					break;
 			}
 			case ' ':
-			// printf("%s L%d: space!\n", __FILE__, __LINE__);
+			// fprintf(stderr, "%s L%d: space!\n", __FILE__, __LINE__);
 			default:
 			{ // append char to char array, apparently easiest with std::string
 
