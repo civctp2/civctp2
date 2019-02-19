@@ -61,11 +61,11 @@ aui_SDLSurface::aui_SDLSurface(
         //but save is save...
 	if ((fmt->Rmask >> fmt->Rshift == 0x1F) && (fmt->Gmask >> fmt->Gshift == 0x3F) && (fmt->Bmask >> fmt->Bshift == 0x1F)) {
             m_pixelFormat = AUI_SURFACE_PIXELFORMAT_565;
-            //printf("%s L%d: AUI_SURFACE_PIXELFORMAT_565\n", __FILE__, __LINE__);
+            //fprintf(stderr, "%s L%d: AUI_SURFACE_PIXELFORMAT_565\n", __FILE__, __LINE__);
             }
         if ((fmt->Rmask >> fmt->Rshift == 0x1F) && (fmt->Gmask >> fmt->Gshift == 0x1F) && (fmt->Bmask >> fmt->Bshift == 0x1F)) {
             m_pixelFormat = AUI_SURFACE_PIXELFORMAT_555;
-            //printf("%s L%d: AUI_SURFACE_PIXELFORMAT_555\n", __FILE__, __LINE__);
+            //fprintf(stderr, "%s L%d: AUI_SURFACE_PIXELFORMAT_555\n", __FILE__, __LINE__);
             }
 
 	m_pitch = m_lpdds->pitch;
@@ -98,13 +98,13 @@ aui_SDLSurface::~aui_SDLSurface()
 uint32 aui_SDLSurface::SetChromaKey( uint32 color ) {
     int hr = SDL_SetColorKey(m_lpdds, SDL_SRCCOLORKEY, /*SDL_MapRGB(m_lpdds->format, color>>16, (color>>8)&0xff, color&0xff)*/color); //|SDL_RLEACCEL ?
     //hr == 0 if succeded!
-    //printf("%s L%d: SDL_SRCCOLORKEY set to %#X\n", __FILE__, __LINE__, color);
+    //fprintf(stderr, "%s L%d: SDL_SRCCOLORKEY set to %#X\n", __FILE__, __LINE__, color);
 
     if ( hr == 0 )
         return aui_Surface::SetChromaKey( color ); //sets aui_Surface.m_chromaKey and returns last value!
 
     //return AUI_ERRCODE_OK;  //this is not sensible, should retrun last color key!?!
-    //printf("%s L%d: SDL_SRCCOLORKEY setting failed!\n", __FILE__, __LINE__);
+    //fprintf(stderr, "%s L%d: SDL_SRCCOLORKEY setting failed!\n", __FILE__, __LINE__);
     return (uint32)-1; //better?
     }
 
@@ -123,9 +123,9 @@ AUI_ERRCODE aui_SDLSurface::Lock( RECT *rect, LPVOID *buffer, DWORD flags ){
 
     // must lock the mutex first!
     SDL_LockMutex(m_bltMutex);
-    //printf("%s L%d: Locking mutex!\n", __FILE__, __LINE__);
+    //fprintf(stderr, "%s L%d: Locking mutex!\n", __FILE__, __LINE__);
     if (SDL_MUSTLOCK(m_lpdds)) {
-//        printf("%s L%d: Locking surface! Check this!\n", __FILE__, __LINE__);
+//        fprintf(stderr, "%s L%d: Locking surface! Check this!\n", __FILE__, __LINE__);
         if (SDL_LockSurface(m_lpdds) < 0) {
             fprintf(stderr, "Cannot lock surface: %s\n", SDL_GetError());
             return AUI_ERRCODE_SURFACELOCKFAILED;

@@ -49,8 +49,8 @@ AUI_ERRCODE aui_SDLBlitter::Blt16To16(
             //ChromaKey and SDL_SRCCOLORKEY  should be set with aui_SDLSurface::SetChromaKey on
             //the SDL-surface already but if SDL_SRCCOLORKEY is missing we set it here:
             if (SDL_SetColorKey(sdlSrc->DDS(), SDL_SRCCOLORKEY, sdlSrc->GetChromaKey())) //sdlSrc->DDS()->format->colorkey))
-                printf("%s L%d: SDL_SRCCOLORKEY setting failed! key %#X\n", __FILE__, __LINE__, sdlSrc->DDS()->format->colorkey);
-            //else printf("%s L%d: SDL_SRCCOLORKEY setting succeded!\n", __FILE__, __LINE__);
+                fprintf(stderr, "%s L%d: SDL_SRCCOLORKEY setting failed! key %#X\n", __FILE__, __LINE__, sdlSrc->DDS()->format->colorkey);
+            //else fprintf(stderr, "%s L%d: SDL_SRCCOLORKEY setting succeded!\n", __FILE__, __LINE__);
             }
 */  //there seems no need for all this
         if (SDL_BlitSurface(sdlSrc->DDS(), &ssrc, sdlDest->DDS(), &sdst) < 0) {
@@ -277,23 +277,23 @@ AUI_ERRCODE aui_SDLBlitter::StretchBlt16To16(
 
         if (ssrc.w == sdst.w) {
             if (ssrc.h == sdst.h) {
-                //printf("%s L%d: Using normal blit!\n", __FILE__, __LINE__);
+                //fprintf(stderr, "%s L%d: Using normal blit!\n", __FILE__, __LINE__);
                 if (SDL_BlitSurface(sdlSrc->DDS(), &ssrc, sdlDest->DDS(), &sdst) < 0) {
                     fprintf(stderr, "StrechBlt failed: %s\n", SDL_GetError());
                     retcode = AUI_ERRCODE_BLTFAILED;
                     }
                 }
             else {
-                //printf("%s L%d: Using V blit!\n", __FILE__, __LINE__);
+                //fprintf(stderr, "%s L%d: Using V blit!\n", __FILE__, __LINE__);
                 retcode = SimpleVStretch(sdlSrc->DDS(), &ssrc, sdlDest->DDS(), &sdst);
                 }
             }
         else if (ssrc.h == sdst.h) {
-            //printf("%s L%d: Using H blit!\n", __FILE__, __LINE__);
+            //fprintf(stderr, "%s L%d: Using H blit!\n", __FILE__, __LINE__);
             retcode = SimpleHStretch(sdlSrc->DDS(), &ssrc, sdlDest->DDS(), &sdst);
             }
         else {
-            //printf("%s L%d: Using HV blit!\n", __FILE__, __LINE__);
+            //fprintf(stderr, "%s L%d: Using HV blit!\n", __FILE__, __LINE__);
             retcode = SimpleHVStretch(sdlSrc->DDS(), &ssrc, sdlDest->DDS(), &sdst);
             }
 
