@@ -273,9 +273,9 @@ MBCHAR *CivPaths::MakeSavePath(MBCHAR *fullPath, MBCHAR *s1, MBCHAR *s2, MBCHAR 
 		sprintf(tempPath, "%s%s%s%s%s", s1, FILE_SEP, s2, FILE_SEP, s3);
 
 		s = _fullpath(fullPath, tempPath, _MAX_PATH);
-		Assert(s != NULL);
 
 #ifdef WIN32
+		Assert(s != NULL);
 		r = _stat(s, &tmpstat);
 #else
 		r = stat(CI_FixName(s), &tmpstat);
