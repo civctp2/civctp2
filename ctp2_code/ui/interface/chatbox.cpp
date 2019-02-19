@@ -71,6 +71,11 @@
 #include "gfx_options.h"
 #include "GameEventManager.h"
 
+#if defined(__AUI_USE_SDL__)
+#include "SDL.h"
+#include "civ3_main.h"
+#endif
+
 #if defined (_DEBUG) || defined(USE_LOGGING)
 #include "ctpaidebug.h"
 #endif
@@ -161,7 +166,8 @@ void ChatBox::AddLine(sint32 playerNum, MBCHAR *text)
 	aui_Ranger *ranger = m_chatWindow->GetTextBox()->GetRanger();
 	ranger->SetValue(ranger->GetValueX(), ranger->GetMaximumY());
 
-	if (g_c3ui->GetWindow(m_chatWindow->Id()) == NULL) {
+	if (g_c3ui->GetWindow(m_chatWindow->Id()) == NULL)
+	{
 		g_soundManager->AddSound(SOUNDTYPE_SFX, (uint32)0,
 									gamesounds_GetGameSoundID(GAMESOUNDS_CHAT_MESSAGE),
 									0,
@@ -290,11 +296,10 @@ BOOL ChatWindow::CheckForEasterEggs(MBCHAR *s)
 	else if (!strncmp(s, "/rnd", 4) && !g_network.IsActive())
 	{
 		extern BOOL gDone;
-#if defined(__AUI_USE_SDL__) // In other cases, replaced by SDL
-#warning ChatWindow command /rnd is not implemented on Linux
-// Implement below and then remove the guards here
-#else
+
+#if !defined(__AUI_USE_SDL__)
 		MSG	msg;
+#endif
 
 		MBCHAR * temp = s+4;
 		while (isspace(*temp))
@@ -305,7 +310,7 @@ BOOL ChatWindow::CheckForEasterEggs(MBCHAR *s)
 		if (g_selected_item != NULL)
 		{
 			char buf[1024];
-			sprintf(buf, "The games runs for %d turns automatically", n);
+			sprintf(buf, "The games runs for %d turns automatically.\nPress ESC to stop.", n);
 			g_chatBox->AddLine(g_selected_item->GetCurPlayer(), buf);
 		}
 
@@ -321,8 +326,21 @@ BOOL ChatWindow::CheckForEasterEggs(MBCHAR *s)
 					g_civApp->Process();
 
 #if defined(__AUI_USE_SDL__)
-				// Implement SDL code here
-				// Remove outer preprocessor derectives, when done
+				SDL_Event event;
+				while(SDL_PollEvent(&event) && !g_letUIProcess)
+				{
+					if(event.type == SDL_QUIT)
+					{
+						gDone = TRUE;
+					}
+
+					if(event.type == SDL_KEYDOWN && event.key.keysym.sym == SDLK_ESCAPE)
+					{
+						i = n;
+					}
+
+					SDLMessageHandler(event);
+				}
 #else
 				// Make it abort if you press for instance the ESC key
 				// Windows code start
@@ -333,18 +351,18 @@ BOOL ChatWindow::CheckForEasterEggs(MBCHAR *s)
 
 					TranslateMessage(&msg);
 
-					if (msg.message == WM_CHAR) {
-						if ((MBCHAR)msg.wParam == 0x1B)
+					if (msg.message == WM_CHAR)
+					{
+						if ((MBCHAR)msg.wParam == 0x1B) // The ESC key
 							i = n;
 					}
 
 					DispatchMessage(&msg);
 				}
-				// Windoes code end
+				// Windows code end
 #endif
 
 				g_letUIProcess = FALSE;
-
 			}
 			while
 			     (
@@ -353,7 +371,6 @@ BOOL ChatWindow::CheckForEasterEggs(MBCHAR *s)
 			      && !gDone
 			     );
 		}
-#endif
 
 		return TRUE;
 	}
@@ -498,12 +515,9 @@ BOOL ChatWindow::CheckForEasterEggs(MBCHAR *s)
 			if (player >= 0 && player < k_MAX_PLAYERS && g_player[player])
 			{
 				g_player[player]->m_playerType = PLAYER_TYPE_ROBOT;
-				if (g_selected_item != NULL)
-				{
-					char buf[1024];
-					sprintf(buf, "Player %d is a robot", player);
-					g_chatBox->AddLine(g_selected_item->GetCurPlayer(), buf);
-				}
+				char buf[1024];
+				sprintf(buf, "Player %d is a robot", player);
+				g_chatBox->AddLine(player, buf);
 			}
 			else
 			{
@@ -541,12 +555,9 @@ BOOL ChatWindow::CheckForEasterEggs(MBCHAR *s)
 				if (player >= 0 && player < k_MAX_PLAYERS && g_player[player])
 				{
 					g_player[player]->m_playerType = PLAYER_TYPE_HUMAN;
-					if (g_selected_item != NULL)
-					{
-						char buf[1024];
-						sprintf(buf, "Player %d is now human", player);
-						g_chatBox->AddLine(g_selected_item->GetCurPlayer(), buf);
-					}
+					char buf[1024];
+					sprintf(buf, "Player %d is now human", player);
+					g_chatBox->AddLine(player, buf);
 				}
 				else
 				{
@@ -561,8 +572,8 @@ BOOL ChatWindow::CheckForEasterEggs(MBCHAR *s)
 		}
 	}
 #if 0
-    else if (!strncmp(s, "/demo", 5) && !g_network.IsActive())
-    {
+	else if (!strncmp(s, "/demo", 5) && !g_network.IsActive())
+	{
 		sint32 i, n;
 		extern BOOL gDone;
 		MSG	msg;
@@ -573,20 +584,23 @@ BOOL ChatWindow::CheckForEasterEggs(MBCHAR *s)
 
 		n = atoi(temp);
 
-		for (i=0; i<(n) && !gDone; i++) {
+		for (i=0; i<(n) && !gDone; i++)
+		{
 			g_turn->NextRound();
 			do {
 				g_controlPanel->Idle();
 				if (g_civApp)
 					g_civApp->Process();
 
-				while (PeekMessage(&msg, gHwnd, 0, 0, PM_REMOVE) ) {
+				while (PeekMessage(&msg, gHwnd, 0, 0, PM_REMOVE) )
+				{
 					if (msg.message == WM_QUIT)
 						gDone = TRUE;
 
 					TranslateMessage(&msg);
 
-					if (msg.message == WM_CHAR) {
+					if (msg.message == WM_CHAR)
+					{
 						if ((MBCHAR)msg.wParam == 0x1B)
 							i = n;
 					}
@@ -689,11 +703,20 @@ BOOL ChatWindow::CheckForEasterEggs(MBCHAR *s)
 
 			g_graphicsOptions->CellTextOn(player);
 
-			if (g_selected_item != NULL)
+			if(player >= 0 && player < k_MAX_PLAYERS && g_player[player])
 			{
 				char buf[1024];
 				sprintf(buf, "Settle cell values are shown for player %d on the map", player);
 				g_chatBox->AddLine(player, buf);
+			}
+			else
+			{
+				if(g_selected_item != NULL)
+				{
+					char buf[1024];
+					sprintf(buf, "Player %d does not exist", player);
+					g_chatBox->AddLine(g_selected_item->GetCurPlayer(), buf);
+				}
 			}
 		}
 		else
@@ -749,12 +772,9 @@ BOOL ChatWindow::CheckForEasterEggs(MBCHAR *s)
 				                       GEA_End);
 				g_gevManager->Resume();
 
-				if (g_selected_item != NULL)
-				{
-					char buf[1024];
-					sprintf(buf, "Begin scheduler for player %d", player);
-					g_chatBox->AddLine(g_selected_item->GetCurPlayer(), buf);
-				}
+				char buf[1024];
+				sprintf(buf, "Begin scheduler for player %d", player);
+				g_chatBox->AddLine(player, buf);
 			}
 			else
 			{
@@ -791,12 +811,9 @@ BOOL ChatWindow::CheckForEasterEggs(MBCHAR *s)
 
 			CtpAiDebug::SetDebugPlayer(player);
 
-			if (g_selected_item != NULL)
-			{
-				char buf[1024];
-				sprintf(buf, "Player %d is filling the log for debugging", player);
-				g_chatBox->AddLine(g_selected_item->GetCurPlayer(), buf);
-			}
+			char buf[1024];
+			sprintf(buf, "Player %d is filling the log for debugging", player);
+			g_chatBox->AddLine(player, buf);
 		}
 		else
 		{
