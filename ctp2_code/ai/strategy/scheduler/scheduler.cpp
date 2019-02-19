@@ -384,6 +384,8 @@ void Scheduler::Process_Agent_Changes()
 			Add_New_Matches_For_Agent(theAgent);
 		}
 
+		theAgent->Get_Army()->SetAICanAddOrders();
+
 		agent_ptr_iter++;
 	}
 
