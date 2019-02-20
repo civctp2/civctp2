@@ -375,7 +375,7 @@ AUI_ERRCODE C3Blitter::Blt16To16FastMMX(
 					}
 #else // _MSCVER
 //					assert(0);
-                    //printf("%s L%d: Using Blt16To16FastMMX!\n", __FILE__, __LINE__);
+                    //fprintf(stderr, "%s L%d: Using Blt16To16FastMMX!\n", __FILE__, __LINE__);
                     __asm__ (
                         //"movl $scanWidth, %eax       \n\t"
                         //"movl $srcBuf, %esi          \n\t"
@@ -659,7 +659,7 @@ bool C3Blitter::CheckMMXTechnology(void)
             );
         }
     catch(...) {
-        printf("%s L%d: MMX-Test FAILED!\n", __FILE__, __LINE__);
+        fprintf(stderr, "%s L%d: MMX-Test FAILED!\n", __FILE__, __LINE__);
         retval = false;
         }
 
@@ -670,12 +670,12 @@ bool C3Blitter::CheckMMXTechnology(void)
     {
     try { __asm__ (" emms            \n\t"); }
     catch(...) {
-        printf("%s L%d: MMX-Test FAILED!\n", __FILE__, __LINE__);
+        fprintf(stderr, "%s L%d: MMX-Test FAILED!\n", __FILE__, __LINE__);
         retval = false;
         }
     }
 
-    printf("%s L%d: MMX-Test succeded!\n", __FILE__, __LINE__);
+    fprintf(stderr, "%s L%d: MMX-Test succeded!\n", __FILE__, __LINE__);
 #endif // _MSC_VER
 
     return retval;

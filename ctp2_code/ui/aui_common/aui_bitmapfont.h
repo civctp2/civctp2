@@ -163,8 +163,11 @@ public:
 		sint16		advance;
 	};
 
+
 	GlyphInfo *GetGlyphInfo( MBCHAR c );
+#if defined(_JAPANESE)
 	GlyphInfo *GetGlyphInfo( const MBCHAR *c );
+#endif
 
 	AUI_ERRCODE RenderLine(
 		aui_Surface *surface,

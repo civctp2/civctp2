@@ -72,6 +72,7 @@
 #include "GameEventManager.h"
 #include "pollution.h"
 
+
 #if defined(__AUI_USE_SDL__)
 #include "SDL.h"
 #include "civ3_main.h"

@@ -50,7 +50,7 @@ void HandleMouseWheel(sint16 delta)
 		}
 	}
 	else
-		printf("%s L%d: Mouse wheel for SDL not handled!\n", __FILE__, __LINE__);
+		fprintf(stderr, "%s L%d: Mouse wheel for SDL not handled!\n", __FILE__, __LINE__);
 }
 
 AUI_ERRCODE

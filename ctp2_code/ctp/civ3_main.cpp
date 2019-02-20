@@ -257,10 +257,6 @@ CivApp                              *g_civApp = NULL;
 
 LRESULT CALLBACK WndProc(HWND hwnd, UINT iMsg, WPARAM wParam, LPARAM lParam);
 
-#ifdef __AUI_USE_SDL__
-int SDLMessageHandler(const SDL_Event &event);
-#endif
-
 #if defined(__GNUC__)
 int CivMain(int argc, char **argv);
 #else
@@ -1037,11 +1033,13 @@ void AtExitProc(void)
 	printf("At exit.\n");
 
 #if defined(USE_SDL)
+
 # if 0
 	// What about this?
 	Mix_CloseAudio();
 # endif
-	g_mouseShouldTerminateThread = TRUE;
+
+g_mouseShouldTerminateThread = TRUE;
 
 	// Destroy the mutex used for the secondary keyboard event queue
 #ifdef __AUI_USE_SDL__
@@ -1695,18 +1693,19 @@ int WINAPI CivMain(HINSTANCE hInstance, HINSTANCE hPrevInstance, PSTR szCmdLine,
 	for (gDone = FALSE; !gDone; )
 	{
 		g_civApp->Process();
-		//printf("%s L%d: g_civApp->Process() done!\n", __FILE__, __LINE__);
+
+                //fprintf(stderr, "%s L%d: g_civApp->Process() done!\n", __FILE__, __LINE__);
 
 #ifdef __AUI_USE_SDL__
 		SDL_Event event;
 		while (!g_letUIProcess) { // There are breaks, too ;)
 			SDL_PumpEvents();
 			int n = SDL_PeepEvents(&event, 1, SDL_GETEVENT,
-			                       ~(SDL_EVENTMASK(SDL_MOUSEMOTION) | SDL_EVENTMASK(SDL_MOUSEBUTTONDOWN) | SDL_EVENTMASK(SDL_MOUSEBUTTONUP)));
-			if (0 > n)
-			{
-				//fprintf(stderr, "[CivMain] PeepEvents failed: %s\n", SDL_GetError());
-				printf("%s L%d: SDL_PeepEvents: Still events stored! Error?: %s\n", __FILE__, __LINE__, SDL_GetError());
+
+                     ~(SDL_EVENTMASK(SDL_MOUSEMOTION) | SDL_EVENTMASK(SDL_MOUSEBUTTONDOWN) | SDL_EVENTMASK(SDL_MOUSEBUTTONUP)));
+			if (0 > n) {
+                            //fprintf(stderr, "[CivMain] PeepEvents failed: %s\n", SDL_GetError());
+                            fprintf(stderr, "%s L%d: SDL_PeepEvents: Still events stored! Error?: %s\n", __FILE__, __LINE__, SDL_GetError());
 
 				break;
 			}
@@ -1867,7 +1866,7 @@ int SDLMessageHandler(const SDL_Event &event)
 			SDLKCONVSHIFT(SDLK_BACKSLASH, '\\', '|');
 			SDLKCONV(SDLK_CARET, '^');
 			SDLKCONV(SDLK_UNDERSCORE, '_');
-			SDLKCONVSHIFT(SDLK_BACKQUOTE, '`', '¬');
+			SDLKCONVSHIFT(SDLK_BACKQUOTE, '`', 'Â¬');
 			SDLKCONV(SDLK_UP, SDLK_UP + 256);
 			SDLKCONV(SDLK_DOWN, SDLK_DOWN + 256);
 			SDLKCONV(SDLK_LEFT, SDLK_LEFT + 256);
@@ -1908,7 +1907,7 @@ int SDLMessageHandler(const SDL_Event &event)
 			SDLKCONV(SDLK_KP_EQUALS, '=');
 			SDLKCONVSHIFT(SDLK_1, '1', '!');
 			SDLKCONVSHIFT(SDLK_2, '2', '"');
-			SDLKCONVSHIFT(SDLK_3, '3', '£');
+			SDLKCONVSHIFT(SDLK_3, '3', 'Â£');
 			SDLKCONVSHIFT(SDLK_4, '4', '$');
 			SDLKCONVSHIFT(SDLK_5, '5', '%');
 			SDLKCONVSHIFT(SDLK_6, '6', '^');
