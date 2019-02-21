@@ -79,8 +79,6 @@ GOAL_SEIGE {
   
   TargetType:City
   TargetOwner:HotEnemy
-  TargetOwner:Neutral
-  TargerOwner:ColdEnemy
 
   Execute   ORDER_ATTACK
 
@@ -128,7 +126,6 @@ GOAL_ATTACK {
   TargetType:AttackUnit
   TargetType:SpecialUnit
   TargetOwner:HotEnemy
-  TargetOwner:ColdEnemy
 
   Execute   ORDER_ATTACK
 
