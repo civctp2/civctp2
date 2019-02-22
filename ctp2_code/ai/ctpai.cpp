@@ -1492,7 +1492,7 @@ void CtpAi::MakeRoomForNewUnits(const PLAYER_INDEX playerId)
 						                           tmp,
 						                           tmp,
 						                           tmp,
-						                           false // Check
+						                           true
 						                          );
 
 						defense_strength -= static_cast<float>(city.GetDefendersBonus() * static_cast<double>(defense_count));
@@ -2295,7 +2295,7 @@ void CtpAi::SpendGoldToRushBuy(const PLAYER_INDEX player)
 					  &wages, &science, &old_savings, &current_savings);
 
 	sint32 reserve = sint32((lost_to_cleric + lost_to_crime + maintenance + wages +
-		science) * reserve_percent);
+		science) * reserve_percent /* * 0.01*/); // It is percent, not a fraction, however it is now treated as fraction.
 
 	current_savings -= reserve;
 
@@ -2377,13 +2377,12 @@ void CtpAi::SpendGoldToRushBuy(const PLAYER_INDEX player)
 
 	rush_buy_list.sort();
 
-	sint32 rush_buy_cost;
 	std::list< std::pair<sint32, Unit> >::iterator iter;
 	for(iter = rush_buy_list.begin(); iter != rush_buy_list.end(); iter++)
 	{
 		city = iter->second;
 
-		rush_buy_cost = city.CD()->GetOvertimeCost();
+		sint32 rush_buy_cost = city.CD()->GetOvertimeCost();
 
 		if(current_savings - rush_buy_cost < 0)
 			continue;

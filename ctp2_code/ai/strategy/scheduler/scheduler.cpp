@@ -2018,7 +2018,7 @@ void Scheduler::Assign_Garrison()
 			                      tmp,
 			                      tmp,
 			                      tmp,
-			                      false // check
+			                      true
 			                     );
 
 			defense_strength += static_cast<float>(city.GetDefendersBonus() * static_cast<double>(defense_count));

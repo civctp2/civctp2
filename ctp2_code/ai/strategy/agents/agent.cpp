@@ -223,50 +223,14 @@ const Squad_Strength & Agent::Compute_Squad_Strength()
 {
 	Assert(m_army.IsValid());
 
-/*	if(!m_army->HasCargo())
+	if(!m_army->HasCargo())
 	{
 		m_squad_strength.Set_Army_Strength(m_army, true);
 	}
 	else
 	{
 		m_squad_strength.Set_Cargo_Strength(m_army);
-	}*/
-
-	sint32 transports, max_slots, empty_slots;
-	m_army->GetCargo(transports, max_slots, empty_slots);
-
-	sint8 defense_count;
-	sint8 ranged_count;
-	float attack_strength;
-	float defense_strength;
-	float ranged_strength;
-	float bombard_land_strength;
-	float bombard_sea_strength;
-	float bombard_air_strength;
-	float total_value;
-	m_army->ComputeStrength(attack_strength,
-	                        defense_strength,
-	                        ranged_strength,
-	                        defense_count,
-	                        ranged_count,
-	                        bombard_land_strength,
-	                        bombard_sea_strength,
-	                        bombard_air_strength,
-	                        total_value,
-	                        true
-	                       );
-
-	m_squad_strength.Set_Agent_Count (m_army.Num()                   );
-	m_squad_strength.Set_Attack      (attack_strength                );
-	m_squad_strength.Set_Defense     (defense_strength               );
-	m_squad_strength.Set_Defenders   (defense_count                  );
-	m_squad_strength.Set_Ranged      (ranged_strength                );
-	m_squad_strength.Set_Ranged_Units(ranged_count                   );
-	m_squad_strength.Set_Bombard_Land(bombard_land_strength          );
-	m_squad_strength.Set_Bombard_Sea (bombard_sea_strength           );
-	m_squad_strength.Set_Bombard_Air (bombard_air_strength           );
-	m_squad_strength.Set_Value       (total_value                    );
-	m_squad_strength.Set_Transport   (static_cast<sint8>(empty_slots));
+	}
 
 	return m_squad_strength;
 }

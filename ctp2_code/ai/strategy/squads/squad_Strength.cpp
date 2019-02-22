@@ -244,7 +244,7 @@ void Squad_Strength::Set_Pos_Strength(const MapPoint & pos)
 						  m_water_bombard_str,
 						  m_air_bombard_str,
 						  m_value,
-						  false // Check, we add also the stuff of the cargo
+						  true
 						  );
 
 	m_value = 0.0;
