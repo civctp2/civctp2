@@ -1800,7 +1800,7 @@ GOAL_SUE {
   PowerBonus                0
   DistanceToHomeBonus       2
   DistanceToEnemyBonus      0
-  InHomeTerritoryBonus      0
+  InHomeTerritoryBonus  10000
   NoOwnerTerritoryBonus     0
   InEnemyTerritoryBonus     0
   WoundedArmyBonus          0
