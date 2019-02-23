@@ -684,10 +684,10 @@ STDEHANDLER(PeaceTreaty_ProposalResponseEvent)
 	else if (!receiver_diplomat.TestEffectiveRegard(sender, NEUTRAL_REGARD))
 		return GEV_HD_Continue;
 
-	if (receiver_diplomat.GetLastHotwarAttack(sender) <= 10)
+	if (receiver_diplomat.GetLastHotwarAttack(sender) < 10)
 		return GEV_HD_Continue;
 
-	if (receiver_diplomat.GetLastColdwarAttack(sender) <= 5)
+	if (receiver_diplomat.GetLastColdwarAttack(sender) < 5)
 		return GEV_HD_Continue;
 
 	if (receiver_diplomat.GetTrust(sender) < COLDWAR_REGARD)
