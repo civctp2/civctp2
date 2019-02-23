@@ -73,6 +73,13 @@ private:
 	sint32          m_rankingEconomic;
 	sint32          m_rankingScientific;
 	sint32          m_rankingPollution;
+	sint32          m_rankingTrade;
+	sint32          m_rankingGold;
+	sint32          m_rankingCities;
+	sint32          m_rankingLandArea;
+	sint32          m_rankingSeaArea;
+	sint32          m_rankingUnits;
+	sint32          m_rankingBuildings;
 	sint32          m_rankingWonders;
 	sint32          m_rankingOverall;
 

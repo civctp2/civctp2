@@ -101,6 +101,20 @@ RankingTab::RankingTab(ctp2_Window *parent)
 	m_rankingScientific = counter++;
 	Add_Dropdown_Category("str_ldl_RANKING_POLLUTION");
 	m_rankingPollution = counter++;
+	Add_Dropdown_Category("str_ldl_RANKING_TRADE");
+	m_rankingTrade = counter++;
+	Add_Dropdown_Category("str_ldl_RANKING_GOLD");
+	m_rankingGold = counter++;
+	Add_Dropdown_Category("str_ldl_RANKING_CITIES");
+	m_rankingCities = counter++;
+	Add_Dropdown_Category("str_ldl_RANKING_LAND_AREA");
+	m_rankingLandArea = counter++;
+	Add_Dropdown_Category("str_ldl_RANKING_SEA_AREA");
+	m_rankingSeaArea = counter++;
+	Add_Dropdown_Category("str_ldl_RANKING_UNITS");
+	m_rankingUnits = counter++;
+	Add_Dropdown_Category("str_ldl_RANKING_BUILDINGS");
+	m_rankingBuildings = counter++;
 	Add_Dropdown_Category("str_ldl_RANKING_WONDERS");
 	m_rankingWonders = counter++;
 	Add_Dropdown_Category("str_ldl_RANKING_OVERALL");
@@ -133,7 +147,6 @@ RankingTab::RankingTab(ctp2_Window *parent)
 
 void RankingTab::Add_Dropdown_Category(char * category)
 {
-
 	ctp2_ListItem * listItem =
 	    static_cast<ctp2_ListItem*>(aui_Ldl::BuildHierarchyFromRoot("RankingListItem"));
 
@@ -150,12 +163,10 @@ void RankingTab::Add_Dropdown_Category(char * category)
 
 void RankingTab::SetLineGraph( bool line_graph )
 {
-
 	m_line_graph = line_graph;
 
 	if (m_line_graph)
 	{
-
 		m_infoGraph->SetGraphType(GRAPH_TYPE_LINE);
 
 		m_lineOrZeroSumButton->SetText(g_theStringDB->GetNameStr("str_ldl_ZEROSUM_BUTTON"));
@@ -163,52 +174,38 @@ void RankingTab::SetLineGraph( bool line_graph )
 	}
 	else
 	{
-
 		m_infoGraph->SetGraphType(GRAPH_TYPE_ZEROSUM);
 
 		m_lineOrZeroSumButton->SetText(g_theStringDB->GetNameStr("str_ldl_LINE_BUTTON"));
-
 	}
 }
 
 void RankingTab::Open(void)
 {
-
-
-
-
 }
 
 void RankingTab::Close(void)
 {
-
 }
-
 
 void RankingTab::Show()
 {
-
 	m_lineOrZeroSumButton->Show();
 }
 
 void RankingTab::Hide()
 {
-
 	m_lineOrZeroSumButton->Hide();
 }
 
 void RankingTab::LoadData()
 {
-
 	UpdateGraph();
-
 	UpdatePlayerList();
-
 }
 
 void RankingTab::CleanupGraph()
 {
-
 	if (m_infoGraphData)
 	{
 		for (sint32 i = 0 ; i < m_infoYCount; ++i)
@@ -225,16 +222,30 @@ void RankingTab::UpdateGraph()
 {
 	CleanupGraph();
 	sint32 category = m_rankingDropDown->GetSelectedItem();
-	if (category == m_rankingOverall)
+	if(category == m_rankingOverall)
 		category = kRankingOverall;
-	else if (category == m_rankingMilitary)
+	else if(category == m_rankingMilitary)
 		category = kRankingMilitary;
-	else if (category == m_rankingEconomic)
+	else if(category == m_rankingEconomic)
 		category = kRankingEconomic;
-	else if (category == m_rankingScientific)
+	else if(category == m_rankingScientific)
 		category = kRankingScientific;
-	else if (category == m_rankingPollution)
+	else if(category == m_rankingPollution)
 		category = kRankingPollution;
+	else if(category == m_rankingTrade)
+		category = kRankingTrade;
+	else if(category == m_rankingGold)
+		category = kRankingGold;
+	else if(category == m_rankingCities)
+		category = kRankingCities;
+	else if(category == m_rankingLandArea)
+		category = kRankingGeographical;
+	else if(category == m_rankingSeaArea)
+		category = kRankingUndersea;
+	else if(category == m_rankingUnits)
+		category = kRankingUnits;
+	else if(category == m_rankingBuildings)
+		category = kRankingBuildings;
 	else if (category == m_rankingWonders)
 		category = kRankingWonders;
 
@@ -318,7 +329,6 @@ void RankingTab::UpdatePlayerList( void )
 	}
 }
 
-
 void RankingTab::SelectRankingActionCallback(aui_Control *control,
 	uint32 action, uint32 data, void *cookie)
 {
@@ -330,7 +340,6 @@ void RankingTab::SelectRankingActionCallback(aui_Control *control,
 		s_current_ranking_tab->UpdateGraph();
 	}
 }
-
 
 void RankingTab::LineOrZeroSumButtonActionCallback(aui_Control *control,
 	uint32 action, uint32 data, void *cookie)
