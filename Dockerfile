@@ -1,7 +1,7 @@
 ################################################################################
 # base system
 ################################################################################
-FROM ubuntu:16.04 as system
+FROM ubuntu:18.04 as system
 
 ENV USERNAME diUser
 RUN useradd -m $USERNAME && \
@@ -16,7 +16,7 @@ RUN useradd -m $USERNAME && \
 FROM system as builder
 
 RUN apt-get update && apt-get install -y --no-install-recommends \
-    libsdl1.2-dev libsdl-mixer1.2-dev libsdl-image1.2-dev byacc gtk+-2.0-dev gcc-5 g++-5 \
+    libsdl1.2-dev libsdl-mixer1.2-dev libsdl-image1.2-dev byacc libgtk2.0-dev gcc-5 g++-5 \
     automake libtool unzip flex git ca-certificates
 
 ### set default compilers
