@@ -105,7 +105,7 @@ debug:
              $IMAGE_TAG:${CI_JOB_STAGE}-${BTYP}
              ./ctp2 $CTP_PARAMS &
     - pidD=$!
-    - java -cp "/opt/sikulixapi.jar:/opt/jython-standalone-2.7.1.jar" org.python.util.jython tests/${JOB}.sikuli/${JOB}.py
+    - sleep 60
     - kill $pidD
     - kill -INT $pidF
     - kill $pidX
