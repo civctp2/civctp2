@@ -363,8 +363,8 @@ GOAL_STEALTH_EXPLORE {
   AlliedValueBonus          0
   PowerBonus                0
   DistanceToHomeBonus     100
-  DistanceToEnemyBonus     -5
-  InHomeTerritoryBonus  -1000
+  DistanceToEnemyBonus     10
+  InHomeTerritoryBonus   1000
   NoOwnerTerritoryBonus  1000
   InEnemyTerritoryBonus  1000
   WoundedArmyBonus          0
@@ -540,7 +540,6 @@ GOAL_CONVERT_CITY {
   SquadClass:Stealth
 
   TargetType:City
-  TargetOwner:Neutral
   TargetOwner:ColdEnemy
   TargetOwner:HotEnemy
   TargetOwner:NoContact
@@ -580,6 +579,8 @@ GOAL_BIOTERROR_CITY {
 
   TargetType:City
   TargetOwner:HotEnemy
+  TargetOwner:ColdEnemy
+  TargetOwner:NoContact
 
   Execute   ORDER_BIO_INFECT
 
@@ -615,7 +616,9 @@ GOAL_NANOATTACK_CITY {
   SquadClass:Stealth
 
   TargetType:City
+  TargetOwner:ColdEnemy
   TargetOwner:HotEnemy
+  TargetOwner:NoContact
 
   Execute   ORDER_NANO_INFECT
 
@@ -1167,6 +1170,7 @@ GOAL_INCITE_REVOLUTION {
 
   TargetType:City
   TargetOwner:HotEnemy
+  TargetOwner:ColdEnemy
 
   Execute   ORDER_INCITE_REVOLUTION
 
@@ -1238,6 +1242,7 @@ GOAL_ASSASSINATE {
 
   TargetType:City
   TargetOwner:HotEnemy
+  TargetOwner:ColdEnemy
 
   Execute   ORDER_ASSASSINATE
 
@@ -1713,6 +1718,8 @@ GOAL_POISON_CITY {
 
   TargetType:City
   TargetOwner:HotEnemy
+  TargetOwner:ColdEnemy
+  TargetOwner:NoContact
 
   Execute   ORDER_PLAGUE
 

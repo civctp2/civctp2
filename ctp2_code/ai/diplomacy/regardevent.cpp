@@ -403,7 +403,6 @@ STDEHANDLER(InciteRevolution_RegardEvent)
 			strId);
 
 	city_diplomat.LogViolationEvent(attack_owner, PROPOSAL_TREATY_MILITARY_PACT);
-
 	city_diplomat.LogViolationEvent(attack_owner, PROPOSAL_TREATY_ALLIANCE);
 
 	return GEV_HD_Continue;
@@ -438,7 +437,6 @@ STDEHANDLER(AssassinateRulerUnit_RegardEvent)
 			strId);
 
 	city_diplomat.LogViolationEvent(attack_owner, PROPOSAL_TREATY_MILITARY_PACT);
-
 	city_diplomat.LogViolationEvent(attack_owner, PROPOSAL_TREATY_ALLIANCE);
 
 	return GEV_HD_Continue;
@@ -535,6 +533,8 @@ STDEHANDLER(EnslaveSettler_RegardEvent)
 
 	Diplomat & settler_diplomat = Diplomat::GetDiplomat(settler_owner);
 
+	settler_diplomat.SetColdwarAttack(attack_owner, (sint16)NewTurnCount::GetCurrentRound());
+
 	sint32 cost;
 	settler_diplomat.GetCurrentDiplomacy(attack_owner).GetEnslaveSettlerRegardCost(cost);
 
@@ -545,7 +545,9 @@ STDEHANDLER(EnslaveSettler_RegardEvent)
 			REGARD_EVENT_MILITARY_SAFETY,
 			strId);
 
-	settler_diplomat.LogViolationEvent(attack_owner, PROPOSAL_TREATY_CEASEFIRE);
+	settler_diplomat.LogViolationEvent(attack_owner, PROPOSAL_TREATY_MILITARY_PACT);
+	settler_diplomat.LogViolationEvent(attack_owner, PROPOSAL_TREATY_TRADE_PACT);
+	settler_diplomat.LogViolationEvent(attack_owner, PROPOSAL_TREATY_ALLIANCE);
 
 	return GEV_HD_Continue;
 }
@@ -566,6 +568,8 @@ STDEHANDLER(SlaveRaidCity_RegardEvent)
 
 	Diplomat & city_diplomat = Diplomat::GetDiplomat(city_owner);
 
+	city_diplomat.SetColdwarAttack(attack_owner, (sint16)NewTurnCount::GetCurrentRound());
+
 	// cost should be variable not standard each time
 	sint32 cost;
 	city_diplomat.GetCurrentDiplomacy(attack_owner).GetSlaveRaidRegardCost(cost);
@@ -577,7 +581,9 @@ STDEHANDLER(SlaveRaidCity_RegardEvent)
 			REGARD_EVENT_MILITARY_SAFETY,
 			strId);
 
-	city_diplomat.LogViolationEvent(attack_owner, PROPOSAL_TREATY_CEASEFIRE);
+	city_diplomat.LogViolationEvent(attack_owner, PROPOSAL_TREATY_MILITARY_PACT);
+	city_diplomat.LogViolationEvent(attack_owner, PROPOSAL_TREATY_TRADE_PACT);
+	city_diplomat.LogViolationEvent(attack_owner, PROPOSAL_TREATY_ALLIANCE);
 
 	return GEV_HD_Continue;
 }
@@ -691,9 +697,6 @@ STDEHANDLER(ExpelUnits_RegardEvent)
 
 	Diplomat & victim_diplomat = Diplomat::GetDiplomat(victim);
 
-
-
-
 	sint32 cost;
 	victim_diplomat.GetCurrentDiplomacy(attack_owner).GetExpelUnitsRegardCost(cost);
 
@@ -703,7 +706,6 @@ STDEHANDLER(ExpelUnits_RegardEvent)
 			cost,
 			REGARD_EVENT_MILITARY_POWER,
 			strId);
-
 
 	return GEV_HD_Continue;
 }
@@ -773,8 +775,6 @@ STDEHANDLER(NukeLocationUnit_RegardEvent)
 
 	Diplomat & pos_diplomat = Diplomat::GetDiplomat(pos_owner);
 
-	pos_diplomat.SetColdwarAttack(attack_owner, (sint16) NewTurnCount::GetCurrentRound());
-
 	sint32 cost;
 	pos_diplomat.GetCurrentDiplomacy(attack_owner).GetNukeCityRegardCost(cost);
 
@@ -813,6 +813,8 @@ STDEHANDLER(UndergroundRailwayUnit_RegardEvent)
 
 	Diplomat & city_diplomat = Diplomat::GetDiplomat(city_owner);
 
+	city_diplomat.SetColdwarAttack(attack_owner, (sint16)NewTurnCount::GetCurrentRound());
+
 	sint32 cost;
 	city_diplomat.GetCurrentDiplomacy(attack_owner).GetUndergroundRailwayRegardCost(cost);
 
@@ -823,7 +825,9 @@ STDEHANDLER(UndergroundRailwayUnit_RegardEvent)
 			REGARD_EVENT_MILITARY_SAFETY,
 			strId);
 
-	city_diplomat.LogViolationEvent(attack_owner, PROPOSAL_TREATY_CEASEFIRE);
+	city_diplomat.LogViolationEvent(attack_owner, PROPOSAL_TREATY_MILITARY_PACT);
+	city_diplomat.LogViolationEvent(attack_owner, PROPOSAL_TREATY_TRADE_PACT);
+	city_diplomat.LogViolationEvent(attack_owner, PROPOSAL_TREATY_ALLIANCE);
 
 	return GEV_HD_Continue;
 }
@@ -844,6 +848,8 @@ STDEHANDLER(InciteUprisingUnit_RegardEvent)
 
 	Diplomat & city_diplomat = Diplomat::GetDiplomat(city_owner);
 
+	city_diplomat.SetColdwarAttack(attack_owner, (sint16)NewTurnCount::GetCurrentRound());
+
 	sint32 cost;
 	city_diplomat.GetCurrentDiplomacy(attack_owner).GetInciteUprisingRegardCost(cost);
 
@@ -854,7 +860,9 @@ STDEHANDLER(InciteUprisingUnit_RegardEvent)
 			REGARD_EVENT_MILITARY_SAFETY,
 			strId);
 
-	city_diplomat.LogViolationEvent(attack_owner, PROPOSAL_TREATY_CEASEFIRE);
+	city_diplomat.LogViolationEvent(attack_owner, PROPOSAL_TREATY_MILITARY_PACT);
+	city_diplomat.LogViolationEvent(attack_owner, PROPOSAL_TREATY_TRADE_PACT);
+	city_diplomat.LogViolationEvent(attack_owner, PROPOSAL_TREATY_ALLIANCE);
 
 	return GEV_HD_Continue;
 }
@@ -875,6 +883,8 @@ STDEHANDLER(BioInfectCityUnit_RegardEvent)
 
 	Diplomat & city_diplomat = Diplomat::GetDiplomat(city_owner);
 
+	city_diplomat.SetColdwarAttack(attack_owner, (sint16)NewTurnCount::GetCurrentRound());
+
 	sint32 cost;
 	city_diplomat.GetCurrentDiplomacy(attack_owner).GetBioInfectedCityRegardCost(cost);
 
@@ -885,7 +895,9 @@ STDEHANDLER(BioInfectCityUnit_RegardEvent)
 			REGARD_EVENT_MILITARY_SAFETY,
 			strId);
 
-	city_diplomat.LogViolationEvent(attack_owner, PROPOSAL_TREATY_CEASEFIRE);
+	city_diplomat.LogViolationEvent(attack_owner, PROPOSAL_TREATY_MILITARY_PACT);
+	city_diplomat.LogViolationEvent(attack_owner, PROPOSAL_TREATY_TRADE_PACT);
+	city_diplomat.LogViolationEvent(attack_owner, PROPOSAL_TREATY_ALLIANCE);
 
 	return GEV_HD_Continue;
 }
@@ -918,7 +930,9 @@ STDEHANDLER(PlagueCityUnit_RegardEvent)
 			REGARD_EVENT_MILITARY_SAFETY,
 			strId);
 
-	city_diplomat.LogViolationEvent(attack_owner, PROPOSAL_TREATY_CEASEFIRE);
+	city_diplomat.LogViolationEvent(attack_owner, PROPOSAL_TREATY_MILITARY_PACT);
+	city_diplomat.LogViolationEvent(attack_owner, PROPOSAL_TREATY_TRADE_PACT);
+	city_diplomat.LogViolationEvent(attack_owner, PROPOSAL_TREATY_ALLIANCE);
 
 	return GEV_HD_Continue;
 }
@@ -951,7 +965,9 @@ STDEHANDLER(NanoInfectCityUnit_RegardEvent)
 			REGARD_EVENT_MILITARY_SAFETY,
 			strId);
 
-	city_diplomat.LogViolationEvent(attack_owner, PROPOSAL_TREATY_CEASEFIRE);
+	city_diplomat.LogViolationEvent(attack_owner, PROPOSAL_TREATY_MILITARY_PACT);
+	city_diplomat.LogViolationEvent(attack_owner, PROPOSAL_TREATY_TRADE_PACT);
+	city_diplomat.LogViolationEvent(attack_owner, PROPOSAL_TREATY_ALLIANCE);
 
 	return GEV_HD_Continue;
 }
@@ -986,7 +1002,6 @@ STDEHANDLER(ConvertCityUnit_RegardEvent)
 
 	city_diplomat.LogViolationEvent(attack_owner, PROPOSAL_TREATY_MILITARY_PACT);
 	city_diplomat.LogViolationEvent(attack_owner, PROPOSAL_TREATY_TRADE_PACT);
-
 	city_diplomat.LogViolationEvent(attack_owner, PROPOSAL_TREATY_ALLIANCE);
 
 	return GEV_HD_Continue;
@@ -1022,7 +1037,6 @@ STDEHANDLER(IndulgenceSaleMade_RegardEvent)
 
 	city_diplomat.LogViolationEvent(attack_owner, PROPOSAL_TREATY_MILITARY_PACT);
 	city_diplomat.LogViolationEvent(attack_owner, PROPOSAL_TREATY_TRADE_PACT);
-
 	city_diplomat.LogViolationEvent(attack_owner, PROPOSAL_TREATY_ALLIANCE);
 
 	return GEV_HD_Continue;
@@ -1096,18 +1110,15 @@ STDEHANDLER(PillageUnit_RegardEvent)
 			REGARD_EVENT_MILITARY_SAFETY,
 			strId);
 
-// EMOD - Hidden Nationality check added by E 19 Nov 2005 - if unit is not Hidden Nationality then Regard Event is Logged
-	if(!(unit.GetDBRec()->GetSneakPillage() == true)) {
-
-//; || (!(td.GetDBRec()->GetHiddenNationality() == true));
-//original code
-	victim_diplomat.LogViolationEvent(attack_owner, PROPOSAL_TREATY_CEASEFIRE);
-//  end original code
+	// Modified by E - Hidden Nationality check added by E 19 Nov 2005 - if unit is not Hidden Nationality then Regard Event is Logged
+	if(!(unit.GetDBRec()->GetSneakPillage() == true))
+	{
+		//; || (!(td.GetDBRec()->GetHiddenNationality() == true));
+		//original code
+		victim_diplomat.LogViolationEvent(attack_owner, PROPOSAL_TREATY_CEASEFIRE);
+		//  end original code
 	}
-// end EMOD
-
-
-
+	// end EMOD
 
 	return GEV_HD_Continue;
 }
@@ -1142,18 +1153,10 @@ STDEHANDLER(InjoinUnit_RegardEvent)
 
 	city_diplomat.LogViolationEvent(attack_owner, PROPOSAL_TREATY_TRADE_PACT);
 	city_diplomat.LogViolationEvent(attack_owner, PROPOSAL_TREATY_RESEARCH_PACT);
-
 	city_diplomat.LogViolationEvent(attack_owner, PROPOSAL_TREATY_ALLIANCE);
 
 	return GEV_HD_Continue;
 }
-
-
-
-
-
-
-
 
 void RegardEventCallbacks::AddCallbacks()
 {
