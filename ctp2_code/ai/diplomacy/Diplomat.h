@@ -536,6 +536,7 @@ public:
 
 	void TargetNuclearAttack(const PLAYER_INDEX foreignerId, const bool launch_now);
 
+	bool HasWarOrDesiresPreemptivelyWith(const PLAYER_INDEX foreignerId) const;
 	bool DesireWarWith(const PLAYER_INDEX foreignerId) const;
 
 	bool ComputeDesireWarWith(const PLAYER_INDEX foreignerId) const;

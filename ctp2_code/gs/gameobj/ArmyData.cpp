@@ -7166,7 +7166,7 @@ bool ArmyData::MoveIntoForeigner(const MapPoint &pos)
 	   ||
 	      (
 	           g_player[attack_owner]->IsRobot()
-	        && diplomat.DesireWarWith(defense_owner)
+	        && diplomat.HasWarOrDesiresPreemptivelyWith(defense_owner)
 	      )
 	  )
 	{

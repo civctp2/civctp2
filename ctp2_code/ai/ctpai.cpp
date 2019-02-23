@@ -103,7 +103,6 @@
 #include "AdvanceListRecord.h"
 #include "AdvanceRecord.h"
 #include "EndGameObjectRecord.h"
-#include "profileDB.h"
 #include "RegardEvent.h"
 #include "reactevent.h"
 #include "ProposalResponseEvent.h"
@@ -2433,11 +2432,7 @@ void CtpAi::BombardNearbyEnemies(const Army & army, const sint32 & max_rge)
 		  (
 		           playerId != foreigner
 		   &&      g_player[foreigner]
-		   &&
-		      (
-		           g_player[playerId]->HasWarWith(foreigner)
-		        || Diplomat::GetDiplomat(playerId).DesireWarWith(foreigner)
-		      )
+		   &&      Diplomat::GetDiplomat(playerId).HasWarOrDesiresPreemptivelyWith(foreigner)
 		  )
 		{  //try to bombard one of his armies or cities within max range
 

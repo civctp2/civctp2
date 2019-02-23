@@ -3806,13 +3806,25 @@ const AiState & Diplomat::GetCurrentDiplomaticState( const PLAYER_INDEX & foreig
 	return m_diplomaticStates[foreignerId];
 }
 
-void Diplomat::SetDiplomaticState(const PLAYER_INDEX & foreignerId, const AiState & newState ) {
-	if (newState != s_badAiState) {
+void Diplomat::SetDiplomaticState(const PLAYER_INDEX & foreignerId, const AiState & newState )
+{
+	if(g_player[m_playerId] == NULL)
+	{
+		return;
+	}
+
+	if (newState != s_badAiState)
+	{
 		m_diplomaticStates[foreignerId] = newState;
 
 		Assert(newState.dbIndex >= 0);
 		if (newState.dbIndex >= 0)
 			ChangeDiplomacy(foreignerId, newState.dbIndex);
+	}
+
+	if(!g_player[m_playerId]->HasContactWith(foreignerId))
+	{
+		return;
 	}
 
 	if(    g_player[m_playerId]
@@ -3826,21 +3838,18 @@ void Diplomat::SetDiplomaticState(const PLAYER_INDEX & foreignerId, const AiStat
 		bool declare_war = true;
 		if (!AgreementMatrix::s_agreements.HasAgreement(m_playerId, foreignerId, PROPOSAL_TREATY_DECLARE_WAR))
 		{
-			declare_war = false;
-
-
 			sint32 turns_since_last_war =
 				AgreementMatrix::s_agreements.TurnsSinceLastWar(m_playerId, foreignerId);
 
 			declare_war = TestPublicRegard(foreignerId, HOTWAR_REGARD);
 
-			declare_war = declare_war && (turns_since_last_war > 5 || turns_since_last_war < 0);
+			declare_war &= (turns_since_last_war > 5 || turns_since_last_war < 0);
 
-			declare_war = declare_war && (AtWarCount() == 0);
+			declare_war &= (AtWarCount() == 0); // On your continet 
 
-			declare_war = declare_war && DesireWarWith(foreignerId);
+			declare_war &= DesireWarWith(foreignerId);
 
-			declare_war = declare_war && !m_personality->GetTrustworthinessChaotic();
+			declare_war &= !m_personality->GetTrustworthinessChaotic();
 
 			Threat war_threat;
 			if (HasThreat(foreignerId, THREAT_DECLARE_WAR, war_threat))
@@ -3891,7 +3900,6 @@ void Diplomat::SetDiplomaticState(const PLAYER_INDEX & foreignerId, const AiStat
 				MapAnalysis::GetMapAnalysis().GetNuclearWeaponsCount(m_playerId) &&
 				g_theUnitPool->IsValid(nuke_threat.detail.arg.cityId))
 			{
-
 				if (GetDiplomat(nuke_threat.receiverId).FearNukesFrom(m_playerId) ||
 					g_rand->Next(100) < m_personality->GetThreatFollowThrough() * 100)
 				{
@@ -3905,7 +3913,8 @@ void Diplomat::SetDiplomaticState(const PLAYER_INDEX & foreignerId, const AiStat
 	}
 }
 
-const DiplomacyRecord & Diplomat::GetCurrentDiplomacy(const PLAYER_INDEX & foreignerId) const {
+const DiplomacyRecord & Diplomat::GetCurrentDiplomacy(const PLAYER_INDEX & foreignerId) const
+{
 	return m_diplomacy[foreignerId];
 }
 
@@ -5357,6 +5366,10 @@ void Diplomat::SendGreeting(const PLAYER_INDEX & foreignerId)
 	so->AddAction(buf);
 	g_slicEngine->Execute(so);
 }
+bool Diplomat::HasWarOrDesiresPreemptivelyWith(const PLAYER_INDEX foreignerId) const
+{
+	return g_player[m_playerId]->HasWarWith(foreignerId) || (/*m_personality->GetAlignmentEvil() || m_personality->GetTrustworthinessChaotic() &&*/ DesireWarWith(foreignerId));
+}
 
 bool Diplomat::DesireWarWith(const PLAYER_INDEX foreignerId) const
 {
@@ -5500,6 +5513,9 @@ bool Diplomat::IsBestHotwarEnemy(const PLAYER_INDEX foreignerId) const
 			continue;
 
 		if (!other_ptr->HasWarWith(m_playerId))
+			continue;
+
+		if(!other_ptr->HasContactWith(m_playerId))
 			continue;
 
 		DIPLOMATIC_STRENGTH const   relative_strength =

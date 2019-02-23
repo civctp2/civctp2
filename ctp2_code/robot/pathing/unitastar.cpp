@@ -272,7 +272,7 @@ bool UnitAstar::CheckUnits
 					{
 						return false;
 					}
-					else if(m_is_robot && (g_player[m_owner]->HasWarWith(dest_owner) || Diplomat::GetDiplomat(m_owner).DesireWarWith(dest_owner)) && m_army_strength.HasEnough(Squad_Strength(pos), true))
+					else if(m_is_robot && Diplomat::GetDiplomat(m_owner).HasWarOrDesiresPreemptivelyWith(dest_owner) && m_army_strength.HasEnough(Squad_Strength(pos), true))
 					{
 						can_enter = true;
 						can_be_zoc = false;
@@ -332,9 +332,6 @@ bool UnitAstar::CheckUnits
 
 	return false;
 }
-
-
-
 
 bool UnitAstar::CheckHisCity(const MapPoint &prev, const MapPoint &pos,
     Cell *the_prev_cell, Cell *the_pos_cell, CityData *the_pos_city,
@@ -1308,11 +1305,7 @@ bool UnitAstar::PretestDest_ZocEnterable(const MapPoint &start, const MapPoint &
 				if
 				  (
 				       m_is_robot
-				    &&
-				       (
-				            g_player[m_owner]->HasWarWith(the_army->GetOwner())
-				         || Diplomat::GetDiplomat(m_owner).DesireWarWith(the_army->GetOwner())
-				       )
+				    && Diplomat::GetDiplomat(m_owner).HasWarOrDesiresPreemptivelyWith(the_army->GetOwner())
 				    && m_army_strength.HasEnough(Squad_Strength(dest), true)
 				  )
 				{
@@ -1345,11 +1338,7 @@ bool UnitAstar::PretestDest_ZocEnterable(const MapPoint &start, const MapPoint &
 				if
 				  (
 				       m_is_robot
-				    &&
-				       (
-				            g_player[m_owner]->HasWarWith(g_theWorld->GetCity(neighbor).GetOwner())
-				         || Diplomat::GetDiplomat(m_owner).DesireWarWith(g_theWorld->GetCity(neighbor).GetOwner())
-				       )
+				    && Diplomat::GetDiplomat(m_owner).HasWarOrDesiresPreemptivelyWith(g_theWorld->GetCity(neighbor).GetOwner())
 				    && m_army_strength.HasEnough(Squad_Strength(dest), true)
 				  )
 				{
