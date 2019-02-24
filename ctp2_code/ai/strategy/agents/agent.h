@@ -160,7 +160,7 @@ public:
 	void MoveIntoTransport();
 	void UnloadCargo();
 	bool CargoCanEnter() const { return CargoCanEnter(Get_Pos()); };
-	bool CargoCanEnter(MapPoint &pos) const { return m_army->CargoCanEnter(pos); };
+	bool CargoCanEnter(const MapPoint &pos) const { return m_army->CargoCanEnter(pos); };
 	void PerformOrderHere(const OrderRecord * order_rec, const Path * path, GAME_EVENT_INSERT priority = GEV_INSERT_AfterCurrent);
 	void PerformOrder(const OrderRecord * order_rec);
 	void WaitHere(const MapPoint & goal_pos);
