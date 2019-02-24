@@ -759,6 +759,7 @@ GOAL_EXPEL {
 ## 19 ##########################################################
 
 GOAL_PILLAGE {
+  UnGroupFirst
   NoTransport
 
   SquadClass:CanAttack
@@ -795,6 +796,7 @@ GOAL_PILLAGE {
 ## 20 ##########################################################
 
 GOAL_PIRATE {
+  UnGroupFirst
   NoTransport
 
   SquadClass:CanAttack
