@@ -4004,14 +4004,11 @@ void Goal::GroupTroops()
 
 			if(agent1_ptr->Get_Pos() == agent2_ptr->Get_Pos())
 			{
-				ORDER_TEST test1 = agent1_ptr->Get_Army()->CargoTestOrderHere(CtpAi::GetUnloadOrder(), agent1_ptr->Get_Pos());
-				ORDER_TEST test2 = agent2_ptr->Get_Army()->CargoTestOrderHere(CtpAi::GetUnloadOrder(), agent2_ptr->Get_Pos());
-
-				if(agent1_ptr->Get_Army()->HasCargo() && test1 != ORDER_TEST_ILLEGAL)
+				if(agent1_ptr->CargoCanEnter())
 				{
 					agent1_ptr->UnloadCargo();
 				}
-				else if(agent2_ptr->Get_Army()->HasCargo() && test2 != ORDER_TEST_ILLEGAL)
+				else if(agent2_ptr->CargoCanEnter())
 				{
 					agent2_ptr->UnloadCargo();
 				}

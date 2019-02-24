@@ -717,9 +717,8 @@ void Agent::UnloadCargo()
 {
 	Assert(Get_Can_Be_Executed());
 
-	MapPoint pos;
+	MapPoint pos = m_army->RetPos();
 	MapPoint pos2;
-	m_army->GetPos(pos);
 	sint32 cargoNum = m_army->GetCargoNum();
 
 	if(cargoNum + g_theWorld->GetCell(pos)->GetNumUnits() > k_MAX_ARMY_SIZE)
@@ -743,12 +742,24 @@ void Agent::UnloadCargo()
 		}
 	}
 
-	g_gevManager->AddEvent(GEV_INSERT_Tail,
-	                       GEV_UnloadOrder,
-	                       GEA_Army, m_army,
-	                       GEA_MapPoint, pos,
-	                       GEA_End
-	                      );
+	if(pos == m_army->RetPos())
+	{
+		g_gevManager->AddEvent(GEV_INSERT_Tail,
+		                       GEV_UnloadOrder,
+		                       GEA_Army, m_army,
+		                       GEA_MapPoint, pos,
+		                       GEA_End
+		                      );
+	}
+	else
+	{
+		g_gevManager->AddEvent(GEV_INSERT_Tail,
+		                       GEV_MoveUnloadOrder,
+		                       GEA_Army, m_army,
+		                       GEA_MapPoint, pos,
+		                       GEA_End
+		                      );
+	}
 
 	Set_Target_Pos(pos);
 	Set_Can_Be_Executed(false);
