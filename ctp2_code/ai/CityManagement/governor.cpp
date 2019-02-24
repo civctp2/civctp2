@@ -2503,7 +2503,7 @@ void Governor::AssignPopulation(CityData *city, bool hasAllAdvances) const
 	/////////////////////////////////////////////////////////////
 	// Create a copy of city data for effect comparision.
 	// Copy should be removed in the end.
-	CityData * tmp_city = new CityData(city);
+	CityData tmp_city(city);
 	sint32 delta;
 	double prev_result;
 
@@ -2523,27 +2523,27 @@ void Governor::AssignPopulation(CityData *city, bool hasAllAdvances) const
 #if defined(NEW_RESOURCE_PROCESS)
 		city->ChangeSpecialists(POP_LABORER, count);
 #else
-		tmp_city->CollectResourcesFinally();
-		tmp_city->ProcessProduction(true);
-		prev_result = tmp_city->GetGrossCityProduction();
+		tmp_city.CollectResourcesFinally();
+		tmp_city.ProcessProduction(true);
+		prev_result = tmp_city.GetGrossCityProduction();
 
-		tmp_city->ChangeSpecialists(POP_LABORER, count);
-		tmp_city->CollectResourcesFinally();
-		tmp_city->ProcessProduction(true);
+		tmp_city.ChangeSpecialists(POP_LABORER, count);
+		tmp_city.CollectResourcesFinally();
+		tmp_city.ProcessProduction(true);
 
-		if(tmp_city->GetGrossCityProduction() > prev_result)
+		if(tmp_city.GetGrossCityProduction() > prev_result)
 		{
 			city->ChangeSpecialists(POP_LABORER, count);
 			city->ProcessProduction(true);
 		}
-		else if(tmp_city->GetGrossCityProduction() < prev_result)
+		else if(tmp_city.GetGrossCityProduction() < prev_result)
 		{
 			delta = (-city->LaborerCount());
 			city->ChangeSpecialists(POP_LABORER, delta);
 		}
 
-		delta = city->LaborerCount() - tmp_city->LaborerCount();
-		tmp_city->ChangeSpecialists(POP_LABORER, delta );
+		delta = city->LaborerCount() - tmp_city.LaborerCount();
+		tmp_city.ChangeSpecialists(POP_LABORER, delta );
 #endif
 	}
 
@@ -2586,22 +2586,22 @@ void Governor::AssignPopulation(CityData *city, bool hasAllAdvances) const
 		city->ChangeSpecialists(POP_FARMER, count);
 #else
 		// Test situation without specialists
-		tmp_city->CollectResources();
-		tmp_city->ProcessFood();
-		prev_result = tmp_city->GetProducedFood();
+		tmp_city.CollectResources();
+		tmp_city.ProcessFood();
+		prev_result = tmp_city.GetProducedFood();
 //		DPRINTF(k_DBG_GAMESTATE, ("PrevResult: %f\n", prev_result));
 
 		// Test situation with specialists
-		tmp_city->ChangeSpecialists(POP_FARMER, count);
-		tmp_city->CollectResourcesFinally();
-		tmp_city->ProcessFood();
+		tmp_city.ChangeSpecialists(POP_FARMER, count);
+		tmp_city.CollectResourcesFinally();
+		tmp_city.ProcessFood();
 
-		if(tmp_city->GetProducedFood() > prev_result)
+		if(tmp_city.GetProducedFood() > prev_result)
 		{
 			// The specialists are beneficial: employ in the real city.
 			city->ChangeSpecialists(POP_FARMER, count);
 		}
-		else if(tmp_city->GetProducedFood() < prev_result)
+		else if(tmp_city.GetProducedFood() < prev_result)
 		{
 			// The specialists are producing less than workers: fire them all?
 			// This should not do anything, because there should be none left
@@ -2613,8 +2613,8 @@ void Governor::AssignPopulation(CityData *city, bool hasAllAdvances) const
 //		DPRINTF(k_DBG_GAMESTATE, ("NewResult: %f\n", tmp_city->GetProducedFood()));
 
 		// Synchronise the tmp_city with the real city.
-		delta = city->FarmerCount() - tmp_city->FarmerCount();
-		tmp_city->ChangeSpecialists(POP_FARMER, delta );
+		delta = city->FarmerCount() - tmp_city.FarmerCount();
+		tmp_city.ChangeSpecialists(POP_FARMER, delta );
 #endif
 	}
 //	DPRINTF(k_DBG_GAMESTATE, ("Farmers: %i\n", city->FarmerCount()));
@@ -2637,33 +2637,28 @@ void Governor::AssignPopulation(CityData *city, bool hasAllAdvances) const
 #if defined(NEW_RESOURCE_PROCESS)
 		city->ChangeSpecialists(POP_MERCHANT, count);
 #else
-		tmp_city->CollectResourcesFinally();
-		tmp_city->CollectOtherTrade(TRUE);
-		prev_result = tmp_city->GetGrossCityGold();
+		tmp_city.CollectResourcesFinally();
+		tmp_city.CollectOtherTrade(TRUE);
+		prev_result = tmp_city.GetGrossCityGold();
 
-		tmp_city->ChangeSpecialists(POP_MERCHANT, count);
-		tmp_city->CollectResourcesFinally();
-		tmp_city->CollectOtherTrade(TRUE);
+		tmp_city.ChangeSpecialists(POP_MERCHANT, count);
+		tmp_city.CollectResourcesFinally();
+		tmp_city.CollectOtherTrade(TRUE);
 
-		if(tmp_city->GetGrossCityGold() > prev_result)
+		if(tmp_city.GetGrossCityGold() > prev_result)
 		{
 			city->ChangeSpecialists(POP_MERCHANT, count);
 		}
-		else if(tmp_city->GetGrossCityGold() < prev_result)
+		else if(tmp_city.GetGrossCityGold() < prev_result)
 		{
 			delta = (-city->MerchantCount());
 			city->ChangeSpecialists(POP_MERCHANT, delta);
 		}
 
-		delta = city->MerchantCount() - tmp_city->MerchantCount();
-		tmp_city->ChangeSpecialists(POP_MERCHANT, delta );
+		delta = city->MerchantCount() - tmp_city.MerchantCount();
+		tmp_city.ChangeSpecialists(POP_MERCHANT, delta );
 #endif
 	}
-
-#if !defined(NEW_RESOURCE_PROCESS)
-	// Not used anymore
-	delete tmp_city;
-#endif
 
 	best_specialist = city->GetBestSpecialist(POP_SCIENTIST);
 
