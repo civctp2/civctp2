@@ -1,3 +1,16 @@
-Dockerfile
-.dockerignore
-.travis.yml
+**
+## if removing the above, make sure to ignore:
+# Dockerfile
+# .dockerignore
+# .travis.yml
+
+## files essential for building
+!autogen.sh
+!configure.ac
+!GNUmakefile.am
+!Makefile
+!ctp2_code/
+!ctp2_data/
+
+## files essential for testing
+!ctp2CD/
