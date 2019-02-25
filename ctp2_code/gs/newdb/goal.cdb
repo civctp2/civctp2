@@ -99,6 +99,7 @@ Goal {
 	Int CanAttackBonus                 = 0
 	Int SlaveryProtectionBonus         = 0
 	Int SmallCitySizeBonus             = 0
+	Int GarrisonBonus                  = 0
 
 	struct ConnectionBoni
 	{

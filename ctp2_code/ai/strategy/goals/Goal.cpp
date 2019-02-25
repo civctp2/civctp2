@@ -1463,10 +1463,24 @@ Utility Goal::Compute_Agent_Matching_Value(const Agent_ptr agent_ptr) const
 	MapPoint dest_pos = Get_Target_Pos();     // Get cheap target position first, no need for pillage checking, yet.
 	MapPoint curr_pos = agent_ptr->Get_Pos();
 
-	if(agent_ptr->IsNeededForGarrison() && dest_pos != curr_pos)
+	Utility bonus = 0;
+
+	if(agent_ptr->IsNeededForGarrison())
 	{
-		return Goal::BAD_UTILITY;
+		if(dest_pos != curr_pos)
+		{
+			return Goal::BAD_UTILITY;
+		}
+		else
+		{
+			bonus = g_theGoalDB->Get(m_goal_type)->GetGarrisonBonus();
+		}
 	}
+
+#if defined(_DEBUG) || defined(USE_LOGGING)  // Add a debug report of goal computing (raw priority and all modifiers)
+	double report_garrison_bonus = bonus;
+#endif //_DEBUG
+
 
 	// This is expensive, because of pillage, get city target first.
 	dest_pos = Get_Target_Pos(agent_ptr->Get_Army());
@@ -1569,8 +1583,6 @@ Utility Goal::Compute_Agent_Matching_Value(const Agent_ptr agent_ptr) const
 		return Goal::BAD_UTILITY;
 	}
 
-	Utility bonus = 0;
-
 	//Set if unit is wounded and it is a retreat of defense goal, add bonus
 	//to goalpriority + matching
 
@@ -1669,7 +1681,7 @@ Utility Goal::Compute_Agent_Matching_Value(const Agent_ptr agent_ptr) const
 		}
 	}
 #if defined(_DEBUG) || defined(USE_LOGGING)  // Add a debug report of goal computing (raw priority and all modifiers)
-	double report_wounded = bonus;
+	double report_wounded = bonus - report_garrison_bonus;
 #endif //_DEBUG
 
 	if(agent_ptr->Get_Army()->HasCargo() ? agent_ptr->Get_Army()->IsCargoObsolete() : agent_ptr->Get_Army()->IsObsolete())
@@ -1793,7 +1805,7 @@ Utility Goal::Compute_Agent_Matching_Value(const Agent_ptr agent_ptr) const
 	MapPoint target_pos = Get_Target_Pos();
 
 	AI_DPRINTF(k_DBG_SCHEDULER_DETAIL, m_playerId, m_goal_type, -1,
-	("\t\t%9x,\t %9x,\t%9x (%3d,%3d),\t%s (%3d,%3d) (%3d,%3d),\t%8d,\t%8d,\t%8f,\t%8f,\t%8d,\t%8f,\t%8f,\t%8f,\t%8d,\t%8f,\t%8f,\t%8d,\t%9x,\t%s,\t%s \n",
+	("\t\t%9x,\t %9x,\t%9x (%3d,%3d),\t%s (%3d,%3d) (%3d,%3d),\t%8d,\t%8d,\t%8f,\t%8f,\t%8d,\t%8f,\t%8f,\t%8f,\t%8d,\t%8f,\t%8f,\t%8d,\t%8d,\t%9x,\t%s,\t%s \n",
 	this,                                          // This goal
 	agent_ptr->Get_Army().m_id,                    // The army
 	agent_ptr,                                     // The agent
@@ -1815,6 +1827,7 @@ Utility Goal::Compute_Agent_Matching_Value(const Agent_ptr agent_ptr) const
 	time_term,                                     // Time needed to goal, if we would follow a bee line
 	report_InVisionRange,                          // In vision range bonus
 	report_NoBarbsPresent,                         // If no Barbarian are present bonus
+	report_garrison_bonus,                         // If an angent is needed for garrison add a bonus so that it is also selected for garrison
 	is_transporter,                                // Whether the agent is a transporter
 	agent_ptr->Get_Goal(),                         // The goal to that this agent is asigned to
 	 (g_theWorld->HasCity(agent_ptr->Get_Pos()) ? g_theWorld->GetCity(agent_ptr->Get_Pos()).GetName() : "field"),

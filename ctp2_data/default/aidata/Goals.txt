@@ -58,6 +58,7 @@ GOAL_DEFEND {
   UnexploredBonus     -999999
   ObsoleteArmyBonus      -500
   TreaspassingArmyBonus     0
+  GarrisonBonus         10000
 
   ThreatenType:None
   ThreatenBonus 0
