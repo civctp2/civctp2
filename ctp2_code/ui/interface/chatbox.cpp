@@ -70,6 +70,8 @@
 #include "tiledmap.h"               // g_tiledMap
 #include "gfx_options.h"
 #include "GameEventManager.h"
+#include "pollution.h"
+
 
 #if defined(__AUI_USE_SDL__)
 #include "SDL.h"
@@ -86,6 +88,7 @@ extern C3UI			*g_c3ui;
 extern Background	*g_background;
 extern CivApp		*g_civApp;
 extern HWND			gHwnd;
+extern Pollution                *g_thePollution;
 
 ChatBox				*g_chatBox = NULL;
 
@@ -792,6 +795,29 @@ BOOL ChatWindow::CheckForEasterEggs(MBCHAR *s)
 			{
 				char buf[1024];
 				sprintf(buf, "This is not a player number");
+				g_chatBox->AddLine(g_selected_item->GetCurPlayer(), buf);
+			}
+		}
+	}
+
+	// Causes sea level rising or an ozone depletion, whatever is next
+	else if(!strcmp(s, "/gw") && !g_network.IsActive())
+	{
+		if(g_thePollution->RunNextDesaster())
+		{
+			if(g_selected_item != NULL)
+			{
+				char buf[1024];
+				sprintf(buf, "Trumpy Bumpy says global warming is bullshit!");
+				g_chatBox->AddLine(g_selected_item->GetCurPlayer(), buf);
+			}
+		}
+		else
+		{
+			if(g_selected_item != NULL)
+			{
+				char buf[1024];
+				sprintf(buf, "No desaster is left");
 				g_chatBox->AddLine(g_selected_item->GetCurPlayer(), buf);
 			}
 		}
