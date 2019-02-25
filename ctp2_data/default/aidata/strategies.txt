@@ -995,11 +995,6 @@ STRATEGY_CAREFUL_START {
 
     GoalElement { Goal GOAL_SETTLE_IN_CITY      Priority        0  MaxEval   0  MaxExec   0 PerCity }
 
-    // minimum number of units to keep in cities as a garrison
-    OffensiveGarrisonCount  0
-    DefensiveGarrisonCount  1
-    RangedGarrisonCount     1
-
     // Set so early cities will build offensive units to explore with after a granary
     BuildListSequenceElement {
         Priority 9100
@@ -1025,11 +1020,6 @@ STRATEGY_AGRESSIVE_START {
     UnitSupportPercent 0.30
 
     GoalElement { Goal GOAL_SETTLE_IN_CITY      Priority        0  MaxEval   0  MaxExec   0 PerCity }
-
-    // same as careful start, but with no garrison
-    OffensiveGarrisonCount  0
-    DefensiveGarrisonCount  1
-    RangedGarrisonCount     1
 
     // Set so early cities will build offensive units to explore before a granary
     BuildListSequenceElement {
