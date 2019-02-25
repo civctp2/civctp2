@@ -3428,9 +3428,16 @@ bool Goal::FollowPathToTask( Agent_ptr first_army,
 			Assert(order_rec);
 			if (order_rec)
 			{
-				if(m_sub_task != SUB_TASK_CARGO_TO_BOARD)
+				if(m_sub_task == SUB_TASK_RALLY)
 				{
-					first_army->PerformOrderHere(order_rec, (Path *) &found_path);
+					if(first_army->Get_Pos() != dest_pos)
+					{
+						first_army->PerformOrderHere(order_rec, (Path *)&found_path);
+					}
+				}
+				else if(m_sub_task != SUB_TASK_CARGO_TO_BOARD)
+				{
+					first_army->PerformOrderHere(order_rec, (Path *)&found_path);
 				}
 				else
 				{
@@ -3875,7 +3882,6 @@ bool Goal::GotoGoalTaskSolution(Agent_ptr the_army, MapPoint & goal_pos)
 
 	if (move_success)
 	{
-		Assert(!the_army->Get_Can_Be_Executed())
 		the_army->Set_Can_Be_Executed(false);
 	}
 
@@ -4065,6 +4071,46 @@ MapPoint Goal::MoveToTarget(Agent_ptr rallyAgent)
 	return rallyPos;
 }
 
+MapPoint Goal::MoveAwayFromTargetCity(Agent_ptr rallyAgent)
+{
+	MapPoint  rallyPos = rallyAgent->Get_Pos();
+	MapPoint targetPos = Get_Target_Pos();
+
+	if(m_target_city.IsValid() && rallyPos.IsNextTo(targetPos))
+	{
+		MapPoint tempPos;
+		for(sint32 i = 0; i < NOWHERE; i++)
+		{
+			if(rallyPos.GetNeighborPosition(WORLD_DIRECTION(i), tempPos))
+			{
+				if(targetPos.IsNextTo(tempPos))
+					continue;
+
+				if(!g_theWorld->IsOnSameContinent(targetPos, tempPos))
+					continue;
+
+				if(!g_theWorld->GetArmyPtr(tempPos)
+				   && (    ( rallyAgent->Get_Army()->HasCargo()
+				        &&   rallyAgent->Get_Army()->CargoCanEnter(tempPos))
+				        || (!rallyAgent->Get_Army()->HasCargo()
+				        &&   rallyAgent->Get_Army()->CanEnter(tempPos))
+				      )
+				  )
+				{
+					// Search for a cell without an army
+					rallyPos = tempPos;
+					if(!GotoGoalTaskSolution(rallyAgent, rallyPos))
+						Assert(false);
+
+					break;
+				}
+			}
+		}
+	}
+
+	return rallyPos;
+}
+
 MapPoint Goal::MoveOutOfCity(Agent_ptr rallyAgent)
 {
 	MapPoint rallyPos = rallyAgent->Get_Pos();
@@ -4073,14 +4119,12 @@ MapPoint Goal::MoveOutOfCity(Agent_ptr rallyAgent)
 		MapPoint tempPos;
 		for(sint32 i = 0 ; i < NOWHERE; i++)
 		{
-			bool result = rallyPos.GetNeighborPosition(WORLD_DIRECTION(i), tempPos);
-			if(result)
+			if(rallyPos.GetNeighborPosition(WORLD_DIRECTION(i), tempPos))
 			{
-				CellUnitList *the_army = NULL;
-				the_army = g_theWorld->GetArmyPtr(tempPos);
-				if(!the_army
+				if(!g_theWorld->GetArmyPtr(tempPos)
 				&& rallyAgent->Get_Army()->CanEnter(tempPos)
-				){	//search for cell without army
+				){
+					// Search for a cell without an army
 					rallyPos = tempPos;
 					break;
 				}
@@ -4168,7 +4212,15 @@ bool Goal::RallyTroops()
 		return true;
 	}
 
-	MapPoint     rallyPos   = rallyAgent->Get_Army()->HasCargo() ? MoveToTarget(rallyAgent) : MoveOutOfCity(rallyAgent);
+	MapPoint     rallyPos = rallyAgent->Get_Army()->HasCargo() ? MoveToTarget(rallyAgent) : MoveOutOfCity(rallyAgent);
+	             rallyPos = MoveAwayFromTargetCity(rallyAgent);
+
+	if(rallyPos == rallyAgent->Get_Pos()
+	&& rallyAgent->Get_Army()->HasCargo()
+	&& rallyAgent->CargoCanEnter()
+	){
+		rallyAgent->UnloadCargo();
+	}
 
 	rallyAgent->WaitHere(Get_Target_Pos(rallyAgent->Get_Army()));
 

@@ -244,6 +244,7 @@ private:
 
     MapPoint MoveToTarget(Agent_ptr rallyAgent);
     MapPoint MoveOutOfCity(Agent_ptr rallyAgent);
+    MapPoint MoveAwayFromTargetCity(Agent_ptr rallyAgent);
     Agent_ptr GetRallyAgent() const;
     MapPoint GetFreeNeighborPos(MapPoint pos) const;
     bool RallyTroops();
