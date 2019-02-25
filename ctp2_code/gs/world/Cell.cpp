@@ -304,7 +304,7 @@ bool Cell::CanEnter(const uint32 flag) const
 
 bool Cell::GetCanDie(void) const
 {
-	return (m_env & k_BIT_MOVEMENT_TYPE_LAND) != 0;
+	return g_theTerrainDB->Get(m_terrain_type)->GetCanDie();
 }
 
 //----------------------------------------------------------------------------

@@ -1311,24 +1311,30 @@ void TiledMap::BreakMegaTile(MapPoint &pos)
 	RedrawTile(&pos);
 
 	MapPoint	curPos = pos;
+	bool isAtMap = true;
 	while (sint32 next = tileInfo->GetNextMega())
-    {
+	{
 		switch (next)
-        {
+		{
 		case k_MEGATILE_DIRECTION_N :
-			curPos.GetNeighborPosition(NORTHWEST, curPos);
+			isAtMap = curPos.GetNeighborPosition(NORTHWEST, curPos);
 			break;
 		case k_MEGATILE_DIRECTION_E :
-			curPos.GetNeighborPosition(NORTHEAST, curPos);
+			isAtMap = curPos.GetNeighborPosition(NORTHEAST, curPos);
 			break;
 		case k_MEGATILE_DIRECTION_S :
-			curPos.GetNeighborPosition(SOUTHEAST, curPos);
+			isAtMap = curPos.GetNeighborPosition(SOUTHEAST, curPos);
 			break;
 		case k_MEGATILE_DIRECTION_W :
-			curPos.GetNeighborPosition(SOUTHWEST, curPos);
+			isAtMap = curPos.GetNeighborPosition(SOUTHWEST, curPos);
 			break;
 		default:
 			Assert(FALSE);
+		}
+
+		if(!isAtMap)
+		{
+			break;
 		}
 
 		tileInfo = GetTileInfo(curPos);
@@ -1339,23 +1345,28 @@ void TiledMap::BreakMegaTile(MapPoint &pos)
 
 	curPos = pos;
 	while (sint32 last = tileInfo->GetLastMega())
-    {
+	{
 		switch (last)
-        {
+		{
 		case k_MEGATILE_DIRECTION_N :
-			curPos.GetNeighborPosition(NORTHWEST, curPos);
+			isAtMap = curPos.GetNeighborPosition(NORTHWEST, curPos);
 			break;
 		case k_MEGATILE_DIRECTION_E :
-			curPos.GetNeighborPosition(NORTHEAST, curPos);
+			isAtMap = curPos.GetNeighborPosition(NORTHEAST, curPos);
 			break;
 		case k_MEGATILE_DIRECTION_S :
-			curPos.GetNeighborPosition(SOUTHEAST, curPos);
+			isAtMap = curPos.GetNeighborPosition(SOUTHEAST, curPos);
 			break;
 		case k_MEGATILE_DIRECTION_W :
-			curPos.GetNeighborPosition(SOUTHWEST, curPos);
+			isAtMap = curPos.GetNeighborPosition(SOUTHWEST, curPos);
 			break;
 		default:
 			Assert(FALSE);
+		}
+
+		if(!isAtMap)
+		{
+			break;
 		}
 
 		tileInfo = GetTileInfo(curPos);

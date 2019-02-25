@@ -1039,7 +1039,7 @@ void AtExitProc(void)
 	Mix_CloseAudio();
 # endif
 
-	g_mouseShouldTerminateThread = TRUE;
+g_mouseShouldTerminateThread = TRUE;
 
 	// Destroy the mutex used for the secondary keyboard event queue
 #ifdef __AUI_USE_SDL__
@@ -1701,6 +1701,7 @@ int WINAPI CivMain(HINSTANCE hInstance, HINSTANCE hPrevInstance, PSTR szCmdLine,
 		while (!g_letUIProcess) { // There are breaks, too ;)
 			SDL_PumpEvents();
 			int n = SDL_PeepEvents(&event, 1, SDL_GETEVENT,
+
                      ~(SDL_EVENTMASK(SDL_MOUSEMOTION) | SDL_EVENTMASK(SDL_MOUSEBUTTONDOWN) | SDL_EVENTMASK(SDL_MOUSEBUTTONUP)));
 			if (0 > n) {
                             //fprintf(stderr, "[CivMain] PeepEvents failed: %s\n", SDL_GetError());

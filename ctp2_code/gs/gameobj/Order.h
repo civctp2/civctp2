@@ -64,7 +64,17 @@ public:
 		m_gameEventArgs = NULL;
 	}
 
+#if defined(__GNUC__)
+	// GCC optimizes away the NULLing in the destructor
+	// Since the Order objects comes from a pool it is
+	// effectively deleted, twice. That is the design,
+	// whether that is good or bad is another question.
+	__attribute__((optimize("-O0"))) ~Order();
+#elif defined(WIN32)
 	~Order();
+#else
+	~Order();
+#endif
 
 	void *operator new(size_t size);
 	void operator delete (void *ptr);
