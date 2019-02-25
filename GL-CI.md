@@ -28,7 +28,3 @@ Sprite loading:
 Sprite animation looping:
 
 ![image only visible on GitLab](/../-/jobs/artifacts/master/raw/loop-sprite.png?job=loop-sprite)
-
-Automated creation of animated sprites:
-
-![image only visible on GitLab](/../-/jobs/artifacts/master/raw/create-sprite.png?job=buildSprites)
