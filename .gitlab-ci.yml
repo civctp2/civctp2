@@ -8,6 +8,9 @@ before_script:
 
 stages:
   - build
+  - testSprite
+  - spriteBuild
+  - spriteInclude
   - test
   - release
 
@@ -43,19 +46,18 @@ build:
     - 'curl -sS -f -L --header  "Private-Token: ${ARTIFACTKEY}" -o ctp2CD.zip "${CI_API_V4_URL}/projects/${CI_PROJECT_NAMESPACE}%2Fctp2CD/jobs/artifacts/master/download?job=ctp2CDpack"'
     - mkdir -p ctp2CD/
     - unzip ctp2CD.zip -d ctp2CD/
-    - docker pull $IMAGE_TAG:test || true
+    - docker pull $IMAGE_TAG:testSprite || true
     - docker build --pull
                    --cache-from $IMAGE_TAG:system-latest
                    --cache-from $IMAGE_TAG:builder-latest
-                   --cache-from $IMAGE_TAG:test
-                   --tag $IMAGE_TAG:test
+                   --cache-from $IMAGE_TAG:testSprite
+                   --tag $IMAGE_TAG:testSprite
                    --target install
                    .
-    - docker push $IMAGE_TAG:test
+    - docker push $IMAGE_TAG:testSprite
   retry: 2
 
 .test: &test
-  stage: test
   dependencies: []
   image: registry.gitlab.com/lynxabraxas/dind-sikuli/master:latest
   variables:
@@ -94,38 +96,183 @@ build:
 
 start-game:
   <<: *test
+  stage: test
   variables:
     CTP_PARAMS: "nointromovie"
 
 new-game:
   <<: *test
+  stage: test
   variables:
     CTP_PARAMS: "nointromovie"
 
 load-game:
   <<: *test
+  stage: test
   variables:
     CTP_PARAMS: "nointromovie"
 
 name-game:
   <<: *test
+  stage: test
   variables:
     CTP_PARAMS: "nointromovie"
 
 play-game_build-city:
   <<: *test
+  stage: test
   variables:
     CTP_PARAMS: "nointromovie"
 
 load-sprite:
   <<: *test
+  stage: testSprite
   variables:
     CTP_PARAMS: "nointromovie runspriteeditor"
 
 loop-sprite:
   <<: *test
+  stage: testSprite
   variables:
     CTP_PARAMS: "nointromovie runspriteeditor"
+
+save-sprite:
+  stage: testSprite
+  dependencies: []
+  image: registry.gitlab.com/lynxabraxas/dind-sikuli/master:latest
+  variables:
+    RES_FILE: ${CI_JOB_NAME}.spr
+    DOCKER_PARAMS: ""
+    CTP_PARAMS: "nointromovie runspriteeditor"
+  artifacts:
+    untracked: true
+    when: always
+  script:
+    - export SHARED_PATH="$(dirname ${CI_PROJECT_DIR})/shared"
+    - mkdir -p ${SHARED_PATH}/.X11-unix/
+    - mkdir -p /tmp/.X11-unix/
+    - mount --bind ${SHARED_PATH}/.X11-unix/ /tmp/.X11-unix/
+    - export DISPLAY=:99.0
+    - Xvfb $DISPLAY -screen 0 1280x1024x24 &
+    - pidX=$!
+    - sleep 3
+    - docker pull $IMAGE_TAG:$CI_JOB_STAGE
+    - echo $DOCKER_PARAMS
+    - echo $CTP_PARAMS
+    - touch $RES_FILE # file must exist for docker bind of file
+    - chmod a+rw $RES_FILE # user inside docker must have write permission!
+    - docker run
+             --env DISPLAY
+             -v ${SHARED_PATH}/.X11-unix/:/tmp/.X11-unix/
+             -v $(pwd)/.civctp2/save/:/opt/ctp2/ctp2_program/ctp/save/
+             -v $(pwd)/${RES_FILE}:/opt/ctp2/ctp2_data/default/graphics/sprites/${RES_FILE}
+             $DOCKER_PARAMS
+             $IMAGE_TAG:$CI_JOB_STAGE
+             ./ctp2 $CTP_PARAMS &
+    - pidD=$!
+    - java -cp "/opt/sikulixapi.jar:/opt/jython-standalone-2.7.1.jar" org.python.util.jython tests/${CI_JOB_NAME}.sikuli/${CI_JOB_NAME}.py
+    - kill $pidD
+    - kill $pidX
+    - test -f $RES_FILE
+    - echo "b9d9702ad28410d68ec1269838e3dabb  $RES_FILE" | md5sum -c
+  retry: 2
+  except:
+    - /^debug-.*$/
+
+export-sprite:
+  stage: testSprite
+  dependencies: []
+  image: registry.gitlab.com/lynxabraxas/dind-sikuli/master:latest
+  variables:
+    RES_FILE: ${CI_JOB_NAME}.txt
+    DOCKER_PARAMS: ""
+    CTP_PARAMS: "nointromovie runspriteeditor"
+  artifacts:
+    untracked: true
+    when: always
+  script:
+    - export SHARED_PATH="$(dirname ${CI_PROJECT_DIR})/shared"
+    - mkdir -p ${SHARED_PATH}/.X11-unix/
+    - mkdir -p /tmp/.X11-unix/
+    - mount --bind ${SHARED_PATH}/.X11-unix/ /tmp/.X11-unix/
+    - export DISPLAY=:99.0
+    - Xvfb $DISPLAY -screen 0 1280x1024x24 &
+    - pidX=$!
+    - sleep 3
+    - docker pull $IMAGE_TAG:$CI_JOB_STAGE
+    - echo $DOCKER_PARAMS
+    - echo $CTP_PARAMS
+    - touch $RES_FILE # file must exist for docker bind of file
+    - chmod a+rw $RES_FILE # user inside docker must have write permission!
+    - docker run
+             --env DISPLAY
+             -v ${SHARED_PATH}/.X11-unix/:/tmp/.X11-unix/
+             -v $(pwd)/.civctp2/save/:/opt/ctp2/ctp2_program/ctp/save/
+             -v $(pwd)/${RES_FILE}:/opt/ctp2/ctp2_program/ctp/${RES_FILE}
+             $DOCKER_PARAMS
+             $IMAGE_TAG:$CI_JOB_STAGE
+             ./ctp2 $CTP_PARAMS &
+    - pidD=$!
+    - java -cp "/opt/sikulixapi.jar:/opt/jython-standalone-2.7.1.jar" org.python.util.jython tests/${CI_JOB_NAME}.sikuli/${CI_JOB_NAME}.py
+    - kill $pidD
+    - kill $pidX
+    - egrep "${RES_FILE}|GOOD_SPRITE|GOOD_SPRITE_IDLE|ANIM_NUM_FRAMES|ANIM_TRANSPARENCIESANIM_TRANSPARENCIES" $RES_FILE
+  retry: 2
+  except:
+    - /^debug-.*$/
+
+buildSprites:
+  stage: spriteBuild
+  dependencies: []
+  image: registry.gitlab.com/lynxabraxas/dind-sikuli/master:latest
+  variables:
+    GIT_SUBMODULE_STRATEGY: recursive
+    RES_FILE: ""
+    DOCKER_PARAMS: ""
+    CTP_PARAMS: "nointromovie runspriteeditor"
+  artifacts:
+    untracked: true
+    when: always
+  script:
+    - apk update && apk upgrade && apk add --no-cache imagemagick bash grep
+    - export SHARED_PATH="$(dirname ${CI_PROJECT_DIR})/shared"
+    - mkdir -p ${SHARED_PATH}/.X11-unix/
+    - mkdir -p /tmp/.X11-unix/
+    - mount --bind ${SHARED_PATH}/.X11-unix/ /tmp/.X11-unix/
+    - export DISPLAY=:99.0
+    - Xvfb $DISPLAY -screen 0 1280x1024x24 &
+    - pidX=$!
+    - docker pull $IMAGE_TAG:testSprite
+    - echo $DOCKER_PARAMS
+    - echo $CTP_PARAMS
+    - bash bin/buildSprites.sh
+    - kill $pidX
+  retry: 2
+  except:
+    - /^debug-.*$/
+
+includeSprites:
+  stage: spriteInclude
+  tags:
+    - multicore
+  dependencies:
+    - buildSprites 
+  script:
+    ## 4th stage build
+    - docker pull $IMAGE_TAG:system-latest
+    - docker pull $IMAGE_TAG:builder-latest
+    - docker pull $IMAGE_TAG:test || true
+    - docker build --pull
+                   --cache-from $IMAGE_TAG:system-latest
+                   --cache-from $IMAGE_TAG:builder-latest
+                   --cache-from $IMAGE_TAG:testSprite
+                   --cache-from $IMAGE_TAG:test
+                   --tag $IMAGE_TAG:test
+                   .
+    - docker push $IMAGE_TAG:test
+  retry: 2
+  except:
+    - /^debug-.*$/
 
 release:
   variables:
