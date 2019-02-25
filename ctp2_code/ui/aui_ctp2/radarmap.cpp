@@ -137,6 +137,7 @@ RadarMap::RadarMap(AUI_ERRCODE *retval,
 //---------------------------------------------------------------------------
 RadarMap::~RadarMap()
 {
+	delete[] m_mapOverlay;
 	delete m_mapSurface;
 	delete m_tempSurface;
 	if (m_tempBuffer)
