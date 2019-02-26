@@ -70,12 +70,12 @@ kill $pidD
 
 ls newSprites/ || true
 
-## rename new sprites to the corresponding case used in ctp2 or ctp2CD (expecting ctp2CD to equal ctp2 in case of overlap)
+## rename new sprites to the corresponding case used in ctp2
 cd newSprites/ &&
     paste -d ' ' \
 	  <(ls -1 GG*.spr \
 		| sort -f) \
-	  <(find ../ctp2/ctp2_data/ ../ctp2CD/ctp2_data/ -type f \
+	  <(find ../ctp2_data/ -type f \
 		| grep -i -oFf <(ls -1 GG*.spr) \
 		| sort -f) \
 	| xargs -t -n 2  mv -n
