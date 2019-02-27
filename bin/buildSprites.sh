@@ -37,7 +37,7 @@ for scene in bpy.data.scenes:
     ## tiny TGA for the listing in the trade manager
     convert sprites/${RES_FILE}/GG${RES_FILE}A.001.tif -trim -resize 23x18 -gravity center -background none -extent 23x18  -channel RGBA -fx 'a==0 ? #FF00FFFF : u' -background white  -alpha remove -depth 5 TGAs/MGGI${RES_FILE}.tga || exit 10
 
-    awk -f sprites/bin/spriteFileGen.awk -v nf=$(ls -1 sprites/${RES_FILE}/*A*.tif | wc -l) > GG${RES_FILE}.txt
+    awk -f bin/spriteFileGen.awk -v nf=$(ls -1 sprites/${RES_FILE}/*A*.tif | wc -l) > GG${RES_FILE}.txt
 
     touch newSprites/GG${RES_FILE}.spr # file must exist for docker bind of file
     chmod a+rw GG${RES_FILE}.txt newSprites/GG${RES_FILE}.spr # user inside docker must have write permission!
