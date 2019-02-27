@@ -123,7 +123,7 @@ public:
 
 	bool CanMove() const { return m_army.IsValid() && m_army->CanMove(); };
 
-	bool FindPathToBoard( const uint32 & move_intersection, const MapPoint & dest_pos, const bool & check_dest, Path & found_path );
+	bool FindPathToBoard( const uint32 & move_intersection, const MapPoint & dest_pos, const bool & check_dest, Path & found_path, sint32 additionalUnits = 0);
 
 	static bool FindPath(const Army & army, const MapPoint & target_pos, const bool & check_dest, Path & found_path );
 	static bool FindPath(const Army & army, const MapPoint & target_pos, const bool & check_dest, Path & found_path, float & total_cost);

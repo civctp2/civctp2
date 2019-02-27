@@ -3567,6 +3567,27 @@ bool Goal::GotoTransportTaskSolution(Agent_ptr the_army, Agent_ptr the_transport
 			return true;
 		}
 
+		MapPoint targetPos = Get_Target_Pos();
+
+		Cell*  theCell = g_theWorld->GetCell(the_transport->Get_Pos());
+		sint32 numUnitsInCity = the_transport->GetUnitsAtPos();
+		sint32 numUnitsInArmy = the_army->Get_Army()->Num();
+
+		if(theCell->HasCity()
+		   && numUnitsInCity + numUnitsInArmy > k_MAX_ARMY_SIZE)
+		{
+			if(!pos.IsValid())
+			{
+				pos = dest_pos;
+			}
+
+			dest_pos = MoveTransportOutOfCity(the_transport, the_army);
+
+			the_transport->Set_Target_Pos(dest_pos);
+			the_transport->Set_Can_Be_Executed(false);
+			return true;
+		}
+
 		if(dest_pos == the_transport->Get_Pos()
 		|| the_transport->Get_Army()->CheckValidDestination(dest_pos)
 		){
@@ -3583,7 +3604,7 @@ bool Goal::GotoTransportTaskSolution(Agent_ptr the_army, Agent_ptr the_transport
 		uint32 move_intersection =
 			the_transport->Get_Army().GetMovementType() | the_army->Get_Army().GetMovementType();
 
-		found = the_transport->FindPathToBoard(move_intersection, dest_pos, check_dest, found_path);
+		found = the_transport->FindPathToBoard(move_intersection, dest_pos, check_dest, found_path, the_army->Get_Army()->Num());
 
 		if (!found)
 		{
@@ -4136,6 +4157,40 @@ MapPoint Goal::MoveOutOfCity(Agent_ptr rallyAgent)
 	}
 
 	return rallyPos;
+}
+
+MapPoint Goal::MoveTransportOutOfCity(Agent_ptr transport, Agent_ptr cargo)
+{
+	sint32 minDistance = 0x7fffffff;
+
+	MapPoint transportPos = transport->Get_Pos();
+	if(g_theWorld->GetCity(transportPos).IsValid())
+	{
+		MapPoint tempPos;
+		for(sint32 i = 0; i < NOWHERE; i++)
+		{
+			if(transportPos.GetNeighborPosition(WORLD_DIRECTION(i), tempPos))
+			{
+				if(!g_theWorld->GetArmyPtr(tempPos)
+				   && transport->Get_Army()->CanEnter(tempPos)
+				   )
+				{
+					sint32 distance = MapPoint::GetSquaredDistance(transport->Get_Pos(), tempPos);
+
+					if(distance < minDistance)
+					{
+						minDistance = distance;
+						transportPos = tempPos;
+					}
+				}
+			}
+		}
+
+		if(!GotoGoalTaskSolution(transport, transportPos))
+			Assert(false);
+	}
+
+	return transportPos;
 }
 
 Agent_ptr Goal::GetRallyAgent() const

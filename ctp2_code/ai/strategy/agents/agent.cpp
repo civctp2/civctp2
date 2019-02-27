@@ -265,7 +265,7 @@ void Agent::Log_Debug_Info(const int & log, const Goal * const goal) const
 		("\t\t   -------\n"));
 }
 
-bool Agent::FindPathToBoard(const uint32 & move_intersection, const MapPoint & dest_pos, const bool & check_dest, Path & found_path)
+bool Agent::FindPathToBoard(const uint32 & move_intersection, const MapPoint & dest_pos, const bool & check_dest, Path & found_path, sint32 additionalUnits)
 {
 	MapPoint start_pos;
 	m_army->GetPos(start_pos);
@@ -300,7 +300,8 @@ bool Agent::FindPathToBoard(const uint32 & move_intersection, const MapPoint & d
 										   cont,
 										   static_cast<float>(trans_max_r),
 										   found_path,
-										   total_cost ))
+										   total_cost,
+										   additionalUnits))
 	{
 		Assert(0 < found_path.Num());
 

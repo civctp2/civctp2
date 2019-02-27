@@ -212,7 +212,8 @@ bool RobotAstar2::FindPath( const PathType & pathType,
 							const sint32 & trans_dest_cont,
 							const float & trans_max_r,
 							Path & new_path,
-							float & total_cost )
+							float & total_cost,
+							sint32 additionalUnits)
 {
 	sint32 cutoff = 20000;
 
@@ -270,7 +271,7 @@ bool RobotAstar2::FindPath( const PathType & pathType,
 
 	AI_DPRINTF(k_DBG_ASTAR, -1, -1, -1,("\n"));
 	if(!UnitAstar::FindPath(army,
-	                        nUnits,
+	                        nUnits + additionalUnits,
 	                        move_intersection,
 	                        move_union,
 	                        start,

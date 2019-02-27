@@ -50,15 +50,16 @@ public:
 	RobotAstar2();
 
 	bool FindPath(const PathType & pathType,
-				  const Army & army,
-				  const uint32 & army_move_type,
-		          const MapPoint & start,
-				  const MapPoint & dest,
-				  const bool & check_dest,
-				  const sint32 & trans_dest_cont,
-				  const float & trans_max_r,
-				  Path & new_path,
-				  float & total_cost);
+	              const Army & army,
+	              const uint32 & army_move_type,
+	              const MapPoint & start,
+	              const MapPoint & dest,
+	              const bool & check_dest,
+	              const sint32 & trans_dest_cont,
+	              const float & trans_max_r,
+	              Path & new_path,
+	              float & total_cost,
+	              sint32 additionalUnits = 0);
 private:
 
 	bool TransportPathCallback (const bool & can_enter,
