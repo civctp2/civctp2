@@ -1491,6 +1491,17 @@ Utility Goal::Compute_Agent_Matching_Value(const Agent_ptr agent_ptr) const
 		return Goal::BAD_UTILITY;
 	}
 
+	if( g_theGoalDB->Get(m_goal_type)->GetNoTransport()
+	&&
+	  ((!g_theWorld->IsOnSameContinent(dest_pos, curr_pos)
+	&& !agent_ptr->Get_Army()->GetMovementTypeAir()
+	   )
+	|| agent_ptr->Get_Army()->HasCargo() // Actually we do not want to have any transporters involved
+	  ))
+	{
+		return Goal::BAD_UTILITY;
+	}
+
 	PLAYER_INDEX target_owner = Get_Target_Owner();
 	const Diplomat & diplomat = Diplomat::GetDiplomat(m_playerId);
 
