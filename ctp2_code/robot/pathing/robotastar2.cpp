@@ -114,6 +114,25 @@ bool RobotAstar2::TransportPathCallback (const bool & can_enter,
 			cost *= m_transMaxR;
 		}
 
+		if(g_theWorld->IsWater(prev) || g_theWorld->IsShallowWater(prev))
+		{
+			if
+			  (
+			       (
+			           g_theWorld->IsLand(pos)
+			        || g_theWorld->IsMountain(pos)
+			       )
+			    && (
+			          ( g_theWorld->IsOccupiedByForeigner  (pos, m_owner) // If the target is a city
+			        && !g_theWorld->IsSurroundedByWater(pos))
+			        ||  g_theWorld->IsNextToForeignerOnLand(pos, m_owner)
+			       )
+			  )
+			{
+				cost += k_MOVE_ISDANGER_COST;
+			}
+		}
+
 		return true;
 	}
 	else

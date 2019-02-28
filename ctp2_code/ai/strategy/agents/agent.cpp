@@ -339,7 +339,7 @@ bool Agent::FindPath(const Army & army, const MapPoint & target_pos, const bool 
 
 	sint32 cont = g_theWorld->GetContinent(target_pos);
 
-	double trans_max_r = 0.8;
+	double trans_max_r = 0.4;
 	bool tmp_check_dest = check_dest;
 	RobotAstar2::PathType path_type;
 	uint32 move_union;
