@@ -1263,13 +1263,20 @@ void SelectedItem::MoveArmyClick(const MapPoint &pos, const aui_MouseEvent *data
 				g_theWorld->IsLand(pos)
 			   )
 			{
-				// Reaching a shore: unload units?
-				SlicObject * so = new SlicObject("14IAAutoUnload");
-				so->AddLocation(pos);
-				so->AddCivilisation(player);
-				so->AddRecipient(player);
-				g_slicEngine->Execute(so);
-				return;
+				if(g_player[player]->IsHuman())
+				{
+					// Reaching a shore: unload units?
+					SlicObject * so = new SlicObject("14IAAutoUnload");
+					so->AddLocation(pos);
+					so->AddCivilisation(player);
+					so->AddRecipient(player);
+					g_slicEngine->Execute(so);
+					return;
+				}
+				else
+				{
+					SetAutoUnload(true);
+				}
 			}
 		}
 
@@ -1390,16 +1397,23 @@ void SelectedItem::ActionClick(const MapPoint &pos, const aui_MouseEvent *data, 
 				(unit.GetNumCarried() > 0)
 			   )
 			{
-				if ((unit.GetMovementTypeSea() || unit.GetMovementTypeShallowWater()) &&
+				if((unit.GetMovementTypeSea() || unit.GetMovementTypeShallowWater()) &&
 					(g_theWorld->IsLand(pos))
 				   )
 				{
-					SlicObject *so = new SlicObject("14IAAutoUnload");
-					so->AddLocation(pos);
-					so->AddCivilisation(player);
-					so->AddRecipient(player);
-					g_slicEngine->Execute(so);
-					return;
+					if(g_player[player]->IsHuman())
+					{
+						SlicObject *so = new SlicObject("14IAAutoUnload");
+						so->AddLocation(pos);
+						so->AddCivilisation(player);
+						so->AddRecipient(player);
+						g_slicEngine->Execute(so);
+						return;
+					}
+					else
+					{
+						SetAutoUnload(true);
+					}
 				}
 			}
 

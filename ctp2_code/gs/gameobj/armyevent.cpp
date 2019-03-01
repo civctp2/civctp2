@@ -809,18 +809,30 @@ STDEHANDLER(ArmyMoveEvent)
 
 			Assert(g_player[owner]->IsRobot() && Diplomat::GetDiplomat(owner).HasWarOrDesiresPreemptivelyWith(defender->GetOwner()));
 
-			DPRINTF(k_DBG_GAMESTATE, ("Army 0x%lx gets event to attack foreigner\n", army.m_id));
-			g_gevManager->AddEvent(GEV_INSERT_AfterCurrent,
-								   GEV_FinishAttack,
-								   GEA_Army, army,
-								   GEA_MapPoint, newPos,
-								   GEA_End);
+			if(g_player[owner]->IsRobot() && army->CanFight(*defender) || g_player[owner]->IsHuman())
+			{
+				DPRINTF(k_DBG_GAMESTATE, ("Army 0x%lx gets event to attack foreigner\n", army.m_id));
+				g_gevManager->AddEvent(GEV_INSERT_AfterCurrent,
+									   GEV_FinishAttack,
+									   GEA_Army, army,
+									   GEA_MapPoint, newPos,
+									   GEA_End);
 
-			DPRINTF(k_DBG_GAMESTATE, ("Army 0x%lx clears current oders via event before attacking foreigner\n", army.m_id));
-			g_gevManager->AddEvent(GEV_INSERT_AfterCurrent,
-								   GEV_ClearOrders,
-								   GEA_Army, army,
-								   GEA_End);
+				DPRINTF(k_DBG_GAMESTATE, ("Army 0x%lx clears current oders via event before attacking foreigner\n", army.m_id));
+				g_gevManager->AddEvent(GEV_INSERT_AfterCurrent,
+									   GEV_ClearOrders,
+									   GEA_Army, army,
+									   GEA_End);
+			}
+			else
+			{
+				DPRINTF(k_DBG_GAMESTATE, ("Army 0x%lx unloads for attacking foreigner\n", army.m_id));
+				g_gevManager->AddEvent(GEV_INSERT_AfterCurrent,
+									   GEV_UnloadOrder,
+									   GEA_Army, army,
+									   GEA_MapPoint, newPos,
+									   GEA_End);
+			}
 		}
 		else
 		{
