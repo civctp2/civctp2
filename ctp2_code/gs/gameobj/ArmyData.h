@@ -400,6 +400,7 @@ public:
 
     bool CanMove();
 
+    bool CanSomeCargoBeachAssault() const;
     bool CanBeachAssault() const;
     bool CanHearGossip() const;
     bool CanSlaveUprising() const;

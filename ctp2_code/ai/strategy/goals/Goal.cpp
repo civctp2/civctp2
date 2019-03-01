@@ -579,7 +579,7 @@ Utility Goal::Recompute_Matching_Value(Plan_List & matches, const bool update, c
 
 				combinedUtility += matchUtility;
 				AI_DPRINTF(k_DBG_SCHEDULER_ALL, m_playerId, m_goal_type, -1,
-							("\t\t[%3d] match = %d %s\n", count, matchUtility, g_theGoalDB->Get(m_goal_type)->GetNameText()));
+							("\t\t[%3d] match = %d %s Agent: %x (%d, %d)\n", count, matchUtility, g_theGoalDB->Get(m_goal_type)->GetNameText(), match_iter->Get_Agent(), match_iter->Get_Agent()->Get_Pos().x, match_iter->Get_Agent()->Get_Pos().y));
 				++count;
 			}
 			else
@@ -1585,7 +1585,7 @@ Utility Goal::Compute_Agent_Matching_Value(const Agent_ptr agent_ptr) const
 
 #if defined(_DEBUG) || defined(USE_LOGGING)
 // Maybe this is of some use later
-//		is_transporter = true;
+		is_transporter = true;
 #endif
 	}
 
@@ -1597,8 +1597,7 @@ Utility Goal::Compute_Agent_Matching_Value(const Agent_ptr agent_ptr) const
 	//Set if unit is wounded and it is a retreat of defense goal, add bonus
 	//to goalpriority + matching
 
-	MapPoint armyPos      = agent_ptr->Get_Pos();
-	PLAYER_INDEX PosOwner = g_theWorld->GetOwner(armyPos);
+	PLAYER_INDEX PosOwner = g_theWorld->GetOwner(curr_pos);
 
 	if(g_theGoalDB->Get(m_goal_type)->GetTargetTypeCity()
 	&& g_theGoalDB->Get(m_goal_type)->GetTargetOwnerSelf()
@@ -1744,7 +1743,7 @@ Utility Goal::Compute_Agent_Matching_Value(const Agent_ptr agent_ptr) const
 
 	if(g_theGoalDB->Get(m_goal_type)->GetTreaspassingArmyBonus() > 0)
 	{
-		PLAYER_INDEX pos_owner = g_theWorld->GetCell(agent_ptr->Get_Pos())->GetOwner();
+		PLAYER_INDEX pos_owner = g_theWorld->GetCell(curr_pos)->GetOwner();
 
 		bool incursion_permissin = Diplomat::GetDiplomat(m_playerId).IncursionPermission(pos_owner);
 		if (pos_owner >= 0 && !(incursion_permissin))
@@ -1783,13 +1782,21 @@ Utility Goal::Compute_Agent_Matching_Value(const Agent_ptr agent_ptr) const
 
 	if(!agent_ptr->Get_Army()->HasCargo())
 	{
-		if(!g_theWorld->IsOnSameContinent(dest_pos, agent_ptr->Get_Pos()) // Same continent problem
-		&& !agent_ptr->Get_Army()->GetMovementTypeAir()
-		&& g_player[m_playerId]->GetCargoCapacity() <= 0
-		&& m_current_attacking_strength.Get_Transport() <= 0
+		if((!g_theWorld->IsOnSameContinent(dest_pos, curr_pos) // Same continent problem
+		&&  !agent_ptr->Get_Army()->GetMovementTypeAir()
+		&&   g_player[m_playerId]->GetCargoCapacity() <= 0
+		&&   m_current_attacking_strength.Get_Transport() <= 0)
+		|| ( g_theWorld->IsSurroundedByWater(dest_pos)
+		&&  !agent_ptr->Get_Army()->CanBeachAssault())
 		){
 			return Goal::BAD_UTILITY;
 		}
+	}
+
+	if( g_theWorld->IsSurroundedByWater(dest_pos)
+	&& !agent_ptr->Get_Army()->CanSomeCargoBeachAssault())
+	{
+		return Goal::BAD_UTILITY;
 	}
 
 	Utility match = bonus + time_term + raw_priority;
@@ -1798,16 +1805,52 @@ Utility Goal::Compute_Agent_Matching_Value(const Agent_ptr agent_ptr) const
 
 	Utility tieBreaker = 0;
 
-	for(sint32 i = 0; i < army->Num(); ++i) // HasCargo, maybe has not be corrected, since we just want to make the sort order stable.
+	if(agent_ptr->Get_Army()->HasCargo())
 	{
-		const UnitRecord* rec = army->Get(i)->GetDBRec();
+		sint32 cargoNum = 0;
+		for(sint32 i = 0; i < army->Num(); ++i) // HasCargo, maybe has not be corrected, since we just want to make the sort order stable.
+		{
+			UnitDynamicArray const * cargo =
+				army->Get(i).AccessData()->GetCargoList();
 
-		tieBreaker += static_cast<Utility>(rec->GetAttack());
-		tieBreaker += static_cast<Utility>(rec->GetDefense());
-		tieBreaker +=                      rec->GetZBRangeAttack();
-		tieBreaker +=                      rec->GetFirepower();
-		tieBreaker += static_cast<Utility>(rec->GetArmor());
-		tieBreaker +=                      army->Get(i)->CalculateTotalHP();//rec->GetMaxHP();
+			if(cargo && cargo->Num() > 0)
+			{
+				cargoNum += cargo->Num();
+
+				for(sint32 j = 0; j < cargo->Num(); ++j)
+				{
+					const UnitRecord* rec = cargo->Get(j)->GetDBRec();
+
+					tieBreaker += static_cast<Utility>(rec->GetAttack());
+					tieBreaker += static_cast<Utility>(rec->GetDefense());
+					tieBreaker +=                      rec->GetZBRangeAttack();
+					tieBreaker +=                      rec->GetFirepower();
+					tieBreaker += static_cast<Utility>(rec->GetArmor());
+					tieBreaker +=                      army->Get(i)->CalculateTotalHP();//rec->GetMaxHP();
+				}
+			}
+		}
+
+		// Take the number into account so that we prefer the closest one
+		tieBreaker /= cargoNum;
+		tieBreaker += 100; // That is still a bit hacky, it makes the AIs preffering transports, it is some sort of distance modifier
+	}
+	else
+	{
+		for(sint32 i = 0; i < army->Num(); ++i) // HasCargo, maybe has not be corrected, since we just want to make the sort order stable.
+		{
+			const UnitRecord* rec = army->Get(i)->GetDBRec();
+
+			tieBreaker += static_cast<Utility>(rec->GetAttack());
+			tieBreaker += static_cast<Utility>(rec->GetDefense());
+			tieBreaker +=                      rec->GetZBRangeAttack();
+			tieBreaker +=                      rec->GetFirepower();
+			tieBreaker += static_cast<Utility>(rec->GetArmor());
+			tieBreaker +=                      army->Get(i)->CalculateTotalHP();//rec->GetMaxHP();
+		}
+
+		// Take the number into account so that we prefer the closest one
+		tieBreaker /= army->Num();
 	}
 
 	match += tieBreaker;
@@ -1816,12 +1859,12 @@ Utility Goal::Compute_Agent_Matching_Value(const Agent_ptr agent_ptr) const
 	MapPoint target_pos = Get_Target_Pos();
 
 	AI_DPRINTF(k_DBG_SCHEDULER_DETAIL, m_playerId, m_goal_type, -1,
-	("\t\t%9x,\t %9x,\t%9x (%3d,%3d),\t%s (%3d,%3d) (%3d,%3d),\t%8d,\t%8d,\t%8f,\t%8f,\t%8d,\t%8f,\t%8f,\t%8f,\t%8d,\t%8f,\t%8f,\t%8d,\t%8d,\t%9x,\t%s,\t%s \n",
+	("\t\t%9x,\t %9x,\t%9x (%3d,%3d),\t%s (%3d,%3d) (%3d,%3d),\t%8d,\t%8d,\t%8f,\t%8f,\t%8d,\t%8f,\t%8f,\t%8f,\t%8d,\t%8f,\t%8f,\t%8f,\t%8d,\t%9x,\t%d\t%s,\t%s \n",
 	this,                                          // This goal
 	agent_ptr->Get_Army().m_id,                    // The army
 	agent_ptr,                                     // The agent
-	agent_ptr->Get_Pos().x,                        // Agent pos.x
-	agent_ptr->Get_Pos().y,                        // Agent pos.y
+	curr_pos.x,                                    // Agent pos.x
+	curr_pos.y,                                    // Agent pos.y
 	g_theGoalDB->Get(m_goal_type)->GetNameText(),  // Goal name
 	target_pos.x,                                  // Target pos.x
 	target_pos.y,                                  // Target pos.y
@@ -1838,11 +1881,12 @@ Utility Goal::Compute_Agent_Matching_Value(const Agent_ptr agent_ptr) const
 	time_term,                                     // Time needed to goal, if we would follow a bee line
 	report_InVisionRange,                          // In vision range bonus
 	report_NoBarbsPresent,                         // If no Barbarian are present bonus
-	report_garrison_bonus,                         // If an angent is needed for garrison add a bonus so that it is also selected for garrison
+	report_garrison_bonus,                         // If an agent is needed for garrison add a bonus so that it is also selected for garrison
 	is_transporter,                                // Whether the agent is a transporter
 	agent_ptr->Get_Goal(),                         // The goal to that this agent is asigned to
-	 (g_theWorld->HasCity(agent_ptr->Get_Pos()) ? g_theWorld->GetCity(agent_ptr->Get_Pos()).GetName() : "field"),
-	 (g_theWorld->HasCity(target_pos) ? g_theWorld->GetCity(target_pos).GetName() : "field")
+	tieBreaker,
+	(g_theWorld->HasCity(curr_pos) ? g_theWorld->GetCity(curr_pos).GetName() : "field"),
+	(g_theWorld->HasCity(target_pos) ? g_theWorld->GetCity(target_pos).GetName() : "field")
 	));
 #endif //_DEBUG
 
@@ -4291,6 +4335,8 @@ bool Goal::RallyTroops()
 	rallyAgent->WaitHere(Get_Target_Pos(rallyAgent->Get_Army()));
 
 	Squad_Strength strength = m_current_attacking_strength;
+
+	Assert(rallyPos != Get_Target_Pos(rallyAgent->Get_Army()));
 
 	sint32 unitsAtRallyPos = (rallyPos == rallyAgent->Get_Pos()) ? rallyAgent->GetUnitsAtPos() : rallyAgent->Get_Army()->Num();
 	for

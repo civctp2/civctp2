@@ -9195,6 +9195,28 @@ void ArmyData::ActionUnsuccessful(const MapPoint &point)
 	}
 }
 
+bool ArmyData::CanSomeCargoBeachAssault() const
+{
+	for(sint32 i = 0; i < m_nElements; i++)
+	{
+		const UnitDynamicArray * cargo =
+			m_array[i].AccessData()->GetCargoList();
+
+		if(cargo)
+		{
+			for(sint32 j = 0; j < cargo->Num(); j++)
+			{
+				if(cargo->Access(j).CanBeachAssault())
+				{
+					return true;
+				}
+			}
+		}
+	}
+
+	return false;
+}
+
 bool ArmyData::CanBeachAssault() const
 {
 	for(sint32 i = 0; i < m_nElements; i++) {
