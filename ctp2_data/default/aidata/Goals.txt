@@ -1484,6 +1484,7 @@ GOAL_SUE_FRANCHISE {
 // Cause military units to pullback towards our city
 //
 GOAL_RETREAT {
+  NeedsRoom
   UnGroupFirst
   ExecuteIncrementally
 
@@ -1525,6 +1526,7 @@ GOAL_RETREAT {
 // Cause special units to pullback if no other goal
 //
 GOAL_RETREAT_SPECIAL {
+  NeedsRoom
   UnGroupFirst
   ExecuteIncrementally
 

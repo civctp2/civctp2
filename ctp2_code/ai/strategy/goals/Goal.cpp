@@ -1602,6 +1602,12 @@ Utility Goal::Compute_Agent_Matching_Value(const Agent_ptr agent_ptr) const
 	if(g_theGoalDB->Get(m_goal_type)->GetTargetTypeCity()
 	&& g_theGoalDB->Get(m_goal_type)->GetTargetOwnerSelf()
 	){
+		if(g_theGoalDB->Get(m_goal_type)->GetNeedsRoom()
+		&& agent_ptr->Get_Army()->Num() + g_theWorld->GetCell(dest_pos)->GetNumUnits() > k_MAX_ARMY_SIZE)
+		{
+			return Goal::BAD_UTILITY;
+		}
+
 		// For Defend or Retreat goals
 		if
 		  (
