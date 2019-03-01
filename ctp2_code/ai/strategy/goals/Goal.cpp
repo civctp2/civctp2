@@ -1792,17 +1792,23 @@ Utility Goal::Compute_Agent_Matching_Value(const Agent_ptr agent_ptr) const
 		&&  !agent_ptr->Get_Army()->GetMovementTypeAir()
 		&&   g_player[m_playerId]->GetCargoCapacity() <= 0
 		&&   m_current_attacking_strength.Get_Transport() <= 0)
-		|| ( g_theWorld->IsSurroundedByWater(dest_pos)
+		|| (!g_theGoalDB->Get(m_goal_type)->GetTargetOwnerSelf()
+		&&   g_theWorld->IsSurroundedByWater(dest_pos)
+		&&   g_theWorld->GetCell(dest_pos)->GetNumUnits() > 0
 		&&  !agent_ptr->Get_Army()->CanBeachAssault())
 		){
 			return Goal::BAD_UTILITY;
 		}
 	}
-
-	if( g_theWorld->IsSurroundedByWater(dest_pos)
-	&& !agent_ptr->Get_Army()->CanSomeCargoBeachAssault())
+	else
 	{
-		return Goal::BAD_UTILITY;
+		if(!g_theGoalDB->Get(m_goal_type)->GetTargetOwnerSelf()
+		&&  g_theWorld->IsSurroundedByWater(dest_pos)
+		&&  g_theWorld->GetCell(dest_pos)->GetNumUnits() > 0
+		&& !agent_ptr->Get_Army()->CanSomeCargoBeachAssault())
+		{
+			return Goal::BAD_UTILITY;
+		}
 	}
 
 	Utility match = bonus + time_term + raw_priority;
