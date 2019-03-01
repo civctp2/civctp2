@@ -485,7 +485,8 @@ MapPoint Path::SnipEndUntilCanEnter(const Army & army)
 		if(end.GetNeighborPosition(WORLD_DIRECTION(m_step[i].dir), next))
 		{
 			end = next;
-			if(army.CanEnter(next))
+			if(army.CanEnter(next)
+			&& army->Num() + g_theWorld->GetCell(next)->GetNumUnits() <= k_MAX_ARMY_SIZE)
 			{
 				last_can_enter = i;
 				last           = end;
