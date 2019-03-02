@@ -262,6 +262,10 @@ includeSprites:
     - docker pull $IMAGE_TAG:system-latest
     - docker pull $IMAGE_TAG:builder-latest
     - docker pull $IMAGE_TAG:test || true
+    - apk add --update --no-cache curl
+    - 'curl -sS -f -L --header  "Private-Token: ${ARTIFACTKEY}" -o ctp2CD.zip "${CI_API_V4_URL}/projects/${CI_PROJECT_NAMESPACE}%2Fctp2CD/jobs/artifacts/master/download?job=ctp2CDpack"'
+    - mkdir -p ctp2CD/
+    - unzip ctp2CD.zip -d ctp2CD/
     - docker build --pull
                    --cache-from $IMAGE_TAG:system-latest
                    --cache-from $IMAGE_TAG:builder-latest
