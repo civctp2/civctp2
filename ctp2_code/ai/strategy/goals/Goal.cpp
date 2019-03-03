@@ -682,21 +682,24 @@ bool Goal::Add_Match(const Agent_ptr & agent, const bool update_match_value, con
 	{
 		Plan the_match(agent, needsCargo);
 
+		Utility matchingValue = Goal::BAD_UTILITY;
+
 		if(update_match_value)
 		{
-			the_match.Compute_Matching_Value(this);
+			matchingValue = the_match.Compute_Matching_Value(this);
 		}
 
-		m_matches.push_back(the_match);
+		if(!update_match_value || matchingValue > Goal::BAD_UTILITY)
+		{
+			m_matches.push_back(the_match);
 
-		m_needs_sorting = true;
+			m_needs_sorting = true;
 
-		return true;
+			return true;
+		}
 	}
-	else
-	{
-		return false;
-	}
+
+	return false;
 }
 
 bool Goal::CanGoalBeReevaluated() const
@@ -761,7 +764,7 @@ void Goal::Commit_Agents()
 		else if(Is_Satisfied() || IsTotallyComplete())
 		{
 			AI_DPRINTF(k_DBG_SCHEDULER_DETAIL, m_playerId, m_goal_type, -1,
-				("\t\tNO AGENTS COMMITTED:           (goal: %x agent: %x, id: 0%x)\n", this, match_iter->Get_Agent(), match_iter->Get_Agent()->Get_Army().m_id));
+				("\t\tNO MORE AGENTS NEEDED:           (goal: %x agent: %x, id: 0%x)\n", this, match_iter->Get_Agent(), match_iter->Get_Agent()->Get_Army().m_id));
 			break;
 		}
 		else
@@ -802,7 +805,7 @@ void Goal::Commit_Transport_Agents()
 		else if(!Needs_Transporter() || IsTotallyComplete())
 		{
 			AI_DPRINTF(k_DBG_SCHEDULER_DETAIL, m_playerId, m_goal_type, -1,
-				("\t\tNO TRANSPORT AGENTS COMMITTED: (goal: %x agent: %x, id: 0%x)\n", this, match_iter->Get_Agent(), match_iter->Get_Agent()->Get_Army().m_id));
+				("\t\tNO MORE TRANSPORT AGENTS NEEDED: (goal: %x agent: %x, id: 0%x)\n", this, match_iter->Get_Agent(), match_iter->Get_Agent()->Get_Army().m_id));
 			break;
 		}
 		else if(match_iter->Get_Cannot_Be_Used())
@@ -811,11 +814,10 @@ void Goal::Commit_Transport_Agents()
 		}
 		else if(match_iter->Get_Needs_Cargo())
 		{
-			AI_DPRINTF(k_DBG_SCHEDULER_DETAIL, m_playerId, m_goal_type, -1,
-				("\t\tTRANSPORT AGENTS COMMITTED:    (goal: %x agent: %x, id: 0%x)\n", this, match_iter->Get_Agent(), match_iter->Get_Agent()->Get_Army().m_id));
-
 			if(match_iter->Get_Agent()->Get_Army()->CanTransport())
 			{
+				AI_DPRINTF(k_DBG_SCHEDULER_DETAIL, m_playerId, m_goal_type, -1,
+					("\t\tTRANSPORT AGENTS COMMITTED:    (goal: %x agent: %x, id: 0%x)\n", this, match_iter->Get_Agent(), match_iter->Get_Agent()->Get_Army().m_id));
 				match_iter->Commit_Agent_Common(this);
 			}
 		}
@@ -1548,7 +1550,6 @@ Utility Goal::Compute_Agent_Matching_Value(const Agent_ptr agent_ptr) const
 	if(Needs_Transporter()
 	&& agent_ptr->Get_Army()->GetCargo(transports, max, empty)
 	&& empty > 0
-	&& m_agents.size() > 0
 	){
 		Utility transport_utility = 0;
 		Utility           utility = 0;

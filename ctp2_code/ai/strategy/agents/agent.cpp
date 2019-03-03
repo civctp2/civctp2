@@ -471,7 +471,8 @@ bool Agent::EstimateTransportUtility(const Agent_ptr transport, Utility & utilit
 	Assert(transport);
 	utility = 0;
 
-	if (m_army->NumUnitsCanMoveIntoThisTransport(*transport->m_army.GetData()) <= 0)
+	sint32 cargoCapacity = m_army->NumUnitsCanMoveIntoThisTransport(*transport->m_army.GetData());
+	if (cargoCapacity <= 0)
 		return false;
 
 	bool check_continents = !transport->m_army.GetMovementTypeAir();
@@ -503,10 +504,10 @@ bool Agent::EstimateTransportUtility(const Agent_ptr transport, Utility & utilit
 
 	size_t move_type_bonus = transport->m_army->CountMovementTypeSea() * 1000;
 
-	utility = move_type_bonus + (trans_rounds * -100) - tile_count;
+	utility = move_type_bonus + (trans_rounds * -100) - tile_count /*+ cargoCapacity*100*/; // Could be added, but not needed
 
 	AI_DPRINTF(k_DBG_SCHEDULER_DETAIL, m_army->GetOwner(), Get_Goal_Type(), -1,
-	("\t %9x (%3d,%3d),\t%9x (%3d,%3d),\t%8d,\t%8d,\t%8d,\t%8d\n",
+	("\t %9x (%3d,%3d),\t%9x (%3d,%3d),\t%8d,\t%8d,\t%8d,\t%8d,\t%8d\n",
 	this,                                          // This agent
 	this->Get_Pos().x,                             // Agent pos.x
 	this->Get_Pos().y,                             // Agent pos.y
@@ -516,7 +517,8 @@ bool Agent::EstimateTransportUtility(const Agent_ptr transport, Utility & utilit
 	utility,                                       // Transport utility
 	move_type_bonus,                               // Movement bonus of transporter type
 	trans_rounds,                                  // Distance to transporter (Square rooted quare distance), not identical with path distance
-	tile_count));                                  // Rounds to target
+	tile_count,                                    // Rounds to target
+	cargoCapacity));                               // Empty slots for units
 
 	return true;
 }

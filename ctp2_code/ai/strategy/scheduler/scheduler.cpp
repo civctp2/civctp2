@@ -1655,10 +1655,11 @@ bool Scheduler::Add_Transport_Matches_For_Goal
 		}
 
 		if(empty > 0
-		&& max == empty // must be empty otherwise the reansporter would go somewhere else or is alread in the agent list
+		&& max == empty // Must be empty otherwise the reansporter would go somewhere else or is already in the agent list
 		&& goal_ptr->CanReachTargetContinent(agent)
 		&& goal_ptr->Add_Transport_Match(agent)
 		){
+			AI_DPRINTF(k_DBG_SCHEDULER_ALL, m_playerId, -1, -1, ("\t\tAdd transport match, now %d matches.\n", goal_ptr->Get_Matches_Num()));
 			match_added = true;
 		}
 	}
