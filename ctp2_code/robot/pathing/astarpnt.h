@@ -181,16 +181,12 @@ private:
     AstarPoint *m_parent;
     AstarPoint *m_next;
 
-    friend class RobotAstar;
     friend class RobotAstar2;
     friend class Astar;
     friend class UnitAstar;
-    friend class AstarQueue;
     friend class AVLHeap;
     friend class Path;
 
-    friend sint32 count_point(AstarPoint *node, const MapPoint  &pos);
-    friend sint32 check_for_dups(AstarPoint *cost_tree, AstarPoint *node);
 };
 
 #endif

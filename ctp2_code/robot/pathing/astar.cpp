@@ -162,21 +162,8 @@ void Astar::DecayOrtho(AstarPoint *parent, AstarPoint *point,
     }
 }
 
-
-
-
-
-
-
-
-
-
-
-
-
 bool Astar::InitPoint(AstarPoint *parent, AstarPoint *point,
     const MapPoint &pos, const float pc, const MapPoint &dest)
-
 {
     AstarPoint *d = point;
     ASTAR_ENTRY_TYPE entry=ASTAR_CAN_ENTER;
@@ -566,7 +553,6 @@ bool Astar::FindPath
 #ifdef TRACK_ASTAR_NODES
 					g_nodes_inserted++;
 #endif
-
 					if (c->m_point->GetEntry() == ASTAR_CAN_ENTER)
 					{
 						m_priority_queue.Insert(c->m_point);
@@ -586,7 +572,6 @@ bool Astar::FindPath
 			if (0 < m_priority_queue.Len())
 			{
 				best = m_priority_queue.Remove(1);
-
 #ifdef TRACK_ASTAR_NODES
 				g_closed_nodes++;
 #endif
@@ -600,7 +585,7 @@ bool Astar::FindPath
 
 		if (best)
 		{
-			DPRINTF(k_DBG_ASTAR,("\tCheckBest , BestPos: (%d, %d), DestPos (%d, %d)\n", best->m_pos.x, best->m_pos.y, dest.x, dest.y));
+			DPRINTF(k_DBG_ASTAR,("\tCheckBest , StartPos (%d, %d), DestPos (%d, %d), BestPos (%d, %d)\n", start.x, start.y, dest.x, dest.y, best->m_pos.x, best->m_pos.y));
 			if (best->m_pos == dest)
 			{
 				float               cost;

@@ -354,7 +354,7 @@ bool RobotAstar2::EntryCost( const MapPoint &prev,
 			}
 		}
 
-		DPRINTF(k_DBG_ASTAR,("\tCheckEnter, ThisPos: (%d, %d), NextPos (%d, %d), IsZoc: %d, EntryType: %d, Cost: %f\n", prev.x, prev.y, pos.x, pos.y, is_zoc, entry, cost));
+		DPRINTF(k_DBG_ASTAR,("\tCheckEnter, StartPos (%d, %d), DestPos (%d, %d), ThisPos (%d, %d), NextPos (%d, %d), IsZoc: %d, EntryType: %d, Cost: %f\n", m_start.x, m_start.y, m_dest.x, m_dest.y, prev.x, prev.y, pos.x, pos.y, is_zoc, entry, cost));
 
 		if (cost < 1.0)
 		{
