@@ -137,9 +137,12 @@ public:
 
     void SetZoc(const BOOL z)
     {
-        if (z) {
+        if (z)
+        {
             m_flags |= k_ASTAR_ZOC_MASK;
-        } else {
+        }
+        else
+        {
             m_flags &= ~k_ASTAR_ZOC_MASK;
         }
     }
@@ -186,7 +189,6 @@ private:
     friend class UnitAstar;
     friend class AVLHeap;
     friend class Path;
-
 };
 
 #endif

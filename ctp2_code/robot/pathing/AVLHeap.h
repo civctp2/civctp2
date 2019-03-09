@@ -36,27 +36,26 @@
 
 #define AVLHEAP_SIZE ((4096)/sizeof(AstarPoint))
 
-class AVLHeap {
-
+class AVLHeap
+{
 	AstarPoint *m_block_list;
 	AstarPoint *m_used_head;
 	AstarPoint *m_used_tail;
 	AstarPoint *m_ready;
 
-    void InitNewBlock();
+	void InitNewBlock();
 
 public:
 
-    AVLHeap();
-    ~AVLHeap();
+	AVLHeap();
+	~AVLHeap();
 
-    void InitHeap();
-    void CleanUp();
+	void InitHeap();
+	void CleanUp();
 
-    AstarPoint * GetNew();
-    void MassDelete(const bool isunit);
-    void Validate();
-
+	AstarPoint * GetNew();
+	void MassDelete(const bool isunit);
+	void Validate();
 };
 
 #endif

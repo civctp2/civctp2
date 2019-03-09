@@ -153,7 +153,6 @@
 #include "ArmyPool.h"
 #include "aui.h"
 #include "Barbarians.h"
-#include "BFS.h"
 #include "BuildingRecord.h"
 #include "buildingutil.h"
 #include "c3debug.h"

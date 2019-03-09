@@ -64,11 +64,11 @@ RobotAstar2::RobotAstar2()
 }
 
 bool RobotAstar2::TransportPathCallback (const bool & can_enter,
-										 const MapPoint & prev,
-									     const MapPoint & pos,
-										 const bool & is_zoc,
-									     float & cost,
-									     ASTAR_ENTRY_TYPE & entry )
+                                         const MapPoint & prev,
+                                         const MapPoint & pos,
+                                         const bool & is_zoc,
+                                         float & cost,
+                                         ASTAR_ENTRY_TYPE & entry )
 {
 	if (can_enter)
 	{
@@ -144,11 +144,11 @@ bool RobotAstar2::TransportPathCallback (const bool & can_enter,
 }
 
 bool RobotAstar2::AirliftPathCallback (const bool & can_enter,
-									   const MapPoint & prev,
-									   const MapPoint & pos,
-									   const bool & is_zoc,
-									   float & cost,
-									   ASTAR_ENTRY_TYPE & entry )
+                                       const MapPoint & prev,
+                                       const MapPoint & pos,
+                                       const bool & is_zoc,
+                                       float & cost,
+                                       ASTAR_ENTRY_TYPE & entry )
 {
 	if (can_enter)
 	{
@@ -193,11 +193,11 @@ bool RobotAstar2::AirliftPathCallback (const bool & can_enter,
 }
 
 bool RobotAstar2::DefensivePathCallback (const bool & can_enter,
-									     const MapPoint & prev,
-									     const MapPoint & pos,
-										 const bool & is_zoc,
-									     float & cost,
-									     ASTAR_ENTRY_TYPE & entry)
+                                         const MapPoint & prev,
+                                         const MapPoint & pos,
+                                         const bool & is_zoc,
+                                         float & cost,
+                                         ASTAR_ENTRY_TYPE & entry)
 {
 	PLAYER_INDEX pos_owner;
 	PLAYER_INDEX prev_owner;
@@ -223,16 +223,16 @@ bool RobotAstar2::DefensivePathCallback (const bool & can_enter,
 }
 
 bool RobotAstar2::FindPath( const PathType & pathType,
-							const Army & army,
-							const uint32 & army_move_type,
-							const MapPoint & start,
-							const MapPoint & dest,
-							const bool & check_dest,
-							const sint32 & trans_dest_cont,
-							const float & trans_max_r,
-							Path & new_path,
-							float & total_cost,
-							sint32 additionalUnits)
+                            const Army & army,
+                            const uint32 & army_move_type,
+                            const MapPoint & start,
+                            const MapPoint & dest,
+                            const bool & check_dest,
+                            const sint32 & trans_dest_cont,
+                            const float & trans_max_r,
+                            Path & new_path,
+                            float & total_cost,
+                            sint32 additionalUnits)
 {
 	sint32 cutoff = 20000;
 
@@ -257,12 +257,12 @@ bool RobotAstar2::FindPath( const PathType & pathType,
 	bool isstealth;
 	sint32 maxattack, maxdefense;
 	army->CharacterizeArmy( isspecial,
-		isstealth,
-		maxattack,
-		maxdefense,
-		cancapture,
-		haszoc,
-		canbombard);
+	    isstealth,
+	    maxattack,
+	    maxdefense,
+	    cancapture,
+	    haszoc,
+	    canbombard);
 
 	if(isspecial && maxattack == 0 && !haszoc)
 	{
@@ -315,10 +315,10 @@ bool RobotAstar2::FindPath( const PathType & pathType,
 }
 
 bool RobotAstar2::EntryCost( const MapPoint &prev,
-							   const MapPoint &pos,
-							   float & cost,
-							   bool &is_zoc,
-							   ASTAR_ENTRY_TYPE &entry )
+                               const MapPoint &pos,
+                               float & cost,
+                               bool &is_zoc,
+                               ASTAR_ENTRY_TYPE &entry )
 {
 	if(m_pathType == PATH_TYPE_TRANSPORT || m_pathType == PATH_TYPE_AIRLIFT)
 	{
