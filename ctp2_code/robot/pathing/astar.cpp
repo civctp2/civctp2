@@ -489,7 +489,7 @@ bool Astar::FindPath
 						c->m_point->m_past_cost + c->m_point->m_entry_cost;
 					float const		bestG	= past_cost + bMove;
 
-					if (bestG < oldG)
+					if (bestG < oldG && (c->m_point->m_parent == NULL || c->m_point != best->m_parent))
 					{
 						if (c->m_point->GetExpanded())
 						{
