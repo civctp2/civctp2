@@ -83,7 +83,7 @@ GOAL_SEIGE {
 
   Execute   ORDER_ATTACK
 
-  ThreatBonus             500
+  ThreatBonus            -500
   EnemyValueBonus        -250
   AlliedValueBonus       1000
   PowerBonus              500
@@ -104,8 +104,8 @@ GOAL_SEIGE {
     LandToCloseCityConnectionBonus 1000
     CloseCityConnectionBonus        500
     SmallTargetEmpireSize             3
-    SmallTargetEmpireBonus          100
-    WeakestEnemyBonus               200
+    SmallTargetEmpireBonus          500
+    WeakestEnemyBonus              1000
   }
 
   ThreatenType:DestroyCity

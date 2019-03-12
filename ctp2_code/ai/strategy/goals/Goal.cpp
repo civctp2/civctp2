@@ -2238,12 +2238,6 @@ Utility Goal::Compute_Raw_Priority()
 		m_target_city->GetPop(pop);
 		cell_value += (1.0 - (static_cast<double>(pop) / static_cast<double>(m_target_city.CD()->GetOverallMaxPop()))) * static_cast<double>(goal_rec->GetSmallCitySizeBonus());
 
-		if(pop == m_target_city.CD()->GetMaxPop())
-		{
-			m_raw_priority = Goal::BAD_UTILITY;
-			return m_raw_priority;
-		}
-
 #if defined(_DEBUG) || defined(USE_LOGGING)
 		report_cell_SmallCitySize = cell_value - report_cell_lastvalue;
 		report_cell_lastvalue     = cell_value;
@@ -2255,7 +2249,7 @@ Utility Goal::Compute_Raw_Priority()
 	bool isLandConnected = goal_rec->HasConnectionBoni() && player_ptr->IsConnected(target_pos, doubleDistanceFactor * g_theConstDB->Get(0)->GetBorderSquaredRadius(), distance);
 	bool isConnected     = goal_rec->HasConnectionBoni() && player_ptr->IsConnected(target_pos, doubleDistanceFactor * g_theConstDB->Get(0)->GetBorderSquaredRadius(), distance, false);
 
-	const GoalRecord::ConnectionBoni* cbRec = isLandConnected || isConnected ? goal_rec->GetConnectionBoniPtr() : NULL;
+	const GoalRecord::ConnectionBoni* cbRec = goal_rec->GetConnectionBoniPtr();
 
 	// A little ugly but this way I don't have to mess with the debug reports
 	if(cbRec != NULL)
@@ -2314,7 +2308,7 @@ Utility Goal::Compute_Raw_Priority()
 	    && cbRec->GetWeakestEnemyBonus() != 0
 	    && target_owner > -1
 	    && (
-	            g_player[m_playerId]->GetWeakestEnemy() == target_owner
+	            Diplomat::GetDiplomat(m_playerId).IsBestHotwarEnemy(target_owner)
 	         || target_owner == 0
 	       )
 	  )
@@ -2342,7 +2336,7 @@ Utility Goal::Compute_Raw_Priority()
 	if(CtpAiDebug::DebugLogCheck(this->Get_Player_Index(), this->Get_Goal_Type(), -1))
 	{
 		char buff[1024];
-		sprintf(buff, "\t %9" PRIXPTR ",\t%s,\t%i, \t\trc(%3d,%3d),\t%8f,\t%8f,\t%8f,\t%8f,\t%8f,\t%8f,\t%8f, rc(%3d,%3d),\t%8f, rc(%3d,%3d), \t%8f,\t%8f,\t%8f,\t%8f,\t%8f,\t%8f,\t%8f,",
+		sprintf(buff, "\t %9" PRIXPTR ",\t%s,\t%i, \t\trc(%3d,%3d),\t%8f,\t%8f,\t%8f,\t%8f,\t%8f,\t%8f,\t%8f, rc(%3d,%3d),\t%8f, rc(%3d,%3d), \t%8f,\t%8f,\t%8f,\t%8f,\t\t%8f,\t\t%8f,\t\t%8f,",
 		    (uintptr_t)this,
 		        goal_rec->GetNameText(),
 		        m_raw_priority,
@@ -2369,7 +2363,7 @@ Utility Goal::Compute_Raw_Priority()
 		        report_cell_NoOwnerTerritory
 		       );
 
-		AI_DPRINTF(k_DBG_SCHEDULER_DETAIL, m_playerId, m_goal_type, -1, ("%s\t%8f,\t\t%8f,\t%i,\t\t%8f,\t%8f,\t%8f,\t%s\n",
+		AI_DPRINTF(k_DBG_SCHEDULER_DETAIL, m_playerId, m_goal_type, -1, ("%s\t\t%8f,\t\t\t%8f,\t%i,\t\t\t%8f,\t%8f,\t%8f,\t%s\n",
 		                                 buff,
 		                                 report_cell_SlaveryProtection,
 		                                 report_cell_SmallCitySize,
