@@ -270,6 +270,8 @@ void MapAnalysis::BeginTurn()
             }
         }
 
+		CalcEmpireCenter(player);
+
         sint32 num_armies = player_ptr->m_all_armies->Num();
         for (i = 0; i < num_armies; i++)
         {
@@ -304,12 +306,7 @@ void MapAnalysis::BeginTurn()
 			m_bioWeapons[player]     += army->CountBioUnits();
 			m_nanoWeapons[player]    += army->CountNanoUnits();
 
-			if(m_empireCenter[player] == MapPoint())
-			{
-				CalcEmpireCenter(player);
-			}
-
-			if(!m_empireBoundingRect[player].IsValid())
+			if(!m_empireBoundingRect[player].IsValid() && player_ptr->m_all_cities->Num() == 0)
 			{
 				UpdateBoundingRectangle(army);
 			}
@@ -364,6 +361,7 @@ void MapAnalysis::BeginTurn()
         {
             city = player_ptr->m_all_cities->Access(i);
             Assert(city.IsValid() && city->GetCityData());
+			UpdateBoundingRectangle(city);
             city.GetPos(pos);
             sint32 total_value = city->GetCityData()->GetValue();
 
@@ -625,7 +623,7 @@ double MapAnalysis::GetPowerRank(const CityData * city) const
 void MapAnalysis::CalcEmpireCenter(const PLAYER_INDEX playerId)
 {
 	// For now disabled // why? //
-//	m_empireCenter[playerId] = g_player[playerId]->CalcEmpireCenter();
+	m_empireCenter[playerId] = g_player[playerId]->CalcEmpireCenter();
 
 	DPRINTF(k_DBG_SCHEDULER, ("Empire Center for player %d :  rc(%3d,%3d)   \n",
 	        playerId,
@@ -655,11 +653,11 @@ void MapAnalysis::UpdateBoundingRectangle(const Army & army)
     bool added = m_empireBoundingRect[player].Add(armyRect);
     Assert(added);
 
-	m_empireCenter[player].xy2rc(m_empireBoundingRect[player].GetCenter(), * g_theWorld->GetSize());
+/*	m_empireCenter[player].xy2rc(m_empireBoundingRect[player].GetCenter(), * g_theWorld->GetSize());
 	DPRINTF(k_DBG_SCHEDULER, ("Empire Center for player %d :  rc(%3d,%3d)   \n",
 		player,
 		m_empireCenter[player].x,
-		m_empireCenter[player].y));
+		m_empireCenter[player].y));*/
 }
 
 void MapAnalysis::UpdateBoundingRectangle(const Unit & city)
@@ -694,11 +692,11 @@ void MapAnalysis::UpdateBoundingRectangle(const Unit & city)
     bool added = m_empireBoundingRect[player].Add(cityRect);
     Assert(added);
 
-	m_empireCenter[player].xy2rc(m_empireBoundingRect[player].GetCenter(), * g_theWorld->GetSize());
+/*	m_empireCenter[player].xy2rc(m_empireBoundingRect[player].GetCenter(), * g_theWorld->GetSize());
 	DPRINTF(k_DBG_SCHEDULER, ("Empire Center for player %d :  rc(%3d,%3d)   \n",
 		player,
 		m_empireCenter[player].x,
-		m_empireCenter[player].y));
+		m_empireCenter[player].y));*/
 }
 
 const BoundingRect & MapAnalysis::GetBoundingRectangle(const PLAYER_INDEX & player) const

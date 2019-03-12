@@ -9761,10 +9761,11 @@ MapPoint Player::CalcEmpireCenter() const
 		float costs = 0.0f;
 		Path path;
 
-		g_city_astar.FindSimpleDistancePath(empireCenter, m_all_cities->Get(i)->GetPos(), m_owner, path, costs);
-
-		path.RestoreIndexAndCurrentPos(path.Num()/cityNum);
-		path.GetCurrentPoint(empireCenter);
+		if(g_city_astar.FindSimpleDistancePath(empireCenter, m_all_cities->Get(i)->GetPos(), m_owner, path, costs))
+		{
+			path.RestoreIndexAndCurrentPos(path.Num() / cityNum);
+			path.GetCurrentPoint(empireCenter);
+		}
 	}
 
 	return empireCenter;

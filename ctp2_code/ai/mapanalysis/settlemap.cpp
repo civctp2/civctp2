@@ -216,7 +216,6 @@ void SettleMap::HandleCityGrowth(const Unit & city, sint32 oldSizeIndex)
 		m_settleValues.SetGridValue(claimPos, new_value);
 	}
 
-	MapAnalysis::GetMapAnalysis().UpdateBoundingRectangle(city);
 }
 
 bool SettleMap::HasSettleTargets(const PLAYER_INDEX &playerId, bool isWater) const
