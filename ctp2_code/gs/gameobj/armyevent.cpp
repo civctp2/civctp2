@@ -807,7 +807,7 @@ STDEHANDLER(ArmyMoveEvent)
 				}
 			}
 
-			Assert(g_player[owner]->IsRobot() && Diplomat::GetDiplomat(owner).HasWarOrDesiresPreemptivelyWith(defender->GetOwner()));
+			Assert(!g_player[owner]->IsRobot() || Diplomat::GetDiplomat(owner).HasWarOrDesiresPreemptivelyWith(defender->GetOwner()));
 
 			if(g_player[owner]->IsRobot() && army->CanFight(*defender) || g_player[owner]->IsHuman())
 			{
