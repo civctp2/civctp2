@@ -440,7 +440,7 @@ bool Unit::IsInVisionRange(MapPoint &pos) const
 	double distance    = MapPoint::GetSquaredDistance(here, pos);
 	double visionRange = GetVisionRange();
 
-	return distance <= visionRange;
+	return distance <= visionRange* visionRange;
 }
 
 bool Unit::NearestUnexplored(sint32 searchRadius, MapPoint &pos) const

@@ -223,50 +223,14 @@ const Squad_Strength & Agent::Compute_Squad_Strength()
 {
 	Assert(m_army.IsValid());
 
-/*	if(!m_army->HasCargo())
+	if(!m_army->HasCargo())
 	{
 		m_squad_strength.Set_Army_Strength(m_army, true);
 	}
 	else
 	{
 		m_squad_strength.Set_Cargo_Strength(m_army);
-	}*/
-
-	sint32 transports, max_slots, empty_slots;
-	m_army->GetCargo(transports, max_slots, empty_slots);
-
-	sint8 defense_count;
-	sint8 ranged_count;
-	float attack_strength;
-	float defense_strength;
-	float ranged_strength;
-	float bombard_land_strength;
-	float bombard_sea_strength;
-	float bombard_air_strength;
-	float total_value;
-	m_army->ComputeStrength(attack_strength,
-	                        defense_strength,
-	                        ranged_strength,
-	                        defense_count,
-	                        ranged_count,
-	                        bombard_land_strength,
-	                        bombard_sea_strength,
-	                        bombard_air_strength,
-	                        total_value,
-	                        true
-	                       );
-
-	m_squad_strength.Set_Agent_Count (m_army.Num()                   );
-	m_squad_strength.Set_Attack      (attack_strength                );
-	m_squad_strength.Set_Defense     (defense_strength               );
-	m_squad_strength.Set_Defenders   (defense_count                  );
-	m_squad_strength.Set_Ranged      (ranged_strength                );
-	m_squad_strength.Set_Ranged_Units(ranged_count                   );
-	m_squad_strength.Set_Bombard_Land(bombard_land_strength          );
-	m_squad_strength.Set_Bombard_Sea (bombard_sea_strength           );
-	m_squad_strength.Set_Bombard_Air (bombard_air_strength           );
-	m_squad_strength.Set_Value       (total_value                    );
-	m_squad_strength.Set_Transport   (static_cast<sint8>(empty_slots));
+	}
 
 	return m_squad_strength;
 }
@@ -301,7 +265,7 @@ void Agent::Log_Debug_Info(const int & log, const Goal * const goal) const
 		("\t\t   -------\n"));
 }
 
-bool Agent::FindPathToBoard(const uint32 & move_intersection, const MapPoint & dest_pos, const bool & check_dest, Path & found_path)
+bool Agent::FindPathToBoard(const uint32 & move_intersection, const MapPoint & dest_pos, const bool & check_dest, Path & found_path, sint32 additionalUnits)
 {
 	MapPoint start_pos;
 	m_army->GetPos(start_pos);
@@ -336,7 +300,8 @@ bool Agent::FindPathToBoard(const uint32 & move_intersection, const MapPoint & d
 										   cont,
 										   static_cast<float>(trans_max_r),
 										   found_path,
-										   total_cost ))
+										   total_cost,
+										   additionalUnits))
 	{
 		Assert(0 < found_path.Num());
 
@@ -374,7 +339,7 @@ bool Agent::FindPath(const Army & army, const MapPoint & target_pos, const bool 
 
 	sint32 cont = g_theWorld->GetContinent(target_pos);
 
-	double trans_max_r = 0.8;
+	double trans_max_r = 0.4;
 	bool tmp_check_dest = check_dest;
 	RobotAstar2::PathType path_type;
 	uint32 move_union;
@@ -506,7 +471,8 @@ bool Agent::EstimateTransportUtility(const Agent_ptr transport, Utility & utilit
 	Assert(transport);
 	utility = 0;
 
-	if (m_army->NumUnitsCanMoveIntoThisTransport(*transport->m_army.GetData()) <= 0)
+	sint32 cargoCapacity = m_army->NumUnitsCanMoveIntoThisTransport(*transport->m_army.GetData());
+	if (cargoCapacity <= 0)
 		return false;
 
 	bool check_continents = !transport->m_army.GetMovementTypeAir();
@@ -538,10 +504,10 @@ bool Agent::EstimateTransportUtility(const Agent_ptr transport, Utility & utilit
 
 	size_t move_type_bonus = transport->m_army->CountMovementTypeSea() * 1000;
 
-	utility = move_type_bonus + (trans_rounds * -100) - tile_count;
+	utility = move_type_bonus + (trans_rounds * -100) - tile_count /*+ cargoCapacity*100*/; // Could be added, but not needed
 
 	AI_DPRINTF(k_DBG_SCHEDULER_DETAIL, m_army->GetOwner(), Get_Goal_Type(), -1,
-	("\t %9x (%3d,%3d),\t%9x (%3d,%3d),\t%8d,\t%8d,\t%8d,\t%8d\n",
+	("\t %9x (%3d,%3d),\t%9x (%3d,%3d),\t%8d,\t%8d,\t%8d,\t%8d,\t%8d\n",
 	this,                                          // This agent
 	this->Get_Pos().x,                             // Agent pos.x
 	this->Get_Pos().y,                             // Agent pos.y
@@ -551,7 +517,8 @@ bool Agent::EstimateTransportUtility(const Agent_ptr transport, Utility & utilit
 	utility,                                       // Transport utility
 	move_type_bonus,                               // Movement bonus of transporter type
 	trans_rounds,                                  // Distance to transporter (Square rooted quare distance), not identical with path distance
-	tile_count));                                  // Rounds to target
+	tile_count,                                    // Rounds to target
+	cargoCapacity));                               // Empty slots for units
 
 	return true;
 }
@@ -753,9 +720,8 @@ void Agent::UnloadCargo()
 {
 	Assert(Get_Can_Be_Executed());
 
-	MapPoint pos;
+	MapPoint pos = m_army->RetPos();
 	MapPoint pos2;
-	m_army->GetPos(pos);
 	sint32 cargoNum = m_army->GetCargoNum();
 
 	if(cargoNum + g_theWorld->GetCell(pos)->GetNumUnits() > k_MAX_ARMY_SIZE)

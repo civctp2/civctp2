@@ -947,6 +947,37 @@ bool World::GetAdjacentLand(MapPoint const & pos, MapPoint & land) const
 	return false;
 }
 
+bool World::IsNextToForeignerOnLand(const MapPoint &pos, PLAYER_INDEX owner) const
+{
+	MapPoint next;
+	for(sint16 dir = 0; dir < NOWHERE; ++dir)
+	{
+		if(pos.GetNeighborPosition(static_cast<WORLD_DIRECTION>(dir), next))
+		{
+			if(IsWater(next))
+				continue;
+
+			Cell * cell = g_theWorld->GetCell(next);
+
+			if(cell->GetNumUnits() > 0
+			&& cell->UnitArmy()->GetOwner() != owner)
+			{
+				return true;
+			}
+		}
+	}
+
+	return false;
+}
+
+bool World::IsOccupiedByForeigner(const MapPoint &pos, PLAYER_INDEX owner) const
+{
+	Cell * cell = g_theWorld->GetCell(pos);
+
+	return (cell->GetNumUnits() > 0)
+		&& (cell->UnitArmy()->GetOwner() != owner);
+}
+
 bool World::GetAdjacentOcean(const MapPoint &pos, sint32 & water_cont) const
 {
 	MapPoint water;
@@ -967,10 +998,14 @@ bool World::GetAdjacentOcean(const MapPoint &pos, sint32 & water_cont) const
 
 	return false;
 }
-
 bool World::IsSurroundedByWater(const sint32 x, const sint32 y)
 {
-	MapPoint	pos (x,y);
+	MapPoint	pos(x, y);
+	return IsSurroundedByWater(pos);
+}
+
+bool World::IsSurroundedByWater(MapPoint const & pos)
+{
 	MapPoint	n ;
 
 	if(pos.GetNeighborPosition(NORTH, n))

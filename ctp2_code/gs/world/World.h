@@ -273,6 +273,7 @@ public:
     bool IsNextToWaterNotDiagonals(const sint32 x, const sint32 y);
     bool IsNextTo (const sint32 t, const sint32 i, const sint32 j);
     bool IsSurroundedByWater(const sint32 x, const sint32 y) ;
+    bool IsSurroundedByWater(MapPoint const & pos);
     void GenerateShallowWater();
     void GenerateDeepWater();
     void NewGenerateDeepWater();
@@ -523,7 +524,8 @@ public:
     BOOL IsCellZoc(const PLAYER_INDEX &owner, const MapPoint &pos, const BOOL is_check_only_visible);
     BOOL IsMoveZOC(PLAYER_INDEX owner, const MapPoint &start, const MapPoint &dest,
         const BOOL is_check_only_visible);
-
+    bool IsNextToForeignerOnLand(const MapPoint &pos, PLAYER_INDEX owner) const;
+    bool IsOccupiedByForeigner(const MapPoint &pos, PLAYER_INDEX owner) const;
 
 
 

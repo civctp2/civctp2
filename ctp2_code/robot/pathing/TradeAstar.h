@@ -35,21 +35,21 @@
 #include "gstypes.h"
 #include "Astar.h"
 
-class TradeAstar : public Astar {
-
-    PLAYER_INDEX m_owner;
+class TradeAstar : public Astar
+{
+	PLAYER_INDEX m_owner;
 
 	bool EntryCost(const MapPoint &prev, const MapPoint &pos,
-                            float &cost, bool &is_zoc,
-							ASTAR_ENTRY_TYPE &entry);
+	                        float &cost, bool &is_zoc,
+	                        ASTAR_ENTRY_TYPE &entry);
 
-    sint32 GetMaxDir(MapPoint &pos) const;
+	sint32 GetMaxDir(MapPoint &pos) const;
 
 public:
 
-    bool FindPath(const PLAYER_INDEX owner, const MapPoint &start,
-		const MapPoint &dest, Path &a_path, float &total_cost,
-		const bool isunit);
+	bool FindPath(const PLAYER_INDEX owner, const MapPoint &start,
+	              const MapPoint &dest, Path &a_path, float &total_cost,
+	              const bool isunit);
 };
 
 #endif

@@ -362,6 +362,7 @@ ArmyData::ArmyData(const Army &army, const UnitDynamicArray &units)
     m_killMeSoon            (new PointerList<KillRecord>),
     m_dontKillCount         (0),
     m_needToKill            (false),
+    m_addOrdersAI           (true),
     m_debugString           (NULL)
 {
     for (sint32 i = 0; i < units.Num(); ++i)
@@ -388,6 +389,7 @@ ArmyData::ArmyData(const Army &army, const CellUnitList &units)
     m_killMeSoon            (new PointerList<KillRecord>),
     m_dontKillCount         (0),
     m_needToKill            (false),
+    m_addOrdersAI           (true),
     m_debugString           (NULL)
 {
     for (sint32 i = 0; i < units.Num(); ++i)
@@ -414,6 +416,7 @@ ArmyData::ArmyData(const Army &army, Unit &u)
     m_killMeSoon            (new PointerList<KillRecord>),
     m_dontKillCount         (0),
     m_needToKill            (false),
+    m_addOrdersAI           (true),
     m_debugString           (NULL)
 {
     Insert(u);
@@ -437,6 +440,7 @@ ArmyData::ArmyData(const Army &army)
     m_killMeSoon            (new PointerList<KillRecord>),
     m_dontKillCount         (0),
     m_needToKill            (false),
+    m_addOrdersAI           (true),
     m_debugString           (NULL)
 {
 }
@@ -459,6 +463,7 @@ ArmyData::ArmyData(CivArchive &archive)
     m_killMeSoon            (new PointerList<KillRecord>),
     m_dontKillCount         (0),
     m_needToKill            (false),
+    m_addOrdersAI           (true),
     m_debugString           (NULL)
 {
     Serialize(archive);
@@ -6018,6 +6023,11 @@ void ArmyData::AddOrders(UNIT_ORDER_TYPE order)
 void ArmyData::AutoAddOrders(UNIT_ORDER_TYPE order, Path *path,
 							 const MapPoint &point, sint32 argument)
 {
+	if(g_player[m_owner]->IsRobot() && !m_addOrdersAI)
+	{
+		return;
+	}
+
 	if(!g_useOrderQueues)
 	{
 		ClearOrders();
@@ -6053,6 +6063,11 @@ void ArmyData::AutoAddOrders(UNIT_ORDER_TYPE order, Path *path,
 void ArmyData::AutoAddOrdersWrongTurn(UNIT_ORDER_TYPE order, Path *path,
 									  const MapPoint &point, sint32 argument)
 {
+	if(g_player[m_owner]->IsRobot() && !m_addOrdersAI)
+	{
+		return;
+	}
+
 	ClearOrders();
 
 	m_orders->AddTail(new Order(order, path, point, argument));
@@ -6087,6 +6102,11 @@ void ArmyData::AutoAddOrdersWrongTurn(UNIT_ORDER_TYPE order, Path *path,
 void ArmyData::AddOrders(UNIT_ORDER_TYPE order, Path *path, const MapPoint &point,
 						 sint32 argument, GAME_EVENT passedEvent)
 {
+	if(g_player[m_owner]->IsRobot() && !m_addOrdersAI)
+	{
+		return;
+	}
+
 	bool execute = true;
 
 	if(g_network.IsActive() && g_network.IsLocalPlayer(m_owner) &&
@@ -7146,7 +7166,7 @@ bool ArmyData::MoveIntoForeigner(const MapPoint &pos)
 	   ||
 	      (
 	           g_player[attack_owner]->IsRobot()
-	        && diplomat.DesireWarWith(defense_owner)
+	        && diplomat.HasWarOrDesiresPreemptivelyWith(defense_owner)
 	      )
 	  )
 	{
@@ -7832,6 +7852,7 @@ void ArmyData::MoveUnits(const MapPoint &pos)
 				else if(g_player[m_owner]->IsRobot())
 				{
 					ClearOrders();
+					m_addOrdersAI = false;
 					Scheduler::s_needAnotherCycle = true;
 				}
 			}
@@ -9172,6 +9193,28 @@ void ArmyData::ActionUnsuccessful(const MapPoint &point)
 							point.x,
 							point.y);
 	}
+}
+
+bool ArmyData::CanSomeCargoBeachAssault() const
+{
+	for(sint32 i = 0; i < m_nElements; i++)
+	{
+		const UnitDynamicArray * cargo =
+			m_array[i].AccessData()->GetCargoList();
+
+		if(cargo)
+		{
+			for(sint32 j = 0; j < cargo->Num(); j++)
+			{
+				if(cargo->Access(j).CanBeachAssault())
+				{
+					return true;
+				}
+			}
+		}
+	}
+
+	return false;
 }
 
 bool ArmyData::CanBeachAssault() const

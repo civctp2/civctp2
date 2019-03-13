@@ -58,6 +58,7 @@ GOAL_DEFEND {
   UnexploredBonus     -999999
   ObsoleteArmyBonus      -500
   TreaspassingArmyBonus     0
+  GarrisonBonus         10000
 
   ThreatenType:None
   ThreatenBonus 0
@@ -79,8 +80,6 @@ GOAL_SEIGE {
   
   TargetType:City
   TargetOwner:HotEnemy
-  TargetOwner:Neutral
-  TargerOwner:ColdEnemy
 
   Execute   ORDER_ATTACK
 
@@ -128,7 +127,6 @@ GOAL_ATTACK {
   TargetType:AttackUnit
   TargetType:SpecialUnit
   TargetOwner:HotEnemy
-  TargetOwner:ColdEnemy
 
   Execute   ORDER_ATTACK
 
@@ -366,8 +364,8 @@ GOAL_STEALTH_EXPLORE {
   AlliedValueBonus          0
   PowerBonus                0
   DistanceToHomeBonus     100
-  DistanceToEnemyBonus     -5
-  InHomeTerritoryBonus  -1000
+  DistanceToEnemyBonus     10
+  InHomeTerritoryBonus   1000
   NoOwnerTerritoryBonus  1000
   InEnemyTerritoryBonus  1000
   WoundedArmyBonus          0
@@ -543,7 +541,6 @@ GOAL_CONVERT_CITY {
   SquadClass:Stealth
 
   TargetType:City
-  TargetOwner:Neutral
   TargetOwner:ColdEnemy
   TargetOwner:HotEnemy
   TargetOwner:NoContact
@@ -583,6 +580,8 @@ GOAL_BIOTERROR_CITY {
 
   TargetType:City
   TargetOwner:HotEnemy
+  TargetOwner:ColdEnemy
+  TargetOwner:NoContact
 
   Execute   ORDER_BIO_INFECT
 
@@ -618,7 +617,9 @@ GOAL_NANOATTACK_CITY {
   SquadClass:Stealth
 
   TargetType:City
+  TargetOwner:ColdEnemy
   TargetOwner:HotEnemy
+  TargetOwner:NoContact
 
   Execute   ORDER_NANO_INFECT
 
@@ -759,6 +760,7 @@ GOAL_EXPEL {
 ## 19 ##########################################################
 
 GOAL_PILLAGE {
+  UnGroupFirst
   NoTransport
 
   SquadClass:CanAttack
@@ -795,6 +797,7 @@ GOAL_PILLAGE {
 ## 20 ##########################################################
 
 GOAL_PIRATE {
+  UnGroupFirst
   NoTransport
 
   SquadClass:CanAttack
@@ -1170,6 +1173,7 @@ GOAL_INCITE_REVOLUTION {
 
   TargetType:City
   TargetOwner:HotEnemy
+  TargetOwner:ColdEnemy
 
   Execute   ORDER_INCITE_REVOLUTION
 
@@ -1241,6 +1245,7 @@ GOAL_ASSASSINATE {
 
   TargetType:City
   TargetOwner:HotEnemy
+  TargetOwner:ColdEnemy
 
   Execute   ORDER_ASSASSINATE
 
@@ -1479,6 +1484,7 @@ GOAL_SUE_FRANCHISE {
 // Cause military units to pullback towards our city
 //
 GOAL_RETREAT {
+  NeedsRoom
   UnGroupFirst
   ExecuteIncrementally
 
@@ -1520,6 +1526,7 @@ GOAL_RETREAT {
 // Cause special units to pullback if no other goal
 //
 GOAL_RETREAT_SPECIAL {
+  NeedsRoom
   UnGroupFirst
   ExecuteIncrementally
 
@@ -1716,6 +1723,8 @@ GOAL_POISON_CITY {
 
   TargetType:City
   TargetOwner:HotEnemy
+  TargetOwner:ColdEnemy
+  TargetOwner:NoContact
 
   Execute   ORDER_PLAGUE
 
@@ -1803,7 +1812,7 @@ GOAL_SUE {
   PowerBonus                0
   DistanceToHomeBonus       2
   DistanceToEnemyBonus      0
-  InHomeTerritoryBonus      0
+  InHomeTerritoryBonus  10000
   NoOwnerTerritoryBonus     0
   InEnemyTerritoryBonus     0
   WoundedArmyBonus          0

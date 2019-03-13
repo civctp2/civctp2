@@ -384,6 +384,8 @@ void Scheduler::Process_Agent_Changes()
 			Add_New_Matches_For_Agent(theAgent);
 		}
 
+		theAgent->Get_Army()->SetAICanAddOrders();
+
 		agent_ptr_iter++;
 	}
 
@@ -1653,10 +1655,11 @@ bool Scheduler::Add_Transport_Matches_For_Goal
 		}
 
 		if(empty > 0
-		&& max == empty // must be empty otherwise the reansporter would go somewhere else or is alread in the agent list
+		&& max == empty // Must be empty otherwise the reansporter would go somewhere else or is already in the agent list
 		&& goal_ptr->CanReachTargetContinent(agent)
 		&& goal_ptr->Add_Transport_Match(agent)
 		){
+			AI_DPRINTF(k_DBG_SCHEDULER_ALL, m_playerId, -1, -1, ("\t\tAdd transport match, now %d matches.\n", goal_ptr->Get_Matches_Num()));
 			match_added = true;
 		}
 	}
@@ -2016,7 +2019,7 @@ void Scheduler::Assign_Garrison()
 			                      tmp,
 			                      tmp,
 			                      tmp,
-			                      false // check
+			                      true
 			                     );
 
 			defense_strength += static_cast<float>(city.GetDefendersBonus() * static_cast<double>(defense_count));

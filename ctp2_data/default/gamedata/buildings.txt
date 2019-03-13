@@ -23,6 +23,8 @@
 #
 ################################################################################
 
+## 0 ##########################################################
+
 IMPROVE_ACADEMY {
    DefaultIcon ICON_IMPROVE_ACADEMY
    Description DESCRIPTION_IMPROVE_ACADEMY
@@ -32,7 +34,7 @@ IMPROVE_ACADEMY {
    SciencePercent 0.1
 }
 
-############################################################
+## 1 ##########################################################
 
 IMPROVE_AIRPORT {
    DefaultIcon ICON_IMPROVE_AIRPORT
@@ -49,7 +51,7 @@ IMPROVE_AIRPORT {
    CantBuildInSea
 }
 
-############################################################
+## 2 ##########################################################
 
 IMPROVE_ANTI_BALLISTIC_MISSILES {
    DefaultIcon ICON_IMPROVE_ANTI_BALLISTIC_MISSILES
@@ -60,7 +62,7 @@ IMPROVE_ANTI_BALLISTIC_MISSILES {
    ProtectFromNukes
 }
 
-############################################################
+## 3 ##########################################################
 
 IMPROVE_AQUA_FILTER {
    DefaultIcon ICON_IMPROVE_AQUA_FILTER
@@ -76,7 +78,7 @@ IMPROVE_AQUA_FILTER {
    RaiseMaxPopulation 14
 }
 
-############################################################
+## 4 ##########################################################
 
 IMPROVE_AQUEDUCT {
    DefaultIcon ICON_IMPROVE_AQUEDUCT
@@ -88,7 +90,7 @@ IMPROVE_AQUEDUCT {
    RaiseMaxPopulation 14
 }
 
-############################################################
+## 5 ##########################################################
 
 IMPROVE_ARCOLOGIES {
    DefaultIcon ICON_IMPROVE_ARCOLOGIES
@@ -103,7 +105,7 @@ IMPROVE_ARCOLOGIES {
    RaiseMaxPopulation 14
 }
 
-############################################################
+## 6 ##########################################################
 
 IMPROVE_ARENA {
    DefaultIcon ICON_IMPROVE_ARENA
@@ -114,7 +116,7 @@ IMPROVE_ARENA {
    HappyInc 2
 }
 
-############################################################
+## 7 ##########################################################
 
 IMPROVE_BALLISTA_TOWERS {
    DefaultIcon ICON_IMPROVE_BALLISTA_TOWERS
@@ -126,7 +128,7 @@ IMPROVE_BALLISTA_TOWERS {
    OffenseBonusLand 20
 }
 
-############################################################
+## 8 ##########################################################
 
 IMPROVE_BANK {
    DefaultIcon ICON_IMPROVE_BANK
@@ -140,7 +142,7 @@ IMPROVE_BANK {
    CommercePercent 0.15
 }
 
-############################################################
+## 9 ##########################################################
 
 IMPROVE_BASCILICA {
    DefaultIcon ICON_IMPROVE_BASCILICA
@@ -156,7 +158,7 @@ IMPROVE_BASCILICA {
    Cathedral
 }
 
-############################################################
+## 10 ##########################################################
 
 IMPROVE_BATTLEMENTS {
    DefaultIcon ICON_IMPROVE_BATTLEMENTS
@@ -168,7 +170,7 @@ IMPROVE_BATTLEMENTS {
    OffenseBonusWater 25
 }
 
-############################################################
+## 11 ##########################################################
 
 IMPROVE_BAZAAR {
    DefaultIcon ICON_IMPROVE_BAZAAR
@@ -179,7 +181,7 @@ IMPROVE_BAZAAR {
    CommercePercent 0.1
 }
 
-############################################################
+## 12 ##########################################################
 
 IMPROVE_BEHAVIORAL_MOD_CENTER {
    DefaultIcon ICON_IMPROVE_BEHAVIORAL_MOD_CENTER
@@ -194,7 +196,7 @@ IMPROVE_BEHAVIORAL_MOD_CENTER {
    LowerCrime -0.3
 }
 
-############################################################
+## 13 ##########################################################
 
 IMPROVE_BODY_EXCHANGE {
    DefaultIcon ICON_IMPROVE_BODY_EXCHANGE
@@ -210,7 +212,7 @@ IMPROVE_BODY_EXCHANGE {
    RaiseOvercrowdingLevel 12
 }
 
-############################################################
+## 14 ##########################################################
 
 IMPROVE_BROKERAGE {
    DefaultIcon ICON_IMPROVE_BROKERAGE
@@ -226,7 +228,7 @@ IMPROVE_BROKERAGE {
    Brokerage
 }
 
-############################################################
+## 15 ##########################################################
 
 IMPROVE_CAPITOL {
    DefaultIcon ICON_IMPROVE_CAPITOL
@@ -238,7 +240,7 @@ IMPROVE_CAPITOL {
    HappyInc 1
 }
 
-############################################################
+## 16 ##########################################################
 
 IMPROVE_CITY_WALLS {
    DefaultIcon ICON_IMPROVE_CITY_WALLS
@@ -253,7 +255,7 @@ IMPROVE_CITY_WALLS {
    CantBuildInSea
 }
 
-############################################################
+## 17 ##########################################################
 
 IMPROVE_COMPUTER_CENTER {
    DefaultIcon ICON_IMPROVE_COMPUTER_CENTER
@@ -269,7 +271,7 @@ IMPROVE_COMPUTER_CENTER {
    SciencePercent 0.2
 }
 
-############################################################
+## 18 ##########################################################
 
 IMPROVE_CORNUCOPIC_VAT {
    DefaultIcon ICON_IMPROVE_CORNUCOPIC_VAT
@@ -284,7 +286,7 @@ IMPROVE_CORNUCOPIC_VAT {
    FoodVat 1
 }
 
-############################################################
+## 19 ##########################################################
 
 IMPROVE_CORRECTIONAL_FACILITY {
    DefaultIcon ICON_IMPROVE_CORRECTIONAL_FACILITY
@@ -298,7 +300,7 @@ IMPROVE_CORRECTIONAL_FACILITY {
    LowerCrime -0.2
 }
 
-############################################################
+## 20 ##########################################################
 
 IMPROVE_COURTHOUSE {
    DefaultIcon ICON_IMPROVE_COURTHOUSE
@@ -309,7 +311,7 @@ IMPROVE_COURTHOUSE {
    LowerCrime -0.1
 }
 
-############################################################
+## 21 ##########################################################
 
 IMPROVE_DRUG_STORE {
    DefaultIcon ICON_IMPROVE_DRUG_STORE
@@ -320,7 +322,7 @@ IMPROVE_DRUG_STORE {
    RaiseOvercrowdingLevel 4
 }
 
-############################################################
+## 22 ##########################################################
 
 IMPROVE_E_BANK {
    DefaultIcon ICON_IMPROVE_E_BANK
@@ -336,7 +338,7 @@ IMPROVE_E_BANK {
    CommercePercent 0.25
 }
 
-############################################################
+## 23 ##########################################################
 
 IMPROVE_ECO_TRANSIT {
    DefaultIcon ICON_IMPROVE_ECO_TRANSIT
@@ -350,7 +352,7 @@ IMPROVE_ECO_TRANSIT {
    PopulationPollutionPercent -0.5
 }
 
-############################################################
+## 24 ##########################################################
 
 IMPROVE_FACTORY {
    DefaultIcon ICON_IMPROVE_FACTORY
@@ -362,7 +364,7 @@ IMPROVE_FACTORY {
    AllowGrunts
 }
 
-############################################################
+## 25 ##########################################################
 
 IMPROVE_FLAK_TOWERS {
    DefaultIcon ICON_IMPROVE_FLAK_TOWERS
@@ -373,7 +375,7 @@ IMPROVE_FLAK_TOWERS {
    OffenseBonusAir 40
 }
 
-############################################################
+## 26 ##########################################################
 
 IMPROVE_FOOD_SILO {
    DefaultIcon ICON_IMPROVE_FOOD_SILO
@@ -388,7 +390,7 @@ IMPROVE_FOOD_SILO {
    StarvationProtection 5
 }
 
-############################################################
+## 27 ##########################################################
 
 IMPROVE_FORCEFIELD {
    DefaultIcon ICON_IMPROVE_FORCEFIELD
@@ -403,7 +405,7 @@ IMPROVE_FORCEFIELD {
    ForceField
 }
 
-############################################################
+## 28 ##########################################################
 
 IMPROVE_FUSION_PLANT {
    DefaultIcon ICON_IMPROVE_FUSION_PLANT
@@ -418,7 +420,7 @@ IMPROVE_FUSION_PLANT {
    ProductionPercent 0.25
 }
 
-############################################################
+## 29 ##########################################################
 
 IMPROVE_GAIA_COMPUTER {
    DefaultIcon ICON_IMPROVE_GAIA_COMPUTER
@@ -428,7 +430,7 @@ IMPROVE_GAIA_COMPUTER {
    Upkeep 25
 }
 
-############################################################
+## 30 ##########################################################
 
 IMPROVE_GRANARY {
    DefaultIcon ICON_IMPROVE_GRANARY
@@ -440,7 +442,7 @@ IMPROVE_GRANARY {
    StarvationProtection 2
 }
 
-############################################################
+## 31 ##########################################################
 
 IMPROVE_HOSPITAL {
    DefaultIcon ICON_IMPROVE_HOSPITAL
@@ -454,7 +456,7 @@ IMPROVE_HOSPITAL {
    RaiseOvercrowdingLevel 8
 }
 
-############################################################
+## 32 ##########################################################
 
 IMPROVE_INCUBATION_CENTER {
    DefaultIcon ICON_IMPROVE_INCUBATION_CENTER
@@ -469,7 +471,7 @@ IMPROVE_INCUBATION_CENTER {
    RaiseOvercrowdingLevel 12
 }
 
-############################################################
+## 33 ##########################################################
 
 IMPROVE_MATTER_DECOMPILER {
    DefaultIcon ICON_IMPROVE_MATTER_DECOMPILER
@@ -483,7 +485,7 @@ IMPROVE_MATTER_DECOMPILER {
    ProductionPollutionPercent -0.5
 }
 
-############################################################
+## 34 ##########################################################
 
 IMPROVE_MICRO_DEFENSE {
    DefaultIcon ICON_IMPROVE_MICRO_DEFENSE
@@ -495,7 +497,7 @@ IMPROVE_MICRO_DEFENSE {
    ProtectFromNanoVirus 0.5
 }
 
-############################################################
+## 35 ##########################################################
 
 IMPROVE_MILL {
    DefaultIcon ICON_IMPROVE_MILL
@@ -506,7 +508,7 @@ IMPROVE_MILL {
    ProductionPercent 0.1
 }
 
-############################################################
+## 36 ##########################################################
 
 IMPROVE_MOVIE_PALACE {
    DefaultIcon ICON_IMPROVE_MOVIE_PALACE
@@ -521,7 +523,7 @@ IMPROVE_MOVIE_PALACE {
    Television
 }
 
-############################################################
+## 37 ##########################################################
 
 IMPROVE_NANITE_FACTORY {
    DefaultIcon ICON_IMPROVE_NANITE_FACTORY
@@ -536,7 +538,7 @@ IMPROVE_NANITE_FACTORY {
    ProductionPercent 0.25
 }
 
-############################################################
+## 38 ##########################################################
 
 IMPROVE_NUCLEAR_PLANT {
    DefaultIcon ICON_IMPROVE_NUCLEAR_PLANT
@@ -551,7 +553,7 @@ IMPROVE_NUCLEAR_PLANT {
    NuclearPlant
 }
 
-############################################################
+## 39 ##########################################################
 
 IMPROVE_OIL_REFINERY {
    DefaultIcon ICON_IMPROVE_OIL_REFINERY
@@ -562,7 +564,7 @@ IMPROVE_OIL_REFINERY {
    ProductionPercent 0.15
 }
 
-############################################################
+## 40 ##########################################################
 
 IMPROVE_ORBITAL_LABORATORY {
    DefaultIcon ICON_IMPROVE_ORBITAL_LABORATORY
@@ -579,7 +581,7 @@ IMPROVE_ORBITAL_LABORATORY {
    SciencePercent 0.3
 }
 
-############################################################
+## 41 ##########################################################
 
 IMPROVE_POWER_SATELLITE {
    DefaultIcon ICON_IMPROVE_POWER_SATELLITE
@@ -589,7 +591,7 @@ IMPROVE_POWER_SATELLITE {
    Upkeep 0
 }
 
-############################################################
+## 42 ##########################################################
 
 IMPROVE_PUBLIC_TRANSPORTATION {
    DefaultIcon ICON_IMPROVE_PUBLIC_TRANSPORTATION
@@ -600,7 +602,7 @@ IMPROVE_PUBLIC_TRANSPORTATION {
    PopulationPollutionPercent -0.3
 }
 
-############################################################
+## 43 ##########################################################
 
 IMPROVE_PUBLISHING_HOUSE {
    DefaultIcon ICON_IMPROVE_PUBLISHING_HOUSE
@@ -615,7 +617,7 @@ IMPROVE_PUBLISHING_HOUSE {
    SciencePercent 0.15
 }
 
-############################################################
+## 44 ##########################################################
 
 IMPROVE_RECYCLING_PLANT {
    DefaultIcon ICON_IMPROVE_RECYCLING_PLANT
@@ -626,7 +628,7 @@ IMPROVE_RECYCLING_PLANT {
    ProductionPollutionPercent -0.3
 }
 
-############################################################
+## 45 ##########################################################
 
 IMPROVE_ROBOTIC_PLANT {
    DefaultIcon ICON_IMPROVE_ROBOTIC_PLANT
@@ -640,7 +642,7 @@ IMPROVE_ROBOTIC_PLANT {
    ProductionPercent 0.2
 }
 
-############################################################
+## 46 ##########################################################
 
 IMPROVE_SECURITY_MONITOR {
    DefaultIcon ICON_IMPROVE_SECURITY_MONITOR
@@ -656,7 +658,7 @@ IMPROVE_SECURITY_MONITOR {
    LowerCrime -0.3
 }
 
-############################################################
+## 47 ##########################################################
 
 IMPROVE_SHRINE {
    DefaultIcon ICON_IMPROVE_SHRINE
@@ -669,7 +671,7 @@ IMPROVE_SHRINE {
    Cathedral
 }
 
-############################################################
+## 48 ##########################################################
 
 IMPROVE_TELEVISION {
    DefaultIcon ICON_IMPROVE_TELEVISION
@@ -687,7 +689,7 @@ IMPROVE_TELEVISION {
    Television
 }
 
-############################################################
+## 49 ##########################################################
 
 IMPROVE_THEATER {
    DefaultIcon ICON_IMPROVE_THEATER
@@ -698,7 +700,7 @@ IMPROVE_THEATER {
    HappyInc 2
 }
 
-############################################################
+## 50 ##########################################################
 
 IMPROVE_UNIVERSITY {
    DefaultIcon ICON_IMPROVE_UNIVERSITY
@@ -712,7 +714,7 @@ IMPROVE_UNIVERSITY {
    SciencePercent 0.15
 }
 
-############################################################
+## 51 ##########################################################
 
 IMPROVE_VR_AMUSEMENT_PARK {
    DefaultIcon ICON_IMPROVE_VR_AMUSEMENT_PARK
@@ -727,4 +729,4 @@ IMPROVE_VR_AMUSEMENT_PARK {
    HappyInc 5
 }
 
-############################################################
+## end ##########################################################

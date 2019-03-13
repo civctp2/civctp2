@@ -40,8 +40,8 @@
 #include "dynarr.h"
 #include "directions.h"
 
-struct Direction {
-
+struct Direction
+{
 	sint8 dir;
 
 	Direction (WORLD_DIRECTION val = NOWHERE) { dir = static_cast<sint8>(val); }
@@ -81,16 +81,16 @@ public:
 	void Restart(MapPoint &p);
 	void JustSetStart(const MapPoint &p);
 
-    bool IsEnd() const;
-    sint32 Next(MapPoint &p);
-    void GetCurrentPoint(MapPoint &p) const;
-    void ClipStartToCurrent();
+	bool IsEnd() const;
+	sint32 Next(MapPoint &p);
+	void GetCurrentPoint(MapPoint &p) const;
+	void ClipStartToCurrent();
 
-    void GetStartPoint(MapPoint &pos) const;
-    void StartDir(WORLD_DIRECTION &d);
-    void GetCurrentDir(WORLD_DIRECTION &d);
-    bool IsEndDir();
-    void IncDir();
+	void GetStartPoint(MapPoint &pos) const;
+	void StartDir(WORLD_DIRECTION &d);
+	void GetCurrentDir(WORLD_DIRECTION &d);
+	bool IsEndDir();
+	void IncDir();
 
 	void ConcatReturnPath();
 	void Concat(Path const & otherpath);
@@ -116,7 +116,6 @@ public:
 	MapPoint SnipEndUntilCargoCanEnter(const Army & army);
 	MapPoint SnipEndUntilCanEnter(const Army & army);
 	MapPoint SnipEndUntilCannotEnter(const Army & army);
-
 };
 
 #endif

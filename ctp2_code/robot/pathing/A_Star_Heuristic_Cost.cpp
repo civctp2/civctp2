@@ -170,19 +170,6 @@ A_Star_Heuristic_Cost::~A_Star_Heuristic_Cost()
 	delete [] relaxed_min_movement_costs;
 }
 
-
-
-
-
-
-
-
-
-
-
-
-
-
 void A_Star_Heuristic_Cost::Update()
 {
 
@@ -192,19 +179,6 @@ void A_Star_Heuristic_Cost::Update()
 
 }
 
-
-
-
-
-
-
-
-
-
-
-
-
-
 void A_Star_Heuristic_Cost::Update_One_Tiles_Cost
 (
 	MapPointData &the_tile,
@@ -212,69 +186,6 @@ void A_Star_Heuristic_Cost::Update_One_Tiles_Cost
 )
 {
 }
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
 
 void A_Star_Heuristic_Cost::Clear_Raw_Movement_Costs()
 {
@@ -284,40 +195,23 @@ void A_Star_Heuristic_Cost::Clear_Raw_Movement_Costs()
 			 );
 }
 
-
-
-
-
-
-
-
-
-
-
-
 void A_Star_Heuristic_Cost::Update_Raw_Movement_Costs()
 {
-
-
 	double a_tiles_cost;
 
 	double *raw_min_cost;
 	int odd_row = true;
 
-
 	Clear_Raw_Movement_Costs();
 
 	for (xy_pos.y = 0; xy_pos.y < world_rows; xy_pos.y++)
 	{
-
 		if (odd_row) xy_pos.x = 0;
 
 		else xy_pos.x = 1;
 
-
 		for (; xy_pos.x < world_columns; xy_pos.x += 2)
 		{
-
 			g_theWorld->XY_Coords.XY_to_RC(xy_pos, ipos);
 
 			a_tiles_cost = g_theWorld->GetMoveCost(ipos);
@@ -328,48 +222,29 @@ void A_Star_Heuristic_Cost::Update_Raw_Movement_Costs()
 
 			if (a_tiles_cost < (*raw_min_cost))
 			{
-
 				(*raw_min_cost) = a_tiles_cost;
-
 			}
-
 		}
 
 		odd_row = !odd_row;
-
 	}
-
 }
-
-
-
-
 
 #ifdef SUPER_DEBUG_HEURISTIC
 void A_Star_Heuristic_Cost::test_terrain_costs()
 {
-
-
 	double a_tiles_cost;
 	int odd_row = true;
-    MapPoint norm_pos;
-
-
-
-
-
+	MapPoint norm_pos;
 
 	for (xy_pos.y = 0; xy_pos.y < world_rows; xy_pos.y++)
 	{
-
 		if (odd_row) xy_pos.x = 0;
 
 		else xy_pos.x = 1;
 
-
 		for (; xy_pos.x < world_columns; xy_pos.x += 2)
 		{
-
 			g_theWorld->XY_Coords.XY_to_RC(xy_pos, ipos);
 
 			a_tiles_cost = g_theWorld->GetMoveCost(ipos);
@@ -378,72 +253,25 @@ void A_Star_Heuristic_Cost::test_terrain_costs()
 
 			norm_pos.Iso2Norm(ipos);
 			g_theWorld->SetColor(ipos, (long) a_tiles_cost);
-
 		}
 
 		odd_row = not odd_row;
-
 	}
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
 }
 #endif
 
-
-
-
-
-
-
-
-
 void A_Star_Heuristic_Cost::Relax_Raw_Movement_Costs()
 {
-
 	int row, column;
-
 
 	for (row = 0; row < rows; row++)
 	{
-
 		for (column = 0; column < columns; column++)
 		{
-
 			Relax_One_Cost_Grid(row, column);
-
 		}
-
 	}
 }
-
-
-
-
-
-
-
-
-
-
-
-
 
 //----------------------------------------------------------------------------
 //
@@ -452,8 +280,8 @@ void A_Star_Heuristic_Cost::Relax_Raw_Movement_Costs()
 // Description: Sets a (relaxed) block value to the minimum (raw) value of
 //              itself and its direct neighbours.
 //
-// Parameters : a_Row			: block row number
-//				a_Column		: block column number
+// Parameters : a_Row           : block row number
+//              a_Column        : block column number
 //
 // Globals    : -
 //

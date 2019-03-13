@@ -1,3 +1,5 @@
+## 0 ##########################################################
+
 ADVANCE_ADV_INFANTRY_TACTICS {
 
    Prerequisites ADVANCE_NAVAL_AVIATION
@@ -8,6 +10,8 @@ ADVANCE_ADV_INFANTRY_TACTICS {
    Branch 0
    Age AGE_SIX
 }
+
+## 1 ##########################################################
 
 ADVANCE_ADV_NAVAL_TACTICS {
 
@@ -20,6 +24,8 @@ ADVANCE_ADV_NAVAL_TACTICS {
    Age AGE_SIX
 }
 
+## 2 ##########################################################
+
 ADVANCE_ADV_URBAN_PLANNING {
 
    Prerequisites ADVANCE_MASS_TRANSIT
@@ -30,6 +36,8 @@ ADVANCE_ADV_URBAN_PLANNING {
    Branch 0
    Age AGE_SIX
 }
+
+## 3 ##########################################################
 
 ADVANCE_ADVANCED_COMPOSITES {
 
@@ -42,6 +50,8 @@ ADVANCE_ADVANCED_COMPOSITES {
    Age AGE_SEVEN
 }
 
+## 4 ##########################################################
+
 ADVANCE_AERODYNAMICS {
 
    Prerequisites ADVANCE_INTERNAL_COMBUSTION
@@ -53,6 +63,8 @@ ADVANCE_AERODYNAMICS {
    Age AGE_SIX
 }
 
+## 5 ##########################################################
+
 ADVANCE_AGE_OF_REASON {
 
    Prerequisites ADVANCE_CHEMISTRY
@@ -63,6 +75,8 @@ ADVANCE_AGE_OF_REASON {
    Branch 0
    Age AGE_FOUR
 }
+
+## 6 ##########################################################
 
 ADVANCE_AGRICULTURAL_REVOLUTION {
 
@@ -76,12 +90,16 @@ ADVANCE_AGRICULTURAL_REVOLUTION {
    KeyAdvanceAdvice KEY_GROWTH_ADVANCE_ADVICE
 }
 
+## 7 ##########################################################
+
 ADVANCE_AGRICULTURE {
    Cost 242
    Icon ICON_ADVANCE_AGRICULTURE
    Branch 0
    Age AGE_ONE
 }
+
+## 8 ##########################################################
 
 ADVANCE_AI_SURVEILLANCE {
 
@@ -94,6 +112,8 @@ ADVANCE_AI_SURVEILLANCE {
    Age AGE_EIGHT
 }
 
+## 9 ##########################################################
+
 ADVANCE_ALCHEMY {
 
    Prerequisites ADVANCE_PHILOSOPHY
@@ -104,6 +124,8 @@ ADVANCE_ALCHEMY {
    Branch 0
    Age AGE_THREE
 }
+
+## 10 #########################################################
 
 ADVANCE_ARCOLOGIES {
 
@@ -116,6 +138,8 @@ ADVANCE_ARCOLOGIES {
    Age AGE_EIGHT
 }
 
+## 11 #########################################################
+
 ADVANCE_BALLISTICS {
 
    Prerequisites ADVANCE_AGRICULTURE
@@ -126,6 +150,8 @@ ADVANCE_BALLISTICS {
    Branch 0
    Age AGE_THREE
 }
+
+## 12 #########################################################
 
 ADVANCE_BANKING {
 
@@ -138,6 +164,8 @@ ADVANCE_BANKING {
    Age AGE_FOUR
 }
 
+## 13 #########################################################
+
 ADVANCE_BRONZE_WORKING {
 
    Prerequisites ADVANCE_TOOLMAKING
@@ -147,6 +175,8 @@ ADVANCE_BRONZE_WORKING {
    Branch 0
    Age AGE_ONE
 }
+
+## 14 #########################################################
 
 ADVANCE_BUREAUCRACY {
 
@@ -159,6 +189,8 @@ ADVANCE_BUREAUCRACY {
    Age AGE_THREE
 }
 
+## 15 #########################################################
+
 ADVANCE_CANNON_MAKING {
 
    Prerequisites ADVANCE_GUNPOWDER
@@ -169,6 +201,8 @@ ADVANCE_CANNON_MAKING {
    Branch 0
    Age AGE_FOUR
 }
+
+## 16 #########################################################
 
 ADVANCE_CAVALRY_TACTICS {
 
@@ -181,6 +215,8 @@ ADVANCE_CAVALRY_TACTICS {
    Age AGE_FOUR
 }
 
+## 17 #########################################################
+
 ADVANCE_CHAOS_THEORY {
 
    Prerequisites ADVANCE_COMPUTER
@@ -192,6 +228,8 @@ ADVANCE_CHAOS_THEORY {
    Age AGE_EIGHT
 }
 
+## 18 #########################################################
+
 ADVANCE_CHEMISTRY {
 
    Prerequisites ADVANCE_ALCHEMY
@@ -202,6 +240,8 @@ ADVANCE_CHEMISTRY {
    Branch 0
    Age AGE_FOUR
 }
+
+## 18 #########################################################
 
 ADVANCE_CLASSICAL_EDUCATION {
 
@@ -215,6 +255,8 @@ ADVANCE_CLASSICAL_EDUCATION {
    KeyAdvanceAdvice KEY_SCIENCE_ADVANCE_ADVICE
 }
 
+## 20 #########################################################
+
 ADVANCE_COMMUNISM {
 
    Prerequisites ADVANCE_BANKING
@@ -225,6 +267,8 @@ ADVANCE_COMMUNISM {
    Branch 0
    Age AGE_FIVE
 }
+
+## 21 #########################################################
 
 ADVANCE_COMPUTER {
 
@@ -238,6 +282,8 @@ ADVANCE_COMPUTER {
    TriggerFeat FEAT_ADVANCE_COMPUTERS
 }
 
+## 22 #########################################################
+
 ADVANCE_CONCRETE {
 
    Prerequisites ADVANCE_MASONRY
@@ -250,6 +296,8 @@ ADVANCE_CONCRETE {
    TriggerFeat FEAT_ADVANCE_CONCRETE
 }
 
+## 23 #########################################################
+
 ADVANCE_CONSERVATION {
 
    Prerequisites ADVANCE_GLOBAL_ECONOMICS
@@ -260,6 +308,8 @@ ADVANCE_CONSERVATION {
    Branch 0
    Age AGE_SIX
 }
+
+## 24 #########################################################
 
 ADVANCE_CORPORATE_REPUBLIC {
 
@@ -272,6 +322,8 @@ ADVANCE_CORPORATE_REPUBLIC {
    Age AGE_SIX
 }
 
+## 25 #########################################################
+
 ADVANCE_CORPORATION {
 
    Prerequisites ADVANCE_MASS_MEDIA
@@ -282,6 +334,8 @@ ADVANCE_CORPORATION {
    Branch 0
    Age AGE_SIX
 }
+
+## 26 #########################################################
 
 ADVANCE_CRIMINAL_CODE {
 
@@ -294,6 +348,8 @@ ADVANCE_CRIMINAL_CODE {
    Age AGE_SIX
 }
 
+## 27 #########################################################
+
 ADVANCE_CYBERNETICS {
 
    Prerequisites ADVANCE_EUGENICS
@@ -304,6 +360,8 @@ ADVANCE_CYBERNETICS {
    Branch 0
    Age AGE_NINE
 }
+
+## 28 #########################################################
 
 ADVANCE_DEMOCRACY {
 
@@ -316,6 +374,8 @@ ADVANCE_DEMOCRACY {
    Age AGE_FIVE
 }
 
+## 29 #########################################################
+
 ADVANCE_DIGITAL_ENCRYPTION {
 
    Prerequisites ADVANCE_ARCOLOGIES
@@ -326,6 +386,8 @@ ADVANCE_DIGITAL_ENCRYPTION {
    Branch 0
    Age AGE_EIGHT
 }
+
+## 30 #########################################################
 
 ADVANCE_DRAMA {
 
@@ -338,6 +400,8 @@ ADVANCE_DRAMA {
    Age AGE_TWO
 }
 
+## 31 #########################################################
+
 ADVANCE_ECONOMICS {
 
    Prerequisites ADVANCE_BANKING
@@ -348,6 +412,8 @@ ADVANCE_ECONOMICS {
    Branch 0
    Age AGE_FIVE
 }
+
+## 32 #########################################################
 
 ADVANCE_ECOTOPIA {
 
@@ -360,6 +426,8 @@ ADVANCE_ECOTOPIA {
    Age AGE_EIGHT
 }
 
+## 33 #########################################################
+
 ADVANCE_ELECTRICITY {
 
    Prerequisites ADVANCE_INDUSTRIAL_REVOLUTION
@@ -370,6 +438,8 @@ ADVANCE_ELECTRICITY {
    Branch 0
    Age AGE_FIVE
 }
+
+## 34 #########################################################
 
 ADVANCE_EUGENICS {
 
@@ -382,6 +452,8 @@ ADVANCE_EUGENICS {
    Age AGE_EIGHT
 }
 
+## 35 #########################################################
+
 ADVANCE_EXPLOSIVES {
 
    Prerequisites ADVANCE_GUNPOWDER
@@ -392,6 +464,8 @@ ADVANCE_EXPLOSIVES {
    Branch 0
    Age AGE_FIVE
 }
+
+## 36 #########################################################
 
 ADVANCE_FASCISM {
 
@@ -404,6 +478,8 @@ ADVANCE_FASCISM {
    Age AGE_FIVE
 }
 
+## 37 #########################################################
+
 ADVANCE_FEUDALISM {
 
    Prerequisites ADVANCE_HORSE_RIDING
@@ -414,6 +490,8 @@ ADVANCE_FEUDALISM {
    Branch 0
    Age AGE_THREE
 }
+
+## 38 #########################################################
 
 ADVANCE_FUEL_CELLS {
 
@@ -426,6 +504,8 @@ ADVANCE_FUEL_CELLS {
    Age AGE_EIGHT
 }
 
+## 39 #########################################################
+
 ADVANCE_FUSION {
 
    Prerequisites ADVANCE_CHAOS_THEORY
@@ -437,6 +517,8 @@ ADVANCE_FUSION {
    Age AGE_NINE
 }
 
+## 40 #########################################################
+
 ADVANCE_GAIA_CONTROLLER {
 
    Prerequisites ADVANCE_GAIA_THEORY
@@ -447,6 +529,8 @@ ADVANCE_GAIA_CONTROLLER {
    Branch 0
    Age AGE_TEN
 }
+
+## 41 #########################################################
 
 ADVANCE_GAIA_THEORY {
 
@@ -461,6 +545,8 @@ ADVANCE_GAIA_THEORY {
    PollutionProductionModifier -1
 }
 
+## 42 #########################################################
+
 ADVANCE_GENETIC_TAILORING {
 
    Prerequisites ADVANCE_EUGENICS
@@ -471,6 +557,8 @@ ADVANCE_GENETIC_TAILORING {
    Branch 0
    Age AGE_NINE
 }
+
+## 43 #########################################################
 
 ADVANCE_GENETICS {
 
@@ -483,6 +571,8 @@ ADVANCE_GENETICS {
    Age AGE_EIGHT
 }
 
+## 44 #########################################################
+
 ADVANCE_GEOMETRY {
 
    Prerequisites ADVANCE_BALLISTICS
@@ -493,6 +583,8 @@ ADVANCE_GEOMETRY {
    Branch 0
    Age AGE_TWO
 }
+
+## 45 #########################################################
 
 ADVANCE_GLOBAL_COMMUNICATIONS {
 
@@ -505,6 +597,8 @@ ADVANCE_GLOBAL_COMMUNICATIONS {
    Age AGE_SEVEN
 }
 
+## 46 #########################################################
+
 ADVANCE_GLOBAL_DEFENSE {
 
    Prerequisites ADVANCE_RADAR
@@ -515,6 +609,8 @@ ADVANCE_GLOBAL_DEFENSE {
    Branch 0
    Age AGE_SEVEN
 }
+
+## 47 #########################################################
 
 ADVANCE_GLOBAL_ECONOMICS {
 
@@ -528,6 +624,8 @@ ADVANCE_GLOBAL_ECONOMICS {
    Capitalization
 }
 
+## 48 #########################################################
+
 ADVANCE_GUIDED_WEAPON_SYSTEMS {
 
    Prerequisites ADVANCE_COMPUTER
@@ -538,6 +636,8 @@ ADVANCE_GUIDED_WEAPON_SYSTEMS {
    Branch 0
    Age AGE_SEVEN
 }
+
+## 49 #########################################################
 
 ADVANCE_GUNPOWDER {
 
@@ -552,6 +652,8 @@ ADVANCE_GUNPOWDER {
    TriggerFeat FEAT_ADVANCE_GUNPOWDER
 }
 
+## 50 #########################################################
+
 ADVANCE_HORSE_RIDING {
 
    Prerequisites ADVANCE_BALLISTICS
@@ -563,6 +665,8 @@ ADVANCE_HORSE_RIDING {
    Age AGE_THREE
    KeyAdvanceAdvice KEY_MILITARY_ADVANCE_ADVICE
 }
+
+## 51 #########################################################
 
 ADVANCE_HT_SUPERCONDUCTOR {
 
@@ -576,6 +680,8 @@ ADVANCE_HT_SUPERCONDUCTOR {
    MagLev
 }
 
+## 52 #########################################################
+
 ADVANCE_HULL_MAKING {
 
    Prerequisites ADVANCE_GEOMETRY
@@ -586,6 +692,8 @@ ADVANCE_HULL_MAKING {
    Branch 0
    Age AGE_TWO
 }
+
+## 53 #########################################################
 
 ADVANCE_HUMAN_CLONING {
 
@@ -598,6 +706,8 @@ ADVANCE_HUMAN_CLONING {
    Age AGE_NINE
 }
 
+## 54 #########################################################
+
 ADVANCE_INDUSTRIAL_REVOLUTION {
 
    Prerequisites ADVANCE_AGRICULTURAL_REVOLUTION
@@ -608,6 +718,8 @@ ADVANCE_INDUSTRIAL_REVOLUTION {
    Branch 0
    Age AGE_FIVE
 }
+
+## 55 #########################################################
 
 ADVANCE_INTERNAL_COMBUSTION {
 
@@ -620,6 +732,8 @@ ADVANCE_INTERNAL_COMBUSTION {
    Age AGE_SIX
 }
 
+## 56 #########################################################
+
 ADVANCE_IRON_WORKING {
 
    Prerequisites ADVANCE_BRONZE_WORKING
@@ -630,6 +744,8 @@ ADVANCE_IRON_WORKING {
    Branch 0
    Age AGE_TWO
 }
+
+## 57 #########################################################
 
 ADVANCE_JET_PROPULSION {
 
@@ -642,6 +758,8 @@ ADVANCE_JET_PROPULSION {
    Age AGE_SIX
 }
 
+## 58 #########################################################
+
 ADVANCE_JURISPRUDENCE {
 
    Prerequisites ADVANCE_WRITING
@@ -651,6 +769,8 @@ ADVANCE_JURISPRUDENCE {
    Branch 0
    Age AGE_TWO
 }
+
+## 59 #########################################################
 
 ADVANCE_LIFE_EXTENSION {
 
@@ -664,6 +784,8 @@ ADVANCE_LIFE_EXTENSION {
    TriggerFeat FEAT_ADVANCE_LIFE_EXTENSION
 }
 
+## 60 #########################################################
+
 ADVANCE_LIQUID_BREATHING_APPARATUS {
 
    Prerequisites ADVANCE_ADVANCED_COMPOSITES
@@ -674,6 +796,8 @@ ADVANCE_LIQUID_BREATHING_APPARATUS {
    Branch 0
    Age AGE_EIGHT
 }
+
+## 61 #########################################################
 
 ADVANCE_MASONRY {
 
@@ -686,6 +810,8 @@ ADVANCE_MASONRY {
    Age AGE_ONE
 }
 
+## 62 #########################################################
+
 ADVANCE_MASS_MEDIA {
 
    Prerequisites ADVANCE_ECONOMICS
@@ -696,6 +822,8 @@ ADVANCE_MASS_MEDIA {
    Branch 0
    Age AGE_SIX
 }
+
+## 63 #########################################################
 
 ADVANCE_MASS_PRODUCTION {
 
@@ -712,6 +840,8 @@ ADVANCE_MASS_PRODUCTION {
    TriggerFeat FEAT_ADVANCE_MASS_PRODUCTION
 }
 
+## 64 #########################################################
+
 ADVANCE_MASS_TRANSIT {
 
    Prerequisites ADVANCE_CORPORATE_REPUBLIC
@@ -722,6 +852,8 @@ ADVANCE_MASS_TRANSIT {
    Branch 0
    Age AGE_SIX
 }
+
+## 65 #########################################################
 
 ADVANCE_MEDICINE {
 
@@ -734,6 +866,8 @@ ADVANCE_MEDICINE {
    Age AGE_SIX
 }
 
+## 66 #########################################################
+
 ADVANCE_MODERN_METALLURGY {
 
    Prerequisites ADVANCE_AGE_OF_REASON
@@ -745,6 +879,8 @@ ADVANCE_MODERN_METALLURGY {
    Age AGE_FIVE
 }
 
+## 67 #########################################################
+
 ADVANCE_MONARCHY {
 
    Prerequisites ADVANCE_PHILOSOPHY
@@ -755,6 +891,8 @@ ADVANCE_MONARCHY {
    Branch 0
    Age AGE_ONE
 }
+
+## 68 #########################################################
 
 ADVANCE_NANO_ASSEMBLY {
 
@@ -770,6 +908,8 @@ ADVANCE_NANO_ASSEMBLY {
 #   PollutionProductionModifier -1
 }
 
+## 69 #########################################################
+
 ADVANCE_NANO_MACHINES {
 
    Prerequisites ADVANCE_NANO_ASSEMBLY
@@ -780,6 +920,8 @@ ADVANCE_NANO_MACHINES {
    Branch 0
    Age AGE_NINE
 }
+
+## 70 #########################################################
 
 ADVANCE_NANO_WARFARE {
 
@@ -792,6 +934,8 @@ ADVANCE_NANO_WARFARE {
    Age AGE_NINE
 }
 
+## 71 #########################################################
+
 ADVANCE_NATIONALISM {
 
    Prerequisites ADVANCE_FASCISM
@@ -802,6 +946,8 @@ ADVANCE_NATIONALISM {
    Branch 0
    Age AGE_FIVE
 }
+
+## 72 #########################################################
 
 ADVANCE_NAVAL_AVIATION {
 
@@ -814,6 +960,8 @@ ADVANCE_NAVAL_AVIATION {
    Age AGE_SIX
 }
 
+## 73 #########################################################
+
 ADVANCE_NAVAL_TACTICS {
 
    Prerequisites ADVANCE_CANNON_MAKING
@@ -824,6 +972,8 @@ ADVANCE_NAVAL_TACTICS {
    Branch 0
    Age AGE_FOUR
 }
+
+## 74 #########################################################
 
 ADVANCE_NEURAL_INTERFACE {
 
@@ -836,6 +986,8 @@ ADVANCE_NEURAL_INTERFACE {
    Age AGE_NINE
 }
 
+## 75 #########################################################
+
 ADVANCE_NEURAL_REPROGRAMMING {
 
    Prerequisites ADVANCE_DIGITAL_ENCRYPTION
@@ -846,6 +998,8 @@ ADVANCE_NEURAL_REPROGRAMMING {
    Branch 0
    Age AGE_TEN
 }
+
+## 76 #########################################################
 
 ADVANCE_NUCLEAR_POWER {
 
@@ -860,6 +1014,8 @@ ADVANCE_NUCLEAR_POWER {
    KeyAdvanceAdvice KEY_MILITARY_ADVANCE_ADVICE
 }
 
+## 77 #########################################################
+
 ADVANCE_OCEAN_FARING {
 
    Prerequisites ADVANCE_BUREAUCRACY
@@ -870,6 +1026,8 @@ ADVANCE_OCEAN_FARING {
    Branch 0
    Age AGE_FOUR
 }
+
+## 78 #########################################################
 
 ADVANCE_OIL_REFINING {
 
@@ -884,6 +1042,8 @@ ADVANCE_OIL_REFINING {
    KeyAdvanceAdvice KEY_GROWTH_ADVANCE_ADVICE
 }
 
+## 79 #########################################################
+
 ADVANCE_OPTICS {
 
    Prerequisites ADVANCE_CLASSICAL_EDUCATION
@@ -894,6 +1054,8 @@ ADVANCE_OPTICS {
    Branch 0
    Age AGE_FOUR
 }
+
+## 80 #########################################################
 
 ADVANCE_PHARMACEUTICALS {
 
@@ -906,6 +1068,8 @@ ADVANCE_PHARMACEUTICALS {
    Age AGE_FIVE
 }
 
+## 81 #########################################################
+
 ADVANCE_PHILOSOPHY {
 
    Prerequisites ADVANCE_DRAMA
@@ -916,6 +1080,8 @@ ADVANCE_PHILOSOPHY {
    Branch 0
    Age AGE_TWO
 }
+
+## 82 #########################################################
 
 ADVANCE_PHYSICS {
 
@@ -928,6 +1094,8 @@ ADVANCE_PHYSICS {
    Age AGE_FIVE
 }
 
+## 83 #########################################################
+
 ADVANCE_PLASMA_WEAPONRY {
 
    Prerequisites ADVANCE_FUSION
@@ -938,6 +1106,8 @@ ADVANCE_PLASMA_WEAPONRY {
    Branch 0
    Age AGE_NINE
 }
+
+## 84 #########################################################
 
 ADVANCE_PRINTING_PRESS {
 
@@ -950,6 +1120,8 @@ ADVANCE_PRINTING_PRESS {
    Age AGE_FOUR
 }
 
+## 85 #########################################################
+
 ADVANCE_QUANTUM_MECHANICS {
 
    Prerequisites ADVANCE_COMPUTER
@@ -961,6 +1133,8 @@ ADVANCE_QUANTUM_MECHANICS {
    Age AGE_SIX
 }
 
+## 86 #########################################################
+
 ADVANCE_RADAR {
 
    Prerequisites ADVANCE_ELECTRICITY
@@ -971,6 +1145,8 @@ ADVANCE_RADAR {
    Branch 0
    Age AGE_SIX
 }
+
+## 87 #########################################################
 
 ADVANCE_RAILROAD {
 
@@ -984,12 +1160,16 @@ ADVANCE_RAILROAD {
    Railroads
 }
 
+## 88 #########################################################
+
 ADVANCE_RELIGION {
    Cost 334
    Icon ICON_ADVANCE_RELIGION
    Branch 0
    Age AGE_ONE
 }
+
+## 89 #########################################################
 
 ADVANCE_ROBOTICS {
 
@@ -1003,12 +1183,16 @@ ADVANCE_ROBOTICS {
    TriggerFeat FEAT_ADVANCE_ROBOTICS
 }
 
+## 90 #########################################################
+
 ADVANCE_SHIP_BUILDING {
    Cost 426
    Icon ICON_ADVANCE_SHIP_BUILDING
    Branch 0
    Age AGE_ONE
 }
+
+## 91 #########################################################
 
 ADVANCE_SLAVE_LABOR {
 
@@ -1021,6 +1205,8 @@ ADVANCE_SLAVE_LABOR {
    Age AGE_TWO
 }
 
+## 92 #########################################################
+
 ADVANCE_SMART_MATERIALS {
 
    Prerequisites ADVANCE_CYBERNETICS
@@ -1031,6 +1217,8 @@ ADVANCE_SMART_MATERIALS {
    Branch 0
    Age AGE_NINE
 }
+
+## 93 #########################################################
 
 ADVANCE_SPACE_FLIGHT {
 
@@ -1043,12 +1231,16 @@ ADVANCE_SPACE_FLIGHT {
    Age AGE_EIGHT
 }
 
+## 94 #########################################################
+
 ADVANCE_STONE_WORKING {
    Cost 288
    Icon ICON_ADVANCE_STONE_WORKING
    Branch 0
    Age AGE_ONE
 }
+
+## 95 #########################################################
 
 ADVANCE_SUBNEURAL_ADS {
 
@@ -1061,6 +1253,8 @@ ADVANCE_SUBNEURAL_ADS {
    GLHidden
 }
 
+## 96 #########################################################
+
 ADVANCE_SUPERSONIC_FLIGHT {
 
    Prerequisites ADVANCE_CORPORATE_REPUBLIC
@@ -1071,6 +1265,8 @@ ADVANCE_SUPERSONIC_FLIGHT {
    Branch 0
    Age AGE_SEVEN
 }
+
+## 97 #########################################################
 
 ADVANCE_TANK_WARFARE {
 
@@ -1083,6 +1279,8 @@ ADVANCE_TANK_WARFARE {
    Age AGE_SIX
 }
 
+## 98 #########################################################
+
 ADVANCE_TECHNOCRACY {
 
    Prerequisites ADVANCE_GLOBAL_COMMUNICATIONS
@@ -1093,6 +1291,8 @@ ADVANCE_TECHNOCRACY {
    Branch 0
    Age AGE_EIGHT
 }
+
+## 99 #########################################################
 
 ADVANCE_THEOLOGY {
 
@@ -1105,6 +1305,8 @@ ADVANCE_THEOLOGY {
    Age AGE_THREE
 }
 
+## 100 ########################################################
+
 ADVANCE_TOOLMAKING {
    Cost 196
    Icon ICON_ADVANCE_TOOLMAKING
@@ -1112,6 +1314,8 @@ ADVANCE_TOOLMAKING {
    Age AGE_ONE
    Transform
 }
+
+## 101 ########################################################
 
 ADVANCE_TRADE {
 
@@ -1126,6 +1330,8 @@ ADVANCE_TRADE {
    KeyAdvanceAdvice KEY_GROWTH_ADVANCE_ADVICE
 }
 
+## 102 ########################################################
+
 ADVANCE_ULTRAPRESSURE_MACHINERY {
 
    Prerequisites ADVANCE_LIQUID_BREATHING_APPARATUS
@@ -1136,6 +1342,8 @@ ADVANCE_ULTRAPRESSURE_MACHINERY {
    Branch 0
    Age AGE_NINE
 }
+
+## 103 ########################################################
 
 ADVANCE_UNIFIED_PHYSICS {
 
@@ -1148,6 +1356,8 @@ ADVANCE_UNIFIED_PHYSICS {
    Age AGE_NINE
 }
 
+## 104 ########################################################
+
 ADVANCE_VERTICAL_FLIGHT_AIRCRAFT {
 
    Prerequisites ADVANCE_AERODYNAMICS
@@ -1158,6 +1368,8 @@ ADVANCE_VERTICAL_FLIGHT_AIRCRAFT {
    Branch 0
    Age AGE_SIX
 }
+
+## 105 ########################################################
 
 ADVANCE_VIRTUAL_DEMOCRACY {
 
@@ -1170,6 +1382,8 @@ ADVANCE_VIRTUAL_DEMOCRACY {
    Age AGE_NINE
 }
 
+## 106 ########################################################
+
 ADVANCE_WRITING {
    Cost 380
    Icon ICON_ADVANCE_WRITING
@@ -1177,3 +1391,4 @@ ADVANCE_WRITING {
    Age AGE_ONE
 }
 
+## end ########################################################

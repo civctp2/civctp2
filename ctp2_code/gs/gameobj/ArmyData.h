@@ -132,6 +132,7 @@ private:
     bool                       m_hasBeenAdded;         // Used and serialized (uint8)
     bool                       m_isPirating;           // Used and serialized (uint8)
     bool                       m_needToKill;           // Used and serialized (uint8)
+    bool                       m_addOrdersAI;          // Used
 
 public:
 
@@ -399,6 +400,7 @@ public:
 
     bool CanMove();
 
+    bool CanSomeCargoBeachAssault() const;
     bool CanBeachAssault() const;
     bool CanHearGossip() const;
     bool CanSlaveUprising() const;
@@ -573,6 +575,7 @@ public:
     bool IsInVisionRangeAndCanEnter(MapPoint &pos) const;
 
     void Battle(const MapPoint &pos, CellUnitList & defender);
+    void SetAICanAddOrders() { m_addOrdersAI = true; }
 
 #if 0
 public:
