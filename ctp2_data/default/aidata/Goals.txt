@@ -242,11 +242,11 @@ GOAL_SETTLE_SEA {
   Execute   ORDER_SETTLE
 
   ThreatBonus            -100
-  EnemyValueBonus         100
+  EnemyValueBonus        -100
   AlliedValueBonus        100
   PowerBonus              100
   DistanceToHomeBonus     -50
-  DistanceToEnemyBonus     15
+  DistanceToEnemyBonus     -2
   InHomeTerritoryBonus      0
   NoOwnerTerritoryBonus     0
   InEnemyTerritoryBonus     0
