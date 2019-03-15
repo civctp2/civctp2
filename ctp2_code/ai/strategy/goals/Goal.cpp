@@ -634,7 +634,7 @@ Utility Goal::Recompute_Matching_Value(Plan_List & matches, const bool update, c
 		combinedUtility /= count;
 	}
 
-	AI_DPRINTF(k_DBG_SCHEDULER_ALL, m_playerId, m_goal_type, -1,("\tMatch value combined utility: %i, raw priority: %i\n", combinedUtility, m_raw_priority));
+	AI_DPRINTF(k_DBG_SCHEDULER_ALL, m_playerId, m_goal_type, -1,("\tMatch value combined utility: %i, raw priority: %i, execute incrementally: %i\n", combinedUtility, m_raw_priority, goal_record->GetExecuteIncrementally()));
 	if(update)
 	{
 		m_combinedUtility = combinedUtility;

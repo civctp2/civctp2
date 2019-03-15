@@ -2062,7 +2062,15 @@ void Scheduler::Assign_Garrison()
 			   || current_garrison          < needed_garrison
 			  )
 			{
-				AI_DPRINTF(k_DBG_SCHEDULER_DETAIL, m_playerId, -1, -1,("%9x\t %9x\t %s\n", agent_iter->second, agent_iter->second->Get_Army().m_id, city.GetName()));
+				AI_DPRINTF(k_DBG_SCHEDULER_DETAIL, m_playerId, -1, -1,("%9x\t %9x\t GarrisonStrength: %6.1f / %6.1f GarrisonNum %2d / %2d (%2d units) needed for garrison in %s\n",
+				                                                       agent_iter->second,
+				                                                       agent_iter->second->Get_Army().m_id,
+				                                                       current_garrison_strength,
+				                                                       needed_garrison_strength,
+				                                                       current_garrison,
+				                                                       needed_garrison,
+				                                                       agent_iter->second->Get_Army()->Num(),
+				                                                       city.GetName()));
 
 				current_garrison_strength += agent_iter->first;
 				current_garrison          += agent_iter->second->Get_Army()->Num();
