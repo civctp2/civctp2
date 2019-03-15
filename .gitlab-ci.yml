@@ -86,7 +86,7 @@ debug:
     - mkdir -p /tmp/.X11-unix/
     - mount --bind ${SHARED_PATH}/.X11-unix/ /tmp/.X11-unix/
     - export DISPLAY=:99.0
-    - Xvfb $DISPLAY -screen 0 1280x1024x24 &
+    - Xvfb $DISPLAY -cc 4 -ac -screen 0 1280x1024x24 &
     - pidX=$!
     - sleep 3
     - BTYP=${CI_JOB_NAME%% *}
