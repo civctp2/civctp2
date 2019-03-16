@@ -162,6 +162,7 @@ public:
     void Remove_Matches();
     void Remove_Match(const Agent_ptr & agent);
     bool Has_Agent_And_Set_Needs_Cargo(Agent* agent);
+    bool Can_Transport_Any_Width_Need(Agent* agent);
     bool Needs_Cargo(Agent* agent);
     bool Cannot_Be_Used(Agent* agent);
     void Set_Cannot_Be_Used(Agent* agent, bool cannotBeUsed);

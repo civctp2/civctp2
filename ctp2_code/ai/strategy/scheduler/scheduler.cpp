@@ -1639,6 +1639,10 @@ bool Scheduler::Add_Transport_Matches_For_Goal
 			continue;
 		}
 
+		// Can Transport
+		if(!goal_ptr->Can_Transport_Any_Width_Need(agent))
+			continue;
+
 		bool hasMatch  = goal_ptr->Has_Agent_And_Set_Needs_Cargo(agent);
 		match_added   |= hasMatch;
 

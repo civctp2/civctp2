@@ -889,6 +889,24 @@ void Goal::Rollback_Emptied_Transporters()
 	}
 }
 
+bool Goal::Can_Transport_Any_Width_Need(Agent* agent)
+{
+	for
+	(
+	    Plan_List::iterator match_iter  = m_matches.begin();
+	                        match_iter != m_matches.end();
+	                      ++match_iter
+	)
+	{
+		if(match_iter->Get_Needs_Transporter() && match_iter->Get_Agent()->Get_Army()->NumUnitsCanMoveIntoThisTransport(*agent->Get_Army().GetData()))
+		{
+			return true;
+		}
+	}
+
+	return false;
+}
+
 bool Goal::Has_Agent_And_Set_Needs_Cargo(Agent* agent)
 {
 	for
@@ -4664,6 +4682,10 @@ bool Goal::FindTransporters(const Agent_ptr & agent_ptr, std::list< std::pair<Ut
 		sint32          empty_slots         = 0;
 		possible_transport->Get_Army()->GetCargo(transports, max_slots, empty_slots);
 
+/*		AI_DPRINTF(k_DBG_SCHEDULER, m_playerId, m_goal_type, possible_transport->Get_Army().m_id,
+			("GOAL %x Agent %x (%d): transports: %d, max_slots: %d, empty_slots %d\n",
+			 this, possible_transport, m_goal_type, transports, max_slots, empty_slots));*/
+
 		if(max_slots <= 0)
 			continue;
 
@@ -4833,7 +4855,9 @@ sint32 Goal::GetThreatenBonus() const
 bool Goal::Goal_Too_Expensive() const
 {
 #if defined(_DEBUG) || defined(USE_LOGGING)
-	if(    (m_current_attacking_strength.Get_Agent_Count() > k_MAX_ARMY_SIZE)
+	if(    (g_theGoalDB->Get(m_goal_type)->GetTargetOwnerSelf()
+	    &&  g_theGoalDB->Get(m_goal_type)->GetTargetTypeCity()
+	    &&  m_current_attacking_strength.Get_Agent_Count() > k_MAX_ARMY_SIZE)
 	    && (m_current_attacking_strength.Get_Value() >
 	            m_current_needed_strength.Get_Value() * 3
 	       )
