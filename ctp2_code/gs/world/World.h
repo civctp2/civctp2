@@ -274,6 +274,7 @@ public:
     bool IsNextTo (const sint32 t, const sint32 i, const sint32 j);
     bool IsSurroundedByWater(const sint32 x, const sint32 y) ;
     bool IsSurroundedByWater(MapPoint const & pos);
+    bool HasAdjacentFreeLand(MapPoint const & pos, const sint32 player) const;
     void GenerateShallowWater();
     void GenerateDeepWater();
     void NewGenerateDeepWater();

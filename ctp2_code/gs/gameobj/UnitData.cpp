@@ -2963,9 +2963,6 @@ void UnitData::SetMilitaryContribution(bool on)
 	m_city_data->SetMilitaryContribution(on);
 }
 
-	void SetMilitaryContribution(bool on);
-	bool GetMilitaryContribution();
-
 bool UnitData::IsEntrenched() const
 {
 	return Flag(k_UDF_IS_ENTRENCHED);
@@ -6401,32 +6398,4 @@ void UnitData::UnElite()  //copy and make for elite units  UnVeteran
 {
 	if (Flag(k_UDF_IS_ELITE))
 		ClearFlag(k_UDF_IS_ELITE);
-}
-
-bool UnitData::HasAdjacentFreeLand() const
-{
-	MapPoint neighbor;
-	for(sint16 dir = 0; dir < NOWHERE; ++dir)
-	{
-		if(m_pos.GetNeighborPosition(static_cast<WORLD_DIRECTION>(dir), neighbor))
-		{
-			if
-			  (
-			   (
-			        g_theWorld->IsLand(neighbor)
-			     || g_theWorld->IsMountain(neighbor)
-			   )
-			   &&
-			   (
-			        g_theWorld->GetCell(neighbor)->GetNumUnits() == 0
-			     || g_theWorld->GetCell(neighbor)->AccessUnit(0)->GetOwner() == m_owner
-			   )
-			  )
-			{
-				return true;
-			}
-		}
-	}
-
-	return false;
 }

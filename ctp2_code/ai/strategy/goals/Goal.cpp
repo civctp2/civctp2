@@ -1684,17 +1684,6 @@ Utility Goal::Compute_Agent_Matching_Value(const Agent_ptr agent_ptr) const
 
 		if
 		  (
-		        m_target_city.IsValid()
-		    && !m_target_city->HasAdjacentFreeLand()
-		    &&  g_theWorld->GetCell(m_target_city->GetPos())->GetNumUnits() != 0
-		    && !agent_ptr->Get_Army()->CanBeachAssault()
-		  )
-		{
-			return Goal::BAD_UTILITY;
-		}
-
-		if
-		  (
 		        agent_ptr->Get_Army()->HasCargo()
 		    &&  agent_ptr->Get_Army()->IsCargoWounded()
 		    && !agent_ptr->Get_Army()->IsCargoObsolete()
@@ -1816,10 +1805,9 @@ Utility Goal::Compute_Agent_Matching_Value(const Agent_ptr agent_ptr) const
 	{
 		if((!g_theWorld->IsOnSameContinent(dest_pos, curr_pos) // Same continent problem
 		&&  !agent_ptr->Get_Army()->GetMovementTypeAir()
-		&&   g_player[m_playerId]->GetCargoCapacity() <= 0
-		&&   m_current_attacking_strength.Get_Transport() <= 0)
+		&&   g_player[m_playerId]->GetCargoCapacity() <= 0)
 		|| (!g_theGoalDB->Get(m_goal_type)->GetTargetOwnerSelf()
-		&&   g_theWorld->IsSurroundedByWater(dest_pos)
+		&&  !g_theWorld->HasAdjacentFreeLand(dest_pos, m_playerId)
 		&&   g_theWorld->GetCell(dest_pos)->GetNumUnits() > 0
 		&&  !agent_ptr->Get_Army()->CanBeachAssault())
 		){
@@ -1829,7 +1817,7 @@ Utility Goal::Compute_Agent_Matching_Value(const Agent_ptr agent_ptr) const
 	else
 	{
 		if(!g_theGoalDB->Get(m_goal_type)->GetTargetOwnerSelf()
-		&&  g_theWorld->IsSurroundedByWater(dest_pos)
+		&& !g_theWorld->HasAdjacentFreeLand(dest_pos, m_playerId)
 		&&  g_theWorld->GetCell(dest_pos)->GetNumUnits() > 0
 		&& !agent_ptr->Get_Army()->CanSomeCargoBeachAssault())
 		{
