@@ -555,9 +555,6 @@ UNIT_CARGO_HELICOPTER {
    SoundVictory SOUND_VICTORY_CARGO_HELICOPTER
    SoundDeath SOUND_DEATH_CARGO_HELICOPTER
 
-   CanAttack: Air
-   CanAttack: Land
-   CanAttack: Mountain
    CanCarry: SmallLand
    CanSee: Standard
    MovementType: Air
@@ -670,19 +667,12 @@ UNIT_CATAMARAN {
    SoundVictory SOUND_VICTORY_CATAMARAN
    SoundDeath SOUND_DEATH_CATAMARAN
 
-   CanAttack: Sea
-   CanAttack: ShallowWater
    CanCarry: MedLand
    CanCarry: SmallLand
    CanSee: Standard
    MovementType: ShallowWater
    Size: Large
    VisionClass: Standard
-
-   CanReform {
-      Sound SOUND_ID_REFORM_CITY
-      Effect SPECEFFECT_REFORMCITY
-   }
 
    CargoData {
       MaxCargo 1
@@ -1160,8 +1150,6 @@ UNIT_CYBER_NINJA {
    SoundVictory SOUND_VICTORY_CYBER_NINJA
    SoundDeath SOUND_DEATH_CYBER_NINJA
 
-   CanAttack: Land
-   CanAttack: Mountain
    CanSee: Standard
    CanSee: Stealth
    MovementType: Land
