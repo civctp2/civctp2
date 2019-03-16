@@ -579,7 +579,14 @@ Utility Goal::Recompute_Matching_Value(Plan_List & matches, const bool update, c
 
 				combinedUtility += matchUtility;
 				AI_DPRINTF(k_DBG_SCHEDULER_ALL, m_playerId, m_goal_type, -1,
-							("\t\t[%3d] match = %d %s Agent: %x (%d, %d)\n", count, matchUtility, g_theGoalDB->Get(m_goal_type)->GetNameText(), match_iter->Get_Agent(), match_iter->Get_Agent()->Get_Pos().x, match_iter->Get_Agent()->Get_Pos().y));
+				            ("\t\t[%3d] match = %d %s Agent: %x (%3d, %3d)\t%20s\n", 
+				             count,
+				             matchUtility,
+				             g_theGoalDB->Get(m_goal_type)->GetNameText(),
+				             match_iter->Get_Agent(),
+				             match_iter->Get_Agent()->Get_Pos().x,
+				             match_iter->Get_Agent()->Get_Pos().y,
+				             g_theUnitDB->GetNameStr(match_iter->Get_Agent()->Get_Army()->Get(0).GetType())));
 				++count;
 			}
 			else
@@ -880,7 +887,7 @@ void Goal::Rollback_Emptied_Transporters()
 			if(!Pretest_Bid(agent_ptr, goalPos))
 			{
 				AI_DPRINTF(k_DBG_SCHEDULER, agent_ptr->Get_Army()->GetOwner(), m_goal_type, -1,
-					("\t\tTransporter not needed anymore, removing from goal\n"));
+					("\t\tTransporter (%s) not needed anymore, removing from goal\n", g_theUnitDB->GetNameStr(agent_ptr->Get_Army()->Get(0)->GetType())));
 
 				Rollback_Agent(agent_iter); // increases the agent iterator
 				--agent_iter;
@@ -1890,7 +1897,7 @@ Utility Goal::Compute_Agent_Matching_Value(const Agent_ptr agent_ptr) const
 	MapPoint target_pos = Get_Target_Pos();
 
 	AI_DPRINTF(k_DBG_SCHEDULER_DETAIL, m_playerId, m_goal_type, -1,
-	("\t\t%9x,\t %9x,\t%9x (%3d,%3d),\t%s (%3d,%3d) (%3d,%3d),\t%8d,\t%8d,\t%8f,\t%8f,\t%8d,\t%8f,\t%8f,\t%8f,\t%8d,\t%8f,\t%8f,\t%8f,\t%8d,\t%9x,\t%d\t%s,\t%s \n",
+	("\t\t%9x,\t %9x,\t%9x (%3d,%3d),\t%s (%3d,%3d) (%3d,%3d),\t%8d,\t%8d,\t%12f,\t%12f,\t%12d,\t%12f,\t%12f,\t%12f,\t%8d,\t%12f,\t%12f,\t%12f,\t%12d,\t%9x,\t%6d,\t%20s,\t%16s,\t%16s \n",
 	this,                                          // This goal
 	agent_ptr->Get_Army().m_id,                    // The army
 	agent_ptr,                                     // The agent
@@ -1916,6 +1923,7 @@ Utility Goal::Compute_Agent_Matching_Value(const Agent_ptr agent_ptr) const
 	is_transporter,                                // Whether the agent is a transporter
 	agent_ptr->Get_Goal(),                         // The goal to that this agent is asigned to
 	tieBreaker,
+	g_theUnitDB->GetNameStr(agent_ptr->Get_Army()->Get(0).GetType()),
 	(g_theWorld->HasCity(curr_pos) ? g_theWorld->GetCity(curr_pos).GetName() : "field"),
 	(g_theWorld->HasCity(target_pos) ? g_theWorld->GetCity(target_pos).GetName() : "field")
 	));

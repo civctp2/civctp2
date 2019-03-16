@@ -1622,6 +1622,8 @@ bool Scheduler::Add_Transport_Matches_For_Goal
 
 	bool match_added = false;
 
+	AI_DPRINTF(k_DBG_SCHEDULER_ALL, m_playerId, -1, -1, ("\t\tNow %d matches, add transport matches.\n", goal_ptr->Get_Matches_Num()));
+
 	for
 	(
 	    Agent_List::iterator agent_iter  = m_agents.begin();
@@ -1665,12 +1667,23 @@ bool Scheduler::Add_Transport_Matches_For_Goal
 		&& goal_ptr->CanReachTargetContinent(agent)
 		&& goal_ptr->Add_Transport_Match(agent)
 		){
-			AI_DPRINTF(k_DBG_SCHEDULER_ALL, m_playerId, -1, -1, ("\t\tAdd transport match, now %d matches.\n", goal_ptr->Get_Matches_Num()));
 			match_added = true;
 		}
 	}
 
+#if defined(_DEBUG) || defined(USE_LOGGING)
+	if(match_added)
+	{
+		AI_DPRINTF(k_DBG_SCHEDULER_ALL, m_playerId, -1, -1, ("\t\tNow %d matches. Transport matches were added.\n", goal_ptr->Get_Matches_Num()));
+	}
+	else
+	{
+		AI_DPRINTF(k_DBG_SCHEDULER_ALL, m_playerId, -1, -1, ("\t\tNow %d matches. No transport matches were added.\n", goal_ptr->Get_Matches_Num()));
+	}
+
 	AI_DPRINTF(k_DBG_SCHEDULER_ALL, m_playerId, -1, -1, ("\t\tRecomputing matches for transport\n"));
+#endif
+
 	goal_ptr->Compute_Matching_Value(false);
 
 	return match_added;
@@ -2066,7 +2079,7 @@ void Scheduler::Assign_Garrison()
 			   || current_garrison          < needed_garrison
 			  )
 			{
-				AI_DPRINTF(k_DBG_SCHEDULER_DETAIL, m_playerId, -1, -1,("%9x\t %9x\t GarrisonStrength: %6.1f / %6.1f GarrisonNum %2d / %2d (%2d units) needed for garrison in %s\n",
+				AI_DPRINTF(k_DBG_SCHEDULER_DETAIL, m_playerId, -1, -1,("%9x\t %9x\t GarrisonStrength: %9.1f / %9.1f GarrisonNum %2d / %2d (%2d units) needed for garrison in %s\n",
 				                                                       agent_iter->second,
 				                                                       agent_iter->second->Get_Army().m_id,
 				                                                       current_garrison_strength,
