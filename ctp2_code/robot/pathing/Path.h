@@ -38,7 +38,6 @@
 
 #include "astarpnt.h"
 #include "dynarr.h"
-#include "directions.h"
 
 struct Direction
 {

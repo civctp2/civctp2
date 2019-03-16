@@ -58,7 +58,6 @@
 #include "UnitPool.h"
 #include "director.h"
 #include "MoveFlags.h"
-#include "directions.h"
 #include "network.h"
 #include "SlicEngine.h"
 #include "SlicObject.h"

@@ -34,6 +34,7 @@
 
 #include "c3.h"
 #include "Wormhole.h"
+
 #include "player.h"
 #include "TurnCnt.h"
 #include "civarchive.h"
@@ -49,7 +50,6 @@
 #include "AICause.h"
 #include "network.h"
 #include "net_endgame.h"
-#include "directions.h"
 #include "gamefile.h"
 #include "ResourceRecord.h"
 

@@ -6408,7 +6408,7 @@ bool UnitData::HasAdjacentFreeLand() const
 	MapPoint neighbor;
 	for(sint16 dir = 0; dir < NOWHERE; ++dir)
 	{
-		if(this->m_pos.GetNeighborPosition(static_cast<WORLD_DIRECTION>(dir), neighbor))
+		if(m_pos.GetNeighborPosition(static_cast<WORLD_DIRECTION>(dir), neighbor))
 		{
 			if
 			  (

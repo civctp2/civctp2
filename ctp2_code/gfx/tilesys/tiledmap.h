@@ -87,7 +87,6 @@ extern TiledMap *   g_tiledMap;
 #include "mouse.h"
 #endif
 #include "colorset.h"
-#include "directions.h"     // WORLD_DIRECTION
 #include "MapPoint.h"       // MapPoint
 #include "pixelutils.h"     // Pixel types
 #include "SelItem.h"

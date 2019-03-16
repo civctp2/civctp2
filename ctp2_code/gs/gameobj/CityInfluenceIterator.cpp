@@ -39,7 +39,6 @@
 #include "Cell.h"
 #include "CitySizeRecord.h"
 
-#include "directions.h"
 #include "UnitData.h"
 
 #include "network.h"
