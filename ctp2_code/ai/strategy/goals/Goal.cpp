@@ -579,10 +579,11 @@ Utility Goal::Recompute_Matching_Value(Plan_List & matches, const bool update, c
 
 				combinedUtility += matchUtility;
 				AI_DPRINTF(k_DBG_SCHEDULER_ALL, m_playerId, m_goal_type, -1,
-				            ("\t\t[%3d] match = %d %s Agent: %x (%3d, %3d)\t%20s (%2d)\n", 
+				            ("\t\t[%3d] match = %d %s Army: %9x Agent: %9x (%3d, %3d)\t%20s (%2d)\n", 
 				             count,
 				             matchUtility,
 				             g_theGoalDB->Get(m_goal_type)->GetNameText(),
+				             match_iter->Get_Agent()->Get_Army(),
 				             match_iter->Get_Agent(),
 				             match_iter->Get_Agent()->Get_Pos().x,
 				             match_iter->Get_Agent()->Get_Pos().y,
@@ -4435,6 +4436,7 @@ bool Goal::RallyTroops()
 				// Outgroup the units over limit
 				// Outgrouping is done before the army is send to their target
 				agent_ptr->Get_Army()->RemainNumUnits(agent_ptr->Get_Army()->Num() - unitsAtRallyPos);
+				agent_ptr->Set_Can_Be_Executed(false);
 			}
 		}
 	}

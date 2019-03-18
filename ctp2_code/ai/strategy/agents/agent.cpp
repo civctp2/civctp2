@@ -250,7 +250,7 @@ void Agent::Log_Debug_Info(const int & log, const Goal * const goal) const
 	           m_playerId,
 	           goal != NULL ? goal->Get_Goal_Type() : -1,
 	           -1,
-	           ("\t\t   Agent: handle=%x,\tclass=%x,\t(x=%3d,y=%3d),\t (is_used=%d) \t (by_this=%d) \t %20s \t in %s\n",
+	           ("\t\t   Agent: handle=%x,\tclass=%x,\t(x=%3d,y=%3d),\t (is_used=%d) \t (by_this=%d) \t %20s (%2d units, %2d cargo) \t in %s\n",
 	            m_army.m_id,
 	            m_squad_class,
 	            pos.x,
@@ -258,6 +258,8 @@ void Agent::Log_Debug_Info(const int & log, const Goal * const goal) const
 	            (m_goal ? 1 : 0),
 	            ((goal == m_goal) ? 1 : 0),
 	            g_theUnitDB->GetNameStr(m_army->Get(0).GetType()),
+	            m_army->Num(),
+	            m_army->GetCargoNum(),
 	            (g_theWorld->HasCity(pos) ? g_theWorld->GetCity(pos).GetName() : "field")
 	           )
 	          );
