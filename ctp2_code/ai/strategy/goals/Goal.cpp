@@ -579,14 +579,15 @@ Utility Goal::Recompute_Matching_Value(Plan_List & matches, const bool update, c
 
 				combinedUtility += matchUtility;
 				AI_DPRINTF(k_DBG_SCHEDULER_ALL, m_playerId, m_goal_type, -1,
-				            ("\t\t[%3d] match = %d %s Agent: %x (%3d, %3d)\t%20s\n", 
+				            ("\t\t[%3d] match = %d %s Agent: %x (%3d, %3d)\t%20s (%2d)\n", 
 				             count,
 				             matchUtility,
 				             g_theGoalDB->Get(m_goal_type)->GetNameText(),
 				             match_iter->Get_Agent(),
 				             match_iter->Get_Agent()->Get_Pos().x,
 				             match_iter->Get_Agent()->Get_Pos().y,
-				             g_theUnitDB->GetNameStr(match_iter->Get_Agent()->Get_Army()->Get(0).GetType())));
+				             g_theUnitDB->GetNameStr(match_iter->Get_Agent()->Get_Army()->Get(0).GetType()),
+				             match_iter->Get_Agent()->Get_Army()->Num()));
 				++count;
 			}
 			else
@@ -4019,6 +4020,10 @@ bool Goal::Ok_To_Rally() const
 					++num_at_dest;
 				}
 				// Would have been removed for the outcommented stuff below
+				else if(agent_ptr->Get_Army()->HasCargo())
+				{
+					++num_in_water; // Actually is beeing transported
+				}
 				else
 				{
 					return false;
