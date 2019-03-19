@@ -10724,7 +10724,7 @@ void ArmyData::PerformOrderHere(const OrderRecord * order_rec, const Path * path
 			//else bombard now?
 			else
 			{
-				g_gevManager->AddEvent(GEV_INSERT_AfterCurrent,
+				g_gevManager->AddEvent(priority,
 				                       static_cast<GAME_EVENT>(game_event),
 				                       GEA_Army, Army(m_id),
 				                       GEA_MapPoint, target_pos,
@@ -10747,7 +10747,7 @@ void ArmyData::PerformOrderHere(const OrderRecord * order_rec, const Path * path
 	{
 		if (range > 0 || order_rec->GetIsTeleport() || order_rec->GetIsTarget())//event needs target pos
 		{
-			g_gevManager->AddEvent(GEV_INSERT_AfterCurrent,
+			g_gevManager->AddEvent(priority,
 			                       static_cast<GAME_EVENT>(game_event),
 			                       GEA_Army, Army(m_id),
 			                       GEA_MapPoint, target_pos,
@@ -10756,7 +10756,7 @@ void ArmyData::PerformOrderHere(const OrderRecord * order_rec, const Path * path
 		}
 		else
 		{
-			g_gevManager->AddEvent(GEV_INSERT_AfterCurrent,
+			g_gevManager->AddEvent(priority,
 			                       static_cast<GAME_EVENT>(game_event),
 			                       GEA_Army, Army(m_id),
 			                       GEA_End
@@ -10778,7 +10778,7 @@ void ArmyData::PerformOrderHere(const OrderRecord * order_rec, const Path * path
 			if(move_pos != m_pos)
 			{//then first move army to move_pos
 
-				g_gevManager->AddEvent(GEV_INSERT_AfterCurrent,
+				g_gevManager->AddEvent(priority,
 				                       GEV_MoveOrder,
 				                       GEA_Army, Army(m_id),
 				                       GEA_Path, move_path,
@@ -10808,7 +10808,7 @@ void ArmyData::PerformOrderHere(const OrderRecord * order_rec, const Path * path
 		delete tmp_path;
 	}
 
-	g_gevManager->AddEvent(GEV_INSERT_AfterCurrent,
+	g_gevManager->AddEvent(priority,
 	                       GEV_ClearOrders,
 	                       GEA_Army, Army(m_id),
 	                       GEA_End
