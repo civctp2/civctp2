@@ -561,7 +561,7 @@ Ermöglicht:
 [END]
 
 [ADVANCE_CRIMINAL_CODE_GAMEPLAY]
-Das moderne Strafgesetz ermöglicht den Einsatz von <L:DATABASE_UNITS,UNIT_LAWYER>Anwälten<e>, die einerseits die <L:DATABASE_CONCEPTS,CONCEPT_CITY>Städte<e> innerhalb ihrer eigenen Nation von <L:DATABASE_UNITS,UNIT_CORPORATE_BRANCH>Bürokraten<e> befreien und andererseits durch die Verhängung von <L:DATABASE_ORDERS,ORDER_INJOIN>Handelsembargos<e> die <L:DATABASE_CONCEPTS,CONCEPT_PRODUCTION>Produktion<e> fremder Städte zum Erliegen bringen können. Die <L:DATABASE_BUILDINGS,IMPROVE_CORRECTIONAL_FACILITY>Haftanstalt<e> ist eine Hightech-Einrichtung zur großflächigen Bekämpfung der <L:DATABASE_CONCEPTS,CONCEPT_CRIME>Kriminalität<e>. Durch den <L:DATABASE_WONDERS,WONDER_ZERO_CRIME_BILL>Bagatellerlass<e> werden zahlreiche kleinere Vergehen als minderschwere Fälle eingestuft, wodurch die Überbelegung in den Haftanstalten und auch die Kriminalitätsrate innerhalb der gesamten Nation sinkt.
+Das moderne Strafgesetz ermöglicht den Einsatz von <L:DATABASE_UNITS,UNIT_LAWYER>Anwälten<e>, die einerseits die <L:DATABASE_CONCEPTS,CONCEPT_CITY>Städte<e> innerhalb ihrer eigenen Nation von <L:DATABASE_UNITS,UNIT_CORPORATE_BRANCH>Bürokraten<e> befreien und andererseits durch <L:DATABASE_ORDERS,ORDER_INJOIN>Abmahnen<e> die <L:DATABASE_CONCEPTS,CONCEPT_PRODUCTION>Produktion<e> fremder Städte stoppen können. Die <L:DATABASE_BUILDINGS,IMPROVE_CORRECTIONAL_FACILITY>Haftanstalt<e> ist eine Hightech-Einrichtung zur großflächigen Bekämpfung der <L:DATABASE_CONCEPTS,CONCEPT_CRIME>Kriminalität<e>. Durch den <L:DATABASE_WONDERS,WONDER_ZERO_CRIME_BILL>Bagatellerlass<e> werden zahlreiche kleinere Vergehen als minderschwere Fälle eingestuft, wodurch die Überbelegung in den Haftanstalten und auch die Kriminalitätsrate innerhalb der gesamten Nation sinkt.
 [END]
 
 [ADVANCE_CRIMINAL_CODE_HISTORICAL]
@@ -7602,7 +7602,7 @@ Identifizierung anderer <L:DATABASE_CONCEPTS,CONCEPT_STEALTH_UNITS>Stealth-Einhe
 [UNIT_CORPORATE_BRANCH_GAMEPLAY]
 Die Handelsgesellschaft ist eine <L:DATABASE_CONCEPTS,CONCEPT_STEALTH_UNITS>Stealth-Einheit<e>, deren Hauptangriff in der Errichtung eines <L:DATABASE_ORDERS,ORDER_FRANCHISE>Franchising-Unternehmens<e> in einer fremden Stadt besteht. Durch Franchising wird der jeweiligen Stadt <L:DATABASE_CONCEPTS,CONCEPT_PRODUCTION>Produktion<e> entzogen. Darüber hinaus kann eine Handelsgesellschaft auch in einer fremden Stadt Werbung platzieren, die Bevölkerung überreden, importierte Produkte zu kaufen und so Gold für die eigene Nation erwirtschaften. Für jede dieser Angriffsaktionen wird für die auftraggebende Nation ein Honorar fällig, das in <L:DATABASE_CONCEPTS,CONCEPT_GOLD>Gold<e> zu zahlen ist.
 
-Der <L:DATABASE_UNITS,UNIT_LAWYER>Anwalt<e> ist die einzige Einheit, die sich durch Erhebung von <L:DATABASE_ORDERS,ORDER_INJOIN>Handelsembargos<e> erfolgreich gegen eine Handelsgesellschaft zur Wehr setzen kann.
+Der <L:DATABASE_UNITS,UNIT_LAWYER>Anwalt<e> ist die einzige Einheit, die sich durch <L:DATABASE_ORDERS,ORDER_INJOIN>Abmahnen<e> erfolgreich gegen eine Handelsgesellschaft wehren kann.
 [END]
 
 [UNIT_CORPORATE_BRANCH_HISTORICAL]
@@ -8462,8 +8462,8 @@ Voraussetzung:
 <L:DATABASE_ADVANCES,ADVANCE_CRIMINAL_CODE>Strafgesetz<e>
 
 Fähigkeiten:
-<L:DATABASE_ORDERS,ORDER_INJOIN>Handelsembargo<e>
-<L:DATABASE_ORDERS,ORDER_SUE>Klageerhebung<e>
+<L:DATABASE_ORDERS,ORDER_INJOIN>Abmahnen<e>
+<L:DATABASE_ORDERS,ORDER_SUE>Klagen<e>
 [END]
 
 [UNIT_LAWYER_STATISTICS]
@@ -8482,12 +8482,12 @@ Nahrungsbedarf: {UnitDB(UnitRecord[0]).FoodHunger}
 [END]
 
 [UNIT_LAWYER_SUMMARY]
-<L:DATABASE_ORDERS,ORDER_INJOIN>Handelsembargo<e>
-<L:DATABASE_ORDERS,ORDER_SUE>Klageerhebung<e>
+<L:DATABASE_ORDERS,ORDER_INJOIN>Abmahnen<e>
+<L:DATABASE_ORDERS,ORDER_SUE>Klagen<e>
 [END]
 
 [UNIT_LAWYER_GAMEPLAY]
-Der Anwalt gehört zu den effizienteren <L:DATABASE_CONCEPTS,CONCEPT_STEALTH_UNITS>Stealth-Einheiten<e> für wirtschaftliche Kriegsführung und kann zwei Angriffsarten durchführen: Zum einen kann er <L:DATABASE_ORDERS,ORDER_INJOIN>Handelsembargos<e> erheben, wodurch die gesamte <L:DATABASE_CONCEPTS,CONCEPT_PRODUCTION>Produktion<e> einer Stadt vorübergehend zum Erliegen kommt. Zum anderen kann er andere <L:DATABASE_CONCEPTS,CONCEPT_STEALTH_UNITS>Handelseinheiten<e>, wie z. B. <L:DATABASE_UNITS,UNIT_CORPORATE_BRANCH>Handelsgesellschaften<e> auch <L:DATABASE_ORDERS,ORDER_SUE>verklagen<e>. Der Anwalt ist die einzige Einheit, die juristisch vorgehen kann, um ein <L:DATABASE_ORDERS,ORDER_FRANCHISE>Franchising-Unternehmen<e> aus einer Stadt zu vertreiben. Für die Durchführung eines solchen Spezialangriffs muss ihm die auftraggebende Nation ein Honorar in <L:DATABASE_CONCEPTS,CONCEPT_GOLD>Gold<e> zahlen - und die Honorarforderungen von Anwälten ändern sich, wie Sie ja sicher wissen, stündlich!
+Der Anwalt gehört zu den effizienteren <L:DATABASE_CONCEPTS,CONCEPT_STEALTH_UNITS>Stealth-Einheiten<e> für wirtschaftliche Kriegsführung und kann zwei Angriffsarten durchführen: Zum einen kann eine Stadt <L:DATABASE_ORDERS,ORDER_INJOIN>abmahnen<e> erheben, wodurch ihre <L:DATABASE_CONCEPTS,CONCEPT_PRODUCTION>Produktion<e> für eine Runde gestoppt wird. Zum anderen kann er andere <L:DATABASE_CONCEPTS,CONCEPT_STEALTH_UNITS>Handelseinheiten<e>, wie z. B. <L:DATABASE_UNITS,UNIT_CORPORATE_BRANCH>Handelsgesellschaften<e> auch <L:DATABASE_ORDERS,ORDER_SUE>verklagen<e>. Der Anwalt ist die einzige Einheit, die juristisch vorgehen kann, um ein <L:DATABASE_ORDERS,ORDER_FRANCHISE>Franchising-Unternehmen<e> aus einer Stadt zu vertreiben. Für die Durchführung eines solchen Spezialangriffs muss ihm die auftraggebende Nation ein Honorar in <L:DATABASE_CONCEPTS,CONCEPT_GOLD>Gold<e> zahlen - und die Honorarforderungen von Anwälten ändern sich, wie Sie ja sicher wissen, stündlich!
 [END]
 
 [UNIT_LAWYER_HISTORICAL]
@@ -9808,7 +9808,7 @@ Effekt:
 [END]
 
 [ORDER_INJOIN_GAMEPLAY]
-Soll eine feindliche Stadt an der Durchführung eines bestimmten Bauprojekts gehindert werden, z. B. eines Weltwunders oder einer bestimmten Einheit, so können <L:DATABASE_UNITS,UNIT_LAWYER>Anwälte<e> losgeschickt werden, um Handelsembargos zu veranlassen, wodurch die <L:DATABASE_CONCEPTS,CONCEPT_PRODUCTION>Produktion<e> in der betreffenden Stadt für die Dauer einer Runde lahm gelegt wird. Dieser Angriff verläuft immer erfolgreich, muss allerdings in Form von Gold honoriert werden.
+Soll eine feindliche Stadt an der Durchführung eines bestimmten Bauprojekts gehindert werden, z. B. eines Weltwunders oder einer bestimmten Einheit, so können <L:DATABASE_UNITS,UNIT_LAWYER>Anwälte<e> sie abmahnen, wodurch die <L:DATABASE_CONCEPTS,CONCEPT_PRODUCTION>Produktion<e> in der betreffenden Stadt für Runde gestoppt wird. Dieser Angriff verläuft immer erfolgreich, muss allerdings in Form von Gold honoriert werden.
 [END]
 
 [ORDER_INJOIN_HISTORICAL]
@@ -10272,7 +10272,7 @@ Vernichtet feindliche <L:DATABASE_UNITS,UNIT_LAWYER>Anwälte<e> und <L:DATABASE_U
 [END]
 
 [ORDER_SUE_GAMEPLAY]
-Die Möglichkeit der Klageerhebung erfüllt zwei Funktionen: Zum einen können <L:DATABASE_UNITS,UNIT_LAWYER>Anwälte<e> befreundete <L:DATABASE_CONCEPTS,CONCEPT_CITY>Städte<e> auf diese Weise von feindlichen Franchising-Unternehmen befreien, und zum anderen können Anwälte feindliche Anwälte oder <L:DATABASE_UNITS,UNIT_CORPORATE_BRANCH>Handelsgesellschaften<e> verklagen, um sie zu vernichten.
+Die Klage erfüllt zwei Funktionen: Zum einen können <L:DATABASE_UNITS,UNIT_LAWYER>Anwälte<e> befreundete <L:DATABASE_CONCEPTS,CONCEPT_CITY>Städte<e> auf so von feindlichen Franchising-Unternehmen befreien, und zum anderen können Anwälte feindliche Anwälte oder <L:DATABASE_UNITS,UNIT_CORPORATE_BRANCH>Handelsgesellschaften<e> verklagen, um sie zu vernichten.
 
 Für die Durchführung dieses Angriffs, der immer erfolgreich verläuft, fällt ein Honorar in Höhe von 500 Gold an.
 [END]
@@ -10593,7 +10593,7 @@ Auslösung von <L:DATABASE_CONCEPTS,CONCEPT_REVOLUTION>Revolutionen<e> durch das 
 [END]
 
 [WONDER_AI_ENTITY_GAMEPLAY]
-Durch die Implantierung eines Kontrollchips in das Gehirn eines jeden Bürgers ist die KI-Pyramide in der Lage, jeglicher Art von <L:DATABASE_CONCEPTS,CONCEPT_RIOTS>Aufruhr<e> und <L:DATABASE_CONCEPTS,CONCEPT_REVOLUTION>Revolution<e> in einer Zivilisation ein Ende zu bereiten. Sie schaltet alle Beschwerden und Klagen der Bürger aus und ersetzt den Lärm in der Welt durch ein beruhigendes, konstantes Signal. Mit der Zeit kann die KI-Pyramide jedoch ein eigenes Bewußtsein entwickeln und sich dazu entscheiden, die Heimatzivilisation zu verlassen und eine eigene Zivilisation zu gründen. In diesem Fall werden die Städte der ursprünglichen Heimatzivilisation <L:DATABASE_CONCEPTS,CONCEPT_REVOLUTION>revoltieren<e>, sich abspalten und schließlich dem neuen KI-Herrscher folgen.
+Durch die Implantierung eines Kontrollchips in das Gehirn eines jeden Bürgers ist die KI-Pyramide in der Lage, jeglicher Art von <L:DATABASE_CONCEPTS,CONCEPT_RIOTS>Aufruhr<e> und <L:DATABASE_CONCEPTS,CONCEPT_REVOLUTION>Revolution<e> in einer Zivilisation zu beenden. Sie schaltet alle Beschwerden und Klagen der Bürger aus und ersetzt den Lärm in der Welt durch ein beruhigendes, konstantes Signal. Mit der Zeit kann die KI-Pyramide jedoch ein eigenes Bewußtsein entwickeln und sich dazu entscheiden, die Heimatzivilisation zu verlassen und eine eigene Zivilisation zu gründen. In diesem Fall werden die Städte der ursprünglichen Heimatzivilisation <L:DATABASE_CONCEPTS,CONCEPT_REVOLUTION>revoltieren<e>, sich abspalten und schließlich dem neuen KI-Herrscher folgen.
 [END]
 
 [WONDER_AI_ENTITY_HISTORICAL]
