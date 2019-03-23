@@ -4417,6 +4417,7 @@ ORDER_RESULT ArmyData::IndulgenceSale(const MapPoint &point)
 
 		SlicObject * so  = new SlicObject("911FaithHealAttacker");
 		so->AddRecipient(u.GetOwner());
+		so->AddCivilisation(c.GetOwner()); // Televangelist message differs that of clerics and in addition needs the civ
 		so->AddCity(c);
 		g_slicEngine->Execute(so);
 	} else {
