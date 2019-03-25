@@ -579,7 +579,7 @@ Utility Goal::Recompute_Matching_Value(Plan_List & matches, const bool update, c
 
 				combinedUtility += matchUtility;
 				AI_DPRINTF(k_DBG_SCHEDULER_ALL, m_playerId, m_goal_type, -1,
-				            ("\t\t[%3d] match = %d %s Army: %9x Agent: %9x (%3d, %3d)\t%20s (%2d)\n", 
+				            ("\t\t[%3d] match = %d %s Army: %9x Agent: %9x (%3d, %3d)\t%20s (units %2d, cargo %2d)\n", 
 				             count,
 				             matchUtility,
 				             g_theGoalDB->Get(m_goal_type)->GetNameText(),
@@ -588,7 +588,8 @@ Utility Goal::Recompute_Matching_Value(Plan_List & matches, const bool update, c
 				             match_iter->Get_Agent()->Get_Pos().x,
 				             match_iter->Get_Agent()->Get_Pos().y,
 				             g_theUnitDB->GetNameStr(match_iter->Get_Agent()->Get_Army()->Get(0).GetType()),
-				             match_iter->Get_Agent()->Get_Army()->Num()));
+				             match_iter->Get_Agent()->Get_Army()->Num(),
+				             match_iter->Get_Agent()->Get_Army()->GetCargoNum()));
 				++count;
 			}
 			else
@@ -3510,7 +3511,7 @@ bool Goal::FollowPathToTask( Agent_ptr first_army,
 				{
 					if(first_army->Get_Pos() != dest_pos)
 					{
-						first_army->PerformOrderHere(order_rec, (Path *)&found_path);
+						first_army->PerformOrderHere(order_rec, (Path *)&found_path, GEV_INSERT_Tail);
 					}
 				}
 				else if(m_sub_task != SUB_TASK_CARGO_TO_BOARD)
@@ -4070,7 +4071,7 @@ bool Goal::RallyComplete() const
 		if (agent_ptr->Get_Is_Dead())
 			continue;
 
-		if(!agent_ptr->IsArmyPosFilled())
+		if(!agent_ptr->IsArmyPosFilled() || !agent_ptr->IsOneArmyAtPos())
 		{
 			if(incompleteStackFound)
 			{
@@ -4366,6 +4367,7 @@ bool Goal::RallyTroops()
 	Assert(rallyPos != Get_Target_Pos(rallyAgent->Get_Army()));
 
 	sint32 unitsAtRallyPos = (rallyPos == rallyAgent->Get_Pos()) ? rallyAgent->GetUnitsAtPos() : rallyAgent->Get_Army()->Num();
+
 	for
 	(
 	    Agent_List::iterator agent_iter  = m_agents.begin();
@@ -4396,6 +4398,7 @@ bool Goal::RallyTroops()
 		    && rallyPos.IsNextTo(agent_ptr->Get_Pos())
 		  )
 		{
+			agent_ptr->WaitHere(Get_Target_Pos(agent_ptr->Get_Army()));
 			continue;
 		}
 
@@ -4414,29 +4417,29 @@ bool Goal::RallyTroops()
 			}
 		}
 
-		// Count units at target position or sent to target position
-		unitsAtRallyPos += agent_ptr->Get_Army()->Num();
-
-		// If target position is full or will be full
-		if(unitsAtRallyPos > k_MAX_ARMY_SIZE)
+		if(unitsAtRallyPos + agent_ptr->Get_Army()->Num() > k_MAX_ARMY_SIZE
+		&& agent_ptr->Get_Pos().IsNextTo(rallyPos))
 		{
-			unitsAtRallyPos -= k_MAX_ARMY_SIZE;
 
 			// Change target
 			if(agent_ptr->Get_Army()->Num() < k_MAX_ARMY_SIZE)
 			{
-				rallyPos = GetFreeNeighborPos(rallyPos);
+				rallyPos = agent_ptr->Get_Pos();
 
-				if(!rallyPos.IsValid())
-				{
-					Assert(false);
-					// Find another rally point
-				}
-
-				// Outgroup the units over limit
+				// Outgroup the units over the limit
 				// Outgrouping is done before the army is send to their target
-				agent_ptr->Get_Army()->RemainNumUnits(agent_ptr->Get_Army()->Num() - unitsAtRallyPos);
+				agent_ptr->Get_Army()->Split(agent_ptr->Get_Army()->Num() - unitsAtRallyPos);
 				agent_ptr->Set_Can_Be_Executed(false);
+
+				unitsAtRallyPos = agent_ptr->Get_Army()->Num() - unitsAtRallyPos;
+
+				uint8 magnitude = 220;
+				MBCHAR * myString = new MBCHAR[256];
+				MapPoint goal_pos = Get_Target_Pos(agent_ptr->Get_Army());
+				MapPoint curr_pos = agent_ptr->Get_Pos();
+				sprintf(myString, "Split at (%d,%d) to GO (%d,%d)", curr_pos.x, curr_pos.y, goal_pos.x, goal_pos.y);
+				g_graphicsOptions->AddTextToArmy(agent_ptr->Get_Army(), myString, magnitude);
+				delete[] myString;
 			}
 		}
 	}
