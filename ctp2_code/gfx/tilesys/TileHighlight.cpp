@@ -119,7 +119,7 @@ double GetEntryCost
 	{
 		// Army without land units: do not use roads/tunnels etc.
 		TerrainRecord::Modifiers const * bareTerrainProperties  =
-		    (g_theWorld->HasCity(a_Place)/* && g_theWorld->GetTerrain(a_Place)->HasEnvCity()*/)
+		    (g_theWorld->HasCity(a_Place) && g_theWorld->GetTerrain(a_Place)->HasEnvCity())
 		    ? g_theWorld->GetTerrain(a_Place)->GetEnvCityPtr()
 		    : g_theWorld->GetTerrain(a_Place)->GetEnvBase();
 
@@ -129,8 +129,10 @@ double GetEntryCost
 			cost = icost;
 		}
 	}
+
 	sint32 highestbonus;
-	if (a_Army.GetMoveBonusUnits(highestbonus)) {
+	if (a_Army.GetMoveBonusUnits(highestbonus))
+	{
 		cost = highestbonus;
 	}
 
