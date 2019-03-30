@@ -1325,16 +1325,6 @@ void Player::RegisterLostUnits(sint32 nUnits, const MapPoint &pos,
 	}
 }
 
-void Player::RegisterInsertCargo(ID id, const sint32 unit_type, sint32 hp)
-{
-	// Edit this so that the cargo is registered
-}
-
-void Player::RegisterUnloadCargo(ID id, const sint32 unit_type, sint32 hp)
-{
-	// Edit this so that the cargo is registered
-}
-
 sint32 Player::GetWeakestEnemy() const
 {
 	return Diplomat::GetDiplomat(m_owner).GetWeakestEnemy();
@@ -6660,19 +6650,6 @@ void Player::UngroupArmy(Army &army)
 	}
 }
 #endif
-
-void Player::RegisterYourArmyWasMoved(const Army &i_moved, const MapPoint &new_pos)
-{
-
-	for(sint32 i = 0; i < m_all_armies->Num(); i++) {
-        if(m_all_armies->Access(i).m_id == i_moved.m_id) {
-
-            return;
-        }
-	}
-
-    return;
-}
 
 void Player::AssasinateRuler()
 {

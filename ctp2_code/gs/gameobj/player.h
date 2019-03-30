@@ -432,15 +432,10 @@ public:
 	void RegisterLostUnits(sint32 nUnits, const MapPoint &pos,
 	                       const DEATH_EFFECT_MORALE mtype);
 
-	void RegisterInsertCargo(ID id, const sint32 unit_type, sint32 hp);
-	void RegisterUnloadCargo(ID id, const sint32 unit_type, sint32 hp);
 	void GroupArmy(Army &army);
 	void UngroupArmy(Army &army);
 
-	void RegisterYourArmyWasMoved(const Army &i_moved, const MapPoint &new_pos);
-
 	void GetArmyPos(sint32 index, MapPoint &army_pos);
-	void UnloadAllTransports ();
 
 	bool Settle      (Army &settle_army);
 	bool SettleInCity(Army &settle_army);

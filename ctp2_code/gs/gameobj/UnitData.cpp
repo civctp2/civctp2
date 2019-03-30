@@ -406,9 +406,6 @@ UnitData::~UnitData()
 void UnitData::SetPosAndNothingElse(const MapPoint &p)
 {
 	m_pos = p;
-
-	Assert(g_player[m_owner]);
-	g_player[m_owner]->RegisterYourArmyWasMoved(m_army, m_pos);
 }
 
 void UnitData::SetPos(const MapPoint &p, bool &left_map)
@@ -448,8 +445,6 @@ void UnitData::SetPos(const MapPoint &p, bool &left_map)
 			}
 		}
 	}
-	Assert(g_player[m_owner]);
-	g_player[m_owner]->RegisterYourArmyWasMoved(m_army, m_pos);
 }
 
 //----------------------------------------------------------------------------
@@ -931,8 +926,7 @@ bool UnitData::IsMovePointsEnough(const MapPoint &pos) const
 //----------------------------------------------------------------------------
 bool UnitData::CanAtLeastOneCargoUnloadAt
 (
-    MapPoint const &    old_pos,
-    MapPoint const &    dest_pos,
+    MapPoint const &    unload_pos,
     bool                use_vision,
     bool                check_move_points
 ) const
@@ -941,7 +935,7 @@ bool UnitData::CanAtLeastOneCargoUnloadAt
 
 	for (sint32 i = 0; i < cargo_num; i++)
 	{
-		if (CanThisCargoUnloadAt((*m_cargo_list)[i], old_pos, dest_pos, use_vision, check_move_points))
+		if (CanThisCargoUnloadAt((*m_cargo_list)[i], unload_pos, use_vision, check_move_points))
 		{
 			return true;
 		}
@@ -971,8 +965,7 @@ bool UnitData::CanAtLeastOneCargoUnloadAt
 bool UnitData::CanThisCargoUnloadAt
 (
     Unit             the_cargo,
-    MapPoint const & old_pos,
-    MapPoint const & new_pos,
+    MapPoint const & unload_pos,
     bool             use_vision,
     bool             check_move_points
 ) const
@@ -980,10 +973,10 @@ bool UnitData::CanThisCargoUnloadAt
 	const UnitData * the_cargo_data = the_cargo.GetData();
 	Assert(the_cargo_data);
 
-	if(check_move_points && !the_cargo_data->IsMovePointsEnough(new_pos))
+	if(check_move_points && !the_cargo_data->IsMovePointsEnough(unload_pos))
 		return false;
 
-	Cell *          the_dest        = g_theWorld->GetCell(new_pos);
+	Cell *          the_dest        = g_theWorld->GetCell(unload_pos);
 	CellUnitList *  the_dest_army   = the_dest ? the_dest->UnitArmy() : NULL;
 	sint32          destUnitCount   = the_dest_army ? the_dest_army->Num() : 0;
 
@@ -995,7 +988,7 @@ bool UnitData::CanThisCargoUnloadAt
 		return false;
 	}
 
-	bool check_baddies = !use_vision || g_player[m_owner]->IsVisible(new_pos);
+	bool check_baddies = !use_vision || g_player[m_owner]->IsVisible(unload_pos);
 
 	if (check_baddies)
 	{
@@ -1008,9 +1001,9 @@ bool UnitData::CanThisCargoUnloadAt
 			return false;
 		}
 
-		if (    (m_pos != new_pos)
+		if (    (m_pos != unload_pos)
 		     && !the_cargo.IsIgnoresZOC()
-		     && g_theWorld->IsMoveZOC(m_owner, m_pos, new_pos, false)
+		     && g_theWorld->IsMoveZOC(m_owner, m_pos, unload_pos, false)
 		   )
 		{
 			// Zone of control violation
@@ -1026,7 +1019,7 @@ bool UnitData::CanThisCargoUnloadAt
 		return false;
 	}
 
-	return g_theWorld->CanEnter(new_pos, the_cargo.GetMovementType());
+	return g_theWorld->CanEnter(unload_pos, the_cargo.GetMovementType());
 }
 
 //----------------------------------------------------------------------------
@@ -1047,13 +1040,13 @@ bool UnitData::CanThisCargoUnloadAt
 // Remark(s)  : Better to check max_debark > 0 before returning true ?
 //
 //----------------------------------------------------------------------------
-bool UnitData::UnloadCargo(const MapPoint &new_pos, Army &debark,
-						   bool justOneUnit, const Unit &theUnit)
+bool UnitData::UnloadCargo(const MapPoint &unload_pos, Army &debark,
+                           bool justOneUnit, const Unit &theUnit)
 {
 	if(!m_cargo_list)
 		return false;
 
-	Cell *cell = g_theWorld->GetCell(new_pos);
+	Cell *cell = g_theWorld->GetCell(unload_pos);
 
 	sint32 max_debark;
 	if(cell->UnitArmy() && cell->UnitArmy()->GetOwner() != m_owner) {
@@ -1077,7 +1070,7 @@ bool UnitData::UnloadCargo(const MapPoint &new_pos, Army &debark,
 		if (max_debark <= count)
 			break;
 
-		if (CanThisCargoUnloadAt(m_cargo_list->Access(i), m_pos, new_pos, false))
+		if (CanThisCargoUnloadAt(m_cargo_list->Access(i), unload_pos, false))
 		{
 			count++;
 
@@ -1118,12 +1111,12 @@ bool UnitData::UnloadCargo(const MapPoint &new_pos, Army &debark,
 // Remark(s)  :
 //
 //----------------------------------------------------------------------------
-bool UnitData::UnloadSelectedCargo(const MapPoint &new_pos, Army &debark)
+bool UnitData::UnloadSelectedCargo(const MapPoint &unload_pos, Army &debark)
 {
 	if(!m_cargo_list)
 		return false;
 
-	Cell *cell = g_theWorld->GetCell(new_pos);
+	Cell *cell = g_theWorld->GetCell(unload_pos);
 	//how many units can we unload
 	sint32 max_debark =
 	    std::min(k_MAX_ARMY_SIZE - cell->GetNumUnits(),
@@ -1144,7 +1137,7 @@ bool UnitData::UnloadSelectedCargo(const MapPoint &new_pos, Army &debark)
 		if (max_debark <= count)
 			break;
 
-		if (CanThisCargoUnloadAt(m_cargo_list->Access(i), m_pos, new_pos, false))
+		if (CanThisCargoUnloadAt(m_cargo_list->Access(i), unload_pos, false))
 		{
 			count++;
 
@@ -1155,7 +1148,6 @@ bool UnitData::UnloadSelectedCargo(const MapPoint &new_pos, Army &debark)
 
 			UnitDynamicArray revealedUnits;
 			g_theWorld->InsertUnit(m_pos, passenger, revealedUnits);
-			g_player[m_owner]->RegisterUnloadCargo(m_army.m_id, passenger.GetType(), (sint32)passenger.GetHP());
 
 			passenger.AddUnitVision();
 

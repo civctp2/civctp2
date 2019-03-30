@@ -2690,7 +2690,6 @@ ORDER_RESULT ArmyData::CauseUnhappiness(const MapPoint &point,
 bool ArmyData::CanPlantNuke(double &chance, double &escape_chance,
 							sint32 &uindex) const
 {
-
 	if ( !g_player[m_owner]->m_advances->HasAdvance(advanceutil_GetNukeAdvance()))
 		return false;
 
@@ -2727,7 +2726,6 @@ bool ArmyData::CanPlantNuke(double &chance, double &escape_chance,
 //----------------------------------------------------------------------------
 bool ArmyData::CanPlantNuke(double &chance, double &escape_chance) const
 {
-
 	if ( !g_player[m_owner]->m_advances->HasAdvance(advanceutil_GetNukeAdvance()))
 		return false;
 
@@ -5317,7 +5315,7 @@ bool ArmyData::CanBombard(const MapPoint &point) const
 	}
 
 #if 0
-	// This prevents the AI from figuring out wheather a uit can be bombarded
+	// This prevents the AI from figuring out wheather a unit can be bombarded
 	// Fix this first, before you enable it again.
 	// In case of doubt check the method's callers
 
@@ -6049,7 +6047,8 @@ void ArmyData::AutoAddOrders(UNIT_ORDER_TYPE order, Path *path,
 	m_orders->AddTail(new Order(order, path, point, argument));
 	StopPirating();
 
-	if(m_owner >= 0 && m_owner < k_MAX_PLAYERS && g_player[m_owner]) {
+	if(m_owner >= 0 && m_owner < k_MAX_PLAYERS && g_player[m_owner])
+	{
 		ExecuteOrders(false);
 	}
 }
@@ -6621,9 +6620,9 @@ bool ArmyData::ExecuteMoveOrder(Order *order)
 	    (order->m_order == UNIT_ORDER_MOVE_THEN_UNLOAD)
 	   )
 	{
-		if (order->m_path->IsEndDir() ||
-			(order->m_order == UNIT_ORDER_MOVE_THEN_UNLOAD && order->m_point.IsNextTo(m_pos))
-		   )
+		if( order->m_path->IsEndDir() ||
+		   (order->m_order == UNIT_ORDER_MOVE_THEN_UNLOAD && order->m_point.IsNextTo(m_pos))
+		  )
 		{
 			if (order->m_order == UNIT_ORDER_MOVE_THEN_UNLOAD && order->m_point.IsNextTo(m_pos))
 			{
@@ -6722,13 +6721,18 @@ void ArmyData::CheckLoadSleepingCargoFromCity(Order *order)
 	if(cell->UnitArmy()->Num() < 1)
 		return;
 
-	for(sint32 i = 0; i < m_nElements; i++) {
-		if(m_array[i].GetCargoCapacity() > 0) {
-			for (int j = cell->UnitArmy()->Num() - 1; j >= 0; j--) {
+	for(sint32 i = 0; i < m_nElements; i++)
+	{
+		if(m_array[i].GetCargoCapacity() > 0)
+		{
+			for (int j = cell->UnitArmy()->Num() - 1; j >= 0; j--)
+			{
 				Unit u = cell->UnitArmy()->Access(j);
 				if(!u.IsAsleep())
 					continue;
-				if(m_array[i].CanCarry(u)) {
+
+				if(m_array[i].CanCarry(u))
+				{
 					bool out_of_fuel;
 					u.SetIsInTransport(m_array[i]);
 					u.DeductMoveCost(k_MOVE_ENTER_TRANSPORT_COST, out_of_fuel);
@@ -6736,9 +6740,8 @@ void ArmyData::CheckLoadSleepingCargoFromCity(Order *order)
 					u.UndoVision();
 					u.RemoveUnitVision();
 					m_array[i].InsertCargo(u);
-					g_player[m_owner]->RegisterInsertCargo
-					    (m_array[i].GetArmy(), u.GetType(), (sint32)u.GetHP());
 				}
+
 				if(m_array[i].GetCargoCapacity() < 1)
 					break;
 			}
@@ -7629,7 +7632,7 @@ bool ArmyData::MoveIntoCell(const MapPoint &pos, UNIT_ORDER_TYPE order, WORLD_DI
 
 		if(g_player[m_owner]->IsRobot())
 		{
-			if(CanAtLeastOneCargoUnloadAt(RetPos(), pos, false))
+			if(CanAtLeastOneCargoUnloadAt(pos, false))
 			{
 				g_gevManager->AddEvent
 				                      (
@@ -8247,15 +8250,13 @@ void ArmyData::DoBoardTransport(Order *order)
 // Remark(s)  : -
 //
 //----------------------------------------------------------------------------
-bool ArmyData::CanAtLeastOneCargoUnloadAt(const MapPoint & old_pos,
-                                          const MapPoint & dest_pos,
+bool ArmyData::CanAtLeastOneCargoUnloadAt(const MapPoint & unload_pos,
                                           const bool & used_vision,
                                           const bool check_move_points) const
 {
 	for(sint32 i = 0; i < m_nElements; i++)
 	{
-		if(m_array[i].CanAtLeastOneCargoUnloadAt(old_pos,
-		                                         dest_pos,
+		if(m_array[i].CanAtLeastOneCargoUnloadAt(unload_pos,
 		                                         used_vision,
 		                                         check_move_points)
 		){
@@ -8375,7 +8376,8 @@ void ArmyData::FinishUnloadOrder(Army &debark, MapPoint &to_pt)
 	{
 		sint32 visiblePlayer = g_selected_item->GetVisiblePlayer();
 		if ((visiblePlayer == m_array[0].GetOwner()) ||
-			(m_array[0].GetVisibility() & (1 << visiblePlayer))) {
+			(m_array[0].GetVisibility() & (1 << visiblePlayer)))
+		{
 			g_soundManager->AddSound(SOUNDTYPE_SFX, (uint32)0,
 								m_array[0].GetCantMoveSoundID(),
 								to_pt.x,
@@ -8383,24 +8385,28 @@ void ArmyData::FinishUnloadOrder(Army &debark, MapPoint &to_pt)
 		}
 
 		debark.Kill();
-	} else {
-
+	}
+	else
+	{
 		sint32 i;
 //		sint32 n = debark.Num();
 
-		if(IsOccupiedByForeigner(to_pt)) {
-			for(i = 0; i < debark.Num(); i++) {
-				if((!debark[i]->Flag(k_UDF_BEACH_ASSAULT_LEGAL))) {
+		if(IsOccupiedByForeigner(to_pt))
+		{
+			for(i = 0; i < debark.Num(); i++)
+			{
+				if((!debark[i]->Flag(k_UDF_BEACH_ASSAULT_LEGAL)))
+				{
 					CheckWasEnemyVisible(to_pt);
 
 					bool inserted = false;
-					for(sint32 j = 0; j < m_nElements && !inserted; j++) {
+					for(sint32 j = 0; j < m_nElements && !inserted; j++)
+					{
 						inserted = m_array[j].InsertCargo(debark[i]);
-						if(inserted) {
+						if(inserted)
+						{
 							Unit u = debark[i];
 							u.GetInserted(m_array[j]);
-							g_player[m_owner]->RegisterInsertCargo
-							    (m_id, u.GetType(), (sint32)u.GetHP());
 							break;
 						}
 					}
@@ -8411,17 +8417,20 @@ void ArmyData::FinishUnloadOrder(Army &debark, MapPoint &to_pt)
 					i--;
 				}
 			}
-		} else if(g_theWorld->GetCity(to_pt).m_id != 0 &&
-			      g_theWorld->GetCity(to_pt).GetOwner() != m_owner) {
-			if(!g_theArmyPool->AccessArmy(debark)->CanAtLeastOneCaptureCity()) {
+		}
+		else if(g_theWorld->GetCity(to_pt).m_id != 0 &&
+		        g_theWorld->GetCity(to_pt).GetOwner() != m_owner)
+		{
+			if(!g_theArmyPool->AccessArmy(debark)->CanAtLeastOneCaptureCity())
+			{
 				for(i = debark.Num() - 1; i >= 0; i--) {
 					bool inserted = false;
-					for(sint32 j = 0; j < m_nElements && !inserted; j++) {
+					for(sint32 j = 0; j < m_nElements && !inserted; j++)
+					{
 						inserted = m_array[j].InsertCargo(debark[i]);
-						if(inserted) {
+						if(inserted)
+						{
 							debark[i].GetInserted(m_array[j]);
-							g_player[m_owner]->RegisterInsertCargo
-							    (m_id, debark[i].GetType(),(sint32)debark[i].GetHP());
 							break;
 						}
 					}
@@ -8433,24 +8442,24 @@ void ArmyData::FinishUnloadOrder(Army &debark, MapPoint &to_pt)
 			}
 		}
 
-		if(0 < debark.Num()) {
-			if (g_soundManager) {
+		if(debark.Num() > 0)
+		{
+			if (g_soundManager)
+			{
 				sint32 visiblePlayer = g_selected_item->GetVisiblePlayer();
 				if ((visiblePlayer == debark[0].GetOwner()) ||
-				    (debark[0].GetVisibility() & (1 << visiblePlayer))) {
+				    (debark[0].GetVisibility() & (1 << visiblePlayer)))
+				{
 					g_soundManager->AddSound(SOUNDTYPE_SFX, (uint32)0,
 									    m_array[0].GetUnloadSoundID(),
 									    to_pt.x,
 									    to_pt.y);
 				}
 			}
-		}
-		if (0 < debark.Num())
-		{
+
 			if (debark.IsValid())
 			{
-				sint32 i;
-				for(i = 0; i < debark.Num(); i++)
+				for(sint32 i = 0; i < debark.Num(); i++)
 				{
 					if(!debark[i]->Flag(k_UDF_BEACH_ASSAULT_LEGAL) &&
 					   !debark[i].GetMovementTypeAir())
@@ -8462,24 +8471,27 @@ void ArmyData::FinishUnloadOrder(Army &debark, MapPoint &to_pt)
 				}
 			}
 
-			if(m_pos != to_pt) {
-				sint32 i;
-				for(i = 0; i < debark.Num(); i++) {
-					if (debark[i].GetActor()) {
+			if(m_pos != to_pt)
+			{
+				for(sint32 i = 0; i < debark.Num(); i++)
+				{
+					if (debark[i].GetActor())
+					{
 						debark[i].GetActor()->Hide();
 						debark[i].GetActor()->PositionActor(m_pos);
 						g_director->AddShow(debark[i]);
 					}
 				}
 				debark.AutoAddOrders(UNIT_ORDER_MOVE_TO, NULL, to_pt, 0);
-			} else {
-				sint32 i;
-				for(i = 0; i < debark.Num(); i++) {
+			}
+			else
+			{
+				for(sint32 i = 0; i < debark.Num(); i++)
+				{
 					g_director->AddShow(debark[i]);
 				}
 				debark.AutoAddOrders(UNIT_ORDER_TELEPORT_TO, NULL, m_pos, 0);
 			}
-
 		}
 	}
 }
@@ -8862,8 +8874,6 @@ bool ArmyData::ExecuteTeleportOrder(Order *order)
 
 	CheckTerrainEvents();
 
-    MapPoint norm_pos;
-    norm_pos.Iso2Norm(order->m_point);
 
 	return true;
 }

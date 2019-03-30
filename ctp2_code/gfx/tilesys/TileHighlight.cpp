@@ -112,14 +112,14 @@ double GetEntryCost
 					  : g_theWorld->GetMoveCost(a_Place);
 
 	if ((a_Army.IsAtLeastOneMoveShallowWater() ||
-		 a_Army.IsAtLeastOneMoveWater()
-		) &&
-		(!a_Army.IsAtLeastOneMoveLand())
+	     a_Army.IsAtLeastOneMoveWater()
+	    ) &&
+	    (!a_Army.IsAtLeastOneMoveLand())
 	   )
 	{
 		// Army without land units: do not use roads/tunnels etc.
 		TerrainRecord::Modifiers const * bareTerrainProperties  =
-		    (g_theWorld->HasCity(a_Place))
+		    (g_theWorld->HasCity(a_Place)/* && g_theWorld->GetTerrain(a_Place)->HasEnvCity()*/)
 		    ? g_theWorld->GetTerrain(a_Place)->GetEnvCityPtr()
 		    : g_theWorld->GetTerrain(a_Place)->GetEnvBase();
 
@@ -191,25 +191,31 @@ bool IsKnownEntryCost
 // Remark(s)  :
 //
 //----------------------------------------------------------------------------
-bool TiledMap::CanDrawSpecialMove(SELECT_TYPE sType, Army &sel_army, const MapPoint &old_pos, const MapPoint &dest_pos)
+bool TiledMap::CanDrawSpecialMove(SELECT_TYPE sType, Army &sel_army, const MapPoint &dest_pos)
 {
-	switch (sType) {
+	switch (sType)
+	{
 	case SELECT_TYPE_LOCAL_ARMY:
-		if (g_theWorld->HasCity(dest_pos)) {
-			if(g_controlPanel->GetTargetingMode() == CP_TARGETING_MODE_ORDER_PENDING) {
+		if (g_theWorld->HasCity(dest_pos))
+		{
+			if(g_controlPanel->GetTargetingMode() == CP_TARGETING_MODE_ORDER_PENDING)
+			{
 				const OrderRecord *rec = g_controlPanel->GetCurrentOrder();
-				if(rec->GetTargetPretestEnemyCity()) {
+				if(rec->GetTargetPretestEnemyCity())
+				{
 					if(g_theWorld->GetCell(dest_pos)->GetCity().GetOwner() != g_selected_item->GetVisiblePlayer()) {
 						return true;
 					}
 				}
 			}
 			return false;
-		} else {
-			return sel_army.CanAtLeastOneCargoUnloadAt(old_pos, dest_pos, TRUE);
+		}
+		else
+		{
+			return sel_army.CanAtLeastOneCargoUnloadAt(dest_pos, true);
 		}
 	case SELECT_TYPE_LOCAL_ARMY_UNLOADING:
-		return sel_army.CanAtLeastOneCargoUnloadAt(old_pos, dest_pos, TRUE);
+		return sel_army.CanAtLeastOneCargoUnloadAt(dest_pos, true);
 	default:
 		return false;
 	}
@@ -472,7 +478,7 @@ void TiledMap::DrawLegalMove
 				((sType == SELECT_TYPE_LOCAL_ARMY_UNLOADING) && (line_segment_count == 0))
 			   )
 			{
-				if (draw_one_special && CanDrawSpecialMove(sType, sel_army, prevPos, currPos))
+				if (draw_one_special && CanDrawSpecialMove(sType, sel_army, currPos))
 				{
 					draw_one_special		= false;
 					lineColor				= k_TURN_COLOR_SPECIAL;
@@ -550,7 +556,7 @@ void TiledMap::DrawLegalMove
 			if (((sType == SELECT_TYPE_LOCAL_ARMY) ||
 				 ((sType == SELECT_TYPE_LOCAL_ARMY_UNLOADING) && (line_segment_count == 0))
 				) &&
-				(draw_one_special && CanDrawSpecialMove(sType, sel_army, prevPos, currPos))
+				(draw_one_special && CanDrawSpecialMove(sType, sel_army, currPos))
 			   )
 			{
 				draw_one_special		= false;
@@ -619,7 +625,7 @@ void TiledMap::DrawLegalMove
 				if (((sType == SELECT_TYPE_LOCAL_ARMY) ||
 					 ((sType == SELECT_TYPE_LOCAL_ARMY_UNLOADING) && (line_segment_count == 1))
 					) &&
-					(draw_one_special && CanDrawSpecialMove(sType, sel_army, prevPos, currPos))
+					(draw_one_special && CanDrawSpecialMove(sType, sel_army, currPos))
 				   )
 				{
 					draw_one_special		= FALSE;

@@ -76,7 +76,7 @@ bool RobotAstar2::TransportPathCallback (const bool & can_enter,
 		bool is_land    = ( g_theWorld->IsLand(pos) || g_theWorld->IsMountain(pos) );
 		bool wrong_cont = ( cont != m_transDestCont ) && (!g_theWorld->IsCity(pos));
 
-		bool occupied = (m_army->HasCargo() && (!m_army.CanAtLeastOneCargoUnloadAt(prev, pos, false, !m_is_robot)));
+		bool occupied = (m_army->HasCargo() && (!m_army.CanAtLeastOneCargoUnloadAt(pos, false, !m_is_robot)));
 
 		if(occupied || wrong_cont)
 		{
@@ -169,11 +169,11 @@ bool RobotAstar2::AirliftPathCallback (const bool & can_enter,
 		   )
 		  )
 		{
-			bool occupied = (m_army->HasCargo() && !m_army.CanAtLeastOneCargoUnloadAt(prev, pos, false, !m_is_robot));
+			bool occupied = (m_army->HasCargo() && !m_army.CanAtLeastOneCargoUnloadAt(pos, false, !m_is_robot));
 
 			if(occupied)
 			{
-				if(!m_army.CanAtLeastOneCargoUnloadAt(prev, prev, false, !m_is_robot))
+				if(!m_army.CanAtLeastOneCargoUnloadAt(prev, false, !m_is_robot))
 				{
 					cost = k_ASTAR_BIG;
 					entry = ASTAR_RETRY_DIRECTION;

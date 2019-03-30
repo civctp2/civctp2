@@ -426,7 +426,7 @@ public:
     void SetTurnOver();
     bool TurnOver();
 
-    bool CanAtLeastOneCargoUnloadAt(const MapPoint &old_pos, const MapPoint &dest_pos, const bool & used_vision, const bool check_move_points = true) const;
+    bool CanAtLeastOneCargoUnloadAt(const MapPoint &unload_pos, const bool & used_vision, const bool check_move_points = true) const;
 
     static bool GetInciteRevolutionCost( const MapPoint &point, sint32 &attackCost );
     static bool GetInciteUprisingCost( const MapPoint &point, sint32 &attackCost );
