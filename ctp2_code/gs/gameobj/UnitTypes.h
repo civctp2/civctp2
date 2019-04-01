@@ -171,7 +171,7 @@ enum UNIT_ORDER_TYPE
 	UNIT_ORDER_GROUP_UNIT,                   // 44
 	UNIT_ORDER_DISBAND,                      // 45
 	UNIT_ORDER_FINISH_ATTACK,                // 46
-	UNIT_ORDER_UNLOAD_ONE_UNIT,              // 47
+	UNIT_ORDER_UNUSED,                       // 47
 	UNIT_ORDER_BOARD_TRANSPORT,              // 48
 	UNIT_ORDER_WAKE_UP,                      // 49
 

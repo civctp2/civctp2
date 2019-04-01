@@ -336,20 +336,20 @@ bool unitutil_GetCityInfo(MapPoint &pos, char * city_name, sint32 & image_index)
 
 void unitutil_ExecuteMadLaunch(Unit & unit)
 {
-
 	if( unit.GetDBRec()->HasNuclearAttack() &&
 		unit->GetTargetCity().IsValid() &&
-		!unit.Flag(k_UDF_MAD_LAUNCHED)) {
-
-
-
-
+		!unit.Flag(k_UDF_MAD_LAUNCHED))
+	{
 		if (unit.IsBeingTransported())
 		{
+			sint32 count = 0;
+			unit.SetFlag(k_UDF_TEMP_TRANSPORT_SELECT);
 			Unit transport = unit.GetTransport();
 			Army debark = g_player[unit.GetOwner()]->GetNewArmy(CAUSE_NEW_ARMY_TRANSPORTED);
-			transport.UnloadCargo(transport.RetPos(), debark, TRUE, unit);
-		} else {
+			transport.UnloadCargo(transport.RetPos(), debark, count, true);
+		}
+		else
+		{
 			unit->CreateOwnArmy();
 		}
 

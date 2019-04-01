@@ -282,9 +282,7 @@ public:
 	    bool                check_move_points = true
 	) const;
 
-	bool UnloadCargo(const MapPoint &unload_pos, Army &debark,
-	                 bool justOneUnit, const Unit &theUnit);
-	bool UnloadSelectedCargo(const MapPoint &unload_pos, Army &debark);
+	bool UnloadCargo(const MapPoint &unload_pos, Army &debark, sint32 &count, bool unloadSelected = false);
 
 	bool IsBeingTransported() const { return Flag(k_UDF_IS_IN_TRANSPORT); };
 	void SetIsInTransport(const Unit &transport);

@@ -1040,8 +1040,7 @@ bool UnitData::CanThisCargoUnloadAt
 // Remark(s)  : Better to check max_debark > 0 before returning true ?
 //
 //----------------------------------------------------------------------------
-bool UnitData::UnloadCargo(const MapPoint &unload_pos, Army &debark,
-                           bool justOneUnit, const Unit &theUnit)
+bool UnitData::UnloadCargo(const MapPoint &unload_pos, Army &debark, sint32 &count, bool unloadSelected)
 {
 	if(!m_cargo_list)
 		return false;
@@ -1049,23 +1048,31 @@ bool UnitData::UnloadCargo(const MapPoint &unload_pos, Army &debark,
 	Cell *cell = g_theWorld->GetCell(unload_pos);
 
 	sint32 max_debark;
-	if(cell->UnitArmy() && cell->UnitArmy()->GetOwner() != m_owner) {
+	if(cell->UnitArmy() && cell->UnitArmy()->GetOwner() != m_owner)
+	{
 	//compute the max number of units we can unload
 		max_debark = k_MAX_ARMY_SIZE - g_theWorld->GetCell(m_pos)->GetNumUnits();
-	} else {
+	}
+	else
+	{
 		max_debark = std::min
 		    (k_MAX_ARMY_SIZE - cell->GetNumUnits(),
 		     k_MAX_ARMY_SIZE - g_theWorld->GetCell(m_pos)->GetNumUnits()
 		    );
 	}
+
 	sint32 const        n       = GetNumCarried();
-	sint32 count = 0;
 	Unit passenger;
 
-	for (sint32 i=n-1; 0 <=i ; i--)
+	for (sint32 i = n - 1; 0 <= i ; i--)
 	{
-		if(justOneUnit && theUnit != m_cargo_list->Access(i))
-			continue;
+		if(unloadSelected)
+		{
+			if(!m_cargo_list->Access(i).Flag(k_UDF_TEMP_TRANSPORT_SELECT))
+				continue;
+
+			m_cargo_list->Access(i).ClearFlag(k_UDF_TEMP_TRANSPORT_SELECT);
+		}
 
 		if (max_debark <= count)
 			break;
@@ -1076,7 +1083,7 @@ bool UnitData::UnloadCargo(const MapPoint &unload_pos, Army &debark,
 
 			passenger = (*m_cargo_list)[i];
 			m_cargo_list->DelIndex(i);
-			passenger .SetPosAndNothingElse(m_pos);
+			passenger .SetPosAndNothingElse(m_pos); // unload_pos?
 			passenger .UnsetIsInTransport();
 
 			UnitDynamicArray revealedUnits;
@@ -1092,73 +1099,7 @@ bool UnitData::UnloadCargo(const MapPoint &unload_pos, Army &debark,
 			debark.Insert(passenger);
 		}
 	}
-	return true;
-}
 
-//----------------------------------------------------------------------------
-//
-// Name       : UnitData::UnloadSelectedCargo
-//
-// Description: Try to unload this unit's m_cargo_list onto MapPoint &new_pos.
-//
-// Parameters : MapPoint &new_pos     : the position to unload to
-//              Army     &debark      : a new army formed from the debarked units
-//
-// Globals    : -
-//
-// Returns    : bool true when done (not success/failure)
-//
-// Remark(s)  :
-//
-//----------------------------------------------------------------------------
-bool UnitData::UnloadSelectedCargo(const MapPoint &unload_pos, Army &debark)
-{
-	if(!m_cargo_list)
-		return false;
-
-	Cell *cell = g_theWorld->GetCell(unload_pos);
-	//how many units can we unload
-	sint32 max_debark =
-	    std::min(k_MAX_ARMY_SIZE - cell->GetNumUnits(),
-	             k_MAX_ARMY_SIZE - g_theWorld->GetCell(m_pos)->GetNumUnits()
-	            );// not m_cargo_list ?
-
-	sint32 const        n       = GetNumCarried();
-	sint32 count = 0;
-	Unit passenger;
-
-	for (sint32 i=n-1; 0 <=i ; i--)
-	{
-		if(!m_cargo_list->Access(i).Flag(k_UDF_TEMP_TRANSPORT_SELECT))
-			continue;
-
-		m_cargo_list->Access(i).ClearFlag(k_UDF_TEMP_TRANSPORT_SELECT);
-
-		if (max_debark <= count)
-			break;
-
-		if (CanThisCargoUnloadAt(m_cargo_list->Access(i), unload_pos, false))
-		{
-			count++;
-
-			passenger = (*m_cargo_list)[i];
-			m_cargo_list->DelIndex(i);
-			passenger .SetPosAndNothingElse(m_pos);
-			passenger .UnsetIsInTransport();
-
-			UnitDynamicArray revealedUnits;
-			g_theWorld->InsertUnit(m_pos, passenger, revealedUnits);
-
-			passenger.AddUnitVision();
-
-			if(debark.m_id == 0)
-			{
-				debark = g_player[m_owner]->GetNewArmy(CAUSE_NEW_ARMY_TRANSPORTED);
-			}
-
-			debark.Insert(passenger);
-		}
-	}
 	return true;
 }
 

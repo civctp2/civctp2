@@ -182,9 +182,7 @@ public:
 
 	bool CanAtLeastOneCargoUnloadAt(const MapPoint & unload_pos, const bool & used_vision, bool check_move_points = true) const;
 
-	bool UnloadCargo(const MapPoint &unload_pos, Army &debark,
-			 bool justOneUnit, const Unit &theUnit);
-	bool UnloadSelectedCargo(const MapPoint &unload_pos, Army &debark);
+	bool UnloadCargo(const MapPoint &unload_pos, Army &debark, sint32 &count, bool unloadSelected = false);
 
 	bool IsMovePointsEnough(const MapPoint &pos) const;
 

@@ -6376,7 +6376,6 @@ bool ArmyData::ExecuteOrders(bool propagate)
 				completedOrder = true;
 				break;
 			case UNIT_ORDER_UNLOAD:
-			case UNIT_ORDER_UNLOAD_ONE_UNIT:
 			case UNIT_ORDER_UNLOAD_SELECTED_STACK:
 				completedOrder = ExecuteUnloadOrder(order);
 				if(!completedOrder)
@@ -8323,20 +8322,17 @@ bool ArmyData::ExecuteUnloadOrder(Order *order)
 	Army debark;
 
 	bool unitUnloadDone = false;
+	sint32 count = 0; // Count the units to debark between the transporters so that we do not try to debark more units than fit at the unload position.
 	for(sint32 i = 0; i < m_nElements; i++)
 	{
-		if(order->m_order == UNIT_ORDER_UNLOAD_ONE_UNIT)
+		if(order->m_order == UNIT_ORDER_UNLOAD
+		|| order->m_order == UNIT_ORDER_MOVE_THEN_UNLOAD)
 		{
-			unitUnloadDone |= m_array[i].UnloadCargo(to_pt, debark, true, Unit(order->m_argument));
-		}
-		else if(order->m_order == UNIT_ORDER_UNLOAD
-		     || order->m_order == UNIT_ORDER_MOVE_THEN_UNLOAD)
-		{
-			unitUnloadDone |= m_array[i].UnloadCargo(to_pt, debark, false, Unit());
+			unitUnloadDone |= m_array[i].UnloadCargo(to_pt, debark, count);
 		}
 		else if(order->m_order == UNIT_ORDER_UNLOAD_SELECTED_STACK)
 		{
-			unitUnloadDone |= m_array[i].UnloadSelectedCargo(to_pt, debark);
+			unitUnloadDone |= m_array[i].UnloadCargo(to_pt, debark, count, true);
 		}
 		else
 		{

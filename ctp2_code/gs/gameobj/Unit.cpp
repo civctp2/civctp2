@@ -740,27 +740,14 @@ bool Unit::IsBeingTransported() const
 	return GetData()->IsBeingTransported();
 }
 
-#if 0
-void Unit::Transform()
-{
-	AccessData()->Transform();
-}
-#endif
-
 bool Unit::CanAtLeastOneCargoUnloadAt(const MapPoint & unload_pos, const bool & use_vision, bool check_move_points) const
 {
 	return GetData()->CanAtLeastOneCargoUnloadAt(unload_pos, use_vision, check_move_points);
 }
 
-bool Unit::UnloadCargo(const MapPoint &unload_pos, Army &debark,
-                       bool justOneUnit, const Unit &theUnit)
+bool Unit::UnloadCargo(const MapPoint &unload_pos, Army &debark, sint32 &count, bool unloadSelected)
 {
-	return AccessData()->UnloadCargo(unload_pos, debark, justOneUnit, theUnit);
-}
-
-bool Unit::UnloadSelectedCargo(const MapPoint &unload_pos, Army &debark)
-{
-	return AccessData()->UnloadSelectedCargo(unload_pos, debark);
+	return AccessData()->UnloadCargo(unload_pos, debark, count, unloadSelected);
 }
 
 bool Unit::IsMovePointsEnough(const MapPoint &pos) const
