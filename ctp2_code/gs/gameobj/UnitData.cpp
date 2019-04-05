@@ -1050,15 +1050,12 @@ bool UnitData::UnloadCargo(const MapPoint &unload_pos, Army &debark, sint32 &cou
 	sint32 max_debark;
 	if(cell->UnitArmy() && cell->UnitArmy()->GetOwner() != m_owner)
 	{
-	//compute the max number of units we can unload
-		max_debark = k_MAX_ARMY_SIZE - g_theWorld->GetCell(m_pos)->GetNumUnits();
+		// Get the max number of units we can unload
+		max_debark = k_MAX_ARMY_SIZE;
 	}
 	else
 	{
-		max_debark = std::min
-		    (k_MAX_ARMY_SIZE - cell->GetNumUnits(),
-		     k_MAX_ARMY_SIZE - g_theWorld->GetCell(m_pos)->GetNumUnits()
-		    );
+		max_debark = k_MAX_ARMY_SIZE - cell->GetNumUnits();
 	}
 
 	sint32 const        n       = GetNumCarried();
@@ -1087,7 +1084,12 @@ bool UnitData::UnloadCargo(const MapPoint &unload_pos, Army &debark, sint32 &cou
 			passenger .UnsetIsInTransport();
 
 			UnitDynamicArray revealedUnits;
-			g_theWorld->InsertUnit(m_pos, passenger, revealedUnits);
+
+			if(m_pos == unload_pos)
+			{
+				g_theWorld->InsertUnit(m_pos, passenger, revealedUnits);
+			}
+		//	else will be handled when the unit moves
 
 			passenger.AddUnitVision();
 
