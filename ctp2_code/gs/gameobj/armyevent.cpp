@@ -58,7 +58,6 @@
 #include "UnitPool.h"
 #include "director.h"
 #include "MoveFlags.h"
-#include "directions.h"
 #include "network.h"
 #include "SlicEngine.h"
 #include "SlicObject.h"
@@ -807,7 +806,7 @@ STDEHANDLER(ArmyMoveEvent)
 				}
 			}
 
-			Assert(g_player[owner]->IsRobot() && Diplomat::GetDiplomat(owner).HasWarOrDesiresPreemptivelyWith(defender->GetOwner()));
+			Assert(!g_player[owner]->IsRobot() || Diplomat::GetDiplomat(owner).HasWarOrDesiresPreemptivelyWith(defender->GetOwner()));
 
 			if(g_player[owner]->IsRobot() && army->CanFight(*defender) || g_player[owner]->IsHuman())
 			{

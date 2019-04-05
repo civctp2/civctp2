@@ -189,6 +189,7 @@ public:
     void GroupUnit(Unit unit);
     void UngroupUnits();
     void RemainNumUnits(sint32 remain);
+    void Split(sint32 remain);
 
     void FastKill();
 

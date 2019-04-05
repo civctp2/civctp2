@@ -83,7 +83,7 @@ GOAL_SEIGE {
 
   Execute   ORDER_ATTACK
 
-  ThreatBonus             500
+  ThreatBonus            -500
   EnemyValueBonus        -250
   AlliedValueBonus       1000
   PowerBonus              500
@@ -104,8 +104,8 @@ GOAL_SEIGE {
     LandToCloseCityConnectionBonus 1000
     CloseCityConnectionBonus        500
     SmallTargetEmpireSize             3
-    SmallTargetEmpireBonus          100
-    WeakestEnemyBonus               200
+    SmallTargetEmpireBonus          500
+    WeakestEnemyBonus              1000
   }
 
   ThreatenType:DestroyCity
@@ -242,11 +242,11 @@ GOAL_SETTLE_SEA {
   Execute   ORDER_SETTLE
 
   ThreatBonus            -100
-  EnemyValueBonus         100
+  EnemyValueBonus        -100
   AlliedValueBonus        100
   PowerBonus              100
   DistanceToHomeBonus     -50
-  DistanceToEnemyBonus     15
+  DistanceToEnemyBonus     -2
   InHomeTerritoryBonus      0
   NoOwnerTerritoryBonus     0
   InEnemyTerritoryBonus     0

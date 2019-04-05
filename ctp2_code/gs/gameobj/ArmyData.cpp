@@ -1363,7 +1363,20 @@ void ArmyData::RemainNumUnits(sint32 remain)
 		                       GEA_Int, CAUSE_NEW_ARMY_UNGROUPING_ORDER,
 		                       GEA_End);
 	}
+}
 
+void ArmyData::Split(sint32 remain)
+{
+	remain = std::max(remain - 1, 0);
+	Army newArmy = g_player[m_owner]->GetNewArmy(CAUSE_NEW_ARMY_UNGROUPING_ORDER);
+	for(sint32 i = m_nElements - 1; i > remain; i--)
+	{
+		g_gevManager->AddEvent(GEV_INSERT_AfterCurrent, GEV_AddUnitToArmy,
+							   GEA_Unit, m_array[i],
+							   GEA_Army, newArmy,
+							   GEA_Int, CAUSE_NEW_ARMY_UNGROUPING_ORDER,
+							   GEA_End);
+	}
 }
 
 // If this army has a m_tempKillList, insert all the units at MapPoint &pos into it.
@@ -6864,10 +6877,15 @@ bool ArmyData::FinishMove(WORLD_DIRECTION d, MapPoint &newPos, UNIT_ORDER_TYPE o
 	CellUnitList transports;
 	sint32 canMoveIntoTransport = NumUnitsCanMoveIntoTransport(newPos, transports);
 
+	// Problem with AI: It load units into transport helis, even so they are not the target.
+	// However these things don't seem to fix it, properly.
 	if
 	  (
 	      g_theWorld->GetCity(newPos).m_id == 0
 	   && canMoveIntoTransport > 0
+//	   && order == UNIT_ORDER_BOARD_TRANSPORT
+//	   && !g_player[m_owner]->IsRobot()
+//	   && !g_theWorld->IsOnSameContinent(newPos, m_pos)
 	  )
 	{
 		Army army(m_id);
@@ -10724,7 +10742,7 @@ void ArmyData::PerformOrderHere(const OrderRecord * order_rec, const Path * path
 			//else bombard now?
 			else
 			{
-				g_gevManager->AddEvent(GEV_INSERT_AfterCurrent,
+				g_gevManager->AddEvent(priority,
 				                       static_cast<GAME_EVENT>(game_event),
 				                       GEA_Army, Army(m_id),
 				                       GEA_MapPoint, target_pos,
@@ -10747,7 +10765,7 @@ void ArmyData::PerformOrderHere(const OrderRecord * order_rec, const Path * path
 	{
 		if (range > 0 || order_rec->GetIsTeleport() || order_rec->GetIsTarget())//event needs target pos
 		{
-			g_gevManager->AddEvent(GEV_INSERT_AfterCurrent,
+			g_gevManager->AddEvent(priority,
 			                       static_cast<GAME_EVENT>(game_event),
 			                       GEA_Army, Army(m_id),
 			                       GEA_MapPoint, target_pos,
@@ -10756,7 +10774,7 @@ void ArmyData::PerformOrderHere(const OrderRecord * order_rec, const Path * path
 		}
 		else
 		{
-			g_gevManager->AddEvent(GEV_INSERT_AfterCurrent,
+			g_gevManager->AddEvent(priority,
 			                       static_cast<GAME_EVENT>(game_event),
 			                       GEA_Army, Army(m_id),
 			                       GEA_End
@@ -10778,7 +10796,7 @@ void ArmyData::PerformOrderHere(const OrderRecord * order_rec, const Path * path
 			if(move_pos != m_pos)
 			{//then first move army to move_pos
 
-				g_gevManager->AddEvent(GEV_INSERT_AfterCurrent,
+				g_gevManager->AddEvent(priority,
 				                       GEV_MoveOrder,
 				                       GEA_Army, Army(m_id),
 				                       GEA_Path, move_path,
@@ -10808,7 +10826,7 @@ void ArmyData::PerformOrderHere(const OrderRecord * order_rec, const Path * path
 		delete tmp_path;
 	}
 
-	g_gevManager->AddEvent(GEV_INSERT_AfterCurrent,
+	g_gevManager->AddEvent(priority,
 	                       GEV_ClearOrders,
 	                       GEA_Army, Army(m_id),
 	                       GEA_End

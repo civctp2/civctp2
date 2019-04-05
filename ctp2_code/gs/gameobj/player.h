@@ -122,7 +122,6 @@ PLAYER_INDEX const  PLAYER_UNASSIGNED   = -1;
 #include "Advances.h"           // Advances, AdvanceType
 #include "AgreementTypes.h"     // AGREEMENT_TYPE
 #include "AICause.h"            // CAUSE_..., ERR_BUILD_INST
-#include "directions.h"         // WORLD_DIRECTION
 #include "GameObj_types.h"      // CIV_INDEX, GENDER
 #include "GameOver.h"           // GAME_OVER
 #include "gstypes.h"            // k_MAX_PLAYERS

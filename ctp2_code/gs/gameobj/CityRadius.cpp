@@ -37,8 +37,6 @@
 extern World *g_theWorld;
 extern MapPoint g_mp_size;
 
-#include "directions.h"	// NOWHERE
-
 //----------------------------------------------------------------------------
 //
 // Name       : CityRadiusIterator

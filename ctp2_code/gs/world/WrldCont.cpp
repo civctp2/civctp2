@@ -34,7 +34,6 @@
 
 #include "bset.h"
 #include "Cell.h"
-#include "directions.h"
 #include "dynarr.h"
 #include "mapanalysis.h"
 #include "MoveFlags.h"

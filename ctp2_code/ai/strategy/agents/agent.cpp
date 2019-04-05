@@ -250,13 +250,16 @@ void Agent::Log_Debug_Info(const int & log, const Goal * const goal) const
 	           m_playerId,
 	           goal != NULL ? goal->Get_Goal_Type() : -1,
 	           -1,
-	           ("\t\t   Agent: handle=%x,\tclass=%x,\t(x=%d,y=%d),\t (is_used=%d) \t (by_this=%d) \t (in %s)\n",
+	           ("\t\t   Agent: handle=%x,\tclass=%x,\t(x=%3d,y=%3d),\t (is_used=%d) \t (by_this=%d) \t %20s (%2d units, %2d cargo) \t in %s\n",
 	            m_army.m_id,
 	            m_squad_class,
 	            pos.x,
 	            pos.y,
 	            (m_goal ? 1 : 0),
 	            ((goal == m_goal) ? 1 : 0),
+	            g_theUnitDB->GetNameStr(m_army->Get(0).GetType()),
+	            m_army->Num(),
+	            m_army->GetCargoNum(),
 	            (g_theWorld->HasCity(pos) ? g_theWorld->GetCity(pos).GetName() : "field")
 	           )
 	          );
@@ -507,7 +510,7 @@ bool Agent::EstimateTransportUtility(const Agent_ptr transport, Utility & utilit
 	utility = move_type_bonus + (trans_rounds * -100) - tile_count /*+ cargoCapacity*100*/; // Could be added, but not needed
 
 	AI_DPRINTF(k_DBG_SCHEDULER_DETAIL, m_army->GetOwner(), Get_Goal_Type(), -1,
-	("\t %9x (%3d,%3d),\t%9x (%3d,%3d),\t%8d,\t%8d,\t%8d,\t%8d,\t%8d\n",
+	("\t\t%9x (%3d,%3d),\t%9x (%3d,%3d),\t%8d,\t%8d,\t%8d,\t%8d,\t%8d\t%20s\t%20s\n",
 	this,                                          // This agent
 	this->Get_Pos().x,                             // Agent pos.x
 	this->Get_Pos().y,                             // Agent pos.y
@@ -518,7 +521,9 @@ bool Agent::EstimateTransportUtility(const Agent_ptr transport, Utility & utilit
 	move_type_bonus,                               // Movement bonus of transporter type
 	trans_rounds,                                  // Distance to transporter (Square rooted quare distance), not identical with path distance
 	tile_count,                                    // Rounds to target
-	cargoCapacity));                               // Empty slots for units
+	cargoCapacity,                                 // Empty slots for units
+	g_theUnitDB->GetNameStr(m_army->Get(0).GetType()),
+	g_theUnitDB->GetNameStr(transport->Get_Army()->Get(0).GetType())));
 
 	return true;
 }

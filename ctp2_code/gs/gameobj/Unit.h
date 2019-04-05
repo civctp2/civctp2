@@ -59,7 +59,6 @@ class Unit;
 
 #include "ID.h"
 #include "dbtypes.h"
-#include "directions.h"     // WORLD_DIRECTION
 #include "Advances.h"       // AdvanceType
 #include "AICause.h"        // CAUSE_...
 #include "HappyTracker.h"   // HAPPY_REASON

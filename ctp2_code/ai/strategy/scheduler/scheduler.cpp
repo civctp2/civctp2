@@ -1208,7 +1208,7 @@ bool Scheduler::Prioritize_Goals()
 		AI_DPRINTF(k_DBG_SCHEDULER, m_playerId, goal_type, -1,("//\n"));
 		AI_DPRINTF(k_DBG_SCHEDULER, m_playerId, goal_type, -1,("\n"));
 		AI_DPRINTF(k_DBG_SCHEDULER, m_playerId, goal_type, -1,
-			("\t %9x,\tGOAL,\t\tRAW_PRIORITY,\t\tCOORDS,\t\tINIT_VALUE,\tLAST_VALUE,\tTHREAT,\t\tENEMYVAL,\tALLIEDVAL,\tMAXPOW,\t\tHOMEDIST\t(   ),\t\tENEMYDIST (    ),\t\tSETTLE,\t\tCHOKE,\t\tUNEXPLORED,\tNOT_VISIBLE,\tIN_HOME_TER,\tIN_ENEMY_TER,\tON_NEUT_TER,\tSLAVERY_PROTECTION,\tSMALL_CITY,\tTHREATEN,\tCONNECTED,\tSMALL_EMP,\tWEAKEST\n",
+			("\t %9x,\tGOAL,\t\tRAW_PRIORITY,\t\tCOORDS,\t\tINIT_VALUE,\t\tLAST_VALUE,\t\tTHREAT,\t\tENEMYVAL,\tALLIEDVAL,\tMAXPOW,\t\tHOMEDIST\t   (       ),\tENEMYDIST    (       ),\t\tSETTLE,\t\tCHOKE,\t\tUNEXPLORED,\tNOT_VISIBLE,\tIN_HOME_TER,\tIN_ENEMY_TER,\tON_NEUT_TER,\tSLAVERY_PROTECTION,\tSMALL_CITY,\tTHREATEN,\tCONNECTED,\tSMALL_EMP,\tWEAKEST,\tPLACE\n",
 		this));
 
 		      sorted_goal_iter  = m_goals_of_type[goal_type].begin();
@@ -1434,6 +1434,8 @@ bool Scheduler::Prune_Goals()
 			{
 				if(goal_ptr->Get_Matches_Num() == 0)
 				{
+		//			Assert(false);
+		//			Add_New_Matches_For_Goal(goal_ptr);
 					goal_ptr->Copy_Insert_Matches(m_generic_goals[goal_type]);
 				}
 
@@ -1620,6 +1622,8 @@ bool Scheduler::Add_Transport_Matches_For_Goal
 
 	bool match_added = false;
 
+	AI_DPRINTF(k_DBG_SCHEDULER_ALL, m_playerId, -1, -1, ("\t\tNow %d matches, add transport matches.\n", goal_ptr->Get_Matches_Num()));
+
 	for
 	(
 	    Agent_List::iterator agent_iter  = m_agents.begin();
@@ -1636,6 +1640,10 @@ bool Scheduler::Add_Transport_Matches_For_Goal
 		{
 			continue;
 		}
+
+		// Can Transport
+		if(!goal_ptr->Can_Transport_Any_Width_Need(agent))
+			continue;
 
 		bool hasMatch  = goal_ptr->Has_Agent_And_Set_Needs_Cargo(agent);
 		match_added   |= hasMatch;
@@ -1659,12 +1667,23 @@ bool Scheduler::Add_Transport_Matches_For_Goal
 		&& goal_ptr->CanReachTargetContinent(agent)
 		&& goal_ptr->Add_Transport_Match(agent)
 		){
-			AI_DPRINTF(k_DBG_SCHEDULER_ALL, m_playerId, -1, -1, ("\t\tAdd transport match, now %d matches.\n", goal_ptr->Get_Matches_Num()));
 			match_added = true;
 		}
 	}
 
+#if defined(_DEBUG) || defined(USE_LOGGING)
+	if(match_added)
+	{
+		AI_DPRINTF(k_DBG_SCHEDULER_ALL, m_playerId, -1, -1, ("\t\tNow %d matches. Transport matches were added.\n", goal_ptr->Get_Matches_Num()));
+	}
+	else
+	{
+		AI_DPRINTF(k_DBG_SCHEDULER_ALL, m_playerId, -1, -1, ("\t\tNow %d matches. No transport matches were added.\n", goal_ptr->Get_Matches_Num()));
+	}
+
 	AI_DPRINTF(k_DBG_SCHEDULER_ALL, m_playerId, -1, -1, ("\t\tRecomputing matches for transport\n"));
+#endif
+
 	goal_ptr->Compute_Matching_Value(false);
 
 	return match_added;
@@ -2060,7 +2079,15 @@ void Scheduler::Assign_Garrison()
 			   || current_garrison          < needed_garrison
 			  )
 			{
-				AI_DPRINTF(k_DBG_SCHEDULER_DETAIL, m_playerId, -1, -1,("%9x\t %9x\t %s\n", agent_iter->second, agent_iter->second->Get_Army().m_id, city.GetName()));
+				AI_DPRINTF(k_DBG_SCHEDULER_DETAIL, m_playerId, -1, -1,("%9x\t %9x\t GarrisonStrength: %9.1f / %9.1f GarrisonNum %2d / %2d (%2d units) needed for garrison in %s\n",
+				                                                       agent_iter->second,
+				                                                       agent_iter->second->Get_Army().m_id,
+				                                                       current_garrison_strength,
+				                                                       needed_garrison_strength,
+				                                                       current_garrison,
+				                                                       needed_garrison,
+				                                                       agent_iter->second->Get_Army()->Num(),
+				                                                       city.GetName()));
 
 				current_garrison_strength += agent_iter->first;
 				current_garrison          += agent_iter->second->Get_Army()->Num();
