@@ -32,25 +32,12 @@
 //----------------------------------------------------------------------------
 
 #include "c3.h"
-#include "c3errors.h"
-#include "Globals.h"
-
-#include "astarpnt.h"
 #include "Astar.h"
+
 #include "AVLHeap.h"
-
-#include "dynarr.h"
 #include "Path.h"
-
-#include "XY_Coordinates.h"
 #include "World.h"
-#include "RandGen.h"
-#include "Cell.h"
-#include "priorityqueue.h"
 #include "A_Star_Heuristic_Cost.h"
-
-extern World *g_theWorld;
-extern RandomGenerator *g_rand;
 
 sint32 g_search_count;
 

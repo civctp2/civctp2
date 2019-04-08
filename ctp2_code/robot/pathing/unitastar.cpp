@@ -44,9 +44,6 @@
 #include "c3.h"
 #include "UnitAstar.h"
 
-#include "Globals.h"
-
-#include "dynarr.h"
 #include "Path.h"
 
 // Added by Calvitix
@@ -57,27 +54,11 @@
 #include "AgreementMatrix.h"
 #include "ArmyData.h"
 
-#include "Army.h"
-#include "Unit.h"
-#include "cellunitlist.h"
-#include "XY_Coordinates.h"
-#include "World.h"              // g_theWorld, GROUND_Z, SPACE_Z
-#include "Cell.h"
-
-#include "dynarr.h"
-#include "player.h"
-#include "RandGen.h"
-#include "UnitRecord.h"
-#include "WonderRecord.h"
 #include "TerrainRecord.h"
 #include "UnitData.h"
 
 #include "UnseenCell.h"
-#include "MoveFlags.h"
 #include "wonderutil.h"
-
-#include "A_Star_Heuristic_Cost.h"
-#include "terrainutil.h"
 
 #define MARK_UNUSED     0xcdcdcdcd
 
@@ -633,7 +614,7 @@ bool UnitAstar::EntryCost(const MapPoint &prev, const MapPoint &pos,
 	if (m_check_units_in_cell)
 	{
 		if (CheckUnits(prev, pos, the_prev_cell, the_pos_cell, cost, is_zoc, can_be_zoc, entry,
-            can_enter))
+		    can_enter))
 		{
 			RESTORE;
 			return can_enter;
@@ -787,16 +768,16 @@ float UnitAstar::EstimateFutureCost(const MapPoint &pos, const MapPoint &dest)
 void UnitAstar::RecalcEntryCost(AstarPoint *parent, AstarPoint *node, float &new_entry_cost,
     bool &new_is_zoc, ASTAR_ENTRY_TYPE &new_entry)
 {
-    bool can_be_zoc = true;
-    bool can_enter;
-    Cell *the_prev_cell = g_theWorld->AccessCell(parent->m_pos);
-    Cell *the_pos_cell = g_theWorld->AccessCell(node->m_pos);
-    if (CheckMoveIntersection(parent->m_pos, node->m_pos,
-        the_prev_cell, the_pos_cell, new_entry_cost, new_is_zoc,
-          can_be_zoc, new_entry, can_enter)) return;
+	bool can_be_zoc = true;
+	bool can_enter;
+	Cell *the_prev_cell = g_theWorld->AccessCell(parent->m_pos);
+	Cell *the_pos_cell = g_theWorld->AccessCell(node->m_pos);
+	if (CheckMoveIntersection(parent->m_pos, node->m_pos,
+	    the_prev_cell, the_pos_cell, new_entry_cost, new_is_zoc,
+	       can_be_zoc, new_entry, can_enter)) return;
 
-    if (m_pretty_path)
-        Astar::DecayOrtho(parent, node, new_entry_cost);
+	if (m_pretty_path)
+		Astar::DecayOrtho(parent, node, new_entry_cost);
 }
 
 void UnitAstar::InitArmy(const Army &army, sint32 &nUnits,
@@ -933,7 +914,7 @@ bool UnitAstar::EnterPathPoints(Path &a_path, MapPoint &old)
 
 bool UnitAstar::FindVisionEdge(Path &a_path, MapPoint &old)
 {
-    static MapPoint pos;
+	static MapPoint pos;
 
     a_path.Start(old);
     a_path.Next(pos);
@@ -1027,7 +1008,7 @@ bool UnitAstar::FindStraightPath(const MapPoint &start, const MapPoint &dest,
                            float &total_cost, bool no_bad_path,
                            const sint32 cutoff, sint32 &nodes_opened)
 {
-    StraightLine(start, dest, good_path);
+	StraightLine(start, dest, good_path);
 
 	static MapPoint no_enter_pos;
 	if (EnterPathPoints(good_path, no_enter_pos))

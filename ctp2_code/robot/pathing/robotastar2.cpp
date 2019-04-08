@@ -34,24 +34,10 @@
 #include "c3.h"
 #include "robotastar2.h"
 
-#include "Globals.h"
-
-#include "dynarr.h"
 #include "Path.h"
-#include "UnitAstar.h"
-
 #include "World.h"          // g_theWorld
-#include "dynarr.h"
-#include "player.h"
-#include "RandGen.h"
-#include "UnitRec.h"
-#include "Unit.h"
-#include "civarchive.h"
-#include "UnitRecord.h"
 #include "ArmyData.h"
-#include "Cell.h"
 #include "Diplomat.h"
-#include "profileDB.h"      // g_theProfileDB
 #include "ctpaidebug.h"
 
 uint32 const    INCURSION_PERMISSION_ALL    = 0xffffffffu;
