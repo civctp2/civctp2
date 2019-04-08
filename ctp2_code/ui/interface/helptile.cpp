@@ -48,7 +48,6 @@
 #include "tilecontrol.h"
 
 #include "Cell.h"
-#include "XY_Coordinates.h"
 #include "World.h"
 #include "TerrainRecord.h"
 #include "StrDB.h"

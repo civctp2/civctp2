@@ -65,7 +65,6 @@
 #include "colorset.h"               // g_colorSet
 #include "gamesounds.h"
 #include "soundmanager.h"           // g_soundManager
-#include "XY_Coordinates.h"
 #include "World.h"                  // g_theWorld;
 #include "tiledmap.h"               // g_tiledMap
 #include "gfx_options.h"

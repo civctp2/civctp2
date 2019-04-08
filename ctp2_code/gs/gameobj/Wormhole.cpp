@@ -38,7 +38,6 @@
 #include "player.h"
 #include "TurnCnt.h"
 #include "civarchive.h"
-#include "XY_Coordinates.h"
 #include "World.h"
 #include "ConstRecord.h"
 #include "pointerlist.h"

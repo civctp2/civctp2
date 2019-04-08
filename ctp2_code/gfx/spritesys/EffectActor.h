@@ -8,7 +8,6 @@
 #include "EffectSpriteGroup.h"
 #include "pixelutils.h"
 #include "Queue.h"
-#include "XY_Coordinates.h"
 #include "World.h"
 #include "tech_wllist.h"
 

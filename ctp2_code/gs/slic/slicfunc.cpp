@@ -79,7 +79,6 @@
 #include "SlicSymbol.h"
 #include "AdvanceRecord.h"
 #include "player.h"
-#include "XY_Coordinates.h"
 #include "World.h"
 #include "Unit.h"
 #include "UnitRec.h"

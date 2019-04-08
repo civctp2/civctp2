@@ -7,7 +7,6 @@
 #include "TradePool.h"
 
 #include "director.h"
-#include "XY_Coordinates.h"
 #include "World.h"
 #include "Cell.h"
 

@@ -33,7 +33,6 @@
 
 #include "PlayHap.h"
 #include "player.h"
-#include "XY_Coordinates.h"
 #include "World.h"
 #include "ConstRecord.h"
 #include "aui.h"

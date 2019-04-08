@@ -37,7 +37,6 @@
 #include "Advances.h"
 #include "UnitDynArr.h"
 #include "TurnCnt.h"
-#include "XY_Coordinates.h"
 #include "World.h"
 #include "profileDB.h"
 #include "StrDB.h"

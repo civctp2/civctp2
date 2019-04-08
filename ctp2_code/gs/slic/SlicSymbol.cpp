@@ -62,7 +62,6 @@
 #include "Readiness.h"
 #include "message.h"
 #include "SlicFunc.h"
-#include "XY_Coordinates.h"
 #include "World.h"
 #include "SlicArray.h"
 #include "SlicStack.h"

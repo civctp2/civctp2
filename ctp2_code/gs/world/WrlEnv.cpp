@@ -34,7 +34,6 @@
 
 #include "c3.h"
 
-#include "XY_Coordinates.h"
 #include "World.h"
 #include "Cell.h"
 #include "StrDB.h"

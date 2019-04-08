@@ -35,7 +35,6 @@
 
 #include "UnitData.h"
 #include "UnitPool.h"           // g_theUnitPool
-#include "XY_Coordinates.h"
 #include "World.h"              // g_theWorld
 #include "player.h"             // g_player
 

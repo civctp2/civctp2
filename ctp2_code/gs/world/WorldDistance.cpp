@@ -31,7 +31,6 @@
 #include "c3.h"
 #include "WorldDistance.h"
 
-#include "XY_Coordinates.h"
 #include "World.h"
 #include "PQueue.h"
 #include "Cell.h"

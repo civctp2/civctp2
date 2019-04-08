@@ -54,7 +54,6 @@
 #include "TurnCnt.h"
 #include "MapPoint.h"
 
-#include "XY_Coordinates.h"
 #include "World.h"              // g_theWorld
 #include "BuildingRecord.h"
 #include "cellunitlist.h"
