@@ -64,7 +64,6 @@
 #include "ConstRecord.h"        // g_theConstDB
 #include "StrDB.h"              // g_theStringDB
 #include "DB.h"
-#include "UnitRec.h"
 #include "dynarr.h"
 #include "UnitDynArr.h"
 #include "citydata.h"

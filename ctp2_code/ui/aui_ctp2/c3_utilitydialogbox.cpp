@@ -63,7 +63,6 @@
 #include "Unit.h"
 #include "UnitData.h"
 #include "UnitDynArr.h"
-#include "UnitRec.h"
 #include "WonderRecord.h"
 #include "World.h"
 

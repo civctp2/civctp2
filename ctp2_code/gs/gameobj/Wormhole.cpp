@@ -42,7 +42,7 @@
 #include "ConstRecord.h"
 #include "pointerlist.h"
 #include "RandGen.h"
-#include "UnitRec.h"
+#include "UnitRecord.h"
 #include "GoodActor.h"
 #include "director.h"
 #include "UnitPool.h"

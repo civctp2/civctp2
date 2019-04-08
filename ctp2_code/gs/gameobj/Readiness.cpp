@@ -36,6 +36,7 @@
 
 #include "c3.h"
 #include "Readiness.h"
+
 #include "civarchive.h"
 #include "DB.h"
 #include "GovernmentRecord.h"
@@ -44,7 +45,6 @@
 #include "WonderRecord.h"
 #include "player.h"
 #include "AICause.h"
-#include "UnitRec.h"
 #include "Army.h"
 #include "dynarr.h"
 #include "TurnCnt.h"

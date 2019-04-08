@@ -81,7 +81,6 @@
 #include "player.h"
 #include "World.h"
 #include "Unit.h"
-#include "UnitRec.h"
 #include "WonderRecord.h"
 #include "Token.h"
 #include "Cell.h"
