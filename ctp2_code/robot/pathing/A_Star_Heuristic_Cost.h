@@ -29,9 +29,7 @@
 #ifndef __A_Star_Heuristic_Cost_h__
 #define __A_Star_Heuristic_Cost_h__
 
-struct MapPointData;
 #include "MapPoint.h"
-#include "XY_Coordinates.h"
 #include "World.h"
 
 #define HEURISTIC_TILES_PER_GRID 4
@@ -56,7 +54,7 @@ private:
 	bool y_wrap;
 
 
-	MapPointData xy_pos;
+	MapPoint xy_pos;
 
 	MapPoint ipos;
 	double *relaxed_min_cost;
@@ -82,10 +80,10 @@ public:
 
 	double Get_Minimum_Nearby_Movement_Cost
 	(
-		MapPointData const & the_tile
+		MapPoint const & the_tile
 	)
 	{
-		g_theWorld->XY_Coords.RC_to_XY(the_tile, xy_pos);
+		xy_pos.rc2xy(the_tile, *g_theWorld->GetSize());
 		relaxed_min_cost = Get_Relaxed_Cost_Grid_Pointer(xy_pos);
 
 		return *relaxed_min_cost;

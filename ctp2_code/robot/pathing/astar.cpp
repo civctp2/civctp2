@@ -79,8 +79,7 @@ float Astar::EstimateFutureCost(const MapPoint &pos, const MapPoint &dest)
 
 	sint32 dist = pos.NormalizedDistance(dest);
 	{
-		best_heuristic = (float)g_theWorld->A_star_heuristic->Get_Minimum_Nearby_Movement_Cost(
-				MapPointData(pos));
+		best_heuristic = (float)g_theWorld->A_star_heuristic->Get_Minimum_Nearby_Movement_Cost(pos);
 
 		Assert(best_heuristic > 0);
 		Assert(best_heuristic < 500);
@@ -415,7 +414,7 @@ bool Astar::FindPath
 		Assert(loop_count < 1400000); // Ultra Gigantic problem
 
 		float past_cost = best->m_past_cost + best->m_entry_cost;
-		best->SetExpanded(TRUE);
+		best->SetExpanded(true);
 
 		sint32 max_dir = GetMaxDir(best->m_pos);
 
