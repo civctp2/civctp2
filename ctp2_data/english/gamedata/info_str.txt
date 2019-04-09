@@ -151,7 +151,7 @@ WAR_OVER				"The {player[0].civ_name_plural} are no longer at war with the {play
 
 
 ## Trade Messages ##
-TRADE_PIRATED				"{player[0].sir_cap}, our trade route from {city[0].name} to {city[1].name} has been pirated by the {player[1].civ_name_plural}."
+TRADE_PIRATED				"Our trade route from {city[0].name} to {city[1].name} has been pirated by the {player[0].civ_name_plural} and {gold[0].value} gold is lost."
 TRADE_PIRATE_GOLD			"{gold[0].value} gold was pirated on the trade route from {city[0].name} to {city[1].name} owned by {player[0].civ_name_plural}."
 TRADE_ROUTES_BROKEN_BY_EMBARGO		"{player[0].sir_cap}, the {player[1].civ_name_plural} have placed an embargo on all of our trade into their nations. All existing trade routes to {player[1].country_name} have been broken! We have lost all of the caravans on those routes as well."
 TRADE_ROUTES_BROKEN_BY_WAR		"Troubling news, {player[0].sir}. Due to the sparking of conflict between us and {player[1].country_name}, all of our trade routes to {player[1].civ_name_singular} cities have been broken. All caravans assigned to those routes have been lost as well."
