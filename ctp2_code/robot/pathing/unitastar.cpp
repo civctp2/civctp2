@@ -658,6 +658,15 @@ bool UnitAstar::InitPoint(AstarPoint *parent, AstarPoint *point,
                           const MapPoint &pos,
                           const float pc, const MapPoint &dest)
 {
+#if defined(DEBUG_ASTAR_ENDLESS_LOOPS)
+	AstarPoint *ancestor = parent;
+	while(ancestor != NULL)
+	{
+		Assert(ancestor != point);
+		ancestor = ancestor->m_parent;
+	}
+#endif
+
 	AstarPoint *d = point;
 	bool is_zoc = false;
 	ASTAR_ENTRY_TYPE entry = ASTAR_CAN_ENTER;
@@ -712,8 +721,7 @@ bool UnitAstar::InitPoint(AstarPoint *parent, AstarPoint *point,
 		d->SetZoc(is_zoc);
 		d->SetEntry(entry);
 
-		if (m_pretty_path)
-			Astar::DecayOrtho(parent, point, d->m_entry_cost);
+		Astar::DecayOrtho(parent, point, d->m_entry_cost);
 
 		d->m_future_cost = EstimateFutureCost(d->m_pos, dest);
 		d->m_total_cost = d->m_past_cost + d->m_entry_cost
@@ -776,8 +784,7 @@ void UnitAstar::RecalcEntryCost(AstarPoint *parent, AstarPoint *node, float &new
 	    the_prev_cell, the_pos_cell, new_entry_cost, new_is_zoc,
 	       can_be_zoc, new_entry, can_enter)) return;
 
-	if (m_pretty_path)
-		Astar::DecayOrtho(parent, node, new_entry_cost);
+	Astar::DecayOrtho(parent, node, new_entry_cost);
 }
 
 void UnitAstar::InitArmy(const Army &army, sint32 &nUnits,
@@ -1421,17 +1428,12 @@ bool UnitAstar::FindPath(Army &army,  MapPoint const & start,
 
 	InitArmy (army, nUnits, move_intersection, move_union, m_army_minmax_move);
 
-	if (!Player::IsThisPlayerARobot(owner))
-		m_pretty_path = true;
-
 	sint32 cutoff       = 2000000000;
 	sint32 nodes_opened = 0;
 	bool result = FindPath(army, nUnits, move_intersection, move_union,
 	   start, owner, dest, good_path, is_broken_path, bad_path,
-	   total_cost, FALSE, FALSE, m_pretty_path, cutoff, nodes_opened,
+	   total_cost, FALSE, FALSE, cutoff, nodes_opened,
 	   TRUE, FALSE, TRUE);
-
-	m_pretty_path = false;
 
 	return result;
 
@@ -1450,7 +1452,6 @@ bool UnitAstar::FindPath(Army army,
                          float &total_cost,
                          const bool no_bad_path,
                          const bool check_rail_launcher,
-                         const bool pretty_path,
                          const sint32 cutoff,
                          sint32 &nodes_opened,
                          const bool &check_dest,
@@ -1467,7 +1468,6 @@ bool UnitAstar::FindPath(Army army,
 	m_nUnits               = nUnits;
 	m_move_intersection    = move_intersection;
 	m_move_union           = move_union;
-	m_pretty_path          = pretty_path;
 	m_check_dest           = check_dest;
 	m_check_units_in_cell  = check_units_in_cell;
 

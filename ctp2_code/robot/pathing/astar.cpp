@@ -99,7 +99,7 @@ float Astar::EstimateFutureCost(const MapPoint &pos, const MapPoint &dest)
 #endif
 
 #ifdef _PLAYTEST
-		if (m_pretty_path && g_old_heuristic)
+		if (g_old_heuristic)
 		{
 			 float ground_dist =  0.7f * best_heuristic * dist;
 

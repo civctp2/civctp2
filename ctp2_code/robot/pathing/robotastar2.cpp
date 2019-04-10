@@ -226,7 +226,6 @@ bool RobotAstar2::FindPath( const PathType & pathType,
 	const bool no_straight_lines = false;
 	const bool check_units_in_cell = true;
 	bool is_broken_path = false;
-	const bool pretty_path = false;
 	Path bad_path;
 
 	m_pathType = pathType;
@@ -287,7 +286,6 @@ bool RobotAstar2::FindPath( const PathType & pathType,
 	                        total_cost,
 	                        true,
 	                        false,
-	                        pretty_path,
 	                        cutoff,
 	                        nodes_opened,
 	                        check_dest,

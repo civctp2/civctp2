@@ -73,11 +73,8 @@ protected:
 
 public:
 
-	bool m_pretty_path;
-
 	Astar()
-	: m_maxSquaredDistance (-1),
-	  m_pretty_path        (false)
+	: m_maxSquaredDistance (-1)
 	{
 	};
 

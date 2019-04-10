@@ -173,7 +173,6 @@ public:
                   float &total_cost,
                   const bool no_bad_path,
                   const bool check_rail_launcher,
-                  const bool pretty_path,
                   const sint32 cutoff,
                   sint32 &nodes_opened,
                   const bool &check_dest,
