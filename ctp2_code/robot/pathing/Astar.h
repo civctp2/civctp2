@@ -59,7 +59,7 @@ protected:
 	    AstarPoint *node, float &new_entery_cost,
 	    bool &new_is_zoc, ASTAR_ENTRY_TYPE &entry);
 
-	virtual bool InitPoint(AstarPoint *parent, AstarPoint *point,
+	bool InitPoint(AstarPoint *parent, AstarPoint *point,
 	    const MapPoint &pos, const float pc, const MapPoint &dest);
 
 	bool Cleanup(const MapPoint &dest,

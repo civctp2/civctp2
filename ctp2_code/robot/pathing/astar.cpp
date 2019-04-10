@@ -139,13 +139,22 @@ void Astar::DecayOrtho(AstarPoint *parent, AstarPoint *point, float &new_entry_c
 bool Astar::InitPoint(AstarPoint *parent, AstarPoint *point,
     const MapPoint &pos, const float pc, const MapPoint &dest)
 {
+#if defined(DEBUG_ASTAR_ENDLESS_LOOPS)
+	AstarPoint *ancestor = parent;
+	while(ancestor != NULL)
+	{
+		Assert(ancestor != point);
+		ancestor = ancestor->m_parent;
+	}
+#endif
+
 	AstarPoint *d = point;
 	ASTAR_ENTRY_TYPE entry=ASTAR_CAN_ENTER;
 	bool is_zoc = false;
 
 	d->m_flags = 0;
 	d->SetEntry(ASTAR_CAN_ENTER);
-	d->SetZoc(FALSE);
+	d->SetZoc(false);
 	d->SetExpanded(false);
 	d->m_pos = pos;
 	d->m_parent = parent;
@@ -167,6 +176,31 @@ bool Astar::InitPoint(AstarPoint *parent, AstarPoint *point,
 	}
 	else if (EntryCost(parent->m_pos, d->m_pos, d->m_entry_cost, is_zoc, entry))
 	{
+		Assert(entry != ASTAR_RETRY_DIRECTION);
+
+#ifdef _DEBUG
+		if(entry == ASTAR_RETRY_DIRECTION)
+		{
+			is_zoc = false;
+			entry = ASTAR_CAN_ENTER;
+
+			d->m_flags = 0;
+			d->SetEntry(ASTAR_CAN_ENTER);
+			d->SetZoc(false);
+			d->SetExpanded(false);
+			d->m_pos = pos;
+			d->m_parent = parent;
+			d->m_queue_idx = -1;
+
+			d->m_past_cost = pc;
+			d->m_entry_cost = 0.0;
+			d->m_future_cost = EstimateFutureCost(d->m_pos, dest);
+			d->m_total_cost = d->m_past_cost + d->m_entry_cost
+				+ d->m_future_cost;
+			EntryCost(parent->m_pos, d->m_pos, d->m_entry_cost, is_zoc, entry);
+		}
+#endif
+
 		d->SetEntry(entry);
 		d->SetZoc(is_zoc);
 

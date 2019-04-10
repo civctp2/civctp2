@@ -654,107 +654,6 @@ bool UnitAstar::EntryCost(const MapPoint &prev, const MapPoint &pos,
 	return false;
 }
 
-bool UnitAstar::InitPoint(AstarPoint *parent, AstarPoint *point,
-                          const MapPoint &pos,
-                          const float pc, const MapPoint &dest)
-{
-#if defined(DEBUG_ASTAR_ENDLESS_LOOPS)
-	AstarPoint *ancestor = parent;
-	while(ancestor != NULL)
-	{
-		Assert(ancestor != point);
-		ancestor = ancestor->m_parent;
-	}
-#endif
-
-	AstarPoint *d = point;
-	bool is_zoc = false;
-	ASTAR_ENTRY_TYPE entry = ASTAR_CAN_ENTER;
-
-	d->m_flags = 0;
-	d->SetEntry(ASTAR_CAN_ENTER);
-	d->SetZoc(false);
-	d->SetExpanded(false);
-	d->m_pos = pos;
-	d->m_parent = parent;
-	d->m_queue_idx = -1;
-
-	d->m_past_cost = pc;
-	if (parent == NULL)
-	{
-		d->m_entry_cost = 0.0;
-		d->m_future_cost = EstimateFutureCost(d->m_pos, dest);
-		d->m_total_cost = d->m_past_cost + d->m_entry_cost
-		    + d->m_future_cost;
-#ifdef PRINT_COSTS
-		g_theWorld->SetColor(pos,  d->m_total_cost);
-#endif
-		return true;
-	}
-	else if (EntryCost(parent->m_pos, d->m_pos, d->m_entry_cost, is_zoc, entry))
-	{
-		Assert(entry != ASTAR_RETRY_DIRECTION);
-
-#ifdef _DEBUG
-		if (entry == ASTAR_RETRY_DIRECTION)
-		{
-			is_zoc = false;
-			entry=ASTAR_CAN_ENTER;
-
-			d->m_flags = 0;
-			d->SetEntry(ASTAR_CAN_ENTER);
-			d->SetZoc(false);
-			d->SetExpanded(false);
-			d->m_pos = pos;
-			d->m_parent = parent;
-			d->m_queue_idx = -1;
-
-			d->m_past_cost = pc;
-			d->m_entry_cost = 0.0;
-			d->m_future_cost = EstimateFutureCost(d->m_pos, dest);
-			d->m_total_cost = d->m_past_cost + d->m_entry_cost
-			        + d->m_future_cost;
-			EntryCost(parent->m_pos, d->m_pos, d->m_entry_cost, is_zoc, entry);
-		}
-#endif
-
-		d->SetZoc(is_zoc);
-		d->SetEntry(entry);
-
-		Astar::DecayOrtho(parent, point, d->m_entry_cost);
-
-		d->m_future_cost = EstimateFutureCost(d->m_pos, dest);
-		d->m_total_cost = d->m_past_cost + d->m_entry_cost
-		    + d->m_future_cost;
-
-#ifdef PRINT_COSTS
-		g_theWorld->SetColor(pos,  d->m_total_cost);
-#endif
-
-		return true;
-	}
-	else
-	{
-		if (entry == ASTAR_RETRY_DIRECTION)
-		{
-			d->SetEntry(ASTAR_RETRY_DIRECTION);
-		}
-		else
-		{
-			d->SetEntry(ASTAR_BLOCKED);
-		}
-
-		d->m_future_cost = k_ASTAR_BIG;
-
-		d->m_total_cost = d->m_past_cost + d->m_entry_cost
-		    + d->m_future_cost;
-#ifdef PRINT_COSTS
-			g_theWorld->SetColor(pos,  d->m_total_cost);
-#endif
-		return false;
-	}
-}
-
 float UnitAstar::EstimateFutureCost(const MapPoint &pos, const MapPoint &dest)
 {
 	if (m_move_intersection & k_Unit_MovementType_Air_Bit)
@@ -784,7 +683,7 @@ void UnitAstar::RecalcEntryCost(AstarPoint *parent, AstarPoint *node, float &new
 	    the_prev_cell, the_pos_cell, new_entry_cost, new_is_zoc,
 	       can_be_zoc, new_entry, can_enter)) return;
 
-	Astar::DecayOrtho(parent, node, new_entry_cost);
+	DecayOrtho(parent, node, new_entry_cost);
 }
 
 void UnitAstar::InitArmy(const Army &army, sint32 &nUnits,
