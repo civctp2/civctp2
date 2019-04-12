@@ -43,6 +43,7 @@
 
 #include "c3.h"
 #include "UnitAstar.h"
+#include "world.h"
 
 #include "Path.h"
 
