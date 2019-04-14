@@ -40,6 +40,7 @@
 #include "Globals.h"
 #include "ctpaidebug.h"
 #include "SelItem.h"                // g_selected_item
+#include "world.h"
 
 GraphicsOptions * g_graphicsOptions = NULL;
 
@@ -87,6 +88,7 @@ void GraphicsOptions::Initialize(void)
 
 void GraphicsOptions::Cleanup(void)
 {
+	g_graphicsOptions->ResetAllCellTexts();
 	allocated::clear(g_graphicsOptions);
 }
 
@@ -176,7 +178,7 @@ bool GraphicsOptions::AddTextToCell(const MapPoint &pos, const char *text,
 
 		if (!cellText)
 		{
-			cellText = new CellText;
+			cellText = new CellText();
 			cellText->m_key = PackCellAVLKey(pos);
 			m_cellAVL->Insert(new Comparable<CellText *>(cellText, CellAVLCompare));
 		}
@@ -194,7 +196,18 @@ void GraphicsOptions::ResetCellText(const MapPoint &pos)
 	if (cellText)
 	{
 		delete [] cellText->m_text;
-		m_cellAVL->Delete(cellText);
+		delete m_cellAVL->Delete(cellText); // Retruns a Comparable<CellText *> pointer, which was inserted by Insert and must be deleted
 		delete cellText;
+	}
+}
+
+void GraphicsOptions::ResetAllCellTexts()
+{
+	for(MapPoint pos(0, 0); pos.x < g_theWorld->GetWidth(); pos.x++)
+	{
+		for(pos.y = 0; pos.y < g_theWorld->GetHeight(); pos.y++)
+		{
+			g_graphicsOptions->ResetCellText(pos);
+		}
 	}
 }

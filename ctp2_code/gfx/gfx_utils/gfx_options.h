@@ -91,6 +91,7 @@ public:
 	CellText * GetCellText(MapPoint const & pos);
 	bool AddTextToCell(const MapPoint &pos, const char * text, const uint8 & colorMagnitude, const PLAYER_INDEX playerId);
 	void ResetCellText(const MapPoint &pos);
+	void ResetAllCellTexts();
 
 private:
 	bool                      m_armyTextOn;
