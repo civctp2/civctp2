@@ -40,7 +40,7 @@
 #include "Globals.h"
 #include "ctpaidebug.h"
 #include "SelItem.h"                // g_selected_item
-#include "world.h"
+#include "World.h"
 
 GraphicsOptions * g_graphicsOptions = NULL;
 
