@@ -3451,6 +3451,10 @@ bool Goal::FollowPathToTask( Agent_ptr first_army,
 			test = first_army->Get_Army()->TestOrderHere(order_rec, dest_pos );
 		}
 	}
+//	else if(m_sub_task == SUB_TASK_CARGO_TO_BOARD)
+//	{
+//		order_rec = CtpAi::GetBoardTransportOrder();
+//	}
 	else
 	{
 		order_rec = CtpAi::GetMoveOrder();
@@ -3897,6 +3901,16 @@ bool Goal::GotoGoalTaskSolution(Agent_ptr the_army, MapPoint & goal_pos)
 	{
 		// There is still a problem with air transporters
 		return true;
+	}
+	else if ( the_army->Get_Army()->HasCargo()
+	     &&   the_army->Get_Army()->GetMovementTypeAir()
+	     &&   the_army->Get_Army()->RetPos().IsNextTo(goal_pos)
+	     &&   goal_rec->GetTargetTypeCity()
+	     &&   goal_rec->GetTargetOwnerSelf()
+	     &&   g_theWorld->IsOnSameContinent(goal_pos, the_army->Get_Pos())
+	     &&   the_army->Get_Army()->Num() + g_theWorld->GetCell(goal_pos)->GetNumUnits() > k_MAX_ARMY_SIZE)
+	{
+		the_army->UnloadCargo();
 	}
 	else
 	{
