@@ -6718,7 +6718,7 @@ void ArmyData::CheckLoadSleepingCargoFromCity(Order *order)
 	&& !terrainutil_HasAirfield(m_pos))
 		return;
 
-	if(cell->UnitArmy()->Num() < 1)
+	if(cell->GetNumUnits() < 1)
 		return;
 
 	for(sint32 i = 0; i < m_nElements; i++)
@@ -7465,7 +7465,7 @@ void ArmyData::UpdateZOCForMove(const MapPoint &pos, WORLD_DIRECTION d)
 	if(cell->GetCity().IsValid()) {
 		doneRemoving = true;
 	} else {
-		for(i = cell->UnitArmy()->Num() - 1; i >= 0; i--) {
+		for(i = cell->GetNumUnits() - 1; i >= 0; i--) {
 
 			if(cell->AccessUnit(i).GetArmy() != me &&
 			   !cell->AccessUnit(i).IsNoZoc()) {
