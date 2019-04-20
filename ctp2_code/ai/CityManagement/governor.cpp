@@ -3573,6 +3573,16 @@ void Governor::ComputeDesiredUnits()
 				strategy.GetSpecialUnitsCount(desired_count);
 			break;
 
+		case BUILD_UNIT_LIST_DIPLOMAT:
+			if(!strategy.GetDiplomatUnitsCount(desired_count))
+				strategy.GetSpecialUnitsCount(desired_count);
+			break;
+
+		case BUILD_UNIT_LIST_MISSIONARY:
+			if(!strategy.GetMissionaryUnitsCount(desired_count))
+				strategy.GetSpecialUnitsCount(desired_count);
+			break;
+
 		case BUILD_UNIT_LIST_SPECIAL:
 			strategy.GetSpecialUnitsCount(desired_count);
 			break;
@@ -3690,6 +3700,8 @@ void Governor::ComputeDesiredUnits()
 
 		case BUILD_UNIT_LIST_SLAVERY:
 		case BUILD_UNIT_LIST_SPY:
+		case BUILD_UNIT_LIST_DIPLOMAT:
+		case BUILD_UNIT_LIST_MISSIONARY:
 		case BUILD_UNIT_LIST_SPECIAL:
 		case BUILD_UNIT_LIST_FREIGHT:
 			if (best_unit_type >= 0)
@@ -3951,6 +3963,8 @@ StringId Governor::GetUnitsAdvice(SlicContext & sc) const
 		|| static_cast<BUILD_UNIT_LIST>(i) == BUILD_UNIT_LIST_SEA_SETTLER
 		|| static_cast<BUILD_UNIT_LIST>(i) == BUILD_UNIT_LIST_SLAVERY
 		|| static_cast<BUILD_UNIT_LIST>(i) == BUILD_UNIT_LIST_SPY
+		|| static_cast<BUILD_UNIT_LIST>(i) == BUILD_UNIT_LIST_DIPLOMAT
+		|| static_cast<BUILD_UNIT_LIST>(i) == BUILD_UNIT_LIST_MISSIONARY
 		|| static_cast<BUILD_UNIT_LIST>(i) == BUILD_UNIT_LIST_SPECIAL
 		|| static_cast<BUILD_UNIT_LIST>(i) == BUILD_UNIT_LIST_SEA_TRANSPORT
 		|| static_cast<BUILD_UNIT_LIST>(i) == BUILD_UNIT_LIST_AIR_TRANSPORT
@@ -4343,6 +4357,8 @@ sint32 Governor::GetNeededUnitType(const CityData *city, sint32 & list_num) cons
 		    || static_cast<BUILD_UNIT_LIST>(list_num) == BUILD_UNIT_LIST_SEA_SETTLER
 		    || static_cast<BUILD_UNIT_LIST>(list_num) == BUILD_UNIT_LIST_SLAVERY
 		    || static_cast<BUILD_UNIT_LIST>(list_num) == BUILD_UNIT_LIST_SPY
+		    || static_cast<BUILD_UNIT_LIST>(list_num) == BUILD_UNIT_LIST_DIPLOMAT
+		    || static_cast<BUILD_UNIT_LIST>(list_num) == BUILD_UNIT_LIST_MISSIONARY
 		    || static_cast<BUILD_UNIT_LIST>(list_num) == BUILD_UNIT_LIST_SPECIAL
 		    || static_cast<BUILD_UNIT_LIST>(list_num) == BUILD_UNIT_LIST_SEA_TRANSPORT
 		    || static_cast<BUILD_UNIT_LIST>(list_num) == BUILD_UNIT_LIST_AIR_TRANSPORT
@@ -4420,6 +4436,8 @@ sint32 Governor::GetNeededUnitType(const CityData *city, sint32 & list_num) cons
 			  (
 			       static_cast<BUILD_UNIT_LIST>(list_num) == BUILD_UNIT_LIST_SLAVERY
 			    || static_cast<BUILD_UNIT_LIST>(list_num) == BUILD_UNIT_LIST_SPY
+			    || static_cast<BUILD_UNIT_LIST>(list_num) == BUILD_UNIT_LIST_DIPLOMAT
+			    || static_cast<BUILD_UNIT_LIST>(list_num) == BUILD_UNIT_LIST_MISSIONARY
 			    || static_cast<BUILD_UNIT_LIST>(list_num) == BUILD_UNIT_LIST_SPECIAL
 			  )
 			{
@@ -4496,6 +4514,14 @@ const UnitBuildListRecord * Governor::GetBuildListRecord(const StrategyRecord & 
 	case BUILD_UNIT_LIST_SPY:
 //		Assert(strategy.HasSpyUnitList());
 		return strategy.HasSpyUnitList() ? strategy.GetSpyUnitListPtr() : NULL;
+
+	case BUILD_UNIT_LIST_DIPLOMAT:
+//		Assert(strategy.HasDiplomatUnitList());
+		return strategy.HasDiplomatUnitList() ? strategy.GetDiplomatUnitListPtr() : NULL;
+
+	case BUILD_UNIT_LIST_MISSIONARY:
+		//		Assert(strategy.HasDiplomatUnitList());
+		return strategy.HasMissionaryUnitList() ? strategy.GetMissionaryUnitListPtr() : NULL;
 
 	case BUILD_UNIT_LIST_SPECIAL:
 		Assert(strategy.HasSpecialUnitList());
@@ -4661,6 +4687,7 @@ sint32 Governor::GetNeededGarrisonUnitType(const CityData * city, sint32 & list_
 			  (
 			   (    static_cast<BUILD_UNIT_LIST>(list_num) == BUILD_UNIT_LIST_SLAVERY
 			     || static_cast<BUILD_UNIT_LIST>(list_num) == BUILD_UNIT_LIST_SPY
+			     || static_cast<BUILD_UNIT_LIST>(list_num) == BUILD_UNIT_LIST_DIPLOMAT
 			     || static_cast<BUILD_UNIT_LIST>(list_num) == BUILD_UNIT_LIST_SPECIAL
 			   )
 			   && garrisonComplete > build_settler_production_level
@@ -4701,6 +4728,7 @@ sint32 Governor::GetNeededGarrisonUnitType(const CityData * city, sint32 & list_
 			    || static_cast<BUILD_UNIT_LIST>(list_num) == BUILD_UNIT_LIST_SEA_SETTLER
 			    || static_cast<BUILD_UNIT_LIST>(list_num) == BUILD_UNIT_LIST_SLAVERY
 			    || static_cast<BUILD_UNIT_LIST>(list_num) == BUILD_UNIT_LIST_SPY
+			    || static_cast<BUILD_UNIT_LIST>(list_num) == BUILD_UNIT_LIST_DIPLOMAT
 			    || static_cast<BUILD_UNIT_LIST>(list_num) == BUILD_UNIT_LIST_SPECIAL
 			  )
 			{
