@@ -7863,6 +7863,7 @@ bool CityData::IsCelebratingHappiness(void) const { return (m_happy->IsVeryHappy
 
 void CityData::HappinessAttackedBy(sint32 player)
 {
+	Assert(player < k_MAX_PLAYERS);
 	m_happinessAttackedBy = player;
 }
 
