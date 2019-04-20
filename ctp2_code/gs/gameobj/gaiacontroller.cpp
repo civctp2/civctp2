@@ -172,8 +172,6 @@ void GaiaController::InitializeStatics()
 
 void GaiaController::Initialize()
 {
-
-
 	m_numMainframes = 0;
 	m_numSatellites = 0;
 	m_numTowersBuilt = 0;
@@ -187,10 +185,9 @@ void GaiaController::Initialize()
 	m_coveredCells.Resize( x_size, y_size, 0 );
 }
 
-
 GaiaController::~GaiaController()
 {
-    // Nothing allocated directly.
+	// Nothing allocated directly.
 }
 
 void GaiaController::RecomputeCoverage()
@@ -649,7 +646,6 @@ void GaiaController::HandleBuildingChange(const sint32 type, Unit & city, const 
 				m_completedTurn = -1;
 		}
 	}
-
 }
 
 void GaiaController::HandleWonderChange(const sint32 type, const sint16 delta)
@@ -662,7 +658,6 @@ void GaiaController::HandleWonderChange(const sint32 type, const sint16 delta)
 		if (!CanStartCountdown())
 			m_completedTurn = -1;
 	}
-
 }
 
 void GaiaController::HandleTerrImprovementChange(const sint32 type, const MapPoint & pos, const sint16 delta)
@@ -679,7 +674,6 @@ void GaiaController::HandleTerrImprovementChange(const sint32 type, const MapPoi
 					m_completedTurn = -1;
 			}
 		}
-
 }
 
 sint16 GaiaController::NumMainframesBuilt() const
@@ -821,56 +815,36 @@ bool GaiaController::CanStartCountdown() const
 	if (NumSatellitesLaunched() < NumSatellitesRequired())
 		return false;
 
-
-
-
 	return true;
 }
 
 bool GaiaController::HasReqTowerCoverage() const
 {
-	if(GetTowerCoverage() >= TowerCoverageRequired())
-		return true;
-	else
-		return false;
+	return GetTowerCoverage() >= TowerCoverageRequired();
 }
 
 bool GaiaController::HasMinTowersBuilt() const
 {
-	if(NumTowersBuilt() >= NumTowersRequired())
-		return true;
-	else
-		return false;
+	return NumTowersBuilt() >= NumTowersRequired();
 }
 
 bool GaiaController::HasMinCoresBuilt() const
 {
-	if(NumMainframesBuilt() >= NumMainframesRequired())
-		return true;
-	else
-		return false;
+	return NumMainframesBuilt() >= NumMainframesRequired();
 }
 
 bool GaiaController::HasMinSatsBuilt() const
 {
-	if(NumSatellitesLaunched() >= NumSatellitesRequired())
-		return true;
-	else
-		return false;
+	return NumSatellitesLaunched() >= NumSatellitesRequired();
 }
 
 bool GaiaController::HasMaxSatsBuilt() const
 {
-	if(NumSatellitesLaunched() >= MaxSatellitesAllowed())
-		return true;
-	else
-		return false;
+	return NumSatellitesLaunched() >= MaxSatellitesAllowed();
 }
-
 
 bool GaiaController::StartCountdown()
 {
-
 	sint32 max_turns_to_activate = TotalCountdownTurns();
 
 	if (CanStartCountdown())
@@ -924,9 +898,7 @@ sint16 GaiaController::TurnsToComplete() const
 
 bool GaiaController::GaiaControllerTileImp(const sint32 type) const
 {
-	if (type == sm_towerTileImpIndex)
-		return true;
-	return false;
+	return type == sm_towerTileImpIndex;
 }
 
 bool GaiaController::CanBuildTowers(const bool & check_pw) const
@@ -937,11 +909,8 @@ bool GaiaController::CanBuildTowers(const bool & check_pw) const
 	return terrainutil_CanPlayerBuild(rec, m_playerId, check_pw);
 }
 
-
 sint32 GaiaController::ScoreTowerPosition(MapPoint & pos, const MapPoint empire_center, MapPoint_List & towers) const
 {
-
-
 	static sint32 optimal_distance = -1;
 	if (optimal_distance < 0)
 	{
@@ -1006,11 +975,10 @@ void GaiaController::ComputeTowerCandidates(Scored_MapPoint_List & candidates) c
 		{
 			if (terrainutil_CanPlayerBuildAt(rec, m_playerId, pos))
 			{
-                candidates.push_back(std::pair<sint32,MapPoint>(-1,pos));
+				candidates.push_back(std::pair<sint32,MapPoint>(-1,pos));
 			}
 		}
 }
-
 
 void GaiaController::ComputeTowerPositions()
 {
@@ -1025,7 +993,6 @@ void GaiaController::ComputeTowerPositions()
 
 	if (!CanBuildTowers(true))
 		return;
-
 
 	ComputeTowerCandidates(candidates);
 
@@ -1067,9 +1034,9 @@ void GaiaController::ComputeTowerPositions()
 				candidate_iter->first = ScoreTowerPosition(candidate_iter->second, empire_pos, towers);
 			}
 
-        candidates.sort(std::greater<std::pair<sint32, MapPoint> >());
+		candidates.sort(std::greater<std::pair<sint32, MapPoint> >());
 
-	    pos =  candidates.front().second;
+		pos =  candidates.front().second;
 		candidates.pop_front();
 		m_newTowerPositions.push_back(pos);
 
@@ -1102,19 +1069,16 @@ bool GaiaController::PopNextTowerPosition(MapPoint & pos)
 
 void GaiaController::BuildProcessingTowers()
 {
-
 	MapPoint pos;
 	bool found = PopNextTowerPosition(pos);
 	if (!found)
 	{
-
 		ComputeTowerPositions();
 		found = PopNextTowerPosition(pos);
 	}
 
 	while (found)
 	{
-
 		g_gevManager->AddEvent(GEV_INSERT_Tail, GEV_CreateImprovement,
 			GEA_Player, m_playerId,
 			GEA_MapPoint, pos,
