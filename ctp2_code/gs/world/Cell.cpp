@@ -267,11 +267,6 @@ bool Cell::RemoveUnitReference(const Unit &u)
 	}
 	else
 	{
-		if(!u.IsValid() || !u.IsBeingTransported())
-		{
-			Assert(false);
-		}
-
 		return false;
 	}
 }

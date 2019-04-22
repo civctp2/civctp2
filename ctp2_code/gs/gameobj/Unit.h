@@ -180,11 +180,9 @@ public:
 	void SetIsInTransport(const Unit &transport);
 	bool IsBeingTransported() const;
 
-	bool CanAtLeastOneCargoUnloadAt(const MapPoint & old_pos, const MapPoint & dest_pos, const bool & used_vision, bool check_move_points = true) const;
+	bool CanAtLeastOneCargoUnloadAt(const MapPoint & unload_pos, const bool & used_vision, bool check_move_points = true) const;
 
-	bool UnloadCargo(const MapPoint &new_pos, Army &debark,
-			 bool justOneUnit, const Unit &theUnit);
-	bool UnloadSelectedCargo(const MapPoint &new_pos, Army &debark);
+	bool UnloadCargo(const MapPoint &unload_pos, Army &debark, sint32 &count, bool unloadSelected = false);
 
 	bool IsMovePointsEnough(const MapPoint &pos) const;
 

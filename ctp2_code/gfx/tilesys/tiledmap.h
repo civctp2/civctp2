@@ -409,7 +409,7 @@ public:
 
 	void		DrawWater(void);
 
-	bool        CanDrawSpecialMove(SELECT_TYPE sType, Army &sel_army, const MapPoint &old_pos, const MapPoint &cur_pos);
+	bool        CanDrawSpecialMove(SELECT_TYPE sType, Army &sel_army, const MapPoint &dest_pos);
 	void		DrawLegalMove(aui_Surface *pSurface);
 	void		DrawUnfinishedMove(aui_Surface *pSurface);
 
