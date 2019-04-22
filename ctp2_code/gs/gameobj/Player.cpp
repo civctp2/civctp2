@@ -1052,24 +1052,6 @@ void Player::DoCreateUnits()
 	}
 }
 
-void Player::InsertArmy(const MapPoint &point, const Unit &home_city,
-						Army &army, CAUSE_NEW_ARMY cause)
-{
-#if 0
-	sint32 i, n = army.Num();
-	static UnitDynamicArray revealed;
-	revealed.Clear();
-	bool revealed_unexplored;
-
-	for(i = 0; i < n; i++) {
-		army[i].Place(point, home_city);
-		bool r = army[i].SetPosition(point, revealed, revealed_unexplored);
-		Assert(r);
-		InsertUnitReference(army[i], cause);
-	}
-#endif
-}
-
 Unit Player::InsertUnitReference(const Unit &u,  const CAUSE_NEW_ARMY cause,
 								 const Unit &whereBuilt)
 {
@@ -3238,7 +3220,7 @@ void Player::KillATrader()
 
 	Assert(m_traderUnits->Num() > 0);
 	if(m_traderUnits->Num() > 0) {
-		m_traderUnits->Access(0).Kill(CAUSE_REMOVE_ARMY_UNKNOWN, -1);
+		m_traderUnits->Access(0).Kill(CAUSE_REMOVE_ARMY_TRADE, -1);
 	}
 }
 
@@ -6618,39 +6600,6 @@ bool Player::ActuallySetGovernment(sint32 type)
 	return true;
 }
 
-void Player::GroupArmy(Army &army)
-{
-	Assert(false);
-
-}
-
-#if 0
-void Player::UngroupArmy(Army &army)
-{
-	sint32 i;
-	for(i = army.Num() - 1; i > 0; i--) {
-
-
-		Army newArmy = GetNewArmy(CAUSE_NEW_ARMY_UNGROUPING);
-		g_gevManager->AddEvent(GEV_INSERT_Tail, GEV_AddUnitToArmy,
-							   GEA_Unit, army[i],
-							   GEA_Army, newArmy,
-							   GEA_End);
-
-
-
-
-
-
-
-
-
-
-
-	}
-}
-#endif
-
 void Player::AssasinateRuler()
 {
 	m_assasinationModifier = g_theConstDB->Get(0)->GetAssasinationHappinessEffect();
@@ -6677,10 +6626,6 @@ void Player::CloseEmbassy(sint32 player)
 		g_network.Enqueue(new NetInfo(NET_INFO_CODE_SET_EMBASSIES, m_owner, m_embassies));
 	}
 }
-
-
-
-
 
 bool Player::HasEmbassyWith(sint32 player) const
 {
@@ -6723,14 +6668,6 @@ void Player::AddProductionFromFranchise(sint32 amt)
 
 #ifdef _DEBUG
 
-
-
-
-
-
-
-
-
 void Player::DisplayAdvances()
 	{
 	MBCHAR	s[512] ;
@@ -6753,65 +6690,27 @@ void Player::DisplayAdvances()
 void Player::DisplayWWR()
 {
 	g_debugWindow->AddText("WWR:");
-    m_global_happiness->DisplayWWR();
+	m_global_happiness->DisplayWWR();
 
-    char str[80];
-    sprintf(str, "  readiness level %d cost  %3.1f  %%  %3.1f",  m_readiness->GetLevel(),
-        m_readiness->GetCost(),
-        100.0 * m_readiness->GetPecentLastTurn());
+	char str[80];
+	sprintf(str, "  readiness level %d cost  %3.1f  %%  %3.1f",  m_readiness->GetLevel(),
+	    m_readiness->GetCost(),
+	    100.0 * m_readiness->GetPecentLastTurn());
 	g_debugWindow->AddText(str);
-    sprintf(str, "  materials %% %3.1f materials current %d", 100.0 * m_materialsTax, m_materialPool->GetMaterials());
+	sprintf(str, "  materials %% %3.1f materials current %d", 100.0 * m_materialsTax, m_materialPool->GetMaterials());
 	g_debugWindow->AddText(str);
-    double tmp;
-    m_tax_rate->GetScienceTaxRate(tmp);
-    sprintf(str, "  science %% %3.1f science current %3.1f", tmp, 100.0 * m_science->GetLevel());
+	double tmp;
+	m_tax_rate->GetScienceTaxRate(tmp);
+	sprintf(str, "  science %% %3.1f science current %3.1f", tmp, 100.0 * m_science->GetLevel());
 	g_debugWindow->AddText(str);
-    sprintf(str, "  gold %d", m_gold->GetLevel());
+	sprintf(str, "  gold %d", m_gold->GetLevel());
 	g_debugWindow->AddText(str);
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
 }
 
-
-
-
-
-
-
-
-
-
-
-
-
-
 uint32 Player_Player_GetVersion(void)
-	{
+{
 	return (k_PLAYER_VERSION_MAJOR<<16 | k_PLAYER_VERSION_MINOR) ;
-	}
+}
 
 bool player_isAlly(PLAYER_INDEX me, PLAYER_INDEX him)
 {
@@ -6822,11 +6721,6 @@ bool player_isEnemy(PLAYER_INDEX me, PLAYER_INDEX him)
 {
 	return !AgreementMatrix::s_agreements.HasAgreement(me, him, PROPOSAL_TREATY_ALLIANCE);
 }
-
-
-
-
-
 
 sint32 Player::GetCheapestMilitaryUnit()
 {

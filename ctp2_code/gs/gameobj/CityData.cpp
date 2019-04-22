@@ -8716,7 +8716,7 @@ void CityData::ChangePopulation(sint32 delta)
 	if(m_population <= 0) {
 		g_gevManager->AddEvent(GEV_INSERT_Tail, GEV_KillCity,
 		                       GEA_City, m_home_city.m_id,
-		                       GEA_Int, CAUSE_REMOVE_CITY_UNKNOWN,
+		                       GEA_Int, CAUSE_REMOVE_CITY_NO_PEOPLE,
 		                       GEA_Player, PLAYER_UNASSIGNED,
 		                       GEA_End);
 	}

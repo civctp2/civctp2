@@ -432,9 +432,6 @@ public:
 	void RegisterLostUnits(sint32 nUnits, const MapPoint &pos,
 	                       const DEATH_EFFECT_MORALE mtype);
 
-	void GroupArmy(Army &army);
-	void UngroupArmy(Army &army);
-
 	void GetArmyPos(sint32 index, MapPoint &army_pos);
 
 	bool Settle      (Army &settle_army);
@@ -448,8 +445,6 @@ public:
 	void WakeUp(sint32 idx);
 
 	sint32 GetCheapestMilitaryUnit();
-	void InsertArmy(const MapPoint &point, const Unit &home_city,
-	                Army &army, CAUSE_NEW_ARMY cause);
 
 	void BeginTurnPollution(void) ;
 	void EndTurnPollution(void) ;
