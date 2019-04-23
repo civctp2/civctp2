@@ -4807,20 +4807,24 @@ sint32 Governor::GetNeededGarrisonUnitType(const CityData * city, sint32 & list_
 	return type;
 }
 
-sint32 Governor::GetNeededBuildingType(const CityData *city, const BuildingBuildListRecord *build_list_rec ) const
+sint32 Governor::GetNeededBuildingType(const CityData *city, const BuildingBuildListRecord *build_list_rec) const
 {
 	Assert(city);
+
+	bool shouldNotBuildGaiaController = g_player[m_playerId]->GetNumCities() < g_player[m_playerId]->GetGaiaController()->NumMainframesRequired();
 
 	for (sint32 i = 0; i < build_list_rec->GetNumBuilding(); i++)
 	{
 		sint32 const building_type = build_list_rec->GetBuildingIndex(i);
 
 		if(GaiaController::IsSatellite(building_type)
-		&& g_player[m_playerId]->GetGaiaController()->HasMaxSatsBuilt())
+		&&(shouldNotBuildGaiaController
+		|| g_player[m_playerId]->GetGaiaController()->HasMaxSatsBuilt()))
 			continue;
 
 		if(GaiaController::IsMainframeBuilding(building_type)
-		&& g_player[m_playerId]->GetGaiaController()->HasMinCoresBuilt())
+		&&(shouldNotBuildGaiaController
+		|| g_player[m_playerId]->GetGaiaController()->HasMinCoresBuilt()))
 			continue;
 
 		if ( city->CanBuildBuilding(building_type) )

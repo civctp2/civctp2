@@ -1173,9 +1173,11 @@ void CtpAi::BeginTurn(const PLAYER_INDEX player)
 	DPRINTF(k_DBG_AI, ("//  elapsed time = %d ms\n", (GetTickCount() - t1)));
 
 	GaiaController *gaia_controller = player_ptr->GetGaiaController();
-	if (player_ptr->IsRobot() &&
-		gaia_controller && gaia_controller->CanBuildTowers(false))
-	{
+	if(player_ptr->IsRobot()
+	&& gaia_controller
+	&& gaia_controller->CanBuildTowers(false)
+	&& player_ptr->GetNumCities() >= player_ptr->GetGaiaController()->NumMainframesRequired() // At least we should have enough cities for all Gaia computers
+	){
 		t1 = GetTickCount();
 		DPRINTF(k_DBG_AI, (LOG_SECTION_START));
 		DPRINTF(k_DBG_AI, ("// PLACE ENDGAME INSTALLATIONS -- Turn %d\n", round));
