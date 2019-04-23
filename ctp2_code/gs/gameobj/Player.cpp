@@ -140,6 +140,7 @@
 #include "AchievementTracker.h"
 #include "AdvanceRecord.h"
 #include "Advances.h"
+#include "advanceutil.h"
 #include "AgeRecord.h"
 #include "Agreement.h"
 #include "AgreementData.h"
@@ -6015,32 +6016,15 @@ bool Player::HasAdvance(AdvanceType adv) const
 	return m_advances->HasAdvance(adv);
 }
 
+bool Player::CanUseNukes() const
+{
+	return HasAdvance(advanceutil_GetNukeAdvance()) && !wonderutil_GetNukesEliminated(g_theWonderTracker->GetBuiltWonders());
+}
+
 sint32 Player::NumAdvances()
 {
 	if (!m_advances) return 0;
 	return (m_advances->GetNum());
-}
-
-uint32 Player::RoadAdvanceLevel() const
-{
-#if 0
-
-	uint32 enable_maglev = g_theAdvanceDB->EnableImprovement(TERRAIN_IMPROVEMENT_ROAD_3);
-	if(enable_maglev >= 0 && m_advances->HasAdvance(enable_maglev)) {
-		return 3;
-	}
-
-	uint32 enable_railroad = g_theAdvanceDB->EnableImprovement(TERRAIN_IMPROVEMENT_ROAD_2);
-	if(enable_railroad >= 0 && m_advances->HasAdvance(enable_railroad)) {
-		return 2;
-	}
-
-	uint32 enable_road = g_theAdvanceDB->EnableImprovement(TERRAIN_IMPROVEMENT_ROAD_1);
-	if(enable_road >= 0 && m_advances->HasAdvance(enable_road)) {
-		return 1;
-	}
-#endif
-	return 1;
 }
 
 void Player::SetCityRoads()

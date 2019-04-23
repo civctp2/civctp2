@@ -5586,7 +5586,7 @@ Total Defense vs. Nukes
 [END]
 
 [IMPROVE_ANTI_BALLISTIC_MISSILES_GAMEPLAY]
-Although it cannot protect against a <L:DATABASE_ORDERS,ORDER_PLANT_NUKE>Planted Nuke<e>, the Anti-Ballistic Missile system is failsafe measure against nuclear missile attacks.
+Although it cannot protect against a <L:DATABASE_ORDERS,ORDER_PLANT_NUKE>Planted Nuke<e>, the Anti-Ballistic Missile system is failsafe against nuclear missile attacks.
 [END]
 
 [IMPROVE_ANTI_BALLISTIC_MISSILES_HISTORICAL]
@@ -8629,7 +8629,7 @@ Food Hunger: {UnitDB(UnitRecord[0]).FoodHunger}
 [END]
 
 [UNIT_NUKE_SUMMARY]
-Destroys target and reduces surrounding area to dead tiles.
+Destroys the target and turns the surrounding area into dead tiles.
 [END]
 
 [UNIT_NUKE_GAMEPLAY]
@@ -9892,12 +9892,12 @@ Costs:
 
 [ORDER_PLANT_NUKE_STATISTICS]
 Effect:
-Has a chance of destroying each improvement and reducing terrain to dead tiles.
+Has a chance of destroying each improvement and turning the surrounding terrain into dead tiles.
 
 [END]
 
 [ORDER_PLANT_NUKE_GAMEPLAY]
-The ability to plant nukes in enemy <L:DATABASE_CONCEPTS,CONCEPT_CITY>Cities<e> is the most nefarious and powerful act a <L:DATABASE_UNITS,UNIT_SPY>Spy<e> or <L:DATABASE_UNITS,UNIT_CYBER_NINJA>Cyber Ninja<e> can perform.  There is a 25% chance of success for the Spy, and a 35% chance of success for the Cyber Ninja.  The risk of capture is significant - 75% for the Spy and 50% for the Cyber Ninja.
+The ability to plant nukes in enemy <L:DATABASE_CONCEPTS,CONCEPT_CITY>Cities<e> is the most nefarious and powerful act a <L:DATABASE_UNITS,UNIT_SPY>Spy<e> or <L:DATABASE_UNITS,UNIT_CYBER_NINJA>Cyber Ninja<e> can perform.  There is a 25% chance of success for a Spy, and a 35% chance of success for a Cyber Ninja.  The risk of capture is significant - 75% for the Spy and 50% for the Cyber Ninja.
 
 If the attack is successful, the nuke detonates, destroying the target city and all Tile Improvements within three tiles of the city.  As with <L:DATABASE_UNITS,UNIT_NUKE>standard nukes<e>, the affected area is reduced to <L:DATABASE_TERRAIN,TERRAIN_DEAD>dead tiles<e>.
 
@@ -10803,11 +10803,11 @@ Costs:
 
 [WONDER_NANITE_DEFUSER_STATISTICS]
 Gives:
-Eliminates <L:DATABASE_UNITS,UNIT_NUKE>Nukes<e> worldwide
+Eliminates all <L:DATABASE_UNITS,UNIT_NUKE>Nukes<e> worldwide
 [END]
 
 [WONDER_NANITE_DEFUSER_GAMEPLAY]
-Using nanotechnological means, the nanite defuser eliminates the threat of nuclear war by defusing every nuclear weapon in the world.
+Using nanotechnology, the nanite defuser eliminates the threat of nuclear war by destroying every nuclear <L:DATABASE_BUILDINGS,IMPROVE_NUCLEAR_PLANT>power plant<e> and <L:DATABASE_UNITS,UNIT_NUKE>weapon<e> in the world including those that <L:DATABASE_ORDERS,ORDER_PLANT_NUKE>are planted<e> by <L:DATABASE_UNITS,UNIT_SPY>Spies<e> and <L:DATABASE_UNITS,UNIT_CYBER_NINJA>Cyber Ninjas<e> in enemy <L:DATABASE_CONCEPTS,CONCEPT_CITY>Cities<e>.
 [END]
 
 [WONDER_NANITE_DEFUSER_HISTORICAL]

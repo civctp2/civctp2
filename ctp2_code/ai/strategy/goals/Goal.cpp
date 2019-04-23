@@ -2843,7 +2843,7 @@ bool Goal::IsTargetImmune() const
 
 	if(order_record->GetUnitPretest_CanPlantNuke())
 	{
-		if(!g_player[m_playerId]->HasAdvance(advanceutil_GetNukeAdvance()))
+		if(!g_player[m_playerId]->CanUseNukes())
 			return true;
 	}
 

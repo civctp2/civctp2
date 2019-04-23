@@ -568,11 +568,6 @@ public:
 	void RequestOfferPactCaptureCity(const PLAYER_INDEX recipient, Unit &city) ;
 	void RequestOfferPactEndPollution(const PLAYER_INDEX recipient) ;
 
-
-
-
-
-
 	void RequestExchangeAdvance(const PLAYER_INDEX recipient, AdvanceType &advance, AdvanceType &desired_advance) ;
 	void RequestExchangeCity(const PLAYER_INDEX recipient, Unit &offerCity, Unit &wantCity) ;
 	void RequestExchangeMap(const PLAYER_INDEX recipient) ;
@@ -593,12 +588,11 @@ public:
 	DynamicArray<Message> *GetMessages(void) const { return (m_messages) ; }
 	void NotifyModalMessageDestroyed();
 
-
+	bool CanUseNukes() const;
 	bool HasAdvance(AdvanceType adv) const;
 	sint32 NumAdvances();
 	double GetPollutionSizeModifier(void) const;
 	double GetPollutionProductionModifier(void) const;
-	uint32 RoadAdvanceLevel() const;
 	void SetCityRoads();
 #ifdef _DEBUG
 	void DisplayAdvances() ;

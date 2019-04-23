@@ -144,7 +144,6 @@
 #include "c3.h"
 #include "ArmyData.h"
 
-#include "advanceutil.h"
 #include "Agreement.h"
 #include "AgreementMatrix.h"
 #include "AgreementPool.h"
@@ -2690,7 +2689,7 @@ ORDER_RESULT ArmyData::CauseUnhappiness(const MapPoint &point,
 bool ArmyData::CanPlantNuke(double &chance, double &escape_chance,
 							sint32 &uindex) const
 {
-	if ( !g_player[m_owner]->m_advances->HasAdvance(advanceutil_GetNukeAdvance()))
+	if ( !g_player[m_owner]->CanUseNukes())
 		return false;
 
 	const UnitRecord::PlantNukeData *data;
@@ -2726,7 +2725,7 @@ bool ArmyData::CanPlantNuke(double &chance, double &escape_chance,
 //----------------------------------------------------------------------------
 bool ArmyData::CanPlantNuke(double &chance, double &escape_chance) const
 {
-	if ( !g_player[m_owner]->m_advances->HasAdvance(advanceutil_GetNukeAdvance()))
+	if(!g_player[m_owner]->CanUseNukes())
 		return false;
 
 	const UnitRecord::PlantNukeData *data;
@@ -10264,7 +10263,7 @@ bool ArmyData::TestOrderAll(const OrderRecord *order_rec) const
 
 	if(order_rec->GetUnitPretest_CanPlantNuke())
 	{
-		if (!g_player[m_owner]->m_advances->HasAdvance(advanceutil_GetNukeAdvance()))
+		if (!g_player[m_owner]->CanUseNukes())
 			return false;
 	}
 
@@ -10304,7 +10303,7 @@ bool ArmyData::TestOrderAll(const OrderRecord *order_rec) const
 bool ArmyData::TestOrderAny(OrderRecord const * order_rec) const
 {
 	if (order_rec->GetUnitPretest_CanPlantNuke() &&
-		!g_player[m_owner]->m_advances->HasAdvance(advanceutil_GetNukeAdvance())
+	    !g_player[m_owner]->CanUseNukes()
 	   )
 	{
 		return false;
@@ -10328,7 +10327,7 @@ bool ArmyData::TestOrderAny(OrderRecord const * order_rec) const
 bool ArmyData::TestCargoOrderAny(OrderRecord const * order_rec) const
 {
 	if (order_rec->GetUnitPretest_CanPlantNuke() &&
-		!g_player[m_owner]->m_advances->HasAdvance(advanceutil_GetNukeAdvance())
+	    !g_player[m_owner]->CanUseNukes()
 	   )
 	{
 		return false;

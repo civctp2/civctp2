@@ -5758,7 +5758,7 @@ Vollständiger Schutz gegen Nuklearraketen
 [END]
 
 [IMPROVE_ANTI_BALLISTIC_MISSILES_GAMEPLAY]
-Die Raketenabwehr ist zwar nicht in der Lage, bereits <L:DATABASE_ORDERS,ORDER_PLANT_NUKE>gezündete Nuklearraketen<e> aufzuhalten, ansonsten stellt dieses Verteidigungssystem jedoch eine störungssichere Maßnahme gegen nukleare Raketenangriffe dar.
+Die Raketenabwehr ist zwar nicht in der Lage, bereits <L:DATABASE_ORDERS,ORDER_PLANT_NUKE>gezündete Nuklearraketen<e> aufzuhalten, ansonsten ist sie störungssicher gegen nukleare Raketenangriffe.
 [END]
 
 [IMPROVE_ANTI_BALLISTIC_MISSILES_HISTORICAL]
@@ -10935,11 +10935,11 @@ Kosten:
 
 [WONDER_NANITE_DEFUSER_STATISTICS]
 Effekt:
-Vernichtet weltweit alle <L:DATABASE_UNITS,UNIT_NUKE>Nuklearraketen<e>
+Vernichtet weltweit alle <L:DATABASE_UNITS,UNIT_NUKE>Nuklearwaffen<e>
 [END]
 
 [WONDER_NANITE_DEFUSER_GAMEPLAY]
-Mit Hilfe von Nanotechnologie setzt der Nanitenentschärfer der Bedrohung durch einen Nuklearkrieg ein endgültiges Ende, indem er sämtliche Nuklearwaffen der Welt unbrauchbar macht.
+Mit Nanotechnologie beendet der Nanitenentschärfer die Bedrohung durch einen Nuklearkrieg, indem er alle <L:DATABASE_BUILDINGS,IMPROVE_NUCLEAR_PLANT>Nuklearkraftwerke<e> und <L:DATABASE_UNITS,UNIT_NUKE>Nuklearwaffen<e> der Welt vernichtet, einschließlich diejenigen, die von <L:DATABASE_UNITS,UNIT_SPY>Spionen<e> und <L:DATABASE_UNITS,UNIT_CYBER_NINJA>Cyber-Ninjas<e> in feindlichen <L:DATABASE_CONCEPTS,CONCEPT_CITY>Städten<e> <L:DATABASE_ORDERS,ORDER_PLANT_NUKE>gezündet werden<e>.
 [END]
 
 [WONDER_NANITE_DEFUSER_HISTORICAL]
