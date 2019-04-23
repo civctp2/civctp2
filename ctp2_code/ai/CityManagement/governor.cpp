@@ -3879,7 +3879,8 @@ void Governor::FillEmptyBuildQueues(bool noWarChange)
 				// Reconsider AI production at the start of a war
 				city->GetBuildQueue()->Clear();
 			}
-			else
+			else if(city->GetBuildQueue()->GetHead()->m_category != k_GAME_OBJ_TYPE_CAPITALIZATION
+			     && city->GetBuildQueue()->GetHead()->m_category != k_GAME_OBJ_TYPE_INFRASTRUCTURE)
 			{
 				// Keep using the current build queue
 				continue;
@@ -3893,6 +3894,20 @@ void Governor::FillEmptyBuildQueues(bool noWarChange)
 
 		if (!city->GetUseGovernor() || (CTPRecord::INDEX_INVALID == type))
 			continue;
+
+		if(city->GetBuildQueue()->GetLen() > 0)
+		{
+			if(city->GetBuildQueue()->GetHead()->m_category == k_GAME_OBJ_TYPE_CAPITALIZATION
+			&&                                     cat      == k_GAME_OBJ_TYPE_CAPITALIZATION)
+				continue;
+
+			if(city->GetBuildQueue()->GetHead()->m_category == k_GAME_OBJ_TYPE_INFRASTRUCTURE
+			&&                                     cat      == k_GAME_OBJ_TYPE_INFRASTRUCTURE)
+				continue;
+
+			if(city->GetBuildQueue()->GetLen() > 1) // There is already something after cap/inf, it is needed because, we insert new stuff before stuff was build this turn.
+				continue;
+		}
 
 		bool insert_ok = false;
 		switch (cat)
@@ -3910,12 +3925,12 @@ void Governor::FillEmptyBuildQueues(bool noWarChange)
 			break;
 		case k_GAME_OBJ_TYPE_CAPITALIZATION:
 			insert_ok = true;
-//			city->InsertCapitalization(); // How is Capitalization removed?
+			city->InsertCapitalization();
 			city->BuildCapitalization();
 			break;
 		case k_GAME_OBJ_TYPE_INFRASTRUCTURE:
 			insert_ok = true;
-//			city->InsertInfrastructure(); // How is Infrastructure removed?
+			city->InsertInfrastructure();
 			city->BuildInfrastructure();
 			break;
 		}
