@@ -206,12 +206,6 @@ public:
     void Log_Debug_Info(const int & log) const;
     void Log_Debug_Info_Full(const int & log) const;
 
-    void Copy_Insert_Matches(Goal_ptr generic_goal)
-    {
-        m_matches = generic_goal->m_matches;
-        this->Compute_Matching_Value();
-    };
-
     bool CanReachTargetContinent(Agent_ptr agent_ptr) const;
 
     void ResetNeededTransport();
