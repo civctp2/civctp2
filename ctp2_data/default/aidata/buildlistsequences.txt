@@ -188,8 +188,8 @@ BUILD_LIST_SEQUENCE_SCIENCE {
   BuildListElement { BuildingBuildList BUILDING_BUILD_LIST_DEFENSE }
   BuildListElement { BuildingBuildList BUILDING_BUILD_LIST_SCIENCE }
 
-  BuildListElement { Infrastructure }
   BuildListElement { Capitalization }
+  BuildListElement { Infrastructure }
 
   BuildListElement { WonderBuildList WONDER_BUILD_LIST_HAPPINESS }
   BuildListElement { WonderBuildList WONDER_BUILD_LIST_GROWTH}
@@ -222,8 +222,8 @@ BUILD_LIST_SEQUENCE_GOLD {
   BuildListElement { BuildingBuildList BUILDING_BUILD_LIST_DEFENSE }
   BuildListElement { BuildingBuildList BUILDING_BUILD_LIST_SCIENCE }
 
-  BuildListElement { Infrastructure }
   BuildListElement { Capitalization }
+  BuildListElement { Infrastructure }
 
   BuildListElement { WonderBuildList WONDER_BUILD_LIST_HAPPINESS }
   BuildListElement { WonderBuildList WONDER_BUILD_LIST_GROWTH}
@@ -384,8 +384,8 @@ BUILD_LIST_SEQUENCE_WONDERS_SCIENTIST {
   BuildListElement { WonderBuildList WONDER_BUILD_LIST_DEFENSE}
   BuildListElement { WonderBuildList WONDER_BUILD_LIST_SCIENCE}
 
-  BuildListElement { Infrastructure }
   BuildListElement { Capitalization }
+  BuildListElement { Infrastructure }
 }
 
 ### 10 ###
@@ -466,8 +466,8 @@ BUILD_LIST_SEQUENCE_WONDERS_ECONOMIC {
   BuildListElement { WonderBuildList WONDER_BUILD_LIST_DEFENSE}
   BuildListElement { WonderBuildList WONDER_BUILD_LIST_SCIENCE}
 
-  BuildListElement { Infrastructure }
   BuildListElement { Capitalization }
+  BuildListElement { Infrastructure }
 }
 
 ### 12 ###
