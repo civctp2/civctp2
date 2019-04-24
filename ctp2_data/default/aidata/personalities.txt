@@ -34,7 +34,7 @@
 //
 
 
-// Note: first personality is always used for the barbarians and should never be used
+// Note: The first personality is always used for the barbarians and should never be used
 // for normal AI's because it effects what strategies they use.
 PERSONALITY_KAHN {
   DefaultStrategy STRATEGY_MILITARIST_DEFAULT
@@ -70,7 +70,7 @@ PERSONALITY_KAHN {
   DefenceHighStrategy      {  Strategy STRATEGY_DEFENSE_MEDIUM    Priority 800  }
   DefenceVeryHighStrategy  {  Strategy STRATEGY_DEFENSE_HIGH      Priority 800  }
 
-  CitiesOverLimit 0 // Additional cities the AI can build, default value 0.
+  CitiesOverLimit 10 // Additional cities the AI can build, default value 0.
   // Priorities here must be higher than everything before otherwise the AI ruins
   // its empire by to many cities.
   OverCityLimitStrategy    {  Strategy STRATEGY_TOO_MANY_CITIES   Priority 2000 } // Applied if AI is over city limit
@@ -121,7 +121,7 @@ PERSONALITY_GHANDI {
   DefenceHighStrategy      {  Strategy STRATEGY_DEFENSE_HIGH      Priority 800  }
   DefenceVeryHighStrategy  {  Strategy STRATEGY_DEFENSE_VERY_HIGH Priority 800  }
 
-  CitiesOverLimit 0
+  CitiesOverLimit 1
   OverCityLimitStrategy    {  Strategy STRATEGY_TOO_MANY_CITIES   Priority 2000 }
   NoRevolutionStrategy     {  Strategy STRATEGY_NO_REVOLUTON      Priority 2000 }
 
@@ -173,7 +173,7 @@ PERSONALITY_STALIN {
   DefenceHighStrategy      {  Strategy STRATEGY_DEFENSE_MEDIUM    Priority 800  }
   DefenceVeryHighStrategy  {  Strategy STRATEGY_DEFENSE_HIGH      Priority 800  }
 
-  CitiesOverLimit 0
+  CitiesOverLimit 3
   OverCityLimitStrategy    {  Strategy STRATEGY_TOO_MANY_CITIES   Priority 2000 }
   NoRevolutionStrategy     {  Strategy STRATEGY_NO_REVOLUTON      Priority 2000 }
 
@@ -222,7 +222,7 @@ PERSONALITY_CEASAR {
   DefenceHighStrategy      {  Strategy STRATEGY_DEFENSE_MEDIUM    Priority 800  }
   DefenceVeryHighStrategy  {  Strategy STRATEGY_DEFENSE_HIGH      Priority 800  }
 
-  CitiesOverLimit 0
+  CitiesOverLimit 2
   OverCityLimitStrategy    {  Strategy STRATEGY_TOO_MANY_CITIES   Priority 2000 }
   NoRevolutionStrategy     {  Strategy STRATEGY_NO_REVOLUTON      Priority 2000 }
 
@@ -271,7 +271,7 @@ PERSONALITY_DEGAULLE {
   DefenceHighStrategy      {  Strategy STRATEGY_DEFENSE_HIGH      Priority 800  }
   DefenceVeryHighStrategy  {  Strategy STRATEGY_DEFENSE_VERY_HIGH Priority 800  }
 
-  CitiesOverLimit 0
+  CitiesOverLimit 1
   OverCityLimitStrategy    {  Strategy STRATEGY_TOO_MANY_CITIES   Priority 2000 }
   NoRevolutionStrategy     {  Strategy STRATEGY_NO_REVOLUTON      Priority 2000 }
 
@@ -321,7 +321,7 @@ PERSONALITY_MEDICI {
   DefenceHighStrategy      {  Strategy STRATEGY_DEFENSE_HIGH      Priority 800  }
   DefenceVeryHighStrategy  {  Strategy STRATEGY_DEFENSE_VERY_HIGH Priority 800  }
 
-  CitiesOverLimit 0
+  CitiesOverLimit 1
   OverCityLimitStrategy    {  Strategy STRATEGY_TOO_MANY_CITIES   Priority 2000 }
   NoRevolutionStrategy     {  Strategy STRATEGY_NO_REVOLUTON      Priority 2000 }
 
@@ -371,7 +371,7 @@ PERSONALITY_TELLER {
   DefenceHighStrategy      {  Strategy STRATEGY_DEFENSE_MEDIUM    Priority 800  }
   DefenceVeryHighStrategy  {  Strategy STRATEGY_DEFENSE_HIGH      Priority 800  }
 
-  CitiesOverLimit 0
+  CitiesOverLimit 1
   OverCityLimitStrategy    {  Strategy STRATEGY_TOO_MANY_CITIES   Priority 2000 }
   NoRevolutionStrategy     {  Strategy STRATEGY_NO_REVOLUTON      Priority 2000 }
 
@@ -423,7 +423,7 @@ PERSONALITY_STRANGELOVE {
   DefenceHighStrategy      {  Strategy STRATEGY_DEFENSE_MEDIUM    Priority 800  }
   DefenceVeryHighStrategy  {  Strategy STRATEGY_DEFENSE_HIGH      Priority 800  }
 
-  CitiesOverLimit 0
+  CitiesOverLimit 2
   OverCityLimitStrategy    {  Strategy STRATEGY_TOO_MANY_CITIES   Priority 2000 }
   NoRevolutionStrategy     {  Strategy STRATEGY_NO_REVOLUTON      Priority 2000 }
 
@@ -473,7 +473,7 @@ PERSONALITY_CALLENBACH {
   DefenceHighStrategy      {  Strategy STRATEGY_DEFENSE_MEDIUM    Priority 800  }
   DefenceVeryHighStrategy  {  Strategy STRATEGY_DEFENSE_HIGH      Priority 800  }
 
-  CitiesOverLimit 0
+  CitiesOverLimit 1
   OverCityLimitStrategy    {  Strategy STRATEGY_TOO_MANY_CITIES   Priority 2000 }
   NoRevolutionStrategy     {  Strategy STRATEGY_NO_REVOLUTON      Priority 2000 }
 
@@ -523,7 +523,7 @@ PERSONALITY_NADER {
   DefenceHighStrategy      {  Strategy STRATEGY_DEFENSE_MEDIUM    Priority 800  }
   DefenceVeryHighStrategy  {  Strategy STRATEGY_DEFENSE_HIGH      Priority 800  }
 
-  CitiesOverLimit 0
+  CitiesOverLimit 1
   OverCityLimitStrategy    {  Strategy STRATEGY_TOO_MANY_CITIES   Priority 2000 }
   NoRevolutionStrategy     {  Strategy STRATEGY_NO_REVOLUTON      Priority 2000 }
 
