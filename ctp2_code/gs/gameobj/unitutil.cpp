@@ -371,7 +371,8 @@ bool unitutil_IsUnitBetterThan(sint32 type1, sint32 type2, sint32 gov)
 	// Transport units should always be bigger:
 	const UnitRecord::CargoData* cargo1 = unitRec1->GetCargoDataPtr();
 	const UnitRecord::CargoData* cargo2 = unitRec2->GetCargoDataPtr();
-	if(cargo1 && cargo2){
+	if(cargo1 && cargo2)
+	{
 		if(cargo1->GetMaxCargo() > cargo2->GetMaxCargo())
 		{
 			return true;

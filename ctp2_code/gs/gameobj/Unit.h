@@ -551,9 +551,6 @@ public:
 	bool CanCauseUnhappiness(const MapPoint &pos);
 	bool CanExpel(const MapPoint &pos);
 
-
-
-
 	void AddEndGameObject(sint32 type);
 
 	bool SendSlaveTo(Unit dest);
@@ -600,12 +597,6 @@ public:
 	sint32 IsElite() const;
 	void SetElite();
 	void UnElite();
-	sint32 IsConscript() const;
-	void SetConscript();
-	void UnConscript();
-	sint32 IsMercenary() const;
-	void SetMercenary();
-	void UnMercenary();
 };
 
 uint32 Unit_Unit_GetVersion(void);
