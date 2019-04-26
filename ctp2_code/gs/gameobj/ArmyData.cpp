@@ -10278,7 +10278,7 @@ bool ArmyData::TestOrderAll(const OrderRecord *order_rec) const
 			return true;
 		}
 
-		orderValid = orderValid && m_array[i].UnitValidForOrder(order_rec);
+		orderValid &= m_array[i].UnitValidForOrder(order_rec);
 	}
 
 	return orderValid;

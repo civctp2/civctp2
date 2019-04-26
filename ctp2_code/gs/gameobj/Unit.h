@@ -583,7 +583,7 @@ public:
 	void CheckVisionRadius();
 
 	CityData *GetCityData() const;
-	CityData *CD() { return GetCityData(); }
+	CityData *CD() const { return GetCityData(); }
 
 	std::string GetDisplayName(void) const;
 

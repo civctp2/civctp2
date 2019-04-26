@@ -3219,8 +3219,9 @@ bool Goal::Pretest_Bid(const Agent_ptr agent_ptr, const MapPoint & target_pos) c
 			return true;
 	}
 
-	bool needs_land_unit  = goal_rec->GetTargetTypeCity();
+	bool needs_land_unit  = goal_rec->GetTargetTypeCity() && !m_target_city.CD()->IsCoastal();
 	     needs_land_unit &= goal_rec->GetTargetOwnerSelf();
+//	     needs_land_unit &= !m_target_city.CD()->IsCoastal(); // This is evaluated, even if needs_land_unit is false
 	     needs_land_unit |= goal_rec->GetTargetTypeGoodyHut();
 
 	uint32 movement_type  = army->GetMovementType();
