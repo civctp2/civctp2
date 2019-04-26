@@ -1505,6 +1505,9 @@ void Scheduler::Add_New_Matches_For_Goal
 		if((goal_squad_class & agent->Get_Squad_Class()) != goal_squad_class)
 			continue;
 
+		if(!agent->Get_Army()->TestOrderAny(g_theGoalDB->Get(type)->GetExecute()))
+			continue;
+
 		goal_ptr->Add_Match(agent, update_match_value);
 	}
 }
