@@ -1487,6 +1487,7 @@ GOAL_RETREAT {
   NeedsRoom
   UnGroupFirst
   ExecuteIncrementally
+  InField
 
   SquadClass:CanAttack
   SquadClass:CanDefend
@@ -1517,7 +1518,7 @@ GOAL_RETREAT {
   ThreatenType:None
   ThreatenBonus 0
 
-  // no force matching to retreat
+  // No force matching for retreat
   ForceMatch:Special 
 }
 
@@ -1529,6 +1530,7 @@ GOAL_RETREAT_SPECIAL {
   NeedsRoom
   UnGroupFirst
   ExecuteIncrementally
+  InField
 
   SquadClass:Special
 
@@ -1556,7 +1558,7 @@ GOAL_RETREAT_SPECIAL {
   ThreatenType:None
   ThreatenBonus 0
 
-  // no force matching to retreat
+  // No force matching for retreat
   ForceMatch:Special 
 }
 

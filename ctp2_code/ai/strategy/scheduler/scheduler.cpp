@@ -1493,6 +1493,7 @@ void Scheduler::Add_New_Matches_For_Goal
 {
 	GOAL_TYPE   type             = goal_ptr->Get_Goal_Type();
 	SQUAD_CLASS goal_squad_class = g_theGoalDB->Get(type)->GetSquadClass();
+	bool hasInField = g_theGoalDB->Get(type)->GetInField();
 
 	for
 	(
@@ -1506,6 +1507,9 @@ void Scheduler::Add_New_Matches_For_Goal
 			continue;
 
 		if(!agent->Get_Army()->TestOrderAny(g_theGoalDB->Get(type)->GetExecute()))
+			continue;
+
+		if(hasInField && g_theWorld->HasCity(agent->Get_Army()->RetPos()))
 			continue;
 
 		goal_ptr->Add_Match(agent, update_match_value);
@@ -1534,6 +1538,9 @@ void Scheduler::Add_New_Matches_For_Agent
 				  g_theGoalDB->Get(i)->GetSquadClass();
 
 		if((goal_squad_class & squad_class) != goal_squad_class)
+			continue;
+
+		if(g_theGoalDB->Get(i)->GetInField() && g_theWorld->HasCity(agent->Get_Army()->RetPos()))
 			continue;
 
 		for

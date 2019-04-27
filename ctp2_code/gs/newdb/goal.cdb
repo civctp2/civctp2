@@ -43,6 +43,7 @@ Goal {
 	Bit HasTransportersOrNoCoastalCities    // The AI has to own transporters to persue this goal and needs coastal cities
 	Bit IsGlobalGoal
 	Bit NeedsRoom                           // Only consider if the target position has room
+	Bit InField                             // Only consider units in field
 
 	Bits SquadClass {
 		CanExplore,
