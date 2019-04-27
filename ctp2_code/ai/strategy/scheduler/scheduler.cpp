@@ -2138,7 +2138,7 @@ void Scheduler::PrintAllGoals() const
 	AI_DPRINTF(k_DBG_SCHEDULER, m_playerId, -1, -1,
 		("Number of goals in goal database: %d\n", g_theGoalDB->NumRecords()));
 	AI_DPRINTF(k_DBG_SCHEDULER, m_playerId, -1, -1,
-		("Goals for player %d: %d\n", m_playerId, m_goals.size()));
+		("Current goals for player %d: %d\n", m_playerId, m_goals.size()));
 	AI_DPRINTF(k_DBG_SCHEDULER, m_playerId, -1, -1, ("\n"));
 
 	Sorted_Goal_Iter sorted_goal_iter;

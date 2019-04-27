@@ -210,16 +210,41 @@ STDEHANDLER(CtpAi_CreateCityEvent)
 void CtpAi::AddGoalsForCitiesAndArmies(const PLAYER_INDEX player)
 {
 	Scheduler & scheduler = Scheduler::GetScheduler(player);
+	const StrategyRecord &strategy = Diplomat::GetDiplomat(player).GetCurrentStrategy();
 
-	for(PLAYER_INDEX foreignerId = 0; foreignerId < CtpAi::s_maxPlayers; foreignerId++)
+	for(GOAL_TYPE goal_type = 0; goal_type < g_theGoalDB->NumRecords(); goal_type++)
 	{
-		Player* player_ptr = g_player[foreignerId];
-		if(player_ptr == NULL)
-			continue;
+		sint16 max_eval = 0;
+		sint16 max_exec = 0;
 
-		for(GOAL_TYPE goal_type = 0; goal_type < g_theGoalDB->NumRecords(); goal_type++)
+		for(sint32 i = 0; i < strategy.GetNumGoalElement(); i++)
 		{
-			GoalRecord const * goal = g_theGoalDB->Get(goal_type);
+			const StrategyRecord::GoalElement* goal_element_ptr = strategy.GetGoalElement(i);
+
+			if(goal_type == goal_element_ptr->GetGoalIndex())
+			{
+				scheduler.GetMaxEvalExec(goal_element_ptr, max_eval, max_exec);
+				break;
+			}
+			else
+			{
+				continue;
+			}
+		}
+
+		GoalRecord const * goal = g_theGoalDB->Get(goal_type);
+
+		if(max_eval <= 0 || max_exec <= 0) // Nothing to evaluate and to execute
+		{
+			scheduler.Remove_Goals_Type(goal);
+			continue;
+		}
+
+		for(PLAYER_INDEX foreignerId = 0; foreignerId < CtpAi::s_maxPlayers; foreignerId++)
+		{
+			Player* player_ptr = g_player[foreignerId];
+			if(player_ptr == NULL)
+				continue;
 
 			if
 			  (

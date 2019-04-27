@@ -50,7 +50,7 @@
 #include "c3debugstl.h"
 
 #include "civarchive.h"
-#include "Goal.h"               // Needed here to instantaite std::greater<Goal_ptr> correctly
+#include "Goal.h"               // Needed here to instantiate std::greater<Goal_ptr> correctly
 
 class GoalRecord;
 class Scheduler;
@@ -199,7 +199,9 @@ public:
 	void PrintAllGoals() const;
 #endif
 
-protected:
+	GOAL_TYPE GetMaxEvalExec(const StrategyRecord::GoalElement *goal_element_ptr, sint16 & max_eval, sint16 & max_exec);
+
+private:
 
 	void Add_New_Matches_For_Goal
 	(
@@ -219,11 +221,7 @@ protected:
 
 	bool Add_Transport_Matches_For_Goal(const Goal_ptr & goal_ptr);
 
-	GOAL_TYPE GetMaxEvalExec(const StrategyRecord::GoalElement *goal_element_ptr, sint16 & max_eval, sint16 & max_exec);
-
 	bool GetArmyDetachState(const Army & army) const;
-
-private:
 
 	static Scheduler_Vector      s_theSchedulers;
 
