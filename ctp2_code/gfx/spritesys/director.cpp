@@ -731,10 +731,6 @@ void Director::HandleNextAction(void)
 			}
 
 			item->m_handler(item->m_action, item->m_sequence, executeType);
-
-			if (item->m_type == DQITEM_ADDVISION ||
-				item->m_type == DQITEM_REMOVEVISION)
-				HandleNextAction();
 		}
 	}
 }
@@ -742,7 +738,6 @@ void Director::HandleNextAction(void)
 void Director::ActionFinished(Sequence *seq)
 {
 	DQItem			*item;
-
 
 	if (!seq) {
 		if (m_dispatchedItems->GetCount() > 0) {
@@ -755,10 +750,6 @@ void Director::ActionFinished(Sequence *seq)
 		SetActionFinished(TRUE);
 		return;
 	}
-
-
-
-
 
 	if (seq->GetSequenceID() == m_lastSequenceID) {
 		seq->Release();
