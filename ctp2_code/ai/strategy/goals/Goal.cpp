@@ -4379,7 +4379,7 @@ bool Goal::RallyTroops()
 
 	Squad_Strength strength = m_current_attacking_strength;
 
-	Assert(rallyPos != Get_Target_Pos(rallyAgent->Get_Army()));
+//	Assert(rallyPos != Get_Target_Pos(rallyAgent->Get_Army())); // Actually a valid situation, for choke points
 
 	sint32 unitsAtRallyPos = (rallyPos == rallyAgent->Get_Pos()) ? rallyAgent->GetUnitsAtPos() : rallyAgent->Get_Army()->Num();
 
