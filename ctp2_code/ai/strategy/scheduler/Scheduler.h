@@ -213,7 +213,8 @@ private:
 
 	void Remove_Matches_For_Goal( const Goal_ptr & goal );
 
-	void Remove_Matches_For_Agent( const Agent_ptr & agnet );
+	void Remove_Matches_For_Agent( const Agent_ptr & agent );
+	void Remove_Invalid_Matches_For_Agent(const Agent_ptr & agent);
 
 	void Rollback_Matches_For_Goal(const Goal_ptr & goal_ptr);
 

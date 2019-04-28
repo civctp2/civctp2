@@ -383,6 +383,10 @@ void Scheduler::Process_Agent_Changes()
 			Remove_Matches_For_Agent(theAgent);
 			Add_New_Matches_For_Agent(theAgent);
 		}
+		else
+		{
+			Remove_Invalid_Matches_For_Agent(theAgent);
+		}
 
 		theAgent->Get_Army()->SetAICanAddOrders();
 
@@ -1568,10 +1572,7 @@ void Scheduler::Remove_Matches_For_Goal
 	goal_ptr->Remove_Matches();
 }
 
-void Scheduler::Remove_Matches_For_Agent
-(
-    const Agent_ptr & agent
-)
+void Scheduler::Remove_Matches_For_Agent(const Agent_ptr & agent)
 {
 	for(sint32 i = 0; i < g_theGoalDB->NumRecords(); i++)
 	{
@@ -1583,8 +1584,30 @@ void Scheduler::Remove_Matches_For_Agent
 		                     goal_iter != goal_list.end();
 		                   ++goal_iter
 		){
-
 			goal_iter->second->Remove_Match(agent);
+		}
+	}
+}
+
+void Scheduler::Remove_Invalid_Matches_For_Agent
+(
+    const Agent_ptr & agent
+)
+{
+	for(sint32 i = 0; i < g_theGoalDB->NumRecords(); i++)
+	{
+		if(g_theGoalDB->Get(i)->GetInField() && g_theWorld->HasCity(agent->Get_Army()->RetPos()))
+		{
+			Sorted_Goal_List & goal_list = m_goals_of_type[i];
+
+			for
+			(
+			    Sorted_Goal_Iter goal_iter  = goal_list.begin();
+			                     goal_iter != goal_list.end();
+			                   ++goal_iter
+			){
+				goal_iter->second->Remove_Match(agent);
+			}
 		}
 	}
 }
