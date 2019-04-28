@@ -27,9 +27,12 @@
 //
 //----------------------------------------------------------------------------
 
-# 47 Total Orders
+# 46 Orders in total
+
 
 # Standard Orders
+
+## 0 ##########################################################
 
 ORDER_MOVE {
   Gold 0
@@ -52,6 +55,8 @@ ORDER_MOVE {
   InvalidCursor 2
 }
 
+## 1 ##########################################################
+
 ORDER_ATTACK {
   Gold 0
   Move 100
@@ -72,6 +77,8 @@ ORDER_ATTACK {
   InvalidCursor 4
 }
 
+## 2 ##########################################################
+
 ORDER_FORTIFY {
   Gold 0
   Move 100
@@ -91,6 +98,8 @@ ORDER_FORTIFY {
   InvalidCursor 63
 }
 
+## 3 ##########################################################
+
 ORDER_SLEEP {
   Gold 0
   Move 100
@@ -109,6 +118,8 @@ ORDER_SLEEP {
   Cursor 28
   InvalidCursor 29
 }
+
+## 4 ##########################################################
 
 ORDER_PILLAGE {
   Gold 0
@@ -130,6 +141,8 @@ ORDER_PILLAGE {
   InvalidCursor 19
 }
 
+## 5 ##########################################################
+
 ORDER_INTERCEPT_TRADE {
   Gold 0
   Move 100
@@ -149,6 +162,8 @@ ORDER_INTERCEPT_TRADE {
   Cursor 74
   InvalidCursor 75
 }
+
+## 6 ##########################################################
 
 ORDER_EXPEL {
   Gold 0
@@ -170,6 +185,8 @@ ORDER_EXPEL {
   InvalidCursor 17
 }
 
+## 7 ##########################################################
+
 ORDER_REFORM {
   Gold 1000
   Move 100
@@ -190,6 +207,7 @@ ORDER_REFORM {
   InvalidCursor 23
 }
 
+## 8 ##########################################################
 
 ORDER_BOMBARD {
   Gold 0
@@ -212,6 +230,7 @@ ORDER_BOMBARD {
   InvalidCursor 8
 }
 
+## 9 ##########################################################
 
 ORDER_BOARD_TRANSPORT {
   Gold 0
@@ -233,6 +252,7 @@ ORDER_BOARD_TRANSPORT {
   InvalidCursor 67
 }
 
+## 10 #########################################################
 
 ORDER_UNLOAD {
   Gold 0
@@ -254,6 +274,7 @@ ORDER_UNLOAD {
   InvalidCursor 69
 }
 
+## 11 #########################################################
 
 ORDER_UPGRADE {
   Gold 0
@@ -272,6 +293,8 @@ ORDER_UPGRADE {
   Cursor 1
   InvalidCursor 2
 }
+
+## 12 #########################################################
 
 ORDER_DISBAND_ARMY {
   Gold 0
@@ -293,6 +316,8 @@ ORDER_DISBAND_ARMY {
   InvalidCursor 25
 }
 
+## 13 #########################################################
+
 ORDER_SPACE_LAUNCH {
   Gold 0
   Move 0
@@ -313,7 +338,10 @@ ORDER_SPACE_LAUNCH {
   InvalidCursor 81
 }
 
+
 # Settler Orders
+
+## 14 #########################################################
 
 ORDER_SETTLE {
   Gold 0
@@ -334,6 +362,8 @@ ORDER_SETTLE {
   Cursor 70
   InvalidCursor 71
 }
+
+## 15 #########################################################
 
 ORDER_SETTLE_IN_CITY {
   Gold 0
@@ -356,7 +386,10 @@ ORDER_SETTLE_IN_CITY {
   InvalidCursor 71
 }
 
+
 # Diplomatic Orders
+
+## 16 #########################################################
 
 ORDER_ESTABLISH_EMBASSY {
   Gold 0
@@ -378,6 +411,7 @@ ORDER_ESTABLISH_EMBASSY {
   InvalidCursor 21
 }
 
+## 17 #########################################################
 
 ORDER_THROW_PARTY {
   Gold 500
@@ -402,6 +436,8 @@ ORDER_THROW_PARTY {
 
 # Espionage Orders
 
+## 18 #########################################################
+
 ORDER_INVESTIGATE_CITY {
   Gold 0
   Move 100
@@ -422,6 +458,7 @@ ORDER_INVESTIGATE_CITY {
   InvalidCursor 31
 }
 
+## 19 #########################################################
 
 ORDER_STEAL_TECHNOLOGY {
   Gold 2000
@@ -443,6 +480,7 @@ ORDER_STEAL_TECHNOLOGY {
   InvalidCursor 43
 }
 
+## 20 #########################################################
 
 ORDER_INCITE_REVOLUTION {
   Gold 100
@@ -464,6 +502,7 @@ ORDER_INCITE_REVOLUTION {
   InvalidCursor 41
 }
 
+## 21 #########################################################
 
 ORDER_PLANT_NUKE {
   Gold 5000
@@ -488,6 +527,8 @@ ORDER_PLANT_NUKE {
 
 # Religious Orders
 
+## 22 #########################################################
+
 ORDER_CONVERT {
   Gold 100
   Move 100
@@ -508,6 +549,7 @@ ORDER_CONVERT {
   InvalidCursor 35
 }
 
+## 23 #########################################################
 
 ORDER_SOOTHSAY {
   Gold 500
@@ -529,6 +571,7 @@ ORDER_SOOTHSAY {
   InvalidCursor 39
 }
 
+## 24 #########################################################
 
 ORDER_INDULGENCE {
   Gold 0
@@ -550,6 +593,7 @@ ORDER_INDULGENCE {
   InvalidCursor 37
 }
 
+## 25 #########################################################
 
 ORDER_FAITH_HEALING {
   Gold 500
@@ -574,6 +618,8 @@ ORDER_FAITH_HEALING {
 
 # Slavery Orders
 
+## 26 #########################################################
+
 ORDER_SLAVE_RAID {
   Gold 250
   Move 100
@@ -594,6 +640,7 @@ ORDER_SLAVE_RAID {
   InvalidCursor 27
 }
 
+## 27 #########################################################
 
 ORDER_ENSLAVE_SETTLER {
   Gold 250
@@ -616,6 +663,7 @@ ORDER_ENSLAVE_SETTLER {
   InvalidCursor 27
 }
 
+## 28 #########################################################
 
 ORDER_INCITE_UPRISING {
   Gold 0
@@ -637,6 +685,7 @@ ORDER_INCITE_UPRISING {
   InvalidCursor 33
 }
 
+## 29 #########################################################
 
 ORDER_UNDERGROUND_RAILWAY {
   Gold 50
@@ -661,6 +710,8 @@ ORDER_UNDERGROUND_RAILWAY {
 
 # Economic Orders
 
+## 30 #########################################################
+
 ORDER_FRANCHISE {
   Gold 250
   Move 100
@@ -681,6 +732,7 @@ ORDER_FRANCHISE {
   InvalidCursor 65
 }
 
+## 31 #########################################################
 
 ORDER_ADVERTISE {
   Gold 500
@@ -702,6 +754,7 @@ ORDER_ADVERTISE {
   InvalidCursor 79
 }
 
+## 32 #########################################################
 
 ORDER_INJOIN {
   Gold 300
@@ -723,6 +776,7 @@ ORDER_INJOIN {
   InvalidCursor 49
 }
 
+## 33 #########################################################
 
 ORDER_SUE {
   Gold 500
@@ -744,6 +798,7 @@ ORDER_SUE {
   InvalidCursor 51
 }
 
+## 34 #########################################################
 
 ORDER_SUE_FRANCHISE {
   Gold 500
@@ -769,6 +824,8 @@ ORDER_SUE_FRANCHISE {
 
 # Nuke Orders
 
+## 35 #########################################################
+
 ORDER_TARGET {
   Gold 0
   Move 0
@@ -789,7 +846,8 @@ ORDER_TARGET {
   InvalidCursor 83
 }
 
-			
+## 35 #########################################################
+
 ORDER_CLEAR_TARGET {
   Gold 0
   Move 0
@@ -808,7 +866,10 @@ ORDER_CLEAR_TARGET {
   InvalidCursor 89
 }
 
+
 # Futuristic Orders
+
+## 36 #########################################################
 
 ORDER_BIO_INFECT {
   Gold 1000
@@ -830,6 +891,7 @@ ORDER_BIO_INFECT {
   InvalidCursor 59
 }
 
+## 37 #########################################################
 
 ORDER_PLAGUE {
   Gold 1000
@@ -851,6 +913,7 @@ ORDER_PLAGUE {
   InvalidCursor 85
 }
 
+## 38 #########################################################
 
 ORDER_NANO_INFECT {
   Gold 4000
@@ -872,6 +935,7 @@ ORDER_NANO_INFECT {
   InvalidCursor 57
 }
 
+## 39 #########################################################
 
 ORDER_ASSASSINATE {
   Gold 1000
@@ -893,6 +957,7 @@ ORDER_ASSASSINATE {
   InvalidCursor 55
 }
 
+## 40 #########################################################
 
 ORDER_CREATE_PARK {
   Gold 0
@@ -917,6 +982,8 @@ ORDER_CREATE_PARK {
 
 # Hidden Orders (For GL)
 
+## 41 #########################################################
+
 ORDER_RANGED_ATTACK {
   Gold 0
   Move 100
@@ -935,6 +1002,7 @@ ORDER_RANGED_ATTACK {
   InvalidCursor 8
 }
 
+## 42 #########################################################
 
 ORDER_REFUEL {
   Gold 0
@@ -958,6 +1026,8 @@ ORDER_REFUEL {
 
 # Orders To Be Cut
 
+## 43 #########################################################
+
 ORDER_PARADROP {
   Gold 0
   Move 100
@@ -980,6 +1050,7 @@ ORDER_PARADROP {
   InvalidCursor 8
 }
 
+## 44 #########################################################
 
 ORDER_INVESTIGATE_READINESS {
   Gold 0
@@ -1003,6 +1074,7 @@ ORDER_INVESTIGATE_READINESS {
   InvalidCursor 8
 }
 
+## 45 #########################################################
 
 ORDER_AIRLIFT {
   Gold 0
@@ -1026,3 +1098,4 @@ ORDER_AIRLIFT {
   InvalidCursor 8
 }
 
+## end ########################################################
