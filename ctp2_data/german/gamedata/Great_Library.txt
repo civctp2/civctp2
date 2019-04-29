@@ -4883,7 +4883,7 @@ Unterhalt:
 
 [IMPROVE_BEHAVIORAL_MOD_CENTER_STATISTICS]
 Effekt:
--{BuildingDB(Building[0]).LowerCrime}% <L:DATABASE_CONCEPTS,CONCEPT_CRIME>Kriminalität<e>
+{BuildingDB(Building[0]).LowerCrime}% <L:DATABASE_CONCEPTS,CONCEPT_CRIME>Kriminalität<e>
 [END]
 
 [IMPROVE_BEHAVIORAL_MOD_CENTER_GAMEPLAY]
