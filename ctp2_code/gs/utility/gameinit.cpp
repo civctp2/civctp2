@@ -148,7 +148,6 @@
 #include "wonderutil.h"
 #include "World.h"
 #include "Wormhole.h"
-#include "XY_Coordinates.h"
 
 extern void Astar_Init();
 extern void Astar_Cleanup();

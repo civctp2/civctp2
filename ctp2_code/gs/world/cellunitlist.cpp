@@ -44,7 +44,6 @@
 
 #include "World.h"
 #include "player.h"
-#include "UnitRec.h"
 #include "DB.h"
 #include "WonderRecord.h"
 #include "SelItem.h"

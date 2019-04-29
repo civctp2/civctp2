@@ -25,7 +25,6 @@
 #include "Actor.h"
 #include "UnitActor.h"
 #include "workeractor.h"
-#include "XY_Coordinates.h"
 #include "World.h"              // g_theWorld
 #include "Cell.h"
 #include "MapPoint.h"

@@ -85,7 +85,7 @@ void Path::FlattenAstarList(AstarPoint *best)
 	AstarPoint *    ptr = best;
 
 	sint32 n;
-	for (n=0; ptr->m_parent; n++, ptr = ptr->m_parent);
+	for(n = 0; ptr->m_parent; n++, ptr = ptr->m_parent) { Assert(n >= 0); }; // Check for endless loop
 
 	m_current = m_start = ptr->m_pos;
 	m_next = 0;

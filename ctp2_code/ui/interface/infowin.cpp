@@ -61,7 +61,6 @@
 #include "Unit.h"
 #include "UnitData.h"
 #include "UnitDynArr.h"
-#include "UnitRec.h"
 #include "World.h"                  // g_theWorld
 #include "workmap.h"
 

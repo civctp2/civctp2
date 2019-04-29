@@ -56,7 +56,6 @@
 #include "tileutils.h"
 #include "TileInfo.h"
 #include "GoodyHuts.h"
-#include "UnitRec.h"
 #include "TradeDynArr.h"
 #include "cellunitlist.h"
 #include "Unit.h"

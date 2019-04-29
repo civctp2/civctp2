@@ -47,17 +47,11 @@
 #include "CityAstar.h"
 
 #include "AgreementMatrix.h"    // Allow alliance checking
-#include "Astar.h"              // k_ASTAR_BIG, ASTAR_BLOCKED, ASTAR_CAN_ENTER
-#include "c3errors.h"
 #include "Diplomat.h"           // To be able to retrieve the current strategy
-#include "Globals.h"
-#include "MoveFlags.h"
 #include "Path.h"
 #include "player.h"             // g_player
 #include "StrategyRecord.h"     // For accessing the strategy database
-#include "TerrainImprovementRecord.h"
 #include "terrainutil.h"
-#include "TerrImprove.h"
 #include "World.h"              // g_theWorld
 
 CityAstar g_city_astar;

@@ -34,8 +34,6 @@
 #include "c3.h"
 #include "World.h"
 
-#include "Globals.h"
-#include "XY_Coordinates.h"
 #include "Cell.h"
 #include "StrDB.h"
 #include "TerrainRecord.h"

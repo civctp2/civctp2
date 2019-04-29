@@ -57,7 +57,6 @@
 #include "c3_utilitydialogbox.h"
 #include "SelItem.h"
 #include "player.h"					// g_player
-#include "UnitRec.h"
 #include "World.h"
 #include "Unit.h"
 #include "UnitData.h"

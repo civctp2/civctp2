@@ -32,25 +32,17 @@
 //----------------------------------------------------------------------------
 
 #include "c3.h"
-#include "c3errors.h"
-#include "Globals.h"
-
-#include "astarpnt.h"
 #include "Astar.h"
+
 #include "AVLHeap.h"
-
-#include "dynarr.h"
 #include "Path.h"
-
-#include "XY_Coordinates.h"
 #include "World.h"
-#include "RandGen.h"
-#include "Cell.h"
-#include "priorityqueue.h"
 #include "A_Star_Heuristic_Cost.h"
 
-extern World *g_theWorld;
-extern RandomGenerator *g_rand;
+#ifdef PRINT_COSTS
+#include "gfx_options.h"
+#include "tiledmap.h"
+#endif
 
 sint32 g_search_count;
 
@@ -92,8 +84,7 @@ float Astar::EstimateFutureCost(const MapPoint &pos, const MapPoint &dest)
 
 	sint32 dist = pos.NormalizedDistance(dest);
 	{
-		best_heuristic = (float)g_theWorld->A_star_heuristic->Get_Minimum_Nearby_Movement_Cost(
-				MapPointData(pos));
+		best_heuristic = (float)g_theWorld->A_star_heuristic->Get_Minimum_Nearby_Movement_Cost(pos);
 
 		Assert(best_heuristic > 0);
 		Assert(best_heuristic < 500);
@@ -113,7 +104,7 @@ float Astar::EstimateFutureCost(const MapPoint &pos, const MapPoint &dest)
 #endif
 
 #ifdef _PLAYTEST
-		if (m_pretty_path && g_old_heuristic)
+		if (g_old_heuristic)
 		{
 			 float ground_dist =  0.7f * best_heuristic * dist;
 
@@ -153,13 +144,22 @@ void Astar::DecayOrtho(AstarPoint *parent, AstarPoint *point, float &new_entry_c
 bool Astar::InitPoint(AstarPoint *parent, AstarPoint *point,
     const MapPoint &pos, const float pc, const MapPoint &dest)
 {
+#if defined(DEBUG_ASTAR_ENDLESS_LOOP)
+	AstarPoint *ancestor = parent;
+	while(ancestor != NULL)
+	{
+		Assert(ancestor != point);
+		ancestor = ancestor->m_parent;
+	}
+#endif
+
 	AstarPoint *d = point;
 	ASTAR_ENTRY_TYPE entry=ASTAR_CAN_ENTER;
 	bool is_zoc = false;
 
 	d->m_flags = 0;
 	d->SetEntry(ASTAR_CAN_ENTER);
-	d->SetZoc(FALSE);
+	d->SetZoc(false);
 	d->SetExpanded(false);
 	d->m_pos = pos;
 	d->m_parent = parent;
@@ -169,29 +169,54 @@ bool Astar::InitPoint(AstarPoint *parent, AstarPoint *point,
 	if (parent == NULL)
 	{
 		d->m_entry_cost = 0.0;
-		d->m_future_cost = EstimateFutureCost(d->m_pos, dest);
+		d->m_future_cost = EstimateFutureCost(d->m_pos, dest); // Still use this heuristic for the start
 		d->m_total_cost = d->m_past_cost + d->m_entry_cost
 		     + d->m_future_cost;
 
 #ifdef PRINT_COSTS
-		g_theWorld->SetColor(pos,  d->m_total_cost);
+		PrintCosts(pos, 200, d->m_total_cost);
 #endif
 
 		return true;
 	}
 	else if (EntryCost(parent->m_pos, d->m_pos, d->m_entry_cost, is_zoc, entry))
 	{
+		Assert(pc == parent->m_past_cost + parent->m_entry_cost);
+		Assert(entry != ASTAR_RETRY_DIRECTION);
+
+#ifdef _DEBUG
+		if(entry == ASTAR_RETRY_DIRECTION)
+		{
+			is_zoc = false;
+			entry = ASTAR_CAN_ENTER;
+
+			d->m_flags = 0;
+			d->SetEntry(ASTAR_CAN_ENTER);
+			d->SetZoc(false);
+			d->SetExpanded(false);
+			d->m_pos = pos;
+			d->m_parent = parent;
+			d->m_queue_idx = -1;
+
+			d->m_past_cost = pc;
+			d->m_entry_cost = 0.0;
+			d->m_future_cost = EstimateFutureCost(d->m_pos, dest);
+			d->m_total_cost = d->m_past_cost + d->m_entry_cost
+				+ d->m_future_cost;
+			EntryCost(parent->m_pos, d->m_pos, d->m_entry_cost, is_zoc, entry);
+		}
+#endif
+
 		d->SetEntry(entry);
 		d->SetZoc(is_zoc);
 
 		DecayOrtho(parent, point, d->m_entry_cost);
-
-		d->m_future_cost = EstimateFutureCost(d->m_pos, dest);
+		d->m_future_cost = d->m_entry_cost * d->m_pos.NormalizedDistance(dest);
 		d->m_total_cost = d->m_past_cost + d->m_entry_cost
 		    + d->m_future_cost;
 
 #ifdef PRINT_COSTS
-		g_theWorld->SetColor(pos,  d->m_total_cost);
+		PrintCosts(pos, 100, d->m_total_cost);
 #endif
 
 		return true;
@@ -211,15 +236,36 @@ bool Astar::InitPoint(AstarPoint *parent, AstarPoint *point,
 			d->SetEntry(ASTAR_BLOCKED);
 		}
 
-		d->m_future_cost = (d->m_entry_cost + k_ASTAR_BIG);
+		d->m_future_cost = k_ASTAR_BIG;
 		d->m_total_cost = d->m_past_cost + d->m_entry_cost
 		    + d->m_future_cost;
- #ifdef PRINT_COSTS
-		g_theWorld->SetColor(pos,  d->m_total_cost);
+
+#ifdef PRINT_COSTS
+		PrintCosts(pos, 0, d->m_total_cost);
 #endif
 		return false;
 	}
 }
+
+#ifdef PRINT_COSTS
+void Astar::PrintCosts(MapPoint pos, uint8 magnitude, float costs)
+{
+	if(g_graphicsOptions != NULL)
+	{
+		char buf[16];
+		sprintf(buf, "%5.1f", costs);
+		g_graphicsOptions->AddTextToCell(pos, buf, magnitude, -1);
+	}
+}
+
+void Astar::ResetPrintedCosts()
+{
+	if(g_graphicsOptions != NULL)
+	{
+		g_graphicsOptions->ResetAllCellTexts();
+	}
+}
+#endif
 
 void Astar::RecalcEntryCost(AstarPoint *parent, AstarPoint *node, float &new_entry_cost,
     bool &new_is_zoc, ASTAR_ENTRY_TYPE &new_entry)
@@ -385,6 +431,10 @@ bool Astar::FindPath
 	}
 #endif
 
+#ifdef PRINT_COSTS
+	ResetPrintedCosts();
+#endif
+
 	m_priority_queue.Clear();
 	g_search_count++;
 
@@ -428,7 +478,7 @@ bool Astar::FindPath
 		Assert(loop_count < 1400000); // Ultra Gigantic problem
 
 		float past_cost = best->m_past_cost + best->m_entry_cost;
-		best->SetExpanded(TRUE);
+		best->SetExpanded(true);
 
 		sint32 max_dir = GetMaxDir(best->m_pos);
 
@@ -578,15 +628,25 @@ bool Astar::FindPath
 
 	} while (searching || (best && (k_ASTAR_BIG <= best->m_entry_cost )) && (nodes_opened < cutoff));
 
+	Assert(nodes_opened < cutoff);
+
 #ifdef SUPER_DEBUG_HEURISTIC
 	WhackScreen();
 #endif
 
 	bool const r =  Cleanup(dest, a_path, total_cost, isunit, best, cost_tree);
+	DPRINTF(k_DBG_ASTAR, ("\tFinalPathCosts: %f , StartPos (%d, %d), DestPos (%d, %d), BestPos (%d, %d)\n", total_cost, start.x, start.y, dest.x, dest.y, best->m_pos.x, best->m_pos.y));
 
 #ifdef TRACK_ASTAR_NODES
 	g_paths_found++;
 	g_paths_lengths += a_path.Num();
+#endif
+
+#ifdef PRINT_COSTS
+	if(g_tiledMap != NULL)
+	{
+		g_tiledMap->Refresh();
+	}
 #endif
 
 	return r;

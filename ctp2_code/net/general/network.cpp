@@ -94,7 +94,6 @@ extern sint32 g_debugOwner;
 
 #include "UnitData.h"
 #include "player.h"
-#include "XY_Coordinates.h"
 #include "World.h"
 #include "UnitPool.h"
 #include "citydata.h"

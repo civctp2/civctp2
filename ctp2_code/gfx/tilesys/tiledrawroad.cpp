@@ -35,7 +35,6 @@
 
 #include "pixelutils.h"
 
-#include "XY_Coordinates.h"
 #include "World.h"
 #include "TerrImproveData.h"
 

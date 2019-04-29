@@ -156,9 +156,8 @@ void World::CreateTheWorld(MapPoint player_start_list[k_MAX_PLAYERS],
 
 		SetAllMoveCost();
 
-		XY_Coords.Init(m_size.y, m_size.x);
 
-        delete A_star_heuristic;
+		delete A_star_heuristic;
 		A_star_heuristic = new A_Star_Heuristic_Cost
 								(m_size.y,
 								 m_size.x,
@@ -244,8 +243,6 @@ World::World(CivArchive &archive, BOOL fromMapFile)
 	    Serialize(archive) ;
 
 	g_mp_size = m_size;
-
-	XY_Coords.Init(m_size.y, m_size.x);
 
 	A_star_heuristic = new A_Star_Heuristic_Cost
 							(m_size.y,

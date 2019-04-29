@@ -67,7 +67,6 @@
 
 #include "tiledmap.h"
 #include "background.h"
-#include "XY_Coordinates.h"
 #include "World.h"
 #include "civ3_main.h"
 #include "pollution.h"

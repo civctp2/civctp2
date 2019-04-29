@@ -46,7 +46,6 @@
 #include "aui_radio.h"
 #include "aui_switchgroup.h"
 #include "aui_uniqueid.h"
-#include "XY_Coordinates.h"
 #include "World.h"
 #include "profileDB.h"			// WORLD_SHAPE
 #include "custommapscreen.h"

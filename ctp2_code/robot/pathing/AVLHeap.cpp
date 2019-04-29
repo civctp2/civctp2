@@ -33,7 +33,6 @@
 #include "AVLHeap.h"
 #include "pixelutils.h"
 
-#include "XY_Coordinates.h"
 #include "World.h"
 
 extern World *g_theWorld;

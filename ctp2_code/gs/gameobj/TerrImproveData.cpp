@@ -38,7 +38,6 @@
 #include "c3.h"
 #include "TerrImproveData.h"
 
-#include "XY_Coordinates.h"
 #include "World.h"
 #include "Cell.h"
 #include "civarchive.h"

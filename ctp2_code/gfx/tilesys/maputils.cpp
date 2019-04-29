@@ -31,7 +31,6 @@
 #include "tiledmap.h"
 #include "maputils.h"
 #include "profileDB.h"
-#include "XY_Coordinates.h"
 #include "World.h"
 
 extern ProfileDB	*g_theProfileDB;

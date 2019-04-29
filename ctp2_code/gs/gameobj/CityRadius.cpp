@@ -31,7 +31,6 @@
 #include "c3.h"
 #include "MapPoint.h"
 #include "CityRadius.h"
-#include "XY_Coordinates.h"
 #include "World.h"
 
 extern World *g_theWorld;

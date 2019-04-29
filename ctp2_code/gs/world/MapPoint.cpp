@@ -38,9 +38,7 @@
 #include <algorithm>
 
 #include "civarchive.h"
-#include "XY_Coordinates.h"
 #include "World.h"              // g_theWorld
-#include "c3math.h"
 
 MapPoint g_mp_size;
 
