@@ -4444,6 +4444,18 @@ sint32 CityData::CalculateGoldFromResources()
 		else
 		{
 			m_goldLostToPiracy += m_tradeSourceList[i]->GetValue();
+
+			TradeRoute route = m_tradeSourceList[i];
+			// Unit fromCity = route.GetSource();
+			Unit toCity = route.GetDestination();
+
+			SlicObject * so = new SlicObject("045TradePirated");
+			so->AddRecipient(GetOwner());
+			so->AddGold(route->GetValue()) ;
+			so->AddCity(m_home_city); // m_home_city should equal fromCity
+			so->AddCity(toCity);
+			so->AddCivilisation(route->GetPiratingArmy().GetOwner());
+			g_slicEngine->Execute(so);
 		}
 	}
 
