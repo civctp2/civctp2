@@ -1683,21 +1683,13 @@ void ArmyData::BeginTurn()
 		    fromCity = route.GetSource();
 		    toCity = route.GetDestination();
 
-		    SlicObject * so1 = new SlicObject("044TradePirateGold");
-		    so1->AddRecipient(GetOwner());
-		    so1->AddGold(pgold) ;
-		    so1->AddCity(fromCity);
-		    so1->AddCity(toCity);
-		    so1->AddCivilisation(fromCity.GetOwner());
-		    g_slicEngine->Execute(so1);
-
-		    SlicObject * so2 = new SlicObject("045TradePirated");
-		    so2->AddRecipient(fromCity.GetOwner());
-		    so2->AddGold(route->GetValue()) ;
-		    so2->AddCity(fromCity);
-		    so2->AddCity(toCity);
-		    so2->AddCivilisation(GetOwner());
-		    g_slicEngine->Execute(so2);
+		    SlicObject * so = new SlicObject("044TradePirateGold");
+		    so->AddRecipient(GetOwner());
+		    so->AddGold(pgold) ;
+		    so->AddCity(fromCity);
+		    so->AddCity(toCity);
+		    so->AddCivilisation(fromCity.GetOwner());
+		    g_slicEngine->Execute(so);
                 }
             }
             if(piratedByMe < 1) {
