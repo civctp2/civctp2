@@ -68,6 +68,8 @@ STDEHANDLER(BeginTurnEvent)
 
 	g_director->NextPlayer();
 
+	g_player[player]->BeginTurn();
+
 	if(g_theProfileDB->IsAIOn() && (!g_network.IsClient()))
 	{
 		g_gevManager->AddEvent(GEV_INSERT_Tail, GEV_AiBeginMapAnalysis,
@@ -85,8 +87,6 @@ STDEHANDLER(BeginTurnEvent)
 		                       GEA_End
 		                      );
 	}
-
-	g_player[player]->BeginTurn();
 
 	g_gevManager->AddEvent(GEV_INSERT_Tail, GEV_ResumeEmailAndHotSeatDiplomacy,
 	                       GEA_Player,      player,

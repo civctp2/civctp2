@@ -2468,7 +2468,7 @@ bool Unit::UnitValidForOrder(const OrderRecord * order_rec) const
 	else if(order_rec->GetUnitPretest_CanSellIndulgences())
 		order_valid = unit_rec->HasIndulgenceSales();
 //	else if(order_rec->GetUnitPretest_CanFaithHeal())
-//		order_valid = false;
+//		order_valid = false; // Is sell indulgence
 	else if(order_rec->GetUnitPretest_CanSoothsay())
 		order_valid = unit_rec->HasCanSoothsay();
 	else if(order_rec->GetUnitPretest_CanCreatePark())

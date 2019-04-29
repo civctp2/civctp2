@@ -166,7 +166,7 @@ public:
 	Sorted_Goal_Iter Remove_Goal(const Sorted_Goal_Iter & sorted_goal_iter);
 	void Remove_Goal(const Goal_ptr & goal);
 
-	void Remove_Goals_Type(const GoalRecord *rec);
+	void Remove_Goals_Type(const GOAL_TYPE & type);
 
 
 	Squad_Strength GetMostNeededStrength() const;
@@ -200,6 +200,7 @@ public:
 #endif
 
 	GOAL_TYPE GetMaxEvalExec(const StrategyRecord::GoalElement *goal_element_ptr, sint16 & max_eval, sint16 & max_exec);
+	bool HasAgentToExecute(const GOAL_TYPE & type) const;
 
 private:
 

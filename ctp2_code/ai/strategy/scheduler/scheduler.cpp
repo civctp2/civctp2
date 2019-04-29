@@ -1046,9 +1046,9 @@ Scheduler::Sorted_Goal_Iter Scheduler::Remove_Goal(const Scheduler::Sorted_Goal_
 //  called by CtpAi::AddSettleTargets
 //
 ////////////////////////////////////////////////////////////
-void Scheduler::Remove_Goals_Type(const GoalRecord *rec)
+void Scheduler::Remove_Goals_Type(const GOAL_TYPE & type)
 {
-	Sorted_Goal_List & goalList = m_goals_of_type[rec->GetIndex()];
+	Sorted_Goal_List & goalList = m_goals_of_type[type];
 	for
 	(
 	    Sorted_Goal_Iter sorted_goal_iter  = goalList.begin();
@@ -1766,6 +1766,31 @@ GOAL_TYPE Scheduler::GetMaxEvalExec(const StrategyRecord::GoalElement *goal_elem
 	max_exec = (sint16) floor(tmp_exec);
 
 	return goal_type;
+}
+
+bool Scheduler::HasAgentToExecute(const GOAL_TYPE & type) const
+{
+	const OrderRecord *order = g_theGoalDB->Get(type)->GetExecute();
+
+	for
+	(
+	    Agent_List::const_iterator agent_iter  = m_agents.begin();
+	                               agent_iter != m_agents.end();
+	                             ++agent_iter
+	)
+	{
+		Agent* agent = (*agent_iter);
+
+		if(agent->Get_Is_Dead()) // We haven't removed those, yet.
+			continue;
+
+		if(agent->Get_Army()->TestOrderAny(order))
+		{
+			return true;
+		}
+	}
+
+	return false;
 }
 
 void Scheduler::DisbandObsoleteArmies(const sint16 max_count)

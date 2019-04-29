@@ -232,13 +232,15 @@ void CtpAi::AddGoalsForCitiesAndArmies(const PLAYER_INDEX player)
 			}
 		}
 
-		GoalRecord const * goal = g_theGoalDB->Get(goal_type);
-
-		if(max_eval <= 0 || max_exec <= 0) // Nothing to evaluate and to execute
-		{
-			scheduler.Remove_Goals_Type(goal);
+		if(max_eval <= 0                           // Nothing to evaluate
+		|| max_exec <= 0                           // Nothing to execute
+		|| !scheduler.HasAgentToExecute(goal_type) // No army for execution
+		){
+			scheduler.Remove_Goals_Type(goal_type);
 			continue;
 		}
+
+		GoalRecord const * goal = g_theGoalDB->Get(goal_type);
 
 		for(PLAYER_INDEX foreignerId = 0; foreignerId < CtpAi::s_maxPlayers; foreignerId++)
 		{
@@ -1758,7 +1760,7 @@ void CtpAi::AddSettleTargets(const PLAYER_INDEX playerId)
 		// Remove any settle goals if we have no units for them
 		if (targets.empty())
 		{
-			scheduler.Remove_Goals_Type(g_theGoalDB->Get(goal_type));
+			scheduler.Remove_Goals_Type(goal_type);
 			continue;
 		}
 
