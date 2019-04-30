@@ -11275,7 +11275,20 @@ void CityData::GiveTradeRouteGold()
 				if((route.GetSource().GetOwner() != m_owner)
 				&&(route.GetDestination().GetOwner() != m_owner)
 				){
-					g_player[m_owner]->AddGold(static_cast<sint32>(route->GetValue() * g_theConstDB->Get(0)->GetCityOnTradeRouteCoeff()));
+					sint32 tgold = static_cast<sint32>(route->GetValue() * g_theConstDB->Get(0)->GetCityOnTradeRouteCoeff());
+					g_player[m_owner]->AddGold(tgold);
+
+					Unit fromCity = route.GetSource();
+					Unit toCity = route.GetDestination();
+
+					SlicObject * so = new SlicObject("359TradePassing");
+					so->AddRecipient(GetOwner());
+					so->AddGold(tgold) ;
+					so->AddCity(m_home_city); // m_home_city should equal fromCity
+					so->AddCity(fromCity);
+					so->AddCity(toCity);
+					so->AddCivilisation(fromCity.GetOwner());
+					g_slicEngine->Execute(so);
 				}
 			}
 		}
