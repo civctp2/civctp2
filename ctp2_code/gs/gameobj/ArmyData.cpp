@@ -1701,7 +1701,7 @@ void ArmyData::BeginTurn()
                 }
             }
             if(piratedByMe < 1) {
-                StopPirating();
+                StopPirating(); // if no route was successfully pirated by me, which happens if routes got removed; moving the army/unit along a route also calls StopPirating probably from AddOrders or AutoAddOrders
             }
         }
     }
@@ -6054,7 +6054,7 @@ void ArmyData::AutoAddOrders(UNIT_ORDER_TYPE order, Path *path,
 	}
 
 	m_orders->AddTail(new Order(order, path, point, argument));
-	StopPirating();
+	StopPirating(); // why?
 
 	if(m_owner >= 0 && m_owner < k_MAX_PLAYERS && g_player[m_owner])
 	{
@@ -6092,7 +6092,7 @@ void ArmyData::AutoAddOrdersWrongTurn(UNIT_ORDER_TYPE order, Path *path,
 	ClearOrders();
 
 	m_orders->AddTail(new Order(order, path, point, argument));
-	StopPirating();
+	StopPirating(); // why?
 
 	if(m_owner >= 0 && m_owner < k_MAX_PLAYERS && g_player[m_owner]) {
 		ExecuteOrders(false);
@@ -6201,7 +6201,7 @@ void ArmyData::AddOrders(UNIT_ORDER_TYPE order, Path *path, const MapPoint &poin
 		}
 	}
 
-	StopPirating();
+	StopPirating(); // why?
 
 	Order *o = m_orders->GetTail();
 	if(g_network.IsHost()) {

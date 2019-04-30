@@ -56,7 +56,7 @@ void Army::KillArmy()
 
 	CAUSE_REMOVE_ARMY cause = GetRemoveCause();
 
-	AccessData()->StopPirating();
+	AccessData()->StopPirating(); // do not execute pirating if army gets killed
 
 	Army tmp(*this);
 	tmp.SetRemoveCause(cause);
