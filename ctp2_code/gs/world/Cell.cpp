@@ -1240,31 +1240,38 @@ void Cell::InsertDBImprovement(sint32 type)
 		m_objects = new DynamicArray<ID>;
 	uint32 id = k_BIT_GAME_OBJ_TYPE_IMPROVEMENT_DB | type;
 
-	sint32 i;
-	for (i = m_objects->Num() - 1; i >= 0; i--) {
-		if((m_objects->Access(i).m_id & k_ID_TYPE_MASK) == k_BIT_GAME_OBJ_TYPE_IMPROVEMENT_DB) {
+	for (sint32 i = m_objects->Num() - 1; i >= 0; i--)
+	{
+		if((m_objects->Access(i).m_id & k_ID_TYPE_MASK) == k_BIT_GAME_OBJ_TYPE_IMPROVEMENT_DB)
+		{
 			const TerrainImprovementRecord *oldRec =
 				g_theTerrainImprovementDB->Get(m_objects->Access(i).m_id & k_ID_KEY_MASK);
-			if(oldRec->GetClass() & rec->GetExcludes()) {
-
+			if(oldRec->GetClass() & rec->GetExcludes())
+			{
 				m_objects->DelIndex(i);
-			} else if(m_objects->Access(i).m_id == id) {
+			}
+			else if(m_objects->Access(i).m_id == id)
+			{
+				Assert(false);
 				return;
 			}
 		}
 	}
 
 	m_objects->Insert(ID(id));
-	if(rec->GetClassRoad()) {
+	if(rec->GetClassRoad())
+	{
 		sint32 level = rec->GetLevel();
 		Assert(level > 0 && level < 4);
-		if(level > 0 && level < 4) {
+		if(level > 0 && level < 4)
+		{
 			SetEnv((m_env & ~(k_MASK_ENV_ROAD)) | (level << k_SHIFT_ENV_ROAD));
 			CalcMovementType();
 		}
 	}
 
-	if(rec->GetClassOceanRoad()) {
+	if(rec->GetClassOceanRoad())
+	{
 		SetEnv(m_env | k_MASK_ENV_CANAL_TUNNEL | (k_Unit_MovementType_Land_Bit << k_SHIFT_ENV_MOVEMENT_TYPE));
 	}
 }
