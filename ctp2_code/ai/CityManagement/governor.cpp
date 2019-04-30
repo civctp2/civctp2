@@ -1582,7 +1582,11 @@ void Governor::PlaceTileImprovements()
 				continue;
 
 			if(cell->GetNumImprovements() > 0)
-					continue;
+				continue;
+
+			if(g_theInstallationTree->GetCount(it.Pos()) > 0
+			&& g_theWorld->GetCell(it.Pos())->GetTerrainType() != terrainutil_GetDead())
+				continue;
 
 			if(FindBestTileImprovement(it.Pos(), ti_goal, bonusFood, bonusProduction, bonusCommerce))
 			{
