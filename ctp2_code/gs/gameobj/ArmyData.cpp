@@ -6201,7 +6201,9 @@ void ArmyData::AddOrders(UNIT_ORDER_TYPE order, Path *path, const MapPoint &poin
 		}
 	}
 
-	StopPirating(); // why?
+	if(point != m_pos || order != UNIT_ORDER_INTERCEPT_TRADE){
+	    StopPirating(); // to ensure trade route is not regarded as pirated when moving off (which is not possible any more on the new position, see https://github.com/civctp2/civctp2/issues/75
+	    }
 
 	Order *o = m_orders->GetTail();
 	if(g_network.IsHost()) {
