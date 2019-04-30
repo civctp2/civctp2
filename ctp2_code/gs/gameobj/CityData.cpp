@@ -11281,10 +11281,15 @@ void CityData::GiveTradeRouteGold()
 					Unit fromCity = route.GetSource();
 					Unit toCity = route.GetDestination();
 
+					ROUTE_TYPE type;
+					sint32 good;
+					route.GetSourceResource(type, good);
+					
 					SlicObject * so = new SlicObject("359TradePassing");
 					so->AddRecipient(GetOwner());
 					so->AddGold(tgold) ;
 					so->AddCity(m_home_city); // m_home_city should equal fromCity
+					so->AddGood(good);
 					so->AddCity(fromCity);
 					so->AddCity(toCity);
 					so->AddCivilisation(fromCity.GetOwner());

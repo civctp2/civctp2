@@ -155,7 +155,7 @@ TRADE_PIRATED				"La nostra rotta commerciale da  {good[0].name} {city[0].name} 
 TRADE_PIRATE_GOLD			"{gold[0].value} gold was pirated on the trade route carrying {good[0].name} from {city[0].name} to {city[1].name} owned by {player[0].civ_name_plural}."
 TRADE_ROUTES_BROKEN_BY_EMBARGO		"{player[0].sir_cap}, {player[1].civ_name_plural#ARTICLE} hanno deciso l'embargo contro di noi in ogni loro nazione. Tutte le rotte esistenti verso {player[1].country_name#ARTICLE} sono state eliminate! Inoltra, abbiamo perso tutte le carovane che si trovavano su quelle vie."
 TRADE_ROUTES_BROKEN_BY_WAR		"Brutte notizie, {player[0].sir}. A causa del conflitto scoppiato fra noi e {player[1].civ_name_plural#ARTICLE}, tutte le nostre rotte commerciali verso le città {player[1].country_name#ARTICLED_PREPOSITION} sono state bloccate. Tutte le carovane presenti su quelle rotte sono andate perse."
-TRADE_PASS				"The trade route passing through our city of {city[0].name} carrying goods from {city[1].name} to {city[2].name} owned by the {player[0].civ_name_plural} brought us {gold[0].value} gold."
+TRADE_PASS				"The trade route passing through our city of {city[0].name} carrying {good[0].name} from {city[1].name} to {city[2].name} owned by the {player[0].civ_name_plural} brought us {gold[0].value} gold."
 SENDER_KILLED_TRADE_ROUTE		"{player[0].leader_name} ha chiuso la rotta commerciale che trasportava {good[0].name} da {city[0].name} a {city[1].name}."
 
 ## Trade Advisor Stuff ##
