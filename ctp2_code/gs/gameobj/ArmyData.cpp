@@ -6054,7 +6054,10 @@ void ArmyData::AutoAddOrders(UNIT_ORDER_TYPE order, Path *path,
 	}
 
 	m_orders->AddTail(new Order(order, path, point, argument));
-	StopPirating(); // why?
+
+	if(point != m_pos || order != UNIT_ORDER_INTERCEPT_TRADE){
+	    StopPirating(); // to ensure trade route is not regarded as pirated when moving off (which is not possible any more on the new position, see https://github.com/civctp2/civctp2/issues/75
+	    }
 
 	if(m_owner >= 0 && m_owner < k_MAX_PLAYERS && g_player[m_owner])
 	{
@@ -6092,7 +6095,10 @@ void ArmyData::AutoAddOrdersWrongTurn(UNIT_ORDER_TYPE order, Path *path,
 	ClearOrders();
 
 	m_orders->AddTail(new Order(order, path, point, argument));
-	StopPirating(); // why?
+
+	if(point != m_pos || order != UNIT_ORDER_INTERCEPT_TRADE){
+	    StopPirating(); // to ensure trade route is not regarded as pirated when moving off (which is not possible any more on the new position, see https://github.com/civctp2/civctp2/issues/75
+	    }
 
 	if(m_owner >= 0 && m_owner < k_MAX_PLAYERS && g_player[m_owner]) {
 		ExecuteOrders(false);
