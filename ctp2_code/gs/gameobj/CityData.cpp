@@ -11275,7 +11275,8 @@ void CityData::GiveTradeRouteGold()
 				if((route.GetSource().GetOwner() != m_owner)
 				&&(route.GetDestination().GetOwner() != m_owner)
 				){
-					sint32 tgold = static_cast<sint32>(route->GetValue() * g_theConstDB->Get(0)->GetCityOnTradeRouteCoeff());
+				    sint32 tgold = static_cast<sint32>(route->GetValue() * g_theConstDB->Get(0)->GetCityOnTradeRouteCoeff());
+				    if(!route->IsBeingPirated()){
 					g_player[m_owner]->AddGold(tgold);
 
 					Unit fromCity = route.GetSource();
@@ -11294,6 +11295,10 @@ void CityData::GiveTradeRouteGold()
 					so->AddCity(toCity);
 					so->AddCivilisation(fromCity.GetOwner());
 					g_slicEngine->Execute(so);
+					}
+				    // else {
+				    // 	// message that tgold is not earned from transit due to pirating
+				    // 	}
 				}
 			}
 		}
