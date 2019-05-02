@@ -1914,12 +1914,11 @@ bool Governor::FindBestTileImprovement(const MapPoint &pos, TiGoal &goal, sint32
 	// Now at the end because otherwise it catches before the dead tiles
 	else if(!g_theWorld->IsGood(pos))
 	{ // Should be removed
-		ERR_BUILD_INST err;
 		if(terrain_type == terrainutil_GetGlacier()
 		|| terrain_type == terrainutil_GetSwamp()
 		|| terrain_type == terrainutil_GetTundra()
 		){
-			if(player_ptr->CanCreateImprovement(terrainutil_GetTerraformHillsImprovement(), pos, 0, FALSE, err))
+			if(player_ptr->CanCreateImprovement(terrainutil_GetTerraformHillsImprovement(), pos, false))
 			{
 				strategy.GetImproveProductionBonus(bonus);
 				goal.utility =  bonus * (1.0-production_rank);
@@ -1928,7 +1927,7 @@ bool Governor::FindBestTileImprovement(const MapPoint &pos, TiGoal &goal, sint32
 		}
 		else if(terrain_type == terrainutil_GetDesert())
 		{
-			if(player_ptr->CanCreateImprovement(terrainutil_GetTerraformGrasslandImprovement(), pos, 0, FALSE, err)){
+			if(player_ptr->CanCreateImprovement(terrainutil_GetTerraformGrasslandImprovement(), pos, false)){
 				strategy.GetImproveGrowthBonus(bonus);
 				goal.utility =  bonus * (1.0-growth_rank);
 				goal.type = terrainutil_GetTerraformGrasslandImprovement();
@@ -2005,8 +2004,7 @@ sint32 Governor::GetBestRoadImprovement(const MapPoint & pos) const
 		return -1;
 
 	Player *player_ptr = g_player[m_playerId];
-	ERR_BUILD_INST err;
-	if (player_ptr && !player_ptr->CanCreateImprovement(terr_imp_rec->GetIndex(), pos, 0, FALSE, err))
+	if (player_ptr && !player_ptr->CanCreateImprovement(terr_imp_rec->GetIndex(), pos, false))
 	    return -1;
 
 	sint32 const old_move_cost = static_cast<sint32>(cell->GetMoveCost());
@@ -2104,9 +2102,8 @@ void Governor::GetBestFoodProdGoldImprovement(const MapPoint & pos, sint32 & foo
 	for (type = 0; type < g_theTerrainImprovementDB->NumRecords(); type++)
 	{
 		rec = g_theTerrainImprovementDB->Get(type);
-		ERR_BUILD_INST err;
 
-		if (!player_ptr->CanCreateImprovement(type, pos, 0, FALSE, err))
+		if (!player_ptr->CanCreateImprovement(type, pos, false))
 			continue;
 
 		if (current_class != 0x0 && ((rec->GetClass() & current_class) == 0x0))

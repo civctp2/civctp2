@@ -5350,8 +5350,8 @@ void Player::GetArmyPos(sint32 index, MapPoint &army_pos)
 }
 
 bool Player::CanCreateImprovement(sint32 type,
-								  const MapPoint &point, sint32 extraData,
-								  const bool check_materials, ERR_BUILD_INST &err)
+                                  const MapPoint &point,
+                                  const bool check_materials)
 {
 	const TerrainImprovementRecord *rec = g_theTerrainImprovementDB->Get(type);
 	Cell *cell = g_theWorld->GetCell(point);
@@ -5365,7 +5365,6 @@ bool Player::CanCreateImprovement(sint32 type,
 	{
 		if(cell->GetDBImprovement(i) == type)
 		{
-
 			return false;
 		}
 	}
@@ -5374,7 +5373,6 @@ bool Player::CanCreateImprovement(sint32 type,
 	{
 		if(cell->AccessImprovement(i).GetType() == type)
 		{
-
 			return false;
 		}
 	}
@@ -5406,9 +5404,8 @@ TerrainImprovement Player::CreateImprovement(sint32 dbIndex,
 											 sint32 extraData)
 {
 	TerrainImprovement theImprovement;
-	ERR_BUILD_INST err;
 
-	if(!CanCreateImprovement(dbIndex, point, extraData, true, err))
+	if(!CanCreateImprovement(dbIndex, point, true))
 		return theImprovement;
 
 	theImprovement = g_theTerrainImprovementPool->Create(m_owner,

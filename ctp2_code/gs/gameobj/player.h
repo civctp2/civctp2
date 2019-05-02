@@ -650,9 +650,7 @@ public:
 
 	bool CanCreateImprovement(sint32 type,
 	                          const MapPoint &point,
-	                          sint32 extraData,
-	                          const bool check_materials,
-	                          ERR_BUILD_INST &err);
+	                          const bool check_materials);
 	TerrainImprovement CreateImprovement(sint32 dbIndex, MapPoint const & point,
 										 sint32 extraData);
 	TerrainImprovement CreateSpecialImprovement(sint32 dbIndex, MapPoint const & point,
