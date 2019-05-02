@@ -1017,7 +1017,6 @@ GOAL_ESTABLISH_EMBASSY {
   NeedsEscort
 
   SquadClass:Special
-  SquadClass:Stealth
 
   TargetType:City
   TargetOwner:Ally
@@ -1758,7 +1757,6 @@ GOAL_THROW_PARTY {
   NeedsEscort
 
   SquadClass:Special
-  SquadClass:Stealth
 
   TargetType:City
   TargetOwner:Ally
