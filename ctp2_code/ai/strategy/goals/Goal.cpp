@@ -1806,15 +1806,17 @@ Utility Goal::Compute_Agent_Matching_Value(const Agent_ptr agent_ptr) const
 
 	if(!agent_ptr->Get_Army()->HasCargo())
 	{
-		if((!g_theWorld->IsOnSameContinent(dest_pos, curr_pos) // Same continent problem
-		&&  !agent_ptr->Get_Army()->GetMovementTypeAir()
-		&&   g_player[m_playerId]->GetCargoCapacity() <= 0)
-		|| (!g_theGoalDB->Get(m_goal_type)->GetTargetOwnerSelf()
-		&&  !g_theWorld->HasAdjacentFreeLand(dest_pos, m_playerId)
-		&&   g_theWorld->GetCell(dest_pos)->GetNumUnits() > 0
-		&&  !agent_ptr->Get_Army()->CanBeachAssault())
-		){
-			return Goal::BAD_UTILITY;
+		if(!g_theWorld->IsOnSameContinent(dest_pos, curr_pos)) // Same continent problem
+		{
+			if((!agent_ptr->Get_Army()->GetMovementTypeAir()
+			&&   g_player[m_playerId]->GetCargoCapacity() <= 0)
+			|| (!g_theGoalDB->Get(m_goal_type)->GetTargetOwnerSelf()
+			&&  !g_theWorld->HasAdjacentFreeLand(dest_pos, m_playerId)
+			&&   g_theWorld->GetCell(dest_pos)->GetNumUnits() > 0
+			&&  !agent_ptr->Get_Army()->CanBeachAssault())
+			){
+				return Goal::BAD_UTILITY;
+			}
 		}
 	}
 	else
