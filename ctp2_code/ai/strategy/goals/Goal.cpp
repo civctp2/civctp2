@@ -2619,6 +2619,12 @@ bool Goal::IsInvalidByDiplomacy() const
 
 		if(player_ptr->HasContactWith(target_owner))
 		{
+			if(!goal_record->GetTargetOwnerHotEnemy()
+			&&  player_ptr->HasWarWith(target_owner))
+			{
+				return true;
+			}
+
 			bool iscivilian = false;
 			if(
 			       m_target_army.m_id != 0
@@ -2833,11 +2839,11 @@ bool Goal::IsTargetImmune() const
 	}
 
 	// Just exchanges the player, at that size you should conquer
-	// @ToDo adapt for players that have the give city wonder and that have not
+	// @ToDo adapt for players that have the give city wonder and are not at the city limit
 	// @ToDo adapt if no new civ is created but Barbarians.
 	if(order_record->GetUnitPretest_CanInciteRevolution())
 	{
-		if(g_player[m_playerId] ->GetNumCities() == 1)
+		if(g_player[target_owner]->GetNumCities() == 1)
 			return true;
 	}
 
