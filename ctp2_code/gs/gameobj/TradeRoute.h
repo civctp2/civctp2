@@ -102,10 +102,10 @@ public:
 	StringId GetResourceName() const;
 
 	void ReturnPath(const PLAYER_INDEX owner, DynamicArray<MapPoint> &waypoints,
-					DynamicArray<MapPoint> &fullpath,
-					double &cost);
+	                DynamicArray<MapPoint> &fullpath,
+	                double &cost);
 	void SetPath(DynamicArray<MapPoint> &fullpath,
-				 DynamicArray<MapPoint> &waypoints);
+	             DynamicArray<MapPoint> &waypoints);
 
 	void BeginTurn();
 

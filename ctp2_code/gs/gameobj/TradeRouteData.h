@@ -78,11 +78,6 @@ private:
 
 	sint32	m_path_selection_state;
 
-
-
-
-
-
 	Unit m_sourceCity;
 	Unit m_destinationCity;
 	TradeRoute m_recip;
@@ -96,9 +91,6 @@ private:
 	DynamicArray<MapPoint> m_setWayPoints;
 
 	Path *m_astarPath;
-
-
-
 
 	BOOL m_dontAdjustPointsWhenKilled;
 
