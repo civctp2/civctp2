@@ -11276,15 +11276,16 @@ void CityData::GiveTradeRouteGold()
 				&&(route.GetDestination().GetOwner() != m_owner)
 				){
 				    sint32 tgold = static_cast<sint32>(route->GetValue() * g_theConstDB->Get(0)->GetCityOnTradeRouteCoeff());
+
+				    Unit fromCity = route.GetSource();
+				    Unit toCity = route.GetDestination();
+				    
+				    ROUTE_TYPE type;
+				    sint32 good;
+				    route.GetSourceResource(type, good);
+					
 				    if(!route->IsBeingPirated()){
 					g_player[m_owner]->AddGold(tgold);
-
-					Unit fromCity = route.GetSource();
-					Unit toCity = route.GetDestination();
-
-					ROUTE_TYPE type;
-					sint32 good;
-					route.GetSourceResource(type, good);
 					
 					SlicObject * so = new SlicObject("359TradePassing");
 					so->AddRecipient(GetOwner());
@@ -11296,9 +11297,17 @@ void CityData::GiveTradeRouteGold()
 					so->AddCivilisation(fromCity.GetOwner());
 					g_slicEngine->Execute(so);
 					}
-				    // else {
-				    // 	// message that tgold is not earned from transit due to pirating
-				    // 	}
+				    else { // message that tgold is not earned from transit due to pirating
+					SlicObject * so = new SlicObject("358TradePassingPirated");
+					so->AddRecipient(GetOwner());
+					so->AddGold(tgold) ;
+					so->AddCity(m_home_city); // m_home_city should equal fromCity
+					so->AddGood(good);
+					so->AddCity(fromCity);
+					so->AddCity(toCity);
+					so->AddCivilisation(fromCity.GetOwner());
+					g_slicEngine->Execute(so);
+				    	}
 				}
 			}
 		}

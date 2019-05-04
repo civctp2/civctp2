@@ -2356,6 +2356,11 @@ alertbox '355SessionLost' {
 	}
 }
 
+messagebox '358TradePassingPirated' {
+	Text(ID_TRADE_PASS_PIRATED) ;
+	MessageType("PIRATE");
+}
+
 messagebox '359TradePassing' {
 	Text(ID_TRADE_PASS) ;
 	MessageType("TRADE");
