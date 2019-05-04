@@ -1682,17 +1682,25 @@ void ArmyData::BeginTurn()
 		    fromCity = route.GetSource();
 		    toCity = route.GetDestination();
 
-		    SlicObject * so = new SlicObject("044TradePirateGold");
-		    so->AddRecipient(GetOwner());
-		    so->AddGold(pgold) ;
-		    so->AddCity(fromCity);
-		    so->AddCity(toCity);
-		    so->AddCivilisation(fromCity.GetOwner());
-		    g_slicEngine->Execute(so);
+		    SlicObject * so1 = new SlicObject("044TradePirateGold");
+		    so1->AddRecipient(GetOwner());
+		    so1->AddGold(pgold) ;
+		    so1->AddCity(fromCity);
+		    so1->AddCity(toCity);
+		    so1->AddCivilisation(fromCity.GetOwner());
+		    g_slicEngine->Execute(so1);
+
+		    SlicObject * so2 = new SlicObject("045TradePirated");
+		    so2->AddRecipient(fromCity.GetOwner());
+		    so2->AddGold(route->GetValue()) ;
+		    so2->AddCity(fromCity);
+		    so2->AddCity(toCity);
+		    so2->AddCivilisation(GetOwner());
+		    g_slicEngine->Execute(so2);
                 }
             }
             if(piratedByMe < 1) {
-                StopPirating();
+                StopPirating(); // if no route was successfully pirated by me, which happens if routes got removed; moving the army/unit along a route also calls StopPirating probably from AddOrders or AutoAddOrders
             }
         }
     }
@@ -6045,7 +6053,10 @@ void ArmyData::AutoAddOrders(UNIT_ORDER_TYPE order, Path *path,
 	}
 
 	m_orders->AddTail(new Order(order, path, point, argument));
-	StopPirating();
+
+	if(point != m_pos || order != UNIT_ORDER_INTERCEPT_TRADE){
+	    StopPirating(); // to ensure trade route is not regarded as pirated when moving off (which is not possible any more on the new position, see https://github.com/civctp2/civctp2/issues/75
+	    }
 
 	if(m_owner >= 0 && m_owner < k_MAX_PLAYERS && g_player[m_owner])
 	{
@@ -6083,7 +6094,10 @@ void ArmyData::AutoAddOrdersWrongTurn(UNIT_ORDER_TYPE order, Path *path,
 	ClearOrders();
 
 	m_orders->AddTail(new Order(order, path, point, argument));
-	StopPirating();
+
+	if(point != m_pos || order != UNIT_ORDER_INTERCEPT_TRADE){
+	    StopPirating(); // to ensure trade route is not regarded as pirated when moving off (which is not possible any more on the new position, see https://github.com/civctp2/civctp2/issues/75
+	    }
 
 	if(m_owner >= 0 && m_owner < k_MAX_PLAYERS && g_player[m_owner]) {
 		ExecuteOrders(false);
@@ -6196,7 +6210,9 @@ void ArmyData::AddOrders(UNIT_ORDER_TYPE order, Path *path, const MapPoint &poin
 		}
 	}
 
-	StopPirating();
+	if(point != m_pos || order != UNIT_ORDER_INTERCEPT_TRADE){
+	    StopPirating(); // to ensure trade route is not regarded as pirated when moving off (which is not possible any more on the new position, see https://github.com/civctp2/civctp2/issues/75
+	    }
 
 	Order *o = m_orders->GetTail();
 	if(g_network.IsHost()) {
