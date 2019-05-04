@@ -11306,6 +11306,7 @@ void CityData::GiveTradeRouteGold()
 					so->AddCity(fromCity);
 					so->AddCity(toCity);
 					so->AddCivilisation(fromCity.GetOwner());
+					so->AddCivilisation(route->GetPiratingArmy().GetOwner());
 					g_slicEngine->Execute(so);
 				    	}
 				}

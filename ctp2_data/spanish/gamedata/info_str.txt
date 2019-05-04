@@ -156,7 +156,7 @@ TRADE_PIRATE_GOLD			"{gold[0].value} gold was pirated on the trade route carryin
 TRADE_ROUTES_BROKEN_BY_EMBARGO		"{player[0].sir_cap}, los {player[1].civ_name_plural} han impuesto un embargo sobre todas nuestras relaciones comerciales en todas sus naciones. ¡Han cortado todas nuestras rutas comerciales con {player[1].country_name}. Además hemos perdido todas las caravanas que estaban en esas rutas."
 TRADE_ROUTES_BROKEN_BY_WAR		"Malas noticias, {player[0].sir}. Debido al conflicto que ha brotado entre nosotros y {player[1].country_name}, se han cortado todas las rutas comerciales con las ciudades de {player[1].civ_name_singular}. Y además hemos perdido las caravanas que estaban en esas rutas."
 TRADE_PASS				"The trade route passing through our city of {city[0].name} carrying {good[0].name} from {city[1].name} to {city[2].name} owned by the {player[0].civ_name_plural} brought us {gold[0].value} gold."
-TRADE_PASS_PIRATED			"The trade route passing through our city of {city[0].name} carrying {good[0].name} from {city[1].name} to {city[2].name} owned by the {player[0].civ_name_plural} was pirated and {gold[0].value} gold from transit was not earned."
+TRADE_PASS_PIRATED			"The trade route passing through our city of {city[0].name} carrying {good[0].name} from {city[1].name} to {city[2].name} owned by the {player[0].civ_name_plural} was pirated by the {player[1].civ_name_plural} and {gold[0].value} gold from transit was not earned."
 SENDER_KILLED_TRADE_ROUTE		"{player[0].leader_name} ha cancelado la ruta comercial por la que se lleva {good[0].name} de {city[0].name} a {city[1].name}."
 
 ## Trade Advisor Stuff ##
