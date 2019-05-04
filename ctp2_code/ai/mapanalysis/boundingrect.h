@@ -1,3 +1,5 @@
+// To be removed
+
 #ifdef HAVE_PRAGMA_ONCE
 #pragma once
 #endif
@@ -6,21 +8,6 @@
 #define __BOUNDING_RECT_H__
 
 #include "MapPoint.h"
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
 
 class BoundingRect {
 
@@ -82,6 +69,15 @@ public:
 	void Get(sint16 row, sint16 col, MapPoint & pos);
 	sint16 GetMaxCols();
 	sint16 GetMaxRows();
+
+	MapPoint GetUpperLeft () const { return m_upperLeft;  }
+	MapPoint GetLowerRight() const { return m_lowerRight; }
+	bool IsXWrapOK() const { return m_xWrapOk; }
+	bool IsYWrapOK() const { return m_yWrapOk; }
+	bool IsULXWrap() const { return m_ul_x_wrap; }
+	bool IsLRXWrap() const { return m_lr_x_wrap; }
+	bool IsULYWrap() const { return m_ul_y_wrap; }
+	bool IsLRYWrap() const { return m_lr_y_wrap; }
 
 private:
 	bool m_isValid;

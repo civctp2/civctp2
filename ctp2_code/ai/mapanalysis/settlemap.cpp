@@ -56,14 +56,12 @@
 
 #include <functional>
 
-#include "boundingrect.h"
 #include "Cell.h"
 #include "citydata.h"
 #include "CityInfluenceIterator.h"
 #include "CitySizeRecord.h"
 #include "Diplomat.h"
 #include "gfx_options.h"
-#include "mapanalysis.h"
 #include "StrategyRecord.h"
 #include "TerrainRecord.h"
 #include "UnitRecord.h"
@@ -215,25 +213,16 @@ void SettleMap::HandleCityGrowth(const Unit & city, sint32 oldSizeIndex)
 		double const    new_value   = ComputeSettleValue(claimPos, ignoreCity);
 		m_settleValues.SetGridValue(claimPos, new_value);
 	}
-
 }
 
 bool SettleMap::HasSettleTargets(const PLAYER_INDEX &playerId, bool isWater) const
 {
-	BoundingRect rect =
-		MapAnalysis::GetMapAnalysis().GetBoundingRectangle(playerId);
-
-	if(!rect.IsValid())
+	Player *player_ptr = g_player[playerId];
+	Assert(player_ptr);
+	if(!player_ptr)
 		return false;
 
-	rect.Expand( 10 );
-
-	MapPoint xy_pos(0,0);
-	MapPoint rc_pos(0,0);
 	SettleTarget settle_target;
-
-	sint16 rows = rect.GetMaxRows();
-	sint16 cols = rect.GetMaxCols();
 
 	sint32 settle_threshold         = 0;
 	sint32 min_settle_distance      = 0;
@@ -242,26 +231,25 @@ bool SettleMap::HasSettleTargets(const PLAYER_INDEX &playerId, bool isWater) con
 	(void)strategy.GetMinSettleScore   (settle_threshold);
 	(void)strategy.GetMinSettleDistance(min_settle_distance);
 
-	for(sint32 i = 0; rect.Get(i, xy_pos, rows, cols); i++)
+	MapPoint rc_pos;
+	for(rc_pos.x = 0; rc_pos.x < g_theWorld->GetWidth(); rc_pos.x++)
 	{
-#if defined(USE_WORLDSIZE_CLASS)
-		rc_pos.xy2rc(xy_pos, g_theWorld->GetSize());
-#else
-		rc_pos.xy2rc(xy_pos, *g_theWorld->GetSize());
-#endif
-
-		if(!CanSettlePos(rc_pos))
-			continue;
-
-		if(m_settleValues.GetGridValue(rc_pos) <= settle_threshold)
+		for(rc_pos.y = 0; rc_pos.y < g_theWorld->GetHeight(); rc_pos.y++)
 		{
-			continue;
-		}
+			if(!CanSettlePos(rc_pos))
+				continue;
 
-		if(g_theWorld->IsWater(rc_pos) == isWater
-		&& !this->HasCityInSettleDistance(rc_pos, min_settle_distance)
-		){
-			return true;
+			if(m_settleValues.GetGridValue(rc_pos) <= settle_threshold)
+			{
+				continue;
+			}
+
+			if( g_theWorld->IsWater(rc_pos) == isWater
+			&& !HasCityInSettleDistance(rc_pos, min_settle_distance)
+			  )
+			{
+				return true;
+			}
 		}
 	}
 
@@ -271,60 +259,28 @@ bool SettleMap::HasSettleTargets(const PLAYER_INDEX &playerId, bool isWater) con
 void SettleMap::GetSettleTargets(const PLAYER_INDEX &playerId,
                                  SettleMap::SettleTargetList & targets) const
 {
-	BoundingRect rect =
-	    MapAnalysis::GetMapAnalysis().GetBoundingRectangle(playerId);
-
-	if (!rect.IsValid())
-		return;
-
-	rect.Expand( 10 );
-
-	MapPoint xy_pos(0,0);
-	MapPoint rc_pos(0,0);
-	SettleTarget settle_target;
-
-	sint16 rows = rect.GetMaxRows();
-	sint16 cols = rect.GetMaxCols();
-
-	sint32 settle_threshold = 0;
-	(void) Diplomat::GetDiplomat(playerId).GetCurrentStrategy().GetMinSettleScore(settle_threshold);
-
 	Player *player_ptr = g_player[playerId];
 	Assert(player_ptr);
 	if(!player_ptr)
 		return;
+
+	SettleTarget settle_target;
+
+	sint32 settle_threshold = 0;
+	(void) Diplomat::GetDiplomat(playerId).GetCurrentStrategy().GetMinSettleScore(settle_threshold);
 
 	sint32 numTerrain = g_theTerrainDB->NumRecords();
 	bool* settleTerrainTypes = new bool[numTerrain];
 	std::fill(settleTerrainTypes, settleTerrainTypes + numTerrain, false);
 
 	bool noSettleUnits = true;
-	Unit unit;
-	sint32 i;
 
 	Assert(player_ptr->m_all_units);
-	for(i = 0; i < player_ptr->m_all_units->Num(); ++i)
+	for(sint32 i = 0; i < player_ptr->m_all_units->Num(); ++i)
 	{
-		unit = player_ptr->m_all_units->Access(i);
 		const UnitRecord* rec = player_ptr->m_all_units->Access(i).GetDBRec();
 
 		CanUnitRecordSettle(rec, settleTerrainTypes, noSettleUnits);
-	}
-
-	for(i = 0; i < player_ptr->GetNumCities(); ++i)
-	{
-		CityData* cityData = player_ptr->GetCityFromIndex(i).GetCityData();
-		if (cityData->HowMuchLonger() == 1)
-		{
-			BuildQueue* queue = cityData->GetBuildQueue();
-
-			if (queue->IsHeadUnit())
-			{
-				const UnitRecord* rec = g_theUnitDB->Get(queue->GetHeadType());
-
-				CanUnitRecordSettle(rec, settleTerrainTypes, noSettleUnits);
-			}
-		}
 	}
 
 	if(noSettleUnits && !g_graphicsOptions->IsCellTextOn())
@@ -333,52 +289,50 @@ void SettleMap::GetSettleTargets(const PLAYER_INDEX &playerId,
 		return;
 	}
 
-	for(i = 0; rect.Get(i, xy_pos, rows, cols); i++)
+	MapPoint rc_pos;
+	for(rc_pos.x = 0; rc_pos.x < g_theWorld->GetWidth(); rc_pos.x++)
 	{
-#if defined(USE_WORLDSIZE_CLASS)
-		rc_pos.xy2rc(xy_pos, g_theWorld->GetSize());
-#else
-		rc_pos.xy2rc(xy_pos, *g_theWorld->GetSize());
-#endif
-
-		settle_target.m_value = m_settleValues.GetGridValue(rc_pos);
-		settle_target.m_pos = rc_pos;
-
-		if(g_graphicsOptions->IsCellTextOn())
+		for(rc_pos.y = 0; rc_pos.y < g_theWorld->GetHeight(); rc_pos.y++)
 		{
-			char buf[16];
-			sprintf(buf,"*%4.0f*",settle_target.m_value);
-			g_graphicsOptions->AddTextToCell(rc_pos, buf, 255, playerId);
-		}
+			settle_target.m_value = m_settleValues.GetGridValue(rc_pos);
+			settle_target.m_pos = rc_pos;
 
-		if(!CanSettlePos(rc_pos))
-			continue;
-
-		if(settle_target.m_value <= settle_threshold)
-		{
-			if (g_graphicsOptions->IsCellTextOn())
+			if(g_graphicsOptions->IsCellTextOn())
 			{
 				char buf[16];
-				sprintf(buf,"(%4.0f)",settle_target.m_value);
+				sprintf(buf, "*%4.0f*", settle_target.m_value);
 				g_graphicsOptions->AddTextToCell(rc_pos, buf, 255, playerId);
 			}
 
-			continue;
-		}
+			if(!CanSettlePos(rc_pos))
+				continue;
 
-		if(g_graphicsOptions->IsCellTextOn())
-		{
-			char buf[16];
-			sprintf(buf,"%4.0f",settle_target.m_value);
-			g_graphicsOptions->AddTextToCell(rc_pos, buf, 200, playerId);
-		}
+			if(settle_target.m_value <= settle_threshold)
+			{
+				if(g_graphicsOptions->IsCellTextOn())
+				{
+					char buf[16];
+					sprintf(buf, "(%4.0f)", settle_target.m_value);
+					g_graphicsOptions->AddTextToCell(rc_pos, buf, 255, playerId);
+				}
 
-		if(!settleTerrainTypes[g_theWorld->GetTerrainType(rc_pos)])
-			continue;
+				continue;
+			}
 
-		if(!noSettleUnits) // The condition should be superflous
-		{
-			targets.push_back(settle_target);
+			if(g_graphicsOptions->IsCellTextOn())
+			{
+				char buf[16];
+				sprintf(buf, "%4.0f", settle_target.m_value);
+				g_graphicsOptions->AddTextToCell(rc_pos, buf, 200, playerId);
+			}
+
+			if(!settleTerrainTypes[g_theWorld->GetTerrainType(rc_pos)])
+				continue;
+
+			if(!noSettleUnits) // The condition should be superflous
+			{
+				targets.push_back(settle_target);
+			}
 		}
 	}
 

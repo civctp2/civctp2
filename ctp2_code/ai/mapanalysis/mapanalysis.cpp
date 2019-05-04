@@ -93,7 +93,6 @@ void MapAnalysis::Resize
 
 	m_tradeAtRiskGrid   .resize(maxPlayerId);
 	m_piracyLossGrid    .resize(maxPlayerId);
-	m_empireBoundingRect.resize(maxPlayerId);
 	m_empireCenter      .resize(maxPlayerId);
 
 	for (sint16 player = 0; player < maxPlayerId; player++)
@@ -109,9 +108,6 @@ void MapAnalysis::Resize
 		m_valueGrid      [player].Resize(xSize, ySize, resolution);
 		m_tradeAtRiskGrid[player].Resize(xSize, ySize, resolution);
 		m_piracyLossGrid [player].Resize(xSize, ySize, resolution);
-
-		if (player >= old_size)
-			m_empireBoundingRect[player] = BoundingRect();
 	}
 
 	m_piracyIncomeMatrix     .resize(maxPlayerId * maxPlayerId, 0);
@@ -306,11 +302,6 @@ void MapAnalysis::BeginTurn()
 			m_bioWeapons[player]     += army->CountBioUnits();
 			m_nanoWeapons[player]    += army->CountNanoUnits();
 
-			if(!m_empireBoundingRect[player].IsValid() && player_ptr->m_all_cities->Num() == 0)
-			{
-				UpdateBoundingRectangle(army);
-			}
-
 			m_threatGrid      [player].AddValue(pos, static_cast<sint32>(attack_strength + ranged_strength));
 			m_attackGrid      [player].AddValue(pos, static_cast<sint32>(attack_strength));
 			m_defenseGrid     [player].AddValue(pos, static_cast<sint32>(defense_strength));
@@ -361,7 +352,6 @@ void MapAnalysis::BeginTurn()
 		{
 			city = player_ptr->m_all_cities->Access(i);
 			Assert(city.IsValid() && city->GetCityData());
-			UpdateBoundingRectangle(city);
 			city.GetPos(pos);
 			sint32 total_value = city->GetCityData()->GetValue();
 
@@ -629,79 +619,6 @@ void MapAnalysis::CalcEmpireCenter(const PLAYER_INDEX playerId)
 	        playerId,
 	        m_empireCenter[playerId].x,
 	        m_empireCenter[playerId].y));
-}
-
-void MapAnalysis::UpdateBoundingRectangle(const Army & army)
-{
-	const PLAYER_INDEX player = army.GetOwner();
-
-	MapPoint xy_pos(0, 0);
-	MapPoint rc_pos;
-	army.GetPos(rc_pos);
-	xy_pos.rc2xy(rc_pos, * g_theWorld->GetSize());
-
-	MapPoint xy_map_size(g_theWorld->GetWidth() * 2, g_theWorld->GetHeight());
-
-	if (!m_empireBoundingRect[player].IsValid())
-	{
-		m_empireBoundingRect[player].Initialize
-			(xy_pos, 2, xy_map_size, g_theWorld->IsXwrap(), g_theWorld->IsYwrap());
-	}
-
-	BoundingRect armyRect(xy_pos, 2, xy_map_size, g_theWorld->IsXwrap(), g_theWorld->IsYwrap());
-
-	bool added = m_empireBoundingRect[player].Add(armyRect);
-	Assert(added);
-
-/*	m_empireCenter[player].xy2rc(m_empireBoundingRect[player].GetCenter(), * g_theWorld->GetSize());
-	DPRINTF(k_DBG_SCHEDULER, ("Empire Center for player %d :  rc(%3d,%3d)   \n",
-		player,
-		m_empireCenter[player].x,
-		m_empireCenter[player].y));*/
-}
-
-void MapAnalysis::UpdateBoundingRectangle(const Unit & city)
-{
-	const PLAYER_INDEX player = city.GetOwner();
-
-	MapPoint xy_center(0, 0);
-	xy_center.rc2xy(city.RetPos(), * g_theWorld->GetSize());
-
-	MapPoint xy_map_size(g_theWorld->GetWidth() * 2, g_theWorld->GetHeight());
-
-	if (!m_empireBoundingRect[player].IsValid())
-	{
-		m_empireBoundingRect[player].Initialize
-			(xy_center, 0, xy_map_size, g_theWorld->IsXwrap(), g_theWorld->IsYwrap());
-	}
-
-	sint32 city_size = city->GetCityData()->GetSizeIndex();
-	if (city_size >= g_theCitySizeDB->NumRecords()) // I can arrange the sizes as I want in that file, but it seems to be about just to have one size
-	{
-		city_size = g_theCitySizeDB->NumRecords() - 1;
-	}
-	sint16 xy_radius = (sint16)g_theCitySizeDB->Get(city_size)->GetIntRadius();
-
-	if ((xy_radius % 2) != 0)
-		xy_radius++;
-
-	BoundingRect cityRect(xy_center, xy_radius, xy_map_size,
-						  g_theWorld->IsXwrap(), g_theWorld->IsYwrap()
-						 );
-
-	bool added = m_empireBoundingRect[player].Add(cityRect);
-	Assert(added);
-
-/*	m_empireCenter[player].xy2rc(m_empireBoundingRect[player].GetCenter(), * g_theWorld->GetSize());
-	DPRINTF(k_DBG_SCHEDULER, ("Empire Center for player %d :  rc(%3d,%3d)   \n",
-		player,
-		m_empireCenter[player].x,
-		m_empireCenter[player].y));*/
-}
-
-const BoundingRect & MapAnalysis::GetBoundingRectangle(const PLAYER_INDEX & player) const
-{
-	return m_empireBoundingRect[player];
 }
 
 const MapPoint & MapAnalysis::GetEmpireCenter(const PLAYER_INDEX player) const
@@ -1222,7 +1139,6 @@ void MapAnalysis::Cleanup()
 	MapGridVector().swap(m_cityValueGrid);
 	MapGridVector().swap(m_tradeAtRiskGrid);
 	MapGridVector().swap(m_piracyLossGrid);
-	BoundingRectVector().swap(m_empireBoundingRect);
 	MapPointVector().swap(m_empireCenter);
 	Sint16Vector().swap(m_piracyIncomeMatrix);
 	Sint32Vector().swap(m_minCityThreat);

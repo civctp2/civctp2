@@ -42,7 +42,6 @@ class MapAnalysis;
 
 #include "mapgrid.h"
 #include "citydata.h"
-#include "boundingrect.h"
 #include "bit_table.h"
 
 class MapAnalysis
@@ -50,7 +49,6 @@ class MapAnalysis
 public:
 
     typedef std::vector<MapGrid<sint32> > MapGridVector;
-    typedef std::vector<BoundingRect> BoundingRectVector;
     typedef std::vector<sint32> Sint32Vector;
     typedef std::vector<sint16> Sint16Vector;
     typedef std::vector<uint32> Uint32Vector;
@@ -127,12 +125,6 @@ public:
 	double GetHappinessRank (const CityData *city) const;
 	double GetThreatRank    (const CityData *city) const;
 	double GetPowerRank     (const CityData *city) const;
-
-	void UpdateBoundingRectangle(const Army & army);
-
-	void UpdateBoundingRectangle(const Unit & city);
-
-	const BoundingRect & GetBoundingRectangle(const PLAYER_INDEX & player) const;
 
 	const MapPoint & GetEmpireCenter(const PLAYER_INDEX player) const;
 
@@ -289,8 +281,6 @@ private:
 	// Should be replaced by simple integers, too
 	Sint32Vector m_minCityThreat;
 	Sint32Vector m_maxCityThreat;
-
-	BoundingRectVector m_empireBoundingRect;
 
 	MapPointVector m_empireCenter;
 

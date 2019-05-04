@@ -1800,9 +1800,8 @@ void CtpAi::AddSettleTargets(const PLAYER_INDEX playerId)
 		}
 
 		// Add new settle goals
-		sint32  max_desired_goals   = static_cast<sint32>
-		    (goal_element_ptr->GetMaxEval() - scheduler.CountGoalsOfType(goal_type));
-		sint32  desired_goals       = max_desired_goals;
+		sint32  max_desired_goals = static_cast<sint32>(targets.size());
+		sint32  desired_goals     = max_desired_goals;
 
 		for (SettleMap::SettleTargetList::iterator iter = targets.begin();
 		     iter != targets.end() && (desired_goals > 0);
