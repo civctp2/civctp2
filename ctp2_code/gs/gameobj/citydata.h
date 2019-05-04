@@ -454,7 +454,7 @@ public:
 	void DelTradeRoute(TradeRoute route);
 	sint32 IsUsedInTradeRoute(const MapPoint &qpos);
 	void CalculateTradeRoutes(bool projectedOnly);
-	sint32 CalculateGoldFromResources();
+	sint32 CalculateGoldFromResources(bool issueMessage= false);
 	void AddTradeResource(ROUTE_TYPE type, sint32 resource);
 #ifdef CTP1_TRADE
 	sint32 GetResourceCount(sint32 resource);

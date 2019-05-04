@@ -3605,7 +3605,7 @@ void CityData::CalculateCoeffProd()
 //----------------------------------------------------------------------------
 void CityData::CalculateBonusGold()
 {
-	m_bonusGold  = static_cast<double>(CalculateGoldFromResources());
+	m_bonusGold  = static_cast<double>(CalculateGoldFromResources(true));
 
 	//EMOD Civilization and Citystyle bonuses
 	m_bonusGold += g_player[m_owner]->CivCommerceBonus();
@@ -4430,7 +4430,7 @@ void CityData::CalculateTradeRoutes(bool projectedOnly)
 	}
 }
 
-sint32 CityData::CalculateGoldFromResources()
+sint32 CityData::CalculateGoldFromResources(bool issueMessage)
 {
 	m_goldFromTradeRoutes = 0;
 	m_goldLostToPiracy    = 0;
@@ -4445,17 +4445,19 @@ sint32 CityData::CalculateGoldFromResources()
 		{
 			m_goldLostToPiracy += m_tradeSourceList[i]->GetValue();
 
-			TradeRoute route = m_tradeSourceList[i];
-			// Unit fromCity = route.GetSource();
-			Unit toCity = route.GetDestination();
-
-			SlicObject * so = new SlicObject("045TradePirated");
-			so->AddRecipient(GetOwner());
-			so->AddGold(route->GetValue()) ;
-			so->AddCity(m_home_city); // m_home_city should equal fromCity
-			so->AddCity(toCity);
-			so->AddCivilisation(route->GetPiratingArmy().GetOwner());
-			g_slicEngine->Execute(so);
+			if(issueMessage){ // supress message e.g. for CauseAndEffectTab call
+			    TradeRoute route = m_tradeSourceList[i];
+			    // Unit fromCity = route.GetSource();
+			    Unit toCity = route.GetDestination();
+			    
+			    SlicObject * so = new SlicObject("045TradePirated");
+			    so->AddRecipient(GetOwner());
+			    so->AddGold(route->GetValue()) ;
+			    so->AddCity(m_home_city); // m_home_city should equal fromCity
+			    so->AddCity(toCity);
+			    so->AddCivilisation(route->GetPiratingArmy().GetOwner());
+			    g_slicEngine->Execute(so);
+			    }
 		}
 	}
 
