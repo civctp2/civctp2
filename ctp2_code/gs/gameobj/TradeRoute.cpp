@@ -144,20 +144,31 @@ void TradeRoute::GetSourceResource(ROUTE_TYPE &type, sint32 &resource) const
 	GetData()->GetSourceResource(type, resource);
 }
 
-TradeRoute TradeRoute::GetRecip() const
+void TradeRoute::SetLastTimePirated(sint32 currentTurn)
 {
-	return GetData()->GetRecip();
+	AccessData()->SetLastTimePirated(currentTurn);
 }
 
-TradeRoute TradeRoute::AccessRecip()
+sint32 TradeRoute::GetLastTimePirated() const
 {
-	return AccessData()->AccessRecip();
+	return GetData()->GetLastTimePirated();
 }
 
-void TradeRoute::SetRecip(TradeRoute route)
+void TradeRoute::IncreaseAccumulatedTimePirated()
 {
-	AccessData()->SetRecip(route);
+	AccessData()->IncreaseAccumulatedTimePirated();
 }
+
+void TradeRoute::ResetAccumulatedTimePirated()
+{
+	AccessData()->ResetAccumulatedTimePirated();
+}
+
+uint16 TradeRoute::GetAccumulatedTimePirated()
+{
+	return GetData()->GetAccumulatedTimePirated();
+}
+
 
 BOOL TradeRoute::PassesThrough(sint32 player) const
 {

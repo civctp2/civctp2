@@ -78,11 +78,12 @@ TradeRouteData::TradeRouteData
     m_outline                       (g_colorSet->GetColor(COLOR_BLACK)),
     m_selectedIndex                 (0),
     m_valid                         (false),
+    m_accumilatedTimesPirated       (0),
     m_gold_in_return                (gold_in_return),
     m_path_selection_state          (k_TRADEROUTE_NO_PATH),
     m_sourceCity                    (source),
     m_destinationCity               (dest),
-    m_recip                         (),
+    m_piratedLastTime               (-1),
     m_path                          (),
     m_wayPoints                     (),
     m_selectedPath                  (),
@@ -156,24 +157,6 @@ void TradeRouteData::GetSourceResource(ROUTE_TYPE &type, sint32 &resource) const
 {
 	type        = m_sourceRouteType;
 	resource    = m_sourceResource;
-}
-
-TradeRoute TradeRouteData::GetRecip() const
-{
-	return m_recip;
-}
-
-TradeRoute TradeRouteData::AccessRecip()
-{
-	return m_recip;
-}
-
-void TradeRouteData::SetRecip(TradeRoute route)
-{
-	Assert(FALSE);
-
-	m_recip = route;
-	ENQUEUE();
 }
 
 void TradeRouteData::CheckSquareForCity(MapPoint const & pos)
@@ -381,18 +364,22 @@ TradeRouteData::Serialize(CivArchive &archive)
 		archive << m_sourceResource;
 		archive.Store((uint8 *)m_passesThrough, sizeof(m_passesThrough)) ;
 		archive.PutSINT32(m_crossesWater) ;
-		archive.PutSINT8(static_cast<sint8>(m_isActive));
+		archive.PutSINT8(m_isActive);
 		archive.PutUINT32(m_color);
 		archive.PutUINT32(m_outline);
 		archive.PutSINT32(m_selectedIndex);
 		m_piratingArmy.Serialize(archive);
-		archive.PutSINT32(m_valid);
+		archive.PutSINT8(m_valid);
+		archive.PutUINT16(m_accumilatedTimesPirated);
+
+		sint8 empty = 0;
+		archive.PutSINT8(empty); // Unused bytes
 		archive << m_payingFor;
 		archive << m_gold_in_return;
 
 		m_sourceCity.Serialize(archive);
 		m_destinationCity.Serialize(archive);
-		m_recip.Serialize(archive);
+		archive << m_piratedLastTime;
 		m_path.Serialize(archive);
 		m_wayPoints.Serialize(archive) ;
 		m_selectedPath.Serialize(archive);
@@ -422,18 +409,21 @@ TradeRouteData::Serialize(CivArchive &archive)
 		archive >> m_sourceResource;
 		archive.Load((uint8 *)m_passesThrough, sizeof(m_passesThrough)) ;
 		m_crossesWater = (BOOL)(archive.GetSINT32()) ;
-		m_isActive = (BOOL)(archive.GetSINT8());
+		m_isActive = archive.GetSINT8();
 		m_color = archive.GetUINT32();
 		m_outline = archive.GetUINT32();
 		m_selectedIndex = archive.GetSINT32();
 		m_piratingArmy.Serialize(archive);
-		m_valid = archive.GetSINT32();
+		m_valid = archive.GetSINT8(); // Split former BOOL m_valid, so that we can save something in the gap
+		m_accumilatedTimesPirated = archive.GetUINT16();
+
+		sint8 empty = archive.GetSINT8(); // Unused 8 bytes
 		archive >> m_payingFor;
 		archive >> m_gold_in_return;
 
 		m_sourceCity.Serialize(archive);
 		m_destinationCity.Serialize(archive);
-		m_recip.Serialize(archive);
+		archive >> m_piratedLastTime;
 		m_path.Serialize(archive);
 		m_wayPoints.Serialize(archive) ;
 		m_selectedPath.Serialize(archive);

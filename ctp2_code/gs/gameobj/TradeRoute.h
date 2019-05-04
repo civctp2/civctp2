@@ -63,12 +63,13 @@ public:
 
 	void GetSourceResource(ROUTE_TYPE &type, sint32 &resource) const;
 
-	TradeRoute GetRecip() const;
-	TradeRoute AccessRecip();
-	void SetRecip(TradeRoute route);
+	void     SetLastTimePirated(sint32 currentTurn);
+	sint32   GetLastTimePirated() const;
+	void IncreaseAccumulatedTimePirated();
+	void    ResetAccumulatedTimePirated();
+	uint16    GetAccumulatedTimePirated();
 
 	BOOL PassesThrough(sint32 player) const;
-	void SetTariff(sint32 player, BOOL b);
 
 	BOOL CrossesWater() const;
 
