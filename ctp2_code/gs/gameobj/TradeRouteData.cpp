@@ -387,7 +387,7 @@ TradeRouteData::Serialize(CivArchive &archive)
 		archive.PutUINT32(m_color);
 		archive.PutUINT32(m_outline);
 		archive.PutSINT32(m_selectedIndex);
-		archive.PutSINT32(m_path_selection_state);
+		m_piratingArmy.Serialize(archive);
 		archive.PutSINT32(m_valid);
 		archive << m_payingFor;
 		archive << m_gold_in_return;
@@ -428,7 +428,7 @@ TradeRouteData::Serialize(CivArchive &archive)
 		m_color = archive.GetUINT32();
 		m_outline = archive.GetUINT32();
 		m_selectedIndex = archive.GetSINT32();
-		m_path_selection_state = archive.GetSINT32();
+		m_piratingArmy.Serialize(archive);
 		m_valid = archive.GetSINT32();
 		archive >> m_payingFor;
 		archive >> m_gold_in_return;
