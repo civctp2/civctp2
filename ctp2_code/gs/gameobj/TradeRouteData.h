@@ -94,7 +94,7 @@ private:
 
 	Path *m_astarPath;
 
-	BOOL m_dontAdjustPointsWhenKilled;
+	bool m_dontAdjustPointsWhenKilled;
 
 	void CheckSquareForCity(MapPoint const & pos);
 
@@ -183,7 +183,7 @@ public:
 	void Serialize(CivArchive &archive);
 
 	void DontAdjustPointsWhenKilled();
-	BOOL GetDontAdjustPoints() const { return m_dontAdjustPointsWhenKilled; }
+	bool GetDontAdjustPoints() const { return m_dontAdjustPointsWhenKilled; }
 
 	sint32 GetValue() const;
 

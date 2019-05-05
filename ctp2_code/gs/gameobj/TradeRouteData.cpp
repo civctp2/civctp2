@@ -118,7 +118,7 @@ TradeRouteData::TradeRouteData
 TradeRouteData::TradeRouteData(CivArchive &archive) : GameObj(0)
 {
 	m_astarPath = new Path;
-	m_dontAdjustPointsWhenKilled = FALSE;
+	m_dontAdjustPointsWhenKilled = false;
 	Serialize(archive);
 }
 
@@ -331,7 +331,7 @@ void TradeRouteData::ReturnPath
 
 	fullpath.Insert(waypoints[0]);
 	MapPoint pnt;
-	m_crossesWater = FALSE;
+	m_crossesWater = false;
 	for (int p = 1; p < m_astarPath->Num(); p++) {
 		WORLD_DIRECTION d;
 		m_astarPath->GetCurrentDir(d);
@@ -340,7 +340,7 @@ void TradeRouteData::ReturnPath
 		if(r) {
 			fullpath.Insert(pnt);
 			if(g_theWorld->IsWater(pnt)) {
-				m_crossesWater = TRUE;
+				m_crossesWater = true;
 			}
 		}
 
@@ -585,7 +585,7 @@ double TradeRouteData::GetCost() const
 
 void TradeRouteData::DontAdjustPointsWhenKilled()
 {
-	m_dontAdjustPointsWhenKilled = TRUE;
+	m_dontAdjustPointsWhenKilled = true;
 }
 
 sint32 TradeRouteData::GetValue() const
