@@ -39,7 +39,7 @@ template GREAT_ARROW_BUTTON:CTP2_GENERIC_SIZABLE_TEXT_BUTTON {
 
 
 # Text box for statistics about item
-template GREAT_BOX : CTP2_HYPER_TEXT_BOX {
+template GREAT_BOX : CTP2_HEADER_FONT: CTP2_HYPER_TEXT_BOX {
 
 
 	int	ypix		85
@@ -127,9 +127,6 @@ TechTree {
 		string	image0	"UPBT01XU.tga"
 		string	image1	"UPBT01XU.tga"
 		string	disabledimage0	"UPBT01XU.tga"
-
-		string	textblttype	"center"
-
 	} #button
 } #techtree
 
