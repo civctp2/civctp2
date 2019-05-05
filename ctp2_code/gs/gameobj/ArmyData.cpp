@@ -1683,9 +1683,14 @@ void ArmyData::BeginTurn()
 		    fromCity = route.GetSource();
 		    toCity = route.GetDestination();
 
+		    ROUTE_TYPE type;
+		    sint32 good;
+		    route.GetSourceResource(type, good);
+					
 		    SlicObject * so1 = new SlicObject("044TradePirateGold");
 		    so1->AddRecipient(GetOwner());
 		    so1->AddGold(pgold) ;
+		    so1->AddGood(good);
 		    so1->AddCity(fromCity);
 		    so1->AddCity(toCity);
 		    so1->AddCivilisation(fromCity.GetOwner());
@@ -1694,6 +1699,7 @@ void ArmyData::BeginTurn()
 		    SlicObject * so2 = new SlicObject("045TradePirated");
 		    so2->AddRecipient(fromCity.GetOwner());
 		    so2->AddGold(route->GetValue()) ;
+		    so2->AddGood(good);
 		    so2->AddCity(fromCity);
 		    so2->AddCity(toCity);
 		    so2->AddCivilisation(GetOwner());
