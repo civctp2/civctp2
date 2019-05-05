@@ -56,7 +56,12 @@ void NetTradeRoute::Packetize(uint8 *buf, uint16 & size)
 
 	PUSHLONG((uint32)(m_routeData->m_sourceCity));
 	PUSHLONG((uint32)(m_routeData->m_destinationCity));
-	PUSHLONG((uint32)(m_routeData->m_recip));
+	PUSHLONG((uint32)(m_routeData->m_piratedLastTime));
+	PUSHLONG((uint32)(m_routeData->m_piratingArmy.m_id));
+	PUSHSHORT((uint16)(m_routeData->m_accumilatedTimesPirated));
+	PUSHBYTE(m_routeData->m_valid);
+	PUSHBYTE(m_routeData->m_pirate);
+
 	PUSHSHORT((uint16)(m_routeData->m_path.Num()));
 	for(i = 0; i < m_routeData->m_path.Num(); i++) {
 		PUSHSHORT((uint16)m_routeData->m_path[i].x);
@@ -71,7 +76,6 @@ void NetTradeRoute::Unpacketize(uint16 id, uint8 *buf, uint16 size)
 	uint32 passesThrough;
 	uint32 sourceCityID;
 	uint32 destCityID;
-	uint32 recip;
 	uint16 numWp;
 	sint32 i;
 
@@ -130,15 +134,18 @@ void NetTradeRoute::Unpacketize(uint16 id, uint8 *buf, uint16 size)
 		}
 	}
 
-	PULLLONG(recip);
-	m_routeData->m_recip = TradeRoute(recip);
+	PULLLONG(m_routeData->m_piratedLastTime);
+	PULLLONG(m_routeData->m_piratingArmy.m_id);
+	PULLSHORT(m_routeData->m_accumilatedTimesPirated);
+	PULLBYTE(m_routeData->m_valid);
+	PULLBYTE(m_routeData->m_pirate);
 
 	PULLSHORT(numWp);
 
 	m_routeData->RemoveFromCells();
 
 	m_routeData->m_path.Clear();
-    PLAYER_INDEX owner;
+	PLAYER_INDEX owner;
 	for(i = 0; i < numWp; i++) {
 		MapPoint pnt;
 		PULLSHORTTYPE(pnt.x, sint16);

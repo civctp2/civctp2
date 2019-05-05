@@ -50,52 +50,53 @@
 #include "radarmap.h"
 #include "tradeutil.h"
 
-
 extern TradeAstar g_theTradeAstar;
 
 TradeRouteData::TradeRouteData
 (
-	const TradeRoute    route,
-	const Unit          source,
-	const Unit          dest,
-	const PLAYER_INDEX  owner,
-	const ROUTE_TYPE    sourceType,
-	const sint32        sourceResource,
-	PLAYER_INDEX        paying_for,
-	sint32              gold_in_return
+    const TradeRoute    route,
+    const Unit          source,
+    const Unit          dest,
+    const PLAYER_INDEX  owner,
+    const ROUTE_TYPE    sourceType,
+    const sint32        sourceResource,
+    PLAYER_INDEX        paying_for,
+    sint32              gold_in_return
 )
 :
-	GameObj                         (route.m_id),
+    GameObj                         (route.m_id),
     CityRadiusCallback              (),
-	m_transportCost                 (0.0),
-	m_owner                         (owner),
-	m_payingFor                     (paying_for),
-	m_piratingArmy                  (),
-	m_sourceRouteType               (sourceType),
-	m_sourceResource                (sourceResource),
-	m_crossesWater                  (false),
-	m_isActive                      (false),
-	m_color                         (g_colorSet->GetColor(COLOR_YELLOW)),
-	m_outline                       (g_colorSet->GetColor(COLOR_BLACK)),
-	m_selectedIndex                 (0),
-	m_valid                         (false),
-	m_gold_in_return                (gold_in_return),
-	m_path_selection_state          (k_TRADEROUTE_NO_PATH),
-	m_sourceCity                    (source),
-	m_destinationCity               (dest),
-	m_recip                         (),
-	m_path                          (),
-	m_wayPoints                     (),
-	m_selectedPath                  (),
-	m_selectedWayPoints             (),
-	m_setPath                       (),
-	m_setWayPoints                  (),
-	m_astarPath                     (new Path()),
-	m_dontAdjustPointsWhenKilled    (false)
+    m_transportCost                 (0.0),
+    m_owner                         (owner),
+    m_payingFor                     (paying_for),
+    m_piratingArmy                  (),
+    m_sourceRouteType               (sourceType),
+    m_sourceResource                (sourceResource),
+    m_crossesWater                  (false),
+    m_isActive                      (false),
+    m_color                         (g_colorSet->GetColor(COLOR_YELLOW)),
+    m_outline                       (g_colorSet->GetColor(COLOR_BLACK)),
+    m_selectedIndex                 (0),
+    m_valid                         (false),
+    m_accumilatedTimesPirated       (0),
+    m_pirate                        (PLAYER_UNASSIGNED),
+    m_gold_in_return                (gold_in_return),
+    m_path_selection_state          (k_TRADEROUTE_NO_PATH),
+    m_sourceCity                    (source),
+    m_destinationCity               (dest),
+    m_piratedLastTime               (-1),
+    m_path                          (),
+    m_wayPoints                     (),
+    m_selectedPath                  (),
+    m_selectedWayPoints             (),
+    m_setPath                       (),
+    m_setWayPoints                  (),
+    m_astarPath                     (new Path()),
+    m_dontAdjustPointsWhenKilled    (false)
 {
-    std::fill(m_passesThrough, m_passesThrough + k_MAX_PLAYERS, FALSE);
+	std::fill(m_passesThrough, m_passesThrough + k_MAX_PLAYERS, FALSE);
 	MapPoint sPos   (m_sourceCity.RetPos());
-    MapPoint dPos   (m_destinationCity.RetPos());
+	MapPoint dPos   (m_destinationCity.RetPos());
 
 	AddWayPoint(sPos);
 	AddWayPoint(dPos);
@@ -117,12 +118,12 @@ TradeRouteData::TradeRouteData
 TradeRouteData::TradeRouteData(CivArchive &archive) : GameObj(0)
 {
 	m_astarPath = new Path;
-	m_dontAdjustPointsWhenKilled = FALSE;
+	m_dontAdjustPointsWhenKilled = false;
 	Serialize(archive);
 }
 
 TradeRouteData::TradeRouteData(TradeRouteData* copyme, uint32 new_id)
-	: GameObj(new_id)
+    : GameObj(new_id)
 {
 	*this = *copyme;
 	m_astarPath = new Path;
@@ -145,7 +146,7 @@ void TradeRouteData::RemoveFromCells()
 	TradeRoute route(m_id);
 	sint32 const    num = m_path.Num();
 	for (sint32 i = 0; i < num; i++)
-    {
+	{
 		if(g_theWorld)
 			g_theWorld->GetCell(m_path[i])->DelTradeRoute(route);
 		if(g_radarMap)
@@ -159,31 +160,12 @@ void TradeRouteData::GetSourceResource(ROUTE_TYPE &type, sint32 &resource) const
 	resource    = m_sourceResource;
 }
 
-TradeRoute TradeRouteData::GetRecip() const
-{
-	return m_recip;
-}
-
-TradeRoute TradeRouteData::AccessRecip()
-{
-	return m_recip;
-}
-
-void TradeRouteData::SetRecip(TradeRoute route)
-{
-
-	Assert(FALSE);
-
-	m_recip = route;
-	ENQUEUE();
-}
-
 void TradeRouteData::CheckSquareForCity(MapPoint const & pos)
 {
 	Unit city = g_theWorld->GetCell(pos)->GetCity();
 
 	if (city.IsValid())
-    {
+	{
 		m_passesThrough[city.GetOwner()] = TRUE;
 	}
 }
@@ -221,57 +203,57 @@ bool TradeRouteData::GeneratePath()
 	sint32 const    nwp     = m_wayPoints.Num();
 
 	for (sint32 wp = 0; wp < nwp - 1; ++wp)
-    {
+	{
 		if (wp == 0)
-        {
+		{
 			if (!g_theTradeAstar.FindPath
-                    (m_payingFor, m_wayPoints[wp], m_wayPoints[wp + 1],
-					 *m_astarPath, cost, FALSE
-                    )
-               )
-            {
+			        ( m_payingFor, m_wayPoints[wp], m_wayPoints[wp + 1],
+			         *m_astarPath, cost, FALSE
+			        )
+			   )
+			{
 				return false;
-            }
+			}
 		}
-        else
-        {
-	        Path    partialAstarPath;
+		else
+		{
+			Path    partialAstarPath;
 			if (g_theTradeAstar.FindPath
-                    (m_payingFor, m_wayPoints[wp], m_wayPoints[wp + 1],
-					 partialAstarPath, cost, FALSE
-                    )
-               )
-            {
-    			m_astarPath->Concat(partialAstarPath);
-            }
-            else
-            {
-                return false;
-            }
+			        (m_payingFor, m_wayPoints[wp], m_wayPoints[wp + 1],
+			         partialAstarPath, cost, FALSE
+			        )
+			   )
+			{
+				m_astarPath->Concat(partialAstarPath);
+			}
+			else
+			{
+				return false;
+			}
 		}
 
 		m_transportCost += cost;
 	}
 
 	m_transportCost = std::max<double>
-        (1.0, (double)((int)tradeutil_GetNetTradeCosts(m_transportCost)));
+	    (1.0, (double)((int)tradeutil_GetNetTradeCosts(m_transportCost)));
 
 	m_path.Insert(m_wayPoints[0]);
 	MapPoint pnt;
 	for (sint32 p = 1; p < m_astarPath->Num(); p++)
-    {
+	{
 		WORLD_DIRECTION d;
 		m_astarPath->GetCurrentDir(d);
 		sint32 r = m_path[p-1].GetNeighborPosition(d, pnt);
 		Assert(r);
 
 		if (r)
-        {
+		{
 			m_path.Insert(pnt);
 			g_theWorld->GetCell(pnt)->AddTradeRoute(m_id);
 			g_radarMap->RedrawTile(&pnt);
 			if (g_theWorld->IsWater(pnt))
-            {
+			{
 				m_crossesWater = true;
 			}
 		}
@@ -279,7 +261,7 @@ bool TradeRouteData::GeneratePath()
 		m_astarPath->IncDir();
 	}
 
-    ENQUEUE();
+	ENQUEUE();
 	return true;
 }
 
@@ -288,7 +270,7 @@ void TradeRouteData::SetPath(DynamicArray<MapPoint> &fullpath,
 {
 	m_setPath.Clear();
 	for (int p = 0; p < fullpath.Num(); p++)
-    {
+	{
 		m_setPath.Insert(fullpath[p]);
 	}
 }
@@ -296,16 +278,16 @@ void TradeRouteData::SetPath(DynamicArray<MapPoint> &fullpath,
 void TradeRouteData::BeginTurn()
 {
 	if (m_setPath.Num() > 0)
-    {
+	{
 		RemoveFromCells();
 		m_path.Clear();
 		m_wayPoints.Clear();
 		for (int p = 0; p < m_setPath.Num(); p++)
-        {
+		{
 			m_path.Insert(m_setPath[p]);
 		}
 		for (int wp = 0; wp < m_setWayPoints.Num(); wp++)
-        {
+		{
 			m_wayPoints.Insert(m_setWayPoints[wp]);
 		}
 		m_setPath.Clear();
@@ -318,7 +300,7 @@ void TradeRouteData::ReturnPath
     const PLAYER_INDEX          owner,
     DynamicArray<MapPoint> &    waypoints,
     DynamicArray<MapPoint> &    fullpath,
-	double &                    cost
+    double &                    cost
 )
 {
 	fullpath.Clear();
@@ -332,9 +314,9 @@ void TradeRouteData::ReturnPath
 	sint32  r;
 
 	for (int wp = 0; wp < nwp - 1; wp++)
-    {
+	{
 		if (wp == 0)
-        {
+		{
 			r = g_theTradeAstar.FindPath(owner, waypoints[wp], waypoints[wp + 1],
 			                             *m_astarPath, partialcost, FALSE);
 			Assert(r);
@@ -349,7 +331,7 @@ void TradeRouteData::ReturnPath
 
 	fullpath.Insert(waypoints[0]);
 	MapPoint pnt;
-	m_crossesWater = FALSE;
+	m_crossesWater = false;
 	for (int p = 1; p < m_astarPath->Num(); p++) {
 		WORLD_DIRECTION d;
 		m_astarPath->GetCurrentDir(d);
@@ -358,7 +340,7 @@ void TradeRouteData::ReturnPath
 		if(r) {
 			fullpath.Insert(pnt);
 			if(g_theWorld->IsWater(pnt)) {
-				m_crossesWater = TRUE;
+				m_crossesWater = true;
 			}
 		}
 
@@ -383,18 +365,21 @@ TradeRouteData::Serialize(CivArchive &archive)
 		archive << m_sourceResource;
 		archive.Store((uint8 *)m_passesThrough, sizeof(m_passesThrough)) ;
 		archive.PutSINT32(m_crossesWater) ;
-		archive.PutSINT8(static_cast<sint8>(m_isActive));
+		archive.PutSINT8(m_isActive);
 		archive.PutUINT32(m_color);
 		archive.PutUINT32(m_outline);
 		archive.PutSINT32(m_selectedIndex);
 		m_piratingArmy.Serialize(archive);
-		archive.PutSINT32(m_valid);
+		archive.PutSINT8(m_valid);
+		archive.PutUINT16(m_accumilatedTimesPirated);
+
+		archive.PutSINT8(m_pirate);
 		archive << m_payingFor;
 		archive << m_gold_in_return;
 
 		m_sourceCity.Serialize(archive);
 		m_destinationCity.Serialize(archive);
-		m_recip.Serialize(archive);
+		archive << m_piratedLastTime;
 		m_path.Serialize(archive);
 		m_wayPoints.Serialize(archive) ;
 		m_selectedPath.Serialize(archive);
@@ -424,18 +409,21 @@ TradeRouteData::Serialize(CivArchive &archive)
 		archive >> m_sourceResource;
 		archive.Load((uint8 *)m_passesThrough, sizeof(m_passesThrough)) ;
 		m_crossesWater = (BOOL)(archive.GetSINT32()) ;
-		m_isActive = (BOOL)(archive.GetSINT8());
+		m_isActive = archive.GetSINT8();
 		m_color = archive.GetUINT32();
 		m_outline = archive.GetUINT32();
 		m_selectedIndex = archive.GetSINT32();
 		m_piratingArmy.Serialize(archive);
-		m_valid = archive.GetSINT32();
+		m_valid = archive.GetSINT8(); // Split former BOOL m_valid, so that we can save something in the gap
+		m_accumilatedTimesPirated = archive.GetUINT16();
+
+		m_pirate = archive.GetSINT8();
 		archive >> m_payingFor;
 		archive >> m_gold_in_return;
 
 		m_sourceCity.Serialize(archive);
 		m_destinationCity.Serialize(archive);
-		m_recip.Serialize(archive);
+		archive >> m_piratedLastTime;
 		m_path.Serialize(archive);
 		m_wayPoints.Serialize(archive) ;
 		m_selectedPath.Serialize(archive);
@@ -473,10 +461,8 @@ StringId TradeRouteData::GetResourceName() const
 #endif
 }
 
-
 BOOL TradeRouteData::InitSelectedData()
 {
-
 	if (m_selectedPath.Num()) return FALSE;
 
 	m_selectedPath = m_path;
@@ -488,7 +474,6 @@ BOOL TradeRouteData::InitSelectedData()
 
 BOOL TradeRouteData::IsSelectedPathSame()
 {
-
 	if (m_path.Num() != m_selectedPath.Num()) return FALSE;
 
 	for ( sint32 i = 0 ; i < m_path.Num() ; i++ )
@@ -500,15 +485,15 @@ BOOL TradeRouteData::IsSelectedPathSame()
 sint32 TradeRouteData::AddSelectedWayPoint(const MapPoint &pos)
 {
 	for (sint32 wp = 0; wp < m_selectedWayPoints.Num(); ++wp)
-    {
+	{
 		if (pos == m_selectedWayPoints[wp])
 		{
 			m_selectedIndex = wp;
-            return m_selectedIndex;
+			return m_selectedIndex;
 		}
-    }
+	}
 
-    sint32 wpIndex  = 0;
+	sint32 wpIndex  = 0;
 	for (int i = 0; i < m_selectedPath.Num(); ++i)
 	{
 		if (pos == m_selectedPath[i])
@@ -516,20 +501,20 @@ sint32 TradeRouteData::AddSelectedWayPoint(const MapPoint &pos)
 			m_selectedWayPoints.InsertBefore(pos, wpIndex);
 			break;
 		}
-        else if (m_selectedPath[i] == m_selectedWayPoints[wpIndex])
-        {
-            ++wpIndex;
-        }
+		else if (m_selectedPath[i] == m_selectedWayPoints[wpIndex])
+		{
+			++wpIndex;
+		}
 	}
 
-    m_selectedIndex = wpIndex;
-    return m_selectedIndex;
+	m_selectedIndex = wpIndex;
+	return m_selectedIndex;
 }
 
 void TradeRouteData::GenerateSelectedPath(const MapPoint &pos)
 {
 	if ((m_selectedIndex == 0) || (m_selectedIndex == m_selectedWayPoints.Num()))
-        return;
+		return;
 
 	DynamicArray<MapPoint> tempWp = m_selectedWayPoints;
 	tempWp[m_selectedIndex] = pos;
@@ -561,14 +546,12 @@ BOOL TradeRouteData::IsPosInPath(const MapPoint &pos)
 
 void TradeRouteData::UpdateSelectedCellData(TradeRoute &route)
 {
-
 	for ( sint32 i = 0 ; i < m_selectedPath.Num() ; i++ )
 		g_theWorld->GetCell(m_selectedPath[i])->AddTradeRoute(route);
 }
 
 void TradeRouteData::ClearSelectedCellData(TradeRoute &route)
 {
-
 	for ( sint32 i = 0 ; i < m_selectedPath.Num() ; i++ )
 		g_theWorld->GetCell(m_selectedPath[i])->DelTradeRoute(route);
 }
@@ -602,7 +585,7 @@ double TradeRouteData::GetCost() const
 
 void TradeRouteData::DontAdjustPointsWhenKilled()
 {
-	m_dontAdjustPointsWhenKilled = TRUE;
+	m_dontAdjustPointsWhenKilled = true;
 }
 
 sint32 TradeRouteData::GetValue() const
