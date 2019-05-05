@@ -59,6 +59,9 @@ void NetTradeRoute::Packetize(uint8 *buf, uint16 & size)
 	PUSHLONG((uint32)(m_routeData->m_piratedLastTime));
 	PUSHLONG((uint32)(m_routeData->m_piratingArmy.m_id));
 	PUSHSHORT((uint16)(m_routeData->m_accumilatedTimesPirated));
+	PUSHBYTE(m_routeData->m_valid);
+	PUSHBYTE(m_routeData->m_pirate);
+
 	PUSHSHORT((uint16)(m_routeData->m_path.Num()));
 	for(i = 0; i < m_routeData->m_path.Num(); i++) {
 		PUSHSHORT((uint16)m_routeData->m_path[i].x);
@@ -134,6 +137,8 @@ void NetTradeRoute::Unpacketize(uint16 id, uint8 *buf, uint16 size)
 	PULLLONG(m_routeData->m_piratedLastTime);
 	PULLLONG(m_routeData->m_piratingArmy.m_id);
 	PULLSHORT(m_routeData->m_accumilatedTimesPirated);
+	PULLBYTE(m_routeData->m_valid);
+	PULLBYTE(m_routeData->m_pirate);
 
 	PULLSHORT(numWp);
 
