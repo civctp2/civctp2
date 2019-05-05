@@ -79,6 +79,7 @@ TradeRouteData::TradeRouteData
     m_selectedIndex                 (0),
     m_valid                         (false),
     m_accumilatedTimesPirated       (0),
+    m_pirate                        (PLAYER_UNASSIGNED),
     m_gold_in_return                (gold_in_return),
     m_path_selection_state          (k_TRADEROUTE_NO_PATH),
     m_sourceCity                    (source),
@@ -372,8 +373,7 @@ TradeRouteData::Serialize(CivArchive &archive)
 		archive.PutSINT8(m_valid);
 		archive.PutUINT16(m_accumilatedTimesPirated);
 
-		sint8 empty = 0;
-		archive.PutSINT8(empty); // Unused bytes
+		archive.PutSINT8(m_pirate);
 		archive << m_payingFor;
 		archive << m_gold_in_return;
 
@@ -417,7 +417,7 @@ TradeRouteData::Serialize(CivArchive &archive)
 		m_valid = archive.GetSINT8(); // Split former BOOL m_valid, so that we can save something in the gap
 		m_accumilatedTimesPirated = archive.GetUINT16();
 
-		sint8 empty = archive.GetSINT8(); // Unused 8 bytes
+		m_pirate = archive.GetSINT8();
 		archive >> m_payingFor;
 		archive >> m_gold_in_return;
 

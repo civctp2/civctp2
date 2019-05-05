@@ -373,7 +373,6 @@ Diplomat::Diplomat()
     m_enemyCount                    (0),
     m_friendPower                   (0),
     m_enemyThreat                   (0),
-    m_piracyHistory                 (),
     m_incursionPermission           (1 << PLAYER_INDEX_VANDALS),
     m_outstandingProposals          (0),
     m_diplomcyVictoryCompleteTurn   (-1),
@@ -403,7 +402,6 @@ Diplomat::Diplomat(Diplomat const & a_Original)
     m_enemyCount                    (a_Original.m_enemyCount),
     m_friendPower                   (a_Original.m_friendPower),
     m_enemyThreat                   (a_Original.m_enemyThreat),
-    m_piracyHistory                 (a_Original.m_piracyHistory),
     m_incursionPermission           (a_Original.m_incursionPermission),
     m_outstandingProposals          (a_Original.m_outstandingProposals),
     m_diplomcyVictoryCompleteTurn   (a_Original.m_diplomcyVictoryCompleteTurn),
@@ -451,7 +449,6 @@ Diplomat const & Diplomat::operator = (Diplomat const & a_Original)
 		m_enemyCount                    = a_Original.m_enemyCount;
 		m_friendPower                   = a_Original.m_friendPower;
 		m_enemyThreat                   = a_Original.m_enemyThreat;
-		m_piracyHistory                 = a_Original.m_piracyHistory;
 		m_incursionPermission           = a_Original.m_incursionPermission;
 		m_outstandingProposals          = a_Original.m_outstandingProposals;
 		m_diplomcyVictoryCompleteTurn   = a_Original.m_diplomcyVictoryCompleteTurn;
@@ -496,7 +493,6 @@ Diplomat::~Diplomat()
 	ThreatList().swap(m_threats);
 	BoolVector().swap(m_desireWarWith);
 	std::string().swap(m_personalityName);
-	PiracyHistoryList().swap(m_piracyHistory);
 }
 
 void Diplomat::Resize(const PLAYER_INDEX & newMaxPlayerId)
@@ -671,7 +667,6 @@ void Diplomat::Cleanup()
 	m_incursionPermission			= 1 << PLAYER_INDEX_VANDALS;
 	m_outstandingProposals			= 0;
 	m_personalityName.resize(0);
-	m_piracyHistory.clear();
 
 	ClearEffectiveRegardCache();
 }
@@ -4448,23 +4443,31 @@ void Diplomat::UpdateAttributes()
 
 bool Diplomat::GetTradeRoutePiracyRisk(const Unit & source_city, const Unit & dest_city) const
 {
-	for
-	(
-	    PiracyHistoryList::const_iterator piracy_iter = m_piracyHistory.begin();
-	    piracy_iter != m_piracyHistory.end();
-	    ++piracy_iter
-	)
-	{
-		if ((piracy_iter->m_sourceCity == source_city) &&
-		    (piracy_iter->m_destinationCity == dest_city) &&
-		    !AgreementMatrix::s_agreements.HasAgreement(piracy_iter->m_piratingPlayer,
-		                                                m_playerId, PROPOSAL_OFFER_STOP_PIRACY)
-		   )
-		{
-			sint32 max_piracy_events;
-			GetCurrentStrategy().GetMaxPiracyEvents(max_piracy_events);
+	Player * player_ptr = g_player[m_playerId];
+	Assert(player_ptr);
 
-			return piracy_iter->m_accumEvents >= max_piracy_events;
+	sint32 max_piracy_events;
+	GetCurrentStrategy().GetMaxPiracyEvents(max_piracy_events);
+
+	sint32 num_cities = player_ptr->m_all_cities->Num();
+
+	for(sint32 i = 0; i < num_cities; i++)
+	{
+		Unit city = player_ptr->m_all_cities->Access(i);
+		Assert(city.IsValid());
+
+		for(sint32 r = 0; r < city.CD()->GetTradeSourceList()->Num(); r++)
+		{
+			TradeRoute route = city.CD()->GetTradeSourceList()->Access(r);
+
+			if ((route->GetSource() == source_city) &&
+			    (route->GetDestination() == dest_city) &&
+			    !AgreementMatrix::s_agreements.HasAgreement(route->GetPirate(),
+			                                                m_playerId, PROPOSAL_OFFER_STOP_PIRACY)
+			   )
+			{
+				return route->GetAccumulatedTimePirated() >= max_piracy_events;
+			}
 		}
 	}
 
@@ -4478,68 +4481,44 @@ void Diplomat::ComputeTradeRoutePiracyRisk()
 
 	sint32 cur_round = player_ptr->GetCurRound();
 
-	PiracyHistoryList::iterator piracy_iter = m_piracyHistory.begin();
-	while (piracy_iter != m_piracyHistory.end())
-	{
-		sint32 piracy_memory_turns;
-		GetCurrentStrategy().GetPiracyMemoryTurns(piracy_memory_turns);
-
-		if (cur_round > piracy_iter->m_lastTurn + piracy_memory_turns)
-		{
-			piracy_iter = m_piracyHistory.erase(piracy_iter);
-		}
-		else
-		{
-			++piracy_iter;
-		}
-	}
+	sint32 piracy_memory_turns;
+	GetCurrentStrategy().GetPiracyMemoryTurns(piracy_memory_turns);
 
 	sint32 num_cities = player_ptr->m_all_cities->Num();
-	TradeRoute route;
-	Unit city;
-	PiracyHistory piracy;
 	StringId piracy_str_id;
 	g_theStringDB->GetStringID("REGARD_EVENT_PER_ROUTE_PIRACY", piracy_str_id);
 	sint32 piracy_regard_cost;
 
 	for (sint32 i = 0; i < num_cities; i++)
 	{
-		city = player_ptr->m_all_cities->Access(i);
+		Unit city = player_ptr->m_all_cities->Access(i);
 		Assert(city.IsValid());
 
-		for (sint32 r = 0; r < city.CD()->GetTradeSourceList()->Num(); r++) {
-			route = city.CD()->GetTradeSourceList()->Access(r);
+		for (sint32 r = 0; r < city.CD()->GetTradeSourceList()->Num(); r++)
+		{
+			TradeRoute route = city.CD()->GetTradeSourceList()->Access(r);
 
-			if (route->IsBeingPirated())
+			if(route->IsBeingPirated())
 			{
-				piracy.m_sourceCity = route->GetSource();
-				piracy.m_destinationCity = route->GetDestination();
-				piracy.m_piratingPlayer =
-				route->GetPiratingArmy().GetOwner();
+				PLAYER_INDEX piratingPlayer = route->GetPiratingArmy().GetOwner();
 
-				GetCurrentDiplomacy(piracy.m_piratingPlayer).
+				route->SetPirate(piratingPlayer);
+
+				GetCurrentDiplomacy(piratingPlayer).
 				GetPerRoutePiracyRegardCost(piracy_regard_cost);
 
-				LogRegardEvent( piracy.m_piratingPlayer,
-								piracy_regard_cost,
-								REGARD_EVENT_GOLD,
-								piracy_str_id );
+				LogRegardEvent(piratingPlayer,
+				               piracy_regard_cost,
+				               REGARD_EVENT_GOLD,
+				               piracy_str_id);
 
-				piracy_iter = std::find(m_piracyHistory.begin(),
-								        m_piracyHistory.end(),
-								        piracy);
-
-				if (piracy_iter != m_piracyHistory.end())
-				{
-					piracy_iter->m_accumEvents++;
-					piracy_iter->m_lastTurn = cur_round;
-				}
-				else
-				{
-					piracy.m_accumEvents = 1;
-					piracy.m_lastTurn = cur_round;
-					m_piracyHistory.push_front(piracy);
-				}
+				route->IncreaseAccumulatedTimePirated();
+				route->SetLastTimePirated(cur_round);
+			}
+			else if(cur_round > route->GetLastTimePirated() + piracy_memory_turns)
+			{
+				route->SetPirate(PLAYER_UNASSIGNED);
+				route->ResetAccumulatedTimePirated();
 			}
 		}
 	}
@@ -4547,19 +4526,32 @@ void Diplomat::ComputeTradeRoutePiracyRisk()
 
 bool Diplomat::GetTradeRoutePiracyRisk(const PLAYER_INDEX foreignerId) const
 {
-	for
-	(
-	    PiracyHistoryList::const_iterator piracy_iter = m_piracyHistory.begin();
-	    piracy_iter != m_piracyHistory.end();
-	    ++piracy_iter
-	)
+	Player * player_ptr = g_player[m_playerId];
+	Assert(player_ptr);
+
+	sint32 num_cities = player_ptr->m_all_cities->Num();
+
+	for(sint32 i = 0; i < num_cities; i++)
 	{
-		if ((piracy_iter->m_piratingPlayer == foreignerId) &&
-		     !AgreementMatrix::s_agreements.HasAgreement
-		        (piracy_iter->m_piratingPlayer, m_playerId, PROPOSAL_OFFER_STOP_PIRACY)
-		   )
+		Unit city = player_ptr->m_all_cities->Access(i);
+		Assert(city.IsValid());
+
+		for(sint32 r = 0; r < city.CD()->GetTradeSourceList()->Num(); r++)
 		{
-			return true;
+			TradeRoute route = city.CD()->GetTradeSourceList()->Access(r);
+
+			if(route->IsBeingPirated())
+			{
+				PLAYER_INDEX piratingPlayer = route->GetPirate();
+
+				if ((piratingPlayer == foreignerId) &&
+				     !AgreementMatrix::s_agreements.HasAgreement
+				        (piratingPlayer, m_playerId, PROPOSAL_OFFER_STOP_PIRACY)
+				   )
+				{
+					return true;
+				}
+			}
 		}
 	}
 

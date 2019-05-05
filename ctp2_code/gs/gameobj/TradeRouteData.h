@@ -74,6 +74,7 @@ private:
 
 	bool m_valid;
 	sint16 m_accumilatedTimesPirated;
+	sint8 m_pirate;
 
 	sint32 m_gold_in_return;
 
@@ -126,11 +127,13 @@ public:
 	void SetSource(Unit source);
 	void SetDestination(Unit dest);
 
-	void     SetLastTimePirated(sint32 currentTurn)       {        m_piratedLastTime = currentTurn; }
-	sint32   GetLastTimePirated()                   const { return m_piratedLastTime; }
-	void IncreaseAccumulatedTimePirated()                 {        m_accumilatedTimesPirated++; }
-	void    ResetAccumulatedTimePirated()                 {        m_accumilatedTimesPirated = 0; }
-	uint16    GetAccumulatedTimePirated()           const { return m_accumilatedTimesPirated; }
+	void      SetLastTimePirated(sint32 currentTurn)       {        m_piratedLastTime = currentTurn; }
+	sint32    GetLastTimePirated()                   const { return m_piratedLastTime; }
+	void IncreaseAccumulatedTimePirated()                  {        m_accumilatedTimesPirated++; }
+	void    ResetAccumulatedTimePirated()                  {        m_accumilatedTimesPirated = 0; }
+	uint16    GetAccumulatedTimePirated()            const { return m_accumilatedTimesPirated; }
+	void      SetPirate(sint8 pirate)                      {        m_pirate = pirate; }
+	sint8     GetPirate()                            const { return m_pirate; }
 
 	double GetCost() const;
 	void SetCost(double cost);

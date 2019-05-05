@@ -63,12 +63,6 @@ public:
 
 	void GetSourceResource(ROUTE_TYPE &type, sint32 &resource) const;
 
-	void     SetLastTimePirated(sint32 currentTurn);
-	sint32   GetLastTimePirated() const;
-	void IncreaseAccumulatedTimePirated();
-	void    ResetAccumulatedTimePirated();
-	uint16    GetAccumulatedTimePirated();
-
 	BOOL PassesThrough(sint32 player) const;
 
 	BOOL CrossesWater() const;
