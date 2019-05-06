@@ -24,6 +24,7 @@
 #   protect itself from slave raids. (06-Sep-2008 Martin Gühmann)
 # - Added build list sequences for small cities and for cities at their
 #   maximum size. (20-Aug-2009 Martin Gühmann)
+# - Added to the wonder sequences a build list for the end game. (16-Feb-2019 Martin Gühmann)
 #
 #----------------------------------------------------------------------------
 
@@ -33,6 +34,7 @@
 BUILD_LIST_SEQUENCE_PRODUCTION {
   BuildListElement { GarrisonUnitBuildList }
   BuildListElement { BuildingBuildList BUILDING_BUILD_LIST_PRODUCTION }
+  BuildListElement { BuildingBuildList BUILDING_BUILD_LIST_ENDGAME }
   BuildListElement { BuildingBuildList BUILDING_BUILD_LIST_GROWTH }
   BuildListElement { AllUnitBuildList }
   BuildListElement { Freight }
@@ -66,6 +68,7 @@ BUILD_LIST_SEQUENCE_PRODUCTION {
 BUILD_LIST_SEQUENCE_GROWTH {
   BuildListElement { GarrisonUnitBuildList }
   BuildListElement { BuildingBuildList BUILDING_BUILD_LIST_GROWTH }
+  BuildListElement { BuildingBuildList BUILDING_BUILD_LIST_ENDGAME }
   BuildListElement { AllUnitBuildList }
   BuildListElement { Freight }
   BuildListElement { BuildingBuildList BUILDING_BUILD_LIST_PRODUCTION }
@@ -97,6 +100,7 @@ BUILD_LIST_SEQUENCE_GROWTH {
 
 ### 2 ###
 BUILD_LIST_SEQUENCE_OFFENSE {
+  BuildListElement { BuildingBuildList BUILDING_BUILD_LIST_ENDGAME }
   BuildListElement { BuildingBuildList BUILDING_BUILD_LIST_OFFENSE }
   BuildListElement { GarrisonUnitBuildList }
   BuildListElement { AllUnitBuildList }
@@ -132,6 +136,7 @@ BUILD_LIST_SEQUENCE_OFFENSE {
 BUILD_LIST_SEQUENCE_DEFENSE {
   BuildListElement { GarrisonUnitBuildList }
   BuildListElement { BuildingBuildList BUILDING_BUILD_LIST_DEFENSE }
+  BuildListElement { BuildingBuildList BUILDING_BUILD_LIST_ENDGAME }
   BuildListElement { BuildingBuildList BUILDING_BUILD_LIST_GROWTH }
   BuildListElement { AllUnitBuildList }
   BuildListElement { BuildingBuildList BUILDING_BUILD_LIST_PRODUCTION }
@@ -164,6 +169,7 @@ BUILD_LIST_SEQUENCE_DEFENSE {
 ### 4 ###
 BUILD_LIST_SEQUENCE_SCIENCE {
   BuildListElement { GarrisonUnitBuildList }
+  BuildListElement { BuildingBuildList BUILDING_BUILD_LIST_ENDGAME }
   BuildListElement { BuildingBuildList BUILDING_BUILD_LIST_SCIENCE }
   BuildListElement { BuildingBuildList BUILDING_BUILD_LIST_GOLD }
   BuildListElement { BuildingBuildList BUILDING_BUILD_LIST_GROWTH }
@@ -198,6 +204,7 @@ BUILD_LIST_SEQUENCE_SCIENCE {
 BUILD_LIST_SEQUENCE_GOLD {
   BuildListElement { GarrisonUnitBuildList }
   BuildListElement { BuildingBuildList BUILDING_BUILD_LIST_GOLD }
+  BuildListElement { BuildingBuildList BUILDING_BUILD_LIST_ENDGAME }
   BuildListElement { BuildingBuildList BUILDING_BUILD_LIST_SCIENCE }
   BuildListElement { BuildingBuildList BUILDING_BUILD_LIST_GROWTH }
   BuildListElement { Freight }
@@ -236,6 +243,7 @@ BUILD_LIST_SEQUENCE_WONDERS {
   BuildListElement { WonderBuildList WONDER_BUILD_LIST_GOLD }
   BuildListElement { WonderBuildList WONDER_BUILD_LIST_DEFENSE }
   BuildListElement { WonderBuildList WONDER_BUILD_LIST_OFFENSE }
+  BuildListElement { BuildingBuildList BUILDING_BUILD_LIST_ENDGAME }
   BuildListElement { BuildingBuildList BUILDING_BUILD_LIST_PRODUCTION }
   BuildListElement { GarrisonUnitBuildList }
   BuildListElement { BuildingBuildList BUILDING_BUILD_LIST_GROWTH }
@@ -271,6 +279,7 @@ BUILD_LIST_SEQUENCE_WONDERS {
 BUILD_LIST_SEQUENCE_HAPPINESS {
   BuildListElement { BuildingBuildList BUILDING_BUILD_LIST_HAPPINESS }
   BuildListElement { GarrisonUnitBuildList }
+  BuildListElement { BuildingBuildList BUILDING_BUILD_LIST_ENDGAME }
   BuildListElement { BuildingBuildList BUILDING_BUILD_LIST_GROWTH }
   BuildListElement { Freight }
   BuildListElement { AllUnitBuildList }
@@ -306,6 +315,7 @@ BUILD_LIST_SEQUENCE_HAPPINESS {
 // the same build list sequence are not allowed.
 BUILD_LIST_SEQUENCE_DEFAULT {
   BuildListElement { GarrisonUnitBuildList }
+  BuildListElement { BuildingBuildList BUILDING_BUILD_LIST_ENDGAME }
   BuildListElement { BuildingBuildList BUILDING_BUILD_LIST_GROWTH }
   BuildListElement { Freight }
   BuildListElement { AllUnitBuildList }
@@ -316,6 +326,7 @@ BUILD_LIST_SEQUENCE_DEFAULT {
   BuildListElement { BuildingBuildList BUILDING_BUILD_LIST_DEFENSE }
 
   // otherwise, just build anything
+  BuildListElement { BuildingBuildList BUILDING_BUILD_LIST_ENDGAME }
   BuildListElement { BuildingBuildList BUILDING_BUILD_LIST_HAPPINESS }
   BuildListElement { BuildingBuildList BUILDING_BUILD_LIST_GROWTH }
   BuildListElement { BuildingBuildList BUILDING_BUILD_LIST_PRODUCTION }
@@ -345,6 +356,7 @@ BUILD_LIST_SEQUENCE_WONDERS_SCIENTIST {
   BuildListElement { WonderBuildList WONDER_BUILD_LIST_GOLD }
   BuildListElement { WonderBuildList WONDER_BUILD_LIST_DEFENSE }
   BuildListElement { WonderBuildList WONDER_BUILD_LIST_OFFENSE }
+  BuildListElement { BuildingBuildList BUILDING_BUILD_LIST_ENDGAME }
   BuildListElement { BuildingBuildList BUILDING_BUILD_LIST_PRODUCTION }
   BuildListElement { GarrisonUnitBuildList }
   BuildListElement { BuildingBuildList BUILDING_BUILD_LIST_GROWTH }
@@ -385,6 +397,7 @@ BUILD_LIST_SEQUENCE_WONDERS_MILITARIST {
   BuildListElement { WonderBuildList WONDER_BUILD_LIST_HAPPINESS }
   BuildListElement { WonderBuildList WONDER_BUILD_LIST_GROWTH }
   BuildListElement { WonderBuildList WONDER_BUILD_LIST_GOLD }
+  BuildListElement { BuildingBuildList BUILDING_BUILD_LIST_ENDGAME }
   BuildListElement { BuildingBuildList BUILDING_BUILD_LIST_PRODUCTION }
   BuildListElement { GarrisonUnitBuildList }
   BuildListElement { BuildingBuildList BUILDING_BUILD_LIST_GROWTH }
@@ -425,6 +438,7 @@ BUILD_LIST_SEQUENCE_WONDERS_ECONOMIC {
   BuildListElement { WonderBuildList WONDER_BUILD_LIST_PRODUCTION }
   BuildListElement { WonderBuildList WONDER_BUILD_LIST_DEFENSE }
   BuildListElement { WonderBuildList WONDER_BUILD_LIST_OFFENSE }
+  BuildListElement { BuildingBuildList BUILDING_BUILD_LIST_ENDGAME }
   BuildListElement { BuildingBuildList BUILDING_BUILD_LIST_PRODUCTION }
   BuildListElement { GarrisonUnitBuildList }
   BuildListElement { BuildingBuildList BUILDING_BUILD_LIST_GROWTH }
@@ -465,6 +479,7 @@ BUILD_LIST_SEQUENCE_WONDERS_ECOTOPIAN {
   BuildListElement { WonderBuildList WONDER_BUILD_LIST_DEFENSE }
   BuildListElement { WonderBuildList WONDER_BUILD_LIST_GROWTH }
   BuildListElement { WonderBuildList WONDER_BUILD_LIST_GOLD }
+  BuildListElement { BuildingBuildList BUILDING_BUILD_LIST_ENDGAME }
   BuildListElement { BuildingBuildList BUILDING_BUILD_LIST_PRODUCTION }
   BuildListElement { GarrisonUnitBuildList }
   BuildListElement { BuildingBuildList BUILDING_BUILD_LIST_GROWTH }
@@ -505,6 +520,7 @@ BUILD_LIST_SEQUENCE_WONDERS_DIPLOMATIC {
   BuildListElement { WonderBuildList WONDER_BUILD_LIST_GOLD }
   BuildListElement { WonderBuildList WONDER_BUILD_LIST_DEFENSE }
   BuildListElement { WonderBuildList WONDER_BUILD_LIST_OFFENSE }
+  BuildListElement { BuildingBuildList BUILDING_BUILD_LIST_ENDGAME }
   BuildListElement { BuildingBuildList BUILDING_BUILD_LIST_PRODUCTION }
   BuildListElement { GarrisonUnitBuildList }
   BuildListElement { BuildingBuildList BUILDING_BUILD_LIST_GROWTH }

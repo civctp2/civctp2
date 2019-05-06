@@ -75,40 +75,6 @@ class Diplomat;
 class Diplomat
 {
 public:
-	struct PiracyHistory
-	{
-		PiracyHistory()
-		:
-		    m_sourceCity        (),
-		    m_destinationCity   (),
-		    m_piratingPlayer    (PLAYER_UNASSIGNED),
-		    m_accumEvents       (0),
-		    m_lastTurn          (-1)
-		{ };
-
-		bool operator<(const PiracyHistory & rval) const
-			{
-				if (m_sourceCity.m_id < rval.m_sourceCity.m_id &&
-					m_destinationCity.m_id < rval.m_destinationCity.m_id &&
-					m_piratingPlayer < rval.m_piratingPlayer)
-					return true;
-				return false;
-			}
-
-		bool operator==(const PiracyHistory & rval) const
-			{
-				if (m_sourceCity.m_id == rval.m_sourceCity.m_id &&
-					m_destinationCity.m_id == rval.m_destinationCity.m_id &&
-					m_piratingPlayer == rval.m_piratingPlayer )
-					return true;
-				return false;
-			}
-		Unit m_sourceCity;
-		Unit m_destinationCity;
-		PLAYER_INDEX m_piratingPlayer;
-		sint32 m_accumEvents;
-		sint32 m_lastTurn;
-	};
 
 	typedef std::list<Motivation> MotivationList;
 	typedef std::vector<MotivationList::iterator> MotivationVector;
@@ -117,7 +83,6 @@ public:
 	typedef std::list<Threat> ThreatList;
 	typedef std::vector<DiplomacyRecord> DiplomacyRecordVector;
 	typedef std::vector<Diplomat> DiplomatVector;
-	typedef std::list<PiracyHistory> PiracyHistoryList;
 	typedef std::list<AiState> AiStateList;
 	typedef std::list<std::pair<sint32, Unit> > NukeTargetList;
 	typedef std::vector<bool> BoolVector;
@@ -131,18 +96,10 @@ public:
 
 	static sint32 s_proposalTypeToElemIndex[PROPOSAL_MAX];
 
-
-
-
-
-
 	static Diplomat & GetDiplomat(const PLAYER_INDEX & playerId);
 	static bool HasDiplomat(const PLAYER_INDEX & playerId);
 
 	static void ResizeAll(const PLAYER_INDEX & newMaxPlayers);
-
-
-
 
 	static void CleanupAll();
 
@@ -161,10 +118,6 @@ public:
 	sint32 GetNextId();
 
 	void SetNextId(const sint32 & id);
-
-
-
-
 
 	Diplomat();
 	Diplomat(Diplomat const & a_Original);
@@ -204,12 +157,6 @@ public:
 
 	void BeginTurn();
 
-
-
-
-
-
-
 	void LogRegardEvent( const PLAYER_INDEX & foreignerId,
 						 const sint32 & regardDelta,
 						 const REGARD_EVENT_TYPE & type,
@@ -220,7 +167,6 @@ public:
 
 	const ai::Regard GetPublicRegard( const PLAYER_INDEX & foreignerId,
 									  const REGARD_EVENT_TYPE & type = REGARD_EVENT_ALL ) const;
-
 
 	StringId ExplainRegard( const PLAYER_INDEX & foreignerId,
 						  const REGARD_EVENT_TYPE & type = REGARD_EVENT_ALL ) const;
@@ -241,17 +187,9 @@ public:
 
 	void UpdateRegard(const PLAYER_INDEX foreignerId);
 
-
-
-
-
-
-
-
 	sint32 AddAgreement(const PLAYER_INDEX & foreignerId);
 
 	void EnactStopPiracy(const PLAYER_INDEX victimId, const PLAYER_INDEX pirateId);
-
 
 	bool CanAfford( const PLAYER_INDEX senderId,
 					const PLAYER_INDEX receiverId,
@@ -265,30 +203,17 @@ public:
 
 	bool GetEmbargo(const PLAYER_INDEX foreignerId) const;
 
-
-
-
-
-
-
 	void AddRejection(const PLAYER_INDEX & foreignerId);
-
-
-
-
-
 
 	const Threat & GetThreatById(const sint32 & id) const;
 
 	void RemoveThreatById(const sint32 & id);
-
 
 	sint32 AddThreat(const PLAYER_INDEX & foreignerId);
 
 	const ThreatList & GetThreatList() const;
 
 	bool ExecuteThreat(const Threat & threat);
-
 
 	bool HasThreat(const PLAYER_INDEX & foreignerId,
 				   const THREAT_TYPE type,
@@ -297,11 +222,6 @@ public:
 	bool ComputeThreatResponse(const PLAYER_INDEX foreignerId, Response & threat_response) const;
 
 	bool GetAgreementToBreak(const PLAYER_INDEX foreignerId, ai::Agreement & pact) const;
-
-
-
-
-
 
 	void ConsiderResponse( const PLAYER_INDEX & senderId,
 						   const Response & response );
@@ -324,26 +244,11 @@ public:
 	void ExecuteResponse( const PLAYER_INDEX sender,
 						  const PLAYER_INDEX receiver );
 
-
-
-
 	const Response & GetResponsePending(const PLAYER_INDEX foreignerId) const;
 
 	const Response & GetResponse(const PLAYER_INDEX foreignerId) const;
 
 	void ExecuteResponse(const Response & response, bool runAI = true);
-
-
-
-
-
-
-
-
-
-
-
-
 
 	void ConsiderMotivation(const Motivation & motivation);
 
@@ -353,16 +258,7 @@ public:
 
 	const Motivation & GetCurrentMotivation() const;
 
-
 	StringId GetDiplomacyAdvice(SlicContext & sc, const PLAYER_INDEX & foreignerId = -1) const;
-
-
-
-
-
-
-
-
 
 	void ContinueDiplomacy( const PLAYER_INDEX & foreignerId );
 
@@ -415,9 +311,6 @@ public:
 	sint32 GetViolationTrustCost(const PLAYER_INDEX foreignerId,
 					 			 const PROPOSAL_TYPE proposalType ) const;
 
-
-
-
 	const NewProposal & GetNewProposalPending(const PLAYER_INDEX foreignerId) const;
 
 	const NewProposal & GetNewProposalAdvice(const PLAYER_INDEX foreignerId) const;
@@ -433,11 +326,6 @@ public:
 	void ComputeCurrentStrategy();
 
 	const StrategyRecord & GetCurrentStrategy() const;
-
-
-
-
-
 
 	void InitDiplomaticState( const PLAYER_INDEX & foreignerId );
 
@@ -455,11 +343,6 @@ public:
 
 	const DiplomacyRecord & GetCurrentDiplomacy(const PLAYER_INDEX & foreignerId) const;
 
-
-
-
-
-
 	sint32 GetNextAdvance() const;
 
 	sint32 GetDesiredAdvanceFrom( const PLAYER_INDEX & foreignerId, const sint32 min_cost, const sint32 max_cost ) const;
@@ -469,11 +352,6 @@ public:
 	sint32 GetNextKeyAdvance() const;
 
 	StringId GetScienceAdvice(SlicContext & sc, StringId & advance_advice);
-
-
-
-
-
 
 	sint32 GetTradeFrom(const PLAYER_INDEX &foreignId) const;
 
@@ -529,13 +407,13 @@ public:
 
 	sint32 GetLastColdwarAttack(const PLAYER_INDEX foreignerId) const;
 
-
 	PLAYER_INDEX ComputeNuclearLaunchTarget();
 
 	PLAYER_INDEX GetNuclearLaunchTarget() const;
 
 	void TargetNuclearAttack(const PLAYER_INDEX foreignerId, const bool launch_now);
 
+	bool HasWarOrDesiresPreemptivelyWith(const PLAYER_INDEX foreignerId) const;
 	bool DesireWarWith(const PLAYER_INDEX foreignerId) const;
 
 	bool ComputeDesireWarWith(const PLAYER_INDEX foreignerId) const;
@@ -585,8 +463,6 @@ private:
 	static sint32 s_nextId;
 	static Diplomat::DiplomatVector s_theDiplomats;
 
-	void RemoveBestMotivation();
-
 	void UpdateAttributes();
 
 	void MergeStrategy(const sint32 index);
@@ -597,7 +473,6 @@ private:
 						   const DiplomacyArg & argument );
 
 	void ComputeTradeRoutePiracyRisk();
-
 
 	bool LaunchNuclearAttackOnCity(const Unit & city);
 
@@ -611,19 +486,9 @@ private:
 
 	void ExecutePersistantAgreements();
 
-
-
-
-
-
 	PLAYER_INDEX m_playerId;
 	std::string m_personalityName;
 	const PersonalityRecord *m_personality;
-
-
-
-
-
 
 	MotivationList m_motivations;
 
@@ -643,16 +508,10 @@ private:
 
 	ThreatList m_threats;
 
-
-
-
-
 	sint8 m_friendCount;
 	sint8 m_enemyCount;
 	sint32 m_friendPower;
 	sint32 m_enemyThreat;
-
-	PiracyHistoryList m_piracyHistory;
 
 	uint32 m_incursionPermission;
 
@@ -668,13 +527,6 @@ private:
 	bool m_launchedNanoAttack;
 	BoolVector m_desireWarWith;
 
-
-
-
-
-
-
-
 	bool ComputeEffectiveRegard(const PLAYER_INDEX & foreignerId, const ai::Regard & test_regard) const;
 
 	struct cEffectiveRegardEntry
@@ -683,7 +535,6 @@ private:
 		cEffectiveRegardEntry() {m_round=-666;}
 		int m_round;
 		uint32 m_bits;
-
 
 		int RegardToIndex(int regard) {return (regard>>6);}
 	};

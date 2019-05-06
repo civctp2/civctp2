@@ -32,39 +32,29 @@
 //----------------------------------------------------------------------------
 
 #include "c3.h"
-#include "c3errors.h"
-#include "Globals.h"
-
-#include "astarpnt.h"
 #include "Astar.h"
+
 #include "AVLHeap.h"
-
-#include "dynarr.h"
 #include "Path.h"
-
-#include "XY_Coordinates.h"
 #include "World.h"
-#include "RandGen.h"
-#include "Cell.h"
-#include "priorityqueue.h"
 #include "A_Star_Heuristic_Cost.h"
 
-extern World *g_theWorld;
-extern RandomGenerator *g_rand;
+#ifdef PRINT_COSTS
+#include "gfx_options.h"
+#include "tiledmap.h"
+#endif
 
 sint32 g_search_count;
 
 AVLHeap g_astar_mem;
 
 void Astar_Init()
-
 {
-    g_astar_mem.InitHeap();
-    g_search_count = 1;
+	g_astar_mem.InitHeap();
+	g_search_count = 1;
 }
 
 void Astar_Cleanup()
-
 {
 	g_astar_mem.CleanUp();
 }
@@ -73,13 +63,7 @@ void Astar_Cleanup()
 
 float g_cost_factor = k_MIN_MOVE_COST;
 
-#ifdef _DEBUG
-
-
-#endif
-
 #ifdef TRACK_ASTAR_NODES
-
 float    g_nodes_opened   = 0;
 float    g_nodes_inserted = 0;
 int      g_paths_found    = 0;
@@ -96,13 +80,11 @@ bool g_old_heuristic = false;
 
 float Astar::EstimateFutureCost(const MapPoint &pos, const MapPoint &dest)
 {
-
 	float best_heuristic;
 
 	sint32 dist = pos.NormalizedDistance(dest);
 	{
-		best_heuristic = (float)g_theWorld->A_star_heuristic->Get_Minimum_Nearby_Movement_Cost(
-				MapPointData(pos));
+		best_heuristic = (float)g_theWorld->A_star_heuristic->Get_Minimum_Nearby_Movement_Cost(pos);
 
 		Assert(best_heuristic > 0);
 		Assert(best_heuristic < 500);
@@ -121,17 +103,9 @@ float Astar::EstimateFutureCost(const MapPoint &pos, const MapPoint &dest)
 #endif
 #endif
 
-
-
-
-
-
-
-
-
-
 #ifdef _PLAYTEST
-		if (m_pretty_path && g_old_heuristic) {
+		if (g_old_heuristic)
+		{
 			 float ground_dist =  0.7f * best_heuristic * dist;
 
 #ifdef SUPER_DEBUG_HEURISTIC
@@ -144,146 +118,173 @@ float Astar::EstimateFutureCost(const MapPoint &pos, const MapPoint &dest)
 	}
 }
 
-void Astar::DecayOrtho(AstarPoint *parent, AstarPoint *point,
-      float &new_entry_cost)
+void Astar::DecayOrtho(AstarPoint *parent, AstarPoint *point, float &new_entry_cost)
 {
-    BOOL is_ortho = FALSE;
+	BOOL is_ortho = FALSE;
 
-    if (parent->m_pos.x == point->m_pos.x) {
-      is_ortho = TRUE;
-    } else if (parent->m_pos.x < point->m_pos.x) {
-       is_ortho = ((parent->m_pos.y-1) == point->m_pos.y);
-    } else {
-      is_ortho = ((parent->m_pos.y+1) == point->m_pos.y);
-    }
+	if (parent->m_pos.x == point->m_pos.x)
+	{
+		is_ortho = TRUE;
+	}
+	else if (parent->m_pos.x < point->m_pos.x)
+	{
+		is_ortho = ((parent->m_pos.y-1) == point->m_pos.y);
+	}
+	else
+	{
+		is_ortho = ((parent->m_pos.y+1) == point->m_pos.y);
+	}
 
-    if (is_ortho) {
-       new_entry_cost = point->m_entry_cost * 0.95f;
-    }
+	if (is_ortho)
+	{
+		new_entry_cost = point->m_entry_cost * 0.95f;
+	}
 }
-
-
-
-
-
-
-
-
-
-
-
-
 
 bool Astar::InitPoint(AstarPoint *parent, AstarPoint *point,
     const MapPoint &pos, const float pc, const MapPoint &dest)
-
 {
-    AstarPoint *d = point;
-    ASTAR_ENTRY_TYPE entry=ASTAR_CAN_ENTER;
-    bool is_zoc = false;
+#if defined(DEBUG_ASTAR_ENDLESS_LOOP)
+	AstarPoint *ancestor = parent;
+	while(ancestor != NULL)
+	{
+		Assert(ancestor != point);
+		ancestor = ancestor->m_parent;
+	}
+#endif
 
-    d->m_flags = 0;
+	AstarPoint *d = point;
+	ASTAR_ENTRY_TYPE entry=ASTAR_CAN_ENTER;
+	bool is_zoc = false;
+
+	d->m_flags = 0;
 	d->SetEntry(ASTAR_CAN_ENTER);
-    d->SetZoc(FALSE);
-    d->SetExpanded(false);
-    d->m_pos = pos;
-    d->m_parent = parent;
-    d->m_queue_idx = -1;
+	d->SetZoc(false);
+	d->SetExpanded(false);
+	d->m_pos = pos;
+	d->m_parent = parent;
+	d->m_queue_idx = -1;
 
 	d->m_past_cost = pc;
-    if (parent == NULL) {
-       d->m_entry_cost = 0.0;
-       d->m_future_cost = EstimateFutureCost(d->m_pos, dest);
-       d->m_total_cost = d->m_past_cost + d->m_entry_cost
-            + d->m_future_cost;
+	if (parent == NULL)
+	{
+		d->m_entry_cost = 0.0;
+		d->m_future_cost = EstimateFutureCost(d->m_pos, dest); // Still use this heuristic for the start
+		d->m_total_cost = d->m_past_cost + d->m_entry_cost
+		     + d->m_future_cost;
 
 #ifdef PRINT_COSTS
-			g_theWorld->SetColor(pos,  d->m_total_cost);
+		PrintCosts(pos, 200, d->m_total_cost);
 #endif
 
-       return true;
-    } else if (EntryCost(parent->m_pos, d->m_pos, d->m_entry_cost, is_zoc, entry)){
+		return true;
+	}
+	else if (EntryCost(parent->m_pos, d->m_pos, d->m_entry_cost, is_zoc, entry))
+	{
+		Assert(pc == parent->m_past_cost + parent->m_entry_cost);
+		Assert(entry != ASTAR_RETRY_DIRECTION);
 
-        d->SetEntry(entry);
-        d->SetZoc(is_zoc);
+#ifdef _DEBUG
+		if(entry == ASTAR_RETRY_DIRECTION)
+		{
+			is_zoc = false;
+			entry = ASTAR_CAN_ENTER;
 
-        DecayOrtho(parent, point, d->m_entry_cost);
+			d->m_flags = 0;
+			d->SetEntry(ASTAR_CAN_ENTER);
+			d->SetZoc(false);
+			d->SetExpanded(false);
+			d->m_pos = pos;
+			d->m_parent = parent;
+			d->m_queue_idx = -1;
 
-        d->m_future_cost = EstimateFutureCost(d->m_pos, dest);
-        d->m_total_cost = d->m_past_cost + d->m_entry_cost
-            + d->m_future_cost;
+			d->m_past_cost = pc;
+			d->m_entry_cost = 0.0;
+			d->m_future_cost = EstimateFutureCost(d->m_pos, dest);
+			d->m_total_cost = d->m_past_cost + d->m_entry_cost
+				+ d->m_future_cost;
+			EntryCost(parent->m_pos, d->m_pos, d->m_entry_cost, is_zoc, entry);
+		}
+#endif
+
+		d->SetEntry(entry);
+		d->SetZoc(is_zoc);
+
+		DecayOrtho(parent, point, d->m_entry_cost);
+		d->m_future_cost = d->m_entry_cost * d->m_pos.NormalizedDistance(dest);
+		d->m_total_cost = d->m_past_cost + d->m_entry_cost
+		    + d->m_future_cost;
 
 #ifdef PRINT_COSTS
-			g_theWorld->SetColor(pos,  d->m_total_cost);
+		PrintCosts(pos, 100, d->m_total_cost);
 #endif
 
-        return true;
-    } else {
+		return true;
+	}
+	else
+	{
+		d->SetExpanded(true);
+		d->SetEntry(entry);
+		d->SetZoc(is_zoc);
 
-        d->SetExpanded(true);
-        d->SetEntry(entry);
-        d->SetZoc(is_zoc);
+		if (entry == ASTAR_RETRY_DIRECTION)
+		{
+			d->SetEntry(ASTAR_RETRY_DIRECTION);
+		}
+		else
+		{
+			d->SetEntry(ASTAR_BLOCKED);
+		}
 
-        if (entry == ASTAR_RETRY_DIRECTION) {
-            d->SetEntry(ASTAR_RETRY_DIRECTION);
-        } else {
-    		d->SetEntry(ASTAR_BLOCKED);
-        }
+		d->m_future_cost = k_ASTAR_BIG;
+		d->m_total_cost = d->m_past_cost + d->m_entry_cost
+		    + d->m_future_cost;
 
-        d->m_future_cost = (d->m_entry_cost + k_ASTAR_BIG);
-        d->m_total_cost = d->m_past_cost + d->m_entry_cost
-            + d->m_future_cost;
- #ifdef PRINT_COSTS
-			g_theWorld->SetColor(pos,  d->m_total_cost);
+#ifdef PRINT_COSTS
+		PrintCosts(pos, 0, d->m_total_cost);
 #endif
-       return false;
-    }
+		return false;
+	}
 }
+
+#ifdef PRINT_COSTS
+void Astar::PrintCosts(MapPoint pos, uint8 magnitude, float costs)
+{
+	if(g_graphicsOptions != NULL)
+	{
+		char buf[16];
+		sprintf(buf, "%5.1f", costs);
+		g_graphicsOptions->AddTextToCell(pos, buf, magnitude, -1);
+	}
+}
+
+void Astar::ResetPrintedCosts()
+{
+	if(g_graphicsOptions != NULL)
+	{
+		g_graphicsOptions->ResetAllCellTexts();
+	}
+}
+#endif
 
 void Astar::RecalcEntryCost(AstarPoint *parent, AstarPoint *node, float &new_entry_cost,
     bool &new_is_zoc, ASTAR_ENTRY_TYPE &new_entry)
 {
 
-    Assert(parent);
-    Assert(node);
+	Assert(parent);
+	Assert(node);
 
-    EntryCost(parent->m_pos, node->m_pos,
-        new_entry_cost, new_is_zoc, new_entry);
+	EntryCost(parent->m_pos, node->m_pos,
+	    new_entry_cost, new_is_zoc, new_entry);
 
 	Assert(new_entry_cost < 10000.0);
 
-    DecayOrtho(parent, node, new_entry_cost);
+	DecayOrtho(parent, node, new_entry_cost);
 }
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
 
 #ifdef _DEBUG
 sint32 finite_stack;
 #endif _DEUBG
-
-
-
 
 #if 0
 sint32 g_propagate_depth;
@@ -294,93 +295,94 @@ void Astar::PropagatePathCost(AstarPoint *node, AstarPoint *parent,
 
 {
 #ifdef _DEBUG
-    if ((100 < g_propagate_depth) && (!g_propagate_been_seen)){
-        g_propagate_been_seen=1;
-        sint32 DONT_hit_I___call_KARL_at_x4646=0;
-        Assert(DONT_hit_I___call_KARL_at_x4646);
-    }
+	if ((100 < g_propagate_depth) && (!g_propagate_been_seen))
+	{
+		g_propagate_been_seen = 1;
+		sint32 DONT_hit_I___call_KARL_at_x4646=0;
+		Assert(DONT_hit_I___call_KARL_at_x4646);
+	}
 #endif
 
-    AstarPoint *dead = NULL;
-    float new_past_cost, new_entry_cost, new_total_cost;
-    bool reset = false;
-    sint32 d=0;
+	AstarPoint *dead = NULL;
+	float new_past_cost, new_entry_cost, new_total_cost;
+	bool reset = false;
+	sint32 d = 0;
 
-    if (node->m_parent == NULL) {
-        return;
-    }
-
-    if (node->GetEntry() != ASTAR_CAN_ENTER) {
+	if (node->m_parent == NULL)
+	{
 		return;
 	}
 
+	if (node->GetEntry() != ASTAR_CAN_ENTER)
+	{
+		return;
+	}
 
-
-
-    bool new_is_zoc;
+	bool new_is_zoc;
 	ASTAR_ENTRY_TYPE new_entry;
-    if (node->m_parent != parent) {
+	if (node->m_parent != parent)
+	{
+		new_past_cost = parent->m_past_cost + parent->m_entry_cost;
+		new_is_zoc = false;
+		new_entry = ASTAR_CAN_ENTER;
 
-        new_past_cost = parent->m_past_cost + parent->m_entry_cost;
-        new_is_zoc = false;
-        new_entry = ASTAR_CAN_ENTER;
+		RecalcEntryCost(parent, node, new_entry_cost, new_is_zoc, new_entry);
+		new_total_cost = new_past_cost + new_entry_cost + node->m_future_cost;
 
-        RecalcEntryCost(parent, node, new_entry_cost, new_is_zoc, new_entry);
-        new_total_cost = new_past_cost + new_entry_cost + node->m_future_cost;
+		if ((new_entry == ASTAR_CAN_ENTER) && (new_total_cost < k_ASTAR_BIG) && ((new_total_cost+0.8) < node->m_total_cost) && (new_is_zoc == FALSE))
+		{
+			reset = true;
+			node->m_parent = parent;
+		}
+	}
 
+	static MapPoint next_pos;
+	Cell *c;
 
-
-
-        if ((new_entry == ASTAR_CAN_ENTER) && (new_total_cost < k_ASTAR_BIG) && ((new_total_cost+0.8) < node->m_total_cost) && (new_is_zoc == FALSE))
-        {
-            reset = true;
-            node->m_parent = parent;
-        }
-    }
-
-    static MapPoint next_pos;
-    Cell *c;
-
-    if (node->m_parent == parent) {
-
-        if (!(node->GetExpanded())) {
+	if (node->m_parent == parent)
+	{
+		if (!(node->GetExpanded()))
+		{
 			sint32 del_idx = node->m_queue_idx;
-            AstarPoint *node_actually_removed = m_priority_queue.Remove(del_idx);
+			AstarPoint *node_actually_removed = m_priority_queue.Remove(del_idx);
 			Assert(node_actually_removed == node);
-        }
+		}
 
-        node->m_past_cost = parent->m_past_cost +
-            parent->m_entry_cost;
+		node->m_past_cost = parent->m_past_cost +
+		    parent->m_entry_cost;
 
-        if (reset) {
-            node->m_entry_cost = new_entry_cost;
-            node->SetZoc(new_is_zoc);
+		if (reset)
+		{
+			node->m_entry_cost = new_entry_cost;
+			node->SetZoc(new_is_zoc);
 			node->SetEntry(new_entry);
-        }
+		}
 
-        node->m_total_cost = node->m_past_cost +
-            node->m_entry_cost + node->m_future_cost;
+		node->m_total_cost = node->m_past_cost +
+		    node->m_entry_cost + node->m_future_cost;
 
-        if (!(node->GetExpanded())) {
-
-			if (node->GetEntry() == ASTAR_CAN_ENTER)  {
+		if (!(node->GetExpanded()))
+		{
+			if (node->GetEntry() == ASTAR_CAN_ENTER)
+			{
 				m_priority_queue.Insert(node);
 			}
+		}
 
-        }
-
-		if ((node->GetEntry() == ASTAR_CAN_ENTER) && (node->m_total_cost  < k_ASTAR_BIG)) {
-			for (d=0; d<GetMaxDir(node->m_pos); d++) {
+		if ((node->GetEntry() == ASTAR_CAN_ENTER) && (node->m_total_cost  < k_ASTAR_BIG))
+		{
+			for (d=0; d<GetMaxDir(node->m_pos); d++)
+			{
 				if (!node->m_pos.GetNeighborPosition(WORLD_DIRECTION(d), next_pos))  continue;
 
 				c = g_theWorld->GetCell(next_pos);
 
-				if (c->m_point != NULL)  {
+				if (c->m_point != NULL)
+				{
 					if ((c->m_search_count == g_search_count) &&
-						(!c->m_point->GetZoc())) {
-
+						(!c->m_point->GetZoc()))
+					{
 						g_propagate_depth++;
-
 
 						if (g_propagate_depth > 100)
 							return;
@@ -429,6 +431,10 @@ bool Astar::FindPath
 	}
 #endif
 
+#ifdef PRINT_COSTS
+	ResetPrintedCosts();
+#endif
+
 	m_priority_queue.Clear();
 	g_search_count++;
 
@@ -472,7 +478,7 @@ bool Astar::FindPath
 		Assert(loop_count < 1400000); // Ultra Gigantic problem
 
 		float past_cost = best->m_past_cost + best->m_entry_cost;
-		best->SetExpanded(TRUE);
+		best->SetExpanded(true);
 
 		sint32 max_dir = GetMaxDir(best->m_pos);
 
@@ -502,7 +508,7 @@ bool Astar::FindPath
 						c->m_point->m_past_cost + c->m_point->m_entry_cost;
 					float const		bestG	= past_cost + bMove;
 
-					if (bestG < oldG)
+					if (bestG < oldG && (c->m_point->m_parent == NULL || c->m_point != best->m_parent))
 					{
 						if (c->m_point->GetExpanded())
 						{
@@ -566,7 +572,6 @@ bool Astar::FindPath
 #ifdef TRACK_ASTAR_NODES
 					g_nodes_inserted++;
 #endif
-
 					if (c->m_point->GetEntry() == ASTAR_CAN_ENTER)
 					{
 						m_priority_queue.Insert(c->m_point);
@@ -586,7 +591,6 @@ bool Astar::FindPath
 			if (0 < m_priority_queue.Len())
 			{
 				best = m_priority_queue.Remove(1);
-
 #ifdef TRACK_ASTAR_NODES
 				g_closed_nodes++;
 #endif
@@ -600,7 +604,7 @@ bool Astar::FindPath
 
 		if (best)
 		{
-			DPRINTF(k_DBG_ASTAR,("\tCheckBest , BestPos: (%d, %d), DestPos (%d, %d)\n", best->m_pos.x, best->m_pos.y, dest.x, dest.y));
+			DPRINTF(k_DBG_ASTAR,("\tCheckBest , StartPos (%d, %d), DestPos (%d, %d), BestPos (%d, %d)\n", start.x, start.y, dest.x, dest.y, best->m_pos.x, best->m_pos.y));
 			if (best->m_pos == dest)
 			{
 				float               cost;
@@ -624,15 +628,25 @@ bool Astar::FindPath
 
 	} while (searching || (best && (k_ASTAR_BIG <= best->m_entry_cost )) && (nodes_opened < cutoff));
 
+	Assert(nodes_opened < cutoff);
+
 #ifdef SUPER_DEBUG_HEURISTIC
 	WhackScreen();
 #endif
 
 	bool const r =  Cleanup(dest, a_path, total_cost, isunit, best, cost_tree);
+	DPRINTF(k_DBG_ASTAR, ("\tFinalPathCosts: %f , StartPos (%d, %d), DestPos (%d, %d), BestPos (%d, %d)\n", total_cost, start.x, start.y, dest.x, dest.y, best->m_pos.x, best->m_pos.y));
 
 #ifdef TRACK_ASTAR_NODES
 	g_paths_found++;
 	g_paths_lengths += a_path.Num();
+#endif
+
+#ifdef PRINT_COSTS
+	if(g_tiledMap != NULL)
+	{
+		g_tiledMap->Refresh();
+	}
 #endif
 
 	return r;
@@ -645,21 +659,21 @@ bool Astar::Cleanup(const MapPoint &dest,
                     AstarPoint *best,
                     AstarPoint *cost_tree)
 {
-    if ((best == NULL) ||
-        (best->m_pos != dest))
-    {
-       total_cost = 0.0;
+	if ((best == NULL) ||
+	    (best->m_pos != dest))
+	{
+		total_cost = 0.0;
 
-       a_path.Clear();
-       g_astar_mem.MassDelete(isunit);
-       return false;
-    }
-    else
-    {
-       total_cost = best->m_past_cost + best->m_entry_cost;
-       a_path.FlattenAstarList(best);
-       g_astar_mem.MassDelete(isunit);
+		a_path.Clear();
+		g_astar_mem.MassDelete(isunit);
+		return false;
+	}
+	else
+	{
+		total_cost = best->m_past_cost + best->m_entry_cost;
+		a_path.FlattenAstarList(best);
+		g_astar_mem.MassDelete(isunit);
 
-       return true;
-    }
+		return true;
+	}
 }

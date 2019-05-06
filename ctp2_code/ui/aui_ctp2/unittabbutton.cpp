@@ -11,7 +11,6 @@
 #include "c3_coloriconbutton.h"
 #include "thermometer.h"
 #include "Unit.h"
-#include "UnitRec.h"
 #include "battleorderboxactions.h"
 #include "c3_coloredstatic.h"
 #include "UIUtils.h"

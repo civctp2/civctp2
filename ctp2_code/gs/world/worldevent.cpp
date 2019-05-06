@@ -29,10 +29,10 @@
 //----------------------------------------------------------------------------
 
 #include "c3.h"
-#include "World.h"
+#include "World.h"             // g_theWorld
+
 #include "Cell.h"
 #include "Unit.h"
-#include "directions.h"
 #include "GameEventUser.h"
 #include "Events.h"
 #include "tiledmap.h"
@@ -40,8 +40,6 @@
 #include "SlicObject.h"
 #include "SlicEngine.h"
 #include "cellunitlist.h"
-#include "AICause.h"
-#include "World.h"             // g_theWorld
 
 STDEHANDLER(CutImprovementsEvent)
 {
@@ -58,6 +56,7 @@ STDEHANDLER(CutImprovementsEvent)
 		{
 			g_tiledMap->PostProcessTile(npos, g_theWorld->GetTileInfo(npos));
 			g_tiledMap->TileChanged(npos);
+			g_tiledMap->RedrawTile(&npos);
 		}
 	}
 

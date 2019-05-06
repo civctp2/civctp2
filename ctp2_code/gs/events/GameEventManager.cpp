@@ -65,7 +65,7 @@ extern BOOL g_eventLog;
 
 void gameEventManager_Initialize()
 {
-    delete g_gevManager;
+	delete g_gevManager;
 	g_gevManager = new GameEventManager();
 }
 
@@ -77,20 +77,25 @@ void gameEventManager_Cleanup()
 
 GameEventManager::GameEventManager()
 :
-	m_eventList         (new PointerList<GameEvent>),
+    m_eventList         (new PointerList<GameEvent>),
 #if defined(_DEBUG)
-	m_eventHistory      (),
+    m_eventHistory      (),
 #endif
     // 	GameEventHook *m_hooks[GEV_MAX];
     m_processing        (false),
-	m_processingEvent   (GEV_MAX),
-	m_serial            (0),
+    m_processingEvent   (GEV_MAX),
+    m_serial            (0),
     m_needUserInput     (false),
     m_pauseCount        (0)
 {
 #ifdef _DEBUG
-	FILE *  f = fopen(EVENTLOGNAME, "w");
-	fclose(f);
+	m_eventLogFile = fopen(EVENTLOGNAME, "w");
+
+	if(g_eventLog == FALSE)
+	{
+		fclose(m_eventLogFile);
+		m_eventLogFile = NULL;
+	}
 #endif
 
 	std::fill(m_hooks, m_hooks + GEV_MAX, (GameEventHook *) NULL);
@@ -99,28 +104,35 @@ GameEventManager::GameEventManager()
 GameEventManager::~GameEventManager()
 {
 	if (m_eventList)
-    {
+	{
 		m_eventList->DeleteAll();
 		delete m_eventList;
 	}
 
 #ifdef _DEBUG
-    for
-    (
-        std::list<GameEvent *>::iterator    p = m_eventHistory.begin();
-        p != m_eventHistory.end();
-        ++p
-    )
-    {
+	for
+	(
+	    std::list<GameEvent *>::iterator    p = m_eventHistory.begin();
+	    p != m_eventHistory.end();
+	    ++p
+	)
+	{
 		delete *p;
 	}
-    std::list<GameEvent *>().swap(m_eventHistory);
+	std::list<GameEvent *>().swap(m_eventHistory);
 #endif
 
 	for (size_t i = 0; i < GEV_MAX; ++i)
-    {
+	{
 		delete m_hooks[i];
 	}
+
+#ifdef _DEBUG
+	if(m_eventLogFile != NULL)
+	{
+		fclose(m_eventLogFile);
+	}
+#endif
 }
 
 GAME_EVENT_ERR GameEventManager::AddEvent(GAME_EVENT_INSERT insert, GAME_EVENT type,
@@ -722,36 +734,36 @@ bool GameEventManager::VerifyArgs(GAME_EVENT type, const GAME_EVENT_ARGUMENT* ar
 		Path *path;
 
 #ifdef _DEBUG
-#define DG_PRINT(fn, fmt, val) { EVENTLOG((fmt, val)); }
+#define DG_PRINT(fmt, val) { EVENTLOG((fmt, val)); }
 #else
-#define DG_PRINT(fn, fmt, val)
+#define DG_PRINT(fmt, val)
 #endif
 
 		switch(nextArg) {
 			case GEA_Army:
 				if(!CheckArg(argNum, *argString, GEAC_ARMY)) return false;
 				a = *(Army*)args[givenArgNum];
-				DG_PRINT(EVENTLOGNAME, "0x%lx, ", a.m_id);
+				DG_PRINT("0x%lx, ", a.m_id);
 				break;
 			case GEA_Unit:
 				if(!CheckArg(argNum, *argString, GEAC_UNIT)) return false;
 				u = *(Unit*)args[givenArgNum];
-				DG_PRINT(EVENTLOGNAME, "0x%lx, ", u.m_id);
+				DG_PRINT("0x%lx, ", u.m_id);
 				break;
 			case GEA_City:
 				if(!CheckArg(argNum, *argString, GEAC_CITY)) return false;
 				c = *(Unit*)args[givenArgNum];
-				DG_PRINT(EVENTLOGNAME, "0x%lx, ", c.m_id);
+				DG_PRINT("0x%lx, ", c.m_id);
 				break;
 			case GEA_Gold:
 				if(!CheckArg(argNum, *argString, GEAC_GOLD)) return false;
 				value = *(sint32*)args[givenArgNum];
-				DG_PRINT(EVENTLOGNAME, "%d, ", value);
+				DG_PRINT("%d, ", value);
 				break;
 			case GEA_Path:
 				if(!CheckArg(argNum, *argString, GEAC_PATH)) return false;
 				path = *(Path**)args[givenArgNum];
-				DG_PRINT(EVENTLOGNAME, "0x%lx, ", path);
+				DG_PRINT("0x%lx, ", path);
 				break;
 			case GEA_MapPoint:
 				if(!CheckArg(argNum, *argString, GEAC_MAPPOINT)) return false;
@@ -761,38 +773,38 @@ bool GameEventManager::VerifyArgs(GAME_EVENT type, const GAME_EVENT_ARGUMENT* ar
 			case GEA_Player:
 				if(!CheckArg(argNum, *argString, GEAC_PLAYER)) return false;
 				value = *(sint32*)args[givenArgNum];
-				DG_PRINT(EVENTLOGNAME, "%d, ", value);
+				DG_PRINT("%d, ", value);
 				break;
 			case GEA_Int:
 				if(!CheckArg(argNum, *argString, GEAC_INT)) return false;
 				value = *(sint32*)args[givenArgNum];
-				DG_PRINT(EVENTLOGNAME, "%d, ", value);
+				DG_PRINT("%d, ", value);
 				break;
 			case GEA_Direction:
 				if(!CheckArg(argNum, *argString, GEAC_DIRECTION)) return false;
 				value = *(sint32*)args[givenArgNum];
-				DG_PRINT(EVENTLOGNAME, "%d, ", value);
+				DG_PRINT("%d, ", value);
 				break;
 
 			case GEA_Wonder:
 				if(!CheckArg(argNum, *argString, GEAC_WONDER)) return false;
 				value = *(sint32*)args[givenArgNum];
-				DG_PRINT(EVENTLOGNAME, "%d, ", value);
+				DG_PRINT("%d, ", value);
 				break;
 			case GEA_Advance:
 				if(!CheckArg(argNum, *argString, GEAC_ADVANCE)) return false;
 				value = *(sint32*)args[givenArgNum];
-				DG_PRINT(EVENTLOGNAME, "%d, ", value);
+				DG_PRINT("%d, ", value);
 				break;
 			case GEA_Improvement:
 				if(!CheckArg(argNum, *argString, GEAC_IMPROVEMENT)) return false;
 				imp = *(TerrainImprovement*)args[givenArgNum];
-				DG_PRINT(EVENTLOGNAME, "0x%lx, ", imp.m_id);
+				DG_PRINT("0x%lx, ", imp.m_id);
 				break;
 			case GEA_TradeRoute:
 				if(!CheckArg(argNum, *argString, GEAC_TRADEROUTE)) return false;
 				route = *(TradeRoute*)args[givenArgNum];
-				DG_PRINT(EVENTLOGNAME, "0x%lx, ", route.m_id);
+				DG_PRINT("0x%lx, ", route.m_id);
 				break;
 			case GEA_End:
 				if(*(argString) != 0) {
@@ -817,7 +829,6 @@ bool GameEventManager::VerifyArgs(GAME_EVENT type, const GAME_EVENT_ARGUMENT* ar
 #ifdef _DEBUG
 void GameEventManager::Log(const char *fmt, ...)
 {
-
 	if (g_eventLog == FALSE)
 		return;
 
@@ -827,12 +838,10 @@ void GameEventManager::Log(const char *fmt, ...)
 	vsprintf(text, fmt, vl);
 	va_end(vl);
 
-	FILE *f = fopen(EVENTLOGNAME, "a");
-	if(f) {
-		fprintf(f, "%s", text);
-		fclose(f);
+	if(m_eventLogFile)
+	{
+		fprintf(m_eventLogFile, "%s", text);
 	}
-
 }
 
 void GameEventManager::Dump()

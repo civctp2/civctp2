@@ -89,7 +89,6 @@
 #include "UnitData.h"
 #include "UnitDynArr.h"
 #include "UnitRecord.h"
-#include "XY_Coordinates.h"
 #include "World.h"                  // g_theWorld
 
 extern Diplomacy_Log *  g_theDiplomacyLog;

@@ -29,12 +29,11 @@
 //----------------------------------------------------------------------------
 
 #include "c3.h"
-#include "XY_Coordinates.h"
 #include "World.h"
+
 #include "Cell.h"
 #include "ObjPool.h"
 #include "QuadTree.h"
-#include "UnitRec.h"
 #include "Unit.h"
 #include "player.h"
 #include "SelItem.h"

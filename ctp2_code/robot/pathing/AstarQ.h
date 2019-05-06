@@ -2,11 +2,13 @@
 #ifndef __ASTAR_QUEUE__
 #define __ASTAR_QUEUE__ 1
 
+// Not used
+
 #include "astarpnt.h"
 
 class AstarQueue {
 
-  AstarPoint *head;
+	AstarPoint *head;
 
 public:
 
@@ -14,10 +16,10 @@ public:
 	void Enqueue(AstarPoint *node);
 	AstarPoint *Dequeue();
 
-    sint32 Remove(const AstarPoint *node);
+	sint32 Remove(const AstarPoint *node);
 
-    void Empty() { head = NULL; }
-    sint32 IsEmpty() { return head == NULL; }
-  };
+	void Empty() { head = NULL; }
+	sint32 IsEmpty() { return head == NULL; }
+};
 
 #endif

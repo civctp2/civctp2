@@ -18,7 +18,9 @@
 //
 // Compiler flags
 //
-// - None
+// - PRINT_COSTS
+//   If defined the total expected costs will be printed onto each tile,
+//   while pathing and if /debugcells has been enabled via the chat window
 //
 //----------------------------------------------------------------------------
 //
@@ -40,6 +42,9 @@
 class MapPoint;
 class AstarPoint;
 
+// Define PRINT_COSTS to see the costs at the tiles the A* algorithm is checking
+//#define PRINT_COSTS 1
+
 const float k_ASTAR_BIG = 7654321.0f;
 
 class Astar
@@ -59,7 +64,7 @@ protected:
 	    AstarPoint *node, float &new_entery_cost,
 	    bool &new_is_zoc, ASTAR_ENTRY_TYPE &entry);
 
-	virtual bool InitPoint(AstarPoint *parent, AstarPoint *point,
+	bool InitPoint(AstarPoint *parent, AstarPoint *point,
 	    const MapPoint &pos, const float pc, const MapPoint &dest);
 
 	bool Cleanup(const MapPoint &dest,
@@ -69,15 +74,17 @@ protected:
 	             AstarPoint *best,
 	             AstarPoint *cost_tree);
 
+#ifdef PRINT_COSTS
+	void PrintCosts(MapPoint pos, uint8 magnitude, float costs);
+	void ResetPrintedCosts();
+#endif
+
 	sint32 m_maxSquaredDistance;
 
 public:
 
-	bool m_pretty_path;
-
 	Astar()
-	: m_maxSquaredDistance (-1),
-	  m_pretty_path        (false)
+	: m_maxSquaredDistance (-1)
 	{
 	};
 

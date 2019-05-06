@@ -113,6 +113,9 @@ class GaiaController {
 	static sint32 GetSatelliteBuildingIndex()
 	{ return(sm_satelliteBuildingIndex); }
 
+	static bool IsMainframeBuilding(sint32 index) { return index == sm_satelliteBuildingIndex; }
+	static bool IsSatellite        (sint32 index) { return index == sm_mainframeBuildingIndex; }
+
 
 	void ComputeTowerPositions();
 

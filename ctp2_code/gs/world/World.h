@@ -64,7 +64,6 @@ enum MAP_GENERATOR
 #include "MapPoint.h"
 #include "CityRadius.h"
 #include "StartingPosition.h"
-#include "XY_Coordinates.h"
 #include "dbtypes.h"
 #include "gstypes.h"
 #include "Cell.h"
@@ -146,17 +145,8 @@ class World : public CityRadiusCallback
     TileInfo		*m_tileInfoStorage;
     double          *m_goodValue;
 
-
-
-
-
-
 	sint32 m_num_civ_starts;
 	StartingPosition m_civ_starts[k_MAX_START_POINTS];
-
-
-
-
 
     sint32			m_insertCityOwner;
     WORLD_RADIUS_OP m_radiusOp;
@@ -171,15 +161,8 @@ class World : public CityRadiusCallback
 	sint32          m_cityOwnerCheck;
 	PQueue<DistItem> *m_distanceQueue;
 
-
-
-
 	sint32			m_playerLandArea[k_MAX_PLAYERS+1];
-
 	uint32			m_capitolDistanceDirtyFlags;
-
-
-
 
 	friend class NetGameSettings;
 	friend class NetWorld;
@@ -187,7 +170,6 @@ class World : public CityRadiusCallback
 public:
 	void SetCapitolDistanceDirtyFlags(uint32 flags) {m_capitolDistanceDirtyFlags |= flags;}
 
-    XY_Coordinates XY_Coords;
 	A_Star_Heuristic_Cost * A_star_heuristic;
 
     World(const MapPoint & m, const int xw, const int yw);
@@ -273,6 +255,8 @@ public:
     bool IsNextToWaterNotDiagonals(const sint32 x, const sint32 y);
     bool IsNextTo (const sint32 t, const sint32 i, const sint32 j);
     bool IsSurroundedByWater(const sint32 x, const sint32 y) ;
+    bool IsSurroundedByWater(MapPoint const & pos);
+    bool HasAdjacentFreeLand(MapPoint const & pos, const sint32 player) const;
     void GenerateShallowWater();
     void GenerateDeepWater();
     void NewGenerateDeepWater();
@@ -523,7 +507,8 @@ public:
     BOOL IsCellZoc(const PLAYER_INDEX &owner, const MapPoint &pos, const BOOL is_check_only_visible);
     BOOL IsMoveZOC(PLAYER_INDEX owner, const MapPoint &start, const MapPoint &dest,
         const BOOL is_check_only_visible);
-
+    bool IsNextToForeignerOnLand(const MapPoint &pos, PLAYER_INDEX owner) const;
+    bool IsOccupiedByForeigner(const MapPoint &pos, PLAYER_INDEX owner) const;
 
 
 

@@ -56,7 +56,6 @@
 #include "tileutils.h"
 #include "TileInfo.h"
 #include "GoodyHuts.h"
-#include "UnitRec.h"
 #include "TradeDynArr.h"
 #include "cellunitlist.h"
 #include "Unit.h"
@@ -267,11 +266,6 @@ bool Cell::RemoveUnitReference(const Unit &u)
 	}
 	else
 	{
-		if(!u.IsValid() || !u.IsBeingTransported())
-		{
-			Assert(false);
-		}
-
 		return false;
 	}
 }
@@ -304,7 +298,7 @@ bool Cell::CanEnter(const uint32 flag) const
 
 bool Cell::GetCanDie(void) const
 {
-	return (m_env & k_BIT_MOVEMENT_TYPE_LAND) != 0;
+	return g_theTerrainDB->Get(m_terrain_type)->GetCanDie();
 }
 
 //----------------------------------------------------------------------------

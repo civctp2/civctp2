@@ -122,7 +122,6 @@ PLAYER_INDEX const  PLAYER_UNASSIGNED   = -1;
 #include "Advances.h"           // Advances, AdvanceType
 #include "AgreementTypes.h"     // AGREEMENT_TYPE
 #include "AICause.h"            // CAUSE_..., ERR_BUILD_INST
-#include "directions.h"         // WORLD_DIRECTION
 #include "GameObj_types.h"      // CIV_INDEX, GENDER
 #include "GameOver.h"           // GAME_OVER
 #include "gstypes.h"            // k_MAX_PLAYERS
@@ -433,15 +432,10 @@ public:
 	void RegisterLostUnits(sint32 nUnits, const MapPoint &pos,
 	                       const DEATH_EFFECT_MORALE mtype);
 
-	void RegisterInsertCargo(ID id, const sint32 unit_type, sint32 hp);
-	void RegisterUnloadCargo(ID id, const sint32 unit_type, sint32 hp);
 	void GroupArmy(Army &army);
 	void UngroupArmy(Army &army);
 
-	void RegisterYourArmyWasMoved(const Army &i_moved, const MapPoint &new_pos);
-
 	void GetArmyPos(sint32 index, MapPoint &army_pos);
-	void UnloadAllTransports ();
 
 	bool Settle      (Army &settle_army);
 	bool SettleInCity(Army &settle_army);

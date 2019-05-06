@@ -226,13 +226,13 @@ public:
 	// The sliders
 	void NormalizeSliders(SlidersSetting & sliders_setting) const;
 
-	sint32 SetSliders(const SlidersSetting & sliders_setting, const bool & update_cities) const;
+	sint32 SetSliders(const SlidersSetting & sliders_setting, const bool & update_cities, bool hasAllAdvances) const;
 
 	void GetSliders(SlidersSetting & sliders_setting) const;
 
-	bool ComputeMinimumSliders( SlidersSetting & sliders_setting ) const;
+	bool ComputeMinimumSliders(SlidersSetting & sliders_setting, bool hasAllAdvances) const;
 
-	bool ComputeBestSliders( SlidersSetting & sliders_setting ) const;
+	bool ComputeBestSliders(SlidersSetting & sliders_setting, bool hasAllAdvances) const;
 
 	StringId GetSlidersAdvice() const;
 
@@ -254,7 +254,7 @@ public:
 
 	void AssignPopulations();
 
-	void AssignPopulation(CityData *city) const;
+	void AssignPopulation(CityData *city, bool hasAllAdvances) const;
 
 	void ComputeMinMaxEntertainers(const CityData *city, sint32 & min, sint32 & max) const;
 
@@ -328,7 +328,7 @@ private:
 
 	sint32 m_currentUnitShieldCost;
 
-	bool FitSlidersToCities( SlidersSetting & sliders_setting ) const;
+	bool FitSlidersToCities(SlidersSetting & sliders_setting, bool hasAllAdvances) const;
 
 	bool TestSliderSettings(const SlidersSetting & sliders_setting,
 	                        bool   & production_test,
@@ -337,12 +337,14 @@ private:
 	                        bool   & happiness_test,
 	                        sint32 & total_production,
 	                        sint32 & total_gold,
-	                        sint32 & total_food) const;
+	                        sint32 & total_food,
+	                        bool     hasAllAdvances) const;
 
 	bool TestSliderSettings
 	(
-		SlidersSetting const &  sliders_setting,
-		SliderTests &           slider_tests
+	    SlidersSetting const &  sliders_setting,
+	    SliderTests &           slider_tests,
+	    bool                    hasAllAdvances
 	) const
 	{
 		return TestSliderSettings(sliders_setting,
@@ -352,7 +354,8 @@ private:
 		                          slider_tests.m_happinessTest,
 		                          slider_tests.m_production,
 		                          slider_tests.m_gold,
-		                          slider_tests.m_food);
+		                          slider_tests.m_food,
+		                          hasAllAdvances);
 	}
 
 	void ComputeNextBuildItem(CityData *city, sint32 & cat, sint32 & type, sint32 & list_num) const;

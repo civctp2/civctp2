@@ -156,9 +156,8 @@ void World::CreateTheWorld(MapPoint player_start_list[k_MAX_PLAYERS],
 
 		SetAllMoveCost();
 
-		XY_Coords.Init(m_size.y, m_size.x);
 
-        delete A_star_heuristic;
+		delete A_star_heuristic;
 		A_star_heuristic = new A_Star_Heuristic_Cost
 								(m_size.y,
 								 m_size.x,
@@ -244,8 +243,6 @@ World::World(CivArchive &archive, BOOL fromMapFile)
 	    Serialize(archive) ;
 
 	g_mp_size = m_size;
-
-	XY_Coords.Init(m_size.y, m_size.x);
 
 	A_star_heuristic = new A_Star_Heuristic_Cost
 							(m_size.y,
@@ -947,6 +944,37 @@ bool World::GetAdjacentLand(MapPoint const & pos, MapPoint & land) const
 	return false;
 }
 
+bool World::IsNextToForeignerOnLand(const MapPoint &pos, PLAYER_INDEX owner) const
+{
+	MapPoint next;
+	for(sint16 dir = 0; dir < NOWHERE; ++dir)
+	{
+		if(pos.GetNeighborPosition(static_cast<WORLD_DIRECTION>(dir), next))
+		{
+			if(IsWater(next))
+				continue;
+
+			Cell * cell = g_theWorld->GetCell(next);
+
+			if(cell->GetNumUnits() > 0
+			&& cell->UnitArmy()->GetOwner() != owner)
+			{
+				return true;
+			}
+		}
+	}
+
+	return false;
+}
+
+bool World::IsOccupiedByForeigner(const MapPoint &pos, PLAYER_INDEX owner) const
+{
+	Cell * cell = g_theWorld->GetCell(pos);
+
+	return (cell->GetNumUnits() > 0)
+		&& (cell->UnitArmy()->GetOwner() != owner);
+}
+
 bool World::GetAdjacentOcean(const MapPoint &pos, sint32 & water_cont) const
 {
 	MapPoint water;
@@ -967,10 +995,42 @@ bool World::GetAdjacentOcean(const MapPoint &pos, sint32 & water_cont) const
 
 	return false;
 }
-
 bool World::IsSurroundedByWater(const sint32 x, const sint32 y)
 {
-	MapPoint	pos (x,y);
+	MapPoint	pos(x, y);
+	return IsSurroundedByWater(pos);
+}
+
+bool World::HasAdjacentFreeLand(MapPoint const & pos, const sint32 player) const
+{
+	MapPoint neighbor;
+	for(sint16 dir = 0; dir < NOWHERE; ++dir)
+	{
+		if(pos.GetNeighborPosition(static_cast<WORLD_DIRECTION>(dir), neighbor))
+		{
+			if
+			  (
+			   (
+			        g_theWorld->IsLand(neighbor)
+			     || g_theWorld->IsMountain(neighbor)
+			   )
+			   &&
+			   (
+			        g_theWorld->GetCell(neighbor)->GetNumUnits() == 0
+			     || g_theWorld->GetCell(neighbor)->AccessUnit(0).GetOwner() == player
+			   )
+			  )
+			{
+				return true;
+			}
+		}
+	}
+
+	return false;
+}
+
+bool World::IsSurroundedByWater(MapPoint const & pos)
+{
 	MapPoint	n ;
 
 	if(pos.GetNeighborPosition(NORTH, n))

@@ -269,8 +269,7 @@ public:
 
 	bool CanAtLeastOneCargoUnloadAt
 	(
-	    MapPoint const &    old_pos,
-	    MapPoint const &    dest_pos,
+	    MapPoint const &    unload_pos,
 	    bool                use_vision,
 	    bool                check_move_points = true
 	) const;
@@ -278,15 +277,12 @@ public:
 	bool CanThisCargoUnloadAt
 	(
 	    Unit                the_cargo,
-	    MapPoint const &    old_pos,
-	    MapPoint const &    new_pos,
+	    MapPoint const &    unload_pos,
 	    bool                use_vision,
 	    bool                check_move_points = true
 	) const;
 
-	bool UnloadCargo(const MapPoint &new_pos, Army &debark,
-	                 bool justOneUnit, const Unit &theUnit);
-	bool UnloadSelectedCargo(const MapPoint &new_pos, Army &debark);
+	bool UnloadCargo(const MapPoint &unload_pos, Army &debark, sint32 &count, bool unloadSelected = false);
 
 	bool IsBeingTransported() const { return Flag(k_UDF_IS_IN_TRANSPORT); };
 	void SetIsInTransport(const Unit &transport);
@@ -688,7 +684,6 @@ public:
 	sint32 CalculateTotalHP() const;
 	sint32 CalculateTotalFuel() const;
 	double CalculateTotalMovePoints() const;
-	bool HasAdjacentFreeLand() const;
 
 //emod
 	bool IsElite() const { return Flag(k_UDF_IS_ELITE); };

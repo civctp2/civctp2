@@ -32,7 +32,7 @@ The build itself is pretty classing and straight forward:
 
 ```
 ./autogen.sh
-CFLAGS="$CFLAGS -w -fuse-ld=gold" CXXFLAGS="$CXXFLAGS -fpermissive -w -fuse-ld=gold" ./configure --enable-silent-rules
+CFLAGS="$CFLAGS -w -O3 -fuse-ld=gold" CXXFLAGS="$CXXFLAGS -fpermissive -w -O3 -fuse-ld=gold" ./configure --enable-silent-rules
 make
 ```
 
@@ -40,9 +40,11 @@ If you want to build a debug version it is:
 
 ```
 ./autogen.sh
-CFLAGS="$CFLAGS -w -fno-omit-frame-pointer -fuse-ld=gold" CXXFLAGS="$CXXFLAGS -fpermissive -w -fno-omit-frame-pointer -fuse-ld=gold" ./configure --enable-silent-rules --enable-debug
+CFLAGS="$CFLAGS -w -Og -fno-omit-frame-pointer -fuse-ld=gold" CXXFLAGS="$CXXFLAGS -fpermissive -w -Og -fno-omit-frame-pointer -fuse-ld=gold" ./configure --enable-silent-rules --enable-debug
 make
 ```
+
+The option -Og optimizes bulds for debugging, this speeds up the debug function and should in general not change anything of the behavior of the executable, however it still could do so. In that case remove the -Og option.
 
 You can look at `./configure` for options, but there aren't many.
 

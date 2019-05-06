@@ -153,7 +153,6 @@
 #include "ArmyPool.h"
 #include "aui.h"
 #include "Barbarians.h"
-#include "BFS.h"
 #include "BuildingRecord.h"
 #include "buildingutil.h"
 #include "c3debug.h"
@@ -1324,16 +1323,6 @@ void Player::RegisterLostUnits(sint32 nUnits, const MapPoint &pos,
 	default:
 		Assert(0);
 	}
-}
-
-void Player::RegisterInsertCargo(ID id, const sint32 unit_type, sint32 hp)
-{
-	// Edit this so that the cargo is registered
-}
-
-void Player::RegisterUnloadCargo(ID id, const sint32 unit_type, sint32 hp)
-{
-	// Edit this so that the cargo is registered
 }
 
 sint32 Player::GetWeakestEnemy() const
@@ -6662,19 +6651,6 @@ void Player::UngroupArmy(Army &army)
 }
 #endif
 
-void Player::RegisterYourArmyWasMoved(const Army &i_moved, const MapPoint &new_pos)
-{
-
-	for(sint32 i = 0; i < m_all_armies->Num(); i++) {
-        if(m_all_armies->Access(i).m_id == i_moved.m_id) {
-
-            return;
-        }
-	}
-
-    return;
-}
-
 void Player::AssasinateRuler()
 {
 	m_assasinationModifier = g_theConstDB->Get(0)->GetAssasinationHappinessEffect();
@@ -9762,10 +9738,11 @@ MapPoint Player::CalcEmpireCenter() const
 		float costs = 0.0f;
 		Path path;
 
-		g_city_astar.FindSimpleDistancePath(empireCenter, m_all_cities->Get(i)->GetPos(), m_owner, path, costs);
-
-		path.RestoreIndexAndCurrentPos(path.Num()/cityNum);
-		path.GetCurrentPoint(empireCenter);
+		if(g_city_astar.FindSimpleDistancePath(empireCenter, m_all_cities->Get(i)->GetPos(), m_owner, path, costs))
+		{
+			path.RestoreIndexAndCurrentPos(path.Num() / cityNum);
+			path.GetCurrentPoint(empireCenter);
+		}
 	}
 
 	return empireCenter;

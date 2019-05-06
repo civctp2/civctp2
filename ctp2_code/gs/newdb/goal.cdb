@@ -42,6 +42,7 @@ Goal {
 	Bit NoRollback
 	Bit HasTransportersOrNoCoastalCities    // The AI has to own transporters to persue this goal and needs coastal cities
 	Bit IsGlobalGoal
+	Bit NeedsRoom                           // Only consider if the target position has room
 
 	Bits SquadClass {
 		CanExplore,
@@ -99,6 +100,7 @@ Goal {
 	Int CanAttackBonus                 = 0
 	Int SlaveryProtectionBonus         = 0
 	Int SmallCitySizeBonus             = 0
+	Int GarrisonBonus                  = 0
 
 	struct ConnectionBoni
 	{

@@ -36,10 +36,10 @@
 //----------------------------------------------------------------------------
 
 #include "c3.h"
-#include "XY_Coordinates.h"
+#include "TerrImproveData.h"
+
 #include "World.h"
 #include "Cell.h"
-#include "TerrImproveData.h"
 #include "civarchive.h"
 #include "tiledmap.h"
 #include "TerrainRecord.h"
@@ -56,7 +56,6 @@
 #include "MaterialPool.h"
 
 #include "GameEventManager.h"
-#include "directions.h"
 
 #include "CityInfluenceIterator.h"
 

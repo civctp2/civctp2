@@ -63,12 +63,7 @@ public:
 
 	void GetSourceResource(ROUTE_TYPE &type, sint32 &resource) const;
 
-	TradeRoute GetRecip() const;
-	TradeRoute AccessRecip();
-	void SetRecip(TradeRoute route);
-
 	BOOL PassesThrough(sint32 player) const;
-	void SetTariff(sint32 player, BOOL b);
 
 	BOOL CrossesWater() const;
 
@@ -102,10 +97,10 @@ public:
 	StringId GetResourceName() const;
 
 	void ReturnPath(const PLAYER_INDEX owner, DynamicArray<MapPoint> &waypoints,
-					DynamicArray<MapPoint> &fullpath,
-					double &cost);
+	                DynamicArray<MapPoint> &fullpath,
+	                double &cost);
 	void SetPath(DynamicArray<MapPoint> &fullpath,
-				 DynamicArray<MapPoint> &waypoints);
+	             DynamicArray<MapPoint> &waypoints);
 
 	void BeginTurn();
 

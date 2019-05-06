@@ -29,22 +29,18 @@
 //----------------------------------------------------------------------------
 
 #include "c3.h"
+#include "TileDrawRoad.h"
+
 #include "aui.h"
 
 #include "pixelutils.h"
 
-#include "MapPoint.h"
-#include "XY_Coordinates.h"
 #include "World.h"
 #include "TerrImproveData.h"
 
 #include "tileutils.h"
 #include "tileset.h"
 #include "tiledmap.h"
-
-#include "TileDrawRoad.h"
-
-#include "directions.h"
 
 extern World *g_theWorld;
 

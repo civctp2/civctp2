@@ -4,7 +4,6 @@
 #include "net_util.h"
 #include "installationpool.h"
 #include "player.h"
-#include "XY_Coordinates.h"
 #include "World.h"
 
 extern Player **g_player;

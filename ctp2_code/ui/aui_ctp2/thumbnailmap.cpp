@@ -38,7 +38,6 @@
 #include "aui_action.h"
 #include "c3ui.h"
 #include "player.h"             // g_player
-#include "XY_Coordinates.h"
 #include "World.h"              // g_theWorld
 #include "Cell.h"
 #include "UnseenCell.h"

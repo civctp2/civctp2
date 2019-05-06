@@ -35,7 +35,6 @@
 #include "primitives.h"
 #include "tiledmap.h"
 #include "MapPoint.h"
-#include "XY_Coordinates.h"
 #include "World.h"
 #include "maputils.h"
 #include "dynarr.h"

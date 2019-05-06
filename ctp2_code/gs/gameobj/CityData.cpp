@@ -1316,6 +1316,7 @@ CityData::CityData(CivArchive &archive)
 }
 
 CityData::CityData(CityData *copy)
+: m_name(NULL)
 {
 	m_distanceToGood = new sint32[g_theResourceDB->NumRecords()];
 	m_happy = new Happy;
@@ -1485,9 +1486,7 @@ void CityData::Copy(CityData *copy)
 
 	m_happy->Copy(copy->m_happy);
 
-	size_t len = (strlen(copy->m_name) + 1) * sizeof(MBCHAR);
-	m_name = new MBCHAR[len];
-	memcpy(m_name, copy->m_name, len);
+	SetNameLocal(copy->m_name);
 	memcpy(m_distanceToGood, copy->m_distanceToGood, sizeof(sint32) * g_theResourceDB->NumRecords());
 	m_defensiveBonus = copy->m_defensiveBonus;
 

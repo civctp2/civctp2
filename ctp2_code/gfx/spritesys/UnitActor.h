@@ -55,18 +55,6 @@ class CivArchive;
 class SpriteState;
 // BOOL, POINT, RECT
 
-#if 0
-#include "pixelutils.h"
-#include "XY_Coordinates.h"
-#include "World.h"
-#include "tech_wllist.h"
-
-class SpriteGroup;
-class ProjectileActor;
-class EffectActor;
-class ActorPath;
-#endif
-
 class UnitActor : public Actor
 {
 public:

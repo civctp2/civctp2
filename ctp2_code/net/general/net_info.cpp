@@ -44,7 +44,6 @@
 
 #include "UnitData.h"
 #include "player.h"
-#include "XY_Coordinates.h"
 #include "World.h"
 #include "Advances.h"
 #include "AdvanceRecord.h"

@@ -1457,22 +1457,25 @@ void CityWindow::OptimizeSpecialists(aui_Control *control, uint32 action, uint32
 	PLAYER_INDEX playerId = g_selected_item->GetVisiblePlayer();
 	Governor & governor = Governor::GetGovernor(playerId);
 
-/*	Timer t;
+#if defined(_DEBUG) || defined(USE_LOGGING)
+	Timer t;
 	t.start();
 
 	DPRINTF(k_DBG_AI, ("\n"));
 	DPRINTF(k_DBG_AI, ("// ADJUST SPECIALIST SETTINGS -- Turn %d\n",   g_player[playerId]->GetCurRound()));
 	DPRINTF(k_DBG_AI, ("//                               Player %d\n", playerId));
-*/
+#endif
 
 	g_player[playerId]->PreResourceCalculation(s_cityWindow->m_cityData);
-	governor.AssignPopulation(s_cityWindow->m_cityData);
+	governor.AssignPopulation(s_cityWindow->m_cityData, g_player[playerId]->m_advances->HasAllAdvances());
 
-/*	DPRINTF(k_DBG_AI, ("//  elapsed time = %f ms\n", t.getElapsedTimeInMilliSec()));
+#if defined(_DEBUG) || defined(USE_LOGGING)
+	DPRINTF(k_DBG_AI, ("//  elapsed time = %f ms\n", t.getElapsedTimeInMilliSec()));
 	DPRINTF(k_DBG_AI, ("\n"));
 
 	t.stop();
-*/
+#endif
+
 	s_cityWindow->Project();
 
 	s_cityWindow->Update();

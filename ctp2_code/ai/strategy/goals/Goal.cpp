@@ -579,7 +579,17 @@ Utility Goal::Recompute_Matching_Value(Plan_List & matches, const bool update, c
 
 				combinedUtility += matchUtility;
 				AI_DPRINTF(k_DBG_SCHEDULER_ALL, m_playerId, m_goal_type, -1,
-							("\t\t[%3d] match = %d %s\n", count, matchUtility, g_theGoalDB->Get(m_goal_type)->GetNameText()));
+				            ("\t\t[%3d] match = %d %s Army: %9x Agent: %9x (%3d, %3d)\t%20s (units %2d, cargo %2d)\n", 
+				             count,
+				             matchUtility,
+				             g_theGoalDB->Get(m_goal_type)->GetNameText(),
+				             match_iter->Get_Agent()->Get_Army(),
+				             match_iter->Get_Agent(),
+				             match_iter->Get_Agent()->Get_Pos().x,
+				             match_iter->Get_Agent()->Get_Pos().y,
+				             g_theUnitDB->GetNameStr(match_iter->Get_Agent()->Get_Army()->Get(0).GetType()),
+				             match_iter->Get_Agent()->Get_Army()->Num(),
+				             match_iter->Get_Agent()->Get_Army()->GetCargoNum()));
 				++count;
 			}
 			else
@@ -634,7 +644,7 @@ Utility Goal::Recompute_Matching_Value(Plan_List & matches, const bool update, c
 		combinedUtility /= count;
 	}
 
-	AI_DPRINTF(k_DBG_SCHEDULER_ALL, m_playerId, m_goal_type, -1,("\tMatch value combined utility: %i, raw priority: %i\n", combinedUtility, m_raw_priority));
+	AI_DPRINTF(k_DBG_SCHEDULER_ALL, m_playerId, m_goal_type, -1,("\tMatch value combined utility: %i, raw priority: %i, execute incrementally: %i\n", combinedUtility, m_raw_priority, goal_record->GetExecuteIncrementally()));
 	if(update)
 	{
 		m_combinedUtility = combinedUtility;
@@ -682,21 +692,24 @@ bool Goal::Add_Match(const Agent_ptr & agent, const bool update_match_value, con
 	{
 		Plan the_match(agent, needsCargo);
 
+		Utility matchingValue = Goal::BAD_UTILITY;
+
 		if(update_match_value)
 		{
-			the_match.Compute_Matching_Value(this);
+			matchingValue = the_match.Compute_Matching_Value(this);
 		}
 
-		m_matches.push_back(the_match);
+		if(!update_match_value || matchingValue > Goal::BAD_UTILITY)
+		{
+			m_matches.push_back(the_match);
 
-		m_needs_sorting = true;
+			m_needs_sorting = true;
 
-		return true;
+			return true;
+		}
 	}
-	else
-	{
-		return false;
-	}
+
+	return false;
 }
 
 bool Goal::CanGoalBeReevaluated() const
@@ -761,7 +774,7 @@ void Goal::Commit_Agents()
 		else if(Is_Satisfied() || IsTotallyComplete())
 		{
 			AI_DPRINTF(k_DBG_SCHEDULER_DETAIL, m_playerId, m_goal_type, -1,
-				("\t\tNO AGENTS COMMITTED:           (goal: %x agent: %x, id: 0%x)\n", this, match_iter->Get_Agent(), match_iter->Get_Agent()->Get_Army().m_id));
+				("\t\tNO MORE AGENTS NEEDED:           (goal: %x agent: %x, id: 0%x)\n", this, match_iter->Get_Agent(), match_iter->Get_Agent()->Get_Army().m_id));
 			break;
 		}
 		else
@@ -802,7 +815,7 @@ void Goal::Commit_Transport_Agents()
 		else if(!Needs_Transporter() || IsTotallyComplete())
 		{
 			AI_DPRINTF(k_DBG_SCHEDULER_DETAIL, m_playerId, m_goal_type, -1,
-				("\t\tNO TRANSPORT AGENTS COMMITTED: (goal: %x agent: %x, id: 0%x)\n", this, match_iter->Get_Agent(), match_iter->Get_Agent()->Get_Army().m_id));
+				("\t\tNO MORE TRANSPORT AGENTS NEEDED: (goal: %x agent: %x, id: 0%x)\n", this, match_iter->Get_Agent(), match_iter->Get_Agent()->Get_Army().m_id));
 			break;
 		}
 		else if(match_iter->Get_Cannot_Be_Used())
@@ -811,11 +824,10 @@ void Goal::Commit_Transport_Agents()
 		}
 		else if(match_iter->Get_Needs_Cargo())
 		{
-			AI_DPRINTF(k_DBG_SCHEDULER_DETAIL, m_playerId, m_goal_type, -1,
-				("\t\tTRANSPORT AGENTS COMMITTED:    (goal: %x agent: %x, id: 0%x)\n", this, match_iter->Get_Agent(), match_iter->Get_Agent()->Get_Army().m_id));
-
 			if(match_iter->Get_Agent()->Get_Army()->CanTransport())
 			{
+				AI_DPRINTF(k_DBG_SCHEDULER_DETAIL, m_playerId, m_goal_type, -1,
+					("\t\tTRANSPORT AGENTS COMMITTED:    (goal: %x agent: %x, id: 0%x)\n", this, match_iter->Get_Agent(), match_iter->Get_Agent()->Get_Army().m_id));
 				match_iter->Commit_Agent_Common(this);
 			}
 		}
@@ -878,13 +890,31 @@ void Goal::Rollback_Emptied_Transporters()
 			if(!Pretest_Bid(agent_ptr, goalPos))
 			{
 				AI_DPRINTF(k_DBG_SCHEDULER, agent_ptr->Get_Army()->GetOwner(), m_goal_type, -1,
-					("\t\tTransporter not needed anymore, removing from goal\n"));
+					("\t\tTransporter (%s) not needed anymore, removing from goal\n", g_theUnitDB->GetNameStr(agent_ptr->Get_Army()->Get(0)->GetType())));
 
 				Rollback_Agent(agent_iter); // increases the agent iterator
 				--agent_iter;
 			}
 		}
 	}
+}
+
+bool Goal::Can_Transport_Any_Width_Need(Agent* agent)
+{
+	for
+	(
+	    Plan_List::iterator match_iter  = m_matches.begin();
+	                        match_iter != m_matches.end();
+	                      ++match_iter
+	)
+	{
+		if(match_iter->Get_Needs_Transporter() && match_iter->Get_Agent()->Get_Army()->NumUnitsCanMoveIntoThisTransport(*agent->Get_Army().GetData()))
+		{
+			return true;
+		}
+	}
+
+	return false;
 }
 
 bool Goal::Has_Agent_And_Set_Needs_Cargo(Agent* agent)
@@ -1463,16 +1493,41 @@ Utility Goal::Compute_Agent_Matching_Value(const Agent_ptr agent_ptr) const
 	MapPoint dest_pos = Get_Target_Pos();     // Get cheap target position first, no need for pillage checking, yet.
 	MapPoint curr_pos = agent_ptr->Get_Pos();
 
-	if(agent_ptr->IsNeededForGarrison() && dest_pos != curr_pos)
+	Utility bonus = 0;
+
+	if(agent_ptr->IsNeededForGarrison())
 	{
-		return Goal::BAD_UTILITY;
+		if(dest_pos != curr_pos)
+		{
+			return Goal::BAD_UTILITY;
+		}
+		else
+		{
+			bonus = g_theGoalDB->Get(m_goal_type)->GetGarrisonBonus();
+		}
 	}
+
+#if defined(_DEBUG) || defined(USE_LOGGING)  // Add a debug report of goal computing (raw priority and all modifiers)
+	double report_garrison_bonus = bonus;
+#endif //_DEBUG
+
 
 	// This is expensive, because of pillage, get city target first.
 	dest_pos = Get_Target_Pos(agent_ptr->Get_Army());
 
 	// This is expensive, so remove first the garrison units.
 	if(!Pretest_Bid(agent_ptr, dest_pos))
+	{
+		return Goal::BAD_UTILITY;
+	}
+
+	if( g_theGoalDB->Get(m_goal_type)->GetNoTransport()
+	&&
+	  ((!g_theWorld->IsOnSameContinent(dest_pos, curr_pos)
+	&& !agent_ptr->Get_Army()->GetMovementTypeAir()
+	   )
+	|| agent_ptr->Get_Army()->HasCargo() // Actually we do not want to have any transporters involved
+	  ))
 	{
 		return Goal::BAD_UTILITY;
 	}
@@ -1523,7 +1578,6 @@ Utility Goal::Compute_Agent_Matching_Value(const Agent_ptr agent_ptr) const
 	if(Needs_Transporter()
 	&& agent_ptr->Get_Army()->GetCargo(transports, max, empty)
 	&& empty > 0
-	&& m_agents.size() > 0
 	){
 		Utility transport_utility = 0;
 		Utility           utility = 0;
@@ -1560,7 +1614,7 @@ Utility Goal::Compute_Agent_Matching_Value(const Agent_ptr agent_ptr) const
 
 #if defined(_DEBUG) || defined(USE_LOGGING)
 // Maybe this is of some use later
-//		is_transporter = true;
+		is_transporter = true;
 #endif
 	}
 
@@ -1569,17 +1623,20 @@ Utility Goal::Compute_Agent_Matching_Value(const Agent_ptr agent_ptr) const
 		return Goal::BAD_UTILITY;
 	}
 
-	Utility bonus = 0;
-
 	//Set if unit is wounded and it is a retreat of defense goal, add bonus
 	//to goalpriority + matching
 
-	MapPoint armyPos      = agent_ptr->Get_Pos();
-	PLAYER_INDEX PosOwner = g_theWorld->GetOwner(armyPos);
+	PLAYER_INDEX PosOwner = g_theWorld->GetOwner(curr_pos);
 
 	if(g_theGoalDB->Get(m_goal_type)->GetTargetTypeCity()
 	&& g_theGoalDB->Get(m_goal_type)->GetTargetOwnerSelf()
 	){
+		if(g_theGoalDB->Get(m_goal_type)->GetNeedsRoom()
+		&& agent_ptr->Get_Army()->Num() + g_theWorld->GetCell(dest_pos)->GetNumUnits() > k_MAX_ARMY_SIZE)
+		{
+			return Goal::BAD_UTILITY;
+		}
+
 		// For Defend or Retreat goals
 		if
 		  (
@@ -1630,17 +1687,6 @@ Utility Goal::Compute_Agent_Matching_Value(const Agent_ptr agent_ptr) const
 
 		if
 		  (
-		        m_target_city.IsValid()
-		    && !m_target_city->HasAdjacentFreeLand()
-		    &&  g_theWorld->GetCell(m_target_city->GetPos())->GetNumUnits() != 0
-		    && !agent_ptr->Get_Army()->CanBeachAssault()
-		  )
-		{
-			return Goal::BAD_UTILITY;
-		}
-
-		if
-		  (
 		        agent_ptr->Get_Army()->HasCargo()
 		    &&  agent_ptr->Get_Army()->IsCargoWounded()
 		    && !agent_ptr->Get_Army()->IsCargoObsolete()
@@ -1669,7 +1715,7 @@ Utility Goal::Compute_Agent_Matching_Value(const Agent_ptr agent_ptr) const
 		}
 	}
 #if defined(_DEBUG) || defined(USE_LOGGING)  // Add a debug report of goal computing (raw priority and all modifiers)
-	double report_wounded = bonus;
+	double report_wounded = bonus - report_garrison_bonus;
 #endif //_DEBUG
 
 	if(agent_ptr->Get_Army()->HasCargo() ? agent_ptr->Get_Army()->IsCargoObsolete() : agent_ptr->Get_Army()->IsObsolete())
@@ -1721,7 +1767,7 @@ Utility Goal::Compute_Agent_Matching_Value(const Agent_ptr agent_ptr) const
 
 	if(g_theGoalDB->Get(m_goal_type)->GetTreaspassingArmyBonus() > 0)
 	{
-		PLAYER_INDEX pos_owner = g_theWorld->GetCell(agent_ptr->Get_Pos())->GetOwner();
+		PLAYER_INDEX pos_owner = g_theWorld->GetCell(curr_pos)->GetOwner();
 
 		bool incursion_permissin = Diplomat::GetDiplomat(m_playerId).IncursionPermission(pos_owner);
 		if (pos_owner >= 0 && !(incursion_permissin))
@@ -1760,11 +1806,24 @@ Utility Goal::Compute_Agent_Matching_Value(const Agent_ptr agent_ptr) const
 
 	if(!agent_ptr->Get_Army()->HasCargo())
 	{
-		if(!g_theWorld->IsOnSameContinent(dest_pos, agent_ptr->Get_Pos()) // Same continent problem
-		&& !agent_ptr->Get_Army()->GetMovementTypeAir()
-		&& g_player[m_playerId]->GetCargoCapacity() <= 0
-		&& m_current_attacking_strength.Get_Transport() <= 0
+		if((!g_theWorld->IsOnSameContinent(dest_pos, curr_pos) // Same continent problem
+		&&  !agent_ptr->Get_Army()->GetMovementTypeAir()
+		&&   g_player[m_playerId]->GetCargoCapacity() <= 0)
+		|| (!g_theGoalDB->Get(m_goal_type)->GetTargetOwnerSelf()
+		&&  !g_theWorld->HasAdjacentFreeLand(dest_pos, m_playerId)
+		&&   g_theWorld->GetCell(dest_pos)->GetNumUnits() > 0
+		&&  !agent_ptr->Get_Army()->CanBeachAssault())
 		){
+			return Goal::BAD_UTILITY;
+		}
+	}
+	else
+	{
+		if(!g_theGoalDB->Get(m_goal_type)->GetTargetOwnerSelf()
+		&& !g_theWorld->HasAdjacentFreeLand(dest_pos, m_playerId)
+		&&  g_theWorld->GetCell(dest_pos)->GetNumUnits() > 0
+		&& !agent_ptr->Get_Army()->CanSomeCargoBeachAssault())
+		{
 			return Goal::BAD_UTILITY;
 		}
 	}
@@ -1775,16 +1834,52 @@ Utility Goal::Compute_Agent_Matching_Value(const Agent_ptr agent_ptr) const
 
 	Utility tieBreaker = 0;
 
-	for(sint32 i = 0; i < army->Num(); ++i) // HasCargo, maybe has not be corrected, since we just want to make the sort order stable.
+	if(agent_ptr->Get_Army()->HasCargo())
 	{
-		const UnitRecord* rec = army->Get(i)->GetDBRec();
+		sint32 cargoNum = 0;
+		for(sint32 i = 0; i < army->Num(); ++i) // HasCargo, maybe has not be corrected, since we just want to make the sort order stable.
+		{
+			UnitDynamicArray const * cargo =
+				army->Get(i).AccessData()->GetCargoList();
 
-		tieBreaker += static_cast<Utility>(rec->GetAttack());
-		tieBreaker += static_cast<Utility>(rec->GetDefense());
-		tieBreaker +=                      rec->GetZBRangeAttack();
-		tieBreaker +=                      rec->GetFirepower();
-		tieBreaker += static_cast<Utility>(rec->GetArmor());
-		tieBreaker +=                      army->Get(i)->CalculateTotalHP();//rec->GetMaxHP();
+			if(cargo && cargo->Num() > 0)
+			{
+				cargoNum += cargo->Num();
+
+				for(sint32 j = 0; j < cargo->Num(); ++j)
+				{
+					const UnitRecord* rec = cargo->Get(j)->GetDBRec();
+
+					tieBreaker += static_cast<Utility>(rec->GetAttack());
+					tieBreaker += static_cast<Utility>(rec->GetDefense());
+					tieBreaker +=                      rec->GetZBRangeAttack();
+					tieBreaker +=                      rec->GetFirepower();
+					tieBreaker += static_cast<Utility>(rec->GetArmor());
+					tieBreaker +=                      army->Get(i)->CalculateTotalHP();//rec->GetMaxHP();
+				}
+			}
+		}
+
+		// Take the number into account so that we prefer the closest one
+		tieBreaker /= cargoNum;
+		tieBreaker += 100; // That is still a bit hacky, it makes the AIs preffering transports, it is some sort of distance modifier
+	}
+	else
+	{
+		for(sint32 i = 0; i < army->Num(); ++i) // HasCargo, maybe has not be corrected, since we just want to make the sort order stable.
+		{
+			const UnitRecord* rec = army->Get(i)->GetDBRec();
+
+			tieBreaker += static_cast<Utility>(rec->GetAttack());
+			tieBreaker += static_cast<Utility>(rec->GetDefense());
+			tieBreaker +=                      rec->GetZBRangeAttack();
+			tieBreaker +=                      rec->GetFirepower();
+			tieBreaker += static_cast<Utility>(rec->GetArmor());
+			tieBreaker +=                      army->Get(i)->CalculateTotalHP();//rec->GetMaxHP();
+		}
+
+		// Take the number into account so that we prefer the closest one
+		tieBreaker /= army->Num();
 	}
 
 	match += tieBreaker;
@@ -1793,12 +1888,12 @@ Utility Goal::Compute_Agent_Matching_Value(const Agent_ptr agent_ptr) const
 	MapPoint target_pos = Get_Target_Pos();
 
 	AI_DPRINTF(k_DBG_SCHEDULER_DETAIL, m_playerId, m_goal_type, -1,
-	("\t\t%9x,\t %9x,\t%9x (%3d,%3d),\t%s (%3d,%3d) (%3d,%3d),\t%8d,\t%8d,\t%8f,\t%8f,\t%8d,\t%8f,\t%8f,\t%8f,\t%8d,\t%8f,\t%8f,\t%8d,\t%9x,\t%s \n",
+	("\t\t%9x,\t %9x,\t%9x (%3d,%3d),\t%s (%3d,%3d) (%3d,%3d),\t%8d,\t%8d,\t%12f,\t%12f,\t%12d,\t%12f,\t%12f,\t%12f,\t%8d,\t%12f,\t%12f,\t%12f,\t%12d,\t%9x,\t%6d,\t%20s,\t%16s,\t%16s \n",
 	this,                                          // This goal
 	agent_ptr->Get_Army().m_id,                    // The army
 	agent_ptr,                                     // The agent
-	agent_ptr->Get_Pos().x,                        // Agent pos.x
-	agent_ptr->Get_Pos().y,                        // Agent pos.y
+	curr_pos.x,                                    // Agent pos.x
+	curr_pos.y,                                    // Agent pos.y
 	g_theGoalDB->Get(m_goal_type)->GetNameText(),  // Goal name
 	target_pos.x,                                  // Target pos.x
 	target_pos.y,                                  // Target pos.y
@@ -1815,8 +1910,12 @@ Utility Goal::Compute_Agent_Matching_Value(const Agent_ptr agent_ptr) const
 	time_term,                                     // Time needed to goal, if we would follow a bee line
 	report_InVisionRange,                          // In vision range bonus
 	report_NoBarbsPresent,                         // If no Barbarian are present bonus
+	report_garrison_bonus,                         // If an agent is needed for garrison add a bonus so that it is also selected for garrison
 	is_transporter,                                // Whether the agent is a transporter
 	agent_ptr->Get_Goal(),                         // The goal to that this agent is asigned to
+	tieBreaker,
+	g_theUnitDB->GetNameStr(agent_ptr->Get_Army()->Get(0).GetType()),
+	(g_theWorld->HasCity(curr_pos) ? g_theWorld->GetCity(curr_pos).GetName() : "field"),
 	(g_theWorld->HasCity(target_pos) ? g_theWorld->GetCity(target_pos).GetName() : "field")
 	));
 #endif //_DEBUG
@@ -2156,12 +2255,6 @@ Utility Goal::Compute_Raw_Priority()
 		m_target_city->GetPop(pop);
 		cell_value += (1.0 - (static_cast<double>(pop) / static_cast<double>(m_target_city.CD()->GetOverallMaxPop()))) * static_cast<double>(goal_rec->GetSmallCitySizeBonus());
 
-		if(pop == m_target_city.CD()->GetMaxPop())
-		{
-			m_raw_priority = Goal::BAD_UTILITY;
-			return m_raw_priority;
-		}
-
 #if defined(_DEBUG) || defined(USE_LOGGING)
 		report_cell_SmallCitySize = cell_value - report_cell_lastvalue;
 		report_cell_lastvalue     = cell_value;
@@ -2173,7 +2266,7 @@ Utility Goal::Compute_Raw_Priority()
 	bool isLandConnected = goal_rec->HasConnectionBoni() && player_ptr->IsConnected(target_pos, doubleDistanceFactor * g_theConstDB->Get(0)->GetBorderSquaredRadius(), distance);
 	bool isConnected     = goal_rec->HasConnectionBoni() && player_ptr->IsConnected(target_pos, doubleDistanceFactor * g_theConstDB->Get(0)->GetBorderSquaredRadius(), distance, false);
 
-	const GoalRecord::ConnectionBoni* cbRec = isLandConnected || isConnected ? goal_rec->GetConnectionBoniPtr() : NULL;
+	const GoalRecord::ConnectionBoni* cbRec = goal_rec->GetConnectionBoniPtr();
 
 	// A little ugly but this way I don't have to mess with the debug reports
 	if(cbRec != NULL)
@@ -2232,7 +2325,7 @@ Utility Goal::Compute_Raw_Priority()
 	    && cbRec->GetWeakestEnemyBonus() != 0
 	    && target_owner > -1
 	    && (
-	            g_player[m_playerId]->GetWeakestEnemy() == target_owner
+	            Diplomat::GetDiplomat(m_playerId).IsBestHotwarEnemy(target_owner)
 	         || target_owner == 0
 	       )
 	  )
@@ -2260,7 +2353,7 @@ Utility Goal::Compute_Raw_Priority()
 	if(CtpAiDebug::DebugLogCheck(this->Get_Player_Index(), this->Get_Goal_Type(), -1))
 	{
 		char buff[1024];
-		sprintf(buff, "\t %9" PRIXPTR ",\t%s,\t%i, \t\trc(%3d,%3d),\t%8f,\t%8f,\t%8f,\t%8f,\t%8f,\t%8f,\t%8f, rc(%3d,%3d),\t%8f, rc(%3d,%3d), \t%8f,\t%8f,\t%8f,\t%8f,\t%8f,\t%8f,\t%8f,",
+		sprintf(buff, "\t %9" PRIXPTR ",\t%s,\t%i, \t\trc(%3d,%3d),\t%8f,\t%8f,\t%8f,\t%8f,\t%8f,\t%8f,\t%8f, rc(%3d,%3d),\t%8f, rc(%3d,%3d), \t%8f,\t%8f,\t%8f,\t%8f,\t\t%8f,\t\t%8f,\t\t%8f,",
 		    (uintptr_t)this,
 		        goal_rec->GetNameText(),
 		        m_raw_priority,
@@ -2287,7 +2380,7 @@ Utility Goal::Compute_Raw_Priority()
 		        report_cell_NoOwnerTerritory
 		       );
 
-		AI_DPRINTF(k_DBG_SCHEDULER_DETAIL, m_playerId, m_goal_type, -1, ("%s\t%8f,\t\t%8f,\t%i,\t\t%8f,\t%8f,\t%8f,\t%s\n",
+		AI_DPRINTF(k_DBG_SCHEDULER_DETAIL, m_playerId, m_goal_type, -1, ("%s\t\t%8f,\t\t\t%8f,\t%i,\t\t\t%8f,\t%8f,\t%8f,\t%s\n",
 		                                 buff,
 		                                 report_cell_SlaveryProtection,
 		                                 report_cell_SmallCitySize,
@@ -3414,9 +3507,16 @@ bool Goal::FollowPathToTask( Agent_ptr first_army,
 			Assert(order_rec);
 			if (order_rec)
 			{
-				if(m_sub_task != SUB_TASK_CARGO_TO_BOARD)
+				if(m_sub_task == SUB_TASK_RALLY)
 				{
-					first_army->PerformOrderHere(order_rec, (Path *) &found_path);
+					if(first_army->Get_Pos() != dest_pos)
+					{
+						first_army->PerformOrderHere(order_rec, (Path *)&found_path, GEV_INSERT_Tail);
+					}
+				}
+				else if(m_sub_task != SUB_TASK_CARGO_TO_BOARD)
+				{
+					first_army->PerformOrderHere(order_rec, (Path *)&found_path);
 				}
 				else
 				{
@@ -3546,6 +3646,27 @@ bool Goal::GotoTransportTaskSolution(Agent_ptr the_army, Agent_ptr the_transport
 			return true;
 		}
 
+		MapPoint targetPos = Get_Target_Pos();
+
+		Cell*  theCell = g_theWorld->GetCell(the_transport->Get_Pos());
+		sint32 numUnitsInCity = the_transport->GetUnitsAtPos();
+		sint32 numUnitsInArmy = the_army->Get_Army()->Num();
+
+		if(theCell->HasCity()
+		   && numUnitsInCity + numUnitsInArmy > k_MAX_ARMY_SIZE)
+		{
+			if(!pos.IsValid())
+			{
+				pos = dest_pos;
+			}
+
+			dest_pos = MoveTransportOutOfCity(the_transport, the_army);
+
+			the_transport->Set_Target_Pos(dest_pos);
+			the_transport->Set_Can_Be_Executed(false);
+			return true;
+		}
+
 		if(dest_pos == the_transport->Get_Pos()
 		|| the_transport->Get_Army()->CheckValidDestination(dest_pos)
 		){
@@ -3562,7 +3683,7 @@ bool Goal::GotoTransportTaskSolution(Agent_ptr the_army, Agent_ptr the_transport
 		uint32 move_intersection =
 			the_transport->Get_Army().GetMovementType() | the_army->Get_Army().GetMovementType();
 
-		found = the_transport->FindPathToBoard(move_intersection, dest_pos, check_dest, found_path);
+		found = the_transport->FindPathToBoard(move_intersection, dest_pos, check_dest, found_path, the_army->Get_Army()->Num());
 
 		if (!found)
 		{
@@ -3861,7 +3982,6 @@ bool Goal::GotoGoalTaskSolution(Agent_ptr the_army, MapPoint & goal_pos)
 
 	if (move_success)
 	{
-		Assert(!the_army->Get_Can_Be_Executed())
 		the_army->Set_Can_Be_Executed(false);
 	}
 
@@ -3902,6 +4022,10 @@ bool Goal::Ok_To_Rally() const
 					++num_at_dest;
 				}
 				// Would have been removed for the outcommented stuff below
+				else if(agent_ptr->Get_Army()->HasCargo())
+				{
+					++num_in_water; // Actually is beeing transported
+				}
 				else
 				{
 					return false;
@@ -3947,7 +4071,7 @@ bool Goal::RallyComplete() const
 		if (agent_ptr->Get_Is_Dead())
 			continue;
 
-		if(!agent_ptr->IsArmyPosFilled())
+		if(!agent_ptr->IsArmyPosFilled() || !agent_ptr->IsOneArmyAtPos())
 		{
 			if(incompleteStackFound)
 			{
@@ -4003,14 +4127,11 @@ void Goal::GroupTroops()
 
 			if(agent1_ptr->Get_Pos() == agent2_ptr->Get_Pos())
 			{
-				ORDER_TEST test1 = agent1_ptr->Get_Army()->CargoTestOrderHere(CtpAi::GetUnloadOrder(), agent1_ptr->Get_Pos());
-				ORDER_TEST test2 = agent2_ptr->Get_Army()->CargoTestOrderHere(CtpAi::GetUnloadOrder(), agent2_ptr->Get_Pos());
-
-				if(agent1_ptr->Get_Army()->HasCargo() && test1 != ORDER_TEST_ILLEGAL)
+				if(agent1_ptr->CargoCanEnter())
 				{
 					agent1_ptr->UnloadCargo();
 				}
-				else if(agent2_ptr->Get_Army()->HasCargo() && test2 != ORDER_TEST_ILLEGAL)
+				else if(agent2_ptr->CargoCanEnter())
 				{
 					agent2_ptr->UnloadCargo();
 				}
@@ -4054,6 +4175,46 @@ MapPoint Goal::MoveToTarget(Agent_ptr rallyAgent)
 	return rallyPos;
 }
 
+MapPoint Goal::MoveAwayFromTargetCity(Agent_ptr rallyAgent)
+{
+	MapPoint  rallyPos = rallyAgent->Get_Pos();
+	MapPoint targetPos = Get_Target_Pos();
+
+	if(m_target_city.IsValid() && rallyPos.IsNextTo(targetPos))
+	{
+		MapPoint tempPos;
+		for(sint32 i = 0; i < NOWHERE; i++)
+		{
+			if(rallyPos.GetNeighborPosition(WORLD_DIRECTION(i), tempPos))
+			{
+				if(targetPos.IsNextTo(tempPos))
+					continue;
+
+				if(!g_theWorld->IsOnSameContinent(targetPos, tempPos))
+					continue;
+
+				if(!g_theWorld->GetArmyPtr(tempPos)
+				   && (    ( rallyAgent->Get_Army()->HasCargo()
+				        &&   rallyAgent->Get_Army()->CargoCanEnter(tempPos))
+				        || (!rallyAgent->Get_Army()->HasCargo()
+				        &&   rallyAgent->Get_Army()->CanEnter(tempPos))
+				      )
+				  )
+				{
+					// Search for a cell without an army
+					rallyPos = tempPos;
+					if(!GotoGoalTaskSolution(rallyAgent, rallyPos))
+						Assert(false);
+
+					break;
+				}
+			}
+		}
+	}
+
+	return rallyPos;
+}
+
 MapPoint Goal::MoveOutOfCity(Agent_ptr rallyAgent)
 {
 	MapPoint rallyPos = rallyAgent->Get_Pos();
@@ -4062,14 +4223,12 @@ MapPoint Goal::MoveOutOfCity(Agent_ptr rallyAgent)
 		MapPoint tempPos;
 		for(sint32 i = 0 ; i < NOWHERE; i++)
 		{
-			bool result = rallyPos.GetNeighborPosition(WORLD_DIRECTION(i), tempPos);
-			if(result)
+			if(rallyPos.GetNeighborPosition(WORLD_DIRECTION(i), tempPos))
 			{
-				CellUnitList *the_army = NULL;
-				the_army = g_theWorld->GetArmyPtr(tempPos);
-				if(!the_army
+				if(!g_theWorld->GetArmyPtr(tempPos)
 				&& rallyAgent->Get_Army()->CanEnter(tempPos)
-				){	//search for cell without army
+				){
+					// Search for a cell without an army
 					rallyPos = tempPos;
 					break;
 				}
@@ -4081,6 +4240,40 @@ MapPoint Goal::MoveOutOfCity(Agent_ptr rallyAgent)
 	}
 
 	return rallyPos;
+}
+
+MapPoint Goal::MoveTransportOutOfCity(Agent_ptr transport, Agent_ptr cargo)
+{
+	sint32 minDistance = 0x7fffffff;
+
+	MapPoint transportPos = transport->Get_Pos();
+	if(g_theWorld->GetCity(transportPos).IsValid())
+	{
+		MapPoint tempPos;
+		for(sint32 i = 0; i < NOWHERE; i++)
+		{
+			if(transportPos.GetNeighborPosition(WORLD_DIRECTION(i), tempPos))
+			{
+				if(!g_theWorld->GetArmyPtr(tempPos)
+				   && transport->Get_Army()->CanEnter(tempPos)
+				   )
+				{
+					sint32 distance = MapPoint::GetSquaredDistance(transport->Get_Pos(), tempPos);
+
+					if(distance < minDistance)
+					{
+						minDistance = distance;
+						transportPos = tempPos;
+					}
+				}
+			}
+		}
+
+		if(!GotoGoalTaskSolution(transport, transportPos))
+			Assert(false);
+	}
+
+	return transportPos;
 }
 
 Agent_ptr Goal::GetRallyAgent() const
@@ -4157,13 +4350,24 @@ bool Goal::RallyTroops()
 		return true;
 	}
 
-	MapPoint     rallyPos   = rallyAgent->Get_Army()->HasCargo() ? MoveToTarget(rallyAgent) : MoveOutOfCity(rallyAgent);
+	MapPoint     rallyPos = rallyAgent->Get_Army()->HasCargo() ? MoveToTarget(rallyAgent) : MoveOutOfCity(rallyAgent);
+	             rallyPos = MoveAwayFromTargetCity(rallyAgent);
+
+	if(rallyPos == rallyAgent->Get_Pos()
+	&& rallyAgent->Get_Army()->HasCargo()
+	&& rallyAgent->CargoCanEnter()
+	){
+		rallyAgent->UnloadCargo();
+	}
 
 	rallyAgent->WaitHere(Get_Target_Pos(rallyAgent->Get_Army()));
 
 	Squad_Strength strength = m_current_attacking_strength;
 
+	Assert(rallyPos != Get_Target_Pos(rallyAgent->Get_Army()));
+
 	sint32 unitsAtRallyPos = (rallyPos == rallyAgent->Get_Pos()) ? rallyAgent->GetUnitsAtPos() : rallyAgent->Get_Army()->Num();
+
 	for
 	(
 	    Agent_List::iterator agent_iter  = m_agents.begin();
@@ -4194,6 +4398,7 @@ bool Goal::RallyTroops()
 		    && rallyPos.IsNextTo(agent_ptr->Get_Pos())
 		  )
 		{
+			agent_ptr->WaitHere(Get_Target_Pos(agent_ptr->Get_Army()));
 			continue;
 		}
 
@@ -4212,28 +4417,29 @@ bool Goal::RallyTroops()
 			}
 		}
 
-		// Count units at target position or sent to target position
-		unitsAtRallyPos += agent_ptr->Get_Army()->Num();
-
-		// If target position is full or will be full
-		if(unitsAtRallyPos > k_MAX_ARMY_SIZE)
+		if(unitsAtRallyPos + agent_ptr->Get_Army()->Num() > k_MAX_ARMY_SIZE
+		&& agent_ptr->Get_Pos().IsNextTo(rallyPos))
 		{
-			unitsAtRallyPos -= k_MAX_ARMY_SIZE;
 
 			// Change target
 			if(agent_ptr->Get_Army()->Num() < k_MAX_ARMY_SIZE)
 			{
-				rallyPos = GetFreeNeighborPos(rallyPos);
+				rallyPos = agent_ptr->Get_Pos();
 
-				if(!rallyPos.IsValid())
-				{
-					Assert(false);
-					// Find another rally point
-				}
-
-				// Outgroup the units over limit
+				// Outgroup the units over the limit
 				// Outgrouping is done before the army is send to their target
-				agent_ptr->Get_Army()->RemainNumUnits(agent_ptr->Get_Army()->Num() - unitsAtRallyPos);
+				agent_ptr->Get_Army()->Split(agent_ptr->Get_Army()->Num() - unitsAtRallyPos);
+				agent_ptr->Set_Can_Be_Executed(false);
+
+				unitsAtRallyPos = agent_ptr->Get_Army()->Num() - unitsAtRallyPos;
+
+				uint8 magnitude = 220;
+				MBCHAR * myString = new MBCHAR[256];
+				MapPoint goal_pos = Get_Target_Pos(agent_ptr->Get_Army());
+				MapPoint curr_pos = agent_ptr->Get_Pos();
+				sprintf(myString, "Split at (%d,%d) to GO (%d,%d)", curr_pos.x, curr_pos.y, goal_pos.x, goal_pos.y);
+				g_graphicsOptions->AddTextToArmy(agent_ptr->Get_Army(), myString, magnitude);
+				delete[] myString;
 			}
 		}
 	}
@@ -4482,6 +4688,10 @@ bool Goal::FindTransporters(const Agent_ptr & agent_ptr, std::list< std::pair<Ut
 		sint32          empty_slots         = 0;
 		possible_transport->Get_Army()->GetCargo(transports, max_slots, empty_slots);
 
+/*		AI_DPRINTF(k_DBG_SCHEDULER, m_playerId, m_goal_type, possible_transport->Get_Army().m_id,
+			("GOAL %x Agent %x (%d): transports: %d, max_slots: %d, empty_slots %d\n",
+			 this, possible_transport, m_goal_type, transports, max_slots, empty_slots));*/
+
 		if(max_slots <= 0)
 			continue;
 
@@ -4651,7 +4861,9 @@ sint32 Goal::GetThreatenBonus() const
 bool Goal::Goal_Too_Expensive() const
 {
 #if defined(_DEBUG) || defined(USE_LOGGING)
-	if(    (m_current_attacking_strength.Get_Agent_Count() > k_MAX_ARMY_SIZE)
+	if(    (g_theGoalDB->Get(m_goal_type)->GetTargetOwnerSelf()
+	    &&  g_theGoalDB->Get(m_goal_type)->GetTargetTypeCity()
+	    &&  m_current_attacking_strength.Get_Agent_Count() > k_MAX_ARMY_SIZE)
 	    && (m_current_attacking_strength.Get_Value() >
 	            m_current_needed_strength.Get_Value() * 3
 	       )

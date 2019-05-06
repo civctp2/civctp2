@@ -19,10 +19,13 @@
 # Modifications from the original Activision code:
 #
 # - Added build lists for small cities and for cities at their maximum size. (20-Aug-2009 Martin Gühmann)
+# - Added a build list for the end game. (16-Feb-2019 Martin Gühmann)
 #
 #----------------------------------------------------------------------------
 
 # 11
+
+##  0 ##########################################################
 
 BUILDING_BUILD_LIST_HAPPINESS {
   Building IMPROVE_SHRINE
@@ -39,6 +42,8 @@ BUILDING_BUILD_LIST_HAPPINESS {
   Building IMPROVE_BODY_EXCHANGE
 }
 
+##  1 ##########################################################
+
 BUILDING_BUILD_LIST_GROWTH {
   Building IMPROVE_GRANARY
   Building IMPROVE_AQUEDUCT
@@ -54,6 +59,8 @@ BUILDING_BUILD_LIST_GROWTH {
   Building IMPROVE_CORNUCOPIC_VAT
 }
 
+##  2 ##########################################################
+
 BUILDING_BUILD_LIST_PRODUCTION {
   Building IMPROVE_MILL
   Building IMPROVE_FACTORY
@@ -68,9 +75,13 @@ BUILDING_BUILD_LIST_PRODUCTION {
   Building IMPROVE_MATTER_DECOMPILER
 }
 
+##  3 ##########################################################
+
 BUILDING_BUILD_LIST_OFFENSE {
   Building IMPROVE_CITY_WALLS
 }
+
+##  4 ##########################################################
 
 BUILDING_BUILD_LIST_DEFENSE {
   Building IMPROVE_CITY_WALLS
@@ -83,6 +94,8 @@ BUILDING_BUILD_LIST_DEFENSE {
   Building IMPROVE_FORCEFIELD
 }
 
+##  5 ##########################################################
+
 BUILDING_BUILD_LIST_SCIENCE {
   Building IMPROVE_PUBLISHING_HOUSE
   Building IMPROVE_ACADEMY
@@ -92,6 +105,8 @@ BUILDING_BUILD_LIST_SCIENCE {
   Building IMPROVE_GAIA_COMPUTER
   Building IMPROVE_POWER_SATELLITE
 }
+
+##  6 ##########################################################
 
 BUILDING_BUILD_LIST_GOLD {
   Building IMPROVE_BAZAAR
@@ -106,17 +121,23 @@ BUILDING_BUILD_LIST_GOLD {
   Building IMPROVE_BEHAVIORAL_MOD_CENTER
 }
 
+##  7 ##########################################################
+
 BUILDING_BUILD_LIST_SMALL_CITIES {
   Building IMPROVE_CITY_WALLS
   Building IMPROVE_GRANARY
   Building IMPROVE_SHRINE
 }
 
+##  8 ##########################################################
+
 BUILDING_BUILD_LIST_MAXIUM_SIZED_CITIES {
   Building IMPROVE_AQUEDUCT
   Building IMPROVE_ARCOLOGIES
   Building IMPROVE_AQUA_FILTER
 }
+
+##  9 ##########################################################
 
 BUILDING_BUILD_LIST_DIRTY_CITIES {
   Building IMPROVE_PUBLIC_TRANSPORTATION
@@ -125,14 +146,25 @@ BUILDING_BUILD_LIST_DIRTY_CITIES {
   Building IMPROVE_MATTER_DECOMPILER
 }
 
+## 10 ##########################################################
+
 BUILDING_BUILD_LIST_SMALL_CITIES_MILITARIST_STOP
 {
   Building IMPROVE_CITY_WALLS
   Building IMPROVE_GRANARY
 }
 
+## 11 ##########################################################
+
 BUILDING_BUILD_LIST_MISC {
   Building IMPROVE_CAPITOL
+}
+
+## 12 ##########################################################
+
+BUILDING_BUILD_LIST_ENDGAME {
+  Building IMPROVE_GAIA_COMPUTER
+  Building IMPROVE_POWER_SATELLITE
 }
 
 ### ALL BUILDINGS DONE ###

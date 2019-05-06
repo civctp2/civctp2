@@ -162,6 +162,7 @@ public:
     void Remove_Matches();
     void Remove_Match(const Agent_ptr & agent);
     bool Has_Agent_And_Set_Needs_Cargo(Agent* agent);
+    bool Can_Transport_Any_Width_Need(Agent* agent);
     bool Needs_Cargo(Agent* agent);
     bool Cannot_Be_Used(Agent* agent);
     void Set_Cannot_Be_Used(Agent* agent, bool cannotBeUsed);
@@ -244,6 +245,8 @@ private:
 
     MapPoint MoveToTarget(Agent_ptr rallyAgent);
     MapPoint MoveOutOfCity(Agent_ptr rallyAgent);
+    MapPoint MoveTransportOutOfCity(Agent_ptr transport, Agent_ptr cargo);
+    MapPoint MoveAwayFromTargetCity(Agent_ptr rallyAgent);
     Agent_ptr GetRallyAgent() const;
     MapPoint GetFreeNeighborPos(MapPoint pos) const;
     bool RallyTroops();

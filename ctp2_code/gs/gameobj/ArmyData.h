@@ -132,6 +132,7 @@ private:
     bool                       m_hasBeenAdded;         // Used and serialized (uint8)
     bool                       m_isPirating;           // Used and serialized (uint8)
     bool                       m_needToKill;           // Used and serialized (uint8)
+    bool                       m_addOrdersAI;          // Used
 
 public:
 
@@ -188,6 +189,7 @@ public:
     void GroupUnit(Unit unit);
     void UngroupUnits();
     void RemainNumUnits(sint32 remain);
+    void Split(sint32 remain);
 
     void FastKill();
 
@@ -399,6 +401,7 @@ public:
 
     bool CanMove();
 
+    bool CanSomeCargoBeachAssault() const;
     bool CanBeachAssault() const;
     bool CanHearGossip() const;
     bool CanSlaveUprising() const;
@@ -423,7 +426,7 @@ public:
     void SetTurnOver();
     bool TurnOver();
 
-    bool CanAtLeastOneCargoUnloadAt(const MapPoint &old_pos, const MapPoint &dest_pos, const bool & used_vision, const bool check_move_points = true) const;
+    bool CanAtLeastOneCargoUnloadAt(const MapPoint &unload_pos, const bool & used_vision, const bool check_move_points = true) const;
 
     static bool GetInciteRevolutionCost( const MapPoint &point, sint32 &attackCost );
     static bool GetInciteUprisingCost( const MapPoint &point, sint32 &attackCost );
@@ -573,6 +576,7 @@ public:
     bool IsInVisionRangeAndCanEnter(MapPoint &pos) const;
 
     void Battle(const MapPoint &pos, CellUnitList & defender);
+    void SetAICanAddOrders() { m_addOrdersAI = true; }
 
 #if 0
 public:

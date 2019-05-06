@@ -92,7 +92,7 @@ OrderInfo g_orderInfo[] = {
 	{UNIT_ORDER_GROUP_UNIT,                 "ORDER_GROUP_UNIT",                 0, 0, 0, 0, NULL}, // 44
 	{UNIT_ORDER_DISBAND,                    "ORDER_DISBAND_ARMY",               0, 0, 0, 0, NULL}, // 45
 	{UNIT_ORDER_FINISH_ATTACK,              "ORDER_FINISH_ATTACK",              0, 0, 0, 0, NULL}, // 46
-	{UNIT_ORDER_UNLOAD_ONE_UNIT,            "ORDER_UNLOAD_ONE_UNIT",            0, 0, 0, 0, NULL}, // 47
+	{UNIT_ORDER_UNUSED,                     "ORDER_UNUSED",                     0, 0, 0, 0, NULL}, // 47
 	{UNIT_ORDER_BOARD_TRANSPORT,            "ORDER_BOARD_TRANSPORT",            0, 0, 0, 0, NULL}, // 48
 	{UNIT_ORDER_WAKE_UP,                    "ORDER_WAKE_UP",                    0, 0, 0, 0, NULL}, // 49
 	{UNIT_ORDER_PILLAGE_UNCONDITIONALLY,    "ORDER_PILLAGE_UNCONDITIONALLY",    0, 0, 0, 0, NULL}, // 50
