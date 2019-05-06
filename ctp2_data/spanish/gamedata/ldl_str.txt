@@ -2749,16 +2749,23 @@ str_ldl_RANKING_ECONOMIC			"Económico"
 str_ldl_RANKING_SCIENTIFIC			"Científico"
 str_ldl_RANKING_OVERALL				"General"
 str_ldl_RANKING_POLLUTION			"Contaminación"
+str_ldl_RANKING_TRADE				"Comercio"
+str_ldl_RANKING_GOLD				"Oro"
+str_ldl_RANKING_CITIES				"Ciudades"
+str_ldl_RANKING_LAND_AREA			"Land Area"
+str_ldl_RANKING_SEA_AREA			"Sea Area"
+str_ldl_RANKING_UNITS				"Unidades"
+str_ldl_RANKING_BUILDINGS			"Construcciones"
 str_ldl_RANKING_WONDERS				"Maravilla"
 str_ldl_RANKING_RANK				"Rango:"
 str_ldl_INFO_RANKING_TAB			"Ranking"
-str_ldl_LINE_BUTTON				"Gráfico lineal"
+str_ldl_LINE_BUTTON					"Gráfico lineal"
 str_ldl_ZEROSUM_BUTTON				"Gráfico de suma cero"
 
 # Timeline Tab
 str_ldl_INFO_TIMELINE_TAB			"Línea temporal"
 str_ldl_RIGHT_BUTTON				"Desplazar a la derecha"
-str_ldl_LEFT_BUTTON				"Desplazar a la izquierda"
+str_ldl_LEFT_BUTTON					"Desplazar a la izquierda"
 
 
 # Intelligence Detail Screen
