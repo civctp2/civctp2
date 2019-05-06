@@ -30,10 +30,11 @@
 #include "IconRecord.h"
 
 #include "advanceutil.h"
+#include "sci_advancescreen.h"
 #include "ldl_file.hpp"
 
-extern C3UI			*g_c3ui;
-extern ProjectFile	*g_GreatLibPF;
+extern C3UI         *g_c3ui;
+extern ProjectFile  *g_GreatLibPF;
 
 #define k_CHART_PATTERN	"chart.tga"
 
@@ -453,7 +454,7 @@ sint32 Chart::SetTipInfo( ctp2_Button *button, sint32 index )
 	sprintf( str, "%s", g_theStringDB->GetNameStr(name) );
 	tipWindow->SetHyperTipText( str );
 
-    return(1);
+	return(1);
 }
 
 AUI_ERRCODE Chart::Update( sint32 index )
@@ -492,10 +493,20 @@ AUI_ERRCODE Chart::Update( sint32 index )
 	for ( i = 0; i < m_numPreReq; i++ )
 	{
 		m_preReqIndex[i] = g_theAdvanceDB->Get(index)->GetPrerequisitesIndex(i);
-		s = g_theAdvanceDB->GetNameStr( m_preReqIndex[i] );
-
 		m_preReqButton[i]->Move( xpos, ypos + i*heightBetweenButtons + i*buttonHeight );
-		m_preReqButton[i]->SetText( s );
+
+		if(scieadvancescreen_isGoal(m_preReqIndex[i]))
+		{
+			MBCHAR str[256];
+			sprintf(str, "%s*", g_theAdvanceDB->GetNameStr(m_preReqIndex[i]));
+			m_preReqButton[i]->SetText(str);
+		}
+		else
+		{
+			s = g_theAdvanceDB->GetNameStr(m_preReqIndex[i]);
+			m_preReqButton[i]->SetText(s);
+		}
+
 		m_preReqButton[i]->Show();
 
 		aui_Ldl		*ldl = g_c3ui->GetLdl();
@@ -535,10 +546,22 @@ AUI_ERRCODE Chart::Update( sint32 index )
 	for ( i = 0; i < m_numEitherPreReq; i++ )
 	{
 		m_eitherPreReqIndex[i] = g_theAdvanceDB->Get(index)->GetEitherPrerequisitesIndex(i);
-		s = g_theAdvanceDB->GetNameStr( m_eitherPreReqIndex[i] );
 
 		m_eitherPreReqButton[i]->Move( xpos, ypos + i*heightBetweenButtons + i*buttonHeight );
 		m_eitherPreReqButton[i]->SetText( s );
+	
+		if(scieadvancescreen_isGoal(m_eitherPreReqIndex[i]))
+		{
+			MBCHAR str[256];
+			sprintf(str, "%s*", g_theAdvanceDB->GetNameStr(m_eitherPreReqIndex[i]));
+			m_eitherPreReqButton[i]->SetText(str);
+		}
+		else
+		{
+			s = g_theAdvanceDB->GetNameStr(m_eitherPreReqIndex[i]);
+			m_eitherPreReqButton[i]->SetText(s);
+		}
+
 		m_eitherPreReqButton[i]->Show();
 
 		aui_Ldl		*ldl = g_c3ui->GetLdl();
@@ -577,10 +600,19 @@ AUI_ERRCODE Chart::Update( sint32 index )
 	ypos = (Height() - buttonHeight) / 2;
 
 	m_centerIndex = index;
-	s = g_theAdvanceDB->GetNameStr( m_centerIndex );
-
 	m_centerButton->Move( xpos, ypos );
-	m_centerButton->SetText( s );
+
+	if(scieadvancescreen_isGoal(m_centerIndex))
+	{
+		MBCHAR str[256];
+		sprintf(str, "%s*", g_theAdvanceDB->GetNameStr(m_centerIndex));
+		m_centerButton->SetText(str);
+	}
+	else
+	{
+		s = g_theAdvanceDB->GetNameStr(m_centerIndex);
+		m_centerButton->SetText(s);
+	}
 
 	aui_Ldl		*ldl = g_c3ui->GetLdl();
 	if (ldl)
@@ -613,10 +645,20 @@ AUI_ERRCODE Chart::Update( sint32 index )
 
 	for ( i = 0;i < m_numLeadsTo;i++ )
 	{
-		s = g_theAdvanceDB->GetNameStr( m_leadsToIndex[i] );
-
 		m_leadsToButton[i]->Move( xpos, ypos + i*heightBetweenButtons + i*buttonHeight );
-		m_leadsToButton[i]->SetText( s );
+
+		if(scieadvancescreen_isGoal(m_leadsToIndex[i]))
+		{
+			MBCHAR str[256];
+			sprintf(str, "%s*", g_theAdvanceDB->GetNameStr(m_leadsToIndex[i]));
+			m_leadsToButton[i]->SetText(str);
+		}
+		else
+		{
+			s = g_theAdvanceDB->GetNameStr(m_leadsToIndex[i]);
+			m_leadsToButton[i]->SetText(s);
+		}
+
 		m_leadsToButton[i]->Show();
 
 		aui_Ldl		*ldl = g_c3ui->GetLdl();

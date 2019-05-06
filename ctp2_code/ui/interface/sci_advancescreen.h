@@ -21,5 +21,8 @@ sint32 sci_advancescreen_loadList( void );
 sint32 sci_advancescreen_updateData( MBCHAR *messageText = NULL, BOOL defaultMessage = TRUE );
 sint32 sci_advancescreen_setStatsInfo(const sint32 index, const sint32 owner);
 sint32 sci_advancescreen_isOnScreen();
+bool   scieadvancescreen_isGoal(sint32 goal);
+void   sci_advancescreen_initAndFillGoalArray(sint32 goal);
+void   sci_advancescreen_clearGoalArray();
 
 #endif
