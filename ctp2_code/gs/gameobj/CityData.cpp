@@ -11285,6 +11285,7 @@ void CityData::GiveTradeRouteGold()
 				    route.GetSourceResource(type, good);
 					
 				    if(!route->IsBeingPirated()){
+					/*
 					g_player[m_owner]->AddGold(tgold);
 					
 					SlicObject * so = new SlicObject("359TradePassing");
@@ -11296,6 +11297,7 @@ void CityData::GiveTradeRouteGold()
 					so->AddCity(toCity);
 					so->AddCivilisation(fromCity.GetOwner());
 					g_slicEngine->Execute(so);
+					*/
 					}
 				    else { // message that tgold is not earned from transit due to pirating
 					SlicObject * so = new SlicObject("358TradePassingPirated");
