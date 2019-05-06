@@ -74,8 +74,9 @@ AUI_ERRCODE Chart::InitCommon( MBCHAR *ldlBlock )
 	AUI_ERRCODE errcode;
 
 	m_centerButton = NULL;
-	m_left = NULL;
-	m_right = NULL;
+	m_left         = NULL;
+	m_right        = NULL;
+	m_goalText     = NULL;
 
 	for ( i = 0;i < k_MAX_PREREQ; i++ )
 	{
@@ -98,7 +99,7 @@ AUI_ERRCODE Chart::InitCommon( MBCHAR *ldlBlock )
 	{
 		sprintf( block, "%s.%s", ldlBlock, k_CHART_LDL_LEFTIMAGE );
 
-        if (aui_Ldl::GetLdl()->FindDataBlock(block))
+		if (aui_Ldl::GetLdl()->FindDataBlock(block))
 		{
 			m_left = new ctp2_Static(
 				&errcode,
@@ -111,7 +112,7 @@ AUI_ERRCODE Chart::InitCommon( MBCHAR *ldlBlock )
 	{
 		sprintf( block, "%s.%s", ldlBlock, k_CHART_LDL_RIGHTIMAGE );
 
-        if (aui_Ldl::GetLdl()->FindDataBlock( block ) )
+		if (aui_Ldl::GetLdl()->FindDataBlock( block ) )
 		{
 			m_right = new ctp2_Static(
 				&errcode,
@@ -124,7 +125,7 @@ AUI_ERRCODE Chart::InitCommon( MBCHAR *ldlBlock )
 	{
 		sprintf( block, "%s.%s", ldlBlock, k_CHART_LDL_BUTTON );
 
-        if (aui_Ldl::GetLdl()->FindDataBlock( block ) )
+		if (aui_Ldl::GetLdl()->FindDataBlock( block ) )
 		{
 			m_centerButton = new ctp2_Button(
 				&errcode,
@@ -240,6 +241,23 @@ AUI_ERRCODE Chart::InitCommon( MBCHAR *ldlBlock )
 		}
 	}
 
+	if(ldlBlock)
+	{
+		sprintf(block, "%s.%s", ldlBlock, k_CHART_LDL_RESEARCH_GOAL);
+
+		if(aui_Ldl::GetLdl()->FindDataBlock(block))
+		{
+			m_goalText = new ctp2_Static(
+				&errcode,
+				aui_UniqueId(),
+				block);
+
+	//		m_goalText
+			errcode = AddSubControl(m_goalText);
+	//		m_goalText->SetTextFontSize(14);
+		}
+	}
+
 	m_heightBetweenButtons = ( m_height - (m_centerButton->Height() * 4) ) / 5;
 	m_distFromSide = ( (m_width - (m_centerButton->Width() * 3)) / 4 );
 	m_distFromCenter = m_distFromSide;
@@ -269,8 +287,8 @@ Chart::~Chart()
 	delete m_centerButton;
 	delete m_left;
 	delete m_right;
+	delete m_goalText;
 }
-
 
 AUI_ERRCODE Chart::Show()
 {
@@ -459,6 +477,19 @@ sint32 Chart::SetTipInfo( ctp2_Button *button, sint32 index )
 
 AUI_ERRCODE Chart::Update( sint32 index )
 {
+	MBCHAR str[_MAX_PATH];
+	if(g_player[g_selected_item->GetVisiblePlayer()]->m_researchGoal >= 0)
+	{
+		sprintf(str, "%s %s", g_theStringDB->GetNameStr("str_ldl_ResearchGoal"),
+				g_theAdvanceDB->Get(g_player[g_selected_item->GetVisiblePlayer()]->m_researchGoal)->GetNameText());
+	}
+	else
+	{
+		sprintf(str, "%s", g_theStringDB->GetNameStr("str_ldl_ResearchGoal"));
+	}
+	m_goalText->SetText(str);
+	m_goalText->Show();
+
 	sint32 i;
 	const MBCHAR *s;
 
@@ -497,7 +528,6 @@ AUI_ERRCODE Chart::Update( sint32 index )
 
 		if(scieadvancescreen_isGoal(m_preReqIndex[i]))
 		{
-			MBCHAR str[256];
 			sprintf(str, "%s*", g_theAdvanceDB->GetNameStr(m_preReqIndex[i]));
 			m_preReqButton[i]->SetText(str);
 		}
@@ -552,7 +582,6 @@ AUI_ERRCODE Chart::Update( sint32 index )
 	
 		if(scieadvancescreen_isGoal(m_eitherPreReqIndex[i]))
 		{
-			MBCHAR str[256];
 			sprintf(str, "%s*", g_theAdvanceDB->GetNameStr(m_eitherPreReqIndex[i]));
 			m_eitherPreReqButton[i]->SetText(str);
 		}
@@ -649,7 +678,6 @@ AUI_ERRCODE Chart::Update( sint32 index )
 
 		if(scieadvancescreen_isGoal(m_leadsToIndex[i]))
 		{
-			MBCHAR str[256];
 			sprintf(str, "%s*", g_theAdvanceDB->GetNameStr(m_leadsToIndex[i]));
 			m_leadsToButton[i]->SetText(str);
 		}
