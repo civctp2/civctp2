@@ -480,8 +480,11 @@ AUI_ERRCODE Chart::Update( sint32 index )
 	MBCHAR str[_MAX_PATH];
 	if(g_player[g_selected_item->GetVisiblePlayer()]->m_researchGoal >= 0)
 	{
-		sprintf(str, "%s %s", g_theStringDB->GetNameStr("str_ldl_ResearchGoal"),
-				g_theAdvanceDB->Get(g_player[g_selected_item->GetVisiblePlayer()]->m_researchGoal)->GetNameText());
+		sint32 all;
+		sint32 have;
+		sci_advancescreen_getGoalAdvances(have, all);
+		sprintf(str, "%s %s (%d/%d)", g_theStringDB->GetNameStr("str_ldl_ResearchGoal"),
+				g_theAdvanceDB->Get(g_player[g_selected_item->GetVisiblePlayer()]->m_researchGoal)->GetNameText(), have, all);
 	}
 	else
 	{

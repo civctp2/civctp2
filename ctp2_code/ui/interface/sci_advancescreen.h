@@ -24,5 +24,6 @@ sint32 sci_advancescreen_isOnScreen();
 bool   scieadvancescreen_isGoal(sint32 goal);
 void   sci_advancescreen_initAndFillGoalArray(sint32 goal);
 void   sci_advancescreen_clearGoalArray();
+void   sci_advancescreen_getGoalAdvances(sint32 & have, sint32 & all);
 
 #endif

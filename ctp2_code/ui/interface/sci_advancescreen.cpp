@@ -437,9 +437,12 @@ sint32 sci_advancescreen_loadList( void )
 	MBCHAR str[_MAX_PATH];
 	if(p->m_researchGoal >= 0)
 	{
+		sint32 all;
+		sint32 have;
 		sci_advancescreen_initAndFillGoalArray(p->m_researchGoal);
-		sprintf(str,"%s %s",g_theStringDB->GetNameStr("str_ldl_ResearchGoal"),
-			g_theAdvanceDB->Get(p->m_researchGoal)->GetNameText());
+		sci_advancescreen_getGoalAdvances(have, all);
+		sprintf(str,"%s %s (%d/%d)",g_theStringDB->GetNameStr("str_ldl_ResearchGoal"),
+			g_theAdvanceDB->Get(p->m_researchGoal)->GetNameText(), have, all);
 	}
 	else
 	{
@@ -775,4 +778,25 @@ void sci_advancescreen_clearGoalArray()
 bool scieadvancescreen_isGoal(sint32 goal)
 {
 	return s_scienceGoalTree && s_scienceGoalTree[goal];
+}
+
+void sci_advancescreen_getGoalAdvances(sint32 & have, sint32 & all)
+{
+	Player *p = g_player[g_selected_item->GetVisiblePlayer()];
+
+	have = 0;
+	all  = 0;
+
+	for(sint32 i = 0; i < g_theAdvanceDB->NumRecords(); ++i)
+	{
+		if(s_scienceGoalTree[i])
+		{
+			all++;
+
+			if(p->HasAdvance(i))
+			{
+				have++;
+			}
+		}
+	}
 }
