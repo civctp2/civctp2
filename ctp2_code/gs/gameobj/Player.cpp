@@ -7559,12 +7559,17 @@ sint32 Player::GetKnowledgeStrength() const
 
 sint32 Player::GetMilitaryStrength() const
 {
-	sint32 totalCost = 0;
-	for(sint32 i = 0; i < m_all_units->Num(); i++) {
+	sint32 totalStrength = 0;
+	for(sint32 i = 0; i < m_all_units->Num(); i++)
+	{
 		if(m_all_units->Access(i).GetAttack() > 0)
-			totalCost += m_all_units->Access(i).GetShieldCost();
+		{
+			totalStrength += m_all_units->Get(i).GetAttack();
+			totalStrength += m_all_units->Get(i).GetDefense();
+		}
 	}
-	return totalCost / 2;
+
+	return totalStrength;
 }
 
 sint32 Player::GetTradeStrength() const
