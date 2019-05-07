@@ -213,7 +213,6 @@ void Player::BeginTurn()
 		                       GEA_Player, m_owner,
 		                       GEA_End);
 
-		m_strengths->Calculate();
 		if(g_network.IsHost())
 		{
 			g_network.Block(m_owner);
