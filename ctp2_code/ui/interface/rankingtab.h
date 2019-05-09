@@ -77,8 +77,7 @@ private:
 	sint32          m_rankingGold;
 	sint32          m_rankingCities;
 	sint32          m_rankingPopulation;
-	sint32          m_rankingLandArea;
-	sint32          m_rankingSeaArea;
+	sint32          m_rankingArea;
 	sint32          m_rankingUnits;
 	sint32          m_rankingBuildings;
 	sint32          m_rankingWonders;

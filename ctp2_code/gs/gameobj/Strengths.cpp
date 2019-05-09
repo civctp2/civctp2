@@ -157,7 +157,6 @@ sint32 Strengths::GetTurnStrength(STRENGTH_CAT category, sint32 turn) const
 {
 	if (!m_strengthRecords[category].Num()) return 0;
 
-
 	if (turn < 0) turn = m_strengthRecords[category].Num() -1;
 
 	if (turn >= m_strengthRecords[category].Num()) return 0;

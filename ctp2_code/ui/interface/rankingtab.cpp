@@ -109,10 +109,8 @@ RankingTab::RankingTab(ctp2_Window *parent)
 	m_rankingCities = counter++;
 	Add_Dropdown_Category("str_ldl_RANKING_POPULATION");
 	m_rankingPopulation = counter++;
-	Add_Dropdown_Category("str_ldl_RANKING_LAND_AREA");
-	m_rankingLandArea = counter++;
-	Add_Dropdown_Category("str_ldl_RANKING_SEA_AREA");
-	m_rankingSeaArea = counter++;
+	Add_Dropdown_Category("str_ldl_RANKING_AREA");
+	m_rankingArea = counter++;
 	Add_Dropdown_Category("str_ldl_RANKING_UNITS");
 	m_rankingUnits = counter++;
 	Add_Dropdown_Category("str_ldl_RANKING_BUILDINGS");
@@ -242,10 +240,8 @@ void RankingTab::UpdateGraph()
 		category = kRankingCities;
 	else if(category == m_rankingPopulation)
 		category = kRankingPopulation;
-	else if(category == m_rankingLandArea)
+	else if(category == m_rankingArea)
 		category = kRankingGeographical;
-	else if(category == m_rankingSeaArea)
-		category = kRankingUndersea;
 	else if(category == m_rankingUnits)
 		category = kRankingUnits;
 	else if(category == m_rankingBuildings)
