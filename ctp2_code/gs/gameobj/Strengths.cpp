@@ -57,8 +57,10 @@ Strengths::Strengths(sint32 owner)
 	sint32 const	curRound = NewTurnCount::GetCurrentRound();
 
 	sint32 c, y;
-	for(y = 1; y < curRound; y++) {
-		for(c = 0; c < sint32(STRENGTH_CAT_MAX); c++) {
+	for(y = 0; y < curRound; y++)
+	{
+		for(c = 0; c < sint32(STRENGTH_CAT_MAX); c++)
+		{
 			m_strengthRecords[c].Insert(0);
 		}
 	}
