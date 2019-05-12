@@ -122,7 +122,6 @@ GOAL_ATTACK {
   RallyFirst
 
   SquadClass:CanAttack
-  SquadClass:CanCaptureCity
 
   TargetType:AttackUnit
   TargetType:SpecialUnit
@@ -161,7 +160,6 @@ GOAL_HARASS {
   RallyFirst
 
   SquadClass:CanAttack
-  SquadClass:CanBombard
 
   TargetType:AttackUnit
   TargetType:SpecialUnit
@@ -651,10 +649,8 @@ GOAL_HARASS_CITY {
   RallyFirst
 
   SquadClass:CanAttack
-  SquadClass:CanBombard
   SquadClass:CanDefend
   SquadClass:HasZoc
-  SquadClass:CanCaptureCity
 
   TargetType:City
   TargetOwner:HotEnemy
@@ -1017,7 +1013,6 @@ GOAL_ESTABLISH_EMBASSY {
   NeedsEscort
 
   SquadClass:Special
-  SquadClass:Stealth
 
   TargetType:City
   TargetOwner:Ally
@@ -1487,6 +1482,7 @@ GOAL_RETREAT {
   NeedsRoom
   UnGroupFirst
   ExecuteIncrementally
+  InField
 
   SquadClass:CanAttack
   SquadClass:CanDefend
@@ -1517,7 +1513,7 @@ GOAL_RETREAT {
   ThreatenType:None
   ThreatenBonus 0
 
-  // no force matching to retreat
+  // No force matching for retreat
   ForceMatch:Special 
 }
 
@@ -1529,6 +1525,7 @@ GOAL_RETREAT_SPECIAL {
   NeedsRoom
   UnGroupFirst
   ExecuteIncrementally
+  InField
 
   SquadClass:Special
 
@@ -1556,7 +1553,7 @@ GOAL_RETREAT_SPECIAL {
   ThreatenType:None
   ThreatenBonus 0
 
-  // no force matching to retreat
+  // No force matching for retreat
   ForceMatch:Special 
 }
 
@@ -1756,7 +1753,6 @@ GOAL_THROW_PARTY {
   NeedsEscort
 
   SquadClass:Special
-  SquadClass:Stealth
 
   TargetType:City
   TargetOwner:Ally

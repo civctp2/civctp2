@@ -210,16 +210,43 @@ STDEHANDLER(CtpAi_CreateCityEvent)
 void CtpAi::AddGoalsForCitiesAndArmies(const PLAYER_INDEX player)
 {
 	Scheduler & scheduler = Scheduler::GetScheduler(player);
+	const StrategyRecord &strategy = Diplomat::GetDiplomat(player).GetCurrentStrategy();
 
-	for(PLAYER_INDEX foreignerId = 0; foreignerId < CtpAi::s_maxPlayers; foreignerId++)
+	for(GOAL_TYPE goal_type = 0; goal_type < g_theGoalDB->NumRecords(); goal_type++)
 	{
-		Player* player_ptr = g_player[foreignerId];
-		if(player_ptr == NULL)
-			continue;
+		sint16 max_eval = 0;
+		sint16 max_exec = 0;
 
-		for(GOAL_TYPE goal_type = 0; goal_type < g_theGoalDB->NumRecords(); goal_type++)
+		for(sint32 i = 0; i < strategy.GetNumGoalElement(); i++)
 		{
-			GoalRecord const * goal = g_theGoalDB->Get(goal_type);
+			const StrategyRecord::GoalElement* goal_element_ptr = strategy.GetGoalElement(i);
+
+			if(goal_type == goal_element_ptr->GetGoalIndex())
+			{
+				scheduler.GetMaxEvalExec(goal_element_ptr, max_eval, max_exec);
+				break;
+			}
+			else
+			{
+				continue;
+			}
+		}
+
+		if(max_eval <= 0                           // Nothing to evaluate
+		|| max_exec <= 0                           // Nothing to execute
+		|| !scheduler.HasAgentToExecute(goal_type) // No army for execution
+		){
+			scheduler.Remove_Goals_Type(goal_type);
+			continue;
+		}
+
+		GoalRecord const * goal = g_theGoalDB->Get(goal_type);
+
+		for(PLAYER_INDEX foreignerId = 0; foreignerId < CtpAi::s_maxPlayers; foreignerId++)
+		{
+			Player* player_ptr = g_player[foreignerId];
+			if(player_ptr == NULL)
+				continue;
 
 			if
 			  (
@@ -1173,9 +1200,11 @@ void CtpAi::BeginTurn(const PLAYER_INDEX player)
 	DPRINTF(k_DBG_AI, ("//  elapsed time = %d ms\n", (GetTickCount() - t1)));
 
 	GaiaController *gaia_controller = player_ptr->GetGaiaController();
-	if (player_ptr->IsRobot() &&
-		gaia_controller && gaia_controller->CanBuildTowers(false))
-	{
+	if(player_ptr->IsRobot()
+	&& gaia_controller
+	&& gaia_controller->CanBuildTowers(false)
+	&& player_ptr->GetNumCities() >= player_ptr->GetGaiaController()->NumMainframesRequired() // At least we should have enough cities for all Gaia computers
+	){
 		t1 = GetTickCount();
 		DPRINTF(k_DBG_AI, (LOG_SECTION_START));
 		DPRINTF(k_DBG_AI, ("// PLACE ENDGAME INSTALLATIONS -- Turn %d\n", round));
@@ -1731,7 +1760,7 @@ void CtpAi::AddSettleTargets(const PLAYER_INDEX playerId)
 		// Remove any settle goals if we have no units for them
 		if (targets.empty())
 		{
-			scheduler.Remove_Goals_Type(g_theGoalDB->Get(goal_type));
+			scheduler.Remove_Goals_Type(goal_type);
 			continue;
 		}
 
@@ -1771,9 +1800,8 @@ void CtpAi::AddSettleTargets(const PLAYER_INDEX playerId)
 		}
 
 		// Add new settle goals
-		sint32  max_desired_goals   = static_cast<sint32>
-		    (goal_element_ptr->GetMaxEval() - scheduler.CountGoalsOfType(goal_type));
-		sint32  desired_goals       = max_desired_goals;
+		sint32  max_desired_goals = static_cast<sint32>(targets.size());
+		sint32  desired_goals     = max_desired_goals;
 
 		for (SettleMap::SettleTargetList::iterator iter = targets.begin();
 		     iter != targets.end() && (desired_goals > 0);

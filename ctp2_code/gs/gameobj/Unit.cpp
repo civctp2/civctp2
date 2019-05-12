@@ -163,8 +163,8 @@ void Unit::RemoveAllReferences(const CAUSE_REMOVE_ARMY cause, PLAYER_INDEX kille
 			break;
 	}
 
-	DPRINTF(k_DBG_GAMESTATE, ("Unit::RemoveAllReferences: id: 0x%lx\n",
-							  m_id));
+	DPRINTF(k_DBG_GAMESTATE, ("Unit::RemoveAllReferences: id: 0x%lx cause: %d\n",
+	                          m_id, cause));
 	if(g_network.IsActive())
 	{
 		if(g_network.IsHost())
@@ -216,7 +216,7 @@ void Unit::RemoveAllReferences(const CAUSE_REMOVE_ARMY cause, PLAYER_INDEX kille
 	}
 	else
 	{
-		if(GetArmy().IsValid())
+		if(GetArmy().IsValid() && !HasLeftMap())
 		{
 			Assert(false);
 			r = g_theWorld->RemoveUnitReference(pos, *this);
@@ -2468,7 +2468,7 @@ bool Unit::UnitValidForOrder(const OrderRecord * order_rec) const
 	else if(order_rec->GetUnitPretest_CanSellIndulgences())
 		order_valid = unit_rec->HasIndulgenceSales();
 //	else if(order_rec->GetUnitPretest_CanFaithHeal())
-//		order_valid = false;
+//		order_valid = false; // Is sell indulgence
 	else if(order_rec->GetUnitPretest_CanSoothsay())
 		order_valid = unit_rec->HasCanSoothsay();
 	else if(order_rec->GetUnitPretest_CanCreatePark())

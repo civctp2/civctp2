@@ -232,7 +232,7 @@ STRATEGY_DEFAULT {
     GoalElement { Goal GOAL_SLAVE_RAID          Priority   380000  MaxEval   8  MaxExec   6 }
     GoalElement { Goal GOAL_CHOKEPOINT          Priority    -1000  MaxEval   5  MaxExec   1 }
     GoalElement { Goal GOAL_PATROL              Priority     5000  MaxEval   0  MaxExec   3 }
-    GoalElement { Goal GOAL_CONVERT_CITY        Priority   400000  MaxEval   5  MaxExec   3 }
+    GoalElement { Goal GOAL_CONVERT_CITY        Priority   450000  MaxEval   5  MaxExec   3 }
     GoalElement { Goal GOAL_BIOTERROR_CITY      Priority   450000  MaxEval   5  MaxExec   3 }
     GoalElement { Goal GOAL_NANOATTACK_CITY     Priority   450000  MaxEval   5  MaxExec   3 }
     GoalElement { Goal GOAL_HARASS_CITY         Priority    30500  MaxEval   3  MaxExec   1 }
@@ -245,7 +245,7 @@ STRATEGY_DEFAULT {
     GoalElement { Goal GOAL_PLANT_NUKE          Priority   450000  MaxEval   5  MaxExec   3 }
     GoalElement { Goal GOAL_CREATE_PARK         Priority   450000  MaxEval   5  MaxExec   3 }
     GoalElement { Goal GOAL_SOOTHSAY            Priority   450000  MaxEval   5  MaxExec   3 }
-    GoalElement { Goal GOAL_ESTABLISH_EMBASSY   Priority   450000  MaxEval  10  MaxExec   3 }
+    GoalElement { Goal GOAL_ESTABLISH_EMBASSY   Priority   600000  MaxEval  10  MaxExec   5 }
     GoalElement { Goal GOAL_FRANCHISING         Priority   450000  MaxEval   5  MaxExec   3 }
     GoalElement { Goal GOAL_STEAL_TECHNOLOGY    Priority   540000  MaxEval   5  MaxExec   3 }
     GoalElement { Goal GOAL_INVESTIGATE_CITY	Priority        0  MaxEval   5  MaxExec   3 }
@@ -265,10 +265,10 @@ STRATEGY_DEFAULT {
     GoalElement { Goal GOAL_ADVERTISING	        Priority   450000  MaxEval   7  MaxExec   5 } //P1 added
     GoalElement { Goal GOAL_INCITE_UPRISING     Priority   460000  MaxEval   2  MaxExec   1 } //P1 added
     GoalElement { Goal GOAL_POISON_CITY         Priority   460000  MaxEval   7  MaxExec   5 } //P1 added
-    GoalElement { Goal GOAL_THROW_PARTY         Priority   440000  MaxEval   5  MaxExec   3 } //MG added
+    GoalElement { Goal GOAL_THROW_PARTY         Priority   440000  MaxEval   7  MaxExec   4 } //MG added
     GoalElement { Goal GOAL_SUE                 Priority   470000  MaxEval  15  MaxExec   5 } //MG added
-    GoalElement { Goal GOAL_INDULGENCE          Priority   440000  MaxEval  15  MaxExec   7 } //MG added
-    GoalElement { Goal GOAL_FAITH_HEALING       Priority   435000  MaxEval  15  MaxExec   7 } //MG added
+    GoalElement { Goal GOAL_INDULGENCE          Priority   440000  MaxEval   5  MaxExec   3 } //MG added
+    GoalElement { Goal GOAL_FAITH_HEALING       Priority   435000  MaxEval   5  MaxExec   3 } //MG added
     GoalElement { Goal GOAL_REFUEL              Priority   990000  MaxEval  25  MaxExec  25 } //MG added Only Available if aircraft needs to be refueled
     GoalElement { Goal GOAL_PARADROP            Priority   490000  MaxEval   5  MaxExec   3 } //MG added
     GoalElement { Goal GOAL_RANGED_ATTACK       Priority   605000  MaxEval  25  MaxExec   5 } //MG added
@@ -313,6 +313,8 @@ STRATEGY_DEFAULT {
     AirTransportUnitsCount  1
     SlaveryUnitsCount       6
     SpyUnitsCount           3
+    DiplomatUnitsCount      2
+    MissionaryUnitsCount    2
     SpecialUnitsCount       3
 
     // Do not build certain items in cities where if it takes too many turns
@@ -340,6 +342,8 @@ STRATEGY_DEFAULT {
     SpecialUnitList      UNIT_BUILD_LIST_SPECIAL_MILITARIST
     SpyUnitList          UNIT_BUILD_LIST_SPECIAL_SPY
     SlaverUnitList       UNIT_BUILD_LIST_SPECIAL_SLAVERY
+    DiplomatUnitList     UNIT_BUILD_LIST_SPECIAL_DIPLOMACY
+    MissionaryUnitList   UNIT_BUILD_LIST_SPECIAL_MISSIONARY
     FreightUnitList      UNIT_BUILD_LIST_FREIGHT
 
     // minimum number of units to keep in cities as a garrison
@@ -675,6 +679,8 @@ STRATEGY_BARBARIAN {
 	AirTransportUnitsCount 0
 	SlaveryUnitsCount      5
 	SpyUnitsCount          3
+	DiplomatUnitsCount     2
+	MissionaryUnitsCount   2
 	SpecialUnitsCount      2
 
 	// Do not certain items in cities where if it takes too many turns
@@ -845,6 +851,8 @@ STRATEGY_ATTACK {
     AirTransportUnitsCount 4
     SlaveryUnitsCount      5
     SpyUnitsCount          3
+    DiplomatUnitsCount     2
+    MissionaryUnitsCount   2
     SpecialUnitsCount      2
 
     // Types of special units that should be built
@@ -1380,7 +1388,7 @@ STRATEGY_SCIENTIST_DEFAULT {
     GoalElement { Goal GOAL_SLAVE_RAID          Priority   380000  MaxEval   8  MaxExec   6 }
     GoalElement { Goal GOAL_CHOKEPOINT          Priority    -1000  MaxEval   5  MaxExec   1 }
     GoalElement { Goal GOAL_PATROL              Priority     5000  MaxEval   0  MaxExec   3 }
-    GoalElement { Goal GOAL_CONVERT_CITY        Priority   400000  MaxEval   5  MaxExec   3 }
+    GoalElement { Goal GOAL_CONVERT_CITY        Priority   450000  MaxEval   5  MaxExec   3 }
     GoalElement { Goal GOAL_BIOTERROR_CITY      Priority   450000  MaxEval   5  MaxExec   3 }
     GoalElement { Goal GOAL_NANOATTACK_CITY     Priority   450000  MaxEval   5  MaxExec   3 }
     GoalElement { Goal GOAL_HARASS_CITY         Priority      500  MaxEval   3  MaxExec   1 }
@@ -1393,7 +1401,7 @@ STRATEGY_SCIENTIST_DEFAULT {
     GoalElement { Goal GOAL_PLANT_NUKE          Priority   450000  MaxEval   5  MaxExec   3 }
     GoalElement { Goal GOAL_CREATE_PARK         Priority   450000  MaxEval   5  MaxExec   3 }
     GoalElement { Goal GOAL_SOOTHSAY            Priority   450000  MaxEval   5  MaxExec   3 }
-    GoalElement { Goal GOAL_ESTABLISH_EMBASSY   Priority   450000  MaxEval  10  MaxExec   3 }
+    GoalElement { Goal GOAL_ESTABLISH_EMBASSY   Priority   600000  MaxEval  10  MaxExec   5 }
     GoalElement { Goal GOAL_FRANCHISING         Priority   450000  MaxEval   5  MaxExec   3 }
     GoalElement { Goal GOAL_STEAL_TECHNOLOGY    Priority   540000  MaxEval   5  MaxExec   3 }
     GoalElement { Goal GOAL_INVESTIGATE_CITY	Priority        0  MaxEval   5  MaxExec   3 }
@@ -1413,10 +1421,10 @@ STRATEGY_SCIENTIST_DEFAULT {
     GoalElement { Goal GOAL_ADVERTISING		Priority   450000  MaxEval  15  MaxExec   7 } //P1 added
     GoalElement { Goal GOAL_INCITE_UPRISING     Priority   460000  MaxEval   7  MaxExec   4 } //P1 added
     GoalElement { Goal GOAL_POISON_CITY         Priority   460000  MaxEval   7  MaxExec   4 } //P1 added
-    GoalElement { Goal GOAL_THROW_PARTY         Priority   540000  MaxEval  10  MaxExec   5 } //MG added
+    GoalElement { Goal GOAL_THROW_PARTY         Priority   540000  MaxEval   8  MaxExec   5 } //MG added
     GoalElement { Goal GOAL_SUE                 Priority   480000  MaxEval  15  MaxExec   7 } //MG added
-    GoalElement { Goal GOAL_INDULGENCE          Priority   420000  MaxEval  15  MaxExec   7 } //MG added
-    GoalElement { Goal GOAL_FAITH_HEALING       Priority   435000  MaxEval  15  MaxExec   7 } //MG added
+    GoalElement { Goal GOAL_INDULGENCE          Priority   420000  MaxEval   5  MaxExec   3 } //MG added
+    GoalElement { Goal GOAL_FAITH_HEALING       Priority   435000  MaxEval   5  MaxExec   3 } //MG added
     GoalElement { Goal GOAL_REFUEL              Priority   990000  MaxEval  25  MaxExec  25 } //MG added Only Available if aircraft needs to be refueled
     GoalElement { Goal GOAL_PARADROP            Priority   490000  MaxEval   5  MaxExec   3 } //MG added
     GoalElement { Goal GOAL_RANGED_ATTACK       Priority   605000  MaxEval  25  MaxExec   3 } //MG added
@@ -1461,6 +1469,8 @@ STRATEGY_SCIENTIST_DEFAULT {
     AirTransportUnitsCount  2
     SlaveryUnitsCount       6
     SpyUnitsCount           3
+    DiplomatUnitsCount      2
+    MissionaryUnitsCount    2
     SpecialUnitsCount       3
 
     // Do not build certain items in cities where if it takes too many turns
@@ -1488,6 +1498,8 @@ STRATEGY_SCIENTIST_DEFAULT {
     SpecialUnitList      UNIT_BUILD_LIST_SPECIAL_SCIENTIST
     SpyUnitList          UNIT_BUILD_LIST_SPECIAL_SPY
     SlaverUnitList       UNIT_BUILD_LIST_SPECIAL_SLAVERY
+    DiplomatUnitList     UNIT_BUILD_LIST_SPECIAL_DIPLOMACY
+    MissionaryUnitList   UNIT_BUILD_LIST_SPECIAL_MISSIONARY
     FreightUnitList      UNIT_BUILD_LIST_FREIGHT
 
     // minimum number of units to keep in cities as a garrison
@@ -1876,7 +1888,7 @@ STRATEGY_MILITARIST_DEFAULT {
     GoalElement { Goal GOAL_SLAVE_RAID          Priority   380000  MaxEval   8  MaxExec   6 }
     GoalElement { Goal GOAL_CHOKEPOINT          Priority    -1000  MaxEval   5  MaxExec   1 }
     GoalElement { Goal GOAL_PATROL              Priority     5000  MaxEval   0  MaxExec   3 }
-    GoalElement { Goal GOAL_CONVERT_CITY        Priority   400000  MaxEval   5  MaxExec   3 }
+    GoalElement { Goal GOAL_CONVERT_CITY        Priority   450000  MaxEval   5  MaxExec   3 }
     GoalElement { Goal GOAL_BIOTERROR_CITY      Priority   450000  MaxEval   5  MaxExec   3 }
     GoalElement { Goal GOAL_NANOATTACK_CITY     Priority   450000  MaxEval   5  MaxExec   3 }
     GoalElement { Goal GOAL_HARASS_CITY         Priority      500  MaxEval   3  MaxExec   1 }
@@ -1889,7 +1901,7 @@ STRATEGY_MILITARIST_DEFAULT {
     GoalElement { Goal GOAL_PLANT_NUKE          Priority   450000  MaxEval   5  MaxExec   3 }
     GoalElement { Goal GOAL_CREATE_PARK         Priority   450000  MaxEval   5  MaxExec   3 }
     GoalElement { Goal GOAL_SOOTHSAY            Priority   450000  MaxEval   5  MaxExec   3 }
-    GoalElement { Goal GOAL_ESTABLISH_EMBASSY   Priority   450000  MaxEval  10  MaxExec   3 }
+    GoalElement { Goal GOAL_ESTABLISH_EMBASSY   Priority   600000  MaxEval  10  MaxExec   5 }
     GoalElement { Goal GOAL_FRANCHISING         Priority   450000  MaxEval   5  MaxExec   3 }
     GoalElement { Goal GOAL_STEAL_TECHNOLOGY    Priority   540000  MaxEval   5  MaxExec   3 }
     GoalElement { Goal GOAL_INVESTIGATE_CITY	Priority        0  MaxEval   5  MaxExec   3 }
@@ -1909,10 +1921,10 @@ STRATEGY_MILITARIST_DEFAULT {
     GoalElement { Goal GOAL_ADVERTISING		Priority   450000  MaxEval   5  MaxExec   3 } //P1 added
     GoalElement { Goal GOAL_INCITE_UPRISING     Priority   460000  MaxEval   2  MaxExec   1 } //P1 added
     GoalElement { Goal GOAL_POISON_CITY         Priority   460000  MaxEval   2  MaxExec   1 } //P1 added
-    GoalElement { Goal GOAL_THROW_PARTY         Priority   540000  MaxEval   5  MaxExec   3 } //MG added
+    GoalElement { Goal GOAL_THROW_PARTY         Priority   540000  MaxEval   8  MaxExec   5 } //MG added
     GoalElement { Goal GOAL_SUE                 Priority   570000  MaxEval  25  MaxExec  15 } //MG added
-    GoalElement { Goal GOAL_INDULGENCE          Priority   470000  MaxEval  15  MaxExec  15 } //MG added
-    GoalElement { Goal GOAL_FAITH_HEALING       Priority   465000  MaxEval  15  MaxExec  15 } //MG added
+    GoalElement { Goal GOAL_INDULGENCE          Priority   470000  MaxEval   5  MaxExec   3 } //MG added
+    GoalElement { Goal GOAL_FAITH_HEALING       Priority   465000  MaxEval   5  MaxExec   3 } //MG added
     GoalElement { Goal GOAL_REFUEL              Priority   990000  MaxEval  25  MaxExec  25 } //MG added Only Available if aircraft needs to be refueled
     GoalElement { Goal GOAL_PARADROP            Priority   490000  MaxEval   5  MaxExec   3 } //MG added
     GoalElement { Goal GOAL_RANGED_ATTACK       Priority   605000  MaxEval  25  MaxExec   5 } //MG added
@@ -1957,6 +1969,8 @@ STRATEGY_MILITARIST_DEFAULT {
     AirTransportUnitsCount  2
     SlaveryUnitsCount       6
     SpyUnitsCount           3
+    DiplomatUnitsCount      2
+    MissionaryUnitsCount    2
     SpecialUnitsCount       3
 
     // Do not build certain items in cities where if it takes too many turns
@@ -1984,6 +1998,8 @@ STRATEGY_MILITARIST_DEFAULT {
     SpecialUnitList      UNIT_BUILD_LIST_SPECIAL_MILITARIST
     SpyUnitList          UNIT_BUILD_LIST_SPECIAL_SPY
     SlaverUnitList       UNIT_BUILD_LIST_SPECIAL_SLAVERY
+    DiplomatUnitList     UNIT_BUILD_LIST_SPECIAL_DIPLOMACY
+    MissionaryUnitList   UNIT_BUILD_LIST_SPECIAL_MISSIONARY
     FreightUnitList      UNIT_BUILD_LIST_FREIGHT
 
     // minimum number of units to keep in cities as a garrison
@@ -2380,7 +2396,7 @@ STRATEGY_ECONOMIC_DEFAULT {
     GoalElement { Goal GOAL_SLAVE_RAID          Priority   380000  MaxEval   8  MaxExec   6 }
     GoalElement { Goal GOAL_CHOKEPOINT          Priority    -1000  MaxEval   5  MaxExec   1 }
     GoalElement { Goal GOAL_PATROL              Priority     5000  MaxEval   0  MaxExec   3 }
-    GoalElement { Goal GOAL_CONVERT_CITY        Priority   400000  MaxEval   5  MaxExec   3 }
+    GoalElement { Goal GOAL_CONVERT_CITY        Priority   450000  MaxEval   5  MaxExec   3 }
     GoalElement { Goal GOAL_BIOTERROR_CITY      Priority   450000  MaxEval   5  MaxExec   3 }
     GoalElement { Goal GOAL_NANOATTACK_CITY     Priority   450000  MaxEval   5  MaxExec   3 }
     GoalElement { Goal GOAL_HARASS_CITY         Priority      500  MaxEval   3  MaxExec   1 }
@@ -2393,7 +2409,7 @@ STRATEGY_ECONOMIC_DEFAULT {
     GoalElement { Goal GOAL_PLANT_NUKE          Priority   450000  MaxEval   5  MaxExec   3 }
     GoalElement { Goal GOAL_CREATE_PARK         Priority   450000  MaxEval   5  MaxExec   3 }
     GoalElement { Goal GOAL_SOOTHSAY            Priority   450000  MaxEval   5  MaxExec   3 }
-    GoalElement { Goal GOAL_ESTABLISH_EMBASSY   Priority   450000  MaxEval  10  MaxExec   3 }
+    GoalElement { Goal GOAL_ESTABLISH_EMBASSY   Priority   600000  MaxEval  10  MaxExec   5 }
     GoalElement { Goal GOAL_FRANCHISING         Priority   550000  MaxEval   5  MaxExec   3 }
     GoalElement { Goal GOAL_STEAL_TECHNOLOGY    Priority   540000  MaxEval   5  MaxExec   3 }
     GoalElement { Goal GOAL_INVESTIGATE_CITY	Priority        0  MaxEval   5  MaxExec   3 }
@@ -2413,10 +2429,10 @@ STRATEGY_ECONOMIC_DEFAULT {
     GoalElement { Goal GOAL_ADVERTISING		Priority   450000  MaxEval  25  MaxExec  15 } //P1 added
     GoalElement { Goal GOAL_INCITE_UPRISING     Priority   460000  MaxEval   2  MaxExec   1 } //P1 added
     GoalElement { Goal GOAL_POISON_CITY         Priority   460000  MaxEval   2  MaxExec   1 } //P1 added
-    GoalElement { Goal GOAL_THROW_PARTY         Priority   440000  MaxEval   5  MaxExec   3 } //MG added
+    GoalElement { Goal GOAL_THROW_PARTY         Priority   440000  MaxEval   8  MaxExec   5 } //MG added
     GoalElement { Goal GOAL_SUE                 Priority   455000  MaxEval  25  MaxExec  15 } //MG added
-    GoalElement { Goal GOAL_INDULGENCE          Priority   454000  MaxEval  25  MaxExec  15 } //MG added
-    GoalElement { Goal GOAL_FAITH_HEALING       Priority   575000  MaxEval  25  MaxExec  15 } //MG added
+    GoalElement { Goal GOAL_INDULGENCE          Priority   454000  MaxEval   5  MaxExec   3 } //MG added
+    GoalElement { Goal GOAL_FAITH_HEALING       Priority   575000  MaxEval   5  MaxExec   3 } //MG added
     GoalElement { Goal GOAL_REFUEL              Priority   990000  MaxEval  25  MaxExec  25 } //MG added Only Available if aircraft needs to be refueled
     GoalElement { Goal GOAL_PARADROP            Priority   490000  MaxEval   5  MaxExec   3 } //MG added
     GoalElement { Goal GOAL_RANGED_ATTACK       Priority   609000  MaxEval  25  MaxExec   3 } //MG added
@@ -2461,6 +2477,8 @@ STRATEGY_ECONOMIC_DEFAULT {
     AirTransportUnitsCount  2
     SlaveryUnitsCount       6
     SpyUnitsCount           3
+    DiplomatUnitsCount      2
+    MissionaryUnitsCount    2
     SpecialUnitsCount       3
 
     // Do not build certain items in cities where if it takes too many turns
@@ -2488,6 +2506,8 @@ STRATEGY_ECONOMIC_DEFAULT {
     SpecialUnitList      UNIT_BUILD_LIST_SPECIAL_ECONOMIC
     SpyUnitList          UNIT_BUILD_LIST_SPECIAL_SPY
     SlaverUnitList       UNIT_BUILD_LIST_SPECIAL_SLAVERY
+    DiplomatUnitList     UNIT_BUILD_LIST_SPECIAL_DIPLOMACY
+    MissionaryUnitList   UNIT_BUILD_LIST_SPECIAL_MISSIONARY
     FreightUnitList      UNIT_BUILD_LIST_FREIGHT
 
     // minimum number of units to keep in cities as a garrison
@@ -2875,7 +2895,7 @@ STRATEGY_ECOTOPIAN_DEFAULT {
     GoalElement { Goal GOAL_SLAVE_RAID          Priority   380000  MaxEval   8  MaxExec   6 }
     GoalElement { Goal GOAL_CHOKEPOINT          Priority    -1000  MaxEval   5  MaxExec   1 }
     GoalElement { Goal GOAL_PATROL              Priority     5000  MaxEval   0  MaxExec   3 }
-    GoalElement { Goal GOAL_CONVERT_CITY        Priority   400000  MaxEval   5  MaxExec   3 }
+    GoalElement { Goal GOAL_CONVERT_CITY        Priority   450000  MaxEval   5  MaxExec   3 }
     GoalElement { Goal GOAL_BIOTERROR_CITY      Priority   450000  MaxEval   5  MaxExec   3 }
     GoalElement { Goal GOAL_NANOATTACK_CITY     Priority   450000  MaxEval   5  MaxExec   3 }
     GoalElement { Goal GOAL_HARASS_CITY         Priority      500  MaxEval   3  MaxExec   1 }
@@ -2888,7 +2908,7 @@ STRATEGY_ECOTOPIAN_DEFAULT {
     GoalElement { Goal GOAL_PLANT_NUKE          Priority   450000  MaxEval   5  MaxExec   3 }
     GoalElement { Goal GOAL_CREATE_PARK         Priority   450000  MaxEval   5  MaxExec   3 }
     GoalElement { Goal GOAL_SOOTHSAY            Priority   450000  MaxEval   5  MaxExec   3 }
-    GoalElement { Goal GOAL_ESTABLISH_EMBASSY   Priority   450000  MaxEval  10  MaxExec   3 }
+    GoalElement { Goal GOAL_ESTABLISH_EMBASSY   Priority   600000  MaxEval  10  MaxExec   5 }
     GoalElement { Goal GOAL_FRANCHISING         Priority   450000  MaxEval   5  MaxExec   3 }
     GoalElement { Goal GOAL_STEAL_TECHNOLOGY    Priority   540000  MaxEval   5  MaxExec   3 }
     GoalElement { Goal GOAL_INVESTIGATE_CITY	Priority        0  MaxEval   5  MaxExec   3 }
@@ -2906,12 +2926,12 @@ STRATEGY_ECOTOPIAN_DEFAULT {
     GoalElement { Goal GOAL_DESTROY_ENDGAME     Priority   450000  MaxEval  20  MaxExec   5 }
     GoalElement { Goal GOAL_PROTECT_ENDGAME     Priority   460000  MaxEval  30  MaxExec  15 }
     GoalElement { Goal GOAL_ADVERTISING		Priority   450000  MaxEval  10  MaxExec   5 } //P1 added
-    GoalElement { Goal GOAL_INCITE_UPRISING     Priority   460000  MaxEval   2  MaxExec   1 } //P1 added
+    GoalElement { Goal GOAL_INCITE_UPRISING     Priority   460000  MaxEval   4  MaxExec   2 } //P1 added
     GoalElement { Goal GOAL_POISON_CITY         Priority   460000  MaxEval   2  MaxExec   1 } //P1 added
-    GoalElement { Goal GOAL_THROW_PARTY         Priority   540000  MaxEval   5  MaxExec   3 } //MG added
+    GoalElement { Goal GOAL_THROW_PARTY         Priority   540000  MaxEval   7  MaxExec   4 } //MG added
     GoalElement { Goal GOAL_SUE                 Priority   470000  MaxEval  10  MaxExec   5 } //MG added
-    GoalElement { Goal GOAL_INDULGENCE          Priority   440000  MaxEval  10  MaxExec   7 } //MG added
-    GoalElement { Goal GOAL_FAITH_HEALING       Priority   445000  MaxEval  15  MaxExec   7 } //MG added
+    GoalElement { Goal GOAL_INDULGENCE          Priority   440000  MaxEval   5  MaxExec   3 } //MG added
+    GoalElement { Goal GOAL_FAITH_HEALING       Priority   445000  MaxEval   5  MaxExec   3 } //MG added
     GoalElement { Goal GOAL_REFUEL              Priority   990000  MaxEval  25  MaxExec  25 } //MG added Only Available if aircraft needs to be refueled
     GoalElement { Goal GOAL_PARADROP            Priority   490000  MaxEval   5  MaxExec   3 } //MG added
     GoalElement { Goal GOAL_RANGED_ATTACK       Priority   606000  MaxEval  25  MaxExec   3 } //MG added
@@ -2956,6 +2976,8 @@ STRATEGY_ECOTOPIAN_DEFAULT {
     AirTransportUnitsCount  2
     SlaveryUnitsCount       6
     SpyUnitsCount           3
+    DiplomatUnitsCount      2
+    MissionaryUnitsCount    2
     SpecialUnitsCount       3
 
     // Do not build certain items in cities where if it takes too many turns
@@ -2983,6 +3005,8 @@ STRATEGY_ECOTOPIAN_DEFAULT {
     SpecialUnitList      UNIT_BUILD_LIST_SPECIAL_ECOTOPIAN
     SpyUnitList          UNIT_BUILD_LIST_SPECIAL_SPY
     SlaverUnitList       UNIT_BUILD_LIST_SPECIAL_SLAVERY
+    DiplomatUnitList     UNIT_BUILD_LIST_SPECIAL_DIPLOMACY
+    MissionaryUnitList   UNIT_BUILD_LIST_SPECIAL_MISSIONARY
     FreightUnitList      UNIT_BUILD_LIST_FREIGHT
 
     // minimum number of units to keep in cities as a garrison
@@ -3370,7 +3394,7 @@ STRATEGY_DIPLOMATIC_DEFAULT {
     GoalElement { Goal GOAL_SLAVE_RAID          Priority   380000  MaxEval   8  MaxExec   3 }
     GoalElement { Goal GOAL_CHOKEPOINT          Priority    -1000  MaxEval   5  MaxExec   1 }
     GoalElement { Goal GOAL_PATROL              Priority     5000  MaxEval   0  MaxExec   3 }
-    GoalElement { Goal GOAL_CONVERT_CITY        Priority   400000  MaxEval   5  MaxExec   3 }
+    GoalElement { Goal GOAL_CONVERT_CITY        Priority   450000  MaxEval   5  MaxExec   3 }
     GoalElement { Goal GOAL_BIOTERROR_CITY      Priority   450000  MaxEval   5  MaxExec   3 }
     GoalElement { Goal GOAL_NANOATTACK_CITY     Priority   450000  MaxEval   5  MaxExec   3 }
     GoalElement { Goal GOAL_HARASS_CITY         Priority      500  MaxEval   3  MaxExec   1 }
@@ -3383,7 +3407,7 @@ STRATEGY_DIPLOMATIC_DEFAULT {
     GoalElement { Goal GOAL_PLANT_NUKE          Priority   450000  MaxEval   5  MaxExec   3 }
     GoalElement { Goal GOAL_CREATE_PARK         Priority   450000  MaxEval   5  MaxExec   3 }
     GoalElement { Goal GOAL_SOOTHSAY            Priority   450000  MaxEval   5  MaxExec   3 }
-    GoalElement { Goal GOAL_ESTABLISH_EMBASSY   Priority   750000  MaxEval  10  MaxExec   3 }
+    GoalElement { Goal GOAL_ESTABLISH_EMBASSY   Priority   750000  MaxEval  10  MaxExec   5 }
     GoalElement { Goal GOAL_FRANCHISING         Priority   450000  MaxEval   5  MaxExec   3 }
     GoalElement { Goal GOAL_STEAL_TECHNOLOGY    Priority   540000  MaxEval   5  MaxExec   3 }
     GoalElement { Goal GOAL_INVESTIGATE_CITY	Priority        0  MaxEval   5  MaxExec   3 }
@@ -3400,10 +3424,10 @@ STRATEGY_DIPLOMATIC_DEFAULT {
     GoalElement { Goal GOAL_RETREAT_SPECIAL     Priority  -600000  MaxEval  10  MaxExec   5 PerCity}
     GoalElement { Goal GOAL_DESTROY_ENDGAME     Priority   450000  MaxEval  20  MaxExec   5 }
     GoalElement { Goal GOAL_PROTECT_ENDGAME     Priority   460000  MaxEval  30  MaxExec  15 }
-    GoalElement { Goal GOAL_ADVERTISING		Priority   450000  MaxEval  15  MaxExec   7 } //P1 added
+    GoalElement { Goal GOAL_ADVERTISING         Priority   450000  MaxEval  15  MaxExec   7 } //P1 added
     GoalElement { Goal GOAL_INCITE_UPRISING     Priority   460000  MaxEval   2  MaxExec   1 } //P1 added
     GoalElement { Goal GOAL_POISON_CITY         Priority   460000  MaxEval   2  MaxExec   1 } //P1 added
-    GoalElement { Goal GOAL_THROW_PARTY         Priority   740000  MaxEval  10  MaxExec   5 } //MG added
+    GoalElement { Goal GOAL_THROW_PARTY         Priority   740000  MaxEval   8  MaxExec   5 } //MG added
     GoalElement { Goal GOAL_SUE                 Priority   430000  MaxEval   5  MaxExec   3 } //MG added
     GoalElement { Goal GOAL_INDULGENCE          Priority   440000  MaxEval   5  MaxExec   3 } //MG added
     GoalElement { Goal GOAL_FAITH_HEALING       Priority   435000  MaxEval   5  MaxExec   3 } //MG added
@@ -3451,6 +3475,8 @@ STRATEGY_DIPLOMATIC_DEFAULT {
     AirTransportUnitsCount  2
     SlaveryUnitsCount       5
     SpyUnitsCount           2
+    DiplomatUnitsCount      2
+    MissionaryUnitsCount    2
     SpecialUnitsCount       3
 
     // Do not build certain items in cities where if it takes too many turns
@@ -3478,6 +3504,8 @@ STRATEGY_DIPLOMATIC_DEFAULT {
     SpecialUnitList      UNIT_BUILD_LIST_SPECIAL_DIPLOMATIC
     SpyUnitList          UNIT_BUILD_LIST_SPECIAL_SPY
     SlaverUnitList       UNIT_BUILD_LIST_SPECIAL_ANTISLAVERY
+    DiplomatUnitList     UNIT_BUILD_LIST_SPECIAL_DIPLOMACY
+    MissionaryUnitList   UNIT_BUILD_LIST_SPECIAL_MISSIONARY
     FreightUnitList      UNIT_BUILD_LIST_FREIGHT
 
     // minimum number of units to keep in cities as a garrison
@@ -3557,7 +3585,7 @@ STRATEGY_DIPLOMATIC_DEFAULT {
         Priority 11000
         BuildListSequence BUILD_LIST_SEQUENCE_WONDERS_DIPLOMATIC
         MinNumUnits 2
-	MinNumCities 4
+        MinNumCities 4
         Top 0.1
         ProductionCities
         Advice BUILD_WONDERS_ADVICE

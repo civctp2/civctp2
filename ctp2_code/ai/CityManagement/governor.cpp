@@ -1582,7 +1582,11 @@ void Governor::PlaceTileImprovements()
 				continue;
 
 			if(cell->GetNumImprovements() > 0)
-					continue;
+				continue;
+
+			if(g_theInstallationTree->GetCount(it.Pos()) > 0
+			&& g_theWorld->GetCell(it.Pos())->GetTerrainType() != terrainutil_GetDead())
+				continue;
 
 			if(FindBestTileImprovement(it.Pos(), ti_goal, bonusFood, bonusProduction, bonusCommerce))
 			{
@@ -1910,12 +1914,11 @@ bool Governor::FindBestTileImprovement(const MapPoint &pos, TiGoal &goal, sint32
 	// Now at the end because otherwise it catches before the dead tiles
 	else if(!g_theWorld->IsGood(pos))
 	{ // Should be removed
-		ERR_BUILD_INST err;
 		if(terrain_type == terrainutil_GetGlacier()
 		|| terrain_type == terrainutil_GetSwamp()
 		|| terrain_type == terrainutil_GetTundra()
 		){
-			if(player_ptr->CanCreateImprovement(terrainutil_GetTerraformHillsImprovement(), pos, 0, FALSE, err))
+			if(player_ptr->CanCreateImprovement(terrainutil_GetTerraformHillsImprovement(), pos, false))
 			{
 				strategy.GetImproveProductionBonus(bonus);
 				goal.utility =  bonus * (1.0-production_rank);
@@ -1924,7 +1927,7 @@ bool Governor::FindBestTileImprovement(const MapPoint &pos, TiGoal &goal, sint32
 		}
 		else if(terrain_type == terrainutil_GetDesert())
 		{
-			if(player_ptr->CanCreateImprovement(terrainutil_GetTerraformGrasslandImprovement(), pos, 0, FALSE, err)){
+			if(player_ptr->CanCreateImprovement(terrainutil_GetTerraformGrasslandImprovement(), pos, false)){
 				strategy.GetImproveGrowthBonus(bonus);
 				goal.utility =  bonus * (1.0-growth_rank);
 				goal.type = terrainutil_GetTerraformGrasslandImprovement();
@@ -2001,8 +2004,7 @@ sint32 Governor::GetBestRoadImprovement(const MapPoint & pos) const
 		return -1;
 
 	Player *player_ptr = g_player[m_playerId];
-	ERR_BUILD_INST err;
-	if (player_ptr && !player_ptr->CanCreateImprovement(terr_imp_rec->GetIndex(), pos, 0, FALSE, err))
+	if (player_ptr && !player_ptr->CanCreateImprovement(terr_imp_rec->GetIndex(), pos, false))
 	    return -1;
 
 	sint32 const old_move_cost = static_cast<sint32>(cell->GetMoveCost());
@@ -2100,9 +2102,8 @@ void Governor::GetBestFoodProdGoldImprovement(const MapPoint & pos, sint32 & foo
 	for (type = 0; type < g_theTerrainImprovementDB->NumRecords(); type++)
 	{
 		rec = g_theTerrainImprovementDB->Get(type);
-		ERR_BUILD_INST err;
 
-		if (!player_ptr->CanCreateImprovement(type, pos, 0, FALSE, err))
+		if (!player_ptr->CanCreateImprovement(type, pos, false))
 			continue;
 
 		if (current_class != 0x0 && ((rec->GetClass() & current_class) == 0x0))
@@ -3573,6 +3574,16 @@ void Governor::ComputeDesiredUnits()
 				strategy.GetSpecialUnitsCount(desired_count);
 			break;
 
+		case BUILD_UNIT_LIST_DIPLOMAT:
+			if(!strategy.GetDiplomatUnitsCount(desired_count))
+				strategy.GetSpecialUnitsCount(desired_count);
+			break;
+
+		case BUILD_UNIT_LIST_MISSIONARY:
+			if(!strategy.GetMissionaryUnitsCount(desired_count))
+				strategy.GetSpecialUnitsCount(desired_count);
+			break;
+
 		case BUILD_UNIT_LIST_SPECIAL:
 			strategy.GetSpecialUnitsCount(desired_count);
 			break;
@@ -3690,6 +3701,8 @@ void Governor::ComputeDesiredUnits()
 
 		case BUILD_UNIT_LIST_SLAVERY:
 		case BUILD_UNIT_LIST_SPY:
+		case BUILD_UNIT_LIST_DIPLOMAT:
+		case BUILD_UNIT_LIST_MISSIONARY:
 		case BUILD_UNIT_LIST_SPECIAL:
 		case BUILD_UNIT_LIST_FREIGHT:
 			if (best_unit_type >= 0)
@@ -3867,7 +3880,8 @@ void Governor::FillEmptyBuildQueues(bool noWarChange)
 				// Reconsider AI production at the start of a war
 				city->GetBuildQueue()->Clear();
 			}
-			else
+			else if(city->GetBuildQueue()->GetHead()->m_category != k_GAME_OBJ_TYPE_CAPITALIZATION
+			     && city->GetBuildQueue()->GetHead()->m_category != k_GAME_OBJ_TYPE_INFRASTRUCTURE)
 			{
 				// Keep using the current build queue
 				continue;
@@ -3881,6 +3895,20 @@ void Governor::FillEmptyBuildQueues(bool noWarChange)
 
 		if (!city->GetUseGovernor() || (CTPRecord::INDEX_INVALID == type))
 			continue;
+
+		if(city->GetBuildQueue()->GetLen() > 0)
+		{
+			if(city->GetBuildQueue()->GetHead()->m_category == k_GAME_OBJ_TYPE_CAPITALIZATION
+			&&                                     cat      == k_GAME_OBJ_TYPE_CAPITALIZATION)
+				continue;
+
+			if(city->GetBuildQueue()->GetHead()->m_category == k_GAME_OBJ_TYPE_INFRASTRUCTURE
+			&&                                     cat      == k_GAME_OBJ_TYPE_INFRASTRUCTURE)
+				continue;
+
+			if(city->GetBuildQueue()->GetLen() > 1) // There is already something after cap/inf, it is needed because, we insert new stuff before stuff was build this turn.
+				continue;
+		}
 
 		bool insert_ok = false;
 		switch (cat)
@@ -3898,12 +3926,12 @@ void Governor::FillEmptyBuildQueues(bool noWarChange)
 			break;
 		case k_GAME_OBJ_TYPE_CAPITALIZATION:
 			insert_ok = true;
-//			city->InsertCapitalization(); // How is Capitalization removed?
+			city->InsertCapitalization();
 			city->BuildCapitalization();
 			break;
 		case k_GAME_OBJ_TYPE_INFRASTRUCTURE:
 			insert_ok = true;
-//			city->InsertInfrastructure(); // How is Infrastructure removed?
+			city->InsertInfrastructure();
 			city->BuildInfrastructure();
 			break;
 		}
@@ -3951,6 +3979,8 @@ StringId Governor::GetUnitsAdvice(SlicContext & sc) const
 		|| static_cast<BUILD_UNIT_LIST>(i) == BUILD_UNIT_LIST_SEA_SETTLER
 		|| static_cast<BUILD_UNIT_LIST>(i) == BUILD_UNIT_LIST_SLAVERY
 		|| static_cast<BUILD_UNIT_LIST>(i) == BUILD_UNIT_LIST_SPY
+		|| static_cast<BUILD_UNIT_LIST>(i) == BUILD_UNIT_LIST_DIPLOMAT
+		|| static_cast<BUILD_UNIT_LIST>(i) == BUILD_UNIT_LIST_MISSIONARY
 		|| static_cast<BUILD_UNIT_LIST>(i) == BUILD_UNIT_LIST_SPECIAL
 		|| static_cast<BUILD_UNIT_LIST>(i) == BUILD_UNIT_LIST_SEA_TRANSPORT
 		|| static_cast<BUILD_UNIT_LIST>(i) == BUILD_UNIT_LIST_AIR_TRANSPORT
@@ -4343,6 +4373,8 @@ sint32 Governor::GetNeededUnitType(const CityData *city, sint32 & list_num) cons
 		    || static_cast<BUILD_UNIT_LIST>(list_num) == BUILD_UNIT_LIST_SEA_SETTLER
 		    || static_cast<BUILD_UNIT_LIST>(list_num) == BUILD_UNIT_LIST_SLAVERY
 		    || static_cast<BUILD_UNIT_LIST>(list_num) == BUILD_UNIT_LIST_SPY
+		    || static_cast<BUILD_UNIT_LIST>(list_num) == BUILD_UNIT_LIST_DIPLOMAT
+		    || static_cast<BUILD_UNIT_LIST>(list_num) == BUILD_UNIT_LIST_MISSIONARY
 		    || static_cast<BUILD_UNIT_LIST>(list_num) == BUILD_UNIT_LIST_SPECIAL
 		    || static_cast<BUILD_UNIT_LIST>(list_num) == BUILD_UNIT_LIST_SEA_TRANSPORT
 		    || static_cast<BUILD_UNIT_LIST>(list_num) == BUILD_UNIT_LIST_AIR_TRANSPORT
@@ -4420,6 +4452,8 @@ sint32 Governor::GetNeededUnitType(const CityData *city, sint32 & list_num) cons
 			  (
 			       static_cast<BUILD_UNIT_LIST>(list_num) == BUILD_UNIT_LIST_SLAVERY
 			    || static_cast<BUILD_UNIT_LIST>(list_num) == BUILD_UNIT_LIST_SPY
+			    || static_cast<BUILD_UNIT_LIST>(list_num) == BUILD_UNIT_LIST_DIPLOMAT
+			    || static_cast<BUILD_UNIT_LIST>(list_num) == BUILD_UNIT_LIST_MISSIONARY
 			    || static_cast<BUILD_UNIT_LIST>(list_num) == BUILD_UNIT_LIST_SPECIAL
 			  )
 			{
@@ -4496,6 +4530,14 @@ const UnitBuildListRecord * Governor::GetBuildListRecord(const StrategyRecord & 
 	case BUILD_UNIT_LIST_SPY:
 //		Assert(strategy.HasSpyUnitList());
 		return strategy.HasSpyUnitList() ? strategy.GetSpyUnitListPtr() : NULL;
+
+	case BUILD_UNIT_LIST_DIPLOMAT:
+//		Assert(strategy.HasDiplomatUnitList());
+		return strategy.HasDiplomatUnitList() ? strategy.GetDiplomatUnitListPtr() : NULL;
+
+	case BUILD_UNIT_LIST_MISSIONARY:
+		//		Assert(strategy.HasDiplomatUnitList());
+		return strategy.HasMissionaryUnitList() ? strategy.GetMissionaryUnitListPtr() : NULL;
 
 	case BUILD_UNIT_LIST_SPECIAL:
 		Assert(strategy.HasSpecialUnitList());
@@ -4661,6 +4703,7 @@ sint32 Governor::GetNeededGarrisonUnitType(const CityData * city, sint32 & list_
 			  (
 			   (    static_cast<BUILD_UNIT_LIST>(list_num) == BUILD_UNIT_LIST_SLAVERY
 			     || static_cast<BUILD_UNIT_LIST>(list_num) == BUILD_UNIT_LIST_SPY
+			     || static_cast<BUILD_UNIT_LIST>(list_num) == BUILD_UNIT_LIST_DIPLOMAT
 			     || static_cast<BUILD_UNIT_LIST>(list_num) == BUILD_UNIT_LIST_SPECIAL
 			   )
 			   && garrisonComplete > build_settler_production_level
@@ -4701,6 +4744,7 @@ sint32 Governor::GetNeededGarrisonUnitType(const CityData * city, sint32 & list_
 			    || static_cast<BUILD_UNIT_LIST>(list_num) == BUILD_UNIT_LIST_SEA_SETTLER
 			    || static_cast<BUILD_UNIT_LIST>(list_num) == BUILD_UNIT_LIST_SLAVERY
 			    || static_cast<BUILD_UNIT_LIST>(list_num) == BUILD_UNIT_LIST_SPY
+			    || static_cast<BUILD_UNIT_LIST>(list_num) == BUILD_UNIT_LIST_DIPLOMAT
 			    || static_cast<BUILD_UNIT_LIST>(list_num) == BUILD_UNIT_LIST_SPECIAL
 			  )
 			{
@@ -4764,20 +4808,24 @@ sint32 Governor::GetNeededGarrisonUnitType(const CityData * city, sint32 & list_
 	return type;
 }
 
-sint32 Governor::GetNeededBuildingType(const CityData *city, const BuildingBuildListRecord *build_list_rec ) const
+sint32 Governor::GetNeededBuildingType(const CityData *city, const BuildingBuildListRecord *build_list_rec) const
 {
 	Assert(city);
+
+	bool shouldNotBuildGaiaController = g_player[m_playerId]->GetNumCities() < g_player[m_playerId]->GetGaiaController()->NumMainframesRequired();
 
 	for (sint32 i = 0; i < build_list_rec->GetNumBuilding(); i++)
 	{
 		sint32 const building_type = build_list_rec->GetBuildingIndex(i);
 
 		if(GaiaController::IsSatellite(building_type)
-		&& g_player[m_playerId]->GetGaiaController()->HasMaxSatsBuilt())
+		&&(shouldNotBuildGaiaController
+		|| g_player[m_playerId]->GetGaiaController()->HasMaxSatsBuilt()))
 			continue;
 
 		if(GaiaController::IsMainframeBuilding(building_type)
-		&& g_player[m_playerId]->GetGaiaController()->HasMinCoresBuilt())
+		&&(shouldNotBuildGaiaController
+		|| g_player[m_playerId]->GetGaiaController()->HasMinCoresBuilt()))
 			continue;
 
 		if ( city->CanBuildBuilding(building_type) )

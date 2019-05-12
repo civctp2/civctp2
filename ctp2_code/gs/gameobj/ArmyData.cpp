@@ -144,7 +144,6 @@
 #include "c3.h"
 #include "ArmyData.h"
 
-#include "advanceutil.h"
 #include "Agreement.h"
 #include "AgreementMatrix.h"
 #include "AgreementPool.h"
@@ -2704,7 +2703,7 @@ ORDER_RESULT ArmyData::CauseUnhappiness(const MapPoint &point,
 bool ArmyData::CanPlantNuke(double &chance, double &escape_chance,
 							sint32 &uindex) const
 {
-	if ( !g_player[m_owner]->m_advances->HasAdvance(advanceutil_GetNukeAdvance()))
+	if ( !g_player[m_owner]->CanUseNukes())
 		return false;
 
 	const UnitRecord::PlantNukeData *data;
@@ -2740,7 +2739,7 @@ bool ArmyData::CanPlantNuke(double &chance, double &escape_chance,
 //----------------------------------------------------------------------------
 bool ArmyData::CanPlantNuke(double &chance, double &escape_chance) const
 {
-	if ( !g_player[m_owner]->m_advances->HasAdvance(advanceutil_GetNukeAdvance()))
+	if(!g_player[m_owner]->CanUseNukes())
 		return false;
 
 	const UnitRecord::PlantNukeData *data;
@@ -4602,9 +4601,8 @@ ORDER_RESULT ArmyData::Launch(Order *order)
 	if(!destCity.IsValid() || destCity.GetOwner() != m_owner)
 		return ORDER_RESULT_ILLEGAL;
 
-	if(m_nElements > 1) {
-
-
+	if(m_nElements > 1)
+	{
 		m_array[uindex]->CreateOwnArmy();
 	}
 
@@ -4676,6 +4674,7 @@ ORDER_RESULT ArmyData::ClearTarget()
 
 void ArmyData::SetReentry(sint32 turns, MapPoint &pos)
 {
+	Assert(g_theWorld->HasCity(pos));
 	m_reentryTurn = NewTurnCount::GetCurrentRound() + turns;
 	m_reentryPos = pos;
 	m_flags |= k_CULF_IN_SPACE;
@@ -6137,6 +6136,8 @@ void ArmyData::AddOrders(UNIT_ORDER_TYPE order, Path *path, const MapPoint &poin
 {
 	if(g_player[m_owner]->IsRobot() && !m_addOrdersAI)
 	{
+		delete path;
+
 		return;
 	}
 
@@ -6187,6 +6188,8 @@ void ArmyData::AddOrders(UNIT_ORDER_TYPE order, Path *path, const MapPoint &poin
 
 		m_orders->AddTail(attackOrder);
 		execute = false;
+
+		Assert(path == NULL); // We do not do anything with the path, so we should not have one, otherwise we have a memory leak
 	}
 	else
 	{
@@ -6740,7 +6743,7 @@ void ArmyData::CheckLoadSleepingCargoFromCity(Order *order)
 	&& !terrainutil_HasAirfield(m_pos))
 		return;
 
-	if(cell->UnitArmy()->Num() < 1)
+	if(cell->GetNumUnits() < 1)
 		return;
 
 	for(sint32 i = 0; i < m_nElements; i++)
@@ -7487,7 +7490,7 @@ void ArmyData::UpdateZOCForMove(const MapPoint &pos, WORLD_DIRECTION d)
 	if(cell->GetCity().IsValid()) {
 		doneRemoving = true;
 	} else {
-		for(i = cell->UnitArmy()->Num() - 1; i >= 0; i--) {
+		for(i = cell->GetNumUnits() - 1; i >= 0; i--) {
 
 			if(cell->AccessUnit(i).GetArmy() != me &&
 			   !cell->AccessUnit(i).IsNoZoc()) {
@@ -10282,7 +10285,7 @@ bool ArmyData::TestOrderAll(const OrderRecord *order_rec) const
 
 	if(order_rec->GetUnitPretest_CanPlantNuke())
 	{
-		if (!g_player[m_owner]->m_advances->HasAdvance(advanceutil_GetNukeAdvance()))
+		if (!g_player[m_owner]->CanUseNukes())
 			return false;
 	}
 
@@ -10297,7 +10300,7 @@ bool ArmyData::TestOrderAll(const OrderRecord *order_rec) const
 			return true;
 		}
 
-		orderValid = orderValid && m_array[i].UnitValidForOrder(order_rec);
+		orderValid &= m_array[i].UnitValidForOrder(order_rec);
 	}
 
 	return orderValid;
@@ -10322,7 +10325,7 @@ bool ArmyData::TestOrderAll(const OrderRecord *order_rec) const
 bool ArmyData::TestOrderAny(OrderRecord const * order_rec) const
 {
 	if (order_rec->GetUnitPretest_CanPlantNuke() &&
-		!g_player[m_owner]->m_advances->HasAdvance(advanceutil_GetNukeAdvance())
+	    !g_player[m_owner]->CanUseNukes()
 	   )
 	{
 		return false;
@@ -10346,7 +10349,7 @@ bool ArmyData::TestOrderAny(OrderRecord const * order_rec) const
 bool ArmyData::TestCargoOrderAny(OrderRecord const * order_rec) const
 {
 	if (order_rec->GetUnitPretest_CanPlantNuke() &&
-		!g_player[m_owner]->m_advances->HasAdvance(advanceutil_GetNukeAdvance())
+	    !g_player[m_owner]->CanUseNukes()
 	   )
 	{
 		return false;
@@ -10738,38 +10741,37 @@ void ArmyData::PerformOrderHere(const OrderRecord * order_rec, const Path * path
 	}
 
 	sint32 min_rge, max_rge=0;
-	MapPoint move_pos = m_pos;//move_pos will become a position to move to if trying to bombard out of range
-	Path *move_path = tmp_path;//copy tmp_path
-	if (strcmp (order_rec->GetEventName(),"BombardOrder") == 0)
+	MapPoint move_pos = m_pos; // move_pos will become a position to move to if trying to bombard out of range
+	if (strcmp (order_rec->GetEventName(),"BombardOrder") == 0) // Should it really be like this? Actually, this belongs into the BombardEvent, which probably should just be given when we are in range.
 	{
 		if(GetBombardRange(min_rge, max_rge))
 		{
 			sint32 dist = m_pos.NormalizedDistance(target_pos);
-			if(dist > max_rge)
-			{//target is out of range
-				for(sint32 i=0;i<moves;i++)
-				{//find a position in tmp_path to move to
-
+			if(dist > max_rge) // The target is out of range
+			{
+				for(sint32 i = 0; i < moves; i++) // Find a position in tmp_path to move to
+				{
 					DPRINTF(k_DBG_FILE, ("move_pos (%d,%d), target_pos (%d,%d), NormalizedDistance %d, i %d\n",
-					                     move_pos.x, move_pos.y, target_pos.x, target_pos.y, dist, i));
+										 move_pos.x, move_pos.y, target_pos.x, target_pos.y, dist, i));
 					tmp_path->IncDir();
 					tmp_path->GetCurrentPoint(move_pos);
 					dist = move_pos.NormalizedDistance(target_pos);
 
-					if(dist <= max_rge)
-					{ //we're now within range
+					if(dist <= max_rge) // We're now within range
+					{
 						DPRINTF(k_DBG_FILE, ("\n found move_pos: we're now within range\n"));
-						tmp_path->Start(m_pos);//reset tmp_path
-						for(sint32 j=1; j<moves-i; j++)
-						{//shorten move_path to end at move_pos
-							move_path->SnipEnd();
+						tmp_path->Start(m_pos); // Reset tmp_path
+
+						for(sint32 j = 1; j < moves - i; j++) // Shorten move_path to end at move_pos
+						{
+							tmp_path->SnipEnd();
 						}
-						i=moves;//exit the loop and continue
+
+						break; // Exit the loop and continue
 					}
 				}
 			}
-			//else bombard now?
-			else
+			else // Bombard now?
 			{
 				g_gevManager->AddEvent(priority,
 				                       static_cast<GAME_EVENT>(game_event),
@@ -10788,6 +10790,7 @@ void ArmyData::PerformOrderHere(const OrderRecord * order_rec, const Path * path
 			moves--;
 		}
 	}
+
 	g_gevManager->Pause();
 	//insert order's game_event here
 	if (game_event > 0)
@@ -10810,37 +10813,42 @@ void ArmyData::PerformOrderHere(const OrderRecord * order_rec, const Path * path
 			                      );
 		}
 	}
+
 	//insert GEV_MoveOrder here, i.e., move adjacent to target pos or within bombarding range of target pos
 	if(tmp_path->GetMovesRemaining() > 0
 	&& !order_rec->GetIsTeleport()
 	&& !order_rec->GetIsTarget()
 	){
-		if(max_rge)
-		{//max_rge >0 implys BombardOrder and army has bombarding units
+		if(max_rge > 0) // max_rge > 0 implys BombardOrder and army has bombarding units
+		{
 			double cur_move_pts;
 			CurMinMovementPoints(cur_move_pts);
 
 			DPRINTF(k_DBG_FILE, ("army 0x%lx, cur_move_pts=%f, move_pos=<%d,%d>\n",m_id,cur_move_pts,move_pos.x,move_pos.y));
 
-			if(move_pos != m_pos)
-			{//then first move army to move_pos
+			if(move_pos != m_pos) // Then first move army to move_pos
+			{
 
 				g_gevManager->AddEvent(priority,
 				                       GEV_MoveOrder,
 				                       GEA_Army, Army(m_id),
-				                       GEA_Path, move_path,
+				                       GEA_Path, tmp_path,
 				                       GEA_MapPoint, move_pos,
 				                       GEA_Int, (game_event == -1),
 				                       GEA_End
 				                      );
 			}
+			else
+			{
+				delete tmp_path;
+			}
 			// Bombard target_pos
-			// Nothing to do here since order has been already given.
+			// Nothing to do here since the order has been already given.
 
 		}
-		else
-		{//not a bombard order
-			g_gevManager->AddEvent(priority,                     // Only for cargo movement
+		else // Not a bombard order
+		{
+			g_gevManager->AddEvent(priority,
 			                       GEV_MoveOrder,
 			                       GEA_Army, Army(m_id),
 			                       GEA_Path, tmp_path,

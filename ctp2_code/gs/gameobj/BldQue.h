@@ -168,7 +168,7 @@ public:
 	void ReplaceHead(sint32 cat, sint32 item_type, sint32 cost);
 	void Serialize(CivArchive &archive) ;
 
-	BuildNode *GetHead(void);
+	BuildNode *GetHead(void) const;
 	PointerList<BuildNode> *GetList() const { return m_list; }
 
 	void ResetOwner(sint32 new_owner);

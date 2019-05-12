@@ -432,9 +432,6 @@ public:
 	void RegisterLostUnits(sint32 nUnits, const MapPoint &pos,
 	                       const DEATH_EFFECT_MORALE mtype);
 
-	void GroupArmy(Army &army);
-	void UngroupArmy(Army &army);
-
 	void GetArmyPos(sint32 index, MapPoint &army_pos);
 
 	bool Settle      (Army &settle_army);
@@ -448,8 +445,6 @@ public:
 	void WakeUp(sint32 idx);
 
 	sint32 GetCheapestMilitaryUnit();
-	void InsertArmy(const MapPoint &point, const Unit &home_city,
-	                Army &army, CAUSE_NEW_ARMY cause);
 
 	void BeginTurnPollution(void) ;
 	void EndTurnPollution(void) ;
@@ -573,11 +568,6 @@ public:
 	void RequestOfferPactCaptureCity(const PLAYER_INDEX recipient, Unit &city) ;
 	void RequestOfferPactEndPollution(const PLAYER_INDEX recipient) ;
 
-
-
-
-
-
 	void RequestExchangeAdvance(const PLAYER_INDEX recipient, AdvanceType &advance, AdvanceType &desired_advance) ;
 	void RequestExchangeCity(const PLAYER_INDEX recipient, Unit &offerCity, Unit &wantCity) ;
 	void RequestExchangeMap(const PLAYER_INDEX recipient) ;
@@ -598,12 +588,11 @@ public:
 	DynamicArray<Message> *GetMessages(void) const { return (m_messages) ; }
 	void NotifyModalMessageDestroyed();
 
-
+	bool CanUseNukes() const;
 	bool HasAdvance(AdvanceType adv) const;
 	sint32 NumAdvances();
 	double GetPollutionSizeModifier(void) const;
 	double GetPollutionProductionModifier(void) const;
-	uint32 RoadAdvanceLevel() const;
 	void SetCityRoads();
 #ifdef _DEBUG
 	void DisplayAdvances() ;
@@ -661,9 +650,7 @@ public:
 
 	bool CanCreateImprovement(sint32 type,
 	                          const MapPoint &point,
-	                          sint32 extraData,
-	                          const bool check_materials,
-	                          ERR_BUILD_INST &err);
+	                          const bool check_materials);
 	TerrainImprovement CreateImprovement(sint32 dbIndex, MapPoint const & point,
 										 sint32 extraData);
 	TerrainImprovement CreateSpecialImprovement(sint32 dbIndex, MapPoint const & point,

@@ -569,9 +569,7 @@ bool Agent::Can_Execute_Order(const sint32 & order_type) const
 {
 	const OrderRecord *order = g_theOrderDB->Get(order_type);
 
-	bool can_execute =  m_army->TestOrderAll(order);
-
-	return can_execute;
+	return m_army->TestOrderAll(order);
 }
 
 void Agent::Execute_Order(const sint32 & order_type, const MapPoint & target_pos)

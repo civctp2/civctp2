@@ -4922,35 +4922,34 @@ void CityData::TryToBuild()
 	{
 		AddShieldsToBuilding();
 		const GovernmentRecord *grec = g_theGovernmentDB->Get(g_player[m_owner]->m_government_type);
-		if
-		  (
-		      m_buildCapitalization
-		   && m_build_queue.GetHead()
-		   && m_build_queue.GetHead()->m_category == k_GAME_OBJ_TYPE_CAPITALIZATION
-		  )
+
+		if(IsBuildingCapitalization())
 		{
 			m_gold_from_capitalization = sint32(ceil(double(m_shieldstore) * grec->GetCapitalizationCoefficient()));
 			m_shieldstore = 0;
 			m_build_category_at_begin_turn = -1;
+
+			if(m_build_queue.GetLen() > 1) // Remove if we have more in the list
+			{
+				m_build_queue.RemoveHead();
+			}
 		}
-		else if
-		  (
-		      m_buildInfrastructure
-		   && m_build_queue.GetHead()
-		   && m_build_queue.GetHead()->m_category == k_GAME_OBJ_TYPE_INFRASTRUCTURE
-		  )
+		else if(IsBuildingInfrastructure())
 		{
 			m_pw_from_infrastructure = sint32(ceil(double(m_shieldstore) * grec->GetInfrastructureCoefficient()));
 			g_player[m_owner]->m_materialPool->AddMaterials(m_pw_from_infrastructure);
 			m_shieldstore = 0;
 			m_build_category_at_begin_turn = -2;
+
+			if(m_build_queue.GetLen() > 1) // Remove if we have more in the list
+			{
+				m_build_queue.RemoveHead();
+			}
 		}
 		else
 		{
-			m_buildCapitalization = false;
 			m_gold_from_capitalization = 0;
 
-			m_buildInfrastructure = false;
 			m_pw_from_infrastructure = 0;
 
 			g_gevManager->AddEvent(GEV_INSERT_AfterCurrent,
@@ -5054,8 +5053,8 @@ bool CityData::BeginTurn()
 	}
 
 	if(!m_build_queue.GetHead()
-	&& !m_buildCapitalization
-	&& !m_buildInfrastructure
+	&& !IsBuildingCapitalization()
+	&& !IsBuildingInfrastructure()
 	&& !m_sentInefficientMessageAlready
 	){
 		SlicObject *so = new SlicObject("37CityQueueIsEmpty");
@@ -5210,12 +5209,8 @@ void CityData::CheckRiot()
 
 bool CityData::BuildUnit(sint32 type)
 {
-
 	if(!CanBuildUnit(type))
 		return false;
-
-	m_buildInfrastructure = false;
-	m_buildCapitalization = false;
 
 	if(g_network.IsClient() && g_network.IsLocalPlayer(m_owner))
 	{
@@ -5256,9 +5251,6 @@ bool CityData::BuildImprovement(sint32 type)
 	Assert(CanBuildBuilding(type));
 	if(!CanBuildBuilding(type))
 		return false;
-
-	m_buildInfrastructure = false;
-	m_buildCapitalization = false;
 
 	if(g_network.IsClient() && g_network.IsLocalPlayer(m_owner)) {
 		g_network.SendAction(new NetAction(NET_ACTION_BUILD_IMP, type,
@@ -5319,9 +5311,6 @@ bool CityData::BuildWonder(sint32 type)
 #endif
 		return false;
 	}
-
-	m_buildInfrastructure = false;
-	m_buildCapitalization = false;
 
 	if(g_network.IsClient() && g_network.IsLocalPlayer(m_owner)) {
 		g_network.SendAction(new NetAction(NET_ACTION_BUILD_WONDER,
@@ -5419,9 +5408,6 @@ void CityData::AddWonder(sint32 type)
 // Not used.
 bool CityData::ChangeCurrentlyBuildingItem(sint32 category, sint32 item_type)
 {
-	m_buildInfrastructure = false;
-	m_buildCapitalization = false;
-
 	if(g_network.IsClient() && g_network.IsLocalPlayer(m_owner)) {
 		g_network.SendAction(new NetAction(NET_ACTION_CHANGE_BUILD,
 										   (uint32)m_home_city, category,
@@ -6699,7 +6685,7 @@ bool CityData::BuyFront()
 		return false;
 
 	// * Can't rush buy capitalization/infrastructure
-	if(m_buildInfrastructure || m_buildCapitalization)
+	if(IsBuildingInfrastructure() || IsBuildingCapitalization())
 		return false;
 
 	//cant rush wonders?
@@ -7863,6 +7849,7 @@ bool CityData::IsCelebratingHappiness(void) const { return (m_happy->IsVeryHappy
 
 void CityData::HappinessAttackedBy(sint32 player)
 {
+	Assert(player < k_MAX_PLAYERS);
 	m_happinessAttackedBy = player;
 }
 
@@ -8094,12 +8081,6 @@ bool CityData::CanBuildInfrastructure() const
 	return g_player[m_owner]->CanBuildInfrastructure();
 }
 
-void CityData::StopInfrastructureCapitalization()
-{
-	m_buildInfrastructure = false;
-	m_buildCapitalization = false;
-}
-
 void CityData::InsertInfrastructure()
 {
 	Assert(CanBuildInfrastructure());
@@ -8131,10 +8112,6 @@ void CityData::BuildInfrastructure()
 		g_network.Enqueue(new NetInfo(NET_INFO_CODE_BUILD_INFRASTRUCTURE, m_home_city));
 		g_network.Unblock(m_owner);
 	}
-
-	m_buildInfrastructure = true;
-	m_buildCapitalization = false;
-
 }
 
 bool CityData::CanBuildCapitalization() const
@@ -8155,9 +8132,6 @@ void CityData::BuildCapitalization()
 		g_network.Enqueue(new NetInfo(NET_INFO_CODE_BUILD_CAPITALIZATION, m_home_city));
 		g_network.Unblock(m_owner);
 	}
-	m_buildInfrastructure = false;
-	m_buildCapitalization = true;
-
 }
 
 void CityData::EliminateNukes()
@@ -8715,7 +8689,7 @@ void CityData::ChangePopulation(sint32 delta)
 	if(m_population <= 0) {
 		g_gevManager->AddEvent(GEV_INSERT_Tail, GEV_KillCity,
 		                       GEA_City, m_home_city.m_id,
-		                       GEA_Int, CAUSE_REMOVE_CITY_UNKNOWN,
+		                       GEA_Int, CAUSE_REMOVE_CITY_NO_PEOPLE,
 		                       GEA_Player, PLAYER_UNASSIGNED,
 		                       GEA_End);
 	}
@@ -8935,12 +8909,7 @@ void CityData::InsertBuildItem(sint32 index, uint32 category, sint32 type)
 		InsertBuildItem(-1, category, type);
 		return;
 	}
-	if(index == 0
-	&& category != k_GAME_OBJ_TYPE_CAPITALIZATION
-	&& category != k_GAME_OBJ_TYPE_INFRASTRUCTURE
-	){
-		StopInfrastructureCapitalization();
-	}
+
 	m_build_queue.InsertBefore(node, category, type);
 }
 
@@ -11456,6 +11425,16 @@ void CityData::AddCitySlum()
 			}
 		}
 	}
+}
+
+bool CityData::IsBuildingCapitalization() const
+{
+	return m_build_queue.GetHead() != NULL && m_build_queue.GetHead()->m_category == k_GAME_OBJ_TYPE_CAPITALIZATION;
+}
+
+bool CityData::IsBuildingInfrastructure() const
+{
+	return m_build_queue.GetHead() != NULL && m_build_queue.GetHead()->m_category == k_GAME_OBJ_TYPE_INFRASTRUCTURE;
 }
 
 bool CityData::IsCoastal() const

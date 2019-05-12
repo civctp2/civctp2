@@ -282,8 +282,8 @@ private:
 	bool              m_terrainImprovementWasBuilt;
 	bool              m_improvementWasBuilt;
 	bool              m_isInjoined;
-	bool              m_buildInfrastructure;
-	bool              m_buildCapitalization;
+	bool              m_buildInfrastructure; // Unused, can be replace in size of BOOL for saving
+	bool              m_buildCapitalization; // Unused, can be replace in size of BOOL for saving
 	bool              m_paidForBuyFront;
 	bool              m_garrisonComplete;
 	bool              m_useGovernor;
@@ -727,9 +727,8 @@ public:
 	bool CanBuildCapitalization() const;
 	void BuildInfrastructure();
 	bool CanBuildInfrastructure() const;
-	bool IsBuildingCapitalization() { return m_buildCapitalization; }
-	bool IsBuildingInfrastructure() { return m_buildInfrastructure; }
-	void StopInfrastructureCapitalization();
+	bool IsBuildingCapitalization() const;
+	bool IsBuildingInfrastructure() const;
 	void EliminateNukes();
 
 	void KillAllTradeRoutes();

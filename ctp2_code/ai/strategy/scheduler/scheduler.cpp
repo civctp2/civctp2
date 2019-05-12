@@ -383,6 +383,10 @@ void Scheduler::Process_Agent_Changes()
 			Remove_Matches_For_Agent(theAgent);
 			Add_New_Matches_For_Agent(theAgent);
 		}
+		else
+		{
+			Remove_Invalid_Matches_For_Agent(theAgent);
+		}
 
 		theAgent->Get_Army()->SetAICanAddOrders();
 
@@ -1042,9 +1046,9 @@ Scheduler::Sorted_Goal_Iter Scheduler::Remove_Goal(const Scheduler::Sorted_Goal_
 //  called by CtpAi::AddSettleTargets
 //
 ////////////////////////////////////////////////////////////
-void Scheduler::Remove_Goals_Type(const GoalRecord *rec)
+void Scheduler::Remove_Goals_Type(const GOAL_TYPE & type)
 {
-	Sorted_Goal_List & goalList = m_goals_of_type[rec->GetIndex()];
+	Sorted_Goal_List & goalList = m_goals_of_type[type];
 	for
 	(
 	    Sorted_Goal_Iter sorted_goal_iter  = goalList.begin();
@@ -1389,8 +1393,6 @@ bool Scheduler::Prune_Goals()
 
 		GOAL_TYPE goal_type = GetMaxEvalExec(goal_element_ptr, max_eval, max_exec);
 
-//		max_eval = m_goals_of_type[goal_type].size(); // Temporary, maybe permanetly
-
 		Sorted_Goal_Iter pruned_goal_iter = m_goals_of_type[goal_type].end();
 		Sorted_Goal_Iter goal_ptr_iter    = m_goals_of_type[goal_type].begin();
 
@@ -1434,9 +1436,9 @@ bool Scheduler::Prune_Goals()
 			{
 				if(goal_ptr->Get_Matches_Num() == 0)
 				{
-		//			Assert(false);
-		//			Add_New_Matches_For_Goal(goal_ptr);
-					goal_ptr->Copy_Insert_Matches(m_generic_goals[goal_type]);
+					Add_New_Matches_For_Goal(goal_ptr);
+					goal_ptr->Sort_Matches_If_Necessary();
+					goal_ptr->Recompute_Matching_Value();
 				}
 
 				m_goals.push_back(goal_ptr);
@@ -1495,6 +1497,7 @@ void Scheduler::Add_New_Matches_For_Goal
 {
 	GOAL_TYPE   type             = goal_ptr->Get_Goal_Type();
 	SQUAD_CLASS goal_squad_class = g_theGoalDB->Get(type)->GetSquadClass();
+	bool hasInField = g_theGoalDB->Get(type)->GetInField();
 
 	for
 	(
@@ -1505,6 +1508,12 @@ void Scheduler::Add_New_Matches_For_Goal
 	{
 		Agent* agent = (*agent_iter);
 		if((goal_squad_class & agent->Get_Squad_Class()) != goal_squad_class)
+			continue;
+
+		if(!agent->Get_Army()->TestOrderAny(g_theGoalDB->Get(type)->GetExecute()))
+			continue;
+
+		if(hasInField && g_theWorld->HasCity(agent->Get_Army()->RetPos()))
 			continue;
 
 		goal_ptr->Add_Match(agent, update_match_value);
@@ -1535,6 +1544,9 @@ void Scheduler::Add_New_Matches_For_Agent
 		if((goal_squad_class & squad_class) != goal_squad_class)
 			continue;
 
+		if(g_theGoalDB->Get(i)->GetInField() && g_theWorld->HasCity(agent->Get_Army()->RetPos()))
+			continue;
+
 		for
 		(
 		    Sorted_Goal_Iter goal_iter  = goal_list.begin();
@@ -1560,10 +1572,7 @@ void Scheduler::Remove_Matches_For_Goal
 	goal_ptr->Remove_Matches();
 }
 
-void Scheduler::Remove_Matches_For_Agent
-(
-    const Agent_ptr & agent
-)
+void Scheduler::Remove_Matches_For_Agent(const Agent_ptr & agent)
 {
 	for(sint32 i = 0; i < g_theGoalDB->NumRecords(); i++)
 	{
@@ -1575,8 +1584,30 @@ void Scheduler::Remove_Matches_For_Agent
 		                     goal_iter != goal_list.end();
 		                   ++goal_iter
 		){
-
 			goal_iter->second->Remove_Match(agent);
+		}
+	}
+}
+
+void Scheduler::Remove_Invalid_Matches_For_Agent
+(
+    const Agent_ptr & agent
+)
+{
+	for(sint32 i = 0; i < g_theGoalDB->NumRecords(); i++)
+	{
+		if(g_theGoalDB->Get(i)->GetInField() && g_theWorld->HasCity(agent->Get_Army()->RetPos()))
+		{
+			Sorted_Goal_List & goal_list = m_goals_of_type[i];
+
+			for
+			(
+			    Sorted_Goal_Iter goal_iter  = goal_list.begin();
+			                     goal_iter != goal_list.end();
+			                   ++goal_iter
+			){
+				goal_iter->second->Remove_Match(agent);
+			}
 		}
 	}
 }
@@ -1735,6 +1766,31 @@ GOAL_TYPE Scheduler::GetMaxEvalExec(const StrategyRecord::GoalElement *goal_elem
 	max_exec = (sint16) floor(tmp_exec);
 
 	return goal_type;
+}
+
+bool Scheduler::HasAgentToExecute(const GOAL_TYPE & type) const
+{
+	const OrderRecord *order = g_theGoalDB->Get(type)->GetExecute();
+
+	for
+	(
+	    Agent_List::const_iterator agent_iter  = m_agents.begin();
+	                               agent_iter != m_agents.end();
+	                             ++agent_iter
+	)
+	{
+		Agent* agent = (*agent_iter);
+
+		if(agent->Get_Is_Dead()) // We haven't removed those, yet.
+			continue;
+
+		if(agent->Get_Army()->TestOrderAny(order))
+		{
+			return true;
+		}
+	}
+
+	return false;
 }
 
 void Scheduler::DisbandObsoleteArmies(const sint16 max_count)
@@ -2137,7 +2193,7 @@ void Scheduler::PrintAllGoals() const
 	AI_DPRINTF(k_DBG_SCHEDULER, m_playerId, -1, -1,
 		("Number of goals in goal database: %d\n", g_theGoalDB->NumRecords()));
 	AI_DPRINTF(k_DBG_SCHEDULER, m_playerId, -1, -1,
-		("Goals for player %d: %d\n", m_playerId, m_goals.size()));
+		("Current goals for player %d: %d\n", m_playerId, m_goals.size()));
 	AI_DPRINTF(k_DBG_SCHEDULER, m_playerId, -1, -1, ("\n"));
 
 	Sorted_Goal_Iter sorted_goal_iter;

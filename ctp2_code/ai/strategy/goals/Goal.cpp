@@ -1806,15 +1806,17 @@ Utility Goal::Compute_Agent_Matching_Value(const Agent_ptr agent_ptr) const
 
 	if(!agent_ptr->Get_Army()->HasCargo())
 	{
-		if((!g_theWorld->IsOnSameContinent(dest_pos, curr_pos) // Same continent problem
-		&&  !agent_ptr->Get_Army()->GetMovementTypeAir()
-		&&   g_player[m_playerId]->GetCargoCapacity() <= 0)
-		|| (!g_theGoalDB->Get(m_goal_type)->GetTargetOwnerSelf()
-		&&  !g_theWorld->HasAdjacentFreeLand(dest_pos, m_playerId)
-		&&   g_theWorld->GetCell(dest_pos)->GetNumUnits() > 0
-		&&  !agent_ptr->Get_Army()->CanBeachAssault())
-		){
-			return Goal::BAD_UTILITY;
+		if(!g_theWorld->IsOnSameContinent(dest_pos, curr_pos)) // Same continent problem
+		{
+			if((!agent_ptr->Get_Army()->GetMovementTypeAir()
+			&&   g_player[m_playerId]->GetCargoCapacity() <= 0)
+			|| (!g_theGoalDB->Get(m_goal_type)->GetTargetOwnerSelf()
+			&&  !g_theWorld->HasAdjacentFreeLand(dest_pos, m_playerId)
+			&&   g_theWorld->GetCell(dest_pos)->GetNumUnits() > 0
+			&&  !agent_ptr->Get_Army()->CanBeachAssault())
+			){
+				return Goal::BAD_UTILITY;
+			}
 		}
 	}
 	else
@@ -2619,6 +2621,12 @@ bool Goal::IsInvalidByDiplomacy() const
 
 		if(player_ptr->HasContactWith(target_owner))
 		{
+			if(!goal_record->GetTargetOwnerHotEnemy()
+			&&  player_ptr->HasWarWith(target_owner))
+			{
+				return true;
+			}
+
 			bool iscivilian = false;
 			if(
 			       m_target_army.m_id != 0
@@ -2833,17 +2841,17 @@ bool Goal::IsTargetImmune() const
 	}
 
 	// Just exchanges the player, at that size you should conquer
-	// @ToDo adapt for players that have the give city wonder and that have not
+	// @ToDo adapt for players that have the give city wonder and are not at the city limit
 	// @ToDo adapt if no new civ is created but Barbarians.
 	if(order_record->GetUnitPretest_CanInciteRevolution())
 	{
-		if(g_player[m_playerId] ->GetNumCities() == 1)
+		if(g_player[target_owner]->GetNumCities() == 1)
 			return true;
 	}
 
 	if(order_record->GetUnitPretest_CanPlantNuke())
 	{
-		if(!g_player[m_playerId]->HasAdvance(advanceutil_GetNukeAdvance()))
+		if(!g_player[m_playerId]->CanUseNukes())
 			return true;
 	}
 
@@ -3219,8 +3227,9 @@ bool Goal::Pretest_Bid(const Agent_ptr agent_ptr, const MapPoint & target_pos) c
 			return true;
 	}
 
-	bool needs_land_unit  = goal_rec->GetTargetTypeCity();
+	bool needs_land_unit  = goal_rec->GetTargetTypeCity() && !m_target_city.CD()->IsCoastal();
 	     needs_land_unit &= goal_rec->GetTargetOwnerSelf();
+//	     needs_land_unit &= !m_target_city.CD()->IsCoastal(); // This is evaluated, even if needs_land_unit is false
 	     needs_land_unit |= goal_rec->GetTargetTypeGoodyHut();
 
 	uint32 movement_type  = army->GetMovementType();
@@ -3451,6 +3460,10 @@ bool Goal::FollowPathToTask( Agent_ptr first_army,
 			test = first_army->Get_Army()->TestOrderHere(order_rec, dest_pos );
 		}
 	}
+//	else if(m_sub_task == SUB_TASK_CARGO_TO_BOARD)
+//	{
+//		order_rec = CtpAi::GetBoardTransportOrder();
+//	}
 	else
 	{
 		order_rec = CtpAi::GetMoveOrder();
@@ -3897,6 +3910,16 @@ bool Goal::GotoGoalTaskSolution(Agent_ptr the_army, MapPoint & goal_pos)
 	{
 		// There is still a problem with air transporters
 		return true;
+	}
+	else if ( the_army->Get_Army()->HasCargo()
+	     &&   the_army->Get_Army()->GetMovementTypeAir()
+	     &&   the_army->Get_Army()->RetPos().IsNextTo(goal_pos)
+	     &&   goal_rec->GetTargetTypeCity()
+	     &&   goal_rec->GetTargetOwnerSelf()
+	     &&   g_theWorld->IsOnSameContinent(goal_pos, the_army->Get_Pos())
+	     &&   the_army->Get_Army()->Num() + g_theWorld->GetCell(goal_pos)->GetNumUnits() > k_MAX_ARMY_SIZE)
+	{
+		the_army->UnloadCargo();
 	}
 	else
 	{
@@ -4364,7 +4387,7 @@ bool Goal::RallyTroops()
 
 	Squad_Strength strength = m_current_attacking_strength;
 
-	Assert(rallyPos != Get_Target_Pos(rallyAgent->Get_Army()));
+//	Assert(rallyPos != Get_Target_Pos(rallyAgent->Get_Army())); // Actually a valid situation, for choke points
 
 	sint32 unitsAtRallyPos = (rallyPos == rallyAgent->Get_Pos()) ? rallyAgent->GetUnitsAtPos() : rallyAgent->Get_Army()->Num();
 

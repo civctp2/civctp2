@@ -121,6 +121,20 @@ BOOL TerrainImprovementData::Complete(void)
 	if(!g_player[m_owner])
 		return TRUE;
 
+	DynamicArray<Installation>	instArray;
+	if(g_theInstallationTree->GetAt(m_point, instArray))
+	{
+		for(sint32 i = instArray.Num() - 1; i >= 0; i--)
+		{
+			const TerrainImprovementRecord *oldRec =
+				g_theTerrainImprovementDB->Get(instArray[i].GetType());
+			if(oldRec->GetClass() & rec->GetExcludes())
+			{
+				instArray[i].Kill();
+			}
+		}
+	}
+
 	if (terrainutil_IsInstallation(m_type))
 	{
 		g_player[m_owner]->CreateInstallation( m_type, m_point );

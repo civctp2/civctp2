@@ -540,9 +540,6 @@ void Diplomat::Load(CivArchive & archive)
 
 	archive >> count;
 
-	// That's actually OK for dead player
-	Assert(count == CtpAi::s_maxPlayers);
-
 	if (count > CtpAi::s_maxPlayers)
 	{
 		Resize(count);
