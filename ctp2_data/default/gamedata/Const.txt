@@ -390,4 +390,4 @@ CAPTURED_CITY_KILL_POP   1  # when a city is captured this number of the populat
 # Like veteran by zeroed out, possible for mods
 COMBAT_ELITE_CHANCE 0.00 
 COMBAT_LEADER_CHANCE 0.00 
-CITY_ON_TRADE_ROUTE_BONUS  0.0   # if a trade route passes through a city and the desination and source is not the same as the city owner then you get this percentage of the trade route value
+CITY_ON_TRADE_ROUTE_BONUS  0.3   # if a trade route passes through a city and the desination and source is not the same as the city owner then you get this percentage of the trade route value
