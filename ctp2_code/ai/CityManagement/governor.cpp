@@ -2068,6 +2068,7 @@ void Governor::GetBestFoodProdGoldImprovement(const MapPoint & pos, sint32 & foo
 			continue;
 
 		if (!rec->GetClassRoad() &&
+			!rec->GetClassOceanRoad() &&
 			!rec->GetClassLandDetector() &&
 			!rec->GetClassOceanDetector() &&
 			!rec->GetClassStructure1() && !rec->GetClassStructure2())
