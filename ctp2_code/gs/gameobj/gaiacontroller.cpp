@@ -1083,7 +1083,6 @@ void GaiaController::ComputeTowerPositions()
 
 	m_newTowerPositions.clear();
 
-	Assert(candidates.size());
 	if (candidates.size() <= 0)
 	{
 		return;
