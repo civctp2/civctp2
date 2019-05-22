@@ -1052,16 +1052,16 @@ void CityData::Serialize(CivArchive &archive)
 bool NeedsCanalTunnel(MapPoint const & center_point)
 {
 	if (g_theWorld->IsCanal(center_point))
-    {
+	{
 		return false;
-    }
-    else if (g_theWorld->IsTunnel(center_point))
-    {
+	}
+	else if (g_theWorld->IsTunnel(center_point))
+	{
 		return false;
 	}
 
 	TerrainRecord const * rec =
-        g_theTerrainDB->Get(g_theWorld->GetTerrainType(center_point));
+	    g_theTerrainDB->Get(g_theWorld->GetTerrainType(center_point));
 
 	return rec->GetMovementTypeSea() || rec->GetMovementTypeShallowWater();
 }
@@ -1094,8 +1094,31 @@ void CityData::Initialize(sint32 settlerType)
 {
 	MapPoint center_point(m_home_city.RetPos());
 
-	if (g_network.IsClient() && g_network.IsLocalPlayer(m_owner)) {
+	if (g_network.IsClient() && g_network.IsLocalPlayer(m_owner))
+	{
 		g_network.AddCreatedObject(m_home_city.AccessData());
+	}
+
+	sint32 name;
+	Civilisation *civ = g_player[m_owner]->GetCivilisation();
+	CivilisationData *civData = g_theCivilisationPool->AccessData(*civ);
+	if(g_player[m_owner]->GetNumCities() == 0)
+	{
+		name = civData->GetCapitalName();
+	}
+	else
+		name = civData->GetAnyCityName();
+
+	if(name != k_CITY_NAME_UNDEFINED)
+	{
+		MBCHAR s[k_MAX_NAME_LEN];
+		civData->GetCityName(name, s);
+		civData->UseCityName(name);
+		SetName(s);
+	}
+	else
+	{
+		SetName(GetName());
 	}
 
 	FindBestSpecialists();
@@ -1112,7 +1135,6 @@ void CityData::Initialize(sint32 settlerType)
 		settlerRec = g_theUnitDB->Get(settlerType, g_player[m_owner]->GetGovernmentType());
 		if(settlerRec)
 			numPops = settlerRec->GetSettleSize();
-
 	}
 	else
 	{
@@ -1166,7 +1188,6 @@ void CityData::Initialize(sint32 settlerType)
 		}
 	}
 
-
 	sint32 good;
 	if(g_theWorld->GetGood(center_point, good))
 	{
@@ -1212,34 +1233,11 @@ void CityData::Initialize(sint32 settlerType)
 	g_network.Enqueue(g_theWorld->GetCell(center_point),
 					  center_point.x, center_point.y);
 
-	MBCHAR s[k_MAX_NAME_LEN];
-	sint32 name;
-	Civilisation *civ = g_player[m_owner]->GetCivilisation();
-	CivilisationData *civData = g_theCivilisationPool->AccessData(*civ);
-	if (g_player[m_owner]->GetNumCities() == 0)
-	{
-		name = civData->GetCapitalName();
-
-	}
-	else
-		name = civData->GetAnyCityName();
-
 	//Added by Martin  Gühmann to make sure that cities created
 	//by the scenario editor keep their style
-	if ((settlerType == CITY_STYLE_EDITOR) && ScenarioEditor::PlaceCityMode())
+	if((settlerType == CITY_STYLE_EDITOR) && ScenarioEditor::PlaceCityMode())
 	{
 		m_cityStyle = ScenarioEditor::CityStyle();
-	}
-
-	if (name != k_CITY_NAME_UNDEFINED)
-	{
-		civData->GetCityName(name, s);
-		civData->UseCityName(name);
-		SetName(s);
-	}
-	else
-	{
-		SetName(GetName());
 	}
 
 	// Gives all starting age buildings to a new city.
@@ -1293,7 +1291,6 @@ void CityData::Initialize(sint32 settlerType)
 	g_gevManager->AddEvent(GEV_INSERT_Tail, GEV_OpenInitialCityInterface,
 	                       GEA_City, m_home_city,
 	                       GEA_End);
-
 }
 
 // called only by NetUnit::Unpacketize
@@ -1555,7 +1552,7 @@ bool CityData::IsACopy()
 //----------------------------------------------------------------------------
 bool CityData::IsBankrupting(void) const
 {
-    return (m_net_gold < 0) && (g_player[m_owner]->GetGold() < -m_net_gold);
+	return (m_net_gold < 0) && (g_player[m_owner]->GetGold() < -m_net_gold);
 }
 
 void CityData::PrepareToRemove(const CAUSE_REMOVE_ARMY cause,
@@ -1898,12 +1895,6 @@ void CityData::TeleportUnits(const MapPoint &pos, bool &revealed_foreign_units, 
 
 #if 0
 
-
-
-
-
-
-
 	CellUnitList	units;
 	MapPoint city_pos;
 
@@ -1926,9 +1917,6 @@ void CityData::TeleportUnits(const MapPoint &pos, bool &revealed_foreign_units, 
 
 		g_theWorld->RemoveUnitReference(oldpos, units[i]);
 		units[i].SetPosition(pos, revealed);
-
-
-
 
 		if (0 < revealed.Num()) {
 			revealed_foreign_units = true;
@@ -2179,7 +2167,8 @@ void CityData::DoLocalPollution()
 //----------------------------------------------------------------------------
 sint32 CityData::ComputeProductionLosses(sint32 gross_production, sint32 &crime_loss, sint32 &franchise_loss) const
 {
-	if(m_bioInfectionTurns > 0){
+	if(m_bioInfectionTurns > 0)
+	{
 		gross_production -= static_cast<sint32>(ceil(gross_production * g_theConstDB->Get(0)->GetBioInfectionProductionCoef()));
 	}
 
@@ -2193,7 +2182,6 @@ sint32 CityData::ComputeProductionLosses(sint32 gross_production, sint32 &crime_
 		franchise_loss = 0;
 
 	return gross_production;
-
 }
 
 //----------------------------------------------------------------------------
@@ -2310,7 +2298,6 @@ void CityData::PayFederalProduction (double percent_military,
                                      sint32 &mil_paid,
                                      double percent_terrain,
                                      sint32 &mat_paid)
-
 {
 #if defined(_DEBUG) || defined(USE_LOGGING)
 	sint32 origShields = m_net_production;
