@@ -4316,6 +4316,11 @@ Agent_ptr Goal::GetRallyAgent() const
 
 		if(agent_ptr->GetUnitsAtPos() >= k_MAX_ARMY_SIZE)
 		{
+			if(rallyAgent == NULL)
+			{
+				// If every possible agent is in a full city
+				rallyAgent = agent_ptr;
+			}
 			continue;
 		}
 
