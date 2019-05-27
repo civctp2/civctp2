@@ -192,14 +192,12 @@ extern CityAstar    g_city_astar;
 
 namespace
 {
-	sint32 const            MAX_DISTANCE                = 0x7fffffff;
-	Governor const          UniqueInvalidGovernor       = Governor(PLAYER_UNASSIGNED);
+	sint32 const            BORDER_DISTANCE_SEARCH_MULT = 3;
 	/// Value for a trade route not requiring caravans (should not occur)
 	double const            VALUE_FREE_LUNCH 	        =
 		std::numeric_limits<double>::max();
 }
 
-Governor const &            Governor::INVALID           = UniqueInvalidGovernor;
 Governor::GovernorVector    Governor::s_theGovernors;
 Governor::CityDistQueue     Governor::s_CityDistQueue;
 Governor::CityPairList      Governor::s_CityPairList;
@@ -1107,23 +1105,30 @@ bool Governor::TestSliderSettings(const SlidersSetting & sliders_setting,
 		Assert(city_unit->GetCityData());
 		CityData * city = city_unit->GetCityData();
 
+#if defined(_DEBUG) || defined(USE_LOGGING)
+		DPRINTF(k_DBG_GOVERNOR, ("//  Elapsed time for nothing       = %f ms (%s)\n", t2.getElapsedTimeInMilliSec(), city->GetName()));
+#endif
 		//Added by Martin Gühmann to take specialists into account.
 		//Well this has an effect but the AI seems to perform worse with it.
 		//Right direction but more debug work is needed.
 		AssignPopulation(city, hasAllAdvances);
 
 #if defined(_DEBUG) || defined(USE_LOGGING)
-		DPRINTF(k_DBG_GOVERNOR, ("//  elapsed time per city and pop asignment = %f ms\n", t2.getElapsedTimeInMilliSec()));
+		DPRINTF(k_DBG_GOVERNOR, ("//  Elapsed time for pop asignment = %f ms (%s)\n", t2.getElapsedTimeInMilliSec(), city->GetName()));
 #endif
 
 		// Force happiness recalculation as crime losses depend on happiness.
 		sint32 gold;
 		city->CalcHappiness(gold, false);
 
+#if defined(_DEBUG) || defined(USE_LOGGING)
+		DPRINTF(k_DBG_GOVERNOR, ("//  Elapsed time for happiness     = %f ms (%s)\n", t2.getElapsedTimeInMilliSec(), city->GetName()));
+#endif
+
 		city->ProcessAllResources();
 
 #if defined(_DEBUG) || defined(USE_LOGGING)
-		DPRINTF(k_DBG_GOVERNOR, ("//  elapsed time per city and resources = %f ms\n", t2.getElapsedTimeInMilliSec()));
+		DPRINTF(k_DBG_GOVERNOR, ("//  Elapsed time for resources     = %f ms (%s)\n", t2.getElapsedTimeInMilliSec(), city->GetName()));
 #endif
 
 		double new_happiness = city->GetHappiness();
@@ -1146,7 +1151,7 @@ bool Governor::TestSliderSettings(const SlidersSetting & sliders_setting,
 		}
 
 #if defined(_DEBUG) || defined(USE_LOGGING)
-		DPRINTF(k_DBG_GOVERNOR, ("//  elapsed time per city = %f ms\n", t2.getElapsedTimeInMilliSec()));
+		DPRINTF(k_DBG_GOVERNOR, ("//  Elapsed total time             = %f ms (%s)\n", t2.getElapsedTimeInMilliSec(), city->GetName()));
 		t2.stop();
 #endif
 	}
@@ -1166,7 +1171,7 @@ bool Governor::TestSliderSettings(const SlidersSetting & sliders_setting,
 	}
 
 #if defined(_DEBUG) || defined(USE_LOGGING)
-	DPRINTF(k_DBG_GOVERNOR, ("//  elapsed time = %f ms\n", t1.getElapsedTimeInMilliSec()));
+	DPRINTF(k_DBG_GOVERNOR, ("// Elapsed time                        = %f ms (All cities)\n", t1.getElapsedTimeInMilliSec()));
 	DPRINTF(k_DBG_GOVERNOR, ("\n"));
 	t1.stop();
 #endif
@@ -1474,7 +1479,8 @@ void Governor::ComputeRoadPriorities()
 			Unit         neighbor_unit = cityList->Get(neighbor_index);
 			sint32 const neighbor_dist = MapPoint::GetSquaredDistance(neighbor_unit.RetPos(), city_unit.RetPos());
 
-			if(!IsInCityPairList(city_index, neighbor_index))
+			if( neighbor_dist <= g_theConstDB->Get(0)->GetBorderSquaredRadius() * BORDER_DISTANCE_SEARCH_MULT
+			&& !IsInCityPairList(city_index, neighbor_index))
 			{
 				s_CityDistQueue.push_back(CityDist(neighbor_unit, neighbor_dist));
 				s_CityPairList.push_back(CityPair(city_index, neighbor_index));
@@ -1492,9 +1498,9 @@ void Governor::ComputeRoadPriorities()
 
 		for
 		(
-			CityDistQueue::const_iterator iter = s_CityDistQueue.begin();
-			iter != max_iter;
-			++iter
+		    CityDistQueue::const_iterator iter = s_CityDistQueue.begin();
+		    iter != max_iter;
+		    ++iter
 		)
 		{
 			float   total_cost = 0.0;
@@ -2754,7 +2760,7 @@ void Governor::AssignPopulation(CityData *city, bool hasAllAdvances) const
 	}
 
 #if defined(_DEBUG) || defined(USE_LOGGING)
-	DPRINTF(k_DBG_GOVERNOR, ("//  elapsed time for popasign = %f ms\n", t1.getElapsedTimeInMilliSec()));
+	DPRINTF(k_DBG_GOVERNOR, ("//  Elapsed time for popasign      = %f ms (%s)\n", t1.getElapsedTimeInMilliSec(), city->GetName()));
 #endif
 }
 
@@ -3125,7 +3131,7 @@ sint32 Governor::ComputeMinimumWorkers(CityData *city,
 		sint32 partSquaredRadius = part_rec->GetSquaredRadius();
 		sint32 fullSquaredRadius = full_rec->GetSquaredRadius();
 
-		DPRINTF(k_DBG_GOVERNOR, ("//  elapsed time per city and pop asignment ß = %f ms\n", t1.getElapsedTimeInMilliSec()));
+		DPRINTF(k_DBG_GOVERNOR_DETAIL, ("//  elapsed time per city and pop asignment ß = %f ms\n", t1.getElapsedTimeInMilliSec()));
 
 		fullTerrainFood += partTerrainFood;
 		fullTerrainProd += partTerrainProd;
@@ -3156,34 +3162,34 @@ sint32 Governor::ComputeMinimumWorkers(CityData *city,
 	//	DPRINTF(k_DBG_GAMESTATE, ("sizeIndex: %i\n", sizeIndex));
 	//	DPRINTF(k_DBG_GAMESTATE, ("part_size: %i\n", part_size));
 	//	DPRINTF(k_DBG_GAMESTATE, ("part_size_pop: %i\n", part_size_pop));
-		DPRINTF(k_DBG_GOVERNOR, ("//  elapsed time per city and pop asignment 0 = %f ms\n", t1.getElapsedTimeInMilliSec()));
+		DPRINTF(k_DBG_GOVERNOR_DETAIL, ("//  elapsed time per city and pop asignment 0 = %f ms\n", t1.getElapsedTimeInMilliSec()));
 		part_radii_prod = city->ProcessProduction(true,
 		                         grossProduction,
 		                         part_radii_prod,
 		                         crimeLoss,
 		                         specialLoss, true);
-		DPRINTF(k_DBG_GOVERNOR, ("//  elapsed time per city and pop asignment 1 = %f ms\n", t1.getElapsedTimeInMilliSec()));
+		DPRINTF(k_DBG_GOVERNOR_DETAIL, ("//  elapsed time per city and pop asignment 1 = %f ms\n", t1.getElapsedTimeInMilliSec()));
 		full_radii_prod = city->ProcessProduction(true,
 		                         grossProduction,
 		                         full_radii_prod,
 		                         crimeLoss,
 		                         specialLoss, true);
-		DPRINTF(k_DBG_GOVERNOR, ("//  elapsed time per city and pop asignment 2 = %f ms\n", t1.getElapsedTimeInMilliSec()));
+		DPRINTF(k_DBG_GOVERNOR_DETAIL, ("//  elapsed time per city and pop asignment 2 = %f ms\n", t1.getElapsedTimeInMilliSec()));
 
 		grossFood = part_radii_food;
 		city->ProcessFood(crimeLossFood, part_radii_food, grossFood, true);
-		DPRINTF(k_DBG_GOVERNOR, ("//  elapsed time per city and pop asignment 3 = %f ms\n", t1.getElapsedTimeInMilliSec()));
+		DPRINTF(k_DBG_GOVERNOR_DETAIL, ("//  elapsed time per city and pop asignment 3 = %f ms\n", t1.getElapsedTimeInMilliSec()));
 		grossFood = full_radii_food;
 		city->ProcessFood(crimeLossFood, full_radii_food, grossFood, true);
-		DPRINTF(k_DBG_GOVERNOR, ("//  elapsed time per city and pop asignment 4 = %f ms\n", t1.getElapsedTimeInMilliSec()));
+		DPRINTF(k_DBG_GOVERNOR_DETAIL, ("//  elapsed time per city and pop asignment 4 = %f ms\n", t1.getElapsedTimeInMilliSec()));
 
 		city->CollectGold(full_radii_gold, specialLoss, crimeLoss, true);
-		DPRINTF(k_DBG_GOVERNOR, ("//  elapsed time per city and pop asignment 5 = %f ms\n", t1.getElapsedTimeInMilliSec()));
+		DPRINTF(k_DBG_GOVERNOR_DETAIL, ("//  elapsed time per city and pop asignment 5 = %f ms\n", t1.getElapsedTimeInMilliSec()));
 		city->CollectGold(part_radii_gold, specialLoss, crimeLoss, true);
-		DPRINTF(k_DBG_GOVERNOR, ("//  elapsed time per city and pop asignment 6 = %f ms\n", t1.getElapsedTimeInMilliSec()));
+		DPRINTF(k_DBG_GOVERNOR_DETAIL, ("//  elapsed time per city and pop asignment 6 = %f ms\n", t1.getElapsedTimeInMilliSec()));
 
 		support = city->GetSupport();
-		DPRINTF(k_DBG_GOVERNOR, ("//  elapsed time per city and pop asignment 7 = %f ms\n", t1.getElapsedTimeInMilliSec()));
+		DPRINTF(k_DBG_GOVERNOR_DETAIL, ("//  elapsed time per city and pop asignment 7 = %f ms\n", t1.getElapsedTimeInMilliSec()));
 		full_radii_scigold = full_radii_gold - support;
 		part_radii_scigold = part_radii_gold;
 		if(full_radii_scigold < 0)
@@ -3196,9 +3202,9 @@ sint32 Governor::ComputeMinimumWorkers(CityData *city,
 		}
 		sint32 scieCrime = 0;
 		city->SplitScience(true, full_radii_scigold, full_radii_science, scieCrime, true);
-		DPRINTF(k_DBG_GOVERNOR, ("//  elapsed time per city and pop asignment 8 = %f ms\n", t1.getElapsedTimeInMilliSec()));
+		DPRINTF(k_DBG_GOVERNOR_DETAIL, ("//  elapsed time per city and pop asignment 8 = %f ms\n", t1.getElapsedTimeInMilliSec()));
 		city->SplitScience(true, part_radii_scigold, part_radii_science, scieCrime, true);
-		DPRINTF(k_DBG_GOVERNOR, ("//  elapsed time per city and pop asignment 9 = %f ms\n", t1.getElapsedTimeInMilliSec()));
+		DPRINTF(k_DBG_GOVERNOR_DETAIL, ("//  elapsed time per city and pop asignment 9 = %f ms\n", t1.getElapsedTimeInMilliSec()));
 
 		///////////////////////////////////////////////////
 		// Check whether it might be better to use
@@ -3222,7 +3228,7 @@ sint32 Governor::ComputeMinimumWorkers(CityData *city,
 			else
 				farmers = 0;
 		}
-		DPRINTF(k_DBG_GOVERNOR, ("//  elapsed time per city and pop asignment A = %f ms\n", t1.getElapsedTimeInMilliSec()));
+		DPRINTF(k_DBG_GOVERNOR_DETAIL, ("//  elapsed time per city and pop asignment A = %f ms\n", t1.getElapsedTimeInMilliSec()));
 
 		///////////////////////////////////////////////////
 		// Check whether it might be better to use
@@ -3242,7 +3248,7 @@ sint32 Governor::ComputeMinimumWorkers(CityData *city,
 				laborers = 0;
 		}
 
-		DPRINTF(k_DBG_GOVERNOR, ("//  elapsed time per city and pop asignment B = %f ms\n", t1.getElapsedTimeInMilliSec()));
+		DPRINTF(k_DBG_GOVERNOR_DETAIL, ("//  elapsed time per city and pop asignment B = %f ms\n", t1.getElapsedTimeInMilliSec()));
 		///////////////////////////////////////////////////
 		// Check whether it might be better to use
 		// merchants to generate the same amount of gold
@@ -3261,7 +3267,7 @@ sint32 Governor::ComputeMinimumWorkers(CityData *city,
 				merchants = 0;
 		}
 
-		DPRINTF(k_DBG_GOVERNOR, ("//  elapsed time per city and pop asignment C = %f ms\n", t1.getElapsedTimeInMilliSec()));
+		DPRINTF(k_DBG_GOVERNOR_DETAIL, ("//  elapsed time per city and pop asignment C = %f ms\n", t1.getElapsedTimeInMilliSec()));
 		///////////////////////////////////////////////////
 		// Check whether it might be better to use
 		// scientists to generate the same amount of science
@@ -3280,7 +3286,7 @@ sint32 Governor::ComputeMinimumWorkers(CityData *city,
 				scientists = 0;
 		}
 
-		DPRINTF(k_DBG_GOVERNOR, ("//  elapsed time per city and pop asignment D = %f ms\n", t1.getElapsedTimeInMilliSec()));
+		DPRINTF(k_DBG_GOVERNOR_DETAIL, ("//  elapsed time per city and pop asignment D = %f ms\n", t1.getElapsedTimeInMilliSec()));
 		///////////////////////////////////////////////////
 		// Checks whether minimum number of food workers
 		// has been found.
@@ -3309,7 +3315,7 @@ sint32 Governor::ComputeMinimumWorkers(CityData *city,
 			notFoodFound = false;
 		}
 
-		DPRINTF(k_DBG_GOVERNOR, ("//  elapsed time per city and pop asignment E = %f ms\n", t1.getElapsedTimeInMilliSec()));
+		DPRINTF(k_DBG_GOVERNOR_DETAIL, ("//  elapsed time per city and pop asignment E = %f ms\n", t1.getElapsedTimeInMilliSec()));
 		///////////////////////////////////////////////////
 		// Checks whether minimum number of production workers
 		// has been found.
@@ -3338,7 +3344,7 @@ sint32 Governor::ComputeMinimumWorkers(CityData *city,
 			notProdFound = false;
 		}
 
-		DPRINTF(k_DBG_GOVERNOR, ("//  elapsed time per city and pop asignment F = %f ms\n", t1.getElapsedTimeInMilliSec()));
+		DPRINTF(k_DBG_GOVERNOR_DETAIL, ("//  elapsed time per city and pop asignment F = %f ms\n", t1.getElapsedTimeInMilliSec()));
 		///////////////////////////////////////////////////
 		// Checks whether minimum number of gold workers
 		// has been found.
@@ -3375,7 +3381,7 @@ sint32 Governor::ComputeMinimumWorkers(CityData *city,
 			notGoldFound = false;
 		}
 
-		DPRINTF(k_DBG_GOVERNOR, ("//  elapsed time per city and pop asignment G = %f ms\n", t1.getElapsedTimeInMilliSec()));
+		DPRINTF(k_DBG_GOVERNOR_DETAIL, ("//  elapsed time per city and pop asignment G = %f ms\n", t1.getElapsedTimeInMilliSec()));
 		///////////////////////////////////////////////////
 		// Checks whether minimum number of science workers
 		// has been found.
@@ -3402,7 +3408,7 @@ sint32 Governor::ComputeMinimumWorkers(CityData *city,
 			notScienceFound = false;
 		}
 
-		DPRINTF(k_DBG_GOVERNOR, ("//  elapsed time per city and pop asignment Z = %f ms\n", t1.getElapsedTimeInMilliSec()));
+		DPRINTF(k_DBG_GOVERNOR_DETAIL, ("//  elapsed time per city and pop asignment Z = %f ms\n", t1.getElapsedTimeInMilliSec()));
 		if(part_rec->GetPopulation() > city->PopCount())
 		{
 			break;
