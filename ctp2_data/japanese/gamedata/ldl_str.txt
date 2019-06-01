@@ -2833,14 +2833,23 @@ str_ldl_SET_GOAL	"目標の設定"
 
 
 # [ランキング]タブ
-str_ldl_RANKING_MILITARY "軍事"
-str_ldl_RANKING_ECONOMIC "経済"
-str_ldl_RANKING_SCIENTIFIC "科学"
-str_ldl_RANKING_OVERALL "総合"
-str_ldl_INFO_RANKING_TAB "ランキング"
-str_ldl_RANKING_RANK "ランク:"
-str_ldl_LINE_BUTTON "折れ線グラフ"
-str_ldl_ZEROSUM_BUTTON "ゼロサム グラフ"
+str_ldl_RANKING_MILITARY			"軍事"
+str_ldl_RANKING_ECONOMIC			"経済"
+str_ldl_RANKING_SCIENTIFIC			"科学"
+str_ldl_RANKING_OVERALL				"総合"
+str_ldl_RANKING_POLLUTION			"汚染"
+str_ldl_RANKING_TRADE				"貿易"
+str_ldl_RANKING_GOLD				"ゴールド"
+str_ldl_RANKING_CITIES				"都市"
+str_ldl_RANKING_POPULATION			"人口"
+str_ldl_RANKING_AREA				"Area"
+str_ldl_RANKING_UNITS				"ユニット"
+str_ldl_RANKING_BUILDINGS			"建物"
+str_ldl_RANKING_WONDERS				"七不思議"
+str_ldl_INFO_RANKING_TAB			"ランキング"
+str_ldl_RANKING_RANK				"ランク:"
+str_ldl_LINE_BUTTON					"折れ線グラフ"
+str_ldl_ZEROSUM_BUTTON				"ゼロサム グラフ"
 
 # [タイムライン]タブ
 str_ldl_INFO_TIMELINE_TAB "タイムライン"
@@ -3200,12 +3209,6 @@ str_ldl_SPNGPS_PlayerText	"Sets the start player. Determines the civ color. "
 str_ldl_Disclaimer1 "THIS MATERIAL IS NOT MADE OR SUPPORTED BY ACTIVISION."
 str_ldl_Disclaimer2 "This version of Call To Power 2 was developed at http://apolyton.net"
 str_ldl_Disclaimer3 "Contact the authors at ctp2source@apolyton.net"
-
-### Version String ###
-
-str_ldl_version "2004-07-26"
-str_ldl_RANKING_POLLUTION		"汚染"
-str_ldl_RANKING_WONDERS		"七不思議"
 
 str_profile_CloseOnEyepoint                     "Close Message When Clicking Eyeball"
 str_profile_ShowExpensive                       "Show Expensive Tile Improvement Effects"
