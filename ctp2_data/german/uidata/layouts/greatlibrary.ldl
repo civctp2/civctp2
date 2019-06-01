@@ -127,10 +127,17 @@ TechTree {
 		string	image0	"UPBT01XU.tga"
 		string	image1	"UPBT01XU.tga"
 		string	disabledimage0	"UPBT01XU.tga"
-
-		string	textblttype	"center"
-
 	} #button
+	
+	ResearchGoal:CTP2_STANDARD_FONT {
+		int xpix		10
+		int ypix		10
+		int widthpix	160
+		int heightpix	20
+		string just		"left"
+		string text		"str_ldl_ResearchGoal"
+	}
+	
 } #techtree
 
 

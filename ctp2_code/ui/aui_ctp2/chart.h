@@ -8,9 +8,10 @@
 #include "ctp2_Static.h"
 
 
-#define k_CHART_LDL_BUTTON			"button"
-#define k_CHART_LDL_LEFTIMAGE		"leftimage"
-#define k_CHART_LDL_RIGHTIMAGE		"rightimage"
+#define k_CHART_LDL_BUTTON          "button"
+#define k_CHART_LDL_LEFTIMAGE       "leftimage"
+#define k_CHART_LDL_RIGHTIMAGE      "rightimage"
+#define k_CHART_LDL_RESEARCH_GOAL   "ResearchGoal"
 
 #define k_MAX_PREREQ (4)
 #define k_MAX_LEADS_TO (4)
@@ -97,6 +98,7 @@ private:
 
 	ctp2_Static	*m_left;
 	ctp2_Static	*m_right;
+	ctp2_Static	*m_goalText;
 
 	sint32	m_heightBetweenButtons;
 	sint32	m_distFromCenter;

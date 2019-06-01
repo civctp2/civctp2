@@ -151,11 +151,11 @@ private:
     DATABASE    m_database;
 };
 
-class GreatLibrary : public KeyboardHandler
+class GreatLibrary final : public KeyboardHandler
 {
 public:
-	GreatLibrary( sint32 theMode );
-	virtual ~GreatLibrary( void );
+	GreatLibrary(sint32 theMode);
+	~GreatLibrary();
 
 	static void Initialize_Great_Library_Data();
 	static void Shutdown_Great_Library_Data();

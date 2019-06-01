@@ -1,0 +1,2872 @@
+template HAPPYMAP {
+
+	int	xpix	26
+
+	int	ypix	547
+
+	int	widthpix	384
+
+	int	heightpix	216
+
+}
+
+
+
+HappyStatusWindow {
+
+	string	xanchor	"left"
+
+	string	yanchor	"top"
+
+	string	pattern	"error.tga"
+
+	int	xpix	0
+
+	int	ypix	0
+
+	int	widthpix	1024
+
+	int	heightpix	768
+
+	ExitButton {
+
+		int	xpix	993
+
+		int	ypix	3
+
+		int	widthpix	28
+
+		int	heightpix	23
+
+		string	image0	"error.tga"
+
+		string	image1	"error.tga"
+
+	}
+
+	Radar:HAPPYMAP {
+
+	}
+
+	WorkMap:HAPPYMAP {
+
+	}
+
+	HappyList {
+
+		int	xpix	0
+
+		int	ypix	132
+
+		int	widthpix	1004
+
+		int	heightpix	400
+
+		int columns		8
+
+		int bevelwidth	1
+
+		int beveltype	1
+
+		bool alwaysranger	TRUE
+
+		string	pattern	"error.tga"
+
+		HeaderBottom {
+
+			string	pattern	"error.tga"
+
+			int	xpix	0
+
+			int	ypix	0
+
+			int	widthpix	1024
+
+			int	heightpix	7
+
+		}
+
+		header {
+
+			switch0:CTP2_STANDARD_FONT {
+
+				int	widthpix	100
+
+				int	heightpix	20
+
+				string text "str_ldl_Name"
+				string	pattern	"error.tga"
+
+				int bevelwidth 	1
+
+			}
+
+			switch1:CTP2_STANDARD_FONT {
+
+				int	widthpix	100
+
+				int	heightpix	20
+
+				string text "str_ldl_Status"
+				string	pattern	"error.tga"
+
+				int bevelwidth 	1
+
+			}
+
+			switch2:CTP2_STANDARD_FONT {
+
+				int	widthpix	50
+
+				int	heightpix	20
+
+				string text "str_ldl_Size"
+				string	pattern	"error.tga"
+
+				int bevelwidth 	1
+
+			}
+
+			switch3:CTP2_STANDARD_FONT {
+
+				int	widthpix	374
+
+				int	heightpix	20
+
+				string text "str_ldl_Happiness"
+				string	pattern	"error.tga"
+
+				int bevelwidth 	1
+
+			}
+
+			switch4:CTP2_STANDARD_FONT {
+
+				int	widthpix	100
+
+				int	heightpix	20
+
+				string text "str_ldl_Percent"
+				string	pattern	"error.tga"
+
+				int bevelwidth 	1
+
+			}
+
+			switch5:CTP2_STANDARD_FONT {
+
+				int	widthpix	100
+
+				int	heightpix	20
+
+				string text "str_ldl_Riot_Chance"
+				string	pattern	"error.tga"
+
+				int bevelwidth 	1
+
+			}
+
+			switch6:CTP2_STANDARD_FONT {
+
+				int	widthpix	100
+
+				int	heightpix	20
+
+				string text "str_ldl_Revolution"
+				string	pattern	"error.tga"
+
+				int bevelwidth 	1
+
+			}
+
+			switch7:CTP2_STANDARD_FONT {
+
+				int	widthpix	80
+
+				int	heightpix	20
+
+				string text "str_ldl_Musicians"
+				string	pattern	"error.tga"
+
+				int bevelwidth 	1
+
+			}
+
+		}
+
+	}
+
+	TopLeftBar {
+
+		string	image0	"error.tga"
+
+		int	xpix	0
+
+		int	ypix	0
+
+		int	widthpix	369
+
+		int	heightpix	39
+
+		string	imagebltflag	"chromakey"
+
+	}
+
+	TopMiddleBar {
+
+		string	image0	"error.tga"
+
+		int	xpix	369
+
+		int	ypix	0
+
+		int	widthpix	292
+
+		int	heightpix	32
+
+		string	imagebltflag	"chromakey"
+
+	}
+
+	TopRightBar {
+
+		string	image0	"error.tga"
+
+		int	xpix	661
+
+		int	ypix	0
+
+		int	widthpix	363
+
+		int	heightpix	38
+
+		string	imagebltflag	"chromakey"
+
+	}
+
+	MiddleTitleBar {
+
+		string	image0	"error.tga"
+
+		int	xpix	413
+
+		int	ypix	49
+
+		int	widthpix	196
+
+		int	heightpix	20
+
+		string	imagebltflag	"chromakey"
+
+	}
+
+	LeftTitleBlockOne {
+
+		string	image0	"error.tga"
+
+		int	xpix	369
+
+		int	ypix	32
+
+		int	widthpix	44
+
+		int	heightpix	22
+
+		string	imagebltflag	"chromakey"
+
+	}
+
+	LeftTitleBlockTwo {
+
+		string	image0	"error.tga"
+
+		int	xpix	391
+
+		int	ypix	54
+
+		int	widthpix	22
+
+		int	heightpix	26
+
+		string	imagebltflag	"chromakey"
+
+	}
+
+	RightTitleBlockOne {
+
+		string	image0	"error.tga"
+
+		int	xpix	609
+
+		int	ypix	32
+
+		int	widthpix	52
+
+		int	heightpix	22
+
+		string	imagebltflag	"chromakey"
+
+	}
+
+	RightTitleBlockTwo {
+
+		string	image0	"error.tga"
+
+		int	xpix	609
+
+		int	ypix	54
+
+		int	widthpix	25
+
+		int	heightpix	25
+
+		string	imagebltflag	"chromakey"
+
+	}
+
+	HeaderTop {
+
+		string	pattern	"error.tga"
+
+		int	xpix	0
+
+		int	ypix	104
+
+		int	widthpix	1024
+
+		int	heightpix	7
+
+	}
+
+	HeaderBottom {
+
+		string	pattern	"error.tga"
+
+		int	xpix	0
+
+		int	ypix	131
+
+		int	widthpix	1024
+
+		int	heightpix	7
+
+	}
+
+	BottomLeftBar {
+
+		string	image0	"error.tga"
+
+		int	xpix	0
+
+		int	ypix	545
+
+		int	widthpix	23
+
+		int	heightpix	223
+
+	}
+
+	BottomMiddleBar {
+
+		string	image0	"error.tga"
+
+		int	xpix	414
+
+		int	ypix	545
+
+		int	widthpix	23
+
+		int	heightpix	223
+
+	}
+
+	BottomRightBar {
+
+		string	image0	"error.tga"
+
+		int	xpix	1002
+
+		int	ypix	545
+
+		int	widthpix	23
+
+		int	heightpix	545
+
+	}
+
+	BottomLeftBlock {
+
+		string	image0	"error.tga"
+
+		int	xpix	437
+
+		int	ypix	544
+
+		int	widthpix	22
+
+		int	heightpix	24
+
+		string	imagebltflag	"chromakey"
+
+	}
+
+	BottomRightBlock {
+
+		string	image0	"error.tga"
+
+		int	xpix	980
+
+		int	ypix	545
+
+		int	widthpix	22
+
+		int	heightpix	28
+
+		string	imagebltflag	"chromakey"
+
+	}
+
+	MiddleBar {
+
+		string	pattern	"error.tga"
+
+		int	xpix	0
+
+		int	ypix	532
+
+		int	widthpix	1024
+
+		int	heightpix	13
+
+	}
+
+	TopLeftBlockOne {
+
+		string	image0	"error.tga"
+
+		int	xpix	0
+
+		int	ypix	55
+
+		int	widthpix	25
+
+		int	heightpix	25
+
+		string	imagebltflag	"chromakey"
+
+	}
+
+	TopLeftBlockTwo {
+
+		string	image0	"error.tga"
+
+		int	xpix	0
+
+		int	ypix	33
+
+		int	widthpix	52
+
+		int	heightpix	22
+
+		string	imagebltflag	"chromakey"
+
+	}
+
+	TopRightBlockOne {
+
+		string	image0	"error.tga"
+
+		int	xpix	980
+
+		int	ypix	32
+
+		int	widthpix	44
+
+		int	heightpix	22
+
+		string	imagebltflag	"chromakey"
+
+	}
+
+	TopRightBlockTwo {
+
+		string	image0	"error.tga"
+
+		int	xpix	1002
+
+		int	ypix	54
+
+		int	widthpix	22
+
+		int	heightpix	26
+
+		string	imagebltflag	"chromakey"
+
+	}
+
+
+
+	ThumbnailMap {
+
+		int	xpix	0
+
+		int	ypix	106
+
+		int	widthpix	1024
+
+		int	heightpix	426
+
+		string	pattern	"error.tga"
+
+	}
+
+
+
+	CivName:CTP2_STANDARD_FONT {
+
+		int xpix		410
+
+		int ypix		32
+
+		int widthpix	180
+
+		int heightpix	17
+
+		string pattern "error.tga"
+
+		string text "str_ldl_Roman_Empire"
+	}
+
+	ReturnButton {
+
+		int	xpix	905
+
+		int	ypix	653
+
+		int	widthpix	94
+
+		int	heightpix	49
+
+		int bevelwidth	0
+
+		int	beveltype	0
+
+		string	image0	"error.tga"
+
+		string	imagebltflag	"chromakey"
+
+	}
+
+	TabGroup {
+
+		int	xpix	453
+
+		int	ypix	596
+
+		int	widthpix	456
+
+		int	heightpix	142
+
+		bool	autoarrange	FALSE
+
+		CivTab:CTP2_STANDARD_FONT {
+
+			int	xpix	6
+
+			int	ypix	0
+
+			int	widthpix	72
+
+			int	heightpix	14
+
+			string	parent	"ControlPanelWindow"
+
+			string	text	"str_ldl_CIV"
+			string	pattern	"error.tga"
+
+			pane {
+
+				int	xpix	0
+
+				int	ypix	0
+
+				int	widthpix	456
+
+				int	heightpix	129
+
+				string	parent	"ControlPanelWindow"
+
+				CivTabWallpaper {
+
+					int	xpix	4
+
+					int	ypix	3
+
+					int	widthpix	448
+
+					int	heightpix	122
+
+					string	pattern	"error.tga"
+
+
+
+					WorkdayText:CIV_TEXT{
+
+						int	xpix	25
+
+						int	ypix	5
+
+						string	text	"str_ldl_CAPS_WORKDAY"
+					}
+
+					RationsText:CIV_TEXT{
+
+						int	xpix	170
+
+						int	ypix	5
+
+						string	text	"str_ldl_CAPS_RATIONS"
+					}
+
+					WagesText:CIV_TEXT{
+
+						int	xpix	312
+
+						int	ypix	5
+
+						string	text	"str_ldl_CAPS_WAGES"
+					}
+
+					WorkdayMarker:CIV_MARKER {
+
+					}
+
+					RationsMarker:CIV_MARKER {
+
+					}
+
+					WagesMarker:CIV_MARKER {
+
+					}
+
+					HappyMarker:CIV_MARKER {
+
+					}
+
+					PwText:CIV_TEXT{
+
+						int	xpix	20	
+
+						int	ypix	39
+
+						string	text	"str_ldl_PW"
+					}
+
+					ScienceText:CIV_TEXT{
+
+						int	xpix	326
+
+						int	ypix	39
+
+						string	text	"str_ldl_CAPS_SCIENCE"
+					}
+
+					HappinessText:CIV_TEXT{
+
+						int	xpix	32
+
+						int	ypix	77
+
+						int	widthpix	97
+
+						string	text	"str_ldl_CAPS_HAPPINESS"
+					}
+
+					RiotText:CIV_TEXT{
+
+						int	xpix	176
+
+						int	ypix	77
+
+						string	text	"str_ldl_RIOT"
+					}
+
+					RevolutionText:CIV_TEXT{
+
+						int	xpix	324
+
+						int	ypix	77
+
+						string	text	"str_ldl_CAPS_REVOLUTION"
+					}
+
+
+
+					WorkdaySlider:CIV_SLIDER {
+
+						int	xpix	10
+
+					}
+
+					RationsSlider:CIV_SLIDER {
+
+						int	xpix	155
+
+					}
+
+					WagesSlider:CIV_SLIDER {
+
+						int	xpix	302
+
+					}
+
+
+
+					WorkdayBox:CIV_BOX {
+
+						int	xpix	111
+
+						int	ypix	23
+
+						int	widthpix	35
+
+					}
+
+					RationsBox:CIV_BOX {
+
+						int	xpix	258
+
+						int	ypix	23
+
+					}
+
+					WagesBox:CIV_BOX {
+
+						int	xpix	405
+
+						int	ypix	23
+
+					}
+
+					PwBox:CIV_BOX {
+
+						int	xpix	55
+
+						int	ypix	58
+
+					}
+
+					ScienceBox:CIV_BOX {
+
+						int	xpix	360
+
+						int	ypix	58
+
+					}
+
+					RiotBox:CIV_BOX {
+
+						int	xpix	212
+
+						int	ypix	94
+
+					}
+
+					RevolutionBox:CIV_BOX {
+
+						int	xpix	360
+
+						int	ypix	94
+
+					}
+
+
+
+					PwPlusButton:CIV_BUTTON {
+
+						string	image0	"error.tga"
+
+						int	xpix	85
+
+					}
+
+					PwMinusButton:CIV_BUTTON {
+
+						string	image0	"error.tga"
+
+						int	xpix	28
+
+					}
+
+					SciencePlusButton:CIV_BUTTON {
+
+						string	image0	"error.tga"
+
+						int	xpix	390
+
+					}
+
+					ScienceMinusButton:CIV_BUTTON {
+
+						string	image0	"error.tga"
+
+						int	xpix	334
+
+					}
+
+
+
+					HappinessThermometer {
+
+						string	pattern	"error.tga"
+
+						int	xpix	32
+
+						int	ypix	98
+
+						int	widthpix	100
+
+						int	heightpix	13
+
+					}
+
+				}
+
+			}
+
+		}
+
+		MacroTab:CTP2_STANDARD_FONT {
+
+#			string	xanchor	"left"
+
+#			string	yanchor	"top"
+
+			int	xpix	78
+
+			int	ypix	0
+
+			int	widthpix	72
+
+			int	heightpix	14
+
+			string	parent	"ControlPanelWindow"
+
+			string	text	"str_ldl_MAX"
+			string	pattern	"error.tga"
+
+			pane {
+
+#				string	xanchor	"left"
+
+#				string	yanchor	"top"
+
+				int	xpix	0
+
+				int	ypix	0
+
+				int	widthpix	456
+
+				int	heightpix	129
+
+				string	parent	"ControlPanelWindow"
+
+				MacroTabWallpaper {
+
+					int	xpix	4
+
+					int	ypix	3
+
+					int	widthpix	448
+
+					int	heightpix	122
+
+#					string	pattern	"error.tga"
+
+					string	pattern	"error.tga"
+
+					int	bevelwidth	0
+
+					
+
+					SwitchHolder {
+
+						int	xpix	0
+
+						int	ypix	0
+
+						int	widthpix	177
+
+						int	heightpix	122
+
+						int	bevelwidth	2
+
+						int	beveltype	1
+
+						MacroSwitchGroup {
+
+							int	xpix	0
+
+							int	ypix	0
+
+							int	widthpix	250
+
+							int	heightpix	122
+
+
+
+							MacroHappySlider {
+
+								int	xpix	25
+
+								int	ypix	5
+
+								int	widthpix	145
+
+								int	heightpix	20
+
+								string	pattern	"error.tga"
+
+								string	type	"slider"
+
+								string	orientation	"horizontal"
+
+								thumb {
+
+									int	widthpix	10
+
+									string	pattern	"error.tga"
+
+								}
+
+							}
+
+
+
+							MacroProdButton:MAX_BUTTON {
+
+								int	xpix	11
+
+								int	ypix	14
+
+								string	text	"str_ldl_MAX_PROD"
+							}
+
+							MacroKnowledgeButton:MAX_BUTTON {
+
+								int	xpix	93
+
+								int	ypix	52
+
+								string	text	"str_ldl_MAX_SCI"
+							}
+
+							MacroGrowthButton:MAX_BUTTON {
+
+								int	xpix	93
+
+								int	ypix	14
+
+								string	text	"str_ldl_MAX_FOOD"
+							}
+
+							MacroGoodsButton:MAX_BUTTON {
+
+								int	xpix	53
+
+								int	ypix	89
+
+								string	text	"str_ldl_CAPS_MAX_GOODS"
+							}
+
+							MacroHappinessButton:MAX_BUTTON{
+
+								int	xpix	11
+
+								int	ypix	52
+
+								string	text	"str_ldl_MAX_HAPPY"
+							}
+
+						}
+
+					}
+
+					BoxHolder {
+
+						int	xpix	188
+
+						int	ypix	0
+
+						int	widthpix	260
+
+						int	heightpix	122
+
+						int	bevelwidth	2
+
+						int	beveltype	1
+
+						MacroFoodLabel:CTP2_STANDARD_FONT {
+
+							int	xpix	76
+
+							int	ypix	38
+
+							int	widthpix	50
+
+							int	heightpix	19
+
+							int bevelwidth	0
+
+							string	text	"str_ldl_CAPS_FOOD"
+						}
+
+						MacroProdLabel:CTP2_STANDARD_FONT {
+
+							int	xpix	2
+
+							int	ypix	13
+
+							int	widthpix	45
+
+							int	heightpix	19
+
+							int bevelwidth	0
+
+							string	text	"str_ldl_PROD"
+						}
+
+						MacroGoldLabel:CTP2_STANDARD_FONT {
+
+							int	xpix	76
+
+							int	ypix	13
+
+							int	widthpix	50
+
+							int	heightpix	19
+
+							int bevelwidth	0
+
+							string	text	"str_ldl_CAPS_GOLD"
+						}
+
+						MacroKnowLabel:CTP2_STANDARD_FONT {
+
+							int	xpix	155
+
+							int	ypix	13
+
+							int	widthpix	60
+
+							int	heightpix	19
+
+							int bevelwidth	0
+
+							string	text	"str_ldl_CAPS_SCIENCE"
+						}
+
+						MacroEatenLabel:CTP2_STANDARD_FONT {
+
+							int	xpix	5
+
+							int	ypix	60
+
+							int	widthpix	45
+
+							int	heightpix	19
+
+							int bevelwidth	0
+
+							string	text	"str_ldl_EATEN"
+						}
+
+						MacroStoredLabel:CTP2_STANDARD_FONT {
+
+							int	xpix	161
+
+							int	ypix	60
+
+							int	widthpix	50
+
+							int	heightpix	19
+
+							int bevelwidth	0
+
+							string	text	"str_ldl_STORED"
+						}
+
+						MacroNextPopLabel:CTP2_STANDARD_FONT {
+
+							int	xpix	67
+
+							int	ypix	81
+
+							int	widthpix	60
+
+							int	heightpix	19
+
+							int bevelwidth	0
+
+							string	text	"str_ldl_NEXT_POP"
+						}
+
+						MacroTurnsLabel:CTP2_STANDARD_FONT {
+
+							int	xpix	155
+
+							int	ypix	81
+
+							int	widthpix	50
+
+							int	heightpix	19
+
+							int bevelwidth	0
+
+							string	text	"str_ldl_TURNS"
+						}
+
+						MacroKnowBox:CTP2_STANDARD_FONT {
+
+							int	xpix	211
+
+							int	ypix	13
+
+							int	widthpix	28
+
+							int	heightpix	19
+
+							int bevelwidth	1
+
+							int beveltype	1
+
+							string	pattern	"error.tga"
+
+							string	text	"str_ldl_0"
+						}
+
+						MacroFoodBox:CTP2_STANDARD_FONT {
+
+							int	xpix	126
+
+							int	ypix	38
+
+							int	widthpix	28
+
+							int	heightpix	19
+
+							int bevelwidth	1
+
+							int beveltype	1
+
+							string	pattern	"error.tga"
+
+							string	text	"str_ldl_0"
+						}
+
+						MacroProdBox:CTP2_STANDARD_FONT {
+
+							int	xpix	44
+
+							int	ypix	13
+
+							int	widthpix	28
+
+							int	heightpix	19
+
+							int bevelwidth	1
+
+							int beveltype	1
+
+							string	pattern	"error.tga"
+
+							string	text	"str_ldl_0"
+						}
+
+						MacroGoldBox:CTP2_STANDARD_FONT {
+
+							int	xpix	126
+
+							int	ypix	13
+
+							int	widthpix	28
+
+							int	heightpix	19
+
+							int bevelwidth	1
+
+							int beveltype	1
+
+							string	pattern	"error.tga"
+
+							string	text	"str_ldl_0"
+						}
+
+						MacroEatenBox:CTP2_STANDARD_FONT {
+
+							int	xpix	49
+
+							int	ypix	60
+
+							int	widthpix	28
+
+							int	heightpix	19
+
+							int bevelwidth	1
+
+							int beveltype	1
+
+							string	pattern	"error.tga"
+
+							string	text	"str_ldl_0"
+						}
+
+						MacroStoredBox:CTP2_STANDARD_FONT {
+
+							int	xpix	211
+
+							int	ypix	60
+
+							int	widthpix	28
+
+							int	heightpix	19
+
+							int bevelwidth	1
+
+							int beveltype	1
+
+							string	pattern	"error.tga"
+
+							string	text	"str_ldl_0"
+						}
+
+						MacroNextPopBox:CTP2_STANDARD_FONT {
+
+							int	xpix	127
+
+							int	ypix	81
+
+							int	widthpix	28
+
+							int	heightpix	19
+
+							int bevelwidth	1
+
+							int beveltype	1
+
+							string	pattern	"error.tga"
+
+							string	text	"str_ldl_0"
+						}
+
+						MacroHappyBox:CTP2_STANDARD_FONT {
+
+							int	xpix	174
+
+							int	ypix	100
+
+							int	widthpix	28
+
+							int	heightpix	19
+
+							int bevelwidth	1
+
+							int beveltype	1
+
+							string	pattern	"error.tga"
+
+							string	text	"str_ldl_0"
+						}
+
+						MacroHappyImage {
+
+							int	xpix	160
+
+							int	ypix	86
+
+							int	widthpix	29
+
+							int	heightpix	23
+
+							string	pattern	"error.tga"
+
+							string	uppicture	"error.tga"
+
+							string	downpicture	"error.tga"
+
+						}
+
+						MacroSadImage {
+
+							int	xpix	49
+
+							int	ypix	86
+
+							int	widthpix	29
+
+							int	heightpix	23
+
+							string	pattern	"error.tga"
+
+							string	uppicture	"error.tga"
+
+							string	downpicture	"error.tga"
+
+						}
+
+		
+
+						MacroHappyLabel:CTP2_STANDARD_FONT {
+
+							int xpix	2
+
+							int ypix	100
+
+							int widthpix	70
+
+							int heightpix	19
+
+							string text		"str_ldl_CAPS_HAPPINESS"
+						}
+
+						
+
+						MacroHappyThermometer {
+
+							int xpix	74
+
+							int ypix	103
+
+							int widthpix	95
+
+							int heightpix	13
+
+							int	percent		50
+
+						}
+
+						MacroHappyImageThermo {
+
+							int	xpix	376
+
+							int	ypix	91
+
+							int	widthpix	18
+
+							int	heightpix	15
+
+							string	image	"error.tga"
+
+						}
+
+						MacroSadImageThermo {
+
+							int	xpix	265
+
+							int	ypix	91
+
+							int	widthpix	18
+
+							int	heightpix	15
+
+							string	image	"error.tga"
+
+						}
+
+					}
+
+				}
+
+			}
+
+		}
+
+		MicroTab:CTP2_STANDARD_FONT {
+
+#			string	xanchor	"left"
+
+#			string	yanchor	"top"
+
+			int	xpix	150
+
+			int	ypix	0
+
+			int	widthpix	72
+
+			int	heightpix	14
+
+			string	parent	"ControlPanelWindow"
+
+			string	text	"str_ldl_POP"
+			string	pattern	"error.tga"
+
+			pane {
+
+#				string	xanchor	"left"
+
+#				string	yanchor	"top"
+
+				int	xpix	0
+
+				int	ypix	0
+
+				int	widthpix	452
+
+				int	heightpix	126
+
+				string	parent	"ControlPanelWindow"
+
+				MicroTabWallpaper {
+
+					int	xpix	4
+
+					int	ypix	3
+
+					int	widthpix	448
+
+					int	heightpix	122
+
+					string	pattern	"error.tga"
+
+
+
+					MicroButtonHolder {
+
+						int	xpix	200
+
+						int	ypix	0
+
+						int	widthpix	248
+
+						int	heightpix	122
+
+						int	beveltype	1
+
+						int	bevelwidth	2
+
+
+
+						MicroMusicianLabel:CTP2_STANDARD_FONT {
+
+							int	xpix	26
+
+							int	ypix	10
+
+							int	widthpix	203
+
+							int	heightpix	24
+
+							int bevelwidth	1
+
+							int beveltype	1
+
+#							string	pattern	"error.tga"
+
+							string	text	"str_ldl_ENTERTAINERS"
+
+
+							MicroMusicianPlus {
+
+								int	xpix	29
+
+								int	ypix	4
+
+								int	widthpix	19
+
+								int	heightpix	16
+
+								string	image0	"error.tga"
+
+								string	image1	"error.tga"
+
+							}
+
+							MicroMusicianMinus {
+
+								int	xpix	4
+
+								int	ypix	4
+
+								int	widthpix	19
+
+								int	heightpix	16
+
+								string	image0	"error.tga"
+
+								string	image1	"error.tga"
+
+							}
+
+							MicroMusicianBox:CTP2_STANDARD_FONT {
+
+								int	xpix	172
+
+								int	ypix	3
+
+								int	widthpix	28
+
+								int	heightpix	19
+
+								int bevelwidth	1
+
+								int beveltype	1
+
+								string	pattern	"error.tga"
+
+								string	text	"str_ldl_0"
+							}
+
+						}
+
+						MicroScientistLabel:CTP2_STANDARD_FONT {
+
+							int	xpix	26
+
+							int	ypix	36
+
+							int	widthpix	203
+
+							int	heightpix	24
+
+							int bevelwidth	1
+
+							int beveltype	1
+
+#							string	pattern	"error.tga"
+
+							string	text	"str_ldl_SCIENTISTS"
+
+
+							MicroScientistPlus {
+
+								int	xpix	29
+
+								int	ypix	4
+
+								int	widthpix	19
+
+								int	heightpix	16
+
+								string	image0	"error.tga"
+
+								string	image1	"error.tga"
+
+							}
+
+							MicroScientistMinus {
+
+								int	xpix	4
+
+								int	ypix	4
+
+								int	widthpix	19
+
+								int	heightpix	16
+
+								string	image0	"error.tga"
+
+								string	image1	"error.tga"
+
+							}
+
+							MicroScientistBox:CTP2_STANDARD_FONT {
+
+								int	xpix	172
+
+								int	ypix	2
+
+								int	widthpix	28
+
+								int	heightpix	19
+
+								int bevelwidth	1
+
+								int beveltype	1
+
+								string	pattern	"error.tga"
+
+								string	text	"str_ldl_0"
+							}
+
+						}
+
+						MicroBankerLabel:CTP2_STANDARD_FONT {
+
+							int	xpix	26
+
+							int	ypix	62
+
+							int	widthpix	203
+
+							int	heightpix	24
+
+							int bevelwidth	1
+
+							int beveltype	1
+
+#							string	pattern	"error.tga"
+
+							string	text	"str_ldl_BANKERS"
+
+
+							MicroBankerPlus {
+
+								int	xpix	29
+
+								int	ypix	4
+
+								int	widthpix	19
+
+								int	heightpix	16
+
+								string	image0	"error.tga"
+
+								string	image1	"error.tga"
+
+							}
+
+							MicroBankerMinus {
+
+								int	xpix	4
+
+								int	ypix	4
+
+								int	widthpix	19
+
+								int	heightpix	16
+
+								string	image0	"error.tga"
+
+								string	image1	"error.tga"
+
+							}
+
+							MicroBankerBox:CTP2_STANDARD_FONT {
+
+								int	xpix	172
+
+								int	ypix	2
+
+								int	widthpix	28
+
+								int	heightpix	19
+
+								int bevelwidth	1
+
+								int beveltype	1
+
+								string	pattern	"error.tga"
+
+								string	text	"str_ldl_0"
+							}
+
+						}
+
+						MicroGruntLabel:CTP2_STANDARD_FONT {
+
+							int	xpix	26
+
+							int	ypix	88
+
+							int	widthpix	203
+
+							int	heightpix	24
+
+							int bevelwidth	1
+
+							int beveltype	1
+
+#							string	pattern	"error.tga"
+
+							string	text	"str_ldl_LABORERS"
+
+
+							MicroGruntPlus {
+
+								int	xpix	29
+
+								int	ypix	4
+
+								int	widthpix	19
+
+								int	heightpix	16
+
+								string	image0	"error.tga"
+
+								string	image1	"error.tga"
+
+							}
+
+							MicroGruntMinus {
+
+								int	xpix	4
+
+								int	ypix	4
+
+								int	widthpix	19
+
+								int	heightpix	16
+
+								string	image0	"error.tga"
+
+								string	image1	"error.tga"
+
+							}
+
+							MicroGruntBox:CTP2_STANDARD_FONT {
+
+								int	xpix	172
+
+								int	ypix	2
+
+								int	widthpix	28
+
+								int	heightpix	19
+
+								int bevelwidth	1
+
+								int beveltype	1
+
+								string	pattern	"error.tga"
+
+								string	text	"str_ldl_0"
+							}
+
+						}
+
+						MicroMusicianModifier:CTP2_STANDARD_FONT {
+
+							int	xpix	397
+
+							int	ypix	31
+
+							int	widthpix	38
+
+							int	heightpix	22
+
+							int bevelwidth	1
+
+							int beveltype	1
+
+							string	pattern	"error.tga"
+
+							string	text	"str_ldl_0"
+						}
+
+						MicroScientistModifier:CTP2_STANDARD_FONT {
+
+							int	xpix	397
+
+							int	ypix	61
+
+							int	widthpix	38
+
+							int	heightpix	22
+
+							int bevelwidth	1
+
+							int beveltype	1
+
+							string	pattern	"error.tga"
+
+							string	text	"str_ldl_0"
+						}
+
+						MicroGruntModifier:CTP2_STANDARD_FONT {
+
+							int	xpix	397
+
+							int	ypix	91
+
+							int	widthpix	38
+
+							int	heightpix	22
+
+							int bevelwidth	1
+
+							int beveltype	1
+
+							string	pattern	"error.tga"
+
+							string	text	"str_ldl_0"
+						}
+
+
+
+					}
+
+
+
+					MicroPicHolder {
+
+						int	xpix	0
+
+						int	ypix	0
+
+						int	widthpix	178
+
+						int	heightpix	122
+
+						int	beveltype	1
+
+						int	bevelwidth	2
+
+						MicroWorkerLabel:CTP2_STANDARD_FONT {
+
+							int	xpix	80
+
+							int	ypix	8
+
+							int	widthpix	63
+
+							int	heightpix	19
+
+							int bevelwidth	0
+
+#							string	pattern	"error.tga"
+
+							string	text	"str_ldl_CAPS_WORKERS"
+						}
+
+						MicroWorkerBox:CTP2_STANDARD_FONT {
+
+							int	xpix	143
+
+							int	ypix	8
+
+							int	widthpix	28
+
+							int	heightpix	19
+
+							int bevelwidth	1
+
+							int beveltype	1
+
+							string	pattern	"error.tga"
+
+							string	text	"str_ldl_0"
+						}
+
+						MicroSlavesLabel:CTP2_STANDARD_FONT {
+
+							int	xpix	2
+
+							int	ypix	8
+
+							int	widthpix	50
+
+							int	heightpix	19
+
+							int bevelwidth	0
+
+#							string	pattern	"error.tga"
+
+							string	text	"str_ldl_CAPS_SLAVES"
+						}
+
+						MicroSlavesBox:CTP2_STANDARD_FONT {
+
+							int	xpix	52
+
+							int	ypix	8
+
+							int	widthpix	28
+
+							int	heightpix	19
+
+							int bevelwidth	1
+
+							int beveltype	1
+
+							string	pattern	"error.tga"
+
+							string	text	"str_ldl_0"
+						}
+
+						MicroTabWorkerPic {
+
+							int	xpix	94
+
+							int	ypix	39
+
+							int	widthpix	76
+
+							int	heightpix	76
+
+							string	image0	"upua88.tga"
+
+							string	imageblttype	"stretch"
+
+						}
+
+						MicroTabSlavePic {
+
+							int	xpix	8
+
+							int	ypix	39
+
+							int	widthpix	76
+
+							int	heightpix	76
+
+							string	image0	"upua89.tga"
+
+							string	imageblttype	"stretch"
+
+						}
+
+					}		
+
+				}
+
+			}
+
+		}
+
+		ProductionTab:CTP2_STANDARD_FONT {
+
+#			string	xanchor	"left"
+
+#			string	yanchor	"top"
+
+			int	xpix	222
+
+			int	ypix	0
+
+			int	widthpix	84
+
+			int	heightpix	14
+
+			string	parent	"ControlPanelWindow"
+
+			string	text	"str_ldl_CAPS_PRODUCTION"
+			string	pattern	"error.tga"
+
+			pane {
+
+#				string	xanchor	"left"
+
+#				string	yanchor	"top"
+
+				int	xpix	0
+
+				int	ypix	0
+
+				int	widthpix	456
+
+				int	heightpix	129
+
+				string	parent	"ControlPanelWindow"
+
+
+
+				ProductionTabWallpaper { 
+
+					int	xpix	4
+
+					int	ypix	3
+
+					int	widthpix	448
+
+					int	heightpix	122
+
+					string	pattern	"error.tga"
+
+
+
+					InventoryListBox {
+
+						int	xpix	2
+
+						int	ypix	22
+
+						int	widthpix	200
+
+						int	heightpix	98
+
+						int columns		1
+
+						int bevelwidth	2
+
+						int beveltype	1
+
+						bool alwaysranger	TRUE
+
+						string	pattern	"error.tga"
+
+						header {
+
+							switch0:CTP2_STANDARD_FONT {
+
+								int	widthpix	200
+
+								int	heightpix	20
+
+								string text "str_ldl_INVENTORY"
+								string	pattern	"error.tga"
+
+								int bevelwidth 	1
+
+							}
+
+						}
+
+					}
+
+
+
+					PurchaseListBox {
+
+						int	xpix	2
+
+						int	ypix	22
+
+						int	widthpix	200
+
+						int	heightpix	98
+
+						int columns		3
+
+						int bevelwidth	2
+
+						int beveltype	1
+
+#						bool alwaysranger	TRUE
+
+						string	pattern	"error.tga"
+
+						header {
+
+							switch0:CTP2_STANDARD_FONT {
+
+								int	widthpix	15
+
+								int	heightpix	20
+
+								string	text	"str_ldl_I"
+								string	pattern	"error.tga"
+
+								int	bevelwidth	1
+
+							}
+
+							switch1:CTP2_STANDARD_FONT {
+
+								int	widthpix	145
+
+								int	heightpix	20
+
+								string text "str_ldl_BUILD_OPTIONS"
+								string	pattern	"error.tga"
+
+								int bevelwidth 	1
+
+							}
+
+							switch2:CTP2_STANDARD_FONT {
+
+								int	widthpix	40
+
+								int	heightpix	20
+
+								string	text	"str_ldl_CAPS_COST"
+								string	pattern	"error.tga"
+
+								int	bevelwidth	1
+
+							}
+
+						}
+
+					}
+
+
+
+					QueueListBox {
+
+						int	xpix	226
+
+						int	ypix	22
+
+						int	widthpix	200
+
+						int	heightpix	98
+
+						int columns		2
+
+						int bevelwidth	2
+
+						int beveltype	1
+
+						bool alwaysranger	TRUE
+
+						string	pattern	"error.tga"
+
+						header {
+
+							switch0:CTP2_STANDARD_FONT {
+
+								int	widthpix	160
+
+								int	heightpix	20
+
+								string text "str_ldl_CAPS_QUEUE"
+								string	pattern	"error.tga"
+
+								int bevelwidth 	1
+
+								QueueExitButton:CTP2_STANDARD_FONT {
+
+									int	xpix	2
+
+									int	ypix	2
+
+									int	widthpix	14
+
+									int	heightpix	14
+
+									string	pattern	"error.tga"
+
+									string	text	"str_ldl_X"
+								}
+
+							}
+
+							switch1:CTP2_STANDARD_FONT {
+
+								int	widthpix	40
+
+								int	heightpix	20
+
+								string	text	"str_ldl_CAPS_COST"
+								string	pattern	"error.tga"
+
+								int	bevelwidth	1
+
+							}
+
+						}
+
+					}
+
+
+
+					ButtonHolder {
+
+						int	xpix	224
+
+						int	ypix	0
+
+						int	widthpix	224
+
+						int	heightpix	122
+
+						int	beveltype	1
+
+						int	bevelwidth	2
+
+						ProdChangeButton:CTP2_STANDARD_FONT {
+
+							int	xpix	130
+
+							int	ypix	8
+
+							int	widthpix	78
+
+							int	heightpix	22
+
+#							string	pattern	"error.tga"
+
+							string	image0	"error.tga"
+
+							string	text	"str_ldl_CAPS_CHANGE"
+						}
+
+						ProdOvertimeButton:CTP2_STANDARD_FONT {
+
+							int	xpix	130
+
+							int	ypix	37
+
+							int	widthpix	78
+
+							int	heightpix	22
+
+#							string	pattern	"error.tga"
+
+							string	image0	"error.tga"
+
+							string	text	"str_ldl_RUSH_BUY"
+						}
+
+						ProdOvertimeCost:CTP2_STANDARD_FONT {
+
+							int	xpix	144
+
+							int	ypix	66
+
+							int	widthpix	50
+
+							int	heightpix	22
+
+							int	bevelwidth	1
+
+							int	beveltype	1
+
+							string	pattern	"error.tga"
+
+							string	text	"str_ldl_1000_G"
+						}
+
+						ProdQueueButton:CTP2_STANDARD_FONT {
+
+							int	xpix	130
+
+							int	ypix	95
+
+							int	widthpix	78
+
+							int	heightpix	22
+
+							string	image0	"error.tga"
+
+							string	text	"str_ldl_CAPS_QUEUE"
+						}
+
+						BeingBuiltText:CTP2_STANDARD_FONT {
+
+							int xpix		13
+
+							int ypix		8
+
+							int widthpix	100
+
+							int heightpix	16
+
+							string pattern "error.tga"
+
+							int bevelwidth	1
+
+							int beveltype 	1
+
+							
+
+							string text "str_ldl_Nothing_Building"
+						}					
+
+						ProductionPicture {
+
+							int	xpix	13
+
+							int	ypix	29
+
+							int	widthpix	100
+
+							int	heightpix	69
+
+							string	imageblttype	"stretch"
+
+							string pattern "error.tga"
+
+							int bevelwidth	1
+
+							int beveltype 	1
+
+						}
+
+						ProductionMeter {
+
+							string	pattern	"error.tga"
+
+							int xpix 13
+
+							int ypix 103
+
+							int widthpix	78
+
+							int heightpix	13
+
+							int percent		50
+
+						}
+
+						TurnText:CTP2_STANDARD_FONT {
+
+							int xpix		91
+
+							int ypix		103
+
+							int widthpix	21
+
+							int heightpix	13
+
+							string	pattern	"error.tga"
+
+							string text "str_ldl_0"
+							int bevelwidth	1
+
+							int	beveltype	1
+
+						}						
+
+						TurnNumberText:CTP2_STANDARD_FONT {
+
+							int xpix		189
+
+							int ypix		97
+
+							int widthpix	31
+
+							int heightpix	19
+
+							int	bevelwidth	1
+
+							string text "str_ldl_0"
+							string pattern "error.tga"
+
+						}
+
+					}
+
+				}
+
+			}
+
+		}
+
+		TradeTab:CTP2_STANDARD_FONT {
+
+			int	xpix	306
+
+			int	ypix	0
+
+			int	widthpix	72
+
+			int	heightpix	14
+
+			string	parent	"ControlPanelWindow"
+
+			string	text	"str_ldl_CAPS_TRADE"
+			string	pattern	"error.tga"
+
+			pane {
+
+				int	xpix	0
+
+				int	ypix	0
+
+				int	widthpix	456
+
+				int	heightpix	129
+
+				string	parent	"ControlPanelWindow"
+
+				string	pattern	"error.tga"
+
+
+
+				TabWallpaper {
+
+					int	xpix	4
+
+					int	ypix	3
+
+					int	widthpix	448
+
+					int	heightpix	122
+
+					string	pattern	"error.tga"
+
+
+
+					TradeButton:CTP2_STANDARD_FONT {
+
+						int	xpix	307
+
+						int	ypix	60
+
+						int	widthpix	102
+
+						int	heightpix	23
+
+						string	pattern	"error.tga"
+
+						string	text	"str_ldl_CAPS_TRADE"
+					#	string image0 "tempbutton1.tga"
+
+					#	string image1 "tempbutton2.tga"
+
+					}
+
+					LockButton:CTP2_STANDARD_FONT {
+
+						int	xpix	307
+
+						int	ypix	87
+
+						int	widthpix	102
+
+						int	heightpix	23
+
+						string	pattern	"error.tga"
+
+						string	text	"str_ldl_CAPS_LOCK"
+					#	string image0 "tempbutton1.tga"
+
+					#	string image1 "tempbutton2.tga"
+
+					}
+
+					GoldLabel:CTP2_STANDARD_FONT {
+
+						int	xpix	307
+
+						int	ypix	5
+
+						int	widthpix	102
+
+						int	heightpix	20
+
+						string	text	"str_ldl_CAPS_TOTAL_GOLD"
+					}
+
+					GoldBox:CTP2_STANDARD_FONT {
+
+						int	xpix	307
+
+						int	ypix	36
+
+						int	widthpix	102
+
+						int	heightpix	23
+
+						string	text	"str_ldl_0"
+					}
+
+					
+
+					TradeList {
+
+						int	xpix	5
+
+						int	ypix	25
+
+						int	widthpix	260
+
+						int	heightpix	90
+
+						int	columns		4
+
+						int bevelwidth	1
+
+						int beveltype	1
+
+						bool alwaysranger	TRUE
+
+						string	pattern	"error.tga"
+
+											
+
+						header {
+
+							switch0:CTP2_STANDARD_FONT {
+
+								int	widthpix	80
+
+								int	heightpix	20
+
+								string text "str_ldl_CAPS_GOODS"
+								string	pattern	"error.tga"
+
+								int bevelwidth 	1
+
+							}
+
+							switch1:CTP2_STANDARD_FONT {
+
+								int	widthpix	70
+
+								int	heightpix	20
+
+								string text "str_ldl_CAPS_FROM"
+								string	pattern	"error.tga"
+
+								int bevelwidth 	1
+
+							}
+
+							switch2:CTP2_STANDARD_FONT {
+
+								int	widthpix	70
+
+								int	heightpix	20
+
+								string text "str_ldl_CAPS_TO"
+								string	pattern	"error.tga"
+
+								int bevelwidth 	1
+
+							}
+
+							switch3:CTP2_STANDARD_FONT {
+
+								int	widthpix	40
+
+								int	heightpix	20
+
+								string text "str_ldl_CAPS_VALUE"
+								string	pattern	"error.tga"
+
+								int bevelwidth 	1
+
+							}
+
+						}
+
+					}
+
+				}
+
+			}
+
+		}
+
+		
+
+		UnitsTab:CTP2_STANDARD_FONT {
+
+			int	xpix	378
+
+			int	ypix	0
+
+			int	widthpix	72
+
+			int	heightpix	14
+
+			string	parent	"ControlPanelWindow"
+
+			string	text	"str_ldl_CAPS_UNITS"
+			string	pattern	"error.tga"
+
+			pane {
+
+				int	xpix	0
+
+				int	ypix	0
+
+				int	widthpix	456
+
+				int	heightpix	129
+
+				string	parent	"ControlPanelWindow"
+
+				string	pattern	"error.tga"
+
+
+
+				TabWallpaper {
+
+					int	xpix	4
+
+					int	ypix	3
+
+					int	widthpix	448
+
+					int	heightpix	122
+
+					string	pattern	"error.tga"
+
+					OrdersButtonBank {
+
+						int	xpix	195
+
+						int	ypix	4
+
+						int	widthpct	54
+
+						int	heightpix	119
+
+						string	pattern	"error.tga"
+
+					}
+
+
+
+					BattleOrderBox {
+
+						int	xpix	5
+
+						int	ypix	4
+
+						int	widthpct	35
+
+						int	heightpix	119
+
+						string	pattern	"error.tga"
+
+						
+
+						UnitImageButton {
+
+							int xpix		40
+
+							int ypix		3
+
+							int widthpix	72
+
+							int	heightpix	54
+
+	#						string pattern "error.tga"
+
+							string imageblttype "stretch"
+
+							int bevelwidth 3
+
+							int beveltype 0
+
+						}
+
+						UnitName:CTP2_STANDARD_FONT {
+
+							int xpix		40
+
+							int ypix		60
+
+							int widthpix	80
+
+							int	heightpix	14
+
+							string pattern "error.tga"
+
+						}
+
+						UnitAttackText:CTP2_STANDARD_FONT {
+
+							int xpix		3
+
+							int ypix		75
+
+							int widthpix	80
+
+							int	heightpix	14
+
+							string text 	"str_ldl_Attack_COLON"
+							string pattern "error.tga"
+
+						}
+
+						UnitAttack:CTP2_STANDARD_FONT {
+
+							int xpix		80
+
+							int ypix		75
+
+							int widthpix	60
+
+							int	heightpix	14
+
+							string pattern "error.tga"
+
+							int bevelwidth 	1
+
+							int beveltype	1
+
+						}
+
+						UnitDefenseText:CTP2_STANDARD_FONT {
+
+							int xpix		3
+
+							int ypix		90
+
+							int widthpix	80
+
+							int	heightpix	14
+
+							string text 	"str_ldl_Defense_COLON"
+							string pattern "error.tga"
+
+						}
+
+						UnitDefense:CTP2_STANDARD_FONT {
+
+							int xpix		80
+
+							int ypix		90
+
+							int widthpix	60
+
+							int	heightpix	14
+
+							string pattern "error.tga"
+
+							int bevelwidth 	1
+
+							int beveltype	1
+
+						}
+
+						UnitMovementText:CTP2_STANDARD_FONT {
+
+							int xpix		3
+
+							int ypix		105
+
+							int widthpix	80
+
+							int	heightpix	14
+
+							string text 	"str_ldl_Movement_COLON"
+							string pattern "error.tga"
+
+						}
+
+						UnitMovement:CTP2_STANDARD_FONT {
+
+							int xpix		80
+
+							int ypix		105
+
+							int widthpix	60
+
+							int	heightpix	14
+
+							string pattern "error.tga"
+
+							int bevelwidth 	1
+
+							int beveltype	1
+
+						}
+
+					}
+
+				}
+
+			}
+
+		}
+
+	}
+
+}
+
+
+
+HappyStatusListItem {
+
+	Name:CTP2_STANDARD_FONT{
+
+		int		xpix			0
+
+		int		ypix			0
+
+		int		widthpix		100
+
+		int		heightpix		20
+
+	}
+
+	Status:CTP2_STANDARD_FONT{
+
+		int		xpix			0
+
+		int		ypix			0
+
+		int		widthpix		100
+
+		int		heightpix		20
+
+	}
+
+	Size:CTP2_STANDARD_FONT{
+
+		int		xpix			0
+
+		int		ypix			0
+
+		int		widthpix		50
+
+		int		heightpix		20
+
+	}
+
+	ThermoStatic {
+
+		int		xpix			0
+
+		int		ypix			0
+
+		int		widthpix		374
+
+		int		heightpix		20
+
+		Thermo {
+
+			int		xpix			4
+
+			int		ypix			3
+
+			int		widthpix		366
+
+			int		heightpix		14
+
+			int		percent			50
+
+		}
+
+	}
+
+	Happiness:CTP2_STANDARD_FONT{
+
+		int		xpix			0
+
+		int		ypix			0
+
+		int		widthpix		100
+
+		int		heightpix		20
+
+	}
+
+	Riot:CTP2_STANDARD_FONT{
+
+		int		xpix			0
+
+		int		ypix			0
+
+		int		widthpix		100
+
+		int		heightpix		20
+
+	}
+
+	Revolution:CTP2_STANDARD_FONT{
+
+		int		xpix			0
+
+		int		ypix			0
+
+		int		widthpix		100
+
+		int		heightpix		20
+
+	}
+
+	Musicians:CTP2_STANDARD_FONT{
+
+		int		xpix			0
+
+		int		ypix			0
+
+		int		widthpix		80
+
+		int		heightpix		20
+
+	}
+
+}
+
+
+
+$
