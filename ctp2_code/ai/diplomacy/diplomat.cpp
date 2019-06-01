@@ -4457,8 +4457,9 @@ bool Diplomat::GetTradeRoutePiracyRisk(const Unit & source_city, const Unit & de
 		{
 			TradeRoute route = city.CD()->GetTradeSourceList()->Access(r);
 
-			if ((route->GetSource() == source_city) &&
-			    (route->GetDestination() == dest_city) &&
+			if (route->GetPirate() >= 0 &&
+			    route->GetSource() == source_city &&
+			    route->GetDestination() == dest_city &&
 			    !AgreementMatrix::s_agreements.HasAgreement(route->GetPirate(),
 			                                                m_playerId, PROPOSAL_OFFER_STOP_PIRACY)
 			   )
