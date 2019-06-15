@@ -11285,9 +11285,9 @@ void CityData::GiveTradeRouteGold()
 				    route.GetSourceResource(type, good);
 					
 				    if(!route->IsBeingPirated()){
-					/*
 					g_player[m_owner]->AddGold(tgold);
 					
+					/*
 					SlicObject * so = new SlicObject("359TradePassing");
 					so->AddRecipient(GetOwner());
 					so->AddGold(tgold) ;
