@@ -2411,6 +2411,7 @@ str_ldl_TradeSellingToCity 		"给这座城市"
 str_ldl_CaravansAvailable 		"可动用商队："
 str_ldl_CaravansInUse 			"使用中商队："
 str_ldl_TotalTradeProfit 		"整体贸易利润："
+str_ldl_TotalPiracyLoss				"Total Piracy Loss:"
 str_ldl_TotalTradeRoutes 		"全部贸易路线："
 
 str_ldl_TradeTitle 			"贸  易  官"

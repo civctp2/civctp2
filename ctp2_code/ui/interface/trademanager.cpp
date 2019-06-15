@@ -536,19 +536,23 @@ void TradeManager::UpdateAdviceWindow()
 		child->SetText(buf);
 	}
 
-	sint32 i, totalProfit = 0, totalRoutes = 0;
+	sint32 i, totalProfit = 0, totalPiracy = 0, totalRoutes = 0;
 	for(i = 0; i < g_player[pl]->m_all_cities->Num(); i++) {
 		Unit city = g_player[pl]->m_all_cities->Access(i);
 		totalRoutes += city.CD()->GetTradeSourceList()->Num();
-		sint32 r;
-		for(r = 0; r < city.CD()->GetTradeSourceList()->Num(); r++) {
-			totalProfit += city.CD()->GetTradeSourceList()->Access(r)->GetValue();
-		}
+		totalProfit += city.CD()->GetGoldFromTradeRoutes(); // takes piracy and wonder bonus into account
+		totalPiracy += city.CD()->GetGoldLostToPiracy(); // takes wonder bonus into account
 	}
 
 	child = (ctp2_Static *)aui_Ldl::GetObject(s_tradeAdviceBlock, "Profit");
 	if(child) {
 		sprintf(buf, "%d", totalProfit);
+		child->SetText(buf);
+	}
+
+	child = (ctp2_Static *)aui_Ldl::GetObject(s_tradeAdviceBlock, "Piracy");
+	if(child) {
+		sprintf(buf, "%d", totalPiracy);
 		child->SetText(buf);
 	}
 

@@ -2411,6 +2411,7 @@ str_ldl_TradeSellingToCity			"Handelspartner"
 str_ldl_CaravansAvailable			"Karawanen:"
 str_ldl_CaravansInUse				"Im Einsatz:"
 str_ldl_TotalTradeProfit			"Einnahmen:"
+str_ldl_TotalPiracyLoss				"Total Piracy Loss:"
 str_ldl_TotalTradeRoutes			"Handelswege:"
 
 str_ldl_TradeTitle				"H A N D E L S M A N A G E R"

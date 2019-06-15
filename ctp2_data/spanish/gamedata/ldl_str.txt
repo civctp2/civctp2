@@ -2411,6 +2411,7 @@ str_ldl_TradeSellingToCity			"A esta ciudad"
 str_ldl_CaravansAvailable			"Caravanas disponibles:"
 str_ldl_CaravansInUse				"Caravanas en uso:"
 str_ldl_TotalTradeProfit			"Benef. com. total:"
+str_ldl_TotalPiracyLoss				"Total Piracy Loss:"
 str_ldl_TotalTradeRoutes			"Rutas com. totales:"
 
 str_ldl_TradeTitle				"A D M I N I S T R A C I Ó N   C O M E R C I A L"

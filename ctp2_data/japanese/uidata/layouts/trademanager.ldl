@@ -514,6 +514,28 @@ TradeAdvice:CTP2_WINDOW {
 		string text "str_ldl_0"
 	}
 
+	PiracyLabel:CTP2_HEADER_FONT {
+		string objecttype "ctp2_Static"
+		int xpix 30
+		int ypix 309
+		int widthpix 108
+		int heightpix 20
+		string just "right"
+		string pattern "uptg20e.tga"
+		string text "str_ldl_TotalPiracyLoss"
+		# Tooltip
+		# string	statustext	"STATUSBAR_TRADEMAN_ADV_TOTAL_PIRACY_DISPLAY"
+	}
+	Piracy:CTP2_HEADER_FONT:CTP2_STATIC_BASE {
+		int xpix 138
+		int ypix 309
+		int widthpix 58
+		int heightpix 20
+		string pattern "uptg20e.tga"
+		int bevelwidth 0
+		string text "str_ldl_0"
+	}
+
 	Background {
 		string objecttype "ctp2_Static"
 		int widthpix 224
