@@ -540,10 +540,7 @@ void TradeManager::UpdateAdviceWindow()
 	for(i = 0; i < g_player[pl]->m_all_cities->Num(); i++) {
 		Unit city = g_player[pl]->m_all_cities->Access(i);
 		totalRoutes += city.CD()->GetTradeSourceList()->Num();
-		sint32 r;
-		for(r = 0; r < city.CD()->GetTradeSourceList()->Num(); r++) {
-			totalProfit += city.CD()->GetTradeSourceList()->Access(r)->GetValue();
-		}
+		totalProfit += city.CD()->GetGoldFromTradeRoutes(); // takes piracy and wonder bonus into account
 	}
 
 	child = (ctp2_Static *)aui_Ldl::GetObject(s_tradeAdviceBlock, "Profit");
