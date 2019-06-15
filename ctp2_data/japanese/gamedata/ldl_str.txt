@@ -2524,6 +2524,7 @@ str_ldl_CaravansAvailable 		"利用可能なｷｬﾗﾊﾞﾝ:"
 str_ldl_CaravansInUse 			"使用中のｷｬﾗﾊﾞﾝ:"
 str_ldl_TotalTradeProfit 		"貿易の合計収益:"
 str_ldl_TotalPiracyLoss				"Total Piracy Loss:"
+str_ldl_TotalTransitProfit			"Total Transit Profit:"
 str_ldl_TotalTradeRoutes 		"貿易ﾙｰﾄの合計数:"
 
 str_ldl_TradeTitle 			"貿易管理"

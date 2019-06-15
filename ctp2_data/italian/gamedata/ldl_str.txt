@@ -2412,6 +2412,7 @@ str_ldl_CaravansAvailable			"Carovane disponibili:"
 str_ldl_CaravansInUse				"Carovane attive:"
 str_ldl_TotalTradeProfit			"Profitto totale:"
 str_ldl_TotalPiracyLoss				"Total Piracy Loss:"
+str_ldl_TotalTransitProfit			"Total Transit Profit:"
 str_ldl_TotalTradeRoutes			"Totale rotte:"
 
 str_ldl_TradeTitle				"G E S T I O N E  C O M M E R C I A L E"
