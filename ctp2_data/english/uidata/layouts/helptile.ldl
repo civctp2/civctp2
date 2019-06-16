@@ -139,7 +139,7 @@ HelpTileWindow {
 		string pattern "uptg20e.tga"
 		int 	xpix		100
 		int 	ypix		 40
-		int widthpix	100
+		int widthpix	500
 		int heightpix	15
 		string textblttype "fill"
 	}
