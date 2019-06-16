@@ -451,7 +451,7 @@ TradeAdvice:CTP2_WINDOW {
 	InUseLabel:CTP2_HEADER_FONT {
 		string objecttype "ctp2_Static"
 		int xpix 30
-		int ypix 239
+		int ypix 242
 		int widthpix 108
 		int heightpix 13
 		string just "right"
@@ -462,7 +462,7 @@ TradeAdvice:CTP2_WINDOW {
 	}
 	InUse:CTP2_HEADER_FONT:CTP2_STATIC_BASE {
 		int xpix 138
-		int ypix 239
+		int ypix 242
 		int widthpix 58
 		int heightpix 13
 		string pattern "uptg20e.tga"
@@ -473,7 +473,7 @@ TradeAdvice:CTP2_WINDOW {
 	RoutesLabel:CTP2_HEADER_FONT {
 		string objecttype "ctp2_Static"
 		int xpix 30
-		int ypix 249
+		int ypix 255
 		int widthpix 108
 		int heightpix 13
 		string just "right"
@@ -484,7 +484,7 @@ TradeAdvice:CTP2_WINDOW {
 	}
 	Routes:CTP2_HEADER_FONT:CTP2_STATIC_BASE {
 		int xpix 138
-		int ypix 249
+		int ypix 255
 		int widthpix 58
 		int heightpix 13
 		string pattern "uptg20e.tga"
@@ -495,7 +495,7 @@ TradeAdvice:CTP2_WINDOW {
 	ProfitLabel:CTP2_HEADER_FONT {
 		string objecttype "ctp2_Static"
 		int xpix 30
-		int ypix 259
+		int ypix 268
 		int widthpix 108
 		int heightpix 13
 		string just "right"
@@ -506,7 +506,7 @@ TradeAdvice:CTP2_WINDOW {
 	}
 	Profit:CTP2_HEADER_FONT:CTP2_STATIC_BASE {
 		int xpix 138
-		int ypix 259
+		int ypix 268
 		int widthpix 58
 		int heightpix 13
 		string pattern "uptg20e.tga"
@@ -517,7 +517,7 @@ TradeAdvice:CTP2_WINDOW {
 	TransitLabel:CTP2_HEADER_FONT {
 		string objecttype "ctp2_Static"
 		int xpix 30
-		int ypix 269
+		int ypix 281
 		int widthpix 108
 		int heightpix 13
 		string just "right"
@@ -528,7 +528,7 @@ TradeAdvice:CTP2_WINDOW {
 	}
 	Transit:CTP2_HEADER_FONT:CTP2_STATIC_BASE {
 		int xpix 138
-		int ypix 269
+		int ypix 281
 		int widthpix 58
 		int heightpix 13
 		string pattern "uptg20e.tga"
@@ -539,7 +539,7 @@ TradeAdvice:CTP2_WINDOW {
 	PiracyLabel:CTP2_HEADER_FONT {
 		string objecttype "ctp2_Static"
 		int xpix 30
-		int ypix 279
+		int ypix 294
 		int widthpix 108
 		int heightpix 13
 		string just "right"
@@ -550,7 +550,7 @@ TradeAdvice:CTP2_WINDOW {
 	}
 	Piracy:CTP2_HEADER_FONT:CTP2_STATIC_BASE {
 		int xpix 138
-		int ypix 279
+		int ypix 294
 		int widthpix 58
 		int heightpix 13
 		string pattern "uptg20e.tga"
