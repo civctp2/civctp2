@@ -5155,6 +5155,9 @@ void CityData::EndTurn()
 	}
 
 	m_build_queue.EndTurn();
+
+	// let city expand if adjacent city is gone or has shrunk
+	GenerateCityInfluence(m_home_city.RetPos(), m_sizeIndex);
 }
 
 void CityData::CalcHappiness(sint32 &virtualGoldSpent, bool isFirstPass)

@@ -129,7 +129,7 @@ bool ExpandInfluence(Unit &city, const MapPoint &centerPos, MapPoint curPos,
 	Cell *cell = g_theWorld->GetCell(curPos);
 
 	if(cell->GetScratch() != 0) return false;
-	if(cell->GetCityOwner().m_id != 0 && cell->GetCityOwner().m_id != city.m_id) return false;
+	if(cell->GetCityOwner().m_id != 0 && cell->GetCityOwner().m_id != city.m_id) return false; // prevents assignment of tiles owned by other adjacent city
 	if(UnitData::GetDistance(centerPos, curPos, 0) > rec->GetSquaredRadius()) return false;
 
 	cell->SetCityOwner(city);
@@ -283,7 +283,7 @@ void GenerateCityInfluence(const MapPoint &cpos, sint32 size)
 {
 	Assert(g_theWorld->GetCell(cpos)->HasCity());
 	Unit					city		= g_theWorld->GetCell(cpos)->GetCity();
-	sint32 const			intRadius	= RadiusFromIndex(size);
+//	sint32 const			intRadius	= RadiusFromIndex(size);
 	ClearScratch(cpos, size);
 	g_theWorld->GetCell(cpos)->SetScratch(1);
 
