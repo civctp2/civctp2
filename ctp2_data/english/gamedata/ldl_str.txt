@@ -945,6 +945,7 @@ str_ldl_Offer					"Offer"
 str_ldl_OFFER_A_GIFT				"OFFER A GIFT"
 str_ldl_OFFER_AN_EXCHANGE			"OFFER AN EXCHANGE"
 str_ldl_Offer_Good				"Offer Good"
+str_ldl_Routes_COLON				"Routes:"
 
 ###	rsh012599 - DO NOT CHANGE THIS TO "Close"...there is already an 'str_ldl_Close'
 ###				- if you see a ui screen that says 'Ok' where it should be 'Close' tell Ryan
