@@ -207,6 +207,7 @@ private:
 	sint32            m_gross_gold;
 	sint32            m_goldFromTradeRoutes;
 	sint32            m_goldLostToPiracy;
+	sint32            m_goldFromTransitRoutes;
 	sint32            m_science;
 	sint32            m_luxury;
 	sint32            m_collected_production_this_turn;  // Will be unused
@@ -467,6 +468,7 @@ public:
 
 	sint32 GetGoldFromTradeRoutes() const { return m_goldFromTradeRoutes; }
 	sint32 GetGoldLostToPiracy() const { return m_goldLostToPiracy; }
+	sint32 GetGoldFromTransitRoutes() const { return m_goldFromTransitRoutes; }
 	TradeDynamicArray* GetTradeSourceList() { return (&m_tradeSourceList); }
 	TradeDynamicArray* GetTradeDestinationList() { return (&m_tradeDestinationList); }
 
@@ -1009,6 +1011,7 @@ private:
 		DPRINTF(k_DBG_AI, ("m_gross_gold: %d\n", sizeof(m_gross_gold)));
 		DPRINTF(k_DBG_AI, ("m_goldFromTradeRoutes: %d\n", sizeof(m_goldFromTradeRoutes)));
 		DPRINTF(k_DBG_AI, ("m_goldLostToPiracy: %d\n", sizeof(m_goldLostToPiracy)));
+		DPRINTF(k_DBG_AI, ("m_goldFromTransitRoutes: %d\n", sizeof(m_goldFromTransitRoutes)));
 		DPRINTF(k_DBG_AI, ("m_science: %d\n", sizeof(m_science)));
 		DPRINTF(k_DBG_AI, ("m_luxury: %d\n", sizeof(m_luxury)));
 		DPRINTF(k_DBG_AI, ("m_city_attitude: %d\n", sizeof(m_city_attitude)));
@@ -1147,6 +1150,7 @@ private:
 		DPRINTF(k_DBG_AI, ("m_gross_gold: %d\n", m_gross_gold));
 		DPRINTF(k_DBG_AI, ("m_goldFromTradeRoutes: %d\n", m_goldFromTradeRoutes));
 		DPRINTF(k_DBG_AI, ("m_goldLostToPiracy: %d\n", m_goldLostToPiracy));
+		DPRINTF(k_DBG_AI, ("m_goldFromTransitRoutes: %d\n", m_goldFromTransitRoutes));
 		DPRINTF(k_DBG_AI, ("m_science: %d\n", m_science));
 		DPRINTF(k_DBG_AI, ("m_luxury: %d\n", m_luxury));
 		DPRINTF(k_DBG_AI, ("m_city_attitude: %d\n", m_city_attitude));

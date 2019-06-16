@@ -382,6 +382,7 @@ CityData::CityData(PLAYER_INDEX owner, Unit hc, const MapPoint &center_point)
 	m_gross_gold                        (0),
 	m_goldFromTradeRoutes               (0),
 	m_goldLostToPiracy                  (0),
+	m_goldFromTransitRoutes             (0),
 	m_science                           (0),
 	m_luxury                            (0),
 	m_city_attitude                     (CITY_ATTITUDE_CONTENT),
@@ -4882,6 +4883,7 @@ void CityData::InitBeginTurnVariables()
 	m_alreadySoldABuilding       = false;
 	m_walls_nullified            = false;
 	//m_secthappy = 0;
+	m_goldFromTransitRoutes      = 0;
 }
 
 void CityData::DoTurnCounters()
@@ -11288,9 +11290,10 @@ void CityData::GiveTradeRouteGold()
 				    route.GetSourceResource(type, good);
 					
 				    if(!route->IsBeingPirated()){
-					/*
 					g_player[m_owner]->AddGold(tgold);
+					m_goldFromTransitRoutes+= tgold;
 					
+					/*
 					SlicObject * so = new SlicObject("359TradePassing");
 					so->AddRecipient(GetOwner());
 					so->AddGold(tgold) ;

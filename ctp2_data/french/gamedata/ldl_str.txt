@@ -2412,6 +2412,7 @@ str_ldl_CaravansAvailable			"Caravanes dispo. :"
 str_ldl_CaravansInUse				"Caravanes util. :"
 str_ldl_TotalTradeProfit			"Total profits :"
 str_ldl_TotalPiracyLoss				"Total Piracy Loss:"
+str_ldl_TotalTransitProfit			"Total Transit Profit:"
 str_ldl_TotalTradeRoutes			"Total routes :"
 
 str_ldl_TradeTitle				"GESTIONNAIRE DE COMMERCE"
