@@ -244,12 +244,24 @@ void helptile_displayData(const MapPoint &p)
 		// UnseenCell object.
 		std::string str= ""; // c++ string to avoid bothering about final length
 		str.append(std::to_string(myTile->GetNumTradeRoutes()));
-		str.append(": ");
-		for(int i = 0; i < myTile->GetNumTradeRoutes(); i++) {
-		    MBCHAR civName[k_MAX_NAME_LEN];
-		    g_player[myTile->GetTradeRoute(i).GetOwner()]->m_civilisation->GetSingularCivName(civName);
-		    str.append(civName);
-		    str.append(" ");
+		str.append(":");
+
+		sint32 seen[k_MAX_PLAYERS];
+		memset(seen, 0, sizeof(seen));
+		for(int i= 0; i < myTile->GetNumTradeRoutes(); i++) {
+		    seen[myTile->GetTradeRoute(i).GetOwner()]++;
+		    }
+		for(int i = 0; i < k_MAX_PLAYERS; i++)
+		    {
+		    if(seen[i] > 0){
+			MBCHAR civName[k_MAX_NAME_LEN];
+			g_player[i]->m_civilisation->GetSingularCivName(civName);
+			str.append(" ");
+			str.append(civName);
+			str.append(" (");
+			str.append(std::to_string(seen[i]));
+			str.append(")");
+			}
 		    }
 		s_tileRoutV->SetText(str.c_str());
 
@@ -293,12 +305,24 @@ void helptile_displayData(const MapPoint &p)
 
 		std::string str= ""; // c++ string to avoid bothering about final length
 		str.append(std::to_string(myTile->GetNumTradeRoutes()));
-		str.append(": ");
-		for(int i = 0; i < myTile->GetNumTradeRoutes(); i++) {
-		    MBCHAR civName[k_MAX_NAME_LEN];
-		    g_player[myTile->GetTradeRoute(i).GetOwner()]->m_civilisation->GetSingularCivName(civName);
-		    str.append(civName);
-		    str.append(" ");
+		str.append(":");
+
+		sint32 seen[k_MAX_PLAYERS];
+		memset(seen, 0, sizeof(seen));
+		for(int i= 0; i < myTile->GetNumTradeRoutes(); i++) {
+		    seen[myTile->GetTradeRoute(i).GetOwner()]++;
+		    }
+		for(int i = 0; i < k_MAX_PLAYERS; i++)
+		    {
+		    if(seen[i] > 0){
+			MBCHAR civName[k_MAX_NAME_LEN];
+			g_player[i]->m_civilisation->GetSingularCivName(civName);
+			str.append(" ");
+			str.append(civName);
+			str.append(" (");
+			str.append(std::to_string(seen[i]));
+			str.append(")");
+			}
 		    }
 		s_tileRoutV->SetText(str.c_str());
 
