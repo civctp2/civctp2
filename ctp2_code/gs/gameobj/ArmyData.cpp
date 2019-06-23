@@ -5913,6 +5913,11 @@ ORDER_RESULT ArmyData::InterceptTrade()
 						m_owner,
 						PROPOSAL_OFFER_STOP_PIRACY))
 					{
+						/// @todo Check what is missing here. turnBuf is never
+						///       initialised, so the effect of so->AddAction
+						///       is unpredictable.
+						
+						char turnBuf[32];
 						SlicObject *so = new SlicObject("12IABreakNoPiracy");
 						so->AddRecipient(m_owner);
 						so->AddCivilisation(m_owner);
@@ -5920,6 +5925,7 @@ ORDER_RESULT ArmyData::InterceptTrade()
 						so->AddUnit(m_array[i]);
 						so->AddLocation(m_pos);
 						so->AddOrder(UNIT_ORDER_INTERCEPT_TRADE);
+						so->AddAction(turnBuf);
 						g_slicEngine->Execute(so);
 
 						g_selected_item->ForceDirectorSelect(Army(m_id));
