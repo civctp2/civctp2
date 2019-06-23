@@ -5913,10 +5913,6 @@ ORDER_RESULT ArmyData::InterceptTrade()
 						m_owner,
 						PROPOSAL_OFFER_STOP_PIRACY))
 					{
-						char turnBuf[32];
-						Agreement ag = g_player[cell->GetOwner()]->FindAgreement(AGREEMENT_TYPE_NO_PIRACY, m_owner);
-						sprintf(turnBuf, "%d", ag.GetTurns() + 1);
-						
 						SlicObject *so = new SlicObject("12IABreakNoPiracy");
 						so->AddRecipient(m_owner);
 						so->AddCivilisation(m_owner);
@@ -5924,7 +5920,14 @@ ORDER_RESULT ArmyData::InterceptTrade()
 						so->AddUnit(m_array[i]);
 						so->AddLocation(m_pos);
 						so->AddOrder(UNIT_ORDER_INTERCEPT_TRADE);
-						so->AddAction(turnBuf);
+						
+						char turnBuf[32];
+						Agreement ag = g_player[cell->GetOwner()]->FindAgreement(AGREEMENT_TYPE_NO_PIRACY, m_owner);
+						if(g_theAgreementPool->IsValid(ag) && ag.GetRecipient() == m_owner){
+						    sprintf(turnBuf, "%d", ag.GetTurns() + 1);
+						    so->AddAction(turnBuf);
+						    }
+
 						g_slicEngine->Execute(so);
 
 						g_selected_item->ForceDirectorSelect(Army(m_id));
