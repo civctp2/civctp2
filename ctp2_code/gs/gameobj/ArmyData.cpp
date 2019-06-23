@@ -5913,11 +5913,10 @@ ORDER_RESULT ArmyData::InterceptTrade()
 						m_owner,
 						PROPOSAL_OFFER_STOP_PIRACY))
 					{
-						/// @todo Check what is missing here. turnBuf is never
-						///       initialised, so the effect of so->AddAction
-						///       is unpredictable.
-						
 						char turnBuf[32];
+						Agreement ag = g_player[cell->GetOwner()]->FindAgreement(AGREEMENT_TYPE_NO_PIRACY, m_owner);
+						sprintf(turnBuf, "%d", ag.GetTurns() + 1);
+						
 						SlicObject *so = new SlicObject("12IABreakNoPiracy");
 						so->AddRecipient(m_owner);
 						so->AddCivilisation(m_owner);
