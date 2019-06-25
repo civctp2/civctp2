@@ -5900,6 +5900,7 @@ ORDER_RESULT ArmyData::InterceptTrade()
 		if (m_array[i].CanInterceptTrade() &&
 			m_array[i].CanPerformSpecialAction())
 		{
+		        /* code apparently a left-over from CTP1, see: https://github.com/civctp2/civctp2/pull/154
 			if(!g_player[m_owner]->IsRobot()
 			||(g_network.IsClient()
 			&& g_network.IsLocalPlayer(m_owner))
@@ -5927,6 +5928,7 @@ ORDER_RESULT ArmyData::InterceptTrade()
 					}
 				}
 			}
+		        */
 
 			ORDER_RESULT const	res	= m_array[i].InterceptTrade();
 
