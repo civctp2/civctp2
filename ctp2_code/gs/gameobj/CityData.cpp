@@ -305,11 +305,12 @@
 #include "wonderutil.h"
 #include "World.h"                      // g_theWorld
 
+#if defined(_DEBUG) || defined(USE_LOGGING)
+#include "Timer.h"
+#endif
+
 extern Pollution *      g_thePollution;
 extern TopTen *         g_theTopTen;
-
-
-
 
 class HackCityArchive : public CivArchive
 {
@@ -372,116 +373,116 @@ public:
 CityData::CityData(PLAYER_INDEX owner, Unit hc, const MapPoint &center_point)
 :
     m_owner                             (owner),
-	m_slaveBits                         (0),
-	m_accumulated_food                  (0),
-	m_shieldstore                       (0),
-	m_shieldstore_at_begin_turn         (0),
-	m_build_category_at_begin_turn      (-4),
-	m_net_gold                          (0),
-	m_gold_lost_to_crime                (0),
-	m_gross_gold                        (0),
-	m_goldFromTradeRoutes               (0),
-	m_goldLostToPiracy                  (0),
-	m_science                           (0),
-	m_luxury                            (0),
-	m_city_attitude                     (CITY_ATTITUDE_CONTENT),
-	m_collected_production_this_turn    (0),
-	m_gross_production                  (0),
+    m_slaveBits                         (0),
+    m_accumulated_food                  (0),
+    m_shieldstore                       (0),
+    m_shieldstore_at_begin_turn         (0),
+    m_build_category_at_begin_turn      (-4),
+    m_net_gold                          (0),
+    m_gold_lost_to_crime                (0),
+    m_gross_gold                        (0),
+    m_goldFromTradeRoutes               (0),
+    m_goldLostToPiracy                  (0),
+    m_science                           (0),
+    m_luxury                            (0),
+    m_city_attitude                     (CITY_ATTITUDE_CONTENT),
+    m_collected_production_this_turn    (0),
+    m_gross_production                  (0),
     m_gross_prod_before_bonuses         (0),
-	m_net_production                    (0),
-	m_production_lost_to_crime          (0),
-	m_built_improvements                (0),
-	m_builtWonders                      (0),
-	m_food_delta                        (0.0),
-	m_gross_food                        (0.0),
+    m_net_production                    (0),
+    m_production_lost_to_crime          (0),
+    m_built_improvements                (0),
+    m_builtWonders                      (0),
+    m_food_delta                        (0.0),
+    m_gross_food                        (0.0),
     m_gross_food_before_bonuses         (0.0),
-	m_net_food                          (0.0),
-	m_food_lost_to_crime                (0.0),
-	m_food_consumed_this_turn           (0.0),
-	m_total_pollution                   (0),
-	m_cityPopulationPollution           (0),
-	m_cityIndustrialPollution           (0),
-	m_foodVatPollution                  (0),
-	m_cityPollutionCleaner              (0),
-	m_contribute_materials              (true),
-	m_contribute_military               (true),
-	m_capturedThisTurn                  (false),
-	m_spied_upon                        (0),
-	m_walls_nullified                   (false),
-	m_franchise_owner                   (PLAYER_UNASSIGNED),
-	m_franchiseTurnsRemaining           (-1),
-	m_watchfulTurns                     (-1),
-	m_bioInfectionTurns                 (-1),
-	m_bioInfectedBy                     (PLAYER_UNASSIGNED),
-	m_nanoInfectionTurns                (-1),
-	m_nanoInfectedBy                    (PLAYER_UNASSIGNED),
-	m_convertedTo                       (PLAYER_UNASSIGNED),
-	m_convertedGold                     (0),
-	m_convertedBy                       (CONVERTED_BY_NOTHING),
-	m_terrainWasPolluted                (false),
-	m_happinessAttacked                 (false),
-	m_happinessAttackedBy               (PLAYER_UNASSIGNED),
-	m_terrainImprovementWasBuilt        (false),
-	m_improvementWasBuilt               (false),
-	m_isInjoined                        (false),
-	m_injoinedBy                        (PLAYER_UNASSIGNED),
-	m_airportLastUsed                   (-1),
-	m_founder                           (owner),
-	m_wages_paid                        (0),
-	m_pw_from_infrastructure            (0),
-	m_gold_from_capitalization          (0),
-	m_buildInfrastructure               (false),
-	m_buildCapitalization               (false),
-	m_paidForBuyFront                   (false),
-	m_doUprising                        (UPRISING_CAUSE_NONE),
-	m_turnFounded                       (g_turn ? g_turn->GetRound() : 0),
-	m_productionLostToFranchise         (0),
-	m_probeRecoveredHere                (false),
-	m_lastCelebrationMsg                (-1),
-	m_alreadySoldABuilding              (false),
-	m_population                        (0),
-	m_partialPopulation                 (0),
+    m_net_food                          (0.0),
+    m_food_lost_to_crime                (0.0),
+    m_food_consumed_this_turn           (0.0),
+    m_total_pollution                   (0),
+    m_cityPopulationPollution           (0),
+    m_cityIndustrialPollution           (0),
+    m_foodVatPollution                  (0),
+    m_cityPollutionCleaner              (0),
+    m_contribute_materials              (true),
+    m_contribute_military               (true),
+    m_capturedThisTurn                  (false),
+    m_spied_upon                        (0),
+    m_walls_nullified                   (false),
+    m_franchise_owner                   (PLAYER_UNASSIGNED),
+    m_franchiseTurnsRemaining           (-1),
+    m_watchfulTurns                     (-1),
+    m_bioInfectionTurns                 (-1),
+    m_bioInfectedBy                     (PLAYER_UNASSIGNED),
+    m_nanoInfectionTurns                (-1),
+    m_nanoInfectedBy                    (PLAYER_UNASSIGNED),
+    m_convertedTo                       (PLAYER_UNASSIGNED),
+    m_convertedGold                     (0),
+    m_convertedBy                       (CONVERTED_BY_NOTHING),
+    m_terrainWasPolluted                (false),
+    m_happinessAttacked                 (false),
+    m_happinessAttackedBy               (PLAYER_UNASSIGNED),
+    m_terrainImprovementWasBuilt        (false),
+    m_improvementWasBuilt               (false),
+    m_isInjoined                        (false),
+    m_injoinedBy                        (PLAYER_UNASSIGNED),
+    m_airportLastUsed                   (-1),
+    m_founder                           (owner),
+    m_wages_paid                        (0),
+    m_pw_from_infrastructure            (0),
+    m_gold_from_capitalization          (0),
+    m_buildInfrastructure               (false),
+    m_buildCapitalization               (false),
+    m_paidForBuyFront                   (false),
+    m_doUprising                        (UPRISING_CAUSE_NONE),
+    m_turnFounded                       (g_turn ? g_turn->GetRound() : 0),
+    m_productionLostToFranchise         (0),
+    m_probeRecoveredHere                (false),
+    m_lastCelebrationMsg                (-1),
+    m_alreadySoldABuilding              (false),
+    m_population                        (0),
+    m_partialPopulation                 (0),
 //	sint16 m_numSpecialists[POP_MAX];
 //	sint32 m_specialistDBIndex[POP_MAX];
-	m_sizeIndex                         (0),
-	m_workerFullUtilizationIndex        (0),
-	m_workerPartialUtilizationIndex     (0),
-	m_useGovernor                       (false),
-	m_buildListSequenceIndex            (0),
-	m_garrisonOtherCities               (false),
-	m_garrisonComplete                  (false),
-	m_currentGarrison                   (0),
-	m_neededGarrison                    (0),
-	m_currentGarrisonStrength           (0.0),
-	m_neededGarrisonStrength            (0.0),
-	m_sellBuilding                      (-1),
-	m_buyFront                          (false),
-	m_max_food_from_terrain             (0),
-	m_max_prod_from_terrain             (0),
-	m_max_gold_from_terrain             (0),
-	m_growth_rate                       (0),
-	m_overcrowdingCoeff                 (0.0),
-	m_starvation_turns                  (0),
-	m_cityStyle                         (CITY_STYLE_GENERIC),
-	m_pos                               (center_point),
-	m_is_rioting                        (false),
-	m_home_city                         (hc),
-	m_min_turns_revolt                  (0),
-	m_build_queue                       (),
-	m_tradeSourceList                   (),
-	m_tradeDestinationList              (),
+    m_sizeIndex                         (0),
+    m_workerFullUtilizationIndex        (0),
+    m_workerPartialUtilizationIndex     (0),
+    m_useGovernor                       (false),
+    m_buildListSequenceIndex            (0),
+    m_garrisonOtherCities               (false),
+    m_garrisonComplete                  (false),
+    m_currentGarrison                   (0),
+    m_neededGarrison                    (0),
+    m_currentGarrisonStrength           (0.0),
+    m_neededGarrisonStrength            (0.0),
+    m_sellBuilding                      (-1),
+    m_buyFront                          (false),
+    m_max_food_from_terrain             (0),
+    m_max_prod_from_terrain             (0),
+    m_max_gold_from_terrain             (0),
+    m_growth_rate                       (0),
+    m_overcrowdingCoeff                 (0.0),
+    m_starvation_turns                  (0),
+    m_cityStyle                         (CITY_STYLE_GENERIC),
+    m_pos                               (center_point),
+    m_is_rioting                        (false),
+    m_home_city                         (hc),
+    m_min_turns_revolt                  (0),
+    m_build_queue                       (),
+    m_tradeSourceList                   (),
+    m_tradeDestinationList              (),
 #ifdef CTP1_TRADE
-	m_resources                         (),
-	m_localResources                    (),
+    m_resources                         (),
+    m_localResources                    (),
 #else
-	m_collectingResources               (),
-	m_sellingResources                  (),
-	m_buyingResources                   (),
+    m_collectingResources               (),
+    m_sellingResources                  (),
+    m_buyingResources                   (),
 #endif
-	m_happy                             (new Happy()),
-	m_name                              (NULL),
+    m_happy                             (new Happy()),
+    m_name                              (NULL),
 //	sint32    *m_distanceToGood;
-	m_defensiveBonus                    (0.0),
+    m_defensiveBonus                    (0.0),
 //	sint32    *m_ringFood;
 //	sint32    *m_ringProd;
 //	sint32    *m_ringGold;
@@ -491,50 +492,50 @@ CityData::CityData(PLAYER_INDEX owner, Unit hc, const MapPoint &center_point)
 //	double    *m_laborersEff;
 //	double    *m_merchantsEff;
 //	double    *m_scientistsEff;
-	m_max_processed_terrain_food        (0.0),
-	m_max_processed_terrain_prod        (0.0),
-	m_max_processed_terrain_gold        (0.0),
-	m_max_processed_terrain_scie        (0.0),
-	m_grossFoodCrimeLoss                (0.0),
-	m_grossProdCrimeLoss                (0.0),
-	m_grossGoldCrimeLoss                (0.0),
-	m_grossScieCrimeLoss                (0.0),
-	m_grossProdBioinfectionLoss         (0.0),
-	m_grossProdFranchiseLoss            (0.0),
-	m_grossGoldConversionLoss           (0.0),
-	m_foodFromOnePop                    (0.0),
-	m_prodFromOnePop                    (0.0),
-	m_goldFromOnePop                    (0.0),
-	m_scieFromOnePop                    (0.0),
-	m_crimeFoodLossOfOnePop             (0.0),
-	m_crimeProdLossOfOnePop             (0.0),
-	m_crimeGoldLossOfOnePop             (0.0),
-	m_crimeScieLossOfOnePop             (0.0),
-	m_bioinfectionProdLossOfOnePop      (0.0),
-	m_franchiseProdLossOfOnePop         (0.0),
-	m_conversionGoldLossOfOnePop        (0.0),
-	m_productionLostToBioinfection      (0),
-	m_max_scie_from_terrain             (0),
-	m_gross_science                     (0.0),
-	m_science_lost_to_crime             (0.0),
+    m_max_processed_terrain_food        (0.0),
+    m_max_processed_terrain_prod        (0.0),
+    m_max_processed_terrain_gold        (0.0),
+    m_max_processed_terrain_scie        (0.0),
+    m_grossFoodCrimeLoss                (0.0),
+    m_grossProdCrimeLoss                (0.0),
+    m_grossGoldCrimeLoss                (0.0),
+    m_grossScieCrimeLoss                (0.0),
+    m_grossProdBioinfectionLoss         (0.0),
+    m_grossProdFranchiseLoss            (0.0),
+    m_grossGoldConversionLoss           (0.0),
+    m_foodFromOnePop                    (0.0),
+    m_prodFromOnePop                    (0.0),
+    m_goldFromOnePop                    (0.0),
+    m_scieFromOnePop                    (0.0),
+    m_crimeFoodLossOfOnePop             (0.0),
+    m_crimeProdLossOfOnePop             (0.0),
+    m_crimeGoldLossOfOnePop             (0.0),
+    m_crimeScieLossOfOnePop             (0.0),
+    m_bioinfectionProdLossOfOnePop      (0.0),
+    m_franchiseProdLossOfOnePop         (0.0),
+    m_conversionGoldLossOfOnePop        (0.0),
+    m_productionLostToBioinfection      (0),
+    m_max_scie_from_terrain             (0),
+    m_gross_science                     (0.0),
+    m_science_lost_to_crime             (0.0),
 #endif
-	m_cityRadiusOp                      (RADIUS_OP_UKNOWN),
-	m_killList                          (NULL),
-	m_radiusNewOwner                    (0),
+    m_cityRadiusOp                      (RADIUS_OP_UKNOWN),
+    m_killList                          (NULL),
+    m_radiusNewOwner                    (0),
     m_tilecount                         (0),
 //            m_whichtile;
     m_tempGoodAdder                     (NULL),
     m_tempGood                          (-1),
     m_tempGoodCount                     (0),
-	m_sentInefficientMessageAlready     (false),
-	m_culture                           (0),      //emod
-	m_secthappy                         (0),      //emod
-	m_bonusFood                         (0.0),
-	m_bonusFoodCoeff                    (0.0),
-	m_bonusProdCoeff                    (0.0),
-	m_bonusProd                         (0.0),
-	m_bonusGoldCoeff                    (0.0),
-	m_bonusGold                         (0.0)
+    m_sentInefficientMessageAlready     (false),
+    m_culture                           (0),      //emod
+    m_secthappy                         (0),      //emod
+    m_bonusFood                         (0.0),
+    m_bonusFoodCoeff                    (0.0),
+    m_bonusProdCoeff                    (0.0),
+    m_bonusProd                         (0.0),
+    m_bonusGoldCoeff                    (0.0),
+    m_bonusGold                         (0.0)
 {
 	m_build_queue.SetOwner(m_owner);
 	m_build_queue.SetCity(m_home_city);
@@ -1574,6 +1575,8 @@ void CityData::PrepareToRemove(const CAUSE_REMOVE_ARMY cause,
 		if(it.Pos() == m_home_city.RetPos()) continue;
 		g_theWorld->GetCell(it.Pos())->SetCityOwner(Unit());
 	}
+
+	// Change influence of neighbor cities
 }
 
 //----------------------------------------------------------------------------
@@ -1871,7 +1874,6 @@ void CityData::Revolt(sint32 &playerToJoin, bool causeIsExternal)
 //----------------------------------------------------------------------------
 void CityData::TeleportUnits(const MapPoint &pos, bool &revealed_foreign_units, sint32 foreigner)
 {
-
 	sint32 i;
 	Cell *cell = g_theWorld->GetCell(m_home_city.RetPos());
 
@@ -1973,7 +1975,6 @@ void CityData::StopTradingWith(PLAYER_INDEX bannedRecipient)
 		destCity = route.GetDestination();
 		if ((srcCity.GetOwner() == bannedRecipient) && (destCity.GetOwner() == bannedRecipient))
 			route.Kill(CAUSE_KILL_TRADE_ROUTE_DIPLOMATIC_AGREEMENT);
-
 	}
 }
 
@@ -3592,16 +3593,24 @@ void CityData::CalculateCoeffProd()
 //----------------------------------------------------------------------------
 void CityData::CalculateBonusGold()
 {
+#if defined(_DEBUG) || defined(USE_LOGGING)
+	Timer t1;
+	t1.start();
+#endif
+
 	m_bonusGold  = static_cast<double>(CalculateGoldFromResources());
+	DPRINTF(k_DBG_GOVERNOR, ("//  CalculateGoldFromResources    = %f ms (%s)\n", t1.getElapsedTimeInMilliSec(), GetName()));
 
 	//EMOD Civilization and Citystyle bonuses
 	m_bonusGold += g_player[m_owner]->CivCommerceBonus();
+	DPRINTF(k_DBG_GOVERNOR, ("//  CivCommerceBonus              = %f ms (%s)\n", t1.getElapsedTimeInMilliSec(), GetName()));
 
 	const CityStyleRecord *styleRec = g_theCityStyleDB->Get(GetCityStyle(), g_player[m_owner]->GetGovernmentType());
 	if(styleRec)
 	{
 		m_bonusGold += styleRec->GetBonusGold();
 	}
+	DPRINTF(k_DBG_GOVERNOR, ("//  GetBonusGold                  = %f ms (%s)\n", t1.getElapsedTimeInMilliSec(), GetName()));
 
 	//Added by E - EXPORT BONUSES TO GOODS This is only for adding not multiplying
 	for(sint32 g = 0; g < g_theResourceDB->NumRecords(); ++g)
@@ -3615,6 +3624,7 @@ void CityData::CalculateBonusGold()
 			}
 		}
 	}
+	DPRINTF(k_DBG_GOVERNOR, ("//  GetTradeGold                  = %f ms (%s)\n", t1.getElapsedTimeInMilliSec(), GetName()));
 
 	// EMOD - Advances can add bonuses JULY 5 2006
 	for(sint32 i = 0; i < g_theAdvanceDB->NumRecords(); i++)
@@ -3629,41 +3639,52 @@ void CityData::CalculateBonusGold()
 		}
 	}
 	//end EMOD
+	DPRINTF(k_DBG_GOVERNOR, ("//  GetBonusGold                  = %f ms (%s)\n", t1.getElapsedTimeInMilliSec(), GetName()));
 
 	//EMOD moved to the end to avoid commercepercent multiplying flags that are likely to be used in the negative
 
 	sint32 goldPerCitizen = buildingutil_GetGoldPerCitizen(GetEffectiveBuildings(), m_owner);
 	m_bonusGold += goldPerCitizen * PopCount();
+	DPRINTF(k_DBG_GOVERNOR, ("//  goldPerCitizen                = %f ms (%s)\n", t1.getElapsedTimeInMilliSec(), GetName()));
 
 	//////////////////////////////////
 	//EMOD - GoldPerCity but now it multiplied to the max number of cities to allow for higher gold hits to humans 3-27-2006
 	sint32 goldPerCity = buildingutil_GetGoldPerCity(GetEffectiveBuildings(), m_owner);
 	//gold += static_cast<double>(goldPerCity * g_player[m_owner]->m_all_cities->Num());
 	m_bonusGold += static_cast<double>(goldPerCity * g_player[m_owner]->m_all_cities->Num() * g_theGovernmentDB->Get(g_player[m_owner]->m_government_type)->GetTooManyCitiesThreshold());
+	DPRINTF(k_DBG_GOVERNOR, ("//  GetGoldPerCity                = %f ms (%s)\n", t1.getElapsedTimeInMilliSec(), GetName()));
 
 	///////////////////////////////////////////////
 	// EMOD - Add(or if negative Subtract) gold per unit
 	sint32 goldPerUnit = buildingutil_GetGoldPerUnit(GetEffectiveBuildings(), m_owner);
 	m_bonusGold += static_cast<double>(goldPerUnit * g_player[m_owner]->m_all_units->Num());
+	DPRINTF(k_DBG_GOVERNOR, ("//  GetGoldPerUnit                = %f ms (%s)\n", t1.getElapsedTimeInMilliSec(), GetName()));
 
 	///////////////////////////////////////////////
 	// EMOD - Add(or if negative Subtract) gold per unit and multiplied by readiness level
 	sint32 goldPerUnitReadiness = buildingutil_GetGoldPerUnitReadiness(GetEffectiveBuildings(), m_owner);
 	m_bonusGold += static_cast<double>(goldPerUnitReadiness * g_player[m_owner]->m_all_units->Num()) * g_player[m_owner]->m_readiness->GetSupportModifier(g_player[m_owner]->m_government_type);
+	DPRINTF(k_DBG_GOVERNOR, ("//  GetGoldPerUnitReadiness       = %f ms (%s)\n", t1.getElapsedTimeInMilliSec(), GetName()));
 
 	///////////////////////////////////////////////
 	// EMOD - Add(or if negative Subtract) gold per unit and multiplied by goldhunger * readiness * govt coefficient * wages
 	sint32 goldPerUnitSupport = buildingutil_GetGoldPerUnitSupport(GetEffectiveBuildings(), m_owner);
 	m_bonusGold += static_cast<double>(goldPerUnitSupport * g_player[m_owner]->m_readiness->TotalUnitGoldSupport()) * g_player[m_owner]->GetWagesPerPerson() * g_player[m_owner]->m_readiness->GetSupportModifier(g_player[m_owner]->m_government_type);
+	DPRINTF(k_DBG_GOVERNOR, ("//  GetGoldPerUnitSupport         = %f ms (%s)\n", t1.getElapsedTimeInMilliSec(), GetName()));
 
 	double interest;
 	buildingutil_GetTreasuryInterest(GetEffectiveBuildings(), interest, m_owner);
 	m_bonusGold += static_cast<double>(g_player[m_owner]->m_gold->GetLevel()) * interest;
+	DPRINTF(k_DBG_GOVERNOR, ("//  GetTreasuryInterest           = %f ms (%s)\n", t1.getElapsedTimeInMilliSec(), GetName()));
+
+#if defined(_DEBUG) || defined(USE_LOGGING)
+	t1.stop();
+#endif
 }
 
 //----------------------------------------------------------------------------
 //
-// Name       : CityData::CalculateBonusGold
+// Name       : CityData::CalculateCoeffGold
 //
 // Description: Calculates the bonus gold coefficent from buildings etc. The
 //              coefficent is multiplied by the gold from terrain.
@@ -3799,7 +3820,7 @@ void CityData::CalculateBonusScie()
 	//end EMOD
 
 	//Civilization Bonus
-	m_bonusScie += g_player[m_home_city.GetOwner()]->CivScienceBonus();
+	m_bonusScie += g_player[m_owner]->CivScienceBonus();
 }
 
 //----------------------------------------------------------------------------
@@ -4980,7 +5001,7 @@ bool CityData::BeginTurn()
 	m_gold_from_capitalization = 0;
 
 	CalculateTradeRoutes(false);
-	g_player[m_owner]->PreResourceCalculation(this);
+	PreResourceCalculation();
 
 #if defined(NEW_RESOURCE_PROCESS)
 	PayResources();
@@ -6352,7 +6373,7 @@ bool CityData::IsLocalResource(sint32 resource) const
 
 void CityData::AddGoodToCity(sint32 good)
 {
-	 m_collectingResources.AddResource(good);
+	m_collectingResources.AddResource(good);
 }
 
 bool CityData::HasTileImpInRadius(sint32 tileimp) const
@@ -8560,7 +8581,7 @@ sint32 CityData::GetBestSpecialist(const POP_TYPE & type) const
 
 //----------------------------------------------------------------------------
 //
-// Name       : Governor::AdjustSizeIndices
+// Name       : CityData::AdjustSizeIndices
 //
 // Description: Adjusts the city size indices and makes the city radius grow
 //              or shrink if necessary.
@@ -8642,20 +8663,21 @@ void CityData::AdjustSizeIndices()
 
 void CityData::ChangePopulation(sint32 delta)
 {
-    m_population                 += delta;
-    m_numSpecialists[POP_WORKER] += (sint16) delta;
+	m_population                 += delta;
+	m_numSpecialists[POP_WORKER] += (sint16) delta;
 
-    for (int i = 0; (i < POP_MAX) && (m_numSpecialists[POP_WORKER] < 0); ++i)
-    {
-        if (m_numSpecialists[i] > 0)
-        {
-            sint16 convertCount = std::min<sint16>
-                                      (m_numSpecialists[i], -m_numSpecialists[POP_WORKER]);
-            m_numSpecialists[i]          -= convertCount;
-            m_numSpecialists[POP_WORKER] += convertCount;
-        }
-    }
-    Assert(m_numSpecialists[POP_WORKER] >= 0);
+	for (int i = 0; (i < POP_MAX) && (m_numSpecialists[POP_WORKER] < 0); ++i)
+	{
+		if (m_numSpecialists[i] > 0)
+		{
+			sint16 convertCount = std::min<sint16>
+			                          (m_numSpecialists[i], -m_numSpecialists[POP_WORKER]);
+			m_numSpecialists[i]          -= convertCount;
+			m_numSpecialists[POP_WORKER] += convertCount;
+		}
+	}
+
+	Assert(m_numSpecialists[POP_WORKER] >= 0);
 
 	AdjustSizeIndices();
 
@@ -10844,9 +10866,19 @@ sint32 CityData::ProcessSectarianHappiness(sint32 newsecthappy, sint32 owner, si
 //----------------------------------------------------------------------------
 void CityData::ProcessAllResources()
 {
-	g_player[m_owner]->PreResourceCalculation(this);
+#if defined(_DEBUG) || defined(USE_LOGGING)
+	Timer t1;
+	t1.start();
+#endif
+
+	PreResourceCalculation();
+
+	DPRINTF(k_DBG_GOVERNOR, ("//  City time for precalculation  = %f ms (%s)\n", t1.getElapsedTimeInMilliSec(), GetName()));
 
 	CollectResources();
+
+	DPRINTF(k_DBG_GOVERNOR, ("//  City time for collection      = %f ms (%s)\n", t1.getElapsedTimeInMilliSec(), GetName()));
+
 #if defined(NEW_RESOURCE_PROCESS)
 	ProcessResources();
 	CalculateResources();
@@ -10854,18 +10886,47 @@ void CityData::ProcessAllResources()
 	DoSupport(true);
 #else
 	ProcessProduction(true);
+
+	DPRINTF(k_DBG_GOVERNOR, ("//  City time for production      = %f ms (%s)\n", t1.getElapsedTimeInMilliSec(), GetName()));
+
 	DoSupport(true);                // Deduct wages and building costs
+
+	DPRINTF(k_DBG_GOVERNOR, ("//  City time for support         = %f ms (%s)\n", t1.getElapsedTimeInMilliSec(), GetName()));
+
 	SplitScience(true);             // Deduct science costs
+
+	DPRINTF(k_DBG_GOVERNOR, ("//  City time for paying scince   = %f ms (%s)\n", t1.getElapsedTimeInMilliSec(), GetName()));
+
 	CollectOtherTrade(true);
+
+	DPRINTF(k_DBG_GOVERNOR, ("//  City time for other trade     = %f ms (%s)\n", t1.getElapsedTimeInMilliSec(), GetName()));
+
 	ProcessFood();
+
+	DPRINTF(k_DBG_GOVERNOR, ("//  City time for food            = %f ms (%s)\n", t1.getElapsedTimeInMilliSec(), GetName()));
+
 	CalcPollution();
+
+	DPRINTF(k_DBG_GOVERNOR, ("//  City time for pollution       = %f ms (%s)\n", t1.getElapsedTimeInMilliSec(), GetName()));
 #endif
 	sint32 gold = 0;
 	// Production has an effect on pollution and polltion has an effect
 	// on happiness. Of course better would be only one recalculation.
 	CalcHappiness(gold, false);
+
+	DPRINTF(k_DBG_GOVERNOR, ("//  City time for happiness       = %f ms (%s)\n", t1.getElapsedTimeInMilliSec(), GetName()));
+
 	EatFood();
+
+	DPRINTF(k_DBG_GOVERNOR, ("//  City time for eating          = %f ms (%s)\n", t1.getElapsedTimeInMilliSec(), GetName()));
+
 	CalculateGrowthRate();
+
+	DPRINTF(k_DBG_GOVERNOR, ("//  City total time for resources = %f ms (%s)\n", t1.getElapsedTimeInMilliSec(), GetName()));
+
+#if defined(_DEBUG) || defined(USE_LOGGING)
+	t1.stop();
+#endif
 }
 
 //----------------------------------------------------------------------------
@@ -10907,7 +10968,7 @@ sint32 CityData::TileImpHappinessIncr() const
 		}
 	}
 
-    return totalHappinessInc;
+	return totalHappinessInc;
 }
 
 //----------------------------------------------------------------------------
@@ -11432,14 +11493,31 @@ bool CityData::IsCoastal() const
 
 void CityData::PreResourceCalculation()
 {
+#if defined(_DEBUG) || defined(USE_LOGGING)
+	Timer t1;
+	t1.start();
+#endif
+
 	CalculateBonusFood();
+	DPRINTF(k_DBG_GOVERNOR, ("//  CalculateBonusFood            = %f ms (%s)\n", t1.getElapsedTimeInMilliSec(), GetName()));
 	CalculateCoeffFood();
+	DPRINTF(k_DBG_GOVERNOR, ("//  CalculateCoeffFood            = %f ms (%s)\n", t1.getElapsedTimeInMilliSec(), GetName()));
 	CalculateBonusProd();
+	DPRINTF(k_DBG_GOVERNOR, ("//  CalculateBonusProd            = %f ms (%s)\n", t1.getElapsedTimeInMilliSec(), GetName()));
 	CalculateCoeffProd();
+	DPRINTF(k_DBG_GOVERNOR, ("//  CalculateCoeffProd            = %f ms (%s)\n", t1.getElapsedTimeInMilliSec(), GetName()));
 	CalculateBonusGold();
+	DPRINTF(k_DBG_GOVERNOR, ("//  CalculateBonusGold            = %f ms (%s)\n", t1.getElapsedTimeInMilliSec(), GetName()));
 	CalculateCoeffGold();
+	DPRINTF(k_DBG_GOVERNOR, ("//  CalculateCoeffGold            = %f ms (%s)\n", t1.getElapsedTimeInMilliSec(), GetName()));
 	CalculateBonusScie();
+	DPRINTF(k_DBG_GOVERNOR, ("//  CalculateBonusScie            = %f ms (%s)\n", t1.getElapsedTimeInMilliSec(), GetName()));
 	CalculateCoeffScie();
+	DPRINTF(k_DBG_GOVERNOR, ("//  CalculateCoeffScie            = %f ms (%s)\n", t1.getElapsedTimeInMilliSec(), GetName()));
+
+#if defined(_DEBUG) || defined(USE_LOGGING)
+	t1.stop();
+#endif
 }
 
 sint32 CityData::GetSpecialistsResources(POP_TYPE pop) const

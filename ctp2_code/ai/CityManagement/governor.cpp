@@ -2760,7 +2760,7 @@ void Governor::AssignPopulation(CityData *city, bool hasAllAdvances) const
 	}
 
 #if defined(_DEBUG) || defined(USE_LOGGING)
-	DPRINTF(k_DBG_GOVERNOR, ("//  Elapsed time for popasign      = %f ms (%s)\n", t1.getElapsedTimeInMilliSec(), city->GetName()));
+	DPRINTF(k_DBG_GOVERNOR, ("//  Elapsed time for popasign (sub)= %f ms (%s)\n", t1.getElapsedTimeInMilliSec(), city->GetName()));
 #endif
 }
 
