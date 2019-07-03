@@ -1006,7 +1006,8 @@ PRIMITIVES_ERRCODE primitives_DrawDashedLine16(
 	sint32 y1,
 	sint32 x2,
 	sint32 y2,
-	Pixel16 color
+	Pixel16 color,
+	sint32 length
 	)
 {
 	Assert(pSurface);
@@ -1031,6 +1032,9 @@ PRIMITIVES_ERRCODE primitives_DrawDashedLine16(
 	uint16 *    pDest       = (uint16 *)(pSurfBase + y1 * surfPitch + (x1 << 1));
 	*pDest = color;
 
+	sint32 draw = length;
+	sint32 skip = 0;
+
 	if (absdx >= absdy)
 	{
 		for (sint32 i=absdx;i;i--)
@@ -1043,8 +1047,20 @@ PRIMITIVES_ERRCODE primitives_DrawDashedLine16(
 			}
 			x1 += sdx;
 
-			pDest = (uint16 *)(pSurfBase + y1 * surfPitch + (x1 << 1));
-			*pDest = color;
+			if ( draw  ) {
+			        pDest = (uint16 *)(pSurfBase + y1 * surfPitch + (x1 << 1));
+			        *pDest = color;
+				draw--;
+				if ( !draw ) {
+					skip = length;
+				}
+			}
+			else {
+				skip--;
+				if ( !skip ) {
+					draw = length;
+				}
+			}
 		}
 	}
 	else
@@ -1059,8 +1075,20 @@ PRIMITIVES_ERRCODE primitives_DrawDashedLine16(
 			}
 			y1 += sdy;
 
-			pDest = (uint16 *)(pSurfBase + y1 * surfPitch + (x1 << 1));
-			*pDest = color;
+			if ( draw  ) {
+			        pDest = (uint16 *)(pSurfBase + y1 * surfPitch + (x1 << 1));
+			        *pDest = color;
+				draw--;
+				if ( !draw ) {
+					skip = length;
+				}
+			}
+			else {
+				skip--;
+				if ( !skip ) {
+					draw = length;
+				}
+			}
 		}
 	}
 
