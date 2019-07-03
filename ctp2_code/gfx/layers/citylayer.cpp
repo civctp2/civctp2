@@ -126,7 +126,7 @@ void DrawTradeRouteSegment(aui_Surface *surf, MapPoint &pos, WORLD_DIRECTION dir
 	if (x1 >= 0 && y1 >= 0 && x2 >= 0 && y2 >= 0 &&
 		x1 < surf->Width() && y1 < surf->Height() && x2 < surf->Width() && y2 < surf->Height()) {
 
-		primitives_DrawDashedAALine16(surf,x1,y1,x2,y2,route,k_TRADE_DASH_LEN);
+		primitives_DrawLine16(surf,x1,y1,x2,y2,route);
 	}
 
 	if (x1==x2) {
