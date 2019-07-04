@@ -775,7 +775,12 @@ void sci_advancescreen_clearGoalArray()
 	memset(s_scienceGoalTree, 0, sizeof(bool)*g_theAdvanceDB->NumRecords());
 }
 
-bool scieadvancescreen_isGoal(sint32 goal)
+bool sci_advancescreen_hasGoal()
+{
+	return s_scienceGoalTree != NULL;
+}
+
+bool sci_advancescreen_isGoal(sint32 goal)
 {
 	return s_scienceGoalTree && s_scienceGoalTree[goal];
 }
