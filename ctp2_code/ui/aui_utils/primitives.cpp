@@ -1032,7 +1032,7 @@ PRIMITIVES_ERRCODE primitives_DrawDashedLine16(
 	uint16 *    pDest       = (uint16 *)(pSurfBase + y1 * surfPitch + (x1 << 1));
 	*pDest = color;
 
-	sint32 draw = length;
+	sint32 draw = length / 2; // start with only half the dash length for more evenly distributed dashes
 	sint32 skip = 0;
 
 	if (absdx >= absdy)
