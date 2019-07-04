@@ -51,7 +51,7 @@ extern Background		*g_background;
 #include "screenmanager.h"
 extern ScreenManager	*g_screenManager;
 
-#define k_TRADE_DASH_LEN 10
+#define k_TRADE_DASH_LEN 5
 
 void DrawTradeRouteSegment(aui_Surface *surf, MapPoint &pos, WORLD_DIRECTION dir,
 							uint16 route, uint16 outline)
