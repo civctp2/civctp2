@@ -1000,6 +1000,105 @@ PRIMITIVES_ERRCODE primitives_DrawLine16(
 	return PRIMITIVES_ERRCODE_OK;
 }
 
+PRIMITIVES_ERRCODE primitives_DrawDashedLine16(
+	aui_Surface *pSurface,
+	sint32 x1,
+	sint32 y1,
+	sint32 x2,
+	sint32 y2,
+	Pixel16 color,
+	sint32 length
+	)
+{
+	Assert(pSurface);
+	if(pSurface == NULL) return PRIMITIVES_ERRCODE_INVALIDPARAM;
+
+	sint32 dx = x2-x1;
+	sint32 dy = y2-y1;
+	sint32 sdx = sgn(dx);
+	sint32 sdy = sgn(dy);
+	sint32 absdx = abs(dx);
+	sint32 absdy = abs(dy);
+	sint32 num = absdy >> 1;
+	sint32 den = absdx >> 1;
+
+	uint8 *pSurfBase;
+
+	sint32 errcode = pSurface->Lock(NULL,(LPVOID *)&pSurfBase,0);
+	Assert(errcode == AUI_ERRCODE_OK);
+	if (errcode != AUI_ERRCODE_OK) return PRIMITIVES_ERRCODE_SURFACELOCKFAILED;
+
+	sint32      surfPitch   = pSurface->Pitch();
+	uint16 *    pDest       = (uint16 *)(pSurfBase + y1 * surfPitch + (x1 << 1));
+	*pDest = color;
+
+	sint32 draw = length / 2; // start with only half the dash length for more evenly distributed dashes
+	sint32 skip = 0;
+
+	if (absdx >= absdy)
+	{
+		for (sint32 i=absdx;i;i--)
+		{
+			num += absdy;
+			if (num > absdx)
+			{
+				num -= absdx;
+				y1 += sdy;
+			}
+			x1 += sdx;
+
+			if ( draw  ) {
+			        pDest = (uint16 *)(pSurfBase + y1 * surfPitch + (x1 << 1));
+			        *pDest = color;
+				draw--;
+				if ( !draw ) {
+					skip = length;
+				}
+			}
+			else {
+				skip--;
+				if ( !skip ) {
+					draw = length;
+				}
+			}
+		}
+	}
+	else
+	{
+		for (sint32 i=absdy;i;i--)
+		{
+			den += absdx;
+			if (den > absdy)
+			{
+				den -= absdy;
+				x1 += sdx;
+			}
+			y1 += sdy;
+
+			if ( draw  ) {
+			        pDest = (uint16 *)(pSurfBase + y1 * surfPitch + (x1 << 1));
+			        *pDest = color;
+				draw--;
+				if ( !draw ) {
+					skip = length;
+				}
+			}
+			else {
+				skip--;
+				if ( !skip ) {
+					draw = length;
+				}
+			}
+		}
+	}
+
+	errcode = pSurface->Unlock((LPVOID)pSurfBase);
+	Assert(errcode == AUI_ERRCODE_OK);
+	if (errcode != AUI_ERRCODE_OK) return PRIMITIVES_ERRCODE_SURFACEUNLOCKFAILED;
+
+	return PRIMITIVES_ERRCODE_OK;
+}
+
 #define k_MAX_BLEND_VALUES	8
 #define k_BLEND_COLOR		0x0000
 #define k_BLEND_VALUE		10

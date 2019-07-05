@@ -67,7 +67,8 @@ PRIMITIVES_ERRCODE  primitives_Scale16(aui_Surface *pSrc, aui_Surface *pDst, con
 
 PRIMITIVES_ERRCODE	primitives_DrawLine16(aui_Surface *pSurface,
 			  sint32 x1,sint32 y1,sint32 x2,sint32 y2,Pixel16 color);
-
+PRIMITIVES_ERRCODE	primitives_DrawDashedLine16(aui_Surface *pSurface,
+			  sint32 x1,sint32 y1,sint32 x2,sint32 y2,Pixel16 color, sint32 length = 0);
 
 PRIMITIVES_ERRCODE	primitives_DrawText(aui_Surface *pDirectSurface,
 				sint32 x, sint32 y, const MBCHAR *pString,COLORREF color, bool bg);
