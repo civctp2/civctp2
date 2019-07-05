@@ -480,6 +480,9 @@ AUI_ERRCODE Chart::Update( sint32 index )
 	MBCHAR str[_MAX_PATH];
 	if(g_player[g_selected_item->GetVisiblePlayer()]->m_researchGoal >= 0)
 	{
+		if(!sci_advancescreen_hasGoal())
+			sci_advancescreen_initAndFillGoalArray(g_player[g_selected_item->GetVisiblePlayer()]->m_researchGoal);
+
 		sint32 all;
 		sint32 have;
 		sci_advancescreen_getGoalAdvances(have, all);
@@ -529,7 +532,7 @@ AUI_ERRCODE Chart::Update( sint32 index )
 		m_preReqIndex[i] = g_theAdvanceDB->Get(index)->GetPrerequisitesIndex(i);
 		m_preReqButton[i]->Move( xpos, ypos + i*heightBetweenButtons + i*buttonHeight );
 
-		if(scieadvancescreen_isGoal(m_preReqIndex[i]))
+		if(sci_advancescreen_isGoal(m_preReqIndex[i]))
 		{
 			sprintf(str, "%s*", g_theAdvanceDB->GetNameStr(m_preReqIndex[i]));
 			m_preReqButton[i]->SetText(str);
@@ -583,7 +586,7 @@ AUI_ERRCODE Chart::Update( sint32 index )
 		m_eitherPreReqButton[i]->Move( xpos, ypos + i*heightBetweenButtons + i*buttonHeight );
 		m_eitherPreReqButton[i]->SetText( s );
 	
-		if(scieadvancescreen_isGoal(m_eitherPreReqIndex[i]))
+		if(sci_advancescreen_isGoal(m_eitherPreReqIndex[i]))
 		{
 			sprintf(str, "%s*", g_theAdvanceDB->GetNameStr(m_eitherPreReqIndex[i]));
 			m_eitherPreReqButton[i]->SetText(str);
@@ -634,7 +637,7 @@ AUI_ERRCODE Chart::Update( sint32 index )
 	m_centerIndex = index;
 	m_centerButton->Move( xpos, ypos );
 
-	if(scieadvancescreen_isGoal(m_centerIndex))
+	if(sci_advancescreen_isGoal(m_centerIndex))
 	{
 		MBCHAR str[256];
 		sprintf(str, "%s*", g_theAdvanceDB->GetNameStr(m_centerIndex));
@@ -679,7 +682,7 @@ AUI_ERRCODE Chart::Update( sint32 index )
 	{
 		m_leadsToButton[i]->Move( xpos, ypos + i*heightBetweenButtons + i*buttonHeight );
 
-		if(scieadvancescreen_isGoal(m_leadsToIndex[i]))
+		if(sci_advancescreen_isGoal(m_leadsToIndex[i]))
 		{
 			sprintf(str, "%s*", g_theAdvanceDB->GetNameStr(m_leadsToIndex[i]));
 			m_leadsToButton[i]->SetText(str);
