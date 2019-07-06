@@ -2432,9 +2432,9 @@ ORDER_RESULT UnitData::InterceptTrade()
 			continue;
 
 		g_gevManager->AddEvent
-		    (GEV_INSERT_AfterCurrent,   GEV_SetPiratingArmy,
+		    (GEV_INSERT_AfterCurrent,   GEV_SetPiratingArmy, // executes StopPiracyRegardEvent
 			 GEA_TradeRoute,            route,
-			 GEA_Army,                  m_army,
+			 GEA_Army,                  m_army, // set a valid pirating army to the trade route
 			 GEA_End
 		    );
 

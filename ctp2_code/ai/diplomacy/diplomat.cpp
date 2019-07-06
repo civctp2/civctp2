@@ -1445,9 +1445,9 @@ void Diplomat::EnactStopPiracy(const PLAYER_INDEX victimId, const PLAYER_INDEX p
 			if (army.IsValid() && (army.GetOwner() == pirateId))
 			{
 				g_gevManager->AddEvent
-				    (GEV_INSERT_Tail, GEV_SetPiratingArmy,
+				    (GEV_INSERT_Tail, GEV_SetPiratingArmy, // executes StopPiracyRegardEvent
 				     GEA_TradeRoute, route,
-				     GEA_Army, 0,
+				     GEA_Army, 0, // setting the pirating army to ID= 0 stops pirating this route
 				     GEA_End
 				   );
 			}

@@ -5930,7 +5930,7 @@ ORDER_RESULT ArmyData::InterceptTrade()
 			}
 		        */
 
-			ORDER_RESULT const	res	= m_array[i].InterceptTrade();
+			ORDER_RESULT const	res	= m_array[i].InterceptTrade(); // call UnitData::InterceptTrade() which adds GEV_SetPiratingArmy
 
 			if (res == ORDER_RESULT_ILLEGAL)
 			{
@@ -10990,9 +10990,9 @@ void ArmyData::StopPirating()
 			if (route->GetPiratingArmy().m_id == m_id)
 			{
 				g_gevManager->AddEvent
-				    (GEV_INSERT_AfterCurrent, GEV_SetPiratingArmy,
+				    (GEV_INSERT_AfterCurrent, GEV_SetPiratingArmy, // executes StopPiracyRegardEvent
 				     GEA_TradeRoute, route,
-				     GEA_Army, 0,
+				     GEA_Army, 0, // setting the pirating army to ID= 0 stops pirating this route
 				     GEA_End
 				    );
 			}
