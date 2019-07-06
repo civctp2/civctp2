@@ -4564,6 +4564,55 @@ SFN_ERROR Slic_BreakNoPiracy::Call(SlicArgList *args)
 	return SFN_ERROR_OK;
 }
 
+SFN_ERROR Slic_BreakTradePact::Call(SlicArgList *args)
+{
+	if(args->Count() != 0) {
+		return SFN_ERROR_NUM_ARGS;
+	}
+
+	SlicObject *context = g_slicEngine->GetContext();
+	if(!g_player[context->GetPlayer(0)]) {
+		return SFN_ERROR_TYPE_ARGS;
+	}
+
+	if(!g_player[context->GetPlayer(1)]) {
+		return SFN_ERROR_TYPE_ARGS;
+	}
+
+	sint32 pirate, victim;
+	pirate = context->GetPlayer(0);
+	victim = context->GetPlayer(1);
+
+	if(!g_player[pirate])
+		return SFN_ERROR_DEAD_PLAYER;
+
+	if(!g_player[victim])
+		return SFN_ERROR_DEAD_PLAYER;
+
+	if (AgreementMatrix::s_agreements.HasAgreement(
+		victim,
+		pirate,
+		PROPOSAL_TREATY_TRADE_PACT)){
+
+	    /* expecting sync of agrrements over network to be handled by Diplomat::LogViolationEvent or dependent events
+	    Agreement ag = g_player[victim]->FindAgreement(AGREEMENT_TYPE_TRADE_PACT, pirate);
+	    if(g_theAgreementPool->IsValid(ag)){
+		if(g_network.IsClient()) {
+		    g_network.SendAction(new NetAction(NET_ACTION_VIOLATE_AGREEMENT,
+			    ag.m_id));
+		} else if(g_network.IsHost()) {
+		    g_network.Enqueue(new NetInfo(NET_INFO_CODE_VIOLATE_AGREEMENT,
+			    ag.m_id, pirate));
+		}
+	    }
+	    */
+	    
+	    Diplomat & route_diplomat = Diplomat::GetDiplomat(victim);
+	    route_diplomat.LogViolationEvent(pirate, PROPOSAL_TREATY_TRADE_PACT);
+	}
+	return SFN_ERROR_OK;
+}
+
 SFN_ERROR Slic_UseDirector::Call(SlicArgList *args)
 {
 	if(args->Count() != 0) {

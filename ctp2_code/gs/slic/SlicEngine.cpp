@@ -723,6 +723,7 @@ void SlicEngine::AddBuiltinFunctions()
 	m_functionHash->Add(new Slic_ClearBuildQueue);
 	m_functionHash->Add(new Slic_BreakLeaveOurLands);
 	m_functionHash->Add(new Slic_BreakNoPiracy);
+	m_functionHash->Add(new Slic_BreakTradePact);
 	m_functionHash->Add(new Slic_UseDirector);
 	m_functionHash->Add(new Slic_ClearOrders);
 	m_functionHash->Add(new Slic_SetTimerGranularity);
