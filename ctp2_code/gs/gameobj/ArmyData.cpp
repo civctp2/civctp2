@@ -5912,7 +5912,7 @@ ORDER_RESULT ArmyData::InterceptTrade()
 					if (AgreementMatrix::s_agreements.HasAgreement(
 						route_owner,
 						m_owner,
-						PROPOSAL_OFFER_STOP_PIRACY))
+						PROPOSAL_REQUEST_STOP_PIRACY))
 					{
 						SlicObject *so = new SlicObject("12IABreakNoPiracy");
 						so->AddRecipient(m_owner);
