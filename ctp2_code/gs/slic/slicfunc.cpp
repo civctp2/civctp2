@@ -4541,10 +4541,11 @@ SFN_ERROR Slic_BreakNoPiracy::Call(SlicArgList *args)
 		return SFN_ERROR_DEAD_PLAYER;
 
 	if (AgreementMatrix::s_agreements.HasAgreement(
-		pirate,
 		victim,
-		PROPOSAL_OFFER_STOP_PIRACY)){
+		pirate,
+		PROPOSAL_REQUEST_STOP_PIRACY)){
 
+	    /* expecting sync of agrrements over network to be handled by Diplomat::LogViolationEvent or dependent events
 	    Agreement ag = g_player[victim]->FindAgreement(AGREEMENT_TYPE_NO_PIRACY, pirate);
 	    if(g_theAgreementPool->IsValid(ag)){
 		if(g_network.IsClient()) {
@@ -4555,8 +4556,10 @@ SFN_ERROR Slic_BreakNoPiracy::Call(SlicArgList *args)
 			    ag.m_id, pirate));
 		}
 	    }
+	    */
 	    
-	    ag.AccessData()->RecipientIsViolating(pirate, TRUE);
+	    Diplomat & route_diplomat = Diplomat::GetDiplomat(victim);
+	    route_diplomat.LogViolationEvent(pirate, PROPOSAL_REQUEST_STOP_PIRACY);
 	}
 	return SFN_ERROR_OK;
 }
