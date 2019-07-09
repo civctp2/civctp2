@@ -4910,7 +4910,7 @@ void CityData::DoTurnCounters()
 	{
 		m_franchiseTurnsRemaining--;
 	}
-	else if(m_franchiseTurnsRemaining == 0)
+	else if(m_franchiseTurnsRemaining <= 0)
 	{
 		m_franchise_owner = -1;
 		m_franchiseTurnsRemaining = -1;
