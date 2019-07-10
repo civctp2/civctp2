@@ -1467,6 +1467,20 @@ MessageClass(420);
 	}
 }
 
+alertBox '12IABreakTradePact' {
+MessageClass(420);
+	Text(ID_IA_BREAK_TREATY); // using messge from (unused) 10IABreakTreaty
+	Button(ID_BUTTON_NO) {
+		ClearOrders(unit[0]);
+		Kill();
+	}
+	Button(ID_BUTTON_YES) {
+		BreakTradePact();
+		AddOrder(unit[0], location[0]);
+		Kill();
+	}
+}
+
 alertBox '13IAEnteringLands' {
 MessageClass(420);
 	Text(ID_IA_ENTERING_LANDS);

@@ -5926,6 +5926,23 @@ ORDER_RESULT ArmyData::InterceptTrade()
 						g_selected_item->ForceDirectorSelect(Army(m_id));
 						return ORDER_RESULT_ILLEGAL;
 					}
+					if (AgreementMatrix::s_agreements.HasAgreement(
+						route_owner,
+						m_owner,
+						PROPOSAL_TREATY_TRADE_PACT))
+					{
+						SlicObject *so = new SlicObject("12IABreakTradePact");
+						so->AddRecipient(m_owner);
+						so->AddCivilisation(m_owner);
+						so->AddCivilisation(route_owner);
+						so->AddUnit(m_array[i]);
+						so->AddLocation(m_pos);
+						so->AddOrder(UNIT_ORDER_INTERCEPT_TRADE);
+						g_slicEngine->Execute(so);
+
+						g_selected_item->ForceDirectorSelect(Army(m_id));
+						return ORDER_RESULT_ILLEGAL;
+					}
 				}
 			}
 
