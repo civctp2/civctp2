@@ -750,15 +750,15 @@ TERRAIN_GLACIER_GOOD_FOUR {
    Icon ICON_GOOD_GLACIER_FOUR
 }
 
-# Perls # 55
+# Jellyfish # 73
 TERRAIN_WATER_SHELF_GOOD_ONE {
-  SpriteID 17
-  Sound SOUND_ID_CRABS
-  Gold 1
+  SpriteID 73
+  Sound SOUND_ID_GIANT_SQUID
+  Gold 5
   Food 10
-  Production 10
+  Production 0
   Probability 0.25
-  Icon ICON_GOOD_GLACIER_ONE
+  Icon ICON_GOOD_SHELF_WATER_ONE
 }
 
 # Octopus # 56
