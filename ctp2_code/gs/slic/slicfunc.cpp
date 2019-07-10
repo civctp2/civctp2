@@ -90,6 +90,7 @@
 #include "Regard.h"
 #include "message.h"
 #include "Agreement.h"
+#include "AgreementMatrix.h"
 #include "TradeOffer.h"
 #include "Civilisation.h"
 #include "screenutils.h"
@@ -4539,20 +4540,26 @@ SFN_ERROR Slic_BreakNoPiracy::Call(SlicArgList *args)
 	if(!g_player[victim])
 		return SFN_ERROR_DEAD_PLAYER;
 
-	sint32 i;
-	for(i = g_player[pirate]->m_agreed->Num() - 1; i >= 0; i--) {
-		Agreement ag = g_player[pirate]->m_agreed->Access(i);
-		if(g_theAgreementPool->IsValid(ag) &&
-		   ag.GetRecipient() == pirate &&
-		   ag.GetOwner() == victim &&
-		   ag.GetAgreement() == AGREEMENT_TYPE_NO_PIRACY) {
-			if(g_network.IsClient()) {
-				g_network.SendAction(new NetAction(NET_ACTION_VIOLATE_AGREEMENT,
-												   ag.m_id));
-			}
+	if (AgreementMatrix::s_agreements.HasAgreement(
+		victim,
+		pirate,
+		PROPOSAL_REQUEST_STOP_PIRACY)){
 
-			ag.AccessData()->RecipientIsViolating(pirate, TRUE);
+	    /* expecting sync of agrrements over network to be handled by Diplomat::LogViolationEvent or dependent events
+	    Agreement ag = g_player[victim]->FindAgreement(AGREEMENT_TYPE_NO_PIRACY, pirate);
+	    if(g_theAgreementPool->IsValid(ag)){
+		if(g_network.IsClient()) {
+		    g_network.SendAction(new NetAction(NET_ACTION_VIOLATE_AGREEMENT,
+			    ag.m_id));
+		} else if(g_network.IsHost()) {
+		    g_network.Enqueue(new NetInfo(NET_INFO_CODE_VIOLATE_AGREEMENT,
+			    ag.m_id, pirate));
 		}
+	    }
+	    */
+	    
+	    Diplomat & route_diplomat = Diplomat::GetDiplomat(victim);
+	    route_diplomat.LogViolationEvent(pirate, PROPOSAL_REQUEST_STOP_PIRACY);
 	}
 	return SFN_ERROR_OK;
 }

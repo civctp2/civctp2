@@ -5900,7 +5900,7 @@ ORDER_RESULT ArmyData::InterceptTrade()
 		if (m_array[i].CanInterceptTrade() &&
 			m_array[i].CanPerformSpecialAction())
 		{
-		        /* code apparently a left-over from CTP1, see: https://github.com/civctp2/civctp2/pull/154
+		        // code apparently a left-over from CTP1, see: https://github.com/civctp2/civctp2/pull/154
 			if(!g_player[m_owner]->IsRobot()
 			||(g_network.IsClient()
 			&& g_network.IsLocalPlayer(m_owner))
@@ -5912,7 +5912,7 @@ ORDER_RESULT ArmyData::InterceptTrade()
 					if (AgreementMatrix::s_agreements.HasAgreement(
 						route_owner,
 						m_owner,
-						PROPOSAL_OFFER_STOP_PIRACY))
+						PROPOSAL_REQUEST_STOP_PIRACY))
 					{
 						SlicObject *so = new SlicObject("12IABreakNoPiracy");
 						so->AddRecipient(m_owner);
@@ -5928,9 +5928,8 @@ ORDER_RESULT ArmyData::InterceptTrade()
 					}
 				}
 			}
-		        */
 
-			ORDER_RESULT const	res	= m_array[i].InterceptTrade();
+			ORDER_RESULT const	res	= m_array[i].InterceptTrade(); // call UnitData::InterceptTrade() which adds GEV_SetPiratingArmy
 
 			if (res == ORDER_RESULT_ILLEGAL)
 			{
@@ -10990,9 +10989,9 @@ void ArmyData::StopPirating()
 			if (route->GetPiratingArmy().m_id == m_id)
 			{
 				g_gevManager->AddEvent
-				    (GEV_INSERT_AfterCurrent, GEV_SetPiratingArmy,
+				    (GEV_INSERT_AfterCurrent, GEV_SetPiratingArmy, // executes StopPiracyRegardEvent
 				     GEA_TradeRoute, route,
-				     GEA_Army, 0,
+				     GEA_Army, 0, // setting the pirating army to ID= 0 stops pirating this route
 				     GEA_End
 				    );
 			}
