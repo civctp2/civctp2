@@ -1430,7 +1430,7 @@ STDEHANDLER(RemoveFranchiseEvent)
 
 	if(!args->GetArmy(0, a)) return GEV_HD_Continue;
 	if(!args->GetUnit(0, lawyer)) return GEV_HD_Continue;
-	if(!args->GetUnit(0, city)) return GEV_HD_Continue;
+	if(!args->GetCity(0, city)) return GEV_HD_Continue;
 
 	city.SetFranchiseTurnsRemaining(g_theConstDB->Get(0)->GetTurnsToSueFranchise());
 	return GEV_HD_Continue;
