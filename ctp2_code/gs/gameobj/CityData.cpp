@@ -5971,7 +5971,7 @@ void CityData::SetCapitol()
 void CityData::MakeFranchise(sint32 player)
 {
 	m_franchise_owner = player;
-	m_franchiseTurnsRemaining = -1;
+	m_franchiseTurnsRemaining = g_theConstDB->Get(0)->GetTurnsFranchised(); // do not use SetFranchiseTurnsRemaining here, as it resets the owner for -1
 }
 
 sint32 CityData::GetFranchiseTurnsRemaining() const
