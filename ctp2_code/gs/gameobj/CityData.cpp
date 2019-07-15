@@ -4910,9 +4910,9 @@ void CityData::DoTurnCounters()
 	{
 		m_franchiseTurnsRemaining--;
 	}
-	else if(m_franchiseTurnsRemaining <= 0)
+	else if(m_franchiseTurnsRemaining == 0) // only zero is meant to reset a Franchise (owner), positive numbers define turns until Franchise is removed, -1 is the default for infinit Franchise, see https://github.com/civctp2/civctp2/pull/167
 	{
-		m_franchise_owner = -1;
+		m_franchise_owner = -1; // owner == -1 means no Franchise
 		m_franchiseTurnsRemaining = -1;
 	}
 }
