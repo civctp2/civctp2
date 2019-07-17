@@ -2389,6 +2389,11 @@ ORDER_RESULT ArmyData::SueFranchise(const MapPoint &point)
 		return ORDER_RESULT_ILLEGAL;
 	}
 
+	if(cell->GetCity().GetFranchiseTurnsRemaining() > 0 && cell->GetCity().GetFranchiseTurnsRemaining() <= g_theConstDB->Get(0)->GetTurnsToSueFranchise()) {
+
+		return ORDER_RESULT_ILLEGAL;
+	}
+
 	AddSpecialActionUsed(u);
 
 	g_gevManager->AddEvent(GEV_INSERT_AfterCurrent, GEV_RemoveFranchise,
