@@ -758,9 +758,8 @@ bool CivApp::InitializeAppDB(void)
 	g_theProgressWindow->StartCountingTo( 40 );
 
 	MBCHAR	fullpath[_MAX_PATH];
-	g_civPaths->FindFile(C3DIR_DIRECT, g_constdb_filename, fullpath);
 
-	if (CI_FileExists(fullpath) &&
+	if (c3files_getfilesize(C3DIR_DIRECT, g_constdb_filename) > 0 && // includes FindFile
 	    g_theConstDB->Parse(C3DIR_DIRECT, g_constdb_filename))
 	{
 		fprintf(stderr, "%s L%d: Using Const.txt from user space!\n", __FILE__, __LINE__);
