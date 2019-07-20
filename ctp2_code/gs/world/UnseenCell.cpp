@@ -247,7 +247,9 @@ UnseenCell::UnseenCell(const MapPoint & point)
 			m_bioInfectedOwner = (sint8)cityData->GetBioInfectedBy();
 			m_nanoInfectedOwner = (sint8)cityData->GetNanoInfectedBy();
 			m_convertedOwner = (sint8)cityData->IsConvertedTo();
+			m_convertedLoss = (sint32)cityData->GetConvertedGold();
 			m_franchiseOwner = (sint8)cityData->GetFranchiseOwner();
+			m_franchiseLoss = (sint32)cityData->GetProductionLostToFranchise();
 			m_injoinedOwner = (sint8)cityData->InjoinedBy();
 			m_happinessAttackOwner = (sint8)cityData->GetHappinessAttackedBy();
 			m_slaveBits = cityData->GetSlaveBits();
