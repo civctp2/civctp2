@@ -6357,6 +6357,16 @@ void CityData::Unconvert(bool makeUnhappy)
 	if(m_convertedTo < 0)
 		return;
 
+	//// let the owner of the conversion know about its removal, see https://github.com/civctp2/civctp2/pull/166
+	MapPoint pos; // needed to get un-seen cell at this city pos
+	UnseenCellCarton ucell;
+
+	m_home_city.GetPos(pos);
+	if(g_player[m_convertedTo]->GetLastSeen(pos, ucell)) // get un-seen cell of conversion owner
+	    {
+	    ucell.m_unseenCell->SetIsConverted(false); // remove conversion flag
+	    }
+
 	m_convertedTo = -1;
 	m_convertedGold = 0;
 	if(makeUnhappy) {
