@@ -757,7 +757,14 @@ bool CivApp::InitializeAppDB(void)
 
 	g_theProgressWindow->StartCountingTo( 40 );
 
-	if (!g_theConstDB->Parse(C3DIR_GAMEDATA, g_constdb_filename))
+	MBCHAR	fullpath[_MAX_PATH];
+
+	if (c3files_getfilesize(C3DIR_DIRECT, g_constdb_filename) > 0 && // includes FindFile
+	    g_theConstDB->Parse(C3DIR_DIRECT, g_constdb_filename))
+	{
+		fprintf(stderr, "%s L%d: Using Const.txt from user space!\n", __FILE__, __LINE__);
+	}
+	else if (!g_theConstDB->Parse(C3DIR_GAMEDATA, g_constdb_filename))
 	{
 		return false;
 	}
