@@ -300,6 +300,7 @@
 #include "UnitPool.h"                   // g_theUnitPool
 #include "UnitRecord.h"
 #include "unitutil.h"
+#include "UnseenCell.h"
 #include "WonderRecord.h"
 #include "WonderTracker.h"
 #include "wonderutil.h"
@@ -5977,6 +5978,16 @@ void CityData::RemoveFranchise()
 {
 	if(m_franchise_owner < 0) // according to CityData::Unconvert
 		return;
+
+	//// let the owner of the franchise know about its removal, see https://github.com/civctp2/civctp2/pull/166
+	MapPoint pos; // needed to get un-seen cell at this city pos
+	UnseenCellCarton ucell;
+
+	m_home_city.GetPos(pos);
+	if(g_player[m_franchise_owner]->GetLastSeen(pos, ucell)) // get un-seen cell of franchise owner
+	    {
+	    ucell.m_unseenCell->SetIsFranchised(false); // remove franchise flag
+	    }
 
 	m_franchise_owner = -1;
 	m_franchiseTurnsRemaining = -1;
