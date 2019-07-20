@@ -3440,8 +3440,15 @@ void TiledMap::DrawCityNames(aui_Surface * surf, sint32 layer)
 					isNanoInfected       = ucell.m_unseenCell->IsNanoInfected();
 					isConverted          = ucell.m_unseenCell->IsConverted();
 					isFranchised         = ucell.m_unseenCell->IsFranchised();
-					convertedLoss        = ucell.m_unseenCell->GetConvertedGold();
-					franchiseLoss        = ucell.m_unseenCell->GetProductionLostToFranchise();
+					Unit unit;
+					if (g_theWorld->GetTopVisibleUnit(pos,unit) && unit.IsCity()){// city might be destroyed
+					    convertedLoss    = unit.GetData()->GetCityData()->GetConvertedGold();
+					    franchiseLoss    = unit.GetData()->GetCityData()->GetProductionLostToFranchise();
+					    }
+					else{// in case city was destroyed since last visit
+					    convertedLoss    = ucell.m_unseenCell->GetConvertedGold();
+					    franchiseLoss    = ucell.m_unseenCell->GetProductionLostToFranchise();
+					    }
 					isInjoined           = ucell.m_unseenCell->IsInjoined();
 					wasHappinessAttacked = ucell.m_unseenCell->WasHappinessAttacked();
 					isRioting            = ucell.m_unseenCell->IsRioting();
