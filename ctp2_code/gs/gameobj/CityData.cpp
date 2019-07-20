@@ -4912,8 +4912,7 @@ void CityData::DoTurnCounters()
 	}
 	else if(m_franchiseTurnsRemaining == 0) // only zero is meant to reset a Franchise (owner), positive numbers define turns until Franchise is removed, -1 is the default for infinit Franchise, see https://github.com/civctp2/civctp2/pull/167
 	{
-		m_franchise_owner = -1; // owner == -1 means no Franchise
-		m_franchiseTurnsRemaining = -1;
+		RemoveFranchise();
 	}
 }
 
@@ -5974,6 +5973,15 @@ void CityData::MakeFranchise(sint32 player)
 	m_franchiseTurnsRemaining = -1;
 }
 
+void CityData::RemoveFranchise()
+{
+	if(m_franchise_owner < 0) // according to CityData::Unconvert
+		return;
+
+	m_franchise_owner = -1;
+	m_franchiseTurnsRemaining = -1;
+}
+
 sint32 CityData::GetFranchiseTurnsRemaining() const
 {
 	return m_franchiseTurnsRemaining;
@@ -5984,8 +5992,7 @@ void CityData::SetFranchiseTurnsRemaining(sint32 turns)
 	m_franchiseTurnsRemaining = turns;
 	if(turns < 1)
 	{
-		m_franchiseTurnsRemaining = -1;
-		m_franchise_owner = -1;
+		RemoveFranchise();
 	}
 }
 
@@ -6598,8 +6605,7 @@ void CityData::ResetCityOwner(sint32 owner)
 	NewGovernment(g_player[m_owner]->m_government_type);
 
 	m_walls_nullified = false;
-	m_franchiseTurnsRemaining = 0;
-	m_franchise_owner = -1;
+	RemoveFranchise(); // Franchise removed in contrast to conversion, see below
 	m_watchfulTurns = 0;
 	m_bioInfectionTurns = 0;
 	m_bioInfectedBy = -1;
