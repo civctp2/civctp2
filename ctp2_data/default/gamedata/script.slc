@@ -2180,7 +2180,7 @@ messagebox '251NaniteDefuseEliminatesNukes' {
 	Duration(2);
 }
 
-messagebox '260LeaveOurLandsBroken' {
+messagebox 'TrustLossFailToWithdrawVictim' {
 	Text(ID_LEAVE_OUR_LANDS_BROKEN);
 	MessageType("ANTIDIPLOMATIC");
 }
@@ -2204,11 +2204,6 @@ messagebox '264AttackEnemyBroken' {
 	Text(ID_ATTACK_ENEMY_BROKEN);
 	MessageType("ANTIDIPLOMATIC");
 }
-
-messagebox '260LeaveOurLandsBrokenByYou' {
-	Text(ID_LEAVE_OUR_LANDS_BROKEN_BY_YOU);
-	MessageType("ANTIDIPLOMATIC");
-}// String is not part of the ctp2.exe
 
 messagebox '261ReducePollutionBrokenByYou' {
 	Text(ID_REDUCE_POLLUTION_BROKEN_BY_YOU);
