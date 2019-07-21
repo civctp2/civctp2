@@ -9939,7 +9939,7 @@ bool ArmyData::GetInciteUprisingCost( const MapPoint &point, sint32 &attackCost 
 	return true;
 }
 
-//Probably left over from CTP1
+////Possibly left over from CTP1, but now used in CTP2
 bool ArmyData::DoLeaveOurLandsCheck(const MapPoint &newPos,
 									UNIT_ORDER_TYPE order_type)
 {
@@ -9959,9 +9959,8 @@ bool ArmyData::DoLeaveOurLandsCheck(const MapPoint &newPos,
 			}
 		}
 		if(atLeastOneNonSpecialUnit) {
-			Agreement ag = g_player[cell->GetOwner()]->FindAgreement(AGREEMENT_TYPE_DEMAND_LEAVE_OUR_LANDS, m_owner);
-			if(g_theAgreementPool->IsValid(ag) && ag.GetRecipient() == m_owner) {
-
+		        //// similar to ArmyData::InterceptTrade()
+			if(AgreementMatrix::s_agreements.HasAgreement(cell->GetOwner(), m_owner, PROPOSAL_REQUEST_WITHDRAW_TROOPS)){
 				if(!g_player[m_owner]->IsRobot()
 				|| (g_network.IsClient()
 				&&  g_network.IsLocalPlayer(m_owner))
@@ -9982,7 +9981,7 @@ bool ArmyData::DoLeaveOurLandsCheck(const MapPoint &newPos,
 				}
 				else
 				{
-					ag.AccessData()->RecipientIsViolating(cell->GetOwner(), true);
+					Diplomat::GetDiplomat(cell->GetOwner()).LogViolationEvent(m_owner, PROPOSAL_REQUEST_WITHDRAW_TROOPS);
 				}
 			}
 		}
