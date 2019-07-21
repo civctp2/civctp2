@@ -4220,26 +4220,30 @@ void TiledMap::DrawCityIcons(aui_Surface *surf, MapPoint const & pos, sint32 own
 		color = GetPlayerColor(convertedOwner, fog);
 		DrawColorizedOverlay(cityIcon, surf, iconRect.left, iconRect.top, color);
 
-		sint32 width, height;
-		RECT rect;
-		RECT clipRect;
-		// Put convertedLoss in str
-		MBCHAR str[80];
-		sprintf(str, "%i", convertedLoss);
-		// Width and height of the pop number
-		width = m_font->GetStringWidth(str);
-		height = m_font->GetMaxHeight();
-		// This rect will be the inner rect that shows the pop number
-		rect = {0, 0, width, height}; // This shadows the outer rect
-		OffsetRect(&rect, // position rect relative to iconRect
-		    iconRect.left + (iconRect.right-iconRect.left) / 2 - width  / 2,
-		    iconRect.top  + (iconRect.bottom-iconRect.top) / 2 - height / 2);
-		
-		clipRect = primitives_GetScreenAdjustedRectCopy(surf, rect);
-		m_font->DrawString(surf, &rect, &clipRect, str,
-		    0,
-		    GetColorRef(COLOR_WHITE, fog),
-		    0);
+		sint32 myOwner = g_selected_item->GetVisiblePlayer();
+		if(myOwner >= 0 && (myOwner == owner || myOwner == convertedOwner))
+		    {
+		    sint32 width, height;
+		    RECT rect;
+		    RECT clipRect;
+		    // Put convertedLoss in str
+		    MBCHAR str[80];
+		    sprintf(str, "%i", convertedLoss);
+		    // Width and height of the pop number
+		    width = m_font->GetStringWidth(str);
+		    height = m_font->GetMaxHeight();
+		    // This rect will be the inner rect that shows the pop number
+		    rect = {0, 0, width, height}; // This shadows the outer rect
+		    OffsetRect(&rect, // position rect relative to iconRect
+			iconRect.left + (iconRect.right-iconRect.left) / 2 - width  / 2,
+			iconRect.top  + (iconRect.bottom-iconRect.top) / 2 - height / 2);
+		    
+		    clipRect = primitives_GetScreenAdjustedRectCopy(surf, rect);
+		    m_font->DrawString(surf, &rect, &clipRect, str,
+			0,
+			GetColorRef(COLOR_WHITE, fog),
+			0);
+		    }
 
 		AddDirtyRectToMix(iconRect);
 
@@ -4261,26 +4265,30 @@ void TiledMap::DrawCityIcons(aui_Surface *surf, MapPoint const & pos, sint32 own
 		color = GetPlayerColor(franchiseOwner, fog);
 		DrawColorizedOverlay(cityIcon, surf, iconRect.left, iconRect.top, color);
 
-		sint32 width, height;
-		RECT rect;
-		RECT clipRect;
-		// Put franchiseLoss in str
-		MBCHAR str[80];
-		sprintf(str, "%i", franchiseLoss);
-		// Width and height of the pop number
-		width = m_font->GetStringWidth(str);
-		height = m_font->GetMaxHeight();
-		// This rect will be the inner rect that shows the pop number
-		rect = {0, 0, width, height}; // This shadows the outer rect
-		OffsetRect(&rect, // position rect relative to iconRect
-		    iconRect.left + (iconRect.right-iconRect.left) / 2 - width  / 2,
-		    iconRect.top  + (iconRect.bottom-iconRect.top) / 2 - height / 2);
-		
-		clipRect = primitives_GetScreenAdjustedRectCopy(surf, rect);
-		m_font->DrawString(surf, &rect, &clipRect, str,
-		    0,
-		    GetColorRef(COLOR_WHITE, fog),
-		    0);
+		sint32 myOwner = g_selected_item->GetVisiblePlayer();
+		if(myOwner >= 0 && (myOwner == owner || myOwner == franchiseOwner))
+		    {
+		    sint32 width, height;
+		    RECT rect;
+		    RECT clipRect;
+		    // Put franchiseLoss in str
+		    MBCHAR str[80];
+		    sprintf(str, "%i", franchiseLoss);
+		    // Width and height of the pop number
+		    width = m_font->GetStringWidth(str);
+		    height = m_font->GetMaxHeight();
+		    // This rect will be the inner rect that shows the pop number
+		    rect = {0, 0, width, height}; // This shadows the outer rect
+		    OffsetRect(&rect, // position rect relative to iconRect
+			iconRect.left + (iconRect.right-iconRect.left) / 2 - width  / 2,
+			iconRect.top  + (iconRect.bottom-iconRect.top) / 2 - height / 2);
+		    
+		    clipRect = primitives_GetScreenAdjustedRectCopy(surf, rect);
+		    m_font->DrawString(surf, &rect, &clipRect, str,
+			0,
+			GetColorRef(COLOR_WHITE, fog),
+			0);
+		    }
 		
 		AddDirtyRectToMix(iconRect);
 
