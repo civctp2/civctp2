@@ -9965,12 +9965,9 @@ bool ArmyData::DoLeaveOurLandsCheck(const MapPoint &newPos,
 				|| (g_network.IsClient()
 				&&  g_network.IsLocalPlayer(m_owner))
 				){
-					char turnBuf[32];
-					sprintf(turnBuf, "%d", ag.GetTurns() + 1);
 					SlicObject *so = new SlicObject("13IAEnteringLands");
 					so->AddCivilisation(m_owner);
 					so->AddCivilisation(cell->GetOwner());
-					so->AddAction(turnBuf);
 					so->AddLocation(newPos);
 					so->AddOrder(order_type);
 					so->AddRecipient(m_owner);
