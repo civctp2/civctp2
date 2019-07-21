@@ -602,6 +602,7 @@ public:
 	bool IsCapitol() const;
 
 	void MakeFranchise(sint32 player);
+	void RemoveFranchise();
 	sint32 GetFranchiseOwner() const { return m_franchise_owner;}
 	sint32 GetFranchiseTurnsRemaining() const;
 	void SetFranchiseTurnsRemaining(sint32 turns);
