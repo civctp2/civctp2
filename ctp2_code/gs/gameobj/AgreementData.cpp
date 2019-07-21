@@ -1158,7 +1158,7 @@ void AgreementData::RecipientIsViolating(PLAYER_INDEX curPlayer, BOOL force)
 		case AGREEMENT_TYPE_NO_PIRACY:
 			tellAi = TRUE;
 			sendMessage = TRUE;
-			sprintf(objName, "004NoPiracyBroken");
+			sprintf(objName, "TrustLossFailToStopPiracyVictim");
 			break;
 		default:
 			break;

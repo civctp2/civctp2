@@ -1655,7 +1655,7 @@ messagebox '002BrokeTreaty' {
 	MessageType("ANTIDIPLOMATIC");
 }// String is not part of the ctp2.exe
 
-messagebox '004NoPiracyBroken' {
+messagebox 'TrustLossFailToStopPiracyVictim' {
 	Text(ID_NO_PIRACY_BROKEN) ;
 	MessageType("ANTIDIPLOMATIC");
 }
