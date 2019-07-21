@@ -99,7 +99,7 @@ CANT_ATTACK_TEAMMATES                   "{player[0].leader_name} ÊÇÄãµÄ¶ÓÓÑ£¬Äã²
 ## Useful diplomacy messages that should be reimplemented ##
 CEASE_FIRE_BROKEN			"¿É³ÜµÄ {player[0].civ_name_plural} Ëº»ÙÁËºÍÆ½ÌõÔ¼£¬º·È»¶ÔÎÒÃÇ·¢¶¯¹¥»÷£¡"
 LEAVE_OUR_LANDS_BROKEN			"{player[0].civ_name_plural} ÆÆ»µÁË²»¿É´©Ô½±ß¾³Ğ­Òé¡£"
-LEAVE_OUR_LANDS_BROKEN_BY_YOU		"ÄãÒÑ¾­Î¥±³ÁËĞ­Òé£¬½«²¿¶ÓÅÉÖÁ {player[0].civ_name_singular} µÄÁìµØ¡£"
+# TRUST_LOSS_FAIL_TO_WITHDRAW ~ LEAVE_OUR_LANDS_BROKEN_BY_YOU		"ÄãÒÑ¾­Î¥±³ÁËĞ­Òé£¬½«²¿¶ÓÅÉÖÁ {player[0].civ_name_singular} µÄÁìµØ¡£"
 REDUCE_POLLUTION_BROKEN			"{player[0].civ_name_plural} Î¥·´ÁË¼õÉÙÎÛÈ¾Ğ­¶¨¡£"
 REDUCE_POLLUTION_BROKEN_BY_YOU		"ÄãÎ¥·´ÁËÓë {player[0].civ_name_plural} µŞ½áµÄ¼õÉÙÎÛÈ¾Ğ­¶¨¡£"
 STOP_TRADE_WITH_BROKEN			"ÄÇÇáÎêµÄ {player[0].civ_name_plural} Î¥±³ÁËĞ­¶¨£¬ÖĞÖ¹ÁËÓë {player[1].civ_name_plural} µÄÃ³Ò×¡£"

@@ -99,7 +99,7 @@ CANT_ATTACK_TEAMMATES			"{player[0].leader_name} gehˆrt zu Eurem Team. Mitgliede
 ## Useful diplomacy messages that should be reimplemented ##
 CEASE_FIRE_BROKEN			"Die ehrlosen {player[0].civ_name_plural} haben gegen unser Friedensabkommen verstoﬂen, indem sie uns grundlos angreifen."
 LEAVE_OUR_LANDS_BROKEN			"Die {player[0].civ_name_plural} haben gegen unsere Vertreibungsvereinbarung verstoﬂen."
-LEAVE_OUR_LANDS_BROKEN_BY_YOU		"Ihr habt Euer Versprechen, Eure Truppen aus dem Territorium der {player[0].civ_name_plural} abzuziehen, gebrochen."
+# TRUST_LOSS_FAIL_TO_WITHDRAW ~ LEAVE_OUR_LANDS_BROKEN_BY_YOU		"Ihr habt Euer Versprechen, Eure Truppen aus dem Territorium der {player[0].civ_name_plural} abzuziehen, gebrochen."
 REDUCE_POLLUTION_BROKEN			"Die {player[0].civ_name_plural} haben gegen unser Abkommen, die Umweltverschmutzung zu senken, verstoﬂen."
 REDUCE_POLLUTION_BROKEN_BY_YOU		"Ihr habt Eure Vereinbarung mit den {player[0].civ_name_plural#DAT}, die Umweltverschmutzung zu reduzieren, nicht eingehalten."
 STOP_TRADE_WITH_BROKEN			"Die unverfrorenen {player[0].civ_name_plural} haben ihre Zusage, die Handelsbeziehungen mit den {player[1].civ_name_plural#DAT} einzustellen, nicht eingehalten."
