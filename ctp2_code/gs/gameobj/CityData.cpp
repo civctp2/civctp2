@@ -5972,6 +5972,8 @@ void CityData::MakeFranchise(sint32 player)
 {
 	m_franchise_owner = player;
 	m_franchiseTurnsRemaining = g_theConstDB->Get(0)->GetTurnsFranchised(); // do not use SetFranchiseTurnsRemaining here, as it resets the owner for -1
+
+	ProcessAllResources(); // updates m_productionLostToFranchise which is used for drawing loss on franchise city-icon, takes NEW_RESOURCE_PROCESS into account
 }
 
 sint32 CityData::GetFranchiseTurnsRemaining() const
@@ -6327,6 +6329,8 @@ void CityData::ConvertTo(sint32 player, CONVERTED_BY by)
 
 	m_convertedTo = player;
 	m_convertedBy = by;
+
+	ProcessAllResources(); // updates m_convertedGold which is used for drawing loss on conversion city-icon, takes NEW_RESOURCE_PROCESS into account
 }
 
 double CityData::TheologicalModifier() const
