@@ -178,9 +178,7 @@ private:
 	sint8                                 m_bioInfectedOwner;
 	sint8                                 m_nanoInfectedOwner;
 	sint8                                 m_convertedOwner;
-	sint32                                m_convertedLoss;
 	sint8                                 m_franchiseOwner;
-	sint32                                m_franchiseLoss;
 	sint8                                 m_injoinedOwner;
 	sint8                                 m_happinessAttackOwner;
 	sint8                                 m_cell_owner;
@@ -213,9 +211,7 @@ public:
 	sint8                                 GetBioInfectedOwner    () const { return m_bioInfectedOwner    ; }
 	sint8                                 GetNanoInfectedOwner   () const { return m_nanoInfectedOwner   ; }
 	sint8                                 GetConvertedOwer       () const { return m_convertedOwner      ; }
-	sint32                                GetConvertedGold       () const { return m_convertedLoss       ; }
 	sint8                                 GetFranchiseOwner      () const { return m_franchiseOwner      ; }
-	sint32                                GetProductionLostToFranchise  () const { return m_franchiseLoss; }
 	sint8                                 GetInjoinedOwner       () const { return m_injoinedOwner       ; }
 	sint8                                 GetHappinessAttackOwner() const { return m_happinessAttackOwner; }
 	sint8                                 GetCellOwner           () const { return m_cell_owner          ; }
@@ -282,8 +278,6 @@ public:
 		DPRINTF(k_DBG_AI, ("m_flags: %d\n",                 sizeof(m_flags)));
 		DPRINTF(k_DBG_AI, ("m_bioInfectedOwner: %d\n",      sizeof(m_bioInfectedOwner)));
 		DPRINTF(k_DBG_AI, ("m_franchiseOwner: %d\n",        sizeof(m_franchiseOwner)));
-		DPRINTF(k_DBG_AI, ("m_franchiseLoss: %d\n",         sizeof(m_franchiseLoss)));
-		DPRINTF(k_DBG_AI, ("m_convertedLoss: %d\n",         sizeof(m_convertedLoss)));
 		DPRINTF(k_DBG_AI, ("m_injoinedOwner: %d\n",         sizeof(m_injoinedOwner)));
 		DPRINTF(k_DBG_AI, ("m_happinessAttackOwner: %d\n",  sizeof(m_happinessAttackOwner)));
 		DPRINTF(k_DBG_AI, ("m_citySize: %d\n",              sizeof(m_citySize)));
@@ -311,8 +305,6 @@ public:
 		DPRINTF(k_DBG_AI, ("m_flags:                %d\n",      m_flags));
 		DPRINTF(k_DBG_AI, ("m_bioInfectedOwner:     %d\n",      m_bioInfectedOwner));
 		DPRINTF(k_DBG_AI, ("m_franchiseOwner:       %d\n",      m_franchiseOwner));
-		DPRINTF(k_DBG_AI, ("m_convertedLoss:        %d\n",      m_convertedLoss));
-		DPRINTF(k_DBG_AI, ("m_franchiseLoss:        %d\n",      m_franchiseLoss));
 		DPRINTF(k_DBG_AI, ("m_injoinedOwner:        %d\n",      m_injoinedOwner));
 		DPRINTF(k_DBG_AI, ("m_happinessAttackOwner: %d\n",      m_happinessAttackOwner));
 		DPRINTF(k_DBG_AI, ("m_citySize:             %d\n",      m_citySize));
