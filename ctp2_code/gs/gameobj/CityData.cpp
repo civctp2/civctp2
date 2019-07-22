@@ -402,7 +402,6 @@ CityData::CityData(PLAYER_INDEX owner, Unit hc, const MapPoint &center_point)
 	m_total_pollution                   (0),
 	m_cityPopulationPollution           (0),
 	m_cityIndustrialPollution           (0),
-	m_foodVatPollution                  (0),
 	m_cityPollutionCleaner              (0),
 	m_contribute_materials              (true),
 	m_contribute_military               (true),
@@ -665,7 +664,7 @@ void CityData::Serialize(CivArchive &archive)
 		archive.PutSINT32(m_total_pollution);
 		archive.PutSINT32(m_cityPopulationPollution);
 		archive.PutSINT32(m_cityIndustrialPollution);
-		archive.PutSINT32(m_foodVatPollution);
+		archive.PutSINT32(m_goldFromTransitRoutes);
 		archive.PutSINT32(m_cityPollutionCleaner);
 		tmp = static_cast<BOOL>(m_contribute_materials);
 		archive.PutSINT32(tmp); // Was BOOL
@@ -823,7 +822,7 @@ void CityData::Serialize(CivArchive &archive)
 		m_total_pollution                = archive.GetSINT32();
 		m_cityPopulationPollution        = archive.GetSINT32();
 		m_cityIndustrialPollution        = archive.GetSINT32();
-		m_foodVatPollution               = archive.GetSINT32();
+		m_goldFromTransitRoutes          = archive.GetSINT32();
 		m_cityPollutionCleaner           = archive.GetSINT32();
 		m_contribute_materials           = archive.GetSINT32() != FALSE; // Was BOOL
 		m_contribute_military            = archive.GetSINT32() != FALSE; // Was BOOL
@@ -1405,7 +1404,7 @@ void CityData::Copy(CityData *copy)
 	m_total_pollution                    = copy->m_total_pollution;
 	m_cityPopulationPollution            = copy->m_cityPopulationPollution;
 	m_cityIndustrialPollution            = copy->m_cityIndustrialPollution;
-	m_foodVatPollution                   = copy->m_foodVatPollution;
+	m_goldFromTransitRoutes              = copy->m_goldFromTransitRoutes;
 	m_cityPollutionCleaner               = copy->m_cityPollutionCleaner;
 	m_contribute_materials               = copy->m_contribute_materials;
 	m_contribute_military                = copy->m_contribute_military;
@@ -2093,7 +2092,7 @@ void CityData::CalcPollution(void)
 	m_cityPopulationPollution   = populationPolluting;
 	m_cityIndustrialPollution   = productionPolluting;
 	m_total_pollution           =
-	            populationPolluting + productionPolluting + m_foodVatPollution +
+	            populationPolluting + productionPolluting +
 	            static_cast<sint32>(populationPolluting * buildingPopulationPercentage) +
 	            static_cast<sint32>(productionPolluting * buildingProductionPercentage) +
 	            static_cast<sint32>(buildingPollution);
