@@ -3446,8 +3446,8 @@ void TiledMap::DrawCityNames(aui_Surface * surf, sint32 layer)
 					    franchiseLoss    = unit.GetData()->GetCityData()->GetProductionLostToFranchise();
 					    }
 					else{// in case city was destroyed since last visit
-					    convertedLoss    = ucell.m_unseenCell->GetConvertedGold();
-					    franchiseLoss    = ucell.m_unseenCell->GetProductionLostToFranchise();
+					    convertedLoss    = 0; // no info on loss if city was destroyed
+					    franchiseLoss    = 0; // no info on loss if city was destroyed
 					    }
 					isInjoined           = ucell.m_unseenCell->IsInjoined();
 					wasHappinessAttacked = ucell.m_unseenCell->WasHappinessAttacked();
@@ -4221,7 +4221,7 @@ void TiledMap::DrawCityIcons(aui_Surface *surf, MapPoint const & pos, sint32 own
 		DrawColorizedOverlay(cityIcon, surf, iconRect.left, iconRect.top, color);
 
 		sint32 myOwner = g_selected_item->GetVisiblePlayer();
-		if(myOwner >= 0 && (myOwner == owner || myOwner == convertedOwner))
+		if(convertedLoss && myOwner >= 0 && (myOwner == owner || myOwner == convertedOwner))
 		    {
 		    sint32 width, height;
 		    RECT rect;
@@ -4266,7 +4266,7 @@ void TiledMap::DrawCityIcons(aui_Surface *surf, MapPoint const & pos, sint32 own
 		DrawColorizedOverlay(cityIcon, surf, iconRect.left, iconRect.top, color);
 
 		sint32 myOwner = g_selected_item->GetVisiblePlayer();
-		if(myOwner >= 0 && (myOwner == owner || myOwner == franchiseOwner))
+		if(franchiseLoss && myOwner >= 0 && (myOwner == owner || myOwner == franchiseOwner))
 		    {
 		    sint32 width, height;
 		    RECT rect;
