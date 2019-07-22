@@ -436,8 +436,8 @@ public:
 	void		DrawCityIcons(aui_Surface *surf, MapPoint const &pos, sint32 owner, bool fog, RECT &popRect,
 								BOOL isBioInfected, BOOL isNanoInfected, BOOL isConverted,
 								BOOL isFranchised, BOOL isInjoined, BOOL wasHappinessAttacked,
-								sint32 bioInfectedOnwer, sint32 nanoInfectedOwner, sint32 convertedOwner,
-								sint32 franchiseOwner, sint32 injoinedOwner, sint32 happinessAttackOwner,
+								sint32 bioInfectedOnwer, sint32 nanoInfectedOwner, sint32 convertedOwner, sint32 convertedLoss,
+								sint32 franchiseOwner, sint32 franchiseLoss, sint32 injoinedOwner, sint32 happinessAttackOwner,
 								uint32 slaveBits, BOOL isRioting, BOOL hasAirport, BOOL hasSleepingUnits,
 								BOOL isWatchful, BOOL isCapitol, BOOL isProdIcon, sint32 citySize,
 								BOOL isPollutionRisk);
