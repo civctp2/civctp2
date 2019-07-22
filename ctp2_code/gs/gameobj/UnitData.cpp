@@ -2380,7 +2380,7 @@ bool UnitData::CanInterceptTrade() const
 
 	if (GetMovementPoints() < g_theConstDB->Get(0)->GetSpecialActionMoveCost())
 		return false;
-
+/* do not forbid AI to break no-piracy agreement in general, should be decided by dipomacy code
 	for (sint32 i = cell->GetNumTradeRoutes() - 1; i >= 0; i--)
 	{
 		TradeRoute route = cell->GetTradeRoute(i);
@@ -2399,7 +2399,7 @@ bool UnitData::CanInterceptTrade() const
 				return false;
 		}
 	}
-
+*/
 	return true;
 }
 
