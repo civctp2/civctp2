@@ -3446,6 +3446,8 @@ void TiledMap::DrawCityNames(aui_Surface * surf, sint32 layer)
 					    franchiseLoss    = unit.GetData()->GetCityData()->GetProductionLostToFranchise();
 					    }
 					else{// in case city was destroyed since last visit
+					    isConverted      = false; // do not show conversion city icon to not give away that city was destroyed
+					    isFranchised     = false; // do not show franchise city icon to not give away that city was destroyed
 					    convertedLoss    = 0; // no info on loss if city was destroyed
 					    franchiseLoss    = 0; // no info on loss if city was destroyed
 					    }
