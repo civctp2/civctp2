@@ -2393,16 +2393,14 @@ bool UnitData::CanInterceptTrade() const
 		   !(g_network.IsClient() && g_network.IsLocalPlayer(m_owner))) {
 
 			if(AgreementMatrix::s_agreements.HasAgreement(
-				m_owner,
 				source_owner,
-				PROPOSAL_OFFER_STOP_PIRACY))
-				continue;
+				m_owner,
+				PROPOSAL_REQUEST_STOP_PIRACY))
+				return false;
 		}
-
-		return true;
 	}
 
-	return false;
+	return true;
 }
 
 ORDER_RESULT UnitData::InterceptTrade()
