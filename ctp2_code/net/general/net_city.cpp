@@ -380,7 +380,7 @@ void NetCity2::Packetize(uint8* buf, uint16 &size)
 
 
 
-	PUSHLONG(m_data->m_foodVatPollution);
+	PUSHLONG(m_data->m_goldFromTransitRoutes);
 	sint8 govSetting = -1;
 	if(m_data->m_useGovernor) {
 		govSetting = (sint8)m_data->m_buildListSequenceIndex;
@@ -458,7 +458,7 @@ void NetCity2::Unpacketize(uint16 id, uint8 *buf, uint16 size)
 
 	PULLLONG(m_data->m_accumulated_food);
 
-	PULLLONG(m_data->m_foodVatPollution);
+	PULLLONG(m_data->m_goldFromTransitRoutes);
 
 	sint8 govSetting;
 	PULLBYTE(govSetting);
