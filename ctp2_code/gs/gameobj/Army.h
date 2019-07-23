@@ -157,7 +157,9 @@ public:
 	bool CanFranchise(double &chance, sint32 &uindex);
 
 	bool CanSue(sint32 &uindex);
+	bool CanSueFranchise(sint32 &uindex);
 	bool CanSue();
+	bool CanSueFranchise();
 	bool CanBeSued();
 	bool CanCauseUnhappiness(double &chance, sint32 &timer, sint32 &amount,
 							 sint32 &uindex);

@@ -2419,8 +2419,8 @@ bool Unit::UnitValidForOrder(const OrderRecord * order_rec) const
 		order_valid = (unit_rec->GetAttack() > 0.0 );
 	else if(order_rec->GetUnitPretest_CanEntrench())
 		order_valid = unit_rec->GetCanEntrench();
-//	else if(order_rec->GetUnitPretest_CanSueFranchise())
-//		order_valid = unit_rec->GetCanSueFranchise();
+	else if(order_rec->GetUnitPretest_CanSueFranchise())
+		order_valid = unit_rec->GetCanSueFranchise();
 	else if(order_rec->GetUnitPretest_CanSue())
 		order_valid = unit_rec->GetCanSue();
 	else if(order_rec->GetUnitPretest_CanCreateFranchise())

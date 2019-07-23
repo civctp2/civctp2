@@ -2234,6 +2234,11 @@ bool ArmyData::CanSue(sint32 &index) const
 	return false;
 }
 
+
+bool ArmyData::CanSueFranchise(sint32 &index) const
+{
+	return CanSue(index);
+}
 //----------------------------------------------------------------------------
 //
 // Name       : ArmyData::CanSue
@@ -2258,6 +2263,11 @@ bool ArmyData::CanSue() const
 		}
 	}
 	return false;
+}
+
+bool ArmyData::CanSueFranchise() const
+{
+	return CanSue();
 }
 
 //----------------------------------------------------------------------------
