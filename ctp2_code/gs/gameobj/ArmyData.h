@@ -216,9 +216,7 @@ public:
     ORDER_RESULT Franchise(const MapPoint &point);
 
     bool CanSue(sint32 &uindex) const;
-    bool CanSueFranchise(sint32 &uindex) const;
     bool CanSue() const;
-    bool CanSueFranchise() const;
     bool CanBeSued() const;
     ORDER_RESULT Sue(const MapPoint &point);
     ORDER_RESULT SueFranchise(const MapPoint &point);

@@ -2351,11 +2351,6 @@ UNIT_LAWYER {
    Size: Small
    VisionClass: Stealth
 
-   CanSueFranchise {
-      Sound SOUND_ID_INJUNCTION
-      Effect SPECEFFECT_INJUNCTIONS
-   }
-
    CanInjoin {
       Sound SOUND_ID_INJUNCTION
       Effect SPECEFFECT_INJUNCTIONS

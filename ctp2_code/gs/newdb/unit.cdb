@@ -378,7 +378,6 @@ Unit {
 	}
 
 	Bit(Struct ChanceEffect) CreateFranchise
-	Bit(struct SoundAndEffect) CanSueFranchise
 
 	Struct CauseUnhappinessData {
 		Float Chance

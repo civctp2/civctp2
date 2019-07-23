@@ -352,19 +352,9 @@ bool Army::CanSue(sint32 &uindex)
 	return AccessData()->CanSue(uindex);
 }
 
-bool Army::CanSueFranchise(sint32 &uindex)
-{
-	return AccessData()->CanSueFranchise(uindex);
-}
-
 bool Army::CanSue()
 {
 	return AccessData()->CanSue();
-}
-
-bool Army::CanSueFranchise()
-{
-	return AccessData()->CanSueFranchise();
 }
 
 bool Army::CanBeSued()
