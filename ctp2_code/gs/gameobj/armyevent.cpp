@@ -382,9 +382,9 @@ STDEHANDLER(ArmySueFranchiseOrderEvent)
 	Army a;
 	MapPoint pos;
 	if(!args->GetArmy(0, a)) return GEV_HD_Continue;
+	if(!args->GetPos(0, pos)) return GEV_HD_Continue;
 
-	a->AddOrders(UNIT_ORDER_SUE_FRANCHISE);
-
+	a->AddOrders(UNIT_ORDER_SUE_FRANCHISE, pos);
 	return GEV_HD_Continue;
 }
 

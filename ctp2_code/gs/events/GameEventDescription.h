@@ -84,7 +84,7 @@ GameEventDescription g_eventDescriptions[] =
 	EVENT(BombardOrder,               "Army bombards", "%a%l")
 	EVENT(FranchiseOrder,             "Army franchises", "%a%l")
 	EVENT(SueOrder,                   "Army sues", "%a%l")
-	EVENT(SueFranchiseOrder,          "Army sues franchise", "%a")
+	EVENT(SueFranchiseOrder,          "Army sues franchise", "%a%l")
 	EVENT(ExpelOrder,                 "Army expels", "%a%l")
 	EVENT(EstablishEmbassyOrder,      "Army establishes embassy", "%a%l")
 	EVENT(AdvertiseOrder,             "Army advertises", "%a%l")
