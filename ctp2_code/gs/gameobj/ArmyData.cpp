@@ -9508,7 +9508,6 @@ bool ArmyData::ExecuteSpecialOrder(Order *order, bool &keepGoing)
 			break;
 		case UNIT_ORDER_SUE_FRANCHISE:
 			result = SueFranchise(order->m_point);
-			useDefaultSuccessSound = true;
 			break;
 		case UNIT_ORDER_EXPEL:
 			result = Expel(order->m_point);
