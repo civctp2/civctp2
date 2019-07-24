@@ -2754,6 +2754,7 @@ messagebox '911SueFailedAttacker' {
 messagebox '911SueFranchiseCompleteVictim' {
 	Text(ID_SUE_FRANCHISE_COMPLETE_VICTIM);
 	MessageType("SUE_ICON");
+	EyePoint(city[0].location);
 }
 
 messagebox '911SueFranchiseFailedVictim' {
