@@ -5121,8 +5121,10 @@ ORDER_RESULT ArmyData::Injoin(const MapPoint &point)
 						   GEA_City, c.m_id,
 						   GEA_End);
 	ActionSuccessful(SPECATTACK_INJOIN, u, c);
+	/* disabled because injunction icon of city already tells the success and therefore message spamming can be avoided
 	g_slicEngine->Execute
 	    (new AggressorReport("911InjunctionCompleteAttack", u, c));
+	*/
 
 	return ORDER_RESULT_SUCCEEDED;
 }
