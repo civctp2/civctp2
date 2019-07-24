@@ -2312,6 +2312,7 @@ ORDER_RESULT ArmyData::Sue(const MapPoint &point)
 	}
 	Cell *cell = g_theWorld->GetCell(point);
 	if(!cell->UnitArmy() || !cell->UnitArmy()->CanBeSued() || cell->UnitArmy()->GetOwner() == m_owner) {
+	    /* SueFranchise now handled by SueFranchiseOrder directly
 		if(cell->GetCity().m_id != 0 &&
 		   cell->GetCity().GetOwner() == m_owner) {
 			Assert(m_orders->GetHead() && m_orders->GetHead()->m_order == UNIT_ORDER_SUE);
@@ -2320,7 +2321,7 @@ ORDER_RESULT ArmyData::Sue(const MapPoint &point)
 			}
 			return SueFranchise(point);
 		}
-
+	    */
 		return ORDER_RESULT_ILLEGAL;
 	}
 
