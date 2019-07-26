@@ -53,6 +53,7 @@
 #include "controlpanelwindow.h"
 #include "OrderRecord.h"
 #include "aui_surface.h"
+#include "aui_bitmapfont.h"
 #include "maputils.h"
 #include "primitives.h"
 #include "tiledmap.h"
@@ -804,7 +805,8 @@ void TiledMap::DrawLegalMove
 						sint32 const	textX	= x - (width >> 1);
 						sint32 const	textY	= y - (height >> 1);
 
-						primitives_DrawText(pSurface, textX, textY, turnNumber, 0, 1);
+						RECT clipRect = primitives_GetScreenAdjustedRectCopy(pSurface, turnRect);
+						m_font->DrawString(pSurface, &turnRect, &clipRect, turnNumber, 0, g_colorSet->GetColorRef(COLOR_BLACK), 0);
 					}
 				}
 			}
@@ -856,7 +858,8 @@ void TiledMap::DrawLegalMove
 					sint32 const	textX	= x - (width >> 1);
 					sint32 const	textY	= y - (height >> 1);
 
-					primitives_DrawText(pSurface, textX, textY, turnNumber, 0, 1);
+					RECT clipRect = primitives_GetScreenAdjustedRectCopy(pSurface, turnRect);
+					m_font->DrawString(pSurface, &turnRect, &clipRect, turnNumber, 0, g_colorSet->GetColorRef(COLOR_BLACK), 0);
 				}
 			}
 		}
@@ -1113,7 +1116,8 @@ void TiledMap::DrawUnfinishedMove(aui_Surface * pSurface)
 						sint32 textX = x - (width>>1);
 						sint32 textY = y - (height>>1);
 
-						primitives_DrawText(pSurface, textX, textY, turnNumber, color, 1);
+						RECT clipRect = primitives_GetScreenAdjustedRectCopy(pSurface, turnRect);
+						m_font->DrawString(pSurface, &turnRect, &clipRect, turnNumber, 0, color, 0);
 					}
 				}
 			}
