@@ -812,7 +812,7 @@ ORDER_SUE_FRANCHISE {
   TargetPretest:OwnCity
   UnitPretest_CanSueFranchise
 
-  Range 1
+  Range 0
 
   CPIcon "upsi21.tga"
   ButtonLocation 6
