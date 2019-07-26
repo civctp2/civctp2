@@ -1279,7 +1279,6 @@ UNIT_DIPLOMAT {
    MaxFuel 0
    IgnoreZOC
    NoZoc
-   CanBeExpelled
    CantCaptureCity
    EstablishEmbassy
    ThrowParty
