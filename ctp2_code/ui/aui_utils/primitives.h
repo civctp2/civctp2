@@ -65,6 +65,38 @@ struct fRect
 	float left, top, right, bottom;
 };
 
+#ifndef __AUI_USE_DIRECTX__
+#include "c3ui.h"
+extern C3UI			*g_c3ui;
+
+inline aui_BitmapFont * getBitmapFont()
+    {
+    aui_BitmapFont *font= NULL;
+    AUI_ERRCODE      errcode     = AUI_ERRCODE_OK;
+    aui_StringTable	*stringTable = new aui_StringTable(&errcode, "TiledMapFontStringTable");
+
+    if (AUI_NEWOK(stringTable, errcode))
+	{
+	const MBCHAR *    fontNameString  = stringTable->GetString(0);
+	const MBCHAR *    fontSizeString  = stringTable->GetString(1);
+	
+	font = g_c3ui->LoadBitmapFont(fontNameString);
+	Assert(font);
+	font->SetPointSize(atoi(fontSizeString));
+	
+	// const MBCHAR *    fString         = stringTable->GetString(2);
+	// strncpy(m_fortifyString, fString, 3);
+	}
+    else {
+	font= NULL;
+	}
+    
+    delete stringTable;
+
+    return font;
+    }
+#endif
+
 PRIMITIVES_ERRCODE	primitives_SetRect(RECT *rect,sint32 left,sint32 top,sint32 right,sint32 bottom);
 PRIMITIVES_ERRCODE	primitives_FrameRect16(aui_Surface *pSurface,RECT *pRect,Pixel16 color);
 PRIMITIVES_ERRCODE	primitives_PaintRect16(aui_Surface *pSurface,RECT *pRect,Pixel16 color);

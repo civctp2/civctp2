@@ -1149,24 +1149,7 @@ PRIMITIVES_ERRCODE primitives_DrawText(
 	hr = pDirectSurface->ReleaseDC(hdc);
 	if (hr != AUI_ERRCODE_OK) return PRIMITIVES_ERRCODE_DSRELEASEDCFAILED;
 #else	
-	aui_BitmapFont *font= NULL;
-	AUI_ERRCODE      errcode     = AUI_ERRCODE_OK;
-	aui_StringTable	*stringTable = new aui_StringTable(&errcode, "TiledMapFontStringTable");
-	
-	if (AUI_NEWOK(stringTable, errcode))
-	    {
-	    const MBCHAR *    fontNameString  = stringTable->GetString(0);
-	    const MBCHAR *    fontSizeString  = stringTable->GetString(1);
-	    
-	    font = g_c3ui->LoadBitmapFont(fontNameString);
-	    Assert(font);
-	    font->SetPointSize(atoi(fontSizeString));
-	    
-	    // const MBCHAR *    fString         = stringTable->GetString(2);
-	    // strncpy(m_fortifyString, fString, 3);
-	    }
-	
-	delete stringTable;
+	aui_BitmapFont *font= getBitmapFont();
 	    
 	if(font){
 	    RECT rect = {x, y - 0.5 * font->GetLineSkip(), pDirectSurface->Width(), pDirectSurface->Height()}; // ony x, y matter; width and hight get clipped in DrawString
@@ -1234,24 +1217,7 @@ PRIMITIVES_ERRCODE primitives_DrawBoundedText(
 	Assert(hr == AUI_ERRCODE_OK);
 	if (hr != AUI_ERRCODE_OK) return PRIMITIVES_ERRCODE_DSRELEASEDCFAILED;
 #else	
-	aui_BitmapFont *font= NULL;
-	AUI_ERRCODE      errcode     = AUI_ERRCODE_OK;
-	aui_StringTable	*stringTable = new aui_StringTable(&errcode, "TiledMapFontStringTable");
-	
-	if (AUI_NEWOK(stringTable, errcode))
-	    {
-	    const MBCHAR *    fontNameString  = stringTable->GetString(0);
-	    const MBCHAR *    fontSizeString  = stringTable->GetString(1);
-	    
-	    font = g_c3ui->LoadBitmapFont(fontNameString);
-	    Assert(font);
-	    font->SetPointSize(atoi(fontSizeString));
-	    
-	    // const MBCHAR *    fString         = stringTable->GetString(2);
-	    // strncpy(m_fortifyString, fString, 3);
-	    }
-	
-	delete stringTable;
+	aui_BitmapFont *font= getBitmapFont();
 	    
 	if(font){
 	    RECT clipRect = primitives_GetScreenAdjustedRectCopy(pDirectSurface, *bound);
@@ -1323,24 +1289,7 @@ PRIMITIVES_ERRCODE primitives_DrawTextBatch(
 	Assert(hr == AUI_ERRCODE_OK);
 	if (hr != AUI_ERRCODE_OK) return PRIMITIVES_ERRCODE_DSRELEASEDCFAILED;
 #else	
-	aui_BitmapFont *font= NULL;
-	AUI_ERRCODE      errcode     = AUI_ERRCODE_OK;
-	aui_StringTable	*stringTable = new aui_StringTable(&errcode, "TiledMapFontStringTable");
-	
-	if (AUI_NEWOK(stringTable, errcode))
-	    {
-	    const MBCHAR *    fontNameString  = stringTable->GetString(0);
-	    const MBCHAR *    fontSizeString  = stringTable->GetString(1);
-	    
-	    font = g_c3ui->LoadBitmapFont(fontNameString);
-	    Assert(font);
-	    font->SetPointSize(atoi(fontSizeString));
-	    
-	    // const MBCHAR *    fString         = stringTable->GetString(2);
-	    // strncpy(m_fortifyString, fString, 3);
-	    }
-	
-	delete stringTable;
+	aui_BitmapFont *font= getBitmapFont();
 	    
 	if(font){
 	    for (sint32 i=0;i < numStrings;i++)
@@ -1549,24 +1498,7 @@ PRIMITIVES_ERRCODE primitives_DropTextCentered(
 	Assert(hr == AUI_ERRCODE_OK);
 	if (hr != AUI_ERRCODE_OK) return PRIMITIVES_ERRCODE_SURFACEUNLOCKFAILED;
 #else	
-	aui_BitmapFont *font= NULL;
-	AUI_ERRCODE      errcode     = AUI_ERRCODE_OK;
-	aui_StringTable	*stringTable = new aui_StringTable(&errcode, "TiledMapFontStringTable");
-	
-	if (AUI_NEWOK(stringTable, errcode))
-	    {
-	    const MBCHAR *    fontNameString  = stringTable->GetString(0);
-	    const MBCHAR *    fontSizeString  = stringTable->GetString(1);
-	    
-	    font = g_c3ui->LoadBitmapFont(fontNameString);
-	    Assert(font);
-	    font->SetPointSize(atoi(fontSizeString));
-	    
-	    // const MBCHAR *    fString         = stringTable->GetString(2);
-	    // strncpy(m_fortifyString, fString, 3);
-	    }
-	
-	delete stringTable;
+	aui_BitmapFont *font= getBitmapFont();
 	    
 	if(font){
 	    RECT clipRect = primitives_GetScreenAdjustedRectCopy(pDirectSurface, *destRect);
@@ -1639,24 +1571,7 @@ PRIMITIVES_ERRCODE primitives_ColoredDropTextCentered(
 	Assert(hr == AUI_ERRCODE_OK);
 	if (hr != AUI_ERRCODE_OK) return PRIMITIVES_ERRCODE_SURFACEUNLOCKFAILED;
 #else	
-	aui_BitmapFont *font= NULL;
-	AUI_ERRCODE      errcode     = AUI_ERRCODE_OK;
-	aui_StringTable	*stringTable = new aui_StringTable(&errcode, "TiledMapFontStringTable");
-	
-	if (AUI_NEWOK(stringTable, errcode))
-	    {
-	    const MBCHAR *    fontNameString  = stringTable->GetString(0);
-	    const MBCHAR *    fontSizeString  = stringTable->GetString(1);
-	    
-	    font = g_c3ui->LoadBitmapFont(fontNameString);
-	    Assert(font);
-	    font->SetPointSize(atoi(fontSizeString));
-	    
-	    // const MBCHAR *    fString         = stringTable->GetString(2);
-	    // strncpy(m_fortifyString, fString, 3);
-	    }
-	
-	delete stringTable;
+	aui_BitmapFont *font= getBitmapFont();
 	    
 	if(font){
 	    RECT clipRect = primitives_GetScreenAdjustedRectCopy(pDirectSurface, *destRect);
@@ -1745,25 +1660,8 @@ PRIMITIVES_ERRCODE primitives_DropTextBatch(
 	Assert(hr == AUI_ERRCODE_OK);
 	if (hr != AUI_ERRCODE_OK) return PRIMITIVES_ERRCODE_DSRELEASEDCFAILED;
 #else	
-	aui_BitmapFont *font= NULL;
-	AUI_ERRCODE      errcode     = AUI_ERRCODE_OK;
-	aui_StringTable	*stringTable = new aui_StringTable(&errcode, "TiledMapFontStringTable");
-	
-	if (AUI_NEWOK(stringTable, errcode))
-	    {
-	    const MBCHAR *    fontNameString  = stringTable->GetString(0);
-	    const MBCHAR *    fontSizeString  = stringTable->GetString(1);
-	    
-	    font = g_c3ui->LoadBitmapFont(fontNameString);
-	    Assert(font);
-	    font->SetPointSize(atoi(fontSizeString));
-	    
-	    // const MBCHAR *    fString         = stringTable->GetString(2);
-	    // strncpy(m_fortifyString, fString, 3);
-	    }
-	
-	delete stringTable;
-	    
+	aui_BitmapFont *font= getBitmapFont();
+
 	if(font){
 	    for (sint32 i=0;i < numStrings;i++)
 		{
