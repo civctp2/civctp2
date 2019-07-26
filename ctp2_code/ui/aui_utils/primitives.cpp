@@ -1148,6 +1148,31 @@ PRIMITIVES_ERRCODE primitives_DrawText(
 
 	hr = pDirectSurface->ReleaseDC(hdc);
 	if (hr != AUI_ERRCODE_OK) return PRIMITIVES_ERRCODE_DSRELEASEDCFAILED;
+#else	
+	aui_BitmapFont *font= NULL;
+	AUI_ERRCODE      errcode     = AUI_ERRCODE_OK;
+	aui_StringTable	*stringTable = new aui_StringTable(&errcode, "TiledMapFontStringTable");
+	
+	if (AUI_NEWOK(stringTable, errcode))
+	    {
+	    const MBCHAR *    fontNameString  = stringTable->GetString(0);
+	    const MBCHAR *    fontSizeString  = stringTable->GetString(1);
+	    
+	    font = g_c3ui->LoadBitmapFont(fontNameString);
+	    Assert(font);
+	    font->SetPointSize(atoi(fontSizeString));
+	    
+	    // const MBCHAR *    fString         = stringTable->GetString(2);
+	    // strncpy(m_fortifyString, fString, 3);
+	    }
+	
+	delete stringTable;
+	    
+	if(font){
+	    RECT rect = {x, y - 0.5 * font->GetLineSkip(), pDirectSurface->Width(), pDirectSurface->Height()}; // ony x, y matter; width and hight get clipped in DrawString
+	    RECT clipRect = primitives_GetScreenAdjustedRectCopy(pDirectSurface, rect);
+	    font->DrawString(pDirectSurface, &rect, &clipRect, pString, 0, color, 0); // no bg correspondence
+	    }
 #endif // __AUI_USE_DIRECTX__
 
 	return PRIMITIVES_ERRCODE_OK;
@@ -1208,6 +1233,30 @@ PRIMITIVES_ERRCODE primitives_DrawBoundedText(
 	hr = pDirectSurface->ReleaseDC(hdc);
 	Assert(hr == AUI_ERRCODE_OK);
 	if (hr != AUI_ERRCODE_OK) return PRIMITIVES_ERRCODE_DSRELEASEDCFAILED;
+#else	
+	aui_BitmapFont *font= NULL;
+	AUI_ERRCODE      errcode     = AUI_ERRCODE_OK;
+	aui_StringTable	*stringTable = new aui_StringTable(&errcode, "TiledMapFontStringTable");
+	
+	if (AUI_NEWOK(stringTable, errcode))
+	    {
+	    const MBCHAR *    fontNameString  = stringTable->GetString(0);
+	    const MBCHAR *    fontSizeString  = stringTable->GetString(1);
+	    
+	    font = g_c3ui->LoadBitmapFont(fontNameString);
+	    Assert(font);
+	    font->SetPointSize(atoi(fontSizeString));
+	    
+	    // const MBCHAR *    fString         = stringTable->GetString(2);
+	    // strncpy(m_fortifyString, fString, 3);
+	    }
+	
+	delete stringTable;
+	    
+	if(font){
+	    RECT clipRect = primitives_GetScreenAdjustedRectCopy(pDirectSurface, *bound);
+	    font->DrawString(pDirectSurface, bound, &clipRect, pString, 0, color, 0); // no bg correspondence
+	    }
 #endif // __AUI_USE_DIRECTX__
 
 	return PRIMITIVES_ERRCODE_OK;
@@ -1273,6 +1322,36 @@ PRIMITIVES_ERRCODE primitives_DrawTextBatch(
 	hr = pDirectSurface->ReleaseDC(hdc);
 	Assert(hr == AUI_ERRCODE_OK);
 	if (hr != AUI_ERRCODE_OK) return PRIMITIVES_ERRCODE_DSRELEASEDCFAILED;
+#else	
+	aui_BitmapFont *font= NULL;
+	AUI_ERRCODE      errcode     = AUI_ERRCODE_OK;
+	aui_StringTable	*stringTable = new aui_StringTable(&errcode, "TiledMapFontStringTable");
+	
+	if (AUI_NEWOK(stringTable, errcode))
+	    {
+	    const MBCHAR *    fontNameString  = stringTable->GetString(0);
+	    const MBCHAR *    fontSizeString  = stringTable->GetString(1);
+	    
+	    font = g_c3ui->LoadBitmapFont(fontNameString);
+	    Assert(font);
+	    font->SetPointSize(atoi(fontSizeString));
+	    
+	    // const MBCHAR *    fString         = stringTable->GetString(2);
+	    // strncpy(m_fortifyString, fString, 3);
+	    }
+	
+	delete stringTable;
+	    
+	if(font){
+	    for (sint32 i=0;i < numStrings;i++)
+		{
+		RECT rect = {x, y, pDirectSurface->Width(), pDirectSurface->Height()}; // ony x, y matter; width and hight get clipped in DrawString
+		RECT clipRect = primitives_GetScreenAdjustedRectCopy(pDirectSurface, rect);
+		font->DrawString(pDirectSurface, &rect, &clipRect, pString[i], 0, color, 0); // no bg correspondence
+		y += font->GetLineSkip();
+		
+		}
+	    }
 #endif
 
 	return PRIMITIVES_ERRCODE_OK;
@@ -1336,6 +1415,8 @@ PRIMITIVES_ERRCODE primitives_DropText(
 	hr = pDirectSurface->ReleaseDC(hdc);
 	Assert(hr == AUI_ERRCODE_OK);
 	if (hr != AUI_ERRCODE_OK) return PRIMITIVES_ERRCODE_SURFACEUNLOCKFAILED;
+#else
+	primitives_DrawText(pDirectSurface, x, y, pString, color, bg);
 #endif // __AUI_USE_DIRECTX__
 
 	return PRIMITIVES_ERRCODE_OK;
@@ -1402,6 +1483,8 @@ PRIMITIVES_ERRCODE primitives_ColoredDropText(
 	hr = pDirectSurface->ReleaseDC(hdc);
 	Assert(hr == AUI_ERRCODE_OK);
 	if (hr != AUI_ERRCODE_OK) return PRIMITIVES_ERRCODE_SURFACEUNLOCKFAILED;
+#else
+	primitives_DrawText(pDirectSurface, x, y, pString, textColor, bg); // not handling dropColor
 #endif // __AUI_USE_DIRECTX__
 
 	return PRIMITIVES_ERRCODE_OK;
@@ -1465,6 +1548,30 @@ PRIMITIVES_ERRCODE primitives_DropTextCentered(
 	hr = pDirectSurface->ReleaseDC(hdc);
 	Assert(hr == AUI_ERRCODE_OK);
 	if (hr != AUI_ERRCODE_OK) return PRIMITIVES_ERRCODE_SURFACEUNLOCKFAILED;
+#else	
+	aui_BitmapFont *font= NULL;
+	AUI_ERRCODE      errcode     = AUI_ERRCODE_OK;
+	aui_StringTable	*stringTable = new aui_StringTable(&errcode, "TiledMapFontStringTable");
+	
+	if (AUI_NEWOK(stringTable, errcode))
+	    {
+	    const MBCHAR *    fontNameString  = stringTable->GetString(0);
+	    const MBCHAR *    fontSizeString  = stringTable->GetString(1);
+	    
+	    font = g_c3ui->LoadBitmapFont(fontNameString);
+	    Assert(font);
+	    font->SetPointSize(atoi(fontSizeString));
+	    
+	    // const MBCHAR *    fString         = stringTable->GetString(2);
+	    // strncpy(m_fortifyString, fString, 3);
+	    }
+	
+	delete stringTable;
+	    
+	if(font){
+	    RECT clipRect = primitives_GetScreenAdjustedRectCopy(pDirectSurface, *destRect);
+	    font->DrawString(pDirectSurface, destRect, &clipRect, pString, k_AUI_BITMAPFONT_DRAWFLAG_VERTCENTER, color, 0); // no bg correspondence
+	    }
 #endif // __AUI_USE_DIRECTX__
 
 	return PRIMITIVES_ERRCODE_OK;
@@ -1531,6 +1638,30 @@ PRIMITIVES_ERRCODE primitives_ColoredDropTextCentered(
 	hr = pDirectSurface->ReleaseDC(hdc);
 	Assert(hr == AUI_ERRCODE_OK);
 	if (hr != AUI_ERRCODE_OK) return PRIMITIVES_ERRCODE_SURFACEUNLOCKFAILED;
+#else	
+	aui_BitmapFont *font= NULL;
+	AUI_ERRCODE      errcode     = AUI_ERRCODE_OK;
+	aui_StringTable	*stringTable = new aui_StringTable(&errcode, "TiledMapFontStringTable");
+	
+	if (AUI_NEWOK(stringTable, errcode))
+	    {
+	    const MBCHAR *    fontNameString  = stringTable->GetString(0);
+	    const MBCHAR *    fontSizeString  = stringTable->GetString(1);
+	    
+	    font = g_c3ui->LoadBitmapFont(fontNameString);
+	    Assert(font);
+	    font->SetPointSize(atoi(fontSizeString));
+	    
+	    // const MBCHAR *    fString         = stringTable->GetString(2);
+	    // strncpy(m_fortifyString, fString, 3);
+	    }
+	
+	delete stringTable;
+	    
+	if(font){
+	    RECT clipRect = primitives_GetScreenAdjustedRectCopy(pDirectSurface, *destRect);
+	    font->DrawString(pDirectSurface, destRect, &clipRect, pString, k_AUI_BITMAPFONT_DRAWFLAG_VERTCENTER, textColor, 0); // no bg correspondence, not handling dropColor
+	    }
 #endif // __AUI_USE_DIRECTX__
 
 	return PRIMITIVES_ERRCODE_OK;
@@ -1613,6 +1744,36 @@ PRIMITIVES_ERRCODE primitives_DropTextBatch(
 	hr = pDirectSurface->ReleaseDC(hdc);
 	Assert(hr == AUI_ERRCODE_OK);
 	if (hr != AUI_ERRCODE_OK) return PRIMITIVES_ERRCODE_DSRELEASEDCFAILED;
+#else	
+	aui_BitmapFont *font= NULL;
+	AUI_ERRCODE      errcode     = AUI_ERRCODE_OK;
+	aui_StringTable	*stringTable = new aui_StringTable(&errcode, "TiledMapFontStringTable");
+	
+	if (AUI_NEWOK(stringTable, errcode))
+	    {
+	    const MBCHAR *    fontNameString  = stringTable->GetString(0);
+	    const MBCHAR *    fontSizeString  = stringTable->GetString(1);
+	    
+	    font = g_c3ui->LoadBitmapFont(fontNameString);
+	    Assert(font);
+	    font->SetPointSize(atoi(fontSizeString));
+	    
+	    // const MBCHAR *    fString         = stringTable->GetString(2);
+	    // strncpy(m_fortifyString, fString, 3);
+	    }
+	
+	delete stringTable;
+	    
+	if(font){
+	    for (sint32 i=0;i < numStrings;i++)
+		{
+		RECT rect = {x, y, pDirectSurface->Width(), pDirectSurface->Height()}; // ony x, y matter; width and hight get clipped in DrawString
+		RECT clipRect = primitives_GetScreenAdjustedRectCopy(pDirectSurface, rect);
+		font->DrawString(pDirectSurface, &rect, &clipRect, pString[i], 0, color, 0); // no bg correspondence
+		y += font->GetLineSkip();
+		
+		}
+	    }
 #endif // __AUI_USE_DIRECTX__
 
 	return PRIMITIVES_ERRCODE_OK;

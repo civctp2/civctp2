@@ -38,7 +38,13 @@
 
 #include "pixelutils.h"
 
+#ifndef __AUI_USE_DIRECTX__
+#include "aui_textbase.h"
+#include "aui_stringtable.h"
+
+class aui_StringTable;
 class aui_Surface;
+#endif
 class aui_Image;
 class Pattern;
 //enum AUI_TABGROUP_ALIGNMENT;
