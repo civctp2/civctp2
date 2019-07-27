@@ -960,6 +960,7 @@ UNIT_CORPORATE_BRANCH {
    IgnoreZOC
    NoZoc
    CanBeSued
+   CanBeExpelled
    CantCaptureCity
    DeathEffectsHappy
    Advertise
@@ -2329,6 +2330,7 @@ UNIT_LAWYER {
    NoZoc
    CanSue
    CanBeSued
+   CanBeExpelled
    CantCaptureCity
    DeathEffectsHappy
    IsSpecialForces
