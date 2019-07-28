@@ -5931,7 +5931,8 @@ ORDER_RESULT ArmyData::InterceptTrade()
 				    }
 				else// AI
 				    {
-				    if(Diplomat::GetDiplomat(m_owner).TestEffectiveRegard(route_owner, COLDWAR_REGARD))
+				    if(Diplomat::GetDiplomat(m_owner).TestEffectiveRegard(route_owner, COLDWAR_REGARD) ||
+					(g_player[m_owner]->m_strengths->GetStrength(STRENGTH_CAT_MILITARY) > g_player[route_owner]->m_strengths->GetStrength(STRENGTH_CAT_MILITARY)))
 					{
 					Diplomat::GetDiplomat(route_owner).LogViolationEvent(m_owner, PROPOSAL_REQUEST_STOP_PIRACY); // as in Slic_BreakNoPiracy::Call
 					}
@@ -5958,7 +5959,8 @@ ORDER_RESULT ArmyData::InterceptTrade()
 				    }
 				else// AI
 				    {
-				    if(Diplomat::GetDiplomat(m_owner).TestEffectiveRegard(route_owner, COLDWAR_REGARD))
+				    if(Diplomat::GetDiplomat(m_owner).TestEffectiveRegard(route_owner, COLDWAR_REGARD) ||
+					(g_player[m_owner]->m_strengths->GetStrength(STRENGTH_CAT_MILITARY) > g_player[route_owner]->m_strengths->GetStrength(STRENGTH_CAT_MILITARY)))
 					{
 					Diplomat::GetDiplomat(route_owner).LogViolationEvent(m_owner, PROPOSAL_TREATY_TRADE_PACT); // as in Slic_BreakNoPiracy::Call
 					}
