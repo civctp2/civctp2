@@ -5931,7 +5931,10 @@ ORDER_RESULT ArmyData::InterceptTrade()
 				    }
 				else// AI
 				    {
-				    Diplomat::GetDiplomat(route_owner).LogViolationEvent(m_owner, PROPOSAL_REQUEST_STOP_PIRACY); // as in Slic_BreakNoPiracy::Call
+				    if(Diplomat::GetDiplomat(m_owner).TestEffectiveRegard(route_owner, COLDWAR_REGARD))
+					{
+					Diplomat::GetDiplomat(route_owner).LogViolationEvent(m_owner, PROPOSAL_REQUEST_STOP_PIRACY); // as in Slic_BreakNoPiracy::Call
+					}
 				    }
 				}
 
@@ -5955,7 +5958,10 @@ ORDER_RESULT ArmyData::InterceptTrade()
 				    }
 				else// AI
 				    {
-				    Diplomat::GetDiplomat(route_owner).LogViolationEvent(m_owner, PROPOSAL_TREATY_TRADE_PACT); // as in Slic_BreakNoPiracy::Call
+				    if(Diplomat::GetDiplomat(m_owner).TestEffectiveRegard(route_owner, COLDWAR_REGARD))
+					{
+					Diplomat::GetDiplomat(route_owner).LogViolationEvent(m_owner, PROPOSAL_TREATY_TRADE_PACT); // as in Slic_BreakNoPiracy::Call
+					}
 				    }
 				}
 			    }
