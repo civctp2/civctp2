@@ -4495,8 +4495,11 @@ SFN_ERROR Slic_BreakLeaveOurLands::Call(SlicArgList *args)
 	if(!g_player[cellOwner])
 		return SFN_ERROR_DEAD_PLAYER;
 
-	sint32 i;
-	for(i = g_player[unitOwner]->m_agreed->Num() - 1; i >= 0; i--) {
+	if (AgreementMatrix::s_agreements.HasAgreement(
+		cellOwner,
+		unitOwner,
+		PROPOSAL_REQUEST_WITHDRAW_TROOPS)){
+	    /* expecting sync of agrrements over network to be handled by Diplomat::LogViolationEvent or dependent events
 		Agreement ag = g_player[unitOwner]->m_agreed->Access(i);
 		if(g_theAgreementPool->IsValid(ag) &&
 		   ag.GetRecipient() == unitOwner &&
@@ -4508,9 +4511,11 @@ SFN_ERROR Slic_BreakLeaveOurLands::Call(SlicArgList *args)
 				g_network.Enqueue(new NetInfo(NET_INFO_CODE_VIOLATE_AGREEMENT,
 											  ag.m_id, unitOwner));
 			}
-
-			ag.AccessData()->RecipientIsViolating(unitOwner, TRUE);
 		}
+	    */
+	    
+	    Diplomat & diplomat = Diplomat::GetDiplomat(cellOwner);
+	    diplomat.LogViolationEvent(unitOwner, PROPOSAL_REQUEST_WITHDRAW_TROOPS);
 	}
 	return SFN_ERROR_OK;
 }
