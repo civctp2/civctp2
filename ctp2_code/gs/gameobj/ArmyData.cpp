@@ -6814,6 +6814,7 @@ void ArmyData::CheckLoadSleepingCargoFromCity(Order *order)
 // Remark(s)  : Actually, not used. Must be left over from CTP1
 //
 //----------------------------------------------------------------------------
+/* commented, since not used any more
 bool ArmyData::Move(WORLD_DIRECTION d, Order *order)
 {
 	MapPoint oldPos = m_pos;
@@ -6923,6 +6924,7 @@ bool ArmyData::Move(WORLD_DIRECTION d, Order *order)
 	}
 	return false;
 }
+*/
 
 bool ArmyData::FinishMove(WORLD_DIRECTION d, MapPoint &newPos, UNIT_ORDER_TYPE order)
 {
