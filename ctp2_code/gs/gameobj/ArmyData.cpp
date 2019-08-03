@@ -6706,6 +6706,10 @@ bool ArmyData::ExecuteMoveOrder(Order *order)
 	}
 	else
 	{
+		if(DoLeaveOurLandsCheck(order->m_point, UNIT_ORDER_MOVE_TO)){
+		    return false;
+		    }
+
 		g_gevManager->AddEvent(GEV_INSERT_AfterCurrent,
 		                       GEV_MoveArmy,
 		                       GEA_Army, m_id,
