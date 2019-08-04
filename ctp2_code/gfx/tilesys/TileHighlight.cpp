@@ -53,6 +53,7 @@
 #include "controlpanelwindow.h"
 #include "OrderRecord.h"
 #include "aui_surface.h"
+#include "aui_bitmapfont.h"
 #include "maputils.h"
 #include "primitives.h"
 #include "tiledmap.h"
@@ -799,12 +800,15 @@ void TiledMap::DrawLegalMove
 						primitives_PaintRect16(pSurface, &turnRect, g_colorSet->GetColor(actual_line_color));
 						primitives_FrameRect16(pSurface, &turnRect, 0);
 
-						sint32 const	width	= textutils_GetWidth(pSurface, turnNumber);
-						sint32 const	height	= textutils_GetHeight(pSurface, turnNumber);
-						sint32 const	textX	= x - (width >> 1);
-						sint32 const	textY	= y - (height >> 1);
+						sint32 const width = m_font->GetStringWidth(turnNumber);
+						sint32 const height = m_font->GetMaxHeight();
+						RECT rect = {0, 0, width, height};
+						OffsetRect(&rect, // position rect relative to turnRect
+						    turnRect.left + (turnRect.right - turnRect.left) / 2 - width  / 2,
+						    turnRect.top  + (turnRect.bottom - turnRect.top) / 2 - height / 2);
 
-						primitives_DrawText(pSurface, textX, textY, turnNumber, 0, 1);
+						RECT clipRect = primitives_GetScreenAdjustedRectCopy(pSurface, rect);
+						m_font->DrawString(pSurface, &rect, &clipRect, turnNumber, 0, g_colorSet->GetColorRef(COLOR_BLACK), 0);
 					}
 				}
 			}
@@ -851,12 +855,15 @@ void TiledMap::DrawLegalMove
 					primitives_PaintRect16(pSurface, &turnRect, g_colorSet->GetColor(actual_line_color));
 					primitives_FrameRect16(pSurface, &turnRect, 0);
 
-					sint32 const	width	= textutils_GetWidth(pSurface, turnNumber);
-					sint32 const	height	= textutils_GetHeight(pSurface, turnNumber);
-					sint32 const	textX	= x - (width >> 1);
-					sint32 const	textY	= y - (height >> 1);
+					sint32 const width = m_font->GetStringWidth(turnNumber);
+					sint32 const height = m_font->GetMaxHeight();
+					RECT rect = {0, 0, width, height};
+					OffsetRect(&rect, // position rect relative to turnRect
+					    turnRect.left + (turnRect.right - turnRect.left) / 2 - width  / 2,
+					    turnRect.top  + (turnRect.bottom - turnRect.top) / 2 - height / 2);
 
-					primitives_DrawText(pSurface, textX, textY, turnNumber, 0, 1);
+					RECT clipRect = primitives_GetScreenAdjustedRectCopy(pSurface, turnRect);
+					m_font->DrawString(pSurface, &turnRect, &clipRect, turnNumber, 0, g_colorSet->GetColorRef(COLOR_BLACK), 0);
 				}
 			}
 		}
@@ -1107,13 +1114,15 @@ void TiledMap::DrawUnfinishedMove(aui_Surface * pSurface)
 
 						COLORREF color = g_colorSet->GetColorRef(k_TURN_COLOR);
 
-						sint32 width = textutils_GetWidth(pSurface, turnNumber);
-						sint32 height = textutils_GetHeight(pSurface, turnNumber);
-
-						sint32 textX = x - (width>>1);
-						sint32 textY = y - (height>>1);
-
-						primitives_DrawText(pSurface, textX, textY, turnNumber, color, 1);
+						sint32 const width = m_font->GetStringWidth(turnNumber);
+						sint32 const height = m_font->GetMaxHeight();
+						RECT rect = {0, 0, width, height};
+						OffsetRect(&rect, // position rect relative to turnRect
+						    turnRect.left + (turnRect.right - turnRect.left) / 2 - width  / 2,
+						    turnRect.top  + (turnRect.bottom - turnRect.top) / 2 - height / 2);
+						
+						RECT clipRect = primitives_GetScreenAdjustedRectCopy(pSurface, turnRect);
+						m_font->DrawString(pSurface, &turnRect, &clipRect, turnNumber, 0, color, 0);
 					}
 				}
 			}
