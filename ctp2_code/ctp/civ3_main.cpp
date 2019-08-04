@@ -201,8 +201,7 @@ extern sint32           g_logCrashes;
 #define WM_MOUSEWHEEL   (WM_MOUSELAST+1)
 #endif
 
-#define k_LDLName                   "civ3.ldl"
-#define k_LDL640Name                "civ3_640.ldl"
+#define k_LDLName                   "ctp2.ldl"
 #define k_CursorName                "cursor2.tif"
 #define k_DisclaimerName            "disclaimer.txt"
 
