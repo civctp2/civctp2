@@ -1,3 +1,3 @@
 #!/bin/bash
 
-jq -r 'to_entries[] | "\(.value) -> \(.key)"'
+jq -r 'to_entries[] | .key as $k | .value[] | "\(.) -> \($k)"'
