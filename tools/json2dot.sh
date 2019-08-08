@@ -1,3 +1,3 @@
 #!/bin/bash
 
-jq -r 'to_entries[] | "\(.value | .Prerequisites) -> \(.key)"'
+jq -r 'to_entries[] | "\(.value) -> \(.key)"'

@@ -4,3 +4,4 @@ awk '!/^#/ {if (NF == 2) {print ($2 ~/{/) ? "\"" $1 "\" : " $2 : "\"" $1 "\" : \
     | sed ':a;N;$!ba;s/,\n}/\n},/g'    `# replace ,\n} by \n}, ` \
     | cat <( echo "{") -               `# add initial { ` \
     | sed '$s/},/}\n}/'                `# replace last , with final } ` \
+    | jq -s --stream 'group_by(.[0]) | map({"key": .[0][0][0], "value": map(.[1])}) | from_entries' # convert duplicate keys to array # https://stackoverflow.com/questions/36956590/json-fields-have-the-same-name#36959474 
