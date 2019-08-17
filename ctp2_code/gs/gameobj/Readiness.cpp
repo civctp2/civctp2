@@ -166,6 +166,13 @@ void MilitaryReadiness::SupportUnitGold(const Unit &u, sint32 gov)
 
 double MilitaryReadiness::GetSupportCost(const Unit &u)
 {
+	//EMOD for AI
+	if(g_theDifficultyDB->Get(g_theGameSettings->GetDifficulty())->GetAINoShieldHunger()
+	   && g_player[m_owner]->IsRobot())
+	{
+		return 0.0;
+	}
+
 	if(u.GetIsProfessional())
 		return 0.0;
 
@@ -173,22 +180,20 @@ double MilitaryReadiness::GetSupportCost(const Unit &u)
 		return 0.0;
 
 	double unitCost;
-	if(u.GetDBRec()->GetIsSpecialForces()) {
+	if(u.GetDBRec()->GetIsSpecialForces())
+	{
 		unitCost = u.GetShieldHunger() * GetSpecialForcesSupportModifier(g_player[m_owner]->GetGovernmentType());
-	} else {
+	}
+	else
+	{
 		unitCost = u.GetShieldHunger() * GetSupportModifier(g_player[m_owner]->GetGovernmentType());
 	}
+
 	unitCost -= unitCost *
 		double((double)wonderutil_GetReadinessCostReduction(
 			g_player[m_owner]->GetBuiltWonders()) / 100.0);
 
 	unitCost *= g_theGovernmentDB->Get(g_player[m_owner]->m_government_type)->GetSupportCoef();
-//EMOD for AI
-	if(g_theDifficultyDB->Get(g_theGameSettings->GetDifficulty())->GetAINoShieldHunger()
-		&& g_player[m_owner]->IsRobot())
-	{
-			unitCost -= unitCost;
-	}
 
 	return unitCost;
 }
@@ -196,6 +201,13 @@ double MilitaryReadiness::GetSupportCost(const Unit &u)
 //EMOD
 sint32 MilitaryReadiness::GetSupportCostGold(const Unit &u)
 {
+	//EMOD for AI
+	if(g_theDifficultyDB->Get(g_theGameSettings->GetDifficulty())->GetAINoGoldHunger()
+	   && g_player[m_owner]->IsRobot())
+	{
+		return 0;
+	}
+
 	if(u.GetIsProfessional())
 		return 0;
 
@@ -204,11 +216,14 @@ sint32 MilitaryReadiness::GetSupportCostGold(const Unit &u)
 
 	double unitCostGold = 0.0;
 	sint32 goldHunger = u.GetDBRec()->GetGoldHunger();
-	if(goldHunger > 0) {
-
-		if(u.GetDBRec()->GetIsSpecialForces()) {
+	if(goldHunger > 0)
+	{
+		if(u.GetDBRec()->GetIsSpecialForces())
+		{
 			unitCostGold = static_cast<double>(goldHunger) * GetSpecialForcesSupportModifier(g_player[m_owner]->GetGovernmentType());
-		} else {
+		}
+		else
+		{
 			unitCostGold = static_cast<double>(goldHunger) * GetSupportModifier(g_player[m_owner]->GetGovernmentType());
 		}
 
@@ -217,13 +232,6 @@ sint32 MilitaryReadiness::GetSupportCostGold(const Unit &u)
 				g_player[m_owner]->GetBuiltWonders())) / 100.0);
 
 		unitCostGold *= g_theGovernmentDB->Get(g_player[m_owner]->m_government_type)->GetSupportCoef();
-	}
-
-	//EMOD for AI
-	if(g_theDifficultyDB->Get(g_theGameSettings->GetDifficulty())->GetAINoGoldHunger()
-		&& g_player[m_owner]->IsRobot())
-	{
-		unitCostGold -= unitCostGold;
 	}
 
 	return static_cast<sint32>(unitCostGold);
@@ -276,10 +284,10 @@ void MilitaryReadiness::RecalcCost()
 	m_cost = 0.0;
 	DynamicArray<Army> *all_armies = g_player[m_owner]->m_all_armies;
 
-	int const   n = all_armies->Num();
+	const sint32   n = all_armies->Num();
 	for(sint32 i = 0; i < n; i++)
 	{
-		int const m =all_armies->Access(i).Num();
+		const sint32 m =all_armies->Access(i).Num();
 		for(sint32 j = 0; j < m; j++)
 		{
 			m_cost += GetSupportCost(all_armies->Access(i)[j]);
@@ -295,25 +303,23 @@ struct UnitCost {
 //EMOD
 sint32 MilitaryReadiness::TotalUnitGoldSupport()
 {
-//based on RecalcCost, this coade (renamed from RecalcCostGold) gets all support gold hunger from units * govt coefficient * readiness
+//based on RecalcCost, this code (renamed from RecalcCostGold) gets all support gold hunger from units * govt coefficient * readiness
 
 	m_costGold = 0;
 	DynamicArray<Army> *all_armies = g_player[m_owner]->m_all_armies;
 	sint32 i, j;
-	sint32 const n = all_armies->Num();
+	const sint32 n = all_armies->Num();
 	for (i=0; i<n; i++)
-    {
-    	sint32 const m = all_armies->Access(i).Num();
-    	for (j=0; j<m; j++)
-        {
-		    m_costGold += GetSupportCostGold(all_armies->Access(i)[j]);
-    	}
-    }
-    return m_costGold;
+	{
+		const sint32 m = all_armies->Access(i).Num();
+		for (j=0; j<m; j++)
+		{
+			m_costGold += GetSupportCostGold(all_armies->Access(i)[j]);
+		}
+	}
+
+	return m_costGold;
 }
-
-
-
 
 
 void MilitaryReadiness::KillUnitsOverBudget(sint32 gov, DynamicArray<Army> &m_all_armies, sint32 mil_total)
@@ -322,7 +328,7 @@ void MilitaryReadiness::KillUnitsOverBudget(sint32 gov, DynamicArray<Army> &m_al
 	if (sint32(m_cost) <= mil_total)
 		return;
 
-//EMOD AI can run deficit? but cant build production?
+	//EMOD AI can run deficit? but cant build production?
 	if(g_theDifficultyDB->Get(g_theGameSettings->GetDifficulty())->GetNoAIProductionDeficit()
 		&& g_player[m_owner]->IsRobot())
 		return;
@@ -330,7 +336,8 @@ void MilitaryReadiness::KillUnitsOverBudget(sint32 gov, DynamicArray<Army> &m_al
 
 	sint32 n = m_all_armies.Num();
 
-	if (n < 1) {
+	if (n < 1)
+	{
 		return;
 	}
 
@@ -407,7 +414,6 @@ void MilitaryReadiness::KillUnitsOverBudget(sint32 gov, DynamicArray<Army> &m_al
 			                       GEA_End);
 		}
 	}
-
 
 	if(sint32(m_cost) > mil_total) {
 		for (i=0; i<(n_prof_units-1); i++) {
