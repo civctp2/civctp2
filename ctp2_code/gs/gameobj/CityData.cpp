@@ -2048,7 +2048,6 @@ void CityData::CalcPollution(void)
 	double buildingProductionPercentage=0.0;
 	double buildingPopulationPercentage=0.0;
 	sint32 i;
-	uint64 buildingCheck;
 	double temp;
 
 	for(i=0; i<g_theBuildingDB->NumRecords(); i++)
@@ -2072,8 +2071,7 @@ void CityData::CalcPollution(void)
 
 	for(i=0; i<g_theWonderDB->NumRecords(); i++)
 	{
-		buildingCheck = (uint64)1 << (uint64)i;
-		if(GetBuiltWonders() & buildingCheck)
+		if(HasCityWonder(i)) // This seems to be supposed to be city only.
 		{
 			if(wonderutil_Get(i, m_owner)->GetPollutionAmount(temp))
 			{
@@ -2517,16 +2515,15 @@ void CityData::CollectResources()
 
 // Add if city has building GetEnablesGood >0 then that good will be added to the city for trade
 
-	sint32 good;
 	for(sint32 b = 0; b < g_theBuildingDB->NumRecords(); b++)
 	{
-		if(m_built_improvements & ((uint64)1 << b))
+		if(HasBuilding(b)) // Should this include buidlings given by wonders?
 		{
 			const BuildingRecord *rec = buildingutil_Get(b, m_owner);
 	//		Check If needsGood for the building a make bonuses dependent on having that good for further bonus
 			if((rec->GetNumEnablesGood() > 0) && (IsBuildingOperational(b)))
 			{
-				for(good = 0; good < rec->GetNumEnablesGood(); good++)
+				for(sint32 good = 0; good < rec->GetNumEnablesGood(); good++)
 				{
 					m_collectingResources.AddResource(rec->GetEnablesGoodIndex(good));
 				}
@@ -2536,16 +2533,16 @@ void CityData::CollectResources()
 
 // end building enables good
 
-	// Add if city has wonder GetEnablesGood >0 then that good will be dded to the city for trade
+	// Add if city has wonder GetEnablesGood > 0 then that good will be added to the city for trade
 	for(sint32 w = 0; w < g_theWonderDB->NumRecords(); w++)
 	{
-		if(m_builtWonders & ((uint64)1 << w)) // Simplify
+		if(HasCityWonder(w)) // Check whether this should be empirewide.
 		{
 			const WonderRecord *wrec = wonderutil_Get(w, m_owner);
 //			Check If needsGood for the building a make bonuses dependent on having that good for further bonus
 			if(wrec->GetNumEnablesGood() > 0)
 			{
-				for(good = 0; good < wrec->GetNumEnablesGood(); good++)
+				for(sint32 good = 0; good < wrec->GetNumEnablesGood(); good++)
 				{
 					m_collectingResources.AddResource(wrec->GetEnablesGoodIndex(good));
 				}
@@ -5736,8 +5733,7 @@ void CityData::ImprovementHealUnitsInCity() const
 	g_theWorld->GetArmy(pos, a);
 
 	sint32 n = a.Num();
-	sint32 i;
-	for (i=0; i<n; i++)
+	for (sint32 i=0; i<n; i++)
 	{
 		if (buildingutil_GetMovementTypeIsHealed(GetEffectiveBuildings(), a[i]))
 		{
@@ -5758,8 +5754,7 @@ void CityData::ImprovementRefuelUnitsInCity() const
 	g_theWorld->GetArmy(pos, a);
 
 	sint32 n = a.Num();
-	sint32 i;
-	for (i=0; i<n; i++)
+	for (sint32 i=0; i<n; i++)
 	{
 		if (buildingutil_GetMovementTypeIsRefueled(GetEffectiveBuildings(), a[i]))
 		{
@@ -5815,9 +5810,8 @@ void CityData::CityRadiusFunc(const MapPoint &pos)
 		case RADIUS_OP_KILL_UNITS:
 			if(g_theWorld->GetCell(pos)->UnitArmy())
 			{
-				sint32 i;
 				CellUnitList *units = g_theWorld->GetCell(pos)->UnitArmy();
-				for(i = 0; i < units->Num(); i++)
+				for(sint32 i = 0; i < units->Num(); i++)
 				{
 					if(!units->Access(i)->Flag(k_UDF_MAD_LAUNCHED))
 						m_killList->Insert(units->Access(i));
@@ -6282,7 +6276,6 @@ void CityData::FinishUprising(Army &sa, UPRISING_CAUSE cause)
 void CityData::CleanupUprising(Army &sa)
 {
 	Cell *cell = g_theWorld->GetCell(m_home_city.RetPos());
-	sint32 i;
 
 	sint32 oldOwner = m_owner;
 	if(!g_theArmyPool->IsValid(sa) || sa.Num() < 1)
@@ -6301,7 +6294,7 @@ void CityData::CleanupUprising(Army &sa)
 			cell->UnitArmy()->KillList(CAUSE_REMOVE_ARMY_SLAVE_UPRISING, GetOwner());
 		}
 
-		for(i = sa.Num() - 1; i >= 0; i--)
+		for(sint32 i = sa.Num() - 1; i >= 0; i--)
 		{
 			if(sa[i].GetHP() < 1)
 				sa.DelIndex(i);
@@ -6368,7 +6361,7 @@ void CityData::NanoInfect( sint32 player )
 
 	for(sint32 i = 0; i < g_theBuildingDB->NumRecords(); i++)
 	{
-		if(m_built_improvements & ((uint64)1 << i))
+		if(HasBuilding(i))
 		{
 			if(g_rand->Next(100) < (g_theConstDB->Get(0)->GetNanoBuildingKillPercentage() * 100.0))
 			{
@@ -6991,7 +6984,7 @@ sint32 CityData::HowMuchLonger(sint32 productionRemaining) const
 
 void CityData::SellBuilding(sint32 which, bool byChoice)
 {
-	if((m_built_improvements & ((uint64)1 << uint64(which))))
+	if(HasBuilding(which))
 	{
 		if(byChoice)
 		{
@@ -7043,7 +7036,6 @@ void CityData::SellBuilding(sint32 which, bool byChoice)
 			g_network.Unblock(m_owner);
 		}
 	}
-
 }
 
 void CityData::SetRoad() const
@@ -8233,7 +8225,7 @@ void CityData::DestroyRandomBuilding()
 
 	for(sint32 i = 0; i < k_MAX_BUILDINGS; i++)
 	{
-		if(m_built_improvements & ((uint64)1 << (uint64)i)) // Improve
+		if(HasBuilding(i))
 		{
 			if(!buildingutil_GetDesignatesCapitol((uint64)1 << (uint64)i, m_owner))
 				buildings[count++] = i;
@@ -8248,6 +8240,7 @@ void CityData::DestroyRandomBuilding()
 //		g_player[m_owner]->RegisterLostBuilding(m_home_city, buildings[which]); //  Maybe worth of reimplementation
 		m_build_queue.RemoveIllegalItems(true);
 	}
+
 	buildingutil_GetDefendersBonus(GetEffectiveBuildings(), m_defensiveBonus, m_owner);
 }
 
@@ -8612,7 +8605,6 @@ sint32 CityData::GetValue() const
 	uint64 buildings = GetEffectiveBuildings()&(((uint64)1<<(uint64)g_theBuildingDB->NumRecords())-1);
 	for(i=0;buildings!=0; i++,buildings>>=1)
 	{
-
 		if ((buildings&0xFF) == 0)
 		{
 			buildings>>=8;
@@ -10429,8 +10421,7 @@ sint32 CityData::GetWorkingPeopleInRing(sint32 ring) const
 
 	sint32 workingPeople = WorkerCount() + SlaveCount() + 1; // Center is free
 
-	sint32 i;
-	for(i = 0; i < ring; ++i)
+	for(sint32 i = 0; i < ring; ++i)
 	{
 		workingPeople -= m_ringSizes[i];
 	}
@@ -10447,7 +10438,6 @@ sint32 CityData::GetWorkingPeopleInRing(sint32 ring) const
 	{
 		return workingPeople;
 	}
-
 }
 
 //----------------------------------------------------------------------------
@@ -10469,12 +10459,11 @@ sint32 CityData::GetWorkingPeopleInRing(sint32 ring) const
 //----------------------------------------------------------------------------
 void CityData::ResourceFractions(double &foodFraction, double &prodFraction, double goldFraction, sint32 workingPeople) const
 {
-	sint32 i;
 	workingPeople++; // Center is free
 
 	///////////////////////////////////////////////
-	// Calcuete the nominators of the fractions
-	for(i = 0; i < g_theCitySizeDB->NumRecords(); ++i)
+	// Calculete the nominators of the fractions
+	for(sint32 i = 0; i < g_theCitySizeDB->NumRecords(); ++i)
 	{
 		if(m_ringSizes[i] == 0)
 		{
@@ -11071,7 +11060,7 @@ sint32 CityData::ProcessSectarianHappiness(sint32 newsecthappy, sint32 owner, si
 
 	for(sint32 b = 0; b < g_theBuildingDB->NumRecords(); b++)
 	{
-		if(m_built_improvements & ((uint64)1 << b)) // Improve
+		if(HasBuilding(b))
 		{
 			const BuildingRecord *rec = buildingutil_Get(b, owner);
 
@@ -11091,11 +11080,11 @@ sint32 CityData::ProcessSectarianHappiness(sint32 newsecthappy, sint32 owner, si
 				for(c = 0; c < g_player[m_owner]->m_all_cities->Num(); c++)
 				{
 					Unit aCity = g_player[m_owner]->m_all_cities->Access(c);
-					if(aCity.CD()->HasBuilding(rec->GetConflictsWithBuildingIndex(i))){
+					if(aCity.CD()->HasBuilding(rec->GetConflictsWithBuildingIndex(i)))
+					{
 						newsecthappy -= g_rand->Next(PopCount() / 3);
 					}
 				}
-
 			}
 
 			//checks if govt conflicts prereqgovt
@@ -11534,7 +11523,7 @@ void CityData::CityGovernmentModifiers()
 	//EMOD if Player PrereqBuilding is different than the government than destroy it
 	for(sint32 b = 0; b < g_theBuildingDB->NumRecords(); b++)
 	{
-		if(m_built_improvements & ((uint64)1 << b)) // Simplify
+		if(HasBuilding(b))
 		{
 			const BuildingRecord *rec = buildingutil_Get(b, m_owner);
 			for(sint32 i = 0; i < rec->GetNumGovernmentType(); i++)
@@ -11566,17 +11555,16 @@ void CityData::Militia()
 			g_player[m_owner]->CreateUnit(cheapUnit, cpos, m_home_city, false, CAUSE_NEW_ARMY_CHEAT);
 		}
 
-		// If city has a buiding that gives it a militia then if
+		// If city has a building that gives it a militia then if
 		// empty creates cheapest unit could be human exploit though.
 		for(sint32 b = 0; b < g_theBuildingDB->NumRecords(); b++)
 		{
-			if(m_built_improvements & ((uint64)1 << b))
+			if(HasBuilding(b)) // Should this include buildings given by wonders?
 			{
 				const BuildingRecord *rec = buildingutil_Get(b, m_owner);
 
-				if(HasBuilding(b)
-				&& rec->GetCreatesMiltiaUnit()
-				){
+				if(rec->GetCreatesMiltiaUnit())
+				{
 					g_player[m_owner]->CreateUnit(cheapUnit, cpos, m_home_city, false, CAUSE_NEW_ARMY_CHEAT);
 				}
 			}
@@ -11589,8 +11577,7 @@ void CityData::DestroyOnePerCiv()
 {
 	if(buildingutil_GetDesignatesOnePerCiv(m_built_improvements, m_owner))
 	{
-		uint64 i;
-		for(i = 0; i < g_theBuildingDB->NumRecords(); i++) // Can this be simplified?
+		for(uint64 i = 0; i < g_theBuildingDB->NumRecords(); i++) // Can this be simplified?
 		{
 			if(buildingutil_GetDesignatesCapitol((uint64)1 << (uint64)i, m_owner) &&
 			   m_built_improvements & uint64((uint64)1 << i))
