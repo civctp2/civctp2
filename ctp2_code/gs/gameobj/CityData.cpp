@@ -3622,16 +3622,20 @@ void CityData::CalculateBonusGold()
 	m_bonusGold  = static_cast<double>(CalculateGoldFromResources());
 	DPRINTF(k_DBG_GOVERNOR, ("//  CalculateGoldFromResources    = %f ms (%s)\n", t1.getElapsedTimeInMilliSec(), GetName()));
 
+	Player* player_ptr = g_player[m_owner];
+	sint32 gov = player_ptr->m_government_type;
+	DPRINTF(k_DBG_GOVERNOR, ("//  GetPlayerPointer              = %f ms (%i)\n", t1.getElapsedTimeInMilliSec(), GetName()));
+
 	//EMOD Civilization and Citystyle bonuses
-	m_bonusGold += g_player[m_owner]->CivCommerceBonus();
+	m_bonusGold += player_ptr->CivCommerceBonus();
 	DPRINTF(k_DBG_GOVERNOR, ("//  CivCommerceBonus              = %f ms (%s)\n", t1.getElapsedTimeInMilliSec(), GetName()));
 
-	const CityStyleRecord *styleRec = g_theCityStyleDB->Get(GetCityStyle(), g_player[m_owner]->GetGovernmentType());
+	const CityStyleRecord *styleRec = g_theCityStyleDB->Get(GetCityStyle(), gov);
 	if(styleRec)
 	{
 		m_bonusGold += styleRec->GetBonusGold();
 	}
-	DPRINTF(k_DBG_GOVERNOR, ("//  GetBonusGold                  = %f ms (%s)\n", t1.getElapsedTimeInMilliSec(), GetName()));
+	DPRINTF(k_DBG_GOVERNOR, ("//  GetCityStyleBonusGold         = %f ms (%s)\n", t1.getElapsedTimeInMilliSec(), GetName()));
 
 	//Added by E - EXPORT BONUSES TO GOODS This is only for adding not multiplying
 	for(sint32 g = 0; g < g_theResourceDB->NumRecords(); ++g)
@@ -3650,7 +3654,7 @@ void CityData::CalculateBonusGold()
 	// EMOD - Advances can add bonuses JULY 5 2006
 	for(sint32 i = 0; i < g_theAdvanceDB->NumRecords(); i++)
 	{
-		if(g_player[m_owner]->HasAdvance(i))
+		if(player_ptr->HasAdvance(i))
 		{
 			AdvanceRecord const * rec = g_theAdvanceDB->Get(i);
 			if(rec)
@@ -3660,7 +3664,7 @@ void CityData::CalculateBonusGold()
 		}
 	}
 	//end EMOD
-	DPRINTF(k_DBG_GOVERNOR, ("//  GetBonusGold                  = %f ms (%s)\n", t1.getElapsedTimeInMilliSec(), GetName()));
+	DPRINTF(k_DBG_GOVERNOR, ("//  GetAdvanceBonusGold           = %f ms (%s)\n", t1.getElapsedTimeInMilliSec(), GetName()));
 
 	//EMOD moved to the end to avoid commercepercent multiplying flags that are likely to be used in the negative
 
@@ -3671,31 +3675,31 @@ void CityData::CalculateBonusGold()
 	//////////////////////////////////
 	//EMOD - GoldPerCity but now it multiplied to the max number of cities to allow for higher gold hits to humans 3-27-2006
 	sint32 goldPerCity = buildingutil_GetGoldPerCity(GetEffectiveBuildings(), m_owner);
-	//gold += static_cast<double>(goldPerCity * g_player[m_owner]->m_all_cities->Num());
-	m_bonusGold += static_cast<double>(goldPerCity * g_player[m_owner]->m_all_cities->Num() * g_theGovernmentDB->Get(g_player[m_owner]->m_government_type)->GetTooManyCitiesThreshold());
+	//gold += static_cast<double>(goldPerCity * player_ptr->m_all_cities->Num());
+	m_bonusGold += static_cast<double>(goldPerCity * player_ptr->m_all_cities->Num() * g_theGovernmentDB->Get(gov)->GetTooManyCitiesThreshold());
 	DPRINTF(k_DBG_GOVERNOR, ("//  GetGoldPerCity                = %f ms (%s)\n", t1.getElapsedTimeInMilliSec(), GetName()));
 
 	///////////////////////////////////////////////
 	// EMOD - Add (or if negative Subtract) gold per unit
 	sint32 goldPerUnit = buildingutil_GetGoldPerUnit(GetEffectiveBuildings(), m_owner);
-	m_bonusGold += static_cast<double>(goldPerUnit * g_player[m_owner]->m_all_units->Num());
+	m_bonusGold += static_cast<double>(goldPerUnit * player_ptr->m_all_units->Num());
 	DPRINTF(k_DBG_GOVERNOR, ("//  GetGoldPerUnit                = %f ms (%s)\n", t1.getElapsedTimeInMilliSec(), GetName()));
 
 	///////////////////////////////////////////////
 	// EMOD - Add (or if negative Subtract) gold per unit and multiplied by readiness level
 	sint32 goldPerUnitReadiness = buildingutil_GetGoldPerUnitReadiness(GetEffectiveBuildings(), m_owner);
-	m_bonusGold += static_cast<double>(goldPerUnitReadiness * g_player[m_owner]->m_all_units->Num()) * g_player[m_owner]->m_readiness->GetSupportModifier(g_player[m_owner]->m_government_type);
+	m_bonusGold += static_cast<double>(goldPerUnitReadiness * player_ptr->m_all_units->Num()) * player_ptr->m_readiness->GetSupportModifier(gov);
 	DPRINTF(k_DBG_GOVERNOR, ("//  GetGoldPerUnitReadiness       = %f ms (%s)\n", t1.getElapsedTimeInMilliSec(), GetName()));
 
 	///////////////////////////////////////////////
 	// EMOD - Add (or if negative Subtract) gold per unit and multiplied by goldhunger * readiness * govt coefficient * wages
 	sint32 goldPerUnitSupport = buildingutil_GetGoldPerUnitSupport(GetEffectiveBuildings(), m_owner);
-	m_bonusGold += static_cast<double>(goldPerUnitSupport * g_player[m_owner]->m_readiness->TotalUnitGoldSupport()) * g_player[m_owner]->GetWagesPerPerson() * g_player[m_owner]->m_readiness->GetSupportModifier(g_player[m_owner]->m_government_type);
+	m_bonusGold += static_cast<double>(goldPerUnitSupport * player_ptr->m_readiness->TotalUnitGoldSupport()) * player_ptr->GetWagesPerPerson() * player_ptr->m_readiness->GetSupportModifier(gov); // GetGoldCost
 	DPRINTF(k_DBG_GOVERNOR, ("//  GetGoldPerUnitSupport         = %f ms (%s)\n", t1.getElapsedTimeInMilliSec(), GetName()));
 
 	double interest;
 	buildingutil_GetTreasuryInterest(GetEffectiveBuildings(), interest, m_owner);
-	m_bonusGold += static_cast<double>(g_player[m_owner]->m_gold->GetLevel()) * interest;
+	m_bonusGold += static_cast<double>(player_ptr->m_gold->GetLevel()) * interest;
 	DPRINTF(k_DBG_GOVERNOR, ("//  GetTreasuryInterest           = %f ms (%s)\n", t1.getElapsedTimeInMilliSec(), GetName()));
 
 #if defined(_DEBUG) || defined(USE_LOGGING)
@@ -11164,6 +11168,7 @@ void CityData::ProcessAllResources()
 	Timer t1;
 	t1.start();
 #endif
+	DPRINTF(k_DBG_GOVERNOR, ("//  City time for nothing         = %f ms (%s)\n", t1.getElapsedTimeInMilliSec(), GetName()));
 
 	PreResourceCalculation();
 

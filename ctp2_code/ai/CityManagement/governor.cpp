@@ -2379,6 +2379,7 @@ void Governor::AssignPopulation(CityData *city, bool hasAllAdvances) const
 {
 #if defined(_DEBUG) || defined(USE_LOGGING)
 	Timer t1;
+	t1.start();
 #endif
 
 	StrategyRecord::PopAssignmentElement const * pop_assignment =
@@ -2416,10 +2417,6 @@ void Governor::AssignPopulation(CityData *city, bool hasAllAdvances) const
 	// Should be removed in the end.
 	double specialists_percent = pop_assignment->GetSpecialists();
 
-#if defined(_DEBUG) || defined(USE_LOGGING)
-	t1.start();
-#endif
-
 	///////////////////////////////////////////////////////////////
 	// Get the amount of workers needed for base resources supply.
 	sint32 farmers, laborers, merchants, scientists,
@@ -2432,10 +2429,6 @@ void Governor::AssignPopulation(CityData *city, bool hasAllAdvances) const
 #else
 	                     minFood, minProd, minGold, minScie,
 	                     farmersEff, laborersEff, merchantsEff, scientistsEff);
-#endif
-
-#if defined(_DEBUG) || defined(USE_LOGGING)
-	t1.stop();
 #endif
 
 	sint32 size_index = city->GetSizeIndex();
@@ -2760,6 +2753,7 @@ void Governor::AssignPopulation(CityData *city, bool hasAllAdvances) const
 	}
 
 #if defined(_DEBUG) || defined(USE_LOGGING)
+	t1.stop();
 	DPRINTF(k_DBG_GOVERNOR, ("//  Elapsed time for popasign (sub)= %f ms (%s)\n", t1.getElapsedTimeInMilliSec(), city->GetName()));
 #endif
 }
