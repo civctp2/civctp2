@@ -442,6 +442,8 @@ void Scheduler::Reset_Agent_Execution()
 //////////////////////////////////////////////////////////////////////////
 void Scheduler::Process_Goal_Changes()
 {
+	time_t  t1 = GetTickCount();
+
 	AI_DPRINTF(k_DBG_SCHEDULER, m_playerId, -1, -1, ("\n"));
 	AI_DPRINTF(k_DBG_SCHEDULER, m_playerId, -1, -1, ("\t//\n"));
 	AI_DPRINTF(k_DBG_SCHEDULER, m_playerId, -1, -1, ("\t// PRIORITIZE GOALS\n"));
@@ -451,8 +453,10 @@ void Scheduler::Process_Goal_Changes()
 	SetContactCache(m_playerId);
 	SetIsNeutralRegardCache(m_playerId);
 	SetIsAllyRegardCache(m_playerId);
+	DPRINTF(k_DBG_SCHEDULER_ALL, ("//  Process goal changes:     Elapsed time = %d ms\n", (GetTickCount() - t1)));
 
 	Prioritize_Goals();
+	DPRINTF(k_DBG_SCHEDULER_ALL, ("//  Prioritize goal changes:  Elapsed time = %d ms\n", (GetTickCount() - t1)));
 
 	SetContactCache(-1);
 	SetIsNeutralRegardCache(-1);
@@ -465,6 +469,7 @@ void Scheduler::Process_Goal_Changes()
 	AI_DPRINTF(k_DBG_SCHEDULER_ALL, m_playerId, -1, -1, ("\n"));
 
 	Prune_Goals();
+	DPRINTF(k_DBG_SCHEDULER_ALL, ("//  Prune goals:              Elapsed time = %d ms\n", (GetTickCount() - t1)));
 
 	m_neededAgentStrength       = Squad_Strength(0);
 }
@@ -1279,8 +1284,8 @@ bool Scheduler::Prioritize_Goals()
 #if defined(_DEBUG)
 	time_t t = t2 - t1;
 #endif
-	AI_DPRINTF(k_DBG_AI, m_playerId, -1, -1, ("//  Raw goal priorities calculated:\n"));
-	AI_DPRINTF(k_DBG_AI, m_playerId, -1, -1, ("//  elapsed time = %d ms\n\n", (t2 - t1)  ));
+	AI_DPRINTF(k_DBG_SCHEDULER_ALL, m_playerId, goal_type, -1, ("//  Raw goal priorities calculated:\n"));
+	AI_DPRINTF(k_DBG_SCHEDULER_ALL, m_playerId, goal_type, -1, ("//  elapsed time = %d ms\n\n", (t2 - t1)  ));
 	t1 = GetTickCount();
 
 	Goal_Vector::iterator generic_goal_iter = m_generic_goals.begin();
@@ -1298,7 +1303,11 @@ bool Scheduler::Prioritize_Goals()
 //		this));
 
 		Remove_Matches_For_Goal(*generic_goal_iter); // Expensive
+		AI_DPRINTF(k_DBG_SCHEDULER, m_playerId, goal_type, -1, ("//  Remove matches:             Elapsed time = %d ms\n", (t2 - t1)));
+		t2 = GetTickCount();
 		Add_New_Matches_For_Goal(*generic_goal_iter, false);
+		AI_DPRINTF(k_DBG_SCHEDULER, m_playerId, goal_type, -1, ("//  Add new matches:            Elapsed time = %d ms\n", (t2 - t1)));
+		t2 = GetTickCount();
 
 		for
 		(
@@ -1335,7 +1344,13 @@ bool Scheduler::Prioritize_Goals()
 			}
 		}
 
+		AI_DPRINTF(k_DBG_SCHEDULER, m_playerId, goal_type, -1, ("//  Recalculate match value:    Elapsed time = %d ms\n", (t2 - t1)));
+		t2 = GetTickCount();
+
+		// Most time is spend here at sorting.
 		m_goals_of_type[goal_type].sort(std::greater<Sorted_Goal_ptr>());
+		AI_DPRINTF(k_DBG_SCHEDULER, m_playerId, goal_type, -1, ("//  Sorted goal:                Elapsed time = %d ms\n", (t2 - t1)));
+		t2 = GetTickCount();
 
 		++generic_goal_iter;
 		AI_DPRINTF(k_DBG_SCHEDULER_ALL, m_playerId, goal_type, -1, ("\n"));
@@ -1347,8 +1362,8 @@ bool Scheduler::Prioritize_Goals()
 	}
 
 	t2 = GetTickCount();
-	AI_DPRINTF(k_DBG_AI, m_playerId, -1, -1, ("//  Goals sorted:\n"));
-	AI_DPRINTF(k_DBG_AI, m_playerId, -1, -1, ("//  elapsed time = %d ms\n\n", (t2 - t1)  ));
+	AI_DPRINTF(k_DBG_SCHEDULER_ALL, m_playerId, goal_type, -1, ("//  Goals sorted:\n"));
+	AI_DPRINTF(k_DBG_SCHEDULER_ALL, m_playerId, goal_type, -1, ("//  elapsed time = %d ms\n\n", (t2 - t1)  ));
 
 #if defined(_DEBUG)
 	t = t2 - t1;
@@ -1436,7 +1451,7 @@ bool Scheduler::Prune_Goals()
 			{
 				if(goal_ptr->Get_Matches_Num() == 0)
 				{
-					Add_New_Matches_For_Goal(goal_ptr);
+					Add_New_Matches_For_Goal(goal_ptr); // This consumes the most time, but it seems this cannot be improved.
 					goal_ptr->Sort_Matches_If_Necessary();
 					goal_ptr->Recompute_Matching_Value();
 				}
