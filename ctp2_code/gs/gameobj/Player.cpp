@@ -4456,7 +4456,7 @@ void Player::BreakCeaseFire(PLAYER_INDEX other_player, bool sendMessages)
 			so->AddCivilisation(other_player);
 			g_slicEngine->Execute(so);
 
-			so = new SlicObject("109CeaseFireBroken");
+			so = new SlicObject("TrustLossViolatedCeaseFireVictim");
 			so->AddRecipient(other_player);
 			so->AddCivilisation(m_owner);
 			g_slicEngine->Execute(so);
