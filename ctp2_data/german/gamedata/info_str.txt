@@ -49,7 +49,7 @@
 
 ## Instant Action Messages ##
 IA_BREAK_TREATY				"Durch einen Verstoß gegen unser Abkommen mit den {player[1].civ_name_plural#DAT} würden wir nicht nur riskieren, uns deren Zorn zuzuziehen, sondern auch unser Ansehen bei anderen Völkern würde darunter leiden. Wollt Ihr das wirklich in Kauf nehmen, {player[0].leader_name#SIR_CAP}?"
-IA_BREAK_CEASE_FIRE			"{player[0].leader_name#SIR_CAP}, seid Ihr sicher, dass Ihr gegen unser Friedensabkommen mit den {player[1].civ_name_plural#DAT} verstoßen wollt?"
+IA_BREAK_CEASE_FIRE			"{player[0].leader_name#SIR_CAP}, seid Ihr sicher, dass Ihr gegen unser Waffenstillstandsabkommen mit den {player[1].civ_name_plural#DAT} verstoßen wollt?"
 IA_BREAK_NO_PIRACY			"{player[0].leader_name#SIR_CAP}, seid Ihr sicher, dass wir diesen Handelsweg überfallen sollen, obwohl wir doch versprochen haben, eben jene Nation zu verschonen?"
 IA_AUTO_UNLOAD				"Sollen unsere Einheiten hier aussteigen, {player[0].leader_name#SIR_CAP}?"
 IA_ENTERING_LANDS			"{player[0].leader_name#SIR_CAP}, seid Ihr sicher, dass unsere Truppen in das Territorium {player[1].civ_name_plural#ARTICLE_GEN} vordringen sollen?"
@@ -97,7 +97,7 @@ CANT_ATTACK_HAVE_TREATY			"Mit dieser Aktion verstoßen wir gegen unser Abkommen 
 CANT_ATTACK_TEAMMATES			"{player[0].leader_name} gehört zu Eurem Team. Mitglieder des eigenen Teams können nicht angegriffen werden."
 
 ## Useful diplomacy messages that should be reimplemented ##
-CEASE_FIRE_BROKEN			"Die ehrlosen {player[0].civ_name_plural} haben gegen unser Friedensabkommen verstoßen, indem sie uns grundlos angreifen."
+CEASE_FIRE_BROKEN			"Die ehrlosen {player[0].civ_name_plural} haben gegen unser Waffenstillstandsabkommen verstoßen, indem sie uns grundlos angreifen."
 LEAVE_OUR_LANDS_BROKEN			"Die {player[0].civ_name_plural} haben gegen unsere Vertreibungsvereinbarung verstoßen."
 # TRUST_LOSS_FAIL_TO_WITHDRAW ~ LEAVE_OUR_LANDS_BROKEN_BY_YOU		"Ihr habt Euer Versprechen, Eure Truppen aus dem Territorium der {player[0].civ_name_plural} abzuziehen, gebrochen."
 REDUCE_POLLUTION_BROKEN			"Die {player[0].civ_name_plural} haben gegen unser Abkommen, die Umweltverschmutzung zu senken, verstoßen."
