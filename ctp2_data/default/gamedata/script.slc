@@ -1188,11 +1188,6 @@ messageBox '108YouBrokeCeaseFire' {
 	MessageType("ANTIDIPLOMATIC");
 }
 
-messageBox '109CeaseFireBroken' {
-	Text(ID_CEASE_FIRE_BROKEN);
-	MessageType("ANTIDIPLOMATIC");
-}
-
 alertBox '110CantAttackAllies' {
 	if(AllUnitsCanBeExpelled(location[0])) {
 		Text(ID_CANT_ATTACK_ALLIES_CAN_EXPEL);
