@@ -1665,7 +1665,7 @@ messagebox '005EcopactBroken' {
 	MessageType("ANTIDIPLOMATIC");
 }// String is not part of the ctp2.exe
 
-messagebox '006CeaseFireBroken' {// Just the string 109CeaseFireBroken was found in the ctp2.exe
+messagebox 'TrustLossViolatedCeaseFireVictim' {
 	Text(ID_CEASE_FIRE_BROKEN) ;
 	MessageType("ANTIDIPLOMATIC");
 }

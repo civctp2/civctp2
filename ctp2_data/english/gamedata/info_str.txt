@@ -97,7 +97,7 @@ CANT_ATTACK_HAVE_TREATY			"This action will break our treaty with the {player[0]
 CANT_ATTACK_TEAMMATES			"{player[0].leader_name} is your teammate, you cannot attack him."
 
 ## Useful diplomacy messages that should be reimplemented ##
-CEASE_FIRE_BROKEN			"The dishonorable {player[0].civ_name_plural} have violated our peace treaty agreement, attacking us without provocation."
+CEASE_FIRE_BROKEN			"The dishonorable {player[0].civ_name_plural} have violated our cease-fire agreement, attacking us without provocation."
 LEAVE_OUR_LANDS_BROKEN			"The {player[0].civ_name_plural} have violated the stop trespassing agreement."
 # TRUST_LOSS_FAIL_TO_WITHDRAW ~ LEAVE_OUR_LANDS_BROKEN_BY_YOU		"You have violated your promise to pull your troops out of {player[0].civ_name_singular} territory."
 REDUCE_POLLUTION_BROKEN			"The{player[0].civ_name_plural} have violated the reduce pollution agreement."
