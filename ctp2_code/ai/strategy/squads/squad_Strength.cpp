@@ -372,31 +372,31 @@ void Squad_Strength::Log_Debug_Info(const int & log, sint32 playerId, sint32 goa
 {
 	AI_DPRINTF
 	          (
-	           k_DBG_SCHEDULER_ALL, playerId, goalType,
-	                                                -1, ("\t\t%s"
-	                                                     "\tm_air_bombard_str   %14.6f"
-	                                                     "\tm_land_bombard_str  %14.6f"
-	                                                     "\tm_water_bombard_str %14.6f"
-	                                                     "\tm_attack_str        %14.6f"
-	                                                     "\tm_defense_str       %14.6f"
-	                                                     "\tm_ranged_str        %14.6f"
-	                                                     "\tm_value             %14.6f"
-	                                                     "\tm_agent_count       %d"
-	                                                     "\tm_transport         %d"
-	                                                     "\tm_defenders         %d"
-	                                                     "\tm_ranged            %d\n"
-	                                                   , text
-	                                                   , m_air_bombard_str
-	                                                   , m_land_bombard_str
-	                                                   , m_water_bombard_str
-	                                                   , m_attack_str
-	                                                   , m_defense_str
-	                                                   , m_ranged_str
-	                                                   , m_value
-	                                                   , m_agent_count
-	                                                   , m_transport
-	                                                   , m_defenders
-	                                                   , m_ranged
-	                                                  )
+	           log, playerId, goalType, -1,
+	                                        ("\t\t%s"
+	                                         "\tm_air_bombard_str   %14.6f"
+	                                         "\tm_land_bombard_str  %14.6f"
+	                                         "\tm_water_bombard_str %14.6f"
+	                                         "\tm_attack_str        %14.6f"
+	                                         "\tm_defense_str       %14.6f"
+	                                         "\tm_ranged_str        %14.6f"
+	                                         "\tm_value             %14.6f"
+	                                         "\tm_agent_count       %d"
+	                                         "\tm_transport         %d"
+	                                         "\tm_defenders         %d"
+	                                         "\tm_ranged            %d\n"
+	                                       , text
+	                                       , m_air_bombard_str
+	                                       , m_land_bombard_str
+	                                       , m_water_bombard_str
+	                                       , m_attack_str
+	                                       , m_defense_str
+	                                       , m_ranged_str
+	                                       , m_value
+	                                       , m_agent_count
+	                                       , m_transport
+	                                       , m_defenders
+	                                       , m_ranged
+	                                      )
 	          );
 }

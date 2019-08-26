@@ -615,7 +615,7 @@ void MapAnalysis::CalcEmpireCenter(const PLAYER_INDEX playerId)
 	// For now disabled // why? //
 	m_empireCenter[playerId] = g_player[playerId]->CalcEmpireCenter();
 
-	DPRINTF(k_DBG_SCHEDULER, ("Empire Center for player %d :  rc(%3d,%3d)   \n",
+	DPRINTF(k_DBG_MAPANALYSIS, ("Empire Center for player %d :  rc(%3d,%3d)   \n",
 	        playerId,
 	        m_empireCenter[playerId].x,
 	        m_empireCenter[playerId].y));
