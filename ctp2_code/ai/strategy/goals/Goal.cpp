@@ -520,16 +520,10 @@ Utility Goal::Compute_Matching_Value(Plan_List & matches, const bool update)
 			continue;
 		}
 
+		AI_DPRINTF(k_DBG_SCHEDULER_DETAIL, m_playerId, m_goal_type, -1, ("\t\t[%3d] ", count));
+
 		Utility matchUtility = match_iter->Compute_Matching_Value(this);
 
-		if(update)
-		{
-			if(matchUtility > Goal::BAD_UTILITY)
-			{
-				AI_DPRINTF(k_DBG_SCHEDULER_DETAIL, m_playerId, m_goal_type, -1,
-							("\t\t[%3d] match = %d %s\n", count, match_iter->Get_Matching_Value(), g_theGoalDB->Get(m_goal_type)->GetNameText()));
-			}
-		}
 		++count;
 	}
 
@@ -1487,6 +1481,7 @@ Utility Goal::Compute_Agent_Matching_Value(const Agent_ptr agent_ptr) const
 
 	if(agent_ptr->Get_Is_Dead())
 	{
+		AI_DPRINTF(k_DBG_SCHEDULER_DETAIL, m_playerId, m_goal_type, -1, ("\t\tGoal::BAD_UTILITY: Is dead\n"));
 		return Goal::BAD_UTILITY;
 	}
 
@@ -1499,6 +1494,7 @@ Utility Goal::Compute_Agent_Matching_Value(const Agent_ptr agent_ptr) const
 	{
 		if(dest_pos != curr_pos)
 		{
+			AI_DPRINTF(k_DBG_SCHEDULER_DETAIL, m_playerId, m_goal_type, -1, ("\t\tGoal::BAD_UTILITY: Needed for garrison, but not in target city\n"));
 			return Goal::BAD_UTILITY;
 		}
 		else
@@ -1518,17 +1514,23 @@ Utility Goal::Compute_Agent_Matching_Value(const Agent_ptr agent_ptr) const
 	// This is expensive, so remove first the garrison units.
 	if(!Pretest_Bid(agent_ptr, dest_pos))
 	{
+		AI_DPRINTF(k_DBG_SCHEDULER_DETAIL, m_playerId, m_goal_type, -1, ("\t\tGoal::BAD_UTILITY: No pretest bid\n"));
 		return Goal::BAD_UTILITY;
 	}
 
-	if( g_theGoalDB->Get(m_goal_type)->GetNoTransport()
-	&&
-	  ((!g_theWorld->IsOnSameContinent(dest_pos, curr_pos)
-	&& !agent_ptr->Get_Army()->GetMovementTypeAir()
-	   )
-	|| agent_ptr->Get_Army()->HasCargo() // Actually we do not want to have any transporters involved
-	  ))
+	if(
+	       g_theGoalDB->Get(m_goal_type)->GetNoTransport()
+	    &&
+	       (
+	           (
+	                !g_theWorld->IsOnSameContinent(dest_pos, curr_pos)
+	             && !agent_ptr->Get_Army()->GetMovementTypeAir()
+	           )
+	        || agent_ptr->Get_Army()->HasCargo() // Actually we do not want to have any transporters involved
+	       )
+	  )
 	{
+		AI_DPRINTF(k_DBG_SCHEDULER_DETAIL, m_playerId, m_goal_type, -1, ("\t\tGoal::BAD_UTILITY: No transport allowed\n"));
 		return Goal::BAD_UTILITY;
 	}
 
@@ -1565,6 +1567,7 @@ Utility Goal::Compute_Agent_Matching_Value(const Agent_ptr agent_ptr) const
 
 		if (!isspecial || maxattack > 0 || haszoc)
 		{
+			AI_DPRINTF(k_DBG_SCHEDULER_DETAIL, m_playerId, m_goal_type, -1, ("\t\tGoal::BAD_UTILITY: IsNotSpecial, CanAttack, HasZOC\n"));
 			return Goal::BAD_UTILITY;
 		}
 	}
@@ -1620,6 +1623,7 @@ Utility Goal::Compute_Agent_Matching_Value(const Agent_ptr agent_ptr) const
 
 	if(agent_ptr->Get_Army()->HasCargo() && !CanReachTargetContinent(agent_ptr))
 	{
+		AI_DPRINTF(k_DBG_SCHEDULER_DETAIL, m_playerId, m_goal_type, -1, ("\t\tGoal::BAD_UTILITY: Cargo cannot reach target continent\n"));
 		return Goal::BAD_UTILITY;
 	}
 
@@ -1634,6 +1638,7 @@ Utility Goal::Compute_Agent_Matching_Value(const Agent_ptr agent_ptr) const
 		if(g_theGoalDB->Get(m_goal_type)->GetNeedsRoom()
 		&& agent_ptr->Get_Army()->Num() + g_theWorld->GetCell(dest_pos)->GetNumUnits() > k_MAX_ARMY_SIZE)
 		{
+			AI_DPRINTF(k_DBG_SCHEDULER_DETAIL, m_playerId, m_goal_type, -1, ("\t\tGoal::BAD_UTILITY: Not enough room in target city\n"));
 			return Goal::BAD_UTILITY;
 		}
 
@@ -1676,12 +1681,14 @@ Utility Goal::Compute_Agent_Matching_Value(const Agent_ptr agent_ptr) const
 			else
 			{
 				// If there is a settler in the army...
+				AI_DPRINTF(k_DBG_SCHEDULER_DETAIL, m_playerId, m_goal_type, -1, ("\t\tGoal::BAD_UTILITY: Do not fight with a settler in the army\n"));
 				return Goal::BAD_UTILITY;
 			}
 		}
 
 		if(m_target_army.IsValid() && !agent_ptr->Get_Army()->CanFight(*m_target_army.AccessData()))
 		{
+			AI_DPRINTF(k_DBG_SCHEDULER_DETAIL, m_playerId, m_goal_type, -1, ("\t\tGoal::BAD_UTILITY: Army cannot fight\n"));
 			return Goal::BAD_UTILITY;
 		}
 
@@ -1711,6 +1718,7 @@ Utility Goal::Compute_Agent_Matching_Value(const Agent_ptr agent_ptr) const
 		if(agent_ptr->Get_Army()->CanSettle()) // CargoCanSettle
 		{
 			// If there is a settler in the army...
+			AI_DPRINTF(k_DBG_SCHEDULER_DETAIL, m_playerId, m_goal_type, -1, ("\t\tGoal::BAD_UTILITY: Settler in the army\n"));
 			return Goal::BAD_UTILITY;
 		}
 	}
@@ -1815,6 +1823,7 @@ Utility Goal::Compute_Agent_Matching_Value(const Agent_ptr agent_ptr) const
 			&&   g_theWorld->GetCell(dest_pos)->GetNumUnits() > 0
 			&&  !agent_ptr->Get_Army()->CanBeachAssault())
 			){
+				AI_DPRINTF(k_DBG_SCHEDULER_DETAIL, m_playerId, m_goal_type, -1, ("\t\tGoal::BAD_UTILITY: Army cannot beach assault\n"));
 				return Goal::BAD_UTILITY;
 			}
 		}
@@ -1826,6 +1835,7 @@ Utility Goal::Compute_Agent_Matching_Value(const Agent_ptr agent_ptr) const
 		&&  g_theWorld->GetCell(dest_pos)->GetNumUnits() > 0
 		&& !agent_ptr->Get_Army()->CanSomeCargoBeachAssault())
 		{
+			AI_DPRINTF(k_DBG_SCHEDULER_DETAIL, m_playerId, m_goal_type, -1, ("\t\tGoal::BAD_UTILITY: Cargo cannot beach assault\n"));
 			return Goal::BAD_UTILITY;
 		}
 	}
