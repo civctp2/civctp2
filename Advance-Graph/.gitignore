@@ -1,0 +1,2 @@
+# ignore PDFs which are not bit-reproducible due to UUID and date-tag
+*.pdf
