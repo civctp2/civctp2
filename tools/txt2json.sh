@@ -4,4 +4,11 @@ awk '!/^#/ {if (NF == 2) {print ($2 ~/{/) ? "\"" $1 "\" : " $2 : "\"" $1 "\" : \
     | sed ':a;N;$!ba;s/,\n}/\n},/g'    `# replace ,\n} by \n}, ` \
     | cat <( echo "{") -               `# add initial { ` \
     | sed '$s/},/}\n}/'                `# replace last , with final } ` \
-    | jq -s --stream 'group_by(.[0]) | map({"key": .[0][0][0], "value": map(.[1])}) | from_entries' # convert duplicate keys to array # https://stackoverflow.com/questions/36956590/json-fields-have-the-same-name#36959474 
+    | jq -s --stream 'reduce (.[] | select(length==2)) as $kv ({};
+      $kv[0][0] as $k
+      |$kv[1] as $v
+      | (.[$k]|type) as $t
+      | if $t == "null" then .[$k] = $v
+        elif $t == "array" then .[$k] += [$v]
+        else .[$k] = [ .[$k], $v ]
+        end)' # convert duplicate keys to array # https://stackoverflow.com/questions/36956590/json-fields-have-the-same-name#36974355
