@@ -316,13 +316,13 @@
 <polygon fill="#000000" stroke="#000000" points="1647.3751,-895.5321 1636.8757,-896.9512 1645.9684,-902.3894 1647.3751,-895.5321"/>
 </g>
 <!-- ADVANCE_TANK_WARFARE -->
-<g id="node106" class="node">
+<g id="node105" class="node">
 <title>ADVANCE_TANK_WARFARE</title>
 <ellipse fill="none" stroke="#000000" cx="1914.9885" cy="-810" rx="129.9769" ry="18"/>
 <text text-anchor="middle" x="1914.9885" y="-806.3" font-family="Times,serif" font-size="14.00" fill="#000000">ADVANCE_TANK_WARFARE</text>
 </g>
 <!-- ADVANCE_INTERNAL_COMBUSTION&#45;&gt;ADVANCE_TANK_WARFARE -->
-<g id="edge185" class="edge">
+<g id="edge184" class="edge">
 <title>ADVANCE_INTERNAL_COMBUSTION&#45;&gt;ADVANCE_TANK_WARFARE</title>
 <path fill="none" stroke="#000000" d="M1914.9885,-935.7623C1914.9885,-911.201 1914.9885,-867.2474 1914.9885,-838.3541"/>
 <polygon fill="#000000" stroke="#000000" points="1918.4886,-838.0896 1914.9885,-828.0896 1911.4886,-838.0897 1918.4886,-838.0896"/>
@@ -334,7 +334,7 @@
 <polygon fill="#000000" stroke="#000000" points="738.8866,-820.5561 728.5501,-822.8814 738.0806,-827.5096 738.8866,-820.5561"/>
 </g>
 <!-- ADVANCE_AERODYNAMICS&#45;&gt;ADVANCE_VERTICAL_FLIGHT_AIRCRAFT -->
-<g id="edge196" class="edge">
+<g id="edge195" class="edge">
 <title>ADVANCE_AERODYNAMICS&#45;&gt;ADVANCE_VERTICAL_FLIGHT_AIRCRAFT</title>
 <path fill="none" stroke="#000000" d="M1469.4202,-869.6197C1454.5543,-867.7122 1439.3564,-865.7847 1424.9885,-864 1315.4688,-850.3959 1190.9941,-835.6403 1100.1147,-824.9969"/>
 <polygon fill="#000000" stroke="#000000" points="1100.3775,-821.5039 1090.0384,-823.8176 1099.5637,-828.4564 1100.3775,-821.5039"/>
@@ -502,7 +502,7 @@
 <text text-anchor="middle" x="2307.9885" y="-446.3" font-family="Times,serif" font-size="14.00" fill="#000000">ADVANCE_TECHNOCRACY</text>
 </g>
 <!-- ADVANCE_ROBOTICS&#45;&gt;ADVANCE_TECHNOCRACY -->
-<g id="edge187" class="edge">
+<g id="edge186" class="edge">
 <title>ADVANCE_ROBOTICS&#45;&gt;ADVANCE_TECHNOCRACY</title>
 <path fill="none" stroke="#000000" d="M2068.3371,-507.5163C2115.9787,-496.0824 2182.6784,-480.0744 2233.6181,-467.8489"/>
 <polygon fill="#000000" stroke="#000000" points="2234.6786,-471.1938 2243.5856,-465.4567 2233.0449,-464.3871 2234.6786,-471.1938"/>
@@ -568,7 +568,7 @@
 <text text-anchor="middle" x="256.9885" y="-1454.3" font-family="Times,serif" font-size="14.00" fill="#000000">ADVANCE_THEOLOGY</text>
 </g>
 <!-- ADVANCE_PHILOSOPHY&#45;&gt;ADVANCE_THEOLOGY -->
-<g id="edge189" class="edge">
+<g id="edge188" class="edge">
 <title>ADVANCE_PHILOSOPHY&#45;&gt;ADVANCE_THEOLOGY</title>
 <path fill="none" stroke="#000000" d="M769.4913,-1657.3526C741.2433,-1646.7459 703.9327,-1632.6653 670.9885,-1620 540.2422,-1569.7349 386.8048,-1509.3196 308.5614,-1478.4085"/>
 <polygon fill="#000000" stroke="#000000" points="309.5288,-1475.0275 298.9423,-1474.6074 306.9562,-1481.5377 309.5288,-1475.0275"/>
@@ -652,7 +652,7 @@
 <text text-anchor="middle" x="1275.9885" y="-1742.3" font-family="Times,serif" font-size="14.00" fill="#000000">ADVANCE_TRADE</text>
 </g>
 <!-- ADVANCE_AGRICULTURE&#45;&gt;ADVANCE_TRADE -->
-<g id="edge190" class="edge">
+<g id="edge189" class="edge">
 <title>ADVANCE_AGRICULTURE&#45;&gt;ADVANCE_TRADE</title>
 <path fill="none" stroke="#000000" d="M1449.9325,-1801.6621C1415.2077,-1790.5501 1369.2166,-1775.833 1333.247,-1764.3227"/>
 <polygon fill="#000000" stroke="#000000" points="1333.9762,-1760.8813 1323.3852,-1761.167 1331.8427,-1767.5483 1333.9762,-1760.8813"/>
@@ -844,7 +844,7 @@
 <polygon fill="#000000" stroke="#000000" points="1200.931,-1486.3362 1204.6441,-1476.4133 1195.5534,-1481.8548 1200.931,-1486.3362"/>
 </g>
 <!-- ADVANCE_BUREAUCRACY&#45;&gt;ADVANCE_THEOLOGY -->
-<g id="edge188" class="edge">
+<g id="edge187" class="edge">
 <title>ADVANCE_BUREAUCRACY&#45;&gt;ADVANCE_THEOLOGY</title>
 <path fill="none" stroke="#000000" d="M1072.0879,-1517.2892C1057.0615,-1515.3498 1041.5913,-1513.4986 1026.9885,-1512 902.2044,-1499.1939 548.141,-1476.2393 366.8714,-1464.8277"/>
 <polygon fill="#000000" stroke="#000000" points="366.9784,-1461.3276 356.7784,-1464.193 366.539,-1468.3138 366.9784,-1461.3276"/>
@@ -868,7 +868,7 @@
 <text text-anchor="middle" x="672.9885" y="-1814.3" font-family="Times,serif" font-size="14.00" fill="#000000">ADVANCE_JURISPRUDENCE</text>
 </g>
 <!-- ADVANCE_JURISPRUDENCE&#45;&gt;ADVANCE_TRADE -->
-<g id="edge191" class="edge">
+<g id="edge190" class="edge">
 <title>ADVANCE_JURISPRUDENCE&#45;&gt;ADVANCE_TRADE</title>
 <path fill="none" stroke="#000000" d="M770.8767,-1806.3118C887.1492,-1792.4286 1079.2605,-1769.4899 1190.029,-1756.2638"/>
 <polygon fill="#000000" stroke="#000000" points="1190.646,-1759.7151 1200.1605,-1755.0541 1189.816,-1752.7645 1190.646,-1759.7151"/>
@@ -1036,7 +1036,7 @@
 <text text-anchor="middle" x="2103.9885" y="-302.3" font-family="Times,serif" font-size="14.00" fill="#000000">ADVANCE_UNIFIED_PHYSICS</text>
 </g>
 <!-- ADVANCE_CHAOS_THEORY&#45;&gt;ADVANCE_UNIFIED_PHYSICS -->
-<g id="edge194" class="edge">
+<g id="edge193" class="edge">
 <title>ADVANCE_CHAOS_THEORY&#45;&gt;ADVANCE_UNIFIED_PHYSICS</title>
 <path fill="none" stroke="#000000" d="M2260.417,-361.2101C2230.8618,-350.7788 2192.6844,-337.3044 2161.4443,-326.2785"/>
 <polygon fill="#000000" stroke="#000000" points="2162.5839,-322.9692 2151.9891,-322.9414 2160.2541,-329.5701 2162.5839,-322.9692"/>
@@ -1144,7 +1144,7 @@
 <polygon fill="#000000" stroke="#000000" points="1830.1227,-759.3252 1838.9939,-753.5329 1828.4468,-752.5288 1830.1227,-759.3252"/>
 </g>
 <!-- ADVANCE_CORPORATE_REPUBLIC&#45;&gt;ADVANCE_SUPERSONIC_FLIGHT -->
-<g id="edge182" class="edge">
+<g id="edge181" class="edge">
 <title>ADVANCE_CORPORATE_REPUBLIC&#45;&gt;ADVANCE_SUPERSONIC_FLIGHT</title>
 <path fill="none" stroke="#000000" d="M1539.0719,-793.8418C1490.026,-782.6668 1424.6992,-767.7822 1373.8249,-756.1906"/>
 <polygon fill="#000000" stroke="#000000" points="1374.3796,-752.7273 1363.8519,-753.9182 1372.8244,-759.5524 1374.3796,-752.7273"/>
@@ -1216,7 +1216,7 @@
 <polygon fill="#000000" stroke="#000000" points="1613.4886,-694.4132 1609.9885,-684.4133 1606.4886,-694.4133 1613.4886,-694.4132"/>
 </g>
 <!-- ADVANCE_CORPORATION&#45;&gt;ADVANCE_VERTICAL_FLIGHT_AIRCRAFT -->
-<g id="edge197" class="edge">
+<g id="edge196" class="edge">
 <title>ADVANCE_CORPORATION&#45;&gt;ADVANCE_VERTICAL_FLIGHT_AIRCRAFT</title>
 <path fill="none" stroke="#000000" d="M970.9885,-863.8314C970.9885,-856.131 970.9885,-846.9743 970.9885,-838.4166"/>
 <polygon fill="#000000" stroke="#000000" points="974.4886,-838.4132 970.9885,-828.4133 967.4886,-838.4133 974.4886,-838.4132"/>
@@ -1240,7 +1240,7 @@
 <polygon fill="#000000" stroke="#000000" points="688.6303,-617.4004 696.5708,-610.3862 685.9893,-610.9177 688.6303,-617.4004"/>
 </g>
 <!-- ADVANCE_CORPORATION&#45;&gt;ADVANCE_TANK_WARFARE -->
-<g id="edge184" class="edge">
+<g id="edge183" class="edge">
 <title>ADVANCE_CORPORATION&#45;&gt;ADVANCE_TANK_WARFARE</title>
 <path fill="none" stroke="#000000" d="M1055.831,-869.203C1070.8492,-867.2378 1086.3592,-865.4004 1100.9885,-864 1400.0478,-835.3724 1476.806,-855.3104 1775.9885,-828 1788.1304,-826.8916 1800.8442,-825.5276 1813.4408,-824.0504"/>
 <polygon fill="#000000" stroke="#000000" points="1813.9924,-827.5095 1823.5049,-822.8442 1813.1594,-820.5592 1813.9924,-827.5095"/>
@@ -1348,7 +1348,7 @@
 <text text-anchor="middle" x="807.9885" y="-302.3" font-family="Times,serif" font-size="14.00" fill="#000000">ADVANCE_VIRTUAL_DEMOCRACY</text>
 </g>
 <!-- ADVANCE_NEURAL_INTERFACE&#45;&gt;ADVANCE_VIRTUAL_DEMOCRACY -->
-<g id="edge199" class="edge">
+<g id="edge198" class="edge">
 <title>ADVANCE_NEURAL_INTERFACE&#45;&gt;ADVANCE_VIRTUAL_DEMOCRACY</title>
 <path fill="none" stroke="#000000" d="M864.0628,-359.8314C854.9336,-351.0673 843.8396,-340.4171 833.9367,-330.9103"/>
 <polygon fill="#000000" stroke="#000000" points="836.286,-328.3139 826.6483,-323.9134 831.4383,-333.3636 836.286,-328.3139"/>
@@ -1378,7 +1378,7 @@
 <polygon fill="#000000" stroke="#000000" points="1535.454,-1043.6209 1544.9236,-1038.8694 1534.5578,-1036.6785 1535.454,-1043.6209"/>
 </g>
 <!-- ADVANCE_DIGITAL_ENCRYPTION&#45;&gt;ADVANCE_VIRTUAL_DEMOCRACY -->
-<g id="edge198" class="edge">
+<g id="edge197" class="edge">
 <title>ADVANCE_DIGITAL_ENCRYPTION&#45;&gt;ADVANCE_VIRTUAL_DEMOCRACY</title>
 <path fill="none" stroke="#000000" d="M1717.7869,-434.0714C1606.7003,-409.6392 1403.0721,-365.1773 1368.9885,-360 1194.7045,-333.5263 1149.4006,-341.5025 973.9885,-324 960.2938,-322.6336 945.9693,-321.1549 931.7195,-319.6525"/>
 <polygon fill="#000000" stroke="#000000" points="931.6799,-316.1288 921.3668,-318.5557 930.9423,-323.0899 931.6799,-316.1288"/>
@@ -1408,7 +1408,7 @@
 <polygon fill="#000000" stroke="#000000" points="1287.3428,-317.3116 1276.9925,-319.5746 1286.4949,-324.2601 1287.3428,-317.3116"/>
 </g>
 <!-- ADVANCE_DIGITAL_ENCRYPTION&#45;&gt;ADVANCE_UNIFIED_PHYSICS -->
-<g id="edge195" class="edge">
+<g id="edge194" class="edge">
 <title>ADVANCE_DIGITAL_ENCRYPTION&#45;&gt;ADVANCE_UNIFIED_PHYSICS</title>
 <path fill="none" stroke="#000000" d="M1799.9514,-431.7243C1812.2253,-411.0113 1835.0517,-377.8203 1863.9885,-360 1887.9596,-345.2377 1950.8902,-331.359 2006.2964,-321.3688"/>
 <polygon fill="#000000" stroke="#000000" points="2006.9514,-324.8073 2016.185,-319.612 2005.7269,-317.9152 2006.9514,-324.8073"/>
@@ -1420,7 +1420,7 @@
 <text text-anchor="middle" x="2307.9885" y="-518.3" font-family="Times,serif" font-size="14.00" fill="#000000">ADVANCE_GLOBAL_COMMUNICATIONS</text>
 </g>
 <!-- ADVANCE_GLOBAL_COMMUNICATIONS&#45;&gt;ADVANCE_TECHNOCRACY -->
-<g id="edge186" class="edge">
+<g id="edge185" class="edge">
 <title>ADVANCE_GLOBAL_COMMUNICATIONS&#45;&gt;ADVANCE_TECHNOCRACY</title>
 <path fill="none" stroke="#000000" d="M2307.9885,-503.8314C2307.9885,-496.131 2307.9885,-486.9743 2307.9885,-478.4166"/>
 <polygon fill="#000000" stroke="#000000" points="2311.4886,-478.4132 2307.9885,-468.4133 2304.4886,-478.4133 2311.4886,-478.4132"/>
@@ -1642,13 +1642,13 @@
 <polygon fill="#000000" stroke="#000000" points="2275.2805,-324.6407 2284.3319,-319.134 2273.8221,-317.7943 2275.2805,-324.6407"/>
 </g>
 <!-- ADVANCE_ULTRAPRESSURE_MACHINERY -->
-<g id="node107" class="node">
+<g id="node106" class="node">
 <title>ADVANCE_ULTRAPRESSURE_MACHINERY</title>
 <ellipse fill="none" stroke="#000000" cx="1542.9885" cy="-306" rx="188.4666" ry="18"/>
 <text text-anchor="middle" x="1542.9885" y="-302.3" font-family="Times,serif" font-size="14.00" fill="#000000">ADVANCE_ULTRAPRESSURE_MACHINERY</text>
 </g>
 <!-- ADVANCE_NANO_ASSEMBLY&#45;&gt;ADVANCE_ULTRAPRESSURE_MACHINERY -->
-<g id="edge193" class="edge">
+<g id="edge192" class="edge">
 <title>ADVANCE_NANO_ASSEMBLY&#45;&gt;ADVANCE_ULTRAPRESSURE_MACHINERY</title>
 <path fill="none" stroke="#000000" d="M1919.7051,-364.3303C1843.7991,-352.5771 1733.9989,-335.5758 1652.505,-322.9574"/>
 <polygon fill="#000000" stroke="#000000" points="1652.6266,-319.4346 1642.2087,-321.3631 1651.5554,-326.3522 1652.6266,-319.4346"/>
@@ -1726,7 +1726,7 @@
 <polygon fill="#000000" stroke="#000000" points="2232.7498,-693.0732 2238.3721,-684.0931 2228.3769,-687.6071 2232.7498,-693.0732"/>
 </g>
 <!-- ADVANCE_JET_PROPULSION&#45;&gt;ADVANCE_SUPERSONIC_FLIGHT -->
-<g id="edge183" class="edge">
+<g id="edge182" class="edge">
 <title>ADVANCE_JET_PROPULSION&#45;&gt;ADVANCE_SUPERSONIC_FLIGHT</title>
 <path fill="none" stroke="#000000" d="M1301.465,-791.8314C1300.3955,-784.131 1299.1238,-774.9743 1297.9352,-766.4166"/>
 <polygon fill="#000000" stroke="#000000" points="1301.3884,-765.8367 1296.5459,-756.4133 1294.4549,-766.7997 1301.3884,-765.8367"/>
@@ -1774,7 +1774,7 @@
 <polygon fill="#000000" stroke="#000000" points="1796.5989,-972.2775 1806.0844,-967.5579 1795.7261,-965.3321 1796.5989,-972.2775"/>
 </g>
 <!-- ADVANCE_LIQUID_BREATHING_APPARATUS&#45;&gt;ADVANCE_ULTRAPRESSURE_MACHINERY -->
-<g id="edge192" class="edge">
+<g id="edge191" class="edge">
 <title>ADVANCE_LIQUID_BREATHING_APPARATUS&#45;&gt;ADVANCE_ULTRAPRESSURE_MACHINERY</title>
 <path fill="none" stroke="#000000" d="M882.4727,-504.0169C919.2833,-480.4368 984.9428,-437.2113 1037.9885,-396 1057.1382,-381.1226 1056.8286,-369.8483 1078.9885,-360 1093.8517,-353.3944 1272.344,-333.8575 1403.5217,-320.1931"/>
 <polygon fill="#000000" stroke="#000000" points="1404.0897,-323.653 1413.674,-319.1374 1403.3656,-316.6905 1404.0897,-323.653"/>
@@ -1832,18 +1832,6 @@
 <title>ADVANCE_UNIFIED_PHYSICS&#45;&gt;ADVANCE_PLASMA_WEAPONRY</title>
 <path fill="none" stroke="#000000" d="M2159.8893,-289.572C2196.1896,-278.9041 2243.6998,-264.942 2282.0165,-253.6815"/>
 <polygon fill="#000000" stroke="#000000" points="2283.4464,-256.9094 2292.0539,-250.7318 2281.4727,-250.1934 2283.4464,-256.9094"/>
-</g>
-<!-- ADVANCE_SUBNEURAL_ADS -->
-<g id="node105" class="node">
-<title>ADVANCE_SUBNEURAL_ADS</title>
-<ellipse fill="none" stroke="#000000" cx="997.9885" cy="-1890" rx="132.6765" ry="18"/>
-<text text-anchor="middle" x="997.9885" y="-1886.3" font-family="Times,serif" font-size="14.00" fill="#000000">ADVANCE_SUBNEURAL_ADS</text>
-</g>
-<!-- ADVANCE_SUBNEURAL_ADS&#45;&gt;ADVANCE_SUBNEURAL_ADS -->
-<g id="edge181" class="edge">
-<title>ADVANCE_SUBNEURAL_ADS&#45;&gt;ADVANCE_SUBNEURAL_ADS</title>
-<path fill="none" stroke="#000000" d="M1086.1548,-1903.4473C1120.2434,-1904.0449 1148.5767,-1899.5625 1148.5767,-1890 1148.5767,-1881.4087 1125.7063,-1876.918 1096.3394,-1876.5278"/>
-<polygon fill="#000000" stroke="#000000" points="1096.1462,-1873.0282 1086.1548,-1876.5527 1096.1634,-1880.0282 1096.1462,-1873.0282"/>
 </g>
 </g>
 </svg>
