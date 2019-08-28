@@ -5,6 +5,41 @@ digraph G {
 	node [fontname="Sans serif",
 		fontsize=7.5
 	];
+	subgraph gvpr_result {
+		subgraph "root-nodes" {
+			graph [rank=same];
+			ADVANCE_AGRICULTURE	[color="#00000055",
+				label=<<TABLE border="0" cellspacing="0" cellborder="0"><TR><TD><IMG SCALE="TRUE" SRC="upap008l.png"/></TD></TR>
+<TR><TD>AGRICULTURE</TD></TR></TABLE>>,
+				shape=box,
+				style=filled];
+			ADVANCE_RELIGION	[color="#00000055",
+				label=<<TABLE border="0" cellspacing="0" cellborder="0"><TR><TD><IMG SCALE="TRUE" SRC="upap089l.png"/></TD></TR>
+<TR><TD>RELIGION</TD></TR></TABLE>>,
+				shape=box,
+				style=filled];
+			ADVANCE_SHIP_BUILDING	[color="#00000055",
+				label=<<TABLE border="0" cellspacing="0" cellborder="0"><TR><TD><IMG SCALE="TRUE" SRC="upap091l.png"/></TD></TR>
+<TR><TD>SHIP BUILDING</TD></TR></TABLE>>,
+				shape=box,
+				style=filled];
+			ADVANCE_STONE_WORKING	[color="#00000055",
+				label=<<TABLE border="0" cellspacing="0" cellborder="0"><TR><TD><IMG SCALE="TRUE" SRC="upap095l.png"/></TD></TR>
+<TR><TD>STONE WORKING</TD></TR></TABLE>>,
+				shape=box,
+				style=filled];
+			ADVANCE_TOOLMAKING	[color="#00000055",
+				label=<<TABLE border="0" cellspacing="0" cellborder="0"><TR><TD><IMG SCALE="TRUE" SRC="upap101l.png"/></TD></TR>
+<TR><TD>TOOLMAKING</TD></TR></TABLE>>,
+				shape=box,
+				style=filled];
+			ADVANCE_WRITING	[color="#00000055",
+				label=<<TABLE border="0" cellspacing="0" cellborder="0"><TR><TD><IMG SCALE="TRUE" SRC="upap107l.png"/></TD></TR>
+<TR><TD>WRITING</TD></TR></TABLE>>,
+				shape=box,
+				style=filled];
+		}
+	}
 	ADVANCE_ADV_INFANTRY_TACTICS	[label=<<TABLE border="0" cellspacing="0" cellborder="0"><TR><TD><IMG SCALE="TRUE" SRC="cm2_upap001l.png"/></TD></TR>
 <TR><TD>ADV INFANTRY TACTICS</TD></TR></TABLE>>,
 		shape=box];
@@ -159,11 +194,6 @@ digraph G {
 <TR><TD>OIL REFINING</TD></TR></TABLE>>,
 		shape=box];
 	ADVANCE_INDUSTRIAL_REVOLUTION -> ADVANCE_OIL_REFINING;
-	ADVANCE_AGRICULTURE	[color="#00000055",
-		label=<<TABLE border="0" cellspacing="0" cellborder="0"><TR><TD><IMG SCALE="TRUE" SRC="upap008l.png"/></TD></TR>
-<TR><TD>AGRICULTURE</TD></TR></TABLE>>,
-		shape=box,
-		style=filled];
 	ADVANCE_BALLISTICS	[label=<<TABLE border="0" cellspacing="0" cellborder="0"><TR><TD><IMG SCALE="TRUE" SRC="cm2_upap012l.png"/></TD></TR>
 <TR><TD>BALLISTICS</TD></TR></TABLE>>,
 		shape=box];
@@ -497,40 +527,15 @@ digraph G {
 	ADVANCE_NATIONALISM -> ADVANCE_DEMOCRACY;
 	ADVANCE_NATIONALISM -> ADVANCE_CRIMINAL_CODE;
 	ADVANCE_NATIONALISM -> ADVANCE_FASCISM;
-	ADVANCE_RELIGION	[color="#00000055",
-		label=<<TABLE border="0" cellspacing="0" cellborder="0"><TR><TD><IMG SCALE="TRUE" SRC="upap089l.png"/></TD></TR>
-<TR><TD>RELIGION</TD></TR></TABLE>>,
-		shape=box,
-		style=filled];
 	ADVANCE_RELIGION -> ADVANCE_SLAVE_LABOR;
 	ADVANCE_RELIGION -> ADVANCE_DRAMA;
 	ADVANCE_RELIGION -> ADVANCE_MONARCHY;
-	ADVANCE_SHIP_BUILDING	[color="#00000055",
-		label=<<TABLE border="0" cellspacing="0" cellborder="0"><TR><TD><IMG SCALE="TRUE" SRC="upap091l.png"/></TD></TR>
-<TR><TD>SHIP BUILDING</TD></TR></TABLE>>,
-		shape=box,
-		style=filled];
 	ADVANCE_SHIP_BUILDING -> ADVANCE_ALCHEMY;
 	ADVANCE_SHIP_BUILDING -> ADVANCE_HULL_MAKING;
-	ADVANCE_STONE_WORKING	[color="#00000055",
-		label=<<TABLE border="0" cellspacing="0" cellborder="0"><TR><TD><IMG SCALE="TRUE" SRC="upap095l.png"/></TD></TR>
-<TR><TD>STONE WORKING</TD></TR></TABLE>>,
-		shape=box,
-		style=filled];
 	ADVANCE_STONE_WORKING -> ADVANCE_MASONRY;
-	ADVANCE_TOOLMAKING	[color="#00000055",
-		label=<<TABLE border="0" cellspacing="0" cellborder="0"><TR><TD><IMG SCALE="TRUE" SRC="upap101l.png"/></TD></TR>
-<TR><TD>TOOLMAKING</TD></TR></TABLE>>,
-		shape=box,
-		style=filled];
 	ADVANCE_TOOLMAKING -> ADVANCE_BALLISTICS;
 	ADVANCE_TOOLMAKING -> ADVANCE_BRONZE_WORKING;
 	ADVANCE_TOOLMAKING -> ADVANCE_MASONRY;
-	ADVANCE_WRITING	[color="#00000055",
-		label=<<TABLE border="0" cellspacing="0" cellborder="0"><TR><TD><IMG SCALE="TRUE" SRC="upap107l.png"/></TD></TR>
-<TR><TD>WRITING</TD></TR></TABLE>>,
-		shape=box,
-		style=filled];
 	ADVANCE_WRITING -> ADVANCE_DRAMA;
 	ADVANCE_WRITING -> ADVANCE_JURISPRUDENCE;
 }
