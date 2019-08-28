@@ -10,7 +10,8 @@ awk '!/^#/ {if (NF == 2) {print ($2 ~/{/) ? "\"" $1 "\" : " $2 : "\"" $1 "\" : \
       $kv[0][0] as $k
       |$kv[1] as $v
       | (.[$k]|type) as $t
-      | if $t == "null" then .[$k] = $v
+      | if $t == "null" then .[$k] = [$v]
         elif $t == "array" then .[$k] += [$v]
         else .[$k] = [ .[$k], $v ]
-        end)' # convert duplicate keys to array # https://stackoverflow.com/questions/36956590/json-fields-have-the-same-name#36974355
+        end)' `# convert duplicate keys to array # https://stackoverflow.com/questions/36956590/json-fields-have-the-same-name#36974355 ` \
+    | sed '/\[\]/d'                    `# remove empty arrays in array ` \
