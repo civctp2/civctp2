@@ -17,7 +17,7 @@ all : Advance.pdf
 
 %.pdf : %.gv
 	dot $< -Tpdf \
-	| sed "s|^/CreationDate (.*)$$|/CreationDate (D:20190828000000+00'00')|; \
-	     s|^/ModDate (.*)$$|/ModDate (D:20190828000000+00'00')|; \
+	| sed "s|^[[:space:]]*/CreationDate (.*)$$|/CreationDate (D:20190828000000+00'00')|; \
+	     s|^[[:space:]]*/ModDate (.*)$$|/ModDate (D:20190828000000+00'00')|; \
 	     /^\/ID \[<.*> <.*>\]$$/d" >  $@ # deleting ID instead of replacing: http://superuser.com/questions/130347/how-do-i-produce-bytewise-consistent-documents-with-pdflatex#130804
 
