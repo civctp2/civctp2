@@ -12,7 +12,8 @@ all : Advance.pdf
 	| gvpr -c 'N[$$.degree==0]{delete(root, $$)}' > $@ # remove nodes without any edges, e.g. DEFAULT, SUBNEURAL_ADS, MIND_CONTROL
 
 %.svg : %.gv
-	dot $< -Tsvg -o $@
+	dot $< -Tsvg \
+	| sed 's|xlink:href="|xlink:href="pic555/|' > $@
 
 %.pdf : %.gv
 	dot $< -Tpdf -o $@
