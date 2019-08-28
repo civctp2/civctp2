@@ -13,21 +13,21 @@
 <g id="node1" class="node">
 <title>ADVANCE_ADV_INFANTRY_TACTICS</title>
 <polygon fill="none" stroke="#000000" points="3395,-894.0833 3207,-894.0833 3207,-773.0833 3395,-773.0833 3395,-894.0833"/>
-<image xlink:href="pic555/upap001l.png" width="160px" height="90px" preserveAspectRatio="xMinYMin meet" x="3221" y="-887.583"/>
+<image xlink:href="pic555/upap001l.png" width="120px" height="90px" preserveAspectRatio="xMinYMin meet" x="3241" y="-887.583"/>
 <text text-anchor="start" x="3217" y="-782.3833" font-family="Times,serif" font-size="14.00" fill="#000000">ADV_INFANTRY_TACTICS</text>
 </g>
 <!-- ADVANCE_ADV_NAVAL_TACTICS -->
 <g id="node2" class="node">
 <title>ADVANCE_ADV_NAVAL_TACTICS</title>
 <polygon fill="none" stroke="#000000" points="2919,-932.0833 2752,-932.0833 2752,-811.0833 2919,-811.0833 2919,-932.0833"/>
-<image xlink:href="pic555/upap002l.png" width="147px" height="90px" preserveAspectRatio="xMinYMin meet" x="2762.5" y="-925.583"/>
+<image xlink:href="pic555/upap002l.png" width="120px" height="90px" preserveAspectRatio="xMinYMin meet" x="2776" y="-925.583"/>
 <text text-anchor="start" x="2762.5" y="-820.3833" font-family="Times,serif" font-size="14.00" fill="#000000">ADV_NAVAL_TACTICS</text>
 </g>
 <!-- ADVANCE_ADV_URBAN_PLANNING -->
 <g id="node3" class="node">
 <title>ADVANCE_ADV_URBAN_PLANNING</title>
 <polygon fill="none" stroke="#000000" points="3624,-298.0833 3444,-298.0833 3444,-177.0833 3624,-177.0833 3624,-298.0833"/>
-<image xlink:href="pic555/upap003l.png" width="160px" height="90px" preserveAspectRatio="xMinYMin meet" x="3454" y="-291.583"/>
+<image xlink:href="pic555/upap003l.png" width="120px" height="90px" preserveAspectRatio="xMinYMin meet" x="3474" y="-291.583"/>
 <text text-anchor="start" x="3454" y="-186.3833" font-family="Times,serif" font-size="14.00" fill="#000000">ADV_URBAN_PLANNING</text>
 </g>
 <!-- ADVANCE_ARCOLOGIES -->
@@ -47,7 +47,7 @@
 <g id="node24" class="node">
 <title>ADVANCE_AI_SURVEILLANCE</title>
 <polygon fill="none" stroke="#000000" points="4326,-500.0833 4182,-500.0833 4182,-379.0833 4326,-379.0833 4326,-500.0833"/>
-<image xlink:href="pic555/upap009l.png" width="124px" height="90px" preserveAspectRatio="xMinYMin meet" x="4192" y="-493.583"/>
+<image xlink:href="pic555/upap009l.png" width="120px" height="90px" preserveAspectRatio="xMinYMin meet" x="4194" y="-493.583"/>
 <text text-anchor="start" x="4192" y="-388.3833" font-family="Times,serif" font-size="14.00" fill="#000000">AI_SURVEILLANCE</text>
 </g>
 <!-- ADVANCE_ARCOLOGIES&#45;&gt;ADVANCE_AI_SURVEILLANCE -->
@@ -60,7 +60,7 @@
 <g id="node28" class="node">
 <title>ADVANCE_DIGITAL_ENCRYPTION</title>
 <polygon fill="none" stroke="#000000" points="4338,-639.0833 4170,-639.0833 4170,-518.0833 4338,-518.0833 4338,-639.0833"/>
-<image xlink:href="pic555/upap030l.png" width="148px" height="90px" preserveAspectRatio="xMinYMin meet" x="4180" y="-632.583"/>
+<image xlink:href="pic555/upap030l.png" width="120px" height="90px" preserveAspectRatio="xMinYMin meet" x="4194" y="-632.583"/>
 <text text-anchor="start" x="4180" y="-527.3833" font-family="Times,serif" font-size="14.00" fill="#000000">DIGITAL_ENCRYPTION</text>
 </g>
 <!-- ADVANCE_ARCOLOGIES&#45;&gt;ADVANCE_DIGITAL_ENCRYPTION -->
@@ -73,7 +73,7 @@
 <g id="node5" class="node">
 <title>ADVANCE_ADVANCED_COMPOSITES</title>
 <polygon fill="none" stroke="#000000" points="3861,-440.0833 3673,-440.0833 3673,-319.0833 3861,-319.0833 3861,-440.0833"/>
-<image xlink:href="pic555/upap004l.png" width="160px" height="90px" preserveAspectRatio="xMinYMin meet" x="3687" y="-433.583"/>
+<image xlink:href="pic555/upap004l.png" width="120px" height="90px" preserveAspectRatio="xMinYMin meet" x="3707" y="-433.583"/>
 <text text-anchor="start" x="3683" y="-328.3833" font-family="Times,serif" font-size="14.00" fill="#000000">ADVANCED_COMPOSITES</text>
 </g>
 <!-- ADVANCE_ADVANCED_COMPOSITES&#45;&gt;ADVANCE_ARCOLOGIES -->
@@ -86,7 +86,7 @@
 <g id="node6" class="node">
 <title>ADVANCE_HT_SUPERCONDUCTOR</title>
 <polygon fill="none" stroke="#000000" points="4101,-579.0833 3930,-579.0833 3930,-458.0833 4101,-458.0833 4101,-579.0833"/>
-<image xlink:href="pic555/upap052l.png" width="151px" height="90px" preserveAspectRatio="xMinYMin meet" x="3940.5" y="-572.583"/>
+<image xlink:href="pic555/upap052l.png" width="120px" height="90px" preserveAspectRatio="xMinYMin meet" x="3956" y="-572.583"/>
 <text text-anchor="start" x="3940.5" y="-467.3833" font-family="Times,serif" font-size="14.00" fill="#000000">HT_SUPERCONDUCTOR</text>
 </g>
 <!-- ADVANCE_ADVANCED_COMPOSITES&#45;&gt;ADVANCE_HT_SUPERCONDUCTOR -->
@@ -99,7 +99,7 @@
 <g id="node7" class="node">
 <title>ADVANCE_LIQUID_BREATHING_APPARATUS</title>
 <polygon fill="none" stroke="#000000" points="4134,-162.0833 3897,-162.0833 3897,-41.0833 4134,-41.0833 4134,-162.0833"/>
-<image xlink:href="pic555/upap061l.png" width="160px" height="90px" preserveAspectRatio="xMinYMin meet" x="3936" y="-155.583"/>
+<image xlink:href="pic555/upap061l.png" width="120px" height="90px" preserveAspectRatio="xMinYMin meet" x="3956" y="-155.583"/>
 <text text-anchor="start" x="3907.5" y="-50.3833" font-family="Times,serif" font-size="14.00" fill="#000000">LIQUID_BREATHING_APPARATUS</text>
 </g>
 <!-- ADVANCE_ADVANCED_COMPOSITES&#45;&gt;ADVANCE_LIQUID_BREATHING_APPARATUS -->
@@ -138,7 +138,7 @@
 <g id="node89" class="node">
 <title>ADVANCE_NEURAL_INTERFACE</title>
 <polygon fill="none" stroke="#000000" points="4530,-419.0833 4374,-419.0833 4374,-298.0833 4530,-298.0833 4530,-419.0833"/>
-<image xlink:href="pic555/upap075l.png" width="136px" height="90px" preserveAspectRatio="xMinYMin meet" x="4384" y="-412.583"/>
+<image xlink:href="pic555/upap075l.png" width="120px" height="90px" preserveAspectRatio="xMinYMin meet" x="4392" y="-412.583"/>
 <text text-anchor="start" x="4384" y="-307.3833" font-family="Times,serif" font-size="14.00" fill="#000000">NEURAL_INTERFACE</text>
 </g>
 <!-- ADVANCE_HT_SUPERCONDUCTOR&#45;&gt;ADVANCE_NEURAL_INTERFACE -->
@@ -151,7 +151,7 @@
 <g id="node97" class="node">
 <title>ADVANCE_ULTRAPRESSURE_MACHINERY</title>
 <polygon fill="none" stroke="#000000" points="4788,-348.0833 4566,-348.0833 4566,-227.0833 4788,-227.0833 4788,-348.0833"/>
-<image xlink:href="pic555/upap103l.png" width="160px" height="90px" preserveAspectRatio="xMinYMin meet" x="4597" y="-341.583"/>
+<image xlink:href="pic555/upap103l.png" width="120px" height="90px" preserveAspectRatio="xMinYMin meet" x="4617" y="-341.583"/>
 <text text-anchor="start" x="4576" y="-236.3833" font-family="Times,serif" font-size="14.00" fill="#000000">ULTRAPRESSURE_MACHINERY</text>
 </g>
 <!-- ADVANCE_LIQUID_BREATHING_APPARATUS&#45;&gt;ADVANCE_ULTRAPRESSURE_MACHINERY -->
@@ -229,7 +229,7 @@
 <g id="node12" class="node">
 <title>ADVANCE_NAVAL_AVIATION</title>
 <polygon fill="none" stroke="#000000" points="3133.5,-932.0833 2992.5,-932.0833 2992.5,-811.0833 3133.5,-811.0833 3133.5,-932.0833"/>
-<image xlink:href="pic555/upap073l.png" width="121px" height="90px" preserveAspectRatio="xMinYMin meet" x="3003" y="-925.583"/>
+<image xlink:href="pic555/upap073l.png" width="120px" height="90px" preserveAspectRatio="xMinYMin meet" x="3003.5" y="-925.583"/>
 <text text-anchor="start" x="3003" y="-820.3833" font-family="Times,serif" font-size="14.00" fill="#000000">NAVAL_AVIATION</text>
 </g>
 <!-- ADVANCE_AERODYNAMICS&#45;&gt;ADVANCE_NAVAL_AVIATION -->
@@ -242,7 +242,7 @@
 <g id="node13" class="node">
 <title>ADVANCE_VERTICAL_FLIGHT_AIRCRAFT</title>
 <polygon fill="none" stroke="#000000" points="3171,-754.0833 2955,-754.0833 2955,-633.0833 3171,-633.0833 3171,-754.0833"/>
-<image xlink:href="pic555/upap105l.png" width="160px" height="90px" preserveAspectRatio="xMinYMin meet" x="2983" y="-747.583"/>
+<image xlink:href="pic555/upap105l.png" width="120px" height="90px" preserveAspectRatio="xMinYMin meet" x="3003" y="-747.583"/>
 <text text-anchor="start" x="2965" y="-642.3833" font-family="Times,serif" font-size="14.00" fill="#000000">VERTICAL_FLIGHT_AIRCRAFT</text>
 </g>
 <!-- ADVANCE_AERODYNAMICS&#45;&gt;ADVANCE_VERTICAL_FLIGHT_AIRCRAFT -->
@@ -255,7 +255,7 @@
 <g id="node57" class="node">
 <title>ADVANCE_GLOBAL_ECONOMICS</title>
 <polygon fill="none" stroke="#000000" points="3382,-476.0833 3220,-476.0833 3220,-355.0833 3382,-355.0833 3382,-476.0833"/>
-<image xlink:href="pic555/upap047l.png" width="142px" height="90px" preserveAspectRatio="xMinYMin meet" x="3230" y="-469.583"/>
+<image xlink:href="pic555/upap047l.png" width="120px" height="90px" preserveAspectRatio="xMinYMin meet" x="3241" y="-469.583"/>
 <text text-anchor="start" x="3230" y="-364.3833" font-family="Times,serif" font-size="14.00" fill="#000000">GLOBAL_ECONOMICS</text>
 </g>
 <!-- ADVANCE_JET_PROPULSION&#45;&gt;ADVANCE_GLOBAL_ECONOMICS -->
@@ -268,7 +268,7 @@
 <g id="node59" class="node">
 <title>ADVANCE_SUPERSONIC_FLIGHT</title>
 <polygon fill="none" stroke="#000000" points="3380,-615.0833 3222,-615.0833 3222,-494.0833 3380,-494.0833 3380,-615.0833"/>
-<image xlink:href="pic555/upap097l.png" width="138px" height="90px" preserveAspectRatio="xMinYMin meet" x="3232" y="-608.583"/>
+<image xlink:href="pic555/upap097l.png" width="120px" height="90px" preserveAspectRatio="xMinYMin meet" x="3241" y="-608.583"/>
 <text text-anchor="start" x="3232" y="-503.3833" font-family="Times,serif" font-size="14.00" fill="#000000">SUPERSONIC_FLIGHT</text>
 </g>
 <!-- ADVANCE_JET_PROPULSION&#45;&gt;ADVANCE_SUPERSONIC_FLIGHT -->
@@ -326,7 +326,7 @@
 <g id="node16" class="node">
 <title>ADVANCE_MODERN_METALLURGY</title>
 <polygon fill="none" stroke="#000000" points="2075,-565.0833 1895,-565.0833 1895,-444.0833 2075,-444.0833 2075,-565.0833"/>
-<image xlink:href="pic555/upap067l.png" width="160px" height="90px" preserveAspectRatio="xMinYMin meet" x="1905" y="-558.583"/>
+<image xlink:href="pic555/upap067l.png" width="120px" height="90px" preserveAspectRatio="xMinYMin meet" x="1925" y="-558.583"/>
 <text text-anchor="start" x="1905" y="-453.3833" font-family="Times,serif" font-size="14.00" fill="#000000">MODERN_METALLURGY</text>
 </g>
 <!-- ADVANCE_AGE_OF_REASON&#45;&gt;ADVANCE_MODERN_METALLURGY -->
@@ -365,7 +365,7 @@
 <g id="node67" class="node">
 <title>ADVANCE_PHARMACEUTICALS</title>
 <polygon fill="none" stroke="#000000" points="2495,-387.0833 2342,-387.0833 2342,-266.0833 2495,-266.0833 2495,-387.0833"/>
-<image xlink:href="pic555/upap081l.png" width="133px" height="90px" preserveAspectRatio="xMinYMin meet" x="2352.5" y="-380.583"/>
+<image xlink:href="pic555/upap081l.png" width="120px" height="90px" preserveAspectRatio="xMinYMin meet" x="2359" y="-380.583"/>
 <text text-anchor="start" x="2352.5" y="-275.3833" font-family="Times,serif" font-size="14.00" fill="#000000">PHARMACEUTICALS</text>
 </g>
 <!-- ADVANCE_DEMOCRACY&#45;&gt;ADVANCE_PHARMACEUTICALS -->
@@ -390,7 +390,7 @@
 <g id="node19" class="node">
 <title>ADVANCE_INDUSTRIAL_REVOLUTION</title>
 <polygon fill="none" stroke="#000000" points="2306,-526.0833 2111,-526.0833 2111,-405.0833 2306,-405.0833 2306,-526.0833"/>
-<image xlink:href="pic555/upap055l.png" width="160px" height="90px" preserveAspectRatio="xMinYMin meet" x="2129" y="-519.583"/>
+<image xlink:href="pic555/upap055l.png" width="120px" height="90px" preserveAspectRatio="xMinYMin meet" x="2149" y="-519.583"/>
 <text text-anchor="start" x="2121.5" y="-414.3833" font-family="Times,serif" font-size="14.00" fill="#000000">INDUSTRIAL_REVOLUTION</text>
 </g>
 <!-- ADVANCE_MODERN_METALLURGY&#45;&gt;ADVANCE_INDUSTRIAL_REVOLUTION -->
@@ -416,7 +416,7 @@
 <g id="node52" class="node">
 <title>ADVANCE_QUANTUM_MECHANICS</title>
 <polygon fill="none" stroke="#000000" points="3622.5,-1172.0833 3445.5,-1172.0833 3445.5,-1051.0833 3622.5,-1051.0833 3622.5,-1172.0833"/>
-<image xlink:href="pic555/upap086l.png" width="157px" height="90px" preserveAspectRatio="xMinYMin meet" x="3456" y="-1165.58"/>
+<image xlink:href="pic555/upap086l.png" width="120px" height="90px" preserveAspectRatio="xMinYMin meet" x="3474.5" y="-1165.58"/>
 <text text-anchor="start" x="3456" y="-1060.3833" font-family="Times,serif" font-size="14.00" fill="#000000">QUANTUM_MECHANICS</text>
 </g>
 <!-- ADVANCE_PHYSICS&#45;&gt;ADVANCE_QUANTUM_MECHANICS -->
@@ -442,7 +442,7 @@
 <g id="node18" class="node">
 <title>ADVANCE_AGRICULTURAL_REVOLUTION</title>
 <polygon fill="none" stroke="#000000" points="1106,-666.0833 887,-666.0833 887,-545.0833 1106,-545.0833 1106,-666.0833"/>
-<image xlink:href="pic555/upap007l.png" width="160px" height="90px" preserveAspectRatio="xMinYMin meet" x="917" y="-659.583"/>
+<image xlink:href="pic555/upap007l.png" width="120px" height="90px" preserveAspectRatio="xMinYMin meet" x="937" y="-659.583"/>
 <text text-anchor="start" x="897.5" y="-554.3833" font-family="Times,serif" font-size="14.00" fill="#000000">AGRICULTURAL_REVOLUTION</text>
 </g>
 <!-- ADVANCE_AGRICULTURAL_REVOLUTION&#45;&gt;ADVANCE_INDUSTRIAL_REVOLUTION -->
@@ -675,7 +675,7 @@
 <g id="node41" class="node">
 <title>ADVANCE_CANNON_MAKING</title>
 <polygon fill="none" stroke="#000000" points="1679,-793.0833 1538,-793.0833 1538,-672.0833 1679,-672.0833 1679,-793.0833"/>
-<image xlink:href="pic555/upap016l.png" width="121px" height="90px" preserveAspectRatio="xMinYMin meet" x="1548.5" y="-786.583"/>
+<image xlink:href="pic555/upap016l.png" width="120px" height="90px" preserveAspectRatio="xMinYMin meet" x="1549" y="-786.583"/>
 <text text-anchor="start" x="1548.5" y="-681.3833" font-family="Times,serif" font-size="14.00" fill="#000000">CANNON_MAKING</text>
 </g>
 <!-- ADVANCE_GUNPOWDER&#45;&gt;ADVANCE_CANNON_MAKING -->
@@ -688,7 +688,7 @@
 <g id="node43" class="node">
 <title>ADVANCE_CAVALRY_TACTICS</title>
 <polygon fill="none" stroke="#000000" points="1683,-932.0833 1534,-932.0833 1534,-811.0833 1683,-811.0833 1683,-932.0833"/>
-<image xlink:href="pic555/upap017l.png" width="129px" height="90px" preserveAspectRatio="xMinYMin meet" x="1544.5" y="-925.583"/>
+<image xlink:href="pic555/upap017l.png" width="120px" height="90px" preserveAspectRatio="xMinYMin meet" x="1549" y="-925.583"/>
 <text text-anchor="start" x="1544.5" y="-820.3833" font-family="Times,serif" font-size="14.00" fill="#000000">CAVALRY_TACTICS</text>
 </g>
 <!-- ADVANCE_GUNPOWDER&#45;&gt;ADVANCE_CAVALRY_TACTICS -->
@@ -752,7 +752,7 @@
 <g id="node70" class="node">
 <title>ADVANCE_NEURAL_REPROGRAMMING</title>
 <polygon fill="none" stroke="#000000" points="4779,-170.0833 4575,-170.0833 4575,-49.0833 4779,-49.0833 4779,-170.0833"/>
-<image xlink:href="pic555/upap076l.png" width="160px" height="90px" preserveAspectRatio="xMinYMin meet" x="4597" y="-163.583"/>
+<image xlink:href="pic555/upap076l.png" width="120px" height="90px" preserveAspectRatio="xMinYMin meet" x="4617" y="-163.583"/>
 <text text-anchor="start" x="4585" y="-58.3833" font-family="Times,serif" font-size="14.00" fill="#000000">NEURAL_REPROGRAMMING</text>
 </g>
 <!-- ADVANCE_DIGITAL_ENCRYPTION&#45;&gt;ADVANCE_NEURAL_REPROGRAMMING -->
@@ -765,7 +765,7 @@
 <g id="node71" class="node">
 <title>ADVANCE_VIRTUAL_DEMOCRACY</title>
 <polygon fill="none" stroke="#000000" points="4764,-487.0833 4590,-487.0833 4590,-366.0833 4764,-366.0833 4764,-487.0833"/>
-<image xlink:href="pic555/upap106l.png" width="154px" height="90px" preserveAspectRatio="xMinYMin meet" x="4600" y="-480.583"/>
+<image xlink:href="pic555/upap106l.png" width="120px" height="90px" preserveAspectRatio="xMinYMin meet" x="4617" y="-480.583"/>
 <text text-anchor="start" x="4600" y="-375.3833" font-family="Times,serif" font-size="14.00" fill="#000000">VIRTUAL_DEMOCRACY</text>
 </g>
 <!-- ADVANCE_DIGITAL_ENCRYPTION&#45;&gt;ADVANCE_VIRTUAL_DEMOCRACY -->
@@ -784,7 +784,7 @@
 <g id="node38" class="node">
 <title>ADVANCE_CLASSICAL_EDUCATION</title>
 <polygon fill="none" stroke="#000000" points="1322,-933.0833 1142,-933.0833 1142,-812.0833 1322,-812.0833 1322,-933.0833"/>
-<image xlink:href="pic555/upap020l.png" width="160px" height="90px" preserveAspectRatio="xMinYMin meet" x="1152" y="-926.583"/>
+<image xlink:href="pic555/upap020l.png" width="120px" height="90px" preserveAspectRatio="xMinYMin meet" x="1172" y="-926.583"/>
 <text text-anchor="start" x="1152" y="-821.3833" font-family="Times,serif" font-size="14.00" fill="#000000">CLASSICAL_EDUCATION</text>
 </g>
 <!-- ADVANCE_GEOMETRY&#45;&gt;ADVANCE_CLASSICAL_EDUCATION -->
@@ -860,7 +860,7 @@
 <g id="node75" class="node">
 <title>ADVANCE_MASS_PRODUCTION</title>
 <polygon fill="none" stroke="#000000" points="2699.5,-754.0833 2547.5,-754.0833 2547.5,-633.0833 2699.5,-633.0833 2699.5,-754.0833"/>
-<image xlink:href="pic555/upap064l.png" width="132px" height="90px" preserveAspectRatio="xMinYMin meet" x="2557.5" y="-747.583"/>
+<image xlink:href="pic555/upap064l.png" width="120px" height="90px" preserveAspectRatio="xMinYMin meet" x="2563.5" y="-747.583"/>
 <text text-anchor="start" x="2557.5" y="-642.3833" font-family="Times,serif" font-size="14.00" fill="#000000">MASS_PRODUCTION</text>
 </g>
 <!-- ADVANCE_ECONOMICS&#45;&gt;ADVANCE_MASS_PRODUCTION -->
@@ -879,7 +879,7 @@
 <g id="node35" class="node">
 <title>ADVANCE_BRONZE_WORKING</title>
 <polygon fill="none" stroke="#000000" points="675,-470.0833 528,-470.0833 528,-349.0833 675,-349.0833 675,-470.0833"/>
-<image xlink:href="pic555/upap014l.png" width="127px" height="90px" preserveAspectRatio="xMinYMin meet" x="538.5" y="-463.583"/>
+<image xlink:href="pic555/upap014l.png" width="120px" height="90px" preserveAspectRatio="xMinYMin meet" x="542" y="-463.583"/>
 <text text-anchor="start" x="538.5" y="-358.3833" font-family="Times,serif" font-size="14.00" fill="#000000">BRONZE_WORKING</text>
 </g>
 <!-- ADVANCE_BRONZE_WORKING&#45;&gt;ADVANCE_IRON_WORKING -->
@@ -1070,7 +1070,7 @@
 <g id="node81" class="node">
 <title>ADVANCE_GENETIC_TAILORING</title>
 <polygon fill="none" stroke="#000000" points="4983.5,-487.0833 4824.5,-487.0833 4824.5,-366.0833 4983.5,-366.0833 4983.5,-487.0833"/>
-<image xlink:href="pic555/upap043l.png" width="139px" height="90px" preserveAspectRatio="xMinYMin meet" x="4835" y="-480.583"/>
+<image xlink:href="pic555/upap043l.png" width="120px" height="90px" preserveAspectRatio="xMinYMin meet" x="4844.5" y="-480.583"/>
 <text text-anchor="start" x="4835" y="-375.3833" font-family="Times,serif" font-size="14.00" fill="#000000">GENETIC_TAILORING</text>
 </g>
 <!-- ADVANCE_EUGENICS&#45;&gt;ADVANCE_GENETIC_TAILORING -->
@@ -1083,7 +1083,7 @@
 <g id="node86" class="node">
 <title>ADVANCE_PLASMA_WEAPONRY</title>
 <polygon fill="none" stroke="#000000" points="4984,-777.0833 4824,-777.0833 4824,-656.0833 4984,-656.0833 4984,-777.0833"/>
-<image xlink:href="pic555/upap084l.png" width="140px" height="90px" preserveAspectRatio="xMinYMin meet" x="4834" y="-770.583"/>
+<image xlink:href="pic555/upap084l.png" width="120px" height="90px" preserveAspectRatio="xMinYMin meet" x="4844" y="-770.583"/>
 <text text-anchor="start" x="4834" y="-665.3833" font-family="Times,serif" font-size="14.00" fill="#000000">PLASMA_WEAPONRY</text>
 </g>
 <!-- ADVANCE_FUSION&#45;&gt;ADVANCE_PLASMA_WEAPONRY -->
@@ -1140,7 +1140,7 @@
 <g id="node51" class="node">
 <title>ADVANCE_GUIDED_WEAPON_SYSTEMS</title>
 <polygon fill="none" stroke="#000000" points="3637,-1033.0833 3431,-1033.0833 3431,-912.0833 3637,-912.0833 3637,-1033.0833"/>
-<image xlink:href="pic555/upap049l.png" width="160px" height="90px" preserveAspectRatio="xMinYMin meet" x="3454" y="-1026.58"/>
+<image xlink:href="pic555/upap049l.png" width="120px" height="90px" preserveAspectRatio="xMinYMin meet" x="3474" y="-1026.58"/>
 <text text-anchor="start" x="3441" y="-921.3833" font-family="Times,serif" font-size="14.00" fill="#000000">GUIDED_WEAPON_SYSTEMS</text>
 </g>
 <!-- ADVANCE_COMPUTER&#45;&gt;ADVANCE_GUIDED_WEAPON_SYSTEMS -->
@@ -1228,7 +1228,7 @@
 <g id="node56" class="node">
 <title>ADVANCE_CORPORATE_REPUBLIC</title>
 <polygon fill="none" stroke="#000000" points="3149.5,-615.0833 2976.5,-615.0833 2976.5,-494.0833 3149.5,-494.0833 3149.5,-615.0833"/>
-<image xlink:href="pic555/upap025l.png" width="153px" height="90px" preserveAspectRatio="xMinYMin meet" x="2987" y="-608.583"/>
+<image xlink:href="pic555/upap025l.png" width="120px" height="90px" preserveAspectRatio="xMinYMin meet" x="3003.5" y="-608.583"/>
 <text text-anchor="start" x="2987" y="-503.3833" font-family="Times,serif" font-size="14.00" fill="#000000">CORPORATE_REPUBLIC</text>
 </g>
 <!-- ADVANCE_CORPORATE_REPUBLIC&#45;&gt;ADVANCE_COMPUTER -->
@@ -1290,7 +1290,7 @@
 <g id="node93" class="node">
 <title>ADVANCE_GLOBAL_DEFENSE</title>
 <polygon fill="none" stroke="#000000" points="3604.5,-894.0833 3463.5,-894.0833 3463.5,-773.0833 3604.5,-773.0833 3604.5,-894.0833"/>
-<image xlink:href="pic555/upap046l.png" width="121px" height="90px" preserveAspectRatio="xMinYMin meet" x="3474" y="-887.583"/>
+<image xlink:href="pic555/upap046l.png" width="120px" height="90px" preserveAspectRatio="xMinYMin meet" x="3474.5" y="-887.583"/>
 <text text-anchor="start" x="3474" y="-782.3833" font-family="Times,serif" font-size="14.00" fill="#000000">GLOBAL_DEFENSE</text>
 </g>
 <!-- ADVANCE_SUPERSONIC_FLIGHT&#45;&gt;ADVANCE_GLOBAL_DEFENSE -->
@@ -1386,7 +1386,7 @@
 <g id="node66" class="node">
 <title>ADVANCE_SMART_MATERIALS</title>
 <polygon fill="none" stroke="#000000" points="5349,-777.0833 5196,-777.0833 5196,-656.0833 5349,-656.0833 5349,-777.0833"/>
-<image xlink:href="pic555/upap093l.png" width="133px" height="90px" preserveAspectRatio="xMinYMin meet" x="5206.5" y="-770.583"/>
+<image xlink:href="pic555/upap093l.png" width="120px" height="90px" preserveAspectRatio="xMinYMin meet" x="5213" y="-770.583"/>
 <text text-anchor="start" x="5206.5" y="-665.3833" font-family="Times,serif" font-size="14.00" fill="#000000">SMART_MATERIALS</text>
 </g>
 <!-- ADVANCE_CYBERNETICS&#45;&gt;ADVANCE_SMART_MATERIALS -->
@@ -1399,7 +1399,7 @@
 <g id="node87" class="node">
 <title>ADVANCE_GAIA_CONTROLLER</title>
 <polygon fill="none" stroke="#000000" points="5535,-821.0833 5385,-821.0833 5385,-700.0833 5535,-700.0833 5535,-821.0833"/>
-<image xlink:href="pic555/upap041l.png" width="130px" height="90px" preserveAspectRatio="xMinYMin meet" x="5395" y="-814.583"/>
+<image xlink:href="pic555/upap041l.png" width="120px" height="90px" preserveAspectRatio="xMinYMin meet" x="5400" y="-814.583"/>
 <text text-anchor="start" x="5395" y="-709.3833" font-family="Times,serif" font-size="14.00" fill="#000000">GAIA_CONTROLLER</text>
 </g>
 <!-- ADVANCE_SMART_MATERIALS&#45;&gt;ADVANCE_GAIA_CONTROLLER -->
@@ -1567,7 +1567,7 @@
 <g id="node79" class="node">
 <title>ADVANCE_INTERNAL_COMBUSTION</title>
 <polygon fill="none" stroke="#000000" points="2716,-526.0833 2531,-526.0833 2531,-405.0833 2716,-405.0833 2716,-526.0833"/>
-<image xlink:href="pic555/upap056l.png" width="160px" height="90px" preserveAspectRatio="xMinYMin meet" x="2544" y="-519.583"/>
+<image xlink:href="pic555/upap056l.png" width="120px" height="90px" preserveAspectRatio="xMinYMin meet" x="2564" y="-519.583"/>
 <text text-anchor="start" x="2541.5" y="-414.3833" font-family="Times,serif" font-size="14.00" fill="#000000">INTERNAL_COMBUSTION</text>
 </g>
 <!-- ADVANCE_ELECTRICITY&#45;&gt;ADVANCE_INTERNAL_COMBUSTION -->
@@ -1719,7 +1719,7 @@
 <g id="node91" class="node">
 <title>ADVANCE_GLOBAL_COMMUNICATIONS</title>
 <polygon fill="none" stroke="#000000" points="4120,-896.0833 3911,-896.0833 3911,-775.0833 4120,-775.0833 4120,-896.0833"/>
-<image xlink:href="pic555/upap048l.png" width="160px" height="90px" preserveAspectRatio="xMinYMin meet" x="3936" y="-889.583"/>
+<image xlink:href="pic555/upap048l.png" width="120px" height="90px" preserveAspectRatio="xMinYMin meet" x="3956" y="-889.583"/>
 <text text-anchor="start" x="3921.5" y="-784.3833" font-family="Times,serif" font-size="14.00" fill="#000000">GLOBAL_COMMUNICATIONS</text>
 </g>
 <!-- ADVANCE_GLOBAL_COMMUNICATIONS&#45;&gt;ADVANCE_DIGITAL_ENCRYPTION -->
