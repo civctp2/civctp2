@@ -1,5 +1,7 @@
 digraph G {
-	graph [imagepath=pic555];
+	graph [imagepath=pic555,
+		rankdir=LR
+	];
 	ADVANCE_ADV_INFANTRY_TACTICS	 [label=<<TABLE border="0" cellspacing="0" cellborder="0"><TR><TD><IMG SRC="upap001l.png"/></TD></TR><TR><TD>ADV_INFANTRY_TACTICS</TD></TR></TABLE>>,
 		shape=box];
 	ADVANCE_ADV_NAVAL_TACTICS	 [label=<<TABLE border="0" cellspacing="0" cellborder="0"><TR><TD><IMG SRC="upap002l.png"/></TD></TR><TR><TD>ADV_NAVAL_TACTICS</TD></TR></TABLE>>,
