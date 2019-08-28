@@ -2,6 +2,9 @@ digraph G {
 	graph [imagepath=pic555,
 		rankdir=LR
 	];
+	node [fontname="Sans serif",
+		fontsize=7
+	];
 	ADVANCE_ADV_INFANTRY_TACTICS	 [label=<<TABLE border="0" cellspacing="0" cellborder="0"><TR><TD><IMG SCALE="TRUE" SRC="upap001l.png"/></TD></TR><TR><TD>ADV_INFANTRY_TACTICS</TD></TR></TABLE>>,
 		shape=box];
 	ADVANCE_ADV_NAVAL_TACTICS	 [label=<<TABLE border="0" cellspacing="0" cellborder="0"><TR><TD><IMG SCALE="TRUE" SRC="upap002l.png"/></TD></TR><TR><TD>ADV_NAVAL_TACTICS</TD></TR></TABLE>>,

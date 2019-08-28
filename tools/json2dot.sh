@@ -5,5 +5,6 @@ jq -r 'to_entries[] | .key as $k | .value[]? | if $k != . then "\(.) -> \($k)" e
     | cat <(echo 'digraph G {') \
           <(echo 'imagepath="pic555"') \
           <(echo 'rankdir=LR') \
+          <(echo 'node [fontname="Sans serif" fontsize=7]') \
 	  - \
 	  <(echo '}')
