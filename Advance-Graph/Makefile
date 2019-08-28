@@ -8,7 +8,7 @@ all : Advance.pdf
 	../tools/txt2json.sh $< > $@
 
 %.gv : %.json
-	../tools/json2dot.sh < $< > $@
+	../tools/json2dot.sh ../ctp2_data/default/gamedata/uniticon.txt < $< > $@
 
 %.svg : %.gv
 	dot $< -Tsvg -o $@
