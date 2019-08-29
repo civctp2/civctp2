@@ -1,0 +1,347 @@
+#######################################
+
+# File: objectpad.ldl
+
+# Last Access: Mon Jun 01 13:01:31 1998
+
+#######################################
+
+
+
+##-----------------------------------##
+
+##              Data                 ##
+
+##-----------------------------------##
+
+ObjectPad {
+
+	string	xanchor	"left"
+
+	string	yanchor	"top"
+
+	string	pattern	"error.tga"
+
+	int	xpix	50
+
+	int	ypix	50
+
+	int	widthpix	755
+
+	int	heightpix	570
+
+	ExitButton:CTP2_STANDARD_FONT {
+
+		int	xpix	735
+
+		int	ypix	5
+
+		int	widthpix	15
+
+		int	heightpix	15
+
+		string	text	"str_ldl_X"
+		string	pattern	"error.tga"
+
+	}
+
+	ClassDropDown:CTP2_STANDARD_FONT{
+
+		int	xpix		10
+
+		int	ypix		20
+
+		int	widthpix	100
+
+		int	heightpix	20
+
+		string	pattern	"error.tga"
+
+		staticpane:CTP2_STANDARD_FONT{
+
+			int widthpix 100
+
+			int heightpix 20
+
+			string text "str_ldl_Class"
+		}
+
+		
+
+		button {
+
+			string image0	"error.tga"
+
+			string image1	"error.tga"
+
+			int widthpix	20
+
+		}
+
+		window {
+
+			int heightpix 200
+
+			listbox {
+
+				string pattern "error.tga"
+
+			}
+
+		}
+
+	
+
+	}
+
+
+
+	NewButton:CTP2_STANDARD_FONT {
+
+		int	xpix	20
+
+		int	ypix	540
+
+		int	widthpix	60
+
+		int	heightpix	20
+
+		string	text	"str_ldl_New"
+		string	pattern	"error.tga"
+
+	}
+
+	CopyButton:CTP2_STANDARD_FONT {
+
+		int	xpix	140
+
+		int	ypix	540
+
+		int	widthpix	60
+
+		int	heightpix	20
+
+		string	text	"str_ldl_Copy"
+		string	pattern	"error.tga"
+
+	}
+
+	SaveButton:CTP2_STANDARD_FONT {
+
+		int	xpix	600
+
+		int	ypix	20
+
+		int	widthpix	80
+
+		int	heightpix	20
+
+		string	text	"str_ldl_Save"
+		string	pattern	"error.tga"
+
+	}
+
+
+
+	NameSheet {
+
+		int	xpix	20
+
+		int	ypix	50
+
+		int	widthpix	140
+
+		int	heightpix	480
+
+		string	pattern	"error.tga"
+
+		NameBox {
+
+			int	xpix	0
+
+			int	ypix	20
+
+			int	widthpix	140
+
+			int	heightpix	460
+
+			int columns		1
+
+			string	pattern	"error.tga"
+
+			header {
+
+				switch0:CTP2_HEADER_FONT {
+
+					int	widthpix	140
+
+					int	heightpix	20
+
+					string text "str_ldl_Name"
+					string	pattern	"error.tga"
+
+					int bevelwidth 	1
+
+				}
+
+			}
+
+		}
+
+	}
+
+
+
+	ActiveSheet {
+
+		int	xpix	240
+
+		int	ypix	50
+
+		int	widthpix	100
+
+		int	heightpix	480
+
+		string	pattern	"error.tga"
+
+		ActiveBox {
+
+			int	xpix	0
+
+			int	ypix	20
+
+			int	widthpix	100
+
+			int	heightpix	460
+
+			int columns		1
+
+			string	pattern	"error.tga"
+
+			header {
+
+				switch0:CTP2_HEADER_FONT {
+
+					int	widthpix	100
+
+					int	heightpix	20
+
+					string text "str_ldl_Active_Abilities"
+					string	pattern	"error.tga"
+
+					int bevelwidth 	1
+
+				}
+
+			}
+
+		}
+
+	}
+
+
+
+	AvailableSheet {
+
+		int	xpix	440
+
+		int	ypix	50
+
+		int	widthpix	100
+
+		int	heightpix	500
+
+		string	pattern	"error.tga"
+
+		AvailableBox {
+
+			int	xpix	0
+
+			int	ypix	20
+
+			int	widthpix	100
+
+			int	heightpix	480
+
+			int columns		1
+
+			string	pattern	"error.tga"
+
+			header {
+
+				switch0:CTP2_HEADER_FONT {
+
+					int	widthpix	100
+
+					int	heightpix	20
+
+					string text "str_ldl_Available_Abilities"
+					string	pattern	"error.tga"
+
+					int bevelwidth 	1
+
+				}
+
+			}
+
+		}
+
+	}
+
+}
+
+
+
+ClassDropDownStrings {
+
+	int	numstrings	6
+
+	
+
+	string string0 		"str_tbl_ldl_Unit"
+	string string1 		"str_tbl_ldl_Building"
+	string string2 		"str_tbl_ldl_Wonder"
+	string string3 		"str_tbl_ldl_Advance"
+	string string4		"str_tbl_ldl_Ability"
+	string string5		"str_tbl_ldl_Tile"
+}
+
+
+
+ClassDropDownItem {
+
+	name:CTP2_STANDARD_FONT {
+
+		int xpix	0
+
+		int ypix	0
+
+		int widthpix	96
+
+		int heightpix	16
+
+	}
+
+}
+
+
+
+NameListItem {
+
+	name:CTP2_STANDARD_FONT {
+
+		int xpix	0
+
+		int ypix	0
+
+		int widthpix	140
+
+		int heightpix	20
+
+	}
+
+}
+
+
+
+$

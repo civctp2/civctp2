@@ -155,6 +155,8 @@ TRADE_PIRATED				"Our trade route carrying {good[0].name} from {city[0].name} to
 TRADE_PIRATE_GOLD			"{gold[0].value} gold was pirated on the trade route carrying {good[0].name} from {city[0].name} to {city[1].name} owned by {player[0].civ_name_plural}."
 TRADE_ROUTES_BROKEN_BY_EMBARGO		"{player[0].sir_cap}, the {player[1].civ_name_plural} have placed an embargo on all of our trade into their nations. All existing trade routes to {player[1].country_name} have been broken! We have lost all of the caravans on those routes as well."
 TRADE_ROUTES_BROKEN_BY_WAR		"Troubling news, {player[0].sir}. Due to the sparking of conflict between us and {player[1].country_name}, all of our trade routes to {player[1].civ_name_singular} cities have been broken. All caravans assigned to those routes have been lost as well."
+TRADE_PASS				"The trade route passing through our city of {city[0].name} carrying {good[0].name} from {city[1].name} to {city[2].name} owned by the {player[0].civ_name_plural} brought us {gold[0].value} gold."
+TRADE_PASS_PIRATED			"The trade route passing through our city of {city[0].name} carrying {good[0].name} from {city[1].name} to {city[2].name} owned by the {player[0].civ_name_plural} was pirated by the {player[1].civ_name_plural} and {gold[0].value} gold from transit was not earned."
 SENDER_KILLED_TRADE_ROUTE		"{player[0].leader_name} has cancelled the trade route carrying {good[0].name} from {city[0].name} to {city[1].name}."
 
 ## Trade Advisor Stuff ##

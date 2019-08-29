@@ -57,8 +57,10 @@ Strengths::Strengths(sint32 owner)
 	sint32 const	curRound = NewTurnCount::GetCurrentRound();
 
 	sint32 c, y;
-	for(y = 1; y < curRound; y++) {
-		for(c = 0; c < sint32(STRENGTH_CAT_MAX); c++) {
+	for(y = 0; y < curRound; y++)
+	{
+		for(c = 0; c < sint32(STRENGTH_CAT_MAX); c++)
+		{
 			m_strengthRecords[c].Insert(0);
 		}
 	}
@@ -76,9 +78,12 @@ Strengths::~Strengths()
 void Strengths::Serialize(CivArchive &archive)
 {
 	sint32 i;
-	if(archive.IsStoring()) {
+	if(archive.IsStoring())
+	{
 		archive << m_owner;
-	} else {
+	}
+	else
+	{
 		archive >> m_owner;
 	}
 
@@ -154,7 +159,6 @@ sint32 Strengths::GetTurnStrength(STRENGTH_CAT category, sint32 turn) const
 {
 	if (!m_strengthRecords[category].Num()) return 0;
 
-
 	if (turn < 0) turn = m_strengthRecords[category].Num() -1;
 
 	if (turn >= m_strengthRecords[category].Num()) return 0;
@@ -167,7 +171,8 @@ sint32 Strengths::GetTotalUnitCost() const
 	sint32 i;
 	sint32 c = 0;
 	UnitDynamicArray *units = g_player[m_owner]->m_all_units;
-	for(i = units->Num() - 1; i >= 0; i--) {
+	for(i = units->Num() - 1; i >= 0; i--)
+	{
 		c += units->Access(i).GetDBRec()->GetShieldCost();
 	}
 	return c;
@@ -175,13 +180,15 @@ sint32 Strengths::GetTotalUnitCost() const
 
 sint32 Strengths::GetTotalBuildingCost() const
 {
-	sint32 i, j;
 	sint32 c = 0;
 	UnitDynamicArray *cities = g_player[m_owner]->m_all_cities;
-	for(i = cities->Num() - 1; i >= 0; i--) {
-		uint64 builtImprovements = cities->Access(i).GetImprovements();
-		for(j = g_theBuildingDB->NumRecords() - 1; j >= 0; j--) {
-			if(builtImprovements & ((uint64)1 << (uint64)j)) {
+	for(sint32 i = cities->Num() - 1; i >= 0; i--)
+	{
+		const CityData* city = cities->Get(i).GetCityData();
+		for(sint32 j = g_theBuildingDB->NumRecords() - 1; j >= 0; j--)
+		{
+			if(city->HasBuilding(j))
+			{
 				c += buildingutil_Get(j, m_owner)->GetProductionCost();
 			}
 		}
@@ -191,23 +198,26 @@ sint32 Strengths::GetTotalBuildingCost() const
 
 sint32 Strengths::GetTotalWonderCost() const
 {
-	sint32 i;
 	sint32 c = 0;
-	for(i = g_theWonderDB->NumRecords() - 1; i >= 0; i--) {
-		if(g_player[m_owner]->m_builtWonders & (uint64(1) << uint64(i))) {
+	for(sint32 i = g_theWonderDB->NumRecords() - 1; i >= 0; i--)
+	{
+		if(g_player[m_owner]->HasWonder(i))
+		{
 			c += wonderutil_Get(i, m_owner)->GetProductionCost();
 		}
 	}
+
 	return c;
 }
 
 sint32 Strengths::GetTotalProduction() const
 {
-	sint32 i;
 	sint32 c = 0;
 	UnitDynamicArray *cities = g_player[m_owner]->m_all_cities;
-	for(i = cities->Num() - 1; i >= 0; i--) {
+	for(sint32 i = cities->Num() - 1; i >= 0; i--)
+	{
 		c += cities->Access(i).GetData()->GetCityData()->GetNetCityProduction();
 	}
+
 	return c;
 }

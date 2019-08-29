@@ -121,9 +121,10 @@ static bool *s_scienceGoalTree=NULL;
 
 sint32 ScienceSortCallback(ctp2_ListItem *item1, ctp2_ListItem *item2, sint32 column);
 
-void sci_advancescreen_fillgoalarray(sint32 goal);
+void sci_advancescreen_fillGoalArray(sint32 goal);
 
-class SciAdvanceScreenKeyboardHandler : public KeyboardHandler {
+class SciAdvanceScreenKeyboardHandler : public KeyboardHandler
+{
 public:
 	void kh_Close() {
 		sci_advancescreen_removeMyWindow(AUI_BUTTON_ACTION_EXECUTE);
@@ -153,12 +154,9 @@ void sci_advancescreen_GoalCallback(aui_Control *control, uint32 action, uint32 
 
 void sci_advancescreen_listAction( aui_Control *control, uint32 action, uint32 data, void *cookie )
 {
-	switch ( action ) {
+	switch ( action )
+	{
 	case AUI_LISTBOX_ACTION_SELECT:
-
-
-
-
 
 		ctp2_ListBox *lb;
 		ctp2_ListItem *item;
@@ -167,48 +165,29 @@ void sci_advancescreen_listAction( aui_Control *control, uint32 action, uint32 d
 		item = (ctp2_ListItem *)lb->GetSelectedItem();
 		if(!item) return;
 
-
 		sci_advancescreen_updateData( NULL, FALSE );
 		break;
 
 	case AUI_LISTBOX_ACTION_DOUBLECLICKSELECT:
-		if(sci_advancescreen_removeMyWindow(action)) {
-
-
-
-
-
+		if(sci_advancescreen_removeMyWindow(action))
+		{
 			ctp2_ListBox *lb = (ctp2_ListBox *)control;
 
 			ctp2_ListItem *item = (ctp2_ListItem *)lb->GetSelectedItem();
 			if(!item) return;
 
 			g_player[g_selected_item->GetVisiblePlayer()]->SetResearching( (long)item->GetUserData() );
-			if(g_scienceManagementDialog) {
+			if(g_scienceManagementDialog)
+			{
 				g_scienceManagementDialog->Update();
 			}
 
 			if ( g_scienceWin )
 				g_scienceWin->UpdateData( SCI_UPDATE_NOLIST );
-
-
-
-
-
-
-
-
-
-
-
-
 		}
 		break;
 	}
 }
-
-
-
 
 sint32	sci_advancescreen_displayMyWindow( MBCHAR *messageText, sint32 from, Sequence *seq )
 {
@@ -219,35 +198,34 @@ sint32	sci_advancescreen_displayMyWindow( MBCHAR *messageText, sint32 from, Sequ
 
 	sint32 retval=0;
 	if(!s_sci_advanceScreen) { retval = sci_advancescreen_Initialize( messageText ); }
-	else {
+	else
+	{
 		sci_advancescreen_loadList();
 		sci_advancescreen_updateData( messageText );
 	}
 
 	AUI_ERRCODE auiErr;
 
-	if ( from == k_SCI_INCLUDE_CANCEL ) {
+	if ( from == k_SCI_INCLUDE_CANCEL )
+	{
 		s_cancel->Show();
 	}
-	else {
+	else
+	{
 		s_cancel->Hide();
-
-
-
-
-
 		sint32 soundID = gamesounds_GetGameSoundID(GAMESOUNDS_CHEER_CASTLE);
 		g_soundManager->AddSound(SOUNDTYPE_SFX, 0, soundID);
 	}
 
-	if(from != k_SCI_INCLUDE_CANCEL) {
+	if(from != k_SCI_INCLUDE_CANCEL)
+	{
 			g_soundManager->AddGameSound(GAMESOUNDS_ADVANCE);
 	}
 	auiErr = g_c3ui->AddWindow(s_sci_advanceScreen);
 	Assert( auiErr == AUI_ERRCODE_OK );
 
-
-	if (from == k_SCI_INCLUDE_CANCEL) {
+	if (from == k_SCI_INCLUDE_CANCEL)
+	{
 		keypress_RegisterHandler(&s_keyboardHandler);
 	}
 
@@ -264,16 +242,8 @@ sint32 sci_advancescreen_removeMyWindow(uint32 action)
 
 		Assert( auiErr == AUI_ERRCODE_OK );
 
-
-
-
-
-
-
-
-
-
-		if (s_screenSequence) {
+		if (s_screenSequence)
+		{
 			g_director->ActionFinished(s_screenSequence);
 			s_screenSequence = NULL;
 		}
@@ -281,7 +251,6 @@ sint32 sci_advancescreen_removeMyWindow(uint32 action)
 
 	return 1;
 }
-
 
 AUI_ERRCODE sci_advancescreen_Initialize( MBCHAR *messageText )
 {
@@ -368,13 +337,12 @@ AUI_ERRCODE sci_advancescreen_Initialize( MBCHAR *messageText )
 	return AUI_ERRCODE_OK;
 }
 
-
 void sci_advancescreen_Cleanup(void)
 {
 	if (s_sci_advanceScreen && g_c3ui)
-    {
-	    g_c3ui->RemoveWindow(s_sci_advanceScreen->Id());
-    }
+	{
+		g_c3ui->RemoveWindow(s_sci_advanceScreen->Id());
+	}
 
 	keypress_RemoveHandler(&s_keyboardHandler);
 
@@ -396,29 +364,22 @@ void sci_advancescreen_Cleanup(void)
 	mycleanup(s_sci_advanceScreen);
 #undef mycleanup
 
-    delete [] s_scienceGoalTree;
-    s_scienceGoalTree = NULL;
+	delete [] s_scienceGoalTree;
+	s_scienceGoalTree = NULL;
 }
-
-
-
 
 void sci_advancescreen_backPress(aui_Control *control, uint32 action, uint32 data, void *cookie )
 {
 	if ( action != (uint32)AUI_BUTTON_ACTION_EXECUTE ) return;
 
-	if(sci_advancescreen_removeMyWindow(action)) {
-
-
-
-
+	if(sci_advancescreen_removeMyWindow(action))
+	{
 		ctp2_ListItem *item;
 
 		item = (ctp2_ListItem*)s_advanceList->GetSelectedItem();
 
-		if (!item) {
-
-
+		if (!item)
+		{
 			return;
 		}
 
@@ -429,22 +390,6 @@ void sci_advancescreen_backPress(aui_Control *control, uint32 action, uint32 dat
 
 		if ( g_scienceWin )
 			g_scienceWin->UpdateData( SCI_UPDATE_NOLIST );
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
 	}
 }
 
@@ -454,22 +399,13 @@ void sci_advancescreen_cancelPress(aui_Control *control, uint32 action, uint32 d
 
 	g_player[g_selected_item->GetVisiblePlayer()]->SetResearching( s_oldResearching );
 
-	if(g_scienceManagementDialog) {
+	if(g_scienceManagementDialog)
+	{
 		g_scienceManagementDialog->Update();
 	}
 
-	if(sci_advancescreen_removeMyWindow(action)) {
-
-
-
-
-
-
-
-
-
-
-
+	if(sci_advancescreen_removeMyWindow(action))
+	{
 	}
 }
 
@@ -497,22 +433,20 @@ void sci_advancescreen_cancelPress(aui_Control *control, uint32 action, uint32 d
 //----------------------------------------------------------------------------
 sint32 sci_advancescreen_loadList( void )
 {
-
 	Player *p = g_player[g_selected_item->GetVisiblePlayer()];
 	MBCHAR str[_MAX_PATH];
-	if(!s_scienceGoalTree)
-	{
-		s_scienceGoalTree = new bool[g_theAdvanceDB->NumRecords()];
-	}
-	memset(s_scienceGoalTree,0,sizeof(bool)*g_theAdvanceDB->NumRecords());
 	if(p->m_researchGoal >= 0)
 	{
-		sci_advancescreen_fillgoalarray(p->m_researchGoal);
-		sprintf(str,"%s %s",g_theStringDB->GetNameStr("str_ldl_ResearchGoal"),
-			g_theAdvanceDB->Get(p->m_researchGoal)->GetNameText());
+		sint32 all;
+		sint32 have;
+		sci_advancescreen_initAndFillGoalArray(p->m_researchGoal);
+		sci_advancescreen_getGoalAdvances(have, all);
+		sprintf(str,"%s %s (%d/%d)",g_theStringDB->GetNameStr("str_ldl_ResearchGoal"),
+			g_theAdvanceDB->Get(p->m_researchGoal)->GetNameText(), have, all);
 	}
 	else
 	{
+		sci_advancescreen_clearGoalArray();
 		sprintf(str,"%s",g_theStringDB->GetNameStr("str_ldl_ResearchGoal"));
 	}
 	s_goaltext->SetText(str);
@@ -524,17 +458,14 @@ sint32 sci_advancescreen_loadList( void )
 
 	s_advanceList->Clear();
 
-
-
-
 	uint8 *			advances		= p->m_advances->CanResearch();
 	sint32 const	advanceCount	= g_theAdvanceDB->NumRecords();
 	sint32			curItemIndex	= 0;
 
 	for (sint32 i = 0; i < advanceCount; ++i)
 	{
-
-		if( advances[i] ) {
+		if( advances[i] )
+		{
 			if(s_scienceGoalTree[i])
 			{
 				sprintf( str, "%s*", g_theStringDB->GetNameStr(g_theAdvanceDB->Get(i)->m_name) );
@@ -587,19 +518,21 @@ sint32 sci_advancescreen_updateData( MBCHAR *messageText, BOOL defaultMessage )
 
 	Player *p = g_player[g_selected_item->GetVisiblePlayer()];
 
-	if ( messageText ) {
+	if ( messageText )
+	{
 		s_message->SetHyperText( messageText );
 	}
-	else if ( defaultMessage ) {
+	else if ( defaultMessage )
+	{
 		s_message->SetHyperText( s_advanceString->GetString(0) );
 	}
-
 
 	ctp2_ListItem *item;
 
 	item = (ctp2_ListItem*)s_advanceList->GetSelectedItem();
 
-	if ( !item ) {
+	if ( !item )
+	{
 		sprintf( str, "-" );
 		s_turnsBox->SetText( str );
 		s_changeBox->SetText( "" );
@@ -609,26 +542,20 @@ sint32 sci_advancescreen_updateData( MBCHAR *messageText, BOOL defaultMessage )
 
 	sci_advancescreen_setStatsInfo( (long)item->GetUserData(), g_selected_item->GetVisiblePlayer());
 
-
-
-
-
-
-
-
-
-
-
 	advanceTurns = p->m_advances->TurnsToNextAdvance((AdvanceType)item->GetUserData());
 
-	if ( advanceTurns == -1 ) {
+	if ( advanceTurns == -1 )
+	{
 		sprintf( str, "-" );
 	}
-	else {
-		if ( advanceTurns <= 0 ) {
+	else
+	{
+		if ( advanceTurns <= 0 )
+		{
 			sprintf( str, "1" );
 		}
-		else {
+		else
+		{
 			sprintf( str, "%d", advanceTurns + 1 );
 		}
 	}
@@ -642,23 +569,13 @@ sint32 sci_advancescreen_updateData( MBCHAR *messageText, BOOL defaultMessage )
 
 sint32 sci_advancescreen_setStatsInfo(const sint32 index, const sint32 owner)
 {
-
-
-
-
-
-    if (s_glStats == NULL)
-        return(1);
+	if (s_glStats == NULL)
+		return(1);
 
 #define GIVES_TEXT_LEN 8192
 	MBCHAR givesText[GIVES_TEXT_LEN];
 	MBCHAR linkText[GIVES_TEXT_LEN];
 	givesText[0] = 0;
-
-
-
-
-
 
 	bool isAdvance = false;
 
@@ -685,11 +602,13 @@ sint32 sci_advancescreen_setStatsInfo(const sint32 index, const sint32 owner)
 
 	isAdvance = false;
 
-	if(strlen(givesText) > GIVES_TEXT_LEN - 100) {
+	if(strlen(givesText) > GIVES_TEXT_LEN - 100)
+	{
 		return 1;
 	}
 
-	for(i = 0; i < g_theBuildingDB->NumRecords(); i++) {
+	for(i = 0; i < g_theBuildingDB->NumRecords(); i++)
+	{
 		const BuildingRecord *rec = buildingutil_Get(i, owner);
 		if(rec->GetEnableAdvanceIndex() == index)
 		{
@@ -707,18 +626,19 @@ sint32 sci_advancescreen_setStatsInfo(const sint32 index, const sint32 owner)
 		}
 	}
 
-	if(strlen(givesText) > GIVES_TEXT_LEN - 100) {
+	if(strlen(givesText) > GIVES_TEXT_LEN - 100)
+	{
 		return 1;
 	}
 
 	isAdvance = false;
 
-	for(i = 0; i < g_theWonderDB->NumRecords(); i++) {
+	for(i = 0; i < g_theWonderDB->NumRecords(); i++)
+	{
 		const WonderRecord *rec = wonderutil_Get(i, owner);
 
 		if(rec->GetEnableAdvanceIndex() == index)
 		{
-
 			if( !isAdvance )
 			{
 				sprintf(givesText + strlen(givesText), "%s\n",
@@ -733,13 +653,16 @@ sint32 sci_advancescreen_setStatsInfo(const sint32 index, const sint32 owner)
 	}
 
 	bool isTileImp = false;
-	for(i = 0; i < g_theTerrainImprovementDB->NumRecords(); i++) {
+	for(i = 0; i < g_theTerrainImprovementDB->NumRecords(); i++)
+	{
 		const TerrainImprovementRecord *rec = g_theTerrainImprovementDB->Get(i);
 
 		if(terrainutil_AdvanceEnablesImprovementForPlayer(g_selected_item->GetVisiblePlayer(),
 														  index,
-														  i)) {
-			if(!isTileImp) {
+														  i))
+		{
+			if(!isTileImp)
+			{
 				sprintf(givesText + strlen(givesText), "%s\n",
 						g_theStringDB->GetNameStr("ADVANCE_GIVES_TILE_IMPROVEMENTS"));
 				isTileImp = true;
@@ -751,10 +674,13 @@ sint32 sci_advancescreen_setStatsInfo(const sint32 index, const sint32 owner)
 	}
 
 	bool isGov = false;
-	for(i = 0; i < g_theGovernmentDB->NumRecords(); i++) {
+	for(i = 0; i < g_theGovernmentDB->NumRecords(); i++)
+	{
 		const GovernmentRecord *rec = g_theGovernmentDB->Get(i);
-		if(rec->GetEnableAdvanceIndex() == index) {
-			if(!isGov) {
+		if(rec->GetEnableAdvanceIndex() == index)
+		{
+			if(!isGov)
+			{
 				sprintf(givesText + strlen(givesText), "%s\n", g_theStringDB->GetNameStr("ADVANCE_GIVES_GOVS"));
 				isGov = true;
 				anyAdvance = true;
@@ -764,7 +690,6 @@ sint32 sci_advancescreen_setStatsInfo(const sint32 index, const sint32 owner)
 		}
 	}
 
-
 	if( !anyAdvance )
 	{
 		sprintf( givesText, "%s", g_theStringDB->GetNameStr( "ADVANCE_NO_SPECIFIC_ADVANCES" ) );
@@ -773,31 +698,32 @@ sint32 sci_advancescreen_setStatsInfo(const sint32 index, const sint32 owner)
 	s_glStats->SetHyperText(givesText);
 
 #if 0
-    sprintf( variableFile, g_theAdvanceDB->Get(index)->GetIcon()->GetVari() );
+	sprintf( variableFile, g_theAdvanceDB->Get(index)->GetIcon()->GetVari() );
 
-    text = (char *)(g_GreatLibPF->getData(variableFile, &size));
+	text = (char *)(g_GreatLibPF->getData(variableFile, &size));
 
-    if (text == NULL) {
-        s_glStats->SetHyperText(" ");
-        return(0);
-    }
+	if (text == NULL)
+	{
+		s_glStats->SetHyperText(" ");
+		return(0);
+	}
 
-    terminated_text = new char[size+1];
-    memcpy(terminated_text, text, size);
-    terminated_text[size] = 0;
+	terminated_text = new char[size+1];
+	memcpy(terminated_text, text, size);
+	terminated_text[size] = 0;
 
-    g_GreatLibPF->freeData(text);
+	g_GreatLibPF->freeData(text);
 
-    s_glStats->SetHyperText(terminated_text);
+	s_glStats->SetHyperText(terminated_text);
 
-    delete [] terminated_text;
+	delete [] terminated_text;
 
 #endif
 
 	if(s_sci_advanceScreen)
 		s_sci_advanceScreen->ShouldDraw(TRUE);
 
-    return(1);
+	return(1);
 }
 
 sint32 sci_advancescreen_isOnScreen()
@@ -817,7 +743,7 @@ sint32 ScienceSortCallback(ctp2_ListItem *item1, ctp2_ListItem *item2, sint32 co
 	return turns1-turns2;
 }
 
-void sci_advancescreen_fillgoalarray(sint32 goal)
+void sci_advancescreen_fillGoalArray(sint32 goal)
 {
 	const AdvanceRecord *rec = g_theAdvanceDB->Get(goal);
 
@@ -828,7 +754,49 @@ void sci_advancescreen_fillgoalarray(sint32 goal)
 	{
 		if(rec->GetIndex() != rec->GetPrerequisitesIndex(i))
 		{
-			sci_advancescreen_fillgoalarray(rec->GetPrerequisitesIndex(i));
+			sci_advancescreen_fillGoalArray(rec->GetPrerequisitesIndex(i));
+		}
+	}
+}
+
+void sci_advancescreen_initAndFillGoalArray(sint32 goal)
+{
+	sci_advancescreen_clearGoalArray();
+	sci_advancescreen_fillGoalArray(goal);
+}
+
+void sci_advancescreen_clearGoalArray()
+{
+	if(!s_scienceGoalTree)
+	{
+		s_scienceGoalTree = new bool[g_theAdvanceDB->NumRecords()];
+	}
+
+	memset(s_scienceGoalTree, 0, sizeof(bool)*g_theAdvanceDB->NumRecords());
+}
+
+bool scieadvancescreen_isGoal(sint32 goal)
+{
+	return s_scienceGoalTree && s_scienceGoalTree[goal];
+}
+
+void sci_advancescreen_getGoalAdvances(sint32 & have, sint32 & all)
+{
+	Player *p = g_player[g_selected_item->GetVisiblePlayer()];
+
+	have = 0;
+	all  = 0;
+
+	for(sint32 i = 0; i < g_theAdvanceDB->NumRecords(); ++i)
+	{
+		if(s_scienceGoalTree[i])
+		{
+			all++;
+
+			if(p->HasAdvance(i))
+			{
+				have++;
+			}
 		}
 	}
 }

@@ -133,18 +133,18 @@ Text_Hasher<char *> * GreatLibrary::s_great_library_info = NULL;
 
 void GreatLibrary::Initialize_Great_Library_Data()
 {
-    const int GREAT_LIBRARY_HASH_SIZE = 2000;
+	const int GREAT_LIBRARY_HASH_SIZE = 2000;
 
-    allocated::reassign(s_great_library_info,
-                        new Text_Hasher<char *>(GREAT_LIBRARY_HASH_SIZE, NULL)
-                       );
+	allocated::reassign(s_great_library_info,
+	                    new Text_Hasher<char *>(GREAT_LIBRARY_HASH_SIZE, NULL)
+	                   );
 
-    Load_Great_Library();
+	Load_Great_Library();
 }
 
 void GreatLibrary::Shutdown_Great_Library_Data()
 {
-    allocated::clear(s_great_library_info);
+	allocated::clear(s_great_library_info);
 }
 
 enum Read_Library_State
@@ -210,7 +210,6 @@ void GreatLibrary::Load_Great_Library()
 
 			case IN_NAME:
 				{
-
 					if (ch == ']')
 					{
 						reading_what = IN_TEXT;
@@ -218,11 +217,9 @@ void GreatLibrary::Load_Great_Library()
 						the_name[name_pos++] = 0;
 
 						ch = fgetc(great_library);
-
 					}
 					else
 					{
-
 						the_name[name_pos++] = static_cast<char>(ch);
 
 						Assert(name_pos < MAX_NAME);
@@ -240,17 +237,14 @@ void GreatLibrary::Load_Great_Library()
 
 							ch = fgetc(great_library);
 						}
-
 					}
 				}
 				break;
 
 			case IN_TEXT:
 				{
-
 					if (ch == '[')
 					{
-
 						end_ptr = &(the_entry[entry_pos]);
 
 						Assert(ch == '[');
@@ -263,14 +257,11 @@ void GreatLibrary::Load_Great_Library()
 					}
 					else
 					{
-
 						the_entry[entry_pos++] = static_cast<char>(ch);
-
 
 						Assert(entry_pos < MAX_ENTRY - 6);
 						if (entry_pos >= MAX_ENTRY - 6)
 						{
-
 							end_ptr = &(the_entry[entry_pos]);
 
 							while (ch != '[')
@@ -284,13 +275,11 @@ void GreatLibrary::Load_Great_Library()
 							reading_what = IN_END;
 						}
 					}
-
 				}
 				break;
 
 			case IN_END:
 				{
-
 					the_entry[entry_pos++] = static_cast<char>(ch);
 
 #if defined(_JAPANESE)
@@ -311,16 +300,16 @@ void GreatLibrary::Load_Great_Library()
 
 							size_t  nameLength  = strlen(the_name);
 							char *  name_copy   = new char[nameLength + 1];
-                            strcpy(name_copy, the_name);
+							strcpy(name_copy, the_name);
 							name_copy[nameLength] = 0;
 
-                            size_t  entryLength = strlen(the_entry);
+							size_t  entryLength = strlen(the_entry);
 							char *  entry_copy  = new char[entryLength + 1];
-                            strcpy(entry_copy, the_entry);
+							strcpy(entry_copy, the_entry);
 							entry_copy[entryLength] = 0;
 
 							s_great_library_info->Add_To_Hash_Table
-                                (name_copy, entry_copy);
+							    (name_copy, entry_copy);
 
 							reading_what = LOOKING_FOR_NAME;
 						}
@@ -438,7 +427,6 @@ void greatlibrary_SetGoalCallback( aui_Control *control, uint32 action, uint32 d
 
 void greatlibrary_ExitCallback( aui_Control *control, uint32 action, uint32 data, void *cookie )
 {
-
 	if ( action != (uint32)AUI_BUTTON_ACTION_EXECUTE ) return;
 
 	close_GreatLibrary();
@@ -454,7 +442,6 @@ void greatlibrary_ExitCallback( aui_Control *control, uint32 action, uint32 data
 
 void greatlibrary_BackCallback( aui_Control *control, uint32 action, uint32 data, void *cookie )
 {
-
 	if ( action != (uint32)AUI_BUTTON_ACTION_EXECUTE ) return;
 
 	g_greatLibrary->Back();
@@ -462,7 +449,6 @@ void greatlibrary_BackCallback( aui_Control *control, uint32 action, uint32 data
 
 void greatlibrary_ForwardCallback( aui_Control *control, uint32 action, uint32 data, void *cookie )
 {
-
 	if ( action != (uint32)AUI_BUTTON_ACTION_EXECUTE ) return;
 
 	g_greatLibrary->Forward();
@@ -475,7 +461,6 @@ void GreatLibrary::kh_Close()
 
 void greatlibrary_IndexButtonCallback( aui_Control *control, uint32 action, uint32 data, void *cookie )
 {
-
 	if ( action != (uint32)AUI_SWITCH_ACTION_ON ) return;
 
 	if ( g_greatLibrary ) g_greatLibrary->HandleIndexButton( (ctp2_Button *)control );
@@ -497,7 +482,6 @@ void greatlibrary_SearchWordActionCallback( aui_Control *control, uint32 action,
 	if ( action != (uint32)CTP2_HYPERLINK_ACTION_EXECUTE ) return;
 
 	g_greatLibrary->Force_A_Search();
-
 }
 
 void greatlibrary_PrereqActionCallback( aui_Control *control, uint32 action, uint32 data, void *cookie )
@@ -988,6 +972,11 @@ void GreatLibrary::Display( void )
 	SetLibrary(m_window->GetTechMode(), m_window->GetTechDatabase());
 
 	FixTabs();
+
+	if(g_player[g_selected_item->GetVisiblePlayer()]->m_researchGoal > -1)
+	{
+		sci_advancescreen_initAndFillGoalArray(g_player[g_selected_item->GetVisiblePlayer()]->m_researchGoal);
+	}
 }
 
 void GreatLibrary::Remove(void)
@@ -1226,24 +1215,32 @@ void GreatLibrary::HandleSetGoal( void )
 
 		if(tmp == 1)
 		{
+			sci_advancescreen_initAndFillGoalArray(g_player[g_selected_item->GetVisiblePlayer()]->m_researchGoal);
 			const MBCHAR *fmt = g_theStringDB->GetNameStr("str_ldl_GreatLibraryGoalSetTo");
 			if (!fmt) fmt = "Goal set to: %s";
 			sprintf(goal_set_message, fmt, selection_name);
 		}
 		else if(tmp == 0)
 		{
+			sci_advancescreen_clearGoalArray();
 			const MBCHAR *fmt = g_theStringDB->GetNameStr("str_ldl_GreatLibraryGoalKnown");
 			if (!fmt) fmt = "%s is already known. No goal was set.";
 			sprintf(goal_set_message, fmt, selection_name);
 		}
 		else
 		{
+			sci_advancescreen_clearGoalArray();
 			const MBCHAR *fmt = g_theStringDB->GetNameStr("str_ldl_GreatLibraryNoGoalPossible");
 			if (!fmt) fmt = "%s cannot be researched.";
 			sprintf(goal_set_message, fmt, selection_name);
 		}
 
 		MessageBoxDialog::Information(goal_set_message, "InfoSetGoal");
+
+		if(!m_techTree->IsHidden())
+		{
+			m_techTree->Update(m_techTree->GetCenterIndex());
+		}
 	}
 }
 
@@ -2147,10 +2144,6 @@ void GreatLibrary::Add_Item_To_Topics_List
 	m_topics_list->AddItem(item);
 }
 
-
-
-
-
 void GreatLibrary::FixTabs()
 {
 	ctp2_Tab *curTab = m_tabGroup->GetCurrentTab();
@@ -2158,5 +2151,5 @@ void GreatLibrary::FixTabs()
 	m_tabGroup->SelectTab(m_historicalTab);
 	m_tabGroup->SelectTab(m_gameplayTab);
 
-    m_tabGroup->SelectTab(curTab->IsDisabled() ? m_gameplayTab : curTab);
+	m_tabGroup->SelectTab(curTab->IsDisabled() ? m_gameplayTab : curTab);
 }

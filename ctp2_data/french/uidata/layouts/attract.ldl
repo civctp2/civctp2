@@ -1,0 +1,10 @@
+# attract.ldl
+
+AttractWindow {
+	int xpix 0
+	int ypix 0
+	int widthpix 100
+	int heightpix 100
+}
+
+$

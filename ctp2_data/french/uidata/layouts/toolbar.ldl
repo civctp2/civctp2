@@ -1,0 +1,554 @@
+#######################################
+# File: toolbar.ldl
+# Last Access: Thu Apr 29 14:33:59 1999
+#######################################
+
+##-----------------------------------##
+##             Templates             ##
+##-----------------------------------##
+START_LOC_CHECKBOX:CTP2_STANDARD_FONT {
+	string	image0	"error.tga"
+	string	image1	"error.tga"
+	string	disabledimage0	"error.tga"
+	string	disabledimage1	"error.tga"
+	int	widthpix	160
+	int	heightpix	24
+}
+
+TOOLBAR_BUTTON:CTP2_STANDARD_FONT {
+	int	widthpix	89
+	int	heightpix	21
+	int	ypix	20
+	string	image0	"error.tga"
+	string	image1	"error.tga"
+	string	imagebltflag	"chromakey"
+	int	bevelwidth	0
+}
+
+
+##-----------------------------------##
+##                Data               ##
+##-----------------------------------##
+CheatPwPopup {
+	string	xanchor	"center"
+	string	yanchor	"center"
+	int	widthpix	400
+	int	heightpix	200
+	string	pattern	"error.tga"
+	TitleLabel:CTP2_STANDARD_TITLE_FONT {
+		int	xpix	0
+		string	yanchor	"top"
+		int	widthpix	167
+		int	heightpix	20
+		string	text	"str_ldl_Message"
+	}
+	TextMessage:CTP2_STANDARD_FONT {
+		int	xpix	15
+		int	ypix	60
+		int	widthpix	372
+		int	heightpix	30
+		string	text	"str_ldl_Cheat_pw"
+		string	just	"center"
+		bool	wordwrap	TRUE
+	}
+	TextField {
+		int	xpix	100
+		int	ypix	90
+		int	widthpix	200
+		int	heightpix	20
+		string	pattern	"error.tga"
+		int	maxfieldlen	7
+	}
+}
+
+DisclaimerScreen {
+	string	xanchor	"center"
+	string	yanchor	"center"
+	int	widthpix	500
+	int	heightpix	300
+	string	pattern	"uptg20e.tga"
+
+	TitleLabel:CTP_GREY_TITLE_FONT {
+		int	xpix	151
+		string	yanchor	"top"
+		int	widthpix	167
+		int	heightpix	20
+		string	text	"str_ldl_Disclaimer"
+		int	ypix	18
+	}
+	AgreeButton:CTP2_BUTTON_SMALL {
+		string	text	"str_ldl_I_Agree"
+		int	xpix	260
+		int	ypix	260
+		string	image0	"ubhs120.tga"
+		string	image1	"ubhs120.tga"
+		int	widthpix	200
+		int	heightpix	20
+		int	bevelwidth	2
+		string	imagebltflag	"chromakey"
+	}
+	DisagreeButton:CTP2_BUTTON_SMALL {
+		string	text	"str_ldl_I_Disagree"
+		int	xpix	40
+		int	ypix	260
+		string	image0	"ubhs120.tga"
+		string	image1	"ubhs120.tga"
+		int	widthpix	200
+		int	heightpix	20
+		int	bevelwidth	2
+		string	imagebltflag	"chromakey"
+	}
+	DisclaimerText:CTP2_HYPER_TEXT_BOX {
+		int	xpix	19
+		int	ypix	40
+		int	widthpix	448
+		int	heightpix	218
+		int 	hypermaxlength	8192
+	}
+
+}
+
+Toolbar {
+	string	pattern	"error.tga"
+	int	xpix	10
+	int	ypix	10
+	int	widthpix	452
+	int	heightpix	246
+	GoldButton:TOOLBAR_BUTTON {
+		int	heightpix	20
+		int	ypix	185
+		int	xpix	224
+		string	text	"str_ldl_Gold"
+	}
+	PwButton:TOOLBAR_BUTTON {
+		int	ypix	185
+		int	xpix	121
+		string	text	"str_ldl_Public_Works"
+	}
+	ShowMapButton:TOOLBAR_BUTTON {
+		int	ypix	40
+		int	xpix	341
+		string	text	"str_ldl_Show_Map"
+	}
+	AdvancesButton:TOOLBAR_BUTTON {
+		int	ypix	185
+		int	xpix	18
+		string	text	"str_ldl_Advances"
+	}
+	UnitsButton:TOOLBAR_BUTTON {
+		int	ypix	160
+		int	xpix	18
+		string	text	"str_ldl_Unit_City"
+	}
+	TileButton:TOOLBAR_BUTTON {
+		int	ypix	40
+		int	xpix	242
+		string	text	"str_ldl_Tile_Pad"
+	}
+	CityButton:TOOLBAR_BUTTON {
+		int	ypix	160
+		int	xpix	121
+		string	text	"str_ldl_Edit_City"
+	}
+	TileImprovementButton:TOOLBAR_BUTTON {
+		int	ypix	160
+		int	xpix	224
+		string	text	"str_ldl_Tile_Imp"
+	}
+	PolluteButton:TOOLBAR_BUTTON {
+		int	ypix	64
+		int	xpix	242
+		string	text	"str_ldl_Pollution"
+	}
+	ToolbarTitleStaticText:CTP2_STANDARD_FONT {
+		int	xpix	147
+		int	ypix	9
+		int	widthpix	157
+		int	heightpix	18
+		string	text	"str_ldl_Toolbar_Title"
+	}
+	CivButton:TOOLBAR_BUTTON {
+		int	ypix	161
+		int	xpix	328
+		string	text	"str_ldl_Civ"
+	}
+	WorldSettingsStaticText:CTP2_STANDARD_FONT {
+		int	xpix	10
+		int	ypix	18
+		int	widthpix	94
+		int	heightpix	18
+		string	text	"str_ldl_World_Settings"
+		int	bevelwidth	1
+		int	beveltype	2
+		string	pattern	"error.tga"
+	}
+	ToolbarWorldBox {
+		int	xpix	14
+		int	ypix	27
+		int	widthpix	426
+		int	heightpix	90
+		int	bevelwidth	1
+		int	beveltype	2
+	}
+	PlayerSettingsStaticText:CTP2_STANDARD_FONT {
+		int	xpix	10
+		int	ypix	119
+		int	widthpix	97
+		int	heightpix	18
+		string	text	"str_ldl_Player_Settings"
+		int	bevelwidth	1
+		int	beveltype	2
+		string	pattern	"error.tga"
+	}
+	PlayerStaticText:CTP2_STANDARD_FONT {
+		int	xpix	18
+		int	ypix	137
+		int	widthpix	50
+		int	heightpix	18
+		string	text	"str_ldl_Player_Static_Text"
+	}
+	PlayerNameText:CTP2_STANDARD_FONT {
+		int	xpix	114
+		int	ypix	137
+		int	widthpix	296
+		int	heightpix	18
+		string	text	"str_ldl_Player_Name_Text"
+		int	bevelwidth	1
+		int	beveltype	1
+	}
+	PlayerPlusButton {
+		int	xpix	87
+		int	widthpix	22
+		int	heightpix	18
+		int	bevelwidth	0
+		string	image0	"error.tga"
+		string	image1	"error.tga"
+		string	imagebltflag	"chromakey"
+		int	ypix	137
+	}
+	PlayerMinusButton {
+		int	xpix	63
+		int	widthpix	22
+		int	heightpix	18
+		int	bevelwidth	0
+		string	image0	"error.tga"
+		string	image1	"error.tga"
+		string	imagebltflag	"chromakey"
+		int	ypix	137
+	}
+	PlayerFlag {
+		int	xpix	413
+		int	ypix	133
+		int	widthpix	23
+		int	heightpix	23
+	}
+	ToolbarPlayerBox {
+		int	xpix	14
+		int	ypix	128
+		int	widthpix	426
+		int	heightpix	81
+		int	bevelwidth	1
+		int	beveltype	2
+	}
+	YearStaticText:CTP2_STANDARD_FONT {
+		int	xpix	20
+		int	ypix	93
+		int	widthpix	83
+		int	heightpix	18
+		string	text	"str_ldl_Year_Static_Text"
+	}
+	YearText:CTP2_STANDARD_FONT {
+		int	xpix	154
+		int	ypix	95
+		int	widthpix	77
+		int	heightpix	18
+		string	text	"str_ldl_Year_Text"
+		int	bevelwidth	1
+		int	beveltype	1
+	}
+	YearPlusButton {
+		int	xpix	127
+		int	widthpix	22
+		int	heightpix	18
+		int	bevelwidth	0
+		string	image0	"error.tga"
+		string	image1	"error.tga"
+		string	imagebltflag	"chromakey"
+		int	ypix	95
+	}
+	YearMinusButton {
+		int	xpix	102
+		int	widthpix	22
+		int	heightpix	18
+		int	bevelwidth	0
+		string	image0	"error.tga"
+		string	image1	"error.tga"
+		string	imagebltflag	"chromakey"
+		int	ypix	95
+	}
+	NumPlayersStaticText:CTP2_STANDARD_FONT {
+		int	xpix	16
+		int	ypix	34
+		int	widthpix	83
+		int	heightpix	18
+		string	text	"str_ldl_Num_Players_Static_Text"
+	}
+	NumPlayersText:CTP2_STANDARD_FONT {
+		int	xpix	101
+		int	ypix	35
+		int	widthpix	131
+		int	heightpix	16
+		string	text	"str_ldl_Num_Players_Text"
+		int	bevelwidth	1
+		int	beveltype	1
+	}
+	MapSizeStaticText:CTP2_STANDARD_FONT {
+		int	xpix	33
+		int	ypix	54
+		int	widthpix	69
+		int	heightpix	18
+		string	text	"str_ldl_Map_Size_Static_Text"
+	}
+	MapSizeText:CTP2_STANDARD_FONT {
+		int	xpix	101
+		int	ypix	54
+		int	widthpix	131
+		int	heightpix	16
+		string	text	"str_ldl_Map_Size_Text"
+		int	bevelwidth	1
+		int	beveltype	1
+	}
+	DifficultyStaticText:CTP2_STANDARD_FONT {
+		int	xpix	37
+		int	ypix	74
+		int	widthpix	63
+		int	heightpix	18
+		string	text	"str_ldl_Difficulty_Static_Text"
+	}
+	DifficultyButton:CTP2_STANDARD_FONT {
+		string	text	"str_ldl_Difficulty_Text"
+		int	xpix	104
+		int	ypix	72
+		string	image0	"error.tga"
+		string	image1	"error.tga"
+		int	widthpix	123
+		int	heightpix	21
+		int	bevelwidth	0
+		string	imagebltflag	"chromakey"
+	}
+	SaveScenario:CTP2_STANDARD_FONT {
+		string	text	"str_ldl_SAVE_SCENARIO"
+		int	xpix	58
+		int	ypix	211
+		string	image0	"error.tga"
+		string	image1	"error.tga"
+		int	widthpix	123
+		int	heightpix	21
+		int	bevelwidth	0
+		string	imagebltflag	"chromakey"
+	}
+	SaveScenarioAs:CTP2_STANDARD_FONT {
+		string	text	"str_ldl_SAVE_SCENARIO_AS"
+		int	xpix	211
+		int	ypix	211
+		string	image0	"error.tga"
+		string	image1	"error.tga"
+		int	widthpix	123
+		int	heightpix	21
+		int	bevelwidth	0
+		string	imagebltflag	"chromakey"
+	}
+	ResetLOS:TOOLBAR_BUTTON {
+		int	ypix	64
+		int	xpix	341
+		string	text	"str_ldl_Reset_LOS"
+	}
+	StartingLocButton:TOOLBAR_BUTTON {
+		int	ypix	89
+		int	xpix	292
+		string	text	"str_ldl_Start_Loc"
+	}
+}
+
+Scorewarn {
+	string	pattern	"error.tga"
+	string	xanchor	"center"
+	string	yanchor	"center"
+	int	widthpix	300
+	int	heightpix	200
+	Message:CTP2_STANDARD_FONT {
+		string	text	"str_ldl_Scorewarn"
+		int	xpix	50
+		int	ypix	50
+		int	widthpix	200
+		int	heightpix	100
+		int	srcxpix	50
+		int	srcypix	50
+		int	srcwidthpix	200
+		int	srcheightpix	100
+		string	pattern	"error.tga"
+	}
+}
+
+TileImpPad {
+	string	pattern	"error.tga"
+	int	xpix	45
+	int	ypix	49
+	int	widthpix	325
+	int	heightpix	82
+	Message:CTP2_STANDARD_FONT {
+		int	xpix	14
+		int	ypix	14
+		int	widthpix	307
+		int	heightpix	51
+		string	pattern	"error.tga"
+		string	text	"str_ldl_Tile_Imp_Pad_Message"
+		string	textblttype	"fill"
+		int	bevelwidth	0
+	}
+}
+
+StartingPositionsPad {
+	string	pattern	"error.tga"
+	int	xpix	20
+	int	ypix	20
+	int	widthpix	355
+	int	heightpix	238
+	StartLocTitle:CTP2_STANDARD_FONT {
+		int	xpix	89
+		int	ypix	12
+		int	widthpix	169
+		int	heightpix	20
+		string	text	"str_ldl_Start_Loc_Title"
+	}
+	StartLocModeText:CTP2_STANDARD_FONT {
+		int	xpix	13
+		int	ypix	36
+		int	widthpix	132
+		int	heightpix	20
+		string	text	"str_ldl_Start_Loc_Mode_Text"
+	}
+	StartLocModeNone:START_LOC_CHECKBOX {
+		int	ypix	60
+		int	xpix	94
+		stringtable {
+			string	string0	"str_ldl_Start_Loc_Mode_None"
+			string	string1	"str_ldl_Start_Loc_Mode_None"
+		}
+	}
+	StartLocModePlayer:START_LOC_CHECKBOX {
+		int	ypix	87
+		int	xpix	94
+		stringtable {
+			string	string0	"str_ldl_Start_Loc_Mode_Player"
+			string	string1	"str_ldl_Start_Loc_Mode_Player"
+		}
+	}
+	StartLocModeCiv:START_LOC_CHECKBOX {
+		int	ypix	114
+		int	xpix	95
+		stringtable {
+			string	string0	"str_ldl_Start_Loc_Mode_Civ"
+			string	string1	"str_ldl_Start_Loc_Mode_Civ"
+		}
+	}
+	PlayerCivPlusButton {
+		int	xpix	65
+		int	widthpix	22
+		int	heightpix	18
+		int	bevelwidth	0
+		string	image0	"error.tga"
+		string	image1	"error.tga"
+		string	imagebltflag	"chromakey"
+		int	ypix	163
+	}
+	PlayerCivMinusButton {
+		int	xpix	43
+		int	widthpix	22
+		int	heightpix	18
+		int	bevelwidth	0
+		string	image0	"error.tga"
+		string	image1	"error.tga"
+		string	imagebltflag	"chromakey"
+		int	ypix	163
+	}
+	PlayerCivStaticText:CTP2_STANDARD_FONT {
+		int	xpix	11
+		int	ypix	140
+		int	widthpix	100
+		int	heightpix	20
+		string	text	"str_ldl_Start_Loc_Civ_Text"
+		string	pattern	"error.tga"
+	}
+	PlayerCivNameText:CTP2_STANDARD_FONT {
+		int	xpix	92
+		int	ypix	162
+		int	widthpix	163
+		int	heightpix	20
+		string	text	"str_ldl_Player_Civ_Name_Text"
+		int	bevelwidth	1
+		int	beveltype	1
+		string	pattern	"error.tga"
+	}
+	PlayerCivNameLocation:CTP2_STANDARD_FONT {
+		int	xpix	255
+		int	ypix	162
+		int	widthpix	85
+		int	heightpix	20
+		string	text	"str_ldl_Start_Loc_None"
+		int	bevelwidth	1
+		int	beveltype	1
+		string	pattern	"error.tga"
+	}
+	StartingLocDeleteButton:TOOLBAR_BUTTON {
+		int	widthpix	90
+		int	heightpix	22
+		int	ypix	138
+		int	xpix	253
+		string	yanchor	"top"
+		string	text	"str_ldl_Start_Loc_Delete"
+	}
+	CivsLockedButton:START_LOC_CHECKBOX {
+		int	ypix	188
+		int	xpix	92
+		stringtable {
+			string	string0	"str_ldl_Civs_Unlocked"
+			string	string1	"str_ldl_Civs_Locked"
+		}
+	}
+}
+
+CheatGoldPopup {
+	string	xanchor	"center"
+	string	yanchor	"center"
+	int	widthpix	400
+	int	heightpix	200
+	string	pattern	"error.tga"
+	TitleLabel:CTP2_STANDARD_TITLE_FONT {
+		int	xpix	0
+		string	yanchor	"top"
+		int	widthpix	167
+		int	heightpix	20
+		string	text	"str_ldl_Message"
+	}
+	TextMessage:CTP2_STANDARD_FONT {
+		int	xpix	15
+		int	ypix	60
+		int	widthpix	372
+		int	heightpix	30
+		string	text	"str_ldl_Cheat_gold"
+		string	just	"center"
+		bool	wordwrap	TRUE
+	}
+	TextField {
+		int	xpix	100
+		int	ypix	90
+		int	widthpix	200
+		int	heightpix	20
+		string	pattern	"error.tga"
+		int	maxfieldlen	7
+	}
+}
+
+
+$

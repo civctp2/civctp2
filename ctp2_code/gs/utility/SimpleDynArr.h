@@ -24,13 +24,13 @@ public:
 	}
 
 	T & operator [] (const sint32 i)
-    {
+	{
 		Assert((0 <= i) && (i < m_nElements));
 		return m_array[i];
 	}
 
 	T const & operator [] (const sint32 i) const
-    {
+	{
 		Assert((0 <= i) && (i < m_nElements));
 		return m_array[i];
 	}
@@ -51,16 +51,16 @@ public:
 #endif
 
 private:
-    /// Stored data items
-    T *     m_array;
-    /// Number of stored data items
-    sint32  m_nElements;
-    /// Allocated size for storage.
-    /// Always larger than 0 and at least \a m_nElements.
-    sint32  m_arraySize;
+	/// Stored data items
+	T *     m_array;
+	/// Number of stored data items
+	sint32  m_nElements;
+	/// Allocated size for storage.
+	/// Always larger than 0 and at least \a m_nElements.
+	sint32  m_arraySize;
 
-    /// Increase allocated size for storage
-    void Grow();
+	/// Increase allocated size for storage
+	void Grow();
 };
 
 template <class T> SimpleDynamicArray<T>::SimpleDynamicArray()
@@ -69,20 +69,22 @@ template <class T> SimpleDynamicArray<T>::SimpleDynamicArray()
     m_nElements    (0),
     m_arraySize    (1)
 {
+	memset(m_array, 0, 1);
 }
 
 template <class T> SimpleDynamicArray<T>::~SimpleDynamicArray()
 {
-    delete [] m_array;
+	delete [] m_array;
 }
 
 template <class T> void SimpleDynamicArray<T>::Grow()
 {
-    T * oldarray = m_array;
-    m_array = new T[m_arraySize * 2];
-    memcpy(m_array, oldarray, m_arraySize * sizeof(T));
-    m_arraySize *= 2;
-    delete [] oldarray;
+	T * oldarray = m_array;
+	m_array = new T[m_arraySize * 2];
+	memset(m_array, 0, m_arraySize * 2);
+	memcpy(m_array, oldarray, m_arraySize * sizeof(T));
+	m_arraySize *= 2;
+	delete [] oldarray;
 }
 
 template <class T> void SimpleDynamicArray<T>::Insert(const T &val)
@@ -95,40 +97,46 @@ template <class T> void SimpleDynamicArray<T>::Insert(const T &val)
 
 template <class T> void SimpleDynamicArray<T>::DelIndex(sint32 i)
 {
-    Assert((0 <= i) && (i < m_nElements));
-    memmove(&m_array[i], &m_array[i+1], m_nElements - i - 1);
-    m_nElements--;
+	Assert((0 <= i) && (i < m_nElements));
+	memmove(&m_array[i], &m_array[i+1], m_nElements - i - 1);
+	m_nElements--;
 }
 
 template <class T> void SimpleDynamicArray<T>::Serialize(CivArchive &archive)
 {
-	if(archive.IsStoring()) {
+	if(archive.IsStoring())
+	{
 		archive << m_nElements;
 		archive << m_arraySize; // Not very useful to store this
-        if (0 < m_nElements) {
-    		archive.Store((uint8*)m_array, m_nElements * sizeof(T));
-        }
-	} else {
+		if (0 < m_nElements)
+		{
+			archive.Store((uint8*)m_array, m_nElements * sizeof(T));
+		}
+	}
+	else
+	{
 		archive >> m_nElements;
 		archive >> m_arraySize;
 
 		delete [] m_array;
 		m_array = new T[m_arraySize]; /// @todo Try std::max(1, m_nElements)
+		memset(m_array, 0, m_arraySize);
 
-        if (0 < m_nElements) {
-    		archive.Load((uint8*)m_array, m_nElements * sizeof(T));
-        }
+		if (0 < m_nElements)
+		{
+			archive.Load((uint8*)m_array, m_nElements * sizeof(T));
+		}
 	}
 }
 
 template <class T> bool SimpleDynamicArray<T>::IsPresent(T const & chk) const
 {
-	for (int i = 0; i < m_nElements; i++)
-    {
+	for (sint32 i = 0; i < m_nElements; i++)
+	{
 		if (m_array[i] == chk)
 			return true;
 	}
 
-    return false;
+	return false;
 }
 #endif
