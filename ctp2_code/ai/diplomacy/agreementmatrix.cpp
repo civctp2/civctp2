@@ -336,6 +336,12 @@ void AgreementMatrix::BreakAgreements(const PLAYER_INDEX & sender_player, const 
 {
 	Diplomat & foreign_diplomat = Diplomat::GetDiplomat(foreign_player);
 
+	if (HasAgreement(sender_player, foreign_player, PROPOSAL_TREATY_CEASEFIRE))
+	{
+		CancelAgreement(sender_player, foreign_player, PROPOSAL_TREATY_CEASEFIRE);
+		foreign_diplomat.LogViolationEvent(sender_player, PROPOSAL_TREATY_CEASEFIRE);
+	}
+
 	if (HasAgreement(sender_player, foreign_player, PROPOSAL_TREATY_PEACE))
 	{
 		CancelAgreement(sender_player, foreign_player, PROPOSAL_TREATY_PEACE);
