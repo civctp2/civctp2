@@ -777,19 +777,19 @@ CityWindow:CTP2_NEW_CITY_WINDOW {
 		# Funky bars
 		EfficiencyBar {
 			string objecttype "ctp2_Static"
-			int xpix 203
-			int ypix 100
-			int widthpix 151 #175 original width
-			int heightpix 12
+			int xpix 6
+			int ypix 166
+			int widthpix 108 #175 original width
+			int heightpix 16
 
 			# Tooltip
 			string	statustext	"STATUSBAR_CITYMAN_STATS_EFFICIENCY_BUTTON"
 		}					
 		EfficiencyLabel:CITY_WORKER_INFO_LABEL {
 			string objecttype "ctp2_Static"
-			int xpix 118
-			int ypix 100
-			int widthpix 80
+			int xpix 6
+			int ypix 148
+			int widthpix 50
 			int heightpix 18
 			string text "str_ldl_CityWinEfficiency"
 
@@ -922,8 +922,8 @@ CityWindow:CTP2_NEW_CITY_WINDOW {
 
 		# Icons...
 		FoodIcon:CITY_WIN_GLOBAL_ICON {
-			int ypix 136
-			int xpix 1
+			int ypix  95
+			int xpix 118
 			string image0 "upic05.tga"
 
 			# Tooltip
@@ -931,8 +931,8 @@ CityWindow:CTP2_NEW_CITY_WINDOW {
 			string	statustext	"STATUSBAR_CITYMAN_MAIN_SMFOOD_DISPLAY"
 		}
 		ProductionIcon:CITY_WIN_GLOBAL_ICON {
-			int ypix 161
-			int xpix 1
+			int ypix  95
+			int xpix 175
 			string image0 "upic06.tga"
 
 			# Tooltip
@@ -940,8 +940,8 @@ CityWindow:CTP2_NEW_CITY_WINDOW {
 			string	statustext	"STATUSBAR_CITYMAN_MAIN_SMPROD_DISPLAY"
 		}
 		TradeIcon:CITY_WIN_GLOBAL_ICON {
-			int ypix 136
-			int xpix 57
+			int ypix  95
+			int xpix 232
 			string image0 "upic09.tga"
 
 			# Tooltip
@@ -949,8 +949,8 @@ CityWindow:CTP2_NEW_CITY_WINDOW {
 			string	statustext	"STATUSBAR_CITYMAN_MAIN_SMCOMM_DISPLAY"
 		}
 		ScienceIcon:CITY_WIN_GLOBAL_ICON {
-			int ypix 161
-			int xpix 57
+			int ypix  95
+			int xpix 289
 			string image0 "upic07.tga"
 
 			# Tooltip
@@ -960,32 +960,32 @@ CityWindow:CTP2_NEW_CITY_WINDOW {
 
 		# Numbers...
 		FoodValue:CITY_WIN_GLOBAL_ICON_VALUE {
-			int ypix 141
-			int xpix 26
+			int ypix 100
+			int xpix 144
 			string text "str_ldl_0"
 
 			# Tooltip
 			string	statustext	"STATUSBAR_CITYMAN_MAIN_SMFOOD_DISPLAY"
 		}
 		ProductionValue:CITY_WIN_GLOBAL_ICON_VALUE {
-			int ypix 166
-			int xpix 26
+			int ypix 100
+			int xpix 201
 			string text "str_ldl_0"
 
 			# Tooltip
 			string	statustext	"STATUSBAR_CITYMAN_MAIN_SMPROD_DISPLAY"
 		}
 		TradeValue:CITY_WIN_GLOBAL_ICON_VALUE {
-			int ypix 141
-			int xpix 82
+			int ypix 100
+			int xpix 258
 			string text "str_ldl_0"
 
 			# Tooltip
 			string	statustext	"STATUSBAR_CITYMAN_MAIN_SMCOMM_DISPLAY"
 		}
 		ScienceValue:CITY_WIN_GLOBAL_ICON_VALUE {
-			int ypix 166
-			int xpix 82
+			int ypix 100
+			int xpix 315
 			string text "str_ldl_0"
 
 			# Tooltip
