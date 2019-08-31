@@ -992,6 +992,40 @@ CityWindow:CTP2_NEW_CITY_WINDOW {
 			string	statustext	"STATUSBAR_CITYMAN_MAIN_SMSCI_DISPLAY"
 		}
 
+		# Icons for bought resources:
+		FoodIconTrade:CITY_WIN_GLOBAL_ICON {
+			int ypix 098
+			int xpix 118
+			string image0 "upic05.tga"
+		}
+		ProductionIconTrade:CITY_WIN_GLOBAL_ICON {
+			int ypix 098
+			int xpix 175
+			string image0 "upic06.tga"
+		}
+		TradeIconTrade:CITY_WIN_GLOBAL_ICON {
+			int ypix 098
+			int xpix 232
+			string image0 "upic09.tga"
+		}
+
+		# Numbers for bought resources:
+		FoodTradeValue:CITY_WIN_GLOBAL_ICON_VALUE {
+			int ypix 103
+			int xpix 144
+			string text "str_ldl_0"
+		}
+		ProductionTradeValue:CITY_WIN_GLOBAL_ICON_VALUE {
+			int ypix 103
+			int xpix 201
+			string text "str_ldl_0"
+		}
+		GoldTradeValue:CITY_WIN_GLOBAL_ICON_VALUE {
+			int ypix 103
+			int xpix 258
+			string text "str_ldl_0"
+		}
+
 		## SPECIALISTS
 		# Labels...
 		Entertainers:CITY_WORKER_ALLOCATION_LABEL {
