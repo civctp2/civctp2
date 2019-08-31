@@ -2414,7 +2414,7 @@ str_ldl_TradeSellingToCity			"Destination"
 str_ldl_CaravansAvailable			"Caravans Available:"
 str_ldl_CaravansInUse				"Caravans in use:"
 str_ldl_TotalTradeProfit			"Total Trade Profit:"
-str_ldl_TotalPiracyLoss				"Total Piracy Loss:"
+str_ldl_TotalPiracyLoss				"Expected Piracy Loss:"
 str_ldl_TotalTransitProfit			"Total Transit Profit:"
 str_ldl_TotalTradeRoutes			"Total Trade Routes:"
 
