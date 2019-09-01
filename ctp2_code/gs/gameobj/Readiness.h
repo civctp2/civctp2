@@ -65,7 +65,7 @@ private:
 	BOOL m_ignore_unsupport;
 	sint32 m_owner;
 	sint32 m_turnStarted;
-	sint32 m_costGold; //EMOD modify MilitaryReadiness::Serialize if you want to have this but you don't have a getter method anyway so why have it at all?
+	sint32 m_costGold; //EMOD
 
 //----------------------------------------------------------------------------
 // Changing anything below this line is less dangerous.
@@ -80,6 +80,7 @@ public:
 	          READINESS_LEVEL level, BOOL immediate = FALSE);
 	READINESS_LEVEL GetLevel() const { return m_readinessLevel; }
 	double GetCost() const { return m_cost; }
+	sint32 GetGoldCost() const { return m_costGold; }
 
 	void BeginTurn(sint32 gov);
 	double GetSupportModifier(sint32 gov_type)const;

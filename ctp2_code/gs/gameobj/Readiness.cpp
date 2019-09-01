@@ -318,12 +318,11 @@ sint32 MilitaryReadiness::TotalUnitGoldSupport()
 {
 	m_costGold = 0;
 	DynamicArray<Army> *all_armies = g_player[m_owner]->m_all_armies;
-	sint32 i, j;
 	const sint32 n = all_armies->Num();
-	for (i=0; i<n; i++)
+	for (sint32 i = 0; i < n; i++)
 	{
 		const sint32 m = all_armies->Access(i).Num();
-		for (j=0; j<m; j++)
+		for (sint32 j = 0; j < m; j++)
 		{
 			m_costGold += GetSupportCostGold(all_armies->Access(i)[j]);
 		}
@@ -331,7 +330,6 @@ sint32 MilitaryReadiness::TotalUnitGoldSupport()
 
 	return m_costGold;
 }
-
 
 void MilitaryReadiness::KillUnitsOverBudget(sint32 gov, DynamicArray<Army> &m_all_armies, sint32 mil_total)
 // notgoing to do a gold one because it will cost economy not units, tougher for human and AI

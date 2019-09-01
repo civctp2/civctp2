@@ -384,7 +384,7 @@ CityData::CityData(PLAYER_INDEX owner, Unit hc, const MapPoint &center_point)
     m_gross_gold                        (0),
     m_goldFromTradeRoutes               (0),
     m_goldLostToPiracy                  (0),
-	m_goldFromTransitRoutes             (0),
+    m_goldFromTransitRoutes             (0),
     m_science                           (0),
     m_luxury                            (0),
     m_city_attitude                     (CITY_ATTITUDE_CONTENT),
@@ -1705,7 +1705,7 @@ void CityData::NoRevoltCountdown()
 // Returns    : -
 //
 // Remark(s)  : - causeIsExternal defaults to false in citydata.h
-//			  : - Sometimes a city constantly revolts needs fixing
+//            : - Sometimes a city constantly revolts needs fixing
 //
 //----------------------------------------------------------------------------
 void CityData::Revolt(sint32 &playerToJoin, bool causeIsExternal)
@@ -3694,7 +3694,7 @@ void CityData::CalculateBonusGold()
 	///////////////////////////////////////////////
 	// EMOD - Add (or if negative Subtract) gold per unit and multiplied by goldhunger * readiness * govt coefficient * wages
 	sint32 goldPerUnitSupport = buildingutil_GetGoldPerUnitSupport(GetEffectiveBuildings(), m_owner);
-	m_bonusGold += static_cast<double>(goldPerUnitSupport * player_ptr->m_readiness->TotalUnitGoldSupport()) * player_ptr->GetWagesPerPerson() * player_ptr->m_readiness->GetSupportModifier(gov); // GetGoldCost
+	m_bonusGold += static_cast<double>(goldPerUnitSupport * player_ptr->m_readiness->GetGoldCost()) * player_ptr->GetWagesPerPerson() * player_ptr->m_readiness->GetSupportModifier(gov);
 	DPRINTF(k_DBG_GOVERNOR, ("//  GetGoldPerUnitSupport         = %f ms (%s)\n", t1.getElapsedTimeInMilliSec(), GetName()));
 
 	double interest;
