@@ -3828,7 +3828,6 @@ STRATEGY_TOO_MANY_CITIES {
     GoalElement { Goal GOAL_SETTLE_SEA          Priority        0  MaxEval   0  MaxExec   0 }
     GoalElement { Goal GOAL_SEIGE               Priority        0  MaxEval   0  MaxExec   0 }
     GoalElement { Goal GOAL_HARASS_CITY         Priority        0  MaxEval   0  MaxExec   0 }
-    GoalElement { Goal GOAL_SETTLE_IN_CITY      Priority        0  MaxEval   1  MaxExec   1 PerCity }
 }
 
 STRATEGY_NO_REVOLUTON {
