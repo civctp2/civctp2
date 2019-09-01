@@ -300,6 +300,7 @@
 #include "UnitPool.h"                   // g_theUnitPool
 #include "UnitRecord.h"
 #include "unitutil.h"
+#include "UnseenCell.h"
 #include "WonderRecord.h"
 #include "WonderTracker.h"
 #include "wonderutil.h"
@@ -403,7 +404,6 @@ CityData::CityData(PLAYER_INDEX owner, Unit hc, const MapPoint &center_point)
     m_total_pollution                   (0),
     m_cityPopulationPollution           (0),
     m_cityIndustrialPollution           (0),
-    m_foodVatPollution                  (0),
     m_cityPollutionCleaner              (0),
     m_contribute_materials              (true),
     m_contribute_military               (true),
@@ -666,7 +666,7 @@ void CityData::Serialize(CivArchive &archive)
 		archive.PutSINT32(m_total_pollution);
 		archive.PutSINT32(m_cityPopulationPollution);
 		archive.PutSINT32(m_cityIndustrialPollution);
-		archive.PutSINT32(m_foodVatPollution);
+		archive.PutSINT32(m_goldFromTransitRoutes);
 		archive.PutSINT32(m_cityPollutionCleaner);
 		tmp = static_cast<BOOL>(m_contribute_materials);
 		archive.PutSINT32(tmp); // Was BOOL
@@ -824,7 +824,7 @@ void CityData::Serialize(CivArchive &archive)
 		m_total_pollution                = archive.GetSINT32();
 		m_cityPopulationPollution        = archive.GetSINT32();
 		m_cityIndustrialPollution        = archive.GetSINT32();
-		m_foodVatPollution               = archive.GetSINT32();
+		m_goldFromTransitRoutes          = archive.GetSINT32();
 		m_cityPollutionCleaner           = archive.GetSINT32();
 		m_contribute_materials           = archive.GetSINT32() != FALSE; // Was BOOL
 		m_contribute_military            = archive.GetSINT32() != FALSE; // Was BOOL
@@ -1403,7 +1403,7 @@ void CityData::Copy(CityData *copy)
 	m_total_pollution                    = copy->m_total_pollution;
 	m_cityPopulationPollution            = copy->m_cityPopulationPollution;
 	m_cityIndustrialPollution            = copy->m_cityIndustrialPollution;
-	m_foodVatPollution                   = copy->m_foodVatPollution;
+	m_goldFromTransitRoutes              = copy->m_goldFromTransitRoutes;
 	m_cityPollutionCleaner               = copy->m_cityPollutionCleaner;
 	m_contribute_materials               = copy->m_contribute_materials;
 	m_contribute_military                = copy->m_contribute_military;
@@ -2082,7 +2082,7 @@ void CityData::CalcPollution(void)
 	m_cityPopulationPollution   = populationPolluting;
 	m_cityIndustrialPollution   = productionPolluting;
 	m_total_pollution           =
-	            populationPolluting + productionPolluting + m_foodVatPollution +
+	            populationPolluting + productionPolluting +
 	            static_cast<sint32>(populationPolluting * buildingPopulationPercentage) +
 	            static_cast<sint32>(productionPolluting * buildingProductionPercentage) +
 	            static_cast<sint32>(buildingPollution);
@@ -4918,10 +4918,9 @@ void CityData::DoTurnCounters()
 	{
 		m_franchiseTurnsRemaining--;
 	}
-	else if(m_franchiseTurnsRemaining == 0)
+	else if(m_franchiseTurnsRemaining == 0) // only zero is meant to reset a Franchise (owner), positive numbers define turns until Franchise is removed, -1 is the default for infinit Franchise, see https://github.com/civctp2/civctp2/pull/167
 	{
-		m_franchise_owner = -1;
-		m_franchiseTurnsRemaining = -1;
+		RemoveFranchise();
 	}
 }
 
@@ -5979,6 +5978,27 @@ void CityData::SetCapitol()
 void CityData::MakeFranchise(sint32 player)
 {
 	m_franchise_owner = player;
+	m_franchiseTurnsRemaining = g_theConstDB->Get(0)->GetTurnsFranchised(); // do not use SetFranchiseTurnsRemaining here, as it resets the owner for -1
+
+	ProcessAllResources(); // updates m_productionLostToFranchise which is used for drawing loss on franchise city-icon, takes NEW_RESOURCE_PROCESS into account
+}
+
+void CityData::RemoveFranchise()
+{
+	if(m_franchise_owner < 0) // according to CityData::Unconvert
+		return;
+
+	//// let the owner of the franchise know about its removal, see https://github.com/civctp2/civctp2/pull/166
+	MapPoint pos; // needed to get un-seen cell at this city pos
+	UnseenCellCarton ucell;
+
+	m_home_city.GetPos(pos);
+	if(g_player[m_franchise_owner]->GetLastSeen(pos, ucell)) // get un-seen cell of franchise owner
+	    {
+	    ucell.m_unseenCell->SetIsFranchised(false); // remove franchise flag
+	    }
+
+	m_franchise_owner = -1;
 	m_franchiseTurnsRemaining = -1;
 }
 
@@ -5992,8 +6012,7 @@ void CityData::SetFranchiseTurnsRemaining(sint32 turns)
 	m_franchiseTurnsRemaining = turns;
 	if(turns < 1)
 	{
-		m_franchiseTurnsRemaining = -1;
-		m_franchise_owner = -1;
+		RemoveFranchise();
 	}
 }
 
@@ -6335,6 +6354,8 @@ void CityData::ConvertTo(sint32 player, CONVERTED_BY by)
 
 	m_convertedTo = player;
 	m_convertedBy = by;
+
+	ProcessAllResources(); // updates m_convertedGold which is used for drawing loss on conversion city-icon, takes NEW_RESOURCE_PROCESS into account
 }
 
 double CityData::TheologicalModifier() const
@@ -6346,6 +6367,16 @@ void CityData::Unconvert(bool makeUnhappy)
 {
 	if(m_convertedTo < 0)
 		return;
+
+	//// let the owner of the conversion know about its removal, see https://github.com/civctp2/civctp2/pull/166
+	MapPoint pos; // needed to get un-seen cell at this city pos
+	UnseenCellCarton ucell;
+
+	m_home_city.GetPos(pos);
+	if(g_player[m_convertedTo]->GetLastSeen(pos, ucell)) // get un-seen cell of conversion owner
+	    {
+	    ucell.m_unseenCell->SetIsConverted(false); // remove conversion flag
+	    }
 
 	m_convertedTo = -1;
 	m_convertedGold = 0;
@@ -6606,8 +6637,7 @@ void CityData::ResetCityOwner(sint32 owner)
 	NewGovernment(g_player[m_owner]->m_government_type);
 
 	m_walls_nullified = false;
-	m_franchiseTurnsRemaining = 0;
-	m_franchise_owner = -1;
+	RemoveFranchise(); // Franchise removed in contrast to conversion, see below
 	m_watchfulTurns = 0;
 	m_bioInfectionTurns = 0;
 	m_bioInfectedBy = -1;

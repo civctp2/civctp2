@@ -1000,6 +1000,105 @@ PRIMITIVES_ERRCODE primitives_DrawLine16(
 	return PRIMITIVES_ERRCODE_OK;
 }
 
+PRIMITIVES_ERRCODE primitives_DrawDashedLine16(
+	aui_Surface *pSurface,
+	sint32 x1,
+	sint32 y1,
+	sint32 x2,
+	sint32 y2,
+	Pixel16 color,
+	sint32 length
+	)
+{
+	Assert(pSurface);
+	if(pSurface == NULL) return PRIMITIVES_ERRCODE_INVALIDPARAM;
+
+	sint32 dx = x2-x1;
+	sint32 dy = y2-y1;
+	sint32 sdx = sgn(dx);
+	sint32 sdy = sgn(dy);
+	sint32 absdx = abs(dx);
+	sint32 absdy = abs(dy);
+	sint32 num = absdy >> 1;
+	sint32 den = absdx >> 1;
+
+	uint8 *pSurfBase;
+
+	sint32 errcode = pSurface->Lock(NULL,(LPVOID *)&pSurfBase,0);
+	Assert(errcode == AUI_ERRCODE_OK);
+	if (errcode != AUI_ERRCODE_OK) return PRIMITIVES_ERRCODE_SURFACELOCKFAILED;
+
+	sint32      surfPitch   = pSurface->Pitch();
+	uint16 *    pDest       = (uint16 *)(pSurfBase + y1 * surfPitch + (x1 << 1));
+	*pDest = color;
+
+	sint32 draw = length / 2; // start with only half the dash length for more evenly distributed dashes
+	sint32 skip = 0;
+
+	if (absdx >= absdy)
+	{
+		for (sint32 i=absdx;i;i--)
+		{
+			num += absdy;
+			if (num > absdx)
+			{
+				num -= absdx;
+				y1 += sdy;
+			}
+			x1 += sdx;
+
+			if ( draw  ) {
+			        pDest = (uint16 *)(pSurfBase + y1 * surfPitch + (x1 << 1));
+			        *pDest = color;
+				draw--;
+				if ( !draw ) {
+					skip = length;
+				}
+			}
+			else {
+				skip--;
+				if ( !skip ) {
+					draw = length;
+				}
+			}
+		}
+	}
+	else
+	{
+		for (sint32 i=absdy;i;i--)
+		{
+			den += absdx;
+			if (den > absdy)
+			{
+				den -= absdy;
+				x1 += sdx;
+			}
+			y1 += sdy;
+
+			if ( draw  ) {
+			        pDest = (uint16 *)(pSurfBase + y1 * surfPitch + (x1 << 1));
+			        *pDest = color;
+				draw--;
+				if ( !draw ) {
+					skip = length;
+				}
+			}
+			else {
+				skip--;
+				if ( !skip ) {
+					draw = length;
+				}
+			}
+		}
+	}
+
+	errcode = pSurface->Unlock((LPVOID)pSurfBase);
+	Assert(errcode == AUI_ERRCODE_OK);
+	if (errcode != AUI_ERRCODE_OK) return PRIMITIVES_ERRCODE_SURFACEUNLOCKFAILED;
+
+	return PRIMITIVES_ERRCODE_OK;
+}
+
 #define k_MAX_BLEND_VALUES	8
 #define k_BLEND_COLOR		0x0000
 #define k_BLEND_VALUE		10
@@ -1049,6 +1148,14 @@ PRIMITIVES_ERRCODE primitives_DrawText(
 
 	hr = pDirectSurface->ReleaseDC(hdc);
 	if (hr != AUI_ERRCODE_OK) return PRIMITIVES_ERRCODE_DSRELEASEDCFAILED;
+#else	
+	aui_BitmapFont *font= getBitmapFont();
+	    
+	if(font){
+	    RECT rect = {x, y - 0.5 * font->GetLineSkip(), pDirectSurface->Width(), pDirectSurface->Height()}; // ony x, y matter; width and hight get clipped in DrawString
+	    RECT clipRect = primitives_GetScreenAdjustedRectCopy(pDirectSurface, rect);
+	    font->DrawString(pDirectSurface, &rect, &clipRect, pString, 0, color, 0); // no bg correspondence
+	    }
 #endif // __AUI_USE_DIRECTX__
 
 	return PRIMITIVES_ERRCODE_OK;
@@ -1109,6 +1216,13 @@ PRIMITIVES_ERRCODE primitives_DrawBoundedText(
 	hr = pDirectSurface->ReleaseDC(hdc);
 	Assert(hr == AUI_ERRCODE_OK);
 	if (hr != AUI_ERRCODE_OK) return PRIMITIVES_ERRCODE_DSRELEASEDCFAILED;
+#else	
+	aui_BitmapFont *font= getBitmapFont();
+	    
+	if(font){
+	    RECT clipRect = primitives_GetScreenAdjustedRectCopy(pDirectSurface, *bound);
+	    font->DrawString(pDirectSurface, bound, &clipRect, pString, 0, color, 0); // no bg correspondence
+	    }
 #endif // __AUI_USE_DIRECTX__
 
 	return PRIMITIVES_ERRCODE_OK;
@@ -1174,6 +1288,19 @@ PRIMITIVES_ERRCODE primitives_DrawTextBatch(
 	hr = pDirectSurface->ReleaseDC(hdc);
 	Assert(hr == AUI_ERRCODE_OK);
 	if (hr != AUI_ERRCODE_OK) return PRIMITIVES_ERRCODE_DSRELEASEDCFAILED;
+#else	
+	aui_BitmapFont *font= getBitmapFont();
+	    
+	if(font){
+	    for (sint32 i=0;i < numStrings;i++)
+		{
+		RECT rect = {x, y, pDirectSurface->Width(), pDirectSurface->Height()}; // ony x, y matter; width and hight get clipped in DrawString
+		RECT clipRect = primitives_GetScreenAdjustedRectCopy(pDirectSurface, rect);
+		font->DrawString(pDirectSurface, &rect, &clipRect, pString[i], 0, color, 0); // no bg correspondence
+		y += font->GetLineSkip();
+		
+		}
+	    }
 #endif
 
 	return PRIMITIVES_ERRCODE_OK;
@@ -1237,6 +1364,8 @@ PRIMITIVES_ERRCODE primitives_DropText(
 	hr = pDirectSurface->ReleaseDC(hdc);
 	Assert(hr == AUI_ERRCODE_OK);
 	if (hr != AUI_ERRCODE_OK) return PRIMITIVES_ERRCODE_SURFACEUNLOCKFAILED;
+#else
+	primitives_DrawText(pDirectSurface, x, y, pString, color, bg);
 #endif // __AUI_USE_DIRECTX__
 
 	return PRIMITIVES_ERRCODE_OK;
@@ -1303,6 +1432,8 @@ PRIMITIVES_ERRCODE primitives_ColoredDropText(
 	hr = pDirectSurface->ReleaseDC(hdc);
 	Assert(hr == AUI_ERRCODE_OK);
 	if (hr != AUI_ERRCODE_OK) return PRIMITIVES_ERRCODE_SURFACEUNLOCKFAILED;
+#else
+	primitives_DrawText(pDirectSurface, x, y, pString, textColor, bg); // not handling dropColor
 #endif // __AUI_USE_DIRECTX__
 
 	return PRIMITIVES_ERRCODE_OK;
@@ -1366,6 +1497,13 @@ PRIMITIVES_ERRCODE primitives_DropTextCentered(
 	hr = pDirectSurface->ReleaseDC(hdc);
 	Assert(hr == AUI_ERRCODE_OK);
 	if (hr != AUI_ERRCODE_OK) return PRIMITIVES_ERRCODE_SURFACEUNLOCKFAILED;
+#else	
+	aui_BitmapFont *font= getBitmapFont();
+	    
+	if(font){
+	    RECT clipRect = primitives_GetScreenAdjustedRectCopy(pDirectSurface, *destRect);
+	    font->DrawString(pDirectSurface, destRect, &clipRect, pString, k_AUI_BITMAPFONT_DRAWFLAG_VERTCENTER, color, 0); // no bg correspondence
+	    }
 #endif // __AUI_USE_DIRECTX__
 
 	return PRIMITIVES_ERRCODE_OK;
@@ -1432,6 +1570,13 @@ PRIMITIVES_ERRCODE primitives_ColoredDropTextCentered(
 	hr = pDirectSurface->ReleaseDC(hdc);
 	Assert(hr == AUI_ERRCODE_OK);
 	if (hr != AUI_ERRCODE_OK) return PRIMITIVES_ERRCODE_SURFACEUNLOCKFAILED;
+#else	
+	aui_BitmapFont *font= getBitmapFont();
+	    
+	if(font){
+	    RECT clipRect = primitives_GetScreenAdjustedRectCopy(pDirectSurface, *destRect);
+	    font->DrawString(pDirectSurface, destRect, &clipRect, pString, k_AUI_BITMAPFONT_DRAWFLAG_VERTCENTER, textColor, 0); // no bg correspondence, not handling dropColor
+	    }
 #endif // __AUI_USE_DIRECTX__
 
 	return PRIMITIVES_ERRCODE_OK;
@@ -1514,6 +1659,19 @@ PRIMITIVES_ERRCODE primitives_DropTextBatch(
 	hr = pDirectSurface->ReleaseDC(hdc);
 	Assert(hr == AUI_ERRCODE_OK);
 	if (hr != AUI_ERRCODE_OK) return PRIMITIVES_ERRCODE_DSRELEASEDCFAILED;
+#else	
+	aui_BitmapFont *font= getBitmapFont();
+
+	if(font){
+	    for (sint32 i=0;i < numStrings;i++)
+		{
+		RECT rect = {x, y, pDirectSurface->Width(), pDirectSurface->Height()}; // ony x, y matter; width and hight get clipped in DrawString
+		RECT clipRect = primitives_GetScreenAdjustedRectCopy(pDirectSurface, rect);
+		font->DrawString(pDirectSurface, &rect, &clipRect, pString[i], 0, color, 0); // no bg correspondence
+		y += font->GetLineSkip();
+		
+		}
+	    }
 #endif // __AUI_USE_DIRECTX__
 
 	return PRIMITIVES_ERRCODE_OK;

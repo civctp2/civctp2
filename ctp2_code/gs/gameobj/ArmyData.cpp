@@ -2312,6 +2312,7 @@ ORDER_RESULT ArmyData::Sue(const MapPoint &point)
 	}
 	Cell *cell = g_theWorld->GetCell(point);
 	if(!cell->UnitArmy() || !cell->UnitArmy()->CanBeSued() || cell->UnitArmy()->GetOwner() == m_owner) {
+	    /* SueFranchise now handled by SueFranchiseOrder directly
 		if(cell->GetCity().m_id != 0 &&
 		   cell->GetCity().GetOwner() == m_owner) {
 			Assert(m_orders->GetHead() && m_orders->GetHead()->m_order == UNIT_ORDER_SUE);
@@ -2320,7 +2321,7 @@ ORDER_RESULT ArmyData::Sue(const MapPoint &point)
 			}
 			return SueFranchise(point);
 		}
-
+	    */
 		return ORDER_RESULT_ILLEGAL;
 	}
 
@@ -2384,7 +2385,12 @@ ORDER_RESULT ArmyData::SueFranchise(const MapPoint &point)
 		return ORDER_RESULT_ILLEGAL;
 	}
 
-	if(cell->GetCity().GetFranchiseTurnsRemaining() <= 0) {
+	if(cell->GetCity().GetFranchiseTurnsRemaining() == 0) {
+
+		return ORDER_RESULT_ILLEGAL;
+	}
+
+	if(cell->GetCity().GetFranchiseTurnsRemaining() > 0 && cell->GetCity().GetFranchiseTurnsRemaining() <= g_theConstDB->Get(0)->GetTurnsToSueFranchise()) {
 
 		return ORDER_RESULT_ILLEGAL;
 	}
@@ -5900,7 +5906,7 @@ ORDER_RESULT ArmyData::InterceptTrade()
 		if (m_array[i].CanInterceptTrade() &&
 			m_array[i].CanPerformSpecialAction())
 		{
-		        /* code apparently a left-over from CTP1, see: https://github.com/civctp2/civctp2/pull/154
+		        // code apparently a left-over from CTP1, see: https://github.com/civctp2/civctp2/pull/154
 			if(!g_player[m_owner]->IsRobot()
 			||(g_network.IsClient()
 			&& g_network.IsLocalPlayer(m_owner))
@@ -5912,7 +5918,7 @@ ORDER_RESULT ArmyData::InterceptTrade()
 					if (AgreementMatrix::s_agreements.HasAgreement(
 						route_owner,
 						m_owner,
-						PROPOSAL_OFFER_STOP_PIRACY))
+						PROPOSAL_REQUEST_STOP_PIRACY))
 					{
 						SlicObject *so = new SlicObject("12IABreakNoPiracy");
 						so->AddRecipient(m_owner);
@@ -5926,11 +5932,27 @@ ORDER_RESULT ArmyData::InterceptTrade()
 						g_selected_item->ForceDirectorSelect(Army(m_id));
 						return ORDER_RESULT_ILLEGAL;
 					}
+					if (AgreementMatrix::s_agreements.HasAgreement(
+						route_owner,
+						m_owner,
+						PROPOSAL_TREATY_TRADE_PACT))
+					{
+						SlicObject *so = new SlicObject("12IABreakTradePact");
+						so->AddRecipient(m_owner);
+						so->AddCivilisation(m_owner);
+						so->AddCivilisation(route_owner);
+						so->AddUnit(m_array[i]);
+						so->AddLocation(m_pos);
+						so->AddOrder(UNIT_ORDER_INTERCEPT_TRADE);
+						g_slicEngine->Execute(so);
+
+						g_selected_item->ForceDirectorSelect(Army(m_id));
+						return ORDER_RESULT_ILLEGAL;
+					}
 				}
 			}
-		        */
 
-			ORDER_RESULT const	res	= m_array[i].InterceptTrade();
+			ORDER_RESULT const	res	= m_array[i].InterceptTrade(); // call UnitData::InterceptTrade() which adds GEV_SetPiratingArmy
 
 			if (res == ORDER_RESULT_ILLEGAL)
 			{
@@ -6684,6 +6706,10 @@ bool ArmyData::ExecuteMoveOrder(Order *order)
 	}
 	else
 	{
+		if(DoLeaveOurLandsCheck(order->m_point, UNIT_ORDER_MOVE_TO)){
+		    return false;
+		    }
+
 		g_gevManager->AddEvent(GEV_INSERT_AfterCurrent,
 		                       GEV_MoveArmy,
 		                       GEA_Army, m_id,
@@ -6792,6 +6818,7 @@ void ArmyData::CheckLoadSleepingCargoFromCity(Order *order)
 // Remark(s)  : Actually, not used. Must be left over from CTP1
 //
 //----------------------------------------------------------------------------
+/* commented, since not used any more
 bool ArmyData::Move(WORLD_DIRECTION d, Order *order)
 {
 	MapPoint oldPos = m_pos;
@@ -6901,6 +6928,7 @@ bool ArmyData::Move(WORLD_DIRECTION d, Order *order)
 	}
 	return false;
 }
+*/
 
 bool ArmyData::FinishMove(WORLD_DIRECTION d, MapPoint &newPos, UNIT_ORDER_TYPE order)
 {
@@ -9917,7 +9945,7 @@ bool ArmyData::GetInciteUprisingCost( const MapPoint &point, sint32 &attackCost 
 	return true;
 }
 
-//Probably left over from CTP1
+////Possibly left over from CTP1, but now used in CTP2
 bool ArmyData::DoLeaveOurLandsCheck(const MapPoint &newPos,
 									UNIT_ORDER_TYPE order_type)
 {
@@ -9937,19 +9965,15 @@ bool ArmyData::DoLeaveOurLandsCheck(const MapPoint &newPos,
 			}
 		}
 		if(atLeastOneNonSpecialUnit) {
-			Agreement ag = g_player[cell->GetOwner()]->FindAgreement(AGREEMENT_TYPE_DEMAND_LEAVE_OUR_LANDS, m_owner);
-			if(g_theAgreementPool->IsValid(ag) && ag.GetRecipient() == m_owner) {
-
+		        //// similar to ArmyData::InterceptTrade()
+			if(AgreementMatrix::s_agreements.HasAgreement(cell->GetOwner(), m_owner, PROPOSAL_REQUEST_WITHDRAW_TROOPS)){
 				if(!g_player[m_owner]->IsRobot()
 				|| (g_network.IsClient()
 				&&  g_network.IsLocalPlayer(m_owner))
 				){
-					char turnBuf[32];
-					sprintf(turnBuf, "%d", ag.GetTurns() + 1);
 					SlicObject *so = new SlicObject("13IAEnteringLands");
 					so->AddCivilisation(m_owner);
 					so->AddCivilisation(cell->GetOwner());
-					so->AddAction(turnBuf);
 					so->AddLocation(newPos);
 					so->AddOrder(order_type);
 					so->AddRecipient(m_owner);
@@ -9960,7 +9984,7 @@ bool ArmyData::DoLeaveOurLandsCheck(const MapPoint &newPos,
 				}
 				else
 				{
-					ag.AccessData()->RecipientIsViolating(cell->GetOwner(), true);
+					Diplomat::GetDiplomat(cell->GetOwner()).LogViolationEvent(m_owner, PROPOSAL_REQUEST_WITHDRAW_TROOPS);
 				}
 			}
 		}
@@ -10990,9 +11014,9 @@ void ArmyData::StopPirating()
 			if (route->GetPiratingArmy().m_id == m_id)
 			{
 				g_gevManager->AddEvent
-				    (GEV_INSERT_AfterCurrent, GEV_SetPiratingArmy,
+				    (GEV_INSERT_AfterCurrent, GEV_SetPiratingArmy, // executes StopPiracyRegardEvent
 				     GEA_TradeRoute, route,
-				     GEA_Army, 0,
+				     GEA_Army, 0, // setting the pirating army to ID= 0 stops pirating this route
 				     GEA_End
 				    );
 			}

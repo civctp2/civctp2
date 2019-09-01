@@ -3326,7 +3326,6 @@ The most important resource of the 20th century, oil and its by-products have ha
 Location:
 
 <L:DATABASE_TERRAIN,TERRAIN_WATER_SHALLOW>Shallow Ocean<e>
-<L:DATABASE_TERRAIN,TERRAIN_WATER_SHELF>Continental Shelf<e>
 <L:DATABASE_TERRAIN,TERRAIN_WATER_REEF>Coral Reef<e>
 <L:DATABASE_TERRAIN,TERRAIN_WATER_KELP>Kelp Bed<e>
 [END]
@@ -3337,11 +3336,31 @@ Location:
 [END]
 
 [TERRAIN_WATER_SHALLOW_GOOD_TWO_GAMEPLAY]
-<L:DATABASE_TERRAIN,TERRAIN_WATER_SHALLOW>Shallow Oceans<e>, <L:DATABASE_TERRAIN,TERRAIN_WATER_SHELF>Continental Shelfs<e>, <L:DATABASE_TERRAIN,TERRAIN_WATER_REEF>Coral Reefs<e> and <L:DATABASE_TERRAIN,TERRAIN_WATER_KELP>Kelp Beds<e> are prime habitat for oysters, which nurture grains of sand into a commodity prized for their uniqueness as well as their rarity.  Pearls are used primarily for jewelry and are sure to fetch a high price in any market.
+<L:DATABASE_TERRAIN,TERRAIN_WATER_SHALLOW>Shallow Oceans<e>, <L:DATABASE_TERRAIN,TERRAIN_WATER_REEF>Coral Reefs<e> and <L:DATABASE_TERRAIN,TERRAIN_WATER_KELP>Kelp Beds<e> are prime habitat for oysters, which nurture grains of sand into a commodity prized for their uniqueness as well as their rarity.  Pearls are used primarily for jewelry and are sure to fetch a high price in any market.
 [END]
 
 [TERRAIN_WATER_SHALLOW_GOOD_TWO_HISTORICAL]
 Pearls have been treasured by most Civilizations since the dawn of time. The Shun empress of China was said to have received a tribute of pearls in 2250 BC and Cleopatra supposedly dissolved a large pearl in a glass of wine and drank it to impress Mark Antony with the limitless wealth of her kingdom. The first successful pearl farm was begun in 1906 in Espiratu Santo Island in the Mexican Gulf of California, leading to the science of pearl cultivation.
+[END]
+
+
+[TERRAIN_WATER_SHELF_GOOD_ONE_PREREQ]
+Location:
+
+<L:DATABASE_TERRAIN,TERRAIN_WATER_SHELF>Continental Shelf<e>
+<L:DATABASE_TERRAIN,TERRAIN_WATER_KELP>Kelp Bed<e>
+[END]
+
+[TERRAIN_WATER_SHELF_GOOD_ONE_STATISTICS]
++10 <L:DATABASE_CONCEPTS,CONCEPT_FOOD>Food<e>
++5 <L:DATABASE_CONCEPTS,CONCEPT_COMMERCE>Commerce<e>
+[END]
+
+[TERRAIN_WATER_SHELF_GOOD_ONE_GAMEPLAY]
+<L:DATABASE_TERRAIN,TERRAIN_WATER_SHELF>Continental Shelfs<e> are prime habitat for jellyfish.
+[END]
+
+[TERRAIN_WATER_SHELF_GOOD_ONE_HISTORICAL]
 [END]
 
 [TERRAIN_ARCTIC_MOUNTAIN_GOOD_ONE_PREREQ]
@@ -5794,7 +5813,7 @@ Commerce: 5
 
 Goods:
 <L:DATABASE_RESOURCE,TERRAIN_WATER_SHALLOW_GOOD_ONE>Crabs<e>
-<L:DATABASE_RESOURCE,TERRAIN_WATER_SHALLOW_GOOD_TWO>Pearls<e> 
+<L:DATABASE_RESOURCE,TERRAIN_WATER_SHELF_GOOD_ONE>Jellyfish<e>
 <L:DATABASE_RESOURCE,TERRAIN_WATER_SHALLOW_GOOD_THREE>Salmon<e>
 <L:DATABASE_RESOURCE,TERRAIN_WATER_SHALLOW_GOOD_FOUR>Lobster<e> 
 [END]
@@ -5807,7 +5826,7 @@ Defense: +0%
 [TERRAIN_WATER_SHELF_GAMEPLAY]
 Continental Shelves are the dramatic slope between <L:DATABASE_TERRAIN,TERRAIN_WATER_SHALLOW>Shallow Water<e> and <L:DATABASE_TERRAIN,TERRAIN_WATER_DEEP>Deep Water<e> tiles.  They are rich in <L:DATABASE_CONCEPTS,CONCEPT_PRODUCTION>Production<e>, and provide a small amount of <L:DATABASE_CONCEPTS,CONCEPT_FOOD>Food<e> and <L:DATABASE_CONCEPTS,CONCEPT_COMMERCE>Commerce<e>.  One can build <L:DATABASE_CONCEPTS,CONCEPT_SEA_COLONIES>Underwater Cities<e> on them, as well as any ocean-based <L:DATABASE_CONCEPTS,CONCEPT_TILE_IMPROVEMENTS>Tile Improvements<e>.
 
-<L:DATABASE_RESOURCE,TERRAIN_WATER_SHALLOW_GOOD_ONE>Crabs<e>, <L:DATABASE_RESOURCE,TERRAIN_WATER_SHALLOW_GOOD_TWO>Pearls<e>, <L:DATABASE_RESOURCE,TERRAIN_WATER_SHALLOW_GOOD_THREE>Salmon<e> and <L:DATABASE_RESOURCE,TERRAIN_WATER_SHALLOW_GOOD_FOUR>Lobster<e> are <L:DATABASE_CONCEPTS,CONCEPT_GOODS>Goods<e> native to shelf tiles.
+<L:DATABASE_RESOURCE,TERRAIN_WATER_SHALLOW_GOOD_ONE>Crabs<e>, <L:DATABASE_RESOURCE,TERRAIN_WATER_SHELF_GOOD_ONE>Jellyfish<e>, <L:DATABASE_RESOURCE,TERRAIN_WATER_SHALLOW_GOOD_THREE>Salmon<e> and <L:DATABASE_RESOURCE,TERRAIN_WATER_SHALLOW_GOOD_FOUR>Lobster<e> are <L:DATABASE_CONCEPTS,CONCEPT_GOODS>Goods<e> native to shelf tiles.
 [END]
 
 [TERRAIN_WATER_SHELF_HISTORICAL]
@@ -6388,7 +6407,7 @@ Commerce: 5
 
 Goods:
 <L:DATABASE_RESOURCE,TERRAIN_WATER_SHALLOW_GOOD_ONE>Crab<e>
-<L:DATABASE_RESOURCE,TERRAIN_WATER_SHALLOW_GOOD_TWO>Pearls<e>
+<L:DATABASE_RESOURCE,TERRAIN_WATER_SHELF_GOOD_ONE>Jellyfish<e>
 <L:DATABASE_RESOURCE,TERRAIN_WATER_SHALLOW_GOOD_THREE>Salmon<e> 
 <L:DATABASE_RESOURCE,TERRAIN_WATER_SHALLOW_GOOD_FOUR>Lobster<e>
 [END]
@@ -6403,7 +6422,7 @@ Defense: +0%
 
 One can build any ocean-based <L:DATABASE_CONCEPTS,CONCEPT_TILE_IMPROVEMENTS>Tile Improvements<e> on Kelp Beds, except for <L:DATABASE_TILE_IMPROVEMENTS,TILEIMP_UNDERSEA_MINES>Undersea Mines<e> and <L:DATABASE_TILE_IMPROVEMENTS,TILEIMP_PORT>Ports<e>.
 
-Kelp beds often have Goods, such as <L:DATABASE_RESOURCE,TERRAIN_WATER_SHALLOW_GOOD_ONE>Crabs<e> and <L:DATABASE_RESOURCE,TERRAIN_WATER_SHALLOW_GOOD_TWO>Pearls<e>, <L:DATABASE_RESOURCE,TERRAIN_WATER_SHALLOW_GOOD_THREE>Salmon<e> and <L:DATABASE_RESOURCE,TERRAIN_WATER_SHALLOW_GOOD_FOUR>Lobster<e>.
+Kelp beds often have Goods, such as <L:DATABASE_RESOURCE,TERRAIN_WATER_SHALLOW_GOOD_ONE>Crabs<e> and <L:DATABASE_RESOURCE,TERRAIN_WATER_SHELF_GOOD_ONE>Jellyfish<e>, <L:DATABASE_RESOURCE,TERRAIN_WATER_SHALLOW_GOOD_THREE>Salmon<e> and <L:DATABASE_RESOURCE,TERRAIN_WATER_SHALLOW_GOOD_FOUR>Lobster<e>.
 [END]
 
 [TERRAIN_WATER_KELP_HISTORICAL]

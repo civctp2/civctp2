@@ -2889,7 +2889,7 @@ bool Goal::IsTargetImmune() const
 
 	if(order_record->GetUnitPretest_CanCreateFranchise())
 	{
-		if(m_target_city.GetCityData()->GetFranchiseTurnsRemaining() <= 0)
+		if(m_target_city.GetCityData()->GetFranchiseOwner() == m_playerId)
 			return true;
 	}
 
