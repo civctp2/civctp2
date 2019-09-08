@@ -879,7 +879,6 @@ UNIT_CLERIC {
    EnableAdvance ADVANCE_THEOLOGY
    ObsoleteAdvance ADVANCE_MASS_MEDIA
    UpgradeTo UNIT_TELEVANGELIST
-   GovernmentType GOVERNMENT_THEOCRACY
    ActiveDefenseRange 0
    LossMoveToDmgNone
    MaxFuel 0
@@ -4013,7 +4012,6 @@ UNIT_TELEVANGELIST {
    MaxMovePoints 400
    VisionRange 2
    EnableAdvance ADVANCE_MASS_MEDIA
-   GovernmentType GOVERNMENT_THEOCRACY
    ActiveDefenseRange 0
    LossMoveToDmgNone
    MaxFuel 0
