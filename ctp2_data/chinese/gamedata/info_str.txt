@@ -378,6 +378,7 @@ IMMUNE_TO_PLAGUE_VICTIM 		"{city[0].name}ÓÉÓÚËÈ½¨ÓĞÎ¢ÉúÎï°²È«ÉèÊ©£¬ËÈÓµÓĞ¶ÔÉú»¯¹
 ## Reform City ##
 ## All Military Unit Action ##
 REFORM_CITY 				"{city[0].name}ËÈÍê³ÉÖØÕû£¬¸ÃÊĞÊĞÃñ²»ÔÙÎªÍâ¹úËù¿ØÖÆ¡£"
+REFORM_CITY_VICTIM			"Foreign inquisitors have reformed the city of {city[0].name} and its citizens are no longer under our influence."
 
 ## Sell Indulgences ##
 ## Cleric Attack ##

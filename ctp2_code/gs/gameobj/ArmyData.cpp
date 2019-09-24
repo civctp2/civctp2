@@ -4303,6 +4303,13 @@ ORDER_RESULT ArmyData::ReformCity(const MapPoint &point)
 							   GEA_Unit, m_array[uindex].m_id,
 							   GEA_City, c.m_id,
 							   GEA_End);
+		
+		SlicObject *so = new SlicObject("135ReformCityVictim");
+		so->AddRecipient(c.IsConvertedTo());
+		so->AddCity(c);
+		g_slicEngine->Execute(so);
+
+
 		// EMOD added for reforming units to destroy
 		// religious buildings, if they can build there own
 		for (sint32 i = m_nElements - 1; i >= 0; i--)

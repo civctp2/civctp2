@@ -1916,6 +1916,11 @@ messagebox '135ReformCity' {
 	MessageType("REFORM_CITY_ICON");
 }
 
+messagebox '135ReformCityVictim' {
+	Text(ID_REFORM_CITY_VICTIM) ;
+	MessageType("REFORM_CITY_ICON");
+}
+
 messagebox '137SlaveryCompleteAttacker' {
 	Text(ID_SLAVERY_COMPLETE_ATTACKER) ;
 	MessageType("CAPTURE_SLAVES");
