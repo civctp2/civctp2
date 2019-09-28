@@ -547,6 +547,7 @@ public:
 	double TheologicalModifier() const;
 	void Unconvert();
 	sint32 IsConvertedTo() const;
+	sint32 GetConvertedGold() const;
 
 	bool IsCloaked() const;
 	void Cloak();

@@ -1733,6 +1733,11 @@ sint32 Unit::IsConvertedTo() const
 	return GetData()->IsConvertedTo();
 }
 
+sint32 Unit::GetConvertedGold() const
+{
+	return GetData()->GetConvertedGold();
+}
+
 bool Unit::IsCloaked() const
 {
 	return GetData()->IsCloaked();

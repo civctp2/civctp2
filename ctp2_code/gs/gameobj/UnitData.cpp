@@ -4843,6 +4843,14 @@ sint32 UnitData::IsConvertedTo() const
 	return m_city_data->IsConvertedTo();
 }
 
+sint32 UnitData::GetConvertedGold() const
+{
+	Assert(m_city_data);
+	if(!m_city_data)
+		return -1;
+	return m_city_data->GetConvertedGold();
+}
+
 bool UnitData::IsCloaked() const
 {
 	return Flag(k_UDF_IS_CLOAKED);

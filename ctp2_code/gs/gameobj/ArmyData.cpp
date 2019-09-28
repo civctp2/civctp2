@@ -4307,6 +4307,7 @@ ORDER_RESULT ArmyData::ReformCity(const MapPoint &point)
 		SlicObject *so = new SlicObject("135ReformCityVictim");
 		so->AddRecipient(c.IsConvertedTo());
 		so->AddCity(c);
+		so->AddGold(c.GetConvertedGold());
 		g_slicEngine->Execute(so);
 
 
