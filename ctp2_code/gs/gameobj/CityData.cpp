@@ -4421,6 +4421,7 @@ void CityData::CalculateTradeRoutes(bool projectedOnly)
 				{
 					if(!projectedOnly)
 					{
+					fprintf(stderr, "%s L%d: deadRoutes, resource: %d, m_collectingResources: %d, m_sellingResources: %d, i: %d!\n", __FILE__, __LINE__, routeResource, m_collectingResources[routeResource], m_sellingResources[routeResource], i);
 						deadRoutes.Insert(route);
 					}
 				}
@@ -4431,6 +4432,7 @@ void CityData::CalculateTradeRoutes(bool projectedOnly)
 			{
 				if(m_food_delta < routeResource && !projectedOnly)
 				{
+	fprintf(stderr, "%s L%d: deadRoutes!\n", __FILE__, __LINE__);
 					deadRoutes.Insert(route);
 				}
 				break;
@@ -4464,6 +4466,7 @@ void CityData::CalculateTradeRoutes(bool projectedOnly)
 			{
 				if(g_player[m_owner]->GetGold() < route.GetGoldInReturn()) // kill route because of not enough gold to pay for the resource
 				{
+	fprintf(stderr, "%s L%d: deadRoutes!\n", __FILE__, __LINE__);
 					deadRoutes.Insert(route);
 					killRoute = true;
 				}
@@ -4494,6 +4497,7 @@ void CityData::CalculateTradeRoutes(bool projectedOnly)
 		{
 			if(deadRoutes[i].GetSource().m_id == m_home_city.m_id)
 			{
+	fprintf(stderr, "%s L%d: KillTradeRoute!\n", __FILE__, __LINE__);
 				g_gevManager->AddEvent(GEV_INSERT_Tail, GEV_KillTradeRoute,
 				                       GEA_TradeRoute, deadRoutes[i],
 				                       GEA_Int, CAUSE_KILL_TRADE_ROUTE_SENDER_KILLED,
@@ -4501,6 +4505,7 @@ void CityData::CalculateTradeRoutes(bool projectedOnly)
 			}
 			else
 			{
+	fprintf(stderr, "%s L%d: KillTradeRoute!\n", __FILE__, __LINE__);
 				g_gevManager->AddEvent(GEV_INSERT_Tail, GEV_KillTradeRoute,
 				                       GEA_TradeRoute, deadRoutes[i],
 				                       GEA_Int, CAUSE_KILL_TRADE_ROUTE_RECIPIENT_KILLED,

@@ -5162,6 +5162,7 @@ void Governor::ManageGoodsTradeRoutes()
 				{
 					unused_freight += curDestRoute->GetCost();
 
+					fprintf(stderr, "%s L%d: sellingPrice: %d, maxPrice: %d, PiracyRisk: %d!\n", __FILE__, __LINE__, sellingPrice, maxPrice, Diplomat::GetDiplomat(m_playerId).GetTradeRoutePiracyRisk(city, curDestRoute->GetDestination()));
 					g_gevManager->AddEvent(GEV_INSERT_Tail, GEV_KillTradeRoute,
 						GEA_TradeRoute, curDestRoute.m_id,
 						GEA_Int, CAUSE_KILL_TRADE_ROUTE_SENDER_KILLED,
