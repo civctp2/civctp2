@@ -1623,6 +1623,11 @@ sint32 Unit::GetFranchiseOwner() const
 	return GetData()->GetFranchiseOwner();
 }
 
+sint32 Unit::GetProductionLostToFranchise() const
+{
+	return GetData()->GetProductionLostToFranchise();
+}
+
 void Unit::SetFranchiseTurnsRemaining(sint32 turns)
 {
 	AccessData()->SetFranchiseTurnsRemaining(turns);

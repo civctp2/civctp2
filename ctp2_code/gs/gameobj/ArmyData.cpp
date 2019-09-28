@@ -2406,6 +2406,7 @@ ORDER_RESULT ArmyData::SueFranchise(const MapPoint &point)
 	SlicObject *so = new SlicObject("911SueFranchiseCompleteVictim");
 	so->AddRecipient(cell->GetCity().GetFranchiseOwner());
 	so->AddCity(cell->GetCity());
+	so->AddGold(cell->GetCity().GetProductionLostToFranchise());
 	g_slicEngine->Execute(so);
 
 	g_slicEngine->Execute

@@ -418,7 +418,7 @@ SUE_COMPLETE_VICTIM			"Wir haben einen juristischen Rückschlag erlitten: {unitre
 SUE_FAILED_VICTIM			"Ein fremder Anwalt hat vergeblich versucht, {unitrecord[0].name#ONE_OF_OUR_ACC} zu verklagen ... Die Gerechtigkeit hat gesiegt!"
 SUE_COMPLETE_ATTACKER			"Unser Anwalt hat mit seiner Klage {unitrecord[0].name#A_FOREIGN_ACC} vernichtet."
 SUE_FAILED_ATTACKER			"Unser Anwalt ist gescheitert, {unitrecord[0].name#A_FOREIGN_ACC} zu verklagen."
-SUE_FRANCHISE_COMPLETE_VICTIM		"Unser Franchising-Unternehmen in der Stadt {city[0].name} ist aufgrund einer gerichtlichen Entscheidung gezwungen, seine Pforten zu schließen."
+SUE_FRANCHISE_COMPLETE_VICTIM		"Unser Franchising-Unternehmen in der Stadt {city[0].name} ist aufgrund einer gerichtlichen Entscheidung gezwungen, seine Pforten zu schließen. Es brachte zuvor {gold[0].value} Gold."
 SUE_FRANCHISE_FAILED_VICTIM		"Trotz aller gegenteiligen Bemühungen fremder Anwälte bleibt unser Franchising-Unternehmen in der Stadt {city[0].name} weiterhin bestehen."
 SUE_FRANCHISE_COMPLETE_ATTACKER		"Die Klage unseres Anwalts gegen ein fremdes Franchising-Unternehmen in unserer Stadt {city[0].name} hatte Erfolg: Sie müssen schließen."
 SUE_FRANCHISE_FAILED_ATTACKER		"Obwohl sich unsere Anwälte große Mühe geben, gelingt es fremden Franchising-Unternehmen immer noch, den Bürgern der Stadt {city[0].name} Geld aus der Tasche zu ziehen."

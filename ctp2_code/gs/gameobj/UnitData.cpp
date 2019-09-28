@@ -4671,6 +4671,15 @@ sint32 UnitData::GetFranchiseOwner() const
 	return m_city_data->GetFranchiseOwner();
 }
 
+sint32 UnitData::GetProductionLostToFranchise() const
+{
+	Assert(m_city_data);
+	if(!m_city_data)
+		return -1;
+
+	return m_city_data->GetProductionLostToFranchise();
+}
+
 void UnitData::SetFranchiseTurnsRemaining(sint32 turns)
 {
 	Assert(m_city_data);

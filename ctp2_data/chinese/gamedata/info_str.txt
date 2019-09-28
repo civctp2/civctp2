@@ -416,7 +416,7 @@ SUE_COMPLETE_VICTIM 			"我们受到了法令的约束，外国律师对{unitrecord[0].name}提出
 SUE_FAILED_VICTIM 			"外国律师对{unitrecord[0].name}提出的诉讼不成立。正所谓：邪不胜正。"
 SUE_COMPLETE_ATTACKER 			"我国律师对{unitrecord[0].name}提出的诉讼成立。"
 SUE_FAILED_ATTACKER 			"外国律师对{unitrecord[0].name}提出的诉讼不成立。"
-SUE_FRANCHISE_COMPLETE_VICTIM 		"外国律师采取的法律行为，使得我国在{city[0].name}的专卖店被迫关门。"
+SUE_FRANCHISE_COMPLETE_VICTIM		"Foreign legal action has forced our franchise in the city of {city[0].name} to close up shop. The franchise was worth {gold[0].value} gold."外国律师采取的法律行为，使得我国在{city[0].name}的专卖店被迫关门。"
 SUE_FRANCHISE_FAILED_VICTIM 		"尽管外国律师费尽心力，我国在{city[0].name}的专卖店仍获法院裁示，能够继续营业。"
 SUE_FRANCHISE_COMPLETE_ATTACKER 	"我国律师成功地在法庭上赢得胜利，外国在{city[0].name}的专卖店勒令结束营业。"
 SUE_FRANCHISE_FAILED_ATTACKER 		"虽然我国律师努力陈述事实，然而判决结果却让外国在{city[0].name}的专卖店继续营运，继续从我国人民身上榨取金钱。"
