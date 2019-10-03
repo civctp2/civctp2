@@ -2370,27 +2370,29 @@ ORDER_RESULT ArmyData::SueFranchise(const MapPoint &point)
 		return ORDER_RESULT_ILLEGAL;
 
 	Unit &	u		= m_array[uindex];
-	Cell *	cell	= g_theWorld->GetCell(point);
+	Unit c = GetAdjacentCity(point);
 
-	if(!cell || cell->GetCity().m_id == 0)
+
+
+	if(c.m_id == 0)
 		return ORDER_RESULT_ILLEGAL;
 
-	if(cell->GetCity().GetOwner() != m_owner) {
-
-		return ORDER_RESULT_ILLEGAL;
-	}
-
-	if(cell->GetCity().GetFranchiseOwner() < 0) {
+	if(c.GetOwner() != m_owner) {
 
 		return ORDER_RESULT_ILLEGAL;
 	}
 
-	if(cell->GetCity().GetFranchiseTurnsRemaining() == 0) {
+	if(c.GetFranchiseOwner() < 0) {
 
 		return ORDER_RESULT_ILLEGAL;
 	}
 
-	if(cell->GetCity().GetFranchiseTurnsRemaining() > 0 && cell->GetCity().GetFranchiseTurnsRemaining() <= g_theConstDB->Get(0)->GetTurnsToSueFranchise()) {
+	if(c.GetFranchiseTurnsRemaining() == 0) {
+
+		return ORDER_RESULT_ILLEGAL;
+	}
+
+	if(c.GetFranchiseTurnsRemaining() > 0 && c.GetFranchiseTurnsRemaining() <= g_theConstDB->Get(0)->GetTurnsToSueFranchise()) {
 
 		return ORDER_RESULT_ILLEGAL;
 	}
@@ -2400,17 +2402,17 @@ ORDER_RESULT ArmyData::SueFranchise(const MapPoint &point)
 	g_gevManager->AddEvent(GEV_INSERT_AfterCurrent, GEV_RemoveFranchise,
 						   GEA_Army, m_id,
 						   GEA_Unit, u,
-						   GEA_City, cell->GetCity(),
+						   GEA_City, c,
 						   GEA_End);
 
 	SlicObject *so = new SlicObject("911SueFranchiseCompleteVictim");
-	so->AddRecipient(cell->GetCity().GetFranchiseOwner());
-	so->AddCity(cell->GetCity());
-	so->AddGold(cell->GetCity().GetProductionLostToFranchise());
+	so->AddRecipient(c.GetFranchiseOwner());
+	so->AddCity(c);
+	so->AddGold(c.GetProductionLostToFranchise());
 	g_slicEngine->Execute(so);
 
 	g_slicEngine->Execute
-        (new AggressorReport("911SueFranchiseCompleteAttacker", u, cell->GetCity()));
+        (new AggressorReport("911SueFranchiseCompleteAttacker", u, c));
 
 	return ORDER_RESULT_SUCCEEDED;
 }
