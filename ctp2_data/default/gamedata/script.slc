@@ -1919,6 +1919,7 @@ messagebox '135ReformCity' {
 messagebox '135ReformCityVictim' {
 	Text(ID_REFORM_CITY_VICTIM) ;
 	MessageType("REFORM_CITY_ICON");
+	EyePoint(city[0].location);
 }
 
 messagebox '137SlaveryCompleteAttacker' {
