@@ -2405,13 +2405,6 @@ ORDER_RESULT ArmyData::SueFranchise(const MapPoint &point)
 						   GEA_City, c,
 						   GEA_End);
 
-	SlicObject *so = new SlicObject("911SueFranchiseCompleteVictim");
-	so->AddRecipient(c.GetFranchiseOwner());
-	so->AddCity(c);
-	so->AddGold(c.GetFranchiseTurnsRemaining() > 0 ? c.GetFranchiseTurnsRemaining() : 0);// misuseing AddGold for passing the remaining franchise turns
-	so->AddGold(c.GetProductionLostToFranchise());
-	g_slicEngine->Execute(so);
-
 	g_slicEngine->Execute
         (new AggressorReport("911SueFranchiseCompleteAttacker", u, c));
 

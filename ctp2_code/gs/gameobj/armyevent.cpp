@@ -1433,6 +1433,14 @@ STDEHANDLER(RemoveFranchiseEvent)
 	if(!args->GetCity(0, city)) return GEV_HD_Continue;
 
 	city.SetFranchiseTurnsRemaining(g_theConstDB->Get(0)->GetTurnsToSueFranchise());
+
+	SlicObject *so = new SlicObject("911SueFranchiseCompleteVictim");
+	so->AddRecipient(city.GetFranchiseOwner());
+	so->AddCity(city);
+	so->AddGold(city.GetFranchiseTurnsRemaining() > 0 ? city.GetFranchiseTurnsRemaining() : 0);// misuseing AddGold for passing the remaining franchise turns
+	so->AddGold(city.GetProductionLostToFranchise());
+	g_slicEngine->Execute(so);
+
 	return GEV_HD_Continue;
 }
 
