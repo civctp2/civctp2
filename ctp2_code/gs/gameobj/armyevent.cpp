@@ -1437,7 +1437,7 @@ STDEHANDLER(RemoveFranchiseEvent)
 	SlicObject *so = new SlicObject("911SueFranchiseCompleteVictim");
 	so->AddRecipient(city.GetFranchiseOwner());
 	so->AddCity(city);
-	so->AddGold(city.GetFranchiseTurnsRemaining() > 0 ? city.GetFranchiseTurnsRemaining() : 0);// misuseing AddGold for passing the remaining franchise turns
+	so->AddGold(city.GetFranchiseTurnsRemaining() >= 0 ? city.GetFranchiseTurnsRemaining() + 1 : 0);// misuseing AddGold for passing the remaining franchise turns
 	so->AddGold(city.GetProductionLostToFranchise());
 	g_slicEngine->Execute(so);
 
