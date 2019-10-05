@@ -2377,7 +2377,7 @@ ORDER_RESULT ArmyData::SueFranchise(const MapPoint &point)
 	if(c.m_id == 0)
 		return ORDER_RESULT_ILLEGAL;
 
-	if(c.GetOwner() != m_owner) {
+	if(c.GetOwner() != m_owner) { // only remove franchises from your own cities
 
 		return ORDER_RESULT_ILLEGAL;
 	}
@@ -2408,6 +2408,7 @@ ORDER_RESULT ArmyData::SueFranchise(const MapPoint &point)
 	SlicObject *so = new SlicObject("911SueFranchiseCompleteVictim");
 	so->AddRecipient(c.GetFranchiseOwner());
 	so->AddCity(c);
+	so->AddGold(c.GetFranchiseTurnsRemaining() > 0 ? c.GetFranchiseTurnsRemaining() : 0);// misuseing AddGold for passing the remaining franchise turns
 	so->AddGold(c.GetProductionLostToFranchise());
 	g_slicEngine->Execute(so);
 
@@ -4292,7 +4293,7 @@ ORDER_RESULT ArmyData::ReformCity(const MapPoint &point)
 	if(c.m_id == 0)
 		return ORDER_RESULT_ILLEGAL;
 
-	if(c.GetOwner() != m_array[uindex].GetOwner())
+	if(c.GetOwner() != m_array[uindex].GetOwner()) // only reform (remove conversion) your own cities 
 		return ORDER_RESULT_ILLEGAL;
 
 	if(c.IsConvertedTo() < 0)

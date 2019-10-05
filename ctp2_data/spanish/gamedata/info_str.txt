@@ -418,7 +418,7 @@ SUE_COMPLETE_VICTIM			"Hemos sufrido un contratiempo legal. Un abogado extranjer
 SUE_FAILED_VICTIM			"Un abogado extranjero ha intentado sin éxito un pleito contra una de nuestras unidades de {unitrecord[0].name}. Aun así la justicia ha prevalecido."
 SUE_COMPLETE_ATTACKER			"Nuestro abogado ha conseguido ganar un litigio y destruir una unidad de {unitrecord[0].name} extranjera."
 SUE_FAILED_ATTACKER			"Nuestro abogado ha fracasado en su pleito contra una unidad de {unitrecord[0].name} extranjera."
-SUE_FRANCHISE_COMPLETE_VICTIM		"Foreign legal action has forced our franchise in the city of {city[0].name} to close up shop. The franchise was worth {gold[0].value} gold."ón legal extranjera nos ha forzado a cerrar nuestra franquicia en {city[0].name}."
+SUE_FRANCHISE_COMPLETE_VICTIM		"Foreign legal action has forced our franchise in the city of {city[0].name} to close up shop in {gold[0].value} turn(s). The franchise is worth {gold[1].value} gold."ón legal extranjera nos ha forzado a cerrar nuestra franquicia en {city[0].name}."
 SUE_FRANCHISE_FAILED_VICTIM		"A pesar de los considerables esfuerzos de un abogado extranjero, nuestra franquicia en la ciudad de {city[0].name} sigue en activo."
 SUE_FRANCHISE_COMPLETE_ATTACKER		"Uno de nuestro abogados ha llevado a cabo con éxito un pleito contra la franquicia extranjera en {city[0].name}, forzando así su cierre."
 SUE_FRANCHISE_FAILED_ATTACKER		"A pesar se la valiente lucha de nuestro abogado contra la franquicia presente en {city[0].name} ésta seguirá llevándose el dinero de nuestros ciudadanos."

@@ -418,7 +418,7 @@ SUE_COMPLETE_VICTIM			"Abbiamo subito una sconfitta legale. Un avvocato stranier
 SUE_FAILED_VICTIM			"Un avvocato straniero ha cercato invano di denunciare {unitrecord[0].name#ARTICLE_ONE_OF_OUR}. Per fortuna, la giustizia ha prevalso."
 SUE_COMPLETE_ATTACKER			"Il nostro avvocato è riuscito con successo a decretare la distruzione di {unitrecord[0].name#ARTICLE_FOREIGN}."
 SUE_FAILED_ATTACKER			"Il nostro avvocato non è riuscito a denunciare {unitrecord[0].name#ARTICLE_FOREIGN}."
-SUE_FRANCHISE_COMPLETE_VICTIM		"Foreign legal action has forced our franchise in the city of {city[0].name} to close up shop. The franchise was worth {gold[0].value} gold."
+SUE_FRANCHISE_COMPLETE_VICTIM		"Foreign legal action has forced our franchise in the city of {city[0].name} to close up shop in {gold[0].value} turn(s). The franchise is worth {gold[1].value} gold."
 SUE_FRANCHISE_FAILED_VICTIM		"Nonostante l'accanimento di un avvocato straniero, la nostra filiale di {city[0].name} resta operativa."
 SUE_FRANCHISE_COMPLETE_ATTACKER		"Un nostro avvocato è riuscito a denunciare la filiale straniera nella nostra città di {city[0].name}, costringendola a chiudere."
 SUE_FRANCHISE_FAILED_ATTACKER		"Anche se il nostro avvocato ha fatto il possibile, la filiale straniera presso {city[0].name} continua a privare i nostri cittadini del loro denaro."
