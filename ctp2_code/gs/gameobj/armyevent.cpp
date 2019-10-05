@@ -1417,6 +1417,11 @@ STDEHANDLER(LawsuitEvent)
 		so->AddLocation(a->RetPos());
 		so->AddUnitRecord(utype);
 		g_slicEngine->Execute(so);
+		
+		so = new SlicObject("911SueCompleteAttacker");
+		so->AddRecipient(lawyer->GetOwner());
+		so->AddUnitRecord(utype);
+		g_slicEngine->Execute(so);
 	}
 
 	return GEV_HD_Continue;

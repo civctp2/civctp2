@@ -2720,11 +2720,6 @@ messagebox '911SoothsayFailedAttacker' {
 	MessageType("SOOTHSAY_ICON");
 }// String is not part of the ctp2.exe
 
-messagebox '911SueCompleteVictim' {
-	Text(ID_SUE_COMPLETE_VICTIM);
-	MessageType("SUE_ICON");
-}
-
 messagebox '911SueFailedVictim' {
 	Text(ID_SUE_FAILED_VICTIM);
 	MessageType("SUE_ICON");

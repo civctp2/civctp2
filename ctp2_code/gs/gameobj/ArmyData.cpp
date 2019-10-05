@@ -2331,18 +2331,6 @@ ORDER_RESULT ArmyData::Sue(const MapPoint &point)
 						   GEA_MapPoint, point,
 						   GEA_End);
 
-	Unit attacking_unit = m_array[uindex];
-
-	SlicObject *so = new SlicObject("911SueCompleteVictim");
-	so->AddRecipient(cell->UnitArmy()->GetOwner());
-	so->AddUnitRecord(m_array[uindex].GetType());
-	g_slicEngine->Execute(so);
-
-	so = new SlicObject("911SueCompleteAttacker");
-	so->AddRecipient(attacking_unit.GetOwner());
-	so->AddUnitRecord(m_array[uindex].GetType());
-	g_slicEngine->Execute(so);
-
 	return ORDER_RESULT_SUCCEEDED;
 }
 
