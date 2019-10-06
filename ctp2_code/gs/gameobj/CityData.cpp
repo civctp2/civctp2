@@ -6002,7 +6002,7 @@ sint32 CityData::GetFranchiseTurnsRemaining() const
 void CityData::SetFranchiseTurnsRemaining(sint32 turns)
 {
 	m_franchiseTurnsRemaining = turns;
-	if(turns < 1)
+	if(turns < 0)// < 0: remove instantly; 0: beginning of next turn, i.e. turns + 1 
 	{
 		RemoveFranchise();
 	}
