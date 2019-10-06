@@ -2405,9 +2405,6 @@ ORDER_RESULT ArmyData::SueFranchise(const MapPoint &point)
 						   GEA_City, c,
 						   GEA_End);
 
-	g_slicEngine->Execute
-        (new AggressorReport("911SueFranchiseCompleteAttacker", u, c));
-
 	return ORDER_RESULT_SUCCEEDED;
 }
 
