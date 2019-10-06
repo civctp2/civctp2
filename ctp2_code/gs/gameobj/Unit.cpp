@@ -1623,6 +1623,11 @@ sint32 Unit::GetFranchiseOwner() const
 	return GetData()->GetFranchiseOwner();
 }
 
+sint32 Unit::GetProductionLostToFranchise() const
+{
+	return GetData()->GetProductionLostToFranchise();
+}
+
 void Unit::SetFranchiseTurnsRemaining(sint32 turns)
 {
 	AccessData()->SetFranchiseTurnsRemaining(turns);
@@ -1731,6 +1736,11 @@ void Unit::Unconvert()
 sint32 Unit::IsConvertedTo() const
 {
 	return GetData()->IsConvertedTo();
+}
+
+sint32 Unit::GetConvertedGold() const
+{
+	return GetData()->GetConvertedGold();
 }
 
 bool Unit::IsCloaked() const

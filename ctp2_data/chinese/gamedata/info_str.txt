@@ -378,6 +378,7 @@ IMMUNE_TO_PLAGUE_VICTIM 		"{city[0].name}ÓÉÓÚËÈ½¨ÓĞÎ¢ÉúÎï°²È«ÉèÊ©£¬ËÈÓµÓĞ¶ÔÉú»¯¹
 ## Reform City ##
 ## All Military Unit Action ##
 REFORM_CITY 				"{city[0].name}ËÈÍê³ÉÖØÕû£¬¸ÃÊĞÊĞÃñ²»ÔÙÎªÍâ¹úËù¿ØÖÆ¡£"
+REFORM_CITY_VICTIM			"Foreign inquisitors have reformed the city of {city[0].name} and its citizens are no longer under our influence. They used to pay {gold[0].value} gold."
 
 ## Sell Indulgences ##
 ## Cleric Attack ##
@@ -415,9 +416,9 @@ SUE_COMPLETE_VICTIM 			"ÎÒÃÇÊÜµ½ÁË·¨ÁîµÄÔ¼Êø£¬Íâ¹úÂÉÊ¦¶Ô{unitrecord[0].name}Ìá³ö
 SUE_FAILED_VICTIM 			"Íâ¹úÂÉÊ¦¶Ô{unitrecord[0].name}Ìá³öµÄËßËÏ²»³ÉÁ¢¡£ÕıËùÎ½£ºĞ°²»Ê¤Õı¡£"
 SUE_COMPLETE_ATTACKER 			"ÎÒ¹úÂÉÊ¦¶Ô{unitrecord[0].name}Ìá³öµÄËßËÏ³ÉÁ¢¡£"
 SUE_FAILED_ATTACKER 			"Íâ¹úÂÉÊ¦¶Ô{unitrecord[0].name}Ìá³öµÄËßËÏ²»³ÉÁ¢¡£"
-SUE_FRANCHISE_COMPLETE_VICTIM 		"Íâ¹úÂÉÊ¦²ÉÈ¡µÄ·¨ÂÉĞĞÎª£¬Ê¹µÃÎÒ¹úÔÚ{city[0].name}µÄ×¨Âôµê±»ÆÈ¹ØÃÅ¡£"
+SUE_FRANCHISE_COMPLETE_VICTIM		"Foreign legal action has forced our franchise in the city of {city[0].name} to close up shop in {gold[0].value} turn(s). The franchise is worth {gold[1].value} gold."Íâ¹úÂÉÊ¦²ÉÈ¡µÄ·¨ÂÉĞĞÎª£¬Ê¹µÃÎÒ¹úÔÚ{city[0].name}µÄ×¨Âôµê±»ÆÈ¹ØÃÅ¡£"
 SUE_FRANCHISE_FAILED_VICTIM 		"¾¡¹ÜÍâ¹úÂÉÊ¦·Ñ¾¡ĞÄÁ¦£¬ÎÒ¹úÔÚ{city[0].name}µÄ×¨ÂôµêÈÔ»ñ·¨Ôº²ÃÊ¾£¬ÄÜ¹»¼ÌĞøÓªÒµ¡£"
-SUE_FRANCHISE_COMPLETE_ATTACKER 	"ÎÒ¹úÂÉÊ¦³É¹¦µØÔÚ·¨Í¥ÉÏÓ®µÃÊ¤Àû£¬Íâ¹úÔÚ{city[0].name}µÄ×¨ÂôµêÀÕÁî½áÊøÓªÒµ¡£"
+SUE_FRANCHISE_COMPLETE_ATTACKER		"A Lawyer of ours has successfully sued the foreign franchise in our city of {city[0].name}, forcing it out of business in {gold[0].value} turn(s)."ÎÒ¹úÂÉÊ¦³É¹¦µØÔÚ·¨Í¥ÉÏÓ®µÃÊ¤Àû£¬Íâ¹úÔÚ{city[0].name}µÄ×¨ÂôµêÀÕÁî½áÊøÓªÒµ¡£"
 SUE_FRANCHISE_FAILED_ATTACKER 		"ËäÈ»ÎÒ¹úÂÉÊ¦Å¬Á¦³ÂÊöÊÂÊµ£¬È»¶øÅĞ¾ö½á¹ûÈ´ÈÃÍâ¹úÔÚ{city[0].name}µÄ×¨Âôµê¼ÌĞøÓªÔË£¬¼ÌĞø´ÓÎÒ¹úÈËÃñÉíÉÏÕ¥È¡½ğÇ®¡£"
 
 ## Hold Reception ##

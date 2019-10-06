@@ -380,6 +380,7 @@ IMMUNE_TO_PLAGUE_VICTIM			"{city[0].name} è immune agli effetti delle armi biolo
 ## Reform City ##
 ## All Military Unit Action ##
 REFORM_CITY				"Siamo riusciti a riformare {city[0].name}. I suoi cittadini non sono più sotto l'influenza straniera."
+REFORM_CITY_VICTIM			"Foreign inquisitors have reformed the city of {city[0].name} and its citizens are no longer under our influence. They used to pay {gold[0].value} gold."
 
 ## Sell Indulgences ##
 ## Cleric Attack ##
@@ -417,9 +418,9 @@ SUE_COMPLETE_VICTIM			"Abbiamo subito una sconfitta legale. Un avvocato stranier
 SUE_FAILED_VICTIM			"Un avvocato straniero ha cercato invano di denunciare {unitrecord[0].name#ARTICLE_ONE_OF_OUR}. Per fortuna, la giustizia ha prevalso."
 SUE_COMPLETE_ATTACKER			"Il nostro avvocato è riuscito con successo a decretare la distruzione di {unitrecord[0].name#ARTICLE_FOREIGN}."
 SUE_FAILED_ATTACKER			"Il nostro avvocato non è riuscito a denunciare {unitrecord[0].name#ARTICLE_FOREIGN}."
-SUE_FRANCHISE_COMPLETE_VICTIM		"Le azioni legali straniere hanno costretto la nostra filiale di {city[0].name} a chiudere i battenti."
+SUE_FRANCHISE_COMPLETE_VICTIM		"Foreign legal action has forced our franchise in the city of {city[0].name} to close up shop in {gold[0].value} turn(s). The franchise is worth {gold[1].value} gold."
 SUE_FRANCHISE_FAILED_VICTIM		"Nonostante l'accanimento di un avvocato straniero, la nostra filiale di {city[0].name} resta operativa."
-SUE_FRANCHISE_COMPLETE_ATTACKER		"Un nostro avvocato è riuscito a denunciare la filiale straniera nella nostra città di {city[0].name}, costringendola a chiudere."
+SUE_FRANCHISE_COMPLETE_ATTACKER		"A Lawyer of ours has successfully sued the foreign franchise in our city of {city[0].name}, forcing it out of business in {gold[0].value} turn(s)."è riuscito a denunciare la filiale straniera nella nostra città di {city[0].name}, costringendola a chiudere."
 SUE_FRANCHISE_FAILED_ATTACKER		"Anche se il nostro avvocato ha fatto il possibile, la filiale straniera presso {city[0].name} continua a privare i nostri cittadini del loro denaro."
 
 ## Hold Reception ##

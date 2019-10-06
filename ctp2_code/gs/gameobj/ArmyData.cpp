@@ -2331,18 +2331,6 @@ ORDER_RESULT ArmyData::Sue(const MapPoint &point)
 						   GEA_MapPoint, point,
 						   GEA_End);
 
-	Unit attacking_unit = m_array[uindex];
-
-	SlicObject *so = new SlicObject("911SueCompleteVictim");
-	so->AddRecipient(cell->UnitArmy()->GetOwner());
-	so->AddUnitRecord(m_array[uindex].GetType());
-	g_slicEngine->Execute(so);
-
-	so = new SlicObject("911SueCompleteAttacker");
-	so->AddRecipient(attacking_unit.GetOwner());
-	so->AddUnitRecord(m_array[uindex].GetType());
-	g_slicEngine->Execute(so);
-
 	return ORDER_RESULT_SUCCEEDED;
 }
 
@@ -2370,27 +2358,29 @@ ORDER_RESULT ArmyData::SueFranchise(const MapPoint &point)
 		return ORDER_RESULT_ILLEGAL;
 
 	Unit &	u		= m_array[uindex];
-	Cell *	cell	= g_theWorld->GetCell(point);
+	Unit c = GetAdjacentCity(point);
 
-	if(!cell || cell->GetCity().m_id == 0)
+
+
+	if(c.m_id == 0)
 		return ORDER_RESULT_ILLEGAL;
 
-	if(cell->GetCity().GetOwner() != m_owner) {
-
-		return ORDER_RESULT_ILLEGAL;
-	}
-
-	if(cell->GetCity().GetFranchiseOwner() < 0) {
+	if(c.GetOwner() != m_owner) { // only remove franchises from your own cities
 
 		return ORDER_RESULT_ILLEGAL;
 	}
 
-	if(cell->GetCity().GetFranchiseTurnsRemaining() == 0) {
+	if(c.GetFranchiseOwner() < 0) {
 
 		return ORDER_RESULT_ILLEGAL;
 	}
 
-	if(cell->GetCity().GetFranchiseTurnsRemaining() > 0 && cell->GetCity().GetFranchiseTurnsRemaining() <= g_theConstDB->Get(0)->GetTurnsToSueFranchise()) {
+	if(c.GetFranchiseTurnsRemaining() == 0) {
+
+		return ORDER_RESULT_ILLEGAL;
+	}
+
+	if(c.GetFranchiseTurnsRemaining() > 0 && c.GetFranchiseTurnsRemaining() <= g_theConstDB->Get(0)->GetTurnsToSueFranchise()) {
 
 		return ORDER_RESULT_ILLEGAL;
 	}
@@ -2400,16 +2390,8 @@ ORDER_RESULT ArmyData::SueFranchise(const MapPoint &point)
 	g_gevManager->AddEvent(GEV_INSERT_AfterCurrent, GEV_RemoveFranchise,
 						   GEA_Army, m_id,
 						   GEA_Unit, u,
-						   GEA_City, cell->GetCity(),
+						   GEA_City, c,
 						   GEA_End);
-
-	SlicObject *so = new SlicObject("911SueFranchiseCompleteVictim");
-	so->AddRecipient(cell->GetCity().GetFranchiseOwner());
-	so->AddCity(cell->GetCity());
-	g_slicEngine->Execute(so);
-
-	g_slicEngine->Execute
-        (new AggressorReport("911SueFranchiseCompleteAttacker", u, cell->GetCity()));
 
 	return ORDER_RESULT_SUCCEEDED;
 }
@@ -4289,7 +4271,7 @@ ORDER_RESULT ArmyData::ReformCity(const MapPoint &point)
 	if(c.m_id == 0)
 		return ORDER_RESULT_ILLEGAL;
 
-	if(c.GetOwner() != m_array[uindex].GetOwner())
+	if(c.GetOwner() != m_array[uindex].GetOwner()) // only reform (remove conversion) your own cities 
 		return ORDER_RESULT_ILLEGAL;
 
 	if(c.IsConvertedTo() < 0)
@@ -4303,6 +4285,14 @@ ORDER_RESULT ArmyData::ReformCity(const MapPoint &point)
 							   GEA_Unit, m_array[uindex].m_id,
 							   GEA_City, c.m_id,
 							   GEA_End);
+		
+		SlicObject *so = new SlicObject("135ReformCityVictim");
+		so->AddRecipient(c.IsConvertedTo());
+		so->AddCity(c);
+		so->AddGold(c.GetConvertedGold());
+		g_slicEngine->Execute(so);
+
+
 		// EMOD added for reforming units to destroy
 		// religious buildings, if they can build there own
 		for (sint32 i = m_nElements - 1; i >= 0; i--)

@@ -1916,6 +1916,12 @@ messagebox '135ReformCity' {
 	MessageType("REFORM_CITY_ICON");
 }
 
+messagebox '135ReformCityVictim' {
+	Text(ID_REFORM_CITY_VICTIM) ;
+	MessageType("REFORM_CITY_ICON");
+	EyePoint(city[0].location);
+}
+
 messagebox '137SlaveryCompleteAttacker' {
 	Text(ID_SLAVERY_COMPLETE_ATTACKER) ;
 	MessageType("CAPTURE_SLAVES");
@@ -2713,11 +2719,6 @@ messagebox '911SoothsayFailedAttacker' {
 	Text(ID_SOOTHSAY_FAILED_ATTACKER);
 	MessageType("SOOTHSAY_ICON");
 }// String is not part of the ctp2.exe
-
-messagebox '911SueCompleteVictim' {
-	Text(ID_SUE_COMPLETE_VICTIM);
-	MessageType("SUE_ICON");
-}
 
 messagebox '911SueFailedVictim' {
 	Text(ID_SUE_FAILED_VICTIM);
