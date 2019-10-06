@@ -1026,6 +1026,14 @@ CityWindow:CTP2_NEW_CITY_WINDOW {
 			string text "str_ldl_0"
 		}
 
+		# Label
+		TradeBonusLabel:CTP2_STATIC_BASE {
+			int	xpix	289
+			int	ypix	106
+			string	text	"str_ldl_Trade_Bonus"
+		}
+
+
 		## SPECIALISTS
 		# Labels...
 		Entertainers:CITY_WORKER_ALLOCATION_LABEL {
