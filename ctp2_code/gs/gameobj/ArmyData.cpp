@@ -3015,8 +3015,8 @@ ORDER_RESULT ArmyData::SlaveRaid(const MapPoint &point)
 	sint32 timer, amount;
 	sint32 uindex;
 	bool target_is_city;
-	Unit target_city;
-	Unit home_city;
+	Unit target_city; // city that is attaced by slaver
+	Unit home_city; // city where slaves are put to work
 
 	if (!IsSlaveRaidPossible(point, success, death, timer, amount, uindex,
 	    target_is_city, target_city, home_city))
@@ -3042,7 +3042,7 @@ ORDER_RESULT ArmyData::SlaveRaid(const MapPoint &point)
 		// InformAI(UNIT_ORDER_ENSLAVE_SETTLER, point); //does nothing here but could be implemented
 
 		DPRINTF(k_DBG_GAMESTATE, ("Doing EnslaveSettler instead of SlaveRaid\n"));
-		return EnslaveSettler(point, uindex, home_city);
+		return EnslaveSettler(point, uindex, home_city); //redetermines home_city?
 	}
 
 	double slaveryReduction = target_city.IsProtectedFromSlavery();
@@ -3061,8 +3061,6 @@ ORDER_RESULT ArmyData::SlaveRaid(const MapPoint &point)
 			return ORDER_RESULT_FAILED;
 		}
 
-		MapPoint cpos;
-		home_city.GetPos(cpos);
 		g_gevManager->AddEvent(GEV_INSERT_AfterCurrent, GEV_SlaveRaidCity,
 							   GEA_Unit, m_array[uindex],
 							   GEA_City, target_city.m_id,
@@ -3315,22 +3313,11 @@ ORDER_RESULT ArmyData::EnslaveSettler(const MapPoint &point, const sint32 uindex
 
 	ActionSuccessful(SPECATTACK_ENSLAVESETTLER, m_array[uindex], cell->AccessUnit(0));
 
-	g_gevManager->AddEvent(GEV_INSERT_AfterCurrent, GEV_EnslaveSettler,
+	g_gevManager->AddEvent(GEV_INSERT_AfterCurrent, GEV_EnslaveSettler, // also sends messages
 						   GEA_Army, m_id,
 						   GEA_Unit, m_array[uindex],
 						   GEA_Unit, cell->AccessUnit(0).m_id,
 						   GEA_End);
-	sint32 settlerOwner = cell->AccessUnit(0).GetOwner();
-
-	SlicObject *    so = new SlicObject("139SettlerSlavedVictim");
-	so->AddRecipient(settlerOwner);
-	g_slicEngine->Execute(so);
-
-	so = new SlicObject("137SlaveryCompleteAttacker");
-	so->AddRecipient(m_owner);
-	so->AddCivilisation(m_owner);
-	so->AddCity(home_city);
-	g_slicEngine->Execute(so);
 
 	AddSpecialActionUsed(m_array[uindex]);
 

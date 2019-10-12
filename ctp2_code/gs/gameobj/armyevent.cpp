@@ -1488,6 +1488,16 @@ STDEHANDLER(EnslaveSettlerEvent)
 		                       GEA_City,    home_city.m_id,
 		                       GEA_Player,  settlerOwner,
 		                       GEA_End);
+
+		SlicObject *so = new SlicObject("139SettlerSlavedVictim");
+		so->AddRecipient(settlerOwner);
+		g_slicEngine->Execute(so);
+
+		so = new SlicObject("137SlaveryCompleteAttacker");
+		so->AddRecipient(slaverOwner);
+		so->AddCivilisation(slaverOwner);
+		so->AddCity(home_city);
+		g_slicEngine->Execute(so);
 	}
 	// else No action: the slaver does not have any cities
 
