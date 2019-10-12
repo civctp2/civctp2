@@ -2655,6 +2655,10 @@ void CityData::CollectResourcesFinally()
 	m_gross_production = (sint32)(fullProdTerrainTotal + ceil(utilizationRatio * double(partProdTerrainTotal)));
 	m_gross_gold = (sint32)(fullGoldTerrainTotal + ceil(utilizationRatio * double(partGoldTerrainTotal)));
 
+	m_gross_food += FoodFromTrade();
+	m_gross_production += ProdFromTrade();
+	m_gross_gold += GoldFromTrade();
+
 	m_collected_production_this_turn = m_gross_production;
 
 	/* Why is gross production passed to net here?
@@ -2672,6 +2676,48 @@ void CityData::CollectResourcesFinally()
 	m_net_food = m_gross_food;
 	m_net_gold = m_gross_gold;
 }
+
+sint32 CityData::FoodFromTrade(){
+    sint32 food= 0;
+
+    for (sint32 g = 0; g < g_theResourceDB->NumRecords(); g++){
+	if(m_buyingResources[g] > 0){
+	    for (sint32 nGood = 0; nGood < m_buyingResources[g]; nGood++){
+		food += g_theResourceDB->Get(g)->GetFood();
+		}
+	    }
+	}
+
+    return(food);
+    }
+
+sint32 CityData::ProdFromTrade(){
+    sint32 prod= 0;
+
+    for (sint32 g = 0; g < g_theResourceDB->NumRecords(); g++){
+	if(m_buyingResources[g] > 0){
+	    for (sint32 nGood = 0; nGood < m_buyingResources[g]; nGood++){
+		prod += g_theResourceDB->Get(g)->GetProduction();
+		}
+	    }
+	}
+
+    return(prod);
+    }
+
+sint32 CityData::GoldFromTrade(){
+    sint32 gold= 0;
+
+    for (sint32 g = 0; g < g_theResourceDB->NumRecords(); g++){
+	if(m_buyingResources[g] > 0){
+	    for (sint32 nGood = 0; nGood < m_buyingResources[g]; nGood++){
+		gold += g_theResourceDB->Get(g)->GetGold();
+		}
+	    }
+	}
+
+    return(gold);
+    }
 
 #if defined(NEW_RESOURCE_PROCESS)
 //----------------------------------------------------------------------------

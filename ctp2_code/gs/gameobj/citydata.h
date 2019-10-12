@@ -399,6 +399,10 @@ public:
 	void   CollectResources();
 	void   CollectResourcesFinally();
 
+        sint32 FoodFromTrade();
+        sint32 ProdFromTrade();
+        sint32 GoldFromTrade();
+
 #if !defined(NEW_RESOURCE_PROCESS)
 	sint32 ProcessFood();
 	void   ProcessFood(double &foodLostToCrime, double &producedFood, double &grossFood, bool considerOnlyFromTerrain = false) const;

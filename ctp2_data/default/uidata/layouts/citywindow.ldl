@@ -774,79 +774,28 @@ CityWindow:CTP2_NEW_CITY_WINDOW {
 			string just "left"
 		}
 
-		# Icons...
-		FoodIcon:CITY_WIN_GLOBAL_ICON {
-			int ypix 136
-			int xpix 1
-			string image0 "upic05.tga"
-
-			# Tooltip
-			string	tipwindow	"TOOLTIP_CITYMAN_MAIN_SMFOOD_DISPLAY"
-			string	statustext	"STATUSBAR_CITYMAN_MAIN_SMFOOD_DISPLAY"
-		}
-		ProductionIcon:CITY_WIN_GLOBAL_ICON {
-			int ypix 161
-			int xpix 1
-			string image0 "upic06.tga"
-
-			# Tooltip
-			string	tipwindow	"TOOLTIP_CITYMAN_MAIN_SMPROD_DISPLAY"
-			string	statustext	"STATUSBAR_CITYMAN_MAIN_SMPROD_DISPLAY"
-		}
-		TradeIcon:CITY_WIN_GLOBAL_ICON {
-			int ypix 136
-			int xpix 57
-			string image0 "upic09.tga"
-
-			# Tooltip
-			string	tipwindow	"TOOLTIP_CITYMAN_MAIN_SMCOMM_DISPLAY"
-			string	statustext	"STATUSBAR_CITYMAN_MAIN_SMCOMM_DISPLAY"
-		}
-		ScienceIcon:CITY_WIN_GLOBAL_ICON {
-			int ypix 161
-			int xpix 57
-			string image0 "upic07.tga"
-
-			# Tooltip
-			string	tipwindow	"TOOLTIP_CITYMAN_MAIN_SMSCI_DISPLAY"
-			string	statustext	"STATUSBAR_CITYMAN_MAIN_SMSCI_DISPLAY"
-		}
-
-		# Numbers...
-		FoodValue:CITY_WIN_GLOBAL_ICON_VALUE {
-			int ypix 141
-			int xpix 26
-			string text "str_ldl_0"
-
-			# Tooltip
-			string	statustext	"STATUSBAR_CITYMAN_MAIN_SMFOOD_DISPLAY"
-		}
-		ProductionValue:CITY_WIN_GLOBAL_ICON_VALUE {
-			int ypix 166
-			int xpix 26
-			string text "str_ldl_0"
-
-			# Tooltip
-			string	statustext	"STATUSBAR_CITYMAN_MAIN_SMPROD_DISPLAY"
-		}
-		TradeValue:CITY_WIN_GLOBAL_ICON_VALUE {
-			int ypix 141
-			int xpix 82
-			string text "str_ldl_0"
-
-			# Tooltip
-			string	statustext	"STATUSBAR_CITYMAN_MAIN_SMCOMM_DISPLAY"
-		}
-		ScienceValue:CITY_WIN_GLOBAL_ICON_VALUE {
-			int ypix 166
-			int xpix 82
-			string text "str_ldl_0"
-
-			# Tooltip
-			string	statustext	"STATUSBAR_CITYMAN_MAIN_SMSCI_DISPLAY"
-		}
-
 		# Funky bars
+		EfficiencyBar {
+			string objecttype "ctp2_Static"
+			int xpix 6
+			int ypix 166
+			int widthpix 108 #175 original width
+			int heightpix 16
+
+			# Tooltip
+			string	statustext	"STATUSBAR_CITYMAN_STATS_EFFICIENCY_BUTTON"
+		}					
+		EfficiencyLabel:CITY_WORKER_INFO_LABEL {
+			string objecttype "ctp2_Static"
+			int xpix 6
+			int ypix 148
+			int widthpix 50
+			int heightpix 18
+			string text "str_ldl_CityWinEfficiency"
+
+			# Tooltip
+			string	statustext	"STATUSBAR_CITYMAN_STATS_EFFICIENCY_BUTTON"
+		}
 		GrowthBar {
 			string	objecttype	"ctp2_Static"
 			int	xpix	6
@@ -923,7 +872,7 @@ CityWindow:CTP2_NEW_CITY_WINDOW {
 		}
 		Workers:CITY_WORKER_INFO_LABEL {
 			int	xpix	118
-			int	ypix	39
+			int	ypix	30
 			int	widthpix	80
 			int	heightpix	15
 			#string pattern "uptg04e.tga"
@@ -934,7 +883,7 @@ CityWindow:CTP2_NEW_CITY_WINDOW {
 		}
 		Slaves:CITY_WORKER_INFO_LABEL {
 			int	xpix	117
-			int	ypix	72
+			int	ypix	55
 			int	widthpix	80
 			int	heightpix	15
 			#string pattern "uptg04e.tga"
@@ -951,7 +900,7 @@ CityWindow:CTP2_NEW_CITY_WINDOW {
 		}
 		WorkersCount:CITY_WORKER_ALLOCATION_TEXT_BOX {
 			int	xpix	219
-			int	ypix	39
+			int	ypix	30
 			int	widthpix	46
 			int	heightpix	15
 			string just "center"
@@ -961,7 +910,7 @@ CityWindow:CTP2_NEW_CITY_WINDOW {
 		SlaveCount:CITY_WORKER_ALLOCATION_TEXT_BOX {
 			int	xpix	219
 			int	widthpix	46
-			int	ypix	72
+			int	ypix	55
 			string just "center"
 			string	text	"str_ldl_0"
 			int	heightpix	15
@@ -970,33 +919,126 @@ CityWindow:CTP2_NEW_CITY_WINDOW {
 			# Tooltip
 			string	statustext	"STATUSBAR_CITYMAN_MAIN_TOTALSLAVES_DISPLAY"
 		}
-		EfficiencyBar {
-			string objecttype "ctp2_Static"
-			int xpix 203
-			int ypix 100
-			int widthpix 151 #175 original width
-			int heightpix 12
 
-			# Tooltip
-			string	statustext	"STATUSBAR_CITYMAN_STATS_EFFICIENCY_BUTTON"
-		}					
-		EfficiencyLabel:CITY_WORKER_INFO_LABEL {
-			string objecttype "ctp2_Static"
+		# Icons...
+		FoodIcon:CITY_WIN_GLOBAL_ICON {
+			int ypix  76
 			int xpix 118
-			int ypix 100
-			int widthpix 80
-			int heightpix 18
-			string text "str_ldl_CityWinEfficiency"
+			string image0 "upic05.tga"
 
 			# Tooltip
-			string	statustext	"STATUSBAR_CITYMAN_STATS_EFFICIENCY_BUTTON"
+			string	tipwindow	"TOOLTIP_CITYMAN_MAIN_SMFOOD_DISPLAY"
+			string	statustext	"STATUSBAR_CITYMAN_MAIN_SMFOOD_DISPLAY"
 		}
+		ProductionIcon:CITY_WIN_GLOBAL_ICON {
+			int ypix  76
+			int xpix 175
+			string image0 "upic06.tga"
+
+			# Tooltip
+			string	tipwindow	"TOOLTIP_CITYMAN_MAIN_SMPROD_DISPLAY"
+			string	statustext	"STATUSBAR_CITYMAN_MAIN_SMPROD_DISPLAY"
+		}
+		TradeIcon:CITY_WIN_GLOBAL_ICON {
+			int ypix  76
+			int xpix 232
+			string image0 "upic09.tga"
+
+			# Tooltip
+			string	tipwindow	"TOOLTIP_CITYMAN_MAIN_SMCOMM_DISPLAY"
+			string	statustext	"STATUSBAR_CITYMAN_MAIN_SMCOMM_DISPLAY"
+		}
+		ScienceIcon:CITY_WIN_GLOBAL_ICON {
+			int ypix  76
+			int xpix 289
+			string image0 "upic07.tga"
+
+			# Tooltip
+			string	tipwindow	"TOOLTIP_CITYMAN_MAIN_SMSCI_DISPLAY"
+			string	statustext	"STATUSBAR_CITYMAN_MAIN_SMSCI_DISPLAY"
+		}
+
+		# Numbers...
+		FoodValue:CITY_WIN_GLOBAL_ICON_VALUE {
+			int ypix  81
+			int xpix 144
+			string text "str_ldl_0"
+
+			# Tooltip
+			string	statustext	"STATUSBAR_CITYMAN_MAIN_SMFOOD_DISPLAY"
+		}
+		ProductionValue:CITY_WIN_GLOBAL_ICON_VALUE {
+			int ypix  81
+			int xpix 201
+			string text "str_ldl_0"
+
+			# Tooltip
+			string	statustext	"STATUSBAR_CITYMAN_MAIN_SMPROD_DISPLAY"
+		}
+		TradeValue:CITY_WIN_GLOBAL_ICON_VALUE {
+			int ypix  81
+			int xpix 258
+			string text "str_ldl_0"
+
+			# Tooltip
+			string	statustext	"STATUSBAR_CITYMAN_MAIN_SMCOMM_DISPLAY"
+		}
+		ScienceValue:CITY_WIN_GLOBAL_ICON_VALUE {
+			int ypix  81
+			int xpix 315
+			string text "str_ldl_0"
+
+			# Tooltip
+			string	statustext	"STATUSBAR_CITYMAN_MAIN_SMSCI_DISPLAY"
+		}
+
+		# Icons for bought resources:
+		FoodIconTrade:CITY_WIN_GLOBAL_ICON {
+			int ypix 098
+			int xpix 118
+			string image0 "upic05.tga"
+		}
+		ProductionIconTrade:CITY_WIN_GLOBAL_ICON {
+			int ypix 098
+			int xpix 175
+			string image0 "upic06.tga"
+		}
+		TradeIconTrade:CITY_WIN_GLOBAL_ICON {
+			int ypix 098
+			int xpix 232
+			string image0 "upic09.tga"
+		}
+
+		# Numbers for bought resources:
+		FoodTradeValue:CITY_WIN_GLOBAL_ICON_VALUE {
+			int ypix 103
+			int xpix 144
+			string text "str_ldl_0"
+		}
+		ProductionTradeValue:CITY_WIN_GLOBAL_ICON_VALUE {
+			int ypix 103
+			int xpix 201
+			string text "str_ldl_0"
+		}
+		GoldTradeValue:CITY_WIN_GLOBAL_ICON_VALUE {
+			int ypix 103
+			int xpix 258
+			string text "str_ldl_0"
+		}
+
+		# Label
+		TradeBonusLabel:CTP2_STATIC_BASE {
+			int	xpix	289
+			int	ypix	106
+			string	text	"str_ldl_Trade_Bonus"
+		}
+
 
 		## SPECIALISTS
 		# Labels...
 		Entertainers:CITY_WORKER_ALLOCATION_LABEL {
 			int	xpix	118
-			int	ypix	131
+			int	ypix	135
 			string	text	"str_ldl_Entertainers"
 
 			# Tooltip
@@ -1004,7 +1046,7 @@ CityWindow:CTP2_NEW_CITY_WINDOW {
 		}
 		Farmers:CITY_WORKER_ALLOCATION_LABEL {
 			int	xpix	118
-			int	ypix	159
+			int	ypix	162
 			string	text	"str_ldl_Farmers"
 
 			# Tooltip
@@ -1012,7 +1054,7 @@ CityWindow:CTP2_NEW_CITY_WINDOW {
 		}
 		Laborers:CITY_WORKER_ALLOCATION_LABEL {
 			int	xpix	118
-			int	ypix	187
+			int	ypix	189
 			string	text	"str_ldl_Laborers"
 
 			# Tooltip
@@ -1020,7 +1062,7 @@ CityWindow:CTP2_NEW_CITY_WINDOW {
 		}
 		Merchants:CITY_WORKER_ALLOCATION_LABEL {
 			int	xpix	118
-			int	ypix	215
+			int	ypix	216
 			string	text	"str_ldl_Merchants"
 
 			# Tooltip
@@ -1037,28 +1079,28 @@ CityWindow:CTP2_NEW_CITY_WINDOW {
 		# Spinners...
 		EntertainersSpinner:CITY_WORKER_ALLOCATION_SPINNER {
 			int	xpix	204
-			int	ypix	124
+			int	ypix	128
 
 			# Tooltip
 			string	statustext	"STATUSBAR_CITYMAN_MAIN_TOTALENTR_BUTTON"
 		}
 		FarmersSpinner:CITY_WORKER_ALLOCATION_SPINNER {
 			int	xpix	204
-			int	ypix	152
+			int	ypix	155
 
 			# Tooltip
 			string	statustext	"STATUSBAR_CITYMAN_MAIN_TOTALFARM_BUTTON"
 		}
 		LaborersSpinner:CITY_WORKER_ALLOCATION_SPINNER {
 			int	xpix	204
-			int	ypix	180
+			int	ypix	182
 
 			# Tooltip
 			string	statustext	"STATUSBAR_CITYMAN_MAIN_TOTALLABR_BUTTON"
 		}
 		MerchantsSpinner:CITY_WORKER_ALLOCATION_SPINNER {
 			int	xpix	204
-			int	ypix	208
+			int	ypix	209
 
 			# Tooltip
 			string	statustext	"STATUSBAR_CITYMAN_MAIN_TOTALMRCH_BUTTON"
@@ -1073,7 +1115,7 @@ CityWindow:CTP2_NEW_CITY_WINDOW {
 		# Icons...
 		HappyWorkerIcon:CITY_WORKER_ICON {
 			int	xpix	281
-			int	ypix	122
+			int	ypix	126
 			string image0 "upic10.tga"
 
 			# Tooltip
@@ -1082,7 +1124,7 @@ CityWindow:CTP2_NEW_CITY_WINDOW {
 		}
 		FoodWorkerIcon:CITY_WORKER_ICON {
 			int	xpix	281
-			int	ypix	150
+			int	ypix	153
 			string image0 "upic05.tga"
 
 			# Tooltip
@@ -1091,7 +1133,7 @@ CityWindow:CTP2_NEW_CITY_WINDOW {
 		}
 		ProductionWorkerIcon:CITY_WORKER_ICON {
 			int	xpix	281
-			int	ypix	178
+			int	ypix	180
 			string image0 "upic06.tga"
 
 			# Tooltip
@@ -1100,7 +1142,7 @@ CityWindow:CTP2_NEW_CITY_WINDOW {
 		}
 		TradeWorkerIcon:CITY_WORKER_ICON {
 			int	xpix	281
-			int	ypix	206
+			int	ypix	207
 			string image0 "upic09.tga"
 
 			# Tooltip
@@ -1119,22 +1161,22 @@ CityWindow:CTP2_NEW_CITY_WINDOW {
 		# Numbers...
 		HappyWorkerValue:CITY_WORKER_ICON_VALUE {
 			int	xpix	305
-			int	ypix	129
+			int	ypix	133
 			string text "str_ldl_0"
 		}
 		FoodWorkerValue:CITY_WORKER_ICON_VALUE {
 			int	xpix	305
-			int	ypix	157
+			int	ypix	160
 			string text "str_ldl_0"
 		}
 		ProductionWorkerValue:CITY_WORKER_ICON_VALUE {
 			int	xpix	305
-			int	ypix	185
+			int	ypix	187
 			string text "str_ldl_0"
 		}
 		TradeWorkerValue:CITY_WORKER_ICON_VALUE {
 			int	xpix	305
-			int	ypix	213
+			int	ypix	214
 			string text "str_ldl_0"
 		}
 		ScienceWorkerValue:CITY_WORKER_ICON_VALUE {
