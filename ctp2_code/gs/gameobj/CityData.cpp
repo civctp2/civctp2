@@ -5969,6 +5969,10 @@ void CityData::SetCapitol()
 
 void CityData::MakeFranchise(sint32 player)
 {
+	if(m_franchise_owner != player){// remove foreign franchise to update city icon for former owner
+	    RemoveFranchise();
+	    }
+
 	m_franchise_owner = player;
 	m_franchiseTurnsRemaining = g_theConstDB->Get(0)->GetTurnsFranchised(); // do not use SetFranchiseTurnsRemaining here, as it resets the owner for -1
 
@@ -6344,6 +6348,10 @@ void CityData::ConvertTo(sint32 player, CONVERTED_BY by)
 	if(IsProtectedFromConversion())
 		return;
 
+	if(m_convertedTo != player){// remove foreign conversion to update city icon for former owner
+	    Unconvert(false);// do not cause unhappiness in this case
+	    }
+	
 	m_convertedTo = player;
 	m_convertedBy = by;
 
