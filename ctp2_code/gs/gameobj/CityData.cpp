@@ -4417,7 +4417,7 @@ void CityData::CalculateTradeRoutes(bool projectedOnly)
 		switch(routeType)
 		{
 			case ROUTE_TYPE_RESOURCE:
-				if(m_collectingResources[routeResource] <= m_sellingResources[routeResource])
+			    if(m_collectingResources[routeResource] <= m_sellingResources[routeResource]) // if good got lost (should not happen so far because (partial?) implementation is not active)
 				{
 					if(!projectedOnly)
 					{
@@ -4460,17 +4460,17 @@ void CityData::CalculateTradeRoutes(bool projectedOnly)
 		killRoute = false;
 		if(!projectedOnly)
 		{
-			if(route.GetOwner() != m_owner)
+			if(route.GetOwner() != m_owner) // foreign source
 			{
-				if(g_player[m_owner]->GetGold() < route.GetGoldInReturn())
+				if(g_player[m_owner]->GetGold() < route.GetGoldInReturn()) // kill route because of not enough gold to pay for the resource
 				{
 					deadRoutes.Insert(route);
 					killRoute = true;
 				}
 				else
 				{
-					g_player[m_owner]->SubGold(route.GetGoldInReturn());
-					g_player[route.GetSource().GetOwner()]->AddGold(route.GetGoldInReturn());
+					g_player[m_owner]->SubGold(route.GetGoldInReturn()); // remove gold from receiver
+					g_player[route.GetSource().GetOwner()]->AddGold(route.GetGoldInReturn()); // give gold to sender
 				}
 			}
 
@@ -4484,7 +4484,7 @@ void CityData::CalculateTradeRoutes(bool projectedOnly)
 		if(route.IsActive() && !killRoute)
 		{
 			route.GetSourceResource(routeType, routeResource);
-			AddTradeResource(routeType, routeResource);
+			AddTradeResource(routeType, routeResource); // add to m_buyingResources
 		}
 	}
 

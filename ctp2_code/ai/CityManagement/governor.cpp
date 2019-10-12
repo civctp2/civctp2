@@ -5083,8 +5083,8 @@ void Governor::ManageGoodsTradeRoutes()
 				sint32 sellingPrice = -1;
 				TradeRoute curDestRoute;
 
-				if(!city.CD()->HasResource(g)
-				&&  city.CD()->GetResourceTradeRoute(g, curDestRoute))
+				if(!city.CD()->HasResource(g) // no resource g left for trade
+				&&  city.CD()->GetResourceTradeRoute(g, curDestRoute)) // have already a route for g
 				{
 					sellingPrice =
 						tradeutil_GetTradeValue(m_playerId, curDestRoute->GetDestination(), g);
@@ -5101,7 +5101,7 @@ void Governor::ManageGoodsTradeRoutes()
 				double maxNeededFreight = 0.0;
 				for (sint32 op = 1; op < k_MAX_PLAYERS; op++)
 				{
-					if (m_playerId != op)
+					if (m_playerId != op) // skip all players not awailable for trading
 					{
 						if (!g_player[op])
 							continue;
