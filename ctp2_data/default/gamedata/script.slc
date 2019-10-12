@@ -1925,6 +1925,7 @@ messagebox '135ReformCityVictim' {
 messagebox '137SlaveryCompleteAttacker' {
 	Text(ID_SLAVERY_COMPLETE_ATTACKER) ;
 	MessageType("CAPTURE_SLAVES");
+	EyePoint(city[0].location);
 }
 
 messagebox '137SlaveCompleteVictim' {
