@@ -7547,16 +7547,23 @@ SFN_ERROR Slic_Liberate::Call(SlicArgList *args)
 	//if(!args->GetInt(0, cause))
 	//	return GEV_HD_Continue;
 
-    //// give conquering units to barbars
+    city.ResetCityOwner(PLAYER_INDEX_VANDALS, FALSE, CAUSE_REMOVE_CITY_DIPLOMACY); // must be before sending armies home otherwise NearestFriendlyCityWithRoom returns the current city
+
+    //// send conquering units home
     Cell *cell = g_theWorld->GetCell(city.RetPos());
     sint32 i, n = cell->GetNumUnits();
 
+    MapPoint 		cpos;
+    UnitDynamicArray    revealed;
     for(i = 0; i < n; i++) {
-	Unit u = cell->AccessUnit(i);	    
-	u.ResetUnitOwner(PLAYER_INDEX_VANDALS, CAUSE_REMOVE_ARMY_DIPLOMACY);
+	Unit u = cell->AccessUnit(i);
+	if(u.NearestFriendlyCityWithRoom(cpos, n, u.GetArmy())){
+	    u.SetPosition(cpos, revealed);
+	    }
+	else{
+	    u.Kill(CAUSE_REMOVE_ARMY_EXPELLED_NO_CITIES, PLAYER_INDEX_VANDALS);
+	    }
 	}
-
-    city.ResetCityOwner(PLAYER_INDEX_VANDALS, FALSE, CAUSE_REMOVE_CITY_DIPLOMACY);
 
     return SFN_ERROR_OK;
 }
