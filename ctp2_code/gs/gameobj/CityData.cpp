@@ -6015,6 +6015,19 @@ void CityData::SetCapitol()
 
 void CityData::MakeFranchise(sint32 player)
 {
+	if(m_franchise_owner != player){// remove foreign franchise to update city icon for former owner
+	    if(m_franchise_owner > 0){// m_franchise_owner < 0 means not franchised
+		SlicObject *so = new SlicObject("911SueFranchiseCompleteVictim");
+		so->AddRecipient(GetFranchiseOwner());
+		so->AddCity(m_home_city);
+		so->AddGold(0);// misuseing AddGold for passing the remaining franchise turns
+		so->AddGold(GetProductionLostToFranchise());
+		g_slicEngine->Execute(so);
+		}
+
+	    RemoveFranchise();// must be after message because m_franchise_owner is set to -1
+	    }
+
 	m_franchise_owner = player;
 	m_franchiseTurnsRemaining = g_theConstDB->Get(0)->GetTurnsFranchised(); // do not use SetFranchiseTurnsRemaining here, as it resets the owner for -1
 
@@ -6390,6 +6403,18 @@ void CityData::ConvertTo(sint32 player, CONVERTED_BY by)
 	if(IsProtectedFromConversion())
 		return;
 
+	if(m_convertedTo != player){// remove foreign conversion to update city icon for former owner
+	    if(m_convertedTo > 0){// m_convertedTo < 0 means not converted
+		SlicObject *so = new SlicObject("135ReformCityVictim");
+		so->AddRecipient(IsConvertedTo());
+		so->AddCity(m_home_city);
+		so->AddGold(GetConvertedGold());
+		g_slicEngine->Execute(so);
+		}
+
+	    Unconvert(false);// do not cause unhappiness in this case, has to be after message (sets m_convertedTo to -1)
+	    }
+	
 	m_convertedTo = player;
 	m_convertedBy = by;
 

@@ -380,7 +380,7 @@ IMMUNE_TO_PLAGUE_VICTIM			"{city[0].name} es inmune a los devastadores efectos d
 ## Reform City ##
 ## All Military Unit Action ##
 REFORM_CITY				"Hemos conseguido reformar {city[0].name}. Sus ciudadanos ya no están bajo la influencia extranjera."
-REFORM_CITY_VICTIM			"Foreign inquisitors have reformed the city of {city[0].name} and its citizens are no longer under our influence. They used to pay {gold[0].value} gold."
+REFORM_CITY_VICTIM			"The citizens of the formerly converted city of {city[0].name} are no longer under our influence. They used to pay {gold[0].value} gold."
 
 ## Sell Indulgences ##
 ## Cleric Attack ##

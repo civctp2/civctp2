@@ -380,7 +380,7 @@ IMMUNE_TO_PLAGUE_VICTIM			"Da dort ein Bio-Schutzfilter installiert ist, sind di
 ## Reform City ##
 ## All Military Unit Action ##
 REFORM_CITY				"Wir haben die Stadt {city[0].name} erfolgreich reformiert. Die dortige Bevölkerung steht nicht länger unter fremdem Einfluss."
-REFORM_CITY_VICTIM			"Fremde Inquisitoren haben die Stadt {city[0].name} reformiert und ihre Bürger stehen nicht mehr unter unserem Einfluss. Sie zahlten jede Runde {gold[0].value} Gold."
+REFORM_CITY_VICTIM			"Die Bürger der zuvor zu uns konvertierten Stadt {city[0].name} stehen nicht mehr unter unserem Einfluss. Sie zahlten jede Runde {gold[0].value} Gold."
 
 ## Sell Indulgences ##
 ## Cleric Attack ##
