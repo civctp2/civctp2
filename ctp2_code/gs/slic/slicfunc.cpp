@@ -7547,6 +7547,15 @@ SFN_ERROR Slic_Liberate::Call(SlicArgList *args)
 	//if(!args->GetInt(0, cause))
 	//	return GEV_HD_Continue;
 
+    //// give conquering units to barbars
+    Cell *cell = g_theWorld->GetCell(city.RetPos());
+    sint32 i, n = cell->GetNumUnits();
+
+    for(i = 0; i < n; i++) {
+	Unit u = cell->AccessUnit(i);	    
+	u.ResetUnitOwner(PLAYER_INDEX_VANDALS, CAUSE_REMOVE_ARMY_DIPLOMACY);
+	}
+
     city.ResetCityOwner(PLAYER_INDEX_VANDALS, FALSE, CAUSE_REMOVE_CITY_DIPLOMACY);
 
     return SFN_ERROR_OK;
