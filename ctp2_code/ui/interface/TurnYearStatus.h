@@ -56,6 +56,7 @@ public:
 
 	TurnYearStatus(MBCHAR *ldlBlock);
 
+	void Update();
 	void UpdatePlayer(PLAYER_INDEX player);
 
 	static AUI_ERRCODE DrawDougsProgress(ctp2_Static *control,
@@ -64,8 +65,6 @@ public:
 	                                     void *cookie);
 
 private:
-
-	void Update();
 
 	static void TurnYearStatusActionCallback(aui_Control *control, uint32 action,
 		uint32 data, void *cookie);

@@ -156,6 +156,7 @@ public:
 	void KeyboardSelectFirstUnit();
 	void SelectFirstUnit(bool setSelect = true);
 	void NextUnmovedUnit(bool isFirst = false, bool manualNextUnit = false);
+	double UnitsDoneRatio();
 	void MaybeAutoEndTurn(bool isFirst = false);
 
 	void Refresh();

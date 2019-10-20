@@ -317,5 +317,15 @@ AUI_ERRCODE TurnYearStatus::DrawDougsProgress(ctp2_Static *control,
 			primitives_PaintRect16(surface, &tmp, g_colorSet->GetPlayerColor(g_selected_item->GetCurPlayer()));
 		}
 	}
+	else {// use progress bar to indicate how many units have got their order for the trun
+	    RECT tmp = rect;
+	    sint32 width = tmp.right - tmp.left;
+	    sint32 displayWidth = width * g_selected_item->UnitsDoneRatio();
+	    if(displayWidth > width) {
+		displayWidth = width;
+		}
+	    tmp.right = tmp.left + displayWidth;
+	    primitives_PaintRect16(surface, &tmp, g_colorSet->GetPlayerColor(g_selected_item->GetCurPlayer()));    
+	    }
 	return AUI_ERRCODE_OK;
 }

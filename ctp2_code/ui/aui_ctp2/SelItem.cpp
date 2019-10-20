@@ -645,6 +645,20 @@ void SelectedItem::NextUnmovedUnit(bool isFirst, bool manualNextUnit)
 	}
 }
 
+double SelectedItem::UnitsDoneRatio(){
+    Player *p = g_player[GetVisiblePlayer()];
+    sint32 numUnits= p->m_all_armies->Num();
+    sint32 unitsDone= numUnits;
+    
+    for(sint32 u = numUnits - 1; u >= 0; u--){
+	if(CanAutoSelect(p->m_all_armies->Access(u)) && unitsDone){
+	    unitsDone--;
+	    }
+	}
+    
+    return(double(unitsDone) / numUnits);
+    }
+
 void SelectedItem::MaybeAutoEndTurn(bool isFirst)
 {
 	sint32 player = GetVisiblePlayer();
