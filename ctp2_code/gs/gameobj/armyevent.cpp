@@ -627,6 +627,7 @@ STDEHANDLER(ArmyGetExpelledOrderEvent)
 	SlicObject *so = new SlicObject("42UnitExpelled");
 	so->AddCivilisation(player);
 	so->AddRecipient(victim);
+	so->AddLocation(pos);
 	g_slicEngine->Execute(so);
 
 	return GEV_HD_Continue;

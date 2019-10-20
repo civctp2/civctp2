@@ -785,6 +785,7 @@ messagebox '41UnitDisbandedOnGovChange' {
 messagebox '42UnitExpelled' {
 	MessageType("MILITARY");
 	Text(ID_UNIT_EXPELLED);
+	EyePoint(location[0]);
 }
 
 messagebox '44WonderStarted' {
