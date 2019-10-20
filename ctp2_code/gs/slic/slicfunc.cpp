@@ -7546,22 +7546,50 @@ SFN_ERROR Slic_Liberate::Call(SlicArgList *args)
 
 	//if(!args->GetInt(0, cause))
 	//	return GEV_HD_Continue;
-
+    
     city.ResetCityOwner(PLAYER_INDEX_VANDALS, FALSE, CAUSE_REMOVE_CITY_DIPLOMACY); // must be before sending armies home otherwise NearestFriendlyCityWithRoom returns the current city
 
-    //// send conquering units home
+    //// send conquering armies home, based on code from ArmyData::Expel
     Cell *cell = g_theWorld->GetCell(city.RetPos());
     sint32 i, n = cell->GetNumUnits();
 
+    bool 		foundCity	= false;
     MapPoint 		cpos;
-    UnitDynamicArray    revealed;
+    CellUnitList 	expelled;
     for(i = 0; i < n; i++) {
-	Unit u = cell->AccessUnit(i);
-	if(u.NearestFriendlyCityWithRoom(cpos, n, u.GetArmy())){
-	    u.SetPosition(cpos, revealed);
-	    }
-	else{
-	    u.Kill(CAUSE_REMOVE_ARMY_EXPELLED_NO_CITIES, PLAYER_INDEX_VANDALS);
+	    Unit u = cell->AccessUnit(i);	    
+	    foundCity = u.NearestFriendlyCityWithRoom(cpos, n, u.GetArmy());
+	    expelled.Insert(u);
+	}
+
+    n = expelled.Num();
+    if(n > 0) {
+	for(i = 0; i < n; i++) {
+	    if(foundCity) {
+		Army newArmy;
+		if(expelled[i].GetArmy().Num() > 1) {
+		    newArmy = g_player[expelled[i].GetOwner()]->GetNewArmy(CAUSE_NEW_ARMY_EXPELLED);
+		    } else {
+		    newArmy = expelled[i].GetArmy();
+		    }
+		
+		g_gevManager->AddEvent(GEV_INSERT_AfterCurrent, GEV_GetExpelledOrder,
+		    GEA_Army, newArmy,
+		    GEA_MapPoint, cpos,
+		    GEA_Player, PLAYER_INDEX_VANDALS,
+		    GEA_End);
+		
+		if(expelled[i].GetArmy().Num() > 1) {
+		    g_gevManager->AddEvent(GEV_INSERT_AfterCurrent, GEV_AddUnitToArmy,
+			GEA_Unit, expelled[i],
+			GEA_Army, newArmy,
+			GEA_Int, CAUSE_NEW_ARMY_EXPELLED,
+			GEA_End);
+		    }
+		}
+	    else {
+		expelled[i].Kill(CAUSE_REMOVE_ARMY_EXPELLED_NO_CITIES, PLAYER_INDEX_VANDALS);
+		}
 	    }
 	}
 
