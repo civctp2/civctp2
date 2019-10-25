@@ -325,7 +325,16 @@ AUI_ERRCODE TurnYearStatus::DrawDougsProgress(ctp2_Static *control,
 		displayWidth = width;
 		}
 	    tmp.right = tmp.left + displayWidth;
-	    primitives_PaintRect16(surface, &tmp, g_colorSet->GetPlayerColor(g_selected_item->GetCurPlayer()));    
+	    primitives_PaintRect16(surface, &tmp, g_colorSet->GetPlayerColor(g_selected_item->GetCurPlayer()));
+	    
+	    tmp = rect;
+	    width = tmp.right - tmp.left;
+	    displayWidth = width * g_selected_item->UnitsBusyRatio();
+	    if(displayWidth > width) {
+		displayWidth = width;
+		}
+	    tmp.right = tmp.left + displayWidth;
+	    primitives_PaintRect16(surface, &tmp, g_colorSet->GetDarkPlayerColor(g_selected_item->GetCurPlayer())); // use FOW color for units with continuing orders
 	    }
 	return AUI_ERRCODE_OK;
 }
