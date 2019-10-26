@@ -420,7 +420,6 @@ CityData::CityData(PLAYER_INDEX owner, Unit hc, const MapPoint &center_point)
 	m_convertedGold                     (0),
 	m_convertedBy                       (CONVERTED_BY_NOTHING),
 	m_terrainWasPolluted                (false),
-	m_happinessAttacked                 (false),
 	m_happinessAttackedBy               (PLAYER_UNASSIGNED),
 	m_terrainImprovementWasBuilt        (false),
 	m_improvementWasBuilt               (false),
@@ -692,8 +691,7 @@ void CityData::Serialize(CivArchive &archive)
 		archive.PutSINT32(tmp);
 		tmp = static_cast<BOOL>(m_terrainWasPolluted);
 		archive.PutSINT32(tmp); // Was BOOL
-		tmp = static_cast<BOOL>(m_happinessAttacked);
-		archive.PutSINT32(tmp); // Was BOOL
+		archive.PutSINT32(m_happinessAttackedBy);
 		tmp = static_cast<BOOL>(m_terrainImprovementWasBuilt);
 		archive.PutSINT32(tmp); // Was BOOL
 		tmp = static_cast<BOOL>(m_improvementWasBuilt);
@@ -841,7 +839,7 @@ void CityData::Serialize(CivArchive &archive)
 		m_convertedGold                  = archive.GetSINT32();
 		m_convertedBy                    = static_cast<CONVERTED_BY>(archive.GetSINT32());
 		m_terrainWasPolluted             = archive.GetSINT32() != FALSE; // Was BOOL
-		m_happinessAttacked              = archive.GetSINT32() != FALSE; // Was BOOL
+		m_happinessAttackedBy            = archive.GetSINT32();
 		m_terrainImprovementWasBuilt     = archive.GetSINT32() != FALSE; // Was BOOL
 		m_improvementWasBuilt            = archive.GetSINT32() != FALSE; // Was BOOL
 		m_isInjoined                     = archive.GetSINT32() != FALSE; // Was BOOL
@@ -1423,7 +1421,7 @@ void CityData::Copy(CityData *copy)
 	m_convertedGold                      = copy->m_convertedGold;
 	m_convertedBy                        = copy->m_convertedBy;
 	m_terrainWasPolluted                 = copy->m_terrainWasPolluted;
-	m_happinessAttacked                  = copy->m_happinessAttacked;
+	m_happinessAttackedBy                = copy->m_happinessAttackedBy;
 	m_terrainImprovementWasBuilt         = copy->m_terrainImprovementWasBuilt;
 	m_improvementWasBuilt                = copy->m_improvementWasBuilt;
 	m_isInjoined                         = copy->m_isInjoined;
@@ -4922,7 +4920,7 @@ void CityData::InitBeginTurnVariables()
 {
 	m_capturedThisTurn           = false;
 	m_terrainWasPolluted         = false;
-	m_happinessAttacked          = false;
+	m_happinessAttackedBy        = -1;
 	m_terrainImprovementWasBuilt = false;
 	m_improvementWasBuilt        = false;
 
@@ -6710,7 +6708,7 @@ void CityData::ResetCityOwner(sint32 owner)
 	{
 		m_convertedTo = -1;
 	}
-	m_happinessAttacked = false;
+	m_happinessAttackedBy = -1;
 	m_isInjoined = false;
 
 	m_happy->ClearTimedChanges();
@@ -7961,7 +7959,7 @@ void CityData::HappinessAttackedBy(sint32 player)
 
 bool CityData::WasHappinessAttacked(void) const
 {
-	if(m_happinessAttacked)
+	if(m_happinessAttackedBy >= 0)
 		return true;
 
 	double val;
