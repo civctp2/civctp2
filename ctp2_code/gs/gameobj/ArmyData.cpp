@@ -2658,7 +2658,10 @@ ORDER_RESULT ArmyData::CauseUnhappiness(const MapPoint &point,
         g_slicEngine->Execute
             (new AggressorReport("227TerrorhackCompleteAttacker", u, c)) ;
 
-    } else if (strcmp(unitName, "UNIT_SUBNEURAL_ADS") == 0) {
+    }
+    else if (strcmp(unitName, "UNIT_SUBNEURAL_ADS") == 0 ||
+             strcmp(unitName, "UNIT_CORPORATE_BRANCH") == 0
+	) {
         SlicObject * so = new CityReport("197AdvertiseCompleteVictim", c);
 		so->AddCivilisation(GetOwner());
         g_slicEngine->Execute(so) ;
