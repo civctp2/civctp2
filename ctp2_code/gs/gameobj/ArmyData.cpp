@@ -2163,7 +2163,7 @@ ORDER_RESULT ArmyData::Franchise(const MapPoint &point)
 		return ORDER_RESULT_ILLEGAL;
 
 	Unit u      = m_array[uindex];
-	Unit city   = g_theWorld->GetCity(point);
+	Unit city   = GetAdjacentCity(point);
 
 	if(city.m_id == 0) {
 		return ORDER_RESULT_ILLEGAL;
