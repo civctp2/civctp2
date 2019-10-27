@@ -7566,21 +7566,8 @@ SFN_ERROR Slic_Liberate::Call(SlicArgList *args)
     if(n > 0) {
 	for(i = 0; i < n; i++) {
 	    if(foundCity) {
-		Army newArmy;
-		if(expelled[i].GetArmy().Num() > 1) { // put unit in its own army, similar to ArmyData::UngroupUnits / ArmyData::RemainNumUnits
-		    newArmy = g_player[expelled[i].GetOwner()]->GetNewArmy(CAUSE_NEW_ARMY_EXPELLED); // new army for unit
-		    g_gevManager->AddEvent(GEV_INSERT_AfterCurrent, GEV_AddUnitToArmy, // put unit in new (empty) army
-			GEA_Unit, expelled[i],
-			GEA_Army, newArmy,
-			GEA_Int, CAUSE_NEW_ARMY_EXPELLED,
-			GEA_End);
-		    }
-		else {
-		    newArmy = expelled[i].GetArmy();
-		    }
-		
 		g_gevManager->AddEvent(GEV_INSERT_AfterCurrent, GEV_GetExpelledOrder,
-		    GEA_Army, newArmy,
+		    GEA_Army, expelled[i].GetArmy(),
 		    GEA_MapPoint, cpos,
 		    GEA_Player, PLAYER_INDEX_VANDALS,
 		    GEA_End);
