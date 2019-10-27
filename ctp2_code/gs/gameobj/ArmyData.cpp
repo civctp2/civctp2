@@ -2582,8 +2582,7 @@ bool ArmyData::CanCauseUnhappiness(double &chance, sint32 &timer, sint32 &amt) c
 // Remark(s)  : -
 //
 //----------------------------------------------------------------------------
-ORDER_RESULT ArmyData::CauseUnhappiness(const MapPoint &point,
-										sint32 uindex)
+ORDER_RESULT ArmyData::CauseUnhappiness(const MapPoint &point, sint32 uindex)
 {
 	Assert(uindex >= 0);
 	Assert(uindex < m_nElements);
@@ -2621,21 +2620,20 @@ ORDER_RESULT ArmyData::CauseUnhappiness(const MapPoint &point,
 	c.ModifySpecialAttackChance(UNIT_ORDER_CAUSE_UNHAPPINESS, chance);
 	c.SetWatchful();
 
-    char unitName[256];
-    strcpy(unitName, g_theStringDB->
-           GetIdStr(g_theUnitDB->GetName(u.GetData()->GetType())));
+	char unitName[256];
+	strcpy(unitName, g_theStringDB->GetIdStr(g_theUnitDB->GetName(u.GetData()->GetType())));
 
 	if(g_rand->Next(100) >= sint32(chance * 100.0)) {
 
-        if (strcmp(unitName, "UNIT_CYBER_NINJA") == 0) {
-            g_slicEngine->Execute
-                (new CityReport("230TerrorhackFailedVictim", c));
-            g_slicEngine->Execute
-                (new AggressorReport("229TerrorhackFailedAttacker", u, c));
-        }
+	    if (strcmp(unitName, "UNIT_CYBER_NINJA") == 0) {
+		g_slicEngine->Execute
+		    (new CityReport("230TerrorhackFailedVictim", c));
+		g_slicEngine->Execute
+		    (new AggressorReport("229TerrorhackFailedAttacker", u, c));
+		}
 
-        DPRINTF(k_DBG_GAMESTATE, ("Cause unhappiness failed\n"));
-		return ORDER_RESULT_FAILED;
+	    DPRINTF(k_DBG_GAMESTATE, ("Cause unhappiness failed\n"));
+	    return ORDER_RESULT_FAILED;
 	}
 
 	DPRINTF(k_DBG_GAMESTATE, ("City 0x%lx will be %d less happy for %d turns\n",
@@ -2652,21 +2650,21 @@ ORDER_RESULT ArmyData::CauseUnhappiness(const MapPoint &point,
 	c.AccessData()->GetCityData()->IndicateHappinessAttacked() ;
 	c.AccessData()->GetCityData()->HappinessAttackedBy(m_owner) ;
 
-    if (strcmp(unitName, "UNIT_CYBER_NINJA") == 0) {
-        g_slicEngine->Execute
-            (new CityReport("228TerrorhackCompleteVictim", c));
-        g_slicEngine->Execute
-            (new AggressorReport("227TerrorhackCompleteAttacker", u, c)) ;
-    }
-    else if (strcmp(unitName, "UNIT_SUBNEURAL_ADS") == 0 ||
-             strcmp(unitName, "UNIT_CORPORATE_BRANCH") == 0
-	) {
-        SlicObject * so = new CityReport("197AdvertiseCompleteVictim", c);
-		so->AddCivilisation(GetOwner());
-        g_slicEngine->Execute(so);
-        g_slicEngine->Execute
-            (new AggressorReport("911AdvertiseCompleteAttacker", u, c)) ;
-    }
+	if (strcmp(unitName, "UNIT_CYBER_NINJA") == 0) {
+	    g_slicEngine->Execute
+		(new CityReport("228TerrorhackCompleteVictim", c));
+	    g_slicEngine->Execute
+		(new AggressorReport("227TerrorhackCompleteAttacker", u, c)) ;
+	    }
+	else if (strcmp(unitName, "UNIT_SUBNEURAL_ADS") == 0 ||
+	    strcmp(unitName, "UNIT_CORPORATE_BRANCH") == 0
+	    ) {
+	    SlicObject * so = new CityReport("197AdvertiseCompleteVictim", c);
+	    so->AddCivilisation(GetOwner());
+	    g_slicEngine->Execute(so);
+	    g_slicEngine->Execute
+		(new AggressorReport("911AdvertiseCompleteAttacker", u, c)) ;
+	    }
 
 	return ORDER_RESULT_SUCCEEDED;
 }
