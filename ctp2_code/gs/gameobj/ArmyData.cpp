@@ -2657,15 +2657,15 @@ ORDER_RESULT ArmyData::CauseUnhappiness(const MapPoint &point,
             (new CityReport("228TerrorhackCompleteVictim", c));
         g_slicEngine->Execute
             (new AggressorReport("227TerrorhackCompleteAttacker", u, c)) ;
-
     }
     else if (strcmp(unitName, "UNIT_SUBNEURAL_ADS") == 0 ||
              strcmp(unitName, "UNIT_CORPORATE_BRANCH") == 0
 	) {
         SlicObject * so = new CityReport("197AdvertiseCompleteVictim", c);
 		so->AddCivilisation(GetOwner());
-        g_slicEngine->Execute(so) ;
-
+        g_slicEngine->Execute(so);
+        g_slicEngine->Execute
+            (new AggressorReport("911AdvertiseCompleteAttacker", u, c)) ;
     }
 
 	return ORDER_RESULT_SUCCEEDED;
@@ -4527,11 +4527,6 @@ ORDER_RESULT ArmyData::Advertise(const MapPoint &point)
 		return ORDER_RESULT_ILLEGAL;
 
 	Unit u = m_array[uindex];
-
-	SlicObject *so = new SlicObject("911AdvertiseCompleteAttacker");
-	so->AddRecipient(u.GetOwner());
-	so->AddCity(c);
-	g_slicEngine->Execute(so);
 
 	// establish that building there. Used to spread corporations
 	for (sint32 i = m_nElements - 1; i>= 0; i--) {
