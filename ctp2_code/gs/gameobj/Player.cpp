@@ -2928,7 +2928,7 @@ bool Player::SettleInCity(Army &settle_army)
 		if(settle_army[i].CanSettle(pos, true))
 		{
 			Unit c = g_theWorld->GetCity(pos);
-			c.CD()->ChangePopulation(settle_army[i].GetDBRec()->GetSettleSize());
+			c.CD()->ChangePopulation(1); // do not use settle_army[i].GetDBRec()->GetSettleSize() to avoid population-cheat
 			settle_army[i].KillUnit(CAUSE_REMOVE_ARMY_SETTLE, GetOwner());
 
 			return true;
