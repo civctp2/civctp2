@@ -2387,6 +2387,11 @@ messagebox '359TradePassing' {
 	MessageType("TRADE");
 }
 
+messagebox '360SenderCreatedTradeRoute' {
+	Text(ID_SENDER_CREATED_TRADE_ROUTE);
+	MessageType("TRADE");
+}
+
 messagebox '360SenderKilledTradeRoute' {
 	Text(ID_SENDER_KILLED_TRADE_ROUTE);
 	MessageType("TRADE");

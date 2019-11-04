@@ -3070,6 +3070,17 @@ TradeRoute Player::CreateTradeRoute(Unit sourceCity,
 
 	if (newRoute.IsValid())
 	{
+		SlicObject *so = new SlicObject("360SenderCreatedTradeRoute");
+		ROUTE_TYPE type;
+		sint32 resource;
+		newRoute.GetSourceResource(type, resource);
+		so->AddRecipient(destCity.GetOwner());
+		so->AddCivilisation(m_owner);
+		so->AddGood(resource);
+		so->AddCity(sourceCity);
+		so->AddCity(destCity);
+		g_slicEngine->Execute(so);
+		
 		return g_player[paying_for]->PayForTrade(newRoute);
 	}
 

@@ -553,7 +553,7 @@ STDEHANDLER(SendGoodEvent)
 		g_network.SendAction(new NetAction(NET_ACTION_REQUEST_TRADE_ROUTE,
 		                                   resIndex, sourceCity.m_id, destCity.m_id));
 	} else {
-		g_player[sourceCity.GetOwner()]->CreateTradeRoute(sourceCity, ROUTE_TYPE_RESOURCE,
+		g_player[sourceCity.GetOwner()]->CreateTradeRoute(sourceCity, ROUTE_TYPE_RESOURCE, // apparently the only active source for the creation of trade routes
 		                                                  resIndex, destCity,
 		                                                  sourceCity.GetOwner(), 0);
 	}

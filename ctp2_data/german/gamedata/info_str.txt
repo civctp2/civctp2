@@ -157,6 +157,7 @@ TRADE_ROUTES_BROKEN_BY_EMBARGO		"{player[0].leader_name#SIR_CAP}, die {player[1]
 TRADE_ROUTES_BROKEN_BY_WAR		"Es gibt beunruhigende Neuigkeiten, {player[0].leader_name#SIR_CAP}. Wegen des zwischen uns und {player[1].country_name#DAT} entbrannten Konflikts wurde der Handel auf unseren Handelswegen, die in {player[1].civ_name_singular#UNDEF_PLURAL_ACC} Städte führen, eingestellt. Außerdem haben wir alle Karawanen, die dort unterwegs waren, verloren."
 TRADE_PASS				"Der Handelsweg von den {player[0].civ_name_plural} durch unsere Stadt {city[0].name}, welcher {good[0].name#PLURAL} von {city[1].name} nach {city[2].name} bringt, brachte uns {gold[0].value} Gold."
 TRADE_PASS_PIRATED			"Der Handelsweg von den {player[0].civ_name_plural} durch unsere Stadt {city[0].name}, welcher {good[0].name#PLURAL} von {city[1].name} nach {city[2].name} bringt, wurde von den {player[1].civ_name_plural} überfallen und {gold[0].value} Gold durch den Transit wurden nicht erwirtschafted."
+SENDER_CREATED_TRADE_ROUTE		"{player[0].leader_name} hat einen Handelsweg für den Handel mit {good[0].name#PLURAL} von {city[0].name} nach {city[1].name} eingerichtet."
 SENDER_KILLED_TRADE_ROUTE		"{player[0].leader_name} hat den Handelsweg für den Handel mit {good[0].name#PLURAL} von {city[0].name} nach {city[1].name} eingestellt."
 
 ## Trade Advisor Stuff ##
