@@ -257,39 +257,27 @@ void TradeManager::SetMode(TRADE_MANAGER_MODE mode)
 //	MBCHAR *tradeBlock="TradeManager:TradeTabs";
 	ctp2_Tab *market = (ctp2_Tab *)aui_Ldl::GetObject(s_tradeManagerBlock, "TradeTabs.Market");
 	ctp2_Tab *summary = (ctp2_Tab *)aui_Ldl::GetObject(s_tradeManagerBlock, "TradeTabs.Summary");
+	ctp2_Tab *import = (ctp2_Tab *)aui_Ldl::GetObject(s_tradeManagerBlock, "TradeTabs.Import");
 	ctp2_TabGroup *group = (ctp2_TabGroup *)aui_Ldl::GetObject(s_tradeManagerBlock, "TradeTabs");
-
-
-
-
-
 
 	switch(mode) {
 		case TRADE_MANAGER_MARKET:
 			market->Activate();
 			summary->Deactivate();
+			import->Deactivate();
 			group->SelectTab(market);
-
-
-
-
-
-
-
-
 			break;
 		case TRADE_MANAGER_SUMMARY:
 			market->Deactivate();
 			summary->Activate();
+			import->Deactivate();
 			group->SelectTab(summary);
-
-
-
-
-
-
-
-
+			break;
+		case TRADE_MANAGER_IMPORT:
+			market->Deactivate();
+			summary->Deactivate();
+			import->Activate();
+			group->SelectTab(import);
 			break;
 		default:
 			Assert(FALSE);
