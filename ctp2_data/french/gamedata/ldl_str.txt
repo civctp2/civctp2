@@ -2224,7 +2224,7 @@ str_ldl_OptionsMenuTitle			"Options"
 str_ldl_EmpireManager				"Gest. d'empire"
 str_ldl_ScienceManager				"Gest. de science"
 str_ldl_TradeOpenMarket				"Commerce - marché"
-str_ldl_TradeSummary				"Commerce - bilan"
+str_ldl_TradeSummary				"Trade - Export"
 str_ldl_Gaia					"Gaia"
 
 # Cities Menu Strings
@@ -2403,7 +2403,7 @@ str_ldl_CreateRoute				"Créer route"
 str_ldl_BreakRoute				"Rompre route"
 str_ldl_TradeShowAdvisor			"Conseils"
 str_ldl_TradeHideAdvisor			"Conseils"
-str_ldl_TradeSummary				"Bilan"
+str_ldl_TradeSummary				"Trade - Export"
 str_ldl_TradeMarket				"Marché"
 
 str_ldl_TradeSellingGood			"Vend"
