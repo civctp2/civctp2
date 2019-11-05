@@ -2407,7 +2407,7 @@ str_ldl_TradeSummary				"Export"
 str_ldl_TradeMarket				"Marktplatz"
 
 str_ldl_TradeSellingGood			"Handelsgut"
-str_ldl_TradeSellingToCity			"Handelspartner"
+str_ldl_TradeSellingToCity			"Empfänger"
 
 str_ldl_CaravansAvailable			"Karawanen:"
 str_ldl_CaravansInUse				"Im Einsatz:"

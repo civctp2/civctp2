@@ -2393,7 +2393,7 @@ str_ldl_order_faith_healing			"Guérir par la foi"
 str_ldl_order_refuel				"Ravitailler"
 str_ldl_order_sleep				"Rendre inactive"
 
-str_ldl_TradeYourCity				"Notre ville"
+str_ldl_TradeYourCity				"Source"
 str_ldl_TradeGood				"Possède ce bien"
 str_ldl_TradeSendCity				"Cette ville va l'acheter"
 str_ldl_TradePrice				"Pour"
@@ -2407,7 +2407,7 @@ str_ldl_TradeSummary				"Trade - Export"
 str_ldl_TradeMarket				"Marché"
 
 str_ldl_TradeSellingGood			"Vend"
-str_ldl_TradeSellingToCity			"A cette ville"
+str_ldl_TradeSellingToCity			"Destination"
 
 str_ldl_CaravansAvailable			"Caravanes dispo. :"
 str_ldl_CaravansInUse				"Caravanes util. :"
