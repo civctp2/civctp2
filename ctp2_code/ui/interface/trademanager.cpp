@@ -110,6 +110,7 @@ TradeManager::TradeManager(AUI_ERRCODE *err)
 
 	m_createList = (ctp2_ListBox *)aui_Ldl::GetObject(s_tradeManagerBlock, "TradeTabs.Market.TabPanel.List");
 	m_summaryList = (ctp2_ListBox *)aui_Ldl::GetObject(s_tradeManagerBlock, "TradeTabs.Summary.TabPanel.List");
+	m_importList = (ctp2_ListBox *)aui_Ldl::GetObject(s_tradeManagerBlock, "TradeTabs.Import.TabPanel.List");
 
 	Assert(m_createList);
 
@@ -306,7 +307,8 @@ void TradeManager::Notify()
 void TradeManager::Update()
 {
 	UpdateCreateList(g_selected_item->GetVisiblePlayer());
-	UpdateSummaryList();
+	UpdateSummaryList(m_summaryList, true);
+	UpdateSummaryList(m_importList, false);
 	UpdateAdviceWindow();
 
 }
@@ -656,7 +658,7 @@ void TradeManager::UpdateAdviceText()
 	}
 }
 
-void TradeManager::UpdateSummaryList()
+void TradeManager::UpdateSummaryList(ctp2_ListBox *summaryList, bool source)
 {
 	sint32 pl = g_selected_item->GetVisiblePlayer();
 	Assert(pl >= 0 && pl < k_MAX_PLAYERS);
@@ -668,13 +670,14 @@ void TradeManager::UpdateSummaryList()
 	Player *p = g_player[pl];
 	Unit maxCity;
 
-	m_summaryList->Clear();
+	summaryList->Clear();
 
 	for (sint32 c = 0; c < p->m_all_cities->Num(); c++)
     {
 		Unit city = p->m_all_cities->Access(c);
 
-		for (sint32 r = 0; r < city.CD()->GetTradeSourceList()->Num(); r++)
+		sint32 numTradeRoutes= source ? city.CD()->GetTradeSourceList()->Num() : city.CD()->GetTradeDestinationList()->Num();
+		for (sint32 r = 0; r < numTradeRoutes; r++)
         {
 			ctp2_ListItem * item = (ctp2_ListItem *)
                 aui_Ldl::BuildHierarchyFromRoot("TradeSummaryItem");
@@ -682,7 +685,7 @@ void TradeManager::UpdateSummaryList()
 			if(!item)
 				break;
 
-			TradeRoute route = city.CD()->GetTradeSourceList()->Access(r);
+			TradeRoute route = source ? city.CD()->GetTradeSourceList()->Access(r) : city.CD()->GetTradeDestinationList()->Access(r) ;
 
 			if (ctp2_Static * origin = (ctp2_Static *)item->GetChildByIndex(k_CITY_COL_SUM_INDEX))
             {
@@ -769,7 +772,7 @@ void TradeManager::UpdateSummaryList()
 			item->SetUserData((void *)route.m_id);
 			item->SetCompareCallback(CompareSummaryItems);
 
-			m_summaryList->AddItem(item);
+			summaryList->AddItem(item);
 		}
 	}
 

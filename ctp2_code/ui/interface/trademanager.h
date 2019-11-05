@@ -42,6 +42,7 @@ class TradeManager
 
 	ctp2_ListBox *m_createList;
 	ctp2_ListBox *m_summaryList;
+	ctp2_ListBox *m_importList;
 
 	ctp2_Button  *m_createButton, *m_breakButton;
 
@@ -71,7 +72,7 @@ class TradeManager
 	void UpdateCreateList(const PLAYER_INDEX & player_id);
 	void UpdateAdviceWindow();
 	void UpdateAdviceText();
-	void UpdateSummaryList();
+	void UpdateSummaryList(ctp2_ListBox *summaryList, bool source= true);
 
 	static void Close(aui_Control *control, uint32 action, uint32 data, void *cookie);
 	static void CreateRoute(aui_Control *control, uint32 action, uint32 data, void *cookie);
