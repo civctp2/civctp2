@@ -15,9 +15,9 @@ TradeManager:CTP2_DIALOG_WINDOW {
 		Market:CTP2_TAB{
 			TabButton:CTP2_SIMPLE_TAB_BUTTON {
 				string text "str_ldl_TradeMarket"
-				string image00 "upct21ul.tga"
-				string image10 "upct21u.tga"
-				string image20 "upct21ul.tga"
+				string image00 "upct31ur.tga"
+				string image10 "upct31u.tga"
+				string image20 "upct31ur.tga"
 				bool nohighlight true
 				# Tooltip
 				string	statustext	"STATUSBAR_TRADEMAN_OPEN_GOTO_MARKET_BUTTON"
@@ -200,11 +200,11 @@ TradeManager:CTP2_DIALOG_WINDOW {
 	
 		Summary:CTP2_TAB {
 			TabButton:CTP2_SIMPLE_TAB_BUTTON {
-				int xpix 166
+				int xpix 144
 				string text "str_ldl_TradeSummary"
-				string image00 "upct22ul.tga"
-				string image10 "upct22u.tga"
-				string image20 "upct21ul.tga"
+				string image00 "upct32ur.tga"
+				string image10 "upct32u.tga"
+				string image20 "upct32ul.tga"
 				bool nohighlight true
 				# Tooltip
 				string	statustext	"STATUSBAR_TRADEMAN_OPEN_GOTO_TRADESUMM_BUTTON"
@@ -315,11 +315,11 @@ TradeManager:CTP2_DIALOG_WINDOW {
 
 		Import:CTP2_TAB {
 			TabButton:CTP2_SIMPLE_TAB_BUTTON {
-				int xpix 332
+				int xpix 316
 				string text "str_ldl_TradeImport"
-				string image00 "upct22ul.tga"
-				string image10 "upct22u.tga"
-				string image20 "upct22ul.tga"
+				string image00 "upct33ul.tga"
+				string image10 "upct33u.tga"
+				string image20 "upct33ul.tga"
 				bool nohighlight true
 				# Tooltip
 				string	statustext	"STATUSBAR_TRADEMAN_OPEN_GOTO_TRADESUMM_BUTTON"
