@@ -753,7 +753,8 @@ void TradeManager::UpdateSummaryList(ctp2_ListBox *summaryList, bool source)
 		
 		if (ctp2_Static * nation = (ctp2_Static *)item->GetChildByIndex(k_NATION_COL_SUM_INDEX))
 		    {
-		    nation->SetDrawCallbackAndCookie(DrawNationColumn, (void *)route.GetDestination().GetOwner());
+		    nation->SetDrawCallbackAndCookie(DrawNationColumn,
+			source ? (void *)route.GetDestination().GetOwner() : (void *)route.GetSource().GetOwner());
 		    }
 		
 		item->SetUserData((void *)route.m_id);
