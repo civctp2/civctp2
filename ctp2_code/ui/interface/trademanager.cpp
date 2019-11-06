@@ -678,7 +678,7 @@ void TradeManager::UpdateSummaryList(ctp2_ListBox *summaryList, bool source)
 		if (ctp2_Static * origin = (ctp2_Static *)item->GetChildByIndex(k_CITY_COL_SUM_INDEX))
 		    {
 		    MBCHAR name[k_MAX_NAME_LEN + 1];
-		    strncpy(name, city.GetName(), k_MAX_NAME_LEN);
+		    strncpy(name, route.GetSource().GetName(), k_MAX_NAME_LEN);
 		    name[k_MAX_NAME_LEN] = 0;
 		    origin->TextReloadFont();
 		    origin->GetTextFont()->TruncateString(name, origin->Width());
