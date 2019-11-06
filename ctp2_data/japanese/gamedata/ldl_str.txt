@@ -2515,6 +2515,7 @@ str_ldl_BreakRoute 			"貿易ルートの破棄"
 str_ldl_TradeShowAdvisor		"アドバイス"
 str_ldl_TradeHideAdvisor 		"アドバイス"
 str_ldl_TradeSummary 			"概要"
+str_ldl_TradeImport				"Import"
 str_ldl_TradeMarket 			"市場"
 
 str_ldl_TradeSellingGood 		"販売中"

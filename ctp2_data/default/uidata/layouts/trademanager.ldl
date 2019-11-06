@@ -316,7 +316,7 @@ TradeManager:CTP2_DIALOG_WINDOW {
 		Import:CTP2_TAB {
 			TabButton:CTP2_SIMPLE_TAB_BUTTON {
 				int xpix 332
-				string text "str_ldl_TradeSummary"
+				string text "str_ldl_TradeImport"
 				string image00 "upct22ul.tga"
 				string image10 "upct22u.tga"
 				string image20 "upct22ul.tga"
