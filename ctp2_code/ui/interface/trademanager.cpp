@@ -747,7 +747,16 @@ void TradeManager::UpdateSummaryList(ctp2_ListBox *summaryList, bool source)
 		
 		if (ctp2_Static * count = (ctp2_Static *)item->GetChildByIndex(k_CARAVANS_COL_SUM_INDEX))
 		    {
-		    sprintf(buf, "%.0f", route.GetCost());
+		    if(source){
+			sprintf(buf, "%.0f", route.GetCost());
+			}
+		    else{
+			sprintf(buf, "%d,%d,%d",
+			    g_theResourceDB->Get(resource)->GetFood(),
+			    g_theResourceDB->Get(resource)->GetProduction(),
+			    g_theResourceDB->Get(resource)->GetGold()
+			    );
+			}
 		    count->SetText(buf);
 		    }
 		

@@ -410,7 +410,7 @@ TradeManager:CTP2_DIALOG_WINDOW {
 							int heightpix 20
 							string pattern "uptg04e.tga"
 							int bevelwidth 1
-							string text "str_ldl_TradeCaravans"
+							string text "str_ldl_TradeBonus"
 							int numimagegroups 3
 							# Tooltip
 							string	statustext	"STATUSBAR_TRADEMAN_OPEN_SORTBY_CRVN_BUTTON"
