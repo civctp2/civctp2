@@ -2224,7 +2224,6 @@ str_ldl_OptionsMenuTitle			"Opzioni"
 str_ldl_EmpireManager				"Gestione imperiale"
 str_ldl_ScienceManager				"Gestione scientifica"
 str_ldl_TradeOpenMarket				"Commercio - Mercato aperto"
-str_ldl_TradeSummary				"Trade - Export"
 str_ldl_Gaia					"Controllore Gaia"
 
 # Cities Menu Strings

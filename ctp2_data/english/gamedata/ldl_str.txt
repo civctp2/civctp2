@@ -2225,7 +2225,6 @@ str_ldl_OptionsMenuTitle			"Options"
 str_ldl_EmpireManager				"Empire Manager"
 str_ldl_ScienceManager				"Science Manager"
 str_ldl_TradeOpenMarket				"Trade - Open Market"
-str_ldl_TradeSummary				"Trade - Export"
 str_ldl_Gaia					"Gaia Controller"
 
 # Cities Menu Strings

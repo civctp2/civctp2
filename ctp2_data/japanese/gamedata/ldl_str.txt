@@ -2365,7 +2365,6 @@ str_ldl_OptionsMenuTitle		"オプション"
 str_ldl_EmpireManager			"帝国管理"
 str_ldl_ScienceManager				"科学管理"
 str_ldl_TradeOpenMarket			"貿易 - 市場の開設"
-str_ldl_TradeSummary			"貿易 - 概要"
 str_ldl_Gaia				"ガイア コントローラー"
 
 # 都市メニューのストリング
