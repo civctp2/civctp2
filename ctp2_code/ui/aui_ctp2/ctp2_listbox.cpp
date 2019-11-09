@@ -265,7 +265,7 @@ AUI_ERRCODE ctp2_ListBox::CreateRangersAndHeader( const MBCHAR *ldlBlock )
 	{
 		sprintf( block, "%s.%s", ldlBlock, k_AUI_LISTBOX_LDL_RANGERX );
 
-        if (aui_Ldl::FindDataBlock(block))
+		if (aui_Ldl::FindDataBlock(block))
 			m_horizontalRanger = new c3_Ranger(
 				&errcode,
 				aui_UniqueId(),
@@ -306,9 +306,10 @@ AUI_ERRCODE ctp2_ListBox::CreateRangersAndHeader( const MBCHAR *ldlBlock )
 	return AUI_ERRCODE_OK;
 }
 
-
 void ctp2_ListBox::Clear(void)
 {
+	BuildListStart(); // Do not sort anything in the list while we are clearing it
+
 	ListPos position = m_pane->ChildList()->GetHeadPosition();
 	for ( sint32 i = m_pane->ChildList()->L(); i; i-- )
 	{
@@ -316,21 +317,19 @@ void ctp2_ListBox::Clear(void)
 
 		RemoveItem(item->Id());
 		delete item;
-
 	}
+
 	m_draw |= m_drawMask & k_AUI_REGION_DRAWFLAG_UPDATE;
 
 	m_pane->ChildList()->DeleteAll();
+
+	BuildListEnd(); // Now sort again and do whatever is necessary.
 }
-
-
-
 
 AUI_ERRCODE ctp2_ListBox::SortByColumn(
 	sint32 column,
 	BOOL ascending )
 {
-
 	if ( column == -1 ) return AUI_ERRCODE_OK;
 
 	if ( column != -2 )
@@ -374,10 +373,8 @@ AUI_ERRCODE ctp2_ListBox::SortByColumn(
 	return AUI_ERRCODE_OK;
 }
 
-
 AUI_ERRCODE ctp2_ListBox::Draw(aui_Surface *surf, sint32 x, sint32 y)
 {
-
 	aui_Region::Draw(surf, x, y);
 
 	if (IsHidden()) return AUI_ERRCODE_OK;
@@ -403,7 +400,6 @@ AUI_ERRCODE ctp2_ListBox::Draw(aui_Surface *surf, sint32 x, sint32 y)
 
 		for ( sint32 i = m_visualSelectedList->L(); i; i-- )
 		{
-
 			sint32 itemIndex = m_visualSelectedList->GetNext( position );
 			if ( minVertical <= itemIndex && itemIndex < maxVertical )
 			{
@@ -414,16 +410,11 @@ AUI_ERRCODE ctp2_ListBox::Draw(aui_Surface *surf, sint32 x, sint32 y)
 				g_ui->TheBlitter()->ColorBlt(surf, &selectRect,
 											 RGB(255,179,69), 0);
 				GetItemByIndex(itemIndex)->Draw(surf);
-
-
-
-
 			}
 		}
 
 	return AUI_ERRCODE_OK;
 }
-
 
 AUI_ERRCODE ctp2_ListBox::DrawThis( aui_Surface *surface, sint32 x, sint32 y )
 {
