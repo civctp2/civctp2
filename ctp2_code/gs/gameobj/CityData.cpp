@@ -4911,7 +4911,6 @@ void CityData::DelTradeRoute(TradeRoute route)
 	if(route.GetDestination() == m_home_city)
 	{
 		m_tradeDestinationList.Del(route);
-		m_tradeSourceList.Del(route);
 		ROUTE_TYPE type;
 		sint32 resource;
 		route.GetSourceResource(type, resource);
