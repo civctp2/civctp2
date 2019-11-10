@@ -2928,7 +2928,12 @@ bool Player::SettleInCity(Army &settle_army)
 		if(settle_army[i].CanSettle(pos, true))
 		{
 			Unit c = g_theWorld->GetCity(pos);
-			c.CD()->ChangePopulation(settle_army[i].GetDBRec()->GetSettleSize());
+			sint32 pop;
+			const UnitRecord *rec = settle_army[i].GetDBRec();
+			if(!rec->GetPopCostsToBuild(pop)) // similar to https://github.com/civctp2/civctp2/blob/408bbbaae58a7617d546ca6b2fd27b2d1c73eb64/ctp2_code/gs/gameobj/bldque.cpp#L1723
+			    pop= 1; // only BuildingRemovesAPop used so far in Units.txt but not PopCostsToBuild
+
+			c.CD()->ChangePopulation(pop); // use opposite of https://github.com/civctp2/civctp2/blob/408bbbaae58a7617d546ca6b2fd27b2d1c73eb64/ctp2_code/gs/gameobj/bldque.cpp#L1716 (ane not settle_army[i].GetDBRec()->GetSettleSize()) to avoid population-cheat
 			settle_army[i].KillUnit(CAUSE_REMOVE_ARMY_SETTLE, GetOwner());
 
 			return true;
