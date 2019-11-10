@@ -45,7 +45,7 @@ class TradeManager
 	ctp2_ListBox *m_summaryList;
 	ctp2_ListBox *m_importList;
 
-	ctp2_Button  *m_createButton, *m_breakButton;
+	ctp2_Button  *m_createButton, *m_breakButton, *m_breakImpBut;
 
 	ctp2_Button *m_ownCitiesButton, *m_friendlyCitiesButton, *m_allCitiesButton;
 
@@ -76,11 +76,11 @@ class TradeManager
 	void UpdateSummaryList(ctp2_ListBox *summaryList, bool source= true);
 
 	static void Close(aui_Control *control, uint32 action, uint32 data, void *cookie);
-	static void CreateRoute(aui_Control *control, uint32 action, uint32 data, void *cookie);
+	static void CreateRoute(aui_Control *control, uint32 action, uint32 data, void *cookie, bool source= true);
 	static void ShowAdvice(aui_Control *control, uint32 action, uint32 data, void *cookie);
 	static void Summary(aui_Control *control, uint32 action, uint32 data, void *cookie);
 	static void ListSelect(aui_Control *control, uint32 action, uint32 data, void *cookie);
-	static void SummaryListSelect(aui_Control *control, uint32 action, uint32 data, void *cookie);
+	static void SummaryListSelect(aui_Control *control, uint32 action, uint32 data, void *cookie, bool source= true);
 	void FilterButtonActivated(aui_Control *control);
 	static void CityFilterButton(aui_Control *control, uint32 action, uint32 data, void *cookie);
 

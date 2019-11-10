@@ -115,13 +115,16 @@ TradeManager::TradeManager(AUI_ERRCODE *err)
 	Assert(m_createList);
 
 	aui_Ldl::SetActionFuncAndCookie(s_tradeManagerBlock, "CloseButton", Close, NULL);
+	
 	m_createButton = (ctp2_Button *)aui_Ldl::GetObject(s_tradeManagerBlock, "TradeTabs.Market.TabPanel.CreateRouteButton");
-
 	aui_Ldl::SetActionFuncAndCookie(s_tradeManagerBlock, "TradeTabs.Market.TabPanel.CreateRouteButton", CreateRoute, (void *)0);
 
 	m_breakButton = (ctp2_Button *)aui_Ldl::GetObject(s_tradeManagerBlock, "TradeTabs.Summary.TabPanel.BreakRouteButton");
-
 	aui_Ldl::SetActionFuncAndCookie(s_tradeManagerBlock, "TradeTabs.Summary.TabPanel.BreakRouteButton", CreateRoute, (void *)1);
+
+	m_breakImpBut = (ctp2_Button *)aui_Ldl::GetObject(s_tradeManagerBlock, "TradeTabs.Import.TabPanel.BreakRouteButton");
+	aui_Ldl::SetActionFuncAndCookie(s_tradeManagerBlock, "TradeTabs.Import.TabPanel.BreakRouteButton", CreateRoute, (void *)1, false);
+
 	aui_Ldl::SetActionFuncAndCookie(s_tradeManagerBlock, "ShowAdviceButton", ShowAdvice, NULL);
 
 	if(m_createList) {
@@ -130,6 +133,10 @@ TradeManager::TradeManager(AUI_ERRCODE *err)
 
 	if(m_summaryList) {
 		m_summaryList->SetActionFuncAndCookie(SummaryListSelect, NULL);
+	}
+
+	if(m_importList) {
+		m_importList->SetActionFuncAndCookie(SummaryListSelect, NULL, false);
 	}
 
 	m_adviceWindow = (ctp2_Window *)aui_Ldl::BuildHierarchyFromRoot(s_tradeAdviceBlock);
@@ -774,6 +781,7 @@ void TradeManager::UpdateSummaryList(ctp2_ListBox *summaryList, bool source)
 	    }
 	
 	m_breakButton->Enable(FALSE);
+	m_breakImpBut->Enable(FALSE);
 }
 
 void TradeManager::Close(aui_Control *control, uint32 action, uint32 data, void *cookie)
@@ -783,7 +791,7 @@ void TradeManager::Close(aui_Control *control, uint32 action, uint32 data, void 
 	TradeManager::Hide();
 }
 
-void TradeManager::CreateRoute(aui_Control *control, uint32 action, uint32 uidata, void *cookie)
+void TradeManager::CreateRoute(aui_Control *control, uint32 action, uint32 uidata, void *cookie, bool source)
 {
 	if(action != AUI_BUTTON_ACTION_EXECUTE) return;
 
@@ -819,11 +827,13 @@ void TradeManager::CreateRoute(aui_Control *control, uint32 action, uint32 uidat
 							   GEA_City, data->m_destination,
 							   GEA_End);
 	} else {
+		ctp2_ListBox *summaryList;
+		summaryList= source ? s_tradeManager->m_summaryList : s_tradeManager->m_ImportLists;
 
-		Assert(s_tradeManager->m_summaryList);
-		if(!s_tradeManager->m_summaryList) return;
+		Assert(summaryList);
+		if(!summaryList) return;
 
-		ctp2_ListItem *item = (ctp2_ListItem *)s_tradeManager->m_summaryList->GetSelectedItem();
+		ctp2_ListItem *item = (ctp2_ListItem *)summaryList->GetSelectedItem();
 		if(!item) return;
 
 		TradeRoute route((uint32)item->GetUserData());
@@ -832,12 +842,12 @@ void TradeManager::CreateRoute(aui_Control *control, uint32 action, uint32 uidat
 
 		g_gevManager->AddEvent(GEV_INSERT_Tail, GEV_KillTradeRoute,
 							   GEA_TradeRoute, route.m_id,
-							   GEA_Int, CAUSE_KILL_TRADE_ROUTE_SENDER_KILLED,
+							   GEA_Int,
+							   source ? CAUSE_KILL_TRADE_ROUTE_SENDER_KILLED : CAUSE_KILL_TRADE_ROUTE_RECIPIENT_KILLED ,
 							   GEA_End);
 
 		if(g_network.IsClient()) {
-			g_network.SendAction(new NetAction(NET_ACTION_CANCEL_TRADE_ROUTE,
-											   (uint32)route));
+			g_network.SendAction(new NetAction(NET_ACTION_CANCEL_TRADE_ROUTE, (uint32)route));
 		}
 	}
 }
@@ -1078,7 +1088,7 @@ void TradeManager::ListSelect(aui_Control *control, uint32 action, uint32 data, 
 	}
 }
 
-void TradeManager::SummaryListSelect(aui_Control *control, uint32 action, uint32 data, void *cookie)
+void TradeManager::SummaryListSelect(aui_Control *control, uint32 action, uint32 data, void *cookie, bool source)
 {
 	if(action != AUI_LISTBOX_ACTION_SELECT && action != AUI_LISTBOX_ACTION_DOUBLECLICKSELECT) {
 		return;
@@ -1088,14 +1098,19 @@ void TradeManager::SummaryListSelect(aui_Control *control, uint32 action, uint32
 	if(!s_tradeManager) return;
 
 	ctp2_ListBox *lb = (ctp2_ListBox *)control;
-	Assert(lb == s_tradeManager->m_summaryList);
-	if(lb != s_tradeManager->m_summaryList) return;
+	ctp2_ListBox *summaryList= source ? s_tradeManager->m_summaryList : s_tradeManager->m_ImportList;
+	Assert(lb == summaryList);
+	if(lb != summaryList) return;
 
 	ctp2_ListItem *item = (ctp2_ListItem *)lb->GetSelectedItem();
 	if(item) {
-		s_tradeManager->m_breakButton->Enable(TRUE);
+	        source ? 
+		    s_tradeManager->m_breakButton->Enable(TRUE) :
+		    s_tradeManager->m_breakImpBut->Enable(TRUE);
 	} else {
-		s_tradeManager->m_breakButton->Enable(FALSE);
+	        source ? 
+		    s_tradeManager->m_breakButton->Enable(FALSE) :
+		    s_tradeManager->m_breakImpBut->Enable(FALSE);
 	}
 	if(action == AUI_LISTBOX_ACTION_DOUBLECLICKSELECT) {
 

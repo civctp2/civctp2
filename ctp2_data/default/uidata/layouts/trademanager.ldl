@@ -417,6 +417,14 @@ TradeManager:CTP2_DIALOG_WINDOW {
 						}
 					}
 				}
+				BreakRouteButton:CTP2_BUTTON_SMALL {
+					int xpix 170
+					int ypix 267
+					int widthpix 160
+					string text "str_ldl_BreakRoute"
+					# Tooltip
+					string	statustext	"STATUSBAR_TRADEMAN_OPEN_BREAK_ROUTE_BUTTON"
+				}
 			}
 		}
 	}
