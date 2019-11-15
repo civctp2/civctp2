@@ -74,7 +74,6 @@ static MBCHAR               *s_intelligenceBlock = "IntelligenceWindow";
 static MBCHAR               *s_intelligenceAdviceBlock = "IntelligenceAdvice";
 ctp2_ListBox                *IntelligenceWindow::sm_list = NULL;
 
-
 aui_StringTable             *IntelligenceWindow::sm_strengthImages = NULL;
 aui_StringTable             *IntelligenceWindow::sm_embassyImages = NULL;
 
@@ -119,7 +118,6 @@ IntelligenceWindow::IntelligenceWindow(AUI_ERRCODE *err)
 	if(*err == AUI_ERRCODE_OK) {
 		InitImageTables();
 	}
-
 
 }
 
@@ -429,14 +427,6 @@ AUI_ERRCODE IntelligenceWindow::DrawPlayerRegard(ctp2_Static *control,
 	char **toneIcons = DiplomacyWindow::GetToneIcons();
 	sint32 p = (sint32)cookie;
 
-
-
-
-
-
-
-
-
 	switch(GetRegardThreshold(p, g_selected_item->GetVisiblePlayer())) {
 		case HOTWAR_REGARD: imageName = toneIcons[DIPLOMATIC_TONE_ANGRY]; break;
 		case COLDWAR_REGARD: imageName = toneIcons[DIPLOMATIC_TONE_INDIGNANT]; break;
@@ -488,13 +478,6 @@ AUI_ERRCODE IntelligenceWindow::DrawPlayerStrength(ctp2_Static *control,
 
 	if(!g_player[p]) return AUI_ERRCODE_OK;
 	if(!g_player[g_selected_item->GetVisiblePlayer()]) return AUI_ERRCODE_OK;
-
-
-
-
-
-
-
 
 	DIPLOMATIC_STRENGTH relativeStrength = g_player[p]->GetRelativeStrength(g_selected_item->GetVisiblePlayer());
 
@@ -654,61 +637,6 @@ AUI_ERRCODE IntelligenceWindow::DrawTreaties(ctp2_Static *control,
 	return AUI_ERRCODE_OK;
 }
 
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
 void IntelligenceWindow::InitImageTables()
 {
 	AUI_ERRCODE err;
@@ -736,9 +664,6 @@ void IntelligenceWindow::SelectItem(aui_Control *control, uint32 action, uint32 
 		sm_list->SelectItem(item);
 		DiplomacyWindow::EnableButtons( TRUE, (sint32)item->GetUserData() );
 	}
-
-
-
 
 }
 

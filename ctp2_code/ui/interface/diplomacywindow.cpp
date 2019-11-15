@@ -109,10 +109,6 @@ DiplomacyWindow::DiplomacyWindow(AUI_ERRCODE *err)
 		return;
 	}
 
-
-
-
-
 	m_goldRequestWindow = NULL;
 	m_pollutionRequestWindow = NULL;
 	m_percentRequestWindow = NULL;
@@ -127,46 +123,6 @@ DiplomacyWindow::DiplomacyWindow(AUI_ERRCODE *err)
 	m_selectingProgramatically = false;
 
 	aui_Ldl::SetActionFuncAndCookie(s_dipWindowBlock, "CloseButton", DiplomacyWindow::Close, NULL);
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
 
 	sm_messageButton = (ctp2_Button *)aui_Ldl::GetObject(s_dipWindowBlock, "DiplomacyTabs.Intelligence.TabPanel.MessageButton");
 	sm_messageButton->SetActionFuncAndCookie(SendMessage, NULL);
@@ -183,11 +139,6 @@ DiplomacyWindow::DiplomacyWindow(AUI_ERRCODE *err)
 	sm_detailsButton = (ctp2_Button *)aui_Ldl::GetObject(s_dipWindowBlock, "DiplomacyTabs.Intelligence.TabPanel.DetailsButton");
 	sm_detailsButton->SetActionFuncAndCookie(Details, NULL);
 	sm_detailsButton->Enable(FALSE);
-
-
-
-
-
 
 	SetSendProposal(-1);
 
@@ -292,14 +243,6 @@ AUI_ERRCODE DiplomacyWindow::Display()
 
 		EnableButtons(FALSE);
 
-
-
-
-
-
-
-
-
 	}
 
 	return err;
@@ -307,9 +250,6 @@ AUI_ERRCODE DiplomacyWindow::Display()
 
 AUI_ERRCODE DiplomacyWindow::Hide()
 {
-
-
-
 
 	if(!s_dipWindow)
 		return AUI_ERRCODE_OK;
@@ -325,21 +265,6 @@ AUI_ERRCODE DiplomacyWindow::Hide()
 void DiplomacyWindow::GotoTab(sint32 tabIndex)
 {
 	Assert(FALSE);
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
 
 }
 
@@ -360,16 +285,6 @@ bool DiplomacyWindow::IsShown()
 void DiplomacyWindow::ShowInitialSections()
 {
 
-
-
-
-
-
-
-
-
-
-
 }
 
 void DiplomacyWindow::ShowSection(MBCHAR *section, bool show)
@@ -388,97 +303,6 @@ void DiplomacyWindow::ShowSection(MBCHAR *section, bool show)
 void DiplomacyWindow::ShowSections(uint32 sections)
 {
 
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
 	Update();
 }
 
@@ -489,49 +313,6 @@ void DiplomacyWindow::Update()
 	if(updating)
 		return;
 	updating = true;
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
 
 	ctp2_ListBox *intList = (ctp2_ListBox *)aui_Ldl::GetObject(s_dipWindowBlock, "DiplomacyTabs.Intelligence.TabPanel.List");
 	Assert(intList);
@@ -583,23 +364,6 @@ void DiplomacyWindow::UpdateProposalList(ctp2_ListBox *propList, bool toPlayer)
 
 						prop = &Diplomat::GetDiplomat(i).GetMyLastNewProposal(player);
 
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
 					if(*prop == Diplomat::s_badNewProposal)
 						continue;
 
@@ -629,16 +393,6 @@ void DiplomacyWindow::UpdateProposalList(ctp2_ListBox *propList, bool toPlayer)
 
 					if(*prop == Diplomat::s_badNewProposal)
 						continue;
-
-
-
-
-
-
-
-
-
-
 
 					propData = prop->detail;
 				}
@@ -805,370 +559,25 @@ void DiplomacyWindow::GetProposalSummary(const ProposalData &prop,
 void DiplomacyWindow::UpdateProposalsReceived()
 {
 
-
 }
 
 void DiplomacyWindow::UpdateProposalsMade()
 {
-
 
 }
 
 void DiplomacyWindow::UpdateProposalDetails()
 {
 
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
 }
 
 void DiplomacyWindow::UpdateCreateList()
 {
 
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
 }
 
 void DiplomacyWindow::UpdateSendProposalDetails()
 {
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
 
 }
 
@@ -1181,203 +590,10 @@ void DiplomacyWindow::SetViewingResponse(sint32 sender, sint32 receiver)
 void DiplomacyWindow::UpdateResponseDetails()
 {
 
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
 }
 
 void DiplomacyWindow::UpdateThreatList()
 {
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
 
 }
 
@@ -1387,7 +603,6 @@ StringId DiplomacyWindow::GetProposalText(sint32 proposal, DIPLOMATIC_TONE tone,
 	Assert(rec);
 	if(!rec)
 		return 0;
-
 
 	if(useReciprocal) {
 
@@ -1475,7 +690,6 @@ StringId DiplomacyWindow::GetProposalSummaryText(sint32 proposal, DIPLOMATIC_TON
 	if(!rec)
 		return 0;
 
-
 	if(useReciprocal) {
 
 		sint32 recipIndex;
@@ -1498,9 +712,6 @@ bool DiplomacyWindow::AddProposalData(SlicObject &so, sint32 proposal, Diplomacy
 	Assert(rec);
 	if(!rec)
 		return false;
-
-
-
 
 	switch(rec->GetArg1()) {
 		case k_DiplomacyProposal_Arg1_OwnCity_Bit:
@@ -1590,20 +801,6 @@ void DiplomacyWindow::Close(aui_Control *control, uint32 action, uint32 data, vo
 {
 	if(action != AUI_BUTTON_ACTION_EXECUTE) return;
 
-
-
-
-
-
-
-
-
-
-
-
-
-
-
 	DiplomacyWindow::Hide();
 }
 
@@ -1620,31 +817,6 @@ void DiplomacyWindow::ProposalsReceived(aui_Control *control, uint32 action, uin
 void DiplomacyWindow::ShowReceivedProposalDetails()
 {
 
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
 }
 
 void DiplomacyWindow::Respond(aui_Control *control, uint32 action, uint32 data, void *cookie)
@@ -1660,190 +832,40 @@ void DiplomacyWindow::Respond(aui_Control *control, uint32 action, uint32 data, 
 void DiplomacyWindow::Respond(RESPONSE_TYPE disposition)
 {
 
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
 }
 
 void DiplomacyWindow::Accept(aui_Control *control, uint32 action, uint32 data, void *cookie)
 {
-
-
-
-
-
 
 }
 
 void DiplomacyWindow::Reject(aui_Control *control, uint32 action, uint32 data, void *cookie)
 {
 
-
-
-
-
-
 }
 
 void DiplomacyWindow::Counter(aui_Control *control, uint32 action, uint32 data, void *cookie)
 {
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
 
 }
 
 void DiplomacyWindow::Create(aui_Control *control, uint32 action, uint32 data, void *cookie)
 {
 
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
 }
 
 void DiplomacyWindow::SendProposal()
 {
-
-
-
-
-
-
-
-
-
-
-
 
 }
 
 void DiplomacyWindow::SendCounter()
 {
 
-
-
-
-
-
-
-
-
-
-
-
-
 }
 
 void DiplomacyWindow::Send(aui_Control *control, uint32 action, uint32 data, void *cookie)
 {
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
 
 }
 
@@ -1968,9 +990,6 @@ STDEHANDLER(DipWinNewNegotiationEvent)
 void DiplomacyWindow::InitializeEvents()
 {
 
-
-
-
 }
 
 void DiplomacyWindow::CleanupEvents()
@@ -1979,7 +998,6 @@ void DiplomacyWindow::CleanupEvents()
 
 void DiplomacyWindow::Civ(aui_Control *control, uint32 action, uint32 data, void *cookie)
 {
-
 
 }
 
@@ -2001,84 +1019,25 @@ AUI_ERRCODE DiplomacyWindow::DrawCivColor(ctp2_Static *control, aui_Surface *sur
 void DiplomacyWindow::Tone(aui_Control *control, uint32 action, uint32 data, void *cookie)
 {
 
-
-
-
-
-
-
-
 }
 
 void DiplomacyWindow::Request(aui_Control *control, uint32 action, uint32 data, void *cookie)
 {
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
 
 }
 
 void DiplomacyWindow::Treaty(aui_Control *control, uint32 action, uint32 data, void *cookie)
 {
 
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
 }
 
 void DiplomacyWindow::Gift(aui_Control *control, uint32 action, uint32 data, void *cookie)
 {
 
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
 }
 
 void DiplomacyWindow::Exchange(aui_Control *control, uint32 action, uint32 data, void *cookie)
 {
-
-
-
-
-
-
-
 
 }
 
@@ -2105,132 +1064,15 @@ void DiplomacyWindowChangeModeAction::Execute(aui_Control *control,
 											  uint32 data)
 {
 
-
-
-
 }
 
 void DiplomacyWindow::CreateList(aui_Control *control, uint32 action, uint32 data, void *cookie)
 {
 
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
 }
 
 void DiplomacyWindow::ClearForm(aui_Control *control, uint32 action, uint32 data, void *cookie)
 {
-
-
-
-
-
-
-
-
-
-
-
 
 }
 
@@ -2434,11 +1276,6 @@ bool DiplomacyWindow::ProposalContextMenu(sint32 proposal)
 			AddAdvanceItems(m_curMenu, m_sendToCiv, g_selected_item->GetVisiblePlayer());
 			break;
 
-
-
-
-
-
 		case k_DiplomacyProposal_Arg1_OwnUnitType_Bit:
 
 			break;
@@ -2567,11 +1404,6 @@ void DiplomacyWindow::ProcessMenuSelection(sint32 itemIndex, void *cookie)
 void DiplomacyWindow::ProcessMenuCancel()
 {
 
-
-
-
-
-
 }
 
 void DiplomacyWindow::MenuCallback(ctp2_Menu *menu, CTP2_MENU_ACTION action, sint32 itemIndex, void *cookie)
@@ -2634,7 +1466,6 @@ void DiplomacyWindow::GoldCancel(aui_Control *control, uint32 action, uint32 dat
 		g_c3ui->RemoveWindow(s_dipWindow->m_goldRequestWindow->Id());
 	}
 
-
 	s_dipWindow->ProcessMenuCancel();
 }
 
@@ -2673,7 +1504,6 @@ void DiplomacyWindow::PollutionCancel(aui_Control *control, uint32 action, uint3
 		g_c3ui->RemoveWindow(s_dipWindow->m_pollutionRequestWindow->Id());
 	}
 
-
 	s_dipWindow->ProcessMenuCancel();
 }
 
@@ -2711,7 +1541,6 @@ void DiplomacyWindow::PercentCancel(aui_Control *control, uint32 action, uint32 
 	if(s_dipWindow->m_percentRequestWindow) {
 		g_c3ui->RemoveWindow(s_dipWindow->m_percentRequestWindow->Id());
 	}
-
 
 	s_dipWindow->ProcessMenuCancel();
 }
@@ -2990,7 +1819,6 @@ void DiplomacyWindow::SendThreat()
 	response.threat.type = diplomacyutil_GetThreatType(m_sendThreat);
 	response.threat.arg = m_threatArg;
 
-
 	Diplomat::GetDiplomat(m_viewResponseSender).ExecuteResponse(response);
 }
 
@@ -3098,36 +1926,6 @@ void DiplomacyWindow::SetSendProposal(sint32 prop)
 
 void DiplomacyWindow::EnableRequests(bool enable)
 {
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
 
 }
 
