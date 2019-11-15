@@ -1863,6 +1863,15 @@ void Diplomat::SetEmbargo(const PLAYER_INDEX foreignerId, const bool state)
 		}
 
 		g_theTradePool->BreakOffTrade(m_playerId, foreignerId);
+		
+		ai::Agreement agreement;
+		agreement.senderId = foreignerId;
+		agreement.receiverId = m_playerId;
+		agreement.start = static_cast<sint16>(NewTurnCount::GetCurrentRound());
+		agreement.end = -1;
+		agreement.proposal.first_type = PROPOSAL_REQUEST_END_EMBARGO; //agreement type used in the sense of DECLARE_EMBARGO see diplomacyproposal.txt 
+
+		AgreementMatrix::s_agreements.SetAgreement(agreement);
 	}
 
 	m_foreigners[foreignerId].SetEmbargo(state);
