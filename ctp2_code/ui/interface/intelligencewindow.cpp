@@ -246,90 +246,90 @@ void IntelligenceWindow::SetRegardTip(MBCHAR *buf, const sint32 player, const si
 }
 
 void IntelligenceWindow::Update(ctp2_ListBox *theList)
-{
-    PLAYER_INDEX    visPl   = g_selected_item->GetVisiblePlayer();
-	Assert(g_player[visPl]);
-	if(!g_player[visPl]) return;
-
-	theList->Clear();
-	theList->SetAbsorbancy(FALSE);
-	sm_list = theList;
-
-	for (sint32 p = 1; p < k_MAX_PLAYERS; p++)
     {
-		if (p == visPl) continue;
-		if (!g_player[visPl]->HasContactWith(p)) continue;
+    PLAYER_INDEX    visPl   = g_selected_item->GetVisiblePlayer();
+    Assert(g_player[visPl]);
+    if(!g_player[visPl]) return;
 
-	    ctp2_ListItem * item =
+    theList->Clear();
+    theList->SetAbsorbancy(FALSE);
+    sm_list = theList;
+
+    for (sint32 p = 1; p < k_MAX_PLAYERS; p++)
+	{
+	if (p == visPl) continue;
+	if (!g_player[visPl]->HasContactWith(p)) continue;
+
+	ctp2_ListItem * item =
             (ctp2_ListItem *)aui_Ldl::BuildHierarchyFromRoot("IntelligenceListItem");
-		Assert(item);
-		if (!item) break;
+	Assert(item);
+	if (!item) break;
 
-		if (ctp2_Static * flag = (ctp2_Static *) item->GetChildByIndex(k_INT_FLAG_COL))
-        {
-			flag->SetDrawCallbackAndCookie(DrawPlayerFlag, (void *)p, false);
-			flag->SetActionFuncAndCookie(SelectItem, item);
-		}
+	if (ctp2_Static * flag = (ctp2_Static *) item->GetChildByIndex(k_INT_FLAG_COL))
+	    {
+	    flag->SetDrawCallbackAndCookie(DrawPlayerFlag, (void *)p, false);
+	    flag->SetActionFuncAndCookie(SelectItem, item);
+	    }
 
-		if (ctp2_Static * nation = (ctp2_Static *)item->GetChildByIndex(k_INT_NATION_COL))
-        {
-		    MBCHAR buf[k_MAX_NAME_LEN];
+	if (ctp2_Static * nation = (ctp2_Static *)item->GetChildByIndex(k_INT_NATION_COL))
+	    {
+	    MBCHAR buf[k_MAX_NAME_LEN];
             g_player[p]->GetCivilisation()->GetCountryName(buf);
-			nation->SetText(buf);
-			nation->SetActionFuncAndCookie(SelectItem, item);
+	    nation->SetText(buf);
+	    nation->SetActionFuncAndCookie(SelectItem, item);
+	    }
+
+	if (ctp2_Static * regard = (ctp2_Static *)item->GetChildByIndex(k_INT_REGARD_COL))
+	    {
+	    regard->SetDrawCallbackAndCookie(DrawPlayerRegard, (void *)p, true);
+	    MBCHAR buf[k_MAX_NAME_LEN];
+	    SetRegardTip(buf, p, visPl);
+	    ((aui_TipWindow *)regard->GetTipWindow())->SetTipText(buf);
+	    regard->SetActionFuncAndCookie(SelectItem, item);
+	    }
+
+	if (ctp2_Static * strength = (ctp2_Static *)item->GetChildByIndex(k_INT_STRENGTH_COL))
+	    {
+	    strength->SetDrawCallbackAndCookie(DrawPlayerStrength, (void *)p, true);
+	    MBCHAR buf[k_MAX_NAME_LEN];
+	    DIPLOMATIC_STRENGTH relativeStrength = g_player[p]->GetRelativeStrength(visPl);
+
+	    if (relativeStrength < DIPLOMATIC_STRENGTH_WEAK)
+		{
+		strcpy(buf, g_theStringDB->GetNameStr("TOOLTIP_DIPMAN_INTEL_STR_VWEK_BUTTON"));
+		}
+	    else if(relativeStrength < DIPLOMATIC_STRENGTH_AVERAGE)
+		{
+		strcpy(buf, g_theStringDB->GetNameStr("TOOLTIP_DIPMAN_INTEL_STR_WEAK_BUTTON"));
+		}
+	    else if(relativeStrength < DIPLOMATIC_STRENGTH_STRONG)
+		{
+		strcpy(buf, g_theStringDB->GetNameStr("TOOLTIP_DIPMAN_INTEL_STR_AVG_BUTTON"));
+		}
+	    else
+		{
+		strcpy(buf, g_theStringDB->GetNameStr("TOOLTIP_DIPMAN_INTEL_STR_STRN_BUTTON"));
 		}
 
-		if (ctp2_Static * regard = (ctp2_Static *)item->GetChildByIndex(k_INT_REGARD_COL))
-        {
-			regard->SetDrawCallbackAndCookie(DrawPlayerRegard, (void *)p, true);
-			MBCHAR buf[k_MAX_NAME_LEN];
-			SetRegardTip(buf, p, visPl);
-			((aui_TipWindow *)regard->GetTipWindow())->SetTipText(buf);
-			regard->SetActionFuncAndCookie(SelectItem, item);
-		}
+	    ((aui_TipWindow *)strength->GetTipWindow())->SetTipText(buf);
+	    strength->SetActionFuncAndCookie(SelectItem, item);
+	    }
 
-		if (ctp2_Static * strength = (ctp2_Static *)item->GetChildByIndex(k_INT_STRENGTH_COL))
-        {
-			strength->SetDrawCallbackAndCookie(DrawPlayerStrength, (void *)p, true);
-			MBCHAR buf[k_MAX_NAME_LEN];
-			DIPLOMATIC_STRENGTH relativeStrength = g_player[p]->GetRelativeStrength(visPl);
+	if (ctp2_Static * embassy = (ctp2_Static *)item->GetChildByIndex(k_INT_EMBASSY_COL))
+	    {
+	    embassy->SetDrawCallbackAndCookie(DrawEmbassy, (void *)p, true);
+	    embassy->SetActionFuncAndCookie(SelectItem, item);
+	    }
 
-			if (relativeStrength < DIPLOMATIC_STRENGTH_WEAK)
-			{
-				strcpy(buf, g_theStringDB->GetNameStr("TOOLTIP_DIPMAN_INTEL_STR_VWEK_BUTTON"));
-			}
-			else if(relativeStrength < DIPLOMATIC_STRENGTH_AVERAGE)
-			{
-				strcpy(buf, g_theStringDB->GetNameStr("TOOLTIP_DIPMAN_INTEL_STR_WEAK_BUTTON"));
-			}
-			else if(relativeStrength < DIPLOMATIC_STRENGTH_STRONG)
-			{
-				strcpy(buf, g_theStringDB->GetNameStr("TOOLTIP_DIPMAN_INTEL_STR_AVG_BUTTON"));
-			}
-			else
-			{
-				strcpy(buf, g_theStringDB->GetNameStr("TOOLTIP_DIPMAN_INTEL_STR_STRN_BUTTON"));
-			}
-
-			((aui_TipWindow *)strength->GetTipWindow())->SetTipText(buf);
-			strength->SetActionFuncAndCookie(SelectItem, item);
-		}
-
-		if (ctp2_Static * embassy = (ctp2_Static *)item->GetChildByIndex(k_INT_EMBASSY_COL))
-        {
-			embassy->SetDrawCallbackAndCookie(DrawEmbassy, (void *)p, true);
-			embassy->SetActionFuncAndCookie(SelectItem, item);
-		}
-
-		if (ctp2_Static * treaty = (ctp2_Static *)item->GetChildByIndex(k_INT_TREATIES_COL))
-        {
-			treaty->SetDrawCallbackAndCookie(DrawTreaties, (void *)p, true);
-			treaty->SetActionFuncAndCookie(SelectItem, item);
-		}
-		item->SetUserData((void*) p);
-		theList->AddItem(item);
+	if (ctp2_Static * treaty = (ctp2_Static *)item->GetChildByIndex(k_INT_TREATIES_COL))
+	    {
+	    treaty->SetDrawCallbackAndCookie(DrawTreaties, (void *)p, true);
+	    treaty->SetActionFuncAndCookie(SelectItem, item);
+	    }
+	item->SetUserData((void*) p);
+	theList->AddItem(item);
 	}
-}
+    }
 
 void IntelligenceWindow::Close(aui_Control *control, uint32 action, uint32 data, void *cookie)
 {
@@ -586,56 +586,53 @@ AUI_ERRCODE IntelligenceWindow::DrawEmbassy(ctp2_Static *control,
 	return AUI_ERRCODE_OK;
 }
 
-AUI_ERRCODE IntelligenceWindow::DrawTreaties(ctp2_Static *control,
-											 aui_Surface *surface,
-											 RECT &rect,
-											 void *cookie)
-{
-	sint32 p    = (sint32) cookie;
-	sint32 visP = g_selected_item->GetVisiblePlayer();
-	sint32 slot;
-
-	for (sint32 ag = 1; ag < PROPOSAL_MAX; ++ag)
+AUI_ERRCODE IntelligenceWindow::DrawTreaties(ctp2_Static *control, aui_Surface *surface, RECT &rect, void *cookie)
     {
-		const DiplomacyProposalRecord *rec =
-			g_theDiplomacyProposalDB->Get(diplomacyutil_GetDBIndex((PROPOSAL_TYPE)ag));
+    sint32 p    = (sint32) cookie;
+    sint32 visP = g_selected_item->GetVisiblePlayer();
+    sint32 slot;
 
-		if (!rec->GetImageSlot(slot))
-			continue;
+    for (sint32 ag = 1; ag < PROPOSAL_MAX; ++ag)
+	{
+	const DiplomacyProposalRecord *rec =
+	    g_theDiplomacyProposalDB->Get(diplomacyutil_GetDBIndex((PROPOSAL_TYPE)ag));
 
-		if (rec->GetHasEmbargo())
-		{
-			if (!Diplomat::GetDiplomat(p).GetEmbargo(visP))
-				continue;
-		}
-		else if(!AgreementMatrix::s_agreements.HasAgreement(visP, p, (PROPOSAL_TYPE)ag))
-			continue;
+	if (!rec->GetImageSlot(slot))
+	    continue;
 
-		aui_Image *image = g_c3ui->LoadImage((char *)rec->GetImage());
-		Assert(image);
-		if(!image)
-			continue;
-		RECT srcRect = {
-			0, 0,
-				image->TheSurface()->Width(),
-				image->TheSurface()->Height()
-		};
+	if (rec->GetHasEmbargo())
+	    {
+	    if (!Diplomat::GetDiplomat(p).GetEmbargo(visP))
+		continue;
+	    }
+	else if(!AgreementMatrix::s_agreements.HasAgreement(visP, p, (PROPOSAL_TYPE)ag))
+	    continue;
 
-		image->SetChromakey(255,0,255);
+	aui_Image *image = g_c3ui->LoadImage((char *)rec->GetImage());
+	Assert(image);
+	if(!image)
+	    continue;
+	RECT srcRect = {
+	    0, 0,
+	    image->TheSurface()->Width(),
+	    image->TheSurface()->Height()
+	    };
 
-		sint32 x = image->TheSurface()->Width() * slot;
+	image->SetChromakey(255,0,255);
 
-		g_c3ui->TheBlitter()->Blt(surface, rect.left + x,
-			rect.top + (((rect.bottom - rect.top) - image->TheSurface()->Height()) / 2),
-			image->TheSurface(),
-			&srcRect,
-			k_AUI_BLITTER_FLAG_CHROMAKEY);
+	sint32 x = image->TheSurface()->Width() * slot;
 
-		g_c3ui->UnloadImage(image);
+	g_c3ui->TheBlitter()->Blt(surface, rect.left + x,
+	    rect.top + (((rect.bottom - rect.top) - image->TheSurface()->Height()) / 2),
+	    image->TheSurface(),
+	    &srcRect,
+	    k_AUI_BLITTER_FLAG_CHROMAKEY);
+
+	g_c3ui->UnloadImage(image);
 	}
 
-	return AUI_ERRCODE_OK;
-}
+    return AUI_ERRCODE_OK;
+    }
 
 void IntelligenceWindow::InitImageTables()
 {
