@@ -878,14 +878,14 @@ AUI_ERRCODE DiplomacyDetails::DrawTreaties(ctp2_Static *control, aui_Surface *su
 	    continue;
 
 	if (p == visP){
-	    if (slot > 4)
+	    if (slot > 5)
 		continue;
 	    }
 	else{
-	    if (slot < 4)
+	    if (slot < 5)
 		slot = 0;
 	    else
-		slot -= 3;
+		slot -= 4;
 	    }
 
 	if(AgreementMatrix::s_agreements.HasAgreement(detailPlayer, p, (PROPOSAL_TYPE)ag)) {
