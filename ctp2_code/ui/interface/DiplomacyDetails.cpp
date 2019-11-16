@@ -860,71 +860,60 @@ AUI_ERRCODE DiplomacyDetails::DrawEmbassy(ctp2_Static *control,
 	return AUI_ERRCODE_OK;
 }
 
-AUI_ERRCODE DiplomacyDetails::DrawTreaties(ctp2_Static *control,
-											 aui_Surface *surface,
-											 RECT &rect,
-											 void *cookie)
-{
-	sint32 p = (sint32)cookie;
-	sint32 visP = g_selected_item->GetVisiblePlayer();
+AUI_ERRCODE DiplomacyDetails::DrawTreaties(ctp2_Static *control, aui_Surface *surface, RECT &rect, void *cookie)
+    {
+    //// similar to IntelligenceWindow::DrawTreaties
+    sint32 p = (sint32)cookie;
+    sint32 visP = g_selected_item->GetVisiblePlayer();
 
-	sint32 x = 0;
+    sint32 x = 0;
 
-	sint32 ag;
-	sint32 slot;
-	for(ag = 1; ag < PROPOSAL_MAX; ag++) {
+    sint32 ag;
+    sint32 slot;
+    for(ag = 1; ag < PROPOSAL_MAX; ag++) {
+	const DiplomacyProposalRecord *rec =
+	    g_theDiplomacyProposalDB->Get(diplomacyutil_GetDBIndex((PROPOSAL_TYPE)ag));
 
+	if (!rec->GetImageSlot(slot))
+	    continue;
 
+	if (p == visP){
+	    if (slot > 4)
+		continue;
+	    }
+	else{
+	    if (slot < 4)
+		slot = 0;
+	    else
+		slot -= 3;
+	    }
 
+	if(AgreementMatrix::s_agreements.HasAgreement(detailPlayer, p, (PROPOSAL_TYPE)ag)) {
+	    aui_Image *image = g_c3ui->LoadImage((char *)rec->GetImage());
+	    Assert(image);
+	    if(!image)
+		continue;
+	    RECT srcRect = {
+		0, 0,
+		image->TheSurface()->Width(),
+		image->TheSurface()->Height()
+		};
 
+	    image->SetChromakey(255,0,255);
 
+	    x = image->TheSurface()->Width() * slot;
 
-		const DiplomacyProposalRecord *rec =
-			g_theDiplomacyProposalDB->Get(diplomacyutil_GetDBIndex((PROPOSAL_TYPE)ag));
+	    g_c3ui->TheBlitter()->Blt(surface, rect.left + x,
+		rect.top + (((rect.bottom - rect.top) - image->TheSurface()->Height()) / 2),
+		image->TheSurface(),
+		&srcRect,
+		k_AUI_BLITTER_FLAG_CHROMAKEY);
 
-		if (!rec->GetImageSlot(slot))
-			continue;
-
-		if (p == visP)
-		{
-			if (slot > 4)
-				continue;
-		}
-		else
-		{
-
-			if (slot < 4)
-				slot = 0;
-			else
-				slot -= 3;
-		}
-
-		if(AgreementMatrix::s_agreements.HasAgreement(detailPlayer, p, (PROPOSAL_TYPE)ag)) {
-			aui_Image *image = g_c3ui->LoadImage((char *)rec->GetImage());
-			Assert(image);
-			if(!image)
-				continue;
-			RECT srcRect = {
-				0, 0,
-				image->TheSurface()->Width(),
-				image->TheSurface()->Height()
-			};
-
-			image->SetChromakey(255,0,255);
-
-			x = image->TheSurface()->Width() * slot;
-
-			g_c3ui->TheBlitter()->Blt(surface, rect.left + x,
-									  rect.top + (((rect.bottom - rect.top) - image->TheSurface()->Height()) / 2),
-									  image->TheSurface(),
-									  &srcRect,
-									  k_AUI_BLITTER_FLAG_CHROMAKEY);
-
-			g_c3ui->UnloadImage(image);
-		}
+	    g_c3ui->UnloadImage(image);
+	    }
 	}
-	return AUI_ERRCODE_OK;
-}
+    return AUI_ERRCODE_OK;
+    }
 
 sint32 DiplomacyDetails::GetRegardThreshold(sint32 ofPlayer, sint32 forPlayer)
 {

@@ -588,6 +588,7 @@ AUI_ERRCODE IntelligenceWindow::DrawEmbassy(ctp2_Static *control,
 
 AUI_ERRCODE IntelligenceWindow::DrawTreaties(ctp2_Static *control, aui_Surface *surface, RECT &rect, void *cookie)
     {
+    //// similar to DiplomacyDetails::DrawTreaties
     sint32 p    = (sint32) cookie;
     sint32 visP = g_selected_item->GetVisiblePlayer();
     sint32 slot;
