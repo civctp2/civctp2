@@ -882,42 +882,32 @@ AUI_ERRCODE DiplomacyDetails::DrawTreaties(ctp2_Static *control, aui_Surface *su
 	    if (!Diplomat::GetDiplomat(p).GetEmbargo(detailPlayer))
 		continue;
 	    }
+	else if(!AgreementMatrix::s_agreements.HasAgreement(detailPlayer, p, (PROPOSAL_TYPE)ag))
+	    continue;
 
-	if (p == visP){
-	    if (slot > 5)
-		continue;
-	    }
-	else{
-	    if (slot < 5)
-		slot = 0;
-	    else
-		slot -= 4;
-	    }
+	aui_Image *image = g_c3ui->LoadImage((char *)rec->GetImage());
+	Assert(image);
+	if(!image)
+	    continue;
+	RECT srcRect = {
+	    0, 0,
+	    image->TheSurface()->Width(),
+	    image->TheSurface()->Height()
+	    };
 
-	if(AgreementMatrix::s_agreements.HasAgreement(detailPlayer, p, (PROPOSAL_TYPE)ag)) {
-	    aui_Image *image = g_c3ui->LoadImage((char *)rec->GetImage());
-	    Assert(image);
-	    if(!image)
-		continue;
-	    RECT srcRect = {
-		0, 0,
-		image->TheSurface()->Width(),
-		image->TheSurface()->Height()
-		};
+	image->SetChromakey(255,0,255);
 
-	    image->SetChromakey(255,0,255);
+	x = image->TheSurface()->Width() * slot;
 
-	    x = image->TheSurface()->Width() * slot;
+	g_c3ui->TheBlitter()->Blt(surface, rect.left + x,
+	    rect.top + (((rect.bottom - rect.top) - image->TheSurface()->Height()) / 2),
+	    image->TheSurface(),
+	    &srcRect,
+	    k_AUI_BLITTER_FLAG_CHROMAKEY);
 
-	    g_c3ui->TheBlitter()->Blt(surface, rect.left + x,
-		rect.top + (((rect.bottom - rect.top) - image->TheSurface()->Height()) / 2),
-		image->TheSurface(),
-		&srcRect,
-		k_AUI_BLITTER_FLAG_CHROMAKEY);
-
-	    g_c3ui->UnloadImage(image);
-	    }
+	g_c3ui->UnloadImage(image);
 	}
+    
     return AUI_ERRCODE_OK;
     }
 

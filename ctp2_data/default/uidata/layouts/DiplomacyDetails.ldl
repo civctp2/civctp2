@@ -127,17 +127,17 @@ DiplomacyDetails:CTP2_3TAB_DIALOG_WINDOW {
 # Start Foreign Relations Tab...
 ################################################################################
 				List:CTP2_LISTBOX {
-					int xpix 20
-					int ypix 30
-					int widthpix 450
-					int heightpix 160
+					int xpix 10
+					int ypix 24
+					int widthpix 470
+					int heightpix 173
 					header {
 						# MDS 090600  Added flag
 						switch0:DIP_INTEL_HEADER {
-							int	widthpix	40
+							int	 widthpix 40
 						}
 						switch1:DIP_INTEL_HEADER {
-							int widthpix 150
+							int widthpix 110
 							string text "str_ldl_Nation"
 						}
 						switch2:DIP_INTEL_HEADER {
@@ -152,9 +152,8 @@ DiplomacyDetails:CTP2_3TAB_DIALOG_WINDOW {
 							int widthpix 50
 							string text "str_ldl_Embassy"
 						}
-
 						switch5:DIP_INTEL_HEADER {
-							int widthpix 110
+							int widthpix 172 #212
 							string text "str_ldl_AlliancesTreaties"
 						}
 					}
