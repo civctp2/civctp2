@@ -877,6 +877,12 @@ AUI_ERRCODE DiplomacyDetails::DrawTreaties(ctp2_Static *control, aui_Surface *su
 	if (!rec->GetImageSlot(slot))
 	    continue;
 
+	if (rec->GetHasEmbargo())
+	    {
+	    if (!Diplomat::GetDiplomat(p).GetEmbargo(detailPlayer))
+		continue;
+	    }
+
 	if (p == visP){
 	    if (slot > 5)
 		continue;
