@@ -85,6 +85,7 @@ bool CtpAiDebug::IsDebugArmyIdSet()
 		if (s_debugArmies[i] != -1)
 			return true;
 	}
+
 	return false;
 }
 
@@ -101,12 +102,12 @@ void CtpAiDebug::SetDebugGoalType(const sint32 goal_type)
 void CtpAiDebug::SetDebugArmies(const CellUnitList & unit_list)
 {
 	for (sint32 i = 0; i < k_MAX_ARMY_SIZE; i++)
-		{
-			if (i < unit_list.Num())
-				s_debugArmies[i] = unit_list.Get(i).GetArmy().m_id;
-			else
-				s_debugArmies[i] = -1;
-		}
+	{
+		if (i < unit_list.Num())
+			s_debugArmies[i] = unit_list.Get(i).GetArmy().m_id;
+		else
+			s_debugArmies[i] = -1;
+	}
 }
 
 #endif // _DEBUG

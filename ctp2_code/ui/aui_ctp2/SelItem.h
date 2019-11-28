@@ -156,6 +156,8 @@ public:
 	void KeyboardSelectFirstUnit();
 	void SelectFirstUnit(bool setSelect = true);
 	void NextUnmovedUnit(bool isFirst = false, bool manualNextUnit = false);
+	double UnitsDoneRatio();
+	double UnitsBusyRatio();
 	void MaybeAutoEndTurn(bool isFirst = false);
 
 	void Refresh();
@@ -342,6 +344,7 @@ public:
 };
 
 bool CanAutoSelect(const Army &army);
+bool HasContinuingOrder(const Army &army);
 
 extern uint32 SelectedItem_GetVersion(void);
 

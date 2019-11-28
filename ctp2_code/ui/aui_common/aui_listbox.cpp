@@ -81,7 +81,6 @@ aui_ListBox::aui_ListBox(
 	if ( !AUI_SUCCESS(*retval) ) return;
 }
 
-
 aui_ListBox::aui_ListBox(
 	AUI_ERRCODE *retval,
 	uint32 id,
@@ -107,7 +106,6 @@ aui_ListBox::aui_ListBox(
 	Assert( AUI_SUCCESS(*retval) );
 	if ( !AUI_SUCCESS(*retval) ) return;
 }
-
 
 AUI_ERRCODE aui_ListBox::InitCommonLdl( const MBCHAR *ldlBlock )
 {
@@ -138,7 +136,6 @@ AUI_ERRCODE aui_ListBox::InitCommonLdl( const MBCHAR *ldlBlock )
 
 	return AUI_ERRCODE_OK;
 }
-
 
 AUI_ERRCODE aui_ListBox::InitCommon( void )
 {
@@ -210,7 +207,6 @@ AUI_ERRCODE aui_ListBox::InitCommon( void )
 	return AUI_ERRCODE_OK;
 }
 
-
 AUI_ERRCODE aui_ListBox::CreateRangersAndHeader( const MBCHAR *ldlBlock )
 {
 	AUI_ERRCODE errcode = AUI_ERRCODE_OK;
@@ -256,7 +252,7 @@ AUI_ERRCODE aui_ListBox::CreateRangersAndHeader( const MBCHAR *ldlBlock )
 	{
 		sprintf( block, "%s.%s", ldlBlock, k_AUI_LISTBOX_LDL_RANGERY );
 
-        if (aui_Ldl::GetLdl()->FindDataBlock(block))
+		if (aui_Ldl::GetLdl()->FindDataBlock(block))
 			m_verticalRanger = new aui_Ranger(
 				&errcode,
 				aui_UniqueId(),
@@ -325,7 +321,6 @@ AUI_ERRCODE aui_ListBox::CreateRangersAndHeader( const MBCHAR *ldlBlock )
 	return AUI_ERRCODE_OK;
 }
 
-
 aui_ListBox::~aui_ListBox()
 {
 	delete m_pane;
@@ -343,14 +338,11 @@ aui_ListBox::~aui_ListBox()
 	}
 }
 
-
 AUI_ERRCODE aui_ListBox::Draw(
 	aui_Surface *surface,
 	sint32 x,
 	sint32 y )
 {
-
-
 	if ( IsHidden() ) return AUI_ERRCODE_OK;
 
 	if (!surface)
@@ -365,10 +357,6 @@ AUI_ERRCODE aui_ListBox::Draw(
 		DrawChildren( surface, x, y );
 
 	m_draw = 0;
-
-
-
-
 
 	RECT rect = { 0, 0, m_width, m_height };
 	OffsetRect( &rect, m_x + x, m_y + y );
@@ -408,7 +396,6 @@ AUI_ERRCODE aui_ListBox::Draw(
 	return AUI_ERRCODE_OK;
 }
 
-
 BOOL aui_ListBox::IsItem( aui_Region *region )
 {
 	ListPos position = m_pane->ChildList()->GetHeadPosition();
@@ -428,9 +415,6 @@ BOOL aui_ListBox::IsItem( aui_Region *region )
 	return FALSE;
 }
 
-
-
-
 aui_Item *aui_ListBox::GetSelectedItem( void ) const
 {
 	if ( m_selectedList->L() )
@@ -440,14 +424,10 @@ aui_Item *aui_ListBox::GetSelectedItem( void ) const
 		return NULL;
 }
 
-
-
-
 sint32 aui_ListBox::GetSelectedItemIndex(void) const
 {
 	return m_selectedList->L() ? m_selectedList->GetHead() : -1;
 }
-
 
 BOOL aui_ListBox::SetMultiSelect( BOOL multiSelect )
 {
@@ -456,7 +436,6 @@ BOOL aui_ListBox::SetMultiSelect( BOOL multiSelect )
 	return wasMultiSelect;
 }
 
-
 BOOL aui_ListBox::SetForceSelect( BOOL forceSelect )
 {
 	BOOL wasForceSelect = m_forceSelect;
@@ -464,14 +443,12 @@ BOOL aui_ListBox::SetForceSelect( BOOL forceSelect )
 	return wasForceSelect;
 }
 
-
 BOOL aui_ListBox::SetAbsorbancy( BOOL absorbEvents )
 {
 	BOOL wasAbsorbant = m_absorbEvents;
 	m_absorbEvents = absorbEvents;
 	return wasAbsorbant;
 }
-
 
 AUI_ERRCODE aui_ListBox::Resize( sint32 width, sint32 height )
 {
@@ -487,7 +464,6 @@ AUI_ERRCODE aui_ListBox::Resize( sint32 width, sint32 height )
 	return AUI_ERRCODE_OK;
 }
 
-
 AUI_ERRCODE aui_ListBox::Show( void )
 {
 	aui_Control::Show();
@@ -500,7 +476,6 @@ AUI_ERRCODE aui_ListBox::Show( void )
 
 	return AUI_ERRCODE_OK;
 }
-
 
 AUI_ERRCODE aui_ListBox::AddItem( aui_Item *item )
 {
@@ -535,7 +510,6 @@ AUI_ERRCODE aui_ListBox::AddItem( aui_Item *item )
 	if ( m_forceSelect && !m_selectedList->L() )
 		SelectItem( (sint32)0, 1 );
 
-
 	if (!m_buildingTheList) {
 		CalculateDimensions();
 		RepositionHeaderSwitches();
@@ -547,7 +521,6 @@ AUI_ERRCODE aui_ListBox::AddItem( aui_Item *item )
 
 	return errcode;
 }
-
 
 AUI_ERRCODE aui_ListBox::InsertItem( aui_Item *item, sint32 index )
 {
@@ -581,9 +554,6 @@ AUI_ERRCODE aui_ListBox::InsertItem( aui_Item *item, sint32 index )
 
 	if ( m_forceSelect && !m_selectedList->L() )
 		SelectItem( (sint32)0, 1 );
-
-
-
 
 	ListPos position = m_selectedList->GetHeadPosition();
 	sint32	i;
@@ -624,7 +594,6 @@ AUI_ERRCODE aui_ListBox::InsertItem( aui_Item *item, sint32 index )
 
 	return errcode;
 }
-
 
 AUI_ERRCODE aui_ListBox::RemoveItem( uint32 itemId )
 {
@@ -683,7 +652,6 @@ AUI_ERRCODE aui_ListBox::RemoveItem( uint32 itemId )
 	return AUI_ERRCODE_OK;
 }
 
-
 void aui_ListBox::RemoveItems( BOOL destroy, BOOL destroyAction )
 {
 	for ( sint32 i = m_pane->ChildList()->L(); i; i-- )
@@ -695,15 +663,12 @@ void aui_ListBox::RemoveItems( BOOL destroy, BOOL destroyAction )
 	}
 }
 
-
 AUI_ERRCODE aui_ListBox::RemoveItemByIndex( sint32 index )
 {
-
 	aui_Item *item = GetItemByIndex( index );
 	Assert( item != NULL );
 	return item ? RemoveItem( item->Id() ) : AUI_ERRCODE_INVALIDPARAM;
 }
-
 
 aui_Item *aui_ListBox::GetItemByIndex( sint32 index )
 {
@@ -716,7 +681,6 @@ aui_Item *aui_ListBox::GetItemByIndex( sint32 index )
 
 	return (aui_Item *)m_pane->ChildList()->GetAt( position );
 }
-
 
 AUI_ERRCODE aui_ListBox::AddHeaderSwitch( aui_Switch *theSwitch )
 {
@@ -735,7 +699,6 @@ AUI_ERRCODE aui_ListBox::AddHeaderSwitch( aui_Switch *theSwitch )
 
 	return AUI_ERRCODE_OK;
 }
-
 
 AUI_ERRCODE aui_ListBox::RemoveHeaderSwitch( uint32 switchId )
 {
@@ -791,7 +754,6 @@ AUI_ERRCODE aui_ListBox::RangerMoved( void )
 	return AUI_ERRCODE_OK;
 }
 
-
 sint32 aui_ListBox::ItemsPerWidth( sint32 column )
 {
 	sint32 itemsPerWidth = 0;
@@ -811,7 +773,6 @@ sint32 aui_ListBox::ItemsPerWidth( sint32 column )
 	return itemsPerWidth ? itemsPerWidth : m_itemsPerWidth;
 }
 
-
 sint32 aui_ListBox::ColumnWidth( sint32 column )
 {
 	ListPos position = m_widthList->FindIndex( column );
@@ -820,7 +781,6 @@ sint32 aui_ListBox::ColumnWidth( sint32 column )
 	else
 		return m_maxItemWidth;
 }
-
 
 sint32 aui_ListBox::HorizontalRangerPositionCount( void )
 {
@@ -846,7 +806,6 @@ sint32 aui_ListBox::HorizontalRangerPositionCount( void )
 
 	return columns - count;
 }
-
 
 AUI_ERRCODE aui_ListBox::CalculateDimensions( void )
 {
@@ -887,7 +846,6 @@ AUI_ERRCODE aui_ListBox::CalculateDimensions( void )
 
 	return AUI_ERRCODE_OK;
 }
-
 
 AUI_ERRCODE aui_ListBox::RepositionItems( void )
 {
@@ -959,10 +917,8 @@ AUI_ERRCODE aui_ListBox::RepositionItems( void )
 	return AUI_ERRCODE_OK;
 }
 
-
 AUI_ERRCODE aui_ListBox::RepositionHeaderSwitches( void )
 {
-
 	m_header->Move( m_headerOffset.x, m_headerOffset.y - m_header->Height() );
 
 	if ( !IsHidden() ) m_header->Show();
@@ -989,13 +945,6 @@ AUI_ERRCODE aui_ListBox::RepositionHeaderSwitches( void )
 				x,
 				m_header->Height() - theSwitch->Height() );
 
-
-
-
-
-
-
-
 			theSwitch->Resize(
 				width,
 				theSwitch->Height() );
@@ -1014,9 +963,6 @@ AUI_ERRCODE aui_ListBox::RepositionHeaderSwitches( void )
 AUI_ERRCODE aui_ListBox::RepositionRangers( void )
 {
 	sint32 rangerDimension;
-
-
-
 
 	rangerDimension =
 		m_width - 2 * m_horizontalRanger->GetButtonSize();
@@ -1056,12 +1002,6 @@ AUI_ERRCODE aui_ListBox::RepositionRangers( void )
 			if ( m_parent ) m_parent->ShouldDraw();
 		}
 	}
-
-
-
-
-
-
 
 	sint32 headerHeight = 0;
 
@@ -1105,12 +1045,8 @@ AUI_ERRCODE aui_ListBox::RepositionRangers( void )
 		}
 	}
 
-
-
-
 	return AUI_ERRCODE_OK;
 }
-
 
 aui_DragDropWindow *aui_ListBox::CreateDragDropWindow( aui_Control *dragDropItem )
 {
@@ -1140,7 +1076,6 @@ aui_DragDropWindow *aui_ListBox::CreateDragDropWindow( aui_Control *dragDropItem
 	return ddw;
 }
 
-
 AUI_ERRCODE aui_ListBox::CalculateScroll( sint32 x, sint32 y )
 {
 
@@ -1161,7 +1096,6 @@ AUI_ERRCODE aui_ListBox::CalculateScroll( sint32 x, sint32 y )
 	return AUI_ERRCODE_OK;
 }
 
-
 AUI_ERRCODE aui_ListBox::ScrollList( void )
 {
 	if ( m_dragDropWindow ) return AUI_ERRCODE_OK;
@@ -1178,7 +1112,6 @@ AUI_ERRCODE aui_ListBox::ScrollList( void )
 
 	return AUI_ERRCODE_OK;
 }
-
 
 void aui_ListBox::SendSelectCallback(
 	AUI_LISTBOX_ACTION action,
@@ -1212,9 +1145,6 @@ void aui_ListBox::SendSelectCallback(
 	m_selectedListLastTime->AddTail( *m_selectedList );
 }
 
-
-
-
 void aui_ListBox::WhatsChanged(
 	tech_WLList<sint32> &selectedList,
 	tech_WLList<sint32> &deselectedList )
@@ -1239,7 +1169,6 @@ void aui_ListBox::WhatsChanged(
 			deselectedList.AddTail( itemIndex );
 	}
 }
-
 
 AUI_ERRCODE aui_ListBox::DragSelect( sint32 y )
 {
@@ -1287,7 +1216,6 @@ AUI_ERRCODE aui_ListBox::DragSelect( sint32 y )
 	}
 	else
 	{
-
 		if (!m_forceSelect && !m_multiSelect && m_visualSelectedList->L() )
 			m_visualSelectedList->RemoveHead();
 
@@ -1323,7 +1251,6 @@ AUI_ERRCODE aui_ListBox::DragSelect( sint32 y )
 	return AUI_ERRCODE_OK;
 }
 
-
 AUI_ERRCODE aui_ListBox::SelectItem( sint32 index, uint32 data )
 {
 	if ( index < 0 || index >= (sint32)m_pane->ChildList()->L() )
@@ -1352,7 +1279,6 @@ AUI_ERRCODE aui_ListBox::SelectItem( sint32 index, uint32 data )
 	return AUI_ERRCODE_OK;
 }
 
-
 AUI_ERRCODE aui_ListBox::SelectItem( aui_Item *item, uint32 data )
 {
 	ListPos position = m_pane->ChildList()->GetHeadPosition();
@@ -1362,7 +1288,6 @@ AUI_ERRCODE aui_ListBox::SelectItem( aui_Item *item, uint32 data )
 
 	return AUI_ERRCODE_INVALIDPARAM;
 }
-
 
 AUI_ERRCODE aui_ListBox::DeselectItem( sint32 index, uint32 data )
 {
@@ -1390,7 +1315,6 @@ AUI_ERRCODE aui_ListBox::DeselectItem( sint32 index, uint32 data )
 	return AUI_ERRCODE_OK;
 }
 
-
 AUI_ERRCODE aui_ListBox::DeselectItem( aui_Item *item, uint32 data )
 {
 	ListPos position = m_pane->ChildList()->GetHeadPosition();
@@ -1401,9 +1325,6 @@ AUI_ERRCODE aui_ListBox::DeselectItem( aui_Item *item, uint32 data )
 	return AUI_ERRCODE_INVALIDPARAM;
 }
 
-
-
-
 AUI_ERRCODE aui_ListBox::StartSelecting( void )
 {
 	SetMouseOwnership();
@@ -1412,7 +1333,6 @@ AUI_ERRCODE aui_ListBox::StartSelecting( void )
 
 	return AUI_ERRCODE_OK;
 }
-
 
 AUI_ERRCODE aui_ListBox::SwitchItems( sint32 indexA, sint32 indexB )
 {
@@ -1457,13 +1377,6 @@ AUI_ERRCODE aui_ListBox::SwitchItems( sint32 indexA, sint32 indexB )
 	return AUI_ERRCODE_OK;
 }
 
-
-
-
-
-
-
-
 void aui_ListBox::PreChildrenCallback( aui_MouseEvent *mouseData )
 {
 	if ( m_absorbEvents )
@@ -1479,7 +1392,6 @@ void aui_ListBox::PreChildrenCallback( aui_MouseEvent *mouseData )
 		}
 	}
 }
-
 
 void aui_ListBox::PostChildrenCallback( aui_MouseEvent *mouseData )
 {
@@ -1500,9 +1412,6 @@ void aui_ListBox::PostChildrenCallback( aui_MouseEvent *mouseData )
 	if ( m_absorbed )
 	{
 		m_absorbed = FALSE;
-
-
-
 
 		ListPos position = m_pane->ChildList()->GetHeadPosition();
 		for ( sint32 i = m_pane->ChildList()->L(); i; i-- )
@@ -1608,8 +1517,6 @@ void aui_ListBox::MouseLGrabInside( aui_MouseEvent *mouseData )
 				}
 				else
 				{
-
-
 					if (m_multiSelect) {
 						if (!(mouseData->flags & k_MOUSE_EVENT_FLAG_LCONTROL
 								|| mouseData->flags & k_MOUSE_EVENT_FLAG_RCONTROL)) {
@@ -1628,19 +1535,12 @@ void aui_ListBox::MouseLGrabInside( aui_MouseEvent *mouseData )
 						}
 					}  else {
 
-
 					}
-
 				}
 			}
 			else
 			{
 				m_selectStatus = AUI_LISTBOX_SELECTSTATUS_SELECTING;
-
-
-
-
-
 
 				if ( !m_multiSelect
 					|| (m_multiSelect
@@ -1656,9 +1556,6 @@ void aui_ListBox::MouseLGrabInside( aui_MouseEvent *mouseData )
 				if (m_multiSelect
 					&& (mouseData->flags & k_MOUSE_EVENT_FLAG_LSHIFT
 						|| mouseData->flags & k_MOUSE_EVENT_FLAG_RSHIFT)) {
-
-
-
 
 					sint32		firstIndex = 999999,
 								index;
@@ -1884,7 +1781,6 @@ void aui_ListBox::MouseLDropOutside( aui_MouseEvent *mouseData )
 		m_mouseCode = AUI_ERRCODE_HANDLED;
 }
 
-
 void aui_ListBox::MouseLDragAway( aui_MouseEvent *mouseData )
 {
 	if (IsDisabled()) return;
@@ -1946,7 +1842,6 @@ void aui_ListBox::MouseLDragInside( aui_MouseEvent *mouseData )
 		DragSelect( mouseData->position.y - m_y );
 }
 
-
 void aui_ListBox::MouseLDragOutside( aui_MouseEvent *mouseData )
 {
 	if (IsDisabled()) return;
@@ -1958,7 +1853,6 @@ void aui_ListBox::MouseLDragOutside( aui_MouseEvent *mouseData )
 		DragSelect( mouseData->position.y - m_y );
 	}
 }
-
 
 void aui_ListBox::MouseLDoubleClickInside( aui_MouseEvent *mouseData )
 {
@@ -1995,7 +1889,6 @@ void aui_ListBox::MouseLDoubleClickInside( aui_MouseEvent *mouseData )
 	else
 		MouseLDoubleClickOutside( mouseData );
 }
-
 
 //----------------------------------------------------------------------------
 //
@@ -2042,10 +1935,6 @@ void aui_ListBox::BuildListEnd(bool isAddBottom)
 {
 	m_buildingTheList = FALSE;
 
-
-
-
-
 	SetForceSelect(m_savedForceSelect);
 
 	CalculateDimensions();
@@ -2056,7 +1945,6 @@ void aui_ListBox::BuildListEnd(bool isAddBottom)
 									: m_verticalRanger->GetMinimumY();
 	m_verticalRanger->SetValue(m_verticalRanger->GetValueX(), verticalStart);
 	RepositionItems();
-
 
 	if ( m_forceSelect && !m_selectedList->L() )
 		SelectItem( (sint32)0, 1 );
@@ -2070,7 +1958,6 @@ void ListBoxRangerActionCallback(
 	uint32 data,
 	void *cookie )
 {
-
 	if ( action == (uint32)AUI_RANGER_ACTION_VALUECHANGE )
 	{
 		aui_ListBox *listbox = (aui_ListBox *)cookie;
@@ -2097,7 +1984,6 @@ aui_Item *aui_ListBox::ConstructAndAddTextItem(const MBCHAR *ldlblock, const MBC
 	item->SetUserData(userData);
 	AddItem(item);
 	return item;
-
 }
 
 void aui_ListBox::SendKeyboardAction()

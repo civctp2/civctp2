@@ -827,6 +827,9 @@ ControlPanelWindow:CTP2_WINDOW {
 			int ypix 106
 			int widthpix 66	
 			int heightpix 5
+
+			# Tooltip
+			string	statustext	"STATUSBAR_DOUGS_PROG"
 		}
 
 ################################################################################

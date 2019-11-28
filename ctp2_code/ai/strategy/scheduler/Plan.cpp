@@ -305,6 +305,7 @@ Utility Plan::Compute_Matching_Value(Goal_ptr goal_ptr)
 	}
 	else
 	{
+		AI_DPRINTF(k_DBG_SCHEDULER_DETAIL, goal_ptr->Get_Player_Index(), goal_ptr->Get_Goal_Type(), -1, ("\t\t Goal::BAD_UTILITY: No agent\n"));
 		m_matching_value = Goal::BAD_UTILITY;
 	}
 

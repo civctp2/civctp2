@@ -800,7 +800,7 @@ STDEHANDLER(CtpAi_BeginTurnEvent)
 
 	CtpAi::BeginTurn(playerId);
 
-	DPRINTF(k_DBG_AI, ("//  elapsed time = %d ms\n", (GetTickCount() - t1)));
+	DPRINTF(k_DBG_AI, ("//  elapsed time = %d ms (PROCESS BEGIN AI TURN)\n", (GetTickCount() - t1)));
 
 	return GEV_HD_Continue;
 }
