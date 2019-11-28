@@ -1443,7 +1443,7 @@ void UnitActor::DrawForceField(bool fogged)
 	Pixel16 *cityImage = g_tiledMap->GetTileSet()->GetImprovementData((uint16)which);
 
 	if (g_tiledMap->GetZoomLevel() == k_ZOOM_LARGEST) {
-	    g_tiledMap->DrawDitheredOverlay(NULL, cityImage, m_x + nudgeX, m_y + nudgeY, fogged);
+	    g_tiledMap->DrawDitheredOverlayIntoMix(cityImage, m_x + nudgeX, m_y + nudgeY, fogged);
 	    }
 	else {
 	    g_tiledMap->DrawDitheredOverlayScaledIntoMix(cityImage, m_x + nudgeX, m_y + nudgeY,
