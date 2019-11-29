@@ -1765,28 +1765,7 @@ sint32 TiledMap::DrawDitheredOverlayIntoMix(Pixel16 *data, sint32 x, sint32 y, B
 
 			switch ((tag & 0x0F00) >> 8) {
 				case k_TILE_SKIP_RUN_ID	:
-						destPixel += (tag & 0x00FF);
-						hpos += (tag & 0x00FF);
-					break;
-				case k_TILE_COPY_RUN_ID			: {
-						short len = (tag & 0x00FF);
-
-						for (short i=0; i<len; i++) {
-							if ((hpos + j) & 1) {
-								if (fogged)
-									*destPixel++ = pixelutils_BlendFast(*rowData,k_FOW_COLOR,k_FOW_BLEND_VALUE);
-								else
-									*destPixel++ = *rowData;
-							} else {
-								destPixel++;
-							}
-
-							hpos++;
-							rowData++;
-						}
-
-					}
-					break;
+				case k_TILE_COPY_RUN_ID :
 				case k_TILE_SHADOW_RUN_ID		: {
 						sint32 len = (sint32)(tag & 0x00FF);
 						for (sint32 i=0; i<len; i++) {
