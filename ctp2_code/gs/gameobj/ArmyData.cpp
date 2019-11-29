@@ -2221,13 +2221,16 @@ ORDER_RESULT ArmyData::Franchise(const MapPoint &point)
 // Remark(s)  : -
 //
 //----------------------------------------------------------------------------
-bool ArmyData::CanSue(sint32 &index) const
+bool ArmyData::CanSue(sint32 &index, double &chance, double &eliteChance) const
 {
+	const UnitRecord::InvestigateCityData *data;
 	for(sint32 i = 0; i < m_nElements; i++) {
-		if(m_array[i].GetDBRec()->GetCanSue() &&
+		if(m_array[i].GetDBRec()->GetCanSue(data) &&
 		   !m_array[i].Flag(k_UDF_USED_SPECIAL_ACTION_THIS_TURN) &&
 		   m_array[i].CanPerformSpecialAction()) {
 			index = i;
+			chance = data->GetChance();
+			eliteChance = data->GetEliteChance();
 			return true;
 		}
 	}
@@ -2251,8 +2254,9 @@ bool ArmyData::CanSue(sint32 &index) const
 //----------------------------------------------------------------------------
 bool ArmyData::CanSue() const
 {
+	const UnitRecord::InvestigateCityData *data;
 	for(sint32 i = 0; i < m_nElements; i++) {
-		if(m_array[i].GetDBRec()->GetCanSue() &&
+		if(m_array[i].GetDBRec()->GetCanSue(data) &&
 		   m_array[i].CanPerformSpecialAction() ) {
 			return true;
 		}

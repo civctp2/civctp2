@@ -323,7 +323,12 @@ Unit {
 
 	Bit(struct SoundAndEffect) NuclearAttack
 
-	Bit CanSue
+	Struct SueData {
+	       Float Chance,
+	       EliteChance,
+	       DeathChance
+	}
+	Bit(Struct SueData) CanSue
 	Bit IsStealthy
 	Bit SeeSurfaceFromSpace
 

@@ -2328,7 +2328,6 @@ UNIT_LAWYER {
    MaxFuel 0
    IgnoreZOC
    NoZoc
-   CanSue
    CanBeSued
    CanBeExpelled
    CantCaptureCity
@@ -2355,6 +2354,12 @@ UNIT_LAWYER {
    CanInjoin {
       Sound SOUND_ID_INJUNCTION
       Effect SPECEFFECT_INJUNCTIONS
+   }
+
+   CanSue {
+      Chance 0.75
+      EliteChance 0.1
+      DeathChance 0.5
    }
 }
 
