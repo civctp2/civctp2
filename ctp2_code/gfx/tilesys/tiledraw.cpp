@@ -1775,7 +1775,7 @@ sint32 TiledMap::DrawDitheredOverlayIntoMix(Pixel16 *data, sint32 x, sint32 y, B
 						        if (fogged)
 								*destPixel++ = pixelutils_BlendFast(*rowData,k_FOW_COLOR,k_FOW_BLEND_VALUE);
 							else
-								*destPixel++ = *rowData;
+								*destPixel++ = pixelutils_Shadow(*rowData);
 
 							hpos++;
 							rowData++;
