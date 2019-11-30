@@ -487,6 +487,34 @@ void UnitManager::UpdateTacticalList()
 	m_tacticalList->BuildListEnd();
 }
 
+static void UpdateUpkeepButton(ctp2_Button *butt, Player *pl, bool useTotalFormat)
+{
+	Assert(butt);
+	Assert(pl);
+
+	MBCHAR buf[k_MAX_NAME_LEN];
+
+	if(useTotalFormat) { // total format
+		pl->m_readiness->RecalcCost();
+		sprintf(buf, g_theStringDB->GetNameStr("str_ldl_UpkeepTotalFormat"), (sint32)pl->m_readiness->GetCost());
+	} else { // percent format
+		double totalProd = pl->m_total_production;
+		double readinessCost = pl->m_readiness->GetCost();
+
+		sint32 p;
+		if(readinessCost == 0)
+			p = 0;
+		else if(totalProd == 0)
+			p = 100;
+		else
+			p = (sint32(100.0 * (readinessCost / totalProd)));
+
+		sprintf(buf, g_theStringDB->GetNameStr("str_ldl_UpkeepPercentFormat"), p);
+	}
+
+	butt->SetText(buf);
+}
+
 void UnitManager::UpdateAdvice()
 {
 	Player *pl = g_player[g_selected_item->GetVisiblePlayer()];
@@ -555,22 +583,11 @@ void UnitManager::UpdateAdvice()
 		walk.Next();
 	}
 
-	MBCHAR buf[k_MAX_NAME_LEN];
-
-	double totalProd = pl->m_total_production;
-	sint32 p;
-	if(totalProd == 0)
-		p = 100;
-	else
-		p = (sint32(100.0 * (pl->m_readiness->GetCost() / totalProd)));
-
-	sprintf(buf, g_theStringDB->GetNameStr("str_ldl_UpkeepPercentFormat"), p);
-
 	ctp2_Button *upkeepButt = (ctp2_Button *)aui_Ldl::GetObject(s_unitManagerAdviceBlock, "UpkeepButton");
 	Assert(upkeepButt);
-	if(upkeepButt) {
-		upkeepButt->SetText(buf);
-	}
+	bool useTotalFormat = false; // force initial percent format
+
+	UpdateUpkeepButton(upkeepButt, pl, useTotalFormat);
 }
 
 void UnitManager::UpdateReadiness()
@@ -599,6 +616,15 @@ void UnitManager::UpdateReadiness()
 			Assert(false);
 			break;
 	}
+
+	ctp2_Button *butt = (ctp2_Button *)aui_Ldl::GetObject(s_unitManagerAdviceBlock, "UpkeepButton");
+	Assert(butt);
+
+	// keep existing format: if there is NO '%' sign then useTotalFormat==true,
+	// if percent sign exist then useTotalFormat==false
+	bool useTotalFormat = !strstr(butt->GetText(), "%");
+
+	UpdateUpkeepButton(butt, pl, useTotalFormat);
 }
 
 void  UnitManager::UpdateNumUnits()
@@ -864,26 +890,13 @@ void UnitManager::UpkeepButton(aui_Control *control, uint32 action, uint32 data,
 	if(!pl) return;
 
 	ctp2_Button *butt = (ctp2_Button *)control;
-	MBCHAR buf[k_MAX_NAME_LEN];
+	Assert(butt);
 
-	if(strstr(butt->GetText(), "%")) {
-		pl->m_readiness->RecalcCost();
-		sprintf(buf, g_theStringDB->GetNameStr("str_ldl_UpkeepTotalFormat"), (sint32)pl->m_readiness->GetCost());
-	} else {
+	// toggle existing format: if there IS '%' sign then change to total format
+	// (i.e. useTotalFormat==true) and vice versa
+	bool useTotalFormat = strstr(butt->GetText(), "%");
 
-		double totalProd = pl->m_total_production;
-		double readinessCost = pl->m_readiness->GetCost();
-		sint32 p;
-		if(readinessCost == 0)
-			p = 0;
-		else if(totalProd == 0)
-			p = 100;
-		else
-			p = (sint32(100.0 * (readinessCost / totalProd)));
-
-		sprintf(buf, g_theStringDB->GetNameStr("str_ldl_UpkeepPercentFormat"), p);
-	}
-	butt->SetText(buf);
+	UpdateUpkeepButton(butt, pl, useTotalFormat);
 }
 
 void UnitManager::Advice(aui_Control *control, uint32 action, uint32 data, void *cookie)
