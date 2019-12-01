@@ -91,9 +91,10 @@ debug:
              -v ${SHARED_PATH}/.X11-unix/:/tmp/.X11-unix/
              -v $(pwd)/.civctp2/save/:/opt/ctp2/ctp2_program/ctp/save/
              -v $(pwd)/logs/:/opt/ctp2/ctp2_program/ctp/logs/
+             -v $(pwd)/debug/gdb.cmds:/opt/ctp2/ctp2_program/ctp/gdb.cmds
              $DOCKER_PARAMS
              $IMAGE_TAG:${CI_JOB_STAGE}-${BTYP}
-             gdb --quiet --args ./ctp2 $CTP_PARAMS &
+             gdb --quiet -x gdb.cmds --args ./ctp2 $CTP_PARAMS &
     - pidD=$!
     - java -cp "/opt/sikulixapi.jar:/opt/jython-standalone-2.7.1.jar" org.python.util.jython tests/${JOB}.sikuli/${JOB}.py
     - kill $pidD
