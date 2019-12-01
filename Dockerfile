@@ -89,7 +89,7 @@ ARG BTYP
 
 RUN apt-get update && apt-get install -y --no-install-recommends \
     libsdl1.2debian libsdl-mixer1.2 libsdl-image1.2 libgtk2.0-0 \
-    gdb && \
+    gdb libstdc++-5-dev && \
     apt-get clean && \
     rm -rf /var/lib/apt/lists/*
 
