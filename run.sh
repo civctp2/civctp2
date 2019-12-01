@@ -12,14 +12,14 @@ touch $HOME/.civctp2/userkeymap.txt # file must exist for docker file-vol
 ## ./run.sh -v $HOME/ctp2CD/ctp2_program/ctp/music/:/opt/ctp2/ctp2_program/ctp/music/:ro registry.gitlab.com/civctp2/civctp2/master:latest ./ctp2 fullscreen
 docker run \
        --rm \
-       --volume=$XSOCK:$XSOCK:rw \
-       --volume=$XAUTH:$XAUTH:rw \
-       --device=/dev/dri:/dev/dri \
-       --device=/dev/snd:/dev/snd \
-       --env="ALSA_CARD=0" \
-       --env="XAUTHORITY=${XAUTH}" \
-       --env="DISPLAY" \
-       --user="diUser" \
+       --volume $XSOCK:$XSOCK:rw \
+       --volume $XAUTH:$XAUTH:rw \
+       --device /dev/dri:/dev/dri \
+       --device /dev/snd:/dev/snd \
+       --env "ALSA_CARD=0" \
+       --env "XAUTHORITY=${XAUTH}" \
+       --env "DISPLAY" \
+       --user "diUser" \
        -v $HOME/.civctp2/userprofile.txt:/opt/ctp2/ctp2_program/ctp/userprofile.txt \
        -v $HOME/.civctp2/userkeymap.txt:/opt/ctp2/ctp2_program/ctp/userkeymap.txt \
        -v $HOME/.civctp2/save/:/opt/ctp2/ctp2_program/ctp/save \
