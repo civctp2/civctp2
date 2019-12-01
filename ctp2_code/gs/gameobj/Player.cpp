@@ -3074,9 +3074,21 @@ TradeRoute Player::CreateTradeRoute(Unit sourceCity,
 												 gold_in_return);
 
 	if (newRoute.IsValid())
-	{
-		return g_player[paying_for]->PayForTrade(newRoute);
-	}
+	    newRoute= g_player[paying_for]->PayForTrade(newRoute); // kills route if not enough caravans
+
+	if (newRoute.IsValid() && destCity.GetOwner() != m_owner){
+	    SlicObject *so = new SlicObject("360SenderCreatedTradeRoute");
+	    ROUTE_TYPE type;
+	    sint32 resource;
+	    newRoute.GetSourceResource(type, resource);
+	    so->AddRecipient(destCity.GetOwner());
+	    so->AddCivilisation(m_owner);
+	    so->AddGood(resource);
+	    so->AddCity(sourceCity);
+	    so->AddCity(destCity);
+	    g_slicEngine->Execute(so);
+	    return newRoute;
+	    }
 
 	return TradeRoute();
 }
