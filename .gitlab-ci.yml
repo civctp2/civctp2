@@ -66,6 +66,8 @@ debug:
   stage: test
   dependencies: []
   image: registry.gitlab.com/lynxabraxas/dind-sikuli/master:latest
+  variables:
+    DOCKER_PARAMS: " --security-opt seccomp=unconfined "
   artifacts:
     untracked: true
     when: always
