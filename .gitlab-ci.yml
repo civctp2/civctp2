@@ -66,6 +66,8 @@ debug:
   stage: test
   dependencies: []
   image: registry.gitlab.com/lynxabraxas/dind-sikuli/master:latest
+  variables:
+    DOCKER_PARAMS: " --security-opt seccomp=unconfined "
   artifacts:
     untracked: true
     when: always
@@ -82,7 +84,7 @@ debug:
     - JOB=${CI_JOB_NAME##* }
     - echo "$BTYP $JOB"
     - docker pull $IMAGE_TAG:${CI_JOB_STAGE}-${BTYP}
-    - export DOCKER_PARAMS=$( [ "${BTYP##*debug*}" ] || echo "--user 0:0" )
+    - export DOCKER_PARAMS=$( [ "${BTYP##*debug*}" ] || echo "${DOCKER_PARAMS} --user 0:0" && echo "${DOCKER_PARAMS}" )
     - echo $DOCKER_PARAMS
     - echo $CTP_PARAMS
     - mkdir -p $(pwd)/logs/ && chmod a+rw $(pwd)/logs/ # needs to be rw for diUser
