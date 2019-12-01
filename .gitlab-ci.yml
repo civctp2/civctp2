@@ -93,7 +93,7 @@ debug:
              -v $(pwd)/logs/:/opt/ctp2/ctp2_program/ctp/logs/
              $DOCKER_PARAMS
              $IMAGE_TAG:${CI_JOB_STAGE}-${BTYP}
-             ./ctp2 $CTP_PARAMS &
+             gdb --quiet --args ./ctp2 $CTP_PARAMS &
     - pidD=$!
     - java -cp "/opt/sikulixapi.jar:/opt/jython-standalone-2.7.1.jar" org.python.util.jython tests/${JOB}.sikuli/${JOB}.py
     - kill $pidD
