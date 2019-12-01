@@ -59,8 +59,8 @@ build:
   dependencies: []
   image: registry.gitlab.com/lynxabraxas/dind-sikuli/master:latest
   variables:
-    RES_FILE: ${CI_JOB_NAME}.png
-    DOCKER_PARAMS: ""
+    RES_FILE: '${CI_JOB_NAME}.png'
+    DOCKER_PARAMS: '--user 0:0'
   artifacts:
     untracked: true
     when: always
