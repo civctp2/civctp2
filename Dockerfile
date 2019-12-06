@@ -72,7 +72,7 @@ RUN cd /ctp2 \
     CFLAGS="$CFLAGS -w -fuse-ld=gold" \
     CXXFLAGS="$CXXFLAGS -fpermissive -w -fuse-ld=gold" \
     LDFLAGS="$LDFLAGS -L/usr/local/lib" \
-    ./configure --prefix=/opt/ctp2 --bindir=/opt/ctp2/ctp2_program/ctp --enable-silent-rules ` [[ $BTYP == debug ]] && echo --enable-debug ` \
+    ./configure --prefix=/opt/ctp2 --bindir=/opt/ctp2/ctp2_program/ctp --enable-silent-rules $( [ "${BTYP##*debug*}" ] || echo --enable-debug ) \
     && make -j"$(nproc)" \
     && make -j"$(nproc)" install \
     && cp -r /ctp2/ctp2_data/ /opt/ctp2/ \
@@ -88,10 +88,10 @@ FROM system as install
 ARG BTYP
 
 RUN apt-get update && apt-get install -y --no-install-recommends \
-    libsdl1.2debian libsdl-mixer1.2 libsdl-image1.2 libgtk2.0-0 ` [[ $BTYP == debug ]] && echo binutils ` && \
+    libsdl1.2debian libsdl-mixer1.2 libsdl-image1.2 libgtk2.0-0 $( [ "${BTYP##*debug*}" ] || echo binutils ) && \
     apt-get clean && \
     rm -rf /var/lib/apt/lists/*
- 
+
 ## ctp2CD/ copy done in install stage such that stages before are compatible with travis docker build, results in one additional layer in the final DI (incr. DI download size)
 COPY ctp2CD/ /opt/ctp2/
 ## ctp2/ copy has to be after ctp2CD/ to overwrite with newer versions from civctp2
