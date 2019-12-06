@@ -158,17 +158,7 @@ load-sprite__plain:
   variables:
     CTP_PARAMS: "nointromovie runspriteeditor"
 
-load-sprite__debug:
-  <<: *test
-  variables:
-    CTP_PARAMS: "nointromovie runspriteeditor"
-
 loop-sprite__plain:
-  <<: *test
-  variables:
-    CTP_PARAMS: "nointromovie runspriteeditor"
-
-loop-sprite__debug:
   <<: *test
   variables:
     CTP_PARAMS: "nointromovie runspriteeditor"
