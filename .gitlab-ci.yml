@@ -105,61 +105,73 @@ debug:
 
 start-game__plain:
   <<: *test
+  needs: ["plain"]
   variables:
     CTP_PARAMS: "nointromovie"
 
 start-game__debug:
   <<: *test
+  needs: ["debug"]
   variables:
     CTP_PARAMS: "nointromovie"
 
 new-game__plain:
   <<: *test
+  needs: ["plain"]
   variables:
     CTP_PARAMS: "nointromovie"
 
 new-game__debug:
   <<: *test
+  needs: ["debug"]
   variables:
     CTP_PARAMS: "nointromovie"
 
 load-game__plain:
   <<: *test
+  needs: ["plain"]
   variables:
     CTP_PARAMS: "nointromovie"
 
 load-game__debug:
   <<: *test
+  needs: ["debug"]
   variables:
     CTP_PARAMS: "nointromovie"
 
 name-game__plain:
   <<: *test
+  needs: ["plain"]
   variables:
     CTP_PARAMS: "nointromovie"
 
 name-game__debug:
   <<: *test
+  needs: ["debug"]
   variables:
     CTP_PARAMS: "nointromovie"
 
 play-game_build-city__plain:
   <<: *test
+  needs: ["plain"]
   variables:
     CTP_PARAMS: "nointromovie"
 
 play-game_build-city__debug:
   <<: *test
+  needs: ["debug"]
   variables:
     CTP_PARAMS: "nointromovie"
 
 load-sprite__plain:
   <<: *test
+  needs: ["plain"]
   variables:
     CTP_PARAMS: "nointromovie runspriteeditor"
 
 loop-sprite__plain:
   <<: *test
+  needs: ["plain"]
   variables:
     CTP_PARAMS: "nointromovie runspriteeditor"
 
