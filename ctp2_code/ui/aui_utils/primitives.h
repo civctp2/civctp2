@@ -72,26 +72,10 @@ extern C3UI			*g_c3ui;
 inline aui_BitmapFont * getBitmapFont()
     {
     aui_BitmapFont *font= NULL;
-    AUI_ERRCODE      errcode     = AUI_ERRCODE_OK;
-    aui_StringTable	*stringTable = new aui_StringTable(&errcode, "TiledMapFontStringTable");
 
-    if (AUI_NEWOK(stringTable, errcode))
-	{
-	const MBCHAR *    fontNameString  = stringTable->GetString(0);
-	const MBCHAR *    fontSizeString  = stringTable->GetString(1);
-	
-	font = g_c3ui->LoadBitmapFont(fontNameString);
-	Assert(font);
-	font->SetPointSize(atoi(fontSizeString));
-	
-	// const MBCHAR *    fString         = stringTable->GetString(2);
-	// strncpy(m_fortifyString, fString, 3);
-	}
-    else {
-	font= NULL;
-	}
-    
-    delete stringTable;
+    font = g_c3ui->LoadBitmapFont("arialbd.ttf"); // using hard coded font name (from TiledMapFontStringTable) because this is needed in the debug version before DB initialization
+    Assert(font);
+    font->SetPointSize(9); // size set for TiledMapFontStringTable
 
     return font;
     }
