@@ -1384,11 +1384,11 @@ void UnitActor::DrawForceField(bool fogged)
 	}
 	else if (g_theWorld->IsWater(m_pos))
 	{
-		which = 155;
+		which = 156;
 	}
 	else
 	{
-		which = 156;	// space?
+		which = 155;	// space?
 	}
 
 	Unit			unit(GetUnitID());
