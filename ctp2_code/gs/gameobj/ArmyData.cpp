@@ -6706,6 +6706,10 @@ bool ArmyData::ExecuteMoveOrder(Order *order)
 	}
 	else
 	{
+		if(DoLeaveOurLandsCheck(order->m_point, UNIT_ORDER_MOVE_TO)){
+		    return false;
+		    }
+
 		g_gevManager->AddEvent(GEV_INSERT_AfterCurrent,
 		                       GEV_MoveArmy,
 		                       GEA_Army, m_id,
@@ -6814,6 +6818,7 @@ void ArmyData::CheckLoadSleepingCargoFromCity(Order *order)
 // Remark(s)  : Actually, not used. Must be left over from CTP1
 //
 //----------------------------------------------------------------------------
+/* commented, since not used any more
 bool ArmyData::Move(WORLD_DIRECTION d, Order *order)
 {
 	MapPoint oldPos = m_pos;
@@ -6923,6 +6928,7 @@ bool ArmyData::Move(WORLD_DIRECTION d, Order *order)
 	}
 	return false;
 }
+*/
 
 bool ArmyData::FinishMove(WORLD_DIRECTION d, MapPoint &newPos, UNIT_ORDER_TYPE order)
 {
@@ -9939,7 +9945,7 @@ bool ArmyData::GetInciteUprisingCost( const MapPoint &point, sint32 &attackCost 
 	return true;
 }
 
-//Probably left over from CTP1
+////Possibly left over from CTP1, but now used in CTP2
 bool ArmyData::DoLeaveOurLandsCheck(const MapPoint &newPos,
 									UNIT_ORDER_TYPE order_type)
 {
@@ -9959,19 +9965,15 @@ bool ArmyData::DoLeaveOurLandsCheck(const MapPoint &newPos,
 			}
 		}
 		if(atLeastOneNonSpecialUnit) {
-			Agreement ag = g_player[cell->GetOwner()]->FindAgreement(AGREEMENT_TYPE_DEMAND_LEAVE_OUR_LANDS, m_owner);
-			if(g_theAgreementPool->IsValid(ag) && ag.GetRecipient() == m_owner) {
-
+		        //// similar to ArmyData::InterceptTrade()
+			if(AgreementMatrix::s_agreements.HasAgreement(cell->GetOwner(), m_owner, PROPOSAL_REQUEST_WITHDRAW_TROOPS)){
 				if(!g_player[m_owner]->IsRobot()
 				|| (g_network.IsClient()
 				&&  g_network.IsLocalPlayer(m_owner))
 				){
-					char turnBuf[32];
-					sprintf(turnBuf, "%d", ag.GetTurns() + 1);
 					SlicObject *so = new SlicObject("13IAEnteringLands");
 					so->AddCivilisation(m_owner);
 					so->AddCivilisation(cell->GetOwner());
-					so->AddAction(turnBuf);
 					so->AddLocation(newPos);
 					so->AddOrder(order_type);
 					so->AddRecipient(m_owner);
@@ -9982,7 +9984,7 @@ bool ArmyData::DoLeaveOurLandsCheck(const MapPoint &newPos,
 				}
 				else
 				{
-					ag.AccessData()->RecipientIsViolating(cell->GetOwner(), true);
+					Diplomat::GetDiplomat(cell->GetOwner()).LogViolationEvent(m_owner, PROPOSAL_REQUEST_WITHDRAW_TROOPS);
 				}
 			}
 		}
