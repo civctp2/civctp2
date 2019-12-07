@@ -327,7 +327,7 @@ AUI_ERRCODE aui_BitmapFont::SetTTFFile( const MBCHAR * ttffile )
 AUI_ERRCODE aui_BitmapFont::SetPointSize( sint32 pointSize )
 {
 
-	Assert( !HasCached() );
+// diabled because SetPointSize needed in linux debug version before m_surfaceList is populated	Assert( !HasCached() );
 	if ( HasCached() ) return AUI_ERRCODE_HACK;
 
 	sint32 error = TT_Set_Instance_CharSize( m_ttInstance, pointSize * 64 );
