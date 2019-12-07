@@ -103,73 +103,73 @@ debug:
   except:
     - /^debug-.*$/
 
-plain start-game 0 7 :
+plain start-game:
   <<: *test
   needs: ["plain"]
   variables:
     CTP_PARAMS: "nointromovie"
 
-debug start-game 0 5 :
+debug start-game:
   <<: *test
   needs: ["debug"]
   variables:
     CTP_PARAMS: "nointromovie"
 
-plain new-game 1 7 :
+plain new-game:
   <<: *test
   needs: ["plain"]
   variables:
     CTP_PARAMS: "nointromovie"
 
-debug new-game 1 5 :
+debug new-game:
   <<: *test
   needs: ["debug"]
   variables:
     CTP_PARAMS: "nointromovie"
 
-plain load-game 2 7 :
+plain load-game:
   <<: *test
   needs: ["plain"]
   variables:
     CTP_PARAMS: "nointromovie"
 
-debug load-game 2 5 :
+debug load-game:
   <<: *test
   needs: ["debug"]
   variables:
     CTP_PARAMS: "nointromovie"
 
-plain name-game 3 7 :
+plain name-game:
   <<: *test
   needs: ["plain"]
   variables:
     CTP_PARAMS: "nointromovie"
 
-debug name-game 3 5 :
+debug name-game:
   <<: *test
   needs: ["debug"]
   variables:
     CTP_PARAMS: "nointromovie"
 
-plain play-game_build-city 4 7 :
+plain play-game_build-city:
   <<: *test
   needs: ["plain"]
   variables:
     CTP_PARAMS: "nointromovie"
 
-debug play-game_build-city 4 5 :
+debug play-game_build-city:
   <<: *test
   needs: ["debug"]
   variables:
     CTP_PARAMS: "nointromovie"
 
-plain load-sprite 5 7 :
+plain load-sprite:
   <<: *test
   needs: ["plain"]
   variables:
     CTP_PARAMS: "nointromovie runspriteeditor"
 
-plain loop-sprite 6 7 :
+plain loop-sprite:
   <<: *test
   needs: ["plain"]
   variables:
