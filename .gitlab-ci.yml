@@ -78,8 +78,8 @@ debug:
     - Xvfb $DISPLAY -screen 0 1280x1024x24 &
     - pidX=$!
     - sleep 3
-    - BTYP=${CI_JOB_NAME##*__}
-    - JOB=${CI_JOB_NAME%%__*}
+    - BTYP=${CI_JOB_NAME%% *}
+    - JOB=${CI_JOB_NAME##* }
     - echo "$BTYP $JOB"
     - docker pull $IMAGE_TAG:${CI_JOB_STAGE}-${BTYP}
     - export DOCKER_PARAMS=$( [ "${BTYP##*debug*}" ] || echo "--user 0:0" )
@@ -103,73 +103,73 @@ debug:
   except:
     - /^debug-.*$/
 
-start-game__plain:
+plain start-game 0 7 :
   <<: *test
   needs: ["plain"]
   variables:
     CTP_PARAMS: "nointromovie"
 
-start-game__debug:
+debug start-game 0 5 :
   <<: *test
   needs: ["debug"]
   variables:
     CTP_PARAMS: "nointromovie"
 
-new-game__plain:
+plain new-game 1 7 :
   <<: *test
   needs: ["plain"]
   variables:
     CTP_PARAMS: "nointromovie"
 
-new-game__debug:
+debug new-game 1 5 :
   <<: *test
   needs: ["debug"]
   variables:
     CTP_PARAMS: "nointromovie"
 
-load-game__plain:
+plain load-game 2 7 :
   <<: *test
   needs: ["plain"]
   variables:
     CTP_PARAMS: "nointromovie"
 
-load-game__debug:
+debug load-game 2 5 :
   <<: *test
   needs: ["debug"]
   variables:
     CTP_PARAMS: "nointromovie"
 
-name-game__plain:
+plain name-game 3 7 :
   <<: *test
   needs: ["plain"]
   variables:
     CTP_PARAMS: "nointromovie"
 
-name-game__debug:
+debug name-game 3 5 :
   <<: *test
   needs: ["debug"]
   variables:
     CTP_PARAMS: "nointromovie"
 
-play-game_build-city__plain:
+plain play-game_build-city 4 7 :
   <<: *test
   needs: ["plain"]
   variables:
     CTP_PARAMS: "nointromovie"
 
-play-game_build-city__debug:
+debug play-game_build-city 4 5 :
   <<: *test
   needs: ["debug"]
   variables:
     CTP_PARAMS: "nointromovie"
 
-load-sprite__plain:
+plain load-sprite 5 7 :
   <<: *test
   needs: ["plain"]
   variables:
     CTP_PARAMS: "nointromovie runspriteeditor"
 
-loop-sprite__plain:
+plain loop-sprite 6 7 :
   <<: *test
   needs: ["plain"]
   variables:
