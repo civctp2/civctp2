@@ -1772,14 +1772,10 @@ sint32 TiledMap::DrawDitheredOverlayIntoMix(Pixel16 *data, sint32 x, sint32 y, B
 						short len = (tag & 0x00FF);
 
 						for (short i=0; i<len; i++) {
-							if ((hpos + j) & 1) {
-								if (fogged)
-									*destPixel++ = pixelutils_BlendFast(*rowData,k_FOW_COLOR,k_FOW_BLEND_VALUE);
-								else
-									*destPixel++ = *rowData;
-							} else {
-								destPixel++;
-							}
+						        if (fogged)
+								*destPixel++ = pixelutils_BlendFast(pixelutils_BlendFast(*rowData, *destPixel, k_FOW_BLEND_VALUE), k_FOW_COLOR, k_FOW_BLEND_VALUE);
+							else
+								*destPixel++ = pixelutils_BlendFast(*rowData, *destPixel, k_FOW_BLEND_VALUE);
 
 							hpos++;
 							rowData++;
@@ -1874,12 +1870,10 @@ void TiledMap::DrawDitheredOverlayScaledIntoMix(Pixel16 *data, sint32 x, sint32 
 
 						pixel = pixel3;
 
-						if ((hdestpos + vdestpos) & 1) {
-							if (fogged)
-								*destPixel = pixelutils_BlendFast(pixel,k_FOW_COLOR,k_FOW_BLEND_VALUE);
-							else
-								*destPixel = pixel;
-						}
+						if (fogged)
+						    *destPixel = pixelutils_BlendFast(pixelutils_BlendFast(pixel, *destPixel, k_FOW_BLEND_VALUE), k_FOW_COLOR, k_FOW_BLEND_VALUE);
+						else
+						    *destPixel = pixelutils_BlendFast(pixel, *destPixel, k_FOW_BLEND_VALUE);
 					}
 
 					pixel1 = pixel3;
