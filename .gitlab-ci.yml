@@ -94,7 +94,7 @@ debug:
              -v $(pwd)/debug/gdb.cmds:/opt/ctp2/ctp2_program/ctp/gdb.cmds
              $DOCKER_PARAMS
              $IMAGE_TAG:${CI_JOB_STAGE}-${BTYP}
-             gdb --quiet -x gdb.cmds --args ./ctp2 $CTP_PARAMS &
+             gdb -quiet -batch -x gdb.cmds --args ./ctp2 $CTP_PARAMS &
     - pidD=$!
     - java -cp "/opt/sikulixapi.jar:/opt/jython-standalone-2.7.1.jar" org.python.util.jython tests/${JOB}.sikuli/${JOB}.py
     - kill $pidD
