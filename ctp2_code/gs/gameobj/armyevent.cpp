@@ -58,7 +58,6 @@
 #include "UnitPool.h"
 #include "director.h"
 #include "MoveFlags.h"
-#include "directions.h"
 #include "network.h"
 #include "SlicEngine.h"
 #include "SlicObject.h"
@@ -807,16 +806,32 @@ STDEHANDLER(ArmyMoveEvent)
 				}
 			}
 
-			g_gevManager->AddEvent(GEV_INSERT_AfterCurrent,
-								   GEV_FinishAttack,
-								   GEA_Army, army,
-								   GEA_MapPoint, newPos,
-								   GEA_End);
+			Assert(!g_player[owner]->IsRobot() || Diplomat::GetDiplomat(owner).HasWarOrDesiresPreemptivelyWith(defender->GetOwner()));
 
-			g_gevManager->AddEvent(GEV_INSERT_AfterCurrent,
-								   GEV_ClearOrders,
-								   GEA_Army, army,
-								   GEA_End);
+			if(g_player[owner]->IsRobot() && army->CanFight(*defender) || g_player[owner]->IsHuman())
+			{
+				DPRINTF(k_DBG_GAMESTATE, ("Army 0x%lx gets event to attack foreigner\n", army.m_id));
+				g_gevManager->AddEvent(GEV_INSERT_AfterCurrent,
+									   GEV_FinishAttack,
+									   GEA_Army, army,
+									   GEA_MapPoint, newPos,
+									   GEA_End);
+
+				DPRINTF(k_DBG_GAMESTATE, ("Army 0x%lx clears current oders via event before attacking foreigner\n", army.m_id));
+				g_gevManager->AddEvent(GEV_INSERT_AfterCurrent,
+									   GEV_ClearOrders,
+									   GEA_Army, army,
+									   GEA_End);
+			}
+			else
+			{
+				DPRINTF(k_DBG_GAMESTATE, ("Army 0x%lx unloads for attacking foreigner\n", army.m_id));
+				g_gevManager->AddEvent(GEV_INSERT_AfterCurrent,
+									   GEV_UnloadOrder,
+									   GEA_Army, army,
+									   GEA_MapPoint, newPos,
+									   GEA_End);
+			}
 		}
 		else
 		{
@@ -1415,7 +1430,7 @@ STDEHANDLER(RemoveFranchiseEvent)
 
 	if(!args->GetArmy(0, a)) return GEV_HD_Continue;
 	if(!args->GetUnit(0, lawyer)) return GEV_HD_Continue;
-	if(!args->GetUnit(0, city)) return GEV_HD_Continue;
+	if(!args->GetCity(0, city)) return GEV_HD_Continue;
 
 	city.SetFranchiseTurnsRemaining(g_theConstDB->Get(0)->GetTurnsToSueFranchise());
 	return GEV_HD_Continue;

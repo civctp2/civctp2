@@ -34,7 +34,6 @@
 #include "civarchive.h"
 #include "Globals.h"
 #include "gstypes.h"
-#include "UnitRec.h"
 #include "UnitData.h"
 #include "StrDB.h"
 

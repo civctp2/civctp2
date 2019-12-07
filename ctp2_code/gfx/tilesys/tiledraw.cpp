@@ -3405,6 +3405,8 @@ void TiledMap::DrawCityNames(aui_Surface * surf, sint32 layer)
 
 				sint32  owner = 0;
 
+				sint32  franchiseLoss        = 0;
+				sint32  convertedLoss        = 0;
 				BOOL	isBioInfected        = FALSE,
 						isNanoInfected       = FALSE,
 						isConverted          = FALSE,
@@ -3438,6 +3440,17 @@ void TiledMap::DrawCityNames(aui_Surface * surf, sint32 layer)
 					isNanoInfected       = ucell.m_unseenCell->IsNanoInfected();
 					isConverted          = ucell.m_unseenCell->IsConverted();
 					isFranchised         = ucell.m_unseenCell->IsFranchised();
+					Unit unit;
+					if (g_theWorld->GetTopVisibleUnit(pos,unit) && unit.IsCity()){// city might be destroyed
+					    convertedLoss    = unit.GetData()->GetCityData()->GetConvertedGold();
+					    franchiseLoss    = unit.GetData()->GetCityData()->GetProductionLostToFranchise();
+					    }
+					else{// in case city was destroyed since last visit
+					    isConverted      = false; // do not show conversion city icon to not give away that city was destroyed
+					    isFranchised     = false; // do not show franchise city icon to not give away that city was destroyed
+					    convertedLoss    = 0; // no info on loss if city was destroyed
+					    franchiseLoss    = 0; // no info on loss if city was destroyed
+					    }
 					isInjoined           = ucell.m_unseenCell->IsInjoined();
 					wasHappinessAttacked = ucell.m_unseenCell->WasHappinessAttacked();
 					isRioting            = ucell.m_unseenCell->IsRioting();
@@ -3530,6 +3543,8 @@ void TiledMap::DrawCityNames(aui_Surface * surf, sint32 layer)
 							isNanoInfected       = cityData->IsNanoInfected();
 							isConverted          = cityData->IsConverted();
 							isFranchised         = cityData->IsFranchised();
+							convertedLoss        = cityData->GetConvertedGold();
+							franchiseLoss        = cityData->GetProductionLostToFranchise();
 							isInjoined           = cityData->IsInjoined();
 							wasHappinessAttacked = cityData->WasHappinessAttacked();
 							isWatchful           = cityData->IsWatchful();
@@ -3925,8 +3940,8 @@ void TiledMap::DrawCityNames(aui_Surface * surf, sint32 layer)
 					DrawCityIcons(surf, pos, owner, fog, rect,
 								isBioInfected, isNanoInfected, isConverted,
 								isFranchised, isInjoined, wasHappinessAttacked,
-								bioInfectedOwner, nanoInfectedOwner, convertedOwner,
-								franchiseOwner, injoinedOwner, happinessAttackOwner,
+								bioInfectedOwner, nanoInfectedOwner, convertedOwner, convertedLoss,
+								franchiseOwner, franchiseLoss, injoinedOwner, happinessAttackOwner,
 								slaveBits, isRioting, hasAirport, hasSleepingUnits,
 								isWatchful, isCapitol, isProdIcon, pop, isPollutionRisk);
 
@@ -3995,8 +4010,8 @@ void TiledMap::DrawCityNames(aui_Surface * surf, sint32 layer)
 void TiledMap::DrawCityIcons(aui_Surface *surf, MapPoint const & pos, sint32 owner, bool fog, RECT &popRect,
 								BOOL isBioInfected, BOOL isNanoInfected, BOOL isConverted,
 								BOOL isFranchised, BOOL isInjoined, BOOL wasHappinessAttacked,
-								sint32 bioInfectedOwner, sint32 nanoInfectedOwner, sint32 convertedOwner,
-								sint32 franchiseOwner, sint32 injoinedOwner, sint32 happinessAttackOwner,
+								sint32 bioInfectedOwner, sint32 nanoInfectedOwner, sint32 convertedOwner, sint32 convertedLoss,
+								sint32 franchiseOwner, sint32 franchiseLoss, sint32 injoinedOwner, sint32 happinessAttackOwner,
 								uint32 slaveBits, BOOL isRioting, BOOL hasAirport, BOOL hasSleepingUnits,
 								BOOL isWatchful, BOOL isCapitol, BOOL isProdIcon, sint32 citySize,
 								BOOL isPollutionRisk)
@@ -4206,6 +4221,32 @@ void TiledMap::DrawCityIcons(aui_Surface *surf, MapPoint const & pos, sint32 own
 
 		color = GetPlayerColor(convertedOwner, fog);
 		DrawColorizedOverlay(cityIcon, surf, iconRect.left, iconRect.top, color);
+
+		sint32 myOwner = g_selected_item->GetVisiblePlayer();
+		if(convertedLoss && myOwner >= 0 && (myOwner == owner || myOwner == convertedOwner))
+		    {
+		    sint32 width, height;
+		    RECT rect;
+		    RECT clipRect;
+		    // Put convertedLoss in str
+		    MBCHAR str[80];
+		    sprintf(str, "%i", convertedLoss);
+		    // Width and height of the pop number
+		    width = m_font->GetStringWidth(str);
+		    height = m_font->GetMaxHeight();
+		    // This rect will be the inner rect that shows the pop number
+		    rect = {0, 0, width, height}; // This shadows the outer rect
+		    OffsetRect(&rect, // position rect relative to iconRect
+			iconRect.left + (iconRect.right-iconRect.left) / 2 - width  / 2,
+			iconRect.top  + (iconRect.bottom-iconRect.top) / 2 - height / 2);
+		    
+		    clipRect = primitives_GetScreenAdjustedRectCopy(surf, rect);
+		    m_font->DrawString(surf, &rect, &clipRect, str,
+			0,
+			GetColorRef(COLOR_WHITE, fog),
+			0);
+		    }
+
 		AddDirtyRectToMix(iconRect);
 
 		iconRect.left += iconDim.x;
@@ -4225,6 +4266,32 @@ void TiledMap::DrawCityIcons(aui_Surface *surf, MapPoint const & pos, sint32 own
 
 		color = GetPlayerColor(franchiseOwner, fog);
 		DrawColorizedOverlay(cityIcon, surf, iconRect.left, iconRect.top, color);
+
+		sint32 myOwner = g_selected_item->GetVisiblePlayer();
+		if(franchiseLoss && myOwner >= 0 && (myOwner == owner || myOwner == franchiseOwner))
+		    {
+		    sint32 width, height;
+		    RECT rect;
+		    RECT clipRect;
+		    // Put franchiseLoss in str
+		    MBCHAR str[80];
+		    sprintf(str, "%i", franchiseLoss);
+		    // Width and height of the pop number
+		    width = m_font->GetStringWidth(str);
+		    height = m_font->GetMaxHeight();
+		    // This rect will be the inner rect that shows the pop number
+		    rect = {0, 0, width, height}; // This shadows the outer rect
+		    OffsetRect(&rect, // position rect relative to iconRect
+			iconRect.left + (iconRect.right-iconRect.left) / 2 - width  / 2,
+			iconRect.top  + (iconRect.bottom-iconRect.top) / 2 - height / 2);
+		    
+		    clipRect = primitives_GetScreenAdjustedRectCopy(surf, rect);
+		    m_font->DrawString(surf, &rect, &clipRect, str,
+			0,
+			GetColorRef(COLOR_WHITE, fog),
+			0);
+		    }
+		
 		AddDirtyRectToMix(iconRect);
 
 		iconRect.left += iconDim.x;

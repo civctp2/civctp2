@@ -251,6 +251,8 @@ Strategy {
 	Bit (Int) SpecialUnitsCount
 	Bit (Int) SpyUnitsCount
 	Bit (Int) SlaveryUnitsCount
+	Bit (Int) DiplomatUnitsCount
+	Bit (Int) MissionaryUnitsCount
 	Bit (Int) SeaTransportUnitsCount
 	Bit (Int) AirTransportUnitsCount
 
@@ -267,6 +269,8 @@ Strategy {
 	Bit (Record UnitBuildList) SpecialUnitList
 	Bit (Record UnitBuildList) SpyUnitList
 	Bit (Record UnitBuildList) SlaverUnitList
+	Bit (Record UnitBuildList) DiplomatUnitList
+	Bit (Record UnitBuildList) MissionaryUnitList
 	Bit (Record UnitBuildList) SeaTransportUnitList
 	Bit (Record UnitBuildList) AirTransportUnitList
 	Bit (Record UnitBuildList) FreightUnitList

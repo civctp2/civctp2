@@ -38,7 +38,6 @@
 #include "installationtree.h"
 #include "QuadTree.h"
 #include "Unit.h"
-#include "XY_Coordinates.h"
 #include "World.h"
 #include "player.h"
 #include "Cell.h"

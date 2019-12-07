@@ -300,6 +300,7 @@
 #include "UnitPool.h"                   // g_theUnitPool
 #include "UnitRecord.h"
 #include "unitutil.h"
+#include "UnseenCell.h"
 #include "WonderRecord.h"
 #include "WonderTracker.h"
 #include "wonderutil.h"
@@ -382,6 +383,7 @@ CityData::CityData(PLAYER_INDEX owner, Unit hc, const MapPoint &center_point)
 	m_gross_gold                        (0),
 	m_goldFromTradeRoutes               (0),
 	m_goldLostToPiracy                  (0),
+	m_goldFromTransitRoutes             (0),
 	m_science                           (0),
 	m_luxury                            (0),
 	m_city_attitude                     (CITY_ATTITUDE_CONTENT),
@@ -401,7 +403,6 @@ CityData::CityData(PLAYER_INDEX owner, Unit hc, const MapPoint &center_point)
 	m_total_pollution                   (0),
 	m_cityPopulationPollution           (0),
 	m_cityIndustrialPollution           (0),
-	m_foodVatPollution                  (0),
 	m_cityPollutionCleaner              (0),
 	m_contribute_materials              (true),
 	m_contribute_military               (true),
@@ -664,7 +665,7 @@ void CityData::Serialize(CivArchive &archive)
 		archive.PutSINT32(m_total_pollution);
 		archive.PutSINT32(m_cityPopulationPollution);
 		archive.PutSINT32(m_cityIndustrialPollution);
-		archive.PutSINT32(m_foodVatPollution);
+		archive.PutSINT32(m_goldFromTransitRoutes);
 		archive.PutSINT32(m_cityPollutionCleaner);
 		tmp = static_cast<BOOL>(m_contribute_materials);
 		archive.PutSINT32(tmp); // Was BOOL
@@ -822,7 +823,7 @@ void CityData::Serialize(CivArchive &archive)
 		m_total_pollution                = archive.GetSINT32();
 		m_cityPopulationPollution        = archive.GetSINT32();
 		m_cityIndustrialPollution        = archive.GetSINT32();
-		m_foodVatPollution               = archive.GetSINT32();
+		m_goldFromTransitRoutes          = archive.GetSINT32();
 		m_cityPollutionCleaner           = archive.GetSINT32();
 		m_contribute_materials           = archive.GetSINT32() != FALSE; // Was BOOL
 		m_contribute_military            = archive.GetSINT32() != FALSE; // Was BOOL
@@ -1404,7 +1405,7 @@ void CityData::Copy(CityData *copy)
 	m_total_pollution                    = copy->m_total_pollution;
 	m_cityPopulationPollution            = copy->m_cityPopulationPollution;
 	m_cityIndustrialPollution            = copy->m_cityIndustrialPollution;
-	m_foodVatPollution                   = copy->m_foodVatPollution;
+	m_goldFromTransitRoutes              = copy->m_goldFromTransitRoutes;
 	m_cityPollutionCleaner               = copy->m_cityPollutionCleaner;
 	m_contribute_materials               = copy->m_contribute_materials;
 	m_contribute_military                = copy->m_contribute_military;
@@ -2092,7 +2093,7 @@ void CityData::CalcPollution(void)
 	m_cityPopulationPollution   = populationPolluting;
 	m_cityIndustrialPollution   = productionPolluting;
 	m_total_pollution           =
-	            populationPolluting + productionPolluting + m_foodVatPollution +
+	            populationPolluting + productionPolluting +
 	            static_cast<sint32>(populationPolluting * buildingPopulationPercentage) +
 	            static_cast<sint32>(productionPolluting * buildingProductionPercentage) +
 	            static_cast<sint32>(buildingPollution);
@@ -4882,6 +4883,7 @@ void CityData::InitBeginTurnVariables()
 	m_alreadySoldABuilding       = false;
 	m_walls_nullified            = false;
 	//m_secthappy = 0;
+	m_goldFromTransitRoutes      = 0;
 }
 
 void CityData::DoTurnCounters()
@@ -4908,10 +4910,9 @@ void CityData::DoTurnCounters()
 	{
 		m_franchiseTurnsRemaining--;
 	}
-	else if(m_franchiseTurnsRemaining == 0)
+	else if(m_franchiseTurnsRemaining == 0) // only zero is meant to reset a Franchise (owner), positive numbers define turns until Franchise is removed, -1 is the default for infinit Franchise, see https://github.com/civctp2/civctp2/pull/167
 	{
-		m_franchise_owner = -1;
-		m_franchiseTurnsRemaining = -1;
+		RemoveFranchise();
 	}
 }
 
@@ -4922,35 +4923,34 @@ void CityData::TryToBuild()
 	{
 		AddShieldsToBuilding();
 		const GovernmentRecord *grec = g_theGovernmentDB->Get(g_player[m_owner]->m_government_type);
-		if
-		  (
-		      m_buildCapitalization
-		   && m_build_queue.GetHead()
-		   && m_build_queue.GetHead()->m_category == k_GAME_OBJ_TYPE_CAPITALIZATION
-		  )
+
+		if(IsBuildingCapitalization())
 		{
 			m_gold_from_capitalization = sint32(ceil(double(m_shieldstore) * grec->GetCapitalizationCoefficient()));
 			m_shieldstore = 0;
 			m_build_category_at_begin_turn = -1;
+
+			if(m_build_queue.GetLen() > 1) // Remove if we have more in the list
+			{
+				m_build_queue.RemoveHead();
+			}
 		}
-		else if
-		  (
-		      m_buildInfrastructure
-		   && m_build_queue.GetHead()
-		   && m_build_queue.GetHead()->m_category == k_GAME_OBJ_TYPE_INFRASTRUCTURE
-		  )
+		else if(IsBuildingInfrastructure())
 		{
 			m_pw_from_infrastructure = sint32(ceil(double(m_shieldstore) * grec->GetInfrastructureCoefficient()));
 			g_player[m_owner]->m_materialPool->AddMaterials(m_pw_from_infrastructure);
 			m_shieldstore = 0;
 			m_build_category_at_begin_turn = -2;
+
+			if(m_build_queue.GetLen() > 1) // Remove if we have more in the list
+			{
+				m_build_queue.RemoveHead();
+			}
 		}
 		else
 		{
-			m_buildCapitalization = false;
 			m_gold_from_capitalization = 0;
 
-			m_buildInfrastructure = false;
 			m_pw_from_infrastructure = 0;
 
 			g_gevManager->AddEvent(GEV_INSERT_AfterCurrent,
@@ -5054,8 +5054,8 @@ bool CityData::BeginTurn()
 	}
 
 	if(!m_build_queue.GetHead()
-	&& !m_buildCapitalization
-	&& !m_buildInfrastructure
+	&& !IsBuildingCapitalization()
+	&& !IsBuildingInfrastructure()
 	&& !m_sentInefficientMessageAlready
 	){
 		SlicObject *so = new SlicObject("37CityQueueIsEmpty");
@@ -5156,6 +5156,9 @@ void CityData::EndTurn()
 	}
 
 	m_build_queue.EndTurn();
+
+	// let city expand if adjacent city is gone or has shrunk
+	GenerateCityInfluence(m_home_city.RetPos(), m_sizeIndex);
 }
 
 void CityData::CalcHappiness(sint32 &virtualGoldSpent, bool isFirstPass)
@@ -5210,12 +5213,8 @@ void CityData::CheckRiot()
 
 bool CityData::BuildUnit(sint32 type)
 {
-
 	if(!CanBuildUnit(type))
 		return false;
-
-	m_buildInfrastructure = false;
-	m_buildCapitalization = false;
 
 	if(g_network.IsClient() && g_network.IsLocalPlayer(m_owner))
 	{
@@ -5256,9 +5255,6 @@ bool CityData::BuildImprovement(sint32 type)
 	Assert(CanBuildBuilding(type));
 	if(!CanBuildBuilding(type))
 		return false;
-
-	m_buildInfrastructure = false;
-	m_buildCapitalization = false;
 
 	if(g_network.IsClient() && g_network.IsLocalPlayer(m_owner)) {
 		g_network.SendAction(new NetAction(NET_ACTION_BUILD_IMP, type,
@@ -5319,9 +5315,6 @@ bool CityData::BuildWonder(sint32 type)
 #endif
 		return false;
 	}
-
-	m_buildInfrastructure = false;
-	m_buildCapitalization = false;
 
 	if(g_network.IsClient() && g_network.IsLocalPlayer(m_owner)) {
 		g_network.SendAction(new NetAction(NET_ACTION_BUILD_WONDER,
@@ -5419,9 +5412,6 @@ void CityData::AddWonder(sint32 type)
 // Not used.
 bool CityData::ChangeCurrentlyBuildingItem(sint32 category, sint32 item_type)
 {
-	m_buildInfrastructure = false;
-	m_buildCapitalization = false;
-
 	if(g_network.IsClient() && g_network.IsLocalPlayer(m_owner)) {
 		g_network.SendAction(new NetAction(NET_ACTION_CHANGE_BUILD,
 										   (uint32)m_home_city, category,
@@ -5980,6 +5970,27 @@ void CityData::SetCapitol()
 void CityData::MakeFranchise(sint32 player)
 {
 	m_franchise_owner = player;
+	m_franchiseTurnsRemaining = g_theConstDB->Get(0)->GetTurnsFranchised(); // do not use SetFranchiseTurnsRemaining here, as it resets the owner for -1
+
+	ProcessAllResources(); // updates m_productionLostToFranchise which is used for drawing loss on franchise city-icon, takes NEW_RESOURCE_PROCESS into account
+}
+
+void CityData::RemoveFranchise()
+{
+	if(m_franchise_owner < 0) // according to CityData::Unconvert
+		return;
+
+	//// let the owner of the franchise know about its removal, see https://github.com/civctp2/civctp2/pull/166
+	MapPoint pos; // needed to get un-seen cell at this city pos
+	UnseenCellCarton ucell;
+
+	m_home_city.GetPos(pos);
+	if(g_player[m_franchise_owner]->GetLastSeen(pos, ucell)) // get un-seen cell of franchise owner
+	    {
+	    ucell.m_unseenCell->SetIsFranchised(false); // remove franchise flag
+	    }
+
+	m_franchise_owner = -1;
 	m_franchiseTurnsRemaining = -1;
 }
 
@@ -5993,8 +6004,7 @@ void CityData::SetFranchiseTurnsRemaining(sint32 turns)
 	m_franchiseTurnsRemaining = turns;
 	if(turns < 1)
 	{
-		m_franchiseTurnsRemaining = -1;
-		m_franchise_owner = -1;
+		RemoveFranchise();
 	}
 }
 
@@ -6336,6 +6346,8 @@ void CityData::ConvertTo(sint32 player, CONVERTED_BY by)
 
 	m_convertedTo = player;
 	m_convertedBy = by;
+
+	ProcessAllResources(); // updates m_convertedGold which is used for drawing loss on conversion city-icon, takes NEW_RESOURCE_PROCESS into account
 }
 
 double CityData::TheologicalModifier() const
@@ -6347,6 +6359,16 @@ void CityData::Unconvert(bool makeUnhappy)
 {
 	if(m_convertedTo < 0)
 		return;
+
+	//// let the owner of the conversion know about its removal, see https://github.com/civctp2/civctp2/pull/166
+	MapPoint pos; // needed to get un-seen cell at this city pos
+	UnseenCellCarton ucell;
+
+	m_home_city.GetPos(pos);
+	if(g_player[m_convertedTo]->GetLastSeen(pos, ucell)) // get un-seen cell of conversion owner
+	    {
+	    ucell.m_unseenCell->SetIsConverted(false); // remove conversion flag
+	    }
 
 	m_convertedTo = -1;
 	m_convertedGold = 0;
@@ -6607,8 +6629,7 @@ void CityData::ResetCityOwner(sint32 owner)
 	NewGovernment(g_player[m_owner]->m_government_type);
 
 	m_walls_nullified = false;
-	m_franchiseTurnsRemaining = 0;
-	m_franchise_owner = -1;
+	RemoveFranchise(); // Franchise removed in contrast to conversion, see below
 	m_watchfulTurns = 0;
 	m_bioInfectionTurns = 0;
 	m_bioInfectedBy = -1;
@@ -6699,7 +6720,7 @@ bool CityData::BuyFront()
 		return false;
 
 	// * Can't rush buy capitalization/infrastructure
-	if(m_buildInfrastructure || m_buildCapitalization)
+	if(IsBuildingInfrastructure() || IsBuildingCapitalization())
 		return false;
 
 	//cant rush wonders?
@@ -7863,6 +7884,7 @@ bool CityData::IsCelebratingHappiness(void) const { return (m_happy->IsVeryHappy
 
 void CityData::HappinessAttackedBy(sint32 player)
 {
+	Assert(player < k_MAX_PLAYERS);
 	m_happinessAttackedBy = player;
 }
 
@@ -8094,12 +8116,6 @@ bool CityData::CanBuildInfrastructure() const
 	return g_player[m_owner]->CanBuildInfrastructure();
 }
 
-void CityData::StopInfrastructureCapitalization()
-{
-	m_buildInfrastructure = false;
-	m_buildCapitalization = false;
-}
-
 void CityData::InsertInfrastructure()
 {
 	Assert(CanBuildInfrastructure());
@@ -8131,10 +8147,6 @@ void CityData::BuildInfrastructure()
 		g_network.Enqueue(new NetInfo(NET_INFO_CODE_BUILD_INFRASTRUCTURE, m_home_city));
 		g_network.Unblock(m_owner);
 	}
-
-	m_buildInfrastructure = true;
-	m_buildCapitalization = false;
-
 }
 
 bool CityData::CanBuildCapitalization() const
@@ -8155,9 +8167,6 @@ void CityData::BuildCapitalization()
 		g_network.Enqueue(new NetInfo(NET_INFO_CODE_BUILD_CAPITALIZATION, m_home_city));
 		g_network.Unblock(m_owner);
 	}
-	m_buildInfrastructure = false;
-	m_buildCapitalization = true;
-
 }
 
 void CityData::EliminateNukes()
@@ -8715,7 +8724,7 @@ void CityData::ChangePopulation(sint32 delta)
 	if(m_population <= 0) {
 		g_gevManager->AddEvent(GEV_INSERT_Tail, GEV_KillCity,
 		                       GEA_City, m_home_city.m_id,
-		                       GEA_Int, CAUSE_REMOVE_CITY_UNKNOWN,
+		                       GEA_Int, CAUSE_REMOVE_CITY_NO_PEOPLE,
 		                       GEA_Player, PLAYER_UNASSIGNED,
 		                       GEA_End);
 	}
@@ -8935,12 +8944,7 @@ void CityData::InsertBuildItem(sint32 index, uint32 category, sint32 type)
 		InsertBuildItem(-1, category, type);
 		return;
 	}
-	if(index == 0
-	&& category != k_GAME_OBJ_TYPE_CAPITALIZATION
-	&& category != k_GAME_OBJ_TYPE_INFRASTRUCTURE
-	){
-		StopInfrastructureCapitalization();
-	}
+
 	m_build_queue.InsertBefore(node, category, type);
 }
 
@@ -11306,7 +11310,43 @@ void CityData::GiveTradeRouteGold()
 				if((route.GetSource().GetOwner() != m_owner)
 				&&(route.GetDestination().GetOwner() != m_owner)
 				){
-					g_player[m_owner]->AddGold(static_cast<sint32>(route->GetValue() * g_theConstDB->Get(0)->GetCityOnTradeRouteCoeff()));
+				    sint32 tgold = static_cast<sint32>(route->GetValue() * g_theConstDB->Get(0)->GetCityOnTradeRouteCoeff());
+
+				    Unit fromCity = route.GetSource();
+				    Unit toCity = route.GetDestination();
+				    
+				    ROUTE_TYPE type;
+				    sint32 good;
+				    route.GetSourceResource(type, good);
+					
+				    if(!route->IsBeingPirated()){
+					g_player[m_owner]->AddGold(tgold);
+					m_goldFromTransitRoutes+= tgold;
+					
+					/*
+					SlicObject * so = new SlicObject("359TradePassing");
+					so->AddRecipient(GetOwner());
+					so->AddGold(tgold) ;
+					so->AddCity(m_home_city); // m_home_city should equal fromCity
+					so->AddGood(good);
+					so->AddCity(fromCity);
+					so->AddCity(toCity);
+					so->AddCivilisation(fromCity.GetOwner());
+					g_slicEngine->Execute(so);
+					*/
+					}
+				    else { // message that tgold is not earned from transit due to pirating
+					SlicObject * so = new SlicObject("358TradePassingPirated");
+					so->AddRecipient(GetOwner());
+					so->AddGold(tgold) ;
+					so->AddCity(m_home_city); // m_home_city should equal fromCity
+					so->AddGood(good);
+					so->AddCity(fromCity);
+					so->AddCity(toCity);
+					so->AddCivilisation(fromCity.GetOwner());
+					so->AddCivilisation(route->GetPiratingArmy().GetOwner());
+					g_slicEngine->Execute(so);
+				    	}
 				}
 			}
 		}
@@ -11456,6 +11496,16 @@ void CityData::AddCitySlum()
 			}
 		}
 	}
+}
+
+bool CityData::IsBuildingCapitalization() const
+{
+	return m_build_queue.GetHead() != NULL && m_build_queue.GetHead()->m_category == k_GAME_OBJ_TYPE_CAPITALIZATION;
+}
+
+bool CityData::IsBuildingInfrastructure() const
+{
+	return m_build_queue.GetHead() != NULL && m_build_queue.GetHead()->m_category == k_GAME_OBJ_TYPE_INFRASTRUCTURE;
 }
 
 bool CityData::IsCoastal() const

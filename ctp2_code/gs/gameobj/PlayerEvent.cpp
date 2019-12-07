@@ -336,6 +336,8 @@ STDEHANDLER(FinishBeginTurnEvent)
 	DPRINTF(k_DBG_GAMESTATE, ("Gold: %d\n", p->m_gold->GetLevel()));
 	DPRINTF(k_DBG_GAMESTATE, ("Public Works: %d\n", p->m_materialPool->GetMaterials()));
 
+	p->m_strengths->Calculate();
+
 	if ( p->m_owner == g_selected_item->GetVisiblePlayer() )
 	{
 		g_c3ui->AddAction( new SW_UpdateAction );

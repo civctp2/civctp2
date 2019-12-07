@@ -61,10 +61,8 @@ static HashTable hash_table;
 
 static inline unsigned Hash (const char *hash_key)
 {
-	unsigned hash_value;
+	unsigned hash_value = 0;
 	unsigned rotate_bits;
-
-	hash_value = 0;
 
 	while (*hash_key)
 	{
@@ -82,9 +80,7 @@ static inline unsigned Hash (const char *hash_key)
 
 void Hash_Init (void)
 {
-	int bucket;
-
-	for (bucket = 0; bucket < HashTableSize; bucket++)
+	for (int bucket = 0; bucket < HashTableSize; bucket++)
 	{
 		hash_table.bucket[bucket] = NULL;
 	}
@@ -103,9 +99,7 @@ static void Hash_CloseEntry (HashTableEntry_Ptr entry)
 
 static void Hash_Close (void)
 {
-	int bucket;
-
-	for (bucket = 0; bucket < HashTableSize; bucket++)
+	for (int bucket = 0; bucket < HashTableSize; bucket++)
 	{
 		Hash_CloseEntry (hash_table.bucket[bucket]);
 	}
@@ -113,17 +107,14 @@ static void Hash_Close (void)
 
 static bool Hash_Exist (const char *hash_key)
 {
-	int					hash_value;
-	HashTableEntry_Ptr	hash_entry;
-
-	hash_value = Hash (hash_key);
-	hash_entry = hash_table.bucket[hash_value];
+	int                 hash_value = Hash (hash_key);
+	HashTableEntry_Ptr  hash_entry = hash_table.bucket[hash_value];
 
 	while (hash_entry)
 	{
 		if (stricmp (hash_key, hash_entry->key) == 0)
 		{
-			return (true);
+			return true;
 		}
 		else
 		{
@@ -131,19 +122,15 @@ static bool Hash_Exist (const char *hash_key)
 		}
 	}
 
-	return (false);
+	return false;
 }
 
 void Hash_Add (const char *hash_key)
 {
-	int					hash_value;
-	HashTableEntry_Ptr	hash_entry;
-
 	if (!Hash_Exist (hash_key))
 	{
-
-		hash_value = Hash (hash_key);
-		hash_entry = (HashTableEntry_Ptr) malloc (sizeof (HashTableEntry));
+		int                hash_value = Hash (hash_key);
+		HashTableEntry_Ptr hash_entry = (HashTableEntry_Ptr) malloc (sizeof (HashTableEntry));
 
 		hash_entry->key = strdup (hash_key);
 		hash_entry->next = hash_table.bucket[hash_value];
@@ -176,11 +163,8 @@ static void Hash_DumpEntry (HashTableEntry_Ptr entry, int bucket)
 
 static void Hash_Dump (void)
 {
-	int bucket;
-
-	for (bucket = 0; bucket < HashTableSize; bucket ++)
+	for (int bucket = 0; bucket < HashTableSize; bucket ++)
 	{
-
 		Hash_DumpEntry (hash_table.bucket[bucket], bucket);
 	}
 }

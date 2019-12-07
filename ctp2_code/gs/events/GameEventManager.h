@@ -256,6 +256,7 @@ private:
 #ifdef _DEBUG
 	/// History of recently handled events
 	std::list<GameEvent*>   m_eventHistory;
+	FILE *m_eventLogFile;
 #endif
 
 	GameEventHook *m_hooks[GEV_MAX];

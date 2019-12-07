@@ -12,7 +12,6 @@
 #include "Army.h"
 #include "cellunitlist.h"
 #include "MapPoint.h"
-#include "XY_Coordinates.h"
 #include "World.h"
 #include "Cell.h"
 #include "Order.h"

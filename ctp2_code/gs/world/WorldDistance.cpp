@@ -29,17 +29,16 @@
 //----------------------------------------------------------------------------
 
 #include "c3.h"
-#include "XY_Coordinates.h"
+#include "WorldDistance.h"
+
 #include "World.h"
 #include "PQueue.h"
 #include "Cell.h"
 #include "player.h"
 #include "UnitDynArr.h"
-#include "WorldDistance.h"
 #include "UnitData.h"
 #include "citydata.h"
 #include "Happy.h"
-#include "directions.h"
 
 extern Player **g_player;
 

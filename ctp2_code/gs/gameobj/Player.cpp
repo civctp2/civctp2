@@ -140,6 +140,7 @@
 #include "AchievementTracker.h"
 #include "AdvanceRecord.h"
 #include "Advances.h"
+#include "advanceutil.h"
 #include "AgeRecord.h"
 #include "Agreement.h"
 #include "AgreementData.h"
@@ -153,7 +154,6 @@
 #include "ArmyPool.h"
 #include "aui.h"
 #include "Barbarians.h"
-#include "BFS.h"
 #include "BuildingRecord.h"
 #include "buildingutil.h"
 #include "c3debug.h"
@@ -1053,24 +1053,6 @@ void Player::DoCreateUnits()
 	}
 }
 
-void Player::InsertArmy(const MapPoint &point, const Unit &home_city,
-						Army &army, CAUSE_NEW_ARMY cause)
-{
-#if 0
-	sint32 i, n = army.Num();
-	static UnitDynamicArray revealed;
-	revealed.Clear();
-	bool revealed_unexplored;
-
-	for(i = 0; i < n; i++) {
-		army[i].Place(point, home_city);
-		bool r = army[i].SetPosition(point, revealed, revealed_unexplored);
-		Assert(r);
-		InsertUnitReference(army[i], cause);
-	}
-#endif
-}
-
 Unit Player::InsertUnitReference(const Unit &u,  const CAUSE_NEW_ARMY cause,
 								 const Unit &whereBuilt)
 {
@@ -1324,16 +1306,6 @@ void Player::RegisterLostUnits(sint32 nUnits, const MapPoint &pos,
 	default:
 		Assert(0);
 	}
-}
-
-void Player::RegisterInsertCargo(ID id, const sint32 unit_type, sint32 hp)
-{
-	// Edit this so that the cargo is registered
-}
-
-void Player::RegisterUnloadCargo(ID id, const sint32 unit_type, sint32 hp)
-{
-	// Edit this so that the cargo is registered
 }
 
 sint32 Player::GetWeakestEnemy() const
@@ -3249,7 +3221,7 @@ void Player::KillATrader()
 
 	Assert(m_traderUnits->Num() > 0);
 	if(m_traderUnits->Num() > 0) {
-		m_traderUnits->Access(0).Kill(CAUSE_REMOVE_ARMY_UNKNOWN, -1);
+		m_traderUnits->Access(0).Kill(CAUSE_REMOVE_ARMY_TRADE, -1);
 	}
 }
 
@@ -5378,8 +5350,8 @@ void Player::GetArmyPos(sint32 index, MapPoint &army_pos)
 }
 
 bool Player::CanCreateImprovement(sint32 type,
-								  const MapPoint &point, sint32 extraData,
-								  const bool check_materials, ERR_BUILD_INST &err)
+                                  const MapPoint &point,
+                                  const bool check_materials)
 {
 	const TerrainImprovementRecord *rec = g_theTerrainImprovementDB->Get(type);
 	Cell *cell = g_theWorld->GetCell(point);
@@ -5393,7 +5365,6 @@ bool Player::CanCreateImprovement(sint32 type,
 	{
 		if(cell->GetDBImprovement(i) == type)
 		{
-
 			return false;
 		}
 	}
@@ -5402,7 +5373,6 @@ bool Player::CanCreateImprovement(sint32 type,
 	{
 		if(cell->AccessImprovement(i).GetType() == type)
 		{
-
 			return false;
 		}
 	}
@@ -5434,9 +5404,8 @@ TerrainImprovement Player::CreateImprovement(sint32 dbIndex,
 											 sint32 extraData)
 {
 	TerrainImprovement theImprovement;
-	ERR_BUILD_INST err;
 
-	if(!CanCreateImprovement(dbIndex, point, extraData, true, err))
+	if(!CanCreateImprovement(dbIndex, point, true))
 		return theImprovement;
 
 	theImprovement = g_theTerrainImprovementPool->Create(m_owner,
@@ -6044,32 +6013,15 @@ bool Player::HasAdvance(AdvanceType adv) const
 	return m_advances->HasAdvance(adv);
 }
 
+bool Player::CanUseNukes() const
+{
+	return HasAdvance(advanceutil_GetNukeAdvance()) && !wonderutil_GetNukesEliminated(g_theWonderTracker->GetBuiltWonders());
+}
+
 sint32 Player::NumAdvances()
 {
 	if (!m_advances) return 0;
 	return (m_advances->GetNum());
-}
-
-uint32 Player::RoadAdvanceLevel() const
-{
-#if 0
-
-	uint32 enable_maglev = g_theAdvanceDB->EnableImprovement(TERRAIN_IMPROVEMENT_ROAD_3);
-	if(enable_maglev >= 0 && m_advances->HasAdvance(enable_maglev)) {
-		return 3;
-	}
-
-	uint32 enable_railroad = g_theAdvanceDB->EnableImprovement(TERRAIN_IMPROVEMENT_ROAD_2);
-	if(enable_railroad >= 0 && m_advances->HasAdvance(enable_railroad)) {
-		return 2;
-	}
-
-	uint32 enable_road = g_theAdvanceDB->EnableImprovement(TERRAIN_IMPROVEMENT_ROAD_1);
-	if(enable_road >= 0 && m_advances->HasAdvance(enable_road)) {
-		return 1;
-	}
-#endif
-	return 1;
 }
 
 void Player::SetCityRoads()
@@ -6629,52 +6581,6 @@ bool Player::ActuallySetGovernment(sint32 type)
 	return true;
 }
 
-void Player::GroupArmy(Army &army)
-{
-	Assert(false);
-
-}
-
-#if 0
-void Player::UngroupArmy(Army &army)
-{
-	sint32 i;
-	for(i = army.Num() - 1; i > 0; i--) {
-
-
-		Army newArmy = GetNewArmy(CAUSE_NEW_ARMY_UNGROUPING);
-		g_gevManager->AddEvent(GEV_INSERT_Tail, GEV_AddUnitToArmy,
-							   GEA_Unit, army[i],
-							   GEA_Army, newArmy,
-							   GEA_End);
-
-
-
-
-
-
-
-
-
-
-
-	}
-}
-#endif
-
-void Player::RegisterYourArmyWasMoved(const Army &i_moved, const MapPoint &new_pos)
-{
-
-	for(sint32 i = 0; i < m_all_armies->Num(); i++) {
-        if(m_all_armies->Access(i).m_id == i_moved.m_id) {
-
-            return;
-        }
-	}
-
-    return;
-}
-
 void Player::AssasinateRuler()
 {
 	m_assasinationModifier = g_theConstDB->Get(0)->GetAssasinationHappinessEffect();
@@ -6701,10 +6607,6 @@ void Player::CloseEmbassy(sint32 player)
 		g_network.Enqueue(new NetInfo(NET_INFO_CODE_SET_EMBASSIES, m_owner, m_embassies));
 	}
 }
-
-
-
-
 
 bool Player::HasEmbassyWith(sint32 player) const
 {
@@ -6747,14 +6649,6 @@ void Player::AddProductionFromFranchise(sint32 amt)
 
 #ifdef _DEBUG
 
-
-
-
-
-
-
-
-
 void Player::DisplayAdvances()
 	{
 	MBCHAR	s[512] ;
@@ -6777,65 +6671,27 @@ void Player::DisplayAdvances()
 void Player::DisplayWWR()
 {
 	g_debugWindow->AddText("WWR:");
-    m_global_happiness->DisplayWWR();
+	m_global_happiness->DisplayWWR();
 
-    char str[80];
-    sprintf(str, "  readiness level %d cost  %3.1f  %%  %3.1f",  m_readiness->GetLevel(),
-        m_readiness->GetCost(),
-        100.0 * m_readiness->GetPecentLastTurn());
+	char str[80];
+	sprintf(str, "  readiness level %d cost  %3.1f  %%  %3.1f",  m_readiness->GetLevel(),
+	    m_readiness->GetCost(),
+	    100.0 * m_readiness->GetPecentLastTurn());
 	g_debugWindow->AddText(str);
-    sprintf(str, "  materials %% %3.1f materials current %d", 100.0 * m_materialsTax, m_materialPool->GetMaterials());
+	sprintf(str, "  materials %% %3.1f materials current %d", 100.0 * m_materialsTax, m_materialPool->GetMaterials());
 	g_debugWindow->AddText(str);
-    double tmp;
-    m_tax_rate->GetScienceTaxRate(tmp);
-    sprintf(str, "  science %% %3.1f science current %3.1f", tmp, 100.0 * m_science->GetLevel());
+	double tmp;
+	m_tax_rate->GetScienceTaxRate(tmp);
+	sprintf(str, "  science %% %3.1f science current %3.1f", tmp, 100.0 * m_science->GetLevel());
 	g_debugWindow->AddText(str);
-    sprintf(str, "  gold %d", m_gold->GetLevel());
+	sprintf(str, "  gold %d", m_gold->GetLevel());
 	g_debugWindow->AddText(str);
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
 }
 
-
-
-
-
-
-
-
-
-
-
-
-
-
 uint32 Player_Player_GetVersion(void)
-	{
+{
 	return (k_PLAYER_VERSION_MAJOR<<16 | k_PLAYER_VERSION_MINOR) ;
-	}
+}
 
 bool player_isAlly(PLAYER_INDEX me, PLAYER_INDEX him)
 {
@@ -6846,11 +6702,6 @@ bool player_isEnemy(PLAYER_INDEX me, PLAYER_INDEX him)
 {
 	return !AgreementMatrix::s_agreements.HasAgreement(me, him, PROPOSAL_TREATY_ALLIANCE);
 }
-
-
-
-
-
 
 sint32 Player::GetCheapestMilitaryUnit()
 {
@@ -7583,12 +7434,17 @@ sint32 Player::GetKnowledgeStrength() const
 
 sint32 Player::GetMilitaryStrength() const
 {
-	sint32 totalCost = 0;
-	for(sint32 i = 0; i < m_all_units->Num(); i++) {
+	sint32 totalStrength = 0;
+	for(sint32 i = 0; i < m_all_units->Num(); i++)
+	{
 		if(m_all_units->Access(i).GetAttack() > 0)
-			totalCost += m_all_units->Access(i).GetShieldCost();
+		{
+			totalStrength += m_all_units->Get(i).GetAttack();
+			totalStrength += m_all_units->Get(i).GetDefense();
+		}
 	}
-	return totalCost / 2;
+
+	return totalStrength;
 }
 
 sint32 Player::GetTradeStrength() const
@@ -9762,10 +9618,11 @@ MapPoint Player::CalcEmpireCenter() const
 		float costs = 0.0f;
 		Path path;
 
-		g_city_astar.FindSimpleDistancePath(empireCenter, m_all_cities->Get(i)->GetPos(), m_owner, path, costs);
-
-		path.RestoreIndexAndCurrentPos(path.Num()/cityNum);
-		path.GetCurrentPoint(empireCenter);
+		if(g_city_astar.FindSimpleDistancePath(empireCenter, m_all_cities->Get(i)->GetPos(), m_owner, path, costs))
+		{
+			path.RestoreIndexAndCurrentPos(path.Num() / cityNum);
+			path.GetCurrentPoint(empireCenter);
+		}
 	}
 
 	return empireCenter;

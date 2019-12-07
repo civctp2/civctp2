@@ -113,6 +113,9 @@ class GaiaController {
 	static sint32 GetSatelliteBuildingIndex()
 	{ return(sm_satelliteBuildingIndex); }
 
+	static bool IsMainframeBuilding(sint32 index) { return index == sm_mainframeBuildingIndex; }
+	static bool IsSatellite        (sint32 index) { return index == sm_satelliteBuildingIndex; }
+
 
 	void ComputeTowerPositions();
 
@@ -131,9 +134,13 @@ class GaiaController {
 	static sint32 sm_satelliteBuildingIndex;
 	static sint32 sm_mainframeBuildingIndex;
 
-	sint32 ScoreTowerPosition(MapPoint & pos, const MapPoint empire_center, MapPoint_List & towers) const;
+	sint32 ScoreTowerPosition(MapPoint & pos, const MapPoint empire_center, MapPoint_List & towers, sint32 radius) const;
 
 	void ComputeTowerCandidates(Scored_MapPoint_List & candidates) const;
+	void GetTowerPositions(MapPoint_List & towers) const;
+	void ComputeFutureCoverage(MapPoint_List & towers, sint32 radius);
+	sint32 AddsCoverage(const MapPoint & pos, sint32 radius) const;
+	void AddFutureCoverage(const MapPoint & pos, sint32 radius);
 
 	PLAYER_INDEX m_playerId;
 	sint16 m_numMainframes;
@@ -143,6 +150,7 @@ class GaiaController {
 	float m_percentCoverage;
 	sint16 m_completedTurn;
 	Bit_Table m_coveredCells;
+	Bit_Table m_futureCoveredCells;
 	float m_maxPercentCoverage;
 	MapPoint_List m_newTowerPositions;
 };

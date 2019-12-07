@@ -64,7 +64,6 @@
 #include "ConstRecord.h"        // g_theConstDB
 #include "StrDB.h"              // g_theStringDB
 #include "DB.h"
-#include "UnitRec.h"
 #include "dynarr.h"
 #include "UnitDynArr.h"
 #include "citydata.h"
@@ -164,8 +163,8 @@ void Unit::RemoveAllReferences(const CAUSE_REMOVE_ARMY cause, PLAYER_INDEX kille
 			break;
 	}
 
-	DPRINTF(k_DBG_GAMESTATE, ("Unit::RemoveAllReferences: id: 0x%lx\n",
-							  m_id));
+	DPRINTF(k_DBG_GAMESTATE, ("Unit::RemoveAllReferences: id: 0x%lx cause: %d\n",
+	                          m_id, cause));
 	if(g_network.IsActive())
 	{
 		if(g_network.IsHost())
@@ -217,7 +216,7 @@ void Unit::RemoveAllReferences(const CAUSE_REMOVE_ARMY cause, PLAYER_INDEX kille
 	}
 	else
 	{
-		if(GetArmy().IsValid())
+		if(GetArmy().IsValid() && !HasLeftMap())
 		{
 			Assert(false);
 			r = g_theWorld->RemoveUnitReference(pos, *this);
@@ -440,7 +439,7 @@ bool Unit::IsInVisionRange(MapPoint &pos) const
 	double distance    = MapPoint::GetSquaredDistance(here, pos);
 	double visionRange = GetVisionRange();
 
-	return distance <= visionRange;
+	return distance <= visionRange* visionRange;
 }
 
 bool Unit::NearestUnexplored(sint32 searchRadius, MapPoint &pos) const
@@ -740,27 +739,14 @@ bool Unit::IsBeingTransported() const
 	return GetData()->IsBeingTransported();
 }
 
-#if 0
-void Unit::Transform()
+bool Unit::CanAtLeastOneCargoUnloadAt(const MapPoint & unload_pos, const bool & use_vision, bool check_move_points) const
 {
-	AccessData()->Transform();
-}
-#endif
-
-bool Unit::CanAtLeastOneCargoUnloadAt(const MapPoint & old_pos, const MapPoint & dest_pos, const bool & use_vision, bool check_move_points) const
-{
-	return GetData()->CanAtLeastOneCargoUnloadAt(old_pos, dest_pos, use_vision, check_move_points);
+	return GetData()->CanAtLeastOneCargoUnloadAt(unload_pos, use_vision, check_move_points);
 }
 
-bool Unit::UnloadCargo(const MapPoint &new_pos, Army &debark,
-					   bool justOneUnit, const Unit &theUnit)
+bool Unit::UnloadCargo(const MapPoint &unload_pos, Army &debark, sint32 &count, bool unloadSelected)
 {
-	return AccessData()->UnloadCargo(new_pos, debark, justOneUnit, theUnit);
-}
-
-bool Unit::UnloadSelectedCargo(const MapPoint &new_pos, Army &debark)
-{
-	return AccessData()->UnloadSelectedCargo(new_pos, debark);
+	return AccessData()->UnloadCargo(unload_pos, debark, count, unloadSelected);
 }
 
 bool Unit::IsMovePointsEnough(const MapPoint &pos) const
@@ -2433,8 +2419,8 @@ bool Unit::UnitValidForOrder(const OrderRecord * order_rec) const
 		order_valid = (unit_rec->GetAttack() > 0.0 );
 	else if(order_rec->GetUnitPretest_CanEntrench())
 		order_valid = unit_rec->GetCanEntrench();
-//	else if(order_rec->GetUnitPretest_CanSueFranchise())
-//		order_valid = unit_rec->GetCanSueFranchise();
+	else if(order_rec->GetUnitPretest_CanSueFranchise())
+		order_valid = unit_rec->GetCanSue();
 	else if(order_rec->GetUnitPretest_CanSue())
 		order_valid = unit_rec->GetCanSue();
 	else if(order_rec->GetUnitPretest_CanCreateFranchise())
@@ -2482,7 +2468,7 @@ bool Unit::UnitValidForOrder(const OrderRecord * order_rec) const
 	else if(order_rec->GetUnitPretest_CanSellIndulgences())
 		order_valid = unit_rec->HasIndulgenceSales();
 //	else if(order_rec->GetUnitPretest_CanFaithHeal())
-//		order_valid = false;
+//		order_valid = false; // Is sell indulgence
 	else if(order_rec->GetUnitPretest_CanSoothsay())
 		order_valid = unit_rec->HasCanSoothsay();
 	else if(order_rec->GetUnitPretest_CanCreatePark())

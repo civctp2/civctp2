@@ -1,0 +1,489 @@
+##-----------------------------------##
+
+##              Data                 ##
+
+##-----------------------------------##
+
+playereditwindow:nswindow {
+
+	int	widthpix	450
+
+	int	heightpix	410
+
+#	string	pattern	"error.tga"
+	string	pattern	"uptg20e.tga"
+
+
+
+	titlestatictext : nstitlestatictext {
+
+		string	text	"str_ldl_CAPS_PROFILE"
+	}
+
+
+
+	playernamestatictext:nsstatictext {
+
+		int	xpix	149
+
+		int	ypix	47
+
+		int	widthpix	159
+
+		int	heightpix	20
+
+		string	text	"str_ldl_Player_Name_COLON"
+
+
+#		string	pattern	"error.tga"
+		string	pattern	"uptg20e.tga"
+
+		int	srcxpix	149
+
+		int	srcypix	47
+
+		int	srcwidthpix	159
+
+		int	srcheightpix	20
+
+	}
+
+
+
+	playernametextfield {
+
+		int	xpix	149
+
+		int	ypix	70
+
+		int	widthpix	159
+
+		int	heightpix	20
+
+		bool	autohscroll	false
+
+		int	maxfieldlen	23
+	}
+
+
+
+	locationstatictext:nsstatictext {
+
+		int	xpix	24
+
+		int	ypix	96
+
+		int	widthpix	158
+
+		int	heightpix	20
+
+		string	text	"str_ldl_Location_COLON"
+
+
+#		string	pattern	"error.tga"
+		string	pattern	"uptg20e.tga"
+
+		int	srcxpix	24
+
+		int	srcypix	96
+
+		int	srcwidthpix	158
+
+		int	srcheightpix	20
+
+	}
+
+
+
+	locationtextfield {
+
+		int	xpix	24
+
+		int	ypix	119
+
+		int	widthpix	158
+
+		int	heightpix	20
+
+		bool	autohscroll	false
+
+	}
+
+
+
+	icqstatictext:nsstatictext {
+
+		int	xpix	24
+
+		int	ypix	182
+
+		int	widthpix	158
+
+		int	heightpix	20
+
+		string	text	"str_ldl_ICQ_COLON"
+
+
+#		string	pattern	"error.tga"
+		string	pattern	"uptg20e.tga"
+
+		int	srcxpix	24
+
+		int	srcypix	182
+
+		int	srcwidthpix	158
+
+		int	srcheightpix	20
+
+	}
+
+
+
+	icqtextfield {
+
+		int	xpix	24
+
+		int	ypix	205
+
+		int	widthpix	158
+
+		int	heightpix	20
+
+		bool	autohscroll	false
+
+	}
+
+
+
+	emailstatictext:nsstatictext {
+
+		int	xpix	24
+
+		int	ypix	268
+
+		int	widthpix	158
+
+		int	heightpix	20
+
+		string	text	"str_ldl_Email_COLON"
+
+
+#		string	pattern	"error.tga"
+		string	pattern	"uptg20e.tga"
+
+		int	srcxpix	24
+
+		int	srcypix	268
+
+		int	srcwidthpix	158
+
+		int	srcheightpix	20
+
+	}
+
+
+
+	emailtextfield {
+
+		int	xpix	24
+
+		int	ypix	291
+
+		int	widthpix	158
+
+		int	heightpix	20
+
+		bool	autohscroll	false
+
+	}
+
+
+
+	experiencestatictext:nsstatictext {
+
+		int	xpix	218
+
+		int	ypix	177
+
+		int	widthpix	200
+
+		int	heightpix	20
+
+		string	text	"str_ldl_Experience_Level_COLON"
+
+
+#		string	pattern	"error.tga"
+		string	pattern	"uptg20e.tga"
+
+		int	srcxpix	218
+
+		int	srcypix	117
+
+		int	srcwidthpix	200
+
+		int	srcheightpix	20
+
+	}
+
+
+
+	experienceswitchgroup {
+
+		int	xpix	250
+
+		int	ypix	200
+
+		int	widthpix	160
+
+		int	heightpix	155
+
+		experience0checkbox:nstoggleswitch {
+
+			int	xpix	0
+
+			int	ypix	0
+
+			string	text	"str_ldl_Chieftain"
+		}
+
+		experience1checkbox:nstoggleswitch {
+
+			int	xpix	0
+
+			int	ypix	26
+
+			string	text	"str_ldl_Warlord"
+		}
+
+		experience2checkbox:nstoggleswitch {
+
+			int	xpix	0
+
+			int	ypix	52
+
+			string	text	"str_ldl_Prince"
+		}
+
+		experience3checkbox:nstoggleswitch {
+
+			int	xpix	0
+
+			int	ypix	78
+
+			string	text	"str_ldl_King"
+		}
+
+		experience4checkbox:nstoggleswitch {
+
+			int	xpix	0
+
+			int	ypix	104
+
+			string	text	"str_ldl_Emperor"
+		}
+
+		experience5checkbox:nstoggleswitch {
+
+			int	xpix	0
+
+			int	ypix	129
+
+			string	text	"str_ldl_Deity"
+		}
+
+	}
+
+
+
+	playerinfostatictext:nsstatictext {
+
+		int	xpix	210
+
+		int	ypix	96
+
+		int	widthpix	216
+
+		int	heightpix	20
+
+		string	text	"str_ldl_Player_Info_COLON"
+
+
+#		string	pattern	"error.tga"
+		string	pattern	"uptg20e.tga"
+
+		int	srcxpix	210
+
+		int	srcypix	96
+
+		int	srcwidthpix	216
+
+		int	srcheightpix	20
+
+	}
+
+
+
+	playerinfotextfield {
+
+		int	xpix	210
+
+		int	ypix	119
+
+		int	widthpix	216
+
+		int	heightpix	63
+
+		bool	autovscroll	false
+
+		bool	multiline	true
+
+		string	fieldtext	"str_ldl_Type_Player_Info"
+	}
+
+
+
+	# There is no close button, but we wan't "cancel" to be to the left.
+
+	cancelbutton:nsclosebutton {
+
+		string	text	"str_ldl_Cancel"
+	}
+
+
+
+	okbutton:nsnextbutton {
+
+		string	text	"str_ldl_CAPS_OK"
+	}
+
+}
+
+
+
+
+
+#aiplayereditwindow:nswindow {
+
+#	string	xanchor	"center"
+
+#	string	yanchor	"center"
+
+#	int	widthpct	70
+
+#	int	heightpct	70
+
+#	titlestatictext:nstitlestatictext {
+
+#		string	text	"AI Player Setup"
+
+#	}
+
+#	playernamestatictext:nsstatictext {
+
+#		int	xpct	25
+
+#		int	ypct	29
+
+#		int	widthpct	25
+
+#		int	heightpix	25
+
+#		string	text	"Player Name"
+
+#	}
+
+#	playernametextfield {
+
+#		int	xpct	25
+
+#		int	ypct	35
+
+#		int	widthpct	25
+
+#		int	heightpix	25
+
+#	}
+
+#	playerteamstatictext:nsstatictext {
+
+#		int	xpct	55
+
+#		int	ypct	29
+
+#		int	widthpct	10
+
+#		int	heightpix	25
+
+#		string	text	"Team"
+
+#	}
+
+#	playerteamtextfield {
+
+#		int	xpct	55
+
+#		int	ypct	35
+
+#		int	widthpct	5
+
+#		int	heightpix	25
+
+#	}
+
+#	helpbutton:nsbutton {
+
+#		string	xanchor	"right"
+
+#		string	yanchor	"bottom"
+
+#		int	xpct	5
+
+#		int	ypct	5
+
+#		int	widthpct	20
+
+#		int	heightpct	8
+
+#		string	text	"Help"
+
+#	}
+
+#	okbutton:nsbutton {
+
+#		string	yanchor	"bottom"
+
+#		int	xpct	29
+
+#		int	ypct	5
+
+#		int	widthpct	20
+
+#		int	heightpct	8
+
+#		string	text	"OK"
+
+#	}
+
+#	cancelbutton:nsbutton {
+
+#		string	yanchor	"bottom"
+
+#		int	xpct	51
+
+#		int	ypct	5
+
+#		int	widthpct	20
+
+#		int	heightpct	8
+
+#		string	text	"Cancel"
+
+#	}
+
+#}
+
+
+
+$
+
+

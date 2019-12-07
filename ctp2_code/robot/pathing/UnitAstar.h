@@ -115,8 +115,6 @@ public:
     virtual bool EntryCost(const MapPoint &prev, const MapPoint &pos,
        float &cost, bool &is_zoc, ASTAR_ENTRY_TYPE &entry);
 
-    bool InitPoint(AstarPoint *parent, AstarPoint *point, const MapPoint &pos,
-        const float pc, const MapPoint &dest);
     bool CheckIsDangerForPos(const MapPoint & myPos);
 
     void RecalcEntryCost(AstarPoint *parent, AstarPoint *node, float &new_entery_cost,
@@ -173,7 +171,6 @@ public:
                   float &total_cost,
                   const bool no_bad_path,
                   const bool check_rail_launcher,
-                  const bool pretty_path,
                   const sint32 cutoff,
                   sint32 &nodes_opened,
                   const bool &check_dest,

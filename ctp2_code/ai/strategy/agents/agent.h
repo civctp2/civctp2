@@ -123,7 +123,7 @@ public:
 
 	bool CanMove() const { return m_army.IsValid() && m_army->CanMove(); };
 
-	bool FindPathToBoard( const uint32 & move_intersection, const MapPoint & dest_pos, const bool & check_dest, Path & found_path );
+	bool FindPathToBoard( const uint32 & move_intersection, const MapPoint & dest_pos, const bool & check_dest, Path & found_path, sint32 additionalUnits = 0);
 
 	static bool FindPath(const Army & army, const MapPoint & target_pos, const bool & check_dest, Path & found_path );
 	static bool FindPath(const Army & army, const MapPoint & target_pos, const bool & check_dest, Path & found_path, float & total_cost);
@@ -159,6 +159,8 @@ public:
 
 	void MoveIntoTransport();
 	void UnloadCargo();
+	bool CargoCanEnter() const { return CargoCanEnter(Get_Pos()); };
+	bool CargoCanEnter(const MapPoint &pos) const { return m_army->CargoCanEnter(pos); };
 	void PerformOrderHere(const OrderRecord * order_rec, const Path * path, GAME_EVENT_INSERT priority = GEV_INSERT_AfterCurrent);
 	void PerformOrder(const OrderRecord * order_rec);
 	void WaitHere(const MapPoint & goal_pos);

@@ -3799,7 +3799,7 @@ Coût :
 
 [IMPROVE_BEHAVIORAL_MOD_CENTER_STATISTICS]
 Résultat :
-<L:DATABASE_CONCEPTS,CONCEPT_CRIME>Criminalité<e> : -{BuildingDB(Building[0]).LowerCrime} %
+<L:DATABASE_CONCEPTS,CONCEPT_CRIME>Criminalité<e> : {BuildingDB(Building[0]).LowerCrime} %
 [END]
 
 [IMPROVE_BEHAVIORAL_MOD_CENTER_GAMEPLAY]

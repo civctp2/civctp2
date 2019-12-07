@@ -470,6 +470,7 @@ SLICFUNC(SFR_VOID, ClearBuildQueue);
 
 SLICFUNC(SFR_VOID, BreakLeaveOurLands);
 SLICFUNC(SFR_VOID, BreakNoPiracy);
+SLICFUNC(SFR_VOID, BreakTradePact);
 SLICFUNC(SFR_VOID, UseDirector);
 SLICFUNC(SFR_VOID, ClearOrders);
 

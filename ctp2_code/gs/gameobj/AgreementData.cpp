@@ -47,7 +47,6 @@
 #include "SlicEngine.h"
 #include "SlicObject.h"
 #include "UnitData.h"
-#include "XY_Coordinates.h"
 #include "World.h"
 #include "Cell.h"
 #include "ConstRecord.h"

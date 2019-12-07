@@ -34,7 +34,6 @@
 
 #include "c3.h"
 
-#include "XY_Coordinates.h"
 #include "World.h"
 #include "Cell.h"
 #include "StrDB.h"
@@ -728,31 +727,34 @@ void World::ChangeOwner(const MapPoint &point, sint32 fromOwner, sint32 toOwner)
 	if(fromOwner == toOwner)
 		return;
 
-	if(thisCell->GetOwner() == fromOwner) {
+	if(thisCell->GetOwner() == fromOwner)
+	{
 		thisCell->SetOwner(toOwner);
 
-		if(g_network.IsHost()) {
+		if(g_network.IsHost())
+		{
 			uint32 packpos = g_network.PackedPos(point);
 			g_network.Enqueue(new NetInfo(NET_INFO_CODE_CELL_OWNER,
 										  packpos, toOwner));
 		}
 
 		DynamicArray<Installation> instArray;
-		if(g_theInstallationTree->GetAt(point, instArray)) {
-			sint32 i;
-			MapPoint ipos;
-			for(i = 0; i < instArray.Num(); i++) {
-				instArray[i].GetPos(ipos);
+		if(g_theInstallationTree->GetAt(point, instArray))
+		{
+			for(sint32 i = 0; i < instArray.Num(); i++)
+			{
 				instArray[i].ChangeOwner(toOwner);
 			}
 		}
 		g_network.Enqueue(thisCell, point.x, point.y);
 
-		sint32 d;
-		for(d = (sint32)NORTH; d < (sint32)NOWHERE; d++) {
-			if(point.GetNeighborPosition((WORLD_DIRECTION)d, neighbor)) {
+		for(sint32 d = (sint32)NORTH; d < (sint32)NOWHERE; d++)
+		{
+			if(point.GetNeighborPosition((WORLD_DIRECTION)d, neighbor))
+			{
 				neighborCell = GetCell(neighbor);
-				if(neighborCell->GetOwner() == fromOwner) {
+				if(neighborCell->GetOwner() == fromOwner)
+				{
 					if(fromOwner >= 0 ||
 					   neighborCell->m_env & (k_MASK_ENV_ROAD | k_MASK_ENV_IRRIGATION |
 											  k_MASK_ENV_MINE | k_MASK_ENV_INSTALLATION |
@@ -779,8 +781,6 @@ void World::CutImprovements(const MapPoint &point)
 	{
 		for(sint32 i = instArray.Num() - 1; i >= 0; i--)
 		{
-			static MapPoint ipos;
-			instArray[i].GetPos(ipos);
 			instArray[i].Kill();
 		}
 	}

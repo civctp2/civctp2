@@ -1743,7 +1743,7 @@ void ControlPanelWindow::OrderDeliveryUpdate()
 	}
 }
 
-void ControlPanelWindow::TileImpUpdate()  //emod4 defientely need this but schould it look like sce
+void ControlPanelWindow::TileImpUpdate()  //emod4 definetely needs this but schould it look like sce
 {
 	if ((m_currentTerrainImpRec==NULL)||(g_selected_item==NULL))
 		return;
@@ -1781,7 +1781,7 @@ void ControlPanelWindow::TileImpUpdate()  //emod4 defientely need this but schou
 	}
 	else
 	{
-		if (player->CanCreateImprovement(m_currentTerrainImpRec->GetIndex(), pos, 0, true, err))
+		if (player->CanCreateImprovement(m_currentTerrainImpRec->GetIndex(), pos, true))
 		{
 			g_cursorManager->SetCursor(CURSORINDEX_MOVE);
 			color = g_colorSet->GetColor(COLOR_GREEN);

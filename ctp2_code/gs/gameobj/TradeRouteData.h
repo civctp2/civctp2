@@ -65,27 +65,24 @@ private:
 	sint32 m_sourceResource;
 	BOOL m_passesThrough[k_MAX_PLAYERS];
 	BOOL m_crossesWater;
-	BOOL m_isActive;
+	bool m_isActive;
 
 	uint32	m_color;
 	uint32	m_outline;
 
 	sint32	m_selectedIndex;
 
-	BOOL m_valid;
+	bool m_valid;
+	sint16 m_accumilatedTimesPirated;
+	sint8 m_pirate;
 
 	sint32 m_gold_in_return;
 
 	sint32	m_path_selection_state;
 
-
-
-
-
-
 	Unit m_sourceCity;
 	Unit m_destinationCity;
-	TradeRoute m_recip;
+	sint32 m_piratedLastTime;
 
 	DynamicArray<MapPoint> m_path;
 	DynamicArray<MapPoint> m_wayPoints;
@@ -97,10 +94,7 @@ private:
 
 	Path *m_astarPath;
 
-
-
-
-	BOOL m_dontAdjustPointsWhenKilled;
+	bool m_dontAdjustPointsWhenKilled;
 
 	void CheckSquareForCity(MapPoint const & pos);
 
@@ -133,9 +127,13 @@ public:
 	void SetSource(Unit source);
 	void SetDestination(Unit dest);
 
-	TradeRoute GetRecip() const;
-	TradeRoute AccessRecip();
-	void SetRecip(TradeRoute route);
+	void      SetLastTimePirated(sint32 currentTurn)       {        m_piratedLastTime = currentTurn; }
+	sint32    GetLastTimePirated()                   const { return m_piratedLastTime; }
+	void IncreaseAccumulatedTimePirated()                  {        m_accumilatedTimesPirated++; }
+	void    ResetAccumulatedTimePirated()                  {        m_accumilatedTimesPirated = 0; }
+	uint16    GetAccumulatedTimePirated()            const { return m_accumilatedTimesPirated; }
+	void      SetPirate(sint8 pirate)                      {        m_pirate = pirate; }
+	sint8     GetPirate()                            const { return m_pirate; }
 
 	double GetCost() const;
 	void SetCost(double cost);
@@ -185,7 +183,7 @@ public:
 	void Serialize(CivArchive &archive);
 
 	void DontAdjustPointsWhenKilled();
-	BOOL GetDontAdjustPoints() const { return m_dontAdjustPointsWhenKilled; }
+	bool GetDontAdjustPoints() const { return m_dontAdjustPointsWhenKilled; }
 
 	sint32 GetValue() const;
 

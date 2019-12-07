@@ -207,6 +207,7 @@ private:
 	sint32            m_gross_gold;
 	sint32            m_goldFromTradeRoutes;
 	sint32            m_goldLostToPiracy;
+	sint32            m_goldFromTransitRoutes;
 	sint32            m_science;
 	sint32            m_luxury;
 	sint32            m_collected_production_this_turn;  // Will be unused
@@ -216,7 +217,6 @@ private:
 	sint32            m_total_pollution;
 	sint32            m_cityPopulationPollution;
 	sint32            m_cityIndustrialPollution;
-	sint32            m_foodVatPollution;
 	sint32            m_cityPollutionCleaner;
 	sint32            m_spied_upon;                      // A counter
 	sint32            m_franchise_owner;
@@ -282,8 +282,8 @@ private:
 	bool              m_terrainImprovementWasBuilt;
 	bool              m_improvementWasBuilt;
 	bool              m_isInjoined;
-	bool              m_buildInfrastructure;
-	bool              m_buildCapitalization;
+	bool              m_buildInfrastructure; // Unused, can be replace in size of BOOL for saving
+	bool              m_buildCapitalization; // Unused, can be replace in size of BOOL for saving
 	bool              m_paidForBuyFront;
 	bool              m_garrisonComplete;
 	bool              m_useGovernor;
@@ -467,6 +467,7 @@ public:
 
 	sint32 GetGoldFromTradeRoutes() const { return m_goldFromTradeRoutes; }
 	sint32 GetGoldLostToPiracy() const { return m_goldLostToPiracy; }
+	sint32 GetGoldFromTransitRoutes() const { return m_goldFromTransitRoutes; }
 	TradeDynamicArray* GetTradeSourceList() { return (&m_tradeSourceList); }
 	TradeDynamicArray* GetTradeDestinationList() { return (&m_tradeDestinationList); }
 
@@ -600,6 +601,7 @@ public:
 	bool IsCapitol() const;
 
 	void MakeFranchise(sint32 player);
+	void RemoveFranchise();
 	sint32 GetFranchiseOwner() const { return m_franchise_owner;}
 	sint32 GetFranchiseTurnsRemaining() const;
 	void SetFranchiseTurnsRemaining(sint32 turns);
@@ -727,9 +729,8 @@ public:
 	bool CanBuildCapitalization() const;
 	void BuildInfrastructure();
 	bool CanBuildInfrastructure() const;
-	bool IsBuildingCapitalization() { return m_buildCapitalization; }
-	bool IsBuildingInfrastructure() { return m_buildInfrastructure; }
-	void StopInfrastructureCapitalization();
+	bool IsBuildingCapitalization() const;
+	bool IsBuildingInfrastructure() const;
 	void EliminateNukes();
 
 	void KillAllTradeRoutes();
@@ -1010,6 +1011,7 @@ private:
 		DPRINTF(k_DBG_AI, ("m_gross_gold: %d\n", sizeof(m_gross_gold)));
 		DPRINTF(k_DBG_AI, ("m_goldFromTradeRoutes: %d\n", sizeof(m_goldFromTradeRoutes)));
 		DPRINTF(k_DBG_AI, ("m_goldLostToPiracy: %d\n", sizeof(m_goldLostToPiracy)));
+		DPRINTF(k_DBG_AI, ("m_goldFromTransitRoutes: %d\n", sizeof(m_goldFromTransitRoutes)));
 		DPRINTF(k_DBG_AI, ("m_science: %d\n", sizeof(m_science)));
 		DPRINTF(k_DBG_AI, ("m_luxury: %d\n", sizeof(m_luxury)));
 		DPRINTF(k_DBG_AI, ("m_city_attitude: %d\n", sizeof(m_city_attitude)));
@@ -1027,7 +1029,6 @@ private:
 		DPRINTF(k_DBG_AI, ("m_total_pollution: %d\n", sizeof(m_total_pollution)));
 		DPRINTF(k_DBG_AI, ("m_cityPopulationPollution: %d\n", sizeof(m_cityPopulationPollution)));
 		DPRINTF(k_DBG_AI, ("m_cityIndustrialPollution: %d\n", sizeof(m_cityIndustrialPollution)));
-		DPRINTF(k_DBG_AI, ("m_foodVatPollution: %d\n", sizeof(m_foodVatPollution)));
 		DPRINTF(k_DBG_AI, ("m_cityPollutionCleaner: %d\n", sizeof(m_cityPollutionCleaner)));
 		DPRINTF(k_DBG_AI, ("m_contribute_materials: %d\n", sizeof(m_contribute_materials)));
 		DPRINTF(k_DBG_AI, ("m_contribute_military: %d\n", sizeof(m_contribute_military)));
@@ -1148,6 +1149,7 @@ private:
 		DPRINTF(k_DBG_AI, ("m_gross_gold: %d\n", m_gross_gold));
 		DPRINTF(k_DBG_AI, ("m_goldFromTradeRoutes: %d\n", m_goldFromTradeRoutes));
 		DPRINTF(k_DBG_AI, ("m_goldLostToPiracy: %d\n", m_goldLostToPiracy));
+		DPRINTF(k_DBG_AI, ("m_goldFromTransitRoutes: %d\n", m_goldFromTransitRoutes));
 		DPRINTF(k_DBG_AI, ("m_science: %d\n", m_science));
 		DPRINTF(k_DBG_AI, ("m_luxury: %d\n", m_luxury));
 		DPRINTF(k_DBG_AI, ("m_city_attitude: %d\n", m_city_attitude));
@@ -1165,7 +1167,6 @@ private:
 		DPRINTF(k_DBG_AI, ("m_total_pollution: %d\n", m_total_pollution));
 		DPRINTF(k_DBG_AI, ("m_cityPopulationPollution: %d\n", m_cityPopulationPollution));
 		DPRINTF(k_DBG_AI, ("m_cityIndustrialPollution: %d\n", m_cityIndustrialPollution));
-		DPRINTF(k_DBG_AI, ("m_foodVatPollution: %d\n", m_foodVatPollution));
 		DPRINTF(k_DBG_AI, ("m_cityPollutionCleaner: %d\n", m_cityPollutionCleaner));
 		DPRINTF(k_DBG_AI, ("m_contribute_materials: %d\n", m_contribute_materials));
 		DPRINTF(k_DBG_AI, ("m_contribute_military: %d\n", m_contribute_military));

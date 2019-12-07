@@ -172,8 +172,6 @@ void GaiaController::InitializeStatics()
 
 void GaiaController::Initialize()
 {
-
-
 	m_numMainframes = 0;
 	m_numSatellites = 0;
 	m_numTowersBuilt = 0;
@@ -184,13 +182,13 @@ void GaiaController::Initialize()
 	sint32 x_size = g_theWorld->GetXWidth();
 	sint32 y_size = g_theWorld->GetYHeight();
 
-	m_coveredCells.Resize( x_size, y_size, 0 );
+	m_coveredCells.Resize(x_size, y_size, 0);
+	m_futureCoveredCells.Resize(x_size, y_size, 0);
 }
-
 
 GaiaController::~GaiaController()
 {
-    // Nothing allocated directly.
+	// Nothing allocated directly.
 }
 
 void GaiaController::RecomputeCoverage()
@@ -200,45 +198,41 @@ void GaiaController::RecomputeCoverage()
 	if (player_ptr == NULL)
 		return;
 
-	MapPoint pos;
-	sint32 type;
 	sint32 radius = GetTowerRadius();
 
 	const DynamicArray<Installation> *tile_imps =
 		player_ptr->m_allInstallations;
 
-	m_coveredCells.Reset( 0 );
+	m_coveredCells.Reset(0);
 	m_numTowersBuilt = 0;
 	sint32 covered_cells = 0;
 
-	MapPoint cell_pos;
-
-	for(sint32 i = 0; i < tile_imps->Num(); i++) {
-		type = tile_imps->Access(i).GetType();
+	for(sint32 i = 0; i < tile_imps->Num(); i++)
+	{
+		sint32 type = tile_imps->Access(i).GetType();
 		if (type == sm_towerTileImpIndex)
+		{
+			m_numTowersBuilt++;
+
+			MapPoint pos = tile_imps->Access(i).RetPos();
+
+			RadiusIterator it(pos, radius);
+
+			for(it.Start(); !it.End(); it.Next())
 			{
-				m_numTowersBuilt++;
+				MapPoint cell_pos = it.Pos();
 
-				tile_imps->Access(i).GetPos(pos);
-
-				RadiusIterator it(pos, radius);
-
-				for(it.Start(); !it.End(); it.Next())
-					{
-						cell_pos = it.Pos();
-
-						if (m_coveredCells.Get(cell_pos.x, cell_pos.y) == FALSE)
-							{
-
-								covered_cells++;
-								m_coveredCells.Set(cell_pos.x, cell_pos.y, 1);
-							}
-					}
+				if (m_coveredCells.Get(cell_pos.x, cell_pos.y) == FALSE)
+				{
+					covered_cells++;
+					m_coveredCells.Set(cell_pos.x, cell_pos.y, 1);
+				}
 			}
+		}
 	}
+
 	m_percentCoverage = ((float) covered_cells /
 						 (g_theWorld->GetXWidth() * g_theWorld->GetYHeight()));
-
 }
 
 STDEHANDLER(GaiaController_CaptureCity)
@@ -649,7 +643,6 @@ void GaiaController::HandleBuildingChange(const sint32 type, Unit & city, const 
 				m_completedTurn = -1;
 		}
 	}
-
 }
 
 void GaiaController::HandleWonderChange(const sint32 type, const sint16 delta)
@@ -662,7 +655,6 @@ void GaiaController::HandleWonderChange(const sint32 type, const sint16 delta)
 		if (!CanStartCountdown())
 			m_completedTurn = -1;
 	}
-
 }
 
 void GaiaController::HandleTerrImprovementChange(const sint32 type, const MapPoint & pos, const sint16 delta)
@@ -679,7 +671,6 @@ void GaiaController::HandleTerrImprovementChange(const sint32 type, const MapPoi
 					m_completedTurn = -1;
 			}
 		}
-
 }
 
 sint16 GaiaController::NumMainframesBuilt() const
@@ -821,56 +812,36 @@ bool GaiaController::CanStartCountdown() const
 	if (NumSatellitesLaunched() < NumSatellitesRequired())
 		return false;
 
-
-
-
 	return true;
 }
 
 bool GaiaController::HasReqTowerCoverage() const
 {
-	if(GetTowerCoverage() >= TowerCoverageRequired())
-		return true;
-	else
-		return false;
+	return GetTowerCoverage() >= TowerCoverageRequired();
 }
 
 bool GaiaController::HasMinTowersBuilt() const
 {
-	if(NumTowersBuilt() >= NumTowersRequired())
-		return true;
-	else
-		return false;
+	return NumTowersBuilt() >= NumTowersRequired();
 }
 
 bool GaiaController::HasMinCoresBuilt() const
 {
-	if(NumMainframesBuilt() >= NumMainframesRequired())
-		return true;
-	else
-		return false;
+	return NumMainframesBuilt() >= NumMainframesRequired();
 }
 
 bool GaiaController::HasMinSatsBuilt() const
 {
-	if(NumSatellitesLaunched() >= NumSatellitesRequired())
-		return true;
-	else
-		return false;
+	return NumSatellitesLaunched() >= NumSatellitesRequired();
 }
 
 bool GaiaController::HasMaxSatsBuilt() const
 {
-	if(NumSatellitesLaunched() >= MaxSatellitesAllowed())
-		return true;
-	else
-		return false;
+	return NumSatellitesLaunched() >= MaxSatellitesAllowed();
 }
-
 
 bool GaiaController::StartCountdown()
 {
-
 	sint32 max_turns_to_activate = TotalCountdownTurns();
 
 	if (CanStartCountdown())
@@ -924,9 +895,7 @@ sint16 GaiaController::TurnsToComplete() const
 
 bool GaiaController::GaiaControllerTileImp(const sint32 type) const
 {
-	if (type == sm_towerTileImpIndex)
-		return true;
-	return false;
+	return type == sm_towerTileImpIndex;
 }
 
 bool GaiaController::CanBuildTowers(const bool & check_pw) const
@@ -937,11 +906,8 @@ bool GaiaController::CanBuildTowers(const bool & check_pw) const
 	return terrainutil_CanPlayerBuild(rec, m_playerId, check_pw);
 }
 
-
-sint32 GaiaController::ScoreTowerPosition(MapPoint & pos, const MapPoint empire_center, MapPoint_List & towers) const
+sint32 GaiaController::ScoreTowerPosition(MapPoint & pos, const MapPoint empire_center, MapPoint_List & towers, sint32 radius) const
 {
-
-
 	static sint32 optimal_distance = -1;
 	if (optimal_distance < 0)
 	{
@@ -995,28 +961,108 @@ sint32 GaiaController::ScoreTowerPosition(MapPoint & pos, const MapPoint empire_
 	return min_score;
 }
 
-void GaiaController::ComputeTowerCandidates(Scored_MapPoint_List & candidates) const
+void GaiaController::ComputeFutureCoverage(MapPoint_List & towers, sint32 radius)
 {
-	MapPoint pos;
-	const TerrainImprovementRecord *rec =
-		g_theTerrainImprovementDB->Get(sm_towerTileImpIndex);
+	m_futureCoveredCells.Reset(0);
 
-	for (pos.x = 0; pos.x < g_theWorld->GetWidth(); pos.x++)
-		for (pos.y = 0; pos.y < g_theWorld->GetHeight(); pos.y++)
-		{
-			if (terrainutil_CanPlayerBuildAt(rec, m_playerId, pos))
-			{
-                candidates.push_back(std::pair<sint32,MapPoint>(-1,pos));
-			}
-		}
+	for(MapPoint_List::const_iterator tower_iter  = towers.begin();
+	                                  tower_iter != towers.end();
+	                                  tower_iter++)
+	{
+		AddFutureCoverage(*tower_iter, radius);
+	}
 }
 
+void GaiaController::AddFutureCoverage(const MapPoint & pos, sint32 radius)
+{
+	RadiusIterator it(pos, radius);
+
+	for(it.Start(); !it.End(); it.Next())
+	{
+		MapPoint cell_pos = it.Pos();
+
+		if(m_futureCoveredCells.Get(cell_pos.x, cell_pos.y) == FALSE)
+		{
+			m_futureCoveredCells.Set(cell_pos.x, cell_pos.y, 1);
+		}
+	}
+}
+
+sint32 GaiaController::AddsCoverage(const MapPoint & pos, sint32 radius) const
+{
+	sint32 counter = 0;
+	RadiusIterator it(pos, radius);
+
+	for(it.Start(); !it.End(); it.Next())
+	{
+		MapPoint cell_pos = it.Pos();
+
+		if(m_futureCoveredCells.Get(cell_pos.x, cell_pos.y) == FALSE)
+		{
+			counter++;
+		}
+	}
+
+	return counter;
+}
+
+void GaiaController::ComputeTowerCandidates(Scored_MapPoint_List & candidates) const
+{
+	sint32 radius = GetTowerRadius();
+	MapPoint pos;
+
+	for (pos.x = 0; pos.x < g_theWorld->GetWidth(); pos.x++)
+	{
+		for (pos.y = 0; pos.y < g_theWorld->GetHeight(); pos.y++)
+		{
+			if (g_player[m_playerId]->CanCreateImprovement(sm_towerTileImpIndex, pos, false))
+			{
+				if(AddsCoverage(pos, radius) > 0)
+				{
+					candidates.push_back(std::pair<sint32, MapPoint>(-1, pos));
+				}
+			}
+		}
+	}
+}
+
+void GaiaController::GetTowerPositions(MapPoint_List & towers) const
+{
+	const DynamicArray<Installation> *tile_imps =
+		g_player[m_playerId]->m_allInstallations;
+
+	for(sint32 i = 0; i < tile_imps->Num(); i++)
+	{
+		sint32 type = tile_imps->Access(i).GetType();
+		if(type == sm_towerTileImpIndex)
+		{
+			towers.push_back(tile_imps->Access(i).RetPos());
+		}
+	}
+
+	MapPoint pos;
+
+	for(pos.x = 0; pos.x < g_theWorld->GetWidth(); pos.x++)
+	{
+		for(pos.y = 0; pos.y < g_theWorld->GetHeight(); pos.y++)
+		{
+			Cell *cell = g_theWorld->GetCell(pos);
+			for(sint32 i = 0; i < cell->GetNumImprovements(); i++)
+			{
+				if(cell->AccessImprovement(i).GetOwner() == m_playerId
+				   && cell->AccessImprovement(i).GetType() == sm_towerTileImpIndex)
+				{
+					towers.push_back(pos);
+				}
+			}
+		}
+	}
+}
 
 void GaiaController::ComputeTowerPositions()
 {
 	MapPoint_List towers;
 	Scored_MapPoint_List candidates;
-	MapPoint pos;
 
 	Player *player_ptr = g_player[m_playerId];
 	Assert(player_ptr);
@@ -1026,25 +1072,14 @@ void GaiaController::ComputeTowerPositions()
 	if (!CanBuildTowers(true))
 		return;
 
-
+	sint32 radius = GetTowerRadius();
+	GetTowerPositions(towers);
+	ComputeFutureCoverage(towers, radius);
 	ComputeTowerCandidates(candidates);
 
 	m_maxPercentCoverage = static_cast<float>(candidates.size());
 	m_maxPercentCoverage /= (g_theWorld->GetWidth() * g_theWorld->GetHeight());
 	m_maxPercentCoverage *= (float) 1.2;
-
-	const DynamicArray<Installation> *tile_imps =
-		player_ptr->m_allInstallations;
-
-	sint32 type;
-	for(sint32 i = 0; i < tile_imps->Num(); i++) {
-		type = tile_imps->Access(i).GetType();
-		if (type == sm_towerTileImpIndex)
-			{
-				tile_imps->Access(i).GetPos(pos);
-				towers.push_back(pos);
-			}
-	}
 
 	m_newTowerPositions.clear();
 
@@ -1056,28 +1091,44 @@ void GaiaController::ComputeTowerPositions()
 
 	sint32 tower_pw_cost;
 	sint32 total_pw = player_ptr->m_materialPool->GetMaterials();
-	do {
+	MapPoint empire_pos = MapAnalysis::GetMapAnalysis().GetEmpireCenter(m_playerId);
 
-		MapPoint empire_pos = MapAnalysis::GetMapAnalysis().GetEmpireCenter(m_playerId);
+	while(total_pw > 0 && candidates.size() > 0)
+	{
 		Scored_MapPoint_List::iterator candidate_iter;
-		for (candidate_iter = candidates.begin();
-			 candidate_iter != candidates.end();
-			 candidate_iter++)
+		for (candidate_iter  = candidates.begin();
+		     candidate_iter != candidates.end();
+		    )
+		{
+			candidate_iter->first = AddsCoverage(candidate_iter->second, radius);
+
+			if(candidate_iter->first > 0)
 			{
-				candidate_iter->first = ScoreTowerPosition(candidate_iter->second, empire_pos, towers);
+				candidate_iter->first =+ ScoreTowerPosition(candidate_iter->second, empire_pos, towers, radius);
+				candidate_iter++;
 			}
+			else
+			{
+				candidate_iter = candidates.erase(candidate_iter);
+			}
+		}
 
-        candidates.sort(std::greater<std::pair<sint32, MapPoint> >());
+		if(candidates.size() > 0)
+		{
+			candidates.sort(std::greater<std::pair<sint32, MapPoint> >());
 
-	    pos =  candidates.front().second;
-		candidates.pop_front();
-		m_newTowerPositions.push_back(pos);
+			MapPoint pos =  candidates.front().second;
 
-		towers.push_back(pos);
+			candidates.pop_front();
+			m_newTowerPositions.push_back(pos);
 
-		tower_pw_cost = terrainutil_GetProductionCost(sm_towerTileImpIndex, pos, -1);
-		total_pw -= tower_pw_cost;
-	} while (total_pw > 0);
+			towers.push_back(pos);
+			AddFutureCoverage(pos, radius);
+
+			tower_pw_cost = terrainutil_GetProductionCost(sm_towerTileImpIndex, pos, -1);
+			total_pw -= tower_pw_cost;
+		}
+	}
 }
 
 float GaiaController::GetMaxTowerCoverage() const
@@ -1102,19 +1153,16 @@ bool GaiaController::PopNextTowerPosition(MapPoint & pos)
 
 void GaiaController::BuildProcessingTowers()
 {
-
 	MapPoint pos;
 	bool found = PopNextTowerPosition(pos);
 	if (!found)
 	{
-
 		ComputeTowerPositions();
 		found = PopNextTowerPosition(pos);
 	}
 
 	while (found)
 	{
-
 		g_gevManager->AddEvent(GEV_INSERT_Tail, GEV_CreateImprovement,
 			GEA_Player, m_playerId,
 			GEA_MapPoint, pos,

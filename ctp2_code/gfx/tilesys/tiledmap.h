@@ -87,7 +87,6 @@ extern TiledMap *   g_tiledMap;
 #include "mouse.h"
 #endif
 #include "colorset.h"
-#include "directions.h"     // WORLD_DIRECTION
 #include "MapPoint.h"       // MapPoint
 #include "pixelutils.h"     // Pixel types
 #include "SelItem.h"
@@ -410,7 +409,7 @@ public:
 
 	void		DrawWater(void);
 
-	bool        CanDrawSpecialMove(SELECT_TYPE sType, Army &sel_army, const MapPoint &old_pos, const MapPoint &cur_pos);
+	bool        CanDrawSpecialMove(SELECT_TYPE sType, Army &sel_army, const MapPoint &dest_pos);
 	void		DrawLegalMove(aui_Surface *pSurface);
 	void		DrawUnfinishedMove(aui_Surface *pSurface);
 
@@ -437,8 +436,8 @@ public:
 	void		DrawCityIcons(aui_Surface *surf, MapPoint const &pos, sint32 owner, bool fog, RECT &popRect,
 								BOOL isBioInfected, BOOL isNanoInfected, BOOL isConverted,
 								BOOL isFranchised, BOOL isInjoined, BOOL wasHappinessAttacked,
-								sint32 bioInfectedOnwer, sint32 nanoInfectedOwner, sint32 convertedOwner,
-								sint32 franchiseOwner, sint32 injoinedOwner, sint32 happinessAttackOwner,
+								sint32 bioInfectedOnwer, sint32 nanoInfectedOwner, sint32 convertedOwner, sint32 convertedLoss,
+								sint32 franchiseOwner, sint32 franchiseLoss, sint32 injoinedOwner, sint32 happinessAttackOwner,
 								uint32 slaveBits, BOOL isRioting, BOOL hasAirport, BOOL hasSleepingUnits,
 								BOOL isWatchful, BOOL isCapitol, BOOL isProdIcon, sint32 citySize,
 								BOOL isPollutionRisk);

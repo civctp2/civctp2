@@ -44,7 +44,6 @@
 #include "Gold.h"
 #include "Readiness.h"
 #include "UnitPool.h"
-#include "XY_Coordinates.h"
 #include "World.h"
 #include "SlicEngine.h"
 #include "SlicObject.h"
@@ -170,7 +169,7 @@ void Player::BeginTurn()
 		for(i = 0; i < n; i++)
 		{
 			g_gevManager->AddEvent(GEV_INSERT_Tail,
-			                       GEV_CityBeginTurn,
+			                       GEV_CityBeginTurn, // During this, things are built
 			                       GEA_City, m_all_cities->Access(i),
 			                       GEA_End);
 		}
@@ -214,7 +213,6 @@ void Player::BeginTurn()
 		                       GEA_Player, m_owner,
 		                       GEA_End);
 
-		m_strengths->Calculate();
 		if(g_network.IsHost())
 		{
 			g_network.Block(m_owner);
@@ -231,7 +229,7 @@ void Player::BeginTurn()
 	if(!g_network.IsClient())
 	{
 		g_gevManager->AddEvent(GEV_INSERT_Tail,
-		                       GEV_FinishBeginTurn,
+		                       GEV_FinishBeginTurn, // Inserts at tail GEV_FinishBuildPhase, tail inserts GEV_StartMovePhase, tail inserts GEV_AIFinishBeginTurn, which fills empty build queues and assigns garrisons, AI goals should be calculated afterwards
 		                       GEA_Player, m_owner,
 		                       GEA_End);
 	}

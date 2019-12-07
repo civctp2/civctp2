@@ -36,10 +36,10 @@
 //----------------------------------------------------------------------------
 
 #include "c3.h"
-#include "XY_Coordinates.h"
+#include "TerrImproveData.h"
+
 #include "World.h"
 #include "Cell.h"
-#include "TerrImproveData.h"
 #include "civarchive.h"
 #include "tiledmap.h"
 #include "TerrainRecord.h"
@@ -56,7 +56,6 @@
 #include "MaterialPool.h"
 
 #include "GameEventManager.h"
-#include "directions.h"
 
 #include "CityInfluenceIterator.h"
 
@@ -121,6 +120,20 @@ BOOL TerrainImprovementData::Complete(void)
 	Assert(g_player[m_owner]);
 	if(!g_player[m_owner])
 		return TRUE;
+
+	DynamicArray<Installation>	instArray;
+	if(g_theInstallationTree->GetAt(m_point, instArray))
+	{
+		for(sint32 i = instArray.Num() - 1; i >= 0; i--)
+		{
+			const TerrainImprovementRecord *oldRec =
+				g_theTerrainImprovementDB->Get(instArray[i].GetType());
+			if(oldRec->GetClass() & rec->GetExcludes())
+			{
+				instArray[i].Kill();
+			}
+		}
+	}
 
 	if (terrainutil_IsInstallation(m_type))
 	{

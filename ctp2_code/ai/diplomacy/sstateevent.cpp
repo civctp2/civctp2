@@ -902,7 +902,7 @@ STDEHANDLER(CheckCityLimit_NextSStateEvent)
 
 	sint32 acceptedCityMaximum = diplomat.GetPersonality()->GetCitiesOverLimit() + government->GetTooManyCitiesThreshold();
 
-	if(g_player[playerId]->GetNumCities() > acceptedCityMaximum)
+	if(g_player[playerId]->GetNumCities() >= acceptedCityMaximum)
 	{
 		if(diplomat.GetPersonality()->HasOverCityLimitStrategy())
 		{
@@ -928,7 +928,8 @@ STDEHANDLER(CheckCityLimit_NextSStateEvent)
 				state.priority = 2000;
 				diplomat.ConsiderStrategicState(state);
 			}
-			if(g_theStrategyDB->GetNamedItem("STRATEGY_NO_REVOLUTON", state.dbIndex))
+			if(wonderutil_GetRevoltingCitiesJoinPlayer(g_player[playerId]->m_builtWonders)
+			&& g_theStrategyDB->GetNamedItem("STRATEGY_NO_REVOLUTON", state.dbIndex))
 			{
 				state.priority = 2000;
 				diplomat.ConsiderStrategicState(state);

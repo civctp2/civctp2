@@ -144,7 +144,6 @@
 #include "c3.h"
 #include "ArmyData.h"
 
-#include "advanceutil.h"
 #include "Agreement.h"
 #include "AgreementMatrix.h"
 #include "AgreementPool.h"
@@ -362,6 +361,7 @@ ArmyData::ArmyData(const Army &army, const UnitDynamicArray &units)
     m_killMeSoon            (new PointerList<KillRecord>),
     m_dontKillCount         (0),
     m_needToKill            (false),
+    m_addOrdersAI           (true),
     m_debugString           (NULL)
 {
     for (sint32 i = 0; i < units.Num(); ++i)
@@ -388,6 +388,7 @@ ArmyData::ArmyData(const Army &army, const CellUnitList &units)
     m_killMeSoon            (new PointerList<KillRecord>),
     m_dontKillCount         (0),
     m_needToKill            (false),
+    m_addOrdersAI           (true),
     m_debugString           (NULL)
 {
     for (sint32 i = 0; i < units.Num(); ++i)
@@ -414,6 +415,7 @@ ArmyData::ArmyData(const Army &army, Unit &u)
     m_killMeSoon            (new PointerList<KillRecord>),
     m_dontKillCount         (0),
     m_needToKill            (false),
+    m_addOrdersAI           (true),
     m_debugString           (NULL)
 {
     Insert(u);
@@ -437,6 +439,7 @@ ArmyData::ArmyData(const Army &army)
     m_killMeSoon            (new PointerList<KillRecord>),
     m_dontKillCount         (0),
     m_needToKill            (false),
+    m_addOrdersAI           (true),
     m_debugString           (NULL)
 {
 }
@@ -459,6 +462,7 @@ ArmyData::ArmyData(CivArchive &archive)
     m_killMeSoon            (new PointerList<KillRecord>),
     m_dontKillCount         (0),
     m_needToKill            (false),
+    m_addOrdersAI           (true),
     m_debugString           (NULL)
 {
     Serialize(archive);
@@ -1358,7 +1362,20 @@ void ArmyData::RemainNumUnits(sint32 remain)
 		                       GEA_Int, CAUSE_NEW_ARMY_UNGROUPING_ORDER,
 		                       GEA_End);
 	}
+}
 
+void ArmyData::Split(sint32 remain)
+{
+	remain = std::max(remain - 1, 0);
+	Army newArmy = g_player[m_owner]->GetNewArmy(CAUSE_NEW_ARMY_UNGROUPING_ORDER);
+	for(sint32 i = m_nElements - 1; i > remain; i--)
+	{
+		g_gevManager->AddEvent(GEV_INSERT_AfterCurrent, GEV_AddUnitToArmy,
+							   GEA_Unit, m_array[i],
+							   GEA_Army, newArmy,
+							   GEA_Int, CAUSE_NEW_ARMY_UNGROUPING_ORDER,
+							   GEA_End);
+	}
 }
 
 // If this army has a m_tempKillList, insert all the units at MapPoint &pos into it.
@@ -1665,17 +1682,31 @@ void ArmyData::BeginTurn()
 		    fromCity = route.GetSource();
 		    toCity = route.GetDestination();
 
-		    SlicObject * so = new SlicObject("044TradePirateGold");
-		    so->AddRecipient(GetOwner());
-		    so->AddGold(pgold) ;
-		    so->AddCity(fromCity);
-		    so->AddCity(toCity);
-		    so->AddCivilisation(fromCity.GetOwner());
-		    g_slicEngine->Execute(so);
+		    ROUTE_TYPE type;
+		    sint32 good;
+		    route.GetSourceResource(type, good);
+					
+		    SlicObject * so1 = new SlicObject("044TradePirateGold");
+		    so1->AddRecipient(GetOwner());
+		    so1->AddGold(pgold) ;
+		    so1->AddGood(good);
+		    so1->AddCity(fromCity);
+		    so1->AddCity(toCity);
+		    so1->AddCivilisation(fromCity.GetOwner());
+		    g_slicEngine->Execute(so1);
+
+		    SlicObject * so2 = new SlicObject("045TradePirated");
+		    so2->AddRecipient(fromCity.GetOwner());
+		    so2->AddGold(route->GetValue()) ;
+		    so2->AddGood(good);
+		    so2->AddCity(fromCity);
+		    so2->AddCity(toCity);
+		    so2->AddCivilisation(GetOwner());
+		    g_slicEngine->Execute(so2);
                 }
             }
             if(piratedByMe < 1) {
-                StopPirating();
+                StopPirating(); // if no route was successfully pirated by me, which happens if routes got removed; moving the army/unit along a route also calls StopPirating probably from AddOrders or AutoAddOrders
             }
         }
     }
@@ -2281,6 +2312,7 @@ ORDER_RESULT ArmyData::Sue(const MapPoint &point)
 	}
 	Cell *cell = g_theWorld->GetCell(point);
 	if(!cell->UnitArmy() || !cell->UnitArmy()->CanBeSued() || cell->UnitArmy()->GetOwner() == m_owner) {
+	    /* SueFranchise now handled by SueFranchiseOrder directly
 		if(cell->GetCity().m_id != 0 &&
 		   cell->GetCity().GetOwner() == m_owner) {
 			Assert(m_orders->GetHead() && m_orders->GetHead()->m_order == UNIT_ORDER_SUE);
@@ -2289,7 +2321,7 @@ ORDER_RESULT ArmyData::Sue(const MapPoint &point)
 			}
 			return SueFranchise(point);
 		}
-
+	    */
 		return ORDER_RESULT_ILLEGAL;
 	}
 
@@ -2353,7 +2385,12 @@ ORDER_RESULT ArmyData::SueFranchise(const MapPoint &point)
 		return ORDER_RESULT_ILLEGAL;
 	}
 
-	if(cell->GetCity().GetFranchiseTurnsRemaining() <= 0) {
+	if(cell->GetCity().GetFranchiseTurnsRemaining() == 0) {
+
+		return ORDER_RESULT_ILLEGAL;
+	}
+
+	if(cell->GetCity().GetFranchiseTurnsRemaining() > 0 && cell->GetCity().GetFranchiseTurnsRemaining() <= g_theConstDB->Get(0)->GetTurnsToSueFranchise()) {
 
 		return ORDER_RESULT_ILLEGAL;
 	}
@@ -2672,8 +2709,7 @@ ORDER_RESULT ArmyData::CauseUnhappiness(const MapPoint &point,
 bool ArmyData::CanPlantNuke(double &chance, double &escape_chance,
 							sint32 &uindex) const
 {
-
-	if ( !g_player[m_owner]->m_advances->HasAdvance(advanceutil_GetNukeAdvance()))
+	if ( !g_player[m_owner]->CanUseNukes())
 		return false;
 
 	const UnitRecord::PlantNukeData *data;
@@ -2709,8 +2745,7 @@ bool ArmyData::CanPlantNuke(double &chance, double &escape_chance,
 //----------------------------------------------------------------------------
 bool ArmyData::CanPlantNuke(double &chance, double &escape_chance) const
 {
-
-	if ( !g_player[m_owner]->m_advances->HasAdvance(advanceutil_GetNukeAdvance()))
+	if(!g_player[m_owner]->CanUseNukes())
 		return false;
 
 	const UnitRecord::PlantNukeData *data;
@@ -4412,6 +4447,7 @@ ORDER_RESULT ArmyData::IndulgenceSale(const MapPoint &point)
 
 		SlicObject * so  = new SlicObject("911FaithHealAttacker");
 		so->AddRecipient(u.GetOwner());
+		so->AddCivilisation(c.GetOwner()); // Televangelist message differs that of clerics and in addition needs the civ
 		so->AddCity(c);
 		g_slicEngine->Execute(so);
 	} else {
@@ -4571,9 +4607,8 @@ ORDER_RESULT ArmyData::Launch(Order *order)
 	if(!destCity.IsValid() || destCity.GetOwner() != m_owner)
 		return ORDER_RESULT_ILLEGAL;
 
-	if(m_nElements > 1) {
-
-
+	if(m_nElements > 1)
+	{
 		m_array[uindex]->CreateOwnArmy();
 	}
 
@@ -4645,6 +4680,7 @@ ORDER_RESULT ArmyData::ClearTarget()
 
 void ArmyData::SetReentry(sint32 turns, MapPoint &pos)
 {
+	Assert(g_theWorld->HasCity(pos));
 	m_reentryTurn = NewTurnCount::GetCurrentRound() + turns;
 	m_reentryPos = pos;
 	m_flags |= k_CULF_IN_SPACE;
@@ -5299,7 +5335,7 @@ bool ArmyData::CanBombard(const MapPoint &point) const
 	}
 
 #if 0
-	// This prevents the AI from figuring out wheather a uit can be bombarded
+	// This prevents the AI from figuring out wheather a unit can be bombarded
 	// Fix this first, before you enable it again.
 	// In case of doubt check the method's callers
 
@@ -5870,6 +5906,7 @@ ORDER_RESULT ArmyData::InterceptTrade()
 		if (m_array[i].CanInterceptTrade() &&
 			m_array[i].CanPerformSpecialAction())
 		{
+		        // code apparently a left-over from CTP1, see: https://github.com/civctp2/civctp2/pull/154
 			if(!g_player[m_owner]->IsRobot()
 			||(g_network.IsClient()
 			&& g_network.IsLocalPlayer(m_owner))
@@ -5881,9 +5918,26 @@ ORDER_RESULT ArmyData::InterceptTrade()
 					if (AgreementMatrix::s_agreements.HasAgreement(
 						route_owner,
 						m_owner,
-						PROPOSAL_OFFER_STOP_PIRACY))
+						PROPOSAL_REQUEST_STOP_PIRACY))
 					{
 						SlicObject *so = new SlicObject("12IABreakNoPiracy");
+						so->AddRecipient(m_owner);
+						so->AddCivilisation(m_owner);
+						so->AddCivilisation(route_owner);
+						so->AddUnit(m_array[i]);
+						so->AddLocation(m_pos);
+						so->AddOrder(UNIT_ORDER_INTERCEPT_TRADE);
+						g_slicEngine->Execute(so);
+
+						g_selected_item->ForceDirectorSelect(Army(m_id));
+						return ORDER_RESULT_ILLEGAL;
+					}
+					if (AgreementMatrix::s_agreements.HasAgreement(
+						route_owner,
+						m_owner,
+						PROPOSAL_TREATY_TRADE_PACT))
+					{
+						SlicObject *so = new SlicObject("12IABreakTradePact");
 						so->AddRecipient(m_owner);
 						so->AddCivilisation(m_owner);
 						so->AddCivilisation(route_owner);
@@ -5898,7 +5952,7 @@ ORDER_RESULT ArmyData::InterceptTrade()
 				}
 			}
 
-			ORDER_RESULT const	res	= m_array[i].InterceptTrade();
+			ORDER_RESULT const	res	= m_array[i].InterceptTrade(); // call UnitData::InterceptTrade() which adds GEV_SetPiratingArmy
 
 			if (res == ORDER_RESULT_ILLEGAL)
 			{
@@ -6018,15 +6072,24 @@ void ArmyData::AddOrders(UNIT_ORDER_TYPE order)
 void ArmyData::AutoAddOrders(UNIT_ORDER_TYPE order, Path *path,
 							 const MapPoint &point, sint32 argument)
 {
+	if(g_player[m_owner]->IsRobot() && !m_addOrdersAI)
+	{
+		return;
+	}
+
 	if(!g_useOrderQueues)
 	{
 		ClearOrders();
 	}
 
 	m_orders->AddTail(new Order(order, path, point, argument));
-	StopPirating();
 
-	if(m_owner >= 0 && m_owner < k_MAX_PLAYERS && g_player[m_owner]) {
+	if(point != m_pos || order != UNIT_ORDER_INTERCEPT_TRADE){
+	    StopPirating(); // to ensure trade route is not regarded as pirated when moving off (which is not possible any more on the new position, see https://github.com/civctp2/civctp2/issues/75
+	    }
+
+	if(m_owner >= 0 && m_owner < k_MAX_PLAYERS && g_player[m_owner])
+	{
 		ExecuteOrders(false);
 	}
 }
@@ -6053,10 +6116,18 @@ void ArmyData::AutoAddOrders(UNIT_ORDER_TYPE order, Path *path,
 void ArmyData::AutoAddOrdersWrongTurn(UNIT_ORDER_TYPE order, Path *path,
 									  const MapPoint &point, sint32 argument)
 {
+	if(g_player[m_owner]->IsRobot() && !m_addOrdersAI)
+	{
+		return;
+	}
+
 	ClearOrders();
 
 	m_orders->AddTail(new Order(order, path, point, argument));
-	StopPirating();
+
+	if(point != m_pos || order != UNIT_ORDER_INTERCEPT_TRADE){
+	    StopPirating(); // to ensure trade route is not regarded as pirated when moving off (which is not possible any more on the new position, see https://github.com/civctp2/civctp2/issues/75
+	    }
 
 	if(m_owner >= 0 && m_owner < k_MAX_PLAYERS && g_player[m_owner]) {
 		ExecuteOrders(false);
@@ -6087,6 +6158,13 @@ void ArmyData::AutoAddOrdersWrongTurn(UNIT_ORDER_TYPE order, Path *path,
 void ArmyData::AddOrders(UNIT_ORDER_TYPE order, Path *path, const MapPoint &point,
 						 sint32 argument, GAME_EVENT passedEvent)
 {
+	if(g_player[m_owner]->IsRobot() && !m_addOrdersAI)
+	{
+		delete path;
+
+		return;
+	}
+
 	bool execute = true;
 
 	if(g_network.IsActive() && g_network.IsLocalPlayer(m_owner) &&
@@ -6134,6 +6212,8 @@ void ArmyData::AddOrders(UNIT_ORDER_TYPE order, Path *path, const MapPoint &poin
 
 		m_orders->AddTail(attackOrder);
 		execute = false;
+
+		Assert(path == NULL); // We do not do anything with the path, so we should not have one, otherwise we have a memory leak
 	}
 	else
 	{
@@ -6160,7 +6240,9 @@ void ArmyData::AddOrders(UNIT_ORDER_TYPE order, Path *path, const MapPoint &poin
 		}
 	}
 
-	StopPirating();
+	if(point != m_pos || order != UNIT_ORDER_INTERCEPT_TRADE){
+	    StopPirating(); // to ensure trade route is not regarded as pirated when moving off (which is not possible any more on the new position, see https://github.com/civctp2/civctp2/issues/75
+	    }
 
 	Order *o = m_orders->GetTail();
 	if(g_network.IsHost()) {
@@ -6344,7 +6426,6 @@ bool ArmyData::ExecuteOrders(bool propagate)
 				completedOrder = true;
 				break;
 			case UNIT_ORDER_UNLOAD:
-			case UNIT_ORDER_UNLOAD_ONE_UNIT:
 			case UNIT_ORDER_UNLOAD_SELECTED_STACK:
 				completedOrder = ExecuteUnloadOrder(order);
 				if(!completedOrder)
@@ -6588,9 +6669,9 @@ bool ArmyData::ExecuteMoveOrder(Order *order)
 	    (order->m_order == UNIT_ORDER_MOVE_THEN_UNLOAD)
 	   )
 	{
-		if (order->m_path->IsEndDir() ||
-			(order->m_order == UNIT_ORDER_MOVE_THEN_UNLOAD && order->m_point.IsNextTo(m_pos))
-		   )
+		if( order->m_path->IsEndDir() ||
+		   (order->m_order == UNIT_ORDER_MOVE_THEN_UNLOAD && order->m_point.IsNextTo(m_pos))
+		  )
 		{
 			if (order->m_order == UNIT_ORDER_MOVE_THEN_UNLOAD && order->m_point.IsNextTo(m_pos))
 			{
@@ -6686,16 +6767,21 @@ void ArmyData::CheckLoadSleepingCargoFromCity(Order *order)
 	&& !terrainutil_HasAirfield(m_pos))
 		return;
 
-	if(cell->UnitArmy()->Num() < 1)
+	if(cell->GetNumUnits() < 1)
 		return;
 
-	for(sint32 i = 0; i < m_nElements; i++) {
-		if(m_array[i].GetCargoCapacity() > 0) {
-			for (int j = cell->UnitArmy()->Num() - 1; j >= 0; j--) {
+	for(sint32 i = 0; i < m_nElements; i++)
+	{
+		if(m_array[i].GetCargoCapacity() > 0)
+		{
+			for (int j = cell->UnitArmy()->Num() - 1; j >= 0; j--)
+			{
 				Unit u = cell->UnitArmy()->Access(j);
 				if(!u.IsAsleep())
 					continue;
-				if(m_array[i].CanCarry(u)) {
+
+				if(m_array[i].CanCarry(u))
+				{
 					bool out_of_fuel;
 					u.SetIsInTransport(m_array[i]);
 					u.DeductMoveCost(k_MOVE_ENTER_TRANSPORT_COST, out_of_fuel);
@@ -6703,9 +6789,8 @@ void ArmyData::CheckLoadSleepingCargoFromCity(Order *order)
 					u.UndoVision();
 					u.RemoveUnitVision();
 					m_array[i].InsertCargo(u);
-					g_player[m_owner]->RegisterInsertCargo
-					    (m_array[i].GetArmy(), u.GetType(), (sint32)u.GetHP());
 				}
+
 				if(m_array[i].GetCargoCapacity() < 1)
 					break;
 			}
@@ -6844,10 +6929,15 @@ bool ArmyData::FinishMove(WORLD_DIRECTION d, MapPoint &newPos, UNIT_ORDER_TYPE o
 	CellUnitList transports;
 	sint32 canMoveIntoTransport = NumUnitsCanMoveIntoTransport(newPos, transports);
 
+	// Problem with AI: It load units into transport helis, even so they are not the target.
+	// However these things don't seem to fix it, properly.
 	if
 	  (
 	      g_theWorld->GetCity(newPos).m_id == 0
 	   && canMoveIntoTransport > 0
+//	   && order == UNIT_ORDER_BOARD_TRANSPORT
+//	   && !g_player[m_owner]->IsRobot()
+//	   && !g_theWorld->IsOnSameContinent(newPos, m_pos)
 	  )
 	{
 		Army army(m_id);
@@ -7146,7 +7236,7 @@ bool ArmyData::MoveIntoForeigner(const MapPoint &pos)
 	   ||
 	      (
 	           g_player[attack_owner]->IsRobot()
-	        && diplomat.DesireWarWith(defense_owner)
+	        && diplomat.HasWarOrDesiresPreemptivelyWith(defense_owner)
 	      )
 	  )
 	{
@@ -7424,7 +7514,7 @@ void ArmyData::UpdateZOCForMove(const MapPoint &pos, WORLD_DIRECTION d)
 	if(cell->GetCity().IsValid()) {
 		doneRemoving = true;
 	} else {
-		for(i = cell->UnitArmy()->Num() - 1; i >= 0; i--) {
+		for(i = cell->GetNumUnits() - 1; i >= 0; i--) {
 
 			if(cell->AccessUnit(i).GetArmy() != me &&
 			   !cell->AccessUnit(i).IsNoZoc()) {
@@ -7591,7 +7681,7 @@ bool ArmyData::MoveIntoCell(const MapPoint &pos, UNIT_ORDER_TYPE order, WORLD_DI
 
 		if(g_player[m_owner]->IsRobot())
 		{
-			if(CanAtLeastOneCargoUnloadAt(RetPos(), pos, false))
+			if(CanAtLeastOneCargoUnloadAt(pos, false))
 			{
 				g_gevManager->AddEvent
 				                      (
@@ -7832,6 +7922,7 @@ void ArmyData::MoveUnits(const MapPoint &pos)
 				else if(g_player[m_owner]->IsRobot())
 				{
 					ClearOrders();
+					m_addOrdersAI = false;
 					Scheduler::s_needAnotherCycle = true;
 				}
 			}
@@ -8208,15 +8299,13 @@ void ArmyData::DoBoardTransport(Order *order)
 // Remark(s)  : -
 //
 //----------------------------------------------------------------------------
-bool ArmyData::CanAtLeastOneCargoUnloadAt(const MapPoint & old_pos,
-                                          const MapPoint & dest_pos,
+bool ArmyData::CanAtLeastOneCargoUnloadAt(const MapPoint & unload_pos,
                                           const bool & used_vision,
                                           const bool check_move_points) const
 {
 	for(sint32 i = 0; i < m_nElements; i++)
 	{
-		if(m_array[i].CanAtLeastOneCargoUnloadAt(old_pos,
-		                                         dest_pos,
+		if(m_array[i].CanAtLeastOneCargoUnloadAt(unload_pos,
 		                                         used_vision,
 		                                         check_move_points)
 		){
@@ -8283,20 +8372,17 @@ bool ArmyData::ExecuteUnloadOrder(Order *order)
 	Army debark;
 
 	bool unitUnloadDone = false;
+	sint32 count = 0; // Count the units to debark between the transporters so that we do not try to debark more units than fit at the unload position.
 	for(sint32 i = 0; i < m_nElements; i++)
 	{
-		if(order->m_order == UNIT_ORDER_UNLOAD_ONE_UNIT)
+		if(order->m_order == UNIT_ORDER_UNLOAD
+		|| order->m_order == UNIT_ORDER_MOVE_THEN_UNLOAD)
 		{
-			unitUnloadDone |= m_array[i].UnloadCargo(to_pt, debark, true, Unit(order->m_argument));
-		}
-		else if(order->m_order == UNIT_ORDER_UNLOAD
-		     || order->m_order == UNIT_ORDER_MOVE_THEN_UNLOAD)
-		{
-			unitUnloadDone |= m_array[i].UnloadCargo(to_pt, debark, false, Unit());
+			unitUnloadDone |= m_array[i].UnloadCargo(to_pt, debark, count);
 		}
 		else if(order->m_order == UNIT_ORDER_UNLOAD_SELECTED_STACK)
 		{
-			unitUnloadDone |= m_array[i].UnloadSelectedCargo(to_pt, debark);
+			unitUnloadDone |= m_array[i].UnloadCargo(to_pt, debark, count, true);
 		}
 		else
 		{
@@ -8336,7 +8422,8 @@ void ArmyData::FinishUnloadOrder(Army &debark, MapPoint &to_pt)
 	{
 		sint32 visiblePlayer = g_selected_item->GetVisiblePlayer();
 		if ((visiblePlayer == m_array[0].GetOwner()) ||
-			(m_array[0].GetVisibility() & (1 << visiblePlayer))) {
+			(m_array[0].GetVisibility() & (1 << visiblePlayer)))
+		{
 			g_soundManager->AddSound(SOUNDTYPE_SFX, (uint32)0,
 								m_array[0].GetCantMoveSoundID(),
 								to_pt.x,
@@ -8344,24 +8431,28 @@ void ArmyData::FinishUnloadOrder(Army &debark, MapPoint &to_pt)
 		}
 
 		debark.Kill();
-	} else {
-
+	}
+	else
+	{
 		sint32 i;
 //		sint32 n = debark.Num();
 
-		if(IsOccupiedByForeigner(to_pt)) {
-			for(i = 0; i < debark.Num(); i++) {
-				if((!debark[i]->Flag(k_UDF_BEACH_ASSAULT_LEGAL))) {
+		if(IsOccupiedByForeigner(to_pt))
+		{
+			for(i = 0; i < debark.Num(); i++)
+			{
+				if((!debark[i]->Flag(k_UDF_BEACH_ASSAULT_LEGAL)))
+				{
 					CheckWasEnemyVisible(to_pt);
 
 					bool inserted = false;
-					for(sint32 j = 0; j < m_nElements && !inserted; j++) {
+					for(sint32 j = 0; j < m_nElements && !inserted; j++)
+					{
 						inserted = m_array[j].InsertCargo(debark[i]);
-						if(inserted) {
+						if(inserted)
+						{
 							Unit u = debark[i];
 							u.GetInserted(m_array[j]);
-							g_player[m_owner]->RegisterInsertCargo
-							    (m_id, u.GetType(), (sint32)u.GetHP());
 							break;
 						}
 					}
@@ -8372,17 +8463,20 @@ void ArmyData::FinishUnloadOrder(Army &debark, MapPoint &to_pt)
 					i--;
 				}
 			}
-		} else if(g_theWorld->GetCity(to_pt).m_id != 0 &&
-			      g_theWorld->GetCity(to_pt).GetOwner() != m_owner) {
-			if(!g_theArmyPool->AccessArmy(debark)->CanAtLeastOneCaptureCity()) {
+		}
+		else if(g_theWorld->GetCity(to_pt).m_id != 0 &&
+		        g_theWorld->GetCity(to_pt).GetOwner() != m_owner)
+		{
+			if(!g_theArmyPool->AccessArmy(debark)->CanAtLeastOneCaptureCity())
+			{
 				for(i = debark.Num() - 1; i >= 0; i--) {
 					bool inserted = false;
-					for(sint32 j = 0; j < m_nElements && !inserted; j++) {
+					for(sint32 j = 0; j < m_nElements && !inserted; j++)
+					{
 						inserted = m_array[j].InsertCargo(debark[i]);
-						if(inserted) {
+						if(inserted)
+						{
 							debark[i].GetInserted(m_array[j]);
-							g_player[m_owner]->RegisterInsertCargo
-							    (m_id, debark[i].GetType(),(sint32)debark[i].GetHP());
 							break;
 						}
 					}
@@ -8394,24 +8488,24 @@ void ArmyData::FinishUnloadOrder(Army &debark, MapPoint &to_pt)
 			}
 		}
 
-		if(0 < debark.Num()) {
-			if (g_soundManager) {
+		if(debark.Num() > 0)
+		{
+			if (g_soundManager)
+			{
 				sint32 visiblePlayer = g_selected_item->GetVisiblePlayer();
 				if ((visiblePlayer == debark[0].GetOwner()) ||
-				    (debark[0].GetVisibility() & (1 << visiblePlayer))) {
+				    (debark[0].GetVisibility() & (1 << visiblePlayer)))
+				{
 					g_soundManager->AddSound(SOUNDTYPE_SFX, (uint32)0,
 									    m_array[0].GetUnloadSoundID(),
 									    to_pt.x,
 									    to_pt.y);
 				}
 			}
-		}
-		if (0 < debark.Num())
-		{
+
 			if (debark.IsValid())
 			{
-				sint32 i;
-				for(i = 0; i < debark.Num(); i++)
+				for(sint32 i = 0; i < debark.Num(); i++)
 				{
 					if(!debark[i]->Flag(k_UDF_BEACH_ASSAULT_LEGAL) &&
 					   !debark[i].GetMovementTypeAir())
@@ -8423,24 +8517,27 @@ void ArmyData::FinishUnloadOrder(Army &debark, MapPoint &to_pt)
 				}
 			}
 
-			if(m_pos != to_pt) {
-				sint32 i;
-				for(i = 0; i < debark.Num(); i++) {
-					if (debark[i].GetActor()) {
+			if(m_pos != to_pt)
+			{
+				for(sint32 i = 0; i < debark.Num(); i++)
+				{
+					if (debark[i].GetActor())
+					{
 						debark[i].GetActor()->Hide();
 						debark[i].GetActor()->PositionActor(m_pos);
 						g_director->AddShow(debark[i]);
 					}
 				}
 				debark.AutoAddOrders(UNIT_ORDER_MOVE_TO, NULL, to_pt, 0);
-			} else {
-				sint32 i;
-				for(i = 0; i < debark.Num(); i++) {
+			}
+			else
+			{
+				for(sint32 i = 0; i < debark.Num(); i++)
+				{
 					g_director->AddShow(debark[i]);
 				}
 				debark.AutoAddOrders(UNIT_ORDER_TELEPORT_TO, NULL, m_pos, 0);
 			}
-
 		}
 	}
 }
@@ -8823,8 +8920,6 @@ bool ArmyData::ExecuteTeleportOrder(Order *order)
 
 	CheckTerrainEvents();
 
-    MapPoint norm_pos;
-    norm_pos.Iso2Norm(order->m_point);
 
 	return true;
 }
@@ -9172,6 +9267,28 @@ void ArmyData::ActionUnsuccessful(const MapPoint &point)
 							point.x,
 							point.y);
 	}
+}
+
+bool ArmyData::CanSomeCargoBeachAssault() const
+{
+	for(sint32 i = 0; i < m_nElements; i++)
+	{
+		const UnitDynamicArray * cargo =
+			m_array[i].AccessData()->GetCargoList();
+
+		if(cargo)
+		{
+			for(sint32 j = 0; j < cargo->Num(); j++)
+			{
+				if(cargo->Access(j).CanBeachAssault())
+				{
+					return true;
+				}
+			}
+		}
+	}
+
+	return false;
 }
 
 bool ArmyData::CanBeachAssault() const
@@ -10192,7 +10309,7 @@ bool ArmyData::TestOrderAll(const OrderRecord *order_rec) const
 
 	if(order_rec->GetUnitPretest_CanPlantNuke())
 	{
-		if (!g_player[m_owner]->m_advances->HasAdvance(advanceutil_GetNukeAdvance()))
+		if (!g_player[m_owner]->CanUseNukes())
 			return false;
 	}
 
@@ -10207,7 +10324,7 @@ bool ArmyData::TestOrderAll(const OrderRecord *order_rec) const
 			return true;
 		}
 
-		orderValid = orderValid && m_array[i].UnitValidForOrder(order_rec);
+		orderValid &= m_array[i].UnitValidForOrder(order_rec);
 	}
 
 	return orderValid;
@@ -10232,7 +10349,7 @@ bool ArmyData::TestOrderAll(const OrderRecord *order_rec) const
 bool ArmyData::TestOrderAny(OrderRecord const * order_rec) const
 {
 	if (order_rec->GetUnitPretest_CanPlantNuke() &&
-		!g_player[m_owner]->m_advances->HasAdvance(advanceutil_GetNukeAdvance())
+	    !g_player[m_owner]->CanUseNukes()
 	   )
 	{
 		return false;
@@ -10256,7 +10373,7 @@ bool ArmyData::TestOrderAny(OrderRecord const * order_rec) const
 bool ArmyData::TestCargoOrderAny(OrderRecord const * order_rec) const
 {
 	if (order_rec->GetUnitPretest_CanPlantNuke() &&
-		!g_player[m_owner]->m_advances->HasAdvance(advanceutil_GetNukeAdvance())
+	    !g_player[m_owner]->CanUseNukes()
 	   )
 	{
 		return false;
@@ -10648,40 +10765,39 @@ void ArmyData::PerformOrderHere(const OrderRecord * order_rec, const Path * path
 	}
 
 	sint32 min_rge, max_rge=0;
-	MapPoint move_pos = m_pos;//move_pos will become a position to move to if trying to bombard out of range
-	Path *move_path = tmp_path;//copy tmp_path
-	if (strcmp (order_rec->GetEventName(),"BombardOrder") == 0)
+	MapPoint move_pos = m_pos; // move_pos will become a position to move to if trying to bombard out of range
+	if (strcmp (order_rec->GetEventName(),"BombardOrder") == 0) // Should it really be like this? Actually, this belongs into the BombardEvent, which probably should just be given when we are in range.
 	{
 		if(GetBombardRange(min_rge, max_rge))
 		{
 			sint32 dist = m_pos.NormalizedDistance(target_pos);
-			if(dist > max_rge)
-			{//target is out of range
-				for(sint32 i=0;i<moves;i++)
-				{//find a position in tmp_path to move to
-
+			if(dist > max_rge) // The target is out of range
+			{
+				for(sint32 i = 0; i < moves; i++) // Find a position in tmp_path to move to
+				{
 					DPRINTF(k_DBG_FILE, ("move_pos (%d,%d), target_pos (%d,%d), NormalizedDistance %d, i %d\n",
-					                     move_pos.x, move_pos.y, target_pos.x, target_pos.y, dist, i));
+										 move_pos.x, move_pos.y, target_pos.x, target_pos.y, dist, i));
 					tmp_path->IncDir();
 					tmp_path->GetCurrentPoint(move_pos);
 					dist = move_pos.NormalizedDistance(target_pos);
 
-					if(dist <= max_rge)
-					{ //we're now within range
+					if(dist <= max_rge) // We're now within range
+					{
 						DPRINTF(k_DBG_FILE, ("\n found move_pos: we're now within range\n"));
-						tmp_path->Start(m_pos);//reset tmp_path
-						for(sint32 j=1; j<moves-i; j++)
-						{//shorten move_path to end at move_pos
-							move_path->SnipEnd();
+						tmp_path->Start(m_pos); // Reset tmp_path
+
+						for(sint32 j = 1; j < moves - i; j++) // Shorten move_path to end at move_pos
+						{
+							tmp_path->SnipEnd();
 						}
-						i=moves;//exit the loop and continue
+
+						break; // Exit the loop and continue
 					}
 				}
 			}
-			//else bombard now?
-			else
+			else // Bombard now?
 			{
-				g_gevManager->AddEvent(GEV_INSERT_AfterCurrent,
+				g_gevManager->AddEvent(priority,
 				                       static_cast<GAME_EVENT>(game_event),
 				                       GEA_Army, Army(m_id),
 				                       GEA_MapPoint, target_pos,
@@ -10698,13 +10814,14 @@ void ArmyData::PerformOrderHere(const OrderRecord * order_rec, const Path * path
 			moves--;
 		}
 	}
+
 	g_gevManager->Pause();
 	//insert order's game_event here
 	if (game_event > 0)
 	{
 		if (range > 0 || order_rec->GetIsTeleport() || order_rec->GetIsTarget())//event needs target pos
 		{
-			g_gevManager->AddEvent(GEV_INSERT_AfterCurrent,
+			g_gevManager->AddEvent(priority,
 			                       static_cast<GAME_EVENT>(game_event),
 			                       GEA_Army, Army(m_id),
 			                       GEA_MapPoint, target_pos,
@@ -10713,44 +10830,49 @@ void ArmyData::PerformOrderHere(const OrderRecord * order_rec, const Path * path
 		}
 		else
 		{
-			g_gevManager->AddEvent(GEV_INSERT_AfterCurrent,
+			g_gevManager->AddEvent(priority,
 			                       static_cast<GAME_EVENT>(game_event),
 			                       GEA_Army, Army(m_id),
 			                       GEA_End
 			                      );
 		}
 	}
+
 	//insert GEV_MoveOrder here, i.e., move adjacent to target pos or within bombarding range of target pos
 	if(tmp_path->GetMovesRemaining() > 0
 	&& !order_rec->GetIsTeleport()
 	&& !order_rec->GetIsTarget()
 	){
-		if(max_rge)
-		{//max_rge >0 implys BombardOrder and army has bombarding units
+		if(max_rge > 0) // max_rge > 0 implys BombardOrder and army has bombarding units
+		{
 			double cur_move_pts;
 			CurMinMovementPoints(cur_move_pts);
 
 			DPRINTF(k_DBG_FILE, ("army 0x%lx, cur_move_pts=%f, move_pos=<%d,%d>\n",m_id,cur_move_pts,move_pos.x,move_pos.y));
 
-			if(move_pos != m_pos)
-			{//then first move army to move_pos
+			if(move_pos != m_pos) // Then first move army to move_pos
+			{
 
-				g_gevManager->AddEvent(GEV_INSERT_AfterCurrent,
+				g_gevManager->AddEvent(priority,
 				                       GEV_MoveOrder,
 				                       GEA_Army, Army(m_id),
-				                       GEA_Path, move_path,
+				                       GEA_Path, tmp_path,
 				                       GEA_MapPoint, move_pos,
 				                       GEA_Int, (game_event == -1),
 				                       GEA_End
 				                      );
 			}
+			else
+			{
+				delete tmp_path;
+			}
 			// Bombard target_pos
-			// Nothing to do here since order has been already given.
+			// Nothing to do here since the order has been already given.
 
 		}
-		else
-		{//not a bombard order
-			g_gevManager->AddEvent(priority,                     // Only for cargo movement
+		else // Not a bombard order
+		{
+			g_gevManager->AddEvent(priority,
 			                       GEV_MoveOrder,
 			                       GEA_Army, Army(m_id),
 			                       GEA_Path, tmp_path,
@@ -10765,7 +10887,7 @@ void ArmyData::PerformOrderHere(const OrderRecord * order_rec, const Path * path
 		delete tmp_path;
 	}
 
-	g_gevManager->AddEvent(GEV_INSERT_AfterCurrent,
+	g_gevManager->AddEvent(priority,
 	                       GEV_ClearOrders,
 	                       GEA_Army, Army(m_id),
 	                       GEA_End
@@ -10890,9 +11012,9 @@ void ArmyData::StopPirating()
 			if (route->GetPiratingArmy().m_id == m_id)
 			{
 				g_gevManager->AddEvent
-				    (GEV_INSERT_AfterCurrent, GEV_SetPiratingArmy,
+				    (GEV_INSERT_AfterCurrent, GEV_SetPiratingArmy, // executes StopPiracyRegardEvent
 				     GEA_TradeRoute, route,
-				     GEA_Army, 0,
+				     GEA_Army, 0, // setting the pirating army to ID= 0 stops pirating this route
 				     GEA_End
 				    );
 			}

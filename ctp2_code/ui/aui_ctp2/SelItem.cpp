@@ -57,7 +57,6 @@
 
 #include "player.h"
 #include "civarchive.h"
-#include "XY_Coordinates.h"
 #include "World.h"
 #include "director.h"
 #include "SelItem.h"

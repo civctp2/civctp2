@@ -126,6 +126,24 @@ HelpTileWindow {
 		string textblttype "fill"
 	}
 	
+	RoutN:CTP2_STANDARD_FONT{
+		string pattern "uptg20e.tga"
+		int 	xpix		 25
+		int 	ypix		 40
+		int widthpix	70
+		int heightpix	15
+		string textblttype "fill"
+		string text	"str_ldl_Routes_COLON"
+	}
+	RoutV:CTP2_STANDARD_FONT{
+		string pattern "uptg20e.tga"
+		int 	xpix		100
+		int 	ypix		 40
+		int widthpix	500
+		int heightpix	15
+		string textblttype "fill"
+	}
+	
 	TileImage {
 #		string pattern "uptg20e.tga"
 		int 	xpix		191

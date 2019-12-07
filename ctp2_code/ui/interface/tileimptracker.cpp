@@ -212,12 +212,6 @@ void tileimptracker_DisplayData(MapPoint const & p, sint32 type)
 
 	sint32 extraData = 0;
 
-
-
-
-
-
-
 	BOOL alreadyHasIt = g_theTerrainImprovementPool->HasImprovement(p,
 																	TERRAIN_IMPROVEMENT(s_tileImprovementNum),
 																	extraData);
@@ -306,15 +300,14 @@ void tileimptracker_DisplayData(MapPoint const & p, sint32 type)
 		sprintf(mytext,"%d", gold);
 		s_trackerGoldV->SetText(mytext);
 
-		ERR_BUILD_INST err;
 		bool const	checkMaterials	= !g_theProfileDB->GetValueByName("ShowExpensive");
 
 		if (g_player[visPlayer]->CanCreateImprovement
-				(TERRAIN_IMPROVEMENT(s_tileImprovementNum), p, extraData, checkMaterials, err)
+				(TERRAIN_IMPROVEMENT(s_tileImprovementNum), p, checkMaterials)
 		   )
 		{
 			if (g_player[visPlayer]->CanCreateImprovement
-					(TERRAIN_IMPROVEMENT(s_tileImprovementNum), p, extraData, true, err)
+					(TERRAIN_IMPROVEMENT(s_tileImprovementNum), p, true)
 			   )
 			{
 				s_trackerBorderColor = COLOR_GREEN;

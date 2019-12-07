@@ -153,6 +153,7 @@ Const : alsire {
 	Int    GossipMapRadius                        aka GOSSIP_MAP_RADIUS
 	Float  HearGossipChance                       aka HEAR_GOSSIP_CHANCE
 	Float  FranchiseEffect                        aka FRANCHISE_EFFECT
+	Int    TurnsFranchised                        aka TURNS_FRANCHISED
 	Int    TurnsToSueFranchise                    aka TURNS_TO_SUE_FRANCHISE
 
 	Float  SlaverEliteChance                      aka SLAVER_ELITE_CHANCE

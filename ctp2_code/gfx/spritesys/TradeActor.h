@@ -7,7 +7,6 @@
 #include "Actor.h"
 #include "GoodSpriteGroup.h"
 #include "Queue.h"
-#include "XY_Coordinates.h"
 #include "World.h"
 #include "TradeRoute.h"
 

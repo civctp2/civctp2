@@ -1911,7 +1911,7 @@ int SDLMessageHandler(const SDL_Event &event)
 			SDLKCONVSHIFT(SDLK_4, '4', '$');
 			SDLKCONVSHIFT(SDLK_5, '5', '%');
 			SDLKCONVSHIFT(SDLK_6, '6', '^');
-			SDLKCONVSHIFT(SDLK_7, '7', '&');
+			SDLKCONVSHIFT(SDLK_7, '7', '/');
 			SDLKCONVSHIFT(SDLK_8, '8', '*');
 			SDLKCONVSHIFT(SDLK_9, '9', '(');
 			SDLKCONVSHIFT(SDLK_0, '0', ')');

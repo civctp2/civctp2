@@ -48,12 +48,12 @@
 #include "tilecontrol.h"
 
 #include "Cell.h"
-#include "XY_Coordinates.h"
 #include "World.h"
 #include "TerrainRecord.h"
 #include "StrDB.h"
 #include "TerrImprove.h"
 #include "TerrImprovePool.h"
+#include "Civilisation.h"
 
 #include "c3_dropdown.h"
 #include "spnewgamewindow.h"
@@ -77,6 +77,8 @@ extern TerrainImprovementPool	*g_theTerrainImprovementPool;
 
 c3_PopupWindow					*g_helpTileWindow = NULL;
 
+static c3_Static			*s_tileRout			= NULL;
+static c3_Static			*s_tileRoutV		= NULL;
 static c3_Static			*s_tileFood			= NULL;
 static c3_Static			*s_tileFoodV		= NULL;
 static c3_Static			*s_tileProd			= NULL;
@@ -143,11 +145,13 @@ sint32 helptile_Initialize( void )
 	g_helpTileWindow->AddClose( bExitPress );
 	g_helpTileWindow->AddTitle();
 
+	if(newC3Static(windowBlock,"RoutN",&s_tileRout)) return -1;
 	if(newC3Static(windowBlock,"FoodN",&s_tileFood)) return -1;
 	if(newC3Static(windowBlock,"ProdN",&s_tileProd)) return -1;
 	if(newC3Static(windowBlock,"MoveN",&s_tileMove)) return -1;
 	if(newC3Static(windowBlock,"GoodN",&s_tileGood)) return -1;
 	if(newC3Static(windowBlock,"SaleN",&s_tileSale)) return -1;
+	if(newC3Static(windowBlock,"RoutV",&s_tileRoutV)) return -1;
 	if(newC3Static(windowBlock,"FoodV",&s_tileFoodV)) return -1;
 	if(newC3Static(windowBlock,"ProdV",&s_tileProdV)) return -1;
 	if(newC3Static(windowBlock,"MoveV",&s_tileMoveV)) return -1;
@@ -190,11 +194,13 @@ void helptile_Cleanup( void )
 		g_c3ui->RemoveWindow(g_helpTileWindow->Id());
 	}
 
+	mycleanup(s_tileRout);
 	mycleanup(s_tileFood);
 	mycleanup(s_tileProd);
 	mycleanup(s_tileGood);
 	mycleanup(s_tileMove);
 	mycleanup(s_tileSale);
+	mycleanup(s_tileRoutV);
 	mycleanup(s_tileFoodV);
 	mycleanup(s_tileProdV);
 	mycleanup(s_tileGoodV);
@@ -234,6 +240,31 @@ void helptile_displayData(const MapPoint &p)
 		strcpy(myname, g_theStringDB->GetNameStr(g_theTerrainDB->Get(ucell.m_unseenCell->GetTerrainType())->GetName()));
 		g_helpTileWindow->TitleText()->SetText( myname );
 
+		// Unfortunatly this kind of information is not stored in the
+		// UnseenCell object.
+		std::string str= ""; // c++ string to avoid bothering about final length
+		str.append(std::to_string(myTile->GetNumTradeRoutes()));
+		str.append(":");
+
+		sint32 seen[k_MAX_PLAYERS];
+		memset(seen, 0, sizeof(seen));
+		for(int i= 0; i < myTile->GetNumTradeRoutes(); i++) {
+		    seen[myTile->GetTradeRoute(i).GetOwner()]++;
+		    }
+		for(int i = 0; i < k_MAX_PLAYERS; i++)
+		    {
+		    if(seen[i] > 0){
+			MBCHAR civName[k_MAX_NAME_LEN];
+			g_player[i]->m_civilisation->GetSingularCivName(civName);
+			str.append(" ");
+			str.append(civName);
+			str.append(" (");
+			str.append(std::to_string(seen[i]));
+			str.append(")");
+			}
+		    }
+		s_tileRoutV->SetText(str.c_str());
+
 		sprintf( mytext , "%d\n", ucell.m_unseenCell->GetFoodProduced());
 		s_tileFoodV->SetText(mytext);
 
@@ -271,6 +302,29 @@ void helptile_displayData(const MapPoint &p)
 	{
 		strcpy(myname, g_theWorld->GetTerrainName(p));
 		g_helpTileWindow->TitleText()->SetText( myname );
+
+		std::string str= ""; // c++ string to avoid bothering about final length
+		str.append(std::to_string(myTile->GetNumTradeRoutes()));
+		str.append(":");
+
+		sint32 seen[k_MAX_PLAYERS];
+		memset(seen, 0, sizeof(seen));
+		for(int i= 0; i < myTile->GetNumTradeRoutes(); i++) {
+		    seen[myTile->GetTradeRoute(i).GetOwner()]++;
+		    }
+		for(int i = 0; i < k_MAX_PLAYERS; i++)
+		    {
+		    if(seen[i] > 0){
+			MBCHAR civName[k_MAX_NAME_LEN];
+			g_player[i]->m_civilisation->GetSingularCivName(civName);
+			str.append(" ");
+			str.append(civName);
+			str.append(" (");
+			str.append(std::to_string(seen[i]));
+			str.append(")");
+			}
+		    }
+		s_tileRoutV->SetText(str.c_str());
 
 		sprintf( mytext , "%d\n", myTile->GetFoodProduced());
 		s_tileFoodV->SetText(mytext);

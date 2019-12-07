@@ -38,14 +38,13 @@
 #ifndef __UNIT_UTIL_H__
 #define __UNIT_UTIL_H__
 
-#include "UnitRecord.h"
-
 class MapPoint;
 class SpecialAttackInfoRecord;
 class MapPoint;
 class Army;
 class CellUnitList;
 class Unit;
+class UnitRecord;
 enum SPECATTACK;
 
 void unitutil_Initialize();

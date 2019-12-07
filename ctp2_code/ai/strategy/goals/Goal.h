@@ -162,6 +162,7 @@ public:
     void Remove_Matches();
     void Remove_Match(const Agent_ptr & agent);
     bool Has_Agent_And_Set_Needs_Cargo(Agent* agent);
+    bool Can_Transport_Any_Width_Need(Agent* agent);
     bool Needs_Cargo(Agent* agent);
     bool Cannot_Be_Used(Agent* agent);
     void Set_Cannot_Be_Used(Agent* agent, bool cannotBeUsed);
@@ -205,12 +206,6 @@ public:
     void Log_Debug_Info(const int & log) const;
     void Log_Debug_Info_Full(const int & log) const;
 
-    void Copy_Insert_Matches(Goal_ptr generic_goal)
-    {
-        m_matches = generic_goal->m_matches;
-        this->Compute_Matching_Value();
-    };
-
     bool CanReachTargetContinent(Agent_ptr agent_ptr) const;
 
     void ResetNeededTransport();
@@ -244,6 +239,8 @@ private:
 
     MapPoint MoveToTarget(Agent_ptr rallyAgent);
     MapPoint MoveOutOfCity(Agent_ptr rallyAgent);
+    MapPoint MoveTransportOutOfCity(Agent_ptr transport, Agent_ptr cargo);
+    MapPoint MoveAwayFromTargetCity(Agent_ptr rallyAgent);
     Agent_ptr GetRallyAgent() const;
     MapPoint GetFreeNeighborPos(MapPoint pos) const;
     bool RallyTroops();

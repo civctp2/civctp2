@@ -72,50 +72,20 @@
 #include "screenutils.h"
 
 #include "CivPaths.h"           // g_civPaths
-#include "ObjPool.h"
-#include "Cell.h"
-#include "MapPoint.h"
-#include "tiledmap.h"
 #include "SelItem.h"
-#include "c3files.h"
-#include "pointerlist.h"
 #include "linegraph.h"
 #include "TurnCnt.h"
-#include "Strengths.h"
-#include "UnitPool.h"
 #include "Score.h"
 
-#include "pixelutils.h"
-#include "radarmap.h"
-
-
-
-
-#include "player.h"
-#include "UnitRec.h"
-#include "XY_Coordinates.h"
-#include "World.h"
-#include "Unit.h"
-#include "UnitData.h"
-#include "UnitDynArr.h"
-#include "citydata.h"
 #include "StrDB.h"
-#include "BuildingRecord.h"
 #include "WonderRecord.h"
-#include "TerrainRecord.h"
-#include "TopTen.h"
-#include "AgeRecord.h"
 #include "highscoredb.h"
 #include "GameSettings.h"
 
 #include "c3_listitem.h"
 #include "civapp.h"
-#include "Civilisation.h"
-#include "CivilisationData.h"
 #include "colorset.h"           // g_colorSet
 #include "IconRecord.h"
-#include "resource.h"
-#include "thumbnailmap.h"
 #include "network.h"
 #include "TurnCnt.h"
 #include "wonderutil.h"
@@ -124,7 +94,6 @@
 extern sint32                   g_ScreenWidth;
 extern sint32                   g_ScreenHeight;
 extern C3UI                     *g_c3ui;
-extern TopTen                   *g_theTopTen;
 extern CivApp                   *g_civApp;
 extern PointerList<Player>      *g_deadPlayer;
 extern sint32                   g_modalWindow;

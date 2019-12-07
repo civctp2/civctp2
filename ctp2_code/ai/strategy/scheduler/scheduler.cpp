@@ -383,6 +383,12 @@ void Scheduler::Process_Agent_Changes()
 			Remove_Matches_For_Agent(theAgent);
 			Add_New_Matches_For_Agent(theAgent);
 		}
+		else
+		{
+			Remove_Invalid_Matches_For_Agent(theAgent);
+		}
+
+		theAgent->Get_Army()->SetAICanAddOrders();
 
 		agent_ptr_iter++;
 	}
@@ -1040,9 +1046,9 @@ Scheduler::Sorted_Goal_Iter Scheduler::Remove_Goal(const Scheduler::Sorted_Goal_
 //  called by CtpAi::AddSettleTargets
 //
 ////////////////////////////////////////////////////////////
-void Scheduler::Remove_Goals_Type(const GoalRecord *rec)
+void Scheduler::Remove_Goals_Type(const GOAL_TYPE & type)
 {
-	Sorted_Goal_List & goalList = m_goals_of_type[rec->GetIndex()];
+	Sorted_Goal_List & goalList = m_goals_of_type[type];
 	for
 	(
 	    Sorted_Goal_Iter sorted_goal_iter  = goalList.begin();
@@ -1206,7 +1212,7 @@ bool Scheduler::Prioritize_Goals()
 		AI_DPRINTF(k_DBG_SCHEDULER, m_playerId, goal_type, -1,("//\n"));
 		AI_DPRINTF(k_DBG_SCHEDULER, m_playerId, goal_type, -1,("\n"));
 		AI_DPRINTF(k_DBG_SCHEDULER, m_playerId, goal_type, -1,
-			("\t %9x,\tGOAL,\t\tRAW_PRIORITY,\t\tCOORDS,\t\tINIT_VALUE,\tLAST_VALUE,\tTHREAT,\t\tENEMYVAL,\tALLIEDVAL,\tMAXPOW,\t\tHOMEDIST\t(   ),\t\tENEMYDIST (    ),\t\tSETTLE,\t\tCHOKE,\t\tUNEXPLORED,\tNOT_VISIBLE,\tIN_HOME_TER,\tIN_ENEMY_TER,\tON_NEUT_TER,\tSLAVERY_PROTECTION,\tSMALL_CITY,\tTHREATEN,\tCONNECTED,\tSMALL_EMP,\tWEAKEST\n",
+			("\t %9x,\tGOAL,\t\tRAW_PRIORITY,\t\tCOORDS,\t\tINIT_VALUE,\t\tLAST_VALUE,\t\tTHREAT,\t\tENEMYVAL,\tALLIEDVAL,\tMAXPOW,\t\tHOMEDIST\t   (       ),\tENEMYDIST    (       ),\t\tSETTLE,\t\tCHOKE,\t\tUNEXPLORED,\tNOT_VISIBLE,\tIN_HOME_TER,\tIN_ENEMY_TER,\tON_NEUT_TER,\tSLAVERY_PROTECTION,\tSMALL_CITY,\tTHREATEN,\tCONNECTED,\tSMALL_EMP,\tWEAKEST,\tPLACE\n",
 		this));
 
 		      sorted_goal_iter  = m_goals_of_type[goal_type].begin();
@@ -1387,8 +1393,6 @@ bool Scheduler::Prune_Goals()
 
 		GOAL_TYPE goal_type = GetMaxEvalExec(goal_element_ptr, max_eval, max_exec);
 
-//		max_eval = m_goals_of_type[goal_type].size(); // Temporary, maybe permanetly
-
 		Sorted_Goal_Iter pruned_goal_iter = m_goals_of_type[goal_type].end();
 		Sorted_Goal_Iter goal_ptr_iter    = m_goals_of_type[goal_type].begin();
 
@@ -1432,7 +1436,9 @@ bool Scheduler::Prune_Goals()
 			{
 				if(goal_ptr->Get_Matches_Num() == 0)
 				{
-					goal_ptr->Copy_Insert_Matches(m_generic_goals[goal_type]);
+					Add_New_Matches_For_Goal(goal_ptr);
+					goal_ptr->Sort_Matches_If_Necessary();
+					goal_ptr->Recompute_Matching_Value();
 				}
 
 				m_goals.push_back(goal_ptr);
@@ -1491,6 +1497,7 @@ void Scheduler::Add_New_Matches_For_Goal
 {
 	GOAL_TYPE   type             = goal_ptr->Get_Goal_Type();
 	SQUAD_CLASS goal_squad_class = g_theGoalDB->Get(type)->GetSquadClass();
+	bool hasInField = g_theGoalDB->Get(type)->GetInField();
 
 	for
 	(
@@ -1501,6 +1508,12 @@ void Scheduler::Add_New_Matches_For_Goal
 	{
 		Agent* agent = (*agent_iter);
 		if((goal_squad_class & agent->Get_Squad_Class()) != goal_squad_class)
+			continue;
+
+		if(!agent->Get_Army()->TestOrderAny(g_theGoalDB->Get(type)->GetExecute()))
+			continue;
+
+		if(hasInField && g_theWorld->HasCity(agent->Get_Army()->RetPos()))
 			continue;
 
 		goal_ptr->Add_Match(agent, update_match_value);
@@ -1531,6 +1544,9 @@ void Scheduler::Add_New_Matches_For_Agent
 		if((goal_squad_class & squad_class) != goal_squad_class)
 			continue;
 
+		if(g_theGoalDB->Get(i)->GetInField() && g_theWorld->HasCity(agent->Get_Army()->RetPos()))
+			continue;
+
 		for
 		(
 		    Sorted_Goal_Iter goal_iter  = goal_list.begin();
@@ -1556,10 +1572,7 @@ void Scheduler::Remove_Matches_For_Goal
 	goal_ptr->Remove_Matches();
 }
 
-void Scheduler::Remove_Matches_For_Agent
-(
-    const Agent_ptr & agent
-)
+void Scheduler::Remove_Matches_For_Agent(const Agent_ptr & agent)
 {
 	for(sint32 i = 0; i < g_theGoalDB->NumRecords(); i++)
 	{
@@ -1571,8 +1584,30 @@ void Scheduler::Remove_Matches_For_Agent
 		                     goal_iter != goal_list.end();
 		                   ++goal_iter
 		){
-
 			goal_iter->second->Remove_Match(agent);
+		}
+	}
+}
+
+void Scheduler::Remove_Invalid_Matches_For_Agent
+(
+    const Agent_ptr & agent
+)
+{
+	for(sint32 i = 0; i < g_theGoalDB->NumRecords(); i++)
+	{
+		if(g_theGoalDB->Get(i)->GetInField() && g_theWorld->HasCity(agent->Get_Army()->RetPos()))
+		{
+			Sorted_Goal_List & goal_list = m_goals_of_type[i];
+
+			for
+			(
+			    Sorted_Goal_Iter goal_iter  = goal_list.begin();
+			                     goal_iter != goal_list.end();
+			                   ++goal_iter
+			){
+				goal_iter->second->Remove_Match(agent);
+			}
 		}
 	}
 }
@@ -1618,6 +1653,8 @@ bool Scheduler::Add_Transport_Matches_For_Goal
 
 	bool match_added = false;
 
+	AI_DPRINTF(k_DBG_SCHEDULER_ALL, m_playerId, -1, -1, ("\t\tNow %d matches, add transport matches.\n", goal_ptr->Get_Matches_Num()));
+
 	for
 	(
 	    Agent_List::iterator agent_iter  = m_agents.begin();
@@ -1634,6 +1671,10 @@ bool Scheduler::Add_Transport_Matches_For_Goal
 		{
 			continue;
 		}
+
+		// Can Transport
+		if(!goal_ptr->Can_Transport_Any_Width_Need(agent))
+			continue;
 
 		bool hasMatch  = goal_ptr->Has_Agent_And_Set_Needs_Cargo(agent);
 		match_added   |= hasMatch;
@@ -1653,7 +1694,7 @@ bool Scheduler::Add_Transport_Matches_For_Goal
 		}
 
 		if(empty > 0
-		&& max == empty // must be empty otherwise the reansporter would go somewhere else or is alread in the agent list
+		&& max == empty // Must be empty otherwise the reansporter would go somewhere else or is already in the agent list
 		&& goal_ptr->CanReachTargetContinent(agent)
 		&& goal_ptr->Add_Transport_Match(agent)
 		){
@@ -1661,7 +1702,19 @@ bool Scheduler::Add_Transport_Matches_For_Goal
 		}
 	}
 
+#if defined(_DEBUG) || defined(USE_LOGGING)
+	if(match_added)
+	{
+		AI_DPRINTF(k_DBG_SCHEDULER_ALL, m_playerId, -1, -1, ("\t\tNow %d matches. Transport matches were added.\n", goal_ptr->Get_Matches_Num()));
+	}
+	else
+	{
+		AI_DPRINTF(k_DBG_SCHEDULER_ALL, m_playerId, -1, -1, ("\t\tNow %d matches. No transport matches were added.\n", goal_ptr->Get_Matches_Num()));
+	}
+
 	AI_DPRINTF(k_DBG_SCHEDULER_ALL, m_playerId, -1, -1, ("\t\tRecomputing matches for transport\n"));
+#endif
+
 	goal_ptr->Compute_Matching_Value(false);
 
 	return match_added;
@@ -1713,6 +1766,31 @@ GOAL_TYPE Scheduler::GetMaxEvalExec(const StrategyRecord::GoalElement *goal_elem
 	max_exec = (sint16) floor(tmp_exec);
 
 	return goal_type;
+}
+
+bool Scheduler::HasAgentToExecute(const GOAL_TYPE & type) const
+{
+	const OrderRecord *order = g_theGoalDB->Get(type)->GetExecute();
+
+	for
+	(
+	    Agent_List::const_iterator agent_iter  = m_agents.begin();
+	                               agent_iter != m_agents.end();
+	                             ++agent_iter
+	)
+	{
+		Agent* agent = (*agent_iter);
+
+		if(agent->Get_Is_Dead()) // We haven't removed those, yet.
+			continue;
+
+		if(agent->Get_Army()->TestOrderAny(order))
+		{
+			return true;
+		}
+	}
+
+	return false;
 }
 
 void Scheduler::DisbandObsoleteArmies(const sint16 max_count)
@@ -2016,7 +2094,7 @@ void Scheduler::Assign_Garrison()
 			                      tmp,
 			                      tmp,
 			                      tmp,
-			                      false // check
+			                      true
 			                     );
 
 			defense_strength += static_cast<float>(city.GetDefendersBonus() * static_cast<double>(defense_count));
@@ -2057,7 +2135,15 @@ void Scheduler::Assign_Garrison()
 			   || current_garrison          < needed_garrison
 			  )
 			{
-				AI_DPRINTF(k_DBG_SCHEDULER_DETAIL, m_playerId, -1, -1,("%9x\t %9x\t %s\n", agent_iter->second, agent_iter->second->Get_Army().m_id, city.GetName()));
+				AI_DPRINTF(k_DBG_SCHEDULER_DETAIL, m_playerId, -1, -1,("%9x\t %9x\t GarrisonStrength: %9.1f / %9.1f GarrisonNum %2d / %2d (%2d units) needed for garrison in %s\n",
+				                                                       agent_iter->second,
+				                                                       agent_iter->second->Get_Army().m_id,
+				                                                       current_garrison_strength,
+				                                                       needed_garrison_strength,
+				                                                       current_garrison,
+				                                                       needed_garrison,
+				                                                       agent_iter->second->Get_Army()->Num(),
+				                                                       city.GetName()));
 
 				current_garrison_strength += agent_iter->first;
 				current_garrison          += agent_iter->second->Get_Army()->Num();
@@ -2107,7 +2193,7 @@ void Scheduler::PrintAllGoals() const
 	AI_DPRINTF(k_DBG_SCHEDULER, m_playerId, -1, -1,
 		("Number of goals in goal database: %d\n", g_theGoalDB->NumRecords()));
 	AI_DPRINTF(k_DBG_SCHEDULER, m_playerId, -1, -1,
-		("Goals for player %d: %d\n", m_playerId, m_goals.size()));
+		("Current goals for player %d: %d\n", m_playerId, m_goals.size()));
 	AI_DPRINTF(k_DBG_SCHEDULER, m_playerId, -1, -1, ("\n"));
 
 	Sorted_Goal_Iter sorted_goal_iter;

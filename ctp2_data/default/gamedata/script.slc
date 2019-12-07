@@ -1467,6 +1467,20 @@ MessageClass(420);
 	}
 }
 
+alertBox '12IABreakTradePact' {
+MessageClass(420);
+	Text(ID_IA_BREAK_TREATY); // using messge from (unused) 10IABreakTreaty
+	Button(ID_BUTTON_NO) {
+		ClearOrders(unit[0]);
+		Kill();
+	}
+	Button(ID_BUTTON_YES) {
+		BreakTradePact();
+		AddOrder(unit[0], location[0]);
+		Kill();
+	}
+}
+
 alertBox '13IAEnteringLands' {
 MessageClass(420);
 	Text(ID_IA_ENTERING_LANDS);
@@ -1748,7 +1762,7 @@ messagebox '044TradePirateGold' {
 messagebox '045TradePirated' {
 	Text(ID_TRADE_PIRATED) ;
 	MessageType("PIRATE");
-}// String is not part of the ctp2.exe
+}
 
 messagebox '045aTradePiratedUnknown' {
 	Text(ID_TRADE_PIRATED_UNKOWN);
@@ -2354,6 +2368,16 @@ alertbox '355SessionLost' {
 		Kill();
 		QuitToLobby();
 	}
+}
+
+messagebox '358TradePassingPirated' {
+	Text(ID_TRADE_PASS_PIRATED) ;
+	MessageType("PIRATE");
+}
+
+messagebox '359TradePassing' {
+	Text(ID_TRADE_PASS) ;
+	MessageType("TRADE");
 }
 
 messagebox '360SenderKilledTradeRoute' {

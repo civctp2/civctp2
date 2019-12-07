@@ -49,7 +49,6 @@
 #include "Unit.h"
 #include "AICause.h"
 #include "Advances.h"
-#include "XY_Coordinates.h"
 #include "World.h"
 #include "RiskRecord.h"
 #include "profileDB.h"

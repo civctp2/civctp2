@@ -50,7 +50,7 @@
 #include "c3debugstl.h"
 
 #include "civarchive.h"
-#include "Goal.h"               // Needed here to instantaite std::greater<Goal_ptr> correctly
+#include "Goal.h"               // Needed here to instantiate std::greater<Goal_ptr> correctly
 
 class GoalRecord;
 class Scheduler;
@@ -166,7 +166,7 @@ public:
 	Sorted_Goal_Iter Remove_Goal(const Sorted_Goal_Iter & sorted_goal_iter);
 	void Remove_Goal(const Goal_ptr & goal);
 
-	void Remove_Goals_Type(const GoalRecord *rec);
+	void Remove_Goals_Type(const GOAL_TYPE & type);
 
 
 	Squad_Strength GetMostNeededStrength() const;
@@ -199,7 +199,10 @@ public:
 	void PrintAllGoals() const;
 #endif
 
-protected:
+	GOAL_TYPE GetMaxEvalExec(const StrategyRecord::GoalElement *goal_element_ptr, sint16 & max_eval, sint16 & max_exec);
+	bool HasAgentToExecute(const GOAL_TYPE & type) const;
+
+private:
 
 	void Add_New_Matches_For_Goal
 	(
@@ -211,7 +214,8 @@ protected:
 
 	void Remove_Matches_For_Goal( const Goal_ptr & goal );
 
-	void Remove_Matches_For_Agent( const Agent_ptr & agnet );
+	void Remove_Matches_For_Agent( const Agent_ptr & agent );
+	void Remove_Invalid_Matches_For_Agent(const Agent_ptr & agent);
 
 	void Rollback_Matches_For_Goal(const Goal_ptr & goal_ptr);
 
@@ -219,11 +223,7 @@ protected:
 
 	bool Add_Transport_Matches_For_Goal(const Goal_ptr & goal_ptr);
 
-	GOAL_TYPE GetMaxEvalExec(const StrategyRecord::GoalElement *goal_element_ptr, sint16 & max_eval, sint16 & max_exec);
-
 	bool GetArmyDetachState(const Army & army) const;
-
-private:
 
 	static Scheduler_Vector      s_theSchedulers;
 

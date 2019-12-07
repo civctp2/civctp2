@@ -430,7 +430,7 @@ TradeAdvice:CTP2_WINDOW {
 		int xpix 30
 		int ypix 229
 		int widthpix 108
-		int heightpix 20
+		int heightpix 13
 		string just "right"
 		string pattern "uptg20e.tga"
 		string text "str_ldl_CaravansAvailable"
@@ -440,9 +440,9 @@ TradeAdvice:CTP2_WINDOW {
 
 	Available:CTP2_HEADER_FONT:CTP2_STATIC_BASE {
 		int xpix 138
-		int ypix 228
+		int ypix 229
 		int widthpix 58
-		int heightpix 20
+		int heightpix 13
 		string pattern "uptg20e.tga"
 		int bevelwidth 0
 		string text "str_ldl_0"
@@ -451,9 +451,9 @@ TradeAdvice:CTP2_WINDOW {
 	InUseLabel:CTP2_HEADER_FONT {
 		string objecttype "ctp2_Static"
 		int xpix 30
-		int ypix 249
+		int ypix 242
 		int widthpix 108
-		int heightpix 20
+		int heightpix 13
 		string just "right"
 		string pattern "uptg20e.tga"
 		string text "str_ldl_CaravansInUse"
@@ -462,9 +462,31 @@ TradeAdvice:CTP2_WINDOW {
 	}
 	InUse:CTP2_HEADER_FONT:CTP2_STATIC_BASE {
 		int xpix 138
-		int ypix 248
+		int ypix 242
 		int widthpix 58
-		int heightpix 20
+		int heightpix 13
+		string pattern "uptg20e.tga"
+		int bevelwidth 0
+		string text "str_ldl_0"
+	}
+
+	RoutesLabel:CTP2_HEADER_FONT {
+		string objecttype "ctp2_Static"
+		int xpix 30
+		int ypix 255
+		int widthpix 108
+		int heightpix 13
+		string just "right"
+		string pattern "uptg20e.tga"
+		string text "str_ldl_TotalTradeRoutes"
+		# Tooltip
+		string	statustext	"STATUSBAR_TRADEMAN_ADV_TOTAL_ROUTES_DISPLAY"
+	}
+	Routes:CTP2_HEADER_FONT:CTP2_STATIC_BASE {
+		int xpix 138
+		int ypix 255
+		int widthpix 58
+		int heightpix 13
 		string pattern "uptg20e.tga"
 		int bevelwidth 0
 		string text "str_ldl_0"
@@ -473,9 +495,9 @@ TradeAdvice:CTP2_WINDOW {
 	ProfitLabel:CTP2_HEADER_FONT {
 		string objecttype "ctp2_Static"
 		int xpix 30
-		int ypix 269
+		int ypix 268
 		int widthpix 108
-		int heightpix 20
+		int heightpix 13
 		string just "right"
 		string pattern "uptg20e.tga"
 		string text "str_ldl_TotalTradeProfit"
@@ -486,29 +508,51 @@ TradeAdvice:CTP2_WINDOW {
 		int xpix 138
 		int ypix 268
 		int widthpix 58
-		int heightpix 20
+		int heightpix 13
 		string pattern "uptg20e.tga"
 		int bevelwidth 0
 		string text "str_ldl_0"
 	}
 
-	RoutesLabel:CTP2_HEADER_FONT {
+	TransitLabel:CTP2_HEADER_FONT {
 		string objecttype "ctp2_Static"
 		int xpix 30
-		int ypix 289
+		int ypix 281
 		int widthpix 108
-		int heightpix 20
+		int heightpix 13
 		string just "right"
 		string pattern "uptg20e.tga"
-		string text "str_ldl_TotalTradeRoutes"
+		string text "str_ldl_TotalTransitProfit"
 		# Tooltip
-		string	statustext	"STATUSBAR_TRADEMAN_ADV_TOTAL_ROUTES_DISPLAY"
+		# string	statustext	"STATUSBAR_TRADEMAN_ADV_TOTAL_PIRACY_DISPLAY"
 	}
-	Routes:CTP2_HEADER_FONT:CTP2_STATIC_BASE {
+	Transit:CTP2_HEADER_FONT:CTP2_STATIC_BASE {
 		int xpix 138
-		int ypix 288
+		int ypix 281
 		int widthpix 58
-		int heightpix 20
+		int heightpix 13
+		string pattern "uptg20e.tga"
+		int bevelwidth 0
+		string text "str_ldl_0"
+	}
+
+	PiracyLabel:CTP2_HEADER_FONT {
+		string objecttype "ctp2_Static"
+		int xpix 30
+		int ypix 294
+		int widthpix 108
+		int heightpix 13
+		string just "right"
+		string pattern "uptg20e.tga"
+		string text "str_ldl_TotalPiracyLoss"
+		# Tooltip
+		# string	statustext	"STATUSBAR_TRADEMAN_ADV_TOTAL_PIRACY_DISPLAY"
+	}
+	Piracy:CTP2_HEADER_FONT:CTP2_STATIC_BASE {
+		int xpix 138
+		int ypix 294
+		int widthpix 58
+		int heightpix 13
 		string pattern "uptg20e.tga"
 		int bevelwidth 0
 		string text "str_ldl_0"

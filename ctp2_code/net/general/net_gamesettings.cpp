@@ -3,7 +3,6 @@
 #include "net_util.h"
 #include "network.h"
 
-#include "XY_Coordinates.h"
 #include "World.h"
 #include "player.h"
 #include "tiledmap.h"

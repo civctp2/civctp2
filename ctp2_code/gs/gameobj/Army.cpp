@@ -56,7 +56,7 @@ void Army::KillArmy()
 
 	CAUSE_REMOVE_ARMY cause = GetRemoveCause();
 
-	AccessData()->StopPirating();
+	AccessData()->StopPirating(); // do not execute pirating if army gets killed
 
 	Army tmp(*this);
 	tmp.SetRemoveCause(cause);
@@ -895,13 +895,12 @@ bool Army::IsWounded(void) const
 
 bool Army::CanAtLeastOneCargoUnloadAt
 (
-    MapPoint const &    old_pos,
-    MapPoint const &    dest_pos,
+    MapPoint const &    unload_pos,
     bool                use_vision,
     const bool          check_move_points
 ) const
 {
-	return GetData()->CanAtLeastOneCargoUnloadAt(old_pos, dest_pos, use_vision, check_move_points);
+	return GetData()->CanAtLeastOneCargoUnloadAt(unload_pos, use_vision, check_move_points);
 }
 
 bool Army::ExecutedThisTurn() const

@@ -1,6 +1,6 @@
 #include "c3.h"
 #include "TradeRoute.h"
-#include "XY_Coordinates.h"
+
 #include "World.h"
 #include "TradePool.h"
 #include "player.h"
@@ -40,11 +40,6 @@ void TradeRoute::RemoveAllReferences(CAUSE_KILL_TRADE_ROUTE cause)
 	g_director->TradeActorDestroy(*this);
 	TradeRouteData* data = AccessData();
 
-
-
-
-
-
 	Unit source(data->GetSource()), dest(data->GetDestination());
 
 
@@ -70,10 +65,10 @@ void TradeRoute::RemoveAllReferences(CAUSE_KILL_TRADE_ROUTE cause)
 		}
 	}
 
-    if ((NULL != g_player)  &&
-        (NULL != g_player[GetPayingFor()])) {
-    	g_player[GetPayingFor()]->RemoveTradeRoute(*this, cause);
-    }
+	if ((NULL != g_player)  &&
+	    (NULL != g_player[GetPayingFor()])) {
+		g_player[GetPayingFor()]->RemoveTradeRoute(*this, cause);
+	}
 
 	data->RemoveFromCells();
 
@@ -85,9 +80,6 @@ void TradeRoute::RemoveAllReferences(CAUSE_KILL_TRADE_ROUTE cause)
 		AccessRecip().KillRoute();
 	}
 #endif
-
-
-
 
 	if(g_network.IsHost()) {
 		g_network.Enqueue(new NetInfo(NET_INFO_CODE_KILL_TRADE_ROUTE, (uint32)*this, (uint32)cause));
@@ -117,13 +109,13 @@ PLAYER_INDEX TradeRoute::GetPayingFor() const
 
 const TradeRouteData* TradeRoute::GetData() const
 {
-    Assert(g_theTradePool);
+	Assert(g_theTradePool);
 	return g_theTradePool->GetTradeRoute(*this);
 }
 
 TradeRouteData* TradeRoute::AccessData() const
 {
-    Assert(g_theTradePool);
+	Assert(g_theTradePool);
 	return g_theTradePool->AccessTradeRoute(*this);
 }
 
@@ -150,21 +142,6 @@ const DynamicArray<MapPoint>* TradeRoute::GetSelectedPath() const
 void TradeRoute::GetSourceResource(ROUTE_TYPE &type, sint32 &resource) const
 {
 	GetData()->GetSourceResource(type, resource);
-}
-
-TradeRoute TradeRoute::GetRecip() const
-{
-	return GetData()->GetRecip();
-}
-
-TradeRoute TradeRoute::AccessRecip()
-{
-	return AccessData()->AccessRecip();
-}
-
-void TradeRoute::SetRecip(TradeRoute route)
-{
-	AccessData()->SetRecip(route);
 }
 
 BOOL TradeRoute::PassesThrough(sint32 player) const
@@ -209,12 +186,12 @@ uint32 TradeRoute::GetOutlineColor() const
 
 void TradeRoute::SetColor( uint32 color )
 {
-	 AccessData()->SetColor(color);
+	AccessData()->SetColor(color);
 }
 
 void TradeRoute::SetOutlineColor( uint32 color )
 {
-	 AccessData()->SetOutlineColor(color);
+	AccessData()->SetOutlineColor(color);
 }
 
 void TradeRoute::ReturnPath(const PLAYER_INDEX owner, DynamicArray<MapPoint> &waypoints,

@@ -501,7 +501,6 @@ bool BuildQueue::BuildFrontBuilding()
 
 bool BuildQueue::BuildFrontWonder()
 {
-
 	if(wonderutil_IsBuilt(m_list->GetHead()->m_type))
 	{
 		RemoveHead();
@@ -522,8 +521,9 @@ bool BuildQueue::BuildFrontWonder()
 		wonderutil_AddBuilt(m_list->GetHead()->m_type);
 
 		return true;
-	} else {
-
+	}
+	else
+	{
 		if(m_city.CD()->HowMuchLonger() <= 3 &&
 		   !(m_list->GetHead()->m_flags & k_BUILD_NODE_FLAG_ALMOST_DONE)) {
 			m_list->GetHead()->m_flags |= k_BUILD_NODE_FLAG_ALMOST_DONE;
@@ -555,7 +555,9 @@ bool BuildQueue::BuildFrontEndgame()
 								  m_city.m_id, m_list->GetHead()->m_type));
 		g_player[m_owner]->AddEndGameObject(m_city, m_list->GetHead()->m_type);
 		return true;
-	} else {
+	}
+	else
+	{
 		return false;
 	}
 }
@@ -968,14 +970,6 @@ void BuildQueue::HandleProductionStop(void)
 #if defined(CTP1_HAS_RISEN_FROM_THE_GRAVE)
 		case k_GAME_OBJ_TYPE_UNIT:
 			// SendMsgWormholeProbeStopped() does not exist
-			break;
-#endif
-
-#if 0
-// TODO: check
-		case k_GAME_OBJ_TYPE_INFRASTRUCTURE:
-		case k_GAME_OBJ_TYPE_CAPITALIZATION:
-			m_city.CD()->StopInfrastructureCapitalization();
 			break;
 #endif
 		}
@@ -1779,7 +1773,7 @@ sint32 BuildQueue::GetLen() const
 	return m_list->GetCount();
 }
 
-BuildNode *BuildQueue::GetHead()
+BuildNode *BuildQueue::GetHead() const
 {
 	return m_list->GetHead();
 }

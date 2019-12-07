@@ -294,8 +294,7 @@ public:
 
 	bool CanAtLeastOneCargoUnloadAt
 	(
-	    MapPoint const &    old_pos,
-	    MapPoint const &    dest_pos,
+	    MapPoint const &    unload_pos,
 	    bool                use_vision,
 	    const bool          check_move_points = true
 	) const;

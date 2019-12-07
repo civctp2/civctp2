@@ -1,0 +1,7 @@
+
+CITY_MANAGER_WINDOW {
+	int widthpix 640
+	int heightpix 400
+}
+
+$

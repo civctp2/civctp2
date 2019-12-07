@@ -37,12 +37,8 @@ public:
 
     T m_data;
 
-    friend class AstarQueue;
     friend class Astar;
     friend class AVLHeap;
-
-    friend sint32 count_point(AVL<T> *node, const MapPoint  &pos);
-    friend sint32 check_for_dups(AVL<T> *cost_tree, AVL<T> *node);
 
     AVL();
     void InitAVL();
@@ -89,23 +85,8 @@ template <class T> void AVL<T>::InitAVL() {
 #endif
 }
 
-
-
-
-
-
-
-
-
-
-
-
-
-
 template <class T>  sint32 AVL<T>::Insert (AVL<T> *addme, AVL<T> **node)
-
 {
-
    if(*node != NULL) {
         Assert(!addme->m_data.Identical((*node)->m_data));
    }
@@ -142,107 +123,6 @@ template <class T>  sint32 AVL<T>::Insert (AVL<T> *addme, AVL<T> **node)
    }
    return 0;
 }
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
 
 template <class T> sint32 AVL<T>::rotate_remove_avl(AVL<T> ** node,
                 AVL_INDEX_TYPE a, AVL_INDEX_TYPE b)
@@ -295,19 +175,6 @@ template <class T> sint32 AVL<T>::rotate_remove_avl(AVL<T> ** node,
 
 }
 
-
-
-
-
-
-
-
-
-
-
-
-
-
 template <class T> sint32 AVL<T>::balance_remove_avl(AVL<T> **node,
                                   AVL_INDEX_TYPE a, AVL_INDEX_TYPE b)
 
@@ -327,23 +194,6 @@ template <class T> sint32 AVL<T>::balance_remove_avl(AVL<T> **node,
 	_ASSERTE(0);
    return FALSE;
 }
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
 
 template <class T> sint32 AVL<T>::promote_rightmost_avl(AVL<T> **c, AVL<T> **p,
                            AVL<T>  **dead, sint32 is_top)
@@ -442,21 +292,6 @@ template <class T> sint32 AVL<T>::Verify(AVL<T> *node, sint32 &depth)
    }
 }
 
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
 template <class T> sint32 AVL<T>::Remove(AVL<T> *delme,
      AVL<T> **dead, AVL<T> **node)
 
@@ -503,26 +338,6 @@ template <class T> sint32 AVL<T>::Remove(AVL<T> *delme,
 	return FALSE;
 }
 
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
 template <class T>  void AVL<T>::rotate_insert_avl(AVL<T> ** node,
                        AVL_INDEX_TYPE a, AVL_INDEX_TYPE b)
 {  AVL *tmp1, *tmp2;
@@ -561,23 +376,6 @@ template <class T>  void AVL<T>::rotate_insert_avl(AVL<T> ** node,
    (*node)->m_balance = AVL_MID;
 }
 
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
 template <class T> sint32 AVL<T>::balance_insert_avl(AVL<T> **node,
          AVL_INDEX_TYPE a, AVL_INDEX_TYPE b)
 
@@ -597,19 +395,6 @@ template <class T> sint32 AVL<T>::balance_insert_avl(AVL<T> **node,
    _ASSERTE(0);
 	return FALSE;
 }
-
-
-
-
-
-
-
-
-
-
-
-
-
 
 #if 0
 
@@ -672,20 +457,6 @@ template <class T> sint32 AVL<T>::Search(AVL<T> *matchme,
    }
 }
 
-
-
-
-
-
-
-
-
-
-
-
-
-
-
 template <class T> sint32 AVL<T>::RemoveSmallest(AVL<T> **smallest,
                                     AVL<T> **node)
 
@@ -707,14 +478,6 @@ template <class T> sint32 AVL<T>::RemoveSmallest(AVL<T> **smallest,
       }
    }
 }
-
-
-
-
-
-
-
-
 
 template <class T> sint32 AVL<T>::GetBiggest(
     AVL<T> **biggest,

@@ -53,13 +53,6 @@
 #include "Sci.h"
 #include "Gold.h"
 
-
-
-
-
-
-
-
 STDEHANDLER(LandForPeace_ProposalResponseEvent)
 {
 	sint32 cityId;
@@ -93,22 +86,14 @@ STDEHANDLER(LandForPeace_ProposalResponseEvent)
 	sint32 at_risk_value = (sint32) ((double)at_risk_value_percent / 100.0) *
 		MapAnalysis::GetMapAnalysis().TotalValue(receiver);
 
-
-
-
-
-
 	if (receiver_diplomat.GetTrust(sender) < COLDWAR_REGARD)
 		return GEV_HD_Continue;
-
 
 	if (at_risk_value_percent < 75)
 		return GEV_HD_Continue;
 
-
 	if ( at_risk_value < Unit(cityId)->GetCityData()->GetValue())
 		return GEV_HD_Continue;
-
 
 	if (((double) MapAnalysis::GetMapAnalysis().TotalThreat(receiver) /
 		MapAnalysis::GetMapAnalysis().TotalThreat(sender)) > 1.25)
@@ -122,26 +107,13 @@ STDEHANDLER(LandForPeace_ProposalResponseEvent)
 	}
 	else if (!AgreementMatrix::s_agreements.HasAgreement(sender, receiver, PROPOSAL_TREATY_PEACE))
 	{
-
 		DiplomacyArg arg;
 		receiver_diplomat.ConsiderCounterResponse(sender, PROPOSAL_TREATY_PEACE,
 			arg, accept_priority, DIPLOMATIC_TONE_EQUAL);
 	}
 
-
-
-
-
-
 	return GEV_HD_Continue;
 }
-
-
-
-
-
-
-
 
 STDEHANDLER(Accept_ProposalResponseEvent)
 {
@@ -184,12 +156,6 @@ STDEHANDLER(Accept_ProposalResponseEvent)
 	return GEV_HD_Continue;
 }
 
-
-
-
-
-
-
 STDEHANDLER(Reject_ProposalResponseEvent)
 {
 	PLAYER_INDEX sender;
@@ -214,7 +180,6 @@ STDEHANDLER(Reject_ProposalResponseEvent)
 	}
 	return GEV_HD_Continue;
 }
-
 
 STDEHANDLER(PayTribute_ProposalResponseEvent)
 {
@@ -268,11 +233,6 @@ STDEHANDLER(PayTribute_ProposalResponseEvent)
 	receiver_diplomat.ConsiderCounterResponse(sender, PROPOSAL_OFFER_GIVE_GOLD,
 		arg, accept_priority, DIPLOMATIC_TONE_EQUAL);
 
-
-
-
-
-
 	return GEV_HD_Continue;
 }
 
@@ -314,7 +274,6 @@ STDEHANDLER(MutualWithdraw_ProposalResponseEvent)
 	return GEV_HD_Continue;
 }
 
-
 STDEHANDLER(PayForAdvance_ProposalResponseEvent)
 {
 	PLAYER_INDEX sender;
@@ -347,7 +306,6 @@ STDEHANDLER(PayForAdvance_ProposalResponseEvent)
 	ProposalAnalysis::DebugResult(sender_proposal);
 #endif _DEBUG
 
-
 	sint32 regard = receiver_diplomat.GetEffectiveRegard(sender);
 	double desired_gold_precise = 0;
 
@@ -374,11 +332,6 @@ STDEHANDLER(PayForAdvance_ProposalResponseEvent)
 		arg.gold = desired_gold;
 		receiver_diplomat.ConsiderCounterResponse(sender, PROPOSAL_OFFER_GIVE_GOLD,
 			arg, accept_priority, DIPLOMATIC_TONE_EQUAL);
-
-
-
-
-
 	}
 
 	else if (proposal_receiver_result.gold >= desired_gold)
@@ -388,13 +341,6 @@ STDEHANDLER(PayForAdvance_ProposalResponseEvent)
 
 	return GEV_HD_Continue;
 }
-
-
-
-
-
-
-
 
 STDEHANDLER(AdvanceForGold_ProposalResponseEvent)
 {
@@ -428,7 +374,6 @@ STDEHANDLER(AdvanceForGold_ProposalResponseEvent)
 	ProposalAnalysis::DebugResult(sender_proposal);
 #endif _DEBUG
 
-
 	sint32 regard = receiver_diplomat.GetEffectiveRegard(sender);
 
 	sint32 min_cost = 0;
@@ -447,13 +392,11 @@ STDEHANDLER(AdvanceForGold_ProposalResponseEvent)
 		AgreementMatrix::s_agreements.HasAgreement(sender, receiver, PROPOSAL_TREATY_ALLIANCE) ||
 		receiver_diplomat.GetPersonality()->GetDiscoveryScientist())
 	{
-
 		min_cost = static_cast<sint32>(proposal_sender_result.science * 0.5);
 		max_cost = std::min(max_cost, proposal_sender_result.science * 3);
 	}
 	else
 	{
-
 		min_cost = static_cast<sint32>(proposal_sender_result.science * 0.8);
 		max_cost = std::min(max_cost, proposal_sender_result.science * 2);
 	}
@@ -467,18 +410,10 @@ STDEHANDLER(AdvanceForGold_ProposalResponseEvent)
 		arg.advanceType = desired_advance;
 		receiver_diplomat.ConsiderCounterResponse(sender, PROPOSAL_OFFER_GIVE_ADVANCE,
 			arg, accept_priority, DIPLOMATIC_TONE_EQUAL);
-
-
-
-
-
 	}
 
 	return GEV_HD_Continue;
 }
-
-
-
 
 STDEHANDLER(AdvanceExchange_ProposalResponseEvent)
 {
@@ -524,17 +459,14 @@ STDEHANDLER(AdvanceExchange_ProposalResponseEvent)
 		AgreementMatrix::s_agreements.HasAgreement(sender, receiver, PROPOSAL_TREATY_ALLIANCE) ||
 		receiver_diplomat.GetPersonality()->GetDiscoveryScientist())
 	{
-
 		min_cost = static_cast<sint32>(proposal_sender_result.science * 0.5);
 		max_cost = proposal_sender_result.science * 2;
 	}
 	else
 	{
-
 		min_cost = static_cast<sint32>(proposal_sender_result.science * 0.8);
 		max_cost = proposal_sender_result.science * 3;
 	}
-
 
 	sint32 desired_advance = receiver_diplomat.GetDesiredAdvanceFrom(sender, min_cost, max_cost);
 
@@ -683,7 +615,6 @@ STDEHANDLER(GiveMap_ProposalResponseEvent)
 	if (receiver_saw_map != -1 &&
 		receiver_saw_map < want_map_turns)
 	{
-
 		DiplomacyResult proposal_sender_result;
 		DiplomacyResult proposal_receiver_result;
 		ProposalAnalysis::ComputeResult( sender_proposal,
@@ -711,7 +642,6 @@ STDEHANDLER(GiveMap_ProposalResponseEvent)
 
 	return GEV_HD_Continue;
 }
-
 
 STDEHANDLER(PeaceTreaty_ProposalResponseEvent)
 {
@@ -742,9 +672,6 @@ STDEHANDLER(PeaceTreaty_ProposalResponseEvent)
 	if (accept_priority <= 0)
 		return GEV_HD_Continue;
 
-
-
-
 	if ((!receiver_diplomat.GetPersonality()->GetConquestAgressive() ||
 		 receiver_diplomat.GetPersonality()->GetDiscoveryDiplomatic()) &&
 		 AgreementMatrix::s_agreements.TurnsSinceLastWar(sender,receiver) == -1)
@@ -757,10 +684,10 @@ STDEHANDLER(PeaceTreaty_ProposalResponseEvent)
 	else if (!receiver_diplomat.TestEffectiveRegard(sender, NEUTRAL_REGARD))
 		return GEV_HD_Continue;
 
-	if (receiver_diplomat.GetLastHotwarAttack(sender) <= 10)
+	if (receiver_diplomat.GetLastHotwarAttack(sender) < 10)
 		return GEV_HD_Continue;
 
-	if (receiver_diplomat.GetLastColdwarAttack(sender) <= 5)
+	if (receiver_diplomat.GetLastColdwarAttack(sender) < 5)
 		return GEV_HD_Continue;
 
 	if (receiver_diplomat.GetTrust(sender) < COLDWAR_REGARD)
@@ -773,7 +700,6 @@ STDEHANDLER(PeaceTreaty_ProposalResponseEvent)
 	if (receiver_diplomat.GetBorderIncursionBy(sender) &&
 		AgreementMatrix::s_agreements.HasAgreement(sender,receiver, PROPOSAL_OFFER_WITHDRAW_TROOPS))
 	{
-
 		DiplomacyArg arg;
 		receiver_diplomat.ConsiderCounterResponse(sender, PROPOSAL_OFFER_WITHDRAW_TROOPS, arg, accept_priority, DIPLOMATIC_TONE_INDIGNANT);
 
@@ -781,7 +707,6 @@ STDEHANDLER(PeaceTreaty_ProposalResponseEvent)
 	}
 	else
 	{
-
 		receiver_diplomat.ConsiderResponse(sender, RESPONSE_ACCEPT, accept_priority);
 	}
 
@@ -836,9 +761,6 @@ STDEHANDLER(AcceptAlliance_ProposalResponseEvent)
 
 	return GEV_HD_Continue;
 }
-
-
-
 
 STDEHANDLER(CeasefireForGold_ProposalResponseEvent)
 {
@@ -964,7 +886,6 @@ STDEHANDLER(StopResearch_ProposalResponseEvent)
 		(sender_strength > DIPLOMATIC_STRENGTH_AVERAGE) ||
 		!appropriate_advance)
 	{
-
 		receiver_diplomat.ConsiderResponse(sender, RESPONSE_REJECT, reject_priority);
 		return GEV_HD_Continue;
 	}
@@ -988,7 +909,6 @@ STDEHANDLER(StopResearch_ProposalResponseEvent)
 		}
 		else if (has_advance && !AgreementMatrix::s_agreements.HasAgreement(sender,receiver,PROPOSAL_TREATY_PEACE))
 		{
-
 			DiplomacyArg arg;
 			receiver_diplomat.ConsiderCounterResponse(
 				sender,
@@ -999,7 +919,6 @@ STDEHANDLER(StopResearch_ProposalResponseEvent)
 		}
 		else
 		{
-
 			receiver_diplomat.ConsiderResponse(sender, RESPONSE_ACCEPT, accept_priority);
 			return GEV_HD_Continue;
 		}
@@ -1081,7 +1000,6 @@ STDEHANDLER(ReduceWeapons_ProposalResponseEvent)
 	}
 	else
 	{
-
 		receiver_diplomat.ConsiderResponse(sender, RESPONSE_REJECT, reject_priority);
 
 		return GEV_HD_Continue;
@@ -1097,7 +1015,6 @@ STDEHANDLER(ReduceWeapons_ProposalResponseEvent)
 
 	if (reduce_percent <= 0.0)
 	{
-
 		receiver_diplomat.ConsiderResponse(sender, RESPONSE_REJECT, reject_priority);
 
 		return GEV_HD_Continue;
@@ -1254,9 +1171,9 @@ STDEHANDLER(HonorMilitaryAgreement_ProposalResponseEvent)
 	}
 
 	DIPLOMATIC_STRENGTH sender_strength =
-        std::max(g_player[sender]->GetRelativeStrength(foreigner),
-			     g_player[sender]->GetRelativeStrength(receiver)
-                );
+	    std::max(g_player[sender]->GetRelativeStrength(foreigner),
+	             g_player[sender]->GetRelativeStrength(receiver)
+	            );
 
 	if (sender_strength > DIPLOMATIC_STRENGTH_VERY_STRONG)
 	{
@@ -1265,7 +1182,7 @@ STDEHANDLER(HonorMilitaryAgreement_ProposalResponseEvent)
 	}
 
 	DIPLOMATIC_STRENGTH foreigner_strength =
-        foreigner_ptr->GetRelativeStrength(sender);
+	    foreigner_ptr->GetRelativeStrength(sender);
 
 	if (foreigner_strength > DIPLOMATIC_STRENGTH_VERY_STRONG)
 	{
@@ -1409,7 +1326,6 @@ STDEHANDLER(HonorPollutionAgreement_ProposalResponseEvent)
 			}
 		}
 	}
-
 	else if ((receiver_pollution / sender_pollution) < 1.0)
 	{
 		DiplomacyArg arg;
@@ -1441,7 +1357,6 @@ STDEHANDLER(HonorPollutionAgreement_ProposalResponseEvent)
 			arg, accept_priority, tone);
 		return GEV_HD_Continue;
 	}
-
 
 	if (receiver_diplomat.GetPersonality()->GetDiscoveryEcotopian() ||
 		receiver_diplomat.GetPersonality()->GetTrustworthinessLawful() ||
@@ -1499,7 +1414,6 @@ STDEHANDLER(EndEmbargo_ProposalResponseEvent)
 	sint32 receiver_trade_total =  MapAnalysis::GetMapAnalysis().GetTotalTrade(receiver);
 	sint32 sender_trade_total = MapAnalysis::GetMapAnalysis().GetTotalTrade(sender);
 
-
 	if (receiver_diplomat.TestPublicRegard(sender, FRIEND_REGARD) &&
 		(sender_trade_total > 1.5 * receiver_trade_total ))
 	{
@@ -1508,7 +1422,6 @@ STDEHANDLER(EndEmbargo_ProposalResponseEvent)
 		arg.gold = ProposalAnalysis::RoundGold(arg.gold);
 		if (arg.gold <= 0)
 			return GEV_HD_Continue;
-
 
 		receiver_diplomat.ConsiderCounterResponse(
 			sender,
@@ -1532,7 +1445,6 @@ STDEHANDLER(EndEmbargo_ProposalResponseEvent)
 			arg, accept_priority, DIPLOMATIC_TONE_MEEK);
 		return GEV_HD_Continue;
 	}
-
 
 	receiver_diplomat.ConsiderResponse(sender, RESPONSE_ACCEPT, accept_priority);
 
@@ -1570,7 +1482,6 @@ STDEHANDLER(DefaultTreatyResponse_ProposalResponseEvent)
 
 	if (is_treaty)
 	{
-
 		DiplomacyResult sender_result;
 		DiplomacyResult receiver_result;
 		ProposalAnalysis::ComputeResult( sender_proposal,
@@ -1750,7 +1661,6 @@ STDEHANDLER(DefaultTreatyResponse_ProposalResponseEvent)
 
 void ProposalResponseEventCallbacks::AddCallbacks()
 {
-
 	g_gevManager->AddCallback(GEV_ProposalResponse,
 							  GEV_PRI_Pre,
 							  &s_LandForPeace_ProposalResponseEvent);
@@ -1834,5 +1744,4 @@ void ProposalResponseEventCallbacks::AddCallbacks()
 	g_gevManager->AddCallback(GEV_ProposalResponse,
 							  GEV_PRI_Pre,
 							  &s_MutualWithdraw_ProposalResponseEvent);
-
 }

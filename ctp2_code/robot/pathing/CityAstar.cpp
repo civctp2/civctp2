@@ -47,17 +47,11 @@
 #include "CityAstar.h"
 
 #include "AgreementMatrix.h"    // Allow alliance checking
-#include "Astar.h"              // k_ASTAR_BIG, ASTAR_BLOCKED, ASTAR_CAN_ENTER
-#include "c3errors.h"
 #include "Diplomat.h"           // To be able to retrieve the current strategy
-#include "Globals.h"
-#include "MoveFlags.h"
 #include "Path.h"
 #include "player.h"             // g_player
 #include "StrategyRecord.h"     // For accessing the strategy database
-#include "TerrainImprovementRecord.h"
 #include "terrainutil.h"
-#include "TerrImprove.h"
 #include "World.h"              // g_theWorld
 
 CityAstar g_city_astar;
@@ -173,18 +167,13 @@ bool CityAstar::EntryCost
 			}
 		}
 
-		if(m_pathLand || m_simpleDistance)
-		{
-			cost = sqrt(static_cast<float>(MapPoint::GetSquaredDistance(m_start, pos)))
-				 + sqrt(static_cast<float>(MapPoint::GetSquaredDistance(m_dest,  pos)));
-			entry = ASTAR_CAN_ENTER;
-			return true;
-		}
-
 		Cell *  entryCell   = g_theWorld->GetCell(pos);
 
 		cost  = static_cast<float>(entryCell->GetMoveCost());
 		entry = ASTAR_CAN_ENTER;
+
+		if(m_simpleDistance)
+			return true;
 
 		if(!g_player[m_owner]->IsExplored(pos))
 		{
@@ -219,7 +208,7 @@ bool CityAstar::IsConnected
     bool                isLand
 )
 {
-	m_pathRoad              = true;
+	m_pathRoad              = false;
 	m_owner                 = owner;
 	m_pathLand              = isLand;
 	m_maxSquaredDistance    = maxSquaredDistance;
