@@ -6,6 +6,7 @@ touch $XAUTH
 xauth nlist $DISPLAY < /dev/null | sed -e 's/^..../ffff/' | xauth -f $XAUTH nmerge -
 
 mkdir -p $HOME/.civctp2/save/
+mkdir -p $HOME/.civctp2/logs/ # if not existent created by docker then owned by root
 touch $HOME/.civctp2/userprofile.txt # file must exist for docker file-vol
 touch $HOME/.civctp2/userkeymap.txt # file must exist for docker file-vol
 touch $HOME/.civctp2/Const.txt # file must exist for docker file-vol
@@ -25,6 +26,7 @@ docker run \
        -v $HOME/.civctp2/userkeymap.txt:/opt/ctp2/ctp2_program/ctp/userkeymap.txt \
        -v $HOME/.civctp2/Const.txt:/opt/ctp2/ctp2_program/ctp/Const.txt \
        -v $HOME/.civctp2/save/:/opt/ctp2/ctp2_program/ctp/save \
+       -v $HOME/.civctp2/logs/:/opt/ctp2/ctp2_program/ctp/logs \
        $@
 
 rm $XAUTH # remove to avoid accumulation of xauth settings
