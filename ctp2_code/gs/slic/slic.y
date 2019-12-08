@@ -456,10 +456,10 @@ SLIC_ERROR slicif_run_parser(char* filename, int symStart)
 #ifdef _DEBUG
 	static int debug_opened = 0;
 	if(!debug_opened) {
-		debuglog = fopen("slicdbg.txt", "w");
+		debuglog = fopen("logs" FILE_SEP "slicdbg.txt", "w");
 		debug_opened = 1;
 	} else {
-		debuglog = fopen("slicdbg.txt", "a");
+		debuglog = fopen("logs" FILE_SEP "slicdbg.txt", "a");
 	}
 #endif
 	slicif_set_start(symStart);

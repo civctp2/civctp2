@@ -1163,7 +1163,7 @@ bool CivApp::InitializeAppDB(void)
 	g_theProgressWindow->StartCountingTo( 520 );
 
 #ifdef _DEBUG
-	FILE *dipFile = fopen("dipcombo.txt", "w");
+	FILE *dipFile = fopen("logs" FILE_SEP "dipcombo.txt", "w");
 	if(dipFile) {
 		sint32 i,j;
 

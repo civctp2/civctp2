@@ -89,21 +89,21 @@ BOOL CALLBACK   Debug_EnumModulesCallback(LPSTR moduleName, ULONG dllBase, PVOID
 int             Debug_FunctionNameOpenFromPDB(void);
 
 #ifdef _DEBUG
-#define k_MAP_FILE "civctp_dbg.map"
+#define k_MAP_FILE "logs" FILE_SEP "civctp_dbg.map"
 #else
 #ifndef _BFR_
-#define k_MAP_FILE "civctp_rel.map"
+#define k_MAP_FILE "logs" FILE_SEP "civctp_rel.map"
 #else
 #if defined(USE_LOGGING)
-#define k_MAP_FILE "ctp2log.map"
+#define k_MAP_FILE "logs" FILE_SEP "ctp2log.map"
 #else
-#define k_MAP_FILE "ctp2.map"
+#define k_MAP_FILE "logs" FILE_SEP "ctp2.map"
 #endif
 #endif
 #endif
 
 #else // WIN32
-#define k_MAP_FILE "ctp2linux.map"
+#define k_MAP_FILE "logs" FILE_SEP "ctp2linux.map"
 #endif // WIN32
 
 #if defined(WIN32)

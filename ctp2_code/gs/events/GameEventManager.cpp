@@ -59,7 +59,7 @@ GameEventManager *g_gevManager = NULL;
 
 extern BOOL g_eventLog;
 
-#define EVENTLOGNAME "eventlog.txt"
+#define EVENTLOGNAME "logs" FILE_SEP "eventlog.txt"
 
 #define k_MAX_EVENT_HISTORY 10
 
@@ -846,7 +846,7 @@ void GameEventManager::Log(const char *fmt, ...)
 
 void GameEventManager::Dump()
 {
-	FILE *f = fopen("eventcb.txt", "w");
+	FILE *f = fopen("logs" FILE_SEP "eventcb.txt", "w");
 
 	GAME_EVENT ev;
 	for(ev = (GAME_EVENT)0; ev < GEV_MAX; ev = GAME_EVENT((sint32)ev + 1)) {
