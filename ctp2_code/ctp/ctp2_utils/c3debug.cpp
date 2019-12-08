@@ -117,6 +117,7 @@ void c3debug_InitDebugLog()
 	{
 		int unlinkRetVal;
 		if(strcmp(dent->d_name, "." ) != 0
+		&& strstr(dent->d_name, ".map") == NULL // do not delete already created k_MAP_FILE
 		&& strcmp(dent->d_name, "..") != 0)
 		{
 			sprintf(fileName, "logs%s%s", FILE_SEP, dent->d_name);
