@@ -317,16 +317,7 @@ void c3debug_Assert(char const *s, char const * file, int line)
 	MBCHAR str[1024];
 	sprintf(str, "Assertion (%s) Failed in File:%s, Line:%ld\n", s, file, line);
 	fprintf(stderr, str);
-	sint32 result = MessageBox(NULL, str, "Assert", MB_ABORTRETRYIGNORE | MB_ICONEXCLAMATION);
-	
-	if(result == IDRETRY)
-	{
-		std::raise(SIGINT);
-	}
-	else if(result == IDABORT)
-	{
-		exit(-1);
-	}
+	std::raise(SIGINT);
 #endif
 #endif
 }
