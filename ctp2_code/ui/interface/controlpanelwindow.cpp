@@ -1771,9 +1771,6 @@ void ControlPanelWindow::TileImpUpdate()  //emod4 definetely needs this but scho
 		return;
 	}
 
-	ERR_BUILD_INST	err;
-	Pixel16			color;
-
 	if (CursorOverControlPanel())
 	{
 		g_cursorManager->SetCursor(CURSORINDEX_DEFAULT);
@@ -1781,6 +1778,7 @@ void ControlPanelWindow::TileImpUpdate()  //emod4 definetely needs this but scho
 	}
 	else
 	{
+		Pixel16 color;
 		if (player->CanCreateImprovement(m_currentTerrainImpRec->GetIndex(), pos, true))
 		{
 			g_cursorManager->SetCursor(CURSORINDEX_MOVE);
@@ -1794,7 +1792,7 @@ void ControlPanelWindow::TileImpUpdate()  //emod4 definetely needs this but scho
 
 		if(g_player[player_id]->IsExplored(pos))
 		{
-			g_tiledMap->SetTerrainOverlay(m_currentTerrainImpRec,pos,color);
+			g_tiledMap->SetTerrainOverlay(m_currentTerrainImpRec, pos, color);
 			tileimptracker_DisplayData(pos, m_currentTerrainImpRec->GetIndex());
 		}
 		else

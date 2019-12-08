@@ -123,6 +123,7 @@ class CityWindow {
 
 	ctp2_Static *m_globalBox;
 	ctp2_Static *m_globalFood, *m_globalProduction, *m_globalTrade, *m_globalScience, *m_globalPopulation;
+	ctp2_Static *m_globalTradeFood, *m_globalTradeProduction, *m_globalTradeGold;
 
 	uint32 m_unitId[k_MAX_ARMY_SIZE];
 

@@ -627,6 +627,7 @@ STDEHANDLER(ArmyGetExpelledOrderEvent)
 	SlicObject *so = new SlicObject("42UnitExpelled");
 	so->AddCivilisation(player);
 	so->AddRecipient(victim);
+	so->AddLocation(pos);
 	g_slicEngine->Execute(so);
 
 	return GEV_HD_Continue;
@@ -1417,6 +1418,11 @@ STDEHANDLER(LawsuitEvent)
 		so->AddLocation(a->RetPos());
 		so->AddUnitRecord(utype);
 		g_slicEngine->Execute(so);
+		
+		so = new SlicObject("911SueCompleteAttacker");
+		so->AddRecipient(lawyer->GetOwner());
+		so->AddUnitRecord(utype);
+		g_slicEngine->Execute(so);
 	}
 
 	return GEV_HD_Continue;
@@ -1432,7 +1438,23 @@ STDEHANDLER(RemoveFranchiseEvent)
 	if(!args->GetUnit(0, lawyer)) return GEV_HD_Continue;
 	if(!args->GetCity(0, city)) return GEV_HD_Continue;
 
-	city.SetFranchiseTurnsRemaining(g_theConstDB->Get(0)->GetTurnsToSueFranchise());
+        // report message before owner is possibly reset by SetFranchiseTurnsRemaining
+	sint32 TurnsToSueFranchise= g_theConstDB->Get(0)->GetTurnsToSueFranchise();
+	SlicObject *so = new SlicObject("911SueFranchiseCompleteVictim");
+	so->AddRecipient(city.GetFranchiseOwner());
+	so->AddCity(city);
+	so->AddGold(TurnsToSueFranchise >= 0 ? TurnsToSueFranchise + 1 : 0);// misuseing AddGold for passing the remaining franchise turns
+	so->AddGold(city.GetProductionLostToFranchise());
+	g_slicEngine->Execute(so);
+
+	so = new SlicObject("911SueFranchiseCompleteAttacker");
+	so->AddRecipient(lawyer.GetOwner());
+	so->AddCity(city);
+	so->AddGold(TurnsToSueFranchise >= 0 ? TurnsToSueFranchise + 1 : 0);// misuseing AddGold for passing the remaining franchise turns
+	g_slicEngine->Execute(so);
+
+	city.SetFranchiseTurnsRemaining(TurnsToSueFranchise);
+
 	return GEV_HD_Continue;
 }
 
@@ -1467,6 +1489,16 @@ STDEHANDLER(EnslaveSettlerEvent)
 		                       GEA_City,    home_city.m_id,
 		                       GEA_Player,  settlerOwner,
 		                       GEA_End);
+
+		SlicObject *so = new SlicObject("139SettlerSlavedVictim");
+		so->AddRecipient(settlerOwner);
+		g_slicEngine->Execute(so);
+
+		so = new SlicObject("137SlaveryCompleteAttacker");
+		so->AddRecipient(slaverOwner);
+		so->AddCivilisation(slaverOwner);
+		so->AddCity(home_city);
+		g_slicEngine->Execute(so);
 	}
 	// else No action: the slaver does not have any cities
 

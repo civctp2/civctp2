@@ -278,7 +278,6 @@ private:
 	bool              m_capturedThisTurn;
 	bool              m_walls_nullified;         // Not used?
 	bool              m_terrainWasPolluted;
-	bool              m_happinessAttacked;
 	bool              m_terrainImprovementWasBuilt;
 	bool              m_improvementWasBuilt;
 	bool              m_isInjoined;
@@ -398,6 +397,10 @@ public:
 
 	void   CollectResources();
 	void   CollectResourcesFinally();
+
+        sint32 FoodFromTrade();
+        sint32 ProdFromTrade();
+        sint32 GoldFromTrade();
 
 #if !defined(NEW_RESOURCE_PROCESS)
 	sint32 ProcessFood();
@@ -683,7 +686,7 @@ public:
 	bool WasImprovementBuilt(void) const { return m_improvementWasBuilt; }
 	void IndicateTerrainImprovementBuilt(void) { m_terrainImprovementWasBuilt = true; }
 	bool WasTerrainImprovementBuilt(void) const { return m_terrainImprovementWasBuilt; }
-	void IndicateHappinessAttacked(void) { m_happinessAttacked = true; }
+	void IndicateHappinessAttacked(void) { m_happinessAttackedBy >= 0; }
 	bool WasHappinessAttacked(void) const;
 	void HappinessAttackedBy(sint32 player);
 	sint32 GetHappinessAttackedBy() const { return m_happinessAttackedBy;}
@@ -1046,7 +1049,6 @@ private:
 		DPRINTF(k_DBG_AI, ("m_convertedGold: %d\n", sizeof(m_convertedGold)));
 		DPRINTF(k_DBG_AI, ("m_convertedBy: %d\n", sizeof(m_convertedBy)));
 		DPRINTF(k_DBG_AI, ("m_terrainWasPolluted: %d\n", sizeof(m_terrainWasPolluted)));
-		DPRINTF(k_DBG_AI, ("m_happinessAttacked: %d\n", sizeof(m_happinessAttacked)));
 		DPRINTF(k_DBG_AI, ("m_terrainImprovementWasBuilt: %d\n", sizeof(m_terrainImprovementWasBuilt)));
 		DPRINTF(k_DBG_AI, ("m_improvementWasBuilt: %d\n", sizeof(m_improvementWasBuilt)));
 		DPRINTF(k_DBG_AI, ("m_isInjoined: %d\n", sizeof(m_isInjoined)));
@@ -1184,7 +1186,6 @@ private:
 		DPRINTF(k_DBG_AI, ("m_convertedGold: %d\n", m_convertedGold));
 		DPRINTF(k_DBG_AI, ("m_convertedBy: %d\n", m_convertedBy));
 		DPRINTF(k_DBG_AI, ("m_terrainWasPolluted: %d\n", m_terrainWasPolluted));
-		DPRINTF(k_DBG_AI, ("m_happinessAttacked: %d\n", m_happinessAttacked));
 		DPRINTF(k_DBG_AI, ("m_terrainImprovementWasBuilt: %d\n", m_terrainImprovementWasBuilt));
 		DPRINTF(k_DBG_AI, ("m_improvementWasBuilt: %d\n", m_improvementWasBuilt));
 		DPRINTF(k_DBG_AI, ("m_isInjoined: %d\n", m_isInjoined));

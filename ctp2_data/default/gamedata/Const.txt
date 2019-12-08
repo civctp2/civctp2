@@ -192,7 +192,7 @@ GOSSIP_MAP_RADIUS       10      # When a map is revealed through gossip, a circl
 HEAR_GOSSIP_CHANCE       0.02   # How likely a diplomat next to a capitol is to hear gossip
 FRANCHISE_EFFECT         0.1    # How much production a franchise steals
 TURNS_FRANCHISED        -1      # How many turns a franchise will be effective, -1: infinit
-TURNS_TO_SUE_FRANCHISE   0      # How many turns a lawsuit takes to expel a franchise
+TURNS_TO_SUE_FRANCHISE  -1      # How many turns a lawsuit takes to expel a franchise, 0: next turn, -1: instantly
 
 SLAVER_ELITE_CHANCE 0.0 # Chance of a slaver becoming elite in a successful raid
 ELITE_SLAVER_BONUS  0.0 # Bonus to success percentage an elite slaver receives

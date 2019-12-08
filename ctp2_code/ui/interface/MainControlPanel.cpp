@@ -109,6 +109,7 @@ void MainControlPanel::Update()
 {
 	if(g_mainControlPanel) {
 		g_mainControlPanel->m_controlTabPanel->Update();
+		g_mainControlPanel->m_turnYearStatus->Update();// update progress of this turn
 	}
 }
 

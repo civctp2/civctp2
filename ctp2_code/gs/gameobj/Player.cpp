@@ -2928,7 +2928,12 @@ bool Player::SettleInCity(Army &settle_army)
 		if(settle_army[i].CanSettle(pos, true))
 		{
 			Unit c = g_theWorld->GetCity(pos);
-			c.CD()->ChangePopulation(settle_army[i].GetDBRec()->GetSettleSize());
+			sint32 pop;
+			const UnitRecord *rec = settle_army[i].GetDBRec();
+			if(!rec->GetPopCostsToBuild(pop)) // similar to https://github.com/civctp2/civctp2/blob/408bbbaae58a7617d546ca6b2fd27b2d1c73eb64/ctp2_code/gs/gameobj/bldque.cpp#L1723
+			    pop= 1; // only BuildingRemovesAPop used so far in Units.txt but not PopCostsToBuild
+
+			c.CD()->ChangePopulation(pop); // use opposite of https://github.com/civctp2/civctp2/blob/408bbbaae58a7617d546ca6b2fd27b2d1c73eb64/ctp2_code/gs/gameobj/bldque.cpp#L1716 (ane not settle_army[i].GetDBRec()->GetSettleSize()) to avoid population-cheat
 			settle_army[i].KillUnit(CAUSE_REMOVE_ARMY_SETTLE, GetOwner());
 
 			return true;
@@ -3069,9 +3074,21 @@ TradeRoute Player::CreateTradeRoute(Unit sourceCity,
 												 gold_in_return);
 
 	if (newRoute.IsValid())
-	{
-		return g_player[paying_for]->PayForTrade(newRoute);
-	}
+	    newRoute= g_player[paying_for]->PayForTrade(newRoute); // kills route if not enough caravans
+
+	if (newRoute.IsValid() && destCity.GetOwner() != m_owner){
+	    SlicObject *so = new SlicObject("360SenderCreatedTradeRoute");
+	    ROUTE_TYPE type;
+	    sint32 resource;
+	    newRoute.GetSourceResource(type, resource);
+	    so->AddRecipient(destCity.GetOwner());
+	    so->AddCivilisation(m_owner);
+	    so->AddGood(resource);
+	    so->AddCity(sourceCity);
+	    so->AddCity(destCity);
+	    g_slicEngine->Execute(so);
+	    return newRoute;
+	    }
 
 	return TradeRoute();
 }

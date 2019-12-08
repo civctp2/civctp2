@@ -25,6 +25,7 @@ struct CreateListData {
 enum TRADE_MANAGER_MODE {
 	TRADE_MANAGER_MARKET,
 	TRADE_MANAGER_SUMMARY,
+	TRADE_MANAGER_IMPORT,
 	TRADE_MANAGER_MAX
 };
 
@@ -42,8 +43,9 @@ class TradeManager
 
 	ctp2_ListBox *m_createList;
 	ctp2_ListBox *m_summaryList;
+	ctp2_ListBox *m_importList;
 
-	ctp2_Button  *m_createButton, *m_breakButton;
+	ctp2_Button  *m_createButton, *m_breakButton, *m_breakImpBut;
 
 	ctp2_Button *m_ownCitiesButton, *m_friendlyCitiesButton, *m_allCitiesButton;
 
@@ -71,7 +73,7 @@ class TradeManager
 	void UpdateCreateList(const PLAYER_INDEX & player_id);
 	void UpdateAdviceWindow();
 	void UpdateAdviceText();
-	void UpdateSummaryList();
+	void UpdateSummaryList(ctp2_ListBox *summaryList, bool source= true);
 
 	static void Close(aui_Control *control, uint32 action, uint32 data, void *cookie);
 	static void CreateRoute(aui_Control *control, uint32 action, uint32 data, void *cookie);

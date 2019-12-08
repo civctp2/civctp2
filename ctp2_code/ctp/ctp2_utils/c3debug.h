@@ -82,13 +82,14 @@ typedef void (* CivExceptionFunction) (void);
 #define k_DBG_UI                0x00000080
 #define k_DBG_FIX               0x00000100
 #define k_DBG_SLIC              0x00000200
-#define k_DBG_SCHEDULER         0x00000400
-#define k_DBG_SCHEDULER_DETAIL  0x00000c00
-#define k_DBG_SCHEDULER_ALL     0x00001c00
+#define k_DBG_SCHEDULER         0x00000400 // For the scheduler
+#define k_DBG_SCHEDULER_DETAIL  0x00000800 // For stuff from the scheduler that really fills up the logs.
+#define k_DBG_SCHEDULER_ALL     0x00000c00 // Get everything from the scheduler, combine the two above. Don't use for DPRINT, but the ones from above.
 #define k_DBG_DIPLOMACY         0x00002000
 #define k_DBG_MAPANALYSIS       0x00004000
 #define k_DBG_ASTAR             0x00008000
 #define k_DBG_GOVERNOR          0x00010000
+#define k_DBG_GOVERNOR_DETAIL   0x00020000
 
 #define k_DEBUG_OWNER_NONE          0
 #define k_DEBUG_OWNER_CRC           1

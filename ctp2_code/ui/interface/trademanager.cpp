@@ -110,17 +110,21 @@ TradeManager::TradeManager(AUI_ERRCODE *err)
 
 	m_createList = (ctp2_ListBox *)aui_Ldl::GetObject(s_tradeManagerBlock, "TradeTabs.Market.TabPanel.List");
 	m_summaryList = (ctp2_ListBox *)aui_Ldl::GetObject(s_tradeManagerBlock, "TradeTabs.Summary.TabPanel.List");
+	m_importList = (ctp2_ListBox *)aui_Ldl::GetObject(s_tradeManagerBlock, "TradeTabs.Import.TabPanel.List");
 
 	Assert(m_createList);
 
 	aui_Ldl::SetActionFuncAndCookie(s_tradeManagerBlock, "CloseButton", Close, NULL);
+	
 	m_createButton = (ctp2_Button *)aui_Ldl::GetObject(s_tradeManagerBlock, "TradeTabs.Market.TabPanel.CreateRouteButton");
-
 	aui_Ldl::SetActionFuncAndCookie(s_tradeManagerBlock, "TradeTabs.Market.TabPanel.CreateRouteButton", CreateRoute, (void *)0);
 
 	m_breakButton = (ctp2_Button *)aui_Ldl::GetObject(s_tradeManagerBlock, "TradeTabs.Summary.TabPanel.BreakRouteButton");
-
 	aui_Ldl::SetActionFuncAndCookie(s_tradeManagerBlock, "TradeTabs.Summary.TabPanel.BreakRouteButton", CreateRoute, (void *)1);
+
+	m_breakImpBut = (ctp2_Button *)aui_Ldl::GetObject(s_tradeManagerBlock, "TradeTabs.Import.TabPanel.BreakRouteButton");
+	aui_Ldl::SetActionFuncAndCookie(s_tradeManagerBlock, "TradeTabs.Import.TabPanel.BreakRouteButton", CreateRoute, (void *)2);
+
 	aui_Ldl::SetActionFuncAndCookie(s_tradeManagerBlock, "ShowAdviceButton", ShowAdvice, NULL);
 
 	if(m_createList) {
@@ -129,6 +133,10 @@ TradeManager::TradeManager(AUI_ERRCODE *err)
 
 	if(m_summaryList) {
 		m_summaryList->SetActionFuncAndCookie(SummaryListSelect, NULL);
+	}
+
+	if(m_importList) {
+		m_importList->SetActionFuncAndCookie(SummaryListSelect, NULL);
 	}
 
 	m_adviceWindow = (ctp2_Window *)aui_Ldl::BuildHierarchyFromRoot(s_tradeAdviceBlock);
@@ -256,39 +264,27 @@ void TradeManager::SetMode(TRADE_MANAGER_MODE mode)
 //	MBCHAR *tradeBlock="TradeManager:TradeTabs";
 	ctp2_Tab *market = (ctp2_Tab *)aui_Ldl::GetObject(s_tradeManagerBlock, "TradeTabs.Market");
 	ctp2_Tab *summary = (ctp2_Tab *)aui_Ldl::GetObject(s_tradeManagerBlock, "TradeTabs.Summary");
+	ctp2_Tab *import = (ctp2_Tab *)aui_Ldl::GetObject(s_tradeManagerBlock, "TradeTabs.Import");
 	ctp2_TabGroup *group = (ctp2_TabGroup *)aui_Ldl::GetObject(s_tradeManagerBlock, "TradeTabs");
-
-
-
-
-
 
 	switch(mode) {
 		case TRADE_MANAGER_MARKET:
 			market->Activate();
 			summary->Deactivate();
+			import->Deactivate();
 			group->SelectTab(market);
-
-
-
-
-
-
-
-
 			break;
 		case TRADE_MANAGER_SUMMARY:
 			market->Deactivate();
 			summary->Activate();
+			import->Deactivate();
 			group->SelectTab(summary);
-
-
-
-
-
-
-
-
+			break;
+		case TRADE_MANAGER_IMPORT:
+			market->Deactivate();
+			summary->Deactivate();
+			import->Activate();
+			group->SelectTab(import);
 			break;
 		default:
 			Assert(FALSE);
@@ -306,7 +302,8 @@ void TradeManager::Notify()
 void TradeManager::Update()
 {
 	UpdateCreateList(g_selected_item->GetVisiblePlayer());
-	UpdateSummaryList();
+	UpdateSummaryList(m_summaryList, true);
+	UpdateSummaryList(m_importList, false);
 	UpdateAdviceWindow();
 
 }
@@ -656,7 +653,7 @@ void TradeManager::UpdateAdviceText()
 	}
 }
 
-void TradeManager::UpdateSummaryList()
+void TradeManager::UpdateSummaryList(ctp2_ListBox *summaryList, bool source)
 {
 	sint32 pl = g_selected_item->GetVisiblePlayer();
 	Assert(pl >= 0 && pl < k_MAX_PLAYERS);
@@ -668,112 +665,123 @@ void TradeManager::UpdateSummaryList()
 	Player *p = g_player[pl];
 	Unit maxCity;
 
-	m_summaryList->Clear();
+	summaryList->Clear();
 
 	for (sint32 c = 0; c < p->m_all_cities->Num(); c++)
-    {
-		Unit city = p->m_all_cities->Access(c);
-
-		for (sint32 r = 0; r < city.CD()->GetTradeSourceList()->Num(); r++)
-        {
-			ctp2_ListItem * item = (ctp2_ListItem *)
-                aui_Ldl::BuildHierarchyFromRoot("TradeSummaryItem");
-			Assert(item);
-			if(!item)
-				break;
-
-			TradeRoute route = city.CD()->GetTradeSourceList()->Access(r);
-
-			if (ctp2_Static * origin = (ctp2_Static *)item->GetChildByIndex(k_CITY_COL_SUM_INDEX))
-            {
-				MBCHAR name[k_MAX_NAME_LEN + 1];
-				strncpy(name, city.GetName(), k_MAX_NAME_LEN);
-				name[k_MAX_NAME_LEN] = 0;
-				origin->TextReloadFont();
-				origin->GetTextFont()->TruncateString(name, origin->Width());
-				origin->SetText(name);
+	    {
+	    Unit city = p->m_all_cities->Access(c);
+	    
+	    sint32 numTradeRoutes= source ? city.CD()->GetTradeSourceList()->Num() : city.CD()->GetTradeDestinationList()->Num();
+	    for (sint32 r = 0; r < numTradeRoutes; r++)
+		{
+		ctp2_ListItem * item = (ctp2_ListItem *)
+		    aui_Ldl::BuildHierarchyFromRoot("TradeSummaryItem");
+		Assert(item);
+		if(!item)
+		    break;
+		
+		TradeRoute route = source ? city.CD()->GetTradeSourceList()->Access(r) : city.CD()->GetTradeDestinationList()->Access(r) ;
+		
+		if (ctp2_Static * origin = (ctp2_Static *)item->GetChildByIndex(k_CITY_COL_SUM_INDEX))
+		    {
+		    MBCHAR name[k_MAX_NAME_LEN + 1];
+		    strncpy(name, route.GetSource().GetName(), k_MAX_NAME_LEN);
+		    name[k_MAX_NAME_LEN] = 0;
+		    origin->TextReloadFont();
+		    origin->GetTextFont()->TruncateString(name, origin->Width());
+		    origin->SetText(name);
+		    }
+		
+		ROUTE_TYPE rtype;
+		sint32 resource;
+		route.GetSourceResource(rtype, resource);
+		
+		if (ctp2_Static * icon = (ctp2_Static *)item->GetChildByIndex(k_GOODICON_COL_SUM_INDEX))
+		    {
+		    if (rtype == ROUTE_TYPE_RESOURCE)
+			{
+			const MBCHAR *imageName = g_theResourceDB->Get(resource)->GetIcon()->GetIcon();
+			if (stricmp(imageName, "NULL") == 0)
+			    {
+			    icon->SetImage(NULL);
+			    }
+			else
+			    {
+			    icon->SetImage(g_theResourceDB->Get(resource)->GetIcon()->GetIcon());
+			    }
 			}
-
-			ROUTE_TYPE rtype;
-			sint32 resource;
-			route.GetSourceResource(rtype, resource);
-
-			if (ctp2_Static * icon = (ctp2_Static *)item->GetChildByIndex(k_GOODICON_COL_SUM_INDEX))
-            {
-				if (rtype == ROUTE_TYPE_RESOURCE)
-                {
-					const MBCHAR *imageName = g_theResourceDB->Get(resource)->GetIcon()->GetIcon();
-					if (stricmp(imageName, "NULL") == 0)
-                    {
-						icon->SetImage(NULL);
-					}
-                    else
-                    {
-						icon->SetImage(g_theResourceDB->Get(resource)->GetIcon()->GetIcon());
-					}
-				}
+		    }
+		
+		if (ctp2_Static * good = (ctp2_Static *)item->GetChildByIndex(k_GOOD_COL_SUM_INDEX))
+		    {
+		    if (rtype == ROUTE_TYPE_RESOURCE)
+			{
+			good->SetText(g_theResourceDB->Get(resource)->GetNameText());
 			}
-
-			if (ctp2_Static * good = (ctp2_Static *)item->GetChildByIndex(k_GOOD_COL_SUM_INDEX))
-            {
-				if (rtype == ROUTE_TYPE_RESOURCE)
-                {
-					good->SetText(g_theResourceDB->Get(resource)->GetNameText());
-				}
-                else
-                {
-					good->SetText(g_theStringDB->GetNameStr("ROUTE_TYPE_FOOD"));
-				}
+		    else
+			{
+			good->SetText(g_theStringDB->GetNameStr("ROUTE_TYPE_FOOD"));
 			}
-
-			if (ctp2_Static * dest = (ctp2_Static *)item->GetChildByIndex(k_TOCITY_COL_SUM_INDEX))
-            {
-				MBCHAR name[k_MAX_NAME_LEN + 1];
-				Unit dCity = route.GetDestination();
-				strncpy(name, dCity.GetName(), k_MAX_NAME_LEN);
-				name[k_MAX_NAME_LEN] = 0;
-				dest->TextReloadFont();
-				dest->GetTextFont()->TruncateString(name, dest->Width());
-				dest->SetText(name);
+		    }
+		
+		if (ctp2_Static * dest = (ctp2_Static *)item->GetChildByIndex(k_TOCITY_COL_SUM_INDEX))
+		    {
+		    MBCHAR name[k_MAX_NAME_LEN + 1];
+		    Unit dCity = route.GetDestination();
+		    strncpy(name, dCity.GetName(), k_MAX_NAME_LEN);
+		    name[k_MAX_NAME_LEN] = 0;
+		    dest->TextReloadFont();
+		    dest->GetTextFont()->TruncateString(name, dest->Width());
+		    dest->SetText(name);
+		    }
+		
+		if (ctp2_Static * piracy = (ctp2_Static *)item->GetChildByIndex(k_PIRACY_COL_SUM_INDEX))
+		    {
+		    piracy->SetDrawCallbackAndCookie(DrawPiracyColumn, (void *)route.m_id);
+		    }
+		
+		MBCHAR buf[20];
+		if(rtype == ROUTE_TYPE_RESOURCE) {
+		    sprintf(buf, "%d", route->GetValue());
+		    } else {
+		    strcpy(buf, "---");
+		    }
+		
+		if (ctp2_Static * price = (ctp2_Static *)item->GetChildByIndex(k_PRICE_COL_SUM_INDEX))
+		    {
+		    price->SetText(buf);
+		    }
+		
+		if (ctp2_Static * count = (ctp2_Static *)item->GetChildByIndex(k_CARAVANS_COL_SUM_INDEX))
+		    {
+		    if(source){
+			sprintf(buf, "%.0f", route.GetCost());
 			}
-
-			if (ctp2_Static * piracy = (ctp2_Static *)item->GetChildByIndex(k_PIRACY_COL_SUM_INDEX))
-            {
-				piracy->SetDrawCallbackAndCookie(DrawPiracyColumn, (void *)route.m_id);
+		    else{
+			sprintf(buf, "%d,%d,%d",
+			    g_theResourceDB->Get(resource)->GetFood(),
+			    g_theResourceDB->Get(resource)->GetProduction(),
+			    g_theResourceDB->Get(resource)->GetGold()
+			    );
 			}
-
-			MBCHAR buf[20];
-			if(rtype == ROUTE_TYPE_RESOURCE) {
-				sprintf(buf, "%d", route->GetValue());
-			} else {
-				strcpy(buf, "---");
-			}
-
-			if (ctp2_Static * price = (ctp2_Static *)item->GetChildByIndex(k_PRICE_COL_SUM_INDEX))
-            {
-				price->SetText(buf);
-			}
-
-			if (ctp2_Static * count = (ctp2_Static *)item->GetChildByIndex(k_CARAVANS_COL_SUM_INDEX))
-            {
-				sprintf(buf, "%.0f", route.GetCost());
-				count->SetText(buf);
-			}
-
-			if (ctp2_Static * nation = (ctp2_Static *)item->GetChildByIndex(k_NATION_COL_SUM_INDEX))
-            {
-				nation->SetDrawCallbackAndCookie
-                    (DrawNationColumn, (void *)route.GetDestination().GetOwner());
-			}
-
-			item->SetUserData((void *)route.m_id);
-			item->SetCompareCallback(CompareSummaryItems);
-
-			m_summaryList->AddItem(item);
+		    count->SetText(buf);
+		    }
+		
+		if (ctp2_Static * nation = (ctp2_Static *)item->GetChildByIndex(k_NATION_COL_SUM_INDEX))
+		    {
+		    nation->SetDrawCallbackAndCookie(DrawNationColumn,
+			source ? (void *)route.GetDestination().GetOwner() : (void *)route.GetSource().GetOwner());
+		    }
+		
+		item->SetUserData((void *)route.m_id);
+		item->SetCompareCallback(CompareSummaryItems);
+		
+		summaryList->AddItem(item);
 		}
-	}
-
+	    }
+	
 	m_breakButton->Enable(FALSE);
+	m_breakImpBut->Enable(FALSE);
 }
 
 void TradeManager::Close(aui_Control *control, uint32 action, uint32 data, void *cookie)
@@ -789,10 +797,10 @@ void TradeManager::CreateRoute(aui_Control *control, uint32 action, uint32 uidat
 
 	Assert(s_tradeManager);
 	if(!s_tradeManager) return;
-	bool breakInstead = sint32(cookie) != 0;
 
 //	ctp2_Static *market = (ctp2_Static *)aui_Ldl::GetObject(s_tradeManagerBlock, "Market");
-	if(!breakInstead) {
+	switch(sint32(cookie)) {
+	case 0: {
 		Assert(s_tradeManager->m_createList);
 		if(!s_tradeManager->m_createList) return;
 
@@ -818,12 +826,18 @@ void TradeManager::CreateRoute(aui_Control *control, uint32 action, uint32 uidat
 							   GEA_City, data->m_source,
 							   GEA_City, data->m_destination,
 							   GEA_End);
-	} else {
+		break;
+	    }
+	case 1:
+	case 2: {
+		bool source = sint32(cookie) == 1;
+		ctp2_ListBox *summaryList;
+		summaryList= source ? s_tradeManager->m_summaryList : s_tradeManager->m_importList;
 
-		Assert(s_tradeManager->m_summaryList);
-		if(!s_tradeManager->m_summaryList) return;
+		Assert(summaryList);
+		if(!summaryList) return;
 
-		ctp2_ListItem *item = (ctp2_ListItem *)s_tradeManager->m_summaryList->GetSelectedItem();
+		ctp2_ListItem *item = (ctp2_ListItem *)summaryList->GetSelectedItem();
 		if(!item) return;
 
 		TradeRoute route((uint32)item->GetUserData());
@@ -832,14 +846,16 @@ void TradeManager::CreateRoute(aui_Control *control, uint32 action, uint32 uidat
 
 		g_gevManager->AddEvent(GEV_INSERT_Tail, GEV_KillTradeRoute,
 							   GEA_TradeRoute, route.m_id,
-							   GEA_Int, CAUSE_KILL_TRADE_ROUTE_SENDER_KILLED,
+							   GEA_Int,
+							   source ? CAUSE_KILL_TRADE_ROUTE_SENDER_KILLED : CAUSE_KILL_TRADE_ROUTE_RECIPIENT_KILLED ,
 							   GEA_End);
 
 		if(g_network.IsClient()) {
-			g_network.SendAction(new NetAction(NET_ACTION_CANCEL_TRADE_ROUTE,
-											   (uint32)route));
+			g_network.SendAction(new NetAction(NET_ACTION_CANCEL_TRADE_ROUTE, (uint32)route));
+		break;
 		}
-	}
+	    }
+	} //switch
 }
 
 void TradeManager::ShowAdvice(aui_Control *control, uint32 action, uint32 data, void *cookie)
@@ -1088,14 +1104,25 @@ void TradeManager::SummaryListSelect(aui_Control *control, uint32 action, uint32
 	if(!s_tradeManager) return;
 
 	ctp2_ListBox *lb = (ctp2_ListBox *)control;
-	Assert(lb == s_tradeManager->m_summaryList);
-	if(lb != s_tradeManager->m_summaryList) return;
+	bool source = lb == s_tradeManager->m_summaryList;
+	if(source){
+	    Assert(lb == s_tradeManager->m_summaryList);
+	    if(lb != s_tradeManager->m_summaryList) return;
+	    }
+	else {
+	    Assert(lb == s_tradeManager->m_importList);
+	    if(lb != s_tradeManager->m_importList) return;
+	    }
 
 	ctp2_ListItem *item = (ctp2_ListItem *)lb->GetSelectedItem();
 	if(item) {
-		s_tradeManager->m_breakButton->Enable(TRUE);
+	        source ? 
+		    s_tradeManager->m_breakButton->Enable(TRUE) :
+		    s_tradeManager->m_breakImpBut->Enable(TRUE);
 	} else {
-		s_tradeManager->m_breakButton->Enable(FALSE);
+	        source ? 
+		    s_tradeManager->m_breakButton->Enable(FALSE) :
+		    s_tradeManager->m_breakImpBut->Enable(FALSE);
 	}
 	if(action == AUI_LISTBOX_ACTION_DOUBLECLICKSELECT) {
 

@@ -2163,7 +2163,7 @@ ORDER_RESULT ArmyData::Franchise(const MapPoint &point)
 		return ORDER_RESULT_ILLEGAL;
 
 	Unit u      = m_array[uindex];
-	Unit city   = g_theWorld->GetCity(point);
+	Unit city   = GetAdjacentCity(point);
 
 	if(city.m_id == 0) {
 		return ORDER_RESULT_ILLEGAL;
@@ -2331,18 +2331,6 @@ ORDER_RESULT ArmyData::Sue(const MapPoint &point)
 						   GEA_MapPoint, point,
 						   GEA_End);
 
-	Unit attacking_unit = m_array[uindex];
-
-	SlicObject *so = new SlicObject("911SueCompleteVictim");
-	so->AddRecipient(cell->UnitArmy()->GetOwner());
-	so->AddUnitRecord(m_array[uindex].GetType());
-	g_slicEngine->Execute(so);
-
-	so = new SlicObject("911SueCompleteAttacker");
-	so->AddRecipient(attacking_unit.GetOwner());
-	so->AddUnitRecord(m_array[uindex].GetType());
-	g_slicEngine->Execute(so);
-
 	return ORDER_RESULT_SUCCEEDED;
 }
 
@@ -2370,27 +2358,29 @@ ORDER_RESULT ArmyData::SueFranchise(const MapPoint &point)
 		return ORDER_RESULT_ILLEGAL;
 
 	Unit &	u		= m_array[uindex];
-	Cell *	cell	= g_theWorld->GetCell(point);
+	Unit c = GetAdjacentCity(point);
 
-	if(!cell || cell->GetCity().m_id == 0)
+
+
+	if(c.m_id == 0)
 		return ORDER_RESULT_ILLEGAL;
 
-	if(cell->GetCity().GetOwner() != m_owner) {
-
-		return ORDER_RESULT_ILLEGAL;
-	}
-
-	if(cell->GetCity().GetFranchiseOwner() < 0) {
+	if(c.GetOwner() != m_owner) { // only remove franchises from your own cities
 
 		return ORDER_RESULT_ILLEGAL;
 	}
 
-	if(cell->GetCity().GetFranchiseTurnsRemaining() == 0) {
+	if(c.GetFranchiseOwner() < 0) {
 
 		return ORDER_RESULT_ILLEGAL;
 	}
 
-	if(cell->GetCity().GetFranchiseTurnsRemaining() > 0 && cell->GetCity().GetFranchiseTurnsRemaining() <= g_theConstDB->Get(0)->GetTurnsToSueFranchise()) {
+	if(c.GetFranchiseTurnsRemaining() == 0) {
+
+		return ORDER_RESULT_ILLEGAL;
+	}
+
+	if(c.GetFranchiseTurnsRemaining() > 0 && c.GetFranchiseTurnsRemaining() <= g_theConstDB->Get(0)->GetTurnsToSueFranchise()) {
 
 		return ORDER_RESULT_ILLEGAL;
 	}
@@ -2400,16 +2390,8 @@ ORDER_RESULT ArmyData::SueFranchise(const MapPoint &point)
 	g_gevManager->AddEvent(GEV_INSERT_AfterCurrent, GEV_RemoveFranchise,
 						   GEA_Army, m_id,
 						   GEA_Unit, u,
-						   GEA_City, cell->GetCity(),
+						   GEA_City, c,
 						   GEA_End);
-
-	SlicObject *so = new SlicObject("911SueFranchiseCompleteVictim");
-	so->AddRecipient(cell->GetCity().GetFranchiseOwner());
-	so->AddCity(cell->GetCity());
-	g_slicEngine->Execute(so);
-
-	g_slicEngine->Execute
-        (new AggressorReport("911SueFranchiseCompleteAttacker", u, cell->GetCity()));
 
 	return ORDER_RESULT_SUCCEEDED;
 }
@@ -2600,8 +2582,7 @@ bool ArmyData::CanCauseUnhappiness(double &chance, sint32 &timer, sint32 &amt) c
 // Remark(s)  : -
 //
 //----------------------------------------------------------------------------
-ORDER_RESULT ArmyData::CauseUnhappiness(const MapPoint &point,
-										sint32 uindex)
+ORDER_RESULT ArmyData::CauseUnhappiness(const MapPoint &point, sint32 uindex)
 {
 	Assert(uindex >= 0);
 	Assert(uindex < m_nElements);
@@ -2639,21 +2620,20 @@ ORDER_RESULT ArmyData::CauseUnhappiness(const MapPoint &point,
 	c.ModifySpecialAttackChance(UNIT_ORDER_CAUSE_UNHAPPINESS, chance);
 	c.SetWatchful();
 
-    char unitName[256];
-    strcpy(unitName, g_theStringDB->
-           GetIdStr(g_theUnitDB->GetName(u.GetData()->GetType())));
+	char unitName[256];
+	strcpy(unitName, g_theStringDB->GetIdStr(g_theUnitDB->GetName(u.GetData()->GetType())));
 
 	if(g_rand->Next(100) >= sint32(chance * 100.0)) {
 
-        if (strcmp(unitName, "UNIT_CYBER_NINJA") == 0) {
-            g_slicEngine->Execute
-                (new CityReport("230TerrorhackFailedVictim", c));
-            g_slicEngine->Execute
-                (new AggressorReport("229TerrorhackFailedAttacker", u, c));
-        }
+	    if (strcmp(unitName, "UNIT_CYBER_NINJA") == 0) {
+		g_slicEngine->Execute
+		    (new CityReport("230TerrorhackFailedVictim", c));
+		g_slicEngine->Execute
+		    (new AggressorReport("229TerrorhackFailedAttacker", u, c));
+		}
 
-        DPRINTF(k_DBG_GAMESTATE, ("Cause unhappiness failed\n"));
-		return ORDER_RESULT_FAILED;
+	    DPRINTF(k_DBG_GAMESTATE, ("Cause unhappiness failed\n"));
+	    return ORDER_RESULT_FAILED;
 	}
 
 	DPRINTF(k_DBG_GAMESTATE, ("City 0x%lx will be %d less happy for %d turns\n",
@@ -2670,18 +2650,21 @@ ORDER_RESULT ArmyData::CauseUnhappiness(const MapPoint &point,
 	c.AccessData()->GetCityData()->IndicateHappinessAttacked() ;
 	c.AccessData()->GetCityData()->HappinessAttackedBy(m_owner) ;
 
-    if (strcmp(unitName, "UNIT_CYBER_NINJA") == 0) {
-        g_slicEngine->Execute
-            (new CityReport("228TerrorhackCompleteVictim", c));
-        g_slicEngine->Execute
-            (new AggressorReport("227TerrorhackCompleteAttacker", u, c)) ;
-
-    } else if (strcmp(unitName, "UNIT_SUBNEURAL_ADS") == 0) {
-        SlicObject * so = new CityReport("197AdvertiseCompleteVictim", c);
-		so->AddCivilisation(GetOwner());
-        g_slicEngine->Execute(so) ;
-
-    }
+	if (strcmp(unitName, "UNIT_CYBER_NINJA") == 0) {
+	    g_slicEngine->Execute
+		(new CityReport("228TerrorhackCompleteVictim", c));
+	    g_slicEngine->Execute
+		(new AggressorReport("227TerrorhackCompleteAttacker", u, c)) ;
+	    }
+	else if (strcmp(unitName, "UNIT_SUBNEURAL_ADS") == 0 ||
+	    strcmp(unitName, "UNIT_CORPORATE_BRANCH") == 0
+	    ) {
+	    SlicObject * so = new CityReport("197AdvertiseCompleteVictim", c);
+	    so->AddCivilisation(GetOwner());
+	    g_slicEngine->Execute(so);
+	    g_slicEngine->Execute
+		(new AggressorReport("911AdvertiseCompleteAttacker", u, c)) ;
+	    }
 
 	return ORDER_RESULT_SUCCEEDED;
 }
@@ -3033,8 +3016,8 @@ ORDER_RESULT ArmyData::SlaveRaid(const MapPoint &point)
 	sint32 timer, amount;
 	sint32 uindex;
 	bool target_is_city;
-	Unit target_city;
-	Unit home_city;
+	Unit target_city; // city that is attaced by slaver
+	Unit home_city; // city where slaves are put to work
 
 	if (!IsSlaveRaidPossible(point, success, death, timer, amount, uindex,
 	    target_is_city, target_city, home_city))
@@ -3060,7 +3043,7 @@ ORDER_RESULT ArmyData::SlaveRaid(const MapPoint &point)
 		// InformAI(UNIT_ORDER_ENSLAVE_SETTLER, point); //does nothing here but could be implemented
 
 		DPRINTF(k_DBG_GAMESTATE, ("Doing EnslaveSettler instead of SlaveRaid\n"));
-		return EnslaveSettler(point, uindex, home_city);
+		return EnslaveSettler(point, uindex, home_city); //redetermines home_city?
 	}
 
 	double slaveryReduction = target_city.IsProtectedFromSlavery();
@@ -3079,8 +3062,6 @@ ORDER_RESULT ArmyData::SlaveRaid(const MapPoint &point)
 			return ORDER_RESULT_FAILED;
 		}
 
-		MapPoint cpos;
-		home_city.GetPos(cpos);
 		g_gevManager->AddEvent(GEV_INSERT_AfterCurrent, GEV_SlaveRaidCity,
 							   GEA_Unit, m_array[uindex],
 							   GEA_City, target_city.m_id,
@@ -3333,22 +3314,11 @@ ORDER_RESULT ArmyData::EnslaveSettler(const MapPoint &point, const sint32 uindex
 
 	ActionSuccessful(SPECATTACK_ENSLAVESETTLER, m_array[uindex], cell->AccessUnit(0));
 
-	g_gevManager->AddEvent(GEV_INSERT_AfterCurrent, GEV_EnslaveSettler,
+	g_gevManager->AddEvent(GEV_INSERT_AfterCurrent, GEV_EnslaveSettler, // also sends messages
 						   GEA_Army, m_id,
 						   GEA_Unit, m_array[uindex],
 						   GEA_Unit, cell->AccessUnit(0).m_id,
 						   GEA_End);
-	sint32 settlerOwner = cell->AccessUnit(0).GetOwner();
-
-	SlicObject *    so = new SlicObject("139SettlerSlavedVictim");
-	so->AddRecipient(settlerOwner);
-	g_slicEngine->Execute(so);
-
-	so = new SlicObject("137SlaveryCompleteAttacker");
-	so->AddRecipient(m_owner);
-	so->AddCivilisation(m_owner);
-	so->AddCity(home_city);
-	g_slicEngine->Execute(so);
 
 	AddSpecialActionUsed(m_array[uindex]);
 
@@ -4289,7 +4259,7 @@ ORDER_RESULT ArmyData::ReformCity(const MapPoint &point)
 	if(c.m_id == 0)
 		return ORDER_RESULT_ILLEGAL;
 
-	if(c.GetOwner() != m_array[uindex].GetOwner())
+	if(c.GetOwner() != m_array[uindex].GetOwner()) // only reform (remove conversion) your own cities 
 		return ORDER_RESULT_ILLEGAL;
 
 	if(c.IsConvertedTo() < 0)
@@ -4303,6 +4273,14 @@ ORDER_RESULT ArmyData::ReformCity(const MapPoint &point)
 							   GEA_Unit, m_array[uindex].m_id,
 							   GEA_City, c.m_id,
 							   GEA_End);
+		
+		SlicObject *so = new SlicObject("135ReformCityVictim");
+		so->AddRecipient(c.IsConvertedTo());
+		so->AddCity(c);
+		so->AddGold(c.GetConvertedGold());
+		g_slicEngine->Execute(so);
+
+
 		// EMOD added for reforming units to destroy
 		// religious buildings, if they can build there own
 		for (sint32 i = m_nElements - 1; i >= 0; i--)
@@ -4547,11 +4525,6 @@ ORDER_RESULT ArmyData::Advertise(const MapPoint &point)
 		return ORDER_RESULT_ILLEGAL;
 
 	Unit u = m_array[uindex];
-
-	SlicObject *so = new SlicObject("911AdvertiseCompleteAttacker");
-	so->AddRecipient(u.GetOwner());
-	so->AddCity(c);
-	g_slicEngine->Execute(so);
 
 	// establish that building there. Used to spread corporations
 	for (sint32 i = m_nElements - 1; i>= 0; i--) {

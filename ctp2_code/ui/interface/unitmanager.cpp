@@ -410,15 +410,16 @@ void UnitManager::UpdateTacticalList()
 
 	Assert(m_tacticalList);
 	if(!m_tacticalList) return;
+
 	m_tacticalList->Clear();
 
 	UnitDynamicArray *units = pl->m_all_units;
 	Assert(units);
 	if(!units) return;
 
-	sint32 i;
-	for (i = 0; i < units->Num(); i++)
-    {
+	m_tacticalList->BuildListStart();
+	for (sint32 i = 0; i < units->Num(); i++)
+	{
 		Unit u = units->Access(i);
 		ctp2_ListItem *item = (ctp2_ListItem *)aui_Ldl::BuildHierarchyFromRoot("UnitTacticalItem");
 		Assert(item);
@@ -482,6 +483,8 @@ void UnitManager::UpdateTacticalList()
 		item->SetCompareCallback(CompareTacticalItems);
 		m_tacticalList->AddItem(item);
 	}
+
+	m_tacticalList->BuildListEnd();
 }
 
 void UnitManager::UpdateAdvice()

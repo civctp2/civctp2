@@ -168,6 +168,20 @@ bool CanAutoSelect(const Army &army)
 	return false;
 }
 
+bool HasContinuingOrder(const Army &army)
+{
+	if (!g_theArmyPool->IsValid(army)) return false;
+	if(army.Num() < 1) return false;
+
+	if(army.IsAsleep() ||
+	   army.IsEntrenched() ||
+	   army.IsEntrenching() ||
+	   army.HasLeftMap()) {
+		return true;
+	}
+	return false;
+}
+
 SelectedItem::SelectedItem(sint32 nPlayers)
 {
 	sint32 i, j;
@@ -644,6 +658,34 @@ void SelectedItem::NextUnmovedUnit(bool isFirst, bool manualNextUnit)
 		MaybeAutoEndTurn(isFirst);
 	}
 }
+
+double SelectedItem::UnitsDoneRatio(){
+    Player *p = g_player[GetVisiblePlayer()];
+    sint32 numUnits= p->m_all_armies->Num();
+    sint32 unitsDone= numUnits;
+    
+    for(sint32 u = numUnits - 1; u >= 0; u--){
+	if(CanAutoSelect(p->m_all_armies->Access(u)) && unitsDone){
+	    unitsDone--;
+	    }
+	}
+    
+    return(double(unitsDone) / numUnits);
+    }
+
+double SelectedItem::UnitsBusyRatio(){
+    Player *p = g_player[GetVisiblePlayer()];
+    sint32 numUnits= p->m_all_armies->Num();
+    sint32 unitsDone= numUnits;
+    
+    for(sint32 u = numUnits - 1; u >= 0; u--){
+	if(!HasContinuingOrder(p->m_all_armies->Access(u)) && unitsDone){
+	    unitsDone--;
+	    }
+	}
+    
+    return(double(unitsDone) / numUnits);
+    }
 
 void SelectedItem::MaybeAutoEndTurn(bool isFirst)
 {

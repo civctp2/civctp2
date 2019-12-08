@@ -331,14 +331,14 @@ AGE_GENETIC_STYLE_ALL {
 	Sprites { Type 0 MinSize 31 MaxSize 35  Sprite 79 Walls 153 }
 	Sprites { Type 0 MinSize 36 MaxSize 999 Sprite 80 Walls 153 }
 
-	Sprites { Type 1 MinSize 0  MaxSize 5   Sprite 89 Walls 153 ForceField 155 }
-	Sprites { Type 1 MinSize 6  MaxSize 10  Sprite 90 Walls 153 ForceField 155 }
-	Sprites { Type 1 MinSize 11 MaxSize 15  Sprite 91 Walls 153 ForceField 155 }
-	Sprites { Type 1 MinSize 16 MaxSize 20  Sprite 92 Walls 153 ForceField 155 }
-	Sprites { Type 1 MinSize 21 MaxSize 25  Sprite 93 Walls 153 ForceField 155 }
-	Sprites { Type 1 MinSize 26 MaxSize 30  Sprite 94 Walls 153 ForceField 155 }
-	Sprites { Type 1 MinSize 31 MaxSize 35  Sprite 95 Walls 153 ForceField 155 }
-	Sprites { Type 1 MinSize 36 MaxSize 999 Sprite 96 Walls 153 ForceField 155 }
+	Sprites { Type 1 MinSize 0  MaxSize 5   Sprite 89 Walls 153 ForceField 156 }
+	Sprites { Type 1 MinSize 6  MaxSize 10  Sprite 90 Walls 153 ForceField 156 }
+	Sprites { Type 1 MinSize 11 MaxSize 15  Sprite 91 Walls 153 ForceField 156 }
+	Sprites { Type 1 MinSize 16 MaxSize 20  Sprite 92 Walls 153 ForceField 156 }
+	Sprites { Type 1 MinSize 21 MaxSize 25  Sprite 93 Walls 153 ForceField 156 }
+	Sprites { Type 1 MinSize 26 MaxSize 30  Sprite 94 Walls 153 ForceField 156 }
+	Sprites { Type 1 MinSize 31 MaxSize 35  Sprite 95 Walls 153 ForceField 156 }
+	Sprites { Type 1 MinSize 36 MaxSize 999 Sprite 96 Walls 153 ForceField 156 }
 }
 
 AGE_DIAMOND_STYLE_ALL {
@@ -351,14 +351,14 @@ AGE_DIAMOND_STYLE_ALL {
 	Sprites { Type 0 MinSize 31 MaxSize 35  Sprite 194 Walls 153 }
 	Sprites { Type 0 MinSize 36 MaxSize 999 Sprite 195 Walls 153 }
 
-	Sprites { Type 1 MinSize 0  MaxSize 5   Sprite 196 Walls 153 ForceField 155 }
-	Sprites { Type 1 MinSize 6  MaxSize 10  Sprite 197 Walls 153 ForceField 155 }
-	Sprites { Type 1 MinSize 11 MaxSize 15  Sprite 198 Walls 153 ForceField 155 }
-	Sprites { Type 1 MinSize 16 MaxSize 20  Sprite 199 Walls 153 ForceField 155 }
-	Sprites { Type 1 MinSize 21 MaxSize 25  Sprite 200 Walls 153 ForceField 155 }
-	Sprites { Type 1 MinSize 26 MaxSize 30  Sprite 201 Walls 153 ForceField 155 }
-	Sprites { Type 1 MinSize 31 MaxSize 35  Sprite 202 Walls 153 ForceField 155 }
-	Sprites { Type 1 MinSize 36 MaxSize 999 Sprite 203 Walls 153 ForceField 155 }
+	Sprites { Type 1 MinSize 0  MaxSize 5   Sprite 196 Walls 153 ForceField 156 }
+	Sprites { Type 1 MinSize 6  MaxSize 10  Sprite 197 Walls 153 ForceField 156 }
+	Sprites { Type 1 MinSize 11 MaxSize 15  Sprite 198 Walls 153 ForceField 156 }
+	Sprites { Type 1 MinSize 16 MaxSize 20  Sprite 199 Walls 153 ForceField 156 }
+	Sprites { Type 1 MinSize 21 MaxSize 25  Sprite 200 Walls 153 ForceField 156 }
+	Sprites { Type 1 MinSize 26 MaxSize 30  Sprite 201 Walls 153 ForceField 156 }
+	Sprites { Type 1 MinSize 31 MaxSize 35  Sprite 202 Walls 153 ForceField 156 }
+	Sprites { Type 1 MinSize 36 MaxSize 999 Sprite 203 Walls 153 ForceField 156 }
 }
 
 AGE_FUTURE_STYLE_ALL {
@@ -371,13 +371,13 @@ AGE_FUTURE_STYLE_ALL {
 	Sprites { Type 0 MinSize 31 MaxSize 35  Sprite 210 Walls 153 }
 	Sprites { Type 0 MinSize 36 MaxSize 999 Sprite 211 Walls 153 }
 
-	Sprites { Type 1 MinSize 0  MaxSize 5   Sprite 196 Walls 153 ForceField 155 }
-	Sprites { Type 1 MinSize 6  MaxSize 10  Sprite 197 Walls 153 ForceField 155 }
-	Sprites { Type 1 MinSize 11 MaxSize 15  Sprite 198 Walls 153 ForceField 155 }
-	Sprites { Type 1 MinSize 16 MaxSize 20  Sprite 199 Walls 153 ForceField 155 }
-	Sprites { Type 1 MinSize 21 MaxSize 25  Sprite 200 Walls 153 ForceField 155 }
-	Sprites { Type 1 MinSize 26 MaxSize 30  Sprite 201 Walls 153 ForceField 155 }
-	Sprites { Type 1 MinSize 31 MaxSize 35  Sprite 202 Walls 153 ForceField 155 }
-	Sprites { Type 1 MinSize 36 MaxSize 999 Sprite 203 Walls 153 ForceField 155 }
+	Sprites { Type 1 MinSize 0  MaxSize 5   Sprite 196 Walls 153 ForceField 156 }
+	Sprites { Type 1 MinSize 6  MaxSize 10  Sprite 197 Walls 153 ForceField 156 }
+	Sprites { Type 1 MinSize 11 MaxSize 15  Sprite 198 Walls 153 ForceField 156 }
+	Sprites { Type 1 MinSize 16 MaxSize 20  Sprite 199 Walls 153 ForceField 156 }
+	Sprites { Type 1 MinSize 21 MaxSize 25  Sprite 200 Walls 153 ForceField 156 }
+	Sprites { Type 1 MinSize 26 MaxSize 30  Sprite 201 Walls 153 ForceField 156 }
+	Sprites { Type 1 MinSize 31 MaxSize 35  Sprite 202 Walls 153 ForceField 156 }
+	Sprites { Type 1 MinSize 36 MaxSize 999 Sprite 203 Walls 153 ForceField 156 }
 }
 

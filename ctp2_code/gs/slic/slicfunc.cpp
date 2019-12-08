@@ -7546,8 +7546,37 @@ SFN_ERROR Slic_Liberate::Call(SlicArgList *args)
 
 	//if(!args->GetInt(0, cause))
 	//	return GEV_HD_Continue;
+    
+    city.ResetCityOwner(PLAYER_INDEX_VANDALS, FALSE, CAUSE_REMOVE_CITY_DIPLOMACY); // must be before sending armies home otherwise NearestFriendlyCityWithRoom returns the current city
 
-    city.ResetCityOwner(PLAYER_INDEX_VANDALS, FALSE, CAUSE_REMOVE_CITY_DIPLOMACY);
+    //// send conquering armies home, based on code from ArmyData::Expel
+    Cell *cell = g_theWorld->GetCell(city.RetPos());
+    sint32 i, n = cell->GetNumUnits();
+
+    bool 		foundCity	= false;
+    MapPoint 		cpos;
+    CellUnitList 	expelled;
+    for(i = 0; i < n; i++) {
+	    Unit u = cell->AccessUnit(i);	    
+	    foundCity = u.NearestFriendlyCityWithRoom(cpos, n, u.GetArmy());
+	    expelled.Insert(u);
+	}
+
+    n = expelled.Num();
+    if(n > 0) {
+	for(i = 0; i < n; i++) {
+	    if(foundCity) {
+		g_gevManager->AddEvent(GEV_INSERT_AfterCurrent, GEV_GetExpelledOrder,
+		    GEA_Army, expelled[i].GetArmy(),
+		    GEA_MapPoint, cpos,
+		    GEA_Player, PLAYER_INDEX_VANDALS,
+		    GEA_End);
+		}
+	    else {
+		expelled[i].Kill(CAUSE_REMOVE_ARMY_EXPELLED_NO_CITIES, PLAYER_INDEX_VANDALS);
+		}
+	    }
+	}
 
     return SFN_ERROR_OK;
 }

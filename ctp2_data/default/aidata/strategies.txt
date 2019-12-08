@@ -524,11 +524,11 @@ STRATEGY_DEFAULT {
     }
 
     Harass {
-        AttackMatch   0.6
+        AttackMatch   0.4
         DefenseMatch  0.3
-        RangedMatch   0.6
+        RangedMatch   0.4
         BombardMatch  0.0
-        ValueMatch    0.6
+        ValueMatch    0.3
     }
 
     StealthAttack {
@@ -815,7 +815,7 @@ STRATEGY_SEIGE {
         DefenseMatch  0.3
         RangedMatch   0.6
         BombardMatch  0.0
-        ValueMatch    0.6
+        ValueMatch    0.4
     }
 }
 
@@ -921,7 +921,7 @@ STRATEGY_ATTACK {
         DefenseMatch  0.3
         RangedMatch   0.6
         BombardMatch  0.0
-        ValueMatch    0.6
+        ValueMatch    0.4
     }
 }
 
@@ -1680,11 +1680,11 @@ STRATEGY_SCIENTIST_DEFAULT {
     }
 
     Harass {
-        AttackMatch   0.6
+        AttackMatch   0.4
         DefenseMatch  0.3
-        RangedMatch   0.6
+        RangedMatch   0.4
         BombardMatch  0.0
-        ValueMatch    0.6
+        ValueMatch    0.3
     }
 
     StealthAttack {
@@ -2180,11 +2180,11 @@ STRATEGY_MILITARIST_DEFAULT {
     }
 
     Harass {
-        AttackMatch   0.6
+        AttackMatch   0.4
         DefenseMatch  0.3
-        RangedMatch   0.6
+        RangedMatch   0.4
         BombardMatch  0.0
-        ValueMatch    0.6
+        ValueMatch    0.3
     }
 
     StealthAttack {
@@ -2688,11 +2688,11 @@ STRATEGY_ECONOMIC_DEFAULT {
     }
 
     Harass {
-        AttackMatch   0.6
+        AttackMatch   0.4
         DefenseMatch  0.3
-        RangedMatch   0.6
+        RangedMatch   0.5
         BombardMatch  0.0
-        ValueMatch    0.6
+        ValueMatch    0.3
     }
 
     StealthAttack {
@@ -3187,11 +3187,11 @@ STRATEGY_ECOTOPIAN_DEFAULT {
     }
 
     Harass {
-        AttackMatch   0.6
+        AttackMatch   0.4
         DefenseMatch  0.3
-        RangedMatch   0.6
+        RangedMatch   0.5
         BombardMatch  0.0
-        ValueMatch    0.6
+        ValueMatch    0.3
     }
 
     StealthAttack {
@@ -3686,11 +3686,11 @@ STRATEGY_DIPLOMATIC_DEFAULT {
     }
 
     Harass {
-        AttackMatch   0.6
+        AttackMatch   0.4
         DefenseMatch  0.3
-        RangedMatch   0.6
+        RangedMatch   0.5
         BombardMatch  0.0
-        ValueMatch    0.6
+        ValueMatch    0.3
     }
 
     StealthAttack {
@@ -3828,7 +3828,6 @@ STRATEGY_TOO_MANY_CITIES {
     GoalElement { Goal GOAL_SETTLE_SEA          Priority        0  MaxEval   0  MaxExec   0 }
     GoalElement { Goal GOAL_SEIGE               Priority        0  MaxEval   0  MaxExec   0 }
     GoalElement { Goal GOAL_HARASS_CITY         Priority        0  MaxEval   0  MaxExec   0 }
-    GoalElement { Goal GOAL_SETTLE_IN_CITY      Priority        0  MaxEval   1  MaxExec   1 PerCity }
 }
 
 STRATEGY_NO_REVOLUTON {

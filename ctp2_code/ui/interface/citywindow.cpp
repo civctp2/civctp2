@@ -181,6 +181,9 @@ CityWindow::CityWindow(AUI_ERRCODE *err)
     m_globalProduction      (NULL),
     m_globalTrade           (NULL),
     m_globalScience         (NULL),
+    m_globalTradeFood       (NULL),
+    m_globalTradeProduction (NULL),
+    m_globalTradeGold       (NULL),
     m_globalPopulation      (NULL),
     m_activateButton        (NULL),
     m_disbandButton         (NULL)
@@ -316,6 +319,9 @@ CityWindow::CityWindow(AUI_ERRCODE *err)
 	m_globalProduction = (ctp2_Static *)aui_Ldl::GetObject(s_cityWindowBlock, "Globals.ProductionValue");
 	m_globalScience = (ctp2_Static *)aui_Ldl::GetObject(s_cityWindowBlock, "Globals.ScienceValue");
 	m_globalTrade = (ctp2_Static *)aui_Ldl::GetObject(s_cityWindowBlock, "Globals.TradeValue");
+	m_globalTradeFood = (ctp2_Static *)aui_Ldl::GetObject(s_cityWindowBlock, "Globals.FoodTradeValue");
+	m_globalTradeProduction = (ctp2_Static *)aui_Ldl::GetObject(s_cityWindowBlock, "Globals.ProductionTradeValue");
+	m_globalTradeGold = (ctp2_Static *)aui_Ldl::GetObject(s_cityWindowBlock, "Globals.GoldTradeValue");
 	m_globalPopulation = (ctp2_Static *)aui_Ldl::GetObject(s_cityWindowBlock, "Globals.PopulationValue");
 
 	ctp2_Static *efficiencyBar = (ctp2_Static *)aui_Ldl::GetObject(s_cityWindowBlock, "Globals.EfficiencyBar");
@@ -824,6 +830,21 @@ void CityWindow::Update()
 		// Display net production instead of gross production - Martin Gühmann
 		sprintf(buf, "%d", m_cityData->GetNetCityProduction());
 		m_globalProduction->SetText(buf);
+	}
+
+	if(m_globalTradeFood) {
+		sprintf(buf, "%d", m_cityData->FoodFromTrade());
+		m_globalTradeFood->SetText(buf);
+	}
+
+	if(m_globalTradeProduction) {
+		sprintf(buf, "%d", m_cityData->ProdFromTrade());
+		m_globalTradeProduction->SetText(buf);
+	}
+
+	if(m_globalTradeGold) {
+		sprintf(buf, "%d", m_cityData->GoldFromTrade());
+		m_globalTradeGold->SetText(buf);
 	}
 
 	if(m_globalPopulation) {

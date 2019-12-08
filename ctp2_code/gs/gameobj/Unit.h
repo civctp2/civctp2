@@ -419,6 +419,7 @@ public:
 
 	void MakeFranchise(sint32 player);
 	sint32 GetFranchiseOwner() const;
+	sint32 GetProductionLostToFranchise() const;
 	void SetFranchiseTurnsRemaining(sint32 turns);
 	sint32 GetFranchiseTurnsRemaining() const;
 
@@ -453,6 +454,7 @@ public:
 	double TheologicalModifier() const;
 	void Unconvert();
 	sint32 IsConvertedTo() const;
+	sint32 GetConvertedGold() const;
 
 	bool IsCloaked() const;
 	void Cloak();
