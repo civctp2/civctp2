@@ -14,7 +14,7 @@ addImagePath(path)
 def main():
     wait("ctp2start-scr.png", 100)
     click("ctp2new-game-btn.png")
-    click(Pattern("ctp2launch-btn.png").similar(0.99))
+    click("ctp2launch-btn.png")
     if exists("ctp2ctr-bar.png", 100):
         if waitVanish("ctp2progress-bar.png", 100): # control bar appears before progressbar vanishes
             file = capture(SCREEN.getBounds())
