@@ -1,0 +1,7 @@
+show args
+catch signal SIGINT
+command  
+   backtrace
+   continue 
+   end
+run
