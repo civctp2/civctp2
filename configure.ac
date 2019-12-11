@@ -146,6 +146,7 @@ if test x$enable_debug = xyes  || test x$enable_debug = xfull; then
 	AC_DEFINE(_DEBUGTOOLS,1,[Enable debug tools])# _DEBUG requires this
 	AC_DEFINE(_DEBUG_MEMORY,1,[Enable the leak reporter])# _DEBUG requires this
 fi
+AM_CONDITIONAL([DEBUG], [test "x$enable_debug" != "xno"])# for conditional block in Makefile.am
 
 if test 0 -eq 1; then
 	AC_DEFINE(CTP2_ENABLE_SLICDEBUG,1,[Enable slic debugging code])
