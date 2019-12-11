@@ -58,7 +58,7 @@ ENV LD_LIBRARY_PATH "${LD_LIBRARY_PATH}:/usr/local/lib"
 
 ## ctp2CD/ copy not done in builder stage such that stages before are compatible with travis docker build
 ## not using `COPY  ./ /ctp2/` to avoid cache out-dating when ctp2CD/ is populated for 3rd stage
-COPY autogen.sh configure.ac GNUmakefile.am Makefile   /ctp2/
+COPY autogen.sh configure.ac GNUmakefile.am   /ctp2/
 COPY ctp2_code/  /ctp2/ctp2_code/
 COPY ctp2_data/  /ctp2/ctp2_data/
 
