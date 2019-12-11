@@ -178,7 +178,6 @@ AC_SUBST(CTP2_ENABLE_SLICDEBUG) # What is this good for?
 AC_OUTPUT([
    GNUmakefile
    ctp2_code/Makefile
-   ctp2_code/ctp/Makefile
    ctp2_code/gfx/Makefile
    ctp2_code/gfx/gfx_utils/Makefile
    ctp2_code/gfx/layers/Makefile
