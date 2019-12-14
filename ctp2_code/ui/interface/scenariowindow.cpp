@@ -200,7 +200,7 @@ void ScenarioWindow::FillListWithScenarioPacks(ctp2_ListBox *available,bool hide
 	for (i=0; i<g_civScenarios->GetNumScenarioPacks(); i++) {
 		scenPack = g_civScenarios->GetScenarioPack(i);
 
-		sprintf(checkFile,"%s\\%s",scenPack->m_path,"Activision.txt");
+		sprintf(checkFile,"%s%s%s",scenPack->m_path, FILE_SEP, "Activision.txt");
 #ifdef WIN32
 		if(!(hideOriginalScenarios && !_stat(checkFile,&fileStatus)))
 #else

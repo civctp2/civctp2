@@ -1474,20 +1474,23 @@ sint32 gameinit_Initialize(sint32 mWidth, sint32 mHeight, CivArchive &archive)
 		g_rand = new RandomGenerator(archive);
 	} else {
 #ifdef _DEBUG
-	FILE * fin = fopen ("dbgseed.txt", "r");
+	FILE * fin = fopen ("logs" FILE_SEP "dbgseed.txt", "r");
 
 	if (fin) {
 		fscanf (fin, "%d", &seed);
-	} else {
+	}
+	else {
 
 		seed = g_oldRandSeed ? g_oldRandSeed : GetTickCount();
 
-		fin = fopen("logs\\oldseed.txt", "w");
-		fprintf (fin, "%d\n", seed);
+		fin = fopen("logs" FILE_SEP "oldseed.txt", "w");
+		if (fin)
+		    fprintf (fin, "%d\n", seed);
 	}
 
 	DPRINTF(k_DBG_FIX, ("** RANDOM SEED %d\n", seed));
-	fclose (fin);
+	if (fin)
+	    fclose (fin);
 #else
 
 	seed = g_oldRandSeed ? g_oldRandSeed : GetTickCount();

@@ -234,6 +234,8 @@ AUI_ERRCODE aui_BitmapFont::Load( void )
 	static MBCHAR fullPath[ MAX_PATH + 1 ];
 	if ( g_ui->GetBitmapFontResource()->FindFile( fullPath, m_ttffile ) )
 		strncpy( m_ttffile, fullPath, MAX_PATH );
+	else if (g_civPaths->FindFile(C3DIR_FONTS, m_ttffile, fullPath, TRUE)) // try C3DIR_FONTS if GetBitmapFontResource fails (e.g. is not yet available)
+		strncpy( m_ttffile, fullPath, MAX_PATH );
 
 #ifdef __linux__
 	sint32 error = TT_Open_Face(s_ttEngine, CI_FixName(m_ttffile), &m_ttFace);
@@ -325,7 +327,7 @@ AUI_ERRCODE aui_BitmapFont::SetTTFFile( const MBCHAR * ttffile )
 AUI_ERRCODE aui_BitmapFont::SetPointSize( sint32 pointSize )
 {
 
-	Assert( !HasCached() );
+// diabled because SetPointSize needed in linux debug version before m_surfaceList is populated	Assert( !HasCached() );
 	if ( HasCached() ) return AUI_ERRCODE_HACK;
 
 	sint32 error = TT_Set_Instance_CharSize( m_ttInstance, pointSize * 64 );

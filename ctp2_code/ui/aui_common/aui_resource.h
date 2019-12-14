@@ -162,7 +162,8 @@ aui_Resource<T>::aui_Resource()
 template<class T>
 aui_Resource<T>::~aui_Resource()
 {
-	Assert(!m_resourceList || (m_resourceList->L() == 0));
+	Assert(!m_resourceList);
+// diabled because SetPointSize needed in linux debug version before m_surfaceList is populated	Assert((m_resourceList->L() == 0));
 	delete m_resourceList;
 	m_resourceList = NULL;
 

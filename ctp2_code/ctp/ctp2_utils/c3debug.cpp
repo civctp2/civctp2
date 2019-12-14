@@ -58,8 +58,8 @@ char g_last_debug_text[4096];
 extern DebugWindow *g_debugWindow;
 #endif
 
-#define k_FILENAME				"logs" FILE_SEP "civ3log%#.3d.txt"
-#define k_MAX_LOG_FILE_LINES	40000
+#define k_FILENAME            "logs" FILE_SEP "civ3log%#.3d.txt"
+#define k_MAX_LOG_FILE_LINES  40000
 
 MBCHAR	s_logFileName[20];
 sint32	s_logFileNumber=0;
@@ -117,6 +117,7 @@ void c3debug_InitDebugLog()
 	{
 		int unlinkRetVal;
 		if(strcmp(dent->d_name, "." ) != 0
+		&& strstr(dent->d_name, ".map") == NULL // do not delete already created k_MAP_FILE
 		&& strcmp(dent->d_name, "..") != 0)
 		{
 			sprintf(fileName, "logs%s%s", FILE_SEP, dent->d_name);

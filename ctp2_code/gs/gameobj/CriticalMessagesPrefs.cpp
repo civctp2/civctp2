@@ -25,6 +25,8 @@
 //
 //----------------------------------------------------------------------------
 
+#define k_CRITMSG            "logs" FILE_SEP "usercritmsgs.txt"
+
 #include "c3.h"
 #include "c3files.h"
 
@@ -135,7 +137,7 @@ void CriticalMessagesPrefs::Load()
 	FILE *filePtr;
 	MBCHAR inputStr[100];
 	bool value;
-	filePtr=c3files_fopen(C3DIR_DIRECT,"usercritmsgs.txt","rt");
+	filePtr=c3files_fopen(C3DIR_DIRECT, k_CRITMSG, "rt");
 	if(!filePtr) {
 		filePtr=c3files_fopen(C3DIR_UIDATA, "CritMsgs.txt", "rt");
 		if(!filePtr)
@@ -161,7 +163,7 @@ void CriticalMessagesPrefs::Load()
 void CriticalMessagesPrefs::Save()
 {
 	FILE *filePtr;
-	filePtr=c3files_fopen(C3DIR_DIRECT,"usercritmsgs.txt","wt");
+	filePtr=c3files_fopen(C3DIR_DIRECT, k_CRITMSG, "wt");
 	if(!filePtr)
 		return;
 

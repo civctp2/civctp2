@@ -89,7 +89,7 @@ void ldlif_add_name(void **newnames, char *name, void *oldnames)
 void ldlif_init_log()
 {
 #ifdef _DEBUG
-	FILE *f = fopen("ldlparselog.txt", "w");
+	FILE *f = fopen("logs" FILE_SEP "ldlparselog.txt", "w");
 	if(f) {
 		fprintf(f, "%" PRId64 "\n", time(0));
 		fclose(f);
@@ -102,7 +102,7 @@ void ldlif_log(char *format, ...)
 	va_list list;
 	va_start(list, format);
 
-	FILE *f = fopen("ldlparselog.txt", "a");
+	FILE *f = fopen("logs" FILE_SEP "ldlparselog.txt", "a");
 	vfprintf(f, format, list);
 	fclose(f);
 	va_end(list);

@@ -121,12 +121,6 @@ static MBCHAR s_stackTraceString[k_STACK_TRACE_LEN];
 
 void DebugCallStack_Open (void)
 {
-#if !defined(WIN32)
-	std::basic_string<TCHAR> exeName = main_GetExeName();
-	std::basic_string<TCHAR> command = "nm --demangle --defined-only --numeric-sort " + exeName + " > " + k_MAP_FILE;
-
-	system(command.c_str());
-#endif
 
 	Debug_FunctionNameOpen (k_MAP_FILE);
 }
