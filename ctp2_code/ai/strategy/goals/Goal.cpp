@@ -2877,6 +2877,14 @@ bool Goal::IsTargetImmune() const
 			return true;
 	}
 
+	if( order_record->GetUnitPretest_CanSue()
+	    &&  m_target_army.m_id != 0
+	    && !m_target_army->CanBeSued()
+	  )
+	{
+	    return true;
+	}
+
 	if(order_record->GetUnitPretest_EstablishEmbassy())
 	{
 		if(g_player[m_playerId]->HasEmbassyWith(m_target_city->GetOwner()))
