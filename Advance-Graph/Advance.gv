@@ -150,10 +150,6 @@ digraph G {
 <TR><TD>OCEAN FARING</TD></TR></TABLE>>,
 		shape=box];
 	ADVANCE_BUREAUCRACY -> ADVANCE_OCEAN_FARING;
-	ADVANCE_THEOLOGY	 [label=<<TABLE border="0" cellspacing="0" cellborder="0"><TR><TD><IMG SCALE="TRUE" SRC="cm2_upap100l.png"/></TD></TR>
-<TR><TD>THEOLOGY</TD></TR></TABLE>>,
-		shape=box];
-	ADVANCE_BUREAUCRACY -> ADVANCE_THEOLOGY;
 	ADVANCE_CANNON_MAKING	 [label=<<TABLE border="0" cellspacing="0" cellborder="0"><TR><TD><IMG SCALE="TRUE" SRC="upap016l.png"/></TD></TR>
 <TR><TD>CANNON MAKING</TD></TR></TABLE>>,
 		shape=box];
@@ -409,6 +405,10 @@ digraph G {
 <TR><TD>JURISPRUDENCE</TD></TR></TABLE>>,
 		shape=box];
 	ADVANCE_JURISPRUDENCE -> ADVANCE_BUREAUCRACY;
+	ADVANCE_THEOLOGY	 [label=<<TABLE border="0" cellspacing="0" cellborder="0"><TR><TD><IMG SCALE="TRUE" SRC="cm2_upap100l.png"/></TD></TR>
+<TR><TD>THEOLOGY</TD></TR></TABLE>>,
+		shape=box];
+	ADVANCE_JURISPRUDENCE -> ADVANCE_THEOLOGY;
 	ADVANCE_JURISPRUDENCE -> ADVANCE_TRADE;
 	ADVANCE_ULTRAPRESSURE_MACHINERY	 [label=<<TABLE border="0" cellspacing="0" cellborder="0"><TR><TD><IMG SCALE="TRUE" SRC="upap103l.png"/></TD></TR>
 <TR><TD>ULTRAPRESSURE MACHINERY</TD></TR></TABLE>>,
