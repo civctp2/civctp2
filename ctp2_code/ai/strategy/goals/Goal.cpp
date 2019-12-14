@@ -2865,12 +2865,6 @@ bool Goal::IsTargetImmune() const
 			return true;
 	}
 
-	if(order_record->GetTargetPretestEnemySpecialUnit())
-	{
-		if(g_theWorld->GetOwner(target_pos) != m_playerId)
-			return true;
-	}
-
 	if(order_record->GetTargetPretestEnemySpecialUnit()
 	&& m_target_army.m_id != 0
 	&& m_target_army->CanBeExpelled()
