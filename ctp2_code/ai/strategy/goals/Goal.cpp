@@ -2865,14 +2865,6 @@ bool Goal::IsTargetImmune() const
 			return true;
 	}
 
-	if(order_record->GetTargetPretestEnemySpecialUnit()
-	&& m_target_army.m_id != 0
-	&& m_target_army->CanBeExpelled()
-	  )
-	{
-		return true;
-	}
-
 	if(order_record->GetUnitPretest_CanReformCity())
 	{
 		if(!m_target_city.GetCityData()->IsConverted())
