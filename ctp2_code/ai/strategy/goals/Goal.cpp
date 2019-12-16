@@ -2649,13 +2649,15 @@ bool Goal::IsInvalidByDiplomacy() const
 			{
 				iscivilian = m_target_army->IsCivilian();
 			}
-
+			
+			/* disabling, see https://github.com/civctp2/civctp2/pull/217#issuecomment-565860162
 			if(iscivilian &&
 			   !goal_record->GetExecute()->GetUnitPretest_CanEnslaveSettler() &&
 			   goal_record->GetTargetOwnerHotEnemy() &&
 			   (diplomat.GetPersonality()->GetAlignmentGood() ||
 				diplomat.GetPersonality()->GetAlignmentNeutral()))
 				return true;
+			*/
 
 			if(goal_record->GetTargetOwnerNeutral())
 			{
