@@ -64,10 +64,6 @@ void TradeRoute::RemoveAllReferences(CAUSE_KILL_TRADE_ROUTE cause)
 			}
 	     // }
 	}
-				ROUTE_TYPE type;
-				sint32 good;
-				GetSourceResource(type, good);
-	fprintf(stderr, "%s L%d: Kill trade route cause: %d, owner: %d, resource: %d!\n", __FILE__, __LINE__, cause, source.GetOwner(), good);
 
 	if ((NULL != g_player)  &&
 	    (NULL != g_player[GetPayingFor()])) {
