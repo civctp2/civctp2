@@ -2558,11 +2558,8 @@ void CityData::CollectResources()
 		m_ringGold[ring] += cell->GetGoldProduced();
 		m_ringSizes[ring]++;
 		sint32 good;
-		if(g_theWorld->GetGood(it.Pos(), good)
-#if !defined(NEW_RESOURCE_PROCESS)
-		&& MapPoint::GetSquaredDistance(cityPos, it.Pos()) <= partSquaredRadius
-#endif
-		){
+		if(g_theWorld->GetGood(it.Pos(), good))
+		{
 			//if(g_theResourceDB->Get(good)->GetCantTrade() == 0){
 			if(CanCollectGood(good)){
 			//EMOD 4-26-2006 to prevent free collection of goods
