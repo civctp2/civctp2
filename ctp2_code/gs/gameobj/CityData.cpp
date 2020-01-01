@@ -4414,7 +4414,7 @@ void CityData::CalculateTradeRoutes(bool projectedOnly)
 		switch(routeType)
 		{
 			case ROUTE_TYPE_RESOURCE:
-			    if(m_collectingResources[routeResource] <= m_sellingResources[routeResource]) // if good got lost (should not happen so far because (partial?) implementation is not active)
+			    if(m_collectingResources[routeResource] <= m_sellingResources[routeResource]) // if good got lost (e.g. city shrunk or in case good collection is made dependent on adv., building, impr. etc)
 				{
 					if(!projectedOnly)
 					{
