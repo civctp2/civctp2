@@ -49,7 +49,7 @@ void TradeRoute::RemoveAllReferences(CAUSE_KILL_TRADE_ROUTE cause)
 		dest.DelTradeRoute(*this);
 
 	if(g_theUnitPool->IsValid(source) && g_theUnitPool->IsValid(dest)) {
-	    // if(source.GetOwner() != dest.GetOwner()) {
+		if(source.GetOwner() != dest.GetOwner()) {
 			if(cause == CAUSE_KILL_TRADE_ROUTE_SENDER_KILLED) {
 				SlicObject *so = new SlicObject("360SenderKilledTradeRoute");
 				ROUTE_TYPE type;
@@ -62,7 +62,7 @@ void TradeRoute::RemoveAllReferences(CAUSE_KILL_TRADE_ROUTE cause)
 				so->AddRecipient(dest.GetOwner());
 				g_slicEngine->Execute(so);
 			}
-	     // }
+		}
 	}
 
 	if ((NULL != g_player)  &&
