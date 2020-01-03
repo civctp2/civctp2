@@ -2105,6 +2105,7 @@ messagebox '193BranchCompleteVictim' {
 messagebox '195BranchFailedVictim' {
 	Text(ID_BRANCH_FAILED_VICTIM) ;
 	MessageType("BRANCH");
+	EyePoint(city[0]);
 }
 
 messagebox '197AdvertiseCompleteVictim' {
