@@ -46,7 +46,6 @@ SOOTHSAY_FAILED_VICTIM 			"We caught a foreign {unitrecord[0].name} attempting t
 SOOTHSAY_COMPLETE_ATTACKER 		"Our {unitrecord[0].name} has reduced the Happiness in the foreign city of {city[0].name} by Soothsaying."
 SOOTHSAY_FAILED_ATTACKER 		"Our {unitrecord[0].name} tried to Soothsay in the city of {city[0].name}.  He failed and has been captured."
 
-SUE_COMPLETE_VICTIM 			"We have suffered a legal setback.  A foreign lawyer has successfully sued our one of our {unitrecord[0].name} units."
 SUE_FAILED_VICTIM 			"A foreign lawyer has tried in vain to sue one of our {unitrecord[0].name} units.  Justice, however, has prevailed."
 SUE_COMPLETE_ATTACKER 			"Our lawyers have successfully litigated the destruction of a foreign {unitrecord[0].name}."
 SUE_FAILED_ATTACKER 			"Our lawyer has failed in its attempt to sue a foreign {unitrecord[0].name}."

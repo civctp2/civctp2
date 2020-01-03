@@ -415,7 +415,7 @@ STOPPED_BY_SPIES_AGRESSOR		"Foreign counter-intelligence efforts in the city of 
 
 ## Sue ##
 ## Lawyer Attack ##
-SUE_COMPLETE_VICTIM			"We have suffered a legal setback. A foreign Lawyer has successfully sued our one of our {unitrecord[0].name} units."
+SUE_COMPLETE_VICTIM			"We have suffered a legal setback. A foreign Lawyer has successfully sued one of our {unitrecord[0].name} units."
 SUE_FAILED_VICTIM			"A foreign Lawyer has tried in vain to sue one of our {unitrecord[0].name} units. Justice, however, has prevailed."
 SUE_COMPLETE_ATTACKER			"Our Lawyer has successfully litigated the destruction of a foreign {unitrecord[0].name}."
 SUE_FAILED_ATTACKER			"Our Lawyer has failed in its attempt to sue a foreign {unitrecord[0].name}."
