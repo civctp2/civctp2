@@ -2328,7 +2328,10 @@ void UnitActor::Serialize(CivArchive &archive)
 		}
 
 		archive << m_facing;
-		archive << m_lastMoveFacing;
+		archive.PutUINT8((uint8)m_isFortified);
+		archive.PutUINT8((uint8)m_isFortifying);
+		archive.PutUINT8((uint8)m_hasCityWalls);
+		archive.PutUINT8((uint8)m_hasForceField);
 		archive << m_size;
 		archive.PutUINT8((uint8)m_isUnseenCellActor);
 
@@ -2354,7 +2357,10 @@ void UnitActor::Serialize(CivArchive &archive)
 	else
 	{
 		archive >> m_facing;
-		archive >> m_lastMoveFacing;
+		m_isFortified = (BOOL)archive.GetUINT8();
+		m_isFortifying = (BOOL)archive.GetUINT8();
+		m_hasCityWalls = (BOOL)archive.GetUINT8();
+		m_hasForceField = (BOOL)archive.GetUINT8();
 		archive >> m_size;
 
 		m_isUnseenCellActor = (BOOL)archive.GetUINT8();
