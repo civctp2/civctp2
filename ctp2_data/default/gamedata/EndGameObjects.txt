@@ -15,7 +15,7 @@ ENDGAME_POWER_SATELLITE {
     Building IMPROVE_POWER_SATELLITE
 	
 	MinNeeded 10
-	MaxNeeded 20
+	MaxNeeded 40
 }
 
 ENDGAME_PROCESSING_TOWER {
@@ -29,7 +29,7 @@ ENDGAME_PROCESSING_TOWER {
 	MinRadius 5
 
 	// use max radius when max power sources are built
-	MaxRadius 8
+	MaxRadius 16
 
 	// need to have 60% of the map area covered
 	MinCoverage 0.6
