@@ -836,7 +836,7 @@ void DiplomacyWindow::Respond(RESPONSE_TYPE disposition)
 
 void DiplomacyWindow::Accept(aui_Control *control, uint32 action, uint32 data, void *cookie)
 {
-
+        Hide();
 }
 
 void DiplomacyWindow::Reject(aui_Control *control, uint32 action, uint32 data, void *cookie)
@@ -1638,6 +1638,7 @@ void DiplomacyWindow::AcceptCounter(aui_Control *control, uint32 action, uint32 
 		}
 		s_dipWindow->ShowSections(k_DIPWIN_PROPOSALS_RECEIVED | k_DIPWIN_PROPOSALS_MADE | k_DIPWIN_PROPOSAL_DETAILS);
 	}
+        Hide();
 }
 
 void DiplomacyWindow::RejectCounter(aui_Control *control, uint32 action, uint32 data, void *cookie)
