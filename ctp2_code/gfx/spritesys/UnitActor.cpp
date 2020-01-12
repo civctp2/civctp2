@@ -338,11 +338,6 @@ void UnitActor::Initialize(void)
 
 	m_hidden = FALSE;
 
-	m_isFortifying = FALSE;
-	m_isFortified = FALSE;
-	m_hasCityWalls = FALSE;
-	m_hasForceField = FALSE;
-
 	m_shieldFlashOnTime = 0;
 	m_shieldFlashOffTime = 0;
 
