@@ -201,7 +201,7 @@ STDEHANDLER(CaptureCityEvent)
 		if (
 			(g_theProfileDB->IsCityCaptureOptions())
 			//(g_theProfileDB->GetValueByName("CityCaptureOptions"))
-		&& (city.GetData()->GetCityData()->PopCount() > 0)
+		&& (city.GetData()->GetCityData()->PopCount() > 1)
 		){
 //EMOD Capture city options
             /// @todo Check impact: this could be considered a human cheat.
