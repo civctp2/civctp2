@@ -2692,7 +2692,9 @@ sint32 CityData::FoodFromTrade(){
 	    ROUTE_TYPE routeType;
 	    sint32 g;
 	    route.GetSourceResource(routeType, g);
-	    food += g_theResourceDB->Get(g)->GetFood();
+	    if(!route->IsBeingPirated()){
+		food += g_theResourceDB->Get(g)->GetFood();
+		}
 	    }
 	}
 
@@ -2708,7 +2710,9 @@ sint32 CityData::ProdFromTrade(){
 	    ROUTE_TYPE routeType;
 	    sint32 g;
 	    route.GetSourceResource(routeType, g);
-	    prod += g_theResourceDB->Get(g)->GetProduction();
+	    if(!route->IsBeingPirated()){
+		prod += g_theResourceDB->Get(g)->GetProduction();
+		}
 	    }
 	}
 
@@ -2724,7 +2728,9 @@ sint32 CityData::GoldFromTrade(){
 	    ROUTE_TYPE routeType;
 	    sint32 g;
 	    route.GetSourceResource(routeType, g);
-	    gold += g_theResourceDB->Get(g)->GetGold();
+	    if(!route->IsBeingPirated()){
+		gold += g_theResourceDB->Get(g)->GetGold();
+		}
 	    }
 	}
 
