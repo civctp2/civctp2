@@ -190,6 +190,7 @@
 #include "profileDB.h"
 #include "radarmap.h"
 #include "RandGen.h"                    // g_rand
+#include "ResourceRecord.h"             // g_theResourceDB
 #include "RiskRecord.h"
 #include "Scheduler.h"
 #include "SelItem.h"
@@ -1686,6 +1687,17 @@ void ArmyData::BeginTurn()
 		    sint32 good;
 		    route.GetSourceResource(type, good);
 					
+		    SlicObject * so = new SlicObject("043TradePiratedBonus");
+		    so->AddRecipient(toCity.GetOwner());
+		    so->AddGood(good);
+		    so->AddCity(fromCity); // sender
+		    so->AddCity(toCity); // recipent, this city is the destination
+		    so->AddCivilisation(GetOwner());
+		    so->AddGold(g_theResourceDB->Get(good)->GetFood()); // missuse to pass integer to msg
+		    so->AddGold(g_theResourceDB->Get(good)->GetProduction()); // missuse to pass integer to msg
+		    so->AddGold(g_theResourceDB->Get(good)->GetGold()); // missuse to pass integer to msg
+		    g_slicEngine->Execute(so);
+		
 		    SlicObject * so1 = new SlicObject("044TradePirateGold");
 		    so1->AddRecipient(GetOwner());
 		    so1->AddGold(pgold) ;
