@@ -338,11 +338,6 @@ void UnitActor::Initialize(void)
 
 	m_hidden = FALSE;
 
-	m_isFortifying = FALSE;
-	m_isFortified = FALSE;
-	m_hasCityWalls = FALSE;
-	m_hasForceField = FALSE;
-
 	m_shieldFlashOnTime = 0;
 	m_shieldFlashOffTime = 0;
 
@@ -2328,7 +2323,10 @@ void UnitActor::Serialize(CivArchive &archive)
 		}
 
 		archive << m_facing;
-		archive << m_lastMoveFacing;
+		archive.PutUINT8((uint8)m_isFortified); // was not saved before #244 and is only saved here to fill the fromer 4 bytes, i.e. slot could be reused
+		archive.PutUINT8((uint8)m_isFortifying); // was not saved before #244 and is only saved here to fill the fromer 4 bytes, i.e. slot could be reused
+		archive.PutUINT8((uint8)m_hasCityWalls); // without saving, known city walls are not drawn after a game reload (bad for sending armies, slavers)
+		archive.PutUINT8((uint8)m_hasForceField); // without saving, known force fields are not drawn after a game reload (bad for sending armies)
 		archive << m_size;
 		archive.PutUINT8((uint8)m_isUnseenCellActor);
 
@@ -2354,7 +2352,10 @@ void UnitActor::Serialize(CivArchive &archive)
 	else
 	{
 		archive >> m_facing;
-		archive >> m_lastMoveFacing;
+		m_isFortified = (BOOL)archive.GetUINT8();
+		m_isFortifying = (BOOL)archive.GetUINT8();
+		m_hasCityWalls = (BOOL)archive.GetUINT8();
+		m_hasForceField = (BOOL)archive.GetUINT8();
 		archive >> m_size;
 
 		m_isUnseenCellActor = (BOOL)archive.GetUINT8();
