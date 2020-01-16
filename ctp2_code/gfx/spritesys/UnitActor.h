@@ -264,7 +264,7 @@ protected:
 	LOADTYPE			m_loadType;
 
 	sint32				m_facing;
-	sint32				m_lastMoveFacing;
+	sint32				m_lastMoveFacing; // purpose unclear since there is also m_facing, not saved any more since #244
 	sint32				m_frame;
 	uint16				m_transparency;
 
