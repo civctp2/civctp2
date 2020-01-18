@@ -4419,18 +4419,22 @@ ORDER_RESULT ArmyData::IndulgenceSale(const MapPoint &point)
 	if(u.GetDBRec()->GetIsTelevangelist()) {
 		g_slicEngine->Execute(new CityReport("911FaithHealVictim", c));
 
+		/* disabled because action never fails and gold increase already tells the success and therefore message spamming can be avoided
 		SlicObject * so  = new SlicObject("911FaithHealAttacker");
 		so->AddRecipient(u.GetOwner());
 		so->AddCivilisation(c.GetOwner()); // Televangelist message differs that of clerics and in addition needs the civ
 		so->AddCity(c);
 		g_slicEngine->Execute(so);
+		*/
 	} else {
 		g_slicEngine->Execute(new CityReport("911IndulgenceCompleteVictim", c));
 
+		/* disabled because action never fails and gold increase already tells the success and therefore message spamming can be avoided
 		SlicObject * so = new SlicObject("911IndulgenceCompleteAttacker");
 		so->AddRecipient(u.GetOwner());
 		so->AddCity(c);
 		g_slicEngine->Execute(so);
+		*/
 	}
 
 	ActionSuccessful(SPECATTACK_SELLINDULGENCE, m_array[uindex], c);
