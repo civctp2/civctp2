@@ -4473,6 +4473,9 @@ void CityData::CalculateTradeRoutes(bool projectedOnly)
 					g_player[route.GetSource().GetOwner()]->AddGold(route.GetGoldInReturn());
 				}
 			}
+			else{ // gold even for domestic trade route (e.g. paid by the citizens from their wages)
+			    g_player[m_owner]->AddGold(route.GetGoldInReturn());
+			    }
 
 			if(!route.IsActive())
 			{
