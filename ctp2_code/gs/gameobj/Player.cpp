@@ -3083,6 +3083,9 @@ TradeRoute Player::CreateTradeRoute(Unit sourceCity,
 	    so->AddGood(resource);
 	    so->AddCity(sourceCity);
 	    so->AddCity(destCity);
+	    so->AddGold(g_theResourceDB->Get(resource)->GetFood()); // missuse to pass integer to msg
+	    so->AddGold(g_theResourceDB->Get(resource)->GetProduction()); // missuse to pass integer to msg
+	    so->AddGold(g_theResourceDB->Get(resource)->GetGold()); // missuse to pass integer to msg
 	    g_slicEngine->Execute(so);
 	    return newRoute;
 	    }

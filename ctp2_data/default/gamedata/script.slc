@@ -2398,7 +2398,7 @@ messagebox '359TradePassing' {
 messagebox '360SenderCreatedTradeRoute' {
 	Text(ID_SENDER_CREATED_TRADE_ROUTE);
 	MessageType("TRADE");
-	EyePoint(city[1]);
+	EyePoint(city[1].location); // target is of interest
 }
 
 messagebox '360SenderKilledTradeRoute' {
