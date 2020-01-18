@@ -159,7 +159,7 @@ TRADE_ROUTES_BROKEN_BY_WAR		"Malas noticias, {player[0].sir}. Debido al conflict
 TRADE_PASS				"The trade route passing through our city of {city[0].name} carrying {good[0].name} from {city[1].name} to {city[2].name} owned by the {player[0].civ_name_plural} brought us {gold[0].value} gold."
 TRADE_PASS_PIRATED			"The trade route passing through our city of {city[0].name} carrying {good[0].name} from {city[1].name} to {city[2].name} owned by the {player[0].civ_name_plural} was pirated by the {player[1].civ_name_plural} and {gold[0].value} gold from transit was not earned."
 SENDER_CREATED_TRADE_ROUTE			"{player[0].leader_name} has created a trade route carrying {good[0].name} from {city[0].name} to {city[1].name}, bringing {gold[0].value} food, {gold[1].value} production, {gold[2].value} gold."
-SENDER_KILLED_TRADE_ROUTE		"{player[0].leader_name} ha cancelado la ruta comercial por la que se lleva {good[0].name} de {city[0].name} a {city[1].name}."
+SENDER_KILLED_TRADE_ROUTE			"{player[0].leader_name} has cancelled the trade route carrying {good[0].name} from {city[0].name} to {city[1].name}, which was worth {gold[0].value} food, {gold[1].value} production, {gold[2].value} gold."
 
 ## Trade Advisor Stuff ##
 SELECTED_TRADE_ADVICE			"Vender {good[0].name} a {city[1].name} producirá {gold[0].value} de oro, y requiere {value[0].value} caravanas."

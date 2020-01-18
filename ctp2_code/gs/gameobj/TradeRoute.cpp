@@ -5,6 +5,7 @@
 #include "TradePool.h"
 #include "player.h"
 #include "TradeRouteData.h"
+#include "ResourceRecord.h"             // g_theResourceDB
 #include "director.h"
 #include "MapPoint.h"
 #include "dynarr.h"
@@ -60,6 +61,9 @@ void TradeRoute::RemoveAllReferences(CAUSE_KILL_TRADE_ROUTE cause)
 				so->AddCity(dest);
 				so->AddCivilisation(source.GetOwner());
 				so->AddRecipient(dest.GetOwner());
+				so->AddGold(g_theResourceDB->Get(good)->GetFood()); // missuse to pass integer to msg
+				so->AddGold(g_theResourceDB->Get(good)->GetProduction()); // missuse to pass integer to msg
+				so->AddGold(g_theResourceDB->Get(good)->GetGold()); // missuse to pass integer to msg
 				g_slicEngine->Execute(so);
 			}
 		}

@@ -2404,7 +2404,7 @@ messagebox '360SenderCreatedTradeRoute' {
 messagebox '360SenderKilledTradeRoute' {
 	Text(ID_SENDER_KILLED_TRADE_ROUTE);
 	MessageType("TRADE");
-	EyePoint(city[1]);
+	EyePoint(city[1].location); // target is of interest
 }
 
 messagebox '361IAProtectedFromConversionByWonder' {
