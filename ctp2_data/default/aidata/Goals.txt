@@ -1818,7 +1818,7 @@ GOAL_SUE {
   ObsoleteArmyBonus         0
   TreaspassingArmyBonus     0
 
-  ThreatenType:SpecialAttackCity
+  ThreatenType:None
   ThreatenBonus 5000
 
   ForceMatch:Special

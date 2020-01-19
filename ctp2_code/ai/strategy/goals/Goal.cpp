@@ -2649,13 +2649,15 @@ bool Goal::IsInvalidByDiplomacy() const
 			{
 				iscivilian = m_target_army->IsCivilian();
 			}
-
+			
+			/* disabling, see https://github.com/civctp2/civctp2/pull/217#issuecomment-565860162
 			if(iscivilian &&
 			   !goal_record->GetExecute()->GetUnitPretest_CanEnslaveSettler() &&
 			   goal_record->GetTargetOwnerHotEnemy() &&
 			   (diplomat.GetPersonality()->GetAlignmentGood() ||
 				diplomat.GetPersonality()->GetAlignmentNeutral()))
 				return true;
+			*/
 
 			if(goal_record->GetTargetOwnerNeutral())
 			{
@@ -2865,20 +2867,6 @@ bool Goal::IsTargetImmune() const
 			return true;
 	}
 
-	if(order_record->GetTargetPretestEnemySpecialUnit())
-	{
-		if(g_theWorld->GetOwner(target_pos) != m_playerId)
-			return true;
-	}
-
-	if(order_record->GetTargetPretestEnemySpecialUnit()
-	&& m_target_army.m_id != 0
-	&& m_target_army->CanBeExpelled()
-	  )
-	{
-		return true;
-	}
-
 	if(order_record->GetUnitPretest_CanReformCity())
 	{
 		if(!m_target_city.GetCityData()->IsConverted())
@@ -2889,6 +2877,14 @@ bool Goal::IsTargetImmune() const
 	{
 		if(!m_target_city.GetCityData()->IsFranchised())
 			return true;
+	}
+
+	if( order_record->GetUnitPretest_CanSue()
+	    &&  m_target_army.m_id != 0
+	    && !m_target_army->CanBeSued()
+	  )
+	{
+	    return true;
 	}
 
 	if(order_record->GetUnitPretest_EstablishEmbassy())
