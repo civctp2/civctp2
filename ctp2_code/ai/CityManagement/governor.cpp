@@ -5078,7 +5078,7 @@ void Governor::ManageGoodsTradeRoutes()
 
 		for (sint32 g = 0; g < g_theResourceDB->NumRecords(); g++)
 		{
-			if(city.CD()->IsLocalResource(g))
+			if(city.CD()->IsLocalResource(g)) // only consider collected goods (not bought goods)
 			{
 				sint32 sellingPrice = -1;
 				TradeRoute curDestRoute;
@@ -5099,42 +5099,41 @@ void Governor::ManageGoodsTradeRoutes()
 				sint32 bestPrice = 0;
 				double maxCost = 0.0;
 				double maxNeededFreight = 0.0;
-				for (sint32 op = 1; op < k_MAX_PLAYERS; op++)
+				for (sint32 op = 1; op < k_MAX_PLAYERS; op++) // determin player offering highest price for good g
 				{
 					if (m_playerId != op) // skip all players not awailable for trading
 					{
-						if (!g_player[op])
+						if (!g_player[op]) // player gone/dead 
 							continue;
 
-						if (!player_ptr->HasContactWith(op))
+						if (!player_ptr->HasContactWith(op)) // player not yet known
 							continue;
 
-						if (AgreementMatrix::s_agreements.TurnsAtWar(m_playerId, op) >= 0)
+						if (AgreementMatrix::s_agreements.TurnsAtWar(m_playerId, op) >= 0) // no trade if at ware
 							continue;
 
-						if (Diplomat::GetDiplomat(op).GetEmbargo(m_playerId))
+						if (Diplomat::GetDiplomat(op).GetEmbargo(m_playerId)) // no trade if embargo enacted
 							continue;
 					}
 
-					for (sint32 d = 0; d < g_player[op]->m_all_cities->Num(); d++) {
+					for (sint32 d = 0; d < g_player[op]->m_all_cities->Num(); d++) { // check all cities if suitabelfor trading
 						Unit destCity = g_player[op]->m_all_cities->Access(d);
 
-						if(!(destCity.GetVisibility() & (1 << m_playerId)))
+						if(!(destCity.GetVisibility() & (1 << m_playerId))) // city not visible/known
 							continue;
 
-						if(destCity.m_id == city.m_id)
+						if(destCity.m_id == city.m_id) // exclude current city
 							continue;
 
-						if (Diplomat::GetDiplomat(m_playerId).
-								GetTradeRoutePiracyRisk(city, destCity))
+						if (Diplomat::GetDiplomat(m_playerId).GetTradeRoutePiracyRisk(city, destCity)) // exclude cities whose route would have a hight risk of piracy
 							continue;
 
 						if(curDestRoute.m_id != 0 &&
-						    curDestRoute->GetDestination().m_id == destCity.m_id)
+						    curDestRoute->GetDestination().m_id == destCity.m_id) // exclude standing trade route destination
 							continue;
 
-						const sint32 price = tradeutil_GetTradeValue(m_playerId, destCity, g);
-						const double cost = tradeutil_GetTradeDistance(city, destCity);
+						const sint32 price = tradeutil_GetTradeValue(m_playerId, destCity, g); // # of gold
+						const double cost = tradeutil_GetTradeDistance(city, destCity); // # of caravans
 
 						if (price > bestPrice)
 						{
@@ -5149,18 +5148,18 @@ void Governor::ManageGoodsTradeRoutes()
 							maxCost = cost;
 						}
 					}
-				}
+				} // determined player offering highest price for good g
 
 				m_neededFreight += maxNeededFreight;
 
-				if (!player_ptr->IsRobot())
+				if (!player_ptr->IsRobot()) // exlcude human players
 					continue;
 
-				if (((sellingPrice < maxPrice) && (sellingPrice > 0) ) ||
-					(curDestRoute.m_id != 0 && Diplomat::GetDiplomat(m_playerId).
+				if (((sellingPrice < maxPrice) && (sellingPrice > 0) ) || // kill existing routes if lower in value 
+					(curDestRoute.m_id != 0 && Diplomat::GetDiplomat(m_playerId). // or piracy risk is high
 					GetTradeRoutePiracyRisk(city, curDestRoute->GetDestination())))
 				{
-					unused_freight += curDestRoute->GetCost();
+					unused_freight += curDestRoute->GetCost(); // bug: - 1 missing? one caravan is lost when killing a route
 
 					g_gevManager->AddEvent(GEV_INSERT_Tail, GEV_KillTradeRoute,
 						GEA_TradeRoute, curDestRoute.m_id,
@@ -5172,7 +5171,7 @@ void Governor::ManageGoodsTradeRoutes()
 					}
 				}
 
-				if ((maxPrice > 0) && ((sellingPrice < 0) || (sellingPrice < maxPrice)))
+				if ((maxPrice > 0) && ((sellingPrice < 0) || (sellingPrice < maxPrice))) // good asked for and (no route existed before or better price)
 				{
 					new_route.m_sourceCity      = city;
 					new_route.m_destinationCity = maxCity;
@@ -5188,18 +5187,19 @@ void Governor::ManageGoodsTradeRoutes()
 		}
 	}
 
-	m_neededFreight -= total_freight;
+	m_neededFreight -= total_freight; // of all cravans needed to sell all goods available removed those that already existe (and would be available if existing routes got killed); bug: missing - 1 for each existing trade route?
 
-	new_routes.sort();
+	new_routes.sort(); // sort routes according to m_value (or m_valuePerCaravan #if defined(USE_VALUE_PER_CARAVAN))
 
+	//// create new routes
 	for
 	(
 		std::list<GoodsRoute>::iterator route_iter = new_routes.begin();
-		(route_iter != new_routes.end()) && (unused_freight > 0);
+		(route_iter != new_routes.end()) && (unused_freight > 0); // if unused caravans are still available
 		++route_iter
 	)
 	{
-		if(route_iter->m_cost <= unused_freight)
+		if(route_iter->m_cost <= unused_freight) // create route if enough unused caravans are available
 		{
 			g_gevManager->AddEvent(GEV_INSERT_Tail, GEV_SendGood,
 			                       GEA_Int,         route_iter->m_resource,
@@ -5207,7 +5207,7 @@ void Governor::ManageGoodsTradeRoutes()
 			                       GEA_City,        route_iter->m_destinationCity,
 			                       GEA_End
 			                      );
-			unused_freight -= route_iter->m_cost;
+			unused_freight -= route_iter->m_cost; // subtract caravans now in use
 		}
 	}
 }
