@@ -5035,13 +5035,13 @@ struct GoodsRoute
 
 	bool operator < (GoodsRoute const & rval) const
 	{
-#if defined(USE_VALUE_PER_CARAVAN)
+	// sort on higest m_valuePerCaravan (best profit in total, i.e. not wasting caravans)
 		return (m_valuePerCaravan < rval.m_valuePerCaravan)
-		    || ((m_valuePerCaravan == rval.m_valuePerCaravan) && (m_cost > rval.m_cost));
-#else
+		    || ((m_valuePerCaravan == rval.m_valuePerCaravan) && (m_cost > rval.m_cost)); // if valuePerCaravan equal, compare higher cost
+/* sort based on higest (gold) value (bad, since more profit in total could be made with the caravans available)
 		return (m_value < rval.m_value)
 		    || ((m_value == rval.m_value) && (m_cost > rval.m_cost));
-#endif
+*/
 	};
 
 	/// Total yield
