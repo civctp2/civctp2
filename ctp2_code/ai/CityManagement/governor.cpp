@@ -5033,7 +5033,7 @@ struct GoodsRoute
 		m_valuePerCaravan	(0.0)
 	{};
 
-	bool operator < (GoodsRoute const & rval) const
+	bool operator < (const GoodsRoute & rval) const // similar to https://thispointer.com/c-how-to-sort-a-list-of-objects-with-custom-comparator-or-lambda-function/
 	{
 	// sort on higest m_valuePerCaravan (best profit in total, i.e. not wasting caravans)
 		return (m_valuePerCaravan < rval.m_valuePerCaravan)
@@ -5066,7 +5066,6 @@ void Governor::ManageGoodsTradeRoutes()
 	double unused_freight = player_ptr->GetUnusedFreight();
 	double total_freight = player_ptr->GetTotalFreight();
 	sint32 totalRoutes = 0; // apparently there is no GetTotalRoutes() or similar, see e.g. https://github.com/civctp2/civctp2/blob/8ed4659c7075e856b9ba72e02e21facf0329ce26/ctp2_code/ui/interface/trademanager.cpp#L539
-	GoodsRoute new_route;
 	std::list<GoodsRoute> new_routes;
 
 	m_neededFreight = 0.0;
@@ -5175,6 +5174,7 @@ void Governor::ManageGoodsTradeRoutes()
 
 				if ((maxPrice > 0) && ((sellingPrice < 0) || (sellingPrice < maxPrice))) // good asked for and (no route existed before or better price)
 				{
+					GoodsRoute new_route;
 					new_route.m_sourceCity      = city;
 					new_route.m_destinationCity = maxCity;
 					new_route.m_cost            = maxCost;
