@@ -2558,11 +2558,8 @@ void CityData::CollectResources()
 		m_ringGold[ring] += cell->GetGoldProduced();
 		m_ringSizes[ring]++;
 		sint32 good;
-		if(g_theWorld->GetGood(it.Pos(), good)
-#if !defined(NEW_RESOURCE_PROCESS)
-		&& MapPoint::GetSquaredDistance(cityPos, it.Pos()) <= partSquaredRadius
-#endif
-		){
+		if(g_theWorld->GetGood(it.Pos(), good))
+		{
 			//if(g_theResourceDB->Get(good)->GetCantTrade() == 0){
 			if(CanCollectGood(good)){
 			//EMOD 4-26-2006 to prevent free collection of goods
@@ -4417,7 +4414,7 @@ void CityData::CalculateTradeRoutes(bool projectedOnly)
 		switch(routeType)
 		{
 			case ROUTE_TYPE_RESOURCE:
-				if(m_collectingResources[routeResource] <= m_sellingResources[routeResource])
+			    if(m_collectingResources[routeResource] <= m_sellingResources[routeResource]) // if good got lost (e.g. city shrunk or in case good collection is made dependent on adv., building, impr. etc)
 				{
 					if(!projectedOnly)
 					{
@@ -4460,17 +4457,17 @@ void CityData::CalculateTradeRoutes(bool projectedOnly)
 		killRoute = false;
 		if(!projectedOnly)
 		{
-			if(route.GetOwner() != m_owner)
+			if(route.GetOwner() != m_owner) // foreign source
 			{
-				if(g_player[m_owner]->GetGold() < route.GetGoldInReturn())
+				if(g_player[m_owner]->GetGold() < route.GetGoldInReturn()) // kill route because of not enough gold to pay for the resource
 				{
 					deadRoutes.Insert(route);
 					killRoute = true;
 				}
 				else
 				{
-					g_player[m_owner]->SubGold(route.GetGoldInReturn());
-					g_player[route.GetSource().GetOwner()]->AddGold(route.GetGoldInReturn());
+					g_player[m_owner]->SubGold(route.GetGoldInReturn()); // remove gold from receiver
+					g_player[route.GetSource().GetOwner()]->AddGold(route.GetGoldInReturn()); // give gold to sender
 				}
 			}
 
@@ -4484,7 +4481,7 @@ void CityData::CalculateTradeRoutes(bool projectedOnly)
 		if(route.IsActive() && !killRoute)
 		{
 			route.GetSourceResource(routeType, routeResource);
-			AddTradeResource(routeType, routeResource);
+			AddTradeResource(routeType, routeResource); // add to m_buyingResources
 		}
 	}
 
@@ -4906,7 +4903,6 @@ void CityData::DelTradeRoute(TradeRoute route)
 	if(route.GetDestination() == m_home_city)
 	{
 		m_tradeDestinationList.Del(route);
-		m_tradeSourceList.Del(route);
 		ROUTE_TYPE type;
 		sint32 resource;
 		route.GetSourceResource(type, resource);

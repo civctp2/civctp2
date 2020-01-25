@@ -2391,11 +2391,13 @@ messagebox '359TradePassing' {
 messagebox '360SenderCreatedTradeRoute' {
 	Text(ID_SENDER_CREATED_TRADE_ROUTE);
 	MessageType("TRADE");
+	EyePoint(city[1]);
 }
 
 messagebox '360SenderKilledTradeRoute' {
 	Text(ID_SENDER_KILLED_TRADE_ROUTE);
 	MessageType("TRADE");
+	EyePoint(city[1]);
 }
 
 messagebox '361IAProtectedFromConversionByWonder' {
