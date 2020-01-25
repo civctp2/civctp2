@@ -5065,6 +5065,7 @@ void Governor::ManageGoodsTradeRoutes()
 
 	double unused_freight = player_ptr->GetUnusedFreight();
 	double total_freight = player_ptr->GetTotalFreight();
+	sint32 totalRoutes = 0; // apparently there is no GetTotalRoutes() or similar, see e.g. https://github.com/civctp2/civctp2/blob/8ed4659c7075e856b9ba72e02e21facf0329ce26/ctp2_code/ui/interface/trademanager.cpp#L539
 	GoodsRoute new_route;
 	std::list<GoodsRoute> new_routes;
 
@@ -5075,6 +5076,7 @@ void Governor::ManageGoodsTradeRoutes()
 	for (sint32 i = 0; i < cityCount; i++)
 	{
 		Unit & city = city_list->Access(i);
+		totalRoutes += city.CD()->GetTradeSourceList()->Num();
 
 		for (sint32 g = 0; g < g_theResourceDB->NumRecords(); g++)
 		{
@@ -5159,7 +5161,7 @@ void Governor::ManageGoodsTradeRoutes()
 					(curDestRoute.m_id != 0 && Diplomat::GetDiplomat(m_playerId). // or piracy risk is high
 					GetTradeRoutePiracyRisk(city, curDestRoute->GetDestination())))
 				{
-					unused_freight += curDestRoute->GetCost(); // bug: - 1 missing? one caravan is lost when killing a route
+					unused_freight += curDestRoute->GetCost() - 1; // - 1 because one caravan is lost when killing a route
 
 					g_gevManager->AddEvent(GEV_INSERT_Tail, GEV_KillTradeRoute,
 						GEA_TradeRoute, curDestRoute.m_id,
@@ -5187,7 +5189,7 @@ void Governor::ManageGoodsTradeRoutes()
 		}
 	}
 
-	m_neededFreight -= total_freight; // of all cravans needed to sell all goods available removed those that already existe (and would be available if existing routes got killed); bug: missing - 1 for each existing trade route?
+	m_neededFreight -= total_freight - totalRoutes; // cravans needed to sell all goods available (with an offer); subtract those that already exist (and would be available if existing routes got killed); - 1 for each existing trade route
 
 	new_routes.sort(); // sort routes according to m_value (or m_valuePerCaravan #if defined(USE_VALUE_PER_CARAVAN))
 

@@ -29,7 +29,7 @@ bool TradeRoute::IsValid() const
 	return g_theTradePool->IsValid(m_id);
 }
 
-void TradeRoute::KillRoute(CAUSE_KILL_TRADE_ROUTE cause)
+void TradeRoute::KillRoute(CAUSE_KILL_TRADE_ROUTE cause) // mapped to TradeRoute::Kill in TradeRoute.h
 {
 	TradeRoute tmp(*this);
 	tmp.RemoveAllReferences(cause);
@@ -67,7 +67,7 @@ void TradeRoute::RemoveAllReferences(CAUSE_KILL_TRADE_ROUTE cause)
 
 	if ((NULL != g_player)  &&
 	    (NULL != g_player[GetPayingFor()])) {
-		g_player[GetPayingFor()]->RemoveTradeRoute(*this, cause);
+		g_player[GetPayingFor()]->RemoveTradeRoute(*this, cause); // brings used caravans/trade-units back - 1
 	}
 
 	data->RemoveFromCells();
