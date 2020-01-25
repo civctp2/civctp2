@@ -5197,6 +5197,7 @@ void Governor::ManageGoodsTradeRoutes()
 	for(GoodsRoute & route : new_routes)
 	    std::cout << route.m_valuePerCaravan << " :: " << route.m_value << " :: " << route.m_cost << std::endl;
 	new_routes.sort(); // sort routes according to m_value (or m_valuePerCaravan #if defined(USE_VALUE_PER_CARAVAN))
+	new_routes.reverse(); // revert sort order to start with higest m_valuePerCaravan
 	std::cout<<"**** after sorting ****"<<std::endl;
 	for(GoodsRoute & route : new_routes)
 	    std::cout << route.m_valuePerCaravan << " :: " << route.m_value << " :: " << route.m_cost << std::endl;
