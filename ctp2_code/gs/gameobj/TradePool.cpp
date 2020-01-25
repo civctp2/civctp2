@@ -46,9 +46,7 @@ TradeRoute TradePool::Create(Unit sourceCity,
 	TradeRouteData* newData;
 	TradeRoute newRoute(NewKey(k_BIT_GAME_OBJ_TYPE_TRADE_ROUTE));
 
-	newData = new TradeRouteData(newRoute, sourceCity, destCity, owner,
-								 sType, sResource, paying_for,
-								 gold_in_return);
+	newData = new TradeRouteData(newRoute, sourceCity, destCity, owner, sType, sResource, paying_for, gold_in_return); // also sets actual transport cost
 	if(!newData->IsValid()) {
 
 		delete newData;

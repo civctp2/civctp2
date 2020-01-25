@@ -79,7 +79,7 @@ sint32 tradeutil_GetAccurateTradeDistance(Unit &source, Unit &destination)
 	Path    path;
 	float   cost;
 
-	if (g_theTradeAstar.FindPath
+	if (g_theTradeAstar.FindPath // comparable to TradeRouteData::GeneratePath cost calculation
             (source.GetOwner(), source.RetPos(), destination.RetPos(), path, cost, FALSE)
        )
     {
@@ -89,6 +89,7 @@ sint32 tradeutil_GetAccurateTradeDistance(Unit &source, Unit &destination)
 	return DISTANCE_UNKNOWN;
 }
 
+/* deprecated (in favor of tradeutil_GetAccurateTradeDistance) because result can differ significantly
 sint32 tradeutil_GetTradeDistance(Unit &source, Unit &destination)
 {
 	double cost = g_theWorld->CalcTerrainFreightCost(source.RetPos()) *
@@ -97,6 +98,7 @@ sint32 tradeutil_GetTradeDistance(Unit &source, Unit &destination)
 
 	return static_cast<sint32>(std::max<double>(tradeutil_GetNetTradeCosts(cost), 1.0));
 }
+*/
 
 // Maybe move the following to worldutils
 

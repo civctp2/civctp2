@@ -5136,7 +5136,7 @@ void Governor::ManageGoodsTradeRoutes()
 							continue;
 
 						const sint32 price = tradeutil_GetTradeValue(m_playerId, destCity, g); // # of gold
-						const double cost = tradeutil_GetTradeDistance(city, destCity); // # of caravans
+						const double cost = tradeutil_GetAccurateTradeDistance(city, destCity); // # of caravans
 
 						if (price > bestPrice)
 						{

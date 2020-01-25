@@ -3068,13 +3068,10 @@ TradeRoute Player::CreateTradeRoute(Unit sourceCity,
 		return TradeRoute();
 	}
 
-	TradeRoute newRoute = g_theTradePool->Create(sourceCity, destCity, m_owner,
-												 sourceType, sourceResource,
-												 paying_for,
-												 gold_in_return);
+	TradeRoute newRoute = g_theTradePool->Create(sourceCity, destCity, m_owner, sourceType, sourceResource, paying_for, gold_in_return); // creates route and determins actual transport cost
 
 	if (newRoute.IsValid())
-	    newRoute= g_player[paying_for]->PayForTrade(newRoute); // kills route if not enough caravans
+	    newRoute= g_player[paying_for]->PayForTrade(newRoute); // kills route if not enough caravans, reduces available trade units
 
 	if (newRoute.IsValid() && destCity.GetOwner() != m_owner){
 	    SlicObject *so = new SlicObject("360SenderCreatedTradeRoute");
@@ -3095,7 +3092,7 @@ TradeRoute Player::CreateTradeRoute(Unit sourceCity,
 
 TradeRoute Player::PayForTrade(TradeRoute &newRoute)
 {
-	AddUsedTransportPoints((sint32)newRoute.GetCost());
+	AddUsedTransportPoints((sint32)newRoute.GetCost()); // reduces available trade units
 
 	if((m_usedTradeTransportPoints > m_tradeTransportPoints &&
 		!wonderutil_GetFreeTradeRoutes(m_builtWonders)) ||

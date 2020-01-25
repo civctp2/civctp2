@@ -105,7 +105,7 @@ TradeRouteData::TradeRouteData
 			("Creating route from city @ (%d,%d) to city @ (%d,%d)\n",
 			 sPos.x, sPos.y, dPos.x, dPos.y));
 
-	m_valid = GeneratePath();
+	m_valid = GeneratePath(); // determins cost of trade-units
 
 	DPRINTF(k_DBG_GAMESTATE, ("Created Trade Route from %s to %s, cost=%d, valid=%i\n",
 	                          m_sourceCity->GetCityData()->GetName(),
@@ -206,7 +206,7 @@ bool TradeRouteData::GeneratePath()
 	{
 		if (wp == 0)
 		{
-			if (!g_theTradeAstar.FindPath
+			if (!g_theTradeAstar.FindPath // similar to tradeutil_GetAccurateTradeDistance
 			        ( m_payingFor, m_wayPoints[wp], m_wayPoints[wp + 1],
 			         *m_astarPath, cost, FALSE
 			        )
