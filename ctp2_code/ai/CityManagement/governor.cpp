@@ -183,7 +183,6 @@
 #include "WonderRecord.h"
 #include "WonderTracker.h"
 #include "World.h"
-#include <iostream>
 
 #if defined(_DEBUG) || defined(USE_LOGGING)
 #include "Timer.h"
@@ -5036,7 +5035,6 @@ struct GoodsRoute
 
 	bool operator < (const GoodsRoute & rval) const // similar to https://thispointer.com/c-how-to-sort-a-list-of-objects-with-custom-comparator-or-lambda-function/
 	{
-	fprintf(stderr, "%s L%d: m_valuePerCaravan: %f; rval.m_valuePerCaravan: %f!\n", __FILE__, __LINE__, m_valuePerCaravan, rval.m_valuePerCaravan);
 	// sort on higest m_valuePerCaravan (best profit in total, i.e. not wasting caravans)
 		return (m_valuePerCaravan < rval.m_valuePerCaravan)
 		    || ((m_valuePerCaravan == rval.m_valuePerCaravan) && (m_cost > rval.m_cost)); // if valuePerCaravan equal, compare higher cost
@@ -5193,15 +5191,8 @@ void Governor::ManageGoodsTradeRoutes()
 
 	m_neededFreight -= total_freight - totalRoutes; // cravans needed to sell all goods available (with an offer); subtract those that already exist (and would be available if existing routes got killed); - 1 for each existing trade route
 
-	std::cout<<"**** routes in the list Initially ****"<<std::endl;
-	for(GoodsRoute & route : new_routes)
-	    std::cout << route.m_valuePerCaravan << " :: " << route.m_value << " :: " << route.m_cost << std::endl;
 	new_routes.sort(); // sort routes according to m_value (or m_valuePerCaravan #if defined(USE_VALUE_PER_CARAVAN))
 	new_routes.reverse(); // revert sort order to start with higest m_valuePerCaravan
-	std::cout<<"**** after sorting ****"<<std::endl;
-	for(GoodsRoute & route : new_routes)
-	    std::cout << route.m_valuePerCaravan << " :: " << route.m_value << " :: " << route.m_cost << std::endl;
-	std::cout<<"**** end ****"<<std::endl;
 
 	//// create new routes
 	for
@@ -5211,7 +5202,6 @@ void Governor::ManageGoodsTradeRoutes()
 		++route_iter
 	)
 	{
-	fprintf(stderr, "%s L%d: m_valuePerCaravan: %f!\n", __FILE__, __LINE__, route_iter->m_valuePerCaravan);
 		if(route_iter->m_cost <= unused_freight) // create route if enough unused caravans are available
 		{
 			g_gevManager->AddEvent(GEV_INSERT_Tail, GEV_SendGood,
@@ -5221,7 +5211,6 @@ void Governor::ManageGoodsTradeRoutes()
 			                       GEA_End
 			                      );
 			unused_freight -= route_iter->m_cost; // subtract caravans now in use
-	fprintf(stderr, "%s L%d: m_valuePerCaravan: %f!\n", __FILE__, __LINE__, route_iter->m_valuePerCaravan);
 		}
 	}
 }
