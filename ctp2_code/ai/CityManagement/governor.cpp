@@ -5081,14 +5081,15 @@ void Governor::ManageGoodsTradeRoutes()
 		{
 			if(city.CD()->IsLocalResource(g)) // only consider collected goods (not bought goods)
 			{
-				sint32 sellingPrice = -1;
+				double sellingVPC = -1; 
 				TradeRoute curDestRoute;
 
-				if(!city.CD()->HasResource(g) // no resource g left for trade
+				if(!city.CD()->HasResource(g) // good not available locally (either sold out or not collected), i.e. do not by a good that is available locally
 				&&  city.CD()->GetResourceTradeRoute(g, curDestRoute)) // have already a route for g
 				{
-					sellingPrice =
-						tradeutil_GetTradeValue(m_playerId, curDestRoute->GetDestination(), g);
+					Unit destCity = curDestRoute->GetDestination(); // tradeutil_GetAccurateTradeDistance expectes a reference: https://stackoverflow.com/a/16767368
+					sellingVPC = static_cast<double>(tradeutil_GetTradeValue(m_playerId, curDestRoute->GetDestination(), g))
+					    / tradeutil_GetAccurateTradeDistance(city, destCity); // tradeutil_GetAccurateTradeDistance returns > 1.0
 				}
 				else
 				{
@@ -5097,10 +5098,11 @@ void Governor::ManageGoodsTradeRoutes()
 
 				Unit maxCity;
 				sint32 maxPrice = 0;
-				sint32 bestPrice = 0;
+				double bestValuePerCaravan = 0.0;
+				double maxValuePerCaravan = 0.0;
 				double maxCost = 0.0;
 				double maxNeededFreight = 0.0;
-				for (sint32 op = 1; op < k_MAX_PLAYERS; op++) // determin player offering highest price for good g
+				for (sint32 op = 1; op < k_MAX_PLAYERS; op++) // determine player offering highest price for good g
 				{
 					if (m_playerId != op) // skip all players not awailable for trading
 					{
@@ -5135,18 +5137,20 @@ void Governor::ManageGoodsTradeRoutes()
 
 						const sint32 price = tradeutil_GetTradeValue(m_playerId, destCity, g); // # of gold
 						const double cost = tradeutil_GetAccurateTradeDistance(city, destCity); // # of caravans
+						const double valuePerCaravan = static_cast<double>(price) / cost; // cost = tradeutil_GetAccurateTradeDistance returns > 1.0
 
-						if (price > bestPrice) // determin best offer (and its cost) that would be available, to set goal for # of caravans (m_neededFreight)
+						if (valuePerCaravan > bestValuePerCaravan) // determine best offer (and its cost) that would be available, to set goal for # of caravans (m_neededFreight)
 						{
 							maxNeededFreight = cost;
-							bestPrice = price;
+							bestValuePerCaravan = valuePerCaravan;
 						}
 
-						if ((price > maxPrice) && (cost < total_freight)) // determin best offer that can be afforded (considering all currently available (used + unused) trade-units)
+						if ((valuePerCaravan > maxValuePerCaravan) && (cost < total_freight)) // determine best offer that can be afforded (considering all currently available (used + unused) trade-units)
 						{
-							maxPrice = price;
+							maxPrice = price; // only needed in case old sort order would be used
+							maxValuePerCaravan = valuePerCaravan;
 							maxCity = destCity;
-							maxCost = cost;
+							maxCost = cost; // needed for bookkeeping concerning unused_freight when creating new routes
 						}
 					}
 				} // determined player offering highest price for good g
@@ -5156,7 +5160,7 @@ void Governor::ManageGoodsTradeRoutes()
 				if (!player_ptr->IsRobot()) // exlcude human players
 					continue;
 
-				if (((sellingPrice < maxPrice) && (sellingPrice > 0) ) || // kill existing routes if lower in value 
+				if (((sellingVPC < maxValuePerCaravan) && (sellingVPC > 0) ) || // kill existing routes if lower in value 
 					(curDestRoute.m_id != 0 && Diplomat::GetDiplomat(m_playerId). // or piracy risk is high
 					GetTradeRoutePiracyRisk(city, curDestRoute->GetDestination())))
 				{
@@ -5167,12 +5171,11 @@ void Governor::ManageGoodsTradeRoutes()
 						GEA_Int, CAUSE_KILL_TRADE_ROUTE_SENDER_KILLED,
 						GEA_End);
 					if(g_network.IsClient()) {
-						g_network.SendAction(new NetAction(NET_ACTION_CANCEL_TRADE_ROUTE,
-														   (uint32)curDestRoute));
+						g_network.SendAction(new NetAction(NET_ACTION_CANCEL_TRADE_ROUTE, (uint32)curDestRoute));
 					}
 				}
 
-				if ((maxPrice > 0) && ((sellingPrice < 0) || (sellingPrice < maxPrice))) // good asked for and (no route existed before or better price)
+				if ((sellingVPC < 0) || (sellingVPC < maxValuePerCaravan)) // good not available locally (!HasResource <=> sellingVPC < 0) or better offer (sellingVPC < maxValuePerCaravan)
 				{
 					GoodsRoute new_route;
 					new_route.m_sourceCity      = city;
@@ -5180,9 +5183,8 @@ void Governor::ManageGoodsTradeRoutes()
 					new_route.m_cost            = maxCost;
 					new_route.m_value           = maxPrice;
 					new_route.m_resource        = g;
-					new_route.m_valuePerCaravan	=
-						(maxCost <= 0) ? VALUE_FREE_LUNCH
-									   : static_cast<double>(maxPrice) / maxCost;
+					new_route.m_valuePerCaravan = maxValuePerCaravan;
+
 					new_routes.push_back(new_route);
 				}
 			}
