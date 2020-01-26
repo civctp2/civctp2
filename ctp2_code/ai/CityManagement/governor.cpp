@@ -5025,7 +5025,6 @@ struct GoodsRoute
 {
 	GoodsRoute()
 	:
-		m_value             (0),
 		m_cost              (0.0),
 		m_resource          (CTPRecord::INDEX_INVALID),
 		m_sourceCity        (),
@@ -5045,7 +5044,7 @@ struct GoodsRoute
 	};
 
 	/// Total yield
-	sint32  m_value;
+	// sint32  m_value; // not needed with m_valuePerCaravan
 	/// Number of required caravans
 	double  m_cost;
 	/// Traded good
@@ -5096,7 +5095,6 @@ void Governor::ManageGoodsTradeRoutes()
 				}
 
 				Unit maxCity;
-				sint32 maxPrice = 0;
 				double bestValuePerCaravan = 0.0;
 				double maxValuePerCaravan = 0.0;
 				double maxCost = 0.0;
@@ -5146,7 +5144,6 @@ void Governor::ManageGoodsTradeRoutes()
 
 						if ((valuePerCaravan > maxValuePerCaravan) && (cost < total_freight)) // determine best offer that can be afforded (considering all currently available (used + unused) trade-units)
 						{
-							maxPrice = price; // only needed in case old sort order would be used
 							maxValuePerCaravan = valuePerCaravan;
 							maxCity = destCity;
 							maxCost = cost; // needed for bookkeeping concerning unused_freight when creating new routes
@@ -5177,12 +5174,11 @@ void Governor::ManageGoodsTradeRoutes()
 				if ((sellingVPC < 0) || (sellingVPC < maxValuePerCaravan)) // good not available locally (!HasResource <=> sellingVPC < 0) or better offer (sellingVPC < maxValuePerCaravan)
 				{
 					GoodsRoute new_route;
-					new_route.m_sourceCity      = city;
-					new_route.m_destinationCity = maxCity;
-					new_route.m_cost            = maxCost;
-					new_route.m_value           = maxPrice;
-					new_route.m_resource        = g;
-					new_route.m_valuePerCaravan = maxValuePerCaravan;
+					new_route.m_sourceCity      = city; // needed for route creation
+					new_route.m_destinationCity = maxCity; // needed for route creation
+					new_route.m_cost            = maxCost; // needed for bookkeeping when creating new routes
+					new_route.m_resource        = g; // needed for route creation
+					new_route.m_valuePerCaravan = maxValuePerCaravan; // needed for sorting
 
 					new_routes.push_back(new_route);
 				}
