@@ -48,7 +48,7 @@
 
 extern TradeAstar g_theTradeAstar;
 
-sint32 tradeutil_GetTradeValue(const sint32 owner, Unit const & destination, sint32 resource)
+sint32 tradeutil_GetTradeValue(const sint32 owner, const Unit & destination, sint32 resource)
     {
     Assert(destination.IsValid());
     if(!destination.IsValid()) return 0;
@@ -71,7 +71,7 @@ sint32 tradeutil_GetTradeValue(const sint32 owner, Unit const & destination, sin
     return totalValue;
     }
 
-sint32 tradeutil_GetAccurateTradeDistance(Unit &source, Unit &destination)
+sint32 tradeutil_GetAccurateTradeDistance(const Unit &source, const Unit &destination)
 {
 	Path    path;
 	float   cost;

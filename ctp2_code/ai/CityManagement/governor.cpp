@@ -5087,9 +5087,8 @@ void Governor::ManageGoodsTradeRoutes()
 				if(!city.CD()->HasResource(g) // good not available locally (either sold out or not collected), i.e. do not by a good that is available locally
 				&&  city.CD()->GetResourceTradeRoute(g, curDestRoute)) // have already a route for g
 				{
-					Unit destCity = curDestRoute->GetDestination(); // tradeutil_GetAccurateTradeDistance expectes a reference: https://stackoverflow.com/a/16767368
 					sellingVPC = static_cast<double>(tradeutil_GetTradeValue(m_playerId, curDestRoute->GetDestination(), g))
-					    / tradeutil_GetAccurateTradeDistance(city, destCity); // tradeutil_GetAccurateTradeDistance returns > 1.0
+					    / tradeutil_GetAccurateTradeDistance(city, curDestRoute->GetDestination()); // tradeutil_GetAccurateTradeDistance returns > 1.0
 				}
 				else
 				{
