@@ -593,9 +593,7 @@ sint32 TradeRouteData::GetValue() const
 	if(m_sourceRouteType != ROUTE_TYPE_RESOURCE)
 		return 0;
 
-	double baseValue = g_theWorld->GetGoodValue(m_sourceResource);
-	double distance = double(m_destinationCity->GetCityData()->GetDistanceToGood(m_sourceResource));
-	return sint32(baseValue * distance);
+	return tradeutil_GetTradeValue(m_owner, m_destinationCity, m_sourceResource);
 }
 
 void TradeRouteData::SetPiratingArmy(Army &a)
