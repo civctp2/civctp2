@@ -5424,12 +5424,14 @@ bool UnitData::CanUpgrade(sint32 & upgradeType, sint32 & upgradeCosts) const
 //----------------------------------------------------------------------------
 void UnitData::Upgrade(const sint32 type, const sint32 costs)
 {
+        /* disabled because the result is obvious and therefore message spamming can be avoided
 	// Notify player of upgrades
 	SlicObject *so = new SlicObject("999UnitUpgraded");
 	so->AddRecipient(m_owner);
 	so->AddUnitRecord(m_type);
 	so->AddUnitRecord(type);
 	g_slicEngine->Execute(so);
+	*/
 
 	// And remove gold
 	g_player[m_owner]->m_gold->SubGold(costs);
