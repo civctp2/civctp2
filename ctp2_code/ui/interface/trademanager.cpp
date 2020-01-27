@@ -537,7 +537,7 @@ void TradeManager::UpdateAdviceWindow()
 	for(i = 0; i < g_player[pl]->m_all_cities->Num(); i++) {
 		Unit city = g_player[pl]->m_all_cities->Access(i);
 		totalRoutes += city.CD()->GetTradeSourceList()->Num();
-		totalProfit += city.CD()->GetGoldFromTradeRoutes(); // takes piracy and wonder bonus into account
+		totalProfit += city.CD()->CalculateGoldFromResources(); // takes piracy and wonder bonus into account
 		totalPiracy += city.CD()->GetGoldLostToPiracy(); // takes wonder bonus into account
 		totalTransi += city.CD()->GetGoldFromTransitRoutes(); // takes piracy into account
 	}
