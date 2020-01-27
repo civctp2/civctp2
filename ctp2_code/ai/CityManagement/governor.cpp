@@ -5071,10 +5071,12 @@ void Governor::ManageGoodsTradeRoutes()
 
 	UnitDynamicArray * city_list = player_ptr->GetAllCitiesList();
 	sint32             cityCount = city_list ? city_list->Num() : 0;
+	for (sint32 i = 0; i < cityCount; i++) {
+	    totalRoutes += city_list->Access(i).CD()->GetTradeSourceList()->Num(); // apparently there is no GetTotalRoutes() or similar, see e.g. https://github.com/civctp2/civctp2/blob/8ed4659c7075e856b9ba72e02e21facf0329ce26/ctp2_code/ui/interface/trademanager.cpp#L539
+	    }
 	for (sint32 i = 0; i < cityCount; i++)
 	{
 		Unit & city = city_list->Access(i);
-		totalRoutes += city.CD()->GetTradeSourceList()->Num();
 
 		for (sint32 g = 0; g < g_theResourceDB->NumRecords(); g++)
 		{
@@ -5142,7 +5144,7 @@ void Governor::ManageGoodsTradeRoutes()
 							bestValuePerCaravan = valuePerCaravan;
 						}
 
-						if ((valuePerCaravan > maxValuePerCaravan) && (cost < total_freight)) // determine best offer that can be afforded (considering all currently available (used + unused) trade-units)
+						if ((valuePerCaravan > maxValuePerCaravan) && (cost < total_freight - totalRoutes)) // determine best offer that can be afforded (considering all currently available (used + unused) trade-units); - 1 for each existing trade route (lost when cancelling)
 						{
 							maxValuePerCaravan = valuePerCaravan;
 							maxCity = destCity;
