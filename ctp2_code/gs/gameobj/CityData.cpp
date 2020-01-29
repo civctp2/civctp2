@@ -4459,13 +4459,16 @@ void CityData::CalculateTradeRoutes(bool projectedOnly)
 		{
 			if(route.GetOwner() != m_owner) // foreign source
 			{
+			//// GetGoldInReturn() seems to be a remainder form CTP1 and currently is always 0 because the only active place where it is set (0) is here: https://github.com/civctp2/civctp2/blob/ea3274c3d43176670ac71f6bc75703fac18a226e/ctp2_code/gs/gameobj/PlayerEvent.cpp#L556-L558
+			//// currently the profit form trade (gold) is given here: https://github.com/civctp2/civctp2/blob/ea3274c3d43176670ac71f6bc75703fac18a226e/ctp2_code/gs/gameobj/CityData.cpp#L4510-L4538
+			        Assert(route.GetGoldInReturn() == 0); // remove if GetGoldInReturn() is used again with values != 0
 				if(g_player[m_owner]->GetGold() < route.GetGoldInReturn()) // kill route because of not enough gold to pay for the resource
 				{
 					deadRoutes.Insert(route);
 					killRoute = true;
 				}
 				else
-				{
+				{ // since GetGoldInReturn() is currently always 0, this basically has no effect
 					g_player[m_owner]->SubGold(route.GetGoldInReturn()); // remove gold from receiver
 					g_player[route.GetSource().GetOwner()]->AddGold(route.GetGoldInReturn()); // give gold to sender
 				}
