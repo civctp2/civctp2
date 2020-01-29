@@ -5025,7 +5025,6 @@ struct GoodsRoute
 {
 	GoodsRoute()
 	:
-		m_value             (0),
 		m_cost              (0.0),
 		m_resource          (CTPRecord::INDEX_INVALID),
 		m_sourceCity        (),
@@ -5033,19 +5032,19 @@ struct GoodsRoute
 		m_valuePerCaravan	(0.0)
 	{};
 
-	bool operator < (GoodsRoute const & rval) const
+	bool operator < (const GoodsRoute & rval) const // similar to https://thispointer.com/c-how-to-sort-a-list-of-objects-with-custom-comparator-or-lambda-function/
 	{
-#if defined(USE_VALUE_PER_CARAVAN)
+	// sort on higest m_valuePerCaravan (best profit in total, i.e. not wasting caravans)
 		return (m_valuePerCaravan < rval.m_valuePerCaravan)
-		    || ((m_valuePerCaravan == rval.m_valuePerCaravan) && (m_cost > rval.m_cost));
-#else
+		    || ((m_valuePerCaravan == rval.m_valuePerCaravan) && (m_cost > rval.m_cost)); // if valuePerCaravan equal, compare higher cost
+/* sort based on higest (gold) value (bad, since more profit in total could be made with the caravans available)
 		return (m_value < rval.m_value)
 		    || ((m_value == rval.m_value) && (m_cost > rval.m_cost));
-#endif
+*/
 	};
 
 	/// Total yield
-	sint32  m_value;
+	// sint32  m_value; // not needed with m_valuePerCaravan
 	/// Number of required caravans
 	double  m_cost;
 	/// Traded good
@@ -5065,29 +5064,32 @@ void Governor::ManageGoodsTradeRoutes()
 
 	double unused_freight = player_ptr->GetUnusedFreight();
 	double total_freight = player_ptr->GetTotalFreight();
-	GoodsRoute new_route;
+	sint32 totalRoutes = 0; // apparently there is no GetTotalRoutes() or similar, see e.g. https://github.com/civctp2/civctp2/blob/8ed4659c7075e856b9ba72e02e21facf0329ce26/ctp2_code/ui/interface/trademanager.cpp#L539
 	std::list<GoodsRoute> new_routes;
 
 	m_neededFreight = 0.0;
 
 	UnitDynamicArray * city_list = player_ptr->GetAllCitiesList();
 	sint32             cityCount = city_list ? city_list->Num() : 0;
+	for (sint32 i = 0; i < cityCount; i++) {
+	    totalRoutes += city_list->Access(i).CD()->GetTradeSourceList()->Num(); // apparently there is no GetTotalRoutes() or similar, see e.g. https://github.com/civctp2/civctp2/blob/8ed4659c7075e856b9ba72e02e21facf0329ce26/ctp2_code/ui/interface/trademanager.cpp#L539
+	    }
 	for (sint32 i = 0; i < cityCount; i++)
 	{
 		Unit & city = city_list->Access(i);
 
 		for (sint32 g = 0; g < g_theResourceDB->NumRecords(); g++)
 		{
-			if(city.CD()->IsLocalResource(g))
+			if(city.CD()->IsLocalResource(g)) // only consider collected goods (not bought goods)
 			{
-				sint32 sellingPrice = -1;
+				double sellingVPC = -1; 
 				TradeRoute curDestRoute;
 
-				if(!city.CD()->HasResource(g) // no resource g left for trade
+				if(!city.CD()->HasResource(g) // good not available locally (either sold out or not collected), i.e. do not by a good that is available locally
 				&&  city.CD()->GetResourceTradeRoute(g, curDestRoute)) // have already a route for g
 				{
-					sellingPrice =
-						tradeutil_GetTradeValue(m_playerId, curDestRoute->GetDestination(), g);
+					sellingVPC = static_cast<double>(tradeutil_GetTradeValue(m_playerId, curDestRoute->GetDestination(), g))
+					    / tradeutil_GetAccurateTradeDistance(city, curDestRoute->GetDestination()); // tradeutil_GetAccurateTradeDistance returns > 1.0
 				}
 				else
 				{
@@ -5095,111 +5097,111 @@ void Governor::ManageGoodsTradeRoutes()
 				}
 
 				Unit maxCity;
-				sint32 maxPrice = 0;
-				sint32 bestPrice = 0;
+				double bestValuePerCaravan = 0.0;
+				double maxValuePerCaravan = 0.0;
 				double maxCost = 0.0;
 				double maxNeededFreight = 0.0;
-				for (sint32 op = 1; op < k_MAX_PLAYERS; op++)
+				for (sint32 op = 1; op < k_MAX_PLAYERS; op++) // determine player offering highest price for good g
 				{
 					if (m_playerId != op) // skip all players not awailable for trading
 					{
-						if (!g_player[op])
+						if (!g_player[op]) // player gone/dead 
 							continue;
 
-						if (!player_ptr->HasContactWith(op))
+						if (!player_ptr->HasContactWith(op)) // player not yet known
 							continue;
 
-						if (AgreementMatrix::s_agreements.TurnsAtWar(m_playerId, op) >= 0)
+						if (AgreementMatrix::s_agreements.TurnsAtWar(m_playerId, op) >= 0) // no trade if at ware
 							continue;
 
-						if (Diplomat::GetDiplomat(op).GetEmbargo(m_playerId))
+						if (Diplomat::GetDiplomat(op).GetEmbargo(m_playerId)) // no trade if embargo enacted
 							continue;
 					}
 
-					for (sint32 d = 0; d < g_player[op]->m_all_cities->Num(); d++) {
+					for (sint32 d = 0; d < g_player[op]->m_all_cities->Num(); d++) { // check all cities if suitabelfor trading
 						Unit destCity = g_player[op]->m_all_cities->Access(d);
 
-						if(!(destCity.GetVisibility() & (1 << m_playerId)))
+						if(!(destCity.GetVisibility() & (1 << m_playerId))) // city not visible/known
 							continue;
 
-						if(destCity.m_id == city.m_id)
+						if(destCity.m_id == city.m_id) // exclude current city
 							continue;
 
-						if (Diplomat::GetDiplomat(m_playerId).
-								GetTradeRoutePiracyRisk(city, destCity))
+						if (Diplomat::GetDiplomat(m_playerId).GetTradeRoutePiracyRisk(city, destCity)) // exclude cities whose route would have a hight risk of piracy
 							continue;
 
 						if(curDestRoute.m_id != 0 &&
-						    curDestRoute->GetDestination().m_id == destCity.m_id)
+						    curDestRoute->GetDestination().m_id == destCity.m_id) // exclude standing trade route destination
 							continue;
 
-						const sint32 price = tradeutil_GetTradeValue(m_playerId, destCity, g);
-						const double cost = tradeutil_GetTradeDistance(city, destCity);
+						const sint32 price = tradeutil_GetTradeValue(m_playerId, destCity, g); // # of gold
+						const double cost = tradeutil_GetAccurateTradeDistance(city, destCity); // # of caravans
+						const double valuePerCaravan = static_cast<double>(price) / cost; // cost = tradeutil_GetAccurateTradeDistance returns > 1.0
 
-						if (price > bestPrice)
+						if (valuePerCaravan > bestValuePerCaravan) // determine best offer (and its cost) that would be available, to set goal for # of caravans (m_neededFreight)
 						{
 							maxNeededFreight = cost;
-							bestPrice = price;
+							bestValuePerCaravan = valuePerCaravan;
 						}
 
-						if ((price > maxPrice) && (cost < total_freight))
+						if ((valuePerCaravan > maxValuePerCaravan) && (cost < total_freight - totalRoutes)) // determine best offer that can be afforded (considering all currently available (used + unused) trade-units); - 1 for each existing trade route (lost when cancelling)
 						{
-							maxPrice = price;
+							maxValuePerCaravan = valuePerCaravan;
 							maxCity = destCity;
-							maxCost = cost;
+							maxCost = cost; // needed for bookkeeping concerning unused_freight when creating new routes
 						}
 					}
-				}
+				} // determined player offering highest price for good g
 
 				m_neededFreight += maxNeededFreight;
 
-				if (!player_ptr->IsRobot())
+				if (!player_ptr->IsRobot()) // exlcude human players
 					continue;
 
-				if (((sellingPrice < maxPrice) && (sellingPrice > 0) ) ||
-					(curDestRoute.m_id != 0 && Diplomat::GetDiplomat(m_playerId).
+				if (((sellingVPC < maxValuePerCaravan) && (sellingVPC > 0) ) || // kill existing routes if lower in value 
+					(curDestRoute.m_id != 0 && Diplomat::GetDiplomat(m_playerId). // or piracy risk is high
 					GetTradeRoutePiracyRisk(city, curDestRoute->GetDestination())))
 				{
-					unused_freight += curDestRoute->GetCost();
+					unused_freight += curDestRoute->GetCost() - 1; // - 1 because one caravan is lost when killing a route
 
 					g_gevManager->AddEvent(GEV_INSERT_Tail, GEV_KillTradeRoute,
 						GEA_TradeRoute, curDestRoute.m_id,
 						GEA_Int, CAUSE_KILL_TRADE_ROUTE_SENDER_KILLED,
 						GEA_End);
 					if(g_network.IsClient()) {
-						g_network.SendAction(new NetAction(NET_ACTION_CANCEL_TRADE_ROUTE,
-														   (uint32)curDestRoute));
+						g_network.SendAction(new NetAction(NET_ACTION_CANCEL_TRADE_ROUTE, (uint32)curDestRoute));
 					}
 				}
 
-				if ((maxPrice > 0) && ((sellingPrice < 0) || (sellingPrice < maxPrice)))
+				if ((sellingVPC < 0) || (sellingVPC < maxValuePerCaravan)) // good not available locally (!HasResource <=> sellingVPC < 0) or better offer (sellingVPC < maxValuePerCaravan)
 				{
-					new_route.m_sourceCity      = city;
-					new_route.m_destinationCity = maxCity;
-					new_route.m_cost            = maxCost;
-					new_route.m_value           = maxPrice;
-					new_route.m_resource        = g;
-					new_route.m_valuePerCaravan	=
-						(maxCost <= 0) ? VALUE_FREE_LUNCH
-									   : static_cast<double>(maxPrice) / maxCost;
+					GoodsRoute new_route;
+					new_route.m_sourceCity      = city; // needed for route creation
+					new_route.m_destinationCity = maxCity; // needed for route creation
+					new_route.m_cost            = maxCost; // needed for bookkeeping when creating new routes
+					new_route.m_resource        = g; // needed for route creation
+					new_route.m_valuePerCaravan = maxValuePerCaravan; // needed for sorting
+
 					new_routes.push_back(new_route);
 				}
 			}
 		}
 	}
 
-	m_neededFreight -= total_freight;
+	m_neededFreight -= total_freight - totalRoutes; // cravans needed to sell all goods available (with an offer); subtract those that already exist (and would be available if existing routes got killed); - 1 for each existing trade route
 
-	new_routes.sort();
+	new_routes.sort(); // sort routes according to m_value (or m_valuePerCaravan #if defined(USE_VALUE_PER_CARAVAN))
+	new_routes.reverse(); // revert sort order to start with higest m_valuePerCaravan
 
+	//// create new routes
 	for
 	(
 		std::list<GoodsRoute>::iterator route_iter = new_routes.begin();
-		(route_iter != new_routes.end()) && (unused_freight > 0);
+		(route_iter != new_routes.end()) && (unused_freight > 0); // if unused caravans are still available
 		++route_iter
 	)
 	{
-		if(route_iter->m_cost <= unused_freight)
+		if(route_iter->m_cost <= unused_freight) // create route if enough unused caravans are available
 		{
 			g_gevManager->AddEvent(GEV_INSERT_Tail, GEV_SendGood,
 			                       GEA_Int,         route_iter->m_resource,
@@ -5207,7 +5209,7 @@ void Governor::ManageGoodsTradeRoutes()
 			                       GEA_City,        route_iter->m_destinationCity,
 			                       GEA_End
 			                      );
-			unused_freight -= route_iter->m_cost;
+			unused_freight -= route_iter->m_cost; // subtract caravans now in use
 		}
 	}
 }

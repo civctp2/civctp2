@@ -48,38 +48,35 @@
 
 extern TradeAstar g_theTradeAstar;
 
-sint32 tradeutil_GetTradeValue(const sint32 owner, Unit const & destination, sint32 resource)
-{
-	Assert(destination.IsValid());
-	if(!destination.IsValid()) return 0;
-
-	Assert(resource >= 0 && resource < g_theResourceDB->NumRecords());
-	if(resource < 0 || resource >= g_theResourceDB->NumRecords())
-		return 0;
-
-	double baseValue = g_theWorld->GetGoodValue(resource);
-	double distance = static_cast<double>(destination.GetCityData()->GetDistanceToGood(resource));
-	sint32 totalValue = sint32(baseValue * distance);
-
-    PLAYER_INDEX const  tradePartner    = destination.GetOwner();
-
-    if (    (owner != tradePartner)
-         && AgreementMatrix::s_agreements.HasAgreement
-                (owner, tradePartner, PROPOSAL_TREATY_TRADE_PACT)
-       )
+sint32 tradeutil_GetTradeValue(const sint32 owner, const Unit & destination, sint32 resource)
     {
-		totalValue = (sint32) (totalValue * 1.05); //- shouldn't trade pact values be set in the ConstDB instead of 1.05? - E 6.13.2007
+    Assert(destination.IsValid());
+    if(!destination.IsValid()) return 0;
+    
+    Assert(resource >= 0 && resource < g_theResourceDB->NumRecords());
+    if(resource < 0 || resource >= g_theResourceDB->NumRecords())
+	return 0;
+
+    double baseValue = g_theWorld->GetGoodValue(resource); // good value varies between a min and a map depening on its frequency on the map
+    double distance = static_cast<double>(destination.GetCityData()->GetDistanceToGood(resource));
+    sint32 totalValue = sint32(baseValue * distance);
+
+    PLAYER_INDEX const  tradePartner = destination.GetOwner();
+
+    if ((owner != tradePartner)	&& AgreementMatrix::s_agreements.HasAgreement(owner, tradePartner, PROPOSAL_TREATY_TRADE_PACT))
+	{
+	totalValue = (sint32) (totalValue * 1.05); //- shouldn't trade pact values be set in the ConstDB instead of 1.05? - E 6.13.2007
 	}
 
-	return totalValue;
-}
+    return totalValue;
+    }
 
-sint32 tradeutil_GetAccurateTradeDistance(Unit &source, Unit &destination)
+sint32 tradeutil_GetAccurateTradeDistance(const Unit &source, const Unit &destination)
 {
 	Path    path;
 	float   cost;
 
-	if (g_theTradeAstar.FindPath
+	if (g_theTradeAstar.FindPath // comparable to TradeRouteData::GeneratePath cost calculation
             (source.GetOwner(), source.RetPos(), destination.RetPos(), path, cost, FALSE)
        )
     {
@@ -89,6 +86,7 @@ sint32 tradeutil_GetAccurateTradeDistance(Unit &source, Unit &destination)
 	return DISTANCE_UNKNOWN;
 }
 
+/* deprecated (in favor of tradeutil_GetAccurateTradeDistance) because result can differ significantly
 sint32 tradeutil_GetTradeDistance(Unit &source, Unit &destination)
 {
 	double cost = g_theWorld->CalcTerrainFreightCost(source.RetPos()) *
@@ -97,6 +95,7 @@ sint32 tradeutil_GetTradeDistance(Unit &source, Unit &destination)
 
 	return static_cast<sint32>(std::max<double>(tradeutil_GetNetTradeCosts(cost), 1.0));
 }
+*/
 
 // Maybe move the following to worldutils
 

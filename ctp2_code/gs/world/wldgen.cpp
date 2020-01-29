@@ -847,16 +847,13 @@ void World::GenerateGoods()
 
 void World::ComputeGoodsValues()
 {
-
     sint32 newGoodCount = g_theResourceDB->NumRecords();
 
     delete [] m_goodValue;
-    if (newGoodCount > 0)
-    {
+    if (newGoodCount > 0) {
         m_goodValue = new double[newGoodCount];
     }
-    else
-    {
+    else {
         m_goodValue = NULL;
         return;
     }
@@ -894,29 +891,20 @@ void World::ComputeGoodsValues()
 		}
 	}
 
-	double valueDiff =
-        g_theConstDB->Get(0)->GetMaxGoodValue() - g_theConstDB->Get(0)->GetMinGoodValue();
+	double valueDiff = g_theConstDB->Get(0)->GetMaxGoodValue() - g_theConstDB->Get(0)->GetMinGoodValue();
 
-	for (i = 0; i < newGoodCount; i++)
-    {
-		if (goodCounts[i] <= 0)
-        {
+	for (i = 0; i < newGoodCount; i++) {
+		if (goodCounts[i] <= 0) {
 			m_goodValue[i] = g_theConstDB->Get(0)->GetMaxGoodValue() + 1;
 		}
-        else
-        {
-            // goodCounts[i] > 0 => maxCount > 0, so division by maxCount is OK
-			double percent = double(goodCounts[i]) / double(maxCount);
+		else {
+		    // goodCounts[i] > 0 => maxCount > 0, so division by maxCount is OK
+		    double percent = double(goodCounts[i]) / double(maxCount);
 
-			m_goodValue[i] = g_theConstDB->Get(0)->GetMinGoodValue() +
-				                ((1.0 - percent) * valueDiff);
+		    m_goodValue[i] = g_theConstDB->Get(0)->GetMinGoodValue() + ((1.0 - percent) * valueDiff);
 		}
 
-		DPRINTF(k_DBG_GAMESTATE, ("Good %s has a base value of %lf\n",
-								  g_theResourceDB->Get(i)->GetNameText(),
-								  m_goodValue[i]
-                                 )
-               );
+		DPRINTF(k_DBG_GAMESTATE, ("Good %s has a base value of %lf\n", g_theResourceDB->Get(i)->GetNameText(), m_goodValue[i]));
 	}
 }
 

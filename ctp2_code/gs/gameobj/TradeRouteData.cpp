@@ -105,7 +105,7 @@ TradeRouteData::TradeRouteData
 			("Creating route from city @ (%d,%d) to city @ (%d,%d)\n",
 			 sPos.x, sPos.y, dPos.x, dPos.y));
 
-	m_valid = GeneratePath();
+	m_valid = GeneratePath(); // determins cost of trade-units
 
 	DPRINTF(k_DBG_GAMESTATE, ("Created Trade Route from %s to %s, cost=%d, valid=%i\n",
 	                          m_sourceCity->GetCityData()->GetName(),
@@ -206,7 +206,7 @@ bool TradeRouteData::GeneratePath()
 	{
 		if (wp == 0)
 		{
-			if (!g_theTradeAstar.FindPath
+			if (!g_theTradeAstar.FindPath // similar to tradeutil_GetAccurateTradeDistance
 			        ( m_payingFor, m_wayPoints[wp], m_wayPoints[wp + 1],
 			         *m_astarPath, cost, FALSE
 			        )
@@ -593,9 +593,7 @@ sint32 TradeRouteData::GetValue() const
 	if(m_sourceRouteType != ROUTE_TYPE_RESOURCE)
 		return 0;
 
-	double baseValue = g_theWorld->GetGoodValue(m_sourceResource);
-	double distance = double(m_destinationCity->GetCityData()->GetDistanceToGood(m_sourceResource));
-	return sint32(baseValue * distance);
+	return tradeutil_GetTradeValue(m_owner, m_destinationCity, m_sourceResource);
 }
 
 void TradeRouteData::SetPiratingArmy(Army &a)

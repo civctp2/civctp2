@@ -177,7 +177,7 @@ void gslog_LogPlayerStats(sint32 player)
 
 	sint32 totalCommerce = 0, totalCommerceCrime = 0,
 		totalCommerceWages = 0, totalCommerceBuildingUpkeep = 0,
-		totalCommerceScience = 0, totalTrade = 0;
+		totalCommerceScience = 0, totalNetGold = 0, totalTrade = 0;
 
 
 	sint32  wonderReduction = wonderutil_GetDecreaseMaintenance(pl->GetBuiltWonders());
@@ -193,7 +193,8 @@ void gslog_LogPlayerStats(sint32 player)
 		totalCommerceWages          += cityData->CalcWages();
 		totalCommerceBuildingUpkeep += commerceBuildingUpkeep;
 		totalCommerceScience        += cityData->GetScience();
-		totalTrade                  += cityData->GetNetCityGold();
+		totalNetGold                += cityData->GetNetCityGold();
+		totalTrade                  += cityData->CalculateGoldFromResources();
 	}
 
 	sint32 percentCommerceCrime = totalCommerce ?
@@ -215,7 +216,9 @@ void gslog_LogPlayerStats(sint32 player)
 	gslog_print("  Commerce Building Upkeep: %d (%d%%)\n", totalCommerceBuildingUpkeep, percentCommerceBuildingUpkeep);
 	gslog_print("  Commerce Science: %d (%d%%):\n", totalCommerceScience, percentCommerceScience);
 	gslog_print("  Commerce Savings %%: %d\n", percentCommerceSavings);
-	gslog_print("  Net Trade: %d\n", totalTrade);
+	gslog_print("  Net Gold: %d\n", totalNetGold);
+	gslog_print("  Total Trade Profit: %d\n", totalTrade);
+
 
 	gslog_print("  Total accumulated science: %d\n", pl->m_science->GetLevel());
 

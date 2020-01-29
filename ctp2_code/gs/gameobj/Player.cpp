@@ -3068,13 +3068,10 @@ TradeRoute Player::CreateTradeRoute(Unit sourceCity,
 		return TradeRoute();
 	}
 
-	TradeRoute newRoute = g_theTradePool->Create(sourceCity, destCity, m_owner,
-												 sourceType, sourceResource,
-												 paying_for,
-												 gold_in_return);
+	TradeRoute newRoute = g_theTradePool->Create(sourceCity, destCity, m_owner, sourceType, sourceResource, paying_for, gold_in_return); // creates route and determins actual transport cost
 
 	if (newRoute.IsValid())
-	    newRoute= g_player[paying_for]->PayForTrade(newRoute); // kills route if not enough caravans
+	    newRoute= g_player[paying_for]->PayForTrade(newRoute); // kills route if not enough caravans, reduces available trade units
 
 	if (newRoute.IsValid() && destCity.GetOwner() != m_owner){
 	    SlicObject *so = new SlicObject("360SenderCreatedTradeRoute");
@@ -3095,7 +3092,7 @@ TradeRoute Player::CreateTradeRoute(Unit sourceCity,
 
 TradeRoute Player::PayForTrade(TradeRoute &newRoute)
 {
-	AddUsedTransportPoints((sint32)newRoute.GetCost());
+	AddUsedTransportPoints((sint32)newRoute.GetCost()); // reduces available trade units
 
 	if((m_usedTradeTransportPoints > m_tradeTransportPoints &&
 		!wonderutil_GetFreeTradeRoutes(m_builtWonders)) ||
@@ -3175,10 +3172,10 @@ void Player::RemoveTradeRoute(TradeRoute route, CAUSE_KILL_TRADE_ROUTE cause)
 {
 	Assert(route.GetPayingFor() == m_owner);
 	if(route.GetPayingFor() == m_owner && !route.AccessData()->GetDontAdjustPoints()) {
-		RemoveUsedTransportPoints((sint32)route.GetCost());
+		RemoveUsedTransportPoints((sint32)route.GetCost()); // brings back used caravans/trade-units completely
 
 		if(cause != CAUSE_KILL_TRADE_ROUTE_NO_INITIAL_CARAVANS) {
-			KillATrader();
+			KillATrader(); // removes a caravan/trade-unit
 		}
 
 #if 0
@@ -3238,7 +3235,7 @@ void Player::KillATrader()
 
 	Assert(m_traderUnits->Num() > 0);
 	if(m_traderUnits->Num() > 0) {
-		m_traderUnits->Access(0).Kill(CAUSE_REMOVE_ARMY_TRADE, -1);
+	    m_traderUnits->Access(0).Kill(CAUSE_REMOVE_ARMY_TRADE, -1); // remove one caravan (trade unit)
 	}
 }
 
