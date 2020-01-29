@@ -223,21 +223,16 @@ void DrawTradeRoute(
 
 			uint16 routeColor = route;
 
-			if (!g_tiledMap->GetLocalVision()->IsVisible(prev)) {
-				routeColor = pixelutils_PercentDarken(routeColor, 64);
-			}
-
-			if (oldDir != NOWHERE)
+			if(g_tiledMap->GetLocalVision()->IsVisible(curr)) {
+			    if (oldDir != NOWHERE) {
 				DrawReversedTradeRouteSegment(pSurface, prev, oldDir, routeColor, outline);
-
-			DrawTradeRouteSegment(pSurface, prev, dir, routeColor, outline);
-
-			if ((i == pRoute->Num()-1) && g_tiledMap->GetLocalVision()->IsExplored(curr)) {
-				routeColor = route;
-				if (!g_tiledMap->GetLocalVision()->IsVisible(curr)) {
-					routeColor = pixelutils_PercentDarken(routeColor, 64);
 				}
+			    
+			    DrawTradeRouteSegment(pSurface, prev, dir, routeColor, outline);
+
+			    if ((i == pRoute->Num()-1)) {
 				DrawReversedTradeRouteSegment(pSurface, curr, dir, routeColor, outline);
+				}
 			}
 
 			oldDir = dir;
