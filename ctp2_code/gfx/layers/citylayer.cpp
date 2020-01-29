@@ -187,11 +187,6 @@ void DrawReversedTradeRouteSegment(aui_Surface *surf, MapPoint &pos, WORLD_DIREC
 }
 
 
-
-
-
-
-
 void DrawTradeRoute(
 		aui_Surface *pSurface,
 		DynamicArray<MapPoint> *pRoute,
@@ -210,22 +205,15 @@ void DrawTradeRoute(
 	MapPoint prev, curr;
 	MapPoint screenPrev, screenCurr;
 
-	WORLD_DIRECTION		dir = NOWHERE,
-						oldDir = NOWHERE;
+	WORLD_DIRECTION	dir = NOWHERE, oldDir = NOWHERE;
 
 	for (sint32 i = 0;i < pRoute->Num()-1;i++)
 	{
 		prev = pRoute->Get(i);
 		curr = pRoute->Get(i+1);
 
-
-
-
-
 		if (g_tiledMap->TileIsVisible(prev.x, prev.y))
-
 		{
-
 			dir = prev.GetNeighborDirection(curr);
 
 			if (!g_tiledMap->GetLocalVision()->IsExplored(prev)) {
@@ -233,12 +221,11 @@ void DrawTradeRoute(
 				continue;
 			}
 
-			uint16		routeColor = route;
+			uint16 routeColor = route;
 
 			if (!g_tiledMap->GetLocalVision()->IsVisible(prev)) {
 				routeColor = pixelutils_PercentDarken(routeColor, 64);
 			}
-
 
 			if (oldDir != NOWHERE)
 				DrawReversedTradeRouteSegment(pSurface, prev, oldDir, routeColor, outline);
@@ -254,42 +241,6 @@ void DrawTradeRoute(
 			}
 
 			oldDir = dir;
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
 		}
-
-
 	}
 }
