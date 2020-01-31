@@ -327,6 +327,7 @@ Const : alsire {
 
 	Float  CaravanCoef                            aka CARAVAN_COEF
 	Float  DomesticTradeReduction                 aka DOMESTIC_TRADE_COEF
+	Float  TradePactCoef                          aka PACT_TRADE_COEF
 
 	Int    PollutionCausedByNuke                  aka POLLUTION_CAUSED_BY_NUKE
 

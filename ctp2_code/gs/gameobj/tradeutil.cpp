@@ -69,7 +69,7 @@ sint32 tradeutil_GetTradeValue(const sint32 owner, const Unit & destination, sin
 
     if ((owner != tradePartner)	&& AgreementMatrix::s_agreements.HasAgreement(owner, tradePartner, PROPOSAL_TREATY_TRADE_PACT))
 	{
-	totalValue = (sint32) (totalValue * 1.05); //- shouldn't trade pact values be set in the ConstDB instead of 1.05? - E 6.13.2007
+	totalValue = (sint32) (totalValue * g_theConstDB->Get(0)->GetTradePactCoef());
 	}
 
     return static_cast<sint32>(std::max<double>(totalValue, 1.0)); // ensure that the trade value is >= 1
