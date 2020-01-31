@@ -72,7 +72,7 @@ sint32 tradeutil_GetTradeValue(const sint32 owner, const Unit & destination, sin
 	totalValue = (sint32) (totalValue * 1.05); //- shouldn't trade pact values be set in the ConstDB instead of 1.05? - E 6.13.2007
 	}
 
-    return totalValue;
+    return static_cast<sint32>(std::max<double>(totalValue, 1.0)); // ensure that the trade value is >= 1
     }
 
 sint32 tradeutil_GetAccurateTradeDistance(const Unit &source, const Unit &destination)
