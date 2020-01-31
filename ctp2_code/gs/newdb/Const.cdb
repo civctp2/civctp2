@@ -326,6 +326,7 @@ Const : alsire {
 	Int    BaseStarvationProtection               aka BASE_STARVATION_PROTECTION
 
 	Float  CaravanCoef                            aka CARAVAN_COEF
+	Float  DomesticTradeReduction                 aka DOMESTIC_TRADE_COEF
 
 	Int    PollutionCausedByNuke                  aka POLLUTION_CAUSED_BY_NUKE
 

@@ -62,7 +62,9 @@ sint32 tradeutil_GetTradeValue(const sint32 owner, const Unit & destination, sin
     PLAYER_INDEX const  tradePartner = destination.GetOwner();
 
     sint32 totalValue= sint32( // do not count distance to good in case of domestic trade (good is within territory then)
-	(owner != tradePartner) ? baseValue * destination.GetCityData()->GetDistanceToGood(resource) : baseValue
+	(owner != tradePartner) ?
+	baseValue * destination.GetCityData()->GetDistanceToGood(resource) :
+	baseValue * destination.GetCityData()->GetDistanceToGood(resource) * g_theConstDB->Get(0)->GetDomesticTradeReduction()
 	);
 
     if ((owner != tradePartner)	&& AgreementMatrix::s_agreements.HasAgreement(owner, tradePartner, PROPOSAL_TREATY_TRADE_PACT))
