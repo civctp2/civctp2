@@ -308,20 +308,7 @@ void DiplomacyWindow::ShowSections(uint32 sections)
 
 void DiplomacyWindow::Update()
 {
-	static bool updating = false;
-
-	if(updating)
-		return;
-	updating = true;
-
-	ctp2_ListBox *intList = (ctp2_ListBox *)aui_Ldl::GetObject(s_dipWindowBlock, "DiplomacyTabs.Intelligence.TabPanel.List");
-	Assert(intList);
-	if(intList) {
-
-		IntelligenceWindow::Update(intList);
-	}
-
-	updating = false;
+	UpdateCreateList();
 }
 
 void DiplomacyWindow::UpdateProposalList(ctp2_ListBox *propList, bool toPlayer)
@@ -573,7 +560,12 @@ void DiplomacyWindow::UpdateProposalDetails()
 
 void DiplomacyWindow::UpdateCreateList()
 {
+	ctp2_ListBox *intList = (ctp2_ListBox *)aui_Ldl::GetObject(s_dipWindowBlock, "DiplomacyTabs.Intelligence.TabPanel.List");
+	Assert(intList);
+	if(intList) {
 
+		IntelligenceWindow::Update(intList);
+	}
 }
 
 void DiplomacyWindow::UpdateSendProposalDetails()
