@@ -2949,9 +2949,11 @@ bool Goal::IsTargetImmune() const
 			sint32 popCount;
 			m_target_city.GetCityData()->GetPop(popCount);
 
-			// Slavers must go to cities with population to enslave, give an extra point so that the city isn't killed on conquest
-			if(popCount <= 2)
+			// Slavers must go to cities with population to enslave, i.e. OK for pop >= 2
+			if(popCount <= 1)
 				return true;
+			// city wall check should be added if fuzzy-logic is implemented
+			// city walls reduce chance of success but do not prevent it completely
 		}
 
 		if(      order_record->GetUnitPretest_CanEnslaveSettler()
