@@ -380,8 +380,8 @@ fprintf(stderr, "%s L%d: !\n", __FILE__, __LINE__);
 
 						prop = &Diplomat::GetDiplomat(player).GetMyLastNewProposal(receiver);
 
-					if(*prop == Diplomat::s_badNewProposal)
-						continue;
+					// if(*prop == Diplomat::s_badNewProposal)
+					// 	continue;
 
 					propData = prop->detail;
 				}
