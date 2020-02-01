@@ -309,6 +309,7 @@ void DiplomacyWindow::ShowSections(uint32 sections)
 void DiplomacyWindow::Update()
 {
 	UpdateCreateList();
+	UpdateProposalList((ctp2_ListBox *)aui_Ldl::GetObject(s_dipWindowBlock, "DiplomacyTabs.ProposalMade.TabPanel.List"), false);
 }
 
 void DiplomacyWindow::UpdateProposalList(ctp2_ListBox *propList, bool toPlayer)

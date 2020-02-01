@@ -410,6 +410,39 @@ DiplomacyWindow:CTP2_DIALOG_WINDOW {
 			
 			} # tab panel/content
 		} # tab
+		
+		ProposalMade:CTP2_TAB {
+			TabButton:CTP2_SIMPLE_TAB_BUTTON {
+				int xpix 241
+				string text "str_ldl_ShowHistory"
+				string image00 "upct22ul.tga"
+				string image10 "upct22u.tga"
+				string image20 "upct22ul.tga"
+				bool nohighlight true
+			}
+
+			# Panel/content
+			TabPanel:CTP2_DIALOG_WINDOW_TAB_HELPER {
+
+				List:CTP2_LISTBOX {
+					int xpix 10
+					int ypix 24
+					int widthpix 470
+					int heightpix 406
+					
+					header {
+						switch0:DIP_INTEL_HEADER {
+							int widthpix 32
+							string text "str_ldl_Regard"
+						}
+						switch1:DIP_INTEL_HEADER {
+							int widthpix 438
+							string text "str_ldl_Nation"
+						}
+					}
+				}
+			} # tab panel/content
+		} # tab
 	} # tab-group
 	CloseButton:CTP2_STANDARD_CLOSE {
 		# Tooltip
