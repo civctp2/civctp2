@@ -491,18 +491,17 @@ DipProposalListItem:CTP2_LIST_ITEM {
 }
 
 ProposalMadeListItem:CTP2_LIST_ITEM {
-	int	widthpix	230
-	int	heightpix	32
+	int	widthpix	470
+	int	heightpix	40
 	box {
 		string	objecttype	"ctp2_Static"
-		int	widthpix	230
+		int	widthpix	470
 		int	heightpix	40
 		int	beveltype	2
 		int	bevelwidth	1
 		Attitude {
 			string	objecttype	"ctp2_Static"
 			string  imagebltflag "chromakey"
-			int	xpix	200
 			int	widthpix	32
 			int	heightpix	32
 		}
@@ -512,10 +511,10 @@ ProposalMadeListItem:CTP2_LIST_ITEM {
 			string	just	"left"
 			bool	vertcenter	TRUE
 			bool	wordwrap	TRUE
-			int	widthpix	250
-			int	heightpix	40
-			int	xpix	0
+			int	xpix	32
 			int	ypix	2
+			int	widthpix	438
+			int	heightpix	40
 		}
 	}
 }

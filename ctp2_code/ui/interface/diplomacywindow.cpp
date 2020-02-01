@@ -397,6 +397,18 @@ void DiplomacyWindow::UpdateProposalList(ctp2_ListBox *propList, bool toPlayer)
 					ctp2_Static *box = (ctp2_Static *)item->GetChildByIndex(0);
 					Assert(box);
 					if(box) {
+						ctp2_Static *attitude = (ctp2_Static *)box->GetChildByIndex(0);
+						Assert(attitude);
+						if(attitude) {
+							if(toPlayer) {
+								attitude->SetImage(sm_toneIcons[propData.tone]);
+							} else {
+								DIPLOMATIC_TONE tone = (m_sendTone > DIPLOMATIC_TONE_NOT_CHOSEN) && (m_sendTone < DIPLOMATIC_TONE_MAX) ? m_sendTone : DIPLOMATIC_TONE_EQUAL;
+
+								attitude->SetImage(sm_toneIcons[tone]);
+							}
+						}
+
 						ctp2_Static *textStatic = (ctp2_Static *)box->GetChildByIndex(1);
 						Assert(textStatic);
 						if(textStatic) {
@@ -415,18 +427,6 @@ void DiplomacyWindow::UpdateProposalList(ctp2_ListBox *propList, bool toPlayer)
 
 							GetProposalSummary(propData, sender, receiver, finalText + strlen(finalText), false, response);
 							textStatic->SetText(finalText);
-						}
-
-						ctp2_Static *attitude = (ctp2_Static *)box->GetChildByIndex(0);
-						Assert(attitude);
-						if(attitude) {
-							if(toPlayer) {
-								attitude->SetImage(sm_toneIcons[propData.tone]);
-							} else {
-								DIPLOMATIC_TONE tone = (m_sendTone > DIPLOMATIC_TONE_NOT_CHOSEN) && (m_sendTone < DIPLOMATIC_TONE_MAX) ? m_sendTone : DIPLOMATIC_TONE_EQUAL;
-
-								attitude->SetImage(sm_toneIcons[tone]);
-							}
 						}
 					}
 
