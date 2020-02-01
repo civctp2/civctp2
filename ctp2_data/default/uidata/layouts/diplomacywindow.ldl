@@ -315,22 +315,29 @@ DiplomacyWindow:CTP2_DIALOG_WINDOW {
 ################################################################################
 # Group of all tab panels and their tabs in the Diplomacy window.
 ################################################################################
-	DiplomacyTabs:CTP2_STATIC_BASE {
+	DiplomacyTabs:CTP2_TAB_GROUP {
 		int xpix 36
 		int ypix 29
 		int widthpix 500
 		int heightpix 320
 		# Intelligence information tab.
-		Intelligence:CTP2_STATIC_BASE {
+		Intelligence:CTP2_TAB {
+			TabButton:CTP2_SIMPLE_TAB_BUTTON {
+				string text "str_ldl_DipNegotiationTable"
+				string image00 "upct21ul.tga"
+				string image10 "upct21u.tga"
+				string image20 "upct21ul.tga"
+				bool nohighlight true
+			}
 
-			# Panel.
+			# Panel/content
 			TabPanel:CTP2_DIALOG_WINDOW_TAB_HELPER {
 
 				List:CTP2_LISTBOX {
 					int xpix 10
-					int ypix 12
+					int ypix 24
 					int widthpix 470
-					int heightpix 418
+					int heightpix 406
 					
 					header {
 						# MDS 090600  Adding color flag
@@ -401,9 +408,9 @@ DiplomacyWindow:CTP2_DIALOG_WINDOW {
 					string	statustext	"STATUSBAR_DIPMAN_TABLE_EMBARGO_BUTTON"
 				}
 			
-			} 
-		}
-	}
+			} # tab panel/content
+		} # tab
+	} # tab-group
 	CloseButton:CTP2_STANDARD_CLOSE {
 		# Tooltip
 		int xpix 455
