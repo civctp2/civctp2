@@ -317,7 +317,7 @@ void DiplomacyWindow::UpdateProposalList(ctp2_ListBox *propList, bool toPlayer)
 	sint32 player = g_selected_item->GetVisiblePlayer();
 	sint32 i;
 	bool selectedSomething = false;
-
+fprintf(stderr, "%s L%d: !\n", __FILE__, __LINE__);
 	Assert(propList);
 	if(propList) {
 		ctp2_ListItem *oldItem = (ctp2_ListItem *)propList->GetSelectedItem();
@@ -330,6 +330,7 @@ void DiplomacyWindow::UpdateProposalList(ctp2_ListBox *propList, bool toPlayer)
 				oldSelectedPlayer = (sint32)oldItem->GetUserData();
 			}
 		}
+fprintf(stderr, "%s L%d: !\n", __FILE__, __LINE__);
 
 		propList->Clear();
 
@@ -392,6 +393,7 @@ void DiplomacyWindow::UpdateProposalList(ctp2_ListBox *propList, bool toPlayer)
 					item = (ctp2_ListItem *)aui_Ldl::BuildHierarchyFromRoot("ProposalMadeListItem");
 				}
 				Assert(item);
+fprintf(stderr, "%s L%d: !\n", __FILE__, __LINE__);
 				if(item) {
 
 					ctp2_Static *box = (ctp2_Static *)item->GetChildByIndex(0);
@@ -424,6 +426,7 @@ void DiplomacyWindow::UpdateProposalList(ctp2_ListBox *propList, bool toPlayer)
 								g_player[receiver]->m_civilisation->GetCountryName(finalText + strlen(finalText));
 								strcat(finalText, ": ");
 							}
+fprintf(stderr, "%s L%d: !\n", __FILE__, __LINE__);
 
 							GetProposalSummary(propData, sender, receiver, finalText + strlen(finalText), false, response);
 							textStatic->SetText(finalText);
@@ -514,6 +517,7 @@ void DiplomacyWindow::GetProposalSummary(const ProposalData &prop,
 	StringId origText = GetProposalSummaryText(dbIndex, prop.tone, false, isCounter);
 	stringutils_Interpret(g_theStringDB->GetNameStr(origText), so, finalText);
 
+fprintf(stderr, "%s L%d: !\n", __FILE__, __LINE__);
 	if(prop.second_type != PROPOSAL_NONE) {
 
 		dbIndex = diplomacyutil_GetDBIndex(prop.second_type);
@@ -525,6 +529,7 @@ void DiplomacyWindow::GetProposalSummary(const ProposalData &prop,
 
 		strcat(finalText, "  ");
 		stringutils_Interpret(g_theStringDB->GetNameStr(origText), eso, finalText + strlen(finalText));
+fprintf(stderr, "%s L%d: !\n", __FILE__, __LINE__);
 	}
 
 	if(response) {
@@ -539,6 +544,7 @@ void DiplomacyWindow::GetProposalSummary(const ProposalData &prop,
 				origText = g_theDiplomacyThreatDB->Get(threatDBIndex)->GetDetails();
 				strcat(finalText, "  ");
 				stringutils_Interpret(g_theStringDB->GetNameStr(origText), tso, finalText + strlen(finalText));
+fprintf(stderr, "%s L%d: !\n", __FILE__, __LINE__);
 			}
 		}
 	}
@@ -567,6 +573,7 @@ void DiplomacyWindow::UpdateCreateList()
 
 		IntelligenceWindow::Update(intList);
 	}
+fprintf(stderr, "%s L%d: !\n", __FILE__, __LINE__);
 }
 
 void DiplomacyWindow::UpdateSendProposalDetails()
