@@ -1755,6 +1755,12 @@ messagebox '040GrossPolluter' {
 	EyePoint(city[0], city[0].owner, 'OpenProductionCallback');//Added by MG
 }
 
+messagebox '043TradePiratedBonus' {
+	Text(ID_TRADE_PIRATE_BONUS) ;
+	MessageType("PIRATE");
+	EyePoint(city[1].location); // target is of interest
+}
+
 messagebox '044TradePirateGold' {
 	Text(ID_TRADE_PIRATE_GOLD);
 	MessageType("TRADE");
@@ -1763,6 +1769,7 @@ messagebox '044TradePirateGold' {
 messagebox '045TradePirated' {
 	Text(ID_TRADE_PIRATED) ;
 	MessageType("PIRATE");
+	EyePoint(city[0].location); // source is of interest
 }
 
 messagebox '045aTradePiratedUnknown' {

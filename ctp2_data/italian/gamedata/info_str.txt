@@ -152,6 +152,7 @@ WAR_OVER				"{player[0].civ_name_plural#ARTICLE_CAP} non sono più in guerra con 
 
 ## Trade Messages ##
 TRADE_PIRATED				"La nostra rotta commerciale da  {good[0].name} {city[0].name} verso {city[1].name} è stata colpita dagli atti di pirateria {player[0].civ_name_plural#PREPOSITION} and {gold[0].value} gold is lost."
+TRADE_PIRATE_BONUS			"The trade route carrying {good[0].name} from {city[0].name} to {city[1].name} has been pirated by the {player[0].civ_name_plural} and {gold[0].value} food, {gold[1].value} production, {gold[2].value} gold was lost."
 TRADE_PIRATE_GOLD			"{gold[0].value} gold was pirated on the trade route carrying {good[0].name} from {city[0].name} to {city[1].name} owned by {player[0].civ_name_plural}."
 TRADE_ROUTES_BROKEN_BY_EMBARGO		"{player[0].sir_cap}, {player[1].civ_name_plural#ARTICLE} hanno deciso l'embargo contro di noi in ogni loro nazione. Tutte le rotte esistenti verso {player[1].country_name#ARTICLE} sono state eliminate! Inoltra, abbiamo perso tutte le carovane che si trovavano su quelle vie."
 TRADE_ROUTES_BROKEN_BY_WAR		"Brutte notizie, {player[0].sir}. A causa del conflitto scoppiato fra noi e {player[1].civ_name_plural#ARTICLE}, tutte le nostre rotte commerciali verso le città {player[1].country_name#ARTICLED_PREPOSITION} sono state bloccate. Tutte le carovane presenti su quelle rotte sono andate perse."

@@ -2683,9 +2683,13 @@ void CityData::CollectResourcesFinally()
 sint32 CityData::FoodFromTrade(){
     sint32 food= 0;
 
-    for (sint32 g = 0; g < g_theResourceDB->NumRecords(); g++){
-	if(m_buyingResources[g] > 0){
-	    for (sint32 nGood = 0; nGood < m_buyingResources[g]; nGood++){
+    for(sint32 i = 0; i < m_tradeDestinationList.Num(); i++){
+	TradeRoute route = m_tradeDestinationList[i];
+	if(route.IsActive()){
+	    ROUTE_TYPE routeType;
+	    sint32 g;
+	    route.GetSourceResource(routeType, g);
+	    if(!route->IsBeingPirated()){
 		food += g_theResourceDB->Get(g)->GetFood();
 		}
 	    }
@@ -2697,9 +2701,13 @@ sint32 CityData::FoodFromTrade(){
 sint32 CityData::ProdFromTrade(){
     sint32 prod= 0;
 
-    for (sint32 g = 0; g < g_theResourceDB->NumRecords(); g++){
-	if(m_buyingResources[g] > 0){
-	    for (sint32 nGood = 0; nGood < m_buyingResources[g]; nGood++){
+    for(sint32 i = 0; i < m_tradeDestinationList.Num(); i++){
+	TradeRoute route = m_tradeDestinationList[i];
+	if(route.IsActive()){
+	    ROUTE_TYPE routeType;
+	    sint32 g;
+	    route.GetSourceResource(routeType, g);
+	    if(!route->IsBeingPirated()){
 		prod += g_theResourceDB->Get(g)->GetProduction();
 		}
 	    }
@@ -2711,9 +2719,13 @@ sint32 CityData::ProdFromTrade(){
 sint32 CityData::GoldFromTrade(){
     sint32 gold= 0;
 
-    for (sint32 g = 0; g < g_theResourceDB->NumRecords(); g++){
-	if(m_buyingResources[g] > 0){
-	    for (sint32 nGood = 0; nGood < m_buyingResources[g]; nGood++){
+    for(sint32 i = 0; i < m_tradeDestinationList.Num(); i++){
+	TradeRoute route = m_tradeDestinationList[i];
+	if(route.IsActive()){
+	    ROUTE_TYPE routeType;
+	    sint32 g;
+	    route.GetSourceResource(routeType, g);
+	    if(!route->IsBeingPirated()){
 		gold += g_theResourceDB->Get(g)->GetGold();
 		}
 	    }
