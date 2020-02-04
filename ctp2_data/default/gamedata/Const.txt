@@ -392,3 +392,5 @@ CAPTURED_CITY_KILL_POP   1  # when a city is captured this number of the populat
 COMBAT_ELITE_CHANCE 0.00 
 COMBAT_LEADER_CHANCE 0.00 
 CITY_ON_TRADE_ROUTE_BONUS  0.3   # if a trade route passes through a city and the desination and source is not the same as the city owner then you get this percentage of the trade route value
+DOMESTIC_TRADE_COEF 0.5 # coefficient for the reduction of trade route value in case of domestic trade (value < 1.0 promotes foreign trade)
+PACT_TRADE_COEF  1.05  # surplus in trade route values in case of a standing trade pact
