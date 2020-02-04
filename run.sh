@@ -7,6 +7,7 @@ if [ -z ${XVFBtmp+x} ]; then
     xauth nlist $DISPLAY < /dev/null | sed -e 's/^..../ffff/' | xauth -f $XAUTH nmerge -
 
     DOCKERARGS="--volume $XSOCK:$XSOCK:rw --volume $XAUTH:$XAUTH:rw --env XAUTHORITY=$XAUTH"
+    DOCKERARGS="${DOCKERARGS} --device /dev/dri:/dev/dri --device /dev/snd:/dev/snd --env ALSA_CARD=0 "
 else
     DOCKERARGS="--volume $XVFBtmp:$XSOCK:rw"
 fi
@@ -25,9 +26,6 @@ fi
 docker run \
        --rm \
        $DOCKERARGS \
-       --device /dev/dri:/dev/dri \
-       --device /dev/snd:/dev/snd \
-       --env "ALSA_CARD=0" \
        --env "DISPLAY" \
        -v $HOME/.civctp2/userprofile.txt:/opt/ctp2/ctp2_program/ctp/userprofile.txt \
        -v $HOME/.civctp2/userkeymap.txt:/opt/ctp2/ctp2_program/ctp/userkeymap.txt \
