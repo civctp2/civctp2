@@ -2380,7 +2380,7 @@ bool UnitData::CanInterceptTrade() const
 
 	if (GetMovementPoints() < g_theConstDB->Get(0)->GetSpecialActionMoveCost())
 		return false;
-
+/* do not forbid AI to break no-piracy agreement in general, should be decided by dipomacy code
 	for (sint32 i = cell->GetNumTradeRoutes() - 1; i >= 0; i--)
 	{
 		TradeRoute route = cell->GetTradeRoute(i);
@@ -2393,16 +2393,14 @@ bool UnitData::CanInterceptTrade() const
 		   !(g_network.IsClient() && g_network.IsLocalPlayer(m_owner))) {
 
 			if(AgreementMatrix::s_agreements.HasAgreement(
-				m_owner,
 				source_owner,
-				PROPOSAL_OFFER_STOP_PIRACY))
-				continue;
+				m_owner,
+				PROPOSAL_REQUEST_STOP_PIRACY))
+				return false;
 		}
-
-		return true;
 	}
-
-	return false;
+*/
+	return true;
 }
 
 ORDER_RESULT UnitData::InterceptTrade()

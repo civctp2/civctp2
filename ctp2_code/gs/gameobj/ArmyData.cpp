@@ -5892,50 +5892,67 @@ ORDER_RESULT ArmyData::InterceptTrade()
 			m_array[i].CanPerformSpecialAction())
 		{
 		        // code apparently a left-over from CTP1, see: https://github.com/civctp2/civctp2/pull/154
-			if(!g_player[m_owner]->IsRobot()
-			||(g_network.IsClient()
-			&& g_network.IsLocalPlayer(m_owner))
-			){
-				Cell *cell = g_theWorld->GetCell(m_pos);
-				for (sint32 j = 0; j < cell->GetNumTradeRoutes(); j++)
+		        Cell *cell = g_theWorld->GetCell(m_pos);
+			for (sint32 j = 0; j < cell->GetNumTradeRoutes(); j++)
+			    {
+			    sint32 route_owner = cell->GetTradeRoute(j).GetOwner();
+			    if (AgreementMatrix::s_agreements.HasAgreement(route_owner, m_owner, PROPOSAL_REQUEST_STOP_PIRACY))
 				{
-					sint32 route_owner = cell->GetTradeRoute(j).GetOwner();
-					if (AgreementMatrix::s_agreements.HasAgreement(
-						route_owner,
-						m_owner,
-						PROPOSAL_REQUEST_STOP_PIRACY))
+				if(!g_player[m_owner]->IsRobot()
+				||(g_network.IsClient()
+				&& g_network.IsLocalPlayer(m_owner))
+				    ){
+				    SlicObject *so = new SlicObject("12IABreakNoPiracy");
+				    so->AddRecipient(m_owner);
+				    so->AddCivilisation(m_owner);
+				    so->AddCivilisation(route_owner);
+				    so->AddUnit(m_array[i]);
+				    so->AddLocation(m_pos);
+				    so->AddOrder(UNIT_ORDER_INTERCEPT_TRADE);
+				    g_slicEngine->Execute(so);
+				    
+				    g_selected_item->ForceDirectorSelect(Army(m_id));
+				    return ORDER_RESULT_ILLEGAL;
+				    }
+				else// AI
+				    {
+				    if(Diplomat::GetDiplomat(m_owner).TestEffectiveRegard(route_owner, COLDWAR_REGARD) ||
+					(g_player[m_owner]->m_strengths->GetStrength(STRENGTH_CAT_MILITARY) > g_player[route_owner]->m_strengths->GetStrength(STRENGTH_CAT_MILITARY)))
 					{
-						SlicObject *so = new SlicObject("12IABreakNoPiracy");
-						so->AddRecipient(m_owner);
-						so->AddCivilisation(m_owner);
-						so->AddCivilisation(route_owner);
-						so->AddUnit(m_array[i]);
-						so->AddLocation(m_pos);
-						so->AddOrder(UNIT_ORDER_INTERCEPT_TRADE);
-						g_slicEngine->Execute(so);
-
-						g_selected_item->ForceDirectorSelect(Army(m_id));
-						return ORDER_RESULT_ILLEGAL;
+					Diplomat::GetDiplomat(route_owner).LogViolationEvent(m_owner, PROPOSAL_REQUEST_STOP_PIRACY); // as in Slic_BreakNoPiracy::Call
 					}
-					if (AgreementMatrix::s_agreements.HasAgreement(
-						route_owner,
-						m_owner,
-						PROPOSAL_TREATY_TRADE_PACT))
-					{
-						SlicObject *so = new SlicObject("12IABreakTradePact");
-						so->AddRecipient(m_owner);
-						so->AddCivilisation(m_owner);
-						so->AddCivilisation(route_owner);
-						so->AddUnit(m_array[i]);
-						so->AddLocation(m_pos);
-						so->AddOrder(UNIT_ORDER_INTERCEPT_TRADE);
-						g_slicEngine->Execute(so);
-
-						g_selected_item->ForceDirectorSelect(Army(m_id));
-						return ORDER_RESULT_ILLEGAL;
-					}
+				    }
 				}
-			}
+
+			    if (AgreementMatrix::s_agreements.HasAgreement(route_owner, m_owner, PROPOSAL_TREATY_TRADE_PACT))
+				{
+				if(!g_player[m_owner]->IsRobot()
+				||(g_network.IsClient()
+				&& g_network.IsLocalPlayer(m_owner))
+				    ){
+				    SlicObject *so = new SlicObject("12IABreakTradePact");
+				    so->AddRecipient(m_owner);
+				    so->AddCivilisation(m_owner);
+				    so->AddCivilisation(route_owner);
+				    so->AddUnit(m_array[i]);
+				    so->AddLocation(m_pos);
+				    so->AddOrder(UNIT_ORDER_INTERCEPT_TRADE);
+				    g_slicEngine->Execute(so);
+				    
+				    g_selected_item->ForceDirectorSelect(Army(m_id));
+				    return ORDER_RESULT_ILLEGAL;
+				    }
+				else// AI
+				    {
+				    if(Diplomat::GetDiplomat(m_owner).TestEffectiveRegard(route_owner, COLDWAR_REGARD) ||
+					(g_player[m_owner]->m_strengths->GetStrength(STRENGTH_CAT_MILITARY) > g_player[route_owner]->m_strengths->GetStrength(STRENGTH_CAT_MILITARY)))
+					{
+					Diplomat::GetDiplomat(route_owner).LogViolationEvent(m_owner, PROPOSAL_TREATY_TRADE_PACT); // as in Slic_BreakNoPiracy::Call
+					}
+				    }
+				}
+			    }
+
 
 			ORDER_RESULT const	res	= m_array[i].InterceptTrade(); // call UnitData::InterceptTrade() which adds GEV_SetPiratingArmy
 
