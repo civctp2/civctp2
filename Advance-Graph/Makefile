@@ -9,8 +9,7 @@ all : Advance.pdf
 
 %.gv : %.json
 	../tools/json2dot.sh ../ctp2_data/default/gamedata/uniticon.txt < $< \
-	| gvpr -c 'N[$$.degree==0]{delete(root, $$)}' ` # remove nodes without any edges, e.g. DEFAULT, SUBNEURAL_ADS, MIND_CONTROL ` \
-	| tred > $@ # removes edges implied by transitivity
+	| gvpr -c 'N[$$.degree==0]{delete(root, $$)}' > $@ # remove nodes without any edges, e.g. DEFAULT, SUBNEURAL_ADS, MIND_CONTROL
 
 %.svg : %.gv
 	dot $< -Tsvg \
