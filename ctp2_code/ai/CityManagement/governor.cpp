@@ -5085,8 +5085,7 @@ void Governor::ManageGoodsTradeRoutes()
 				double sellingVPC = -1; 
 				TradeRoute curDestRoute;
 
-				if(!city.CD()->HasResource(g) // good not available locally (either sold out or not collected), i.e. do not by a good that is available locally
-				&&  city.CD()->GetResourceTradeRoute(g, curDestRoute)) // have already a route for g
+				if(city.CD()->GetResourceTradeRoute(g, curDestRoute)) // have already a route for g
 				{
 					sellingVPC = static_cast<double>(tradeutil_GetTradeValue(m_playerId, curDestRoute->GetDestination(), g))
 					    / tradeutil_GetAccurateTradeDistance(city, curDestRoute->GetDestination()); // tradeutil_GetAccurateTradeDistance returns > 1.0
@@ -5115,6 +5114,8 @@ void Governor::ManageGoodsTradeRoutes()
 							continue;
 
 						if (Diplomat::GetDiplomat(op).GetEmbargo(m_playerId)) // no trade if embargo enacted
+							continue;
+						if (city.CD()->HasResource(g)) // good available locally, i.e. do not buy a good that is available locally (exception: domestic trade)
 							continue;
 					}
 
