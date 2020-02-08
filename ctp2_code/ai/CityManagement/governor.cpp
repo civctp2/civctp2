@@ -5173,7 +5173,7 @@ void Governor::ManageGoodsTradeRoutes()
 					}
 				}
 
-				if ((sellingVPC < 0) || (sellingVPC < maxValuePerCaravan)) // good not available locally (!HasResource <=> sellingVPC < 0) or better offer (sellingVPC < maxValuePerCaravan)
+				if ((maxValuePerCaravan > 0) && ((sellingVPC < 0) || (sellingVPC < maxValuePerCaravan))) // if there is an offer (maxValuePerCaravan > 0) && (no route for good so far (sellingVPC < 0) or better offer (sellingVPC < maxValuePerCaravan))
 				{
 					GoodsRoute new_route;
 					new_route.m_sourceCity      = city; // needed for route creation
