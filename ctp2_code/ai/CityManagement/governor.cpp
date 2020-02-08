@@ -5083,12 +5083,14 @@ void Governor::ManageGoodsTradeRoutes()
 			if(city.CD()->IsLocalResource(g)) // only consider collected goods (not bought goods)
 			{
 				double sellingVPC = -1; 
+				double sellingCost = -1;
 				TradeRoute curDestRoute;
 
 				if(city.CD()->GetResourceTradeRoute(g, curDestRoute)) // have already a route for g
 				{
+					sellingCost = tradeutil_GetAccurateTradeDistance(city, curDestRoute->GetDestination());
 					sellingVPC = static_cast<double>(tradeutil_GetTradeValue(m_playerId, curDestRoute->GetDestination(), g))
-					    / tradeutil_GetAccurateTradeDistance(city, curDestRoute->GetDestination()); // tradeutil_GetAccurateTradeDistance returns > 1.0
+					    / sellingCost; // tradeutil_GetAccurateTradeDistance returns > 1.0
 				}
 				else
 				{
@@ -5159,7 +5161,7 @@ void Governor::ManageGoodsTradeRoutes()
 				if (!player_ptr->IsRobot()) // exlcude human players
 					continue;
 
-				if (((sellingVPC < maxValuePerCaravan) && (sellingVPC > 0) ) || // kill existing routes if lower in value 
+				if ((sellingCost > 1 && (sellingVPC < maxValuePerCaravan) && (sellingVPC > 0) ) || // kill existing routes if lower in value but only if this gives caravans (sellingCost > 1)
 					(curDestRoute.m_id != 0 && Diplomat::GetDiplomat(m_playerId). // or piracy risk is high
 					GetTradeRoutePiracyRisk(city, curDestRoute->GetDestination())))
 				{
@@ -5174,7 +5176,7 @@ void Governor::ManageGoodsTradeRoutes()
 					}
 				}
 
-				if ((maxValuePerCaravan > 0) && ((sellingVPC < 0) || (sellingVPC < maxValuePerCaravan))) // if there is an offer (maxValuePerCaravan > 0) && (no route for good so far (sellingVPC < 0) or better offer (sellingVPC < maxValuePerCaravan))
+				if ((maxValuePerCaravan > 0) && ((sellingVPC < 0) || ((sellingVPC < maxValuePerCaravan) && (sellingCost > 1)))) // if there is an offer (maxValuePerCaravan > 0) && (no route for good so far (sellingVPC < 0) or better offer (sellingVPC < maxValuePerCaravan) where old route will yield fee caravans)
 				{
 					GoodsRoute new_route;
 					new_route.m_sourceCity      = city; // needed for route creation
