@@ -360,8 +360,8 @@ TradeRouteData::Serialize(CivArchive &archive)
 {
 	if(archive.IsStoring()) {
 		archive << m_id;
-		archive << m_transportCost;
-		archive << m_transportCost; // second time, slot can be reused (just to preserve the alignment, needed since m_transportCost was changed from double to sint32)
+		archive.PutDOUBLE((double)m_transportCost); // save sint32 as double (just to preserve the alignment, needed since m_transportCost was changed from double to sint32)
+
 		archive << m_owner;
 		archive.PutSINT32(m_sourceRouteType);
 		archive << m_sourceResource;
@@ -405,8 +405,7 @@ TradeRouteData::Serialize(CivArchive &archive)
 
 	} else {
 		archive >> m_id;
-		archive >> m_transportCost;
-		archive >> m_transportCost; // second time, slot can be reused (just to preserve the alignment, needed since m_transportCost was changed from double to sint32)
+		m_transportCost = (sint32) archive.GetDOUBLE (); // load sint32 from double (just to preserve the alignment, needed since m_transportCost was changed from double to sint32)
 		archive >> m_owner;
 		m_sourceRouteType = (ROUTE_TYPE)(archive.GetSINT32()) ;
 		archive >> m_sourceResource;
