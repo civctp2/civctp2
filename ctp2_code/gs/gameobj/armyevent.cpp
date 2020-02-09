@@ -809,8 +809,17 @@ STDEHANDLER(ArmyMoveEvent)
 
 			Assert(!g_player[owner]->IsRobot() || Diplomat::GetDiplomat(owner).HasWarOrDesiresPreemptivelyWith(defender->GetOwner()));
 
-			if(g_player[owner]->IsRobot() && army->CanFight(*defender) || g_player[owner]->IsHuman())
-			{
+			if(newPos != extraOrderPos){ // about to unintionally bump into another civ's unit
+			        //// so just clear the order for reconsideration
+			        DPRINTF(k_DBG_GAMESTATE, ("Army 0x%lx clears current oders via event due to unit in the way\n", army.m_id));
+				g_gevManager->AddEvent(GEV_INSERT_AfterCurrent,
+									   GEV_ClearOrders,
+									   GEA_Army, army,
+									   GEA_End);
+				return GEV_HD_Continue;
+			}
+			else{ // not a move order
+			    if(g_player[owner]->IsRobot() && army->CanFight(*defender) || g_player[owner]->IsHuman()){
 				DPRINTF(k_DBG_GAMESTATE, ("Army 0x%lx gets event to attack foreigner\n", army.m_id));
 				g_gevManager->AddEvent(GEV_INSERT_AfterCurrent,
 									   GEV_FinishAttack,
@@ -823,15 +832,16 @@ STDEHANDLER(ArmyMoveEvent)
 									   GEV_ClearOrders,
 									   GEA_Army, army,
 									   GEA_End);
-			}
-			else
-			{
+				}
+			    else
+				{
 				DPRINTF(k_DBG_GAMESTATE, ("Army 0x%lx unloads for attacking foreigner\n", army.m_id));
 				g_gevManager->AddEvent(GEV_INSERT_AfterCurrent,
 									   GEV_UnloadOrder,
 									   GEA_Army, army,
 									   GEA_MapPoint, newPos,
 									   GEA_End);
+				}
 			}
 		}
 		else
