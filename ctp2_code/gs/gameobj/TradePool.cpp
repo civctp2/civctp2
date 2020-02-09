@@ -186,8 +186,7 @@ const TradeDynamicArray &TradePool::GetAllRoutes()
 	return *m_all_routes;
 }
 
-void TradePool::BreakOffTrade(PLAYER_INDEX attack_owner,
-							  PLAYER_INDEX defense_owner)
+void TradePool::BreakOffTrade(PLAYER_INDEX attack_owner, PLAYER_INDEX defense_owner, CAUSE_KILL_TRADE_ROUTE cause)
 {
 	sint32 i;
 
@@ -201,7 +200,7 @@ void TradePool::BreakOffTrade(PLAYER_INDEX attack_owner,
 			g_gevManager->Pause();
 			g_gevManager->AddEvent(GEV_INSERT_AfterCurrent, GEV_KillTradeRoute,
 				GEA_TradeRoute, route.m_id,
-				GEA_Int, CAUSE_KILL_TRADE_ROUTE_SENDER_KILLED,
+				GEA_Int, cause,
 				GEA_End);
 			g_gevManager->Resume();
 		}
