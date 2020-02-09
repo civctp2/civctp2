@@ -5154,7 +5154,10 @@ void Diplomat::SendGreeting(const PLAYER_INDEX & foreignerId)
 }
 bool Diplomat::HasWarOrDesiresPreemptivelyWith(const PLAYER_INDEX foreignerId) const
 {
-	return g_player[m_playerId]->HasWarWith(foreignerId) || (/*m_personality->GetAlignmentEvil() || m_personality->GetTrustworthinessChaotic() &&*/ DesireWarWith(foreignerId));
+	return g_player[m_playerId]->HasWarWith(foreignerId)
+	    || (m_personality->GetAlignmentEvil()
+	       || (m_personality->GetTrustworthinessChaotic() && DesireWarWith(foreignerId))
+	       );
 }
 
 bool Diplomat::DesireWarWith(const PLAYER_INDEX foreignerId) const
