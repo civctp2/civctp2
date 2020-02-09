@@ -34,6 +34,7 @@
 #include "TradeRouteData.h"
 
 #include <algorithm>
+#include <cmath>                    // std::round
 #include "TradeRoute.h"
 #include "World.h"
 #include "player.h"
@@ -199,7 +200,8 @@ void TradeRouteData::AddWayPoint(MapPoint pos)
 
 bool TradeRouteData::GeneratePath()
 {
-	float           cost    = 0.0;
+	float            cost    = 0.0;  // float expected by g_theTradeAstar.FindPath
+	double  transportCost    = 0.0;  // double because m_transportCost is double (not changed to preserve alignmen)
 	sint32 const    nwp     = m_wayPoints.Num();
 
 	for (sint32 wp = 0; wp < nwp - 1; ++wp)
@@ -232,11 +234,10 @@ bool TradeRouteData::GeneratePath()
 			}
 		}
 
-		m_transportCost += cost;
+		transportCost += cost;
 	}
 
-	m_transportCost = std::max<double>
-	    (1.0, (double)((int)tradeutil_GetNetTradeCosts(m_transportCost)));
+	m_transportCost = std::round(std::max<double>(tradeutil_GetNetTradeCosts(transportCost), 1.0)); // not casting to int as in tradeutil_GetAccurateTradeDistance to keep alignment of double
 
 	m_path.Insert(m_wayPoints[0]);
 	MapPoint pnt;
@@ -570,7 +571,8 @@ void TradeRouteData::SetDestination(Unit dest)
 
 void TradeRouteData::SetCost(double cost)
 {
-	m_transportCost = cost;
+	m_transportCost = std::round(std::max<double>(cost, 1.0)); // no casting to int to keep alignment of double
+	m_path.Insert(m_wayPoints[0]);
 	ENQUEUE();
 }
 

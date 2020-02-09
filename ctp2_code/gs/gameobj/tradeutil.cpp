@@ -36,6 +36,8 @@
 
 #include "c3.h"
 #include "tradeutil.h"
+
+#include <cmath>                    // std::round
 #include "World.h"
 #include "ResourceRecord.h"
 #include "Unit.h"
@@ -84,7 +86,7 @@ sint32 tradeutil_GetAccurateTradeDistance(const Unit &source, const Unit &destin
             (source.GetOwner(), source.RetPos(), destination.RetPos(), path, cost, FALSE)
        )
     {
-        return static_cast<sint32>(std::max<double>(tradeutil_GetNetTradeCosts(cost), 1.0));
+        return static_cast<sint32>(std::round(std::max<double>(tradeutil_GetNetTradeCosts(cost), 1.0)));
     }
 
 	return DISTANCE_UNKNOWN;
