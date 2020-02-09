@@ -7230,6 +7230,7 @@ bool ArmyData::MoveIntoForeigner(const MapPoint &pos)
 	      )
 	  )
 	{
+	fprintf(stderr, "%s L%d:\n", __FILE__, __LINE__);
 		Battle(pos, defender);
 	}
 	else
@@ -7292,6 +7293,7 @@ bool ArmyData::MoveIntoForeigner(const MapPoint &pos)
 			// Have to check wehther we desire war
 			if(VerifyAttack(UNIT_ORDER_MOVE_TO, pos, defense_owner))
 			{
+	fprintf(stderr, "%s L%d:\n", __FILE__, __LINE__);
 				Battle(pos, defender);
 			}
 
@@ -7403,6 +7405,7 @@ void ArmyData::Battle(const MapPoint &pos, CellUnitList & defender)
 bool ArmyData::VerifyAttack(UNIT_ORDER_TYPE order, const MapPoint &pos,
 							sint32 defense_owner)
 {
+	fprintf(stderr, "%s L%d:\n", __FILE__, __LINE__);
 	if (g_player[m_owner]->HasWarWith(defense_owner))
 	{
 		return true;
@@ -7438,6 +7441,7 @@ bool ArmyData::VerifyAttack(UNIT_ORDER_TYPE order, const MapPoint &pos,
 	}
 	else
 	{
+	fprintf(stderr, "%s L%d:\n", __FILE__, __LINE__);
 		return true;
 	}
 
