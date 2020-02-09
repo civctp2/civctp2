@@ -56,7 +56,7 @@ class TradeRouteData : public GameObj,
 {
 private:
 
-	double m_transportCost;
+	sint32 m_transportCost;
 	PLAYER_INDEX m_owner;
 	PLAYER_INDEX m_payingFor;
 	Army m_piratingArmy;
@@ -135,8 +135,8 @@ public:
 	void      SetPirate(sint8 pirate)                      {        m_pirate = pirate; }
 	sint8     GetPirate()                            const { return m_pirate; }
 
-	double GetCost() const;
-	void SetCost(double cost);
+	sint32 GetCost() const;
+	void SetCost(sint32 cost);
 
 	const DynamicArray<MapPoint>* GetPath() const { return &m_path; }
 	const DynamicArray<MapPoint>* GetSelectedPath() const { return &m_selectedPath; }

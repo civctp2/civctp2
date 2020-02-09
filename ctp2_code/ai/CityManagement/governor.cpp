@@ -295,7 +295,7 @@ Governor::Governor(PLAYER_INDEX const & playerId)
 	m_currentUnitShieldCost     (0),
 	m_playerId                  (playerId),
 	m_currentUnitCount          (),
-	m_neededFreight             (0.0),
+	m_neededFreight             (0),
 	m_tileImprovementGoals      (),
 	m_canBuildLandSettlers      (false),
 	m_canBuildSeaSettlers       (false)
@@ -3608,8 +3608,7 @@ void Governor::ComputeDesiredUnits()
 				{
 					double freight_per_unit = GetDBUnitRec(best_unit_type)->GetMaxMovePoints();
 					Assert(0.0 != freight_per_unit);
-					desired_count =
-						static_cast<sint32>(ceil(m_neededFreight / freight_per_unit));
+					desired_count = static_cast<sint32>(ceil((double)m_neededFreight / freight_per_unit));
 				}
 			}
 			break;
@@ -5025,7 +5024,7 @@ struct GoodsRoute
 {
 	GoodsRoute()
 	:
-		m_cost              (0.0),
+		m_cost              (0),
 		m_resource          (CTPRecord::INDEX_INVALID),
 		m_sourceCity        (),
 		m_destinationCity   (),
@@ -5046,7 +5045,7 @@ struct GoodsRoute
 	/// Total yield
 	// sint32  m_value; // not needed with m_valuePerCaravan
 	/// Number of required caravans
-	double  m_cost;
+	sint32  m_cost;
 	/// Traded good
 	sint32  m_resource;
 	/// Supplier city
@@ -5062,12 +5061,12 @@ void Governor::ManageGoodsTradeRoutes()
 	Assert(g_player[m_playerId] != NULL);
 	Player *player_ptr = g_player[m_playerId];
 
-	double unused_freight = player_ptr->GetUnusedFreight();
-	double total_freight = player_ptr->GetTotalFreight();
+	sint32 unused_freight = player_ptr->GetUnusedFreight();
+	sint32 total_freight = player_ptr->GetTotalFreight();
 	sint32 totalRoutes = 0; // apparently there is no GetTotalRoutes() or similar, see e.g. https://github.com/civctp2/civctp2/blob/8ed4659c7075e856b9ba72e02e21facf0329ce26/ctp2_code/ui/interface/trademanager.cpp#L539
 	std::list<GoodsRoute> new_routes;
 
-	m_neededFreight = 0.0;
+	m_neededFreight = 0;
 
 	UnitDynamicArray * city_list = player_ptr->GetAllCitiesList();
 	sint32             cityCount = city_list ? city_list->Num() : 0;
@@ -5083,7 +5082,7 @@ void Governor::ManageGoodsTradeRoutes()
 			if(city.CD()->IsLocalResource(g)) // only consider collected goods (not bought goods)
 			{
 				double sellingVPC = -1; 
-				double sellingCost = -1;
+				sint32 sellingCost = -1;
 				TradeRoute curDestRoute;
 
 				if(city.CD()->GetResourceTradeRoute(g, curDestRoute)) // have already a route for g
@@ -5100,8 +5099,8 @@ void Governor::ManageGoodsTradeRoutes()
 				Unit maxCity;
 				double bestValuePerCaravan = 0.0;
 				double maxValuePerCaravan = 0.0;
-				double maxCost = 0.0;
-				double maxNeededFreight = 0.0;
+				sint32 maxCost = 0;
+				sint32 maxNeededFreight = 0;
 				for (sint32 op = 1; op < k_MAX_PLAYERS; op++) // determine player offering highest price for good g
 				{
 					if (m_playerId != op) // skip all players not awailable for trading
@@ -5138,7 +5137,7 @@ void Governor::ManageGoodsTradeRoutes()
 							continue;
 
 						const sint32 price = tradeutil_GetTradeValue(m_playerId, destCity, g); // # of gold
-						const double cost = tradeutil_GetAccurateTradeDistance(city, destCity); // # of caravans
+						const sint32 cost = tradeutil_GetAccurateTradeDistance(city, destCity); // # of caravans
 						const double valuePerCaravan = static_cast<double>(price) / cost; // cost = tradeutil_GetAccurateTradeDistance returns > 1.0
 
 						if (valuePerCaravan > bestValuePerCaravan) // determine best offer (and its cost) that would be available, to set goal for # of caravans (m_neededFreight)

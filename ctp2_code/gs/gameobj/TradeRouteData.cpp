@@ -67,7 +67,7 @@ TradeRouteData::TradeRouteData
 :
     GameObj                         (route.m_id),
     CityRadiusCallback              (),
-    m_transportCost                 (0.0),
+    m_transportCost                 (0),
     m_owner                         (owner),
     m_payingFor                     (paying_for),
     m_piratingArmy                  (),
@@ -201,7 +201,7 @@ void TradeRouteData::AddWayPoint(MapPoint pos)
 bool TradeRouteData::GeneratePath()
 {
 	float            cost    = 0.0;  // float expected by g_theTradeAstar.FindPath
-	double  transportCost    = 0.0;  // double because m_transportCost is double (not changed to preserve alignmen)
+	double  transportCost    = 0.0;  // double because tradeutil_GetNetTradeCosts is double based
 	sint32 const    nwp     = m_wayPoints.Num();
 
 	for (sint32 wp = 0; wp < nwp - 1; ++wp)
@@ -237,7 +237,7 @@ bool TradeRouteData::GeneratePath()
 		transportCost += cost;
 	}
 
-	m_transportCost = std::round(std::max<double>(tradeutil_GetNetTradeCosts(transportCost), 1.0)); // not casting to int as in tradeutil_GetAccurateTradeDistance to keep alignment of double
+	m_transportCost = static_cast<sint32>(std::round(std::max<double>(tradeutil_GetNetTradeCosts(transportCost), 1.0))); // similar (identical?) to tradeutil_GetAccurateTradeDistance 
 
 	m_path.Insert(m_wayPoints[0]);
 	MapPoint pnt;
@@ -361,6 +361,7 @@ TradeRouteData::Serialize(CivArchive &archive)
 	if(archive.IsStoring()) {
 		archive << m_id;
 		archive << m_transportCost;
+		archive << m_transportCost; // second time, slot can be reused (just to preserve the alignment, needed since m_transportCost was changed from double to sint32)
 		archive << m_owner;
 		archive.PutSINT32(m_sourceRouteType);
 		archive << m_sourceResource;
@@ -405,6 +406,7 @@ TradeRouteData::Serialize(CivArchive &archive)
 	} else {
 		archive >> m_id;
 		archive >> m_transportCost;
+		archive >> m_transportCost; // second time, slot can be reused (just to preserve the alignment, needed since m_transportCost was changed from double to sint32)
 		archive >> m_owner;
 		m_sourceRouteType = (ROUTE_TYPE)(archive.GetSINT32()) ;
 		archive >> m_sourceResource;
@@ -569,19 +571,19 @@ void TradeRouteData::SetDestination(Unit dest)
 	ENQUEUE();
 }
 
-void TradeRouteData::SetCost(double cost)
+void TradeRouteData::SetCost(sint32 cost)
 {
-	m_transportCost = std::round(std::max<double>(cost, 1.0)); // no casting to int to keep alignment of double
+	m_transportCost = std::max<sint32>(cost, 1);
 	m_path.Insert(m_wayPoints[0]);
 	ENQUEUE();
 }
 
-double TradeRouteData::GetCost() const
+sint32 TradeRouteData::GetCost() const
 {
 #ifndef CTP1_TRADE
 	return m_transportCost;
 #else
-	return 1.0;
+	return 1;
 #endif
 }
 

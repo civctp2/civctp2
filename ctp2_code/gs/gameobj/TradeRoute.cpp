@@ -124,7 +124,7 @@ Unit TradeRoute::GetDestination() const
 	return GetData()->GetDestination();
 }
 
-double TradeRoute::GetCost() const
+sint32 TradeRoute::GetCost() const
 {
 	return GetData()->GetCost();
 }

@@ -86,7 +86,7 @@ public:
 	sint32 GetPathSelectionState() const;
 	void SetPathSelectionState(sint32 state);
 
-	double GetCost() const;
+	sint32 GetCost() const;
 	const DynamicArray<MapPoint>* GetPath() const;
 	const DynamicArray<MapPoint>* GetSelectedPath() const;
 
