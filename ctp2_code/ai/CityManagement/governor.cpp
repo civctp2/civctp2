@@ -5160,7 +5160,7 @@ void Governor::ManageGoodsTradeRoutes()
 				if (!player_ptr->IsRobot()) // exlcude human players
 					continue;
 
-				if ((sellingCost > 1 && (sellingVPC < maxValuePerCaravan) && (sellingVPC > 0) ) || // kill existing routes if lower in value but only if this gives caravans (sellingCost > 1)
+				if (((sellingVPC < maxValuePerCaravan) && (sellingVPC > 0) ) || // kill existing routes if lower in value 
 					(curDestRoute.m_id != 0 && Diplomat::GetDiplomat(m_playerId). // or piracy risk is high
 					GetTradeRoutePiracyRisk(city, curDestRoute->GetDestination())))
 				{
@@ -5175,7 +5175,7 @@ void Governor::ManageGoodsTradeRoutes()
 					}
 				}
 
-				if ((maxValuePerCaravan > 0) && ((sellingVPC < 0) || ((sellingVPC < maxValuePerCaravan) && (sellingCost > 1)))) // if there is an offer (maxValuePerCaravan > 0) && (no route for good so far (sellingVPC < 0) or better offer (sellingVPC < maxValuePerCaravan) where old route will yield fee caravans)
+				if ((maxValuePerCaravan > 0) && ((sellingVPC < 0) || (sellingVPC < maxValuePerCaravan))) // if there is an offer (maxValuePerCaravan > 0) && (no route for good so far (sellingVPC < 0) or better offer (sellingVPC < maxValuePerCaravan))
 				{
 					GoodsRoute new_route;
 					new_route.m_sourceCity      = city; // needed for route creation
