@@ -5169,7 +5169,7 @@ void Governor::ManageGoodsTradeRoutes()
 
 					g_gevManager->AddEvent(GEV_INSERT_Tail, GEV_KillTradeRoute,
 						GEA_TradeRoute, curDestRoute.m_id,
-						GEA_Int, CAUSE_KILL_TRADE_ROUTE_SENDER_KILLED,
+						GEA_Int, CAUSE_KILL_TRADE_ROUTE_BETTER_OFFER,
 						GEA_End);
 					if(g_network.IsClient()) {
 						g_network.SendAction(new NetAction(NET_ACTION_CANCEL_TRADE_ROUTE, (uint32)curDestRoute));
