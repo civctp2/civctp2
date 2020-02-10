@@ -2891,12 +2891,7 @@ bool Goal::IsTargetImmune() const
 
 		// do not go for installing an embassy if civ of target city has wonder that forbids so
 		if(wonderutil_GetCloseEmbassies(g_player[m_target_city->GetOwner()]->m_builtWonders)) { // code from ArmyData::EstablishEmbassy
-		    for(sint32 w = 0; w < g_theWonderDB->NumRecords(); w++) {
-			if((g_player[m_target_city->GetOwner()]->m_builtWonders & ((uint64)1 << w)) &&
-			    !wonderutil_IsObsolete(w)) {
-			    return true;
-			    }
-			}
+		    return true;
 		    }
 		    
 

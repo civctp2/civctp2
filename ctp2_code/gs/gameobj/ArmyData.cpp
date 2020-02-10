@@ -3565,22 +3565,8 @@ ORDER_RESULT ArmyData::EstablishEmbassy(const MapPoint &point)
 	if(wonderutil_GetCloseEmbassies(g_player[c.GetOwner()]->m_builtWonders)) {
 		SlicObject *so = new SlicObject("145NoEmbassiesWonder");
 		so->AddCivilisation(c.GetOwner());
-		so->AddCity(c);
-		sint32 w;
-		for(w = 0; w < g_theWonderDB->NumRecords(); w++) {
-			if((g_player[c.GetOwner()]->m_builtWonders & ((uint64)1 << w)) &&
-			   !wonderutil_IsObsolete(w)) {
-				so->AddWonder(w);
-				break;
-			}
-		}
-		Assert(w < g_theWonderDB->NumRecords());
-		if(w >= g_theWonderDB->NumRecords()) {
-			delete so;
-		} else {
-			so->AddRecipient(m_owner);
-			g_slicEngine->Execute(so);
-		}
+		so->AddRecipient(m_owner);
+		g_slicEngine->Execute(so);
 		return ORDER_RESULT_FAILED;
 	}
 
