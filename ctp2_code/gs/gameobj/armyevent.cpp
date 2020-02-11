@@ -786,11 +786,15 @@ STDEHANDLER(ArmyMoveEvent)
 										   GEA_Army, army,
 										   GEA_End);
 
-					if(!extra)
+					if(!extra){
+					    fprintf(stderr, "%s L%d:\n", __FILE__, __LINE__);
 						return GEV_HD_Continue;
+					    }
 
-					if (newPos != extraOrderPos)
+					if (newPos != extraOrderPos){
+			    fprintf(stderr, "%s L%d: newPos: %d,%d; extraOrderPos: %d,%d\n", __FILE__, __LINE__, newPos.x, newPos.y, extraOrderPos.x, extraOrderPos.y);
 						return GEV_HD_Continue;
+					    }
 				}
 			}
 
@@ -809,8 +813,10 @@ STDEHANDLER(ArmyMoveEvent)
 
 			Assert(!g_player[owner]->IsRobot() || Diplomat::GetDiplomat(owner).HasWarOrDesiresPreemptivelyWith(defender->GetOwner()));
 
+			    fprintf(stderr, "%s L%d: newPos: %d,%d; extraOrderPos: %d,%d\n", __FILE__, __LINE__, newPos.x, newPos.y, extraOrderPos.x, extraOrderPos.y);
 			if(newPos != extraOrderPos){ // about to unintionally bump into another civ's unit
 			        //// so just clear the order for reconsideration
+			    fprintf(stderr, "%s L%d: newPos: %d,%d; extraOrderPos: %d,%d\n", __FILE__, __LINE__, newPos.x, newPos.y, extraOrderPos.x, extraOrderPos.y);
 			        DPRINTF(k_DBG_GAMESTATE, ("Army 0x%lx clears current oders via event due to unit in the way\n", army.m_id));
 				g_gevManager->AddEvent(GEV_INSERT_AfterCurrent,
 									   GEV_ClearOrders,
