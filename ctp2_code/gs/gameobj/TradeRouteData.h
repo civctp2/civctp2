@@ -125,6 +125,7 @@ public:
 	void AddSeenByBit(sint32 player);
 	void RemoveSeenByBit(sint32 player);
 	bool SeenBy(sint32 player);
+	uint32 SeenByBits();
 	void RedrawRadarMapAlongRoute();
 
 	void SetSource(Unit source);
@@ -178,6 +179,8 @@ public:
 	BOOL IsActive() const { return m_isActive == 1; }
 	void Activate() { m_isActive = 1; }
 	void Deactivate() { m_isActive = 0; m_piratingArmy = 0; } // deactivated route cannot be pirated
+	void Remove(sint8 cause) { m_isActive = -cause; } // store cause as negative value
+	sint8 IsRemoved() const { return (m_isActive < 0 ? -m_isActive : 0); } // report cause as positive value
 
 	BOOL IsValid() const { return m_valid; }
 

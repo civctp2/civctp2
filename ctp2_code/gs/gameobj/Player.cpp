@@ -2479,6 +2479,13 @@ void Player::EndTurn()
 		m_all_cities->Access(i).EndTurnCity();
 	}
 
+	//// check which deactive routes can be removed completely, i.e. are not seen by any active player any more
+	const TradeDynamicArray *allRoutes = g_theTradePool->AccessAllRoutes();
+	for(i = allRoutes->Num() - 1; i >= 0; i--)
+	{
+		allRoutes->Access(i).RemoveUnseenRoute(); // checks if a route is not seen any more and then removes it completely
+	}
+
 	if ((m_gold->GetLevel() < 50) && (m_gold->DeltaThisTurn() < 0) &&
 	    (g_slicEngine->GetSegment("027NotEnoughGold")->TestLastShown(m_owner, 10)))
 	{

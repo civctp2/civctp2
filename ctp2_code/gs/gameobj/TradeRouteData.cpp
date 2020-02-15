@@ -162,6 +162,11 @@ bool TradeRouteData::SeenBy(sint32 player)
 	return m_seenBy & (1 << player);
 }
 
+uint32 TradeRouteData::SeenByBits()
+{
+	return m_seenBy;
+}
+
 void TradeRouteData::RedrawRadarMapAlongRoute()
 {
 	TradeRoute route(m_id);

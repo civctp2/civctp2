@@ -31,17 +31,10 @@ bool TradeRoute::IsValid() const
 
 void TradeRoute::KillRoute(CAUSE_KILL_TRADE_ROUTE cause) // mapped to TradeRoute::Kill in TradeRoute.h
 {
-	TradeRoute tmp(*this);
-	tmp.RemoveAllReferences(cause);
-}
-
-void TradeRoute::RemoveAllReferences(CAUSE_KILL_TRADE_ROUTE cause)
-{
-	g_director->TradeActorDestroy(*this);
 	TradeRouteData* data = AccessData();
-
+	data->Remove(cause); // remove route from game but keep reference as long as m_seenBy is not zero
+	
 	Unit source(data->GetSource()), dest(data->GetDestination());
-
 
 	if(g_theUnitPool->IsValid(source))
 		source.DelTradeRoute(*this); // remove route from CityData (m_tradeSourceList), essential because routes of m_tradeSourceList are expected to be active (i.e. no checks on route.IsActive())
@@ -69,6 +62,27 @@ void TradeRoute::RemoveAllReferences(CAUSE_KILL_TRADE_ROUTE cause)
 	    (NULL != g_player[GetPayingFor()])) {
 		g_player[GetPayingFor()]->RemoveTradeRoute(*this, cause); // brings used caravans/trade-units back - 1
 	}
+
+	TradeRoute tmp(*this);
+	tmp.Deactivate(); // deactivate route => if a tile of the path is seen again the route will not be drawn any more
+	tmp.RemoveSeenByBit(source.GetOwner()); // owner should not see it any more instantly
+	tmp.RemoveSeenByBit(dest.GetOwner()); // receiver should not see it any more instantly
+}
+
+void TradeRoute::RemoveUnseenRoute() // mapped to TradeRoute::Kill in TradeRoute.h
+{
+	TradeRouteData* data = AccessData();
+	if(data->SeenByBits() == 0){
+	    TradeRoute tmp(*this);
+	    CAUSE_KILL_TRADE_ROUTE cause= data->IsRemoved();
+	    tmp.RemoveAllReferences(cause);
+	    }
+}
+
+void TradeRoute::RemoveAllReferences(CAUSE_KILL_TRADE_ROUTE cause)
+{
+	g_director->TradeActorDestroy(*this);  // good animation
+	TradeRouteData* data = AccessData();
 
 	data->RemoveFromCells();
 

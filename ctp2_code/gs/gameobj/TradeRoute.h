@@ -94,6 +94,7 @@ public:
 	BOOL IsActive() const;
 	void Activate();
 	void Deactivate();
+	void RemoveUnseenRoute();
 
 	sint32 GetGoldInReturn() const;
 
