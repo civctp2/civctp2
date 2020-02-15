@@ -12,6 +12,8 @@
 #include "Globals.h"
 #include "Events.h"
 #include "GameEventUser.h"
+#include "SelItem.h"            // g_selected_item
+
 
 class aui_Surface;
 
@@ -88,9 +90,11 @@ void TradePool::Draw(aui_Surface* surface)
     for (sint32 i = 0; i < num; i++) {
 		TradeRoute route = m_all_routes->Access(i);
 
-		DrawTradeRoute(surface, (DynamicArray<MapPoint>*)m_all_routes->Access(i).GetPath(),
+		if(route.SeenBy(g_selected_item->GetVisiblePlayer())){
+		    DrawTradeRoute(surface, (DynamicArray<MapPoint>*)m_all_routes->Access(i).GetPath(),
 			g_colorSet->GetPlayerColor(route.GetOwner()),
 			g_colorSet->GetColor(COLOR_BLACK));
+		    }
 
 #if 0
 
@@ -100,16 +104,20 @@ void TradePool::Draw(aui_Surface* surface)
 			if (m_all_routes->Access(i).GetPathSelectionState() == k_TRADEROUTE_SELECTED_PATH)
 			{
 
+			if(route.SeenBy(g_selected_item->GetVisiblePlayer())){
 				DrawTradeRoute(surface, (DynamicArray<MapPoint>*)m_all_routes->Access(i).GetSelectedPath(),
 					g_colorSet->GetColor(COLOR_SELECT_1),
 					g_colorSet->GetColor(COLOR_BLACK));
+			    }
 			}
 			else
 			{
 
+			if(route.SeenBy(g_selected_item->GetVisiblePlayer())){
 				DrawTradeRoute(surface, (DynamicArray<MapPoint>*)m_all_routes->Access(i).GetSelectedPath(),
 					g_colorSet->GetColor(COLOR_RED),
 					g_colorSet->GetColor(COLOR_BLACK));
+			    }
 			}
 		}
 #endif
