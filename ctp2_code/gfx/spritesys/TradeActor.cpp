@@ -271,7 +271,7 @@ void TradeActor::Draw(const Vision *tileLocalVision)
 	uint16			flags = k_DRAWFLAGS_NORMAL;
 	Pixel16			color = 0x0000;
 
-	if(tileLocalVision->IsExplored(m_currentPos) && g_tiledMap->GetLocalVision()->IsVisible(m_currentPos))
+	if(tileLocalVision->IsExplored(m_currentPos))
 	{
 		POINT	hotPoint = m_goodSpriteGroup->GetHotPoint(m_curGoodAction);
 		double	scale = g_tiledMap->GetScale();
