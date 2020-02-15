@@ -179,19 +179,9 @@ uint32 TradeRoute::GetColor() const
 	return GetData()->GetColor();
 }
 
-uint32 TradeRoute::GetOutlineColor() const
-{
-	return GetData()->GetOutlineColor();
-}
-
 void TradeRoute::SetColor( uint32 color )
 {
 	AccessData()->SetColor(color);
-}
-
-void TradeRoute::SetOutlineColor( uint32 color )
-{
-	AccessData()->SetOutlineColor(color);
 }
 
 void TradeRoute::ReturnPath(const PLAYER_INDEX owner, DynamicArray<MapPoint> &waypoints,

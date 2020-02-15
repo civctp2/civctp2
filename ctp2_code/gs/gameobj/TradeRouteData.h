@@ -68,7 +68,7 @@ private:
 	sint8 m_isActive;
 
 	uint32	m_color;
-	uint32	m_outline;
+	uint32	m_seenBy;
 
 	sint32	m_selectedIndex;
 
@@ -120,9 +120,7 @@ public:
 	PLAYER_INDEX GetPayingFor() const { return m_payingFor; }
 
 	uint32 GetColor() const { return m_color; }
-	uint32 GetOutlineColor() const { return m_outline; }
 	void SetColor( uint32 color ) { m_color = color; }
-	void SetOutlineColor( uint32 color ) { m_outline = color; }
 
 	void SetSource(Unit source);
 	void SetDestination(Unit dest);

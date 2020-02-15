@@ -90,7 +90,7 @@ void TradePool::Draw(aui_Surface* surface)
 
 		DrawTradeRoute(surface, (DynamicArray<MapPoint>*)m_all_routes->Access(i).GetPath(),
 			g_colorSet->GetPlayerColor(route.GetOwner()),
-			(uint16)route.GetOutlineColor());
+			g_colorSet->GetColor(COLOR_BLACK));
 
 #if 0
 

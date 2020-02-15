@@ -51,7 +51,7 @@ void NetTradeRoute::Packetize(uint8 *buf, uint16 & size)
 	PUSHBYTE(m_routeData->m_crossesWater);
 	PUSHBYTE(m_routeData->m_isActive);
 	PUSHLONG(m_routeData->m_color);
-	PUSHLONG(m_routeData->m_outline);
+	PUSHLONG(m_routeData->m_seenBy);
 	PUSHLONG(m_routeData->m_gold_in_return);
 
 	PUSHLONG((uint32)(m_routeData->m_sourceCity));
@@ -110,7 +110,7 @@ void NetTradeRoute::Unpacketize(uint16 id, uint8 *buf, uint16 size)
 	PULLBYTE(m_routeData->m_crossesWater);
 	PULLBYTE(m_routeData->m_isActive);
 	PULLLONG(m_routeData->m_color);
-	PULLLONG(m_routeData->m_outline);
+	PULLLONG(m_routeData->m_seenBy);
 
 	PULLLONG(m_routeData->m_gold_in_return);
 

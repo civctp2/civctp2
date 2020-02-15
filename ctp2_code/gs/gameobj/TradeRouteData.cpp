@@ -75,7 +75,7 @@ TradeRouteData::TradeRouteData
     m_crossesWater                  (false),
     m_isActive                      (0),
     m_color                         (g_colorSet->GetColor(COLOR_YELLOW)),
-    m_outline                       (g_colorSet->GetColor(COLOR_BLACK)),
+    m_seenBy                        (0),
     m_selectedIndex                 (0),
     m_valid                         (false),
     m_accumilatedTimesPirated       (0),
@@ -367,7 +367,7 @@ TradeRouteData::Serialize(CivArchive &archive)
 		archive.PutSINT32(m_crossesWater) ;
 		archive.PutSINT8(m_isActive);
 		archive.PutUINT32(m_color);
-		archive.PutUINT32(m_outline);
+		archive.PutUINT32(m_seenBy);
 		archive.PutSINT32(m_selectedIndex);
 		m_piratingArmy.Serialize(archive);
 		archive.PutSINT8(m_valid);
@@ -411,7 +411,7 @@ TradeRouteData::Serialize(CivArchive &archive)
 		m_crossesWater = (BOOL)(archive.GetSINT32()) ;
 		m_isActive = archive.GetSINT8();
 		m_color = archive.GetUINT32();
-		m_outline = archive.GetUINT32();
+		m_seenBy = archive.GetUINT32();
 		m_selectedIndex = archive.GetSINT32();
 		m_piratingArmy.Serialize(archive);
 		m_valid = archive.GetSINT8(); // Split former BOOL m_valid, so that we can save something in the gap

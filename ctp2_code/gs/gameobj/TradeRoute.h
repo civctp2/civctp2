@@ -68,9 +68,7 @@ public:
 	BOOL CrossesWater() const;
 
 	uint32 GetColor() const;
-	uint32 GetOutlineColor() const;
 	void SetColor( uint32 color );
-	void SetOutlineColor( uint32 color );
 
 	void ClearSelectedPath();
 	void GenerateSelectedPath(const MapPoint &pos);
