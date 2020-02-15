@@ -106,6 +106,8 @@ TradeRouteData::TradeRouteData
 			 sPos.x, sPos.y, dPos.x, dPos.y));
 
 	m_valid = GeneratePath(); // determins cost of trade-units
+	AddSeenByBit(owner); // route seen by owner in any case, currently paying_for == owner see https://github.com/civctp2/civctp2/blob/67954be9d07cfe5944dec129d0a5f21114a9682b/ctp2_code/gs/gameobj/Player.cpp#L3071
+	AddSeenByBit(m_destinationCity->GetOwner()); // route seen by receiver in any case, currently paying_for != m_destinationCity->GetOwner() see https://github.com/civctp2/civctp2/blob/67954be9d07cfe5944dec129d0a5f21114a9682b/ctp2_code/gs/gameobj/Player.cpp#L3071
 
 	DPRINTF(k_DBG_GAMESTATE, ("Created Trade Route from %s to %s, cost=%d, valid=%i\n",
 	                          m_sourceCity->GetCityData()->GetName(),
