@@ -141,6 +141,25 @@ TradeRouteData::~TradeRouteData()
 	delete m_astarPath;
 }
 
+void TradeRouteData::AddSeenByBit(sint32 player)
+{
+	if(player >= 0 && player < k_MAX_PLAYERS) {
+		m_seenBy |= (1 << player);
+	}
+}
+
+void TradeRouteData::RemoveSeenByBit(sint32 player)
+{
+	if(player >= 0 && player < k_MAX_PLAYERS) {
+		m_seenBy &= ~(1 << player);
+	}
+}
+
+bool TradeRouteData::SeenBy(sint32 player)
+{
+	return m_seenBy & (1 << player);
+}
+
 void TradeRouteData::RemoveFromCells()
 {
 	TradeRoute route(m_id);

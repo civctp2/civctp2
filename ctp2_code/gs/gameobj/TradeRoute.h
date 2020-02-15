@@ -70,6 +70,10 @@ public:
 	uint32 GetColor() const;
 	void SetColor( uint32 color );
 
+	void AddSeenByBit(sint32 player);
+	void RemoveSeenByBit(sint32 player);
+	bool SeenBy(sint32 player);
+
 	void ClearSelectedPath();
 	void GenerateSelectedPath(const MapPoint &pos);
 	sint32 AddSelectedWayPoint(const MapPoint &pos);

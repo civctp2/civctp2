@@ -122,6 +122,10 @@ public:
 	uint32 GetColor() const { return m_color; }
 	void SetColor( uint32 color ) { m_color = color; }
 
+	void AddSeenByBit(sint32 player);
+	void RemoveSeenByBit(sint32 player);
+	bool SeenBy(sint32 player);
+
 	void SetSource(Unit source);
 	void SetDestination(Unit dest);
 

@@ -184,6 +184,21 @@ void TradeRoute::SetColor( uint32 color )
 	AccessData()->SetColor(color);
 }
 
+void TradeRoute::AddSeenByBit( sint32 player )
+{
+	AccessData()->AddSeenByBit(player);
+}
+
+void TradeRoute::RemoveSeenByBit( sint32 player )
+{
+	AccessData()->RemoveSeenByBit(player);
+}
+
+bool TradeRoute::SeenBy( sint32 player )
+{
+	return GetData()->SeenBy(player);
+}
+
 void TradeRoute::ReturnPath(const PLAYER_INDEX owner, DynamicArray<MapPoint> &waypoints,
 							DynamicArray<MapPoint> &fullpath,
 							double &cost)
