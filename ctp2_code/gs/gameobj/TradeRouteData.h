@@ -65,7 +65,7 @@ private:
 	sint32 m_sourceResource;
 	BOOL m_passesThrough[k_MAX_PLAYERS];
 	BOOL m_crossesWater;
-	bool m_isActive;
+	sint8 m_isActive;
 
 	uint32	m_color;
 	uint32	m_outline;
@@ -171,9 +171,9 @@ public:
 	sint32 GetPathSelectionState() const { return m_path_selection_state; }
 	void SetPathSelectionState(sint32 state) { m_path_selection_state = state; }
 
-	BOOL IsActive() const { return m_isActive; }
-	void Activate() { m_isActive = TRUE; }
-	void Deactivate() { m_isActive = FALSE; }
+	BOOL IsActive() const { return m_isActive == 1; }
+	void Activate() { m_isActive = 1; }
+	void Deactivate() { m_isActive = 0; }
 
 	BOOL IsValid() const { return m_valid; }
 

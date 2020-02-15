@@ -73,7 +73,7 @@ TradeRouteData::TradeRouteData
     m_sourceRouteType               (sourceType),
     m_sourceResource                (sourceResource),
     m_crossesWater                  (false),
-    m_isActive                      (false),
+    m_isActive                      (0),
     m_color                         (g_colorSet->GetColor(COLOR_YELLOW)),
     m_outline                       (g_colorSet->GetColor(COLOR_BLACK)),
     m_selectedIndex                 (0),
