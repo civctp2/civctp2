@@ -4413,11 +4413,6 @@ void CityData::CalculateTradeRoutes(bool projectedOnly)
 		}
 		if(!projectedOnly)
 		{
-			if(!route.IsActive())
-			{
-				route.Activate();
-				g_director->TradeActorCreate(route);
-			}
 			route.BeginTurn();
 		}
 
@@ -4484,12 +4479,6 @@ void CityData::CalculateTradeRoutes(bool projectedOnly)
 					g_player[m_owner]->SubGold(route.GetGoldInReturn()); // remove gold from receiver
 					g_player[route.GetSource().GetOwner()]->AddGold(route.GetGoldInReturn()); // give gold to sender
 				}
-			}
-
-			if(!route.IsActive())
-			{
-				route.Activate();
-				g_director->TradeActorCreate(route);
 			}
 		}
 
