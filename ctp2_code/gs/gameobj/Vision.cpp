@@ -547,7 +547,7 @@ void Vision::DoFillCircleOp(const MapPoint &posRC, CIRCLE_OP op,
 	uint16 *	entry	= &m_array[pos.x][pos.y];
 	switch(op)
 	{
-		case CIRCLE_OP_ADD:
+		case CIRCLE_OP_ADD:{ // local scope is essential, without seen tile do not get converted to unseen tiles
 			if(!((*entry) & k_EXPLORED_BIT))
 			{
 				redraw = true;
@@ -561,6 +561,22 @@ void Vision::DoFillCircleOp(const MapPoint &posRC, CIRCLE_OP op,
 					delete ucell.m_unseenCell;
 				}
 			}
+
+			//// reveal trade route state
+			Cell *cell = g_theWorld->GetCell(iso);
+			for(sint32 i = 0; i < cell->GetNumTradeRoutes(); i++){
+			    if(cell->GetTradeRoute(i).IsValid()){
+				if(cell->GetTradeRoute(i).IsActive()){
+				    cell->GetTradeRoute(i).AddSeenByBit(m_owner);
+				    }
+				else { // either inactive or cancelled but not yet deleted (because m_seenBy not yet 0)
+				    cell->GetTradeRoute(i).RemoveSeenByBit(m_owner);
+				    }
+				}
+			    else { // in case route is invalid (should not happen)
+				cell->GetTradeRoute(i).RemoveSeenByBit(m_owner);
+				}
+			    }
 
 			*entry = (*entry + 1) | k_EXPLORED_BIT;
 			if(redraw && removeadd)
@@ -576,7 +592,8 @@ void Vision::DoFillCircleOp(const MapPoint &posRC, CIRCLE_OP op,
 				redraw = false;
 			}
 			break;
-		case CIRCLE_OP_SUBTRACT:
+		}
+		case CIRCLE_OP_SUBTRACT:{
 
 			Assert(((*entry) & k_VISIBLE_REFERENCE_MASK) != 0);
 
@@ -600,8 +617,8 @@ void Vision::DoFillCircleOp(const MapPoint &posRC, CIRCLE_OP op,
 				}
 			}
 			break;
-		case CIRCLE_OP_ADD_RADAR:
-		{
+		}
+		case CIRCLE_OP_ADD_RADAR:{
 			CellUnitList army;
 			g_theWorld->GetArmy(iso, army);
 			sint32 n = army.Num();
@@ -611,15 +628,17 @@ void Vision::DoFillCircleOp(const MapPoint &posRC, CIRCLE_OP op,
 			}
 			break;
 		}
-		case CIRCLE_OP_MERGE:
+		case CIRCLE_OP_MERGE:{
 			if(MergePoint(pos.x, pos.y))
 			{
 				redraw = true;
 			}
 			break;
-		default:
+		}
+		default:{
 			Assert(false);
 			break;
+		}
 	}
 
 	if(g_tiledMap && redraw && m_amOnScreen)
