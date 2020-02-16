@@ -286,6 +286,7 @@ bool TradeRouteData::GeneratePath()
 	return true;
 }
 
+/* unused
 void TradeRouteData::SetPath(DynamicArray<MapPoint> &fullpath,
                              DynamicArray<MapPoint> &waypoints)
 {
@@ -315,6 +316,7 @@ void TradeRouteData::BeginTurn()
 		m_setWayPoints.Clear();
 	}
 }
+*/
 
 void TradeRouteData::ReturnPath
 (
@@ -407,8 +409,8 @@ TradeRouteData::Serialize(CivArchive &archive)
 		m_selectedWayPoints.Serialize(archive);
 		m_astarPath->Serialize(archive);
 
-		m_setPath.Serialize(archive);
-		m_setWayPoints.Serialize(archive);
+		m_setPath.Serialize(archive); // unused
+		m_setWayPoints.Serialize(archive); // unused
 
 		uint8 hasChild;
 		hasChild = m_lesser != NULL;
@@ -450,8 +452,8 @@ TradeRouteData::Serialize(CivArchive &archive)
 		m_selectedPath.Serialize(archive);
 		m_selectedWayPoints.Serialize(archive);
 		m_astarPath->Serialize(archive);
-		m_setPath.Serialize(archive);
-		m_setWayPoints.Serialize(archive);
+		m_setPath.Serialize(archive); // unused
+		m_setWayPoints.Serialize(archive); // unused
 
 		uint8 hasChild;
 		archive >> hasChild;

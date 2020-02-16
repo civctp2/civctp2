@@ -4411,10 +4411,6 @@ void CityData::CalculateTradeRoutes(bool projectedOnly)
 			}
 			continue;
 		}
-		if(!projectedOnly)
-		{
-			route.BeginTurn();
-		}
 
 		route.GetSourceResource(routeType, routeResource);
 

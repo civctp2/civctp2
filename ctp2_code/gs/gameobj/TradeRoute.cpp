@@ -206,11 +206,12 @@ void TradeRoute::ReturnPath(const PLAYER_INDEX owner, DynamicArray<MapPoint> &wa
 	AccessData()->ReturnPath(owner, waypoints, fullpath, cost);
 }
 
-void TradeRoute::SetPath(DynamicArray<MapPoint> &fullpath,
-						 DynamicArray<MapPoint> &waypoints)
+/* unused
+void TradeRoute::SetPath(DynamicArray<MapPoint> &fullpath, DynamicArray<MapPoint> &waypoints)
 {
 	AccessData()->SetPath(fullpath, waypoints);
 }
+*/
 
 void TradeRoute::GenerateSelectedPath(const MapPoint &pos)
 {
@@ -267,10 +268,12 @@ void TradeRoute::SetPathSelectionState( sint32 state )
 	AccessData()->SetPathSelectionState(state);
 }
 
+/* unused
 void TradeRoute::BeginTurn()
 {
 	AccessData()->BeginTurn();
 }
+*/
 
 sint32 TradeRoute::GetGoldInReturn() const
 {

@@ -89,8 +89,8 @@ private:
 	DynamicArray<MapPoint> m_selectedPath;
 	DynamicArray<MapPoint> m_selectedWayPoints;
 
-	DynamicArray<MapPoint> m_setPath;
-	DynamicArray<MapPoint> m_setWayPoints;
+	DynamicArray<MapPoint> m_setPath; // unused
+	DynamicArray<MapPoint> m_setWayPoints; // unused
 
 	Path *m_astarPath;
 
@@ -157,9 +157,10 @@ public:
 	void ReturnPath(const PLAYER_INDEX owner, DynamicArray<MapPoint> &waypoints,
 					DynamicArray<MapPoint> &fullpath,
 					double &cost);
-	void SetPath(DynamicArray<MapPoint> &fullpath,
-				 DynamicArray<MapPoint> &waypoints);
+/* unused
+	void SetPath(DynamicArray<MapPoint> &fullpath, DynamicArray<MapPoint> &waypoints);
 	void BeginTurn();
+*/
 
 	void ClearSelectedPath();
 	void GenerateSelectedPath(const MapPoint &pos);

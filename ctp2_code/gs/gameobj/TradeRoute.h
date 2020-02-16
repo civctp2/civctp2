@@ -101,10 +101,10 @@ public:
 	void ReturnPath(const PLAYER_INDEX owner, DynamicArray<MapPoint> &waypoints,
 	                DynamicArray<MapPoint> &fullpath,
 	                double &cost);
-	void SetPath(DynamicArray<MapPoint> &fullpath,
-	             DynamicArray<MapPoint> &waypoints);
-
+/* unused
+	void SetPath(DynamicArray<MapPoint> &fullpath,DynamicArray<MapPoint> &waypoints);
 	void BeginTurn();
+*/
 
 	void DontAdjustPointsWhenKilled();
 };
