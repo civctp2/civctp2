@@ -174,6 +174,7 @@ void TurnYearStatus::BuildTurnLengthOverride()
 				s_pTurnLengthOverride = new sTurnLengthOverride[count];
 				s_turnLengthOverrideSize = count;
 				rewind(fp);
+
 				for (int i = 0; i < count; i++)
 				{
 					fscanf(fp, "%d,%[^'\n']\n", &(s_pTurnLengthOverride[i].turn), &dummy);
@@ -219,7 +220,6 @@ void TurnYearStatus::UpdatePlayer(PLAYER_INDEX player)
 
 void TurnYearStatus::Update()
 {
-
 	switch(m_displayType)
 	{
 		case DISPLAY_YEAR:
@@ -266,11 +266,10 @@ void TurnYearStatus::TurnYearStatusActionCallback(aui_Control *control, uint32 a
 }
 
 AUI_ERRCODE TurnYearStatus::DrawDougsProgress(ctp2_Static *control,
-											  aui_Surface *surface,
-											  RECT &rect,
-											  void *cookie)
+                                              aui_Surface *surface,
+                                              RECT &rect,
+                                              void *cookie)
 {
-
 	if(g_selected_item == NULL)
 		return AUI_ERRCODE_OK;
 
@@ -279,12 +278,14 @@ AUI_ERRCODE TurnYearStatus::DrawDougsProgress(ctp2_Static *control,
 		return AUI_ERRCODE_OK;
 	}
 
-	if(!g_player[g_selected_item->GetVisiblePlayer()]) {
+	if(!g_player[g_selected_item->GetVisiblePlayer()])
+	{
 		return AUI_ERRCODE_OK;
 	}
 
 	primitives_PaintRect16(surface, &rect, g_colorSet->GetColor(COLOR_BLACK));
-	if(g_selected_item->GetVisiblePlayer() != g_selected_item->GetCurPlayer()) {
+	if(g_selected_item->GetVisiblePlayer() != g_selected_item->GetCurPlayer())
+	{
 		sint32 p;
 
 		sint32 alive = 0;
@@ -293,48 +294,65 @@ AUI_ERRCODE TurnYearStatus::DrawDougsProgress(ctp2_Static *control,
 		sint32 startp = g_selected_item->GetVisiblePlayer() + 1;
 		if(startp >= k_MAX_PLAYERS)
 			startp = 0;
-		for(p = startp; p != g_selected_item->GetVisiblePlayer(); p++) {
-			if(g_player[p]) {
+
+		for(p = startp; p != g_selected_item->GetVisiblePlayer(); p++)
+		{
+			if(g_player[p])
+			{
 				alive++;
 			}
-			if(p == g_selected_item->GetCurPlayer()) {
+
+			if(p == g_selected_item->GetCurPlayer())
+			{
 				progress = alive;
 			}
-			if(p == k_MAX_PLAYERS - 1) {
 
+			if(p == k_MAX_PLAYERS - 1)
+			{
 				p = -1;
 			}
 		}
 
-		if(alive > 0) {
+		if(alive > 0)
+		{
 			RECT tmp = rect;
 			sint32 width = tmp.right - tmp.left;
 			sint32 displayWidth = (width * progress) / alive;
-			if(displayWidth > width) {
+			if(displayWidth > width)
+			{
 				displayWidth = width;
 			}
+
 			tmp.right = tmp.left + displayWidth;
 			primitives_PaintRect16(surface, &tmp, g_colorSet->GetPlayerColor(g_selected_item->GetCurPlayer()));
 		}
 	}
-	else {// use progress bar to indicate how many units have got their order for the trun
-	    RECT tmp = rect;
-	    sint32 width = tmp.right - tmp.left;
-	    sint32 displayWidth = static_cast<sint32>(width * g_selected_item->UnitsDoneRatio());
-	    if(displayWidth > width) {
-		displayWidth = width;
+	else // Use the progress bar to indicate how many units have got their orders for this turn
+	{
+		RECT tmp = rect;
+		sint32 width = tmp.right - tmp.left;
+		sint32 displayWidth = static_cast<sint32>(width * g_selected_item->UnitsDoneRatio());
+
+		if(displayWidth > width)
+		{
+			displayWidth = width;
 		}
-	    tmp.right = tmp.left + displayWidth;
-	    primitives_PaintRect16(surface, &tmp, g_colorSet->GetPlayerColor(g_selected_item->GetCurPlayer()));
-	    
-	    tmp = rect;
-	    width = tmp.right - tmp.left;
-	    displayWidth = static_cast<sint32>(width * g_selected_item->UnitsBusyRatio());
-	    if(displayWidth > width) {
-		displayWidth = width;
+
+		tmp.right = tmp.left + displayWidth;
+		primitives_PaintRect16(surface, &tmp, g_colorSet->GetPlayerColor(g_selected_item->GetCurPlayer()));
+
+		tmp = rect;
+		width = tmp.right - tmp.left;
+		displayWidth = static_cast<sint32>(width * g_selected_item->UnitsBusyRatio());
+
+		if(displayWidth > width)
+		{
+			displayWidth = width;
 		}
-	    tmp.right = tmp.left + displayWidth;
-	    primitives_PaintRect16(surface, &tmp, g_colorSet->GetDarkPlayerColor(g_selected_item->GetCurPlayer())); // use FOW color for units with continuing orders
-	    }
+
+		tmp.right = tmp.left + displayWidth;
+		primitives_PaintRect16(surface, &tmp, g_colorSet->GetDarkPlayerColor(g_selected_item->GetCurPlayer())); // use FOW color for units with continuing orders
+	}
+
 	return AUI_ERRCODE_OK;
 }
