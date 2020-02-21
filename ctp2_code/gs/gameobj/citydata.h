@@ -686,7 +686,6 @@ public:
 	bool WasImprovementBuilt(void) const { return m_improvementWasBuilt; }
 	void IndicateTerrainImprovementBuilt(void) { m_terrainImprovementWasBuilt = true; }
 	bool WasTerrainImprovementBuilt(void) const { return m_terrainImprovementWasBuilt; }
-	void IndicateHappinessAttacked(void) { m_happinessAttackedBy >= 0; }
 	bool WasHappinessAttacked(void) const;
 	void HappinessAttackedBy(sint32 player);
 	sint32 GetHappinessAttackedBy() const { return m_happinessAttackedBy;}
