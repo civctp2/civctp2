@@ -320,7 +320,7 @@ AUI_ERRCODE TurnYearStatus::DrawDougsProgress(ctp2_Static *control,
 	else {// use progress bar to indicate how many units have got their order for the trun
 	    RECT tmp = rect;
 	    sint32 width = tmp.right - tmp.left;
-	    sint32 displayWidth = width * g_selected_item->UnitsDoneRatio();
+	    sint32 displayWidth = static_cast<sint32>(width * g_selected_item->UnitsDoneRatio());
 	    if(displayWidth > width) {
 		displayWidth = width;
 		}
@@ -329,7 +329,7 @@ AUI_ERRCODE TurnYearStatus::DrawDougsProgress(ctp2_Static *control,
 	    
 	    tmp = rect;
 	    width = tmp.right - tmp.left;
-	    displayWidth = width * g_selected_item->UnitsBusyRatio();
+	    displayWidth = static_cast<sint32>(width * g_selected_item->UnitsBusyRatio());
 	    if(displayWidth > width) {
 		displayWidth = width;
 		}

@@ -7448,7 +7448,7 @@ sint32 Player::GetKnowledgeStrength() const
 
 sint32 Player::GetMilitaryStrength() const
 {
-	sint32 totalStrength = 0;
+	double totalStrength = 0;
 	for(sint32 i = 0; i < m_all_units->Num(); i++)
 	{
 		if(m_all_units->Access(i).GetAttack() > 0)
@@ -7458,7 +7458,7 @@ sint32 Player::GetMilitaryStrength() const
 		}
 	}
 
-	return totalStrength;
+	return static_cast<sint32>(totalStrength);
 }
 
 sint32 Player::GetTradeStrength() const
