@@ -60,7 +60,11 @@ First, you need the original game files of CTP2.
 If you have the CD version, it's better to install it on a Windows machine / using Wine and copy over the files. You need the folders `ctp2_data`, `ctp2_program` and `Scenarios`.
 
 If you have the GoG version, use `innoextract` to extract all the required files (you can `sudo apt install innoextract` if you need) from the `setup_call_to_power2_2.0.0.13.exe` windows installer.
-For example `innoextract -m -I app  setup_call_to_power2_2.0.0.13.exe` will extract the `app`folder that contains all the game files, which are in the same subfolders as in the CD version: `ctp2_data`, `ctp2_program` and `Scenarios`.
+For example `innoextract -m -I app  setup_call_to_power2_2.0.0.13.exe` will extract the `app` folder that contains all the game files, which are in the same subfolders as in the CD version: `ctp2_data`, `ctp2_program` and `Scenarios`. GOG' version of `ctp2_data` folder needs some files deleted to be fully compatible with AE:
+```bash
+rm ctp2_data/default/aidata/{AdvanceLists,BuildListSequences,UnitBuildLists}.txt
+rm ctp2_data/english/uidata/layouts/*
+```
 
 Put those folder in you `home` path or anywhere else, for example `~/ctp2`
 
