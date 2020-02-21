@@ -25,12 +25,12 @@
 //
 //----------------------------------------------------------------------------
 
-#define k_CRITMSG            "logs" FILE_SEP "usercritmsgs.txt"
-
 #include "c3.h"
 #include "c3files.h"
 
 #include "CriticalMessagesPrefs.h"
+
+#define k_CRITMSG            "usercritmsgs.txt"
 
 //----------------------------------------------------------------------------
 //
