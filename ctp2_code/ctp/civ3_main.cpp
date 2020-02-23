@@ -1698,12 +1698,16 @@ int WINAPI CivMain(HINSTANCE hInstance, HINSTANCE hPrevInstance, PSTR szCmdLine,
 #ifdef __AUI_USE_SDL__
 		SDL_Event event;
 		while (!g_letUIProcess) { // There are breaks, too ;)
-			SDL_PumpEvents();
-			int n = SDL_PeepEvents(&event, 1, SDL_GETEVENT,
+			// Throttle the loop a bit to prevent 100% CPU usage in idle state.
+			// FIXME: implement blocking loop with SDL_WaitEvent().
+			if (!SDL_PollEvent(NULL)) {
+				SDL_Delay(30);
+				break;
+			}
 
+			int n = SDL_PeepEvents(&event, 1, SDL_GETEVENT,
                      ~(SDL_EVENTMASK(SDL_MOUSEMOTION) | SDL_EVENTMASK(SDL_MOUSEBUTTONDOWN) | SDL_EVENTMASK(SDL_MOUSEBUTTONUP)));
 			if (0 > n) {
-                            //fprintf(stderr, "[CivMain] PeepEvents failed: %s\n", SDL_GetError());
                             fprintf(stderr, "%s L%d: SDL_PeepEvents: Still events stored! Error?: %s\n", __FILE__, __LINE__, SDL_GetError());
 
 				break;
