@@ -695,7 +695,7 @@ bool Cell::OwnsTradeRoute(const PLAYER_INDEX &owner) const
 	return false;
 }
 
-sint32 Cell::GetNumTradeRoutes() const
+sint32 Cell::GetNumTradeRoutes() const // returns # of trade routes not regarding route.IsActive(), this is necessary for #256 to work!
 {
 	if(!(m_env & k_BIT_MOVEMENT_TYPE_TRADE))
 		return 0;
@@ -708,7 +708,7 @@ sint32 Cell::GetNumTradeRoutes() const
 	return c;
 }
 
-TradeRoute Cell::GetTradeRoute(sint32 index) const
+TradeRoute Cell::GetTradeRoute(sint32 index) const // returns trade route not regarding route.IsActive(), this is necessary for #256 to work!
 {
 	if (m_objects)
 	{

@@ -899,7 +899,7 @@ SFN_ERROR Slic_TradeRoutes::Call(SlicArgList *args)
 		return SFN_ERROR_TYPE_ARGS;
 	}
 
-	m_result.m_int = g_player[p]->GetNumTradeRoutes();
+	m_result.m_int = g_player[p]->GetNumTradeRoutes(); // GetNumTradeRoutes from Player is expected to return only # of active routes (i.e. no need for checks on route.IsActive())
 	return SFN_ERROR_OK;
 }
 

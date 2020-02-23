@@ -1609,30 +1609,34 @@ void SelectedItem::SelectTradeRoute( const MapPoint &pos )
 
 	for ( sint32 i = 0 ; i < tradeNum ; i++ )
 	{
-		ud = cell->GetTradeRoute(i).GetSource().GetData();
+		TradeRoute route = cell->GetTradeRoute(i);
+		if(!route.IsActive()) // skip deactivated routes (only exist for drawing until revisited, see #256)
+		    continue;
+
+		ud = route.GetSource().GetData();
 		cd = ud->GetCityData();
 
 		if (cd->GetOwner() == m_current_player)
 		{
-			if (!cell->GetTradeRoute(i).InitSelectedData())
+			if (!route.InitSelectedData())
 			{
-				if (cell->GetTradeRoute(i).IsPosInPath(pos))
+				if (route.IsPosInPath(pos))
 				{
 					break;
 				}
-				else if (cell->GetTradeRoute(i).IsPosInSelectedPath(pos))
+				else if (route.IsPosInSelectedPath(pos))
 				{
-					cell->GetTradeRoute(i).SetPathSelectionState(k_TRADEROUTE_SELECTED_PATH);
+					route.SetPathSelectionState(k_TRADEROUTE_SELECTED_PATH);
 				}
 			}
 			else
 			{
-				cell->GetTradeRoute(i).SetPathSelectionState(k_TRADEROUTE_ORIGINAL_PATH);
+				route.SetPathSelectionState(k_TRADEROUTE_ORIGINAL_PATH);
 			}
 
 			g_tradeSelectedState = true;
 
-			cell->GetTradeRoute(i).AddSelectedWayPoint(pos);
+			route.AddSelectedWayPoint(pos);
 
 			TradeRoute tradeRouteItem = cell->GetTradeRoute(i);
 			g_grabbedItem->SetGrabbedItem(&tradeRouteItem);

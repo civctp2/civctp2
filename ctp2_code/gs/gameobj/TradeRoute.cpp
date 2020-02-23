@@ -44,10 +44,10 @@ void TradeRoute::RemoveAllReferences(CAUSE_KILL_TRADE_ROUTE cause)
 
 
 	if(g_theUnitPool->IsValid(source))
-		source.DelTradeRoute(*this);
+		source.DelTradeRoute(*this); // remove route from CityData (m_tradeSourceList), essential because routes of m_tradeSourceList are expected to be active (i.e. no checks on route.IsActive())
 	if(g_theUnitPool->IsValid(dest))
-		dest.DelTradeRoute(*this);
-
+		dest.DelTradeRoute(*this); // remove route from CityData (m_tradeDestinationList), essential because routes of m_tradeDestinationList are expected to be active (i.e. no checks on route.IsActive())
+	
 	if(g_theUnitPool->IsValid(source) && g_theUnitPool->IsValid(dest)) {
 		if(source.GetOwner() != dest.GetOwner()) {
 			if(cause == CAUSE_KILL_TRADE_ROUTE_SENDER_KILLED) {

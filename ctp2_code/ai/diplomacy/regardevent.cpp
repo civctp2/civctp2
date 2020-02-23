@@ -251,6 +251,9 @@ STDEHANDLER(StopPiracyRegardEvent)
 	if(!args->GetTradeRoute(0, route))
 		return GEV_HD_Continue;
 
+	if(!route.IsActive()) // skip deactivated routes (only exist for drawing until revisited, see #256)
+		return GEV_HD_Continue;
+	    
 	if(!args->GetArmy(0, army))
 		return GEV_HD_Continue;
 

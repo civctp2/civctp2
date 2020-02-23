@@ -176,7 +176,7 @@ public:
 
 	BOOL IsActive() const { return m_isActive == 1; }
 	void Activate() { m_isActive = 1; }
-	void Deactivate() { m_isActive = 0; }
+	void Deactivate() { m_isActive = 0; m_piratingArmy = 0; } // deactivated route cannot be pirated
 
 	BOOL IsValid() const { return m_valid; }
 

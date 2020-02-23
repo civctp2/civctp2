@@ -7245,7 +7245,7 @@ sint32 Player::GetNumTradeRoutes() const
 	sint32 routes = 0;
 
 	for(sint32 i = 0; i < m_all_cities->Num(); i++) {
-		routes += m_all_cities->Access(i).GetNumTradeRoutes();
+		routes += m_all_cities->Access(i).GetNumTradeRoutes(); // GetNumTradeRoutes from CityData based on m_tradeSourceList and m_tradeDestinationList and are expected to hold only active routes (i.e. no need for checks on route.IsActive())
 	}
 	return routes;
 }

@@ -4817,6 +4817,9 @@ void CityData::AddTradeRoute(TradeRoute &route, bool fromNetwork)
 	Assert((route.GetSource() == m_home_city) ||
 		   (route.GetDestination() == m_home_city));
 
+	if(!route.IsActive()) // skip deactivated routes, routes of m_tradeSourceList and m_tradeDestinationList are expected to be active (i.e. no checks on route.IsActive())
+	    return;
+
 	if(route.GetSource() == m_home_city)
 	{
 		m_tradeSourceList.Insert(route);
@@ -11686,7 +11689,7 @@ bool CityData::CityIsOnTradeRoute()
 	{
 		for(sint32 i = 0; i < cell->GetNumTradeRoutes(); i++)
 		{
-			if(cell->GetTradeRoute(i).IsValid())
+			if(cell->GetTradeRoute(i).IsActive() && cell->GetTradeRoute(i).IsValid()) // only count active (and valid) routes
 			{
 				return true;
 			}
@@ -11709,6 +11712,9 @@ void CityData::GiveTradeRouteGold()
 			if(cell->GetTradeRoute(i).IsValid())
 			{
 				TradeRoute route = cell->GetTradeRoute(i);
+				if(!route.IsActive()) // skip deactivated routes (only exist for drawing until revisited, see #256)
+				    continue;
+
 				if((route.GetSource().GetOwner() != m_owner)
 				&&(route.GetDestination().GetOwner() != m_owner)
 				){

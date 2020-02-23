@@ -2384,6 +2384,9 @@ bool UnitData::CanInterceptTrade() const
 	for (sint32 i = cell->GetNumTradeRoutes() - 1; i >= 0; i--)
 	{
 		TradeRoute route = cell->GetTradeRoute(i);
+		if(!route.IsActive()) // skip deactivated routes (only exist for drawing until revisited, see #256)
+		    continue;
+
 		PLAYER_INDEX source_owner = route.GetOwner();
 //		PLAYER_INDEX dest_owner = route.GetDestination().GetOwner();
 		if ( source_owner == m_owner )
@@ -2417,13 +2420,15 @@ ORDER_RESULT UnitData::InterceptTrade()
 	for(i = cell->GetNumTradeRoutes() - 1; i >= 0; i--)
 	{
 		TradeRoute route = cell->GetTradeRoute(i);
-		if(!g_theTradePool->IsValid(route)) {
+		if(!g_theTradePool->IsValid(route)) { // skip invalid routes (not sure if those can exist)
 			if(g_network.IsClient()) {
 				g_network.RequestResync(RESYNC_BAD_TRADE_ROUTE);
 				return ORDER_RESULT_ILLEGAL;
 			}
 			continue;
 		}
+		if(!route.IsActive()) // skip deactivated routes (only exist for drawing until revisited, see #256)
+		    continue;
 
 		PLAYER_INDEX source_owner = route.GetOwner();
 //		PLAYER_INDEX dest_owner = route.GetDestination().GetOwner();

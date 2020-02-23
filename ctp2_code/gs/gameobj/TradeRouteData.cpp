@@ -621,7 +621,10 @@ sint32 TradeRouteData::GetValue() const
 
 void TradeRouteData::SetPiratingArmy(Army &a)
 {
-	m_piratingArmy = a;
+	if(m_isActive)
+	    m_piratingArmy = a;
+	else
+	    m_piratingArmy = 0; // deactivated route cannot be pirated
 }
 
 Army TradeRouteData::GetPiratingArmy()
@@ -631,5 +634,8 @@ Army TradeRouteData::GetPiratingArmy()
 
 bool TradeRouteData::IsBeingPirated()
 {
-	return m_piratingArmy.IsValid();
+	if(m_isActive)
+	    return m_piratingArmy.IsValid();
+	else
+	    return false; // deactivated route cannot be pirated
 }
