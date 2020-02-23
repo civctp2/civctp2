@@ -4970,7 +4970,7 @@ void CityData::InitBeginTurnVariables()
 {
 	m_capturedThisTurn           = false;
 	m_terrainWasPolluted         = false;
-	m_happinessAttackedBy        = -1;
+	m_happinessAttackedBy        = PLAYER_UNASSIGNED;
 	m_terrainImprovementWasBuilt = false;
 	m_improvementWasBuilt        = false;
 
@@ -6823,7 +6823,7 @@ void CityData::ResetCityOwner(sint32 owner)
 	{
 		m_convertedTo = -1;
 	}
-	m_happinessAttackedBy = -1;
+	m_happinessAttackedBy = PLAYER_UNASSIGNED;
 	m_isInjoined = false;
 
 	m_happy->ClearTimedChanges();

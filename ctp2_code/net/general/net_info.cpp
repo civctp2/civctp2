@@ -978,7 +978,6 @@ NetInfo::Unpacketize(uint16 id, uint8* buf, uint16 size)
 			Assert(g_theUnitPool->IsValid(city));
 			if(g_theUnitPool->IsValid(city)) {
 				city.AddHappyTimer(m_data2, double(-((sint32)m_data3)), HAPPY_REASON_HAPPINESS_ATTACK);
-				city.AccessData()->GetCityData()->IndicateHappinessAttacked();
 			}
 			break;
 		}

@@ -757,8 +757,6 @@ bool CivApp::InitializeAppDB(void)
 
 	g_theProgressWindow->StartCountingTo( 40 );
 
-	MBCHAR	fullpath[_MAX_PATH];
-
 	if (c3files_getfilesize(C3DIR_DIRECT, g_constdb_filename) > 0 && // includes FindFile
 	    g_theConstDB->Parse(C3DIR_DIRECT, g_constdb_filename))
 	{

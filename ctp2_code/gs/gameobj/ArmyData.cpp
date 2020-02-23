@@ -2659,7 +2659,6 @@ ORDER_RESULT ArmyData::CauseUnhappiness(const MapPoint &point, sint32 uindex)
 									  amount));
 	}
 	c.AddHappyTimer(timer, double(-amount), HAPPY_REASON_HAPPINESS_ATTACK);
-	c.AccessData()->GetCityData()->IndicateHappinessAttacked() ;
 	c.AccessData()->GetCityData()->HappinessAttackedBy(m_owner) ;
 
 	if (strcmp(unitName, "UNIT_CYBER_NINJA") == 0) {
