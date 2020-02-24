@@ -92,7 +92,8 @@ static c3_Static			*s_tileSaleV		= NULL;
 static c3_Static			*s_tileGold			= NULL;
 static c3_Static			*s_tileGoldV		= NULL;
 
-static aui_StringTable		*s_stringTable		= NULL;
+static aui_StringTable		*s_stringTable	= NULL;
+static bool s_helptileIsShown = false;
 
 enum { STR_SALE_VALUE=0,STR_NONE=1 };
 
@@ -369,6 +370,8 @@ void helptile_displayData(const MapPoint &p)
 	{
 		g_c3ui->AddWindow(g_helpTileWindow);
 	}
+
+	s_helptileIsShown = true;
 }
 
 void helptile_setPosition(const MapPoint& p)
@@ -383,9 +386,22 @@ void helptile_setPosition(const MapPoint& p)
 	g_helpTileWindow->Move(x,y);
 }
 
-static
-void bExitPress( aui_Control *control, uint32 action, uint32 data, void *cookie )
+bool helptile_isShown(void) { return s_helptileIsShown; }
+
+void helptile_closeWindow(void)
 {
+	Assert(s_helptileIsShown);
+
+  AUI_ERRCODE auiErr;
+  auiErr = g_c3ui->RemoveWindow(g_helpTileWindow->Id());
+  Assert(auiErr == AUI_ERRCODE_OK);
+
+  s_helptileIsShown = false;
+}
+
+static
+void bExitPress(aui_Control *control, uint32 action, uint32 data,
+											 void *cookie) {
 	removeMyWindow(action);
 }
 
@@ -394,13 +410,7 @@ sint32 removeMyWindow(uint32 action)
 {
 	if ( action != (uint32)AUI_BUTTON_ACTION_EXECUTE ) return 0;
 
-	AUI_ERRCODE auiErr;
-#if 1
-	auiErr = g_c3ui->RemoveWindow( g_helpTileWindow->Id() );
-	Assert( auiErr == AUI_ERRCODE_OK );
-#else
-	sint32 initialplayscreen_removeMyWindow(uint32);
-	initialplayscreen_removeMyWindow(action);
-#endif
+	helptile_closeWindow();
+
 	return 1;
 }
