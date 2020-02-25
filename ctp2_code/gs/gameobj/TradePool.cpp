@@ -56,11 +56,11 @@ TradeRoute TradePool::Create(Unit sourceCity,
 	}
 
 	Insert(newData);
+	newRoute.Activate(); // route activation should happen before AddTradeRoute, just in case
 
-	sourceCity.AddTradeRoute(newRoute);
-	destCity.AddTradeRoute(newRoute);
+	sourceCity.AddTradeRoute(newRoute); // activates trade route in case it is not
+	destCity.AddTradeRoute(newRoute); // activates trade route in case it is not
 	m_all_routes->Insert(newRoute);
-	newRoute.Activate();
 	g_director->TradeActorCreate(newRoute);
 	sourceCity.RecalculateResources();
 

@@ -4796,6 +4796,7 @@ sint32 CityData::GetWagesNeeded()
 // Name       : AddTradeRoute
 //
 // Description: Add a trade route to this city's m_tradeSourceList or tradeDestinationList
+//              Activates trade route in case it is not!
 //
 // Parameters : TradeRoute &route       : the trade route
 //            : bool       fromNetwork  :
@@ -4817,8 +4818,8 @@ void CityData::AddTradeRoute(TradeRoute &route, bool fromNetwork)
 	Assert((route.GetSource() == m_home_city) ||
 		   (route.GetDestination() == m_home_city));
 
-	if(!route.IsActive()) // skip deactivated routes, routes of m_tradeSourceList and m_tradeDestinationList are expected to be active (i.e. no checks on route.IsActive())
-	    return;
+	if(!route.IsActive()) // do not skip deactivated routes, calling CityData::AddTradeRoute should always only be used for trade routes to be active
+	    route.Activate(); // routes of m_tradeSourceList and m_tradeDestinationList are expected to be active (i.e. no checks on route.IsActive() there)
 
 	if(route.GetSource() == m_home_city)
 	{
