@@ -63,6 +63,7 @@ TradeRoute TradePool::Create(Unit sourceCity,
 	m_all_routes->Insert(newRoute);
 	g_director->TradeActorCreate(newRoute);
 	sourceCity.RecalculateResources();
+	newRoute.RedrawRadarMapAlongRoute(); // must be called after TradeRouteData is set and route activation
 
 	return newRoute;
 }

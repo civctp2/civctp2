@@ -162,6 +162,17 @@ bool TradeRouteData::SeenBy(sint32 player)
 	return m_seenBy & (1 << player);
 }
 
+void TradeRouteData::RedrawRadarMapAlongRoute()
+{
+	TradeRoute route(m_id);
+	sint32 const    num = m_path.Num();
+	for (sint32 i = 0; i < num; i++)
+	{
+		if(g_radarMap)
+			g_radarMap->RedrawTile(&m_path[i]);
+	}
+}
+
 void TradeRouteData::RemoveFromCells()
 {
 	TradeRoute route(m_id);
@@ -272,7 +283,6 @@ bool TradeRouteData::GeneratePath()
 		{
 			m_path.Insert(pnt);
 			g_theWorld->GetCell(pnt)->AddTradeRoute(m_id);
-			g_radarMap->RedrawTile(&pnt);
 			if (g_theWorld->IsWater(pnt))
 			{
 				m_crossesWater = true;

@@ -199,6 +199,11 @@ bool TradeRoute::SeenBy( sint32 player )
 	return GetData()->SeenBy(player);
 }
 
+void TradeRoute::RedrawRadarMapAlongRoute()
+{
+	AccessData()->RedrawRadarMapAlongRoute();
+}
+
 void TradeRoute::ReturnPath(const PLAYER_INDEX owner, DynamicArray<MapPoint> &waypoints,
 							DynamicArray<MapPoint> &fullpath,
 							double &cost)
