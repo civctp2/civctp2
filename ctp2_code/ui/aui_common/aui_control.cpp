@@ -186,7 +186,7 @@ AUI_ERRCODE aui_Control::InitCommonLdl(
 			else
 				m_actionKey = '^';
 		} else if(stricmp(shortcut, "ESC") == 0) {
-			m_actionKey = VK_ESCAPE;
+			SetActionKeyToESC();
 		} else {
 			m_actionKey = shortcut[0];
 		}
