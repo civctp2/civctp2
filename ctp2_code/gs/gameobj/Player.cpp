@@ -6978,6 +6978,13 @@ void Player::StartDeath(GAME_OVER reason, sint32 data)
         g_noai_stop_player = g_selected_item->GetPlayerAfterThis(m_owner);
     }
 
+	//// clear seenBy bit for dead player (needed for RemoveUnseenRoute)
+	const TradeDynamicArray *allRoutes = g_theTradePool->AccessAllRoutes();
+	for(sint32 i = allRoutes->Num() - 1; i >= 0; i--)
+	{
+		allRoutes->Access(i).RemoveSeenByBit(m_owner); // checks if a route is not seen any more and then removes it completely
+	}
+
 
 	if(m_terrainImprovements) {
 		sint32 i, n = m_terrainImprovements->Num();
