@@ -346,7 +346,7 @@ sint32 ui_HandleKeypress(WPARAM wParam, LPARAM lParam)
 		extern OptionsWindow *g_optionsWindow;
 
 		if(g_c3ui->TopWindow() && g_c3ui->TopWindow() == DipWizard::GetWindow()) {
-			// Nothing
+			DipWizard::Hide();
 		} else if(g_keyboardHandlers.GetTail()) {
 			g_keyboardHandlers.GetTail()->kh_Close();
 		} else if (g_civApp->IsGameLoaded()) {
