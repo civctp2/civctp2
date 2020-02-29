@@ -335,11 +335,10 @@ sint32 ui_HandleKeypress(WPARAM wParam, LPARAM lParam)
 	}
 #endif
 
-
-
-
-
-
+	// If a tooltip is shown, close it to prevent keyboard events being sent to it.
+	if (g_c3ui->TopWindow() && g_c3ui->TopWindow()->Type() == AUI_WINDOW_TYPE_TIP) {
+		g_ui->RemoveWindow(g_c3ui->TopWindow()->Id());
+	}
 
 	if (wParam == VK_ESCAPE) {
 
