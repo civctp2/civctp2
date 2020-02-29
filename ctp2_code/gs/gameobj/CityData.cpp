@@ -4904,8 +4904,7 @@ void CityData::DelTradeRoute(TradeRoute route)
 		switch(type)
 		{
 			case ROUTE_TYPE_RESOURCE:
-				Assert(m_sellingResources[resource] > 0);
-				if(m_sellingResources[resource] > 0)
+				if(m_sellingResources[resource] > 0) // can be already zero if called 2nd time from TradeRoute::RemoveAllReferences
 				{
 					m_sellingResources.AddResource(resource, -1);
 				}
@@ -4924,8 +4923,7 @@ void CityData::DelTradeRoute(TradeRoute route)
 		switch(type)
 		{
 			case ROUTE_TYPE_RESOURCE:
-				Assert(m_buyingResources[resource] > 0);
-				if(m_buyingResources[resource] > 0)
+				if(m_buyingResources[resource] > 0) // can be already zero if called 2nd time from TradeRoute::RemoveAllReferences
 				{
 					m_buyingResources.AddResource(resource, -1);
 				}
