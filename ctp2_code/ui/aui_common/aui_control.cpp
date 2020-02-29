@@ -186,11 +186,7 @@ AUI_ERRCODE aui_Control::InitCommonLdl(
 			else
 				m_actionKey = '^';
 		} else if(stricmp(shortcut, "ESC") == 0) {
-#ifdef WIN32
-			m_actionKey = VK_ESCAPE;
-#else
-			m_actionKey = AUI_KEYBOARD_KEY_ESCAPE;
-#endif
+			SetActionKeyToESC();
 		} else {
 			m_actionKey = shortcut[0];
 		}

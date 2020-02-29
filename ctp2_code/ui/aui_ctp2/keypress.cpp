@@ -134,6 +134,7 @@
 #include "MainControlPanel.h"
 #include "UnitControlPanel.h"
 #include "segmentlist.h"
+#include "helptile.h"
 
 extern C3UI			*g_c3ui;
 extern BOOL			gSuspended;
@@ -334,18 +335,17 @@ sint32 ui_HandleKeypress(WPARAM wParam, LPARAM lParam)
 	}
 #endif
 
-
-
-
-
-
+	// If a tooltip is shown, close it to prevent keyboard events being sent to it.
+	if (g_c3ui->TopWindow() && g_c3ui->TopWindow()->Type() == AUI_WINDOW_TYPE_TIP) {
+		g_ui->RemoveWindow(g_c3ui->TopWindow()->Id());
+	}
 
 	if (wParam == VK_ESCAPE) {
 
 		extern OptionsWindow *g_optionsWindow;
 
 		if(g_c3ui->TopWindow() && g_c3ui->TopWindow() == DipWizard::GetWindow()) {
-
+			DipWizard::Hide();
 		} else if(g_keyboardHandlers.GetTail()) {
 			g_keyboardHandlers.GetTail()->kh_Close();
 		} else if (g_civApp->IsGameLoaded()) {
@@ -354,7 +354,6 @@ sint32 ui_HandleKeypress(WPARAM wParam, LPARAM lParam)
 			   (g_theMessagePool->IsValid(*g_currentMessageWindow->GetMessage()))) {
 				g_currentMessageWindow->GetMessage()->Minimize();
 			} else if(g_modalMessage) {
-
 				Message *msg = g_modalMessage->GetMessage();
 				if(msg && g_theMessagePool->IsValid(*msg)) {
 					Assert(msg->IsAlertBox());
@@ -365,15 +364,15 @@ sint32 ui_HandleKeypress(WPARAM wParam, LPARAM lParam)
 				}
 			} else if (g_chatBox->IsActive()) {
 				g_chatBox->SetActive(false);
+			} else if (helptile_isShown()) {
+				helptile_closeWindow();
 			} else if (g_optionsWindow && g_c3ui->GetWindow(g_optionsWindow->Id())) {
-
 				optionsscreen_removeMyWindow(AUI_BUTTON_ACTION_EXECUTE);
-			} else if(g_c3ui->TopWindow() && g_c3ui->TopWindow()->HandleKey(wParam)) {
-
-			} else if(g_battleViewWindow) {
-				battleview_ExitButtonActionCallback( NULL, AUI_BUTTON_ACTION_EXECUTE, 0, NULL);
+			} else if (g_c3ui->TopWindow() && g_c3ui->TopWindow()->HandleKey(wParam)) {
+				// Nothing
+			} else if (g_battleViewWindow) {
+				battleview_ExitButtonActionCallback(NULL, AUI_BUTTON_ACTION_EXECUTE, 0, NULL);
 			} else {
-
 				optionsscreen_Initialize();
 				optionsscreen_displayMyWindow(1);
 			}
