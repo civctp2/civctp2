@@ -180,6 +180,8 @@ public:
 	void AddUnseen(UnseenCell *ucell);
 	void GetUnseenCellList(DynamicArray<UnseenCellCarton> &array);
 
+	void RevealTradeRouteState(const MapPoint &iso);
+
 	void Clear();
 
 	void CopyCircle(Vision *src, const MapPoint &center, sint32 radius);

@@ -562,46 +562,7 @@ void Vision::DoFillCircleOp(const MapPoint &posRC, CIRCLE_OP op,
 				}
 			}
 
-			//// reveal trade route state
-			Cell *cell = g_theWorld->GetCell(iso);
-			for(sint32 i = 0; i < cell->GetNumTradeRoutes(); i++){
-			    if(cell->GetTradeRoute(i).IsValid()){
-				if(cell->GetTradeRoute(i).IsActive()){
-				    cell->GetTradeRoute(i).AddSeenByBit(m_owner);
-
-				    //// reveal source and destination cities (info gotten from the traders) to avoid human advantage from deducing unseen city pos (which the AI can't)
-				    UnseenCellCarton ucell;
-				    Unit city;
-				    MapPoint point;
-				    
-				    city= cell->GetTradeRoute(i).GetSource();
-				    if(!(city.GetVisibility() & (1 << m_owner))){ // only reveal if not already seen 
-					point= city.RetPos();
-					if(m_unseenCells->RemoveAt(point, ucell))
-					    delete ucell.m_unseenCell;
-					city.SetVisible(m_owner);
-					ucell.m_unseenCell = new UnseenCell(point);
-					m_unseenCells->Insert(ucell);
-					}
-
-				    city= cell->GetTradeRoute(i).GetDestination();
-				    if(!(city.GetVisibility() & (1 << m_owner))){ // only reveal if not already seen 
-					point= city.RetPos();
-					if(m_unseenCells->RemoveAt(point, ucell))
-					    delete ucell.m_unseenCell;
-					city.SetVisible(m_owner);
-					ucell.m_unseenCell = new UnseenCell(point);
-					m_unseenCells->Insert(ucell);
-					}
-				    }
-				else { // either inactive or cancelled but not yet deleted (because m_seenBy not yet 0)
-				    cell->GetTradeRoute(i).RemoveSeenByBit(m_owner);
-				    }
-				}
-			    else { // in case route is invalid (should not happen)
-				cell->GetTradeRoute(i).RemoveSeenByBit(m_owner);
-				}
-			    }
+			RevealTradeRouteState(iso); // reveal trade route state
 
 			*entry = (*entry + 1) | k_EXPLORED_BIT;
 			if(redraw && removeadd)
@@ -696,6 +657,48 @@ void Vision::AddUnseen(const MapPoint &point)
 		m_unseenCells->Insert(unseen);
 	}
 }
+
+void Vision::RevealTradeRouteState(const MapPoint &iso){ // reaveals or removes trade route drawing depending on trade route state
+    Cell *cell = g_theWorld->GetCell(iso);
+    for(sint32 i = 0; i < cell->GetNumTradeRoutes(); i++){
+	if(cell->GetTradeRoute(i).IsValid()){
+	    if(cell->GetTradeRoute(i).IsActive()){
+		cell->GetTradeRoute(i).AddSeenByBit(m_owner);
+		
+		//// reveal source and destination cities (info gotten from the traders) to avoid human advantage from deducing unseen city pos (which the AI can't)
+		UnseenCellCarton ucell;
+		Unit city;
+		MapPoint point;
+		
+		city= cell->GetTradeRoute(i).GetSource();
+		if(!(city.GetVisibility() & (1 << m_owner))){ // only reveal if not already seen 
+		    point= city.RetPos();
+		    if(m_unseenCells->RemoveAt(point, ucell))
+			delete ucell.m_unseenCell;
+		    city.SetVisible(m_owner);
+		    ucell.m_unseenCell = new UnseenCell(point);
+		    m_unseenCells->Insert(ucell);
+		    }
+		
+		city= cell->GetTradeRoute(i).GetDestination();
+		if(!(city.GetVisibility() & (1 << m_owner))){ // only reveal if not already seen 
+		    point= city.RetPos();
+		    if(m_unseenCells->RemoveAt(point, ucell))
+			delete ucell.m_unseenCell;
+		    city.SetVisible(m_owner);
+		    ucell.m_unseenCell = new UnseenCell(point);
+		    m_unseenCells->Insert(ucell);
+		    }
+		}
+	    else { // either inactive or cancelled but not yet deleted (because m_seenBy not yet 0)
+		cell->GetTradeRoute(i).RemoveSeenByBit(m_owner);
+		}
+	    }
+	else { // in case route is invalid (should not happen)
+	    cell->GetTradeRoute(i).RemoveSeenByBit(m_owner);
+	    }
+	}
+    }
 
 void Vision::Copy(const Vision *copy)
 {
