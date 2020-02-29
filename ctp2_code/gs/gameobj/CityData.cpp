@@ -4379,7 +4379,9 @@ void CityData::AddTradeResource(ROUTE_TYPE type, sint32 resource)
 //
 // Name       : CityData::CalculateTradeRoutes
 //
-// Description:
+// Description: Removes routes that cannot be afforded any more (from CTP1)
+//              Basically has no effect for CTP2 until GetGoldInReturn() or ROUTE_TYPE_FOOD is used again
+//              Activates trade route in case it is not, should not happen, just in case
 //
 // Parameters : bool projectedOnly
 //
@@ -4412,6 +4414,10 @@ void CityData::CalculateTradeRoutes(bool projectedOnly)
 			continue;
 		}
 
+		if(!route.IsActive()){
+		    route.Activate(); // routes of m_tradeSourceList and m_tradeDestinationList are expected to be active
+		    fprintf(stderr, "%s L%d: Activated deactive route, this should not happen!\n", __FILE__, __LINE__);
+		    }		    
 		route.GetSourceResource(routeType, routeResource);
 
 		switch(routeType)
@@ -4456,6 +4462,11 @@ void CityData::CalculateTradeRoutes(bool projectedOnly)
 			}
 			continue;
 		}
+
+		if(!route.IsActive()){
+		    route.Activate(); // routes of m_tradeSourceList and m_tradeDestinationList are expected to be active
+		    fprintf(stderr, "%s L%d: Activated deactive route, this should not happen!\n", __FILE__, __LINE__);
+		    }		    
 
 		killRoute = false;
 		if(!projectedOnly)
