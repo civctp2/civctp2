@@ -57,6 +57,7 @@ TradeRoute TradePool::Create(Unit sourceCity,
 
 	Insert(newData);
 	newRoute.Activate(); // route activation should happen before AddTradeRoute, just in case
+	newRoute.RevealTradeRouteStateIfInVision(); // reveal trade route state to players where route is in vision, must be after Activate()
 
 	sourceCity.AddTradeRoute(newRoute); // activates trade route in case it is not
 	destCity.AddTradeRoute(newRoute); // activates trade route in case it is not

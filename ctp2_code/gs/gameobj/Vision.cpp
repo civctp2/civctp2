@@ -667,31 +667,7 @@ void Vision::RevealTradeRouteState(const MapPoint &iso){ // reaveals or removes 
 	if(cell->GetTradeRoute(i).IsValid()){
 	    if(cell->GetTradeRoute(i).IsActive()){
 		cell->GetTradeRoute(i).AddSeenByBit(m_owner);
-		
-		//// reveal source and destination cities (info gotten from the traders) to avoid human advantage from deducing unseen city pos (which the AI can't)
-		UnseenCellCarton ucell;
-		Unit city;
-		MapPoint point;
-		
-		city= cell->GetTradeRoute(i).GetSource();
-		if(!(city.GetVisibility() & (1 << m_owner))){ // only reveal if not already seen 
-		    point= city.RetPos();
-		    if(m_unseenCells->RemoveAt(point, ucell))
-			delete ucell.m_unseenCell;
-		    city.SetVisible(m_owner);
-		    ucell.m_unseenCell = new UnseenCell(point);
-		    m_unseenCells->Insert(ucell);
-		    }
-		
-		city= cell->GetTradeRoute(i).GetDestination();
-		if(!(city.GetVisibility() & (1 << m_owner))){ // only reveal if not already seen 
-		    point= city.RetPos();
-		    if(m_unseenCells->RemoveAt(point, ucell))
-			delete ucell.m_unseenCell;
-		    city.SetVisible(m_owner);
-		    ucell.m_unseenCell = new UnseenCell(point);
-		    m_unseenCells->Insert(ucell);
-		    }
+		RevealTradeRouteCities(cell->GetTradeRoute(i));
 		}
 	    else { // either inactive or cancelled but not yet deleted (because m_seenBy not yet 0)
 		cell->GetTradeRoute(i).RemoveSeenByBit(m_owner);
@@ -700,6 +676,26 @@ void Vision::RevealTradeRouteState(const MapPoint &iso){ // reaveals or removes 
 	else { // in case route is invalid (should not happen)
 	    cell->GetTradeRoute(i).RemoveSeenByBit(m_owner);
 	    }
+	}
+    }
+
+void Vision::RevealTradeRouteCities(TradeRoute route){ //// reveal source and destination cities (info gotten from the traders) to avoid human advantage from deducing unseen city pos (which the AI can't)
+    
+    RevealCity(route.GetSource());
+    RevealCity(route.GetDestination());
+    }
+
+void Vision::RevealCity(Unit city){ //// reveal unseen city
+    UnseenCellCarton ucell;
+    MapPoint point;
+    
+    if(!(city.GetVisibility() & (1 << m_owner))){ // only reveal if not already seen 
+	point= city.RetPos();
+	if(m_unseenCells->RemoveAt(point, ucell))
+	    delete ucell.m_unseenCell;
+	city.SetVisible(m_owner);
+	ucell.m_unseenCell = new UnseenCell(point);
+	m_unseenCells->Insert(ucell);
 	}
     }
 

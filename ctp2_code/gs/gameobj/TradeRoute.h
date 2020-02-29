@@ -74,6 +74,7 @@ public:
 	void RemoveSeenByBit(sint32 player);
 	bool SeenBy(sint32 player);
 	void RedrawRadarMapAlongRoute();
+	void RevealTradeRouteStateIfInVision();
 
 	void ClearSelectedPath();
 	void GenerateSelectedPath(const MapPoint &pos);

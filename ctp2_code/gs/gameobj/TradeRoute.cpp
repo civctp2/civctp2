@@ -67,6 +67,7 @@ void TradeRoute::KillRoute(CAUSE_KILL_TRADE_ROUTE cause) // mapped to TradeRoute
 	tmp.Deactivate(); // deactivate route => if a tile of the path is seen again the route will not be drawn any more
 	tmp.RemoveSeenByBit(source.GetOwner()); // owner should not see it any more instantly
 	tmp.RemoveSeenByBit(dest.GetOwner()); // receiver should not see it any more instantly
+	tmp.RevealTradeRouteStateIfInVision(); // reveal trade route state to players where route is in vision, must be after Deactivate()
 }
 
 void TradeRoute::RemoveUnseenRoute() // mapped to TradeRoute::Kill in TradeRoute.h
@@ -221,6 +222,11 @@ bool TradeRoute::SeenBy( sint32 player )
 void TradeRoute::RedrawRadarMapAlongRoute()
 {
 	AccessData()->RedrawRadarMapAlongRoute();
+}
+
+void TradeRoute::RevealTradeRouteStateIfInVision()
+{
+	AccessData()->RevealTradeRouteStateIfInVision();
 }
 
 void TradeRoute::ReturnPath(const PLAYER_INDEX owner, DynamicArray<MapPoint> &waypoints,

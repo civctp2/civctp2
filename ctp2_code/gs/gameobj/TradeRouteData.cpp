@@ -49,6 +49,7 @@
 #include "UnitData.h"
 #include "radarmap.h"
 #include "tradeutil.h"
+#include "Vision.h"                 // for using m_vision
 
 extern TradeAstar g_theTradeAstar;
 
@@ -169,13 +170,35 @@ uint32 TradeRouteData::SeenByBits()
 
 void TradeRouteData::RedrawRadarMapAlongRoute()
 {
-	TradeRoute route(m_id);
 	sint32 const    num = m_path.Num();
 	for (sint32 i = 0; i < num; i++)
 	{
 		if(g_radarMap)
 			g_radarMap->RedrawTile(&m_path[i]);
 	}
+}
+
+void TradeRouteData::RevealTradeRouteStateIfInVision()
+{
+	TradeRoute route(m_id);
+	sint32 const    num = m_path.Num();
+	for (sint32 i = 0; i < num; i++){
+	    for(sint32 p = 0; p < k_MAX_PLAYERS; p++){ // if point i is in vision of player p then AddSeenByBit
+		if(g_player && g_player[p] && g_player[p]->m_vision && g_player[p]->m_vision->IsVisible(m_path[i])){ // check pointers, critical when game is closed or reloaded; also reaveal trade route cities for owner
+		    if(IsActive()){
+			if(!SeenBy(p)){
+			    AddSeenByBit(p);
+			    }
+			g_player[p]->m_vision->RevealTradeRouteCities(route);
+			}
+		    else{
+			if(SeenBy(p)){
+			    RemoveSeenByBit(p);
+			    }
+			}
+		    }
+		}
+	    }
 }
 
 void TradeRouteData::RemoveFromCells()

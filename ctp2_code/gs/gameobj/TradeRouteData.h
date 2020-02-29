@@ -127,6 +127,7 @@ public:
 	bool SeenBy(sint32 player);
 	uint32 SeenByBits();
 	void RedrawRadarMapAlongRoute();
+	void RevealTradeRouteStateIfInVision();
 
 	void SetSource(Unit source);
 	void SetDestination(Unit dest);

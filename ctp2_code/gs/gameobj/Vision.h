@@ -57,6 +57,7 @@ class Vision;
 //----------------------------------------------------------------------------
 
 #include "MapPoint.h"
+#include "TradeRoute.h"
 
 class CivArchive;
 class UnseenCellQuadTree;
@@ -181,7 +182,8 @@ public:
 	void GetUnseenCellList(DynamicArray<UnseenCellCarton> &array);
 
 	void RevealTradeRouteState(const MapPoint &iso);
-
+	void RevealTradeRouteCities(TradeRoute route);
+	void RevealCity(Unit city);
 	void Clear();
 
 	void CopyCircle(Vision *src, const MapPoint &center, sint32 radius);
