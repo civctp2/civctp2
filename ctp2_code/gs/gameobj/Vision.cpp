@@ -588,9 +588,6 @@ void Vision::DoFillCircleOp(const MapPoint &posRC, CIRCLE_OP op,
 				--(*entry);
 			}
 			// else: No action: keep counter at 0
-
-			RevealTradeRouteState(iso); // reveal trade route state also if moving off, in case a route was created within former vision
-
 			if(((*entry) & k_VISIBLE_REFERENCE_MASK) == 0)
 			{
 				AddUnseen(iso);
