@@ -2931,7 +2931,7 @@ Die Rentabilität eines bestimmten Handelsweges hängt von mehreren Faktoren ab, z
 [CONCEPT_TRADE_ROUTE_GAMEPLAY]
 Handelswege dienen dem Warentransport zwischen zwei <L:DATABASE_CONCEPTS,CONCEPT_CITY>Städten<e> im In- und Ausland mittels Karawanen (und später Frachttransportern). Ein Handelsweg wird auf der Karte durch eine zwischen zwei Städten gezogene Linie gekennzeichnet, und das kleine Symbol, das darauf abgebildet ist, gibt an, welches Handelsgut hier befördert wird.
 
-Auf feindlichen Handelswegen kann je einmal pro Runde Piraterie betrieben werden, wobei der Weg nicht zerstört wird, sondern lediglich die Handelserträge in die Taschen der Piraten wandern. Piraterie wird als Akt der Aggression gewertet und führt in der Regel zu diplomatischen Konsequenzen.
+Feindliche Handelswege können pro Runde einmal durch Piraten ü berfallen werden. Dabei wird der Weg nicht zerstört, sondern nur die Handelserträge geraubt. Piraterie wird als Akt der Aggression gewertet und führt in der Regel zu diplomatischen Konsequenzen.
 [END]
 
 [CONCEPT_TRADE_ROUTE_HISTORICAL]
@@ -8111,7 +8111,7 @@ Effekt:
 [END]
 
 [UNIT_Z_FREIGHT_TRANSPORT_GAMEPLAY]
-Frachttransporter stellen in der <L:DATABASE_CONCEPTS,CONCEPT_MODERN_AGE>Moderne<e> das Äquivalent zu <L:DATABASE_UNITS,UNIT_CARAVAN>Karawanen<e> dar. Durch die Einführung moderner Frachttransportmittel wie Schiffen, Lastwagen und Eisenbahnwaggons können deutlich größere Warenmengen von einem Ort zum anderen befördert und wirtschaftlich genutzt werden.
+Frachttransporter ersetzen in der <L:DATABASE_CONCEPTS,CONCEPT_MODERN_AGE>Moderne<e> die <L:DATABASE_UNITS,UNIT_CARAVAN>Karawanen<e>. Durch die Einführung moderner Frachttransportmittel wie Schiffen, Lastwagen und Eisenbahnwaggons können deutlich größere Warenmengen von einem Ort zum anderen befördert und wirtschaftlich genutzt werden.
 [END]
 
 [UNIT_Z_FREIGHT_TRANSPORT_HISTORICAL]
