@@ -5199,7 +5199,7 @@ void Governor::ManageGoodsTradeRoutes()
 	for
 	(
 		std::list<GoodsRoute>::iterator route_iter = new_routes.begin();
-		(route_iter != std::next(new_routes.begin(), new_routes.size() / 2)) && (unused_freight > 0); // only iterate over first half (i.e. use median as threshold) to not waste cravans on low VPC instead save them for next turn && if unused caravans are still available
+		(route_iter != std::next(new_routes.begin(), new_routes.size() / 4)) && (unused_freight > 0); // only iterate over first quater (i.e. use quantile as threshold) to not waste cravans on low VPC instead save them for next turn && if unused caravans are still available
 		++route_iter
 	)
 	{
