@@ -5189,6 +5189,8 @@ void Governor::ManageGoodsTradeRoutes()
 	}
 
 	m_neededFreight -= total_freight - totalRoutes; // cravans needed to sell all goods available (with an offer); subtract those that already exist (and would be available if existing routes got killed); - 1 for each existing trade route
+	if(m_neededFreight < 0) // m_neededFreight should be >= 0
+	    m_neededFreight= 0;
 
 	new_routes.sort(); // sort routes according to m_value (or m_valuePerCaravan #if defined(USE_VALUE_PER_CARAVAN))
 	new_routes.reverse(); // revert sort order to start with higest m_valuePerCaravan
