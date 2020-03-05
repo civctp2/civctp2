@@ -5116,8 +5116,6 @@ void Governor::ManageGoodsTradeRoutes()
 
 						if (Diplomat::GetDiplomat(op).GetEmbargo(m_playerId)) // no trade if embargo enacted
 							continue;
-						if (city.CD()->HasResource(g)) // good available locally, i.e. do not buy a good that is available locally (exception: domestic trade)
-							continue;
 					}
 
 					for (sint32 d = 0; d < g_player[op]->m_all_cities->Num(); d++) { // check all cities if suitabelfor trading
@@ -5160,8 +5158,8 @@ void Governor::ManageGoodsTradeRoutes()
 				if (!player_ptr->IsRobot()) // exlcude human players
 					continue;
 
-				if (((sellingVPC < maxValuePerCaravan) && (sellingVPC > 0) ) || // kill existing routes if lower in value 
-					(curDestRoute.m_id != 0 && Diplomat::GetDiplomat(m_playerId). // or piracy risk is high
+				if (((sellingVPC < maxValuePerCaravan) && (sellingVPC > 0) && !city.CD()->HasResource(g)) || // kill existing routes if lower in value but only if the good is NOT available multiple times within the city influence
+					(curDestRoute.m_id != 0 && Diplomat::GetDiplomat(m_playerId). // or piracy risk is high, i.e. pirated too often
 					GetTradeRoutePiracyRisk(city, curDestRoute->GetDestination())))
 				{
 					unused_freight += curDestRoute->GetCost() - 1; // - 1 because one caravan is lost when killing a route
@@ -5205,7 +5203,7 @@ void Governor::ManageGoodsTradeRoutes()
 	{
 		if(route_iter->m_cost <= unused_freight) // create route if enough unused caravans are available
 		{
-			g_gevManager->AddEvent(GEV_INSERT_Tail, GEV_SendGood,
+			g_gevManager->AddEvent(GEV_INSERT_Tail, GEV_SendGood, // if the good is already sold and not available multiple times (i.e. city.CD()->HasResource(g) == false), this will kill a standing route of good g from the source city due to https://github.com/civctp2/civctp2/blob/45cd01bb9f54502c2dfa13e8acd40558fb2af7c0/ctp2_code/gs/gameobj/Player.cpp#L3025-L3035
 			                       GEA_Int,         route_iter->m_resource,
 			                       GEA_City,        route_iter->m_sourceCity,
 			                       GEA_City,        route_iter->m_destinationCity,
