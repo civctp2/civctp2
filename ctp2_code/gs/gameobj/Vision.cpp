@@ -123,7 +123,8 @@ void Vision::Clear()
 
 void Vision::AddExplored(MapPoint pos, double radius)
 {
-	FillCircle(pos, radius, CIRCLE_OP_ADD);
+	FillCircle(pos, radius, CIRCLE_OP_ADD); // makes also visible, i.e. removes ucell from m_unseenCells
+	FillCircle(pos, radius, CIRCLE_OP_SUBTRACT); // removes visibility, i.e. adds ucell to m_unseenCells
 }
 
 void Vision::SetTheWholeWorldExplored()
@@ -686,13 +687,11 @@ void Vision::RevealCity(Unit city){ //// reveal unseen city
     UnseenCellCarton ucell;
     MapPoint point;
     
-    if(!(city.GetVisibility() & (1 << m_owner))){ // only reveal if not already seen 
-	point= city.RetPos();
-	if(m_unseenCells->RemoveAt(point, ucell))
-	    delete ucell.m_unseenCell;
+    if(!(city.GetVisibility() & (1 << m_owner))){ // only reveal if not already seen
 	city.SetVisible(m_owner);
-	ucell.m_unseenCell = new UnseenCell(point);
-	m_unseenCells->Insert(ucell);
+	point= city.RetPos();
+	AddExplored(point, 0); // similar but not the same as m_array[point.x][point.y] |= k_EXPLORED_BIT; (city name and icons are not shown then), execution of RevealTradeRouteState for city pos OK (not revealing other trade routes of that city)
+	AddUnseen(point); // only works if IsExplored
 	}
     }
 
