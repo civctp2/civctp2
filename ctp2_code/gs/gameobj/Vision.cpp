@@ -690,8 +690,12 @@ void Vision::RevealCity(Unit city){ //// reveal unseen city
     if(!(city.GetVisibility() & (1 << m_owner))){ // only reveal if not already seen
 	city.SetVisible(m_owner);
 	point= city.RetPos();
-	AddExplored(point, 0); // similar but not the same as m_array[point.x][point.y] |= k_EXPLORED_BIT; (city name and icons are not shown then), execution of RevealTradeRouteState for city pos OK (not revealing other trade routes of that city)
+	Convert(point); // essential for m_array[point.x][point.y]
+	m_array[point.x][point.y] |= k_EXPLORED_BIT; // AddExplored(point, 0) similar but contains execution of RevealTradeRouteState (OK for city pos, not revealing other trade routes of that city)
+	Unconvert(point); // needed for AddUnseen
 	AddUnseen(point); // only works if IsExplored
+	if(g_tiledMap && m_amOnScreen)
+	    g_tiledMap->RedrawTile(&point);
 	}
     }
 
