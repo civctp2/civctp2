@@ -5087,7 +5087,7 @@ void Governor::ManageGoodsTradeRoutes()
 
 				if(city.CD()->GetResourceTradeRoute(g, curDestRoute)) // have already a route for g
 				{
-					sellingCost = tradeutil_GetAccurateTradeDistance(city, curDestRoute->GetDestination());
+					sellingCost = curDestRoute->GetCost();
 					sellingVPC = static_cast<double>(tradeutil_GetTradeValue(m_playerId, curDestRoute->GetDestination(), g))
 					    / sellingCost; // tradeutil_GetAccurateTradeDistance returns > 1.0
 				}
