@@ -136,7 +136,7 @@ public:
 	sint8     GetPirate()                            const { return m_pirate; }
 
 	sint32 GetCost() const;
-	void SetCost(sint32 cost);
+	// void SetCost(sint32 cost); // deprecated, cost set by GeneratePath() and should not be changed any more
 
 	const DynamicArray<MapPoint>* GetPath() const { return &m_path; }
 	const DynamicArray<MapPoint>* GetSelectedPath() const { return &m_selectedPath; }

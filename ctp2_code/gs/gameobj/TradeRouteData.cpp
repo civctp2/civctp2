@@ -570,12 +570,14 @@ void TradeRouteData::SetDestination(Unit dest)
 	ENQUEUE();
 }
 
+/* deprecated, cost set by GeneratePath() and should not be changed any more
 void TradeRouteData::SetCost(sint32 cost)
 {
 	m_transportCost = std::max<sint32>(cost, 1);
 	m_path.Insert(m_wayPoints[0]);
 	ENQUEUE();
 }
+*/
 
 sint32 TradeRouteData::GetCost() const
 {
