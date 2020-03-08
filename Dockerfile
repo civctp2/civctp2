@@ -59,8 +59,9 @@ ENV LD_LIBRARY_PATH "${LD_LIBRARY_PATH}:/usr/local/lib"
 ## ctp2CD/ copy not done in builder stage such that stages before are compatible with travis docker build
 ## not using `COPY  ./ /ctp2/` to avoid cache out-dating when ctp2CD/ is populated for 3rd stage
 COPY autogen.sh configure.ac GNUmakefile.am   /ctp2/
-COPY ctp2_code/  /ctp2/ctp2_code/
 COPY ctp2_data/  /ctp2/ctp2_data/
+## done after copying ctp2_data/ because ctp2_code/ more likely to change
+COPY ctp2_code/  /ctp2/ctp2_code/
 
 ARG BTYP
 
@@ -92,13 +93,14 @@ RUN apt-get update && apt-get install -y --no-install-recommends \
     apt-get clean && \
     rm -rf /var/lib/apt/lists/*
 
+## copy libs first since they are less likely to change
+COPY --from=builder /usr/local/lib /usr/local/lib
+ENV LD_LIBRARY_PATH "${LD_LIBRARY_PATH}:/usr/local/lib"
+
 ## ctp2CD/ copy done in install stage such that stages before are compatible with travis docker build, results in one additional layer in the final DI (incr. DI download size)
 COPY ctp2CD/ /opt/ctp2/
 ## ctp2/ copy has to be after ctp2CD/ to overwrite with newer versions from civctp2
 COPY --from=builder /opt/ctp2/ /opt/ctp2/
-
-COPY --from=builder /usr/local/lib /usr/local/lib
-ENV LD_LIBRARY_PATH "${LD_LIBRARY_PATH}:/usr/local/lib"
 
 USER $USERNAME
 
