@@ -683,22 +683,23 @@ void Vision::RevealTradeRouteCities(TradeRoute route){ //// reveal source and de
     RevealCity(route.GetDestination());
     }
 
-void Vision::RevealCity(Unit city){ //// reveal unseen city
+void Vision::RevealCity(Unit city){ //// reveal city and its current state
     UnseenCellCarton ucell;
     MapPoint point;
-    
-    if(!(city.GetVisibility() & (1 << m_owner))){ // only reveal if not already seen
-	city.SetVisible(m_owner);
+
+    if(city.m_id){
 	point= city.RetPos();
 	Convert(point); // essential for m_array[point.x][point.y]
-	m_array[point.x][point.y] |= k_EXPLORED_BIT; // AddExplored(point, 0) similar but contains execution of RevealTradeRouteState (OK for city pos, not revealing other trade routes of that city)
-	Unconvert(point); // needed for AddUnseen
-	if(m_unseenCells->RemoveAt(point, ucell)) // AddUnseen(point); (only works if IsExplored) does not update unseen cell
-	    delete ucell.m_unseenCell;
-	ucell.m_unseenCell= new UnseenCell(point);
-	m_unseenCells->Insert(ucell); 
-	if(g_tiledMap && m_amOnScreen)
-	    g_tiledMap->RedrawTile(&point);
+	MapPoint iso(point);
+	Unconvert(iso); // needed for RemoveAt
+	if(((m_array[point.x][point.y] & k_VISIBLE_REFERENCE_MASK) == 0) && g_theWorld->GetOwner(iso) != m_owner){ // apparently IsVisible is false for an owned tile
+	    city.SetVisible(m_owner);
+	    m_array[point.x][point.y] |= k_EXPLORED_BIT; // AddExplored(point, 0) similar but contains execution of RevealTradeRouteState (OK for city pos, not revealing other trade routes of that city)
+	    if(m_unseenCells->RemoveAt(iso, ucell)) // AddUnseen(point); (only works if IsExplored) does not update unseen cell
+		delete ucell.m_unseenCell;
+	    ucell.m_unseenCell= new UnseenCell(iso);
+	    m_unseenCells->Insert(ucell); 
+	    }
 	}
     }
 
