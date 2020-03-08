@@ -693,7 +693,10 @@ void Vision::RevealCity(Unit city){ //// reveal unseen city
 	Convert(point); // essential for m_array[point.x][point.y]
 	m_array[point.x][point.y] |= k_EXPLORED_BIT; // AddExplored(point, 0) similar but contains execution of RevealTradeRouteState (OK for city pos, not revealing other trade routes of that city)
 	Unconvert(point); // needed for AddUnseen
-	AddUnseen(point); // only works if IsExplored
+	if(m_unseenCells->RemoveAt(point, ucell)) // AddUnseen(point); (only works if IsExplored) does not update unseen cell
+	    delete ucell.m_unseenCell;
+	ucell.m_unseenCell= new UnseenCell(point);
+	m_unseenCells->Insert(ucell); 
 	if(g_tiledMap && m_amOnScreen)
 	    g_tiledMap->RedrawTile(&point);
 	}
