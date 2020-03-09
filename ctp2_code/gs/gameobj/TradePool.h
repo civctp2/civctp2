@@ -62,7 +62,7 @@ public:
 	TradeDynamicArray *AccessAllRoutes() { return m_all_routes; }
 
 	sint32 GetGoldValue(sint32 resource, sint32 num);
-	void BreakOffTrade(PLAYER_INDEX pl1, PLAYER_INDEX pl2);
+	void BreakOffTrade(PLAYER_INDEX pl1, PLAYER_INDEX pl2, CAUSE_KILL_TRADE_ROUTE cause);
 };
 
 extern TradePool* g_theTradePool;

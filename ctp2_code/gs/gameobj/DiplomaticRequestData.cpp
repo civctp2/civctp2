@@ -467,7 +467,7 @@ void DiplomaticRequestData::Enact(BOOL fromCurPlayer)
 		case REQUEST_TYPE_DEMAND_STOP_TRADE :
 			g_player[m_owner]->MakeShortCeaseFire(m_recipient, AGREEMENT_TYPE_DEMAND_STOP_TRADE, m_thirdParty) ;
 			g_player[m_recipient]->StopTradingWith(m_thirdParty) ;
-            g_theTradePool->BreakOffTrade(m_owner, m_thirdParty);
+			g_theTradePool->BreakOffTrade(m_owner, m_thirdParty, CAUSE_KILL_TRADE_ROUTE_DIPLOMATIC_AGREEMENT);
 			so = new SlicObject("01dipAcceptDemandStoptrade");
 			so->AddRecipient(m_owner) ;
 			so->AddCivilisation(m_owner) ;
@@ -487,11 +487,10 @@ void DiplomaticRequestData::Enact(BOOL fromCurPlayer)
 			so->AddCivilisation(m_owner) ;
 			so->AddCivilisation(m_recipient) ;
 			so->AddCivilisation(m_thirdParty) ;
-            so->AddAttitude(GetAttitude(m_recipient, m_owner));
+			so->AddAttitude(GetAttitude(m_recipient, m_owner));
 
-
-            g_theTradePool->BreakOffTrade(m_owner, m_thirdParty);
-            g_theTradePool->BreakOffTrade(m_recipient, m_thirdParty);
+			g_theTradePool->BreakOffTrade(m_owner, m_thirdParty, CAUSE_KILL_TRADE_ROUTE_DIPLOMATIC_AGREEMENT);
+			g_theTradePool->BreakOffTrade(m_recipient, m_thirdParty, CAUSE_KILL_TRADE_ROUTE_DIPLOMATIC_AGREEMENT);
 			break ;
 
 		case REQUEST_TYPE_DEMAND_LEAVE_OUR_LANDS :
