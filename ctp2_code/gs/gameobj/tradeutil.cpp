@@ -92,7 +92,6 @@ sint32 tradeutil_GetAccurateTradeDistance(const Unit &source, const Unit &destin
 	return DISTANCE_UNKNOWN;
 }
 
-/* deprecated (in favor of tradeutil_GetAccurateTradeDistance) because result can differ significantly
 sint32 tradeutil_GetTradeDistance(Unit &source, Unit &destination)
 {
 	double cost = g_theWorld->CalcTerrainFreightCost(source.RetPos()) *
@@ -101,7 +100,6 @@ sint32 tradeutil_GetTradeDistance(Unit &source, Unit &destination)
 
 	return static_cast<sint32>(std::max<double>(tradeutil_GetNetTradeCosts(cost), 1.0));
 }
-*/
 
 // Maybe move the following to worldutils
 
