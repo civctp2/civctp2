@@ -421,7 +421,7 @@ void TradeManager::UpdateCreateList(const PLAYER_INDEX & player_id)
 						data->m_resource = g;
 						data->m_destination = maxCity[i];
 						data->m_price = maxPrice[i];
-						data->m_caravans = tradeutil_GetAccurateTradeDistance(city, maxCity[i]);
+						data->m_caravans = tradeutil_GetTradeDistance(city, maxCity[i]);
 						data->m_curDestination.m_id = curDestCity.m_id;
 
 						m_createData.AddTail(data);

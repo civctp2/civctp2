@@ -5089,7 +5089,7 @@ void Governor::ManageGoodsTradeRoutes()
 				{
 					sellingCost = curDestRoute->GetCost();
 					sellingVPC = static_cast<double>(tradeutil_GetTradeValue(m_playerId, curDestRoute->GetDestination(), g))
-					    / sellingCost; // tradeutil_GetAccurateTradeDistance returns > 1.0
+					    / sellingCost; // tradeutil_GetTradeDistance returns > 1.0
 				}
 				else
 				{

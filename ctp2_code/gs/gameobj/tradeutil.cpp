@@ -77,6 +77,7 @@ sint32 tradeutil_GetTradeValue(const sint32 owner, const Unit & destination, sin
     return static_cast<sint32>(std::max<double>(totalValue, 1.0)); // ensure that the trade value is >= 1
     }
 
+/* deprecated (in favor of tradeutil_GetTradeDistance) because result can differ significantly, though exact takes much longer to compute due to use of astar
 sint32 tradeutil_GetAccurateTradeDistance(const Unit &source, const Unit &destination)
 {
 	Path    path;
@@ -91,6 +92,7 @@ sint32 tradeutil_GetAccurateTradeDistance(const Unit &source, const Unit &destin
 
 	return DISTANCE_UNKNOWN;
 }
+*/
 
 sint32 tradeutil_GetTradeDistance(Unit &source, Unit &destination)
 {

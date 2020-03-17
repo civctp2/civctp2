@@ -107,6 +107,7 @@ TradeRouteData::TradeRouteData
 			 sPos.x, sPos.y, dPos.x, dPos.y));
 
 	m_valid = GeneratePath(); // determins cost of trade-units
+	m_transportCost = tradeutil_GetTradeDistance(m_sourceCity, m_destinationCity); // overwrite transport cost from GeneratePath with that from tradeutil_GetTradeDistance to conform with all other cost estimations before creation, namely in governor.cpp (AI) and trademanager (human), which use tradeutil_GetTradeDistance due to significant speed-up
 
 	DPRINTF(k_DBG_GAMESTATE, ("Created Trade Route from %s to %s, cost=%d, valid=%i\n",
 	                          m_sourceCity->GetCityData()->GetName(),
