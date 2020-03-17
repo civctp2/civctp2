@@ -5136,10 +5136,8 @@ void Governor::ManageGoodsTradeRoutes()
 
 						const sint32 price = tradeutil_GetTradeValue(m_playerId, destCity, g); // # of gold
 						const sint32 cost = tradeutil_GetTradeDistance(city, destCity); // # of caravans
-						const sint32 cost2 = tradeutil_GetAccurateTradeDistance(city, destCity); // # of caravans
 						const double valuePerCaravan = static_cast<double>(price) / cost; // cost = tradeutil_GetAccurateTradeDistance returns > 1.0
-						fprintf(stderr, "%s L%d: GetAccurateTradeDistance - GetTradeDistance: %d, valuePerCaravan: %f (%f)\n", __FILE__, __LINE__, cost2 - cost, valuePerCaravan, static_cast<double>(price) / cost2);
-						
+
 						if (valuePerCaravan > bestValuePerCaravan) // determine best offer (and its cost) that would be available, to set goal for # of caravans (m_neededFreight)
 						{
 							maxNeededFreight = cost;
