@@ -685,6 +685,7 @@ void Vision::RevealTradeRouteState(const MapPoint &iso){ // reaveals or removes 
 	    if(cell->GetTradeRoute(i).IsActive()){
 		cell->GetTradeRoute(i).AddSeenByBit(m_owner);
 		RevealTradeRouteCities(cell->GetTradeRoute(i));
+		RevealTradeRouteTiles(cell->GetTradeRoute(i));
 		}
 	    else { // either inactive or cancelled but not yet deleted (because m_seenBy not yet 0)
 		cell->GetTradeRoute(i).RemoveSeenByBit(m_owner);
@@ -693,6 +694,15 @@ void Vision::RevealTradeRouteState(const MapPoint &iso){ // reaveals or removes 
 	else { // in case route is invalid (should not happen)
 	    cell->GetTradeRoute(i).RemoveSeenByBit(m_owner);
 	    }
+	}
+    }
+
+void Vision::RevealTradeRouteTiles(TradeRoute route){ //// reveal trade route tiles (info gotten from the traders) to avoid knowledge of isolated cities (which can lead to invalid routes) and to make discovery of new trade route even more interesting and helpful for the AI
+    
+    const DynamicArray<MapPoint>* path= route.GetPath();
+    sint32 const num = path->Num();
+    for (sint32 i = 0; i < num; i++){
+	UpdateUnseen(path->Get(i));
 	}
     }
 

@@ -183,6 +183,7 @@ public:
 	void GetUnseenCellList(DynamicArray<UnseenCellCarton> &array);
 
 	void RevealTradeRouteState(const MapPoint &iso);
+	void RevealTradeRouteTiles(TradeRoute route);
 	void RevealTradeRouteCities(TradeRoute route);
 	void RevealCity(Unit city);
 	void Clear();
