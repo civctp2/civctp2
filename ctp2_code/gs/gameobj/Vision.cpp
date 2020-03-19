@@ -659,6 +659,25 @@ void Vision::AddUnseen(const MapPoint &point)
 	}
 }
 
+void Vision::UpdateUnseen(const MapPoint &posRC){ //// in contrast to AddUnseen also update already seen ucells even for unexplored tiles
+    
+    MapPoint point(posRC);
+    Convert(point); // essential for m_array[point.x][point.y]
+    MapPoint iso(point);
+    Unconvert(iso); // needed for RemoveAt
+    UnseenCellCarton ucell;
+    
+    if(((m_array[point.x][point.y] & k_VISIBLE_REFERENCE_MASK) == 0) && g_theWorld->GetOwner(iso) != m_owner){ // apparently IsVisible is false for an owned tile
+	m_array[point.x][point.y] |= k_EXPLORED_BIT; // AddExplored(point, 0) similar but contains execution of RevealTradeRouteState (OK for city pos, not revealing other trade routes of that city)
+	if(m_unseenCells->RemoveAt(iso, ucell))
+	    delete ucell.m_unseenCell;
+	ucell.m_unseenCell= new UnseenCell(iso);
+	m_unseenCells->Insert(ucell); 
+	if(g_network.IsHost())
+	    g_network.Enqueue(new NetInfo(NET_INFO_CODE_ADD_UNSEEN, m_owner, g_network.PackedPos(point)));
+	}
+    }
+
 void Vision::RevealTradeRouteState(const MapPoint &iso){ // reaveals or removes trade route drawing depending on trade route state
     Cell *cell = g_theWorld->GetCell(iso);
     for(sint32 i = 0; i < cell->GetNumTradeRoutes(); i++){
@@ -688,18 +707,8 @@ void Vision::RevealCity(Unit city){ //// reveal city and its current state
     MapPoint point;
 
     if(city.m_id){
-	point= city.RetPos();
-	Convert(point); // essential for m_array[point.x][point.y]
-	MapPoint iso(point);
-	Unconvert(iso); // needed for RemoveAt
-	if(((m_array[point.x][point.y] & k_VISIBLE_REFERENCE_MASK) == 0) && g_theWorld->GetOwner(iso) != m_owner){ // apparently IsVisible is false for an owned tile
-	    city.SetVisible(m_owner);
-	    m_array[point.x][point.y] |= k_EXPLORED_BIT; // AddExplored(point, 0) similar but contains execution of RevealTradeRouteState (OK for city pos, not revealing other trade routes of that city)
-	    if(m_unseenCells->RemoveAt(iso, ucell)) // AddUnseen(point); (only works if IsExplored) does not update unseen cell
-		delete ucell.m_unseenCell;
-	    ucell.m_unseenCell= new UnseenCell(iso);
-	    m_unseenCells->Insert(ucell); 
-	    }
+	city.SetVisible(m_owner);
+	UpdateUnseen(city.RetPos());
 	}
     }
 

@@ -179,6 +179,7 @@ public:
 
 	void AddUnseen(const MapPoint &point);
 	void AddUnseen(UnseenCell *ucell);
+	void UpdateUnseen(const MapPoint &point);
 	void GetUnseenCellList(DynamicArray<UnseenCellCarton> &array);
 
 	void RevealTradeRouteState(const MapPoint &iso);
