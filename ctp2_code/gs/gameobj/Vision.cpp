@@ -687,11 +687,9 @@ void Vision::RevealTradeRouteState(const MapPoint &iso){ // reaveals or removes 
 	TradeRoute route= cell->GetTradeRoute(i);
 	if(route.IsValid()){
 	    if(route.IsActive()){
-		if(!route.SeenBy(m_owner)){ // only reveal if not already seen, otherwise units are overdrawn by constant ucell updates
-		    route.AddSeenByBit(m_owner);
-		    RevealTradeRouteCities(route);
-		    RevealTradeRouteTiles(route);
-		    }
+		route.AddSeenByBit(m_owner);
+		RevealTradeRouteCities(route);
+		RevealTradeRouteTiles(route);
 		}
 	    else { // either inactive or cancelled but not yet deleted (because m_seenBy not yet 0)
 		route.RemoveSeenByBit(m_owner);
