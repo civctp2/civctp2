@@ -176,21 +176,10 @@ TradeManager::TradeManager(AUI_ERRCODE *err)
 void TradeManager::TabCallback(aui_Control *control, uint32 action, uint32 data, void *cookie)
 {
 	if(action != ctp2_Tab::ACTION_ACTIVATED) return;
-
-	switch(sint32(cookie)) {
-	case 0: {
-	    UpdateCreateList(g_selected_item->GetVisiblePlayer());
-	    break;
+	
+	if(sint32(cookie) > 0){ // avoid updating market tab, which can take very long and only needs to be updated in case of cancelling a route
+	    s_tradeManager->Update();
 	    }
-	case 1: {
-	    UpdateSummaryList(m_summaryList, true);
-	    break;
-	    }
-	case 2: {
-	    UpdateSummaryList(m_importList, false);
-	    break;
-	    }
-	}
 }
 
 TradeManager::~TradeManager()
