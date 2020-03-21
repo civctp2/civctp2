@@ -301,11 +301,18 @@ void TradeManager::Notify()
 
 void TradeManager::Update()
 {
-	UpdateCreateList(g_selected_item->GetVisiblePlayer());
-	UpdateSummaryList(m_summaryList, true);
-	UpdateSummaryList(m_importList, false);
+	ctp2_Tab *market = (ctp2_Tab *)aui_Ldl::GetObject(s_tradeManagerBlock, "TradeTabs.Market");
+	ctp2_Tab *summary = (ctp2_Tab *)aui_Ldl::GetObject(s_tradeManagerBlock, "TradeTabs.Summary");
+	ctp2_Tab *import = (ctp2_Tab *)aui_Ldl::GetObject(s_tradeManagerBlock, "TradeTabs.Import");
+	
+	if(market && !market->IsHidden())
+	    UpdateCreateList(g_selected_item->GetVisiblePlayer());
+	if(summary && !summary->IsHidden())
+	    UpdateSummaryList(m_summaryList, true);
+	if(import && !import->IsHidden())
+	    UpdateSummaryList(m_importList, false);
+	
 	UpdateAdviceWindow();
-
 }
 
 void TradeManager::UpdateCreateList(const PLAYER_INDEX & player_id)
