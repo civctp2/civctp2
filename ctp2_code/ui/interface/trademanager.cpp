@@ -114,6 +114,10 @@ TradeManager::TradeManager(AUI_ERRCODE *err)
 
 	Assert(m_createList);
 
+	aui_Ldl::SetActionFuncAndCookie(s_tradeManagerBlock, "TradeTabs.Market", TabCallback, (void *)0);
+	aui_Ldl::SetActionFuncAndCookie(s_tradeManagerBlock, "TradeTabs.Summary", TabCallback, (void *)1);
+	aui_Ldl::SetActionFuncAndCookie(s_tradeManagerBlock, "TradeTabs.Import", TabCallback, (void *)2);
+
 	aui_Ldl::SetActionFuncAndCookie(s_tradeManagerBlock, "CloseButton", Close, NULL);
 	
 	m_createButton = (ctp2_Button *)aui_Ldl::GetObject(s_tradeManagerBlock, "TradeTabs.Market.TabPanel.CreateRouteButton");
@@ -167,6 +171,26 @@ TradeManager::TradeManager(AUI_ERRCODE *err)
 	SetNumCities(1);
 
 	*err = AUI_ERRCODE_OK;
+}
+
+void TradeManager::TabCallback(aui_Control *control, uint32 action, uint32 data, void *cookie)
+{
+	if(action != ctp2_Tab::ACTION_ACTIVATED) return;
+
+	switch(sint32(cookie)) {
+	case 0: {
+	    UpdateCreateList(g_selected_item->GetVisiblePlayer());
+	    break;
+	    }
+	case 1: {
+	    UpdateSummaryList(m_summaryList, true);
+	    break;
+	    }
+	case 2: {
+	    UpdateSummaryList(m_importList, false);
+	    break;
+	    }
+	}
 }
 
 TradeManager::~TradeManager()

@@ -67,6 +67,7 @@ class TradeManager
 	static AUI_ERRCODE Display();
 	static AUI_ERRCODE Hide();
 
+	static void TabCallback(aui_Control *control, uint32 action, uint32 data, void *cookie);
 	static void SetMode(TRADE_MANAGER_MODE mode);
 	static void Notify();
 	void Update();
