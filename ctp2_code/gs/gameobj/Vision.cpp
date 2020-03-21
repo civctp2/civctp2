@@ -666,19 +666,25 @@ void Vision::UpdateUnseen(const MapPoint &posRC){ //// in contrast to AddUnseen 
     MapPoint iso(point);
     Unconvert(iso); // needed for RemoveAt
     UnseenCellCarton ucell;
+    bool removed= false;
+  
+    if(m_unseenCells->RemoveAt(iso, ucell)){
+	removed= true; // there was a ucell before, i.e. tile is not in vision or unexplored
+	delete ucell.m_unseenCell;
+	}
     
-    if(((m_array[point.x][point.y] & k_VISIBLE_REFERENCE_MASK) == 0) && g_theWorld->GetOwner(iso) != m_owner){ // apparently IsVisible is false for an owned tile
-	m_array[point.x][point.y] |= k_EXPLORED_BIT; // AddExplored(point, 0) similar but contains execution of RevealTradeRouteState (OK for city pos, not revealing other trade routes of that city)
-	if(m_unseenCells->RemoveAt(iso, ucell))
-	    delete ucell.m_unseenCell;
+    if(!IsExplored(iso) || removed){ // if tile is unexplored or ucell was removed, i.e. not in vision (IsExplored needs iso NOT point!!!)
 	ucell.m_unseenCell= new UnseenCell(iso);
 	m_unseenCells->Insert(ucell); 
 	if(g_network.IsHost())
 	    g_network.Enqueue(new NetInfo(NET_INFO_CODE_ADD_UNSEEN, m_owner, g_network.PackedPos(point)));
 	}
-    if(g_tiledMap && m_amOnScreen){
+    
+    if(g_tiledMap && m_amOnScreen && (!IsExplored(iso) || removed)){ // only redraw if tile is not in vision to avoid overdrawing of units
 	g_tiledMap->RedrawTile(&iso); // without the ucell is only redrawn on the next redraw of the map
 	}
+
+    m_array[point.x][point.y] |= k_EXPLORED_BIT; // AddExplored(point, 0) similar but contains execution of RevealTradeRouteState (OK for city pos, not revealing other trade routes of that city)
     }
 
 void Vision::RevealTradeRouteState(const MapPoint &iso){ // reaveals or removes trade route drawing depending on trade route state
