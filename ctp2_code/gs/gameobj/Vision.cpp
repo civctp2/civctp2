@@ -684,18 +684,19 @@ void Vision::UpdateUnseen(const MapPoint &posRC){ //// in contrast to AddUnseen 
 void Vision::RevealTradeRouteState(const MapPoint &iso){ // reaveals or removes trade route drawing depending on trade route state
     Cell *cell = g_theWorld->GetCell(iso);
     for(sint32 i = 0; i < cell->GetNumTradeRoutes(); i++){
-	if(cell->GetTradeRoute(i).IsValid()){
-	    if(cell->GetTradeRoute(i).IsActive()){
-		cell->GetTradeRoute(i).AddSeenByBit(m_owner);
-		RevealTradeRouteCities(cell->GetTradeRoute(i));
-		RevealTradeRouteTiles(cell->GetTradeRoute(i));
+	TradeRoute route= cell->GetTradeRoute(i);
+	if(route.IsValid()){
+	    if(route.IsActive()){
+		route.AddSeenByBit(m_owner);
+		RevealTradeRouteCities(route);
+		RevealTradeRouteTiles(route);
 		}
 	    else { // either inactive or cancelled but not yet deleted (because m_seenBy not yet 0)
-		cell->GetTradeRoute(i).RemoveSeenByBit(m_owner);
+		route.RemoveSeenByBit(m_owner);
 		}
 	    }
 	else { // in case route is invalid (should not happen)
-	    cell->GetTradeRoute(i).RemoveSeenByBit(m_owner);
+	    route.RemoveSeenByBit(m_owner);
 	    }
 	}
     }
