@@ -317,6 +317,7 @@ void TradeManager::Update()
 
 void TradeManager::UpdateCreateList(const PLAYER_INDEX & player_id)
 {
+	fprintf(stderr, "%s L%d:\n", __FILE__, __LINE__);
 	Assert(player_id >= 0 && player_id < k_MAX_PLAYERS);
 	if(player_id < 0 || player_id >= k_MAX_PLAYERS) return;
 
@@ -508,6 +509,7 @@ void TradeManager::UpdateCreateList(const PLAYER_INDEX & player_id)
 
 
 	m_createButton->Enable(FALSE);
+	fprintf(stderr, "%s L%d:\n", __FILE__, __LINE__);
 }
 
 void TradeManager::UpdateAdviceWindow()
