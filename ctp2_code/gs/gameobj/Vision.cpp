@@ -676,6 +676,9 @@ void Vision::UpdateUnseen(const MapPoint &posRC){ //// in contrast to AddUnseen 
 	if(g_network.IsHost())
 	    g_network.Enqueue(new NetInfo(NET_INFO_CODE_ADD_UNSEEN, m_owner, g_network.PackedPos(point)));
 	}
+    if(g_tiledMap && m_amOnScreen){
+	g_tiledMap->RedrawTile(&iso); // without the ucell is only redrawn on the next redraw of the map
+	}
     }
 
 void Vision::RevealTradeRouteState(const MapPoint &iso){ // reaveals or removes trade route drawing depending on trade route state
