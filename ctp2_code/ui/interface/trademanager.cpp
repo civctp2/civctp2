@@ -304,12 +304,13 @@ void TradeManager::Update()
 	ctp2_Tab *market = (ctp2_Tab *)aui_Ldl::GetObject(s_tradeManagerBlock, "TradeTabs.Market");
 	ctp2_Tab *summary = (ctp2_Tab *)aui_Ldl::GetObject(s_tradeManagerBlock, "TradeTabs.Summary");
 	ctp2_Tab *import = (ctp2_Tab *)aui_Ldl::GetObject(s_tradeManagerBlock, "TradeTabs.Import");
+	ctp2_TabGroup *group = (ctp2_TabGroup *)aui_Ldl::GetObject(s_tradeManagerBlock, "TradeTabs");
 	
-	if(market && !market->IsHidden())
+	if(market && group->GetCurrentTab() == market)
 	    UpdateCreateList(g_selected_item->GetVisiblePlayer());
-	if(summary && !summary->IsHidden())
+	if(summary && group->GetCurrentTab() == summary)
 	    UpdateSummaryList(m_summaryList, true);
-	if(import && !import->IsHidden())
+	if(import && group->GetCurrentTab() == import)
 	    UpdateSummaryList(m_importList, false);
 	
 	UpdateAdviceWindow();
