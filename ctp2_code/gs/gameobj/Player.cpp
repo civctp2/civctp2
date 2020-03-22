@@ -3090,6 +3090,9 @@ TradeRoute Player::CreateTradeRoute(Unit sourceCity,
 	    so->AddGood(resource);
 	    so->AddCity(sourceCity);
 	    so->AddCity(destCity);
+	    so->AddGold(g_theResourceDB->Get(resource)->GetFood()); // missuse to pass integer to msg
+	    so->AddGold(g_theResourceDB->Get(resource)->GetProduction()); // missuse to pass integer to msg
+	    so->AddGold(g_theResourceDB->Get(resource)->GetGold()); // missuse to pass integer to msg
 	    g_slicEngine->Execute(so);
 	    return newRoute;
 	    }
@@ -3099,7 +3102,7 @@ TradeRoute Player::CreateTradeRoute(Unit sourceCity,
 
 TradeRoute Player::PayForTrade(TradeRoute &newRoute)
 {
-	AddUsedTransportPoints((sint32)newRoute.GetCost()); // reduces available trade units
+	AddUsedTransportPoints(newRoute.GetCost()); // reduces available trade units
 
 	if((m_usedTradeTransportPoints > m_tradeTransportPoints &&
 		!wonderutil_GetFreeTradeRoutes(m_builtWonders)) ||
@@ -3179,7 +3182,7 @@ void Player::RemoveTradeRoute(TradeRoute route, CAUSE_KILL_TRADE_ROUTE cause)
 {
 	Assert(route.GetPayingFor() == m_owner);
 	if(route.GetPayingFor() == m_owner && !route.AccessData()->GetDontAdjustPoints()) {
-		RemoveUsedTransportPoints((sint32)route.GetCost()); // brings back used caravans/trade-units completely
+		RemoveUsedTransportPoints(route.GetCost()); // brings back used caravans/trade-units completely
 
 		if(cause != CAUSE_KILL_TRADE_ROUTE_NO_INITIAL_CARAVANS) {
 			KillATrader(); // removes a caravan/trade-unit

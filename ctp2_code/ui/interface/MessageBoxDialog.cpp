@@ -140,6 +140,10 @@ m_userData(userData)
 		m_rightButton->SetText(g_theStringDB->GetNameStr(okText));
 	}
 
+	// Right button is always visible and acts like Cancel in a two-button query
+	// dialog or like OK in a one-button informational dialog.
+	m_rightButton->SetActionKeyToESC();
+
 	m_leftButton->SetActionFuncAndCookie(
 		LeftButtonActionCallback, this);
 	m_rightButton->SetActionFuncAndCookie(

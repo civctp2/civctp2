@@ -36,6 +36,8 @@
 
 #include "c3.h"
 #include "tradeutil.h"
+
+#include <cmath>                    // std::round
 #include "World.h"
 #include "ResourceRecord.h"
 #include "Unit.h"
@@ -75,6 +77,7 @@ sint32 tradeutil_GetTradeValue(const sint32 owner, const Unit & destination, sin
     return static_cast<sint32>(std::max<double>(totalValue, 1.0)); // ensure that the trade value is >= 1
     }
 
+/* deprecated (in favor of tradeutil_GetTradeDistance) because result can differ significantly, though exact takes much longer to compute due to use of astar
 sint32 tradeutil_GetAccurateTradeDistance(const Unit &source, const Unit &destination)
 {
 	Path    path;
@@ -84,13 +87,13 @@ sint32 tradeutil_GetAccurateTradeDistance(const Unit &source, const Unit &destin
             (source.GetOwner(), source.RetPos(), destination.RetPos(), path, cost, FALSE)
        )
     {
-        return static_cast<sint32>(std::max<double>(tradeutil_GetNetTradeCosts(cost), 1.0));
+        return static_cast<sint32>(std::round(std::max<double>(tradeutil_GetNetTradeCosts(cost), 1.0)));
     }
 
 	return DISTANCE_UNKNOWN;
 }
+*/
 
-/* deprecated (in favor of tradeutil_GetAccurateTradeDistance) because result can differ significantly
 sint32 tradeutil_GetTradeDistance(Unit &source, Unit &destination)
 {
 	double cost = g_theWorld->CalcTerrainFreightCost(source.RetPos()) *
@@ -99,7 +102,6 @@ sint32 tradeutil_GetTradeDistance(Unit &source, Unit &destination)
 
 	return static_cast<sint32>(std::max<double>(tradeutil_GetNetTradeCosts(cost), 1.0));
 }
-*/
 
 // Maybe move the following to worldutils
 

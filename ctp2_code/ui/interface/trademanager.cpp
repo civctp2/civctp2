@@ -421,7 +421,7 @@ void TradeManager::UpdateCreateList(const PLAYER_INDEX & player_id)
 						data->m_resource = g;
 						data->m_destination = maxCity[i];
 						data->m_price = maxPrice[i];
-						data->m_caravans = tradeutil_GetAccurateTradeDistance(city, maxCity[i]);
+						data->m_caravans = tradeutil_GetTradeDistance(city, maxCity[i]);
 						data->m_curDestination.m_id = curDestCity.m_id;
 
 						m_createData.AddTail(data);
@@ -755,7 +755,7 @@ void TradeManager::UpdateSummaryList(ctp2_ListBox *summaryList, bool source)
 		if (ctp2_Static * count = (ctp2_Static *)item->GetChildByIndex(k_CARAVANS_COL_SUM_INDEX))
 		    {
 		    if(source){
-			sprintf(buf, "%.0f", route.GetCost());
+			sprintf(buf, "%d", route.GetCost());
 			}
 		    else{
 			sprintf(buf, "%d,%d,%d",
@@ -996,7 +996,7 @@ sint32 TradeManager::CompareSummaryItems(ctp2_ListItem *item1, ctp2_ListItem *it
 		case k_PRICE_COL_SUM_INDEX:
 			return route1->GetValue() - route2->GetValue();
 		case k_CARAVANS_COL_SUM_INDEX:
-			return sint32(route1.GetCost() - route2.GetCost());
+			return route1.GetCost() - route2.GetCost();
 		case k_NATION_COL_SUM_INDEX:
 			Assert(route1.GetDestination().IsValid());
 			Assert(route2.GetDestination().IsValid());

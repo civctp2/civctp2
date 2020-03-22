@@ -5,6 +5,7 @@
 #include "TradePool.h"
 #include "player.h"
 #include "TradeRouteData.h"
+#include "ResourceRecord.h"             // g_theResourceDB
 #include "director.h"
 #include "MapPoint.h"
 #include "dynarr.h"
@@ -23,6 +24,27 @@ extern World* g_theWorld;
 extern Player** g_player;
 extern Director	*g_director;
 extern UnitPool *g_theUnitPool;
+
+class TradeReport : public SlicObject{
+public:
+    TradeReport(char const *what, TradeRoute route, Unit const &civ, Unit const &rcp) : SlicObject(what){
+	ROUTE_TYPE type;
+	sint32 good;
+	route.GetSourceResource(type, good);
+	
+	Unit src(route->GetSource());
+	Unit dst(route->GetDestination());
+
+	AddGood(good);
+	AddCity(src);
+	AddCity(dst);
+	AddGold(g_theResourceDB->Get(good)->GetFood()); // missuse to pass integer to msg
+	AddGold(g_theResourceDB->Get(good)->GetProduction()); // missuse to pass integer to msg
+	AddGold(g_theResourceDB->Get(good)->GetGold()); // missuse to pass integer to msg
+	AddCivilisation(civ.GetOwner());
+	AddRecipient(rcp.GetOwner());
+    };
+};
 
 bool TradeRoute::IsValid() const
 {
@@ -43,17 +65,33 @@ void TradeRoute::KillRoute(CAUSE_KILL_TRADE_ROUTE cause) // mapped to TradeRoute
 	
 	if(g_theUnitPool->IsValid(source) && g_theUnitPool->IsValid(dest)) {
 		if(source.GetOwner() != dest.GetOwner()) {
-			if(cause == CAUSE_KILL_TRADE_ROUTE_SENDER_KILLED) {
-				SlicObject *so = new SlicObject("360SenderKilledTradeRoute");
-				ROUTE_TYPE type;
-				sint32 good;
-				GetSourceResource(type, good);
-				so->AddGood(good);
-				so->AddCity(source);
-				so->AddCity(dest);
-				so->AddCivilisation(source.GetOwner());
-				so->AddRecipient(dest.GetOwner());
-				g_slicEngine->Execute(so);
+			switch(cause) {
+			    case CAUSE_KILL_TRADE_ROUTE_SENDER_KILLED:
+			    case CAUSE_KILL_TRADE_ROUTE_PIRATED:
+			    case CAUSE_KILL_TRADE_ROUTE_CHANGED_DESTINATION:
+			    case CAUSE_KILL_TRADE_ROUTE_BETTER_OFFER:
+				{
+				g_slicEngine->Execute(new TradeReport("360SenderKilledTradeRoute", *this, source, dest));
+				break;
+				}
+			    case CAUSE_KILL_TRADE_ROUTE_RECIPIENT_KILLED:
+				{
+				g_slicEngine->Execute(new TradeReport("360SenderKilledTradeRoute", *this, dest, source));
+				break;
+				}
+			    case CAUSE_KILL_TRADE_ROUTE_CITY_CHANGED_OWNER:
+			    case CAUSE_KILL_TRADE_ROUTE_CITY_DIED:
+			    case CAUSE_KILL_TRADE_ROUTE_DIPLOMATIC_AGREEMENT:
+			    case CAUSE_KILL_TRADE_ROUTE_WAR:
+			    case CAUSE_KILL_TRADE_ROUTE_EMBARGO:
+				{
+				g_slicEngine->Execute(new TradeReport("360SenderKilledTradeRoute", *this, source, dest));
+				g_slicEngine->Execute(new TradeReport("360SenderKilledTradeRoute", *this, dest, source));
+				break;
+				}
+			    default: // CAUSE_KILL_TRADE_ROUTE_UNKNOWN CAUSE_KILL_TRADE_ROUTE_RESET
+				{
+				}
 			}
 		}
 	}
@@ -144,7 +182,7 @@ Unit TradeRoute::GetDestination() const
 	return GetData()->GetDestination();
 }
 
-double TradeRoute::GetCost() const
+sint32 TradeRoute::GetCost() const
 {
 	return GetData()->GetCost();
 }

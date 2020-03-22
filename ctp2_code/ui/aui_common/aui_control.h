@@ -211,6 +211,8 @@ public:
 	virtual aui_Control	*SetKeyboardFocus( void );
 	virtual AUI_ERRCODE	ReleaseKeyboardFocus( void );
 
+	void SetActionKeyToESC( void ) { m_actionKey = VK_ESCAPE; }
+
 	virtual AUI_ERRCODE Draw(
 		aui_Surface *surface = NULL,
 		sint32 x = 0,

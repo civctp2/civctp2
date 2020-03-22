@@ -11,6 +11,8 @@ sint32 helptile_Initialize();
 void helptile_Cleanup( void );
 void helptile_displayData(const MapPoint&);
 void helptile_setPosition(const MapPoint&);
+bool helptile_isShown(void);
+void helptile_closeWindow(void);
 
 #include "c3_listitem.h"
 

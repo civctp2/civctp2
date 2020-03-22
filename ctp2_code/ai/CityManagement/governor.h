@@ -437,7 +437,7 @@ private:
 	PLAYER_INDEX        m_playerId;
 	BuildUnitList       m_buildUnitList[BUILD_UNIT_LIST_MAX];
 	UnitCountVector     m_currentUnitCount;
-	double              m_neededFreight;
+	sint32              m_neededFreight;
 	/// Currently considered tile improvements
 	TiGoalQueue         m_tileImprovementGoals;
 	bool                m_canBuildLandSettlers;
