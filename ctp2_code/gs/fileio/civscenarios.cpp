@@ -244,7 +244,7 @@ void CivScenarios::LoadData(void)
 		if (!dent)
 			continue;
 		snprintf(path, sizeof(path), "%s%s%s", rootPath, FILE_SEP, dent->d_name);
-		if (!stat(path, &tmpstat))
+		if (stat(path, &tmpstat) == -1)
 			continue;
 
 		if (S_ISDIR(tmpstat.st_mode)) {
