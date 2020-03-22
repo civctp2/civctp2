@@ -343,6 +343,7 @@ void TradeManager::UpdateCreateList(const PLAYER_INDEX & player_id)
 	Unit maxCity[k_MAX_CITIES_PER_GOOD];
 
 	m_createList->Clear();
+	m_createList->BuildListStart();
 	m_createData.DeleteAll();
 
 	for (sint32 c = 0; c < p->m_all_cities->Num(); c++)
@@ -515,12 +516,7 @@ void TradeManager::UpdateCreateList(const PLAYER_INDEX & player_id)
 			}
 		}
 	}
-
-
-
-
-
-
+	m_createList->BuildListEnd();
 
 	m_createButton->Enable(FALSE);
 	fprintf(stderr, "%s L%d:\n", __FILE__, __LINE__);
@@ -689,6 +685,7 @@ void TradeManager::UpdateSummaryList(ctp2_ListBox *summaryList, bool source)
 	Unit maxCity;
 
 	summaryList->Clear();
+	summaryList->BuildListStart();
 
 	for (sint32 c = 0; c < p->m_all_cities->Num(); c++)
 	    {
@@ -802,6 +799,7 @@ void TradeManager::UpdateSummaryList(ctp2_ListBox *summaryList, bool source)
 		summaryList->AddItem(item);
 		}
 	    }
+	summaryList->BuildListEnd();
 	
 	m_breakButton->Enable(FALSE);
 	m_breakImpBut->Enable(FALSE);
