@@ -153,7 +153,7 @@ Const : alsire {
 	Int    GossipMapRadius                        aka GOSSIP_MAP_RADIUS
 	Float  HearGossipChance                       aka HEAR_GOSSIP_CHANCE
 	Float  FranchiseEffect                        aka FRANCHISE_EFFECT
-	Int    TurnsFranchised                        aka TURNS_FRANCHISED
+	Int    TurnsFranchised                =  -1   aka TURNS_FRANCHISED
 	Int    TurnsToSueFranchise                    aka TURNS_TO_SUE_FRANCHISE
 
 	Float  SlaverEliteChance                      aka SLAVER_ELITE_CHANCE
@@ -326,8 +326,8 @@ Const : alsire {
 	Int    BaseStarvationProtection               aka BASE_STARVATION_PROTECTION
 
 	Float  CaravanCoef                            aka CARAVAN_COEF
-	Float  DomesticTradeReduction                 aka DOMESTIC_TRADE_COEF
-	Float  TradePactCoef                          aka PACT_TRADE_COEF
+	Float  DomesticTradeReduction   =    0.5      aka DOMESTIC_TRADE_COEF
+	Float  TradePactCoef            =    1.05     aka PACT_TRADE_COEF
 
 	Int    PollutionCausedByNuke                  aka POLLUTION_CAUSED_BY_NUKE
 
