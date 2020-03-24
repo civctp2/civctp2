@@ -60,6 +60,8 @@ ENV LD_LIBRARY_PATH "${LD_LIBRARY_PATH}:/usr/local/lib"
 ## not using `COPY  ./ /ctp2/` to avoid cache out-dating when ctp2CD/ is populated for 3rd stage
 COPY autogen.sh configure.ac GNUmakefile.am   /ctp2/
 COPY ctp2_data/  /ctp2/ctp2_data/
+## updates to Scenarios/ to overwrite files from ctp2CD/ in merge stage
+COPY Scenarios/  /opt/ctp2/Scenarios/
 ## done after copying ctp2_data/ because ctp2_code/ more likely to change
 COPY ctp2_code/  /ctp2/ctp2_code/
 
@@ -99,8 +101,6 @@ ENV LD_LIBRARY_PATH "${LD_LIBRARY_PATH}:/usr/local/lib"
 
 ## ctp2CD/ copy done in install stage such that stages before are compatible with travis docker build, results in one additional layer in the final DI (incr. DI download size)
 COPY ctp2CD/ /opt/ctp2/
-## overwrite Scenarios/ with updates
-COPY Scenarios/  /opt/ctp2/Scenarios/
 ## ctp2/ copy has to be after ctp2CD/ to overwrite with newer versions from civctp2
 COPY --from=builder /opt/ctp2/ /opt/ctp2/
 
