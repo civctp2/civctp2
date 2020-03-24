@@ -60,8 +60,6 @@ ENV LD_LIBRARY_PATH "${LD_LIBRARY_PATH}:/usr/local/lib"
 ## not using `COPY  ./ /ctp2/` to avoid cache out-dating when ctp2CD/ is populated for 3rd stage
 COPY autogen.sh configure.ac GNUmakefile.am   /ctp2/
 COPY ctp2_data/  /ctp2/ctp2_data/
-## updates to Scenarios/ to overwrite files from ctp2CD/ in merge stage
-COPY Scenarios/  /opt/ctp2/Scenarios/
 ## done after copying ctp2_data/ because ctp2_code/ more likely to change
 COPY ctp2_code/  /ctp2/ctp2_code/
 
