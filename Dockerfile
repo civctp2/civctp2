@@ -99,6 +99,8 @@ ENV LD_LIBRARY_PATH "${LD_LIBRARY_PATH}:/usr/local/lib"
 
 ## ctp2CD/ copy done in install stage such that stages before are compatible with travis docker build, results in one additional layer in the final DI (incr. DI download size)
 COPY ctp2CD/ /opt/ctp2/
+## overwrite Scenarios/ with updates
+COPY Scenarios/  /opt/ctp2/Scenarios/
 ## ctp2/ copy has to be after ctp2CD/ to overwrite with newer versions from civctp2
 COPY --from=builder /opt/ctp2/ /opt/ctp2/
 
