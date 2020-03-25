@@ -204,7 +204,7 @@ void ScenarioWindow::FillListWithScenarioPacks(ctp2_ListBox *available,bool hide
 #ifdef WIN32
 		if(!(hideOriginalScenarios && !_stat(checkFile,&fileStatus)))
 #else
-		if(!(hideOriginalScenarios && !stat(checkFile,&fileStatus)))
+		if(!(hideOriginalScenarios && stat(checkFile,&fileStatus) == 0))
 #endif
 		{
 			ctp2_ListItem	*item=NULL;

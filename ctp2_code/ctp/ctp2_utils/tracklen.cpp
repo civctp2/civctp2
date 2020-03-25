@@ -369,7 +369,7 @@ DWORD *tracklen_LoadEncryptedKey( DWORD *trackLenBuf, const char *szFile )
 
 		snprintf(szLink, sizeof(szLink) - 1, "/proc/%ld/exe", pid);
 		int rc = lstat(szLink, &st);
-		if (rc != 0)
+		if (rc == -1)
 			return NULL;
 
 		if (!S_ISLNK(st.st_mode))
@@ -415,7 +415,7 @@ DWORD *tracklen_LoadEncryptedKey( DWORD *trackLenBuf, const char *szFile )
 #else
 	struct stat st = { 0 };
 	size_t dwSize = 0;
-	if (!stat(szTemp, &st)) {
+	if (stat(szTemp, &st) == 0) {
 		dwSize = st.st_size;
 	}
 #endif

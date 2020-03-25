@@ -281,7 +281,7 @@ MBCHAR *CivPaths::MakeSavePath(MBCHAR *fullPath, MBCHAR *s1, MBCHAR *s2, MBCHAR 
 		r = stat(CI_FixName(s), &tmpstat);
 #endif
 
-		if (!r) {
+		if (r == 0) {
 			strcat(fullPath, FILE_SEP);
 			return fullPath;
 		}
@@ -410,7 +410,7 @@ MBCHAR *CivPaths::MakeAssetPath
 	r = stat(CI_FixName(s), &tmpstat);
 #endif
 
-	if (!r) return fullPath;
+	if (r == 0) return fullPath;
 	else return NULL;
 }
 

@@ -1743,8 +1743,7 @@ PointerList<GameInfo> *GameFile::BuildSaveList(C3SAVEDIR dir)
 		if (!dent) continue;
 
 		snprintf(path, sizeof(path), "%s%s%s", dirPath, FILE_SEP, dent->d_name);
-		if (stat(path, &tmpstat))
-			continue;
+		if (stat(path, &tmpstat) == -1) continue;
 
 		if (S_ISDIR(tmpstat.st_mode))
 		{
@@ -1788,7 +1787,7 @@ PointerList<GameInfo> *GameFile::BuildSaveList(C3SAVEDIR dir)
 				if (!dent2) continue;
 
 				snprintf(path, sizeof(path), "%s%s%s", gameInfo->path, FILE_SEP, dent2->d_name);
-				if (stat(path, &tmpstat)) continue;
+				if (stat(path, &tmpstat) == -1) continue;
 
 				if (!S_ISDIR(tmpstat.st_mode)) {
 					name = dent2->d_name;

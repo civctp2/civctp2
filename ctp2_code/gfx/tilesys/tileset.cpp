@@ -839,7 +839,7 @@ void TileSet::QuickLoadMapped(void)
 #else
 	struct stat st;
 	int rc = stat(path, &st);
-	if (0 != rc) {
+	if (rc == -1) {
 		c3errors_FatalDialog("Tile Set", "Unable to load tileset.");
 		return;
 	}

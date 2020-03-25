@@ -110,7 +110,7 @@ AUI_ERRCODE TargaImageFormat::Load(MBCHAR const * filename, aui_Image *image)
     if (_access(CI_FixName(filename), 0) != 0)
 #else
     struct stat st;
-    if (stat(CI_FixName(filename), &st) != 0)
+    if (stat(CI_FixName(filename), &st) == -1)
 #endif
     {
 		return LoadRIM(CI_FixName(filename), image);

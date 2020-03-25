@@ -307,13 +307,16 @@ uint8 *c3files_loadbinaryfile(C3DIR dir, MBCHAR const * filename, sint32 *size)
 
 bool c3files_PathIsValid(const MBCHAR *path)
 {
+	int rc;
 #if defined(WIN32)
 	struct _stat tmpstat;
-	return !_stat(path, &tmpstat);
+	rc = _stat(path, &tmpstat);
 #else
 	struct stat  tmpstat;
-	return !stat(CI_FixName(path), &tmpstat);
+	rc = stat(CI_FixName(path), &tmpstat);
 #endif
+
+	return (rc == 0);
 }
 
 bool c3files_CreateDirectory(const MBCHAR *path)
@@ -662,14 +665,14 @@ const MBCHAR *c3files_GetCDDriveMount(MBCHAR *buf, size_t size,
 	char *fulllink = NULL;
 	struct stat st = {0};
 
-	if(lstat(cdDriveName, &st) != 0)
+	if(lstat(cdDriveName, &st) == -1)
 	{
 		for(sint32 i = 0; i < strlen(cdDriveName); ++i)
 		{
 			cdDriveName[i] = tolower(cdDriveName[i]);
 		}
 		
-		if(lstat(cdDriveName, &st) != 0)
+		if(lstat(cdDriveName, &st) == -1)
 		{
 			return NULL;
 		}
