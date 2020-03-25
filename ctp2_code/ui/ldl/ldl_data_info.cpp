@@ -8,7 +8,8 @@ int ldl_datablock::GetInt( const char *szName )
 {
 	ldl_attribute *atr = GetAttribute(szName);
 
-	if(atr) {
+	if(atr)
+	{
 		if(atr->GetType() == ATTRIBUTE_TYPE_INT)
 			return ((ldl_attributeValue<int> *)atr)->GetValue();
 		else if(atr->GetType() == ATTRIBUTE_TYPE_DOUBLE)
@@ -32,7 +33,8 @@ char *ldl_datablock::GetString( const char *szName )
 {
 	ldl_attribute *atr = GetAttribute(szName);
 
-	if(atr) {
+	if(atr)
+	{
 		if(atr->GetType() == ATTRIBUTE_TYPE_STRING)
 			return ((ldl_attributeValue<char *> *)atr)->GetValue();
 	}
@@ -45,7 +47,7 @@ bool ldl_datablock::GetBool( const char *szName )
 	ldl_attribute * atr = GetAttribute(szName);
 
 	if (atr && (atr->GetType() == ATTRIBUTE_TYPE_BOOL))
-    {
+	{
 		return ((ldl_attributeValue<bool> *)atr)->GetValue();
 	}
 

@@ -193,15 +193,6 @@ void *ldlif_end_block(void *names)
 
 	block->AddTemplateChildren();
 
-
-
-
-
-
-
-
-
-
 	if(!s_blockStack->GetTail()) {
 		s_topLevelList->AddTail(block);
 
@@ -209,7 +200,6 @@ void *ldlif_end_block(void *names)
 
 	delete namelist;
 	return block;
-
 }
 
 void *ldlif_add_empty_block(void *names)
@@ -264,5 +254,4 @@ void ldlif_deallocate_stuff()
 
 	delete s_blockTree;
 	s_blockTree = NULL;
-
 }

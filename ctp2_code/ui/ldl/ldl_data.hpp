@@ -121,7 +121,7 @@ public:
 	double  GetDouble(const char *szName = "double");
 	bool    GetBool(const char *szName = "bool");
 //	RECT GetRect(const char *x1 = "rect_x1", const char *y1 = "rect_y1",
-//				 const char *x2 = "rect_x2", const char *y2 = "rect_y2");
+//	             const char *x2 = "rect_x2", const char *y2 = "rect_y2");
 //	POINT GetPoint(const char *x1 = "point_x", const char *y1 = "point_y");
 	char *  GetString(const char *szName);
 };

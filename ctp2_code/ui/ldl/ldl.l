@@ -31,7 +31,7 @@ extern int ldl_parse_error;
 
 %}
 
-string 		\"[^\"\n]*[\"\r\n]
+string		\"[^\"\n]*[\"\r\n]
 name		[a-zA-Z]+[a-zA-Z0-9_]*
 
 %x incl
@@ -45,10 +45,10 @@ name		[a-zA-Z]+[a-zA-Z0-9_]*
 <incl>[ \t\r]* {}
 <incl>\"    { BEGIN(fname); }
 <fname>[a-zA-Z0-9_.\\]+\" { /* Got the include file name */
-  			if ( ldl_include_stack_ptr >= MAX_INCLUDE_DEPTH ) {
+			if ( ldl_include_stack_ptr >= MAX_INCLUDE_DEPTH ) {
 				ldl_parse_error = LDL_ERROR_INCLUDE;
 				yyterminate();
-            } else {
+			} else {
 
 				char buf[MAX_PATH];
 				char filename[MAX_PATH];
@@ -59,15 +59,15 @@ name		[a-zA-Z]+[a-zA-Z0-9_]*
 					yyterminate();
 				}
 				ldl_include_line_number_stack[ldl_include_stack_ptr] = g_ldlLineNumber;
-			    ldl_include_stack[ldl_include_stack_ptr++] =
+				ldl_include_stack[ldl_include_stack_ptr++] =
 						YY_CURRENT_BUFFER;
 				ldl_include_filename_stack[ldl_include_stack_ptr] = malloc(strlen(buf)+1);
 				strcpy(ldl_include_filename_stack[ldl_include_stack_ptr],
-					   buf);
-			    yyin = fopen( buf, "r" );
+				       buf);
+				yyin = fopen( buf, "r" );
 
-			    if ( ! yyin ) {
-				    ldl_parse_error = LDL_ERROR_CANT_OPEN_FILE;
+				if ( ! yyin ) {
+					ldl_parse_error = LDL_ERROR_CANT_OPEN_FILE;
 					yyterminate();
 				} else {
 					yy_switch_to_buffer(
@@ -79,18 +79,18 @@ name		[a-zA-Z]+[a-zA-Z0-9_]*
 			}
 		}
 <fname>.		{
-				    ldl_parse_error = LDL_ERROR_INCLUDE;
-				    yyterminate();
+					ldl_parse_error = LDL_ERROR_INCLUDE;
+					yyterminate();
 				}
 
 ^importLoc	{ BEGIN(inclL); }
 <inclL>[ \t\r]* {}
 <inclL>\"    { BEGIN(fnameL); }
 <fnameL>[a-zA-Z0-9_.\\]+\" { /* Got the include file name */
-  			if ( ldl_include_stack_ptr >= MAX_INCLUDE_DEPTH ) {
+			if ( ldl_include_stack_ptr >= MAX_INCLUDE_DEPTH ) {
 				ldl_parse_error = LDL_ERROR_INCLUDE;
 				yyterminate();
-            } else {
+			} else {
 
 				char buf[MAX_PATH];
 				char filename[MAX_PATH];
@@ -101,15 +101,15 @@ name		[a-zA-Z]+[a-zA-Z0-9_]*
 					yyterminate();
 				}
 				ldl_include_line_number_stack[ldl_include_stack_ptr] = g_ldlLineNumber;
-			    ldl_include_stack[ldl_include_stack_ptr++] =
+				ldl_include_stack[ldl_include_stack_ptr++] =
 						YY_CURRENT_BUFFER;
 				ldl_include_filename_stack[ldl_include_stack_ptr] = malloc(strlen(buf)+1);
 				strcpy(ldl_include_filename_stack[ldl_include_stack_ptr],
-					   buf);
-			    yyin = fopen( buf, "r" );
+				       buf);
+				yyin = fopen( buf, "r" );
 
-			    if ( ! yyin ) {
-				    ldl_parse_error = LDL_ERROR_CANT_OPEN_FILE;
+				if ( ! yyin ) {
+					ldl_parse_error = LDL_ERROR_CANT_OPEN_FILE;
 					yyterminate();
 				} else {
 					yy_switch_to_buffer(
@@ -121,8 +121,8 @@ name		[a-zA-Z]+[a-zA-Z0-9_]*
 			}
 		}
 <fnameL>.		{
-				    ldl_parse_error = LDL_ERROR_INCLUDE;
-				    yyterminate();
+					ldl_parse_error = LDL_ERROR_INCLUDE;
+					yyterminate();
 				}
 
 <<EOF>> {
@@ -132,15 +132,15 @@ name		[a-zA-Z]+[a-zA-Z0-9_]*
 				}
 				yyterminate();
 			} else {
-                fclose(yyin);
-                yyin = 0;
+				fclose(yyin);
+				yyin = 0;
 				yy_delete_buffer( YY_CURRENT_BUFFER );
 				free(ldl_include_filename_stack[ldl_include_stack_ptr + 1]);
 				yy_switch_to_buffer(
 					ldl_include_stack[ldl_include_stack_ptr] );
 				g_ldlLineNumber = ldl_include_line_number_stack[ldl_include_stack_ptr];
 			}
-        }
+		}
 
 template		{ }
 int				{
@@ -155,8 +155,8 @@ bool			{
 string			{
 					return TSTRING;
 				}
-true            { return VTRUE; }
-false           { return VFALSE; }
+true			{ return VTRUE; }
+false			{ return VFALSE; }
 {name}			{
 					yylval.nameval = ldlif_getnameptr(yytext);
 					return VNAME;
@@ -166,7 +166,7 @@ false           { return VFALSE; }
 					return VINT;
 				}
 -?[0-9]*\.[0-9]+ {
-				    yylval.floatval = atof(yytext);
+					yylval.floatval = atof(yytext);
 					return VFLOAT;
 				}
 {string}		{
@@ -174,10 +174,10 @@ false           { return VFALSE; }
 					yylval.stringval = ldlif_getstringptr(&yytext[1]);
 					return VSTRING;
 				}
-#.*\n             { g_ldlLineNumber++; }
+#.*\n			{ g_ldlLineNumber++; }
 [ \t\r]			{ }
 \n				{ g_ldlLineNumber++; }
-\$              { }
+\$				{ }
 .				{ return yytext[0]; }
 
 %%

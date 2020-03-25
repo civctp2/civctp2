@@ -515,7 +515,7 @@ MBCHAR *CivPaths::FindFile(C3DIR dir, const MBCHAR *filename, MBCHAR *path,
 
 	if (check_prjfile &&
 	    ((dir == C3DIR_PATTERNS) ||
-			(dir == C3DIR_PICTURES)))
+	     (dir == C3DIR_PICTURES)))
 	{
 		uint32 len = strlen(filename);
 
