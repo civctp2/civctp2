@@ -20,10 +20,10 @@ extern "C" {
 
 extern int g_ldlLineNumber;
 
-int ldlif_open_first_file(char *file);
 const char *ldlif_current_file();
 
 int ldlif_find_file(const char *filename, char *buf);
+int ldlif_find_localized_file(const char *filename, char *buf);
 
 char *ldlif_getnameptr(const char *name);
 char *ldlif_getstringptr(const char *text);

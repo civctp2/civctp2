@@ -91,7 +91,7 @@ public:
 
 
 	MBCHAR *FindFile(C3DIR dir, const MBCHAR *filename, MBCHAR *path,
-                     bool silent = false, bool check_prjfile = true, bool checkScenario = true);
+                     bool silent = false, bool check_prjfile = true, bool checkScenario = true, bool checkLocalizedPath = true);
 
 	MBCHAR *GetSpecificPath(C3DIR dir, MBCHAR *path, BOOL local);
 

@@ -36,6 +36,8 @@ name		[a-zA-Z]+[a-zA-Z0-9_]*
 
 %x incl
 %x fname
+%x inclL
+%x fnameL
 
 %%
 
@@ -80,6 +82,49 @@ name		[a-zA-Z]+[a-zA-Z0-9_]*
 				    ldl_parse_error = LDL_ERROR_INCLUDE;
 				    yyterminate();
 				}
+
+^importLoc	{ BEGIN(inclL); }
+<inclL>[ \t\r]* {}
+<inclL>\"    { BEGIN(fnameL); }
+<fnameL>[a-zA-Z0-9_.\\]+\" { /* Got the include file name */
+  			if ( ldl_include_stack_ptr >= MAX_INCLUDE_DEPTH ) {
+				ldl_parse_error = LDL_ERROR_INCLUDE;
+				yyterminate();
+            } else {
+
+				char buf[MAX_PATH];
+				char filename[MAX_PATH];
+				strcpy(filename, yytext);
+				filename[strlen(filename)-1] = 0; /* Strip trailing quote */
+				if(!ldlif_find_localized_file(filename, buf)) {
+					ldl_parse_error = LDL_ERROR_CANT_OPEN_FILE;
+					yyterminate();
+				}
+				ldl_include_line_number_stack[ldl_include_stack_ptr] = g_ldlLineNumber;
+			    ldl_include_stack[ldl_include_stack_ptr++] =
+						YY_CURRENT_BUFFER;
+				ldl_include_filename_stack[ldl_include_stack_ptr] = malloc(strlen(buf)+1);
+				strcpy(ldl_include_filename_stack[ldl_include_stack_ptr],
+					   buf);
+			    yyin = fopen( buf, "r" );
+
+			    if ( ! yyin ) {
+				    ldl_parse_error = LDL_ERROR_CANT_OPEN_FILE;
+					yyterminate();
+				} else {
+					yy_switch_to_buffer(
+						yy_create_buffer( yyin, YY_BUF_SIZE ) );
+
+					g_ldlLineNumber = 1;
+					BEGIN(INITIAL);
+				}
+			}
+		}
+<fnameL>.		{
+				    ldl_parse_error = LDL_ERROR_INCLUDE;
+				    yyterminate();
+				}
+
 <<EOF>> {
 			if ( --ldl_include_stack_ptr < 0 ) {
 				if(ldl_include_stack_ptr == -1) {
