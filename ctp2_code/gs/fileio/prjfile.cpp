@@ -415,7 +415,7 @@ int ProjectFile::readDOSdir(long path, PFEntry *table)
         if (!(dirent.dwFileAttributes & FILE_ATTRIBUTE_DIRECTORY)) {
 #else
         snprintf(tmp, sizeof(tmp), "%s%s%s", m_paths[path].dos_path, FILE_SEP, name);
-        if (!stat(tmp, &tmpstat))
+        if (stat(tmp, &tmpstat) == -1)
             continue;
 
         if (!S_ISDIR(tmpstat.st_mode)) {

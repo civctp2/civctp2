@@ -2324,8 +2324,7 @@ PointerList<GameMapInfo> *GameMapFile::BuildSaveMapList(C3SAVEDIR dir)
 		if (!dent) continue;
 
 		snprintf(path, sizeof(path), "%s%s%s", dirPath, FILE_SEP, dent->d_name);
-		if (!stat(path, &tmpstat))
-			continue;
+		if (stat(path, &tmpstat) == -1) continue;
 
 		if (S_ISDIR(tmpstat.st_mode)) {
 			MBCHAR *name = dent->d_name;
@@ -2364,7 +2363,7 @@ PointerList<GameMapInfo> *GameMapFile::BuildSaveMapList(C3SAVEDIR dir)
 				if (!dent2) continue;
 
 				snprintf(path, sizeof(path), "%s%s%s", gameInfo->path, FILE_SEP, dent2->d_name);
-				if (!stat(path, &tmpstat)) continue;
+				if (stat(path, &tmpstat) == -1) continue;
 
 				if (!S_ISDIR(tmpstat.st_mode))
 				{
