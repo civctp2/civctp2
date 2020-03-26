@@ -1,0 +1,10 @@
+# By default disable any auto-conversion of line terminators.
+* -text
+
+# Enforce LF terminators for all program code files.
+*.c text eol=lf
+*.h text eol=lf
+*.cpp text eol=lf
+*.y text eol=lf
+*.l text eol=lf
+*.cdb text eol=lf
