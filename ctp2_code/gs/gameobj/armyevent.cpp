@@ -807,8 +807,18 @@ STDEHANDLER(ArmyMoveEvent)
 				}
 			}
 
+			if(g_player[owner]->IsRobot() && army->CanExpel() && defender->CanBeExpelled())
+			{
+				DPRINTF(k_DBG_GAMESTATE, ("Army 0x%lx gets event to expell foreigner\n", army.m_id));
+				g_gevManager->AddEvent(GEV_INSERT_AfterCurrent,
+				    GEV_ExpelOrder,
+				    GEA_Army, army,
+				    GEA_MapPoint, newPos,
+				    GEA_End);
+				return GEV_HD_Continue;
+			}
+				
 			Assert(!g_player[owner]->IsRobot() || Diplomat::GetDiplomat(owner).HasWarOrDesiresPreemptivelyWith(defender->GetOwner()));
-
 			if(g_player[owner]->IsRobot() && army->CanFight(*defender) || g_player[owner]->IsHuman())
 			{
 				DPRINTF(k_DBG_GAMESTATE, ("Army 0x%lx gets event to attack foreigner\n", army.m_id));
