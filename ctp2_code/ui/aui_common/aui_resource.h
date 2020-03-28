@@ -328,7 +328,7 @@ BOOL aui_Resource<T>::FindFile( MBCHAR *fullPath, const MBCHAR *name )
 				if ( GetFileAttributes( fullPath ) != 0xffffffff )
 #else
 				struct stat st;
-				if (0 == stat(fullPath, &st))
+				if (stat(fullPath, &st) == 0)
 #endif
 				{
 					return TRUE;

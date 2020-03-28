@@ -317,7 +317,7 @@ namespace Os
 		snprintf(szLink, sizeof(szLink) - 1, "/proc/%ld/exe", static_cast<long int>(pid));
 		int rc = lstat(szLink, &st);
 		// szLink must be a link...
-		if (rc != 0)
+		if (rc == -1)
 			return std::basic_string<TCHAR>();
 
 		if (!S_ISLNK(st.st_mode))
@@ -376,7 +376,7 @@ namespace Os
 #elif defined(LINUX)
 		struct stat st = { 0 };
 		int rc = stat(Os::GetExeName().c_str(), &st);
-		if (rc != 0)
+		if (rc == -1)
 			return exeVersion.str();
 
 		struct tm *t = localtime(&st.st_mtime);

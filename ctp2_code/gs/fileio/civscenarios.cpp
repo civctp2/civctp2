@@ -175,7 +175,7 @@ void CivScenarios::LoadScenarioPackData(ScenarioPack *pack, MBCHAR *packPath)
 #else
 		r = stat(scenListName, &tmpstat);
 #endif
-		if (!r) {
+		if (r == 0) {
 			MBCHAR *scenarioPath = new MBCHAR[strlen(scenPath)+1];
 			strcpy(scenarioPath, scenPath);
 			scenList->AddTail(scenarioPath);
@@ -262,7 +262,7 @@ void CivScenarios::LoadData(void)
 #else
 			r = stat(packListName, &tmpstat);
 #endif
-			if (!r) {
+			if (r == 0) {
 				fileListFileName = new MBCHAR[strlen(name)+1];
 
 				strcpy(fileListFileName, name);
@@ -461,11 +461,14 @@ CIV_SCEN_ERR CivScenarios::MakeNewPack(MBCHAR *dirName, MBCHAR *packName, MBCHAR
 	g_civPaths->GetScenarioRootPath(rootPath);
 
 	sprintf(path, "%s%s%s", rootPath, FILE_SEP, dirName);
+
+	int rc;
 #ifdef WIN32
-	if(!_stat(path, &tmpstat)) {
+	rc = _stat(path, &tmpstat);
 #else
-	if(!stat(path, &tmpstat)) {
+	rc = stat(path, &tmpstat);
 #endif
+	if (rc == 0) {
 		return CIV_SCEN_DIR_EXISTS;
 	}
 
@@ -519,12 +522,14 @@ CIV_SCEN_ERR CivScenarios::MakeNewScenario(ScenarioPack *pack, MBCHAR *scenName,
 
 	MBCHAR scenPath[_MAX_PATH];
 	sprintf(scenPath, "%s%sscen%04d", pack->m_path, FILE_SEP, pack->m_numScenarios);
-#ifdef WIN32
-	if(!_stat(scenPath, &tmpstat)) {
-#else
-	if(!stat(scenPath, &tmpstat)) {
-#endif
 
+	int rc;
+#ifdef WIN32
+	rc = _stat(scenPath, &tmpstat);
+#else
+	rc = stat(scenPath, &tmpstat);
+#endif
+	if (rc == 0) {
 		return CIV_SCEN_DIR_EXISTS;
 	}
 

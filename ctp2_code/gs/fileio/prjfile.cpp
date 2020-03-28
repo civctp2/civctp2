@@ -123,7 +123,7 @@ void * mapFile(char const *path, long *size, PFPath &pfp)
 {
     void *ptr;
     struct stat tmpstat = { 0 };
-    if (stat(CI_FixName(path), &tmpstat) != 0) {
+    if (stat(CI_FixName(path), &tmpstat) == -1) {
     	return NULL;
     }
     int fd = open(CI_FixName(path), O_RDONLY);
@@ -415,7 +415,7 @@ int ProjectFile::readDOSdir(long path, PFEntry *table)
         if (!(dirent.dwFileAttributes & FILE_ATTRIBUTE_DIRECTORY)) {
 #else
         snprintf(tmp, sizeof(tmp), "%s%s%s", m_paths[path].dos_path, FILE_SEP, name);
-        if (!stat(tmp, &tmpstat))
+        if (stat(tmp, &tmpstat) == -1)
             continue;
 
         if (!S_ISDIR(tmpstat.st_mode)) {
