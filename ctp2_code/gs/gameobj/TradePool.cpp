@@ -12,6 +12,8 @@
 #include "Globals.h"
 #include "Events.h"
 #include "GameEventUser.h"
+#include "SelItem.h"            // g_selected_item
+
 
 class aui_Surface;
 
@@ -54,12 +56,15 @@ TradeRoute TradePool::Create(Unit sourceCity,
 	}
 
 	Insert(newData);
+	newRoute.Activate(); // route activation should happen before AddTradeRoute, just in case
+	newRoute.RevealTradeRouteStateIfInVision(); // reveal trade route state to players where route is in vision, must be after Activate()
 
-	sourceCity.AddTradeRoute(newRoute);
-	destCity.AddTradeRoute(newRoute);
+	sourceCity.AddTradeRoute(newRoute); // activates trade route in case it is not
+	destCity.AddTradeRoute(newRoute); // activates trade route in case it is not
 	m_all_routes->Insert(newRoute);
 	g_director->TradeActorCreate(newRoute);
 	sourceCity.RecalculateResources();
+	newRoute.RedrawRadarMapAlongRoute(); // must be called after TradeRouteData is set and route activation
 
 	return newRoute;
 }
@@ -88,9 +93,11 @@ void TradePool::Draw(aui_Surface* surface)
     for (sint32 i = 0; i < num; i++) {
 		TradeRoute route = m_all_routes->Access(i);
 
-		DrawTradeRoute(surface, (DynamicArray<MapPoint>*)m_all_routes->Access(i).GetPath(),
+		if(route.SeenBy(g_selected_item->GetVisiblePlayer())){
+		    DrawTradeRoute(surface, (DynamicArray<MapPoint>*)m_all_routes->Access(i).GetPath(),
 			g_colorSet->GetPlayerColor(route.GetOwner()),
-			(uint16)route.GetOutlineColor());
+			g_colorSet->GetColor(COLOR_BLACK));
+		    }
 
 #if 0
 
@@ -100,16 +107,20 @@ void TradePool::Draw(aui_Surface* surface)
 			if (m_all_routes->Access(i).GetPathSelectionState() == k_TRADEROUTE_SELECTED_PATH)
 			{
 
+			if(route.SeenBy(g_selected_item->GetVisiblePlayer())){
 				DrawTradeRoute(surface, (DynamicArray<MapPoint>*)m_all_routes->Access(i).GetSelectedPath(),
 					g_colorSet->GetColor(COLOR_SELECT_1),
 					g_colorSet->GetColor(COLOR_BLACK));
+			    }
 			}
 			else
 			{
 
+			if(route.SeenBy(g_selected_item->GetVisiblePlayer())){
 				DrawTradeRoute(surface, (DynamicArray<MapPoint>*)m_all_routes->Access(i).GetSelectedPath(),
 					g_colorSet->GetColor(COLOR_RED),
 					g_colorSet->GetColor(COLOR_BLACK));
+			    }
 			}
 		}
 #endif

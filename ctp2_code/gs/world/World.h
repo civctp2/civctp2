@@ -475,7 +475,6 @@ public:
 	double CalcTerrainFreightCost(const MapPoint &pos);
 
 	bool HasCity(const MapPoint &pos) const;
-	bool IsSupplyingTrade(const MapPoint &pos) const;
 
 	BOOL IsConnectedToCity(const MapPoint &pos, sint32 owner, uint8* array = NULL) const;
 	BOOL IsOnOrNextToOwner(const MapPoint &pos, sint32 owner);

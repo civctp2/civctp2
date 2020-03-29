@@ -65,10 +65,10 @@ private:
 	sint32 m_sourceResource;
 	BOOL m_passesThrough[k_MAX_PLAYERS];
 	BOOL m_crossesWater;
-	bool m_isActive;
+	sint8 m_isActive;
 
 	uint32	m_color;
-	uint32	m_outline;
+	uint32	m_seenBy;
 
 	sint32	m_selectedIndex;
 
@@ -89,8 +89,8 @@ private:
 	DynamicArray<MapPoint> m_selectedPath;
 	DynamicArray<MapPoint> m_selectedWayPoints;
 
-	DynamicArray<MapPoint> m_setPath;
-	DynamicArray<MapPoint> m_setWayPoints;
+	DynamicArray<MapPoint> m_setPath; // unused
+	DynamicArray<MapPoint> m_setWayPoints; // unused
 
 	Path *m_astarPath;
 
@@ -120,9 +120,14 @@ public:
 	PLAYER_INDEX GetPayingFor() const { return m_payingFor; }
 
 	uint32 GetColor() const { return m_color; }
-	uint32 GetOutlineColor() const { return m_outline; }
 	void SetColor( uint32 color ) { m_color = color; }
-	void SetOutlineColor( uint32 color ) { m_outline = color; }
+
+	void AddSeenByBit(sint32 player);
+	void RemoveSeenByBit(sint32 player);
+	bool SeenBy(sint32 player);
+	uint32 SeenByBits();
+	void RedrawRadarMapAlongRoute();
+	void RevealTradeRouteStateIfInVision();
 
 	void SetSource(Unit source);
 	void SetDestination(Unit dest);
@@ -155,9 +160,10 @@ public:
 	void ReturnPath(const PLAYER_INDEX owner, DynamicArray<MapPoint> &waypoints,
 					DynamicArray<MapPoint> &fullpath,
 					double &cost);
-	void SetPath(DynamicArray<MapPoint> &fullpath,
-				 DynamicArray<MapPoint> &waypoints);
+/* unused
+	void SetPath(DynamicArray<MapPoint> &fullpath, DynamicArray<MapPoint> &waypoints);
 	void BeginTurn();
+*/
 
 	void ClearSelectedPath();
 	void GenerateSelectedPath(const MapPoint &pos);
@@ -171,9 +177,11 @@ public:
 	sint32 GetPathSelectionState() const { return m_path_selection_state; }
 	void SetPathSelectionState(sint32 state) { m_path_selection_state = state; }
 
-	BOOL IsActive() const { return m_isActive; }
-	void Activate() { m_isActive = TRUE; }
-	void Deactivate() { m_isActive = FALSE; }
+	BOOL IsActive() const { return m_isActive == 1; }
+	void Activate() { m_isActive = 1; }
+	void Deactivate() { m_isActive = 0; m_piratingArmy = 0; } // deactivated route cannot be pirated
+	void Remove(sint8 cause) { m_isActive = -cause; } // store cause as negative value
+	sint8 IsRemoved() const { return (m_isActive < 0 ? -m_isActive : 0); } // report cause as positive value
 
 	BOOL IsValid() const { return m_valid; }
 

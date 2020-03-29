@@ -926,7 +926,15 @@ void RadarMap::RenderTrade(aui_Surface *surface, const MapPoint &position, const
 
 	MapPoint screenPosition(((worldpos.y / 2) + position.x) % (m_mapSize->x), position.y);
 
-	if(!g_theWorld->GetCell(worldpos)->GetNumTradeRoutes() ||
+	bool seenTrade= false;
+	for (sint32 i = 0; i < g_theWorld->GetCell(worldpos)->GetNumTradeRoutes(); i++) {
+	    TradeRoute route = g_theWorld->GetCell(worldpos)->GetTradeRoute(i);
+	    if(route.SeenBy(g_selected_item->GetVisiblePlayer())){
+		seenTrade= true;
+		}
+	    }
+
+	if(!seenTrade ||
 	   !player->m_vision->IsExplored(worldpos)) {
 		return;
 	}

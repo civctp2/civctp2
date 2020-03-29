@@ -4379,7 +4379,9 @@ void CityData::AddTradeResource(ROUTE_TYPE type, sint32 resource)
 //
 // Name       : CityData::CalculateTradeRoutes
 //
-// Description:
+// Description: Removes routes that cannot be afforded any more (from CTP1)
+//              Basically has no effect for CTP2 until GetGoldInReturn() or ROUTE_TYPE_FOOD is used again
+//              Activates trade route in case it is not, should not happen, just in case
 //
 // Parameters : bool projectedOnly
 //
@@ -4411,16 +4413,11 @@ void CityData::CalculateTradeRoutes(bool projectedOnly)
 			}
 			continue;
 		}
-		if(!projectedOnly)
-		{
-			if(!route.IsActive())
-			{
-				route.Activate();
-				g_director->TradeActorCreate(route);
-			}
-			route.BeginTurn();
-		}
 
+		if(!route.IsActive()){
+		    route.Activate(); // routes of m_tradeSourceList and m_tradeDestinationList are expected to be active
+		    fprintf(stderr, "%s L%d: Activated deactive route, this should not happen!\n", __FILE__, __LINE__);
+		    }		    
 		route.GetSourceResource(routeType, routeResource);
 
 		switch(routeType)
@@ -4466,6 +4463,11 @@ void CityData::CalculateTradeRoutes(bool projectedOnly)
 			continue;
 		}
 
+		if(!route.IsActive()){
+		    route.Activate(); // routes of m_tradeSourceList and m_tradeDestinationList are expected to be active
+		    fprintf(stderr, "%s L%d: Activated deactive route, this should not happen!\n", __FILE__, __LINE__);
+		    }		    
+
 		killRoute = false;
 		if(!projectedOnly)
 		{
@@ -4484,12 +4486,6 @@ void CityData::CalculateTradeRoutes(bool projectedOnly)
 					g_player[m_owner]->SubGold(route.GetGoldInReturn()); // remove gold from receiver
 					g_player[route.GetSource().GetOwner()]->AddGold(route.GetGoldInReturn()); // give gold to sender
 				}
-			}
-
-			if(!route.IsActive())
-			{
-				route.Activate();
-				g_director->TradeActorCreate(route);
 			}
 		}
 
@@ -4811,6 +4807,7 @@ sint32 CityData::GetWagesNeeded()
 // Name       : AddTradeRoute
 //
 // Description: Add a trade route to this city's m_tradeSourceList or tradeDestinationList
+//              Activates trade route in case it is not!
 //
 // Parameters : TradeRoute &route       : the trade route
 //            : bool       fromNetwork  :
@@ -4831,6 +4828,9 @@ void CityData::AddTradeRoute(TradeRoute &route, bool fromNetwork)
 {
 	Assert((route.GetSource() == m_home_city) ||
 		   (route.GetDestination() == m_home_city));
+
+	if(!route.IsActive()) // do not skip deactivated routes, calling CityData::AddTradeRoute should always only be used for trade routes to be active
+	    route.Activate(); // routes of m_tradeSourceList and m_tradeDestinationList are expected to be active (i.e. no checks on route.IsActive() there)
 
 	if(route.GetSource() == m_home_city)
 	{
@@ -4904,8 +4904,7 @@ void CityData::DelTradeRoute(TradeRoute route)
 		switch(type)
 		{
 			case ROUTE_TYPE_RESOURCE:
-				Assert(m_sellingResources[resource] > 0);
-				if(m_sellingResources[resource] > 0)
+				if(m_sellingResources[resource] > 0) // can be already zero if called 2nd time from TradeRoute::RemoveAllReferences
 				{
 					m_sellingResources.AddResource(resource, -1);
 				}
@@ -4924,8 +4923,7 @@ void CityData::DelTradeRoute(TradeRoute route)
 		switch(type)
 		{
 			case ROUTE_TYPE_RESOURCE:
-				Assert(m_buyingResources[resource] > 0);
-				if(m_buyingResources[resource] > 0)
+				if(m_buyingResources[resource] > 0) // can be already zero if called 2nd time from TradeRoute::RemoveAllReferences
 				{
 					m_buyingResources.AddResource(resource, -1);
 				}
@@ -11701,7 +11699,7 @@ bool CityData::CityIsOnTradeRoute()
 	{
 		for(sint32 i = 0; i < cell->GetNumTradeRoutes(); i++)
 		{
-			if(cell->GetTradeRoute(i).IsValid())
+			if(cell->GetTradeRoute(i).IsActive() && cell->GetTradeRoute(i).IsValid()) // only count active (and valid) routes
 			{
 				return true;
 			}
@@ -11724,6 +11722,9 @@ void CityData::GiveTradeRouteGold()
 			if(cell->GetTradeRoute(i).IsValid())
 			{
 				TradeRoute route = cell->GetTradeRoute(i);
+				if(!route.IsActive()) // skip deactivated routes (only exist for drawing until revisited, see #256)
+				    continue;
+
 				if((route.GetSource().GetOwner() != m_owner)
 				&&(route.GetDestination().GetOwner() != m_owner)
 				){

@@ -70,9 +70,13 @@ public:
 	BOOL CrossesWater() const;
 
 	uint32 GetColor() const;
-	uint32 GetOutlineColor() const;
 	void SetColor( uint32 color );
-	void SetOutlineColor( uint32 color );
+
+	void AddSeenByBit(sint32 player);
+	void RemoveSeenByBit(sint32 player);
+	bool SeenBy(sint32 player);
+	void RedrawRadarMapAlongRoute();
+	void RevealTradeRouteStateIfInVision();
 
 	void ClearSelectedPath();
 	void GenerateSelectedPath(const MapPoint &pos);
@@ -93,6 +97,7 @@ public:
 	BOOL IsActive() const;
 	void Activate();
 	void Deactivate();
+	void RemoveUnseenRoute();
 
 	sint32 GetGoldInReturn() const;
 
@@ -101,10 +106,10 @@ public:
 	void ReturnPath(const PLAYER_INDEX owner, DynamicArray<MapPoint> &waypoints,
 	                DynamicArray<MapPoint> &fullpath,
 	                double &cost);
-	void SetPath(DynamicArray<MapPoint> &fullpath,
-	             DynamicArray<MapPoint> &waypoints);
-
+/* unused
+	void SetPath(DynamicArray<MapPoint> &fullpath,DynamicArray<MapPoint> &waypoints);
 	void BeginTurn();
+*/
 
 	void DontAdjustPointsWhenKilled();
 };

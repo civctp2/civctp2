@@ -53,23 +53,16 @@ bool TradeRoute::IsValid() const
 
 void TradeRoute::KillRoute(CAUSE_KILL_TRADE_ROUTE cause) // mapped to TradeRoute::Kill in TradeRoute.h
 {
-	TradeRoute tmp(*this);
-	tmp.RemoveAllReferences(cause);
-}
-
-void TradeRoute::RemoveAllReferences(CAUSE_KILL_TRADE_ROUTE cause)
-{
-	g_director->TradeActorDestroy(*this);
 	TradeRouteData* data = AccessData();
-
+	data->Remove(cause); // remove route from game but keep reference as long as m_seenBy is not zero
+	
 	Unit source(data->GetSource()), dest(data->GetDestination());
 
-
 	if(g_theUnitPool->IsValid(source))
-		source.DelTradeRoute(*this);
+		source.DelTradeRoute(*this); // remove route from CityData (m_tradeSourceList), essential because routes of m_tradeSourceList are expected to be active (i.e. no checks on route.IsActive())
 	if(g_theUnitPool->IsValid(dest))
-		dest.DelTradeRoute(*this);
-
+		dest.DelTradeRoute(*this); // remove route from CityData (m_tradeDestinationList), essential because routes of m_tradeDestinationList are expected to be active (i.e. no checks on route.IsActive())
+	
 	if(g_theUnitPool->IsValid(source) && g_theUnitPool->IsValid(dest)) {
 		if(source.GetOwner() != dest.GetOwner()) {
 			switch(cause) {
@@ -108,6 +101,33 @@ void TradeRoute::RemoveAllReferences(CAUSE_KILL_TRADE_ROUTE cause)
 		g_player[GetPayingFor()]->RemoveTradeRoute(*this, cause); // brings used caravans/trade-units back - 1
 	}
 
+	TradeRoute tmp(*this);
+	tmp.Deactivate(); // deactivate route => if a tile of the path is seen again the route will not be drawn any more
+	tmp.RemoveSeenByBit(source.GetOwner()); // owner should not see it any more instantly
+	tmp.RemoveSeenByBit(dest.GetOwner()); // receiver should not see it any more instantly
+	tmp.RevealTradeRouteStateIfInVision(); // reveal trade route state to players where route is in vision, must be after Deactivate()
+}
+
+void TradeRoute::RemoveUnseenRoute() // mapped to TradeRoute::Kill in TradeRoute.h
+{
+	TradeRouteData* data = AccessData();
+	if(data->SeenByBits() == 0){
+	    TradeRoute tmp(*this);
+	    CAUSE_KILL_TRADE_ROUTE cause= data->IsRemoved();
+	    tmp.RemoveAllReferences(cause);
+	    }
+}
+
+void TradeRoute::RemoveAllReferences(CAUSE_KILL_TRADE_ROUTE cause)
+{
+	g_director->TradeActorDestroy(*this);  // good animation
+	TradeRouteData* data = AccessData();
+
+	Unit source(data->GetSource()), dest(data->GetDestination());
+	if(g_theUnitPool->IsValid(source))
+		source.DelTradeRoute(*this); // remove route from CityData (m_tradeSourceList), essential because routes of m_tradeSourceList are expected to be active (i.e. no checks on route.IsActive())
+	if(g_theUnitPool->IsValid(dest))
+		dest.DelTradeRoute(*this); // remove route from CityData (m_tradeDestinationList), essential because routes of m_tradeDestinationList are expected to be active (i.e. no checks on route.IsActive())
 	data->RemoveFromCells();
 
 #ifdef RECIPROCAL_ROUTES
@@ -217,19 +237,34 @@ uint32 TradeRoute::GetColor() const
 	return GetData()->GetColor();
 }
 
-uint32 TradeRoute::GetOutlineColor() const
-{
-	return GetData()->GetOutlineColor();
-}
-
 void TradeRoute::SetColor( uint32 color )
 {
 	AccessData()->SetColor(color);
 }
 
-void TradeRoute::SetOutlineColor( uint32 color )
+void TradeRoute::AddSeenByBit( sint32 player )
 {
-	AccessData()->SetOutlineColor(color);
+	AccessData()->AddSeenByBit(player);
+}
+
+void TradeRoute::RemoveSeenByBit( sint32 player )
+{
+	AccessData()->RemoveSeenByBit(player);
+}
+
+bool TradeRoute::SeenBy( sint32 player )
+{
+	return GetData()->SeenBy(player);
+}
+
+void TradeRoute::RedrawRadarMapAlongRoute()
+{
+	AccessData()->RedrawRadarMapAlongRoute();
+}
+
+void TradeRoute::RevealTradeRouteStateIfInVision()
+{
+	AccessData()->RevealTradeRouteStateIfInVision();
 }
 
 void TradeRoute::ReturnPath(const PLAYER_INDEX owner, DynamicArray<MapPoint> &waypoints,
@@ -239,11 +274,12 @@ void TradeRoute::ReturnPath(const PLAYER_INDEX owner, DynamicArray<MapPoint> &wa
 	AccessData()->ReturnPath(owner, waypoints, fullpath, cost);
 }
 
-void TradeRoute::SetPath(DynamicArray<MapPoint> &fullpath,
-						 DynamicArray<MapPoint> &waypoints)
+/* unused
+void TradeRoute::SetPath(DynamicArray<MapPoint> &fullpath, DynamicArray<MapPoint> &waypoints)
 {
 	AccessData()->SetPath(fullpath, waypoints);
 }
+*/
 
 void TradeRoute::GenerateSelectedPath(const MapPoint &pos)
 {
@@ -300,10 +336,12 @@ void TradeRoute::SetPathSelectionState( sint32 state )
 	AccessData()->SetPathSelectionState(state);
 }
 
+/* unused
 void TradeRoute::BeginTurn()
 {
 	AccessData()->BeginTurn();
 }
+*/
 
 sint32 TradeRoute::GetGoldInReturn() const
 {

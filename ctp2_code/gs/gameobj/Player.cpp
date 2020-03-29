@@ -2479,6 +2479,13 @@ void Player::EndTurn()
 		m_all_cities->Access(i).EndTurnCity();
 	}
 
+	//// check which deactive routes can be removed completely, i.e. are not seen by any active player any more
+	const TradeDynamicArray *allRoutes = g_theTradePool->AccessAllRoutes();
+	for(i = allRoutes->Num() - 1; i >= 0; i--)
+	{
+		allRoutes->Access(i).RemoveUnseenRoute(); // checks if a route is not seen any more and then removes it completely
+	}
+
 	if ((m_gold->GetLevel() < 50) && (m_gold->DeltaThisTurn() < 0) &&
 	    (g_slicEngine->GetSegment("027NotEnoughGold")->TestLastShown(m_owner, 10)))
 	{
@@ -6974,6 +6981,13 @@ void Player::StartDeath(GAME_OVER reason, sint32 data)
         g_noai_stop_player = g_selected_item->GetPlayerAfterThis(m_owner);
     }
 
+	//// clear seenBy bit for dead player (needed for RemoveUnseenRoute)
+	const TradeDynamicArray *allRoutes = g_theTradePool->AccessAllRoutes();
+	for(sint32 i = allRoutes->Num() - 1; i >= 0; i--)
+	{
+		allRoutes->Access(i).RemoveSeenByBit(m_owner); // checks if a route is not seen any more and then removes it completely
+	}
+
 
 	if(m_terrainImprovements) {
 		sint32 i, n = m_terrainImprovements->Num();
@@ -7248,7 +7262,7 @@ sint32 Player::GetNumTradeRoutes() const
 	sint32 routes = 0;
 
 	for(sint32 i = 0; i < m_all_cities->Num(); i++) {
-		routes += m_all_cities->Access(i).GetNumTradeRoutes();
+		routes += m_all_cities->Access(i).GetNumTradeRoutes(); // GetNumTradeRoutes from CityData based on m_tradeSourceList and m_tradeDestinationList and are expected to hold only active routes (i.e. no need for checks on route.IsActive())
 	}
 	return routes;
 }

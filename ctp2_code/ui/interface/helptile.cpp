@@ -243,15 +243,22 @@ void helptile_displayData(const MapPoint &p)
 
 		// Unfortunatly this kind of information is not stored in the
 		// UnseenCell object.
-		std::string str= ""; // c++ string to avoid bothering about final length
-		str.append(std::to_string(myTile->GetNumTradeRoutes()));
-		str.append(":");
 
 		sint32 seen[k_MAX_PLAYERS];
 		memset(seen, 0, sizeof(seen));
+		sint32 numSeenTradeRutes= 0;
 		for(int i= 0; i < myTile->GetNumTradeRoutes(); i++) {
-		    seen[myTile->GetTradeRoute(i).GetOwner()]++;
+		    TradeRoute route= myTile->GetTradeRoute(i);
+		    if(route.SeenBy(g_selected_item->GetVisiblePlayer())){
+			seen[route.GetOwner()]++;
+			numSeenTradeRutes++;
+			}
 		    }
+
+		std::string str= ""; // c++ string to avoid bothering about final length
+		str.append(std::to_string(numSeenTradeRutes));
+		str.append(":");
+
 		for(int i = 0; i < k_MAX_PLAYERS; i++)
 		    {
 		    if(seen[i] > 0){
@@ -304,15 +311,21 @@ void helptile_displayData(const MapPoint &p)
 		strcpy(myname, g_theWorld->GetTerrainName(p));
 		g_helpTileWindow->TitleText()->SetText( myname );
 
-		std::string str= ""; // c++ string to avoid bothering about final length
-		str.append(std::to_string(myTile->GetNumTradeRoutes()));
-		str.append(":");
-
 		sint32 seen[k_MAX_PLAYERS];
 		memset(seen, 0, sizeof(seen));
+		sint32 numSeenTradeRutes= 0;
 		for(int i= 0; i < myTile->GetNumTradeRoutes(); i++) {
-		    seen[myTile->GetTradeRoute(i).GetOwner()]++;
+		    TradeRoute route= myTile->GetTradeRoute(i);
+		    if(route.SeenBy(g_selected_item->GetVisiblePlayer())){
+			seen[route.GetOwner()]++;
+			numSeenTradeRutes++;
+			}
 		    }
+
+		std::string str= ""; // c++ string to avoid bothering about final length
+		str.append(std::to_string(numSeenTradeRutes));
+		str.append(":");
+
 		for(int i = 0; i < k_MAX_PLAYERS; i++)
 		    {
 		    if(seen[i] > 0){

@@ -50,6 +50,7 @@
 #include "UnitData.h"
 #include "radarmap.h"
 #include "tradeutil.h"
+#include "Vision.h"                 // for using m_vision
 
 extern TradeAstar g_theTradeAstar;
 
@@ -74,9 +75,9 @@ TradeRouteData::TradeRouteData
     m_sourceRouteType               (sourceType),
     m_sourceResource                (sourceResource),
     m_crossesWater                  (false),
-    m_isActive                      (false),
+    m_isActive                      (0),
     m_color                         (g_colorSet->GetColor(COLOR_YELLOW)),
-    m_outline                       (g_colorSet->GetColor(COLOR_BLACK)),
+    m_seenBy                        (0),
     m_selectedIndex                 (0),
     m_valid                         (false),
     m_accumilatedTimesPirated       (0),
@@ -108,6 +109,9 @@ TradeRouteData::TradeRouteData
 
 	m_valid = GeneratePath(); // determins cost of trade-units
 	m_transportCost = tradeutil_GetTradeDistance(m_sourceCity, m_destinationCity); // overwrite transport cost from GeneratePath with that from tradeutil_GetTradeDistance to conform with all other cost estimations before creation, namely in governor.cpp (AI) and trademanager (human), which use tradeutil_GetTradeDistance due to significant speed-up
+
+	AddSeenByBit(owner); // route seen by owner in any case, currently paying_for == owner see https://github.com/civctp2/civctp2/blob/67954be9d07cfe5944dec129d0a5f21114a9682b/ctp2_code/gs/gameobj/Player.cpp#L3071
+	AddSeenByBit(m_destinationCity->GetOwner()); // route seen by receiver in any case, currently paying_for != m_destinationCity->GetOwner() see https://github.com/civctp2/civctp2/blob/67954be9d07cfe5944dec129d0a5f21114a9682b/ctp2_code/gs/gameobj/Player.cpp#L3071
 
 	DPRINTF(k_DBG_GAMESTATE, ("Created Trade Route from %s to %s, cost=%d, valid=%i\n",
 	                          m_sourceCity->GetCityData()->GetName(),
@@ -141,6 +145,63 @@ TradeRouteData::TradeRouteData(const TradeRoute route)
 TradeRouteData::~TradeRouteData()
 {
 	delete m_astarPath;
+}
+
+void TradeRouteData::AddSeenByBit(sint32 player)
+{
+	if(player >= 0 && player < k_MAX_PLAYERS) {
+		m_seenBy |= (1 << player);
+	}
+}
+
+void TradeRouteData::RemoveSeenByBit(sint32 player)
+{
+	if(player >= 0 && player < k_MAX_PLAYERS) {
+		m_seenBy &= ~(1 << player);
+	}
+}
+
+bool TradeRouteData::SeenBy(sint32 player)
+{
+	return m_seenBy & (1 << player);
+}
+
+uint32 TradeRouteData::SeenByBits()
+{
+	return m_seenBy;
+}
+
+void TradeRouteData::RedrawRadarMapAlongRoute()
+{
+	sint32 const    num = m_path.Num();
+	for (sint32 i = 0; i < num; i++)
+	{
+		if(g_radarMap)
+			g_radarMap->RedrawTile(&m_path[i]);
+	}
+}
+
+void TradeRouteData::RevealTradeRouteStateIfInVision()
+{
+	TradeRoute route(m_id);
+	sint32 const    num = m_path.Num();
+	for (sint32 i = 0; i < num; i++){
+	    for(sint32 p = 0; p < k_MAX_PLAYERS; p++){ // if point i is in vision of player p then AddSeenByBit
+		if(g_player && g_player[p] && g_player[p]->m_vision && g_player[p]->m_vision->IsVisible(m_path[i])){ // check pointers, critical when game is closed or reloaded; also reaveal trade route cities for owner
+		    if(IsActive()){
+			if(!SeenBy(p)){
+			    AddSeenByBit(p);
+			    }
+			g_player[p]->m_vision->RevealTradeRouteCities(route);
+			}
+		    else{
+			if(SeenBy(p)){
+			    RemoveSeenByBit(p);
+			    }
+			}
+		    }
+		}
+	    }
 }
 
 void TradeRouteData::RemoveFromCells()
@@ -253,7 +314,6 @@ bool TradeRouteData::GeneratePath()
 		{
 			m_path.Insert(pnt);
 			g_theWorld->GetCell(pnt)->AddTradeRoute(m_id);
-			g_radarMap->RedrawTile(&pnt);
 			if (g_theWorld->IsWater(pnt))
 			{
 				m_crossesWater = true;
@@ -267,6 +327,7 @@ bool TradeRouteData::GeneratePath()
 	return true;
 }
 
+/* unused
 void TradeRouteData::SetPath(DynamicArray<MapPoint> &fullpath,
                              DynamicArray<MapPoint> &waypoints)
 {
@@ -296,6 +357,7 @@ void TradeRouteData::BeginTurn()
 		m_setWayPoints.Clear();
 	}
 }
+*/
 
 void TradeRouteData::ReturnPath
 (
@@ -370,7 +432,7 @@ TradeRouteData::Serialize(CivArchive &archive)
 		archive.PutSINT32(m_crossesWater) ;
 		archive.PutSINT8(m_isActive);
 		archive.PutUINT32(m_color);
-		archive.PutUINT32(m_outline);
+		archive.PutUINT32(m_seenBy);
 		archive.PutSINT32(m_selectedIndex);
 		m_piratingArmy.Serialize(archive);
 		archive.PutSINT8(m_valid);
@@ -389,8 +451,8 @@ TradeRouteData::Serialize(CivArchive &archive)
 		m_selectedWayPoints.Serialize(archive);
 		m_astarPath->Serialize(archive);
 
-		m_setPath.Serialize(archive);
-		m_setWayPoints.Serialize(archive);
+		m_setPath.Serialize(archive); // unused
+		m_setWayPoints.Serialize(archive); // unused
 
 		uint8 hasChild;
 		hasChild = m_lesser != NULL;
@@ -414,7 +476,7 @@ TradeRouteData::Serialize(CivArchive &archive)
 		m_crossesWater = (BOOL)(archive.GetSINT32()) ;
 		m_isActive = archive.GetSINT8();
 		m_color = archive.GetUINT32();
-		m_outline = archive.GetUINT32();
+		m_seenBy = archive.GetUINT32();
 		m_selectedIndex = archive.GetSINT32();
 		m_piratingArmy.Serialize(archive);
 		m_valid = archive.GetSINT8(); // Split former BOOL m_valid, so that we can save something in the gap
@@ -432,8 +494,8 @@ TradeRouteData::Serialize(CivArchive &archive)
 		m_selectedPath.Serialize(archive);
 		m_selectedWayPoints.Serialize(archive);
 		m_astarPath->Serialize(archive);
-		m_setPath.Serialize(archive);
-		m_setWayPoints.Serialize(archive);
+		m_setPath.Serialize(archive); // unused
+		m_setWayPoints.Serialize(archive); // unused
 
 		uint8 hasChild;
 		archive >> hasChild;
@@ -604,7 +666,10 @@ sint32 TradeRouteData::GetValue() const
 
 void TradeRouteData::SetPiratingArmy(Army &a)
 {
-	m_piratingArmy = a;
+	if(m_isActive)
+	    m_piratingArmy = a;
+	else
+	    m_piratingArmy = 0; // deactivated route cannot be pirated
 }
 
 Army TradeRouteData::GetPiratingArmy()
@@ -614,5 +679,8 @@ Army TradeRouteData::GetPiratingArmy()
 
 bool TradeRouteData::IsBeingPirated()
 {
-	return m_piratingArmy.IsValid();
+	if(m_isActive)
+	    return m_piratingArmy.IsValid();
+	else
+	    return false; // deactivated route cannot be pirated
 }

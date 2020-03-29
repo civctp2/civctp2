@@ -1673,6 +1673,9 @@ void ArmyData::BeginTurn()
             sint32 piratedByMe = 0;
             for(i = 0; i < cell->GetNumTradeRoutes(); i++) {
                 TradeRoute route = cell->GetTradeRoute(i);
+		if(!route.IsActive()) // skip deactivated routes (only exist for drawing until revisited, see #256)
+		    continue;
+
                 if(route->GetPiratingArmy().m_id == m_id) {
 		    sint32 pgold = static_cast<sint32>(route->GetValue() * g_theConstDB->Get(0)->GetPiracyWasteCoefficient());
                     g_player[m_owner]->AddGold(pgold);
@@ -5898,7 +5901,10 @@ ORDER_RESULT ArmyData::InterceptTrade()
 				Cell *cell = g_theWorld->GetCell(m_pos);
 				for (sint32 j = 0; j < cell->GetNumTradeRoutes(); j++)
 				{
-					sint32 route_owner = cell->GetTradeRoute(j).GetOwner();
+					TradeRoute route = cell->GetTradeRoute(j);
+					sint32 route_owner = route.GetOwner();
+					if(!route.IsActive()) // skip deactivated routes (only exist for drawing until revisited, see #256)
+					    continue;
 					if (AgreementMatrix::s_agreements.HasAgreement(
 						route_owner,
 						m_owner,

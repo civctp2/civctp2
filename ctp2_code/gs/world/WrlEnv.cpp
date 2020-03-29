@@ -100,11 +100,6 @@ bool World::IsShallowWater(const sint32 x, const sint32 y) const
 	return ((m_map[x][y]->m_env & k_MASK_ENV_MOVEMENT_TYPE) & (k_BIT_MOVEMENT_TYPE_SHALLOW_WATER)) != 0;
 }
 
-bool World::IsSupplyingTrade(const MapPoint &pos) const
-{
-	return (GetCell(pos)->GetNumTradeRoutes() > 0);
-}
-
 sint32 World::IsCurrent(const MapPoint &pos)
 {
 	if (IsWater(pos)) {

@@ -70,8 +70,8 @@ RUN cd /ctp2 \
     && CPPFLAGS="-I/usr/local/include/SDL/" \
     CC=/usr/bin/gcc-5 \
     CXX=/usr/bin/g++-5 \
-    CFLAGS="$CFLAGS -w -O3 -fuse-ld=gold" \
-    CXXFLAGS="$CXXFLAGS -fpermissive -w -O3 -fuse-ld=gold" \
+    CFLAGS="$CFLAGS -w $( [ "${BTYP##*debug*}" ] && echo -O3 || echo -g -rdynamic ) -fuse-ld=gold" \
+    CXXFLAGS="$CXXFLAGS -fpermissive -w $( [ "${BTYP##*debug*}" ] && echo -O3 || echo -g -rdynamic ) -fuse-ld=gold" \
     LDFLAGS="$LDFLAGS -L/usr/local/lib" \
     ./configure --prefix=/opt/ctp2 --bindir=/opt/ctp2/ctp2_program/ctp --enable-silent-rules $( [ "${BTYP##*debug*}" ] || echo --enable-debug ) \
     && make -j"$(nproc)" \
