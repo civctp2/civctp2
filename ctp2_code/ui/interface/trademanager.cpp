@@ -314,6 +314,9 @@ void TradeManager::Notify()
 
 void TradeManager::Update()
 {
+	if(s_tradeManager->m_window->IsHidden()) // only update if window is visible to avoid spending time on UpdateCreateList e.g. in case AI declares war and all trade routes get deleted which in turn leads to freeing of caravans which is bound to TradeManager::Update() due to the infos in the advice window
+	    return;
+	
 	ctp2_Tab *market = (ctp2_Tab *)aui_Ldl::GetObject(s_tradeManagerBlock, "TradeTabs.Market");
 	ctp2_Tab *summary = (ctp2_Tab *)aui_Ldl::GetObject(s_tradeManagerBlock, "TradeTabs.Summary");
 	ctp2_Tab *import = (ctp2_Tab *)aui_Ldl::GetObject(s_tradeManagerBlock, "TradeTabs.Import");
