@@ -149,14 +149,16 @@ TradeRouteData::~TradeRouteData()
 
 void TradeRouteData::AddSeenByBit(sint32 player)
 {
-	if(player >= 0 && player < k_MAX_PLAYERS) {
+	if(player >= 0 && player < k_MAX_PLAYERS)
+	{
 		m_seenBy |= (1 << player);
 	}
 }
 
 void TradeRouteData::RemoveSeenByBit(sint32 player)
 {
-	if(player >= 0 && player < k_MAX_PLAYERS) {
+	if(player >= 0 && player < k_MAX_PLAYERS)
+	{
 		m_seenBy &= ~(1 << player);
 	}
 }
@@ -185,23 +187,33 @@ void TradeRouteData::RevealTradeRouteStateIfInVision()
 {
 	TradeRoute route(m_id);
 	sint32 const    num = m_path.Num();
-	for (sint32 i = 0; i < num; i++){
-	    for(sint32 p = 0; p < k_MAX_PLAYERS; p++){ // if point i is in vision of player p then AddSeenByBit
-		if(g_player && g_player[p] && g_player[p]->m_vision && g_player[p]->m_vision->IsVisible(m_path[i])){ // check pointers, critical when game is closed or reloaded; also reaveal trade route cities for owner
-		    if(IsActive()){
-			if(!SeenBy(p)){
-			    AddSeenByBit(p);
-			    }
-			g_player[p]->m_vision->RevealTradeRouteCities(route);
+	for (sint32 i = 0; i < num; i++)
+	{
+		for(sint32 p = 0; p < k_MAX_PLAYERS; p++)
+		{
+			// If point i is in vision of player p then AddSeenByBit
+			if(g_player && g_player[p] && g_player[p]->m_vision && g_player[p]->m_vision->IsVisible(m_path[i]))
+			{
+				// Check pointers, critical when game is closed or reloaded; also reaveal trade route cities for owner
+				if(IsActive())
+				{
+					if(!SeenBy(p))
+					{
+						AddSeenByBit(p);
+					}
+
+					g_player[p]->m_vision->RevealTradeRouteCities(route);
+				}
+				else
+				{
+					if(SeenBy(p))
+					{
+						RemoveSeenByBit(p);
+					}
+				}
 			}
-		    else{
-			if(SeenBy(p)){
-			    RemoveSeenByBit(p);
-			    }
-			}
-		    }
 		}
-	    }
+	}
 }
 
 void TradeRouteData::RemoveFromCells()
@@ -412,16 +424,15 @@ void TradeRouteData::ReturnPath
 	}
 }
 
-BOOL
-TradeRouteData::CrossesWater() const
+BOOL TradeRouteData::CrossesWater() const
 {
 	return m_crossesWater;
 }
 
-void
-TradeRouteData::Serialize(CivArchive &archive)
+void TradeRouteData::Serialize(CivArchive &archive)
 {
-	if(archive.IsStoring()) {
+	if(archive.IsStoring())
+	{
 		archive << m_id;
 		archive.PutDOUBLE((double)m_transportCost); // save sint32 as double (just to preserve the alignment, needed since m_transportCost was changed from double to sint32)
 
@@ -457,7 +468,8 @@ TradeRouteData::Serialize(CivArchive &archive)
 		uint8 hasChild;
 		hasChild = m_lesser != NULL;
 		archive << hasChild;
-		if (m_lesser) {
+		if (m_lesser)
+		{
 			((TradeRouteData *)(m_lesser))->Serialize(archive) ;
 		}
 
@@ -466,7 +478,9 @@ TradeRouteData::Serialize(CivArchive &archive)
 		if (m_greater)
 			((TradeRouteData *)(m_greater))->Serialize(archive) ;
 
-	} else {
+	}
+	else
+	{
 		archive >> m_id;
 		m_transportCost = (sint32) archive.GetDOUBLE (); // load sint32 from double (just to preserve the alignment, needed since m_transportCost was changed from double to sint32)
 		archive >> m_owner;
@@ -499,9 +513,12 @@ TradeRouteData::Serialize(CivArchive &archive)
 
 		uint8 hasChild;
 		archive >> hasChild;
-		if (hasChild) {
+		if (hasChild)
+		{
 			m_lesser = new TradeRouteData(archive);
-		} else {
+		}
+		else
+		{
 			m_lesser = NULL;
 		}
 
@@ -667,9 +684,9 @@ sint32 TradeRouteData::GetValue() const
 void TradeRouteData::SetPiratingArmy(Army &a)
 {
 	if(m_isActive)
-	    m_piratingArmy = a;
+		m_piratingArmy = a;
 	else
-	    m_piratingArmy = 0; // deactivated route cannot be pirated
+		m_piratingArmy = 0; // deactivated route cannot be pirated
 }
 
 Army TradeRouteData::GetPiratingArmy()
@@ -680,7 +697,7 @@ Army TradeRouteData::GetPiratingArmy()
 bool TradeRouteData::IsBeingPirated()
 {
 	if(m_isActive)
-	    return m_piratingArmy.IsValid();
+		return m_piratingArmy.IsValid();
 	else
-	    return false; // deactivated route cannot be pirated
+		return false; // deactivated route cannot be pirated
 }
