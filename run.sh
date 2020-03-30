@@ -14,6 +14,8 @@ fi
 
 mkdir -p $HOME/.civctp2/save/
 mkdir -p $HOME/.civctp2/logs/ # if not existent created by docker then owned by root
+mkdir -p $HOME/.civctp2/maps/ # if not existent created by docker then owned by root
+mkdir -p $HOME/.civctp2/Scenarios/ # if not existent created by docker then owned by root
 touch $HOME/.civctp2/userprofile.txt # file must exist for docker file-vol
 touch $HOME/.civctp2/userkeymap.txt # file must exist for docker file-vol
 
@@ -32,6 +34,8 @@ docker run \
        $CON \
        -v $HOME/.civctp2/save/:/opt/ctp2/ctp2_program/ctp/save \
        -v $HOME/.civctp2/logs/:/opt/ctp2/ctp2_program/ctp/logs \
+       -v $HOME/.civctp2/maps/:/opt/ctp2/ctp2_program/ctp/maps \
+       -v $HOME/.civctp2/Scenarios/:/opt/ctp2/Scenarios \
        $@
 
 if [ -z ${XVFBtmp+x} ]; then 
