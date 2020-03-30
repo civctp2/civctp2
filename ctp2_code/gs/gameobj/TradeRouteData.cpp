@@ -161,12 +161,12 @@ void TradeRouteData::RemoveSeenByBit(sint32 player)
 	}
 }
 
-bool TradeRouteData::SeenBy(sint32 player)
+bool TradeRouteData::SeenBy(sint32 player) const
 {
 	return m_seenBy & (1 << player);
 }
 
-uint32 TradeRouteData::SeenByBits()
+uint32 TradeRouteData::SeenByBits() const
 {
 	return m_seenBy;
 }

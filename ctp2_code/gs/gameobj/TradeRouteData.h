@@ -124,8 +124,8 @@ public:
 
 	void AddSeenByBit(sint32 player);
 	void RemoveSeenByBit(sint32 player);
-	bool SeenBy(sint32 player);
-	uint32 SeenByBits();
+	bool SeenBy(sint32 player) const;
+	uint32 SeenByBits() const;
 	void RedrawRadarMapAlongRoute();
 	void RevealTradeRouteStateIfInVision();
 
@@ -177,13 +177,13 @@ public:
 	sint32 GetPathSelectionState() const { return m_path_selection_state; }
 	void SetPathSelectionState(sint32 state) { m_path_selection_state = state; }
 
-	BOOL IsActive() const { return m_isActive == 1; }
+	bool IsActive() const { return m_isActive == 1; }
 	void Activate() { m_isActive = 1; }
 	void Deactivate() { m_isActive = 0; m_piratingArmy = 0; } // deactivated route cannot be pirated
 	void Remove(sint8 cause) { m_isActive = -cause; } // store cause as negative value
-	sint8 IsRemoved() const { return (m_isActive < 0 ? -m_isActive : 0); } // report cause as positive value
+	CAUSE_KILL_TRADE_ROUTE IsRemoved() const { return (m_isActive < 0 ? static_cast<CAUSE_KILL_TRADE_ROUTE>(-m_isActive) : CAUSE_KILL_TRADE_ROUTE_UNKNOWN); } // report cause as positive value
 
-	BOOL IsValid() const { return m_valid; }
+	bool IsValid() const { return m_valid; }
 
 	sint32 GetGoldInReturn() const { return m_gold_in_return; }
 

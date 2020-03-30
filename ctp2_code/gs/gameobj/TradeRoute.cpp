@@ -111,11 +111,12 @@ void TradeRoute::KillRoute(CAUSE_KILL_TRADE_ROUTE cause) // mapped to TradeRoute
 void TradeRoute::RemoveUnseenRoute() // mapped to TradeRoute::Kill in TradeRoute.h
 {
 	TradeRouteData* data = AccessData();
-	if(data->SeenByBits() == 0){
-	    TradeRoute tmp(*this);
-	    CAUSE_KILL_TRADE_ROUTE cause= data->IsRemoved();
-	    tmp.RemoveAllReferences(cause);
-	    }
+	if(data->SeenByBits() == 0)
+	{
+		TradeRoute tmp(*this);
+		CAUSE_KILL_TRADE_ROUTE cause= data->IsRemoved();
+		tmp.RemoveAllReferences(cause);
+	}
 }
 
 void TradeRoute::RemoveAllReferences(CAUSE_KILL_TRADE_ROUTE cause)
@@ -252,7 +253,7 @@ void TradeRoute::RemoveSeenByBit( sint32 player )
 	AccessData()->RemoveSeenByBit(player);
 }
 
-bool TradeRoute::SeenBy( sint32 player )
+bool TradeRoute::SeenBy( sint32 player ) const
 {
 	return GetData()->SeenBy(player);
 }

@@ -74,7 +74,7 @@ public:
 
 	void AddSeenByBit(sint32 player);
 	void RemoveSeenByBit(sint32 player);
-	bool SeenBy(sint32 player);
+	bool SeenBy(sint32 player) const;
 	void RedrawRadarMapAlongRoute();
 	void RevealTradeRouteStateIfInVision();
 
