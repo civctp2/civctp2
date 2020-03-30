@@ -52,44 +52,44 @@ class TradeRouteData;
 class Path;
 
 class TradeRouteData : public GameObj,
-					   public CityRadiusCallback
+                       public CityRadiusCallback
 {
 private:
 
-	sint32 m_transportCost;
-	PLAYER_INDEX m_owner;
-	PLAYER_INDEX m_payingFor;
-	Army m_piratingArmy;
+	sint32                 m_transportCost;
+	PLAYER_INDEX           m_owner;
+	PLAYER_INDEX           m_payingFor;
+	Army                   m_piratingArmy;
 
-	ROUTE_TYPE m_sourceRouteType;
-	sint32 m_sourceResource;
-	BOOL m_passesThrough[k_MAX_PLAYERS];
-	BOOL m_crossesWater;
-	sint8 m_isActive;
+	ROUTE_TYPE             m_sourceRouteType;
+	sint32                 m_sourceResource;
+	BOOL                   m_passesThrough[k_MAX_PLAYERS];
+	BOOL                   m_crossesWater;
+	sint8                  m_isActive;
 
-	uint32	m_color;
-	uint32	m_seenBy;
+	uint32                 m_color;
+	uint32                 m_seenBy;
 
-	sint32	m_selectedIndex;
+	sint32                 m_selectedIndex;
 
-	bool m_valid;
-	sint16 m_accumilatedTimesPirated;
-	sint8 m_pirate;
+	bool                   m_valid;
+	sint16                 m_accumilatedTimesPirated;
+	sint8                  m_pirate;
 
-	sint32 m_gold_in_return;
+	sint32                 m_gold_in_return;
 
-	sint32	m_path_selection_state;
+	sint32                 m_path_selection_state;
 
-	Unit m_sourceCity;
-	Unit m_destinationCity;
-	sint32 m_piratedLastTime;
+	Unit                   m_sourceCity;
+	Unit                   m_destinationCity;
+	sint32                 m_piratedLastTime;
 
 	DynamicArray<MapPoint> m_path;
 	DynamicArray<MapPoint> m_wayPoints;
 	DynamicArray<MapPoint> m_selectedPath;
 	DynamicArray<MapPoint> m_selectedWayPoints;
 
-	DynamicArray<MapPoint> m_setPath; // unused
+	DynamicArray<MapPoint> m_setPath;      // unused
 	DynamicArray<MapPoint> m_setWayPoints; // unused
 
 	Path *m_astarPath;
@@ -102,13 +102,13 @@ private:
 
 public:
 	TradeRouteData(const TradeRoute route,
-				   const Unit source,
-				   const Unit dest,
-				   const PLAYER_INDEX owner,
-				   const ROUTE_TYPE sourceType,
-				   const sint32 sourceResource,
-				   PLAYER_INDEX paying_for,
-				   sint32 gold_in_return);
+	               const Unit source,
+	               const Unit dest,
+	               const PLAYER_INDEX owner,
+	               const ROUTE_TYPE sourceType,
+	               const sint32 sourceResource,
+	               PLAYER_INDEX paying_for,
+	               sint32 gold_in_return);
 	TradeRouteData(const TradeRoute route);
 	TradeRouteData(CivArchive &archive);
 	TradeRouteData(TradeRouteData* copyme, uint32 new_id);
@@ -124,8 +124,8 @@ public:
 
 	void AddSeenByBit(sint32 player);
 	void RemoveSeenByBit(sint32 player);
-	bool SeenBy(sint32 player);
-	uint32 SeenByBits();
+	bool SeenBy(sint32 player) const;
+	uint32 SeenByBits() const;
 	void RedrawRadarMapAlongRoute();
 	void RevealTradeRouteStateIfInVision();
 
@@ -158,8 +158,8 @@ public:
 	void ClearPath();
 	void AddWayPoint(MapPoint pos);
 	void ReturnPath(const PLAYER_INDEX owner, DynamicArray<MapPoint> &waypoints,
-					DynamicArray<MapPoint> &fullpath,
-					double &cost);
+	                DynamicArray<MapPoint> &fullpath,
+	                double &cost);
 /* unused
 	void SetPath(DynamicArray<MapPoint> &fullpath, DynamicArray<MapPoint> &waypoints);
 	void BeginTurn();
@@ -177,13 +177,13 @@ public:
 	sint32 GetPathSelectionState() const { return m_path_selection_state; }
 	void SetPathSelectionState(sint32 state) { m_path_selection_state = state; }
 
-	BOOL IsActive() const { return m_isActive == 1; }
+	bool IsActive() const { return m_isActive == 1; }
 	void Activate() { m_isActive = 1; }
 	void Deactivate() { m_isActive = 0; m_piratingArmy = 0; } // deactivated route cannot be pirated
 	void Remove(sint8 cause) { m_isActive = -cause; } // store cause as negative value
-	sint8 IsRemoved() const { return (m_isActive < 0 ? -m_isActive : 0); } // report cause as positive value
+	CAUSE_KILL_TRADE_ROUTE IsRemoved() const { return (m_isActive < 0 ? static_cast<CAUSE_KILL_TRADE_ROUTE>(-m_isActive) : CAUSE_KILL_TRADE_ROUTE_UNKNOWN); } // report cause as positive value
 
-	BOOL IsValid() const { return m_valid; }
+	bool IsValid() const { return m_valid; }
 
 	sint32 GetGoldInReturn() const { return m_gold_in_return; }
 
