@@ -1105,6 +1105,7 @@ AUI_ERRCODE aui_UI::Draw( void )
 	}
 #ifdef __AUI_USE_SDL__
 	// refresh screen
+#if !defined(SKIP_SDL2_SCREEN_ISSUES)
 	SDL_Surface * screen = SDL_GetVideoSurface();
 	/*if(m_dirtyRectInfoList->L()) {
 		ListPos position = m_dirtyRectInfoList->GetHeadPosition();
@@ -1124,6 +1125,7 @@ AUI_ERRCODE aui_UI::Draw( void )
 		}
 	}*/
 	SDL_Flip(screen);
+#endif // SKIP_SDL2_SCREEN_ISSUES
 #endif
 	errcode = m_mouse->Resume();
 	Assert( errcode == AUI_ERRCODE_OK );

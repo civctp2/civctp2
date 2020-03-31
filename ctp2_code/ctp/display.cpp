@@ -9,7 +9,7 @@
 #ifdef __AUI_USE_DIRECTX__
 #include <multimon.h>
 #elif defined(__AUI_USE_SDL__)
-#include <SDL.h>
+#include <SDL2/SDL.h>
 #endif
 
 PointerList<CTPDisplayMode>	*g_displayModes = NULL;
@@ -140,7 +140,11 @@ void display_EnumerateDisplayModes(void)
 #else
 	SDL_PixelFormat fmt = { 0 };
 	fmt.BitsPerPixel = 16;
+#if !defined(SKIP_SDL2_SCREEN_ISSUES)
 	SDL_Rect **modes = SDL_ListModes(/*&fmt*/NULL, SDL_FULLSCREEN);
+#else // SKIP_SDL2_SCREEN_ISSUES
+	SDL_Rect **modes = 0;
+#endif // SKIP_SDL2_SCREEN_ISSUES
 
 	g_displayModes = new PointerList<CTPDisplayMode>;
 
@@ -149,6 +153,7 @@ void display_EnumerateDisplayModes(void)
 	} else if ((SDL_Rect **) -1 == modes) {
 		// Fallback if SDL reports us to support anything,
 		// we'll pick 800 x 600 and 1024 x 768
+#if !defined(SKIP_SDL2_SCREEN_ISSUES)
 		const SDL_VideoInfo *info = SDL_GetVideoInfo();
 		if (0 == info) {
 			return;
@@ -172,6 +177,7 @@ void display_EnumerateDisplayModes(void)
 		mode->width  = 1024;
 		mode->height = 768;
 		g_displayModes->AddTail(mode);
+#endif // SKIP_SDL2_SCREEN_ISSUES
 	} else {
 		for (int i = 0; modes[i]; i++) {
 			// We might get modes multiple times for each bpp

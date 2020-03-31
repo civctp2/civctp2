@@ -26,6 +26,7 @@ AUI_ERRCODE aui_SDL::InitCommon(BOOL useExclusiveMode)
 */
 	SDL_ShowCursor(SDL_DISABLE);
 
+#if !defined(SKIP_SDL2_EVENT_ISSUES)
 	// enable only a handfull of events
 	SDL_EventState(SDL_IGNORE, SDL_ALLEVENTS);
 	SDL_EventState(SDL_ENABLE, SDL_MOUSEEVENTMASK);
@@ -33,6 +34,7 @@ AUI_ERRCODE aui_SDL::InitCommon(BOOL useExclusiveMode)
 	SDL_EventState(SDL_ENABLE, SDL_QUITMASK);
 
 	SDL_EnableUNICODE(1);
+#endif // SKIP_SDL2_EVENT_ISSUES
 
 	return AUI_ERRCODE_OK;
 }

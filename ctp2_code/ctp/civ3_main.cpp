@@ -169,8 +169,8 @@
 #include <unistd.h>
 #endif
 #if defined(USE_SDL)
-#include <SDL.h>
-#include <SDL_mixer.h>
+#include <SDL2/SDL.h>
+#include <SDL2/SDL_mixer.h>
 #include "aui_sdlkeyboard.h"
 #endif
 #ifdef HAVE_X11
@@ -1168,6 +1168,7 @@ void ParseCommandLine(PSTR szCmdLine)
 	g_runSpriteEditor = (NULL != strstr(szCmdLine, "runspriteeditor"));
 
 #if defined(__AUI_USE_SDL__)
+    #if !defined(SKIP_SDL2_SCREEN_ISSUES)
 	if (strstr(szCmdLine, "fullscreen"))
 		g_SDL_flags = g_SDL_flags|SDL_FULLSCREEN;
 	if (strstr(szCmdLine, "hwsurface"))
@@ -1175,6 +1176,7 @@ void ParseCommandLine(PSTR szCmdLine)
 	else g_SDL_flags = g_SDL_flags|SDL_SWSURFACE;
 	if (strstr(szCmdLine, "openglblit"))
 	g_SDL_flags = g_SDL_flags|SDL_OPENGLBLIT;
+    #endif // SKIP_SDL2_SCREEN_ISSUES
 #endif
 	
 	g_eventLog = (NULL != strstr(szCmdLine, "eventlog"));
@@ -1705,8 +1707,12 @@ int WINAPI CivMain(HINSTANCE hInstance, HINSTANCE hPrevInstance, PSTR szCmdLine,
 				break;
 			}
 
+#if !defined(SKIP_SDL2_EVENT_ISSUES)
 			int n = SDL_PeepEvents(&event, 1, SDL_GETEVENT,
                      ~(SDL_EVENTMASK(SDL_MOUSEMOTION) | SDL_EVENTMASK(SDL_MOUSEBUTTONDOWN) | SDL_EVENTMASK(SDL_MOUSEBUTTONUP)));
+#else // SKIP_SDL2_EVENT_ISSUES
+			int n = 0;
+#endif // SKIP_SDL2_EVENT_ISSUES
 			if (0 > n) {
                             fprintf(stderr, "%s L%d: SDL_PeepEvents: Still events stored! Error?: %s\n", __FILE__, __LINE__, SDL_GetError());
 
@@ -1819,8 +1825,8 @@ int SDLMessageHandler(const SDL_Event &event)
 			// TODO: Determine what the 'swallowNextChar' variable
 			// is for, and, if necessary, implement appropriate
 			// code in the SDL sections to perform the same function.
-			SDLKey key = event.key.keysym.sym;
-			SDLMod mod = event.key.keysym.mod;
+			SDL_Keycode key = event.key.keysym.sym;
+			Uint16 mod = event.key.keysym.mod;
 			WPARAM wp = '\0';
 			switch (key) {
 #define SDLKCONV(sdl_name, char) \
@@ -1891,16 +1897,16 @@ int SDLMessageHandler(const SDL_Event &event)
 			//SDLKCONVSHIFT(SDLK_F13, '' + 128, '\0');
 			//SDLKCONVSHIFT(SDLK_F14, '' + 128, '\0');
 			//SDLKCONVSHIFT(SDLK_F15, '' + 128, '\0');
-			SDLKCONV(SDLK_KP0, '0');
-			SDLKCONV(SDLK_KP1, '1');
-			SDLKCONV(SDLK_KP2, '2');
-			SDLKCONV(SDLK_KP3, '3');
-			SDLKCONV(SDLK_KP4, '4');
-			SDLKCONV(SDLK_KP5, '5');
-			SDLKCONV(SDLK_KP6, '6');
-			SDLKCONV(SDLK_KP7, '7');
-			SDLKCONV(SDLK_KP8, '8');
-			SDLKCONV(SDLK_KP9, '9');
+			SDLKCONV(SDLK_KP_0, '0');
+			SDLKCONV(SDLK_KP_1, '1');
+			SDLKCONV(SDLK_KP_2, '2');
+			SDLKCONV(SDLK_KP_3, '3');
+			SDLKCONV(SDLK_KP_4, '4');
+			SDLKCONV(SDLK_KP_5, '5');
+			SDLKCONV(SDLK_KP_6, '6');
+			SDLKCONV(SDLK_KP_7, '7');
+			SDLKCONV(SDLK_KP_8, '8');
+			SDLKCONV(SDLK_KP_9, '9');
 			SDLKCONV(SDLK_KP_PERIOD, '.');
 			SDLKCONV(SDLK_KP_DIVIDE, '/');
 			SDLKCONV(SDLK_KP_MULTIPLY, '*');

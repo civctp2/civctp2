@@ -63,9 +63,7 @@ aui_SDLMouse::GetInput(void)
    SDL_Event od[10];
    // check for one of the mouse events
    int numElements =
-      SDL_PeepEvents(od, 10, SDL_GETEVENT,
-            SDL_EVENTMASK(SDL_MOUSEMOTION) | SDL_EVENTMASK(SDL_MOUSEBUTTONDOWN) |
-                  SDL_EVENTMASK(SDL_MOUSEBUTTONUP));
+      SDL_PeepEvents(od, 10, SDL_GETEVENT, SDL_MOUSEMOTION, SDL_MOUSEBUTTONUP);
    if (0 > numElements) {
       fprintf(stderr, "Mouse PeepEvents failed: %s\n", SDL_GetError());
       return AUI_ERRCODE_GETDEVICEDATAFAILED;
@@ -87,6 +85,7 @@ aui_SDLMouse::GetInput(void)
             break;
          case SDL_MOUSEBUTTONDOWN:
          case SDL_MOUSEBUTTONUP:
+#if !defined(SKIP_SDL2_EVENT_ISSUES)
 	    if (od[ev].button.button == SDL_BUTTON_WHEELUP){
 		HandleMouseWheel((sint16)1);
 		break;
@@ -102,6 +101,7 @@ aui_SDLMouse::GetInput(void)
             } else if (od[ev].button.button == SDL_BUTTON_RIGHT) {
                   m_data.rbutton = od[ev].button.state == SDL_PRESSED;
             }
+#endif // SKIP_SDL2_EVENT_ISSUES
             break;
          default:
             printf("event not handeled: %d\n", od[ev].type);

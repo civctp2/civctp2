@@ -580,7 +580,11 @@ bool c3files_HasLegalCD()
 void c3files_InitializeCD(void)
 {
 #if defined(__linux__)
+#if !defined(SKIP_SDL2_CDROM_ISSUES)
 	int rc = SDL_Init(SDL_INIT_CDROM);
+#else // SKIP_SDL2_CDROM_ISSUES
+	int rc = 1;
+#endif // SKIP_SDL2_CDROM_ISSUES
 	if(0 != rc)
 	{
 		fprintf(stderr, "Could not initialize CDROM:\n%s\n", SDL_GetError());
@@ -828,7 +832,11 @@ void c3files_GetCDDrives(void)
 		}
 	}
 #else
+#if !defined(SKIP_SDL2_CDROM_ISSUES)
 	int CDCnt = SDL_CDNumDrives();
+#else // SKIP_SDL2_CDROM_ISSUES
+	int CDCnt = 0;
+#endif // SKIP_SDL2_CDROM_ISSUES
 	Assert(CDCnt >= 0);
 	if (CDCnt < 0)
 	{
@@ -886,6 +894,9 @@ MBCHAR * c3files_GetVolumeName(DriveIdType id)
 	return NULL;
 
 #elif defined(LINUX)
+#if defined(SKIP_SDL2_CDROM_ISSUES)
+	return NULL;
+#else // SKIP_SDL2_CDROM_ISSUES
 	/// \todo Add code to determine beginsector of iso_primary_sector
 	/// On a German ctp2 cd, it starts on sector 16 (byte 16 << 11 = 0x8000)
 	const MBCHAR *cd_dev = SDL_CDName(id);
@@ -946,6 +957,7 @@ MBCHAR * c3files_GetVolumeName(DriveIdType id)
 		VolumeName[i+1] = '\0';
 
 	return VolumeName;
+#endif // SKIP_SDL2_CDROM_ISSUES
 #endif
 }
 

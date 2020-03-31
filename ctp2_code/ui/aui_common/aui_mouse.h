@@ -36,8 +36,8 @@
 #include "tech_wllist.h"
 
 #ifdef USE_SDL
-#include <SDL.h>
-#include <SDL_thread.h>
+#include <SDL2/SDL.h>
+#include <SDL2/SDL_thread.h>
 #endif
 
 class aui_Cursor;
