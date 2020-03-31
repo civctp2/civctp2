@@ -265,7 +265,7 @@ STRATEGY_DEFAULT {
     SettlerUnitList     UNIT_BUILD_LIST_LAND_SETTLER
     SeaTransportUnitList UNIT_BUILD_LIST_SEA_TRANSPORT
     AirTransportUnitList UNIT_BUILD_LIST_AIR_TRANSPORT
-    SpecialUnitList     UNIT_BUILD_LIST_SPECIAL
+    SpecialUnitList     UNIT_BUILD_LIST_SPECIAL_MILITARIST
     FreightUnitList     UNIT_BUILD_LIST_FREIGHT
 
 	// minimum number of units to keep in cities as a garrison
@@ -1229,7 +1229,7 @@ STRATEGY_SCIENTIST_DEFAULT {
     SettlerUnitList     UNIT_BUILD_LIST_LAND_SETTLER
     SeaTransportUnitList   UNIT_BUILD_LIST_SEA_TRANSPORT
     AirTransportUnitList   UNIT_BUILD_LIST_AIR_TRANSPORT
-    SpecialUnitList     UNIT_BUILD_LIST_SPECIAL_PEACEFUL
+    SpecialUnitList     UNIT_BUILD_LIST_SPECIAL_SCIENTIST
     FreightUnitList     UNIT_BUILD_LIST_FREIGHT
 
 	// minimum number of units to keep in cities as a garrison
@@ -2121,7 +2121,7 @@ STRATEGY_ECONOMIC_DEFAULT {
     SettlerUnitList     UNIT_BUILD_LIST_LAND_SETTLER
     SeaTransportUnitList   UNIT_BUILD_LIST_SEA_TRANSPORT
     AirTransportUnitList   UNIT_BUILD_LIST_AIR_TRANSPORT
-    SpecialUnitList     UNIT_BUILD_LIST_SPECIAL_PEACEFUL
+    SpecialUnitList     UNIT_BUILD_LIST_SPECIAL_ECONOMIC
     FreightUnitList     UNIT_BUILD_LIST_FREIGHT
 
 	// minimum number of units to keep in cities as a garrison
@@ -2566,7 +2566,7 @@ STRATEGY_ECOTOPIAN_DEFAULT {
     SettlerUnitList     UNIT_BUILD_LIST_LAND_SETTLER
     SeaTransportUnitList   UNIT_BUILD_LIST_SEA_TRANSPORT
     AirTransportUnitList   UNIT_BUILD_LIST_AIR_TRANSPORT
-    SpecialUnitList     UNIT_BUILD_LIST_SPECIAL
+    SpecialUnitList     UNIT_BUILD_LIST_SPECIAL_ECOTOPIAN
     FreightUnitList     UNIT_BUILD_LIST_FREIGHT
 
 	// minimum number of units to keep in cities as a garrison
@@ -3010,7 +3010,7 @@ STRATEGY_DIPLOMATIC_DEFAULT {
     SettlerUnitList     UNIT_BUILD_LIST_LAND_SETTLER
     SeaTransportUnitList   UNIT_BUILD_LIST_SEA_TRANSPORT
     AirTransportUnitList   UNIT_BUILD_LIST_AIR_TRANSPORT
-    SpecialUnitList     UNIT_BUILD_LIST_SPECIAL_PEACEFUL
+    SpecialUnitList     UNIT_BUILD_LIST_SPECIAL_DIPLOMATIC
     FreightUnitList     UNIT_BUILD_LIST_FREIGHT
 
 	// minimum number of units to keep in cities as a garrison
