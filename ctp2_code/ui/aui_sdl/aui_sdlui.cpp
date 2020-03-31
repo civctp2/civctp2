@@ -135,10 +135,12 @@ AUI_ERRCODE aui_SDLUI::CreateNativeScreen( BOOL useExclusiveMode )
 	assert( AUI_SUCCESS(errcode) );
 	if ( !AUI_SUCCESS(errcode) ) return errcode;
 
+#if !defined(SKIP_SDL2_SCREEN_ISSUES)
 	m_lpdds = SDL_SetVideoMode(m_width, m_height, m_bpp, g_SDL_flags); // mod by lynx |SDL_FULLSCREEN);
 	if (!m_lpdds) {
 		c3errors_FatalDialog("aui_SDLUI", SDL_GetError());
 	}
+#endif // SKIP_SDL2_SCREEN_ISSUES
 
 	m_primary = new aui_SDLSurface(
 		&errcode,

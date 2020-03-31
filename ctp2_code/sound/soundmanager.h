@@ -44,8 +44,8 @@
 #include "gamesounds.h"
 
 #if defined(USE_SDL)
-#include <SDL.h>
-#include <SDL_mixer.h>
+#include <SDL2/SDL.h>
+#include <SDL2/SDL_mixer.h>
 #endif
 
 template <class T> class PointerList;
@@ -163,7 +163,9 @@ private:
 #if !defined(USE_SDL)
 	HREDBOOK				m_redbook;
 #else
+    #if !defined(SKIP_SDL2_CDROM_ISSUES)
 	SDL_CD                  *m_cdrom;
+    #endif // SKIP_SDL2_CDROM_ISSUES
 	BOOL					m_useOggTracks;
 	Uint32                  m_SDLInitFlags;
 	Mix_Music				*m_oggTrack;

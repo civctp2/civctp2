@@ -404,7 +404,7 @@ AUI_ERRCODE aui_Mouse::Start( void )
 	m_thread =
 		CreateThread( NULL, 0, MouseThreadProc, (LPVOID)this, 0, &m_threadId );
 #elif defined(__AUI_USE_SDL__)
-	m_thread   = SDL_CreateThread(MouseThreadProc, this);
+	m_thread   = SDL_CreateThread(MouseThreadProc, "Mouse-thread", this);
 #endif
 
 	m_curCursor = m_cursors + m_firstIndex;
@@ -484,7 +484,10 @@ AUI_ERRCODE aui_Mouse::End( void )
 		else
 			TerminateThread( m_thread, 1 );
 #elif defined(__AUI_USE_SDL__)
-		SDL_KillThread(m_thread);
+		g_mouseShouldTerminateThread = TRUE;
+
+		int status = 0;
+		SDL_WaitThread(m_thread, &status);
 #endif
 
 		Erase();

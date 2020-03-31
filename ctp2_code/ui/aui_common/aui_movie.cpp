@@ -37,13 +37,13 @@
 #include "aui_movie.h"
 
 #ifdef __AUI_USE_SDL__
-#include <SDL.h>
+#include <SDL2/SDL.h>
 #ifdef USE_SDL_FFMPEG
 #include <SDL_ffmpeg.h>
 SDL_ffmpegFile* film;
 #endif
-#include <SDL_mixer.h>
-#include <SDL_syswm.h>
+#include <SDL2/SDL_mixer.h>
+#include <SDL2/SDL_syswm.h>
 #include "soundmanager.h"		// g_soundManager
 #include "aui_sdlsurface.h"
 

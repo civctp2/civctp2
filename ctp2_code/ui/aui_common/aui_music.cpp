@@ -62,7 +62,9 @@ aui_Redbook::aui_Redbook() :
 #ifdef __AUI_USE_DIRECTX__
 m_cd_device_id(-1),
 #elif defined(__AUI_USE_SDL__)
+#if !defined(SKIP_SDL2_CDROM_ISSUES)
 m_cd_device_id(0),
+#endif // SKIP_SDL2_CDROM_ISSUES
 #endif
 m_cd_drive_num(0),
 m_cd_drive_index(0),
@@ -77,7 +79,9 @@ aui_Redbook::~aui_Redbook()
 #ifdef __AUI_USE_DIRECTX__
 	m_cd_device_id = -1;
 #elif defined(__AUI_USE_SDL__)
+#if !defined(SKIP_SDL2_CDROM_ISSUES)
 	m_cd_device_id = 0;
+#endif // SKIP_SDL2_CDROM_ISSUES
 #endif
 	m_cd_drive_num = 0;
 	m_cd_drive_index = 0;

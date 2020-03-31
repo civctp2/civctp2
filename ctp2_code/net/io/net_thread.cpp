@@ -203,7 +203,7 @@ NET_ERR NetThread::Init(NetIOResponse *response)
 	NetIO::Init(response);
 
 #ifdef USE_SDL
-	if ((m_thread = SDL_CreateThread(NetThread_StartThread, this)) == NULL) {
+	if ((m_thread = SDL_CreateThread(NetThread_StartThread, "Net-start-thread", this)) == NULL) {
 #elif defined(WIN32)
 	if((m_threadHandle = CreateThread(NULL,
 									  0,

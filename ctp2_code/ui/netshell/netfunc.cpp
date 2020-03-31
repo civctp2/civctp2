@@ -47,8 +47,8 @@
 #endif
 
 #ifdef USE_SDL
-#include <SDL.h>
-#include <SDL_thread.h>
+#include <SDL2/SDL.h>
+#include <SDL2/SDL_thread.h>
 #endif
 
 #ifdef WIN32
@@ -2460,7 +2460,7 @@ NETFunc::STATUS NETFunc::SetTransport(Transport *t) {
 		}
 		cancelDial = 0;
 #ifdef USE_SDL
-		threadHandle = SDL_CreateThread(ConnectThread, (void *)transport);
+		threadHandle = SDL_CreateThread(ConnectThread, "Connect-thread", (void *)transport);
 #else
 		threadHandle = CreateThread(0, 0, ConnectThread, (void *)transport, 0, &threadId);
 #endif
@@ -2903,7 +2903,7 @@ NETFunc::STATUS NETFunc::Connect(dp_t *d, PlayerStats *stats, bool h) {
 		return ERR;
 
 #ifdef USE_SDL
-	threadHandle = SDL_CreateThread(ReConnectThread, (void *) &reconnected);
+	threadHandle = SDL_CreateThread(ReConnectThread, "Reconnect-thread", (void *) &reconnected);
 #else
 	threadHandle = CreateThread(0, 0, ReConnectThread, (void *)&reconnected, 0, &threadId);
 #endif

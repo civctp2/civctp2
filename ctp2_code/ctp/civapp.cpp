@@ -1250,7 +1250,7 @@ sint32 CivApp::InitializeApp(HINSTANCE hInstance, int iCmdShow)
 	CoInitialize(NULL);
 #endif
 #ifdef __AUI_USE_SDL__
-        Uint32 flags = (SDL_INIT_EVERYTHING | SDL_INIT_EVENTTHREAD) & ~SDL_INIT_AUDIO; //why no audio?
+        Uint32 flags = (SDL_INIT_EVERYTHING | SDL_INIT_EVENTS) & ~SDL_INIT_AUDIO; //why no audio?
 #if defined(_DEBUG) || defined(DEBUG)
         flags |= SDL_INIT_NOPARACHUTE;
 #endif// _DEBUG || DEBUG
@@ -2365,8 +2365,7 @@ sint32 CivApp::ProcessUI(const uint32 target_milliseconds, uint32 &used_millisec
 #ifdef __AUI_USE_SDL__
 					// Because of the way keyboard events are handled in SDL, we
 					// need to escape this loop if there are any SDL_KeyEvents pending
-					if (SDL_PeepEvents(NULL, 1, SDL_PEEKEVENT,
-							SDL_EVENTMASK(SDL_KEYUP) | SDL_EVENTMASK(SDL_KEYDOWN))) {
+					if (SDL_PeepEvents(NULL, 1, SDL_PEEKEVENT, SDL_KEYDOWN, SDL_KEYUP)) {
 						break;
 					}
 #endif

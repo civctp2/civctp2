@@ -324,7 +324,9 @@ AUI_ERRCODE aui_BmpImageFormat::Load(MBCHAR const * filename, aui_Image *image )
         if (bmp->format->Gmask >> bmp->format->Gshift == 0x1F)
             fprintf(stderr, "%s L%d: 555 image!\n", __FILE__, __LINE__);
 	if (NULL == surf) {
+#if !defined(SKIP_SDL2_SCREEN_ISSUES)
 		surf = SDL_DisplayFormat(bmp);
+#endif // SKIP_SDL2_SCREEN_ISSUES
 	}
 	SDL_FreeSurface(bmp);
 	if (NULL == surf)

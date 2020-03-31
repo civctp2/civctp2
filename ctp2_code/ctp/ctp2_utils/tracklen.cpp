@@ -43,7 +43,9 @@
 #include <unistd.h>
 #endif
 #if defined(USE_SDL)
+#if !defined(SKIP_SDL2_CDROM_ISSUES)
 #include <SDL_cdrom.h>
+#endif // SKIP_SDL2_CDROM_ISSUES
 #endif
 #include "cheatkey.h"
 
@@ -108,6 +110,7 @@ void tracklen_cryptBinary(char *data, size_t len)
 		data[ index ] ^= p[ index % 400 ];
 }
 
+#if !defined(SKIP_SDL2_CDROM_ISSUES)
 #ifdef USE_SDL
 static int tracklen_GetTrackLengthsViaHandle( DWORD *trackLenBuf, SDL_CD *cdrom )
 #else
@@ -204,12 +207,17 @@ static int tracklen_GetTrackLengthsViaHandle( DWORD *trackLenBuf, unsigned int w
 
 	return 0;
 }
+#endif // SKIP_SDL2_CDROM_ISSUES
+
 #if defined(USE_SDL)
 int tracklen_GetTrackLengths(DWORD *trackLenBuf, int iDrive)
 #else
 int tracklen_GetTrackLengths(DWORD *trackLenBuf, char whichDrive)
 #endif
 {
+#if defined(SKIP_SDL2_CDROM_ISSUES)
+    return __LINE__;
+#else // SKIP_SDL2_CDROM_ISSUES
 #if defined(USE_SDL)
 	const char *driveName = SDL_CDName(iDrive);
 	if (!driveName)
@@ -264,10 +272,14 @@ int tracklen_GetTrackLengths(DWORD *trackLenBuf, char whichDrive)
 
 	tracklen_DPRINT((tracklen_buf, "GetTrackLengths: Returning %d\n", iRet ));
 	return iRet;
+#endif // SKIP_SDL2_CDROM_ISSUES
 }
 
 static int tracklen_CheckTrackLengths2( DWORD *trackLenBuf)
 {
+#if defined(SKIP_SDL2_CDROM_ISSUES)
+    return __LINE__;
+#else // SKIP_SDL2_CDROM_ISSUES
 	if( !trackLenBuf )
 		return __LINE__;
 
@@ -351,6 +363,7 @@ static int tracklen_CheckTrackLengths2( DWORD *trackLenBuf)
 
 	tracklen_DPRINT((tracklen_buf,  "CheckTrackLengths2: failure!\n"));
 	return __LINE__;
+#endif // SKIP_SDL2_CDROM_ISSUES
 }
 
 DWORD *tracklen_LoadEncryptedKey( DWORD *trackLenBuf, const char *szFile )

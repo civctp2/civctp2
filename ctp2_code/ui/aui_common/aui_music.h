@@ -3,8 +3,10 @@
 
 #include "aui_base.h"
 #ifdef USE_SDL
-#include <SDL.h>
+#include <SDL2/SDL.h>
+#if !defined(SKIP_SDL2_CDROM_ISSUES)
 #include <SDL_cdrom.h>
+#endif // SKIP_SDL2_CDROM_ISSUES
 #endif
 
 enum AUI_MUSIC_CODE
@@ -98,7 +100,9 @@ protected:
 #ifdef __AUI_USE_DIRECTX__
 	sint32 m_cd_device_id;
 #elif defined(__AUI_USE_SDL__)
+#if !defined(SKIP_SDL2_CDROM_ISSUES)
 	SDL_CD*m_cd_device_id;
+#endif // SKIP_SDL2_CDROM_ISSUES
 #endif
 	int    m_cd_drive_num;
 	sint32 m_cd_drive_index;

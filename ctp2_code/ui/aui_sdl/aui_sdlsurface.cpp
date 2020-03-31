@@ -6,7 +6,7 @@
 #include "aui_ui.h"
 #include "aui_uniqueid.h"
 #include "aui_sdlsurface.h"
-#include <SDL_thread.h>
+#include <SDL2/SDL_thread.h>
 
 uint32 aui_SDLSurface::m_SDLSurfaceClassId = aui_UniqueId();
 
@@ -36,6 +36,7 @@ aui_SDLSurface::aui_SDLSurface(
 	Assert( AUI_SUCCESS(*retval) );
 	if ( !AUI_SUCCESS(*retval) ) return;
 
+#if !defined(SKIP_SDL2_SCREEN_ISSUES)
 	SDL_PixelFormat* fmt = SDL_GetVideoSurface()->format;
 	if ( !(m_lpdds = lpdds) )
 	{
@@ -67,7 +68,7 @@ aui_SDLSurface::aui_SDLSurface(
             m_pixelFormat = AUI_SURFACE_PIXELFORMAT_555;
             //fprintf(stderr, "%s L%d: AUI_SURFACE_PIXELFORMAT_555\n", __FILE__, __LINE__);
             }
-
+#endif // SKIP_SDL2_SCREEN_ISSUES
 	m_pitch = m_lpdds->pitch;
 	m_size = m_pitch * m_height;
 
@@ -96,12 +97,14 @@ aui_SDLSurface::~aui_SDLSurface()
 
 
 uint32 aui_SDLSurface::SetChromaKey( uint32 color ) {
+#if !defined(SKIP_SDL2_SCREEN_ISSUES)
     int hr = SDL_SetColorKey(m_lpdds, SDL_SRCCOLORKEY, /*SDL_MapRGB(m_lpdds->format, color>>16, (color>>8)&0xff, color&0xff)*/color); //|SDL_RLEACCEL ?
     //hr == 0 if succeded!
     //fprintf(stderr, "%s L%d: SDL_SRCCOLORKEY set to %#X\n", __FILE__, __LINE__, color);
 
     if ( hr == 0 )
         return aui_Surface::SetChromaKey( color ); //sets aui_Surface.m_chromaKey and returns last value!
+#endif
 
     //return AUI_ERRCODE_OK;  //this is not sensible, should retrun last color key!?!
     //fprintf(stderr, "%s L%d: SDL_SRCCOLORKEY setting failed!\n", __FILE__, __LINE__);

@@ -19,7 +19,7 @@
 #endif
 
 #ifdef USE_SDL
-#include <SDL.h>
+#include <SDL2/SDL.h>
 #endif
 
 #ifdef __linux__

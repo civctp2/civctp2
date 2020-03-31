@@ -10,8 +10,8 @@
 #include "pointerlist.h"
 #include "net_anet.h"
 #ifdef USE_SDL
-#include <SDL.h>
-#include <SDL_thread.h>
+#include <SDL2/SDL.h>
+#include <SDL2/SDL_thread.h>
 #endif
 
 #define k_MAX_NETWORK_PLAYERS 32

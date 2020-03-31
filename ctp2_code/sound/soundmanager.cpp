@@ -94,7 +94,9 @@ SoundManager::SoundManager()
 #if !defined(USE_SDL)
     m_redbook                   (0),
 #else
+#if !defined(SKIP_SDL2_CDROM_ISSUES)
 	m_cdrom                     (0),
+#endif // SKIP_SDL2_CDROM_ISSUES
 	m_useOggTracks				(false),
 	m_oggTrack					(0),
     m_SDLInitFlags              (SDL_INIT_NOPARACHUTE),
@@ -219,6 +221,7 @@ void SoundManager::InitRedbook()
 			printf("Detected Ogg Music track, using that instead of CD Audio\n");
 		}
 	}
+#if !defined(SKIP_SDL2_CDROM_ISSUES)
     if (!m_cdrom && !m_useOggTracks) {
         int errcode = SDL_Init(SDL_INIT_CDROM | m_SDLInitFlags);
 
@@ -257,6 +260,7 @@ void SoundManager::InitRedbook()
             CDstatus status = SDL_CDStatus(m_cdrom);
         }
     }
+#endif // SKIP_SLD2_CDROM_ISSUES
 #else // !USE_SDL
 	if (!m_redbook)
 	{
@@ -272,10 +276,12 @@ void SoundManager::CleanupRedbook()
 		Mix_FreeMusic(m_oggTrack);
 		m_oggTrack = NULL;
 	}
+#if !defined(SKIP_SDL2_CDROM_ISSUES)
     if (m_cdrom) {
         SDL_CDClose(m_cdrom);
         m_cdrom = 0;
     }
+#endif // SKIP_SDL2_CDROM_ISSUES
 #else
     if (m_redbook) {
 		AIL_redbook_stop(m_redbook);
@@ -291,6 +297,7 @@ void SoundManager::ProcessRedbook()
 
 	if (!m_musicEnabled) return;
 
+#if!defined(SKIP_SDL2_CDROM_ISSUES)
 	if (GetTickCount() > m_timeToCheckCD) {
 #if defined(USE_SDL)
 		CDstatus status;
@@ -347,6 +354,7 @@ void SoundManager::ProcessRedbook()
 
 		m_timeToCheckCD = GetTickCount() + k_CHECK_CD_PERIOD;
 	}
+#endif // SKIP_SDL2_CDROM_ISSUES
 }
 
 void SoundManager::Process(const uint32 &target_milliseconds,
@@ -680,9 +688,11 @@ SoundManager::SetVolume(const SOUNDTYPE &type, const uint32 &volume)
 				Mix_VolumeMusic(scaledVolume);
 			}
 		}
+#if !defined(SKIP_SDL2_CDROM_ISSUES)
         if (m_cdrom) {
             // TODO: found nothing in reference
         }
+#endif // SKIP_SDL2_CDROM_ISSUES
 #endif
 		break;
 	}
@@ -945,6 +955,7 @@ void SoundManager::StartMusic(const sint32 &InTrackNum)
 		
 		return;
 	}
+#if !defined(SKIP_SDL2_CDROM_ISSUES)
     if (!m_cdrom) {
         return;
     }
@@ -956,6 +967,9 @@ void SoundManager::StartMusic(const sint32 &InTrackNum)
     }
 
 	sint32 const numTracks = m_cdrom->numtracks;
+#else // SKIP_SDL2_CDROM_ISSUES
+    sint32 const numTracks = 0;
+#endif // SKIP_SDL2_CDROM_ISSUES
 #else
     if (!m_redbook) {
         return;
@@ -985,7 +999,9 @@ void SoundManager::StartMusic(const sint32 &InTrackNum)
 	m_curTrack = trackNum;
 
 #if defined(USE_SDL)
+#if !defined(SKIP_SDL2_CDROM_ISSUES)
     SDL_CDPlayTracks(m_cdrom, trackNum, 0, 1, 0);
+#endif // SKIP_SDL2_CDROM_ISSUES
 #else
 	U32 start;
     U32 end;
@@ -1016,7 +1032,9 @@ void SoundManager::TerminateMusic(void)
 //	}
 	if (!m_redbook) return;
 #else
+#if !defined(SKIP_SDL2_CDROM_ISSUES)
     if (!m_cdrom) return;
+#endif // SKIP_SDL2_CDROM_ISSUES
 #endif
 
 	m_stopRedbookTemporarily = TRUE;
@@ -1026,11 +1044,13 @@ void SoundManager::TerminateMusic(void)
 		AIL_redbook_stop(m_redbook);
 	}
 #else
+#if !defined(SKIP_SDL2_CDROM_ISSUES)
     CDstatus status = SDL_CDStatus(m_cdrom);
 
     if (CD_PLAYING == status) {
         SDL_CDStop(m_cdrom);
     }
+#endif // SKIP_SDL2_CDROM_ISSUES
 #endif
 }
 
