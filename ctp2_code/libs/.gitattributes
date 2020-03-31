@@ -1,0 +1,2 @@
+# Disable any auto-conversion of line terminators for libs.
+* -text
