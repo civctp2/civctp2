@@ -54,10 +54,18 @@ ldl_datablock *ldlif_find_block(char const * name)
 
 int ldlif_find_file(const char *filename, char *fullpath)
 {
-	if(!g_civPaths->FindFile(C3DIR_LAYOUT, filename, fullpath))
+	if(!g_civPaths->FindFile(C3DIR_LAYOUT, filename, fullpath, false, true, true, false))
 		return 0;
 	return 1;
 }
+
+int ldlif_find_localized_file(const char *filename, char * fullpath)
+{
+	if (!g_civPaths->FindFile(C3DIR_LAYOUT, filename, fullpath))
+		return 0;
+	return 1;
+}
+
 
 char *ldlif_getnameptr(const char *name)
 {
@@ -185,15 +193,6 @@ void *ldlif_end_block(void *names)
 
 	block->AddTemplateChildren();
 
-
-
-
-
-
-
-
-
-
 	if(!s_blockStack->GetTail()) {
 		s_topLevelList->AddTail(block);
 
@@ -201,7 +200,6 @@ void *ldlif_end_block(void *names)
 
 	delete namelist;
 	return block;
-
 }
 
 void *ldlif_add_empty_block(void *names)
@@ -256,5 +254,4 @@ void ldlif_deallocate_stuff()
 
 	delete s_blockTree;
 	s_blockTree = NULL;
-
 }

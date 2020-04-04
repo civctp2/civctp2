@@ -44,22 +44,22 @@ blocks: blocks block
 
 block: blocknames '{' { ldlif_start_block($1.names); } attributes '}' { $$.block = ldlif_end_block($1.names); }
      | blocknames '{' '}' { $$.block = ldlif_add_empty_block($1.names); }
-	   ;
+       ;
 
 blocknames: VNAME ':' blocknames { ldlif_add_name(&$$.names, $1.nameval, $3.names); }
           | VNAME { ldlif_add_name(&$$.names, $1.nameval, NULL); }
-		  ;
+          ;
 
 attributes: attributes attribute
-			| attribute
-			;
+            | attribute
+            ;
 
 attribute: block
            | TBOOL VNAME bool { ldlif_add_bool_attribute($2.nameval, $3.intval); }
-		   | TINT VNAME VINT { ldlif_add_int_attribute($2.nameval, $3.intval); }
-		   | TDOUBLE VNAME VFLOAT { ldlif_add_float_attribute($2.nameval, $3.floatval); }
-		   | TSTRING VNAME VSTRING { ldlif_add_string_attribute($2.nameval, $3.stringval); }
-		   ;
+           | TINT VNAME VINT { ldlif_add_int_attribute($2.nameval, $3.intval); }
+           | TDOUBLE VNAME VFLOAT { ldlif_add_float_attribute($2.nameval, $3.floatval); }
+           | TSTRING VNAME VSTRING { ldlif_add_string_attribute($2.nameval, $3.stringval); }
+           ;
 
 bool: VTRUE { $$.intval = 1; } | VFALSE { $$.intval = 0; } ;
 

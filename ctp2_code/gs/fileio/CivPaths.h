@@ -40,13 +40,6 @@
 #include "c3files.h"
 #include <vector>	// list did not work: crashes on begin() for empty list
 
-
-
-
-
-
-
-
 class CivPaths {
 private:
 	MBCHAR *m_hdPath;
@@ -87,11 +80,8 @@ public:
 
 	MBCHAR *GetSavePath(C3SAVEDIR dir, MBCHAR *path);
 
-
-
-
 	MBCHAR *FindFile(C3DIR dir, const MBCHAR *filename, MBCHAR *path,
-                     bool silent = false, bool check_prjfile = true, bool checkScenario = true);
+	                 bool silent = false, bool check_prjfile = true, bool checkScenario = true, bool checkLocalizedPath = true);
 
 	MBCHAR *GetSpecificPath(C3DIR dir, MBCHAR *path, BOOL local);
 
@@ -103,67 +93,42 @@ public:
 
 	void	ClearCurScenarioPath(void);
 
-
-
-
 	void	SetCurScenarioPackPath(const MBCHAR *path);
 
 	MBCHAR	* GetCurScenarioPackPath(void);
 
 	void	ClearCurScenarioPackPath(void);
 
-
-
-
-
-
-
-
-
-
-
-    bool        FindPath(C3DIR dir, int num, MBCHAR *path);
+	bool        FindPath(C3DIR dir, int num, MBCHAR *path);
 
 	MBCHAR *    GetSavePathString(void) const { return m_savePath; }
 
 	MBCHAR *    GetDesktopPath(void);
 
 	std::vector<MBCHAR const *> const &
-                GetExtraDataPaths(void) const;
-	void	    InsertExtraDataPath(MBCHAR const * path);
-	void	    ResetExtraDataPaths(void);
-	void 		ReplaceFileSeperator(MBCHAR* path);
+	            GetExtraDataPaths(void) const;
+	void        InsertExtraDataPath(MBCHAR const * path);
+	void        ResetExtraDataPaths(void);
+	void        ReplaceFileSeperator(MBCHAR* path);
 
 protected:
 
 	MBCHAR *    MakeAssetPath
-    (
-        MBCHAR *        fullPath,
-        MBCHAR const *  s1,
-        MBCHAR const *  s2,
-        MBCHAR const *  s3,
-        MBCHAR const *  s4,
-        MBCHAR const *  s5
-    ) const;
+	(
+	    MBCHAR *        fullPath,
+	    MBCHAR const *  s1,
+	    MBCHAR const *  s2,
+	    MBCHAR const *  s3,
+	    MBCHAR const *  s4,
+	    MBCHAR const *  s5
+	) const;
 
 	MBCHAR *    MakeSavePath(MBCHAR *fullPath, MBCHAR *s1, MBCHAR *s2, MBCHAR *s3);
 };
 
-
-
-
-
-
-
 void CivPaths_InitCivPaths();
 
-
 void CivPaths_CleanupCivPaths();
-
-
-
-
-
 
 extern CivPaths *g_civPaths;
 

@@ -8,7 +8,7 @@
 
 ldl_datablock::ldl_datablock(PointerList<char> *templateNames)
 :
-	m_templates     (),
+    m_templates     (),
     m_children      (),
     m_attributes    (),
     m_parent        (NULL),
@@ -34,7 +34,7 @@ ldl_datablock::ldl_datablock(PointerList<char> *templateNames)
 
 ldl_datablock::ldl_datablock(ldl_datablock *copy)
 :
-	m_templates     (),
+    m_templates     (),
     m_children      (),
     m_attributes    (),
     m_parent        (NULL),
@@ -42,12 +42,12 @@ ldl_datablock::ldl_datablock(ldl_datablock *copy)
     m_hash          (0)
 {
 	for
-    (
-        ldl_attribute * attr = copy->m_attributes.GetHead();
-        attr;
-        attr = copy->m_attributes.GetNext(attr)
-    )
-    {
+	(
+	    ldl_attribute * attr = copy->m_attributes.GetHead();
+	    attr;
+	    attr = copy->m_attributes.GetNext(attr)
+	)
+	{
 		m_attributes.AddTail(attr->GetCopy());
 	}
 
@@ -63,7 +63,7 @@ ldl_datablock::ldl_datablock(ldl_datablock *copy)
 
 ldl_datablock::ldl_datablock(sint32 hash)
 :
-	m_templates     (),
+    m_templates     (),
     m_children      (),
     m_attributes    (),
     m_parent        (NULL),
@@ -73,7 +73,7 @@ ldl_datablock::ldl_datablock(sint32 hash)
 
 ldl_datablock::ldl_datablock(ldl *theLdl, char const * name)
 :
-	m_templates     (),
+    m_templates     (),
     m_children      (),
     m_attributes    (),
     m_parent        (NULL),
@@ -93,13 +93,13 @@ ldl_datablock::~ldl_datablock()
 char *ldl_datablock::GetFullName(char *output)
 {
 	if (m_parent)
-    {
+	{
 		m_parent->GetFullName(output);
 		strcat(output, ".");
 		strcat(output, m_name);
 	}
-    else
-    {
+	else
+	{
 		strcpy(output, m_name);
 	}
 
@@ -126,14 +126,14 @@ ldl_attribute *ldl_datablock::GetAttribute( const char *szName )
 	char * strPtr = ldlif_getnameptr(szName);
 
 	for
-    (
-        ldl_attribute * atr = m_attributes.GetHead();
-        atr;
-        atr = m_attributes.GetNext(atr)
-    )
-    {
+	(
+	    ldl_attribute * atr = m_attributes.GetHead();
+	    atr;
+	    atr = m_attributes.GetNext(atr)
+	)
+	{
 		if (atr->GetName() == strPtr)
-        {
+		{
 			return atr;
 		}
 	}
@@ -209,7 +209,6 @@ void ldl_datablock::AddTemplateChildren()
 
 void ldl_datablock::AddTemplateChildrenTo(ldl_datablock *block)
 {
-
 	PointerList<ldl_datablock>::Walker bwalk;
 	for(bwalk.SetList(&m_children); bwalk.IsValid(); bwalk.Next()) {
 
