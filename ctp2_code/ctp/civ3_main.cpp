@@ -276,11 +276,7 @@ BOOL g_runInBackground = FALSE;
 BOOL g_runSpriteEditor = FALSE;
 BOOL g_eventLog = FALSE;
 
-#if 0
-uint32 g_SDL_flags = SDL_DOUBLEBUF | SDL_HWSURFACE; 
-#else
-uint32 g_SDL_flags = 0; //See ctp2_code/ui/aui_common/aui_ui.cpp //SEB Pandora
-#endif
+uint32 g_SDL_flags = 0;
 
 BOOL g_use_profile_process = FALSE;
 
@@ -1168,15 +1164,15 @@ void ParseCommandLine(PSTR szCmdLine)
 	g_runSpriteEditor = (NULL != strstr(szCmdLine, "runspriteeditor"));
 
 #if defined(__AUI_USE_SDL__)
-    #if !defined(SKIP_SDL2_SCREEN_ISSUES)
-	if (strstr(szCmdLine, "fullscreen"))
-		g_SDL_flags = g_SDL_flags|SDL_FULLSCREEN;
-	if (strstr(szCmdLine, "hwsurface"))
-		g_SDL_flags = g_SDL_flags|SDL_HWSURFACE;
-	else g_SDL_flags = g_SDL_flags|SDL_SWSURFACE;
-	if (strstr(szCmdLine, "openglblit"))
-	g_SDL_flags = g_SDL_flags|SDL_OPENGLBLIT;
-    #endif // SKIP_SDL2_SCREEN_ISSUES
+	if (strstr(szCmdLine, "fullscreen")) {
+        g_SDL_flags = g_SDL_flags | SDL_WINDOW_FULLSCREEN;
+    }
+	if (strstr(szCmdLine, "hwsurface")) {
+        printf("SDL2 does not support hwsurface option");
+	}
+	if (strstr(szCmdLine, "openglblit")) {
+	    printf("SDL2 uses OpenGL automatically");
+    }
 #endif
 	
 	g_eventLog = (NULL != strstr(szCmdLine, "eventlog"));

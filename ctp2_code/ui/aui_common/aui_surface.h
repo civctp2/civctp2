@@ -24,7 +24,7 @@
 // Modifications from the original Activision code:
 //
 // - Corrected a reported memory leak.
-// - Added back buffering capability. (1-Jan-2010 Martin Gühmann)
+// - Added back buffering capability. (1-Jan-2010 Martin Gï¿½hmann)
 //
 //----------------------------------------------------------------------------
 #if defined(HAVE_PRAGMA_ONCE)
@@ -88,6 +88,8 @@ protected:
 	AUI_ERRCODE InitCommon( sint32 width, sint32 height, sint32 bpp, BOOL isPrimary );
 
 public:
+	static AUI_SURFACE_PIXELFORMAT TransformBppToSurfacePixelFormat(int bpp);
+
 	virtual BOOL IsThisA( uint32 classId )
 	{
 		return classId == m_surfaceClassId;

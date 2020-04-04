@@ -37,6 +37,10 @@
 #include "aui_pixel.h"
 #include "aui_ui.h"
 
+#if defined(__AUI_USE_SDL__)
+    #include <ui/aui_sdl/aui_sdlsurface.h>
+#endif
+
 aui_Image::aui_Image(
 	AUI_ERRCODE *retval,
 	const MBCHAR * filename )
@@ -324,10 +328,10 @@ AUI_ERRCODE aui_BmpImageFormat::Load(MBCHAR const * filename, aui_Image *image )
         if (bmp->format->Gmask >> bmp->format->Gshift == 0x1F)
             fprintf(stderr, "%s L%d: 555 image!\n", __FILE__, __LINE__);
 	if (NULL == surf) {
-#if !defined(SKIP_SDL2_SCREEN_ISSUES)
-		surf = SDL_DisplayFormat(bmp);
-#endif // SKIP_SDL2_SCREEN_ISSUES
-	}
+        SDL_PixelFormat *format = SDL_AllocFormat(aui_SDLSurface::TransformSurfacePixelFormatToSDL(g_ui->PixelFormat()));
+        surf = SDL_ConvertSurface(bmp, format, 0);
+        SDL_FreeFormat(format);
+    }
 	SDL_FreeSurface(bmp);
 	if (NULL == surf)
 		return AUI_ERRCODE_LOADFAILED;
