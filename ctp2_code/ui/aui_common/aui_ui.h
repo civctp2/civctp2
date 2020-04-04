@@ -410,6 +410,10 @@ protected:
 
 	virtual AUI_ERRCODE ClipAndConsolidate( void );
 
+#ifdef __AUI_USE_SDL__
+	virtual AUI_ERRCODE SDLDrawScreen( void ) {}
+#endif
+
 	AUI_ERRCODE InsertDirtyRectInfo( RECT *rect, aui_Window *window );
 	void FlushDirtyRectInfoList( void );
 

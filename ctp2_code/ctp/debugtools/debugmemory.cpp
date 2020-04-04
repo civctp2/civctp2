@@ -58,6 +58,17 @@
 #define fopen(a, b) ci_fopen(a, b)
 #endif
 
+#if defined(SKIP_SDL2_DEBUG_MEMORY_ISSUE)
+
+void DebugMemory_LeaksShow (int turn_count) {}
+void DebugMemory_LeaksClear(void) {}
+size_t DebugMemory_GetTotalFromEXE(void) { return 0; }
+size_t DebugMemory_GetTotalFromDLL(void) { return 0; }
+void DebugMemory_Open (void) {}
+void DebugMemory_Close (void) {}
+
+#else
+
 struct DebugMemory;
 struct MemoryHeapDescriptor;
 struct AllocHeader;
@@ -1350,5 +1361,7 @@ void operator delete (void *mem)
 #endif // _DEBUG_MEMORY
 
 #endif // MEMORY_LOGGED
+
+#endif // SKIP_SDL2_DEBUG_MEMORY_ISSUE
 
 #endif // _DEBUG
