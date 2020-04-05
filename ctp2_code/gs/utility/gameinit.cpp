@@ -29,22 +29,22 @@
 // Modifications from the original Activision code:
 //
 // - Added player selection for new single player game and scenarios of
-//   all types, by Martin G�hmann.
+//   all types, by Martin Gühmann.
 // - Fixed scenarios that allow players other than player 1 to be played,
-//   by Martin G�hmann
+//   by Martin Gühmann
 // - Added multiplayer to single player game conversion for testing.
 // - Prevent assigning the same civilisation index twice, while keeping the
 //   human player selection.
 // - TradePool is fixed on reload if the number of goods in the
 //   savegame differs from the number of goods in the database.
-//   - June 4th 2005 Martin G�hmann
+//   - June 4th 2005 Martin Gühmann
 // - Allowed for nPlayers to be 2 or 3 - JJB 2005/06/28
 // - Removed auto-tutorial on low difficulty - JJB 2005/06/28
-// - Removed refferences to the civilisation database. (Aug 20th 2005 Martin G�hmann)
-// - Removed unused SpriteStateDB refferences. (Aug 28th 2005 Martin G�hmann)
-// - Reused obsolate concept icon database slot for new map icon database. (3-Mar-2007 Martin G�hmann)
-// - Removed old concept database. (31-Mar-2007 Martin G�hmann)
-// - Replaced old const database by new one. (5-Aug-2007 Martin G�hmann)
+// - Removed refferences to the civilisation database. (Aug 20th 2005 Martin Gühmann)
+// - Removed unused SpriteStateDB refferences. (Aug 28th 2005 Martin Gühmann)
+// - Reused obsolate concept icon database slot for new map icon database. (3-Mar-2007 Martin Gühmann)
+// - Removed old concept database. (31-Mar-2007 Martin Gühmann)
+// - Replaced old const database by new one. (5-Aug-2007 Martin Gühmann)
 //
 //----------------------------------------------------------------------------
 
@@ -1969,7 +1969,7 @@ sint32 gameinit_Initialize(sint32 mWidth, sint32 mHeight, CivArchive *archive)
 
 			case STARTINFOTYPE_CIVSFIXED:
 			case STARTINFOTYPE_POSITIONSFIXED:
-// Added by Martin G�hmann
+// Added by Martin Gühmann
 // No difference between STARTINFOTYPE_CIVSFIXED and STARTINFOTYPE_POSITIONSFIXED
 				{
 					Assert(numPlayersLoaded == 0);

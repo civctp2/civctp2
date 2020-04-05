@@ -1703,26 +1703,29 @@ int WINAPI CivMain(HINSTANCE hInstance, HINSTANCE hPrevInstance, PSTR szCmdLine,
 				break;
 			}
 
-#if !defined(SKIP_SDL2_EVENT_ISSUES)
-			int n = SDL_PeepEvents(&event, 1, SDL_GETEVENT,
-                     ~(SDL_EVENTMASK(SDL_MOUSEMOTION) | SDL_EVENTMASK(SDL_MOUSEBUTTONDOWN) | SDL_EVENTMASK(SDL_MOUSEBUTTONUP)));
-#else // SKIP_SDL2_EVENT_ISSUES
-			int n = 0;
-#endif // SKIP_SDL2_EVENT_ISSUES
+			int n = SDL_PeepEvents(&event, 1, SDL_GETEVENT, SDL_FIRSTEVENT, SDL_MOUSEMOTION-1);
 			if (0 > n) {
-                            fprintf(stderr, "%s L%d: SDL_PeepEvents: Still events stored! Error?: %s\n", __FILE__, __LINE__, SDL_GetError());
-
+				fprintf(stderr, "%s L%d: SDL_PeepEvents: Still events stored! Error?: %s\n", __FILE__, __LINE__, SDL_GetError());
 				break;
 			}
 
 			if (0 == n)
 			{
-				// other events are handled in other threads
-				// or no more events
-				break;
+				n = SDL_PeepEvents(&event, 1, SDL_GETEVENT, SDL_MOUSEWHEEL+1, SDL_LASTEVENT);
+				if (0 > n) {
+					fprintf(stderr, "%s L%d: SDL_PeepEvents: Still events stored! Error?: %s\n", __FILE__, __LINE__, SDL_GetError());
+					break;
+				}
+
+				if (0 == n) {
+					// other events are handled in other threads
+					// or no more events
+					break;
+				}
 			}
-			if (SDL_QUIT == event.type)
+			if (SDL_QUIT == event.type) {
 				gDone = TRUE;
+			}
 
 			// If a keyboard event then we must reenqueue it so that aui_sdlkeyboard has a chance to look at it
 			if (event.type == SDL_KEYDOWN || event.type == SDL_KEYUP)

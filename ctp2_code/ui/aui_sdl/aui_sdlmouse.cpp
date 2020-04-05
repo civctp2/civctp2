@@ -12,6 +12,8 @@
 #include "civapp.h"
 extern CivApp           *g_civApp;
 
+// SKIP_SDL2_EVENT_ISSUES: TODO: scrolling with mouse (screen sides) is too fast to be useful
+
 aui_SDLMouse::aui_SDLMouse(
    AUI_ERRCODE *retval,
    const MBCHAR *ldlBlock,
@@ -62,8 +64,7 @@ aui_SDLMouse::GetInput(void)
 
    SDL_Event od[10];
    // check for one of the mouse events
-   int numElements =
-      SDL_PeepEvents(od, 10, SDL_GETEVENT, SDL_MOUSEMOTION, SDL_MOUSEBUTTONUP);
+   int numElements = SDL_PeepEvents(od, 10, SDL_GETEVENT, SDL_MOUSEMOTION, SDL_MOUSEWHEEL);
    if (0 > numElements) {
       fprintf(stderr, "Mouse PeepEvents failed: %s\n", SDL_GetError());
       return AUI_ERRCODE_GETDEVICEDATAFAILED;
@@ -85,15 +86,6 @@ aui_SDLMouse::GetInput(void)
             break;
          case SDL_MOUSEBUTTONDOWN:
          case SDL_MOUSEBUTTONUP:
-#if !defined(SKIP_SDL2_EVENT_ISSUES)
-	    if (od[ev].button.button == SDL_BUTTON_WHEELUP){
-		HandleMouseWheel((sint16)1);
-		break;
-	    }
-	    else if (od[ev].button.button == SDL_BUTTON_WHEELDOWN){
-		HandleMouseWheel((sint16)-1);
-		break;
-	    }
             m_data.position.x = od[ev].button.x;
             m_data.position.y = od[ev].button.y;
             if (od[ev].button.button == SDL_BUTTON_LEFT) {
@@ -101,8 +93,14 @@ aui_SDLMouse::GetInput(void)
             } else if (od[ev].button.button == SDL_BUTTON_RIGHT) {
                   m_data.rbutton = od[ev].button.state == SDL_PRESSED;
             }
-#endif // SKIP_SDL2_EVENT_ISSUES
             break;
+         case SDL_MOUSEWHEEL:
+	    if (od[ev].wheel.y > 0) {
+               HandleMouseWheel((sint16)1);
+	    } else if (od[ev].wheel.y < 0) {
+	       HandleMouseWheel((sint16)-1);
+	    }
+	    break;
          default:
             printf("event not handeled: %d\n", od[ev].type);
             break;

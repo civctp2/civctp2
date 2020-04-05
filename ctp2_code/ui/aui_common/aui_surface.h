@@ -24,7 +24,7 @@
 // Modifications from the original Activision code:
 //
 // - Corrected a reported memory leak.
-// - Added back buffering capability. (1-Jan-2010 Martin G�hmann)
+// - Added back buffering capability. (1-Jan-2010 Martin Gühmann)
 //
 //----------------------------------------------------------------------------
 #if defined(HAVE_PRAGMA_ONCE)

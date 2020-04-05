@@ -168,13 +168,9 @@ uint32 aui_SDLKeyboard::convertSDLKey(SDL_Keysym keysym)
 			return AUI_KEYBOARD_KEY_LEFTARROW;
 		case SDLK_RIGHT:
 			return AUI_KEYBOARD_KEY_RIGHTARROW;
+		default:
+			return AUI_KEYBOARD_KEY_INVALID;
 	}
-#if !defined(SKIP_SDL2_EVENT_ISSUES)
-	if ((keysym.unicode & 0xFF80) == 0) {
-		return (keysym.unicode & 0x7F);
-	}
-#endif // SKIP_SDL2_EVENT_ISSUES
-	return AUI_KEYBOARD_KEY_INVALID;
 }
 
 AUI_ERRCODE aui_SDLKeyboard::Acquire()
