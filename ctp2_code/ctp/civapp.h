@@ -85,7 +85,7 @@ public:
     sint32		InitializeApp(HINSTANCE hInstance, int iCmdShow);
 	bool		InitializeAppDB(void);
 	sint32		InitializeAppDB(CivArchive &archive);
-	sint32		InitializeGame(CivArchive &archive);
+	sint32		InitializeGame(CivArchive *archive);
 
    	bool		IsGameLoaded(void) const
     {
@@ -138,7 +138,7 @@ private:
 	void		CleanupGameUI(void);
 	void 		InitializeAppUI(void);
 	sint32  	InitializeGameUI(void);
-	sint32		InitializeSpriteEditor(CivArchive &archive);
+	sint32		InitializeSpriteEditor(CivArchive *archive);
 	void		PostLoadSaveGameMapAction(MBCHAR const *);
 	sint32      ProcessAI();
 	sint32      ProcessNet(const uint32 target_milliseconds, uint32 &used_milliseconds);

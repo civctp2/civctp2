@@ -28,17 +28,17 @@
 // - Readded Activision patch new magic number 66.
 // - Fixed autosave directory name for scenarios to match normal directory.
 // - Fixed the scenario savegame bug (but not for autosave, that still needs to be done)
-// - Replaced old civilisation database by new one. (Aug 20th 2005 Martin Gühmann)
-// - Made progress bar more fluently. (Aug 22nd 2005 Martin Gühmann)
-// - Removed old sprite state databases. (Aug 29th 2005 Martin Gühmann)
-// - Removed old difficulty database. (April 29th 2006 Martin Gühmann)
-// - Removed old pollution database. (July 15th 2006 Martin Gühmann)
-// - Removed old gobal warming database. (July 15th 2006 Martin Gühmann)
-// - Removed old concept database. (31-Mar-2007 Martin Gühmann)
-// - Removed old const database. (5-Aug-2007 Martin Gühmann)
-// - Replaced CIV_INDEX by sint32. (2-Jan-2008 Martin Gühmann)
+// - Replaced old civilisation database by new one. (Aug 20th 2005 Martin Gï¿½hmann)
+// - Made progress bar more fluently. (Aug 22nd 2005 Martin Gï¿½hmann)
+// - Removed old sprite state databases. (Aug 29th 2005 Martin Gï¿½hmann)
+// - Removed old difficulty database. (April 29th 2006 Martin Gï¿½hmann)
+// - Removed old pollution database. (July 15th 2006 Martin Gï¿½hmann)
+// - Removed old gobal warming database. (July 15th 2006 Martin Gï¿½hmann)
+// - Removed old concept database. (31-Mar-2007 Martin Gï¿½hmann)
+// - Removed old const database. (5-Aug-2007 Martin Gï¿½hmann)
+// - Replaced CIV_INDEX by sint32. (2-Jan-2008 Martin Gï¿½hmann)
 // - Make the Linux version loading and producing Windows compatible
-//   savegames. (16-Jan-2019 Martin Gühmann)
+//   savegames. (16-Jan-2019 Martin Gï¿½hmann)
 //
 //----------------------------------------------------------------------------
 
@@ -845,7 +845,7 @@ uint32 GameFile::Restore(const MBCHAR *filepath)
 
 	g_theProgressWindow->StartCountingTo( 1080 );
 
-	g_civApp->InitializeGame(archive);
+	g_civApp->InitializeGame(&archive);
 
 	g_theProgressWindow->StartCountingTo( 1090 );
 
