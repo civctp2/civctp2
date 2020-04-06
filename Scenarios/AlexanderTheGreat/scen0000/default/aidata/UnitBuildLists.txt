@@ -94,7 +94,7 @@ UNIT_BUILD_LIST_SPECIAL_NUCLEAR {
 ## 12 #########################################################
 
 UNIT_BUILD_LIST_SEA_TRANSPORT {
-  Unit UNIT_CATAMARAN
+  Unit UNIT_TRIREME
   Unit UNIT_LONGSHIP
   Unit UNIT_CARRACK
   Unit UNIT_TROOP_SHIP

@@ -3718,14 +3718,21 @@ void Governor::ComputeDesiredUnits()
 			if (best_unit_type >= 0)
 			{
 				Assert(g_theUnitDB->Get(best_unit_type)->HasCargoData());
-				needed_transport /= g_theUnitDB->Get(best_unit_type)->GetCargoDataPtr()->GetMaxCargo();
-				desired_count = std::max<sint32>(desired_count, needed_transport);
+				if(g_theUnitDB->Get(best_unit_type)->HasCargoData())
+				{
+					Assert(g_theUnitDB->Get(best_unit_type)->GetCargoDataPtr()->GetMaxCargo() > 0);
+					if(g_theUnitDB->Get(best_unit_type)->GetCargoDataPtr()->GetMaxCargo() > 0)
+					{
+						needed_transport /= g_theUnitDB->Get(best_unit_type)->GetCargoDataPtr()->GetMaxCargo();
+						desired_count = std::max<sint32>(desired_count, needed_transport);
 
-				m_buildUnitList[list_num].m_maximumCount = desired_count;
-				m_buildUnitList[list_num].m_desiredCount =
-				    static_cast<sint16>(desired_count
-				                        - m_currentUnitCount[best_unit_type]
-				                       );
+						m_buildUnitList[list_num].m_maximumCount = desired_count;
+						m_buildUnitList[list_num].m_desiredCount =
+						    static_cast<sint16>(desired_count
+						                        - m_currentUnitCount[best_unit_type]
+						                       );
+					}
+				}
 			}
 			break;
 
