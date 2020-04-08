@@ -355,7 +355,7 @@ void TradeManager::UpdateCreateList(const PLAYER_INDEX & player_id)
 
 		for (sint32 g = 0; g < g_theResourceDB->NumRecords(); g++)
         {
-			if(city.CD()->IsLocalResource(g)) {
+			if(city.CD()->IsLocalResource(g)) { // only consider collected goods (not bought goods)
 
 				sint32 op;
 				sint32 maxPrice[k_MAX_CITIES_PER_GOOD];
@@ -370,7 +370,7 @@ void TradeManager::UpdateCreateList(const PLAYER_INDEX & player_id)
 
 
 				if(!city.CD()->HasResource(g) &&
-					city.CD()->IsSellingResourceTo(g, curDestCity) ) {
+					city.CD()->IsSellingResourceTo(g, curDestCity) ) { // have already a route for g
 					sellingPrice = tradeutil_GetTradeValue(player_id, curDestCity, g);
 
 				//need to add something here where cities that have an improvement that needs a good will demand the good. May be increase the value of selling that good?
@@ -384,13 +384,13 @@ void TradeManager::UpdateCreateList(const PLAYER_INDEX & player_id)
 					sellingPrice = -1;
 				}
 
-				for(op = 1; op < k_MAX_PLAYERS; op++) {
-					if(!g_player[op]) continue;
-					if(player_id != op && !p->HasContactWith(op)) continue;
+				for(op = 1; op < k_MAX_PLAYERS; op++) { // determine player offering highest price for good g
+					if(!g_player[op]) continue; // player gone/dead
+					if(player_id != op && !p->HasContactWith(op)) continue; // player not yet known
 					if(m_showCities == TRADE_CITIES_OWN && op != g_selected_item->GetVisiblePlayer()) continue;
 					if ((m_showCities == TRADE_CITIES_ALL)			&&
 						(op != g_selected_item->GetVisiblePlayer()) &&
-						(AgreementMatrix::s_agreements.TurnsAtWar(player_id, op) >= 0)
+						(AgreementMatrix::s_agreements.TurnsAtWar(player_id, op) >= 0) // no trade if at ware
 					   )
 						continue;
 
@@ -402,21 +402,21 @@ void TradeManager::UpdateCreateList(const PLAYER_INDEX & player_id)
 					   )
 						continue;
 
-					if(Diplomat::GetDiplomat(op).GetEmbargo(player_id))
+					if(Diplomat::GetDiplomat(op).GetEmbargo(player_id)) // no trade if embargo enacted
 						continue;
 
-					for(d = 0; d < g_player[op]->m_all_cities->Num(); d++) {
+					for(d = 0; d < g_player[op]->m_all_cities->Num(); d++) { // check all cities if suitabelfor trading
 						Unit destCity = g_player[op]->m_all_cities->Access(d);
 						if(!(destCity.IsValid())) continue;
-						if(!(destCity.GetVisibility() & (1 << player_id))) continue;
-						if(destCity.m_id == city.m_id) continue;
+						if(!(destCity.GetVisibility() & (1 << player_id))) continue; // city not visible/known
+						if(destCity.m_id == city.m_id) continue; // exclude current city
 
 
-						if(curDestCity.m_id == destCity.m_id) continue;
+						if(curDestCity.m_id == destCity.m_id) continue; // exclude standing trade route destination
 
-						sint32 price = tradeutil_GetTradeValue(player_id, destCity, g);
+						sint32 price = tradeutil_GetTradeValue(player_id, destCity, g); // # of gold
 						for(i = 0; i < m_numCities; i++) {
-							if(price > maxPrice[i]) {
+							if(price > maxPrice[i]) { // determine best offer
 								for(j = m_numCities - 1; j>= i; j--) {
 									maxPrice[j] = maxPrice[j - 1];
 									maxCity[j].m_id = maxCity[j - 1].m_id;
