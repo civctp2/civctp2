@@ -417,7 +417,7 @@ void TradeManager::UpdateCreateList(const PLAYER_INDEX & player_id)
 
 						for(i = 0; i < m_numCities; i++) {
 							if(valuePerCaravan > maxValuePerCaravan[i]) { // determine best offer
-								for(j = m_numCities - 1; j>= i; j--) {
+								for(j = m_numCities - 1; j > i; j--) {
 									maxValuePerCaravan[j] = maxValuePerCaravan[j - 1];
 									maxCity[j].m_id = maxCity[j - 1].m_id;
 								}
