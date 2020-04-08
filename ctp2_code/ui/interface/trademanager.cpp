@@ -369,15 +369,10 @@ void TradeManager::UpdateCreateList(const PLAYER_INDEX & player_id)
 				}
 
 
-				if(!city.CD()->HasResource(g) &&
-					city.CD()->IsSellingResourceTo(g, curDestCity) ) { // have already a route for g
+				if(city.CD()->IsSellingResourceTo(g, curDestCity)) { // have already a route for g
 					sellingPrice = tradeutil_GetTradeValue(player_id, curDestCity, g);
 
 				//need to add something here where cities that have an improvement that needs a good will demand the good. May be increase the value of selling that good?
-
-
-
-
 				}
 				else {
 					curDestCity.m_id = 0;
