@@ -38,6 +38,7 @@
 #include "aui_joystick.h"
 #include "aui_sdlsurface.h"
 #include "aui_sdlmouse.h"
+#include "aui_sdlmoviemanager.h"
 
 #include "aui_sdlui.h"
 
@@ -70,6 +71,7 @@ aui_SDLUI::aui_SDLUI
 :   aui_UI              (),
     aui_SDL             (),
     m_X11Display        (0),
+    m_SDLWindow         (0),
     m_SDLRenderer       (0),
     m_SDLTexture        (0)
 {
@@ -138,15 +140,17 @@ AUI_ERRCODE aui_SDLUI::CreateNativeScreen( BOOL useExclusiveMode )
 	if ( !AUI_SUCCESS(errcode) ) return errcode;
 
 	m_pixelFormat = aui_Surface::TransformBppToSurfacePixelFormat(m_bpp);
-	SDL_Window *sdlWindow = SDL_CreateWindow("Call To Power 2", SDL_WINDOWPOS_CENTERED, SDL_WINDOWPOS_CENTERED,
+	m_SDLWindow = SDL_CreateWindow("Call To Power 2", SDL_WINDOWPOS_CENTERED, SDL_WINDOWPOS_CENTERED,
 		m_width, m_height, g_SDL_flags);
-	if (!sdlWindow) {
+	if (!m_SDLWindow) {
 		c3errors_FatalDialog("aui_SDLUI", "SDL window creation failed:\n%s\n", SDL_GetError());
 	}
-	m_SDLRenderer = SDL_CreateRenderer(sdlWindow, -1, 0);
+	m_SDLRenderer = SDL_CreateRenderer(m_SDLWindow, -1, 0);
 	if (!m_SDLRenderer) {
 		c3errors_FatalDialog("aui_SDLUI", "SDL renderer creation failed:\n%s\n", SDL_GetError());
 	}
+	SDL_SetHint(SDL_HINT_RENDER_SCALE_QUALITY, "linear");
+	SDL_RenderSetLogicalSize(m_SDLRenderer, m_width, m_height);
 	m_SDLTexture = SDL_CreateTexture(m_SDLRenderer, aui_SDLSurface::TransformSurfacePixelFormatToSDL(m_pixelFormat),
 		SDL_TEXTUREACCESS_STREAMING, m_width, m_height);
 	if (!m_SDLTexture) {
@@ -186,6 +190,18 @@ aui_SDLUI::~aui_SDLUI( void )
 		m_X11Display = 0;
 	}
 #endif
+	if (m_SDLTexture) {
+		SDL_DestroyTexture(m_SDLTexture);
+		m_SDLTexture = NULL;
+	}
+	if (m_SDLRenderer) {
+		SDL_DestroyRenderer(m_SDLRenderer);
+		m_SDLRenderer = NULL;
+	}
+	if (m_SDLWindow) {
+		SDL_DestroyWindow(m_SDLWindow);
+		m_SDLWindow = NULL;
+	}
 }
 
 AUI_ERRCODE aui_SDLUI::TearDownMouse(void)
@@ -328,6 +344,19 @@ AUI_ERRCODE aui_SDLUI::AltTabIn( void )
 	}
 
 	return FlushDirtyList();
+}
+
+aui_MovieManager* aui_SDLUI::CreateMovieManager( void ) {
+	Assert(m_SDLWindow);
+	Assert(m_SDLRenderer);
+	int windowWidth;
+	int windowHeight;
+	SDL_GetWindowSize(m_SDLWindow, &windowWidth, &windowHeight);
+
+	aui_Surface *cursorSurface = m_mouse->GetCurrentCursor()->TheSurface();
+	aui_SDLSurface *sdlCursorSurface = dynamic_cast<aui_SDLSurface*>(cursorSurface);
+	return new aui_SDLMovieManager(m_SDLRenderer, windowWidth, windowHeight,
+			sdlCursorSurface ? sdlCursorSurface->GetSDLSurface() : NULL);
 }
 
 AUI_ERRCODE aui_SDLUI::SDLDrawScreen( void ) {

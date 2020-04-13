@@ -99,7 +99,6 @@ SoundManager::SoundManager()
 #endif // SKIP_SDL2_CDROM_ISSUES
 	m_useOggTracks				(false),
 	m_oggTrack					(0),
-    m_SDLInitFlags              (SDL_INIT_NOPARACHUTE),
 #endif
     m_timeToCheckCD             (0),
     m_numTracks                 (0),
@@ -118,11 +117,6 @@ SoundManager::SoundManager()
 		m_voiceVolume   = static_cast<uint32>(g_theProfileDB->GetVoiceVolume());
 		m_musicVolume   = static_cast<uint32>(g_theProfileDB->GetMusicVolume());
     }
-
-#if defined(USE_SDL) && defined(_DEBUG)
-    // Do not remove this or debugging won't work... :(
-    m_SDLInitFlags |= SDL_INIT_NOPARACHUTE;
-#endif
 
 	m_sfxSounds     = new PointerList<CivSound>;
 	m_voiceSounds   = new PointerList<CivSound>;
@@ -159,7 +153,7 @@ void SoundManager::InitSoundDriver()
 	int     output_rate     = 22050;	// 22khz @ 16 Bit stereo
 	Uint16  output_format   = AUDIO_S16SYS;
 	int     output_channels = 2;
-	int     errcode         = SDL_Init(SDL_INIT_AUDIO | m_SDLInitFlags);
+	int     errcode         = SDL_InitSubSystem(SDL_INIT_AUDIO);
 
     if (errcode < 0)
     {
@@ -204,7 +198,7 @@ void SoundManager::CleanupSoundDriver()
             Mix_CloseAudio();
         }
 
-        // SDL_Quit() -> civ_main.cpp:AtExitProc()
+        SDL_QuitSubSystem(SDL_INIT_AUDIO);
 #else // !USE_SDL
 		AIL_quick_shutdown();
 #endif // USE_SDL
@@ -223,7 +217,7 @@ void SoundManager::InitRedbook()
 	}
 #if !defined(SKIP_SDL2_CDROM_ISSUES)
     if (!m_cdrom && !m_useOggTracks) {
-        int errcode = SDL_Init(SDL_INIT_CDROM | m_SDLInitFlags);
+        int errcode = SDL_Init(SDL_INIT_CDROM);
 
         Assert(0 == errcode);
         if (errcode < 0) {

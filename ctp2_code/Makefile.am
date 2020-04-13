@@ -235,6 +235,8 @@ ctp_ctp2_SOURCES = \
 	ui/aui_sdl/aui_sdljoystick.cpp \
 	ui/aui_sdl/aui_sdlkeyboard.cpp \
 	ui/aui_sdl/aui_sdlmouse.cpp \
+	ui/aui_sdl/aui_sdlmovie.cpp \
+	ui/aui_sdl/aui_sdlmoviemanager.cpp \
 	ui/aui_sdl/aui_sdlsound.cpp \
 	ui/aui_sdl/aui_sdlsurface.cpp \
 	ui/aui_sdl/aui_sdlui.cpp \

@@ -16,8 +16,8 @@ RUN useradd -m $USERNAME && \
 FROM system as builder
 
 RUN apt-get update && apt-get install -y --no-install-recommends \
-    libsdl2-dev libsdl2-mixer-dev libsdl2-image-dev libtiff-dev byacc libgtk2.0-dev gcc-5 g++-5 \
-    automake libtool unzip flex git ca-certificates
+    libsdl2-dev libsdl2-mixer-dev libsdl2-image-dev libtiff-dev libavcodec-dev libavformat-dev libswscale-dev \
+    byacc libgtk2.0-dev gcc-5 g++-5 automake libtool unzip flex git ca-certificates
 
 ### set default compilers
 RUN update-alternatives --install /usr/bin/gcc gcc /usr/bin/gcc-5 100 && \
@@ -62,7 +62,7 @@ FROM system as install
 ARG BTYP
 
 RUN apt-get update && apt-get install -y --no-install-recommends \
-    libsdl2-2.0 libsdl2-mixer-2.0 libsdl2-image-2.0 libgtk2.0-0 && \
+    libsdl2-2.0 libsdl2-mixer-2.0 libsdl2-image-2.0 ffmpeg libgtk2.0-0 && \
     apt-get clean && \
     rm -rf /var/lib/apt/lists/*
 
@@ -70,8 +70,6 @@ RUN apt-get update && apt-get install -y --no-install-recommends \
 COPY ctp2CD/ /opt/ctp2/
 ## ctp2/ copy has to be after ctp2CD/ to overwrite with newer versions from civctp2
 COPY --from=builder /opt/ctp2/ /opt/ctp2/
-## Disable English layout files
-RUN mv /opt/ctp2/ctp2_data/english/uidata/layouts /opt/ctp2/ctp2_data/english/uidata/layouts.org
 
 USER $USERNAME
 

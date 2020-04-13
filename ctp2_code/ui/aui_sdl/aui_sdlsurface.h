@@ -56,6 +56,7 @@ public:
 
 	SDL_mutex* m_bltMutex;
 
+	SDL_Surface* GetSDLSurface() { return m_lpdds; }
 protected:
 	SDL_Surface* m_lpdds;
 

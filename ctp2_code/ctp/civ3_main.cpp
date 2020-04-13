@@ -45,17 +45,17 @@
 // - Merged GNU and MSVC code (DoFinalCleanup, CivMain).
 // - Option added to include multiple data directories.
 // - Display the main thread function name in the debugger.
-// - Removed references to CivilisationDB. (Aug 20th 2005 Martin G?hmann)
-// - Removed references to old SpriteStateDBs. (Aug 29th 2005 Martin G?hmann)
-// - Initialized local variables. (Sep 9th 2005 Martin G?hmann)
-// - Removed unused local variables. (Sep 9th 2005 Martin G?hmann)
-// - Removed some unreachable code. (Sep 9th 2005 Martin G?hmann)
+// - Removed references to CivilisationDB. (Aug 20th 2005 Martin Gühmann)
+// - Removed references to old SpriteStateDBs. (Aug 29th 2005 Martin Gühmann)
+// - Initialized local variables. (Sep 9th 2005 Martin Gühmann)
+// - Removed unused local variables. (Sep 9th 2005 Martin Gühmann)
+// - Removed some unreachable code. (Sep 9th 2005 Martin Gühmann)
 // - Moved debug tools handling to c3.h, so that the leak reporter doesn't
-//   report leaks that aren't leaks. (Oct 3rd 2005 Matzin G?hmann)
+//   report leaks that aren't leaks. (Oct 3rd 2005 Matzin Gühmann)
 // - Added version to crash.txt
-// - USE_LOGGING now works in a final version. (30-Jun-2008 Martin G?hmann)
+// - USE_LOGGING now works in a final version. (30-Jun-2008 Martin Gühmann)
 // - The log files are now only opened and closed once, this speeds up
-//   debugging significantly. (09-Aug-2008 Martin G?hmann)
+//   debugging significantly. (09-Aug-2008 Martin Gühmann)
 //
 //----------------------------------------------------------------------------
 //
@@ -72,7 +72,6 @@
 #include "ancientwindows.h"
 #include "appstrings.h"
 #include "aui.h"
-#include "aui_directmoviemanager.h"
 #include "aui_Factory.h"
 #include "aui_ldl.h"
 #include "background.h"
@@ -557,12 +556,7 @@ int ui_Initialize(void)
 	g_c3ui->RegisterObject(aui_Factory::new_Keyboard(auiErr));
 
 	SPLASH_STRING("Creating Movie manager...");
-#if defined(__AUI_USE_SDL__)
-	//SDL movie manager is in aui_movie.cpp
-	g_c3ui->RegisterObject(new aui_MovieManager());
-#else
-	g_c3ui->RegisterObject(new aui_DirectMovieManager());
-#endif
+	g_c3ui->RegisterObject(g_c3ui->CreateMovieManager());
 
 	SPLASH_STRING("Starting Mouse...");
 	auiErr = g_c3ui->TheMouse()->Start();
@@ -1165,7 +1159,7 @@ void ParseCommandLine(PSTR szCmdLine)
 
 #if defined(__AUI_USE_SDL__)
 	if (strstr(szCmdLine, "fullscreen")) {
-        g_SDL_flags = g_SDL_flags | SDL_WINDOW_FULLSCREEN;
+        g_SDL_flags = g_SDL_flags | SDL_WINDOW_FULLSCREEN_DESKTOP;
     }
 	if (strstr(szCmdLine, "hwsurface")) {
         printf("SDL2 does not support hwsurface option");

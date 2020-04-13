@@ -10,6 +10,9 @@ addons:
     - libsdl2-mixer-dev
     - libsdl2-image-dev
     - libtiff-dev
+    - libavcodec-dev
+    - libavformat-dev
+    - libswscale-dev
     - byacc
     - libgtk2.0-dev
     - gcc-5

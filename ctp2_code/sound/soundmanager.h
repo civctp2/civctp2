@@ -167,7 +167,6 @@ private:
 	SDL_CD                  *m_cdrom;
     #endif // SKIP_SDL2_CDROM_ISSUES
 	BOOL					m_useOggTracks;
-	Uint32                  m_SDLInitFlags;
 	Mix_Music				*m_oggTrack;
 #endif
 	uint32					m_timeToCheckCD;

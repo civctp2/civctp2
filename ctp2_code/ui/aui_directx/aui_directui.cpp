@@ -28,7 +28,7 @@
 //
 // - Prevented crashes
 // - Added graphics DirectX built in double buffering and extended it
-//   to manual tripple buffering. (1-Jan-2010 Martin Gühmann)
+//   to manual tripple buffering. (1-Jan-2010 Martin GÃ¼hmann)
 //
 //----------------------------------------------------------------------------
 
@@ -43,6 +43,7 @@
 #include "aui_joystick.h"
 #include "aui_directsurface.h"
 #include "aui_directmouse.h"
+#include "aui_directmoviemanager.h"
 
 #include "aui_directui.h"
 
@@ -385,6 +386,10 @@ AUI_ERRCODE aui_DirectUI::AltTabIn( void )
 	}
 
 	return FlushDirtyList();
+}
+
+aui_MovieManager* aui_DirectUI::CreateMovieManager( void ) {
+	return new aui_DirectMovieManager();
 }
 
 #endif  // __AUI_USE_DIRECTX__

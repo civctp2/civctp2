@@ -1,0 +1,56 @@
+#ifdef HAVE_PRAGMA_ONCE
+#pragma once
+#endif
+
+#ifndef __aui_sdl__aui_sdlmovie_h__
+#define __aui_sdl__aui_sdlmovie_h__ 1
+
+#include "ctp2_config.h"
+#include "aui_movie.h"
+
+#if defined(__AUI_USE_SDL__)
+
+class VideoState;
+class SDL_Renderer;
+class SDL_Surface;
+class SDL_Cursor;
+class aui_SDLMovie : public aui_Movie {
+public:
+	aui_SDLMovie(AUI_ERRCODE *retval, const MBCHAR * filename = NULL);
+	virtual ~aui_SDLMovie();
+
+	void SetContext(SDL_Renderer *renderer, const int windowWidth, const int windowHeight, SDL_Surface *cursorSurface);
+
+	virtual AUI_ERRCODE Load();
+	virtual AUI_ERRCODE Unload();
+
+	virtual AUI_ERRCODE Open(uint32 flags = 0, aui_Surface *surface = NULL, RECT *rect = NULL);
+	virtual AUI_ERRCODE Close();
+
+	virtual AUI_ERRCODE Play();
+	virtual AUI_ERRCODE Stop();
+
+	virtual AUI_ERRCODE Pause();
+	virtual AUI_ERRCODE Resume();
+
+	virtual AUI_ERRCODE Process();
+
+	virtual BOOL IsOpen() const;
+	virtual BOOL IsPlaying() const;
+	virtual BOOL IsPaused() const;
+
+private:
+	VideoState *m_videoState;
+
+	SDL_Renderer *m_renderer;
+	int m_windowWidth;
+	int m_windowHeight;
+	int m_logicalWidth;
+	int m_logicalHeight;
+	SDL_Surface *m_cursorSurface;
+	SDL_Cursor *m_cursor;
+};
+
+#endif  // defined(__AUI_USE_SDL__)
+
+#endif
