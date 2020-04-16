@@ -62,7 +62,7 @@ FROM system as install
 ARG BTYP
 
 RUN apt-get update && apt-get install -y --no-install-recommends \
-    libsdl2-2.0 libsdl2-mixer-2.0 libsdl2-image-2.0 ffmpeg libgtk2.0-0 && \
+    libsdl2-2.0 libsdl2-mixer-2.0 libsdl2-image-2.0 libavcodec57 libavformat57 libswscale4 libgtk2.0-0 && \
     apt-get clean && \
     rm -rf /var/lib/apt/lists/*
 
