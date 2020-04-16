@@ -1984,9 +1984,7 @@ aui_SDLMovie::aui_SDLMovie(AUI_ERRCODE *retval, const MBCHAR * filename) :
 	m_windowWidth(0),
 	m_windowHeight(0),
 	m_logicalWidth(0),
-	m_logicalHeight(0),
-	m_cursorSurface(NULL),
-	m_cursor(NULL)
+	m_logicalHeight(0)
 {
 	strncpy(m_filename, filename, sizeof(m_filename));
 	m_filename[MAX_PATH] = '\0';
@@ -1998,13 +1996,11 @@ aui_SDLMovie::~aui_SDLMovie() {
 	m_renderer = NULL;
 }
 
-void aui_SDLMovie::SetContext(SDL_Renderer *renderer, const int windowWidth, const int windowHeight,
-		SDL_Surface* cursorSurface) {
+void aui_SDLMovie::SetContext(SDL_Renderer *renderer, const int windowWidth, const int windowHeight) {
 	Assert(renderer);
 	m_renderer = renderer;
 	m_windowWidth = windowWidth;
 	m_windowHeight = windowHeight;
-	m_cursorSurface = cursorSurface;
 }
 
 AUI_ERRCODE aui_SDLMovie::Load() {
@@ -2033,13 +2029,6 @@ AUI_ERRCODE aui_SDLMovie::Open(uint32 flags, aui_Surface *surface, RECT *rect) {
 		return AUI_ERRCODE_MOVIEFAILED;
 	}
 
-	if (m_cursorSurface) {
-		m_cursor = SDL_CreateColorCursor(m_cursorSurface, 0, 0);
-		if (m_cursor) {
-			SDL_SetCursor(m_cursor);
-		}
-	}
-
 	renderer = m_renderer;
 	screen_width = m_windowWidth;
 	screen_height = m_windowHeight;
@@ -2058,13 +2047,7 @@ AUI_ERRCODE aui_SDLMovie::Open(uint32 flags, aui_Surface *surface, RECT *rect) {
 AUI_ERRCODE aui_SDLMovie::Close() {
 
 #if defined(USE_SDL_FFMPEG)
-	// Reset cursor
-	if (m_cursor) {
-		SDL_SetCursor(NULL);
-		SDL_FreeCursor(m_cursor);
-		m_cursor = NULL;
-	}
-	SDL_ShowCursor(SDL_DISABLE);
+	SDL_ShowCursor(SDL_ENABLE);
 	if (m_videoState) {
 		Stop();
 		stream_close(m_videoState);

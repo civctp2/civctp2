@@ -33,13 +33,11 @@ static int lockmgr(void **mtx, enum AVLockOp op)
 }
 #endif // USE_SDL_FFMPEG
 
-aui_SDLMovieManager::aui_SDLMovieManager(SDL_Renderer *renderer, const int windowWidth, const int windowHeight,
-		SDL_Surface *mouseSurface) :
+aui_SDLMovieManager::aui_SDLMovieManager(SDL_Renderer *renderer, const int windowWidth, const int windowHeight) :
 	aui_MovieManager(false),
 	m_renderer(renderer),
 	m_windowWidth(windowWidth),
-	m_windowHeight(windowHeight),
-	m_mouseSurface(mouseSurface)
+	m_windowHeight(windowHeight)
 {
 	Assert(m_renderer);
 	m_movieResource = new aui_Resource<aui_SDLMovie>();
@@ -61,7 +59,7 @@ aui_SDLMovieManager::~aui_SDLMovieManager() {
 
 aui_Movie* aui_SDLMovieManager::Load(const MBCHAR *filename, C3DIR dir) {
 	aui_SDLMovie *movie = m_movieResource->Load(filename, dir);
-	movie->SetContext(m_renderer, m_windowWidth, m_windowHeight, m_mouseSurface);
+	movie->SetContext(m_renderer, m_windowWidth, m_windowHeight);
 	return movie;
 }
 

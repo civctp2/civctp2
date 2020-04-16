@@ -49,7 +49,6 @@ AUI_ERRCODE aui_SDL::InitCommon(BOOL useExclusiveMode)
 		return AUI_ERRCODE_CREATEFAILED;
 	}
 */
-	SDL_ShowCursor(SDL_DISABLE);
 
 	SDL_SetEventFilter(FilterEvents, NULL);
 

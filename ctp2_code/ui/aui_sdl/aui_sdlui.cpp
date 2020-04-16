@@ -352,11 +352,7 @@ aui_MovieManager* aui_SDLUI::CreateMovieManager( void ) {
 	int windowWidth;
 	int windowHeight;
 	SDL_GetWindowSize(m_SDLWindow, &windowWidth, &windowHeight);
-
-	aui_Surface *cursorSurface = m_mouse->GetCurrentCursor()->TheSurface();
-	aui_SDLSurface *sdlCursorSurface = dynamic_cast<aui_SDLSurface*>(cursorSurface);
-	return new aui_SDLMovieManager(m_SDLRenderer, windowWidth, windowHeight,
-			sdlCursorSurface ? sdlCursorSurface->GetSDLSurface() : NULL);
+	return new aui_SDLMovieManager(m_SDLRenderer, windowWidth, windowHeight);
 }
 
 AUI_ERRCODE aui_SDLUI::SDLDrawScreen( void ) {

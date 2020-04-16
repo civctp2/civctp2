@@ -19,7 +19,7 @@ public:
 	aui_SDLMovie(AUI_ERRCODE *retval, const MBCHAR * filename = NULL);
 	virtual ~aui_SDLMovie();
 
-	void SetContext(SDL_Renderer *renderer, const int windowWidth, const int windowHeight, SDL_Surface *cursorSurface);
+	void SetContext(SDL_Renderer *renderer, const int windowWidth, const int windowHeight);
 
 	virtual AUI_ERRCODE Load();
 	virtual AUI_ERRCODE Unload();
@@ -47,8 +47,6 @@ private:
 	int m_windowHeight;
 	int m_logicalWidth;
 	int m_logicalHeight;
-	SDL_Surface *m_cursorSurface;
-	SDL_Cursor *m_cursor;
 };
 
 #endif  // defined(__AUI_USE_SDL__)

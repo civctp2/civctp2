@@ -19,9 +19,25 @@ public:
 	             BOOL useExclusiveMode = FALSE);
 	virtual ~aui_SDLMouse();
 
+	virtual AUI_ERRCODE	BltWindowToPrimary(aui_Window *window);
+	virtual AUI_ERRCODE	BltDirtyRectInfoToPrimary();
+	virtual AUI_ERRCODE	BltBackgroundColorToPrimary(COLORREF color, aui_DirtyList *colorAreas);
+	virtual AUI_ERRCODE	BltBackgroundImageToPrimary(aui_Image *image, RECT *imageRect, aui_DirtyList *imageAreas);
+
 protected:
 	aui_SDLMouse();
+
+	virtual void ActivateCursor(aui_Cursor *cursor);
+
+	virtual AUI_ERRCODE Erase() { return AUI_ERRCODE_OK; }
 	virtual AUI_ERRCODE GetInput();
+	virtual AUI_ERRCODE ReactToInput() {}
+
+	virtual AUI_ERRCODE CreatePrivateBuffers() { return AUI_ERRCODE_OK; }
+	virtual void DestroyPrivateBuffers() {}
+
+private:
+	aui_Cursor *m_currentCursor;
 };
 
 typedef aui_SDLMouse aui_NativeMouse;

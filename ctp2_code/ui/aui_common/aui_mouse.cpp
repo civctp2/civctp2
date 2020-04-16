@@ -243,6 +243,7 @@ AUI_ERRCODE aui_Mouse::InitCommonLdl( const MBCHAR *ldlBlock )
 			m_animDelayList.AddTail( blk->GetInt( k_MOUSE_LDL_ANIMDELAY ) );
 		}
 	}
+	ActivateCursor(*m_curCursor);
 
 	return AUI_ERRCODE_OK;
 }
@@ -357,6 +358,7 @@ void aui_Mouse::SetCurrentCursor( sint32 index )
 	if ( index < m_firstIndex || index > m_lastIndex ) return;
 
 	m_curCursor = m_cursors + index;
+	ActivateCursor(*m_curCursor);
 }
 
 sint32 aui_Mouse::GetCurrentCursorIndex(void)
@@ -408,6 +410,7 @@ AUI_ERRCODE aui_Mouse::Start( void )
 #endif
 
 	m_curCursor = m_cursors + m_firstIndex;
+	ActivateCursor(*m_curCursor);
 
 	if ( m_thread )
 	{
@@ -889,8 +892,10 @@ AUI_ERRCODE aui_Mouse::HandleAnim( void )
 	if ( m_lastIndex >= m_firstIndex )
 	{
 
-		if(m_curCursor < m_cursors + m_firstIndex)
+		if(m_curCursor < m_cursors + m_firstIndex) {
 			m_curCursor = m_cursors + m_firstIndex;
+			ActivateCursor(*m_curCursor);
+		}
 
 		uint32 now = GetTickCount();
 		if ( now - m_time > m_animDelay )
@@ -898,7 +903,7 @@ AUI_ERRCODE aui_Mouse::HandleAnim( void )
 
 			if ( m_curCursor++ >= m_cursors + m_lastIndex )
 				m_curCursor = m_cursors + m_firstIndex;
-
+			ActivateCursor(*m_curCursor);
 			m_time = now;
 
 			return AUI_ERRCODE_HANDLED;

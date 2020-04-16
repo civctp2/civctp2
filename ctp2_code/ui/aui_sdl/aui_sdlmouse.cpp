@@ -3,6 +3,7 @@
 
 #ifdef __AUI_USE_SDL__
 
+#include "aui_ui.h"
 #include "aui_sdlmouse.h"
 
 #include "ctp2_listbox.h"
@@ -10,6 +11,10 @@
 #include "aui_ranger.h"
 
 #include "civapp.h"
+#include "aui_sdlsurface.h"
+
+#include "profileDB.h"
+
 extern CivApp           *g_civApp;
 
 // SKIP_SDL2_EVENT_ISSUES: TODO: scrolling with mouse (screen sides) is too fast to be useful
@@ -21,7 +26,8 @@ aui_SDLMouse::aui_SDLMouse(
    :
    aui_Input(),
    aui_Mouse(retval, ldlBlock),
-   aui_SDLInput(retval, useExclusiveMode)
+   aui_SDLInput(retval, useExclusiveMode),
+   m_currentCursor(NULL)
 {
 	Assert(AUI_SUCCESS(*retval));
 	if (!AUI_SUCCESS(*retval)) return;
@@ -29,6 +35,7 @@ aui_SDLMouse::aui_SDLMouse(
 
 aui_SDLMouse::~aui_SDLMouse()
 {
+	End();
 }
 
 void HandleMouseWheel(sint16 delta)
@@ -102,12 +109,187 @@ aui_SDLMouse::GetInput(void)
 	    }
 	    break;
          default:
-            printf("event not handeled: %d\n", od[ev].type);
+            printf("event not handled: %d\n", od[ev].type);
             break;
       }
       ev++;
    }
    return AUI_ERRCODE_OK;
+}
+
+void aui_SDLMouse::ActivateCursor(aui_Cursor *cursor)
+{
+	if (cursor != m_currentCursor) {
+		aui_Surface *cursorSurface = cursor->TheSurface();
+		aui_SDLSurface *sdlCursorSurface = dynamic_cast<aui_SDLSurface *>(cursorSurface);
+		if (sdlCursorSurface != NULL) {
+			POINT hotspot;
+			cursor->GetHotspot(hotspot);
+			SDL_Cursor *sdlCursor = SDL_CreateColorCursor(sdlCursorSurface->GetSDLSurface(), hotspot.x, hotspot.y);
+			if (sdlCursor != NULL) {
+				SDL_Cursor *currentSDLCursor = SDL_GetCursor();
+				SDL_SetCursor(sdlCursor);
+				if (currentSDLCursor) {
+					SDL_FreeCursor(currentSDLCursor);
+				}
+				m_currentCursor = cursor;
+			}
+		}
+	}
+}
+
+AUI_ERRCODE	aui_SDLMouse::BltWindowToPrimary(aui_Window *window)
+{
+	AUI_ERRCODE retcode = AUI_ERRCODE_OK;
+
+	sint32 windowX = window->X();
+	sint32 windowY = window->Y();
+	aui_Surface *windowSurface = window->TheSurface();
+	aui_DirtyList *windowDirtyList = window->GetDirtyList();
+
+	ListPos position = windowDirtyList->GetHeadPosition();
+	for (sint32 j = windowDirtyList->L(); j; j--)
+	{
+		RECT *windowDirtyRect = windowDirtyList->GetNext(position);
+
+		RECT screenDirtyRect = *windowDirtyRect;
+		OffsetRect(&screenDirtyRect, windowX, windowY);
+
+		AUI_ERRCODE errcode = g_ui->BltToSecondary(
+				screenDirtyRect.left,
+				screenDirtyRect.top,
+				windowSurface,
+				windowDirtyRect,
+				k_AUI_BLITTER_FLAG_COPY );
+		Assert( errcode == AUI_ERRCODE_OK );
+		if ( errcode != AUI_ERRCODE_OK )
+		{
+			retcode = AUI_ERRCODE_BLTFAILED;
+			break;
+		}
+	}
+
+	return retcode;
+}
+
+AUI_ERRCODE	aui_SDLMouse::BltDirtyRectInfoToPrimary()
+{
+	AUI_ERRCODE retcode = AUI_ERRCODE_OK;
+	AUI_ERRCODE errcode;
+
+	if (g_civApp->IsInBackground()) return AUI_ERRCODE_OK;
+
+	tech_WLList<aui_UI::DirtyRectInfo *> *driList = g_ui->GetDirtyRectInfoList();
+
+	uint32 blitFlags;
+	LPVOID primaryBuf = NULL;
+
+	if (g_theProfileDB && g_theProfileDB->IsUseDirectXBlitter())
+	{
+		blitFlags = k_AUI_BLITTER_FLAG_COPY;
+	}
+	else
+	{
+		blitFlags = k_AUI_BLITTER_FLAG_COPY | k_AUI_BLITTER_FLAG_FAST;
+		errcode = g_ui->Secondary()->Lock(NULL, &primaryBuf, 0);
+		Assert( errcode == AUI_ERRCODE_OK );
+	}
+
+	ListPos position = driList->GetHeadPosition();
+	for (sint32 j = driList->L(); j; j--)
+	{
+		aui_UI::DirtyRectInfo *dri = driList->GetNext(position);
+
+		aui_Window *window = dri->window;
+
+		sint32 windowX = window->X();
+		sint32 windowY = window->Y();
+		aui_Surface *windowSurface = window->TheSurface();
+
+		if (!windowSurface) continue;
+
+		if (g_civApp->IsInBackground()) continue;
+
+		RECT *windowDirtyRect = &dri->rect;
+
+		RECT screenDirtyRect = *windowDirtyRect;
+		OffsetRect(&screenDirtyRect, windowX, windowY);
+
+		if (!g_civApp->IsInBackground()) // Actual Drawing
+		{
+			errcode = g_ui->BltToSecondary(
+					screenDirtyRect.left,
+					screenDirtyRect.top,
+					windowSurface,
+					windowDirtyRect,
+					blitFlags);
+			Assert(errcode == AUI_ERRCODE_OK);
+			if (errcode != AUI_ERRCODE_OK)
+			{
+				retcode = AUI_ERRCODE_BLTFAILED;
+				break;
+			}
+		}
+	}
+
+	errcode = g_ui->BltSecondaryToPrimary(blitFlags);
+	Assert(errcode == AUI_ERRCODE_OK);
+	if (errcode != AUI_ERRCODE_OK)
+	{
+		retcode = AUI_ERRCODE_BLTFAILED;
+	}
+
+	if (!g_theProfileDB || !g_theProfileDB->IsUseDirectXBlitter())
+	{
+		errcode = g_ui->Secondary()->Unlock( primaryBuf );
+		Assert( errcode == AUI_ERRCODE_OK );
+	}
+
+	return retcode;
+}
+
+AUI_ERRCODE	aui_SDLMouse::BltBackgroundColorToPrimary(COLORREF color, aui_DirtyList *colorAreas)
+{
+	if (g_civApp->IsInBackground()) return AUI_ERRCODE_OK;
+
+	ListPos position = colorAreas->GetHeadPosition();
+	for (sint32 j = colorAreas->L(); j; j--)
+	{
+		RECT *screenDirtyRect = colorAreas->GetNext(position);
+		AUI_ERRCODE errcode = g_ui->ColorBltToSecondary(screenDirtyRect, color,0);
+		Assert(errcode == AUI_ERRCODE_OK);
+		if (errcode != AUI_ERRCODE_OK)
+		{
+			return AUI_ERRCODE_BLTFAILED;
+		}
+	}
+
+	return AUI_ERRCODE_OK;
+}
+
+AUI_ERRCODE	aui_SDLMouse::BltBackgroundImageToPrimary(aui_Image *image, RECT *imageRect, aui_DirtyList *imageAreas)
+{
+	if (g_civApp->IsInBackground()) return AUI_ERRCODE_OK;
+
+	ListPos position = imageAreas->GetHeadPosition();
+	for ( sint32 j = imageAreas->L(); j; j-- )
+	{
+		RECT *screenDirtyRect = imageAreas->GetNext(position);
+		AUI_ERRCODE errcode = g_ui->BltToSecondary(
+			screenDirtyRect->left,
+			screenDirtyRect->top,
+			image->TheSurface(),
+			screenDirtyRect,
+			k_AUI_BLITTER_FLAG_COPY);
+
+		Assert(errcode == AUI_ERRCODE_OK);
+		if (errcode != AUI_ERRCODE_OK)
+		{
+			return AUI_ERRCODE_BLTFAILED;
+		}
+	}
+
+	return AUI_ERRCODE_OK;
 }
 
 #endif

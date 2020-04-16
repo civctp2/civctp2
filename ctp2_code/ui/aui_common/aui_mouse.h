@@ -24,7 +24,7 @@
 // Modifications from the original Activision code:
 //
 // - Increased k_MOUSE_MAXNUMCURSORS to allow some additional cursors.
-//   - April 30th 2005 Martin Gühmann
+//   - April 30th 2005 Martin GÃ¼hmann
 //
 //----------------------------------------------------------------------------
 
@@ -178,12 +178,12 @@ public:
 
 	AUI_ERRCODE HandleAnim( void );
 
-	AUI_ERRCODE	BltWindowToPrimary( aui_Window *window );
-	AUI_ERRCODE BltDirtyRectInfoToPrimary( void );
-	AUI_ERRCODE	BltBackgroundColorToPrimary(
+	virtual AUI_ERRCODE	BltWindowToPrimary( aui_Window *window );
+	virtual AUI_ERRCODE BltDirtyRectInfoToPrimary( void );
+	virtual AUI_ERRCODE	BltBackgroundColorToPrimary(
 		COLORREF color,
 		aui_DirtyList *colorAreas );
-	AUI_ERRCODE	BltBackgroundImageToPrimary(
+	virtual AUI_ERRCODE	BltBackgroundImageToPrimary(
 		aui_Image *image,
 		RECT *imageRect,
 		aui_DirtyList *imageAreas );
@@ -194,8 +194,8 @@ public:
 	LPCRITICAL_SECTION LPCS( void ) const { return m_lpcs; }
 #endif
 
-	AUI_ERRCODE CreatePrivateBuffers( void );
-	void DestroyPrivateBuffers( void );
+	virtual AUI_ERRCODE CreatePrivateBuffers( void );
+	virtual void DestroyPrivateBuffers( void );
 
 	uint32 GetFlags(void) { return m_flags;}
 	void SetFlags(uint32 flags) { m_flags = flags; }
@@ -207,6 +207,7 @@ protected:
 #else
 	static LPCRITICAL_SECTION m_lpcs;
 #endif
+	virtual void ActivateCursor(aui_Cursor *cursor) {}
 
 	virtual AUI_ERRCODE Erase( void );
 
