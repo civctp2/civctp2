@@ -29,15 +29,15 @@
 //   correct stop player is set.
 // - #01 Standardization of city selection and focus handling
 //   (L. Hirth 6/2004)
-// - Entrenching units are treated like Entrenched units. (Oct 16th 2005 Martin Gühmann)
-// - Added select city instead of army option. (Oct 16th 2005 Martin Gühmann)
+// - Entrenching units are treated like Entrenched units. (Oct 16th 2005 Martin GÃ¼hmann)
+// - Added select city instead of army option. (Oct 16th 2005 Martin GÃ¼hmann)
 // - Added option to avoid an end turn if there are cities with empty build
-//   queues. (Oct. 22nd 2005 Martin Gühmann) Doesn't really work.
+//   queues. (Oct. 22nd 2005 Martin GÃ¼hmann) Doesn't really work.
 // - Added option to allow end turn if the game runs in the background,
-//   useful for automatic AI testing. (Oct. 22nd 2005 Martin Gühmann)
-// - Added debug pathing for the city astar. (17-Jan-2008 Martin Gühmann)
+//   useful for automatic AI testing. (Oct. 22nd 2005 Martin GÃ¼hmann)
+// - Added debug pathing for the city astar. (17-Jan-2008 Martin GÃ¼hmann)
 // - If the keyboard is used for moving the map is only centered if the auto
-//   center option is active. (23-Feb-2008 Martin Gühmann)
+//   center option is active. (23-Feb-2008 Martin GÃ¼hmann)
 //
 //----------------------------------------------------------------------------
 
@@ -255,7 +255,7 @@ SelectedItem::SelectedItem(CivArchive &archive)
 
 	SetPlayerOnScreen(m_current_player);
 
-	//Added by Martin Gühmann
+	//Added by Martin GÃ¼hmann
 	//To make sure that save games saved with other players than
 	//player one can be continued without using the cheat editor.
 	NewTurnCount::SetStopPlayer(m_current_player);
@@ -662,6 +662,9 @@ void SelectedItem::NextUnmovedUnit(bool isFirst, bool manualNextUnit)
 double SelectedItem::UnitsDoneRatio(){
     Player *p = g_player[GetVisiblePlayer()];
     sint32 numUnits= p->m_all_armies->Num();
+    if (numUnits == 0) {
+        return 1.0;
+    }
     sint32 unitsDone= numUnits;
     
     for(sint32 u = numUnits - 1; u >= 0; u--){
@@ -676,6 +679,9 @@ double SelectedItem::UnitsDoneRatio(){
 double SelectedItem::UnitsBusyRatio(){
     Player *p = g_player[GetVisiblePlayer()];
     sint32 numUnits= p->m_all_armies->Num();
+    if (numUnits == 0) {
+        return 0.0;
+    }
     sint32 unitsDone= numUnits;
     
     for(sint32 u = numUnits - 1; u >= 0; u--){

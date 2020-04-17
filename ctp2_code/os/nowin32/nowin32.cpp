@@ -45,7 +45,8 @@ char* _fullpath(char* absolute, const char* relative, size_t bufsize)
 	else
 	{
 #ifdef __USE_GNU
-		char *abs = canonicalize_file_name(CI_FixName(relative));
+		const char *fixedName = CI_FixName(relative);
+		char *abs = canonicalize_file_name(fixedName);
 		if(abs)
 		{
 			strncpy(dest, abs, size - 1);
@@ -54,7 +55,29 @@ char* _fullpath(char* absolute, const char* relative, size_t bufsize)
 		}
 		else
 		{
-			return NULL;
+			// NOTE: canonicalize_file_name will return NULL if last element does not exist
+			//   as this method should not return NULL in that case we test dirname on existence
+			char *fixedNameDuplicate = strdup(fixedName);
+			abs = canonicalize_file_name(dirname(fixedNameDuplicate));
+			free(fixedNameDuplicate);
+			if (abs)
+			{
+				strncpy(dest, abs, size - 1);
+				dest[size - 1] = '\0';
+				free(abs);
+
+				// add basename
+				int spaceLeft = size - strlen(dest);
+				Assert(spaceLeft >= 0);
+				strncat(dest, FILE_SEP, spaceLeft);
+				fixedNameDuplicate = strdup(fixedName);
+				strncat(dest, basename(fixedNameDuplicate), spaceLeft - strlen(FILE_SEP));
+				free(fixedNameDuplicate);
+			}
+			else
+			{
+				return NULL;
+			}
 		}
 #elif defined(BSD) || defined(__USE_BSD)
 		char rlpath[PATH_MAX] = {0};
