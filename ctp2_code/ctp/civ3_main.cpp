@@ -236,7 +236,7 @@ sint32                              g_modalWindow = 0;
 BOOL                                g_helpMode = TRUE;
 
 static uint32                       s_scrollcurtick =0;
-static uint32                       s_scrolllasttick=0;
+static uint32                       s_lastscrolltick=0;
 static sint32                       s_scrolltime =k_SMOOTH_START_TIME;
 static uint32                       s_accelTickStart = 0;
 
@@ -650,7 +650,6 @@ bool ui_CheckForScroll(void)
 
 	g_tiledMap->SetScrolling(false);
 
-	s_scrolllasttick = s_scrollcurtick;
 	s_scrollcurtick	 = GetTickCount();
 
 	if (!g_c3ui->TheMouse())
@@ -669,6 +668,9 @@ bool ui_CheckForScroll(void)
 
 //	const int       k_MAX_SMOOTH_SCROLL         = 64;
 	const int       k_TICKS_PER_ACCELERATION    = 50;
+	/* Limit the number of scroll actions per second. */
+	const int       k_NUMBER_OF_SCROLL_ACTIONS  = 20;
+	const int       k_TICKS_PER_SCROLL          = 1000 / k_NUMBER_OF_SCROLL_ACTIONS;
 
 	sint32	deltaX = 0,
 			deltaY = 0;
@@ -821,9 +823,12 @@ bool ui_CheckForScroll(void)
 
 		if (g_smoothScroll)
 			g_tiledMap->ScrollMapSmooth(smoothX, smoothY);
-		else
-			g_tiledMap->ScrollMap(deltaX, deltaY);
-
+		else {
+			if ((s_scrollcurtick - s_lastscrolltick) > k_TICKS_PER_SCROLL) {
+				s_lastscrolltick = GetTickCount();
+				g_tiledMap->ScrollMap(deltaX, deltaY);
+			}
+		}
 	}
 	else
 	{
