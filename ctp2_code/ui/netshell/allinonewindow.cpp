@@ -28,11 +28,11 @@
 // Modifications from the original Activision code:
 //
 // - Memory leak repaired.
-// - Replaced old civilisation database by new one. (Aug 21st 2005 Martin Gühmann)
+// - Replaced old civilisation database by new one. (Aug 21st 2005 Martin Gï¿½hmann)
 // - The ages in the summary are now displayed correctly.
-// - Initialized local variables. (Sep 9th 2005 Martin Gühmann)
-// - Standardized code. (May 29th 2006 Martin Gühmann)
-// - Replaced old civ selection button bank by list box. (2-Jan-2008 Martin Gühmann)
+// - Initialized local variables. (Sep 9th 2005 Martin Gï¿½hmann)
+// - Standardized code. (May 29th 2006 Martin Gï¿½hmann)
+// - Replaced old civ selection button bank by list box. (2-Jan-2008 Martin Gï¿½hmann)
 //
 //----------------------------------------------------------------------------
 
@@ -3585,7 +3585,12 @@ void AllinoneWindow::OKButtonAction::Execute(
 
 	if ( g_playersetup.IsReadyToLaunch() ) return;
 
-	if (g_netfunc->IsHost() && !c3files_HasLegalCD() )
+#if defined(USE_SDL)
+	bool legalGame = true;
+#else // USE_SDL
+	bool legalGame = c3files_HasLegalCD();
+#endif // USE_SDL
+	if (g_netfunc->IsHost() && !legalGame )
 	{
 		static ns_String donthavecd( "strings.system.donthavecd" );
 		g_netfunc->PushChatMessage( donthavecd.GetString() );

@@ -252,7 +252,12 @@ spnewgamescreen_startPress(aui_Control *control, uint32 action, uint32 data, voi
 {
 	if ( action == uint32(AUI_BUTTON_ACTION_EXECUTE) )
 	{
-		if (c3files_HasLegalCD())
+#if defined(USE_SDL)
+		bool legalGame = true;
+#else // USE_SDL
+		bool legalGame = c3files_HasLegalCD();
+#endif // USE_SDL
+		if (legalGame)
 		{
 			MBCHAR fieldText[k_MAX_NAME_LEN];
 			g_spNewGameWindow->m_spName->GetFieldText(fieldText, k_MAX_NAME_LEN);
@@ -397,8 +402,11 @@ void spnewgamescreen_scenarioExitCallback(aui_Control *control, uint32 action, u
 	       );
 
 	if (c3files_PathIsValid(tempPath)) {
+
+#if !defined(USE_SDL)
 		if(!c3files_HasLegalCD())
 			exit(0);
+#endif // USE_SDL
 
 		SaveInfo *saveInfo = new SaveInfo;
 

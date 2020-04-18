@@ -141,10 +141,6 @@ public:
 	void ReleaseSoundDriver();
 	void ReacquireSoundDriver();
 
-#if defined(USE_SDL)
-    void SDL_ChannelCompleteCB(int channel);
-#endif
-
 private:
 	PointerList<CivSound>	*m_sfxSounds;
 	PointerList<CivSound>	*m_voiceSounds;
@@ -160,16 +156,13 @@ private:
 	BOOL					m_noSound;
 	BOOL					m_usePlaySound;
 
-#if !defined(USE_SDL)
-	HREDBOOK				m_redbook;
-#else
-    #if !defined(SKIP_SDL2_CDROM_ISSUES)
-	SDL_CD                  *m_cdrom;
-    #endif // SKIP_SDL2_CDROM_ISSUES
+#if defined(USE_SDL)
 	BOOL					m_useOggTracks;
 	Mix_Music				*m_oggTrack;
-#endif
-	uint32					m_timeToCheckCD;
+#else // USE_SDL
+	HREDBOOK				m_redbook;
+#endif // USE_SDL
+	uint32					m_timeToCheckMusic;
 	sint32					m_numTracks;
 	sint32					m_curTrack;
 	sint32					m_lastTrack;

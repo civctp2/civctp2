@@ -34,7 +34,7 @@
 // - #pragmas commented out
 // - Includes fixed for case sensitive filesystems
 // - Added sdl sound and cdrom support
-// - Initialized local variables. (Sep 9th 2005 Martin G�hmann)
+// - Initialized local variables. (Sep 9th 2005 Martin Gühmann)
 //
 //----------------------------------------------------------------------------
 
@@ -59,12 +59,12 @@ SoundManager		*g_soundManager     = NULL;
 
 namespace
 {
-    uint32 const    k_CHECK_CD_PERIOD	= 4000;     // [ms]
+    uint32 const    k_CHECK_MUSIC_PERIOD = 4000;     // [ms]
     uint32 const    SLIDER_FULL         = 10;
 
 #if !defined(USE_SDL)
     S32             s_masterVolume;
-#endif
+#endif // USE_SDL
     sint32          s_startTrack        = 1;        // skip CD data track
 }
 
@@ -82,34 +82,31 @@ void SoundManager::Cleanup()
 
 SoundManager::SoundManager()
 :
-    m_sfxSounds                 (NULL),
-    m_voiceSounds               (NULL),
-    m_soundWalker               (NULL),
-    m_sfxVolume                 (SLIDER_FULL),
-    m_musicVolume               (SLIDER_FULL),
-    m_voiceVolume               (SLIDER_FULL),
-    m_oldRedbookVolume          (0),
-    m_noSound                   (false),
-    m_usePlaySound              (false),
-#if !defined(USE_SDL)
-    m_redbook                   (0),
-#else
-#if !defined(SKIP_SDL2_CDROM_ISSUES)
-	m_cdrom                     (0),
-#endif // SKIP_SDL2_CDROM_ISSUES
-	m_useOggTracks				(false),
-	m_oggTrack					(0),
-#endif
-    m_timeToCheckCD             (0),
-    m_numTracks                 (0),
-    m_curTrack                  (0),
-    m_lastTrack                 (0),
-    m_musicEnabled              (false),
-    m_style                     (MUSICSTYLE_PLAYLIST),
-    m_playListPosition          (0),
-    m_userTrack                 (0),
-    m_autoRepeat                (true),
-    m_stopRedbookTemporarily    (false)
+		m_sfxSounds                 (NULL),
+		m_voiceSounds               (NULL),
+		m_soundWalker               (NULL),
+		m_sfxVolume                 (SLIDER_FULL),
+		m_musicVolume               (SLIDER_FULL),
+		m_voiceVolume               (SLIDER_FULL),
+		m_oldRedbookVolume          (0),
+		m_noSound                   (false),
+		m_usePlaySound              (false),
+#if defined(USE_SDL)
+		m_useOggTracks				(false),
+		m_oggTrack					(0),
+#else // USE_SDL
+    	m_redbook                   (0),
+#endif // USE_SDL
+		m_timeToCheckMusic          (0),
+		m_numTracks                 (0),
+		m_curTrack                  (0),
+		m_lastTrack                 (0),
+		m_musicEnabled              (false),
+		m_style                     (MUSICSTYLE_PLAYLIST),
+		m_playListPosition          (0),
+		m_userTrack                 (0),
+		m_autoRepeat                (true),
+		m_stopRedbookTemporarily    (false)
 {
     if (g_theProfileDB)
     {
@@ -169,16 +166,15 @@ void SoundManager::InitSoundDriver()
     }
 
     m_noSound = (errcode < 0);
-#else // !USE_SDL
+#else // USE_SDL
 	S32		use_digital     = 1;
 	S32		use_MIDI        = 0;
 	S32		output_rate     = 22050;	// 22khz @ 16 Bit stereo
 	S32		output_bits     = 16;
 	S32		output_channels = 2;
 
-	m_noSound = !AIL_quick_startup
-            (use_digital, use_MIDI, output_rate, output_bits, output_channels);
-#endif // defined(USE_SDL)
+	m_noSound = !AIL_quick_startup(use_digital, use_MIDI, output_rate, output_bits, output_channels);
+#endif // USE_SDL
 
 	InitRedbook();
 
@@ -199,7 +195,7 @@ void SoundManager::CleanupSoundDriver()
         }
 
         SDL_QuitSubSystem(SDL_INIT_AUDIO);
-#else // !USE_SDL
+#else // USE_SDL
 		AIL_quick_shutdown();
 #endif // USE_SDL
 	}
@@ -212,50 +208,10 @@ void SoundManager::InitRedbook()
 	if( !m_useOggTracks) {
 		if(CI_FileExists("music/Track02.ogg")) {
 			m_useOggTracks = true;
-			printf("Detected Ogg Music track, using that instead of CD Audio\n");
+			printf("Detected Ogg Music track\n");
 		}
 	}
-#if !defined(SKIP_SDL2_CDROM_ISSUES)
-    if (!m_cdrom && !m_useOggTracks) {
-        int errcode = SDL_Init(SDL_INIT_CDROM);
-
-        Assert(0 == errcode);
-        if (errcode < 0) {
-            return;
-        }
-
-        int numDrives = SDL_CDNumDrives();
-        Assert(numDrives >= 0);
-
-        int drive = -1;
-        int i = 0;
-        // Hack: We don't have the num of the SDL drive stored,
-        //       so we search for the drive with the drive letter stored
-        MBCHAR driveLetter = toupper(c3files_GetCtpCdId());
-        while ((i < numDrives) && (-1 == drive)) {
-            const char *cd_name = SDL_CDName(i);
-            if (cd_name) {
-                if (toupper(cd_name[0]) == driveLetter) {
-                    drive = i;
-                }
-            }
-            i++;
-        }
-
-        // No drive match?!
-        if (drive < 0) {
-            return;
-        }
-        m_cdrom = SDL_CDOpen(drive);
-        Assert(m_cdrom != 0);
-        // No control structur?
-        if (m_cdrom)
-        {
-            CDstatus status = SDL_CDStatus(m_cdrom);
-        }
-    }
-#endif // SKIP_SLD2_CDROM_ISSUES
-#else // !USE_SDL
+#else // USE_SDL
 	if (!m_redbook)
 	{
 		m_redbook = AIL_redbook_open_drive(c3files_GetCtpCdId());
@@ -270,19 +226,13 @@ void SoundManager::CleanupRedbook()
 		Mix_FreeMusic(m_oggTrack);
 		m_oggTrack = NULL;
 	}
-#if !defined(SKIP_SDL2_CDROM_ISSUES)
-    if (m_cdrom) {
-        SDL_CDClose(m_cdrom);
-        m_cdrom = 0;
-    }
-#endif // SKIP_SDL2_CDROM_ISSUES
-#else
+#else // USE_SDL
     if (m_redbook) {
 		AIL_redbook_stop(m_redbook);
 		AIL_redbook_close(m_redbook);
 		m_redbook = NULL;
 	}
-#endif
+#endif // USE_SDL
 }
 
 void SoundManager::ProcessRedbook()
@@ -291,52 +241,28 @@ void SoundManager::ProcessRedbook()
 
 	if (!m_musicEnabled) return;
 
-#if!defined(SKIP_SDL2_CDROM_ISSUES)
-	if (GetTickCount() > m_timeToCheckCD) {
+	if (GetTickCount() > m_timeToCheckMusic) {
+
 #if defined(USE_SDL)
-		CDstatus status;
 		if(m_useOggTracks) {
 			if(!Mix_PlayingMusic()) {
 				if (m_curTrack != -1)
-				PickNextTrack();
+					PickNextTrack();
 
-			if (m_curTrack != -1 && !m_stopRedbookTemporarily)
-				StartMusic(m_curTrack);
+				if (m_curTrack != -1 && !m_stopRedbookTemporarily)
+					StartMusic(m_curTrack);
 			}
 		}
-        if (m_cdrom) {
-            status = SDL_CDStatus(m_cdrom);
-#else
+#else // USE_SDL
         U32 status;
 		if (m_redbook) {
 			status = AIL_redbook_status(m_redbook);
-#endif
 			switch (status) {
-#if !defined(USE_SDL)
 			case REDBOOK_ERROR:
-#else
-            case CD_TRAYEMPTY:
-                break;
-            case CD_ERROR:
-#endif
-				break;
-#if !defined(USE_SDL)
 			case REDBOOK_PLAYING:
-#else
-            case CD_PLAYING:
-#endif
-				break;
-#if !defined(USE_SDL)
 			case REDBOOK_PAUSED:
-#else
-            case CD_PAUSED:
-#endif
 				break;
-#if !defined(USE_SDL)
 			case REDBOOK_STOPPED:
-#else
-            case CD_STOPPED:
-#endif
 				if (m_curTrack != -1)
 					PickNextTrack();
 
@@ -345,10 +271,9 @@ void SoundManager::ProcessRedbook()
 				break;
 			}
 		}
-
-		m_timeToCheckCD = GetTickCount() + k_CHECK_CD_PERIOD;
+#endif // USE_SDL
+		m_timeToCheckMusic = GetTickCount() + k_CHECK_MUSIC_PERIOD;
 	}
-#endif // SKIP_SDL2_CDROM_ISSUES
 }
 
 void SoundManager::Process(const uint32 &target_milliseconds,
@@ -371,11 +296,11 @@ void SoundManager::Process(const uint32 &target_milliseconds,
 			if (!sound) continue;
 
 			if (sound->IsPlaying()) {
-#if !defined(USE_SDL)
+#if defined(USE_SDL)
+				if (!Mix_Playing(sound->GetChannel())) {
+#else // USE_SDL
 				if (AIL_quick_status(sound->GetHAudio()) == QSTAT_DONE) {
-#else
-                if (!Mix_Playing(sound->GetChannel())) {
-#endif
+#endif // USE_SDL
 					m_soundWalker->Remove();
 
 					delete sound;
@@ -395,12 +320,12 @@ void SoundManager::Process(const uint32 &target_milliseconds,
 			if (!sound) continue;
 
 			if (sound->IsPlaying()) {
-#if !defined(USE_SDL)
+#if defined(USE_SDL)
+				if ((-1 == sound->GetChannel()) ||
+					(!Mix_Playing(sound->GetChannel()))) {
+#else // USE_SDL
 				if (AIL_quick_status(sound->GetHAudio()) == QSTAT_DONE) {
-#else
-                if ((-1 == sound->GetChannel()) ||
-                    (!Mix_Playing(sound->GetChannel()))) {
-#endif
+#endif // USE_SDL
 					m_soundWalker->Remove();
 					delete sound;
 				} else {
@@ -488,12 +413,12 @@ SoundManager::AddSound(const SOUNDTYPE &type,
     }
     else
 	{
-#if !defined(USE_SDL)
+#if defined(USE_SDL)
+		int channel = Mix_PlayChannel(-1, sound->GetAudio(), 0);
+		sound->SetChannel(channel);
+#else // USE_SDL
 		AIL_quick_play(sound->GetHAudio(), 1);
-#else
-        int channel = Mix_PlayChannel(-1, sound->GetAudio(), 0);
-        sound->SetChannel(channel);
-#endif
+#endif // USE_SDL
 		sound->SetIsPlaying(TRUE);
 	}
 }
@@ -534,12 +459,12 @@ SoundManager::AddLoopingSound(const SOUNDTYPE &type,
 		break;
 	}
 
-#if !defined(USE_SDL)
+#if defined(USE_SDL)
+	int channel = Mix_PlayChannel(-1, sound->GetAudio(), -1);
+	sound->SetChannel(channel);
+#else // USE_SDL
 	AIL_quick_play(sound->GetHAudio(), 0);
-#else
-    int channel = Mix_PlayChannel(-1, sound->GetAudio(), -1);
-    sound->SetChannel(channel);
-#endif
+#endif // USE_SDL
 
 	sound->SetIsLooping(TRUE);
 	sound->SetIsPlaying(TRUE);
@@ -553,14 +478,14 @@ SoundManager::TerminateLoopingSound(const SOUNDTYPE &type,
 
 	if (!existingSound) return;
 
-#if !defined(USE_SDL)
-	AIL_quick_halt(existingSound->GetHAudio());
+#if defined(USE_SDL)
+	int channel = existingSound->GetChannel();
+	if (channel >= 0) {
+		Mix_HaltChannel(channel);
+	}
+	existingSound->SetChannel(-1);
 #else
-    int channel = existingSound->GetChannel();
-    if (channel >= 0) {
-        Mix_HaltChannel(channel);
-    }
-    existingSound->SetChannel(-1);
+	AIL_quick_halt(existingSound->GetHAudio());
 #endif
 }
 
@@ -583,15 +508,15 @@ SoundManager::TerminateAllLoopingSounds(const SOUNDTYPE &type)
 	while (node) {
 		sound = node->GetObj();
 		if (sound && sound->IsLooping()) {
-#if !defined(USE_SDL)
+#if defined(USE_SDL)
+			int channel = sound->GetChannel();
+			if (channel >= 0) {
+				Mix_HaltChannel(channel);
+			}
+			sound->SetChannel(-1);
+#else // USE_SDL
 			AIL_quick_halt(sound->GetHAudio());
-#else
-            int channel = sound->GetChannel();
-            if (channel >= 0) {
-                Mix_HaltChannel(channel);
-            }
-            sound->SetChannel(-1);
-#endif
+#endif // USE_SDL
 		}
 		node = node->GetNext();
 	}
@@ -616,14 +541,14 @@ SoundManager::TerminateSounds(const SOUNDTYPE &type)
 	while (node) {
 		sound = node->GetObj();
 		if (sound) {
-#if !defined(USE_SDL)
-			AIL_quick_halt(sound->GetHAudio());
-#else
-            int channel = sound->GetChannel();
+#if defined(USE_SDL)
+			int channel = sound->GetChannel();
             if (channel >= 0) {
                 Mix_HaltChannel(channel);
             }
-#endif
+#else // USE_SDL
+			AIL_quick_halt(sound->GetHAudio());
+#endif // USE_SDL
 		}
 		node = node->GetNext();
 	}
@@ -669,11 +594,8 @@ SoundManager::SetVolume(const SOUNDTYPE &type, const uint32 &volume)
 		break;
 	case SOUNDTYPE_MUSIC:
 		m_musicVolume = volume;
-#if !defined(USE_SDL)
-		if (m_redbook)
-			AIL_redbook_set_volume(m_redbook, (sint32)((double)volume * 12.7));
-#else
-		if (m_useOggTracks) {
+#if defined(USE_SDL)
+			if (m_useOggTracks) {
 			// Assume max volume is 10...
 			sint32 scaledVolume = (sint32)((double)volume * 12.7);
 			if (scaledVolume > MIX_MAX_VOLUME) {
@@ -682,12 +604,10 @@ SoundManager::SetVolume(const SOUNDTYPE &type, const uint32 &volume)
 				Mix_VolumeMusic(scaledVolume);
 			}
 		}
-#if !defined(SKIP_SDL2_CDROM_ISSUES)
-        if (m_cdrom) {
-            // TODO: found nothing in reference
-        }
-#endif // SKIP_SDL2_CDROM_ISSUES
-#endif
+#else // USE_SDL
+		if (m_redbook)
+			AIL_redbook_set_volume(m_redbook, (sint32)((double)volume * 12.7));
+#endif // USE_SDL
 		break;
 	}
 }
@@ -872,14 +792,14 @@ SoundManager::SetPosition(const SOUNDTYPE &type,
 #if defined(USE_SDL)
             Mix_Chunk * myChunk = sound->GetAudio();
             // Why set the volume again?
-#else
+#else // USE_SDL
             sint32 panValue = 64;
 			HAUDIO hAudio   = sound->GetHAudio();
             if (hAudio)
             {
                 AIL_quick_set_volume(hAudio, volume, panValue);
             }
-#endif
+#endif // USE_SDL
 		}
 
 		node = node->GetNext();
@@ -901,11 +821,11 @@ void SoundManager::StartMusic(const sint32 &InTrackNum)
 {
 	m_stopRedbookTemporarily = FALSE;
 
-#if !defined(USE_SDL)
-	if (!g_theProfileDB->IsUseRedbookAudio() || !c3files_HasCD()) return;
-#else
 	if (!g_theProfileDB->IsUseRedbookAudio()) return;
-	if (!(c3files_HasCD() || m_useOggTracks)) return;
+#if defined(USE_SDL)
+	if (!m_useOggTracks) return;
+#else
+	if (!c3files_HasCD()) return;
 #endif
 
 	if (m_noSound) return;
@@ -947,23 +867,7 @@ void SoundManager::StartMusic(const sint32 &InTrackNum)
 		else
 			printf("Error, music track %s not found\n", buf);
 		
-		return;
 	}
-#if !defined(SKIP_SDL2_CDROM_ISSUES)
-    if (!m_cdrom) {
-        return;
-    }
-
-    CDstatus status = SDL_CDStatus(m_cdrom);
-
-    if ((CD_ERROR == status) || (!CD_INDRIVE(status))) {
-        return;
-    }
-
-	sint32 const numTracks = m_cdrom->numtracks;
-#else // SKIP_SDL2_CDROM_ISSUES
-    sint32 const numTracks = 0;
-#endif // SKIP_SDL2_CDROM_ISSUES
 #else
     if (!m_redbook) {
         return;
@@ -980,8 +884,6 @@ void SoundManager::StartMusic(const sint32 &InTrackNum)
 	}
 
 	sint32 const numTracks = AIL_redbook_tracks(m_redbook);
-#endif
-
 	if (numTracks <= s_startTrack) return;
 
 	m_numTracks = numTracks;
@@ -992,11 +894,6 @@ void SoundManager::StartMusic(const sint32 &InTrackNum)
 
 	m_curTrack = trackNum;
 
-#if defined(USE_SDL)
-#if !defined(SKIP_SDL2_CDROM_ISSUES)
-    SDL_CDPlayTracks(m_cdrom, trackNum, 0, 1, 0);
-#endif // SKIP_SDL2_CDROM_ISSUES
-#else
 	U32 start;
     U32 end;
 	AIL_redbook_track_info(m_redbook, trackNum, &start, &end);
@@ -1005,30 +902,29 @@ void SoundManager::StartMusic(const sint32 &InTrackNum)
 	TerminateAllSounds();
 
 	AIL_redbook_play(m_redbook, start, end);
-#endif
+#endif // USE_SDL
 }
 
 void SoundManager::TerminateMusic(void)
 {
-	if (!g_theProfileDB->IsUseRedbookAudio() || !c3files_HasCD()) return;
+	if (!g_theProfileDB->IsUseRedbookAudio()) return;
+#if !defined(USE_SDL)
+	if (!c3files_HasCD()) return;
+#endif
 
 	if (m_noSound) return;
 
 	if (m_usePlaySound) return;
 
-#if !defined(USE_SDL) // Does not compile and why the hell is this here?
-//	if (m_useOggTracks) {
-//		Mix_StopMUS();
-//		if(m_oggTrack) {
-//			Mix_FreeMusic(m_oggTrack);
-//			m_oggTrack = NULL;
-//		}
-//	}
-	if (!m_redbook) return;
+#if defined(USE_SDL)
+	if (m_useOggTracks) {
+		if(m_oggTrack) {
+			Mix_FreeMusic(m_oggTrack);
+			m_oggTrack = NULL;
+		}
+	}
 #else
-#if !defined(SKIP_SDL2_CDROM_ISSUES)
-    if (!m_cdrom) return;
-#endif // SKIP_SDL2_CDROM_ISSUES
+	if (!m_redbook) return;
 #endif
 
 	m_stopRedbookTemporarily = TRUE;
@@ -1037,14 +933,6 @@ void SoundManager::TerminateMusic(void)
 	if (AIL_redbook_track(m_redbook)) {
 		AIL_redbook_stop(m_redbook);
 	}
-#else
-#if !defined(SKIP_SDL2_CDROM_ISSUES)
-    CDstatus status = SDL_CDStatus(m_cdrom);
-
-    if (CD_PLAYING == status) {
-        SDL_CDStop(m_cdrom);
-    }
-#endif // SKIP_SDL2_CDROM_ISSUES
 #endif
 }
 
@@ -1108,11 +996,11 @@ void SoundManager::PlayManagedSound(const MBCHAR *fullFilename, const bool &bNoW
 #if !defined(USE_SDL)
 	PlaySound(fullFilename, NULL,
 		(SND_ASYNC | SND_FILENAME | (bNoWait ? SND_NOWAIT : 0)));
-#else
-	std::cerr << "SoundManager::StupidPlaySound("
+#else // USE_SDL
+	std::cerr << "SoundManager::PlayManagedSound("
 		<< fullFilename
 		<< ") called." << std::endl;
-#endif
+#endif // USE_SDL
 }
 
 void SoundManager::ReleaseSoundDriver()
@@ -1133,7 +1021,7 @@ void SoundManager::ReleaseSoundDriver()
 
 	S32 err = AIL_digital_handle_release(dig);
 	Assert(err);
-#endif
+#endif // USE_SDL
 }
 
 void SoundManager::ReacquireSoundDriver()
@@ -1151,5 +1039,5 @@ void SoundManager::ReacquireSoundDriver()
 	Assert(err);
 
 	AIL_set_digital_master_volume(dig, s_masterVolume);
-#endif
+#endif // USE_SDL
 }

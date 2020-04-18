@@ -26,15 +26,15 @@
 //
 // - Repaired memory leaks.
 // - Updated tribe index check.
-// - Replaced the old civilisation database by a new one. (Aug 21st 2005 Martin Gühmann)
-// - Standardized code (May 21st 2006 Martin Gühmann)
+// - Replaced the old civilisation database by a new one. (Aug 21st 2005 Martin Gï¿½hmann)
+// - Standardized code (May 21st 2006 Martin Gï¿½hmann)
 //
 //----------------------------------------------------------------------------
 //
 // Remarks
 //
 // - This is the only file with some Activision comments left.
-// - Fixed scenarios so that the from the civ choser selected civ is used. (2-Jan-2008 Martin Gühmann)
+// - Fixed scenarios so that the from the civ choser selected civ is used. (2-Jan-2008 Martin Gï¿½hmann)
 //
 //----------------------------------------------------------------------------
 
@@ -642,7 +642,10 @@ void loadsavescreen_LoadGame(void)
 
 	Assert(gameInfo);
 	if (!gameInfo) return;
+
+#if !defined(USE_SDL)
 	if (!c3files_HasLegalCD()) return;
+#endif // USE_SDL
 
 	if (SaveInfo * saveInfo = g_loadsaveWindow->GetSaveInfo())
 	{
@@ -797,7 +800,12 @@ void loadsavescreen_LoadMPGame(void)
 	}
 
 	// SAM042099 check for a valid CD-ROM before allowing a game to be loaded
-	if ((!g_netfunc || g_netfunc->IsHost()) && !c3files_HasLegalCD())
+#if defined(USE_SDL)
+	bool legalGame = true;
+#else // USE_SDL
+	bool legalGame = c3files_HasLegalCD();
+#endif // USE_SDL
+	if ((!g_netfunc || g_netfunc->IsHost()) && !legalGame)
 		return;
 
 	GameInfo *  gameInfo = g_loadsaveWindow->GetGameInfo();
@@ -896,8 +904,10 @@ void loadsavescreen_SaveMPGame(void)
 
 void loadsavescreen_LoadSCENGame(void)
 {
+#if !defined(USE_SDL)
 	// SAM042099 check for a valid CD-ROM before allowing a game to be loaded
 	if (!c3files_HasLegalCD()) return;
+#endif // USE_SDL
 
 	GameInfo	*gameInfo = g_loadsaveWindow->GetGameInfo();
 

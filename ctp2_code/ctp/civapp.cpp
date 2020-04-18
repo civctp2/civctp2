@@ -1274,8 +1274,10 @@ sint32 CivApp::InitializeApp(HINSTANCE hInstance, int iCmdShow)
 	g_logCrashes = g_theProfileDB->GetEnableLogs();
 
 	InitDataIncludePath();
+#if !defined(USE_SDL)
 	c3files_InitializeCD();
 	g_civPaths->InitCDPath();
+#endif // USE_SDL
 	GreatLibrary::Initialize_Great_Library_Data();
 
 	display_Initialize(hInstance, iCmdShow);
