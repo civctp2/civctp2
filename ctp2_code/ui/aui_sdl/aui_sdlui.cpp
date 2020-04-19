@@ -349,10 +349,11 @@ AUI_ERRCODE aui_SDLUI::AltTabIn( void )
 aui_MovieManager* aui_SDLUI::CreateMovieManager( void ) {
 	Assert(m_SDLWindow);
 	Assert(m_SDLRenderer);
+	Assert(m_SDLTexture);
 	int windowWidth;
 	int windowHeight;
 	SDL_GetWindowSize(m_SDLWindow, &windowWidth, &windowHeight);
-	return new aui_SDLMovieManager(m_SDLRenderer, windowWidth, windowHeight);
+	return new aui_SDLMovieManager(m_SDLRenderer, m_SDLTexture, windowWidth, windowHeight);
 }
 
 AUI_ERRCODE aui_SDLUI::SDLDrawScreen( void ) {

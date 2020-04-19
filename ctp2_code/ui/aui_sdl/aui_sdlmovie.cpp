@@ -19,8 +19,7 @@ extern "C" {
 }
 #include <SDL2/SDL.h>
 #include "profileDB.h"
-
-#undef MOVIE_RESIZABLE_WINDOW
+#include "aui_sdlsurface.h"
 
 #define MAX_QUEUE_SIZE (15 * 1024 * 1024)
 #define MIN_FRAMES 25
@@ -197,7 +196,6 @@ typedef struct VideoState {
 	int frame_drops_early;
 	int frame_drops_late;
 
-	SDL_Texture *vis_texture;
 	SDL_Texture *vid_texture;
 
 	double frame_timer;
@@ -233,10 +231,8 @@ static int is_full_screen;
 
 static AVPacket flush_pkt;
 
-#if defined(MOVIE_RESIZABLE_WINDOW)
-  static SDL_Window *window = NULL;
-#endif // MOVIE_RESIZABLE_WINDOW
 static SDL_Renderer *renderer = NULL;
+static SDL_Texture *background = NULL;
 static SDL_AudioDeviceID audio_dev;
 
 static const struct TextureFormatEntry {
@@ -868,8 +864,6 @@ static void stream_close(VideoState *is)
 	sws_freeContext(is->img_convert_ctx);
 	sws_freeContext(is->sub_convert_ctx);
 	av_free(is->filename);
-	if (is->vis_texture)
-		SDL_DestroyTexture(is->vis_texture);
 	if (is->vid_texture)
 		SDL_DestroyTexture(is->vid_texture);
 	av_free(is);
@@ -894,14 +888,6 @@ static int video_open(VideoState *is)
 	w = screen_width ? screen_width : default_width;
 	h = screen_height ? screen_height : default_height;
 
-#if defined(MOVIE_RESIZABLE_WINDOW)
-	SDL_SetWindowSize(window, w, h);
-	SDL_SetWindowPosition(window, SDL_WINDOWPOS_CENTERED, SDL_WINDOWPOS_CENTERED);
-	if (is_full_screen)
-		SDL_SetWindowFullscreen(window, SDL_WINDOW_FULLSCREEN_DESKTOP);
-	SDL_ShowWindow(window);
-#endif
-
 	is->width  = w;
 	is->height = h;
 
@@ -916,6 +902,9 @@ static void video_display(VideoState *is)
 
 	SDL_SetRenderDrawColor(renderer, 0, 0, 0, 255);
 	SDL_RenderClear(renderer);
+	if (!is_full_screen) {
+		SDL_RenderCopy(renderer, background, NULL, NULL);
+	}
 	if (is->video_st)
 		video_image_display(is);
 	SDL_RenderPresent(renderer);
@@ -1945,14 +1934,6 @@ fail:
 
 }
 
-static void toggle_full_screen(VideoState *is)
-{
-#if defined(MOVIE_RESIZABLE_WINDOW)
-	is_full_screen = !is_full_screen;
-	SDL_SetWindowFullscreen(window, is_full_screen ? SDL_WINDOW_FULLSCREEN_DESKTOP : 0);
-#endif
-}
-
 static void refresh_loop_wait_event(VideoState *is, SDL_Event *event) {
 	double remaining_time = 0.0;
 	SDL_PumpEvents();
@@ -1981,6 +1962,7 @@ aui_SDLMovie::aui_SDLMovie(AUI_ERRCODE *retval, const MBCHAR * filename) :
 	aui_Movie(),
 	m_videoState(NULL),
 	m_renderer(NULL),
+	m_background(NULL),
 	m_windowWidth(0),
 	m_windowHeight(0),
 	m_logicalWidth(0),
@@ -1994,11 +1976,15 @@ aui_SDLMovie::aui_SDLMovie(AUI_ERRCODE *retval, const MBCHAR * filename) :
 aui_SDLMovie::~aui_SDLMovie() {
 	Assert(!m_videoState);
 	m_renderer = NULL;
+	m_background = NULL;
 }
 
-void aui_SDLMovie::SetContext(SDL_Renderer *renderer, const int windowWidth, const int windowHeight) {
+void aui_SDLMovie::SetContext(SDL_Renderer *renderer, SDL_Texture *background, const int windowWidth,
+		const int windowHeight) {
 	Assert(renderer);
+	Assert(background);
 	m_renderer = renderer;
+	m_background = background;
 	m_windowWidth = windowWidth;
 	m_windowHeight = windowHeight;
 }
@@ -2014,12 +2000,9 @@ AUI_ERRCODE aui_SDLMovie::Unload() {
 AUI_ERRCODE aui_SDLMovie::Open(uint32 flags, aui_Surface *surface, RECT *rect) {
 
 #if defined(USE_SDL_FFMPEG)
-	if (!m_renderer) {
+	if (!m_renderer || (!(flags & k_AUI_MOVIE_PLAYFLAG_ONSCREEN) && !m_background)) {
 		return AUI_ERRCODE_MOVIEFAILED;
 	}
-
-	av_init_packet(&flush_pkt);
-	flush_pkt.data = (uint8_t *)&flush_pkt;
 
 	static SDL_RendererInfo renderer_info = {0};
 	SDL_GetRendererInfo(m_renderer, &renderer_info);
@@ -2029,15 +2012,31 @@ AUI_ERRCODE aui_SDLMovie::Open(uint32 flags, aui_Surface *surface, RECT *rect) {
 		return AUI_ERRCODE_MOVIEFAILED;
 	}
 
+	m_flags = flags;
 	renderer = m_renderer;
-	screen_width = m_windowWidth;
-	screen_height = m_windowHeight;
+
+	av_init_packet(&flush_pkt);
+	flush_pkt.data = (uint8_t *)&flush_pkt;
+
+	is_full_screen = m_flags & k_AUI_MOVIE_PLAYFLAG_ONSCREEN;
 	SDL_RenderGetLogicalSize(renderer, &m_logicalWidth, &m_logicalHeight);
-	SDL_RenderSetLogicalSize(renderer, m_windowWidth, m_windowHeight);
-	autoexit = !(flags & k_AUI_MOVIE_PLAYFLAG_PLAYANDHOLD);
+	if (is_full_screen) {
+		screen_width = m_windowWidth;
+		screen_height = m_windowHeight;
+		SDL_RenderSetLogicalSize(renderer, m_windowWidth, m_windowHeight);
+	} else {
+		screen_width = rect->right - rect->left;
+		screen_height = rect->bottom - rect->top;
+		background = m_background;
+	}
+	autoexit = 1;
 
 	// Adjust volume range ctp2 [0..10] -> ffmpeg [0..100]
 	m_videoState = stream_open(m_filename, g_theProfileDB->GetSFXVolume() * 10);
+	if (m_videoState && !(m_flags & k_AUI_MOVIE_PLAYFLAG_ONSCREEN)) {
+		m_videoState->xleft = rect->left;
+		m_videoState->ytop = rect->top;
+	}
 	return m_videoState ? AUI_ERRCODE_OK : AUI_ERRCODE_MOVIEFAILED;
 #else // USE_SDL_FFMPEG
 	return AUI_ERRCODE_OK;
@@ -2050,11 +2049,19 @@ AUI_ERRCODE aui_SDLMovie::Close() {
 	SDL_ShowCursor(SDL_ENABLE);
 	if (m_videoState) {
 		Stop();
+		if (m_flags & k_AUI_MOVIE_PLAYFLAG_PLAYANDHOLD) {
+			GrabLastFrame();
+		}
 		stream_close(m_videoState);
 		m_videoState = NULL;
 	}
+
+	if (m_flags & k_AUI_MOVIE_PLAYFLAG_ONSCREEN) {
+		SDL_RenderSetLogicalSize(m_renderer, m_logicalWidth, m_logicalHeight);
+	}
 	renderer = NULL;
-	SDL_RenderSetLogicalSize(m_renderer, m_logicalWidth, m_logicalHeight);
+	background = NULL;
+	m_flags = 0;
 	m_isFinished = TRUE;
 #endif // USE_SDL_FFMPEG
 	return AUI_ERRCODE_OK;
@@ -2107,7 +2114,6 @@ AUI_ERRCODE aui_SDLMovie::Process() {
 
 		BOOL done = FALSE;
 		while (!done) {
-			double x;
 			refresh_loop_wait_event(m_videoState, &event);
 			switch (event.type) {
 				case SDL_KEYDOWN:
@@ -2120,12 +2126,6 @@ AUI_ERRCODE aui_SDLMovie::Process() {
 					if (!m_videoState->width)
 						continue;
 					switch (event.key.keysym.sym) {
-						#if defined(MOVIE_RESIZABLE_WINDOW)
-						case SDLK_f:
-							toggle_full_screen(m_videoState);
-							m_videoState->force_refresh = 1;
-							break;
-						#endif
 						case SDLK_p:
 							toggle_pause(m_videoState);
 							break;
@@ -2138,7 +2138,7 @@ AUI_ERRCODE aui_SDLMovie::Process() {
 						SDL_ShowCursor(1);
 						cursor_hidden = 0;
 					} else {
-						if (event.motion.type & SDL_BUTTON_LMASK != 0) {
+						if ((event.motion.type & SDL_BUTTON_LMASK != 0) && (m_flags & k_AUI_MOVIE_PLAYFLAG_ONSCREEN)) {
 							done = TRUE;
 						}
 					}
@@ -2146,17 +2146,14 @@ AUI_ERRCODE aui_SDLMovie::Process() {
 					break;
 				case SDL_MOUSEBUTTONDOWN:
 				case SDL_MOUSEBUTTONUP:
-					done = TRUE;
+					if (m_flags & k_AUI_MOVIE_PLAYFLAG_ONSCREEN)
+						done = TRUE;
 					break;
 				case SDL_WINDOWEVENT:
 					switch (event.window.event) {
 						case SDL_WINDOWEVENT_RESIZED:
 							screen_width  = m_videoState->width  = event.window.data1;
 							screen_height = m_videoState->height = event.window.data2;
-							if (m_videoState->vis_texture) {
-								SDL_DestroyTexture(m_videoState->vis_texture);
-								m_videoState->vis_texture = NULL;
-							}
 						case SDL_WINDOWEVENT_EXPOSED:
 							m_videoState->force_refresh = 1;
 					}
@@ -2174,12 +2171,12 @@ AUI_ERRCODE aui_SDLMovie::Process() {
 }
 
 BOOL aui_SDLMovie::IsOpen() const {
-	return m_videoState != NULL;
+	return m_videoState != NULL || m_isFinished;
 }
 
 BOOL aui_SDLMovie::IsPlaying() const {
 #if defined(USE_SDL_FFMPEG)
-	return m_videoState && m_videoState->read_tid != NULL;
+	return m_videoState && m_videoState->read_tid;
 #else // USE_SDL_FFMPEG
 	return FALSE;
 #endif // USE_SDL_FFMPEG
@@ -2194,4 +2191,36 @@ BOOL aui_SDLMovie::IsPaused() const {
 #endif // USE_SDL_FFMPEG
 }
 
+void aui_SDLMovie::GrabLastFrame() {
+	aui_SDLSurface *sdlSurface = dynamic_cast<aui_SDLSurface *>(GetDestSurface());
+	if (sdlSurface) {
+		// Undo logical size if needed; to grab unscaled pixels
+		if (m_windowWidth != m_logicalWidth) {
+			SDL_RenderSetLogicalSize(m_renderer, m_windowWidth, m_windowHeight);
+		}
+
+		SDL_Surface *surface = sdlSurface->GetSDLSurface();
+		SDL_Texture *backgroundTexture = SDL_CreateTextureFromSurface(m_renderer, surface);
+		if (backgroundTexture) {
+			SDL_RenderClear(m_renderer);
+
+			SDL_Rect surfaceRect = { 0, 0, surface->w, surface->h };
+			SDL_RenderCopy(m_renderer, backgroundTexture, NULL, &surfaceRect);
+
+			RECT *destRect = GetDestRect();
+			SDL_Rect sdlSrcRect = {0, 0, destRect->right - destRect->left, destRect->bottom - destRect->top };
+			SDL_Rect sdlDestRect = { destRect->left, destRect->top, sdlSrcRect.w, sdlSrcRect.h };
+			SDL_RenderCopy(m_renderer, m_videoState->vid_texture, &sdlSrcRect, &sdlDestRect);
+			SDL_RenderReadPixels(m_renderer, &surfaceRect, surface->format->format, surface->pixels, surface->pitch);
+
+			SDL_RenderClear(m_renderer);
+			SDL_DestroyTexture(backgroundTexture);
+		}
+
+		// Reset logical size if needed
+		if (m_windowWidth != m_logicalWidth) {
+			SDL_RenderSetLogicalSize(m_renderer, m_logicalWidth, m_logicalHeight);
+		}
+	}
+}
 #endif // defined(__AUI_USE_SDL__)

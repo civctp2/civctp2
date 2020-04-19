@@ -15,7 +15,8 @@
 
 class aui_SDLMovieManager : public aui_MovieManager {
 public:
-	aui_SDLMovieManager(SDL_Renderer *sdlRenderer, const int windowWidth, const int windowHeight);
+	aui_SDLMovieManager(SDL_Renderer *sdlRenderer, SDL_Texture *background, const int windowWidth,
+			const int windowHeight);
 	virtual ~aui_SDLMovieManager();
 
 	virtual aui_Movie *Load(const MBCHAR *filename, C3DIR dir = C3DIR_DIRECT);
@@ -34,6 +35,7 @@ private:
 	aui_Resource<aui_SDLMovie>	*m_movieResource;
 
 	SDL_Renderer *m_renderer;
+	SDL_Texture *m_background;
 	int m_windowWidth;
 	int m_windowHeight;
 };

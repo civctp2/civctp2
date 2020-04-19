@@ -12,14 +12,14 @@
 
 class VideoState;
 class SDL_Renderer;
+class SDL_Texture;
 class SDL_Surface;
-class SDL_Cursor;
 class aui_SDLMovie : public aui_Movie {
 public:
 	aui_SDLMovie(AUI_ERRCODE *retval, const MBCHAR * filename = NULL);
 	virtual ~aui_SDLMovie();
 
-	void SetContext(SDL_Renderer *renderer, const int windowWidth, const int windowHeight);
+	void SetContext(SDL_Renderer *renderer, SDL_Texture *background, const int windowWidth, const int windowHeight);
 
 	virtual AUI_ERRCODE Load();
 	virtual AUI_ERRCODE Unload();
@@ -40,9 +40,12 @@ public:
 	virtual BOOL IsPaused() const;
 
 private:
+	void GrabLastFrame();
+
 	VideoState *m_videoState;
 
 	SDL_Renderer *m_renderer;
+	SDL_Texture *m_background;
 	int m_windowWidth;
 	int m_windowHeight;
 	int m_logicalWidth;

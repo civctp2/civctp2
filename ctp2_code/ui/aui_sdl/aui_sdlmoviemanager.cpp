@@ -33,13 +33,16 @@ static int lockmgr(void **mtx, enum AVLockOp op)
 }
 #endif // USE_SDL_FFMPEG
 
-aui_SDLMovieManager::aui_SDLMovieManager(SDL_Renderer *renderer, const int windowWidth, const int windowHeight) :
+aui_SDLMovieManager::aui_SDLMovieManager(SDL_Renderer *renderer, SDL_Texture *background, const int windowWidth,
+		const int windowHeight) :
 	aui_MovieManager(false),
 	m_renderer(renderer),
+	m_background(background),
 	m_windowWidth(windowWidth),
 	m_windowHeight(windowHeight)
 {
 	Assert(m_renderer);
+	Assert(m_background);
 	m_movieResource = new aui_Resource<aui_SDLMovie>();
 
 #if defined(USE_SDL_FFMPEG)
@@ -59,7 +62,7 @@ aui_SDLMovieManager::~aui_SDLMovieManager() {
 
 aui_Movie* aui_SDLMovieManager::Load(const MBCHAR *filename, C3DIR dir) {
 	aui_SDLMovie *movie = m_movieResource->Load(filename, dir);
-	movie->SetContext(m_renderer, m_windowWidth, m_windowHeight);
+	movie->SetContext(m_renderer, m_background, m_windowWidth, m_windowHeight);
 	return movie;
 }
 
