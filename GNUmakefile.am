@@ -13,6 +13,9 @@ bootstrap bootstrap-anet doc local playtest: $(top_srcdir)/Makefile
 .PHONY: purge bootstrap doc local playtest
 
 if DEBUG
+all-local:
+	nm --demangle --defined-only --numeric-sort $(top_srcdir)/ctp2_code/ctp/ctp2 > $(top_srcdir)/ctp2_code/ctp/ctp2linux.map
+
 install-data-hook:
 	nm --demangle --defined-only --numeric-sort $(DESTDIR)$(bindir)/ctp2 > $(DESTDIR)$(bindir)/ctp2linux.map
 endif
