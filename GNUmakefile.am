@@ -19,3 +19,9 @@ all-local:
 install-data-hook:
 	nm --demangle --defined-only --numeric-sort $(DESTDIR)$(bindir)/ctp2 > $(DESTDIR)$(bindir)/ctp2linux.map
 endif
+
+clean-local:
+	rm -f $(top_srcdir)/ctp2_code/ctp/ctp2linux.map
+
+uninstall-local:
+	rm -f $(DESTDIR)$(bindir)/ctp2linux.map
