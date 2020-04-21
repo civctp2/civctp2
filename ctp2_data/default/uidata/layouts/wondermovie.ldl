@@ -9,7 +9,7 @@ WonderMovieWindow {
 	string	xanchor	"center"
 	string	yanchor	"center"
 	int	widthpix	338
-	int	heightpix	357
+	int	heightpix	360
 	string	pattern		"uptg20e.tga"
 	
 	MovieButton {
@@ -39,7 +39,7 @@ WonderMovieWindow {
 		int xpix		0
 		int ypix		48
 		int widthpix	9
-		int heightpix	292
+		int heightpix	295
 		
 		string pattern	"upba6701.tga"
 	}
@@ -47,13 +47,13 @@ WonderMovieWindow {
 		int xpix		329
 		int ypix		48
 		int widthpix	9
-		int heightpix	292
+		int heightpix	295
 		
 		string pattern "upba6702.tga"
 	}
 	BottomBorder {
 		int xpix		0
-		int ypix		340
+		int ypix		343
 		int widthpix	338
 		int heightpix	17
 		

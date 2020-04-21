@@ -221,7 +221,6 @@ static int default_height = 480;
 static int screen_width  = 0;
 static int screen_height = 0;
 static int av_sync_type = AV_SYNC_AUDIO_MASTER;
-static int autoexit = 0;
 static int infinite_buffer = -1;
 static int64_t cursor_last_shown;
 static int cursor_hidden = 0;
@@ -1836,10 +1835,8 @@ static int read_thread(void *arg)
 		if (!is->paused &&
 			(!is->audio_st || (is->auddec.finished == is->audioq.serial && frame_queue_nb_remaining(&is->sampq) == 0)) &&
 			(!is->video_st || (is->viddec.finished == is->videoq.serial && frame_queue_nb_remaining(&is->pictq) == 0))) {
-			if (autoexit) {
-				ret = AVERROR_EOF;
-				goto fail;
-			}
+			ret = AVERROR_EOF;
+			goto fail;
 		}
 		ret = av_read_frame(ic, pkt);
 		if (ret < 0) {
@@ -1938,7 +1935,7 @@ static void refresh_loop_wait_event(VideoState *is, SDL_Event *event) {
 	double remaining_time = 0.0;
 	SDL_PumpEvents();
 	while (!SDL_PeepEvents(event, 1, SDL_GETEVENT, SDL_FIRSTEVENT, SDL_LASTEVENT)) {
-		if (!cursor_hidden && av_gettime_relative() - cursor_last_shown > CURSOR_HIDE_DELAY) {
+	if (is_full_screen && !cursor_hidden && av_gettime_relative() - cursor_last_shown > CURSOR_HIDE_DELAY) {
 			SDL_ShowCursor(0);
 			cursor_hidden = 1;
 		}
@@ -2029,7 +2026,6 @@ AUI_ERRCODE aui_SDLMovie::Open(uint32 flags, aui_Surface *surface, RECT *rect) {
 		screen_height = rect->bottom - rect->top;
 		background = m_background;
 	}
-	autoexit = 1;
 
 	// Adjust volume range ctp2 [0..10] -> ffmpeg [0..100]
 	m_videoState = stream_open(m_filename, g_theProfileDB->GetSFXVolume() * 10);
@@ -2112,58 +2108,10 @@ AUI_ERRCODE aui_SDLMovie::Process() {
 		/* handle an event sent by the GUI */
 		SDL_Event event;
 
-		BOOL done = FALSE;
-		while (!done) {
+		bool movieFinished = false;
+		while (!movieFinished) {
 			refresh_loop_wait_event(m_videoState, &event);
-			switch (event.type) {
-				case SDL_KEYDOWN:
-					if (event.key.keysym.sym == SDLK_ESCAPE || event.key.keysym.sym == SDLK_SPACE
-						|| event.key.keysym.sym == SDLK_q) {
-						done = TRUE;
-						break;
-					}
-					// If we don't yet have a window, skip all key events, because read_thread might still be initializing...
-					if (!m_videoState->width)
-						continue;
-					switch (event.key.keysym.sym) {
-						case SDLK_p:
-							toggle_pause(m_videoState);
-							break;
-						default:
-							break;
-					}
-					break;
-				case SDL_MOUSEMOTION:
-					if (cursor_hidden) {
-						SDL_ShowCursor(1);
-						cursor_hidden = 0;
-					} else {
-						if ((event.motion.type & SDL_BUTTON_LMASK != 0) && (m_flags & k_AUI_MOVIE_PLAYFLAG_ONSCREEN)) {
-							done = TRUE;
-						}
-					}
-					cursor_last_shown = av_gettime_relative();
-					break;
-				case SDL_MOUSEBUTTONDOWN:
-				case SDL_MOUSEBUTTONUP:
-					if (m_flags & k_AUI_MOVIE_PLAYFLAG_ONSCREEN)
-						done = TRUE;
-					break;
-				case SDL_WINDOWEVENT:
-					switch (event.window.event) {
-						case SDL_WINDOWEVENT_RESIZED:
-							screen_width  = m_videoState->width  = event.window.data1;
-							screen_height = m_videoState->height = event.window.data2;
-						case SDL_WINDOWEVENT_EXPOSED:
-							m_videoState->force_refresh = 1;
-					}
-					break;
-				case SDL_QUIT:
-					done = TRUE;
-					break;
-				default:
-					break;
-			}
+			movieFinished = HandleMovieEvent(event);
 		}
 		Close();
 	}
@@ -2189,6 +2137,57 @@ BOOL aui_SDLMovie::IsPaused() const {
 #else // USE_SDL_FFMPEG
 	return FALSE;
 #endif // USE_SDL_FFMPEG
+}
+
+bool aui_SDLMovie::HandleMovieEvent(SDL_Event &event) {
+	bool movieFinished = false;
+
+	switch (event.type) {
+		case SDL_QUIT:
+			movieFinished = true;
+			break;
+		case SDL_KEYDOWN:
+			switch (event.key.keysym.sym) {
+				case SDLK_ESCAPE:
+				case SDLK_SPACE:
+				case SDLK_q:
+					movieFinished = true;
+					break;
+				case SDLK_p:
+					toggle_pause(m_videoState);
+					break;
+				default:
+					break;
+			}
+			break;
+		case SDL_MOUSEMOTION:
+			if (cursor_hidden) {
+				SDL_ShowCursor(1);
+				cursor_hidden = 0;
+			} else {
+				if ((event.motion.type & SDL_BUTTON_LMASK != 0) &&
+					(is_full_screen || InsideMovieArea(event.button.x, event.button.y))) {
+					movieFinished = true;
+				}
+			}
+			cursor_last_shown = av_gettime_relative();
+			break;
+		case SDL_MOUSEBUTTONDOWN:
+		case SDL_MOUSEBUTTONUP:
+			if (is_full_screen || InsideMovieArea(event.button.x, event.button.y)) {
+				movieFinished = true;
+			}
+			break;
+		default:
+			break;
+	}
+	return movieFinished;
+}
+
+
+bool aui_SDLMovie::InsideMovieArea(int x, int y) {
+	return (x > m_videoState->xleft && x < (m_videoState->xleft + m_videoState->width)
+		&& y > m_videoState->ytop && y < (m_videoState->ytop + m_videoState->height));
 }
 
 void aui_SDLMovie::GrabLastFrame() {

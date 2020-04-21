@@ -83,10 +83,9 @@ protected:
 #if defined(HAVE_X11)
 	Display *           m_X11Display;
 #endif
-	SDL_Window   *m_SDLWindow;
-	SDL_Surface  *m_SDLSurface;
+	SDL_Window *m_SDLWindow;
 	SDL_Renderer *m_SDLRenderer;
-	SDL_Texture  *m_SDLTexture;
+	SDL_Texture *m_SDLTexture;
 };
 
 typedef aui_SDLUI aui_NativeUI;

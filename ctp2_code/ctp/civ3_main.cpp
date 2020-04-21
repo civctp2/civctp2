@@ -770,11 +770,7 @@ bool ui_CheckForScroll(void)
 			isMouseScrolling = true;
 		}
 
-
 		if(scrolled) {
-			if (isMouseScrolling)
-				g_cursorManager->SetCursor(scrollCursor);
-
 			if(!scrolled_last_time) {
 				scroll_start = GetTickCount();
 			}
@@ -800,6 +796,8 @@ bool ui_CheckForScroll(void)
 		lastdeltaX = deltaX;
 		lastdeltaY = deltaY;
 
+		if (isMouseScrolling)
+			g_cursorManager->SetCursor(scrollCursor);
 		g_tiledMap->SetScrolling(true);
 
 		uint32 accellTickDelta = s_scrollcurtick - s_accelTickStart;
@@ -1032,8 +1030,6 @@ void AtExitProc(void)
 	// What about this?
 	Mix_CloseAudio();
 # endif
-
-g_mouseShouldTerminateThread = TRUE;
 
 	// Destroy the mutex used for the secondary keyboard event queue
 #ifdef __AUI_USE_SDL__

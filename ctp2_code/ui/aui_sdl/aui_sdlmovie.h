@@ -10,6 +10,8 @@
 
 #if defined(__AUI_USE_SDL__)
 
+#include <SDL_events.h>
+
 class VideoState;
 class SDL_Renderer;
 class SDL_Texture;
@@ -40,6 +42,8 @@ public:
 	virtual BOOL IsPaused() const;
 
 private:
+	bool HandleMovieEvent(SDL_Event &event);
+	bool InsideMovieArea(int x, int y);
 	void GrabLastFrame();
 
 	VideoState *m_videoState;

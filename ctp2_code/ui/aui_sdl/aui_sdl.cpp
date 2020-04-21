@@ -19,21 +19,21 @@ sint32 aui_SDL::m_SDLRefCount = 0;
 //                                */
 
 int FilterEvents(void* userData, SDL_Event *event) {
-    switch(event->type) {
-        // Quit event
-        case SDL_QUIT:
-        // Keyboard events
-        case SDL_KEYDOWN:
-	case SDL_KEYUP:
-        // Mouse events
-        case SDL_MOUSEMOTION:
-        case SDL_MOUSEBUTTONDOWN:
-        case SDL_MOUSEBUTTONUP:
-        case SDL_MOUSEWHEEL:
-            return 1;
-        default:
-            return 0;
-    }
+	switch(event->type) {
+		// Quit event
+		case SDL_QUIT:
+		// Keyboard events
+		case SDL_KEYDOWN:
+		case SDL_KEYUP:
+		// Mouse events
+		case SDL_MOUSEMOTION:
+		case SDL_MOUSEBUTTONDOWN:
+		case SDL_MOUSEBUTTONUP:
+		case SDL_MOUSEWHEEL:
+			return 1;
+		default:
+			return 0;
+	}
 }
 
 AUI_ERRCODE aui_SDL::InitCommon(BOOL useExclusiveMode)

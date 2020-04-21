@@ -32,22 +32,22 @@
 //   play.
 // - Start the great library with the current research project of the player.
 // - Added option to add new messages at the top.
-// - Fixed crossed Sword bug. - Oct. 14th 2004 Martin Gühmann
+// - Fixed crossed Sword bug. - Oct. 14th 2004 Martin GÃ¼hmann
 // - Fixed the crossed sword bug that was caused by the previous bug fix,
-//   cossed swords even if the city is hidden. - Oct. 15th 2004 Martin Gühmann
+//   cossed swords even if the city is hidden. - Oct. 15th 2004 Martin GÃ¼hmann
 // - Added unit display name.
 // - Relaxed Assert for invisible buttons with mods.
 // - Prevented crashes with mods.
-// - Added special attack window. (Aug 15th 2005 Martin Gühmann)
+// - Added special attack window. (Aug 15th 2005 Martin GÃ¼hmann)
 // - Removed unused methods: FillBank, ClearButtons and AddButton.
-//   (Aug 16th 2005 Martin Gühmann)
+//   (Aug 16th 2005 Martin GÃ¼hmann)
 // - Restored Fifth Tileimp Button Bank by E 2-27-2007
 // - TODO fix obsolete tileimp defect
 // - TODO add buttons for orders button bank
 // - TODO create scroll bar like CityStyles in Scenario Editor for
 //   Orders and tileimprovements so they are not limited
-// - Replaced old const database by new one. (5-Aug-2007 Martin Gühmann)
-// - Replaced old const database by new one. (5-Aug-2007 Martin Gühmann)
+// - Replaced old const database by new one. (5-Aug-2007 Martin GÃ¼hmann)
+// - Replaced old const database by new one. (5-Aug-2007 Martin GÃ¼hmann)
 //
 //----------------------------------------------------------------------------
 //
@@ -58,8 +58,8 @@
 //   CityPanelRebuild - notice the strange immediate return) are never called,
 //   and some variables (e.g. m_mainDropDown) are not NULL-initialised in the
 //   constructor. Maybe this is some leftover of the CTP1 code?
-// - Initialized local variables. (Sep 9th 2005 Martin Gühmann)
-// - Standatized code (May 21st 2006 Martin Gühmann)
+// - Initialized local variables. (Sep 9th 2005 Martin GÃ¼hmann)
+// - Standatized code (May 21st 2006 Martin GÃ¼hmann)
 // - None of the unit or order stuff is used here? see UnitControlPanel.cpp
 //
 //----------------------------------------------------------------------------
@@ -2952,7 +2952,9 @@ void ControlPanelWindow::Idle()
 	if (m_targetingMode)
 		TargetingMode();
 	else
-		g_cursorManager->SetCursor(CURSORINDEX_DEFAULT);
+		// prevent resetting of scroll-cursor
+		if (!g_tiledMap->IsScrolling())
+			g_cursorManager->SetCursor(CURSORINDEX_DEFAULT);
 }
 
 void ControlPanelWindow::Move( sint32 x, sint32 y )

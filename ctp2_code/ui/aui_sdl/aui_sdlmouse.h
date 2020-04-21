@@ -15,9 +15,11 @@
 class aui_SDLMouse : public aui_Mouse, public aui_SDLInput
 {
 public:
-	aui_SDLMouse(AUI_ERRCODE *retval, const MBCHAR *ldlBlock,
-	             BOOL useExclusiveMode = FALSE);
+	aui_SDLMouse(AUI_ERRCODE *retval, const MBCHAR *ldlBlock, BOOL useExclusiveMode = FALSE);
 	virtual ~aui_SDLMouse();
+
+	virtual AUI_ERRCODE HandleAnim();
+	virtual void SetAnimIndexes(sint32 firstIndex, sint32 lastIndex);
 
 	virtual AUI_ERRCODE	BltWindowToPrimary(aui_Window *window);
 	virtual AUI_ERRCODE	BltDirtyRectInfoToPrimary();
@@ -29,15 +31,13 @@ protected:
 
 	virtual void ActivateCursor(aui_Cursor *cursor);
 
-	virtual AUI_ERRCODE Erase() { return AUI_ERRCODE_OK; }
-	virtual AUI_ERRCODE GetInput();
+	virtual AUI_ERRCODE GetInput() {}
 	virtual AUI_ERRCODE ReactToInput() {}
-
-	virtual AUI_ERRCODE CreatePrivateBuffers() { return AUI_ERRCODE_OK; }
-	virtual void DestroyPrivateBuffers() {}
+	virtual sint32 ManipulateInputs(aui_MouseEvent *data, BOOL add);
 
 private:
 	aui_Cursor *m_currentCursor;
+	SDL_TimerID m_animationTimer;
 };
 
 typedef aui_SDLMouse aui_NativeMouse;
