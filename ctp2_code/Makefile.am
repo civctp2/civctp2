@@ -10,7 +10,7 @@ SUBDIRS = \
 	libs \
 	sound
 
-bin_PROGRAMS = ctp2
+bin_PROGRAMS = ctp/ctp2
 # This hack shortens include path list,
 # but prohibits using a separate build dir
 #ctp2_code=..
@@ -38,7 +38,7 @@ CTP2_ANET_INC=-I$(ctp2_code)/libs/anet/h
 
 include $(ctp2_code)/os/autoconf/Makefile.common
 
-ctp2_LDADD = \
+ctp_ctp2_LDADD = \
 	gfx/gfx_utils/libgfxgfx_utils.la \
 	gfx/layers/libgfxlayers.la \
 	gfx/spritesys/libgfxspritesys.la \
@@ -57,10 +57,10 @@ ctp2_LDADD = \
 	$(CTP2_LIBOSNOWIN32_LDADD) \
 	$(CTP2_LIBTTF_LDADD)
 
-ctp2_LDFLAGS = \
+ctp_ctp2_LDFLAGS = \
 	$(CTP2_LDFLAGS)
 
-ctp2_SOURCES = \
+ctp_ctp2_SOURCES = \
 	ctp/ctp2_utils/appstrings.cpp \
 	ctp/ctp2_utils/c3cmdline.cpp \
 	ctp/ctp2_utils/c3cpu.cpp \

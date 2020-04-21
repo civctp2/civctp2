@@ -26,7 +26,7 @@ You will probably need GCC 5.x or later to build. The code doesn't seem to build
 
 You will need SDL 1.2, SDL_Mixer, SDL_Image and the GTK 2.0 libraries.
 You will also need `byacc`
-On debian and friends, use `sudo apt install libsdl1.2-dev libsdl-mixer1.2-dev libsdl-image1.2-dev byacc gtk2.0-dev` to install them all.
+On debian and friends, use `sudo apt install libsdl1.2-dev libsdl-mixer1.2-dev libsdl-image1.2-dev byacc gtk2.0-dev flex` to install them all.
 
 The build itself is pretty classing and straight forward:
 
