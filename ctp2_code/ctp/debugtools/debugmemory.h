@@ -47,17 +47,6 @@
 extern "C" {
 #endif
 
-#if defined(SKIP_SDL2_DEBUG_MEMORY_ISSUE)
-
-void DebugMemory_LeaksShow (int turn_count);
-void DebugMemory_LeaksClear(void);
-size_t DebugMemory_GetTotalFromEXE(void);
-size_t DebugMemory_GetTotalFromDLL(void);
-void DebugMemory_Open (void);
-void DebugMemory_Close (void);
-
-#else
-
 #ifndef _DEBUG_MEMORY
 	#define MEMORY_FAST
 #else
@@ -152,8 +141,6 @@ void DebugMemoryHeap_GuardedClose      (const char *file, int line, MemoryHeap h
 	#define HEAP_CLOSE(heap)              DebugMemoryHeap_GuardedClose   ((__FILE__), (__LINE__), heap)
 
 #endif
-
-#endif // SKIP_SDL2_DEBUG_MEMORY_ISSUE
 
 #ifdef __cplusplus
 }
