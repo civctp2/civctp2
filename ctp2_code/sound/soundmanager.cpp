@@ -158,7 +158,7 @@ void SoundManager::InitSoundDriver()
     }
     else
     {
-        errcode = Mix_OpenAudio(output_rate, output_format, output_channels, 8192);
+        errcode = Mix_OpenAudio(output_rate, output_format, output_channels, 256);
         if (errcode < 0)
         {
             // char *err = SDL_GetError(); cerr << "Opening mixer failed:" << err << endl;
