@@ -32,7 +32,8 @@ aui_SDLMouse::aui_SDLMouse(
    aui_Mouse(retval, ldlBlock),
    aui_SDLInput(retval, useExclusiveMode),
    m_currentCursor(NULL),
-   m_animationTimer(0)
+   m_animationTimer(0),
+   m_lastFrameTick(0)
 {
 	Assert(AUI_SUCCESS(*retval));
 	if (!AUI_SUCCESS(*retval)) return;
@@ -141,8 +142,20 @@ sint32 aui_SDLMouse::ManipulateInputs(aui_MouseEvent *data, BOOL add) {
 				break;
 		}
 	}
+
+	uint32 currentFrameTick = SDL_GetTicks();
 	if (numberEvents) {
+		m_lastFrameTick = currentFrameTick;
 		m_data = data[numberEvents - 1];
+	} else {
+		// generate at least a single event every x ticks to force a redraw
+		const int FRAMES_PER_SECOND = 60;
+		const int TICKS_PER_FRAME = 1000 / FRAMES_PER_SECOND;
+		if (currentFrameTick > m_lastFrameTick + TICKS_PER_FRAME) {
+			m_lastFrameTick = currentFrameTick;
+			data[0] = m_data;
+			numberEvents = 1;
+		}
 	}
 	return numberEvents;
 }

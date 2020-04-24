@@ -38,6 +38,7 @@ protected:
 private:
 	aui_Cursor *m_currentCursor;
 	SDL_TimerID m_animationTimer;
+	uint32 m_lastFrameTick;
 };
 
 typedef aui_SDLMouse aui_NativeMouse;
