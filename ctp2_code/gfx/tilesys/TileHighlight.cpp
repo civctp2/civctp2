@@ -31,7 +31,7 @@
 // - Added some bombard code (PFT)
 // - Repaired crash when no order is active.
 // - Corrected turn box computation for ship paths through cities.
-// - Added debug pathing for the city astar. (17-Jan-2008 Martin Gühmann)
+// - Added debug pathing for the city astar. (17-Jan-2008 Martin GÃ¼hmann)
 // - Added check if only movebonus units are in an army, and it returns the
 //	 highest movebonus value of the army for entry cost (17-Mar-2009 Maq).
 //
@@ -477,15 +477,16 @@ void TiledMap::DrawLegalMove
 			x2 += xoffset;
 			y2 += yoffset;
 
-			if ((sType == SELECT_TYPE_LOCAL_ARMY) ||
-				((sType == SELECT_TYPE_LOCAL_ARMY_UNLOADING) && (line_segment_count == 0))
-			   )
+			if (g_player[g_selected_item->GetVisiblePlayer()]->IsExplored(currPos))
 			{
-				if (draw_one_special && CanDrawSpecialMove(sType, sel_army, currPos))
-				{
-					draw_one_special		= false;
-					lineColor				= k_TURN_COLOR_SPECIAL;
-					special_line_segment	= line_segment_count;
+				if ((sType == SELECT_TYPE_LOCAL_ARMY) ||
+					((sType == SELECT_TYPE_LOCAL_ARMY_UNLOADING) && (line_segment_count == 0))
+				) {
+					if (draw_one_special && CanDrawSpecialMove(sType, sel_army, currPos)) {
+						draw_one_special = false;
+						lineColor = k_TURN_COLOR_SPECIAL;
+						special_line_segment = line_segment_count;
+					}
 				}
 			}
 
