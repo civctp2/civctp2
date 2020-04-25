@@ -2373,7 +2373,10 @@ void CityData::AddShieldsToBuilding()
 		m_net_production = 0;
 	}
 
-	SetShieldstore(m_shieldstore + m_net_production);
+	// Do not add shields to the store when the build-queue is empty.
+	if (m_build_queue.GetHead() != NULL) {
+		SetShieldstore(m_shieldstore + m_net_production);
+	}
 }
 
 #if !defined(NEW_RESOURCE_PROCESS)

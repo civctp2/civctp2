@@ -625,8 +625,6 @@ bool BuildQueue::BuildFront(sint32 &shieldstore, CityData *cd, const MapPoint &p
 			// Cities with empty queues lose the same switch penalty % of their shield store
 			// each turn they are empty.
 
-			shieldstore -= cd->GetNetCityProduction();// Remove shields given at beginturn.
-
 			if (shieldstore > 0)
 			{
 				sint32 s = 0;
@@ -643,6 +641,7 @@ bool BuildQueue::BuildFront(sint32 &shieldstore, CityData *cd, const MapPoint &p
 				DPRINTF(k_DBG_GAMESTATE, ("Deducting %i shields for empty queue in city of %lx\n", s, m_city.m_id));
 				shieldstore = s;
 			}
+			assert(shieldstore >= 0);
 		}
 		return false;
 	}
