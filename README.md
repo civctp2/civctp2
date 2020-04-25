@@ -18,15 +18,17 @@ Note that the game files are not included in this repo, you can get them from th
 
 ![screenshot](screenshot.png "screenshot of CTP2 running on Linux")
 
-This version should support CD Audio music, and also supports Ripped CD Audio compressed as ogg (like found in the GoG version). The Audio tracks should be named `Track02.ogg` to `Track11.ogg` and be in the `ctp2_program/ctp/music` folder.
+The Windows version supports CD Audio music, and the Linux version supports Ripped CD Audio compressed as ogg (like found in the GoG version). The Audio tracks should be named `Track02.ogg` to `Track11.ogg` and be in the `ctp2_program/ctp/music` folder.
+
+As the Linux version does not support direct play from CD-rom, you need to rip the assets-files from the CD and put them on your disk.
 
 ## Building on Linux
 
 You will probably need GCC 5.x or later to build. The code doesn't seem to build on GCC 4.8.
 
-You will need SDL 1.2, SDL_Mixer, SDL_Image and the GTK 2.0 libraries.
+You will need SDL 2.0, SDL_Mixer 2.0, SDL_Image 2.0 and the GTK 2.0 libraries. To be able to play movies you also need ffmpeg libraries (some).
 You will also need `byacc`
-On debian and friends, use `sudo apt install libsdl1.2-dev libsdl-mixer1.2-dev libsdl-image1.2-dev byacc gtk2.0-dev flex` to install them all.
+On debian and friends, use `sudo apt install libsdl2-dev libsdl2-mixer-dev libsdl2-image-dev libtiff-dev libavcodec-dev libavformat-dev libswscale-dev byacc gtk2.0-dev flex` to install them all.
 
 The build itself is pretty classing and straight forward:
 
