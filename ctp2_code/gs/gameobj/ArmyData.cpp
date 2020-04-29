@@ -43,15 +43,15 @@
 // - Improved destructor to clean up lists.
 // - Implemented Immobile units.
 // - Moved UnitValidForOrder to Unit.cpp to be able to access the Unit
-//   properties. - April 24th 2005 Martin Gühmann
+//   properties. - April 24th 2005 Martin GÃ¼hmann
 // - Teleevangelist unit does not need to have index 66 in unit database,
 //   so that the soothsay message is replaced by the faith heal message.
-//   Actual this should be replaced by new order. - April 30th 2005 Martin Gühmann
-// - Implemented GovernmentModified for UnitDB - April 30th 2005 Martin Gühmann
+//   Actual this should be replaced by new order. - April 30th 2005 Martin GÃ¼hmann
+// - Implemented GovernmentModified for UnitDB - April 30th 2005 Martin GÃ¼hmann
 // - Added unit record and civilisation information to some messageboxes.
 // - Repaired crash when inciting an uprising succeeds.
-// - Initialized local variables. (Sep 9th 2005 Martin Gühmann)
-// - Positions of units on transports are now updated. (Sep 9th 2005 Martin Gühmann)
+// - Initialized local variables. (Sep 9th 2005 Martin GÃ¼hmann)
+// - Positions of units on transports are now updated. (Sep 9th 2005 Martin GÃ¼hmann)
 // - Improved grouping checks.
 // - SneakBomard check added to BombardCity and Bombard  by E 17-JAN-2006
 // - SneakAttack added to ::Fight because it works here   by E 17-JAN-2006
@@ -79,8 +79,8 @@
 //   are Entrenched by E 5-15-2006
 // - Added Gold Cost to CanCaptureTile 5-16-2006 by E
 // - Added SettleImprovement to beginturn 5-27-2006 by E
-// - Armies with a CanSettleOn only unit are now recognized as settler armies. (May 21st 2006 Martin Gühmann)
-// - Standardized code (May 21st 2006 Martin Gühmann)
+// - Armies with a CanSettleOn only unit are now recognized as settler armies. (May 21st 2006 Martin GÃ¼hmann)
+// - Standardized code (May 21st 2006 Martin GÃ¼hmann)
 // - Added HostileTerrain so units in terrain that has this value lose 5-27-2006 by E
 // - Added Great Merchant Gold 5-27-2006 by E
 // - Added barbariancamps to entrenched barbs  5-27-2006 by E
@@ -94,7 +94,7 @@
 // - Changed barbariancamps to barbariancities (E 6-07-2006)
 // - Made barbarians immune to hstile terrain (E 6-10-2006)
 // - Implemented SpawnBarbairans units (E 6-10-2006)
-// - Fixed CanCloak (25th 2006 Martin Gühmann)
+// - Fixed CanCloak (25th 2006 Martin GÃ¼hmann)
 // - Repaired some crashes.
 // - Implemented EnablesPunativeAirstrikes Wonder flag
 // - Implemented ConstDB ChanceLostAtSea
@@ -105,7 +105,7 @@
 // - Added a return true for AI in verifyattack (for testing)
 // - Added random number for beginturn barbarian code
 // - Moved the upgrade stuff into its own methods, however more work is needed.
-//   (Dec 24th 2006 Martin Gühmann)
+//   (Dec 24th 2006 Martin GÃ¼hmann)
 // - Added message for hostile terrain and guerrilla spawn
 // - Readded message for ship sinking (removed later)
 // - Added new limits for BarbarianSpawnBarbarian
@@ -114,23 +114,23 @@
 // - Added Slic execute commands
 // - Modified sink to send the unit type 5-24-2007
 // - Cleaned up beginturn moving stuff to ArmyData
-// - Replaced old const database by new one. (5-Aug-2007 Martin Gühmann)
+// - Replaced old const database by new one. (5-Aug-2007 Martin GÃ¼hmann)
 // - Changed settlebuilding for convert to estabvlish building since it isn't settling
 // - Added establishbuilding check to advertise, makes it more worthwhile - by E 27 Aug 2007
-// - Units that are grouped into previously empty armies now show up on the map. (5-Aug-2007 Martin Gühmann)
-// - Improved Ungroup and transport capacity methods. (5-Aug-2007 Martin Gühmann)
-// - Bombard order is not given twice anymore. (30-Jan-2008 Martin Gühmann)
+// - Units that are grouped into previously empty armies now show up on the map. (5-Aug-2007 Martin GÃ¼hmann)
+// - Improved Ungroup and transport capacity methods. (5-Aug-2007 Martin GÃ¼hmann)
+// - Bombard order is not given twice anymore. (30-Jan-2008 Martin GÃ¼hmann)
 // - The player's cargo capacity is now calculated before the AI uses its
-//   units and not afterwards. (3-Feb-2008 Martin Gühmann)
-// - Added check move points option to CanAtLeastOneCargoUnloadAt. (8-Feb-2008 Martin Gühmann)
-// - Throwing diplomatic parties costs now the displayed price. (9-Feb-2008 Martin Gühmann)
+//   units and not afterwards. (3-Feb-2008 Martin GÃ¼hmann)
+// - Added check move points option to CanAtLeastOneCargoUnloadAt. (8-Feb-2008 Martin GÃ¼hmann)
+// - Throwing diplomatic parties costs now the displayed price. (9-Feb-2008 Martin GÃ¼hmann)
 // - Added messages for failed slave raids, one for an alive slave and another
-//   for a killed slaver. (9-Feb-2008 Martin Gühmann)
-// - Expelling costs now move points. (9-Feb-2008 Martin Gühmann)
-// - Separated the Settle event drom the Settle in City event. (19-Feb-2008 Martin Gühmann)
+//   for a killed slaver. (9-Feb-2008 Martin GÃ¼hmann)
+// - Expelling costs now move points. (9-Feb-2008 Martin GÃ¼hmann)
+// - Separated the Settle event drom the Settle in City event. (19-Feb-2008 Martin GÃ¼hmann)
 // - Special attack centers only if the auto center option on units and
-//   cities is set. (23-Feb-2008 Martin Gühmann)
-// - Merged finish move. (13-Aug-2008 Martin Gühmann)
+//   cities is set. (23-Feb-2008 Martin GÃ¼hmann)
+// - Merged finish move. (13-Aug-2008 Martin GÃ¼hmann)
 // - Modified CheckActiveDefenders to only fire when a valid target is alive.
 //   Also removed counterbombarding and returning active defense fire after
 //   an active defender has fired, to remove the cheesy effect. (09-Mar-2009 Maq)
@@ -5261,7 +5261,7 @@ void ArmyData::MinMovementPoints(double &cur) const
 //
 // Remark(s)  : Used to allow bombarding from a distance.
 //
-// Additions by PFT Dec 18, 2004. And modified by Martin Gühmann.
+// Additions by PFT Dec 18, 2004. And modified by Martin GÃ¼hmann.
 //
 //----------------------------------------------------------------------------
 bool ArmyData::GetBombardRange(sint32 & min_rge, sint32 & max_rge)
@@ -9817,7 +9817,7 @@ bool ArmyData::CheckWasEnemyVisible(const MapPoint &pos, bool justCheck)
 	if (cell->GetCity().IsValid())
 	{
 		bool visible = (cell->GetCity().GetVisibility() & (1 << m_owner)) != 0;
-		if(!visible)
+		if(!visible && !justCheck)
 		{
 			cell->GetCity().SetVisible(m_owner);
 		}
