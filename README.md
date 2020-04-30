@@ -26,9 +26,9 @@ As the Linux version does not support direct play from CD-rom, you need to rip t
 
 You will probably need GCC 5.x or later to build. The code doesn't seem to build on GCC 4.8.
 
-You will need SDL 2.0, SDL_Mixer 2.0, SDL_Image 2.0 and the GTK 2.0 libraries. To be able to play movies you also need ffmpeg libraries (some).
+You will need SDL 2.0, SDL_Mixer 2.0, SDL_Image 2.0. To be able to play movies you also need ffmpeg libraries (some).
 You will also need `byacc`
-On debian and friends, use `sudo apt install libsdl2-dev libsdl2-mixer-dev libsdl2-image-dev libtiff-dev libavcodec-dev libavformat-dev libswscale-dev byacc gtk2.0-dev flex` to install them all.
+On debian and friends, use `sudo apt install libsdl2-dev libsdl2-mixer-dev libsdl2-image-dev libtiff-dev libavcodec-dev libavformat-dev libswscale-dev byacc flex` to install them all.
 
 The build itself is pretty classing and straight forward:
 
