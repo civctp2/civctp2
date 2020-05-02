@@ -907,7 +907,7 @@ int sprite_Initialize(void)
 
 	spritegrouplist_Initialize();
 
-	g_director = new Director();
+	g_director = Director::CreateDirector();
 
 	return 0;
 }
