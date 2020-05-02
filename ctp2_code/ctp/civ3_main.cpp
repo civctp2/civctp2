@@ -1674,18 +1674,26 @@ int WINAPI CivMain(HINSTANCE hInstance, HINSTANCE hPrevInstance, PSTR szCmdLine,
 
 	for (gDone = FALSE; !gDone; )
 	{
+		uint32 frameStartTick = GetTickCount();
 		g_civApp->Process();
 
-                //fprintf(stderr, "%s L%d: g_civApp->Process() done!\n", __FILE__, __LINE__);
+		//fprintf(stderr, "%s L%d: g_civApp->Process() done!\n", __FILE__, __LINE__);
 
 #ifdef __AUI_USE_SDL__
 		SDL_Event event;
 		while (!g_letUIProcess) { // There are breaks, too ;)
-			// Throttle the loop a bit to prevent 100% CPU usage in idle state.
-			// FIXME: implement blocking loop with SDL_WaitEvent().
-			if (!SDL_PollEvent(NULL)) {
-				SDL_Delay(30);
-				break;
+
+			static const int FRAMES_PER_SECOND = 30;
+			static const int TICKS_PER_FRAME = 1000 / FRAMES_PER_SECOND;
+			const int frameTicksLeft = frameStartTick + TICKS_PER_FRAME - GetTickCount();
+			if (frameTicksLeft > 0) {
+				if (!SDL_WaitEventTimeout(NULL, frameTicksLeft)) {
+					break;
+				}
+			} else {
+				if (!SDL_PollEvent(NULL)) {
+					break;
+				}
 			}
 
 			int n = SDL_PeepEvents(&event, 1, SDL_GETEVENT, SDL_FIRSTEVENT, SDL_MOUSEMOTION-1);
