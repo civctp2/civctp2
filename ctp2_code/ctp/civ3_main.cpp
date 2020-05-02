@@ -45,17 +45,17 @@
 // - Merged GNU and MSVC code (DoFinalCleanup, CivMain).
 // - Option added to include multiple data directories.
 // - Display the main thread function name in the debugger.
-// - Removed references to CivilisationDB. (Aug 20th 2005 Martin G?hmann)
-// - Removed references to old SpriteStateDBs. (Aug 29th 2005 Martin G?hmann)
-// - Initialized local variables. (Sep 9th 2005 Martin G?hmann)
-// - Removed unused local variables. (Sep 9th 2005 Martin G?hmann)
-// - Removed some unreachable code. (Sep 9th 2005 Martin G?hmann)
+// - Removed references to CivilisationDB. (Aug 20th 2005 Martin Gühmann)
+// - Removed references to old SpriteStateDBs. (Aug 29th 2005 Martin Gühmann)
+// - Initialized local variables. (Sep 9th 2005 Martin Gühmann)
+// - Removed unused local variables. (Sep 9th 2005 Martin Gühmann)
+// - Removed some unreachable code. (Sep 9th 2005 Martin Gühmann)
 // - Moved debug tools handling to c3.h, so that the leak reporter doesn't
-//   report leaks that aren't leaks. (Oct 3rd 2005 Matzin G?hmann)
+//   report leaks that aren't leaks. (Oct 3rd 2005 Matzin Gühmann)
 // - Added version to crash.txt
-// - USE_LOGGING now works in a final version. (30-Jun-2008 Martin G?hmann)
+// - USE_LOGGING now works in a final version. (30-Jun-2008 Martin Gühmann)
 // - The log files are now only opened and closed once, this speeds up
-//   debugging significantly. (09-Aug-2008 Martin G?hmann)
+//   debugging significantly. (09-Aug-2008 Martin Gühmann)
 //
 //----------------------------------------------------------------------------
 //
@@ -917,7 +917,7 @@ int sprite_Initialize(void)
 
 	spritegrouplist_Initialize();
 
-	g_director = new Director();
+	g_director = Director::CreateDirector();
 
 	return 0;
 }
