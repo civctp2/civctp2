@@ -840,17 +840,9 @@ void UnitActor::Process(void)
 
 			GetNextAction();
 		}
-
-		g_director->HandleNextAction();
 	}
 	else
 	{
-
-
-
-
-
-
 		if (m_curAction->GetPath()!=NULL)
 		{
 

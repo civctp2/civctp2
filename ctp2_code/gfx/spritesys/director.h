@@ -152,9 +152,7 @@ public:
 	virtual void DecrementPendingGameActions() = 0;
 
 	// TiledMap
-	virtual void DrawActiveUnits(RECT *paintRect, sint32 layer) = 0;
-	virtual void DrawActiveEffects(RECT *paintRect, sint32 layer) = 0;
-	virtual void DrawTradeRouteAnimations(RECT *paintRect, sint32 layer) = 0;
+	virtual void Draw(RECT *paintRect, sint32 layer) = 0;
 
 	virtual void OffsetActiveUnits(sint32 deltaX, sint32 deltaY) = 0;
 	virtual void OffsetActiveEffects(sint32 deltaX, sint32 deltaY) = 0;
@@ -173,7 +171,6 @@ public:
 	virtual void ActionFinished(Sequence *seq) = 0;
 
 	// UnitActor
-	virtual void HandleNextAction() = 0;
 	#ifdef _DEBUG
 		virtual void DumpSequence(Sequence *seq) = 0;
 	#endif
