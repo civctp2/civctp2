@@ -93,6 +93,8 @@
 #include "wondermoviewin.h"
 #include "World.h"                  // g_theWorld
 
+#include <set>
+
 extern SpriteGroupList	*g_unitSpriteGroupList;
 extern Background		*g_background;
 extern C3UI				*g_c3ui;
@@ -231,6 +233,7 @@ public:
 
 	virtual void Process();
 	virtual void PauseDirector(BOOL pause);
+	virtual void Draw(RECT *paintRect, sint32 layer);
 
 	virtual void NextPlayer();
 
@@ -324,10 +327,6 @@ public:
 	virtual void DecrementPendingGameActions();
 
 	// TiledMap
-	virtual void DrawActiveUnits(RECT *paintRect, sint32 layer);
-	virtual void DrawActiveEffects(RECT *paintRect, sint32 layer);
-	virtual void DrawTradeRouteAnimations(RECT *paintRect, sint32 layer);
-
 	virtual void OffsetActiveUnits(sint32 deltaX, sint32 deltaY);
 	virtual void OffsetActiveEffects(sint32 deltaX, sint32 deltaY);
 	virtual void OffsetTradeRouteAnimations(sint32 deltaX, sint32 deltaY);
@@ -345,7 +344,6 @@ public:
 	virtual void ActionFinished(Sequence *seq);
 
 	// UnitActor
-	virtual void HandleNextAction();
 	#ifdef _DEBUG
 		virtual void DumpSequence(Sequence *seq);
 	#endif
@@ -360,8 +358,16 @@ public:
 	void		ActiveEffectAdd(EffectActor *effectActor);
 
 private:
+	void	HandleNextAction();
 	void	HandleFinishedItem(DQItem *item);
 	void	SaveFinishedItem(DQItem *item);
+
+	void	DrawStandbyUnits(RECT *paintRect, sint32 layer);
+	void	DrawActiveUnits(RECT *paintRect, sint32 layer);
+	void	DrawActiveEffects(RECT *paintRect, sint32 layer);
+	void	DrawTradeRouteAnimations(RECT *paintRect, sint32 layer);
+
+	void	DrawUnitActor(RECT *paintRect, UnitActor *actor, bool standby);
 
 	uint32	KillAllActiveEffects();
 
@@ -384,7 +390,7 @@ private:
 	bool	IsProcessing();
 	void	ActiveEffectRemove(EffectActor *effectActor);
 
-	static DirectorImpl         *m_instance;
+	static DirectorImpl		*m_instance;
 	tech_WLList<UnitActor *>	*m_activeUnitList;
 
 	tech_WLList<EffectActor *>	*m_activeEffectList;
@@ -3080,6 +3086,14 @@ void DirectorImpl::NextPlayer()
 	}
 }
 
+void DirectorImpl::Draw(RECT *paintRect, sint32 layer)
+{
+	DrawTradeRouteAnimations(paintRect, layer);
+	DrawStandbyUnits(paintRect, layer);
+	DrawActiveUnits(paintRect, layer);
+	DrawActiveEffects(paintRect, layer);
+}
+
 void DirectorImpl::DrawActiveUnits(RECT *paintRect, sint32 layer)
 {
 	m_nextPlayer = FALSE;
@@ -3089,22 +3103,58 @@ void DirectorImpl::DrawActiveUnits(RECT *paintRect, sint32 layer)
 
 	for (size_t i = 0; i < numToProcess; i++)
 	{
-		UnitActor *     actor = m_activeUnitList->GetNext(pos);
+		UnitActor* actor = m_activeUnitList->GetNext(pos);
+		DrawUnitActor(paintRect, actor, false);
+	}
+}
 
-		if (actor)
-		{
-			MapPoint    pos = actor->GetPos();
+void DirectorImpl::DrawStandbyUnits(RECT *paintRect, sint32 layer)
+{
+	std::set<UnitActor *> uniqueStandbyActors;
 
-			sint32	    tileX;
-			maputils_MapX2TileX(pos.x, pos.y, &tileX);
-
-			if (maputils_TilePointInTileRect(tileX, pos.y, paintRect))
-			{
-				if (actor->GetUnitVisibility() & (1 << g_selected_item->GetVisiblePlayer()))
-				{
-					g_tiledMap->PaintUnitActor(actor);
+	PointerList<DQItem>::Walker walk(m_itemQueue);
+	for (; walk.IsValid(); walk.Next()) {
+		switch (walk.GetObj()->m_type) {
+			case DQITEM_MOVE:
+			case DQITEM_TELEPORT: {
+				UnitActor *actor = ((DQActionMove *) (walk.GetObj()->m_action))->move_actor;
+				if (!actor->IsActive()) {
+					uniqueStandbyActors.insert(actor);
 				}
+				break;
 			}
+			default:
+				break;
+		}
+	}
+
+	for (std::set<UnitActor*>::iterator it=uniqueStandbyActors.begin(); it != uniqueStandbyActors.end(); ++it) {
+		DrawUnitActor(paintRect, *it, true);
+	}
+}
+
+void DirectorImpl::DrawUnitActor(RECT *paintRect, UnitActor *actor, bool standby)
+{
+	if (!actor)
+		return;
+
+	if (actor->GetUnitVisibility() & (1 << g_selected_item->GetVisiblePlayer())) {
+		MapPoint pos = actor->GetPos();
+		// Do not draw standby units over cities
+		if (standby && g_theWorld->IsCity(pos)) {
+			return;
+		}
+
+		sint32	tileX;
+		maputils_MapX2TileX(pos.x, pos.y, &tileX);
+
+		if (maputils_TilePointInTileRect(tileX, pos.y, paintRect))
+		{
+			if (standby) {
+				actor->PositionActor(pos);
+				actor->Process();
+			}
+			g_tiledMap->PaintUnitActor(actor);
 		}
 	}
 }

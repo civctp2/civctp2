@@ -3076,9 +3076,7 @@ sint32 TiledMap::RepaintSprites(aui_Surface *surf, RECT *paintRect, bool scrolli
 	g_screenManager->LockSurface(surf);
 
 	RepaintLayerSprites(paintRect, 0);
-	g_director->DrawTradeRouteAnimations(paintRect, 0);
-	g_director->DrawActiveUnits(paintRect, 0);
-	g_director->DrawActiveEffects(paintRect, 0);
+	g_director->Draw(paintRect, 0);
 
 	if (g_spriteEditWindow)
 		g_spriteEditWindow->DrawSprite();
