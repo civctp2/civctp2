@@ -177,6 +177,8 @@ public:
 
 #if defined(__AUI_USE_DIRECTX__)
 	LPCRITICAL_SECTION LPCS( void ) const { return m_lpcs; }
+
+	BOOL ShouldTerminateThread( void );
 #endif // __AUI_USE_DIRECTX__
 
 	uint32 GetFlags(void) { return m_flags;}
@@ -211,8 +213,6 @@ protected:
 	AUI_ERRCODE CreatePrivateBuffers( void );
 	void DestroyPrivateBuffers( void );
 	AUI_ERRCODE Erase( void );
-
-	BOOL ShouldTerminateThread( void );
 
 	aui_Surface		*m_privateMix;
 	aui_Surface		*m_pickup;
