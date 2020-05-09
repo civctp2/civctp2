@@ -2341,7 +2341,6 @@ sint32 CivApp::ProcessUI(const uint32 target_milliseconds, uint32 &used_millisec
 				{
 					if (g_director)
 					{
-						g_director->GarbageCollectItems();
 						g_director->Process();
 					}
 				}
