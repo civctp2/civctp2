@@ -3051,9 +3051,7 @@ sint32 TiledMap::OffsetSprites(RECT *paintRect, sint32 deltaX, sint32 deltaY)
 {
 	OffsetLayerSprites(paintRect, deltaX, deltaY, 0);
 
-	g_director->OffsetActiveUnits(-deltaX, -deltaY);
-	g_director->OffsetActiveEffects(-deltaX, -deltaY);
-	g_director->OffsetTradeRouteAnimations(-deltaX, -deltaY);
+	g_director->OffsetActors(-deltaX, -deltaY);
 
 	return 0;
 }

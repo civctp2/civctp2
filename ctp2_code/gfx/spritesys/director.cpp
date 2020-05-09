@@ -192,11 +192,11 @@ public:
 
 class Sequence {
 public:
-	Sequence(sint32 seqID = 0)
+	Sequence(sint32 seqID, DQItem *item)
 			:
 			m_sequenceID    (seqID),
 			m_refCount      (0),
-			m_item          (NULL)
+			m_item          (item)
 	{
 		m_addedToActiveList[SEQ_ACTOR_PRIMARY]      = FALSE;
 		m_addedToActiveList[SEQ_ACTOR_SECONDARY]    = FALSE;
@@ -209,17 +209,16 @@ public:
 	void	Release(void) { m_refCount--; }
 	sint32	GetRefCount(void) { return m_refCount; }
 
-	void	SetItem(DQItem *item) { m_item = item; }
 	DQItem	*GetItem(void) { return m_item; }
 
 	void	SetAddedToActiveList(SEQ_ACTOR which, BOOL added) { m_addedToActiveList[which] = added; }
 	BOOL	GetAddedToActiveList(SEQ_ACTOR which) { return m_addedToActiveList[which]; }
 
 private:
-	sint32		m_sequenceID;
-	sint32		m_refCount;
-	DQItem *    m_item;
-	BOOL		m_addedToActiveList[SEQ_ACTOR_MAX];
+	sint32	m_sequenceID;
+	sint32	m_refCount;
+	DQItem	*m_item;
+	BOOL	m_addedToActiveList[SEQ_ACTOR_MAX];
 };
 
 class DirectorImpl : public Director {
@@ -234,10 +233,10 @@ public:
 	virtual void Process();
 	virtual void PauseDirector(BOOL pause);
 	virtual void Draw(RECT *paintRect, sint32 layer);
+	virtual void OffsetActors(sint32 deltaX, sint32 deltaY);
 
 	virtual void NextPlayer();
 
-	virtual void GarbageCollectItems();
 	virtual void CatchUp();
 	virtual bool CaughtUp();
 
@@ -327,10 +326,6 @@ public:
 	virtual void DecrementPendingGameActions();
 
 	// TiledMap
-	virtual void OffsetActiveUnits(sint32 deltaX, sint32 deltaY);
-	virtual void OffsetActiveEffects(sint32 deltaX, sint32 deltaY);
-	virtual void OffsetTradeRouteAnimations(sint32 deltaX, sint32 deltaY);
-
 	virtual UnitActor *GetClickedActiveUnit(aui_MouseEvent *mouse);
 
 	// TradePool
@@ -352,15 +347,18 @@ public:
 	virtual void ActiveUnitRemove(UnitActor *unitActor);
 
 	// Used locally
-	Sequence	*NewSequence();
+	Sequence	*NewSequence(DQItem* item);
 	bool 		TileIsVisibleToPlayer(MapPoint &pos);
 	void		ActiveUnitAdd(UnitActor *unitActor);
 	void		ActiveEffectAdd(EffectActor *effectActor);
+	void		CenterMap(const MapPoint &pos);
 
 private:
+	bool    CanStartNextAction() { return m_itemQueue->GetCount() > 0 && GetActionFinished(); }
 	void	HandleNextAction();
 	void	HandleFinishedItem(DQItem *item);
 	void	SaveFinishedItem(DQItem *item);
+	void	GarbageCollectItems();
 
 	void	DrawStandbyUnits(RECT *paintRect, sint32 layer);
 	void	DrawActiveUnits(RECT *paintRect, sint32 layer);
@@ -369,17 +367,24 @@ private:
 
 	void	DrawUnitActor(RECT *paintRect, UnitActor *actor, bool standby);
 
-	uint32	KillAllActiveEffects();
+	void	OffsetStandbyUnits(sint32 deltaX, sint32 deltaY);
+	void	OffsetActiveUnits(sint32 deltaX, sint32 deltaY);
+	void	OffsetActiveEffects(sint32 deltaX, sint32 deltaY);
+	void	OffsetTradeRouteAnimations(sint32 deltaX, sint32 deltaY);
 
+	void	ProcessStandbyUnits();
 	uint32	ProcessActiveUnits();
 	uint32	ProcessActiveEffects();
 	void	ProcessTradeRouteAnimations();
 
 	void	Kill(UnitActor *actor);
 	void	FastKill(EffectActor *actor);
+	uint32	KillAllActiveEffects();
 
 	bool	GetActionFinished() { return m_actionFinished; }
 	void	SetActionFinished(bool finished = true) { m_actionFinished = finished; }
+
+	void	UpdateStandbyUnits();
 
 #ifdef _DEBUG
 	void	DumpItem(DQItem *item);
@@ -420,6 +425,7 @@ private:
 	PointerList<DQItem>			*m_savedItems;
 	PointerList<DQItem>			*m_itemQueue;
 
+	std::set<UnitActor *>		m_standbyActors;
 	PointerList<DQItem>::Walker	*m_itemWalker;
 
 	sint32						m_pendingGameActions;
@@ -493,11 +499,7 @@ void dh_move(DQAction *itemAction, Sequence *seq, DHEXECUTE executeType)
 		if (g_selected_item->GetVisiblePlayer()!= theActor->GetPlayerNum()
 			&& !g_tiledMap->TileIsVisible(theActor->GetPos().x, theActor->GetPos().y))
 		{
-			g_radarMap->CenterMap(theActor->GetPos());
-			g_tiledMap->Refresh();
-			g_tiledMap->InvalidateMap();
-			g_tiledMap->InvalidateMix();
-			background_draw_handler(g_background);
+			DirectorImpl::Instance()->CenterMap(theActor->GetPos());
 		}
 	}
 	else
@@ -1247,14 +1249,7 @@ void dh_centerMap(DQAction *itemAction, Sequence *seq, DHEXECUTE executeType)
 	DQActionCenterMap	*action = (DQActionCenterMap *)itemAction;
 
 	if(!g_selected_item->GetIsPathing()) {
-
-		g_radarMap->CenterMap(action->centerMap_pos);
-
-		g_tiledMap->Refresh();
-		g_tiledMap->InvalidateMap();
-		g_tiledMap->InvalidateMix();
-
-		background_draw_handler(g_background);
+		DirectorImpl::Instance()->CenterMap(action->centerMap_pos);
 	}
 
 	DirectorImpl::Instance()->ActionFinished(seq);
@@ -1546,7 +1541,8 @@ void dh_terminateFaceoff(DQAction *itemAction, Sequence *seq, DHEXECUTE executeT
 		facerOffer->SetHealthPercent(-1.0);
 		facerOffer->SetTempStackSize(0);
 
-		DirectorImpl::Instance()->ActiveUnitRemove(facerOffer);
+		// This is commented out as currently AddFaceoff is not called and thereby ActiveUnitAdd is not called.
+		// DirectorImpl::Instance()->ActiveUnitRemove(facerOffer);
 	}
 
 	DirectorImpl::Instance()->ActionFinished(seq);
@@ -1780,8 +1776,7 @@ DQItem::DQItem(DQITEM_TYPE type, DQAction *action, DQHandler *handler)
 	m_handler           (handler),
 	m_sequence          (NULL)
 {
-	m_sequence = DirectorImpl::Instance()->NewSequence();
-	m_sequence->SetItem(this);
+	m_sequence = DirectorImpl::Instance()->NewSequence(this);
 
 	if (g_turn)
 	{
@@ -1948,6 +1943,28 @@ void DirectorImpl::UpdateTimingClock(void)
 	m_masterCurTime += elapsed;
 }
 
+void DirectorImpl::UpdateStandbyUnits()
+{
+	if (!m_standbyActors.empty() || m_itemQueue->IsEmpty())
+		return;
+
+	PointerList<DQItem>::Walker walk(m_itemQueue);
+	for (; walk.IsValid(); walk.Next()) {
+		switch (walk.GetObj()->m_type) {
+			case DQITEM_MOVE:
+			case DQITEM_TELEPORT: {
+				UnitActor *actor = ((DQActionMove *) (walk.GetObj()->m_action))->move_actor;
+				if (!actor->IsActive()) {
+					m_standbyActors.insert(actor);
+				}
+				break;
+			}
+			default:
+				break;
+		}
+	}
+}
+
 void DirectorImpl::Process(void)
 {
 	UpdateTimingClock();
@@ -1956,12 +1973,14 @@ void DirectorImpl::Process(void)
 
 	if (GetTickCount() > nextTime)
 	{
-		HandleNextAction();
-
+		ProcessStandbyUnits();
 		ProcessActiveUnits();
 		ProcessActiveEffects();
-
 		ProcessTradeRouteAnimations();
+
+		HandleNextAction();
+		GarbageCollectItems();
+
 		if(g_tiledMap)
 			g_tiledMap->ProcessLayerSprites(g_tiledMap->GetMapViewRect(), 0);
 
@@ -2368,7 +2387,7 @@ void DirectorImpl::HandleNextAction(void)
 {
 	if (m_paused) return;
 
-	while (m_itemQueue->GetCount() > 0 && GetActionFinished())
+	while (CanStartNextAction())
 	{
 		DQItem *    item        = m_itemQueue->RemoveHead();
 
@@ -2473,9 +2492,9 @@ void DirectorImpl::ActionFinished(Sequence *seq)
 	}
 }
 
-Sequence *DirectorImpl::NewSequence(void)
+Sequence *DirectorImpl::NewSequence(DQItem *item)
 {
-	return new Sequence(++m_curSequenceID);
+	return new Sequence(++m_curSequenceID, item);
 }
 
 void DirectorImpl::HandleFinishedItem(DQItem *item)
@@ -2695,6 +2714,16 @@ bool DirectorImpl::CaughtUp(void)
 	return !m_itemQueue || (m_itemQueue->GetCount() == 0);
 }
 
+void DirectorImpl::CenterMap(const MapPoint &pos)
+{
+	g_radarMap->CenterMap(pos);
+	ProcessStandbyUnits();
+	g_tiledMap->Refresh();
+	g_tiledMap->InvalidateMap();
+	g_tiledMap->InvalidateMix();
+	background_draw_handler(g_background);
+}
+
 bool DirectorImpl::TileIsVisibleToPlayer(MapPoint &pos)
 {
 #if defined(_PLAYTEST)
@@ -2838,6 +2867,17 @@ BOOL DirectorImpl::IsActive(UnitActor *unitActor)
 	}
 }
 #endif
+
+void DirectorImpl::ProcessStandbyUnits()
+{
+	m_standbyActors.clear();
+	UpdateStandbyUnits();
+
+	for (std::set<UnitActor*>::iterator it=m_standbyActors.begin(); it != m_standbyActors.end(); ++it) {
+		(*it)->Process();
+	}
+}
+
 uint32 DirectorImpl::ProcessActiveUnits(void)
 {
 	if (m_activeUnitList->IsEmpty()) return 0;
@@ -2925,6 +2965,24 @@ void DirectorImpl::ProcessTradeRouteAnimations(void)
 		{
 			actor->Process();
 		}
+	}
+}
+
+void DirectorImpl::OffsetActors(sint32 deltaX, sint32 deltaY)
+{
+	OffsetStandbyUnits(-deltaX, -deltaY);
+	OffsetActiveUnits(-deltaX, -deltaY);
+	OffsetActiveEffects(-deltaX, -deltaY);
+	OffsetTradeRouteAnimations(-deltaX, -deltaY);
+}
+
+void DirectorImpl::OffsetStandbyUnits(sint32 deltaX, sint32 deltaY)
+{
+	UpdateStandbyUnits();
+	for (std::set<UnitActor*>::iterator it=m_standbyActors.begin(); it != m_standbyActors.end(); ++it) {
+		UnitActor *actor = *it;
+		actor->SetX(actor->GetX() + deltaX);
+		actor->SetY(actor->GetY() + deltaY);
 	}
 }
 
@@ -3110,25 +3168,8 @@ void DirectorImpl::DrawActiveUnits(RECT *paintRect, sint32 layer)
 
 void DirectorImpl::DrawStandbyUnits(RECT *paintRect, sint32 layer)
 {
-	std::set<UnitActor *> uniqueStandbyActors;
-
-	PointerList<DQItem>::Walker walk(m_itemQueue);
-	for (; walk.IsValid(); walk.Next()) {
-		switch (walk.GetObj()->m_type) {
-			case DQITEM_MOVE:
-			case DQITEM_TELEPORT: {
-				UnitActor *actor = ((DQActionMove *) (walk.GetObj()->m_action))->move_actor;
-				if (!actor->IsActive()) {
-					uniqueStandbyActors.insert(actor);
-				}
-				break;
-			}
-			default:
-				break;
-		}
-	}
-
-	for (std::set<UnitActor*>::iterator it=uniqueStandbyActors.begin(); it != uniqueStandbyActors.end(); ++it) {
+	UpdateStandbyUnits();
+	for (std::set<UnitActor*>::iterator it=m_standbyActors.begin(); it != m_standbyActors.end(); ++it) {
 		DrawUnitActor(paintRect, *it, true);
 	}
 }
@@ -3150,10 +3191,6 @@ void DirectorImpl::DrawUnitActor(RECT *paintRect, UnitActor *actor, bool standby
 
 		if (maputils_TilePointInTileRect(tileX, pos.y, paintRect))
 		{
-			if (standby) {
-				actor->PositionActor(pos);
-				actor->Process();
-			}
 			g_tiledMap->PaintUnitActor(actor);
 		}
 	}

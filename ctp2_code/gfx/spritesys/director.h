@@ -59,10 +59,11 @@ public:
 
 	virtual void Process() = 0;
 	virtual void PauseDirector(BOOL pause) = 0;
+	virtual void Draw(RECT *paintRect, sint32 layer) = 0;
+	virtual void OffsetActors(sint32 deltaX, sint32 deltaY) = 0;
 
 	virtual void NextPlayer() = 0;
 
-	virtual void GarbageCollectItems() = 0;
 	virtual void CatchUp() = 0;
 	virtual bool CaughtUp() = 0;
 
@@ -127,7 +128,8 @@ public:
 	virtual void AddPlayWonderMovie(sint32 which) = 0;
 	virtual void AddPlayVictoryMovie(GAME_OVER reason, BOOL previouslyWon, BOOL previouslyLost) = 0;
 	virtual void AddMessage(const Message &message) = 0;
-	virtual void AddFaceoff(Unit &attacker, Unit &defender) = 0;
+	// Please check the implementation of 'terminate faceoff' (especially ActiveUnitRemove) when this is activated
+	// virtual void AddFaceoff(Unit &attacker, Unit &defender) = 0;
 	virtual void AddTerminateFaceoff(Unit &faceroffer) = 0;
 	virtual void AddTerminateSound(Unit &unit) = 0;
 	virtual void AddInvokeThroneRoom() = 0;
@@ -152,12 +154,6 @@ public:
 	virtual void DecrementPendingGameActions() = 0;
 
 	// TiledMap
-	virtual void Draw(RECT *paintRect, sint32 layer) = 0;
-
-	virtual void OffsetActiveUnits(sint32 deltaX, sint32 deltaY) = 0;
-	virtual void OffsetActiveEffects(sint32 deltaX, sint32 deltaY) = 0;
-	virtual void OffsetTradeRouteAnimations(sint32 deltaX, sint32 deltaY) = 0;
-
 	virtual UnitActor *GetClickedActiveUnit(aui_MouseEvent *mouse) = 0;
 
 	// TradePool
