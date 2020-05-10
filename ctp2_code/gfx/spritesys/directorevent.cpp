@@ -117,7 +117,7 @@ STDEHANDLER(DirectorMoveUnitsEvent)
 								numRest, restOfStack);
 	} else {
 		g_director->AddMove(top_src, from, newPos, numRevealed, revealedActors,
-							numRest, restOfStack, FALSE, top_src.GetMoveSoundID());
+							numRest, restOfStack, top_src.GetMoveSoundID());
 
 	}
 

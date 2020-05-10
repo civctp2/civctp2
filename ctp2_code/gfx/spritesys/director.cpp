@@ -252,7 +252,6 @@ public:
 		UnitActor **        revealedActors,
 		sint32              numRest,
 		UnitActor **        restOfStack,
-		bool                isTransported,
 		sint32              soundID
 	);
 
@@ -3309,7 +3308,6 @@ void DirectorImpl::AddMove (
 		UnitActor **        revealedActors,
 		sint32              numRest,
 		UnitActor **        restOfStack,
-		bool                isTransported,
 		sint32              soundID
 	)
 {
@@ -3327,15 +3325,6 @@ void DirectorImpl::AddMove (
 	}
 
 	actor->SetHiddenUnderStack(FALSE);
-
-	if (actor->GetIsTransported() == FALSE && isTransported)
-	{
-		actor->SetIsTransported(k_TRANSPORTREMOVEONLY);
-	}
-	else if (actor->GetIsTransported() == k_TRANSPORTREMOVEONLY && !isTransported)
-	{
-		actor->SetIsTransported(k_TRANSPORTADDONLY);
-	}
 
 	DQActionMove		*action = new DQActionMove;
 	DQItem				*item = new DQItem(DQITEM_MOVE, action, dh_move);

@@ -158,7 +158,6 @@ UnitActor::UnitActor(SpriteState *ss, Unit id, sint32 unitType, const MapPoint &
     m_numOActors                (0),
     m_hidden                    (false),
     m_hiddenUnderStack          (false),
-    m_isTransported             (false),
 //	sint32				m_holdingCurAnimPos[UNITACTION_MAX];
 //	sint32				m_holdingCurAnimDelayEnd[UNITACTION_MAX];
 //	sint32				m_holdingCurAnimElapsed[UNITACTION_MAX];
@@ -243,7 +242,6 @@ UnitActor::UnitActor(CivArchive &archive)
     m_numOActors                (0),
     m_hidden                    (false),
     m_hiddenUnderStack          (false),
-    m_isTransported             (false),
 //	sint32				m_holdingCurAnimPos[UNITACTION_MAX];
 //	sint32				m_holdingCurAnimDelayEnd[UNITACTION_MAX];
 //	sint32				m_holdingCurAnimElapsed[UNITACTION_MAX];
@@ -334,7 +332,6 @@ void UnitActor::Initialize(void)
 	m_savedRevealedActors = m_revealedActors = NULL;
 	m_moveActors = NULL;
 	m_hiddenUnderStack = FALSE;
-	m_isTransported = FALSE;
 
 	m_hidden = FALSE;
 
@@ -724,15 +721,6 @@ void UnitActor::GetNextAction(bool isVisible)
 
 	if(m_playerNum == g_selected_item->GetVisiblePlayer() && m_curAction->GetActionType() == UNITACTION_MOVE)
 	{
-
-		if(!m_curAction->GetIsSpecialActionType())
-		{
-			if(m_isTransported == k_TRANSPORTADDONLY)
-			{
-
-				m_isTransported = FALSE;
-			}
-		}
 
 		if(m_savedRevealedActors != NULL)
 		{
@@ -2470,20 +2458,13 @@ bool UnitActor::ActionMove(Action *actionObj)
 
 	AddAction(actionObj);
 
-	if (GetIsTransported() == k_TRANSPORTREMOVEONLY)
-    {
-		TerminateLoopingSound(SOUNDTYPE_SFX);
-    }
-	else
-	{
-	    sint32 const visiblePlayer = g_selected_item->GetVisiblePlayer();
+	sint32 const visiblePlayer = g_selected_item->GetVisiblePlayer();
 
-		if ((visiblePlayer == GetPlayerNum()) ||
-			(GetUnitVisibility() & (1 << visiblePlayer)))
-        {
-			AddLoopingSound(SOUNDTYPE_SFX,actionObj->GetSoundEffect());
-        }
-   	}
+	if ((visiblePlayer == GetPlayerNum()) || 
+		(GetUnitVisibility() & (1 << visiblePlayer)))
+	{
+		AddLoopingSound(SOUNDTYPE_SFX,actionObj->GetSoundEffect());
+	}
 
 	return true;
 }

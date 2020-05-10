@@ -2921,7 +2921,7 @@ void ArmyData::FixActors(MapPoint &opos, const MapPoint &npos, UnitDynamicArray 
 
 	MapPoint newPos(npos);
 	g_director->AddMove(top_src, opos, newPos, numActors, revealedActors,
-						numRest, restOfStack, false, top_src.GetMoveSoundID());
+						numRest, restOfStack, top_src.GetMoveSoundID());
 
 }
 
@@ -7779,7 +7779,7 @@ void ArmyData::MoveActors(const MapPoint &pos,
 								numRest, restOfStack);
 	} else {
 		g_director->AddMove(top_src, m_pos, newPos, numRevealed, revealedActors,
-							numRest, restOfStack, false, top_src.GetMoveSoundID());
+							numRest, restOfStack, top_src.GetMoveSoundID());
 
 	}
 
@@ -8236,7 +8236,7 @@ bool ArmyData::MoveIntoTransport(const MapPoint &pos, CellUnitList &transports)
 
 	MapPoint directorDoesntLikeConsts = pos;
 	g_director->AddMove(top_src, m_pos, directorDoesntLikeConsts, numRevealed, revealedActors,
-							numRest, restOfStack, true, top_src.GetMoveSoundID());
+							numRest, restOfStack, top_src.GetMoveSoundID());
 
 	UpdateZOCForRemoval();
 
