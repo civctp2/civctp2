@@ -44,10 +44,6 @@ class Battle;
 
 class Sequence;
 
-// UnitActor
-#define k_TRANSPORTREMOVEONLY -1
-#define k_TRANSPORTADDONLY -2
-
 class Director
 {
 public:
@@ -79,7 +75,6 @@ public:
         UnitActor **        revealedActors,
         sint32              numRest,
         UnitActor **        restOfStack,
-        bool                isTransported,
         sint32              soundID
     ) = 0;
 

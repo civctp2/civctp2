@@ -191,9 +191,6 @@ public:
 	BOOL			HiddenUnderStack(void) const { return m_hiddenUnderStack; }
 	void			SetHiddenUnderStack(BOOL val) { m_hiddenUnderStack = val; }
 
-	void			SetIsTransported(sint32 val) { m_isTransported = val; }
-	sint32			GetIsTransported() const { return m_isTransported; }
-
 	void			GetBoundingRect(RECT *rect) const;
 
 	sint32			GetHoldingCurAnimPos(UNITACTION action) const { return m_holdingCurAnimPos[action]; }
@@ -296,7 +293,6 @@ protected:
 	sint32				m_numOActors;
 	BOOL				m_hidden;
 	BOOL				m_hiddenUnderStack;
-	sint32				m_isTransported;
 
 	sint32				m_holdingCurAnimPos[UNITACTION_MAX];
 	sint32				m_holdingCurAnimDelayEnd[UNITACTION_MAX];
