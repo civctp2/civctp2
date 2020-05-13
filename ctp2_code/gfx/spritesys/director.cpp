@@ -56,6 +56,7 @@
 #include "colorset.h"
 #include "cursormanager.h"
 #include "debugmemory.h"
+#include "directoractions.h"
 #include "dynarr.h"
 #include "EffectActor.h"
 #include "GameEventManager.h"
@@ -88,6 +89,7 @@
 #include "UnitActor.h"
 #include "UnitData.h"
 #include "UnitDynArr.h"
+#include "UnitPool.h"
 #include "UnitRecord.h"
 #include "victorymoviewin.h"
 #include "wondermoviewin.h"
@@ -268,9 +270,7 @@ public:
 	virtual void AddAttack(Unit attacker, Unit attacked);
 	virtual void AddAttackPos(Unit attacker, MapPoint const & pos);
 	virtual void AddSpecialAttack(Unit attacker, Unit attacked, SPECATTACK attack);
-	virtual void AddWinnerLoser(Unit victor, Unit dead);
-	virtual void AddDeath(Unit dead);
-	virtual void AddDeathWithSound(Unit dead, sint32 soundID);
+	virtual void AddDeath(UnitActor *dead, const MapPoint &deadPos, sint32 deadSoundID);
 	virtual void AddProjectileAttack(
 		Unit shooting,
 		Unit target,
@@ -283,7 +283,7 @@ public:
 	virtual void AddHide(Unit hider);
 	virtual void AddShow(Unit hider);
 	virtual void AddWork(Unit worker);
-	virtual void AddFastKill(Unit dead);
+	virtual void AddFastKill(UnitActor *dead);
 	virtual void AddRemoveVision(const MapPoint &pos, double range);
 	virtual void AddAddVision(const MapPoint &pos, double range);
 	virtual void AddSetVisibility(UnitActor *actor, uint32 visibility);
@@ -376,7 +376,6 @@ private:
 	uint32	ProcessActiveEffects();
 	void	ProcessTradeRouteAnimations();
 
-	void	Kill(UnitActor *actor);
 	void	FastKill(EffectActor *actor);
 	uint32	KillAllActiveEffects();
 
@@ -447,6 +446,11 @@ void dh_move(DQAction *itemAction, Sequence *seq, DHEXECUTE executeType)
 
 	if (theActor==NULL)
 	{
+		DirectorImpl::Instance()->ActionFinished(seq);
+		return;
+	}
+
+	if (g_theUnitPool && !g_theUnitPool->IsValid(theActor->GetUnitID())) {
 		DirectorImpl::Instance()->ActionFinished(seq);
 		return;
 	}
@@ -827,75 +831,38 @@ void dh_specialAttack(DQAction *itemAction, Sequence *seq, DHEXECUTE executeType
 
 void dh_death(DQAction *itemAction, Sequence *seq, DHEXECUTE executeType)
 {
-	DQActionDeath * action              = (DQActionDeath *)itemAction;
-	UnitActor *     theDead             = action->death_dead;
-	UnitActor *     theVictor           = action->death_victor;
-	Anim *          deathAnim           = NULL;
-	Anim *          victorAnim          = NULL;
-	sint32		    deathActionType     = UNITACTION_NONE;
-	sint32          victorActionType    = UNITACTION_NONE;
+	DQActionDeath * action			= (DQActionDeath *)itemAction;
+	UnitActor *     dead			= action->dead;
+	Anim *          deathAnim		= NULL;
+	sint32		    deathActionType	= UNITACTION_NONE;
 
-	if (theDead != NULL && !theDead->GetNeedsToDie())
+	Assert(dead);
+	if (!dead->GetNeedsToDie())
 	{
-		theDead->SetNeedsToDie(TRUE);
+		dead->SetNeedsToDie(TRUE);
 
-		if(theDead->HasDeath())
+		if(dead->HasDeath())
 		{
-			if (theDead->GetLoadType() != LOADTYPE_FULL)
-				theDead->FullLoad(UNITACTION_VICTORY);
+			if (dead->GetLoadType() != LOADTYPE_FULL)
+				dead->FullLoad(UNITACTION_VICTORY);
 
-			deathAnim = theDead->CreateAnim((UNITACTION)deathActionType); // deathAnim must be deleted
+			deathActionType = UNITACTION_VICTORY;
+			deathAnim = dead->CreateAnim((UNITACTION)deathActionType); // deathAnim must be deleted
 
-			if(deathAnim)
-			{
-				deathActionType = UNITACTION_VICTORY;
-			}
-			else
+			if(!deathAnim)
 			{
 				deathActionType = UNITACTION_FAKE_DEATH;
-				deathAnim = theDead->MakeFakeDeath();
+				deathAnim = dead->MakeFakeDeath();
 			}
 		}
 		else
 		{
 			deathActionType = UNITACTION_FAKE_DEATH;
-			deathAnim = theDead->MakeFakeDeath();
+			deathAnim = dead->MakeFakeDeath();
 		}
-	}
-	else
-	{
-		theDead = NULL;
-	}
 
-	if(theVictor != NULL && !theVictor->GetNeedsToDie())
-	{
-		DirectorImpl::Instance()->ActiveUnitRemove(theVictor);
-
-		theVictor->SetNeedsToVictor(TRUE);
-
-		if(theVictor->HasDeath())
-		{
-		}
-		else
-		{
-			if (theVictor->GetLoadType() != LOADTYPE_FULL) {
-				theVictor->FullLoad(UNITACTION_VICTORY);
-			}
-
-			victorActionType = UNITACTION_VICTORY;
-
-			victorAnim = theVictor->CreateAnim((UNITACTION)victorActionType);
-			if (victorAnim == NULL)
-			{
-				theVictor = NULL;
-			}
-		}
-	}
-
-	if(theDead != NULL )
-	{
-		theDead->SetHealthPercent(-1.0);
-		theDead->SetTempStackSize(0);
+		dead->SetHealthPercent(-1.0);
+		dead->SetTempStackSize(0);
 
 		Action *deadActionObj = new Action(	(UNITACTION)deathActionType, ACTIONEND_ANIMEND);
 		Assert(deadActionObj != NULL);
@@ -903,109 +870,49 @@ void dh_death(DQAction *itemAction, Sequence *seq, DHEXECUTE executeType)
 		{
 			c3errors_ErrorDialog("Director", "Internal Failure to create death action");
 			delete deathAnim;
-			delete victorAnim;
 			return;
 		}
 
 		deadActionObj->SetSequence(seq);
 		seq->AddRef();
 
-		deadActionObj->SetStartMapPoint(action->dead_Pos);
-		deadActionObj->SetEndMapPoint(action->dead_Pos);
+		deadActionObj->SetStartMapPoint(action->dead_pos);
+		deadActionObj->SetEndMapPoint(action->dead_pos);
 
 		deadActionObj->SetAnim(deathAnim);
 
-		deadActionObj->SetUnitVisionRange(theDead->GetUnitVisionRange());
-		deadActionObj->SetUnitsVisibility(theDead->GetUnitVisibility());
-		deadActionObj->SetFacing(theDead->GetFacing());
+		deadActionObj->SetUnitVisionRange(dead->GetUnitVisionRange());
+		deadActionObj->SetUnitsVisibility(dead->GetUnitVisibility());
+		deadActionObj->SetFacing(dead->GetFacing());
 
 		if (g_soundManager)
-			g_soundManager->TerminateLoopingSound(SOUNDTYPE_SFX, (uint32)theDead->GetUnitID());
+			g_soundManager->TerminateLoopingSound(SOUNDTYPE_SFX, (uint32)dead->GetUnitID());
 
 		if (g_soundManager) {
 			sint32 visiblePlayer = g_selected_item->GetVisiblePlayer();
-			if ((visiblePlayer == theDead->GetPlayerNum()) ||
-				(theDead->GetUnitVisibility() & (1 << visiblePlayer))) {
-				g_soundManager->AddSound(SOUNDTYPE_SFX, (uint32)theDead->GetUnitID(), action->dead_soundID,
-										 theDead->GetPos().x, theDead->GetPos().y);
+			if ((visiblePlayer == dead->GetPlayerNum()) ||
+				(dead->GetUnitVisibility() & (1 << visiblePlayer))) {
+				g_soundManager->AddSound(SOUNDTYPE_SFX, (uint32)dead->GetUnitID(), action->dead_soundID,
+										 dead->GetPos().x, dead->GetPos().y);
 			}
 		}
 
-		theDead->AddAction(deadActionObj);
+		dead->AddAction(deadActionObj);
 
-		if (DirectorImpl::Instance()->TileIsVisibleToPlayer(action->dead_Pos)
+		if (DirectorImpl::Instance()->TileIsVisibleToPlayer(action->dead_pos)
 			&& executeType == DHEXECUTE_NORMAL) {
 			seq->SetAddedToActiveList(SEQ_ACTOR_PRIMARY, TRUE);
-			DirectorImpl::Instance()->ActiveUnitAdd(theDead);
+			DirectorImpl::Instance()->ActiveUnitAdd(dead);
 		} else {
-			if (theDead->WillDie()) {
-				DirectorImpl::Instance()->FastKill(theDead);
+			if (dead->WillDie()) {
+				DirectorImpl::Instance()->FastKill(dead);
 			} else {
-				theDead->EndTurnProcess();
+				dead->EndTurnProcess();
 			}
+			DirectorImpl::Instance()->ActionFinished(seq);
 		}
-	}
-
-	if(theVictor != NULL)
-	{
-		theVictor->SetHealthPercent(-1.0);
-		theVictor->SetTempStackSize(0);
-
-		if(theVictor->HasDeath() || victorAnim == NULL)
-		{
-			theVictor->ActionQueueUpIdle();
-		}
-		else
-		{
-			Action *victorActionObj = new Action((UNITACTION)victorActionType, ACTIONEND_ANIMEND);
-			Assert(victorActionObj != NULL);
-			if (victorActionObj == NULL)
-			{
-				c3errors_ErrorDialog("Director", "Internal Failure to create victory action");
-				delete deathAnim;
-				delete victorAnim;
-				return;
-			}
-			victorActionObj->SetSequence(seq);
-			seq->AddRef();
-			victorActionObj->SetStartMapPoint(action->victor_Pos);
-			victorActionObj->SetEndMapPoint(action->victor_Pos);
-
-			victorActionObj->SetAnim(victorAnim);
-
-			victorActionObj->SetUnitVisionRange(theVictor->GetUnitVisionRange());
-			victorActionObj->SetUnitsVisibility(theVictor->GetUnitVisibility());
-
-			if (g_soundManager)
-				g_soundManager->TerminateLoopingSound(SOUNDTYPE_SFX, (uint32)theVictor->GetUnitID());
-			if (g_soundManager) {
-				sint32 visiblePlayer = g_selected_item->GetVisiblePlayer();
-				if ((visiblePlayer == theVictor->GetPlayerNum()) ||
-					(theVictor->GetUnitVisibility() & (1 << visiblePlayer))) {
-					g_soundManager->AddSound(SOUNDTYPE_SFX, (uint32)theVictor->GetUnitID(), action->victor_soundID,
-											 theVictor->GetPos().x, theVictor->GetPos().y);
-				}
-			}
-
-			theVictor->AddAction(victorActionObj);
-		}
-
-		if (DirectorImpl::Instance()->TileIsVisibleToPlayer(action->victor_Pos) && executeType == DHEXECUTE_NORMAL)
-		{
-			seq->SetAddedToActiveList(SEQ_ACTOR_SECONDARY, TRUE);
-			DirectorImpl::Instance()->ActiveUnitAdd(theVictor);
-		}
-		else
-		{
-			if (theVictor->WillDie())
-			{
-				DirectorImpl::Instance()->FastKill(theVictor);
-			}
-			else
-			{
-				theVictor->EndTurnProcess();
-			}
-		}
+	} else {
+		DirectorImpl::Instance()->ActionFinished(seq);
 	}
 }
 
@@ -1837,28 +1744,6 @@ DirectorImpl::~DirectorImpl(void)
 	m_instance = NULL;
 }
 
-void DirectorImpl::Kill(UnitActor *actor)
-{
-	actor->DumpAllActions();
-
-	ListPos pos = m_activeUnitList->Find(actor, m_activeUnitList->GetHeadPosition());
-	if (pos)
-	{
-		if (m_processingActiveUnits)
-		{
-			actor->SetKillNow();
-		}
-		else
-		{
-			m_activeUnitList->DeleteAt(pos);
-			delete actor;
-			/// @todo Useless NULLing of a local variable. Check if actor should be *&.
-			///       Same for the FastKill functions.
-			actor = NULL;
-		}
-	}
-}
-
 void DirectorImpl::FastKill(UnitActor *actor)
 {
 	actor->DumpAllActions();
@@ -1872,12 +1757,14 @@ void DirectorImpl::FastKill(UnitActor *actor)
 		else
 		{
 			m_activeUnitList->DeleteAt(pos);
+			m_standbyActors.erase(actor);
 			delete actor;
 			actor = NULL;
 		}
 	}
 	else
 	{
+		m_standbyActors.erase(actor);
 		delete actor;
 		actor = NULL;
 	}
@@ -2097,12 +1984,9 @@ void DirectorImpl::DumpItem(DQItem *item)
 			DQActionDeath *action = (DQActionDeath *)item->m_action;
 
 			DPRINTF(k_DBG_UI, ("Death\n"));
-			DPRINTF(k_DBG_UI, ("  death_dead         :%#.8lx\n", action->death_dead));
-			DPRINTF(k_DBG_UI, ("  death_victor       :%#.8lx\n", action->death_victor));
-			DPRINTF(k_DBG_UI, ("  victor_Pos         :%d,%d\n", action->victor_Pos.x, action->victor_Pos.y));
-			DPRINTF(k_DBG_UI, ("  dead_Pos           :%d,%d\n", action->dead_Pos.x, action->dead_Pos.y));
+			DPRINTF(k_DBG_UI, ("  dead               :%#.8lx\n", action->dead));
+			DPRINTF(k_DBG_UI, ("  dead_Pos           :%d,%d\n", action->dead_pos.x, action->dead_pos.y));
 			DPRINTF(k_DBG_UI, ("  dead_soundID       :%d\n", action->dead_soundID));
-			DPRINTF(k_DBG_UI, ("  victor_soundID     :%d\n", action->victor_soundID));
 		}
 			break;
 		case DQITEM_MORPH:
@@ -2590,17 +2474,10 @@ void DirectorImpl::HandleFinishedItem(DQItem *item)
 		case DQITEM_DEATH: {
 			DQActionDeath	*action = (DQActionDeath *)item->m_action;
 			if (removePrimaryFromActiveList) {
-				if (action && action->death_dead) {
-					ActiveUnitRemove(action->death_dead);
-					if (!action->death_dead->IsActive())
-						g_soundManager->TerminateLoopingSound(SOUNDTYPE_SFX, action->dead_id);
-				}
-			}
-			if (removeSecondaryFromActiveList) {
-				if (action && action->death_victor) {
-					ActiveUnitRemove(action->death_victor);
-					if (!action->death_victor->IsActive())
-						g_soundManager->TerminateLoopingSound(SOUNDTYPE_SFX, action->victor_id);
+				if (action && action->dead) {
+					ActiveUnitRemove(action->dead);
+					if (!action->dead->IsActive())
+						g_soundManager->TerminateLoopingSound(SOUNDTYPE_SFX, action->dead->GetUnitID());
 				}
 			}
 		}
@@ -2657,6 +2534,7 @@ void DirectorImpl::CatchUp(void)
 
 			if (actor) {
 				if (actor->WillDie()) {
+					m_standbyActors.erase(actor);
 					m_activeUnitList->DeleteAt(actorPos);
 					delete actor;
 				} else {
@@ -2688,6 +2566,7 @@ void DirectorImpl::CatchUp(void)
 
 			if (actor) {
 				if (actor->WillDie()) {
+					m_standbyActors.erase(actor);
 					m_activeUnitList->DeleteAt(actorPos);
 					delete actor;
 				} else {
@@ -2908,6 +2787,7 @@ uint32 DirectorImpl::ProcessActiveUnits(void)
 			if (actor->GetKillNow())
 			{
 				actor->DumpAllActions();
+				m_standbyActors.erase(actor);
 				m_activeUnitList->DeleteAt(actorPos);
 				delete actor;
 			}
@@ -3083,6 +2963,7 @@ void DirectorImpl::NextPlayer()
 			{
 				if (actor->WillDie())
 				{
+					m_standbyActors.erase(actor);
 					m_activeUnitList->DeleteAt(actorPos);
 					delete actor;
 				}
@@ -3120,6 +3001,7 @@ void DirectorImpl::NextPlayer()
 			{
 				if(actor->WillDie())
 				{
+					m_standbyActors.erase(actor);
 					m_activeUnitList->DeleteAt(actorPos);
 					delete actor;
 				}
@@ -3632,69 +3514,18 @@ void DirectorImpl::AddSpecialAttack(Unit attacker, Unit attacked, SPECATTACK att
 	}
 }
 
-void DirectorImpl::AddWinnerLoser(Unit victor, Unit dead)
+void DirectorImpl::AddDeath(UnitActor *dead, const MapPoint &deadPos, sint32 deadSoundID)
 {
-	Assert(victor.GetActor());
-	Assert(dead.GetActor());
+	Assert(dead);
 
-	DQActionDeath		*action = new DQActionDeath;
-	DQItem				*item = new DQItem(DQITEM_DEATH, action, dh_death);
-	item->SetOwner(victor.GetOwner());
+	DQActionDeath	*action = new DQActionDeath;
+	DQItem			*item = new DQItem(DQITEM_DEATH, action, dh_death);
+	item->SetOwner(dead->GetPlayerNum());
 
-	action->death_victor = victor.GetActor();
-	action->victor_id = victor.m_id;
-	action->death_dead = dead.GetActor();
-	action->dead_id = dead.m_id;
-	action->victor_Pos = victor.RetPos();
-	action->dead_Pos = dead.RetPos();
+	action->dead = dead;
+	action->dead_pos = deadPos;
+	action->dead_soundID = deadSoundID;
 
-	action->dead_soundID = dead.GetDeathSoundID();
-	action->victor_soundID = victor.GetVictorySoundID();
-
-	m_itemQueue->AddTail(item);
-}
-
-void DirectorImpl::AddDeath(Unit dead)
-{
-	Assert(dead.GetActor());
-
-	DQActionDeath		*action = new DQActionDeath;
-	DQItem				*item = new DQItem(DQITEM_DEATH, action, dh_death);
-	item->SetOwner(dead.GetOwner());
-
-	action->death_dead	= dead.GetActor();
-	action->death_victor= NULL;
-	action->dead_id		= dead.m_id;
-	action->victor_id	= 0;
-	action->victor_Pos	= dead.RetPos();
-	action->dead_Pos	= dead.RetPos();
-	action->dead_soundID	= dead.GetDeathSoundID();
-	action->victor_soundID	= 0;
-
-	ActiveUnitAdd(dead.GetActor());
-
-	dead.SetActor(NULL);
-	m_itemQueue->AddTail(item);
-}
-
-void DirectorImpl::AddDeathWithSound(Unit dead, sint32 soundID)
-{
-	Assert(dead.GetActor());
-
-	DQActionDeath		*action = new DQActionDeath;
-	DQItem				*item = new DQItem(DQITEM_DEATH, action, dh_death);
-	item->SetOwner(dead.GetOwner());
-
-	action->death_dead = dead.GetActor();
-	action->dead_id = dead.m_id;
-	action->death_victor = NULL;
-	action->victor_id = 0;
-	action->victor_Pos = dead.RetPos();
-	action->dead_Pos = dead.RetPos();
-	action->dead_soundID = soundID;
-	action->victor_soundID = 0;
-
-	dead.SetActor(NULL);
 	m_itemQueue->AddTail(item);
 }
 
@@ -3760,18 +3591,14 @@ void DirectorImpl::AddWork(Unit worker)
 	m_itemQueue->AddTail(item);
 }
 
-void DirectorImpl::AddFastKill(Unit dead)
+void DirectorImpl::AddFastKill(UnitActor *dead)
 {
-	UnitActor *actor = dead.GetActor();
-	Assert(actor);
-	if (!actor) return;
+	Assert(dead);
+	if (!dead) return;
 
 	DQActionFastKill	*action = new DQActionFastKill;
 	DQItem				*item = new DQItem(DQITEM_FASTKILL, action, dh_fastkill);
-
-	action->dead = actor;
-
-	dead.SetActor(NULL);
+	action->dead = dead;
 
 	m_itemQueue->AddTail(item);
 }

@@ -95,7 +95,6 @@ enum  GAME_ACTION
 //----------------------------------------------------------------------------
 
 #include "ctp2_inttypes.h"      // sintNN, uintNN
-#include "directoractions.h"    // DQAction
 #include "MapPoint.h"           // MapPoint
 
 class ActorPath;
@@ -194,9 +193,6 @@ public:
 	void			SetUnitVisionRange(double visRange) { m_unitVisionRange = visRange; }
 	double			GetUnitVisionRange(void) const { return m_unitVisionRange; }
 
-	void			SetSpecialUnitEffectsAction(DQAction action) { m_specialUnitEffectsAction = action; }
-	DQAction		GetSpecialUnitEffectsAction(void) const { return m_specialUnitEffectsAction; }
-
 	void			SetSequence(Sequence *seq) { m_sequence = seq; }
 	Sequence		*GetSequence(void) const { return m_sequence; }
 
@@ -238,8 +234,6 @@ protected:
 	UnitActor			**m_revealedActors;
 	UnitActor			**m_moveActors;
 	sint32				m_numOActors;
-
-	DQAction			m_specialUnitEffectsAction;
 
 	Sequence			*m_sequence;
 };

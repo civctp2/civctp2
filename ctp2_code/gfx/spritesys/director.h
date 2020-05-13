@@ -91,9 +91,7 @@ public:
 	virtual void AddAttack(Unit attacker, Unit attacked) = 0;
 	virtual void AddAttackPos(Unit attacker, MapPoint const & pos) = 0;
 	virtual void AddSpecialAttack(Unit attacker, Unit attacked, SPECATTACK attack) = 0;
-	virtual void AddWinnerLoser(Unit victor, Unit dead) = 0;
-	virtual void AddDeath(Unit dead) = 0;
-	virtual void AddDeathWithSound(Unit dead, sint32 soundID) = 0;
+	virtual void AddDeath(UnitActor *dead, const MapPoint &deadPos, sint32 deadSoundID) = 0;
 	virtual void AddProjectileAttack(
 		Unit shooting,
 		Unit target,
@@ -106,7 +104,7 @@ public:
 	virtual void AddHide(Unit hider) = 0;
 	virtual void AddShow(Unit hider) = 0;
 	virtual void AddWork(Unit worker) = 0;
-	virtual void AddFastKill(Unit dead) = 0;
+	virtual void AddFastKill(UnitActor *dead) = 0;
 	virtual void AddRemoveVision(const MapPoint &pos, double range) = 0;
 	virtual void AddAddVision(const MapPoint &pos, double range) = 0;
 	virtual void AddSetVisibility(UnitActor *actor, uint32 visibility) = 0;
