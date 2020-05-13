@@ -28,19 +28,19 @@
 // - #pragma marked as Microsoft extension.
 // - IsValid marked as const.
 // - GetDisplayName added.
-// - Made GetFuel method const - April 24th 2005 Martin Gühmann
+// - Made GetFuel method const - April 24th 2005 Martin GÃ¼hmann
 // - Added NeedsRefueling method to remove code duplications.
-//   - April 24th 2005 Martin Gühmann
+//   - April 24th 2005 Martin GÃ¼hmann
 // - Moved UnitValidForOrder from ArmyData to be able to access the Unit
-//   properties as well. - April 24th 2005 Martin Gühmann
+//   properties as well. - April 24th 2005 Martin GÃ¼hmann
 // - Removed some unsused method to removed some unused in methods in
-//   CityData.. - Aug 6th 2005 Martin Gühmann
-// - Removed another unused and unecessary function. (Aug 12th 2005 Martin Gühmann)
-// - Moved sinking and upgrade functionality from ArmyData. (Dec 24th 2006 Martin Gühmann)
+//   CityData.. - Aug 6th 2005 Martin GÃ¼hmann
+// - Removed another unused and unecessary function. (Aug 12th 2005 Martin GÃ¼hmann)
+// - Moved sinking and upgrade functionality from ArmyData. (Dec 24th 2006 Martin GÃ¼hmann)
 // - Modified sink to take a unit so the Slic identifies what sank - E 5-24-2007
-// - Added an IsInVisionRange test. (25-Jan-2008 Martin Gühmann)
-// - Added check move points option to CanAtLeastOneCargoUnloadAt (8-Feb-2008 Martin Gühmann).
-// - Separated the Settle event drom the Settle in City event. (19-Feb-2008 Martin Gühmann)
+// - Added an IsInVisionRange test. (25-Jan-2008 Martin GÃ¼hmann)
+// - Added check move points option to CanAtLeastOneCargoUnloadAt (8-Feb-2008 Martin GÃ¼hmann).
+// - Separated the Settle event drom the Settle in City event. (19-Feb-2008 Martin GÃ¼hmann)
 //
 //----------------------------------------------------------------------------
 
@@ -360,7 +360,6 @@ public:
 
 	void SetSpriteState(SpriteState *s);
 	SpriteState * GetSpriteState() const;
-	void SetActor(UnitActor *a);
 	UnitActor * GetActor() const;
 
 	SpriteState * GetPrimaryProjectileState();

@@ -76,7 +76,6 @@ Action::Action(sint32 actionType, ACTIONEND endCondition, sint32 startAnimPos, s
 	m_revealedActors            (NULL),
 	m_moveActors                (NULL),
 	m_numOActors                (0),
-    m_specialUnitEffectsAction  (),
     m_sequence                  (NULL)
 { ; }
 
@@ -107,7 +106,6 @@ Action::Action(Action const & a_Original)
 	m_revealedActors            (NULL),
 	m_moveActors                (NULL),
 	m_numOActors                (a_Original.m_numOActors),
-    m_specialUnitEffectsAction  (a_Original.m_specialUnitEffectsAction),
     /// @todo Check copying of m_sequence (shallow copy in original code, not deleted in destructor)
     m_sequence                  (a_Original.m_sequence)
 {

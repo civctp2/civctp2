@@ -209,47 +209,20 @@ public:
 	sint32						attackpos_soundID;
 };
 
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
 class DQActionDeath : public DQAction
 {
 public:
 	DQActionDeath()
     :
-        DQAction            (),
-        death_dead          (NULL),
-        death_victor        (NULL),
-        dead_id             (0),
-        victor_id           (0),
-        victor_Pos          (),
-        dead_Pos            (),
-        dead_soundID        (CTPRecord::INDEX_INVALID),
-        victor_soundID      (CTPRecord::INDEX_INVALID)
+        DQAction		(),
+        dead			(NULL),
+        dead_pos		(),
+        dead_soundID	(CTPRecord::INDEX_INVALID)
     {};
 
-	UnitActor					*death_dead;
-	UnitActor					*death_victor;
-	sint32						dead_id;
-	sint32						victor_id;
-	MapPoint					victor_Pos;
-	MapPoint					dead_Pos;
-	sint32						dead_soundID;
-	sint32						victor_soundID;
+	UnitActor	*dead;
+	MapPoint	dead_pos;
+	sint32		dead_soundID;
 };
 
 class DQActionMorph : public DQAction
