@@ -37,24 +37,24 @@
 // - Prevented crashes due to uninitialised members.
 // - Prevented some NULL-dereferencing crashes.
 // - Exposed city walls and force field graphics to agecitystyle.txt,
-//   by Martin Gühmann.
+//   by Martin GÃ¼hmann.
 // - Prevented crashes with invalid (i.e. killed or destroyed) units.
 // - PFT 29 mar 05, show # turns until city next grows a pop.
-// - Removed refferences to the civilisation database. (Aug 20th 2005 Martin Gühmann)
-// - Removed unnecessary include files. (Aug 28th 2005 Martin Gühmann)
-// - Initialized local variables. (Sep 9th 2005 Martin Gühmann)
-// - Removed unused local variables. (Sep 9th 2005 Martin Gühmann)
+// - Removed refferences to the civilisation database. (Aug 20th 2005 Martin GÃ¼hmann)
+// - Removed unnecessary include files. (Aug 28th 2005 Martin GÃ¼hmann)
+// - Initialized local variables. (Sep 9th 2005 Martin GÃ¼hmann)
+// - Removed unused local variables. (Sep 9th 2005 Martin GÃ¼hmann)
 // - Fixed memory leaks.
 // - added Hidden Nationality check for units 2-21-2007
 // - Added Civilization flag MAPICONS
-// - Added MapIcon database (3-Mar-2007 Martin Gühmann)
+// - Added MapIcon database (3-Mar-2007 Martin GÃ¼hmann)
 // - Implemented but then outcomment DrawCityImps just didn't come out right
 //   maybe revisit
 // - Made DrawStackingIndicator only the stack sized moved the rest to DrawIndicators
 // - Made StackingIndicator above the healthbar per Maquiladora's design
 // - Move Civ flag underneath the healthbar.
 // - Unit stacking indications and special indecations are placed according
-//   their size. (9-Feb-2008 Martin Gühmann)
+//   their size. (9-Feb-2008 Martin GÃ¼hmann)
 // - Made the elite icon replace the veteran icon, rather than sit below it.
 //	 (11-Apr-2009 Maq)
 // - Stopped the cargo icon showing for enemy transports if they're only carrying
@@ -869,49 +869,6 @@ void UnitActor::Process(void)
 		m_transparency = m_curAction->GetTransparency();
 	}
 
-}
-
-Action *UnitActor::WillDie(void) const
-{
-#ifndef _TEST
-	STOMPCHECK();
-#endif
-	sint32		type;
-
-	if (m_curAction != NULL) {
-		type = m_curAction->m_actionType;
-		if (type == UNITACTION_VICTORY)
-		{
-			if (HasDeath())
-				return m_curAction;
-		}
-		else if (type == UNITACTION_FAKE_DEATH)
-		{
-			return m_curAction;
-		}
-	}
-
-	size_t  numItems = GetActionQueueNumItems();
-
-	for (size_t i = 0; i < numItems; ++i)
-    {
-    	Action * action = NULL;
-		m_actionQueue.GetQueueItem(i, action);
-		if (action)
-        {
-			type = action->m_actionType;
-			if (type == UNITACTION_VICTORY) {
-				if (HasDeath())
-					return action;
-			}
-			else if (type == UNITACTION_FAKE_DEATH)
-			{
-				return action;
-			}
-		}
-	}
-
-	return NULL;
 }
 
 Action *UnitActor::WillMorph(void) const

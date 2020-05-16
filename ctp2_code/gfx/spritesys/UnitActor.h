@@ -28,7 +28,7 @@
 // Modifications from the original Activision code:
 //
 // - Unit stacking indications and special indecations are placed according
-//   their size. (9-Feb-2008 Martin Gühmann)
+//   their size. (9-Feb-2008 Martin GÃ¼hmann)
 //
 //----------------------------------------------------------------------------
 
@@ -95,7 +95,6 @@ public:
 	void			DumpAllActions(void);
 	void			EndTurnProcess(void);
 	Action 			*WillMorph(void) const;
-	Action			*WillDie(void) const;
 	void			AddAction(Action *actionObj);
 	void			GetNextAction(bool isVisible = true);
 	void			AddIdle(bool NoIdleJustDelay = false);
