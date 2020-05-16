@@ -183,10 +183,6 @@ public:
 	void			SaveRevealedActors(UnitActor **revealedActors) { m_savedRevealedActors = revealedActors; }
 	UnitActor		**GetRevealedActors(void) const { return m_revealedActors; }
 
-	void			SetMoveActors(UnitActor **moveActors, sint32 numOActors) { m_moveActors = moveActors; m_numOActors = numOActors; }
-	UnitActor		**GetMoveActors(void) const { return m_moveActors; }
-	sint32			GetNumOActors(void) const { return m_numOActors; }
-
 	BOOL			HiddenUnderStack(void) const { return m_hiddenUnderStack; }
 	void			SetHiddenUnderStack(BOOL val) { m_hiddenUnderStack = val; }
 
@@ -288,8 +284,6 @@ protected:
 
 	BOOL				m_bVisSpecial;
 
-	UnitActor			**m_moveActors;
-	sint32				m_numOActors;
 	BOOL				m_hidden;
 	BOOL				m_hiddenUnderStack;
 

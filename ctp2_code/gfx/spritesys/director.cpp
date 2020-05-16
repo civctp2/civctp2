@@ -43,7 +43,6 @@
 // TODO: DQAction: dump write actor unit-id as well
 // TODO: Director: introduce callbacks (window) when action is done
 // TODO: DQAction: consistent NULL checking in ifs
-// TODO: rename actionobj to action
 // TODO: verify that all EffectActors are deleted
 
 #include "c3.h"
@@ -209,8 +208,8 @@ public:
 			m_refCount      (0),
 			m_item          (item)
 	{
-		m_addedToActiveList[SEQ_ACTOR_PRIMARY]      = FALSE;
-		m_addedToActiveList[SEQ_ACTOR_SECONDARY]    = FALSE;
+		m_addedToActiveList[SEQ_ACTOR_PRIMARY]      = false;
+		m_addedToActiveList[SEQ_ACTOR_SECONDARY]    = false;
 	}
 
 	~Sequence() {}
@@ -222,14 +221,14 @@ public:
 
 	DQItem	*GetItem(void) { return m_item; }
 
-	void	SetAddedToActiveList(SEQ_ACTOR which, BOOL added) { m_addedToActiveList[which] = added; }
-	BOOL	GetAddedToActiveList(SEQ_ACTOR which) { return m_addedToActiveList[which]; }
+	void	SetAddedToActiveList(SEQ_ACTOR which, bool added) { m_addedToActiveList[which] = added; }
+	bool	GetAddedToActiveList(SEQ_ACTOR which) { return m_addedToActiveList[which]; }
 
 private:
 	sint32	m_sequenceID;
 	sint32	m_refCount;
 	DQItem	*m_item;
-	BOOL	m_addedToActiveList[SEQ_ACTOR_MAX];
+	bool	m_addedToActiveList[SEQ_ACTOR_MAX];
 };
 
 class DirectorImpl : public Director {
@@ -481,7 +480,9 @@ public:
 	revealedActors	(revealedActors),
 	soundID			(soundID)
 	{}
-	virtual ~DQActionMove() {}
+	virtual ~DQActionMove() {
+		delete [] moveActors;
+	}
 
 	virtual void Execute(Sequence *sequence)
 	{
@@ -495,6 +496,7 @@ public:
 
 	virtual void Finalize(bool primary, bool secondary) {
 		if (primary) {
+			MoveActorsToEndPosition();
 			DirectorImpl::Instance()->ActiveUnitRemove(moveActor);
 			if (!moveActor->IsActive()) {
 				g_soundManager->TerminateLoopingSound(SOUNDTYPE_SFX, moveActor->GetUnitID());
@@ -565,13 +567,15 @@ private:
 
 		action->SetSoundEffect(soundID);
 
-		action->SetMoveActors(moveActors, moveArraySize);
-
 		if(!moveActor->ActionMove(action))
 		{
 			delete action;
 			DirectorImpl::Instance()->ActionFinished(sequence);
 			return;
+		}
+
+		for (int i = 0; i < moveArraySize; i++) {
+			moveActors[i]->SetHiddenUnderStack(TRUE);
 		}
 
 		bool visible = DirectorImpl::Instance()->TileIsVisibleToPlayer(startPos)
@@ -591,6 +595,16 @@ private:
 				visible,
 				sequence,
 				SEQ_ACTOR_PRIMARY);
+	}
+
+	void MoveActorsToEndPosition()
+	{
+		moveActor->PositionActor(endPos);
+
+		for (int i = 0; i < moveArraySize; i++)
+		{
+			moveActors[i]->PositionActor(endPos);
+		}
 	}
 };
 
@@ -669,9 +683,9 @@ public:
 			}
 
 			if (anim) {
-				Action *actionObj = new Action(actionType, ACTIONEND_PATHEND);
-				actionObj->SetAnim(anim);
-				projectileEnd->AddAction(actionObj);
+				Action *action = new Action(actionType, ACTIONEND_PATHEND);
+				action->SetAnim(anim);
+				projectileEnd->AddAction(action);
 				DirectorImpl::Instance()->ActiveEffectAdd(projectileEnd);
 			} else {
 				delete projectileEnd;
@@ -1570,9 +1584,9 @@ public:
 
 		if (anim)
 		{
-			Action * actionObj = new Action(EFFECTACTION_FLASH, ACTIONEND_PATHEND);
-			actionObj->SetAnim(anim);
-			flash->AddAction(actionObj);
+			Action * action = new Action(EFFECTACTION_FLASH, ACTIONEND_PATHEND);
+			action->SetAnim(anim);
+			flash->AddAction(action);
 			DirectorImpl::Instance()->ActiveEffectAdd(flash);
 		}
 
@@ -1936,9 +1950,9 @@ public:
 			Anim *anim = effectActor->CreateAnim(EFFECTACTION_PLAY);
 
 			if (anim) {
-				Action *actionObj = new Action(EFFECTACTION_PLAY, ACTIONEND_PATHEND);
-				actionObj->SetAnim(anim);
-				effectActor->AddAction(actionObj);
+				Action *action = new Action(EFFECTACTION_PLAY, ACTIONEND_PATHEND);
+				action->SetAnim(anim);
+				effectActor->AddAction(action);
 				DirectorImpl::Instance()->ActiveEffectAdd(effectActor);
 
 				if (g_soundManager) {
@@ -2558,153 +2572,7 @@ void DirectorImpl::DumpSequence(Sequence *seq) {
 
 void DirectorImpl::DumpItem(DQItem *item)
 {
-	switch(item->m_type)
-	{
-		case DQITEM_MOVE:
-		{
-			item->m_action->Dump();
-		}
-			break;
-		case DQITEM_MOVEPROJECTILE:
-		{
-			item->m_action->Dump();
-		}
-			break;
-		case DQITEM_SPECEFFECT :
-		{
-			item->m_action->Dump();
-		}
-			break;
-		case DQITEM_ATTACK:
-		{
-			item->m_action->Dump();
-		}
-			break;
-		case DQITEM_ATTACKPOS:
-		{
-			item->m_action->Dump();
-		}
-			break;
-		case DQITEM_SPECATTACK:
-		{
-			item->m_action->Dump();
-		}
-			break;
-		case DQITEM_DEATH:
-		{
-			item->m_action->Dump();
-		}
-			break;
-		case DQITEM_MORPH:
-		{
-			item->m_action->Dump();
-		}
-			break;
-		case DQITEM_HIDE:
-		{
-			item->m_action->Dump();
-		}
-			break;
-		case DQITEM_SHOW:
-		{
-			item->m_action->Dump();
-		}
-			break;
-		case DQITEM_WORK:
-		{
-			item->m_action->Dump();
-		}
-			break;
-		case DQITEM_FASTKILL:
-		{
-			item->m_action->Dump();
-		}
-			break;
-		case DQITEM_ADDVISION:
-		{
-			item->m_action->Dump();
-		}
-			break;
-		case DQITEM_REMOVEVISION:
-		{
-			item->m_action->Dump();
-		}
-			break;
-		case DQITEM_SETOWNER:
-		{
-			item->m_action->Dump();
-		}
-			break;
-		case DQITEM_SETVISIBILITY: {
-			item->m_action->Dump();
-		}
-			break;
-		case DQITEM_SETVISIONRANGE: {
-			item->m_action->Dump();
-		}
-			break;
-		case DQITEM_COMBATFLASH: {
-			item->m_action->Dump();
-		}
-			break;
-		case DQITEM_TELEPORT: {
-			item->m_action->Dump();
-		}
-			break;
-		case DQITEM_COPYVISION: {
-			item->m_action->Dump();
-		}
-			break;
-		case DQITEM_CENTERMAP : {
-			item->m_action->Dump();
-		}
-			break;
-		case DQITEM_SELECTUNIT : {
-			item->m_action->Dump();
-		}
-			break;
-		case DQITEM_ENDTURN : {
-			item->m_action->Dump();
-		}
-			break;
-		case DQITEM_BATTLE : {
-			item->m_action->Dump();
-		}
-			break;
-		case DQITEM_PLAYSOUND : {
-			item->m_action->Dump();
-		}
-			break;
-		case DQITEM_PLAYWONDERMOVIE : {
-			item->m_action->Dump();
-		}
-			break;
-		case DQITEM_PLAYVICTORYMOVIE : {
-			item->m_action->Dump();
-		}
-			break;
-		case DQITEM_MESSAGE : {
-			item->m_action->Dump();
-		}
-			break;
-		case DQITEM_FACEOFF : {
-			item->m_action->Dump();
-		}
-			break;
-		case DQITEM_TERMINATE_FACEOFF : {
-			item->m_action->Dump();
-		}
-			break;
-		case DQITEM_TERMINATE_SOUND : {
-			item->m_action->Dump();
-		}
-			break;
-		case DQITEM_BEGIN_SCHEDULER:
-		{
-			item->m_action->Dump();
-		}
-			break;
-	}
+	item->m_action->Dump();
 }
 
 #endif
@@ -2773,7 +2641,7 @@ void DirectorImpl::EndTurn() {
 void DirectorImpl::HandleActor(DHEXECUTE executeType, UnitActor *actor, bool enableAction, Sequence *seq, SEQ_ACTOR seqActor)
 {
 	if (enableAction && (executeType == DHEXECUTE_NORMAL)) {
-		seq->SetAddedToActiveList(seqActor, TRUE);
+		seq->SetAddedToActiveList(seqActor, true);
 		ActiveUnitAdd(actor);
 	} else {
 		FinalizeActor(actor);
@@ -2798,16 +2666,17 @@ void DirectorImpl::HandleNextAction(void)
 
 	while (CanStartNextAction())
 	{
-		DQItem *    item        = m_itemQueue->RemoveHead();
+		DQItem *item = m_itemQueue->RemoveHead();
 
-		Assert(item->m_handler != NULL);
-		if (item->m_handler != NULL)
+		Assert(item->m_handler);
+		if (item->m_handler)
 		{
 			SetActionFinished(FALSE);
 
+			Assert(m_dispatchedItems->GetCount() == 0);
 			m_dispatchedItems->AddTail(item);
 
-			DHEXECUTE		executeType = DHEXECUTE_NORMAL;
+			DHEXECUTE executeType = DHEXECUTE_NORMAL;
 
 			if (
 				item->m_round < g_turn->GetRound() - 1
@@ -2836,6 +2705,8 @@ void DirectorImpl::HandleNextAction(void)
 
 void DirectorImpl::ActionFinished(Sequence *seq)
 {
+	Assert(m_dispatchedItems->GetCount() <= 1);
+
 	DQItem			*item;
 
 	if (!seq) {
@@ -2913,68 +2784,15 @@ void DirectorImpl::HandleFinishedItem(DQItem *item)
 
 	Sequence *seq = item->m_sequence;
 
-	BOOL	removePrimaryFromActiveList = FALSE;
-	BOOL	removeSecondaryFromActiveList = FALSE;
+	bool	removePrimaryFromActiveList = false;
+	bool	removeSecondaryFromActiveList = false;
 
 	if (seq) {
 		removePrimaryFromActiveList = seq->GetAddedToActiveList(SEQ_ACTOR_PRIMARY);
 		removeSecondaryFromActiveList = seq->GetAddedToActiveList(SEQ_ACTOR_SECONDARY);
 	}
 
-	switch (item->m_type)
-	{
-		default:
-//  case DQITEM_ADDVISION:
-//  case DQITEM_ATTACK:
-//  case DQITEM_BATTLE:
-//  case DQITEM_CENTERMAP:
-//  case DQITEM_COMBATFLASH:
-//  case DQITEM_COPYVISION:
-//  case DQITEM_ENDTURN:
-//  case DQITEM_FACEOFF:
-//  case DQITEM_FASTKILL:
-//  case DQITEM_HIDE:
-//  case DQITEM_MESSAGE:
-//  case DQITEM_MORPH:
-//  case DQITEM_MOVEPROJECTILE:
-//  case DQITEM_PLAYSOUND:
-//  case DQITEM_PLAYVICTORYMOVIE:
-//  case DQITEM_PLAYWONDERMOVIE:
-//  case DQITEM_REMOVEVISION:
-//  case DQITEM_SPECEFFECT:
-//  case DQITEM_SELECTUNIT:
-//  case DQITEM_SETOWNER:
-//  case DQITEM_SETVISIBILITY:
-//  case DQITEM_SETVISIONRANGE:
-//  case DQITEM_SHOW:
-//  case DQITEM_TELEPORT:
-//  case DQITEM_TERMINATE_FACEOFF:
-			// Does not contain actions that have to be removed
-			break;
-
-		case DQITEM_MOVE: {
-			item->m_action->Finalize(removePrimaryFromActiveList, false);
-		}
-			break;
-		case DQITEM_ATTACKPOS:
-		{
-			item->m_action->Finalize(removePrimaryFromActiveList, false);
-		}
-			break;
-		case DQITEM_SPECATTACK:
-		{
-			item->m_action->Finalize(removePrimaryFromActiveList, removeSecondaryFromActiveList);
-		}
-			break;
-		case DQITEM_DEATH: {
-			item->m_action->Finalize(removePrimaryFromActiveList, false);
-		}
-			break;
-		case DQITEM_WORK: {
-			item->m_action->Finalize(removePrimaryFromActiveList, false);
-		}
-			break;
-	}
+	item->m_action->Finalize(removePrimaryFromActiveList, removeSecondaryFromActiveList);
 
 	delete item;
 }

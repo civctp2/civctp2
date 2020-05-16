@@ -177,16 +177,6 @@ public:
 	void			SetNumRevealedActors(sint32 num) { m_numRevealedActors = num; }
 	sint32			GetNumRevealedActors(void) const { return m_numRevealedActors; }
 
-	void			SetMoveActors(UnitActor **moveActors, sint32 numOActors)
-    {
-        m_moveActors = moveActors;
-        m_numOActors = numOActors;
-    }
-	UnitActor		**GetMoveActors(void) const { return m_moveActors; }
-
-	void			SetNumOActors(sint32 val) { m_numOActors = val; }
-	sint32			GetNumOActors(void) const { return m_numOActors; }
-
 	void			SetUnitsVisibility(uint32 unitsVis) { m_unitsVisibility = unitsVis; }
 	uint32			GetUnitsVisibility(void) const { return m_unitsVisibility; }
 
@@ -232,8 +222,6 @@ protected:
 
 	sint32				m_numRevealedActors;
 	UnitActor			**m_revealedActors;
-	UnitActor			**m_moveActors;
-	sint32				m_numOActors;
 
 	Sequence			*m_sequence;
 };

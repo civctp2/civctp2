@@ -154,8 +154,6 @@ UnitActor::UnitActor(SpriteState *ss, Unit id, sint32 unitType, const MapPoint &
     m_numSavedRevealedActors    (0),
     m_savedRevealedActors       (NULL),
     m_bVisSpecial               (false),
-    m_moveActors                (NULL),
-    m_numOActors                (0),
     m_hidden                    (false),
     m_hiddenUnderStack          (false),
 //	sint32				m_holdingCurAnimPos[UNITACTION_MAX];
@@ -238,8 +236,6 @@ UnitActor::UnitActor(CivArchive &archive)
     m_numSavedRevealedActors    (0),
     m_savedRevealedActors       (NULL),
     m_bVisSpecial               (false),
-    m_moveActors                (NULL),
-    m_numOActors                (0),
     m_hidden                    (false),
     m_hiddenUnderStack          (false),
 //	sint32				m_holdingCurAnimPos[UNITACTION_MAX];
@@ -285,7 +281,6 @@ void UnitActor::Initialize(void)
 	m_needsToDie = FALSE;
 	m_needsToVictor = FALSE;
 	m_killNow = FALSE;
-	m_numOActors = 0;
 	m_curUnitAction			= UNITACTION_NONE;
 	m_transparency			= 0;
 	m_numRevealedActors		= 0;
@@ -330,7 +325,6 @@ void UnitActor::Initialize(void)
 
 	m_numSavedRevealedActors = 0;
 	m_savedRevealedActors = m_revealedActors = NULL;
-	m_moveActors = NULL;
 	m_hiddenUnderStack = FALSE;
 
 	m_hidden = FALSE;
@@ -699,26 +693,6 @@ void UnitActor::GetNextAction(bool isVisible)
 	m_curAction->GetStartMapPoint(curStartMapPoint);
 	m_curAction->GetEndMapPoint(curEndMapPoint);
 
-
-
-
-	int i, j;
-	if((j = i = m_curAction->GetNumOActors()) > 0)
-	{
-		i--;
-		UnitActor **moveActors = m_curAction->GetMoveActors();
-		for(; i>=0; i--)
-		{
-			if(moveActors[i] != NULL)
-				moveActors[i]->SetHiddenUnderStack(TRUE);
-
-			if(!m_isUnseenCellActor &&
-				m_playerNum == g_selected_item->GetVisiblePlayer()) {
-			}
-		}
-		m_curAction->SetNumOActors(0 - j);
-	}
-
 	if(m_playerNum == g_selected_item->GetVisiblePlayer() && m_curAction->GetActionType() == UNITACTION_MOVE)
 	{
 
@@ -786,33 +760,6 @@ void UnitActor::Process(void)
 
 	if (m_curAction->Finished())
 	{
-		if (m_curUnitAction==UNITACTION_MOVE)
-		{
-			MapPoint pos;
-
-			m_curAction->GetEndMapPoint(pos);
-			PositionActor(pos);
-		}
-
-		UnitActor **moveActors = m_curAction->GetMoveActors();
-
-		if(moveActors != NULL)
-		{
-
-			sint32 num = abs(m_curAction->GetNumOActors());
-
-			m_curAction->SetNumOActors(num);
-
-			for (int i = num-1; i >= 0; i--)
-			{
-				if(moveActors[i] != NULL)
-				   moveActors[i]->PositionActor(m_pos);
-
-			}
-			delete moveActors;
-			m_curAction->SetMoveActors(NULL, NULL);
-		}
-
 		if (m_curAction->m_actionType != UNITACTION_IDLE &&
 			m_curAction->m_actionType != UNITACTION_FACE_OFF)
 			g_director->ActionFinished(m_curAction->GetSequence());
@@ -906,11 +853,6 @@ void UnitActor::DumpAllActions(void)
 	if (m_curAction != NULL) {
 		m_facing = m_curAction->GetFacing();
 
-		if (m_curAction->m_actionType == UNITACTION_MOVE) {
-			m_curAction->GetEndMapPoint(pos);
-			PositionActor(pos);
-		}
-
 		if (m_curAction->m_actionType != UNITACTION_IDLE &&
 			m_curAction->m_actionType != UNITACTION_FACE_OFF) {
 			g_director->ActionFinished(m_curAction->GetSequence());
@@ -924,11 +866,6 @@ void UnitActor::DumpAllActions(void)
 		m_actionQueue.Dequeue(deadAction);
 		if (deadAction != NULL) {
 			m_facing = deadAction->GetFacing();
-
-			if (deadAction->m_actionType == UNITACTION_MOVE) {
-				deadAction->GetEndMapPoint(pos);
-				PositionActor(pos);
-			}
 
 			if (deadAction->m_actionType != UNITACTION_IDLE &&
 				deadAction->m_actionType != UNITACTION_FACE_OFF) {

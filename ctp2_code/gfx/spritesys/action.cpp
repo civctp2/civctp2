@@ -74,8 +74,6 @@ Action::Action(sint32 actionType, ACTIONEND endCondition, sint32 startAnimPos, s
 	m_unitVisionRange           (0),
 	m_numRevealedActors         (0),
 	m_revealedActors            (NULL),
-	m_moveActors                (NULL),
-	m_numOActors                (0),
     m_sequence                  (NULL)
 { ; }
 
@@ -104,8 +102,6 @@ Action::Action(Action const & a_Original)
 	m_unitVisionRange           (a_Original.m_unitVisionRange),
 	m_numRevealedActors         (a_Original.m_numRevealedActors),
 	m_revealedActors            (NULL),
-	m_moveActors                (NULL),
-	m_numOActors                (a_Original.m_numOActors),
     /// @todo Check copying of m_sequence (shallow copy in original code, not deleted in destructor)
     m_sequence                  (a_Original.m_sequence)
 {
@@ -114,7 +110,7 @@ Action::Action(Action const & a_Original)
         m_curAnim = new Anim(*a_Original.m_curAnim);
     }
 
-    /// @todo Check copying of m_curPath, m_moveActors, m_revealedActors (NULLed in original code)
+    /// @todo Check copying of m_curPath, m_revealedActors (NULLed in original code)
 }
 
 /// @todo Remove when no longer used
@@ -127,7 +123,6 @@ Action::Action(Action *copyme)
 	}
 
 	m_curPath = NULL;
-	m_moveActors = NULL;
 	m_revealedActors = NULL;
 }
 
@@ -135,7 +130,6 @@ Action::~Action(void)
 {
 	delete m_curPath;
 	delete m_curAnim;
-	delete[] m_moveActors;
 	delete[] m_revealedActors;
 }
 
