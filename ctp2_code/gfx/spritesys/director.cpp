@@ -150,23 +150,10 @@ enum DQACTION_TYPE {
 	DQACTION_FACEOFF,
 	DQACTION_TERMINATE_FACEOFF,
 	DQACTION_TERMINATE_SOUND,
-
 	DQACTION_INVOKE_THRONE_ROOM,
-
 	DQACTION_INVOKE_RESEARCH_ADVANCE,
-
 	DQACTION_BEGIN_SCHEDULER,
-
 	DQACTION_MAX
-};
-
-enum DHEXECUTE {
-	DHEXECUTE_NONE = -1,
-
-	DHEXECUTE_NORMAL,
-	DHEXECUTE_IMMEDIATE,
-
-	DHEXECUTE_MAX
 };
 
 enum SEQ_ACTOR {
@@ -177,11 +164,9 @@ enum SEQ_ACTOR {
 };
 
 class DQAction; // forward
-typedef void (DQHandler)(DQAction *action, Sequence *seq, DHEXECUTE executeType);
-
 class DQItem {
 public:
-	DQItem(DQAction *action, DQHandler *handler);
+	DQItem(DQAction *action);
 	~DQItem();
 
 	void			SetOwner(sint32 owner) { m_owner = (sint8)owner; }
@@ -191,7 +176,6 @@ public:
 	sint8			m_owner;
 	uint16			m_round;
 	DQAction		*m_action;
-	DQHandler		*m_handler;
 	Sequence		*m_sequence;
 };
 
@@ -2169,211 +2153,12 @@ protected:
 	sint32 player;
 };
 
-void dh_move(DQAction *itemAction, Sequence *seq, DHEXECUTE executeType)
-{
-	if (executeType == DHEXECUTE_NORMAL) {
-		itemAction->Execute(seq);
-	} else {
-		itemAction->ExecuteImmediate(seq);
-	}
-}
-
-void dh_teleport(DQAction *itemAction, Sequence *seq, DHEXECUTE executeType)
-{
-	itemAction->Execute(seq);
-}
-
-void dh_projectileMove(DQAction *itemAction, Sequence *seq, DHEXECUTE executeType)
-{
-	itemAction->Execute(seq);
-}
-
-void dh_attack(DQAction *itemAction, Sequence *seq, DHEXECUTE executeType)
-{
-	if (executeType == DHEXECUTE_NORMAL) {
-		itemAction->Execute(seq);
-	} else {
-		itemAction->ExecuteImmediate(seq);
-	}
-}
-
-void dh_specialAttack(DQAction *itemAction, Sequence *seq, DHEXECUTE executeType)
-{
-	if (executeType == DHEXECUTE_NORMAL) {
-		itemAction->Execute(seq);
-	} else {
-		itemAction->ExecuteImmediate(seq);
-	}
-}
-
-void dh_death(DQAction *itemAction, Sequence *seq, DHEXECUTE executeType)
-{
-	if (executeType == DHEXECUTE_NORMAL) {
-		itemAction->Execute(seq);
-	} else {
-		itemAction->ExecuteImmediate(seq);
-	}
-}
-
-void dh_morphUnit(DQAction *itemAction, Sequence *seq, DHEXECUTE executeType)
-{
-	itemAction->Execute(seq);
-}
-
-void dh_hide(DQAction *itemAction, Sequence *seq, DHEXECUTE executeType)
-{
-	itemAction->Execute(seq);
-}
-
-void dh_show(DQAction *itemAction, Sequence *seq, DHEXECUTE executeType)
-{
-	itemAction->Execute(seq);
-}
-
-void dh_work(DQAction *itemAction, Sequence *seq, DHEXECUTE executeType)
-{
-	if (executeType == DHEXECUTE_NORMAL) {
-		itemAction->Execute(seq);
-	} else {
-		itemAction->ExecuteImmediate(seq);
-	}
-}
-
-void dh_fastkill(DQAction *itemAction, Sequence *seq, DHEXECUTE executeType)
-{
-	itemAction->Execute(seq);
-}
-
-void dh_removeVision(DQAction *itemAction, Sequence *seq, DHEXECUTE executeType)
-{
-	itemAction->Execute(seq);
-}
-
-void dh_addVision(DQAction *itemAction, Sequence *seq, DHEXECUTE executeType)
-{
-	itemAction->Execute(seq);
-}
-
-void dh_setVisibility(DQAction *itemAction, Sequence *seq, DHEXECUTE executeType)
-{
-	itemAction->Execute(seq);
-}
-
-void dh_setOwner(DQAction *itemAction, Sequence *seq, DHEXECUTE executeType)
-{
-	itemAction->Execute(seq);
-}
-
-void dh_setVisionRange(DQAction *itemAction, Sequence *seq, DHEXECUTE executeType)
-{
-	itemAction->Execute(seq);
-}
-
-void dh_combatflash(DQAction *itemAction, Sequence *seq, DHEXECUTE executeType)
-{
-	itemAction->Execute(seq);
-}
-
-void dh_copyVision(DQAction *itemAction, Sequence *seq, DHEXECUTE executeType)
-{
-	itemAction->Execute(seq);
-}
-
-void dh_centerMap(DQAction *itemAction, Sequence *seq, DHEXECUTE executeType)
-{
-	itemAction->Execute(seq);
-}
-
-void dh_selectUnit(DQAction *itemAction, Sequence *seq, DHEXECUTE executeType)
-{
-	itemAction->Execute(seq);
-}
-
-void dh_endTurn(DQAction *itemAction, Sequence *seq, DHEXECUTE executeType)
-{
-	itemAction->Execute(seq);
-}
-
-void dh_battle(DQAction *itemAction, Sequence *seq, DHEXECUTE executeType)
-{
-	itemAction->Execute(seq);
-}
-
-void dh_playSound(DQAction *itemAction, Sequence *seq, DHEXECUTE executeType)
-{
-	itemAction->Execute(seq);
-}
-
-void dh_playWonderMovie(DQAction *itemAction, Sequence *seq, DHEXECUTE executeType)
-{
-	itemAction->Execute(seq);
-}
-
-void dh_playVictoryMovie(DQAction *itemAction, Sequence *seq, DHEXECUTE executeType)
-{
-	itemAction->Execute(seq);
-}
-
-void dh_message(DQAction *itemAction, Sequence *seq, DHEXECUTE executeType)
-{
-	itemAction->Execute(seq);
-}
-
-void dh_faceoff(DQAction *itemAction, Sequence *seq, DHEXECUTE executeType)
-{
-	if (executeType == DHEXECUTE_NORMAL) {
-		itemAction->Execute(seq);
-	} else {
-		itemAction->ExecuteImmediate(seq);
-	}
-}
-
-void dh_terminateFaceoff(DQAction *itemAction, Sequence *seq, DHEXECUTE executeType)
-{
-	itemAction->Execute(seq);
-}
-
-void dh_terminateSound(DQAction *itemAction, Sequence *seq, DHEXECUTE executeType)
-{
-	itemAction->Execute(seq);
-}
-
-void dh_speceffect(DQAction *itemAction, Sequence *seq, DHEXECUTE executeType)
-{
-	itemAction->Execute(seq);
-}
-
-void dh_attackpos(DQAction *itemAction, Sequence *seq, DHEXECUTE executeType)
-{
-	if (executeType == DHEXECUTE_NORMAL) {
-		itemAction->Execute(seq);
-	} else {
-		itemAction->ExecuteImmediate(seq);
-	}
-}
-
-void dh_invokeThroneRoom(DQAction *itemAction, Sequence *seq, DHEXECUTE executeType)
-{
-	itemAction->Execute(seq);
-}
-
-void dh_invokeResearchAdvance(DQAction *itemAction, Sequence *seq, DHEXECUTE executeType)
-{
-	itemAction->Execute(seq);
-}
-
-void dh_beginScheduler(DQAction *itemAction, Sequence *seq, DHEXECUTE executeType)
-{
-	itemAction->Execute(seq);
-}
-
-DQItem::DQItem(DQAction *action, DQHandler *handler)
+DQItem::DQItem(DQAction *action)
 :
 	m_addedToSavedList  (FALSE),
 	m_owner             (PLAYER_UNASSIGNED),
 	m_round             (0),
 	m_action            (action),
-	m_handler           (handler),
 	m_sequence          (NULL)
 {
 	m_sequence = DirectorImpl::Instance()->NewSequence(this);
@@ -2677,39 +2462,33 @@ void DirectorImpl::HandleNextAction(void)
 
 	while (CanStartNextAction())
 	{
+		SetActionFinished(FALSE);
+
 		DQItem *item = m_itemQueue->RemoveHead();
 
-		Assert(item->m_handler);
-		if (item->m_handler)
+		Assert(m_dispatchedItems->GetCount() == 0);
+		m_dispatchedItems->AddTail(item);
+
+		if (
+			item->m_round < g_turn->GetRound() - 1
+			||
+			(
+				!g_theProfileDB->IsEnemyMoves()
+				&&  item->GetOwner() != -1
+				&&  item->GetOwner() != g_selected_item->GetVisiblePlayer()
+			)
+			||
+			(
+				!g_theProfileDB->IsUnitAnim()
+				&&  item->GetOwner() != -1
+				&&  g_player[item->GetOwner()] != NULL
+				&&  g_player[item->GetOwner()]->IsRobot()
+			)
+			)
 		{
-			SetActionFinished(FALSE);
-
-			Assert(m_dispatchedItems->GetCount() == 0);
-			m_dispatchedItems->AddTail(item);
-
-			DHEXECUTE executeType = DHEXECUTE_NORMAL;
-
-			if (
-				item->m_round < g_turn->GetRound() - 1
-				||
-				(
-					!g_theProfileDB->IsEnemyMoves()
-					&&  item->GetOwner() != -1
-					&&  item->GetOwner() != g_selected_item->GetVisiblePlayer()
-				)
-				||
-				(
-					!g_theProfileDB->IsUnitAnim()
-					&&  item->GetOwner() != -1
-					&&  g_player[item->GetOwner()] != NULL
-					&&  g_player[item->GetOwner()]->IsRobot()
-				)
-				)
-			{
-				executeType = DHEXECUTE_IMMEDIATE;
-			}
-
-			item->m_handler(item->m_action, item->m_sequence, executeType);
+			item->m_action->ExecuteImmediate(item->m_sequence);
+		} else {
+			item->m_action->Execute(item->m_sequence);
 		}
 	}
 }
@@ -2827,7 +2606,7 @@ void DirectorImpl::GarbageCollectItems(void)
 
 void DirectorImpl::ProcessImmediately(DQItem *item)
 {
-	item->m_handler(item->m_action, item->m_sequence, DHEXECUTE_IMMEDIATE);
+	item->m_action->ExecuteImmediate(item->m_sequence);
 }
 
 void DirectorImpl::CatchUp(void)
@@ -2840,15 +2619,9 @@ void DirectorImpl::CatchUp(void)
 
 	while(m_itemQueue->GetCount())
 	{
-		DQItem *    item    = m_itemQueue->RemoveHead();
-
-		Assert(item->m_handler);
-		if (item->m_handler)
-		{
-			m_dispatchedItems->AddTail(item);
-
-			item->m_handler(item->m_action, item->m_sequence, DHEXECUTE_IMMEDIATE);
-		}
+		DQItem *item = m_itemQueue->RemoveHead();
+		m_dispatchedItems->AddTail(item);
+		item->m_action->ExecuteImmediate(item->m_sequence);
 	}
 
 	pos = m_activeUnitList->GetHeadPosition();
@@ -3232,15 +3005,9 @@ void DirectorImpl::NextPlayer() {
 
 	while(m_itemQueue->GetCount())
 	{
-		DQItem *    item    = m_itemQueue->RemoveHead();
-
-		Assert(item->m_handler);
-		if (item->m_handler)
-		{
-			m_dispatchedItems->AddTail(item);
-
-			item->m_handler(item->m_action, item->m_sequence, DHEXECUTE_NORMAL);
-		}
+		DQItem *item = m_itemQueue->RemoveHead();
+		m_dispatchedItems->AddTail(item);
+		item->m_action->Execute(item->m_sequence);
 	}
 
 	if(!g_network.IsActive()) {
@@ -3457,7 +3224,7 @@ void DirectorImpl::AddMove (
 			numRevealed,
 			numRevealed > 0 ? revealedActors : NULL,
 			soundID);
-	DQItem				*item = new DQItem(action, dh_move);
+	DQItem				*item = new DQItem(action);
 	item->SetOwner(mover.GetOwner());
 
 	m_itemQueue->AddTail(item);
@@ -3484,7 +3251,7 @@ void DirectorImpl::AddTeleport (
 			moveActors,
 			numRevealed,
 			revealedActors);
-	DQItem				*item	= new DQItem(action, dh_teleport);
+	DQItem				*item	= new DQItem(action);
 
 	m_itemQueue->AddTail(item);
 }
@@ -3494,7 +3261,7 @@ void DirectorImpl::AddProjectileAttack(Unit shooting, Unit target, SpriteState *
 {
 	DQActionMoveProjectile	*action = new DQActionMoveProjectile(
 			projectileEnd_state, shooting.RetPos(), target.RetPos());
-	DQItem					*item = new DQItem(action, dh_projectileMove);
+	DQItem					*item = new DQItem(action);
 
 	m_itemQueue->AddTail(item);
 }
@@ -3502,7 +3269,7 @@ void DirectorImpl::AddProjectileAttack(Unit shooting, Unit target, SpriteState *
 void DirectorImpl::AddSpecialEffect(MapPoint &pos, sint32 spriteID, sint32 soundID)
 {
 	DQActionSpecialEffect	*action = new DQActionSpecialEffect(pos, spriteID, soundID);
-	DQItem					*item = new DQItem(action, dh_speceffect);
+	DQItem					*item = new DQItem(action);
 
 	m_itemQueue->AddTail(item);
 }
@@ -3510,7 +3277,7 @@ void DirectorImpl::AddSpecialEffect(MapPoint &pos, sint32 spriteID, sint32 sound
 void DirectorImpl::AddCombatFlash(MapPoint const & pos)
 {
 	DQActionCombatFlash	*   action  = new DQActionCombatFlash(pos);
-	DQItem *                item    = new DQItem(action, dh_combatflash);
+	DQItem *                item    = new DQItem(action);
 
 	m_itemQueue->AddTail(item);
 }
@@ -3518,7 +3285,7 @@ void DirectorImpl::AddCombatFlash(MapPoint const & pos)
 void DirectorImpl::AddCopyVision(void)
 {
 	DQActionCopyVision	*action = new DQActionCopyVision();
-	DQItem				*item = new DQItem(action, dh_copyVision);
+	DQItem				*item = new DQItem(action);
 
 	m_itemQueue->AddTail(item);
 }
@@ -3526,7 +3293,7 @@ void DirectorImpl::AddCopyVision(void)
 void DirectorImpl::AddCenterMap(const MapPoint &pos)
 {
 	DQActionCenterMap	*action = new DQActionCenterMap(pos);
-	DQItem				*item = new DQItem(action, dh_centerMap);
+	DQItem				*item = new DQItem(action);
 
 	m_itemQueue->AddTail(item);
 }
@@ -3534,7 +3301,7 @@ void DirectorImpl::AddCenterMap(const MapPoint &pos)
 void DirectorImpl::AddSelectUnit(uint32 flags)
 {
 	DQActionUnitSelection	*action = new DQActionUnitSelection(flags);
-	DQItem				*item = new DQItem(action, dh_selectUnit);
+	DQItem				*item = new DQItem(action);
 
 	m_itemQueue->AddTail(item);
 }
@@ -3599,7 +3366,7 @@ void DirectorImpl::AddEndTurn(void)
 	}
 
 	DQActionEndTurn		*action = new DQActionEndTurn();
-	DQItem				*item = new DQItem(action, dh_endTurn);
+	DQItem				*item = new DQItem(action);
 
 	m_itemQueue->AddTail(item);
 }
@@ -3632,7 +3399,7 @@ void DirectorImpl::AddAttack(Unit attacker, Unit defender)
 			defender.GetActor(),
 			defender.RetPos(),
 			defender.IsCity());
-	DQItem				*item = new DQItem(action, dh_attack);
+	DQItem				*item = new DQItem(action);
 	item->SetOwner(attacker.GetOwner());
 
 	m_itemQueue->AddTail(item);
@@ -3656,7 +3423,7 @@ void DirectorImpl::AddAttackPos(Unit attacker, MapPoint const & pos)
 
 	DQActionAttackPos	*action = new DQActionAttackPos(
 			attacker.GetActor(), attacker.RetPos(), pos, attacker.GetAttackSoundID());
-	DQItem *item = new DQItem(action, dh_attackpos);
+	DQItem *item = new DQItem(action);
 	item->SetOwner(attacker.GetOwner());
 	m_itemQueue->AddTail(item);
 
@@ -3685,7 +3452,7 @@ void DirectorImpl::AddSpecialAttack(Unit attacker, Unit attacked, SPECATTACK att
 			attacked.RetPos(),
 			attacked.IsCity());
 
-	DQItem *            item            = new DQItem(action, dh_specialAttack);
+	DQItem *            item            = new DQItem(action);
 	item->SetOwner(attacker.GetOwner());
 
 	m_itemQueue->AddTail(item);
@@ -3702,7 +3469,7 @@ void DirectorImpl::AddDeath(UnitActor *dead, const MapPoint &deadPos, sint32 dea
 	Assert(dead);
 
 	DQActionDeath	*action = new DQActionDeath(dead, deadPos, deadSoundID);
-	DQItem			*item = new DQItem(action, dh_death);
+	DQItem			*item = new DQItem(action);
 	item->SetOwner(dead->GetPlayerNum());
 
 	m_dyingActors.insert(dead);
@@ -3715,7 +3482,7 @@ void DirectorImpl::AddMorphUnit(UnitActor *morphingActor, SpriteState *ss, sint3
 		return;
 
 	DQActionMorph	*action = new DQActionMorph(morphingActor, ss, type, id);
-	DQItem			*item = new DQItem(action, dh_morphUnit);
+	DQItem			*item = new DQItem(action);
 	m_itemQueue->AddTail(item);
 }
 
@@ -3726,7 +3493,7 @@ void DirectorImpl::AddHide(Unit hider)
 	if (!actor) return;
 
 	DQActionHideShow	*action = new DQActionHide(actor);
-	DQItem				*item = new DQItem(action, dh_hide);
+	DQItem				*item = new DQItem(action);
 
 	m_itemQueue->AddTail(item);
 }
@@ -3738,7 +3505,7 @@ void DirectorImpl::AddShow(Unit hider)
 	if (!actor) return;
 
 	DQActionHideShow	*action = new DQActionShow(actor, hider.RetPos());
-	DQItem				*item = new DQItem(action, dh_show);
+	DQItem				*item = new DQItem(action);
 
 	m_itemQueue->AddTail(item);
 }
@@ -3749,7 +3516,7 @@ void DirectorImpl::AddWork(Unit worker)
 		return;
 
 	DQActionWork	*action = new DQActionWork(worker.GetActor(), worker.RetPos(), worker.GetWorkSoundID());
-	DQItem			*item   = new DQItem(action, dh_work);
+	DQItem			*item   = new DQItem(action);
 	item->SetOwner(worker.GetOwner());
 
 	m_itemQueue->AddTail(item);
@@ -3761,7 +3528,7 @@ void DirectorImpl::AddFastKill(UnitActor *dead)
 	if (!dead) return;
 
 	DQActionFastKill	*action = new DQActionFastKill(dead);
-	DQItem				*item = new DQItem(action, dh_fastkill);
+	DQItem				*item = new DQItem(action);
 
 	m_itemQueue->AddTail(item);
 }
@@ -3769,7 +3536,7 @@ void DirectorImpl::AddFastKill(UnitActor *dead)
 void DirectorImpl::AddRemoveVision(const MapPoint &pos, double range)
 {
 	DQActionVision		*action = new DQActionRemoveVision(pos, range);
-	DQItem				*item = new DQItem(action, dh_removeVision);
+	DQItem				*item = new DQItem(action);
 
 	m_itemQueue->AddTail(item);
 }
@@ -3777,7 +3544,7 @@ void DirectorImpl::AddRemoveVision(const MapPoint &pos, double range)
 void DirectorImpl::AddAddVision(const MapPoint &pos, double range)
 {
 	DQActionVision *    action  = new DQActionAddVision(pos, range);
-	DQItem				*item = new DQItem(action, dh_addVision);
+	DQItem				*item = new DQItem(action);
 
 	m_itemQueue->AddTail(item);
 }
@@ -3788,7 +3555,7 @@ void DirectorImpl::AddSetVisibility(UnitActor *actor, uint32 visibility)
 	if (!actor) return;
 
 	DQActionSetVisibility * action  = new DQActionSetVisibility(actor, visibility);
-	DQItem				*item = new DQItem(action, dh_setVisibility);
+	DQItem				*item = new DQItem(action);
 
 	m_itemQueue->AddTail(item);
 }
@@ -3799,7 +3566,7 @@ void DirectorImpl::AddSetOwner(UnitActor *actor, sint32 owner)
 	if (!actor) return;
 
 	DQActionSetOwner *  action  = new DQActionSetOwner(actor, owner);
-	DQItem				*item = new DQItem(action, dh_setOwner);
+	DQItem				*item = new DQItem(action);
 
 	m_itemQueue->AddTail(item);
 }
@@ -3810,7 +3577,7 @@ void DirectorImpl::AddSetVisionRange(UnitActor *actor, double range)
 	if (!actor) return;
 
 	DQActionSetVisionRange *    action  = new DQActionSetVisionRange(actor, range);
-	DQItem				*item = new DQItem(action, dh_setVisionRange);
+	DQItem				*item = new DQItem(action);
 
 	m_itemQueue->AddTail(item);
 }
@@ -3821,7 +3588,7 @@ void DirectorImpl::AddBattle(Battle *battle)
 		return;
 
 	DQActionBattle *    action  = new DQActionBattle(battle);
-	DQItem				*item = new DQItem(action, dh_battle);
+	DQItem				*item = new DQItem(action);
 
 	m_itemQueue->AddTail(item);
 }
@@ -3831,7 +3598,7 @@ void DirectorImpl::AddPlaySound(sint32 soundID, MapPoint const & pos)
 	if (soundID <= 0) return;
 
 	DQActionPlaySound * action  = new DQActionPlaySound(soundID, pos);
-	DQItem				*item = new DQItem(action, dh_playSound);
+	DQItem				*item = new DQItem(action);
 
 	m_itemQueue->AddTail(item);
 }
@@ -3848,7 +3615,7 @@ void DirectorImpl::AddPlayWonderMovie(sint32 which)
 		return;
 
 	DQActionPlayWonderMovie	*   action  = new DQActionPlayWonderMovie(which);
-	DQItem				*item = new DQItem(action, dh_playWonderMovie);
+	DQItem				*item = new DQItem(action);
 
 	m_itemQueue->AddTail(item);
 }
@@ -3866,7 +3633,7 @@ void DirectorImpl::AddPlayVictoryMovie(GAME_OVER reason, BOOL previouslyWon, BOO
 	}
 
 	DQActionPlayVictoryMovie *  action  = new DQActionPlayVictoryMovie(reason);
-	DQItem				*item = new DQItem(action, dh_playVictoryMovie);
+	DQItem				*item = new DQItem(action);
 
 	m_itemQueue->AddTail(item);
 }
@@ -3874,7 +3641,7 @@ void DirectorImpl::AddPlayVictoryMovie(GAME_OVER reason, BOOL previouslyWon, BOO
 void DirectorImpl::AddMessage(const Message & message)
 {
 	DQActionMessage	*   action  = new DQActionMessage(message);
-	DQItem				*item = new DQItem(action, dh_message);
+	DQItem				*item = new DQItem(action);
 
 	m_itemQueue->AddTail(item);
 }
@@ -3886,7 +3653,7 @@ void DirectorImpl::AddFaceoff(Unit &attacker, Unit &defender)
 
 	DQActionFaceoff	*   action  = new DQActionFaceoff(attacker.GetActor(), attacker.RetPos(),
 			defender.GetActor(), defender.RetPos());
-	DQItem						*item = new DQItem(action, dh_faceoff);
+	DQItem						*item = new DQItem(action);
 
 	m_itemQueue->AddTail(item);
 }
@@ -3897,7 +3664,7 @@ void DirectorImpl::AddTerminateFaceoff(Unit &faceroffer)
 		return;
 
 	DQActionTerminateFaceOff	*action = new DQActionTerminateFaceOff(faceroffer->GetActor());
-	DQItem						*item = new DQItem(action, dh_terminateFaceoff);
+	DQItem						*item = new DQItem(action);
 
 	m_itemQueue->AddTail(item);
 }
@@ -3908,7 +3675,7 @@ void DirectorImpl::AddTerminateSound(Unit &unit)
 		return;
 
 	DQActionTerminateSound *    action  = new DQActionTerminateSound(unit.m_id);
-	DQItem						*item = new DQItem(action, dh_terminateSound);
+	DQItem						*item = new DQItem(action);
 
 	m_itemQueue->AddTail(item);
 }
@@ -3916,7 +3683,7 @@ void DirectorImpl::AddTerminateSound(Unit &unit)
 void DirectorImpl::AddInvokeThroneRoom(void)
 {
 	DQActionInvokeThroneRoom *  action = new DQActionInvokeThroneRoom;
-	DQItem						*item = new DQItem(action, dh_invokeThroneRoom);
+	DQItem						*item = new DQItem(action);
 
 	m_itemQueue->AddTail(item);
 }
@@ -3927,7 +3694,7 @@ void DirectorImpl::AddInvokeResearchAdvance(MBCHAR * message)
 		return;
 
 	DQActionInvokeResearchAdvance * action = new DQActionInvokeResearchAdvance(message);
-	DQItem						*item = new DQItem(action, dh_invokeResearchAdvance);
+	DQItem						*item = new DQItem(action);
 
 	m_itemQueue->AddTail(item);
 }
@@ -3941,7 +3708,7 @@ void DirectorImpl::AddBeginScheduler(sint32 player)
 	DPRINTF(k_DBG_GAMESTATE, ("Director::AddBeginScheduler(%d)\n", player));
 
 	DQActionBeginScheduler *    action = new DQActionBeginScheduler(player);
-	DQItem						*item = new DQItem(action, dh_beginScheduler);
+	DQItem						*item = new DQItem(action);
 
 	m_itemQueue->AddTail(item);
 }
