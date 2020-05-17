@@ -58,6 +58,7 @@ public:
 	virtual void Draw(RECT *paintRect, sint32 layer) = 0;
 	virtual void OffsetActors(sint32 deltaX, sint32 deltaY) = 0;
 
+	virtual void Unlock() = 0;
 	virtual void NextPlayer() = 0;
 
 	virtual void CatchUp() = 0;
@@ -139,21 +140,18 @@ public:
 	virtual void UpdateTimingClock() = 0;
 
 	// DirectorEvent
-	virtual Sequence *GetHoldSchedulerSequence() = 0;
-	virtual void SetHoldSchedulerSequence(Sequence *seq) = 0;
+	//virtual Sequence *GetHoldSchedulerSequence() = 0;
+	//virtual void SetHoldSchedulerSequence(Sequence *seq) = 0;
 
 	// GameEventManager
 	virtual void IncrementPendingGameActions() = 0;
 	virtual void DecrementPendingGameActions() = 0;
 
-	// TiledMap
-	virtual UnitActor *GetClickedActiveUnit(aui_MouseEvent *mouse) = 0;
-
 	// TradePool
 	virtual void TradeActorCreate(TradeRoute newRoute) = 0;
 	virtual void TradeActorDestroy(TradeRoute routeToDestroy) = 0;
 
-	// Unit
+	// Unit && UnseenCell
 	virtual void FastKill(UnitActor *actor) = 0;
 
 	// UnitActor && DirectorEvent
@@ -163,9 +161,6 @@ public:
 	#ifdef _DEBUG
 		virtual void DumpSequence(Sequence *seq) = 0;
 	#endif
-
-	// UnseenCell
-	virtual void ActiveUnitRemove(UnitActor *unitActor) = 0;
 };
 
 extern Director *g_director;

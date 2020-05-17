@@ -332,8 +332,6 @@ void UnitActor::Initialize(void)
 	m_shieldFlashOnTime = 0;
 	m_shieldFlashOffTime = 0;
 
-	m_activeListRef = 0;
-
 	m_healthPercent = -1.0;
 
 	m_tempStackSize = 0;
@@ -734,6 +732,12 @@ void UnitActor::GetNextAction(bool isVisible)
 	}
 
 	m_curUnitAction = (UNITACTION)m_curAction->GetActionType();
+}
+
+bool UnitActor::IsActionFinished()
+{
+	return (!m_curAction
+		|| m_curAction->m_actionType == UNITACTION_IDLE || m_curAction->m_actionType == UNITACTION_FACE_OFF);
 }
 
 void UnitActor::Process(void)

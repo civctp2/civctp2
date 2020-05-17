@@ -302,7 +302,7 @@ public:
 	void			DrawPartiallyConstructedImprovement(aui_Surface *surface, uint32 env,
 													sint32 type, sint32 x, sint32 y,
 													uint16 index, bool fog, sint32 percentComplete);
-													//Added by Martin Gühmann sint32 percentComplete by Martin Gühmann
+													//Added by Martin GÃ¼hmann sint32 percentComplete by Martin GÃ¼hmann
 
 	void            DrawAnImprovement(aui_Surface *surface, Pixel16 *data, sint32 x, sint32 y,bool fog,bool clip=false);
 
@@ -389,8 +389,6 @@ public:
 	                sint32 x, sint32 y);
 
 	void		HandleCheat(MapPoint &pos);
-
-	UnitActor	*GetClickedUnit(aui_MouseEvent *data);
 
 	bool		PointInMask(POINT hitPt) const;
 	bool		MousePointToTilePos(POINT point, MapPoint &tilePos) const;

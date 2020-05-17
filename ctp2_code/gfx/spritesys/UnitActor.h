@@ -97,6 +97,7 @@ public:
 	Action 			*WillMorph(void) const;
 	void			AddAction(Action *actionObj);
 	void			GetNextAction(bool isVisible = true);
+	bool			IsActionFinished();
 	void			AddIdle(bool NoIdleJustDelay = false);
 	void			ActionQueueUpIdle(bool NoIdleJustDelay = false);
 
@@ -217,14 +218,6 @@ public:
 
 	BOOL			HitTest(POINT mousePt);
 
-
-
-
-
-	void			AddActiveListRef(void) { m_activeListRef++; }
-	sint32			ReleaseActiveListRef(void) { return --m_activeListRef;}
-	sint32			GetActiveListRef(void) const { return m_activeListRef; }
-
 	void			Serialize(CivArchive &archive);
 
 #ifdef _DEBUG
@@ -307,7 +300,6 @@ protected:
 	uint32				m_shieldFlashOnTime;
 	uint32				m_shieldFlashOffTime;
 
-	sint32				m_activeListRef;
 	double				m_healthPercent;
 	sint32				m_tempStackSize;
 
