@@ -26,7 +26,7 @@
 //
 // - Start the great library with the current research project of the player.
 // - Start the "change to"-list with the current research selected.
-// - Initialized local variables. (Sep 9th 2005 Martin Gühmann)
+// - Initialized local variables. (Sep 9th 2005 Martin Gï¿½hmann)
 // - Fixed memory leaks.
 //
 //----------------------------------------------------------------------------
@@ -244,7 +244,7 @@ sint32 sci_advancescreen_removeMyWindow(uint32 action)
 
 		if (s_screenSequence)
 		{
-			g_director->ActionFinished(s_screenSequence);
+			g_director->ExternalActionFinished(DEA_ADVANCE_WINDOW);
 			s_screenSequence = NULL;
 		}
 	}

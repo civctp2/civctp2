@@ -764,10 +764,6 @@ void UnitActor::Process(void)
 
 	if (m_curAction->Finished())
 	{
-		if (m_curAction->m_actionType != UNITACTION_IDLE &&
-			m_curAction->m_actionType != UNITACTION_FACE_OFF)
-			g_director->ActionFinished(m_curAction->GetSequence());
-
 		if((m_curAction->m_actionType == UNITACTION_VICTORY && HasDeath())
 			||
 			m_curAction->m_actionType == UNITACTION_FAKE_DEATH) {
@@ -856,11 +852,6 @@ void UnitActor::DumpAllActions(void)
 
 	if (m_curAction != NULL) {
 		m_facing = m_curAction->GetFacing();
-
-		if (m_curAction->m_actionType != UNITACTION_IDLE &&
-			m_curAction->m_actionType != UNITACTION_FACE_OFF) {
-			g_director->ActionFinished(m_curAction->GetSequence());
-		}
 		delete m_curAction;
 		m_curAction = NULL;
 	}
@@ -870,12 +861,6 @@ void UnitActor::DumpAllActions(void)
 		m_actionQueue.Dequeue(deadAction);
 		if (deadAction != NULL) {
 			m_facing = deadAction->GetFacing();
-
-			if (deadAction->m_actionType != UNITACTION_IDLE &&
-				deadAction->m_actionType != UNITACTION_FACE_OFF) {
-				g_director->ActionFinished(deadAction->GetSequence());
-			}
-
 			delete deadAction;
 			deadAction = NULL;
 		} else {

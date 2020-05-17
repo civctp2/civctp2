@@ -44,6 +44,14 @@ class Battle;
 
 class Sequence;
 
+enum DEACTION_TYPE {
+	DEA_BEGIN_SCHEDULER,
+	DEA_BATTLE_WINDOW,
+	DEA_ADVANCE_WINDOW,
+	DEA_WONDER_MOVIE,
+	DEA_VICTORY_MOVIE
+};
+
 class Director
 {
 public:
@@ -58,7 +66,8 @@ public:
 	virtual void Draw(RECT *paintRect, sint32 layer) = 0;
 	virtual void OffsetActors(sint32 deltaX, sint32 deltaY) = 0;
 
-	virtual void Unlock() = 0;
+	virtual void ExternalActionFinished(DEACTION_TYPE externalActionType) = 0;
+
 	virtual void NextPlayer() = 0;
 
 	virtual void CatchUp() = 0;
@@ -153,9 +162,6 @@ public:
 
 	// Unit && UnseenCell
 	virtual void FastKill(UnitActor *actor) = 0;
-
-	// UnitActor && DirectorEvent
-	virtual void ActionFinished(Sequence *seq) = 0;
 
 	// UnitActor
 	#ifdef _DEBUG

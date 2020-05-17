@@ -24,7 +24,7 @@
 //
 // Modifications from the original Activision code:
 //
-// - Initialized local variables. (Sep 9th 2005 Martin Gühmann)
+// - Initialized local variables. (Sep 9th 2005 Martin Gï¿½hmann)
 //
 //----------------------------------------------------------------------------
 
@@ -122,7 +122,7 @@ void wondermoviewin_Cleanup()
 		g_wonderMovieWindow = NULL;
 	}
 
-	g_director->ActionFinished(seq);
+	g_director->ExternalActionFinished(DEA_WONDER_MOVIE);
 }
 
 

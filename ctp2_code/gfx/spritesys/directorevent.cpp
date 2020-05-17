@@ -236,10 +236,10 @@ STDEHANDLER(DirectorActionSuccessful)
 STDEHANDLER(DirectorReallyBeginScheduler)
 {
 	//if(g_director->GetHoldSchedulerSequence() != NULL) {
-	//	g_director->ActionFinished(g_director->GetHoldSchedulerSequence());
+	//	g_director->ExternalActionFinished(g_director->GetHoldSchedulerSequence());
 	//	g_director->SetHoldSchedulerSequence(NULL);
 	//}
-	g_director->Unlock();
+	g_director->ExternalActionFinished(DEA_BEGIN_SCHEDULER);
 	return GEV_HD_Continue;
 }
 

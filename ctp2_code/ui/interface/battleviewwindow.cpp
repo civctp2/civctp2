@@ -113,7 +113,7 @@ void BattleViewWindow::Cleanup(void)
 
 	g_modalWindow--;
 
-	g_director->ActionFinished(seq);
+	g_director->ExternalActionFinished(DEA_BATTLE_WINDOW);
 }
 
 

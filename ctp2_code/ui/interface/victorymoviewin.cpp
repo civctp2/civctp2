@@ -24,7 +24,7 @@
 //
 // Modifications from the original Activision code:
 //
-// - Initialized local variables. (Sep 9th 2005 Martin Gühmann)
+// - Initialized local variables. (Sep 9th 2005 Martin Gï¿½hmann)
 //
 //----------------------------------------------------------------------------
 
@@ -176,7 +176,7 @@ void victorymoviewin_Cleanup()
 		g_victoryMovieWindow = NULL;
 	}
 
-	g_director->ActionFinished(seq);
+	g_director->ExternalActionFinished(DEA_VICTORY_MOVIE);
 }
 
 
