@@ -38,7 +38,6 @@
 //
 //----------------------------------------------------------------------------
 
-// TODO: Deprecate HoldSchedulerSequence
 // TODO: Deprecate DQItem
 // TODO: Deprecate Sequence
 // TODO: Director: introduce callbacks (window) when action is done
@@ -430,10 +429,6 @@ public:
 
 	// battleviewwindow
 	virtual void UpdateTimingClock();
-
-	// DirectorEvent
-	//virtual Sequence *GetHoldSchedulerSequence() { return m_holdSchedulerSequence; }
-	//virtual void SetHoldSchedulerSequence(Sequence *seq) { m_holdSchedulerSequence = seq; }
 
 	// GameEventManager
 	virtual void IncrementPendingGameActions();
@@ -2107,23 +2102,12 @@ public:
 			g_network.Enqueue(new NetInfo(NET_INFO_CODE_BEGIN_SCHEDULER, player));
 		}
 
-		//Assert(!DirectorImpl::Instance()->GetHoldSchedulerSequence());
-		//if(!g_network.IsActive() || g_network.IsLocalPlayer(player))
-		//{
-		//	DirectorImpl::Instance()->SetHoldSchedulerSequence(sequence);
-		//}
-		//else
-		//{
-		//	DirectorImpl::Instance()->SetHoldSchedulerSequence(NULL);
-		//}
-
 		g_gevManager->Pause();
 		g_gevManager->AddEvent(GEV_INSERT_Tail, GEV_BeginScheduler,
 							   GEA_Player, player,
 							   GEA_End);
 		g_gevManager->Resume();
 
-		// bool canStartImmediate = !DirectorImpl::Instance()->GetHoldSchedulerSequence();
 		bool canStartImmediate = g_network.IsActive() && !g_network.IsLocalPlayer(player);
 		if (canStartImmediate) {
 			DirectorImpl::Instance()->ExternalActionFinished(DEA_BEGIN_SCHEDULER);

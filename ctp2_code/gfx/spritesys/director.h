@@ -148,10 +148,6 @@ public:
 	// battleviewwindow
 	virtual void UpdateTimingClock() = 0;
 
-	// DirectorEvent
-	//virtual Sequence *GetHoldSchedulerSequence() = 0;
-	//virtual void SetHoldSchedulerSequence(Sequence *seq) = 0;
-
 	// GameEventManager
 	virtual void IncrementPendingGameActions() = 0;
 	virtual void DecrementPendingGameActions() = 0;
