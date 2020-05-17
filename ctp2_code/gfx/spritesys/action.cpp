@@ -73,8 +73,7 @@ Action::Action(sint32 actionType, ACTIONEND endCondition, sint32 startAnimPos, s
 	m_unitsVisibility           (0),
 	m_unitVisionRange           (0),
 	m_numRevealedActors         (0),
-	m_revealedActors            (NULL),
-    m_sequence                  (NULL)
+	m_revealedActors            (NULL)
 { ; }
 
 Action::Action(Action const & a_Original)
@@ -101,9 +100,7 @@ Action::Action(Action const & a_Original)
 	m_unitsVisibility           (a_Original.m_unitsVisibility),
 	m_unitVisionRange           (a_Original.m_unitVisionRange),
 	m_numRevealedActors         (a_Original.m_numRevealedActors),
-	m_revealedActors            (NULL),
-    /// @todo Check copying of m_sequence (shallow copy in original code, not deleted in destructor)
-    m_sequence                  (a_Original.m_sequence)
+	m_revealedActors            (NULL)
 {
     if (a_Original.m_curAnim)
     {

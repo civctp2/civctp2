@@ -6,7 +6,6 @@
 
 class aui_MovieButton;
 class c3_Static;
-class Sequence;
 class ctp2_HyperTextBox;
 
 class WonderMovieWindow : public C3Window
@@ -46,13 +45,9 @@ public:
 	void SetWonderName(MBCHAR *name);
 	void SetText(const MBCHAR *text);
 
-	Sequence *GetSequence(void) { return m_sequence;}
-	void SetSequence(Sequence *seq) { m_sequence = seq; }
-
 private:
 	aui_MovieButton		*m_movieButton;
 	c3_Static			*m_wonderName;
-	Sequence 			*m_sequence;
 	c3_Static			*m_topBorder;
 	c3_Static			*m_leftBorder;
 	c3_Static			*m_rightBorder;

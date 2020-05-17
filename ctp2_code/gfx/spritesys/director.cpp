@@ -39,8 +39,6 @@
 //----------------------------------------------------------------------------
 
 // TODO: Deprecate DQItem
-// TODO: Deprecate Sequence
-// TODO: Director: introduce callbacks (window) when action is done
 // TODO: verify that all EffectActors are deleted
 
 #include "c3.h"
@@ -166,8 +164,8 @@ public:
 	virtual bool IsTypeImmediate() { return false; }
 	virtual bool IsTypeActor() { return false; }
 
-	virtual void Execute(Sequence *sequence) = 0;
-	virtual void ExecuteImmediate(Sequence *sequence) = 0;
+	virtual void Execute() = 0;
+	virtual void ExecuteImmediate() = 0;
 
 	virtual void Dump() = 0;
 };
@@ -181,14 +179,14 @@ public:
 	virtual ~DQActionActor() {}
 	virtual bool IsTypeActor() { return true; }
 
-	virtual void Execute(Sequence *sequence)
+	virtual void Execute()
 	{
-		DoExecute(sequence, false);
+		DoExecute(false);
 	}
 
-	virtual void ExecuteImmediate(Sequence *sequence)
+	virtual void ExecuteImmediate()
 	{
-		DoExecute(sequence, true);
+		DoExecute(true);
 		Finish();
 	}
 
@@ -235,7 +233,7 @@ public:
 		DoFinish();
 	}
 protected:
-	virtual void DoExecute(Sequence *sequence, bool immediate) = 0;
+	virtual void DoExecute(bool immediate) = 0;
 	virtual void DoFinish() {}
 
 	void AddActiveActor(UnitActor *actor) {
@@ -307,32 +305,6 @@ public:
 	sint8			m_owner;
 	uint16			m_round;
 	DQAction		*m_action;
-	Sequence		*m_sequence;
-};
-
-class Sequence {
-public:
-	Sequence(sint32 seqID, DQItem *item)
-			:
-			m_sequenceID    (seqID),
-			m_refCount      (0),
-			m_item          (item)
-	{
-	}
-
-	~Sequence() {}
-
-	sint32 GetSequenceID(void) { return m_sequenceID; }
-	void	AddRef(void) { m_refCount++; }
-	void	Release(void) { m_refCount--; }
-	sint32	GetRefCount(void) { return m_refCount; }
-
-	DQItem	*GetItem(void) { return m_item; }
-
-private:
-	sint32	m_sequenceID;
-	sint32	m_refCount;
-	DQItem	*m_item;
 };
 
 class DirectorImpl : public Director {
@@ -441,13 +413,7 @@ public:
 	// Unit
 	virtual void FastKill(UnitActor *actor);
 
-	// UnitActor
-	#ifdef _DEBUG
-		virtual void DumpSequence(Sequence *seq);
-	#endif
-
 	// Used locally
-	Sequence	*NewSequence(DQItem* item);
 	void		EndTurn();
 	bool		HandleActor(bool immediate, UnitActor* actor, bool actionEnabled);
 	bool 		TileIsVisibleToPlayer(MapPoint &pos);
@@ -504,10 +470,6 @@ private:
 	bool						m_paused;
 	bool						m_processingActiveEffects;
 
-	sint32						m_curSequenceID;
-	sint32						m_lastSequenceID;
-	Sequence					*m_holdSchedulerSequence;
-
 	PointerList<DQItem>			*m_itemQueue;
 
 	std::set<UnitActor *>		m_standbyActors;
@@ -530,8 +492,8 @@ public:
 	virtual ~DQActionImmediate() {}
 	virtual bool IsTypeImmediate() { return true; }
 
-	virtual void Execute(Sequence *sequence) { ExecuteImmediate(sequence); }
-	virtual void ExecuteImmediate(Sequence *sequence)
+	virtual void Execute() { ExecuteImmediate(); }
+	virtual void ExecuteImmediate()
 	{
 		DoExecuteImmediate();
 	}
@@ -1305,16 +1267,13 @@ public:
 	UnitActor	*moveActor;
 
 protected:
-	virtual void DoExecute(Sequence *sequence, bool immediate)
+	virtual void DoExecute(bool immediate)
 	{
 		if (g_theUnitPool && !g_theUnitPool->IsValid(moveActor->GetUnitID())) {
 			return;
 		}
 
 		Action *action = new Action();
-
-		action->SetSequence(sequence);
-		sequence->AddRef();
 
 		action->SetStartMapPoint(startPosition);
 		action->SetEndMapPoint  (endPosition);
@@ -1411,7 +1370,7 @@ public:
 	}
 protected:
 	virtual MBCHAR const * const GetName() { return "Attack"; }
-	virtual void DoExecute(Sequence *sequence, bool immediate)
+	virtual void DoExecute(bool immediate)
 	{
 		//	bool attackerVisible = DirectorImpl::Instance()->TileIsVisibleToPlayer(attackerPos);
 		bool defenderVisible = DirectorImpl::Instance()->TileIsVisibleToPlayer(defenderPosition);
@@ -1430,9 +1389,6 @@ protected:
 		sint32 facingIndex = spriteutils_DeltaToFacing(deltax, deltay);
 
 		Action *action = new Action();
-		action->SetSequence(sequence);
-		sequence->AddRef();
-
 		action->SetStartMapPoint(attackerPosition);
 		action->SetEndMapPoint  (attackerPosition);
 
@@ -1447,9 +1403,6 @@ protected:
 			facingIndex = spriteutils_DeltaToFacing(-deltax, -deltay);
 
 			action = new Action();
-			action->SetSequence(sequence);
-			sequence->AddRef();
-
 			action->SetStartMapPoint(defenderPosition);
 			action->SetEndMapPoint  (defenderPosition);
 
@@ -1498,7 +1451,7 @@ public:
 protected:
 	virtual MBCHAR const * const GetName() { return "Special attack"; }
 
-	virtual void DoExecute(Sequence *sequence, bool immediate)
+	virtual void DoExecute(bool immediate)
 	{
 		BOOL attackerCanAttack = !attackerIsCity;
 		BOOL defenderIsAttackable = !defenderIsCity;
@@ -1528,9 +1481,6 @@ protected:
 
 			facingIndex = spriteutils_DeltaToFacing(deltax, deltay);
 
-			attackerAction->SetSequence(sequence);
-			sequence->AddRef();
-
 			if(!attacker->ActionSpecialAttack(attackerAction, facingIndex))
 			{
 				delete attackerAction;
@@ -1551,9 +1501,6 @@ protected:
 			defenderAction->SetEndMapPoint  (defenderPosition);
 
 			facingIndex=spriteutils_DeltaToFacing(-deltax, -deltay);
-
-			defenderAction->SetSequence(sequence);
-			sequence->AddRef();
 
 			if(!defender->ActionSpecialAttack(defenderAction, facingIndex))
 			{
@@ -1602,7 +1549,7 @@ public:
 		DPRINTF(k_DBG_UI, ("  soundID                :%d\n", soundID));
 	}
 protected:
-	virtual void DoExecute(Sequence *sequence, bool immediate)
+	virtual void DoExecute(bool immediate)
 	{
 		if (attacker->GetNeedsToDie()) {
 			return;
@@ -1610,9 +1557,6 @@ protected:
 		Action *action = new Action(UNITACTION_ATTACK, ACTIONEND_ANIMEND,
 									attacker->GetHoldingCurAnimPos(UNITACTION_ATTACK),
 									attacker->GetHoldingCurAnimSpecialDelayProcess(UNITACTION_ATTACK));
-		action->SetSequence(sequence);
-		sequence->AddRef();
-
 		action->SetStartMapPoint(attackerPosition);
 		action->SetEndMapPoint(attackerPosition);
 
@@ -1685,7 +1629,7 @@ public:
 		DPRINTF(k_DBG_UI, ("  deadSoundID        :%d\n", deadSoundID));
 	}
 protected:
-	virtual void DoExecute(Sequence *sequence, bool immediate)
+	virtual void DoExecute(bool immediate)
 	{
 		if (!dead->GetNeedsToDie())
 		{
@@ -1719,10 +1663,6 @@ protected:
 			dead->SetTempStackSize(0);
 
 			Action *action = new Action((UNITACTION)deathActionType, ACTIONEND_ANIMEND);
-
-			action->SetSequence(sequence);
-			sequence->AddRef();
-
 			action->SetStartMapPoint(deadPosition);
 			action->SetEndMapPoint(deadPosition);
 
@@ -1784,7 +1724,7 @@ public:
 		DPRINTF(k_DBG_UI, ("  workSoundID        :%d\n", workSoundID));
 	}
 protected:
-	virtual void DoExecute(Sequence *sequence, bool immediate)
+	virtual void DoExecute(bool immediate)
 	{
 		Action *action = new Action(UNITACTION_WORK, ACTIONEND_ANIMEND);
 
@@ -1805,10 +1745,6 @@ protected:
 				return;
 			}
 		}
-
-		action->SetSequence(sequence);
-		sequence->AddRef();
-
 		action->SetAnim(anim);
 
 		workActor->AddAction(action);
@@ -1859,15 +1795,13 @@ public:
 		DPRINTF(k_DBG_UI, ("  attackedPosition   :%d,%d\n", attackedPosition.x, attackedPosition.y));
 	}
 protected:
-	virtual void DoExecute(Sequence *sequence, bool immediate)
+	virtual void DoExecute(bool immediate)
 	{
 		Action *attackerAction = new Action(UNITACTION_FACE_OFF, ACTIONEND_INTERRUPT);
-		attackerAction->SetSequence(NULL);
 		attackerAction->SetStartMapPoint(attackerPosition);
 		attackerAction->SetEndMapPoint(attackerPosition);
 
 		Action *attackedAction = new Action(UNITACTION_FACE_OFF, ACTIONEND_INTERRUPT);
-		attackedAction->SetSequence(NULL);
 		attackedAction->SetStartMapPoint(attackedPosition);
 		attackedAction->SetEndMapPoint(attackedPosition);
 
@@ -1957,10 +1891,10 @@ public:
 	{}
 	virtual ~DQActionExternal() {}
 
-	virtual void ExecuteImmediate(Sequence *sequence)
+	virtual void ExecuteImmediate()
 	{
 		// External dependency so no immediate execution available
-		Execute(sequence);
+		Execute();
 	}
 };
 
@@ -1977,9 +1911,9 @@ public:
 	}
 	virtual DQACTION_TYPE GetType() { return DQACTION_INVOKE_RESEARCH_ADVANCE; }
 
-	virtual void Execute(Sequence *sequence)
+	virtual void Execute()
 	{
-		sci_advancescreen_displayMyWindow(message, 0, sequence);
+		sci_advancescreen_displayMyWindow(message, 0);
 	}
 
 	virtual void Dump()
@@ -2001,14 +1935,14 @@ public:
 	virtual ~DQActionBattle() {}
 	virtual DQACTION_TYPE GetType() { return DQACTION_BATTLE; }
 
-	virtual void Execute(Sequence *sequence)
+	virtual void Execute()
 	{
 		if(g_battleViewWindow)
 		{
 			BattleViewWindow::Cleanup();
 		}
 
-		BattleViewWindow::Initialize(sequence);
+		BattleViewWindow::Initialize();
 
 		if(g_battleViewWindow)
 		{
@@ -2036,9 +1970,9 @@ public:
 	virtual ~DQActionPlayWonderMovie() {}
 	virtual DQACTION_TYPE GetType() { return DQACTION_PLAYWONDERMOVIE; }
 
-	virtual void Execute(Sequence *sequence)
+	virtual void Execute()
 	{
-		wondermoviewin_Initialize(sequence);
+		wondermoviewin_Initialize();
 		wondermoviewin_DisplayWonderMovie(wonderMovieID);
 	}
 
@@ -2061,9 +1995,9 @@ public:
 	virtual ~DQActionPlayVictoryMovie() {}
 	virtual DQACTION_TYPE GetType() { return DQACTION_PLAYVICTORYMOVIE; }
 
-	virtual void Execute(Sequence *sequence)
+	virtual void Execute()
 	{
-		victorymoviewin_Initialize(sequence);
+		victorymoviewin_Initialize();
 		victorymoviewin_DisplayVictoryMovie(reason);
 	}
 
@@ -2086,7 +2020,7 @@ public:
 	virtual ~DQActionBeginScheduler() {}
 	virtual DQACTION_TYPE GetType() { return DQACTION_BEGIN_SCHEDULER; }
 
-	virtual void Execute(Sequence *sequence)
+	virtual void Execute()
 	{
 #ifdef _DEBUG
 		static bool isCurrentPlayerOk = true; // static, to report the error only once
@@ -2127,11 +2061,8 @@ DQItem::DQItem(DQAction *action)
 :
 	m_owner             (PLAYER_UNASSIGNED),
 	m_round             (0),
-	m_action            (action),
-	m_sequence          (NULL)
+	m_action            (action)
 {
-	m_sequence = DirectorImpl::Instance()->NewSequence(this);
-
 	if (g_turn)
 	{
 		m_round = static_cast<uint16>(g_turn->GetRound());
@@ -2141,12 +2072,10 @@ DQItem::DQItem(DQAction *action)
 DQItem::~DQItem()
 {
 	//DPRINTF(k_DBG_GAMESTATE, ("Deleting item @ %lx, type=%d\n", this, m_type));
-	delete m_sequence;
 	delete m_action;
 }
 
 #define k_MAX_DISPATCHED_QUEUE_ITEMS		1000
-#define k_MAX_SAVED_SEQUENCES				1000
 
 DirectorImpl *DirectorImpl::m_instance = NULL;
 DirectorImpl::DirectorImpl(void)
@@ -2161,11 +2090,8 @@ DirectorImpl::DirectorImpl(void)
 	m_averageFPS                (k_DEFAULT_FPS),
 	m_paused                    (FALSE),
 	m_processingActiveEffects   (FALSE),
-	m_curSequenceID             (0),
-	m_lastSequenceID            (0),
 	m_itemQueue                 (new PointerList<DQItem>),
 	m_itemWalker                (new PointerList<DQItem>::Walker),
-	m_holdSchedulerSequence     (NULL),
 	m_pendingGameActions        (0),
 	m_endTurnRequested          (false)
 {
@@ -2312,11 +2238,6 @@ void DirectorImpl::PauseDirector(BOOL pause)
 
 #ifdef _DEBUG
 
-void DirectorImpl::DumpSequence(Sequence *seq) {
-	DPRINTF(k_DBG_UI, ("  m_sequence->m_sequenceID     :%ld\n", seq->GetSequenceID()));
-	DumpItem(seq->GetItem());
-}
-
 void DirectorImpl::DumpItem(DQItem *item)
 {
 	if (item) {
@@ -2334,8 +2255,6 @@ void DirectorImpl::DumpInfo(void)
 {
 	DPRINTF(k_DBG_UI, (" ------------------\n"));
 	DPRINTF(k_DBG_UI, ("Director Dump:\n"));
-	DPRINTF(k_DBG_UI, (" m_curSequenceID  :%d\n", m_curSequenceID));
-	DPRINTF(k_DBG_UI, (" m_lastSequenceID :%d\n", m_lastSequenceID));
 	DPRINTF(k_DBG_UI, (" ------------------\n"));
 	DPRINTF(k_DBG_UI, (" Current Item:\n"));
 	DumpItem(m_currentItem);
@@ -2416,11 +2335,11 @@ void DirectorImpl::HandleNextAction(void)
 			)
 			)
 		{
-			m_currentItem->m_action->ExecuteImmediate(m_currentItem->m_sequence);
+			m_currentItem->m_action->ExecuteImmediate();
 			delete m_currentItem;
 			m_currentItem = NULL;
 		} else {
-			m_currentItem->m_action->Execute(m_currentItem->m_sequence);
+			m_currentItem->m_action->Execute();
 		}
 	}
 }
@@ -2455,11 +2374,6 @@ void DirectorImpl::ExternalActionFinished(DEACTION_TYPE externalActionType)
 	}
 }
 
-Sequence *DirectorImpl::NewSequence(DQItem *item)
-{
-	return new Sequence(++m_curSequenceID, item);
-}
-
 void DirectorImpl::CatchUp(void)
 {
 	if (m_currentItem) {
@@ -2471,7 +2385,7 @@ void DirectorImpl::CatchUp(void)
 	while(m_itemQueue->GetCount())
 	{
 		DQItem *item = m_itemQueue->RemoveHead();
-		item->m_action->ExecuteImmediate(item->m_sequence);
+		item->m_action->ExecuteImmediate();
 		delete item;
 	}
 
@@ -2746,7 +2660,7 @@ void DirectorImpl::NextPlayer() {
 	while(m_itemQueue->GetCount())
 	{
 		DQItem *item = m_itemQueue->RemoveHead();
-		item->m_action->ExecuteImmediate(item->m_sequence);
+		item->m_action->ExecuteImmediate();
 		delete item;
 	}
 

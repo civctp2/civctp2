@@ -42,8 +42,6 @@ class TradeRoute;
 class UnitActor;
 class Battle;
 
-class Sequence;
-
 enum DEACTION_TYPE {
 	DEA_BEGIN_SCHEDULER,
 	DEA_BATTLE_WINDOW,
@@ -158,11 +156,6 @@ public:
 
 	// Unit && UnseenCell
 	virtual void FastKill(UnitActor *actor) = 0;
-
-	// UnitActor
-	#ifdef _DEBUG
-		virtual void DumpSequence(Sequence *seq) = 0;
-	#endif
 };
 
 extern Director *g_director;

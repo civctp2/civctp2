@@ -7,9 +7,7 @@
 #include "aui_action.h"     // aui_Action
 #include "ctp2_inttypes.h"  // sint32, uint32
 
-class Sequence;
-
-void wondermoviewin_Initialize(Sequence *seq);
+void wondermoviewin_Initialize();
 void wondermoviewin_DisplayWonderMovie(sint32 id);
 
 void wondermoviewin_Cleanup();

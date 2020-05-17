@@ -80,7 +80,7 @@ void RemoveBattleViewAction::Execute(aui_Control *control, uint32 action, uint32
 }
 
 
-void BattleViewWindow::Initialize(Sequence *seq)
+void BattleViewWindow::Initialize()
 {
 	AUI_ERRCODE		errcode;
 
@@ -90,8 +90,6 @@ void BattleViewWindow::Initialize(Sequence *seq)
 	g_battleViewWindow = new BattleViewWindow( &errcode, aui_UniqueId(), "BattleViewWindow", 16,
 											AUI_WINDOW_TYPE_POPUP);
 
-	g_battleViewWindow->SetSequence(seq);
-
 	g_modalWindow++;
 
 	Assert(g_battleViewWindow != NULL);
@@ -100,11 +98,7 @@ void BattleViewWindow::Initialize(Sequence *seq)
 
 void BattleViewWindow::Cleanup(void)
 {
-	Sequence	*seq = NULL;
-
 	if (g_battleViewWindow) {
-		seq = g_battleViewWindow->GetSequence();
-
 		g_c3ui->RemoveWindow(g_battleViewWindow->Id());
 
 		delete g_battleViewWindow;
@@ -157,8 +151,7 @@ BattleViewWindow::BattleViewWindow
     m_fortBonusValue        (NULL),
     m_fortBonusImage        (NULL),
     m_fortifiedBonusText    (NULL),
-    m_fortifiedBonusValue   (NULL),
-    m_sequence              (NULL)
+    m_fortifiedBonusValue   (NULL)
 {
 	InitCommonLdl(ldlBlock);
 }

@@ -115,8 +115,6 @@ static aui_StringTable	*s_advanceString = NULL;
 
 static sint32 s_oldResearching = -1;
 
-static Sequence		*s_screenSequence = NULL;
-
 static bool *s_scienceGoalTree=NULL;
 
 sint32 ScienceSortCallback(ctp2_ListItem *item1, ctp2_ListItem *item2, sint32 column);
@@ -189,12 +187,10 @@ void sci_advancescreen_listAction( aui_Control *control, uint32 action, uint32 d
 	}
 }
 
-sint32	sci_advancescreen_displayMyWindow( MBCHAR *messageText, sint32 from, Sequence *seq )
+sint32	sci_advancescreen_displayMyWindow( MBCHAR *messageText, sint32 from)
 {
 	Player *p = g_player[ g_selected_item->GetVisiblePlayer() ];
 	s_oldResearching = p->m_advances->GetResearching();
-
-	s_screenSequence = seq;
 
 	sint32 retval=0;
 	if(!s_sci_advanceScreen) { retval = sci_advancescreen_Initialize( messageText ); }
@@ -242,11 +238,7 @@ sint32 sci_advancescreen_removeMyWindow(uint32 action)
 
 		Assert( auiErr == AUI_ERRCODE_OK );
 
-		if (s_screenSequence)
-		{
-			g_director->ExternalActionFinished(DEA_ADVANCE_WINDOW);
-			s_screenSequence = NULL;
-		}
+		g_director->ExternalActionFinished(DEA_ADVANCE_WINDOW);
 	}
 
 	return 1;

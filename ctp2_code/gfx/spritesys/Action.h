@@ -100,7 +100,6 @@ enum  GAME_ACTION
 class ActorPath;
 class Anim;
 // POINT
-class Sequence;
 class UnitActor;
 
 //----------------------------------------------------------------------------
@@ -183,9 +182,6 @@ public:
 	void			SetUnitVisionRange(double visRange) { m_unitVisionRange = visRange; }
 	double			GetUnitVisionRange(void) const { return m_unitVisionRange; }
 
-	void			SetSequence(Sequence *seq) { m_sequence = seq; }
-	Sequence		*GetSequence(void) const { return m_sequence; }
-
 	void			SetSoundEffect(sint32 sound_id) { m_sound_effect_id = sound_id; }
 	sint32  		GetSoundEffect(void) const { return m_sound_effect_id; }
 
@@ -222,8 +218,6 @@ protected:
 
 	sint32				m_numRevealedActors;
 	UnitActor			**m_revealedActors;
-
-	Sequence			*m_sequence;
 };
 
 #endif
