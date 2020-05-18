@@ -111,12 +111,12 @@ AUI_ERRCODE aui_Pixel::Convert24To16Dither(
 	if (!thisrerr || !thisgerr || !thisberr ||
 		!nextrerr || !nextgerr || !nextberr)
     {
-		delete thisrerr;
-		delete thisgerr;
-		delete thisberr;
-		delete nextrerr;
-		delete nextgerr;
-		delete nextberr;
+		delete[] thisrerr;
+		delete[] thisgerr;
+		delete[] thisberr;
+		delete[] nextrerr;
+		delete[] nextgerr;
+		delete[] nextberr;
 		return AUI_ERRCODE_LOADFAILED;
 	}
 
@@ -248,12 +248,12 @@ AUI_ERRCODE aui_Pixel::Convert24To16Dither(
 	    fs_direction = ! fs_direction;
 	}
 
-    delete thisrerr;
-    delete thisgerr;
-    delete thisberr;
-    delete nextrerr;
-    delete nextgerr;
-    delete nextberr;
+    delete[] thisrerr;
+    delete[] thisgerr;
+    delete[] thisberr;
+    delete[] nextrerr;
+    delete[] nextgerr;
+    delete[] nextberr;
 
     Free2D(m_edge);
 

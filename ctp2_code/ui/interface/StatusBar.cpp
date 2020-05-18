@@ -44,7 +44,7 @@ void StatusBar::SetText(const MBCHAR *text, const aui_Control *owner)
 {
 	if(m_text && (unsigned) m_allocatedLen < strlen(text) + 1) {
 
-		delete m_text;
+		delete[] m_text;
 		m_text = NULL;
 	}
 
