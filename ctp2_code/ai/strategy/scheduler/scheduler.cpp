@@ -632,12 +632,9 @@ void Scheduler::Match_Resources(const bool move_armies)
 	sint32 committed_agents = 0;
 	sint32 total_agents     = m_agents.size();
 
-	for
-	(
-	    Goal_List::iterator goal_iter  = m_goals.begin();
-	                        goal_iter != m_goals.end();
-	                      ++goal_iter
-	)
+	//It is best not to iterate using a for loop, as items may be erased as we go through
+	Goal_List::iterator goal_iter = m_goals.begin();
+	while(goal_iter != m_goals.end())
 	{
 		if(committed_agents >= total_agents)
 		{
@@ -686,7 +683,7 @@ void Scheduler::Match_Resources(const bool move_armies)
 
 			// Actually should be checked in the next cycle, but there still seems to be something wrong.
 			Goal_List::iterator tmp_goal_iter = goal_iter;
-			--goal_iter;
+			goal_iter++;
 			m_goals.erase(tmp_goal_iter);
 
 			/*
@@ -723,6 +720,7 @@ void Scheduler::Match_Resources(const bool move_armies)
 					--goal_iter;
 					goal_ptr->Rollback_All_Agents(); // Just roll back but don't report to the build list
 					Reprioritize_Goal(tmp_goal_iter);
+					goal_iter++;
 					continue;
 				}
 			}
@@ -745,6 +743,7 @@ void Scheduler::Match_Resources(const bool move_armies)
 					("\t\tGOAL_FAILED Not enough transporters (goal: %x)\n", goal_ptr));
 
 				Rollback_Matches_For_Goal(goal_ptr);
+				goal_iter++;
 				continue;
 			}
 		}
@@ -756,6 +755,7 @@ void Scheduler::Match_Resources(const bool move_armies)
 			AI_DPRINTF(k_DBG_SCHEDULER, m_playerId, goal_ptr->Get_Goal_Type(), -1,
 					("\t\tGOAL (goal: %x) -- No agents were committed, maybe next time. Continuing...\n",
 						goal_ptr));
+			goal_iter++;
 			continue;
 		}
 
@@ -865,6 +865,7 @@ void Scheduler::Match_Resources(const bool move_armies)
 				break;
 			}
 		}
+		goal_iter++;
 	}
 
 #if defined(_DEBUG)
