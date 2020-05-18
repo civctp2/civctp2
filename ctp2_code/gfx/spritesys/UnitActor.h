@@ -92,7 +92,6 @@ public:
 	sint32			GetSize(void) const { return m_size; }
 
 	virtual void	Process(void);
-	void			DumpAllActions(void);
 	void			EndTurnProcess(void);
 	Action 			*WillMorph(void) const;
 	void			AddAction(Action *actionObj);
@@ -171,15 +170,6 @@ public:
 	void            SetUnitVisionRange(double range) { m_unitVisionRange = range; }
 	void            SetNewUnitVisionRange(double range) { m_newUnitVisionRange = range; }
 
-	void			SetNeedsToDie(BOOL val) { m_needsToDie = val; }
-	BOOL			GetNeedsToDie(void) const { return m_needsToDie; }
-
-	void			SetNeedsToVictor(BOOL val) { m_needsToVictor = val; }
-	BOOL			GetNeedsToVictor(void) const { return m_needsToVictor; }
-
-	void			SetKillNow(void) { m_killNow = TRUE; }
-	BOOL			GetKillNow(void) const { return m_killNow; }
-
 	void			SetRevealedActors(UnitActor **revealedActors) { m_revealedActors = revealedActors; }
 	void			SaveRevealedActors(UnitActor **revealedActors) { m_savedRevealedActors = revealedActors; }
 	UnitActor		**GetRevealedActors(void) const { return m_revealedActors; }
@@ -237,6 +227,8 @@ public:
 	void            HackSetSpriteID(sint32 spriteID) { m_spriteID = spriteID; }
 
 protected:
+	void			DumpAllActions(void);
+
 	MapPoint			m_pos;
 	MapPoint			m_savePos;
 	Unit				m_unitID;
@@ -264,9 +256,6 @@ protected:
 	uint32				m_unitSaveVisibility;
 
 	BOOL				m_directionalAttack;
- 	BOOL				m_needsToDie;
- 	BOOL				m_needsToVictor;
-	BOOL				m_killNow;
 	double				m_unitVisionRange;
 	double              m_newUnitVisionRange;
 

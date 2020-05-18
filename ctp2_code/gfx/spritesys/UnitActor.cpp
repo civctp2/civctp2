@@ -144,9 +144,6 @@ UnitActor::UnitActor(SpriteState *ss, Unit id, sint32 unitType, const MapPoint &
 	m_unitVisibility            (0),
     m_unitSaveVisibility        (0),
     m_directionalAttack         (false),
-    m_needsToDie                (false),
-    m_needsToVictor             (false),
-    m_killNow                   (false),
 	m_unitVisionRange           (visionRange),
     m_newUnitVisionRange        (0.0),
     m_numRevealedActors         (0),
@@ -226,9 +223,6 @@ UnitActor::UnitActor(CivArchive &archive)
 	m_unitVisibility            (0),
     m_unitSaveVisibility        (0),
     m_directionalAttack         (false),
-    m_needsToDie                (false),
-    m_needsToVictor             (false),
-    m_killNow                   (false),
 	m_unitVisionRange           (0.0),
     m_newUnitVisionRange        (0.0),
     m_numRevealedActors         (0),
@@ -278,9 +272,6 @@ void UnitActor::Initialize(void)
 	m_heraldRect = tmpRect;
 	m_bVisSpecial = FALSE;
 	m_animPos = 0;
-	m_needsToDie = FALSE;
-	m_needsToVictor = FALSE;
-	m_killNow = FALSE;
 	m_curUnitAction			= UNITACTION_NONE;
 	m_transparency			= 0;
 	m_numRevealedActors		= 0;
@@ -747,14 +738,8 @@ void UnitActor::Process(void)
 
 	if (!m_curAction)
 	{
-
 		DumpFullLoad();
-
 		AddIdle(m_facing != 3);
-
-
-
-
 	}
 
 	if (!m_curAction)
@@ -762,52 +747,36 @@ void UnitActor::Process(void)
 
 	m_curAction->Process();
 
-	if (m_curAction->Finished())
-	{
-		if((m_curAction->m_actionType == UNITACTION_VICTORY && HasDeath())
-			||
-			m_curAction->m_actionType == UNITACTION_FAKE_DEATH) {
-			SetKillNow();
-			delete m_curAction;
-			m_curAction = NULL;
-		} else
-		{
-
-			GetNextAction();
-		}
+	if (m_curAction->Finished()) {
+		GetNextAction();
 	}
 	else
 	{
 		if (m_curAction->GetPath()!=NULL)
 		{
-
 			POINT curPt = m_curAction->GetPosition();
 			m_x = curPt.x;
 			m_y = curPt.y;
 		}
 		else
 		{
-
 			sint32 x, y;
 			maputils_MapXY2PixelXY(m_pos.x, m_pos.y, &x, &y);
 			m_x = x;
 			m_y = y;
 		}
 
-
-		if(m_curAction->GetActionType() == UNITACTION_MOVE || m_curAction->GetActionType() == UNITACTION_ATTACK)
-		{
+		if(m_curAction->GetActionType() == UNITACTION_MOVE || m_curAction->GetActionType() == UNITACTION_ATTACK) {
 			m_lastMoveFacing = m_curAction->GetFacing();
 		}
-
 
 		if(m_curAction->SpecialDelayProcess()
 			|| (m_curUnitAction == UNITACTION_IDLE
 				&& m_unitSpriteGroup
-				&& m_unitSpriteGroup->GetGroupSprite((GAME_ACTION)m_curUnitAction) == NULL)) {
+				&& m_unitSpriteGroup->GetGroupSprite((GAME_ACTION)m_curUnitAction) == NULL))
+		{
 			m_facing = m_lastMoveFacing;
 		} else {
-
 			m_facing = m_curAction->GetFacing();
 		}
 
@@ -815,7 +784,6 @@ void UnitActor::Process(void)
 
 		m_transparency = m_curAction->GetTransparency();
 	}
-
 }
 
 Action *UnitActor::WillMorph(void) const
@@ -856,15 +824,14 @@ void UnitActor::DumpAllActions(void)
 		m_curAction = NULL;
 	}
 
-	Action *deadAction=NULL;
+	Action *otherAction=NULL;
 	while (m_actionQueue.GetNumItems() > 0) {
-		m_actionQueue.Dequeue(deadAction);
-		if (deadAction != NULL) {
-			m_facing = deadAction->GetFacing();
-			delete deadAction;
-			deadAction = NULL;
+		m_actionQueue.Dequeue(otherAction);
+		if (otherAction != NULL) {
+			m_facing = otherAction->GetFacing();
+			delete otherAction;
+			otherAction = NULL;
 		} else {
-
 			Assert(FALSE);
 			return;
 		}
@@ -2313,9 +2280,6 @@ bool UnitActor::ActionMove(Action *actionObj)
 	if (actionObj == NULL)
 		return false;
 
-	if(GetNeedsToDie())
-	   return false;
-
 	SetIsFortifying(FALSE);
 	SetIsFortified (FALSE);
 
@@ -2360,9 +2324,6 @@ bool UnitActor::ActionAttack(Action *actionObj,sint32 facing)
 	if (actionObj == NULL)
 		return false;
 
-	if(GetNeedsToDie())
-	   return false;
-
 	actionObj->SetCurrentEndCondition(ACTIONEND_ANIMEND);
 
    	if(!TryAnimation(actionObj,UNITACTION_ATTACK))
@@ -2392,9 +2353,6 @@ bool UnitActor::ActionSpecialAttack(Action *actionObj,sint32 facing)
 
 	if (actionObj==NULL)
 		return false;
-
-	if(GetNeedsToDie())
-	   return false;
 
 	actionObj->SetCurrentEndCondition(ACTIONEND_ANIMEND);
 
