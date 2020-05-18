@@ -90,7 +90,7 @@ AUI_ERRCODE VideoWindow::CreateVideoSurface(MBCHAR *name, BOOL modal)
 
 	g_civPaths->FindFile(C3DIR_VIDEOS, name, fname);
 	hr = m_video->OpenStream(fname);
-	Assert(!hr);
+	Assert(FAILED(hr));
 	if (hr != 0) {
 
 		c3errors_ErrorDialog("Video", "Error opening DirectMovie Indeo 5 video stream.  Be sure that DirectMovie and Indeo 5 are installed.");
