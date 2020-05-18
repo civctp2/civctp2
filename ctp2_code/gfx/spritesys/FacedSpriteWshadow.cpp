@@ -599,7 +599,7 @@ void FacedSpriteWshadow::SetFrameData(uint16 facing, uint16 frame, Pixel16 *data
 	Assert(m_frames[facing] != NULL);
 	Assert(m_framesSizes[facing] != NULL);
 #ifdef _WINDOWS
-	Assert((((data == NULL) && (size = 0)) || ((data != NULL) && (_msize(data) == size))));
+	Assert((((data == NULL) && (size == 0)) || ((data != NULL) && (_msize(data) == size))));
 #endif
 	m_frames[facing][frame] = data;
 	m_framesSizes[facing][frame] = size;
@@ -612,7 +612,7 @@ void FacedSpriteWshadow::SetMiniFrameData(uint16 facing, uint16 frame, Pixel16 *
 	Assert(m_miniframes[facing] != NULL);
 	Assert(m_miniframesSizes[facing] != NULL);
 #ifdef _WINDOWS
-	Assert((((data == NULL) && (size = 0)) || ((data != NULL) && (_msize(data) == size))));
+	Assert((((data == NULL) && (size == 0)) || ((data != NULL) && (_msize(data) == size))));
 #endif
 
 	m_miniframes[facing][frame] = data;
@@ -672,7 +672,7 @@ void FacedSpriteWshadow::SetShadowFrameData(uint16 facing, uint16 frame, Pixel16
 	Assert(m_shadowFrames[facing] != NULL);
 	Assert(m_shadowFramesSizes[facing] != NULL);
 #ifdef _WINDOWS
-	Assert((((data == NULL) && (size = 0)) || ((data != NULL) && (_msize(data) == size))));
+	Assert((((data == NULL) && (size == 0)) || ((data != NULL) && (_msize(data) == size))));
 #endif
 	m_shadowFrames[facing][frame] = data;
 	m_shadowFramesSizes[facing][frame] = size;
@@ -685,7 +685,7 @@ void FacedSpriteWshadow::SetMiniShadowFrameData(uint16 facing, uint16 frame, Pix
 	Assert(m_miniShadowFrames[facing] != NULL);
 	Assert(m_miniShadowFramesSizes[facing] != NULL);
 #ifdef _WINDOWS
-	Assert((((data == NULL) && (size = 0)) || ((data != NULL) && (_msize(data) == size))));
+	Assert((((data == NULL) && (size == 0)) || ((data != NULL) && (_msize(data) == size))));
 #endif
 	m_miniShadowFrames[facing][frame] = data;
 	m_miniShadowFramesSizes[facing][frame] = size;
