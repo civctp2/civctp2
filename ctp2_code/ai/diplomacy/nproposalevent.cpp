@@ -713,7 +713,7 @@ STDEHANDLER(TradePact_NewProposalEvent)
 	if (!args->GetInt(0, desireType))
 		return GEV_HD_Continue;
 
-	if ((MOTIVATION_TYPE) desireType != MOTIVATION_DESIRE_MAKE_FRIEND ||
+	if ((MOTIVATION_TYPE) desireType != MOTIVATION_DESIRE_MAKE_FRIEND &&
 		(MOTIVATION_TYPE) desireType != MOTIVATION_DESIRE_GOLD)
 		return GEV_HD_Continue;
 
@@ -870,7 +870,7 @@ STDEHANDLER(MilitaryPact_NewProposalEvent)
 		if (!args->GetInt(0, desireType))
 			return GEV_HD_Continue;
 
-		if ((MOTIVATION_TYPE) desireType != MOTIVATION_DESIRE_MAKE_FRIEND ||
+		if ((MOTIVATION_TYPE) desireType != MOTIVATION_DESIRE_MAKE_FRIEND &&
 			(MOTIVATION_TYPE) desireType != MOTIVATION_DESIRE_ENLIST_FRIEND)
 			return GEV_HD_Continue;
 	}
