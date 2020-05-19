@@ -38,10 +38,8 @@
 //
 //----------------------------------------------------------------------------
 
-// TODO: combine Execute and ExecuteImmediate in a single method
 // TODO: Make moveActor protected
 // TODO: verify that all EffectActors are deleted
-// TODO: verify m_currentAction finish and deletion
 // TODO: verify if Effect-actors need to be refactored
 // TODO: check if stand-by units are not drawn outside position when center map has been called
 
@@ -153,63 +151,98 @@ enum DQACTION_TYPE {
 	DQACTION_MAX
 };
 
+class DQActiveLoopingSound {
+public:
+	DQActiveLoopingSound(uint32 unitID) :
+	m_unitID	(unitID)
+	{}
+	~DQActiveLoopingSound()
+	{
+		if (g_soundManager) {
+			g_soundManager->TerminateLoopingSound(SOUNDTYPE_SFX, m_unitID);
+		}
+	}
+
+	uint32 GetUnitID() { return m_unitID; }
+private:
+	uint32	m_unitID;
+};
+
 class DQAction {
 public:
-	DQAction() :
-	m_round	(0)
+	DQAction() {}
+	virtual ~DQAction() {}
+	virtual DQACTION_TYPE GetType() = 0;
+	virtual bool IsTypeActive() { return false; }
+
+	virtual void ProcessLoopingSound(DQActiveLoopingSound* &activeLoopingSound) = 0;
+	virtual void Execute() = 0;
+	virtual bool SkipProcess() = 0;
+	virtual void PrepareProcess() = 0;
+	virtual void Process() = 0;
+	virtual bool IsFinished() = 0;
+	virtual void Finalize() = 0;
+
+	virtual void Dump() = 0;
+protected:
+	static bool TileIsVisibleToPlayer(const MapPoint &position)
 	{
-		if (g_turn)
-		{
+		#if defined(_PLAYTEST)
+			if (g_doingFastRounds) return false;
+		#endif
+
+		return g_tiledMap && g_tiledMap->GetLocalVision()->IsVisible(position);
+	}
+};
+
+class DQActionImmediate : public DQAction {
+public:
+	DQActionImmediate()
+			: DQAction()
+	{}
+	virtual ~DQActionImmediate() {}
+	virtual bool IsTypeImmediate() { return true; }
+
+	virtual void ProcessLoopingSound(DQActiveLoopingSound* &activeLoopingSound) {}
+	virtual void Execute() = 0;
+	virtual bool SkipProcess() { return true; }
+	virtual void PrepareProcess() {}
+	virtual void Process() {}
+	virtual bool IsFinished() { return true; }
+	virtual void Finalize() {}
+};
+
+class DQActionActive : public DQAction
+{
+public:
+	DQActionActive(sint8 owner)
+			: DQAction(),
+			  m_owner		(owner),
+			  m_round		(0)
+	{
+		if (g_turn) {
 			m_round = static_cast<uint16>(g_turn->GetRound());
 		}
 	}
-	virtual ~DQAction() {}
-	virtual DQACTION_TYPE GetType() = 0;
-	virtual bool IsTypeImmediate() { return false; }
-	virtual bool IsTypeActor() { return false; }
+	virtual ~DQActionActive() {}
+	virtual bool IsTypeActive() { return true; }
 
-	virtual sint8 GetOwner() { return PLAYER_UNASSIGNED; }
-
-	virtual void Execute() = 0;
-	virtual void ExecuteImmediate() = 0;
-
-	virtual bool IsFinished() = 0;
-	virtual void Finish() {}
-
-	virtual void Dump() = 0;
-
-	uint16 GetRound() { return m_round; }
-private:
-	uint16 m_round;
-};
-
-class DQActionActor : public DQAction
-{
-public:
-	DQActionActor(sint8 owner)
-			: DQAction(),
-			m_owner	(owner)
-	{}
-	virtual ~DQActionActor() {}
-	virtual bool IsTypeActor() { return true; }
-
-	virtual sint8 GetOwner() { return m_owner; }
-	virtual void Execute()
+	virtual void ProcessLoopingSound(DQActiveLoopingSound* &activeLoopingSound)
 	{
-		DoExecute(false);
+		delete activeLoopingSound;
+		activeLoopingSound = NULL;
 	}
 
-	virtual void ExecuteImmediate()
+	virtual void Execute() {}
+
+	virtual bool SkipProcess()
 	{
-		DoExecute(true);
+		return (SkipPreviousRounds() || SkipEnemyMoves() || SkipRobotUnitAnimations() || DoSkipProcess());
 	}
 
-	virtual bool IsFinished()
-	{
-		return m_activeActors.empty();
-	}
+	virtual void PrepareProcess() = 0;
 
-	void Process()
+	virtual void Process()
 	{
 		for (auto it = m_activeActors.begin(); it != m_activeActors.end(); ) {
 			UnitActor *actor = *it;
@@ -222,6 +255,13 @@ public:
 			}
 		}
 	}
+
+	virtual bool IsFinished()
+	{
+		return m_activeActors.empty();
+	}
+
+	virtual void Finalize() {}
 
 	void Offset(sint32 deltaX, sint32 deltaY)
 	{
@@ -244,14 +284,8 @@ public:
 		m_activeActors.erase(actor);
 	}
 
-	virtual void Finish()
-	{
-		m_activeActors.clear();
-		DoFinish();
-	}
 protected:
-	virtual void DoExecute(bool immediate) = 0;
-	virtual void DoFinish() {}
+	virtual bool DoSkipProcess() { return false; }
 
 	void AddActiveActor(UnitActor *actor) {
 		m_activeActors.insert(actor);
@@ -272,8 +306,53 @@ private:
 		}
 	}
 
+	bool SkipPreviousRounds()
+	{
+		return (m_round < g_turn->GetRound() - 1);
+	}
+	bool SkipEnemyMoves()
+	{
+		return (!g_theProfileDB->IsEnemyMoves()
+				&&  m_owner != -1
+				&&  m_owner != g_selected_item->GetVisiblePlayer());
+	}
+	bool SkipRobotUnitAnimations()
+	{
+		return (!g_theProfileDB->IsUnitAnim()
+				&& m_owner != -1
+				&&  g_player[m_owner] != NULL
+				&& g_player[m_owner]->IsRobot());
+	}
+
 	sint8							m_owner;
+	uint16							m_round;
 	std::unordered_set<UnitActor*>	m_activeActors;
+};
+
+class DQActionExternal : public DQAction
+{
+public:
+	DQActionExternal()
+			: DQAction(),
+			m_finished	(false)
+	{}
+	virtual ~DQActionExternal() {}
+
+	virtual void ProcessLoopingSound(DQActiveLoopingSound* &activeLoopingSound)
+	{
+		delete activeLoopingSound;
+		activeLoopingSound = NULL;
+	}
+
+	virtual bool SkipProcess() { return false; }
+	virtual void PrepareProcess() {}
+	virtual void Process() {}
+	virtual bool IsFinished() { return m_finished; }
+	virtual void Finalize() {}
+
+	void SetFinished() { m_finished = true; }
+protected:
+	bool	m_finished;
 };
 
 class DirectorImpl : public Director {
@@ -383,11 +462,12 @@ public:
 	// Used locally
 	void		EndTurn();
 	bool		HandleActor(bool immediate, UnitActor* actor, bool actionEnabled);
-	bool 		TileIsVisibleToPlayer(MapPoint &pos);
 	void		ActiveEffectAdd(EffectActor *effectActor);
 	void		CenterMap(const MapPoint &pos);
 
 private:
+	static void	FinalizeAction(DQAction* &action);
+
 	bool    CanStartNextAction() { return m_actionQueue->GetCount() > 0 && !m_currentAction; }
 	void	HandleNextAction();
 
@@ -423,6 +503,7 @@ private:
 
 	static DirectorImpl			*m_instance;
 	DQAction					*m_currentAction;
+	DQActiveLoopingSound		*m_activeLoopingSound;
 	tech_WLList<EffectActor *>	*m_activeEffectList;
 	tech_WLList<TradeActor *>	*m_tradeActorList;
 
@@ -451,24 +532,6 @@ Director* Director::CreateDirector() {
 	return new DirectorImpl();
 }
 
-class DQActionImmediate : public DQAction {
-public:
-	DQActionImmediate()
-			: DQAction()
-	{}
-	virtual ~DQActionImmediate() {}
-	virtual bool IsTypeImmediate() { return true; }
-
-	virtual void Execute() { ExecuteImmediate(); }
-	virtual void ExecuteImmediate()
-	{
-		DoExecuteImmediate();
-	}
-	virtual bool IsFinished() { return true; }
-protected:
-	virtual void DoExecuteImmediate() = 0;
-};
-
 class DQActionTeleport : public DQActionImmediate
 {
 public:
@@ -491,6 +554,23 @@ public:
 	{}
 	virtual ~DQActionTeleport() {}
 	virtual DQACTION_TYPE GetType() { return DQACTION_TELEPORT; }
+
+	virtual void Execute()
+	{
+		for (int i = 0; i < numberOfRevealedActors; i++)
+		{
+			UnitActor *tempActor = revealedActors[i];
+			tempActor->SetVisSpecial(TRUE);
+		}
+
+		moveActor->PositionActor(endPosition);
+
+		for (int i = 0; i < numberOfMoveActors; i++)
+		{
+			UnitActor *moveActor = moveActors[i];
+			moveActor->PositionActor(endPosition);
+		}
+	}
 
 	virtual void Dump()
 	{
@@ -516,23 +596,6 @@ public:
 	UnitActor	*moveActor;
 
 protected:
-	virtual void DoExecuteImmediate()
-	{
-		for (int i = 0; i < numberOfRevealedActors; i++)
-		{
-			UnitActor *tempActor = revealedActors[i];
-			tempActor->SetVisSpecial(TRUE);
-		}
-
-		moveActor->PositionActor(endPosition);
-
-		for (int i = 0; i < numberOfMoveActors; i++)
-		{
-			UnitActor *moveActor = moveActors[i];
-			moveActor->PositionActor(endPosition);
-		}
-	}
-
 	MapPoint	startPosition;
 	MapPoint	endPosition;
 	sint32		numberOfMoveActors;
@@ -553,10 +616,9 @@ public:
 	virtual ~DQActionMoveProjectile() {}
 	virtual DQACTION_TYPE GetType() { return DQACTION_MOVEPROJECTILE; }
 
-protected:
-	virtual void DoExecuteImmediate()
+	virtual void Execute()
 	{
-		if (DirectorImpl::Instance()->TileIsVisibleToPlayer(startPosition))
+		if (TileIsVisibleToPlayer(startPosition))
 		{
 			EffectActor *projectileEnd = new EffectActor(projectileEndState, endPosition);
 			sint32 actionType = EFFECTACTION_PLAY;
@@ -604,6 +666,11 @@ public:
 	virtual ~DQActionMorph() {}
 	virtual DQACTION_TYPE GetType() { return DQACTION_MORPH; }
 
+	virtual void Execute()
+	{
+		morphingActor->ChangeType(spriteState, type, id, FALSE);
+	}
+
 	virtual void Dump()
 	{
 		DPRINTF(k_DBG_UI, ("Morph\n"));
@@ -613,11 +680,6 @@ public:
 		DPRINTF(k_DBG_UI, ("  id                 :%#.8lx\n", id.m_id));
 	}
 protected:
-	virtual void DoExecuteImmediate()
-	{
-		morphingActor->ChangeType(spriteState, type, id, FALSE);
-	}
-
 	UnitActor	*morphingActor;
 	SpriteState	*spriteState;
 	sint32		type;
@@ -646,15 +708,15 @@ public:
 	virtual ~DQActionHide() {}
 	virtual DQACTION_TYPE GetType() { return DQACTION_HIDE; }
 
+	virtual void Execute()
+	{
+		hidingActor->Hide();
+	}
+
 	virtual void Dump()
 	{
 		DPRINTF(k_DBG_UI, ("Hide\n"));
 		DPRINTF(k_DBG_UI, ("  hidingActor        :%#x (%#.8lx)\n", hidingActor->GetUnitID(), hidingActor));
-	}
-protected:
-	virtual void DoExecuteImmediate()
-	{
-		hidingActor->Hide();
 	}
 };
 
@@ -668,17 +730,18 @@ public:
 	virtual ~DQActionShow() {}
 	virtual DQACTION_TYPE GetType() { return DQACTION_SHOW; }
 
+	virtual void Execute()
+	{
+		hidingActor->PositionActor(hidingPosition);
+		hidingActor->Show();
+	}
+
 	virtual void Dump() {
 		DPRINTF(k_DBG_UI, ("Show\n"));
 		DPRINTF(k_DBG_UI, ("  hidingActor        :%#x (%#.8lx)\n", hidingActor->GetUnitID(), hidingActor));
 		DPRINTF(k_DBG_UI, ("  hidingPosition     :%d,%d\n", hidingPosition.x, hidingPosition.y));
 	}
 protected:
-	virtual void DoExecuteImmediate()
-	{
-		hidingActor->PositionActor(hidingPosition);
-		hidingActor->Show();
-	}
 	MapPoint hidingPosition;
 };
 
@@ -692,17 +755,17 @@ public:
 	virtual ~DQActionFastKill() {}
 	virtual DQACTION_TYPE GetType() { return DQACTION_FASTKILL; }
 
+	virtual void Execute()
+	{
+		DirectorImpl::Instance()->FastKill(dead);
+	}
+
 	virtual void Dump()
 	{
 		DPRINTF(k_DBG_UI, ("Fast Kill\n"));
 		DPRINTF(k_DBG_UI, ("  dead               :%#x (%#.8lx)\n", dead->GetUnitID(), dead));
 	}
 private:
-	virtual void DoExecuteImmediate()
-	{
-		DirectorImpl::Instance()->FastKill(dead);
-	}
-
 	UnitActor	*dead;
 };
 
@@ -730,18 +793,18 @@ public:
 	virtual ~DQActionRemoveVision() {}
 	virtual DQACTION_TYPE GetType() { return DQACTION_REMOVEVISION; }
 
+	virtual void Execute()
+	{
+		if(g_tiledMap) {
+			g_tiledMap->RemoveVisible(visionPosition, visionRange);
+		}
+	}
+
 	virtual void Dump()
 	{
 		DPRINTF(k_DBG_UI, ("Remove Vision\n"));
 		DPRINTF(k_DBG_UI, ("  visionPosition     :%d,%d\n", visionPosition.x, visionPosition.y));
 		DPRINTF(k_DBG_UI, ("  visionRange        :%#.2f\n", visionRange));
-	}
-protected:
-	virtual void DoExecuteImmediate()
-	{
-		if(g_tiledMap) {
-			g_tiledMap->RemoveVisible(visionPosition, visionRange);
-		}
 	}
 };
 
@@ -753,18 +816,18 @@ public:
 	virtual ~DQActionAddVision() {}
 	virtual DQACTION_TYPE GetType() { return DQACTION_ADDVISION; }
 
+	virtual void Execute()
+	{
+		if(g_tiledMap) {
+			g_tiledMap->AddVisible(visionPosition, visionRange);
+		}
+	}
+
 	virtual void Dump()
 	{
 		DPRINTF(k_DBG_UI, ("Add Vision\n"));
 		DPRINTF(k_DBG_UI, ("  visionPosition     :%d,%d\n", visionPosition.x, visionPosition.y));
 		DPRINTF(k_DBG_UI, ("  visionRange        :%#.2f\n", visionRange));
-	}
-protected:
-	virtual void DoExecuteImmediate()
-	{
-		if(g_tiledMap) {
-			g_tiledMap->AddVisible(visionPosition, visionRange);
-		}
 	}
 };
 
@@ -779,6 +842,11 @@ public:
 	virtual ~DQActionSetVisibility() {}
 	virtual DQACTION_TYPE GetType() { return DQACTION_SETVISIBILITY; }
 
+	virtual void Execute()
+	{
+		actor->SetUnitVisibility(flag);
+	}
+
 	virtual void Dump()
 	{
 		DPRINTF(k_DBG_UI, ("Set Visibility\n"));
@@ -786,11 +854,6 @@ public:
 		DPRINTF(k_DBG_UI, ("  flag               :%%#.8lx\n", flag));
 	}
 protected:
-	virtual void DoExecuteImmediate()
-	{
-		actor->SetUnitVisibility(flag);
-	}
-
 	UnitActor	*actor;
 	uint32		flag;
 };
@@ -806,6 +869,11 @@ public:
 	virtual ~DQActionSetOwner() {}
 	virtual DQACTION_TYPE GetType() { return DQACTION_SETOWNER; }
 
+	virtual void Execute()
+	{
+		setOwnerActor->SetPlayerNum(owner);
+	}
+
 	virtual void Dump()
 	{
 		DPRINTF(k_DBG_UI, ("Set Owner\n"));
@@ -813,11 +881,6 @@ public:
 		DPRINTF(k_DBG_UI, ("  owner              :%d\n", owner));
 	}
 protected:
-	virtual void DoExecuteImmediate()
-	{
-		setOwnerActor->SetPlayerNum(owner);
-	}
-
 	UnitActor	*setOwnerActor;
 	sint32		owner;
 };
@@ -833,6 +896,11 @@ public:
 	virtual ~DQActionSetVisionRange() {}
 	virtual DQACTION_TYPE GetType() { return DQACTION_SETVISIONRANGE; }
 
+	virtual void Execute()
+	{
+		actor->SetUnitVisionRange(range);
+	}
+
 	virtual void Dump()
 	{
 		DPRINTF(k_DBG_UI, ("Set Vision Range\n"));
@@ -840,11 +908,6 @@ public:
 		DPRINTF(k_DBG_UI, ("  range     :%#.2f\n", range));
 	}
 protected:
-	virtual void DoExecuteImmediate()
-	{
-		actor->SetUnitVisionRange(range);
-	}
-
 	UnitActor	*actor;
 	double		range;
 };
@@ -864,19 +927,19 @@ public:
 		g_radarMap->ComputeCenteredMap(centerMapPosition, viewRect);
 	}
 
-	virtual void Dump()
-	{
-		DPRINTF(k_DBG_UI, ("Center Map\n"));
-		DPRINTF(k_DBG_UI, ("  centerMapPosition:%d,%d\n", centerMapPosition.x, centerMapPosition.y));
-	}
-protected:
-	virtual void DoExecuteImmediate()
+	virtual void Execute()
 	{
 		if(!g_selected_item->GetIsPathing()) {
 			DirectorImpl::Instance()->CenterMap(centerMapPosition);
 		}
 	}
 
+	virtual void Dump()
+	{
+		DPRINTF(k_DBG_UI, ("Center Map\n"));
+		DPRINTF(k_DBG_UI, ("  centerMapPosition:%d,%d\n", centerMapPosition.x, centerMapPosition.y));
+	}
+protected:
 	MapPoint	centerMapPosition;
 };
 
@@ -890,13 +953,7 @@ public:
 	virtual ~DQActionCombatFlash() {}
 	virtual DQACTION_TYPE GetType() { return DQACTION_COMBATFLASH; }
 
-	virtual void Dump()
-	{
-		DPRINTF(k_DBG_UI, ("Combat Flash\n"));
-		DPRINTF(k_DBG_UI, ("  flashPosition     :%d,%d\n", flashPosition.x, flashPosition.y));
-	}
-protected:
-	virtual void DoExecuteImmediate()
+	virtual void Execute()
 	{
 		SpriteState	*spriteState = new SpriteState(99);
 		EffectActor	*flash = new EffectActor(spriteState, flashPosition);
@@ -917,6 +974,12 @@ protected:
 		}
 	}
 
+	virtual void Dump()
+	{
+		DPRINTF(k_DBG_UI, ("Combat Flash\n"));
+		DPRINTF(k_DBG_UI, ("  flashPosition     :%d,%d\n", flashPosition.x, flashPosition.y));
+	}
+protected:
 	MapPoint	flashPosition;
 };
 
@@ -929,15 +992,15 @@ public:
 	virtual ~DQActionCopyVision() {}
 	virtual DQACTION_TYPE GetType() { return DQACTION_COPYVISION; }
 
-	virtual void Dump()
-	{
-		DPRINTF(k_DBG_UI, ("Copy Vision\n"));
-	}
-protected:
-	virtual void DoExecuteImmediate()
+	virtual void Execute()
 	{
 		g_tiledMap->CopyVision();
 		g_radarMap->Update();
+	}
+
+	virtual void Dump()
+	{
+		DPRINTF(k_DBG_UI, ("Copy Vision\n"));
 	}
 };
 
@@ -951,17 +1014,17 @@ public:
 	virtual ~DQActionUnitSelection() {}
 	virtual DQACTION_TYPE GetType() { return DQACTION_SELECTUNIT; }
 
+	virtual void Execute()
+	{
+		g_selected_item->DirectorUnitSelection(flags);
+	}
+
 	virtual void Dump()
 	{
 		DPRINTF(k_DBG_UI, ("Select Unit\n"));
 		DPRINTF(k_DBG_UI, ("  flags     :%#.8lx\n", flags));
 	}
 protected:
-	virtual void DoExecuteImmediate()
-	{
-		g_selected_item->DirectorUnitSelection(flags);
-	}
-
 	uint32	flags;
 };
 
@@ -974,18 +1037,19 @@ public:
 	virtual ~DQActionEndTurn() {}
 	virtual DQACTION_TYPE GetType() { return DQACTION_ENDTURN; }
 
-	virtual void Dump()
-	{
-		DPRINTF(k_DBG_UI, ("End Turn\n"));
-	}
-protected:
-	virtual void DoExecuteImmediate()
+	virtual void Execute()
 	{
 		DirectorImpl::Instance()->EndTurn();
-
+		g_gevManager->Pause();
 		g_gevManager->AddEvent(GEV_INSERT_Tail, GEV_EndTurn,
 							   GEA_Player, g_selected_item->GetCurPlayer(),
 							   GEA_End);
+		g_gevManager->Resume();
+	}
+
+	virtual void Dump()
+	{
+		DPRINTF(k_DBG_UI, ("End Turn\n"));
 	}
 };
 
@@ -1000,6 +1064,13 @@ public:
 	virtual ~DQActionPlaySound() {}
 	virtual DQACTION_TYPE GetType() { return DQACTION_PLAYSOUND; }
 
+	virtual void Execute()
+	{
+		if (g_soundManager) {
+			g_soundManager->AddSound(SOUNDTYPE_SFX, 0, soundID, position.x, position.y);
+		}
+	}
+
 	virtual void Dump()
 	{
 		DPRINTF(k_DBG_UI, ("Play Sound\n"));
@@ -1007,13 +1078,6 @@ public:
 		DPRINTF(k_DBG_UI, ("  position             :%d,%d\n", position.x, position.y));
 	}
 protected:
-	virtual void DoExecuteImmediate()
-	{
-		if (g_soundManager) {
-			g_soundManager->AddSound(SOUNDTYPE_SFX, 0, soundID, position.x, position.y);
-		}
-	}
-
 	sint32		soundID;
 	MapPoint	position;
 };
@@ -1028,12 +1092,7 @@ public:
 	virtual ~DQActionMessage() {}
 	virtual DQACTION_TYPE GetType() { return DQACTION_MESSAGE; }
 
-	virtual void Dump()
-	{
-		DPRINTF(k_DBG_UI, ("Message\n"));
-	}
-protected:
-	virtual void DoExecuteImmediate()
+	virtual void Execute()
 	{
 		if (g_theMessagePool->IsValid(message)) {
 			if (message.IsAlertBox()) {
@@ -1058,6 +1117,11 @@ protected:
 		}
 	}
 
+	virtual void Dump()
+	{
+		DPRINTF(k_DBG_UI, ("Message\n"));
+	}
+protected:
 	Message	message;
 };
 
@@ -1071,13 +1135,7 @@ public:
 	virtual ~DQActionTerminateFaceOff() {}
 	virtual DQACTION_TYPE GetType() { return DQACTION_TERMINATE_FACEOFF; }
 
-	virtual void Dump()
-	{
-		DPRINTF(k_DBG_UI, ("Terminate Faceoff\n"));
-		DPRINTF(k_DBG_UI, ("  faceroffer   :%#x (%#.8lx)\n", faceOffer->GetUnitID(), faceOffer));
-	}
-protected:
-	virtual void DoExecuteImmediate()
+	virtual void Execute()
 	{
 		faceOffer->SetHealthPercent(-1.0);
 		faceOffer->SetTempStackSize(0);
@@ -1086,6 +1144,12 @@ protected:
 		// DirectorImpl::Instance()->ActiveUnitRemove(faceOffer);
 	}
 
+	virtual void Dump()
+	{
+		DPRINTF(k_DBG_UI, ("Terminate Faceoff\n"));
+		DPRINTF(k_DBG_UI, ("  faceroffer   :%#x (%#.8lx)\n", faceOffer->GetUnitID(), faceOffer));
+	}
+protected:
 	UnitActor	*faceOffer;
 };
 
@@ -1099,19 +1163,19 @@ public:
 	virtual ~DQActionTerminateSound() {}
 	virtual DQACTION_TYPE GetType() { return DQACTION_TERMINATE_SOUND; }
 
-	virtual void Dump()
-	{
-		DPRINTF(k_DBG_UI, ("Terminate Sound\n"));
-		DPRINTF(k_DBG_UI, ("  terminate_sound_unit    :%#.8lx\n", terminateSoundUnitID));
-	}
-protected:
-	virtual void DoExecuteImmediate()
+	virtual void Execute()
 	{
 		if (g_soundManager) {
 			g_soundManager->TerminateLoopingSound(SOUNDTYPE_SFX, terminateSoundUnitID);
 		}
 	}
 
+	virtual void Dump()
+	{
+		DPRINTF(k_DBG_UI, ("Terminate Sound\n"));
+		DPRINTF(k_DBG_UI, ("  terminate_sound_unit    :%#.8lx\n", terminateSoundUnitID));
+	}
+protected:
 	uint32	terminateSoundUnitID;
 };
 
@@ -1127,15 +1191,7 @@ public:
 	virtual ~DQActionSpecialEffect() {}
 	virtual DQACTION_TYPE GetType() { return DQACTION_SPECEFFECT; }
 
-	virtual void Dump()
-	{
-		DPRINTF(k_DBG_UI, ("Special Effect\n"));
-		DPRINTF(k_DBG_UI, ("  position             :%d,%d\n", position.x, position.y));
-		DPRINTF(k_DBG_UI, ("  spriteID             :%d\n", spriteID));
-		DPRINTF(k_DBG_UI, ("  soundID              :%d\n", soundID));
-	}
-protected:
-	virtual void DoExecuteImmediate()
+	virtual void Execute()
 	{
 		if (g_tiledMap->GetLocalVision()->IsVisible(position)) {
 			SpriteState *spriteState = new SpriteState(spriteID);
@@ -1156,6 +1212,14 @@ protected:
 		}
 	}
 
+	virtual void Dump()
+	{
+		DPRINTF(k_DBG_UI, ("Special Effect\n"));
+		DPRINTF(k_DBG_UI, ("  position             :%d,%d\n", position.x, position.y));
+		DPRINTF(k_DBG_UI, ("  spriteID             :%d\n", spriteID));
+		DPRINTF(k_DBG_UI, ("  soundID              :%d\n", soundID));
+	}
+protected:
 	MapPoint	position;
 	sint32		spriteID;
 	sint32		soundID;
@@ -1170,15 +1234,15 @@ public:
 	virtual ~DQActionInvokeThroneRoom() {}
 	virtual DQACTION_TYPE GetType() { return DQACTION_INVOKE_THRONE_ROOM; }
 
+	virtual void Execute() {}
+
 	virtual void Dump()
 	{
 		DPRINTF(k_DBG_UI, ("Invoke Throne-room\n"));
 	}
-protected:
-	virtual void DoExecuteImmediate() {}
 };
 
-class DQActionMove : public DQActionActor
+class DQActionMove : public DQActionActive
 {
 public:
 	DQActionMove(
@@ -1191,7 +1255,7 @@ public:
 			sint32			numberOfRevealedActors,
 			UnitActor		**revealedActors,
 			sint32			soundID)
-			: DQActionActor(owner),
+			: DQActionActive(owner),
 			  moveActor					(moveActor),
 			  moveActorActive			(false),
 			  startPosition				(startPosition),
@@ -1202,45 +1266,22 @@ public:
 			  revealedActors			(revealedActors),
 			  soundID					(soundID)
 	{}
-	virtual ~DQActionMove() {
-		if (!moveActor->IsActive()) {
-			g_soundManager->TerminateLoopingSound(SOUNDTYPE_SFX, moveActor->GetUnitID());
-		}
+	virtual ~DQActionMove()
+	{
 		delete [] moveActors;
 	}
 	virtual DQACTION_TYPE GetType() { return DQACTION_MOVE; }
 
-	virtual void Dump()
+	virtual void ProcessLoopingSound(DQActiveLoopingSound* &activeLoopingSound)
 	{
-		DPRINTF(k_DBG_UI, ("Move\n"));
-		DPRINTF(k_DBG_UI, ("  actor                  :%#x (%#.8lx)\n", moveActor->GetUnitID(), moveActor));
-		DPRINTF(k_DBG_UI, ("  startPosition          :%d,%d\n", startPosition.x, startPosition.y));
-		DPRINTF(k_DBG_UI, ("  endPosition            :%d,%d\n", endPosition.x, endPosition.y));
-		DPRINTF(k_DBG_UI, ("  numberOfMoveActors          :%d\n", numberOfMoveActors));
-		DPRINTF(k_DBG_UI, ("  moveActors                  :"));
-		for (int i = 0; i < numberOfMoveActors; i++) {
-			DPRINTF(k_DBG_UI, ("%#x (%#.8lx)  ", moveActors[i]->GetUnitID(), moveActors[i]));
+		if (!activeLoopingSound || activeLoopingSound->GetUnitID() != moveActor->GetUnitID()) {
+			delete activeLoopingSound;
+			activeLoopingSound = new DQActiveLoopingSound(moveActor->GetUnitID());
 		}
-		DPRINTF(k_DBG_UI, ("\n"));
-		DPRINTF(k_DBG_UI, ("  numberOfRevealedActors      :%d\n", numberOfRevealedActors));
-		DPRINTF(k_DBG_UI, ("  revealedActors              :"));
-		for (int i = 0; i < numberOfRevealedActors; i++) {
-			DPRINTF(k_DBG_UI, ("%#x (%#.8lx)  ", revealedActors[i]->GetUnitID(), revealedActors[i]));
-		}
-		DPRINTF(k_DBG_UI, ("\n"));
-		DPRINTF(k_DBG_UI, ("  soundID                     :%d\n", soundID));
 	}
 
-	// TODO: make protected
-	UnitActor	*moveActor;
-
-protected:
-	virtual void DoExecute(bool immediate)
+	virtual void PrepareProcess()
 	{
-		if (g_theUnitPool && !g_theUnitPool->IsValid(moveActor->GetUnitID())) {
-			return;
-		}
-
 		Action *action = new Action();
 
 		action->SetStartMapPoint(startPosition);
@@ -1269,29 +1310,57 @@ protected:
 			moveActors[i]->SetHiddenUnderStack(TRUE);
 		}
 
-		bool visible = DirectorImpl::Instance()->TileIsVisibleToPlayer(startPosition)
-					   || DirectorImpl::Instance()->TileIsVisibleToPlayer(endPosition);
-
-		if (visible && !immediate)
+		if (g_selected_item->GetVisiblePlayer()!= moveActor->GetPlayerNum()
+			&& !g_tiledMap->TileIsVisible(moveActor->GetPos().x, moveActor->GetPos().y))
 		{
-			if (g_selected_item->GetVisiblePlayer()!= moveActor->GetPlayerNum()
-				&& !g_tiledMap->TileIsVisible(moveActor->GetPos().x, moveActor->GetPos().y))
-			{
-				DirectorImpl::Instance()->CenterMap(moveActor->GetPos());
-			}
+			DirectorImpl::Instance()->CenterMap(moveActor->GetPos());
 		}
-		if (DirectorImpl::Instance()->HandleActor(immediate, moveActor, visible)) {
-			AddActiveActor(moveActor);
-		}
+		AddActiveActor(moveActor);
 	}
 
-	virtual void DoFinish() {
+	virtual void Finalize() {
 		moveActor->PositionActor(endPosition);
 
 		for (int i = 0; i < numberOfMoveActors; i++)
 		{
 			moveActors[i]->PositionActor(endPosition);
 		}
+	}
+
+	virtual void Dump()
+	{
+		DPRINTF(k_DBG_UI, ("Move\n"));
+		DPRINTF(k_DBG_UI, ("  actor                  :%#x (%#.8lx)\n", moveActor->GetUnitID(), moveActor));
+		DPRINTF(k_DBG_UI, ("  startPosition          :%d,%d\n", startPosition.x, startPosition.y));
+		DPRINTF(k_DBG_UI, ("  endPosition            :%d,%d\n", endPosition.x, endPosition.y));
+		DPRINTF(k_DBG_UI, ("  numberOfMoveActors          :%d\n", numberOfMoveActors));
+		DPRINTF(k_DBG_UI, ("  moveActors                  :"));
+		for (int i = 0; i < numberOfMoveActors; i++) {
+			DPRINTF(k_DBG_UI, ("%#x (%#.8lx)  ", moveActors[i]->GetUnitID(), moveActors[i]));
+		}
+		DPRINTF(k_DBG_UI, ("\n"));
+		DPRINTF(k_DBG_UI, ("  numberOfRevealedActors      :%d\n", numberOfRevealedActors));
+		DPRINTF(k_DBG_UI, ("  revealedActors              :"));
+		for (int i = 0; i < numberOfRevealedActors; i++) {
+			DPRINTF(k_DBG_UI, ("%#x (%#.8lx)  ", revealedActors[i]->GetUnitID(), revealedActors[i]));
+		}
+		DPRINTF(k_DBG_UI, ("\n"));
+		DPRINTF(k_DBG_UI, ("  soundID                     :%d\n", soundID));
+	}
+
+	// TODO: make protected
+	UnitActor	*moveActor;
+
+protected:
+	virtual bool DoSkipProcess()
+	{
+		// Unit invalid
+		if (g_theUnitPool && !g_theUnitPool->IsValid(moveActor->GetUnitID())) {
+			return true;
+		}
+
+		// Unit invisible
+		return !TileIsVisibleToPlayer(startPosition) && !TileIsVisibleToPlayer(endPosition);
 	}
 
 	bool 		moveActorActive;
@@ -1304,7 +1373,7 @@ protected:
 	sint32		soundID;
 };
 
-class DQActionAttack : public DQActionActor
+class DQActionAttack : public DQActionActive
 {
 public:
 	DQActionAttack(
@@ -1316,7 +1385,7 @@ public:
 			const MapPoint	&defenderPosition,
 			bool			defenderIsCity
 	)
-			: DQActionActor(owner),
+			: DQActionActive(owner),
 			  attacker			(attacker),
 			  attackerPosition	(attackerPosition),
 			  attackerIsCity	(attackerIsCity),
@@ -1326,6 +1395,42 @@ public:
 	{}
 	virtual ~DQActionAttack() {}
 	virtual DQACTION_TYPE GetType() { return DQACTION_ATTACK; }
+
+	virtual void PrepareProcess()
+	{
+		POINT  attackerPoints, defenderPoints;
+		maputils_MapXY2PixelXY(attackerPosition.x, attackerPosition.y, attackerPoints);
+		maputils_MapXY2PixelXY(defenderPosition.x, defenderPosition.y, defenderPoints);
+
+		sint32  deltaX = defenderPoints.x - attackerPoints.x;
+		sint32  deltaY = defenderPoints.y - attackerPoints.y;
+
+		bool playerInvolved = (defender->GetPlayerNum() == g_selected_item->GetVisiblePlayer())
+							  || (attacker->GetPlayerNum() == g_selected_item->GetVisiblePlayer());
+		if (playerInvolved)
+		{
+			Action *action = new Action();
+			action->SetStartMapPoint(attackerPosition);
+			action->SetEndMapPoint  (attackerPosition);
+
+			sint32 facingIndex = spriteutils_DeltaToFacing(deltaX, deltaY);
+			attacker->ActionAttack(action, facingIndex);
+			AddActiveActor(attacker);
+		}
+
+		bool defenderVisible = TileIsVisibleToPlayer(defenderPosition);
+		if (!defenderIsCity && (playerInvolved || defenderVisible))
+		{
+			Action *action = new Action();
+			action->SetStartMapPoint(defenderPosition);
+			action->SetEndMapPoint  (defenderPosition);
+
+			sint32 facingIndex = spriteutils_DeltaToFacing(-deltaX, -deltaY);
+			defender->ActionAttack(action, facingIndex);
+
+			AddActiveActor(defender);
+		}
+	}
 
 	virtual void Dump()
 	{
@@ -1339,52 +1444,6 @@ public:
 	}
 protected:
 	virtual MBCHAR const * const GetName() { return "Attack"; }
-	virtual void DoExecute(bool immediate)
-	{
-		//	bool attackerVisible = DirectorImpl::Instance()->TileIsVisibleToPlayer(attackerPos);
-		bool defenderVisible = DirectorImpl::Instance()->TileIsVisibleToPlayer(defenderPosition);
-
-		bool playerInvolved  = (defender->GetPlayerNum() == g_selected_item->GetVisiblePlayer()) ||
-							   (attacker->GetPlayerNum() == g_selected_item->GetVisiblePlayer());
-
-		POINT  AttackerPoints, DefenderPoints;
-
-		maputils_MapXY2PixelXY(attackerPosition.x, attackerPosition.y, AttackerPoints);
-		maputils_MapXY2PixelXY(defenderPosition.x, defenderPosition.y, DefenderPoints);
-
-		sint32  deltax = DefenderPoints.x - AttackerPoints.x;
-		sint32  deltay = DefenderPoints.y - AttackerPoints.y;
-
-		sint32 facingIndex = spriteutils_DeltaToFacing(deltax, deltay);
-
-		Action *action = new Action();
-		action->SetStartMapPoint(attackerPosition);
-		action->SetEndMapPoint  (attackerPosition);
-
-		attacker->ActionAttack(action, facingIndex);
-
-		if (DirectorImpl::Instance()->HandleActor(immediate, attacker, playerInvolved)) {
-			AddActiveActor(attacker);
-		}
-
-		if (!defenderIsCity)
-		{
-			facingIndex = spriteutils_DeltaToFacing(-deltax, -deltay);
-
-			action = new Action();
-			action->SetStartMapPoint(defenderPosition);
-			action->SetEndMapPoint  (defenderPosition);
-
-			defender->ActionAttack(action, facingIndex);
-
-			if (playerInvolved) {
-				defenderVisible = true;
-			}
-			if (DirectorImpl::Instance()->HandleActor(immediate, defender, defenderVisible)) {
-				AddActiveActor(defender);
-			}
-		}
-	}
 
 	UnitActor	*attacker;
 	MapPoint	attackerPosition;
@@ -1413,6 +1472,50 @@ public:
 	virtual ~DQActionSpecialAttack() {}
 	virtual DQACTION_TYPE GetType() { return DQACTION_SPECATTACK; }
 
+	virtual void PrepareProcess()
+	{
+		if (attackerSoundID >= 0) {
+			g_soundManager->AddSound(SOUNDTYPE_SFX, 0, attackerSoundID, 0, 0);
+		}
+
+		POINT attackerPoints, defenderPoints;
+		maputils_MapXY2PixelXY(attackerPosition.x, attackerPosition.y, attackerPoints);
+		maputils_MapXY2PixelXY(defenderPosition.x, defenderPosition.y, defenderPoints);
+
+		sint32 deltaX = defenderPoints.x - attackerPoints.x;
+		sint32 deltaY = defenderPoints.y - attackerPoints.y;
+
+		bool attackerVisible = TileIsVisibleToPlayer(attackerPosition);
+		if (!attackerIsCity && attackerVisible)
+		{
+			Action *attackerAction = new Action();
+			attackerAction->SetStartMapPoint(attackerPosition);
+			attackerAction->SetEndMapPoint  (attackerPosition);
+
+			sint32 facingIndex = spriteutils_DeltaToFacing(deltaX, deltaY);
+			if (attacker->ActionSpecialAttack(attackerAction, facingIndex)) {
+				AddActiveActor(attacker);
+			} else {
+				delete attackerAction;
+			}
+		}
+
+		bool defenderVisible = TileIsVisibleToPlayer(defenderPosition);
+		if (!defenderIsCity && defenderVisible)
+		{
+			Action *defenderAction = new Action();
+			defenderAction->SetStartMapPoint(defenderPosition);
+			defenderAction->SetEndMapPoint  (defenderPosition);
+
+			sint32 facingIndex = spriteutils_DeltaToFacing(-deltaX, -deltaY);
+			if (defender->ActionSpecialAttack(defenderAction, facingIndex)) {
+				AddActiveActor(defender);
+			} else {
+				delete defenderAction;
+			}
+		}
+	}
+
 	virtual void Dump()
 	{
 		DQActionAttack::Dump();
@@ -1422,74 +1525,14 @@ public:
 protected:
 	virtual MBCHAR const * const GetName() { return "Special attack"; }
 
-	virtual void DoExecute(bool immediate)
-	{
-		BOOL attackerCanAttack = !attackerIsCity;
-		BOOL defenderIsAttackable = !defenderIsCity;
-
-		if (!attackerCanAttack && !defenderIsAttackable)
-		{
-			return;
-		}
-
-		sint32 facingIndex;
-		POINT  AttackerPoints, DefenderPoints;
-		maputils_MapXY2PixelXY(attackerPosition.x, attackerPosition.y, AttackerPoints);
-		maputils_MapXY2PixelXY(defenderPosition.x, defenderPosition.y, DefenderPoints);
-
-		sint32  deltax = DefenderPoints.x - AttackerPoints.x;
-		sint32  deltay = DefenderPoints.y - AttackerPoints.y;
-
-		if (attackerSoundID >= 0) {
-			g_soundManager->AddSound(SOUNDTYPE_SFX, 0, attackerSoundID, 0, 0);
-		}
-
-		if (attackerCanAttack)
-		{
-			Action *attackerAction = new Action();
-			attackerAction->SetStartMapPoint(attackerPosition);
-			attackerAction->SetEndMapPoint  (attackerPosition);
-
-			facingIndex = spriteutils_DeltaToFacing(deltax, deltay);
-
-			if(!attacker->ActionSpecialAttack(attackerAction, facingIndex))
-			{
-				delete attackerAction;
-				return;
-			}
-
-			bool visible = DirectorImpl::Instance()->TileIsVisibleToPlayer(attackerPosition);
-			if (DirectorImpl::Instance()->HandleActor(immediate, attacker, visible)) {
-				AddActiveActor(attacker);
-			}
-		}
-
-		if (defenderIsAttackable)
-		{
-			Action *defenderAction = new Action();
-
-			defenderAction->SetStartMapPoint(defenderPosition);
-			defenderAction->SetEndMapPoint  (defenderPosition);
-
-			facingIndex=spriteutils_DeltaToFacing(-deltax, -deltay);
-
-			if(!defender->ActionSpecialAttack(defenderAction, facingIndex))
-			{
-				delete defenderAction;
-				return;
-			}
-
-			bool visible = DirectorImpl::Instance()->TileIsVisibleToPlayer(defenderPosition);
-			if (DirectorImpl::Instance()->HandleActor(immediate, defender, visible)) {
-				AddActiveActor(defender);
-			}
-		}
+	virtual bool DoSkipProcess() {
+		return attackerIsCity && defenderIsCity;
 	}
 
 	sint32	attackerSoundID;
 };
 
-class DQActionAttackPos : public DQActionActor
+class DQActionAttackPos : public DQActionActive
 {
 public:
 	DQActionAttackPos(
@@ -1498,7 +1541,7 @@ public:
 			const MapPoint	&attackerPosition,
 			const MapPoint	&targetPosition,
 			sint32			soundID)
-			: DQActionActor(owner),
+			: DQActionActive(owner),
 			  attacker			(attacker),
 			  attackerPosition	(attackerPosition),
 			  targetPosition	(targetPosition),
@@ -1507,16 +1550,7 @@ public:
 	virtual ~DQActionAttackPos() {}
 	virtual DQACTION_TYPE GetType() { return DQACTION_ATTACKPOS; }
 
-	virtual void Dump()
-	{
-		DPRINTF(k_DBG_UI, ("Attack Pos\n"));
-		DPRINTF(k_DBG_UI, ("  attacker               :%#x (%#.8lx)\n", attacker->GetUnitID(), attacker));
-		DPRINTF(k_DBG_UI, ("  attackerPosition       :%d,%d\n", attackerPosition.x, attackerPosition.y));
-		DPRINTF(k_DBG_UI, ("  targetPosition         :%d,%d\n", targetPosition.x, targetPosition.y));
-		DPRINTF(k_DBG_UI, ("  soundID                :%d\n", soundID));
-	}
-protected:
-	virtual void DoExecute(bool immediate)
+	virtual void PrepareProcess()
 	{
 		Action *action = new Action(UNITACTION_ATTACK, ACTIONEND_ANIMEND,
 									attacker->GetHoldingCurAnimPos(UNITACTION_ATTACK),
@@ -1527,22 +1561,22 @@ protected:
 		if (attacker->GetLoadType() != LOADTYPE_FULL) {
 			attacker->FullLoad(UNITACTION_ATTACK);
 		}
-
-		Anim	*attackerAnim = attacker->CreateAnim(UNITACTION_ATTACK);
+		Anim *attackerAnim = attacker->CreateAnim(UNITACTION_ATTACK);
 		if (!attackerAnim) {
 			attackerAnim = attacker->CreateAnim(UNITACTION_IDLE);
 		}
 		action->SetAnim(attackerAnim);
 
-		POINT AttackerPoints, AttackedPoints;
-		maputils_MapXY2PixelXY(attackerPosition.x, attackerPosition.y, AttackerPoints);
-		maputils_MapXY2PixelXY(targetPosition.x, targetPosition.y, AttackedPoints);
-
-		action->SetFacing(spriteutils_DeltaToFacing(AttackedPoints.x - AttackerPoints.x,
-													AttackedPoints.y - AttackerPoints.y));
+		POINT attackerPoints, attackedPoints;
+		maputils_MapXY2PixelXY(attackerPosition.x, attackerPosition.y, attackerPoints);
+		maputils_MapXY2PixelXY(targetPosition.x, targetPosition.y, attackedPoints);
+		action->SetFacing(spriteutils_DeltaToFacing(attackedPoints.x - attackerPoints.x,
+													attackedPoints.y - attackerPoints.y));
 
 		action->SetUnitVisionRange(attacker->GetUnitVisionRange());
 		action->SetUnitsVisibility(attacker->GetUnitVisibility());
+		attacker->AddAction(action);
+		AddActiveActor(attacker);
 
 		if (g_soundManager) {
 			sint32 visiblePlayer = g_selected_item->GetVisiblePlayer();
@@ -1553,13 +1587,21 @@ protected:
 										 attackerPosition.x, attackerPosition.y);
 			}
 		}
+	}
 
-		attacker->AddAction(action);
-
-		bool attackerVisible = DirectorImpl::Instance()->TileIsVisibleToPlayer(attackerPosition);
-		if (DirectorImpl::Instance()->HandleActor(immediate, attacker, attackerVisible)) {
-			AddActiveActor(attacker);
-		}
+	virtual void Dump()
+	{
+		DPRINTF(k_DBG_UI, ("Attack Pos\n"));
+		DPRINTF(k_DBG_UI, ("  attacker               :%#x (%#.8lx)\n", attacker->GetUnitID(), attacker));
+		DPRINTF(k_DBG_UI, ("  attackerPosition       :%d,%d\n", attackerPosition.x, attackerPosition.y));
+		DPRINTF(k_DBG_UI, ("  targetPosition         :%d,%d\n", targetPosition.x, targetPosition.y));
+		DPRINTF(k_DBG_UI, ("  soundID                :%d\n", soundID));
+	}
+protected:
+	virtual bool DoSkipProcess()
+	{
+		// Unit invisible
+		return !TileIsVisibleToPlayer(attackerPosition);
 	}
 
 	UnitActor	*attacker;
@@ -1568,11 +1610,11 @@ protected:
 	sint32		soundID;
 };
 
-class DQActionDeath : public DQActionActor
+class DQActionDeath : public DQActionActive
 {
 public:
 	DQActionDeath(sint8 owner, UnitActor *dead, const MapPoint &deadPosition, sint32 deadSoundID)
-			: DQActionActor(owner),
+			: DQActionActive(owner),
 			  dead			(dead),
 			  deadPosition	(deadPosition),
 			  deadSoundID	(deadSoundID)
@@ -1580,15 +1622,7 @@ public:
 	virtual ~DQActionDeath() {}
 	virtual DQACTION_TYPE GetType() { return DQACTION_DEATH; }
 
-	virtual void Dump()
-	{
-		DPRINTF(k_DBG_UI, ("Death\n"));
-		DPRINTF(k_DBG_UI, ("  dead               :%#x (%#.8lx)\n", dead->GetUnitID(), dead));
-		DPRINTF(k_DBG_UI, ("  deadPosition       :%d,%d\n", deadPosition.x, deadPosition.y));
-		DPRINTF(k_DBG_UI, ("  deadSoundID        :%d\n", deadSoundID));
-	}
-protected:
-	virtual void DoExecute(bool immediate)
+	virtual void PrepareProcess()
 	{
 		Anim	*deathAnim		= NULL;
 		sint32	deathActionType	= UNITACTION_NONE;
@@ -1626,6 +1660,8 @@ protected:
 		action->SetUnitVisionRange(dead->GetUnitVisionRange());
 		action->SetUnitsVisibility(dead->GetUnitVisibility());
 		action->SetFacing(dead->GetFacing());
+		dead->AddAction(action);
+		AddActiveActor(dead);
 
 		if (g_soundManager) {
 			sint32 visiblePlayer = g_selected_item->GetVisiblePlayer();
@@ -1635,13 +1671,20 @@ protected:
 										 deadPosition.x, deadPosition.y);
 			}
 		}
+	}
 
-		dead->AddAction(action);
-
-		bool visible = DirectorImpl::Instance()->TileIsVisibleToPlayer(deadPosition);
-		if (DirectorImpl::Instance()->HandleActor(immediate, dead, visible)) {
-			AddActiveActor(dead);
-		}
+	virtual void Dump()
+	{
+		DPRINTF(k_DBG_UI, ("Death\n"));
+		DPRINTF(k_DBG_UI, ("  dead               :%#x (%#.8lx)\n", dead->GetUnitID(), dead));
+		DPRINTF(k_DBG_UI, ("  deadPosition       :%d,%d\n", deadPosition.x, deadPosition.y));
+		DPRINTF(k_DBG_UI, ("  deadSoundID        :%d\n", deadSoundID));
+	}
+protected:
+	virtual bool DoSkipProcess()
+	{
+		// Unit invisible
+		return !TileIsVisibleToPlayer(deadPosition);
 	}
 
 	UnitActor	*dead;
@@ -1649,11 +1692,11 @@ protected:
 	sint32		deadSoundID;
 };
 
-class DQActionWork : public DQActionActor
+class DQActionWork : public DQActionActive
 {
 public:
 	DQActionWork(sint8 owner, UnitActor *workActor, const MapPoint &workPosition, sint32 workSoundID)
-			: DQActionActor(owner),
+			: DQActionActive(owner),
 			  workActor		(workActor),
 			  workPosition	(workPosition),
 			  workSoundID	(workSoundID)
@@ -1661,18 +1704,9 @@ public:
 	virtual ~DQActionWork() {}
 	virtual DQACTION_TYPE GetType() { return DQACTION_WORK; }
 
-	virtual void Dump()
-	{
-		DPRINTF(k_DBG_UI, ("Work\n"));
-		DPRINTF(k_DBG_UI, ("  workActor          :%#x (%#.8lx)\n", workActor->GetUnitID(), workActor));
-		DPRINTF(k_DBG_UI, ("  workPosition       :%d,%d\n", workPosition.x, workPosition.y));
-		DPRINTF(k_DBG_UI, ("  workSoundID        :%d\n", workSoundID));
-	}
-protected:
-	virtual void DoExecute(bool immediate)
+	virtual void PrepareProcess()
 	{
 		Action *action = new Action(UNITACTION_WORK, ACTIONEND_ANIMEND);
-
 		action->SetStartMapPoint(workPosition);
 		action->SetEndMapPoint(workPosition);
 
@@ -1684,29 +1718,39 @@ protected:
 		if (!anim)
 		{
 			anim = workActor->CreateAnim(UNITACTION_MOVE);
-
 			if (!anim) {
 				delete action;
 				return;
 			}
 		}
 		action->SetAnim(anim);
-
 		workActor->AddAction(action);
+		AddActiveActor(workActor);
 
 		if (g_soundManager)
 		{
 			sint32 visiblePlayer = g_selected_item->GetVisiblePlayer();
 			if ((visiblePlayer == workActor->GetPlayerNum()) ||
-				(workActor->GetUnitVisibility() & (1 << visiblePlayer))) {
-				g_soundManager->AddSound(SOUNDTYPE_SFX, workActor->GetUnitID(), workSoundID, workPosition.x, workPosition.y);
+				(workActor->GetUnitVisibility() & (1 << visiblePlayer)))
+			{
+				g_soundManager->AddSound(SOUNDTYPE_SFX, workActor->GetUnitID(), workSoundID,
+						workPosition.x, workPosition.y);
 			}
 		}
+	}
 
-		bool visible = DirectorImpl::Instance()->TileIsVisibleToPlayer(workPosition);
-		if (DirectorImpl::Instance()->HandleActor(immediate, workActor, visible)) {
-			AddActiveActor(workActor);
-		}
+	virtual void Dump()
+	{
+		DPRINTF(k_DBG_UI, ("Work\n"));
+		DPRINTF(k_DBG_UI, ("  workActor          :%#x (%#.8lx)\n", workActor->GetUnitID(), workActor));
+		DPRINTF(k_DBG_UI, ("  workPosition       :%d,%d\n", workPosition.x, workPosition.y));
+		DPRINTF(k_DBG_UI, ("  workSoundID        :%d\n", workSoundID));
+	}
+protected:
+	virtual bool DoSkipProcess()
+	{
+		// Unit invisible
+		return !TileIsVisibleToPlayer(workPosition);
 	}
 
 	UnitActor	*workActor;
@@ -1714,7 +1758,7 @@ protected:
 	sint32		workSoundID;
 };
 
-class DQActionFaceoff : public DQActionActor
+class DQActionFaceoff : public DQActionActive
 {
 public:
 	DQActionFaceoff(
@@ -1723,7 +1767,7 @@ public:
 			const MapPoint	&attackerPosition,
 			UnitActor		*attacked,
 			const MapPoint	&attackedPosition)
-			: DQActionActor(owner),
+			: DQActionActive(owner),
 			  attacker			(attacker),
 			  attackerPosition	(attackerPosition),
 			  attacked			(attacked),
@@ -1732,16 +1776,7 @@ public:
 	virtual ~DQActionFaceoff() {}
 	virtual DQACTION_TYPE GetType() { return DQACTION_FACEOFF; }
 
-	virtual void Dump()
-	{
-		DPRINTF(k_DBG_UI, ("Faceoff\n"));
-		DPRINTF(k_DBG_UI, ("  attacker           :%#x (%#.8lx)\n", attacker->GetUnitID(), attacker));
-		DPRINTF(k_DBG_UI, ("  attackerPosition   :%d,%d\n", attackerPosition.x, attackerPosition.y));
-		DPRINTF(k_DBG_UI, ("  attacked           :%#x (%#.8lx)\n", attacked->GetUnitID(), attacked));
-		DPRINTF(k_DBG_UI, ("  attackedPosition   :%d,%d\n", attackedPosition.x, attackedPosition.y));
-	}
-protected:
-	virtual void DoExecute(bool immediate)
+	virtual void PrepareProcess()
 	{
 		Action *attackerAction = new Action(UNITACTION_FACE_OFF, ACTIONEND_INTERRUPT);
 		attackerAction->SetStartMapPoint(attackerPosition);
@@ -1773,24 +1808,23 @@ protected:
 			attackedAction = NULL;
 		}
 
-		POINT AttackerPoints, AttackedPoints;
+		POINT attackerPoints, attackedPoints;
 
-		maputils_MapXY2PixelXY(attackerPosition.x, attackerPosition.y, AttackerPoints);
-		maputils_MapXY2PixelXY(attackedPosition.x, attackedPosition.y, AttackedPoints);
+		maputils_MapXY2PixelXY(attackerPosition.x, attackerPosition.y, attackerPoints);
+		maputils_MapXY2PixelXY(attackedPosition.x, attackedPosition.y, attackedPoints);
 
 		attackerAction->SetFacing(spriteutils_DeltaToFacing(
-				AttackedPoints.x - AttackerPoints.x,AttackedPoints.y - AttackerPoints.y));
+				attackedPoints.x - attackerPoints.x, attackedPoints.y - attackerPoints.y));
 
 		if(attackedAnim)
 		{
 			attackedAction->SetAnim(attackedAnim);
 			attackedAction->SetFacing(spriteutils_DeltaToFacing(
-					AttackerPoints.x - AttackedPoints.x, AttackerPoints.y - AttackedPoints.y));
+					attackerPoints.x - attackedPoints.x, attackerPoints.y - attackedPoints.y));
 		}
 
 		attackerAction->SetUnitVisionRange(attacker->GetUnitVisionRange());
 		attackerAction->SetUnitsVisibility(attacker->GetUnitVisibility());
-
 		attacker->AddAction(attackerAction);
 
 		if(attackedAnim)
@@ -1801,48 +1835,39 @@ protected:
 			attacked->AddAction(attackedAction);
 		}
 
-		bool attackedVisible = DirectorImpl::Instance()->TileIsVisibleToPlayer(attackedPosition);
+		bool attackedVisible = TileIsVisibleToPlayer(attackedPosition);
 		if (attacker->GetPlayerNum() == g_selected_item->GetVisiblePlayer() ||
 			attacked->GetPlayerNum() == g_selected_item->GetVisiblePlayer()) {
 			attackedVisible = true;
 		}
-
-		if (DirectorImpl::Instance()->HandleActor(immediate, attacked, attackedVisible)) {
+		if (attackedVisible) {
 			AddActiveActor(attacked);
 		}
 
-		bool attackerVisible = DirectorImpl::Instance()->TileIsVisibleToPlayer(attackerPosition);
+		bool attackerVisible = TileIsVisibleToPlayer(attackerPosition);
 		if (attacked->GetPlayerNum() == g_selected_item->GetVisiblePlayer() ||
 			attacker->GetPlayerNum() == g_selected_item->GetVisiblePlayer()) {
 			attackerVisible = true;
 			attackedVisible = true;
 		}
-		if (DirectorImpl::Instance()->HandleActor(
-				immediate, attacker, attackerVisible && attackedVisible)) {
+		if (attackerVisible && attackedVisible) {
 			AddActiveActor(attacker);
 		}
 	}
 
+	virtual void Dump()
+	{
+		DPRINTF(k_DBG_UI, ("Faceoff\n"));
+		DPRINTF(k_DBG_UI, ("  attacker           :%#x (%#.8lx)\n", attacker->GetUnitID(), attacker));
+		DPRINTF(k_DBG_UI, ("  attackerPosition   :%d,%d\n", attackerPosition.x, attackerPosition.y));
+		DPRINTF(k_DBG_UI, ("  attacked           :%#x (%#.8lx)\n", attacked->GetUnitID(), attacked));
+		DPRINTF(k_DBG_UI, ("  attackedPosition   :%d,%d\n", attackedPosition.x, attackedPosition.y));
+	}
+protected:
 	UnitActor	*attacker;
 	MapPoint	attackerPosition;
 	UnitActor	*attacked;
 	MapPoint	attackedPosition;
-};
-
-class DQActionExternal : public DQAction
-{
-public:
-	DQActionExternal()
-	: DQAction()
-	{}
-	virtual ~DQActionExternal() {}
-
-	virtual void ExecuteImmediate()
-	{
-		// External dependency so no immediate execution available
-		Execute();
-	}
-	virtual bool IsFinished() { return false; }
 };
 
 class DQActionInvokeResearchAdvance : public DQActionExternal
@@ -1884,14 +1909,9 @@ public:
 
 	virtual void Execute()
 	{
-		if(g_battleViewWindow)
-		{
-			BattleViewWindow::Cleanup();
-		}
-
 		BattleViewWindow::Initialize();
 
-		if(g_battleViewWindow)
+		if (g_battleViewWindow)
 		{
 			g_battleViewWindow->SetupBattle(battle);
 			g_c3ui->AddWindow(g_battleViewWindow);
@@ -2008,6 +2028,7 @@ DirectorImpl *DirectorImpl::m_instance = NULL;
 DirectorImpl::DirectorImpl(void)
 :
 	m_currentAction				(NULL),
+	m_activeLoopingSound		(NULL),
 	m_activeEffectList			(new tech_WLList<EffectActor *>),
 	m_tradeActorList			(new tech_WLList<TradeActor *>),
 	m_masterCurTime				(0),
@@ -2034,14 +2055,15 @@ DirectorImpl::~DirectorImpl(void)
 	delete m_actionWalker;
 	delete m_activeEffectList;
 	delete m_tradeActorList;
+	delete m_activeLoopingSound;
 	delete m_currentAction;
 	m_instance = NULL;
 }
 
 void DirectorImpl::FastKill(UnitActor *actor)
 {
-	if (m_currentAction && m_currentAction->IsTypeActor()) {
-		static_cast<DQActionActor*>(m_currentAction)->FastKill(actor);
+	if (m_currentAction && m_currentAction->IsTypeActive()) {
+		static_cast<DQActionActive*>(m_currentAction)->FastKill(actor);
 	}
 	m_dyingActors.erase(actor);
 	m_standbyActors.erase(actor);
@@ -2139,16 +2161,12 @@ void DirectorImpl::Process(void)
 
 	if (GetTickCount() > nextTime)
 	{
-		DQAction *currentAction = m_currentAction;
 		ProcessStandbyUnits();
 		ProcessCurrentAction();
 		ProcessActiveEffects();
 		ProcessTradeRouteAnimations();
 
 		HandleNextAction();
-		if (m_currentAction != currentAction) {
-			delete currentAction;
-		}
 
 		if(g_tiledMap)
 			g_tiledMap->ProcessLayerSprites(g_tiledMap->GetMapViewRect(), 0);
@@ -2215,7 +2233,6 @@ void DirectorImpl::EndTurn() {
 bool DirectorImpl::HandleActor(bool immediate, UnitActor *actor, bool enableAction)
 {
 	if (enableAction && !immediate) {
-		// ActiveUnitAdd(actor);
 		return true;
 	}
 
@@ -2242,36 +2259,18 @@ void DirectorImpl::HandleNextAction(void)
 	while (CanStartNextAction())
 	{
 	 	m_currentAction = m_actionQueue->RemoveHead();
-
-		if (m_currentAction->IsTypeImmediate()
-			|| m_currentAction->GetRound() < g_turn->GetRound() - 1
-			||
-			(
-				!g_theProfileDB->IsEnemyMoves()
-				&&  m_currentAction->GetOwner() != -1
-				&&  m_currentAction->GetOwner() != g_selected_item->GetVisiblePlayer()
-			)
-			||
-			(
-				!g_theProfileDB->IsUnitAnim()
-				&&  m_currentAction->GetOwner() != -1
-				&&  g_player[m_currentAction->GetOwner()] != NULL
-				&&  g_player[m_currentAction->GetOwner()]->IsRobot()
-			)
-			)
-		{
-			m_currentAction->ExecuteImmediate();
-			m_currentAction->Finish();
-			delete m_currentAction;
-			m_currentAction = NULL;
+	 	m_currentAction->ProcessLoopingSound(m_activeLoopingSound);
+	 	m_currentAction->Execute();
+		if (m_currentAction->SkipProcess()) {
+			FinalizeAction(m_currentAction);
 		} else {
-			m_currentAction->Execute();
-			if (m_currentAction->IsFinished()) {
-				m_currentAction->Finish();
-				delete m_currentAction;
-				m_currentAction = NULL;
-			}
+			m_currentAction->PrepareProcess();
 		}
+	}
+
+	if (!m_currentAction) {
+		delete m_activeLoopingSound;
+		m_activeLoopingSound = NULL;
 	}
 }
 
@@ -2300,26 +2299,27 @@ void DirectorImpl::ExternalActionFinished(DEACTION_TYPE externalActionType)
 	}
 
 	if (m_currentAction && m_currentAction->GetType() == actionType) {
-		m_currentAction->Finish();
-		delete m_currentAction;
-		m_currentAction = NULL;
+		static_cast<DQActionExternal*>(m_currentAction)->SetFinished();
 	}
 }
 
-void DirectorImpl::CatchUp(void)
+void DirectorImpl::FinalizeAction(DQAction* &action)
 {
+	action->Finalize();
+	delete action;
+	action = NULL;
+}
+
+void DirectorImpl::CatchUp(void) {
 	if (m_currentAction) {
-		m_currentAction->Finish();
-		delete m_currentAction;
-		m_currentAction = NULL;
+		FinalizeAction(m_currentAction);
 	}
 
-	while(m_actionQueue->GetCount())
+	while (m_actionQueue->GetCount())
 	{
 		DQAction *action = m_actionQueue->RemoveHead();
-		action->ExecuteImmediate();
-		action->Finish();
-		delete action;
+		action->Execute();
+		FinalizeAction(action);
 	}
 
 	if (!g_network.IsActive()) {
@@ -2342,15 +2342,6 @@ void DirectorImpl::CenterMap(const MapPoint &pos)
 	g_tiledMap->InvalidateMap();
 	g_tiledMap->InvalidateMix();
 	background_draw_handler(g_background);
-}
-
-bool DirectorImpl::TileIsVisibleToPlayer(MapPoint &pos)
-{
-#if defined(_PLAYTEST)
-	if (g_doingFastRounds) return false;
-#endif
-
-	return g_tiledMap && g_tiledMap->GetLocalVision()->IsVisible(pos);
 }
 
 void DirectorImpl::ActiveEffectAdd(EffectActor *effectActor)
@@ -2434,11 +2425,10 @@ void DirectorImpl::ProcessStandbyUnits()
 
 void DirectorImpl::ProcessCurrentAction(void)
 {
-	if (m_currentAction && m_currentAction->IsTypeActor()) {
-		static_cast<DQActionActor*>(m_currentAction)->Process();
+	if (m_currentAction) {
+		m_currentAction->Process();
 		if (m_currentAction->IsFinished()) {
-			m_currentAction->Finish();
-			m_currentAction = NULL;
+			FinalizeAction(m_currentAction);
 		}
 	}
 }
@@ -2513,8 +2503,8 @@ void DirectorImpl::OffsetStandbyUnits(sint32 deltaX, sint32 deltaY)
 
 void DirectorImpl::OffsetActiveUnits(sint32 deltaX, sint32 deltaY)
 {
-	if (m_currentAction && m_currentAction->IsTypeActor()) {
-		static_cast<DQActionActor*>(m_currentAction)->Offset(deltaX, deltaY);
+	if (m_currentAction && m_currentAction->IsTypeActive()) {
+		static_cast<DQActionActive*>(m_currentAction)->Offset(deltaX, deltaY);
 	}
 }
 
@@ -2584,17 +2574,15 @@ void DirectorImpl::NextPlayer() {
 #endif
 	if (!g_network.IsActive()) {
 		if (m_currentAction) {
-			m_currentAction->Finish();
-			delete m_currentAction;
-			m_currentAction = NULL;
+			FinalizeAction(m_currentAction);
 		}
 	}
 
 	while(m_actionQueue->GetCount())
 	{
 		DQAction *action = m_actionQueue->RemoveHead();
-		action->ExecuteImmediate();
-		action->Finish();
+		action->Execute();
+		action->Finalize();
 		delete action;
 	}
 
@@ -2620,8 +2608,8 @@ void DirectorImpl::Draw(RECT *paintRect, sint32 layer)
 
 void DirectorImpl::DrawActiveUnits(RECT *paintRect, sint32 layer)
 {
-	if (m_currentAction && m_currentAction->IsTypeActor()) {
-		static_cast<DQActionActor*>(m_currentAction)->Draw(paintRect, layer);
+	if (m_currentAction && m_currentAction->IsTypeActive()) {
+		static_cast<DQActionActive*>(m_currentAction)->Draw(paintRect, layer);
 	}
 }
 
