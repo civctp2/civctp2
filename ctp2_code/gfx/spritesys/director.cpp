@@ -42,6 +42,7 @@
 // TODO: verify that all EffectActors are deleted
 // TODO: verify if Effect-actors need to be refactored
 // TODO: check if stand-by units are not drawn outside position when center map has been called
+// TODO: check 'stand-by' units been implemented differently
 
 #include "c3.h"
 #include "director.h"
@@ -168,6 +169,16 @@ private:
 	uint32	m_unitID;
 };
 
+/**
+ * DQAction: every action will go through all the following steps:
+ *   -> ProcessLoopingSound handles the continuation of a looping sound
+ *   -> Execute runs the execute phase which is always run (unconditionally)
+ *   -> SkipProcess is used to determine of the action will skip the process phase
+ *   -> PrepareProcess will prepare the process phase (may be skipped)
+ *   -> Process runs the process phase (may be skipped)
+ *   -> IsProcessFinished determines if the process phase is finished (may be skipped)
+ *   -> Finalize runs finalization steps of the action
+ */
 class DQAction {
 public:
 	DQAction() {}
@@ -180,7 +191,7 @@ public:
 	virtual bool SkipProcess() = 0;
 	virtual void PrepareProcess() = 0;
 	virtual void Process() = 0;
-	virtual bool IsFinished() = 0;
+	virtual bool IsProcessFinished() = 0;
 	virtual void Finalize() = 0;
 
 	virtual void Dump() = 0;
@@ -193,25 +204,47 @@ protected:
 
 		return g_tiledMap && g_tiledMap->GetLocalVision()->IsVisible(position);
 	}
+
+	static void CenterMap(const MapPoint &position)
+	{
+		g_radarMap->CenterMap(position);
+		g_tiledMap->Refresh();
+		g_tiledMap->InvalidateMap();
+		g_tiledMap->InvalidateMix();
+		background_draw_handler(g_background);
+	}
 };
 
+/**
+ * DQActionImmediate: only executes; no process;
+ *   -> LoopingSound is ignored
+ *   -> Execute implements the functionality of the action
+ *   -> SkipProcess returns true
+ */
 class DQActionImmediate : public DQAction {
 public:
 	DQActionImmediate()
 			: DQAction()
 	{}
 	virtual ~DQActionImmediate() {}
-	virtual bool IsTypeImmediate() { return true; }
 
 	virtual void ProcessLoopingSound(DQActiveLoopingSound* &activeLoopingSound) {}
 	virtual void Execute() = 0;
 	virtual bool SkipProcess() { return true; }
 	virtual void PrepareProcess() {}
 	virtual void Process() {}
-	virtual bool IsFinished() { return true; }
+	virtual bool IsProcessFinished() { return true; }
 	virtual void Finalize() {}
 };
 
+/**
+ * DQActionActive: no execute; only processes
+ *   -> LoopingSound is processed; normally it is terminated; in case it is needed it will keep looping
+ *   -> Execute is empty
+ *   -> SkipProcess determines if process should be skipped based on settings and conditions
+ *   -> PrepareProcess initializes the process phase
+ *   -> IsFinished returns true when processing is done
+ */
 class DQActionActive : public DQAction
 {
 public:
@@ -256,7 +289,7 @@ public:
 		}
 	}
 
-	virtual bool IsFinished()
+	virtual bool IsProcessFinished()
 	{
 		return m_activeActors.empty();
 	}
@@ -329,6 +362,14 @@ private:
 	std::unordered_set<UnitActor*>	m_activeActors;
 };
 
+/**
+ * DQActionExternal: execute configures external process; process runs till externally finished
+ *   -> LoopingSound is terminated
+ *   -> Execute initiates the external process
+ *   -> SkipProcess returns false
+ *   -> Process is empty as it runs externally
+ *   -> IsFinished is externally set
+ */
 class DQActionExternal : public DQAction
 {
 public:
@@ -347,7 +388,7 @@ public:
 	virtual bool SkipProcess() { return false; }
 	virtual void PrepareProcess() {}
 	virtual void Process() {}
-	virtual bool IsFinished() { return m_finished; }
+	virtual bool IsProcessFinished() { return m_finished; }
 	virtual void Finalize() {}
 
 	void SetFinished() { m_finished = true; }
@@ -460,10 +501,7 @@ public:
 	virtual void FastKill(UnitActor *actor);
 
 	// Used locally
-	void		EndTurn();
-	bool		HandleActor(bool immediate, UnitActor* actor, bool actionEnabled);
 	void		ActiveEffectAdd(EffectActor *effectActor);
-	void		CenterMap(const MapPoint &pos);
 
 private:
 	static void	FinalizeAction(DQAction* &action);
@@ -488,7 +526,6 @@ private:
 	uint32	ProcessActiveEffects();
 	void	ProcessTradeRouteAnimations();
 
-	void	FinalizeActor(UnitActor *unitActor);
 	void	FastKill(EffectActor *actor);
 	uint32	KillAllActiveEffects();
 
@@ -521,7 +558,6 @@ private:
 	PointerList<DQAction>		*m_actionQueue;
 
 	std::set<UnitActor *>			m_standbyActors;
-	std::unordered_set<UnitActor *>	m_dyingActors;
 	PointerList<DQAction>::Walker	*m_actionWalker;
 
 	sint32						m_pendingGameActions;
@@ -930,7 +966,7 @@ public:
 	virtual void Execute()
 	{
 		if(!g_selected_item->GetIsPathing()) {
-			DirectorImpl::Instance()->CenterMap(centerMapPosition);
+			CenterMap(centerMapPosition);
 		}
 	}
 
@@ -1039,7 +1075,6 @@ public:
 
 	virtual void Execute()
 	{
-		DirectorImpl::Instance()->EndTurn();
 		g_gevManager->Pause();
 		g_gevManager->AddEvent(GEV_INSERT_Tail, GEV_EndTurn,
 							   GEA_Player, g_selected_item->GetCurPlayer(),
@@ -1139,9 +1174,6 @@ public:
 	{
 		faceOffer->SetHealthPercent(-1.0);
 		faceOffer->SetTempStackSize(0);
-
-		// This is commented out as currently AddFaceoff is not called and thereby ActiveUnitAdd is not called.
-		// DirectorImpl::Instance()->ActiveUnitRemove(faceOffer);
 	}
 
 	virtual void Dump()
@@ -1313,7 +1345,7 @@ public:
 		if (g_selected_item->GetVisiblePlayer()!= moveActor->GetPlayerNum()
 			&& !g_tiledMap->TileIsVisible(moveActor->GetPos().x, moveActor->GetPos().y))
 		{
-			DirectorImpl::Instance()->CenterMap(moveActor->GetPos());
+			CenterMap(moveActor->GetPos());
 		}
 		AddActiveActor(moveActor);
 	}
@@ -1619,7 +1651,10 @@ public:
 			  deadPosition	(deadPosition),
 			  deadSoundID	(deadSoundID)
 	{}
-	virtual ~DQActionDeath() {}
+	virtual ~DQActionDeath()
+	{
+		delete dead;
+	}
 	virtual DQACTION_TYPE GetType() { return DQACTION_DEATH; }
 
 	virtual void PrepareProcess()
@@ -2065,7 +2100,6 @@ void DirectorImpl::FastKill(UnitActor *actor)
 	if (m_currentAction && m_currentAction->IsTypeActive()) {
 		static_cast<DQActionActive*>(m_currentAction)->FastKill(actor);
 	}
-	m_dyingActors.erase(actor);
 	m_standbyActors.erase(actor);
 	delete actor;
 }
@@ -2191,10 +2225,6 @@ void DirectorImpl::DumpAction(DQAction *action)
 	}
 }
 
-#endif
-
-#ifdef _DEBUG
-
 void DirectorImpl::DumpInfo(void)
 {
 	DPRINTF(k_DBG_UI, (" ------------------\n"));
@@ -2219,38 +2249,6 @@ void DirectorImpl::DumpInfo(void)
 	DPRINTF(k_DBG_UI, (" ------------------\n"));
 }
 #endif
-
-void DirectorImpl::EndTurn() {
-
-	for (auto it = m_dyingActors.begin(); it != m_dyingActors.end();) {
-		UnitActor *actor = *it;
-		// Move iterator forward before killing the actor as it will remove the actor from the set.
-		it++;
-		FastKill(actor);
-	}
-}
-
-bool DirectorImpl::HandleActor(bool immediate, UnitActor *actor, bool enableAction)
-{
-	if (enableAction && !immediate) {
-		return true;
-	}
-
-	FinalizeActor(actor);
-	return false;
-}
-
-void DirectorImpl::FinalizeActor(UnitActor *actor)
-{
-	if (!actor)
-		return;
-
-	if (m_dyingActors.count(actor)) {
-		FastKill(actor);
-	} else {
-		actor->EndTurnProcess();
-	}
-}
 
 void DirectorImpl::HandleNextAction(void)
 {
@@ -2333,15 +2331,6 @@ void DirectorImpl::CatchUp(void) {
 bool DirectorImpl::CaughtUp(void)
 {
 	return !m_actionQueue || (m_actionQueue->GetCount() == 0);
-}
-
-void DirectorImpl::CenterMap(const MapPoint &pos)
-{
-	g_radarMap->CenterMap(pos);
-	g_tiledMap->Refresh();
-	g_tiledMap->InvalidateMap();
-	g_tiledMap->InvalidateMix();
-	background_draw_handler(g_background);
 }
 
 void DirectorImpl::ActiveEffectAdd(EffectActor *effectActor)
@@ -2427,7 +2416,7 @@ void DirectorImpl::ProcessCurrentAction(void)
 {
 	if (m_currentAction) {
 		m_currentAction->Process();
-		if (m_currentAction->IsFinished()) {
+		if (m_currentAction->IsProcessFinished()) {
 			FinalizeAction(m_currentAction);
 		}
 	}
@@ -2969,8 +2958,6 @@ void DirectorImpl::AddDeath(UnitActor *dead, const MapPoint &deadPos, sint32 dea
 
 	DQActionDeath *action = new DQActionDeath(dead->GetPlayerNum(), dead, deadPos, deadSoundID);
 	m_actionQueue->AddTail(action);
-
-	m_dyingActors.insert(dead);
 }
 
 void DirectorImpl::AddMorphUnit(UnitActor *morphingActor, SpriteState *ss, sint32 type, Unit id)
