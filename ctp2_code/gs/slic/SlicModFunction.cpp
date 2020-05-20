@@ -21,8 +21,10 @@ SlicModFunc::SlicModFunc(const MBCHAR *name, ...)
 		tag = va_arg(vl, SLIC_TAG);
 		switch(tag) {
 			case ST_END:
+			{
 				done = true;
 				break;
+			}
 			case ST_UNIT:
 			case ST_CITY:
 			case ST_PLAYER:
@@ -32,8 +34,10 @@ SlicModFunc::SlicModFunc(const MBCHAR *name, ...)
 			case ST_ACTION:
 			case ST_ADVANCE:
 			case ST_INT:
+			{
 				m_argTypes[m_numArgs++] = tag;
 				break;
+			}
 			default:
 			{
 				BOOL Unknown_Tag = false;
