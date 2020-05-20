@@ -3055,6 +3055,8 @@ SlicDBInterface *SlicEngine::GetDBConduit(const char *name)
 	return m_dbHash ? m_dbHash->Access(name) : NULL;
 }
 
+//// name must be from enum MOD_FUNC defined in SlicModFuncEnum.h
+//// #name is a stringification: https://gcc.gnu.org/onlinedocs/gcc-3.0.1/cpp_3.html#SEC17
 #define SMF_2A(name, a1, a2) m_modFunc[name] = new SlicModFunc(#name, a1, a2, ST_END);
 #define SMF_3A(name, a1, a2, a3) m_modFunc[name] = new SlicModFunc(#name, a1, a2, a3, ST_END);
 
