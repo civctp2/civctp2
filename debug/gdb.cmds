@@ -12,6 +12,7 @@ command
 catch signal SIGILL
 command  
    backtrace
+   p m_numArgs
    x/i $pc
    disas $pc
    continue 
