@@ -9,4 +9,9 @@ command
    backtrace
    continue 
    end
+catch signal SIGILL
+command  
+   backtrace
+   continue 
+   end
 run
