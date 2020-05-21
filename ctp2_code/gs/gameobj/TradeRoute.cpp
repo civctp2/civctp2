@@ -109,8 +109,10 @@ void TradeRoute::KillRoute(CAUSE_KILL_TRADE_ROUTE cause) // Mapped to TradeRoute
 
 	TradeRoute tmp(*this);
 	tmp.Deactivate();                       // Deactivate route => if a tile of the path is seen again the route will not be drawn any more
-	tmp.RemoveSeenByBit(source.GetOwner()); // Owner should not see it any more instantly
-	tmp.RemoveSeenByBit(dest.GetOwner());   // Receiver should not see it any more instantly
+	if(g_theUnitPool->IsValid(source)) // can be gone in case city is destroyed
+	    tmp.RemoveSeenByBit(source.GetOwner()); // Owner should not see it any more instantly
+	if(g_theUnitPool->IsValid(dest)) // can be gone in case city is destroyed
+	    tmp.RemoveSeenByBit(dest.GetOwner());   // Receiver should not see it any more instantly
 	tmp.RevealTradeRouteStateIfInVision();  // Reveal trade route state to players where route is in vision, must be after Deactivate()
 }
 
