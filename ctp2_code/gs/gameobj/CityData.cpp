@@ -575,8 +575,10 @@ CityData::~CityData()
 	if (!m_home_city.IsValid() || m_home_city.CD() == this)
 	{
 		//DPRINTF(k_DBG_GAMESTATE, ("Killing City %lx\n", uint32(m_home_city)));
-		sint32 i;
 
+		//// all trade routes now killed in PrepareToRemove where owner can still be determined to remove SeenByBit
+	        //// left just in case PrepareToRemove was not called before
+		sint32 i;
 		for(i = 0; i < m_tradeSourceList.Num(); i++)
 		{
 			m_tradeSourceList[i].Kill(CAUSE_KILL_TRADE_ROUTE_CITY_DIED);
@@ -1579,6 +1581,8 @@ void CityData::PrepareToRemove(const CAUSE_REMOVE_ARMY cause,
 		if(it.Pos() == m_home_city.RetPos()) continue;
 		g_theWorld->GetCell(it.Pos())->SetCityOwner(Unit());
 	}
+
+	KillAllTradeRoutes(); // to ensure RemoveSeenByBit is executed before city owner cannot be determined any more
 
 	// Change influence of neighbor cities
 }
