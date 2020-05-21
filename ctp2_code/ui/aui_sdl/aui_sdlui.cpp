@@ -164,9 +164,9 @@ AUI_ERRCODE aui_SDLUI::CreateNativeScreen( BOOL useExclusiveMode )
 
 	if(!m_secondary) {
 		m_secondary = new aui_SDLSurface(&errcode, m_width, m_height, m_bpp, NULL, FALSE);
-		Assert( AUI_NEWOK(m_primary,errcode) );
-		assert( AUI_NEWOK(m_primary,errcode) );
-		if ( !AUI_NEWOK(m_primary,errcode) ) return AUI_ERRCODE_MEMALLOCFAILED;
+		Assert( AUI_NEWOK(m_secondary,errcode) );
+		assert( AUI_NEWOK(m_secondary,errcode) );
+		if ( !AUI_NEWOK(m_secondary,errcode) ) return AUI_ERRCODE_MEMALLOCFAILED;
 	}
 
 	m_pixelFormat = m_primary->PixelFormat();
