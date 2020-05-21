@@ -24,8 +24,8 @@
 //
 // Modifications from the original Activision code:
 //
-// - Initialized local variables. (Sep 9th 2005 Martin G�hmann)
-// - Standartized code (May 21st 2006 Martin G�hmann)
+// - Initialized local variables. (Sep 9th 2005 Martin Gühmann)
+// - Standartized code (May 21st 2006 Martin Gühmann)
 //
 //----------------------------------------------------------------------------
 
@@ -129,7 +129,7 @@ AUI_ERRCODE C3Blitter::Blt16To16Fast(
 {
 	AUI_ERRCODE     retcode         = AUI_ERRCODE_OK;
 #ifdef __arm__
-	assert(0);
+	Assert(0);
 #else
 	const sint32    destPitch       = destSurf->Pitch() / 2;
 	const sint32    srcPitch        = srcSurf->Pitch() / 2;
@@ -213,7 +213,7 @@ L1:
 L2:
 					}
 #else // _MSC_VER
-					assert(0);
+                    Assert(0);
 #endif // _MSC_VER
 				} while ( (srcBuf += srcPitch) != stop );
 			}
@@ -283,7 +283,7 @@ AUI_ERRCODE C3Blitter::Blt16To16FastMMX(
 {
 	AUI_ERRCODE     retcode         = AUI_ERRCODE_OK;
 #ifdef __arm__
-	assert(0);
+	Assert(0);
 #else
 	const sint32    destPitch       = destSurf->Pitch() / 2;
 	const sint32    srcPitch        = srcSurf->Pitch() / 2;
@@ -374,7 +374,7 @@ AUI_ERRCODE C3Blitter::Blt16To16FastMMX(
 	   					rep movsw
 					}
 #else // _MSCVER
-//					assert(0);
+//					Assert(0);
                     //fprintf(stderr, "%s L%d: Using Blt16To16FastMMX!\n", __FILE__, __LINE__);
                     __asm__ (
                         //"movl $scanWidth, %eax       \n\t"
@@ -475,7 +475,7 @@ AUI_ERRCODE C3Blitter::Blt16To16FastFPU(
 {
 	AUI_ERRCODE     retcode         = AUI_ERRCODE_OK;
 #ifdef __arm__
-	assert(0);
+	Assert(0);
 #else
 	const sint32    destPitch       = destSurf->Pitch() / 2;
 	const sint32    srcPitch        = srcSurf->Pitch() / 2;
@@ -559,7 +559,7 @@ AUI_ERRCODE C3Blitter::Blt16To16FastFPU(
 					   	rep movsw
 					}
 #else // _MSC_VER
-					assert(0);
+					Assert(0);
 #endif // _MSC_VER
 				} while ( (srcBuf += srcPitch) != stop );
 			}
@@ -708,7 +708,7 @@ End:	add		ecx, eax
 	rep movsb
 	}
 #else // _MSC_VER
-	assert(0);
+	Assert(0);
 #endif // _MSC_VER
 #endif
 }

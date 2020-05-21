@@ -184,8 +184,8 @@ static AUI_ERRCODE SimpleHVStretch(SDL_Surface* src, SDL_Rect* rsrc,
 		// put a pixel in column dx while the level is non-negative
 		while (lx >= 0 && dx < edx && sx < esx) {
 		    // write source pixel sx
-		    assert(src->format->BytesPerPixel == 2);
-		    assert(dst->format->BytesPerPixel == 2);
+		    Assert(src->format->BytesPerPixel == 2);
+		    Assert(dst->format->BytesPerPixel == 2);
 		    dptr[dx] = sptr[sx];
 		    lx -= rsrc->w-1;
 		    ++dx;

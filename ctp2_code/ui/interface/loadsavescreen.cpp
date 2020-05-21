@@ -1142,7 +1142,7 @@ void loadsavescreen_delete( void )
 		}
 		sprintf(path, "%s", gameInfo->path);
 		int retval=_rmdir(path);
-		assert(!retval);
+		Assert(!retval);
 		g_loadsaveWindow->FillListTwo(NULL);
 		g_loadsaveWindow->SetType(g_loadsaveWindow->GetType());
 #endif // WIN32

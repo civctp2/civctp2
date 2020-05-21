@@ -136,7 +136,6 @@ AUI_ERRCODE aui_SDLUI::CreateNativeScreen( BOOL useExclusiveMode )
 {
 	AUI_ERRCODE errcode = aui_SDL::InitCommon( useExclusiveMode );
 	Assert( AUI_SUCCESS(errcode) );
-	assert( AUI_SUCCESS(errcode) );
 	if ( !AUI_SUCCESS(errcode) ) return errcode;
 
 	m_pixelFormat = aui_Surface::TransformBppToSurfacePixelFormat(m_bpp);
@@ -159,13 +158,11 @@ AUI_ERRCODE aui_SDLUI::CreateNativeScreen( BOOL useExclusiveMode )
 
 	m_primary = new aui_SDLSurface(&errcode, m_width, m_height, m_bpp, NULL, TRUE);
 	Assert( AUI_NEWOK(m_primary,errcode) );
-	assert( AUI_NEWOK(m_primary,errcode) );
 	if ( !AUI_NEWOK(m_primary,errcode) ) return AUI_ERRCODE_MEMALLOCFAILED;
 
 	if(!m_secondary) {
 		m_secondary = new aui_SDLSurface(&errcode, m_width, m_height, m_bpp, NULL, FALSE);
 		Assert( AUI_NEWOK(m_secondary,errcode) );
-		assert( AUI_NEWOK(m_secondary,errcode) );
 		if ( !AUI_NEWOK(m_secondary,errcode) ) return AUI_ERRCODE_MEMALLOCFAILED;
 	}
 
@@ -258,7 +255,7 @@ AUI_ERRCODE aui_SDLUI::RestoreMouse(void)
 
 AUI_ERRCODE aui_SDLUI::AltTabOut( void )
 {
-	assert(0);
+	Assert(0);
 
 	if(m_keyboard) m_keyboard->Unacquire();
 	if ( m_joystick ) m_joystick->Unacquire();
@@ -301,7 +298,7 @@ AUI_ERRCODE aui_SDLUI::AltTabOut( void )
 
 AUI_ERRCODE aui_SDLUI::AltTabIn( void )
 {
-	assert(0);
+	Assert(0);
 
 	if ( !m_primary ) CreateNativeScreen( m_exclusiveMode );
 
