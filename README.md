@@ -62,11 +62,11 @@ If you want to build a debug version it is:
 
 ```
 ./autogen.sh
-CFLAGS="$CFLAGS -w -Og -fno-omit-frame-pointer -fuse-ld=gold" CXXFLAGS="$CXXFLAGS -fpermissive -w -Og -fno-omit-frame-pointer -fuse-ld=gold" ./configure --enable-silent-rules --enable-debug
+CFLAGS="$CFLAGS -w -O0 -fno-omit-frame-pointer -fuse-ld=gold" CXXFLAGS="$CXXFLAGS -fpermissive -w -O0 -fno-omit-frame-pointer -fuse-ld=gold" ./configure --enable-silent-rules --enable-debug
 make
 ```
 
-The option -Og optimizes builds for debugging, this speeds up the debug function and should in general not change anything of the behavior of the executable, however it still could do so. In that case remove the -Og option.
+Most optimizations are completely disabled at -O0 even if individual optimization flags are specified. In case CTP2 becomes to slow to be useful you can use higher levels of optimization such as -O1, or -O2.
 
 You can look at `./configure` for options, but there aren't many.
 
