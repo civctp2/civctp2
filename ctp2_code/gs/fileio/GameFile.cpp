@@ -28,17 +28,17 @@
 // - Readded Activision patch new magic number 66.
 // - Fixed autosave directory name for scenarios to match normal directory.
 // - Fixed the scenario savegame bug (but not for autosave, that still needs to be done)
-// - Replaced old civilisation database by new one. (Aug 20th 2005 Martin Gühmann)
-// - Made progress bar more fluently. (Aug 22nd 2005 Martin Gühmann)
-// - Removed old sprite state databases. (Aug 29th 2005 Martin Gühmann)
-// - Removed old difficulty database. (April 29th 2006 Martin Gühmann)
-// - Removed old pollution database. (July 15th 2006 Martin Gühmann)
-// - Removed old gobal warming database. (July 15th 2006 Martin Gühmann)
-// - Removed old concept database. (31-Mar-2007 Martin Gühmann)
-// - Removed old const database. (5-Aug-2007 Martin Gühmann)
-// - Replaced CIV_INDEX by sint32. (2-Jan-2008 Martin Gühmann)
+// - Replaced old civilisation database by new one. (Aug 20th 2005 Martin GÃ¼hmann)
+// - Made progress bar more fluently. (Aug 22nd 2005 Martin GÃ¼hmann)
+// - Removed old sprite state databases. (Aug 29th 2005 Martin GÃ¼hmann)
+// - Removed old difficulty database. (April 29th 2006 Martin GÃ¼hmann)
+// - Removed old pollution database. (July 15th 2006 Martin GÃ¼hmann)
+// - Removed old gobal warming database. (July 15th 2006 Martin GÃ¼hmann)
+// - Removed old concept database. (31-Mar-2007 Martin GÃ¼hmann)
+// - Removed old const database. (5-Aug-2007 Martin GÃ¼hmann)
+// - Replaced CIV_INDEX by sint32. (2-Jan-2008 Martin GÃ¼hmann)
 // - Make the Linux version loading and producing Windows compatible
-//   savegames. (16-Jan-2019 Martin Gühmann)
+//   savegames. (16-Jan-2019 Martin GÃ¼hmann)
 //
 //----------------------------------------------------------------------------
 
@@ -1368,6 +1368,7 @@ void GameFile::SaveExtendedGameInfo(FILE *saveFile, SaveInfo *info)
 	for (sint32 i=0; i<k_MAX_PLAYERS; i++)
 	{
 		MBCHAR civName[k_MAX_NAME_LEN];
+		memset(civName, 0, k_MAX_NAME_LEN);
 
 		sint32 has_player;
 		GUID guid;
