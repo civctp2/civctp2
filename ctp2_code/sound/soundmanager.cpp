@@ -436,28 +436,33 @@ SoundManager::AddLoopingSound(const SOUNDTYPE &type,
         return;
     }
 
-	CivSound *  existingSound   = FindLoopingSound(type, associatedObject);
-
-	if (existingSound && (existingSound->GetSoundID() == soundID)) return;
-
-	CivSound *  sound           = new CivSound(associatedObject, soundID);
-
-	switch (type)
-    {
-    default:
-        delete sound;
-        return;
-
-	case SOUNDTYPE_SFX:
-		sound->SetVolume(m_sfxVolume);
-		m_sfxSounds->AddTail(sound);
-		break;
-
-	case SOUNDTYPE_VOICE:
-		sound->SetVolume(m_voiceVolume);
-		m_voiceSounds->AddTail(sound);
-		break;
+	CivSound *existingSound = FindLoopingSound(type, associatedObject);
+	if (existingSound && (existingSound->GetSoundID() == soundID) && (existingSound->GetChannel() != -1)) {
+		return;
 	}
+
+	CivSound *sound = NULL;
+	if (existingSound && (existingSound->GetSoundID() == soundID)) {
+		sound = existingSound;
+	} else {
+		sound = new CivSound(associatedObject, soundID);
+		switch (type) {
+			default:
+				delete sound;
+				return;
+
+			case SOUNDTYPE_SFX:
+				sound->SetVolume(m_sfxVolume);
+				m_sfxSounds->AddTail(sound);
+				break;
+
+			case SOUNDTYPE_VOICE:
+				sound->SetVolume(m_voiceVolume);
+				m_voiceSounds->AddTail(sound);
+				break;
+		}
+	}
+
 
 #if defined(USE_SDL)
 	int channel = Mix_PlayChannel(-1, sound->GetAudio(), -1);
