@@ -919,10 +919,10 @@ int sprite_Update(aui_Surface *surf)
 
 void sprite_Cleanup(void)
 {
-	spritegrouplist_Cleanup();
-
 	allocated::clear(g_director);
 	allocated::clear(g_screenManager);
+
+	spritegrouplist_Cleanup();
 }
 
 void ZoomPad_ZoomCallback()
