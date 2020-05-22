@@ -38,11 +38,10 @@
 //
 //----------------------------------------------------------------------------
 
-// TODO: Make moveActor protected
-// TODO: verify that all EffectActors are deleted
-// TODO: verify if Effect-actors need to be refactored
 // TODO: check if stand-by units are not drawn outside position when center map has been called
-// TODO: check 'stand-by' units been implemented differently
+// TODO: check 'stand-by' units been implemented differently (also improve callback from DQActionDeath)
+// TODO: there is a difference in facing between previous implementation and this
+//	(no-enemy-moves seems to have the same issue)
 
 #include "c3.h"
 #include "director.h"
@@ -170,14 +169,34 @@ private:
 };
 
 /**
- * DQAction: every action will go through all the following steps:
- *   -> ProcessLoopingSound handles the continuation of a looping sound
- *   -> Execute runs the execute phase which is always run (unconditionally)
- *   -> SkipProcess is used to determine of the action will skip the process phase
- *   -> PrepareProcess will prepare the process phase (may be skipped)
- *   -> Process runs the process phase (may be skipped)
- *   -> IsProcessFinished determines if the process phase is finished (may be skipped)
- *   -> Finalize runs finalization steps of the action
+ * DQAction: implements two types of behaviour:
+ * - Lock:		lock the scheduler while executing this action
+ * - Process:	process and render this action
+ *
+ * The combination of the two behaviours will create four kind of actions:
+ *  - No Lock && No Process   -> immediate
+ *  - No Lock && Process      -> effect
+ *  - Lock    && No Process   -> external
+ *  - Lock    && Process      -> active
+ *
+ * The action is done (IsDone) which means it can be finalized and deleted, when both behaviours are finished, i.e.
+ *   IsUnlocked and IsProcessFinished both return true.
+ *
+ * Generic-behaviour:
+ *  -> ProcessLoopingSound handles the continuation of a looping sound
+ *  -> Execute runs the execute phase which is always run (unconditionally)
+ *  -> Finalize runs finalization steps of the action (unconditionally)
+ *  -> IsDone returns true when the action is done and can be finalized and deleted
+ *
+ * Lock-behaviour:
+ *  -> Unlock unlocks the action
+ * 	-> IsUnlocked returns true when the action is unlocked
+ *
+ * Process-behaviour:
+ *  -> Process runs the process phase
+ *  -> Draw draws actors
+ *  -> Offset moves actors
+ *  -> IsProcessFinished determines if the process phase is finished
  */
 class DQAction {
 public:
@@ -186,15 +205,23 @@ public:
 	virtual DQACTION_TYPE GetType() = 0;
 	virtual bool IsTypeActive() { return false; }
 
+	// Generic behaviour
 	virtual void ProcessLoopingSound(DQActiveLoopingSound* &activeLoopingSound) = 0;
 	virtual void Execute() = 0;
-	virtual bool SkipProcess() = 0;
-	virtual void PrepareProcess() = 0;
-	virtual void Process() = 0;
-	virtual bool IsProcessFinished() = 0;
+	bool IsDone() { return IsUnlocked() && IsProcessFinished(); }
 	virtual void Finalize() = 0;
-
 	virtual void Dump() = 0;
+
+	// Lock behaviour
+	virtual void Unlock() = 0;
+	virtual bool IsUnlocked() = 0;
+
+	// Process behaviour
+	virtual void Process() = 0;
+	virtual void Draw(RECT *paintRect) = 0;
+	virtual void Offset(sint32 deltaX, sint32 deltaY) = 0;
+	virtual bool IsProcessFinished() = 0;
+
 protected:
 	static bool TileIsVisibleToPlayer(const MapPoint &position)
 	{
@@ -216,34 +243,140 @@ protected:
 };
 
 /**
- * DQActionImmediate: only executes; no process;
+ * DQActionImmediate: No Lock and No Process
  *   -> LoopingSound is ignored
  *   -> Execute implements the functionality of the action
- *   -> SkipProcess returns true
+ *   -> IsUnlocked and IsProcessFinished both return true
  */
 class DQActionImmediate : public DQAction {
 public:
-	DQActionImmediate()
-			: DQAction()
-	{}
+	DQActionImmediate() : DQAction() {}
 	virtual ~DQActionImmediate() {}
 
+	// Generic behaviour
 	virtual void ProcessLoopingSound(DQActiveLoopingSound* &activeLoopingSound) {}
 	virtual void Execute() = 0;
-	virtual bool SkipProcess() { return true; }
-	virtual void PrepareProcess() {}
-	virtual void Process() {}
-	virtual bool IsProcessFinished() { return true; }
 	virtual void Finalize() {}
+
+	// Lock behaviour
+	virtual void Unlock() {}
+	virtual bool IsUnlocked() { return true; }
+
+	// Process behaviour
+	virtual void Process() {}
+	virtual void Draw(RECT *paintRect) {}
+	virtual void Offset(sint32 deltaX, sint32 deltaY) {}
+	virtual bool IsProcessFinished() { return true; }
 };
 
 /**
- * DQActionActive: no execute; only processes
+ * DQActionEffect: No Lock and Process
+ *   -> LoopingSound is ignored
+ *   -> IsUnlocked returns true
+ *   -> IsProcessFinished returns true when processing is done
+ */
+class DQActionEffect : public DQAction {
+public:
+	DQActionEffect(SpriteState *spriteState, const MapPoint &position)
+			: DQAction(),
+			m_activeActor(new EffectActor(spriteState, position))
+	{}
+	DQActionEffect(sint32 spriteID, const MapPoint &position)
+			: DQAction(),
+			m_activeActor(new EffectActor(new SpriteState(spriteID), position))
+	{}
+	virtual ~DQActionEffect() {
+		delete m_activeActor;
+	}
+
+	// Generic behaviour
+	virtual void ProcessLoopingSound(DQActiveLoopingSound* &activeLoopingSound) {}
+	virtual void Execute() {}
+	virtual void Finalize() {}
+
+	// Lock behaviour
+	virtual void Unlock() {}
+	virtual bool IsUnlocked() { return true; }
+
+	// Process behaviour
+	virtual void Process()
+	{
+		m_activeActor->Process();
+	}
+
+	virtual void Draw(RECT *paintRect)
+	{
+		const MapPoint &position = m_activeActor->GetPos();
+
+		sint32 tileX;
+		maputils_MapX2TileX(position.x, position.y, &tileX);
+		if (maputils_TilePointInTileRect(tileX, position.y, paintRect)) {
+			// TODO: improve this logic move the paint method to actor
+			if (m_activeActor->GetCurAction()) {
+				g_tiledMap->PaintEffectActor(m_activeActor);
+			}
+		}
+	}
+
+	virtual void Offset(sint32 deltaX, sint32 deltaY)
+	{
+		m_activeActor->SetX(m_activeActor->GetX() + deltaX);
+		m_activeActor->SetY(m_activeActor->GetY() + deltaY);
+	}
+
+	virtual bool IsProcessFinished()
+	{
+		return m_activeActor->IsActionFinished();
+	}
+
+protected:
+	EffectActor *m_activeActor;
+};
+
+/**
+ * DQActionExternal: Lock, and No Process
+ *   -> LoopingSound is terminated
+ *   -> Execute initiates the external process
+ *   -> IsUnlocked returns false till Unlock has been called
+ *   -> IsProcessFinished returns true
+ */
+class DQActionExternal : public DQAction
+{
+public:
+	DQActionExternal()
+			: DQAction(),
+			  m_unlocked	(false)
+	{}
+	virtual ~DQActionExternal() {}
+
+	// Generic behaviour
+	virtual void ProcessLoopingSound(DQActiveLoopingSound* &activeLoopingSound)
+	{
+		delete activeLoopingSound;
+		activeLoopingSound = NULL;
+	}
+	virtual void Execute() {}
+	virtual void Finalize() {}
+
+	// Lock behaviour
+	virtual void Unlock() { m_unlocked = true; }
+	virtual bool IsUnlocked() { return m_unlocked; }
+
+	// Process behaviour
+	virtual void Process() {}
+	virtual void Draw(RECT *paintRect) {}
+	virtual void Offset(sint32 deltaX, sint32 deltaY) {}
+	virtual bool IsProcessFinished() { return true; }
+
+protected:
+	bool	m_unlocked;
+};
+
+/**
+ * DQActionActive: Lock and Process
  *   -> LoopingSound is processed; normally it is terminated; in case it is needed it will keep looping
- *   -> Execute is empty
- *   -> SkipProcess determines if process should be skipped based on settings and conditions
- *   -> PrepareProcess initializes the process phase
- *   -> IsFinished returns true when processing is done
+ *   -> IsProcessFinished returns true when processing is done
+ *   -> IsUnlocked returns true when processing is done
  */
 class DQActionActive : public DQAction
 {
@@ -260,21 +393,24 @@ public:
 	virtual ~DQActionActive() {}
 	virtual bool IsTypeActive() { return true; }
 
+	// Generic behaviour
 	virtual void ProcessLoopingSound(DQActiveLoopingSound* &activeLoopingSound)
 	{
 		delete activeLoopingSound;
 		activeLoopingSound = NULL;
 	}
-
-	virtual void Execute() {}
-
-	virtual bool SkipProcess()
-	{
-		return (SkipPreviousRounds() || SkipEnemyMoves() || SkipRobotUnitAnimations() || DoSkipProcess());
+	virtual void Execute() {
+		if (!SkipProcess()) {
+			PrepareProcess();
+		}
 	}
+	virtual void Finalize() {}
 
-	virtual void PrepareProcess() = 0;
+	// Lock behaviour
+	virtual void Unlock() {}
+	virtual bool IsUnlocked() { return IsProcessFinished(); }
 
+	// Process behaviour
 	virtual void Process()
 	{
 		for (auto it = m_activeActors.begin(); it != m_activeActors.end(); ) {
@@ -289,14 +425,14 @@ public:
 		}
 	}
 
-	virtual bool IsProcessFinished()
+	virtual void Draw(RECT *paintRect)
 	{
-		return m_activeActors.empty();
+		for (const auto &activeActor : m_activeActors) {
+			DrawUnitActor(activeActor, paintRect);
+		}
 	}
 
-	virtual void Finalize() {}
-
-	void Offset(sint32 deltaX, sint32 deltaY)
+	virtual void Offset(sint32 deltaX, sint32 deltaY)
 	{
 		for (const auto &activeActor : m_activeActors) {
 			activeActor->SetX(activeActor->GetX() + deltaX);
@@ -304,11 +440,9 @@ public:
 		}
 	}
 
-	void Draw(RECT *paintRect, sint32 layer)
+	virtual bool IsProcessFinished()
 	{
-		for (const auto &activeActor : m_activeActors) {
-			DrawUnitActor(activeActor, paintRect);
-		}
+		return m_activeActors.empty();
 	}
 
 	void FastKill(UnitActor *actor)
@@ -318,6 +452,7 @@ public:
 	}
 
 protected:
+	virtual void PrepareProcess() = 0;
 	virtual bool DoSkipProcess() { return false; }
 
 	void AddActiveActor(UnitActor *actor) {
@@ -339,6 +474,10 @@ private:
 		}
 	}
 
+	bool SkipProcess()
+	{
+		return (SkipPreviousRounds() || SkipEnemyMoves() || SkipRobotUnitAnimations() || DoSkipProcess());
+	}
 	bool SkipPreviousRounds()
 	{
 		return (m_round < g_turn->GetRound() - 1);
@@ -360,40 +499,6 @@ private:
 	sint8							m_owner;
 	uint16							m_round;
 	std::unordered_set<UnitActor*>	m_activeActors;
-};
-
-/**
- * DQActionExternal: execute configures external process; process runs till externally finished
- *   -> LoopingSound is terminated
- *   -> Execute initiates the external process
- *   -> SkipProcess returns false
- *   -> Process is empty as it runs externally
- *   -> IsFinished is externally set
- */
-class DQActionExternal : public DQAction
-{
-public:
-	DQActionExternal()
-			: DQAction(),
-			m_finished	(false)
-	{}
-	virtual ~DQActionExternal() {}
-
-	virtual void ProcessLoopingSound(DQActiveLoopingSound* &activeLoopingSound)
-	{
-		delete activeLoopingSound;
-		activeLoopingSound = NULL;
-	}
-
-	virtual bool SkipProcess() { return false; }
-	virtual void PrepareProcess() {}
-	virtual void Process() {}
-	virtual bool IsProcessFinished() { return m_finished; }
-	virtual void Finalize() {}
-
-	void SetFinished() { m_finished = true; }
-protected:
-	bool	m_finished;
 };
 
 class DirectorImpl : public Director {
@@ -501,33 +606,27 @@ public:
 	virtual void FastKill(UnitActor *actor);
 
 	// Used locally
-	void		ActiveEffectAdd(EffectActor *effectActor);
+	void		RemoveStandbyActor(UnitActor *actor);
 
 private:
-	static void	FinalizeAction(DQAction* &action);
-
-	bool    CanStartNextAction() { return m_actionQueue->GetCount() > 0 && !m_currentAction; }
+	bool    CanStartNextAction();
 	void	HandleNextAction();
-
-	void	DrawStandbyUnits(RECT *paintRect, sint32 layer);
-	void	DrawActiveUnits(RECT *paintRect, sint32 layer);
-	void	DrawActiveEffects(RECT *paintRect, sint32 layer);
-	void	DrawTradeRouteAnimations(RECT *paintRect, sint32 layer);
-
-	void	DrawUnitActor(RECT *paintRect, UnitActor *actor, bool standby);
-
-	void	OffsetStandbyUnits(sint32 deltaX, sint32 deltaY);
-	void	OffsetActiveUnits(sint32 deltaX, sint32 deltaY);
-	void	OffsetActiveEffects(sint32 deltaX, sint32 deltaY);
-	void	OffsetTradeRouteAnimations(sint32 deltaX, sint32 deltaY);
+	void	FinalizeAction(DQAction *action);
+	void	FinalizeProcessingActions();
 
 	void	ProcessStandbyUnits();
-	void	ProcessCurrentAction();
-	uint32	ProcessActiveEffects();
+	void	ProcessActions();
 	void	ProcessTradeRouteAnimations();
 
-	void	FastKill(EffectActor *actor);
-	uint32	KillAllActiveEffects();
+	void	DrawStandbyUnits(RECT *paintRect, sint32 layer);
+	void	DrawActions(RECT *paintRect, sint32 layer);
+	void	DrawTradeRouteAnimations(RECT *paintRect, sint32 layer);
+
+	void	OffsetStandbyUnits(sint32 deltaX, sint32 deltaY);
+	void	OffsetActions(sint32 deltaX, sint32 deltaY);
+	void	OffsetTradeRouteAnimations(sint32 deltaX, sint32 deltaY);
+
+	void	DrawUnitActor(RECT *paintRect, UnitActor *actor, bool standby);
 
 	void	UpdateStandbyUnits();
 
@@ -535,13 +634,11 @@ private:
 	void	DumpAction(DQAction *action);
 #endif
 
-	// Unused
-	void	ActiveEffectRemove(EffectActor *effectActor);
+	static DirectorImpl				*m_instance;
+	DQAction						*m_lockingAction;
+	DQActiveLoopingSound			*m_activeLoopingSound;
+	std::unordered_set<DQAction *>	m_processingActions;
 
-	static DirectorImpl			*m_instance;
-	DQAction					*m_currentAction;
-	DQActiveLoopingSound		*m_activeLoopingSound;
-	tech_WLList<EffectActor *>	*m_activeEffectList;
 	tech_WLList<TradeActor *>	*m_tradeActorList;
 
 	static const int            k_TIME_LOG_SIZE = 30;
@@ -553,7 +650,6 @@ private:
 	sint32						m_averageFPS;
 
 	bool						m_paused;
-	bool						m_processingActiveEffects;
 
 	PointerList<DQAction>		*m_actionQueue;
 
@@ -628,65 +724,17 @@ public:
 		DPRINTF(k_DBG_UI, ("\n"));
 	}
 
-	// TODO: make protected
-	UnitActor	*moveActor;
+	UnitActor *GetActor() { return moveActor; }
+
 
 protected:
+	UnitActor	*moveActor;
 	MapPoint	startPosition;
 	MapPoint	endPosition;
 	sint32		numberOfMoveActors;
 	UnitActor	**moveActors;
 	sint32		numberOfRevealedActors;
 	UnitActor	**revealedActors;
-};
-
-class DQActionMoveProjectile : public DQActionImmediate
-{
-public:
-	DQActionMoveProjectile(SpriteState *projectileEndState, const MapPoint &startPosition, const MapPoint &endPosition)
-			: DQActionImmediate(),
-			  projectileEndState	(projectileEndState),
-			  startPosition			(startPosition),
-			  endPosition			(endPosition)
-	{}
-	virtual ~DQActionMoveProjectile() {}
-	virtual DQACTION_TYPE GetType() { return DQACTION_MOVEPROJECTILE; }
-
-	virtual void Execute()
-	{
-		if (TileIsVisibleToPlayer(startPosition))
-		{
-			EffectActor *projectileEnd = new EffectActor(projectileEndState, endPosition);
-			sint32 actionType = EFFECTACTION_PLAY;
-			Anim *anim = projectileEnd->CreateAnim(EFFECTACTION_PLAY);
-			if (!anim) {
-				anim = projectileEnd->CreateAnim(EFFECTACTION_FLASH);
-				actionType = EFFECTACTION_FLASH;
-				Assert(anim);
-			}
-
-			if (anim) {
-				Action *action = new Action(actionType, ACTIONEND_PATHEND);
-				action->SetAnim(anim);
-				projectileEnd->AddAction(action);
-				DirectorImpl::Instance()->ActiveEffectAdd(projectileEnd);
-			} else {
-				delete projectileEnd;
-			}
-		}
-	}
-
-	virtual void Dump()
-	{
-		DPRINTF(k_DBG_UI, ("Move Projectile\n"));
-		DPRINTF(k_DBG_UI, ("  startPosition      :%d,%d\n", startPosition.x, startPosition.y));
-		DPRINTF(k_DBG_UI, ("  endPosition        :%d,%d\n", endPosition.x, endPosition.y));
-		DPRINTF(k_DBG_UI, ("  projectileEndState :%#.8lx\n", projectileEndState));
-	}
-protected:
-	SpriteState	*projectileEndState;
-	MapPoint	startPosition;
-	MapPoint	endPosition;
 };
 
 class DQActionMorph : public DQActionImmediate
@@ -979,46 +1027,6 @@ protected:
 	MapPoint	centerMapPosition;
 };
 
-class DQActionCombatFlash : public DQActionImmediate
-{
-public:
-	DQActionCombatFlash(const MapPoint &flashPosition)
-			: DQActionImmediate(),
-			  flashPosition	(flashPosition)
-	{}
-	virtual ~DQActionCombatFlash() {}
-	virtual DQACTION_TYPE GetType() { return DQACTION_COMBATFLASH; }
-
-	virtual void Execute()
-	{
-		SpriteState	*spriteState = new SpriteState(99);
-		EffectActor	*flash = new EffectActor(spriteState, flashPosition);
-
-		Anim *anim = flash->CreateAnim(EFFECTACTION_PLAY);
-		if (!anim)
-		{
-			anim = flash->CreateAnim(EFFECTACTION_FLASH);
-			Assert(anim);
-		}
-
-		if (anim)
-		{
-			Action * action = new Action(EFFECTACTION_FLASH, ACTIONEND_PATHEND);
-			action->SetAnim(anim);
-			flash->AddAction(action);
-			DirectorImpl::Instance()->ActiveEffectAdd(flash);
-		}
-	}
-
-	virtual void Dump()
-	{
-		DPRINTF(k_DBG_UI, ("Combat Flash\n"));
-		DPRINTF(k_DBG_UI, ("  flashPosition     :%d,%d\n", flashPosition.x, flashPosition.y));
-	}
-protected:
-	MapPoint	flashPosition;
-};
-
 class DQActionCopyVision : public DQActionImmediate
 {
 public:
@@ -1075,6 +1083,7 @@ public:
 
 	virtual void Execute()
 	{
+		// printf("(%d) end-turn (%d)\n", GetTickCount(), g_selected_item->GetCurPlayer());
 		g_gevManager->Pause();
 		g_gevManager->AddEvent(GEV_INSERT_Tail, GEV_EndTurn,
 							   GEA_Player, g_selected_item->GetCurPlayer(),
@@ -1211,52 +1220,6 @@ protected:
 	uint32	terminateSoundUnitID;
 };
 
-class DQActionSpecialEffect : public DQActionImmediate
-{
-public:
-	DQActionSpecialEffect(const MapPoint &position, sint32 spriteID, sint32 soundID)
-			: DQActionImmediate(),
-			  position	(position),
-			  spriteID	(spriteID),
-			  soundID		(soundID)
-	{}
-	virtual ~DQActionSpecialEffect() {}
-	virtual DQACTION_TYPE GetType() { return DQACTION_SPECEFFECT; }
-
-	virtual void Execute()
-	{
-		if (g_tiledMap->GetLocalVision()->IsVisible(position)) {
-			SpriteState *spriteState = new SpriteState(spriteID);
-			EffectActor *effectActor = new EffectActor(spriteState, position);
-
-			Anim *anim = effectActor->CreateAnim(EFFECTACTION_PLAY);
-
-			if (anim) {
-				Action *action = new Action(EFFECTACTION_PLAY, ACTIONEND_PATHEND);
-				action->SetAnim(anim);
-				effectActor->AddAction(action);
-				DirectorImpl::Instance()->ActiveEffectAdd(effectActor);
-
-				if (g_soundManager) {
-					g_soundManager->AddSound(SOUNDTYPE_SFX, 0, soundID, position.x, position.y);
-				}
-			}
-		}
-	}
-
-	virtual void Dump()
-	{
-		DPRINTF(k_DBG_UI, ("Special Effect\n"));
-		DPRINTF(k_DBG_UI, ("  position             :%d,%d\n", position.x, position.y));
-		DPRINTF(k_DBG_UI, ("  spriteID             :%d\n", spriteID));
-		DPRINTF(k_DBG_UI, ("  soundID              :%d\n", soundID));
-	}
-protected:
-	MapPoint	position;
-	sint32		spriteID;
-	sint32		soundID;
-};
-
 class DQActionInvokeThroneRoom : public DQActionImmediate
 {
 public:
@@ -1272,6 +1235,123 @@ public:
 	{
 		DPRINTF(k_DBG_UI, ("Invoke Throne-room\n"));
 	}
+};
+
+class DQActionMoveProjectile : public DQActionEffect
+{
+public:
+	DQActionMoveProjectile(SpriteState *projectileEndState, const MapPoint &startPosition, const MapPoint &endPosition)
+			: DQActionEffect(projectileEndState, endPosition),
+			  startPosition	(startPosition)
+	{}
+	virtual ~DQActionMoveProjectile() {}
+	virtual DQACTION_TYPE GetType() { return DQACTION_MOVEPROJECTILE; }
+
+	virtual void Execute()
+	{
+		if (TileIsVisibleToPlayer(startPosition))
+		{
+			sint32 actionType = EFFECTACTION_PLAY;
+			Anim *animation = m_activeActor->CreateAnim(EFFECTACTION_PLAY);
+			if (!animation) {
+				animation = m_activeActor->CreateAnim(EFFECTACTION_FLASH);
+				actionType = EFFECTACTION_FLASH;
+				Assert(animation);
+			}
+
+			if (animation) {
+				Action *action = new Action(actionType, ACTIONEND_PATHEND);
+				action->SetAnim(animation);
+				m_activeActor->AddAction(action);
+			}
+		}
+	}
+
+	virtual void Dump()
+	{
+		DPRINTF(k_DBG_UI, ("Move Projectile\n"));
+		DPRINTF(k_DBG_UI, ("  startPosition      :%d,%d\n", startPosition.x, startPosition.y));
+		DPRINTF(k_DBG_UI, ("  endPosition        :%d,%d\n", m_activeActor->GetPos().x, m_activeActor->GetPos().y));
+	}
+protected:
+	MapPoint	startPosition;
+};
+
+class DQActionCombatFlash : public DQActionEffect
+{
+public:
+	DQActionCombatFlash(const MapPoint &flashPosition)
+			: DQActionEffect(99, flashPosition)
+	{}
+	virtual ~DQActionCombatFlash() {}
+	virtual DQACTION_TYPE GetType() { return DQACTION_COMBATFLASH; }
+
+	virtual void Execute()
+	{
+		Anim *animation = m_activeActor->CreateAnim(EFFECTACTION_PLAY);
+		if (!animation)
+		{
+			animation = m_activeActor->CreateAnim(EFFECTACTION_FLASH);
+			Assert(animation);
+		}
+
+		if (animation)
+		{
+			Action * action = new Action(EFFECTACTION_FLASH, ACTIONEND_PATHEND);
+			action->SetAnim(animation);
+			m_activeActor->AddAction(action);
+		}
+	}
+
+	virtual void Dump()
+	{
+		DPRINTF(k_DBG_UI, ("Combat Flash\n"));
+		DPRINTF(k_DBG_UI, ("  flashPosition     :%d,%d\n", m_activeActor->GetPos().x, m_activeActor->GetPos().y));
+	}
+};
+
+class DQActionSpecialEffect : public DQActionEffect
+{
+public:
+	DQActionSpecialEffect(const MapPoint &position, sint32 spriteID, sint32 soundID)
+			: DQActionEffect(spriteID, position),
+			  spriteID	(spriteID),
+			  soundID	(soundID)
+	{}
+	virtual ~DQActionSpecialEffect() {}
+	virtual DQACTION_TYPE GetType() { return DQACTION_SPECEFFECT; }
+
+	virtual void Execute()
+	{
+		if (g_tiledMap->GetLocalVision()->IsVisible(m_activeActor->GetPos()))
+		{
+			Anim *animation = m_activeActor->CreateAnim(EFFECTACTION_PLAY);
+
+			if (animation)
+			{
+				Action *action = new Action(EFFECTACTION_PLAY, ACTIONEND_PATHEND);
+				action->SetAnim(animation);
+				m_activeActor->AddAction(action);
+
+				if (g_soundManager)
+				{
+					g_soundManager->AddSound(SOUNDTYPE_SFX, 0, soundID,
+											 m_activeActor->GetPos().x, m_activeActor->GetPos().y);
+				}
+			}
+		}
+	}
+
+	virtual void Dump()
+	{
+		DPRINTF(k_DBG_UI, ("Special Effect\n"));
+		DPRINTF(k_DBG_UI, ("  position             :%d,%d\n", m_activeActor->GetPos().x, m_activeActor->GetPos().y));
+		DPRINTF(k_DBG_UI, ("  spriteID             :%d\n", spriteID));
+		DPRINTF(k_DBG_UI, ("  soundID              :%d\n", soundID));
+	}
+protected:
+	sint32	spriteID;
+	sint32	soundID;
 };
 
 class DQActionMove : public DQActionActive
@@ -1380,8 +1460,7 @@ public:
 		DPRINTF(k_DBG_UI, ("  soundID                     :%d\n", soundID));
 	}
 
-	// TODO: make protected
-	UnitActor	*moveActor;
+	UnitActor *GetActor() { return moveActor; }
 
 protected:
 	virtual bool DoSkipProcess()
@@ -1395,6 +1474,7 @@ protected:
 		return !TileIsVisibleToPlayer(startPosition) && !TileIsVisibleToPlayer(endPosition);
 	}
 
+	UnitActor	*moveActor;
 	bool 		moveActorActive;
 	MapPoint	startPosition;
 	MapPoint	endPosition;
@@ -1427,6 +1507,19 @@ public:
 	{}
 	virtual ~DQActionAttack() {}
 	virtual DQACTION_TYPE GetType() { return DQACTION_ATTACK; }
+
+	virtual void Dump()
+	{
+		DPRINTF(k_DBG_UI, ("%s\n", GetName()));
+		DPRINTF(k_DBG_UI, ("  attacker			:%#x (%#.8lx)\n", attacker->GetUnitID(), attacker));
+		DPRINTF(k_DBG_UI, ("  attackerPosition	:%d,%d\n", attackerPosition.x, attackerPosition.y));
+		DPRINTF(k_DBG_UI, ("  attackerIsCity		:%s\n", attackerIsCity ? "true" : "false"));
+		DPRINTF(k_DBG_UI, ("  defender			:%#x (%#.8lx)\n", defender->GetUnitID(), defender));
+		DPRINTF(k_DBG_UI, ("  defenderPosition	:%d,%d\n", defenderPosition.x, defenderPosition.y));
+		DPRINTF(k_DBG_UI, ("  defenderIsCity		:%s\n", defenderIsCity ? "true" : "false"));
+	}
+protected:
+	virtual MBCHAR const * const GetName() { return "Attack"; }
 
 	virtual void PrepareProcess()
 	{
@@ -1464,19 +1557,6 @@ public:
 		}
 	}
 
-	virtual void Dump()
-	{
-		DPRINTF(k_DBG_UI, ("%s\n", GetName()));
-		DPRINTF(k_DBG_UI, ("  attacker			:%#x (%#.8lx)\n", attacker->GetUnitID(), attacker));
-		DPRINTF(k_DBG_UI, ("  attackerPosition	:%d,%d\n", attackerPosition.x, attackerPosition.y));
-		DPRINTF(k_DBG_UI, ("  attackerIsCity		:%s\n", attackerIsCity ? "true" : "false"));
-		DPRINTF(k_DBG_UI, ("  defender			:%#x (%#.8lx)\n", defender->GetUnitID(), defender));
-		DPRINTF(k_DBG_UI, ("  defenderPosition	:%d,%d\n", defenderPosition.x, defenderPosition.y));
-		DPRINTF(k_DBG_UI, ("  defenderIsCity		:%s\n", defenderIsCity ? "true" : "false"));
-	}
-protected:
-	virtual MBCHAR const * const GetName() { return "Attack"; }
-
 	UnitActor	*attacker;
 	MapPoint	attackerPosition;
 	bool		attackerIsCity;
@@ -1503,6 +1583,19 @@ public:
 	{}
 	virtual ~DQActionSpecialAttack() {}
 	virtual DQACTION_TYPE GetType() { return DQACTION_SPECATTACK; }
+
+	virtual void Dump()
+	{
+		DQActionAttack::Dump();
+		DPRINTF(k_DBG_UI, ("  attackerSoundID    ::%d\n",       attackerSoundID));
+	}
+
+protected:
+	virtual MBCHAR const * const GetName() { return "Special attack"; }
+
+	virtual bool DoSkipProcess() {
+		return attackerIsCity && defenderIsCity;
+	}
 
 	virtual void PrepareProcess()
 	{
@@ -1548,19 +1641,6 @@ public:
 		}
 	}
 
-	virtual void Dump()
-	{
-		DQActionAttack::Dump();
-		DPRINTF(k_DBG_UI, ("  attackerSoundID    ::%d\n",       attackerSoundID));
-	}
-
-protected:
-	virtual MBCHAR const * const GetName() { return "Special attack"; }
-
-	virtual bool DoSkipProcess() {
-		return attackerIsCity && defenderIsCity;
-	}
-
 	sint32	attackerSoundID;
 };
 
@@ -1581,6 +1661,21 @@ public:
 	{}
 	virtual ~DQActionAttackPos() {}
 	virtual DQACTION_TYPE GetType() { return DQACTION_ATTACKPOS; }
+
+	virtual void Dump()
+	{
+		DPRINTF(k_DBG_UI, ("Attack Pos\n"));
+		DPRINTF(k_DBG_UI, ("  attacker               :%#x (%#.8lx)\n", attacker->GetUnitID(), attacker));
+		DPRINTF(k_DBG_UI, ("  attackerPosition       :%d,%d\n", attackerPosition.x, attackerPosition.y));
+		DPRINTF(k_DBG_UI, ("  targetPosition         :%d,%d\n", targetPosition.x, targetPosition.y));
+		DPRINTF(k_DBG_UI, ("  soundID                :%d\n", soundID));
+	}
+protected:
+	virtual bool DoSkipProcess()
+	{
+		// Unit invisible
+		return !TileIsVisibleToPlayer(attackerPosition);
+	}
 
 	virtual void PrepareProcess()
 	{
@@ -1621,21 +1716,6 @@ public:
 		}
 	}
 
-	virtual void Dump()
-	{
-		DPRINTF(k_DBG_UI, ("Attack Pos\n"));
-		DPRINTF(k_DBG_UI, ("  attacker               :%#x (%#.8lx)\n", attacker->GetUnitID(), attacker));
-		DPRINTF(k_DBG_UI, ("  attackerPosition       :%d,%d\n", attackerPosition.x, attackerPosition.y));
-		DPRINTF(k_DBG_UI, ("  targetPosition         :%d,%d\n", targetPosition.x, targetPosition.y));
-		DPRINTF(k_DBG_UI, ("  soundID                :%d\n", soundID));
-	}
-protected:
-	virtual bool DoSkipProcess()
-	{
-		// Unit invisible
-		return !TileIsVisibleToPlayer(attackerPosition);
-	}
-
 	UnitActor	*attacker;
 	MapPoint	attackerPosition;
 	MapPoint	targetPosition;
@@ -1653,9 +1733,24 @@ public:
 	{}
 	virtual ~DQActionDeath()
 	{
+		DirectorImpl::Instance()->RemoveStandbyActor(dead);
 		delete dead;
 	}
 	virtual DQACTION_TYPE GetType() { return DQACTION_DEATH; }
+
+	virtual void Dump()
+	{
+		DPRINTF(k_DBG_UI, ("Death\n"));
+		DPRINTF(k_DBG_UI, ("  dead               :%#x (%#.8lx)\n", dead->GetUnitID(), dead));
+		DPRINTF(k_DBG_UI, ("  deadPosition       :%d,%d\n", deadPosition.x, deadPosition.y));
+		DPRINTF(k_DBG_UI, ("  deadSoundID        :%d\n", deadSoundID));
+	}
+protected:
+	virtual bool DoSkipProcess()
+	{
+		// Unit invisible
+		return !TileIsVisibleToPlayer(deadPosition);
+	}
 
 	virtual void PrepareProcess()
 	{
@@ -1708,20 +1803,6 @@ public:
 		}
 	}
 
-	virtual void Dump()
-	{
-		DPRINTF(k_DBG_UI, ("Death\n"));
-		DPRINTF(k_DBG_UI, ("  dead               :%#x (%#.8lx)\n", dead->GetUnitID(), dead));
-		DPRINTF(k_DBG_UI, ("  deadPosition       :%d,%d\n", deadPosition.x, deadPosition.y));
-		DPRINTF(k_DBG_UI, ("  deadSoundID        :%d\n", deadSoundID));
-	}
-protected:
-	virtual bool DoSkipProcess()
-	{
-		// Unit invisible
-		return !TileIsVisibleToPlayer(deadPosition);
-	}
-
 	UnitActor	*dead;
 	MapPoint	deadPosition;
 	sint32		deadSoundID;
@@ -1738,6 +1819,20 @@ public:
 	{}
 	virtual ~DQActionWork() {}
 	virtual DQACTION_TYPE GetType() { return DQACTION_WORK; }
+
+	virtual void Dump()
+	{
+		DPRINTF(k_DBG_UI, ("Work\n"));
+		DPRINTF(k_DBG_UI, ("  workActor          :%#x (%#.8lx)\n", workActor->GetUnitID(), workActor));
+		DPRINTF(k_DBG_UI, ("  workPosition       :%d,%d\n", workPosition.x, workPosition.y));
+		DPRINTF(k_DBG_UI, ("  workSoundID        :%d\n", workSoundID));
+	}
+protected:
+	virtual bool DoSkipProcess()
+	{
+		// Unit invisible
+		return !TileIsVisibleToPlayer(workPosition);
+	}
 
 	virtual void PrepareProcess()
 	{
@@ -1774,20 +1869,6 @@ public:
 		}
 	}
 
-	virtual void Dump()
-	{
-		DPRINTF(k_DBG_UI, ("Work\n"));
-		DPRINTF(k_DBG_UI, ("  workActor          :%#x (%#.8lx)\n", workActor->GetUnitID(), workActor));
-		DPRINTF(k_DBG_UI, ("  workPosition       :%d,%d\n", workPosition.x, workPosition.y));
-		DPRINTF(k_DBG_UI, ("  workSoundID        :%d\n", workSoundID));
-	}
-protected:
-	virtual bool DoSkipProcess()
-	{
-		// Unit invisible
-		return !TileIsVisibleToPlayer(workPosition);
-	}
-
 	UnitActor	*workActor;
 	MapPoint	workPosition;
 	sint32		workSoundID;
@@ -1811,6 +1892,15 @@ public:
 	virtual ~DQActionFaceoff() {}
 	virtual DQACTION_TYPE GetType() { return DQACTION_FACEOFF; }
 
+	virtual void Dump()
+	{
+		DPRINTF(k_DBG_UI, ("Faceoff\n"));
+		DPRINTF(k_DBG_UI, ("  attacker           :%#x (%#.8lx)\n", attacker->GetUnitID(), attacker));
+		DPRINTF(k_DBG_UI, ("  attackerPosition   :%d,%d\n", attackerPosition.x, attackerPosition.y));
+		DPRINTF(k_DBG_UI, ("  attacked           :%#x (%#.8lx)\n", attacked->GetUnitID(), attacked));
+		DPRINTF(k_DBG_UI, ("  attackedPosition   :%d,%d\n", attackedPosition.x, attackedPosition.y));
+	}
+protected:
 	virtual void PrepareProcess()
 	{
 		Action *attackerAction = new Action(UNITACTION_FACE_OFF, ACTIONEND_INTERRUPT);
@@ -1890,15 +1980,6 @@ public:
 		}
 	}
 
-	virtual void Dump()
-	{
-		DPRINTF(k_DBG_UI, ("Faceoff\n"));
-		DPRINTF(k_DBG_UI, ("  attacker           :%#x (%#.8lx)\n", attacker->GetUnitID(), attacker));
-		DPRINTF(k_DBG_UI, ("  attackerPosition   :%d,%d\n", attackerPosition.x, attackerPosition.y));
-		DPRINTF(k_DBG_UI, ("  attacked           :%#x (%#.8lx)\n", attacked->GetUnitID(), attacked));
-		DPRINTF(k_DBG_UI, ("  attackedPosition   :%d,%d\n", attackedPosition.x, attackedPosition.y));
-	}
-protected:
 	UnitActor	*attacker;
 	MapPoint	attackerPosition;
 	UnitActor	*attacked;
@@ -2062,9 +2143,9 @@ protected:
 DirectorImpl *DirectorImpl::m_instance = NULL;
 DirectorImpl::DirectorImpl(void)
 :
-	m_currentAction				(NULL),
+	m_lockingAction				(NULL),
 	m_activeLoopingSound		(NULL),
-	m_activeEffectList			(new tech_WLList<EffectActor *>),
+	m_processingActions			(),
 	m_tradeActorList			(new tech_WLList<TradeActor *>),
 	m_masterCurTime				(0),
 	m_lastTickCount				(0),
@@ -2072,7 +2153,6 @@ DirectorImpl::DirectorImpl(void)
 	m_averageElapsed			(0),
 	m_averageFPS				(k_DEFAULT_FPS),
 	m_paused					(FALSE),
-	m_processingActiveEffects	(FALSE),
 	m_actionQueue				(new PointerList<DQAction>),
 	m_actionWalker				(new PointerList<DQAction>::Walker),
 	m_pendingGameActions		(0),
@@ -2086,41 +2166,27 @@ DirectorImpl::DirectorImpl(void)
 
 DirectorImpl::~DirectorImpl(void)
 {
+	if (m_lockingAction) {
+		FinalizeAction(m_lockingAction);
+	}
+	FinalizeProcessingActions();
 	delete m_actionQueue;
+
 	delete m_actionWalker;
-	delete m_activeEffectList;
 	delete m_tradeActorList;
 	delete m_activeLoopingSound;
-	delete m_currentAction;
+	delete m_lockingAction;
 	m_instance = NULL;
 }
 
 void DirectorImpl::FastKill(UnitActor *actor)
 {
-	if (m_currentAction && m_currentAction->IsTypeActive()) {
-		static_cast<DQActionActive*>(m_currentAction)->FastKill(actor);
+	// TODO: check if we also should test m_processingActions
+	if (m_lockingAction && m_lockingAction->IsTypeActive()) {
+		static_cast<DQActionActive*>(m_lockingAction)->FastKill(actor);
 	}
 	m_standbyActors.erase(actor);
 	delete actor;
-}
-
-void DirectorImpl::FastKill(EffectActor *actor)
-{
-	ListPos		pos =
-		m_activeEffectList->Find(actor, m_activeEffectList->GetHeadPosition());
-	if (pos)
-	{
-		if (m_processingActiveEffects)
-		{
-			actor->SetKillNow();
-		}
-		else
-		{
-			m_activeEffectList->DeleteAt(pos);
-			delete actor;
-			actor = NULL;
-		}
-	}
 }
 
 void DirectorImpl::UpdateTimingClock(void)
@@ -2173,10 +2239,10 @@ void DirectorImpl::UpdateStandbyUnits()
 		UnitActor *standbyActor = NULL;
 		switch (walk.GetObj()->GetType()) {
 			case DQACTION_MOVE:
-				standbyActor = ((DQActionMove *) (walk.GetObj()))->moveActor;
+				standbyActor = ((DQActionMove *) (walk.GetObj()))->GetActor();
 				break;
 			case DQACTION_TELEPORT:
-				standbyActor = ((DQActionTeleport *) (walk.GetObj()))->moveActor;
+				standbyActor = ((DQActionTeleport *) (walk.GetObj()))->GetActor();
 				break;
 			default:
 				break;
@@ -2187,6 +2253,11 @@ void DirectorImpl::UpdateStandbyUnits()
 	}
 }
 
+void DirectorImpl::RemoveStandbyActor(UnitActor *actor)
+{
+	m_standbyActors.erase(actor);
+}
+
 void DirectorImpl::Process(void)
 {
 	UpdateTimingClock();
@@ -2195,13 +2266,12 @@ void DirectorImpl::Process(void)
 
 	if (GetTickCount() > nextTime)
 	{
-		ProcessStandbyUnits();
-		ProcessCurrentAction();
-		ProcessActiveEffects();
+		ProcessActions();
 		ProcessTradeRouteAnimations();
 
 		HandleNextAction();
 
+		ProcessStandbyUnits();
 		if(g_tiledMap)
 			g_tiledMap->ProcessLayerSprites(g_tiledMap->GetMapViewRect(), 0);
 
@@ -2231,7 +2301,7 @@ void DirectorImpl::DumpInfo(void)
 	DPRINTF(k_DBG_UI, ("Director Dump:\n"));
 	DPRINTF(k_DBG_UI, (" ------------------\n"));
 	DPRINTF(k_DBG_UI, (" Current Action:\n"));
-	DumpAction(m_currentAction);
+	DumpAction(m_lockingAction);
 	DPRINTF(k_DBG_UI, (" ------------------\n"));
 	DPRINTF(k_DBG_UI, (" Queued Actions:\n"));
 	DPRINTF(k_DBG_UI, (" Count:%d\n", m_actionQueue->GetCount()));
@@ -2250,25 +2320,66 @@ void DirectorImpl::DumpInfo(void)
 }
 #endif
 
+bool DirectorImpl::CanStartNextAction() {
+	return m_actionQueue->GetCount() > 0 && (!m_lockingAction || m_lockingAction->IsUnlocked());
+}
+
 void DirectorImpl::HandleNextAction(void)
 {
 	if (m_paused) return;
 
 	while (CanStartNextAction())
 	{
-	 	m_currentAction = m_actionQueue->RemoveHead();
-	 	m_currentAction->ProcessLoopingSound(m_activeLoopingSound);
-	 	m_currentAction->Execute();
-		if (m_currentAction->SkipProcess()) {
-			FinalizeAction(m_currentAction);
-		} else {
-			m_currentAction->PrepareProcess();
+		if (m_lockingAction && m_lockingAction->IsDone()) {
+			FinalizeAction(m_lockingAction);
+		}
+		m_lockingAction = m_actionQueue->RemoveHead();
+	 	m_lockingAction->ProcessLoopingSound(m_activeLoopingSound);
+	 	m_lockingAction->Execute();
+		if (!m_lockingAction->IsProcessFinished()) {
+			m_processingActions.insert(m_lockingAction);
 		}
 	}
 
-	if (!m_currentAction) {
+	if (m_actionQueue->IsEmpty()) {
 		delete m_activeLoopingSound;
 		m_activeLoopingSound = NULL;
+	}
+}
+
+void DirectorImpl::ProcessActions(void)
+{
+	for (auto it = m_processingActions.begin(); it != m_processingActions.end(); ) {
+		DQAction *action = *it;
+		action->Process();
+		if (action->IsProcessFinished()) {
+			it = m_processingActions.erase(it);
+			if (action->IsDone()) {
+				FinalizeAction(action);
+			}
+		} else {
+			++it;
+		}
+	}
+}
+
+void DirectorImpl::FinalizeAction(DQAction *action)
+{
+	m_processingActions.erase(action);
+	if (m_lockingAction == action) {
+		m_lockingAction = NULL;
+	}
+
+	action->Finalize();
+	delete action;
+}
+
+void DirectorImpl::FinalizeProcessingActions()
+{
+	for (auto it = m_processingActions.begin(); it != m_processingActions.end(); ) {
+		DQAction *action = *it;
+		it = m_processingActions.erase(it);
+		action->Finalize();
 	}
 }
 
@@ -2296,22 +2407,16 @@ void DirectorImpl::ExternalActionFinished(DEACTION_TYPE externalActionType)
 			break;
 	}
 
-	if (m_currentAction && m_currentAction->GetType() == actionType) {
-		static_cast<DQActionExternal*>(m_currentAction)->SetFinished();
+	if (m_lockingAction && m_lockingAction->GetType() == actionType) {
+		m_lockingAction->Unlock();
 	}
-}
-
-void DirectorImpl::FinalizeAction(DQAction* &action)
-{
-	action->Finalize();
-	delete action;
-	action = NULL;
 }
 
 void DirectorImpl::CatchUp(void) {
-	if (m_currentAction) {
-		FinalizeAction(m_currentAction);
+	if (m_lockingAction) {
+		FinalizeAction(m_lockingAction);
 	}
+	FinalizeProcessingActions();
 
 	while (m_actionQueue->GetCount())
 	{
@@ -2322,7 +2427,6 @@ void DirectorImpl::CatchUp(void) {
 
 	if (!g_network.IsActive()) {
 
-		KillAllActiveEffects();
 		if (g_soundManager)
 			g_soundManager->TerminateAllLoopingSounds(SOUNDTYPE_SFX);
 	}
@@ -2331,29 +2435,6 @@ void DirectorImpl::CatchUp(void) {
 bool DirectorImpl::CaughtUp(void)
 {
 	return !m_actionQueue || (m_actionQueue->GetCount() == 0);
-}
-
-void DirectorImpl::ActiveEffectAdd(EffectActor *effectActor)
-{
-	Assert(effectActor);
-	ListPos		pos =
-		m_activeEffectList->Find(effectActor, m_activeEffectList->GetHeadPosition());
-
-	if (!pos)
-	{
-		pos = m_activeEffectList->AddHead(effectActor);
-	}
-}
-
-void DirectorImpl::ActiveEffectRemove(EffectActor *effectActor)
-{
-	ListPos		pos =
-		m_activeEffectList->Find(effectActor, m_activeEffectList->GetHeadPosition());
-
-	if (pos)
-	{
-		m_activeEffectList->DeleteAt(pos);
-	}
 }
 
 void DirectorImpl::TradeActorCreate(TradeRoute newRoute)
@@ -2412,49 +2493,6 @@ void DirectorImpl::ProcessStandbyUnits()
 	}
 }
 
-void DirectorImpl::ProcessCurrentAction(void)
-{
-	if (m_currentAction) {
-		m_currentAction->Process();
-		if (m_currentAction->IsProcessFinished()) {
-			FinalizeAction(m_currentAction);
-		}
-	}
-}
-
-uint32 DirectorImpl::ProcessActiveEffects(void)
-{
-	if (m_activeEffectList->IsEmpty()) return 0;
-
-	m_processingActiveEffects = TRUE;
-
-	ListPos pos = m_activeEffectList->GetHeadPosition();
-	for (size_t i = m_activeEffectList->L(); i > 0; --i)
-	{
-		EffectActor * actor = m_activeEffectList->GetNext(pos);
-		if (actor)
-		{
-			actor->Process();
-		}
-	}
-
-	m_processingActiveEffects = FALSE;
-
-	pos = m_activeEffectList->GetHeadPosition();
-	for (size_t n = m_activeEffectList->L(); n > 0; --n)
-	{
-		ListPos	      oldPos    = pos;
-		EffectActor * oldActor  = m_activeEffectList->GetNext(pos);
-		if (oldActor && oldActor->GetKillNow())
-		{
-			m_activeEffectList->DeleteAt(oldPos);
-			delete oldActor;
-		}
-	}
-
-	return 0;
-}
-
 void DirectorImpl::ProcessTradeRouteAnimations(void)
 {
 	if (!g_theProfileDB->IsTradeAnim()) return;
@@ -2475,8 +2513,7 @@ void DirectorImpl::ProcessTradeRouteAnimations(void)
 void DirectorImpl::OffsetActors(sint32 deltaX, sint32 deltaY)
 {
 	OffsetStandbyUnits(-deltaX, -deltaY);
-	OffsetActiveUnits(-deltaX, -deltaY);
-	OffsetActiveEffects(-deltaX, -deltaY);
+	OffsetActions(-deltaX, -deltaY);
 	OffsetTradeRouteAnimations(-deltaX, -deltaY);
 }
 
@@ -2490,27 +2527,10 @@ void DirectorImpl::OffsetStandbyUnits(sint32 deltaX, sint32 deltaY)
 	}
 }
 
-void DirectorImpl::OffsetActiveUnits(sint32 deltaX, sint32 deltaY)
+void DirectorImpl::OffsetActions(sint32 deltaX, sint32 deltaY)
 {
-	if (m_currentAction && m_currentAction->IsTypeActive()) {
-		static_cast<DQActionActive*>(m_currentAction)->Offset(deltaX, deltaY);
-	}
-}
-
-void DirectorImpl::OffsetActiveEffects(sint32 deltaX, sint32 deltaY)
-{
-	ListPos pos             = m_activeEffectList->GetHeadPosition();
-	size_t  numToProcess    = m_activeEffectList->L();
-
-	for (size_t i = 0; i < numToProcess; i++)
-	{
-		EffectActor*    actor       = m_activeEffectList->GetNext(pos);
-
-		if (actor)
-		{
-			actor->SetX(actor->GetX() + deltaX);
-			actor->SetY(actor->GetY() + deltaY);
-		}
+	for (auto action : m_processingActions) {
+		action->Offset(deltaX, deltaY);
 	}
 }
 
@@ -2531,27 +2551,6 @@ void DirectorImpl::OffsetTradeRouteAnimations(sint32 deltaX, sint32 deltaY)
 	}
 }
 
-uint32 DirectorImpl::KillAllActiveEffects()
-{
-	if (m_activeEffectList->IsEmpty()) return 0;
-
-	ListPos     pos = m_activeEffectList->GetHeadPosition();
-
-	do
-	{
-		ListPos         actorPos    = pos;
-		EffectActor *   actor       = m_activeEffectList->GetNext(pos);
-
-		if (actor)
-		{
-			m_activeEffectList->DeleteAt(actorPos);
-			delete actor;
-		}
-	} while (pos);
-
-	return 0;
-}
-
 void DirectorImpl::NextPlayer() {
 #ifdef _PLAYTEST
 	if (!g_doingFastRounds &&
@@ -2562,25 +2561,23 @@ void DirectorImpl::NextPlayer() {
 	return; // Next code isn't used, should it be used?
 #endif
 	if (!g_network.IsActive()) {
-		if (m_currentAction) {
-			FinalizeAction(m_currentAction);
+		if (m_lockingAction) {
+			FinalizeAction(m_lockingAction);
 		}
+		FinalizeProcessingActions();
 	}
 
 	while(m_actionQueue->GetCount())
 	{
 		DQAction *action = m_actionQueue->RemoveHead();
 		action->Execute();
-		action->Finalize();
-		delete action;
+		FinalizeAction(action);
 	}
 
 	if (!g_network.IsActive())
 	{
 		if(g_tiledMap)
 			g_tiledMap->NextPlayer();
-
-		KillAllActiveEffects();
 
 		if (g_soundManager)
 			g_soundManager->TerminateAllLoopingSounds(SOUNDTYPE_SFX);
@@ -2591,14 +2588,13 @@ void DirectorImpl::Draw(RECT *paintRect, sint32 layer)
 {
 	DrawTradeRouteAnimations(paintRect, layer);
 	DrawStandbyUnits(paintRect, layer);
-	DrawActiveUnits(paintRect, layer);
-	DrawActiveEffects(paintRect, layer);
+	DrawActions(paintRect, layer);
 }
 
-void DirectorImpl::DrawActiveUnits(RECT *paintRect, sint32 layer)
+void DirectorImpl::DrawActions(RECT *paintRect, sint32 layer)
 {
-	if (m_currentAction && m_currentAction->IsTypeActive()) {
-		static_cast<DQActionActive*>(m_currentAction)->Draw(paintRect, layer);
+	for (auto action : m_processingActions) {
+		action->Draw(paintRect);
 	}
 }
 
@@ -2628,42 +2624,6 @@ void DirectorImpl::DrawUnitActor(RECT *paintRect, UnitActor *actor, bool standby
 		if (maputils_TilePointInTileRect(tileX, pos.y, paintRect))
 		{
 			g_tiledMap->PaintUnitActor(actor);
-		}
-	}
-}
-
-void DirectorImpl::DrawActiveEffects(RECT *paintRect, sint32 layer)
-{
-	ListPos				pos;
-	EffectActor			*actor;
-	uint32				numToProcess;
-
-	pos = m_activeEffectList->GetHeadPosition();
-	numToProcess = m_activeEffectList->L();
-	for (uint32 i=0; i<numToProcess; i++)
-	{
-		actor = m_activeEffectList->GetNext(pos);
-
-		if (actor )
-		{
-			MapPoint pos = actor->GetPos();
-
-			sint32		tileX;
-
-			maputils_MapX2TileX(pos.x, pos.y, &tileX);
-
-			if (!maputils_TilePointInTileRect(tileX, pos.y, paintRect))
-				continue;
-
-			if (actor->GetActionQueueNumItems() <= 0 && actor->GetKillNow())
-			{
-				FastKill(actor);
-			}
-			else
-			{
-				if(actor->GetCurAction())
-					g_tiledMap->PaintEffectActor(actor);
-			}
 		}
 	}
 }

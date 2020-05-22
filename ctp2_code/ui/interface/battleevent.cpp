@@ -24,7 +24,7 @@
 //
 // Modifications from the original Activision code:
 //
-// - Initialized local variables. (Sep 9th 2005 Martin Gühmann)
+// - Initialized local variables. (Sep 9th 2005 Martin GÃ¼hmann)
 //
 //----------------------------------------------------------------------------
 
@@ -325,7 +325,7 @@ void BattleEvent::ProcessExplode(void)
 						actor->SetY(data->explodeVictim->GetY());
 					}
 
-					if (actor->GetKillNow())
+					if (actor->IsActionFinished())
 						finished = TRUE;
 				} else {
 					finished = TRUE;

@@ -24,7 +24,7 @@
 //
 // Modifications from the original Activision code:
 //
-// - Removed some unused local variables. (Sep 9th 2005 Martin Gühmann)
+// - Removed some unused local variables. (Sep 9th 2005 Martin GÃ¼hmann)
 //
 //----------------------------------------------------------------------------
 
@@ -71,11 +71,7 @@ EffectActor::EffectActor(SpriteState * ss, const MapPoint & pos)
 //    m_playerNum;
     m_effectVisibility          (0),
 //    m_effectSaveVisibility;
-    m_dieAtTick                 (0),
 //    m_directionalAttack;
-    m_needsToDie                (false),
-    m_killNow                   (false),
-    m_generateDeath             (false),
     m_bVisSpecial               (false)
 {
     if (ss && g_effectSpriteGroupList)
@@ -105,6 +101,11 @@ void EffectActor::ChangeType(SpriteState *ss, sint32 type,  Unit id)
 
 	m_effectSpriteGroup = (EffectSpriteGroup *)g_effectSpriteGroupList->GetSprite(ss->GetIndex(), GROUPTYPE_EFFECT, LOADTYPE_FULL,(GAME_ACTION)0);
 
+}
+
+bool EffectActor::IsActionFinished()
+{
+	return !m_curAction && m_actionQueue.GetNumItems() == 0;
 }
 
 void EffectActor::Process(void)
@@ -171,22 +172,12 @@ void EffectActor::Process(void)
 		}
 		else
 		{
-
 			m_facing = m_curAction->GetFacing();
 		}
 
 		m_frame = m_curAction->GetSpriteFrame();
 
 		m_transparency = m_curAction->GetTransparency();
-
-
-
-
-		if(GetNeedsToDie() && m_curAction->GetCurrentEndCondition() == ACTIONEND_INTERRUPT)
-		{
-			SetKillNow();
-		}
-
 	}
 }
 
@@ -230,15 +221,6 @@ void EffectActor::EndTurnProcess(void)
 		}
 
 		m_facing = m_curAction->GetFacing();
-
-
-
-
-		if(GetNeedsToDie())
-		{
-			SetDieAtTick(0);
-			SetKillNow();
-		}
 	}
 }
 
@@ -253,11 +235,7 @@ void EffectActor::GetNextAction(BOOL isVisible)
 
 	if (numItems > 0)
 	{
-
 		m_actionQueue.Dequeue(m_curAction);
-
-
-
 
 		MapPoint curStartMapPoint, curEndMapPoint;
 		m_curAction->GetStartMapPoint(curStartMapPoint);
@@ -269,24 +247,8 @@ void EffectActor::GetNextAction(BOOL isVisible)
 		}
 		else
 		{
-
 			Assert(FALSE);
 		}
-	}
-	else
-	{
-
-		if(numItems <= 0)
-		{
-
-
-
-
-
-
-			SetKillNow();
-		}
-
 	}
 }
 

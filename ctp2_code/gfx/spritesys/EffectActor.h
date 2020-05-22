@@ -32,6 +32,7 @@ public:
 
 	void			AddAction(Action *actionObj);
 	void			GetNextAction(BOOL isVisible = TRUE);
+	bool 			IsActionFinished();
 
 	Anim *          CreateAnim(EFFECTACTION action);
 
@@ -58,24 +59,12 @@ public:
 	Action			*LookAtNextAction(void) { return m_actionQueue.LookAtNextDeQueue(); }
 	size_t			GetActionQueueNumItems(void) const { return m_actionQueue.GetNumItems(); }
 
-	void			SetGenerateDeath(BOOL val) { m_generateDeath = val; }
-	BOOL			GetGenerateDeath(void) const { return m_generateDeath; }
-
-	void			SetDieAtTick(uint32 val) { m_dieAtTick = val; }
-	uint32			GetDieAtTick(void) const { return m_dieAtTick; }
-
 	void			SetEffectVisibility(uint32 val) { m_effectVisibility = val; }
 	void			SetEffectVisibility(uint32 val, BOOL bval) { m_effectSaveVisibility = m_effectVisibility; m_effectVisibility = val; m_bVisSpecial = TRUE; }
 
 	void			SetEffectVisibility() { m_bVisSpecial = FALSE; }
 	uint32			GetEffectVisibility(void) const { return m_effectVisibility; }
 	BOOL			GetVisSpecial(void) const { return m_bVisSpecial; }
-
-	void			SetNeedsToDie(BOOL val) { m_needsToDie = val; }
-	BOOL			GetNeedsToDie(void) const { return m_needsToDie; }
-
-	void			SetKillNow(void) { m_killNow = TRUE; }
-	BOOL			GetKillNow(void) const { return m_killNow; }
 
 	void			GetBoundingRect(RECT *rect) const;
 	EFFECTACTION	GetEffectAction(void) const { return m_curEffectAction; }
@@ -102,12 +91,7 @@ protected:
 	uint32						m_effectVisibility;
 	uint32						m_effectSaveVisibility;
 
-	uint32						m_dieAtTick;
-
 	BOOL						m_directionalAttack;
- 	BOOL						m_needsToDie;
-	BOOL						m_killNow;
-	BOOL						m_generateDeath;
 
 	BOOL						m_bVisSpecial;
 };
