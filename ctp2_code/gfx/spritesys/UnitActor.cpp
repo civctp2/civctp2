@@ -1386,7 +1386,7 @@ bool UnitActor::Draw(bool fogged)
 
 #endif
 
-	if (m_unitSpriteGroup && m_unitID.IsValid())
+	if (m_unitSpriteGroup)
 	{
 		if (m_unitID.IsValid() && m_unitID.IsCity()) //emod - 3-10-2007
 			DrawCityImprovements(fogged);
@@ -1398,7 +1398,7 @@ bool UnitActor::Draw(bool fogged)
 			DrawFortifying(fogged);
 		}
 
-		if (HasCityWalls()) {
+		if (m_unitID.IsValid() && HasCityWalls()) {
 			DrawCityWalls(fogged);
 		}
 

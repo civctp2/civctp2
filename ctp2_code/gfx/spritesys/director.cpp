@@ -707,9 +707,8 @@ private:
 	DQActiveLoopingSound				*m_activeLoopingSound;
 	std::unordered_set<DQAction *>		m_processingActions;
 	// Handle trade actions separately as the life-cycle of trade actions is different to processing actions.
-	std::map<uint32, DQActionTrade*>	m_tradeActions;
-
-	tech_WLList<TradeActor *>	*m_tradeActorList;
+	std::map<uint32, DQActionTrade *>	m_tradeActions;
+	uint32								m_nextProcessTime;
 
 	static const int            k_TIME_LOG_SIZE = 30;
 	uint32						m_masterCurTime;
@@ -1535,11 +1534,6 @@ public:
 protected:
 	virtual bool DoSkipProcess()
 	{
-		// Unit invalid
-		if (g_theUnitPool && !g_theUnitPool->IsValid(moveActor->GetUnitID())) {
-			return true;
-		}
-
 		// Unit invisible
 		return !TileIsVisibleToPlayer(startPosition) && !TileIsVisibleToPlayer(endPosition);
 	}
@@ -2217,7 +2211,7 @@ DirectorImpl::DirectorImpl(void)
 	m_activeLoopingSound		(NULL),
 	m_processingActions			(),
 	m_tradeActions				(),
-	m_tradeActorList			(new tech_WLList<TradeActor *>),
+	m_nextProcessTime			(0),
 	m_masterCurTime				(0),
 	m_lastTickCount				(0),
 	m_timeLogIndex				(0),
@@ -2245,7 +2239,6 @@ DirectorImpl::~DirectorImpl(void)
 	delete m_actionQueue;
 
 	delete m_actionWalker;
-	delete m_tradeActorList;
 	delete m_activeLoopingSound;
 	delete m_lockingAction;
 	m_instance = NULL;
@@ -2334,9 +2327,7 @@ void DirectorImpl::Process(void)
 {
 	UpdateTimingClock();
 
-	static uint32 nextTime = 0;
-
-	if (GetTickCount() > nextTime)
+	if (GetTickCount() > m_nextProcessTime)
 	{
 		ProcessActions();
 		ProcessTradeActions();
@@ -2347,7 +2338,7 @@ void DirectorImpl::Process(void)
 		if(g_tiledMap)
 			g_tiledMap->ProcessLayerSprites(g_tiledMap->GetMapViewRect(), 0);
 
-		nextTime = GetTickCount() + 5; // 75;
+		m_nextProcessTime = GetTickCount() + 5; // 75;
 	}
 }
 
@@ -2538,7 +2529,12 @@ void DirectorImpl::TradeActorCreate(TradeRoute newRoute)
 
 void DirectorImpl::TradeActorDestroy(TradeRoute routeToDestroy)
 {
-	m_tradeActions.erase(routeToDestroy.m_id);
+	auto it = m_tradeActions.find(routeToDestroy.m_id);
+	if (it != m_tradeActions.end()) {
+		it->second->Finalize();
+		delete it->second;
+		m_tradeActions.erase(it);
+	}
 }
 
 void DirectorImpl::ProcessStandbyUnits()
