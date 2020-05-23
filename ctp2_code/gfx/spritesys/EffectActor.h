@@ -36,6 +36,7 @@ public:
 
 	Anim *          CreateAnim(EFFECTACTION action);
 
+	void 			Paint(void);
 	void			Draw(void);
 	void			DrawDirect(aui_Surface *surf, sint32 x, sint32 y);
 	void			DrawDirectWithFlags(aui_Surface *surf, sint32 x, sint32 y, uint16 flags);
@@ -55,7 +56,6 @@ public:
 
 	void			SetPlayerNum(sint32 playerNum) { m_playerNum = playerNum; }
 
-	Action			*GetCurAction(void) const { return m_curAction; }
 	Action			*LookAtNextAction(void) { return m_actionQueue.LookAtNextDeQueue(); }
 	size_t			GetActionQueueNumItems(void) const { return m_actionQueue.GetNumItems(); }
 

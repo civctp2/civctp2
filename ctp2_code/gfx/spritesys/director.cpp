@@ -311,10 +311,7 @@ public:
 		sint32 tileX;
 		maputils_MapX2TileX(position.x, position.y, &tileX);
 		if (maputils_TilePointInTileRect(tileX, position.y, paintRect)) {
-			// TODO: improve this logic move the paint method to actor
-			if (m_activeActor->GetCurAction()) {
-				g_tiledMap->PaintEffectActor(m_activeActor);
-			}
+			m_activeActor->Paint();
 		}
 	}
 
@@ -646,23 +643,20 @@ public:
 	virtual void AddInvokeThroneRoom();
 	virtual void AddInvokeResearchAdvance(MBCHAR *text);
 	virtual void AddBeginScheduler(sint32 player);
+	virtual void AddTradeRoute(TradeRoute newRoute);
+	virtual void RemoveTradeRoute(TradeRoute routeToDestroy);
 
 	// Anim
 	virtual uint32 GetMasterCurTime() { return m_masterCurTime; }
+	// battleviewwindow
+	virtual void UpdateTimingClock();
 
 	// ArmyData
 	virtual BOOL TileWillBeCompletelyVisible(sint32 x, sint32 y);
 
-	// battleviewwindow
-	virtual void UpdateTimingClock();
-
 	// GameEventManager
 	virtual void IncrementPendingGameActions();
 	virtual void DecrementPendingGameActions();
-
-	// TradePool
-	virtual void TradeActorCreate(TradeRoute newRoute);
-	virtual void TradeActorDestroy(TradeRoute routeToDestroy);
 
 	// Used locally
 	void		RemoveStandbyActor(UnitActor *actor);
@@ -2550,7 +2544,7 @@ bool DirectorImpl::CaughtUp(void)
 	return !m_actionQueue || (m_actionQueue->GetCount() == 0);
 }
 
-void DirectorImpl::TradeActorCreate(TradeRoute newRoute)
+void DirectorImpl::AddTradeRoute(TradeRoute newRoute)
 {
 	auto it = m_tradeActions.find(newRoute.m_id);
 	if (it == m_tradeActions.end()) {
@@ -2559,7 +2553,7 @@ void DirectorImpl::TradeActorCreate(TradeRoute newRoute)
 	}
 }
 
-void DirectorImpl::TradeActorDestroy(TradeRoute routeToDestroy)
+void DirectorImpl::RemoveTradeRoute(TradeRoute routeToDestroy)
 {
 	auto it = m_tradeActions.find(routeToDestroy.m_id);
 	if (it != m_tradeActions.end()) {

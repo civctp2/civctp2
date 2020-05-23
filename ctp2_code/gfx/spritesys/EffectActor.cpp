@@ -269,6 +269,13 @@ Anim *EffectActor::CreateAnim(EFFECTACTION action)
 	return origAnim ? new Anim(*origAnim) : NULL;
 }
 
+void EffectActor::Paint(void)
+{
+	if (m_curAction) {
+		g_tiledMap->PaintEffectActor(this);
+	}
+}
+
 void EffectActor::Draw(void)
 {
 	uint16			flags   = k_DRAWFLAGS_NORMAL;;

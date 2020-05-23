@@ -137,6 +137,8 @@ public:
 	virtual void AddInvokeThroneRoom() = 0;
 	virtual void AddInvokeResearchAdvance(MBCHAR *text) = 0;
 	virtual void AddBeginScheduler(sint32 player) = 0;
+	virtual void AddTradeRoute(TradeRoute newRoute) = 0;
+	virtual void RemoveTradeRoute(TradeRoute routeToDestroy) = 0;
 
 	// Anim
 	virtual uint32 GetMasterCurTime() = 0;
@@ -149,10 +151,6 @@ public:
 	// GameEventManager
 	virtual void IncrementPendingGameActions() = 0;
 	virtual void DecrementPendingGameActions() = 0;
-
-	// TradePool
-	virtual void TradeActorCreate(TradeRoute newRoute) = 0;
-	virtual void TradeActorDestroy(TradeRoute routeToDestroy) = 0;
 };
 
 extern Director *g_director;
