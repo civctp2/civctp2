@@ -1175,7 +1175,7 @@ void ShowVisCommand::Execute(sint32 argc, char **argv)
 
 void ReloadSpritesCommand::Execute(sint32 argc, char **argv)
 {
-	g_director->ReloadAllSprites();
+	Director::ReloadAllSprites();
 }
 
 void InitializeDiplomacyCommand::Execute(sint32 argc, char **argv) {

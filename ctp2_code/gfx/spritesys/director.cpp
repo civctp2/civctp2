@@ -570,7 +570,6 @@ public:
 	static DirectorImpl *Instance() { Assert(m_instance); return m_instance; }
 
 	virtual void Clear();
-	virtual void ReloadAllSprites();
 	virtual void NotifyResync();
 
 	virtual void Process();
@@ -723,6 +722,42 @@ private:
 
 Director* Director::CreateDirector() {
 	return new DirectorImpl();
+}
+
+void Director::ReloadAllSprites()
+{
+	for (int player = 0; player < k_MAX_PLAYERS; player++)
+	{
+		if (!g_player[player]) {
+			continue;
+		}
+
+		//PFT  29 mar 05
+		//cycle through human players' cities
+		if (g_player[g_selected_item->GetVisiblePlayer()]->IsHuman())
+		{
+			for (int i = 0; i < g_player[player]->m_all_cities->Num(); i++)
+			{
+				Unit city = g_player[player]->m_all_cities->Access(i);
+
+				//recover the number of turns until the city next produces a pop from it's current state
+				//CityData *cityData = city.GetData()->GetCityData();
+				//cityData->TurnsToNextPop();
+
+				UnitActor *actor = city.GetActor();
+				city.GetSpriteState()->SetIndex(city.GetDBRec()->GetDefaultSprite()->GetValue());
+				actor->ChangeImage(city.GetSpriteState(), city.GetType(), city);
+			}
+		}
+
+		for (int i = 0; i < g_player[player]->m_all_units->Num(); i++)
+		{
+			Unit unit = g_player[player]->m_all_units->Access(i);
+			UnitActor *actor = unit.GetActor();
+			unit.GetSpriteState()->SetIndex(unit.GetDBRec()->GetDefaultSprite()->GetValue());
+			actor->ChangeImage(unit.GetSpriteState(), unit.GetType(), unit);
+		}
+	}
 }
 
 class DQActionTeleport : public DQActionImmediate
@@ -3170,35 +3205,6 @@ void DirectorImpl::DecrementPendingGameActions()
 				DPRINTF(k_DBG_GAMESTATE, ("Adding from DecrementPendingGameActions, %d\n", g_selected_item->GetCurPlayer()));
 				AddEndTurn();
 			}
-		}
-	}
-}
-
-void DirectorImpl::ReloadAllSprites()
-{
-	sint32 p, i;
-	for(p = 0; p < k_MAX_PLAYERS; p++) {
-		if(!g_player[p]) continue;
-		//PFT  29 mar 05
-		//cycle through human players' cities
-		if(g_player[g_selected_item->GetVisiblePlayer()]->IsHuman()){
-			for(i = 0; i < g_player[p]->m_all_cities->Num(); i++) {
-				Unit u = g_player[p]->m_all_cities->Access(i);
-
-				//recover the number of turns until the city next produces a pop from it's current state
-				//CityData *cityData = u.GetData()->GetCityData();
-				//cityData->TurnsToNextPop();
-
-				UnitActor *actor = u.GetActor();
-				u.GetSpriteState()->SetIndex(u.GetDBRec()->GetDefaultSprite()->GetValue());
-				actor->ChangeImage(u.GetSpriteState(), u.GetType(), u);
-			}
-		}
-		for(i = 0; i < g_player[p]->m_all_units->Num(); i++) {
-			Unit u = g_player[p]->m_all_units->Access(i);
-			UnitActor *actor = u.GetActor();
-			u.GetSpriteState()->SetIndex(u.GetDBRec()->GetDefaultSprite()->GetValue());
-			actor->ChangeImage(u.GetSpriteState(), u.GetType(), u);
 		}
 	}
 }

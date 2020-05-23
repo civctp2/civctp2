@@ -1842,7 +1842,7 @@ sint32 CivApp::InitializeGame(CivArchive *archive)
 
 	g_theProgressWindow->StartCountingTo( 730 );
 
-	g_director->ReloadAllSprites();
+	Director::ReloadAllSprites();
 
 	g_theProgressWindow->StartCountingTo( 740 );
 

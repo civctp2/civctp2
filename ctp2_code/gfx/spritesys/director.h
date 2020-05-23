@@ -54,10 +54,11 @@ class Director
 {
 public:
 	static Director* CreateDirector();
+	static void ReloadAllSprites();
+
 	virtual ~Director() {}
 
 	virtual void Clear() = 0;
-	virtual void ReloadAllSprites() = 0;
 	virtual void NotifyResync() = 0;
 
 	virtual void Process() = 0;
