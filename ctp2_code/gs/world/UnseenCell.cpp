@@ -73,23 +73,6 @@ namespace
 {
     sint16 const    TERRAIN_UNKNOWN     = -1;
     sint16 const    MOVECOST_UNKNOWN    = 0x7fff;
-
-    /// Release an actor
-    /// \param      a_Actor  actor to release
-    /// \remarks    The actor is reference counted
-    /// \todo       Move to UnitActor
-    void ReleaseActor(UnitActor * & a_Actor)
-    {
-        if (a_Actor)
-        {
-		    if (--a_Actor->m_refCount <= 0)
-            {
-			    g_director->FastKill(a_Actor);
-		    }
-
-            a_Actor = NULL;
-	    }
-    }
 }
 
 //----------------------------------------------------------------------------
@@ -421,7 +404,7 @@ UnseenCell::UnseenCell(CivArchive &archive)
 //----------------------------------------------------------------------------
 UnseenCell::~UnseenCell()
 {
-	ReleaseActor(m_actor);
+	ReleaseActor();
 
 	delete m_tileInfo;
 
@@ -438,6 +421,18 @@ UnseenCell::~UnseenCell()
 	}
 
 	delete [] m_cityName;
+}
+
+void UnseenCell::ReleaseActor()
+{
+	if (m_actor)
+	{
+		// Note: it is assumed that this actor is local and is never used in g_director
+		if (--m_actor->m_refCount <= 0) {
+			delete m_actor;
+		}
+	}
+	m_actor = NULL;
 }
 
 //----------------------------------------------------------------------------
@@ -983,7 +978,7 @@ void UnseenCell::Serialize(CivArchive &archive)
 		sint32 hasActor;
 		archive >> hasActor;
 
-		ReleaseActor(m_actor);
+		ReleaseActor();
 		if (hasActor)
 		{
 			m_actor = new UnitActor(archive);

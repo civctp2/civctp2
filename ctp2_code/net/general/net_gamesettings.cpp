@@ -15,6 +15,7 @@
 #include "radarwindow.h"
 #include "c3ui.h"
 #include "gameinit.h"
+#include "director.h"
 
 #include "GameSettings.h"
 
@@ -114,6 +115,9 @@ void NetGameSettings::Unpacketize(uint16 id, uint8 *buf, uint16 size)
 
 	g_tiledMap->CopyVision();
 
+	if (g_director) {
+		g_director->Clear();
+	}
 	for(sint32 p = 0; p < k_MAX_PLAYERS; p++) {
 		if(g_player[p]) {
 			g_player[p]->m_all_armies->FastKillList();

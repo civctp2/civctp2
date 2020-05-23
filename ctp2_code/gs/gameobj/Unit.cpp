@@ -302,9 +302,9 @@ void Unit::RemoveAllReferences(const CAUSE_REMOVE_ARMY cause, PLAYER_INDEX kille
 
 void Unit::FastKill()
 {
-	if(GetActor()) {
-		if(g_director)
-			g_director->FastKill(GetActor());
+	UnitActor *actor = GetActor();
+	if(actor) {
+		delete actor;
 		AccessData()->SetActor(NULL);
 	} else {
 		Assert(false);

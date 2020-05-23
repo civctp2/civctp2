@@ -56,6 +56,7 @@ public:
 	static Director* CreateDirector();
 	virtual ~Director() {}
 
+	virtual void Clear() = 0;
 	virtual void ReloadAllSprites() = 0;
 	virtual void NotifyResync() = 0;
 
@@ -129,8 +130,7 @@ public:
 	virtual void AddPlayWonderMovie(sint32 which) = 0;
 	virtual void AddPlayVictoryMovie(GAME_OVER reason, BOOL previouslyWon, BOOL previouslyLost) = 0;
 	virtual void AddMessage(const Message &message) = 0;
-	// Please check the implementation of 'terminate faceoff' (especially ActiveUnitRemove) when this is activated
-	// virtual void AddFaceoff(Unit &attacker, Unit &defender) = 0;
+	virtual void AddFaceoff(Unit &attacker, Unit &defender) = 0;
 	virtual void AddTerminateFaceoff(Unit &faceroffer) = 0;
 	virtual void AddTerminateSound(Unit &unit) = 0;
 	virtual void AddInvokeThroneRoom() = 0;
@@ -139,12 +139,11 @@ public:
 
 	// Anim
 	virtual uint32 GetMasterCurTime() = 0;
+	// battleviewwindow
+	virtual void UpdateTimingClock() = 0;
 
 	// ArmyData
 	virtual BOOL TileWillBeCompletelyVisible(sint32 x, sint32 y) = 0;
-
-	// battleviewwindow
-	virtual void UpdateTimingClock() = 0;
 
 	// GameEventManager
 	virtual void IncrementPendingGameActions() = 0;
@@ -153,9 +152,6 @@ public:
 	// TradePool
 	virtual void TradeActorCreate(TradeRoute newRoute) = 0;
 	virtual void TradeActorDestroy(TradeRoute routeToDestroy) = 0;
-
-	// Unit && UnseenCell
-	virtual void FastKill(UnitActor *actor) = 0;
 };
 
 extern Director *g_director;

@@ -83,7 +83,6 @@
 #include "SpriteRecord.h"
 #include "SpriteState.h"
 #include "spriteutils.h"
-#include "tech_wllist.h"
 #include "tiledmap.h"               // g_tiledMap
 #include "tileutils.h"
 #include "TradeActor.h"
@@ -110,7 +109,6 @@ extern MessagePool		*g_theMessagePool;
 extern BOOL g_doingFastRounds;
 #endif
 
-#define k_MAXFRAMERATE	20
 #define k_DEFAULT_FPS			10
 #define k_ELAPSED_CEILING		100
 
@@ -401,11 +399,13 @@ public:
 		delete activeLoopingSound;
 		activeLoopingSound = NULL;
 	}
+
 	virtual void Execute() {
 		if (!SkipProcess()) {
 			PrepareProcess();
 		}
 	}
+
 	virtual void Finalize() {}
 
 	// Lock behaviour
@@ -447,12 +447,6 @@ public:
 		return m_activeActors.empty();
 	}
 
-	void FastKill(UnitActor *actor)
-	{
-		actor->SetActive(false);
-		m_activeActors.erase(actor);
-	}
-
 protected:
 	virtual void PrepareProcess() = 0;
 	virtual bool DoSkipProcess() { return false; }
@@ -461,6 +455,7 @@ protected:
 		m_activeActors.insert(actor);
 		actor->SetActive(true);
 	}
+
 private:
 	static void DrawUnitActor(UnitActor *actor, RECT *paintRect)
 	{
@@ -574,6 +569,7 @@ public:
 	virtual ~DirectorImpl(void);
 	static DirectorImpl *Instance() { Assert(m_instance); return m_instance; }
 
+	virtual void Clear();
 	virtual void ReloadAllSprites();
 	virtual void NotifyResync();
 
@@ -669,9 +665,6 @@ public:
 	virtual void TradeActorCreate(TradeRoute newRoute);
 	virtual void TradeActorDestroy(TradeRoute routeToDestroy);
 
-	// Unit && UnseenCell
-	virtual void FastKill(UnitActor *actor);
-
 	// Used locally
 	void		RemoveStandbyActor(UnitActor *actor);
 
@@ -703,6 +696,8 @@ private:
 #endif
 
 	static DirectorImpl					*m_instance;
+	PointerList<DQAction>				*m_actionQueue;
+	PointerList<DQAction>::Walker		*m_actionWalker;
 	DQAction							*m_lockingAction;
 	DQActiveLoopingSound				*m_activeLoopingSound;
 	std::unordered_set<DQAction *>		m_processingActions;
@@ -720,10 +715,7 @@ private:
 
 	bool						m_paused;
 
-	PointerList<DQAction>		*m_actionQueue;
-
 	std::set<UnitActor *>			m_standbyActors;
-	PointerList<DQAction>::Walker	*m_actionWalker;
 
 	sint32						m_pendingGameActions;
 	bool						m_endTurnRequested;
@@ -794,7 +786,6 @@ public:
 	}
 
 	UnitActor *GetActor() { return moveActor; }
-
 
 protected:
 	UnitActor	*moveActor;
@@ -905,13 +896,14 @@ public:
 			: DQActionImmediate(),
 			  dead	(dead)
 	{}
-	virtual ~DQActionFastKill() {}
+	virtual ~DQActionFastKill()
+	{
+		DirectorImpl::Instance()->RemoveStandbyActor(dead);
+		delete dead;
+	}
 	virtual DQACTION_TYPE GetType() { return DQACTION_FASTKILL; }
 
-	virtual void Execute()
-	{
-		DirectorImpl::Instance()->FastKill(dead);
-	}
+	virtual void Execute() {}
 
 	virtual void Dump()
 	{
@@ -2231,27 +2223,32 @@ DirectorImpl::DirectorImpl(void)
 
 DirectorImpl::~DirectorImpl(void)
 {
-	if (m_lockingAction) {
-		FinalizeAction(m_lockingAction);
-	}
-	FinalizeProcessingActions();
-	FinalizeTradeActions();
+	Clear();
 	delete m_actionQueue;
-
 	delete m_actionWalker;
-	delete m_activeLoopingSound;
-	delete m_lockingAction;
 	m_instance = NULL;
 }
 
-void DirectorImpl::FastKill(UnitActor *actor)
-{
-	// TODO: check if we also should test m_processingActions
-	if (m_lockingAction && m_lockingAction->IsTypeActive()) {
-		static_cast<DQActionActive*>(m_lockingAction)->FastKill(actor);
+void DirectorImpl::Clear() {
+	if (m_lockingAction) {
+		delete m_lockingAction;
+		m_lockingAction = NULL;
 	}
-	m_standbyActors.erase(actor);
-	delete actor;
+
+	for (auto processingAction : m_processingActions) {
+		delete processingAction;
+	}
+	m_processingActions.clear();
+
+	for (auto tradeAction : m_tradeActions) {
+		delete tradeAction.second;
+	}
+	m_tradeActions.clear();
+
+	m_actionQueue->DeleteAll();
+
+	delete m_activeLoopingSound;
+	m_activeLoopingSound = NULL;
 }
 
 void DirectorImpl::UpdateTimingClock(void)
@@ -2797,7 +2794,6 @@ void DirectorImpl::AddEndTurn(void)
 
 			for(sint32 i = 0; i < p->m_all_armies->Num(); i++)
 			{
-//				IncrementPendingGameActions();
 				g_gevManager->AddEvent(GEV_INSERT_Tail, GEV_BeginTurnExecute,
 									   GEA_Army, p->m_all_armies->Access(i).m_id,
 									   GEA_End);
