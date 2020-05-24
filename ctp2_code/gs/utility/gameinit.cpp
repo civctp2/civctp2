@@ -29,22 +29,22 @@
 // Modifications from the original Activision code:
 //
 // - Added player selection for new single player game and scenarios of
-//   all types, by Martin Gühmann.
+//   all types, by Martin GÃ¼hmann.
 // - Fixed scenarios that allow players other than player 1 to be played,
-//   by Martin Gühmann
+//   by Martin GÃ¼hmann
 // - Added multiplayer to single player game conversion for testing.
 // - Prevent assigning the same civilisation index twice, while keeping the
 //   human player selection.
 // - TradePool is fixed on reload if the number of goods in the
 //   savegame differs from the number of goods in the database.
-//   - June 4th 2005 Martin Gühmann
+//   - June 4th 2005 Martin GÃ¼hmann
 // - Allowed for nPlayers to be 2 or 3 - JJB 2005/06/28
 // - Removed auto-tutorial on low difficulty - JJB 2005/06/28
-// - Removed refferences to the civilisation database. (Aug 20th 2005 Martin Gühmann)
-// - Removed unused SpriteStateDB refferences. (Aug 28th 2005 Martin Gühmann)
-// - Reused obsolate concept icon database slot for new map icon database. (3-Mar-2007 Martin Gühmann)
-// - Removed old concept database. (31-Mar-2007 Martin Gühmann)
-// - Replaced old const database by new one. (5-Aug-2007 Martin Gühmann)
+// - Removed refferences to the civilisation database. (Aug 20th 2005 Martin GÃ¼hmann)
+// - Removed unused SpriteStateDB refferences. (Aug 28th 2005 Martin GÃ¼hmann)
+// - Reused obsolate concept icon database slot for new map icon database. (3-Mar-2007 Martin GÃ¼hmann)
+// - Removed old concept database. (31-Mar-2007 Martin GÃ¼hmann)
+// - Replaced old const database by new one. (5-Aug-2007 Martin GÃ¼hmann)
 //
 //----------------------------------------------------------------------------
 
@@ -1443,7 +1443,7 @@ sint32 gameinit_GetCivForSlot(sint32 slot)
 }
 
 
-sint32 gameinit_Initialize(sint32 mWidth, sint32 mHeight, CivArchive &archive)
+sint32 gameinit_Initialize(sint32 mWidth, sint32 mHeight, CivArchive *archive)
 {
 
 	g_debugWindow->SetDebugMask(k_DBG_AI);
@@ -1470,8 +1470,8 @@ sint32 gameinit_Initialize(sint32 mWidth, sint32 mHeight, CivArchive &archive)
 	// Removed the auto-tutorial on low difficulty, since it causes
 	// more problems than it solves - JJB
 
-	if (&archive) {
-		g_rand = new RandomGenerator(archive);
+	if (archive) {
+		g_rand = new RandomGenerator(*archive);
 	} else {
 #ifdef _DEBUG
 	FILE * fin = fopen ("logs" FILE_SEP "dbgseed.txt", "r");
@@ -1512,8 +1512,8 @@ sint32 gameinit_Initialize(sint32 mWidth, sint32 mHeight, CivArchive &archive)
 
 
 
-	if(&archive) {
-		g_theGameSettings = new GameSettings(archive);
+	if(archive) {
+		g_theGameSettings = new GameSettings(*archive);
 	} else {
 		g_theGameSettings = new GameSettings();
 	}
@@ -1523,8 +1523,8 @@ sint32 gameinit_Initialize(sint32 mWidth, sint32 mHeight, CivArchive &archive)
 	bool loadEverything =
         !g_isScenario || (g_startInfoType == STARTINFOTYPE_NOLOCS);
 
-	if (&archive) {
-		g_theWorld = new World(archive) ;
+	if (archive) {
+		g_theWorld = new World(*archive) ;
 		if(
 
 			(g_isScenario && g_startInfoType != STARTINFOTYPE_NOLOCS)) {
@@ -1579,8 +1579,8 @@ sint32 gameinit_Initialize(sint32 mWidth, sint32 mHeight, CivArchive &archive)
 
 	Assert(g_theWorld);
 
-	if (&archive && loadEverything){
-		g_turn = new TurnCount(archive);
+	if (archive && loadEverything){
+		g_turn = new TurnCount(*archive);
 	} else {
 		g_turn = new TurnCount();
 		if(g_network.IsActive() || g_network.IsNetworkLaunch()) {
@@ -1591,8 +1591,8 @@ sint32 gameinit_Initialize(sint32 mWidth, sint32 mHeight, CivArchive &archive)
 		}
 	}
 
-	if (&archive && loadEverything){
-		g_selected_item = new SelectedItem(archive);
+	if (archive && loadEverything){
+		g_selected_item = new SelectedItem(*archive);
 	}else {
 		g_selected_item = new SelectedItem(nPlayers);
 	}
@@ -1614,23 +1614,23 @@ sint32 gameinit_Initialize(sint32 mWidth, sint32 mHeight, CivArchive &archive)
 	                                                 sint16(g_theWorld->GetYHeight()),
 	                                                 g_theWorld->IsYwrap());
 
-	if (&archive && loadEverything)
-		g_theUnitPool = new UnitPool(archive);
+	if (archive && loadEverything)
+		g_theUnitPool = new UnitPool(*archive);
 	else
 		g_theUnitPool = new UnitPool();
 	Assert(g_theUnitPool);
 
-	if(&archive && loadEverything)
-		g_theArmyPool = new ArmyPool(archive);
+	if(archive && loadEverything)
+		g_theArmyPool = new ArmyPool(*archive);
 	else
 		g_theArmyPool = new ArmyPool();
 	Assert(g_theArmyPool);
 
-	if(&archive && loadEverything)
+	if(archive && loadEverything)
 		g_theUnitPool->RebuildQuadTree();
 
-	if(&archive && loadEverything) {
-		g_theTradePool = new TradePool(archive);
+	if(archive && loadEverything) {
+		g_theTradePool = new TradePool(*archive);
 
 		if(g_numGoods != g_theResourceDB->NumRecords()){
 			sint32 i;
@@ -1648,9 +1648,9 @@ sint32 gameinit_Initialize(sint32 mWidth, sint32 mHeight, CivArchive &archive)
 		g_theTradePool = new TradePool();
 
     // 55 is probably the last save game version for CTP1
-	if (&archive && loadEverything && (g_saveFileVersion < 55))
+	if (archive && loadEverything && (g_saveFileVersion < 55))
     {
-		g_theTradeOfferPool = new TradeOfferPool(archive);
+		g_theTradeOfferPool = new TradeOfferPool(*archive);
 	}
     else
     {
@@ -1658,15 +1658,15 @@ sint32 gameinit_Initialize(sint32 mWidth, sint32 mHeight, CivArchive &archive)
     }
 	Assert(g_theTradeOfferPool);
 
-	if (&archive && loadEverything)
-		g_thePollution = new Pollution(archive);
+	if (archive && loadEverything)
+		g_thePollution = new Pollution(*archive);
 	else
 		g_thePollution = new Pollution();
 	Assert(g_thePollution);
 
-	if (&archive && loadEverything && (g_saveFileVersion < 55))
+	if (archive && loadEverything && (g_saveFileVersion < 55))
     {
-		g_theTopTen = new TopTen(archive);
+		g_theTopTen = new TopTen(*archive);
 	}
     else
     {
@@ -1676,10 +1676,10 @@ sint32 gameinit_Initialize(sint32 mWidth, sint32 mHeight, CivArchive &archive)
 
 	SPLASH_STRING("Initializing SLIC Engine...");
 
-	if (&archive)
+	if (archive)
     {
         delete g_slicEngine;
-        g_slicEngine = new SlicEngine(archive);
+        g_slicEngine = new SlicEngine(*archive);
 		g_slicEngine->PostSerialize();
 	}
     else
@@ -1715,15 +1715,15 @@ sint32 gameinit_Initialize(sint32 mWidth, sint32 mHeight, CivArchive &archive)
 
 	SPLASH_STRING("Initializing Object Pools...");
 
-	if(&archive && loadEverything)
-		g_theTerrainImprovementPool = new TerrainImprovementPool(archive);
+	if(archive && loadEverything)
+		g_theTerrainImprovementPool = new TerrainImprovementPool(*archive);
 	else
 		g_theTerrainImprovementPool = new TerrainImprovementPool();
 	Assert(g_theTerrainImprovementPool) ;
 
-	if (&archive && loadEverything && (g_saveFileVersion < 55))
+	if (archive && loadEverything && (g_saveFileVersion < 55))
     {
-		g_theDiplomaticRequestPool = new DiplomaticRequestPool(archive) ;
+		g_theDiplomaticRequestPool = new DiplomaticRequestPool(*archive) ;
 	}
     else
     {
@@ -1731,15 +1731,15 @@ sint32 gameinit_Initialize(sint32 mWidth, sint32 mHeight, CivArchive &archive)
 	}
 	Assert(g_theDiplomaticRequestPool) ;
 
-	if (&archive && loadEverything)
-		g_theCivilisationPool = new CivilisationPool(archive) ;
+	if (archive && loadEverything)
+		g_theCivilisationPool = new CivilisationPool(*archive) ;
 	else
 		g_theCivilisationPool = new CivilisationPool() ;
 	Assert(g_theCivilisationPool) ;
 
-	if (&archive && loadEverything && (g_saveFileVersion < 55))
+	if (archive && loadEverything && (g_saveFileVersion < 55))
     {
-		g_theAgreementPool = new AgreementPool(archive) ;
+		g_theAgreementPool = new AgreementPool(*archive) ;
 	}
     else
     {
@@ -1748,8 +1748,8 @@ sint32 gameinit_Initialize(sint32 mWidth, sint32 mHeight, CivArchive &archive)
 	Assert(g_theAgreementPool) ;
 
 	delete g_theMessagePool;
-	if (&archive && loadEverything)
-		g_theMessagePool = new MessagePool(archive) ;
+	if (archive && loadEverything)
+		g_theMessagePool = new MessagePool(*archive) ;
 	else
 		g_theMessagePool = new MessagePool() ;
 	Assert(g_theMessagePool) ;
@@ -1758,68 +1758,68 @@ sint32 gameinit_Initialize(sint32 mWidth, sint32 mHeight, CivArchive &archive)
 	g_theCriticalMessagesPrefs = new CriticalMessagesPrefs() ;
 	Assert(g_theCriticalMessagesPrefs) ;
 
-	if(&archive && loadEverything)
-		g_theInstallationPool = new InstallationPool(archive);
+	if(archive && loadEverything)
+		g_theInstallationPool = new InstallationPool(*archive);
 	else
 		g_theInstallationPool = new InstallationPool();
 	Assert(g_theInstallationPool) ;
 
 	g_theInstallationPool->RebuildQuadTree();
 
-	if (&archive && loadEverything && (g_saveFileVersion < 55))
+	if (archive && loadEverything && (g_saveFileVersion < 55))
     {
 		sint32 wormholeExists;
-		archive >> wormholeExists;
-        g_wormhole = (wormholeExists) ? new Wormhole(archive) : NULL;
+		*archive >> wormholeExists;
+        g_wormhole = (wormholeExists) ? new Wormhole(*archive) : NULL;
 	}
     else
     {
 		g_wormhole = NULL;
 	}
 
-	if(&archive && loadEverything) {
-		g_theWonderTracker = new WonderTracker(archive);
+	if(archive && loadEverything) {
+		g_theWonderTracker = new WonderTracker(*archive);
 	} else {
 		g_theWonderTracker = new WonderTracker();
 	}
 
-	if(&archive && loadEverything && (g_saveFileVersion < 55))
+	if(archive && loadEverything && (g_saveFileVersion < 55))
     {
-		g_theAchievementTracker = new AchievementTracker(archive);
+		g_theAchievementTracker = new AchievementTracker(*archive);
 	}
     else
     {
 		g_theAchievementTracker = new AchievementTracker();
 	}
 
-	if (&archive)
+	if (archive)
     {
 		delete g_exclusions;
-		g_exclusions = new Exclusions(archive);
+		g_exclusions = new Exclusions(*archive);
 	}
     else
     {
 	    // Exclusions not used
 	}
 
-	if(&archive && loadEverything) {
-		g_featTracker = new FeatTracker(archive);
+	if(archive && loadEverything) {
+		g_featTracker = new FeatTracker(*archive);
 	} else {
 		g_featTracker = new FeatTracker;
 	}
 
-	if(&archive && loadEverything && (g_saveFileVersion < 55))
+	if(archive && loadEverything && (g_saveFileVersion < 55))
     {
-		g_theTradeBids = new TradeBids(archive);
+		g_theTradeBids = new TradeBids(*archive);
 	}
     else
     {
 		g_theTradeBids = new TradeBids;
 	}
 
-	if(&archive && loadEverything)
+	if(archive && loadEverything)
 	{
-		g_eventTracker = new EventTracker(archive);
+		g_eventTracker = new EventTracker(*archive);
 	}
 	else
 	{
@@ -1838,24 +1838,24 @@ sint32 gameinit_Initialize(sint32 mWidth, sint32 mHeight, CivArchive &archive)
 	sint32 numPlayersLoaded = 0;
 
 	sint32 i, j;
-	if (&archive)
+	if (archive)
 	{
 		for (i = 0; i < k_MAX_PLAYERS; i++)
 		{
-			archive >> playerAlive;
+			*archive >> playerAlive;
 			if (playerAlive)
 			{
-				g_player[i] = new Player(archive);
+				g_player[i] = new Player(*archive);
 
 				numPlayersLoaded++;
 			}
 		}
 
 		sint32 num;
-		archive >> num;
+		*archive >> num;
 		for (i = 0; i < num; i++)
 		{
-			g_deadPlayer->AddTail(new Player(archive));
+			g_deadPlayer->AddTail(new Player(*archive));
 		}
 
 		if (g_isScenario && g_startInfoType != STARTINFOTYPE_NOLOCS)
@@ -1969,7 +1969,7 @@ sint32 gameinit_Initialize(sint32 mWidth, sint32 mHeight, CivArchive &archive)
 
 			case STARTINFOTYPE_CIVSFIXED:
 			case STARTINFOTYPE_POSITIONSFIXED:
-// Added by Martin Gühmann
+// Added by Martin GÃ¼hmann
 // No difference between STARTINFOTYPE_CIVSFIXED and STARTINFOTYPE_POSITIONSFIXED
 				{
 					Assert(numPlayersLoaded == 0);
@@ -2151,13 +2151,13 @@ sint32 gameinit_Initialize(sint32 mWidth, sint32 mHeight, CivArchive &archive)
 	roboinit_Initalize(archive);
 	CtpAi::Cleanup();
 
-	if (&archive && loadEverything)
+	if (archive && loadEverything)
 	{
 		g_theWorld->SetAllMoveCost();
 		g_theWorld->A_star_heuristic->Update();
 		SPLASH_STRING("Load AI data elements...");
 
-		CtpAi::Load(archive);
+		CtpAi::Load(*archive);
 		createRobotInterface = false;
 		if(!g_theProfileDB->IsAIOn()) {
 
@@ -2210,7 +2210,7 @@ sint32 gameinit_Initialize(sint32 mWidth, sint32 mHeight, CivArchive &archive)
 
 	g_theTradeOfferPool->ReRegisterOffers();
 
-	if (!(&archive))
+	if (!archive)
 	{
 		sint32 numPlaced = 0;
 #ifdef _DEBUG
@@ -2277,7 +2277,7 @@ sint32 gameinit_Initialize(sint32 mWidth, sint32 mHeight, CivArchive &archive)
 		g_director->AddCopyVision();
 	}
 
-	if(&archive)
+	if(archive)
 	{
 		SPLASH_STRING("Set all move costs...");
 		g_theWorld->SetAllMoveCost();
@@ -2382,7 +2382,7 @@ sint32 gameinit_Initialize(sint32 mWidth, sint32 mHeight, CivArchive &archive)
 	}
 
 	SPLASH_STRING("Reset vision...");
-	if(&archive && loadEverything) {
+	if(archive && loadEverything) {
 		for(i = 0; i < k_MAX_PLAYERS; i++) {
 			if(g_player[i]) {
 				g_player[i]->ResetVision();
@@ -2430,7 +2430,7 @@ sint32 gameinit_Initialize(sint32 mWidth, sint32 mHeight, CivArchive &archive)
 		g_scenarioUsePlayerNumber = 0;
 	}
 
-	if (!(&archive) || g_isScenario)
+	if (!archive || g_isScenario)
 	{
 		if (g_startHotseatGame || g_startEmailGame)
 		{

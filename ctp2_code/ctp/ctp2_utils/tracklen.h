@@ -27,14 +27,13 @@
 #ifdef HAVE_PRAGMA_ONCE
 #pragma once
 #endif
+
 #ifndef tracklen_h
 #define tracklen_h
 
-#if defined(WIN32)
+#if !defined(USE_SDL)
+
 #include <windows.h>
-#else
-#include "windows.h"
-#endif
 
 #ifdef __cplusplus
 extern "C" {
@@ -62,11 +61,7 @@ char *tracklen_cryptAscii(char *s);
 
 void tracklen_cryptBinary(char *data, size_t len);
 DWORD *tracklen_LoadEncryptedKey( DWORD *trackLenBuf, const char *szFile );
-#if defined(WIN32)
 int tracklen_GetTrackLengths(DWORD *trackLenBuf, char whichDrive);
-#else
-int tracklen_GetTrackLengths(DWORD *trackLenBuf, int iDrive);
-#endif
 char *GetVersionInfo( DWORD *trackLenBuffer );
 BYTE tracklen_CheckTrackLengths( char *szVersionInfoBuffer = NULL );
 void tracklen_AutoPlay_Disable();
@@ -76,4 +71,6 @@ void tracklen_AutoPlay_Restore();
 }
 #endif
 
-#endif
+#endif // USE_SDL
+
+#endif // tracklen_h

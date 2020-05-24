@@ -44,8 +44,8 @@
 #include "gamesounds.h"
 
 #if defined(USE_SDL)
-#include <SDL.h>
-#include <SDL_mixer.h>
+#include <SDL2/SDL.h>
+#include <SDL2/SDL_mixer.h>
 #endif
 
 template <class T> class PointerList;
@@ -141,10 +141,6 @@ public:
 	void ReleaseSoundDriver();
 	void ReacquireSoundDriver();
 
-#if defined(USE_SDL)
-    void SDL_ChannelCompleteCB(int channel);
-#endif
-
 private:
 	PointerList<CivSound>	*m_sfxSounds;
 	PointerList<CivSound>	*m_voiceSounds;
@@ -160,15 +156,13 @@ private:
 	BOOL					m_noSound;
 	BOOL					m_usePlaySound;
 
-#if !defined(USE_SDL)
-	HREDBOOK				m_redbook;
-#else
-	SDL_CD                  *m_cdrom;
+#if defined(USE_SDL)
 	BOOL					m_useOggTracks;
-	Uint32                  m_SDLInitFlags;
 	Mix_Music				*m_oggTrack;
-#endif
-	uint32					m_timeToCheckCD;
+#else // USE_SDL
+	HREDBOOK				m_redbook;
+#endif // USE_SDL
+	uint32					m_timeToCheckMusic;
 	sint32					m_numTracks;
 	sint32					m_curTrack;
 	sint32					m_lastTrack;

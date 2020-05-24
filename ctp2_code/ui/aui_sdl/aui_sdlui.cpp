@@ -38,6 +38,7 @@
 #include "aui_joystick.h"
 #include "aui_sdlsurface.h"
 #include "aui_sdlmouse.h"
+#include "aui_sdlmoviemanager.h"
 
 #include "aui_sdlui.h"
 
@@ -53,7 +54,8 @@ extern sint32				g_ScreenWidth;
 extern sint32				g_ScreenHeight;
 extern DisplayDevice		g_displayDevice;
 
-extern BOOL g_SDL_flags;
+extern uint32 g_SDL_flags; //See ctp2_code/ctp/civ3_main.cpp
+extern sint32 g_is565Format;
 
 aui_SDLUI::aui_SDLUI
 (
@@ -68,7 +70,10 @@ aui_SDLUI::aui_SDLUI
 )
 :   aui_UI              (),
     aui_SDL             (),
-    m_X11Display        (0)
+    m_X11Display        (0),
+    m_SDLWindow         (0),
+    m_SDLRenderer       (0),
+    m_SDLTexture        (0)
 {
 
 	*retval = aui_Region::InitCommon( 0, 0, 0, width, height );
@@ -122,7 +127,6 @@ AUI_ERRCODE aui_SDLUI::DestroyNativeScreen(void)
 	{
 		delete m_primary;
 		m_primary   = NULL;
-		m_lpdds     = NULL;
 	}
 
 	return AUI_ERRCODE_OK;
@@ -135,33 +139,34 @@ AUI_ERRCODE aui_SDLUI::CreateNativeScreen( BOOL useExclusiveMode )
 	assert( AUI_SUCCESS(errcode) );
 	if ( !AUI_SUCCESS(errcode) ) return errcode;
 
-	m_lpdds = SDL_SetVideoMode(m_width, m_height, m_bpp, g_SDL_flags); // mod by lynx |SDL_FULLSCREEN);
-	if (!m_lpdds) {
-		c3errors_FatalDialog("aui_SDLUI", SDL_GetError());
+	m_pixelFormat = aui_Surface::TransformBppToSurfacePixelFormat(m_bpp);
+	m_SDLWindow = SDL_CreateWindow("Call To Power 2", SDL_WINDOWPOS_CENTERED, SDL_WINDOWPOS_CENTERED,
+		m_width, m_height, g_SDL_flags);
+	if (!m_SDLWindow) {
+		c3errors_FatalDialog("aui_SDLUI", "SDL window creation failed:\n%s\n", SDL_GetError());
 	}
+	m_SDLRenderer = SDL_CreateRenderer(m_SDLWindow, -1, 0);
+	if (!m_SDLRenderer) {
+		c3errors_FatalDialog("aui_SDLUI", "SDL renderer creation failed:\n%s\n", SDL_GetError());
+	}
+	SDL_SetHint(SDL_HINT_RENDER_SCALE_QUALITY, "linear");
+	SDL_RenderSetLogicalSize(m_SDLRenderer, m_width, m_height);
+	m_SDLTexture = SDL_CreateTexture(m_SDLRenderer, aui_SDLSurface::TransformSurfacePixelFormatToSDL(m_pixelFormat),
+		SDL_TEXTUREACCESS_STREAMING, m_width, m_height);
+	if (!m_SDLTexture) {
+		c3errors_FatalDialog("aui_SDLUI", "SDL texture creation failed:\n%s\n", SDL_GetError());
+ 	}
 
-	m_primary = new aui_SDLSurface(
-		&errcode,
-		m_width,
-		m_height,
-		m_bpp,
-		m_lpdds,
-		TRUE );
+	m_primary = new aui_SDLSurface(&errcode, m_width, m_height, m_bpp, NULL, TRUE);
 	Assert( AUI_NEWOK(m_primary,errcode) );
 	assert( AUI_NEWOK(m_primary,errcode) );
 	if ( !AUI_NEWOK(m_primary,errcode) ) return AUI_ERRCODE_MEMALLOCFAILED;
 
 	if(!m_secondary) {
-		m_secondary = new aui_SDLSurface(
-			&errcode,
-			m_width,
-			m_height,
-			m_bpp,
-			NULL,
-			FALSE );
-		Assert( AUI_NEWOK(m_primary,errcode) );
-		assert( AUI_NEWOK(m_primary,errcode) );
-		if ( !AUI_NEWOK(m_primary,errcode) ) return AUI_ERRCODE_MEMALLOCFAILED;
+		m_secondary = new aui_SDLSurface(&errcode, m_width, m_height, m_bpp, NULL, FALSE);
+		Assert( AUI_NEWOK(m_secondary,errcode) );
+		assert( AUI_NEWOK(m_secondary,errcode) );
+		if ( !AUI_NEWOK(m_secondary,errcode) ) return AUI_ERRCODE_MEMALLOCFAILED;
 	}
 
 	m_pixelFormat = m_primary->PixelFormat();
@@ -179,16 +184,24 @@ aui_SDLUI::getDisplay()
 
 aui_SDLUI::~aui_SDLUI( void )
 {
-	if ( m_lpdds ) {
-		// m_lpdds is deleted by SDL_Quit()
-		m_lpdds = NULL;
-	}
 #ifdef HAVE_X11
 	if (m_X11Display) {
 		XCloseDisplay(m_X11Display);
 		m_X11Display = 0;
 	}
 #endif
+	if (m_SDLTexture) {
+		SDL_DestroyTexture(m_SDLTexture);
+		m_SDLTexture = NULL;
+	}
+	if (m_SDLRenderer) {
+		SDL_DestroyRenderer(m_SDLRenderer);
+		m_SDLRenderer = NULL;
+	}
+	if (m_SDLWindow) {
+		SDL_DestroyWindow(m_SDLWindow);
+		m_SDLWindow = NULL;
+	}
 }
 
 AUI_ERRCODE aui_SDLUI::TearDownMouse(void)
@@ -331,6 +344,26 @@ AUI_ERRCODE aui_SDLUI::AltTabIn( void )
 	}
 
 	return FlushDirtyList();
+}
+
+aui_MovieManager* aui_SDLUI::CreateMovieManager( void ) {
+	Assert(m_SDLWindow);
+	Assert(m_SDLRenderer);
+	Assert(m_SDLTexture);
+	int windowWidth;
+	int windowHeight;
+	SDL_GetWindowSize(m_SDLWindow, &windowWidth, &windowHeight);
+	return new aui_SDLMovieManager(m_SDLRenderer, m_SDLTexture, windowWidth, windowHeight);
+}
+
+AUI_ERRCODE aui_SDLUI::SDLDrawScreen( void ) {
+	Assert(m_primary);
+	Assert(m_SDLTexture);
+	Assert(m_SDLRenderer);
+	SDL_UpdateTexture(m_SDLTexture, NULL, m_primary->Buffer(), m_primary->Pitch());
+	SDL_RenderClear(m_SDLRenderer);
+	SDL_RenderCopy(m_SDLRenderer, m_SDLTexture, NULL, NULL);
+	SDL_RenderPresent(m_SDLRenderer);
 }
 
 #endif  // __AUI_USE_SDL__

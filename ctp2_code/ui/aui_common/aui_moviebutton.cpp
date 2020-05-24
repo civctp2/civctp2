@@ -172,6 +172,11 @@ AUI_ERRCODE aui_MovieButton::Idle( void )
 				if (m_ActionFunc)
 					m_ActionFunc((aui_Control *)this, AUI_BUTTON_ACTION_EXECUTE, 0, NULL);
 			}
+#if defined(USE_SDL)
+			else {
+				m_window->AddDirtyRect( m_x, m_y, m_x + m_width, m_y + m_height );
+			}
+#endif // USE_SDL
 		}
 	}
 

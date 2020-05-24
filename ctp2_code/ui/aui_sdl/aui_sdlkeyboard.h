@@ -28,7 +28,7 @@ protected:
 	AUI_ERRCODE createSDLKeyboard();
 	void convertSDLKeyboardEvent(SDL_KeyboardEvent &sdlevent,
 	                             aui_KeyboardEvent &auievent);
-	uint32 convertSDLKey(SDL_keysym keysym);
+	uint32 convertSDLKey(SDL_Keysym keysym);
 
 public:
 	virtual AUI_ERRCODE Acquire();

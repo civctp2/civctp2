@@ -11,6 +11,31 @@ SDL_Surface *aui_SDL::m_lpdd = 0;
 uint32 aui_SDL::m_SDLClassId = aui_UniqueId();
 sint32 aui_SDL::m_SDLRefCount = 0;
 
+// SKIP_SDL2_EVENT_ISSUES: TODO: handle SDL2 new keyboard-events especially for unicode characters:
+//    SDL_TEXTEDITING,            /**< Keyboard text editing (composition) */
+//    SDL_TEXTINPUT,              /**< Keyboard text input */
+//    SDL_KEYMAPCHANGED           /**< Keymap changed due to a system event such as an
+//                                     input language or keyboard layout change.
+//                                */
+
+int FilterEvents(void* userData, SDL_Event *event) {
+	switch(event->type) {
+		// Quit event
+		case SDL_QUIT:
+		// Keyboard events
+		case SDL_KEYDOWN:
+		case SDL_KEYUP:
+		// Mouse events
+		case SDL_MOUSEMOTION:
+		case SDL_MOUSEBUTTONDOWN:
+		case SDL_MOUSEBUTTONUP:
+		case SDL_MOUSEWHEEL:
+			return 1;
+		default:
+			return 0;
+	}
+}
+
 AUI_ERRCODE aui_SDL::InitCommon(BOOL useExclusiveMode)
 {
 	m_exclusiveMode = useExclusiveMode;
@@ -24,15 +49,8 @@ AUI_ERRCODE aui_SDL::InitCommon(BOOL useExclusiveMode)
 		return AUI_ERRCODE_CREATEFAILED;
 	}
 */
-	SDL_ShowCursor(SDL_DISABLE);
 
-	// enable only a handfull of events
-	SDL_EventState(SDL_IGNORE, SDL_ALLEVENTS);
-	SDL_EventState(SDL_ENABLE, SDL_MOUSEEVENTMASK);
-	SDL_EventState(SDL_ENABLE, SDL_KEYDOWNMASK);
-	SDL_EventState(SDL_ENABLE, SDL_QUITMASK);
-
-	SDL_EnableUNICODE(1);
+	SDL_SetEventFilter(FilterEvents, NULL);
 
 	return AUI_ERRCODE_OK;
 }

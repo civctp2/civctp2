@@ -25,7 +25,7 @@
 //
 // Modifications from the original Activision code:
 //
-// - c3files_fopen can now ignore scenario paths. (9-Apr-2007 Martin Gühmann)
+// - c3files_fopen can now ignore scenario paths. (9-Apr-2007 Martin Gï¿½hmann)
 //
 //----------------------------------------------------------------------------
 
@@ -84,8 +84,6 @@ enum C3SAVEDIR {
 
 // WIN32_FIND_DATA is native type
 typedef MBCHAR      DriveIdType;
-// TODO: remove when all references have been removed
-#define c3files_GetCTPCDDriveLetter     c3files_GetCtpCdId
 
 #else
 
@@ -153,22 +151,11 @@ bool		c3files_getfilelist_ex(C3SAVEDIR dirID, MBCHAR *ext, PointerList<WIN32_FIN
  */
 const MBCHAR *c3files_GetCTPHomeDir();
 
-/** Returns the system-dependent mount point of the CD drive number cdIndex,
- * i.e. the path to the root directory of the cd.
- *
- * If cdIndex is negative or greater than the number of cd drives available,
- * NULL is returned.
- * If the cd drive has no cd mounted, NULL is returned.
- *
- * @param buf Buffer for mount point retrieval
- * @param size Size of that buffer
- * @param cdIndex Index # of CD
- * @returns CD Mount
- */
-const MBCHAR *c3files_GetCDDriveMount(MBCHAR *buf, size_t size, DriveIdType cdIndex);
-DriveIdType c3files_GetCtpCdId(void);
-bool		c3files_HasCD(void);
+#if !defined(USE_SDL)
 bool		c3files_HasLegalCD(void);
+bool		c3files_HasCD(void);
+DriveIdType c3files_GetCtpCdId(void);
 void		c3files_InitializeCD(void);
+#endif
 
 #endif

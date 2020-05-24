@@ -39,9 +39,9 @@
 // - Keep the user's leader name when the data is consistent.
 // - Skip begin turn handling when loading from a file.
 // - Fixed a repetitive memory leak in the Great Libary caused by
-//   scenario loading, by Martin G?hmann.
+//   scenario loading, by Martin Gühmann.
 // - Removed some redundant code, because it is already done
-//   somewhere else, by Martin G?hmann.
+//   somewhere else, by Martin Gühmann.
 //
 //----------------------------------------------------------------------------
 //
@@ -65,32 +65,32 @@
 // - Used the new ColorSet option to select civilisation colors.
 // - Memory leak repaired: clean up the turn counter override information.
 // - Hot seat handling improved.
-// - Static member of StatusBar is now deleted correctly, by Martin G?hmann.
+// - Static member of StatusBar is now deleted correctly, by Martin Gühmann.
 // - Cleaned up music screen.
 // - The civilisation index from the profile is now reset if it is too high.
-//   This prevents the game from crashing. - April 12th 2005 Martin G?hmann
+//   This prevents the game from crashing. - April 12th 2005 Martin Gühmann
 // - Added crash prevention during game loading.
 // - Added another civilisation index check.
 // - Option added to include multiple data directories.
 // - Added Slic segment cleanup.
-// - Replaced old civilisation database by new one. (Aug 22nd 2005 Martin G?hmann)
-// - Made progress bar more fluently. (Aug 22nd 2005 Martin G?hmann)
-// - Removed the old endgame and installation databases. (Aug 29th 2005 Martin G?hmann)
+// - Replaced old civilisation database by new one. (Aug 22nd 2005 Martin Gühmann)
+// - Made progress bar more fluently. (Aug 22nd 2005 Martin Gühmann)
+// - Removed the old endgame and installation databases. (Aug 29th 2005 Martin Gühmann)
 // - Removed old sprite state databases, removed olf good's icon
-//   database (unused), replaced old risk database by new one. (Aug 29th 2005 Martin G?hmann)
-// - The right color set is now selected afterwards the ProfileDB is available. (Aug 29th 2005 Martin G?hmann)
-// - Added cleanup of gaia controller and info window. (Sep 13th 2005 Martin G?hmann)
-// - Added ArmyData and Network cleanup. (Sep 25th 2005 Martin G?hmann)
-// - Added graphicsresscreen_Cleanup. (Sep 25th 2005 Martin G?hmann)
-// - Replaced old difficulty database by new one. (April 29th 2006 Martin G?hmann)
-// - Replaced old pollution database by new one. (July 15th 2006 Martin G?hmann)
-// - Replaced old global warming database by new one. (July 15th 2006 Martin G?hmann)
-// - Added new map icon database. (3-Mar-2007 Martin G?hmann)
-// - Replaced old map database by new one. (27-Mar-2007 Martin G?hmann)
-// - Replaced old concept database by new one. (31-Mar-2007 Martin G?hmann)
-// - Replaced old const database by new one. (5-Aug-2007 Martin G?hmann)
-// - Fixed PBEM BeginTurn event execution. (27-Oct-2007 Martin G?hmann)
-// - Games can now be saved if the visible player is a robot. (30-Jan-2008 Martin G?hmann)
+//   database (unused), replaced old risk database by new one. (Aug 29th 2005 Martin Gühmann)
+// - The right color set is now selected afterwards the ProfileDB is available. (Aug 29th 2005 Martin Gühmann)
+// - Added cleanup of gaia controller and info window. (Sep 13th 2005 Martin Gühmann)
+// - Added ArmyData and Network cleanup. (Sep 25th 2005 Martin Gühmann)
+// - Added graphicsresscreen_Cleanup. (Sep 25th 2005 Martin Gühmann)
+// - Replaced old difficulty database by new one. (April 29th 2006 Martin Gühmann)
+// - Replaced old pollution database by new one. (July 15th 2006 Martin Gühmann)
+// - Replaced old global warming database by new one. (July 15th 2006 Martin Gühmann)
+// - Added new map icon database. (3-Mar-2007 Martin Gühmann)
+// - Replaced old map database by new one. (27-Mar-2007 Martin Gühmann)
+// - Replaced old concept database by new one. (31-Mar-2007 Martin Gühmann)
+// - Replaced old const database by new one. (5-Aug-2007 Martin Gühmann)
+// - Fixed PBEM BeginTurn event execution. (27-Oct-2007 Martin Gühmann)
+// - Games can now be saved if the visible player is a robot. (30-Jan-2008 Martin Gühmann)
 //
 //----------------------------------------------------------------------------
 
@@ -1250,7 +1250,7 @@ sint32 CivApp::InitializeApp(HINSTANCE hInstance, int iCmdShow)
 	CoInitialize(NULL);
 #endif
 #ifdef __AUI_USE_SDL__
-        Uint32 flags = (SDL_INIT_EVERYTHING | SDL_INIT_EVENTTHREAD) & ~SDL_INIT_AUDIO; //why no audio?
+        Uint32 flags = (SDL_INIT_EVERYTHING | SDL_INIT_EVENTS) & ~SDL_INIT_AUDIO; //why no audio?
 #if defined(_DEBUG) || defined(DEBUG)
         flags |= SDL_INIT_NOPARACHUTE;
 #endif// _DEBUG || DEBUG
@@ -1274,8 +1274,10 @@ sint32 CivApp::InitializeApp(HINSTANCE hInstance, int iCmdShow)
 	g_logCrashes = g_theProfileDB->GetEnableLogs();
 
 	InitDataIncludePath();
+#if !defined(USE_SDL)
 	c3files_InitializeCD();
 	g_civPaths->InitCDPath();
+#endif // USE_SDL
 	GreatLibrary::Initialize_Great_Library_Data();
 
 	display_Initialize(hInstance, iCmdShow);
@@ -1636,7 +1638,7 @@ sint32 CivApp::InitializeGameUI(void)
 	return 0;
 }
 
-sint32 CivApp::InitializeGame(CivArchive &archive)
+sint32 CivApp::InitializeGame(CivArchive *archive)
 {
 	ProgressWindow::BeginProgress(
 		g_theProgressWindow,
@@ -1721,9 +1723,9 @@ sint32 CivApp::InitializeGame(CivArchive &archive)
 
 	g_theProgressWindow->StartCountingTo( 610 );
 
-	if(g_isScenario && (&archive != NULL &&
+	if(g_isScenario && archive &&
 	   (g_startInfoType != STARTINFOTYPE_NONE ||
-		g_saveFileVersion < gamefile_CurrentVersion()))) {
+		g_saveFileVersion < gamefile_CurrentVersion())) {
 
 		for(sint32 i = 0; i < k_MAX_PLAYERS; i++) {
 			if(g_player[i]) {
@@ -1784,7 +1786,7 @@ sint32 CivApp::InitializeGame(CivArchive &archive)
 	GraphicsOptions::Initialize();
 
 	SPLASH_STRING("Initializing Tile Engine...");
-	tile_Initialize(&archive != NULL);
+	tile_Initialize(archive != NULL);
 
 	g_theProgressWindow->StartCountingTo( 660 );
 
@@ -1814,7 +1816,7 @@ sint32 CivApp::InitializeGame(CivArchive &archive)
 
 	if(!g_network.IsActive() && !g_network.IsNetworkLaunch())
 	{
-		if ((&archive == NULL) ||										// launch button
+		if ((archive == NULL) ||										// launch button
 			((g_startInfoType != STARTINFOTYPE_NONE) && g_isScenario)	// scenario start
 		   )
 		{
@@ -1829,7 +1831,7 @@ sint32 CivApp::InitializeGame(CivArchive &archive)
 	g_theProgressWindow->StartCountingTo( 720 );
 
 	if(!g_network.IsActive()) {
-		if (NULL == &archive ||
+		if (NULL == archive ||
 			(g_saveFileVersion >= 42 &&
 			(g_isScenario && g_startInfoType != STARTINFOTYPE_NOLOCS)))
 		{
@@ -1844,7 +1846,7 @@ sint32 CivApp::InitializeGame(CivArchive &archive)
 
 	g_theProgressWindow->StartCountingTo( 740 );
 
-	if(g_turn->IsEmail() && NULL != &archive) {
+	if(g_turn->IsEmail() && archive) {
 		g_selected_item->KeyboardSelectFirstUnit();
 		if(g_selected_item->GetState() != SELECT_TYPE_LOCAL_ARMY &&
 		   (g_player[g_selected_item->GetVisiblePlayer()]->m_all_cities->Num() > 0)) {
@@ -1867,14 +1869,14 @@ sint32 CivApp::InitializeGame(CivArchive &archive)
 
 	g_theProgressWindow->StartCountingTo( 760 );
 
-	if ((&archive) && g_turn->IsHotSeat())
+	if (archive && g_turn->IsHotSeat())
 	{
 		// Indicate the resuming player when loading a saved hotseat game
 		g_turn->SendNextPlayerMessage();
 	}
 	else if (g_selected_item)
 	{
-		if (!&archive)
+		if (!archive)
 		{
 			g_selected_item->Refresh();
 		}
@@ -2009,7 +2011,7 @@ sint32 InitializeSpriteEditorUI(void)
 	return 0;
 }
 
-sint32 CivApp::InitializeSpriteEditor(CivArchive &archive)
+sint32 CivApp::InitializeSpriteEditor(CivArchive *archive)
 {
 	ProgressWindow::BeginProgress(
 		g_theProgressWindow,
@@ -2063,7 +2065,7 @@ sint32 CivApp::InitializeSpriteEditor(CivArchive &archive)
 
 	g_theProgressWindow->StartCountingTo( 720 );
 
-	if (    (&archive != NULL)
+	if (archive
 	     && (g_startInfoType != STARTINFOTYPE_NONE ||
 	         g_saveFileVersion < gamefile_CurrentVersion()
 	        )
@@ -2088,7 +2090,7 @@ sint32 CivApp::InitializeSpriteEditor(CivArchive &archive)
 	g_theProgressWindow->StartCountingTo( 750 );
 
 	SPLASH_STRING("Initializing Tile Engine...");
-	tile_Initialize(&archive != NULL);
+	tile_Initialize(archive != NULL);
 
 	g_theProgressWindow->StartCountingTo( 760 );
 
@@ -2109,7 +2111,7 @@ sint32 CivApp::InitializeSpriteEditor(CivArchive &archive)
 	g_turn->BeginNewTurn(FALSE);
 
 	if(!g_network.IsActive()) {
-		if (NULL == &archive ||
+		if (NULL == archive ||
 			(g_saveFileVersion >= 42 &&
 			(g_isScenario && g_startInfoType != STARTINFOTYPE_NOLOCS))) {
 
@@ -2124,7 +2126,7 @@ sint32 CivApp::InitializeSpriteEditor(CivArchive &archive)
 
 	g_theProgressWindow->StartCountingTo( 800 );
 
-	if(g_turn->IsEmail() && NULL != &archive) {
+	if(g_turn->IsEmail() && archive) {
 		g_selected_item->KeyboardSelectFirstUnit();
 		if(g_selected_item->GetState() != SELECT_TYPE_LOCAL_ARMY &&
 		   (g_player[g_selected_item->GetVisiblePlayer()]->m_all_cities->Num() > 0)) {
@@ -2365,8 +2367,7 @@ sint32 CivApp::ProcessUI(const uint32 target_milliseconds, uint32 &used_millisec
 #ifdef __AUI_USE_SDL__
 					// Because of the way keyboard events are handled in SDL, we
 					// need to escape this loop if there are any SDL_KeyEvents pending
-					if (SDL_PeepEvents(NULL, 1, SDL_PEEKEVENT,
-							SDL_EVENTMASK(SDL_KEYUP) | SDL_EVENTMASK(SDL_KEYDOWN))) {
+					if (SDL_PeepEvents(NULL, 1, SDL_PEEKEVENT, SDL_KEYDOWN, SDL_KEYUP)) {
 						break;
 					}
 #endif
@@ -2586,12 +2587,12 @@ sint32 CivApp::Process(void)
 
 sint32 CivApp::StartGame(void)
 {
-	return InitializeGame((*(CivArchive *)(NULL)));
+	return InitializeGame(NULL);
 }
 
 sint32 CivApp::StartSpriteEditor(void)
 {
-	return InitializeSpriteEditor((*(CivArchive *)(NULL)));
+	return InitializeSpriteEditor(NULL);
 }
 
 sint32 CivApp::EndGame(void)

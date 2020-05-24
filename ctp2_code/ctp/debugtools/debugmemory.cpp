@@ -435,8 +435,8 @@ const unsigned char FILL_BYTE_FREE    = 0x67;
 const unsigned char FILL_BYTE_MARKER  = 0x68;
 const unsigned char FILL_BYTE_REALLOC = 0x69;
 
-const unsigned char DATA_GUARD_SIZE   = 4;
-const unsigned char HEADER_GUARD_SIZE = 4;
+const unsigned char DATA_GUARD_SIZE   = 8;
+const unsigned char HEADER_GUARD_SIZE = 8;
 
 const int CALL_STACK_SIZE = 60;
 

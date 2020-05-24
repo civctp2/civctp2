@@ -16,12 +16,12 @@
 #endif
 #include <unistd.h>
 #include <ctype.h>
-#include <SDL/SDL_timer.h>
+#include <SDL2/SDL_timer.h>
 
 #include "windows.h"
 
-#ifdef USE_GTK
-#include <gtk/gtk.h>
+#ifdef USE_SDL
+  #include "SDL2/SDL.h"
 #endif
 
 // @ToDo: _fullpath is the version of ptitSeb's branch, check whether there
@@ -141,89 +141,121 @@ uint32 GetTickCount()
 	return SDL_GetTicks();
 }
 
-namespace {
-	int mbRetVal = 0;
-}
-
 sint32 MessageBox(HWND parent, const CHAR* msg, const CHAR* title, sint32 flags)
 {
 	fprintf(stderr, "Messagebox(%s): %s\n", (title ? title : "null"), (msg ? msg : "null"));
-#ifdef USE_GTK
-	GtkWidget *dialog = gtk_message_dialog_new
-	                     (
-	                      NULL,
-	                      GTK_DIALOG_DESTROY_WITH_PARENT,
-	                      GTK_MESSAGE_ERROR,
-	                      GTK_BUTTONS_NONE,
-	                      msg
-	                     );
-	gtk_window_set_title(GTK_WINDOW(dialog), title);
-	
-	if (flags & MB_OK)
-	{
-		gtk_dialog_add_buttons(GTK_DIALOG(dialog),
-							   GTK_STOCK_OK, IDOK,
-							   NULL);
-	}
-	else if(flags & MB_OKCANCEL)
-	{
-		gtk_dialog_add_buttons(GTK_DIALOG(dialog),
-							   GTK_STOCK_OK, IDOK,
-							   GTK_STOCK_CANCEL, IDCANCEL,
-							   NULL);
-	}
-	else if(flags & MB_ABORTRETRYIGNORE)
-	{
-		gtk_dialog_add_buttons(GTK_DIALOG(dialog),
-							   "_Abort", IDABORT,
-							   "_Retry", IDRETRY,
-							   "_Ignore", IDIGNORE,
-							   NULL);
-	}
-	else if(flags & MB_YESNOCANCEL)
-	{
-		gtk_dialog_add_buttons(GTK_DIALOG(dialog),
-							   GTK_STOCK_YES, IDYES,
-							   GTK_STOCK_NO, IDNO,
-							   GTK_STOCK_CANCEL, IDCANCEL,
-							   NULL);
-	}
-	else if(flags & MB_YESNO)
-	{
-		gtk_dialog_add_buttons(GTK_DIALOG(dialog),
-							   GTK_STOCK_YES, IDYES,
-							   GTK_STOCK_NO, IDNO,
-							   NULL);
-	}
-	else if(flags & MB_RETRYCANCEL)
-	{
-		gtk_dialog_add_buttons(GTK_DIALOG(dialog),
-							   "_Retry", IDRETRY,
-							   GTK_STOCK_CANCEL, IDCANCEL,
-							   NULL);
-	}
-	else if(flags & MB_CANCELTRYCONTINUE)
-	{
-		gtk_dialog_add_buttons(GTK_DIALOG(dialog),
-							   GTK_STOCK_CANCEL, IDCANCEL,
-							   "_Try", IDTRYAGAIN,
-							   "_Continue", IDCONTINUE,
-							   NULL);
-	}
-	else
-	{
-		gtk_dialog_add_buttons(GTK_DIALOG(dialog),
-							   GTK_STOCK_OK, IDOK,
-							   NULL);
+#ifdef USE_SDL
+	SDL_MessageBoxData data;
+
+	const SDL_MessageBoxColorScheme colorScheme = {
+		{
+			// background
+			{ 0xDE, 0xD2, 0xB4 },
+			// text
+			{ 0x32, 0x31, 0x32 },
+			// button border
+			{ 0x02, 0x02, 0x02 },
+			// button background
+			{ 0xE6, 0xDa, 0xC5 },
+			// button text
+			{ 0x02, 0x02, 0x02 }
+		}
+	};
+
+	const int MAXIMUM_NUMBER_OF_BUTTONS = 3;
+	SDL_MessageBoxButtonData buttonData[MAXIMUM_NUMBER_OF_BUTTONS];
+	memset(buttonData, 0, sizeof(SDL_MessageBoxButtonData)*MAXIMUM_NUMBER_OF_BUTTONS);
+	// filter button
+	switch (flags & 7) {
+		case MB_OK:
+		case MB_OKCANCEL:
+			data.numbuttons = 1;
+			buttonData[0].flags = SDL_MESSAGEBOX_BUTTON_RETURNKEY_DEFAULT;
+			buttonData[0].buttonid = IDOK;
+			buttonData[0].text = "OK";
+			if (flags == MB_OKCANCEL) {
+				data.numbuttons = 2;
+				buttonData[1].flags = SDL_MESSAGEBOX_BUTTON_ESCAPEKEY_DEFAULT;
+				buttonData[1].buttonid = IDCANCEL;
+				buttonData[1].text = "Cancel";
+			}
+			break;
+
+		case MB_ABORTRETRYIGNORE:
+			data.numbuttons = 3;
+			buttonData[0].flags = SDL_MESSAGEBOX_BUTTON_RETURNKEY_DEFAULT;
+			buttonData[0].buttonid = IDABORT;
+			buttonData[0].text = "Abort";
+			buttonData[1].flags = 0;
+			buttonData[1].buttonid = IDRETRY;
+			buttonData[1].text = "Retry";
+			buttonData[2].flags = SDL_MESSAGEBOX_BUTTON_ESCAPEKEY_DEFAULT;
+			buttonData[2].buttonid = IDIGNORE;
+			buttonData[2].text = "Ignore";
+			break;
+
+		case MB_YESNO:
+		case MB_YESNOCANCEL:
+			data.numbuttons = 2;
+			buttonData[0].flags = SDL_MESSAGEBOX_BUTTON_RETURNKEY_DEFAULT;
+			buttonData[0].buttonid = IDYES;
+			buttonData[0].text = "Yes";
+			buttonData[1].flags = SDL_MESSAGEBOX_BUTTON_ESCAPEKEY_DEFAULT;
+			buttonData[1].buttonid = IDNO;
+			buttonData[1].text = "No";
+			if (flags == MB_YESNOCANCEL) {
+				data.numbuttons = 3;
+				buttonData[1].flags = 0;
+				buttonData[2].flags = SDL_MESSAGEBOX_BUTTON_ESCAPEKEY_DEFAULT;
+				buttonData[2].buttonid = IDCANCEL;
+				buttonData[2].text = "Cancel";
+			}
+			break;
+
+		case MB_RETRYCANCEL:
+			data.numbuttons = 2;
+			buttonData[0].flags = SDL_MESSAGEBOX_BUTTON_RETURNKEY_DEFAULT;
+			buttonData[0].buttonid = IDRETRY;
+			buttonData[0].text = "Retry";
+			buttonData[1].flags = SDL_MESSAGEBOX_BUTTON_ESCAPEKEY_DEFAULT;
+			buttonData[1].buttonid = IDCANCEL;
+			buttonData[1].text = "Cancel";
+			break;
+
+		case MB_CANCELTRYCONTINUE:
+			data.numbuttons = 3;
+			buttonData[0].flags = SDL_MESSAGEBOX_BUTTON_RETURNKEY_DEFAULT;
+			buttonData[0].buttonid = IDCONTINUE;
+			buttonData[0].text = "Continue";
+			buttonData[1].flags = 0;
+			buttonData[1].buttonid = IDTRYAGAIN;
+			buttonData[1].text = "Try";
+			buttonData[2].flags = SDL_MESSAGEBOX_BUTTON_ESCAPEKEY_DEFAULT;
+			buttonData[2].buttonid = IDCANCEL;
+			buttonData[2].text = "Cancel";
+			break;
+
+		default:
+			data.numbuttons = 1;
+			buttonData[0].flags = SDL_MESSAGEBOX_BUTTON_RETURNKEY_DEFAULT;
+			buttonData[0].buttonid = IDOK;
+			buttonData[0].text = "OK";
+			break;
 	}
 
-	sint32 result = gtk_dialog_run(GTK_DIALOG(dialog));
-	gtk_widget_destroy(dialog);
-	
-	while(g_main_iteration(FALSE)) 
-		gtk_main_quit();
+	data.buttons = buttonData;
+	data.flags = SDL_MESSAGEBOX_ERROR;
+	data.title = title ? title : "null";
+	data.message = msg;
+	data.colorScheme = &colorScheme;
+	data.window = NULL;
 
-	return result;
+	int selectedButton = IDFAIL;
+	SDL_ShowMessageBox(&data, &selectedButton);
+	if (selectedButton == -1) {
+		selectedButton = buttonData[0].buttonid;
+	}
+	return selectedButton;
 #else
 	return IDFAIL;
 #endif

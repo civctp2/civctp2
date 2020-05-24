@@ -43,7 +43,7 @@
 #include "prjfile.h"
 
 #if defined(USE_SDL)
-#include <SDL_rwops.h>
+#include <SDL2/SDL_rwops.h>
 #endif
 
 extern ProjectFile  *g_SoundPF;

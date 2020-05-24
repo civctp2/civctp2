@@ -84,7 +84,9 @@ void CivPaths_CleanupCivPaths()
 CivPaths::CivPaths(AUI_ERRCODE &errcode)
 :
     m_hdPath                (new MBCHAR[_MAX_PATH]),
+#if !defined(USE_SDL)
     m_cdPath                (new MBCHAR[_MAX_PATH]),
+#endif
     m_defaultPath           (new MBCHAR[_MAX_PATH]),
     m_localizedPath         (new MBCHAR[_MAX_PATH]),
     m_dataPath              (new MBCHAR[_MAX_PATH]),
@@ -132,7 +134,12 @@ CivPaths::CivPaths(AUI_ERRCODE &errcode)
 	}
 
 	fscanf(fin, "%s", m_hdPath);
+#if defined(USE_SDL)
+	MBCHAR dummy[_MAX_PATH];
+	fscanf(fin, "%s", dummy);
+#else // USE_SDL
 	fscanf(fin, "%s", m_cdPath);
+#endif // USE_SDL
 	fscanf(fin, "%s", m_defaultPath);
 	fscanf(fin, "%s", m_localizedPath);
 	fscanf(fin, "%s", m_dataPath);
@@ -146,7 +153,9 @@ CivPaths::CivPaths(AUI_ERRCODE &errcode)
 	fscanf(fin, "%s", m_saveClipsPath);
 
 	ReplaceFileSeperator(m_hdPath);
+#if !defined(USE_SDL)
 	ReplaceFileSeperator(m_cdPath);
+#endif // USE_SDL
 	ReplaceFileSeperator(m_defaultPath);
 	ReplaceFileSeperator(m_localizedPath);
 	ReplaceFileSeperator(m_dataPath);
@@ -189,7 +198,9 @@ CivPaths::~CivPaths()
 	delete [] m_curScenarioPath;
 	delete [] m_curScenarioPackPath;
 	delete [] m_hdPath;
+#if !defined(USE_SDL)
 	delete [] m_cdPath;
+#endif // USE_SDL
 	delete [] m_defaultPath;
 	delete [] m_localizedPath;
 	delete [] m_dataPath;
@@ -228,6 +239,7 @@ void CivPaths::CreateSaveFolders(const MBCHAR *path)
 	c3files_CreateDirectory(subFolderPath);
 }
 
+#if !defined(USE_SDL)
 void CivPaths::InitCDPath(void)
 {
 	MBCHAR tempPath[_MAX_PATH] = {0};
@@ -236,27 +248,10 @@ void CivPaths::InitCDPath(void)
 	if(ctpcd < 0)
 		return;
 
-#if defined(LINUX)
-	const MBCHAR *mount = c3files_GetCDDriveMount(tempPath, _MAX_PATH, ctpcd);
-	if(NULL == mount)
-		return;
-
-	if(!m_cdPath[0])
-	{
-		strcpy(tempPath, m_cdPath);
-		return;
-	}
-
-	if(FILE_SEPC == m_cdPath[0])
-		return;
-
-	strcat(tempPath, FILE_SEP);
-	strcat(tempPath, m_cdPath);
-#else // WIN32
 	sprintf(tempPath, "%c:%s%s", ctpcd, FILE_SEP, m_cdPath);
-#endif
 	strcpy(m_cdPath, tempPath);
 }
+#endif // USE_SDL
 
 MBCHAR *CivPaths::MakeSavePath(MBCHAR *fullPath, MBCHAR *s1, MBCHAR *s2, MBCHAR *s3)
 {
@@ -500,6 +495,7 @@ MBCHAR *CivPaths::FindFile(C3DIR dir, const MBCHAR *filename, MBCHAR *path,
 		return path;
 	}
 
+#if !defined(USE_SDL)
 	// The CD will only have the original content
 	if (checkLocalizedPath && MakeAssetPath(fullPath, m_cdPath, m_dataPath, m_localizedPath, m_assetPaths[dir], filename))
 	{
@@ -512,6 +508,7 @@ MBCHAR *CivPaths::FindFile(C3DIR dir, const MBCHAR *filename, MBCHAR *path,
 		strcpy(path, fullPath);
 		return path;
 	}
+#endif // !USE_SDL
 
 	if (check_prjfile &&
 	    ((dir == C3DIR_PATTERNS) ||
@@ -633,6 +630,7 @@ bool CivPaths::FindPath(C3DIR dir, int num, MBCHAR * path)
 					sprintf(tempPath, "%s%s%s%s%s%s%s", m_hdPath, FILE_SEP,
 					        m_dataPath, FILE_SEP, m_defaultPath, FILE_SEP, m_assetPaths[dir]);
 					break;
+#if !defined(USE_SDL)
 				case 6:
 					if (m_cdPath && m_cdPath[0])
 					{
@@ -647,7 +645,7 @@ bool CivPaths::FindPath(C3DIR dir, int num, MBCHAR * path)
 						    m_dataPath, FILE_SEP, m_defaultPath, FILE_SEP, m_assetPaths[dir]);
 					}
 					break;
-
+#endif // USE_SDL
 				default:
 					return false;
 				} // switch

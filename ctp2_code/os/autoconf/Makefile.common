@@ -6,14 +6,12 @@ CTP2_LDFLAGS = \
 	$(DIRECTX_LDFLAGS) \
 	$(DXMEDIA_LDFLAGS) \
 	$(SDL_LDFLAGS) \
-	-ltiff -lz -lSDL -lSDL_image -lSDL_mixer $(SDL_FFMPEG_LDFLAGS) -ldl -lpthread \
+	-ltiff -lz -lSDL2 -lSDL2_image -lSDL2_mixer $(SDL_FFMPEG_LDFLAGS) -ldl -lpthread \
 	$(X_PRE_LIBS) \
-	$(X_LIBS) -lX11 \
-	$(GTK_LIBS) -ldl
+	$(X_LIBS) -lX11 -ldl
 
 CTP2_CFLAGS=\
 	$(SDL_CFLAGS) \
-	$(GTK_CFLAGS) \
 	$(X_CFLAGS)
 
 CTP2_CXXFLAGS=\

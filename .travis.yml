@@ -1,16 +1,19 @@
 language: cpp
 sudo: true
-dist: trusty
+dist: bionic
 addons:
   apt:
     sources:
     - ubuntu-toolchain-r-test
     packages:
-    - libsdl1.2-dev
-    - libsdl-mixer1.2-dev
-    - libsdl-image1.2-dev
+    - libsdl2-dev
+    - libsdl2-mixer-dev
+    - libsdl2-image-dev
+    - libtiff-dev
+    - libavcodec-dev
+    - libavformat-dev
+    - libswscale-dev
     - byacc
-    - gtk+-2.0-dev
     - gcc-5
     - g++-5
 

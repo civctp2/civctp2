@@ -43,8 +43,9 @@
 class CivPaths {
 private:
 	MBCHAR *m_hdPath;
+#if !defined(USE_SDL)
 	MBCHAR *m_cdPath;
-
+#endif // USE_SDL
 	MBCHAR *m_defaultPath;
 	MBCHAR *m_localizedPath;
 
@@ -76,7 +77,9 @@ public:
 
 	void CreateSaveFolders(const MBCHAR *path);
 
+#if !defined(USE_SDL)
 	void InitCDPath(void);
+#endif
 
 	MBCHAR *GetSavePath(C3SAVEDIR dir, MBCHAR *path);
 

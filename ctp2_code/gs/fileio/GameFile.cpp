@@ -845,7 +845,7 @@ uint32 GameFile::Restore(const MBCHAR *filepath)
 
 	g_theProgressWindow->StartCountingTo( 1080 );
 
-	g_civApp->InitializeGame(archive);
+	g_civApp->InitializeGame(&archive);
 
 	g_theProgressWindow->StartCountingTo( 1090 );
 

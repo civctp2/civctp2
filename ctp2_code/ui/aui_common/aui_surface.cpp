@@ -25,7 +25,7 @@
 // Modifications from the original Activision code:
 //
 // - Corrected a reported memory leak.
-// - Added back buffering capability. (1-Jan-2010 Martin G�hmann)
+// - Added back buffering capability. (1-Jan-2010 Martin Gühmann)
 //
 //----------------------------------------------------------------------------
 
@@ -109,6 +109,21 @@ aui_Surface::aui_Surface(
 	}
 }
 
+AUI_SURFACE_PIXELFORMAT aui_Surface::TransformBppToSurfacePixelFormat(int bpp)
+{
+	switch (bpp) {
+		case 8:
+			return AUI_SURFACE_PIXELFORMAT_332;
+		case 16:
+			return g_is565Format ? AUI_SURFACE_PIXELFORMAT_565 : AUI_SURFACE_PIXELFORMAT_555;
+		case 24:
+		case 32:
+			return AUI_SURFACE_PIXELFORMAT_888;
+		default:
+			return AUI_SURFACE_PIXELFORMAT_UNKNOWN;
+	}
+}
+
 AUI_ERRCODE aui_Surface::InitCommon( sint32 width, sint32 height, sint32 bpp, BOOL isPrimary )
 {
 	m_pixelFormat = AUI_SURFACE_PIXELFORMAT_UNKNOWN,
@@ -144,9 +159,6 @@ AUI_ERRCODE aui_Surface::InitCommon( sint32 width, sint32 height, sint32 bpp, BO
 		InitializeCriticalSection(&m_cs);
 #endif
 	}
-
-
-
 
 	if ( bpp == 16 )
 		if (g_is565Format) {

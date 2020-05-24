@@ -79,6 +79,7 @@ public:
 	void SetWidth(sint32 width) { m_width = width; }
 	void SetHeight(sint32 height) { m_height = height; }
 
+	aui_MovieManager* CreateMovieManager( void );
 protected:
 	LPDIRECTDRAWSURFACE m_lpdds;
 	LPDIRECTDRAWSURFACE m_back;

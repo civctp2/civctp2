@@ -2,10 +2,6 @@
 #define __AUI_MUSIC_H__
 
 #include "aui_base.h"
-#ifdef USE_SDL
-#include <SDL.h>
-#include <SDL_cdrom.h>
-#endif
 
 enum AUI_MUSIC_CODE
 {
@@ -70,6 +66,8 @@ protected:
 
 };
 
+#if !defined(USE_SDL)
+
 class aui_Redbook : public aui_Music
 {
 public:
@@ -95,16 +93,14 @@ protected:
 
 protected:
 
-#ifdef __AUI_USE_DIRECTX__
 	sint32 m_cd_device_id;
-#elif defined(__AUI_USE_SDL__)
-	SDL_CD*m_cd_device_id;
-#endif
 	int    m_cd_drive_num;
 	sint32 m_cd_drive_index;
 	BOOL   m_cd_ok;
 	sint32 m_aux_cdrom_id;
 
 };
+
+#endif // USE_SDL
 
 #endif

@@ -30,6 +30,8 @@ protected:
         AUI_ERRCODE InitCommon( void );
 
 public:
+    static uint32 TransformSurfacePixelFormatToSDL(const AUI_SURFACE_PIXELFORMAT pixelFormat);
+
 	virtual BOOL IsThisA( uint32 classId ) {
             return ((classId == m_SDLSurfaceClassId)
                     || aui_Surface::IsThisA( classId )
@@ -54,8 +56,12 @@ public:
 
 	SDL_mutex* m_bltMutex;
 
+	SDL_Surface* GetSDLSurface() { return m_lpdds; }
 protected:
 	SDL_Surface* m_lpdds;
+
+private:
+    SDL_Surface* CreateSDLSurface(const int width, const int height, const int bpp);
 };
 
 typedef aui_SDLSurface aui_NativeSurface;

@@ -76,11 +76,16 @@ public:
 	Display *getDisplay();
 #endif
 
+	aui_MovieManager* CreateMovieManager( void );
 protected:
+	virtual AUI_ERRCODE SDLDrawScreen( void );
+
 #if defined(HAVE_X11)
 	Display *           m_X11Display;
 #endif
-	SDL_Surface        *m_lpdds;
+	SDL_Window *m_SDLWindow;
+	SDL_Renderer *m_SDLRenderer;
+	SDL_Texture *m_SDLTexture;
 };
 
 typedef aui_SDLUI aui_NativeUI;

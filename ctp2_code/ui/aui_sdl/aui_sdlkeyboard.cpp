@@ -3,7 +3,7 @@
 
 #if defined(__AUI_USE_SDL__)
 
-#include <SDL.h>
+#include <SDL2/SDL.h>
 #include "aui_sdlkeyboard.h"
 #include "aui_ui.h"
 #include "c3ui.h"
@@ -149,7 +149,7 @@ void aui_SDLKeyboard::convertSDLKeyboardEvent(SDL_KeyboardEvent &sdlevent,
 		(sdlevent.state & SDL_PRESSED) ? TRUE : FALSE, sdlevent.keysym.sym, (sdlevent.keysym.sym>' ' && sdlevent.keysym.sym<127)?sdlevent.keysym.sym:' ');*/
 }
 
-uint32 aui_SDLKeyboard::convertSDLKey(SDL_keysym keysym)
+uint32 aui_SDLKeyboard::convertSDLKey(SDL_Keysym keysym)
 {
 	switch (keysym.sym) {
 		case SDLK_ESCAPE:
@@ -168,11 +168,9 @@ uint32 aui_SDLKeyboard::convertSDLKey(SDL_keysym keysym)
 			return AUI_KEYBOARD_KEY_LEFTARROW;
 		case SDLK_RIGHT:
 			return AUI_KEYBOARD_KEY_RIGHTARROW;
+		default:
+			return AUI_KEYBOARD_KEY_INVALID;
 	}
-	if ((keysym.unicode & 0xFF80) == 0) {
-		return (keysym.unicode & 0x7F);
-	}
-	return AUI_KEYBOARD_KEY_INVALID;
 }
 
 AUI_ERRCODE aui_SDLKeyboard::Acquire()

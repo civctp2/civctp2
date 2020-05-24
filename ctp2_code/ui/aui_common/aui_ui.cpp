@@ -1104,26 +1104,7 @@ AUI_ERRCODE aui_UI::Draw( void )
 		ShowSelectedRegion( m_editRegion );
 	}
 #ifdef __AUI_USE_SDL__
-	// refresh screen
-	SDL_Surface * screen = SDL_GetVideoSurface();
-	/*if(m_dirtyRectInfoList->L()) {
-		ListPos position = m_dirtyRectInfoList->GetHeadPosition();
-		for ( sint32 i = m_dirtyRectInfoList->L(); i; i-- ) {
-			DirtyRectInfo *dri = m_dirtyRectInfoList->GetNext( position );
-			sint32 dX = dri->rect.left + dri->window->X();
-			sint32 dY = dri->rect.top + dri->window->Y();
-			sint32 dW = dri->rect.right - dri->rect.left;
-			sint32 dH = dri->rect.bottom - dri->rect.top;
-			if(dX<0) dX = 0; if(dX>=screen->w) dX = screen->w-1;
-			if(dY<0) dY = 0; if(dY>=screen->h) dY = screen->h-1;
-			if(dX+dW>screen->w) dW = screen->w-dX;
-			if(dY+dH>screen->h) dH = screen->h-dY;
-			if(dW>0 && dH>0) {
-				SDL_UpdateRect(screen, dX, dY, dW, dH);
-			}
-		}
-	}*/
-	SDL_Flip(screen);
+	SDLDrawScreen();
 #endif
 	errcode = m_mouse->Resume();
 	Assert( errcode == AUI_ERRCODE_OK );

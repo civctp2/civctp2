@@ -304,7 +304,12 @@ void initialplayscreen_tutorialPress(aui_Control *control, uint32 action, uint32
 {
 	if ( action != (uint32)AUI_BUTTON_ACTION_EXECUTE ) return;
 
-	if (c3files_HasLegalCD()) {
+#if defined(USE_SDL)
+	bool legalGame = true;
+#else // USE_SDL
+	bool legalGame = c3files_HasLegalCD();
+#endif // USE_SDL
+	if (legalGame) {
 		if(initialplayscreen_removeMyWindow(action)) {
 			g_theProfileDB->SetTutorialAdvice(TRUE);
 			g_civApp->PostStartGameAction();

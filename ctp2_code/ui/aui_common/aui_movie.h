@@ -56,19 +56,20 @@ public:
 class aui_Movie : public aui_Base
 {
 public:
-
+	aui_Movie( void );
 	aui_Movie(
 		AUI_ERRCODE *retval,
 		const MBCHAR * filename = NULL );
 	virtual ~aui_Movie();
 
 protected:
+	void InitCommon( void );
 	AUI_ERRCODE InitCommon( const MBCHAR * filename );
 
 public:
 
-	AUI_ERRCODE Load( void );
-	AUI_ERRCODE Unload( void );
+	virtual AUI_ERRCODE Load( void );
+	virtual AUI_ERRCODE Unload( void );
 
 	AUI_ERRCODE   SetFilename( const MBCHAR * filename );
 	const MBCHAR *GetFilename( void ) const { return m_filename; }
@@ -106,10 +107,10 @@ public:
 
 	virtual AUI_ERRCODE Process( void );
 
-	BOOL IsOpen( void ) const { return m_isOpen; }
-	BOOL IsPlaying( void ) const { return m_isPlaying; }
-	BOOL IsFinished( void ) const { return m_isFinished; }
-	BOOL IsPaused( void ) const { return m_isPaused; }
+	virtual BOOL IsOpen( void ) const { return m_isOpen; }
+	virtual BOOL IsPlaying( void ) const { return m_isPlaying; }
+	virtual BOOL IsFinished( void ) const { return m_isFinished; }
+	virtual BOOL IsPaused( void ) const { return m_isPaused; }
 
 	static WNDPROC		m_windowProc;
 	static aui_Movie	*m_onScreenMovie;

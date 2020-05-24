@@ -34,8 +34,8 @@
 //
 // - Removed non-standard include file <iostream.h>.
 // - Standardised min/max usage.
-// - Replaced old civilisation database by new one. (Aug 20th 2005 Martin Gühmann)
-// - Replaced old const database by new one. (5-Aug-2007 Martin Gühmann)
+// - Replaced old civilisation database by new one. (Aug 20th 2005 Martin GÃ¼hmann)
+// - Replaced old const database by new one. (5-Aug-2007 Martin GÃ¼hmann)
 //
 //----------------------------------------------------------------------------
 
@@ -5853,44 +5853,48 @@ void FastRoundCommand::Execute(sint32 argc, char **argv)
 
 #if __AUI_USE_SDL__
 			while (1) {
-				int n = SDL_PeepEvents(&event, 1, SDL_GETEVENT,
-						~(SDL_EVENTMASK(SDL_MOUSEMOTION) | SDL_EVENTMASK(SDL_MOUSEBUTTONDOWN) |
-							SDL_EVENTMASK(SDL_MOUSEBUTTONUP)));
+				int n = SDL_PeepEvents(&event, 1, SDL_GETEVENT, SDL_FIRSTEVENT, SDL_MOUSEMOTION - 1);
 				if (0 > n) {
-					fprintf(stderr, "[FastRoundCommand::Execute] PeepEvents failed: %s\n",
-					    SDL_GetError());
+					fprintf(stderr, "[FastRoundCommand::Execute] PeepEvents failed:\n%s\n", SDL_GetError());
 					break;
 				}
 				if (0 == n) {
-					// other events are handled in other threads
-					// or no more events
-					break;
+					n = SDL_PeepEvents(&event, 1, SDL_GETEVENT, SDL_MOUSEWHEEL + 1, SDL_LASTEVENT);
+					if (0 > n) {
+						fprintf(stderr, "[FastRoundCommand::Execute] PeepEvents failed:\n%s\n", SDL_GetError());
+						break;
+					}
+					if (0 == n) {
+						// other events are handled in other threads
+						// or no more events
+						break;
+					}
 				}
-				if (SDL_QUIT == event.type)
+				if (SDL_QUIT == event.type) {
+					gDone = TRUE;
+				}
+				if (SDL_KEYDOWN == event.type)
+				{
+					SDL_KeyboardEvent key = event.key;
+					if (SDLK_ESCAPE == key.keysym.sym)
+						i = n;
+				}
+			}
 #else
           	while (PeekMessage(&msg, gHwnd, 0, 0, PM_REMOVE) && !g_letUIProcess) {
 
-			    if (msg.message == WM_QUIT)
-#endif
+			    if (msg.message == WM_QUIT) {
 				    gDone = TRUE;
-#ifndef __AUI_USE_SDL__
+			    }
 			    TranslateMessage(&msg);
 
 				if (msg.message == WM_CHAR) {
 					if ((MBCHAR)msg.wParam == 0x1B)
 						i = n;
 				}
-
 			    DispatchMessage(&msg);
-#else
-				if (SDL_KEYDOWN == event.type)
-				{
-					SDL_KeyboardEvent key = event.key;
-					if (SDLK_ESCAPE == key.keysym.sym)
-						i = n;
-					}
-#endif
     		}
+#endif
        		g_letUIProcess = FALSE;
 
 		} while ((g_selected_item->GetCurPlayer() != g_selected_item->GetVisiblePlayer()) &&

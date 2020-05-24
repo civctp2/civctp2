@@ -13,7 +13,7 @@ struct HotseatPlayerSetup;
 #include "MapPoint.h"       // MapPoint
 
 sint32 gameinit_InitializeGameFiles(void);
-sint32 gameinit_Initialize(sint32 mWidth, sint32 mHeight, CivArchive &archive);
+sint32 gameinit_Initialize(sint32 mWidth, sint32 mHeight, CivArchive *archive);
 void   gameinit_CleanupMessages(void);
 void   gameinit_Cleanup(void);
 sint32 gameinit_ResetForNetwork();

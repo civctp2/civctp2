@@ -38,7 +38,7 @@
 
 UnitAstar * g_theUnitAstar  = NULL;
 
-void roboinit_Initalize(CivArchive &a)
+void roboinit_Initalize(CivArchive *a)
 {
 	Astar_Init();
 

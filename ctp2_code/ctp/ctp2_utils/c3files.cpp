@@ -44,8 +44,9 @@
 #include "pointerlist.h"
 #include "profileDB.h"
 #include "soundmanager.h"
+#if !defined(USE_SDL)
 #include "tracklen.h"
-
+#endif // USE_SDL
 #ifdef HAVE_STRING_H
 #include <string.h>
 #endif
@@ -81,26 +82,19 @@
 
 extern C3UI *       g_c3ui;
 
+#if !defined(USE_SDL)
+
 namespace
 {
-#ifdef _WIN32 // #ifndef USE_SDL
 	DriveIdType const   DRIVE_FIRST         = 'A';
 	DriveIdType const   DRIVE_LAST          = 'Z';
 	DriveIdType const   DRIVE_UNDETERMINED  = '\0';
 	size_t const        DRIVE_COUNT         = 1 + (DRIVE_LAST - DRIVE_FIRST);
-#else
-	DriveIdType const   DRIVE_FIRST         = 0;
-	DriveIdType         DRIVE_LAST          = -1;
-	DriveIdType const   DRIVE_UNDETERMINED  = -1;
-	size_t              DRIVE_COUNT         = 0;
-#endif
 
 	size_t const        VOLUME_NAME_SIZE    = 32;
 
 	bool                g_hasCD             = false;
-#ifdef _WIN32 // #ifndef USE_SDL
 	bool                IsCD[DRIVE_COUNT];
-#endif
 	MBCHAR              VolumeName[VOLUME_NAME_SIZE];
 	DriveIdType         WhichCD             = DRIVE_UNDETERMINED;
 
@@ -110,6 +104,8 @@ namespace
 }
 
 #define k_CTP_CD_VOLUME_NAME		"CTP2"
+
+#endif // USE_SDL
 
 FILE* c3files_fopen(C3DIR dirID, MBCHAR const * s1, MBCHAR const * s2, bool checkScenario)
 {
@@ -516,6 +512,8 @@ const MBCHAR *c3files_GetCTPHomeDir()
 		return NULL;
 }
 
+#if !defined(USE_SDL)
+
 bool c3files_HasLegalCD()
 {
 	bool success = false;
@@ -536,7 +534,6 @@ bool c3files_HasLegalCD()
 
 		if (!success)
 		{
-#if defined(WIN32)
 			int const rval = MessageBox
 			                    (g_c3ui ? g_c3ui->TheHWND() : NULL,
 			                     appstrings_GetString(APPSTR_INSERTCDROM),
@@ -550,17 +547,9 @@ bool c3files_HasLegalCD()
 
 			if (IDCANCEL == rval)
 			{
-#else
-				c3errors_ErrorDialog(appstrings_GetString(APPSTR_CDROM),
-				                     appstrings_GetString(APPSTR_NEEDCDROM)
-				                    );
-#endif
-
 				// Do not annoy the user with more messages after cancelling
 				exit(-1);
-#if defined(WIN32)
 			}
-#endif
 
 			if (g_c3ui)
 			{
@@ -579,14 +568,6 @@ bool c3files_HasLegalCD()
 
 void c3files_InitializeCD(void)
 {
-#if defined(__linux__)
-	int rc = SDL_Init(SDL_INIT_CDROM);
-	if(0 != rc)
-	{
-		fprintf(stderr, "Could not initialize CDROM:\n%s\n", SDL_GetError());
-		return;
-	}
-#endif
 	c3files_GetCDDrives();
 	(void) c3files_FindCDByName(k_CTP_CD_VOLUME_NAME);
 }
@@ -599,194 +580,6 @@ bool c3files_HasCD(void)
 DriveIdType c3files_GetCtpCdId(void)
 {
 	return WhichCD;
-}
-
-const MBCHAR *c3files_GetCDDriveMount(MBCHAR *buf, size_t size,
-                                      DriveIdType cdIndex)
-{
-	if(buf == NULL)
-		return NULL;
-
-	MBCHAR *cdDriveName = c3files_GetVolumeName(cdIndex);
-
-	if(cdDriveName == NULL)
-		return NULL;
-
-#if defined(WIN32)
-	if(strlen(cdDriveName) >= size)
-		return NULL;
-
-	strcpy(buf, cdDriveName);
-	return buf;
-#elif defined(LINUX)
-	MBCHAR tempPath[_MAX_PATH] = {0};
-	const size_t mntInfoCnt = 2;
-	// Do not change order of mntInfo
-	const MBCHAR *mntInfo[mntInfoCnt] = {_PATH_MOUNTED, _PATH_MNTTAB };
-	const size_t mntOptsCnt = 23;
-	int lerrno = errno;
-	typedef struct
-	{
-		const char *name;
-		unsigned long flag;
-		bool clear;
-	} mount_opt_t;
-	const mount_opt_t mntOpts[mntOptsCnt] = {
-		{ MNTOPT_RO,      MS_RDONLY, false },
-		{ MNTOPT_RW,      MS_RDONLY, true },
-		{ MNTOPT_NOSUID,  MS_NOSUID, false },
-		{ MNTOPT_SUID,    MS_NOSUID, true },
-		{ "nodev",        MS_NODEV, false },
-		{ "dev",          MS_NODEV, true },
-		{ "noexec",       MS_NOEXEC, false },
-		{ "exec",         MS_NOEXEC, true },
-		{ "sync",         MS_SYNCHRONOUS, false },
-		{ "async",        MS_SYNCHRONOUS, true },
-		{ "remount",      MS_REMOUNT, false },
-		{ "lock",         MS_MANDLOCK, false },
-		{ "nolock",       MS_MANDLOCK, true },
-		{ "dirsync",      MS_DIRSYNC, false },
-		{ "noatime",      MS_NOATIME, false },
-		{ "atime",        MS_NOATIME, true },
-		{ "nodiratime",   MS_NODIRATIME, false },/// \todo: check string
-		{ "bind",         MS_BIND, false },
-//		{ MS_MOVE },			// for /bin/mount
-//		{ MS_REC },
-		{ "verbose",      MS_VERBOSE, false },
-		{ "acl",          MS_POSIXACL, false },
-		{ "noacl",        MS_POSIXACL, true },
-//		{ MS_ACTIVE },
-		{ "nouser",       MS_NOUSER, false },
-		{ "user",         MS_NOUSER, true }
-	};
-
-	BOOL cdrLink = FALSE;
-	MBCHAR devlink[_MAX_PATH] = {0};
-	char *fulllink = NULL;
-	struct stat st = {0};
-
-	if(lstat(cdDriveName, &st) == -1)
-	{
-		for(sint32 i = 0; i < strlen(cdDriveName); ++i)
-		{
-			cdDriveName[i] = tolower(cdDriveName[i]);
-		}
-		
-		if(lstat(cdDriveName, &st) == -1)
-		{
-			return NULL;
-		}
-	}
-
-	if(S_ISLNK(st.st_mode))
-	{
-		int len = readlink(cdDriveName, devlink, _MAX_PATH);
-		if((len > 0) && (len < _MAX_PATH))
-		{
-
-			cdrLink = TRUE;
-			devlink[len] = '\0';
-			strcpy(tempPath, cdDriveName);
-			char *dn = dirname(tempPath);
-			if(dn)
-				strcpy(tempPath, dn);
-
-			strcat(tempPath, FILE_SEP);
-			strcat(tempPath, devlink);
-			fulllink = _fullpath(NULL, tempPath, 0);
-		}
-	}
-
-	for(size_t u = 0; u < mntInfoCnt; u++)
-	{
-		FILE *mounts = setmntent(mntInfo[u], "r");
-		
-		if(mounts)
-		{
-			struct mntent *mntent;
-			while(mntent = getmntent(mounts))
-			{
-				if((mntent->mnt_fsname == NULL) ||
-					(mntent->mnt_dir == NULL) ||
-				   (mntent->mnt_type == NULL))
-					continue;
-
-				if(strcmp(mntent->mnt_type, MNTTYPE_IGNORE) == 0)
-				if(mntent->mnt_type == MNTTYPE_IGNORE)
-					continue;
-
-				if(    strcasestr(mntent->mnt_dir, cdDriveName) != NULL
-				   ||  strcasecmp(cdDriveName, mntent->mnt_fsname) == 0
-				   || (cdrLink && (!strcasecmp(devlink, mntent->mnt_fsname)))
-				   || ((fulllink != NULL) && (!strcasecmp(fulllink, mntent->mnt_fsname)))
-				  )
-				{
-					const MBCHAR *ret = NULL;
-					// Mounted?
-					if(u == 0)
-					{
-						strncpy(buf, mntent->mnt_dir, size);
-						ret = buf;
-						// Not mounted fstab entry
-					}
-					else if(u == 1)
-					{
-						unsigned long flags = MS_MGC_VAL;
-						if(hasmntopt(mntent, "defaults"))
-						{
-							flags |= (MS_NOUSER);
-						}
-						for(size_t f = 0; f < mntOptsCnt; f++)
-						{
-							if(hasmntopt(mntent, mntOpts[f].name))
-								if(mntOpts[f].clear)
-									flags &= ~mntOpts[f].flag;
-								else
-									flags |= mntOpts[f].flag;
-						}
-						errno = 0;
-						int rc = mount(mntent->mnt_fsname,
-									   mntent->mnt_dir,
-									   mntent->mnt_type,
-									   flags, 0);
-						lerrno = errno; //preserve errno value of mount over other library calls!
-						if(0 == rc)
-						{
-							strncpy(buf, mntent->mnt_dir, size);
-							ret = buf;
-						}
-						else
-						{
-							fprintf(stderr, "%s L%d: CD mount error occured: ", __FILE__, __LINE__);
-							perror(strerror(lerrno));
-						}
-					}
-
-					endmntent(mounts);
-					if(fulllink)
-					{
-						free(fulllink);
-						fulllink = 0;
-					}
-					
-					return ret;
-				}
-			}
-			endmntent(mounts);
-		}
-	}
-	if(fulllink)
-	{
-		free(fulllink);
-		fulllink = 0;
-	}
-
-	return NULL;
-#else
-/* Seriously? A game mounting a filesystem? */
-strlcpy(buf, cdDriveName, size);
-return buf;
-#endif
 }
 
 namespace
@@ -809,7 +602,6 @@ namespace
 //----------------------------------------------------------------------------
 void c3files_GetCDDrives(void)
 {
-#if defined(WIN32) // #ifndef USE_SDL
 	MBCHAR          drivepath[4];   // letter + : + dir seperator + zero
 	strcpy(drivepath, " :" FILE_SEP);
 
@@ -827,19 +619,6 @@ void c3files_GetCDDrives(void)
 			IsCD[i]         = false;
 		}
 	}
-#else
-	int CDCnt = SDL_CDNumDrives();
-	Assert(CDCnt >= 0);
-	if (CDCnt < 0)
-	{
-		DRIVE_COUNT = 0;
-	}
-	else
-	{
-		DRIVE_COUNT = CDCnt;
-	}
-	DRIVE_LAST = DRIVE_COUNT - 1;
-#endif
 }
 
 //----------------------------------------------------------------------------
@@ -859,7 +638,6 @@ void c3files_GetCDDrives(void)
 //----------------------------------------------------------------------------
 MBCHAR * c3files_GetVolumeName(DriveIdType id)
 {
-#if defined(WIN32)
 	MBCHAR          drivepath[4];   // letter + : + dir seperator + zero
 	strcpy(drivepath, " :" FILE_SEP);
 	drivepath[0] = id;
@@ -884,69 +662,6 @@ MBCHAR * c3files_GetVolumeName(DriveIdType id)
 	}
 
 	return NULL;
-
-#elif defined(LINUX)
-	/// \todo Add code to determine beginsector of iso_primary_sector
-	/// On a German ctp2 cd, it starts on sector 16 (byte 16 << 11 = 0x8000)
-	const MBCHAR *cd_dev = SDL_CDName(id);
-	FILE *cd = fopen(cd_dev, "rb");
-	int lerrno = errno;
-	if (cd == NULL)
-	{
-		fprintf(stderr, "%s\n", strerror(lerrno));
-		return NULL;
-	}
-	
-	int rc = fseek(cd, 0x8000, SEEK_SET);
-	lerrno = errno;
-	if (rc != 0)
-	{
-		fprintf(stderr, "%s\n", strerror(lerrno));
-		fclose(cd);
-		return NULL;
-	}
-
-	struct iso_primary_descriptor ipd;
-	memset(&ipd, 0, sizeof(ipd));
-	size_t s = fread(&ipd, 1, sizeof(ipd), cd);
-	lerrno = errno;
-	if (s != sizeof(ipd))
-	{
-		fprintf(stderr, "Failed reading %d bytes: %s\n", sizeof(ipd),
-		        strerror(lerrno));
-		fclose(cd);
-		return NULL;
-	}
-	unsigned int i = 0;
-	s = std::min(sizeof(ipd.volume_id), sizeof(VolumeName));
-	assert(i < s);
-
-	while (i < s)
-	{
-		if ('\0' == ipd.volume_id[i])
-		{
-			VolumeName[i] = '\0';
-			return VolumeName;
-		}
-		if ((!isalnum(ipd.volume_id[i])) && (!isspace(ipd.volume_id[i])))
-		{
-			return NULL;
-		}
-		VolumeName[i] = ipd.volume_id[i];
-		i++;
-	}
-	i--;
-
-	// Win32 Compat: GetVolumeInformation does not return ending spaces
-	while ((i > 0) && isspace(VolumeName[i]))
-	{
-		i--;
-	}
-	if (isspace(VolumeName[i+1]))
-		VolumeName[i+1] = '\0';
-
-	return VolumeName;
-#endif
 }
 
 //----------------------------------------------------------------------------
@@ -974,10 +689,8 @@ bool c3files_FindCDByName(MBCHAR const * name)
 
 	for (DriveIdType i = DRIVE_FIRST; (i <= DRIVE_LAST) && !g_hasCD; ++i)
 	{
-#if defined(WIN32) // #ifndef USE_SDL
 		if (IsCD[static_cast<int>(i - DRIVE_FIRST)])
 		{
-#endif
 			MBCHAR const *  cdName  = c3files_GetVolumeName(i);
 
 			if (cdName)
@@ -991,12 +704,12 @@ bool c3files_FindCDByName(MBCHAR const * name)
 					g_hasCD = true;
 				}
 			}
-#if defined(WIN32) // #ifndef USE_SDL
 		}
-#endif
 	}
 
 	return g_hasCD || !g_theProfileDB->IsRequireCD();
 }
 
 } // local namespace
+
+#endif // USE_SDL

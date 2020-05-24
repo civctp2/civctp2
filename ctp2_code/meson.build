@@ -39,16 +39,12 @@ if not win32
 	tiff = dependency('libtiff-4')
 	zlib = dependency('zlib')
 
-	gtk = dependency('gtk+-3.0')
-	conf.set('USE_GTK', 1)
-
 	x11 = dependency('x11', required: false)
 	if x11.found()
 		conf.set('HAVE_X11', 1, description : 'System with X11 present')
 	endif
-	main_dependencies += [tiff, zlib, gtk, sdl, x11]
+	main_dependencies += [tiff, zlib, sdl, x11]
 	
-	main_dependencies += declare_dependency( sources : 'os/nowin32/nowin32.cpp', dependencies : gtk )
 	incdir += include_directories('os/nowin32')
 
 	conf.set_quoted('FILE_SEP', '/')

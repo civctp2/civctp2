@@ -4,8 +4,8 @@
 #include "aui_sdlsurface.h"
 
 #include "aui_sdlblitter.h"
-#include <SDL/SDL.h>
-#include <SDL/SDL_thread.h>
+#include <SDL2/SDL.h>
+#include <SDL2/SDL_thread.h>
 
 #ifndef DD_OK
 #define DD_OK 0

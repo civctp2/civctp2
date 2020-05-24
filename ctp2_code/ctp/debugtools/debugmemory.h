@@ -146,6 +146,6 @@ void DebugMemoryHeap_GuardedClose      (const char *file, int line, MemoryHeap h
 }
 #endif
 
-#endif // __DEBUGMEMORY_H
-
 #endif // _DEBUG
+
+#endif // __DEBUGMEMORY_H

@@ -9,7 +9,7 @@
 #ifdef __AUI_USE_DIRECTX__
 #include <multimon.h>
 #elif defined(__AUI_USE_SDL__)
-#include <SDL.h>
+#include <SDL2/SDL.h>
 #endif
 
 PointerList<CTPDisplayMode>	*g_displayModes = NULL;
@@ -28,8 +28,6 @@ extern sint32				g_ScreenWidth;
 extern sint32				g_ScreenHeight;
 extern BOOL					g_exclusiveMode;
 extern BOOL					g_createDirectDrawOnSecondary;
-
-extern BOOL g_SDL_flags;
 
 #include "profileDB.h"
 extern ProfileDB			*g_theProfileDB;
@@ -138,56 +136,32 @@ void display_EnumerateDisplayModes(void)
 
 	g_displayModes = new PointerList<CTPDisplayMode>;
 #else
-	SDL_PixelFormat fmt = { 0 };
-	fmt.BitsPerPixel = 16;
-	SDL_Rect **modes = SDL_ListModes(/*&fmt*/NULL, SDL_FULLSCREEN);
-
 	g_displayModes = new PointerList<CTPDisplayMode>;
 
-	if (0 == modes) {
-		return;
-	} else if ((SDL_Rect **) -1 == modes) {
-		// Fallback if SDL reports us to support anything,
-		// we'll pick 800 x 600 and 1024 x 768
-		const SDL_VideoInfo *info = SDL_GetVideoInfo();
-		if (0 == info) {
-			return;
-		}
-		if (0 == info->vfmt) {
-			return;
-		}
-		if (16 < info->vfmt->BitsPerPixel) {
-			return;
-		}
-		CTPDisplayMode *mode;
-		mode = new CTPDisplayMode;
-		if  (!mode)
-			return;
-		mode->width  = 800;
-		mode->height = 600;
-		g_displayModes->AddTail(mode);
-		mode = new CTPDisplayMode;
-		if (!mode)
-			return;
-		mode->width  = 1024;
-		mode->height = 768;
-		g_displayModes->AddTail(mode);
-	} else {
-		for (int i = 0; modes[i]; i++) {
-			// We might get modes multiple times for each bpp
-			// supported. Thus, check if we got it already.
-			if (!display_IsLegalResolution(modes[i]->w,
-										   modes[i]->h)
-										&& (modes[i]->h>=600)) {
-				CTPDisplayMode *mode = new CTPDisplayMode;
-				if (!mode)
-					return;
-				mode->width = modes[i]->w;
-				mode->height = modes[i]->h;
-				g_displayModes->AddTail(mode);
-			}
-		}
-	}
+	static const int PRIMARY_DISPLAY = 0;
+	int numberOfDisplayModes = SDL_GetNumDisplayModes(PRIMARY_DISPLAY);
+	if (numberOfDisplayModes < 1) {
+        c3errors_FatalDialog("CivApp", "Unable to find display-modes:\n%s\n", SDL_GetError());
+        return;
+    }
+
+	SDL_DisplayMode displayMode;
+	for (int i = 0; i < numberOfDisplayModes; i++) {
+        const int rc = SDL_GetDisplayMode(PRIMARY_DISPLAY, i, &displayMode);
+        if (rc < 0) {
+            c3errors_FatalDialog("CivApp", "Unable to get display-mode:\n%s\n", SDL_GetError());
+            return;
+        }
+        if (!display_IsLegalResolution(displayMode.w, displayMode.h) && (displayMode.h >= 600)) {
+            CTPDisplayMode *mode = new CTPDisplayMode;
+            if (!mode) {
+                return;
+            }
+            mode->width = displayMode.w;
+            mode->height = displayMode.h;
+            g_displayModes->AddTail(mode);
+        }
+    }
 #endif
 
 #ifdef __AUI_USE_DIRECTX__
@@ -319,9 +293,6 @@ int display_Initialize(HINSTANCE hInstance, int iCmdShow)
 	}
 #endif
 	display_EnumerateDisplayModes();
-
-
-
 
 	BOOL foundRes = FALSE;
 

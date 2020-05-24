@@ -24,7 +24,7 @@
 // Modifications from the original Activision code:
 //
 // - Increased k_MOUSE_MAXNUMCURSORS to allow some additional cursors.
-//   - April 30th 2005 Martin Gühmann
+//   - April 30th 2005 Martin GÃ¼hmann
 //
 //----------------------------------------------------------------------------
 
@@ -35,23 +35,12 @@
 #include "aui_input.h"
 #include "tech_wllist.h"
 
-#ifdef USE_SDL
-#include <SDL.h>
-#include <SDL_thread.h>
-#endif
-
 class aui_Cursor;
 class aui_Surface;
 class aui_Window;
 class aui_Image;
 class aui_DirtyList;
 class ldl_datablock;
-
-#ifdef USE_SDL
-// HACK: Use this global variable to halt mouse event handling
-// thread on game exit
-extern BOOL g_mouseShouldTerminateThread;
-#endif
 
 #define k_MOUSE_LDL_NUMCURSORS	"numcursors"
 #define k_MOUSE_LDL_ANIM		"anim"
@@ -166,57 +155,43 @@ public:
 		if ( firstIndex ) *firstIndex = m_firstIndex;
 		if (  lastIndex ) * lastIndex =  m_lastIndex;
 	}
-	void SetAnimIndexes( sint32 firstIndex, sint32 lastIndex );
+	virtual void SetAnimIndexes( sint32 firstIndex, sint32 lastIndex );
 
 	void SetAnim( sint32 anim );
 
 	virtual AUI_ERRCODE ReactToInput( void );
 
-	BOOL	ShouldTerminateThread( void );
+	virtual sint32 ManipulateInputs( aui_MouseEvent *data, BOOL add );
 
-	sint32	ManipulateInputs( aui_MouseEvent *data, BOOL add );
+	virtual AUI_ERRCODE HandleAnim( void );
 
-	AUI_ERRCODE HandleAnim( void );
-
-	AUI_ERRCODE	BltWindowToPrimary( aui_Window *window );
-	AUI_ERRCODE BltDirtyRectInfoToPrimary( void );
-	AUI_ERRCODE	BltBackgroundColorToPrimary(
+	virtual AUI_ERRCODE	BltWindowToPrimary( aui_Window *window );
+	virtual AUI_ERRCODE BltDirtyRectInfoToPrimary( void );
+	virtual AUI_ERRCODE	BltBackgroundColorToPrimary(
 		COLORREF color,
 		aui_DirtyList *colorAreas );
-	AUI_ERRCODE	BltBackgroundImageToPrimary(
+	virtual AUI_ERRCODE	BltBackgroundImageToPrimary(
 		aui_Image *image,
 		RECT *imageRect,
 		aui_DirtyList *imageAreas );
 
-#ifdef __AUI_USE_SDL__
-	SDL_mutex *LPCS(void) const { return m_lpcs; }
-#else
+#if defined(__AUI_USE_DIRECTX__)
 	LPCRITICAL_SECTION LPCS( void ) const { return m_lpcs; }
-#endif
 
-	AUI_ERRCODE CreatePrivateBuffers( void );
-	void DestroyPrivateBuffers( void );
+	BOOL ShouldTerminateThread( void );
+#endif // __AUI_USE_DIRECTX__
 
 	uint32 GetFlags(void) { return m_flags;}
 	void SetFlags(uint32 flags) { m_flags = flags; }
 
 protected:
 	static sint32 m_mouseRefCount;
-#ifdef __AUI_USE_SDL__
-	static SDL_mutex* m_lpcs;
-#else
-	static LPCRITICAL_SECTION m_lpcs;
-#endif
-
-	virtual AUI_ERRCODE Erase( void );
+	virtual void ActivateCursor(aui_Cursor *cursor) {}
 
 	aui_MouseEvent	m_data;
 	double			m_sensitivity;
 
 	aui_MouseEvent	m_inputs[ k_MOUSE_MAXINPUT ];
-	aui_Surface		*m_privateMix;
-	aui_Surface		*m_pickup;
-	aui_Surface		*m_prevPickup;
 
 	RECT		m_clip;
 	aui_Cursor	*m_cursors[ k_MOUSE_MAXNUMCURSORS ];
@@ -232,10 +207,18 @@ protected:
 	sint32		m_suspendCount;
 	sint32		m_showCount;
 	BOOL		m_reset;
+	uint32		m_flags;
 
-#ifdef __AUI_USE_SDL__
-	SDL_Thread     *m_thread;
-#elif defined(__AUI_USE_DIRECTX__)
+#if defined(__AUI_USE_DIRECTX__)
+	AUI_ERRCODE CreatePrivateBuffers( void );
+	void DestroyPrivateBuffers( void );
+	AUI_ERRCODE Erase( void );
+
+	aui_Surface		*m_privateMix;
+	aui_Surface		*m_pickup;
+	aui_Surface		*m_prevPickup;
+
+	static LPCRITICAL_SECTION m_lpcs;
 	HANDLE		m_thread;
 	DWORD		m_threadId;
 	HANDLE		m_threadEvent;
@@ -243,16 +226,11 @@ protected:
 	HANDLE		m_suspendEvent;
 	HANDLE		m_resumeEvent;
 	HANDLE		m_replyEvent;
-#endif
-
-	uint32		m_flags;
+#endif // __AUI_USE_DIRECTX__
 };
 
-
-#ifdef __AUI_USE_SDL__
-int MouseThreadProc(void *param);
-#else
+#if defined(__AUI_USE_DIRECTX__)
 DWORD WINAPI MouseThreadProc( LPVOID lpVoid );
-#endif
+#endif // __AUI_USE_DIRECTX__
 
 #endif

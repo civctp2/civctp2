@@ -43,7 +43,7 @@
 // - Moved DirectX API-Version to use into "ctp2_config.h"
 // - Added struct for automatic debug tool initialization and
 //   cleanup so that it is the first respective the last thing
-//   that is done in the program. (Oct 3rd 2005 Martin Gühmann)
+//   that is done in the program. (Oct 3rd 2005 Martin GÃ¼hmann)
 //
 //----------------------------------------------------------------------------
 

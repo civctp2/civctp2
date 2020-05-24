@@ -45,17 +45,17 @@
 // - Merged GNU and MSVC code (DoFinalCleanup, CivMain).
 // - Option added to include multiple data directories.
 // - Display the main thread function name in the debugger.
-// - Removed references to CivilisationDB. (Aug 20th 2005 Martin G?hmann)
-// - Removed references to old SpriteStateDBs. (Aug 29th 2005 Martin G?hmann)
-// - Initialized local variables. (Sep 9th 2005 Martin G?hmann)
-// - Removed unused local variables. (Sep 9th 2005 Martin G?hmann)
-// - Removed some unreachable code. (Sep 9th 2005 Martin G?hmann)
+// - Removed references to CivilisationDB. (Aug 20th 2005 Martin Gühmann)
+// - Removed references to old SpriteStateDBs. (Aug 29th 2005 Martin Gühmann)
+// - Initialized local variables. (Sep 9th 2005 Martin Gühmann)
+// - Removed unused local variables. (Sep 9th 2005 Martin Gühmann)
+// - Removed some unreachable code. (Sep 9th 2005 Martin Gühmann)
 // - Moved debug tools handling to c3.h, so that the leak reporter doesn't
-//   report leaks that aren't leaks. (Oct 3rd 2005 Matzin G?hmann)
+//   report leaks that aren't leaks. (Oct 3rd 2005 Matzin Gühmann)
 // - Added version to crash.txt
-// - USE_LOGGING now works in a final version. (30-Jun-2008 Martin G?hmann)
+// - USE_LOGGING now works in a final version. (30-Jun-2008 Martin Gühmann)
 // - The log files are now only opened and closed once, this speeds up
-//   debugging significantly. (09-Aug-2008 Martin G?hmann)
+//   debugging significantly. (09-Aug-2008 Martin Gühmann)
 //
 //----------------------------------------------------------------------------
 //
@@ -72,7 +72,6 @@
 #include "ancientwindows.h"
 #include "appstrings.h"
 #include "aui.h"
-#include "aui_directmoviemanager.h"
 #include "aui_Factory.h"
 #include "aui_ldl.h"
 #include "background.h"
@@ -169,15 +168,12 @@
 #include <unistd.h>
 #endif
 #if defined(USE_SDL)
-#include <SDL.h>
-#include <SDL_mixer.h>
+#include <SDL2/SDL.h>
+#include <SDL2/SDL_mixer.h>
 #include "aui_sdlkeyboard.h"
 #endif
 #ifdef HAVE_X11
 #include <X11/Xlib.h>
-#endif
-#ifdef USE_GTK
-#include <gtk/gtk.h>
 #endif
 
 #if defined(_DEBUG)
@@ -237,7 +233,7 @@ sint32                              g_modalWindow = 0;
 BOOL                                g_helpMode = TRUE;
 
 static uint32                       s_scrollcurtick =0;
-static uint32                       s_scrolllasttick=0;
+static uint32                       s_lastscrolltick=0;
 static sint32                       s_scrolltime =k_SMOOTH_START_TIME;
 static uint32                       s_accelTickStart = 0;
 
@@ -276,11 +272,7 @@ BOOL g_runInBackground = FALSE;
 BOOL g_runSpriteEditor = FALSE;
 BOOL g_eventLog = FALSE;
 
-#if 0
-uint32 g_SDL_flags = SDL_DOUBLEBUF | SDL_HWSURFACE; 
-#else
-uint32 g_SDL_flags = 0; //See ctp2_code/ui/aui_common/aui_ui.cpp //SEB Pandora
-#endif
+uint32 g_SDL_flags = 0;
 
 BOOL g_use_profile_process = FALSE;
 
@@ -561,12 +553,7 @@ int ui_Initialize(void)
 	g_c3ui->RegisterObject(aui_Factory::new_Keyboard(auiErr));
 
 	SPLASH_STRING("Creating Movie manager...");
-#if defined(__AUI_USE_SDL__)
-	//SDL movie manager is in aui_movie.cpp
-	g_c3ui->RegisterObject(new aui_MovieManager());
-#else
-	g_c3ui->RegisterObject(new aui_DirectMovieManager());
-#endif
+	g_c3ui->RegisterObject(g_c3ui->CreateMovieManager());
 
 	SPLASH_STRING("Starting Mouse...");
 	auiErr = g_c3ui->TheMouse()->Start();
@@ -660,7 +647,6 @@ bool ui_CheckForScroll(void)
 
 	g_tiledMap->SetScrolling(false);
 
-	s_scrolllasttick = s_scrollcurtick;
 	s_scrollcurtick	 = GetTickCount();
 
 	if (!g_c3ui->TheMouse())
@@ -679,6 +665,9 @@ bool ui_CheckForScroll(void)
 
 //	const int       k_MAX_SMOOTH_SCROLL         = 64;
 	const int       k_TICKS_PER_ACCELERATION    = 50;
+	/* Limit the number of scroll actions per second. */
+	const int       k_NUMBER_OF_SCROLL_ACTIONS  = 20;
+	const int       k_TICKS_PER_SCROLL          = 1000 / k_NUMBER_OF_SCROLL_ACTIONS;
 
 	sint32	deltaX = 0,
 			deltaY = 0;
@@ -778,11 +767,7 @@ bool ui_CheckForScroll(void)
 			isMouseScrolling = true;
 		}
 
-
 		if(scrolled) {
-			if (isMouseScrolling)
-				g_cursorManager->SetCursor(scrollCursor);
-
 			if(!scrolled_last_time) {
 				scroll_start = GetTickCount();
 			}
@@ -808,6 +793,8 @@ bool ui_CheckForScroll(void)
 		lastdeltaX = deltaX;
 		lastdeltaY = deltaY;
 
+		if (isMouseScrolling)
+			g_cursorManager->SetCursor(scrollCursor);
 		g_tiledMap->SetScrolling(true);
 
 		uint32 accellTickDelta = s_scrollcurtick - s_accelTickStart;
@@ -831,9 +818,12 @@ bool ui_CheckForScroll(void)
 
 		if (g_smoothScroll)
 			g_tiledMap->ScrollMapSmooth(smoothX, smoothY);
-		else
-			g_tiledMap->ScrollMap(deltaX, deltaY);
-
+		else {
+			if ((s_scrollcurtick - s_lastscrolltick) > k_TICKS_PER_SCROLL) {
+				s_lastscrolltick = GetTickCount();
+				g_tiledMap->ScrollMap(deltaX, deltaY);
+			}
+		}
 	}
 	else
 	{
@@ -1038,8 +1028,6 @@ void AtExitProc(void)
 	Mix_CloseAudio();
 # endif
 
-g_mouseShouldTerminateThread = TRUE;
-
 	// Destroy the mutex used for the secondary keyboard event queue
 #ifdef __AUI_USE_SDL__
 	SDL_DestroyMutex(g_secondaryKeyboardEventQueueMutex);
@@ -1168,13 +1156,15 @@ void ParseCommandLine(PSTR szCmdLine)
 	g_runSpriteEditor = (NULL != strstr(szCmdLine, "runspriteeditor"));
 
 #if defined(__AUI_USE_SDL__)
-	if (strstr(szCmdLine, "fullscreen"))
-		g_SDL_flags = g_SDL_flags|SDL_FULLSCREEN;
-	if (strstr(szCmdLine, "hwsurface"))
-		g_SDL_flags = g_SDL_flags|SDL_HWSURFACE;
-	else g_SDL_flags = g_SDL_flags|SDL_SWSURFACE;
-	if (strstr(szCmdLine, "openglblit"))
-	g_SDL_flags = g_SDL_flags|SDL_OPENGLBLIT;
+	if (strstr(szCmdLine, "fullscreen")) {
+        g_SDL_flags = g_SDL_flags | SDL_WINDOW_FULLSCREEN_DESKTOP;
+    }
+	if (strstr(szCmdLine, "hwsurface")) {
+        printf("SDL2 does not support hwsurface option");
+	}
+	if (strstr(szCmdLine, "openglblit")) {
+	    printf("SDL2 uses OpenGL automatically");
+    }
 #endif
 	
 	g_eventLog = (NULL != strstr(szCmdLine, "eventlog"));
@@ -1575,16 +1565,9 @@ int WINAPI CivMain(HINSTANCE hInstance, HINSTANCE hPrevInstance, PSTR szCmdLine,
 		}
 	}
 #endif
-#ifdef USE_GTK
-	gtk_init(&iCmdShow, &pSzCmdLine);
-#endif
 
 	appstrings_Initialize();
 
-#ifdef USE_GTK
-//	gtk_set_locale();
-	gtk_init(&iCmdShow, &pSzCmdLine);
-#endif
 	std::setlocale(LC_COLLATE, appstrings_GetString(APPSTR_LOCALE));
 	std::setlocale(LC_NUMERIC, "C");
 
@@ -1691,36 +1674,51 @@ int WINAPI CivMain(HINSTANCE hInstance, HINSTANCE hPrevInstance, PSTR szCmdLine,
 
 	for (gDone = FALSE; !gDone; )
 	{
+		uint32 frameStartTick = GetTickCount();
 		g_civApp->Process();
 
-                //fprintf(stderr, "%s L%d: g_civApp->Process() done!\n", __FILE__, __LINE__);
+		//fprintf(stderr, "%s L%d: g_civApp->Process() done!\n", __FILE__, __LINE__);
 
 #ifdef __AUI_USE_SDL__
 		SDL_Event event;
 		while (!g_letUIProcess) { // There are breaks, too ;)
-			// Throttle the loop a bit to prevent 100% CPU usage in idle state.
-			// FIXME: implement blocking loop with SDL_WaitEvent().
-			if (!SDL_PollEvent(NULL)) {
-				SDL_Delay(30);
-				break;
+
+			static const int FRAMES_PER_SECOND = 30;
+			static const int TICKS_PER_FRAME = 1000 / FRAMES_PER_SECOND;
+			const int frameTicksLeft = frameStartTick + TICKS_PER_FRAME - GetTickCount();
+			if (frameTicksLeft > 0) {
+				if (!SDL_WaitEventTimeout(NULL, frameTicksLeft)) {
+					break;
+				}
+			} else {
+				if (!SDL_PollEvent(NULL)) {
+					break;
+				}
 			}
 
-			int n = SDL_PeepEvents(&event, 1, SDL_GETEVENT,
-                     ~(SDL_EVENTMASK(SDL_MOUSEMOTION) | SDL_EVENTMASK(SDL_MOUSEBUTTONDOWN) | SDL_EVENTMASK(SDL_MOUSEBUTTONUP)));
+			int n = SDL_PeepEvents(&event, 1, SDL_GETEVENT, SDL_FIRSTEVENT, SDL_MOUSEMOTION-1);
 			if (0 > n) {
-                            fprintf(stderr, "%s L%d: SDL_PeepEvents: Still events stored! Error?: %s\n", __FILE__, __LINE__, SDL_GetError());
-
+				fprintf(stderr, "%s L%d: SDL_PeepEvents: Still events stored! Error?: %s\n", __FILE__, __LINE__, SDL_GetError());
 				break;
 			}
 
 			if (0 == n)
 			{
-				// other events are handled in other threads
-				// or no more events
-				break;
+				n = SDL_PeepEvents(&event, 1, SDL_GETEVENT, SDL_MOUSEWHEEL+1, SDL_LASTEVENT);
+				if (0 > n) {
+					fprintf(stderr, "%s L%d: SDL_PeepEvents: Still events stored! Error?: %s\n", __FILE__, __LINE__, SDL_GetError());
+					break;
+				}
+
+				if (0 == n) {
+					// other events are handled in other threads
+					// or no more events
+					break;
+				}
 			}
-			if (SDL_QUIT == event.type)
+			if (SDL_QUIT == event.type) {
 				gDone = TRUE;
+			}
 
 			// If a keyboard event then we must reenqueue it so that aui_sdlkeyboard has a chance to look at it
 			if (event.type == SDL_KEYDOWN || event.type == SDL_KEYUP)
@@ -1819,8 +1817,8 @@ int SDLMessageHandler(const SDL_Event &event)
 			// TODO: Determine what the 'swallowNextChar' variable
 			// is for, and, if necessary, implement appropriate
 			// code in the SDL sections to perform the same function.
-			SDLKey key = event.key.keysym.sym;
-			SDLMod mod = event.key.keysym.mod;
+			SDL_Keycode key = event.key.keysym.sym;
+			Uint16 mod = event.key.keysym.mod;
 			WPARAM wp = '\0';
 			switch (key) {
 #define SDLKCONV(sdl_name, char) \
@@ -1891,16 +1889,16 @@ int SDLMessageHandler(const SDL_Event &event)
 			//SDLKCONVSHIFT(SDLK_F13, '' + 128, '\0');
 			//SDLKCONVSHIFT(SDLK_F14, '' + 128, '\0');
 			//SDLKCONVSHIFT(SDLK_F15, '' + 128, '\0');
-			SDLKCONV(SDLK_KP0, '0');
-			SDLKCONV(SDLK_KP1, '1');
-			SDLKCONV(SDLK_KP2, '2');
-			SDLKCONV(SDLK_KP3, '3');
-			SDLKCONV(SDLK_KP4, '4');
-			SDLKCONV(SDLK_KP5, '5');
-			SDLKCONV(SDLK_KP6, '6');
-			SDLKCONV(SDLK_KP7, '7');
-			SDLKCONV(SDLK_KP8, '8');
-			SDLKCONV(SDLK_KP9, '9');
+			SDLKCONV(SDLK_KP_0, '0');
+			SDLKCONV(SDLK_KP_1, '1');
+			SDLKCONV(SDLK_KP_2, '2');
+			SDLKCONV(SDLK_KP_3, '3');
+			SDLKCONV(SDLK_KP_4, '4');
+			SDLKCONV(SDLK_KP_5, '5');
+			SDLKCONV(SDLK_KP_6, '6');
+			SDLKCONV(SDLK_KP_7, '7');
+			SDLKCONV(SDLK_KP_8, '8');
+			SDLKCONV(SDLK_KP_9, '9');
 			SDLKCONV(SDLK_KP_PERIOD, '.');
 			SDLKCONV(SDLK_KP_DIVIDE, '/');
 			SDLKCONV(SDLK_KP_MULTIPLY, '*');

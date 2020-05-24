@@ -49,6 +49,7 @@
 #include "netconsole.h"
 #include "c3files.h"
 
+extern BOOL g_noAssertDialogs;
 uint32 g_debug_mask = k_DBG_NONE;
 static int g_useMask;
 
@@ -317,7 +318,8 @@ void c3debug_Assert(char const *s, char const * file, int line)
 	MBCHAR str[1024];
 	sprintf(str, "Assertion (%s) Failed in File:%s, Line:%ld\n", s, file, line);
 	fprintf(stderr, str);
-	sint32 result = MessageBox(NULL, str, "Assert", MB_ABORTRETRYIGNORE | MB_ICONEXCLAMATION);
+	sint32 result = g_noAssertDialogs ? IDIGNORE
+		: MessageBox(NULL, str, "Assert", MB_ABORTRETRYIGNORE | MB_ICONEXCLAMATION);
 	
 	if(result == IDRETRY)
 	{
