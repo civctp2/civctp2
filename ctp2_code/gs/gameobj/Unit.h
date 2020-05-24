@@ -251,15 +251,15 @@ public:
 	sint32 GetMoveSoundID(void);
 	sint32 GetAcknowledgeSoundID(void);
 	sint32 GetCantMoveSoundID(void);
-	sint32 GetAttackSoundID(void);
+	sint32 GetAttackSoundID(void) const;
 
-	sint32 GetWorkSoundID(void);
+	sint32 GetWorkSoundID(void) const;
 	sint32 GetVictorySoundID(void);
 	sint32 GetDeathSoundID(void);
 	sint32 GetLoadSoundID(void);
 	sint32 GetUnloadSoundID(void);
 
-	bool GetSpecialAttackInfo(SPECATTACK attack, sint32 *soundID, sint32 *spriteID);
+	bool GetSpecialAttackInfo(SPECATTACK attack, sint32 *soundID, sint32 *spriteID) const;
 
 	bool CanSettle(const MapPoint &pos, const bool settleOnCity = false) const;
 

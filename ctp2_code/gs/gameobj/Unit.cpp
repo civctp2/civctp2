@@ -957,12 +957,12 @@ sint32 Unit::GetCantMoveSoundID(void)
 	return GetDBRec()->GetSoundCantMoveIndex();
 }
 
-sint32 Unit::GetAttackSoundID(void)
+sint32 Unit::GetAttackSoundID(void) const
 {
 	return GetDBRec()->GetSoundAttackIndex();
 }
 
-sint32 Unit::GetWorkSoundID(void)
+sint32 Unit::GetWorkSoundID(void) const
 {
 	return GetDBRec()->GetSoundWorkIndex();
 }
@@ -987,7 +987,7 @@ sint32 Unit::GetUnloadSoundID(void)
 	return GetDBRec()->GetSoundUnloadIndex();
 }
 
-bool Unit::GetSpecialAttackInfo(SPECATTACK attack, sint32 *soundID, sint32 *spriteID)
+bool Unit::GetSpecialAttackInfo(SPECATTACK attack, sint32 *soundID, sint32 *spriteID) const
 {
 	const SpecialAttackInfoRecord *rec = unitutil_GetSpecialAttack(attack);
 	if(!rec)
