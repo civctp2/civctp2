@@ -40,7 +40,6 @@
 
 // TODO: there is a difference in facing between previous implementation and this
 //	(no-enemy-moves seems to have the same issue)
-// TODO: check is Finalize is needed
 // TODO: check if Animations can be used instead of m_processingActions
 
 #include "c3.h"
@@ -270,14 +269,13 @@ private:
  *  - Lock    && No Process   -> external
  *  - Lock    && Process      -> active
  *
- * The action is done (IsDone) which means it can be finalized and deleted, when both behaviours are finished, i.e.
+ * The action is done (IsDone) which means it can be deleted, when both behaviours are finished, i.e.
  *   IsUnlocked and IsProcessFinished both return true.
  *
  * Generic-behaviour:
  *  -> ProcessLoopingSound handles the continuation of a looping sound
  *  -> Execute runs the execute phase which is always run (unconditionally)
- *  -> Finalize runs finalization steps of the action (unconditionally)
- *  -> IsDone returns true when the action is done and can be finalized and deleted
+ *  -> IsDone returns true when the action is done and can be deleted
  *
  * Lock-behaviour:
  *  -> Unlock unlocks the action
@@ -299,7 +297,6 @@ public:
 	virtual void ProcessLoopingSound(DQActiveLoopingSound* &activeLoopingSound) = 0;
 	virtual void Execute() = 0;
 	bool IsDone() { return IsUnlocked() && IsProcessFinished(); }
-	virtual void Finalize() = 0;
 	virtual void Dump() = 0;
 
 	// Lock behaviour
@@ -346,7 +343,6 @@ public:
 	// Generic behaviour
 	virtual void ProcessLoopingSound(DQActiveLoopingSound* &activeLoopingSound) {}
 	virtual void Execute() = 0;
-	virtual void Finalize() {}
 
 	// Lock behaviour
 	virtual void Unlock() {}
@@ -382,7 +378,6 @@ public:
 	// Generic behaviour
 	virtual void ProcessLoopingSound(DQActiveLoopingSound* &activeLoopingSound) {}
 	virtual void Execute() {}
-	virtual void Finalize() {}
 
 	// Lock behaviour
 	virtual void Unlock() {}
@@ -443,7 +438,6 @@ public:
 		activeLoopingSound = NULL;
 	}
 	virtual void Execute() {}
-	virtual void Finalize() {}
 
 	// Lock behaviour
 	virtual void Unlock() { m_unlocked = true; }
@@ -491,8 +485,6 @@ public:
 			PrepareProcess();
 		}
 	}
-
-	virtual void Finalize() {}
 
 	// Lock behaviour
 	virtual void Unlock() {}
@@ -604,7 +596,6 @@ public:
 	// Generic behaviour
 	virtual void ProcessLoopingSound(DQActiveLoopingSound* &activeLoopingSound) {}
 	virtual void Execute() {}
-	virtual void Finalize() {}
 
 	// Lock behaviour
 	virtual void Unlock() {}
@@ -1556,6 +1547,13 @@ public:
 	}
 	virtual ~DQActionMove()
 	{
+		moveActor->PositionActor(endPosition);
+
+		for (int i = 0; i < numberOfMoveActors; i++)
+		{
+			moveActors[i]->PositionActor(endPosition);
+		}
+
 		DirectorImpl::Instance()->RemoveStandbyActor(moveActor);
 		delete [] moveActors;
 	}
@@ -1605,15 +1603,6 @@ public:
 			CenterMap(moveActor->GetPos());
 		}
 		AddActiveActor(moveActor);
-	}
-
-	virtual void Finalize() {
-		moveActor->PositionActor(endPosition);
-
-		for (int i = 0; i < numberOfMoveActors; i++)
-		{
-			moveActors[i]->PositionActor(endPosition);
-		}
 	}
 
 	virtual void Dump()
@@ -2541,8 +2530,6 @@ void DirectorImpl::FinalizeAction(DQAction *action)
 	if (m_lockingAction == action) {
 		m_lockingAction = NULL;
 	}
-
-	action->Finalize();
 	delete action;
 }
 
@@ -2622,7 +2609,6 @@ void DirectorImpl::RemoveTradeRoute(TradeRoute routeToDestroy)
 {
 	auto it = m_tradeActions.find(routeToDestroy.m_id);
 	if (it != m_tradeActions.end()) {
-		it->second->Finalize();
 		delete it->second;
 		m_tradeActions.erase(it);
 	}
