@@ -38,8 +38,6 @@
 //
 //----------------------------------------------------------------------------
 
-// TODO: there is a difference in facing between previous implementation and this
-//	(no-enemy-moves seems to have the same issue)
 // TODO: check if Animations can be used instead of m_processingActions
 
 #include "c3.h"
@@ -146,7 +144,6 @@ enum DQACTION_TYPE {
 	DQACTION_INVOKE_THRONE_ROOM,
 	DQACTION_INVOKE_RESEARCH_ADVANCE,
 	DQACTION_BEGIN_SCHEDULER,
-	DQACTION_TRADE,
 	DQACTION_MAX
 };
 
@@ -176,6 +173,104 @@ public:
 	virtual void Draw(RECT *paintRect) = 0;
 	virtual void Offset(sint32 deltaX, sint32 deltaY) = 0;
 	virtual bool IsAnimationFinished() = 0;
+
+	virtual void Dump() = 0;
+};
+
+class DQAnimationTrade : public DQAnimation {
+public:
+	DQAnimationTrade() : DQAnimation() {}
+	virtual ~DQAnimationTrade()
+	{
+		Clear();
+	}
+
+	virtual void Process()
+	{
+		if (g_theProfileDB->IsTradeAnim())
+		{
+			for (auto actorReference : m_tradeActors) {
+				actorReference.second->Process();
+			}
+		}
+	}
+
+	virtual void Draw(RECT *paintRect)
+	{
+		if (g_theProfileDB->IsTradeAnim())
+		{
+			for (auto actorReference : m_tradeActors) {
+				DrawTradeActor(actorReference.second, paintRect);
+			}
+		}
+	}
+
+	virtual void Offset(sint32 deltaX, sint32 deltaY)
+	{
+		for (auto actorReference : m_tradeActors)
+		{
+			TradeActor *actor = actorReference.second;
+			actor->SetX(actor->GetX() + deltaX);
+			actor->SetY(actor->GetY() + deltaY);
+		}
+	}
+
+	virtual bool IsAnimationFinished() { return false; }
+
+	virtual void Dump() {
+		DPRINTF(k_DBG_UI, (" ------------------\n"));
+		DPRINTF(k_DBG_UI, (" Trade actors:\n"));
+		for (auto actorReference : m_tradeActors)
+		{
+			TradeActor *actor = actorReference.second;
+			DPRINTF(k_DBG_UI, ("  trade-actor  :%#x (%#.8lx)\n", actor->GetRouteID().m_id, actor));
+		}
+	}
+
+	void AddTradeRoute(const TradeRoute &tradeRoute)
+	{
+		auto current = m_tradeActors.find(tradeRoute.m_id);
+		if (current == m_tradeActors.end()) {
+			m_tradeActors.insert({tradeRoute.m_id, new TradeActor(tradeRoute)});
+		}
+	}
+
+	void RemoveTradeRoute(const TradeRoute &tradeRoute)
+	{
+		auto current = m_tradeActors.find(tradeRoute.m_id);
+		if (current != m_tradeActors.end())
+		{
+			delete current->second;
+			m_tradeActors.erase(current);
+		}
+	}
+
+	void Clear()
+	{
+		for (auto actorReference : m_tradeActors) {
+			delete actorReference.second;
+		}
+		m_tradeActors.clear();
+	}
+
+private:
+	void DrawTradeActor(TradeActor *actor, RECT *paintRect)
+	{
+		const MapPoint &position = actor->GetCurrentPos();
+
+		sint32 tileX;
+		maputils_MapX2TileX(position.x, position.y, &tileX);
+
+		if (maputils_TilePointInTileRect(tileX, position.y, paintRect))
+		{
+			actor->Draw(g_tiledMap->GetLocalVision());
+			RECT dirtyRect;
+			actor->GetBoundingRect(&dirtyRect);
+			g_tiledMap->AddDirtyRectToMix(dirtyRect);
+		}
+	}
+
+	std::map<uint32, TradeActor *> m_tradeActors;
 };
 
 class DQAnimationStandby : public DQAnimation {
@@ -183,20 +278,26 @@ public:
 	DQAnimationStandby() : DQAnimation() {}
 	virtual ~DQAnimationStandby()
 	{
-		m_standbyActors.clear();
+		Clear();
 	}
 
 	virtual void Process()
 	{
 		for (auto actorReference : m_standbyActors) {
-			actorReference.first->Process();
+			UnitActor *actor = actorReference.first;
+			if (!actor->IsActive()) {
+				actorReference.first->Process();
+			}
 		}
 	}
 
 	virtual void Draw(RECT *paintRect)
 	{
 		for (auto actorReference : m_standbyActors) {
-			DrawUnitActor(actorReference.first, paintRect);
+			UnitActor *actor = actorReference.first;
+			if (!actor->IsActive()) {
+				DrawUnitActor(actorReference.first, paintRect);
+			}
 		}
 	}
 
@@ -204,8 +305,11 @@ public:
 	{
 		for (auto actorReference : m_standbyActors) {
 			UnitActor *actor = actorReference.first;
-			actor->SetX(actor->GetX() + deltaX);
-			actor->SetY(actor->GetY() + deltaY);
+			if (!actor->IsActive())
+			{
+				actor->SetX(actor->GetX() + deltaX);
+				actor->SetY(actor->GetY() + deltaY);
+			}
 		}
 	}
 
@@ -228,6 +332,15 @@ public:
 		current->second--;
 		if (current->second <= 0) {
 			m_standbyActors.erase(current);
+		}
+	}
+
+	virtual void Dump() {
+		DPRINTF(k_DBG_UI, (" ------------------\n"));
+		DPRINTF(k_DBG_UI, (" Standby-actors:\n"));
+		for (auto actorReference : m_standbyActors) {
+			UnitActor *actor = actorReference.first;
+			DPRINTF(k_DBG_UI, ("  unit-actor   :%#x (%#.8lx)\n", actor->GetUnitID(), actor));
 		}
 	}
 
@@ -578,70 +691,6 @@ private:
 	std::unordered_set<UnitActor*> m_activeActors;
 };
 
-/**
- * DQActionTrade: No Lock and Process (never finished)
- *   -> LoopingSound is ignored
- *   -> IsUnlocked returns true
- *   -> IsProcessFinished returns false (externally managed)
- */
-class DQActionTrade : public DQAction {
-public:
-	DQActionTrade(const TradeRoute &route)
-		: DQAction(),
-		m_activeActor (new TradeActor(route))
-	{}
-	virtual ~DQActionTrade() {
-		delete m_activeActor;
-	}
-	virtual DQACTION_TYPE GetType() { return DQACTION_TRADE; }
-
-	// Generic behaviour
-	virtual void ProcessLoopingSound(DQActiveLoopingSound* &activeLoopingSound) {}
-	virtual void Execute() {}
-
-	// Lock behaviour
-	virtual void Unlock() {}
-	virtual bool IsUnlocked() { return true; }
-
-	// Process behaviour
-	virtual void Process()
-	{
-		m_activeActor->Process();
-	}
-
-	virtual void Draw(RECT *paintRect)
-	{
-		const MapPoint &position = m_activeActor->GetCurrentPos();
-
-		sint32 tileX;
-		maputils_MapX2TileX(position.x, position.y, &tileX);
-
-		if (maputils_TilePointInTileRect(tileX, position.y, paintRect))
-		{
-			m_activeActor->Draw(g_tiledMap->GetLocalVision());
-			RECT dirtyRect;
-			m_activeActor->GetBoundingRect(&dirtyRect);
-			g_tiledMap->AddDirtyRectToMix(dirtyRect);
-		}
-	}
-
-	virtual void Offset(sint32 deltaX, sint32 deltaY)
-	{
-		m_activeActor->SetX(m_activeActor->GetX() + deltaX);
-		m_activeActor->SetY(m_activeActor->GetY() + deltaY);
-	}
-
-	virtual bool IsProcessFinished() { return false; }
-
-	virtual void Dump()
-	{
-		DPRINTF(k_DBG_UI, ("Trade\n"));
-		DPRINTF(k_DBG_UI, ("  actor        :%#x (%#.8lx)\n", m_activeActor->GetRouteID().m_id, m_activeActor));
-	}
-private:
-	TradeActor *m_activeActor;
-};
-
 class DQActionCenterMap;
 class DirectorImpl : public Director {
 public:
@@ -726,8 +775,10 @@ public:
 	virtual void AddInvokeThroneRoom();
 	virtual void AddInvokeResearchAdvance(MBCHAR *text);
 	virtual void AddBeginScheduler(sint32 player);
-	virtual void AddTradeRoute(const TradeRoute &newRoute);
-	virtual void RemoveTradeRoute(const TradeRoute &routeToDestroy);
+
+	// Animations
+	virtual void AddTradeRouteAnimation(const TradeRoute &tradeRoute);
+	virtual void RemoveTradeRouteAnimation(const TradeRoute &tradeRoute);
 
 	// Anim
 	virtual uint32 GetMasterCurTime() { return m_masterCurTime; }
@@ -752,13 +803,10 @@ private:
 	void FinalizeProcessingActions();
 
 	void ProcessActions();
-	void ProcessTradeActions();
 
 	void DrawActions(RECT *paintRect, sint32 layer);
-	void DrawTradeActions(RECT *paintRect, sint32 layer);
 
 	void OffsetActions(sint32 deltaX, sint32 deltaY);
-	void OffsetTradeActions(sint32 deltaX, sint32 deltaY);
 
 #ifdef _DEBUG
 	void DumpAction(DQAction *action);
@@ -770,8 +818,7 @@ private:
 	DQAction                          *m_lockingAction;
 	DQActiveLoopingSound              *m_activeLoopingSound;
 	std::unordered_set<DQAction *>    m_processingActions;
-	// Handle trade actions separately as the life-cycle of trade actions is different to processing actions.
-	std::map<uint32, DQActionTrade *> m_tradeActions;
+	DQAnimationTrade                  *m_tradeAnimations;
 	DQAnimationStandby                *m_standbyAnimations;
 	uint32                            m_nextProcessTime;
 	// Optimization: keep track of latest added DQActionCenterMap
@@ -2306,7 +2353,7 @@ DirectorImpl::DirectorImpl(void)
 	m_lockingAction      (NULL),
 	m_activeLoopingSound (NULL),
 	m_processingActions  (),
-	m_tradeActions       (),
+	m_tradeAnimations    (new DQAnimationTrade()),
 	m_standbyAnimations  (new DQAnimationStandby()),
 	m_latestCenterMap    (NULL),
 	m_nextProcessTime    (0),
@@ -2328,6 +2375,7 @@ DirectorImpl::DirectorImpl(void)
 DirectorImpl::~DirectorImpl(void)
 {
 	Clear();
+	delete m_tradeAnimations;
 	delete m_standbyAnimations;
 	delete m_actionQueue;
 	delete m_actionWalker;
@@ -2348,11 +2396,7 @@ void DirectorImpl::Clear() {
 		m_lockingAction = NULL;
 	}
 
-	for (auto tradeAction : m_tradeActions) {
-		delete tradeAction.second;
-	}
-	m_tradeActions.clear();
-
+	m_tradeAnimations->Clear();
 	m_standbyAnimations->Clear();
 
 	m_actionQueue->DeleteAll();
@@ -2419,11 +2463,12 @@ void DirectorImpl::Process(void)
 	if (GetTickCount() > m_nextProcessTime)
 	{
 		ProcessActions();
-		ProcessTradeActions();
+		m_tradeAnimations->Process();
 
 		HandleNextAction();
-
+		// To ensure correct facing this needs to be done after HandleNextAction
 		m_standbyAnimations->Process();
+
 		if (g_tiledMap) {
 			g_tiledMap->ProcessLayerSprites(g_tiledMap->GetMapViewRect(), 0);
 		}
@@ -2472,12 +2517,8 @@ void DirectorImpl::DumpInfo(void)
 	{
 		DumpAction(m_actionWalker->GetObj());
 	}
-	DPRINTF(k_DBG_UI, (" ------------------\n"));
-	DPRINTF(k_DBG_UI, (" Trade Actions:\n"));
-	DPRINTF(k_DBG_UI, (" Count:%d\n", m_tradeActions.size()));
-	for (auto action : m_tradeActions) {
-		DumpAction(action.second);
-	}
+	m_tradeAnimations->Dump();
+	m_standbyAnimations->Dump();
 	DPRINTF(k_DBG_UI, (" ------------------\n"));
 }
 #endif
@@ -2605,52 +2646,27 @@ bool DirectorImpl::CaughtUp(void)
 	return !m_actionQueue || (m_actionQueue->GetCount() == 0);
 }
 
-void DirectorImpl::AddTradeRoute(const TradeRoute &newRoute)
+void DirectorImpl::AddTradeRouteAnimation(const TradeRoute &tradeRoute)
 {
-	auto it = m_tradeActions.find(newRoute.m_id);
-	if (it == m_tradeActions.end()) {
-		DQActionTrade *action = new DQActionTrade(newRoute);
-		m_tradeActions.insert({newRoute.m_id, action});
-	}
+	m_tradeAnimations->AddTradeRoute(tradeRoute);
 }
 
-void DirectorImpl::RemoveTradeRoute(const TradeRoute& routeToDestroy)
+void DirectorImpl::RemoveTradeRouteAnimation(const TradeRoute& tradeRoute)
 {
-	auto it = m_tradeActions.find(routeToDestroy.m_id);
-	if (it != m_tradeActions.end()) {
-		delete it->second;
-		m_tradeActions.erase(it);
-	}
-}
-
-void DirectorImpl::ProcessTradeActions(void)
-{
-	if (!g_theProfileDB->IsTradeAnim()) {
-		return;
-	}
-	for (auto tradeAction : m_tradeActions) {
-		tradeAction.second->Process();
-	}
+	m_tradeAnimations->RemoveTradeRoute(tradeRoute);
 }
 
 void DirectorImpl::OffsetActors(sint32 deltaX, sint32 deltaY)
 {
 	m_standbyAnimations->Offset(-deltaX, -deltaY);
 	OffsetActions(-deltaX, -deltaY);
-	OffsetTradeActions(-deltaX, -deltaY);
+	m_tradeAnimations->Offset(-deltaX, -deltaY);
 }
 
 void DirectorImpl::OffsetActions(sint32 deltaX, sint32 deltaY)
 {
 	for (auto action : m_processingActions) {
 		action->Offset(deltaX, deltaY);
-	}
-}
-
-void DirectorImpl::OffsetTradeActions(sint32 deltaX, sint32 deltaY)
-{
-	for (auto tradeAction : m_tradeActions) {
-		tradeAction.second->Offset(deltaX, deltaY);
 	}
 }
 
@@ -2692,7 +2708,7 @@ void DirectorImpl::NextPlayer() {
 
 void DirectorImpl::Draw(RECT *paintRect, sint32 layer)
 {
-	DrawTradeActions(paintRect, layer);
+	m_tradeAnimations->Draw(paintRect);
 	m_standbyAnimations->Draw(paintRect);
 	DrawActions(paintRect, layer);
 }
@@ -2701,16 +2717,6 @@ void DirectorImpl::DrawActions(RECT *paintRect, sint32 layer)
 {
 	for (auto action : m_processingActions) {
 		action->Draw(paintRect);
-	}
-}
-
-void DirectorImpl::DrawTradeActions(RECT *paintRect, sint32 layer)
-{
-	if (!g_theProfileDB->IsTradeAnim()) {
-		return;
-	}
-	for (auto tradeAction : m_tradeActions) {
-		tradeAction.second->Draw(paintRect);
 	}
 }
 

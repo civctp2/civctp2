@@ -137,8 +137,10 @@ public:
 	virtual void AddInvokeThroneRoom() = 0;
 	virtual void AddInvokeResearchAdvance(MBCHAR *text) = 0;
 	virtual void AddBeginScheduler(sint32 player) = 0;
-	virtual void AddTradeRoute(const TradeRoute &newRoute) = 0;
-	virtual void RemoveTradeRoute(const TradeRoute &routeToDestroy) = 0;
+
+	// Animations
+	virtual void AddTradeRouteAnimation(const TradeRoute &tradeRoute) = 0;
+	virtual void RemoveTradeRouteAnimation(const TradeRoute &tradeRoute) = 0;
 
 	// Anim
 	virtual uint32 GetMasterCurTime() = 0;
