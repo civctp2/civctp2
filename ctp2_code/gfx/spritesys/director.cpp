@@ -640,6 +640,7 @@ private:
 	TradeActor	*m_activeActor;
 };
 
+class DQActionCenterMap;
 class DirectorImpl : public Director {
 public:
 	DirectorImpl(void);
@@ -771,6 +772,8 @@ private:
 	std::map<uint32, DQActionTrade *>	m_tradeActions;
 	DQAnimationStandby					*m_standbyAnimations;
 	uint32								m_nextProcessTime;
+	// Optimization: keep track of latest added DQActionCenterMap
+	DQActionCenterMap					*m_latestCenterMap;
 
 	static const int            k_TIME_LOG_SIZE = 30;
 	uint32						m_masterCurTime;
@@ -1171,11 +1174,6 @@ public:
 	virtual ~DQActionCenterMap() {}
 	virtual DQACTION_TYPE GetType() { return DQACTION_CENTERMAP; }
 
-	void CalculateCenteredMap(RECT *viewRect)
-	{
-		g_radarMap->ComputeCenteredMap(centerMapPosition, viewRect);
-	}
-
 	virtual void Execute()
 	{
 		if(!g_selected_item->GetIsPathing()) {
@@ -1188,6 +1186,14 @@ public:
 		DPRINTF(k_DBG_UI, ("Center Map\n"));
 		DPRINTF(k_DBG_UI, ("  centerMapPosition:%d,%d\n", centerMapPosition.x, centerMapPosition.y));
 	}
+
+	bool TileIsCompletelyVisible(sint32 x, sint32 y)
+	{
+		RECT tempViewRect = *g_tiledMap->GetMapViewRect();
+		g_radarMap->ComputeCenteredMap(centerMapPosition, &tempViewRect);
+		return g_tiledMap->TileIsCompletelyVisible(x, y, &tempViewRect);
+	}
+
 protected:
 	MapPoint	centerMapPosition;
 };
@@ -2310,6 +2316,7 @@ DirectorImpl::DirectorImpl(void)
 	m_processingActions		(),
 	m_tradeActions			(),
 	m_standbyAnimations		(new DQAnimationStandby()),
+	m_latestCenterMap		(NULL),
 	m_nextProcessTime		(0),
 	m_masterCurTime			(0),
 	m_lastTickCount			(0),
@@ -2360,6 +2367,8 @@ void DirectorImpl::Clear() {
 
 	delete m_activeLoopingSound;
 	m_activeLoopingSound = NULL;
+
+	m_latestCenterMap = NULL;
 }
 
 void DirectorImpl::UpdateTimingClock(void)
@@ -2526,6 +2535,10 @@ void DirectorImpl::ProcessActions(void)
 
 void DirectorImpl::FinalizeAction(DQAction *action)
 {
+	if (action == m_latestCenterMap) {
+		m_latestCenterMap = NULL;
+	}
+
 	m_processingActions.erase(action);
 	if (m_lockingAction == action) {
 		m_lockingAction = NULL;
@@ -2797,6 +2810,7 @@ void DirectorImpl::AddCenterMap(const MapPoint &pos)
 {
 	DQActionCenterMap *action = new DQActionCenterMap(pos);
 	m_actionQueue->AddTail(action);
+	m_latestCenterMap = action;
 }
 
 void DirectorImpl::AddSelectUnit(uint32 flags)
@@ -3160,21 +3174,10 @@ void DirectorImpl::AddBeginScheduler(sint32 player)
 
 BOOL DirectorImpl::TileWillBeCompletelyVisible(sint32 x, sint32 y)
 {
-	RECT tempViewRect = *g_tiledMap->GetMapViewRect();
-
-	m_actionWalker->SetList(m_actionQueue);
-	while (m_actionWalker->IsValid()) {
-		DQAction *action = m_actionWalker->GetObj();
-		if (action->GetType() == DQACTION_CENTERMAP) {
-			DQActionCenterMap *centerMap = static_cast<DQActionCenterMap*>(action);
-			if (centerMap) {
-				centerMap->CalculateCenteredMap(&tempViewRect);
-			}
-		}
-		m_actionWalker->Next();
+	if (m_latestCenterMap) {
+		return m_latestCenterMap->TileIsCompletelyVisible(x, y);
 	}
-
-	return g_tiledMap->TileIsCompletelyVisible(x, y, &tempViewRect);
+	return g_tiledMap->TileIsCompletelyVisible(x, y);
 }
 
 void DirectorImpl::IncrementPendingGameActions()
