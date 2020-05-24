@@ -38,10 +38,10 @@
 //
 //----------------------------------------------------------------------------
 
-// TODO: check if stand-by units are not drawn outside position when center map has been called
-// TODO: check 'stand-by' units been implemented differently (also improve callback from DQActionDeath)
 // TODO: there is a difference in facing between previous implementation and this
 //	(no-enemy-moves seems to have the same issue)
+// TODO: check is Finalize is needed
+// TODO: check if Animations can be used instead of m_processingActions
 
 #include "c3.h"
 #include "director.h"
@@ -168,6 +168,97 @@ private:
 	uint32	m_unitID;
 };
 
+class DQAnimation {
+public:
+	DQAnimation() {}
+	virtual ~DQAnimation() {}
+
+	virtual void Process() = 0;
+	virtual void Draw(RECT *paintRect) = 0;
+	virtual void Offset(sint32 deltaX, sint32 deltaY) = 0;
+	virtual bool IsAnimationFinished() = 0;
+};
+
+class DQAnimationStandby : public DQAnimation {
+public:
+	DQAnimationStandby() : DQAnimation() {}
+	virtual ~DQAnimationStandby()
+	{
+		m_standbyActors.clear();
+	}
+
+	virtual void Process()
+	{
+		for (auto actorReference : m_standbyActors) {
+			actorReference.first->Process();
+		}
+	}
+
+	virtual void Draw(RECT *paintRect)
+	{
+		for (auto actorReference : m_standbyActors) {
+			DrawUnitActor(actorReference.first, paintRect);
+		}
+	}
+
+	virtual void Offset(sint32 deltaX, sint32 deltaY)
+	{
+		for (auto actorReference : m_standbyActors) {
+			UnitActor *actor = actorReference.first;
+			actor->SetX(actor->GetX() + deltaX);
+			actor->SetY(actor->GetY() + deltaY);
+		}
+	}
+
+	virtual bool IsAnimationFinished() { return false; }
+
+	void AddActor(UnitActor *actor)
+	{
+		auto current = m_standbyActors.find(actor);
+		if (current == m_standbyActors.end()) {
+			m_standbyActors.insert({actor, 1});
+		} else {
+			current->second++;
+		}
+	}
+
+	void RemoveActor(UnitActor *actor)
+	{
+		auto current = m_standbyActors.find(actor);
+		Assert(current != m_standbyActors.end());
+		current->second--;
+		if (current->second <= 0) {
+			m_standbyActors.erase(current);
+		}
+	}
+
+	void Clear() {
+		m_standbyActors.clear();
+	}
+private:
+	void DrawUnitActor(UnitActor *actor, RECT *paintRect)
+	{
+		const MapPoint &pos = actor->GetPos();
+
+		// Do not draw standby units over cities
+		if (g_theWorld->IsCity(pos)) {
+			return;
+		}
+
+		if (actor->GetUnitVisibility() & (1 << g_selected_item->GetVisiblePlayer())) {
+			sint32	tileX;
+			maputils_MapX2TileX(pos.x, pos.y, &tileX);
+
+			if (maputils_TilePointInTileRect(tileX, pos.y, paintRect))
+			{
+				g_tiledMap->PaintUnitActor(actor);
+			}
+		}
+	}
+
+	std::map<UnitActor*, uint32> m_standbyActors;
+};
+
 /**
  * DQAction: implements two types of behaviour:
  * - Lock:		lock the scheduler while executing this action
@@ -203,7 +294,6 @@ public:
 	DQAction() {}
 	virtual ~DQAction() {}
 	virtual DQACTION_TYPE GetType() = 0;
-	virtual bool IsTypeActive() { return false; }
 
 	// Generic behaviour
 	virtual void ProcessLoopingSound(DQActiveLoopingSound* &activeLoopingSound) = 0;
@@ -388,7 +478,6 @@ public:
 		}
 	}
 	virtual ~DQActionActive() {}
-	virtual bool IsTypeActive() { return true; }
 
 	// Generic behaviour
 	virtual void ProcessLoopingSound(DQActiveLoopingSound* &activeLoopingSound)
@@ -659,30 +748,23 @@ public:
 	virtual void DecrementPendingGameActions();
 
 	// Used locally
-	void		RemoveStandbyActor(UnitActor *actor);
+	void	AddStandbyActor(UnitActor *actor);
+	void	RemoveStandbyActor(UnitActor *actor);
 
 private:
 	bool    CanStartNextAction();
 	void	HandleNextAction();
 	void	FinalizeAction(DQAction *action);
 	void	FinalizeProcessingActions();
-	void	FinalizeTradeActions();
 
-	void	ProcessStandbyUnits();
 	void	ProcessActions();
 	void	ProcessTradeActions();
 
-	void	DrawStandbyUnits(RECT *paintRect, sint32 layer);
 	void	DrawActions(RECT *paintRect, sint32 layer);
 	void	DrawTradeActions(RECT *paintRect, sint32 layer);
 
-	void	OffsetStandbyUnits(sint32 deltaX, sint32 deltaY);
 	void	OffsetActions(sint32 deltaX, sint32 deltaY);
 	void	OffsetTradeActions(sint32 deltaX, sint32 deltaY);
-
-	void	DrawUnitActor(RECT *paintRect, UnitActor *actor, bool standby);
-
-	void	UpdateStandbyUnits();
 
 #ifdef _DEBUG
 	void	DumpAction(DQAction *action);
@@ -696,6 +778,7 @@ private:
 	std::unordered_set<DQAction *>		m_processingActions;
 	// Handle trade actions separately as the life-cycle of trade actions is different to processing actions.
 	std::map<uint32, DQActionTrade *>	m_tradeActions;
+	DQAnimationStandby					*m_standbyAnimations;
 	uint32								m_nextProcessTime;
 
 	static const int            k_TIME_LOG_SIZE = 30;
@@ -707,8 +790,6 @@ private:
 	sint32						m_averageFPS;
 
 	bool						m_paused;
-
-	std::set<UnitActor *>			m_standbyActors;
 
 	sint32						m_pendingGameActions;
 	bool						m_endTurnRequested;
@@ -773,8 +854,12 @@ public:
 			  moveActors				(moveActors),
 			  numberOfRevealedActors	(numberOfRevealedActors),
 			  revealedActors			(revealedActors)
-	{}
-	virtual ~DQActionTeleport() {}
+	{
+		DirectorImpl::Instance()->AddStandbyActor(moveActor);
+	}
+	virtual ~DQActionTeleport() {
+		DirectorImpl::Instance()->RemoveStandbyActor(moveActor);
+	}
 	virtual DQACTION_TYPE GetType() { return DQACTION_TELEPORT; }
 
 	virtual void Execute()
@@ -927,7 +1012,6 @@ public:
 	{}
 	virtual ~DQActionFastKill()
 	{
-		DirectorImpl::Instance()->RemoveStandbyActor(dead);
 		delete dead;
 	}
 	virtual DQACTION_TYPE GetType() { return DQACTION_FASTKILL; }
@@ -1467,9 +1551,12 @@ public:
 			  numberOfRevealedActors	(numberOfRevealedActors),
 			  revealedActors			(revealedActors),
 			  soundID					(soundID)
-	{}
+	{
+		DirectorImpl::Instance()->AddStandbyActor(moveActor);
+	}
 	virtual ~DQActionMove()
 	{
+		DirectorImpl::Instance()->RemoveStandbyActor(moveActor);
 		delete [] moveActors;
 	}
 	virtual DQACTION_TYPE GetType() { return DQACTION_MOVE; }
@@ -1818,7 +1905,6 @@ public:
 	{}
 	virtual ~DQActionDeath()
 	{
-		DirectorImpl::Instance()->RemoveStandbyActor(dead);
 		delete dead;
 	}
 	virtual DQACTION_TYPE GetType() { return DQACTION_DEATH; }
@@ -2228,21 +2314,22 @@ protected:
 DirectorImpl *DirectorImpl::m_instance = NULL;
 DirectorImpl::DirectorImpl(void)
 :
-	m_lockingAction				(NULL),
-	m_activeLoopingSound		(NULL),
-	m_processingActions			(),
-	m_tradeActions				(),
-	m_nextProcessTime			(0),
-	m_masterCurTime				(0),
-	m_lastTickCount				(0),
-	m_timeLogIndex				(0),
-	m_averageElapsed			(0),
-	m_averageFPS				(k_DEFAULT_FPS),
-	m_paused					(FALSE),
-	m_actionQueue				(new PointerList<DQAction>),
-	m_actionWalker				(new PointerList<DQAction>::Walker),
-	m_pendingGameActions		(0),
-	m_endTurnRequested			(false)
+	m_actionQueue			(new PointerList<DQAction>),
+	m_actionWalker			(new PointerList<DQAction>::Walker),
+	m_lockingAction			(NULL),
+	m_activeLoopingSound	(NULL),
+	m_processingActions		(),
+	m_tradeActions			(),
+	m_standbyAnimations		(new DQAnimationStandby()),
+	m_nextProcessTime		(0),
+	m_masterCurTime			(0),
+	m_lastTickCount			(0),
+	m_timeLogIndex			(0),
+	m_averageElapsed		(0),
+	m_averageFPS			(k_DEFAULT_FPS),
+	m_paused				(FALSE),
+	m_pendingGameActions	(0),
+	m_endTurnRequested		(false)
 {
 	std::fill(m_timeLog, m_timeLog + k_TIME_LOG_SIZE, 0);
 
@@ -2253,26 +2340,32 @@ DirectorImpl::DirectorImpl(void)
 DirectorImpl::~DirectorImpl(void)
 {
 	Clear();
+	delete m_standbyAnimations;
 	delete m_actionQueue;
 	delete m_actionWalker;
 	m_instance = NULL;
 }
 
 void DirectorImpl::Clear() {
+	for (auto processingAction : m_processingActions) {
+		if (processingAction == m_lockingAction) {
+			m_lockingAction = NULL;
+		}
+		delete processingAction;
+	}
+	m_processingActions.clear();
+
 	if (m_lockingAction) {
 		delete m_lockingAction;
 		m_lockingAction = NULL;
 	}
 
-	for (auto processingAction : m_processingActions) {
-		delete processingAction;
-	}
-	m_processingActions.clear();
-
 	for (auto tradeAction : m_tradeActions) {
 		delete tradeAction.second;
 	}
 	m_tradeActions.clear();
+
+	m_standbyAnimations->Clear();
 
 	m_actionQueue->DeleteAll();
 
@@ -2320,33 +2413,14 @@ void DirectorImpl::UpdateTimingClock(void)
 	m_masterCurTime += elapsed;
 }
 
-void DirectorImpl::UpdateStandbyUnits()
+void DirectorImpl::AddStandbyActor(UnitActor *actor)
 {
-	if (!m_standbyActors.empty() || m_actionQueue->IsEmpty())
-		return;
-
-	PointerList<DQAction>::Walker walk(m_actionQueue);
-	for (; walk.IsValid(); walk.Next()) {
-		UnitActor *standbyActor = NULL;
-		switch (walk.GetObj()->GetType()) {
-			case DQACTION_MOVE:
-				standbyActor = ((DQActionMove *) (walk.GetObj()))->GetActor();
-				break;
-			case DQACTION_TELEPORT:
-				standbyActor = ((DQActionTeleport *) (walk.GetObj()))->GetActor();
-				break;
-			default:
-				break;
-		}
-		if (standbyActor && !standbyActor->IsActive()) {
-			m_standbyActors.insert(standbyActor);
-		}
-	}
+	m_standbyAnimations->AddActor(actor);
 }
 
 void DirectorImpl::RemoveStandbyActor(UnitActor *actor)
 {
-	m_standbyActors.erase(actor);
+	m_standbyAnimations->RemoveActor(actor);
 }
 
 void DirectorImpl::Process(void)
@@ -2360,7 +2434,7 @@ void DirectorImpl::Process(void)
 
 		HandleNextAction();
 
-		ProcessStandbyUnits();
+		m_standbyAnimations->Process();
 		if(g_tiledMap)
 			g_tiledMap->ProcessLayerSprites(g_tiledMap->GetMapViewRect(), 0);
 
@@ -2481,15 +2555,6 @@ void DirectorImpl::FinalizeProcessingActions()
 	}
 }
 
-void DirectorImpl::FinalizeTradeActions()
-{
-	for (auto tradeAction : m_tradeActions) {
-		tradeAction.second->Finalize();
-		delete tradeAction.second;
-	}
-	m_tradeActions.clear();
-}
-
 void DirectorImpl::ExternalActionFinished(DEACTION_TYPE externalActionType)
 {
 	DQACTION_TYPE actionType;
@@ -2563,17 +2628,6 @@ void DirectorImpl::RemoveTradeRoute(TradeRoute routeToDestroy)
 	}
 }
 
-void DirectorImpl::ProcessStandbyUnits()
-{
-	m_standbyActors.clear();
-	UpdateStandbyUnits();
-
-	for (std::set<UnitActor*>::iterator it=m_standbyActors.begin(); it != m_standbyActors.end(); ++it) {
-		(*it)->Process();
-	}
-}
-
-
 void DirectorImpl::ProcessTradeActions(void)
 {
 	if (!g_theProfileDB->IsTradeAnim()) {
@@ -2586,19 +2640,9 @@ void DirectorImpl::ProcessTradeActions(void)
 
 void DirectorImpl::OffsetActors(sint32 deltaX, sint32 deltaY)
 {
-	OffsetStandbyUnits(-deltaX, -deltaY);
+	m_standbyAnimations->Offset(-deltaX, -deltaY);
 	OffsetActions(-deltaX, -deltaY);
 	OffsetTradeActions(-deltaX, -deltaY);
-}
-
-void DirectorImpl::OffsetStandbyUnits(sint32 deltaX, sint32 deltaY)
-{
-	UpdateStandbyUnits();
-	for (std::set<UnitActor*>::iterator it=m_standbyActors.begin(); it != m_standbyActors.end(); ++it) {
-		UnitActor *actor = *it;
-		actor->SetX(actor->GetX() + deltaX);
-		actor->SetY(actor->GetY() + deltaY);
-	}
 }
 
 void DirectorImpl::OffsetActions(sint32 deltaX, sint32 deltaY)
@@ -2651,7 +2695,7 @@ void DirectorImpl::NextPlayer() {
 void DirectorImpl::Draw(RECT *paintRect, sint32 layer)
 {
 	DrawTradeActions(paintRect, layer);
-	DrawStandbyUnits(paintRect, layer);
+	m_standbyAnimations->Draw(paintRect);
 	DrawActions(paintRect, layer);
 }
 
@@ -2661,37 +2705,6 @@ void DirectorImpl::DrawActions(RECT *paintRect, sint32 layer)
 		action->Draw(paintRect);
 	}
 }
-
-void DirectorImpl::DrawStandbyUnits(RECT *paintRect, sint32 layer)
-{
-	UpdateStandbyUnits();
-	for (std::set<UnitActor*>::iterator it=m_standbyActors.begin(); it != m_standbyActors.end(); ++it) {
-		DrawUnitActor(paintRect, *it, true);
-	}
-}
-
-void DirectorImpl::DrawUnitActor(RECT *paintRect, UnitActor *actor, bool standby)
-{
-	if (!actor)
-		return;
-
-	if (actor->GetUnitVisibility() & (1 << g_selected_item->GetVisiblePlayer())) {
-		MapPoint pos = actor->GetPos();
-		// Do not draw standby units over cities
-		if (standby && g_theWorld->IsCity(pos)) {
-			return;
-		}
-
-		sint32	tileX;
-		maputils_MapX2TileX(pos.x, pos.y, &tileX);
-
-		if (maputils_TilePointInTileRect(tileX, pos.y, paintRect))
-		{
-			g_tiledMap->PaintUnitActor(actor);
-		}
-	}
-}
-
 
 void DirectorImpl::DrawTradeActions(RECT *paintRect, sint32 layer)
 {
