@@ -2546,7 +2546,9 @@ void UnitData::DoVision(UnitDynamicArray *revealedUnits)
 
 	if(!IsCity())
 	{
-		m_visibility = (1 << m_owner) | g_theWonderTracker->GlobeSatFlags();
+		m_visibility = (1 << m_owner);
+		if(m_army.m_id && !m_army.IsCivilian()) // GlobeSat only reveals non-civilian units (i.e. civilian units cannot be distinguished  from ordinary civilians)
+		    m_visibility |= g_theWonderTracker->GlobeSatFlags();
 		m_radar_visibility = 1 << m_owner;
 		m_ever_visible |= m_visibility;
 	}
