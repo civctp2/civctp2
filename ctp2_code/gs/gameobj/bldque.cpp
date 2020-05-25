@@ -616,34 +616,19 @@ bool BuildQueue::BuildFront(sint32 &shieldstore, CityData *cd, const MapPoint &p
 
 		return true;
 	} else {
-
-		DPRINTF(k_DBG_GAMESTATE, ("BuildFront: City %lx building nothing\n",
-								  m_city.m_id));
-
-		if (!Player::IsThisPlayerARobot(m_owner) ||
-			(g_network.IsClient() && g_network.IsLocalPlayer(m_owner))) {
-			// Cities with empty queues lose the same switch penalty % of their shield store
-			// each turn they are empty.
-
-			shieldstore -= cd->GetNetCityProduction();// Remove shields given at beginturn.
-
-			if (shieldstore > 0)
-			{
-				sint32 s = 0;
-				double penalty =
+		// Cities with empty queues lose the same switch penalty % of their shield store each turn they are empty.
+		DPRINTF(k_DBG_GAMESTATE, ("BuildFront: City %lx building nothing\n", m_city.m_id));
+		if (shieldstore > 0)
+		{
+			double penalty =
 					static_cast<double>(g_theConstDB->Get(0)->GetChangeCurrentlyBuildingItemPenalty());
+			penalty = std::min<double>(1.0, std::max<double>(0.0, 1.0 - penalty * 0.01));
+			sint32 s = static_cast<sint32>(static_cast<double>(shieldstore) * penalty);
+			DPRINTF(k_DBG_GAMESTATE, ("Decreased shields to %d for empty queue in city of %lx\n", s, m_city.m_id));
 
-				penalty = std::min<double>
-								  (
-								   1.0,
-								   std::max<double>(0.0, 1.0 - penalty * 0.01)
-								  );
-
-				s = static_cast<sint32>(static_cast<double>(shieldstore) * penalty);
-				DPRINTF(k_DBG_GAMESTATE, ("Deducting %i shields for empty queue in city of %lx\n", s, m_city.m_id));
-				shieldstore = s;
-			}
+			shieldstore = s;
 		}
+		Assert(shieldstore >= 0);
 		return false;
 	}
 }

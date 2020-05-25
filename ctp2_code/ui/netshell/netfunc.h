@@ -30,7 +30,7 @@
 //
 // - Added SDL support.
 // - Make the Linux version loading and producing Windows compatible
-//   savegames. (16-Jan-2019 Martin Gühmann)
+//   savegames. (16-Jan-2019 Martin GÃ¼hmann)
 //
 //----------------------------------------------------------------------------
 
@@ -419,7 +419,7 @@ public:
 	}
 
 	void Grow(size_t s) {
-		assert((size + s) <= nf_MAX_PACKETSIZE);
+		Assert((size + s) <= nf_MAX_PACKETSIZE);
         size = static_cast<SizeT>(size + s);
 	}
 

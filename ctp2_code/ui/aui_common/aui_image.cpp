@@ -24,7 +24,7 @@
 // Modifications from the original Activision code:
 //
 // - Crash prevented.
-// - Initialized local variables. (Sep 9th 2005 Martin G�hmann)
+// - Initialized local variables. (Sep 9th 2005 Martin Gühmann)
 //
 //----------------------------------------------------------------------------
 
@@ -314,8 +314,8 @@ AUI_ERRCODE aui_BmpImageFormat::Load(MBCHAR const * filename, aui_Image *image )
 
 	return retcode;
 #elif defined(__AUI_USE_SDL__)
-        fprintf(stderr, "%s L%d: image %s!\n", __FILE__, __LINE__, filename); //is this ever called?
-	assert(0);
+	fprintf(stderr, "%s L%d: image %s!\n", __FILE__, __LINE__, filename); //is this ever called?
+	Assert(0);
 	SDL_Surface *bmp = SDL_LoadBMP(filename);
 	SDL_Surface *surf = NULL;
 	SDL_PixelFormat fmt = { 0 };
