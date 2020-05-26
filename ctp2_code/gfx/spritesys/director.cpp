@@ -2993,6 +2993,16 @@ void DirectorImpl::AddDeath(UnitActor *dead, const MapPoint &deadPos, sint32 dea
 {
 	Assert(dead);
 
+	bool playerInvolved = dead->GetPlayerNum() == g_selected_item->GetVisiblePlayer();
+	bool visibleEnemyUnit = g_theProfileDB->IsEnemyMoves()
+							&& dead->GetPlayerNum() != g_selected_item->GetVisiblePlayer()
+							&& (dead->GetUnitVisibility() & (1 << g_selected_item->GetVisiblePlayer()));
+	if ((playerInvolved || visibleEnemyUnit) && !TileWillBeCompletelyVisible(deadPos.x, deadPos.y)) {
+		AddCenterMap(deadPos);
+	}
+	dead->SetHiddenUnderStack(FALSE);
+
+
 	DQActionDeath *action = new DQActionDeath(dead->GetPlayerNum(), dead, deadPos, deadSoundID);
 	m_actionQueue->AddTail(action);
 }
