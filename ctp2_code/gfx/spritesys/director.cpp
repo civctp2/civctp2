@@ -250,12 +250,12 @@ public:
 private:
 	void DrawTradeActor(TradeActor *actor, RECT *paintRect)
 	{
-		const MapPoint &position = actor->GetCurrentPos();
+		const MapPoint &pos = actor->GetCurrentPos();
 
 		sint32 tileX;
-		maputils_MapX2TileX(position.x, position.y, &tileX);
+		maputils_MapX2TileX(pos.x, pos.y, &tileX);
 
-		if (maputils_TilePointInTileRect(tileX, position.y, paintRect))
+		if (maputils_TilePointInTileRect(tileX, pos.y, paintRect))
 		{
 			actor->Draw(g_tiledMap->GetLocalVision());
 			RECT dirtyRect;
@@ -415,18 +415,18 @@ public:
 	virtual bool IsAnimationFinished() = 0;
 
 protected:
-	static bool TileIsVisibleToPlayer(const MapPoint &position)
+	static bool TileIsVisibleToPlayer(const MapPoint &pos)
 	{
 		#if defined(_PLAYTEST)
 			if (g_doingFastRounds) return false;
 		#endif
 
-		return g_tiledMap && g_tiledMap->GetLocalVision()->IsVisible(position);
+		return g_tiledMap && g_tiledMap->GetLocalVision()->IsVisible(pos);
 	}
 
-	static void CenterMap(const MapPoint &position)
+	static void CenterMap(const MapPoint &pos)
 	{
-		g_radarMap->CenterMap(position);
+		g_radarMap->CenterMap(pos);
 		g_tiledMap->Refresh();
 		g_tiledMap->InvalidateMap();
 		g_tiledMap->InvalidateMix();
@@ -468,13 +468,13 @@ public:
  */
 class DQActionEffect : public DQAction {
 public:
-	DQActionEffect(SpriteState *spriteState, const MapPoint &position)
+	DQActionEffect(SpriteState *spriteState, const MapPoint &pos)
 		: DQAction(),
-		m_activeActor (new EffectActor(spriteState, position))
+		m_activeActor (new EffectActor(spriteState, pos))
 	{}
-	DQActionEffect(sint32 spriteID, const MapPoint &position)
+	DQActionEffect(sint32 spriteID, const MapPoint &pos)
 		: DQAction(),
-		m_activeActor (new EffectActor(new SpriteState(spriteID), position))
+		m_activeActor (new EffectActor(new SpriteState(spriteID), pos))
 	{}
 	virtual ~DQActionEffect() {
 		delete m_activeActor;
@@ -496,11 +496,11 @@ public:
 
 	virtual void Draw(RECT *paintRect)
 	{
-		const MapPoint &position = m_activeActor->GetPos();
+		const MapPoint &pos = m_activeActor->GetPos();
 
 		sint32 tileX;
-		maputils_MapX2TileX(position.x, position.y, &tileX);
-		if (maputils_TilePointInTileRect(tileX, position.y, paintRect)) {
+		maputils_MapX2TileX(pos.x, pos.y, &tileX);
+		if (maputils_TilePointInTileRect(tileX, pos.y, paintRect)) {
 			m_activeActor->Paint();
 		}
 	}
@@ -712,8 +712,8 @@ public:
 
 	virtual void AddMove(
 		const Unit     &mover,
-		MapPoint const &startPosition,
-		MapPoint const &endPosition,
+		MapPoint const &startPos,
+		MapPoint const &endPos,
 		sint32         numberOfRevealedActors,
 		UnitActor      **revealedActors,
 		sint32         numberOfMoveActors,
@@ -722,17 +722,17 @@ public:
 	);
 	virtual void AddTeleport(
 		const Unit     &mover,
-		MapPoint const &startPosition,
-		MapPoint const &endPosition,
+		MapPoint const &startPos,
+		MapPoint const &endPos,
 		sint32         numberOfRevealedActors,
 		UnitActor      **revealedActors,
 		sint32         numberOfMoveActors,
 		UnitActor      **moveActors
 	);
 	virtual void AddAttack(const Unit& attacker, const Unit& attacked);
-	virtual void AddAttackPos(const Unit& attacker, const MapPoint &position);
+	virtual void AddAttackPos(const Unit& attacker, const MapPoint &pos);
 	virtual void AddSpecialAttack(const Unit& attacker, const Unit& attacked, SPECATTACK attack);
-	virtual void AddDeath(UnitActor *dead, const MapPoint &deadPosition, sint32 deadSoundID);
+	virtual void AddDeath(UnitActor *dead, const MapPoint &deadPos, sint32 deadSoundID);
 	virtual void AddProjectileAttack(
 		const Unit  &shooting,
 		const Unit  &target,
@@ -740,24 +740,24 @@ public:
 		SpriteState *projectileEndState,
 		sint32      projectilePath
 	);
-	virtual void AddSpecialEffect(const MapPoint &position, sint32 spriteID, sint32 soundID);
+	virtual void AddSpecialEffect(const MapPoint &pos, sint32 spriteID, sint32 soundID);
 	virtual void AddMorphUnit(UnitActor *morphingActor, SpriteState *spriteState, sint32 type, const Unit &id);
 	virtual void AddHide(const Unit &hider);
 	virtual void AddShow(const Unit &hider);
 	virtual void AddWork(const Unit &worker);
 	virtual void AddFastKill(UnitActor *dead);
-	virtual void AddRemoveVision(const MapPoint &position, double range);
-	virtual void AddAddVision(const MapPoint &position, double range);
+	virtual void AddRemoveVision(const MapPoint &pos, double range);
+	virtual void AddAddVision(const MapPoint &pos, double range);
 	virtual void AddSetVisibility(UnitActor *actor, uint32 visibility);
 	virtual void AddSetOwner(UnitActor *actor, sint32 owner);
 	virtual void AddSetVisionRange(UnitActor *actor, double range);
-	virtual void AddCombatFlash(const MapPoint &position);
+	virtual void AddCombatFlash(const MapPoint &pos);
 	virtual void AddCopyVision();
-	virtual void AddCenterMap(const MapPoint &position);
+	virtual void AddCenterMap(const MapPoint &pos);
 	virtual void AddSelectUnit(uint32 flags);
 	virtual void AddEndTurn();
 	virtual void AddBattle(Battle *battle);
-	virtual void AddPlaySound(sint32 soundID, const MapPoint &position);
+	virtual void AddPlaySound(sint32 soundID, const MapPoint &pos);
 	virtual void AddGameSound(GAMESOUNDS sound);
 	virtual void AddPlayWonderMovie(sint32 which);
 	virtual void AddPlayVictoryMovie(GAME_OVER reason, bool previouslyWon, bool previouslyLost);
@@ -882,16 +882,16 @@ class DQActionTeleport : public DQActionImmediate
 public:
 	DQActionTeleport(
 			UnitActor      *moveActor,
-			const MapPoint &startPosition,
-			const MapPoint &endPosition,
+			const MapPoint &startPos,
+			const MapPoint &endPos,
 			sint32         numberOfMoveActors,
 			UnitActor      **moveActors,
 			sint32         numberOfRevealedActors,
 			UnitActor      **revealedActors)
 		: DQActionImmediate(),
 		moveActor              (moveActor),
-		startPosition          (startPosition),
-		endPosition            (endPosition),
+		startPos               (startPos),
+		endPos                 (endPos),
 		numberOfMoveActors     (numberOfMoveActors),
 		moveActors             (moveActors),
 		numberOfRevealedActors (numberOfRevealedActors),
@@ -912,12 +912,12 @@ public:
 			tempActor->SetVisSpecial(TRUE);
 		}
 
-		moveActor->PositionActor(endPosition);
+		moveActor->PositionActor(endPos);
 
 		for (int i = 0; i < numberOfMoveActors; i++)
 		{
 			UnitActor *moveActor = moveActors[i];
-			moveActor->PositionActor(endPosition);
+			moveActor->PositionActor(endPos);
 		}
 	}
 
@@ -925,8 +925,8 @@ public:
 	{
 		DPRINTF(k_DBG_UI, ("Teleport\n"));
 		DPRINTF(k_DBG_UI, ("  actor                  :%#x (%#.8lx)\n", moveActor->GetUnitID(), moveActor));
-		DPRINTF(k_DBG_UI, ("  startPosition          :%d,%d\n", startPosition.x, startPosition.y));
-		DPRINTF(k_DBG_UI, ("  endPosition            :%d,%d\n", endPosition.x, endPosition.y));
+		DPRINTF(k_DBG_UI, ("  startPosition          :%d,%d\n", startPos.x, startPos.y));
+		DPRINTF(k_DBG_UI, ("  endPosition            :%d,%d\n", endPos.x, endPos.y));
 		DPRINTF(k_DBG_UI, ("  numberOfMoveActors     :%d\n", numberOfMoveActors));
 		if (numberOfMoveActors > 0)
 		{
@@ -949,8 +949,8 @@ public:
 
 protected:
 	UnitActor *moveActor;
-	MapPoint  startPosition;
-	MapPoint  endPosition;
+	MapPoint  startPos;
+	MapPoint  endPos;
 	sint32    numberOfMoveActors;
 	UnitActor **moveActors;
 	sint32    numberOfRevealedActors;
@@ -1027,26 +1027,26 @@ public:
 class DQActionShow : public DQActionHideShow
 {
 public:
-	DQActionShow(UnitActor *hidingActor, const MapPoint &hidingPosition)
+	DQActionShow(UnitActor *hidingActor, const MapPoint &hidingPos)
 		: DQActionHideShow(hidingActor),
-		hidingPosition (hidingPosition)
+		hidingPos (hidingPos)
 	{}
 	virtual ~DQActionShow() {}
 	virtual DQACTION_TYPE GetType() { return DQACTION_SHOW; }
 
 	virtual void Execute()
 	{
-		hidingActor->PositionActor(hidingPosition);
+		hidingActor->PositionActor(hidingPos);
 		hidingActor->Show();
 	}
 
 	virtual void Dump() {
 		DPRINTF(k_DBG_UI, ("Show\n"));
 		DPRINTF(k_DBG_UI, ("  hidingActor            :%#x (%#.8lx)\n", hidingActor->GetUnitID(), hidingActor));
-		DPRINTF(k_DBG_UI, ("  hidingPosition         :%d,%d\n", hidingPosition.x, hidingPosition.y));
+		DPRINTF(k_DBG_UI, ("  hidingPosition         :%d,%d\n", hidingPos.x, hidingPos.y));
 	}
 protected:
-	MapPoint hidingPosition;
+	MapPoint hidingPos;
 };
 
 class DQActionFastKill : public DQActionImmediate
@@ -1076,23 +1076,23 @@ private:
 class DQActionVision : public DQActionImmediate
 {
 public:
-	DQActionVision(const MapPoint &visionPosition, double visionRange)
+	DQActionVision(const MapPoint &visionPos, double visionRange)
 		: DQActionImmediate(),
-		visionPosition (visionPosition),
-		visionRange    (visionRange)
+		visionPos   (visionPos),
+		visionRange (visionRange)
 	{}
 	virtual ~DQActionVision() {}
 
 protected:
-	MapPoint visionPosition;
+	MapPoint visionPos;
 	double   visionRange;
 };
 
 class DQActionRemoveVision : public DQActionVision
 {
 public:
-	DQActionRemoveVision(const MapPoint &visionPosition, double visionRange)
-		: DQActionVision(visionPosition, visionRange)
+	DQActionRemoveVision(const MapPoint &visionPos, double visionRange)
+		: DQActionVision(visionPos, visionRange)
 	{}
 	virtual ~DQActionRemoveVision() {}
 	virtual DQACTION_TYPE GetType() { return DQACTION_REMOVEVISION; }
@@ -1100,22 +1100,22 @@ public:
 	virtual void Execute()
 	{
 		if(g_tiledMap) {
-			g_tiledMap->RemoveVisible(visionPosition, visionRange);
+			g_tiledMap->RemoveVisible(visionPos, visionRange);
 		}
 	}
 
 	virtual void Dump()
 	{
 		DPRINTF(k_DBG_UI, ("Remove Vision\n"));
-		DPRINTF(k_DBG_UI, ("  visionPosition         :%d,%d\n", visionPosition.x, visionPosition.y));
+		DPRINTF(k_DBG_UI, ("  visionPosition         :%d,%d\n", visionPos.x, visionPos.y));
 		DPRINTF(k_DBG_UI, ("  visionRange            :%#.2f\n", visionRange));
 	}
 };
 
 class DQActionAddVision : public DQActionVision {
 public:
-	DQActionAddVision(const MapPoint &visionPosition, double visionRange)
-		: DQActionVision(visionPosition, visionRange)
+	DQActionAddVision(const MapPoint &visionPos, double visionRange)
+		: DQActionVision(visionPos, visionRange)
 	{}
 	virtual ~DQActionAddVision() {}
 	virtual DQACTION_TYPE GetType() { return DQACTION_ADDVISION; }
@@ -1123,14 +1123,14 @@ public:
 	virtual void Execute()
 	{
 		if(g_tiledMap) {
-			g_tiledMap->AddVisible(visionPosition, visionRange);
+			g_tiledMap->AddVisible(visionPos, visionRange);
 		}
 	}
 
 	virtual void Dump()
 	{
 		DPRINTF(k_DBG_UI, ("Add Vision\n"));
-		DPRINTF(k_DBG_UI, ("  visionPosition         :%d,%d\n", visionPosition.x, visionPosition.y));
+		DPRINTF(k_DBG_UI, ("  visionPosition         :%d,%d\n", visionPos.x, visionPos.y));
 		DPRINTF(k_DBG_UI, ("  visionRange            :%#.2f\n", visionRange));
 	}
 };
@@ -1219,9 +1219,9 @@ protected:
 class DQActionCenterMap : public DQActionImmediate
 {
 public:
-	DQActionCenterMap(const MapPoint &centerMapPosition)
+	DQActionCenterMap(const MapPoint &centerMapPos)
 		: DQActionImmediate(),
-		centerMapPosition (centerMapPosition)
+		centerMapPos (centerMapPos)
 	{}
 	virtual ~DQActionCenterMap() {}
 	virtual DQACTION_TYPE GetType() { return DQACTION_CENTERMAP; }
@@ -1229,25 +1229,25 @@ public:
 	virtual void Execute()
 	{
 		if(!g_selected_item->GetIsPathing()) {
-			CenterMap(centerMapPosition);
+			CenterMap(centerMapPos);
 		}
 	}
 
 	virtual void Dump()
 	{
 		DPRINTF(k_DBG_UI, ("Center Map\n"));
-		DPRINTF(k_DBG_UI, ("  centerMapPosition      :%d,%d\n", centerMapPosition.x, centerMapPosition.y));
+		DPRINTF(k_DBG_UI, ("  centerMapPosition      :%d,%d\n", centerMapPos.x, centerMapPos.y));
 	}
 
 	bool TileIsCompletelyVisible(sint32 x, sint32 y)
 	{
 		RECT tempViewRect = *g_tiledMap->GetMapViewRect();
-		g_radarMap->ComputeCenteredMap(centerMapPosition, &tempViewRect);
+		g_radarMap->ComputeCenteredMap(centerMapPos, &tempViewRect);
 		return g_tiledMap->TileIsCompletelyVisible(x, y, &tempViewRect);
 	}
 
 protected:
-	MapPoint centerMapPosition;
+	MapPoint centerMapPos;
 };
 
 class DQActionCopyVision : public DQActionImmediate
@@ -1318,10 +1318,10 @@ public:
 class DQActionPlaySound : public DQActionImmediate
 {
 public:
-	DQActionPlaySound(sint32 soundID, const MapPoint &position)
+	DQActionPlaySound(sint32 soundID, const MapPoint &pos)
 		: DQActionImmediate(),
-		soundID  (soundID),
-		position (position)
+		soundID (soundID),
+		pos     (pos)
 	{}
 	virtual ~DQActionPlaySound() {}
 	virtual DQACTION_TYPE GetType() { return DQACTION_PLAYSOUND; }
@@ -1329,7 +1329,7 @@ public:
 	virtual void Execute()
 	{
 		if (g_soundManager) {
-			g_soundManager->AddSound(SOUNDTYPE_SFX, 0, soundID, position.x, position.y);
+			g_soundManager->AddSound(SOUNDTYPE_SFX, 0, soundID, pos.x, pos.y);
 		}
 	}
 
@@ -1337,11 +1337,11 @@ public:
 	{
 		DPRINTF(k_DBG_UI, ("Play Sound\n"));
 		DPRINTF(k_DBG_UI, ("  soundID                :%d\n", soundID));
-		DPRINTF(k_DBG_UI, ("  position               :%d,%d\n", position.x, position.y));
+		DPRINTF(k_DBG_UI, ("  position               :%d,%d\n", pos.x, pos.y));
 	}
 protected:
 	sint32   soundID;
-	MapPoint position;
+	MapPoint pos;
 };
 
 class DQActionMessage : public DQActionImmediate
@@ -1456,16 +1456,16 @@ public:
 class DQActionMoveProjectile : public DQActionEffect
 {
 public:
-	DQActionMoveProjectile(SpriteState *projectileEndState, const MapPoint &startPosition, const MapPoint &endPosition)
-		: DQActionEffect(projectileEndState, endPosition),
-		startPosition	(startPosition)
+	DQActionMoveProjectile(SpriteState *projectileEndState, const MapPoint &startPos, const MapPoint &endPos)
+		: DQActionEffect(projectileEndState, endPos),
+		startPos (startPos)
 	{}
 	virtual ~DQActionMoveProjectile() {}
 	virtual DQACTION_TYPE GetType() { return DQACTION_MOVEPROJECTILE; }
 
 	virtual void Execute()
 	{
-		if (TileIsVisibleToPlayer(startPosition))
+		if (TileIsVisibleToPlayer(startPos))
 		{
 			sint32 actionType = EFFECTACTION_PLAY;
 			Anim *animation = m_activeActor->CreateAnim(EFFECTACTION_PLAY);
@@ -1486,18 +1486,18 @@ public:
 	virtual void Dump()
 	{
 		DPRINTF(k_DBG_UI, ("Move Projectile\n"));
-		DPRINTF(k_DBG_UI, ("  startPosition          :%d,%d\n", startPosition.x, startPosition.y));
+		DPRINTF(k_DBG_UI, ("  startPosition          :%d,%d\n", startPos.x, startPos.y));
 		DPRINTF(k_DBG_UI, ("  endPosition            :%d,%d\n", m_activeActor->GetPos().x, m_activeActor->GetPos().y));
 	}
 protected:
-	MapPoint startPosition;
+	MapPoint startPos;
 };
 
 class DQActionCombatFlash : public DQActionEffect
 {
 public:
-	DQActionCombatFlash(const MapPoint &flashPosition)
-		: DQActionEffect(99, flashPosition)
+	DQActionCombatFlash(const MapPoint &flashPos)
+		: DQActionEffect(99, flashPos)
 	{}
 	virtual ~DQActionCombatFlash() {}
 	virtual DQACTION_TYPE GetType() { return DQACTION_COMBATFLASH; }
@@ -1530,8 +1530,8 @@ public:
 class DQActionSpecialEffect : public DQActionEffect
 {
 public:
-	DQActionSpecialEffect(const MapPoint &position, sint32 spriteID, sint32 soundID)
-		: DQActionEffect(spriteID, position),
+	DQActionSpecialEffect(const MapPoint &pos, sint32 spriteID, sint32 soundID)
+		: DQActionEffect(spriteID, pos),
 		spriteID (spriteID),
 		soundID  (soundID)
 	{}
@@ -1577,8 +1577,8 @@ public:
 	DQActionMove(
 			sint8          owner,
 			UnitActor      *moveActor,
-			const MapPoint &startPosition,
-			const MapPoint &endPosition,
+			const MapPoint &startPos,
+			const MapPoint &endPos,
 			sint32         numberOfMoveActors,
 			UnitActor      **moveActors,
 			sint32         numberOfRevealedActors,
@@ -1587,8 +1587,8 @@ public:
 		: DQActionActive(owner),
 		moveActor              (moveActor),
 		moveActorActive        (false),
-		startPosition          (startPosition),
-		endPosition            (endPosition),
+		startPos               (startPos),
+		endPos                 (endPos),
 		numberOfMoveActors     (numberOfMoveActors),
 		moveActors             (moveActors),
 		numberOfRevealedActors (numberOfRevealedActors),
@@ -1599,11 +1599,11 @@ public:
 	}
 	virtual ~DQActionMove()
 	{
-		moveActor->PositionActor(endPosition);
+		moveActor->PositionActor(endPos);
 
 		for (int i = 0; i < numberOfMoveActors; i++)
 		{
-			moveActors[i]->PositionActor(endPosition);
+			moveActors[i]->PositionActor(endPos);
 		}
 
 		DirectorImpl::Instance()->RemoveStandbyActor(moveActor);
@@ -1623,11 +1623,11 @@ public:
 	{
 		Action *action = new Action();
 
-		action->SetStartMapPoint(startPosition);
-		action->SetEndMapPoint  (endPosition);
-		action->CreatePath(startPosition.x, startPosition.y, endPosition.x, endPosition.y);
+		action->SetStartMapPoint(startPos);
+		action->SetEndMapPoint  (endPos);
+		action->CreatePath(startPos.x, startPos.y, endPos.x, endPos.y);
 
-		moveActor->PositionActor(startPosition);
+		moveActor->PositionActor(startPos);
 
 		uint32 maxActionCounter = 1;
 		sint32 speed            = g_theProfileDB->GetUnitSpeed();
@@ -1662,8 +1662,8 @@ public:
 	{
 		DPRINTF(k_DBG_UI, ("Move\n"));
 		DPRINTF(k_DBG_UI, ("  actor                  :%#x (%#.8lx)\n", moveActor->GetUnitID(), moveActor));
-		DPRINTF(k_DBG_UI, ("  startPosition          :%d,%d\n", startPosition.x, startPosition.y));
-		DPRINTF(k_DBG_UI, ("  endPosition            :%d,%d\n", endPosition.x, endPosition.y));
+		DPRINTF(k_DBG_UI, ("  startPosition          :%d,%d\n", startPos.x, startPos.y));
+		DPRINTF(k_DBG_UI, ("  endPosition            :%d,%d\n", endPos.x, endPos.y));
 		DPRINTF(k_DBG_UI, ("  numberOfMoveActors     :%d\n", numberOfMoveActors));
 		if (numberOfMoveActors > 0)
 		{
@@ -1689,13 +1689,13 @@ protected:
 	virtual bool DoSkipAnimation()
 	{
 		// Unit invisible
-		return !TileIsVisibleToPlayer(startPosition) && !TileIsVisibleToPlayer(endPosition);
+		return !TileIsVisibleToPlayer(startPos) && !TileIsVisibleToPlayer(endPos);
 	}
 
 	UnitActor *moveActor;
 	bool      moveActorActive;
-	MapPoint  startPosition;
-	MapPoint  endPosition;
+	MapPoint  startPos;
+	MapPoint  endPos;
 	sint32    numberOfMoveActors;
 	UnitActor **moveActors;
 	sint32    numberOfRevealedActors;
@@ -1709,18 +1709,18 @@ public:
 	DQActionAttack(
 			sint8          owner,
 			UnitActor      *attacker,
-			const MapPoint &attackerPosition,
+			const MapPoint &attackerPos,
 			bool           attackerIsCity,
 			UnitActor      *defender,
-			const MapPoint &defenderPosition,
+			const MapPoint &defenderPos,
 			bool           defenderIsCity)
 		: DQActionActive(owner),
-		attacker         (attacker),
-		attackerPosition (attackerPosition),
-		attackerIsCity   (attackerIsCity),
-		defender         (defender),
-		defenderPosition (defenderPosition),
-		defenderIsCity   (defenderIsCity)
+		attacker       (attacker),
+		attackerPos    (attackerPos),
+		attackerIsCity (attackerIsCity),
+		defender       (defender),
+		defenderPos    (defenderPos),
+		defenderIsCity (defenderIsCity)
 	{}
 	virtual ~DQActionAttack() {}
 	virtual DQACTION_TYPE GetType() { return DQACTION_ATTACK; }
@@ -1729,10 +1729,10 @@ public:
 	{
 		DPRINTF(k_DBG_UI, ("%s\n", GetName()));
 		DPRINTF(k_DBG_UI, ("  attacker               :%#x (%#.8lx)\n", attacker->GetUnitID(), attacker));
-		DPRINTF(k_DBG_UI, ("  attackerPosition       :%d,%d\n", attackerPosition.x, attackerPosition.y));
+		DPRINTF(k_DBG_UI, ("  attackerPosition       :%d,%d\n", attackerPos.x, attackerPos.y));
 		DPRINTF(k_DBG_UI, ("  attackerIsCity         :%s\n", attackerIsCity ? "true" : "false"));
 		DPRINTF(k_DBG_UI, ("  defender               :%#x (%#.8lx)\n", defender->GetUnitID(), defender));
-		DPRINTF(k_DBG_UI, ("  defenderPosition       :%d,%d\n", defenderPosition.x, defenderPosition.y));
+		DPRINTF(k_DBG_UI, ("  defenderPosition       :%d,%d\n", defenderPos.x, defenderPos.y));
 		DPRINTF(k_DBG_UI, ("  defenderIsCity         :%s\n", defenderIsCity ? "true" : "false"));
 	}
 protected:
@@ -1741,8 +1741,8 @@ protected:
 	virtual void PrepareAnimation()
 	{
 		POINT  attackerPoints, defenderPoints;
-		maputils_MapXY2PixelXY(attackerPosition.x, attackerPosition.y, attackerPoints);
-		maputils_MapXY2PixelXY(defenderPosition.x, defenderPosition.y, defenderPoints);
+		maputils_MapXY2PixelXY(attackerPos.x, attackerPos.y, attackerPoints);
+		maputils_MapXY2PixelXY(defenderPos.x, defenderPos.y, defenderPoints);
 
 		sint32  deltaX = defenderPoints.x - attackerPoints.x;
 		sint32  deltaY = defenderPoints.y - attackerPoints.y;
@@ -1752,20 +1752,20 @@ protected:
 		if (playerInvolved)
 		{
 			Action *action = new Action();
-			action->SetStartMapPoint(attackerPosition);
-			action->SetEndMapPoint  (attackerPosition);
+			action->SetStartMapPoint(attackerPos);
+			action->SetEndMapPoint  (attackerPos);
 
 			sint32 facingIndex = spriteutils_DeltaToFacing(deltaX, deltaY);
 			attacker->ActionAttack(action, facingIndex);
 			AddActiveActor(attacker);
 		}
 
-		bool defenderVisible = TileIsVisibleToPlayer(defenderPosition);
+		bool defenderVisible = TileIsVisibleToPlayer(defenderPos);
 		if (!defenderIsCity && (playerInvolved || defenderVisible))
 		{
 			Action *action = new Action();
-			action->SetStartMapPoint(defenderPosition);
-			action->SetEndMapPoint  (defenderPosition);
+			action->SetStartMapPoint(defenderPos);
+			action->SetEndMapPoint  (defenderPos);
 
 			sint32 facingIndex = spriteutils_DeltaToFacing(-deltaX, -deltaY);
 			defender->ActionAttack(action, facingIndex);
@@ -1775,10 +1775,10 @@ protected:
 	}
 
 	UnitActor *attacker;
-	MapPoint  attackerPosition;
+	MapPoint  attackerPos;
 	bool      attackerIsCity;
 	UnitActor *defender;
-	MapPoint  defenderPosition;
+	MapPoint  defenderPos;
 	bool      defenderIsCity;
 };
 
@@ -1788,13 +1788,13 @@ public:
 	DQActionSpecialAttack(
 			sint8          owner,
 			UnitActor      *attacker,
-			const MapPoint &attackerPosition,
+			const MapPoint &attackerPos,
 			bool           attackerIsCity,
 			sint32         attackerSoundID,
 			UnitActor      *defender,
-			const MapPoint &defenderPosition,
+			const MapPoint &defenderPos,
 			bool           defenderIsCity)
-		: DQActionAttack(owner, attacker, attackerPosition, attackerIsCity, defender, defenderPosition, defenderIsCity),
+		: DQActionAttack(owner, attacker, attackerPos, attackerIsCity, defender, defenderPos, defenderIsCity),
 		attackerSoundID (attackerSoundID)
 	{}
 	virtual ~DQActionSpecialAttack() {}
@@ -1820,18 +1820,18 @@ protected:
 		}
 
 		POINT attackerPoints, defenderPoints;
-		maputils_MapXY2PixelXY(attackerPosition.x, attackerPosition.y, attackerPoints);
-		maputils_MapXY2PixelXY(defenderPosition.x, defenderPosition.y, defenderPoints);
+		maputils_MapXY2PixelXY(attackerPos.x, attackerPos.y, attackerPoints);
+		maputils_MapXY2PixelXY(defenderPos.x, defenderPos.y, defenderPoints);
 
 		sint32 deltaX = defenderPoints.x - attackerPoints.x;
 		sint32 deltaY = defenderPoints.y - attackerPoints.y;
 
-		bool attackerVisible = TileIsVisibleToPlayer(attackerPosition);
+		bool attackerVisible = TileIsVisibleToPlayer(attackerPos);
 		if (!attackerIsCity && attackerVisible)
 		{
 			Action *attackerAction = new Action();
-			attackerAction->SetStartMapPoint(attackerPosition);
-			attackerAction->SetEndMapPoint  (attackerPosition);
+			attackerAction->SetStartMapPoint(attackerPos);
+			attackerAction->SetEndMapPoint  (attackerPos);
 
 			sint32 facingIndex = spriteutils_DeltaToFacing(deltaX, deltaY);
 			if (attacker->ActionSpecialAttack(attackerAction, facingIndex)) {
@@ -1841,12 +1841,12 @@ protected:
 			}
 		}
 
-		bool defenderVisible = TileIsVisibleToPlayer(defenderPosition);
+		bool defenderVisible = TileIsVisibleToPlayer(defenderPos);
 		if (!defenderIsCity && defenderVisible)
 		{
 			Action *defenderAction = new Action();
-			defenderAction->SetStartMapPoint(defenderPosition);
-			defenderAction->SetEndMapPoint  (defenderPosition);
+			defenderAction->SetStartMapPoint(defenderPos);
+			defenderAction->SetEndMapPoint  (defenderPos);
 
 			sint32 facingIndex = spriteutils_DeltaToFacing(-deltaX, -deltaY);
 			if (defender->ActionSpecialAttack(defenderAction, facingIndex)) {
@@ -1866,14 +1866,14 @@ public:
 	DQActionAttackPos(
 			sint8          owner,
 			UnitActor      *attacker,
-			const MapPoint &attackerPosition,
-			const MapPoint &targetPosition,
+			const MapPoint &attackerPos,
+			const MapPoint &targetPos,
 			sint32         soundID)
 		: DQActionActive(owner),
-		attacker			(attacker),
-		attackerPosition	(attackerPosition),
-		targetPosition	(targetPosition),
-		soundID			(soundID)
+		attacker    (attacker),
+		attackerPos (attackerPos),
+		targetPos   (targetPos),
+		soundID     (soundID)
 	{}
 	virtual ~DQActionAttackPos() {}
 	virtual DQACTION_TYPE GetType() { return DQACTION_ATTACKPOS; }
@@ -1882,15 +1882,15 @@ public:
 	{
 		DPRINTF(k_DBG_UI, ("Attack Pos\n"));
 		DPRINTF(k_DBG_UI, ("  attacker               :%#x (%#.8lx)\n", attacker->GetUnitID(), attacker));
-		DPRINTF(k_DBG_UI, ("  attackerPosition       :%d,%d\n", attackerPosition.x, attackerPosition.y));
-		DPRINTF(k_DBG_UI, ("  targetPosition         :%d,%d\n", targetPosition.x, targetPosition.y));
+		DPRINTF(k_DBG_UI, ("  attackerPosition       :%d,%d\n", attackerPos.x, attackerPos.y));
+		DPRINTF(k_DBG_UI, ("  targetPosition         :%d,%d\n", targetPos.x, targetPos.y));
 		DPRINTF(k_DBG_UI, ("  soundID                :%d\n", soundID));
 	}
 protected:
 	virtual bool DoSkipAnimation()
 	{
 		// Unit invisible
-		return !TileIsVisibleToPlayer(attackerPosition);
+		return !TileIsVisibleToPlayer(attackerPos);
 	}
 
 	virtual void PrepareAnimation()
@@ -1898,8 +1898,8 @@ protected:
 		Action *action = new Action(UNITACTION_ATTACK, ACTIONEND_ANIMEND,
 									attacker->GetHoldingCurAnimPos(UNITACTION_ATTACK),
 									attacker->GetHoldingCurAnimSpecialDelayProcess(UNITACTION_ATTACK));
-		action->SetStartMapPoint(attackerPosition);
-		action->SetEndMapPoint(attackerPosition);
+		action->SetStartMapPoint(attackerPos);
+		action->SetEndMapPoint(attackerPos);
 
 		if (attacker->GetLoadType() != LOADTYPE_FULL) {
 			attacker->FullLoad(UNITACTION_ATTACK);
@@ -1911,8 +1911,8 @@ protected:
 		action->SetAnim(attackerAnim);
 
 		POINT attackerPoints, attackedPoints;
-		maputils_MapXY2PixelXY(attackerPosition.x, attackerPosition.y, attackerPoints);
-		maputils_MapXY2PixelXY(targetPosition.x, targetPosition.y, attackedPoints);
+		maputils_MapXY2PixelXY(attackerPos.x, attackerPos.y, attackerPoints);
+		maputils_MapXY2PixelXY(targetPos.x, targetPos.y, attackedPoints);
 		action->SetFacing(spriteutils_DeltaToFacing(attackedPoints.x - attackerPoints.x,
 													attackedPoints.y - attackerPoints.y));
 
@@ -1927,25 +1927,25 @@ protected:
 				(attacker->GetUnitVisibility() & (1 << visiblePlayer)))
 			{
 				g_soundManager->AddSound(SOUNDTYPE_SFX, attacker->GetUnitID(), soundID,
-										 attackerPosition.x, attackerPosition.y);
+										 attackerPos.x, attackerPos.y);
 			}
 		}
 	}
 
 	UnitActor *attacker;
-	MapPoint  attackerPosition;
-	MapPoint  targetPosition;
+	MapPoint  attackerPos;
+	MapPoint  targetPos;
 	sint32    soundID;
 };
 
 class DQActionDeath : public DQActionActive
 {
 public:
-	DQActionDeath(sint8 owner, UnitActor *dead, const MapPoint &deadPosition, sint32 deadSoundID)
+	DQActionDeath(sint8 owner, UnitActor *dead, const MapPoint &deadPos, sint32 deadSoundID)
 		: DQActionActive(owner),
-		dead			(dead),
-		deadPosition	(deadPosition),
-		deadSoundID	(deadSoundID)
+		dead        (dead),
+		deadPos     (deadPos),
+		deadSoundID (deadSoundID)
 	{}
 	virtual ~DQActionDeath()
 	{
@@ -1957,14 +1957,14 @@ public:
 	{
 		DPRINTF(k_DBG_UI, ("Death\n"));
 		DPRINTF(k_DBG_UI, ("  dead                   :%#x (%#.8lx)\n", dead->GetUnitID(), dead));
-		DPRINTF(k_DBG_UI, ("  deadPosition           :%d,%d\n", deadPosition.x, deadPosition.y));
+		DPRINTF(k_DBG_UI, ("  deadPosition           :%d,%d\n", deadPos.x, deadPos.y));
 		DPRINTF(k_DBG_UI, ("  deadSoundID            :%d\n", deadSoundID));
 	}
 protected:
 	virtual bool DoSkipAnimation()
 	{
 		// Unit invisible
-		return !TileIsVisibleToPlayer(deadPosition);
+		return !TileIsVisibleToPlayer(deadPos);
 	}
 
 	virtual void PrepareAnimation()
@@ -1997,8 +1997,8 @@ protected:
 		dead->SetTempStackSize(0);
 
 		Action *action = new Action((UNITACTION)deathActionType, ACTIONEND_ANIMEND);
-		action->SetStartMapPoint(deadPosition);
-		action->SetEndMapPoint(deadPosition);
+		action->SetStartMapPoint(deadPos);
+		action->SetEndMapPoint(deadPos);
 
 		action->SetAnim(deathAnim);
 
@@ -2013,24 +2013,24 @@ protected:
 			if ((visiblePlayer == dead->GetPlayerNum()) ||
 				(dead->GetUnitVisibility() & (1 << visiblePlayer))) {
 				g_soundManager->AddSound(SOUNDTYPE_SFX, (uint32)dead->GetUnitID(), deadSoundID,
-										 deadPosition.x, deadPosition.y);
+										 deadPos.x, deadPos.y);
 			}
 		}
 	}
 
 	UnitActor *dead;
-	MapPoint  deadPosition;
+	MapPoint  deadPos;
 	sint32    deadSoundID;
 };
 
 class DQActionWork : public DQActionActive
 {
 public:
-	DQActionWork(sint8 owner, UnitActor *workActor, const MapPoint &workPosition, sint32 workSoundID)
+	DQActionWork(sint8 owner, UnitActor *workActor, const MapPoint &workPos, sint32 workSoundID)
 		: DQActionActive(owner),
-		workActor    (workActor),
-		workPosition (workPosition),
-		workSoundID  (workSoundID)
+		workActor   (workActor),
+		workPos     (workPos),
+		workSoundID (workSoundID)
 	{}
 	virtual ~DQActionWork() {}
 	virtual DQACTION_TYPE GetType() { return DQACTION_WORK; }
@@ -2039,21 +2039,21 @@ public:
 	{
 		DPRINTF(k_DBG_UI, ("Work\n"));
 		DPRINTF(k_DBG_UI, ("  workActor              :%#x (%#.8lx)\n", workActor->GetUnitID(), workActor));
-		DPRINTF(k_DBG_UI, ("  workPosition           :%d,%d\n", workPosition.x, workPosition.y));
+		DPRINTF(k_DBG_UI, ("  workPosition           :%d,%d\n", workPos.x, workPos.y));
 		DPRINTF(k_DBG_UI, ("  workSoundID            :%d\n", workSoundID));
 	}
 protected:
 	virtual bool DoSkipAnimation()
 	{
 		// Unit invisible
-		return !TileIsVisibleToPlayer(workPosition);
+		return !TileIsVisibleToPlayer(workPos);
 	}
 
 	virtual void PrepareAnimation()
 	{
 		Action *action = new Action(UNITACTION_WORK, ACTIONEND_ANIMEND);
-		action->SetStartMapPoint(workPosition);
-		action->SetEndMapPoint(workPosition);
+		action->SetStartMapPoint(workPos);
+		action->SetEndMapPoint(workPos);
 
 		if (workActor->GetLoadType() != LOADTYPE_FULL) {
 			workActor->FullLoad(UNITACTION_WORK);
@@ -2079,13 +2079,13 @@ protected:
 				(workActor->GetUnitVisibility() & (1 << visiblePlayer)))
 			{
 				g_soundManager->AddSound(SOUNDTYPE_SFX, workActor->GetUnitID(), workSoundID,
-						workPosition.x, workPosition.y);
+						workPos.x, workPos.y);
 			}
 		}
 	}
 
 	UnitActor *workActor;
-	MapPoint  workPosition;
+	MapPoint  workPos;
 	sint32    workSoundID;
 };
 
@@ -2095,14 +2095,14 @@ public:
 	DQActionFaceoff(
 			sint8          owner,
 			UnitActor      *attacker,
-			const MapPoint &attackerPosition,
+			const MapPoint &attackerPos,
 			UnitActor      *attacked,
-			const MapPoint &attackedPosition)
+			const MapPoint &attackedPos)
 		: DQActionActive(owner),
-		attacker         (attacker),
-		attackerPosition (attackerPosition),
-		attacked         (attacked),
-		attackedPosition (attackedPosition)
+		attacker    (attacker),
+		attackerPos (attackerPos),
+		attacked    (attacked),
+		attackedPos (attackedPos)
 	{}
 	virtual ~DQActionFaceoff() {}
 	virtual DQACTION_TYPE GetType() { return DQACTION_FACEOFF; }
@@ -2111,20 +2111,20 @@ public:
 	{
 		DPRINTF(k_DBG_UI, ("Faceoff\n"));
 		DPRINTF(k_DBG_UI, ("  attacker               :%#x (%#.8lx)\n", attacker->GetUnitID(), attacker));
-		DPRINTF(k_DBG_UI, ("  attackerPosition       :%d,%d\n", attackerPosition.x, attackerPosition.y));
+		DPRINTF(k_DBG_UI, ("  attackerPosition       :%d,%d\n", attackerPos.x, attackerPos.y));
 		DPRINTF(k_DBG_UI, ("  attacked               :%#x (%#.8lx)\n", attacked->GetUnitID(), attacked));
-		DPRINTF(k_DBG_UI, ("  attackedPosition       :%d,%d\n", attackedPosition.x, attackedPosition.y));
+		DPRINTF(k_DBG_UI, ("  attackedPosition       :%d,%d\n", attackedPos.x, attackedPos.y));
 	}
 protected:
 	virtual void PrepareAnimation()
 	{
 		Action *attackerAction = new Action(UNITACTION_FACE_OFF, ACTIONEND_INTERRUPT);
-		attackerAction->SetStartMapPoint(attackerPosition);
-		attackerAction->SetEndMapPoint(attackerPosition);
+		attackerAction->SetStartMapPoint(attackerPos);
+		attackerAction->SetEndMapPoint(attackerPos);
 
 		Action *attackedAction = new Action(UNITACTION_FACE_OFF, ACTIONEND_INTERRUPT);
-		attackedAction->SetStartMapPoint(attackedPosition);
-		attackedAction->SetEndMapPoint(attackedPosition);
+		attackedAction->SetStartMapPoint(attackedPos);
+		attackedAction->SetEndMapPoint(attackedPos);
 
 		Anim * attackerAnim = attacker->MakeFaceoff();
 		if (!attackerAnim)
@@ -2150,8 +2150,8 @@ protected:
 
 		POINT attackerPoints, attackedPoints;
 
-		maputils_MapXY2PixelXY(attackerPosition.x, attackerPosition.y, attackerPoints);
-		maputils_MapXY2PixelXY(attackedPosition.x, attackedPosition.y, attackedPoints);
+		maputils_MapXY2PixelXY(attackerPos.x, attackerPos.y, attackerPoints);
+		maputils_MapXY2PixelXY(attackedPos.x, attackedPos.y, attackedPoints);
 
 		attackerAction->SetFacing(spriteutils_DeltaToFacing(
 				attackedPoints.x - attackerPoints.x, attackedPoints.y - attackerPoints.y));
@@ -2174,7 +2174,7 @@ protected:
 			attacked->AddAction(attackedAction);
 		}
 
-		bool attackedVisible = TileIsVisibleToPlayer(attackedPosition);
+		bool attackedVisible = TileIsVisibleToPlayer(attackedPos);
 		if (attacker->GetPlayerNum() == g_selected_item->GetVisiblePlayer() ||
 			attacked->GetPlayerNum() == g_selected_item->GetVisiblePlayer())
 		{
@@ -2184,7 +2184,7 @@ protected:
 			AddActiveActor(attacked);
 		}
 
-		bool attackerVisible = TileIsVisibleToPlayer(attackerPosition);
+		bool attackerVisible = TileIsVisibleToPlayer(attackerPos);
 		if (attacked->GetPlayerNum() == g_selected_item->GetVisiblePlayer() ||
 			attacker->GetPlayerNum() == g_selected_item->GetVisiblePlayer())
 		{
@@ -2197,9 +2197,9 @@ protected:
 	}
 
 	UnitActor *attacker;
-	MapPoint  attackerPosition;
+	MapPoint  attackerPos;
 	UnitActor *attacked;
-	MapPoint  attackedPosition;
+	MapPoint  attackedPos;
 };
 
 class DQActionInvokeResearchAdvance : public DQActionExternal
@@ -2745,8 +2745,8 @@ void DirectorImpl::DrawAnimations(RECT *paintRect)
 
 void DirectorImpl::AddMove (
 		const Unit     &mover,
-		const MapPoint &startPosition,
-		const MapPoint &endPosition,
+		const MapPoint &startPos,
+		const MapPoint &endPos,
 		sint32         numberOfRevealedActors,
 		UnitActor      **revealedActors,
 		sint32         numberOfMoveActors,
@@ -2764,9 +2764,9 @@ void DirectorImpl::AddMove (
 	if (g_theProfileDB->IsEnemyMoves() &&
 		mover.GetOwner() != g_selected_item->GetVisiblePlayer() &&
 		(mover.GetVisibility() & (1 << g_selected_item->GetVisiblePlayer())) &&
-		!TileWillBeCompletelyVisible(endPosition.x, endPosition.y))
+		!TileWillBeCompletelyVisible(endPos.x, endPos.y))
 	{
-		AddCenterMap(endPosition);
+		AddCenterMap(endPos);
 	}
 
 	actor->SetHiddenUnderStack(FALSE);
@@ -2774,8 +2774,8 @@ void DirectorImpl::AddMove (
 	DQActionMove *action = new DQActionMove(
 			mover.GetOwner(),
 			actor,
-			startPosition,
-			endPosition,
+			startPos,
+			endPos,
 			numberOfMoveActors,
 			numberOfMoveActors > 0 ? moveActors : NULL,
 			numberOfRevealedActors,
@@ -2786,8 +2786,8 @@ void DirectorImpl::AddMove (
 
 void DirectorImpl::AddTeleport (
 		const Unit     &mover,
-		const MapPoint &startPosition,
-		const MapPoint &endPosition,
+		const MapPoint &startPos,
+		const MapPoint &endPos,
 		sint32         numberOfRevealedActors,
 		UnitActor      **revealedActors,
 		sint32         numberOfMoveActors,
@@ -2799,8 +2799,8 @@ void DirectorImpl::AddTeleport (
 
 	DQActionTeleport *action = new DQActionTeleport(
 			mover->GetActor(),
-			startPosition,
-			endPosition,
+			startPos,
+			endPos,
 			numberOfMoveActors,
 			moveActors,
 			numberOfRevealedActors,
@@ -2819,15 +2819,15 @@ void DirectorImpl::AddProjectileAttack(
 	m_actionQueue->AddTail(action);
 }
 
-void DirectorImpl::AddSpecialEffect(const MapPoint &position, sint32 spriteID, sint32 soundID)
+void DirectorImpl::AddSpecialEffect(const MapPoint &pos, sint32 spriteID, sint32 soundID)
 {
-	DQActionSpecialEffect *action = new DQActionSpecialEffect(position, spriteID, soundID);
+	DQActionSpecialEffect *action = new DQActionSpecialEffect(pos, spriteID, soundID);
 	m_actionQueue->AddTail(action);
 }
 
-void DirectorImpl::AddCombatFlash(const MapPoint &position)
+void DirectorImpl::AddCombatFlash(const MapPoint &pos)
 {
-	DQActionCombatFlash	*action = new DQActionCombatFlash(position);
+	DQActionCombatFlash	*action = new DQActionCombatFlash(pos);
 	m_actionQueue->AddTail(action);
 }
 
@@ -2837,9 +2837,9 @@ void DirectorImpl::AddCopyVision()
 	m_actionQueue->AddTail(action);
 }
 
-void DirectorImpl::AddCenterMap(const MapPoint &position)
+void DirectorImpl::AddCenterMap(const MapPoint &pos)
 {
-	DQActionCenterMap *action = new DQActionCenterMap(position);
+	DQActionCenterMap *action = new DQActionCenterMap(pos);
 	m_actionQueue->AddTail(action);
 	m_latestCenterMap = action;
 }
@@ -2943,20 +2943,20 @@ void DirectorImpl::AddAttack(const Unit &attacker, const Unit &defender)
 	}
 }
 
-void DirectorImpl::AddAttackPos(const Unit &attacker, const MapPoint &position)
+void DirectorImpl::AddAttackPos(const Unit &attacker, const MapPoint &pos)
 {
 	if (!attacker.GetActor()) {
 		return;
 	}
 
 	DQActionAttackPos *action = new DQActionAttackPos(
-			attacker.GetOwner(), attacker.GetActor(), attacker.RetPos(), position, attacker.GetAttackSoundID());
+			attacker.GetOwner(), attacker.GetActor(), attacker.RetPos(), pos, attacker.GetAttackSoundID());
 	m_actionQueue->AddTail(action);
 
 	if (g_player[g_selected_item->GetVisiblePlayer()] &&
-		g_player[g_selected_item->GetVisiblePlayer()]->IsVisible(position))
+		g_player[g_selected_item->GetVisiblePlayer()]->IsVisible(pos))
 	{
-		AddCombatFlash(position);
+		AddCombatFlash(pos);
 	}
 }
 
@@ -2989,11 +2989,11 @@ void DirectorImpl::AddSpecialAttack(const Unit& attacker, const Unit &attacked, 
 	}
 }
 
-void DirectorImpl::AddDeath(UnitActor *dead, const MapPoint &deadPosition, sint32 deadSoundID)
+void DirectorImpl::AddDeath(UnitActor *dead, const MapPoint &deadPos, sint32 deadSoundID)
 {
 	Assert(dead);
 
-	DQActionDeath *action = new DQActionDeath(dead->GetPlayerNum(), dead, deadPosition, deadSoundID);
+	DQActionDeath *action = new DQActionDeath(dead->GetPlayerNum(), dead, deadPos, deadSoundID);
 	m_actionQueue->AddTail(action);
 }
 
@@ -3053,15 +3053,15 @@ void DirectorImpl::AddFastKill(UnitActor *dead)
 	m_actionQueue->AddTail(action);
 }
 
-void DirectorImpl::AddRemoveVision(const MapPoint &position, double range)
+void DirectorImpl::AddRemoveVision(const MapPoint &pos, double range)
 {
-	DQActionVision *action = new DQActionRemoveVision(position, range);
+	DQActionVision *action = new DQActionRemoveVision(pos, range);
 	m_actionQueue->AddTail(action);
 }
 
-void DirectorImpl::AddAddVision(const MapPoint &position, double range)
+void DirectorImpl::AddAddVision(const MapPoint &pos, double range)
 {
-	DQActionVision *action = new DQActionAddVision(position, range);
+	DQActionVision *action = new DQActionAddVision(pos, range);
 	m_actionQueue->AddTail(action);
 }
 
@@ -3108,13 +3108,13 @@ void DirectorImpl::AddBattle(Battle *battle)
 	m_actionQueue->AddTail(action);
 }
 
-void DirectorImpl::AddPlaySound(sint32 soundID, const MapPoint &position)
+void DirectorImpl::AddPlaySound(sint32 soundID, const MapPoint &pos)
 {
 	if (soundID <= 0) {
 		return;
 	}
 
-	DQActionPlaySound *action = new DQActionPlaySound(soundID, position);
+	DQActionPlaySound *action = new DQActionPlaySound(soundID, pos);
 	m_actionQueue->AddTail(action);
 }
 

@@ -79,8 +79,8 @@ public:
 
 	virtual void AddMove(
 		const Unit     &mover,
-		MapPoint const &startPosition,
-		MapPoint const &endPosition,
+		MapPoint const &startPos,
+		MapPoint const &endPos,
 		sint32         numberOfRevealedActors,
 		UnitActor      **revealedActors,
 		sint32         numberOfMoveActors,
@@ -90,8 +90,8 @@ public:
 
 	virtual void AddTeleport(
 		const Unit     &mover,
-		MapPoint const &startPosition,
-		MapPoint const &endPosition,
+		MapPoint const &startPos,
+		MapPoint const &endPos,
 		sint32         numberOfRevealedActors,
 		UnitActor      **revealedActors,
 		sint32         numberOfMoveActors,
@@ -99,9 +99,9 @@ public:
     ) = 0;
 
 	virtual void AddAttack(const Unit &attacker, const Unit &attacked) = 0;
-	virtual void AddAttackPos(const Unit &attacker, const MapPoint &position) = 0;
+	virtual void AddAttackPos(const Unit &attacker, const MapPoint &pos) = 0;
 	virtual void AddSpecialAttack(const Unit &attacker, const Unit &attacked, SPECATTACK attack) = 0;
-	virtual void AddDeath(UnitActor *dead, const MapPoint &deadPosition, sint32 deadSoundID) = 0;
+	virtual void AddDeath(UnitActor *dead, const MapPoint &deadPos, sint32 deadSoundID) = 0;
 	virtual void AddProjectileAttack(
 		const Unit  &shooting,
 		const Unit  &target,
@@ -109,24 +109,24 @@ public:
 		SpriteState *projectileEndState,
 		sint32      projectilePath
 	) = 0;
-	virtual void AddSpecialEffect(const MapPoint &position, sint32 spriteID, sint32 soundID) = 0;
+	virtual void AddSpecialEffect(const MapPoint &pos, sint32 spriteID, sint32 soundID) = 0;
 	virtual void AddMorphUnit(UnitActor *morphingActor, SpriteState *spriteState, sint32 type,  const Unit &id) = 0;
 	virtual void AddHide(const Unit &hider) = 0;
 	virtual void AddShow(const Unit &hider) = 0;
 	virtual void AddWork(const Unit &worker) = 0;
 	virtual void AddFastKill(UnitActor *dead) = 0;
-	virtual void AddRemoveVision(const MapPoint &position, double range) = 0;
-	virtual void AddAddVision(const MapPoint &position, double range) = 0;
+	virtual void AddRemoveVision(const MapPoint &pos, double range) = 0;
+	virtual void AddAddVision(const MapPoint &pos, double range) = 0;
 	virtual void AddSetVisibility(UnitActor *actor, uint32 visibility) = 0;
 	virtual void AddSetOwner(UnitActor *actor, sint32 owner) = 0;
 	virtual void AddSetVisionRange(UnitActor *actor, double range) = 0;
-	virtual void AddCombatFlash(const MapPoint &position) = 0;
+	virtual void AddCombatFlash(const MapPoint &pos) = 0;
 	virtual void AddCopyVision() = 0;
-	virtual void AddCenterMap(const MapPoint &position) = 0;
+	virtual void AddCenterMap(const MapPoint &pos) = 0;
 	virtual void AddSelectUnit(uint32 flags) = 0;
 	virtual void AddEndTurn() = 0;
 	virtual void AddBattle(Battle *battle) = 0;
-	virtual void AddPlaySound(sint32 soundID, const MapPoint &position) = 0;
+	virtual void AddPlaySound(sint32 soundID, const MapPoint &pos) = 0;
 	virtual void AddGameSound(GAMESOUNDS sound) = 0;
 	virtual void AddPlayWonderMovie(sint32 which) = 0;
 	virtual void AddPlayVictoryMovie(GAME_OVER reason, bool previouslyWon, bool previouslyLost) = 0;
