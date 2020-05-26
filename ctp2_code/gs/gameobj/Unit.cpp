@@ -187,7 +187,8 @@ void Unit::RemoveAllReferences(const CAUSE_REMOVE_ARMY cause, PLAYER_INDEX kille
 			|| cause == CAUSE_REMOVE_ARMY_DISBANDED
 			|| cause == CAUSE_REMOVE_ARMY_GOVERNMENT_CHANGE
 			|| cause == CAUSE_REMOVE_ARMY_NUKE
-			|| cause == CAUSE_REMOVE_ARMY_PARKRANGER) {
+			|| cause == CAUSE_REMOVE_ARMY_PARKRANGER
+			|| cause == CAUSE_REMOVE_ARMY_TRADE) {
 			g_director->AddFastKill(GetActor());
 		}
 		else
