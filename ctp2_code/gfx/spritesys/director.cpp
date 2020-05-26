@@ -217,7 +217,7 @@ public:
 		for (auto actorReference : m_tradeActors)
 		{
 			TradeActor *actor = actorReference.second;
-			DPRINTF(k_DBG_UI, ("  trade-actor  :%#x (%#.8lx)\n", actor->GetRouteID().m_id, actor));
+			DPRINTF(k_DBG_UI, ("  trade-actor        :%#x (%#.8lx)\n", actor->GetRouteID().m_id, actor));
 		}
 	}
 
@@ -332,7 +332,7 @@ public:
 		DPRINTF(k_DBG_UI, (" Standby-actors:\n"));
 		for (auto actorReference : m_standbyActors) {
 			UnitActor *actor = actorReference.first;
-			DPRINTF(k_DBG_UI, ("  unit-actor   :%#x (%#.8lx)\n", actor->GetUnitID(), actor));
+			DPRINTF(k_DBG_UI, ("  unit-actor         :%#x (%#.8lx)\n", actor->GetUnitID(), actor));
 		}
 	}
 
@@ -927,18 +927,24 @@ public:
 		DPRINTF(k_DBG_UI, ("  actor                  :%#x (%#.8lx)\n", moveActor->GetUnitID(), moveActor));
 		DPRINTF(k_DBG_UI, ("  startPosition          :%d,%d\n", startPosition.x, startPosition.y));
 		DPRINTF(k_DBG_UI, ("  endPosition            :%d,%d\n", endPosition.x, endPosition.y));
-		DPRINTF(k_DBG_UI, ("  numberOfMoveActors          :%d\n", numberOfMoveActors));
-		DPRINTF(k_DBG_UI, ("  moveActors                  :"));
-		for (int i = 0; i < numberOfMoveActors; i++) {
-			DPRINTF(k_DBG_UI, ("%#x (%#.8lx)  ", moveActors[i]->GetUnitID(), moveActors[i]));
+		DPRINTF(k_DBG_UI, ("  numberOfMoveActors     :%d\n", numberOfMoveActors));
+		if (numberOfMoveActors > 0)
+		{
+			DPRINTF(k_DBG_UI, ("  moveActors\n"));
+			for (int i = 0; i < numberOfMoveActors; i++) {
+				DPRINTF(k_DBG_UI, ("    %d.                  :%#x (%#.8lx)\n", i, moveActors[i]->GetUnitID(),
+						moveActors[i]));
+			}
 		}
-		DPRINTF(k_DBG_UI, ("\n"));
-		DPRINTF(k_DBG_UI, ("  numberOfRevealedActors      :%d\n", numberOfRevealedActors));
-		DPRINTF(k_DBG_UI, ("  revealedActors              :"));
-		for (int i = 0; i < numberOfRevealedActors; i++) {
-			DPRINTF(k_DBG_UI, ("%#x (%#.8lx)  ", revealedActors[i]->GetUnitID(), revealedActors[i]));
+		DPRINTF(k_DBG_UI, ("  numberOfRevealedActors :%d\n", numberOfRevealedActors));
+		if (numberOfRevealedActors > 0)
+		{
+			DPRINTF(k_DBG_UI, ("  revealedActors\n"));
+			for (int i = 0; i < numberOfRevealedActors; i++) {
+				DPRINTF(k_DBG_UI, ("    %d.                  :%#x (%#.8lx)\n", i, revealedActors[i]->GetUnitID(),
+						revealedActors[i]));
+			}
 		}
-		DPRINTF(k_DBG_UI, ("\n"));
 	}
 
 protected:
@@ -972,10 +978,10 @@ public:
 	virtual void Dump()
 	{
 		DPRINTF(k_DBG_UI, ("Morph\n"));
-		DPRINTF(k_DBG_UI, ("  morphingActor      :%#x (%#.8lx)\n", morphingActor->GetUnitID(), morphingActor));
-		DPRINTF(k_DBG_UI, ("  spriteState        :%#.8lx (%d)\n", spriteState, spriteState->GetIndex()));
-		DPRINTF(k_DBG_UI, ("  type               :%d\n", type));
-		DPRINTF(k_DBG_UI, ("  id                 :%#.8lx\n", id.m_id));
+		DPRINTF(k_DBG_UI, ("  morphingActor          :%#x (%#.8lx)\n", morphingActor->GetUnitID(), morphingActor));
+		DPRINTF(k_DBG_UI, ("  spriteState            :%#.8lx (%d)\n", spriteState, spriteState->GetIndex()));
+		DPRINTF(k_DBG_UI, ("  type                   :%d\n", type));
+		DPRINTF(k_DBG_UI, ("  id                     :%#.8lx\n", id.m_id));
 	}
 protected:
 	UnitActor   *morphingActor;
@@ -1014,7 +1020,7 @@ public:
 	virtual void Dump()
 	{
 		DPRINTF(k_DBG_UI, ("Hide\n"));
-		DPRINTF(k_DBG_UI, ("  hidingActor        :%#x (%#.8lx)\n", hidingActor->GetUnitID(), hidingActor));
+		DPRINTF(k_DBG_UI, ("  hidingActor            :%#x (%#.8lx)\n", hidingActor->GetUnitID(), hidingActor));
 	}
 };
 
@@ -1036,8 +1042,8 @@ public:
 
 	virtual void Dump() {
 		DPRINTF(k_DBG_UI, ("Show\n"));
-		DPRINTF(k_DBG_UI, ("  hidingActor        :%#x (%#.8lx)\n", hidingActor->GetUnitID(), hidingActor));
-		DPRINTF(k_DBG_UI, ("  hidingPosition     :%d,%d\n", hidingPosition.x, hidingPosition.y));
+		DPRINTF(k_DBG_UI, ("  hidingActor            :%#x (%#.8lx)\n", hidingActor->GetUnitID(), hidingActor));
+		DPRINTF(k_DBG_UI, ("  hidingPosition         :%d,%d\n", hidingPosition.x, hidingPosition.y));
 	}
 protected:
 	MapPoint hidingPosition;
@@ -1061,7 +1067,7 @@ public:
 	virtual void Dump()
 	{
 		DPRINTF(k_DBG_UI, ("Fast Kill\n"));
-		DPRINTF(k_DBG_UI, ("  dead               :%#x (%#.8lx)\n", dead->GetUnitID(), dead));
+		DPRINTF(k_DBG_UI, ("  dead                   :%#x (%#.8lx)\n", dead->GetUnitID(), dead));
 	}
 private:
 	UnitActor *dead;
@@ -1101,8 +1107,8 @@ public:
 	virtual void Dump()
 	{
 		DPRINTF(k_DBG_UI, ("Remove Vision\n"));
-		DPRINTF(k_DBG_UI, ("  visionPosition     :%d,%d\n", visionPosition.x, visionPosition.y));
-		DPRINTF(k_DBG_UI, ("  visionRange        :%#.2f\n", visionRange));
+		DPRINTF(k_DBG_UI, ("  visionPosition         :%d,%d\n", visionPosition.x, visionPosition.y));
+		DPRINTF(k_DBG_UI, ("  visionRange            :%#.2f\n", visionRange));
 	}
 };
 
@@ -1124,8 +1130,8 @@ public:
 	virtual void Dump()
 	{
 		DPRINTF(k_DBG_UI, ("Add Vision\n"));
-		DPRINTF(k_DBG_UI, ("  visionPosition     :%d,%d\n", visionPosition.x, visionPosition.y));
-		DPRINTF(k_DBG_UI, ("  visionRange        :%#.2f\n", visionRange));
+		DPRINTF(k_DBG_UI, ("  visionPosition         :%d,%d\n", visionPosition.x, visionPosition.y));
+		DPRINTF(k_DBG_UI, ("  visionRange            :%#.2f\n", visionRange));
 	}
 };
 
@@ -1148,8 +1154,8 @@ public:
 	virtual void Dump()
 	{
 		DPRINTF(k_DBG_UI, ("Set Visibility\n"));
-		DPRINTF(k_DBG_UI, ("  actor              :%#x (%#.8lx)\n", actor->GetUnitID(), actor));
-		DPRINTF(k_DBG_UI, ("  flag               :%%#.8lx\n", flag));
+		DPRINTF(k_DBG_UI, ("  actor                  :%#x (%#.8lx)\n", actor->GetUnitID(), actor));
+		DPRINTF(k_DBG_UI, ("  flag                   :%%#.8lx\n", flag));
 	}
 protected:
 	UnitActor *actor;
@@ -1175,8 +1181,8 @@ public:
 	virtual void Dump()
 	{
 		DPRINTF(k_DBG_UI, ("Set Owner\n"));
-		DPRINTF(k_DBG_UI, ("  setOwnerActor      :%#x (%#.8lx)\n", setOwnerActor->GetUnitID(), setOwnerActor));
-		DPRINTF(k_DBG_UI, ("  owner              :%d\n", owner));
+		DPRINTF(k_DBG_UI, ("  setOwnerActor          :%#x (%#.8lx)\n", setOwnerActor->GetUnitID(), setOwnerActor));
+		DPRINTF(k_DBG_UI, ("  owner                  :%d\n", owner));
 	}
 protected:
 	UnitActor *setOwnerActor;
@@ -1202,8 +1208,8 @@ public:
 	virtual void Dump()
 	{
 		DPRINTF(k_DBG_UI, ("Set Vision Range\n"));
-		DPRINTF(k_DBG_UI, ("  actor     :%#x (%#.8lx)\n", actor->GetUnitID(), actor));
-		DPRINTF(k_DBG_UI, ("  range     :%#.2f\n", range));
+		DPRINTF(k_DBG_UI, ("  actor                  :%#x (%#.8lx)\n", actor->GetUnitID(), actor));
+		DPRINTF(k_DBG_UI, ("  range                  :%#.2f\n", range));
 	}
 protected:
 	UnitActor *actor;
@@ -1230,7 +1236,7 @@ public:
 	virtual void Dump()
 	{
 		DPRINTF(k_DBG_UI, ("Center Map\n"));
-		DPRINTF(k_DBG_UI, ("  centerMapPosition:%d,%d\n", centerMapPosition.x, centerMapPosition.y));
+		DPRINTF(k_DBG_UI, ("  centerMapPosition      :%d,%d\n", centerMapPosition.x, centerMapPosition.y));
 	}
 
 	bool TileIsCompletelyVisible(sint32 x, sint32 y)
@@ -1281,7 +1287,7 @@ public:
 	virtual void Dump()
 	{
 		DPRINTF(k_DBG_UI, ("Select Unit\n"));
-		DPRINTF(k_DBG_UI, ("  flags     :%#.8lx\n", flags));
+		DPRINTF(k_DBG_UI, ("  flags                  :%#x\n", flags));
 	}
 protected:
 	uint32 flags;
@@ -1296,7 +1302,6 @@ public:
 
 	virtual void Execute()
 	{
-		// printf("(%d) end-turn (%d)\n", GetTickCount(), g_selected_item->GetCurPlayer());
 		g_gevManager->Pause();
 		g_gevManager->AddEvent(GEV_INSERT_Tail, GEV_EndTurn,
 							   GEA_Player, g_selected_item->GetCurPlayer(),
@@ -1331,8 +1336,8 @@ public:
 	virtual void Dump()
 	{
 		DPRINTF(k_DBG_UI, ("Play Sound\n"));
-		DPRINTF(k_DBG_UI, ("  soundID              :%d\n", soundID));
-		DPRINTF(k_DBG_UI, ("  position             :%d,%d\n", position.x, position.y));
+		DPRINTF(k_DBG_UI, ("  soundID                :%d\n", soundID));
+		DPRINTF(k_DBG_UI, ("  position               :%d,%d\n", position.x, position.y));
 	}
 protected:
 	sint32   soundID;
@@ -1401,7 +1406,7 @@ public:
 	virtual void Dump()
 	{
 		DPRINTF(k_DBG_UI, ("Terminate Faceoff\n"));
-		DPRINTF(k_DBG_UI, ("  faceroffer   :%#x (%#.8lx)\n", faceOffer->GetUnitID(), faceOffer));
+		DPRINTF(k_DBG_UI, ("  faceroffer             :%#x (%#.8lx)\n", faceOffer->GetUnitID(), faceOffer));
 	}
 protected:
 	UnitActor *faceOffer;
@@ -1427,7 +1432,7 @@ public:
 	virtual void Dump()
 	{
 		DPRINTF(k_DBG_UI, ("Terminate Sound\n"));
-		DPRINTF(k_DBG_UI, ("  terminate_sound_unit    :%#.8lx\n", terminateSoundUnitID));
+		DPRINTF(k_DBG_UI, ("  terminate_sound_unit   :%#.8lx\n", terminateSoundUnitID));
 	}
 protected:
 	uint32 terminateSoundUnitID;
@@ -1481,8 +1486,8 @@ public:
 	virtual void Dump()
 	{
 		DPRINTF(k_DBG_UI, ("Move Projectile\n"));
-		DPRINTF(k_DBG_UI, ("  startPosition      :%d,%d\n", startPosition.x, startPosition.y));
-		DPRINTF(k_DBG_UI, ("  endPosition        :%d,%d\n", m_activeActor->GetPos().x, m_activeActor->GetPos().y));
+		DPRINTF(k_DBG_UI, ("  startPosition          :%d,%d\n", startPosition.x, startPosition.y));
+		DPRINTF(k_DBG_UI, ("  endPosition            :%d,%d\n", m_activeActor->GetPos().x, m_activeActor->GetPos().y));
 	}
 protected:
 	MapPoint startPosition;
@@ -1517,7 +1522,8 @@ public:
 	virtual void Dump()
 	{
 		DPRINTF(k_DBG_UI, ("Combat Flash\n"));
-		DPRINTF(k_DBG_UI, ("  flashPosition     :%d,%d\n", m_activeActor->GetPos().x, m_activeActor->GetPos().y));
+		DPRINTF(k_DBG_UI, ("  flashPosition          :%d,%d\n", m_activeActor->GetPos().x,
+				m_activeActor->GetPos().y));
 	}
 };
 
@@ -1556,9 +1562,9 @@ public:
 	virtual void Dump()
 	{
 		DPRINTF(k_DBG_UI, ("Special Effect\n"));
-		DPRINTF(k_DBG_UI, ("  position             :%d,%d\n", m_activeActor->GetPos().x, m_activeActor->GetPos().y));
-		DPRINTF(k_DBG_UI, ("  spriteID             :%d\n", spriteID));
-		DPRINTF(k_DBG_UI, ("  soundID              :%d\n", soundID));
+		DPRINTF(k_DBG_UI, ("  position               :%d,%d\n", m_activeActor->GetPos().x, m_activeActor->GetPos().y));
+		DPRINTF(k_DBG_UI, ("  spriteID               :%d\n", spriteID));
+		DPRINTF(k_DBG_UI, ("  soundID                :%d\n", soundID));
 	}
 protected:
 	sint32 spriteID;
@@ -1644,7 +1650,7 @@ public:
 			moveActors[i]->SetHiddenUnderStack(TRUE);
 		}
 
-		if (g_selected_item->GetVisiblePlayer()!= moveActor->GetPlayerNum()
+		if (g_selected_item->GetVisiblePlayer() != moveActor->GetPlayerNum()
 			&& !g_tiledMap->TileIsVisible(moveActor->GetPos().x, moveActor->GetPos().y))
 		{
 			CenterMap(moveActor->GetPos());
@@ -1658,19 +1664,25 @@ public:
 		DPRINTF(k_DBG_UI, ("  actor                  :%#x (%#.8lx)\n", moveActor->GetUnitID(), moveActor));
 		DPRINTF(k_DBG_UI, ("  startPosition          :%d,%d\n", startPosition.x, startPosition.y));
 		DPRINTF(k_DBG_UI, ("  endPosition            :%d,%d\n", endPosition.x, endPosition.y));
-		DPRINTF(k_DBG_UI, ("  numberOfMoveActors          :%d\n", numberOfMoveActors));
-		DPRINTF(k_DBG_UI, ("  moveActors                  :"));
-		for (int i = 0; i < numberOfMoveActors; i++) {
-			DPRINTF(k_DBG_UI, ("%#x (%#.8lx)  ", moveActors[i]->GetUnitID(), moveActors[i]));
+		DPRINTF(k_DBG_UI, ("  numberOfMoveActors     :%d\n", numberOfMoveActors));
+		if (numberOfMoveActors > 0)
+		{
+			DPRINTF(k_DBG_UI, ("  moveActors\n"));
+			for (int i = 0; i < numberOfMoveActors; i++) {
+				DPRINTF(k_DBG_UI, ("    %d.                  :%#x (%#.8lx)\n", i, moveActors[i]->GetUnitID(),
+						moveActors[i]));
+			}
 		}
-		DPRINTF(k_DBG_UI, ("\n"));
-		DPRINTF(k_DBG_UI, ("  numberOfRevealedActors      :%d\n", numberOfRevealedActors));
-		DPRINTF(k_DBG_UI, ("  revealedActors              :"));
-		for (int i = 0; i < numberOfRevealedActors; i++) {
-			DPRINTF(k_DBG_UI, ("%#x (%#.8lx)  ", revealedActors[i]->GetUnitID(), revealedActors[i]));
+		DPRINTF(k_DBG_UI, ("  numberOfRevealedActors :%d\n", numberOfRevealedActors));
+		if (numberOfRevealedActors > 0)
+		{
+			DPRINTF(k_DBG_UI, ("  revealedActors\n"));
+			for (int i = 0; i < numberOfRevealedActors; i++) {
+				DPRINTF(k_DBG_UI, ("    %d.                  :%#x (%#.8lx)\n", i, revealedActors[i]->GetUnitID(),
+						revealedActors[i]));
+			}
 		}
-		DPRINTF(k_DBG_UI, ("\n"));
-		DPRINTF(k_DBG_UI, ("  soundID                     :%d\n", soundID));
+		DPRINTF(k_DBG_UI, ("  soundID                :%d\n", soundID));
 	}
 
 protected:
@@ -1716,12 +1728,12 @@ public:
 	virtual void Dump()
 	{
 		DPRINTF(k_DBG_UI, ("%s\n", GetName()));
-		DPRINTF(k_DBG_UI, ("  attacker			:%#x (%#.8lx)\n", attacker->GetUnitID(), attacker));
-		DPRINTF(k_DBG_UI, ("  attackerPosition	:%d,%d\n", attackerPosition.x, attackerPosition.y));
-		DPRINTF(k_DBG_UI, ("  attackerIsCity		:%s\n", attackerIsCity ? "true" : "false"));
-		DPRINTF(k_DBG_UI, ("  defender			:%#x (%#.8lx)\n", defender->GetUnitID(), defender));
-		DPRINTF(k_DBG_UI, ("  defenderPosition	:%d,%d\n", defenderPosition.x, defenderPosition.y));
-		DPRINTF(k_DBG_UI, ("  defenderIsCity		:%s\n", defenderIsCity ? "true" : "false"));
+		DPRINTF(k_DBG_UI, ("  attacker               :%#x (%#.8lx)\n", attacker->GetUnitID(), attacker));
+		DPRINTF(k_DBG_UI, ("  attackerPosition       :%d,%d\n", attackerPosition.x, attackerPosition.y));
+		DPRINTF(k_DBG_UI, ("  attackerIsCity         :%s\n", attackerIsCity ? "true" : "false"));
+		DPRINTF(k_DBG_UI, ("  defender               :%#x (%#.8lx)\n", defender->GetUnitID(), defender));
+		DPRINTF(k_DBG_UI, ("  defenderPosition       :%d,%d\n", defenderPosition.x, defenderPosition.y));
+		DPRINTF(k_DBG_UI, ("  defenderIsCity         :%s\n", defenderIsCity ? "true" : "false"));
 	}
 protected:
 	virtual MBCHAR const * const GetName() { return "Attack"; }
@@ -1791,7 +1803,7 @@ public:
 	virtual void Dump()
 	{
 		DQActionAttack::Dump();
-		DPRINTF(k_DBG_UI, ("  attackerSoundID    ::%d\n",       attackerSoundID));
+		DPRINTF(k_DBG_UI, ("  attackerSoundID        :%d\n", attackerSoundID));
 	}
 
 protected:
@@ -1944,9 +1956,9 @@ public:
 	virtual void Dump()
 	{
 		DPRINTF(k_DBG_UI, ("Death\n"));
-		DPRINTF(k_DBG_UI, ("  dead               :%#x (%#.8lx)\n", dead->GetUnitID(), dead));
-		DPRINTF(k_DBG_UI, ("  deadPosition       :%d,%d\n", deadPosition.x, deadPosition.y));
-		DPRINTF(k_DBG_UI, ("  deadSoundID        :%d\n", deadSoundID));
+		DPRINTF(k_DBG_UI, ("  dead                   :%#x (%#.8lx)\n", dead->GetUnitID(), dead));
+		DPRINTF(k_DBG_UI, ("  deadPosition           :%d,%d\n", deadPosition.x, deadPosition.y));
+		DPRINTF(k_DBG_UI, ("  deadSoundID            :%d\n", deadSoundID));
 	}
 protected:
 	virtual bool DoSkipAnimation()
@@ -2026,9 +2038,9 @@ public:
 	virtual void Dump()
 	{
 		DPRINTF(k_DBG_UI, ("Work\n"));
-		DPRINTF(k_DBG_UI, ("  workActor          :%#x (%#.8lx)\n", workActor->GetUnitID(), workActor));
-		DPRINTF(k_DBG_UI, ("  workPosition       :%d,%d\n", workPosition.x, workPosition.y));
-		DPRINTF(k_DBG_UI, ("  workSoundID        :%d\n", workSoundID));
+		DPRINTF(k_DBG_UI, ("  workActor              :%#x (%#.8lx)\n", workActor->GetUnitID(), workActor));
+		DPRINTF(k_DBG_UI, ("  workPosition           :%d,%d\n", workPosition.x, workPosition.y));
+		DPRINTF(k_DBG_UI, ("  workSoundID            :%d\n", workSoundID));
 	}
 protected:
 	virtual bool DoSkipAnimation()
@@ -2098,10 +2110,10 @@ public:
 	virtual void Dump()
 	{
 		DPRINTF(k_DBG_UI, ("Faceoff\n"));
-		DPRINTF(k_DBG_UI, ("  attacker           :%#x (%#.8lx)\n", attacker->GetUnitID(), attacker));
-		DPRINTF(k_DBG_UI, ("  attackerPosition   :%d,%d\n", attackerPosition.x, attackerPosition.y));
-		DPRINTF(k_DBG_UI, ("  attacked           :%#x (%#.8lx)\n", attacked->GetUnitID(), attacked));
-		DPRINTF(k_DBG_UI, ("  attackedPosition   :%d,%d\n", attackedPosition.x, attackedPosition.y));
+		DPRINTF(k_DBG_UI, ("  attacker               :%#x (%#.8lx)\n", attacker->GetUnitID(), attacker));
+		DPRINTF(k_DBG_UI, ("  attackerPosition       :%d,%d\n", attackerPosition.x, attackerPosition.y));
+		DPRINTF(k_DBG_UI, ("  attacked               :%#x (%#.8lx)\n", attacked->GetUnitID(), attacked));
+		DPRINTF(k_DBG_UI, ("  attackedPosition       :%d,%d\n", attackedPosition.x, attackedPosition.y));
 	}
 protected:
 	virtual void PrepareAnimation()
@@ -2211,7 +2223,7 @@ public:
 	virtual void Dump()
 	{
 		DPRINTF(k_DBG_UI, ("Invoke Research advance\n"));
-		DPRINTF(k_DBG_UI, ("  message              :%s\n", message));
+		DPRINTF(k_DBG_UI, ("  message                :%s\n", message));
 	}
 protected:
 	MBCHAR *message;
@@ -2266,7 +2278,7 @@ public:
 	virtual void Dump()
 	{
 		DPRINTF(k_DBG_UI, ("Play Wonder Movie\n"));
-		DPRINTF(k_DBG_UI, ("  wonderMovieID        :%ld\n", wonderMovieID));
+		DPRINTF(k_DBG_UI, ("  wonderMovieID          :%ld\n", wonderMovieID));
 	}
 protected:
 	sint32 wonderMovieID;
@@ -2291,7 +2303,7 @@ public:
 	virtual void Dump()
 	{
 		DPRINTF(k_DBG_UI, ("Play Victory Movie\n"));
-		DPRINTF(k_DBG_UI, ("  reason                :%ld\n", reason));
+		DPRINTF(k_DBG_UI, ("  reason                 :%ld\n", reason));
 	}
 protected:
 	GAME_OVER reason;
@@ -2338,7 +2350,7 @@ public:
 	virtual void Dump()
 	{
 		DPRINTF(k_DBG_UI, ("Begin Scheduler\n"));
-		DPRINTF(k_DBG_UI, ("  player: %d\n", player));
+		DPRINTF(k_DBG_UI, ("  player                 :%d\n", player));
 	}
 protected:
 	sint32 player;
