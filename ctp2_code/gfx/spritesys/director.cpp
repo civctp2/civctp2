@@ -2971,6 +2971,12 @@ void DirectorImpl::AddSpecialAttack(const Unit& attacker, const Unit &attacked, 
 		return;
 	}
 
+	if (g_player[g_selected_item->GetVisiblePlayer()] &&
+		g_player[g_selected_item->GetVisiblePlayer()]->IsVisible(attacked.RetPos()))
+	{
+		AddProjectileAttack(attacker, attacked, NULL, new SpriteState(spriteID), 0);
+	}
+
 	DQActionAttack *action = new DQActionSpecialAttack(
 			attacker.GetOwner(),
 			attacker.GetActor(),
@@ -2981,12 +2987,6 @@ void DirectorImpl::AddSpecialAttack(const Unit& attacker, const Unit &attacked, 
 			attacked.RetPos(),
 			attacked.IsCity());
 	m_actionQueue->AddTail(action);
-
-	if (g_player[g_selected_item->GetVisiblePlayer()] &&
-		g_player[g_selected_item->GetVisiblePlayer()]->IsVisible(attacked.RetPos()))
-	{
-		AddProjectileAttack(attacker, attacked, NULL, new SpriteState(spriteID), 0);
-	}
 }
 
 void DirectorImpl::AddDeath(UnitActor *dead, const MapPoint &deadPos, sint32 deadSoundID)

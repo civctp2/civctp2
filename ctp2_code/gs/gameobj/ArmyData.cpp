@@ -5141,7 +5141,6 @@ ORDER_RESULT ArmyData::Injoin(const MapPoint &point)
 						   GEA_Unit, u,
 						   GEA_City, c.m_id,
 						   GEA_End);
-	ActionSuccessful(SPECATTACK_INJOIN, u, c);
 	g_slicEngine->Execute
 	    (new AggressorReport("911InjunctionCompleteAttack", u, c));
 

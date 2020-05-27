@@ -25,8 +25,8 @@
 // Modifications from the original Activision code:
 //
 // - AddUnitToArmyEvent does not crash in the debug version if the unit to
-//   be is transported and has therefore no army. This makes slic code save. (7-Nov-2007 Martin Gühmann)
-// - Added an upgrade unit event. (13-Sep-2008 Martin Gühmann)
+//   be is transported and has therefore no army. This makes slic code save. (7-Nov-2007 Martin GÃ¼hmann)
+// - Added an upgrade unit event. (13-Sep-2008 Martin GÃ¼hmann)
 //
 //----------------------------------------------------------------------------
 
@@ -478,8 +478,6 @@ STDEHANDLER(ReformCityUnitEvent)
 	g_gevManager->AddEvent(GEV_INSERT_AfterCurrent, GEV_UnconvertCity,
 						   GEA_City, c.m_id,
 						   GEA_End);
-
-	u.GetArmy()->ActionSuccessful(SPECATTACK_REFORMCITY, u, c);
 
 	SlicObject *so = new SlicObject("135ReformCity") ;
 	so->AddCity(c);
