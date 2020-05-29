@@ -80,8 +80,6 @@ public:
 		const Unit     &mover,
 		MapPoint const &startPos,
 		MapPoint const &endPos,
-		sint32         numberOfRevealedActors,
-		UnitActor      **revealedActors,
 		sint32         numberOfMoveActors,
 		UnitActor      **moveActors,
 		sint32         soundID
@@ -91,8 +89,6 @@ public:
 		const Unit     &mover,
 		MapPoint const &startPos,
 		MapPoint const &endPos,
-		sint32         numberOfRevealedActors,
-		UnitActor      **revealedActors,
 		sint32         numberOfMoveActors,
 		UnitActor      **moveActors
     ) = 0;

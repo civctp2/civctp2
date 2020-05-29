@@ -59,70 +59,51 @@ STDEHANDLER(DirectorMoveUnitsEvent)
 	Army a;
 	MapPoint from, to;
 
-	if(!args->GetArmy(0, a)) return GEV_HD_Continue;
-	if(!args->GetPos(0, from)) return GEV_HD_Continue;
-	if(!args->GetPos(1, to)) return GEV_HD_Continue;
+	if (!args->GetArmy(0, a)) return GEV_HD_Continue;
+	if (!args->GetPos(0, from)) return GEV_HD_Continue;
+	if (!args->GetPos(1, to)) return GEV_HD_Continue;
 
-	if(a.Num() <= 0) return GEV_HD_Continue;
-
-	if(a->IsStealth()
-		&& !a->IsVisible(g_selected_item->GetPlayerOnScreen())) return GEV_HD_Continue;
-
-//	BOOL theTileIsVisible = g_tiledMap->TileIsCompletelyVisible(to.x, to.y);
+	if (a.Num() <= 0) return GEV_HD_Continue;
+	if (a->IsStealth() && !a->IsVisible(g_selected_item->GetPlayerOnScreen())) return GEV_HD_Continue;
 
 	if (g_selected_item->GetPlayerOnScreen() != -1 &&
 		g_selected_item->GetPlayerOnScreen() != g_selected_item->GetVisiblePlayer() &&
 		!g_network.IsActive())
-
-			return GEV_HD_Continue;
+	{
+		return GEV_HD_Continue;
+	}
 
 	Unit top_src = a->GetTopVisibleUnit(g_selected_item->GetVisiblePlayer());
-	if (top_src.m_id == 0)
+	if (top_src.m_id == 0) {
 		top_src = a[0];
-
-	sint32 numRevealed = 0;
+	}
 
 	UnitActor **restOfStack = NULL;
 	sint32 numRest = a->Num() - 1;
-
 	if (numRest > 0) {
 		restOfStack = new (UnitActor* [numRest]);
 		a->GetActors(top_src, restOfStack);
 	}
 
-	UnitActor	**revealedActors = NULL;
-
-	if (numRevealed > 0) {
-
-		// Something missing here.
-
-	} else {
-		revealedActors = NULL;
-	}
-
 	MapPoint newPos = to;
 
 	if(g_selected_item->IsAutoCenterOn()
-	&& !g_director->TileWillBeCompletelyVisible(newPos.x, newPos.y)
-	&& (top_src.GetVisibility() & (1 << g_selected_item->GetVisiblePlayer()))
-	&& (   g_theProfileDB->IsEnemyMoves()
-	    || top_src.GetOwner() == g_selected_item->GetVisiblePlayer()
-	   )
-	){
+		&& !g_director->TileWillBeCompletelyVisible(newPos.x, newPos.y)
+		&& (top_src.GetVisibility() & (1 << g_selected_item->GetVisiblePlayer()))
+		&& (g_theProfileDB->IsEnemyMoves() || top_src.GetOwner() == g_selected_item->GetVisiblePlayer()))
+	{
 		g_director->AddCenterMap(newPos);
 	}
 
 	if (!to.IsNextTo(from)) {
-		g_director->AddTeleport(top_src, from, newPos, numRevealed, revealedActors,
-								numRest, restOfStack);
+		g_director->AddTeleport(top_src, from, newPos, numRest, restOfStack);
 	} else {
-		g_director->AddMove(top_src, from, newPos, numRevealed, revealedActors,
-							numRest, restOfStack, top_src.GetMoveSoundID());
-
+		g_director->AddMove(top_src, from, newPos, numRest, restOfStack, top_src.GetMoveSoundID());
 	}
 
-	if (top_src.GetData()->HasLeftMap())
+	if (top_src.GetData()->HasLeftMap()) {
 		g_director->AddHide(top_src);
+	}
 
 	return GEV_HD_Continue;
 }

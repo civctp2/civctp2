@@ -2860,17 +2860,16 @@ ORDER_RESULT ArmyData::PlantNuke(const MapPoint &point)
 //----------------------------------------------------------------------------
 void ArmyData::SetPositionAndFixActors(const MapPoint &p)
 {
-	UnitDynamicArray revealedUnits;
 	MapPoint opos;
 	GetPos(opos);
 
 	for(sint32 i = 0; i < m_nElements; i++)
 	{
 		g_theWorld->RemoveUnitReference(opos, m_array[i]);
-		m_array[i].SetPosition(p, revealedUnits);
+		m_array[i].SetPosition(p);
 	}
 
-	FixActors(opos, p, revealedUnits);
+	FixActors(opos, p);
 }
 
 //----------------------------------------------------------------------------
@@ -2881,7 +2880,6 @@ void ArmyData::SetPositionAndFixActors(const MapPoint &p)
 //
 // Parameters : MapPoint opos                   : the army's old position
 //            : MapPoint npos                   : the army's new position
-//            : UnitDynamicArray &revealedUnits : an array of units that were revealed by the move
 //
 // Globals    : g_director                      : display manager
 //
@@ -2890,23 +2888,8 @@ void ArmyData::SetPositionAndFixActors(const MapPoint &p)
 // Remark(s)  : -
 //
 //----------------------------------------------------------------------------
-void ArmyData::FixActors(MapPoint &opos, const MapPoint &npos, UnitDynamicArray &revealedUnits)
+void ArmyData::FixActors(MapPoint &opos, const MapPoint &npos)
 {
-
-	UnitActor	**revealedActors = NULL;
-
-	sint32 numRevealed = revealedUnits.Num();
-	sint32 numActors = 0;
-	if (numRevealed > 0) {
-		revealedActors = new UnitActor*[numRevealed];
-		for (sint32 i=0; i<numRevealed; i++) {
-			if(revealedUnits[i].IsValid()) {
-				revealedActors[numActors++] = revealedUnits[i].GetActor();
-			}
-		}
-	}
-	// else No action: revealedActors = NULL;
-
 	Unit top_src = GetTopVisibleUnit(g_selected_item->GetVisiblePlayer());
 	if(!top_src.IsValid())
 		top_src = m_array[0];
@@ -2920,8 +2903,7 @@ void ArmyData::FixActors(MapPoint &opos, const MapPoint &npos, UnitDynamicArray 
 	}
 
 	MapPoint newPos(npos);
-	g_director->AddMove(top_src, opos, newPos, numActors, revealedActors,
-						numRest, restOfStack, top_src.GetMoveSoundID());
+	g_director->AddMove(top_src, opos, newPos, numRest, restOfStack, top_src.GetMoveSoundID());
 
 }
 
@@ -4681,11 +4663,10 @@ void ArmyData::Reenter()
 		return;
 	}
 
-	sint32 i;
 	Unit city = g_theWorld->GetCity(m_reentryPos);
 	if(!city.IsValid() || city.GetOwner() != m_owner)
 	{
-		for (i = 0; i < m_nElements; i++)
+		for (int i = 0; i < m_nElements; i++)
 		{
 			g_gevManager->AddEvent(GEV_INSERT_AfterCurrent, GEV_KillUnit,
 								   GEA_Unit, m_array[i].m_id,
@@ -4702,22 +4683,20 @@ void ArmyData::Reenter()
 	{
 		m_flags &= ~(k_CULF_IN_SPACE);
 		MapPoint oldPos = m_pos;
-		UnitDynamicArray revealedUnits;
 
-		for (i = 0; i < m_nElements; i++)
+		for (int i = 0; i < m_nElements; i++)
 		{
 			m_array[i]->ClearFlag(k_UDF_HAS_LEFT_MAP);
 			m_array[i]->ClearFlag(k_UDF_IN_SPACE);
 
 			m_array[i]->SetPosAndNothingElse(m_reentryPos);
-			g_theWorld->InsertUnit(m_reentryPos, m_array[i], revealedUnits);
+			g_theWorld->InsertUnit(m_reentryPos, m_array[i]);
 			m_array[i]->AddUnitVision();
 		}
 
 		ResetPos();
-		FixActors(oldPos, m_pos, revealedUnits);
-		for (i = 0; i < m_nElements; i++)
-		{
+		FixActors(oldPos, m_pos);
+		for (int i = 0; i < m_nElements; i++) {
 			g_director->AddShow(m_array[i]);
 		}
 	}
@@ -7709,9 +7688,7 @@ bool ArmyData::MoveIntoCell(const MapPoint &pos, UNIT_ORDER_TYPE order, WORLD_DI
 	return true;
 }
 
-void ArmyData::MoveActors(const MapPoint &pos,
-						  UnitDynamicArray &revealedUnits,
-						  bool teleport)
+void ArmyData::MoveActors(const MapPoint &pos, bool teleport)
 {
 	if(g_selected_item->GetPlayerOnScreen() < 0
 	&& g_selected_item->GetPlayerOnScreen() != g_selected_item->GetVisiblePlayer())
@@ -7720,8 +7697,6 @@ void ArmyData::MoveActors(const MapPoint &pos,
 	Unit top_src = GetTopVisibleUnit(g_selected_item->GetVisiblePlayer());
 	if (top_src.m_id == 0)
 		top_src = m_array[0];
-
-	sint32 numRevealed = revealedUnits.Num();
 
 	UnitActor **restOfStack = NULL;
 	sint32 numRest = 0;
@@ -7760,30 +7735,15 @@ void ArmyData::MoveActors(const MapPoint &pos,
 
 	}
 
-	UnitActor	**revealedActors;
-
-	if (numRevealed > 0) {
-		revealedActors = new UnitActor*[numRevealed];
-		for (sint32 i=0; i<numRevealed; i++) {
-			revealedActors[i] = revealedUnits[i].GetActor();
-		}
-	} else {
-		revealedActors = NULL;
-	}
-
-	MapPoint newPos = pos;
-
 	if (teleport || !(top_src.GetVisibility() & (1 << g_selected_item->GetVisiblePlayer()))) {
-		g_director->AddTeleport(top_src, m_pos, newPos, numRevealed, revealedActors,
-								numRest, restOfStack);
+		g_director->AddTeleport(top_src, m_pos, pos, numRest, restOfStack);
 	} else {
-		g_director->AddMove(top_src, m_pos, newPos, numRevealed, revealedActors,
-							numRest, restOfStack, top_src.GetMoveSoundID());
-
+		g_director->AddMove(top_src, m_pos, pos, numRest, restOfStack, top_src.GetMoveSoundID());
 	}
 
-	if (top_src.GetData()->HasLeftMap())
+	if (top_src.GetData()->HasLeftMap()) {
 		g_director->AddHide(top_src);
+	}
 }
 
 //----------------------------------------------------------------------------
@@ -7813,8 +7773,6 @@ void ArmyData::MoveUnits(const MapPoint &pos)
 		return;
 	}
 
-	UnitDynamicArray revealedUnits;
-
 #if defined(_DEBUG) || defined(USE_LOGGING)
 	bool notReported = true;
 #endif
@@ -7827,8 +7785,6 @@ void ArmyData::MoveUnits(const MapPoint &pos)
 		// EMOD - Rebasing of units, especially aircraft - code removed trying to create a code that automatically moves a unit from a
 		//city to another city anywhere in the world and costing that unit 1 move.
 
-		//UnitDynamicArray revealedUnits;
-		//bool revealedUnexplored = false;
 		if(m_array[i].GetDBRec()->GetCanRebase())
 		{
 			if (!IsOccupiedByForeigner(pos))
@@ -7836,7 +7792,7 @@ void ArmyData::MoveUnits(const MapPoint &pos)
 				if(g_theWorld->HasCity(pos)
 				|| terrainutil_HasAirfield(pos)
 				){  //add unit later?
-					m_array[i].SetPosition(pos, revealedUnits);
+					m_array[i].SetPosition(pos);
 				}
 			}
 		}
@@ -7870,7 +7826,9 @@ void ArmyData::MoveUnits(const MapPoint &pos)
 			}
 
 			g_theWorld->RemoveUnitReference(m_pos, m_array[i]);
-			m_array[i].MoveToPosition(pos, revealedUnits);
+
+			UnitDynamicArray revealedUnits;
+			m_array[i].MoveToPosition(pos, &revealedUnits);
 
 			if(m_array[i].GetNumCarried() > 0)
 			{
@@ -8221,9 +8179,6 @@ bool ArmyData::MoveIntoTransport(const MapPoint &pos, CellUnitList &transports)
 		return true;
 	}
 
-	UnitActor	**revealedActors = NULL;
-	sint32		numRevealed = 0;
-
 	UnitActor **restOfStack = NULL;
 	sint32 numRest = m_nElements - 1;
 
@@ -8234,8 +8189,7 @@ bool ArmyData::MoveIntoTransport(const MapPoint &pos, CellUnitList &transports)
 	}
 
 	MapPoint directorDoesntLikeConsts = pos;
-	g_director->AddMove(top_src, m_pos, directorDoesntLikeConsts, numRevealed, revealedActors,
-							numRest, restOfStack, top_src.GetMoveSoundID());
+	g_director->AddMove(top_src, m_pos, directorDoesntLikeConsts, numRest, restOfStack, top_src.GetMoveSoundID());
 
 	UpdateZOCForRemoval();
 
@@ -8909,8 +8863,7 @@ bool ArmyData::ExecuteTeleportOrder(Order *order)
 		m_array[i].UpdateZOCForInsertion();
 	}
 
-	UnitDynamicArray revealedUnits;
-	MoveActors(order->m_point, revealedUnits, true);
+	MoveActors(order->m_point, true);
 	m_pos = order->m_point;
 
 	CheckTerrainEvents();

@@ -136,40 +136,22 @@ UnitActor::UnitActor(SpriteState *ss, Unit id, sint32 unitType, const MapPoint &
     m_facing                    (k_DEFAULTSPRITEFACING),
     m_lastMoveFacing            (k_DEFAULTSPRITEFACING),
     m_frame                     (0),
-//	uint16				m_transparency;
     m_curAction                 (NULL),
     m_curUnitAction             (UNITACTION_NONE),
     m_actionQueue               (k_MAX_ACTION_QUEUE_SIZE),
-//	RECT				m_heraldRect;
 	m_unitVisibility            (0),
     m_unitSaveVisibility        (0),
     m_directionalAttack         (false),
 	m_unitVisionRange           (visionRange),
     m_newUnitVisionRange        (0.0),
-    m_numRevealedActors         (0),
-    m_revealedActors            (NULL),
-    m_numSavedRevealedActors    (0),
-    m_savedRevealedActors       (NULL),
-    m_bVisSpecial               (false),
     m_hidden                    (false),
     m_hiddenUnderStack          (false),
-//	sint32				m_holdingCurAnimPos[UNITACTION_MAX];
-//	sint32				m_holdingCurAnimDelayEnd[UNITACTION_MAX];
-//	sint32				m_holdingCurAnimElapsed[UNITACTION_MAX];
-//	sint32				m_holdingCurAnimLastFrameTime[UNITACTION_MAX];
-//	sint32				m_holdingCurAnimSpecialDelayProcess;
     m_size                      (0),
     m_isUnseenCellActor         (isUnseenCellActor),
-//	GROUPTYPE			m_type;
-//	sint32				m_spriteID;
     m_isFortified               (false),
     m_isFortifying              (false),
     m_hasCityWalls              (false),
     m_hasForceField             (false),
-//	uint32				m_shieldFlashOnTime;
-//	uint32				m_shieldFlashOffTime;
-//	sint32				m_activeListRef;
-//	double				m_healthPercent;
     m_tempStackSize             (0)
 #ifdef _ACTOR_DRAW_OPTIMIZATION
 //	sint32				m_oldFacing;
@@ -191,15 +173,6 @@ UnitActor::UnitActor(SpriteState *ss, Unit id, sint32 unitType, const MapPoint &
 	Initialize();
 }
 
-
-
-
-
-
-
-
-
-
 UnitActor::UnitActor(CivArchive &archive)
 :
     Actor                       (NULL),
@@ -215,40 +188,22 @@ UnitActor::UnitActor(CivArchive &archive)
     m_facing                    (k_DEFAULTSPRITEFACING),
     m_lastMoveFacing            (k_DEFAULTSPRITEFACING),
     m_frame                     (0),
-//	uint16				m_transparency;
     m_curAction                 (NULL),
     m_curUnitAction             (UNITACTION_NONE),
     m_actionQueue               (k_MAX_ACTION_QUEUE_SIZE),
-//	RECT				m_heraldRect;
 	m_unitVisibility            (0),
     m_unitSaveVisibility        (0),
     m_directionalAttack         (false),
 	m_unitVisionRange           (0.0),
     m_newUnitVisionRange        (0.0),
-    m_numRevealedActors         (0),
-    m_revealedActors            (NULL),
-    m_numSavedRevealedActors    (0),
-    m_savedRevealedActors       (NULL),
-    m_bVisSpecial               (false),
     m_hidden                    (false),
     m_hiddenUnderStack          (false),
-//	sint32				m_holdingCurAnimPos[UNITACTION_MAX];
-//	sint32				m_holdingCurAnimDelayEnd[UNITACTION_MAX];
-//	sint32				m_holdingCurAnimElapsed[UNITACTION_MAX];
-//	sint32				m_holdingCurAnimLastFrameTime[UNITACTION_MAX];
-//	sint32				m_holdingCurAnimSpecialDelayProcess;
     m_size                      (0),
     m_isUnseenCellActor         (false),
-//	GROUPTYPE			m_type;
-//	sint32				m_spriteID;
     m_isFortified               (false),
     m_isFortifying              (false),
     m_hasCityWalls              (false),
     m_hasForceField             (false),
-//	uint32				m_shieldFlashOnTime;
-//	uint32				m_shieldFlashOffTime;
-//	sint32				m_activeListRef;
-//	double				m_healthPercent;
     m_tempStackSize             (0)
 #ifdef _ACTOR_DRAW_OPTIMIZATION
 //	sint32				m_oldFacing;
@@ -270,11 +225,9 @@ void UnitActor::Initialize(void)
 	RECT			tmpRect = {0, 0, 10, 16};
 
 	m_heraldRect = tmpRect;
-	m_bVisSpecial = FALSE;
 	m_animPos = 0;
 	m_curUnitAction			= UNITACTION_NONE;
 	m_transparency			= 0;
-	m_numRevealedActors		= 0;
 
 	for (sint32 i = UNITACTION_MOVE; i<UNITACTION_MAX; i++)
 	{
@@ -313,9 +266,6 @@ void UnitActor::Initialize(void)
 	m_curAction = NULL;
 	m_actionQueue.Allocate(k_MAX_ACTION_QUEUE_SIZE);
 
-
-	m_numSavedRevealedActors = 0;
-	m_savedRevealedActors = m_revealedActors = NULL;
 	m_hiddenUnderStack = FALSE;
 
 	m_hidden = FALSE;
@@ -431,8 +381,6 @@ UnitActor::~UnitActor()
         }
 	}
 
-	delete [] m_savedRevealedActors;
-	delete [] m_revealedActors;
 	delete m_spriteState;
 }
 
@@ -643,84 +591,15 @@ void UnitActor::GetNextAction(bool isVisible)
 
 		if (m_curAction->GetActionType() != m_curUnitAction)
 			m_frame = 0;
-
-
-
-
-
 	} else {
 		return;
 	}
 
-
 	if(m_curAction->m_actionType == UNITACTION_ATTACK )
 	{
-
 		SetUnitVisibility(m_curAction->GetUnitsVisibility());
 	}
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
 	m_curAction->SetSpecialDelayProcess(m_holdingCurAnimSpecialDelayProcess);
-
-	MapPoint curStartMapPoint, curEndMapPoint;
-
-	m_curAction->GetStartMapPoint(curStartMapPoint);
-	m_curAction->GetEndMapPoint(curEndMapPoint);
-
-	if(m_playerNum == g_selected_item->GetVisiblePlayer() && m_curAction->GetActionType() == UNITACTION_MOVE)
-	{
-
-		if(m_savedRevealedActors != NULL)
-		{
-			for (sint32 i=0; i<m_numSavedRevealedActors; i++) {
-				UnitActor * tempActor = m_savedRevealedActors[i];
-				Assert(tempActor != NULL);
-				if (tempActor != NULL)
-					tempActor->SetUnitVisibility(m_curAction->GetUnitsVisibility(), TRUE);
-			}
-
-			delete[] m_savedRevealedActors;
-			m_savedRevealedActors = NULL;
-			m_numSavedRevealedActors = 0;
-
-		}
-
-
-
-
-
-		UnitActor **revealedActors = m_curAction->GetRevealedActors();
-		if (revealedActors) {
-			for (sint32 i=0; i<m_curAction->GetNumRevealedActors(); i++) {
-				UnitActor * tempActor = revealedActors[i];
-				Assert(tempActor != NULL);
-				if (tempActor != NULL)
-					tempActor->SetUnitVisibility(m_curAction->GetUnitsVisibility(), TRUE);
-			}
-
-			SaveRevealedActors(revealedActors);
-
-			m_numRevealedActors = 0;
-			m_revealedActors = NULL;
-			m_curAction->SetRevealedActors(NULL);
-			m_curAction->SetNumRevealedActors(0);
-		}
-	}
 
 	m_curUnitAction = (UNITACTION)m_curAction->GetActionType();
 }

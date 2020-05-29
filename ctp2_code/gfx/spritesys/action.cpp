@@ -71,9 +71,7 @@ Action::Action(sint32 actionType, ACTIONEND endCondition, sint32 startAnimPos, s
 	m_facing                    (k_DEFAULTSPRITEFACING),
 	m_sound_effect_id           (-1),
 	m_unitsVisibility           (0),
-	m_unitVisionRange           (0),
-	m_numRevealedActors         (0),
-	m_revealedActors            (NULL)
+	m_unitVisionRange           (0)
 { ; }
 
 Action::Action(Action const & a_Original)
@@ -98,16 +96,14 @@ Action::Action(Action const & a_Original)
 	m_facing                    (a_Original.m_facing),
 	m_sound_effect_id           (a_Original.m_sound_effect_id),
 	m_unitsVisibility           (a_Original.m_unitsVisibility),
-	m_unitVisionRange           (a_Original.m_unitVisionRange),
-	m_numRevealedActors         (a_Original.m_numRevealedActors),
-	m_revealedActors            (NULL)
+	m_unitVisionRange           (a_Original.m_unitVisionRange)
 {
     if (a_Original.m_curAnim)
     {
         m_curAnim = new Anim(*a_Original.m_curAnim);
     }
 
-    /// @todo Check copying of m_curPath, m_revealedActors (NULLed in original code)
+    /// @todo Check copying of m_curPath (NULLed in original code)
 }
 
 /// @todo Remove when no longer used
@@ -120,14 +116,12 @@ Action::Action(Action *copyme)
 	}
 
 	m_curPath = NULL;
-	m_revealedActors = NULL;
 }
 
 Action::~Action(void)
 {
 	delete m_curPath;
 	delete m_curAnim;
-	delete[] m_revealedActors;
 }
 
 void Action::Process(void)

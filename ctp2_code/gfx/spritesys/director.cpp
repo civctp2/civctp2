@@ -713,8 +713,6 @@ public:
 		const Unit     &mover,
 		MapPoint const &startPos,
 		MapPoint const &endPos,
-		sint32         numberOfRevealedActors,
-		UnitActor      **revealedActors,
 		sint32         numberOfMoveActors,
 		UnitActor      **moveActors,
 		sint32         soundID
@@ -723,8 +721,6 @@ public:
 		const Unit     &mover,
 		MapPoint const &startPos,
 		MapPoint const &endPos,
-		sint32         numberOfRevealedActors,
-		UnitActor      **revealedActors,
 		sint32         numberOfMoveActors,
 		UnitActor      **moveActors
 	);
@@ -876,17 +872,13 @@ public:
 			const MapPoint &startPos,
 			const MapPoint &endPos,
 			sint32         numberOfMoveActors,
-			UnitActor      **moveActors,
-			sint32         numberOfRevealedActors,
-			UnitActor      **revealedActors)
+			UnitActor      **moveActors)
 		: DQActionImmediate(),
 		moveActor              (moveActor),
 		startPos               (startPos),
 		endPos                 (endPos),
 		numberOfMoveActors     (numberOfMoveActors),
-		moveActors             (moveActors),
-		numberOfRevealedActors (numberOfRevealedActors),
-		revealedActors         (revealedActors)
+		moveActors             (moveActors)
 	{
 		DirectorImpl::Instance()->AddStandbyActor(moveActor);
 	}
@@ -897,12 +889,6 @@ public:
 
 	virtual void Execute()
 	{
-		for (int i = 0; i < numberOfRevealedActors; i++)
-		{
-			UnitActor *tempActor = revealedActors[i];
-			tempActor->SetVisSpecial(TRUE);
-		}
-
 		moveActor->PositionActor(endPos);
 
 		for (int i = 0; i < numberOfMoveActors; i++)
@@ -927,15 +913,6 @@ public:
 						moveActors[i]));
 			}
 		}
-		DPRINTF(k_DBG_UI, ("  numberOfRevealedActors :%d\n", numberOfRevealedActors));
-		if (numberOfRevealedActors > 0)
-		{
-			DPRINTF(k_DBG_UI, ("  revealedActors\n"));
-			for (int i = 0; i < numberOfRevealedActors; i++) {
-				DPRINTF(k_DBG_UI, ("    %d.                  :%#x (%#.8lx)\n", i, revealedActors[i]->GetUnitID(),
-						revealedActors[i]));
-			}
-		}
 	}
 
 protected:
@@ -944,8 +921,6 @@ protected:
 	MapPoint  endPos;
 	sint32    numberOfMoveActors;
 	UnitActor **moveActors;
-	sint32    numberOfRevealedActors;
-	UnitActor **revealedActors;
 };
 
 class DQActionMorph : public DQActionImmediate
@@ -1572,8 +1547,6 @@ public:
 			const MapPoint &endPos,
 			sint32         numberOfMoveActors,
 			UnitActor      **moveActors,
-			sint32         numberOfRevealedActors,
-			UnitActor      **revealedActors,
 			sint32         soundID)
 		: DQActionActive(owner),
 		moveActor              (moveActor),
@@ -1582,8 +1555,6 @@ public:
 		endPos                 (endPos),
 		numberOfMoveActors     (numberOfMoveActors),
 		moveActors             (moveActors),
-		numberOfRevealedActors (numberOfRevealedActors),
-		revealedActors         (revealedActors),
 		soundID                (soundID)
 	{
 		DirectorImpl::Instance()->AddStandbyActor(moveActor);
@@ -1664,15 +1635,6 @@ public:
 						moveActors[i]));
 			}
 		}
-		DPRINTF(k_DBG_UI, ("  numberOfRevealedActors :%d\n", numberOfRevealedActors));
-		if (numberOfRevealedActors > 0)
-		{
-			DPRINTF(k_DBG_UI, ("  revealedActors\n"));
-			for (int i = 0; i < numberOfRevealedActors; i++) {
-				DPRINTF(k_DBG_UI, ("    %d.                  :%#x (%#.8lx)\n", i, revealedActors[i]->GetUnitID(),
-						revealedActors[i]));
-			}
-		}
 		DPRINTF(k_DBG_UI, ("  soundID                :%d\n", soundID));
 	}
 
@@ -1689,8 +1651,6 @@ protected:
 	MapPoint  endPos;
 	sint32    numberOfMoveActors;
 	UnitActor **moveActors;
-	sint32    numberOfRevealedActors;
-	UnitActor **revealedActors;
 	sint32    soundID;
 };
 
@@ -2735,8 +2695,6 @@ void DirectorImpl::AddMove (
 		const Unit     &mover,
 		const MapPoint &startPos,
 		const MapPoint &endPos,
-		sint32         numberOfRevealedActors,
-		UnitActor      **revealedActors,
 		sint32         numberOfMoveActors,
 		UnitActor      **moveActors,
 		sint32         soundID)
@@ -2766,8 +2724,6 @@ void DirectorImpl::AddMove (
 			endPos,
 			numberOfMoveActors,
 			numberOfMoveActors > 0 ? moveActors : NULL,
-			numberOfRevealedActors,
-			numberOfRevealedActors > 0 ? revealedActors : NULL,
 			soundID);
 	m_actionQueue->AddTail(action);
 }
@@ -2776,8 +2732,6 @@ void DirectorImpl::AddTeleport (
 		const Unit     &mover,
 		const MapPoint &startPos,
 		const MapPoint &endPos,
-		sint32         numberOfRevealedActors,
-		UnitActor      **revealedActors,
 		sint32         numberOfMoveActors,
 		UnitActor      **moveActors)
 {
@@ -2790,9 +2744,7 @@ void DirectorImpl::AddTeleport (
 			startPos,
 			endPos,
 			numberOfMoveActors,
-			moveActors,
-			numberOfRevealedActors,
-			revealedActors);
+			moveActors);
 	m_actionQueue->AddTail(action);
 }
 

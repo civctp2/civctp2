@@ -27,13 +27,13 @@
 // - Do not generate an Assert popup when slaves revolt and take over a city.
 // - Do not generate an Assert popup when an army is destroyed in an attack.
 // - Added Elite and Leader Chance 6-4-2007
-// - Replaced old const database by new one. (5-Aug-2007 Martin Gühmann)
+// - Replaced old const database by new one. (5-Aug-2007 Martin GÃ¼hmann)
 // - The FinishMoveEvent event now fills a transporter up to the transport
 //   capacy limit even if the army to be transported has more units than the
-//   transporter space, the units that do not fit on board stay at land. (25-Jan-2008 Martin Gühmann)
-// - Separated the Settle event drom the Settle in City event. (19-Feb-2008 Martin Gühmann)
-// - Merged finish move. (13-Aug-2008 Martin Gühmann)
-// - Added an upgrade order event. (13-Sep-2008 Martin Gühmann)
+//   transporter space, the units that do not fit on board stay at land. (25-Jan-2008 Martin GÃ¼hmann)
+// - Separated the Settle event drom the Settle in City event. (19-Feb-2008 Martin GÃ¼hmann)
+// - Merged finish move. (13-Aug-2008 Martin GÃ¼hmann)
+// - Added an upgrade order event. (13-Sep-2008 Martin GÃ¼hmann)
 //
 //----------------------------------------------------------------------------
 
@@ -738,12 +738,11 @@ STDEHANDLER(ArmyMoveEvent)
 // EMOD - Rebasing of units, especially aircraft - code removed trying to create a code that automatically moves a unit from a
 //city to another city anywhere in the world and costing that unit 1 move.
 
-		UnitDynamicArray revealedUnits;
 		for (sint32 i = m_nElements - 1; i>= 0; i--) {   //for(i = 0; i < m_nElements; i++) {
 			if(!m_array[i].GetDBRec()->GetCanRebase()){
 				if (!IsOccupiedByForeigner(order->m_point)){
 					if (g_theWorld->HasCity(order->m_point) || terrainutil_HasAirfield(order->m_point)) {  //add unit later?
-						m_array[i].SetPosition(order->m_point, revealedUnits);
+						m_array[i].SetPosition(order->m_point);
 						return true;
 					}
 				}

@@ -1870,7 +1870,6 @@ void CityData::Revolt(sint32 &playerToJoin, bool causeIsExternal)
 // Description:
 //
 // Parameters : MapPoint &pos                 : destination
-//              bool &revealed_foreign_units  : zeroed out
 //              sint32 foreigner              : recipient
 //
 // Globals    : g_theWorld
@@ -1881,7 +1880,7 @@ void CityData::Revolt(sint32 &playerToJoin, bool causeIsExternal)
 // Remark(s)  :
 //
 //----------------------------------------------------------------------------
-void CityData::TeleportUnits(const MapPoint &pos, bool &revealed_foreign_units, sint32 foreigner)
+void CityData::TeleportUnits(const MapPoint &pos, sint32 foreigner)
 {
 	sint32 i;
 	Cell *cell = g_theWorld->GetCell(m_home_city.RetPos());
@@ -1919,26 +1918,18 @@ void CityData::TeleportUnits(const MapPoint &pos, bool &revealed_foreign_units, 
 	g_theWorld->GetCell(city_pos)->GetArmy(units);
 	n = units.Num();
 
-	revealed_foreign_units = false;
-	UnitDynamicArray revealed;
 	DynamicArray<Army> moveArmies;
 
 	for (i=0; i<n; i++){
-		revealed.Clear();
 		MapPoint oldpos;
 
 		units[i].GetPos(oldpos);
 
 		g_theWorld->RemoveUnitReference(oldpos, units[i]);
-		units[i].SetPosition(pos, revealed);
+		units[i].SetPosition(pos);
 
-		if (0 < revealed.Num()) {
-			revealed_foreign_units = true;
-		}
 	}
 	for(i = 0; i < n; i++) {
-
-
 		units[i].GetArmy().ResetPos();
 	}
 #endif
@@ -6378,8 +6369,7 @@ void CityData::CleanupUprising(Army &sa)
 				sa[i].SetPosAndNothingElse(m_home_city.RetPos());
 				sa[i].AddUnitVision();
 
-				UnitDynamicArray revealedUnits;
-				g_theWorld->InsertUnit(m_home_city.RetPos(), sa[i], revealedUnits);
+				g_theWorld->InsertUnit(m_home_city.RetPos(), sa[i]);
 				g_player[sa.GetOwner()]->InsertUnitReference(sa[i],
 												  CAUSE_NEW_ARMY_UPRISING,
 												  m_home_city);

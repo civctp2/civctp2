@@ -24,7 +24,7 @@
 //
 // Modifications from the original Activision code:
 //
-// - Made government modified for units work here. (July 29th 2006 Martin Gühmann)
+// - Made government modified for units work here. (July 29th 2006 Martin GÃ¼hmann)
 //
 //----------------------------------------------------------------------------
 
@@ -144,7 +144,6 @@ void NetUnit::Unpacketize(uint16 id, uint8* buf, uint16 size)
 
 		if(pnt != m_unitData->m_pos)
 		{
-			UnitDynamicArray revealed;
 			MapPoint newPos = m_unitData->m_pos;
 			DPRINTF(k_DBG_NET, ("Net: Unit %lx moved to %d,%d via unit packet\n",
 								m_unitData->m_id, newPos.x, newPos.y));
@@ -166,21 +165,11 @@ void NetUnit::Unpacketize(uint16 id, uint8* buf, uint16 size)
 				m_unitData->ClearFlag(k_UDF_VISION_ADDED);
 				m_unitData->AddUnitVision();
 			}
-			g_theWorld->InsertUnit(m_unitData->m_pos, uid, revealed);
 
-			if(m_unitData->m_visibility & (1 << g_selected_item->GetVisiblePlayer())) {
-				sint32 numRevealed = revealed.Num();
-				UnitActor **revealedActors;
-				if(numRevealed > 0) {
-					revealedActors = new UnitActor*[numRevealed];
-					for (sint32 i=0; i<numRevealed; i++)
-						revealedActors[i] = revealed[i].GetActor();
-				} else {
-					revealedActors = NULL;
-				}
-
-				g_director->AddMove(uid, pnt, m_unitData->m_pos, numRevealed, revealedActors,
-										NULL, NULL, uid.GetMoveSoundID());
+			g_theWorld->InsertUnit(m_unitData->m_pos, uid);
+			if (m_unitData->m_visibility & (1 << g_selected_item->GetVisiblePlayer()))
+			{
+				g_director->AddMove(uid, pnt, m_unitData->m_pos, 0, NULL, uid.GetMoveSoundID());
 			}
 		}
 #if 0
@@ -268,11 +257,10 @@ void NetUnit::Unpacketize(uint16 id, uint8* buf, uint16 size)
 		} else if(m_unitData->GetDBRec()->GetIsTrader()) {
 			g_player[m_unitData->m_owner]->AddTrader(uid);
 		} else {
-			UnitDynamicArray revealed;
 			if(m_unitData->IsBeingTransported()) {
 
 			} else if(!m_unitData->Flag(k_UDF_TEMP_SLAVE_UNIT)) {
-				g_theWorld->InsertUnit(m_unitData->m_pos, uid, revealed);
+				g_theWorld->InsertUnit(m_unitData->m_pos, uid);
 			}
 			if (!m_unitData->Flag(k_UDF_TEMP_SLAVE_UNIT))
             {
@@ -441,21 +429,14 @@ void NetUnitMove::Unpacketize(uint16 id, uint8 *buf, uint16 size)
 						m_id, m_point.x, m_point.y));
 	UnitData *ud = u.AccessData();
 
-	UnitDynamicArray revealed;
 	MapPoint oldPos = ud->m_pos;
 	g_theWorld->RemoveUnitReference(ud->m_pos, u);
 	g_player[ud->GetOwner()]->RemoveUnitVision(ud->m_pos, ud->GetVisionRange());
 	ud->m_pos = m_point;
 	g_player[ud->GetOwner()]->AddUnitVision(ud->m_pos, ud->GetVisionRange());
-	g_theWorld->InsertUnit(ud->m_pos, u, revealed);
+	g_theWorld->InsertUnit(ud->m_pos, u);
 
-	sint32 numRevealed = revealed.Num();
-	UnitActor **revealedActors = new UnitActor*[numRevealed];
-	for (sint32 i=0; i<numRevealed; i++)
-		revealedActors[i] = revealed[i].GetActor();
-
-	g_director->AddMove(u, oldPos, ud->m_pos, numRevealed, revealedActors,
-							NULL, NULL, u.GetMoveSoundID());
+	g_director->AddMove(u, oldPos, ud->m_pos, 0, NULL, u.GetMoveSoundID());
 }
 
 void NetUnitHP::Packetize(uint8 *buf, uint16 &size)

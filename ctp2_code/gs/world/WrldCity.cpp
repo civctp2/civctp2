@@ -139,8 +139,7 @@ bool World::InsertCity(const MapPoint &pos, Unit u)
 {
 	g_theUnitTree->Insert(u);
 
-	UnitDynamicArray revealed;
-	u.DoVision(revealed);
+	u.DoVision();
 
 	Cell *  c   = GetCell(pos);
 	if (c->HasCity()) {

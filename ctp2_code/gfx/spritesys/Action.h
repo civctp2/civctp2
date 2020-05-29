@@ -171,11 +171,6 @@ public:
 	void			SetItIsTimeToAct(bool act) { m_itIsTimeToAct = act; }
 	bool			GetItIsTimeToAct() const { return m_itIsTimeToAct; }
 
-	void			SetRevealedActors(UnitActor **revealedActors) { m_revealedActors = revealedActors; }
-	UnitActor		**GetRevealedActors(void) const { return m_revealedActors; }
-	void			SetNumRevealedActors(sint32 num) { m_numRevealedActors = num; }
-	sint32			GetNumRevealedActors(void) const { return m_numRevealedActors; }
-
 	void			SetUnitsVisibility(uint32 unitsVis) { m_unitsVisibility = unitsVis; }
 	uint32			GetUnitsVisibility(void) const { return m_unitsVisibility; }
 
@@ -215,9 +210,6 @@ protected:
 	uint32				m_unitsVisibility;
 
 	double				m_unitVisionRange;
-
-	sint32				m_numRevealedActors;
-	UnitActor			**m_revealedActors;
 };
 
 #endif

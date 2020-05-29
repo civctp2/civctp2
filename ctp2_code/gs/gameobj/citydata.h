@@ -31,21 +31,21 @@
 // - Added GetUtilisationRatio function.
 // - Prevented cities to revolt twice in the same turn. By kaan.
 // - Added NeedMoreFood function to calculate whether a city should
-//   build food tile improvements, by Martin Gühmann.
+//   build food tile improvements, by Martin GÃ¼hmann.
 // - Removed some unused functions and added a lot new ones to be able to
 //   estimate resource production better without the need of recalculation
-//   of everything. - April 4th 2005 Martin Gühmann
+//   of everything. - April 4th 2005 Martin GÃ¼hmann
 // - Added m_turnsNextPop to track city growth - PFT 29 mar 05
 // - Removed private member m_turnsNextPop as there is no need to save it
 //   as its calculation is cheap and in addition there was no get method
-//   or anything else that requires to save it. - April 23rd 2005 Martin Gühmann
-// - Replaced some member names for clarity. - Aug 6th 2005 Martin Gühmann
-// - Removed a bunch of unused and incomplete methods. - Aug 6th 2005 Martin Gühmann
-// - Added new code as preparation for resource calculation redesign.- Aug 6th 2005 Martin Gühmann
-// - Added code for new city resource calculation. (Aug 12th 2005 Martin Gühmann)
-// - Removed CITY_TILE_SIZE and k_CITY_RADIUS they aren't used. (Aug 12th 2005 Martin Gühmann)
-// - Removed more unused methods. (Aug 12th 2005 Martin Gühmann)
-// - Added city style specific happiness bonus method. (Oct 7th 2005 Martin Gühmann)
+//   or anything else that requires to save it. - April 23rd 2005 Martin GÃ¼hmann
+// - Replaced some member names for clarity. - Aug 6th 2005 Martin GÃ¼hmann
+// - Removed a bunch of unused and incomplete methods. - Aug 6th 2005 Martin GÃ¼hmann
+// - Added new code as preparation for resource calculation redesign.- Aug 6th 2005 Martin GÃ¼hmann
+// - Added code for new city resource calculation. (Aug 12th 2005 Martin GÃ¼hmann)
+// - Removed CITY_TILE_SIZE and k_CITY_RADIUS they aren't used. (Aug 12th 2005 Martin GÃ¼hmann)
+// - Removed more unused methods. (Aug 12th 2005 Martin GÃ¼hmann)
+// - Added city style specific happiness bonus method. (Oct 7th 2005 Martin GÃ¼hmann)
 // - Added HasNeededGood method by E
 // - Added HasEitherGood method by E
 // - Added HasTileImpInRadius method by E 4-7-2006 bool if a city has imp in radius
@@ -58,7 +58,7 @@
 // - Added methods to find food and production before deductions. (22-Jul-2009 Maq)
 // - Added stuff for reimplementing switch production penalty. (22-Jul-2009 Maq)
 // - Reorderd the member variables and converted m_name to a pointer to reduce
-//   the needed memory. (13-Jan-2019 Martin Gühmann)
+//   the needed memory. (13-Jan-2019 Martin GÃ¼hmann)
 //
 //----------------------------------------------------------------------------
 
@@ -537,7 +537,7 @@ public:
 
 	bool ShouldRevolt(const sint32 inciteBonus);
 	void Revolt(sint32 &playerToJoin, bool causeIsExternal = false);
-	void TeleportUnits(const MapPoint &pos,  bool &revealed_foreign_units, sint32 foreigner);
+	void TeleportUnits(const MapPoint &pos, sint32 foreigner);
 	void StopTradingWith(const PLAYER_INDEX bannedRecipient);
 	Happy *GetHappy(void) { return (m_happy); }
 

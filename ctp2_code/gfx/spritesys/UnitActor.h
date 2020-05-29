@@ -157,22 +157,14 @@ public:
 	bool			HasDirectional(void) { return m_unitSpriteGroup->HasDirectional(); }
 
 	void			SetUnitVisibility(uint32 val) { m_unitSaveVisibility = m_unitVisibility = val; }
-	void			SetUnitVisibility(uint32 val, BOOL bval) { m_unitSaveVisibility = m_unitVisibility; m_unitVisibility = val; m_bVisSpecial = TRUE; }
+	void			SetUnitVisibility(uint32 val, BOOL bval) { m_unitSaveVisibility = m_unitVisibility; m_unitVisibility = val; }
 
-	void			SetUnitVisibility() { m_bVisSpecial = FALSE; }
 	uint32			GetUnitVisibility(void) const { return m_unitVisibility; }
 	uint32			GetUnitSavedVisibility(void) const { return m_unitSaveVisibility; }
-
-	BOOL			GetVisSpecial(void) const { return m_bVisSpecial; }
-	void			SetVisSpecial(BOOL val) { m_bVisSpecial = val; }
 
 	double			GetUnitVisionRange(void) const { return m_unitVisionRange; }
 	void            SetUnitVisionRange(double range) { m_unitVisionRange = range; }
 	void            SetNewUnitVisionRange(double range) { m_newUnitVisionRange = range; }
-
-	void			SetRevealedActors(UnitActor **revealedActors) { m_revealedActors = revealedActors; }
-	void			SaveRevealedActors(UnitActor **revealedActors) { m_savedRevealedActors = revealedActors; }
-	UnitActor		**GetRevealedActors(void) const { return m_revealedActors; }
 
 	BOOL			HiddenUnderStack(void) const { return m_hiddenUnderStack; }
 	void			SetHiddenUnderStack(BOOL val) { m_hiddenUnderStack = val; }
@@ -258,13 +250,6 @@ protected:
 	BOOL				m_directionalAttack;
 	double				m_unitVisionRange;
 	double              m_newUnitVisionRange;
-
-	sint32				m_numRevealedActors;
-	UnitActor			**m_revealedActors;
-	sint32				m_numSavedRevealedActors;
-	UnitActor			**m_savedRevealedActors;
-
-	BOOL				m_bVisSpecial;
 
 	BOOL				m_hidden;
 	BOOL				m_hiddenUnderStack;

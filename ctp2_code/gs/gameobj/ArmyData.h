@@ -29,16 +29,16 @@
 // - Added IsWounded method - Calvitix
 // - Added a isstealth paramater in characterizeArmy method - Calvitix
 // - Moved UnitValidForOrder to Unit.h to be able to access the Unit
-//   properties. - April 24th 2005 Martin Gühmann
-// - Added Cleanup. (Sep. 25th 2005 Martin Gühmann)
+//   properties. - April 24th 2005 Martin GÃ¼hmann
+// - Added Cleanup. (Sep. 25th 2005 Martin GÃ¼hmann)
 // - Moved the upgrade stuff into its own methods, however more work is needed.
-//   (Dec 24th 2006 Martin Gühmann)
-// - Improved Ungroup and transport capacity methods. (5-Aug-2007 Martin Gühmann)
+//   (Dec 24th 2006 Martin GÃ¼hmann)
+// - Improved Ungroup and transport capacity methods. (5-Aug-2007 Martin GÃ¼hmann)
 // - PerformOrderHere move to target order can now be inserted at tail into the
-//   event queue. (30-Jan-2008 Martin Gühmann)
-// - Added check move points option to CanAtLeastOneCargoUnloadAt (8-Feb-2008 Martin Gühmann).
-// - Separated the Settle event drom the Settle in City event. (19-Feb-2008 Martin Gühmann)
-// - Merged finish move. (13-Aug-2008 Martin Gühmann)
+//   event queue. (30-Jan-2008 Martin GÃ¼hmann)
+// - Added check move points option to CanAtLeastOneCargoUnloadAt (8-Feb-2008 Martin GÃ¼hmann).
+// - Separated the Settle event drom the Settle in City event. (19-Feb-2008 Martin GÃ¼hmann)
+// - Merged finish move. (13-Aug-2008 Martin GÃ¼hmann)
 // - Added HasCargoOnlyStealth. (13-Apr-2009 Maq)
 //
 //----------------------------------------------------------------------------
@@ -232,7 +232,7 @@ public:
     bool CanPlantNuke(double &chance, double &escape_chance) const;
     ORDER_RESULT PlantNuke(const MapPoint &point);
     void SetPositionAndFixActors(const MapPoint &p);
-    void FixActors(MapPoint &opos, const MapPoint &npos, UnitDynamicArray &revealedUnits);
+    void FixActors(MapPoint &opos, const MapPoint &npos);
 
     bool CanSlaveRaid(double &success, double &death,
                       sint32 &timer, sint32 &amount,
@@ -448,9 +448,7 @@ public:
     bool MoveIntoCell(const MapPoint &pos,
                       UNIT_ORDER_TYPE order, WORLD_DIRECTION d);
 
-    void MoveActors(const MapPoint &pos,
-                    UnitDynamicArray &revealedUnits,
-                    bool teleport = false);
+    void MoveActors(const MapPoint &pos, bool teleport = false);
     void MoveUnits(const MapPoint &pos);
     void DeductMoveCost(const MapPoint &pos);
 

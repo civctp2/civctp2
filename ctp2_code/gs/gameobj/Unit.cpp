@@ -588,12 +588,12 @@ void Unit::Launch()
     }
 }
 
-bool Unit::MoveToPosition(const MapPoint &p, UnitDynamicArray &revealed)
+bool Unit::MoveToPosition(const MapPoint &p, UnitDynamicArray *revealed)
 {
 	return SetPosition(p, revealed);
 }
 
-bool Unit::SetPosition(const MapPoint &p, UnitDynamicArray &revealed)
+bool Unit::SetPosition(const MapPoint &p, UnitDynamicArray *revealed)
 {
 	bool left_map = false;
 	AccessData()->SetPos(p, left_map);
@@ -1222,7 +1222,7 @@ void Unit::AddUnitVision()
 	AccessData()->AddUnitVision();
 }
 
-void Unit::DoVision(UnitDynamicArray &revealedUnits)
+void Unit::DoVision(UnitDynamicArray *revealedUnits)
 {
 	AccessData()->DoVision(revealedUnits);
 }

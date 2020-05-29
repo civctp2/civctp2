@@ -37,48 +37,48 @@
 // - Modified UDUnitTypeCanSettle so that it checks for a CanSettleOn
 //   unit property so that modders can make  settling terrain-specific. - E
 // - Fixed a broken comparision in UDUnitTypeCanSettle so that it now allows
-//   settling again. - Mar. 1st 2005 Martin G�hmann
+//   settling again. - Mar. 1st 2005 Martin Gühmann
 // - When a city is conquered vision is now removed afterwards the city data
 //   has changed hand. That allows the creation of UnseenCell's with the
 //   current owner. If you loose a city to someone else you know who the
 //   b*st*rd is. When changing hands the city isn't anymore removed and
-//   then added back to the wolrd. - Mar. 4th 2005 Martin G�hmann
+//   then added back to the wolrd. - Mar. 4th 2005 Martin Gühmann
 // - Added GetTurnsToNextPop(sint32 &p)const; PFT 29 mar 05, to help show
 //   # turns until city grows
 // - Implemented immobile units (set MaxMovePoints equal to 0 in units.txt)
 //   PFT 17 Mar 05
-// - Replaced a comma by a semicolon in the Serialize method. - May 19th 2005 Martin G�hmann
+// - Replaced a comma by a semicolon in the Serialize method. - May 19th 2005 Martin Gühmann
 // - Removed some unsused method to removed some unused in methods in
-//   CityData. - Aug 6th 2005 Martin G�hmann
-// - Removed another unused and unecessary function. (Aug 12th 2005 Martin G�hmann)
-// - Initialized local variables. (Sep 9th 2005 Martin G�hmann)
+//   CityData. - Aug 6th 2005 Martin Gühmann
+// - Removed another unused and unecessary function. (Aug 12th 2005 Martin Gühmann)
+// - Initialized local variables. (Sep 9th 2005 Martin Gühmann)
 // - Added city data to "settle too close"-report.
 // - NonLethalBombard implemented in UnitData::Bombard 15-FEB-2006
 // - Added MoveBonus to DeductMove so we can AllTerrainAsRoad-like units 3-31-2006 by E
 // - Old settle terrain flags are ignored if new CanSettleOn terrain flags are
-//   defined. (April 22nd 2006 Martin G�hmann)
-// - Fixed the unit attack boni. (June 4th 2006 Martin G�hmann)
+//   defined. (April 22nd 2006 Martin Gühmann)
+// - Fixed the unit attack boni. (June 4th 2006 Martin Gühmann)
 // - Fixed spy defense chance. Spy defence chance is now used instead of 100%
 //   and wonder does not reduce spy defence chance to 50% if there is a better
-//   spy. (June 4th 2006 Martin G�hmann)
+//   spy. (June 4th 2006 Martin Gühmann)
 // - Added IncreaseBoatMovement and CivHP as a civ attribute (July 2, 2006 by E)
 // - Added Civ Attack Bonuses (July 2, 2006 by E)
 // - Repaired memory leaks
-// - Removed another unused and unecessary function. (Aug 12th 2005 Martin G�hmann)
+// - Removed another unused and unecessary function. (Aug 12th 2005 Martin Gühmann)
 // - Total fuel, total move points and total hp calculation moved into their own
-//   methods. (Dec 24th 2006 Martin G�hmann)
-// - Completed SetType() method. (Dec 24th 2006 Martin G�hmann)
+//   methods. (Dec 24th 2006 Martin Gühmann)
+// - Completed SetType() method. (Dec 24th 2006 Martin Gühmann)
 // - added IsReligion bools 1-23-2007
 // - Added SpawnsBarbarian code from ArmyData
 // - Moved Harvest to BeginTurn from ArmyData 5-24-2007
 // - Added DestroyOnePerCiv to ResetCityOwner 6-4-2007
 // - Added Elite Bonus 6-6-2007
 // - Added LeaderBonus if in Stack - Like Cradle 6-6-2007
-// - Replaced old const database by new one. (5-Aug-2007 Martin G�hmann)
+// - Replaced old const database by new one. (5-Aug-2007 Martin Gühmann)
 // - ChangeArmy has no effect if a unit and its new army do not share the
-//   same tile. (7-Nov-2007 Martin G�hmann)
-// - Added check move points option to CanAtLeastOneCargoUnloadAt (8-Feb-2008 Martin G�hmann).
-// - Separated the Settle event drom the Settle in City event. (19-Feb-2008 Martin G�hmann)
+//   same tile. (7-Nov-2007 Martin Gühmann)
+// - Added check move points option to CanAtLeastOneCargoUnloadAt (8-Feb-2008 Martin Gühmann).
+// - Separated the Settle event drom the Settle in City event. (19-Feb-2008 Martin Gühmann)
 // - Modified GetAttack, GetOffense and GetDefense. Added GetRanged. Also added
 //	 GetDefCounterAttack for new combat option defenders. (07-Mar-2009 Maq)
 // - Modified Bombard so ranged units and defenders use same bonuses as they
@@ -1083,11 +1083,8 @@ bool UnitData::UnloadCargo(const MapPoint &unload_pos, Army &debark, sint32 &cou
 			passenger .SetPosAndNothingElse(m_pos); // unload_pos?
 			passenger .UnsetIsInTransport();
 
-			UnitDynamicArray revealedUnits;
-
-			if(m_pos == unload_pos)
-			{
-				g_theWorld->InsertUnit(m_pos, passenger, revealedUnits);
+			if(m_pos == unload_pos) {
+				g_theWorld->InsertUnit(m_pos, passenger);
 			}
 		//	else will be handled when the unit moves
 
@@ -1989,8 +1986,7 @@ void UnitData::ResetCityOwner(const Unit &me, const PLAYER_INDEX newo,
 	m_owner = newo; // Now change owner
 	AddUnitVision();
 
-	UnitDynamicArray revealed_units;
-	DoVision(revealed_units);
+	DoVision();
 
 #if 0
 	Cell *cell = g_theWorld->GetCell(m_pos);
@@ -2077,8 +2073,7 @@ void UnitData::ResetUnitOwner(const Unit &me, const PLAYER_INDEX new_owner,
 		g_director->AddSetVisionRange(m_actor, (GetVisionRange()));
 	}
 
-	UnitDynamicArray revealed_units;
-	DoVision(revealed_units);
+	DoVision();
 
 	ENQUEUE() ;
 }
@@ -2539,7 +2534,7 @@ ORDER_RESULT UnitData::InterceptTrade()
 	}
 }
 
-void UnitData::DoVision(UnitDynamicArray &revealedUnits)
+void UnitData::DoVision(UnitDynamicArray *revealedUnits)
 {
 	DynamicArray<Unit> array;
 	MapPoint topleft = m_pos;
@@ -2606,7 +2601,9 @@ void UnitData::DoVision(UnitDynamicArray &revealedUnits)
 				him->m_ever_visible |= him->m_visibility;
 
 				if(!(him->m_temp_visibility & (1 << m_owner))) {
-					revealedUnits.Insert(Unit(him->m_id));
+					if (revealedUnits) {
+						revealedUnits->Insert(Unit(him->m_id));
+					}
 					him->m_actor->SetPos(him->m_pos);
 					him->m_temp_visibility |= 1 << m_owner;
 
@@ -5688,7 +5685,6 @@ void UnitData::ExitWormhole(MapPoint &pos)
 
 #if 0
 	Cell *cell = g_theWorld->GetCell(pos);
-	UnitDynamicArray revealedUnits;
 	Unit me(m_id);
 
 
@@ -5697,7 +5693,7 @@ void UnitData::ExitWormhole(MapPoint &pos)
 		   cell->UnitArmy()->Num() < k_MAX_ARMY_SIZE) {
 			SetPosAndNothingElse(pos);
 			m_army.ResetPos();
-			g_theWorld->InsertUnit(pos, Unit(m_id), revealedUnits);
+			g_theWorld->InsertUnit(pos, Unit(m_id));
 			AddUnitVision();
 
 			SlicObject *so = new SlicObject("307EndGameProbeReturned");
@@ -5729,7 +5725,7 @@ void UnitData::ExitWormhole(MapPoint &pos)
 	} else {
 		SetPosAndNothingElse(pos);
 		m_army.ResetPos();
-		g_theWorld->InsertUnit(pos, Unit(m_id), revealedUnits);
+		g_theWorld->InsertUnit(pos, Unit(m_id));
 		AddUnitVision();
 
 		SlicObject *so = new SlicObject("307EndGameProbeReturned");
