@@ -27,10 +27,10 @@
 // - Propagate PW each turn update
 // - Altered filename generating for PBEM saves (JJB 2004/12/30)
 // - Moved needs refueling check to Unit.cpp to remove code duplication.
-//   - April 24th 2005 Martin Gühmann
-// - Replaced old difficulty database by new one. (April 29th 2006 Martin Gühmann)
-// - Replaced old const database by new one. (5-Aug-2007 Martin Gühmann)
-// - Put SendNextPlayerMessage into its own event. (14-Nov-2007 Martin Gühmann)
+//   - April 24th 2005 Martin GÃ¼hmann
+// - Replaced old difficulty database by new one. (April 29th 2006 Martin GÃ¼hmann)
+// - Replaced old const database by new one. (5-Aug-2007 Martin GÃ¼hmann)
+// - Put SendNextPlayerMessage into its own event. (14-Nov-2007 Martin GÃ¼hmann)
 //
 //----------------------------------------------------------------------------
 
@@ -754,7 +754,7 @@ void TurnCount::NetworkEndTurn(BOOL force)
 		g_network.SetMyTurn(FALSE);
 		return;
 	} else if(g_network.IsHost()) {
-		g_director->AddEndTurn();
+		g_gevManager->EndTurnRequest();
 		return;
 	}
 

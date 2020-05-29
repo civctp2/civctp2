@@ -687,12 +687,11 @@ private:
 class DQActionCenterMap;
 class DirectorImpl : public Director {
 public:
-	DirectorImpl(void);
-	virtual ~DirectorImpl(void);
+	DirectorImpl();
+	virtual ~DirectorImpl();
 	static DirectorImpl *Instance() { Assert(m_instance); return m_instance; }
 
 	virtual void Clear();
-	virtual void NotifyResync();
 	virtual void PauseDirector(bool pause);
 
 	virtual void Process();
@@ -781,10 +780,6 @@ public:
 	// ArmyData and others
 	virtual bool TileWillBeCompletelyVisible(sint32 x, sint32 y);
 
-	// GameEventManager
-	virtual void IncrementPendingGameActions();
-	virtual void DecrementPendingGameActions();
-
 	// Used locally
 	void AddStandbyActor(UnitActor *actor);
 	void RemoveStandbyActor(UnitActor *actor);
@@ -829,10 +824,6 @@ private:
 
 	bool                              m_paused;
 
-	sint32                            m_pendingGameActions;
-	bool                              m_endTurnRequested;
-
-	sint32                            m_lastTurnProcessed;
 	sint32                            m_lastPlayer;
 	sint32                            m_lastRound;
 };
@@ -2357,7 +2348,7 @@ protected:
 };
 
 DirectorImpl *DirectorImpl::m_instance = NULL;
-DirectorImpl::DirectorImpl(void)
+DirectorImpl::DirectorImpl()
 :
 		m_actionQueue        (new PointerList<DQAction>),
 		m_lockingAction      (NULL),
@@ -2373,9 +2364,6 @@ DirectorImpl::DirectorImpl(void)
 		m_averageElapsed     (0),
 		m_averageFPS         (k_DEFAULT_FPS),
 		m_paused             (false),
-		m_pendingGameActions (0),
-		m_endTurnRequested   (false),
-		m_lastTurnProcessed  (-1),
 		m_lastPlayer         (-1),
 		m_lastRound          (-1)
 {
@@ -2385,7 +2373,7 @@ DirectorImpl::DirectorImpl(void)
 	m_instance = this;
 }
 
-DirectorImpl::~DirectorImpl(void)
+DirectorImpl::~DirectorImpl()
 {
 	Clear();
 	delete m_tradeAnimations;
@@ -2419,7 +2407,7 @@ void DirectorImpl::Clear() {
 	m_latestCenterMap = NULL;
 }
 
-void DirectorImpl::UpdateTimingClock(void)
+void DirectorImpl::UpdateTimingClock()
 {
 	sint32 elapsed;
 
@@ -2468,7 +2456,7 @@ void DirectorImpl::RemoveStandbyActor(UnitActor *actor)
 	m_standbyAnimations->RemoveActor(actor);
 }
 
-void DirectorImpl::Process(void)
+void DirectorImpl::Process()
 {
 	UpdateTimingClock();
 
@@ -2504,7 +2492,7 @@ void DirectorImpl::DumpAction(DQAction *action)
 	}
 }
 
-void DirectorImpl::DumpInfo(void)
+void DirectorImpl::DumpInfo()
 {
 	DPRINTF(k_DBG_UI, (" ------------------\n"));
 	DPRINTF(k_DBG_UI, ("Director Dump:\n"));
@@ -2534,7 +2522,7 @@ bool DirectorImpl::CanStartNextAction() {
 	return !m_actionQueue->IsEmpty() && (!m_lockingAction || m_lockingAction->IsUnlocked());
 }
 
-void DirectorImpl::HandleNextAction(void)
+void DirectorImpl::HandleNextAction()
 {
 	if (m_paused) {
 		return;
@@ -2559,7 +2547,7 @@ void DirectorImpl::HandleNextAction(void)
 	}
 }
 
-void DirectorImpl::ProcessActions(void)
+void DirectorImpl::ProcessActions()
 {
 	for (auto it = m_animatingActions.begin(); it != m_animatingActions.end(); )
 	{
@@ -2633,7 +2621,7 @@ void DirectorImpl::ExternalActionFinished(DEACTION_TYPE externalActionType)
 	}
 }
 
-void DirectorImpl::CatchUp(void) {
+void DirectorImpl::CatchUp() {
 	if (m_lockingAction) {
 		FinalizeAction(m_lockingAction);
 	}
@@ -2654,7 +2642,7 @@ void DirectorImpl::CatchUp(void) {
 	}
 }
 
-bool DirectorImpl::CaughtUp(void)
+bool DirectorImpl::CaughtUp()
 {
 	return !m_actionQueue || m_actionQueue->IsEmpty();
 }
@@ -2853,34 +2841,6 @@ void DirectorImpl::AddSelectUnit(uint32 flags)
 void DirectorImpl::AddEndTurn()
 {
 	DPRINTF(k_DBG_GAMESTATE, ("Director::AddEndTurn, curPlayer = %d\n", g_selected_item->GetCurPlayer()));
-
-	if (g_selected_item->GetCurPlayer() == g_selected_item->GetVisiblePlayer())
-	{
-		if (m_lastTurnProcessed != g_player[g_selected_item->GetCurPlayer()]->m_current_round)
-		{
-			m_lastTurnProcessed = g_player[g_selected_item->GetCurPlayer()]->m_current_round;
-
-			g_gevManager->Pause();
-
-			Player *player = g_player[g_selected_item->GetCurPlayer()];
-			player->m_endingTurn = TRUE;
-			for (sint32 i = 0; i < player->m_all_armies->Num(); i++) {
-				g_gevManager->AddEvent(GEV_INSERT_Tail, GEV_BeginTurnExecute,
-									   GEA_Army, player->m_all_armies->Access(i).m_id,
-									   GEA_End);
-			}
-			player->m_endingTurn = FALSE;
-
-			g_gevManager->Resume();
-		}
-	}
-
-	if (m_pendingGameActions > 0 || m_endTurnRequested)
-	{
-		DPRINTF(k_DBG_GAMESTATE, ("Director::AddEndTurn, but there are %d pending actions (or it was already requested), not doing it yet.\n", m_pendingGameActions));
-		m_endTurnRequested = true;
-		return;
-	}
 
 	if (g_selected_item->GetCurPlayer() == m_lastPlayer &&
 		g_player[m_lastPlayer] && g_player[m_lastPlayer]->m_current_round == m_lastRound)
@@ -3195,7 +3155,7 @@ void DirectorImpl::AddTerminateSound(const Unit &unit)
 	m_actionQueue->AddTail(action);
 }
 
-void DirectorImpl::AddInvokeThroneRoom(void)
+void DirectorImpl::AddInvokeThroneRoom()
 {
 	DQActionInvokeThroneRoom *action = new DQActionInvokeThroneRoom;
 	m_actionQueue->AddTail(action);
@@ -3231,36 +3191,4 @@ bool DirectorImpl::TileWillBeCompletelyVisible(sint32 x, sint32 y)
 		return m_latestCenterMap->TileIsCompletelyVisible(x, y);
 	}
 	return g_tiledMap->TileIsCompletelyVisible(x, y);
-}
-
-void DirectorImpl::IncrementPendingGameActions()
-{
-	m_pendingGameActions++;
-}
-
-void DirectorImpl::DecrementPendingGameActions()
-{
-	m_pendingGameActions--;
-	Assert(m_pendingGameActions >= 0);
-
-	if (m_pendingGameActions <= 0)
-	{
-		m_pendingGameActions = 0;
-		if (m_endTurnRequested)
-		{
-			Player *player = g_player[g_selected_item->GetCurPlayer()];
-			if (player && (!g_network.IsActive() || g_network.IsLocalPlayer(g_selected_item->GetCurPlayer())))
-			{
-				m_endTurnRequested = false;
-				DPRINTF(k_DBG_GAMESTATE, ("Adding from DecrementPendingGameActions, %d\n", g_selected_item->GetCurPlayer()));
-				AddEndTurn();
-			}
-		}
-	}
-}
-
-void DirectorImpl::NotifyResync()
-{
-	m_endTurnRequested = false;
-	m_pendingGameActions = 0;
 }

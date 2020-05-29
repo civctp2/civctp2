@@ -27,7 +27,7 @@
 //
 // Modifications from the original Activision code:
 //
-// - Improved slic event debugging. (7-Nov-2007 Martin G�hmann)
+// - Improved slic event debugging. (7-Nov-2007 Martin Gühmann)
 //
 //----------------------------------------------------------------------------
 
@@ -246,9 +246,11 @@ public:
 	GAME_EVENT GetProcessingEvent() const { return m_processingEvent; };
 
 	GameEvent* GetHeadEvent(){ return m_eventList->GetHead(); };
+	void EndTurnRequest();
 private:
 	bool CheckArg(sint32 num, char got, char want);
 	bool VerifyArgs(GAME_EVENT type, const GAME_EVENT_ARGUMENT* argTypes, const void** args);
+	void RemoveHead();
 
 	/// Unhandled events
 	PointerList<GameEvent> *m_eventList;
@@ -270,6 +272,9 @@ private:
 	bool m_needUserInput;
 
 	sint32 m_pauseCount;
+
+	sint32 m_lastTurnProcessed;
+	bool   m_endTurnRequested;
 };
 
 #endif

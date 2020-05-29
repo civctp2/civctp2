@@ -46,9 +46,6 @@
 
 #include "ctpai.h"
 
-#include "newturncount.h"
-#include "director.h"
-
 #include "net_city.h"
 #include "net_happy.h"
 
@@ -211,7 +208,7 @@ STDEHANDLER(NetEndAIClientTurnEvent)
 
 	if(g_player[p]->IsRobot()) {
 		DPRINTF(k_DBG_NET, ("NetEndAIClientTurnEvent, %d\n", p));
-		g_director->AddEndTurn();
+		g_gevManager->EndTurnRequest();
 
 	}
 	return GEV_HD_Continue;

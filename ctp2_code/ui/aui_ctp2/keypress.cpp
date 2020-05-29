@@ -31,11 +31,11 @@
 // - Added music screen key by ahenobarb.
 // - Start the great library with the current research project of the player.
 // - Disabled restart key in network, hot seat and email gmase, by
-//   Martin Gühmann.
+//   Martin GÃ¼hmann.
 // - Opening the score tab of the info window does not close other windows
-//   anymore like the other tabs. - Aug 7th 2005 Martin Gühmann
+//   anymore like the other tabs. - Aug 7th 2005 Martin GÃ¼hmann
 // - Strongly modal windows like the DipWizzard cannot closed anymore by
-//   by keypresses that open other windows. (20-10-2007 Martin Gühmann)
+//   by keypresses that open other windows. (20-10-2007 Martin GÃ¼hmann)
 //
 //----------------------------------------------------------------------------
 
@@ -179,9 +179,6 @@ extern ControlPanelWindow *g_controlPanel;
 
 #include "profileDB.h"
 extern ProfileDB *g_theProfileDB;
-
-#include "director.h"
-extern Director *g_director;
 
 #include "c3_utilitydialogbox.h"
 c3_UtilityPlayerListPopup *g_networkPlayersScreen = NULL;
@@ -867,7 +864,7 @@ sint32 ui_HandleKeypress(WPARAM wParam, LPARAM lParam)
 			if(g_selected_item->GetVisiblePlayer() == g_selected_item->GetCurPlayer()) {
 				DPRINTF(k_DBG_GAMESTATE, ("Keypress end turn, %d\n", g_selected_item->GetCurPlayer()));
 				g_selected_item->RegisterManualEndTurn();
-				g_director->AddEndTurn();
+				g_gevManager->EndTurnRequest();
 			}
 			else
 			{
@@ -1327,7 +1324,7 @@ sint32 ui_HandleKeypress(WPARAM wParam, LPARAM lParam)
 		break;
 
 	case KEY_FUNCTION_RESTART:
-		//Added by Martin Gühmann to disable also the restart key in network
+		//Added by Martin GÃ¼hmann to disable also the restart key in network
 		//games, hot seat games and email games.
 		if(!g_modalWindow
 		&& !g_theProfileDB->IsScenario()

@@ -59,7 +59,6 @@ public:
 	virtual ~Director() {}
 
 	virtual void Clear() = 0;
-	virtual void NotifyResync() = 0;
 
 	virtual void Process() = 0;
 	virtual void PauseDirector(bool pause) = 0;
@@ -149,10 +148,6 @@ public:
 
 	// ArmyData
 	virtual bool TileWillBeCompletelyVisible(sint32 x, sint32 y) = 0;
-
-	// GameEventManager
-	virtual void IncrementPendingGameActions() = 0;
-	virtual void DecrementPendingGameActions() = 0;
 };
 
 extern Director *g_director;

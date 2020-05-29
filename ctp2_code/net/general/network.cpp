@@ -33,8 +33,8 @@
 // - Updated the above to prevent an invalid second delete.
 // - Feat tracking added.
 // - Memory leaks repaired.
-// - Replaced old civilisation database by new one. (Aug 20th 2005 Martin Gühmann)
-// - Database in synchronicity check is now done on all databases. (Aug 25th 2005 Martin Gühmann)
+// - Replaced old civilisation database by new one. (Aug 20th 2005 Martin GÃ¼hmann)
+// - Database in synchronicity check is now done on all databases. (Aug 25th 2005 Martin GÃ¼hmann)
 //
 //----------------------------------------------------------------------------
 
@@ -758,7 +758,7 @@ Network::Process()
 					if(sci_advancescreen_isOnScreen()) {
 						sci_advancescreen_removeMyWindow(AUI_BUTTON_ACTION_EXECUTE);
 					}
-					g_director->AddEndTurn();
+					g_gevManager->EndTurnRequest();
 
 				}
 			}
@@ -1129,7 +1129,7 @@ void Network::RemovePlayer(uint16 id)
 		if(g_player[index]) {
 			g_player[index]->SetPlayerType(PLAYER_TYPE_ROBOT);
 			if(index == g_selected_item->GetCurPlayer()) {
-				g_director->AddEndTurn();
+				g_gevManager->EndTurnRequest();
 			}
 
 			SetRobotName(index);
@@ -1199,7 +1199,7 @@ void Network::SetToHost()
 		||  g_player[g_selected_item->GetCurPlayer()]->IsRobot()
 		){
 			DPRINTF(k_DBG_GAMESTATE, ("Set to host, cur player (%d) is robot, adding EndTurn\n", g_selected_item->GetCurPlayer()));
-			g_director->AddEndTurn();
+			g_gevManager->EndTurnRequest();
 		}
 	}
 }
@@ -3587,7 +3587,7 @@ void Network::SetReadyToStart(BOOL ready)
 				}
 				if(i == g_selected_item->GetCurPlayer() && g_player[i]->IsRobot()) {
 
-					g_director->AddEndTurn();
+					g_gevManager->EndTurnRequest();
 				}
 				QueuePacketToAll(new NetSetPlayerGuid(i));
 			}
@@ -3777,9 +3777,6 @@ void Network::StartResync()
 
 	if(g_gevManager)
 		g_gevManager->NotifyResync();
-
-	if(g_director)
-		g_director->NotifyResync();
 
 	CtpAi::Initialize();
 }

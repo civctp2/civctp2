@@ -25,18 +25,18 @@
 //
 // Modifications from the original Activision code:
 //
-// - GetNearestWater function fixed by Martin Gühmann November 2nd 2003.
-// - New Slic functions of CTP2.1 readded by Martin Gühmann and JJB.
+// - GetNearestWater function fixed by Martin GÃ¼hmann November 2nd 2003.
+// - New Slic functions of CTP2.1 readded by Martin GÃ¼hmann and JJB.
 // - Enable automatic selection of a unit (or city) when clicking an eyepoint.
 // - Fixed cut-and-paste error (no apparent impact, but might prevent crash).
 // - FreeAllSlaves slic function added by The Big MC November 24th 2003.
 // - Filled code for GetRoundsToNextDisaster and GetCurrentPollutionLevel.
 // - open_GreatLibrary calls with incorrect first argument type replaced.
 // - HasAdvance function now accepts also advance indices in addition to
-//   advance strings by Martin Gühmann.
+//   advance strings by Martin GÃ¼hmann.
 // - StringCompare function overloaded to allow the comparision between strings
-//   string IDs and strings retrieved from builtins, by Martin Gühmann.
-// - New slic functions added by Martin Gühmann:
+//   string IDs and strings retrieved from builtins, by Martin GÃ¼hmann.
+// - New slic functions added by Martin GÃ¼hmann:
 //   - CargoCapacity:    Gets number of additional units a unit can carry.
 //   - MaxCargoSize:     Gets the maximum number of units a unit can carry.
 //   - CargoSize:        Gets the current number of units a unit is carrying.
@@ -48,17 +48,17 @@
 // - GrantAdvance   : Added input checks and an (optional) reason argument.
 // - Ambiguous sqrt resolved.
 // - CreateUnit function doesn't crash anymore if the unit type argument
-//   represents an invalid unit type. - Feb. 24th 2005 Martin Gühmann
+//   represents an invalid unit type. - Feb. 24th 2005 Martin GÃ¼hmann
 // - New slic function by Solver: IsOnSameContinent - Checks whether two
 //   locations are on the same continent.
 // - Added AddSlaves function modelled after the AddPops function.
 // - Improved argument checking of Get<Type> functions.
 // - AOM facilitation: set player[0] to the recipient when undefined.
-// - Replaced old civilisation database by new one. (Aug 20th 2005 Martin Gühmann)
-// - Removed the old endgame database. (Aug 29th 2005 Martin Gühmann)
-// - Made government modified for units work here. (July 29th 2006 Martin Gühmann)
-// - Added GetContinentSize slic function. (Dec 24th 2006 Martin Gühmann)
-// - Replaced old const database by new one. (5-Aug-2007 Martin Gühmann)
+// - Replaced old civilisation database by new one. (Aug 20th 2005 Martin GÃ¼hmann)
+// - Removed the old endgame database. (Aug 29th 2005 Martin GÃ¼hmann)
+// - Made government modified for units work here. (July 29th 2006 Martin GÃ¼hmann)
+// - Added GetContinentSize slic function. (Dec 24th 2006 Martin GÃ¼hmann)
+// - Replaced old const database by new one. (5-Aug-2007 Martin GÃ¼hmann)
 //
 //----------------------------------------------------------------------------
 
@@ -793,7 +793,7 @@ SFN_ERROR Slic_HasAdvance::Call(SlicArgList *args)
 	if(!args->GetPlayer(0, player))
 		return SFN_ERROR_TYPE_ARGS;
 
-	//Added by Martin Gühmann to overload this function to allow also advance
+	//Added by Martin GÃ¼hmann to overload this function to allow also advance
 	//indices directly instead of advance strings only.
 	sint32 adv;
 	if(args->m_argValue[1].m_type == SA_TYPE_STRING){
@@ -2202,9 +2202,7 @@ SFN_ERROR Slic_AddOrder::Call(SlicArgList *args)
 
 SFN_ERROR Slic_EndTurn::Call(SlicArgList *args)
 {
-
-
-	g_director->AddEndTurn();
+	g_gevManager->EndTurnRequest();
 
 	return SFN_ERROR_OK;
 }
@@ -4243,7 +4241,7 @@ SFN_ERROR Slic_GetNearestWater::Call(SlicArgList *args)
 	}
 
 	SlicSymbolData *sym = args->m_argValue[1].m_symbol;
-	//Outcommented by Martin Gühmann
+	//Outcommented by Martin GÃ¼hmann
 	//in order to fix this function
 	//The porpose of this if statement is check whether
 	//the second argument is a location_t or not unfortunatly
@@ -6431,7 +6429,7 @@ SFN_ERROR Slic_CityIsNamed::Call(SlicArgList *args)
 	Unit city;
 
 	if(!args->GetCity(0, city)) {
-		//Changed by Martin Gühmann
+		//Changed by Martin GÃ¼hmann
 		return SFN_ERROR_TYPE_ARGS;
 	//	return SFN_ERROR_OK;
 	}
@@ -6459,7 +6457,7 @@ SFN_ERROR Slic_StringCompare::Call(SlicArgList *args)
 	if(args->Count() != 2)
 		return SFN_ERROR_NUM_ARGS;
 
-	//Added by Martin Gühmann to allow string comparision, between string IDs and plain strings
+	//Added by Martin GÃ¼hmann to allow string comparision, between string IDs and plain strings
 	char *string1 = 0;
 	char *string2 = 0;
 
@@ -6721,7 +6719,7 @@ SFN_ERROR Slic_ClearBattleFlag::Call(SlicArgList *args)
 
 SFN_ERROR Slic_OpenScenarioEditor::Call(SlicArgList *args)
 {
-	//Wrong number of arguments added by Martin Gühmann
+	//Wrong number of arguments added by Martin GÃ¼hmann
 	if(args->Count() != 0)
 		return SFN_ERROR_NUM_ARGS;
 
@@ -6729,7 +6727,7 @@ SFN_ERROR Slic_OpenScenarioEditor::Call(SlicArgList *args)
 	return SFN_ERROR_OK;
 }
 
-//New Slic functions of CTP2.1 readded by Martin Gühmann
+//New Slic functions of CTP2.1 readded by Martin GÃ¼hmann
 
 SFN_ERROR Slic_DestroyBuilding::Call(SlicArgList *args)
 {
@@ -7059,7 +7057,7 @@ SFN_ERROR Slic_RemoveGood::Call(SlicArgList *args)
 
 //----------------------------------------------------------------------------
 //
-// Authored   : Martin Gühmann
+// Authored   : Martin GÃ¼hmann
 //
 // Name       : Slic_CargoCapacity
 //
@@ -7090,7 +7088,7 @@ SFN_ERROR Slic_CargoCapacity::Call(SlicArgList *args)
 
 //----------------------------------------------------------------------------
 //
-// Authored   : Martin Gühmann
+// Authored   : Martin GÃ¼hmann
 //
 // Name       : Slic_MaxCargoSize
 //
@@ -7125,7 +7123,7 @@ SFN_ERROR Slic_MaxCargoSize::Call(SlicArgList *args)
 
 //----------------------------------------------------------------------------
 //
-// Authored   : Martin Gühmann
+// Authored   : Martin GÃ¼hmann
 //
 // Name       : Slic_CargoSize
 //
@@ -7155,7 +7153,7 @@ SFN_ERROR Slic_CargoSize::Call(SlicArgList *args)
 
 //----------------------------------------------------------------------------
 //
-// Authored   : Martin Gühmann
+// Authored   : Martin GÃ¼hmann
 //
 // Name       : Slic_GetUnitFromCargo
 //
@@ -7203,7 +7201,7 @@ SFN_ERROR Slic_GetUnitFromCargo::Call(SlicArgList *args)
 
 //----------------------------------------------------------------------------
 //
-// Authored   : Martin Gühmann
+// Authored   : Martin GÃ¼hmann
 //
 // Name       : Slic_GetContinent
 //
@@ -7232,7 +7230,7 @@ SFN_ERROR Slic_GetContinent::Call(SlicArgList *args)
 
 //----------------------------------------------------------------------------
 //
-// Authored   : Martin Gühmann
+// Authored   : Martin GÃ¼hmann
 //
 // Name       : Slic_GetContinentSize
 //
@@ -7266,7 +7264,7 @@ SFN_ERROR Slic_GetContinentSize::Call(SlicArgList *args)
 
 //----------------------------------------------------------------------------
 //
-// Authored   : Martin Gühmann
+// Authored   : Martin GÃ¼hmann
 //
 // Name       : Slic_IsWater
 //
