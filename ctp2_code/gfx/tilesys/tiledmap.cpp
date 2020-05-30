@@ -2594,7 +2594,7 @@ sint32 TiledMap::RepaintLayerSprites(RECT *paintRect, sint32 layer)
                 }
 				actor->SetIsFortified(top.IsEntrenched());
 
-				actor->SetHiddenUnderStack(FALSE);
+				actor->SetHiddenUnderStack(false);
 				actor->SetUnitVisibility(top.GetVisibility());
 
 				if (top.IsCity())
@@ -2718,7 +2718,7 @@ sint32 TiledMap::RepaintLayerSprites(RECT *paintRect, sint32 layer)
 
 					if (!actor->IsActive() && TileIsVisible(actorCurPos.x, actorCurPos.y))
                     {
-						actor->SetHiddenUnderStack(FALSE);
+						actor->SetHiddenUnderStack(false);
 						PaintUnitActor
                             (actor, !m_localVision->IsVisible(actor->GetPos()));
 					}

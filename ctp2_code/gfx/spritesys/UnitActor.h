@@ -86,7 +86,7 @@ public:
 	void			Initialize(void);
 
 	void			ChangeImage(SpriteState *ss, sint32 type, Unit id);
-	void			ChangeType(SpriteState *ss, sint32 type, Unit id, BOOL updateVision);
+	void			ChangeType(SpriteState *ss, sint32 type, Unit id, bool updateVision);
 
 	void			SetSize(sint32 size) { m_size = size; }
 	sint32			GetSize(void) const { return m_size; }
@@ -166,8 +166,8 @@ public:
 	void            SetUnitVisionRange(double range) { m_unitVisionRange = range; }
 	void            SetNewUnitVisionRange(double range) { m_newUnitVisionRange = range; }
 
-	BOOL			HiddenUnderStack(void) const { return m_hiddenUnderStack; }
-	void			SetHiddenUnderStack(BOOL val) { m_hiddenUnderStack = val; }
+	bool			HiddenUnderStack(void) const { return m_hiddenUnderStack; }
+	void			SetHiddenUnderStack(bool val) { m_hiddenUnderStack = val; }
 
 	void			GetBoundingRect(RECT *rect) const;
 
@@ -252,7 +252,7 @@ protected:
 	double              m_newUnitVisionRange;
 
 	BOOL				m_hidden;
-	BOOL				m_hiddenUnderStack;
+	bool				m_hiddenUnderStack;
 
 	sint32				m_holdingCurAnimPos[UNITACTION_MAX];
 	sint32				m_holdingCurAnimDelayEnd[UNITACTION_MAX];

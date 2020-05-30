@@ -233,7 +233,7 @@ extern BOOL           g_powerPointsMode;
 sint32                g_is_debug_map_color;
 #endif
 BOOL                  g_show_ai_dbg;
-BOOL                  g_doingFastRounds = FALSE;
+bool                  g_doingFastRounds = false;
 
 extern BOOL           g_ai_revolt = TRUE;
 
@@ -5513,7 +5513,7 @@ void UpgradeCity::Execute(sint32 argc, char** argv)
 
 	SpriteState *newSS = new SpriteState(90+upgLevel);
 
-	u.GetActor()->ChangeType(newSS, u.GetType(),  u, TRUE);
+	u.GetActor()->ChangeType(newSS, u.GetType(),  u, true);
 }
 
 void CreateCommand::Execute(sint32 argc, char** argv)

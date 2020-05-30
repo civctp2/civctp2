@@ -266,7 +266,7 @@ void UnitActor::Initialize(void)
 	m_curAction = NULL;
 	m_actionQueue.Allocate(k_MAX_ACTION_QUEUE_SIZE);
 
-	m_hiddenUnderStack = FALSE;
+	m_hiddenUnderStack = false;
 
 	m_hidden = FALSE;
 
@@ -463,7 +463,7 @@ void UnitActor::ChangeImage(SpriteState *ss, sint32 type, Unit id)
 	m_loadType = LOADTYPE_BASIC;
 }
 
-void UnitActor::ChangeType(SpriteState *ss, sint32 type,  Unit id, BOOL updateVision)
+void UnitActor::ChangeType(SpriteState *ss, sint32 type,  Unit id, bool updateVision)
 {
 #ifndef _TEST
 	STOMPCHECK();

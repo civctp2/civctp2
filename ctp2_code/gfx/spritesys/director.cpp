@@ -101,7 +101,7 @@ extern C3UI        *g_c3ui;
 extern MessagePool *g_theMessagePool;
 
 #ifdef _PLAYTEST
-extern BOOL g_doingFastRounds;
+extern bool g_doingFastRounds;
 #endif
 
 #define k_DEFAULT_FPS     10
@@ -938,7 +938,7 @@ public:
 
 	virtual void Execute()
 	{
-		morphingActor->ChangeType(spriteState, type, id, FALSE);
+		morphingActor->ChangeType(spriteState, type, id, false);
 	}
 
 	virtual void Dump()
@@ -1609,7 +1609,7 @@ public:
 		}
 
 		for (int i = 0; i < numberOfMoveActors; i++) {
-			moveActors[i]->SetHiddenUnderStack(TRUE);
+			moveActors[i]->SetHiddenUnderStack(true);
 		}
 
 		if (g_selected_item->GetVisiblePlayer() != moveActor->GetPlayerNum()
@@ -2080,7 +2080,7 @@ protected:
 		Anim * attackerAnim = attacker->MakeFaceoff();
 		if (!attackerAnim)
 		{
-			attacker->AddIdle(TRUE);
+			attacker->AddIdle(true);
 			delete attackerAction;
 			delete attackedAction;
 			return;
@@ -2094,7 +2094,7 @@ protected:
 		Anim *attackedAnim = attacked->MakeFaceoff();
 		if (!attackedAnim)
 		{
-			attacked->AddIdle(TRUE);
+			attacked->AddIdle(true);
 			delete attackedAction;
 			attackedAction = NULL;
 		}
@@ -2715,7 +2715,7 @@ void DirectorImpl::AddMove (
 		AddCenterMap(endPos);
 	}
 
-	actor->SetHiddenUnderStack(FALSE);
+	actor->SetHiddenUnderStack(false);
 
 	DQActionMove *action = new DQActionMove(
 			mover.GetOwner(),
@@ -2912,7 +2912,7 @@ void DirectorImpl::AddDeath(UnitActor *dead, const MapPoint &deadPos, sint32 dea
 	if ((playerInvolved || visibleEnemyUnit) && !TileWillBeCompletelyVisible(deadPos.x, deadPos.y)) {
 		AddCenterMap(deadPos);
 	}
-	dead->SetHiddenUnderStack(FALSE);
+	dead->SetHiddenUnderStack(false);
 
 
 	DQActionDeath *action = new DQActionDeath(dead->GetPlayerNum(), dead, deadPos, deadSoundID);
