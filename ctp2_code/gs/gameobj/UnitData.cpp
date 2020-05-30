@@ -4120,7 +4120,7 @@ bool UnitData::StoppedBySpies(const Unit &c)
 //
 // Returns    : ORDER_RESULT  : attempt success/failure indication
 //
-// Remark(s)  : -
+// Remark(s)  : SpecialCityAttackResult is not used for failure as caller handles failure
 //
 //----------------------------------------------------------------------------
 ORDER_RESULT UnitData::InvestigateCity(Unit c)
@@ -4167,7 +4167,7 @@ ORDER_RESULT UnitData::InvestigateCity(Unit c)
 			so->AddUnitRecord(m_type);
 			g_slicEngine->Execute(so);
 
-			me.Kill(CAUSE_REMOVE_ARMY_DIED_IN_SPYING, -1);
+			SpecialCityAttackDied(SPECATTACK_SPY, c, CAUSE_REMOVE_ARMY_DIED_IN_SPYING);
 		}
 		else
 		{
@@ -4188,8 +4188,6 @@ ORDER_RESULT UnitData::InvestigateCity(Unit c)
 		return ORDER_RESULT_FAILED;
 	}
 
-	ActionSuccessful(SPECATTACK_SPY, c);
-
 	if(m_owner == g_selected_item->GetVisiblePlayer())
 	{
 		g_gevManager->AddEvent(GEV_INSERT_Tail, GEV_DisplayInvestigationWindow,
@@ -4197,13 +4195,14 @@ ORDER_RESULT UnitData::InvestigateCity(Unit c)
 							   GEA_City, c.m_id,
 							   GEA_End);
 	}
-	return ORDER_RESULT_SUCCEEDED;
+	return SpecialCityAttackResult(ORDER_RESULT_SUCCEEDED, SPECATTACK_SPY, c);
 }
 
 /// Execute an attempt to steal a technology from a city
 /// \param c            The city to steal from
 /// \param whichAdvance Index of specific technology to steal (< 0 meaning random)
 /// \return  The result of the attempt
+/// Note: SpecialCityAttackResult is not used for failure as caller handles failure
 ORDER_RESULT UnitData::StealTechnology(Unit c, sint32 whichAdvance)
 {
 	MapPoint pos;
@@ -4290,8 +4289,7 @@ ORDER_RESULT UnitData::StealTechnology(Unit c, sint32 whichAdvance)
 		so->AddCity(c);
 		so->AddUnitRecord(m_type);
 		g_slicEngine->Execute(so);
-
-		ActionSuccessful(SPECATTACK_STEALTECH, c);
+		return SpecialCityAttackResult(ORDER_RESULT_SUCCEEDED, SPECATTACK_STEALTECH, c);
 	}
 	else if (ORDER_RESULT_FAILED == orderResult)
 	{
@@ -4309,10 +4307,8 @@ ORDER_RESULT UnitData::StealTechnology(Unit c, sint32 whichAdvance)
 		so->AddUnitRecord(m_type);
 		g_slicEngine->Execute(so);
 
-		if (g_rand->Next(100) < sint32(data->GetDeathChance() * 100.0))
-		{
-			Unit me(m_id);
-			me.Kill(CAUSE_REMOVE_ARMY_DIED_IN_SPYING, -1);
+		if (g_rand->Next(100) < sint32(data->GetDeathChance() * 100.0)) {
+			return SpecialCityAttackDied(SPECATTACK_STEALTECH, c, CAUSE_REMOVE_ARMY_DIED_IN_SPYING);
 		}
 	}
 	else
@@ -4347,7 +4343,7 @@ ORDER_RESULT UnitData::StealTechnology(Unit c, sint32 whichAdvance)
 ORDER_RESULT UnitData::InciteRevolution(Unit c)
 {
 	if (StoppedBySpies(c)) {
-		return ORDER_RESULT_FAILED;
+		return SpecialCityAttackResult(ORDER_RESULT_FAILED, SPECATTACK_INCITEREVOLUTION, c);
 	}
 
 	const UnitRecord::InciteRevolutionData *data;
@@ -4382,10 +4378,9 @@ ORDER_RESULT UnitData::InciteRevolution(Unit c)
 		g_slicEngine->Execute(so);
 
 		if(g_rand->Next(100) < sint32(deathChance * 100.0)) {
-			Unit me(m_id);
-			me.Kill(CAUSE_REMOVE_ARMY_DIED_IN_SPYING, -1);
+			return SpecialCityAttackDied(SPECATTACK_INCITEREVOLUTION, c, CAUSE_REMOVE_ARMY_DIED_IN_SPYING);
 		}
-		return ORDER_RESULT_FAILED;
+		return SpecialCityAttackResult(ORDER_RESULT_FAILED, SPECATTACK_INCITEREVOLUTION, c);
 	}
 
 
@@ -4393,15 +4388,13 @@ ORDER_RESULT UnitData::InciteRevolution(Unit c)
 	c.AccessData()->m_city_data->Revolt(g_player[c.GetOwner()]->m_civRevoltingCitiesShouldJoin, true);
 	c.SetSpiedUpon();
 
-	ActionSuccessful(SPECATTACK_INCITEREVOLUTION, c);
-
 	so = new SlicObject("171InciteRevolutionCompleteVictim");
 	so->AddRecipient(city_owner);
 	so->AddCity(c);
 	so->AddUnitRecord(m_type);
 	g_slicEngine->Execute(so);
 
-	return ORDER_RESULT_SUCCEEDED;
+	return SpecialCityAttackResult(ORDER_RESULT_SUCCEEDED, SPECATTACK_INCITEREVOLUTION, c);
 }
 
 ORDER_RESULT UnitData::AssassinateRuler(Unit c)
@@ -4409,7 +4402,7 @@ ORDER_RESULT UnitData::AssassinateRuler(Unit c)
 	SlicObject	*so ;
 
 	if(StoppedBySpies(c)) {
-		return ORDER_RESULT_FAILED;
+		return SpecialCityAttackResult(ORDER_RESULT_FAILED, SPECATTACK_BOMBCABINET, c);
 	}
 
 	double chance, eliteChance, deathChance;
@@ -4439,19 +4432,17 @@ ORDER_RESULT UnitData::AssassinateRuler(Unit c)
 		so->AddCity(c) ;
 		g_slicEngine->Execute(so) ;
 		if(g_rand->Next(100) < sint32(deathChance * 100.0)) {
-			Unit me(m_id);
-			me.Kill(CAUSE_REMOVE_ARMY_DIED_IN_SPYING, -1);
+			return SpecialCityAttackDied(SPECATTACK_BOMBCABINET, c, CAUSE_REMOVE_ARMY_DIED_IN_SPYING);
 		}
 
-		return ORDER_RESULT_FAILED;
+		return SpecialCityAttackResult(ORDER_RESULT_FAILED, SPECATTACK_BOMBCABINET, c);
 	}
 
 	DPRINTF(k_DBG_GAMESTATE, ("assasination succeeded\n"));
 	g_player[c.GetOwner()]->SetGovernmentType(0);
 	g_player[c.GetOwner()]->AssasinateRuler();
 
-	ActionSuccessful(SPECATTACK_BOMBCABINET, c);
-	return ORDER_RESULT_SUCCEEDED;
+	return SpecialCityAttackResult(ORDER_RESULT_SUCCEEDED, SPECATTACK_BOMBCABINET, c);
 }
 
 //leftover from CTP1 ?
@@ -4517,16 +4508,11 @@ void UnitData::CityNullifyWalls()
 ORDER_RESULT UnitData::EstablishEmbassy(Unit c)
 {
 	Assert(GetDBRec()->GetEstablishEmbassy());
-	if(!GetDBRec()->GetEstablishEmbassy())
-		return ORDER_RESULT_ILLEGAL;
+	if(!GetDBRec()->GetEstablishEmbassy() || g_player[m_owner]->HasEmbassyWith(c.GetOwner()))
+		return SpecialCityAttackResult(ORDER_RESULT_ILLEGAL, SPECATTACK_ESTABLISHEMBASSY, c);
 
-	if(g_player[m_owner]->HasEmbassyWith(c.GetOwner())) {
-		return ORDER_RESULT_ILLEGAL;
-	}
-
-	if(wonderutil_GetCloseEmbassies(g_player[c.GetOwner()]->GetBuiltWonders())) {
-
-		return ORDER_RESULT_FAILED;
+	if (wonderutil_GetCloseEmbassies(g_player[c.GetOwner()]->GetBuiltWonders())) {
+		return SpecialCityAttackResult(ORDER_RESULT_FAILED, SPECATTACK_ESTABLISHEMBASSY, c);
 	}
 
 	g_gevManager->AddEvent(GEV_INSERT_AfterCurrent, GEV_EstablishEmbassy,
@@ -4534,8 +4520,7 @@ ORDER_RESULT UnitData::EstablishEmbassy(Unit c)
 						   GEA_Player, c.GetOwner(),
 						   GEA_End);
 
-	ActionSuccessful(SPECATTACK_ESTABLISHEMBASSY, c);
-	return ORDER_RESULT_SUCCEEDED;
+	return SpecialCityAttackResult(ORDER_RESULT_SUCCEEDED, SPECATTACK_ESTABLISHEMBASSY, c);
 }
 
 ORDER_RESULT UnitData::ThrowParty(Unit c, sint32 gold)
@@ -4549,8 +4534,7 @@ ORDER_RESULT UnitData::ThrowParty(Unit c, sint32 gold)
 						   GEA_Player, c.GetOwner(),
 						   GEA_End);
 
-	ActionSuccessful(SPECATTACK_THROWPARTY, c);
-	return ORDER_RESULT_SUCCEEDED;
+	return SpecialCityAttackResult(ORDER_RESULT_SUCCEEDED, SPECATTACK_THROWPARTY, c);
 }
 
 void UnitData::HearGossip(Unit c)
@@ -4646,7 +4630,7 @@ void UnitData::HearGossip(Unit c)
 		}
 	}
 
-	ActionSuccessful(SPECATTACK_HEARGOSSIP, c);
+	SpecialCityAttackResult(ORDER_RESULT_SUCCEEDED, SPECATTACK_HEARGOSSIP, c);
 }
 
 bool UnitData::IsCapitol() const
@@ -4662,6 +4646,7 @@ void UnitData::MakeFranchise(sint32 player)
 		return;
 
 	m_city_data->MakeFranchise(player);
+	SpecialCityAttackResult(ORDER_RESULT_SUCCEEDED, SPECATTACK_CREATEFRANCHISE, Unit(m_id));
 }
 
 sint32 UnitData::GetFranchiseOwner() const
@@ -6107,39 +6092,6 @@ void UnitData::BuildCapitalization()
 	}
 }
 
-void UnitData::ActionSuccessful(SPECATTACK attack, const Unit &c)
-{
-	const SpecialAttackInfoRecord *rec = unitutil_GetSpecialAttack(attack);
-	sint32 soundID = rec->GetSoundIDIndex();
-	sint32 spriteID = rec->GetSpriteID()->GetValue();
-
-	if (spriteID != -1 && soundID != -1) {
-		g_director->AddSpecialAttack(m_actor->GetUnitID(), c, attack);
-	} else {
-		if (soundID != -1) {
-			sint32 visiblePlayer = g_selected_item->GetVisiblePlayer();
-			if ((visiblePlayer == m_owner) ||
-				(m_visibility & (1 << visiblePlayer))) {
-
-				g_soundManager->AddSound(SOUNDTYPE_SFX, (uint32)0, 	soundID, m_pos.x, m_pos.y);
-			}
-		}
-	}
-}
-
-void UnitData::ActionUnsuccessful(void)
-{
-	sint32 visiblePlayer = g_selected_item->GetVisiblePlayer();
-	if ((visiblePlayer == m_owner) ||
-		(m_visibility & (1 << visiblePlayer))) {
-
-		g_soundManager->AddSound(SOUNDTYPE_SFX, (uint32)0,
-							gamesounds_GetGameSoundID(GAMESOUNDS_DEFAULT_FAIL),
-							m_pos.x,
-							m_pos.y);
-	}
-}
-
 const Unit &UnitData::GetTransport() const
 {
 	return m_transport;
@@ -6351,4 +6303,53 @@ void UnitData::UnElite()  //copy and make for elite units  UnVeteran
 {
 	if (Flag(k_UDF_IS_ELITE))
 		ClearFlag(k_UDF_IS_ELITE);
+}
+
+ORDER_RESULT UnitData::SpecialCityAttackResult(ORDER_RESULT result, SPECATTACK attack, const Unit &city)
+{
+	switch(result) {
+		case ORDER_RESULT_SUCCEEDED: {
+			const SpecialAttackInfoRecord *rec = unitutil_GetSpecialAttack(attack);
+			sint32 soundID  = rec->GetSoundIDIndex();
+			sint32 spriteID = rec->GetSpriteID()->GetValue();
+
+			if (spriteID != -1 && soundID != -1) {
+				g_director->AddSpecialAttack(m_actor->GetUnitID(), city, attack);
+			}
+			else
+			{
+				if (soundID != -1)
+				{
+					sint32 visiblePlayer = g_selected_item->GetVisiblePlayer();
+					if ((visiblePlayer == m_owner) || (m_visibility & (1 << visiblePlayer))) {
+						g_soundManager->AddSound(SOUNDTYPE_SFX, (uint32) 0, soundID, m_pos.x, m_pos.y);
+					}
+				}
+			}
+		}
+		break;
+
+		case ORDER_RESULT_SUCCEEDED_INCOMPLETE:
+			break;
+
+		default: {
+			sint32 visiblePlayer = g_selected_item->GetVisiblePlayer();
+			if ((visiblePlayer == m_owner) || (m_visibility & (1 << visiblePlayer))) {
+				g_soundManager->AddSound(SOUNDTYPE_SFX, (uint32) 0,
+										 gamesounds_GetGameSoundID(GAMESOUNDS_DEFAULT_FAIL),
+										 m_pos.x,
+										 m_pos.y);
+			}
+		}
+		break;
+	}
+	return result;
+}
+
+ORDER_RESULT UnitData::SpecialCityAttackDied(SPECATTACK attack, const Unit &city, CAUSE_REMOVE_ARMY cause)
+{
+	Unit me(m_id);
+	me.Kill(cause, -1);
+
+	return ORDER_RESULT_FAILED;
 }

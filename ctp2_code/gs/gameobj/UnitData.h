@@ -664,9 +664,6 @@ public:
 	void BuildCapitalization();
 	void BuildInfrastructure();
 
-	void ActionSuccessful(SPECATTACK attack, const Unit &c);
-	void ActionUnsuccessful(void);;
-
 	const Unit &GetTransport() const;
 	void RemoveTransportedUnit(const Unit &u);
 
@@ -699,6 +696,8 @@ private:
         UnitRecord::BoolAccessor    a_Function
     ) const;
 
+	ORDER_RESULT SpecialCityAttackResult(ORDER_RESULT result, SPECATTACK attack, const Unit &city);
+	ORDER_RESULT SpecialCityAttackDied(SPECATTACK attack, const Unit &city, CAUSE_REMOVE_ARMY cause);
 #if 0
 	void PrintSizeOfClass()
 	{

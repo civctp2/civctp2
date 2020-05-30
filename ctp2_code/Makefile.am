@@ -90,7 +90,6 @@ ctp_ctp2_SOURCES = \
 	ctp/display.cpp \
 	ctp/cifm.cpp \
 	gfx/layers/citylayer.cpp \
-	gfx/spritesys/directorevent.cpp \
 	net/general/net_achievement.cpp \
 	net/general/net_action.cpp \
 	net/general/net_agreement.cpp \

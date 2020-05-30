@@ -31,9 +31,9 @@
 // - Corrected memory leaks and invalid arguments for Gaia Controller messages.
 // - Corrected recipients for Gaia Controller messages.
 // - Propagate PW each turn update
-// - Fixed PBEM BeginTurn event execution. (27-Oct-2007 Martin Gühmann)
-// - An autosave is now created even if the visible player is a robot. (26-Jab-2008 Martin Gühmann)
-// - Separated the Settle event from the Settle in City event. (19-Feb-2008 Martin Gühmann)
+// - Fixed PBEM BeginTurn event execution. (27-Oct-2007 Martin GÃ¼hmann)
+// - An autosave is now created even if the visible player is a robot. (26-Jab-2008 Martin GÃ¼hmann)
+// - Separated the Settle event from the Settle in City event. (19-Feb-2008 Martin GÃ¼hmann)
 // - Added stuff for unit and city gold support. (22-Jul-2009 Maq)
 //
 //----------------------------------------------------------------------------
@@ -81,6 +81,7 @@
 #include "Diplomat.h"
 #include "net_action.h"
 #include "gaiacontroller.h"
+#include "director.h"
 
 #include "ctp2_Window.h"
 
@@ -764,6 +765,11 @@ STDEHANDLER(EndTurnEvent)
 	return GEV_HD_Continue;
 }
 
+STDEHANDLER(BeginSchedulerEvent) {
+	g_director->ExternalActionFinished(DEA_BEGIN_SCHEDULER);
+	return GEV_HD_Continue;
+}
+
 void playerevent_Initialize()
 {
 	g_gevManager->AddCallback(GEV_ContactMade,           GEV_PRI_Primary, &s_ContactMadeEvent);
@@ -813,6 +819,7 @@ void playerevent_Initialize()
 
 	g_gevManager->AddCallback(GEV_EnterAge,              GEV_PRI_Primary, &s_EnterAgeEvent);
 	g_gevManager->AddCallback(GEV_EndTurn,               GEV_PRI_Primary, &s_EndTurnEvent);
+	g_gevManager->AddCallback(GEV_BeginScheduler,        GEV_PRI_Post,    &s_BeginSchedulerEvent);
 }
 
 void playerevent_Cleanup()
