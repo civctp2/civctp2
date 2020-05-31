@@ -26,12 +26,12 @@
 //
 // - Relaxed assert
 // - Moved needs refueling check to Unit.cpp to remove code duplication.
-//   - April 24th 2005 Martin Gühmann
-// - Replaced old difficulty database by new one. (April 29th 2006 Martin Gühmann)
-// - Replaced old const database by new one. (5-Aug-2007 Martin Gühmann)
-// - Fixed PBEM BeginTurn event execution. (27-Oct-2007 Martin Gühmann)
+//   - April 24th 2005 Martin GÃ¼hmann
+// - Replaced old difficulty database by new one. (April 29th 2006 Martin GÃ¼hmann)
+// - Replaced old const database by new one. (5-Aug-2007 Martin GÃ¼hmann)
+// - Fixed PBEM BeginTurn event execution. (27-Oct-2007 Martin GÃ¼hmann)
 // - PollutionBeginTurn is now triggered from PlayerBeginTurn if executed
-//   so that flood events make players invalid after all the player events. (29-Oct-2007 Martin Gühmann)
+//   so that flood events make players invalid after all the player events. (29-Oct-2007 Martin GÃ¼hmann)
 //
 //----------------------------------------------------------------------------
 
@@ -197,16 +197,16 @@ void NewTurnCount::StartNextPlayer(bool stop)
 	{
 		if(g_player[next_player]->IsRobot())
 		{
-			SetStopPlayer(g_selected_item->GetVisiblePlayer());
+			SetStopPlayer(g_selected_item->GetVisiblePlayerID());
 		}
 	}
 
 	g_controlPanel->UpdatePlayerEndProgress(current_player);
 
-	sint32 oldVis = g_selected_item->GetVisiblePlayer();
+	sint32 oldVisiblePlayerID = g_selected_item->GetVisiblePlayerID();
 	g_selected_item->SetPlayerOnScreen(NewTurnCount::GetStopPlayer());
 
-	if(oldVis != g_selected_item->GetVisiblePlayer())
+	if (oldVisiblePlayerID != g_selected_item->GetVisiblePlayerID())
 	{
 		g_tiledMap->CopyVision();
 	}

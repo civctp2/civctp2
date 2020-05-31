@@ -26,8 +26,8 @@
 //
 // - Option added to select which order buttons are displayed for an army.
 // - Added unit display name.
-// - Standartized code (May 21st 2006 Martin Gühmann)
-// - Added a custom status bar text for the upgrade order. (13-Sep-2008 Martin Gühmann)
+// - Standartized code (May 21st 2006 Martin GÃ¼hmann)
+// - Added a custom status bar text for the upgrade order. (13-Sep-2008 Martin GÃ¼hmann)
 // - Changed occurances of UnitRecord::GetMaxHP to
 //   UnitData::CalculateTotalHP. (Aug 3rd 2009 Maq)
 //
@@ -908,7 +908,7 @@ Army UnitControlPanel::GetSelectedArmy()
 	if(!g_selected_item)
 		return(Army());
 
-	Player *player = g_player[g_selected_item->GetVisiblePlayer()];
+	Player * player = g_selected_item->GetVisiblePlayer();
 
 	if(!player)
 		return(Army());

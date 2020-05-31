@@ -946,9 +946,8 @@ CTP2Combat::CTP2Combat
 	if(!g_theProfileDB->IsShowZoomedCombat())
 		return;
 
-	if(m_attacker == g_selected_item->GetVisiblePlayer()
-	|| m_defender == g_selected_item->GetVisiblePlayer()
-	){
+	if(g_selected_item->IsVisiblePlayer(m_attacker)	|| g_selected_item->IsVisiblePlayer(m_defender))
+	{
 		m_battle = new Battle();
 
 		m_battle->Initialize(attackers[0].GetArmy(), defenders);

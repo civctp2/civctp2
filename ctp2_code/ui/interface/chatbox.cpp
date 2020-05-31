@@ -366,12 +366,9 @@ BOOL ChatWindow::CheckForEasterEggs(MBCHAR *s)
 
 				g_letUIProcess = FALSE;
 			}
-			while
-			     (
-			          g_selected_item != NULL
-			      &&  g_selected_item->GetCurPlayer() != g_selected_item->GetVisiblePlayer()
-			      && !gDone
-			     );
+			while (g_selected_item
+				&& !g_selected_item->IsVisiblePlayer(g_selected_item->GetCurPlayer())
+				&& !gDone);
 		}
 
 		return TRUE;

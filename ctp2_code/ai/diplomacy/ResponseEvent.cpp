@@ -24,9 +24,9 @@
 //
 // Modifications from the original Activision code:
 //
-// - Added HotSeat and PBEM human-human diplomacy support. (17-Oct-2007 Martin G�hmann)
+// - Added HotSeat and PBEM human-human diplomacy support. (17-Oct-2007 Martin Gühmann)
 // - Seperated the NewProposal event from the Response event so that the
-//   NewProposal event can be called from slic witout any problems. (17-Oct-2007 Martin G�hmann)
+//   NewProposal event can be called from slic witout any problems. (17-Oct-2007 Martin Gühmann)
 //
 //----------------------------------------------------------------------------
 
@@ -89,15 +89,13 @@ STDEHANDLER(ResponseEvent)
 	bool show_response;
 	if (sender_diplomat.GetReceiverHasInitiative(receiver))
 	{
-		show_response =
-		        receiver == g_selected_item->GetVisiblePlayer()
-		    &&!(sender_response_pending == Diplomat::s_badResponse);
+		show_response = g_selected_item->IsVisiblePlayer(receiver)
+			&& !(sender_response_pending == Diplomat::s_badResponse);
 	}
 	else
 	{
-		show_response =
-		        sender == g_selected_item->GetVisiblePlayer()
-			&&!(receiver_response_pending == Diplomat::s_badResponse);
+		show_response = g_selected_item->IsVisiblePlayer(sender)
+			&& !(receiver_response_pending == Diplomat::s_badResponse);
 	}
 
 	if (show_response)
@@ -118,7 +116,7 @@ STDEHANDLER(ResponseEvent)
 	    )
 	||  (           g_network.IsActive()
 	       &&       g_network.IsLocalPlayer(sender)
-	       &&       sender != g_selected_item->GetVisiblePlayer()
+	       &&       !g_selected_item->IsVisiblePlayer(sender)
 	    )
 	   )
 	&&             !sender_diplomat.GetReceiverHasInitiative(receiver)
@@ -138,7 +136,7 @@ STDEHANDLER(ResponseEvent)
 	    )
 	||  (           g_network.IsActive()
 	       &&       g_network.IsLocalPlayer(receiver)
-	       &&       receiver != g_selected_item->GetVisiblePlayer()
+	       &&       !g_selected_item->IsVisiblePlayer(receiver)
 	    )
 	   )
 	&&              sender_diplomat.GetReceiverHasInitiative(receiver)

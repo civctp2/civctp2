@@ -4184,7 +4184,7 @@ ORDER_RESULT UnitData::InvestigateCity(Unit c)
 		return ORDER_RESULT_FAILED;
 	}
 
-	if(m_owner == g_selected_item->GetVisiblePlayer())
+	if(g_selected_item->IsVisiblePlayer(m_owner))
 	{
 		g_gevManager->AddEvent(GEV_INSERT_Tail, GEV_DisplayInvestigationWindow,
 							   GEA_Unit, m_id,

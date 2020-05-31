@@ -498,7 +498,7 @@ void SlicSegment::AddSpecials(SlicObject *obj)
 		g_selected_item->GetTopCurItem(player, item, state);
 		if(state == SELECT_TYPE_LOCAL_ARMY) {
 			Army army = Army(item);
-			obj->AddUnit(army.GetTopVisibleUnit(g_selected_item->GetVisiblePlayer()));
+			obj->AddUnit(army.GetTopVisibleUnit(g_selected_item->GetVisiblePlayerID()));
 		}
 	}
 }

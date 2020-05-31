@@ -25,7 +25,7 @@
 // Modifications from the original Activision code:
 //
 // - Use the same science percentage everywhere.
-// - Initialized local variables. (Sep 9th 2005 Martin Gühmann)
+// - Initialized local variables. (Sep 9th 2005 Martin GÃ¼hmann)
 //
 //----------------------------------------------------------------------------
 
@@ -207,7 +207,7 @@ void sciencewin_SciButtonCallback( aui_Control *control, uint32 action, uint32 d
 
 	if ( action != (uint32)AUI_BUTTON_ACTION_EXECUTE ) return;
 
-	Player *p = g_player[g_selected_item->GetVisiblePlayer()];
+	Player * player = g_selected_item->GetVisiblePlayer();
 
 	if ( (c3_Button *)control == g_scienceWin->PlusButton() ) {
 
@@ -225,7 +225,7 @@ void sciencewin_SciButtonCallback( aui_Control *control, uint32 action, uint32 d
 	}
 
 	double taxRate = (double)s_scienceTax / 100;
-	p->SetTaxes( taxRate );
+	player->SetTaxes(taxRate);
 
 	g_scienceWin->UpdateData( SCI_UPDATE_NOCHART );
 
@@ -908,7 +908,7 @@ void AdvanceListItem::Update(void)
 	c3_Icon	*subIcon;
 	c3_Static *branchItem;
 
-	sint32 curPlayer = g_selected_item->GetVisiblePlayer();
+	sint32 curPlayer = g_selected_item->GetVisiblePlayerID();
 
 	subIcon = (c3_Icon*)GetChildByIndex(0);
 	if ( g_player[curPlayer] && g_player[curPlayer]->HasAdvance(m_index) ) {
@@ -1298,12 +1298,12 @@ sint32 ScienceWin::UpdateData( SCI_UPDATE update )
 {
 	MBCHAR str[_MAX_PATH];
 
-	sint32 curPlayer = g_selected_item->GetVisiblePlayer();
-	Player *p = g_player[g_selected_item->GetVisiblePlayer()];
+	sint32 curPlayer = g_selected_item->GetVisiblePlayerID();
+	Player * player = g_selected_item->GetVisiblePlayer();
 
 	sint32 researching = g_player[curPlayer]->m_advances->GetResearching();
 
-	BOOL alreadyHas = p->HasAdvance(p->m_advances->GetResearching());
+	BOOL alreadyHas = player->HasAdvance(player->m_advances->GetResearching());
 
 	if(alreadyHas)
 	{
@@ -1315,8 +1315,8 @@ sint32 ScienceWin::UpdateData( SCI_UPDATE update )
 	}
 	m_researchBox->SetText( str );
 
-	sint32 sciLevel = p->GetCurrentScienceLevel();
-	sint32 advanceCost = p->GetCurrentScienceCost();
+	sint32 sciLevel = player->GetCurrentScienceLevel();
+	sint32 advanceCost = player->GetCurrentScienceCost();
 
 	if(alreadyHas)
 	{
@@ -1337,7 +1337,7 @@ sint32 ScienceWin::UpdateData( SCI_UPDATE update )
 	}
 	m_costBox->SetText( str );
 
-	sciLevel = p->m_advances->GetProjectedScience();
+	sciLevel = player->m_advances->GetProjectedScience();
 	if ( sciLevel < 0 ) {
 		sciLevel = 0;
 	}
@@ -1346,14 +1346,14 @@ sint32 ScienceWin::UpdateData( SCI_UPDATE update )
 
 	double scienceTax;
 
-	p->GetScienceTaxRate( scienceTax );
+	player->GetScienceTaxRate(scienceTax);
 
 	s_scienceTax = AsPercentage(scienceTax);
 
 	sprintf(str,"%d%%",s_scienceTax);
 	m_percentBox->SetText(str);
 
-	sint32 advanceTurns = p->m_advances->TurnsToNextAdvance();
+	sint32 advanceTurns = player->m_advances->TurnsToNextAdvance();
 
 	if ( advanceTurns == -1 ) {
 		sprintf( str, "-" );
@@ -1410,7 +1410,7 @@ void ScienceWin::UpdateList(void)
 	AUI_ERRCODE errcode;
 	MBCHAR		ldlBlock[ k_AUI_LDL_MAXBLOCK + 1 ];
 
-	sint32		curPlayer = g_selected_item->GetVisiblePlayer();
+	sint32		curPlayer = g_selected_item->GetVisiblePlayerID();
 	sint32		num = g_theAdvanceDB->NumRecords();
 
 	m_advanceList->Clear();

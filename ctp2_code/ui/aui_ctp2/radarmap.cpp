@@ -28,18 +28,18 @@
 //   (L. Hirth 6/2004)
 // - Standardised ceil/min/max usage.
 // - Radar tile boarder color determined by the visual cell owner instead by
-//   the actual cell owner. - Nov 1st 2004 - Martin Gühmann
+//   the actual cell owner. - Nov 1st 2004 - Martin GÃ¼hmann
 // - Radar tile boarder is now fully determined by the visible tile onwer
 //   instead of being determined half by the actual tile owner and half by the
 //   the the visible tile owner this fixes the bug that appears after conquest
-//   of a city. - Nov. 1st 2004 - Martin Gühmann
+//   of a city. - Nov. 1st 2004 - Martin GÃ¼hmann
 // - The radar map now shows the current terrain and the current units and
 //   cities if fog of war is off, otherwise it only displays the kind of
-//   information it should display. - Dec. 25th 2004 - Martin Gühmann
+//   information it should display. - Dec. 25th 2004 - Martin GÃ¼hmann
 // - Borders on the minimap are now shown if fog of war is off or god mode
 //   is on, even if the there is no contact to that civilisation.
-//   - Mar. 4th 2005 Martin Gühmann
-// - Initialized local variables. (Sep 9th 2005 Martin Gühmann)
+//   - Mar. 4th 2005 Martin GÃ¼hmann
+// - Initialized local variables. (Sep 9th 2005 Martin GÃ¼hmann)
 // - Added political map functionality (6-Jul-2009 EPW)
 // - Added View capitol on minimap (5-Jan-10 EPW)
 //----------------------------------------------------------------------------
@@ -341,24 +341,17 @@ POINT RadarMap::MapToPixel(MapPoint *pos)
 //	- Gives back the player that shall be shown currently
 //
 //---------------------------------------------------------------------------
-Player *RadarMap::GetVisiblePlayerToRender()
+Player * RadarMap::GetVisiblePlayerToRender()
 {
-
-
 	if(!g_tiledMap || !g_tiledMap->ReadyToDraw() ||
 		!g_theWorld || !g_selected_item || !m_mapSize)
 		return(NULL);
-
-
-
-
-
 
 	Assert(m_mapSize->x < 0 || m_mapSize->y > 0);
 	if(m_mapSize->x <= 0 || m_mapSize->y <= 0)
 		return(NULL);
 
-	return(g_player[g_selected_item->GetVisiblePlayer()]);
+	return g_selected_item->GetVisiblePlayer();
 }
 
 //---------------------------------------------------------------------------
@@ -542,7 +535,6 @@ uint8 RadarMap::RadarTileBorder(const Player *player, const MapPoint &position)
 	if(!player->m_vision->IsExplored(position))
 		return(borderFlags);
 
-// Added by Martin Gühmann
 	sint32 owner = g_tiledMap->GetVisibleCellOwner(const_cast<MapPoint&>(position));
 
 	if(owner < 0)
@@ -929,7 +921,7 @@ void RadarMap::RenderTrade(aui_Surface *surface, const MapPoint &position, const
 	bool seenTrade= false;
 	for (sint32 i = 0; i < g_theWorld->GetCell(worldpos)->GetNumTradeRoutes(); i++) {
 	    TradeRoute route = g_theWorld->GetCell(worldpos)->GetTradeRoute(i);
-	    if(route.SeenBy(g_selected_item->GetVisiblePlayer())){
+	    if (route.SeenBy(g_selected_item->GetVisiblePlayerID())) {
 		seenTrade= true;
 		}
 	    }
@@ -1035,7 +1027,7 @@ void RadarMap::RenderViewRect
 		if(!g_tiledMap->ReadyToDraw())
 			return;
 
-	    sint32  nrplayer    = g_selected_item->GetVisiblePlayer();
+	    sint32 nrplayer = g_selected_item->GetVisiblePlayerID();
 
 		offsetRect.bottom = m_mapViewRect.bottom;
 		offsetRect.top = m_mapViewRect.top;
@@ -1498,9 +1490,9 @@ void RadarMap::MouseLGrabInside(aui_MouseEvent *data)
     double  nudge   = (tileY & 1) ? m_tilePixelWidth / 2.0 : 0.0;
     sint32  tileX   = (sint32) ( ceil(((double)(data->position.x - nudge) / m_tilePixelWidth)) );
 
-	tileX = (sint32) ((tileX - m_displayOffset[g_selected_item->GetVisiblePlayer()].x
+	tileX = (sint32) ((tileX - m_displayOffset[g_selected_item->GetVisiblePlayerID()].x
 									+ m_mapSize->x) % m_mapSize->x);
-	tileY = (sint32) ((tileY - m_displayOffset[g_selected_item->GetVisiblePlayer()].y
+	tileY = (sint32) ((tileY - m_displayOffset[g_selected_item->GetVisiblePlayerID()].y
 									+ m_mapSize->y) % m_mapSize->y);
 
 	sint32 width = m_mapViewRect.right - m_mapViewRect.left;
@@ -1541,7 +1533,7 @@ void RadarMap::MouseRGrabInside(aui_MouseEvent *data)
 	data->position.x -= X();
 	data->position.y -= Y();
 
-	sint32 nrplayer = g_selected_item->GetVisiblePlayer();
+	sint32 nrplayer = g_selected_item->GetVisiblePlayerID();
 
 	// compute the offsets after the MouseRClick to center the map with the
 	// desired point
@@ -1598,11 +1590,8 @@ MapPoint RadarMap::MapOffset(MapPoint oldPoint)
 {
 	MapPoint newPoint;
 
-	newPoint.x =
-		(oldPoint.x + m_displayOffset[g_selected_item->GetVisiblePlayer()].x) % m_mapSize->x;
-
-	newPoint.y =
-		(oldPoint.y + m_displayOffset[g_selected_item->GetVisiblePlayer()].y) % m_mapSize->y;
+	newPoint.x = (oldPoint.x + m_displayOffset[g_selected_item->GetVisiblePlayerID()].x) % m_mapSize->x;
+	newPoint.y = (oldPoint.y + m_displayOffset[g_selected_item->GetVisiblePlayerID()].y) % m_mapSize->y;
 
 	return newPoint;
 }
@@ -1618,7 +1607,7 @@ MapPoint RadarMap::MapOffset(MapPoint oldPoint)
 //---------------------------------------------------------------------------
 MapPoint RadarMap::PosWorldToPosRadar(MapPoint worldpos)
 {
-	sint32 nrplayer = g_selected_item->GetVisiblePlayer();
+	sint32 nrplayer = g_selected_item->GetVisiblePlayerID();
 
 	MapPoint posRadar;
 	posRadar.x = (worldpos.x - m_displayOffset[nrplayer].y/2 + m_mapSize->x

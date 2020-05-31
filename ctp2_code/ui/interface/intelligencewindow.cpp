@@ -25,8 +25,8 @@
 // Modifications from the original Activision code:
 //
 // - Update the state of the embargo and war buttons after confirmation.
-// - Initialized local variables. (Sep 9th 2005 Martin Gühmann)
-// - Moved cleanup of statics into the the cleanup method. (Sep 14th 2005 Martin Gühmann)
+// - Initialized local variables. (Sep 9th 2005 Martin GÃ¼hmann)
+// - Moved cleanup of statics into the the cleanup method. (Sep 14th 2005 Martin GÃ¼hmann)
 //
 //----------------------------------------------------------------------------
 
@@ -246,10 +246,11 @@ void IntelligenceWindow::SetRegardTip(MBCHAR *buf, const sint32 player, const si
 }
 
 void IntelligenceWindow::Update(ctp2_ListBox *theList)
-    {
-    PLAYER_INDEX    visPl   = g_selected_item->GetVisiblePlayer();
-    Assert(g_player[visPl]);
-    if(!g_player[visPl]) return;
+{
+    PLAYER_INDEX visiblePlayerID = g_selected_item->GetVisiblePlayerID();
+    Player * player = g_selected_item->GetVisiblePlayer();
+    Assert(player);
+    if(!player) return;
 
     theList->Clear();
     theList->SetAbsorbancy(FALSE);
@@ -257,8 +258,8 @@ void IntelligenceWindow::Update(ctp2_ListBox *theList)
 
     for (sint32 p = 1; p < k_MAX_PLAYERS; p++)
 	{
-	if (p == visPl) continue;
-	if (!g_player[visPl]->HasContactWith(p)) continue;
+	if (p == visiblePlayerID) continue;
+	if (!player->HasContactWith(p)) continue;
 
 	ctp2_ListItem * item =
             (ctp2_ListItem *)aui_Ldl::BuildHierarchyFromRoot("IntelligenceListItem");
@@ -283,7 +284,7 @@ void IntelligenceWindow::Update(ctp2_ListBox *theList)
 	    {
 	    regard->SetDrawCallbackAndCookie(DrawPlayerRegard, (void *)p, true);
 	    MBCHAR buf[k_MAX_NAME_LEN];
-	    SetRegardTip(buf, p, visPl);
+	    SetRegardTip(buf, p, visiblePlayerID);
 	    ((aui_TipWindow *)regard->GetTipWindow())->SetTipText(buf);
 	    regard->SetActionFuncAndCookie(SelectItem, item);
 	    }
@@ -292,7 +293,7 @@ void IntelligenceWindow::Update(ctp2_ListBox *theList)
 	    {
 	    strength->SetDrawCallbackAndCookie(DrawPlayerStrength, (void *)p, true);
 	    MBCHAR buf[k_MAX_NAME_LEN];
-	    DIPLOMATIC_STRENGTH relativeStrength = g_player[p]->GetRelativeStrength(visPl);
+	    DIPLOMATIC_STRENGTH relativeStrength = g_player[p]->GetRelativeStrength(visiblePlayerID);
 
 	    if (relativeStrength < DIPLOMATIC_STRENGTH_WEAK)
 		{
@@ -329,7 +330,7 @@ void IntelligenceWindow::Update(ctp2_ListBox *theList)
 	item->SetUserData((void*) p);
 	theList->AddItem(item);
 	}
-    }
+}
 
 void IntelligenceWindow::Close(aui_Control *control, uint32 action, uint32 data, void *cookie)
 {
@@ -427,7 +428,7 @@ AUI_ERRCODE IntelligenceWindow::DrawPlayerRegard(ctp2_Static *control,
 	char **toneIcons = DiplomacyWindow::GetToneIcons();
 	sint32 p = (sint32)cookie;
 
-	switch(GetRegardThreshold(p, g_selected_item->GetVisiblePlayer())) {
+	switch(GetRegardThreshold(p, g_selected_item->GetVisiblePlayerID())) {
 		case HOTWAR_REGARD: imageName = toneIcons[DIPLOMATIC_TONE_ANGRY]; break;
 		case COLDWAR_REGARD: imageName = toneIcons[DIPLOMATIC_TONE_INDIGNANT]; break;
 		case NEUTRAL_REGARD: imageName = toneIcons[DIPLOMATIC_TONE_MEEK]; break;
@@ -477,9 +478,9 @@ AUI_ERRCODE IntelligenceWindow::DrawPlayerStrength(ctp2_Static *control,
 	sint32 p = (sint32)cookie;
 
 	if(!g_player[p]) return AUI_ERRCODE_OK;
-	if(!g_player[g_selected_item->GetVisiblePlayer()]) return AUI_ERRCODE_OK;
+	if(!g_selected_item->GetVisiblePlayer()) return AUI_ERRCODE_OK;
 
-	DIPLOMATIC_STRENGTH relativeStrength = g_player[p]->GetRelativeStrength(g_selected_item->GetVisiblePlayer());
+	DIPLOMATIC_STRENGTH relativeStrength = g_player[p]->GetRelativeStrength(g_selected_item->GetVisiblePlayerID());
 
 	if(!sm_strengthImages) {
 		InitImageTables();
@@ -540,18 +541,14 @@ AUI_ERRCODE IntelligenceWindow::DrawEmbassy(ctp2_Static *control,
 	const MBCHAR *imageName = NULL;
 
 #if defined(_DEBUG)
-	if(sm_embassyImages->GetNumStrings() > 1 && Diplomat::GetDiplomat(g_selected_item->GetVisiblePlayer()).DesireWarWith(p))
+	if(sm_embassyImages->GetNumStrings() > 1 && Diplomat::GetDiplomat(g_selected_item->GetVisiblePlayerID()).DesireWarWith(p))
 	{
 		imageName = sm_embassyImages->GetString(1);
 	}
 	else
 #endif
-	if (g_player[g_selected_item->GetVisiblePlayer()]->HasEmbassyWith(p))
-	{
+	if (g_selected_item->GetVisiblePlayer()->HasEmbassyWith(p)) {
 		imageName = sm_embassyImages->GetString(0);
-	}
-	else
-	{
 	}
 
 	if(imageName != NULL)
@@ -589,8 +586,8 @@ AUI_ERRCODE IntelligenceWindow::DrawEmbassy(ctp2_Static *control,
 AUI_ERRCODE IntelligenceWindow::DrawTreaties(ctp2_Static *control, aui_Surface *surface, RECT &rect, void *cookie)
     {
     //// similar to DiplomacyDetails::DrawTreaties
-    sint32 p    = (sint32) cookie;
-    sint32 visP = g_selected_item->GetVisiblePlayer();
+    sint32 p = (sint32) cookie;
+    sint32 visiblePlayerID = g_selected_item->GetVisiblePlayerID();
     sint32 slot;
 
     for (sint32 ag = 1; ag < PROPOSAL_MAX; ++ag)
@@ -603,10 +600,10 @@ AUI_ERRCODE IntelligenceWindow::DrawTreaties(ctp2_Static *control, aui_Surface *
 
 	if (rec->GetHasEmbargo())
 	    {
-	    if (!Diplomat::GetDiplomat(p).GetEmbargo(visP))
+	    if (!Diplomat::GetDiplomat(p).GetEmbargo(visiblePlayerID))
 		continue;
 	    }
-	else if(!AgreementMatrix::s_agreements.HasAgreement(visP, p, (PROPOSAL_TYPE)ag))
+	else if(!AgreementMatrix::s_agreements.HasAgreement(visiblePlayerID, p, (PROPOSAL_TYPE)ag))
 	    continue;
 
 	aui_Image *image = g_c3ui->LoadImage((char *)rec->GetImage());
@@ -671,7 +668,7 @@ void intelligence_DeclareWarCallback(bool response, void *cookie)
 		if(g_network.IsClient()) {
 			g_network.SendAction(new NetAction(NET_ACTION_DECLARE_WAR, (sint32)cookie));
 		}
-		Diplomat::GetDiplomat(g_selected_item->GetVisiblePlayer()).DeclareWar((sint32)cookie);
+		Diplomat::GetDiplomat(g_selected_item->GetVisiblePlayerID()).DeclareWar((sint32)cookie);
 		DiplomacyWindow::EnableButtons(TRUE, reinterpret_cast<sint32>(cookie));
 	}
 }
@@ -679,7 +676,7 @@ void intelligence_DeclareWarCallback(bool response, void *cookie)
 void intelligence_DeclarEmbargoCallback(bool response, void *cookie)
 {
 	if(response) {
-		Diplomat::GetDiplomat(g_selected_item->GetVisiblePlayer()).SetEmbargo((sint32)cookie, 1);
+		Diplomat::GetDiplomat(g_selected_item->GetVisiblePlayerID()).SetEmbargo((sint32)cookie, 1);
 		DiplomacyWindow::EnableButtons(TRUE, reinterpret_cast<sint32>(cookie));
 	}
 }
@@ -692,9 +689,7 @@ void IntelligenceWindow::DeclareWarOnSelected()
 
 	if(!item) return;
 
-	sint32 visP = g_selected_item->GetVisiblePlayer();
-
-	if(!g_player[visP]) return;
+	if(!g_selected_item->GetVisiblePlayer()) return;
 
 	sint32 player = (sint32)item->GetUserData();
 
@@ -714,9 +709,7 @@ void IntelligenceWindow::DeclareEmbargoOnSelected()
 
 	if(!item) return;
 
-	sint32 visP = g_selected_item->GetVisiblePlayer();
-
-	if(!g_player[visP]) return;
+	if(!g_selected_item->GetVisiblePlayer()) return;
 
 	sint32 player = (sint32)item->GetUserData();
 
@@ -736,9 +729,7 @@ void IntelligenceWindow::SendMessageToSelected()
 
 	if(!item) return;
 
-	sint32 visP = g_selected_item->GetVisiblePlayer();
-
-	if(!g_player[visP]) return;
+	if(!g_selected_item->GetVisiblePlayer()) return;
 
 	sint32 player = (sint32)item->GetUserData();
 
@@ -759,9 +750,7 @@ void IntelligenceWindow::DisplayDetailsOfSelected()
 
 	if(!item) return;
 
-	sint32 visP = g_selected_item->GetVisiblePlayer();
-
-	if(!g_player[visP]) return;
+	if(!g_selected_item->GetVisiblePlayer()) return;
 
 	sint32 player = (sint32)item->GetUserData();
 
@@ -780,8 +769,8 @@ void IntelligenceWindow::UpdateAdviceText()
 	if (advice == NULL)
 		return;
 
-	sint32 visP = g_selected_item->GetVisiblePlayer();
-	if(!g_player[visP]) return;
+	sint32 visiblePlayerID = g_selected_item->GetVisiblePlayerID();
+	if(!g_selected_item->GetVisiblePlayer()) return;
 
 	ctp2_ListItem *item = (ctp2_ListItem *)sm_list->GetSelectedItem();
 
@@ -789,12 +778,12 @@ void IntelligenceWindow::UpdateAdviceText()
 	StringId adviceId;
 
 	if(!item) {
-		adviceId = Diplomat::GetDiplomat(visP).GetDiplomacyAdvice(sc);
+		adviceId = Diplomat::GetDiplomat(visiblePlayerID).GetDiplomacyAdvice(sc);
 	}
 	else {
 		PLAYER_INDEX player = (sint32)item->GetUserData();
 
-		adviceId = Diplomat::GetDiplomat(visP). Diplomat::GetDiplomacyAdvice(sc, player);
+		adviceId = Diplomat::GetDiplomat(visiblePlayerID). Diplomat::GetDiplomacyAdvice(sc, player);
 	}
 
 	if (adviceId < 0)

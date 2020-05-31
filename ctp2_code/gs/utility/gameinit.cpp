@@ -1295,11 +1295,6 @@ sint32 spriteEditor_Initialize(sint32 mWidth, sint32 mHeight)
     verifyYwrap();
 #endif
 
-
-
-
-
-
 	SPLASH_STRING("Creating AI Interface's...");
 
 	if (g_theProfileDB->IsAIOn() || g_network.IsNetworkLaunch())
@@ -1323,22 +1318,7 @@ sint32 spriteEditor_Initialize(sint32 mWidth, sint32 mHeight)
 
 	g_theTradeOfferPool->ReRegisterOffers();
 
-
-
-
-
-
-
-
-
-
-	if ( g_selected_item && g_player[g_selected_item->GetVisiblePlayer()] )
-	{
-
-
-
-
-
+	if (g_selected_item && g_selected_item->GetVisiblePlayer()) {
 		g_selected_item->Refresh();
 	}
 
@@ -1346,20 +1326,10 @@ sint32 spriteEditor_Initialize(sint32 mWidth, sint32 mHeight)
 
 	g_theWorld->RecalculateZOC();
 
-
-
-
 	g_player[1]->m_gold->SetLevel(1000000);
 	g_player[1]->m_materialPool->AddMaterials(1000000);
 
 	g_scenarioUsePlayerNumber = 0;
-
-
-
-
-
-
-
 
 	g_turn->SetHotSeat(FALSE);
 	g_turn->SetEmail(FALSE);
@@ -2339,11 +2309,7 @@ sint32 gameinit_Initialize(sint32 mWidth, sint32 mHeight, CivArchive *archive)
 		}
 	}
 
-	if (g_selected_item &&
-		g_player[g_selected_item->GetVisiblePlayer()] &&
-		!g_turn->IsHotSeat()
-	   )
-	{
+	if (g_selected_item && g_selected_item->GetVisiblePlayer() && !g_turn->IsHotSeat()) {
 		g_selected_item->Refresh();
 	}
 

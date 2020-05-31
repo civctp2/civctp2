@@ -1699,8 +1699,7 @@ NetInfo::Unpacketize(uint16 id, uint8* buf, uint16 size)
 			Unit unit(m_data2);
 			army->GroupUnit(unit);
 
-			if(army.GetOwner() == g_selected_item->GetVisiblePlayer()) {
-
+			if (g_selected_item->IsVisiblePlayer(army.GetOwner())) {
 				ArmyManagerWindow::NotifyRemoteGroupComplete(army);
 			}
 
@@ -1710,7 +1709,7 @@ NetInfo::Unpacketize(uint16 id, uint8* buf, uint16 size)
 		{
 			DPRINTF(k_DBG_NET, ("Server says ungrouping of Army %lx done (owner=%d)\n", m_data, m_data2));
 
-			if (static_cast<PLAYER_INDEX>(m_data2) == g_selected_item->GetVisiblePlayer())
+			if (g_selected_item->IsVisiblePlayer(m_data2))
             {
 			    Army army(m_data);
 				if (army.IsValid())

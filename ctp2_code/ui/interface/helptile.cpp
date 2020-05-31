@@ -24,10 +24,10 @@
 // Modifications from the original Activision code:
 //
 // - Does not show anymore the current tarrain stats but those from
-//   the last visit. - Dec. 23rd 2004 Martin Gühmann
+//   the last visit. - Dec. 23rd 2004 Martin GÃ¼hmann
 // - Add in food, shields, and gold from any good that is present. PFT 3 apr 05
 // - Moved Peter's last modification to Cell.cpp and UnseenCell.cpp, idially
-//   such code should only be put at one place. - April 12th 2005 Martin Gühmann
+//   such code should only be put at one place. - April 12th 2005 Martin GÃ¼hmann
 //
 //----------------------------------------------------------------------------
 
@@ -234,8 +234,8 @@ void helptile_displayData(const MapPoint &p)
 	if(!g_tiledMap->GetLocalVision()->IsVisible(p)
 	&& !g_fog_toggle
 	&& !g_god
-	&& (g_player[g_selected_item->GetVisiblePlayer()]
-	&& !g_player[g_selected_item->GetVisiblePlayer()]->m_hasGlobalRadar)
+	&& (g_selected_item->GetVisiblePlayer()
+	&& !g_selected_item->GetVisiblePlayer()->m_hasGlobalRadar)
 	&& g_tiledMap->GetLocalVision()->GetLastSeen(p, ucell)
 	){
 		strcpy(myname, g_theStringDB->GetNameStr(g_theTerrainDB->Get(ucell.m_unseenCell->GetTerrainType())->GetName()));
@@ -249,7 +249,7 @@ void helptile_displayData(const MapPoint &p)
 		sint32 numSeenTradeRutes= 0;
 		for(int i= 0; i < myTile->GetNumTradeRoutes(); i++) {
 		    TradeRoute route= myTile->GetTradeRoute(i);
-		    if(route.SeenBy(g_selected_item->GetVisiblePlayer())){
+		    if(route.SeenBy(g_selected_item->GetVisiblePlayerID())){
 			seen[route.GetOwner()]++;
 			numSeenTradeRutes++;
 			}
@@ -316,7 +316,7 @@ void helptile_displayData(const MapPoint &p)
 		sint32 numSeenTradeRutes= 0;
 		for(int i= 0; i < myTile->GetNumTradeRoutes(); i++) {
 		    TradeRoute route= myTile->GetTradeRoute(i);
-		    if(route.SeenBy(g_selected_item->GetVisiblePlayer())){
+		    if(route.SeenBy(g_selected_item->GetVisiblePlayerID())){
 			seen[route.GetOwner()]++;
 			numSeenTradeRutes++;
 			}

@@ -1435,7 +1435,7 @@ Unit Player::CreateCity(
 
 		so = new SlicObject("017SeaCityOthers");
 		so->AddAllRecipientsBut(m_owner);
-		so->AddCivilisation(g_selected_item->GetVisiblePlayer());
+		so->AddCivilisation(g_selected_item->GetVisiblePlayerID());
 		so->AddCivilisation(m_owner);
 		g_slicEngine->Execute(so);
 	}
@@ -1480,9 +1480,7 @@ bool Player::AddCityReferenceToPlayer(Unit u,  CAUSE_NEW_CITY cause)
 	{
 	}
 
-	if(!IsRobot()
-	|| g_selected_item->GetVisiblePlayer() == m_owner
-	){
+	if (!IsRobot() || g_selected_item->IsVisiblePlayer(m_owner)) {
 		MainControlPanel::UpdateCityList();
 	}
 
@@ -3200,7 +3198,7 @@ void Player::InterceptTrade(sint32 army_index)
 	MapPoint pnt;
 
 	Assert(0 < m_all_armies->Get(army_index).Num());
-	Unit u = m_all_armies->Get(army_index).GetTopVisibleUnit(g_selected_item->GetVisiblePlayer());
+	Unit u = m_all_armies->Get(army_index).GetTopVisibleUnit(g_selected_item->GetVisiblePlayerID());
 	if (u.m_id == (0)) {
 		u = m_all_armies->Get(army_index).Get(0);
 	}
@@ -4101,7 +4099,7 @@ void Player::ExchangeMap(PLAYER_INDEX recipient)
 void Player::GiveMap(PLAYER_INDEX recipient)
 {
 	g_player[recipient]->m_vision->MergeMap(m_vision);
-	if(g_selected_item->GetVisiblePlayer() == recipient) {
+	if (g_selected_item->IsVisiblePlayer(recipient)) {
 		g_director->AddCopyVision();
 	}
 }
@@ -5164,7 +5162,7 @@ void Player::AddMessage(Message &msg)
 						// With the existing behaviour they would show immediately
 						// which would often mean that they show on the wrong players
 						// turn.
-				&& g_selected_item->GetVisiblePlayer() == m_owner
+				&& g_selected_item->IsVisiblePlayer(m_owner)
 				&&(!g_currentMessageWindow
 				|| !g_currentMessageWindow->GetMessage()
 				|| !g_theMessagePool->IsValid(*g_currentMessageWindow->GetMessage()))
@@ -5793,8 +5791,7 @@ void Player::AddWonder(sint32 wonder, Unit &city)
 		m_vision->SetTheWholeWorldExplored();
 		m_vision->ClearUnseen();
 
-		if(m_owner == g_selected_item->GetVisiblePlayer())
-		{
+		if (g_selected_item->IsVisiblePlayer(m_owner)) {
 			g_director->AddCopyVision();
 		}
 	}
@@ -6477,7 +6474,7 @@ bool Player::ActuallySetGovernment(sint32 type)
         so->AddRecipient(m_owner);
         so->AddGovernment(type);
         g_slicEngine->Execute(so) ;
-		if(m_owner == g_selected_item->GetVisiblePlayer() && type != 0) {
+		if (g_selected_item->IsVisiblePlayer(m_owner) && type != 0) {
 			g_director->AddGameSound(GAMESOUNDS_CHANGE_GOV);
 		}
     }
@@ -6867,7 +6864,7 @@ void Player::GameOver(GAME_OVER reason, sint32 data)
 		}
 	}
 
-	if (!IsRobot() && m_owner == g_selected_item->GetVisiblePlayer() &&
+	if (!IsRobot() && g_selected_item->IsVisiblePlayer(m_owner) &&
 		(!g_slicEngine->GetTutorialActive() || g_slicEngine->GetTutorialPlayer() == m_owner))
 	{
 		close_AllScreens();
@@ -7800,7 +7797,7 @@ void Player::ContactMade(PLAYER_INDEX with)
 			}
 		}
 
-		if(g_selected_item && g_radarMap && m_owner == g_selected_item->GetVisiblePlayer()) {
+		if (g_selected_item && g_radarMap && g_selected_item->IsVisiblePlayer(m_owner)) {
 			g_radarMap->Update();
 		}
 	}
@@ -7911,7 +7908,7 @@ void Player::CheckWonderObsoletions(AdvanceType advance)
 			g_player[wowner]->m_hasGlobalRadar = FALSE;
 			g_theWonderTracker->SetGlobeSatFlags(g_theWonderTracker->GlobeSatFlags() & ~(1 << m_owner));
 			m_vision->ClearUnseen();
-			if(wowner == g_selected_item->GetVisiblePlayer()) {
+			if (g_selected_item->IsVisiblePlayer(wowner)) {
 				g_director->AddCopyVision();
 			}
 		}
@@ -8006,7 +8003,7 @@ void Player::SetHasAdvance(AdvanceType advance, const bool init)
 		m_all_cities->Access(i).NotifyAdvance(advance);
 	}
 
-	if (g_controlPanel!=NULL && m_owner == g_selected_item->GetVisiblePlayer())
+	if (g_controlPanel!=NULL && g_selected_item->IsVisiblePlayer(m_owner))
 		g_controlPanel->TileImpPanelRedisplay();
 
 	sint32 player_idx;
@@ -8076,9 +8073,7 @@ void Player::SetHasAdvance(AdvanceType advance, const bool init)
 			m_advances->ResetCanResearch(advance);
 		}
 
-		if(sci_advancescreen_isOnScreen() &&
-		   m_owner == g_selected_item->GetVisiblePlayer())
-		{
+		if (sci_advancescreen_isOnScreen() && g_selected_item->IsVisiblePlayer(m_owner)) {
 			sci_advancescreen_loadList();
 		}
 	}
@@ -8554,7 +8549,7 @@ void Player::RecreateMessageIcons()
 		}
 	}
 
-	if(g_controlPanel && m_owner == g_selected_item->GetVisiblePlayer()) {
+	if (g_controlPanel && g_selected_item->IsVisiblePlayer(m_owner)) {
 		g_controlPanel->PopulateMessageList(m_owner);
 	}
 }
@@ -8890,8 +8885,6 @@ void Player::EnterNewAge(sint32 age)
 //----------------------------------------------------------------------------
 sint32 Player::SetResearchGoal(enum DATABASE db, sint32 index)
 {
-	//Added by Martin Gühmann
-	//Clears reseach goal if index is smaller 0:
 	if(index < 0)
 	{
 		m_researchGoal = -1;

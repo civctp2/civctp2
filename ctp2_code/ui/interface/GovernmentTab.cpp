@@ -162,8 +162,7 @@ void GovernmentTab::Update()
 
 void GovernmentTab::UpdateCurrentGovernment()
 {
-
-	Player *player = g_player[g_selected_item->GetVisiblePlayer()];
+	Player * player = g_selected_item->GetVisiblePlayer();
 
 	const GovernmentRecord *government =
 		g_theGovernmentDB->Get(player->GetGovernmentType());
@@ -175,8 +174,7 @@ void GovernmentTab::UpdateCurrentGovernment()
 
 void GovernmentTab::UpdateCompareGovernmentDropdown()
 {
-
-	Player *player = g_player[g_selected_item->GetVisiblePlayer()];
+	Player * player = g_selected_item->GetVisiblePlayer();
 
 	std::pair<bool, sint32> currentSelection = GetGovernmentSelection();
 
@@ -241,13 +239,11 @@ void GovernmentTab::UpdateCompareGovernmentDropdown()
 
 void GovernmentTab::UpdateCompareGovernment()
 {
-
 	std::pair<bool, sint32> currentSelection = GetGovernmentSelection();
-
 
 	if(currentSelection.first) {
 
-		Player *player = g_player[g_selected_item->GetVisiblePlayer()];
+		Player * player = g_selected_item->GetVisiblePlayer();
 
 		const GovernmentRecord *currentGovernment =
 			g_theGovernmentDB->Get(player->GetGovernmentType());
@@ -482,7 +478,7 @@ void GovernmentTab::ConfirmGovernmentChange(bool result, void *data)
 	GovernmentTab *tab = static_cast<GovernmentTab*>(data);
 
 	if(result) {
-		Player *player = g_player[g_selected_item->GetVisiblePlayer()];
+		Player * player = g_selected_item->GetVisiblePlayer();
 		if(!player)
 			return;
 
@@ -499,12 +495,10 @@ void GovernmentTab::ConfirmGovernmentChange(bool result, void *data)
 void GovernmentTab::EnactGovernmentActionCallback(aui_Control *control,
 	uint32 action, uint32 data, void *cookie)
 {
-
 	if(action != static_cast<uint32>(AUI_BUTTON_ACTION_EXECUTE))
 		return;
 
-	Player *player = g_player[g_selected_item->GetVisiblePlayer()];
-
+	Player * player = g_selected_item->GetVisiblePlayer();
 
 	GovernmentTab *tab = static_cast<GovernmentTab*>(cookie);
 

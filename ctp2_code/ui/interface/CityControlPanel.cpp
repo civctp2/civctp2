@@ -27,18 +27,18 @@
 //
 // - Made rush buy button behaviour consistent with other windows.
 // - Disabled rushbuy button if infrastructure or captalization are
-//   at the front of the build queue, by Martin Gühmann.
+//   at the front of the build queue, by Martin GÃ¼hmann.
 // - If infrastructure or capitalization are at the front of the
-//   build queue no cost or turns are shown anymore, by Martin Gühmann.
+//   build queue no cost or turns are shown anymore, by Martin GÃ¼hmann.
 // - Rush buy button should be disabled when it is not the player's turn
 //   unfortunatly the button state is not updated on the end turn event.
 // - Made update of rush buy button possible when (only) the gold of the
 //   player has changed.
 // - #01 Standardization of city selection and focus handling
 //   (L. Hirth 6/2004)
-// - Disabled ForceSelect while updating the city list. (Feb 4th 2007 Martin Gühmann)
-// - Cleaned and made the build progress bar green. (Feb 4th 2007 Martin Gühmann)
-// - The city tab is now updated when you modify the city in the city manager. (9-Feb-2008 Martin Gühmann)
+// - Disabled ForceSelect while updating the city list. (Feb 4th 2007 Martin GÃ¼hmann)
+// - Cleaned and made the build progress bar green. (Feb 4th 2007 Martin GÃ¼hmann)
+// - The city tab is now updated when you modify the city in the city manager. (9-Feb-2008 Martin GÃ¼hmann)
 //
 //----------------------------------------------------------------------------
 
@@ -253,7 +253,7 @@ void CityControlPanel::EditBuildQueueButtonActionCallback(aui_Control *control,
 	if(action != static_cast<uint32>(AUI_BUTTON_ACTION_EXECUTE))
 		return;
 
-	Player *player = g_player[g_selected_item->GetVisiblePlayer()];
+	Player * player = g_selected_item->GetVisiblePlayer();
 	if(!player)
 		return;
 
@@ -302,7 +302,7 @@ void CityControlPanel::ToggleGovernorButtonActionCallback(aui_Control *control,
 	if(action != static_cast<uint32>(AUI_BUTTON_ACTION_EXECUTE))
 		return;
 
-	Player *player = g_player[g_selected_item->GetVisiblePlayer()];
+	Player * player = g_selected_item->GetVisiblePlayer();
 	if(!player)
 		return;
 
@@ -338,7 +338,7 @@ void CityControlPanel::SelectGovernorActionCallback(aui_Control *control,
 
 	if(!g_selected_item)
 		return;
-	Player *player = g_player[g_selected_item->GetVisiblePlayer()];
+	Player * player = g_selected_item->GetVisiblePlayer();
 	if(!player)
 		return;
 
@@ -433,8 +433,7 @@ void CityControlPanel::CitySelectActionCallback(aui_Control *control,
 //----------------------------------------------------------------------------
 void CityControlPanel::UpdateBuildItem()
 {
-	sint32 const	visiblePlayer	= g_selected_item->GetVisiblePlayer();
-	Player *		player			= g_player[visiblePlayer];
+	Player * player = g_selected_item->GetVisiblePlayer();
 	if(!player || (player->GetNumCities() <= 0))
 	{
 		ClearBuildItem();
@@ -464,7 +463,7 @@ void CityControlPanel::UpdateBuildItem()
 	BuildQueue *	queue			= theCity ? theCity->GetBuildQueue() : NULL;
 	BuildNode *		head			= queue ? queue->GetHead() : NULL;
 	sint32 const	cost			= theCity ? theCity->GetOvertimeCost() : 0;
-	bool const		isMyTurn		= visiblePlayer == g_selected_item->GetCurPlayer();
+	bool const		isMyTurn		= g_selected_item->IsVisiblePlayer(g_selected_item->GetCurPlayer());
 
 	// Do update the rush buy button, even when the production has not changed.
 	if ((cost <= 0)							||
@@ -576,7 +575,7 @@ void CityControlPanel::ClearBuildItem()
 void CityControlPanel::UpdateGovernor()
 {
 
-	Player *player = g_player[g_selected_item->GetVisiblePlayer()];
+	Player * player = g_selected_item->GetVisiblePlayer();
 
 	sint32 numberOfItems =
 		m_cityListDropDown->GetListBox()->NumItems();
@@ -668,7 +667,7 @@ void CityControlPanel::UpdateCityList()
 	m_cityListDropDown->Clear();
 
 	// Set the player
-	Player *player = g_player[g_selected_item->GetVisiblePlayer()];
+	Player * player = g_selected_item->GetVisiblePlayer();
 	if(!player)
 		return;
 
@@ -845,7 +844,7 @@ void CityControlPanel::Activated()
 	if(!g_selected_item)
 		return;
 
-	Player *player = g_player[g_selected_item->GetVisiblePlayer()];
+	Player * player = g_selected_item->GetVisiblePlayer();
 
 	if(!player)
 		return;

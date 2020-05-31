@@ -810,7 +810,7 @@ sint32 ui_HandleKeypress(WPARAM wParam, LPARAM lParam)
 #endif
     case KEY_FUNCTION_ENDTURN:
 #ifdef _PLAYTEST
-        if (g_selected_item->GetCurPlayer() != g_selected_item->GetVisiblePlayer())
+        if (!g_selected_item->IsVisiblePlayer(g_selected_item->GetCurPlayer()))
            break;
 
 		if(g_network.IsActive()) {
@@ -818,21 +818,7 @@ sint32 ui_HandleKeypress(WPARAM wParam, LPARAM lParam)
 		} else {
             g_selected_item->Deselect(g_selected_item->GetCurPlayer());
 
-
-
-
 			NewTurnCount::StartNextPlayer(true);
-
-
-
-
-
-
-
-
-
-
-
 
 			g_tiledMap->InvalidateMix();
 			g_tiledMap->InvalidateMap();
@@ -845,7 +831,6 @@ sint32 ui_HandleKeypress(WPARAM wParam, LPARAM lParam)
 #endif
 
     case KEY_FUNCTION_NEXT_ROUND:
-
 
 		if(g_modalMessage) {
 			Message *msg = g_modalMessage->GetMessage();
@@ -861,28 +846,17 @@ sint32 ui_HandleKeypress(WPARAM wParam, LPARAM lParam)
 			g_utilityTextMessage->RemoveWindow();
 		} else {
 
-			if(g_selected_item->GetVisiblePlayer() == g_selected_item->GetCurPlayer()) {
+			if(g_selected_item->IsVisiblePlayer(g_selected_item->GetCurPlayer())) {
 				DPRINTF(k_DBG_GAMESTATE, ("Keypress end turn, %d\n", g_selected_item->GetCurPlayer()));
 				g_selected_item->RegisterManualEndTurn();
 				g_gevManager->EndTurnRequest();
-			}
-			else
-			{
-
-
 			}
 		}
         break;
 
     case KEY_FUNCTION_SAVE_WORLD :
 		if (g_civApp->IsGameLoaded() && !g_network.IsClient()) {
-			g_civApp->AutoSave(g_selected_item->GetVisiblePlayer(), true);
-
-
-
-
-
-
+			g_civApp->AutoSave(g_selected_item->GetVisiblePlayerID(), true);
 		}
 		move = FALSE ;
 		break ;
@@ -890,12 +864,7 @@ sint32 ui_HandleKeypress(WPARAM wParam, LPARAM lParam)
     case KEY_FUNCTION_LOAD_WORLD :
 		if (g_civApp->IsGameLoaded() && !g_network.IsActive()) {
 			{
-				g_civApp->PostLoadQuickSaveAction(g_selected_item->GetVisiblePlayer());
-
-
-
-
-
+				g_civApp->PostLoadQuickSaveAction(g_selected_item->GetVisiblePlayerID());
 			}
 			move = FALSE ;
 		}
@@ -962,15 +931,11 @@ sint32 ui_HandleKeypress(WPARAM wParam, LPARAM lParam)
 	case KEY_FUNCTION_PROCESS_UNIT_ORDERS:
 		if(isMyTurn) {
 			g_gevManager->Pause();
-			for
-            (
-                sint32 i = 0;
-                i < g_player[g_selected_item->GetVisiblePlayer()]->m_all_armies->Num();
-                i++
-            )
+			Player * player = g_selected_item->GetVisiblePlayer();
+			for (sint32 i = 0; i < player->m_all_armies->Num(); i++)
             {
 				g_gevManager->AddEvent(GEV_INSERT_Tail, GEV_BeginTurnExecute,
-									   GEA_Army, g_player[g_selected_item->GetVisiblePlayer()]->m_all_armies->Access(i),
+									   GEA_Army, player->m_all_armies->Access(i),
 									   GEA_End);
 			}
 			g_gevManager->Resume();
@@ -1208,14 +1173,15 @@ sint32 ui_HandleKeypress(WPARAM wParam, LPARAM lParam)
 																		   AUI_BUTTON_ACTION_EXECUTE,
 																		   0);
 					}
-				} else if(g_selected_item) {
-					sint32 visPlayer = g_selected_item->GetVisiblePlayer();
-
-					if(g_player[visPlayer] && g_player[visPlayer]->m_messages->Num() > 0) {
+				} else if(g_selected_item)
+				{
+					Player * visiblePlayer = g_selected_item->GetVisiblePlayer();
+					if(visiblePlayer && visiblePlayer->m_messages->Num() > 0) {
 						sint32 m;
-						for(m = 0; m < g_player[visPlayer]->m_messages->Num(); m++) {
-							if(!g_player[visPlayer]->m_messages->Access(m).IsRead()) {
-								g_player[visPlayer]->m_messages->Access(m).Show();
+						for(m = 0; m < visiblePlayer->m_messages->Num(); m++)
+						{
+							if (!visiblePlayer->m_messages->Access(m).IsRead()) {
+								visiblePlayer->m_messages->Access(m).Show();
 								break;
 							}
 						}
@@ -1226,7 +1192,6 @@ sint32 ui_HandleKeypress(WPARAM wParam, LPARAM lParam)
 		break;
 	case KEY_FUNCTION_EXECUTE_EYEPOINT:
 		{
-
 			if(g_currentMessageWindow) {
 				if(g_theMessagePool->IsValid(*g_currentMessageWindow->GetMessage())) {
 					g_currentMessageWindow->GetMessage()->AccessData()->EyePointCallback(0);
@@ -1273,12 +1238,12 @@ sint32 ui_HandleKeypress(WPARAM wParam, LPARAM lParam)
 
 	case KEY_FUNCTION_BUILD_QUEUE:
 	{
-		if(!g_modalWindow && g_player[g_selected_item->GetVisiblePlayer()]) {
+		if(!g_modalWindow && g_selected_item->GetVisiblePlayer()) {
 			Unit city;
 			if(g_selected_item->GetSelectedCity(city)) {
 				city = g_theWorld->GetCity(g_selected_item->GetCurSelectPos());
-			} else if(g_player[g_selected_item->GetVisiblePlayer()]->GetNumCities()) {
-				city = g_player[g_selected_item->GetVisiblePlayer()]->m_all_cities->Access(0);
+			} else if(g_selected_item->GetVisiblePlayer()->GetNumCities()) {
+				city = g_selected_item->GetVisiblePlayer()->m_all_cities->Access(0);
 			}
 				if(city.IsValid()) {
 					close_AllScreens();
@@ -1288,13 +1253,13 @@ sint32 ui_HandleKeypress(WPARAM wParam, LPARAM lParam)
 		break;
 	}
 	case KEY_FUNCTION_CITY_MANAGEMENT:
-		if(!g_modalWindow && g_player[g_selected_item->GetVisiblePlayer()]) {
+		if(!g_modalWindow && g_selected_item->GetVisiblePlayer()) {
 			close_AllScreens();
 			Unit city;
 			if(g_selected_item->GetSelectedCity(city)) {
 				CityWindow::Display(city.GetData()->GetCityData());
-			} else if(g_player[g_selected_item->GetVisiblePlayer()]->GetNumCities()) {
-				city = g_player[g_selected_item->GetVisiblePlayer()]->m_all_cities->Access(0);
+			} else if(g_selected_item->GetVisiblePlayer()->GetNumCities()) {
+				city = g_selected_item->GetVisiblePlayer()->m_all_cities->Access(0);
 				g_selected_item->SetSelectCity(city);
 				CityWindow::Display(city.GetData()->GetCityData());
 			}
@@ -1324,8 +1289,6 @@ sint32 ui_HandleKeypress(WPARAM wParam, LPARAM lParam)
 		break;
 
 	case KEY_FUNCTION_RESTART:
-		//Added by Martin Gühmann to disable also the restart key in network
-		//games, hot seat games and email games.
 		if(!g_modalWindow
 		&& !g_theProfileDB->IsScenario()
 		&& !g_isScenario

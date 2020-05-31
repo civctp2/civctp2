@@ -25,7 +25,7 @@
 // Modifications from the original Activision code:
 //
 // - Do not trigger disaster warnings when there is no pollution at all.
-// - Replaced old difficulty database by new one. (April 29th 2006 Martin Gühmann)
+// - Replaced old difficulty database by new one. (April 29th 2006 Martin GÃ¼hmann)
 //
 //----------------------------------------------------------------------------
 
@@ -265,7 +265,6 @@ void InfoBigListCallback( aui_Control *control, uint32 action, uint32 data, void
 {
 
 	if ( action != (uint32)AUI_LISTBOX_ACTION_SELECT ) return;
-	sint32 curPlayer =  g_selected_item->GetVisiblePlayer();
 
 	InfoBigListItem *item = (InfoBigListItem *) s_infoBigList->GetSelectedItem();
 	if (!item)
@@ -280,7 +279,7 @@ void InfoBigListCallback( aui_Control *control, uint32 action, uint32 data, void
 
 		Unit *unit = item->GetCity();
 
-		if (curPlayer == unit->GetOwner())
+		if (g_selected_item->IsVisiblePlayer(unit->GetOwner()))
 		{
 			s_infoRadar->SetSelectedCity(*unit);
 		    MapPoint cityPos;
@@ -561,14 +560,12 @@ sint32 infowin_UpdateCivData( void )
 {
 	MBCHAR strbuf[256];
 
-	sint32 curPlayer =  g_selected_item->GetVisiblePlayer();
-
 	s_foundedBox->SetText("");
 	s_turnsBox->SetText("");
 
-	Player *p = g_player[curPlayer];
+	Player * player = g_selected_item->GetVisiblePlayer();
 
-	if (!p) return 0;
+	if (!player) return 0;
 
 	if (!s_infoBigList) return 0;
 
@@ -581,7 +578,6 @@ sint32 infowin_UpdateCivData( void )
 		sint32 turnFounded = unit->GetData()->GetCityData()->GetTurnFounded();
 
 		const char *yearStr = diffutil_GetYearStringFromTurn(g_theGameSettings->GetDifficulty(), turnFounded);
-
 #if 0
 		sint32 yearFounded = diffutil_GetYearFromTurn(g_theProfileDB->GetDifficulty(), turnFounded);
 
@@ -601,15 +597,7 @@ sint32 infowin_UpdateCivData( void )
 		sint32 turnsOld = g_turn->GetRound() - turnFounded;
 		sprintf(strbuf,"%d",turnsOld);
 		s_turnsBox->SetText(strbuf);
-
 	}
-
-
-
-
-
-
-
 
 	return 0;
 }
@@ -644,21 +632,20 @@ sint32 infowin_UpdateScoreList( void )
 	MBCHAR ldlBlock[ k_AUI_LDL_MAXBLOCK + 1 ];
 	MBCHAR strbuf[256];
 
-	sint32 curPlayer =  g_selected_item->GetVisiblePlayer();
-	Player *pl = g_player[curPlayer];
-	if(!pl) {
+	sint32 curPlayer = g_selected_item->GetVisiblePlayerID();
+	Player * player = g_player[curPlayer];
+	if(!player) {
 		PointerList<Player>::Walker walk(g_deadPlayer);
 		while(walk.IsValid()) {
-			if(walk.GetObj()->m_owner == g_selected_item->GetVisiblePlayer()) {
-				pl = walk.GetObj();
+			if(g_selected_item->IsVisiblePlayer(walk.GetObj()->m_owner)) {
+				player = walk.GetObj();
 				break;
 			}
 			walk.Next();
 		}
 	}
-	if(!pl)
+	if(!player)
 		return 0;
-
 
 	s_infoScoreList->Clear();
 	strcpy(ldlBlock,"InfoScoreListItem");

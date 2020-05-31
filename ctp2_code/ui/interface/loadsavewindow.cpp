@@ -26,12 +26,12 @@
 // Modifications from the original Activision code:
 //
 // - Repaired memory leak.
-// - Removed refferences to the civilisation database. (Aug 20th 2005 Martin Gühmann)
-// - Initialized local variables. (Sep 9th 2005 Martin Gühmann)
-// - Standartized code (May 2006 Martin Gühmann)
-// - Moved graph functionality to LineGraph (30-Sep-2007 Martin Gühmann)
-// - Replaced CIV_INDEX by sint32. (2-Jan-2008 Martin Gühmann)
-// - The civ list has no empty rows, anymore. (19-Jan-2019 Martin Gühmann)
+// - Removed refferences to the civilisation database. (Aug 20th 2005 Martin GÃ¼hmann)
+// - Initialized local variables. (Sep 9th 2005 Martin GÃ¼hmann)
+// - Standartized code (May 2006 Martin GÃ¼hmann)
+// - Moved graph functionality to LineGraph (30-Sep-2007 Martin GÃ¼hmann)
+// - Replaced CIV_INDEX by sint32. (2-Jan-2008 Martin GÃ¼hmann)
+// - The civ list has no empty rows, anymore. (19-Jan-2019 Martin GÃ¼hmann)
 //
 //----------------------------------------------------------------------------
 
@@ -473,7 +473,7 @@ bool LoadSaveWindow::CreateSaveInfoIfNeeded( SaveInfo *&info )
 		for (i=1; i<k_MAX_PLAYERS; i++)
 		{
 			MBCHAR			s[_MAX_PATH];
-			PLAYER_INDEX	currentCiv = g_selected_item->GetVisiblePlayer();
+			PLAYER_INDEX	currentCiv = g_selected_item->GetVisiblePlayerID();
 
 			if ((g_player[i]) && (!g_player[i]->IsDead()) && (i!=currentCiv))
 			{
@@ -874,7 +874,7 @@ void LoadSaveWindow::SetSaveInfo(SaveInfo *info)
 void LoadSaveWindow::BuildDefaultSaveName(const MBCHAR *gameName, MBCHAR *name)
 {
 	MBCHAR		civName[k_MAX_NAME_LEN];
-	g_player[g_selected_item->GetVisiblePlayer()]->m_civilisation->GetSingularCivName(civName);
+	g_selected_item->GetVisiblePlayer()->m_civilisation->GetSingularCivName(civName);
 #if !defined(_JAPANESE)
 	civName[4] = 0;
 #endif

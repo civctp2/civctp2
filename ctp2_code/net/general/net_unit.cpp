@@ -167,8 +167,7 @@ void NetUnit::Unpacketize(uint16 id, uint8* buf, uint16 size)
 			}
 
 			g_theWorld->InsertUnit(m_unitData->m_pos, uid);
-			if (m_unitData->m_visibility & (1 << g_selected_item->GetVisiblePlayer()))
-			{
+			if (g_selected_item->IsUnitVisible(m_unitData->m_visibility)) {
 				g_director->AddMove(uid, pnt, m_unitData->m_pos, 0, NULL, uid.GetMoveSoundID());
 			}
 		}

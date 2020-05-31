@@ -1791,7 +1791,7 @@ SFN_ERROR Slic_StealRandomAdvance::Call(SlicArgList *args)
 	sint32 owner = u.GetOwner();
 
 	if(g_network.IsClient()) {
-		if(owner == g_selected_item->GetVisiblePlayer()) {
+		if(g_selected_item->IsVisiblePlayer(owner)) {
 			g_network.SendAction(new NetAction(NET_ACTION_STEAL_TECHNOLOGY,
 										   u.m_id, context->GetCity(0).m_id,
 										   -1));
@@ -1840,7 +1840,7 @@ SFN_ERROR Slic_StealSpecificAdvance::Call(SlicArgList *args)
 	sint32 owner = u.GetOwner();
 
 	if(g_network.IsClient()) {
-		if(u.GetOwner() == g_selected_item->GetVisiblePlayer()) {
+		if (g_selected_item->IsVisiblePlayer(u.GetOwner())) {
 			g_network.SendAction(new NetAction(NET_ACTION_STEAL_TECHNOLOGY,
 										   u.m_id, context->GetCity(0).m_id,
 										   adv));
@@ -2219,7 +2219,7 @@ SFN_ERROR Slic_DoAutoUnload::Call(SlicArgList *args)
 		return SFN_ERROR_TYPE_ARGS;
 
 	g_selected_item->SetAutoUnload(autounload != 0);
-	g_selected_item->EnterArmyMove(g_selected_item->GetVisiblePlayer(), pos);
+	g_selected_item->EnterArmyMove(g_selected_item->GetVisiblePlayerID(), pos);
 
 	return SFN_ERROR_OK;
 }
@@ -4808,8 +4808,8 @@ SFN_ERROR Slic_Deselect::Call(SlicArgList *args)
 	if(args->Count() != 0)
 		return SFN_ERROR_NUM_ARGS;
 
-	if(g_selected_item && g_player && g_player[g_selected_item->GetVisiblePlayer()])
-		g_selected_item->Deselect(g_selected_item->GetVisiblePlayer());
+	if (g_selected_item && g_player && g_selected_item->GetVisiblePlayer())
+		g_selected_item->Deselect(g_selected_item->GetVisiblePlayerID());
 	return SFN_ERROR_OK;
 }
 
@@ -5786,9 +5786,9 @@ SFN_ERROR Slic_BlankScreen::Call(SlicArgList *args)
 	if(!blank && g_selected_item) {
 		g_selected_item->KeyboardSelectFirstUnit();
 		if(g_selected_item->GetState() != SELECT_TYPE_LOCAL_ARMY &&
-		   (g_player[g_selected_item->GetVisiblePlayer()]->m_all_cities->Num() > 0)) {
-			g_selected_item->SetSelectCity(g_player[g_selected_item->GetVisiblePlayer()]->m_all_cities->Access(0));
-			g_director->AddCenterMap(g_player[g_selected_item->GetVisiblePlayer()]->m_all_cities->Access(0).RetPos());
+		   (g_selected_item->GetVisiblePlayer()->m_all_cities->Num() > 0)) {
+			g_selected_item->SetSelectCity(g_selected_item->GetVisiblePlayer()->m_all_cities->Access(0));
+			g_director->AddCenterMap(g_selected_item->GetVisiblePlayer()->m_all_cities->Access(0).RetPos());
 		}
 		g_director->AddCenterMap(g_selected_item->GetCurSelectPos());
 		radarwindow_Show();

@@ -24,9 +24,9 @@
 //
 // Modifications from the original Activision code:
 //
-// - Initialized local variables. (Sep 9th 2005 Martin Gühmann)
-// - Standardized code (May 21st 2006 Martin Gühmann)
-// - Added army debug text to the army manager window. (Dec 24th 2006 Martin Gühmann)
+// - Initialized local variables. (Sep 9th 2005 Martin GÃ¼hmann)
+// - Standardized code (May 21st 2006 Martin GÃ¼hmann)
+// - Added army debug text to the army manager window. (Dec 24th 2006 Martin GÃ¼hmann)
 // - Changed occurances of UnitRecord::GetMaxHP to
 //   UnitData::CalculateTotalHP. (Aug 3rd 2009 Maq)
 //
@@ -638,7 +638,7 @@ void ArmyManagerWindow::List(aui_Control *control, uint32 action, uint32 data, v
 		}
 	} else {
 		s_armyWindow->m_army.m_id = 0;
-		g_selected_item->Deselect(g_selected_item->GetVisiblePlayer());
+		g_selected_item->Deselect(g_selected_item->GetVisiblePlayerID());
 		s_armyWindow->Update();
 	}
 }
@@ -746,7 +746,7 @@ void ArmyManagerWindow::AddSelectedUnits()
 	Army theArmy;
 	bool newArmy = false;
 	if(node->m_army.m_id == 0) {
-		theArmy = g_player[g_selected_item->GetVisiblePlayer()]->GetNewArmy(CAUSE_NEW_ARMY_GROUPING);
+		theArmy = g_selected_item->GetVisiblePlayer()->GetNewArmy(CAUSE_NEW_ARMY_GROUPING);
 		node->m_army = theArmy;
 		m_army = theArmy;
 	} else {
@@ -755,7 +755,7 @@ void ArmyManagerWindow::AddSelectedUnits()
 			theArmy = node->m_army;
 		} else {
 
-			theArmy = g_player[g_selected_item->GetVisiblePlayer()]->GetNewArmy(CAUSE_NEW_ARMY_GROUPING);
+			theArmy = g_selected_item->GetVisiblePlayer()->GetNewArmy(CAUSE_NEW_ARMY_GROUPING);
 			node->m_army = theArmy;
 		}
 	}
@@ -846,7 +846,7 @@ void ArmyManagerWindow::RemoveSelectedUnits()
 
 					units.Insert(m_inArmy[i]);
 				} else {
-					Army newArmy = g_player[g_selected_item->GetVisiblePlayer()]->GetNewArmy(CAUSE_NEW_ARMY_UNGROUPING);
+					Army newArmy = g_selected_item->GetVisiblePlayer()->GetNewArmy(CAUSE_NEW_ARMY_UNGROUPING);
 					m_inArmy[i].ChangeArmy(newArmy, CAUSE_NEW_ARMY_UNGROUPING);
 
 					m_armies->AddTail(new ArmyListNode(newArmy));
@@ -863,7 +863,7 @@ void ArmyManagerWindow::RemoveSelectedUnits()
 
 	if(!g_theArmyPool->IsValid(theArmy) ||
 		theArmy.Num() <= 0)
-		g_selected_item->Deselect(g_selected_item->GetVisiblePlayer());
+		g_selected_item->Deselect(g_selected_item->GetVisiblePlayerID());
 
 	NotifySelection();
 
@@ -979,8 +979,7 @@ STDEHANDLER(ArmyManagerArmyMoved)
 	if(!args->GetArmy(0, a))
 		return GEV_HD_Continue;
 
-    if (a.GetOwner() == g_selected_item->GetVisiblePlayer())
-    {
+    if (g_selected_item->IsVisiblePlayer(a.GetOwner())) {
         ArmyManagerWindow::NotifySelection();
     }
 

@@ -21,7 +21,7 @@
 //
 // Modifications from the original Activision code:
 //
-// - Sound added by Martin Gühmann
+// - Sound added by Martin GÃ¼hmann
 // - Crash fixed when there is no sound defined (for mod).
 // - Moved network handling from TerrainImprovementData constructor to prevent
 //   reporting the temporary when completing the tile improvement.
@@ -133,8 +133,7 @@ TerrainImprovementPool::Create
 		if (soundRecord)
 		{
 			sint32 const	soundID		= soundRecord->GetIndex();
-			if ((soundID != -1) && (owner == g_selected_item->GetVisiblePlayer()))
-			{
+			if ((soundID != -1) && g_selected_item->IsVisiblePlayer(owner)) {
 				g_soundManager->AddSound(SOUNDTYPE_SFX, (uint32) 0, soundID, point.x, point.y);
 			}
 		}

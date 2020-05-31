@@ -25,7 +25,7 @@
 // Modifications from the original Activision code:
 //
 // - Start the great library with the current research project of the player.
-// - Initialized local variables. (Sep 9th 2005 Martin Gühmann)
+// - Initialized local variables. (Sep 9th 2005 Martin GÃ¼hmann)
 //
 //----------------------------------------------------------------------------
 
@@ -653,10 +653,10 @@ AUI_ERRCODE StatsWindow::DrawThis( aui_Surface *surface, sint32 x, sint32 y )
 
 BOOL StatsWindow::CheckCity( void )
 {
-	if(!g_player[g_selected_item->GetVisiblePlayer()])
+	if (!g_selected_item->GetVisiblePlayer())
 		return FALSE;
 
-	sint32 cities = g_player[g_selected_item->GetVisiblePlayer()]->GetNumCities();
+	sint32 cities = g_selected_item->GetVisiblePlayer()->GetNumCities();
 
 	if ( cities ) {
 		return TRUE;
@@ -670,7 +670,7 @@ BOOL StatsWindow::CheckCity( void )
 
 BOOL StatsWindow::CheckUnit( void )
 {
-	sint32 units = g_player[g_selected_item->GetVisiblePlayer()]->m_all_units->Num();
+	sint32 units = g_selected_item->GetVisiblePlayer()->m_all_units->Num();
 
 	if ( units ) {
 		return TRUE;
@@ -684,7 +684,7 @@ BOOL StatsWindow::CheckUnit( void )
 
 BOOL StatsWindow::CheckDiplomacy( void )
 {
-	sint32 player = g_selected_item->GetVisiblePlayer();
+	sint32 player = g_selected_item->GetVisiblePlayerID();
 
 	if(!g_player[player])
 		return FALSE;

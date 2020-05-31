@@ -27,8 +27,8 @@
 // - Blank function added to hide the data of the previous player for hotseat
 //   games.
 // - Use the same science percentage everywhere.
-// - Domestic control panel shows now the city limit. (Aug 7th 2005 Martin Gühmann)
-// - Added a progress bar to the advance select button. (Feb 4th 2007 Martin Gühmann)
+// - Domestic control panel shows now the city limit. (Aug 7th 2005 Martin GÃ¼hmann)
+// - Added a progress bar to the advance select button. (Feb 4th 2007 Martin GÃ¼hmann)
 //
 //----------------------------------------------------------------------------
 
@@ -71,12 +71,11 @@ AUI_ERRCODE domesticcontrolpanel_HappinessDrawCallback(ctp2_Static *control,
 	sint32 hapvals[3];
 	float total;
 
-	if(!g_player[g_selected_item->GetVisiblePlayer()]) {
-
+	if (!g_selected_item->GetVisiblePlayer()) {
 		return AUI_ERRCODE_OK;
 	}
 
-	g_player[g_selected_item->GetVisiblePlayer()]->CountCityHappiness(hapvals[0],hapvals[1],hapvals[2]);
+	g_selected_item->GetVisiblePlayer()->CountCityHappiness(hapvals[0], hapvals[1], hapvals[2]);
 
 	total = (float)(hapvals[0]+hapvals[1]+hapvals[2]);
 
@@ -288,7 +287,7 @@ void DomesticControlPanel::EditResearchButtonActionCallback(aui_Control *control
 
 void DomesticControlPanel::UpdateScience()
 {
-	Player *player = g_player[g_selected_item->GetVisiblePlayer()];
+	Player * player = g_selected_item->GetVisiblePlayer();
 	if(!player) {
 		ClearScience();
 		return;
@@ -353,22 +352,22 @@ void DomesticControlPanel::ClearScience()
 
 void DomesticControlPanel::UpdateStats()
 {
-	if(!g_player[g_selected_item->GetVisiblePlayer()]) {
-
+	if (!g_selected_item->GetVisiblePlayer()) {
 		return;
 	}
 
 	sint32 cities, population, pw, government, science, pollution;
 	double scienceTax = 0.0;
 
-	cities = g_player[g_selected_item->GetVisiblePlayer()]->GetNumCities();
-	population = g_player[g_selected_item->GetVisiblePlayer()]->GetTotalPopulation();
-	pw = static_cast<sint32>((g_player[g_selected_item->GetVisiblePlayer()]->m_materialsTax * 100.0) + 0.5);
-	government = g_player[g_selected_item->GetVisiblePlayer()]->GetGovernmentType();
+	Player * player = g_selected_item->GetVisiblePlayer();
+	cities = player->GetNumCities();
+	population = player->GetTotalPopulation();
+	pw = static_cast<sint32>((player->m_materialsTax * 100.0) + 0.5);
+	government = player->GetGovernmentType();
 
-	g_player[g_selected_item->GetVisiblePlayer()]->GetScienceTaxRate(scienceTax);
+	player->GetScienceTaxRate(scienceTax);
 	science = AsPercentage(scienceTax);
-	pollution = g_player[g_selected_item->GetVisiblePlayer()]->GetPollutionLevel();
+	pollution = player->GetPollutionLevel();
 
 	if(cities == m_currentCities && population == m_currentPopulation &&
 		pw == m_currentPW && government == m_currentGovernment &&
@@ -411,12 +410,12 @@ void DomesticControlPanel::UpdateStats()
 
 void DomesticControlPanel::UpdateGoldPW()
 {
-
-	if (g_player[g_selected_item->GetVisiblePlayer()] == NULL)
+	if (!g_selected_item->GetVisiblePlayer()) {
 		return;
+	}
 
-	sint32 gold = g_player[g_selected_item->GetVisiblePlayer()]->GetGold();
-	sint32 pw = g_player[g_selected_item->GetVisiblePlayer()]->GetMaterialsStored();
+	sint32 gold = g_selected_item->GetVisiblePlayer()->GetGold();
+	sint32 pw = g_selected_item->GetVisiblePlayer()->GetMaterialsStored();
 
 	if(gold == m_currentGold && pw == m_currentPW)
 		return;
@@ -447,11 +446,11 @@ AUI_ERRCODE DomesticControlPanel::DrawScienceBar(ctp2_Static *control,
 	if(!g_selected_item)
 		return AUI_ERRCODE_OK;
 
-	if(g_selected_item->GetVisiblePlayer() < 0)
+	if (g_selected_item->GetVisiblePlayerID() < 0)
 		return AUI_ERRCODE_OK;
 
-	Player *player = g_player[g_selected_item->GetVisiblePlayer()];
-	if(!player)
+	Player * player = g_selected_item->GetVisiblePlayer();
+	if (!player)
 		return AUI_ERRCODE_OK;
 
 	RECT destRect = rect;

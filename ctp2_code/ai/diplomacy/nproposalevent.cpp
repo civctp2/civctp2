@@ -25,7 +25,7 @@
 // Modifications from the original Activision code:
 //
 // - Seperated the NewProposal event from the Response event so that the
-//   NewProposal event can be called from slic witout any problems. (17-Oct-2007 Martin Gühmann)
+//   NewProposal event can be called from slic witout any problems. (17-Oct-2007 Martin GÃ¼hmann)
 //
 //----------------------------------------------------------------------------
 
@@ -77,23 +77,13 @@ STDEHANDLER(General_NewProposalEvent)
 		sender_diplomat.ContinueDiplomacy(receiver);
 	}
 	else {
-
-
-
-
-
-
-
 		g_gevManager->AddEvent(GEV_INSERT_Tail, GEV_NewProposalReady,
 						   GEA_Player, sender,
 						   GEA_Player, receiver,
 						   GEA_End);
 
-
-
-
 		bool execute = false;
-		if(sender != g_selected_item->GetVisiblePlayer()) {
+		if (!g_selected_item->IsVisiblePlayer(sender)) {
 			if(g_network.IsActive() && !g_network.IsLocalPlayer(sender)) {
 				execute = false;
 			} else if(g_network.IsActive()) {
@@ -122,11 +112,6 @@ STDEHANDLER(General_NewProposalEvent)
 
 	return GEV_HD_Continue;
 }
-
-
-
-
-
 
 STDEHANDLER(Scenario_NewProposalEvent) {
 	sint32 motivation_type;

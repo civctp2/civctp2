@@ -19,14 +19,13 @@ m_endTurn(static_cast<ctp2_Button*>(aui_Ldl::GetObject(ldlBlock, "TurnButton")))
 	m_endTurn->Enable(false);
 }
 
-
 void EndTurnButton::UpdatePlayer(PLAYER_INDEX player)
 {
-	if(g_selected_item->GetVisiblePlayer() == player)
+	if(g_selected_item->IsVisiblePlayer(player)) {
 		m_endTurn->Enable(true);
-	else
+	} else {
 		m_endTurn->Enable(false);
-
+	}
 	g_attractWindow->RemoveRegion(m_endTurn);
 }
 
@@ -36,7 +35,7 @@ void EndTurnButton::EndTurnButtonActionCallback(aui_Control *control, uint32 act
 		return;
 
 	DPRINTF(k_DBG_GAMESTATE, ("Button end turn, %d\n", g_selected_item->GetCurPlayer()));
-	if((g_selected_item->GetCurPlayer() != g_selected_item->GetVisiblePlayer())) {
+	if(!g_selected_item->IsVisiblePlayer(g_selected_item->GetCurPlayer())) {
 		DPRINTF(k_DBG_GAMESTATE, ("But not my turn!\n"));
 		return;
 	}

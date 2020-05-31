@@ -510,7 +510,7 @@ STDEHANDLER(CtpAi_ConsiderNuclearWar)
 	Player *player_ptr = g_player[playerId];
 
 	if(!player_ptr->IsRobot() ||
-	   (g_network.IsActive() && playerId == g_selected_item->GetVisiblePlayer())) {
+	   (g_network.IsActive() && g_selected_item->IsVisiblePlayer(playerId))) {
 		return GEV_HD_Continue;
 	}
 
@@ -629,7 +629,6 @@ STDEHANDLER(CtpAi_ProcessMatchesEvent)
 
 	DPRINTF(k_DBG_AI, ("//  elapsed time = %d ms\n", (GetTickCount() - t1)));
 
-	// Modified by Martin Gühmann so that this can be exposed to const.txt
 	if ( cycle < g_theConstDB->Get(0)->GetMaxMatchListCycles() + diff_cycles || Scheduler::s_needAnotherCycle)
 	{
 		Scheduler::s_needAnotherCycle = false;
@@ -1686,7 +1685,6 @@ void CtpAi::AddExploreTargets(const PLAYER_INDEX playerId)
 	Player *player_ptr = g_player[playerId];
 	Assert(player_ptr);
 
-	//Added by Martin Gühmann explore resolution is now constant
 	sint16 explore_res = EXPLORE_RESOLUTION;
 	for (sint16 goal_element = 0; goal_element < strategy.GetNumGoalElement(); goal_element++)
 	{

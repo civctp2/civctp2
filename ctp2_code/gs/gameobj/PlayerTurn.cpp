@@ -26,7 +26,7 @@
 // Modifications from the original Activision code:
 //
 // - PollutionBeginTurn is now triggered from PlayerBeginTurn if executed
-//   so that flood events make players invalid after all the player events. (29-Oct-2007 Martin Gühmann)
+//   so that flood events make players invalid after all the player events. (29-Oct-2007 Martin GÃ¼hmann)
 //
 //----------------------------------------------------------------------------
 
@@ -98,8 +98,9 @@ void Player::BeginTurn()
 		}
 	}
 
-	if (g_selected_item->GetVisiblePlayer() == m_owner)
+	if (g_selected_item->IsVisiblePlayer(m_owner)) {
 		g_controlPanel->PopulateMessageList(m_owner);
+	}
 
 	m_is_turn_over = FALSE;
 

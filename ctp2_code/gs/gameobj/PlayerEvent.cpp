@@ -339,8 +339,7 @@ STDEHANDLER(FinishBeginTurnEvent)
 
 	p->m_strengths->Calculate();
 
-	if ( p->m_owner == g_selected_item->GetVisiblePlayer() )
-	{
+	if (g_selected_item->IsVisiblePlayer(p->m_owner)) {
 		g_c3ui->AddAction( new SW_UpdateAction );
 	}
 
@@ -357,8 +356,8 @@ STDEHANDLER(FinishBeginTurnEvent)
 
 	if((p->IsHuman() ||
 	    p->IsNetwork() && g_network.IsLocalPlayer(p->m_owner)) &&
-	    p->m_owner == g_selected_item->GetVisiblePlayer() &&
-	    g_theProfileDB->IsAutoSelectFirstUnit())
+	    g_selected_item->IsVisiblePlayer(p->m_owner) &&
+	   g_theProfileDB->IsAutoSelectFirstUnit())
 	{
 		if(g_selected_item->GetState() == SELECT_TYPE_NONE)
 		{
@@ -475,9 +474,7 @@ STDEHANDLER(CreateCityEvent)
 
 				if (g_soundManager)
 				{
-					sint32 visiblePlayer = g_selected_item->GetVisiblePlayer();
-					if (visiblePlayer == player)
-					{
+					if (g_selected_item->IsVisiblePlayer(player)) {
 						g_soundManager->AddSound(SOUNDTYPE_SFX, (uint32)0,
 						                         gamesounds_GetGameSoundID(GAMESOUNDS_GOODY_CITY),
 						                         pos.x,
@@ -629,9 +626,7 @@ STDEHANDLER(FinishBuildPhaseEvent)
 	sint32 player;
 	if(!args->GetPlayer(0, player)) return GEV_HD_Continue;
 
-	if((g_player[player] && !Player::IsThisPlayerARobot(player))
-	||  g_selected_item->GetVisiblePlayer() == player
-	){
+	if ((g_player[player] && !Player::IsThisPlayerARobot(player)) || g_selected_item->IsVisiblePlayer(player)) {
 		if (g_theProfileDB->IsAutoSave() &&
 			(!g_network.IsActive() || g_network.IsHost())
 		   )

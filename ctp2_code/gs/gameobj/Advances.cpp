@@ -26,14 +26,14 @@
 //
 // - Safeguard FindLevel against infinite recursion.
 // - Speeded up goody hut advance and unit selection.
-// - Replaced old civilisation database by new one. (Aug 22nd 2005 Martin Gühmann)
-// - Fixed GetPollutionProductionModifier (June 11st 2005 Martin Gühmann)
-// - Fixed GetPollutionSizeModifier (June 11st 2005 Martin Gühmann)
+// - Replaced old civilisation database by new one. (Aug 22nd 2005 Martin GÃ¼hmann)
+// - Fixed GetPollutionProductionModifier (June 11st 2005 Martin GÃ¼hmann)
+// - Fixed GetPollutionSizeModifier (June 11st 2005 Martin GÃ¼hmann)
 // - Added checks for advances requiring goods, cultureonly, govt only
 // - Added EitherPreRequisite to allow flexible tech tree like civ4
-// - Added FractionComplete methods. (Feb 4th 2007 Martin Gühmann)
+// - Added FractionComplete methods. (Feb 4th 2007 Martin GÃ¼hmann)
 // - Added commodityGold and GoldSupport to projected science
-// - Replaced old const database by new one. (5-Aug-2007 Martin Gühmann)
+// - Replaced old const database by new one. (5-Aug-2007 Martin GÃ¼hmann)
 // - Added single-player start and end age affects. (11-Apr-2009 Maq)
 //
 //----------------------------------------------------------------------------
@@ -362,12 +362,12 @@ void Advances::GiveAdvance(AdvanceType adv, CAUSE_SCI cause, BOOL fromClient)
 		if (g_player[m_owner]->GetPoints() < pointCost)
 			return; // Too expensive
 
-		if (g_network.IsClient() && m_owner != g_selected_item->GetVisiblePlayer())
+		if (g_network.IsClient() && !g_selected_item->IsVisiblePlayer(m_owner))
 			return; // Not for me
 
 		if (g_network.IsHost())
 		{
-			if (!fromClient && m_owner != g_selected_item->GetVisiblePlayer())
+			if (!fromClient && !g_selected_item->IsVisiblePlayer(m_owner))
 				return; // Not for me
 		}
 
@@ -1266,8 +1266,7 @@ sint32 Advances::GetProjectedScience() const
 		s += cities->Access(i).CD()->GetProjectedScience();
 	}
 
-	if(m_owner == g_selected_item->GetVisiblePlayer() && !g_network.IsClient())
-	{
+	if (g_selected_item->IsVisiblePlayer(m_owner) && !g_network.IsClient()) {
 		MainControlPanel::SelectedCity();
 	}
 

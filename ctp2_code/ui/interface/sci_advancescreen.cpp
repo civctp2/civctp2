@@ -26,7 +26,7 @@
 //
 // - Start the great library with the current research project of the player.
 // - Start the "change to"-list with the current research selected.
-// - Initialized local variables. (Sep 9th 2005 Martin G�hmann)
+// - Initialized local variables. (Sep 9th 2005 Martin Gühmann)
 // - Fixed memory leaks.
 //
 //----------------------------------------------------------------------------
@@ -174,7 +174,7 @@ void sci_advancescreen_listAction( aui_Control *control, uint32 action, uint32 d
 			ctp2_ListItem *item = (ctp2_ListItem *)lb->GetSelectedItem();
 			if(!item) return;
 
-			g_player[g_selected_item->GetVisiblePlayer()]->SetResearching( (long)item->GetUserData() );
+			g_selected_item->GetVisiblePlayer()->SetResearching((long)item->GetUserData());
 			if(g_scienceManagementDialog)
 			{
 				g_scienceManagementDialog->Update();
@@ -189,8 +189,7 @@ void sci_advancescreen_listAction( aui_Control *control, uint32 action, uint32 d
 
 sint32	sci_advancescreen_displayMyWindow( MBCHAR *messageText, sint32 from)
 {
-	Player *p = g_player[ g_selected_item->GetVisiblePlayer() ];
-	s_oldResearching = p->m_advances->GetResearching();
+	s_oldResearching = g_selected_item->GetVisiblePlayer()->m_advances->GetResearching();
 
 	sint32 retval=0;
 	if(!s_sci_advanceScreen) { retval = sci_advancescreen_Initialize( messageText ); }
@@ -375,7 +374,7 @@ void sci_advancescreen_backPress(aui_Control *control, uint32 action, uint32 dat
 			return;
 		}
 
-		g_player[g_selected_item->GetVisiblePlayer()]->SetResearching( (long)item->GetUserData() );
+		g_selected_item->GetVisiblePlayer()->SetResearching((long)item->GetUserData());
 		if(g_scienceManagementDialog) {
 			g_scienceManagementDialog->Update();
 		}
@@ -389,7 +388,7 @@ void sci_advancescreen_cancelPress(aui_Control *control, uint32 action, uint32 d
 {
 	if ( action != (uint32)AUI_BUTTON_ACTION_EXECUTE ) return;
 
-	g_player[g_selected_item->GetVisiblePlayer()]->SetResearching( s_oldResearching );
+	g_selected_item->GetVisiblePlayer()->SetResearching(s_oldResearching);
 
 	if(g_scienceManagementDialog)
 	{
@@ -425,16 +424,16 @@ void sci_advancescreen_cancelPress(aui_Control *control, uint32 action, uint32 d
 //----------------------------------------------------------------------------
 sint32 sci_advancescreen_loadList( void )
 {
-	Player *p = g_player[g_selected_item->GetVisiblePlayer()];
+	Player * player = g_selected_item->GetVisiblePlayer();
 	MBCHAR str[_MAX_PATH];
-	if(p->m_researchGoal >= 0)
+	if(player->m_researchGoal >= 0)
 	{
 		sint32 all;
 		sint32 have;
-		sci_advancescreen_initAndFillGoalArray(p->m_researchGoal);
+		sci_advancescreen_initAndFillGoalArray(player->m_researchGoal);
 		sci_advancescreen_getGoalAdvances(have, all);
-		sprintf(str,"%s %s (%d/%d)",g_theStringDB->GetNameStr("str_ldl_ResearchGoal"),
-			g_theAdvanceDB->Get(p->m_researchGoal)->GetNameText(), have, all);
+		sprintf(str, "%s %s (%d/%d)", g_theStringDB->GetNameStr("str_ldl_ResearchGoal"),
+			g_theAdvanceDB->Get(player->m_researchGoal)->GetNameText(), have, all);
 	}
 	else
 	{
@@ -450,7 +449,7 @@ sint32 sci_advancescreen_loadList( void )
 
 	s_advanceList->Clear();
 
-	uint8 *			advances		= p->m_advances->CanResearch();
+	uint8 *			advances		= player->m_advances->CanResearch();
 	sint32 const	advanceCount	= g_theAdvanceDB->NumRecords();
 	sint32			curItemIndex	= 0;
 
@@ -487,7 +486,7 @@ sint32 sci_advancescreen_loadList( void )
 
 	// Find the current research in the sorted list.
 	// If not found, index 0 (the cheapest) will be selected.
-	sint32 const	research	= p->m_advances->GetResearching();
+	sint32 const	research	= player->m_advances->GetResearching();
 	bool			isIndexOk	= false;
 
 	for (sint32 index = curItemIndex - 1; (index >= 0) && !isIndexOk; --index)
@@ -507,8 +506,6 @@ sint32 sci_advancescreen_updateData( MBCHAR *messageText, BOOL defaultMessage )
 {
 	MBCHAR str[_MAX_PATH];
 	sint32 advanceTurns;
-
-	Player *p = g_player[g_selected_item->GetVisiblePlayer()];
 
 	if ( messageText )
 	{
@@ -532,9 +529,9 @@ sint32 sci_advancescreen_updateData( MBCHAR *messageText, BOOL defaultMessage )
 		return 0;
 	}
 
-	sci_advancescreen_setStatsInfo( (long)item->GetUserData(), g_selected_item->GetVisiblePlayer());
+	sci_advancescreen_setStatsInfo( (long)item->GetUserData(), g_selected_item->GetVisiblePlayerID());
 
-	advanceTurns = p->m_advances->TurnsToNextAdvance((AdvanceType)item->GetUserData());
+	advanceTurns = g_selected_item->GetVisiblePlayer()->m_advances->TurnsToNextAdvance((AdvanceType)item->GetUserData());
 
 	if ( advanceTurns == -1 )
 	{
@@ -649,9 +646,7 @@ sint32 sci_advancescreen_setStatsInfo(const sint32 index, const sint32 owner)
 	{
 		const TerrainImprovementRecord *rec = g_theTerrainImprovementDB->Get(i);
 
-		if(terrainutil_AdvanceEnablesImprovementForPlayer(g_selected_item->GetVisiblePlayer(),
-														  index,
-														  i))
+		if (terrainutil_AdvanceEnablesImprovementForPlayer(g_selected_item->GetVisiblePlayerID(), index, i))
 		{
 			if(!isTileImp)
 			{
@@ -779,7 +774,7 @@ bool sci_advancescreen_isGoal(sint32 goal)
 
 void sci_advancescreen_getGoalAdvances(sint32 & have, sint32 & all)
 {
-	Player *p = g_player[g_selected_item->GetVisiblePlayer()];
+	Player * player = g_selected_item->GetVisiblePlayer();
 
 	have = 0;
 	all  = 0;
@@ -790,7 +785,7 @@ void sci_advancescreen_getGoalAdvances(sint32 & have, sint32 & all)
 		{
 			all++;
 
-			if(p->HasAdvance(i))
+			if(player->HasAdvance(i))
 			{
 				have++;
 			}

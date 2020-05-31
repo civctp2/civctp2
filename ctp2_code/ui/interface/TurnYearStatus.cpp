@@ -50,10 +50,10 @@ bool                 TurnYearStatus::s_useCustomYear          = false;
 
 const MBCHAR *TurnYearStatus::GetCurrentYear()
 {
-	sint32 currentYear = NewTurnCount::GetCurrentYear(g_selected_item->GetVisiblePlayer());
+	sint32 currentYear = NewTurnCount::GetCurrentYear(g_selected_item->GetVisiblePlayerID());
 
-	sint32 round       = g_player[g_selected_item->GetVisiblePlayer()] ?
-	                     g_player[g_selected_item->GetVisiblePlayer()]->m_current_round :
+	sint32 round       = g_selected_item->GetVisiblePlayer() ?
+						 g_selected_item->GetVisiblePlayer()->m_current_round :
 	                     NewTurnCount::GetCurrentRound();
 
 	return TurnYearStatus::GetYearString(currentYear, round);
@@ -125,8 +125,8 @@ const MBCHAR *TurnYearStatus::GetYearString(sint32 currentYear, sint32 round)
 const MBCHAR *TurnYearStatus::GetCurrentRound()
 {
 	static MBCHAR buf[1024];
-	sint32 round = g_player[g_selected_item->GetVisiblePlayer()] ?
-	                   g_player[g_selected_item->GetVisiblePlayer()]->m_current_round :
+	sint32 round = g_selected_item->GetVisiblePlayer() ?
+	                   g_selected_item->GetVisiblePlayer()->m_current_round :
 	                   NewTurnCount::GetCurrentRound();
 	sprintf(buf, "%d %s", round, g_theStringDB->GetNameStr("str_ldl_Turns"));
 	return buf;
@@ -278,24 +278,23 @@ AUI_ERRCODE TurnYearStatus::DrawDougsProgress(ctp2_Static *control,
 		return AUI_ERRCODE_OK;
 	}
 
-	if(!g_player[g_selected_item->GetVisiblePlayer()])
-	{
+	if (!g_selected_item->GetVisiblePlayer()) {
 		return AUI_ERRCODE_OK;
 	}
 
 	primitives_PaintRect16(surface, &rect, g_colorSet->GetColor(COLOR_BLACK));
-	if(g_selected_item->GetVisiblePlayer() != g_selected_item->GetCurPlayer())
+	if (!g_selected_item->IsVisiblePlayer(g_selected_item->GetCurPlayer()))
 	{
 		sint32 p;
 
 		sint32 alive = 0;
 		sint32 progress = 0;
 
-		sint32 startp = g_selected_item->GetVisiblePlayer() + 1;
+		sint32 startp = g_selected_item->GetVisiblePlayerID() + 1;
 		if(startp >= k_MAX_PLAYERS)
 			startp = 0;
 
-		for(p = startp; p != g_selected_item->GetVisiblePlayer(); p++)
+		for(p = startp; p != g_selected_item->GetVisiblePlayerID(); p++)
 		{
 			if(g_player[p])
 			{

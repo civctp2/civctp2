@@ -290,8 +290,7 @@ bool TiledMap::DrawImprovementsLayer(aui_Surface *surface, MapPoint &pos, sint32
 		return drewSomething;
 
 	bool	    fog                     = !m_localVision->IsVisible(pos);
-	bool        visiblePlayerOwnsThis   =
-	    (g_selected_item->GetVisiblePlayer() == g_theWorld->GetOwner(pos));
+	bool        visiblePlayerOwnsThis   = g_selected_item->IsVisiblePlayer(g_theWorld->GetOwner(pos));
 	uint32		env                     = 0x00000000;
 	Cell *      cell                    = NULL;
 	bool		isAirfield              = false;
@@ -506,7 +505,6 @@ bool TiledMap::DrawImprovementsLayer(aui_Surface *surface, MapPoint &pos, sint32
 void TiledMap::DrawPartiallyConstructedImprovement(aui_Surface *surface, uint32 env,
 												   sint32 type, sint32 x, sint32 y,
 												   uint16 index, bool fog, sint32 percentComplete)
-												   //Added sint32 percentComplete by Martin Gühmann
 {
 	Pixel16		*data = NULL;
 
@@ -3449,7 +3447,7 @@ void TiledMap::DrawCityNames(aui_Surface * surf, sint32 layer)
 					wasHappinessAttacked = ucell.m_unseenCell->WasHappinessAttacked();
 					isRioting            = ucell.m_unseenCell->IsRioting();
 					hasAirport           = ucell.m_unseenCell->HasAirport();
-					if (owner == g_selected_item->GetVisiblePlayer())
+					if (g_selected_item->IsVisiblePlayer(owner))
 						hasSleepingUnits = ucell.m_unseenCell->HasSleepingUnits();
 					else
 						hasSleepingUnits = FALSE;
@@ -3478,7 +3476,7 @@ void TiledMap::DrawCityNames(aui_Surface * surf, sint32 layer)
 					// if there's a unit at pos
 					if (g_theWorld->GetTopVisibleUnit(pos,unit)) {
 						//and it's a city visible to the current player
-						if (unit.GetVisibility() & (1 << g_selected_item->GetVisiblePlayer()) && unit.IsCity())
+						if (g_selected_item->IsUnitVisible(unit) && unit.IsCity())
 						{
 							CityData *cityData   = unit.GetData()->GetCityData();
 
@@ -3556,14 +3554,14 @@ void TiledMap::DrawCityNames(aui_Surface * surf, sint32 layer)
 							sint32 pollution     = cityData->GetPollution();
 							isPollutionRisk      = (pollution > g_theConstDB->Get(0)->GetLocalPollutionLevel());
 
-							if (owner == g_selected_item->GetVisiblePlayer())
+							if (g_selected_item->IsVisiblePlayer(owner))
 								hasSleepingUnits = cityData->HasSleepingUnits();
 							else
 								hasSleepingUnits = FALSE;
 
 							drawCity = true;
 
-							if(owner == g_selected_item->GetVisiblePlayer())
+							if(g_selected_item->IsVisiblePlayer(owner))
 							{
 								drawOurCity = true;
 								HasReligionIcon  = cityData->HasReligionIcon();
@@ -3729,7 +3727,7 @@ void TiledMap::DrawCityNames(aui_Surface * surf, sint32 layer)
 							//original  y = popRect.bottom + 1;
 
 							// nextpop rect, PFT
-							if (owner == g_selected_item->GetVisiblePlayer())
+							if (g_selected_item->IsVisiblePlayer(owner))
 							{
 								//put the number of turns until the city's nextpop in str
 								MBCHAR strn[80];
@@ -4216,7 +4214,7 @@ void TiledMap::DrawCityIcons(aui_Surface *surf, MapPoint const & pos, sint32 own
 		color = GetPlayerColor(convertedOwner, fog);
 		DrawColorizedOverlay(cityIcon, surf, iconRect.left, iconRect.top, color);
 
-		sint32 myOwner = g_selected_item->GetVisiblePlayer();
+		sint32 myOwner = g_selected_item->GetVisiblePlayerID();
 		if(convertedLoss && myOwner >= 0 && (myOwner == owner || myOwner == convertedOwner))
 		    {
 		    sint32 width, height;
@@ -4261,7 +4259,7 @@ void TiledMap::DrawCityIcons(aui_Surface *surf, MapPoint const & pos, sint32 own
 		color = GetPlayerColor(franchiseOwner, fog);
 		DrawColorizedOverlay(cityIcon, surf, iconRect.left, iconRect.top, color);
 
-		sint32 myOwner = g_selected_item->GetVisiblePlayer();
+		sint32 myOwner = g_selected_item->GetVisiblePlayerID();
 		if(franchiseLoss && myOwner >= 0 && (myOwner == owner || myOwner == franchiseOwner))
 		    {
 		    sint32 width, height;
@@ -4679,9 +4677,8 @@ TiledMap::DrawAnImprovement(aui_Surface *surface, Pixel16 *data, sint32 x, sint3
 
 sint32 TiledMap::GetVisibleCellOwner(const MapPoint &pos) const
 {
-	if(!m_localVision->IsVisible(pos)
-	&& g_selected_item->GetVisiblePlayer() != g_theWorld->GetCell(pos)->GetOwner()
-	){
+	if(!m_localVision->IsVisible(pos) && !g_selected_item->IsVisiblePlayer(g_theWorld->GetCell(pos)->GetOwner()))
+	{
 		UnseenCellCarton ucell;
 		if(m_localVision->GetLastSeen(pos, ucell))
 		{
@@ -4694,10 +4691,9 @@ sint32 TiledMap::GetVisibleCellOwner(const MapPoint &pos) const
 
 uint32 TiledMap::GetVisibleCityOwner(const MapPoint &pos) const
 {
-	if(!m_localVision->IsVisible(pos)
 	// Show the city influence radius from the last visit.
-	&& g_selected_item->GetVisiblePlayer() != g_theWorld->GetCell(pos)->GetOwner()
-	){
+	if (!m_localVision->IsVisible(pos) && !g_selected_item->IsVisiblePlayer(g_theWorld->GetCell(pos)->GetOwner()))
+	{
 		UnseenCellCarton ucell;
 		if(m_localVision->GetLastSeen(pos, ucell))
 		{
@@ -4710,10 +4706,9 @@ uint32 TiledMap::GetVisibleCityOwner(const MapPoint &pos) const
 
 uint32 TiledMap::GetVisibleTerrainType(const MapPoint &pos) const
 {
-	if(!m_localVision->IsVisible(pos)
 	// Show the city influence radius from the last visit.
-	&& g_selected_item->GetVisiblePlayer() != g_theWorld->GetCell(pos)->GetOwner()
-	){
+	if (!m_localVision->IsVisible(pos) && !g_selected_item->IsVisiblePlayer(g_theWorld->GetCell(pos)->GetOwner()))
+	{
 		UnseenCellCarton ucell;
 		if(m_localVision->GetLastSeen(pos, ucell))
 		{
@@ -4726,10 +4721,9 @@ uint32 TiledMap::GetVisibleTerrainType(const MapPoint &pos) const
 
 bool TiledMap::HasVisibleCity(const MapPoint &pos) const
 {
-	if(!m_localVision->IsVisible(pos)
 	// Show the city influence radius from the last visit.
-	&& g_selected_item->GetVisiblePlayer() != g_theWorld->GetCell(pos)->GetOwner()
-	){
+	if (!m_localVision->IsVisible(pos) && !g_selected_item->IsVisiblePlayer(g_theWorld->GetCell(pos)->GetOwner()))
+	{
 		UnseenCellCarton ucell;
 		if(m_localVision->GetLastSeen(pos, ucell))
 		{
@@ -4746,8 +4740,8 @@ void TiledMap::DrawNationalBorders(aui_Surface *surface, MapPoint &pos)
 	if (myOwner < 0)
 		return;
 
-	Player *visP = g_player[g_selected_item->GetVisiblePlayer()];
-	if (visP == NULL)
+	Player * visiblePlayer = g_selected_item->GetVisiblePlayer();
+	if (!visiblePlayer)
 		return;
 
 	uint32 myCityOwner = GetVisibleCityOwner(pos);
@@ -4790,8 +4784,8 @@ void TiledMap::DrawNationalBorders(aui_Surface *surface, MapPoint &pos)
 	if(pos.GetNeighborPosition(NORTHWEST, neighbor)) {
 		neighborOwner = GetVisibleCellOwner(neighbor);
 		if(neighborOwner != myOwner
-		&&(visP->HasSeen(myOwner)
-		|| g_fog_toggle // The sense of fog of and god mode is to see something.
+		&&(visiblePlayer->HasSeen(myOwner)
+		   || g_fog_toggle // The sense of fog of and god mode is to see something.
 		|| g_god)
 		&& g_theProfileDB->GetShowPoliticalBorders()
 		){
@@ -4829,9 +4823,10 @@ void TiledMap::DrawNationalBorders(aui_Surface *surface, MapPoint &pos)
 
 		neighborCityOwner = GetVisibleCityOwner(neighbor);
 		if(neighborCityOwner != myCityOwner) {
-			if(myCityData &&
-			   myCityData->GetVisibility() & (1 << visP->m_owner) &&
-			   g_theProfileDB->IsShowCityInfluence()) {
+			if (myCityData &&
+                g_selected_item->IsUnitVisible(myCityData->GetVisibility()) &&
+			    g_theProfileDB->IsShowCityInfluence())
+            {
 				DrawColoredBorderEdge(surface, pos, white, NORTHWEST, k_BORDER_DASHED);
 				//if ((PlayerHasGreatWall) && (IsLand(pos)) {
 					//iconRect.top    = y + 20;  //y
@@ -4848,9 +4843,9 @@ void TiledMap::DrawNationalBorders(aui_Surface *surface, MapPoint &pos)
 	if(pos.GetNeighborPosition(SOUTHWEST, neighbor)) {
 		neighborOwner = GetVisibleCellOwner(neighbor);
 		if(neighborOwner != myOwner
-		&&(visP->HasSeen(myOwner)
-		|| g_fog_toggle
-		|| g_god)
+		&&(visiblePlayer->HasSeen(myOwner)
+		   || g_fog_toggle
+		   || g_god)
 		&& g_theProfileDB->GetShowPoliticalBorders()
 		){
 			if(!g_theProfileDB->IsSmoothBorders())
@@ -4872,8 +4867,9 @@ void TiledMap::DrawNationalBorders(aui_Surface *surface, MapPoint &pos)
 		neighborCityOwner = GetVisibleCityOwner(neighbor);
 		if(neighborCityOwner != myCityOwner) {
 			if(myCityData &&
-			   myCityData->GetVisibility() & (1 << visP->m_owner) &&
-			   g_theProfileDB->IsShowCityInfluence()) {
+                g_selected_item->IsUnitVisible(myCityData->GetVisibility()) &&
+		        g_theProfileDB->IsShowCityInfluence())
+            {
 				DrawColoredBorderEdge(surface, pos, white, SOUTHWEST, k_BORDER_DASHED);
 			}
 		}
@@ -4882,9 +4878,9 @@ void TiledMap::DrawNationalBorders(aui_Surface *surface, MapPoint &pos)
 	if(pos.GetNeighborPosition(NORTHEAST, neighbor)) {
 		neighborOwner = GetVisibleCellOwner(neighbor);
 		if(neighborOwner != myOwner
-		&&(visP->HasSeen(myOwner)
-		|| g_fog_toggle
-		|| g_god)
+		&&(visiblePlayer->HasSeen(myOwner)
+		   || g_fog_toggle
+		   || g_god)
 		&& g_theProfileDB->GetShowPoliticalBorders()
 		){
 
@@ -4909,8 +4905,9 @@ void TiledMap::DrawNationalBorders(aui_Surface *surface, MapPoint &pos)
 		neighborCityOwner = GetVisibleCityOwner(neighbor);
 		if(neighborCityOwner != myCityOwner) {
 			if(myCityData &&
-			   myCityData->GetVisibility() & (1 << visP->m_owner) &&
-			   g_theProfileDB->IsShowCityInfluence()) {
+                g_selected_item->IsUnitVisible(myCityData->GetVisibility()) &&
+		        g_theProfileDB->IsShowCityInfluence())
+            {
 				DrawColoredBorderEdge(surface, pos, white, NORTHEAST, k_BORDER_DASHED);
 			}
 		}
@@ -4919,9 +4916,9 @@ void TiledMap::DrawNationalBorders(aui_Surface *surface, MapPoint &pos)
 	if(pos.GetNeighborPosition(SOUTHEAST, neighbor)) {
 		neighborOwner = GetVisibleCellOwner(neighbor);
 		if(neighborOwner != myOwner
-		&&(visP->HasSeen(myOwner)
-		|| g_fog_toggle
-		|| g_god)
+		&&(visiblePlayer->HasSeen(myOwner)
+		   || g_fog_toggle
+		   || g_god)
 		&& g_theProfileDB->GetShowPoliticalBorders()
 		){
 
@@ -4946,8 +4943,9 @@ void TiledMap::DrawNationalBorders(aui_Surface *surface, MapPoint &pos)
 		neighborCityOwner = GetVisibleCityOwner(neighbor);
 		if(neighborCityOwner != myCityOwner) {
 			if(myCityData &&
-			   myCityData->GetVisibility() & (1 << visP->m_owner) &&
-			   g_theProfileDB->IsShowCityInfluence()) {
+                g_selected_item->IsUnitVisible(myCityData->GetVisibility()) &&
+		        g_theProfileDB->IsShowCityInfluence())
+            {
 				DrawColoredBorderEdge(surface, pos, white, SOUTHEAST, k_BORDER_DASHED);
 			}
 		}
@@ -4978,7 +4976,7 @@ void TiledMap::DrawChatText()
 			RECT timeRect = { x, 100, x, 100 + height};
 			char timebuf[256];
 			if(g_network.IsActive()) {
-				if(g_network.IsSpeedStyle() && g_selected_item->GetCurPlayer() == g_selected_item->GetVisiblePlayer()) {
+				if(g_network.IsSpeedStyle() && g_selected_item->IsVisiblePlayer(g_selected_item->GetCurPlayer())) {
 					time_t const timeleft = g_network.GetTurnEndsAt() - time(0);
 					sprintf(timebuf, "%s: %" PRId64, g_theStringDB->GetNameStr("NETWORK_TIME_LEFT"), timeleft);
 					timeRect.right = timeRect.left + m_font->GetStringWidth(timebuf);

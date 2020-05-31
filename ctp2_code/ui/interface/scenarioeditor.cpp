@@ -25,37 +25,37 @@
 // Modifications from the original Activision code:
 //
 // - Make the number of city styles you can place with the scenario editor mod
-//   dependent, by Martin Gühmann.
+//   dependent, by Martin GÃ¼hmann.
 // - Make sure that newly created cities have the size as displayed in the
-//   CityPopSpinner, by Martin Gühmann.
+//   CityPopSpinner, by Martin GÃ¼hmann.
 // - Corrected wrap handling, by Fromafar.
-// - Fixed Auto-Turn-Off-Pollution-Bug, by Martin Gühmann.
-// - Memory leaks fixed, by Martin Gühmann and Fromafar.
+// - Fixed Auto-Turn-Off-Pollution-Bug, by Martin GÃ¼hmann.
+// - Memory leaks fixed, by Martin GÃ¼hmann and Fromafar.
 // - Fixed switch to player 1 bug when the scenario editor is loaded for the
-//   first time in a game session, by Martin Gühmann.
-// - Added GetLastPlayer() to get the last player in the game, by Martin Gühmann.
+//   first time in a game session, by Martin GÃ¼hmann.
+// - Added GetLastPlayer() to get the last player in the game, by Martin GÃ¼hmann.
 // - Fixed player spinners in the scenario editor so that the last player
 //   is still accessable even if players before in the row were killed,
-//   by Martin Gühmann.
+//   by Martin GÃ¼hmann.
 //   Unfortunatly it looks like here are more problems. Soon after some turns
 //   with the dead player I got Asserts when I try to access the dead player.
-// - Fix of a crash by Martin Gühmann. If you selected a city changed the
+// - Fix of a crash by Martin GÃ¼hmann. If you selected a city changed the
 //   player, the city was destroyed by in game events, conquest, starvation
 //   slic and you switch back via the Scenario Editor to that player the game
 //   crashed, the problem is solved by deselecting everything before player
 //   changing.
-// - Added icons and tooltips to city style buttons, by Martin Gühmann.
+// - Added icons and tooltips to city style buttons, by Martin GÃ¼hmann.
 // - Repaired backwards compatibility and possible crashes.
-// - Replaced old civilisation database by new one. (Aug 21st 2005 Martin Gühmann)
-// - Replaced old risk database by new one. (Aug 29th 2005 Martin Gühmann)
-// - Initialized local variables. (Sep 9th 2005 Martin Gühmann)
-// - Added a civ city style choser on the civ tab. (Jan 4th 2005 Martin Gühmann)
+// - Replaced old civilisation database by new one. (Aug 21st 2005 Martin GÃ¼hmann)
+// - Replaced old risk database by new one. (Aug 29th 2005 Martin GÃ¼hmann)
+// - Initialized local variables. (Sep 9th 2005 Martin GÃ¼hmann)
+// - Added a civ city style choser on the civ tab. (Jan 4th 2005 Martin GÃ¼hmann)
 // - Spinner callbacks are added at the end so that they aren't called due to
-//   min or max modifications. This accelerates Scenario Editor initalisation. (Feb 4th 2007 Martin Gühmann)
+//   min or max modifications. This accelerates Scenario Editor initalisation. (Feb 4th 2007 Martin GÃ¼hmann)
 // - Switching between players now updates the city list of the main control
-//   panel city tab. (Feb 4th 2007 Martin Gühmann)
+//   panel city tab. (Feb 4th 2007 Martin GÃ¼hmann)
 // - TODO add show Enemy Health and Debug AI buttons to Unit Tab
-// - Replaced old const database by new one. (5-Aug-2007 Martin Gühmann)
+// - Replaced old const database by new one. (5-Aug-2007 Martin GÃ¼hmann)
 // - Fixed debug AI button. (10-Apr-2009 Maq)
 //
 //----------------------------------------------------------------------------
@@ -261,7 +261,7 @@ ScenarioEditor::ScenarioEditor(AUI_ERRCODE *err)  //called by intialize does sam
     m_brushSize                 (1),
     m_unitIndex                 (-1),
     m_cityStyle                 (CITY_STYLE_EDITOR), 	//displayed in the CityPopSpinner to new created cities.
- 	m_newPopSize                (1), 	//Added by Martin Gühmann to add the pop number
+ 	m_newPopSize                (1),
     m_startLocMode              (SCEN_START_LOC_MODE_NONE),
     m_haveRegion                (false),
     m_mapMode                   (SCEN_MAP_NONE),
@@ -320,9 +320,6 @@ ScenarioEditor::ScenarioEditor(AUI_ERRCODE *err)  //called by intialize does sam
 		spin = (ctp2_Spinner *)aui_Ldl::GetObject(s_scenarioEditorBlock, s_playerSpinners[i]);
 		if(spin)
 		{
-			//Added by Martin Gühmann to make sure that the Scenario Editor
-			//does not set the player to player 1 when the scenario editor
-			//is loaded for the first time in a session.
 			spin->SetValue((sint32)g_selected_item->GetPlayerOnScreen(), 0);
 			spin->SetMinimum(0, 0);
 			spin->SetMaximum(GetLastPlayer(), 0);
@@ -678,9 +675,9 @@ void ScenarioEditor::Reupdate()
 		}
 	}
 
-	if(g_player[g_selected_item->GetVisiblePlayer()]) {
-		g_player[g_selected_item->GetVisiblePlayer()]->m_playerType = PLAYER_TYPE_HUMAN;
-		NewTurnCount::SetStopPlayer(g_selected_item->GetVisiblePlayer());
+	if (g_selected_item->GetVisiblePlayer()) {
+		g_selected_item->GetVisiblePlayer()->m_playerType = PLAYER_TYPE_HUMAN;
+		NewTurnCount::SetStopPlayer(g_selected_item->GetVisiblePlayerID());
 	}
 
 	if (g_toeMode)
@@ -892,8 +889,6 @@ void ScenarioEditor::PopulateCityList()
 	ctp2_ListItem *curItem = NULL;
 	ctp2_Static *curItemBox = NULL;
 	sint32 col = 0;
-	//Added by Martin Gühmann so that there are now as much buttons
-	//as city styles.
 	for (sint32 cs = 0; cs < g_theCityStyleDB->NumRecords(); cs++) {
 		if(col == 0) {
 			curItem = (ctp2_ListItem *)aui_Ldl::BuildHierarchyFromRoot("ScenCityItem");
@@ -923,9 +918,6 @@ void ScenarioEditor::PopulateCityList()
 			curItem = NULL;
 			curItemBox = NULL;
 		}
-
-//Added by Martin Gühmann to give the city buttons an icon.
-//Added by Martin Gühmann to show the according city style name in the tooltip.
 
 // Modified to allow buttons not to have an icon:
 // - moved down check to prevent a premature break
@@ -1124,10 +1116,6 @@ sint32 ScenarioEditor::CityStyle()
     return (s_scenarioEditor) ? s_scenarioEditor->m_cityStyle : CITY_STYLE_EDITOR;
 }
 
-//Added by Martin Gühmann to make
-//shure that newly created cities
-//have the same pop size as displayed in
-//the CityPopSpinner
 sint32 ScenarioEditor::CitySize()
 {
 	if(!s_scenarioEditor) return 1;
@@ -1483,9 +1471,6 @@ void ScenarioEditor::CityPopSpinner(aui_Control *control, uint32 action, uint32 
 
 	if(!spinner) return;
 	sint32 newPop = spinner->GetValueX();
-	//Added by Martin Gühmann to make sure
-	//newly created cities have the same pop
-	//size as displayed in the CityPopSpinner
 	s_scenarioEditor->m_newPopSize = newPop;
 	Unit city;
 	if(!g_selected_item->GetSelectedCity(city))
@@ -1523,7 +1508,7 @@ bool ScenarioEditor::UpdateAddList(SCEN_ADD addtype)
 
 	leftList->Clear();
 	rightList->Clear();
-	sint32 player = g_selected_item->GetVisiblePlayer();
+	sint32 playerID = g_selected_item->GetVisiblePlayerID();
 
 	Unit city;
 	BOOL haveCity = g_selected_item->GetSelectedCity(city);
@@ -1577,26 +1562,26 @@ bool ScenarioEditor::UpdateAddList(SCEN_ADD addtype)
 			}
 			break;
 		case SCEN_ADD_ADVANCES:
-			Assert(player >= 0);
-			Assert(player < k_MAX_PLAYERS);
+			Assert(playerID >= 0);
+			Assert(playerID < k_MAX_PLAYERS);
 
-			if(player < 0 || player >= k_MAX_PLAYERS)
+			if(playerID < 0 || playerID >= k_MAX_PLAYERS)
 				return false;
 
-			if(!g_player[player])
+			if(!g_player[playerID])
 				return false;
 
 			for(i = 0; i < g_theAdvanceDB->NumRecords(); i++) {
-				if(g_player[player]->HasAdvance(i)) {
+				if(g_player[playerID]->HasAdvance(i)) {
 					AddAddItem(rightList, g_theAdvanceDB->Get(i)->GetNameText(), i);
 				} else {
 					AddAddItem(leftList, g_theAdvanceDB->Get(i)->GetNameText(), i);
 				}
 			}
-			Player *p = g_player[g_selected_item->GetVisiblePlayer()];
-			if(p) {
+			Player * player = g_selected_item->GetVisiblePlayer();
+			if (player) {
 				ctp2_Static *tb = (ctp2_Static *)aui_Ldl::GetObject(s_scenarioAddStuffBlock, "AddStuffTitle");
-				tb->SetText(p->m_civilisation->GetLeaderName());
+				tb->SetText(player->m_civilisation->GetLeaderName());
 			}
 			break;
 	}
@@ -1681,7 +1666,7 @@ void ScenarioEditor::CivCityStyleSpinner(aui_Control *control, uint32 action, ui
 	const CityStyleRecord* rec = g_theCityStyleDB->Get(spinner->GetValueX());
 
 	if(rec){
-		g_player[g_selected_item->GetVisiblePlayer()]->GetCivilisation()->AccessData()->SetCityStyle(spinner->GetValueX());
+		g_selected_item->GetVisiblePlayer()->GetCivilisation()->AccessData()->SetCityStyle(spinner->GetValueX());
 		spinner->SetText(rec->GetNameText());
 
 		aui_TipWindow* tipWindow = (aui_TipWindow *)spinner->GetTipWindow();
@@ -1878,21 +1863,19 @@ void ScenarioEditor::SetupNations()
 
 	}
 
-	Player *p = g_player[g_selected_item->GetVisiblePlayer()];
-	if(p) {
+	Player *player = g_selected_item->GetVisiblePlayer();
+	if (player)
+	{
+		plgroup->SetSelectedItem(player->m_civilisation->GetCivilisation());
 
-		plgroup->SetSelectedItem(p->m_civilisation->GetCivilisation());
-
-		m_placeNationFlag = p->m_civilisation->GetCivilisation();
+		m_placeNationFlag = player->m_civilisation->GetCivilisation();
 
 		ctp2_TextField *tf = (ctp2_TextField *)aui_Ldl::GetObject(s_scenarioEditorBlock, "CivExtraControls.LeaderField");
 		Assert(tf);
 		if(tf) {
-			tf->SetFieldText(p->m_civilisation->GetLeaderName());
+			tf->SetFieldText(player->m_civilisation->GetLeaderName());
 		}
-
 	}
-
 
 	ctp2_DropDown *govs = (ctp2_DropDown *)aui_Ldl::GetObject(s_scenarioEditorBlock, "TabGroup.Civ.SetGovernment");
 	for (i = 0; i < g_theGovernmentDB->NumRecords(); i++)
@@ -1900,25 +1883,14 @@ void ScenarioEditor::SetupNations()
 		AddDropDownItem(govs, "ScenNationItem", (MBCHAR *)g_theStringDB->GetNameStr(g_theGovernmentDB->GetName(i)) );
 	}
 
-	if (p)
+	if (player)
 	{
 
 		ctp2_DropDown *govs = (ctp2_DropDown *)aui_Ldl::GetObject(s_scenarioEditorBlock, "TabGroup.Civ.SetGovernment");
-		govs->SetSelectedItem(p->GetGovernmentType());
+		govs->SetSelectedItem(player->GetGovernmentType());
 	}
 
-
-
-
-
-
-
-
-
-
-
 	UpdatePlayerSelect();
-
 }
 
 void ScenarioEditor::AddLeftList(aui_Control *control, uint32 action, uint32 data, void *cookie)
@@ -1974,7 +1946,7 @@ void ScenarioEditor::AddAddButton(aui_Control *control, uint32 action, uint32 da
 
 	Unit city;
 	BOOL haveCity = g_selected_item->GetSelectedCity(city);
-	sint32 player = g_selected_item->GetVisiblePlayer();
+	sint32 player = g_selected_item->GetVisiblePlayerID();
 
 	switch(s_scenarioEditor->m_addMode) {
 		case SCEN_ADD_BUILDINGS:
@@ -2056,8 +2028,6 @@ void ScenarioEditor::AddAddButton(aui_Control *control, uint32 action, uint32 da
 					AddAddItem(leftList, g_theAdvanceDB->Get(i)->GetNameText(), i);
 				}
 			}
-
-
 			break;
 		default:
 			Assert(FALSE);
@@ -2094,7 +2064,7 @@ void ScenarioEditor::AddRemoveButton(aui_Control *control, uint32 action, uint32
 
 	dbindex = (sint32)selItem->GetUserData();
 
-	sint32 player = g_selected_item->GetVisiblePlayer();
+	sint32 player = g_selected_item->GetVisiblePlayerID();
 
 	switch(s_scenarioEditor->m_addMode) {
 		case SCEN_ADD_BUILDINGS:
@@ -2160,7 +2130,7 @@ void ScenarioEditor::NotifyPlayerChange()
 	if(!s_scenarioEditor)
 		return;
 
-	sint32 player = g_selected_item->GetVisiblePlayer();
+	sint32 player = g_selected_item->GetVisiblePlayerID();
 
 	sint32 i;
 	for(i = 0; i < k_NUM_PLAYER_SPINNERS; i++) {
@@ -2200,7 +2170,7 @@ void ScenarioEditor::NotifyPlayerChange()
 		}
 
 		ctp2_DropDown *govs = (ctp2_DropDown *)aui_Ldl::GetObject(s_scenarioEditorBlock, "TabGroup.Civ.SetGovernment");
-		govs->SetSelectedItem(g_player[g_selected_item->GetVisiblePlayer()]->GetGovernmentType());
+		govs->SetSelectedItem(g_selected_item->GetVisiblePlayer()->GetGovernmentType());
 	}
 }
 
@@ -2224,11 +2194,7 @@ void ScenarioEditor::PlayerSpinner(aui_Control *control, uint32 action, uint32 d
 
 	if(g_player[newPlayer]) {
 
-		// Added by Martin Gühmann to prevent a crash if you use the
-		// Scenario Editor to select a city, change the player without deselecting
-		// it, destroy this city by conquest or slic or starvation and switching back
-		// to that player.
-		g_selected_item->Deselect(g_selected_item->GetVisiblePlayer());
+		g_selected_item->Deselect(g_selected_item->GetVisiblePlayerID());
 
 		tf->SetFieldText(g_player[newPlayer]->m_civilisation->GetLeaderName());
 		g_selected_item->SetPlayerOnScreen(newPlayer);
@@ -2392,7 +2358,7 @@ void ScenarioEditor::PlaceFlag(MapPoint &pos)
 	if(!s_scenarioEditor)
 		return;
 
-	sint32 playerOrCiv = g_selected_item->GetVisiblePlayer();
+	sint32 playerOrCiv = g_selected_item->GetVisiblePlayerID();
 	if(s_scenarioEditor->m_startLocMode == SCEN_START_LOC_MODE_CIV) {
 		playerOrCiv = s_scenarioEditor->m_placeNationFlag;
 	}
@@ -2400,22 +2366,15 @@ void ScenarioEditor::PlaceFlag(MapPoint &pos)
 	sint32 index;
 	if (WorldHasPlayerOrCiv(playerOrCiv, index)) {
 
-
-
-
-
-
 		if (s_scenarioEditor->m_startLocMode == SCEN_START_LOC_MODE_PLAYER) {
-			Player *p = NULL;
-			p = g_player[g_selected_item->GetVisiblePlayer()];
-			if (p) {
-				playerOrCiv = p->GetCivilisation()->GetCivilisation();
+			Player * player = g_selected_item->GetVisiblePlayer();
+			if (player) {
+				playerOrCiv = player->GetCivilisation()->GetCivilisation();
 			}
 		}
 
 		g_theWorld->SetStartingPoint(index, pos, playerOrCiv);
 	} else {
-
 
 		if (s_scenarioEditor->m_startLocMode == SCEN_START_LOC_MODE_PLAYER) {
 
@@ -2424,16 +2383,15 @@ void ScenarioEditor::PlaceFlag(MapPoint &pos)
 
 			}
 
-			Player * p = g_player[playerOrCiv];
-			if (p) {
-				playerOrCiv = p->GetCivilisation()->GetCivilisation();
+			Player * player = g_player[playerOrCiv];
+			if (player) {
+				playerOrCiv = player->GetCivilisation()->GetCivilisation();
 			}
 		}
 
 		g_theWorld->AddStartingPoint(pos, playerOrCiv);
 	}
 }
-
 
 void ScenarioEditor::GetLabel(MBCHAR *labelString, sint32 playerOrCiv)
 {
@@ -2442,7 +2400,7 @@ void ScenarioEditor::GetLabel(MBCHAR *labelString, sint32 playerOrCiv)
 	if (playerOrCiv != -1) {
 		index = playerOrCiv;
 	} else {
-		index = g_selected_item->GetVisiblePlayer();
+		index = g_selected_item->GetVisiblePlayerID();
 	}
 
 	SCEN_START_LOC_MODE mode = s_scenarioEditor->m_startLocMode;
@@ -2679,24 +2637,23 @@ void ScenarioEditor::FileAction(FileDialog *dialog, uint32 action, const MBCHAR 
 
 				ctp2_DropDown *plgroup = (ctp2_DropDown *)aui_Ldl::GetObject(s_scenarioEditorBlock, "CivControls.Nation");
 
-				Player *p = g_player[g_selected_item->GetVisiblePlayer()];
+				Player * player = g_selected_item->GetVisiblePlayer();
 
 				MBCHAR leaderName[k_MAX_NAME_LEN];
-				strcpy(leaderName, p->GetLeaderName());
+				strcpy(leaderName, player->GetLeaderName());
 
-				plgroup->SetSelectedItem(p->m_civilisation->GetCivilisation());
+				plgroup->SetSelectedItem(player->m_civilisation->GetCivilisation());
 
+				player->m_civilisation->AccessData()->SetLeaderName(leaderName);
 
-				p->m_civilisation->AccessData()->SetLeaderName(leaderName);
-
-				if(g_selected_item->GetVisiblePlayer() == g_theProfileDB->GetPlayerIndex()) {
+				if (g_selected_item->IsVisiblePlayer(g_theProfileDB->GetPlayerIndex())) {
 					g_theProfileDB->SetLeaderName(leaderName);
 				}
 
 				ctp2_TextField *tf = (ctp2_TextField *)aui_Ldl::GetObject(s_scenarioEditorBlock, "CivExtraControls.LeaderField");
 				Assert(tf);
 				if(tf) {
-					tf->SetFieldText(p->m_civilisation->GetLeaderName());
+					tf->SetFieldText(player->m_civilisation->GetLeaderName());
 				}
 			}
 			break;
@@ -2843,8 +2800,6 @@ void ScenarioEditor::UpdatePlayerCount()
 	st->SetText(tempstr);
 }
 
-//Added by Martin Gühmann
-
 //----------------------------------------------------------------------------
 //
 // Name       : ScenarioEditor::Pollution
@@ -2958,7 +2913,7 @@ void ScenarioEditor::Year(aui_Control *control, uint32 action, uint32 data, void
 	ctp2_Static *st = (ctp2_Static *)aui_Ldl::GetObject(s_scenarioEditorBlock, "Globals.YearDisplay");
 	st->SetText(TurnYearStatus::GetCurrentYear());
 
-	MainControlPanel::UpdatePlayer(g_selected_item->GetVisiblePlayer());
+	MainControlPanel::UpdatePlayer(g_selected_item->GetVisiblePlayerID());
 }
 
 void ScenarioEditor::Barbarians(aui_Control *control, uint32 action, uint32 data, void *cookie)
@@ -2978,8 +2933,7 @@ void ScenarioEditor::SetGovernment(aui_Control *control, uint32 action, uint32 d
 		return;
 
 	ctp2_DropDown *dd = (ctp2_DropDown *)control;
-	g_player[g_selected_item->GetVisiblePlayer()]->ActuallySetGovernment
-	    (dd->GetSelectedItem());
+	g_selected_item->GetVisiblePlayer()->ActuallySetGovernment(dd->GetSelectedItem());
 }
 
 void ScenarioEditor::Difficulty(aui_Control *control, uint32 action, uint32 data, void *cookie)
@@ -3022,20 +2976,20 @@ void ScenarioEditor::SetPlayerNation(aui_Control *control, uint32 action, uint32
 
 	sint32 nation = dd->GetSelectedItem();
 
-	Player *p = g_player[g_selected_item->GetVisiblePlayer()];
+	Player * player = g_selected_item->GetVisiblePlayer();
 
 	switch(s_scenarioEditor->m_startLocMode) {
 		case SCEN_START_LOC_MODE_NONE:
 		case SCEN_START_LOC_MODE_PLAYER:
 		case SCEN_START_LOC_MODE_PLAYER_WITH_CIV:
 		{
-			if(!p) return;
-			p->m_civilisation->ResetCiv(nation, p->m_civilisation->GetGender());
+			if(!player) return;
+			player->m_civilisation->ResetCiv(nation, player->m_civilisation->GetGender());
 
 			ctp2_TextField *tf = (ctp2_TextField *)aui_Ldl::GetObject(s_scenarioEditorBlock, "CivExtraControls.LeaderField");
 			Assert(tf);
 			if(tf) {
-				tf->SetFieldText(p->m_civilisation->GetLeaderName());
+				tf->SetFieldText(player->m_civilisation->GetLeaderName());
 		}
 			break;
 		}
@@ -3079,27 +3033,18 @@ void ScenarioEditor::LeaderName(aui_Control *control, uint32 action, uint32 data
 	MBCHAR newName[_MAX_PATH];
 	tf->GetFieldText(newName, _MAX_PATH);
 
-	if(g_player[g_selected_item->GetVisiblePlayer()]
-	&& newName[0] != 0
-	){
-		g_player[g_selected_item->GetVisiblePlayer()]->m_civilisation->AccessData()->SetLeaderName(newName);
-		if(g_selected_item->GetVisiblePlayer() == g_theProfileDB->GetPlayerIndex())
-		{
+	if (g_selected_item->GetVisiblePlayer()	&& newName[0] != 0)
+	{
+		g_selected_item->GetVisiblePlayer()->m_civilisation->AccessData()->SetLeaderName(newName);
+		if (g_selected_item->IsVisiblePlayer(g_theProfileDB->GetPlayerIndex())) {
 			g_theProfileDB->SetLeaderName(newName);
 		}
 	}
 }
 
-
-
-
 void ScenarioEditor::EraseMode(aui_Control *control, uint32 action, uint32 data, void *cookie)
 {
 	if(action != AUI_BUTTON_ACTION_EXECUTE) return;
-
-
-
-
 
 	if (PlaceUnitsMode() || PlaceCityMode() || PlaceStartFlags() || PaintHutMode() || PaintRiverMode() || PaintGoodsMode())
 	{
@@ -3187,7 +3132,7 @@ void ScenarioEditor::ExploreButton(aui_Control *control, uint32 action, uint32 d
 {
 	if(action != AUI_BUTTON_ACTION_EXECUTE) return;
 
-	sint32 player = g_selected_item->GetVisiblePlayer();
+	sint32 player = g_selected_item->GetVisiblePlayerID();
 
 	if ((player > 0) && g_player[player])
     {
@@ -3202,7 +3147,7 @@ void ScenarioEditor::UnexploreButton(aui_Control *control, uint32 action, uint32
 {
 	if(action != AUI_BUTTON_ACTION_EXECUTE) return;
 
-	sint32 player = g_selected_item->GetVisiblePlayer();
+	sint32 player = g_selected_item->GetVisiblePlayerID();
 
 	if(player > 0) {
 		g_player[player]->m_vision->SetTheWholeWorldUnexplored();
@@ -3242,7 +3187,6 @@ sint32 ScenarioEditor::GetNumPlayers()
 	return players;
 }
 
-//Added by Martin Gühmann to get the last player in the game.
 sint32 ScenarioEditor::GetLastPlayer()
 {
 	sint32 players = 0;
@@ -3321,13 +3265,12 @@ void ScenarioEditor::AddPW(aui_Control *control, uint32 action, uint32 data, voi
 	tf->GetFieldText(text, MAX_CHARS);
 
 	sint32 lemurPoo = atoi(text);
-	sint32 player = g_selected_item->GetVisiblePlayer();
 
 	if(abs(lemurPoo) <= k_MAX_ADD_GOLD_OR_PW) {
-		g_player[player]->m_materialPool->AddMaterials(lemurPoo);
+		g_selected_item->GetVisiblePlayer()->m_materialPool->AddMaterials(lemurPoo);
 	} else {
 		tf->SetFieldText("");
-		MainControlPanel::UpdatePlayer(g_selected_item->GetVisiblePlayer());
+		MainControlPanel::UpdatePlayer(g_selected_item->GetVisiblePlayerID());
 	}
 	tf->SetFieldText("");
 }
@@ -3337,17 +3280,15 @@ void ScenarioEditor::AddGold(aui_Control *control, uint32 action, uint32 data, v
 	if(action != AUI_TEXTFIELD_ACTION_EXECUTE) return;
 	ctp2_TextField *tf = (ctp2_TextField *)control;
 
-	sint32 player = g_selected_item->GetVisiblePlayer();
-
 	MBCHAR text[MAX_CHARS];
 	tf->GetFieldText(text, MAX_CHARS);
 	sint32 furd = atoi(text);
 
 	if(abs(furd) <= k_MAX_ADD_GOLD_OR_PW) {
-		g_player[player]->m_gold->AddGold(furd);
+		g_selected_item->GetVisiblePlayer()->m_gold->AddGold(furd);
 	} else {
 		tf->SetFieldText("");
-		MainControlPanel::UpdatePlayer(g_selected_item->GetVisiblePlayer());
+		MainControlPanel::UpdatePlayer(g_selected_item->GetVisiblePlayerID());
 	}
 	tf->SetFieldText("");
 }

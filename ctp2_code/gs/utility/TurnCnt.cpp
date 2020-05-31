@@ -237,7 +237,7 @@ void TurnCount::InformNetwork()
 
 void TurnCount::InformMessages()
 {
-	messagewin_BeginTurn( g_selected_item->GetVisiblePlayer() );
+	messagewin_BeginTurn(g_selected_item->GetVisiblePlayerID());
 }
 
 void TurnCount::SliceInformNetwork()
@@ -538,13 +538,7 @@ BOOL TurnCount::BeginNewSlice()
 
 	if(g_player[curPlayer]->GetCurRound() != m_round) {
 		BeginNewTurn(FALSE);
-	} else if(g_network.IsHost() &&
-	          g_selected_item->GetCurPlayer() == g_selected_item->GetVisiblePlayer()) {
-
-
-
-
-
+	} else if(g_network.IsHost() && g_selected_item->IsVisiblePlayer(g_selected_item->GetCurPlayer())) {
 		if (g_soundManager)
 			g_soundManager->AddSound(SOUNDTYPE_SFX, (uint32)0,
 										gamesounds_GetGameSoundID(GAMESOUNDS_NET_YOUR_TURN),
@@ -922,7 +916,7 @@ void TurnCount::NextRound(BOOL fromDirector, BOOL force)
 	if (!g_selected_item)
 		return;
 
-	if (g_selected_item->GetCurPlayer() != g_selected_item->GetVisiblePlayer())
+	if (!g_selected_item->IsVisiblePlayer(g_selected_item->GetCurPlayer()))
 		return;
 
 	if(!fromDirector) {
@@ -948,7 +942,8 @@ sint32 finite_count=0;
 		if((g_player[curPlayer]->IsHuman() ||
 			(g_player[curPlayer]->IsNetwork() &&
 			 g_network.IsLocalPlayer(curPlayer))) &&
-		   g_selected_item->GetCurPlayer() == g_selected_item->GetVisiblePlayer()) {
+		    g_selected_item->IsVisiblePlayer(g_selected_item->GetCurPlayer()))
+		{
 			g_player[g_selected_item->GetCurPlayer()]->ProcessUnitOrders();
 		}
 
@@ -961,7 +956,7 @@ sint32 finite_count=0;
 		if (!VerifyEndTurn(force))
 			return;
 
-		g_selected_item->SetPlayerOnScreen(g_selected_item->GetVisiblePlayer());
+		g_selected_item->SetPlayerOnScreen(g_selected_item->GetVisiblePlayerID());
 		if (g_theProfileDB->IsAIOn())
 		{
 			TurnCount::SetStopPlayer(g_selected_item->GetCurPlayer());

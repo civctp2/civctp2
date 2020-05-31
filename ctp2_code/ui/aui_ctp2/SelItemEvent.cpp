@@ -24,7 +24,7 @@
 //
 // Modifications from the original Activision code:
 //
-// - A just founded city is only seleceted if the player is visible and not a robot. (23-Feb-2008 Martin Gühmann)
+// - A just founded city is only seleceted if the player is visible and not a robot. (23-Feb-2008 Martin GÃ¼hmann)
 //
 //----------------------------------------------------------------------------
 
@@ -52,13 +52,13 @@ STDEHANDLER(SelItemSettleEvent)
 	sint32 res;
 	sint32 pl;
 	if(!args->GetPlayer(0, pl)) return GEV_HD_Continue;
-	if(pl != g_selected_item->GetVisiblePlayer())
+	if (!g_selected_item->IsVisiblePlayer(pl))
 		return GEV_HD_Continue;
 
 	if(!args->GetInt(0, res)) return GEV_HD_Continue;
 
 	if(res) {
-		g_selected_item->Deselect(g_selected_item->GetVisiblePlayer());
+		g_selected_item->Deselect(g_selected_item->GetVisiblePlayerID());
 	}
 	return GEV_HD_Continue;
 }
@@ -70,9 +70,7 @@ STDEHANDLER(SelItemCreateCityEvent)
 	if(!args->GetPlayer(0, pl)) return GEV_HD_Continue;
 	if(!args->GetCity(0, city)) return GEV_HD_Continue;
 
-	if( pl == g_selected_item->GetVisiblePlayer()
-	&& !g_player[pl]->IsRobot()
-	){
+	if (g_selected_item->IsVisiblePlayer(pl) && !g_player[pl]->IsRobot()) {
 		g_selected_item->SetSelectUnit(city);
 	}
 

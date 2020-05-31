@@ -375,7 +375,7 @@ BOOL World::IsMoveZOC(PLAYER_INDEX owner, const MapPoint &start,
 
 bool World::GetTopVisibleUnit (const MapPoint &pos, Unit &top) const
 {
-	sint32 looking_player = g_selected_item->GetVisiblePlayer();
+	sint32 looking_player = g_selected_item->GetVisiblePlayerID();
 	return GetTopVisibleUnit (looking_player, pos, top, true);
 }
 
@@ -424,7 +424,7 @@ bool World::GetTopVisibleUnit (const sint32 looking_player, const MapPoint &pos,
 
 bool World::GetTopVisibleUnitNotCity(const MapPoint &pos, Unit &top) const
 {
-	sint32 player = g_selected_item->GetVisiblePlayer();
+	sint32 player = g_selected_item->GetVisiblePlayerID();
 	return GetTopVisibleUnit(player, pos, top, false);
 }
 
@@ -434,16 +434,15 @@ bool World::GetTopRadarUnit(const MapPoint &pos, Unit &top) const
 	top.m_id = (0);
 	c = GetCell(pos);
 	bool hasGlobalRadar;
-	if(g_player[g_selected_item->GetVisiblePlayer()])
+	if(g_selected_item->GetVisiblePlayer())
 	{
-		hasGlobalRadar = wonderutil_GetGlobalRadar(
-			g_player[g_selected_item->GetVisiblePlayer()]->m_builtWonders);
+		hasGlobalRadar = wonderutil_GetGlobalRadar(g_selected_item->GetVisiblePlayer()->m_builtWonders);
 	}
 	else
 	{
 		hasGlobalRadar = false;
 	}
-	uint32 playerMask = 1 << g_selected_item->GetVisiblePlayer();
+	uint32 playerMask = 1 << g_selected_item->GetVisiblePlayerID();
 	if(c->GetCity().IsValid() &&
 	   ((c->GetCity().AccessData()->GetRadarVisibility() & playerMask ) ||
 		(c->GetCity().AccessData()->GetEverVisible() & playerMask) ||

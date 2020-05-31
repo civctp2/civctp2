@@ -24,7 +24,7 @@
 //
 // Modifications from the original Activision code:
 //
-// - Initialized local variables. (Sep 9th 2005 Martin Gühmann)
+// - Initialized local variables. (Sep 9th 2005 Martin GÃ¼hmann)
 //
 //----------------------------------------------------------------------------
 
@@ -110,7 +110,7 @@ void tutorialwin_ListCallback( aui_Control *control, uint32 action, uint32 data,
 
 	sint32 i = 0;
 
-	sint32 player = g_selected_item->GetVisiblePlayer();
+	sint32 player = g_selected_item->GetVisiblePlayerID();
 	PointerList<SlicRecord> *recordList = g_slicEngine->GetRecords(player);
 	if ( !recordList ) return;
 
@@ -235,7 +235,7 @@ sint32 TutorialWin::UpdateData( void )
 	MBCHAR title[_MAX_PATH];
 	sint32 i = 0;
 
-	sint32 player = g_selected_item->GetVisiblePlayer();
+	sint32 player = g_selected_item->GetVisiblePlayerID();
 	PointerList<SlicRecord> *recordList = g_slicEngine->GetRecords(player);
 	if ( !recordList ) return -1;
 
@@ -264,7 +264,7 @@ sint32 TutorialWin::AddToList( MBCHAR *text, sint32 index )
 	AUI_ERRCODE errcode = AUI_ERRCODE_OK;
 	MBCHAR ldlBlock[ k_AUI_LDL_MAXBLOCK + 1 ];
 
-	sint32 player = g_selected_item->GetVisiblePlayer();
+	sint32 player = g_selected_item->GetVisiblePlayerID();
 	PointerList<SlicRecord> *recordList = g_slicEngine->GetRecords(player);
 	if ( !recordList ) return -1;
 

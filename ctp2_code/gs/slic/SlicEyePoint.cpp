@@ -190,8 +190,8 @@ void SlicEyePoint::Callback()
 		case EYE_POINT_TYPE_CITY:
 		case EYE_POINT_TYPE_GENERIC:
 			if(m_unit.m_id != (0)) {
-				if(g_theUnitPool->IsValid(m_unit) &&
-				   m_unit.GetOwner() == g_selected_item->GetVisiblePlayer()) {
+				if(g_theUnitPool->IsValid(m_unit) && g_selected_item->IsVisiblePlayer(m_unit.GetOwner()))
+				{
 					g_selected_item->SetSelectUnit(m_unit);
 					g_director->AddCenterMap(m_point);
 					if(obj)

@@ -306,7 +306,7 @@ void ThumbnailMap::RenderMap(aui_Surface *surf)
             double      xPos    = (sint32)(k * m_tilePixelWidth);
 			double      yPos    = (sint32)(i * m_tilePixelHeight);
 			MapPoint	pos(j, i);
-			Vision *    vision  = g_player[g_selected_item->GetVisiblePlayer()]->m_vision;
+			Vision *    vision  = g_selected_item->GetVisiblePlayer()->m_vision;
 
             UnseenCellCarton	cellCarton;
 			Unit				top;
@@ -397,9 +397,6 @@ void ThumbnailMap::RenderTradeRoute(aui_Surface *surf, TradeRoute *route)
 			if (p2.x <= 0) p2.x = 1;
 			if (p2.y <= 0) p2.y = 1;
 
-
-
-
 			primitives_DrawAALine16(surf, p1.x, p1.y, p2.x, p2.y, blackColor);
 			primitives_DrawAALine16(surf, p1.x-1, p1.y-1, p2.x-1, p2.y-1, color);
 
@@ -410,7 +407,7 @@ void ThumbnailMap::RenderTradeRoute(aui_Surface *surf, TradeRoute *route)
 
 void ThumbnailMap::RenderTradeRoutes(aui_Surface *surf)
 {
-	Player	*player = g_player[g_selected_item->GetVisiblePlayer()];
+	Player * player = g_selected_item->GetVisiblePlayer();
 	Assert(player != NULL);
 	if (player == NULL) return;
 

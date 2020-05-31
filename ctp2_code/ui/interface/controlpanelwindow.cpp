@@ -275,11 +275,12 @@ void TurnNextCityButtonActionCallback( aui_Control *control, uint32 action, uint
 	}
 	else
 	{
-		if (!g_player[g_selected_item->GetVisiblePlayer()] ||
-			!g_player[g_selected_item->GetVisiblePlayer()]->GetNumCities())
+		Player * player = g_selected_item->GetVisiblePlayer();
+		if (!player || !player->GetNumCities()) {
 			return;
+		}
 
-		Unit city = g_player[g_selected_item->GetVisiblePlayer()]->GetCityFromIndex(0);
+		Unit city = player->GetCityFromIndex(0);
 		g_selected_item->SetSelectUnit(city);
 		if(g_selected_item->IsAutoCenterOn())
 		{
@@ -523,9 +524,9 @@ void ContextMenuCallback(ctp2_Menu *menu, CTP2_MENU_ACTION action, sint32 itemIn
 		{
 			haveCity = true;
 		}
-		else if(g_player[g_selected_item->GetVisiblePlayer()]->GetNumCities())
+		else if(g_selected_item->GetVisiblePlayer()->GetNumCities())
 		{
-			city = g_player[g_selected_item->GetVisiblePlayer()]->m_all_cities->Access(0);
+			city = g_selected_item->GetVisiblePlayer()->m_all_cities->Access(0);
 
 			if(city.IsValid())
 				haveCity = true;
@@ -585,7 +586,8 @@ void ContextMenuCallback(ctp2_Menu *menu, CTP2_MENU_ACTION action, sint32 itemIn
 				Cell *cell = g_theWorld->GetCell(pos);
 				if(cell->UnitArmy())
 				{
-					g_selected_item->SetSelectUnit(cell->UnitArmy()->GetTopVisibleUnit(g_selected_item->GetVisiblePlayer()));
+					g_selected_item->SetSelectUnit(cell->UnitArmy()->GetTopVisibleUnit(
+							g_selected_item->GetVisiblePlayerID()));
 					g_selected_item->GetSelectedArmy(a);
 				}
 			}
@@ -719,9 +721,9 @@ void CityMenuCallback(ctp2_Menu *menu, CTP2_MENU_ACTION action, sint32 itemIndex
 			haveCity = true;
 
 	}
-	else if(g_player[g_selected_item->GetVisiblePlayer()]->GetNumCities())
+	else if(g_selected_item->GetVisiblePlayer()->GetNumCities())
 	{
-		city = g_player[g_selected_item->GetVisiblePlayer()]->m_all_cities->Access(0);
+		city = g_selected_item->GetVisiblePlayer()->m_all_cities->Access(0);
 		g_selected_item->SetSelectCity(city);
 
 		if(city.IsValid())
@@ -741,15 +743,15 @@ void CityMenuCallback(ctp2_Menu *menu, CTP2_MENU_ACTION action, sint32 itemIndex
 					EditQueue::Display(CityWindow::GetCityData(city));
 				}
 			}
-			else if(g_player[g_selected_item->GetVisiblePlayer()]->m_all_cities->Num() > 0)
+			else if (g_selected_item->GetVisiblePlayer()->m_all_cities->Num() > 0)
 			{
 				if(g_network.IsClient() && g_network.GetSensitiveUIBlocked())
 				{
 				}
 				else
 				{
-					EditQueue::Display(CityWindow::GetCityData(g_player[g_selected_item->GetVisiblePlayer()]->
-					                                           m_all_cities->Access(0)));
+					EditQueue::Display(CityWindow::GetCityData(
+							g_selected_item->GetVisiblePlayer()->m_all_cities->Access(0)));
 				}
 			}
 			break;
@@ -1623,7 +1625,7 @@ void ControlPanelWindow::BeginImprovementCycle(TerrainImprovementRecord *rec) //
 	if ((rec==NULL)||(g_selected_item==NULL))
 		return;
 
-	if (!terrainutil_CanPlayerBuild(rec,g_selected_item->GetVisiblePlayer(),false))
+	if (!terrainutil_CanPlayerBuild(rec, g_selected_item->GetVisiblePlayerID(), false))
 	{
 		ClearTargetingMode();
 		return;
@@ -1748,7 +1750,7 @@ void ControlPanelWindow::TileImpUpdate()  //emod4 definetely needs this but scho
 	if ((m_currentTerrainImpRec==NULL)||(g_selected_item==NULL))
 		return;
 
-	sint32 player_id =g_selected_item->GetVisiblePlayer();
+	sint32 player_id = g_selected_item->GetVisiblePlayerID();
 
 	MapPoint pos;
 
@@ -1940,7 +1942,7 @@ bool ControlPanelWindow::TileImpClick(const MapPoint &pos) //emod7
 		return true;
 	}
 
-	sint32 player=g_selected_item->GetVisiblePlayer();
+	sint32 player = g_selected_item->GetVisiblePlayerID();
 
 	if (!terrainutil_CanPlayerBuild(m_currentTerrainImpRec,player,true))
 		return true;
@@ -2078,8 +2080,9 @@ void ControlPanelWindow::AddMessage(Message &message,bool initializing)
 	if (!g_theMessagePool->IsValid(message))
 		return;
 
-	if (message.GetOwner() != g_selected_item->GetVisiblePlayer())
+	if (!g_selected_item->IsVisiblePlayer(message.GetOwner())) {
 		return;
+	}
 
 	ctp2_ListItem *item;
 	item = (ctp2_ListItem *) aui_Ldl::BuildHierarchyFromRoot("MessagePanelListItem");
@@ -2663,9 +2666,9 @@ void ControlPanelWindow::BuildUnitList()
 	{
 		MapPoint pos = g_selected_item->GetCurSelectPos();
 		Cell *cell = g_theWorld->GetCell(pos);
-		if(cell->AccessUnit(0).GetOwner() == g_selected_item->GetVisiblePlayer())
+		if (g_selected_item->IsVisiblePlayer(cell->AccessUnit(0).GetOwner()))
 		{
-			Unit top = cell->UnitArmy()->GetTopVisibleUnit(g_selected_item->GetVisiblePlayer());
+			Unit top = cell->UnitArmy()->GetTopVisibleUnit(g_selected_item->GetVisiblePlayerID());
 
 			if(!top.IsValid())
 				return;
@@ -2849,16 +2852,14 @@ void ControlPanelWindow::BuildList (sint32 index)
 	Cell *cell = g_theWorld->GetCell(pos);
 	if(cell->GetNumUnits() > 0)
 	{
-		if(cell->AccessUnit(0).GetOwner() == g_selected_item->GetVisiblePlayer())
-		{
+		if (g_selected_item->IsVisiblePlayer(cell->AccessUnit(0).GetOwner())) {
 			BuildUnitList();
 		}
 	}
 
 	if(cell->HasCity())
 	{
-		if(cell->GetCity().GetOwner() == g_selected_item->GetVisiblePlayer())
-		{
+		if (g_selected_item->IsVisiblePlayer(cell->GetCity().GetOwner())) {
 			BuildCityList(pos);
 		}
 	}
@@ -3003,9 +3004,7 @@ void ControlPanelWindow::PollCIVStatus()
 	if ((g_selected_item==NULL) || (g_player==NULL))
 		return;
 
-	sint32 p_index = g_selected_item->GetVisiblePlayer();
-
-	Player *current=g_player[p_index];
+	Player * current = g_selected_item->GetVisiblePlayer();
 
 	if (current==NULL)
 		return;
@@ -3054,7 +3053,7 @@ void ControlPanelWindow::HappinessRedisplay(aui_Surface *surface,RECT &rect,void
 	sint32 hapvals[3];
 	float total;
 
-	g_player[g_selected_item->GetVisiblePlayer()]->CountCityHappiness(hapvals[0],hapvals[1],hapvals[2]);
+	g_selected_item->GetVisiblePlayer()->CountCityHappiness(hapvals[0], hapvals[1], hapvals[2]);
 
 	total = (float)(hapvals[0]+hapvals[1]+hapvals[2]);
 
@@ -3088,7 +3087,7 @@ Unit ControlPanelWindow::CityPanelGetCurrent()
 
 	if (m_mainDropDown)
 	{
-		Player * current = g_player[g_selected_item->GetVisiblePlayer()];
+		Player * current = g_selected_item->GetVisiblePlayer();
 
 		if (current && current->GetNumCities())
 		{
@@ -3174,9 +3173,7 @@ void ControlPanelWindow::CityPanelNextCity()
 	if (m_mainDropDown==NULL)
 		return;
 
-	sint32 p_index = g_selected_item->GetVisiblePlayer();
-
-	Player *current=g_player[p_index];
+	Player * current = g_selected_item->GetVisiblePlayer();
 
 	if (current==NULL)
 		return;
@@ -3202,9 +3199,7 @@ Army ControlPanelWindow::UnitPanelGetCurrent()
 {
 	Army army;
 
-	sint32 p_index = g_selected_item->GetVisiblePlayer();
-
-	Player *current=g_player[p_index];
+	Player * current = g_selected_item->GetVisiblePlayer();
 
 	if (current==NULL)
 		return army;
@@ -3423,12 +3418,11 @@ void ControlPanelWindow::TileImpPanelRedisplay()
 
 	uint32	start=(m_currentTerrainSelection*CP_MAX_BUTTONS_PER_BANK);
 	uint32	end	=(start+CP_MAX_BUTTONS_PER_BANK);
-	sint32	p1	= g_selected_item->GetVisiblePlayer();
-	uint32	button;
+ 	uint32	button;
 
 	for (button=start;button<end;button++)
 	{
-		TileImpButtonRedisplay(p1,button);
+		TileImpButtonRedisplay(g_selected_item->GetVisiblePlayerID(), button);
 	}
 
 	m_tileImpPanes[m_currentTerrainSelection]->ShouldDraw();
@@ -3538,9 +3532,7 @@ void ControlPanelWindow::SetTab(CP_TAB tab)
 
 AUI_ERRCODE ControlPanelWindow::UpdatePlayerBeginProgress(sint32 currentPlayer)
 {
-	sint32 visiblePlayer = g_selected_item->GetVisiblePlayer();
-
-	if(currentPlayer == visiblePlayer || g_network.IsActive())
+	if (g_selected_item->IsVisiblePlayer(currentPlayer) || g_network.IsActive())
 	{
 	}
 	else
@@ -3557,9 +3549,7 @@ static sint32 s_totalPlayers = 0;
 
 AUI_ERRCODE ControlPanelWindow::UpdatePlayerEndProgress(sint32 currentPlayer)
 {
-	sint32 visiblePlayer = g_selected_item->GetVisiblePlayer();
-
-	if(currentPlayer == visiblePlayer)
+	if (g_selected_item->IsVisiblePlayer(currentPlayer))
 	{
 		s_totalPlayers = 0;
 		for(int i = 0; i < k_MAX_PLAYERS; i++)

@@ -77,8 +77,8 @@ void messagemodal_DestroyModalMessage( void )
 		g_modalMessage = NULL;
 
 
-		if(g_player && g_player[g_selected_item->GetVisiblePlayer()]) {
-			g_player[g_selected_item->GetVisiblePlayer()]->NotifyModalMessageDestroyed();
+		if(g_player && g_selected_item->GetVisiblePlayer()) {
+			g_selected_item->GetVisiblePlayer()->NotifyModalMessageDestroyed();
 		}
 	}
 }

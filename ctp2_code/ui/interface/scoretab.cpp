@@ -15,11 +15,6 @@
 
 extern void cpw_NumberToCommas( uint64 number, MBCHAR *s );
 
-
-
-
-
-
 ScoreTab::ScoreTab(void)
 :
 	m_difficulty        (static_cast<ctp2_Static *>
@@ -85,17 +80,16 @@ ScoreTab::~ScoreTab()
 
 void ScoreTab::Update(void)
 {
-	sint32      curPlayer   = g_selected_item->GetVisiblePlayer();
-	Player *    pl          = g_player[curPlayer];
-	if (!pl)
-    {
-		pl = Player::GetDeadPlayer(curPlayer);
+	sint32   curPlayer = g_selected_item->GetVisiblePlayerID();
+	Player * player    = g_selected_item->GetVisiblePlayer();
+	if (!player) {
+		player = Player::GetDeadPlayer(curPlayer);
 	}
-	if (!pl)
+	if (!player)
 		return;
 
-	Score *     score       = pl->m_score;
-	MBCHAR      commaNumber[80];
+	Score * score = player->m_score;
+	MBCHAR  commaNumber[80];
 
 	m_difficulty->SetText(m_difficultyStrings->GetString(g_theGameSettings->GetDifficulty()));
 
