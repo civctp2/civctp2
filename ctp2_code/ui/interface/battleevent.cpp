@@ -382,7 +382,7 @@ void BattleEvent::ProcessDeath(void)
 					if (!actor->HasDeath() || (!actor->HasThisAnim(UNITACTION_VICTORY))) {
 
 						action = new Action(UNITACTION_FAKE_DEATH, ACTIONEND_ANIMEND);
-						anim = actor->MakeFakeDeath();
+						anim = Anim::MakeFakeDeath();
 					} else {
 						action = new Action(UNITACTION_VICTORY, ACTIONEND_ANIMEND);
 						anim = actor->CreateAnim(UNITACTION_VICTORY);

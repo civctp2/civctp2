@@ -1846,9 +1846,7 @@ protected:
 
 	virtual void PrepareAnimation()
 	{
-		Action *action = new Action(UNITACTION_ATTACK, ACTIONEND_ANIMEND,
-									attacker->GetHoldingCurAnimPos(UNITACTION_ATTACK),
-									attacker->GetHoldingCurAnimSpecialDelayProcess(UNITACTION_ATTACK));
+		Action *action = new Action(UNITACTION_ATTACK, ACTIONEND_ANIMEND);
 		action->SetStartMapPoint(attackerPos);
 		action->SetEndMapPoint(attackerPos);
 
@@ -1935,13 +1933,13 @@ protected:
 			if(!deathAnim)
 			{
 				deathActionType = UNITACTION_FAKE_DEATH;
-				deathAnim = dead->MakeFakeDeath();
+				deathAnim = Anim::MakeFakeDeath();
 			}
 		}
 		else
 		{
 			deathActionType = UNITACTION_FAKE_DEATH;
-			deathAnim = dead->MakeFakeDeath();
+			deathAnim = Anim::MakeFakeDeath();
 		}
 
 		dead->SetHealthPercent(-1.0);
@@ -2077,7 +2075,7 @@ protected:
 		attackedAction->SetStartMapPoint(attackedPos);
 		attackedAction->SetEndMapPoint(attackedPos);
 
-		Anim * attackerAnim = attacker->MakeFaceoff();
+		Anim * attackerAnim = Anim::MakeFaceoff();
 		if (!attackerAnim)
 		{
 			attacker->AddIdle(true);
@@ -2091,7 +2089,7 @@ protected:
 			attacked->FullLoad(UNITACTION_IDLE);
 		}
 
-		Anim *attackedAnim = attacked->MakeFaceoff();
+		Anim *attackedAnim = Anim::MakeFaceoff();
 		if (!attackedAnim)
 		{
 			attacked->AddIdle(true);
@@ -2356,10 +2354,10 @@ void DirectorImpl::Clear() {
 		m_lockingAction = NULL;
 	}
 
+	m_actionQueue->DeleteAll();
+
 	m_tradeAnimations->Clear();
 	m_standbyAnimations->Clear();
-
-	m_actionQueue->DeleteAll();
 
 	delete m_activeLoopingSound;
 	m_activeLoopingSound = NULL;

@@ -225,18 +225,8 @@ void UnitActor::Initialize(void)
 	RECT			tmpRect = {0, 0, 10, 16};
 
 	m_heraldRect = tmpRect;
-	m_animPos = 0;
 	m_curUnitAction			= UNITACTION_NONE;
 	m_transparency			= 0;
-
-	for (sint32 i = UNITACTION_MOVE; i<UNITACTION_MAX; i++)
-	{
-		m_holdingCurAnimPos[i] = 0;
-		m_holdingCurAnimDelayEnd[i] = 0;
-		m_holdingCurAnimElapsed[i] = 0;
-		m_holdingCurAnimLastFrameTime[i] = 0;
-		m_holdingCurAnimSpecialDelayProcess = FALSE;
-	}
 
 	if (m_type == GROUPTYPE_UNIT)
 	{
@@ -451,7 +441,6 @@ void UnitActor::ChangeImage(SpriteState *ss, sint32 type, Unit id)
 	}
 	else
 	{
-
 		m_unitSpriteGroup = (UnitSpriteGroup *)g_citySpriteGroupList->GetSprite(spriteID, groupType, LOADTYPE_BASIC,(GAME_ACTION)0);
 
 		m_lastMoveFacing = 0;
@@ -526,7 +515,7 @@ void UnitActor::AddIdle(bool NoIdleJustDelay)
 
 	if (anim && ((GetActionQueueNumItems() > 0) || NoIdleJustDelay))
 	{
-		anim->SetNoIdleJustDelay(TRUE);
+		anim->SetType(ANIMTYPE_IDLE);
 	}
 
 	Action * idleAction =
@@ -540,9 +529,6 @@ void UnitActor::AddIdle(bool NoIdleJustDelay)
 	idleAction->SetAnim(anim);
 
 	AddAction(idleAction);
-
-
-
 
 	if (g_soundManager)
 		g_soundManager->TerminateLoopingSound(SOUNDTYPE_SFX, GetUnitID());
@@ -560,16 +546,13 @@ void UnitActor::ActionQueueUpIdle(bool NoIdleJustDelay)
 
 	if (anim && ((GetActionQueueNumItems() > 0) || NoIdleJustDelay))
 	{
-		anim->SetNoIdleJustDelay(TRUE);
+		anim->SetType(ANIMTYPE_IDLE);
 	}
 
 	Action *	tempCurAction	=
 		new Action(UNITACTION_IDLE, ACTIONEND_INTERRUPT, 0, NoIdleJustDelay);
 
 	tempCurAction->SetAnim(anim);
-
-
-
 
 	m_actionQueue.Enqueue(tempCurAction);
 }
@@ -599,7 +582,6 @@ void UnitActor::GetNextAction(bool isVisible)
 	{
 		SetUnitVisibility(m_curAction->GetUnitsVisibility());
 	}
-	m_curAction->SetSpecialDelayProcess(m_holdingCurAnimSpecialDelayProcess);
 
 	m_curUnitAction = (UNITACTION)m_curAction->GetActionType();
 }
@@ -717,13 +699,6 @@ void UnitActor::DumpAllActions(void)
 	}
 }
 
-
-
-
-
-
-
-
 void UnitActor::EndTurnProcess(void)
 {
 #ifndef _TEST
@@ -748,20 +723,14 @@ void UnitActor::AddAction(Action *actionObj)
 	Assert(actionObj != NULL);
 	if (actionObj == NULL) return;
 
-
-
-
-
-
 	if (g_theUnitPool) {
 		if(g_theUnitPool->IsValid(GetUnitID()))
 		{
-			m_playerNum = Unit(GetUnitID()).GetOwner();
+		    m_playerNum = Unit(GetUnitID()).GetOwner();
 		}
 	}
 
 	m_actionQueue.Enqueue(actionObj);
-
 
 	if (m_curAction) {
 		if (m_curAction->GetCurrentEndCondition() == ACTIONEND_INTERRUPT) {
@@ -800,82 +769,9 @@ Anim *UnitActor::CreateAnim(UNITACTION action)
 		}
 	}
 
-	Anim * anim = new Anim(*origAnim);
-
-	if (anim->GetType() == ANIMTYPE_LOOPED)
-	{
-
-		anim->SetDelayEnd(m_holdingCurAnimDelayEnd[action]);
-		anim->SetElapsed(m_holdingCurAnimElapsed[action]);
-		anim->SetLastFrameTime(g_director->GetMasterCurTime() - m_holdingCurAnimElapsed[action]);
-
-		if(m_holdingCurAnimDelayEnd[action] != 0)
-			anim->SetWeAreInDelay(TRUE);
-
-	}
-
-	if(action == UNITACTION_IDLE)
-	{
-		srand(anim->GetDelay() + g_director->GetMasterCurTime());
-		anim->AdjustDelay(rand() % 2000);
-	}
-
-	return anim; // Has to be deleted outside.
-}
-
-#define k_FAKE_DEATH_FRAMES			15
-#define k_FAKE_DEATH_DURATION		1500
-
-Anim * UnitActor::MakeFakeDeath(void)
-{
-    uint16 *     frames          = new uint16[k_FAKE_DEATH_FRAMES];
-    std::fill(frames, frames + k_FAKE_DEATH_FRAMES, 0);
-
-    POINT        pt              = {0,0};
-    POINT *      moveDeltas      = new POINT[k_FAKE_DEATH_FRAMES];
-    std::fill(moveDeltas, moveDeltas + k_FAKE_DEATH_FRAMES, pt);
-
-    uint16 *     transparencies  = new uint16[k_FAKE_DEATH_FRAMES];
-    for (int i = 0; i < k_FAKE_DEATH_FRAMES; i++)
-    {
-        transparencies[i] = (uint16)(15 - i);
-    }
-
-    Anim *       anim            = new Anim();
-    anim->SetNumFrames(k_FAKE_DEATH_FRAMES);
-    anim->SetFrames(frames);
-    anim->SetPlaybackTime(k_FAKE_DEATH_DURATION);
-    anim->SetDeltas(moveDeltas);
-    anim->SetTransparencies(transparencies);
-    anim->SetType(ANIMTYPE_SEQUENTIAL);
-
-    return anim;
-}
-
-#define k_FACEOFF_FRAMES			1
-#define k_FACEOFF_DURATION			1000
-
-Anim *UnitActor::MakeFaceoff(void)
-{
-    uint16 *     frames          = new uint16[k_FACEOFF_FRAMES];
-    std::fill(frames, frames + k_FACEOFF_FRAMES, 0);
-
-    POINT        pt              = {0,0};
-    POINT *      moveDeltas      = new POINT[k_FACEOFF_FRAMES];
-    std::fill(moveDeltas, moveDeltas + k_FACEOFF_FRAMES, pt);
-
-    uint16 *     transparencies  = new uint16[k_FACEOFF_FRAMES];
-    std::fill(transparencies, transparencies + k_FACEOFF_FRAMES, 15);
-
-    Anim *       anim            = new Anim();
-    anim->SetNumFrames(k_FACEOFF_FRAMES);
-    anim->SetFrames(frames);
-    anim->SetPlaybackTime(k_FACEOFF_DURATION);
-    anim->SetDeltas(moveDeltas);
-    anim->SetTransparencies(transparencies);
-    anim->SetType(ANIMTYPE_LOOPED);
-
-    return anim;
+	Anim * animation = new Anim(*origAnim);
+    animation->Rewind();
+	return animation; // Has to be deleted outside.
 }
 
 void UnitActor::DrawFortified(bool fogged)
@@ -1291,7 +1187,6 @@ bool UnitActor::Draw(bool fogged)
 		Pixel16 color   = 0x0000;
 		if(m_curAction == NULL)
 		{
-
 			m_unitSpriteGroup->Draw(m_curUnitAction, m_frame, m_x+xoffset, m_y+yoffset, m_facing,
 									g_tiledMap->GetScale(), m_transparency, color, flags, FALSE, directionAttack);
 		}
@@ -2107,24 +2002,6 @@ LOADTYPE UnitActor::GetLoadType(void) const
 }
 
 
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
 void UnitActor::FullLoad(UNITACTION action)
 {
 
@@ -2136,21 +2013,12 @@ void UnitActor::FullLoad(UNITACTION action)
 	if (m_loadType == LOADTYPE_FULL)
 		return;
 
-
-
-
-
-
-
 	SpriteGroup *group = g_unitSpriteGroupList->GetSprite(m_spriteID, m_unitSpriteGroup->GetType(), LOADTYPE_FULL,(GAME_ACTION)action);
 
 	m_loadType = LOADTYPE_FULL;
 
 	Assert(group == m_unitSpriteGroup);
 }
-
-
-
 
 bool UnitActor::ActionMove(Action *actionObj)
 {
@@ -2163,8 +2031,8 @@ bool UnitActor::ActionMove(Action *actionObj)
 	SetIsFortified (FALSE);
 
 	actionObj->SetActionType(UNITACTION_MOVE);
-	actionObj->SetAnimPos(GetHoldingCurAnimPos(UNITACTION_MOVE));
-	actionObj->SetSpecialDelayProcess(GetHoldingCurAnimSpecialDelayProcess(UNITACTION_MOVE));
+	actionObj->SetAnimPos(0);
+	actionObj->SetSpecialDelayProcess(FALSE);
 	actionObj->SetCurrentEndCondition(ACTIONEND_PATHEND);
 
 	if (GetLoadType()!=LOADTYPE_FULL)
@@ -2196,7 +2064,7 @@ bool UnitActor::ActionMove(Action *actionObj)
 }
 
 
-bool UnitActor::ActionAttack(Action *actionObj,sint32 facing)
+bool UnitActor::ActionAttack(Action *actionObj, sint32 facing)
 {
 	Assert(actionObj != NULL);
 
@@ -2221,7 +2089,7 @@ bool UnitActor::ActionAttack(Action *actionObj,sint32 facing)
 	sint32 const    visiblePlayer = g_selected_item->GetVisiblePlayer();
 
     if ((visiblePlayer == GetPlayerNum()) || (GetUnitVisibility() & (1 << visiblePlayer)))
-		  AddSound(SOUNDTYPE_SFX,actionObj->GetSoundEffect());
+		AddSound(SOUNDTYPE_SFX, actionObj->GetSoundEffect());
 
 	return true;
 }
@@ -2264,8 +2132,8 @@ bool UnitActor::TryAnimation(Action *actionObj,UNITACTION action)
 	Anim * theAnim = CreateAnim(action); // theAnim must be deleted
 	if (theAnim)
 	{
-        actionObj->SetAnimPos(GetHoldingCurAnimPos(action));
-        actionObj->SetSpecialDelayProcess(GetHoldingCurAnimSpecialDelayProcess(action));
+        actionObj->SetAnimPos(0);
+        actionObj->SetSpecialDelayProcess(FALSE);
         actionObj->SetAnim(theAnim);
         return true;
 	}
@@ -2302,10 +2170,6 @@ BOOL UnitActor::HitTest(POINT mousePt)
                  isSpecialDelay, isDirectionAttack
                 );
 }
-
-
-
-
 
 void UnitActor::AddLoopingSound(uint32 sound_type, sint32 sound_id)
 {

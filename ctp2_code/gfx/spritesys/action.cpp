@@ -58,11 +58,7 @@ Action::Action(sint32 actionType, ACTIONEND endCondition, sint32 startAnimPos, s
 	m_maxActionCounter          (0),
 	m_curActionCounter          (0),
 	m_animPos                   (startAnimPos),
-	m_animDelayEnd              (0),
-	m_animElapsed               (0),
-	m_animLastFrameTime         (0),
 	m_delay                     (0),
-	m_itIsTimeToAct             (false),
 	m_finished                  (false),
 	m_loopAnimFinished          (false),
 	m_specialDelayProcess       (specialDelayProcess),
@@ -83,11 +79,7 @@ Action::Action(Action const & a_Original)
 	m_maxActionCounter          (a_Original.m_maxActionCounter),
 	m_curActionCounter          (a_Original.m_curActionCounter),
 	m_animPos                   (a_Original.m_animPos),
-	m_animDelayEnd              (a_Original.m_animDelayEnd),
-	m_animElapsed               (a_Original.m_animElapsed),
-	m_animLastFrameTime         (a_Original.m_animLastFrameTime),
 	m_delay                     (a_Original.m_delay),
-	m_itIsTimeToAct             (a_Original.m_itIsTimeToAct),
 	m_finished                  (a_Original.m_finished),
 	m_loopAnimFinished          (a_Original.m_loopAnimFinished),
 	m_specialDelayProcess       (a_Original.m_specialDelayProcess),
@@ -136,35 +128,10 @@ void Action::Process(void)
         return;
     }
 
-	m_animPos = m_curAnim->GetNextPosition(m_animPos);
-	m_animDelayEnd = m_curAnim->GetDelayEnd();
-	m_animElapsed = m_curAnim->GetElapsed();
-	m_animLastFrameTime = m_curAnim->GetLastFrameTime();
-
-
-
-
-
-
-
-
-
-
-
-
-	m_specialDelayProcess = m_curAnim->GetWeAreInDelay() && (m_actionType == UNITACTION_IDLE);
-	if (m_specialDelayProcess)
-    {
-		m_animPos = 0;
-	}
+    m_curAnim->Process();
 
 	m_curActionCounter++;
-
-
-
-
-
-	if (m_curActionCounter > m_maxActionCounter || m_curAnim->Finished())
+	if (m_curActionCounter > m_maxActionCounter || m_curAnim->IsFinished())
 	{
 		m_curActionCounter = m_maxActionCounter;
 		m_loopAnimFinished = true;
@@ -189,7 +156,6 @@ void Action::Process(Action *pendingAction)
 
 	if (m_endCondition == ACTIONEND_INTERRUPT || Finished())
 	{
-		pendingAction->SetItIsTimeToAct(true);
 		SetFinished(true);
 	}
 
@@ -207,7 +173,7 @@ void Action::SetAnim(Anim *anim)
 //	Assert(anim != NULL);
 	if (anim == NULL) return;
 
-	anim->SetFinished(false);
+	anim->Rewind();
 
     m_maxActionCounter = anim->GetNumFrames();
 
@@ -255,7 +221,7 @@ uint16 Action::GetSpriteFrame(void) const
 		if (m_loopAnimFinished && m_curActionCounter == m_maxActionCounter) {
 			frame = 0;
 		} else {
-			frame = m_curAnim->GetFrame(m_animPos);
+			frame = m_curAnim->GetCurrentFrame();
 		}
 
 	} else {
@@ -286,16 +252,10 @@ uint16 Action::GetTransparency(void) const
 	STOMPCHECK();
 #endif
 
-	uint16	trans = 15;
-	uint16	*transparencies;
+	uint16 transparency = 15;
 
-	if (m_curAnim != NULL && m_animPos < m_curAnim->GetNumFrames()) {
-		transparencies = m_curAnim->GetTransparencies();
-		if (transparencies) {
-			trans = transparencies[m_animPos];
-		}
-
+	if (m_curAnim) {
+		transparency = m_curAnim->GetCurrentTransparency();
 	}
-
-	return trans;
+	return transparency;
 }

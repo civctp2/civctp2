@@ -24,7 +24,7 @@
 //
 // Modifications from the original Activision code:
 //
-// - Initialized local variables. (Sep 9th 2005 Martin Gühmann)
+// - Initialized local variables. (Sep 9th 2005 Martin GÃ¼hmann)
 //
 //----------------------------------------------------------------------------
 
@@ -656,8 +656,7 @@ void SpriteEditWindow::BeginAnimation()
 	m_actionObj->SetUnitsVisibility(1000);
 	m_actionObj->SetUnitVisionRange(1000);
 
-	m_currentAnim->SetWeAreInDelay(FALSE);
-	m_currentAnim->SetFinished(FALSE);
+	m_currentAnim->Rewind();
 }
 
 void SpriteEditWindow::Animate()
@@ -666,17 +665,11 @@ void SpriteEditWindow::Animate()
 
 	if (m_currentAnim)
 	{
-		m_currentAnim->SetWeAreInDelay(FALSE);
-
 		m_actionObj->Process();
 
-		sint32 animPos = m_actionObj->GetAnimPos();
+		m_frame = m_currentAnim->GetCurrentFrame();
 
-		m_frame = m_currentAnim->GetFrame(animPos);
-
-		sint32 num_frames = m_currentAnim->GetNumFrames();
-
-		if (animPos >= num_frames)
+		if (m_currentAnim->IsFinished())
 		{
 			animation_over = true;
 			m_frame = 0;

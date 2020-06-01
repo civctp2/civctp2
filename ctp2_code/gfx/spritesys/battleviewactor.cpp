@@ -25,7 +25,7 @@
 // Modifications from the original Activision code:
 //
 // - Prevented NULL-dereferencing crash.
-// - Removed unnecessary include files. (Aug 28th 2005 Martin Gühmann)
+// - Removed unnecessary include files. (Aug 28th 2005 Martin GÃ¼hmann)
 //
 //----------------------------------------------------------------------------
 
@@ -112,7 +112,7 @@ void BattleViewActor::AddIdle(BOOL NoIdleJustDelay)
 
 	if (anim && ((GetActionQueueNumItems() > 0) || NoIdleJustDelay))
 	{
-		anim->SetNoIdleJustDelay(TRUE);
+		anim->SetType(ANIMTYPE_IDLE);
 	}
 
 	delete m_curAction;
@@ -242,45 +242,9 @@ Anim *BattleViewActor::CreateAnim(UNITACTION action)
 	if (!origAnim)
 		return NULL;
 
-    Anim * anim = new Anim(*origAnim);
-
-	if (action == UNITACTION_IDLE)
-	{
-		srand(anim->GetDelay() + g_director->GetMasterCurTime());
-		anim->AdjustDelay(rand() % 2000);
-	}
-
-	return anim;
-}
-
-#define k_FAKE_DEATH_FRAMES			15
-#define k_FAKE_DEATH_DURATION		1500
-
-Anim * BattleViewActor::MakeFakeDeath(void)
-{
-    Anim *      anim        = new Anim();
-
-    uint16 *    frames      = new uint16[k_FAKE_DEATH_FRAMES];
-    std::fill(frames, frames + k_FAKE_DEATH_FRAMES, 0);
-	anim->SetFrames(frames);
-	anim->SetNumFrames(k_FAKE_DEATH_FRAMES);
-
-    POINT *     moveDeltas  = new POINT[k_FAKE_DEATH_FRAMES];
-    POINT       pt          = {0,0};
-    std::fill(moveDeltas, moveDeltas + k_FAKE_DEATH_FRAMES, pt);
-	anim->SetDeltas(moveDeltas);
-
-    uint16 *    transparencies = new uint16[k_FAKE_DEATH_FRAMES];
-    for (uint16 i = 0; i < k_FAKE_DEATH_FRAMES; ++i)
-    {
-        transparencies[i] = (uint16) (k_FAKE_DEATH_FRAMES - i);
-    }
-	anim->SetTransparencies(transparencies);
-
-	anim->SetPlaybackTime(k_FAKE_DEATH_DURATION);
-	anim->SetType(ANIMTYPE_SEQUENTIAL);
-
-	return anim;
+    Anim * animation = new Anim(*origAnim);
+    animation->Rewind();
+	return animation;
 }
 
 void BattleViewActor::Draw(BOOL fogged)
@@ -329,30 +293,6 @@ void BattleViewActor::DrawDirect(aui_Surface *surf, sint32 x, sint32 y)
 
 	DrawHealthBar(surf);
 }
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
 
 void BattleViewActor::DrawHealthBar(aui_Surface *surf)
 {

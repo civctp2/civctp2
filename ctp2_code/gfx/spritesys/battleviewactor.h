@@ -99,7 +99,6 @@ public:
     {
         return m_unitSpriteGroup && m_unitSpriteGroup->GetAnim((GAME_ACTION) action);
     };
-	Anim			*MakeFakeDeath(void);
 
 	void			Draw(BOOL fogged = FALSE);
 	void			DrawDirect(aui_Surface *surf, sint32 x, sint32 y);

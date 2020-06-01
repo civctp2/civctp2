@@ -26,7 +26,7 @@
 // Modifications from the original Activision code:
 //
 // - Crash prevention, small clean-ups.
-// - Removed unused local variables. (Sep 9th 2005 Martin G�hmann)
+// - Removed unused local variables. (Sep 9th 2005 Martin Gühmann)
 // - Fixed crashes when zooming out and exiting the program.
 //
 //----------------------------------------------------------------------------
@@ -341,13 +341,10 @@ void SpriteFile::WriteAnimData(Anim *a)
 	WriteData(static_cast<uint16>(a->GetNumFrames()));
 	WriteData(a->GetPlaybackTime());
 	WriteData(a->GetDelay());
-	WriteData((uint8 *)a->GetFrames(), sizeof(uint16) * a->GetNumFrames());
-	WriteData((uint8 *)a->GetDeltas(), sizeof(POINT) * a->GetNumFrames());
-	WriteData((uint8 *)a->GetTransparencies(), sizeof(uint16) * a->GetNumFrames());
+	WriteData((uint8 *)a->m_frames, sizeof(uint16) * a->GetNumFrames());
+	WriteData((uint8 *)a->m_moveDeltas, sizeof(POINT) * a->GetNumFrames());
+	WriteData((uint8 *)a->m_transparencies, sizeof(uint16) * a->GetNumFrames());
 }
-
-
-
 
 void SpriteFile::ReadSpriteDataBasic(Sprite *s)
 {
@@ -906,9 +903,9 @@ void SpriteFile::ReadAnimDataBasic(Anim *a)
 {
 	ReadAnimDataFull(a);
 
-	a->SetPlaybackTime(a->GetPlaybackTime() / a->GetNumFrames());
-	a->SetNumFrames(1);
-	uint16 *    u = a->GetFrames();
+	a->m_playbackTime = a->GetPlaybackTime() / a->GetNumFrames();
+	a->m_numFrames = 1;
+	uint16 *    u = a->m_frames;
 	u[0] = 0;
 }
 
@@ -919,31 +916,31 @@ void SpriteFile::ReadAnimDataFull(Anim *a)
 	a->SetType(data16);
 
 	ReadData(&data16, sizeof(data16));
-	a->SetNumFrames(data16);
+	a->m_numFrames = data16;
 
 	ReadData(&data16, sizeof(data16));
-	a->SetPlaybackTime(data16);
+	a->m_playbackTime = data16;
 
 	ReadData(&data16, sizeof(data16));
-	a->SetDelay(data16);
+	a->m_delay = data16;
 
-	uint16 *    u = a->GetFrames();
+	uint16 *    u = a->m_frames;
 	if (u == NULL)
 		u = new uint16[a->GetNumFrames()];
 	ReadData((void *)u, sizeof(uint16) * a->GetNumFrames());
-	a->SetFrames(u);
+	a->m_frames = u;
 
-	POINT *     p = a->GetDeltas();
+	POINT *     p = a->m_moveDeltas;
 	if (p == NULL)
 		p = new POINT[a->GetNumFrames()];
 	ReadData((void *)p, sizeof(POINT) * a->GetNumFrames());
-	a->SetDeltas(p);
+	a->m_moveDeltas = p;
 
-	u = a->GetTransparencies();
+	u = a->m_transparencies;
 	if (u == NULL)
 		u = new uint16[a->GetNumFrames()];
 	ReadData((void *)u, sizeof(uint16) * a->GetNumFrames());
-	a->SetTransparencies(u);
+	a->m_transparencies = u;
 }
 
 void SpriteFile::SkipAnimData(void)

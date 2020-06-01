@@ -124,9 +124,6 @@ public:
 	Anim *          GetAnim(void) const { return m_curAnim; }
 	sint32			GetAnimPos(void) const { return m_animPos; }
 	void			SetAnimPos(sint32 pos) { m_animPos=pos; }
-	sint32			GetAnimDelayEnd(void) const { return m_animDelayEnd; }
-	sint32			GetAnimElapsed(void) const { return m_animElapsed; }
-	sint32			GetAnimLastFrameTime(void) const { return m_animLastFrameTime; }
 
 	ActorPath *     GetPath(void) const { return m_curPath; }
 
@@ -168,9 +165,6 @@ public:
 	bool			LoopAnimHasCycled(void) const { return m_loopAnimFinished; }
 	void			ResetAnimLoop(void) { m_loopAnimFinished = false; }
 
-	void			SetItIsTimeToAct(bool act) { m_itIsTimeToAct = act; }
-	bool			GetItIsTimeToAct() const { return m_itIsTimeToAct; }
-
 	void			SetUnitsVisibility(uint32 unitsVis) { m_unitsVisibility = unitsVis; }
 	uint32			GetUnitsVisibility(void) const { return m_unitsVisibility; }
 
@@ -190,13 +184,9 @@ protected:
 	sint32				m_maxActionCounter;
 	sint32				m_curActionCounter;
 	sint32				m_animPos;
-	sint32				m_animDelayEnd;
-	sint32				m_animElapsed;
-	sint32				m_animLastFrameTime;
 
 	sint32				m_delay;
 
-	bool				m_itIsTimeToAct;
 	bool				m_finished;
 	bool				m_loopAnimFinished;
 	sint32  			m_specialDelayProcess;

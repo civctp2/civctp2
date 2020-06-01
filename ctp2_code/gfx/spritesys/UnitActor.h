@@ -101,8 +101,6 @@ public:
 	void			ActionQueueUpIdle(bool NoIdleJustDelay = false);
 
 	Anim *          CreateAnim(UNITACTION action);
-	Anim			*MakeFakeDeath(void);
-	Anim			*MakeFaceoff(void);
 
 	bool			HasThisAnim(UNITACTION action) const
 	{
@@ -170,12 +168,6 @@ public:
 	void			SetHiddenUnderStack(bool val) { m_hiddenUnderStack = val; }
 
 	void			GetBoundingRect(RECT *rect) const;
-
-	sint32			GetHoldingCurAnimPos(UNITACTION action) const { return m_holdingCurAnimPos[action]; }
-	sint32			GetHoldingCurAnimDelayEnd(UNITACTION action) const { return m_holdingCurAnimDelayEnd[action]; }
-	sint32			GetHoldingCurAnimElapsed(UNITACTION action) const { return m_holdingCurAnimElapsed[action]; }
-	sint32			GetHoldingCurAnimLastFrameTime(UNITACTION action) const { return m_holdingCurAnimLastFrameTime[action]; }
-	sint32			GetHoldingCurAnimSpecialDelayProcess(UNITACTION action) const { return m_holdingCurAnimSpecialDelayProcess; }
 
 	LOADTYPE		GetLoadType(void) const;
 
@@ -253,12 +245,6 @@ protected:
 
 	BOOL				m_hidden;
 	bool				m_hiddenUnderStack;
-
-	sint32				m_holdingCurAnimPos[UNITACTION_MAX];
-	sint32				m_holdingCurAnimDelayEnd[UNITACTION_MAX];
-	sint32				m_holdingCurAnimElapsed[UNITACTION_MAX];
-	sint32				m_holdingCurAnimLastFrameTime[UNITACTION_MAX];
-	sint32				m_holdingCurAnimSpecialDelayProcess;
 
 	sint32				m_size;
 	BOOL                m_isUnseenCellActor;
