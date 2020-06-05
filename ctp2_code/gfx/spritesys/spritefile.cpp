@@ -337,7 +337,7 @@ void SpriteFile::WriteFacedSpriteWshadowData(FacedSpriteWshadow *s)
 
 void SpriteFile::WriteAnimData(Anim *a)
 {
-	WriteData(static_cast<uint16>(a->GetType()));
+	WriteData(static_cast<uint16>(a->m_type));
 	WriteData(static_cast<uint16>(a->GetNumFrames()));
 	WriteData(a->GetPlaybackTime());
 	WriteData(a->GetDelay());
@@ -913,7 +913,7 @@ void SpriteFile::ReadAnimDataFull(Anim *a)
 {
 	uint16		data16;
 	ReadData(&data16, sizeof(data16));
-	a->SetType(data16);
+	a->m_type = (ANIMTYPE) data16;
 
 	ReadData(&data16, sizeof(data16));
 	a->m_numFrames = data16;
@@ -1004,9 +1004,14 @@ SPRITEFILEERR SpriteFile::Create(SPRITEFILETYPE type,unsigned version,unsigned c
 
 SPRITEFILEERR SpriteFile::Write(Sprite *s, Anim *anim)
 {
+	Anim * writeAnim = anim ? anim : new Anim();
 
 	WriteSpriteData(s);
-	WriteAnimData(anim);
+	WriteAnimData(writeAnim);
+
+	if (!anim) {
+		delete writeAnim;
+	}
 
 	return SPRITEFILEERR_OK;
 }

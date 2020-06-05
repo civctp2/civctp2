@@ -220,14 +220,12 @@ void BattleEvent::ProcessAttack(void)
 
 					Assert(actor);
 
-					Anim *  anim = actor->CreateAnim(UNITACTION_ATTACK);
-					if (anim) {
-						Action			*action = new Action(UNITACTION_ATTACK, ACTIONEND_ANIMEND);
-
-						action->SetAnim(anim);
+					Anim * anim = actor->CreateAnim(UNITACTION_ATTACK);
+					if (anim)
+					{
+						Action * action = Action::CreateUnitAction(UNITACTION_ATTACK, anim);
 						actor->AddAction(action);
 					} else {
-
 						finished = TRUE;
 					}
 
@@ -287,22 +285,17 @@ void BattleEvent::ProcessExplode(void)
 				if (actor) {
 					Action		*action = NULL;
 
-					Anim *  anim = actor->CreateAnim(EFFECTACTION_PLAY);
-					if (anim == NULL) {
+					Anim * anim = actor->CreateAnim(EFFECTACTION_PLAY);
+					if (!anim) {
 						anim = actor->CreateAnim(EFFECTACTION_FLASH);
-						if (anim)
-                        {
-							action = new Action(EFFECTACTION_FLASH, ACTIONEND_ANIMEND);
-                        }
-						else
-                        {
+						if (anim) {
+							action = Action::CreateEffectAction(EFFECTACTION_FLASH, anim);
+                        } else {
 							Assert(FALSE);
                         }
 					} else {
-						action = new Action(EFFECTACTION_PLAY, ACTIONEND_ANIMEND);
+						action = Action::CreateEffectAction(EFFECTACTION_PLAY, anim);
 					}
-
-					action->SetAnim(anim);
 					actor->AddAction(action);
 					actor->Process();
 
@@ -374,21 +367,11 @@ void BattleEvent::ProcessDeath(void)
 
 				if (!m_animating) {
 					Action		*action;
-					Anim		*anim;
-
-
-
-
 					if (!actor->HasDeath() || (!actor->HasThisAnim(UNITACTION_VICTORY))) {
-
-						action = new Action(UNITACTION_FAKE_DEATH, ACTIONEND_ANIMEND);
-						anim = Anim::MakeFakeDeath();
+						action = Action::CreateUnitAction(UNITACTION_FAKE_DEATH, Anim::MakeFakeDeath());
 					} else {
-						action = new Action(UNITACTION_VICTORY, ACTIONEND_ANIMEND);
-						anim = actor->CreateAnim(UNITACTION_VICTORY);
+						action = Action::CreateUnitAction(UNITACTION_VICTORY, actor->CreateAnim(UNITACTION_VICTORY));
 					}
-
-					action->SetAnim(anim);
 					actor->AddAction(action);
 
 					if (g_soundManager)
@@ -404,8 +387,8 @@ void BattleEvent::ProcessDeath(void)
 					actor->Process();
 
 					if (actor->GetCurAction() &&
-						actor->GetCurAction()->m_actionType != UNITACTION_VICTORY &&
-						actor->GetCurAction()->m_actionType != UNITACTION_FAKE_DEATH) {
+						actor->GetCurAction()->GetActionType() != UNITACTION_VICTORY &&
+						actor->GetCurAction()->GetActionType() != UNITACTION_FAKE_DEATH) {
 
 						finished = TRUE;
 					}

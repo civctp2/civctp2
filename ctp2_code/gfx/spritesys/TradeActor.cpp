@@ -26,7 +26,7 @@
 //
 // - Prevented memory leaks and double deletes.
 // - The good sprite index is now retrieved from the resource database
-//   instead from the good sprite state database. (Aug 29th 2005 Martin Gühmann)
+//   instead from the good sprite state database. (Aug 29th 2005 Martin Gï¿½hmann)
 //
 //----------------------------------------------------------------------------
 
@@ -68,7 +68,6 @@ TradeActor::TradeActor(TradeRoute newRoute)
 	GROUPTYPE		type;
 
 	m_curAction = NULL;
-	m_animPos = 0;
 
 	m_routeID = newRoute;
 	m_routePath = m_routeID.GetPath();
@@ -97,15 +96,9 @@ TradeActor::TradeActor(TradeRoute newRoute)
 	m_facing = 0;
 	m_frame = 0;
 
+	m_idleAnim = NULL;
 	AddIdle();
 
-	m_actionQueue.Allocate(k_MAX_ACTION_QUEUE_SIZE);
-}
-
-TradeActor::TradeActor(TradeActor *copy)
-{
-	*this = *copy;
-	m_curAction	= new Action(m_curAction);
 }
 
 TradeActor::~TradeActor()
@@ -115,9 +108,11 @@ TradeActor::~TradeActor()
 
 void TradeActor::AddIdle(void)
 {
+	m_idleAnim = m_idleAnim ? Anim::CreateLooping(*m_idleAnim) : CreateAnim(GOODACTION_IDLE);
 	delete m_curAction;
-	m_curAction = new Action(GOODACTION_IDLE, ACTIONEND_INTERRUPT);
-	m_curAction->SetAnim(CreateAnim(GOODACTION_IDLE));
+
+	m_currentPos = GetNextPos();
+	m_curAction = Action::CreateGoodAction(GOODACTION_IDLE, m_idleAnim, m_currentPos, LookAtNextPos());
 	m_curGoodAction = GOODACTION_IDLE;
 }
 
@@ -146,107 +141,27 @@ void TradeActor::Process(void)
 	{
 		m_curAction->Process();
 
-		if (m_curAction->Finished())
+		if (m_curAction->IsFinished())
 		{
-			MapPoint  end;
-			m_curAction->GetEndMapPoint(end);
-			if (end.x != 0 || end.y != 0)
-			{
-				m_currentPos = end;
-			}
-
 			GetNextAction();
 		}
 	}
 
-	if (m_curAction != NULL) {
-		sint32 x, y;
+	if (m_curAction)
+	{
+		POINT current = m_curAction->CalculatePixelXY(m_currentPos);
+		m_x = current.x;
+		m_y = current.y;
 
-
-
-
-
-		if(m_curAction->GetCurrentEndCondition() == ACTIONEND_INTERRUPT && 	m_curAction->LoopAnimHasCycled())
-		{
-			m_curAction->ResetAnimLoop();
-			m_curAction->SetCurActionCounter(0);
-			m_currentPos = GetNextPos();
-
-
-
-
-
-
-			MapPoint tempDestPos = LookAtNextPos();
-			MapPoint tempCurPos = m_currentPos;
-
-			m_curAction->CreatePath(m_currentPos.x, m_currentPos.y, tempDestPos.x, tempDestPos.y);
-
-		}
-
-		maputils_MapXY2PixelXY(m_currentPos.x, m_currentPos.y, &x, &y);
-
-		m_x = x;
-		m_y = y;
-
-		m_frame = m_curAction->GetSpriteFrame();
+    	m_frame = m_curAction->GetSpriteFrame();
 
 		m_transparency = m_curAction->GetTransparency();
-
-		POINT curPt;
-
-		if (m_curAction->GetPath() != NULL) {
-
-			curPt = m_curAction->GetPosition();
-
-
-
-
-
-			m_x = curPt.x;
-			m_y = curPt.y;
-		}
-
-		m_facing = m_curAction->GetFacing();
 	}
 }
 
 void TradeActor::GetNextAction(void)
 {
-	if (m_curAction) {
-		delete m_curAction;
-		m_curAction = NULL;
-	}
-
-	if (m_actionQueue.GetNumItems() > 0) {
-		m_actionQueue.Dequeue(m_curAction);
-		if (m_curAction) {
-			m_curGoodAction = (GOODACTION)m_curAction->GetActionType();
-		} else {
-			Assert(FALSE);
-		}
-	} else {
-
-		AddIdle();
-	}
-}
-
-void TradeActor::AddAction(Action *actionObj)
-{
-	Assert(m_goodSpriteGroup != NULL);
-	if (m_goodSpriteGroup == NULL) return;
-
-	Assert(actionObj != NULL);
-	if (actionObj == NULL) return;
-
-
-	m_actionQueue.Enqueue(actionObj);
-
-	if (m_curAction) {
-		if (m_curAction->GetAnim()->GetType() == ANIMTYPE_LOOPED) {
-			m_curAction->SetFinished(TRUE);
-		}
-	}
+	AddIdle();
 }
 
 Anim *TradeActor::CreateAnim(GOODACTION action)
@@ -260,10 +175,9 @@ Anim *TradeActor::CreateAnim(GOODACTION action)
 
 		origAnim = m_goodSpriteGroup->GetAnim((GAME_ACTION)GOODACTION_IDLE);
 		Assert(origAnim != NULL);
-		return NULL;
 	}
 
-	return new Anim(*origAnim);
+	return origAnim ? Anim::CreateLooping(*origAnim) : NULL;
 }
 
 void TradeActor::Draw(const Vision *tileLocalVision)

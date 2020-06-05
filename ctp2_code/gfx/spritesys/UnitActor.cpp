@@ -444,7 +444,7 @@ void UnitActor::ChangeImage(SpriteState *ss, sint32 type, Unit id)
 		m_unitSpriteGroup = (UnitSpriteGroup *)g_citySpriteGroupList->GetSprite(spriteID, groupType, LOADTYPE_BASIC,(GAME_ACTION)0);
 
 		m_lastMoveFacing = 0;
-		m_facing = 0;
+		m_facing = k_DEFAULTSPRITEFACING;
 	}
 
 	AddIdle();
@@ -504,57 +504,25 @@ void UnitActor::ChangeType(SpriteState *ss, sint32 type,  Unit id, bool updateVi
 	AddIdle();
 }
 
-void UnitActor::AddIdle(bool NoIdleJustDelay)
+void UnitActor::AddIdle()
 {
-	Anim *  anim    = CreateAnim(UNITACTION_IDLE);
-	m_frame         = 0;
+	// TODO: implement interruptable idle
+	Anim * animation  = NULL;
 
-	if (anim == NULL) {
-		anim = CreateAnim(UNITACTION_MOVE);
+	// UNITACTION_IDLE only supports default facing
+	if (m_facing == k_DEFAULTSPRITEFACING) {
+		animation = TryAnimation(UNITACTION_IDLE);
+	}
+	if (!animation) {
+		animation = TryAnimation(UNITACTION_MOVE);
 	}
 
-	if (anim && ((GetActionQueueNumItems() > 0) || NoIdleJustDelay))
-	{
-		anim->SetType(ANIMTYPE_IDLE);
-	}
-
-	Action * idleAction =
-        new Action(UNITACTION_IDLE, ACTIONEND_INTERRUPT, 0, NoIdleJustDelay);
-
-    if (NoIdleJustDelay)
-    {
-		idleAction->SetFacing(m_facing);
-	}
-
-	idleAction->SetAnim(anim);
-
+	Action * idleAction = Action::CreateUnitAction(UNITACTION_IDLE, animation);
 	AddAction(idleAction);
 
-	if (g_soundManager)
+	if (g_soundManager) {
 		g_soundManager->TerminateLoopingSound(SOUNDTYPE_SFX, GetUnitID());
-}
-
-void UnitActor::ActionQueueUpIdle(bool NoIdleJustDelay)
-{
-	Anim * anim = CreateAnim(UNITACTION_IDLE);
-
-	if (anim == NULL)
-	{
-		anim = CreateAnim(UNITACTION_MOVE);
-		Assert(anim != NULL);
 	}
-
-	if (anim && ((GetActionQueueNumItems() > 0) || NoIdleJustDelay))
-	{
-		anim->SetType(ANIMTYPE_IDLE);
-	}
-
-	Action *	tempCurAction	=
-		new Action(UNITACTION_IDLE, ACTIONEND_INTERRUPT, 0, NoIdleJustDelay);
-
-	tempCurAction->SetAnim(anim);
-
-	m_actionQueue.Enqueue(tempCurAction);
 }
 
 void UnitActor::GetNextAction(bool isVisible)
@@ -572,14 +540,14 @@ void UnitActor::GetNextAction(bool isVisible)
 			return;
 		}
 
+		m_facing = m_curAction->CalculateFacing(m_facing);
 		if (m_curAction->GetActionType() != m_curUnitAction)
 			m_frame = 0;
 	} else {
 		return;
 	}
 
-	if(m_curAction->m_actionType == UNITACTION_ATTACK )
-	{
+	if (m_curAction->GetActionType() == UNITACTION_ATTACK) {
 		SetUnitVisibility(m_curAction->GetUnitsVisibility());
 	}
 
@@ -589,7 +557,7 @@ void UnitActor::GetNextAction(bool isVisible)
 bool UnitActor::IsActionFinished()
 {
 	return (!m_curAction
-		|| m_curAction->m_actionType == UNITACTION_IDLE || m_curAction->m_actionType == UNITACTION_FACE_OFF);
+		|| m_curAction->GetActionType() == UNITACTION_IDLE || m_curAction->GetActionType() == UNITACTION_FACE_OFF);
 }
 
 void UnitActor::Process(void)
@@ -600,7 +568,7 @@ void UnitActor::Process(void)
 	if (!m_curAction)
 	{
 		DumpFullLoad();
-		AddIdle(m_facing != 3);
+		AddIdle();
 	}
 
 	if (!m_curAction)
@@ -608,38 +576,14 @@ void UnitActor::Process(void)
 
 	m_curAction->Process();
 
-	if (m_curAction->Finished()) {
+	if (m_curAction->IsFinished() && m_curAction->GetActionType() != UNITACTION_IDLE) {
 		GetNextAction();
 	}
 	else
 	{
-		if (m_curAction->GetPath()!=NULL)
-		{
-			POINT curPt = m_curAction->GetPosition();
-			m_x = curPt.x;
-			m_y = curPt.y;
-		}
-		else
-		{
-			sint32 x, y;
-			maputils_MapXY2PixelXY(m_pos.x, m_pos.y, &x, &y);
-			m_x = x;
-			m_y = y;
-		}
-
-		if(m_curAction->GetActionType() == UNITACTION_MOVE || m_curAction->GetActionType() == UNITACTION_ATTACK) {
-			m_lastMoveFacing = m_curAction->GetFacing();
-		}
-
-		if(m_curAction->SpecialDelayProcess()
-			|| (m_curUnitAction == UNITACTION_IDLE
-				&& m_unitSpriteGroup
-				&& m_unitSpriteGroup->GetGroupSprite((GAME_ACTION)m_curUnitAction) == NULL))
-		{
-			m_facing = m_lastMoveFacing;
-		} else {
-			m_facing = m_curAction->GetFacing();
-		}
+		POINT current = m_curAction->CalculatePixelXY(m_pos);
+		m_x = current.x;
+		m_y = current.y;
 
 		m_frame = m_curAction->GetSpriteFrame();
 
@@ -653,7 +597,7 @@ Action *UnitActor::WillMorph(void) const
 	STOMPCHECK();
 #endif
 
-	if (m_curAction && (UNITACTION_MORPH == m_curAction->m_actionType))
+	if (m_curAction && (UNITACTION_MORPH == m_curAction->GetActionType()))
 	{
 		return m_curAction;
 	}
@@ -663,7 +607,7 @@ Action *UnitActor::WillMorph(void) const
     {
         Action * action = NULL;
 		m_actionQueue.GetQueueItem(i, action);
-		if (action && (action->m_actionType == UNITACTION_MORPH))
+		if (action && (action->GetActionType() == UNITACTION_MORPH))
 		{
 			return action;
 		}
@@ -680,7 +624,7 @@ void UnitActor::DumpAllActions(void)
 	static MapPoint pos;
 
 	if (m_curAction != NULL) {
-		m_facing = m_curAction->GetFacing();
+		m_facing = m_curAction->CalculateFacing(m_facing);
 		delete m_curAction;
 		m_curAction = NULL;
 	}
@@ -689,7 +633,7 @@ void UnitActor::DumpAllActions(void)
 	while (m_actionQueue.GetNumItems() > 0) {
 		m_actionQueue.Dequeue(otherAction);
 		if (otherAction != NULL) {
-			m_facing = otherAction->GetFacing();
+			m_facing = otherAction->CalculateFacing(m_facing);
 			delete otherAction;
 			otherAction = NULL;
 		} else {
@@ -714,6 +658,8 @@ void UnitActor::EndTurnProcess(void)
 
 void UnitActor::AddAction(Action *actionObj)
 {
+	// TODO: implement looping and interrupt for UNITACTION_FACE_OFF
+	// TODO: implement interrupt if needed
 #ifndef _TEST
 	STOMPCHECK();
 #endif
@@ -723,20 +669,15 @@ void UnitActor::AddAction(Action *actionObj)
 	Assert(actionObj != NULL);
 	if (actionObj == NULL) return;
 
-	if (g_theUnitPool) {
-		if(g_theUnitPool->IsValid(GetUnitID()))
-		{
-		    m_playerNum = Unit(GetUnitID()).GetOwner();
-		}
+	if (g_theUnitPool && g_theUnitPool->IsValid(GetUnitID())) {
+		m_playerNum = Unit(GetUnitID()).GetOwner();
 	}
+
+	Interrupt();
 
 	m_actionQueue.Enqueue(actionObj);
 
-	if (m_curAction) {
-		if (m_curAction->GetCurrentEndCondition() == ACTIONEND_INTERRUPT) {
-			m_curAction->SetFinished(TRUE);
-		}
-	} else {
+	if (!m_curAction) {
 		GetNextAction();
 	}
 }
@@ -750,28 +691,7 @@ Anim *UnitActor::CreateAnim(UNITACTION action)
 	if (m_unitSpriteGroup == NULL) return NULL;
 
 	Anim	*origAnim = m_unitSpriteGroup->GetAnim((GAME_ACTION)action);
-
-	if (origAnim == NULL)
-	{
-		if(action != UNITACTION_IDLE)
-		{
-			return NULL;
-		}
-		else
-		{
-
-			origAnim = m_unitSpriteGroup->GetAnim((GAME_ACTION)UNITACTION_MOVE);;
-//			Assert(origAnim != NULL);
-			if(origAnim == NULL)
-				return NULL;
-			else
-				action = UNITACTION_MOVE;
-		}
-	}
-
-	Anim * animation = new Anim(*origAnim);
-    animation->Rewind();
-	return animation; // Has to be deleted outside.
+	return origAnim ? Anim::CreateSequential(*origAnim) : NULL;
 }
 
 void UnitActor::DrawFortified(bool fogged)
@@ -1188,12 +1108,12 @@ bool UnitActor::Draw(bool fogged)
 		if(m_curAction == NULL)
 		{
 			m_unitSpriteGroup->Draw(m_curUnitAction, m_frame, m_x+xoffset, m_y+yoffset, m_facing,
-									g_tiledMap->GetScale(), m_transparency, color, flags, FALSE, directionAttack);
+									g_tiledMap->GetScale(), m_transparency, color, flags, false, directionAttack);
 		}
 		else
 		{
 			m_unitSpriteGroup->Draw(m_curUnitAction, m_frame, m_x+xoffset, m_y+yoffset, m_facing,
-									g_tiledMap->GetScale(), m_transparency, color, flags, m_curAction->SpecialDelayProcess(), directionAttack);
+									g_tiledMap->GetScale(), m_transparency, color, flags, false, directionAttack);
 		}
 
 		if (isCloaked)
@@ -2010,6 +1930,8 @@ void UnitActor::FullLoad(UNITACTION action)
 
 	if (!m_unitSpriteGroup)
 		return;
+	if (m_type != GROUPTYPE_UNIT)
+		return;
 	if (m_loadType == LOADTYPE_FULL)
 		return;
 
@@ -2020,125 +1942,37 @@ void UnitActor::FullLoad(UNITACTION action)
 	Assert(group == m_unitSpriteGroup);
 }
 
-bool UnitActor::ActionMove(Action *actionObj)
+Anim * UnitActor::CreateMoveAnim()
 {
-	Assert(actionObj != NULL);
+	return TryAnimation(UNITACTION_MOVE);
+}
 
-	if (actionObj == NULL)
-		return false;
-
-	SetIsFortifying(FALSE);
-	SetIsFortified (FALSE);
-
-	actionObj->SetActionType(UNITACTION_MOVE);
-	actionObj->SetAnimPos(0);
-	actionObj->SetSpecialDelayProcess(FALSE);
-	actionObj->SetCurrentEndCondition(ACTIONEND_PATHEND);
-
-	if (GetLoadType()!=LOADTYPE_FULL)
-	 	FullLoad(UNITACTION_MOVE);
-
-	Anim * anim	= CreateAnim(UNITACTION_MOVE);
-	Assert(anim != NULL);
-   	if (anim == NULL)
-   		return false;
-
-	actionObj->SetAnim(anim);
-	actionObj->SetUnitsVisibility(GetUnitVisibility());
-	actionObj->SetUnitVisionRange(GetUnitVisionRange());
-	actionObj->SetMaxActionCounter
-        (k_MAX_UNIT_MOVEMENT_ITERATIONS - g_theProfileDB->GetUnitSpeed());
-	actionObj->SetCurActionCounter(0);
-
-	AddAction(actionObj);
-
-	sint32 const visiblePlayer = g_selected_item->GetVisiblePlayer();
-
-	if ((visiblePlayer == GetPlayerNum()) || 
-		(GetUnitVisibility() & (1 << visiblePlayer)))
-	{
-		AddLoopingSound(SOUNDTYPE_SFX,actionObj->GetSoundEffect());
+Anim * UnitActor::CreateAttackAnim()
+{
+	Anim * animation = TryAnimation(UNITACTION_ATTACK);
+	if (!animation) {
+		animation = TryAnimation(UNITACTION_IDLE);
 	}
-
-	return true;
+	return animation;
 }
 
-
-bool UnitActor::ActionAttack(Action *actionObj, sint32 facing)
+Anim * UnitActor::CreateSpecialAttackAnim()
 {
-	Assert(actionObj != NULL);
-
-	if (actionObj == NULL)
-		return false;
-
-	actionObj->SetCurrentEndCondition(ACTIONEND_ANIMEND);
-
-   	if(!TryAnimation(actionObj,UNITACTION_ATTACK))
-	   if(!TryAnimation(actionObj,UNITACTION_IDLE))
-	 	 return false;
-
-	actionObj->SetActionType(UNITACTION_ATTACK);
-	actionObj->SetFacing(facing);
-	actionObj->SetUnitsVisibility(GetUnitVisibility());
-	actionObj->SetUnitVisionRange(GetUnitVisionRange());
-
-	AddAction(actionObj);
-
-	TerminateLoopingSound(SOUNDTYPE_SFX);
-
-	sint32 const    visiblePlayer = g_selected_item->GetVisiblePlayer();
-
-    if ((visiblePlayer == GetPlayerNum()) || (GetUnitVisibility() & (1 << visiblePlayer)))
-		AddSound(SOUNDTYPE_SFX, actionObj->GetSoundEffect());
-
-	return true;
+	Anim * animation = TryAnimation(UNITACTION_WORK);
+	if (!animation) {
+		animation = TryAnimation(UNITACTION_ATTACK);
+		if (!animation) {
+			animation = TryAnimation(UNITACTION_IDLE);
+		}
+	}
+	return animation;
 }
 
-bool UnitActor::ActionSpecialAttack(Action *actionObj,sint32 facing)
-{
-	Assert(actionObj != NULL);
-
-	if (actionObj==NULL)
-		return false;
-
-	actionObj->SetCurrentEndCondition(ACTIONEND_ANIMEND);
-
-	if(!TryAnimation(actionObj,UNITACTION_WORK))
-	   if(!TryAnimation(actionObj,UNITACTION_ATTACK))
-		  if(!TryAnimation(actionObj,UNITACTION_IDLE))
-			 return false;
-
-	actionObj->SetActionType(UNITACTION_ATTACK);
-	actionObj->SetFacing(facing);
-	actionObj->SetUnitsVisibility(GetUnitVisibility());
-	actionObj->SetUnitVisionRange(GetUnitVisionRange());
-
-	AddAction(actionObj);
-
-	TerminateLoopingSound(SOUNDTYPE_SFX);
-
-	sint32 const    visiblePlayer = g_selected_item->GetVisiblePlayer();
-
-	if ((visiblePlayer == GetPlayerNum()) || (GetUnitVisibility() & (1 << visiblePlayer)))
-		AddSound(SOUNDTYPE_SFX, actionObj->GetSoundEffect());
-
-	return true;
-}
-
-bool UnitActor::TryAnimation(Action *actionObj,UNITACTION action)
+Anim * UnitActor::TryAnimation(UNITACTION action)
 {
 	FullLoad(action);
 
-	Anim * theAnim = CreateAnim(action); // theAnim must be deleted
-	if (theAnim)
-	{
-        actionObj->SetAnimPos(0);
-        actionObj->SetSpecialDelayProcess(FALSE);
-        actionObj->SetAnim(theAnim);
-        return true;
-	}
-
-	return false;
+	return CreateAnim(action); // theAnim must be deleted
 }
 
 void UnitActor::DumpFullLoad(void)
@@ -2162,36 +1996,12 @@ BOOL UnitActor::HitTest(POINT mousePt)
 	sint32	yoffset             = (sint32)(k_ACTOR_CENTER_OFFSET_Y * g_tiledMap->GetScale());
     Pixel16 color               = COLOR_WHITE;
 	uint16	flags               = 0;
-    bool    isSpecialDelay      = m_curAction && m_curAction->SpecialDelayProcess();
 
 	return m_unitSpriteGroup->HitTest
                 (mousePt, m_curUnitAction, m_frame, m_x+xoffset, m_y+yoffset,
                  m_facing, g_tiledMap->GetScale(), m_transparency, color, flags,
-                 isSpecialDelay, isDirectionAttack
+                 false, isDirectionAttack
                 );
-}
-
-void UnitActor::AddLoopingSound(uint32 sound_type, sint32 sound_id)
-{
-	if ((g_soundManager)&&(sound_id>=0))
-	   	g_soundManager->AddLoopingSound((SOUNDTYPE)sound_type,
-										(uint32)GetUnitID(),sound_id,
-										GetPos().x, GetPos().y);
-
-}
-
-void UnitActor::AddSound(uint32 sound_type, sint32 sound_id)
-{
-	if ((g_soundManager)&&(sound_id>=0))
-	   	g_soundManager->AddSound((SOUNDTYPE)sound_type,
-								 (uint32)GetUnitID(),sound_id,
-								 GetPos().x, GetPos().y);
-}
-
-void UnitActor::TerminateLoopingSound(uint32 sound_type)
-{
-	if (g_soundManager)
- 		g_soundManager->TerminateLoopingSound(SOUNDTYPE_SFX,GetUnitID());
 }
 
 //----------------------------------------------------------------------------
@@ -2237,26 +2047,26 @@ void UnitActor::DrawCityImprovements(bool fogged)
 			{
 				if (g_tiledMap->GetZoomLevel() == k_ZOOM_LARGEST)
 				{
-					if (fogged)
+						if (fogged)
 						g_tiledMap->DrawBlendedOverlayIntoMix(tileSet->GetMapIconData(cityIcon), m_x + nudgeX, m_y + nudgeY, k_FOW_COLOR, k_FOW_BLEND_VALUE);
-					else
+						else
 							g_tiledMap->DrawColorizedOverlayIntoMix(tileSet->GetMapIconData(cityIcon), m_x + nudgeX, m_y + nudgeY, 0x0000);
 				}
 				else
 				{
-					if (fogged)
+						if (fogged)
 						g_tiledMap->DrawBlendedOverlayScaledIntoMix(tileSet->GetMapIconData(cityIcon), m_x + nudgeX, m_y + nudgeY,
-								g_tiledMap->GetZoomTilePixelWidth(),
+																		g_tiledMap->GetZoomTilePixelWidth(),
 								g_tiledMap->GetZoomTileGridHeight(), k_FOW_COLOR, k_FOW_BLEND_VALUE);
-					else
+						else
 						g_tiledMap->DrawScaledOverlayIntoMix(tileSet->GetMapIconData(cityIcon), m_x + nudgeX, m_y + nudgeY,
-								g_tiledMap->GetZoomTilePixelWidth(),
-								g_tiledMap->GetZoomTileGridHeight());
+																 g_tiledMap->GetZoomTilePixelWidth(),
+																 g_tiledMap->GetZoomTileGridHeight());
+					}
+					nudgeX += 5;
 				}
-				nudgeX += 5;
 			}
 		}
-	}
 
 	for(sint32 i=0; i<g_theWonderDB->NumRecords(); i++)
 	{
@@ -2266,26 +2076,34 @@ void UnitActor::DrawCityImprovements(bool fogged)
 			{
 				if (g_tiledMap->GetZoomLevel() == k_ZOOM_LARGEST)
 				{
-					if (fogged)
+						if (fogged)
 						g_tiledMap->DrawBlendedOverlayIntoMix(tileSet->GetMapIconData(cityIcon), m_x + nudgeX, m_y + nudgeY, k_FOW_COLOR, k_FOW_BLEND_VALUE);
-					else
+						else
 							g_tiledMap->DrawColorizedOverlayIntoMix(tileSet->GetMapIconData(cityIcon), m_x + nudgeX, m_y + nudgeY, 0x0000);
 				}
 				else
 				{
-					if (fogged)
+						if (fogged)
 						g_tiledMap->DrawBlendedOverlayScaledIntoMix(tileSet->GetMapIconData(cityIcon), m_x + nudgeX, m_y + nudgeY,
-								g_tiledMap->GetZoomTilePixelWidth(),
+																		g_tiledMap->GetZoomTilePixelWidth(),
 								g_tiledMap->GetZoomTileGridHeight(), k_FOW_COLOR, k_FOW_BLEND_VALUE);
-					else
+						else
 						g_tiledMap->DrawScaledOverlayIntoMix(tileSet->GetMapIconData(cityIcon), m_x + nudgeX, m_y + nudgeY,
-								g_tiledMap->GetZoomTilePixelWidth(),
-								g_tiledMap->GetZoomTileGridHeight());
+																 g_tiledMap->GetZoomTilePixelWidth(),
+																 g_tiledMap->GetZoomTileGridHeight());
+					}
+					nudgeX += 5;
 				}
-				nudgeX += 5;
 			}
 		}
 	}
+}
+
+void UnitActor::Interrupt()
+{
+	if (m_curAction && m_curAction->GetActionType() == UNITACTION_IDLE) {
+		delete m_curAction;
+		m_curAction = NULL;
 	}
 }
 
@@ -2298,8 +2116,8 @@ void UnitActor::DumpActor(void)
 	DPRINTF(k_DBG_UI, ("  m_curAction        :%#.8lx\n", m_curAction));
 
 	if (m_curAction) {
-		DPRINTF(k_DBG_UI, ("  m_curAction.m_actionType     :%ld\n", m_curAction->m_actionType));
-		DPRINTF(k_DBG_UI, ("  m_curAction.m_finished       :%ld\n", m_curAction->Finished()));
+		DPRINTF(k_DBG_UI, ("  m_curAction.m_actionType     :%ld\n", m_curAction->GetActionType()));
+		DPRINTF(k_DBG_UI, ("  m_curAction.m_finished       :%ld\n", m_curAction->IsFinished()));
 	}
 	DPRINTF(k_DBG_UI, (" ------------------\n"));
 
@@ -2312,8 +2130,8 @@ void UnitActor::DumpActor(void)
 			DPRINTF(k_DBG_UI, ("  m_actionQueue Item      :%u\n", i));
 
 			if (action) {
-				DPRINTF(k_DBG_UI, ("  action.m_actionType     :%ld\n", action->m_actionType));
-				DPRINTF(k_DBG_UI, ("  action.m_finished       :%ld\n", action->Finished()));
+				DPRINTF(k_DBG_UI, ("  action.m_actionType     :%ld\n", action->GetActionType()));
+				DPRINTF(k_DBG_UI, ("  action.m_finished       :%ld\n", action->IsFinished()));
 			}
 		}
 	}

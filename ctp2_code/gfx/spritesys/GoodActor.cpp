@@ -73,7 +73,8 @@ GoodActor::GoodActor(sint32 index, const MapPoint &pos)
     m_curAction         (NULL),
     m_curGoodAction     (GOODACTION_IDLE),
     m_actionQueue       (k_MAX_ACTION_QUEUE_SIZE),
-    m_loadType          (LOADTYPE_BASIC)
+    m_loadType          (LOADTYPE_BASIC),
+    m_delay             (0)
 {
 	Assert(g_goodSpriteGroupList);
     if (g_goodSpriteGroupList)
@@ -97,7 +98,8 @@ GoodActor::GoodActor(GoodActor const & a_Original)
     m_curAction         (NULL),
     m_curGoodAction     (a_Original.m_curGoodAction),
     m_actionQueue       (k_MAX_ACTION_QUEUE_SIZE),
-    m_loadType          (LOADTYPE_BASIC)
+    m_loadType          (LOADTYPE_BASIC),
+    m_delay             (a_Original.m_delay)
 {
     Assert(g_goodSpriteGroupList);
 
@@ -135,6 +137,7 @@ GoodActor & GoodActor::operator = (GoodActor const & a_Original)
         m_transparency      = a_Original.m_transparency;
         m_index             = a_Original.m_index;
 	    m_pos               = a_Original.m_pos;
+	    m_delay             = a_Original.m_delay;
 
         if (g_goodSpriteGroupList)
         {
@@ -176,21 +179,6 @@ GoodActor & GoodActor::operator = (GoodActor const & a_Original)
     return *this;
 }
 
-/// @todo Replace with proper copy constructor
-GoodActor::GoodActor(GoodActor *copy)
-{
-	*this = *copy;
-
-    if (m_curAction)
-    {
-	    m_curAction = new Action(m_curAction);
-    }
-
-	m_goodSpriteGroup = (GoodSpriteGroup *)g_goodSpriteGroupList->GetSprite(m_index, GROUPTYPE_GOOD, GetLoadType(),(GAME_ACTION)0);
-
-	m_actionQueue.CopyQueue();
-}
-
 GoodActor::GoodActor(CivArchive &archive)
 :
     Actor               (),
@@ -203,7 +191,8 @@ GoodActor::GoodActor(CivArchive &archive)
     m_curAction         (NULL),
     m_curGoodAction     (GOODACTION_IDLE),
     m_actionQueue       (k_MAX_ACTION_QUEUE_SIZE),
-    m_loadType          (LOADTYPE_BASIC)
+    m_loadType          (LOADTYPE_BASIC),
+    m_delay             (0)
 {
 	Serialize(archive);
 
@@ -274,30 +263,25 @@ void GoodActor::AddIdle(void)
 {
 	if (m_curAction) return;
 
-	m_curAction = new Action(GOODACTION_IDLE, ACTIONEND_ANIMEND);
-
 	Anim * anim = CreateAnim(GOODACTION_IDLE);
-	if (anim)
-    {
-	    m_curAction->SetAnim(anim);
-	    m_curAction->SetDelay(0);
+	if (anim) {
 	    m_curGoodAction = GOODACTION_IDLE;
     }
+	m_curAction = Action::CreateGoodAction(GOODACTION_IDLE, anim);
+	m_delay = 0;
 }
 
 void GoodActor::Process(void)
 {
-	sint32		tickCount = GetTickCount();
+	uint32 tickCount = GetTickCount();
 
 	if (m_curAction)
     {
 		m_curAction->Process();
 
-		if (m_curAction->Finished())
+		if (m_curAction->IsFinished())
         {
-			if (m_curAction->GetDelay() > 0 &&
-				tickCount > m_curAction->GetDelay()
-               )
+			if (m_delay > 0 && tickCount > m_delay)
             {
 				MapPoint  end;
 				m_curAction->GetEndMapPoint(end);
@@ -307,8 +291,8 @@ void GoodActor::Process(void)
 
 				GetNextAction();
 			} else {
-				if (m_curAction->GetDelay() == 0) {
-					m_curAction->SetDelay(tickCount + 8000 + rand() % 5000);
+				if (m_delay == 0) {
+					m_delay = tickCount + 8000 + rand() % 5000;
 				} else {
 					return;
 				}
@@ -318,20 +302,14 @@ void GoodActor::Process(void)
 
 	if (m_curAction)
     {
-		sint32 x, y;
-		maputils_MapXY2PixelXY(m_pos.x, m_pos.y, &x, &y);
-        Actor::SetPos(x, y);
+		POINT current = m_curAction->CalculatePixelXY(m_pos);
+        Actor::SetPos(current.x, current.y);
 
 		m_frame = m_curAction->GetSpriteFrame();
 
 		m_transparency = m_curAction->GetTransparency();
 
-		if (m_curAction->GetPath())
-        {
-            Actor::SetPos(m_curAction->GetPosition());
-		}
-
-		m_facing = m_curAction->GetFacing();
+		m_facing = m_curAction->CalculateFacing(m_facing);
 	}
 }
 
@@ -355,16 +333,11 @@ void GoodActor::GetNextAction(void)
 
 void GoodActor::AddAction(Action *actionObj)
 {
+	// TODO: implement interrupt if needed
 	Assert(m_goodSpriteGroup && actionObj);
 	if (!m_goodSpriteGroup || !actionObj) return;
 
 	m_actionQueue.Enqueue(actionObj);
-
-	if (m_curAction) {
-		if (m_curAction->GetAnim()->GetType() == ANIMTYPE_LOOPED) {
-			m_curAction->SetFinished(TRUE);
-		}
-	}
 }
 
 Anim *GoodActor::CreateAnim(GOODACTION action)
@@ -378,7 +351,7 @@ Anim *GoodActor::CreateAnim(GOODACTION action)
 		origAnim = m_goodSpriteGroup->GetAnim((GAME_ACTION)GOODACTION_IDLE);
 	}
 
-    return origAnim ? new Anim(*origAnim) : NULL;
+    return origAnim ? Anim::CreateSequential(*origAnim) : NULL;
 }
 
 void GoodActor::DrawSelectionBrackets(void)

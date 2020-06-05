@@ -102,6 +102,7 @@ BattleViewActor::~BattleViewActor()
 
 void BattleViewActor::AddIdle(BOOL NoIdleJustDelay)
 {
+	// TODO: implement interruptable idle (see also UnitActor)
 	Anim * anim = CreateAnim(UNITACTION_IDLE);
 
 	if (anim == NULL)
@@ -110,14 +111,8 @@ void BattleViewActor::AddIdle(BOOL NoIdleJustDelay)
 		Assert(anim != NULL);
 	}
 
-	if (anim && ((GetActionQueueNumItems() > 0) || NoIdleJustDelay))
-	{
-		anim->SetType(ANIMTYPE_IDLE);
-	}
-
 	delete m_curAction;
-	m_curAction = new Action(UNITACTION_IDLE, ACTIONEND_INTERRUPT);
-	m_curAction->SetAnim(anim);
+	m_curAction = Action::CreateUnitAction(UNITACTION_IDLE, anim);
 	m_curUnitAction = UNITACTION_IDLE;
 
 	if (g_soundManager)
@@ -136,15 +131,12 @@ void BattleViewActor::Process(void)
 
 	if (m_curAction)
 	{
-		if(GetActionQueueNumItems() > 0)
-			m_curAction->Process(LookAtNextAction());
-		else
-			m_curAction->Process();
+		m_curAction->Process();
 
 
 
 
-		if (m_curAction->Finished())
+		if (m_curAction->IsFinished())
 		{
 			GetNextAction();
 		}
@@ -161,7 +153,7 @@ void BattleViewActor::DumpAllActions(void)
 {
 
 	if (m_curAction) {
-		m_facing = m_curAction->GetFacing();
+		m_facing = m_curAction->CalculateFacing(m_facing);
 		delete m_curAction;
 		m_curAction = NULL;
 	}
@@ -170,7 +162,7 @@ void BattleViewActor::DumpAllActions(void)
 	while (m_actionQueue.GetNumItems() > 0) {
 		m_actionQueue.Dequeue(deadAction);
 		if (deadAction != NULL) {
-			m_facing = deadAction->GetFacing();
+			m_facing = deadAction->CalculateFacing(m_facing);
 			delete deadAction;
 			deadAction = NULL;
 		}
@@ -214,6 +206,7 @@ void BattleViewActor::GetNextAction(BOOL isVisible)
 
 void BattleViewActor::AddAction(Action *actionObj)
 {
+	// TODO: implement interrupt if needed
 	Assert(m_unitSpriteGroup && actionObj);
 	if (!m_unitSpriteGroup || !actionObj) return;
 
@@ -222,6 +215,10 @@ void BattleViewActor::AddAction(Action *actionObj)
 		m_playerNum = m_unitID.GetOwner();
 	}
 
+	if (m_curAction && m_curAction->GetActionType() == UNITACTION_IDLE) {
+		delete m_curAction;
+		m_curAction = NULL;
+	}
 	m_actionQueue.Enqueue(actionObj);
 }
 
@@ -239,12 +236,7 @@ Anim *BattleViewActor::CreateAnim(UNITACTION action)
 		action = UNITACTION_MOVE;
 	}
 
-	if (!origAnim)
-		return NULL;
-
-    Anim * animation = new Anim(*origAnim);
-    animation->Rewind();
-	return animation;
+	return origAnim ? Anim::CreateSequential(*origAnim) : NULL;
 }
 
 void BattleViewActor::Draw(BOOL fogged)
@@ -269,7 +261,7 @@ void BattleViewActor::Draw(BOOL fogged)
 	else
 	{
 		m_unitSpriteGroup->Draw(m_curUnitAction, m_frame, m_x+k_ACTOR_CENTER_OFFSET_X, m_y+k_ACTOR_CENTER_OFFSET_Y, m_facing,
-			g_tiledMap->GetScale(), m_transparency, color, flags, m_curAction->SpecialDelayProcess(), directionAttack);
+			g_tiledMap->GetScale(), m_transparency, color, flags, false, directionAttack);
 	}
 }
 

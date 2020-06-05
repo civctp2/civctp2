@@ -35,227 +35,138 @@
 #include "ActorPath.h"
 #include "Anim.h"
 #include "UnitActor.h"
-#if 0
-#include "Actor.h"
-#include "debugmemory.h"
-#include "director.h"       // g_director
-#include "EffectActor.h"
-#include "pixelutils.h"
-#include "profileDB.h"      // g_theProfileDB
-#include "spriteutils.h"
-#include "tech_wllist.h"
-#include "Unit.h"
-#endif
+#include "maputils.h"
+#include "profileDB.h"
 
-#define STOMPCHECK()
+static const sint32 k_MAX_UNIT_MOVEMENT_ITERATIONS = 10;
 
-Action::Action(sint32 actionType, ACTIONEND endCondition, sint32 startAnimPos, sint32 specialDelayProcess)
+Action::Action(
+	GROUPTYPE        groupType,
+	sint32           actionType,
+	Anim           * animation,
+	const MapPoint & start,
+	const MapPoint & end,
+	sint32           facing)
 :
-    m_actionType                (actionType),
-    m_endCondition              (endCondition),
-	m_curAnim                   (NULL),
-	m_curPath                   (NULL),
-	m_maxActionCounter          (0),
-	m_curActionCounter          (0),
-	m_animPos                   (startAnimPos),
-	m_delay                     (0),
-	m_finished                  (false),
-	m_loopAnimFinished          (false),
-	m_specialDelayProcess       (specialDelayProcess),
-    m_startMapPoint             (),
-	m_endMapPoint               (),
-	m_facing                    (k_DEFAULTSPRITEFACING),
-	m_sound_effect_id           (-1),
-	m_unitsVisibility           (0),
-	m_unitVisionRange           (0)
-{ ; }
-
-Action::Action(Action const & a_Original)
-:
-    m_actionType                (a_Original.m_actionType),
-    m_endCondition              (a_Original.m_endCondition),
-	m_curAnim                   (NULL),
-	m_curPath                   (NULL),
-	m_maxActionCounter          (a_Original.m_maxActionCounter),
-	m_curActionCounter          (a_Original.m_curActionCounter),
-	m_animPos                   (a_Original.m_animPos),
-	m_delay                     (a_Original.m_delay),
-	m_finished                  (a_Original.m_finished),
-	m_loopAnimFinished          (a_Original.m_loopAnimFinished),
-	m_specialDelayProcess       (a_Original.m_specialDelayProcess),
-    m_startMapPoint             (a_Original.m_startMapPoint),
-	m_endMapPoint               (a_Original.m_endMapPoint),
-	m_facing                    (a_Original.m_facing),
-	m_sound_effect_id           (a_Original.m_sound_effect_id),
-	m_unitsVisibility           (a_Original.m_unitsVisibility),
-	m_unitVisionRange           (a_Original.m_unitVisionRange)
+	m_groupType        (groupType),
+	m_actionType       (actionType),
+	m_curAnim          (animation),
+	m_curPath          (NULL),
+	m_maxActionCounter (0),
+	m_curActionCounter (0),
+	m_finished         (false),
+	m_startMapPoint    (start),
+	m_endMapPoint      (end),
+	m_facing           (facing),
+	m_unitsVisibility  (0)
 {
-    if (a_Original.m_curAnim)
-    {
+	if (m_startMapPoint != m_endMapPoint) {
+		m_curPath = new ActorPath(m_startMapPoint.x, m_startMapPoint.y, m_endMapPoint.x, m_endMapPoint.y);
+	}
+	m_maxActionCounter = DetermineMaxActionCounter();
+}
+
+Action::Action(const Action & a_Original)
+:
+	m_groupType        (a_Original.m_groupType),
+	m_actionType       (a_Original.m_actionType),
+	m_curAnim          (NULL),
+	m_curPath          (NULL),
+	m_maxActionCounter (a_Original.m_maxActionCounter),
+	m_curActionCounter (a_Original.m_curActionCounter),
+	m_finished         (a_Original.m_finished),
+	m_startMapPoint    (a_Original.m_startMapPoint),
+	m_endMapPoint      (a_Original.m_endMapPoint),
+	m_facing           (a_Original.m_facing),
+	m_unitsVisibility  (a_Original.m_unitsVisibility)
+{
+    if (a_Original.m_curAnim) {
         m_curAnim = new Anim(*a_Original.m_curAnim);
     }
 
     /// @todo Check copying of m_curPath (NULLed in original code)
 }
 
-/// @todo Remove when no longer used
-Action::Action(Action *copyme)
-{
-	*this = *copyme;
-
-	if (copyme->GetAnim()) {
-		m_curAnim = new Anim(*copyme->GetAnim());
-	}
-
-	m_curPath = NULL;
-}
-
-Action::~Action(void)
+Action::~Action()
 {
 	delete m_curPath;
 	delete m_curAnim;
 }
 
-void Action::Process(void)
+void Action::Process()
 {
-#ifndef _TEST
-	STOMPCHECK();
-#endif
-
-	if (!m_curAnim)
-    {
-        SetFinished(true);
+	if (!m_curAnim) {
+        m_finished = true;
         return;
     }
 
     m_curAnim->Process();
 
-	m_curActionCounter++;
-	if (m_curActionCounter > m_maxActionCounter || m_curAnim->IsFinished())
-	{
-		m_curActionCounter = m_maxActionCounter;
-		m_loopAnimFinished = true;
-
-		if ( m_endCondition == ACTIONEND_ANIMEND ||
-			m_endCondition == ACTIONEND_PATHEND )
-		{
-			SetFinished(true);
-		}
+	if (m_curActionCounter < m_maxActionCounter) {
+		m_curActionCounter++;
+	} else {
+		m_finished = true;
 	}
-
 }
 
-void Action::Process(Action *pendingAction)
+POINT Action::CalculatePixelXY(const MapPoint & current) const
 {
-#ifndef _TEST
-	STOMPCHECK();
-#endif
-
-	if(pendingAction != this )
-		Process();
-
-	if (m_endCondition == ACTIONEND_INTERRUPT || Finished())
-	{
-		SetFinished(true);
+	POINT pos;
+	if (m_curPath) {
+		m_curPath->CalcPosition(0, m_maxActionCounter, m_curActionCounter, &pos);
+	} else {
+		maputils_MapXY2PixelXY(current.x, current.y, &pos.x, &pos.y);
 	}
-
-#ifndef _TEST
-	STOMPCHECK();
-#endif
-}
-
-void Action::SetAnim(Anim *anim)
-{
-#ifndef _TEST
-	STOMPCHECK();
-#endif
-
-//	Assert(anim != NULL);
-	if (anim == NULL) return;
-
-	anim->Rewind();
-
-    m_maxActionCounter = anim->GetNumFrames();
-
-	m_curAnim = anim;
-
-#ifndef _TEST
-	STOMPCHECK();
-#endif
-}
-
-void Action::CreatePath(sint32 x1, sint32 y1, sint32 x2, sint32 y2)
-{
-#ifndef _TEST
-	STOMPCHECK();
-#endif
-
-	delete m_curPath;
-	m_curPath = new ActorPath(x1, y1, x2, y2);
-
-	m_maxActionCounter = k_MAX_UNIT_MOVEMENT_ITERATIONS;
-
-#ifndef _TEST
-	STOMPCHECK();
-#endif
-
-}
-
-POINT Action::GetPosition(void) const
-{
-	POINT pos = {0,0};
-
-	if (m_curPath)
-    {
-    	m_curPath->CalcPosition(0, m_maxActionCounter, m_curActionCounter, &pos);
-    }
-
 	return pos;
 }
 
-uint16 Action::GetSpriteFrame(void) const
+sint32 Action::CalculateFacing(sint32 facing) const
 {
-	uint16 frame;
-
-	if (m_curAnim) {
-		if (m_loopAnimFinished && m_curActionCounter == m_maxActionCounter) {
-			frame = 0;
-		} else {
-			frame = m_curAnim->GetCurrentFrame();
-		}
-
+	if (m_curPath) {
+		return m_curPath->CalcFacing(0, m_maxActionCounter, m_curActionCounter);
+	} else if (m_facing != k_MAX_FACINGS) {
+		return m_facing;
 	} else {
-		frame = 0;
+		return facing;
 	}
-
-	return frame;
 }
 
-sint32 Action::GetFacing(void)
+uint16 Action::GetSpriteFrame() const
 {
-#ifndef _TEST
-	STOMPCHECK();
-#endif
-
-	if (m_curPath)
-    {
-		m_facing = m_curPath->CalcFacing(0, m_maxActionCounter, m_curActionCounter);
-	}
-    // else: No action: keep current facing
-
-	return m_facing;
-}
-
-uint16 Action::GetTransparency(void) const
-{
-#ifndef _TEST
-	STOMPCHECK();
-#endif
-
-	uint16 transparency = 15;
-
 	if (m_curAnim) {
-		transparency = m_curAnim->GetCurrentTransparency();
+		return m_curAnim->GetCurrentFrame();
+	} else {
+		return 0;
 	}
-	return transparency;
+}
+
+uint16 Action::GetTransparency() const
+{
+	if (m_curAnim) {
+		return m_curAnim->GetCurrentTransparency();
+	} else {
+		return 15;
+	}
+}
+
+sint32 Action::DetermineMaxActionCounter()
+{
+	sint32 result = m_curAnim ? m_curAnim->GetNumFrames() : 0;
+
+	// To ensure that movement always has the same speed it is independent of the number of frames
+	if (m_startMapPoint != m_endMapPoint)
+	{
+		result = k_MAX_UNIT_MOVEMENT_ITERATIONS;
+		// unit moves can be sped up or skipped by settings
+		if (m_groupType == GROUPTYPE_UNIT && m_actionType == UNITACTION_MOVE)
+		{
+			if (g_theProfileDB->IsUnitAnim()) {
+				result = k_MAX_UNIT_MOVEMENT_ITERATIONS - g_theProfileDB->GetUnitSpeed();
+			} else {
+				result = 1;
+			}
+		}
+	}
+
+	return result;
 }

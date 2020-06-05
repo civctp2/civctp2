@@ -61,8 +61,7 @@ WorkerActor::~WorkerActor()
 
 void WorkerActor::AddIdle(void)
 {
-	m_curAction = new Action(UNITACTION_IDLE, ACTIONEND_ANIMEND);
-	m_curAction->SetAnim(CreateAnim(UNITACTION_IDLE));
+	m_curAction = Action::CreateUnitAction(UNITACTION_IDLE, CreateAnim(UNITACTION_IDLE));
 	m_curUnitAction = UNITACTION_IDLE;
 }
 
@@ -72,7 +71,7 @@ void WorkerActor::Process(void)
 	if (m_curAction) {
 		m_curAction->Process();
 
-		if (m_curAction->Finished()) {
+		if (m_curAction->IsFinished()) {
 			MapPoint  end;
 			m_curAction->GetEndMapPoint(end);
 			if (end.x != 0 || end.y != 0) {
@@ -84,25 +83,11 @@ void WorkerActor::Process(void)
 	}
 
 	if (m_curAction != NULL) {
-
-
-
-
-
-
-
-
 		m_frame = m_curAction->GetSpriteFrame();
 
 		m_transparency = m_curAction->GetTransparency();
 
-
-		if (m_curAction->GetPath())
-        {
-		    (void) m_curAction->GetPosition();
-		}
-
-		m_facing = m_curAction->GetFacing();
+		m_facing = m_curAction->CalculateFacing(m_facing);
 	}
 }
 
@@ -131,24 +116,14 @@ void WorkerActor::GetNextAction(void)
 
 void WorkerActor::AddAction(Action *actionObj)
 {
+	// TODO: implement interrupt if needed
 	Assert(m_unitSpriteGroup != NULL);
 	if (m_unitSpriteGroup == NULL) return;
 
 	Assert(actionObj != NULL);
 	if (actionObj == NULL) return;
 
-
 	m_actionQueue.Enqueue(actionObj);
-
-	if (m_curAction)
-    {
-        if (!m_curAction->GetAnim() ||
-       	    (m_curAction->GetAnim()->GetType() == ANIMTYPE_LOOPED)
-           )
-        {
-		    m_curAction->SetFinished(TRUE);
-        }
-    }
 }
 
 Anim *WorkerActor::CreateAnim(UNITACTION action)
@@ -162,10 +137,9 @@ Anim *WorkerActor::CreateAnim(UNITACTION action)
 
 		origAnim = m_unitSpriteGroup->GetAnim((GAME_ACTION)UNITACTION_IDLE);
 		Assert(origAnim != NULL);
-		return NULL;
 	}
 
-	return new Anim(*origAnim);
+	return origAnim ? Anim::CreateSequential(*origAnim) : NULL;
 }
 
 void WorkerActor::Draw(void)

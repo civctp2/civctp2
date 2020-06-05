@@ -216,10 +216,11 @@ sint32 GoodSpriteGroup::Parse(uint16 id, GROUPTYPE group)
 		m_sprites[GOODACTION_IDLE] = idleSprite;
 		printf("]\n");
 
-		Anim *idleAnim = new Anim;
-		idleAnim->ParseFromTokens(theToken);
-		delete m_anims[GOODACTION_IDLE];
-		m_anims[GOODACTION_IDLE] = idleAnim;
+		Anim * idleAnim = Anim::CreateFromTokens(theToken);
+		if (idleAnim) {
+			delete m_anims[GOODACTION_IDLE];
+			m_anims[GOODACTION_IDLE] = idleAnim;
+		}
 	}
 
 	delete theToken;

@@ -121,16 +121,13 @@ void EffectActor::Process(void)
 
 	if (m_curAction) {
 
-		if(GetActionQueueNumItems() > 0)
-			m_curAction->Process(LookAtNextAction());
-		else
-			m_curAction->Process();
+		m_curAction->Process();
 
 
 
 
 
-		if (m_curAction->Finished())
+		if (m_curAction->IsFinished())
 		{
 			MapPoint  end;
 			m_curAction->GetEndMapPoint(end);
@@ -142,39 +139,18 @@ void EffectActor::Process(void)
 		}
 	}
 
-	if (m_curAction != NULL) {
-		sint32 x, y;
-
-		maputils_MapXY2PixelXY(m_pos.x, m_pos.y, &x, &y);
-
-
-		m_shX = m_x = x;
-		m_shY = m_y = y;
-
-		POINT curPt;
-
-		if (m_curAction->GetPath() != NULL) {
-
-			curPt = m_curAction->GetPosition();
-
-			m_shX = m_x = curPt.x;
-			m_shY = m_y = curPt.y;
-		}
+	if (m_curAction != NULL)
+	{
+		POINT current = m_curAction->CalculatePixelXY(m_pos);
+		m_shX = m_x = current.x;
+		m_shY = m_y = current.y;
 
 		if(m_curAction->GetActionType() == EFFECTACTION_PLAY)
 		{
-			m_lastMoveFacing = m_curAction->GetFacing();
+		    m_lastMoveFacing = m_curAction->CalculateFacing(m_lastMoveFacing);
 		}
 
-		if(m_curAction->SpecialDelayProcess())
-		{
-			m_facing = m_lastMoveFacing;
-		}
-		else
-		{
-			m_facing = m_curAction->GetFacing();
-		}
-
+		m_facing = m_curAction->CalculateFacing(m_facing);
 		m_frame = m_curAction->GetSpriteFrame();
 
 		m_transparency = m_curAction->GetTransparency();
@@ -199,28 +175,15 @@ void EffectActor::EndTurnProcess(void)
 
 	if (m_curAction != NULL)
 	{
-		sint32 x, y;
-
-		maputils_MapXY2PixelXY(m_pos.x, m_pos.y, &x, &y);
-
-		m_shX = m_x = x;
-		m_shY = m_y = y;
+		POINT point = m_curAction->CalculatePixelXY(m_pos);
+		m_shX = m_x = point.x;
+		m_shY = m_y = point.y;
 
 		m_frame = m_curAction->GetSpriteFrame();
 
 		m_transparency = m_curAction->GetTransparency();
 
-		POINT curPt;
-
-		if (m_curAction->GetPath() != NULL) {
-
-			curPt = m_curAction->GetPosition();
-
-			m_shX = m_x = curPt.x;
-			m_shY = m_y = curPt.y;
-		}
-
-		m_facing = m_curAction->GetFacing();
+		m_facing = m_curAction->CalculateFacing(m_facing);
 	}
 }
 
@@ -231,15 +194,9 @@ void EffectActor::GetNextAction(BOOL isVisible)
 	delete m_curAction;
 	m_curAction = NULL;
 
-//	Action *pendingAction = LookAtNextAction(); // Not used
-
 	if (numItems > 0)
 	{
 		m_actionQueue.Dequeue(m_curAction);
-
-		MapPoint curStartMapPoint, curEndMapPoint;
-		m_curAction->GetStartMapPoint(curStartMapPoint);
-		m_curAction->GetEndMapPoint(curEndMapPoint);
 
 		if (m_curAction)
 		{
@@ -254,6 +211,7 @@ void EffectActor::GetNextAction(BOOL isVisible)
 
 void EffectActor::AddAction(Action *actionObj)
 {
+	// TODO: implement interrupt if needed
 	Assert(m_effectSpriteGroup && actionObj);
 	if (!m_effectSpriteGroup || !actionObj) return;
 
@@ -266,7 +224,7 @@ Anim *EffectActor::CreateAnim(EFFECTACTION action)
 	if (!m_effectSpriteGroup) return NULL;
 
 	Anim	* origAnim = m_effectSpriteGroup->GetAnim((GAME_ACTION) action);
-	return origAnim ? new Anim(*origAnim) : NULL;
+	return origAnim ? Anim::CreateSequential(*origAnim) : NULL;
 }
 
 void EffectActor::Paint(void)
@@ -285,8 +243,7 @@ void EffectActor::Draw(void)
 
 	m_effectSpriteGroup->Draw(m_curEffectAction, m_frame, m_x+xoffset, m_y+yoffset,
 								m_shX+xoffset, m_shY+yoffset, m_facing,
-								g_tiledMap->GetScale(), m_transparency, color, flags,
-								m_curAction->SpecialDelayProcess());
+								g_tiledMap->GetScale(), m_transparency, color, flags, false);
 }
 
 void EffectActor::DrawDirect(aui_Surface *surf, sint32 x, sint32 y)
@@ -299,15 +256,9 @@ void EffectActor::DrawDirect(aui_Surface *surf, sint32 x, sint32 y)
 	if (m_transparency < 15) {
 		flags |= k_BIT_DRAWFLAGS_TRANSPARENCY;
 	}
-	BOOL specialDelayProcess = FALSE;
-
-	if (m_curAction) {
-		specialDelayProcess = m_curAction->SpecialDelayProcess();
-	}
-
 	m_effectSpriteGroup->DrawDirect(surf, m_curEffectAction, m_frame, m_x+xoffset, m_y+yoffset,
 								m_shX+xoffset, m_shY+yoffset, m_facing,
-								g_tiledMap->GetScale(), m_transparency, color, flags, specialDelayProcess);
+								g_tiledMap->GetScale(), m_transparency, color, flags, false);
 }
 
 void EffectActor::DrawDirectWithFlags(aui_Surface *surf, sint32 x, sint32 y, uint16 flags)
@@ -319,15 +270,9 @@ void EffectActor::DrawDirectWithFlags(aui_Surface *surf, sint32 x, sint32 y, uin
 	if (m_transparency < 15) {
 		flags |= k_BIT_DRAWFLAGS_TRANSPARENCY;
 	}
-	BOOL specialDelayProcess = FALSE;
-
-	if (m_curAction) {
-		specialDelayProcess = m_curAction->SpecialDelayProcess();
-	}
-
 	m_effectSpriteGroup->DrawDirect(surf, m_curEffectAction, m_frame, m_x+xoffset, m_y+yoffset,
 								m_shX+xoffset, m_shY+yoffset, m_facing,
-								g_tiledMap->GetScale(), m_transparency, color, flags, specialDelayProcess);
+								g_tiledMap->GetScale(), m_transparency, color, flags, false);
 }
 
 void EffectActor::DrawText(sint32 x, sint32 y, MBCHAR *effectText)

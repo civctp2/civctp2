@@ -55,7 +55,9 @@ enum SPRITETYPE
 	SPRITETYPE_MAX          // dummy last entry, used as counter
 };
 
-#define k_SPRITE_BASEFACING 0
+#define k_SPRITE_BASEFACING   0
+#define k_DEFAULTSPRITEFACING 3
+#define k_MAX_FACINGS         8
 
 #define k_BIT_DRAWFLAGS_NONE			0x00000000
 #define k_BIT_DRAWFLAGS_FEATHERING		0x00000001

@@ -81,7 +81,6 @@ class GoodActor : public Actor
 public:
     GoodActor(sint32 index, MapPoint const & pos);
     GoodActor(GoodActor const & a_Original);
-    GoodActor(GoodActor * copy); /// @todo Remove when no longer needed
     GoodActor(CivArchive & archive);
 
     virtual ~GoodActor();
@@ -129,6 +128,7 @@ protected:
 	GOODACTION			m_curGoodAction;
 	Queue<Action *>		m_actionQueue;
 	LOADTYPE			m_loadType;
+	uint32 				m_delay;
 };
 
 #endif

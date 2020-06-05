@@ -71,14 +71,14 @@ class Anim
 public:
 	static Anim * MakeFakeDeath();
 	static Anim * MakeFaceoff();
+	static Anim * CreateSequential(const Anim & copy) { return CopySetType(copy, ANIMTYPE_SEQUENTIAL); }
+	static Anim * CreateLooping(const Anim & copy) { return CopySetType(copy, ANIMTYPE_LOOPED); }
+	static Anim * CreateIdle(const Anim & copy) { return CopySetType(copy, ANIMTYPE_IDLE); }
+	static Anim * CreateFromTokens(Token * tokens);
 
-	Anim();
-    Anim(Anim const & copy);
-    Anim const & operator = (Anim const & copy);
+	// TODO: deprecate
+	Anim(const Anim & copy);
 	~Anim();
-
-	uint16 GetType() const { return m_type; }
-	void   SetType(uint16 type) { m_type = type; }
 
 	uint16 GetNumFrames() const { return m_numFrames; }
 	uint16 GetPlaybackTime() const { return m_playbackTime; }
@@ -90,13 +90,17 @@ public:
 	bool   IsFinished() const { return m_finished; }
 	void   Rewind();
 
-	bool   ParseFromTokens(Token * theToken);
 	void   Export(FILE * file);
 
 protected:
 	friend class SpriteFile;
 
-	uint16   m_type;
+	static Anim * CopySetType(const Anim & copy, ANIMTYPE type);
+
+	Anim();
+	bool ParseFromTokens(Token * tokens);
+
+	ANIMTYPE m_type;
 	uint16   m_numFrames;
 	uint16 * m_frames;
 	POINT  * m_moveDeltas;

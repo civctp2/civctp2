@@ -120,13 +120,6 @@ private:
 	aui_Surface			*m_spriteSurface;
 	RECT				m_spriteRect;
 
-	Action				*m_actionObj;
-
-
-
-
-
-
 	ctp2_Button		*m_Load;
 	ctp2_Button		*m_Save;
 

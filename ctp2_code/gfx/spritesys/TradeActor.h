@@ -20,12 +20,10 @@ class TradeActor : public Actor
 {
 public:
 	TradeActor(TradeRoute newRoute);
-	TradeActor(TradeActor *copy);
 	~TradeActor();
 
 	virtual void	Process(void);
 
-	void			AddAction(Action *actionObj);
 	void			GetNextAction(void);
 	void			AddIdle(void);
 
@@ -70,10 +68,10 @@ protected:
 	uint16							m_transparency;
 
 	Action							*m_curAction;
+	Anim                            *m_idleAnim;
 	GOODACTION						m_curGoodAction;
 
 	Queue<Action *>					m_actionQueue;
-
 };
 
 #endif

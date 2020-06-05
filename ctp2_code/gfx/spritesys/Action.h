@@ -50,18 +50,7 @@
 //
 //----------------------------------------------------------------------------
 
-class Action;
-
-enum ACTIONEND
-{
-	ACTIONEND_PATHEND,
-	ACTIONEND_ANIMEND,
-	ACTIONEND_INTERRUPT,
-
-	ACTIONEND_MAX
-};
-
-enum  GAME_ACTION
+enum GAME_ACTION
 {
   ACTION_0=0,
   ACTION_1,
@@ -82,12 +71,6 @@ enum  GAME_ACTION
   ACTION_MAX
 };
 
-#define ACTION_VISIBLE                  0x00000001
-#define ACTION_CENTER                   0x00000002
-
-#define k_DEFAULTSPRITEFACING           3
-#define k_MAX_UNIT_MOVEMENT_ITERATIONS	10
-
 //----------------------------------------------------------------------------
 //
 // Project imports
@@ -96,11 +79,13 @@ enum  GAME_ACTION
 
 #include "ctp2_inttypes.h"      // sintNN, uintNN
 #include "MapPoint.h"           // MapPoint
+#include "Sprite.h"
+#include "SpriteGroup.h"
 
 class ActorPath;
 class Anim;
-// POINT
 class UnitActor;
+// POINT
 
 //----------------------------------------------------------------------------
 //
@@ -111,95 +96,88 @@ class UnitActor;
 class Action
 {
 public:
-	Action(sint32 actionType=0, ACTIONEND endCondition=ACTIONEND_PATHEND, sint32 startAnimPos = 0, sint32 specialDelayProcess = 0);
+	static Action * CreateEffectAction(sint32 actionType, Anim * anim) {
+		return CreateEffectAction(actionType, anim, MapPoint(0,0), MapPoint(0,0));
+	}
+	static Action * CreateEffectAction(sint32 actionType, Anim * anim, const MapPoint & start, const MapPoint & end) {
+		return new Action(GROUPTYPE_EFFECT, actionType, anim, start, end, k_MAX_FACINGS);
+	}
+	static Action * CreateGoodAction(sint32 actionType, Anim * anim) {
+		return CreateGoodAction(actionType, anim, MapPoint(0,0), MapPoint(0,0));
+	}
+	static Action * CreateGoodAction(sint32 actionType, Anim * anim, const MapPoint & start, const MapPoint & end) {
+		return new Action(GROUPTYPE_GOOD, actionType, anim, start, end, k_MAX_FACINGS);
+	}
+	static Action * CreateUnitAction(sint32 actionType, Anim * anim) {
+		return CreateUnitAction(actionType, anim, MapPoint(0,0), MapPoint(0,0));
+	}
+	static Action * CreateUnitAction(
+		sint32           actionType,
+		Anim           * anim,
+		const MapPoint & current,
+		sint32           facing = k_MAX_FACINGS)
+	{
+		return CreateUnitAction(actionType, anim, current, current, facing);
+	}
+	static Action * CreateUnitAction(
+		sint32           actionType,
+		Anim           * anim,
+		const MapPoint & start,
+		const MapPoint & end,
+		sint32           facing = k_MAX_FACINGS)
+	{
+		return new Action(GROUPTYPE_UNIT, actionType, anim, start, end, facing);
+	}
+
+	// TODO: make protected
     Action(Action const & a_Original);
-	Action(Action *copyme); // @todo Remove when no longer used
 
-    virtual ~Action(void);
+    ~Action();
 
-	sint32			GetActionType(void) const { return (m_actionType > 0 ) ? m_actionType : 0; }
-	void			SetActionType(sint32 action) { m_actionType=action;};
-	bool			GetIsSpecialActionType(void) const { return (m_actionType < 0 ); }
+	sint32			GetActionType() const { return (m_actionType > 0 ) ? m_actionType : 0; }
 
-	Anim *          GetAnim(void) const { return m_curAnim; }
-	sint32			GetAnimPos(void) const { return m_animPos; }
-	void			SetAnimPos(sint32 pos) { m_animPos=pos; }
+	void            Process();
+	bool			IsFinished() const { return m_finished; }
 
-	ActorPath *     GetPath(void) const { return m_curPath; }
-
-	virtual void	Process(void);
-	void			Process(Action *pendingAction);
-
-	void			SetAnim(Anim *anim);
-	void			CreatePath(sint32 x1, sint32 y1, sint32 x2, sint32 y2);
-
-	sint32			GetMaxActionCounter(void) const { return m_maxActionCounter; }
-	void			SetMaxActionCounter(sint32 count) { m_maxActionCounter = count; }
-
-	sint32			GetCurActionCounter(void) const { return m_curActionCounter; }
-	void			SetCurActionCounter(sint32 count) { m_curActionCounter = count; }
-
-	POINT			GetPosition(void) const;
-	uint16			GetSpriteFrame(void) const;
-	uint16			GetTransparency(void) const;
-
-	sint32			GetFacing(void); // not quite const
-	void			SetFacing(sint32 facing) { m_facing = facing; }
-	sint32			SpecialDelayProcess(void) const {return m_specialDelayProcess; }
-	void			SetSpecialDelayProcess(sint32 val) {m_specialDelayProcess = val; }
-
-	void			SetDelay(sint32 delay) { m_delay = delay; }
-	sint32			GetDelay(void) const { return m_delay; }
-
-	bool			Finished(void) const { return m_finished; }
-	void			SetFinished(bool fin) { m_finished = fin; }
-
-	void			SetStartMapPoint(MapPoint &point) { m_startMapPoint = point;}
-	void			GetStartMapPoint(MapPoint &point) const { point = m_startMapPoint; }
-
-	void			SetEndMapPoint(MapPoint &point) { m_endMapPoint = point; }
+	// TODO: deprecate
 	void			GetEndMapPoint(MapPoint &point) const { point = m_endMapPoint; }
 
-	ACTIONEND		GetCurrentEndCondition(void) const { return m_endCondition; }
-	void			SetCurrentEndCondition(ACTIONEND end_condition) { m_endCondition = end_condition; }
-	bool			LoopAnimHasCycled(void) const { return m_loopAnimFinished; }
-	void			ResetAnimLoop(void) { m_loopAnimFinished = false; }
+	POINT           CalculatePixelXY(const MapPoint & current) const;
+	sint32          CalculateFacing(sint32 facing) const;
+	uint16			GetSpriteFrame() const;
+	uint16			GetTransparency() const;
 
-	void			SetUnitsVisibility(uint32 unitsVis) { m_unitsVisibility = unitsVis; }
+	// Only used to store unit's visibility in case of action-type is UNITACTION_ATTACK
+	void			PutUnitsVisibility(uint32 unitsVisibility) { m_unitsVisibility = unitsVisibility; }
 	uint32			GetUnitsVisibility(void) const { return m_unitsVisibility; }
 
-	void			SetUnitVisionRange(double visRange) { m_unitVisionRange = visRange; }
-	double			GetUnitVisionRange(void) const { return m_unitVisionRange; }
-
-	void			SetSoundEffect(sint32 sound_id) { m_sound_effect_id = sound_id; }
-	sint32  		GetSoundEffect(void) const { return m_sound_effect_id; }
-
-	sint32				m_actionType;
 protected:
-	ACTIONEND			m_endCondition;
+	Action(
+		GROUPTYPE        groupType,
+		sint32           actionType,
+		Anim           * animation,
+		const MapPoint & start,
+		const MapPoint & end,
+		sint32           facing
+	);
 
-	Anim				*m_curAnim;
-	ActorPath			*m_curPath;
+	sint32 DetermineMaxActionCounter();
 
-	sint32				m_maxActionCounter;
-	sint32				m_curActionCounter;
-	sint32				m_animPos;
+	GROUPTYPE   m_groupType;
+	sint32      m_actionType;
+	bool        m_finished;
 
-	sint32				m_delay;
+	Anim      * m_curAnim;
+	ActorPath * m_curPath;
 
-	bool				m_finished;
-	bool				m_loopAnimFinished;
-	sint32  			m_specialDelayProcess;
+	sint32      m_maxActionCounter;
+	sint32      m_curActionCounter;
 
-	MapPoint			m_startMapPoint;
-	MapPoint			m_endMapPoint;
+	MapPoint    m_startMapPoint;
+	MapPoint    m_endMapPoint;
 
-	sint32				m_facing;
-	sint32              m_sound_effect_id;
-
-	uint32				m_unitsVisibility;
-
-	double				m_unitVisionRange;
+	sint32      m_facing;
+	uint32      m_unitsVisibility;
 };
 
 #endif

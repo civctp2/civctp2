@@ -140,7 +140,7 @@ void UnitSpriteGroup::Draw(UNITACTION action, sint32 frame, sint32 drawX, sint32
 
 
 	if (specialDelayProcess
-		|| (action == UNITACTION_IDLE && m_sprites[action] == NULL)
+		|| (action == UNITACTION_IDLE && (m_sprites[action] == NULL || facing != k_DEFAULTSPRITEFACING))
 		|| (action == UNITACTION_ATTACK && m_sprites[action] == NULL)
 		|| (action == UNITACTION_MOVE && m_sprites[UNITACTION_IDLE] == NULL)
        )
@@ -453,11 +453,11 @@ sint32 UnitSpriteGroup::Parse(uint16 id, GROUPTYPE type)
 		m_sprites[UNITACTION_MOVE] = moveSprite;
 		printf("]\n");
 
-		Anim *moveAnim = new Anim;
-
-		moveAnim->ParseFromTokens(theToken);
-		delete m_anims[UNITACTION_MOVE];
-		m_anims[UNITACTION_MOVE] = moveAnim;
+		Anim * moveAnim = Anim::CreateFromTokens(theToken);
+		if (moveAnim) {
+			delete m_anims[UNITACTION_MOVE];
+			m_anims[UNITACTION_MOVE] = moveAnim;
+		}
 	}
 
 	if (!token_ParseValNext(theToken, TOKEN_UNIT_SPRITE_ATTACK, tmp)) return FALSE;
@@ -500,11 +500,11 @@ sint32 UnitSpriteGroup::Parse(uint16 id, GROUPTYPE type)
 		m_sprites[UNITACTION_ATTACK] = attackSprite;
 		printf("]\n");
 
-		Anim *attackAnim = new Anim;
-
-		attackAnim->ParseFromTokens(theToken);
-		delete m_anims[UNITACTION_ATTACK];
-		m_anims[UNITACTION_ATTACK] = attackAnim;
+		Anim * attackAnim = Anim::CreateFromTokens(theToken);
+		if (attackAnim) {
+			delete m_anims[UNITACTION_ATTACK];
+			m_anims[UNITACTION_ATTACK] = attackAnim;
+		}
 	}
 
 	if (!token_ParseValNext(theToken, TOKEN_UNIT_SPRITE_IDLE, tmp)) return FALSE;
@@ -545,11 +545,11 @@ sint32 UnitSpriteGroup::Parse(uint16 id, GROUPTYPE type)
 		m_sprites[UNITACTION_IDLE] = idleSprite;
 		printf("]\n");
 
-		Anim *idleAnim = new Anim;
-
-		idleAnim->ParseFromTokens(theToken);
-		delete m_anims[UNITACTION_IDLE];
-		m_anims[UNITACTION_IDLE] = idleAnim;
+		Anim * idleAnim = Anim::CreateFromTokens(theToken);
+		if (idleAnim) {
+			delete m_anims[UNITACTION_IDLE];
+			m_anims[UNITACTION_IDLE] = idleAnim;
+		}
 	}
 
 	if (!token_ParseValNext(theToken, TOKEN_UNIT_SPRITE_VICTORY, tmp)) return FALSE;
@@ -584,11 +584,11 @@ sint32 UnitSpriteGroup::Parse(uint16 id, GROUPTYPE type)
 		m_sprites[UNITACTION_VICTORY] = victorySprite;
 		printf("]\n");
 
-		Anim *victoryAnim = new Anim;
-
-		victoryAnim->ParseFromTokens(theToken);
-		delete m_anims[UNITACTION_VICTORY];
-		m_anims[UNITACTION_VICTORY] = victoryAnim;
+		Anim * victoryAnim = Anim::CreateFromTokens(theToken);
+		if (victoryAnim) {
+			delete m_anims[UNITACTION_VICTORY];
+			m_anims[UNITACTION_VICTORY] = victoryAnim;
+		}
 	}
 
 	if (!token_ParseValNext(theToken, TOKEN_UNIT_SPRITE_WORK, tmp)) return FALSE;
@@ -624,10 +624,11 @@ sint32 UnitSpriteGroup::Parse(uint16 id, GROUPTYPE type)
 		m_sprites[UNITACTION_WORK] = workSprite;
 		printf("]\n");
 
-		Anim *workAnim = new Anim;
-		workAnim->ParseFromTokens(theToken);
-		delete m_anims[UNITACTION_WORK];
-		m_anims[UNITACTION_WORK] = workAnim;
+		Anim * workAnim = Anim::CreateFromTokens(theToken);
+		if (workAnim) {
+			delete m_anims[UNITACTION_WORK];
+			m_anims[UNITACTION_WORK] = workAnim;
+		}
 	}
 
 	if (!token_ParseValNext(theToken, TOKEN_UNIT_SPRITE_FIREPOINTS, tmp)) return FALSE;

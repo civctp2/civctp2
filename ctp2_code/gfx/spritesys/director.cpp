@@ -1424,7 +1424,8 @@ class DQActionMoveProjectile : public DQActionEffect
 public:
 	DQActionMoveProjectile(SpriteState *projectileEndState, const MapPoint &startPos, const MapPoint &endPos)
 		: DQActionEffect(projectileEndState, endPos),
-		startPos (startPos)
+		startPos (startPos),
+		endPos   (endPos)
 	{}
 	virtual ~DQActionMoveProjectile() {}
 	virtual DQACTION_TYPE GetType() { return DQACTION_MOVEPROJECTILE; }
@@ -1442,8 +1443,7 @@ public:
 			}
 
 			if (animation) {
-				Action *action = new Action(actionType, ACTIONEND_PATHEND);
-				action->SetAnim(animation);
+				Action *action = Action::CreateEffectAction(actionType, animation, startPos, endPos);
 				m_activeActor->AddAction(action);
 			}
 		}
@@ -1453,10 +1453,11 @@ public:
 	{
 		DPRINTF(k_DBG_UI, ("Move Projectile\n"));
 		DPRINTF(k_DBG_UI, ("  startPosition          :%d,%d\n", startPos.x, startPos.y));
-		DPRINTF(k_DBG_UI, ("  endPosition            :%d,%d\n", m_activeActor->GetPos().x, m_activeActor->GetPos().y));
+		DPRINTF(k_DBG_UI, ("  endPosition            :%d,%d\n", endPos.x, endPos.y));
 	}
 protected:
 	MapPoint startPos;
+	MapPoint endPos;
 };
 
 class DQActionCombatFlash : public DQActionEffect
@@ -1479,8 +1480,7 @@ public:
 
 		if (animation)
 		{
-			Action * action = new Action(EFFECTACTION_FLASH, ACTIONEND_PATHEND);
-			action->SetAnim(animation);
+			Action * action = Action::CreateEffectAction(EFFECTACTION_FLASH, animation);
 			m_activeActor->AddAction(action);
 		}
 	}
@@ -1512,8 +1512,7 @@ public:
 
 			if (animation)
 			{
-				Action *action = new Action(EFFECTACTION_PLAY, ACTIONEND_PATHEND);
-				action->SetAnim(animation);
+				Action *action = Action::CreateEffectAction(EFFECTACTION_PLAY, animation);
 				m_activeActor->AddAction(action);
 
 				if (g_soundManager)
@@ -1583,30 +1582,16 @@ public:
 
 	virtual void PrepareAnimation()
 	{
-		Action *action = new Action();
-
-		action->SetStartMapPoint(startPos);
-		action->SetEndMapPoint  (endPos);
-		action->CreatePath(startPos.x, startPos.y, endPos.x, endPos.y);
-
-		moveActor->PositionActor(startPos);
-
-		uint32 maxActionCounter = 1;
-		sint32 speed            = g_theProfileDB->GetUnitSpeed();
-		if (g_theProfileDB->IsUnitAnim()) {
-			maxActionCounter = k_MAX_UNIT_MOVEMENT_ITERATIONS - speed;
-		}
-
-		action->SetMaxActionCounter(maxActionCounter);
-		action->SetCurActionCounter(0);
-
-		action->SetSoundEffect(soundID);
-
-		if(!moveActor->ActionMove(action))
-		{
-			delete action;
+		Anim  * animation = moveActor->CreateMoveAnim();
+		if (!animation) {
 			return;
 		}
+
+		Action *action = Action::CreateUnitAction(UNITACTION_MOVE, animation, startPos, endPos);
+		moveActor->PositionActor(startPos);
+		moveActor->SetIsFortifying(FALSE);
+		moveActor->SetIsFortified (FALSE);
+		moveActor->AddAction(action);
 
 		for (int i = 0; i < numberOfMoveActors; i++) {
 			moveActors[i]->SetHiddenUnderStack(true);
@@ -1618,6 +1603,15 @@ public:
 			CenterMap(moveActor->GetPos());
 		}
 		AddActiveActor(moveActor);
+
+		if (g_soundManager && soundID >= 0) {
+			sint32 visiblePlayer = g_selected_item->GetVisiblePlayer();
+			if ((visiblePlayer == moveActor->GetPlayerNum()) || (moveActor->GetUnitVisibility() & (1 << visiblePlayer)))
+			{
+				g_soundManager->AddLoopingSound(SOUNDTYPE_SFX, (uint32) moveActor->GetUnitID(), soundID,
+						endPos.x, endPos.y);
+			}
+		}
 	}
 
 	virtual void Dump()
@@ -1702,24 +1696,23 @@ protected:
 							  || (attacker->GetPlayerNum() == g_selected_item->GetVisiblePlayer());
 		if (playerInvolved)
 		{
-			Action *action = new Action();
-			action->SetStartMapPoint(attackerPos);
-			action->SetEndMapPoint  (attackerPos);
+			sint32 facing = spriteutils_DeltaToFacing(deltaX, deltaY);
+			Action *action = Action::CreateUnitAction(UNITACTION_ATTACK, attacker->CreateAttackAnim(), attackerPos,
+					facing);
+			action->PutUnitsVisibility(attacker->GetUnitVisibility());
+			attacker->AddAction(action);
 
-			sint32 facingIndex = spriteutils_DeltaToFacing(deltaX, deltaY);
-			attacker->ActionAttack(action, facingIndex);
 			AddActiveActor(attacker);
 		}
 
 		bool defenderVisible = TileIsVisibleToPlayer(defenderPos);
 		if (!defenderIsCity && (playerInvolved || defenderVisible))
 		{
-			Action *action = new Action();
-			action->SetStartMapPoint(defenderPos);
-			action->SetEndMapPoint  (defenderPos);
-
-			sint32 facingIndex = spriteutils_DeltaToFacing(-deltaX, -deltaY);
-			defender->ActionAttack(action, facingIndex);
+			sint32 facing = spriteutils_DeltaToFacing(-deltaX, -deltaY);
+			Action *action = Action::CreateUnitAction(UNITACTION_ATTACK, defender->CreateAttackAnim(), defenderPos,
+					facing);
+			action->PutUnitsVisibility(defender->GetUnitVisibility());
+			defender->AddAction(action);
 
 			AddActiveActor(defender);
 		}
@@ -1780,30 +1773,24 @@ protected:
 		bool attackerVisible = TileIsVisibleToPlayer(attackerPos);
 		if (!attackerIsCity && attackerVisible)
 		{
-			Action *attackerAction = new Action();
-			attackerAction->SetStartMapPoint(attackerPos);
-			attackerAction->SetEndMapPoint  (attackerPos);
-
-			sint32 facingIndex = spriteutils_DeltaToFacing(deltaX, deltaY);
-			if (attacker->ActionSpecialAttack(attackerAction, facingIndex)) {
-				AddActiveActor(attacker);
-			} else {
-				delete attackerAction;
+			Anim * animation = attacker->CreateSpecialAttackAnim();
+			if (animation) {
+				sint32 facing = spriteutils_DeltaToFacing(deltaX, deltaY);
+				Action *attackerAction = Action::CreateUnitAction(UNITACTION_ATTACK, animation, attackerPos, facing);
+				attackerAction->PutUnitsVisibility(attacker->GetUnitVisibility());
+				attacker->AddAction(attackerAction);
 			}
 		}
 
 		bool defenderVisible = TileIsVisibleToPlayer(defenderPos);
 		if (!defenderIsCity && defenderVisible)
 		{
-			Action *defenderAction = new Action();
-			defenderAction->SetStartMapPoint(defenderPos);
-			defenderAction->SetEndMapPoint  (defenderPos);
-
-			sint32 facingIndex = spriteutils_DeltaToFacing(-deltaX, -deltaY);
-			if (defender->ActionSpecialAttack(defenderAction, facingIndex)) {
-				AddActiveActor(defender);
-			} else {
-				delete defenderAction;
+			Anim * animation = defender->CreateSpecialAttackAnim();
+			if (animation) {
+				sint32 facing = spriteutils_DeltaToFacing(-deltaX, -deltaY);
+				Action *defenderAction = Action::CreateUnitAction(UNITACTION_ATTACK, animation, defenderPos, facing);
+				defenderAction->PutUnitsVisibility(defender->GetUnitVisibility());
+				defender->AddAction(defenderAction);
 			}
 		}
 	}
@@ -1846,27 +1833,15 @@ protected:
 
 	virtual void PrepareAnimation()
 	{
-		Action *action = new Action(UNITACTION_ATTACK, ACTIONEND_ANIMEND);
-		action->SetStartMapPoint(attackerPos);
-		action->SetEndMapPoint(attackerPos);
-
-		if (attacker->GetLoadType() != LOADTYPE_FULL) {
-			attacker->FullLoad(UNITACTION_ATTACK);
-		}
-		Anim *attackerAnim = attacker->CreateAnim(UNITACTION_ATTACK);
-		if (!attackerAnim) {
-			attackerAnim = attacker->CreateAnim(UNITACTION_IDLE);
-		}
-		action->SetAnim(attackerAnim);
-
 		POINT attackerPoints, attackedPoints;
 		maputils_MapXY2PixelXY(attackerPos.x, attackerPos.y, attackerPoints);
 		maputils_MapXY2PixelXY(targetPos.x, targetPos.y, attackedPoints);
-		action->SetFacing(spriteutils_DeltaToFacing(attackedPoints.x - attackerPoints.x,
-													attackedPoints.y - attackerPoints.y));
+		sint32 facing = spriteutils_DeltaToFacing(
+				attackedPoints.x - attackerPoints.x,
+				attackedPoints.y - attackerPoints.y);
 
-		action->SetUnitVisionRange(attacker->GetUnitVisionRange());
-		action->SetUnitsVisibility(attacker->GetUnitVisibility());
+		Action *action = Action::CreateUnitAction(UNITACTION_ATTACK, attacker->CreateAttackAnim(), attackerPos, facing);
+		action->PutUnitsVisibility(attacker->GetUnitVisibility());
 		attacker->AddAction(action);
 		AddActiveActor(attacker);
 
@@ -1945,15 +1920,7 @@ protected:
 		dead->SetHealthPercent(-1.0);
 		dead->SetTempStackSize(0);
 
-		Action *action = new Action((UNITACTION)deathActionType, ACTIONEND_ANIMEND);
-		action->SetStartMapPoint(deadPos);
-		action->SetEndMapPoint(deadPos);
-
-		action->SetAnim(deathAnim);
-
-		action->SetUnitVisionRange(dead->GetUnitVisionRange());
-		action->SetUnitsVisibility(dead->GetUnitVisibility());
-		action->SetFacing(dead->GetFacing());
+		Action *action = Action::CreateUnitAction((UNITACTION)deathActionType, deathAnim, deadPos);
 		dead->AddAction(action);
 		AddActiveActor(dead);
 
@@ -2000,24 +1967,20 @@ protected:
 
 	virtual void PrepareAnimation()
 	{
-		Action *action = new Action(UNITACTION_WORK, ACTIONEND_ANIMEND);
-		action->SetStartMapPoint(workPos);
-		action->SetEndMapPoint(workPos);
-
 		if (workActor->GetLoadType() != LOADTYPE_FULL) {
 			workActor->FullLoad(UNITACTION_WORK);
 		}
 
-		Anim *anim = workActor->CreateAnim(UNITACTION_WORK);
-		if (!anim)
+		Anim *animation = workActor->CreateAnim(UNITACTION_WORK);
+		if (!animation)
 		{
-			anim = workActor->CreateAnim(UNITACTION_MOVE);
-			if (!anim) {
-				delete action;
+			animation = workActor->CreateAnim(UNITACTION_MOVE);
+			if (!animation) {
 				return;
 			}
 		}
-		action->SetAnim(anim);
+
+		Action *action = Action::CreateUnitAction(UNITACTION_WORK, animation, workPos);
 		workActor->AddAction(action);
 		AddActiveActor(workActor);
 
@@ -2067,59 +2030,39 @@ public:
 protected:
 	virtual void PrepareAnimation()
 	{
-		Action *attackerAction = new Action(UNITACTION_FACE_OFF, ACTIONEND_INTERRUPT);
-		attackerAction->SetStartMapPoint(attackerPos);
-		attackerAction->SetEndMapPoint(attackerPos);
-
-		Action *attackedAction = new Action(UNITACTION_FACE_OFF, ACTIONEND_INTERRUPT);
-		attackedAction->SetStartMapPoint(attackedPos);
-		attackedAction->SetEndMapPoint(attackedPos);
-
 		Anim * attackerAnim = Anim::MakeFaceoff();
 		if (!attackerAnim)
 		{
-			attacker->AddIdle(true);
-			delete attackerAction;
-			delete attackedAction;
+			attacker->AddIdle();
 			return;
 		}
-		attackerAction->SetAnim(attackerAnim);
+
+		POINT attackerPoints, attackedPoints;
+		maputils_MapXY2PixelXY(attackerPos.x, attackerPos.y, attackerPoints);
+		maputils_MapXY2PixelXY(attackedPos.x, attackedPos.y, attackedPoints);
+		sint32 attackerFacing = spriteutils_DeltaToFacing(
+				attackedPoints.x - attackerPoints.x,
+				attackedPoints.y - attackerPoints.y);
+
+		Action *attackerAction = Action::CreateUnitAction(UNITACTION_FACE_OFF, attackerAnim, attackerPos, attackerFacing);
+		attacker->AddAction(attackerAction);
 
 		if (attacked->GetLoadType() != LOADTYPE_FULL) {
 			attacked->FullLoad(UNITACTION_IDLE);
 		}
-
 		Anim *attackedAnim = Anim::MakeFaceoff();
 		if (!attackedAnim)
 		{
-			attacked->AddIdle(true);
-			delete attackedAction;
-			attackedAction = NULL;
+			attacked->AddIdle();
 		}
-
-		POINT attackerPoints, attackedPoints;
-
-		maputils_MapXY2PixelXY(attackerPos.x, attackerPos.y, attackerPoints);
-		maputils_MapXY2PixelXY(attackedPos.x, attackedPos.y, attackedPoints);
-
-		attackerAction->SetFacing(spriteutils_DeltaToFacing(
-				attackedPoints.x - attackerPoints.x, attackedPoints.y - attackerPoints.y));
 
 		if (attackedAnim)
 		{
-			attackedAction->SetAnim(attackedAnim);
-			attackedAction->SetFacing(spriteutils_DeltaToFacing(
-					attackerPoints.x - attackedPoints.x, attackerPoints.y - attackedPoints.y));
-		}
-
-		attackerAction->SetUnitVisionRange(attacker->GetUnitVisionRange());
-		attackerAction->SetUnitsVisibility(attacker->GetUnitVisibility());
-		attacker->AddAction(attackerAction);
-
-		if (attackedAnim)
-		{
-			attackedAction->SetUnitVisionRange(attacked->GetUnitVisionRange());
-			attackedAction->SetUnitsVisibility(attacker->GetUnitVisibility());
+			sint32 attackedFacing = spriteutils_DeltaToFacing(
+					attackerPoints.x - attackedPoints.x,
+					attackerPoints.y - attackedPoints.y);
+			Action *attackedAction = Action::CreateUnitAction(UNITACTION_FACE_OFF, attackedAnim, attackedPos,
+					attackedFacing);
 			attacked->AddAction(attackedAction);
 		}
 
@@ -2423,7 +2366,7 @@ void DirectorImpl::Process()
 		ProcessActions();
 
 		HandleNextAction();
-		// To ensure correct facing this needs to be done after HandleNextAction
+		// To ensure smooth animations this needs to be done after HandleNextAction
 		ProcessAnimations();
 
 		if (g_tiledMap) {

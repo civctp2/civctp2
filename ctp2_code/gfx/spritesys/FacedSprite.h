@@ -46,7 +46,6 @@
 
 class FacedSprite;
 
-#define k_MAX_FACINGS		8
 #define k_NUM_FACINGS		5
 
 #define k_MAX_NAMES			100

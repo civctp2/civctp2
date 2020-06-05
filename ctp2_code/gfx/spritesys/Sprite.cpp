@@ -124,14 +124,13 @@ void Sprite::Load(char const * filename)
 void Sprite::Save(char const * filename)
 {
 	SpriteFile *file = new SpriteFile(filename);
-	Anim		*a = new Anim();
+	Anim		*a = NULL;
 
 	file->Create(SPRITEFILETYPE_PLAIN,k_SPRITEFILE_VERSION0,SPRDATA_REGULAR);
 	file->Write(this, a);
 	file->CloseWrite();
 
 	delete file;
-	delete a;
 }
 
 

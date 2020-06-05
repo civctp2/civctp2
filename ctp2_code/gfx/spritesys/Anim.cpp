@@ -75,8 +75,25 @@ Anim * Anim::MakeFaceoff()
 
 	animation->m_numFrames    = k_FACEOFF_FRAMES;
 	animation->m_playbackTime = k_FACEOFF_DURATION;
-	animation->SetType(ANIMTYPE_LOOPED);
+	animation->m_type = ANIMTYPE_LOOPED;
 
+	return animation;
+}
+
+Anim * Anim::CreateFromTokens(Token * tokens)
+{
+	Anim * animation = new Anim();
+	if (!animation->ParseFromTokens(tokens)) {
+		delete animation;
+		animation = NULL;
+	}
+	return animation;
+}
+
+Anim * Anim::CopySetType(Anim const & copy, ANIMTYPE type)
+{
+	Anim * animation = new Anim(copy);
+	animation->m_type = type;
 	return animation;
 }
 
@@ -116,45 +133,6 @@ Anim::Anim(Anim const & copy)
         std::copy(copy.m_transparencies, copy.m_transparencies + m_numFrames, m_transparencies);
         std::copy(copy.m_moveDeltas, copy.m_moveDeltas + m_numFrames, m_moveDeltas);
     }
-}
-
-Anim const & Anim::operator = (Anim const & copy)
-{
-    if (this != &copy)
-    {
-        if (m_numFrames != copy.m_numFrames)
-        {
-            delete [] m_frames;
-            delete [] m_transparencies;
-            delete [] m_moveDeltas;
-        }
-
-        m_type         = copy.m_type;
-        m_numFrames    = copy.m_numFrames;
-        m_animPos      = copy.m_animPos;
-    	m_playbackTime = copy.m_playbackTime;
-	    m_delay        = copy.m_delay;
-		m_finished     = copy.m_finished;
-
-        if (m_numFrames > 0)
-        {
-            m_frames         = new uint16[m_numFrames];
-            m_transparencies = new uint16[m_numFrames];
-            m_moveDeltas     = new POINT [m_numFrames];
-
-            std::copy(copy.m_frames, copy.m_frames + m_numFrames, m_frames);
-            std::copy(copy.m_transparencies, copy.m_transparencies + m_numFrames, m_transparencies);
-            std::copy(copy.m_moveDeltas, copy.m_moveDeltas + m_numFrames, m_moveDeltas);
-        }
-        else
-        {
-            m_frames         = NULL;
-            m_transparencies = NULL;
-            m_moveDeltas     = NULL;
-        }
-    }
-
-    return *this;
 }
 
 Anim::~Anim()
@@ -218,37 +196,37 @@ void Anim::Process()
 
 void Anim::Rewind()
 {
-	m_animPos  = 0;
+//	m_animPos  = 0;
 	m_finished = false;
 }
 
-bool Anim::ParseFromTokens(Token *theToken)
+bool Anim::ParseFromTokens(Token *tokens)
 {
 	sint32		tmp;
 	sint32		i;
 
-	if (!token_ParseValNext(theToken, TOKEN_ANIM, tmp)) return false;
+	if (!token_ParseValNext(tokens, TOKEN_ANIM, tmp)) return false;
 	if (tmp == 0) return false;
 
-	if (!token_ParseAnOpenBraceNext(theToken)) return false;
+	if (!token_ParseAnOpenBraceNext(tokens)) return false;
 
-	if (!token_ParseValNext(theToken, TOKEN_ANIM_TYPE, tmp)) return false;
-	m_type = (uint16)tmp;
+	if (!token_ParseValNext(tokens, TOKEN_ANIM_TYPE, tmp)) return false;
+	m_type = (ANIMTYPE)tmp;
 
-	if (!token_ParseValNext(theToken, TOKEN_ANIM_NUM_FRAMES, tmp)) return false;
+	if (!token_ParseValNext(tokens, TOKEN_ANIM_NUM_FRAMES, tmp)) return false;
 	m_numFrames = (uint16)tmp;
 
-	if (!token_ParseValNext(theToken, TOKEN_ANIM_PLAYBACK_TIME, tmp)) return false;
+	if (!token_ParseValNext(tokens, TOKEN_ANIM_PLAYBACK_TIME, tmp)) return false;
 	m_playbackTime = (uint16)tmp;
 
-	if (!token_ParseValNext(theToken, TOKEN_ANIM_DELAY, tmp)) return false;
+	if (!token_ParseValNext(tokens, TOKEN_ANIM_DELAY, tmp)) return false;
 	m_delay = (uint16)tmp;
 
 	m_frames = new uint16[m_numFrames];
-	if (!token_ParseKeywordNext(theToken, TOKEN_ANIM_FRAME_DATA)) return false;
+	if (!token_ParseKeywordNext(tokens, TOKEN_ANIM_FRAME_DATA)) return false;
 	for (i=0; i<m_numFrames; i++)
 	{
-		if (theToken->Next() == TOKEN_NUMBER) theToken->GetNumber(tmp);
+		if (tokens->Next() == TOKEN_NUMBER) tokens->GetNumber(tmp);
 		else return false;
 		m_frames[i] = (uint16)tmp;
 	}
@@ -259,27 +237,27 @@ bool Anim::ParseFromTokens(Token *theToken)
 		POINT p = {0,0};
 		m_moveDeltas[i] = p;
 	}
-	if (!token_ParseValNext(theToken, TOKEN_ANIM_MOVE_DELTAS, tmp)) return false;
+	if (!token_ParseValNext(tokens, TOKEN_ANIM_MOVE_DELTAS, tmp)) return false;
 	if (tmp)
 	{
-		if (!token_ParseAnOpenBraceNext(theToken)) return false;
+		if (!token_ParseAnOpenBraceNext(tokens)) return false;
 		for (i=0; i<m_numFrames; i++)
 		{
 			POINT		p;
 
-			if (theToken->Next() == TOKEN_NUMBER) theToken->GetNumber(tmp);
+			if (tokens->Next() == TOKEN_NUMBER) tokens->GetNumber(tmp);
 			else return false;
 
 			p.x = tmp;
 
-			if (theToken->Next() == TOKEN_NUMBER) theToken->GetNumber(tmp);
+			if (tokens->Next() == TOKEN_NUMBER) tokens->GetNumber(tmp);
 			else return false;
 
 			p.y = tmp;
 
 			m_moveDeltas[i] = p;
 		}
-		if (!token_ParseAnCloseBraceNext(theToken)) return false;
+		if (!token_ParseAnCloseBraceNext(tokens)) return false;
 	}
 
 	m_transparencies = new uint16[m_numFrames];
@@ -287,22 +265,20 @@ bool Anim::ParseFromTokens(Token *theToken)
 	{
 		m_transparencies[i] = 15;
 	}
-	if (!token_ParseValNext(theToken, TOKEN_ANIM_TRANSPARENCIES, tmp)) return false;
+	if (!token_ParseValNext(tokens, TOKEN_ANIM_TRANSPARENCIES, tmp)) return false;
 	if (tmp)
 	{
-		if (!token_ParseAnOpenBraceNext(theToken)) return false;
+		if (!token_ParseAnOpenBraceNext(tokens)) return false;
 		for (i=0; i<m_numFrames; i++)
 		{
-			if (theToken->Next() == TOKEN_NUMBER) theToken->GetNumber(tmp);
+			if (tokens->Next() == TOKEN_NUMBER) tokens->GetNumber(tmp);
 			else return false;
 			m_transparencies[i] = (uint16)tmp;
 		}
-		if (!token_ParseAnCloseBraceNext(theToken)) return false;
+		if (!token_ParseAnCloseBraceNext(tokens)) return false;
 	}
 
-	if (!token_ParseAnCloseBraceNext(theToken)) return false;
-
-	return true;
+	return token_ParseAnCloseBraceNext(tokens);
 }
 
 void Anim::Export(FILE * file)

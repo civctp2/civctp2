@@ -97,8 +97,7 @@ public:
 	void			AddAction(Action *actionObj);
 	void			GetNextAction(bool isVisible = true);
 	bool			IsActionFinished();
-	void			AddIdle(bool NoIdleJustDelay = false);
-	void			ActionQueueUpIdle(bool NoIdleJustDelay = false);
+	void			AddIdle();
 
 	Anim *          CreateAnim(UNITACTION action);
 
@@ -199,19 +198,16 @@ public:
 #endif
 	sint32          m_refCount;
 
-	bool			ActionMove	       (Action *actionObj);
-	bool			ActionAttack       (Action *actionObj,sint32 facing);
-	bool			ActionSpecialAttack(Action *actionObj,sint32 facing);
-	bool            TryAnimation       (Action *actionObj,UNITACTION action);
-
-	void			TerminateLoopingSound	(uint32 sound_type);
-	void			AddSound				(uint32 sound_type, sint32 sound_id);
-	void			AddLoopingSound			(uint32 sound_type, sint32 sound_id);
+	Anim          * CreateMoveAnim();
+	Anim          * CreateAttackAnim();
+	Anim          * CreateSpecialAttackAnim();
 
 	void            HackSetSpriteID(sint32 spriteID) { m_spriteID = spriteID; }
 
 protected:
 	void			DumpAllActions(void);
+	Anim          * TryAnimation       (UNITACTION action);
+	void            Interrupt();
 
 	MapPoint			m_pos;
 	MapPoint			m_savePos;

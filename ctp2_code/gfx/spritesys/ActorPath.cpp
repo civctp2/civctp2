@@ -35,6 +35,9 @@ ActorPath::ActorPath(sint32 x1, sint32 y1, sint32 x2, sint32 y2)
 	m_pos[POINTSPOSTYPE_ENDPOS].x = x2;
 	m_pos[POINTSPOSTYPE_ENDPOS].y = y2;
 
+	maputils_MapXY2PixelXY(x1, y1, m_points[POINTSPOSTYPE_STARTPOS]);
+	maputils_MapXY2PixelXY(x2, y2, m_points[POINTSPOSTYPE_ENDPOS]);
+
 	m_finished = FALSE;
 }
 
@@ -43,16 +46,6 @@ ActorPath::~ActorPath()
 	delete m_points;
 	delete m_pos;
 }
-
-
-
-
-
-
-
-
-
-
 
 void ActorPath::SetPos(uint16 pointNum, sint32 x, sint32 y)
 {

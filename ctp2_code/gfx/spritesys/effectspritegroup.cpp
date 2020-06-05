@@ -200,11 +200,11 @@ sint32 EffectSpriteGroup::Parse(uint16 id,GROUPTYPE group)
 
 		printf("]\n");
 
-		Anim *effectAnim = new Anim;
-
-		effectAnim->ParseFromTokens(theToken);
-        delete m_anims[EFFECTACTION_PLAY];
-		m_anims[EFFECTACTION_PLAY] = effectAnim;
+		Anim * effectAnim = Anim::CreateFromTokens(theToken);
+		if (effectAnim) {
+			delete m_anims[EFFECTACTION_PLAY];
+			m_anims[EFFECTACTION_PLAY] = effectAnim;
+		}
 	}
 
 	if (!token_ParseValNext(theToken, TOKEN_EFFECT_SPRITE_FLASH, tmp)) return FALSE;
@@ -237,12 +237,11 @@ sint32 EffectSpriteGroup::Parse(uint16 id,GROUPTYPE group)
 		m_sprites[EFFECTACTION_FLASH] = flashSprite;
 		printf("]\n");
 
-		Anim *moveAnim = new Anim;
-
-		moveAnim->ParseFromTokens(theToken);
-        delete m_anims[EFFECTACTION_FLASH];
-		m_anims[EFFECTACTION_FLASH] = moveAnim;
-
+		Anim * moveAnim = Anim::CreateFromTokens(theToken);
+		if (moveAnim) {
+			delete m_anims[EFFECTACTION_FLASH];
+			m_anims[EFFECTACTION_FLASH] = moveAnim;
+		}
 	}
 
 
