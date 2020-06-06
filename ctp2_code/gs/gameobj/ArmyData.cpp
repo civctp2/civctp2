@@ -9561,7 +9561,7 @@ bool ArmyData::ExecuteSpecialOrder(Order *order, bool &keepGoing)
 			(m_array[0].GetVisibility() & (1 << visiblePlayer))) {
 
 			sint32	spriteID = g_theSpecialEffectDB->Get(g_theSpecialEffectDB->FindTypeIndex("SPECEFFECT_GENERAL_CANT"))->GetValue();
-			sint32	soundID = gamesounds_GetGameSoundID(GAMESOUNDS_DEFAULT_FAIL);
+			sint32	soundID = gamesounds_GetGameSoundID(GAMESOUNDS_ILLEGAL_SPECIAL);
 
 			g_director->AddSpecialEffect(order->m_point, spriteID, soundID);
 		}
@@ -9584,8 +9584,9 @@ bool ArmyData::ExecuteSpecialOrder(Order *order, bool &keepGoing)
 
 			sint32	spriteID = g_theSpecialEffectDB->Get(g_theSpecialEffectDB->FindTypeIndex("SPECEFFECT_GENERAL_FAIL"))->GetValue();
 			sint32 soundID;
-			if(!order_rec->GetFailSound(soundID))
-				soundID = 0;
+			if(!order_rec->GetFailSound(soundID)) {
+				soundID = gamesounds_GetGameSoundID(GAMESOUNDS_GENERALFAIL);
+			}
 
 			if(g_selected_item->IsAutoCenterOn()
 			&&!g_director->TileWillBeCompletelyVisible(order->m_point.x, order->m_point.y)
@@ -9612,9 +9613,8 @@ bool ArmyData::ExecuteSpecialOrder(Order *order, bool &keepGoing)
 
 				sint32	spriteID = g_theSpecialEffectDB->Get(g_theSpecialEffectDB->FindTypeIndex("SPECEFFECT_GENERAL_SUCCESS"))->GetValue();
 				sint32 soundID;
-				if(!order_rec->GetSound(soundID))
-				{
-					soundID = 0;
+				if(!order_rec->GetSound(soundID)) {
+					soundID = gamesounds_GetGameSoundID(GAMESOUNDS_GENERALSUCCEED);
 				}
 
 				if(g_player[g_selected_item->GetVisiblePlayer()]->IsVisible(order->m_point))
