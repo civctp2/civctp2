@@ -1230,11 +1230,11 @@ sint32 spriteEditor_Initialize(sint32 mWidth, sint32 mHeight)
 
 	g_theAchievementTracker = new AchievementTracker();
 
+	g_featTracker = new FeatTracker;
+
 	g_theTradeBids = new TradeBids;
 
-
-
-
+	g_eventTracker = new EventTracker;
 
 	SPLASH_STRING("Setting Up Players...");
 
