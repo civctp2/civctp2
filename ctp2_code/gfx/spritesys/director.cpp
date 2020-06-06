@@ -2815,8 +2815,8 @@ void DirectorImpl::AddAttackPos(const Unit &attacker, const MapPoint &pos)
 
 void DirectorImpl::AddSpecialAttack(const Unit& attacker, const Unit &attacked, SPECATTACK attack)
 {
-	sint32	soundID;
-	sint32	spriteID;
+	sint32 soundID;
+	sint32 spriteID;
 	if (!attacker.GetSpecialAttackInfo(attack, &soundID, &spriteID)) {
 		return;
 	}
@@ -2854,7 +2854,6 @@ void DirectorImpl::AddDeath(UnitActor *dead, const MapPoint &deadPos, sint32 dea
 		AddCenterMap(deadPos);
 	}
 	dead->SetHiddenUnderStack(false);
-
 
 	DQActionDeath *action = new DQActionDeath(dead->GetPlayerNum(), dead, deadPos, deadSoundID);
 	m_actionQueue->AddTail(action);

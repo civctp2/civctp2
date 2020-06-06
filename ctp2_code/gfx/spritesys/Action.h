@@ -52,23 +52,23 @@
 
 enum GAME_ACTION
 {
-  ACTION_0=0,
-  ACTION_1,
-  ACTION_2,
-  ACTION_3,
-  ACTION_4,
-  ACTION_5,
-  ACTION_6,
-  ACTION_7,
-  ACTION_8,
-  ACTION_9,
-  ACTION_10,
-  ACTION_11,
-  ACTION_12,
-  ACTION_13,
-  ACTION_14,
-  ACTION_15,
-  ACTION_MAX
+	ACTION_0=0,
+	ACTION_1,
+	ACTION_2,
+	ACTION_3,
+	ACTION_4,
+	ACTION_5,
+	ACTION_6,
+	ACTION_7,
+	ACTION_8,
+	ACTION_9,
+	ACTION_10,
+	ACTION_11,
+	ACTION_12,
+	ACTION_13,
+	ACTION_14,
+	ACTION_15,
+	ACTION_MAX
 };
 
 //----------------------------------------------------------------------------
@@ -130,9 +130,9 @@ public:
 	}
 
 	// TODO: make protected
-    Action(Action const & a_Original);
+	Action(Action const & a_Original);
 
-    ~Action();
+	~Action();
 
 	sint32 GetActionType() const { return (m_actionType > 0 ) ? m_actionType : 0; }
 

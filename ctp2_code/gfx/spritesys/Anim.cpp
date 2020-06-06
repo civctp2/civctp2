@@ -123,16 +123,16 @@ Anim::Anim(Anim const & copy)
 	m_delay          (copy.m_delay),
 	m_finished       (copy.m_finished)
 {
-    if (m_numFrames > 0)
-    {
-        m_frames         = new uint16[m_numFrames];
-        m_transparencies = new uint16[m_numFrames];
-        m_moveDeltas     = new POINT [m_numFrames];
+	if (m_numFrames > 0)
+	{
+		m_frames         = new uint16[m_numFrames];
+		m_transparencies = new uint16[m_numFrames];
+		m_moveDeltas     = new POINT [m_numFrames];
 
-        std::copy(copy.m_frames, copy.m_frames + m_numFrames, m_frames);
-        std::copy(copy.m_transparencies, copy.m_transparencies + m_numFrames, m_transparencies);
-        std::copy(copy.m_moveDeltas, copy.m_moveDeltas + m_numFrames, m_moveDeltas);
-    }
+		std::copy(copy.m_frames, copy.m_frames + m_numFrames, m_frames);
+		std::copy(copy.m_transparencies, copy.m_transparencies + m_numFrames, m_transparencies);
+		std::copy(copy.m_moveDeltas, copy.m_moveDeltas + m_numFrames, m_moveDeltas);
+	}
 }
 
 Anim::~Anim()
@@ -202,8 +202,8 @@ void Anim::Rewind()
 
 bool Anim::ParseFromTokens(Token *tokens)
 {
-	sint32		tmp;
-	sint32		i;
+	sint32 tmp;
+	sint32 i;
 
 	if (!token_ParseValNext(tokens, TOKEN_ANIM, tmp)) return false;
 	if (tmp == 0) return false;
@@ -243,7 +243,7 @@ bool Anim::ParseFromTokens(Token *tokens)
 		if (!token_ParseAnOpenBraceNext(tokens)) return false;
 		for (i=0; i<m_numFrames; i++)
 		{
-			POINT		p;
+			POINT p;
 
 			if (tokens->Next() == TOKEN_NUMBER) tokens->GetNumber(tmp);
 			else return false;

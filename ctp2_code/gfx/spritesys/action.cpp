@@ -80,11 +80,11 @@ Action::Action(const Action & a_Original)
 	m_facing           (a_Original.m_facing),
 	m_unitsVisibility  (a_Original.m_unitsVisibility)
 {
-    if (a_Original.m_curAnim) {
-        m_curAnim = new Anim(*a_Original.m_curAnim);
-    }
+	if (a_Original.m_curAnim) {
+		m_curAnim = new Anim(*a_Original.m_curAnim);
+	}
 
-    /// @todo Check copying of m_curPath (NULLed in original code)
+	/// @todo Check copying of m_curPath (NULLed in original code)
 }
 
 Action::~Action()
@@ -96,11 +96,11 @@ Action::~Action()
 void Action::Process()
 {
 	if (!m_curAnim) {
-        m_finished = true;
-        return;
-    }
+		m_finished = true;
+		return;
+	}
 
-    m_curAnim->Process();
+	m_curAnim->Process();
 
 	if (m_curActionCounter < m_maxActionCounter) {
 		m_curActionCounter++;
