@@ -6,13 +6,8 @@
 
 #include "Actor.h"
 #include "GoodSpriteGroup.h"
-#include "Queue.h"
-#include "World.h"
 #include "TradeRoute.h"
 
-class SpriteState;
-class SpriteGroup;
-class aui_Surface;
 class ActorPath;
 class Action;
 
@@ -20,58 +15,47 @@ class TradeActor : public Actor
 {
 public:
 	TradeActor(TradeRoute newRoute);
-	~TradeActor();
+	virtual ~TradeActor();
 
-	virtual void	Process(void);
+	void       Process();
 
-	void			GetNextAction(void);
-	void			AddIdle(void);
+	void       Draw(RECT * paintRect) const;
 
-	Anim *          CreateAnim(GOODACTION action);
+	TradeRoute GetRouteID() const { return m_routeID; }
 
-	void			Draw(const Vision *tileLocalVision);
-	void			DrawText(sint32 x, sint32 y, MBCHAR *goodText);
-
-	BOOL			IsAnimating(void);
-
-	TradeRoute		GetRouteID(void) { return m_routeID; }
-
-	MapPoint		GetCurrentPos(void) { return m_currentPos; }
-	MapPoint		GetSourcePos(void) { return m_sourcePos; }
-	MapPoint		GetDestPos(void) { return m_destPos; }
-	MapPoint		GetNextPos(void);
-	MapPoint		LookAtNextPos(void);
-
-	uint16			GetWidth(void);
-	uint16			GetHeight(void);
-
-	void			GetBoundingRect(RECT *rect);
+	uint16     GetWidth() const;
+	uint16     GetHeight() const;
+	void       GetBoundingRect(RECT * rect) const;
 
 protected:
-	uint32							m_currentPosID;
-	uint32							m_sourcePosID;
-	uint32							m_destPosID;
+	void     AddIdle();
+	MapPoint GetNextPos();
+	MapPoint LookAtNextPos() const;
 
-	MapPoint						m_currentPos;
-	MapPoint						m_sourcePos;
-	MapPoint						m_destPos;
+	Anim   * CreateAnim(GOODACTION action) const;
 
-	TradeRoute						m_routeID;
-	const DynamicArray<MapPoint>*	m_routePath;
+	void     Draw(const Vision * tileLocalVision) const;
+	void     DrawText(sint32 x, sint32 y, MBCHAR * goodText) const;
 
-	ROUTE_TYPE						m_routeType;
-	sint32							m_routeResource;
+	TradeRoute                     m_routeID;
+	ROUTE_TYPE                     m_routeType;
+	sint32                         m_routeResource;
 
-	GoodSpriteGroup					*m_goodSpriteGroup;
-	sint32							m_facing;
-	sint32							m_frame;
-	uint16							m_transparency;
+	const DynamicArray<MapPoint> * m_routePath;
+	uint32                         m_sourcePosID;
+	uint32                         m_currentPosID;
+	uint32                         m_destPosID;
+	MapPoint                       m_currentPos;
 
-	Action							*m_curAction;
-	Anim                            *m_idleAnim;
-	GOODACTION						m_curGoodAction;
+	GoodSpriteGroup              * m_goodSpriteGroup;
 
-	Queue<Action *>					m_actionQueue;
+	sint32                         m_facing;
+	sint32                         m_frame;
+	uint16                         m_transparency;
+
+	Anim                         * m_idleAnim;
+	Action                       * m_curAction;
+	GOODACTION                     m_curGoodAction;
 };
 
 #endif

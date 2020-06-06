@@ -196,7 +196,7 @@ public:
 		if (g_theProfileDB->IsTradeAnim())
 		{
 			for (auto actorReference : m_tradeActors) {
-				DrawTradeActor(actorReference.second, paintRect);
+				actorReference.second->Draw(paintRect);
 			}
 		}
 	}
@@ -248,22 +248,6 @@ public:
 	}
 
 private:
-	void DrawTradeActor(TradeActor *actor, RECT *paintRect)
-	{
-		const MapPoint &pos = actor->GetCurrentPos();
-
-		sint32 tileX;
-		maputils_MapX2TileX(pos.x, pos.y, &tileX);
-
-		if (maputils_TilePointInTileRect(tileX, pos.y, paintRect))
-		{
-			actor->Draw(g_tiledMap->GetLocalVision());
-			RECT dirtyRect;
-			actor->GetBoundingRect(&dirtyRect);
-			g_tiledMap->AddDirtyRectToMix(dirtyRect);
-		}
-	}
-
 	std::map<uint32, TradeActor *> m_tradeActors;
 };
 
