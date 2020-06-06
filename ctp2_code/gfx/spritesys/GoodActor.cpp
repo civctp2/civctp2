@@ -54,11 +54,11 @@ GoodActor::GoodActor(sint32 index, const MapPoint & pos)
 	m_nextIdleAction  (0)
 {
 	Assert(g_goodSpriteGroupList);
-    if (g_goodSpriteGroupList)
-    {
-	    m_goodSpriteGroup = (GoodSpriteGroup *)
-            g_goodSpriteGroupList->GetSprite(index, GROUPTYPE_GOOD, LOADTYPE_BASIC, (GAME_ACTION) 0);
-    }
+	if (g_goodSpriteGroupList)
+	{
+		m_goodSpriteGroup = (GoodSpriteGroup *)
+			g_goodSpriteGroupList->GetSprite(index, GROUPTYPE_GOOD, LOADTYPE_BASIC, (GAME_ACTION) 0);
+	}
 
 	AddIdle();
 }
@@ -78,79 +78,79 @@ GoodActor::GoodActor(const GoodActor & a_Original)
 	m_loadType        (LOADTYPE_BASIC),
 	m_nextIdleAction  (a_Original.m_nextIdleAction)
 {
-    Assert(g_goodSpriteGroupList);
+	Assert(g_goodSpriteGroupList);
 
-    if (a_Original.m_curAction) {
-        m_curAction = new Action(*a_Original.m_curAction);
-    }
+	if (a_Original.m_curAction) {
+		m_curAction = new Action(*a_Original.m_curAction);
+	}
 
-    for (size_t i = 0; i < a_Original.m_actionQueue.GetNumItems(); ++i)
-    {
-        Action *    data = NULL;
-        if (a_Original.m_actionQueue.GetQueueItem(i, data)) {
-            m_actionQueue.Enqueue(data ? new Action(*data) : NULL);
-        }
-    }
+	for (size_t i = 0; i < a_Original.m_actionQueue.GetNumItems(); ++i)
+	{
+		Action * data = NULL;
+		if (a_Original.m_actionQueue.GetQueueItem(i, data)) {
+			m_actionQueue.Enqueue(data ? new Action(*data) : NULL);
+		}
+	}
 
-    if (g_goodSpriteGroupList)
-    {
-        m_loadType = a_Original.m_loadType;
-	    m_goodSpriteGroup = (GoodSpriteGroup *)
-            g_goodSpriteGroupList->GetSprite(m_index, GROUPTYPE_GOOD, m_loadType, (GAME_ACTION) 0);
-    }
+	if (g_goodSpriteGroupList)
+	{
+		m_loadType = a_Original.m_loadType;
+		m_goodSpriteGroup = (GoodSpriteGroup *)
+			g_goodSpriteGroupList->GetSprite(m_index, GROUPTYPE_GOOD, m_loadType, (GAME_ACTION) 0);
+	}
 }
 
 GoodActor & GoodActor::operator = (const GoodActor & a_Original)
 {
-    if (this != &a_Original)
-    {
-        Assert(g_goodSpriteGroupList);
+	if (this != &a_Original)
+	{
+		Assert(g_goodSpriteGroupList);
 
-        Actor::operator  = (a_Original);
-        m_facing         = a_Original.m_facing;
-        m_frame          = a_Original.m_frame;
-        m_transparency   = a_Original.m_transparency;
-        m_index          = a_Original.m_index;
-	    m_pos            = a_Original.m_pos;
+		Actor::operator  = (a_Original);
+		m_facing         = a_Original.m_facing;
+		m_frame          = a_Original.m_frame;
+		m_transparency   = a_Original.m_transparency;
+		m_index          = a_Original.m_index;
+		m_pos            = a_Original.m_pos;
 		m_nextIdleAction = a_Original.m_nextIdleAction;
 
-        if (g_goodSpriteGroupList)
-        {
-            if (m_goodSpriteGroup) {
-	            g_goodSpriteGroupList->ReleaseSprite(m_index, m_loadType);
-            }
+		if (g_goodSpriteGroupList)
+		{
+			if (m_goodSpriteGroup) {
+				g_goodSpriteGroupList->ReleaseSprite(m_index, m_loadType);
+			}
 
-            m_loadType = a_Original.m_loadType;
-	        m_goodSpriteGroup = (GoodSpriteGroup *)
-                g_goodSpriteGroupList->GetSprite(m_index, GROUPTYPE_GOOD, m_loadType, (GAME_ACTION) 0);
-        }
-        else
-        {
-            m_goodSpriteGroup = NULL;
-            m_loadType        = LOADTYPE_BASIC;
-        }
+			m_loadType = a_Original.m_loadType;
+			m_goodSpriteGroup = (GoodSpriteGroup *)
+				g_goodSpriteGroupList->GetSprite(m_index, GROUPTYPE_GOOD, m_loadType, (GAME_ACTION) 0);
+		}
+		else
+		{
+			m_goodSpriteGroup = NULL;
+			m_loadType        = LOADTYPE_BASIC;
+		}
 
-        delete m_curAction;
-        m_curAction     = a_Original.m_curAction ? new Action(*a_Original.m_curAction) : NULL;
-        m_curGoodAction = a_Original.m_curGoodAction;
+		delete m_curAction;
+		m_curAction     = a_Original.m_curAction ? new Action(*a_Original.m_curAction) : NULL;
+		m_curGoodAction = a_Original.m_curGoodAction;
 
-      	while (m_actionQueue.GetNumItems() > 0)
-        {
-            Action * action = NULL;
-		    m_actionQueue.Dequeue(action);
-		    delete action;
-        }
+		while (m_actionQueue.GetNumItems() > 0)
+		{
+			Action * action = NULL;
+			m_actionQueue.Dequeue(action);
+			delete action;
+		}
 
-        for (size_t i = 0; i < a_Original.m_actionQueue.GetNumItems(); ++i)
-        {
-            Action * data = NULL;
-            if (a_Original.m_actionQueue.GetQueueItem(i, data)) {
-                m_actionQueue.Enqueue(data ? new Action(*data) : NULL);
-            }
-        }
-    }
+		for (size_t i = 0; i < a_Original.m_actionQueue.GetNumItems(); ++i)
+		{
+			Action * data = NULL;
+			if (a_Original.m_actionQueue.GetQueueItem(i, data)) {
+				m_actionQueue.Enqueue(data ? new Action(*data) : NULL);
+			}
+		}
+	}
 
-    return *this;
+	return *this;
 }
 
 GoodActor::GoodActor(CivArchive &archive)
@@ -171,28 +171,28 @@ GoodActor::GoodActor(CivArchive &archive)
 	Serialize(archive);
 
 	Assert(g_goodSpriteGroupList);
-    if (g_goodSpriteGroupList) {
-	    m_goodSpriteGroup = (GoodSpriteGroup *)
-            g_goodSpriteGroupList->GetSprite(m_index, GROUPTYPE_GOOD, LOADTYPE_BASIC, (GAME_ACTION) 0);
-    }
+	if (g_goodSpriteGroupList) {
+		m_goodSpriteGroup = (GoodSpriteGroup *)
+			g_goodSpriteGroupList->GetSprite(m_index, GROUPTYPE_GOOD, LOADTYPE_BASIC, (GAME_ACTION) 0);
+	}
 
 	AddIdle();
 }
 
 GoodActor::~GoodActor()
 {
-    delete m_curAction;
+	delete m_curAction;
 
 	while (m_actionQueue.GetNumItems() > 0)
-    {
-        Action * action = NULL;
+	{
+		Action * action = NULL;
 		m_actionQueue.Dequeue(action);
 		delete action;
 	}
 
-    if (g_goodSpriteGroupList && m_goodSpriteGroup) {
-	    g_goodSpriteGroupList->ReleaseSprite(m_index, m_loadType);
-    }
+	if (g_goodSpriteGroupList && m_goodSpriteGroup) {
+		g_goodSpriteGroupList->ReleaseSprite(m_index, m_loadType);
+	}
 }
 
 void GoodActor::Reload(LOADTYPE loadType)
@@ -246,7 +246,7 @@ void GoodActor::PositionActor(const MapPoint & pos)
 {
 	sint32 pixelX, pixelY;
 	maputils_MapXY2PixelXY(pos.x, pos.y, &pixelX, &pixelY);
-    Actor::SetPos(pixelX, pixelY);
+	Actor::SetPos(pixelX, pixelY);
 	m_pos = pos;
 }
 
@@ -278,9 +278,9 @@ void GoodActor::Process()
 	}
 
 	if (m_curAction)
-    {
+	{
 		POINT current = m_curAction->CalculatePixelXY(m_pos);
-        Actor::SetPos(current.x, current.y);
+		Actor::SetPos(current.x, current.y);
 
 		m_frame        = m_curAction->GetSpriteFrame();
 		m_transparency = m_curAction->GetTransparency();
@@ -329,7 +329,7 @@ Anim * GoodActor::CreateAnim(GOODACTION action) const
 		animation = m_goodSpriteGroup->GetAnim((GAME_ACTION)GOODACTION_IDLE);
 	}
 
-    return animation ? Anim::CreateSequential(*animation) : NULL;
+	return animation ? Anim::CreateSequential(*animation) : NULL;
 }
 
 void GoodActor::DrawSelectionBrackets() const
@@ -339,9 +339,9 @@ void GoodActor::DrawSelectionBrackets() const
 	RECT rect;
 	SetRect(&rect, 0, 0, 1, 1);
 
- 	OffsetRect(&rect,
- 			m_x + (sint32)(k_TILE_PIXEL_WIDTH * g_tiledMap->GetScale())/2,
- 			m_y + (sint32)(k_TILE_GRID_HEIGHT * g_tiledMap->GetScale())/2);
+	OffsetRect(&rect,
+			m_x + (sint32)(k_TILE_PIXEL_WIDTH * g_tiledMap->GetScale())/2,
+			m_y + (sint32)(k_TILE_GRID_HEIGHT * g_tiledMap->GetScale())/2);
 
 	InflateRect(&rect, 25, 25);
 
@@ -390,7 +390,7 @@ bool GoodActor::Draw(bool fogged) const
 #ifdef _ACTOR_DRAW_OPTIMIZATION
 	if ((m_frame == m_oldFrame) && (m_x + xoffset == m_oldOffsetX) && (m_y + yoffset == m_oldOffsetY)) {
 		if (m_paintTwice < 2) {
-		    m_paintTwice++;
+			m_paintTwice++;
 		}
 		return false;
 	}
@@ -458,7 +458,7 @@ uint16 GoodActor::GetWidth() const
 	}
 
 	Sprite * sprite = m_goodSpriteGroup->GetGroupSprite((GAME_ACTION)m_curGoodAction);
-    return sprite ? sprite->GetWidth() : 0;
+	return sprite ? sprite->GetWidth() : 0;
 }
 
 uint16 GoodActor::GetHeight() const
@@ -469,7 +469,7 @@ uint16 GoodActor::GetHeight() const
 	}
 
 	Sprite * sprite = m_goodSpriteGroup->GetGroupSprite((GAME_ACTION)m_curGoodAction);
-    return sprite ? sprite->GetHeight() : 0;
+	return sprite ? sprite->GetHeight() : 0;
 }
 
 void GoodActor::GetBoundingRect(RECT * rect) const
@@ -494,15 +494,15 @@ void GoodActor::GetBoundingRect(RECT * rect) const
 
 void GoodActor::Serialize(CivArchive & archive)
 {
-    CHECKSERIALIZE
+	CHECKSERIALIZE
 
 	if (archive.IsStoring())
-    {
+	{
 		archive << m_index;
 		m_pos.Serialize(archive);
 	}
-    else
-    {
+	else
+		{
 		archive >> m_index;
 		m_pos.Serialize(archive);
 	}

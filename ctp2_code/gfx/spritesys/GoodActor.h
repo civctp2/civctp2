@@ -79,12 +79,12 @@ class aui_Surface;
 class GoodActor : public Actor
 {
 public:
-    GoodActor(sint32 index, const MapPoint & pos);
-    GoodActor(const GoodActor & a_Original);
-    GoodActor(CivArchive & archive);
+	GoodActor(sint32 index, const MapPoint & pos);
+	GoodActor(const GoodActor & a_Original);
+	GoodActor(CivArchive & archive);
 
-    virtual ~GoodActor();
-    GoodActor & operator = (const GoodActor & a_Original);
+	virtual ~GoodActor();
+	GoodActor & operator = (const GoodActor & a_Original);
 
 	void     Process();
 	void     Reload(LOADTYPE loadType);
