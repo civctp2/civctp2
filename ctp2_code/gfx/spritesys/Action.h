@@ -134,22 +134,22 @@ public:
 
     ~Action();
 
-	sint32			GetActionType() const { return (m_actionType > 0 ) ? m_actionType : 0; }
+	sint32 GetActionType() const { return (m_actionType > 0 ) ? m_actionType : 0; }
 
-	void            Process();
-	bool			IsFinished() const { return m_finished; }
+	void   Process();
+	bool   IsFinished() const { return m_finished; }
 
 	// TODO: deprecate
-	void			GetEndMapPoint(MapPoint &point) const { point = m_endMapPoint; }
+	void   GetEndMapPoint(MapPoint &point) const { point = m_endMapPoint; }
 
-	POINT           CalculatePixelXY(const MapPoint & current) const;
-	sint32          CalculateFacing(sint32 facing) const;
-	uint16			GetSpriteFrame() const;
-	uint16			GetTransparency() const;
+	POINT  CalculatePixelXY(const MapPoint & current) const;
+	sint32 CalculateFacing(sint32 facing) const;
+	uint16 GetSpriteFrame() const;
+	uint16 GetTransparency() const;
 
 	// Only used to store unit's visibility in case of action-type is UNITACTION_ATTACK
-	void			PutUnitsVisibility(uint32 unitsVisibility) { m_unitsVisibility = unitsVisibility; }
-	uint32			GetUnitsVisibility(void) const { return m_unitsVisibility; }
+	void   PutUnitsVisibility(uint32 unitsVisibility) { m_unitsVisibility = unitsVisibility; }
+	uint32 GetUnitsVisibility(void) const { return m_unitsVisibility; }
 
 protected:
 	Action(

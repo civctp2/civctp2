@@ -79,56 +79,53 @@ class aui_Surface;
 class GoodActor : public Actor
 {
 public:
-    GoodActor(sint32 index, MapPoint const & pos);
-    GoodActor(GoodActor const & a_Original);
+    GoodActor(sint32 index, const MapPoint & pos);
+    GoodActor(const GoodActor & a_Original);
     GoodActor(CivArchive & archive);
 
     virtual ~GoodActor();
-    GoodActor & operator = (GoodActor const & a_Original);
+    GoodActor & operator = (const GoodActor & a_Original);
 
-	virtual void	Process(void);
+	void     Process();
+	void     Reload(LOADTYPE loadType);
 
-	void			PositionActor(MapPoint &pos);
-	void			AddAction(Action *actionObj);
-	void			GetNextAction(void);
-	void			AddIdle(void);
+	void     PositionActor(const MapPoint & pos);
+	void     AddAction(Action * action);
 
-	Anim *          CreateAnim(GOODACTION action);
+	bool     Draw(bool fogged = false) const;
+	void     DrawDirect(aui_Surface * surf, sint32 x, sint32 y, double scale) const;
 
-	void			DrawSelectionBrackets(void);
-	bool			Draw(bool fogged = false);
-	void			DrawDirect(aui_Surface *surf, sint32 x, sint32 y, double scale);
+	MapPoint GetPos() const { return m_pos; }
+	uint16   GetWidth() const;
+	uint16   GetHeight() const;
+	POINT    GetHotpoint() const;
+	void     GetBoundingRect(RECT * rect) const;
 
-	void			DrawText(sint32 x, sint32 y, MBCHAR const * goodText);
-
-	bool			IsAnimating(void) const;
-
-	MapPoint		GetPos(void) const { return m_pos; }
-	void			SetPos(MapPoint const & pos) { m_pos = pos; }
-	uint16			GetWidth(void) const;
-	uint16			GetHeight(void) const;
-	POINT			GetHotpoint(void) const;
-	void			GetBoundingRect(RECT *rect) const;
-
-	void            Serialize(CivArchive &archive);
-
-	LOADTYPE		GetLoadType(void) const { return m_loadType; }
-	void			SetLoadType(LOADTYPE type) { m_loadType = type; }
-	void			FullLoad();
-	void			DumpFullLoad(void);
+	void     Serialize(CivArchive & archive);
 
 protected:
-	sint32				m_facing;
-	sint32				m_frame;
-	uint16				m_transparency;
-	sint32              m_index;
-	MapPoint			m_pos;
-	GoodSpriteGroup	*   m_goodSpriteGroup;
-	Action *            m_curAction;
-	GOODACTION			m_curGoodAction;
-	Queue<Action *>		m_actionQueue;
-	LOADTYPE			m_loadType;
-	uint32 				m_delay;
+	void   AddIdle();
+	void   GetNextAction();
+
+	Anim * CreateAnim(GOODACTION action) const;
+
+	void   FullLoad();
+	void   DumpFullLoad();
+
+	void   DrawSelectionBrackets() const;
+	void   DrawText(sint32 x, sint32 y, const MBCHAR * goodText) const;
+
+	sint32            m_facing;
+	sint32            m_frame;
+	uint16            m_transparency;
+	sint32            m_index;
+	MapPoint          m_pos;
+	GoodSpriteGroup	* m_goodSpriteGroup;
+	Action          * m_curAction;
+	GOODACTION        m_curGoodAction;
+	Queue<Action *>   m_actionQueue;
+	LOADTYPE          m_loadType;
+	uint32            m_nextIdleAction;
 };
 
 #endif

@@ -1398,21 +1398,13 @@ void TiledMap::ReloadGoodActors(void)
 	{
 		for (sint16 j = 0; j < m_mapBounds.right; ++j)
 		{
-			TileInfo *  theTileInfo = g_theWorld->GetTileInfoStoragePtr(MapPoint(j, i));
+			TileInfo * theTileInfo = g_theWorld->GetTileInfoStoragePtr(MapPoint(j, i));
 
 			if (theTileInfo)
 			{
 				GoodActor * goodActor = theTileInfo->GetGoodActor();
-				if (goodActor && (goodActor->GetLoadType() != loadType))
-                {
-					if (loadType == LOADTYPE_FULL)
-                    {
-						goodActor->FullLoad();
-					}
-                    else
-                    {
-						goodActor->DumpFullLoad();
-					}
+				if (goodActor) {
+					goodActor->Reload(loadType);
 				}
 			}
 		}

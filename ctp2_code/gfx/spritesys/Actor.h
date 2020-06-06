@@ -79,6 +79,8 @@ class SpriteState;
 //
 //----------------------------------------------------------------------------
 
+static const uint16 NO_TRANSPARENCY = 15;
+
 class Actor
 {
 public:
@@ -98,9 +100,6 @@ public:
 	SpriteState * GetSpriteState(void) const { return m_spriteState; }
 	void SetSpriteState(SpriteState *ss) { m_spriteState = ss; }
 
-	virtual void	SetAnim(Anim *a)  {};
-	virtual void	Process(void)     {};
-
 	bool	IsActive () const { return m_isactive; };
 	void	SetActive(bool active) { m_isactive = active; };
 
@@ -119,10 +118,6 @@ protected:
 	SpriteState		*m_spriteState;
 
 	bool			m_morphing;
-
-	sint32			m_animPos;
-
-	virtual bool    ActionMove(Action *actionObj) { return false; };
 };
 
 #endif

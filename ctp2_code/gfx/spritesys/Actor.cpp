@@ -45,6 +45,5 @@ Actor::Actor(SpriteState * ss)
     m_x             (0),
     m_y             (0),
     m_spriteState   (ss),
-    m_morphing      (false),
-    m_animPos       (0)
+    m_morphing      (false)
 { }

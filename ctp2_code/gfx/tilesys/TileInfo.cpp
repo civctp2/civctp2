@@ -129,7 +129,7 @@ void TileInfo::SetGoodActor(sint32 index, MapPoint const & pos)
 
 	if (g_theProfileDB->IsGoodAnim())
 	{
-		m_goodActor->FullLoad();
+		m_goodActor->Reload(LOADTYPE_FULL);
 	}
 }
 

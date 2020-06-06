@@ -196,7 +196,7 @@ void Anim::Process()
 
 void Anim::Rewind()
 {
-//	m_animPos  = 0;
+	m_animPos  = 0;
 	m_finished = false;
 }
 
