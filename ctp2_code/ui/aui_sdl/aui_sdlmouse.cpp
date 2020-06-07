@@ -154,6 +154,7 @@ sint32 aui_SDLMouse::ManipulateInputs(aui_MouseEvent *data, BOOL add) {
 		if (currentFrameTick > m_lastFrameTick + TICKS_PER_FRAME) {
 			m_lastFrameTick = currentFrameTick;
 			data[0] = m_data;
+			data[0].time = currentFrameTick;
 			numberEvents = 1;
 		}
 	}
