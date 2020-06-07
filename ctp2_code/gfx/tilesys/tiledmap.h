@@ -262,8 +262,6 @@ public:
 
 	void			PaintUnitActor(UnitActor *actor, bool fog = false);
 
-	void			PaintEffectActor(EffectActor *actor);
-
 	sint32			RepaintLayerSprites(RECT *paintRect, sint32 layer);
 	sint32			RepaintSprites(aui_Surface *surf, RECT *paintRect, bool scrolling);
 

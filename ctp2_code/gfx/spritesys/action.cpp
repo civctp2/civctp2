@@ -153,8 +153,9 @@ sint32 Action::DetermineMaxActionCounter()
 {
 	sint32 result = m_curAnim ? m_curAnim->GetNumFrames() : 0;
 
-	// To ensure that movement always has the same speed it is independent of the number of frames
-	if (m_startMapPoint != m_endMapPoint)
+	// To ensure that movement always has the same speed it is independent of the number of frames.
+	//   exception: effects with movement are processed in parallel so they can have their own speed.
+	if (m_startMapPoint != m_endMapPoint && (m_groupType != GROUPTYPE_EFFECT))
 	{
 		result = k_MAX_UNIT_MOVEMENT_ITERATIONS;
 		// unit moves can be sped up or skipped by settings

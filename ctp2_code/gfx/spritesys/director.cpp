@@ -480,13 +480,7 @@ public:
 
 	virtual void Draw(RECT *paintRect)
 	{
-		const MapPoint &pos = m_activeActor->GetPos();
-
-		sint32 tileX;
-		maputils_MapX2TileX(pos.x, pos.y, &tileX);
-		if (maputils_TilePointInTileRect(tileX, pos.y, paintRect)) {
-			m_activeActor->Paint();
-		}
+		m_activeActor->Draw(paintRect);
 	}
 
 	virtual void Offset(sint32 deltaX, sint32 deltaY)
@@ -1418,17 +1412,12 @@ public:
 	{
 		if (TileIsVisibleToPlayer(startPos))
 		{
-			sint32 actionType = EFFECTACTION_PLAY;
-			Anim *animation = m_activeActor->CreateAnim(EFFECTACTION_PLAY);
-			if (!animation) {
-				animation = m_activeActor->CreateAnim(EFFECTACTION_FLASH);
-				actionType = EFFECTACTION_FLASH;
-				Assert(animation);
-			}
-
+			EFFECTACTION effectAction;
+			Anim * animation = m_activeActor->CreatePlayElseFlashAnim(effectAction);
+			Assert(animation);
 			if (animation) {
-				Action *action = Action::CreateEffectAction(actionType, animation, startPos, endPos);
-				m_activeActor->AddAction(action);
+				Action * action = Action::CreateEffectAction(effectAction, animation, startPos, endPos);
+				m_activeActor->SetAction(action);
 			}
 		}
 	}
@@ -1455,25 +1444,21 @@ public:
 
 	virtual void Execute()
 	{
-		Anim *animation = m_activeActor->CreateAnim(EFFECTACTION_PLAY);
-		if (!animation)
-		{
-			animation = m_activeActor->CreateAnim(EFFECTACTION_FLASH);
-			Assert(animation);
-		}
-
+		EFFECTACTION effectAction;
+		Anim *animation = m_activeActor->CreatePlayElseFlashAnim(effectAction);
+		Assert(animation);
 		if (animation)
 		{
-			Action * action = Action::CreateEffectAction(EFFECTACTION_FLASH, animation);
-			m_activeActor->AddAction(action);
+			Action * action = Action::CreateEffectAction(effectAction, animation);
+			m_activeActor->SetAction(action);
 		}
 	}
 
 	virtual void Dump()
 	{
 		DPRINTF(k_DBG_UI, ("Combat Flash\n"));
-		DPRINTF(k_DBG_UI, ("  flashPosition          :%d,%d\n", m_activeActor->GetPos().x,
-				m_activeActor->GetPos().y));
+		const MapPoint pos = m_activeActor->GetMapPos();
+		DPRINTF(k_DBG_UI, ("  flashPosition          :%d,%d\n", pos.x, pos.y));
 	}
 };
 
@@ -1490,19 +1475,18 @@ public:
 
 	virtual void Execute()
 	{
-		if (g_tiledMap->GetLocalVision()->IsVisible(m_activeActor->GetPos()))
+		if (g_tiledMap->GetLocalVision()->IsVisible(m_activeActor->GetMapPos()))
 		{
-			Anim *animation = m_activeActor->CreateAnim(EFFECTACTION_PLAY);
-
+			Anim *animation = m_activeActor->CreatePlayAnim();
 			if (animation)
 			{
 				Action *action = Action::CreateEffectAction(EFFECTACTION_PLAY, animation);
-				m_activeActor->AddAction(action);
+				m_activeActor->SetAction(action);
 
 				if (g_soundManager)
 				{
-					g_soundManager->AddSound(SOUNDTYPE_SFX, 0, soundID,
-											 m_activeActor->GetPos().x, m_activeActor->GetPos().y);
+					const MapPoint pos = m_activeActor->GetMapPos();
+					g_soundManager->AddSound(SOUNDTYPE_SFX, 0, soundID, pos.x, pos.y);
 				}
 			}
 		}
@@ -1511,7 +1495,8 @@ public:
 	virtual void Dump()
 	{
 		DPRINTF(k_DBG_UI, ("Special Effect\n"));
-		DPRINTF(k_DBG_UI, ("  position               :%d,%d\n", m_activeActor->GetPos().x, m_activeActor->GetPos().y));
+		const MapPoint pos = m_activeActor->GetMapPos();
+		DPRINTF(k_DBG_UI, ("  position               :%d,%d\n", pos.x, pos.y));
 		DPRINTF(k_DBG_UI, ("  spriteID               :%d\n", spriteID));
 		DPRINTF(k_DBG_UI, ("  soundID                :%d\n", soundID));
 	}

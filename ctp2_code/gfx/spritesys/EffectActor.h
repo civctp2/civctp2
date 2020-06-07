@@ -6,10 +6,6 @@
 
 #include "Actor.h"
 #include "EffectSpriteGroup.h"
-#include "pixelutils.h"
-#include "Queue.h"
-#include "World.h"
-#include "tech_wllist.h"
 
 class SpriteState;
 class SpriteGroup;
@@ -17,83 +13,44 @@ class aui_Surface;
 class ActorPath;
 class Action;
 
-typedef sint32 UnitDBIndex;
-
 class EffectActor : public Actor
 {
 public:
-	EffectActor(SpriteState *ss, const MapPoint &pos);
+	EffectActor(SpriteState * spriteState, const MapPoint & pos);
 	virtual ~EffectActor();
 
-	void ChangeType(SpriteState *ss, sint32 type, Unit id);
+	void Process();
+	void SetAction(Action * action);
+	bool IsActionFinished() const;
 
-	virtual void	Process(void);
-	void			EndTurnProcess(void);
+	Anim * CreatePlayElseFlashAnim(EFFECTACTION & action) const;
+	Anim * CreatePlayAnim() const;
 
-	void			AddAction(Action *actionObj);
-	void			GetNextAction(BOOL isVisible = TRUE);
-	bool 			IsActionFinished();
+	void Draw(RECT * paintRect) const;
+	void DrawDirectWithFlags(aui_Surface * surf, uint16 flags) const;
 
-	Anim *          CreateAnim(EFFECTACTION action);
+	const MapPoint & GetMapPos() const { return m_pos; }
 
-	void 			Paint(void);
-	void			Draw(void);
-	void			DrawDirect(aui_Surface *surf, sint32 x, sint32 y);
-	void			DrawDirectWithFlags(aui_Surface *surf, sint32 x, sint32 y, uint16 flags);
-
-	void			DrawText(sint32 x, sint32 y, MBCHAR *EffectText);
-
-	BOOL			IsAnimating(void) const;
-
-	MapPoint		GetPos(void) const { return m_pos; }
-	void			SetPos(MapPoint pnt) { m_pos = pnt; }
-	MapPoint		GetSavedPos(void) const { return m_savePos; }
-	void			SetSavedPos(MapPoint pnt) { m_savePos = pnt; }
-    void            GetPixelPos(sint32 &x, sint32 &y) const { x = m_x; y = m_y; }
-
-	uint16			GetWidth(void) const;
-	uint16			GetHeight(void) const;
-
-	void			SetPlayerNum(sint32 playerNum) { m_playerNum = playerNum; }
-
-	Action			*LookAtNextAction(void) { return m_actionQueue.LookAtNextDeQueue(); }
-	size_t			GetActionQueueNumItems(void) const { return m_actionQueue.GetNumItems(); }
-
-	void			SetEffectVisibility(uint32 val) { m_effectVisibility = val; }
-	void			SetEffectVisibility(uint32 val, BOOL bval) { m_effectSaveVisibility = m_effectVisibility; m_effectVisibility = val; m_bVisSpecial = TRUE; }
-
-	void			SetEffectVisibility() { m_bVisSpecial = FALSE; }
-	uint32			GetEffectVisibility(void) const { return m_effectVisibility; }
-	BOOL			GetVisSpecial(void) const { return m_bVisSpecial; }
-
-	void			GetBoundingRect(RECT *rect) const;
-	EFFECTACTION	GetEffectAction(void) const { return m_curEffectAction; }
+	uint16 GetWidth() const;
+	uint16 GetHeight() const;
+	void   GetBoundingRect(RECT * rect) const;
 
 protected:
-	MapPoint					m_pos;
-	MapPoint					m_savePos;
+	Anim * CreateAnim(EFFECTACTION action) const;
 
-	sint32						m_shX;
-	sint32						m_shY;
+	void Draw() const;
+	void DrawDirect(aui_Surface * surf) const;
+	void DrawText(sint32 x, sint32 y, MBCHAR * EffectText) const;
 
-	EffectSpriteGroup			*m_effectSpriteGroup;
-	sint32						m_facing;
-	sint32						m_lastMoveFacing;
-	sint32						m_frame;
-	uint16						m_transparency;
+	MapPoint            m_pos;
 
-	Action						*m_curAction;
-	EFFECTACTION				m_curEffectAction;
+	EffectSpriteGroup * m_effectSpriteGroup;
+	sint32              m_facing;
+	sint32              m_frame;
+	uint16              m_transparency;
 
-	Queue<Action *>				m_actionQueue;
-
-	sint32						m_playerNum;
-	uint32						m_effectVisibility;
-	uint32						m_effectSaveVisibility;
-
-	BOOL						m_directionalAttack;
-
-	BOOL						m_bVisSpecial;
+	Action            * m_curAction;
+	EFFECTACTION        m_curEffectAction;
 };
 
 #endif

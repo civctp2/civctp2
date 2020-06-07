@@ -2473,18 +2473,6 @@ void TiledMap::PaintGoodActor(GoodActor *actor, bool fog)
 
 
 
-void TiledMap::PaintEffectActor(EffectActor *actor)
-{
-	Assert(actor != NULL);
-	if (actor == NULL) return;
-
-	actor->Draw();
-
-	RECT rect;
-	actor->GetBoundingRect(&rect);
-	AddDirtyRectToMix(rect);
-}
-
 sint32 TiledMap::RepaintLayerSprites(RECT *paintRect, sint32 layer)
 {
 	if(!ReadyToDraw())

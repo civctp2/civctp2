@@ -283,20 +283,11 @@ void BattleEvent::ProcessExplode(void)
 			if (!m_animating) {
 
 				if (actor) {
-					Action		*action = NULL;
-
-					Anim * anim = actor->CreateAnim(EFFECTACTION_PLAY);
-					if (!anim) {
-						anim = actor->CreateAnim(EFFECTACTION_FLASH);
-						if (anim) {
-							action = Action::CreateEffectAction(EFFECTACTION_FLASH, anim);
-                        } else {
-							Assert(FALSE);
-                        }
-					} else {
-						action = Action::CreateEffectAction(EFFECTACTION_PLAY, anim);
-					}
-					actor->AddAction(action);
+					EFFECTACTION effectAction;
+					Anim * animation = actor->CreatePlayElseFlashAnim(effectAction);
+					Assert(animation);
+					Action * action = Action::CreateEffectAction(effectAction, animation);
+					actor->SetAction(action);
 					actor->Process();
 
 					if(data->explodeVictim) {
@@ -446,9 +437,7 @@ void BattleEvent::DrawExplosions(aui_Surface *surface)
 		if (data) {
 			EffectActor		*actor = data->explodeActor;
 			if (actor) {
-				sint32			x, y;
-				actor->GetPixelPos(x, y);
-				actor->DrawDirectWithFlags(surface, x, y, k_DRAWFLAGS_NORMAL | k_BIT_DRAWFLAGS_ADDITIVE);
+				actor->DrawDirectWithFlags(surface, k_DRAWFLAGS_NORMAL | k_BIT_DRAWFLAGS_ADDITIVE);
 			}
 		}
 		m_walker->Next();
