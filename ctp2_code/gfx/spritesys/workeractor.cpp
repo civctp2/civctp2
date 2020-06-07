@@ -1,97 +1,74 @@
 #include "c3.h"
 #include "workeractor.h"
 
-#include "aui.h"
-#include "pixelutils.h"
-#include "SelItem.h"                // g_selected_item
-#include "tileutils.h"
-#include "Unit.h"
-
-#include "FacedSprite.h"
-#include "UnitSpriteGroup.h"
-#include "SpriteState.h"
-#include "Actor.h"
 #include "SpriteGroupList.h"
-#include "tiledmap.h"               // g_tiledMap
 #include "Anim.h"
 
-#include "ActorPath.h"
-#include "Action.h"
-#include "director.h"               // g_director
-#include "maputils.h"
+extern SpriteGroupList * g_unitSpriteGroupList;
 
-extern SpriteGroupList	*g_unitSpriteGroupList;
-
-namespace
-{
-    /// Default transparency value
-    /// @todo Move to better location
-    uint16 const        TRANSPARENCY_DEFAULT    = 15;
-}
-
-WorkerActor::WorkerActor(sint32 index, const MapPoint &pos, sint32 x, sint32 y)
+WorkerActor::WorkerActor(sint32 index, const MapPoint & pos, sint32 x, sint32 y)
 :
-    Actor               (),
-	m_facing            (0),
-	m_frame             (0),
-	m_transparency      (TRANSPARENCY_DEFAULT),
-	m_index             (index),
-    m_pos               (pos),
-    m_unitSpriteGroup   (NULL),
-    m_curAction         (NULL),
-    m_curUnitAction     (),
-    m_actionQueue       (k_MAX_ACTION_QUEUE_SIZE)
+	Actor             (),
+	m_facing          (0),
+	m_frame           (0),
+	m_transparency    (NO_TRANSPARENCY),
+	m_index           (index),
+	m_pos             (pos),
+	m_unitSpriteGroup (NULL),
+	m_curAction       (NULL),
+	m_curUnitAction   (),
+	m_actionQueue     (k_MAX_ACTION_QUEUE_SIZE)
 {
 	SetPos(x, y);
 
 	Assert(g_unitSpriteGroupList);
-    if (g_unitSpriteGroupList)
-    {
-        m_unitSpriteGroup = (UnitSpriteGroup *)
-            g_unitSpriteGroupList->GetSprite(index, GROUPTYPE_UNIT, LOADTYPE_FULL,(GAME_ACTION)0);
-    }
+	if (g_unitSpriteGroupList)
+	{
+		m_unitSpriteGroup = (UnitSpriteGroup *)
+				g_unitSpriteGroupList->GetSprite(index, GROUPTYPE_UNIT, LOADTYPE_FULL,(GAME_ACTION)0);
+	}
 
-    AddIdle();
+	AddIdle();
 }
 
 WorkerActor::~WorkerActor()
 {
-    delete m_curAction;
+	delete m_curAction;
+
+	while (m_actionQueue.GetNumItems() > 0) {
+		Action * action;
+		m_actionQueue.Dequeue(action);
+		delete action;
+	}
 }
 
-void WorkerActor::AddIdle(void)
+void WorkerActor::AddIdle()
 {
 	m_curAction = Action::CreateUnitAction(UNITACTION_IDLE, CreateAnim(UNITACTION_IDLE));
 	m_curUnitAction = UNITACTION_IDLE;
 }
 
-void WorkerActor::Process(void)
+void WorkerActor::Process()
 {
-
-	if (m_curAction) {
+	if (m_curAction)
+	{
 		m_curAction->Process();
 
-		if (m_curAction->IsFinished()) {
-			MapPoint  end;
-			m_curAction->GetEndMapPoint(end);
-			if (end.x != 0 || end.y != 0) {
-				m_pos = end;
-			}
-
+		if (m_curAction->IsFinished() && m_curAction->GetActionType() != UNITACTION_IDLE) {
 			GetNextAction();
 		}
+	} else {
+		GetNextAction();
 	}
 
-	if (m_curAction != NULL) {
+	if (m_curAction) {
 		m_frame = m_curAction->GetSpriteFrame();
-
 		m_transparency = m_curAction->GetTransparency();
-
 		m_facing = m_curAction->CalculateFacing(m_facing);
 	}
 }
 
-void WorkerActor::GetNextAction(void)
+void WorkerActor::GetNextAction()
 {
 	delete m_curAction;
 	m_curAction = NULL;
@@ -99,91 +76,100 @@ void WorkerActor::GetNextAction(void)
 	if (m_actionQueue.GetNumItems() > 0)
     {
 		m_actionQueue.Dequeue(m_curAction);
-		if (m_curAction)
-        {
+		if (m_curAction) {
 			m_curUnitAction = (UNITACTION) m_curAction->GetActionType();
+		} else {
+			Assert(false);
 		}
-        else
-        {
-			Assert(FALSE);
-		}
-	}
-    else
-    {
+	} else {
 		AddIdle();
 	}
 }
 
-void WorkerActor::AddAction(Action *actionObj)
+void WorkerActor::AddAction(Action * action)
 {
-	// TODO: implement interrupt if needed
-	Assert(m_unitSpriteGroup != NULL);
-	if (m_unitSpriteGroup == NULL) return;
-
-	Assert(actionObj != NULL);
-	if (actionObj == NULL) return;
-
-	m_actionQueue.Enqueue(actionObj);
-}
-
-Anim *WorkerActor::CreateAnim(UNITACTION action)
-{
-	Assert(m_unitSpriteGroup != NULL);
-	if (m_unitSpriteGroup == NULL) return NULL;
-
-	Anim	*origAnim = m_unitSpriteGroup->GetAnim((GAME_ACTION)action);
-	if (origAnim == NULL)
-	{
-
-		origAnim = m_unitSpriteGroup->GetAnim((GAME_ACTION)UNITACTION_IDLE);
-		Assert(origAnim != NULL);
+	Assert(m_unitSpriteGroup);
+	if (!m_unitSpriteGroup) {
+		return;
+	}
+	Assert(action);
+	if (!action) {
+		return;
 	}
 
-	return origAnim ? Anim::CreateSequential(*origAnim) : NULL;
+	Interrupt();
+
+	m_actionQueue.Enqueue(action);
 }
 
-void WorkerActor::Draw(void)
+void WorkerActor::Interrupt()
 {
-	uint16			flags = k_DRAWFLAGS_NORMAL;
-	Pixel16			color = 0x0000;
-
-	m_unitSpriteGroup->Draw(m_curUnitAction, m_frame, m_x+k_ACTOR_CENTER_OFFSET_X, m_y+k_ACTOR_CENTER_OFFSET_Y, m_facing,
-							1, m_transparency, color, flags, NULL, NULL);
+	if (m_curAction && m_curAction->GetActionType() == UNITACTION_IDLE) {
+		delete m_curAction;
+		m_curAction = NULL;
+	}
 }
 
-void WorkerActor::DrawDirect(aui_Surface *surf, sint32 x, sint32 y, double scale)
+Anim * WorkerActor::CreateAnim(UNITACTION action) const
 {
-	uint16			flags = k_DRAWFLAGS_NORMAL;
-	Pixel16			color = 0x0000;
+	Assert(m_unitSpriteGroup);
+	if (!m_unitSpriteGroup) {
+		return NULL;
+	}
 
-	m_unitSpriteGroup->DrawDirect(surf, m_curUnitAction, m_frame, sint32(x+(k_ACTOR_CENTER_OFFSET_X*scale)), sint32(y+(k_ACTOR_CENTER_OFFSET_Y*scale)), m_facing,
-							scale, m_transparency, color, flags, NULL, NULL);
+	Anim * animation = m_unitSpriteGroup->GetAnim((GAME_ACTION)action);
+	if (!animation)
+	{
+		animation = m_unitSpriteGroup->GetAnim((GAME_ACTION)UNITACTION_IDLE);
+		Assert(animation);
+	}
+
+	return animation ? Anim::CreateSequential(*animation) : NULL;
 }
 
-void WorkerActor::DrawText(sint32 x, sint32 y, MBCHAR const * unitText)
+void WorkerActor::Draw() const
+{
+	uint16  flags = k_DRAWFLAGS_NORMAL;
+	Pixel16 color = 0x0000;
+
+	m_unitSpriteGroup->Draw(m_curUnitAction, m_frame,
+			m_x + k_ACTOR_CENTER_OFFSET_X, m_y + k_ACTOR_CENTER_OFFSET_Y,
+			m_facing,1, m_transparency, color, flags, NULL, NULL);
+}
+
+void WorkerActor::DrawDirect(aui_Surface * surf, sint32 x, sint32 y, double scale) const
+{
+	uint16  flags = k_DRAWFLAGS_NORMAL;
+	Pixel16 color = 0x0000;
+
+	m_unitSpriteGroup->DrawDirect(surf, m_curUnitAction, m_frame,
+			sint32(x + (k_ACTOR_CENTER_OFFSET_X * scale)), sint32(y + (k_ACTOR_CENTER_OFFSET_Y * scale)),
+			m_facing, scale, m_transparency, color, flags, NULL, NULL);
+}
+
+void WorkerActor::DrawText(sint32 x, sint32 y, const MBCHAR * unitText) const
 {
 	m_unitSpriteGroup->DrawText(x, y, unitText);
 }
 
-bool WorkerActor::IsAnimating(void) const
+uint16 WorkerActor::GetWidth() const
 {
-	return false;
+	Assert(m_unitSpriteGroup);
+	if (!m_unitSpriteGroup) {
+		return 0;
+	}
+
+	Sprite * sprite = m_unitSpriteGroup->GetGroupSprite((GAME_ACTION)m_curUnitAction);
+	return sprite ? sprite->GetWidth() : 0;
 }
 
-uint16 WorkerActor::GetWidth(void) const
+uint16 WorkerActor::GetHeight() const
 {
-	Assert(m_unitSpriteGroup != NULL);
-	if (m_unitSpriteGroup == NULL) return 0;
+	Assert(m_unitSpriteGroup);
+	if (!m_unitSpriteGroup) {
+		return 0;
+	}
 
-	Sprite *    theSprite = m_unitSpriteGroup->GetGroupSprite((GAME_ACTION)m_curUnitAction);
-    return (theSprite) ? theSprite->GetWidth() : 0;
-}
-
-uint16 WorkerActor::GetHeight(void) const
-{
-	Assert(m_unitSpriteGroup != NULL);
-	if (m_unitSpriteGroup == NULL) return 0;
-
-	Sprite *    theSprite = m_unitSpriteGroup->GetGroupSprite((GAME_ACTION)m_curUnitAction);
-    return (theSprite) ? theSprite->GetHeight() : 0;
+	Sprite * sprite = m_unitSpriteGroup->GetGroupSprite((GAME_ACTION)m_curUnitAction);
+	return sprite ? sprite->GetHeight() : 0;
 }
