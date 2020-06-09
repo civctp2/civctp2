@@ -54,7 +54,7 @@ The build itself is pretty classing and straight forward:
 
 ```
 ./autogen.sh
-CFLAGS="$CFLAGS -w -O3 -fuse-ld=gold" CXXFLAGS="$CXXFLAGS -fpermissive -w -O3 -fuse-ld=gold" ./configure --enable-silent-rules
+CFLAGS="$CFLAGS -O3 -fuse-ld=gold" CXXFLAGS="$CXXFLAGS -fpermissive -O3 -fuse-ld=gold" ./configure --enable-silent-rules
 make
 ```
 
@@ -62,7 +62,7 @@ If you want to build a debug version it is:
 
 ```
 ./autogen.sh
-CFLAGS="$CFLAGS -w -O0 -fno-omit-frame-pointer -fuse-ld=gold" CXXFLAGS="$CXXFLAGS -fpermissive -w -O0 -fno-omit-frame-pointer -fuse-ld=gold" ./configure --enable-silent-rules --enable-debug
+CFLAGS="$CFLAGS -O0 -fno-omit-frame-pointer -fuse-ld=gold" CXXFLAGS="$CXXFLAGS -fpermissive -O0 -fno-omit-frame-pointer -fuse-ld=gold" ./configure --enable-silent-rules --enable-debug
 make
 ```
 
