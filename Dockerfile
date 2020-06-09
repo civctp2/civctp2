@@ -39,7 +39,7 @@ RUN cd /ctp2 \
     && ./autogen.sh && \
     CFLAGS="$CFLAGS $( [ "${BTYP##*debug*}" ] && echo -O3 || echo -ggdb -rdynamic ) -fuse-ld=gold" \
     CXXFLAGS="$CXXFLAGS -fpermissive $( [ "${BTYP##*debug*}" ] && echo -O3 || echo -ggdb -rdynamic ) -fuse-ld=gold" \
-    ./configure --prefix=/opt/ctp2 --bindir=/opt/ctp2/ctp2_program/ctp $( [ "${BTYP##*debug*}" ] || echo --enable-debug ) \
+    ./configure --prefix=/opt/ctp2 --bindir=/opt/ctp2/ctp2_program/ctp --enable-silent-rules $( [ "${BTYP##*debug*}" ] || echo --enable-debug ) \
     && make -j"$(nproc)" \
     && make -j"$(nproc)" install \
     && cp -r /ctp2/ctp2_data/ /opt/ctp2/ \
