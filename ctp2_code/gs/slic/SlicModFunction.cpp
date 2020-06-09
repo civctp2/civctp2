@@ -18,7 +18,7 @@ SlicModFunc::SlicModFunc(const MBCHAR *name, ...)
 
 	m_numArgs = 0;
 	do {
-		tag = va_arg(vl, SLIC_TAG);
+		tag = static_cast<SLIC_TAG>(va_arg(vl, sint32));  // va_arg expects multiple of word types
 		switch(tag) {
 			case ST_END:
 			{
