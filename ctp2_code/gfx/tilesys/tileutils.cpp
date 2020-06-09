@@ -636,7 +636,7 @@ sint32 tileutils_ConvertPixelFormatFrom565(Pixel16 *data)
 	Pixel16		*table = data;
 	Pixel16		*dataStart = table + (end - start + 1);
 
-	for(sint32 j=start; j<end; j++) {
+	for(sint32 j=start; j<=end; j++) {
 
 		if ((sint16)table[j-start] == -1)
 			continue;
@@ -679,7 +679,7 @@ sint32 tileutils_ConvertPixelFormatFrom555(Pixel16 *data)
 	Pixel16		*table = data;
 	Pixel16		*dataStart = table + (end - start + 1);
 
-	for(sint32 j=start; j<end; j++) {
+	for(sint32 j=start; j<=end; j++) {
 
 		if ((sint16)table[j-start] == -1)
 			continue;
