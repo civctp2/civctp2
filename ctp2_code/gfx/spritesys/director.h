@@ -114,7 +114,6 @@ public:
 	virtual void AddAddVision(const MapPoint &pos, double range) = 0;
 	virtual void AddSetVisibility(UnitActor *actor, uint32 visibility) = 0;
 	virtual void AddSetOwner(UnitActor *actor, sint32 owner) = 0;
-	virtual void AddSetVisionRange(UnitActor *actor, double range) = 0;
 	virtual void AddCombatFlash(const MapPoint &pos) = 0;
 	virtual void AddCopyVision() = 0;
 	virtual void AddCenterMap(const MapPoint &pos) = 0;

@@ -506,14 +506,14 @@ void TiledMap::AddDirty(sint32 left, sint32 top, sint32 width, sint32 height, au
 
 #define __GRIDDED_BLITS__
 
-void TiledMap::AddDirtyRect(RECT &rect, aui_DirtyList * a_List)
+void TiledMap::AddDirtyRect(const RECT & rect, aui_DirtyList * a_List)
 {
 	if (a_List) {
 		RECT tempRect = rect;
 
 #ifdef __GRIDDED_BLITS__
 	if (a_List == m_mixDirtyList) {
-		CheckRectAgainstGrid(rect, a_List);
+		CheckRectAgainstGrid(tempRect, a_List);
 	} else {
 
 		tempRect.left = tempRect.left & 0xFFFFFFFC;
@@ -585,7 +585,7 @@ void TiledMap::AddDirtyToMix(sint32 left, sint32 top, sint32 width, sint32 heigh
 	AddDirty(left, top, width, height, m_mixDirtyList);
 }
 
-void TiledMap::AddDirtyRectToMix(RECT &rect)
+void TiledMap::AddDirtyRectToMix(const RECT & rect)
 {
 	AddDirtyRect(rect, m_mixDirtyList);
 }
@@ -2394,28 +2394,17 @@ void TiledMap::PaintUnitActor(UnitActor *actor, bool fog)
 
 		if (g_show_ai_dbg || (g_isScenario && g_showUnitLabels) )
 		{
-			MapPoint pos = actor->GetPos();
-
 			char text[80];
 			text[0] = '\0';
 
 			sint32	tx = (sint32)(actor->GetX()+(k_TILE_PIXEL_WIDTH*m_scale)/2),
 					ty = (sint32)(actor->GetY()+(k_TILE_PIXEL_HEIGHT*m_scale));
 
-			Cell *c = g_theWorld->GetCell(pos);
+			Cell *c = g_theWorld->GetCell(actor->GetMapPos());
 			Unit city = c->GetCity();
 
 			if ((city != Unit()) && g_show_ai_dbg)
 			{
-
-
-
-
-
-
-
-
-
 				strcpy(text, city.GetName());
 
 				DrawSomeText(TRUE, text, tx, ty+10,
@@ -2425,15 +2414,6 @@ void TiledMap::PaintUnitActor(UnitActor *actor, bool fog)
 
 			CellUnitList *al = c->UnitArmy();
 			if (al) {
-
-
-
-
-
-
-
-
-
 				strcpy(text, al->Access(0).GetName());
 
 				DrawSomeText(TRUE, text, tx, ty,
@@ -2635,7 +2615,7 @@ sint32 TiledMap::RepaintLayerSprites(RECT *paintRect, sint32 layer)
 					}
 			   	}
 
-				MapPoint actorCurPos = actor->GetPos();
+				const MapPoint & actorCurPos = actor->GetMapPos();
 				if (actor->IsActive())
                 {
 				    // No action: already busy
@@ -2643,7 +2623,7 @@ sint32 TiledMap::RepaintLayerSprites(RECT *paintRect, sint32 layer)
                 else
                 {
 					PaintUnitActor
-                        (actor, !m_localVision->IsVisible(actor->GetPos()));
+                        (actor, !m_localVision->IsVisible(actorCurPos));
 				}
 
 				if (top.IsCity()) {
@@ -2700,7 +2680,7 @@ sint32 TiledMap::RepaintLayerSprites(RECT *paintRect, sint32 layer)
                     {
 						actor->SetHiddenUnderStack(false);
 						PaintUnitActor
-                            (actor, !m_localVision->IsVisible(actor->GetPos()));
+                            (actor, !m_localVision->IsVisible(actorCurPos));
 					}
 				}
 			}
@@ -2708,9 +2688,6 @@ sint32 TiledMap::RepaintLayerSprites(RECT *paintRect, sint32 layer)
 	}
 	return 0;
 }
-
-
-
 
 void
 TiledMap::ProcessUnit(Unit unit)
@@ -2900,12 +2877,9 @@ sint32 TiledMap::OffsetLayerSprites(RECT *paintRect, sint32 deltaX, sint32 delta
 					}
 				}
 
-				MapPoint actorCurPos = actor->GetPos();
-				if (!actor->IsActive()) {
-					if (actor) {
-						actor->SetX(pixelX);
-						actor->SetY(pixelY);
-					}
+				if (actor && !actor->IsActive()) {
+					actor->SetX(pixelX);
+					actor->SetY(pixelY);
 				}
 
 				if (top.IsCity()) {
@@ -2914,116 +2888,14 @@ sint32 TiledMap::OffsetLayerSprites(RECT *paintRect, sint32 deltaX, sint32 delta
 
 					actor = top.GetActor();
 
-					if (!actor->IsActive()) {
-						if (actor) {
-							actor->SetX(pixelX);
-							actor->SetY(pixelY);
-						}
+					if (actor && !actor->IsActive()) {
+						actor->SetX(pixelX);
+						actor->SetY(pixelY);
 					}
 				}
 			}
 		}
 	}
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
 	return 0;
 }
 

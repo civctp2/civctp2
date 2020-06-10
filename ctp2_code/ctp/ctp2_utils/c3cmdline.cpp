@@ -5513,7 +5513,7 @@ void UpgradeCity::Execute(sint32 argc, char** argv)
 
 	SpriteState *newSS = new SpriteState(90+upgLevel);
 
-	u.GetActor()->ChangeType(newSS, u.GetType(),  u, true);
+	u.GetActor()->ChangeType(newSS, u.GetType(), u);
 }
 
 void CreateCommand::Execute(sint32 argc, char** argv)

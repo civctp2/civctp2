@@ -38,238 +38,193 @@
 #ifndef __UNITACTOR_H__
 #define __UNITACTOR_H__
 
-class UnitActor;
-
-#include "Action.h"             // Action, GAME_ACTION
 #include "Actor.h"              // Actor
-#include "Anim.h"               // Anim
-#include "ctp2_inttypes.h"      // sintN, uintN
-#include "MapPoint.h"           // MapPoint
-#include "Queue.h"
-#include "SpriteGroup.h"        // GROUPTYPE, LOADTYPE
-#include "Unit.h"               // SPECATTACK, Unit
 #include "UnitSpriteGroup.h"    // UNITACTION
+#include "Queue.h"
+#include "ctp2_inttypes.h"      // sintN, uintN
+#include "Unit.h"               // SPECATTACK, Unit
+#include "tileset.h"            // MAPICON
 
 class aui_Surface;
 class CivArchive;
 class SpriteState;
-// BOOL, POINT, RECT
+class SpriteGroupList;
+class Action;
+class Anim;
+// POINT, RECT
 
 class UnitActor : public Actor
 {
 public:
-	UnitActor(SpriteState *ss, Unit id, sint32 type, const MapPoint &pos,
-			  sint32 owner, BOOL isUnseenCellActor, double visionRange,
-			  sint32 citySprite);
-	UnitActor(CivArchive &archive);
+	UnitActor(
+		SpriteState    * spriteState,
+		const Unit     & id,
+		sint32           type,
+		const MapPoint & pos,
+		sint32           owner,
+		double           visionRange,
+		sint32           citySprite,
+		sint32           citySize = 0);
 
-	~UnitActor();
+	UnitActor(CivArchive & archive);
 
-	void			GetIDAndType
-    (
-        sint32              owner,
-        SpriteState *       ss,
-        Unit                id,
-        sint32              unitType,
-        MapPoint const &    pos,
-        sint32 *            spriteID,
-        GROUPTYPE *         groupType,
-        sint32              citySprite = CTPRecord::INDEX_INVALID
-    ) const;
+	virtual ~UnitActor();
 
-	void			AddVision(void);
-	void			RemoveVision(void);
-	void			PositionActor(MapPoint &pos);
-	void			Hide(void);
-	void			Show(void);
+	void             Serialize(CivArchive & archive);
 
-	void			Initialize(void);
+	uint32           GetUnitID() const { return m_unitID.m_id; }
+	sint32           GetUnitDBIndex() const { return m_unitDBIndex; }
 
-	void			ChangeImage(SpriteState *ss, sint32 type, Unit id);
-	void			ChangeType(SpriteState *ss, sint32 type, Unit id, bool updateVision);
+	sint32           GetPlayerNum() const { return m_playerNum; }
+	void             SetPlayerNum(sint32 playerNum) { m_playerNum = playerNum; }
 
-	void			SetSize(sint32 size) { m_size = size; }
-	sint32			GetSize(void) const { return m_size; }
+	void             Process();
+	void             AddAction(Action * action);
+	bool             IsActionFinished() const;
 
-	virtual void	Process(void);
-	void			EndTurnProcess(void);
-	Action 			*WillMorph(void) const;
-	void			AddAction(Action *actionObj);
-	void			GetNextAction(bool isVisible = true);
-	bool			IsActionFinished();
-	void			AddIdle();
+	bool             Draw(bool fogged = false);
+	void             Draw(RECT * paintRect);
+	void             DrawDirect(aui_Surface * surf, sint32 x, sint32 y, double scale) const;
 
-	Anim *          CreateAnim(UNITACTION action);
+	uint16           GetWidth() const;
+	uint16           GetHeight() const;
+	void             GetBoundingRect(RECT * rect) const;
 
-	bool			HasThisAnim(UNITACTION action) const
-	{
+	void             PositionActor(const MapPoint & pos);
+	const MapPoint & GetMapPos() const { return m_pos; }
+	void             Show();
+	void             Hide();
+
+	uint32           GetUnitVisibility() const { return m_unitVisibility; }
+	void             SetUnitVisibility(uint32 unitVisibility) { m_unitVisibility = unitVisibility; }
+	void             SetIsFortified(bool fortified) { m_isFortified = fortified; }
+	void             SetIsFortifying(bool fortifying) { m_isFortifying = fortifying; }
+	void             SetHasCityWalls(bool hasCityWalls) { m_hasCityWalls = hasCityWalls; }
+	void             SetHasForceField(bool hasForceFields) { m_hasForceField = hasForceFields; }
+	sint32           GetCitySize() const { return m_citySize; }
+	sint32           GetNextPop() const { return m_nextPop;}
+
+	void             SetHiddenUnderStack(bool hiddenUnderStack) { m_hiddenUnderStack = hiddenUnderStack; }
+	void             SetHealthPercent(double healthPercent) { m_healthPercent = healthPercent;}
+	void             SetTempStackSize(sint32 tempStackSize) { m_tempStackSize = tempStackSize; }
+
+	Anim           * CreateMoveAnim();
+	Anim           * CreateDeadAnim(UNITACTION & unitAction);
+	Anim           * CreateAttackAnim();
+	Anim           * CreateSpecialAttackAnim();
+	Anim           * CreateWorkAnim();
+	bool             HasAnim(UNITACTION action) const {
 		return m_unitSpriteGroup && m_unitSpriteGroup->GetAnim((GAME_ACTION) action);
 	}
+	void             ChangeImage(SpriteState *spriteState, sint32 type, const Unit & id);
+	void             ChangeType(SpriteState *spriteState, sint32 type, Unit id);
 
-	void			DrawFortified(bool fogged);
-	void			DrawFortifying(bool fogged);
-	void			DrawCityWalls(bool fogged);
-	void			DrawForceField(bool fogged);
-	void			DrawCityImprovements(bool fogged); //emod
+	bool             HitTest(const POINT & mousePoint) const;
 
-	bool			Draw(bool fogged = FALSE);
-	void			DrawHerald(void);
-	void			DrawSelectionBrackets(void);
-	void			DrawHealthBar(void);
-	void			DrawStackingIndicator(sint32 &x, sint32 &y, sint32 stackSize);
-	void			DrawIndicators(sint32 &x, sint32 &y, sint32 stackSize);
-	void			DrawSpecialIndicators(sint32 &x, sint32 &y, sint32 stackSize);
-	void			DrawText(sint32 x, sint32 y, MBCHAR *unitText);
+	// Sprite-editor initialize
+	void             HackSetSpriteID(sint32 spriteID) { m_spriteID = spriteID; }
 
-	void			DrawDirect(aui_Surface *surf, sint32 x, sint32 y, double scale);
-
-	bool			IsAnimating(void) const;
-
-	MapPoint		GetPos(void) const { return m_pos; }
-	void			SetPos(MapPoint pnt) { m_pos = pnt; }
-	MapPoint		GetSavedPos(void) const { return m_savePos; }
-	void			SetSavedPos(MapPoint pnt) { m_savePos = pnt; }
-	void            GetPixelPos(sint32 &x, sint32 &y) const { x = m_x; y = m_y; }
-
-	sint32			GetFacing(void) const { return m_facing; }
-
-	uint16			GetWidth(void) const;
-	uint16			GetHeight(void) const;
-
-	uint32		    GetUnitID(void) const { return m_unitID.m_id; }
-	sint32			GetUnitDBIndex(void) const { return m_unitDBIndex; }
-
-	void			SetPlayerNum(sint32 playerNum) { m_playerNum = playerNum; }
-	sint32			GetPlayerNum(void) const { return m_playerNum;}
-
-	sint32			GetNextPop(void) const { return m_nextPop;}
-
-	Action			*GetCurAction(void) const { return m_curAction; }
-
-	Action			*LookAtNextAction(void) { return m_actionQueue.LookAtNextDeQueue(); }
-	Action			*LookAtLastAction(void) { return m_actionQueue.LookAtLastDeQueue(); }
-	size_t			GetActionQueueNumItems(void) const { return m_actionQueue.GetNumItems(); }
-
-	bool			HasDeath(void) const { return m_unitSpriteGroup->HasDeath(); }
-	bool			HasDirectional(void) { return m_unitSpriteGroup->HasDirectional(); }
-
-	void			SetUnitVisibility(uint32 val) { m_unitSaveVisibility = m_unitVisibility = val; }
-	void			SetUnitVisibility(uint32 val, BOOL bval) { m_unitSaveVisibility = m_unitVisibility; m_unitVisibility = val; }
-
-	uint32			GetUnitVisibility(void) const { return m_unitVisibility; }
-	uint32			GetUnitSavedVisibility(void) const { return m_unitSaveVisibility; }
-
-	double			GetUnitVisionRange(void) const { return m_unitVisionRange; }
-	void            SetUnitVisionRange(double range) { m_unitVisionRange = range; }
-	void            SetNewUnitVisionRange(double range) { m_newUnitVisionRange = range; }
-
-	bool			HiddenUnderStack(void) const { return m_hiddenUnderStack; }
-	void			SetHiddenUnderStack(bool val) { m_hiddenUnderStack = val; }
-
-	void			GetBoundingRect(RECT *rect) const;
-
-	LOADTYPE		GetLoadType(void) const;
-
-	void			FullLoad(UNITACTION action);
-	void			DumpFullLoad(void);
-
-	void			SetIsFortified(BOOL fort) { m_isFortified = fort; }
-	void			SetIsFortifying(BOOL fort) { m_isFortifying = fort; }
-	BOOL			IsFortified(void) const { return m_isFortified; }
-	BOOL			IsFortifying(void) const { return m_isFortifying; }
-
-	void			SetHasCityWalls(BOOL has) { m_hasCityWalls = has; }
-	void			SetHasForceField(BOOL has) { m_hasForceField = has; }
-	BOOL			HasCityWalls(void) const { return m_hasCityWalls;}
-	BOOL			HasForceField(void) const { return m_hasForceField; }
-
-	void			SetHealthPercent(double p) { m_healthPercent = p;}
-	double			GetHealthPercent(void) const { return m_healthPercent; }
-
-	void			SetTempStackSize(sint32 i) { m_tempStackSize = i; }
-	sint32			GetTempStackSize(void) const { return m_tempStackSize; }
-
-	BOOL			HitTest(POINT mousePt);
-
-	void			Serialize(CivArchive &archive);
+	// UnseenCell
+	void             IncreaseReferenceCount() { m_refCount++; }
+	bool             DecreaseReferenceCount() { return --m_refCount <= 0; }
+	void             CopyFlags(const UnitActor & other);
 
 #ifdef _DEBUG
-	void			DumpActor(void);
+	void   DumpActor();
 #endif
-	sint32          m_refCount;
-
-	Anim          * CreateMoveAnim();
-	Anim          * CreateAttackAnim();
-	Anim          * CreateSpecialAttackAnim();
-
-	void            HackSetSpriteID(sint32 spriteID) { m_spriteID = spriteID; }
 
 protected:
-	void			DumpAllActions(void);
-	Anim          * TryAnimation       (UNITACTION action);
-	void            Interrupt();
+	static SpriteGroupList * GetSpriteGroupList(GROUPTYPE groupType);
+	static bool              IsRectCompletelyOnScreen(const RECT & rect);
 
-	MapPoint			m_pos;
-	MapPoint			m_savePos;
-	Unit				m_unitID;
-	sint32				m_unitDBIndex;
-	sint32				m_playerNum;
+	void   Initialize();
 
-	sint32              m_nextPop; //PFT 29 mar 05, show # turns until city next grows a pop
+	void     GetIDAndType(
+		sint32           owner,
+		SpriteState    * spriteState,
+		Unit             id,
+		sint32           unitType,
+		const MapPoint & pos,
+		sint32           citySprite,
+		sint32         & spriteID,
+		GROUPTYPE      & groupType) const;
 
-	UnitSpriteGroup		*m_unitSpriteGroup;
-	LOADTYPE			m_loadType;
+	void     GetNextAction();
+	void     AddIdle();
+	void     Interrupt();
+	void     DumpAllActions();
 
-	sint32				m_facing;
-	sint32				m_lastMoveFacing; // purpose unclear since there is also m_facing, not saved any more since #244
-	sint32				m_frame;
-	uint16				m_transparency;
+	Anim   * TryAnimation(UNITACTION action);
+	Anim   * CreateAnim(UNITACTION action) const;
+	void     FullLoad(UNITACTION action);
+	void     DumpFullLoad();
 
-	Action				*m_curAction;
-	UNITACTION			m_curUnitAction;
+	void     DrawFortifying(sint32 xoffset, sint32 yoffset, bool fogged) const;
+	void     DrawFortified(sint32 nudgeX, sint32 nudgeY, bool fogged) const;
+	void     DrawCityWalls(sint32 nudgeX, sint32 nudgeY, bool fogged) const;
+	void     DrawForceField(sint32 nudgeX, sint32 nudgeY, bool fogged) const;
+	void     DrawCityImprovements(sint32 nudgeX, sint32 nudgeY, bool fogged) const; //emod
+	void     DrawSelectionBrackets() const;
+	void     DrawShield() const;
+	RECT     DrawStackingIndicator(const RECT & rect, sint32 stackSize) const;
+	RECT     DrawIndicators(const RECT & rect) const;
+	RECT     DrawIndicator(const RECT & rect, MAPICON icon, Pixel16 displayedColor) const;
+	RECT     DrawSpecialIndicators(const RECT & rect, sint32 stackSize) const;
+	void     DrawText(sint32 x, sint32 y, MBCHAR * unitText) const;
+	void     DrawImage(Pixel16 * image, sint32 nudgeX, sint32 nudgeY, bool fogged) const;
+	Sprite * GetSprite() const;
+	RECT     DetermineShieldRect() const;
+	sint32   DetermineStackSize() const;
+	double   CalculateHealthPercentage(sint32 stackSize) const;
+	void     DrawHealthBar(const RECT & rect, sint32 stackSize) const;
+	sint32   GetDisplayedOwner() const;
+	Pixel16  GetDisplayedColor() const;
 
-	Queue<Action *>		m_actionQueue;
+	Unit              m_unitID;
+	sint32            m_unitDBIndex;
+	sint32            m_playerNum;
+	MapPoint          m_pos;
+	bool              m_hidden;
 
-	RECT				m_heraldRect;
+	GROUPTYPE         m_type;
+	Action          * m_curAction;
+	UNITACTION        m_curUnitAction;
+	Queue<Action *>   m_actionQueue;
 
-	uint32				m_unitVisibility;
-	uint32				m_unitSaveVisibility;
+	uint32            m_unitVisibility;
+	bool              m_isFortified;
+	bool              m_isFortifying;
+	bool              m_hasCityWalls;
+	bool              m_hasForceField;
+	sint32            m_citySize;
+	sint32            m_nextPop; //PFT 29 mar 05, show # turns until city next grows a pop
 
-	BOOL				m_directionalAttack;
-	double				m_unitVisionRange;
-	double              m_newUnitVisionRange;
+	bool              m_hiddenUnderStack;
+	double            m_healthPercent;
+	sint32            m_tempStackSize;
 
-	BOOL				m_hidden;
-	bool				m_hiddenUnderStack;
+	sint32            m_spriteID;
+	UnitSpriteGroup * m_unitSpriteGroup;
+	LOADTYPE          m_loadType;
+	bool              m_directionalAttack;
 
-	sint32				m_size;
-	BOOL                m_isUnseenCellActor;
+	sint32            m_facing;
+	sint32            m_frame;
+	uint16            m_transparency;
+	uint32            m_shieldFlashOnTime;
+	uint32            m_shieldFlashOffTime;
 
-	GROUPTYPE			m_type;
-	sint32				m_spriteID;
-
-	BOOL				m_isFortified;
-	BOOL				m_isFortifying;
-	BOOL				m_hasCityWalls;
-	BOOL				m_hasForceField;
-
-	uint32				m_shieldFlashOnTime;
-	uint32				m_shieldFlashOffTime;
-
-	double				m_healthPercent;
-	sint32				m_tempStackSize;
+	sint32            m_refCount;
 
 #ifdef _ACTOR_DRAW_OPTIMIZATION
-
-	sint32				m_oldFacing;
-	BOOL				m_oldIsFortified;
-	BOOL				m_oldIsFortifying;
-	BOOL				m_oldHasCityWalls;
-	BOOL				m_oldHasForceField;
-	BOOL				m_oldDrawShield;
-	BOOL				m_oldDrawSelectionBrackets;
-	uint16				m_oldFlags;
-
+	sint32            m_oldFacing;
+	bool              m_oldIsFortified;
+	bool              m_oldIsFortifying;
+	bool              m_oldHasCityWalls;
+	bool              m_oldHasForceField;
+	bool              m_oldDrawShield;
+	bool              m_oldDrawSelectionBrackets;
+	uint16            m_oldFlags;
 #endif
 };
 

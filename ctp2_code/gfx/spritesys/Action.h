@@ -129,7 +129,6 @@ public:
 		return new Action(GROUPTYPE_UNIT, actionType, anim, start, end, facing);
 	}
 
-	// TODO: make protected
 	Action(Action const & a_Original);
 
 	~Action();
@@ -138,9 +137,6 @@ public:
 
 	void   Process();
 	bool   IsFinished() const { return m_finished; }
-
-	// TODO: deprecate
-	void   GetEndMapPoint(MapPoint &point) const { point = m_endMapPoint; }
 
 	POINT  CalculatePixelXY(const MapPoint & current) const;
 	sint32 CalculateFacing(sint32 facing) const;

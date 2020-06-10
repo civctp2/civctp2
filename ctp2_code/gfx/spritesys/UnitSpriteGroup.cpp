@@ -119,27 +119,8 @@ void UnitSpriteGroup::Draw(UNITACTION action, sint32 frame, sint32 drawX, sint32
 	Assert(action >= UNITACTION_MOVE &&
 			action <= UNITACTION_WORK);
 
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
 	if (specialDelayProcess
+		// UNITACTION_IDLE only supports default facing
 		|| (action == UNITACTION_IDLE && (m_sprites[action] == NULL || facing != k_DEFAULTSPRITEFACING))
 		|| (action == UNITACTION_ATTACK && m_sprites[action] == NULL)
 		|| (action == UNITACTION_MOVE && m_sprites[UNITACTION_IDLE] == NULL)
@@ -187,7 +168,8 @@ BOOL UnitSpriteGroup::HitTest(POINT mousePt, UNITACTION action, sint32 frame, si
 			action <= UNITACTION_WORK);
 
 	if (specialDelayProcess
-        || (action == UNITACTION_IDLE && m_sprites[action] == NULL)
+		// UNITACTION_IDLE only supports default facing
+		|| (action == UNITACTION_IDLE && (m_sprites[action] == NULL || facing != k_DEFAULTSPRITEFACING))
         || (action == UNITACTION_MOVE && m_sprites[UNITACTION_IDLE] == NULL)
        )
 	{
@@ -221,11 +203,9 @@ void UnitSpriteGroup::DrawDirect(aui_Surface *surf, UNITACTION action, sint32 fr
 	if (action < UNITACTION_MOVE || action > UNITACTION_WORK)
 		return;
 
-
-
-
 	if (specialDelayProcess
-        || (action == UNITACTION_IDLE && m_sprites[action] == NULL)
+		// UNITACTION_IDLE only supports default facing
+		|| (action == UNITACTION_IDLE && (m_sprites[action] == NULL || facing != k_DEFAULTSPRITEFACING))
         || (action == UNITACTION_MOVE && (m_sprites[UNITACTION_IDLE] == NULL))
        )
 	{

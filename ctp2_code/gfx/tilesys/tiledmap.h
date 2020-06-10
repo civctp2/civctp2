@@ -144,7 +144,7 @@ public:
 	void			ClearGrid(void);
 
 	void			AddDirty(sint32 left, sint32 top, sint32 width, sint32 height, aui_DirtyList *list);
-	void			AddDirtyRect(RECT &rect, aui_DirtyList *list);
+	void			AddDirtyRect(const RECT & rect, aui_DirtyList *a_List);
 	void			AddDirtyTile(MapPoint &pos, aui_DirtyList *list);
 
 	void			AddDirtyToMap(sint32 left, sint32 top, sint32 width, sint32 height);
@@ -152,7 +152,7 @@ public:
 	void			AddDirtyTileToMap(MapPoint &pos);
 
 	void			AddDirtyToMix(sint32 left, sint32 top, sint32 width, sint32 height);
-	void			AddDirtyRectToMix(RECT &rect);
+	void			AddDirtyRectToMix(const RECT & rect);
 	void			AddDirtyTileToMix(MapPoint &pos);
 
 	void			ClearMixDirtyRects(void);

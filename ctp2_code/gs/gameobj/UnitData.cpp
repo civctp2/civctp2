@@ -203,12 +203,10 @@ UnitData::UnitData
 			g_network.Enqueue(this, actorId);
 			g_network.Unblock(m_owner);
 		}
-		m_actor->SetNewUnitVisionRange((GetVisionRange()));
 	} else {
 		m_actor = new UnitActor(m_sprite_state, Unit(m_id), m_type, center_pos,
 								m_owner, false, (GetVisionRange()),
 								m_city_data ? m_city_data->GetDesiredSpriteIndex() : -1);
-		m_actor->SetUnitVisionRange((GetVisionRange()));
 		m_actor->SetUnitVisibility(m_visibility);
 
 		g_network.Enqueue(this);
@@ -233,7 +231,6 @@ UnitData::UnitData
 	m_radar_visibility = 0xffffffff;
 	m_actor = new UnitActor(m_sprite_state, Unit(m_id), m_type, actor_pos,
 							m_owner, false, (GetVisionRange()), -1);
-	m_actor->SetUnitVisionRange((GetVisionRange()));
 
 	m_pos = actor_pos;
 }
@@ -2070,7 +2067,6 @@ void UnitData::ResetUnitOwner(const Unit &me, const PLAYER_INDEX new_owner,
 	{
 		g_director->AddSetOwner(m_actor, new_owner);
 		g_director->AddSetVisibility(m_actor, m_visibility);
-		g_director->AddSetVisionRange(m_actor, (GetVisionRange()));
 	}
 
 	DoVision();
@@ -2604,7 +2600,7 @@ void UnitData::DoVision(UnitDynamicArray *revealedUnits)
 					if (revealedUnits) {
 						revealedUnits->Insert(Unit(him->m_id));
 					}
-					him->m_actor->SetPos(him->m_pos);
+					him->m_actor->PositionActor(him->m_pos);
 					him->m_temp_visibility |= 1 << m_owner;
 
 					runContactMe = true;
@@ -5367,7 +5363,7 @@ void UnitData::SetType(sint32 type)
 
 	// Some more stuff has to be done like we have in CreateUnit
 	m_sprite_state->SetIndex(rec->GetDefaultSprite()->GetValue());
-	m_actor->ChangeType(m_sprite_state, m_type, Unit(m_id), true);
+	m_actor->ChangeType(m_sprite_state, m_type, Unit(m_id));
 
 	if(m_army.m_id != 0)
 	{

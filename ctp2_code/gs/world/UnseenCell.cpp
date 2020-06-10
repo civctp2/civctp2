@@ -25,18 +25,18 @@
 // Modifications from the original Activision code:
 //
 // - Finished tile improvements are now stored as well in the improvements
-//   list to be able to draw or access them later. - Dec. 21st 2004 Martin G�hmann
+//   list to be able to draw or access them later. - Dec. 21st 2004 Martin Gühmann
 // - Added new functions to calculate the food, shields and gold values produced
-//   at the storing time of this UnseenCell. - Dec. 22nd 2004 Martin G�hmann
+//   at the storing time of this UnseenCell. - Dec. 22nd 2004 Martin Gühmann
 // - Modified constructors and serialize method to support the new
-//   m_visibleCityOwner member. - Dec. 26th 2004 - Martin G�hmann
+//   m_visibleCityOwner member. - Dec. 26th 2004 - Martin Gühmann
 // - When an UnseenCell object is created and the according cell contains a
 //   city the owner is now taken from the CityData instead of the Unit
 //   itsself this allows to get the right owner info when a city changes
-//   hands. - Mar. 4th 2005 Martin G�hmann
+//   hands. - Mar. 4th 2005 Martin Gühmann
 // - Moved Peter's good's fix to the according Get*FromTerrain functions.
-//   - April 13th 2005 Martin G�hmann
-// - Fix retrieval of good boni. - May 18th 2005 Martin G�hmann
+//   - April 13th 2005 Martin Gühmann
+// - Fix retrieval of good boni. - May 18th 2005 Martin Gühmann
 // - Added isCapitol
 //
 //----------------------------------------------------------------------------
@@ -191,25 +191,16 @@ UnseenCell::UnseenCell(const MapPoint & point)
 												    city.GetType(),
 												    point,
 												    city.GetOwner(),
-												    TRUE,
 												    city.GetVisionRange(),
-												    city.CD()->GetDesiredSpriteIndex());
+												    city.CD()->GetDesiredSpriteIndex(),
+												    m_citySize);
 
 				newActor->SetUnitVisibility((1 << g_selected_item->GetVisiblePlayer())
 										    | actor->GetUnitVisibility());
-				newActor->SetPos(point);
 
-				newActor->SetIsFortified(actor->IsFortified());
-				newActor->SetIsFortifying(actor->IsFortifying());
-				newActor->SetHasCityWalls(actor->HasCityWalls());
-				newActor->SetHasForceField(actor->HasForceField());
-
-				newActor->SetSize(m_citySize);
+				newActor->CopyFlags(*actor);
 
 				newActor->ChangeImage(newSS, city.GetType(), city);
-
-				newActor->AddIdle();
-				newActor->GetNextAction();
 
 				m_actor = newActor;
 			} // actor
@@ -308,8 +299,8 @@ UnseenCell::UnseenCell(UnseenCell *old)
 {
 	*this = *old;
 
-	if(m_actor) {
-		m_actor->m_refCount++;
+	if (m_actor) {
+		m_actor->IncreaseReferenceCount() ;
 	}
 
 	if(old->m_tileInfo) {
@@ -428,7 +419,7 @@ void UnseenCell::ReleaseActor()
 	if (m_actor)
 	{
 		// Note: it is assumed that this actor is local and is never used in g_director
-		if (--m_actor->m_refCount <= 0) {
+		if (m_actor->DecreaseReferenceCount()) {
 			delete m_actor;
 		}
 	}

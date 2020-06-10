@@ -256,7 +256,7 @@ void BattleViewActor::Draw(BOOL fogged)
 	{
 
 		m_unitSpriteGroup->Draw(m_curUnitAction, m_frame, m_x+k_ACTOR_CENTER_OFFSET_X, m_y+k_ACTOR_CENTER_OFFSET_Y, m_facing,
-			g_tiledMap->GetScale(), m_transparency, color, flags, FALSE, directionAttack);
+			g_tiledMap->GetScale(), m_transparency, color, flags, false, directionAttack);
 	}
 	else
 	{

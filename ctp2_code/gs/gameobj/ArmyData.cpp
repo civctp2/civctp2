@@ -8651,12 +8651,12 @@ sint32 ArmyData::Fight(CellUnitList &defender)
 		{
 			UnitActor *actor = ta.GetActor();
 
-			if(!actor->HasThisAnim(UNITACTION_ATTACK))
+			if(!actor->HasAnim(UNITACTION_ATTACK))
 			{
 				for(i = 0; i < m_nElements; i++)
 				{
 					if(m_array[i].GetActor() &&
-					   m_array[i].GetActor()->HasThisAnim(UNITACTION_ATTACK)) {
+					   m_array[i].GetActor()->HasAnim(UNITACTION_ATTACK)) {
 						ta = m_array[i];
 						break;
 					}

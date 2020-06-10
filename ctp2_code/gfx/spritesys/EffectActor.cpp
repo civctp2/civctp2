@@ -111,7 +111,8 @@ void EffectActor::SetAction(Action * action)
 	m_curEffectAction = (EFFECTACTION) action->GetActionType();
 }
 
-Anim * EffectActor::CreatePlayElseFlashAnim(EFFECTACTION & action) const {
+Anim * EffectActor::CreatePlayElseFlashAnim(EFFECTACTION & action) const
+{
 	action = EFFECTACTION_PLAY;
 	Anim * animation = CreateAnim(action);
 	if (!animation) {

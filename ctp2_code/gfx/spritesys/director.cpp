@@ -269,12 +269,13 @@ public:
 		}
 	}
 
-	virtual void Draw(RECT *paintRect)
+	virtual void Draw(RECT * paintRect)
 	{
 		for (auto actorReference : m_standbyActors) {
 			UnitActor *actor = actorReference.first;
-			if (!actor->IsActive()) {
-				DrawUnitActor(actorReference.first, paintRect);
+			// Do not draw standby units over cities
+			if (!actor->IsActive() && !g_theWorld->IsCity(actor->GetMapPos())) {
+				actor->Draw(paintRect);
 			}
 		}
 	}
@@ -323,27 +324,8 @@ public:
 	void Clear() {
 		m_standbyActors.clear();
 	}
+
 private:
-	void DrawUnitActor(UnitActor *actor, RECT *paintRect)
-	{
-		const MapPoint &pos = actor->GetPos();
-
-		// Do not draw standby units over cities
-		if (g_theWorld->IsCity(pos)) {
-			return;
-		}
-
-		if (actor->GetUnitVisibility() & (1 << g_selected_item->GetVisiblePlayer())) {
-			sint32	tileX;
-			maputils_MapX2TileX(pos.x, pos.y, &tileX);
-
-			if (maputils_TilePointInTileRect(tileX, pos.y, paintRect))
-			{
-				g_tiledMap->PaintUnitActor(actor);
-			}
-		}
-	}
-
 	std::map<UnitActor*, uint32> m_standbyActors;
 };
 
@@ -592,7 +574,7 @@ public:
 	virtual void Draw(RECT *paintRect)
 	{
 		for (const auto &activeActor : m_activeActors) {
-			DrawUnitActor(activeActor, paintRect);
+			activeActor->Draw(paintRect);
 		}
 	}
 
@@ -619,20 +601,6 @@ protected:
 	}
 
 private:
-	static void DrawUnitActor(UnitActor *actor, RECT *paintRect)
-	{
-		if (actor->GetUnitVisibility() & (1 << g_selected_item->GetVisiblePlayer())) {
-			MapPoint pos = actor->GetPos();
-			sint32	tileX;
-			maputils_MapX2TileX(pos.x, pos.y, &tileX);
-
-			if (maputils_TilePointInTileRect(tileX, pos.y, paintRect))
-			{
-				g_tiledMap->PaintUnitActor(actor);
-			}
-		}
-	}
-
 	bool SkipAnimation()
 	{
 		return (SkipPreviousRounds() || SkipEnemyMoves() || SkipRobotUnitAnimations() || DoSkipAnimation());
@@ -723,7 +691,6 @@ public:
 	virtual void AddAddVision(const MapPoint &pos, double range);
 	virtual void AddSetVisibility(UnitActor *actor, uint32 visibility);
 	virtual void AddSetOwner(UnitActor *actor, sint32 owner);
-	virtual void AddSetVisionRange(UnitActor *actor, double range);
 	virtual void AddCombatFlash(const MapPoint &pos);
 	virtual void AddCopyVision();
 	virtual void AddCenterMap(const MapPoint &pos);
@@ -916,7 +883,7 @@ public:
 
 	virtual void Execute()
 	{
-		morphingActor->ChangeType(spriteState, type, id, false);
+		morphingActor->ChangeType(spriteState, type, id);
 	}
 
 	virtual void Dump()
@@ -1131,33 +1098,6 @@ public:
 protected:
 	UnitActor *setOwnerActor;
 	sint32    owner;
-};
-
-class DQActionSetVisionRange : public DQActionImmediate
-{
-public:
-	DQActionSetVisionRange(UnitActor *actor, double range)
-		: DQActionImmediate(),
-		actor (actor),
-		range (range)
-	{}
-	virtual ~DQActionSetVisionRange() {}
-	virtual DQACTION_TYPE GetType() { return DQACTION_SETVISIONRANGE; }
-
-	virtual void Execute()
-	{
-		actor->SetUnitVisionRange(range);
-	}
-
-	virtual void Dump()
-	{
-		DPRINTF(k_DBG_UI, ("Set Vision Range\n"));
-		DPRINTF(k_DBG_UI, ("  actor                  :%#x (%#.8lx)\n", actor->GetUnitID(), actor));
-		DPRINTF(k_DBG_UI, ("  range                  :%#.2f\n", range));
-	}
-protected:
-	UnitActor *actor;
-	double    range;
 };
 
 class DQActionCenterMap : public DQActionImmediate
@@ -1566,10 +1506,11 @@ public:
 			moveActors[i]->SetHiddenUnderStack(true);
 		}
 
+		const MapPoint & actorPosition = moveActor->GetMapPos();
 		if (g_selected_item->GetVisiblePlayer() != moveActor->GetPlayerNum()
-			&& !g_tiledMap->TileIsVisible(moveActor->GetPos().x, moveActor->GetPos().y))
+			&& !g_tiledMap->TileIsVisible(actorPosition.x, actorPosition.y))
 		{
-			CenterMap(moveActor->GetPos());
+			CenterMap(actorPosition);
 		}
 		AddActiveActor(moveActor);
 
@@ -1862,34 +1803,13 @@ protected:
 
 	virtual void PrepareAnimation()
 	{
-		Anim   *deathAnim      = NULL;
-		sint32 deathActionType = UNITACTION_NONE;
-
-		if(dead->HasDeath())
-		{
-			if (dead->GetLoadType() != LOADTYPE_FULL) {
-				dead->FullLoad(UNITACTION_VICTORY);
-			}
-
-			deathActionType = UNITACTION_VICTORY;
-			deathAnim = dead->CreateAnim((UNITACTION)deathActionType); // deathAnim must be deleted
-
-			if(!deathAnim)
-			{
-				deathActionType = UNITACTION_FAKE_DEATH;
-				deathAnim = Anim::MakeFakeDeath();
-			}
-		}
-		else
-		{
-			deathActionType = UNITACTION_FAKE_DEATH;
-			deathAnim = Anim::MakeFakeDeath();
-		}
+		UNITACTION deathActionType;
+		Anim * deathAnimation = dead->CreateDeadAnim(deathActionType);
 
 		dead->SetHealthPercent(-1.0);
 		dead->SetTempStackSize(0);
 
-		Action *action = Action::CreateUnitAction((UNITACTION)deathActionType, deathAnim, deadPos);
+		Action *action = Action::CreateUnitAction(deathActionType, deathAnimation, deadPos);
 		dead->AddAction(action);
 		AddActiveActor(dead);
 
@@ -1936,19 +1856,10 @@ protected:
 
 	virtual void PrepareAnimation()
 	{
-		if (workActor->GetLoadType() != LOADTYPE_FULL) {
-			workActor->FullLoad(UNITACTION_WORK);
+		Anim * animation = workActor->CreateWorkAnim();
+		if (!animation) {
+			return;
 		}
-
-		Anim *animation = workActor->CreateAnim(UNITACTION_WORK);
-		if (!animation)
-		{
-			animation = workActor->CreateAnim(UNITACTION_MOVE);
-			if (!animation) {
-				return;
-			}
-		}
-
 		Action *action = Action::CreateUnitAction(UNITACTION_WORK, animation, workPos);
 		workActor->AddAction(action);
 		AddActiveActor(workActor);
@@ -2000,12 +1911,6 @@ protected:
 	virtual void PrepareAnimation()
 	{
 		Anim * attackerAnim = Anim::MakeFaceoff();
-		if (!attackerAnim)
-		{
-			attacker->AddIdle();
-			return;
-		}
-
 		POINT attackerPoints, attackedPoints;
 		maputils_MapXY2PixelXY(attackerPos.x, attackerPos.y, attackerPoints);
 		maputils_MapXY2PixelXY(attackedPos.x, attackedPos.y, attackedPoints);
@@ -2013,27 +1918,17 @@ protected:
 				attackedPoints.x - attackerPoints.x,
 				attackedPoints.y - attackerPoints.y);
 
-		Action *attackerAction = Action::CreateUnitAction(UNITACTION_FACE_OFF, attackerAnim, attackerPos, attackerFacing);
+		Action * attackerAction = Action::CreateUnitAction(UNITACTION_FACE_OFF, attackerAnim, attackerPos,
+				attackerFacing);
 		attacker->AddAction(attackerAction);
 
-		if (attacked->GetLoadType() != LOADTYPE_FULL) {
-			attacked->FullLoad(UNITACTION_IDLE);
-		}
-		Anim *attackedAnim = Anim::MakeFaceoff();
-		if (!attackedAnim)
-		{
-			attacked->AddIdle();
-		}
-
-		if (attackedAnim)
-		{
-			sint32 attackedFacing = spriteutils_DeltaToFacing(
-					attackerPoints.x - attackedPoints.x,
-					attackerPoints.y - attackedPoints.y);
-			Action *attackedAction = Action::CreateUnitAction(UNITACTION_FACE_OFF, attackedAnim, attackedPos,
-					attackedFacing);
-			attacked->AddAction(attackedAction);
-		}
+		Anim * attackedAnim = Anim::MakeFaceoff();
+		sint32 attackedFacing = spriteutils_DeltaToFacing(
+				attackerPoints.x - attackedPoints.x,
+				attackerPoints.y - attackedPoints.y);
+		Action *attackedAction = Action::CreateUnitAction(UNITACTION_FACE_OFF, attackedAnim, attackedPos,
+				attackedFacing);
+		attacked->AddAction(attackedAction);
 
 		bool attackedVisible = TileIsVisibleToPlayer(attackedPos);
 		if (attacker->GetPlayerNum() == g_selected_item->GetVisiblePlayer() ||
@@ -2915,17 +2810,6 @@ void DirectorImpl::AddSetOwner(UnitActor *actor, sint32 owner)
 	}
 
 	DQActionSetOwner *action = new DQActionSetOwner(actor, owner);
-	m_actionQueue->AddTail(action);
-}
-
-void DirectorImpl::AddSetVisionRange(UnitActor *actor, double range)
-{
-	Assert(actor);
-	if (!actor) {
-		return;
-	}
-
-	DQActionSetVisionRange *action = new DQActionSetVisionRange(actor, range);
 	m_actionQueue->AddTail(action);
 }
 

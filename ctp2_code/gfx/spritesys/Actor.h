@@ -55,8 +55,8 @@
 
 class Actor;
 
-#define k_ACTOR_CENTER_OFFSET_X		48
-#define k_ACTOR_CENTER_OFFSET_Y		48
+static const int k_ACTOR_CENTER_OFFSET_X = 48;
+static const int k_ACTOR_CENTER_OFFSET_Y = 48;
 
 // "fix" bug #4 by kaan
 #define k_MAX_ACTION_QUEUE_SIZE		12
