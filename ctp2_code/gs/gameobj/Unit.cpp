@@ -193,7 +193,7 @@ void Unit::RemoveAllReferences(const CAUSE_REMOVE_ARMY cause, PLAYER_INDEX kille
 		}
 		else
 		{
-			g_director->AddDeath(GetActor(), RetPos(), GetDeathSoundID());
+			g_director->AddDeath(GetActor(), RetPos(), GetDeathSoundID(), killedBy);
 		}
 		AccessData()->SetActor(NULL);
 	}

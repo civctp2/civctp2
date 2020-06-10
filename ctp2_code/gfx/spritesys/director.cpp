@@ -593,6 +593,7 @@ public:
 
 protected:
 	virtual void PrepareAnimation() = 0;
+	virtual bool ForceAnimation() { return false; }
 	virtual bool DoSkipAnimation() { return false; }
 
 	void AddActiveActor(UnitActor *actor) {
@@ -603,7 +604,8 @@ protected:
 private:
 	bool SkipAnimation()
 	{
-		return (SkipPreviousRounds() || SkipEnemyMoves() || SkipRobotUnitAnimations() || DoSkipAnimation());
+		return !ForceAnimation()
+			&& (SkipPreviousRounds() || SkipEnemyMoves() || SkipRobotUnitAnimations() || DoSkipAnimation());
 	}
 
 	bool SkipPreviousRounds()
@@ -673,7 +675,7 @@ public:
 	virtual void AddAttack(const Unit& attacker, const Unit& attacked);
 	virtual void AddAttackPos(const Unit& attacker, const MapPoint &pos);
 	virtual void AddSpecialAttack(const Unit& attacker, const Unit& attacked, SPECATTACK attack);
-	virtual void AddDeath(UnitActor *dead, const MapPoint &deadPos, sint32 deadSoundID);
+	virtual void AddDeath(UnitActor *dead, const MapPoint &deadPos, sint32 deadSoundID, PLAYER_INDEX killedBy);
 	virtual void AddProjectileAttack(
 		const Unit  &shooting,
 		const Unit  &target,
@@ -1775,14 +1777,18 @@ protected:
 class DQActionDeath : public DQActionActive
 {
 public:
-	DQActionDeath(sint8 owner, UnitActor *dead, const MapPoint &deadPos, sint32 deadSoundID)
+	DQActionDeath(sint8 owner, UnitActor *dead, const MapPoint &deadPos, sint32 deadSoundID, PLAYER_INDEX killedBy)
 		: DQActionActive(owner),
 		dead        (dead),
 		deadPos     (deadPos),
-		deadSoundID (deadSoundID)
-	{}
+		deadSoundID (deadSoundID),
+		killedBy    (killedBy)
+	{
+		DirectorImpl::Instance()->AddStandbyActor(dead);
+	}
 	virtual ~DQActionDeath()
 	{
+		DirectorImpl::Instance()->RemoveStandbyActor(dead);
 		delete dead;
 	}
 	virtual DQACTION_TYPE GetType() { return DQACTION_DEATH; }
@@ -1795,6 +1801,11 @@ public:
 		DPRINTF(k_DBG_UI, ("  deadSoundID            :%d\n", deadSoundID));
 	}
 protected:
+	virtual bool ForceAnimation()
+	{
+		return killedBy == g_selected_item->GetVisiblePlayer();
+	}
+
 	virtual bool DoSkipAnimation()
 	{
 		// Unit invisible
@@ -1823,9 +1834,10 @@ protected:
 		}
 	}
 
-	UnitActor *dead;
-	MapPoint  deadPos;
-	sint32    deadSoundID;
+	UnitActor    * dead;
+	MapPoint       deadPos;
+	sint32         deadSoundID;
+	PLAYER_INDEX   killedBy;
 };
 
 class DQActionWork : public DQActionActive
@@ -2706,11 +2718,12 @@ void DirectorImpl::AddSpecialAttack(const Unit& attacker, const Unit &attacked, 
 	m_actionQueue->AddTail(action);
 }
 
-void DirectorImpl::AddDeath(UnitActor *dead, const MapPoint &deadPos, sint32 deadSoundID)
+void DirectorImpl::AddDeath(UnitActor *dead, const MapPoint &deadPos, sint32 deadSoundID, PLAYER_INDEX killedBy)
 {
 	Assert(dead);
 
-	bool playerInvolved = dead->GetPlayerNum() == g_selected_item->GetVisiblePlayer();
+	bool playerInvolved = (dead->GetPlayerNum() == g_selected_item->GetVisiblePlayer())
+			|| (killedBy == g_selected_item->GetVisiblePlayer());
 	bool visibleEnemyUnit = g_theProfileDB->IsEnemyMoves()
 							&& dead->GetPlayerNum() != g_selected_item->GetVisiblePlayer()
 							&& (dead->GetUnitVisibility() & (1 << g_selected_item->GetVisiblePlayer()));
@@ -2719,7 +2732,7 @@ void DirectorImpl::AddDeath(UnitActor *dead, const MapPoint &deadPos, sint32 dea
 	}
 	dead->SetHiddenUnderStack(false);
 
-	DQActionDeath *action = new DQActionDeath(dead->GetPlayerNum(), dead, deadPos, deadSoundID);
+	DQActionDeath * action = new DQActionDeath(dead->GetPlayerNum(), dead, deadPos, deadSoundID, killedBy);
 	m_actionQueue->AddTail(action);
 }
 

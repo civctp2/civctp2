@@ -96,7 +96,7 @@ public:
 	virtual void AddAttack(const Unit &attacker, const Unit &attacked) = 0;
 	virtual void AddAttackPos(const Unit &attacker, const MapPoint &pos) = 0;
 	virtual void AddSpecialAttack(const Unit &attacker, const Unit &attacked, SPECATTACK attack) = 0;
-	virtual void AddDeath(UnitActor *dead, const MapPoint &deadPos, sint32 deadSoundID) = 0;
+	virtual void AddDeath(UnitActor *dead, const MapPoint &deadPos, sint32 deadSoundID, PLAYER_INDEX killedBy) = 0;
 	virtual void AddProjectileAttack(
 		const Unit  &shooting,
 		const Unit  &target,
