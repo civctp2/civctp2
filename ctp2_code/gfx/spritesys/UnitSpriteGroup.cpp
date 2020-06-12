@@ -93,13 +93,6 @@ void UnitSpriteGroup::DeallocateStorage(void)
 	}
 }
 
-
-
-
-
-
-
-
 void UnitSpriteGroup::DeallocateFullLoadAnims(void)
 {
 	for (int i = UNITACTION_MOVE; i < UNITACTION_MAX; i++)
@@ -109,22 +102,20 @@ void UnitSpriteGroup::DeallocateFullLoadAnims(void)
 	}
 }
 
-void UnitSpriteGroup::Draw(UNITACTION action, sint32 frame, sint32 drawX, sint32 drawY,
-						   sint32 facing, double scale, uint16 transparency, Pixel16 outlineColor, uint16 flags, BOOL specialDelayProcess, BOOL directionalAttack)
+void UnitSpriteGroup::Draw(UNITACTION action, sint32 frame, sint32 drawX, sint32 drawY, sint32 facing, double scale,
+		uint16 transparency, Pixel16 outlineColor, uint16 flags, bool directionalAttack)
 {
-
-	if (action == UNITACTION_FAKE_DEATH)
+	if (action == UNITACTION_FAKE_DEATH) {
 		action = UNITACTION_MOVE;
+	}
 
-	Assert(action >= UNITACTION_MOVE &&
-			action <= UNITACTION_WORK);
+	Assert(action >= UNITACTION_MOVE && action <= UNITACTION_WORK);
 
-	if (specialDelayProcess
-		// UNITACTION_IDLE only supports default facing
-		|| (action == UNITACTION_IDLE && (m_sprites[action] == NULL || facing != k_DEFAULTSPRITEFACING))
+	if (// UNITACTION_IDLE only supports default facing
+		(action == UNITACTION_IDLE && (m_sprites[action] == NULL || facing != k_DEFAULTSPRITEFACING))
 		|| (action == UNITACTION_ATTACK && m_sprites[action] == NULL)
 		|| (action == UNITACTION_MOVE && m_sprites[UNITACTION_IDLE] == NULL)
-       )
+		)
 	{
 		if (m_sprites[UNITACTION_MOVE])
 		{
@@ -134,44 +125,35 @@ void UnitSpriteGroup::Draw(UNITACTION action, sint32 frame, sint32 drawX, sint32
 	}
 
 	if (m_sprites[action])
-    {
-    	if ((frame < 0) ||
-            (static_cast<size_t>(frame) >= m_sprites[action]->GetNumFrames())
-           )
-        {
-		    frame = 0;
-	    }
+	{
+		if ((frame < 0) || (static_cast<size_t>(frame) >= m_sprites[action]->GetNumFrames())) {
+			frame = 0;
+		}
 
-    	m_sprites[action]->SetCurrentFrame(static_cast<uint16>(frame));
+		m_sprites[action]->SetCurrentFrame(static_cast<uint16>(frame));
 
-	    if (directionalAttack)
-	    {
-		    m_sprites[action]->DirectionalDraw
-                (drawX, drawY, facing, scale, transparency, outlineColor, flags);
-	    }
-	    else
-	    {
-	        m_sprites[action]->Draw
-                (drawX, drawY, facing, scale, transparency, outlineColor, flags);
-	    }
-    }
+		if (directionalAttack) {
+			m_sprites[action]->DirectionalDraw(drawX, drawY, facing, scale, transparency, outlineColor, flags);
+		} else {
+			m_sprites[action]->Draw(drawX, drawY, facing, scale, transparency, outlineColor, flags);
+		}
+	}
 }
 
 BOOL UnitSpriteGroup::HitTest(POINT mousePt, UNITACTION action, sint32 frame, sint32 drawX, sint32 drawY, sint32 facing,
 							double scale, uint16 transparency, Pixel16 outlineColor, uint16 flags,
-							BOOL specialDelayProcess, BOOL directionalAttack)
+							bool directionalAttack)
 {
-	if (action == UNITACTION_FAKE_DEATH)
+	if (action == UNITACTION_FAKE_DEATH) {
 		action = UNITACTION_MOVE;
+	}
 
-	Assert(action >= UNITACTION_MOVE &&
-			action <= UNITACTION_WORK);
+	Assert(action >= UNITACTION_MOVE && action <= UNITACTION_WORK);
 
-	if (specialDelayProcess
-		// UNITACTION_IDLE only supports default facing
-		|| (action == UNITACTION_IDLE && (m_sprites[action] == NULL || facing != k_DEFAULTSPRITEFACING))
-        || (action == UNITACTION_MOVE && m_sprites[UNITACTION_IDLE] == NULL)
-       )
+	if (// UNITACTION_IDLE only supports default facing
+		(action == UNITACTION_IDLE && (m_sprites[action] == NULL || facing != k_DEFAULTSPRITEFACING))
+		|| (action == UNITACTION_MOVE && m_sprites[UNITACTION_IDLE] == NULL)
+	)
 	{
 		if (m_sprites[UNITACTION_MOVE])
 		{
@@ -181,33 +163,30 @@ BOOL UnitSpriteGroup::HitTest(POINT mousePt, UNITACTION action, sint32 frame, si
 	}
 
 	if (m_sprites[action])
-    {
-    	m_sprites[action]->SetCurrentFrame(static_cast<uint16>(frame));
-	    return m_sprites[action]->HitTest
-            (mousePt, drawX, drawY, facing, scale, transparency, outlineColor, flags);
+	{
+		m_sprites[action]->SetCurrentFrame(static_cast<uint16>(frame));
+		return m_sprites[action]->HitTest(mousePt, drawX, drawY, facing, scale, transparency, outlineColor, flags);
     }
-    return FALSE;
+    return false;
 }
 
 void UnitSpriteGroup::DrawDirect(aui_Surface *surf, UNITACTION action, sint32 frame, sint32 drawX, sint32 drawY,
-						   sint32 facing, double scale, uint16 transparency, Pixel16 outlineColor, uint16 flags,
-						   BOOL specialDelayProcess, BOOL directionalAttack)
+		sint32 facing, double scale, uint16 transparency, Pixel16 outlineColor, uint16 flags)
 {
-
-	if (action == UNITACTION_FAKE_DEATH)
+	if (action == UNITACTION_FAKE_DEATH) {
 		action = UNITACTION_MOVE;
+	}
 
-	Assert(action >= UNITACTION_MOVE &&
-			action <= UNITACTION_WORK);
+	Assert(action >= UNITACTION_MOVE && action <= UNITACTION_WORK);
 
-	if (action < UNITACTION_MOVE || action > UNITACTION_WORK)
+	if (action < UNITACTION_MOVE || action > UNITACTION_WORK) {
 		return;
+	}
 
-	if (specialDelayProcess
-		// UNITACTION_IDLE only supports default facing
-		|| (action == UNITACTION_IDLE && (m_sprites[action] == NULL || facing != k_DEFAULTSPRITEFACING))
-        || (action == UNITACTION_MOVE && (m_sprites[UNITACTION_IDLE] == NULL))
-       )
+	if (// UNITACTION_IDLE only supports default facing
+		(action == UNITACTION_IDLE && (m_sprites[action] == NULL || facing != k_DEFAULTSPRITEFACING))
+		|| (action == UNITACTION_MOVE && (m_sprites[UNITACTION_IDLE] == NULL))
+		)
 	{
 		if (m_sprites[UNITACTION_MOVE])
 		{
@@ -216,16 +195,10 @@ void UnitSpriteGroup::DrawDirect(aui_Surface *surf, UNITACTION action, sint32 fr
 		}
 	}
 
-    if (m_sprites[action] &&
-        (frame < static_cast<sint32>(m_sprites[action]->GetNumFrames()))
-       )
-    {
-    	m_sprites[action]->SetCurrentFrame(static_cast<uint16>(frame));
-
-    	if (!directionalAttack)
-	    {
-			m_sprites[action]->DrawDirect(surf, drawX, drawY, facing, scale, transparency, outlineColor, flags);
-	    }
+	if (m_sprites[action] && (frame < static_cast<sint32>(m_sprites[action]->GetNumFrames())))
+	{
+		m_sprites[action]->SetCurrentFrame(static_cast<uint16>(frame));
+		m_sprites[action]->DrawDirect(surf, drawX, drawY, facing, scale, transparency, outlineColor, flags);
 	}
 }
 
@@ -241,9 +214,6 @@ void UnitSpriteGroup::LoadBasic(MBCHAR const * filename)
 		m_loadType = LOADTYPE_BASIC;
 	}
 }
-
-
-
 
 void UnitSpriteGroup::LoadIndexed(MBCHAR const * filename, GAME_ACTION index)
 {
@@ -285,17 +255,6 @@ void UnitSpriteGroup::Save(MBCHAR const * filename, unsigned int version_id, uns
 	}
 }
 
-
-
-
-
-
-
-
-
-
-
-
 void UnitSpriteGroup::DrawText(sint32 x, sint32 y, MBCHAR const * s)
 {
 #ifndef __MAKESPR__
@@ -303,16 +262,6 @@ void UnitSpriteGroup::DrawText(sint32 x, sint32 y, MBCHAR const * s)
 	primitives_DrawText(g_screenManager->GetSurface(), x, y, s, g_colorSet->GetColorRef(COLOR_WHITE), 1);
 #endif
 }
-
-
-
-
-
-
-
-
-
-
 
 bool
 UnitSpriteGroup::GetImageFileName(MBCHAR * name, char *format,...)

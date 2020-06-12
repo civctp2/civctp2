@@ -207,7 +207,6 @@ void BattleViewActor::DrawDirect(aui_Surface * surf, sint32 x, sint32 y)
 {
 	uint16  flags           = k_DRAWFLAGS_NORMAL;
 	Pixel16 color           = COLOR_BLACK;
-	bool    directionAttack = false;
 
 	if (m_transparency < 15) {
 		flags |= k_BIT_DRAWFLAGS_TRANSPARENCY;
@@ -219,7 +218,7 @@ void BattleViewActor::DrawDirect(aui_Surface * surf, sint32 x, sint32 y)
 	}
 
 	m_unitSpriteGroup->DrawDirect(surf, m_curUnitAction, m_frame, x+k_ACTOR_CENTER_OFFSET_X, y+k_ACTOR_CENTER_OFFSET_Y,
-			m_facing, 1, m_transparency, color, flags, false, directionAttack);
+			m_facing, 1, m_transparency, color, flags);
 
 	DrawHealthBar(surf);
 }

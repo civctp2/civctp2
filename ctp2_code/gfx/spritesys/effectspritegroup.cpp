@@ -41,7 +41,7 @@
 #include "Token.h"
 
 void EffectSpriteGroup::Draw(EFFECTACTION action, sint32 frame, sint32 drawX, sint32 drawY, sint32 SdrawX, sint32 SdrawY,
-						   sint32 facing, double scale, uint16 transparency, Pixel16 outlineColor, uint16 flags, BOOL specialDelayProcess, BOOL directionalAttack)
+		sint32 facing, double scale, uint16 transparency, Pixel16 outlineColor, uint16 flags)
 {
 	Assert(action > EFFECTACTION_NONE &&
 			action < EFFECTACTION_MAX);
@@ -66,8 +66,9 @@ void EffectSpriteGroup::Draw(EFFECTACTION action, sint32 frame, sint32 drawX, si
 	}
 }
 
-void EffectSpriteGroup::DrawDirect(aui_Surface *surf, EFFECTACTION action, sint32 frame, sint32 drawX, sint32 drawY, sint32 SdrawX, sint32 SdrawY,
-						   sint32 facing, double scale, uint16 transparency, Pixel16 outlineColor, uint16 flags, BOOL specialDelayProcess, BOOL directionalAttack)
+void EffectSpriteGroup::DrawDirect(aui_Surface *surf, EFFECTACTION action, sint32 frame, sint32 drawX, sint32 drawY,
+		sint32 SdrawX, sint32 SdrawY, sint32 facing, double scale, uint16 transparency, Pixel16 outlineColor,
+		uint16 flags)
 {
 	Assert(action > EFFECTACTION_NONE &&
 			action < EFFECTACTION_MAX);

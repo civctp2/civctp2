@@ -889,7 +889,7 @@ bool UnitActor::Draw(bool fogged)
 
 		Pixel16 color = 0x0000;
 		m_unitSpriteGroup->Draw(m_curUnitAction, m_frame, m_x+xoffset, m_y+yoffset, m_facing,
-				g_tiledMap->GetScale(), transparency, color, flags, false, directionAttack);
+				g_tiledMap->GetScale(), transparency, color, flags, directionAttack);
 
 		bool forcefieldsEverywhere = false;
 		if (g_player[m_playerNum])
@@ -927,11 +927,10 @@ void UnitActor::DrawDirect(aui_Surface * surf, sint32 x, sint32 y, double scale)
     {
 		uint16  flags = k_DRAWFLAGS_NORMAL;
 		Pixel16 color = 0;
-		bool directionAttack = false;
 		sint32 xoffset = (sint32)(k_ACTOR_CENTER_OFFSET_X * scale);
 		sint32 yoffset = (sint32)(k_ACTOR_CENTER_OFFSET_Y * scale);
 		m_unitSpriteGroup->DrawDirect(surf, m_curUnitAction, m_frame, x+xoffset, y+yoffset, m_facing,
-				scale, m_transparency, color, flags, false, directionAttack);
+				scale, m_transparency, color, flags);
 	}
 }
 
@@ -1498,7 +1497,7 @@ bool UnitActor::HitTest(const POINT & mousePoint) const
 	uint16  flags             = 0;
 
 	return m_unitSpriteGroup->HitTest(mousePoint, m_curUnitAction, m_frame, m_x+xoffset, m_y+yoffset,
-			m_facing, g_tiledMap->GetScale(), m_transparency, color, flags,false, isDirectionAttack);
+			m_facing, g_tiledMap->GetScale(), m_transparency, color, flags,isDirectionAttack);
 }
 
 //----------------------------------------------------------------------------

@@ -65,25 +65,14 @@ public:
 	void			Save(MBCHAR const * filename, unsigned int version_id, unsigned int compression_mode);
 
 	void			Draw(UNITACTION action, sint32 frame, sint32 drawX, sint32 drawY,
-						   sint32 facing, double scale, uint16 transparency, Pixel16 outlineColor, uint16 flags, BOOL specialDelayProcess, BOOL directionalAttack);
+							sint32 facing, double scale, uint16 transparency, Pixel16 outlineColor, uint16 flags,
+							bool directionalAttack);
 
 	void			DrawText(sint32 x, sint32 y, MBCHAR const * s);
 	void			DrawDirect(aui_Surface *surf, UNITACTION action, sint32 frame, sint32 drawX, sint32 drawY,
-							   sint32 facing, double scale, uint16 transparency, Pixel16 outlineColor, uint16 flags,
-							   BOOL specialDelayProcess,
-							   BOOL directionalAttack);
+							sint32 facing, double scale, uint16 transparency, Pixel16 outlineColor, uint16 flags);
 
 	POINT *         GetShieldPoints(UNITACTION action) { return m_shieldPoints[action]; }
-
-
-
-
-
-
-
-
-
-
 
 	uint16			GetNumFirePointsWork(void) { return m_numFirePointsWork; }
 	void			SetNumFirePointsWork(uint16 num) { m_numFirePointsWork = num; }
@@ -95,19 +84,16 @@ public:
 	void			SetHotPoint(UNITACTION action, sint32 facing,POINT pt);
 
 	BOOL			HitTest(POINT mousePt, UNITACTION action, sint32 frame, sint32 drawX, sint32 drawY,
-						   sint32 facing, double scale, uint16 transparency, Pixel16 outlineColor, uint16 flags, BOOL specialDelayProcess, BOOL directionalAttack);
+							sint32 facing, double scale, uint16 transparency, Pixel16 outlineColor, uint16 flags,
+							bool directionalAttack);
 
 private:
-
-
 	uint16			m_numFirePointsWork;
 	POINT			m_firePointsWork[k_NUM_FIREPOINTS][k_NUM_FACINGS];
 
 	POINT			m_moveOffsets[k_NUM_FACINGS];
 
 	POINT			m_shieldPoints[UNITACTION_MAX][k_NUM_FACINGS];
-
-
 };
 
 #endif

@@ -163,7 +163,7 @@ void EffectActor::Draw() const
 	sint32  yoffset = (sint32)((double)k_ACTOR_CENTER_OFFSET_Y * g_tiledMap->GetScale());
 
 	m_effectSpriteGroup->Draw(m_curEffectAction, m_frame, m_x+xoffset, m_y+yoffset,
-			m_x+xoffset, m_y+yoffset, m_facing, g_tiledMap->GetScale(), m_transparency, color, flags, false);
+			m_x+xoffset, m_y+yoffset, m_facing, g_tiledMap->GetScale(), m_transparency, color, flags);
 }
 
 void EffectActor::DrawDirect(aui_Surface * surf) const
@@ -181,7 +181,7 @@ void EffectActor::DrawDirectWithFlags(aui_Surface * surf, uint16 flags) const
 		flags |= k_BIT_DRAWFLAGS_TRANSPARENCY;
 	}
 	m_effectSpriteGroup->DrawDirect(surf, m_curEffectAction, m_frame, m_x + xoffset, m_y + yoffset,
-			m_x + xoffset, m_y + yoffset, m_facing, g_tiledMap->GetScale(), m_transparency, color, flags, false);
+			m_x + xoffset, m_y + yoffset, m_facing, g_tiledMap->GetScale(), m_transparency, color, flags);
 }
 
 void EffectActor::DrawText(sint32 x, sint32 y, MBCHAR * effectText) const
