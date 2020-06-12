@@ -1286,7 +1286,7 @@ void UnitActor::GetBoundingRect(RECT *rect) const
 	double scale = g_tiledMap->GetScale();
 
 	sint32 x = m_x;
-	if (m_facing >= 5) {
+	if (Sprite::IsReversedFacing(m_facing)) {
 		x += (sint32)((double)(k_ACTOR_CENTER_OFFSET_X - (GetWidth()-hotPoint.x)) * scale);
 	} else {
 		x += (sint32)((double)(k_ACTOR_CENTER_OFFSET_X - hotPoint.x) * scale);

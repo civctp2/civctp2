@@ -174,7 +174,8 @@ void FacedSpriteWshadow::Draw(sint32 drawX, sint32 drawY, sint32 facing,
 {
 	SetSurface();
 
-	if (facing < 5)
+	bool normalFacing = !IsReversedFacing(facing);
+	if (normalFacing)
 	{
 		drawX -= (sint32)((double)m_hotPoints[facing].x * scale);
 		drawY -= (sint32)((double)m_hotPoints[facing].y * scale);
@@ -188,6 +189,7 @@ void FacedSpriteWshadow::Draw(sint32 drawX, sint32 drawY, sint32 facing,
 	if(m_frames[facing][m_currentFrame] == NULL)
 	{
 		facing = k_SPRITE_BASEFACING;
+		normalFacing = !IsReversedFacing(facing);
 	}
 	Assert(m_frames[facing][m_currentFrame] != NULL);
 	if(m_frames[facing][m_currentFrame] == NULL)
@@ -201,7 +203,7 @@ void FacedSpriteWshadow::Draw(sint32 drawX, sint32 drawY, sint32 facing,
 
 	if (scale == 1.0)
 	{
-		if (facing < 5)
+		if (normalFacing)
 		{
 			(this->*_DrawLow)((Pixel16 *)m_frames[facing][m_currentFrame], drawX, drawY, m_width, m_height, transparency, outlineColor, flags);
 
@@ -213,7 +215,7 @@ void FacedSpriteWshadow::Draw(sint32 drawX, sint32 drawY, sint32 facing,
 	{
 		if (scale == 0.5)
 		{
-			if (facing < 5)
+			if (normalFacing)
 				(this->*_DrawLow)((Pixel16 *)m_miniframes[facing][m_currentFrame], drawX, drawY, m_width>>1, m_height>>1, transparency, outlineColor, flags);
 			else
 				(this->*_DrawLowReversed)((Pixel16 *)m_miniframes[k_MAX_FACINGS - facing][m_currentFrame], drawX, drawY, m_width>>1, m_height>>1, transparency, outlineColor, flags);
@@ -223,7 +225,7 @@ void FacedSpriteWshadow::Draw(sint32 drawX, sint32 drawY, sint32 facing,
 			sint32 destWidth = (sint32)(m_width * scale);
 			sint32 destHeight = (sint32)(m_height * scale);
 
-			if (facing < 5)
+			if (normalFacing)
 			{
 				(this->*_DrawScaledLow)((Pixel16 *)m_frames[facing][m_currentFrame], drawX, drawY, destWidth, destHeight,
 									transparency, outlineColor, flags, FALSE);
@@ -242,7 +244,8 @@ void FacedSpriteWshadow::DrawDirect(aui_Surface *surf, sint32 drawX, sint32 draw
 {
 	LockSurface(surf);
 
-	if (facing < 5)
+	bool normalFacing = !IsReversedFacing(facing);
+	if (normalFacing)
 	{
 		drawX -= (sint32)((double)m_hotPoints[facing].x * scale);
 		drawY -= (sint32)((double)m_hotPoints[facing].y * scale);
@@ -256,6 +259,7 @@ void FacedSpriteWshadow::DrawDirect(aui_Surface *surf, sint32 drawX, sint32 draw
 	if(m_frames[facing][m_currentFrame] == NULL)
 	{
 		facing = k_SPRITE_BASEFACING;
+		normalFacing = !IsReversedFacing(facing);
 	}
 	Assert(m_frames[facing][m_currentFrame] != NULL);
 	if(m_frames[facing][m_currentFrame] == NULL)
@@ -276,7 +280,7 @@ void FacedSpriteWshadow::DrawDirect(aui_Surface *surf, sint32 drawX, sint32 draw
 
 	if (scale == 1.0)
 	{
-		if (facing < 5)
+		if (normalFacing)
 		{
 			(this->*_DrawLow)((Pixel16 *)m_frames[facing][m_currentFrame], drawX, drawY, m_width, m_height, transparency, outlineColor, flags);
 		}
@@ -289,7 +293,7 @@ void FacedSpriteWshadow::DrawDirect(aui_Surface *surf, sint32 drawX, sint32 draw
 	{
 		if (scale == 0.5)
 		{
-			if (facing < 5)
+			if (normalFacing)
 				(this->*_DrawLow)((Pixel16 *)m_miniframes[facing][m_currentFrame], drawX, drawY, m_width>>1, m_height>>1, transparency, outlineColor, flags);
 			else {
 				(this->*_DrawLowReversed)((Pixel16 *)m_miniframes[k_MAX_FACINGS - facing][m_currentFrame], drawX, drawY, m_width>>1, m_height>>1, transparency, outlineColor, flags);
@@ -300,7 +304,7 @@ void FacedSpriteWshadow::DrawDirect(aui_Surface *surf, sint32 drawX, sint32 draw
 			sint32 destWidth = (sint32)(m_width * scale);
 			sint32 destHeight = (sint32)(m_height * scale);
 
-			if (facing < 5)
+			if (normalFacing)
 			{
 				(this->*_DrawScaledLow)((Pixel16 *)m_frames[facing][m_currentFrame], drawX, drawY, destWidth, destHeight,
 									transparency, outlineColor, flags, FALSE);
@@ -320,7 +324,7 @@ void FacedSpriteWshadow::DirectionalDraw(sint32 drawX, sint32 drawY, sint32 faci
 {
 	SetSurface();
 
-	if (facing < 5)
+	if (!IsReversedFacing(facing))
 	{
 		drawX -= (sint32)((double)m_hotPoints[facing].x * scale);
 		drawY -= (sint32)((double)m_hotPoints[facing].y * scale);
@@ -408,7 +412,8 @@ void FacedSpriteWshadow::DrawShadow(sint32 drawX, sint32 drawY, sint32 facing,
 {
 	SetSurface();
 
-	if (facing < 5)
+	bool normalFacing = !IsReversedFacing(facing);
+	if (normalFacing)
 	{
 		drawX -= (sint32)((double)m_hotPoints[facing].x * scale);
 		drawY -= (sint32)((double)m_hotPoints[facing].y * scale);
@@ -422,6 +427,7 @@ void FacedSpriteWshadow::DrawShadow(sint32 drawX, sint32 drawY, sint32 facing,
 	if(m_shadowFrames[facing][m_currentFrame] == NULL)
 	{
 		facing = k_SPRITE_BASEFACING;
+		normalFacing = !IsReversedFacing(facing);
 	}
 	if(m_shadowFrames[facing][m_currentFrame] == NULL)
 	{
@@ -434,7 +440,7 @@ void FacedSpriteWshadow::DrawShadow(sint32 drawX, sint32 drawY, sint32 facing,
 
 	if (scale == 1.0)
 	{
-		if (facing < 5)
+		if (normalFacing)
 		{
 			(this->*_DrawLow)((Pixel16 *)m_shadowFrames[facing][m_currentFrame], drawX, drawY, m_width, m_height, transparency, outlineColor, flags);
 
@@ -446,7 +452,7 @@ void FacedSpriteWshadow::DrawShadow(sint32 drawX, sint32 drawY, sint32 facing,
 	{
 		if (scale == 0.5)
 		{
-			if (facing < 5)
+			if (normalFacing)
 				(this->*_DrawLow)((Pixel16 *)m_miniShadowFrames[facing][m_currentFrame], drawX, drawY, m_width>>1, m_height>>1, transparency, outlineColor, flags);
 			else
 				(this->*_DrawLowReversed)((Pixel16 *)m_miniShadowFrames[k_MAX_FACINGS - facing][m_currentFrame], drawX, drawY, m_width>>1, m_height>>1, transparency, outlineColor, flags);
@@ -457,7 +463,7 @@ void FacedSpriteWshadow::DrawShadow(sint32 drawX, sint32 drawY, sint32 facing,
 			sint32 destWidth = (sint32)(m_width * scale);
 			sint32 destHeight = (sint32)(m_height * scale);
 
-			if (facing < 5)
+			if (normalFacing)
 			{
 				(this->*_DrawScaledLow)((Pixel16 *)m_shadowFrames[facing][m_currentFrame], drawX, drawY, destWidth, destHeight,
 									transparency, outlineColor, flags, FALSE);
@@ -476,7 +482,8 @@ void FacedSpriteWshadow::DrawFlashEffect(sint32 drawX, sint32 drawY, sint32 faci
 {
 	SetSurface();
 
-	if (facing < 5)
+	bool normalFacing = !IsReversedFacing(facing);
+	if (normalFacing)
 	{
 		drawX -= (sint32)((double)m_hotPoints[facing].x * scale);
 		drawY -= (sint32)((double)m_hotPoints[facing].y * scale);
@@ -490,6 +497,7 @@ void FacedSpriteWshadow::DrawFlashEffect(sint32 drawX, sint32 drawY, sint32 faci
 	if(m_frames[facing][m_currentFrame] == NULL)
 	{
 		facing = k_SPRITE_BASEFACING;
+		normalFacing = !IsReversedFacing(facing);
 	}
 
 	Assert(m_frames[facing][m_currentFrame] != NULL);
@@ -504,7 +512,7 @@ void FacedSpriteWshadow::DrawFlashEffect(sint32 drawX, sint32 drawY, sint32 faci
 
 	if (scale == 1.0)
 	{
-		if (facing < 5)
+		if (normalFacing)
 		{
 			(this->*_DrawFlashLow)((Pixel16 *)m_frames[facing][m_currentFrame], drawX, drawY, m_width, m_height, transparency, outlineColor, flags);
 		}
@@ -517,7 +525,7 @@ void FacedSpriteWshadow::DrawFlashEffect(sint32 drawX, sint32 drawY, sint32 faci
 	{
 		if (scale == 0.5)
 		{
-			if (facing < 5)
+			if (normalFacing)
 			{
 				(this->*_DrawFlashLow)((Pixel16 *)m_miniframes[facing][m_currentFrame], drawX, drawY, m_width>>1, m_height>>1, transparency, outlineColor, flags);
 			}
@@ -531,7 +539,7 @@ void FacedSpriteWshadow::DrawFlashEffect(sint32 drawX, sint32 drawY, sint32 faci
 			sint32 destWidth = (sint32)(m_width * scale);
 			sint32 destHeight = (sint32)(m_height * scale);
 
-			if (facing < 5)
+			if (normalFacing)
 			{
 				(this->*_DrawFlashScaledLow)((Pixel16 *)m_frames[facing][m_currentFrame], drawX, drawY, destWidth, destHeight,
 					transparency, outlineColor, flags, FALSE);
@@ -696,7 +704,7 @@ void FacedSpriteWshadow::DirectionalDrawShadow(sint32 drawX, sint32 drawY, sint3
 {
 	SetSurface();
 
-	if (facing < 5)
+	if (!IsReversedFacing(facing))
 	{
 		drawX -= (sint32)((double)m_hotPoints[facing].x * scale);
 		drawY -= (sint32)((double)m_hotPoints[facing].y * scale);

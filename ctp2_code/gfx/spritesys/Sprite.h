@@ -55,9 +55,10 @@ enum SPRITETYPE
 	SPRITETYPE_MAX          // dummy last entry, used as counter
 };
 
-#define k_SPRITE_BASEFACING   0
-#define k_DEFAULTSPRITEFACING 3
-#define k_MAX_FACINGS         8
+static const int k_SPRITE_BASEFACING   = 0;
+static const int k_DEFAULTSPRITEFACING = 3;
+static const int k_NUM_FACINGS         = 5;
+static const int k_MAX_FACINGS         = 8;
 
 #define k_BIT_DRAWFLAGS_NONE			0x00000000
 #define k_BIT_DRAWFLAGS_FEATHERING		0x00000001
@@ -106,6 +107,8 @@ typedef  void (Sprite::*_SPRITE_DRAWLOW2)(Pixel16 *frame,
 class Sprite
 {
 public:
+	static bool IsReversedFacing(sint32 facing) { return facing >= 5; }
+
 	Sprite();
 	virtual ~Sprite();
 
@@ -170,7 +173,6 @@ public:
 	void			InitializeDrawLow();
 
 protected:
-
 	_SPRITE_DRAWLOW1 _DrawLowClipped        	;
 	_SPRITE_DRAWLOW1 _DrawLow               	;
 	_SPRITE_DRAWLOW1 _DrawLowReversedClipped	;

@@ -38,16 +38,13 @@
 // Library dependencies
 //----------------------------------------------------------------------------
 
-// #include <>
+#include "Sprite.h"
 
 //----------------------------------------------------------------------------
 // Export overview
 //----------------------------------------------------------------------------
 
 class FacedSpriteWshadow;
-
-#define k_MAX_FACINGS		8
-#define k_NUM_FACINGS		5
 
 #define k_MAX_NAMES			100
 #define k_MAX_NAME_LENGTH	_MAX_PATH
