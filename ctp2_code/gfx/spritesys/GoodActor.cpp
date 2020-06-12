@@ -260,7 +260,6 @@ void GoodActor::AddIdle()
 		Anim * animation = CreateAnim(GOODACTION_IDLE);
 		m_curAction = Action::CreateGoodAction(GOODACTION_IDLE, animation);
 		m_curGoodAction = GOODACTION_IDLE;
-		m_nextIdleAction = GetTickCount() + 8000 + rand() % 5000;
 	}
 }
 
@@ -270,7 +269,11 @@ void GoodActor::Process()
     {
 		m_curAction->Process();
 
-		if (m_curAction->IsFinished()) {
+		if (m_curAction->IsFinished())
+		{
+			if (m_curAction->GetActionType() == GOODACTION_IDLE) {
+				m_nextIdleAction = GetTickCount() + 8000 + rand() % 5000;
+			}
 			GetNextAction();
 		}
 	} else {
