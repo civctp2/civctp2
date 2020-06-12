@@ -81,6 +81,10 @@ class SpriteState;
 class BattleViewActor : public Actor
 {
 public:
+	// Make position methods public
+	using Actor::GetX;
+	using Actor::GetY;
+
 	BattleViewActor(SpriteState * spriteState, const Unit & id, const MapPoint & pos, sint32 owner);
 	virtual ~BattleViewActor();
 

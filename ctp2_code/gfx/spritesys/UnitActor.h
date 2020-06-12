@@ -56,6 +56,10 @@ class Anim;
 class UnitActor : public Actor
 {
 public:
+	// Make position methods public
+	using Actor::GetX;
+	using Actor::GetY;
+
 	UnitActor(
 		SpriteState    * spriteState,
 		const Unit     & id,

@@ -16,6 +16,10 @@ class Action;
 class EffectActor : public Actor
 {
 public:
+	// Make position methods public
+	using Actor::GetX;
+	using Actor::GetY;
+
 	EffectActor(SpriteState * spriteState, const MapPoint & pos);
 	virtual ~EffectActor();
 

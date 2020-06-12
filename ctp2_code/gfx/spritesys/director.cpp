@@ -201,15 +201,7 @@ public:
 		}
 	}
 
-	virtual void Offset(sint32 deltaX, sint32 deltaY)
-	{
-		for (auto actorReference : m_tradeActors)
-		{
-			TradeActor *actor = actorReference.second;
-			actor->SetX(actor->GetX() + deltaX);
-			actor->SetY(actor->GetY() + deltaY);
-		}
-	}
+	virtual void Offset(sint32 deltaX, sint32 deltaY) {}
 
 	virtual void Dump() {
 		DPRINTF(k_DBG_UI, (" ------------------\n"));

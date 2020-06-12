@@ -3483,7 +3483,7 @@ bool TiledMap::ScrollMap(sint32 deltaX, sint32 deltaY)
 
 	}
 
-	OffsetSprites(&tempRect, deltaX*hscroll, deltaY*vscroll);
+	OffsetSprites(&m_mapViewRect, deltaX*hscroll, deltaY*vscroll);
 	ScrollPixels((sint32)(deltaX*hscroll), (sint32)(deltaY*vscroll), m_surface);
 
 

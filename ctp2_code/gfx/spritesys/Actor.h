@@ -93,9 +93,6 @@ public:
 	void	SetPos(POINT p) { m_x = p.x; m_y = p.y; }
 	void	SetMorphing(bool val) { m_morphing = val; }
 
-	sint32	GetX(void) const { return m_x; }
-	sint32	GetY(void) const { return m_y; }
-	POINT	GetPos(void) const { POINT p; p.x = m_x; p.y = m_y; return p; }
 	bool	GetMorphing(void) const { return m_morphing; }
 
 	SpriteState * GetSpriteState(void) const { return m_spriteState; }
@@ -112,6 +109,9 @@ protected:
 	sint32			m_oldFrame;
 #endif
 	static Pixel16 GetHealthBarColor(double healthPercentage);
+
+	sint32	GetX(void) const { return m_x; }
+	sint32	GetY(void) const { return m_y; }
 
 	bool			m_isactive;
 

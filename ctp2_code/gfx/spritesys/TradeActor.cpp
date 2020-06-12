@@ -55,8 +55,6 @@ TradeActor::TradeActor(TradeRoute newRoute)
 	m_currentPos      (MapPoint(0,0)),
 	m_goodSpriteGroup (NULL),
 	m_facing          (k_DEFAULTSPRITEFACING),
-	m_frame           (0),
-	m_transparency    (NO_TRANSPARENCY),
 	m_idleAnim        (NULL),
 	m_curAction       (NULL),
 	m_curGoodAction   (GOODACTION_NONE)
@@ -132,14 +130,7 @@ void TradeActor::Process()
 		AddIdle();
 	}
 
-	if (m_curAction)
-	{
-		POINT current = m_curAction->CalculatePixelXY(m_currentPos);
-		m_x = current.x;
-		m_y = current.y;
-
-		m_frame = m_curAction->GetSpriteFrame();
-		m_transparency = m_curAction->GetTransparency();
+	if (m_curAction) {
 		m_facing = m_curAction->CalculateFacing(m_facing);
 	}
 }
@@ -168,30 +159,26 @@ void TradeActor::Draw(RECT * paintRect) const
 
 	if (maputils_TilePointInTileRect(tileX, m_currentPos.y, paintRect))
 	{
-		Draw(g_tiledMap->GetLocalVision());
+		POINT drawPos = m_curAction->CalculatePixelXY(m_currentPos);
+		drawPos.x += k_ACTOR_CENTER_OFFSET_X;
+		drawPos.y += k_ACTOR_CENTER_OFFSET_Y;
+
+		Draw(g_tiledMap->GetLocalVision(), drawPos);
 		RECT dirtyRect;
-		GetBoundingRect(&dirtyRect);
+		GetBoundingRect(&dirtyRect, drawPos);
 		g_tiledMap->AddDirtyRectToMix(dirtyRect);
 	}
 }
 
-void TradeActor::Draw(const Vision * tileLocalVision) const
+void TradeActor::Draw(const Vision * tileLocalVision, const POINT & drawPos) const
 {
-	uint16  flags = k_DRAWFLAGS_NORMAL;
-	Pixel16 color = 0x0000;
+	Pixel16 color = g_colorSet->GetColor(COLOR_BLACK);
 
-	if (tileLocalVision->IsExplored(m_currentPos) && m_routeID.SeenBy(g_selected_item->GetVisiblePlayer()))
+	if (m_curAction
+		&& tileLocalVision->IsExplored(m_currentPos) && m_routeID.SeenBy(g_selected_item->GetVisiblePlayer()))
 	{
-		// POINT  hotPoint = m_goodSpriteGroup->GetHotPoint(m_curGoodAction);
-		// double scale  = g_tiledMap->GetScale();
-		// sint32 xoffset = (sint32)((double)(k_ACTOR_CENTER_OFFSET_X - hotPoint.x) * scale);
-		// sint32 yoffset = (sint32)((double)(k_ACTOR_CENTER_OFFSET_Y - hotPoint.y) * scale);
-
-		sint32 xoffset = k_ACTOR_CENTER_OFFSET_X;
-		sint32 yoffset = k_ACTOR_CENTER_OFFSET_Y;
-
-		m_goodSpriteGroup->Draw(m_curGoodAction, m_frame, m_x + xoffset, m_y + yoffset, m_facing,
-								g_tiledMap->GetScale(), m_transparency, color, flags);
+		m_goodSpriteGroup->Draw(m_curGoodAction, m_curAction->GetSpriteFrame(), drawPos.x, drawPos.y,
+			m_facing, g_tiledMap->GetScale(), m_curAction->GetTransparency(), color, k_DRAWFLAGS_NORMAL);
 	}
 }
 
@@ -230,22 +217,19 @@ uint16 TradeActor::GetHeight() const
 	}
 }
 
-void TradeActor::GetBoundingRect(RECT * rect) const
+void TradeActor::GetBoundingRect(RECT * rect, const POINT & drawPos) const
 {
 	Assert(rect);
 	if (!rect) {
 		return;
 	}
 
-	POINT  hotPoint = m_goodSpriteGroup->GetHotPoint(m_curGoodAction);
-	double scale    = g_tiledMap->GetScale();
-	sint32 xoffset  = (sint32)((double)(k_ACTOR_CENTER_OFFSET_X - hotPoint.x) * scale);
-	sint32 yoffset  = (sint32)((double)(k_ACTOR_CENTER_OFFSET_Y - hotPoint.y) * scale);
+	double scale = g_tiledMap->GetScale();
 
 	rect->left   = 0;
 	rect->top    = 0;
 	rect->right  = (sint32)((double)GetWidth() * scale);
 	rect->bottom = (sint32)((double)GetHeight() * scale);
 
-	OffsetRect(rect, m_x + xoffset, m_y + yoffset);
+	OffsetRect(rect, drawPos.x, drawPos.y);
 }

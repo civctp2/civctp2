@@ -23,10 +23,6 @@ public:
 
 	TradeRoute GetRouteID() const { return m_routeID; }
 
-	uint16     GetWidth() const;
-	uint16     GetHeight() const;
-	void       GetBoundingRect(RECT * rect) const;
-
 protected:
 	void     AddIdle();
 	MapPoint GetNextPos();
@@ -34,8 +30,11 @@ protected:
 
 	Anim   * CreateAnim(GOODACTION action) const;
 
-	void     Draw(const Vision * tileLocalVision) const;
+	void     Draw(const Vision * tileLocalVision, const POINT & drawPos) const;
 	void     DrawText(sint32 x, sint32 y, MBCHAR * goodText) const;
+	uint16   GetWidth() const;
+	uint16   GetHeight() const;
+	void     GetBoundingRect(RECT * rect, const POINT & drawPos) const;
 
 	TradeRoute                     m_routeID;
 	ROUTE_TYPE                     m_routeType;
@@ -50,8 +49,6 @@ protected:
 	GoodSpriteGroup              * m_goodSpriteGroup;
 
 	sint32                         m_facing;
-	sint32                         m_frame;
-	uint16                         m_transparency;
 
 	Anim                         * m_idleAnim;
 	Action                       * m_curAction;

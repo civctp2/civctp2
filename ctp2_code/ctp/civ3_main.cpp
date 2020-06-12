@@ -725,6 +725,12 @@ bool ui_CheckForScroll(void)
 			lastdeltaX = deltaX;
 			lastdeltaY = deltaY;
 
+			if(scrolled_last_time) {
+				scrolled_last_time = false;
+				return false;
+			}
+			scrolled_last_time = true;
+
 			g_tiledMap->SetScrolling(true);
 			g_tiledMap->ScrollMap(deltaX, deltaY);
 

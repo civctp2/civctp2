@@ -17,6 +17,10 @@ class aui_Surface;
 class WorkerActor : public Actor
 {
 public:
+	// Make position methods public
+	using Actor::GetX;
+	using Actor::GetY;
+
 	WorkerActor(sint32 index, const MapPoint & pos, sint32 x = 0, sint32 y = 0);
 	virtual ~WorkerActor();
 
