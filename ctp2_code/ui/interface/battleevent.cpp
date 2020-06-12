@@ -238,10 +238,8 @@ void BattleEvent::ProcessAttack(void)
 
 					actor->Process();
 
-					if (actor->GetCurAction()) {
-						if (actor->GetCurAction()->GetActionType() != UNITACTION_ATTACK) {
-							finished = TRUE;
-						}
+					if (actor->GetCurUnitAction() != UNITACTION_ATTACK) {
+						finished = TRUE;
 					}
 				}
 
@@ -358,11 +356,12 @@ void BattleEvent::ProcessDeath(void)
 
 				if (!m_animating) {
 					Action		*action;
-					if (!actor->HasDeath() || (!actor->HasThisAnim(UNITACTION_VICTORY))) {
+					if (!actor->HasDeath() || (!actor->HasAnim(UNITACTION_VICTORY))) {
 						action = Action::CreateUnitAction(UNITACTION_FAKE_DEATH, Anim::MakeFakeDeath());
 					} else {
 						action = Action::CreateUnitAction(UNITACTION_VICTORY, actor->CreateAnim(UNITACTION_VICTORY));
 					}
+
 					actor->AddAction(action);
 
 					if (g_soundManager)
@@ -377,19 +376,15 @@ void BattleEvent::ProcessDeath(void)
 				} else {
 					actor->Process();
 
-					if (actor->GetCurAction() &&
-						actor->GetCurAction()->GetActionType() != UNITACTION_VICTORY &&
-						actor->GetCurAction()->GetActionType() != UNITACTION_FAKE_DEATH) {
-
+					if (actor->GetCurUnitAction() != UNITACTION_VICTORY &&
+						actor->GetCurUnitAction() != UNITACTION_FAKE_DEATH)
+					{
 						finished = TRUE;
 					}
 				}
-
 			}
 
 			if (finished) {
-
-
 				delete m_walker->Remove();
 				if(actor) {
 					g_battleViewWindow->RemoveActor(actor);

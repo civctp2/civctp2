@@ -68,6 +68,7 @@ static const int k_ACTOR_CENTER_OFFSET_Y = 48;
 //----------------------------------------------------------------------------
 
 #include "ctp2_inttypes.h"      // sint32
+#include "pixeltypes.h"
 
 class Action;
 class Anim;
@@ -110,6 +111,7 @@ protected:
 	sint32			m_oldOffsetY;
 	sint32			m_oldFrame;
 #endif
+	static Pixel16 GetHealthBarColor(double healthPercentage);
 
 	bool			m_isactive;
 

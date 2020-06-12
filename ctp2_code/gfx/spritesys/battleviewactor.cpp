@@ -32,56 +32,47 @@
 #include "c3.h"
 #include "battleviewactor.h"
 
-#include <algorithm>
-#include "aui_surface.h"
-#include "colorset.h"
-#include "director.h"           // g_director
-#include "primitives.h"
-#include "soundmanager.h"       // g_soundManager
 #include "SpriteGroupList.h"
 #include "SpriteState.h"
+#include "soundmanager.h"       // g_soundManager
 #include "tiledmap.h"           // g_tiledMap
+#include "aui_surface.h"
+#include "primitives.h"
 
-extern SpriteGroupList *        g_unitSpriteGroupList;
+extern SpriteGroupList * g_unitSpriteGroupList;
 
 BattleViewActor::BattleViewActor
 (
-    SpriteState *       ss,
-    Unit                id,
-    sint32              unitType,
-    const MapPoint &    pos,
-    sint32              owner
+	SpriteState    * spriteState,
+	const Unit     & id,
+	const MapPoint & pos,
+	sint32           owner
 )
 :
-    Actor               (ss),
-	m_pos               (pos),
-	m_unitID            (id),
-	m_unitDBIndex       (unitType),
-	m_playerNum         (owner),
-    m_unitSpriteGroup   (NULL),
-	m_facing            (k_DEFAULTSPRITEFACING),
-	m_frame             (0),
-	m_transparency      (15),
-	m_curAction         (NULL),
-	m_curUnitAction     (UNITACTION_NONE),
-    m_actionQueue       (k_MAX_ACTION_QUEUE_SIZE),
-	m_type              (GROUPTYPE_UNIT),
-	m_spriteID          (0),
-    m_hitPoints         (0.0),
-    m_hitPointsMax      (0.0),
-	m_isFortified       (false)
+	Actor             (spriteState),
+	m_unitID          (id),
+	m_playerNum       (owner),
+	m_pos             (pos),
+	m_unitSpriteGroup (NULL),
+	m_facing          (k_DEFAULTSPRITEFACING),
+	m_frame           (0),
+	m_transparency    (NO_TRANSPARENCY),
+	m_curAction       (NULL),
+	m_curUnitAction   (UNITACTION_NONE),
+	m_actionQueue     (k_MAX_ACTION_QUEUE_SIZE),
+	m_spriteID        (0),
+	m_hitPoints       (0.0),
+	m_hitPointsMax    (0.0),
+	m_isFortified     (false)
 {
-    if (ss)
-    {
-        m_spriteID = static_cast<uint32>(ss->GetIndex());
-    }
+	if (spriteState) {
+		m_spriteID = static_cast<uint32>(spriteState->GetIndex());
+	}
 
-    if (g_unitSpriteGroupList)
-    {
-	    m_unitSpriteGroup =
-            (UnitSpriteGroup *) g_unitSpriteGroupList->GetSprite
-                (m_spriteID, m_type, LOADTYPE_FULL, (GAME_ACTION) 0);
-    }
+	if (g_unitSpriteGroupList) {
+		m_unitSpriteGroup = (UnitSpriteGroup *)
+				g_unitSpriteGroupList->GetSprite(m_spriteID, GROUPTYPE_UNIT, LOADTYPE_FULL, (GAME_ACTION) 0);
+	}
 
 	AddIdle();
 }
@@ -90,42 +81,33 @@ BattleViewActor::~BattleViewActor()
 {
 	DPRINTF(k_DBG_GAMESTATE, ("Deleting actor at %lx, unit=%lx\n", this, m_unitID.m_id));
 
-    DumpAllActions();
+	DumpAllActions();
 
-	if (m_unitSpriteGroup && g_unitSpriteGroupList)
-    {
+	if (m_unitSpriteGroup && g_unitSpriteGroupList) {
 		g_unitSpriteGroupList->ReleaseSprite(m_spriteID, LOADTYPE_FULL);
 	}
 
 	delete m_curAction;
 }
 
-void BattleViewActor::AddIdle(BOOL NoIdleJustDelay)
+void BattleViewActor::AddIdle()
 {
-	// TODO: implement interruptable idle (see also UnitActor)
-	Anim * anim = CreateAnim(UNITACTION_IDLE);
+	Anim * animation = CreateAnim(UNITACTION_IDLE);
 
-	if (anim == NULL)
+	if (!animation)
 	{
-		anim = CreateAnim(UNITACTION_MOVE);
-		Assert(anim != NULL);
+		animation = CreateAnim(UNITACTION_MOVE);
+		Assert(animation);
 	}
 
 	delete m_curAction;
-	m_curAction = Action::CreateUnitAction(UNITACTION_IDLE, anim);
+	m_curAction = Action::CreateUnitAction(UNITACTION_IDLE, animation);
 	m_curUnitAction = UNITACTION_IDLE;
-
-	if (g_soundManager)
-		g_soundManager->TerminateLoopingSound(SOUNDTYPE_SFX, GetUnitID());
 }
 
-void BattleViewActor::Process(void)
+void BattleViewActor::Process()
 {
-	if(!m_curAction)
-		GetNextAction();
-
-	while(m_curAction && m_curAction->GetActionType() == UNITACTION_NONE)
-	{
+	if (!m_curAction) {
 		GetNextAction();
 	}
 
@@ -133,310 +115,243 @@ void BattleViewActor::Process(void)
 	{
 		m_curAction->Process();
 
-
-
-
-		if (m_curAction->IsFinished())
-		{
+		if (m_curAction->IsFinished()) {
 			GetNextAction();
 		}
 	}
 
-    if (m_curAction)
-    {
-        m_frame        = m_curAction->GetSpriteFrame();
-        m_transparency = m_curAction->GetTransparency();
-    }
+	if (m_curAction)
+	{
+		m_frame        = m_curAction->GetSpriteFrame();
+		m_transparency = m_curAction->GetTransparency();
+	}
 }
 
-void BattleViewActor::DumpAllActions(void)
+void BattleViewActor::DumpAllActions()
 {
-
-	if (m_curAction) {
-		m_facing = m_curAction->CalculateFacing(m_facing);
+	if (m_curAction)
+	{
 		delete m_curAction;
 		m_curAction = NULL;
 	}
 
-	Action *deadAction=NULL;
-	while (m_actionQueue.GetNumItems() > 0) {
-		m_actionQueue.Dequeue(deadAction);
-		if (deadAction != NULL) {
-			m_facing = deadAction->CalculateFacing(m_facing);
-			delete deadAction;
-			deadAction = NULL;
-		}
+	while (m_actionQueue.GetNumItems() > 0)
+	{
+		Action * otherAction;
+		m_actionQueue.Dequeue(otherAction);
+		delete otherAction;
 	}
 }
 
-void BattleViewActor::GetNextAction(BOOL isVisible)
+void BattleViewActor::GetNextAction()
 {
-	uint32 numItems = GetActionQueueNumItems();
-
 	delete m_curAction;
 	m_curAction = NULL;
 
-	Action *pendingAction = LookAtNextAction();
-
-	while(numItems > 0 && pendingAction->GetActionType() == UNITACTION_NONE)
+	if (m_actionQueue.GetNumItems() > 0)
 	{
-		m_actionQueue.Dequeue(m_curAction);
-		delete m_curAction;
-		m_curAction = NULL;
-		pendingAction = LookAtNextAction();
-	}
-
-	if (numItems > 0)
-	{
-
 		m_actionQueue.Dequeue(m_curAction);
 
 		if (m_curAction) {
 			m_curUnitAction = (UNITACTION)m_curAction->GetActionType();
 		} else {
-			Assert(FALSE);
+			Assert(false);
 		}
-	}
-	else
-	{
-
+	} else {
 		AddIdle();
 	}
 }
 
-void BattleViewActor::AddAction(Action *actionObj)
+void BattleViewActor::AddAction(Action *action)
 {
-	// TODO: implement interrupt if needed
-	Assert(m_unitSpriteGroup && actionObj);
-	if (!m_unitSpriteGroup || !actionObj) return;
+	Assert(m_unitSpriteGroup && action);
+	if (!m_unitSpriteGroup || !action) {
+		return;
+	}
 
-	if (m_unitID.IsValid())
-	{
+	if (m_unitID.IsValid()) {
 		m_playerNum = m_unitID.GetOwner();
 	}
 
+	Interrupt();
+
+	m_actionQueue.Enqueue(action);
+}
+
+void BattleViewActor::Interrupt()
+{
 	if (m_curAction && m_curAction->GetActionType() == UNITACTION_IDLE) {
 		delete m_curAction;
 		m_curAction = NULL;
 	}
-	m_actionQueue.Enqueue(actionObj);
 }
 
-Anim *BattleViewActor::CreateAnim(UNITACTION action)
+Anim * BattleViewActor::CreateAnim(UNITACTION action)
 {
 	Assert(m_unitSpriteGroup);
-	if (!m_unitSpriteGroup) return NULL;
-
-	Anim *  origAnim = m_unitSpriteGroup->GetAnim((GAME_ACTION)action);
-
-	if (!origAnim && (UNITACTION_IDLE == action))
-	{
-		origAnim = m_unitSpriteGroup->GetAnim((GAME_ACTION) UNITACTION_MOVE);;
-		Assert(origAnim);
-		action = UNITACTION_MOVE;
+	if (!m_unitSpriteGroup) {
+		return NULL;
 	}
 
-	return origAnim ? Anim::CreateSequential(*origAnim) : NULL;
+	Anim * animation = m_unitSpriteGroup->GetAnim((GAME_ACTION)action);
+	if (!animation && (action == UNITACTION_IDLE))
+	{
+		animation = m_unitSpriteGroup->GetAnim((GAME_ACTION) UNITACTION_MOVE);
+		Assert(animation);
+	}
+
+	return animation ? Anim::CreateSequential(*animation) : NULL;
 }
 
-void BattleViewActor::Draw(BOOL fogged)
+void BattleViewActor::DrawDirect(aui_Surface * surf, sint32 x, sint32 y)
 {
-	uint16			flags           = k_DRAWFLAGS_NORMAL;
-	Pixel16			color           = 0x0000;
-	BOOL			directionAttack = FALSE;
-
-	if (m_transparency < 15) {
-		flags |= k_BIT_DRAWFLAGS_TRANSPARENCY;
-	}
-
-	if (fogged)
-		flags |= k_BIT_DRAWFLAGS_FOGGED;
-
-	if (m_curAction == NULL)
-	{
-
-		m_unitSpriteGroup->Draw(m_curUnitAction, m_frame, m_x+k_ACTOR_CENTER_OFFSET_X, m_y+k_ACTOR_CENTER_OFFSET_Y, m_facing,
-			g_tiledMap->GetScale(), m_transparency, color, flags, false, directionAttack);
-	}
-	else
-	{
-		m_unitSpriteGroup->Draw(m_curUnitAction, m_frame, m_x+k_ACTOR_CENTER_OFFSET_X, m_y+k_ACTOR_CENTER_OFFSET_Y, m_facing,
-			g_tiledMap->GetScale(), m_transparency, color, flags, false, directionAttack);
-	}
-}
-
-void BattleViewActor::DrawDirect(aui_Surface *surf, sint32 x, sint32 y)
-{
-	uint16			flags           = k_DRAWFLAGS_NORMAL;
-	Pixel16			color           = 0x0000;
-	BOOL			directionAttack = FALSE;
+	uint16  flags           = k_DRAWFLAGS_NORMAL;
+	Pixel16 color           = COLOR_BLACK;
+	bool    directionAttack = false;
 
 	if (m_transparency < 15) {
 		flags |= k_BIT_DRAWFLAGS_TRANSPARENCY;
 	}
 
 	if (m_isFortified) {
-		Pixel16			*fortifiedImage = g_tiledMap->GetTileSet()->GetImprovementData(34);
+		Pixel16 * fortifiedImage = g_tiledMap->GetTileSet()->GetImprovementData(34);
 		g_tiledMap->DrawOverlay(surf, fortifiedImage, x + k_ACTOR_CENTER_OFFSET_X-48,  y+k_ACTOR_CENTER_OFFSET_Y-48);
 	}
 
-	m_unitSpriteGroup->DrawDirect(surf, m_curUnitAction, m_frame, x+k_ACTOR_CENTER_OFFSET_X, y+k_ACTOR_CENTER_OFFSET_Y, m_facing,
-							1, m_transparency, color, flags, m_curUnitAction == UNITACTION_IDLE, directionAttack);
+	m_unitSpriteGroup->DrawDirect(surf, m_curUnitAction, m_frame, x+k_ACTOR_CENTER_OFFSET_X, y+k_ACTOR_CENTER_OFFSET_Y,
+			m_facing, 1, m_transparency, color, flags, false, directionAttack);
 
 	DrawHealthBar(surf);
 }
 
-void BattleViewActor::DrawHealthBar(aui_Surface *surf)
+void BattleViewActor::DrawHealthBar(aui_Surface * surf) const
 {
-	if (!surf) return;
-
-	RECT		leftRect, rightRect;
-	sint32		top, middle;
-
-	double		ratio = m_hitPoints / m_hitPointsMax;
-	Pixel16		color = g_colorSet->GetPlayerColor(m_playerNum);
-	MAPICON		icon = MAPICON_HERALD;
-	TileSet		*tileSet = g_tiledMap->GetTileSet();
-	sint32		surfWidth = surf->Width();
-	sint32		surfHeight = surf->Height();
-
-	POINT	iconDim = tileSet->GetMapIconDimensions(icon);
-
-	RECT	iconRect = {0, 0, iconDim.x, iconDim.y};
-
-	UNITACTION		unitAction = m_curUnitAction;
-	if (m_unitSpriteGroup->GetGroupSprite((GAME_ACTION)m_curUnitAction) == NULL)
-		unitAction = UNITACTION_IDLE;
-
-	POINT *shieldPoint;
-
-
-	if (unitAction == UNITACTION_IDLE && m_unitSpriteGroup->GetGroupSprite((GAME_ACTION)UNITACTION_IDLE) == NULL) {
-		shieldPoint = m_unitSpriteGroup->GetShieldPoints(UNITACTION_MOVE);
-		OffsetRect(&iconRect, m_x + shieldPoint->x, m_y + shieldPoint->y);
-	} else {
-		if (m_unitSpriteGroup && m_unitSpriteGroup->GetGroupSprite((GAME_ACTION)unitAction) != NULL) {
-			shieldPoint = m_unitSpriteGroup->GetShieldPoints(unitAction);
-			OffsetRect(&iconRect, m_x + shieldPoint->x, m_y + shieldPoint->y);
-		} else {
-
-			top = m_y;
-			middle = m_x + (sint32)((k_TILE_PIXEL_WIDTH) * g_tiledMap->GetScale())/2;
-			OffsetRect(&iconRect, middle - iconDim.x / 2, top - iconDim.y);
-		}
+	if (!surf) {
+		return;
 	}
 
-	if (iconRect.left < 0) return;
-	if (iconRect.right >= surfWidth) return;
-	if (iconRect.top < 0) return;
-	if (iconRect.bottom >= surfHeight) return;
+	static const MAPICON icon = MAPICON_HERALD;
 
-	g_tiledMap->DrawColorizedOverlay(tileSet->GetMapIconData(icon), surf, iconRect.left, iconRect.top, color);
+	RECT iconRect = DetermineIconRect(icon);
+	if (!IsRectCompletelyOnSurface(iconRect, surf)) {
+		return;
+	}
+
+	g_tiledMap->DrawColorizedOverlay(g_tiledMap->GetTileSet()->GetMapIconData(icon), surf, iconRect.left, iconRect.top,
+			g_colorSet->GetPlayerColor(m_playerNum));
 
 	iconRect.bottom = iconRect.top;
-	iconRect.top = iconRect.bottom - 4;
+	iconRect.top    = iconRect.bottom - 3;
+	if (!IsRectCompletelyOnSurface(iconRect, surf)) {
+		return;
+	}
 
-	if (iconRect.left < 0) return;
-	if (iconRect.right >= surfWidth) return;
-	if (iconRect.top < 0) return;
-	if (iconRect.bottom >= surfHeight) return;
-
-	primitives_FrameRect16(surf, &iconRect, g_colorSet->GetColor(COLOR_BLACK));
+	// Draw background
+	Pixel16 black = g_colorSet->GetColor(COLOR_BLACK);
+	primitives_FrameRect16(surf, &iconRect, black);
 
 	InflateRect(&iconRect, -1, -1);
 
-	leftRect = rightRect = iconRect;
-
-	color = g_colorSet->GetColor(COLOR_GREEN);
-	if (ratio < 1.0) {
-		leftRect.right = leftRect.left + (sint32)(ratio * (double)(iconRect.right-iconRect.left));
-		rightRect.left = leftRect.right;
-		if (ratio >= 0.3 && ratio < 0.7) {
-			color = g_colorSet->GetColor(COLOR_YELLOW);
-		} else {
-			if (ratio < 0.3)
-				color = g_colorSet->GetColor(COLOR_RED);
-		}
-		primitives_PaintRect16(surf, &rightRect, g_colorSet->GetColor(COLOR_BLACK));
-	}
-
-	if(leftRect.left > leftRect.right)
+	double healthPercentage = std::max<double>(m_hitPoints / m_hitPointsMax, 0.0);
+	sint32 healthBarLength = iconRect.right - iconRect.left;
+	if (healthPercentage < 1.0)
 	{
-		RECT temprect = leftRect;
-		leftRect.left = temprect.right;
-		leftRect.right = temprect.left;
+		healthBarLength = (sint32) (healthPercentage * healthBarLength);
+		RECT blackRect = iconRect;
+		blackRect.left += healthBarLength;
+		primitives_PaintRect16(surf, &blackRect, black);
 	}
-	primitives_PaintRect16(surf, &leftRect, color);
+
+	RECT colorRect  = iconRect;
+	colorRect.right = colorRect.left + healthBarLength;
+	primitives_PaintRect16(surf, &colorRect, GetHealthBarColor(healthPercentage));
 }
 
-uint16 BattleViewActor::GetWidth(void) const
+uint16 BattleViewActor::GetWidth() const
 {
-	Assert(m_unitSpriteGroup != NULL);
-	if (m_unitSpriteGroup == NULL) return 0;
-
-	Sprite * theSprite =
-        m_unitSpriteGroup->GetGroupSprite((GAME_ACTION)m_curUnitAction);
-
-	if (theSprite != NULL)
-	{
-		return theSprite->GetWidth();
-	}
-	else
-	{
-		if (m_curUnitAction == UNITACTION_IDLE)
-		{
-			theSprite = m_unitSpriteGroup->GetGroupSprite((GAME_ACTION)UNITACTION_MOVE);
-			if (theSprite != NULL)
-				return theSprite->GetWidth();
-		}
-
+	Assert(m_unitSpriteGroup);
+	if (!m_unitSpriteGroup) {
 		return 0;
 	}
+
+	Sprite * sprite = m_unitSpriteGroup->GetGroupSprite((GAME_ACTION) m_curUnitAction);
+	if (!sprite && (m_curUnitAction == UNITACTION_IDLE)) {
+		sprite = m_unitSpriteGroup->GetGroupSprite((GAME_ACTION) UNITACTION_MOVE);
+	}
+	return sprite ? sprite->GetWidth() : 0;
 }
 
-uint16 BattleViewActor::GetHeight(void) const
+uint16 BattleViewActor::GetHeight() const
 {
-	Assert(m_unitSpriteGroup != NULL);
-	if (m_unitSpriteGroup == NULL) return 0;
-
-	Sprite * theSprite =
-        m_unitSpriteGroup->GetGroupSprite((GAME_ACTION) m_curUnitAction);
-
-	if (theSprite != NULL)
-	{
-		return theSprite->GetHeight();
-	}
-	else
-	{
-		if (m_curUnitAction == UNITACTION_IDLE)
-		{
-			theSprite = m_unitSpriteGroup->GetGroupSprite((GAME_ACTION)UNITACTION_MOVE);
-			if (theSprite != NULL)
-				return theSprite->GetHeight();
-		}
-
+	Assert(m_unitSpriteGroup);
+	if (!m_unitSpriteGroup) {
 		return 0;
 	}
+
+	Sprite * sprite = m_unitSpriteGroup->GetGroupSprite((GAME_ACTION) m_curUnitAction);
+	if (!sprite && (m_curUnitAction == UNITACTION_IDLE)) {
+		sprite = m_unitSpriteGroup->GetGroupSprite((GAME_ACTION) UNITACTION_MOVE);
+	}
+	return sprite ? sprite->GetHeight() : 0;
 }
 
-void BattleViewActor::GetBoundingRect(RECT *rect) const
+void BattleViewActor::GetBoundingRect(RECT * rect) const
 {
-	Assert(rect != NULL);
-	if (rect == NULL) return;
+	Assert(rect);
+	if (!rect) {
+		return;
+	}
 
-	POINT	hotPoint = m_unitSpriteGroup->GetHotPoint(m_curUnitAction, m_facing);
-	double	scale = g_tiledMap->GetScale();
+	POINT  hotPoint = m_unitSpriteGroup->GetHotPoint(m_curUnitAction, m_facing);
+	double scale    = g_tiledMap->GetScale();
 
-	sint32	xoff = (sint32)((double)(k_ACTOR_CENTER_OFFSET_X - hotPoint.x) * scale),
-			yoff = (sint32)((double)(k_ACTOR_CENTER_OFFSET_Y - hotPoint.y) * scale);
+	sint32 xoffset = (sint32)((double)(k_ACTOR_CENTER_OFFSET_X - hotPoint.x) * scale);
+	sint32 yoffset = (sint32)((double)(k_ACTOR_CENTER_OFFSET_Y - hotPoint.y) * scale);
 
-	rect->left = 0;
-	rect->top = 0;
-	rect->right = (sint32)((double)GetWidth() * scale);
+	rect->left   = 0;
+	rect->top    = 0;
+	rect->right  = (sint32)((double)GetWidth() * scale);
 	rect->bottom = (sint32)((double)GetHeight() * scale);
 
-	OffsetRect(rect, m_x+xoff, m_y+yoff);
+	OffsetRect(rect, m_x + xoffset, m_y + yoffset);
 
-rect->bottom += 36;
+	rect->bottom += 36;
+}
 
+RECT BattleViewActor::DetermineIconRect(MAPICON icon) const
+{
+	POINT iconDim = g_tiledMap->GetTileSet()->GetMapIconDimensions(icon);
+	RECT iconRect = {0, 0, iconDim.x, iconDim.y};
+
+	UNITACTION unitAction = m_curUnitAction;
+	if (!m_unitSpriteGroup->GetGroupSprite((GAME_ACTION)m_curUnitAction)) {
+		unitAction = UNITACTION_IDLE;
+	}
+
+	if (unitAction == UNITACTION_IDLE && !m_unitSpriteGroup->GetGroupSprite((GAME_ACTION) UNITACTION_IDLE))
+	{
+		POINT * shieldPoint = m_unitSpriteGroup->GetShieldPoints(UNITACTION_MOVE);
+		OffsetRect(&iconRect, m_x + shieldPoint->x, m_y + shieldPoint->y);
+	}
+	else
+	{
+		if (m_unitSpriteGroup && m_unitSpriteGroup->GetGroupSprite((GAME_ACTION) unitAction))
+		{
+			POINT * shieldPoint = m_unitSpriteGroup->GetShieldPoints(unitAction);
+			OffsetRect(&iconRect, m_x + shieldPoint->x, m_y + shieldPoint->y);
+		}
+		else
+		{
+			sint32 top = m_y;
+			sint32 middle = m_x + (sint32)((k_TILE_PIXEL_WIDTH) * g_tiledMap->GetScale()) / 2;
+			OffsetRect(&iconRect, middle - iconDim.x / 2, top - iconDim.y);
+		}
+	}
+	return iconRect;
+}
+
+bool BattleViewActor::IsRectCompletelyOnSurface(const RECT & rect, aui_Surface * surf)
+{
+	return rect.left >= 0 && rect.right < surf->Width()
+	       && rect.top >= 0 && rect.bottom < surf->Height();
 }

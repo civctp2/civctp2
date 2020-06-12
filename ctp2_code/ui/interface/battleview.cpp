@@ -24,8 +24,8 @@
 //
 // Modifications from the original Activision code:
 //
-// - Removed reference to outdated special effect database. (Aug 26th 2005 Martin Gühmann)
-// - Removed unnecessary include files. (Aug 28th 2005 Martin Gühmann)
+// - Removed reference to outdated special effect database. (Aug 26th 2005 Martin Gï¿½hmann)
+// - Removed unnecessary include files. (Aug 28th 2005 Martin Gï¿½hmann)
 //
 //----------------------------------------------------------------------------
 
@@ -241,9 +241,8 @@ void BattleView::DrawAttackers(void)
 	SortedActor	sortedAttackers[k_MAX_UNITS_PER_SIDE];
 
 	for (i=0; i<m_numAttackers; i++) {
-		m_attackers[i]->GetPixelPos(x, y);
-		sortedAttackers[i].x = x;
-		sortedAttackers[i].y = y;
+		sortedAttackers[i].x = m_attackers[i]->GetX();
+		sortedAttackers[i].y = m_attackers[i]->GetY();
 		sortedAttackers[i].actor = m_attackers[i];
 	}
 
@@ -305,9 +304,8 @@ void BattleView::DrawDefenders(void)
 	SortedActor	sortedDefenders[k_MAX_UNITS_PER_SIDE];
 
 	for (i=0; i<m_numDefenders; i++) {
-		m_defenders[i]->GetPixelPos(x, y);
-		sortedDefenders[i].x = x;
-		sortedDefenders[i].y = y;
+		sortedDefenders[i].x = m_defenders[i]->GetX();
+		sortedDefenders[i].y = m_defenders[i]->GetY();
 		sortedDefenders[i].actor = m_defenders[i];
 	}
 

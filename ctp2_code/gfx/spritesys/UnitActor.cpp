@@ -1738,14 +1738,7 @@ void UnitActor::DrawHealthBar(const RECT & rect, sint32 stackSize) const
 		primitives_PaintRect16(g_screenManager->GetSurface(), &blackRect, black);
 	}
 
-	Pixel16 color = g_colorSet->GetColor(COLOR_GREEN);
-	if (healthPercentage < 0.25) {
-		color = g_colorSet->GetColor(COLOR_RED);
-	} else if (healthPercentage < 0.50) {
-		color = g_colorSet->GetColor(COLOR_ORANGE);
-	} else if (healthPercentage < 0.75) {
-		color = g_colorSet->GetColor(COLOR_YELLOW);
-	}
+	Pixel16 color = GetHealthBarColor(healthPercentage);
 	RECT colorRect  = healthBarRect;
 	colorRect.right = colorRect.left + healthBarLength;
 	primitives_PaintRect16(g_screenManager->GetSurface(), &colorRect, color);
