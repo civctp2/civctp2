@@ -37,8 +37,8 @@ ARG BTYP
 
 RUN cd /ctp2 \
     && ./autogen.sh && \
-    CFLAGS="$CFLAGS $( [ "${BTYP##*debug*}" ] && echo -O3 || echo -ggdb -rdynamic ) -fuse-ld=gold" \
-    CXXFLAGS="$CXXFLAGS -fpermissive $( [ "${BTYP##*debug*}" ] && echo -O3 || echo -ggdb -rdynamic ) -fuse-ld=gold" \
+    CFLAGS="$CFLAGS $( [ "${BTYP##*debug*}" ] && echo -O3 || echo -g -rdynamic ) -fuse-ld=gold" \
+    CXXFLAGS="$CXXFLAGS -fpermissive $( [ "${BTYP##*debug*}" ] && echo -O3 || echo -g -rdynamic ) -fuse-ld=gold" \
     ./configure --prefix=/opt/ctp2 --bindir=/opt/ctp2/ctp2_program/ctp --enable-silent-rules $( [ "${BTYP##*debug*}" ] || echo --enable-debug ) \
     && make -j"$(nproc)" \
     && make -j"$(nproc)" install \
@@ -55,8 +55,7 @@ FROM system as install
 ARG BTYP
 
 RUN apt-get update && apt-get install -y --no-install-recommends \
-    libsdl2-2.0 libsdl2-mixer-2.0 libsdl2-image-2.0 libavcodec57 libavformat57 libswscale4 \
-    gdb libstdc++-5-dev && \
+    libsdl2-2.0 libsdl2-mixer-2.0 libsdl2-image-2.0 libavcodec57 libavformat57 libswscale4 && \
     apt-get clean && \
     rm -rf /var/lib/apt/lists/*
 
