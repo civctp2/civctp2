@@ -146,9 +146,13 @@ enum DQACTION_TYPE {
 
 class DQActiveLoopingSound {
 public:
-	DQActiveLoopingSound(uint32 unitID) :
+	DQActiveLoopingSound(uint32 unitID, sint32 soundID) :
 		m_unitID (unitID)
-	{}
+	{
+		if (g_soundManager) {
+			g_soundManager->AddLoopingSound(SOUNDTYPE_SFX, m_unitID, soundID);
+		}
+	}
 	~DQActiveLoopingSound()
 	{
 		if (g_soundManager) {
@@ -593,13 +597,13 @@ protected:
 		actor->SetActive(true);
 	}
 
-private:
 	bool SkipAnimation()
 	{
 		return !ForceAnimation()
 			&& (SkipPreviousRounds() || SkipEnemyMoves() || SkipRobotUnitAnimations() || DoSkipAnimation());
 	}
 
+private:
 	bool SkipPreviousRounds()
 	{
 		return (m_round < g_turn->GetRound() - 1);
@@ -1479,7 +1483,16 @@ public:
 	{
 		if (!activeLoopingSound || activeLoopingSound->GetUnitID() != moveActor->GetUnitID()) {
 			delete activeLoopingSound;
-			activeLoopingSound = new DQActiveLoopingSound(moveActor->GetUnitID());
+			activeLoopingSound = NULL;
+
+			if (!SkipAnimation() && g_soundManager && soundID >= 0) {
+				sint32 visiblePlayer = g_selected_item->GetVisiblePlayer();
+				if ((visiblePlayer == moveActor->GetPlayerNum()) ||
+						(moveActor->GetUnitVisibility() & (1 << visiblePlayer)))
+				{
+					activeLoopingSound = new DQActiveLoopingSound(moveActor->GetUnitID(), soundID);
+				}
+			}
 		}
 	}
 
@@ -1507,15 +1520,6 @@ public:
 			CenterMap(actorPosition);
 		}
 		AddActiveActor(moveActor);
-
-		if (g_soundManager && soundID >= 0) {
-			sint32 visiblePlayer = g_selected_item->GetVisiblePlayer();
-			if ((visiblePlayer == moveActor->GetPlayerNum()) || (moveActor->GetUnitVisibility() & (1 << visiblePlayer)))
-			{
-				g_soundManager->AddLoopingSound(SOUNDTYPE_SFX, (uint32) moveActor->GetUnitID(), soundID,
-						endPos.x, endPos.y);
-			}
-		}
 	}
 
 	virtual void Dump()
