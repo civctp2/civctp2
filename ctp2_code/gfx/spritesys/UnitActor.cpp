@@ -327,6 +327,9 @@ void UnitActor::ChangeImage(SpriteState * spriteState, sint32 type, const Unit &
 	DumpAllActions();
 
 	GetSpriteGroupList(m_type)->ReleaseSprite(m_spriteID, m_loadType);
+	if (m_loadType != LOADTYPE_BASIC) {
+		GetSpriteGroupList(m_type)->ReleaseSprite(m_spriteID, LOADTYPE_BASIC);
+	}
 	m_unitSpriteGroup = NULL;
 
 	sint32 spriteID;
@@ -383,9 +386,9 @@ void UnitActor::ChangeType(SpriteState * spriteState, sint32 type, Unit id)
 
 void UnitActor::AddIdle()
 {
-	Anim * animation = TryAnimation(UNITACTION_IDLE);
+	Anim * animation = CreateAnim(UNITACTION_IDLE);
 	if (!animation) {
-		animation = TryAnimation(UNITACTION_MOVE);
+		animation = CreateAnim(UNITACTION_MOVE);
 	}
 
 	Action * idleAction = Action::CreateUnitAction(UNITACTION_IDLE, animation);

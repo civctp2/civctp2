@@ -63,7 +63,7 @@ public:
 	UnitActor(
 		SpriteState    * spriteState,
 		const Unit     & id,
-		sint32           type,
+		sint32           unitType,
 		const MapPoint & pos,
 		sint32           owner,
 		double           visionRange,

@@ -205,7 +205,7 @@ UnitData::UnitData
 		}
 	} else {
 		m_actor = new UnitActor(m_sprite_state, Unit(m_id), m_type, center_pos,
-								m_owner, false, (GetVisionRange()),
+								m_owner, GetVisionRange(),
 								m_city_data ? m_city_data->GetDesiredSpriteIndex() : -1);
 		m_actor->SetUnitVisibility(m_visibility);
 
@@ -230,7 +230,7 @@ UnitData::UnitData
 	m_temp_visibility = 0xffffffff;
 	m_radar_visibility = 0xffffffff;
 	m_actor = new UnitActor(m_sprite_state, Unit(m_id), m_type, actor_pos,
-							m_owner, false, (GetVisionRange()), -1);
+							m_owner, GetVisionRange(), -1);
 
 	m_pos = actor_pos;
 }
