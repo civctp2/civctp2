@@ -766,7 +766,7 @@ UNIT_CAVALRY {
    MaxMovePoints 400
    VisionRange 2
    EnableAdvance ADVANCE_CAVALRY_TACTICS
-   ObsoleteAdvance ADVANCE_FUSION
+   ObsoleteAdvance ADVANCE_TANK_WARFARE
    UpgradeTo	UNIT_TANK
    UpgradeTo	UNIT_FUSION_TANK
    ActiveDefenseRange 0
