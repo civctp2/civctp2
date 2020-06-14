@@ -11,6 +11,9 @@ match($0, /.*(UNIT_.*)_PREREQ.*/, s) {
     found=1
     }
 (found++) == 2 && OA {
-    printf("Obsolete:\n<L:DATABASE_ADVANCES,%s>%s<e>\n", OA, OA)
+    oa=OA
+    gsub(/ADVANCE_/, "", oa)
+    gsub(/_/, " ", oa)
+    printf("Obsolete:\n<L:DATABASE_ADVANCES,%s>%s<e>\n", OA, tolower(oa))
     OA=0
     } 1
