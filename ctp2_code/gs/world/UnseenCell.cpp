@@ -25,18 +25,18 @@
 // Modifications from the original Activision code:
 //
 // - Finished tile improvements are now stored as well in the improvements
-//   list to be able to draw or access them later. - Dec. 21st 2004 Martin Gühmann
+//   list to be able to draw or access them later. - Dec. 21st 2004 Martin GÃ¼hmann
 // - Added new functions to calculate the food, shields and gold values produced
-//   at the storing time of this UnseenCell. - Dec. 22nd 2004 Martin Gühmann
+//   at the storing time of this UnseenCell. - Dec. 22nd 2004 Martin GÃ¼hmann
 // - Modified constructors and serialize method to support the new
-//   m_visibleCityOwner member. - Dec. 26th 2004 - Martin Gühmann
+//   m_visibleCityOwner member. - Dec. 26th 2004 - Martin GÃ¼hmann
 // - When an UnseenCell object is created and the according cell contains a
 //   city the owner is now taken from the CityData instead of the Unit
 //   itsself this allows to get the right owner info when a city changes
-//   hands. - Mar. 4th 2005 Martin Gühmann
+//   hands. - Mar. 4th 2005 Martin GÃ¼hmann
 // - Moved Peter's good's fix to the according Get*FromTerrain functions.
-//   - April 13th 2005 Martin Gühmann
-// - Fix retrieval of good boni. - May 18th 2005 Martin Gühmann
+//   - April 13th 2005 Martin GÃ¼hmann
+// - Fix retrieval of good boni. - May 18th 2005 Martin GÃ¼hmann
 // - Added isCapitol
 //
 //----------------------------------------------------------------------------
@@ -866,6 +866,8 @@ void UnseenCell::Serialize(CivArchive &archive)
 				archive.Store((uint8*)walk.GetObj(), sizeof(UnseenInstallationInfo));
 				walk.Next();
 			}
+			UnseenInstallationInfo * storedCityOwner = m_installations->RemoveTail();
+			delete storedCityOwner;
 		}
 
 		{
