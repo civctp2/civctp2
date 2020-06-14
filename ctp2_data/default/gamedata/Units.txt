@@ -2378,7 +2378,7 @@ UNIT_LEVIATHON {
    FoodHunger 0
    MaxMovePoints 10
    VisionRange 3
-   EnableAdvance ADVANCE_UNIFIED_PHYSICS
+   EnableAdvance ADVANCE_PLASMA_WEAPONRY
    BombRounds 5
    BombardRange 1
    CanCounterBombard
