@@ -3955,7 +3955,7 @@ UNIT_TANK {
    MaxMovePoints 600
    VisionRange 3
    EnableAdvance ADVANCE_TANK_WARFARE
-   ObsoleteAdvance ADVANCE_UNIFIED_PHYSICS
+   ObsoleteAdvance ADVANCE_FUSION
    UpgradeTo	UNIT_FUSION_TANK
    ActiveDefenseRange 0
    LossMoveToDmgNone
