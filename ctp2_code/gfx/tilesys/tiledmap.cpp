@@ -120,6 +120,7 @@
 #include "TileInfo.h"
 #include "tileset.h"
 #include "tileutils.h"
+#include "TradePool.h"
 #include "TradeRoute.h"
 #include "TradeRouteData.h"
 #include "TurnCnt.h"                    // g_turn
@@ -3515,8 +3516,8 @@ bool TiledMap::ScrollMap(sint32 deltaX, sint32 deltaY)
 
 	InvalidateMix();
 
-
-	RepaintSprites(m_surface, &tempRect, true);
+	g_theTradePool->Draw(m_surface);
+	RepaintSprites(m_surface, &m_mapViewRect, true);
 
 	return true;
 }
