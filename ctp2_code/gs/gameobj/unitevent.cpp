@@ -668,6 +668,7 @@ STDEHANDLER(LaunchUnitEvent)
 		u.SetFlag(k_UDF_IN_SPACE);
 
 		u.GetArmy()->SetReentry(spaceTurns, pos);
+		g_director->AddSpaceLaunch(u, pos);
 		g_director->AddHide(u);
 	} else {
 		g_gevManager->AddEvent(GEV_INSERT_AfterCurrent, GEV_Reentry,

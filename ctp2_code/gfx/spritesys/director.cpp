@@ -141,7 +141,8 @@ enum DQACTION_TYPE {
 	DQACTION_TERMINATE_SOUND,
 	DQACTION_INVOKE_THRONE_ROOM,
 	DQACTION_INVOKE_RESEARCH_ADVANCE,
-	DQACTION_BEGIN_SCHEDULER
+	DQACTION_BEGIN_SCHEDULER,
+	DQACTION_SPACE_LAUNCH
 };
 
 class DQActiveLoopingSound {
@@ -668,6 +669,7 @@ public:
 		sint32         numberOfMoveActors,
 		UnitActor      **moveActors
 	);
+	virtual void AddSpaceLaunch(const Unit & launcher, const MapPoint & destinationPos);
 	virtual void AddAttack(const Unit& attacker, const Unit& attacked);
 	virtual void AddAttackPos(const Unit& attacker, const MapPoint &pos);
 	virtual void AddSpecialAttack(const Unit& attacker, const Unit& attacked, SPECATTACK attack);
@@ -1555,6 +1557,110 @@ protected:
 	UnitActor **moveActors;
 	sint32    soundID;
 };
+
+class DQActionSpaceLaunch : public DQActionActive
+{
+public:
+	DQActionSpaceLaunch(
+			sint8            owner,
+			UnitActor      * launchActor,
+			const MapPoint & launchPos,
+			const MapPoint & destinationPos,
+			sint32           soundID)
+		: DQActionActive(owner),
+		launchActor         (launchActor),
+		launchPos           (launchPos),
+		directionalNeighbor (DetermineDirectionalNeighbor(launchPos, destinationPos)),
+		soundID             (soundID)
+	{
+		DirectorImpl::Instance()->AddStandbyActor(launchActor);
+	}
+	virtual ~DQActionSpaceLaunch()
+	{
+		DirectorImpl::Instance()->RemoveStandbyActor(launchActor);
+	}
+	virtual DQACTION_TYPE GetType() { return DQACTION_SPACE_LAUNCH; }
+
+	virtual void PrepareAnimation()
+	{
+		Anim * animation = launchActor->CreateMoveAnim();
+		if (!animation) {
+			return;
+		}
+
+		Action * action = Action::CreateUnitAction(UNITACTION_MOVE, animation, launchPos, directionalNeighbor);
+		launchActor->PositionActor(launchPos);
+		launchActor->SetIsFortifying(FALSE);
+		launchActor->SetIsFortified (FALSE);
+		launchActor->AddAction(action);
+
+		AddActiveActor(launchActor);
+
+		if (g_soundManager) {
+			g_soundManager->AddSound(SOUNDTYPE_SFX, launchActor->GetUnitID(), soundID, launchPos.x, launchPos.y);
+		}
+	}
+
+	virtual void Dump()
+	{
+		DPRINTF(k_DBG_UI, ("Space launch\n"));
+		DPRINTF(k_DBG_UI, ("  actor                  :%#x (%#.8lx)\n", launchActor->GetUnitID(), launchActor));
+		DPRINTF(k_DBG_UI, ("  launchPosition         :%d,%d\n", launchPos.x, launchPos.y));
+		DPRINTF(k_DBG_UI, ("  directionNeighbor      :%d,%d\n", directionalNeighbor.x, directionalNeighbor.y));
+		DPRINTF(k_DBG_UI, ("  soundID                :%d\n", soundID));
+	}
+
+protected:
+	virtual bool DoSkipAnimation()
+	{
+		// Unit invisible
+		return !TileIsVisibleToPlayer(launchPos) && !TileIsVisibleToPlayer(directionalNeighbor);
+	}
+
+	UnitActor * launchActor;
+	MapPoint    launchPos;
+	MapPoint    directionalNeighbor;
+	sint32      soundID;
+
+private:
+	static MapPoint DetermineDirectionalNeighbor(const MapPoint & startPos, const MapPoint & endPos)
+	{
+		WORLD_DIRECTION neighborDirection = NOWHERE;
+		MapPointData delta = startPos.NormalizedSubtract(endPos);
+		if (delta.y == 0) {
+			neighborDirection = delta.x > 0 ? EAST : WEST;
+		}
+		else
+		{
+			if (delta.x == 0) {
+				neighborDirection = delta.y > 0 ? SOUTH : NORTH;
+			}
+			else {
+				double directionRatio = ((double) delta.x) / delta.y;
+				if (directionRatio < -2.0 || directionRatio > 2.0) // x-dominant
+				{
+					neighborDirection = delta.x > 0 ? EAST : WEST;
+				}
+				else if (directionRatio > -0.5 && directionRatio < 0.5) // y-dominant
+				{
+					neighborDirection = delta.y > 0 ? SOUTH : NORTH;
+				}
+				else // no dominance
+				{
+					if (delta.y < 0) {
+						neighborDirection = delta.x > 0 ? NORTHEAST : NORTHWEST;
+					} else {
+						neighborDirection = delta.x > 0 ? SOUTHEAST : SOUTHWEST;
+					}
+				}
+			}
+		}
+		MapPoint directionalNeighbor;
+		startPos.GetNeighborPosition(neighborDirection, directionalNeighbor);
+		return directionalNeighbor;
+	}
+};
+
 
 class DQActionAttack : public DQActionActive
 {
@@ -2666,6 +2772,30 @@ void DirectorImpl::AddAttack(const Unit &attacker, const Unit &defender)
 	if (visiblePlayer && visiblePlayer->IsVisible(defender.RetPos())) {
 		AddCombatFlash(defender.RetPos());
 	}
+}
+
+void DirectorImpl::AddSpaceLaunch(const Unit & launcher, const MapPoint & destinationPos)
+{
+	if (!launcher.GetActor()) {
+		return;
+	}
+
+	bool playerInvolved = (launcher->GetOwner() == g_selected_item->GetVisiblePlayer());
+	bool visibleEnemyUnit = g_theProfileDB->IsEnemyMoves()
+	                        && (launcher->GetVisibility() & (1 << g_selected_item->GetVisiblePlayer()));
+	if ((playerInvolved || visibleEnemyUnit)
+		&& !TileWillBeCompletelyVisible(launcher.RetPos().x, launcher.RetPos().y)) {
+		AddCenterMap(launcher.RetPos());
+	}
+
+	DQActionSpaceLaunch *action = new DQActionSpaceLaunch(
+			launcher.GetOwner(),
+			launcher.GetActor(),
+			launcher.RetPos(),
+			destinationPos,
+			gamesounds_GetGameSoundID(GAMESOUNDS_SPACE_LAUNCH)
+	);
+	m_actionQueue->AddTail(action);
 }
 
 void DirectorImpl::AddAttackPos(const Unit &attacker, const MapPoint &pos)

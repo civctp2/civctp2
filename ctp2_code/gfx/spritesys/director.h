@@ -93,6 +93,7 @@ public:
 		UnitActor      **moveActors
     ) = 0;
 
+	virtual void AddSpaceLaunch(const Unit & launcher, const MapPoint & destinationPos) = 0;
 	virtual void AddAttack(const Unit &attacker, const Unit &attacked) = 0;
 	virtual void AddAttackPos(const Unit &attacker, const MapPoint &pos) = 0;
 	virtual void AddSpecialAttack(const Unit &attacker, const Unit &attacked, SPECATTACK attack) = 0;
