@@ -55,7 +55,6 @@
 #include "citydata.h"
 #include "colorset.h"
 #include "cursormanager.h"
-#include "debugmemory.h"
 #include "dynarr.h"
 #include "EffectActor.h"
 #include "GameEventManager.h"
@@ -124,7 +123,6 @@ enum DQACTION_TYPE {
 	DQACTION_REMOVEVISION,
 	DQACTION_SETOWNER,
 	DQACTION_SETVISIBILITY,
-	DQACTION_SETVISIONRANGE,
 	DQACTION_COMBATFLASH,
 	DQACTION_TELEPORT,
 	DQACTION_COPYVISION,
@@ -617,10 +615,7 @@ private:
 
 	bool SkipRobotUnitAnimations()
 	{
-		return (!g_theProfileDB->IsUnitAnim()
-			&& m_owner != -1
-			&& g_player[m_owner] != NULL
-			&& g_player[m_owner]->IsRobot());
+		return (!g_theProfileDB->IsUnitAnim() && m_owner != -1 && g_player[m_owner] && g_player[m_owner]->IsRobot());
 	}
 
 	sint8                          m_owner;
@@ -1458,7 +1453,6 @@ public:
 			sint32         soundID)
 		: DQActionActive(owner),
 		moveActor              (moveActor),
-		moveActorActive        (false),
 		startPos               (startPos),
 		endPos                 (endPos),
 		numberOfMoveActors     (numberOfMoveActors),
@@ -1507,8 +1501,8 @@ public:
 
 		Action *action = Action::CreateUnitAction(UNITACTION_MOVE, animation, startPos, endPos);
 		moveActor->PositionActor(startPos);
-		moveActor->SetIsFortifying(FALSE);
-		moveActor->SetIsFortified (FALSE);
+		moveActor->SetIsFortifying(false);
+		moveActor->SetIsFortified (false);
 		moveActor->AddAction(action);
 
 		for (int i = 0; i < numberOfMoveActors; i++) {
@@ -1550,7 +1544,6 @@ protected:
 	}
 
 	UnitActor *moveActor;
-	bool      moveActorActive;
 	MapPoint  startPos;
 	MapPoint  endPos;
 	sint32    numberOfMoveActors;
@@ -1590,8 +1583,8 @@ public:
 
 		Action * action = Action::CreateUnitAction(UNITACTION_MOVE, animation, launchPos, directionalNeighbor);
 		launchActor->PositionActor(launchPos);
-		launchActor->SetIsFortifying(FALSE);
-		launchActor->SetIsFortified (FALSE);
+		launchActor->SetIsFortifying(false);
+		launchActor->SetIsFortified (false);
 		launchActor->AddAction(action);
 
 		AddActiveActor(launchActor);
