@@ -4177,7 +4177,6 @@ bool TiledMap::TileIsVisible(sint32 mapX, sint32 mapY, sint32 /* mapZ */)
 
 	POINT point = {tileX,tileY};
 
-      /// @todo Check IsYwrap
 	if(!g_theWorld->IsXwrap()) {
 		if(m_mapViewRect.left < 0) {
 			return PtInRect(&ul, point) || PtInRect(&ll, point);
@@ -4185,6 +4184,16 @@ bool TiledMap::TileIsVisible(sint32 mapX, sint32 mapY, sint32 /* mapZ */)
 
 		if(m_mapViewRect.right >= mapWidth) {
 			return PtInRect(&ur, point) || PtInRect(&lr, point);
+		}
+	}
+
+	if(!g_theWorld->IsYwrap()) {
+		if(m_mapViewRect.top < 0) {
+			return PtInRect(&ul, point) || PtInRect(&ur, point);
+		}
+
+		if(m_mapViewRect.bottom >= mapHeight) {
+			return PtInRect(&ll, point) || PtInRect(&lr, point);
 		}
 	}
 
