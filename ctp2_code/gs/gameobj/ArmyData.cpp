@@ -1738,6 +1738,7 @@ void ArmyData::BeginTurn()
                 g_network.Enqueue(new NetInfo(NET_INFO_CODE_REENTER, m_id));
                 g_network.Unblock(m_owner);
             }
+	    fprintf(stderr, "%s L%d: m_reentryTurn %d\n", __FILE__, __LINE__, m_reentryTurn);
             g_gevManager->AddEvent(GEV_INSERT_AfterCurrent, GEV_Reentry,
                                    GEA_Army, m_id,
                                    GEA_End);
@@ -4664,6 +4665,7 @@ void ArmyData::SetReentry(sint32 turns, MapPoint &pos)
 
 void ArmyData::Reenter()
 {
+	fprintf(stderr, "%s L%d:\n", __FILE__, __LINE__);
 	Assert(m_flags & k_CULF_IN_SPACE);
 	if(!(m_flags & k_CULF_IN_SPACE))
 	{
@@ -4671,6 +4673,7 @@ void ArmyData::Reenter()
 	}
 
 	Unit city = g_theWorld->GetCity(m_reentryPos);
+	fprintf(stderr, "%s L%d: m_reentryPos %d, %d\n", __FILE__, __LINE__, m_reentryPos.x, m_reentryPos.y);
 	if(!city.IsValid() || city.GetOwner() != m_owner)
 	{
 		for (int i = 0; i < m_nElements; i++)
@@ -4680,10 +4683,12 @@ void ArmyData::Reenter()
 								   GEA_Int, 0,
 								   GEA_Player, -1,
 								   GEA_End);
+	fprintf(stderr, "%s L%d:\n", __FILE__, __LINE__);
 		}
 	}
 	else if(g_theWorld->GetCell(m_reentryPos)->GetNumUnits() > (k_MAX_ARMY_SIZE - m_nElements))
 	{
+	fprintf(stderr, "%s L%d:\n", __FILE__, __LINE__);
 		return;
 	}
 	else
@@ -4700,6 +4705,7 @@ void ArmyData::Reenter()
 			g_theWorld->InsertUnit(m_reentryPos, m_array[i]);
 			m_array[i]->AddUnitVision();
 		}
+	fprintf(stderr, "%s L%d:\n", __FILE__, __LINE__);
 
 		ResetPos();
 		FixActors(oldPos, m_pos);
@@ -4707,6 +4713,7 @@ void ArmyData::Reenter()
 			g_director->AddShow(m_array[i]);
 		}
 	}
+	fprintf(stderr, "%s L%d:\n", __FILE__, __LINE__);
 }
 
 /////////////////////////////////////////////////////////////////////

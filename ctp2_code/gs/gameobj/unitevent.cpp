@@ -664,6 +664,7 @@ STDEHANDLER(LaunchUnitEvent)
 		return GEV_HD_Continue;
 
 	if(spaceTurns > 0) {
+	fprintf(stderr, "%s L%d:\n", __FILE__, __LINE__);
 		g_theWorld->RemoveUnitReference(u.RetPos(), u);
 		u->RemoveUnitVision();
 		u.SetFlag(k_UDF_HAS_LEFT_MAP);
@@ -673,6 +674,7 @@ STDEHANDLER(LaunchUnitEvent)
 		g_director->AddSpaceLaunch(u, pos);
 		g_director->AddHide(u);
 	} else {
+	fprintf(stderr, "%s L%d:\n", __FILE__, __LINE__);
 		g_gevManager->AddEvent(GEV_INSERT_AfterCurrent, GEV_Reentry,
 							   GEA_Army, u.GetArmy().m_id,
 							   GEA_End);
