@@ -278,7 +278,7 @@ void Unit::RemoveAllReferences(const CAUSE_REMOVE_ARMY cause, PLAYER_INDEX kille
 
 	if(GetArmy().IsValid())
 	{
-		GetArmy().SetKiller(killedBy);
+		g_player[GetArmy().GetOwner()]->GameOverCheck(killedBy);
 		GetArmy().Del(*this);
 	}
 

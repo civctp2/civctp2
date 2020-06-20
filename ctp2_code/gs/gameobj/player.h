@@ -915,6 +915,7 @@ public:
 
 	void BuildDiplomaticSlicMessage(DiplomaticRequest &req);
 
+	void GameOverCheck(sint32 killedBy);
 	void GameOver(GAME_OVER reason, sint32 data);
 
 	sint32 GetPoints() const;
