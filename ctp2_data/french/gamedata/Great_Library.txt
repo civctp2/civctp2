@@ -751,8 +751,8 @@ En 1846, Ascanio Sobrero, chimiste italien, découvre la nitroglycérine qui a rap
 
 [ADVANCE_FASCISM_PREREQ]
 Condition :
-<L:DATABASE_ADVANCES,ADVANCE_GUNPOWDER>Poudre à canon<e>
-<L:DATABASE_ADVANCES,ADVANCE_THEOLOGY>Théologie<e>
+<L:DATABASE_ADVANCES,ADVANCE_INDUSTRIAL_REVOLUTION>Rév. industr.<e>
+<L:DATABASE_ADVANCES,ADVANCE_NATIONALISM>Nationalisme<e>
 [END]
 
 [ADVANCE_FASCISM_STATISTICS]
@@ -876,7 +876,7 @@ Afin d'éradiquer la pollution, les éco-rangers utilisent le bombardement aux nan
 [ADVANCE_GAIA_THEORY_PREREQ]
 Condition :
 <L:DATABASE_ADVANCES,ADVANCE_ECOTOPIA>Ecotopie<e>
-<L:DATABASE_ADVANCES,ADVANCE_NANO_MACHINES>Nano-machines<e>
+<L:DATABASE_ADVANCES,ADVANCE_ULTRAPRESSURE_MACHINERY>Mach. ultrapress.<e>
 [END]
 
 [ADVANCE_GAIA_THEORY_STATISTICS]
@@ -1058,7 +1058,7 @@ Mis au point en 1866, le câble télégraphique de l'Atlantique a ouvert la voie au
 [ADVANCE_GUIDED_WEAPON_SYSTEMS_PREREQ]
 Condition :
 <L:DATABASE_ADVANCES,ADVANCE_COMPUTER>Informatique<e>
-<L:DATABASE_ADVANCES,ADVANCE_RADAR>Radar<e>
+<L:DATABASE_ADVANCES,ADVANCE_COMMUNISM>Communisme<e>
 [END]
 
 [ADVANCE_GUIDED_WEAPON_SYSTEMS_STATISTICS]
@@ -1569,7 +1569,7 @@ L'invention de la micro-défense a permis de résoudre ce problème. A l'aide de na
 
 [ADVANCE_NATIONALISM_PREREQ]
 Condition :
-<L:DATABASE_ADVANCES,ADVANCE_FASCISM>Fascisme<e>
+<L:DATABASE_ADVANCES,ADVANCE_THEOLOGY>Théologie<e>
 <L:DATABASE_ADVANCES,ADVANCE_PRINTING_PRESS>Imprimerie<e>
 [END]
 
@@ -2182,7 +2182,7 @@ Cependant, les fluctuations économiques d'un marché très libéral, combinées à un
 
 [ADVANCE_THEOLOGY_PREREQ]
 Condition :
-<L:DATABASE_ADVANCES,ADVANCE_BUREAUCRACY>Bureaucratie<e>
+<L:DATABASE_ADVANCES,ADVANCE_JURISPRUDENCE>Jurisprudence<e>
 <L:DATABASE_ADVANCES,ADVANCE_PHILOSOPHY>Philosophie<e>
 [END]
 
@@ -2279,7 +2279,7 @@ La théorie du champ unifié ou 'théorie unifiée de toutes choses' décrit toutes l
 [ADVANCE_ULTRAPRESSURE_MACHINERY_PREREQ]
 Condition :
 <L:DATABASE_ADVANCES,ADVANCE_LIQUID_BREATHING_APPARATUS>Respir. amphibie<e>
-<L:DATABASE_ADVANCES,ADVANCE_NANO_ASSEMBLY>Nano-montage<e>
+<L:DATABASE_ADVANCES,ADVANCE_NANO_MACHINES>Nano-machines<e>
 [END]
 
 [ADVANCE_ULTRAPRESSURE_MACHINERY_STATISTICS]

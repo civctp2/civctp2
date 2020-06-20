@@ -755,8 +755,8 @@ Nachdem Ascanio Sobrero, ein italienischer Chemiker, im Jahre 1846 das Nitroglyc
 
 [ADVANCE_FASCISM_PREREQ]
 Voraussetzung:
-<L:DATABASE_ADVANCES,ADVANCE_GUNPOWDER>Schießpulver<e>
-<L:DATABASE_ADVANCES,ADVANCE_THEOLOGY>Theologie<e>
+<L:DATABASE_ADVANCES,ADVANCE_INDUSTRIAL_REVOLUTION>Ind. Revolution<e>
+<L:DATABASE_ADVANCES,ADVANCE_NATIONALISM>Nationalismus<e>
 [END]
 
 [ADVANCE_FASCISM_STATISTICS]
@@ -876,7 +876,7 @@ Der Gaia-Controller bestand aus drei wesentlichen Komponenten. Mehrere kleine Sa
 [ADVANCE_GAIA_THEORY_PREREQ]
 Voraussetzung:
 <L:DATABASE_ADVANCES,ADVANCE_ECOTOPIA>Ökotopie<e>
-<L:DATABASE_ADVANCES,ADVANCE_NANO_MACHINES>Naniten<e>
+<L:DATABASE_ADVANCES,ADVANCE_ULTRAPRESSURE_MACHINERY>Extremdruckmasch.<e>
 [END]
 
 [ADVANCE_GAIA_THEORY_STATISTICS]
@@ -1062,7 +1062,7 @@ Im Jahre 1866 fertig gestellt, ermöglichte das Transatlantik-Fernmeldekabel erst
 [ADVANCE_GUIDED_WEAPON_SYSTEMS_PREREQ]
 Voraussetzung:
 <L:DATABASE_ADVANCES,ADVANCE_COMPUTER>Computer<e>
-<L:DATABASE_ADVANCES,ADVANCE_RADAR>Radar<e>
+<L:DATABASE_ADVANCES,ADVANCE_COMMUNISM>Kommunismus<e>
 [END]
 
 [ADVANCE_GUIDED_WEAPON_SYSTEMS_STATISTICS]
@@ -1559,7 +1559,7 @@ Um dieses Problem zu lösen, wurde der Bio-Schutzfilter entwickelt. Diese Moderni
 
 [ADVANCE_NATIONALISM_PREREQ]
 Voraussetzung:
-<L:DATABASE_ADVANCES,ADVANCE_FASCISM>Faschismus<e>
+<L:DATABASE_ADVANCES,ADVANCE_THEOLOGY>Theologie<e>
 <L:DATABASE_ADVANCES,ADVANCE_PRINTING_PRESS>Druckerpresse<e>
 [END]
 
@@ -2162,7 +2162,7 @@ Doch die wirtschaftlichen Unruhen eines freien Marktsystems in Kombination mit d
 
 [ADVANCE_THEOLOGY_PREREQ]
 Voraussetzung:
-<L:DATABASE_ADVANCES,ADVANCE_BUREAUCRACY>Bürokratie<e>
+<L:DATABASE_ADVANCES,ADVANCE_JURISPRUDENCE>Rechtswiss.<e>
 <L:DATABASE_ADVANCES,ADVANCE_PHILOSOPHY>Philosophie<e>
 [END]
 
@@ -2261,7 +2261,7 @@ Die Ganzheitstheorie, auch als "Theorie vom Verhältnis von Teil und Ganzem" beze
 [ADVANCE_ULTRAPRESSURE_MACHINERY_PREREQ]
 Voraussetzung:
 <L:DATABASE_ADVANCES,ADVANCE_LIQUID_BREATHING_APPARATUS>Flüssigatmung<e>
-<L:DATABASE_ADVANCES,ADVANCE_NANO_ASSEMBLY>Nanokonstruktion<e>
+<L:DATABASE_ADVANCES,ADVANCE_NANO_MACHINES>Naniten<e>
 [END]
 
 [ADVANCE_ULTRAPRESSURE_MACHINERY_STATISTICS]

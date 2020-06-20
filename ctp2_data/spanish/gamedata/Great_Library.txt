@@ -755,8 +755,8 @@ En 1846, el químico italiano Ascanio Sobrero descubrió la nitroglicerina y, poco
 
 [ADVANCE_FASCISM_PREREQ]
 Requiere:
-<L:DATABASE_ADVANCES,ADVANCE_GUNPOWDER>Pólvora<e>
-<L:DATABASE_ADVANCES,ADVANCE_THEOLOGY>Teología<e>
+<L:DATABASE_ADVANCES,ADVANCE_INDUSTRIAL_REVOLUTION>Rev. Industrial<e>
+<L:DATABASE_ADVANCES,ADVANCE_NATIONALISM>Nacionalismo<e>
 [END]
 
 [ADVANCE_FASCISM_STATISTICS]
@@ -875,7 +875,7 @@ Al mismo tiempo que los guardas ecológicos utilizaban bombas de nanita para borr
 [ADVANCE_GAIA_THEORY_PREREQ]
 Requiere:
 <L:DATABASE_ADVANCES,ADVANCE_ECOTOPIA>Ecotopía<e>
-<L:DATABASE_ADVANCES,ADVANCE_NANO_MACHINES>Nanomáquinas<e>
+<L:DATABASE_ADVANCES,ADVANCE_ULTRAPRESSURE_MACHINERY>Ultrapresionadora<e>
 [END]
 
 [ADVANCE_GAIA_THEORY_STATISTICS]
@@ -1058,7 +1058,7 @@ En 1866 se completó el tendido del primer cable transatlántico, lo que represent
 [ADVANCE_GUIDED_WEAPON_SYSTEMS_PREREQ]
 Requiere:
 <L:DATABASE_ADVANCES,ADVANCE_COMPUTER>Ordenador<e>
-<L:DATABASE_ADVANCES,ADVANCE_RADAR>Radar<e>
+<L:DATABASE_ADVANCES,ADVANCE_COMMUNISM>Comunismo<e>
 [END]
 
 [ADVANCE_GUIDED_WEAPON_SYSTEMS_STATISTICS]
@@ -1567,7 +1567,7 @@ La mejora de la microdefensa solucionó este problema. La microdefensa utiliza na
 
 [ADVANCE_NATIONALISM_PREREQ]
 Requiere:
-<L:DATABASE_ADVANCES,ADVANCE_FASCISM>Fascismo<e>
+<L:DATABASE_ADVANCES,ADVANCE_THEOLOGY>Teología<e>
 <L:DATABASE_ADVANCES,ADVANCE_PRINTING_PRESS>Imprenta<e>
 [END]
 
@@ -2180,7 +2180,7 @@ Sin embargo, los altibajos de una economía de libre mercado junto con el aumento
 
 [ADVANCE_THEOLOGY_PREREQ]
 Requiere:
-<L:DATABASE_ADVANCES,ADVANCE_BUREAUCRACY>Burocracia <e>
+<L:DATABASE_ADVANCES,ADVANCE_JURISPRUDENCE>Jurisprudencia<e>
 <L:DATABASE_ADVANCES,ADVANCE_PHILOSOPHY>Filosofía<e>
 [END]
 
@@ -2277,7 +2277,7 @@ La Teoría del Campo Unificado, también conocida como la Teoría del Todo, fue un 
 [ADVANCE_ULTRAPRESSURE_MACHINERY_PREREQ]
 Requiere:
 <L:DATABASE_ADVANCES,ADVANCE_LIQUID_BREATHING_APPARATUS>Respiración submarina<e>
-<L:DATABASE_ADVANCES,ADVANCE_NANO_ASSEMBLY>Nanoensamblaje<e>
+<L:DATABASE_ADVANCES,ADVANCE_NANO_MACHINES>Nanomáquinas<e>
 [END]
 
 [ADVANCE_ULTRAPRESSURE_MACHINERY_STATISTICS]

@@ -756,8 +756,8 @@ Nel 1846, Ascanio Sobrero, un chimico italiano, scoprì la nitroglicerina e, di l
 
 [ADVANCE_FASCISM_PREREQ]
 Richiede:
-<L:DATABASE_ADVANCES,ADVANCE_GUNPOWDER>Polvere da sparo<e>
-<L:DATABASE_ADVANCES,ADVANCE_THEOLOGY>Teologia<e>
+<L:DATABASE_ADVANCES,ADVANCE_INDUSTRIAL_REVOLUTION>Rivoluzione industriale<e>
+<L:DATABASE_ADVANCES,ADVANCE_NATIONALISM>Patriottismo<e>
 [END]
 
 [ADVANCE_FASCISM_STATISTICS]
@@ -875,7 +875,7 @@ Il Controllore Gaia era composto da tre diversi gruppi di componenti. Un sistema
 [ADVANCE_GAIA_THEORY_PREREQ]
 Richiede:
 <L:DATABASE_ADVANCES,ADVANCE_ECOTOPIA>Ecotopia<e>
-<L:DATABASE_ADVANCES,ADVANCE_NANO_MACHINES>Nanomacchine<e>
+<L:DATABASE_ADVANCES,ADVANCE_ULTRAPRESSURE_MACHINERY>Macchine abissali<e>
 [END]
 
 [ADVANCE_GAIA_THEORY_STATISTICS]
@@ -1058,7 +1058,7 @@ Completato nel 1866, il cavo telegrafico atlantico aprì la strada alle telecomun
 [ADVANCE_GUIDED_WEAPON_SYSTEMS_PREREQ]
 Richiede:
 <L:DATABASE_ADVANCES,ADVANCE_COMPUTER>Informatica<e>
-<L:DATABASE_ADVANCES,ADVANCE_RADAR>Radar<e>
+<L:DATABASE_ADVANCES,ADVANCE_COMMUNISM>Comunismo<e>
 [END]
 
 [ADVANCE_GUIDED_WEAPON_SYSTEMS_STATISTICS]
@@ -1571,7 +1571,7 @@ La nanodifesa aiutò a risolvere questo problema. Utilizzando i naniti per monito
 
 [ADVANCE_NATIONALISM_PREREQ]
 Richiede:
-<L:DATABASE_ADVANCES,ADVANCE_FASCISM>Fascismo<e>
+<L:DATABASE_ADVANCES,ADVANCE_THEOLOGY>Teologia<e>
 <L:DATABASE_ADVANCES,ADVANCE_PRINTING_PRESS>Stampa<e>
 [END]
 
@@ -2185,7 +2185,7 @@ I profondi cambiamenti economici introdotti da un sistema di mercato completamen
 
 [ADVANCE_THEOLOGY_PREREQ]
 Richiede:
-<L:DATABASE_ADVANCES,ADVANCE_BUREAUCRACY>Burocrazia<e>
+<L:DATABASE_ADVANCES,ADVANCE_JURISPRUDENCE>Giurisprudenza<e>
 <L:DATABASE_ADVANCES,ADVANCE_PHILOSOPHY>Filosofia<e>
 [END]
 
@@ -2282,7 +2282,7 @@ La fisica unitaria, nota anche come "Teoria unificata generale", è stata un tent
 [ADVANCE_ULTRAPRESSURE_MACHINERY_PREREQ]
 Richiede:
 <L:DATABASE_ADVANCES,ADVANCE_LIQUID_BREATHING_APPARATUS>Respirazione di fluidi<e>
-<L:DATABASE_ADVANCES,ADVANCE_NANO_ASSEMBLY>Nanoassemblaggio<e>
+<L:DATABASE_ADVANCES,ADVANCE_NANO_MACHINES>Nanomacchine<e>
 [END]
 
 [ADVANCE_ULTRAPRESSURE_MACHINERY_STATISTICS]

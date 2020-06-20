@@ -755,8 +755,8 @@ In 1846, Ascanio Sobrero, an Italian chemist, discovered nitroglycerin, and soon
 
 [ADVANCE_FASCISM_PREREQ]
 Requires:
-<L:DATABASE_ADVANCES,ADVANCE_GUNPOWDER>Gunpowder<e>
-<L:DATABASE_ADVANCES,ADVANCE_THEOLOGY>Theology<e>
+<L:DATABASE_ADVANCES,ADVANCE_INDUSTRIAL_REVOLUTION>Industrial Revolution<e>
+<L:DATABASE_ADVANCES,ADVANCE_NATIONALISM>Nationalism<e>
 [END]
 
 [ADVANCE_FASCISM_STATISTICS]
@@ -875,7 +875,7 @@ The Gaia Controller was comprised of three distinct groups of components.  A sys
 [ADVANCE_GAIA_THEORY_PREREQ]
 Requires:
 <L:DATABASE_ADVANCES,ADVANCE_ECOTOPIA>Ecotopia<e>
-<L:DATABASE_ADVANCES,ADVANCE_NANO_MACHINES>Nano-Machines<e>
+<L:DATABASE_ADVANCES,ADVANCE_ULTRAPRESSURE_MACHINERY>Ultrapressure Machines<e>
 [END]
 
 [ADVANCE_GAIA_THEORY_STATISTICS]
@@ -1058,7 +1058,7 @@ Completed in 1866, the Atlantic telegraph cable opened trans-oceanic telecommuni
 [ADVANCE_GUIDED_WEAPON_SYSTEMS_PREREQ]
 Requires:
 <L:DATABASE_ADVANCES,ADVANCE_COMPUTER>Computer<e>
-<L:DATABASE_ADVANCES,ADVANCE_RADAR>Radar<e>
+<L:DATABASE_ADVANCES,ADVANCE_COMMUNISM>Communism<e>
 [END]
 
 [ADVANCE_GUIDED_WEAPON_SYSTEMS_STATISTICS]
@@ -1571,7 +1571,7 @@ The Micro Defense improvement helped solve this problem.  Using nanites to monit
 
 [ADVANCE_NATIONALISM_PREREQ]
 Requires:
-<L:DATABASE_ADVANCES,ADVANCE_FASCISM>Fascism<e>
+<L:DATABASE_ADVANCES,ADVANCE_THEOLOGY>Theology<e>
 <L:DATABASE_ADVANCES,ADVANCE_PRINTING_PRESS>Printing Press<e>
 [END]
 
@@ -2185,7 +2185,7 @@ However, the economic upheavals of a free market system, combined with a rapidly
 
 [ADVANCE_THEOLOGY_PREREQ]
 Requires:
-<L:DATABASE_ADVANCES,ADVANCE_BUREAUCRACY>Bureaucracy<e>
+<L:DATABASE_ADVANCES,ADVANCE_JURISPRUDENCE>Jurisprudence<e>
 <L:DATABASE_ADVANCES,ADVANCE_PHILOSOPHY>Philosophy<e>
 [END]
 
@@ -2282,7 +2282,7 @@ Unified Field Theory, also known as the "Unified Theory of Everything," was an a
 [ADVANCE_ULTRAPRESSURE_MACHINERY_PREREQ]
 Requires:
 <L:DATABASE_ADVANCES,ADVANCE_LIQUID_BREATHING_APPARATUS>Fluid Breathing<e>
-<L:DATABASE_ADVANCES,ADVANCE_NANO_ASSEMBLY>Nano-Assembly<e>
+<L:DATABASE_ADVANCES,ADVANCE_NANO_MACHINES>Nano-Machines<e>
 [END]
 
 [ADVANCE_ULTRAPRESSURE_MACHINERY_STATISTICS]
