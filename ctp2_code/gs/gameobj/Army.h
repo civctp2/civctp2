@@ -242,7 +242,6 @@ public:
 	void Fight(CellUnitList &defender);
 
 	void SetRemoveCause(CAUSE_REMOVE_ARMY cause);
-	CAUSE_REMOVE_ARMY GetRemoveCause() const;
 
 	void ResetPos();
 

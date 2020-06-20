@@ -617,27 +617,6 @@ void ArmyData::SetRemoveCause(CAUSE_REMOVE_ARMY cause)
 
 //----------------------------------------------------------------------------
 //
-// Name       : ArmyData::GetRemoveCause
-//
-// Description: Get RemoveCause for this army
-//
-// Parameters : -
-//
-// Globals    : -
-//
-// Returns    : CAUSE_REMOVE_ARMY   : why this army is to be removed
-//
-// Remark(s)  : see ctp_types.h for enum CAUSE_REMOVE_ARMY.
-//              see, e.g., Unit::RemoveAllReferences
-//
-//----------------------------------------------------------------------------
-CAUSE_REMOVE_ARMY ArmyData::GetRemoveCause() const
-{
-    return m_removeCause;
-}
-
-//----------------------------------------------------------------------------
-//
 // Name       : ArmyData::Insert
 //
 // Description: Insert Unit id into this army

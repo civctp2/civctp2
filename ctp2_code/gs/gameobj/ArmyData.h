@@ -377,7 +377,6 @@ public:
     void DoBoardTransport(Order *order);
 
     void SetRemoveCause(CAUSE_REMOVE_ARMY cause);
-    CAUSE_REMOVE_ARMY GetRemoveCause() const;
 
     uint8 DontKillCount() const { return m_dontKillCount; }
     void SetNeedToKill() { m_needToKill = TRUE; }

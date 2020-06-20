@@ -670,14 +670,6 @@ void Army::SetRemoveCause(CAUSE_REMOVE_ARMY cause)
 	AccessData()->SetRemoveCause(cause);
 }
 
-CAUSE_REMOVE_ARMY Army::GetRemoveCause() const
-{
-	return GetData()->GetRemoveCause();
-}
-
-
-
-
 sint32 Army::NumOrders() const
 {
 	return AccessData()->NumOrders();
