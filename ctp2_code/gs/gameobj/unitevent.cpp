@@ -25,8 +25,8 @@
 // Modifications from the original Activision code:
 //
 // - AddUnitToArmyEvent does not crash in the debug version if the unit to
-//   be is transported and has therefore no army. This makes slic code save. (7-Nov-2007 Martin GÃ¼hmann)
-// - Added an upgrade unit event. (13-Sep-2008 Martin GÃ¼hmann)
+//   be is transported and has therefore no army. This makes slic code save. (7-Nov-2007 Martin Gühmann)
+// - Added an upgrade unit event. (13-Sep-2008 Martin Gühmann)
 //
 //----------------------------------------------------------------------------
 
@@ -664,7 +664,6 @@ STDEHANDLER(LaunchUnitEvent)
 		return GEV_HD_Continue;
 
 	if(spaceTurns > 0) {
-	fprintf(stderr, "%s L%d:\n", __FILE__, __LINE__);
 		g_theWorld->RemoveUnitReference(u.RetPos(), u);
 		u->RemoveUnitVision();
 		u.SetFlag(k_UDF_HAS_LEFT_MAP);
@@ -674,7 +673,6 @@ STDEHANDLER(LaunchUnitEvent)
 		g_director->AddSpaceLaunch(u, pos);
 		g_director->AddHide(u);
 	} else {
-	fprintf(stderr, "%s L%d:\n", __FILE__, __LINE__);
 		g_gevManager->AddEvent(GEV_INSERT_AfterCurrent, GEV_Reentry,
 							   GEA_Army, u.GetArmy().m_id,
 							   GEA_End);
