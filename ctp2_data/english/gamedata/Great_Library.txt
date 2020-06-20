@@ -20,8 +20,8 @@ Advanced Composites, the most powerful of all plastics, were one of the most imp
 
 [ADVANCE_ADV_INFANTRY_TACTICS_PREREQ]
 Requires:
-<L:DATABASE_ADVANCES,ADVANCE_VERTICAL_FLIGHT_AIRCRAFT>Vertical-Flight Aircraft<e>
 <L:DATABASE_ADVANCES,ADVANCE_NAVAL_AVIATION>Naval Aviation<e>
+<L:DATABASE_ADVANCES,ADVANCE_VERTICAL_FLIGHT_AIRCRAFT>Vertical-Flight Aircraft<e>
 [END]
 
 [ADVANCE_ADV_INFANTRY_TACTICS_STATISTICS]
@@ -46,8 +46,8 @@ These advances served to enhance the versatility of infantry, making them better
 
 [ADVANCE_ADV_NAVAL_TACTICS_PREREQ]
 Requires:
-<L:DATABASE_ADVANCES,ADVANCE_MASS_PRODUCTION>Mass Production<e>
 <L:DATABASE_ADVANCES,ADVANCE_EXPLOSIVES>Explosives<e>
+<L:DATABASE_ADVANCES,ADVANCE_MASS_PRODUCTION>Mass Production<e>
 [END]
 
 [ADVANCE_ADV_NAVAL_TACTICS_STATISTICS]
@@ -67,8 +67,8 @@ World War II was the battleship's heyday, when the Washington Treaty of 1922, wh
 
 [ADVANCE_ADV_URBAN_PLANNING_PREREQ]
 Requires:
-<L:DATABASE_ADVANCES,ADVANCE_MODERN_METALLURGY>Modern Metallurgy<e>
 <L:DATABASE_ADVANCES,ADVANCE_MASS_TRANSIT>Mass Transit<e>
+<L:DATABASE_ADVANCES,ADVANCE_MODERN_METALLURGY>Modern Metallurgy<e>
 [END]
 
 [ADVANCE_ADV_URBAN_PLANNING_STATISTICS]
@@ -116,8 +116,8 @@ Few other breakthroughs in human history changed more aspects of human life than
 
 [ADVANCE_AGE_OF_REASON_PREREQ]
 Requires:
-<L:DATABASE_ADVANCES,ADVANCE_PRINTING_PRESS>Printing Press<e>
 <L:DATABASE_ADVANCES,ADVANCE_CHEMISTRY>Chemistry<e>
+<L:DATABASE_ADVANCES,ADVANCE_PRINTING_PRESS>Printing Press<e>
 [END]
 
 [ADVANCE_AGE_OF_REASON_STATISTICS]
@@ -198,8 +198,8 @@ Some law enforcement advocates began to speculate on the potential uses for AI s
 
 [ADVANCE_ALCHEMY_PREREQ]
 Requires:
-<L:DATABASE_ADVANCES,ADVANCE_SHIP_BUILDING>Ship Building<e>
 <L:DATABASE_ADVANCES,ADVANCE_PHILOSOPHY>Philosophy<e>
+<L:DATABASE_ADVANCES,ADVANCE_SHIP_BUILDING>Shipbuilding<e>
 [END]
 
 [ADVANCE_ALCHEMY_STATISTICS]
@@ -217,7 +217,7 @@ Alchemy was a science fused of many disparate sources, including Chinese, Egypti
 
 [ADVANCE_ARCOLOGIES_PREREQ]
 Requires:
-<L:DATABASE_ADVANCES,ADVANCE_ADV_URBAN_PLANNING>Advanced Urban Planning<e>
+<L:DATABASE_ADVANCES,ADVANCE_ADV_URBAN_PLANNING>Adv. Urban Planning<e>
 <L:DATABASE_ADVANCES,ADVANCE_ADVANCED_COMPOSITES>Advanced Composites<e>
 [END]
 
@@ -239,8 +239,8 @@ It was not until the middle of the 21st century that the overcrowding of cities 
 
 [ADVANCE_BALLISTICS_PREREQ]
 Requires:
-<L:DATABASE_ADVANCES,ADVANCE_TOOLMAKING>Tool Making<e>
 <L:DATABASE_ADVANCES,ADVANCE_AGRICULTURE>Agriculture<e>
+<L:DATABASE_ADVANCES,ADVANCE_TOOLMAKING>Toolmaking<e>
 [END]
 
 [ADVANCE_BALLISTICS_STATISTICS]
@@ -263,8 +263,8 @@ The introduction of gunpowder gradually made the bow and ballista obsolete, as W
 
 [ADVANCE_BANKING_PREREQ]
 Requires:
-<L:DATABASE_ADVANCES,ADVANCE_TRADE>Trade<e>
 <L:DATABASE_ADVANCES,ADVANCE_CLASSICAL_EDUCATION>Classical Education<e>
+<L:DATABASE_ADVANCES,ADVANCE_TRADE>Trade<e>
 [END]
 
 [ADVANCE_BANKING_STATISTICS]
@@ -282,7 +282,7 @@ The first banks developed in response to the great risk of early trading. Bandit
 
 [ADVANCE_BRONZE_WORKING_PREREQ]
 Requires:
-<L:DATABASE_ADVANCES,ADVANCE_TOOLMAKING>Tool Making<e>
+<L:DATABASE_ADVANCES,ADVANCE_TOOLMAKING>Toolmaking<e>
 [END]
 
 [ADVANCE_BRONZE_WORKING_STATISTICS]
@@ -300,8 +300,8 @@ Around 3500 BC, Western Europeans discovered that beaten copper repeatedly heate
 
 [ADVANCE_BUREAUCRACY_PREREQ]
 Requires:
-<L:DATABASE_ADVANCES,ADVANCE_JURISPRUDENCE>Jurisprudence<e>
 <L:DATABASE_ADVANCES,ADVANCE_FEUDALISM>Feudalism<e>
+<L:DATABASE_ADVANCES,ADVANCE_JURISPRUDENCE>Jurisprudence<e>
 [END]
 
 [ADVANCE_BUREAUCRACY_STATISTICS]
@@ -320,8 +320,8 @@ Bureaucracy was an important step in establishing the infrastructure necessary f
 
 [ADVANCE_CANNON_MAKING_PREREQ]
 Requires:
-<L:DATABASE_ADVANCES,ADVANCE_IRON_WORKING>Iron Working<e>
 <L:DATABASE_ADVANCES,ADVANCE_GUNPOWDER>Gunpowder<e>
+<L:DATABASE_ADVANCES,ADVANCE_IRON_WORKING>Iron Working<e>
 [END]
 
 [ADVANCE_CANNON_MAKING_STATISTICS]
@@ -339,8 +339,8 @@ The invention of cannon is generally credited to a German monk, Berthold Schwarz
 
 [ADVANCE_CAVALRY_TACTICS_PREREQ]
 Requires:
-<L:DATABASE_ADVANCES,ADVANCE_HORSE_RIDING>Horse Riding<e>
 <L:DATABASE_ADVANCES,ADVANCE_GUNPOWDER>Gunpowder<e>
+<L:DATABASE_ADVANCES,ADVANCE_HORSE_RIDING>Horse Riding<e>
 [END]
 
 [ADVANCE_CAVALRY_TACTICS_STATISTICS]
@@ -400,8 +400,8 @@ From the beginning of recorded history, humans have speculated as to the cause o
 
 [ADVANCE_CLASSICAL_EDUCATION_PREREQ]
 Requires:
-<L:DATABASE_ADVANCES,ADVANCE_GEOMETRY>Geometry<e>
 <L:DATABASE_ADVANCES,ADVANCE_BUREAUCRACY>Bureaucracy<e>
+<L:DATABASE_ADVANCES,ADVANCE_GEOMETRY>Geometry<e>
 [END]
 
 [ADVANCE_CLASSICAL_EDUCATION_STATISTICS]
@@ -420,8 +420,8 @@ As ancient societies expanded and became more complex, the need for a more educa
 
 [ADVANCE_COMMUNISM_PREREQ]
 Requires:
-<L:DATABASE_ADVANCES,ADVANCE_INDUSTRIAL_REVOLUTION>Industrial Revolution<e>
 <L:DATABASE_ADVANCES,ADVANCE_BANKING>Banking<e>
+<L:DATABASE_ADVANCES,ADVANCE_INDUSTRIAL_REVOLUTION>Industrial Revolution<e>
 [END]
 
 [ADVANCE_COMMUNISM_STATISTICS]
@@ -443,8 +443,8 @@ Historically, communism had a hard time taking hold.  The Bolshevik Revolution o
 
 [ADVANCE_COMPUTER_PREREQ]
 Requires:
-<L:DATABASE_ADVANCES,ADVANCE_ELECTRICITY>Electricity<e>
 <L:DATABASE_ADVANCES,ADVANCE_CORPORATE_REPUBLIC>Corporate Republic<e>
+<L:DATABASE_ADVANCES,ADVANCE_ELECTRICITY>Electricity<e>
 [END]
 
 [ADVANCE_COMPUTER_STATISTICS]
@@ -507,8 +507,8 @@ The various industrial revolutions across the world dramatically increased human
 
 [ADVANCE_CORPORATE_REPUBLIC_PREREQ]
 Requires:
-<L:DATABASE_ADVANCES,ADVANCE_CRIMINAL_CODE>Criminal Code<e>
 <L:DATABASE_ADVANCES,ADVANCE_CORPORATION>Corporation<e>
+<L:DATABASE_ADVANCES,ADVANCE_CRIMINAL_CODE>Criminal Code<e>
 [END]
 
 [ADVANCE_CORPORATE_REPUBLIC_STATISTICS]
@@ -528,8 +528,8 @@ Though many international free trade agreements were hailed as bold new measures
 
 [ADVANCE_CORPORATION_PREREQ]
 Requires:
-<L:DATABASE_ADVANCES,ADVANCE_MASS_PRODUCTION>Mass Production<e>
 <L:DATABASE_ADVANCES,ADVANCE_MASS_MEDIA>Mass Media<e>
+<L:DATABASE_ADVANCES,ADVANCE_MASS_PRODUCTION>Mass Production<e>
 [END]
 
 [ADVANCE_CORPORATION_STATISTICS]
@@ -548,8 +548,8 @@ The modern, private business corporation gradually formed out of a fusion of the
 
 [ADVANCE_CRIMINAL_CODE_PREREQ]
 Requires:
-<L:DATABASE_ADVANCES,ADVANCE_NATIONALISM>Nationalism<e>
 <L:DATABASE_ADVANCES,ADVANCE_MASS_MEDIA>Mass Media<e>
+<L:DATABASE_ADVANCES,ADVANCE_NATIONALISM>Nationalism<e>
 [END]
 
 [ADVANCE_CRIMINAL_CODE_STATISTICS]
@@ -572,8 +572,8 @@ The development of a criminal code is essential for a just society to function. 
 
 [ADVANCE_CYBERNETICS_PREREQ]
 Requires:
-<L:DATABASE_ADVANCES,ADVANCE_NEURAL_INTERFACE>Neural Interface<e>
 <L:DATABASE_ADVANCES,ADVANCE_EUGENICS>Gene Therapy<e>
+<L:DATABASE_ADVANCES,ADVANCE_NEURAL_INTERFACE>Neural Interface<e>
 [END]
 
 [ADVANCE_CYBERNETICS_STATISTICS]
@@ -640,8 +640,8 @@ However, as the power and speed of microprocessors increased in the late 20th an
 
 [ADVANCE_DRAMA_PREREQ]
 Requires:
-<L:DATABASE_ADVANCES,ADVANCE_WRITING>Writing<e>
 <L:DATABASE_ADVANCES,ADVANCE_RELIGION>Religion<e>
+<L:DATABASE_ADVANCES,ADVANCE_WRITING>Writing<e>
 [END]
 
 [ADVANCE_DRAMA_STATISTICS]
@@ -713,8 +713,8 @@ Ecotopians advocated the elimination, by any means available, of any systems tha
 
 [ADVANCE_ELECTRICITY_PREREQ]
 Requires:
-<L:DATABASE_ADVANCES,ADVANCE_PHYSICS>Physics<e>
 <L:DATABASE_ADVANCES,ADVANCE_INDUSTRIAL_REVOLUTION>Industrial Revolution<e>
+<L:DATABASE_ADVANCES,ADVANCE_PHYSICS>Physics<e>
 [END]
 
 [ADVANCE_ELECTRICITY_STATISTICS]
@@ -755,8 +755,8 @@ In 1846, Ascanio Sobrero, an Italian chemist, discovered nitroglycerin, and soon
 
 [ADVANCE_FASCISM_PREREQ]
 Requires:
-<L:DATABASE_ADVANCES,ADVANCE_THEOLOGY>Theology<e>
 <L:DATABASE_ADVANCES,ADVANCE_GUNPOWDER>Gunpowder<e>
+<L:DATABASE_ADVANCES,ADVANCE_THEOLOGY>Theology<e>
 [END]
 
 [ADVANCE_FASCISM_STATISTICS]
@@ -779,8 +779,8 @@ The principle fascist regimes of the 20th century, in Italy from 1922-43, German
 
 [ADVANCE_FEUDALISM_PREREQ]
 Requires:
-<L:DATABASE_ADVANCES,ADVANCE_MASONRY>Masonry<e>
 <L:DATABASE_ADVANCES,ADVANCE_HORSE_RIDING>Horse Riding<e>
+<L:DATABASE_ADVANCES,ADVANCE_MASONRY>Masonry<e>
 [END]
 
 [ADVANCE_FEUDALISM_STATISTICS]
@@ -805,8 +805,8 @@ Feudalism flourished in societies with closed agricultural economies, particular
 
 [ADVANCE_FUEL_CELLS_PREREQ]
 Requires:
-<L:DATABASE_ADVANCES,ADVANCE_QUANTUM_MECHANICS>Quantum Physics<e>
 <L:DATABASE_ADVANCES,ADVANCE_CONSERVATION>Conservation<e>
+<L:DATABASE_ADVANCES,ADVANCE_QUANTUM_MECHANICS>Quantum Physics<e>
 [END]
 
 [ADVANCE_FUEL_CELLS_STATISTICS]
@@ -846,8 +846,8 @@ Although research into nuclear fusion began in the 1950s, it was not until the e
 
 [ADVANCE_GAIA_CONTROLLER_PREREQ]
 Requires:
-<L:DATABASE_ADVANCES,ADVANCE_SMART_MATERIALS>Smart Materials<e>
 <L:DATABASE_ADVANCES,ADVANCE_GAIA_THEORY>Gaia Theory<e>
+<L:DATABASE_ADVANCES,ADVANCE_SMART_MATERIALS>Smart Materials<e>
 [END]
 
 [ADVANCE_GAIA_CONTROLLER_STATISTICS]
@@ -874,8 +874,8 @@ The Gaia Controller was comprised of three distinct groups of components.  A sys
 
 [ADVANCE_GAIA_THEORY_PREREQ]
 Requires:
-<L:DATABASE_ADVANCES,ADVANCE_NANO_MACHINES>Nano-Machines<e>
 <L:DATABASE_ADVANCES,ADVANCE_ECOTOPIA>Ecotopia<e>
+<L:DATABASE_ADVANCES,ADVANCE_NANO_MACHINES>Nano-Machines<e>
 [END]
 
 [ADVANCE_GAIA_THEORY_STATISTICS]
@@ -899,7 +899,7 @@ Although this technology was originally intended for environmental cleanup, it w
 
 [ADVANCE_GENETICS_PREREQ]
 Requires:
-<L:DATABASE_ADVANCES,ADVANCE_MEDICINE>Medicine<e>
+<L:DATABASE_ADVANCES,ADVANCE_MEDICINE>Modern Medicine<e>
 <L:DATABASE_ADVANCES,ADVANCE_ROBOTICS>Robotics<e>
 [END]
 
@@ -922,8 +922,8 @@ Since the discovery of deoxyribonucleic acid, or DNA, in the mid 20th century, s
 
 [ADVANCE_EUGENICS_PREREQ]
 Requires:
-<L:DATABASE_ADVANCES,ADVANCE_GENETICS>Genetics<e>
 <L:DATABASE_ADVANCES,ADVANCE_CHAOS_THEORY>Chaos Theory<e>
+<L:DATABASE_ADVANCES,ADVANCE_GENETICS>Genetics<e>
 [END]
 
 [ADVANCE_EUGENICS_STATISTICS]
@@ -1012,8 +1012,8 @@ In order to counter the growing threat of losing technology and secrets to each 
 
 [ADVANCE_GLOBAL_ECONOMICS_PREREQ]
 Requires:
-<L:DATABASE_ADVANCES,ADVANCE_JET_PROPULSION>Jet Propulsion<e>
 <L:DATABASE_ADVANCES,ADVANCE_CORPORATE_REPUBLIC>Corporate Republic<e>
+<L:DATABASE_ADVANCES,ADVANCE_JET_PROPULSION>Jet Propulsion<e>
 [END]
 
 [ADVANCE_GLOBAL_ECONOMICS_STATISTICS]
@@ -1037,8 +1037,8 @@ The spread of global capitalism demanded a vast transport system to shuttle good
 
 [ADVANCE_GLOBAL_COMMUNICATIONS_PREREQ]
 Requires:
-<L:DATABASE_ADVANCES,ADVANCE_NUCLEAR_POWER>Nuclear Power<e>
 <L:DATABASE_ADVANCES,ADVANCE_GLOBAL_DEFENSE>Global Defense<e>
+<L:DATABASE_ADVANCES,ADVANCE_NUCLEAR_POWER>Nuclear Power<e>
 [END]
 
 [ADVANCE_GLOBAL_COMMUNICATIONS_STATISTICS]
@@ -1123,8 +1123,8 @@ Humans used horses for a variety of purposes.  More than any other animal, the h
 
 [ADVANCE_HT_SUPERCONDUCTOR_PREREQ]
 Requires:
-<L:DATABASE_ADVANCES,ADVANCE_FUEL_CELLS>Fuel Cells<e>
 <L:DATABASE_ADVANCES,ADVANCE_ADVANCED_COMPOSITES>Advanced Composites<e>
+<L:DATABASE_ADVANCES,ADVANCE_FUEL_CELLS>Fuel Cells<e>
 [END]
 
 [ADVANCE_HT_SUPERCONDUCTOR_STATISTICS]
@@ -1151,8 +1151,8 @@ Scientific research also benefited from high temperature superconductors.  The F
 
 [ADVANCE_HULL_MAKING_PREREQ]
 Requires:
-<L:DATABASE_ADVANCES,ADVANCE_SHIP_BUILDING>Ship Building<e>
 <L:DATABASE_ADVANCES,ADVANCE_GEOMETRY>Geometry<e>
+<L:DATABASE_ADVANCES,ADVANCE_SHIP_BUILDING>Shipbuilding<e>
 [END]
 
 [ADVANCE_HULL_MAKING_STATISTICS]
@@ -1216,8 +1216,8 @@ Socioeconomic and cultural changes manifest in larger, more populous cities, an 
 
 [ADVANCE_INTERNAL_COMBUSTION_PREREQ]
 Requires:
-<L:DATABASE_ADVANCES,ADVANCE_OIL_REFINING>Oil Refining<e>
 <L:DATABASE_ADVANCES,ADVANCE_ELECTRICITY>Electricity<e>
+<L:DATABASE_ADVANCES,ADVANCE_OIL_REFINING>Oil Refining<e>
 [END]
 
 [ADVANCE_INTERNAL_COMBUSTION_STATISTICS]
@@ -1258,8 +1258,8 @@ In Asia Minor during the 2nd millennium BC, wrought iron began to replace bronze
 
 [ADVANCE_JET_PROPULSION_PREREQ]
 Requires:
-<L:DATABASE_ADVANCES,ADVANCE_MODERN_METALLURGY>Modern Metallurgy<e>
 <L:DATABASE_ADVANCES,ADVANCE_AERODYNAMICS>Aerodynamics<e>
+<L:DATABASE_ADVANCES,ADVANCE_MODERN_METALLURGY>Modern Metallurgy<e>
 [END]
 
 [ADVANCE_JET_PROPULSION_STATISTICS]
@@ -1319,8 +1319,8 @@ Soon after genetic tailoring enabled people to customize the lives of their offs
 
 [ADVANCE_LIQUID_BREATHING_APPARATUS_PREREQ]
 Requires:
-<L:DATABASE_ADVANCES,ADVANCE_MEDICINE>Medicine<e>
 <L:DATABASE_ADVANCES,ADVANCE_ADVANCED_COMPOSITES>Advanced Composites<e>
+<L:DATABASE_ADVANCES,ADVANCE_MEDICINE>Modern Medicine<e>
 [END]
 
 [ADVANCE_LIQUID_BREATHING_APPARATUS_STATISTICS]
@@ -1340,8 +1340,8 @@ The extremely hostile environment of the deepest oceans had prevented manned exp
 
 [ADVANCE_MASONRY_PREREQ]
 Requires:
-<L:DATABASE_ADVANCES,ADVANCE_TOOLMAKING>Tool Making<e>
 <L:DATABASE_ADVANCES,ADVANCE_STONE_WORKING>Stone Working<e>
+<L:DATABASE_ADVANCES,ADVANCE_TOOLMAKING>Toolmaking<e>
 [END]
 
 [ADVANCE_MASONRY_STATISTICS]
@@ -1413,8 +1413,8 @@ Mass production techniques took the manufacturing world by storm.  Specializatio
 
 [ADVANCE_MASS_TRANSIT_PREREQ]
 Requires:
-<L:DATABASE_ADVANCES,ADVANCE_INTERNAL_COMBUSTION>Internal Combustion<e>
 <L:DATABASE_ADVANCES,ADVANCE_CORPORATE_REPUBLIC>Corporate Republic<e>
+<L:DATABASE_ADVANCES,ADVANCE_INTERNAL_COMBUSTION>Internal Combustion<e>
 [END]
 
 [ADVANCE_MASS_TRANSIT_STATISTICS]
@@ -1434,8 +1434,8 @@ Originally privately owned and operated, mass transit systems became more comple
 
 [ADVANCE_MEDICINE_PREREQ]
 Requires:
-<L:DATABASE_ADVANCES,ADVANCE_PHARMACEUTICALS>Pharmaceuticals<e>
 <L:DATABASE_ADVANCES,ADVANCE_CORPORATION>Corporation<e>
+<L:DATABASE_ADVANCES,ADVANCE_PHARMACEUTICALS>Pharmaceuticals<e>
 [END]
 
 [ADVANCE_MEDICINE_STATISTICS]
@@ -1455,8 +1455,8 @@ Medicine developed further throughout the 1800s, as science and technology augme
 
 [ADVANCE_MODERN_METALLURGY_PREREQ]
 Requires:
-<L:DATABASE_ADVANCES,ADVANCE_IRON_WORKING>Iron Working<e>
 <L:DATABASE_ADVANCES,ADVANCE_AGE_OF_REASON>Age of Reason<e>
+<L:DATABASE_ADVANCES,ADVANCE_IRON_WORKING>Iron Working<e>
 [END]
 
 [ADVANCE_MODERN_METALLURGY_STATISTICS]
@@ -1476,8 +1476,8 @@ Modern metallurgy in the early 19th century was primarily focused on iron and st
 
 [ADVANCE_MONARCHY_PREREQ]
 Requires:
-<L:DATABASE_ADVANCES,ADVANCE_RELIGION>Religion<e>
 <L:DATABASE_ADVANCES,ADVANCE_PHILOSOPHY>Philosophy<e>
+<L:DATABASE_ADVANCES,ADVANCE_RELIGION>Religion<e>
 [END]
 
 [ADVANCE_MONARCHY_STATISTICS]
@@ -1495,8 +1495,8 @@ Monarchy was a government in which the supreme authority was vested in a single 
 
 [ADVANCE_NANO_ASSEMBLY_PREREQ]
 Requires:
-<L:DATABASE_ADVANCES,ADVANCE_ROBOTICS>Robotics<e>
 <L:DATABASE_ADVANCES,ADVANCE_DIGITAL_ENCRYPTION>Digital Encryption<e>
+<L:DATABASE_ADVANCES,ADVANCE_ROBOTICS>Robotics<e>
 [END]
 
 [ADVANCE_NANO_ASSEMBLY_STATISTICS]
@@ -1571,8 +1571,8 @@ The Micro Defense improvement helped solve this problem.  Using nanites to monit
 
 [ADVANCE_NATIONALISM_PREREQ]
 Requires:
-<L:DATABASE_ADVANCES,ADVANCE_PRINTING_PRESS>Printing Press<e>
 <L:DATABASE_ADVANCES,ADVANCE_FASCISM>Fascism<e>
+<L:DATABASE_ADVANCES,ADVANCE_PRINTING_PRESS>Printing Press<e>
 [END]
 
 [ADVANCE_NATIONALISM_STATISTICS]
@@ -1592,8 +1592,8 @@ The development of nationalism marked an important shift in the way people viewe
 
 [ADVANCE_NAVAL_AVIATION_PREREQ]
 Requires:
-<L:DATABASE_ADVANCES,ADVANCE_NAVAL_TACTICS>Naval Tactics<e>
 <L:DATABASE_ADVANCES,ADVANCE_AERODYNAMICS>Aerodynamics<e>
+<L:DATABASE_ADVANCES,ADVANCE_NAVAL_TACTICS>Naval Tactics<e>
 [END]
 
 [ADVANCE_NAVAL_AVIATION_STATISTICS]
@@ -1613,8 +1613,8 @@ Carrier-based aircraft continued to evolve and see conflict throughout the latte
 
 [ADVANCE_NAVAL_TACTICS_PREREQ]
 Requires:
-<L:DATABASE_ADVANCES,ADVANCE_HULL_MAKING>Hull Making<e>
 <L:DATABASE_ADVANCES,ADVANCE_CANNON_MAKING>Cannon Making<e>
+<L:DATABASE_ADVANCES,ADVANCE_HULL_MAKING>Hullmaking<e>
 [END]
 
 [ADVANCE_NAVAL_TACTICS_STATISTICS]
@@ -1637,8 +1637,8 @@ As the use of line ahead tactics increased, shipbuilders began rolling out ships
 
 [ADVANCE_NEURAL_INTERFACE_PREREQ]
 Requires:
-<L:DATABASE_ADVANCES,ADVANCE_HT_SUPERCONDUCTOR>Superconductor<e>
 <L:DATABASE_ADVANCES,ADVANCE_GENETICS>Genetics<e>
+<L:DATABASE_ADVANCES,ADVANCE_HT_SUPERCONDUCTOR>Superconductor<e>
 [END]
 
 [ADVANCE_NEURAL_INTERFACE_STATISTICS]
@@ -1688,8 +1688,8 @@ Later in the 21st century, law enforcement organizations capitalized on the beha
 
 [ADVANCE_NUCLEAR_POWER_PREREQ]
 Requires:
-<L:DATABASE_ADVANCES,ADVANCE_QUANTUM_MECHANICS>Quantum Physics<e>
 <L:DATABASE_ADVANCES,ADVANCE_GUIDED_WEAPON_SYSTEMS>Guided Weapon Systems<e>
+<L:DATABASE_ADVANCES,ADVANCE_QUANTUM_MECHANICS>Quantum Physics<e>
 [END]
 
 [ADVANCE_NUCLEAR_POWER_STATISTICS]
@@ -1715,8 +1715,8 @@ Nuclear weapons were developed even earlier than power plants.  Conventional cru
 
 [ADVANCE_OCEAN_FARING_PREREQ]
 Requires:
-<L:DATABASE_ADVANCES,ADVANCE_HULL_MAKING>Hull Making<e>
 <L:DATABASE_ADVANCES,ADVANCE_BUREAUCRACY>Bureaucracy<e>
+<L:DATABASE_ADVANCES,ADVANCE_HULL_MAKING>Hullmaking<e>
 [END]
 
 [ADVANCE_OCEAN_FARING_STATISTICS]
@@ -1832,8 +1832,8 @@ Throughout world history, the term "philosophy" (from the Greek word philosophia
 
 [ADVANCE_PHYSICS_PREREQ]
 Requires:
-<L:DATABASE_ADVANCES,ADVANCE_GEOMETRY>Geometry<e>
 <L:DATABASE_ADVANCES,ADVANCE_AGE_OF_REASON>Age of Reason<e>
+<L:DATABASE_ADVANCES,ADVANCE_GEOMETRY>Geometry<e>
 [END]
 
 [ADVANCE_PHYSICS_STATISTICS]
@@ -1853,8 +1853,8 @@ The problems and methods he established were the focus of astronomy and physics 
 
 [ADVANCE_PLASMA_WEAPONRY_PREREQ]
 Requires:
-<L:DATABASE_ADVANCES,ADVANCE_UNIFIED_PHYSICS>Unified Physics<e>
 <L:DATABASE_ADVANCES,ADVANCE_FUSION>Fusion<e>
+<L:DATABASE_ADVANCES,ADVANCE_UNIFIED_PHYSICS>Unified Physics<e>
 [END]
 
 [ADVANCE_PLASMA_WEAPONRY_STATISTICS]
@@ -1873,8 +1873,8 @@ Plasma did not become a viable military technology until the development of fusi
 
 [ADVANCE_PRINTING_PRESS_PREREQ]
 Requires:
-<L:DATABASE_ADVANCES,ADVANCE_IRON_WORKING>Iron Working<e>
 <L:DATABASE_ADVANCES,ADVANCE_CLASSICAL_EDUCATION>Classical Education<e>
+<L:DATABASE_ADVANCES,ADVANCE_IRON_WORKING>Iron Working<e>
 [END]
 
 [ADVANCE_PRINTING_PRESS_STATISTICS]
@@ -1898,8 +1898,8 @@ The earliest examples of European adoption of xylography (printing from carved w
 
 [ADVANCE_QUANTUM_MECHANICS_PREREQ]
 Requires:
-<L:DATABASE_ADVANCES,ADVANCE_PHYSICS>Physics<e>
 <L:DATABASE_ADVANCES,ADVANCE_COMPUTER>Computer<e>
+<L:DATABASE_ADVANCES,ADVANCE_PHYSICS>Physics<e>
 [END]
 
 [ADVANCE_QUANTUM_MECHANICS_STATISTICS]
@@ -1981,8 +1981,8 @@ Besides questioning and explaining man's existence and his relation to earth, ea
 
 [ADVANCE_ROBOTICS_PREREQ]
 Requires:
-<L:DATABASE_ADVANCES,ADVANCE_NUCLEAR_POWER>Nuclear Power<e>
 <L:DATABASE_ADVANCES,ADVANCE_ADVANCED_COMPOSITES>Advanced Composites<e>
+<L:DATABASE_ADVANCES,ADVANCE_NUCLEAR_POWER>Nuclear Power<e>
 [END]
 
 [ADVANCE_ROBOTICS_STATISTICS]
@@ -2072,8 +2072,8 @@ Materials that were able to dynamically respond to stimuli, or "smart" materials
 
 [ADVANCE_SPACE_FLIGHT_PREREQ]
 Requires:
-<L:DATABASE_ADVANCES,ADVANCE_FUEL_CELLS>Fuel Cells<e>
 <L:DATABASE_ADVANCES,ADVANCE_ADVANCED_COMPOSITES>Advanced Composites<e>
+<L:DATABASE_ADVANCES,ADVANCE_FUEL_CELLS>Fuel Cells<e>
 [END]
 
 [ADVANCE_SPACE_FLIGHT_STATISTICS]
@@ -2120,8 +2120,8 @@ The craft of building with stone or clay originated when prehistoric man sought 
 
 [ADVANCE_SUPERSONIC_FLIGHT_PREREQ]
 Requires:
-<L:DATABASE_ADVANCES,ADVANCE_JET_PROPULSION>Jet Propulsion<e>
 <L:DATABASE_ADVANCES,ADVANCE_CORPORATE_REPUBLIC>Corporate Republic<e>
+<L:DATABASE_ADVANCES,ADVANCE_JET_PROPULSION>Jet Propulsion<e>
 [END]
 
 [ADVANCE_SUPERSONIC_FLIGHT_STATISTICS]
@@ -2141,8 +2141,8 @@ Although supersonic flight's commercial applications were limited to the Concord
 
 [ADVANCE_TANK_WARFARE_PREREQ]
 Requires:
-<L:DATABASE_ADVANCES,ADVANCE_INTERNAL_COMBUSTION>Internal Combustion<e>
 <L:DATABASE_ADVANCES,ADVANCE_CORPORATION>Corporation<e>
+<L:DATABASE_ADVANCES,ADVANCE_INTERNAL_COMBUSTION>Internal Combustion<e>
 [END]
 
 [ADVANCE_TANK_WARFARE_STATISTICS]
@@ -2164,8 +2164,8 @@ After World War II, tanks were designed primarily to fight other tanks.  Armies 
 
 [ADVANCE_TECHNOCRACY_PREREQ]
 Requires:
-<L:DATABASE_ADVANCES,ADVANCE_ROBOTICS>Robotics<e>
 <L:DATABASE_ADVANCES,ADVANCE_GLOBAL_COMMUNICATIONS>Global Communications<e>
+<L:DATABASE_ADVANCES,ADVANCE_ROBOTICS>Robotics<e>
 [END]
 
 [ADVANCE_TECHNOCRACY_STATISTICS]
@@ -2185,8 +2185,8 @@ However, the economic upheavals of a free market system, combined with a rapidly
 
 [ADVANCE_THEOLOGY_PREREQ]
 Requires:
-<L:DATABASE_ADVANCES,ADVANCE_PHILOSOPHY>Philosophy<e>
 <L:DATABASE_ADVANCES,ADVANCE_BUREAUCRACY>Bureaucracy<e>
+<L:DATABASE_ADVANCES,ADVANCE_PHILOSOPHY>Philosophy<e>
 [END]
 
 [ADVANCE_THEOLOGY_STATISTICS]
@@ -2259,8 +2259,8 @@ Trade had political and social ramifications as well.  Nations generally had to 
 
 [ADVANCE_UNIFIED_PHYSICS_PREREQ]
 Requires:
-<L:DATABASE_ADVANCES,ADVANCE_DIGITAL_ENCRYPTION>Digital Encryption<e>
 <L:DATABASE_ADVANCES,ADVANCE_CHAOS_THEORY>Chaos Theory<e>
+<L:DATABASE_ADVANCES,ADVANCE_DIGITAL_ENCRYPTION>Digital Encryption<e>
 [END]
 
 [ADVANCE_UNIFIED_PHYSICS_STATISTICS]
@@ -2366,8 +2366,6 @@ As ancient societies developed, early humans found a need to visibly represent t
 
 [ADVANCE_MIND_CONTROL_PREREQ]
 Requires:
-<L:DATABASE_ADVANCES,ADVANCE_HUMAN_CLONING>Human Cloning<e>
-<L:DATABASE_ADVANCES,ADVANCE_TECHNOCRACY>Technocracy<e>
 [END]
 
 [ADVANCE_MIND_CONTROL_STATISTICS]
