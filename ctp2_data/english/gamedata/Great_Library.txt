@@ -6992,6 +6992,8 @@ In the beginning of World War II, planes dive-bombing and torpedo bombing from c
 [UNIT_ARCHER_PREREQ]
 Requires:
 <L:DATABASE_ADVANCES,ADVANCE_BALLISTICS>Ballistics<e>
+Obsolete:
+<L:DATABASE_ADVANCES,ADVANCE_CANNON_MAKING>Cannon Making<e>
 [END]
 
 [UNIT_ARCHER_STATISTICS]
@@ -7096,6 +7098,8 @@ World War II was the battleship's heyday, when the Washington Treaty of 1922, wh
 [UNIT_BOMBER_PREREQ]
 Requires:
 <L:DATABASE_ADVANCES,ADVANCE_JET_PROPULSION>Jet Propulsion<e>
+Obsolete:
+<L:DATABASE_ADVANCES,ADVANCE_ADVANCED_COMPOSITES>Advanced Composites<e>
 
 Abilities: 
 Can carry 1 <L:DATABASE_UNITS,UNIT_NUKE>Nuke<e> or <L:DATABASE_UNITS,UNIT_CRUISE_MISSILE>Cruise Missile<e>
@@ -7134,6 +7138,8 @@ Although propeller-driven bombers proved their worth many times over in World Wa
 [UNIT_CANNON_PREREQ]
 Requires:
 <L:DATABASE_ADVANCES,ADVANCE_CANNON_MAKING>Cannon Making<e>
+Obsolete:
+<L:DATABASE_ADVANCES,ADVANCE_CYBERNETICS>Cybernetics<e>
 
 Abilities:
 <L:DATABASE_ORDERS,ORDER_BOMBARD>Bombards<e>
@@ -7169,6 +7175,8 @@ As gunpowder revolutionized the world of infantry and melee combat in the 16th c
 [UNIT_CARAVAN_PREREQ]
 Requires:
 <L:DATABASE_ADVANCES,ADVANCE_TRADE>Trade<e>
+Obsolete:
+<L:DATABASE_ADVANCES,ADVANCE_GLOBAL_ECONOMICS>Global Economics<e>
 
 Costs:
 {UnitDB(UnitRecord[0]).ShieldCost} <L:DATABASE_CONCEPTS,CONCEPT_PRODUCTION>Production<e>
@@ -7231,6 +7239,8 @@ Although some military helicopters were primarily designed for ground attack, th
 [UNIT_CARRACK_PREREQ]
 Requires:
 <L:DATABASE_ADVANCES,ADVANCE_OCEAN_FARING>Ocean Faring<e>
+Obsolete:
+<L:DATABASE_ADVANCES,ADVANCE_INTERNAL_COMBUSTION>Internal Combustion<e>
 
 Abilities:
 Can <L:DATABASE_ORDERS,ORDER_BOARD_TRANSPORT>Transport<e> up to three land units
@@ -7270,6 +7280,8 @@ Two of the most famous Carracks were the Santa Maria, one of Christopher Columbu
 [UNIT_CATAMARAN_PREREQ]
 Requires:
 <L:DATABASE_ADVANCES,ADVANCE_SHIP_BUILDING>Shipbuilding<e>
+Obsolete:
+<L:DATABASE_ADVANCES,ADVANCE_HULL_MAKING>Hullmaking<e>
 
 Abilities:
 Can <L:DATABASE_ORDERS,ORDER_BOARD_TRANSPORT>Transport<e> one land units
@@ -7305,6 +7317,8 @@ The Coracle is a boat native to ancient Wales and Ireland.  Some coracles were r
 [UNIT_CATAPULT_PREREQ]
 Requires:
 <L:DATABASE_ADVANCES,ADVANCE_GEOMETRY>Geometry<e>
+Obsolete:
+<L:DATABASE_ADVANCES,ADVANCE_EXPLOSIVES>Explosives<e>
 
 Abilities:
 <L:DATABASE_ORDERS,ORDER_BOMBARD>Bombards<e>
@@ -7340,6 +7354,8 @@ The catapult was the one of the most effective siege weapons used in ancient and
 [UNIT_CAVALRY_PREREQ]
 Requires:
 <L:DATABASE_ADVANCES,ADVANCE_CAVALRY_TACTICS>Cavalry Tactics<e>
+Obsolete:
+<L:DATABASE_ADVANCES,ADVANCE_FUSION>Fusion<e>
 [END]
 
 [UNIT_CAVALRY_STATISTICS]
@@ -7372,6 +7388,8 @@ The early 14th century development of gunpowder and armor-piercing bullets compl
 [UNIT_CLERIC_PREREQ]
 Requires:
 <L:DATABASE_ADVANCES,ADVANCE_THEOLOGY>Theology<e>
+Obsolete:
+<L:DATABASE_ADVANCES,ADVANCE_MASS_MEDIA>Mass Media<e>
 
 Abilities:
 <L:DATABASE_ORDERS,ORDER_CONVERT>Converts Cities<e>
@@ -7566,6 +7584,8 @@ After the military developed an internal neural interface device, they began to 
 [UNIT_DESTROYER_PREREQ]
 Requires:
 <L:DATABASE_ADVANCES,ADVANCE_MASS_PRODUCTION>Mass Production<e>
+Obsolete:
+<L:DATABASE_ADVANCES,ADVANCE_PLASMA_WEAPONRY>Plasma Weaponry<e>
 
 Abilities:
 <L:DATABASE_ORDERS,ORDER_BOMBARD>Bombards<e>
@@ -7605,6 +7625,8 @@ After World War II, the destroyer's dual role of antiaircraft and antisubmarine 
 [UNIT_DIPLOMAT_PREREQ]
 Requires:
 <L:DATABASE_ADVANCES,ADVANCE_BUREAUCRACY>Bureaucracy<e>
+Obsolete:
+<L:DATABASE_ADVANCES,ADVANCE_EUGENICS>Gene Therapy<e>
 
 Abilities:
 <L:DATABASE_ORDERS,ORDER_ESTABLISH_EMBASSY>Establishes Embassies<e>
@@ -7839,6 +7861,8 @@ In April 1925, Adolf Hitler established the Schutzstaffel (German, "Protective E
 [UNIT_FIGHTER_PREREQ]
 Requires:
 <L:DATABASE_ADVANCES,ADVANCE_AERODYNAMICS>Aerodynamics<e>
+Obsolete:
+<L:DATABASE_ADVANCES,ADVANCE_SUPERSONIC_FLIGHT>Supersonic Flight<e>
 
 Abilities:
 Land on <L:DATABASE_UNITS,UNIT_AIRCRAFT_CARRIER>Aircraft Carrier<e>
@@ -7879,6 +7903,8 @@ During World War II, all-metal, propeller-engine fighters were capable of speeds
 [UNIT_FIRE_TRIREME_PREREQ]
 Requires:
 <L:DATABASE_ADVANCES,ADVANCE_ALCHEMY>Alchemy<e>
+Obsolete:
+<L:DATABASE_ADVANCES,ADVANCE_MODERN_METALLURGY>Modern Metallurgy<e>
 [END]
 
 [UNIT_FIRE_TRIREME_STATISTICS]
@@ -7934,6 +7960,8 @@ A standard container size made shipping easier.  A single 8 ft x 8 ft by 20 ft c
 [UNIT_FRIGATE_PREREQ]
 Requires:
 <L:DATABASE_ADVANCES,ADVANCE_MASS_PRODUCTION>Mass Production<e> 
+Obsolete:
+<L:DATABASE_ADVANCES,ADVANCE_PLASMA_WEAPONRY>Plasma Weaponry<e>
 
 Abilities:
 <L:DATABASE_ORDERS,ORDER_BOMBARD>Bombards<e>
@@ -8010,6 +8038,8 @@ The fusion tank could penetrate heavily armored and fortified targets with its h
 [UNIT_HOPLITE_PREREQ]
 Requires:
 <L:DATABASE_ADVANCES,ADVANCE_BRONZE_WORKING>Bronze Working<e>
+Obsolete:
+<L:DATABASE_ADVANCES,ADVANCE_GUNPOWDER>Gunpowder<e>
 [END]
 
 [UNIT_HOPLITE_STATISTICS]
@@ -8074,6 +8104,8 @@ The development of applied chaos theory opened up new opportunities in the realm
 [UNIT_INFANTRYMAN_PREREQ]
 Requires:
 <L:DATABASE_ADVANCES,ADVANCE_GUNPOWDER>Gunpowder<e>
+Obsolete:
+<L:DATABASE_ADVANCES,ADVANCE_ADV_INFANTRY_TACTICS>Adv. Infantry Tactics<e>
 [END]
 
 [UNIT_INFANTRYMAN_STATISTICS]
@@ -8149,6 +8181,8 @@ Although biological warfare was an ever-looming threat in the late 20th century,
 [UNIT_INTERCEPTOR_PREREQ]
 Requires:
 <L:DATABASE_ADVANCES,ADVANCE_SUPERSONIC_FLIGHT>Supersonic Flight<e>
+Obsolete:
+<L:DATABASE_ADVANCES,ADVANCE_AI_SURVEILLANCE>AI Surveillance<e>
 
 Abilities:
 <L:DATABASE_CONCEPTS,CONCEPT_ACTIVE_DEFENSE>Anti-Air Active Defense<e>
@@ -8187,6 +8221,8 @@ The interceptor's extreme speeds and operational altitudes made targeting, strik
 [UNIT_IRONCLAD_PREREQ]
 Requires:
 <L:DATABASE_ADVANCES,ADVANCE_MODERN_METALLURGY>Modern Metallurgy<e>
+Obsolete:
+<L:DATABASE_ADVANCES,ADVANCE_ADV_NAVAL_TACTICS>Adv. Naval Tactics<e>
 
 Abilities:
 <L:DATABASE_ORDERS,ORDER_BOMBARD>Bombards<e>
@@ -8224,6 +8260,8 @@ When, early in the Civil War, Union forces abandoned the Norfolk Navy Yard at Po
 [UNIT_KNIGHT_PREREQ]
 Requires:
 <L:DATABASE_ADVANCES,ADVANCE_FEUDALISM>Feudalism<e>
+Obsolete:
+<L:DATABASE_ADVANCES,ADVANCE_INDUSTRIAL_REVOLUTION>Industrial Revolution<e>
 
 Abilities:
 <L:DATABASE_CONCEPTS,CONCEPT_SPECIAL_FORCES>Special Forces<e>
@@ -8374,6 +8412,8 @@ Conceived by military strategists as the most effective defensive military craft
 [UNIT_LONGSHIP_PREREQ]
 Requires:
 <L:DATABASE_ADVANCES,ADVANCE_HULL_MAKING>Hull Making<e>
+Obsolete:
+<L:DATABASE_ADVANCES,ADVANCE_INTERNAL_COMBUSTION>Internal Combustion<e>
 
 Abilities: 
 Can <L:DATABASE_ORDERS,ORDER_BOARD_TRANSPORT>Transport<e> up to 2 land units
@@ -8409,6 +8449,8 @@ The Viking longship was one of the first seafaring vessels that employed a clink
 [UNIT_MACHINE_GUNNER_PREREQ]
 Requires:
 <L:DATABASE_ADVANCES,ADVANCE_INDUSTRIAL_REVOLUTION>Industrial Revolution<e>
+Obsolete:
+<L:DATABASE_ADVANCES,ADVANCE_CHAOS_THEORY>Chaos Theory<e>
 [END]
 
 [UNIT_MACHINE_GUNNER_STATISTICS]
@@ -8550,6 +8592,8 @@ The first military application of organic systems design culminated in the devel
 [UNIT_MOUNTED_ARCHER_PREREQ]
 Requires:
 <L:DATABASE_ADVANCES,ADVANCE_HORSE_RIDING>Horse Riding<e>
+Obsolete:
+<L:DATABASE_ADVANCES,ADVANCE_INDUSTRIAL_REVOLUTION>Industrial Revolution<e>
 [END]
 
 [UNIT_MOUNTED_ARCHER_STATISTICS]
@@ -8582,6 +8626,8 @@ The earliest armies of the ancient age used chariots to conduct high-speed attac
 [UNIT_NUCLEAR_SUBMARINE_PREREQ]
 Requires:
 <L:DATABASE_ADVANCES,ADVANCE_NUCLEAR_POWER>Nuclear Power<e>
+Obsolete:
+<L:DATABASE_ADVANCES,ADVANCE_GENETIC_TAILORING>Genetic Tailoring<e>
 
 Abilities:
 Can carry up to 2 <L:DATABASE_UNITS,UNIT_CRUISE_MISSILE>Cruise Missiles<e> or <L:DATABASE_UNITS,UNIT_NUKE>Nukes<e>
@@ -8699,6 +8745,8 @@ During World War II, military forces deployed parachute-equipped infantrymen cal
 [UNIT_PIKEMEN_PREREQ]
 Requires:
 <L:DATABASE_ADVANCES,ADVANCE_FEUDALISM>Feudalism<e>
+Obsolete:
+<L:DATABASE_ADVANCES,ADVANCE_FASCISM>Fascism<e>
 
 Abilities:
 Defensive bonus vs. mounted units
@@ -8878,6 +8926,8 @@ Since prehistoric times, people often lived a nomadic lifestyle, traveling from 
 [UNIT_SHIP_OF_THE_LINE_PREREQ]
 Requires:
 <L:DATABASE_ADVANCES,ADVANCE_NAVAL_TACTICS>Naval Tactics<e>
+Obsolete:
+<L:DATABASE_ADVANCES,ADVANCE_MASS_PRODUCTION>Mass Production<e>
 
 Abilities:
 <L:DATABASE_ORDERS,ORDER_BOMBARD>Bombards<e>
@@ -8988,6 +9038,8 @@ In 2047, scientists at the National Aeronautical and Space Administration launch
 [UNIT_SPY_PREREQ]
 Requires:
 <L:DATABASE_ADVANCES,ADVANCE_NATIONALISM>Nationalism<e>
+Obsolete:
+<L:DATABASE_ADVANCES,ADVANCE_NEURAL_INTERFACE>Neural Interface<e>
 Abilities:
 <L:DATABASE_ORDERS,ORDER_INCITE_REVOLUTION>Incites Revolutions<e>
 <L:DATABASE_ORDERS,ORDER_INVESTIGATE_CITY>Spies<e>
@@ -9140,6 +9192,8 @@ Stealth technology was not without its costs.  The first stealth fighter, the Un
 [UNIT_SUBMARINE_PREREQ]
 Requires:
 <L:DATABASE_ADVANCES,ADVANCE_OIL_REFINING>Oil Refining<e>
+Obsolete:
+<L:DATABASE_ADVANCES,ADVANCE_NUCLEAR_POWER>Nuclear Power<e>
 
 Abilities:
 Bombards 
@@ -9177,6 +9231,8 @@ The first submarines, developed and tested by both navies of the American Civil 
 [UNIT_SWORDSMAN_PREREQ]
 Requires:
 <L:DATABASE_ADVANCES,ADVANCE_IRON_WORKING>Iron Working<e>
+Obsolete:
+<L:DATABASE_ADVANCES,ADVANCE_INDUSTRIAL_REVOLUTION>Industrial Revolution<e>
 
 Abilities:
 <L:DATABASE_CONCEPTS,CONCEPT_SPECIAL_FORCES>Special Forces<e>
@@ -9212,6 +9268,8 @@ Samurai were the warrior class during the feudal period of Japanese history from
 [UNIT_TANK_PREREQ]
 Requires:
 <L:DATABASE_ADVANCES,ADVANCE_TANK_WARFARE>Tank Warfare<e>
+Obsolete:
+<L:DATABASE_ADVANCES,ADVANCE_UNIFIED_PHYSICS>Unified Physics<e>
 [END]
 
 [UNIT_TANK_STATISTICS]
@@ -9361,6 +9419,8 @@ By the middle of the 20th century, urban planners experimented with new concepts
 [UNIT_WARRIOR_PREREQ]
 Requires:
 <L:DATABASE_ADVANCES,ADVANCE_TOOLMAKING>Tool Making<e>
+Obsolete:
+<L:DATABASE_ADVANCES,ADVANCE_GUNPOWDER>Gunpowder<e>
 [END]
 
 [UNIT_WARRIOR_STATISTICS]
@@ -11027,6 +11087,8 @@ A player may want to upgrade a unit for a variety of reasons.  Older and obsolet
 [UNIT_LONGBOWMAN_PREREQ]
 Requires:
 <L:DATABASE_ADVANCES,ADVANCE_FEUDALISM><e>
+Obsolete:
+<L:DATABASE_ADVANCES,ADVANCE_CANNON_MAKING>Cannon Making<e>
 [END]
 
 [UNIT_LONGBOWMAN_STATISTICS]

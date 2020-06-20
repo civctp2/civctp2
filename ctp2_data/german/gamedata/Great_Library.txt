@@ -7155,6 +7155,8 @@ Zu Beginn des 2. Weltkrieges besaßen die Tauch- und Torpedobomber, die von Flugz
 [UNIT_ARCHER_PREREQ]
 Voraussetzung:
 <L:DATABASE_ADVANCES,ADVANCE_BALLISTICS>Ballistik<e>
+Veraltet mit:
+<L:DATABASE_ADVANCES,ADVANCE_CANNON_MAKING>Kanonenbau<e>
 [END]
 
 [UNIT_ARCHER_STATISTICS]
@@ -7259,6 +7261,8 @@ Der 2. Weltkrieg sollte die Blütezeit des Schlachtschiffs werden, als das 1922 g
 [UNIT_BOMBER_PREREQ]
 Voraussetzung:
 <L:DATABASE_ADVANCES,ADVANCE_JET_PROPULSION>Düsenantrieb<e>
+Veraltet mit:
+<L:DATABASE_ADVANCES,ADVANCE_ADVANCED_COMPOSITES>Neue Kunststoffe<e>
 
 Fähigkeiten: 
 Transport von 1 <L:DATABASE_UNITS,UNIT_NUKE>Nuklearrakete<e> oder <L:DATABASE_UNITS,UNIT_CRUISE_MISSILE>Cruisemissile<e>
@@ -7297,6 +7301,8 @@ Obwohl sich propellerbetriebene Bomber im 2. Weltkrieg vielfach als sehr nützlic
 [UNIT_CANNON_PREREQ]
 Voraussetzung:
 <L:DATABASE_ADVANCES,ADVANCE_CANNON_MAKING>Kanonenbau<e>
+Veraltet mit:
+<L:DATABASE_ADVANCES,ADVANCE_CYBERNETICS>Kybernetik<e>
 
 Fähigkeit:
 <L:DATABASE_ORDERS,ORDER_BOMBARD>Bombardierung<e>
@@ -7332,6 +7338,8 @@ So wie das Schießpulver im 16. Jahrhundert die Infanterie- und Nahkampftaktiken 
 [UNIT_CARAVAN_PREREQ]
 Voraussetzung:
 <L:DATABASE_ADVANCES,ADVANCE_TRADE>Handel<e>
+Veraltet mit:
+<L:DATABASE_ADVANCES,ADVANCE_GLOBAL_ECONOMICS>Weltwirtschaft<e>
 
 Kosten:
 {UnitDB(UnitRecord[0]).ShieldCost} <L:DATABASE_CONCEPTS,CONCEPT_PRODUCTION>Produktion<e>
@@ -7388,6 +7396,8 @@ Militärhubschrauber waren in erster Linie zur Durchführung von Bodenangriffen ko
 [UNIT_CARRACK_PREREQ]
 Voraussetzung:
 <L:DATABASE_ADVANCES,ADVANCE_OCEAN_FARING>Seefahrt<e>
+Veraltet mit:
+<L:DATABASE_ADVANCES,ADVANCE_INTERNAL_COMBUSTION>Verbr.-Motor<e>
 
 Fähigkeit:
 <L:DATABASE_ORDERS,ORDER_BOARD_TRANSPORT>Transport<e> von maximal 3 Bodeneinheiten 
@@ -7425,6 +7435,8 @@ Ihre hohen Achteraufbauten gewährleisteten eine gute Verteidigung. Darüber hinau
 [UNIT_CATAMARAN_PREREQ]
 Voraussetzung:
 <L:DATABASE_ADVANCES,ADVANCE_SHIP_BUILDING>Schiffbau<e>
+Veraltet mit:
+<L:DATABASE_ADVANCES,ADVANCE_HULL_MAKING>Schiffskonstr.<e>
 
 Fähigkeit:
 <L:DATABASE_ORDERS,ORDER_BOARD_TRANSPORT>Transport<e> von maximal 1 Bodeneinheit 
@@ -7460,6 +7472,8 @@ Die Korvette wurde im Altertum vorrangig in Wales und Irland benutzt. Manche die
 [UNIT_CATAPULT_PREREQ]
 Voraussetzung:
 <L:DATABASE_ADVANCES,ADVANCE_GEOMETRY>Geometrie<e>
+Veraltet mit:
+<L:DATABASE_ADVANCES,ADVANCE_EXPLOSIVES>Sprengstoff<e>
 
 Fähigkeit:
 <L:DATABASE_ORDERS,ORDER_BOMBARD>Bombardierung<e>
@@ -7495,6 +7509,8 @@ Das Katapult gehörte zu den effizientesten Belagerungswaffen der Antike und des 
 [UNIT_CAVALRY_PREREQ]
 Voraussetzung:
 <L:DATABASE_ADVANCES,ADVANCE_CAVALRY_TACTICS>Kavallerietaktiken<e>
+Veraltet mit:
+<L:DATABASE_ADVANCES,ADVANCE_FUSION>Kernfusion<e>
 [END]
 
 [UNIT_CAVALRY_STATISTICS]
@@ -7527,6 +7543,8 @@ Die Entwicklung des Schießpulvers und der panzerdurchschlagenden Patronen im frü
 [UNIT_CLERIC_PREREQ]
 Voraussetzung:
 <L:DATABASE_ADVANCES,ADVANCE_THEOLOGY>Theologie<e>
+Veraltet mit:
+<L:DATABASE_ADVANCES,ADVANCE_MASS_MEDIA>Massenmedien<e>
 
 Fähigkeiten:
 <L:DATABASE_ORDERS,ORDER_CONVERT>Glaubenswechsel<e>
@@ -7722,6 +7740,8 @@ Nachdem das Militär eine interne neurale Schnittstelle entwickelt hatte, wurden 
 [UNIT_DESTROYER_PREREQ]
 Voraussetzung:
 <L:DATABASE_ADVANCES,ADVANCE_MASS_PRODUCTION>Massenproduktion<e>
+Veraltet mit:
+<L:DATABASE_ADVANCES,ADVANCE_PLASMA_WEAPONRY>Plasmawaffen<e>
 
 Fähigkeiten:
 <L:DATABASE_ORDERS,ORDER_BOMBARD>Bombardierung<e> von Land- und Marineeinheiten
@@ -7761,6 +7781,8 @@ Nach dem 2. Weltkrieg wurde die Doppelrolle des Zerstörers als Flug- und U-Boot-
 [UNIT_DIPLOMAT_PREREQ]
 Voraussetzung:
 <L:DATABASE_ADVANCES,ADVANCE_BUREAUCRACY>Bürokratie<e>
+Veraltet mit:
+<L:DATABASE_ADVANCES,ADVANCE_EUGENICS>Gentherapie<e>
 
 Fähigkeiten:
 <L:DATABASE_ORDERS,ORDER_ESTABLISH_EMBASSY>Botschaft errichten<e>
@@ -8002,6 +8024,8 @@ Im April 1925 formierte Adolf Hitler im Rahmen der Neugründung der NSDAP die Sch
 [UNIT_FIGHTER_PREREQ]
 Voraussetzung:
 <L:DATABASE_ADVANCES,ADVANCE_AERODYNAMICS>Aerodynamik<e>
+Veraltet mit:
+<L:DATABASE_ADVANCES,ADVANCE_SUPERSONIC_FLIGHT>Überschallflüge<e>
 
 Fähigkeit:
 Landung auf <L:DATABASE_UNITS,UNIT_AIRCRAFT_CARRIER>Flugzeugträgern<e>
@@ -8042,6 +8066,8 @@ Während des 2. Weltkrieges konnten die metallenen Jagdflieger mit Propellerantri
 [UNIT_FIRE_TRIREME_PREREQ]
 Voraussetzung:
 <L:DATABASE_ADVANCES,ADVANCE_ALCHEMY>Alchimie<e>
+Veraltet mit:
+<L:DATABASE_ADVANCES,ADVANCE_MODERN_METALLURGY>Mod. Metallurgie<e>
 [END]
 
 [UNIT_FIRE_TRIREME_STATISTICS]
@@ -8097,6 +8123,8 @@ Auch die Einführung internationaler Normgrößen für Container trug zur verbessert
 [UNIT_FRIGATE_PREREQ]
 Voraussetzung:
 <L:DATABASE_ADVANCES,ADVANCE_MASS_PRODUCTION>Massenproduktion<e> 
+Veraltet mit:
+<L:DATABASE_ADVANCES,ADVANCE_PLASMA_WEAPONRY>Plasmawaffen<e>
 
 Fähigkeiten:
 <L:DATABASE_ORDERS,ORDER_BOMBARD>Bombardierung<e>
@@ -8173,6 +8201,8 @@ Der Fusionspanzer war in der Lage, mit seiner Hightech-Laserpulskanone selbst sc
 [UNIT_HOPLITE_PREREQ]
 Voraussetzung:
 <L:DATABASE_ADVANCES,ADVANCE_BRONZE_WORKING>Bronzeverarbeitung<e>
+Veraltet mit:
+<L:DATABASE_ADVANCES,ADVANCE_GUNPOWDER>Schießpulver<e>
 [END]
 
 [UNIT_HOPLITE_STATISTICS]
@@ -8237,6 +8267,8 @@ Neue Anwendungsmethoden der Chaostheorie eröffneten ungeahnte physikalische Mögl
 [UNIT_INFANTRYMAN_PREREQ]
 Voraussetzung:
 <L:DATABASE_ADVANCES,ADVANCE_GUNPOWDER>Schießpulver<e>
+Veraltet mit:
+<L:DATABASE_ADVANCES,ADVANCE_ADV_INFANTRY_TACTICS>Geh. Infanteriet.<e>
 [END]
 
 [UNIT_INFANTRYMAN_STATISTICS]
@@ -8309,6 +8341,8 @@ Während die biologische Kriegsführung bereits im späten 20. Jahrhundert eine stä
 [UNIT_INTERCEPTOR_PREREQ]
 Voraussetzung:
 <L:DATABASE_ADVANCES,ADVANCE_SUPERSONIC_FLIGHT>Überschallflüge<e>
+Veraltet mit:
+<L:DATABASE_ADVANCES,ADVANCE_AI_SURVEILLANCE>KI-Überwachung<e>
 
 Fähigkeit:
 <L:DATABASE_CONCEPTS,CONCEPT_ACTIVE_DEFENSE>Aktive Flugabwehr<e>
@@ -8347,6 +8381,8 @@ Die extrem hohen Geschwindigkeiten und Flughöhen des Abfangjägers erschwerten di
 [UNIT_IRONCLAD_PREREQ]
 Voraussetzung:
 <L:DATABASE_ADVANCES,ADVANCE_MODERN_METALLURGY>Moderne Metallurgie<e>
+Veraltet mit:
+<L:DATABASE_ADVANCES,ADVANCE_ADV_NAVAL_TACTICS>Geh. Marinetakt.<e>
 
 Fähigkeit:
 <L:DATABASE_ORDERS,ORDER_BOMBARD>Bombardierung<e>
@@ -8384,6 +8420,8 @@ Nachdem die Unionstruppen zu Beginn des Bürgerkrieges den Norfolk-Marinehafen in
 [UNIT_KNIGHT_PREREQ]
 Voraussetzung:
 <L:DATABASE_ADVANCES,ADVANCE_FEUDALISM>Feudalismus<e>
+Veraltet mit:
+<L:DATABASE_ADVANCES,ADVANCE_INDUSTRIAL_REVOLUTION>Ind. Revolution<e>
 
 Fähigkeit:
 <L:DATABASE_CONCEPTS,CONCEPT_SPECIAL_FORCES>Spezialeinheit<e>
@@ -8534,6 +8572,8 @@ Von Militärstrategen als das effizienteste Verteidigungsfahrzeug der Geschichte 
 [UNIT_LONGSHIP_PREREQ]
 Voraussetzung:
 <L:DATABASE_ADVANCES,ADVANCE_HULL_MAKING>Schiffskonstruktion<e>
+Veraltet mit:
+<L:DATABASE_ADVANCES,ADVANCE_INTERNAL_COMBUSTION>Verbr.-Motor<e>
 
 Fähigkeit: 
 <L:DATABASE_ORDERS,ORDER_BOARD_TRANSPORT>Transport<e> von maximal 2 Bodeneinheiten 
@@ -8569,6 +8609,8 @@ Das Wikinger-Langschiff war eins der ersten Seefahrzeuge, die einen klinkerbepla
 [UNIT_MACHINE_GUNNER_PREREQ]
 Voraussetzung:
 <L:DATABASE_ADVANCES,ADVANCE_INDUSTRIAL_REVOLUTION>Industrielle Revolution<e>
+Veraltet mit:
+<L:DATABASE_ADVANCES,ADVANCE_CHAOS_THEORY>Chaostheorie<e>
 [END]
 
 [UNIT_MACHINE_GUNNER_STATISTICS]
@@ -8710,6 +8752,8 @@ Der Muränengleiter, ein unter strenger Geheimhaltung gebautes Stealth-Unterwasse
 [UNIT_MOUNTED_ARCHER_PREREQ]
 Voraussetzung:
 <L:DATABASE_ADVANCES,ADVANCE_HORSE_RIDING>Rittertum<e>
+Veraltet mit:
+<L:DATABASE_ADVANCES,ADVANCE_INDUSTRIAL_REVOLUTION>Ind. Revolution<e>
 [END]
 
 [UNIT_MOUNTED_ARCHER_STATISTICS]
@@ -8742,6 +8786,8 @@ Um schnelle Angriffe ausführen zu können, setzten die frühen Kampftruppen der An
 [UNIT_NUCLEAR_SUBMARINE_PREREQ]
 Voraussetzung:
 <L:DATABASE_ADVANCES,ADVANCE_NUCLEAR_POWER>Atomenergie<e>
+Veraltet mit:
+<L:DATABASE_ADVANCES,ADVANCE_GENETIC_TAILORING>Genmanipulation<e>
 
 Fähigkeit:
 Transport von maximal 2 <L:DATABASE_UNITS,UNIT_CRUISE_MISSILE>Cruisemissiles<e> oder <L:DATABASE_UNITS,UNIT_NUKE>Nuklearraketen<e>
@@ -8854,6 +8900,8 @@ Während des 2. Weltkrieges gingen die Streitkräfte erstmals dazu über, mit Falls
 [UNIT_PIKEMEN_PREREQ]
 Voraussetzung:
 <L:DATABASE_ADVANCES,ADVANCE_AGRICULTURAL_REVOLUTION>Landwirtschaftliche Revolution<e>
+Veraltet mit:
+<L:DATABASE_ADVANCES,ADVANCE_FASCISM>Faschismus<e>
 
 Abilities:
 Defensivbonus gegen berittene Einheiten
@@ -9031,6 +9079,8 @@ Seit der Frühzeit lebten die Menschen oft als Nomaden, die auf der Suche nach Na
 [UNIT_SHIP_OF_THE_LINE_PREREQ]
 Voraussetzung:
 <L:DATABASE_ADVANCES,ADVANCE_NAVAL_TACTICS>Marinetaktiken<e>
+Veraltet mit:
+<L:DATABASE_ADVANCES,ADVANCE_MASS_PRODUCTION>Massenproduktion<e>
 
 Fähigkeit:
 <L:DATABASE_ORDERS,ORDER_BOMBARD>Bombardierung<e>
@@ -9140,6 +9190,8 @@ Im Jahre 2047 starteten die Wissenschaftler der Nationalen Luft- und Raumfahrtbe
 [UNIT_SPY_PREREQ]
 Voraussetzung:
 <L:DATABASE_ADVANCES,ADVANCE_NATIONALISM>Nationalismus<e>
+Veraltet mit:
+<L:DATABASE_ADVANCES,ADVANCE_NEURAL_INTERFACE>Neur. Schnittst.<e>
 
 Fähigkeiten:
 <L:DATABASE_ORDERS,ORDER_INCITE_REVOLUTION>Revolution auslösen<e>
@@ -9293,6 +9345,8 @@ Die Stealth-Technologie ist jedoch nicht ganz billig. Der erste Stealth-Fighter 
 [UNIT_SUBMARINE_PREREQ]
 Voraussetzung:
 <L:DATABASE_ADVANCES,ADVANCE_OIL_REFINING>Ölraffination<e>
+Veraltet mit:
+<L:DATABASE_ADVANCES,ADVANCE_NUCLEAR_POWER>Atomenergie<e>
 
 Fähigkeit:
 <L:DATABASE_ORDERS,ORDER_BOMBARD>Bombardierung<e>
@@ -9328,6 +9382,8 @@ Die ersten U-Boote, die von beiden am amerikanischen Bürgerkrieg beteiligten Mar
 [UNIT_SWORDSMAN_PREREQ]
 Voraussetzung:
 <L:DATABASE_ADVANCES,ADVANCE_IRON_WORKING>Eisenverarbeitung<e>
+Veraltet mit:
+<L:DATABASE_ADVANCES,ADVANCE_INDUSTRIAL_REVOLUTION>Ind. Revolution<e>
 
 Fähigkeit:
 <L:DATABASE_CONCEPTS,CONCEPT_SPECIAL_FORCES>Spezialeinheit<e>
@@ -9363,6 +9419,8 @@ Die Samurai gehörten im feudalen Japan des 12. Jahrhunderts bis etwa 1871 dem pr
 [UNIT_TANK_PREREQ]
 Voraussetzung:
 <L:DATABASE_ADVANCES,ADVANCE_TANK_WARFARE>Panzereinsatz<e>
+Veraltet mit:
+<L:DATABASE_ADVANCES,ADVANCE_UNIFIED_PHYSICS>Ganzheitstheorie<e>
 [END]
 
 [UNIT_TANK_STATISTICS]
@@ -9510,6 +9568,8 @@ Mitte des 20. Jahrhunderts experimentierten die Stadtplaner mit neuen Planungsko
 [UNIT_WARRIOR_PREREQ]
 Voraussetzung:
 <L:DATABASE_ADVANCES,ADVANCE_TOOLMAKING>Werkzeugbau<e>
+Veraltet mit:
+<L:DATABASE_ADVANCES,ADVANCE_GUNPOWDER>Schießpulver<e>
 [END]
 
 [UNIT_WARRIOR_STATISTICS]
@@ -11086,6 +11146,8 @@ Im späten 20. Jahrhundert war die Gesellschaft der westlichen Welt regelrecht pr
 [UNIT_LONGBOWMAN_PREREQ]
 Requires:
 <L:DATABASE_ADVANCES,ADVANCE_FEUDALISM><e>
+Veraltet mit:
+<L:DATABASE_ADVANCES,ADVANCE_CANNON_MAKING>Kanonenbau<e>
 [END]
 
 [UNIT_LONGBOWMAN_STATISTICS]
