@@ -11,3 +11,4 @@
 *.y text eol=lf
 *.l text eol=lf
 *.cdb text eol=lf
+*.txt text eol=lf
