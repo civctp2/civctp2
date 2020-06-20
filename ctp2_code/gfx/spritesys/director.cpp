@@ -2822,7 +2822,15 @@ void DirectorImpl::AddSpecialAttack(const Unit& attacker, const Unit &attacked, 
 	if (g_player[g_selected_item->GetVisiblePlayer()] &&
 		g_player[g_selected_item->GetVisiblePlayer()]->IsVisible(attacked.RetPos()))
 	{
-		AddProjectileAttack(attacker, attacked, NULL, new SpriteState(spriteID), 0);
+		MapPoint attackPosition;
+		if (attacker->GetVisibility() & (1 << g_selected_item->GetVisiblePlayer())) {
+			attackPosition = attacker.RetPos();
+		} else { // attacker is invisible; do not give away its position by the animation
+			attackPosition = attacked.RetPos();
+		}
+		DQActionMoveProjectile * moveProjectileAction = new DQActionMoveProjectile(new SpriteState(spriteID),
+				attackPosition, attacked.RetPos());
+		m_actionQueue->AddTail(moveProjectileAction);
 	}
 
 	DQActionAttack *action = new DQActionSpecialAttack(
