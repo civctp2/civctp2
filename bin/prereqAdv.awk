@@ -9,7 +9,7 @@ match($0, /.*(ADVANCE_.*)_PREREQ.*/, s) {
     close(cmd)
     found=1
     }
-(found++) == 3 && length(PRS) {
+/\[END\]/ && found {
     n= split(PRS, PRs, "|")
     delete PRs[n] # remove last element, empty due to tailing "|"
     for (i in PRs){
@@ -21,6 +21,8 @@ match($0, /.*(ADVANCE_.*)_PREREQ.*/, s) {
 	printf("<L:DATABASE_ADVANCES,%s>%s<e>\n", PR, pr)
 	PR=0
 	}
-    } 1
-# !/[END]/ && found {
-#     } 1
+    found=0
+    }
+!/<L:DATABASE_ADVANCES,ADVANCE_/ || !found {
+    print
+    }
