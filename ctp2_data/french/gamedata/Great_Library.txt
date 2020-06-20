@@ -7548,7 +7548,7 @@ Lancement suborbital
 <L:DATABASE_ORDERS,ORDER_BOARD_TRANSPORT>Transporter<e> jusqu'à cinq unités [END]
 
 [UNIT_SPACE_PLANE_GAMEPLAY]
-La navette  spatiale est un vaisseau de <L:DATABASE_ORDERS,ORDER_BOARD_TRANSPORT>transport<e> suborbital de longue portée. Lancée d'une ville, elle est capable de <L:DATABASE_ORDERS,ORDER_BOARD_TRANSPORT>transporter<e> jusqu'à 5 unités dans n'importe quelle autre ville. La durée du transit est alors de 4 tours. Inutile sur courte distance, la navette spatiale est idéale si vous avez besoin de <L:DATABASE_ORDERS,ORDER_BOARD_TRANSPORT>transporter<e> rapidement une unité à l'autre bout de la carte. 
+La navette  spatiale est un vaisseau de <L:DATABASE_ORDERS,ORDER_BOARD_TRANSPORT>transport<e> suborbital de longue portée. Lancée d'une ville, elle est capable de <L:DATABASE_ORDERS,ORDER_BOARD_TRANSPORT>transporter<e> jusqu'à 5 unités dans n'importe quelle autre ville. La durée du transit est alors de {UnitDB(UnitRecord[0]).SpaceLaunch} tours. Inutile sur courte distance, la navette spatiale est idéale si vous avez besoin de <L:DATABASE_ORDERS,ORDER_BOARD_TRANSPORT>transporter<e> rapidement une unité à l'autre bout de la carte. 
 [END]
 
 [UNIT_SPACE_PLANE_HISTORICAL]

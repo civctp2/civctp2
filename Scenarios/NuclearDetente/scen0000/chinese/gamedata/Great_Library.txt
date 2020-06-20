@@ -7415,7 +7415,7 @@ Sees <L:DATABASE_UNITS,UNIT_SLAVER>奴隶商人<e>
 [END]
 
 [UNIT_SPACE_PLANE_GAMEPLAY]
-太空飞机是航程远的次轨道<L:DATABASE_ORDERS,ORDER_BOARD_TRANSPORT>运输兵种<e>。从城市里飞射之后，能够<L:DATABASE_ORDERS,ORDER_BOARD_TRANSPORT>运输<e>最多五个部队到地图上的其它城市。整个<L:DATABASE_ORDERS,ORDER_BOARD_TRANSPORT>运输<e>过程耗时 4回合。虽然不适合短程运输，但太空飞机是您想让部队迅速抵达地图另外一端时的最佳选择。
+太空飞机是航程远的次轨道<L:DATABASE_ORDERS,ORDER_BOARD_TRANSPORT>运输兵种<e>。从城市里飞射之后，能够<L:DATABASE_ORDERS,ORDER_BOARD_TRANSPORT>运输<e>最多五个部队到地图上的其它城市。整个<L:DATABASE_ORDERS,ORDER_BOARD_TRANSPORT>运输<e>过程耗时 {UnitDB(UnitRecord[0]).SpaceLaunch}回合。虽然不适合短程运输，但太空飞机是您想让部队迅速抵达地图另外一端时的最佳选择。
 [END]
 
 [UNIT_SPACE_PLANE_HISTORICAL]

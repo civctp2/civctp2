@@ -7460,7 +7460,7 @@ Lancio sub-orbitale
 [END]
 
 [UNIT_SPACE_PLANE_GAMEPLAY]
-L'aereo spaziale è un veicolo di <L:DATABASE_ORDERS,ORDER_BOARD_TRANSPORT>trasporto<e> sub-orbitale a lungo raggio. Quando viene lanciato da una città, può <L:DATABASE_ORDERS,ORDER_BOARD_TRANSPORT>imbarcare<e> fino a 5 unità in un'altra città presente sulla mappa. L'<L:DATABASE_ORDERS,ORDER_BOARD_TRANSPORT>imbarco<e> impiega 4 turni per essere completato. Sebbene non sia indicato per eseguire trasporti a breve distanza, l'aereo spaziale si rivela ideale per lo spostamento immediato di unità dall'altra parte della mappa.
+L'aereo spaziale è un veicolo di <L:DATABASE_ORDERS,ORDER_BOARD_TRANSPORT>trasporto<e> sub-orbitale a lungo raggio. Quando viene lanciato da una città, può <L:DATABASE_ORDERS,ORDER_BOARD_TRANSPORT>imbarcare<e> fino a 5 unità in un'altra città presente sulla mappa. L'<L:DATABASE_ORDERS,ORDER_BOARD_TRANSPORT>imbarco<e> impiega {UnitDB(UnitRecord[0]).SpaceLaunch} turni per essere completato. Sebbene non sia indicato per eseguire trasporti a breve distanza, l'aereo spaziale si rivela ideale per lo spostamento immediato di unità dall'altra parte della mappa.
 [END]
 
 [UNIT_SPACE_PLANE_HISTORICAL]

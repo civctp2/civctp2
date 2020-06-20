@@ -7480,7 +7480,7 @@ Suborbitalstarts
 [END]
 
 [UNIT_SPACE_PLANE_GAMEPLAY]
-Der Raumtransporter ist ein Langstreckenfahrzeug für Suborbitaltransporte. Er kann von einer Stadt aus gestartet werden und bis zu fünf Einheiten zu einer beliebigen anderen Stadt auf der Karte befördern. Insgesamt dauert ein solcher <L:DATABASE_ORDERS,ORDER_BOARD_TRANSPORT>Transport<e> 4 Runden. Der Raumtransporter eignet sich nicht für Kurzstreckentransporte, aber wenn es darum geht, Einheiten möglichst schnell auf die andere Seite der Karte zu bringen, ist er genau richtig.
+Der Raumtransporter ist ein Langstreckenfahrzeug für Suborbitaltransporte. Er kann von einer Stadt aus gestartet werden und bis zu fünf Einheiten zu einer beliebigen anderen Stadt auf der Karte befördern. Insgesamt dauert ein solcher <L:DATABASE_ORDERS,ORDER_BOARD_TRANSPORT>Transport<e> {UnitDB(UnitRecord[0]).SpaceLaunch} Runden. Der Raumtransporter eignet sich nicht für Kurzstreckentransporte, aber wenn es darum geht, Einheiten möglichst schnell auf die andere Seite der Karte zu bringen, ist er genau richtig.
 [END]
 
 [UNIT_SPACE_PLANE_HISTORICAL]
