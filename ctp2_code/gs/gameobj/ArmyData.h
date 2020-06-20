@@ -116,15 +116,12 @@ private:
     MBCHAR                    *m_name;                 // Used and serialized
     MBCHAR                    *m_debugString;          // Used for debugging
 
-    // enums 32 bit, hopefully not something else on other systems
-    CAUSE_REMOVE_ARMY          m_removeCause;          // Unused and serialized (sint32)
-
     // Should be all 32 bit on all systems
     PLAYER_INDEX               m_owner;                // Used and serialized
     PLAYER_INDEX               m_killer;               // In unused methods used and is serialized
     sint32                     m_reentryTurn;          // Used
     MapPoint                   m_pos;                  // Used and serialized
-    MapPoint                   m_reentryPos;           // Used
+    MapPoint                   m_reentryPos;           // Used and serialized
 
     // 8 bit
     uint8                      m_debugStringColor;     // Used for debugging
@@ -586,7 +583,6 @@ public:
 		DPRINTF(k_DBG_AI, ("m_killMeSoon: %d\n",          sizeof(m_killMeSoon)));
 		DPRINTF(k_DBG_AI, ("m_name: %d\n",                sizeof(m_name)));
 		DPRINTF(k_DBG_AI, ("m_debugString: %d\n",         sizeof(m_debugString)));
-		DPRINTF(k_DBG_AI, ("m_removeCause: %d\n",         sizeof(m_removeCause)));
 		DPRINTF(k_DBG_AI, ("m_owner: %d\n",               sizeof(m_owner)));
 		DPRINTF(k_DBG_AI, ("m_pos: %d\n",                 sizeof(m_pos)));
 		DPRINTF(k_DBG_AI, ("m_killer: %d\n",              sizeof(m_killer)));

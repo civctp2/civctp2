@@ -351,7 +351,6 @@ ArmyData::ArmyData(const Army &army, const UnitDynamicArray &units)
     m_orders                (new PointerList<Order>),
     m_owner                 (-1),
     m_pos                   (),
-    m_removeCause           (CAUSE_REMOVE_ARMY_UNKNOWN),
     m_killer                (-1),
     m_hasBeenAdded          (false),
     m_isPirating            (false),
@@ -378,7 +377,6 @@ ArmyData::ArmyData(const Army &army, const CellUnitList &units)
     m_orders                (new PointerList<Order>),
     m_owner                 (-1),
     m_pos                   (),
-    m_removeCause           (CAUSE_REMOVE_ARMY_UNKNOWN),
     m_killer                (-1),
     m_hasBeenAdded          (false),
     m_isPirating            (false),
@@ -405,7 +403,6 @@ ArmyData::ArmyData(const Army &army, Unit &u)
     m_orders                (new PointerList<Order>),
     m_owner                 (-1),
     m_pos                   (),
-    m_removeCause           (CAUSE_REMOVE_ARMY_UNKNOWN),
     m_killer                (-1),
     m_hasBeenAdded          (false),
     m_isPirating            (false),
@@ -429,7 +426,6 @@ ArmyData::ArmyData(const Army &army)
     m_orders                (new PointerList<Order>),
     m_owner                 (-1),
     m_pos                   (),
-    m_removeCause           (CAUSE_REMOVE_ARMY_UNKNOWN),
     m_killer                (-1),
     m_hasBeenAdded          (false),
     m_isPirating            (false),
@@ -452,7 +448,6 @@ ArmyData::ArmyData(CivArchive &archive)
     m_orders                (new PointerList<Order>),
     m_owner                 (-1),
     m_pos                   (),
-    m_removeCause           (CAUSE_REMOVE_ARMY_UNKNOWN),
     m_killer                (-1),
     m_hasBeenAdded          (false),
     m_isPirating            (false),
@@ -501,7 +496,7 @@ void ArmyData::Serialize(CivArchive &archive)
     if(archive.IsStoring()) {
         archive << m_owner;
         archive << m_killer;
-        archive.PutSINT32(m_removeCause);
+	m_reentryPos.Serialize(archive);
         archive.PutUINT8(m_dontKillCount);
         archive.PutUINT8(m_needToKill);
         archive.PutUINT8(m_hasBeenAdded);
@@ -536,7 +531,7 @@ void ArmyData::Serialize(CivArchive &archive)
     } else {
         archive >> m_owner;
         archive >> m_killer;
-        m_removeCause = (CAUSE_REMOVE_ARMY)archive.GetSINT32();
+	m_reentryPos.Serialize(archive);
         m_dontKillCount = archive.GetUINT8();
         m_needToKill    = archive.GetUINT8() != 0;
         m_hasBeenAdded  = archive.GetUINT8() != 0;
