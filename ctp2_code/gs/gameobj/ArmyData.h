@@ -118,8 +118,7 @@ private:
 
     // Should be all 32 bit on all systems
     PLAYER_INDEX               m_owner;                // Used and serialized
-    PLAYER_INDEX               m_killer;               // Unused and serialized
-    sint32                     m_reentryTurn;          // Used
+    sint32                     m_reentryTurn;          // Used and serialized, could be reduced to uint8 by only storing the difference to the current turn
     MapPoint                   m_pos;                  // Used and serialized
     MapPoint                   m_reentryPos;           // Used and serialized
 
@@ -583,7 +582,6 @@ public:
 		DPRINTF(k_DBG_AI, ("m_debugString: %d\n",         sizeof(m_debugString)));
 		DPRINTF(k_DBG_AI, ("m_owner: %d\n",               sizeof(m_owner)));
 		DPRINTF(k_DBG_AI, ("m_pos: %d\n",                 sizeof(m_pos)));
-		DPRINTF(k_DBG_AI, ("m_killer: %d\n",              sizeof(m_killer)));
 		DPRINTF(k_DBG_AI, ("m_reentryTurn: %d\n",         sizeof(m_reentryTurn)));
 		DPRINTF(k_DBG_AI, ("m_pos: %d\n",                 sizeof(m_pos)));
 		DPRINTF(k_DBG_AI, ("m_reentryPos: %d\n",          sizeof(m_reentryPos)));

@@ -351,7 +351,6 @@ ArmyData::ArmyData(const Army &army, const UnitDynamicArray &units)
     m_orders                (new PointerList<Order>),
     m_owner                 (-1),
     m_pos                   (),
-    m_killer                (-1),
     m_hasBeenAdded          (false),
     m_isPirating            (false),
     m_name                  (NULL),
@@ -377,7 +376,6 @@ ArmyData::ArmyData(const Army &army, const CellUnitList &units)
     m_orders                (new PointerList<Order>),
     m_owner                 (-1),
     m_pos                   (),
-    m_killer                (-1),
     m_hasBeenAdded          (false),
     m_isPirating            (false),
     m_name                  (NULL),
@@ -403,7 +401,6 @@ ArmyData::ArmyData(const Army &army, Unit &u)
     m_orders                (new PointerList<Order>),
     m_owner                 (-1),
     m_pos                   (),
-    m_killer                (-1),
     m_hasBeenAdded          (false),
     m_isPirating            (false),
     m_name                  (NULL),
@@ -426,7 +423,6 @@ ArmyData::ArmyData(const Army &army)
     m_orders                (new PointerList<Order>),
     m_owner                 (-1),
     m_pos                   (),
-    m_killer                (-1),
     m_hasBeenAdded          (false),
     m_isPirating            (false),
     m_name                  (NULL),
@@ -448,7 +444,6 @@ ArmyData::ArmyData(CivArchive &archive)
     m_orders                (new PointerList<Order>),
     m_owner                 (-1),
     m_pos                   (),
-    m_killer                (-1),
     m_hasBeenAdded          (false),
     m_isPirating            (false),
     m_name                  (NULL),
@@ -495,7 +490,7 @@ void ArmyData::Serialize(CivArchive &archive)
 
     if(archive.IsStoring()) {
         archive << m_owner;
-        archive << m_killer;
+        archive << m_reentryTurn;
 	m_reentryPos.Serialize(archive);
         archive.PutUINT8(m_dontKillCount);
         archive.PutUINT8(m_needToKill);
@@ -530,7 +525,7 @@ void ArmyData::Serialize(CivArchive &archive)
 
     } else {
         archive >> m_owner;
-        archive >> m_killer;
+        archive >> m_reentryTurn;
 	m_reentryPos.Serialize(archive);
         m_dontKillCount = archive.GetUINT8();
         m_needToKill    = archive.GetUINT8() != 0;
