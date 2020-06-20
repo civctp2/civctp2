@@ -6063,7 +6063,7 @@ La catapulte est l'une des armes de siège les plus efficaces de l'Antiquité et d
 Condition :
 <L:DATABASE_ADVANCES,ADVANCE_CAVALRY_TACTICS>Tactiques de cavalerie<e>
 Obsolete:
-<L:DATABASE_ADVANCES,ADVANCE_FUSION>Fusion<e>
+<L:DATABASE_ADVANCES,ADVANCE_TANK_WARFARE>Guerre blindés<e>
 [END]
 
 [UNIT_CAVALRY_STATISTICS]
@@ -7763,7 +7763,7 @@ Les samouraïs forment une caste de guerriers qui agit pendant l'époque féodale d
 Condition :
 <L:DATABASE_ADVANCES,ADVANCE_TANK_WARFARE>Guerre de blindés<e>
 Obsolete:
-<L:DATABASE_ADVANCES,ADVANCE_UNIFIED_PHYSICS>Physique unifiée<e>
+<L:DATABASE_ADVANCES,ADVANCE_FUSION>Fusion<e>
 [END]
 
 [UNIT_TANK_STATISTICS]

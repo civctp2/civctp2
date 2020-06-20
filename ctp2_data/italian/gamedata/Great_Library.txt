@@ -6010,7 +6010,7 @@ La catapulta era una delle più efficaci armi da assedio utilizzate nei conflitti
 Richiede:
 <L:DATABASE_ADVANCES,ADVANCE_CAVALRY_TACTICS>Tattiche di cavalleria<e>
 Obsolete:
-<L:DATABASE_ADVANCES,ADVANCE_FUSION>Fusione nucleare<e>
+<L:DATABASE_ADVANCES,ADVANCE_TANK_WARFARE>Guerra coi carri armati<e>
 [END]
 
 [UNIT_CAVALRY_STATISTICS]
@@ -7668,7 +7668,7 @@ I samurai erano la classe di guerrieri dell'età feudale giapponese, attivi dal X
 Richiede:
 <L:DATABASE_ADVANCES,ADVANCE_TANK_WARFARE>Guerra coi carri armati<e>
 Obsolete:
-<L:DATABASE_ADVANCES,ADVANCE_UNIFIED_PHYSICS>Fisica unitaria<e>
+<L:DATABASE_ADVANCES,ADVANCE_FUSION>Fusione nucleare<e>
 [END]
 
 [UNIT_TANK_STATISTICS]

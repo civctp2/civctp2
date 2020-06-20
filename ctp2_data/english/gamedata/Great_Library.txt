@@ -7355,7 +7355,7 @@ The catapult was the one of the most effective siege weapons used in ancient and
 Requires:
 <L:DATABASE_ADVANCES,ADVANCE_CAVALRY_TACTICS>Cavalry Tactics<e>
 Obsolete:
-<L:DATABASE_ADVANCES,ADVANCE_FUSION>Fusion<e>
+<L:DATABASE_ADVANCES,ADVANCE_TANK_WARFARE>Tank Warfare<e>
 [END]
 
 [UNIT_CAVALRY_STATISTICS]
@@ -9269,7 +9269,7 @@ Samurai were the warrior class during the feudal period of Japanese history from
 Requires:
 <L:DATABASE_ADVANCES,ADVANCE_TANK_WARFARE>Tank Warfare<e>
 Obsolete:
-<L:DATABASE_ADVANCES,ADVANCE_UNIFIED_PHYSICS>Unified Physics<e>
+<L:DATABASE_ADVANCES,ADVANCE_FUSION>Fusion<e>
 [END]
 
 [UNIT_TANK_STATISTICS]

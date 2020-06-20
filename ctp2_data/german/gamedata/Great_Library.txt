@@ -7510,7 +7510,7 @@ Das Katapult gehörte zu den effizientesten Belagerungswaffen der Antike und des 
 Voraussetzung:
 <L:DATABASE_ADVANCES,ADVANCE_CAVALRY_TACTICS>Kavallerietaktiken<e>
 Veraltet mit:
-<L:DATABASE_ADVANCES,ADVANCE_FUSION>Kernfusion<e>
+<L:DATABASE_ADVANCES,ADVANCE_TANK_WARFARE>Panzereinsatz<e>
 [END]
 
 [UNIT_CAVALRY_STATISTICS]
@@ -9420,7 +9420,7 @@ Die Samurai gehörten im feudalen Japan des 12. Jahrhunderts bis etwa 1871 dem pr
 Voraussetzung:
 <L:DATABASE_ADVANCES,ADVANCE_TANK_WARFARE>Panzereinsatz<e>
 Veraltet mit:
-<L:DATABASE_ADVANCES,ADVANCE_UNIFIED_PHYSICS>Ganzheitstheorie<e>
+<L:DATABASE_ADVANCES,ADVANCE_FUSION>Kernfusion<e>
 [END]
 
 [UNIT_TANK_STATISTICS]

@@ -6024,7 +6024,7 @@ La catapulta fue una de las armas de asedio más efectivas de las guerras de la a
 Requiere:
 <L:DATABASE_ADVANCES,ADVANCE_CAVALRY_TACTICS>Tácticas de caballería<e>
 Obsolete:
-<L:DATABASE_ADVANCES,ADVANCE_FUSION>Fusión<e>
+<L:DATABASE_ADVANCES,ADVANCE_TANK_WARFARE>Combate blindados<e>
 [END]
 
 [UNIT_CAVALRY_STATISTICS]
@@ -7711,7 +7711,7 @@ Los samuráis constituyeron la clase guerrera durante el período feudal de la his
 Requiere:
 <L:DATABASE_ADVANCES,ADVANCE_TANK_WARFARE>Combate de blindados<e>
 Obsolete:
-<L:DATABASE_ADVANCES,ADVANCE_UNIFIED_PHYSICS>Física unificada<e>
+<L:DATABASE_ADVANCES,ADVANCE_FUSION>Fusión<e>
 [END]
 
 [UNIT_TANK_STATISTICS]
