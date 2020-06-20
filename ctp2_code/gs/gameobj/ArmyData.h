@@ -118,7 +118,7 @@ private:
 
     // Should be all 32 bit on all systems
     PLAYER_INDEX               m_owner;                // Used and serialized
-    PLAYER_INDEX               m_killer;               // In unused methods used and is serialized
+    PLAYER_INDEX               m_killer;               // Unused and serialized
     sint32                     m_reentryTurn;          // Used
     MapPoint                   m_pos;                  // Used and serialized
     MapPoint                   m_reentryPos;           // Used and serialized
@@ -383,8 +383,6 @@ public:
     void GetAdvanceFromCityAssault(const Unit &c, PLAYER_INDEX otherPlayer);
 
     void IndicateAdded();
-    PLAYER_INDEX GetKiller() const;
-    void SetKiller(PLAYER_INDEX who);
 
     void AddDeath(const Unit &unit, CAUSE_REMOVE_ARMY cause,
                   PLAYER_INDEX who);

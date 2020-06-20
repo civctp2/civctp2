@@ -263,8 +263,6 @@ public:
 	bool CanMoveIntoThisTransport(const Army &transports);
 
 	void IndicateAdded() const;
-	PLAYER_INDEX GetKiller() const;
-	void SetKiller(PLAYER_INDEX who);
 
 	void AddDeath(const Unit &u, CAUSE_REMOVE_ARMY cause, PLAYER_INDEX who);
 

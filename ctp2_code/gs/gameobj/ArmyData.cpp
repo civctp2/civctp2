@@ -8902,16 +8902,6 @@ void ArmyData::IndicateAdded()
 	m_hasBeenAdded = true;
 }
 
-PLAYER_INDEX ArmyData::GetKiller() const
-{
-	return m_killer;
-}
-
-void ArmyData::SetKiller(PLAYER_INDEX who)
-{
-	m_killer = who;
-}
-
 void ArmyData::AddDeath(const Unit &unit, CAUSE_REMOVE_ARMY cause,
 						PLAYER_INDEX who)
 {

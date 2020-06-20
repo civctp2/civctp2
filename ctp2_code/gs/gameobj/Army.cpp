@@ -761,16 +761,6 @@ void Army::IndicateAdded() const
 	AccessData()->IndicateAdded();
 }
 
-PLAYER_INDEX Army::GetKiller() const
-{
-	return GetData()->GetKiller();
-}
-
-void Army::SetKiller(PLAYER_INDEX who)
-{
-	AccessData()->SetKiller(who);
-}
-
 void Army::AddDeath(const Unit &u, CAUSE_REMOVE_ARMY cause, PLAYER_INDEX who)
 {
 	AccessData()->AddDeath(u, cause, who);
