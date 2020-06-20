@@ -14,9 +14,10 @@ match($0, /.*(ADVANCE_.*)_PREREQ.*/, s) {
     delete PRs[n] # remove last element, empty due to tailing "|"
     for (i in PRs){
 	PR=PRs[i]
-	cmd = sprintf("awk -v var=%s '$1 ~ var { gsub(var, \"\", $0); print }' gl_str.txt", PR)
+	cmd = sprintf("awk -v var=%s -v FPAT='([^ \t]+)|(\"[^\"]+\")' ' $1 ~ var { print $2 }' gl_str.txt", PR)
 	cmd | getline pr
 	close(cmd)
+	gsub("\"","", pr) # remove quotes around quoted fields
 	printf("<L:DATABASE_ADVANCES,%s>%s<e>\n", PR, pr)
 	PR=0
 	}
