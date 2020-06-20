@@ -1679,7 +1679,7 @@ void ArmyData::BeginTurn()
     }
 
     if(m_flags & k_CULF_IN_SPACE) {
-        if(NewTurnCount::GetCurrentRound() >= m_reentryTurn) {
+        if(NewTurnCount::GetCurrentRound() >= m_reentryTurn) { // > ensures that space plan can reenter later in case city cannot hold any more units at that moment
             if(g_network.IsHost()) {
                 g_network.Block(m_owner);
                 g_network.Enqueue(new NetInfo(NET_INFO_CODE_REENTER, m_id));
@@ -4618,10 +4618,11 @@ void ArmyData::Reenter()
 	}
 
 	Unit city = g_theWorld->GetCity(m_reentryPos);
-	if(!city.IsValid() || city.GetOwner() != m_owner)
+	if(!city.IsValid() || city.GetOwner() != m_owner) // target city is gone
 	{
 		for (int i = 0; i < m_nElements; i++)
 		{
+			// ToDo: add message (with eye) that the space plane and its cargo was lost because the target city is gone
 			g_gevManager->AddEvent(GEV_INSERT_AfterCurrent, GEV_KillUnit,
 								   GEA_Unit, m_array[i].m_id,
 								   GEA_Int, 0,
@@ -4629,8 +4630,9 @@ void ArmyData::Reenter()
 								   GEA_End);
 		}
 	}
-	else if(g_theWorld->GetCell(m_reentryPos)->GetNumUnits() > (k_MAX_ARMY_SIZE - m_nElements))
+	else if(g_theWorld->GetCell(m_reentryPos)->GetNumUnits() > (k_MAX_ARMY_SIZE - m_nElements)) // target city cannot hold any more units
 	{
+		// ToDo: add message (with eye) that the space plan cannot reenter as long as the target city cannot hold more units
 		return;
 	}
 	else
