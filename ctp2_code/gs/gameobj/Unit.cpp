@@ -135,11 +135,6 @@ void Unit::RemoveAllReferences(const CAUSE_REMOVE_ARMY cause, PLAYER_INDEX kille
 		AccessData()->GetCityData()->PrepareToRemove(cause, killedBy);
 	}
 
-	if(GetArmy().IsValid())
-	{
-		GetArmy().SetRemoveCause(cause);
-	}
-
 	switch(cause) {
 		case CAUSE_REMOVE_ARMY_ATTACKED:
 		case CAUSE_REMOVE_ARMY_DIED_IN_ATTACK:

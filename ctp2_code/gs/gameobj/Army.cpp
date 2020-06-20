@@ -665,11 +665,6 @@ void Army::Fight(CellUnitList &defender)
 	AccessData()->Fight(defender);
 }
 
-void Army::SetRemoveCause(CAUSE_REMOVE_ARMY cause)
-{
-	AccessData()->SetRemoveCause(cause);
-}
-
 sint32 Army::NumOrders() const
 {
 	return AccessData()->NumOrders();

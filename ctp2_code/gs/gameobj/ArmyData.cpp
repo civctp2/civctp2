@@ -597,26 +597,6 @@ void ArmyData::SetOwner(PLAYER_INDEX p)
 
 //----------------------------------------------------------------------------
 //
-// Name       : ArmyData::SetRemoveCause
-//
-// Description: Set RemoveCause for this army
-//
-// Parameters : CAUSE_REMOVE_ARMY cause
-//
-// Globals    : -
-//
-// Returns    : -
-//
-// Remark(s)  : see ctp_types.h for enum CAUSE_REMOVE_ARMY
-//
-//----------------------------------------------------------------------------
-void ArmyData::SetRemoveCause(CAUSE_REMOVE_ARMY cause)
-{
-    m_removeCause = cause;
-}
-
-//----------------------------------------------------------------------------
-//
 // Name       : ArmyData::Insert
 //
 // Description: Insert Unit id into this army
@@ -1144,7 +1124,6 @@ void ArmyData::GroupArmy(Army &army)
     }
 
     // both armies ok
-    army.SetRemoveCause(CAUSE_REMOVE_ARMY_GROUPING);
     bool atLeastOneAsleep = false;
 
     for(i = army.Num() - 1; i >= 0; i--) {
@@ -1212,7 +1191,6 @@ void ArmyData::GroupAllUnits()
                 if (IsSolist(ul->Access(i)))
                     continue;
 
-                ul->Access(i).GetArmy().SetRemoveCause(CAUSE_REMOVE_ARMY_GROUPING);
                 ul->Access(i).ChangeArmy(Army(m_id), CAUSE_NEW_ARMY_GROUPING);
                 DPRINTF(k_DBG_GAMESTATE, ("Grouped unit 0x%lx\n",
                                           ul->Access(i).m_id));
@@ -1293,7 +1271,7 @@ void ArmyData::GroupUnit(Unit unit)
 
         if (unit.GetArmy().IsValid())
         {
-            unit.GetArmy().SetRemoveCause(CAUSE_REMOVE_ARMY_GROUPING);
+	    // SetRemoveCause used to be called here which had no effect and was removed
         }
         else
         {
@@ -8416,7 +8394,6 @@ void ArmyData::FinishUnloadOrder(Army &debark, MapPoint &to_pt)
 					}
 
 					Assert(inserted);
-					debark.SetRemoveCause(CAUSE_REMOVE_ARMY_UNKNOWN);
 					debark.DelIndex(i);
 					i--;
 				}
@@ -8440,7 +8417,6 @@ void ArmyData::FinishUnloadOrder(Army &debark, MapPoint &to_pt)
 					}
 
 					Assert(inserted);
-					debark.SetRemoveCause(CAUSE_REMOVE_ARMY_UNKNOWN);
 					debark.DelIndex(i);
 				}
 			}

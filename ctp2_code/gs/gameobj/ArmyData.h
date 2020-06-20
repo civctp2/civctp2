@@ -117,7 +117,7 @@ private:
     MBCHAR                    *m_debugString;          // Used for debugging
 
     // enums 32 bit, hopefully not something else on other systems
-    CAUSE_REMOVE_ARMY          m_removeCause;          // Used and serialized (sint32)
+    CAUSE_REMOVE_ARMY          m_removeCause;          // Unused and serialized (sint32)
 
     // Should be all 32 bit on all systems
     PLAYER_INDEX               m_owner;                // Used and serialized
@@ -375,8 +375,6 @@ public:
 
     bool MoveIntoTransport(const MapPoint &pos, CellUnitList &transports);
     void DoBoardTransport(Order *order);
-
-    void SetRemoveCause(CAUSE_REMOVE_ARMY cause);
 
     uint8 DontKillCount() const { return m_dontKillCount; }
     void SetNeedToKill() { m_needToKill = TRUE; }

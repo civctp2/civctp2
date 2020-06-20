@@ -241,8 +241,6 @@ public:
 
 	void Fight(CellUnitList &defender);
 
-	void SetRemoveCause(CAUSE_REMOVE_ARMY cause);
-
 	void ResetPos();
 
 	sint32 NumOrders() const;
