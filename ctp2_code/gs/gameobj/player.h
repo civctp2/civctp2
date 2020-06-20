@@ -396,9 +396,7 @@ public:
 				 const CAUSE_NEW_ARMY cause,
 				 bool fromNetwork,
 				 const Unit &whereBuilt);
-	void RemoveArmy(const Army &army,
-					PLAYER_INDEX killedBy,
-					bool fromNetwork = false);
+	void RemoveArmy(const Army &army, bool fromNetwork = false);
 
 	bool RemoveCityReferenceFromPlayer(const Unit &id,  CAUSE_REMOVE_CITY cause,
 									   sint32 &killedBy);

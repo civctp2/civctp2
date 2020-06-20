@@ -65,7 +65,7 @@ void Army::RemoveAllReferences()
 	Assert(Num() < 1);
 
 	if(GetOwner() >= 0 && GetData()->HasBeenAdded()) {
-		g_player[GetOwner()]->RemoveArmy(*this, GetKiller());
+		g_player[GetOwner()]->RemoveArmy(*this);
 	}
 	g_selected_item->RegisterRemovedArmy(GetOwner(), *this);
 
