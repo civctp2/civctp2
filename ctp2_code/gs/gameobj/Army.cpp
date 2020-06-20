@@ -54,12 +54,9 @@ void Army::KillArmy()
 		return;
 	}
 
-	CAUSE_REMOVE_ARMY cause = GetRemoveCause();
-
 	AccessData()->StopPirating(); // do not execute pirating if army gets killed
 
 	Army tmp(*this);
-	tmp.SetRemoveCause(cause);
 	tmp.RemoveAllReferences();
 }
 
@@ -68,8 +65,7 @@ void Army::RemoveAllReferences()
 	Assert(Num() < 1);
 
 	if(GetOwner() >= 0 && GetData()->HasBeenAdded()) {
-		g_player[GetOwner()]->RemoveArmy(*this, GetRemoveCause(),
-										 GetKiller());
+		g_player[GetOwner()]->RemoveArmy(*this, GetKiller());
 	}
 	g_selected_item->RegisterRemovedArmy(GetOwner(), *this);
 

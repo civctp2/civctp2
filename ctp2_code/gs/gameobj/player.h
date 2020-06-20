@@ -397,7 +397,6 @@ public:
 				 bool fromNetwork,
 				 const Unit &whereBuilt);
 	void RemoveArmy(const Army &army,
-					const CAUSE_REMOVE_ARMY cause,
 					PLAYER_INDEX killedBy,
 					bool fromNetwork = false);
 

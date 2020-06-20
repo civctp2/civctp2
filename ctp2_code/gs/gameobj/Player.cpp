@@ -1188,8 +1188,7 @@ void Player::AddArmy(const Army &army,
 	}
 }
 
-void Player::RemoveArmy(const Army &army, CAUSE_REMOVE_ARMY cause,
-						PLAYER_INDEX killedBy, bool fromNetwork)
+void Player::RemoveArmy(const Army &army, PLAYER_INDEX killedBy, bool fromNetwork)
 {
 	g_selected_item->RegisterRemovedArmy(m_owner, army);
 
