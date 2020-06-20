@@ -117,7 +117,7 @@ MOTIVATION_FEAR_POLLUTION_ADVICE "污染不仅会造成全球暖化，还会带来生态灾害，实在
 
 DIP_ADVISOR_INCOMING_MESSAGE "陛下，我们接到代表{player[0].civ_name_plural}元首{player[0].leader_name}的特使来讯。"
 
-##
+##
 ##  Diplomacy Greetings
 ##
 
@@ -694,13 +694,13 @@ str_ldl_DipThreaten "威胁"
 str_ldl_MakeThreat "做出威胁"
 
 ##
-##	Pop-up Messages
+##	Pop-up Messages
 ##
 POPUP_GENERIC_ACCEPT "{player[1].civ_name_plural}接受你的所有提案。"
 POPUP_GENERIC_REJECT "{player[1].civ_name_plural}拒绝你的提案。"
 POPUP_GENERIC_THREAT_REJECT "{player[1].civ_name_plural}无惧于你的威胁。"
 POPUP_DECLARE_WAR_ANNC "陛下，{player[1].civ_name_plural}对我国宣战！"
-
+
 ##
 ##	CITY MANAGER
 ##
@@ -716,7 +716,7 @@ BUILD_HAPPINESS_ADVICE "这座城市似乎不快乐，应建造能增进快乐的设施，将能长久地带
 BUILD_DEFAULT_ADVICE "目前没有任何建议，每件事情都井然有序、按部就班。"
 
 ##
-##  EMPIRE MANAGER
+##  EMPIRE MANAGER
 ##
 
 # Slider Advice
