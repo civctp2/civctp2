@@ -4,7 +4,7 @@
 
 match($0, /.*(ADVANCE_.*)_PREREQ.*/, s) {
     PRS="" # essential for advances without prerequisites
-    cmd = sprintf("awk -v var=%s '{if($1 ~ var) found=$1}; /Prerequisites/ && found { printf($2\"|\")}; /}/ && found {exit;}' ctp2_data/default/gamedata/Advance.txt", s[1])
+    cmd = sprintf("awk -v var=%s '{if($1 ~ var) found=$1}; /Prerequisites/ && found { printf($2\"|\")}; /}/ && found {exit;}' ../../default/gamedata/Advance.txt", s[1])
     cmd | getline PRS
     close(cmd)
     found=1
@@ -14,10 +14,10 @@ match($0, /.*(ADVANCE_.*)_PREREQ.*/, s) {
     delete PRs[n] # remove last element, empty due to tailing "|"
     for (i in PRs){
 	PR=PRs[i]
-	pr=PR
-	gsub(/ADVANCE_/, "", pr)
-	gsub(/_/, " ", pr)
-	printf("<L:DATABASE_ADVANCES,%s>%s<e>\n", PR, tolower(pr))
+	cmd = sprintf("awk -v var=%s '$1 ~ var { print $2 }' gl_str.txt", PR)
+	cmd | getline pr
+	close(cmd)
+	printf("<L:DATABASE_ADVANCES,%s>%s<e>\n", PR, pr)
 	PR=0
 	}
     } 1
