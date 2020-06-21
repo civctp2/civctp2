@@ -24,7 +24,7 @@
 //
 // Modifications from the original Activision code:
 //
-// - Removed unnecessary include files. (Aug 28th 2005 Martin Gühmann)
+// - Removed unnecessary include files. (Aug 28th 2005 Martin Gï¿½hmann)
 // - Changed occurances of UnitRecord::GetMaxHP to
 //   UnitData::CalculateTotalHP. (Aug 3rd 2009 Maq)
 //
@@ -262,8 +262,7 @@ void Battle::MakeAttackers(sint32 numAttackers, Army const &attackers)
 	pos.x = pos.y = 0;
 
 	for (i=0; i<numAttackers; i++) {
-		m_attackers[i] = new BattleViewActor(attackers[i].GetSpriteState(), attackers[i],
-										attackers[i].GetType(), pos,  attackers[i].GetOwner());
+		m_attackers[i] = new BattleViewActor(attackers[i].GetSpriteState(), attackers[i], pos, attackers[i].GetOwner());
 		m_attackers[i]->SetFacing(k_BATTLEVIEW_DEFAULT_ATTACKER_FACING);
 
 		DPRINTF(k_DBG_FIX, ("MakeAttackers: Actor with Unit id: %.8lx\n", m_attackers[i]->GetUnitID()->m_id));
@@ -279,8 +278,7 @@ void Battle::MakeDefenders(sint32 numDefenders, CellUnitList const & defenders)
 	pos.x = pos.y = 0;
 
 	for (i=0; i<numDefenders; i++) {
-		m_defenders[i] = new BattleViewActor(defenders[i].GetSpriteState(), defenders[i],
-										defenders[i].GetType(), pos,  defenders[i].GetOwner());
+		m_defenders[i] = new BattleViewActor(defenders[i].GetSpriteState(), defenders[i], pos, defenders[i].GetOwner());
 		m_defenders[i]->SetFacing(k_BATTLEVIEW_DEFAULT_DEFENDER_FACING);
 		m_defenders[i]->SetFortified(defenders[i].IsEntrenched());
 		DPRINTF(k_DBG_FIX, ("MakeDefenders: Actor with Unit id: %.8lx\n", m_defenders[i]->GetUnitID()->m_id));

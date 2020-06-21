@@ -725,6 +725,12 @@ bool ui_CheckForScroll(void)
 			lastdeltaX = deltaX;
 			lastdeltaY = deltaY;
 
+			if(scrolled_last_time) {
+				scrolled_last_time = false;
+				return false;
+			}
+			scrolled_last_time = true;
+
 			g_tiledMap->SetScrolling(true);
 			g_tiledMap->ScrollMap(deltaX, deltaY);
 
@@ -907,7 +913,7 @@ int sprite_Initialize(void)
 
 	spritegrouplist_Initialize();
 
-	g_director = new Director();
+	g_director = Director::CreateDirector();
 
 	return 0;
 }
@@ -919,10 +925,10 @@ int sprite_Update(aui_Surface *surf)
 
 void sprite_Cleanup(void)
 {
-	spritegrouplist_Cleanup();
-
 	allocated::clear(g_director);
 	allocated::clear(g_screenManager);
+
+	spritegrouplist_Cleanup();
 }
 
 void ZoomPad_ZoomCallback()

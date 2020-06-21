@@ -25,11 +25,11 @@
 //
 // Modifications from the original Activision code:
 //
-// - Improved slic event debugging. (7-Nov-2007 Martin G�hmann)
+// - Improved slic event debugging. (7-Nov-2007 Martin Gühmann)
 // - Events that should go into the event queue are only added if all their
-//   arguments are valid. (7-Nov-2007 Martin G�hmann)
+//   arguments are valid. (7-Nov-2007 Martin Gühmann)
 // - Events whose arguments became invalid between call and execution are not
-//   executed and an error message is given. (7-Nov-2007 Martin G�hmann)
+//   executed and an error message is given. (7-Nov-2007 Martin Gühmann)
 //
 //----------------------------------------------------------------------------
 
@@ -53,6 +53,7 @@
 #include "TradeRoute.h"
 
 #include "director.h"
+#include "network.h"
 #include "SelItem.h"                // g_selected_item
 
 GameEventManager *g_gevManager = NULL;
@@ -86,7 +87,9 @@ GameEventManager::GameEventManager()
     m_processingEvent   (GEV_MAX),
     m_serial            (0),
     m_needUserInput     (false),
-    m_pauseCount        (0)
+    m_pauseCount        (0),
+	m_lastTurnProcessed (-1),
+	m_endTurnRequested  (false)
 {
 #ifdef _DEBUG
 	m_eventLogFile = fopen(EVENTLOGNAME, "w");
@@ -390,8 +393,6 @@ GAME_EVENT_ERR GameEventManager::ArglistAddEvent(GAME_EVENT_INSERT insert,
 			return GEV_ERR_BadInsert;
 	}
 
-	g_director->IncrementPendingGameActions();
-
 	return Process();
 }
 
@@ -445,8 +446,7 @@ GAME_EVENT_ERR GameEventManager::ProcessHead()
 	if (GEV_ERR_NeedUserInput != err)
     {
 		Assert(event == m_eventList->GetHead());
-		m_eventList->RemoveHead();
-		g_director->DecrementPendingGameActions();
+		RemoveHead();
 
 #if defined(_DEBUG)
         // Debug version: keep the last k_MAX_EVENT_HISTORY handled events
@@ -943,4 +943,55 @@ void GameEventManager::NotifyResync()
 {
 	m_eventList->DeleteAll();
 	m_needUserInput = false;
+	m_endTurnRequested = false;
+}
+
+void GameEventManager::EndTurnRequest()
+{
+	if (g_selected_item->GetCurPlayer() == g_selected_item->GetVisiblePlayer())
+	{
+		if (m_lastTurnProcessed != g_player[g_selected_item->GetCurPlayer()]->m_current_round)
+		{
+			m_lastTurnProcessed = g_player[g_selected_item->GetCurPlayer()]->m_current_round;
+
+			Pause();
+
+			Player *player = g_player[g_selected_item->GetCurPlayer()];
+			player->m_endingTurn = TRUE;
+			for (sint32 i = 0; i < player->m_all_armies->Num(); i++) {
+				AddEvent(GEV_INSERT_Tail, GEV_BeginTurnExecute,
+									   GEA_Army, player->m_all_armies->Access(i).m_id,
+									   GEA_End);
+			}
+			player->m_endingTurn = FALSE;
+
+			Resume();
+		}
+	}
+
+	if (!m_eventList->IsEmpty() || m_endTurnRequested)
+	{
+		DPRINTF(k_DBG_GAMESTATE,("GameEventManager::EndTurnRequest, but there are %d pending actions (or it was already requested), not doing it yet.\n", m_eventList->GetCount()));
+		m_endTurnRequested = true;
+	} else {
+		g_director->AddEndTurn();
+	}
+}
+
+void GameEventManager::RemoveHead()
+{
+	m_eventList->RemoveHead();
+
+	if (m_eventList->IsEmpty())
+	{
+		if (m_endTurnRequested)
+		{
+			Player *player = g_player[g_selected_item->GetCurPlayer()];
+			if (player && (!g_network.IsActive() || g_network.IsLocalPlayer(g_selected_item->GetCurPlayer())))
+			{
+				m_endTurnRequested = false;
+				EndTurnRequest();
+			}
+		}
+	}
 }

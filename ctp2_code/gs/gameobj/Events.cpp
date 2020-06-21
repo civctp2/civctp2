@@ -64,8 +64,6 @@
 
 #include "diplomacywindow.h"
 
-#include "directorevent.h"
-
 #include "Order.h"
 
 #include "World.h"
@@ -105,7 +103,6 @@ void events_Initialize()
 	soundevent_Initialize();
 	interfaceevent_Initialize();
 	improvementevent_Initialize();
-	directorevent_Initialize();
 	worldevent_Initialize();
 	combatevent_Initialize();
 	tradeevent_Initialize();
@@ -142,7 +139,6 @@ void events_Cleanup()
 	soundevent_Cleanup();
 	interfaceevent_Cleanup();
 	improvementevent_Cleanup();
-	directorevent_Cleanup();
 	worldevent_Cleanup();
 	combatevent_Cleanup();
 	tradeevent_Cleanup();

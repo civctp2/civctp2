@@ -188,11 +188,6 @@ AUI_ERRCODE background_draw_handler(LPVOID bg)
 	g_theTradePool->Draw(surface);
 	g_tiledMap->RepaintSprites(surface, g_tiledMap->GetMapViewRect(), false);
 
-	if (g_director)
-    {
-		g_director->GarbageCollectItems();
-	}
-
 	g_tiledMap->DrawUnfinishedMove(surface);
 
 	POINT pos;

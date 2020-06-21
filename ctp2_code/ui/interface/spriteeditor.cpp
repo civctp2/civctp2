@@ -24,7 +24,7 @@
 //
 // Modifications from the original Activision code:
 //
-// - Initialized local variables. (Sep 9th 2005 Martin Gühmann)
+// - Initialized local variables. (Sep 9th 2005 Martin GÃ¼hmann)
 //
 //----------------------------------------------------------------------------
 
@@ -238,7 +238,6 @@ SpriteEditWindow::SpriteEditWindow(
 	m_frame          = 0;
 	m_animation      = GOODACTION_IDLE;
 	m_currentAnim    = NULL;
-	m_actionObj      = new Action();
 
 	aui_Dimension	*dimension=GetDim();
 
@@ -283,9 +282,9 @@ SpriteEditWindow::SpriteEditWindow(
 
 SpriteEditWindow::~SpriteEditWindow()
 {
-//	m_currentAnim, m_spriteData: Not deleted (reference only)
+//	m_spriteData: Not deleted (reference only)
 //	delete m_largeSurface   : TODO (crashes)
-//  delete m_actionObj      : TODO (crashes)
+	delete m_currentAnim;
 	delete m_currentSprite;
 	delete m_spriteSurface;
 	delete m_Load;
@@ -354,9 +353,12 @@ SpriteEditWindow::SetFacing	(sint32 facing)
 void
 SpriteEditWindow::SetAnimation(sint32 anim)
 {
-	m_animation   = anim;
-	m_spriteData  = m_currentSprite->GetGroupSprite((GAME_ACTION)m_animation);
-	m_currentAnim = m_currentSprite->GetAnim       ((GAME_ACTION)m_animation);
+	m_animation  = anim;
+	m_spriteData = m_currentSprite->GetGroupSprite((GAME_ACTION)m_animation);
+
+	delete m_currentAnim;
+	Anim * origAnim = m_currentSprite->GetAnim       ((GAME_ACTION)m_animation);
+	m_currentAnim   = origAnim ? Anim::CreateSequential(*origAnim) : NULL;
 }
 
 void
@@ -582,7 +584,9 @@ void SpriteEditWindow::LoadSprite(char *name)
 
 	m_spriteData = m_currentSprite->GetGroupSprite((GAME_ACTION)m_animation);
 
-	m_currentAnim =m_currentSprite->GetAnim((GAME_ACTION)m_animation);
+	delete m_currentAnim;
+	Anim * origAnim = m_currentSprite->GetAnim((GAME_ACTION)m_animation);
+	m_currentAnim   = origAnim ? Anim::CreateSequential(*origAnim) : NULL;
 
 	float largew=(float)(m_largeRect.right);
 	float largeh=(float)(m_largeRect.bottom);
@@ -641,23 +645,9 @@ void SpriteEditWindow::BeginAnimation()
 	if (m_currentAnim==NULL)
 		return;
 
-//	sint32 speed = g_theProfileDB->GetUnitSpeed();
-
 	m_frame = 0;
 
-	m_actionObj->SetActionType(m_animation);
-	m_actionObj->SetAnimPos(0);
-	m_actionObj->SetSpecialDelayProcess(FALSE);
-	m_actionObj->SetCurrentEndCondition(ACTIONEND_ANIMEND);
-	m_actionObj->SetCurActionCounter(0);
-	m_actionObj->SetFinished(FALSE);
-	m_actionObj->SetAnim(m_currentAnim);
-	m_currentAnim->SetType(ANIMTYPE_LOOPED);
-	m_actionObj->SetUnitsVisibility(1000);
-	m_actionObj->SetUnitVisionRange(1000);
-
-	m_currentAnim->SetWeAreInDelay(FALSE);
-	m_currentAnim->SetFinished(FALSE);
+	m_currentAnim->Rewind();
 }
 
 void SpriteEditWindow::Animate()
@@ -666,24 +656,18 @@ void SpriteEditWindow::Animate()
 
 	if (m_currentAnim)
 	{
-		m_currentAnim->SetWeAreInDelay(FALSE);
+		m_currentAnim->Process();
 
-		m_actionObj->Process();
+		m_frame = m_currentAnim->GetCurrentFrame();
 
-		sint32 animPos = m_actionObj->GetAnimPos();
-
-		m_frame = m_currentAnim->GetFrame(animPos);
-
-		sint32 num_frames = m_currentAnim->GetNumFrames();
-
-		if (animPos >= num_frames)
+		if (m_currentAnim->IsFinished())
 		{
-			animation_over = true;
-			m_frame = 0;
-		}
-		else if (m_actionObj->Finished())
-		{
-			animation_over = true;
+			if (m_stopAfterLoop) {
+				animation_over = true;
+				m_frame = 0;
+			} else {
+				m_currentAnim->Rewind();
+			}
 		}
 	}
 	else

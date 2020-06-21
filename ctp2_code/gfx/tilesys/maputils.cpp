@@ -95,13 +95,20 @@ BOOL maputils_TilePointInTileRect(sint32 x, sint32 y, RECT *tileRect)
 
 	RECT wrappedRect = *tileRect;
 
-	if (wrappedRect.left < 0) wrappedRect.left += mapWidth;
-	if (wrappedRect.right >= mapWidth) wrappedRect.right -= mapWidth;
-	if (wrappedRect.top < 0) wrappedRect.top += mapHeight;
-	if (wrappedRect.bottom >= mapHeight) wrappedRect.bottom -= mapHeight;
+	if (wrappedRect.left < 0) {
+		wrappedRect.left = g_theWorld->IsXwrap() ? wrappedRect.left + mapWidth : 0;
+	}
+	if (wrappedRect.right >= mapWidth) {
+		wrappedRect.right = g_theWorld->IsXwrap() ? wrappedRect.right - mapWidth : mapWidth-1;
+	}
+	if (wrappedRect.top < 0) {
+		wrappedRect.top = g_theWorld->IsYwrap() ? wrappedRect.top + mapHeight : 0;
+	}
+	if (wrappedRect.bottom >= mapHeight) {
+		wrappedRect.bottom = g_theWorld->IsYwrap() ? wrappedRect.bottom - mapHeight : mapHeight - 1;
+	}
 
 	if (wrappedRect.right < wrappedRect.left) {
-
 		if (x < wrappedRect.left && x >= wrappedRect.right) return FALSE;
 	} else {
 
@@ -109,7 +116,6 @@ BOOL maputils_TilePointInTileRect(sint32 x, sint32 y, RECT *tileRect)
 	}
 
 	if (wrappedRect.bottom < wrappedRect.top) {
-
 		if (y < wrappedRect.top && y >= wrappedRect.bottom) return FALSE;
 	} else {
 		if (y < wrappedRect.top || y >= wrappedRect.bottom) return FALSE;

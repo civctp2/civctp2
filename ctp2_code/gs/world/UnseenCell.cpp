@@ -73,24 +73,6 @@ namespace
 {
     sint16 const    TERRAIN_UNKNOWN     = -1;
     sint16 const    MOVECOST_UNKNOWN    = 0x7fff;
-
-    /// Release an actor
-    /// \param      a_Actor  actor to release
-    /// \remarks    The actor is reference counted
-    /// \todo       Move to UnitActor
-    void ReleaseActor(UnitActor * & a_Actor)
-    {
-        if (a_Actor)
-        {
-		    if (--a_Actor->m_refCount <= 0)
-            {
-			    g_director->ActiveUnitRemove(a_Actor);
-			    delete a_Actor;
-		    }
-
-            a_Actor = NULL;
-	    }
-    }
 }
 
 //----------------------------------------------------------------------------
@@ -209,25 +191,16 @@ UnseenCell::UnseenCell(const MapPoint & point)
 												    city.GetType(),
 												    point,
 												    city.GetOwner(),
-												    TRUE,
 												    city.GetVisionRange(),
-												    city.CD()->GetDesiredSpriteIndex());
+												    city.CD()->GetDesiredSpriteIndex(),
+												    m_citySize);
 
 				newActor->SetUnitVisibility((1 << g_selected_item->GetVisiblePlayer())
 										    | actor->GetUnitVisibility());
-				newActor->SetPos(point);
 
-				newActor->SetIsFortified(actor->IsFortified());
-				newActor->SetIsFortifying(actor->IsFortifying());
-				newActor->SetHasCityWalls(actor->HasCityWalls());
-				newActor->SetHasForceField(actor->HasForceField());
-
-				newActor->SetSize(m_citySize);
+				newActor->CopyFlags(*actor);
 
 				newActor->ChangeImage(newSS, city.GetType(), city);
-
-				newActor->AddIdle();
-				newActor->GetNextAction();
 
 				m_actor = newActor;
 			} // actor
@@ -326,8 +299,8 @@ UnseenCell::UnseenCell(UnseenCell *old)
 {
 	*this = *old;
 
-	if(m_actor) {
-		m_actor->m_refCount++;
+	if (m_actor) {
+		m_actor->IncreaseReferenceCount() ;
 	}
 
 	if(old->m_tileInfo) {
@@ -422,7 +395,7 @@ UnseenCell::UnseenCell(CivArchive &archive)
 //----------------------------------------------------------------------------
 UnseenCell::~UnseenCell()
 {
-	ReleaseActor(m_actor);
+	ReleaseActor();
 
 	delete m_tileInfo;
 
@@ -439,6 +412,18 @@ UnseenCell::~UnseenCell()
 	}
 
 	delete [] m_cityName;
+}
+
+void UnseenCell::ReleaseActor()
+{
+	if (m_actor)
+	{
+		// Note: it is assumed that this actor is local and is never used in g_director
+		if (m_actor->DecreaseReferenceCount()) {
+			delete m_actor;
+		}
+	}
+	m_actor = NULL;
 }
 
 //----------------------------------------------------------------------------
@@ -986,7 +971,7 @@ void UnseenCell::Serialize(CivArchive &archive)
 		sint32 hasActor;
 		archive >> hasActor;
 
-		ReleaseActor(m_actor);
+		ReleaseActor();
 		if (hasActor)
 		{
 			m_actor = new UnitActor(archive);

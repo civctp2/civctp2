@@ -28,10 +28,10 @@
 // Modifications from the original Activision code:
 //
 // - Added new functions to calculate the food, shields and gold values produced
-//   at the storing time of this UnseenCell. - Dec. 22nd 2004 Martin Gühmann
+//   at the storing time of this UnseenCell. - Dec. 22nd 2004 Martin Gï¿½hmann
 // - Added visible city oner flag and get method to be able to figure out
 //   the city in whose radius the tile was at the last visit.
-//   - Dec. 26th 2994 - Martin Gühmann
+//   - Dec. 26th 2994 - Martin Gï¿½hmann
 // - added IsCapitol
 // - added IsReligion 1-23-2006
 //
@@ -183,6 +183,7 @@ private:
 	sint8                                 m_happinessAttackOwner;
 	sint8                                 m_cell_owner;
 
+	void ReleaseActor();
 public:
 	UnseenCell(const MapPoint &point);
 	UnseenCell();

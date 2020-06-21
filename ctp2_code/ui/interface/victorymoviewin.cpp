@@ -24,7 +24,7 @@
 //
 // Modifications from the original Activision code:
 //
-// - Initialized local variables. (Sep 9th 2005 Martin Gühmann)
+// - Initialized local variables. (Sep 9th 2005 Martin Gï¿½hmann)
 //
 //----------------------------------------------------------------------------
 
@@ -71,7 +71,7 @@ VictoryMovieWindow		*g_victoryMovieWindow = NULL;
 static GAME_OVER		s_result;
 
 
-void victorymoviewin_Initialize(Sequence *seq)
+void victorymoviewin_Initialize()
 {
 	AUI_ERRCODE		errcode = AUI_ERRCODE_OK;
 
@@ -83,22 +83,6 @@ void victorymoviewin_Initialize(Sequence *seq)
 		Assert(g_victoryMovieWindow != NULL);
 
 	}
-
-	g_victoryMovieWindow->SetSequence(seq);
-
-
-
-
-
-
-
-
-
-
-
-
-
-
 }
 
 
@@ -165,18 +149,14 @@ void victorymoviewin_DisplayVictoryMovie(GAME_OVER reason)
 
 void victorymoviewin_Cleanup()
 {
-	Sequence	*seq = NULL;
-
 	if (g_victoryMovieWindow) {
-		seq = g_victoryMovieWindow->GetSequence();
-
 		g_c3ui->RemoveWindow(g_victoryMovieWindow->Id());
 
 		delete g_victoryMovieWindow;
 		g_victoryMovieWindow = NULL;
 	}
 
-	g_director->ActionFinished(seq);
+	g_director->ExternalActionFinished(DEA_VICTORY_MOVIE);
 }
 
 

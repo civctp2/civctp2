@@ -26,9 +26,9 @@
 // Modifications from the original Activision code:
 //
 // - Added second World::GetGood method, usefull if you already have a Cell
-//   pointer. - May 18th 2005 Martin G�hmann
-// - Moved some stuff from the old global earming database. (July 15th 2006 Martin G�hmann)
-// - GobalWarming and OzoneDepletion are now event handled. (29-Oct-2007 Martin G�hmann)
+//   pointer. - May 18th 2005 Martin Gühmann
+// - Moved some stuff from the old global earming database. (July 15th 2006 Martin Gühmann)
+// - GobalWarming and OzoneDepletion are now event handled. (29-Oct-2007 Martin Gühmann)
 //
 //----------------------------------------------------------------------------
 
@@ -490,7 +490,7 @@ public:
 	sint32 GetColor(const MapPoint &pos) const;
 #endif
 
-	bool InsertUnit (const MapPoint &pos, Unit &id, UnitDynamicArray &revealedUnits);
+	bool InsertUnit (const MapPoint &pos, Unit &id, UnitDynamicArray *revealedUnits = NULL);
 
     sint32 RemoveUnitReference(const MapPoint &pos, const Unit &id);
 

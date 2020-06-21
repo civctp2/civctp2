@@ -32,6 +32,7 @@
 
 #include "c3.h"
 #include "Actor.h"
+#include "colorset.h"
 
 Actor::Actor(SpriteState * ss)
 :
@@ -45,6 +46,18 @@ Actor::Actor(SpriteState * ss)
     m_x             (0),
     m_y             (0),
     m_spriteState   (ss),
-    m_morphing      (false),
-    m_animPos       (0)
+    m_morphing      (false)
 { }
+
+Pixel16 Actor::GetHealthBarColor(double healthPercentage)
+{
+	Pixel16 color = g_colorSet->GetColor(COLOR_GREEN);
+	if (healthPercentage < 0.25) {
+		color = g_colorSet->GetColor(COLOR_RED);
+	} else if (healthPercentage < 0.50) {
+		color = g_colorSet->GetColor(COLOR_ORANGE);
+	} else if (healthPercentage < 0.75) {
+		color = g_colorSet->GetColor(COLOR_YELLOW);
+	}
+	return color;
+}

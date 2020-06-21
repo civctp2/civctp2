@@ -7,10 +7,9 @@
 #include "aui_action.h"
 #include "GameOver.h"
 
-class Sequence;
 enum GAME_OVER;
 
-void victorymoviewin_Initialize(Sequence *seq);
+void victorymoviewin_Initialize();
 void victorymoviewin_DisplayVictoryMovie(GAME_OVER reason);
 
 void victorymoviewin_Cleanup();

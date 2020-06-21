@@ -912,22 +912,6 @@ rem                                                if                           
       <Optimization Condition="'$(Configuration)|$(Platform)'=='Release|Win32'">Disabled</Optimization>
       <Optimization Condition="'$(Configuration)|$(Platform)'=='Test|Win32'">Disabled</Optimization>
     </ClCompile>
-    <ClCompile Include="..\gfx\spritesys\DirectorActions.cpp">
-      <Optimization Condition="'$(Configuration)|$(Platform)'=='Final with Logging|Win32'">MaxSpeed</Optimization>
-      <Optimization Condition="'$(Configuration)|$(Platform)'=='Final|Win32'">MaxSpeed</Optimization>
-      <Optimization Condition="'$(Configuration)|$(Platform)'=='Optimized Test|Win32'">Disabled</Optimization>
-      <FavorSizeOrSpeed Condition="'$(Configuration)|$(Platform)'=='Optimized Test|Win32'">Size</FavorSizeOrSpeed>
-      <Optimization Condition="'$(Configuration)|$(Platform)'=='Release|Win32'">Disabled</Optimization>
-      <Optimization Condition="'$(Configuration)|$(Platform)'=='Test|Win32'">Disabled</Optimization>
-    </ClCompile>
-    <ClCompile Include="..\gfx\spritesys\directorevent.cpp">
-      <Optimization Condition="'$(Configuration)|$(Platform)'=='Final with Logging|Win32'">MaxSpeed</Optimization>
-      <Optimization Condition="'$(Configuration)|$(Platform)'=='Final|Win32'">MaxSpeed</Optimization>
-      <Optimization Condition="'$(Configuration)|$(Platform)'=='Optimized Test|Win32'">Disabled</Optimization>
-      <FavorSizeOrSpeed Condition="'$(Configuration)|$(Platform)'=='Optimized Test|Win32'">Size</FavorSizeOrSpeed>
-      <Optimization Condition="'$(Configuration)|$(Platform)'=='Release|Win32'">Disabled</Optimization>
-      <Optimization Condition="'$(Configuration)|$(Platform)'=='Test|Win32'">Disabled</Optimization>
-    </ClCompile>
     <ClCompile Include="..\gfx\spritesys\EffectActor.cpp">
       <Optimization Condition="'$(Configuration)|$(Platform)'=='Final with Logging|Win32'">MaxSpeed</Optimization>
       <Optimization Condition="'$(Configuration)|$(Platform)'=='Final|Win32'">MaxSpeed</Optimization>
@@ -6971,8 +6955,6 @@ rem                                                if                           
     <ClInclude Include="..\gfx\spritesys\BattleViewActor.h" />
     <ClInclude Include="..\gfx\spritesys\CitySpriteGroup.h" />
     <ClInclude Include="..\gfx\spritesys\Director.h" />
-    <ClInclude Include="..\gfx\spritesys\DirectorActions.h" />
-    <ClInclude Include="..\gfx\spritesys\directorevent.h" />
     <ClInclude Include="..\gfx\spritesys\EffectActor.h" />
     <ClInclude Include="..\gfx\spritesys\EffectSpriteGroup.h" />
     <ClInclude Include="..\gfx\spritesys\FacedSprite.h" />

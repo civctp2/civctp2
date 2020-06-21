@@ -28,19 +28,19 @@
 // - #pragma marked as Microsoft extension.
 // - IsValid marked as const.
 // - GetDisplayName added.
-// - Made GetFuel method const - April 24th 2005 Martin Gühmann
+// - Made GetFuel method const - April 24th 2005 Martin GÃ¼hmann
 // - Added NeedsRefueling method to remove code duplications.
-//   - April 24th 2005 Martin Gühmann
+//   - April 24th 2005 Martin GÃ¼hmann
 // - Moved UnitValidForOrder from ArmyData to be able to access the Unit
-//   properties as well. - April 24th 2005 Martin Gühmann
+//   properties as well. - April 24th 2005 Martin GÃ¼hmann
 // - Removed some unsused method to removed some unused in methods in
-//   CityData.. - Aug 6th 2005 Martin Gühmann
-// - Removed another unused and unecessary function. (Aug 12th 2005 Martin Gühmann)
-// - Moved sinking and upgrade functionality from ArmyData. (Dec 24th 2006 Martin Gühmann)
+//   CityData.. - Aug 6th 2005 Martin GÃ¼hmann
+// - Removed another unused and unecessary function. (Aug 12th 2005 Martin GÃ¼hmann)
+// - Moved sinking and upgrade functionality from ArmyData. (Dec 24th 2006 Martin GÃ¼hmann)
 // - Modified sink to take a unit so the Slic identifies what sank - E 5-24-2007
-// - Added an IsInVisionRange test. (25-Jan-2008 Martin Gühmann)
-// - Added check move points option to CanAtLeastOneCargoUnloadAt (8-Feb-2008 Martin Gühmann).
-// - Separated the Settle event drom the Settle in City event. (19-Feb-2008 Martin Gühmann)
+// - Added an IsInVisionRange test. (25-Jan-2008 Martin GÃ¼hmann)
+// - Added check move points option to CanAtLeastOneCargoUnloadAt (8-Feb-2008 Martin GÃ¼hmann).
+// - Separated the Settle event drom the Settle in City event. (19-Feb-2008 Martin GÃ¼hmann)
 //
 //----------------------------------------------------------------------------
 
@@ -169,8 +169,8 @@ public:
 	bool    DeductMoveCost(const double cost, bool &out_of_fuel);
 	void    GetPos(MapPoint &pos) const;
 	MapPoint RetPos(void) const;
-	bool MoveToPosition(const MapPoint &p, UnitDynamicArray &revealedUnits);
-	bool SetPosition(const MapPoint &p, UnitDynamicArray &revealedUnits);
+	bool MoveToPosition(const MapPoint &p, UnitDynamicArray *revealedUnits = NULL);
+	bool SetPosition(const MapPoint &p, UnitDynamicArray *revealedUnits = NULL);
 	void SetPosAndNothingElse(const MapPoint &p);
 
 	void Launch(void);
@@ -251,15 +251,15 @@ public:
 	sint32 GetMoveSoundID(void);
 	sint32 GetAcknowledgeSoundID(void);
 	sint32 GetCantMoveSoundID(void);
-	sint32 GetAttackSoundID(void);
+	sint32 GetAttackSoundID(void) const;
 
-	sint32 GetWorkSoundID(void);
+	sint32 GetWorkSoundID(void) const;
 	sint32 GetVictorySoundID(void);
 	sint32 GetDeathSoundID(void);
 	sint32 GetLoadSoundID(void);
 	sint32 GetUnloadSoundID(void);
 
-	bool GetSpecialAttackInfo(SPECATTACK attack, sint32 *soundID, sint32 *spriteID);
+	bool GetSpecialAttackInfo(SPECATTACK attack, sint32 *soundID, sint32 *spriteID) const;
 
 	bool CanSettle(const MapPoint &pos, const bool settleOnCity = false) const;
 
@@ -320,7 +320,7 @@ public:
 
 	void RemoveUnitVision();
 	void AddUnitVision();
-	void DoVision(UnitDynamicArray &revealedUnits);
+	void DoVision(UnitDynamicArray *revealedUnits = NULL);
 	void UndoVision();
 	uint32 GetVisibility() const;
 	uint32 GetVisibilityClass() const;
@@ -360,7 +360,6 @@ public:
 
 	void SetSpriteState(SpriteState *s);
 	SpriteState * GetSpriteState() const;
-	void SetActor(UnitActor *a);
 	UnitActor * GetActor() const;
 
 	SpriteState * GetPrimaryProjectileState();

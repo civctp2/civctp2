@@ -25,8 +25,8 @@
 // Modifications from the original Activision code:
 //
 // - AddUnitToArmyEvent does not crash in the debug version if the unit to
-//   be is transported and has therefore no army. This makes slic code save. (7-Nov-2007 Martin Gühmann)
-// - Added an upgrade unit event. (13-Sep-2008 Martin Gühmann)
+//   be is transported and has therefore no army. This makes slic code save. (7-Nov-2007 Martin GÃ¼hmann)
+// - Added an upgrade unit event. (13-Sep-2008 Martin GÃ¼hmann)
 //
 //----------------------------------------------------------------------------
 
@@ -53,6 +53,44 @@
 #include "UnitData.h"
 #include "UnitRecord.h"
 #include "World.h"                      // g_theWorld
+
+// TODO: Search for correct place to implement this
+#include "soundmanager.h"
+#include "SpecialEffectRecord.h"
+#include "SpecialAttackInfoRecord.h"
+#include "unitutil.h"
+
+namespace {
+
+	void NukeActionSuccessful(const Unit &unit, const MapPoint &pos)
+	{
+		sint32 soundID, spriteID;
+		const SpecialAttackInfoRecord *rec;
+		rec = unitutil_GetSpecialAttack(SPECATTACK_NUKE);
+		soundID = rec->GetSoundIDIndex();
+		spriteID = rec->GetSpriteID()->GetValue();
+
+		if (spriteID != -1 && soundID != -1)
+		{
+			if (g_selected_item->IsAutoCenterOn())
+			{
+				if ((unit.GetOwner() == g_selected_item->GetVisiblePlayer())
+					|| (unit.GetVisibility() & (1 << g_selected_item->GetVisiblePlayer()))) {
+					g_director->AddCenterMap(pos);
+				}
+			}
+
+			g_director->AddSpecialEffect(pos, spriteID, soundID);
+		} else {
+			if (soundID != -1) {
+				sint32 visiblePlayer = g_selected_item->GetVisiblePlayer();
+				if ((visiblePlayer == unit.GetOwner()) || (unit.GetVisibility() & (1 << visiblePlayer))) {
+					g_soundManager->AddSound(SOUNDTYPE_SFX, (uint32)0, 	soundID, pos.x, pos.y);
+				}
+			}
+		}
+	}
+}
 
 STDEHANDLER(KillUnitEvent)
 {
@@ -533,6 +571,7 @@ STDEHANDLER(NukeCityUnitEvent)
 		GEA_Player, -1,
 		GEA_End);
 
+	u.GetArmy()->ActionSuccessful(SPECATTACK_NUKE, u, c);
 	return GEV_HD_Continue;
 }
 
@@ -578,6 +617,8 @@ STDEHANDLER(NukeLocationUnitEvent)
 						   GEV_KillTile,
 						   GEA_MapPoint, pos,
 						   GEA_End);
+
+	NukeActionSuccessful(u, pos);
 
 	g_tiledMap->InvalidateMix();
 	g_tiledMap->InvalidateMap();
@@ -627,6 +668,7 @@ STDEHANDLER(LaunchUnitEvent)
 		u.SetFlag(k_UDF_IN_SPACE);
 
 		u.GetArmy()->SetReentry(spaceTurns, pos);
+		g_director->AddSpaceLaunch(u, pos);
 		g_director->AddHide(u);
 	} else {
 		g_gevManager->AddEvent(GEV_INSERT_AfterCurrent, GEV_Reentry,

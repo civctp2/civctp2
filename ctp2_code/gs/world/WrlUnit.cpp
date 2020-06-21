@@ -53,8 +53,7 @@ extern QuadTree<Unit> *g_theUnitTree;
 extern bool player_isEnemy(PLAYER_INDEX me, PLAYER_INDEX him);
 extern UnitPool *g_theUnitPool;
 
-bool World::InsertUnit (const MapPoint &pos, Unit &id,
-						  UnitDynamicArray &revealedUnits)
+bool World::InsertUnit (const MapPoint &pos, Unit &id, UnitDynamicArray *revealedUnits)
 {
 	Assert(!id.IsCity());
 	g_theUnitTree->Insert(id);

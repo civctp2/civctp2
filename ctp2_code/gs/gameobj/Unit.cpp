@@ -28,30 +28,30 @@
 // - IsValid marked as const.
 // - AddDisplayName added.
 // - PFT 29 mar 05, show # turns until city next grows a pop
-// - Made GetFuel method const - April 24th 2005 Martin Gühmann
+// - Made GetFuel method const - April 24th 2005 Martin GÃ¼hmann
 // - Added NeedsRefueling method to remove code duplications.
-//   - April 24th 2005 Martin Gühmann
+//   - April 24th 2005 Martin GÃ¼hmann
 // - Moved UnitValidForOrder from ArmyData to be able to access the Unit
-//   properties as well. - April 24th 2005 Martin Gühmann
-// - Implemented GovernmentModified for the UnitDB.  - April 24th 2005 Martin Gühmann
+//   properties as well. - April 24th 2005 Martin GÃ¼hmann
+// - Implemented GovernmentModified for the UnitDB.  - April 24th 2005 Martin GÃ¼hmann
 // - Removed some unsused method to removed some unused in methods in
-//   CityData.. - Aug 6th 2005 Martin Gühmann
-// - Removed another unused and unecessary function. (Aug 12th 2005 Martin Gühmann)
+//   CityData.. - Aug 6th 2005 Martin GÃ¼hmann
+// - Removed another unused and unecessary function. (Aug 12th 2005 Martin GÃ¼hmann)
 // - Added GetAllTerrainAsImp by E 2-24-2006
 // - Corrected pollution handling.
-// - Moved sinking and upgrade functionality from ArmyData. (Dec 24th 2006 Martin Gühmann)
+// - Moved sinking and upgrade functionality from ArmyData. (Dec 24th 2006 Martin GÃ¼hmann)
 // - Added IsReligion bools 1-23-2007
 // - Added IsHiddenNationality bool 2-7-2007
 // - The upgrade function now selects the best unit type for upgrading
 //   according to the unit transport capacity or the unit attack, defense and
-//   range statitics. (19-May-2007 Martin Gühmann)
+//   range statitics. (19-May-2007 Martin GÃ¼hmann)
 // - modified sink to display the sink message and the unit type
 // - If a unit dies it now uses the value of LaunchPollution if present
-//   to pollute the environment, instead of using a value of 1. (9-Jun-2007 Martin Gühmann)
-// - Replaced old const database by new one. (5-Aug-2007 Martin Gühmann)
-// - Added an IsInVisionRange test. (25-Jan-2008 Martin Gühmann)
-// - Added check move points option to CanAtLeastOneCargoUnloadAt (8-Feb-2008 Martin Gühmann).
-// - Separated the Settle event drom the Settle in City event. (19-Feb-2008 Martin Gühmann)
+//   to pollute the environment, instead of using a value of 1. (9-Jun-2007 Martin GÃ¼hmann)
+// - Replaced old const database by new one. (5-Aug-2007 Martin GÃ¼hmann)
+// - Added an IsInVisionRange test. (25-Jan-2008 Martin GÃ¼hmann)
+// - Added check move points option to CanAtLeastOneCargoUnloadAt (8-Feb-2008 Martin GÃ¼hmann).
+// - Separated the Settle event drom the Settle in City event. (19-Feb-2008 Martin GÃ¼hmann)
 // - Changed occurances of UnitRecord::GetMaxHP to
 //   UnitData::CalculateTotalHP. (Aug 3rd 2009 Maq)
 //
@@ -187,13 +187,15 @@ void Unit::RemoveAllReferences(const CAUSE_REMOVE_ARMY cause, PLAYER_INDEX kille
 			|| cause == CAUSE_REMOVE_ARMY_DISBANDED
 			|| cause == CAUSE_REMOVE_ARMY_GOVERNMENT_CHANGE
 			|| cause == CAUSE_REMOVE_ARMY_NUKE
-			|| cause == CAUSE_REMOVE_ARMY_PARKRANGER) {
-			g_director->AddFastKill(*this);
+			|| cause == CAUSE_REMOVE_ARMY_PARKRANGER
+			|| cause == CAUSE_REMOVE_ARMY_TRADE) {
+			g_director->AddFastKill(GetActor());
 		}
 		else
 		{
-			g_director->AddDeath(*this);
+			g_director->AddDeath(GetActor(), RetPos(), GetDeathSoundID(), killedBy);
 		}
+		AccessData()->SetActor(NULL);
 	}
 
 	if(!GetDBRec()->GetIsTrader())
@@ -301,9 +303,9 @@ void Unit::RemoveAllReferences(const CAUSE_REMOVE_ARMY cause, PLAYER_INDEX kille
 
 void Unit::FastKill()
 {
-	if(GetActor()) {
-		if(g_director)
-			g_director->FastKill(GetActor());
+	UnitActor *actor = GetActor();
+	if(actor) {
+		delete actor;
 		AccessData()->SetActor(NULL);
 	} else {
 		Assert(false);
@@ -586,12 +588,12 @@ void Unit::Launch()
     }
 }
 
-bool Unit::MoveToPosition(const MapPoint &p, UnitDynamicArray &revealed)
+bool Unit::MoveToPosition(const MapPoint &p, UnitDynamicArray *revealed)
 {
 	return SetPosition(p, revealed);
 }
 
-bool Unit::SetPosition(const MapPoint &p, UnitDynamicArray &revealed)
+bool Unit::SetPosition(const MapPoint &p, UnitDynamicArray *revealed)
 {
 	bool left_map = false;
 	AccessData()->SetPos(p, left_map);
@@ -956,12 +958,12 @@ sint32 Unit::GetCantMoveSoundID(void)
 	return GetDBRec()->GetSoundCantMoveIndex();
 }
 
-sint32 Unit::GetAttackSoundID(void)
+sint32 Unit::GetAttackSoundID(void) const
 {
 	return GetDBRec()->GetSoundAttackIndex();
 }
 
-sint32 Unit::GetWorkSoundID(void)
+sint32 Unit::GetWorkSoundID(void) const
 {
 	return GetDBRec()->GetSoundWorkIndex();
 }
@@ -986,7 +988,7 @@ sint32 Unit::GetUnloadSoundID(void)
 	return GetDBRec()->GetSoundUnloadIndex();
 }
 
-bool Unit::GetSpecialAttackInfo(SPECATTACK attack, sint32 *soundID, sint32 *spriteID)
+bool Unit::GetSpecialAttackInfo(SPECATTACK attack, sint32 *soundID, sint32 *spriteID) const
 {
 	const SpecialAttackInfoRecord *rec = unitutil_GetSpecialAttack(attack);
 	if(!rec)
@@ -1135,11 +1137,6 @@ SpriteState * Unit::GetSpriteState() const
 	return GetData()->GetSpriteState();
 }
 
-void Unit::SetActor(UnitActor *a)
-{
-	AccessData()->SetActor(a);
-}
-
 UnitActor * Unit::GetActor() const
 {
 	return GetData()->GetActor();
@@ -1225,7 +1222,7 @@ void Unit::AddUnitVision()
 	AccessData()->AddUnitVision();
 }
 
-void Unit::DoVision(UnitDynamicArray &revealedUnits)
+void Unit::DoVision(UnitDynamicArray *revealedUnits)
 {
 	AccessData()->DoVision(revealedUnits);
 }

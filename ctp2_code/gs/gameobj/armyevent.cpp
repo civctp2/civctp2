@@ -27,13 +27,13 @@
 // - Do not generate an Assert popup when slaves revolt and take over a city.
 // - Do not generate an Assert popup when an army is destroyed in an attack.
 // - Added Elite and Leader Chance 6-4-2007
-// - Replaced old const database by new one. (5-Aug-2007 Martin Gühmann)
+// - Replaced old const database by new one. (5-Aug-2007 Martin GÃ¼hmann)
 // - The FinishMoveEvent event now fills a transporter up to the transport
 //   capacy limit even if the army to be transported has more units than the
-//   transporter space, the units that do not fit on board stay at land. (25-Jan-2008 Martin Gühmann)
-// - Separated the Settle event drom the Settle in City event. (19-Feb-2008 Martin Gühmann)
-// - Merged finish move. (13-Aug-2008 Martin Gühmann)
-// - Added an upgrade order event. (13-Sep-2008 Martin Gühmann)
+//   transporter space, the units that do not fit on board stay at land. (25-Jan-2008 Martin GÃ¼hmann)
+// - Separated the Settle event drom the Settle in City event. (19-Feb-2008 Martin GÃ¼hmann)
+// - Merged finish move. (13-Aug-2008 Martin GÃ¼hmann)
+// - Added an upgrade order event. (13-Sep-2008 Martin GÃ¼hmann)
 //
 //----------------------------------------------------------------------------
 
@@ -79,6 +79,7 @@
 #include "DifficultyRecord.h"   // EMOD
 #include "CivilisationPool.h"
 #include "Happy.h"
+#include "profileDB.h"
 
 extern ArmyPool		*g_theArmyPool;
 
@@ -738,12 +739,11 @@ STDEHANDLER(ArmyMoveEvent)
 // EMOD - Rebasing of units, especially aircraft - code removed trying to create a code that automatically moves a unit from a
 //city to another city anywhere in the world and costing that unit 1 move.
 
-		UnitDynamicArray revealedUnits;
 		for (sint32 i = m_nElements - 1; i>= 0; i--) {   //for(i = 0; i < m_nElements; i++) {
 			if(!m_array[i].GetDBRec()->GetCanRebase()){
 				if (!IsOccupiedByForeigner(order->m_point)){
 					if (g_theWorld->HasCity(order->m_point) || terrainutil_HasAirfield(order->m_point)) {  //add unit later?
-						m_array[i].SetPosition(order->m_point, revealedUnits);
+						m_array[i].SetPosition(order->m_point);
 						return true;
 					}
 				}
@@ -1362,6 +1362,60 @@ STDEHANDLER(MoveUnitsEvent)
 	return GEV_HD_Continue;
 }
 
+STDEHANDLER(DirectorMoveUnitsEvent)
+{
+	Army a;
+	MapPoint from, to;
+
+	if (!args->GetArmy(0, a)) return GEV_HD_Continue;
+	if (!args->GetPos(0, from)) return GEV_HD_Continue;
+	if (!args->GetPos(1, to)) return GEV_HD_Continue;
+
+	if (a.Num() <= 0) return GEV_HD_Continue;
+	if (a->IsStealth() && !a->IsVisible(g_selected_item->GetPlayerOnScreen())) return GEV_HD_Continue;
+
+	if (g_selected_item->GetPlayerOnScreen() != -1 &&
+		g_selected_item->GetPlayerOnScreen() != g_selected_item->GetVisiblePlayer() &&
+		!g_network.IsActive())
+	{
+		return GEV_HD_Continue;
+	}
+
+	Unit top_src = a->GetTopVisibleUnit(g_selected_item->GetVisiblePlayer());
+	if (top_src.m_id == 0) {
+		top_src = a[0];
+	}
+
+	UnitActor **restOfStack = NULL;
+	sint32 numRest = a->Num() - 1;
+	if (numRest > 0) {
+		restOfStack = new (UnitActor* [numRest]);
+		a->GetActors(top_src, restOfStack);
+	}
+
+	MapPoint newPos = to;
+
+	if(g_selected_item->IsAutoCenterOn()
+	   && !g_director->TileWillBeCompletelyVisible(newPos.x, newPos.y)
+	   && (top_src.GetVisibility() & (1 << g_selected_item->GetVisiblePlayer()))
+	   && (g_theProfileDB->IsEnemyMoves() || top_src.GetOwner() == g_selected_item->GetVisiblePlayer()))
+	{
+		g_director->AddCenterMap(newPos);
+	}
+
+	if (!to.IsNextTo(from)) {
+		g_director->AddTeleport(top_src, from, newPos, numRest, restOfStack);
+	} else {
+		g_director->AddMove(top_src, from, newPos, numRest, restOfStack, top_src.GetMoveSoundID());
+	}
+
+	if (top_src.GetData()->HasLeftMap()) {
+		g_director->AddHide(top_src);
+	}
+
+	return GEV_HD_Continue;
+}
+
 STDEHANDLER(ArmyFinishUnloadEvent)
 {
 	Army transportArmy;
@@ -1606,6 +1660,8 @@ void armyevent_Initialize()
 	g_gevManager->AddCallback(GEV_FinishMove, GEV_PRI_Primary, &s_FinishMoveEvent);
 
 	g_gevManager->AddCallback(GEV_MoveUnits, GEV_PRI_Primary, &s_MoveUnitsEvent);
+	g_gevManager->AddCallback(GEV_MoveUnits, GEV_PRI_Post, &s_DirectorMoveUnitsEvent);
+
 	g_gevManager->AddCallback(GEV_CheckOrders, GEV_PRI_Primary, &s_CheckOrdersEvent);
 
 	g_gevManager->AddCallback(GEV_MoveIntoTransport, GEV_PRI_Primary, &s_MoveIntoTransportEvent);

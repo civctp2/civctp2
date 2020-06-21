@@ -75,9 +75,7 @@
 #include "TradePool.h"
 #include "SlicEngine.h"
 #include "SlicObject.h"
-#include "newturncount.h"
 #include "GameEventManager.h"
-#include "director.h"
 #include "Diplomat.h"
 #include "battleviewwindow.h"
 #include "c3ui.h"
@@ -361,15 +359,7 @@ void NetAction::Unpacketize(uint16 id, uint8* buf, uint16 size)
 						battleview_ExitButtonActionCallback(NULL, AUI_BUTTON_ACTION_EXECUTE, 0, NULL);
 					}
 
-					g_director->AddEndTurn();
-
-
-
-
-
-
-
-
+					g_gevManager->EndTurnRequest();
 				} else {
 					g_network.SetEndTurnWhenClear();
 				}

@@ -62,7 +62,7 @@ TradeRoute TradePool::Create(Unit sourceCity,
 	sourceCity.AddTradeRoute(newRoute); // activates trade route in case it is not
 	destCity.AddTradeRoute(newRoute); // activates trade route in case it is not
 	m_all_routes->Insert(newRoute);
-	g_director->TradeActorCreate(newRoute);
+	g_director->AddTradeRouteAnimation(newRoute);
 	sourceCity.RecalculateResources();
 	newRoute.RedrawRadarMapAlongRoute(); // must be called after TradeRouteData is set and route activation
 
@@ -168,7 +168,7 @@ void TradePool::RecreateActors()
 {
 	sint32 i;
 	for(i = 0; i < m_all_routes->Num(); i++) {
-		g_director->TradeActorCreate(m_all_routes->Access(i));
+		g_director->AddTradeRouteAnimation(m_all_routes->Access(i));
 	}
 }
 

@@ -144,7 +144,7 @@ public:
 	void			ClearGrid(void);
 
 	void			AddDirty(sint32 left, sint32 top, sint32 width, sint32 height, aui_DirtyList *list);
-	void			AddDirtyRect(RECT &rect, aui_DirtyList *list);
+	void			AddDirtyRect(const RECT & rect, aui_DirtyList *a_List);
 	void			AddDirtyTile(MapPoint &pos, aui_DirtyList *list);
 
 	void			AddDirtyToMap(sint32 left, sint32 top, sint32 width, sint32 height);
@@ -152,7 +152,7 @@ public:
 	void			AddDirtyTileToMap(MapPoint &pos);
 
 	void			AddDirtyToMix(sint32 left, sint32 top, sint32 width, sint32 height);
-	void			AddDirtyRectToMix(RECT &rect);
+	void			AddDirtyRectToMix(const RECT & rect);
 	void			AddDirtyTileToMix(MapPoint &pos);
 
 	void			ClearMixDirtyRects(void);
@@ -262,8 +262,6 @@ public:
 
 	void			PaintUnitActor(UnitActor *actor, bool fog = false);
 
-	void			PaintEffectActor(EffectActor *actor);
-
 	sint32			RepaintLayerSprites(RECT *paintRect, sint32 layer);
 	sint32			RepaintSprites(aui_Surface *surf, RECT *paintRect, bool scrolling);
 
@@ -302,7 +300,7 @@ public:
 	void			DrawPartiallyConstructedImprovement(aui_Surface *surface, uint32 env,
 													sint32 type, sint32 x, sint32 y,
 													uint16 index, bool fog, sint32 percentComplete);
-													//Added by Martin Gühmann sint32 percentComplete by Martin Gühmann
+													//Added by Martin GÃ¼hmann sint32 percentComplete by Martin GÃ¼hmann
 
 	void            DrawAnImprovement(aui_Surface *surface, Pixel16 *data, sint32 x, sint32 y,bool fog,bool clip=false);
 
@@ -389,8 +387,6 @@ public:
 	                sint32 x, sint32 y);
 
 	void		HandleCheat(MapPoint &pos);
-
-	UnitActor	*GetClickedUnit(aui_MouseEvent *data);
 
 	bool		PointInMask(POINT hitPt) const;
 	bool		MousePointToTilePos(POINT point, MapPoint &tilePos) const;

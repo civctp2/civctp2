@@ -129,7 +129,7 @@ void TradeRoute::RemoveUnseenRoute() // Mapped to TradeRoute::Kill in TradeRoute
 
 void TradeRoute::RemoveAllReferences(CAUSE_KILL_TRADE_ROUTE cause)
 {
-	g_director->TradeActorDestroy(*this);  // Good animation
+	g_director->RemoveTradeRouteAnimation(*this);  // Good animation
 	TradeRouteData* data = AccessData();
 
 	Unit source(data->GetSource()), dest(data->GetDestination());

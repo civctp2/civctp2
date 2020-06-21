@@ -24,7 +24,7 @@
 //
 // Modifications from the original Activision code:
 //
-// - Initialized local variables. (Sep 9th 2005 Martin Gühmann)
+// - Initialized local variables. (Sep 9th 2005 Martin GÃ¼hmann)
 //
 //----------------------------------------------------------------------------
 
@@ -220,14 +220,12 @@ void BattleEvent::ProcessAttack(void)
 
 					Assert(actor);
 
-					Anim *  anim = actor->CreateAnim(UNITACTION_ATTACK);
-					if (anim) {
-						Action			*action = new Action(UNITACTION_ATTACK, ACTIONEND_ANIMEND);
-
-						action->SetAnim(anim);
+					Anim * anim = actor->CreateAnim(UNITACTION_ATTACK);
+					if (anim)
+					{
+						Action * action = Action::CreateUnitAction(UNITACTION_ATTACK, anim);
 						actor->AddAction(action);
 					} else {
-
 						finished = TRUE;
 					}
 
@@ -240,10 +238,8 @@ void BattleEvent::ProcessAttack(void)
 
 					actor->Process();
 
-					if (actor->GetCurAction()) {
-						if (actor->GetCurAction()->GetActionType() != UNITACTION_ATTACK) {
-							finished = TRUE;
-						}
+					if (actor->GetCurUnitAction() != UNITACTION_ATTACK) {
+						finished = TRUE;
 					}
 				}
 
@@ -285,25 +281,11 @@ void BattleEvent::ProcessExplode(void)
 			if (!m_animating) {
 
 				if (actor) {
-					Action		*action = NULL;
-
-					Anim *  anim = actor->CreateAnim(EFFECTACTION_PLAY);
-					if (anim == NULL) {
-						anim = actor->CreateAnim(EFFECTACTION_FLASH);
-						if (anim)
-                        {
-							action = new Action(EFFECTACTION_FLASH, ACTIONEND_ANIMEND);
-                        }
-						else
-                        {
-							Assert(FALSE);
-                        }
-					} else {
-						action = new Action(EFFECTACTION_PLAY, ACTIONEND_ANIMEND);
-					}
-
-					action->SetAnim(anim);
-					actor->AddAction(action);
+					EFFECTACTION effectAction;
+					Anim * animation = actor->CreatePlayElseFlashAnim(effectAction);
+					Assert(animation);
+					Action * action = Action::CreateEffectAction(effectAction, animation);
+					actor->SetAction(action);
 					actor->Process();
 
 					if(data->explodeVictim) {
@@ -325,7 +307,7 @@ void BattleEvent::ProcessExplode(void)
 						actor->SetY(data->explodeVictim->GetY());
 					}
 
-					if (actor->GetKillNow())
+					if (actor->IsActionFinished())
 						finished = TRUE;
 				} else {
 					finished = TRUE;
@@ -374,21 +356,12 @@ void BattleEvent::ProcessDeath(void)
 
 				if (!m_animating) {
 					Action		*action;
-					Anim		*anim;
-
-
-
-
-					if (!actor->HasDeath() || (!actor->HasThisAnim(UNITACTION_VICTORY))) {
-
-						action = new Action(UNITACTION_FAKE_DEATH, ACTIONEND_ANIMEND);
-						anim = actor->MakeFakeDeath();
+					if (!actor->HasDeath() || (!actor->HasAnim(UNITACTION_VICTORY))) {
+						action = Action::CreateUnitAction(UNITACTION_FAKE_DEATH, Anim::MakeFakeDeath());
 					} else {
-						action = new Action(UNITACTION_VICTORY, ACTIONEND_ANIMEND);
-						anim = actor->CreateAnim(UNITACTION_VICTORY);
+						action = Action::CreateUnitAction(UNITACTION_VICTORY, actor->CreateAnim(UNITACTION_VICTORY));
 					}
 
-					action->SetAnim(anim);
 					actor->AddAction(action);
 
 					if (g_soundManager)
@@ -403,19 +376,15 @@ void BattleEvent::ProcessDeath(void)
 				} else {
 					actor->Process();
 
-					if (actor->GetCurAction() &&
-						actor->GetCurAction()->m_actionType != UNITACTION_VICTORY &&
-						actor->GetCurAction()->m_actionType != UNITACTION_FAKE_DEATH) {
-
+					if (actor->GetCurUnitAction() != UNITACTION_VICTORY &&
+						actor->GetCurUnitAction() != UNITACTION_FAKE_DEATH)
+					{
 						finished = TRUE;
 					}
 				}
-
 			}
 
 			if (finished) {
-
-
 				delete m_walker->Remove();
 				if(actor) {
 					g_battleViewWindow->RemoveActor(actor);
@@ -463,9 +432,7 @@ void BattleEvent::DrawExplosions(aui_Surface *surface)
 		if (data) {
 			EffectActor		*actor = data->explodeActor;
 			if (actor) {
-				sint32			x, y;
-				actor->GetPixelPos(x, y);
-				actor->DrawDirectWithFlags(surface, x, y, k_DRAWFLAGS_NORMAL | k_BIT_DRAWFLAGS_ADDITIVE);
+				actor->DrawDirectWithFlags(surface, k_DRAWFLAGS_NORMAL | k_BIT_DRAWFLAGS_ADDITIVE);
 			}
 		}
 		m_walker->Next();

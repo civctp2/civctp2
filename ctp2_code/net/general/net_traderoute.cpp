@@ -162,7 +162,7 @@ void NetTradeRoute::Unpacketize(uint16 id, uint8 *buf, uint16 size)
 		m_routeData->m_sourceCity.AddTradeRoute(route, !m_newRoute);
 		m_routeData->m_destinationCity.AddTradeRoute(route, !m_newRoute);
 		g_theTradePool->m_all_routes->Insert(route);
-		g_director->TradeActorCreate(route);
+		g_director->AddTradeRouteAnimation(route);
 	}
 
 	TradeManager::Notify();

@@ -33,23 +33,23 @@
 //
 // - Make sure that cities created by the scenario editor keep their style and
 //   their size. The last created city by the scenario editor is now selected.
-//	 By Martin Gühmann.
+//	 By Martin GÃ¼hmann.
 // - Map wrapping corrected.
 // - Possible leaks/invalid accesses corrected.
 // - Current terrain improvements are displayed instead of those from the
-//   last visit if the fog of war is toggled off. - Dec 24th 2004 - Martin Gühmann
+//   last visit if the fog of war is toggled off. - Dec 24th 2004 - Martin GÃ¼hmann
 // - With fog of war off the current city sprites and unit sprites at the
-//   right position are displayed. - Dec. 25th 2004 - Martin Gühmann
+//   right position are displayed. - Dec. 25th 2004 - Martin GÃ¼hmann
 // - Improved destructor (useless code removed, corrected delete [])
-// - Removed .NET compiler warnings. - April 23rd 2005 Martin Gühmann
+// - Removed .NET compiler warnings. - April 23rd 2005 Martin GÃ¼hmann
 // - Prevented crashes on game startup and exit.
 // - The good sprite index is now retrieved from the resource database
-//   instaed of good sprite state database. (Aug 29th 2005 Martin Gühmann)
-// - Initialized local variables. (Sep 9th 2005 Martin Gühmann)
-// - Made government modified for units work here. (July 29th 2006 Martin Gühmann)
+//   instaed of good sprite state database. (Aug 29th 2005 Martin GÃ¼hmann)
+// - Initialized local variables. (Sep 9th 2005 Martin GÃ¼hmann)
+// - Made government modified for units work here. (July 29th 2006 Martin GÃ¼hmann)
 // - added debugai profile switch - E 4-3-2007
 // - When yes the debugai switch causes a crash
-// - Full city radius is now drawn around settlers. (30-Jan-2008 Martin Gühmann)
+// - Full city radius is now drawn around settlers. (30-Jan-2008 Martin GÃ¼hmann)
 // - Changed colour of maximum zoom grid from white to black. (12-Mar-2009 Maq)
 //
 //----------------------------------------------------------------------------
@@ -120,6 +120,7 @@
 #include "TileInfo.h"
 #include "tileset.h"
 #include "tileutils.h"
+#include "TradePool.h"
 #include "TradeRoute.h"
 #include "TradeRouteData.h"
 #include "TurnCnt.h"                    // g_turn
@@ -506,14 +507,14 @@ void TiledMap::AddDirty(sint32 left, sint32 top, sint32 width, sint32 height, au
 
 #define __GRIDDED_BLITS__
 
-void TiledMap::AddDirtyRect(RECT &rect, aui_DirtyList * a_List)
+void TiledMap::AddDirtyRect(const RECT & rect, aui_DirtyList * a_List)
 {
 	if (a_List) {
 		RECT tempRect = rect;
 
 #ifdef __GRIDDED_BLITS__
 	if (a_List == m_mixDirtyList) {
-		CheckRectAgainstGrid(rect, a_List);
+		CheckRectAgainstGrid(tempRect, a_List);
 	} else {
 
 		tempRect.left = tempRect.left & 0xFFFFFFFC;
@@ -585,7 +586,7 @@ void TiledMap::AddDirtyToMix(sint32 left, sint32 top, sint32 width, sint32 heigh
 	AddDirty(left, top, width, height, m_mixDirtyList);
 }
 
-void TiledMap::AddDirtyRectToMix(RECT &rect)
+void TiledMap::AddDirtyRectToMix(const RECT & rect)
 {
 	AddDirtyRect(rect, m_mixDirtyList);
 }
@@ -1398,21 +1399,13 @@ void TiledMap::ReloadGoodActors(void)
 	{
 		for (sint16 j = 0; j < m_mapBounds.right; ++j)
 		{
-			TileInfo *  theTileInfo = g_theWorld->GetTileInfoStoragePtr(MapPoint(j, i));
+			TileInfo * theTileInfo = g_theWorld->GetTileInfoStoragePtr(MapPoint(j, i));
 
 			if (theTileInfo)
 			{
 				GoodActor * goodActor = theTileInfo->GetGoodActor();
-				if (goodActor && (goodActor->GetLoadType() != loadType))
-                {
-					if (loadType == LOADTYPE_FULL)
-                    {
-						goodActor->FullLoad();
-					}
-                    else
-                    {
-						goodActor->DumpFullLoad();
-					}
+				if (goodActor) {
+					goodActor->Reload(loadType);
 				}
 			}
 		}
@@ -1853,7 +1846,7 @@ sint32 TiledMap::DrawImprovements(aui_Surface *surface,
 
 	bool visiblePlayerOwnsThis = g_selected_item->GetVisiblePlayer() == g_theWorld->GetOwner(pos);
 
-// Added by Martin Gühmann
+// Added by Martin GÃ¼hmann
 	if(!g_fog_toggle // The sense of toogling off the fog is to see something
 	&& !visiblePlayerOwnsThis
 	&& m_localVision->GetLastSeen(pos, ucell)
@@ -2402,28 +2395,17 @@ void TiledMap::PaintUnitActor(UnitActor *actor, bool fog)
 
 		if (g_show_ai_dbg || (g_isScenario && g_showUnitLabels) )
 		{
-			MapPoint pos = actor->GetPos();
-
 			char text[80];
 			text[0] = '\0';
 
 			sint32	tx = (sint32)(actor->GetX()+(k_TILE_PIXEL_WIDTH*m_scale)/2),
 					ty = (sint32)(actor->GetY()+(k_TILE_PIXEL_HEIGHT*m_scale));
 
-			Cell *c = g_theWorld->GetCell(pos);
+			Cell *c = g_theWorld->GetCell(actor->GetMapPos());
 			Unit city = c->GetCity();
 
 			if ((city != Unit()) && g_show_ai_dbg)
 			{
-
-
-
-
-
-
-
-
-
 				strcpy(text, city.GetName());
 
 				DrawSomeText(TRUE, text, tx, ty+10,
@@ -2433,15 +2415,6 @@ void TiledMap::PaintUnitActor(UnitActor *actor, bool fog)
 
 			CellUnitList *al = c->UnitArmy();
 			if (al) {
-
-
-
-
-
-
-
-
-
 				strcpy(text, al->Access(0).GetName());
 
 				DrawSomeText(TRUE, text, tx, ty,
@@ -2480,18 +2453,6 @@ void TiledMap::PaintGoodActor(GoodActor *actor, bool fog)
 
 
 
-
-void TiledMap::PaintEffectActor(EffectActor *actor)
-{
-	Assert(actor != NULL);
-	if (actor == NULL) return;
-
-	actor->Draw();
-
-	RECT rect;
-	actor->GetBoundingRect(&rect);
-	AddDirtyRectToMix(rect);
-}
 
 sint32 TiledMap::RepaintLayerSprites(RECT *paintRect, sint32 layer)
 {
@@ -2594,7 +2555,7 @@ sint32 TiledMap::RepaintLayerSprites(RECT *paintRect, sint32 layer)
                 }
 				actor->SetIsFortified(top.IsEntrenched());
 
-				actor->SetHiddenUnderStack(FALSE);
+				actor->SetHiddenUnderStack(false);
 				actor->SetUnitVisibility(top.GetVisibility());
 
 				if (top.IsCity())
@@ -2655,7 +2616,7 @@ sint32 TiledMap::RepaintLayerSprites(RECT *paintRect, sint32 layer)
 					}
 			   	}
 
-				MapPoint actorCurPos = actor->GetPos();
+				const MapPoint & actorCurPos = actor->GetMapPos();
 				if (actor->IsActive())
                 {
 				    // No action: already busy
@@ -2663,7 +2624,7 @@ sint32 TiledMap::RepaintLayerSprites(RECT *paintRect, sint32 layer)
                 else
                 {
 					PaintUnitActor
-                        (actor, !m_localVision->IsVisible(actor->GetPos()));
+                        (actor, !m_localVision->IsVisible(actorCurPos));
 				}
 
 				if (top.IsCity()) {
@@ -2718,9 +2679,9 @@ sint32 TiledMap::RepaintLayerSprites(RECT *paintRect, sint32 layer)
 
 					if (!actor->IsActive() && TileIsVisible(actorCurPos.x, actorCurPos.y))
                     {
-						actor->SetHiddenUnderStack(FALSE);
+						actor->SetHiddenUnderStack(false);
 						PaintUnitActor
-                            (actor, !m_localVision->IsVisible(actor->GetPos()));
+                            (actor, !m_localVision->IsVisible(actorCurPos));
 					}
 				}
 			}
@@ -2728,9 +2689,6 @@ sint32 TiledMap::RepaintLayerSprites(RECT *paintRect, sint32 layer)
 	}
 	return 0;
 }
-
-
-
 
 void
 TiledMap::ProcessUnit(Unit unit)
@@ -2804,7 +2762,7 @@ void TiledMap::ProcessLayerSprites(RECT *paintRect, sint32 layer)
 
 
 
-// Added by Martin Gühmann
+// Added by Martin GÃ¼hmann
 			// We want to something when we lift the fog of war
 			if(!g_fog_toggle
 			&&  m_localVision
@@ -2920,12 +2878,9 @@ sint32 TiledMap::OffsetLayerSprites(RECT *paintRect, sint32 deltaX, sint32 delta
 					}
 				}
 
-				MapPoint actorCurPos = actor->GetPos();
-				if (!actor->IsActive()) {
-					if (actor) {
-						actor->SetX(pixelX);
-						actor->SetY(pixelY);
-					}
+				if (actor && !actor->IsActive()) {
+					actor->SetX(pixelX);
+					actor->SetY(pixelY);
 				}
 
 				if (top.IsCity()) {
@@ -2934,116 +2889,14 @@ sint32 TiledMap::OffsetLayerSprites(RECT *paintRect, sint32 deltaX, sint32 delta
 
 					actor = top.GetActor();
 
-					if (!actor->IsActive()) {
-						if (actor) {
-							actor->SetX(pixelX);
-							actor->SetY(pixelY);
-						}
+					if (actor && !actor->IsActive()) {
+						actor->SetX(pixelX);
+						actor->SetY(pixelY);
 					}
 				}
 			}
 		}
 	}
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
 	return 0;
 }
 
@@ -3051,9 +2904,7 @@ sint32 TiledMap::OffsetSprites(RECT *paintRect, sint32 deltaX, sint32 deltaY)
 {
 	OffsetLayerSprites(paintRect, deltaX, deltaY, 0);
 
-	g_director->OffsetActiveUnits(-deltaX, -deltaY);
-	g_director->OffsetActiveEffects(-deltaX, -deltaY);
-	g_director->OffsetTradeRouteAnimations(-deltaX, -deltaY);
+	g_director->OffsetActors(-deltaX, -deltaY);
 
 	return 0;
 }
@@ -3076,9 +2927,7 @@ sint32 TiledMap::RepaintSprites(aui_Surface *surf, RECT *paintRect, bool scrolli
 	g_screenManager->LockSurface(surf);
 
 	RepaintLayerSprites(paintRect, 0);
-	g_director->DrawTradeRouteAnimations(paintRect, 0);
-	g_director->DrawActiveUnits(paintRect, 0);
-	g_director->DrawActiveEffects(paintRect, 0);
+	g_director->Draw(paintRect, 0);
 
 	if (g_spriteEditWindow)
 		g_spriteEditWindow->DrawSprite();
@@ -3635,7 +3484,7 @@ bool TiledMap::ScrollMap(sint32 deltaX, sint32 deltaY)
 
 	}
 
-	OffsetSprites(&tempRect, deltaX*hscroll, deltaY*vscroll);
+	OffsetSprites(&m_mapViewRect, deltaX*hscroll, deltaY*vscroll);
 	ScrollPixels((sint32)(deltaX*hscroll), (sint32)(deltaY*vscroll), m_surface);
 
 
@@ -3667,8 +3516,8 @@ bool TiledMap::ScrollMap(sint32 deltaX, sint32 deltaY)
 
 	InvalidateMix();
 
-
-	RepaintSprites(m_surface, &tempRect, true);
+	g_theTradePool->Draw(m_surface);
+	RepaintSprites(m_surface, &m_mapViewRect, true);
 
 	return true;
 }
@@ -4328,7 +4177,6 @@ bool TiledMap::TileIsVisible(sint32 mapX, sint32 mapY, sint32 /* mapZ */)
 
 	POINT point = {tileX,tileY};
 
-      /// @todo Check IsYwrap
 	if(!g_theWorld->IsXwrap()) {
 		if(m_mapViewRect.left < 0) {
 			return PtInRect(&ul, point) || PtInRect(&ll, point);
@@ -4336,6 +4184,16 @@ bool TiledMap::TileIsVisible(sint32 mapX, sint32 mapY, sint32 /* mapZ */)
 
 		if(m_mapViewRect.right >= mapWidth) {
 			return PtInRect(&ur, point) || PtInRect(&lr, point);
+		}
+	}
+
+	if(!g_theWorld->IsYwrap()) {
+		if(m_mapViewRect.top < 0) {
+			return PtInRect(&ul, point) || PtInRect(&ur, point);
+		}
+
+		if(m_mapViewRect.bottom >= mapHeight) {
+			return PtInRect(&ll, point) || PtInRect(&lr, point);
 		}
 	}
 
@@ -4529,56 +4387,6 @@ sint32 TiledMap::ReadTag(sint32 *mode, Pixel16 **rowData, sint32 *alpha)
 			len = 1;
 	}
 	return len;
-}
-
-UnitActor *TiledMap::GetClickedUnit(aui_MouseEvent *data)
-{
-	sint32				mapWidth, mapHeight;
-	GetMapMetrics(&mapWidth, &mapHeight);
-
-	sint32				x, y;
-	POINT       point = data->position;
-
-	for (sint32 i=m_mapViewRect.top; i<m_mapViewRect.bottom; i++) {
-		for (sint32 j=m_mapViewRect.left; j<m_mapViewRect.right; j++) {
-
-			sint32 tileX, tileY;
-			maputils_WrapPoint(j,i,&tileX,&tileY);
-
-			sint32 mapX, mapY = tileY;
-			mapX = maputils_TileX2MapX(tileX,tileY);
-
-			maputils_MapXY2PixelXY(mapX,mapY,&x,&y);
-
-			MapPoint pos(mapX,mapY);
-
-			Unit		top;
-
-			if (!g_theWorld->GetTopVisibleUnit(pos, top)) continue;
-
-			UnitActor *actor = top.GetActor();
-
-			if (actor->IsActive()) {
-				Unit	second;
-				if (g_theWorld->GetSecondUnit(pos, second)) {
-					top = second;
-					actor = top.GetActor();
-				}
-			}
-
-			if (!actor->IsActive()) {
-				RECT	actorRect;
-
-				SetRect(&actorRect, x, y, x+(sint32)actor->GetWidth(), y+(sint32)actor->GetHeight());
-
-				if (PtInRect(&actorRect, point)) {
-					return actor;
-				}
-			}
-		}
-	}
-
-	return g_director->GetClickedActiveUnit(data);
 }
 
 bool TiledMap::PointInMask(POINT hitPt) const
@@ -4915,7 +4723,7 @@ void TiledMap::HandleCheat(MapPoint &pos)
 						}
 					}
 					Unit id1 = p->CreateCity(unitNum, pos, CAUSE_NEW_CITY_CHEAT, NULL, -1);
-					//Added by Martin Gühmann to make the created city selected.
+					//Added by Martin GÃ¼hmann to make the created city selected.
 					g_selected_item->SetSelectCity(id1);
 					//End Add
 				} else {

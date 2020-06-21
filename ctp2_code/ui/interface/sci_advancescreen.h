@@ -7,9 +7,8 @@
 #define k_SCI_INCLUDE_CANCEL		1
 
 class aui_Control;
-class Sequence;
 
-sint32 sci_advancescreen_displayMyWindow( MBCHAR *messageText = NULL, sint32 from = NULL, Sequence *seq=NULL );
+sint32 sci_advancescreen_displayMyWindow( MBCHAR *messageText = NULL, sint32 from = NULL);
 sint32 sci_advancescreen_removeMyWindow(uint32 action);
 AUI_ERRCODE sci_advancescreen_Initialize( MBCHAR *messageText = NULL );
 void sci_advancescreen_Cleanup(void);

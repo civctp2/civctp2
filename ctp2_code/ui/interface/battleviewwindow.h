@@ -10,11 +10,10 @@ class ctp2_Static;
 class ctp2_Button;
 class c3_Icon;
 class BattleViewActor;
-class Sequence;
 
 class BattleViewWindow : public C3Window {
 public:
-	static void Initialize(Sequence *seq);
+	static void Initialize();
 	static void Cleanup(void);
 
 	BattleViewWindow(
@@ -36,10 +35,6 @@ public:
 
 	void GetAttackerPos(sint32 column, sint32 row, sint32 *x, sint32 *y);
 	void GetDefenderPos(sint32 column, sint32 row, sint32 *x, sint32 *y);
-
-	void SetSequence(Sequence *seq) { m_sequence = seq; }
-	Sequence *GetSequence(void) { return m_sequence; }
-
 
 	const BattleView *GetBattleView() const { return(m_battleView); }
 
@@ -98,9 +93,6 @@ private:
 
 	ctp2_Static				*m_fortifiedBonusText;
 	ctp2_Static				*m_fortifiedBonusValue;
-
-	Sequence				*m_sequence;
-
 };
 
 class RemoveBattleViewAction : public aui_Action

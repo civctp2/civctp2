@@ -55,8 +55,8 @@
 
 class Actor;
 
-#define k_ACTOR_CENTER_OFFSET_X		48
-#define k_ACTOR_CENTER_OFFSET_Y		48
+static const int k_ACTOR_CENTER_OFFSET_X = 48;
+static const int k_ACTOR_CENTER_OFFSET_Y = 48;
 
 // "fix" bug #4 by kaan
 #define k_MAX_ACTION_QUEUE_SIZE		12
@@ -68,6 +68,7 @@ class Actor;
 //----------------------------------------------------------------------------
 
 #include "ctp2_inttypes.h"      // sint32
+#include "pixeltypes.h"
 
 class Action;
 class Anim;
@@ -78,6 +79,8 @@ class SpriteState;
 // Declarations
 //
 //----------------------------------------------------------------------------
+
+static const uint16 NO_TRANSPARENCY = 15;
 
 class Actor
 {
@@ -90,16 +93,10 @@ public:
 	void	SetPos(POINT p) { m_x = p.x; m_y = p.y; }
 	void	SetMorphing(bool val) { m_morphing = val; }
 
-	sint32	GetX(void) const { return m_x; }
-	sint32	GetY(void) const { return m_y; }
-	POINT	GetPos(void) const { POINT p; p.x = m_x; p.y = m_y; return p; }
 	bool	GetMorphing(void) const { return m_morphing; }
 
 	SpriteState * GetSpriteState(void) const { return m_spriteState; }
 	void SetSpriteState(SpriteState *ss) { m_spriteState = ss; }
-
-	virtual void	SetAnim(Anim *a)  {};
-	virtual void	Process(void)     {};
 
 	bool	IsActive () const { return m_isactive; };
 	void	SetActive(bool active) { m_isactive = active; };
@@ -111,6 +108,10 @@ protected:
 	sint32			m_oldOffsetY;
 	sint32			m_oldFrame;
 #endif
+	static Pixel16 GetHealthBarColor(double healthPercentage);
+
+	sint32	GetX(void) const { return m_x; }
+	sint32	GetY(void) const { return m_y; }
 
 	bool			m_isactive;
 
@@ -119,10 +120,6 @@ protected:
 	SpriteState		*m_spriteState;
 
 	bool			m_morphing;
-
-	sint32			m_animPos;
-
-	virtual bool    ActionMove(Action *actionObj) { return false; };
 };
 
 #endif

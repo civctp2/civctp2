@@ -1842,7 +1842,7 @@ sint32 CivApp::InitializeGame(CivArchive *archive)
 
 	g_theProgressWindow->StartCountingTo( 730 );
 
-	g_director->ReloadAllSprites();
+	Director::ReloadAllSprites();
 
 	g_theProgressWindow->StartCountingTo( 740 );
 
@@ -2341,7 +2341,6 @@ sint32 CivApp::ProcessUI(const uint32 target_milliseconds, uint32 &used_millisec
 				{
 					if (g_director)
 					{
-						g_director->GarbageCollectItems();
 						g_director->Process();
 					}
 				}
@@ -2364,13 +2363,6 @@ sint32 CivApp::ProcessUI(const uint32 target_milliseconds, uint32 &used_millisec
 					uint32 used_milliseconds;
 
 					ProcessNet(target_milliseconds, used_milliseconds);
-#ifdef __AUI_USE_SDL__
-					// Because of the way keyboard events are handled in SDL, we
-					// need to escape this loop if there are any SDL_KeyEvents pending
-					if (SDL_PeepEvents(NULL, 1, SDL_PEEKEVENT, SDL_KEYDOWN, SDL_KEYUP)) {
-						break;
-					}
-#endif
 				} while (ui_CheckForScroll());
 
 				g_tiledMap->RetargetTileSurface(NULL);

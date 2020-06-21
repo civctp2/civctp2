@@ -1364,10 +1364,7 @@ NetInfo::Unpacketize(uint16 id, uint8* buf, uint16 size)
 				MapPoint pos;
 				unit.GetPos(pos);
 
-				static UnitDynamicArray revealedUnits;
-				revealedUnits.Clear();
-
-				g_theWorld->InsertUnit(pos, unit, revealedUnits);
+				g_theWorld->InsertUnit(pos, unit);
 				g_player[unit.GetOwner()]->InsertUnitReference(unit,
 															   CAUSE_NEW_ARMY_UPRISING,
 															   Unit());

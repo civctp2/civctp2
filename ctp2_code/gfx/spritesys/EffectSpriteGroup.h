@@ -51,8 +51,11 @@ public:
 
 	void			ExportScript(MBCHAR const * name);
 
-	void			Draw(EFFECTACTION action, sint32 frame, sint32 drawX, sint32 drawY, sint32 SdrawX, sint32 SdrawY, sint32 facing, double scale, uint16 transparency, Pixel16 outlineColor, uint16 flags, BOOL specialDelayProcess, BOOL directionalAttack = FALSE);
-	void			DrawDirect(aui_Surface *surf, EFFECTACTION action, sint32 frame, sint32 drawX, sint32 drawY, sint32 SdrawX, sint32 SdrawY, sint32 facing, double scale, uint16 transparency, Pixel16 outlineColor, uint16 flags, BOOL specialDelayProcess, BOOL directionalAttack = FALSE);
+	void			Draw(EFFECTACTION action, sint32 frame, sint32 drawX, sint32 drawY, sint32 SdrawX, sint32 SdrawY,
+							sint32 facing, double scale, uint16 transparency, Pixel16 outlineColor, uint16 flags);
+	void			DrawDirect(aui_Surface *surf, EFFECTACTION action, sint32 frame, sint32 drawX, sint32 drawY,
+							sint32 SdrawX, sint32 SdrawY, sint32 facing, double scale, uint16 transparency,
+							Pixel16 outlineColor, uint16 flags);
 
 	sint32			Parse(uint16 id,GROUPTYPE group);
 	POINT			GetHotPoint(EFFECTACTION action, sint32 facing);

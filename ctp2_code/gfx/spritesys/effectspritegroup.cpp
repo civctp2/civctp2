@@ -41,7 +41,7 @@
 #include "Token.h"
 
 void EffectSpriteGroup::Draw(EFFECTACTION action, sint32 frame, sint32 drawX, sint32 drawY, sint32 SdrawX, sint32 SdrawY,
-						   sint32 facing, double scale, uint16 transparency, Pixel16 outlineColor, uint16 flags, BOOL specialDelayProcess, BOOL directionalAttack)
+		sint32 facing, double scale, uint16 transparency, Pixel16 outlineColor, uint16 flags)
 {
 	Assert(action > EFFECTACTION_NONE &&
 			action < EFFECTACTION_MAX);
@@ -66,8 +66,9 @@ void EffectSpriteGroup::Draw(EFFECTACTION action, sint32 frame, sint32 drawX, si
 	}
 }
 
-void EffectSpriteGroup::DrawDirect(aui_Surface *surf, EFFECTACTION action, sint32 frame, sint32 drawX, sint32 drawY, sint32 SdrawX, sint32 SdrawY,
-						   sint32 facing, double scale, uint16 transparency, Pixel16 outlineColor, uint16 flags, BOOL specialDelayProcess, BOOL directionalAttack)
+void EffectSpriteGroup::DrawDirect(aui_Surface *surf, EFFECTACTION action, sint32 frame, sint32 drawX, sint32 drawY,
+		sint32 SdrawX, sint32 SdrawY, sint32 facing, double scale, uint16 transparency, Pixel16 outlineColor,
+		uint16 flags)
 {
 	Assert(action > EFFECTACTION_NONE &&
 			action < EFFECTACTION_MAX);
@@ -200,11 +201,11 @@ sint32 EffectSpriteGroup::Parse(uint16 id,GROUPTYPE group)
 
 		printf("]\n");
 
-		Anim *effectAnim = new Anim;
-
-		effectAnim->ParseFromTokens(theToken);
-        delete m_anims[EFFECTACTION_PLAY];
-		m_anims[EFFECTACTION_PLAY] = effectAnim;
+		Anim * effectAnim = Anim::CreateFromTokens(theToken);
+		if (effectAnim) {
+			delete m_anims[EFFECTACTION_PLAY];
+			m_anims[EFFECTACTION_PLAY] = effectAnim;
+		}
 	}
 
 	if (!token_ParseValNext(theToken, TOKEN_EFFECT_SPRITE_FLASH, tmp)) return FALSE;
@@ -237,12 +238,11 @@ sint32 EffectSpriteGroup::Parse(uint16 id,GROUPTYPE group)
 		m_sprites[EFFECTACTION_FLASH] = flashSprite;
 		printf("]\n");
 
-		Anim *moveAnim = new Anim;
-
-		moveAnim->ParseFromTokens(theToken);
-        delete m_anims[EFFECTACTION_FLASH];
-		m_anims[EFFECTACTION_FLASH] = moveAnim;
-
+		Anim * moveAnim = Anim::CreateFromTokens(theToken);
+		if (moveAnim) {
+			delete m_anims[EFFECTACTION_FLASH];
+			m_anims[EFFECTACTION_FLASH] = moveAnim;
+		}
 	}
 
 

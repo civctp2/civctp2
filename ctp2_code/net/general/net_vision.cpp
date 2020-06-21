@@ -24,8 +24,8 @@
 //
 // Modifications from the original Activision code:
 //
-// - Initialized local variables. (Sep 9th 2005 Martin Gühmann)
-// - Made government modified for units work here. (July 29th 2006 Martin Gühmann)
+// - Initialized local variables. (Sep 9th 2005 Martin GÃ¼hmann)
+// - Made government modified for units work here. (July 29th 2006 Martin GÃ¼hmann)
 //
 //----------------------------------------------------------------------------
 
@@ -415,12 +415,10 @@ void NetUnseenCell::Unpacketize(uint16 id, uint8 *buf, uint16 size)
 											(sint32)dbIndex,
 											m_ucell->m_point,
 											m_ucell->m_cityOwner,
-											TRUE,
 											visionRange,
-											m_ucell->m_citySpriteIndex);
+											m_ucell->m_citySpriteIndex,
+											citySize);
 		m_ucell->m_actor->SetUnitVisibility(1 << m_owner);
-
-		m_ucell->m_actor->SetSize(citySize);
 
 		m_ucell->m_actor->ChangeImage(ss, dbIndex, unitID);
 	}

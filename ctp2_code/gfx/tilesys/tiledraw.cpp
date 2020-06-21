@@ -30,38 +30,38 @@
 //
 // - Modification of DrawPartiallyConstructedImprovement's parameter list
 //   to add a percent complete variable to allow more then three construction
-//   per tile improvement by Martin G?hmann.
-// - Allows now to use costumized graphics for ruins/huts by Martin Gühmann
+//   per tile improvement by Martin GÃ¼hmann.
+// - Allows now to use costumized graphics for ruins/huts by Martin GÃ¼hmann
 // - Fixed CtD when drawing ruins or huts on an unseen cell.
 // - City names and sizes are now drawn if game is in god mode or the fog
-//   fog of war is toggled of. - Oct. 22nd 2004 Martin Gühmann
+//   fog of war is toggled of. - Oct. 22nd 2004 Martin GÃ¼hmann
 // - Tile improvements under construction with 100% completeness or more
 //   are now drawn as complete tile improvements, this allows to retrieve them
 //   from the unseen cell without the need to change the unseen cell data
-//   structure. - Dec. 21st 2004 Martin Gühmann
+//   structure. - Dec. 21st 2004 Martin GÃ¼hmann
 // - Current terrain improvements are displayed instead of those from the
-//   last visit if the fog of war is toggled off. - Dec 24th 2004 - Martin Gühmann
+//   last visit if the fog of war is toggled off. - Dec 24th 2004 - Martin GÃ¼hmann
 // - Road like tile improvements are drawn according to the real state
-//   instead to the state from the last visit. - Dec. 25th 2004 - Martin Gühmann
+//   instead to the state from the last visit. - Dec. 25th 2004 - Martin GÃ¼hmann
 // - Draws the city radius from the last visit instead the current one.
-//   - Dec. 26th 2004 Martin G?hmann
+//   - Dec. 26th 2004 Martin GÃ¼hmann
 // - Positions that you own and are explored are now shown as yours.
-//   - Mar. 4th 2005 Martin G?hmann
+//   - Mar. 4th 2005 Martin GÃ¼hmann
 // - If fog of war is off or god mode is on all borders are now shown. Even
-//   those of the civs you have no contact to. - Mar. 4th 2005 Martin Gühmann
+//   those of the civs you have no contact to. - Mar. 4th 2005 Martin GÃ¼hmann
 // - Added option to draw wonders on top of roads.
 // - PFT 29 mar 05, show # turns until city next grows a pop.
-// - Removed .NET warnings. - April 23rd 2005 Martin Gühmann
-// - Initialized local variables. (Sep 9th 2005 Martin Gühmann)
+// - Removed .NET warnings. - April 23rd 2005 Martin GÃ¼hmann
+// - Initialized local variables. (Sep 9th 2005 Martin GÃ¼hmann)
 // - Display non-growth as "---"
 // - Repaired crashes when zooming out
 // - Added IsCapitol Bool to DrawCityIcons 1-5-2006 EMOD
 // - Implemented HasAirport; for some reason it was forgotten 1-5-2006 EMOD
 // - Moved citypop box to the left name in the center and turns until next pop
 //   to the right for cleaner interface 1-13-2007 EMOD
-// - Allowed to select between smooth and square borders. (Feb 4th 2007 Martin Gühmann)
+// - Allowed to select between smooth and square borders. (Feb 4th 2007 Martin GÃ¼hmann)
 // - Fixed Religion Icon displays - E 6.25.2007
-// - Roads now use the TileSetIndex from the TerrainImprovement database. (28-Feb-2008 Martin Gühmann)
+// - Roads now use the TileSetIndex from the TerrainImprovement database. (28-Feb-2008 Martin GÃ¼hmann)
 //
 //----------------------------------------------------------------------------
 
@@ -406,7 +406,7 @@ bool TiledMap::DrawImprovementsLayer(aui_Surface *surface, MapPoint &pos, sint32
 			else
 				break;
 			sint32 type = cell->AccessImprovement(i).GetData()->GetType();
-			DrawPartiallyConstructedImprovement(surface, env, type, x, y, index, fog, percent);//percent added by Martin Gühmann
+			DrawPartiallyConstructedImprovement(surface, env, type, x, y, index, fog, percent);
 			drewSomething = true;
 		}
 	}
@@ -429,12 +429,12 @@ bool TiledMap::DrawImprovementsLayer(aui_Surface *surface, MapPoint &pos, sint32
 			if (percent < 50)
 			{
 				index = 0;
-				DrawPartiallyConstructedImprovement(surface, env, type, x, y, index, fog, percent);//percent added by Martin Gühmann
+				DrawPartiallyConstructedImprovement(surface, env, type, x, y, index, fog, percent);
 			}
 			else if (percent < 100)
 			{
 				index = 1;
-				DrawPartiallyConstructedImprovement(surface, env, type, x, y, index, fog, percent);//percent added by Martin Gühmann
+				DrawPartiallyConstructedImprovement(surface, env, type, x, y, index, fog, percent);
 			}
 			else
 			{
@@ -454,7 +454,7 @@ bool TiledMap::DrawImprovementsLayer(aui_Surface *surface, MapPoint &pos, sint32
 				else
 				{
 					index = 2;
-					DrawPartiallyConstructedImprovement(surface, env, type, x, y, index, fog, percent);//percent added by Martin Gühmann
+					DrawPartiallyConstructedImprovement(surface, env, type, x, y, index, fog, percent);
 				}
 			}
 			drewSomething = true;
@@ -476,7 +476,7 @@ bool TiledMap::DrawImprovementsLayer(aui_Surface *surface, MapPoint &pos, sint32
 
 	if (hasHut)
 	{
-		// Modified by Martin G?hmann to allow modders to customize the graphics of ruins/huts.
+		// Modified by Martin GÃ¼hmann to allow modders to customize the graphics of ruins/huts.
 		sint32 const			terrain =
 			(cell) ? cell->GetTerrain() : ucell.m_unseenCell->GetTerrainType();
 		const TerrainRecord *	rec		= g_theTerrainDB->Get(terrain);
@@ -506,7 +506,7 @@ bool TiledMap::DrawImprovementsLayer(aui_Surface *surface, MapPoint &pos, sint32
 void TiledMap::DrawPartiallyConstructedImprovement(aui_Surface *surface, uint32 env,
 												   sint32 type, sint32 x, sint32 y,
 												   uint16 index, bool fog, sint32 percentComplete)
-												   //Added sint32 percentComplete by Martin G?hmann
+												   //Added sint32 percentComplete by Martin GÃ¼hmann
 {
 	Pixel16		*data = NULL;
 
@@ -3490,7 +3490,7 @@ void TiledMap::DrawCityNames(aui_Surface * surf, sint32 layer)
 							}
 							else
 							{
-								pop              = unit.GetActor()->GetSize();
+								pop              = unit.GetActor()->GetCitySize();
 								nextpop          = unit.GetActor()->GetNextPop();
 								owner            = unit.GetActor()->GetPlayerNum();
 							}

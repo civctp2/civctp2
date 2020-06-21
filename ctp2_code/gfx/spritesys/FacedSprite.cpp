@@ -251,7 +251,8 @@ void FacedSprite::Draw(sint32 drawX, sint32 drawY, sint32 facing, double scale, 
 BOOL FacedSprite::HitTest(POINT mousePt, sint32 drawX, sint32 drawY, sint32 facing, double scale, sint16 transparency,
 						Pixel16 outlineColor, uint16 flags)
 {
-	if (facing < 5) {
+	bool normalFacing = !IsReversedFacing(facing);
+	if (normalFacing) {
 		drawX -= (sint32)((double)m_hotPoints[facing].x * scale);
 		drawY -= (sint32)((double)m_hotPoints[facing].y * scale);
 	} else {
@@ -261,13 +262,13 @@ BOOL FacedSprite::HitTest(POINT mousePt, sint32 drawX, sint32 drawY, sint32 faci
 
 
 	if (scale == g_tiledMap->GetZoomScale(k_ZOOM_LARGEST)) {
-		if (facing < 5) {
+		if (normalFacing) {
 			return HitTestLow(mousePt, (Pixel16 *)m_frames[facing][m_currentFrame], drawX, drawY, m_width, m_height, transparency, outlineColor, flags);
 		} else
 			return HitTestLowReversed(mousePt, (Pixel16 *)m_frames[k_MAX_FACINGS - facing][m_currentFrame], drawX, drawY, m_width, m_height, transparency, outlineColor, flags);
 	} else {
 		if (scale == g_tiledMap->GetZoomScale(k_ZOOM_SMALLEST)) {
-			if (facing < 5)
+			if (normalFacing)
 				return HitTestLow(mousePt, (Pixel16 *)m_miniframes[facing][m_currentFrame], drawX, drawY, m_width>>1, m_height>>1, transparency, outlineColor, flags);
 			else
 				return HitTestLowReversed(mousePt, (Pixel16 *)m_miniframes[k_MAX_FACINGS - facing][m_currentFrame], drawX, drawY, m_width>>1, m_height>>1, transparency, outlineColor, flags);
@@ -276,7 +277,7 @@ BOOL FacedSprite::HitTest(POINT mousePt, sint32 drawX, sint32 drawY, sint32 faci
 			sint32 destWidth = (sint32)(m_width * scale);
 			sint32 destHeight = (sint32)(m_height * scale);
 
-			if (facing < 5) {
+			if (normalFacing) {
 				return HitTestScaledLow(mousePt, (Pixel16 *)m_frames[facing][m_currentFrame], drawX, drawY, destWidth, destHeight,
 									transparency, outlineColor, flags, FALSE);
 			} else {
@@ -373,14 +374,14 @@ void FacedSprite::DrawDirect(aui_Surface *surf, sint32 drawX, sint32 drawY, sint
 	} else
 		LockSurface(surf);
 
-	if (facing < 5) {
+	bool normalFacing = !IsReversedFacing(facing);
+	if (normalFacing) {
 		drawX -= (sint32)((double)m_hotPoints[facing].x * scale);
 		drawY -= (sint32)((double)m_hotPoints[facing].y * scale);
 	} else {
 		drawX -=  (sint32)((double)(m_width - m_hotPoints[k_MAX_FACINGS - facing].x) * scale);
 		drawY -= (sint32)((double)m_hotPoints[k_MAX_FACINGS - facing].y * scale);
 	}
-
 
 	if (drawX > surf->Width() - 1 || drawX < -(m_width*scale)) {
 		UnlockSurface();
@@ -395,7 +396,7 @@ void FacedSprite::DrawDirect(aui_Surface *surf, sint32 drawX, sint32 drawY, sint
 
 	if (scale == g_tiledMap->GetZoomScale(k_ZOOM_LARGEST))
 	{
-		if (facing < 5) {
+		if (normalFacing) {
 			(this->*_DrawLow)((Pixel16 *)m_frames[facing][m_currentFrame], drawX, drawY, m_width, m_height, transparency, outlineColor, flags);
 
 		} else {
@@ -403,7 +404,7 @@ void FacedSprite::DrawDirect(aui_Surface *surf, sint32 drawX, sint32 drawY, sint
 		}
 	} else {
 		if (scale == g_tiledMap->GetZoomScale(k_ZOOM_SMALLEST)) {
-			if (facing < 5) {
+			if (normalFacing) {
 				(this->*_DrawLow)((Pixel16 *)m_miniframes[facing][m_currentFrame], drawX, drawY, m_width>>1, m_height>>1, transparency, outlineColor, flags);
 			} else {
 				(this->*_DrawLowReversed)((Pixel16 *)m_miniframes[k_MAX_FACINGS - facing][m_currentFrame], drawX, drawY, m_width>>1, m_height>>1, transparency, outlineColor, flags);
@@ -413,7 +414,7 @@ void FacedSprite::DrawDirect(aui_Surface *surf, sint32 drawX, sint32 drawY, sint
 			sint32 destWidth = (sint32)(m_width * scale);
 			sint32 destHeight = (sint32)(m_height * scale);
 
-			if (facing < 5) {
+			if (normalFacing) {
 				(this->*_DrawScaledLow)((Pixel16 *)m_frames[facing][m_currentFrame], drawX, drawY, destWidth, destHeight,
 									transparency, outlineColor, flags, FALSE);
 			} else {
@@ -427,23 +428,18 @@ void FacedSprite::DrawDirect(aui_Surface *surf, sint32 drawX, sint32 drawY, sint
 		UnlockSurface();
 }
 
-
-
-
-
 void FacedSprite::DirectionalDraw(sint32 drawX, sint32 drawY, sint32 facing,
 					   double scale, sint16 transparency, Pixel16 outlineColor, uint16 flags)
 {
 	SetSurface();
 
-	if (facing < 5) {
+	if (!IsReversedFacing(facing)) {
 		drawX -= (sint32)((double)m_hotPoints[facing].x * scale);
 		drawY -= (sint32)((double)m_hotPoints[facing].y * scale);
 	} else {
 		drawX -=  (m_width - (sint32)((double)(m_width - m_hotPoints[k_MAX_FACINGS - facing].x) * scale));
 		drawY -= (sint32)((double)m_hotPoints[k_MAX_FACINGS - facing].y * scale);
 	}
-
 
 	if (drawX > g_screenManager->GetSurfWidth() - (m_width*scale) || drawX < 0) return;
 	if (drawY > g_screenManager->GetSurfHeight() - (m_height*scale) || drawY < 0) return;
@@ -499,7 +495,6 @@ void FacedSprite::DirectionalDraw(sint32 drawX, sint32 drawY, sint32 facing,
 		}
 	}
 }
-
 
 sint32 FacedSprite::ParseFromTokens(Token *theToken)
 {

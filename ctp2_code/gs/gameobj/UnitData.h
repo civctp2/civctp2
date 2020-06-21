@@ -28,13 +28,13 @@
 // - Added GetTurnsToNextPop(sint32 &p)const; PFT 29 mar 05, to help show # turns until city grows
 // - Added IsImmobile( )const; PFT 10 apr 05, to identify immobile units
 // - Removed some unsused method to removed some unused in methods in
-//   CityData.. - Aug 6th 2005 Martin Gühmann
-// - Removed another unused and unecessary function. (Aug 12th 2005 Martin Gühmann)
+//   CityData.. - Aug 6th 2005 Martin GÃ¼hmann
+// - Removed another unused and unecessary function. (Aug 12th 2005 Martin GÃ¼hmann)
 // - Total fuel, total move points and total hp calculation moved into their own
-//   methods. (Dec 24th 2006 Martin Gühmann)
+//   methods. (Dec 24th 2006 Martin GÃ¼hmann)
 // - Added IsReligion bools
-// - Added check move points option to CanAtLeastOneCargoUnloadAt (8-Feb-2008 Martin Gühmann).
-// - Separated the Settle event drom the Settle in City event. (19-Feb-2008 Martin Gühmann)
+// - Added check move points option to CanAtLeastOneCargoUnloadAt (8-Feb-2008 Martin GÃ¼hmann).
+// - Separated the Settle event drom the Settle in City event. (19-Feb-2008 Martin GÃ¼hmann)
 // - Added GetRanged, and GetDefCounterAttack for new combat option. (07-Mar-2009 Maq)
 //
 //----------------------------------------------------------------------------
@@ -398,7 +398,7 @@ public:
 	void RemoveUnitVision();
 	void RemoveOldUnitVision(double radius);
 	void AddUnitVision();
-	void DoVision(UnitDynamicArray &revealedUnits);
+	void DoVision(UnitDynamicArray *revealedUnits = NULL);
 	void UndoVision();
 	void KillVision();
 
@@ -664,9 +664,6 @@ public:
 	void BuildCapitalization();
 	void BuildInfrastructure();
 
-	void ActionSuccessful(SPECATTACK attack, const Unit &c);
-	void ActionUnsuccessful(void);;
-
 	const Unit &GetTransport() const;
 	void RemoveTransportedUnit(const Unit &u);
 
@@ -699,6 +696,8 @@ private:
         UnitRecord::BoolAccessor    a_Function
     ) const;
 
+	ORDER_RESULT SpecialCityAttackResult(ORDER_RESULT result, SPECATTACK attack, const Unit &city);
+	ORDER_RESULT SpecialCityAttackDied(SPECATTACK attack, const Unit &city, CAUSE_REMOVE_ARMY cause);
 #if 0
 	void PrintSizeOfClass()
 	{

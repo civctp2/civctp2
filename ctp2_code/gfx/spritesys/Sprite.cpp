@@ -118,24 +118,16 @@ void Sprite::Load(char const * filename)
 {
 }
 
-
-
-
 void Sprite::Save(char const * filename)
 {
 	SpriteFile *file = new SpriteFile(filename);
-	Anim		*a = new Anim();
 
 	file->Create(SPRITEFILETYPE_PLAIN,k_SPRITEFILE_VERSION0,SPRDATA_REGULAR);
-	file->Write(this, a);
+	file->Write(this, NULL);
 	file->CloseWrite();
 
 	delete file;
-	delete a;
 }
-
-
-
 
 void Sprite::ImportTIFF(uint16 index, char **imageFiles,Pixel32 **imageData, size_t *size)
 {
@@ -422,7 +414,8 @@ void Sprite::Draw(sint32 drawX, sint32 drawY, sint32 facing, double scale, sint1
 {
 	SetSurface();
 
-	if (facing < 5) {
+	bool normalFacing = !IsReversedFacing(facing);
+	if (normalFacing) {
 		drawX -= (sint32)((double)m_hotPoint.x * scale);
 	} else {
 		drawX -= (sint32)((double)(m_width-m_hotPoint.x) * scale);
@@ -431,7 +424,7 @@ void Sprite::Draw(sint32 drawX, sint32 drawY, sint32 facing, double scale, sint1
 	drawY -= (sint32)((double)m_hotPoint.y * scale);
 
 	if (scale == g_tiledMap->GetZoomScale(k_ZOOM_LARGEST)) {
-		if (facing < 5) {
+		if (normalFacing) {
 			if (flags & k_BIT_DRAWFLAGS_ADDITIVE) {
 				(this->*_DrawFlashLow)(m_frames[m_currentFrame], drawX, drawY,  m_width, m_height,transparency, outlineColor, flags);
 			} else {
@@ -446,7 +439,7 @@ void Sprite::Draw(sint32 drawX, sint32 drawY, sint32 facing, double scale, sint1
 		}
 	} else {
 		if (scale == g_tiledMap->GetZoomScale(k_ZOOM_SMALLEST)) {
-			if (facing < 5) {
+			if (normalFacing) {
 				if (flags & k_BIT_DRAWFLAGS_ADDITIVE) {
 					(this->*_DrawFlashLow)(m_miniframes[m_currentFrame], drawX, drawY,  m_width>>1, m_height>>1,transparency, outlineColor, flags);
 				} else {
@@ -464,7 +457,7 @@ void Sprite::Draw(sint32 drawX, sint32 drawY, sint32 facing, double scale, sint1
 			sint32 destWidth = (sint32)(m_width * scale);
 			sint32 destHeight = (sint32)(m_height * scale);
 
-			if (facing < 5) {
+			if (normalFacing) {
 				if (flags & k_BIT_DRAWFLAGS_ADDITIVE) {
 					(this->*_DrawFlashScaledLow)((Pixel16 *)m_frames[m_currentFrame], drawX, drawY, destWidth, destHeight,
 										transparency, outlineColor, flags, FALSE);
@@ -519,7 +512,8 @@ sint32 Sprite::ReadTag(sint32 *mode, Pixel16 **rowData, sint32 *alpha)
 BOOL Sprite::HitTest(POINT mousePt, sint32 drawX, sint32 drawY, sint32 facing, double scale, sint16 transparency,
 					Pixel16 outlineColor, uint16 flags)
 {
-	if (facing < 5) {
+	bool normalFacing = !IsReversedFacing(facing);
+	if (normalFacing) {
 		drawX -= (sint32)((double)m_hotPoint.x * scale);
 	} else {
 		drawX -= (sint32)((double)(m_width-m_hotPoint.x) * scale);
@@ -528,14 +522,14 @@ BOOL Sprite::HitTest(POINT mousePt, sint32 drawX, sint32 drawY, sint32 facing, d
 	drawY -= (sint32)((double)m_hotPoint.y * scale);
 
 	if (scale == g_tiledMap->GetZoomScale(k_ZOOM_LARGEST)) {
-		if (facing < 5) {
+		if (normalFacing) {
 			return HitTestLow(mousePt, m_frames[m_currentFrame], drawX, drawY,  m_width, m_height,transparency, outlineColor, flags);
 		} else {
 			return HitTestLowReversed(mousePt, m_frames[m_currentFrame], drawX, drawY, m_width, m_height, transparency, outlineColor, flags);
 		}
 	} else {
 		if (scale == g_tiledMap->GetZoomScale(k_ZOOM_SMALLEST)) {
-			if (facing < 5) {
+			if (normalFacing) {
 				return HitTestLow(mousePt, m_miniframes[m_currentFrame], drawX, drawY,  m_width>>1, m_height>>1,transparency, outlineColor, flags);
 			} else {
 				return HitTestLowReversed(mousePt, m_miniframes[m_currentFrame], drawX, drawY, m_width>>1, m_height>>1, transparency, outlineColor, flags);
@@ -545,7 +539,7 @@ BOOL Sprite::HitTest(POINT mousePt, sint32 drawX, sint32 drawY, sint32 facing, d
 			sint32 destWidth = (sint32)(m_width * scale);
 			sint32 destHeight = (sint32)(m_height * scale);
 
-			if (facing < 5) {
+			if (normalFacing) {
 				return HitTestScaledLow(mousePt, (Pixel16 *)m_frames[m_currentFrame], drawX, drawY, destWidth, destHeight,
 									transparency, outlineColor, flags, FALSE);
 			} else {
@@ -555,9 +549,6 @@ BOOL Sprite::HitTest(POINT mousePt, sint32 drawX, sint32 drawY, sint32 facing, d
 		}
 	}
 }
-
-
-
 
 void Sprite::DrawDirect(aui_Surface *surf, sint32 drawX, sint32 drawY, sint32 facing, double scale,
 				  sint16 transparency, Pixel16 outlineColor, uint16 flags)
@@ -571,7 +562,8 @@ void Sprite::DrawDirect(aui_Surface *surf, sint32 drawX, sint32 drawY, sint32 fa
 	} else
 		LockSurface(surf);
 
-	if (facing < 5) {
+	bool normalFacing = !IsReversedFacing(facing);
+	if (normalFacing) {
 		drawX -= (sint32)((double)m_hotPoint.x * scale);
 	} else {
 		drawX -= (sint32)((double)(m_width-m_hotPoint.x) * scale);
@@ -590,7 +582,7 @@ void Sprite::DrawDirect(aui_Surface *surf, sint32 drawX, sint32 drawY, sint32 fa
 	}
 
 	if (scale == g_tiledMap->GetZoomScale(k_ZOOM_LARGEST)) {
-		if (facing < 5) {
+		if (normalFacing) {
 			if (flags & k_BIT_DRAWFLAGS_ADDITIVE) {
 				(this->*_DrawFlashLow)(m_frames[m_currentFrame], drawX, drawY,  m_width, m_height,transparency, outlineColor, flags);
 			} else {
@@ -605,7 +597,7 @@ void Sprite::DrawDirect(aui_Surface *surf, sint32 drawX, sint32 drawY, sint32 fa
 		}
 	} else {
 		if (scale == g_tiledMap->GetZoomScale(k_ZOOM_SMALLEST)) {
-			if (facing < 5) {
+			if (normalFacing) {
 				if (flags & k_BIT_DRAWFLAGS_ADDITIVE) {
 					(this->*_DrawFlashLow)(m_miniframes[m_currentFrame], drawX, drawY,  m_width>>1, m_height>>1,transparency, outlineColor, flags);
 				} else {
@@ -623,7 +615,7 @@ void Sprite::DrawDirect(aui_Surface *surf, sint32 drawX, sint32 drawY, sint32 fa
 			sint32 destWidth = (sint32)(m_width * scale);
 			sint32 destHeight = (sint32)(m_height * scale);
 
-			if (facing < 5) {
+			if (normalFacing) {
 				if (flags & k_BIT_DRAWFLAGS_ADDITIVE) {
 					(this->*_DrawFlashScaledLow)((Pixel16 *)m_frames[m_currentFrame], drawX, drawY, destWidth, destHeight,
 										transparency, outlineColor, flags, FALSE);
@@ -653,7 +645,7 @@ void Sprite::DirectionalDraw(sint32 drawX, sint32 drawY, sint32 facing, double s
 {
 	SetSurface();
 
-	if (facing < 5) {
+	if (!IsReversedFacing(facing)) {
 		drawX -= (sint32)((double)m_hotPoint.x * scale);
 	} else {
 		drawX -= (sint32)((double)(m_width-m_hotPoint.x) * scale);
@@ -950,9 +942,6 @@ inline Pixel16 Sprite::average(Pixel16 pixel1, Pixel16 pixel2, Pixel16 pixel3, P
 		return static_cast<Pixel16>((r0 << 10) | (g0 << 5) | b0);
 	}
 }
-
-
-
 
 inline Pixel16 Sprite::average(Pixel16 pixel1, Pixel16 pixel2)
 {

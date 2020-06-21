@@ -24,7 +24,7 @@
 //
 // Modifications from the original Activision code:
 //
-// - Initialized local variables. (Sep 9th 2005 Martin Gühmann)
+// - Initialized local variables. (Sep 9th 2005 Martin Gï¿½hmann)
 //
 //----------------------------------------------------------------------------
 
@@ -56,15 +56,13 @@ extern SoundManager		*g_soundManager;
 WonderMovieWindow		*g_wonderMovieWindow = NULL;
 
 
-void wondermoviewin_Initialize(Sequence *seq)
+void wondermoviewin_Initialize()
 {
 	AUI_ERRCODE		errcode = AUI_ERRCODE_OK;
 
 	if (g_wonderMovieWindow == NULL) {
 		g_wonderMovieWindow = new WonderMovieWindow(&errcode, aui_UniqueId(), "WonderMovieWindow", 16);
 		Assert(errcode == AUI_ERRCODE_OK);
-
-		g_wonderMovieWindow->SetSequence(seq);
 	}
 }
 
@@ -112,17 +110,14 @@ void wondermoviewin_DisplayWonderMovie(sint32 id)
 
 void wondermoviewin_Cleanup()
 {
-	Sequence *seq=NULL;
 	if (g_wonderMovieWindow) {
-		seq = g_wonderMovieWindow->GetSequence();
-
 		g_c3ui->RemoveWindow(g_wonderMovieWindow->Id());
 
 		delete g_wonderMovieWindow;
 		g_wonderMovieWindow = NULL;
 	}
 
-	g_director->ActionFinished(seq);
+	g_director->ExternalActionFinished(DEA_WONDER_MOVIE);
 }
 
 

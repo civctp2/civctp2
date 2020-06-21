@@ -60,18 +60,17 @@ class BattleViewActor;
 #include "Actor.h"            // Actor
 #include "Anim.h"             // Anim
 #include "ctp2_inttypes.h"    // sint32, uint32
-#include "pixelutils.h"
-#include "Queue.h"            // Queue
 #include "Unit.h"
 #include "UnitSpriteGroup.h"  // UnitSpriteGroup
-#include "World.h"            // MapPoint
+#include "Queue.h"            // Queue
+#include "tileset.h"
 
 class Action;
 class aui_Surface;
 class SpriteGroup;
 class SpriteState;
 
-// BOOL, GROUPTYPE, UNITACTION
+// GROUPTYPE, UNITACTION
 
 //----------------------------------------------------------------------------
 //
@@ -82,105 +81,67 @@ class SpriteState;
 class BattleViewActor : public Actor
 {
 public:
-	BattleViewActor(SpriteState *ss, Unit id, sint32 type, const MapPoint &pos,
-			  sint32 owner);
+	// Make position methods public
+	using Actor::GetX;
+	using Actor::GetY;
 
-	~BattleViewActor();
+	BattleViewActor(SpriteState * spriteState, const Unit & id, const MapPoint & pos, sint32 owner);
+	virtual ~BattleViewActor();
 
-	virtual void	Process(void);
-	void			DumpAllActions(void);
-	void			AddAction(Action *actionObj);
-	void			GetNextAction(BOOL isVisible = TRUE);
-	void			AddIdle(BOOL NoIdleJustDelay = FALSE);
+	Unit       GetUnitID() const { return m_unitID; }
 
-	Anim *          CreateAnim(UNITACTION action);
+	void       Process();
+	void       AddAction(Action * action);
+	UNITACTION GetCurUnitAction() const { return m_curUnitAction; }
 
-	bool			HasThisAnim(UNITACTION action) const
-    {
-        return m_unitSpriteGroup && m_unitSpriteGroup->GetAnim((GAME_ACTION) action);
-    };
-	Anim			*MakeFakeDeath(void);
+	Anim     * CreateAnim(UNITACTION action);
+	bool       HasAnim(UNITACTION action) const {
+		return m_unitSpriteGroup && m_unitSpriteGroup->GetAnim((GAME_ACTION) action);
+	}
+	bool       HasDeath() const { return m_unitSpriteGroup->HasDeath(); }
 
-	void			Draw(BOOL fogged = FALSE);
-	void			DrawDirect(aui_Surface *surf, sint32 x, sint32 y);
+	void       DrawDirect(aui_Surface * surf, sint32 x, sint32 y);
 
-	void			DrawHealthBar(aui_Surface *surf);
+	uint16     GetWidth() const;
+	uint16     GetHeight() const;
+	void       GetBoundingRect(RECT * rect) const;
 
-	MapPoint		GetPos(void) const
-    {
-        return m_pos;
-    };
-	void			SetPos(MapPoint pnt) { m_pos = pnt; }
-    void            GetPixelPos(sint32 &x, sint32 &y) const
-    {
-        x = Actor::GetX();
-        y = Actor::GetY();
-    };
-	void			SetPixelPos(sint32 x, sint32 y)
-    {
-        Actor::SetPos(x, y);
-    };
-
-	sint32			GetFacing(void) const { return m_facing; }
-	void			SetFacing(sint32 facing) { m_facing = facing; }
-
-	uint16			GetWidth(void) const;
-	uint16			GetHeight(void) const;
-	Unit			GetUnitID(void) const
-    {
-        return m_unitID;
-    };
-
-	Action			*GetCurAction(void) const { return m_curAction; }
-
-	Action			*LookAtNextAction(void) { return m_actionQueue.LookAtNextDeQueue(); }
-	Action			*LookAtLastAction(void) { return m_actionQueue.LookAtLastDeQueue(); }
-	uint32			GetActionQueueNumItems(void) const
-    {
-        return m_actionQueue.GetNumItems();
-    }
-
-	bool			HasDeath(void) const
-    {
-        return m_unitSpriteGroup->HasDeath();
-    };
-	bool			HasDirectional(void) const
-    {
-        return m_unitSpriteGroup->HasDirectional();
-    };
-
-	void			GetBoundingRect(RECT *rect) const;
-
-	double			GetHitPoints(void) const { return m_hitPoints; }
-	double			GetHitPointsMax(void) const{ return m_hitPointsMax; }
-	void			SetHitPoints(double points) { m_hitPoints = points; }
-	void			SetHitPointsMax(double points) { m_hitPointsMax = points; }
-
-	void			SetFortified(bool fortified) { m_isFortified = fortified; }
-	bool			GetFortified(void) const { return m_isFortified; }
+	double     GetHitPoints() const { return m_hitPoints; }
+	void       SetHitPoints(double hitPoints) { m_hitPoints = hitPoints; }
+	void       SetHitPointsMax(double hitPointsMax) { m_hitPointsMax = hitPointsMax; }
+	void       SetFacing(sint32 facing) { m_facing = facing; }
+	void       SetFortified(bool fortified) { m_isFortified = fortified; }
 
 protected:
-	MapPoint			m_pos;
-	Unit				m_unitID;
-	sint32  			m_unitDBIndex;
-	sint32				m_playerNum;
+	static bool IsRectCompletelyOnSurface(const RECT & rect, aui_Surface * surf);
 
-	UnitSpriteGroup		*m_unitSpriteGroup;
-	sint32				m_facing;
-	sint32				m_frame;
-	uint16				m_transparency;
+	void GetNextAction();
+	void AddIdle();
+	void Interrupt();
+	void DumpAllActions();
 
-	Action				*m_curAction;
-	UNITACTION			m_curUnitAction;
+	void DrawHealthBar(aui_Surface * surf) const;
+	RECT DetermineIconRect(MAPICON icon) const;
 
-	Queue<Action *>		m_actionQueue;
-	GROUPTYPE			m_type;
-	uint32				m_spriteID;
+	Unit              m_unitID;
+	sint32            m_playerNum;
+	MapPoint          m_pos;
 
-	double				m_hitPoints;
-	double				m_hitPointsMax;
+	UnitSpriteGroup * m_unitSpriteGroup;
+	sint32            m_facing;
+	sint32            m_frame;
+	uint16            m_transparency;
 
-	bool				m_isFortified;
+	Action          * m_curAction;
+	UNITACTION        m_curUnitAction;
+
+	Queue<Action *>   m_actionQueue;
+	uint32            m_spriteID;
+
+	double            m_hitPoints;
+	double            m_hitPointsMax;
+
+	bool              m_isFortified;
 };
 
 #endif

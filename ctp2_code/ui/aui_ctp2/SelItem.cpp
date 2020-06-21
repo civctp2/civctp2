@@ -814,7 +814,7 @@ void SelectedItem::MaybeAutoEndTurn(bool isFirst)
 				m_gotClickSinceLastAutoEnd = false;
 				Refresh();
 				DPRINTF(k_DBG_GAMESTATE, ("MaybeAutoEndTurn is adding an EndTurn, %d\n", m_current_player));
-				g_director->AddEndTurn();
+				g_gevManager->EndTurnRequest();
 			}
 		}
 	}
