@@ -2676,8 +2676,10 @@ ORDER_RESULT ArmyData::CauseUnhappiness(const MapPoint &point, sint32 uindex)
 	    SlicObject * so = new CityReport("197AdvertiseCompleteVictim", c);
 	    so->AddCivilisation(GetOwner());
 	    g_slicEngine->Execute(so);
+	    /* disabled because success of action is obvious any way (special effect and city icon) and therefore message spamming can be avoided
 	    g_slicEngine->Execute
 		(new AggressorReport("911AdvertiseCompleteAttacker", u, c)) ;
+	    */
 	    }
 
 	return ORDER_RESULT_SUCCEEDED;
