@@ -5433,7 +5433,16 @@ bool ArmyData::BombardCity(const MapPoint &point, bool doAnimations)
 
 			if(doAnimations)
 			{
+				// * Added auto-center for bombardment
+				if (g_selected_item->IsAutoCenterOn()
+					&& (c.GetOwner() == g_selected_item->GetVisiblePlayer()
+					|| m_owner == g_selected_item->GetVisiblePlayer()
+					))
+				{
+					g_director->AddCenterMap(point);
+				}
 				g_director->AddAttackPos(m_array[i], nonConstPos);
+
 				bool out_of_fuel;
 
 				//EMOD Multiple Attacks/Blitz removed it from only Air to a separate flag - 2-24-2006
@@ -5666,9 +5675,13 @@ ORDER_RESULT ArmyData::Bombard(const MapPoint &orderPoint)
 				}
 
 				// * Added auto-center for bombardment
-				if(g_selected_item->IsAutoCenterOn()
-				&& defender.GetOwner() == g_selected_item->GetVisiblePlayer())
+				if (g_selected_item->IsAutoCenterOn()
+					&& (defender.GetOwner() == g_selected_item->GetVisiblePlayer()
+					|| m_owner == g_selected_item->GetVisiblePlayer()
+					))
+				{
 					g_director->AddCenterMap(point);
+				}
 
 				g_director->AddAttackPos(m_array[i], point);
 
