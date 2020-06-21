@@ -158,8 +158,6 @@ void TradeRoute::RemoveAllReferences(CAUSE_KILL_TRADE_ROUTE cause)
 	}
 
 	g_theTradePool->Remove(*this);
-
-	TradeManager::Notify();
 }
 
 Unit TradeRoute::GetSource() const

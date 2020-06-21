@@ -114,6 +114,10 @@ TradeManager::TradeManager(AUI_ERRCODE *err)
 
 	Assert(m_createList);
 
+	aui_Ldl::SetActionFuncAndCookie(s_tradeManagerBlock, "TradeTabs.Market", TabCallback, (void *)0);
+	aui_Ldl::SetActionFuncAndCookie(s_tradeManagerBlock, "TradeTabs.Summary", TabCallback, (void *)1);
+	aui_Ldl::SetActionFuncAndCookie(s_tradeManagerBlock, "TradeTabs.Import", TabCallback, (void *)2);
+
 	aui_Ldl::SetActionFuncAndCookie(s_tradeManagerBlock, "CloseButton", Close, NULL);
 	
 	m_createButton = (ctp2_Button *)aui_Ldl::GetObject(s_tradeManagerBlock, "TradeTabs.Market.TabPanel.CreateRouteButton");
@@ -167,6 +171,15 @@ TradeManager::TradeManager(AUI_ERRCODE *err)
 	SetNumCities(1);
 
 	*err = AUI_ERRCODE_OK;
+}
+
+void TradeManager::TabCallback(aui_Control *control, uint32 action, uint32 data, void *cookie)
+{
+	if(action != ctp2_Tab::ACTION_ACTIVATED) return;
+	
+	if(sint32(cookie) > 0){ // avoid updating market tab, which can take very long and only needs to be updated in case of cancelling a route
+	    s_tradeManager->Update();
+	    }
 }
 
 TradeManager::~TradeManager()
@@ -301,15 +314,27 @@ void TradeManager::Notify()
 
 void TradeManager::Update()
 {
-	UpdateCreateList(g_selected_item->GetVisiblePlayer());
-	UpdateSummaryList(m_summaryList, true);
-	UpdateSummaryList(m_importList, false);
+	if(s_tradeManager->m_window->IsHidden()) // only update if window is visible to avoid spending time on UpdateCreateList e.g. in case AI declares war and all trade routes get deleted which in turn leads to freeing of caravans which is bound to TradeManager::Update() due to the infos in the advice window
+	    return;
+	
+	ctp2_Tab *market = (ctp2_Tab *)aui_Ldl::GetObject(s_tradeManagerBlock, "TradeTabs.Market");
+	ctp2_Tab *summary = (ctp2_Tab *)aui_Ldl::GetObject(s_tradeManagerBlock, "TradeTabs.Summary");
+	ctp2_Tab *import = (ctp2_Tab *)aui_Ldl::GetObject(s_tradeManagerBlock, "TradeTabs.Import");
+	ctp2_TabGroup *group = (ctp2_TabGroup *)aui_Ldl::GetObject(s_tradeManagerBlock, "TradeTabs");
+	
+	if(market && group->GetCurrentTab() == market)
+	    UpdateCreateList(g_selected_item->GetVisiblePlayer());
+	if(summary && group->GetCurrentTab() == summary)
+	    UpdateSummaryList(m_summaryList, true);
+	if(import && group->GetCurrentTab() == import)
+	    UpdateSummaryList(m_importList, false);
+	
 	UpdateAdviceWindow();
-
 }
 
 void TradeManager::UpdateCreateList(const PLAYER_INDEX & player_id)
 {
+	fprintf(stderr, "%s L%d:\n", __FILE__, __LINE__);
 	Assert(player_id >= 0 && player_id < k_MAX_PLAYERS);
 	if(player_id < 0 || player_id >= k_MAX_PLAYERS) return;
 
@@ -321,6 +346,7 @@ void TradeManager::UpdateCreateList(const PLAYER_INDEX & player_id)
 	Unit maxCity[k_MAX_CITIES_PER_GOOD];
 
 	m_createList->Clear();
+	m_createList->BuildListStart();
 	m_createData.DeleteAll();
 
 	for (sint32 c = 0; c < p->m_all_cities->Num(); c++)
@@ -329,7 +355,7 @@ void TradeManager::UpdateCreateList(const PLAYER_INDEX & player_id)
 
 		for (sint32 g = 0; g < g_theResourceDB->NumRecords(); g++)
         {
-			if(city.CD()->IsLocalResource(g)) {
+			if(city.CD()->IsLocalResource(g)) { // only consider collected goods (not bought goods)
 
 				sint32 op;
 				sint32 maxPrice[k_MAX_CITIES_PER_GOOD];
@@ -343,28 +369,23 @@ void TradeManager::UpdateCreateList(const PLAYER_INDEX & player_id)
 				}
 
 
-				if(!city.CD()->HasResource(g) &&
-					city.CD()->IsSellingResourceTo(g, curDestCity) ) {
+				if(city.CD()->IsSellingResourceTo(g, curDestCity)) { // have already a route for g
 					sellingPrice = tradeutil_GetTradeValue(player_id, curDestCity, g);
 
 				//need to add something here where cities that have an improvement that needs a good will demand the good. May be increase the value of selling that good?
-
-
-
-
 				}
 				else {
 					curDestCity.m_id = 0;
 					sellingPrice = -1;
 				}
 
-				for(op = 1; op < k_MAX_PLAYERS; op++) {
-					if(!g_player[op]) continue;
-					if(player_id != op && !p->HasContactWith(op)) continue;
+				for(op = 1; op < k_MAX_PLAYERS; op++) { // determine player offering highest price for good g
+					if(!g_player[op]) continue; // player gone/dead
+					if(player_id != op && !p->HasContactWith(op)) continue; // player not yet known
 					if(m_showCities == TRADE_CITIES_OWN && op != g_selected_item->GetVisiblePlayer()) continue;
 					if ((m_showCities == TRADE_CITIES_ALL)			&&
 						(op != g_selected_item->GetVisiblePlayer()) &&
-						(AgreementMatrix::s_agreements.TurnsAtWar(player_id, op) >= 0)
+						(AgreementMatrix::s_agreements.TurnsAtWar(player_id, op) >= 0) // no trade if at ware
 					   )
 						continue;
 
@@ -376,21 +397,21 @@ void TradeManager::UpdateCreateList(const PLAYER_INDEX & player_id)
 					   )
 						continue;
 
-					if(Diplomat::GetDiplomat(op).GetEmbargo(player_id))
+					if(Diplomat::GetDiplomat(op).GetEmbargo(player_id)) // no trade if embargo enacted
 						continue;
 
-					for(d = 0; d < g_player[op]->m_all_cities->Num(); d++) {
+					for(d = 0; d < g_player[op]->m_all_cities->Num(); d++) { // check all cities if suitabelfor trading
 						Unit destCity = g_player[op]->m_all_cities->Access(d);
 						if(!(destCity.IsValid())) continue;
-						if(!(destCity.GetVisibility() & (1 << player_id))) continue;
-						if(destCity.m_id == city.m_id) continue;
+						if(!(destCity.GetVisibility() & (1 << player_id))) continue; // city not visible/known
+						if(destCity.m_id == city.m_id) continue; // exclude current city
 
 
-						if(curDestCity.m_id == destCity.m_id) continue;
+						if(curDestCity.m_id == destCity.m_id) continue; // exclude standing trade route destination
 
-						sint32 price = tradeutil_GetTradeValue(player_id, destCity, g);
+						sint32 price = tradeutil_GetTradeValue(player_id, destCity, g); // # of gold
 						for(i = 0; i < m_numCities; i++) {
-							if(price > maxPrice[i]) {
+							if(price > maxPrice[i]) { // determine best offer
 								for(j = m_numCities - 1; j>= i; j--) {
 									maxPrice[j] = maxPrice[j - 1];
 									maxCity[j].m_id = maxCity[j - 1].m_id;
@@ -493,14 +514,10 @@ void TradeManager::UpdateCreateList(const PLAYER_INDEX & player_id)
 			}
 		}
 	}
-
-
-
-
-
-
+	m_createList->BuildListEnd();
 
 	m_createButton->Enable(FALSE);
+	fprintf(stderr, "%s L%d:\n", __FILE__, __LINE__);
 }
 
 void TradeManager::UpdateAdviceWindow()
@@ -666,6 +683,7 @@ void TradeManager::UpdateSummaryList(ctp2_ListBox *summaryList, bool source)
 	Unit maxCity;
 
 	summaryList->Clear();
+	summaryList->BuildListStart();
 
 	for (sint32 c = 0; c < p->m_all_cities->Num(); c++)
 	    {
@@ -779,6 +797,7 @@ void TradeManager::UpdateSummaryList(ctp2_ListBox *summaryList, bool source)
 		summaryList->AddItem(item);
 		}
 	    }
+	summaryList->BuildListEnd();
 	
 	m_breakButton->Enable(FALSE);
 	m_breakImpBut->Enable(FALSE);

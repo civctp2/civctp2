@@ -5118,7 +5118,7 @@ void Governor::ManageGoodsTradeRoutes()
 							continue;
 					}
 
-					for (sint32 d = 0; d < g_player[op]->m_all_cities->Num(); d++) { // check all cities if suitabelfor trading
+					for (sint32 d = 0; d < g_player[op]->m_all_cities->Num(); d++) { // check all cities if suitabel for trading
 						Unit destCity = g_player[op]->m_all_cities->Access(d);
 
 						if(!(destCity.GetVisibility() & (1 << m_playerId))) // city not visible/known
