@@ -431,13 +431,18 @@ SoundManager::AddLoopingSound(const SOUNDTYPE &type,
 	if (m_noSound) return;
 
 	if (m_usePlaySound)
-    {
+	{
 		StupidPlaySound(soundID);
-        return;
-    }
+		return;
+	}
 
 	CivSound *existingSound = FindLoopingSound(type, associatedObject);
-	if (existingSound && (existingSound->GetSoundID() == soundID) && (existingSound->GetChannel() != -1)) {
+#if defined(USE_SDL)
+	if (existingSound && (existingSound->GetSoundID() == soundID) && (existingSound->GetChannel() != -1))
+#else
+	if (existingSound && (existingSound->GetSoundID() == soundID))
+#endif
+	{
 		return;
 	}
 

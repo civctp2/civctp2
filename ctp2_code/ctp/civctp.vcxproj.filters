@@ -302,12 +302,6 @@
     <ClCompile Include="..\gfx\spritesys\Director.cpp">
       <Filter>gfx\spritesys</Filter>
     </ClCompile>
-    <ClCompile Include="..\gfx\spritesys\DirectorActions.cpp">
-      <Filter>gfx\spritesys</Filter>
-    </ClCompile>
-    <ClCompile Include="..\gfx\spritesys\directorevent.cpp">
-      <Filter>gfx\spritesys</Filter>
-    </ClCompile>
     <ClCompile Include="..\gfx\spritesys\screenmanager.cpp">
       <Filter>gfx\spritesys</Filter>
     </ClCompile>
@@ -2570,12 +2564,6 @@
       <Filter>gfx</Filter>
     </ClInclude>
     <ClInclude Include="..\gfx\spritesys\Director.h">
-      <Filter>gfx\spritesys</Filter>
-    </ClInclude>
-    <ClInclude Include="..\gfx\spritesys\DirectorActions.h">
-      <Filter>gfx\spritesys</Filter>
-    </ClInclude>
-    <ClInclude Include="..\gfx\spritesys\directorevent.h">
       <Filter>gfx\spritesys</Filter>
     </ClInclude>
     <ClInclude Include="..\gfx\spritesys\screenmanager.h">

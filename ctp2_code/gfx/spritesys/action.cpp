@@ -115,7 +115,7 @@ POINT Action::CalculatePixelXY(const MapPoint & current) const
 	if (m_curPath) {
 		m_curPath->CalcPosition(0, m_maxActionCounter, m_curActionCounter, &pos);
 	} else {
-		maputils_MapXY2PixelXY(current.x, current.y, &pos.x, &pos.y);
+		maputils_MapXY2PixelXY(current.x, current.y, pos);
 	}
 	return pos;
 }
