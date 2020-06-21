@@ -682,9 +682,7 @@ void Scheduler::Match_Resources(const bool move_armies)
 			goal_ptr->Rollback_All_Agents(); // Just roll back but don't report to the build list
 
 			// Actually should be checked in the next cycle, but there still seems to be something wrong.
-			Goal_List::iterator tmp_goal_iter = goal_iter;
-			goal_iter++;
-			m_goals.erase(tmp_goal_iter);
+			m_goals.erase(goal_iter);
 
 			/*
 			// Move to the end
@@ -716,11 +714,8 @@ void Scheduler::Match_Resources(const bool move_armies)
 					// http://www.cplusplus.com/reference/stl/list/splice.html
 					//or use a decrement
 					// Sort the goal list, move iterator increment herein back
-					tmp_goal_iter = goal_iter;
-					--goal_iter;
 					goal_ptr->Rollback_All_Agents(); // Just roll back but don't report to the build list
-					Reprioritize_Goal(tmp_goal_iter);
-					goal_iter++;
+					Reprioritize_Goal(goal_iter);
 					continue;
 				}
 			}
@@ -822,10 +817,9 @@ void Scheduler::Match_Resources(const bool move_armies)
 					{
 						AI_DPRINTF(k_DBG_SCHEDULER, m_playerId, goal_ptr->Get_Goal_Type(), -1,
 							("\t\t Transporters found.\n"));
-						--goal_iter;
 						committed_agents -= goal_ptr->Get_Agent_Count();
 						goal_ptr->Rollback_All_Agents(); // No we don't want to report this to the build list
-						break;
+						continue;
 					}
 				} // if out_of_transports is true, we just fail like in the original code
 			}
