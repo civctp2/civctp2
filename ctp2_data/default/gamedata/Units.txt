@@ -1143,6 +1143,7 @@ UNIT_CYBER_NINJA {
    CanBeExpelled
    CantCaptureCity
    IsSpecialForces
+   InvisibleForGlobeSat
    DefendAgainstSpies 0.5
    SoundSelect1 SOUND_SELECT1_CYBER_NINJA
    SoundSelect2 SOUND_SELECT2_CYBER_NINJA
@@ -3595,6 +3596,7 @@ UNIT_SPY {
    CantCaptureCity
    DeathEffectsHappy
    IsSpecialForces
+   InvisibleForGlobeSat
    DefendAgainstSpies 0.25
    SoundSelect1 SOUND_SELECT1_SPY
    SoundSelect2 SOUND_SELECT2_SPY
