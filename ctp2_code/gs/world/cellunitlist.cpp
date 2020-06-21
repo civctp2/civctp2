@@ -1284,6 +1284,31 @@ bool CellUnitList::IsCivilian() const
 
 //----------------------------------------------------------------------------
 //
+// Name       : CellUnitList::IsInvisibleForGlobeSat
+//
+// Description: Returns true if all units are not visible for GlobeSat
+//
+// Parameters : -
+//
+// Globals    : -
+//
+// Returns    : bool
+//
+// Remark(s)  : -
+//
+//----------------------------------------------------------------------------
+bool CellUnitList::IsInvisibleForGlobeSat() const
+{
+	for(sint32 i = 0; i < m_nElements; i++)
+	{
+		if (!m_array[i].GetDBRec()->GetInvisibleForGlobeSat())
+			return false;
+	}
+	return true;
+}
+
+//----------------------------------------------------------------------------
+//
 // Name       : CellUnitList::CanBombardTargetType
 //
 // Description: Returns true if some member of this army can bombard some member
