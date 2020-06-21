@@ -632,10 +632,18 @@ void Scheduler::Match_Resources(const bool move_armies)
 	sint32 committed_agents = 0;
 	sint32 total_agents     = m_agents.size();
 
+#if defined(_DEBUG)
+	int loopCount = 0;
+	int loopCountBadUtility = -1;
+#endif
+
 	//It is best not to iterate using a for loop, as items may be erased as we go through
 	Goal_List::iterator goal_iter = m_goals.begin();
 	while(goal_iter != m_goals.end())
 	{
+#if defined(_DEBUG)
+		loopCount++;
+#endif
 		if(committed_agents >= total_agents)
 		{
 			Assert(committed_agents == total_agents);
@@ -664,6 +672,9 @@ void Scheduler::Match_Resources(const bool move_armies)
 
 			AI_DPRINTF(k_DBG_SCHEDULER, m_playerId, goal_ptr->Get_Goal_Type(), -1, ("\n"));
 			AI_DPRINTF(k_DBG_SCHEDULER, m_playerId, goal_ptr->Get_Goal_Type(), -1, ("\n"));
+#if defined(_DEBUG)
+			loopCountBadUtility = loopCount;
+#endif
 			// Assuming that the list is still sorted,
 			// and the following has only Goal::BAD_UTILITY
 			break;
@@ -864,7 +875,7 @@ void Scheduler::Match_Resources(const bool move_armies)
 
 #if defined(_DEBUG)
 	sint32 committed_agents_test = 0;
-
+      loopCount = 0;
 	for
 	(
 	    Goal_List::iterator goal_iter2  = m_goals.begin();
@@ -872,6 +883,9 @@ void Scheduler::Match_Resources(const bool move_armies)
 	                      ++goal_iter2
 	)
 	{
+		loopCount++;
+		if (loopCount == loopCountBadUtility)
+			break;
 		Goal_ptr goal_ptr        = static_cast<Goal_ptr>(*goal_iter2);
 		committed_agents_test   += goal_ptr->Get_Agent_Count();
 	}
