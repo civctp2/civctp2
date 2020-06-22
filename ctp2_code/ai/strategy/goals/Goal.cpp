@@ -862,13 +862,8 @@ void Goal::Rollback_Emptied_Transporters()
 	if(m_agents.size() == 0)
 		return;
 
-	Agent_List::iterator agent_iter;
-	for
-	(
-	      agent_iter  = m_agents.begin();
-	      agent_iter != m_agents.end();
-	    ++agent_iter
-	)
+	Agent_List::iterator agent_iter = m_agents.begin();
+	while (agent_iter != m_agents.end())
 	{
 		Agent_ptr agent_ptr = *agent_iter;
 		const MapPoint pos     = agent_ptr->Get_Target_Pos();
@@ -887,9 +882,10 @@ void Goal::Rollback_Emptied_Transporters()
 					("\t\tTransporter (%s) not needed anymore, removing from goal\n", g_theUnitDB->GetNameStr(agent_ptr->Get_Army()->Get(0)->GetType())));
 
 				Rollback_Agent(agent_iter); // increases the agent iterator
-				--agent_iter;
+				continue;
 			}
 		}
+		++agent_iter;
 	}
 }
 
