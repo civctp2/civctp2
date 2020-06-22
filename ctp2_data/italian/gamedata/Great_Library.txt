@@ -5690,6 +5690,8 @@ All'inizio della Seconda Guerra Mondiale, gli attacchi sferrati con bombe o silu
 [UNIT_ARCHER_PREREQ]
 Richiede:
 <L:DATABASE_ADVANCES,ADVANCE_BALLISTICS>Balistica<e>
+Obsolete:
+<L:DATABASE_ADVANCES,ADVANCE_CANNON_MAKING>Fabbricazione di cannoni<e>
 [END]
 
 [UNIT_ARCHER_STATISTICS]
@@ -5779,6 +5781,8 @@ La Seconda Guerra Mondiale rappresentò l'apogeo della corazzata, allorché il Tra
 [UNIT_BOMBER_PREREQ]
 Richiede:
 <L:DATABASE_ADVANCES,ADVANCE_JET_PROPULSION>Propulsione a reazione<e>
+Obsolete:
+<L:DATABASE_ADVANCES,ADVANCE_ADVANCED_COMPOSITES>Materiali compositi av.<e>
 
 Abilità:
 Può trasportare una <L:DATABASE_UNITS,UNIT_NUKE>bomba atomica<e> o un <L:DATABASE_UNITS,UNIT_CRUISE_MISSILE>missile da crociera<e>
@@ -5811,6 +5815,8 @@ Nonostante i bombardieri a elica avessero più volte dato prova delle proprie pot
 [UNIT_CANNON_PREREQ]
 Richiede:
 <L:DATABASE_ADVANCES,ADVANCE_CANNON_MAKING>Fabbricazione di cannoni<e>
+Obsolete:
+<L:DATABASE_ADVANCES,ADVANCE_CYBERNETICS>Cibernetica<e>
 
 Abilità:
 <L:DATABASE_ORDERS,ORDER_BOMBARD>Bombarda<e>
@@ -5841,6 +5847,8 @@ Dopo aver rivoluzionato il mondo della fanteria e degli scontri ravvicinati nel 
 [UNIT_CARAVAN_PREREQ]
 Richiede:
 <L:DATABASE_ADVANCES,ADVANCE_TRADE>Commercio<e>
+Obsolete:
+<L:DATABASE_ADVANCES,ADVANCE_GLOBAL_ECONOMICS>Economia globale<e>
 
 Costa:
 {UnitDB(UnitRecord[0]).ShieldCost} <L:DATABASE_CONCEPTS,CONCEPT_PRODUCTION>produzione<e>
@@ -5902,6 +5910,8 @@ Nonostante alcuni elicotteri militari fossero stati progettati principalmente pe
 [UNIT_CARRACK_PREREQ]
 Richiede:
 <L:DATABASE_ADVANCES,ADVANCE_OCEAN_FARING>Navigazione oceanica<e>
+Obsolete:
+<L:DATABASE_ADVANCES,ADVANCE_INTERNAL_COMBUSTION>Combustione interna<e>
 
 Abilità:
 È in grado di <L:DATABASE_ORDERS,ORDER_BOARD_TRANSPORT>imbarcare<e> fino a tre unità terrestri
@@ -5935,6 +5945,8 @@ Due delle più famose caracche furono la Santa Maria, una delle leggendarie navi 
 [UNIT_CATAMARAN_PREREQ]
 Richiede:
 <L:DATABASE_ADVANCES,ADVANCE_SHIP_BUILDING>Costruzioni navali<e>
+Obsolete:
+<L:DATABASE_ADVANCES,ADVANCE_HULL_MAKING>Fabbricazione di navi<e>
 
 Abilità:
 È in grado di <L:DATABASE_ORDERS,ORDER_BOARD_TRANSPORT>imbarcare<e> un'unità di terra
@@ -5965,6 +5977,8 @@ Le barche di vimini fanno la loro prima comparsa in Galles e in Irlanda. Alcune 
 [UNIT_CATAPULT_PREREQ]
 Richiede:
 <L:DATABASE_ADVANCES,ADVANCE_GEOMETRY>Geometria<e>
+Obsolete:
+<L:DATABASE_ADVANCES,ADVANCE_EXPLOSIVES>Esplosivi<e>
 
 Abilità:
 <L:DATABASE_ORDERS,ORDER_BOMBARD>Bombarda<e>
@@ -5995,6 +6009,8 @@ La catapulta era una delle più efficaci armi da assedio utilizzate nei conflitti
 [UNIT_CAVALRY_PREREQ]
 Richiede:
 <L:DATABASE_ADVANCES,ADVANCE_CAVALRY_TACTICS>Tattiche di cavalleria<e>
+Obsolete:
+<L:DATABASE_ADVANCES,ADVANCE_TANK_WARFARE>Guerra coi carri armati<e>
 [END]
 
 [UNIT_CAVALRY_STATISTICS]
@@ -6022,6 +6038,8 @@ All'inizio del XIV secolo, lo sviluppo della polvere da sparo e dei proiettili i
 [UNIT_CLERIC_PREREQ]
 Richiede:
 <L:DATABASE_ADVANCES,ADVANCE_THEOLOGY>Teologia<e>
+Obsolete:
+<L:DATABASE_ADVANCES,ADVANCE_MASS_MEDIA>Comunicazione di massa<e>
 
 Abilità:
 <L:DATABASE_ORDERS,ORDER_CONVERT>Converte le città<e>
@@ -6191,6 +6209,8 @@ Una volta sviluppata un'interfaccia neurale interna, i militari iniziarono a tes
 [UNIT_DESTROYER_PREREQ]
 Richiede:
 <L:DATABASE_ADVANCES,ADVANCE_MASS_PRODUCTION>Produzione di massa<e>
+Obsolete:
+<L:DATABASE_ADVANCES,ADVANCE_PLASMA_WEAPONRY>Armi al plasma<e>
 
 Abilità:
 <L:DATABASE_ORDERS,ORDER_BOMBARD>Bombarda<e>
@@ -6225,6 +6245,8 @@ Dopo la Seconda Guerra Mondiale, il doppio ruolo, anti-aerei e anti-sottomarini,
 [UNIT_DIPLOMAT_PREREQ]
 Richiede:
 <L:DATABASE_ADVANCES,ADVANCE_BUREAUCRACY>Burocrazia<e>
+Obsolete:
+<L:DATABASE_ADVANCES,ADVANCE_EUGENICS>Eugenetica<e>
 
 Abilità:
 <L:DATABASE_ORDERS,ORDER_ESTABLISH_EMBASSY>Fonda ambasciate<e>
@@ -6429,6 +6451,8 @@ Nell'aprile del 1925, Adolf Hitler creò le Schutzstaffel (che in tedesco signifi
 [UNIT_FIGHTER_PREREQ]
 Richiede:
 <L:DATABASE_ADVANCES,ADVANCE_AERODYNAMICS>Aerodinamica<e>
+Obsolete:
+<L:DATABASE_ADVANCES,ADVANCE_SUPERSONIC_FLIGHT>Volo supersonico<e>
 
 Abilità:
 Atterra sulle <L:DATABASE_UNITS,UNIT_AIRCRAFT_CARRIER>Portaerei<e>
@@ -6463,6 +6487,8 @@ Durante la Seconda Guerra Mondiale, i caccia completamente in metallo, sospinti 
 [UNIT_FIRE_TRIREME_PREREQ]
 Richiede:
 <L:DATABASE_ADVANCES,ADVANCE_ALCHEMY>Alchimia<e>
+Obsolete:
+<L:DATABASE_ADVANCES,ADVANCE_MODERN_METALLURGY>Metallurgia moderna<e>
 [END]
 
 [UNIT_FIRE_TRIREME_STATISTICS]
@@ -6513,6 +6539,8 @@ I container di dimensioni standard resero la spedizione ancor più facile, potend
 [UNIT_FRIGATE_PREREQ]
 Richiede:
 <L:DATABASE_ADVANCES,ADVANCE_MASS_PRODUCTION>Produzione di massa<e> 
+Obsolete:
+<L:DATABASE_ADVANCES,ADVANCE_PLASMA_WEAPONRY>Armi al plasma<e>
 
 Abilità:
 <L:DATABASE_ORDERS,ORDER_BOMBARD>Bombarda<e>
@@ -6579,6 +6607,8 @@ Il carro armato a fusione era in grado di penetrare obiettivi pesantemente coraz
 [UNIT_HOPLITE_PREREQ]
 Richiede:
 <L:DATABASE_ADVANCES,ADVANCE_BRONZE_WORKING>Lavorazione del bronzo<e>
+Obsolete:
+<L:DATABASE_ADVANCES,ADVANCE_GUNPOWDER>Polvere da sparo<e>
 [END]
 
 [UNIT_HOPLITE_STATISTICS]
@@ -6633,6 +6663,8 @@ Lo sviluppo delle applicazioni della teoria del caos aprì nuove frontiere nello 
 [UNIT_INFANTRYMAN_PREREQ]
 Richiede:
 <L:DATABASE_ADVANCES,ADVANCE_GUNPOWDER>Polvere da sparo<e>
+Obsolete:
+<L:DATABASE_ADVANCES,ADVANCE_ADV_INFANTRY_TACTICS>Tattiche av. fanteria<e>
 [END]
 
 [UNIT_INFANTRYMAN_STATISTICS]
@@ -6698,6 +6730,8 @@ Sebbene la guerra biologica fosse un vero e proprio spauracchio alla fine del XX
 [UNIT_INTERCEPTOR_PREREQ]
 Richiede:
 <L:DATABASE_ADVANCES,ADVANCE_SUPERSONIC_FLIGHT>Volo supersonico<e>
+Obsolete:
+<L:DATABASE_ADVANCES,ADVANCE_AI_SURVEILLANCE>Sorveglianza con IA<e>
 
 Abilità:
 <L:DATABASE_CONCEPTS,CONCEPT_ACTIVE_DEFENSE>Difesa attiva<e>
@@ -6730,6 +6764,8 @@ Le velocità estreme e l'altitudine operativa dell'intercettore rendevano il punt
 [UNIT_IRONCLAD_PREREQ]
 Richiede:
 <L:DATABASE_ADVANCES,ADVANCE_MODERN_METALLURGY>Metallurgia moderna<e>
+Obsolete:
+<L:DATABASE_ADVANCES,ADVANCE_ADV_NAVAL_TACTICS>Tattiche navali avanzate<e>
 
 Abilità:
 <L:DATABASE_ORDERS,ORDER_BOMBARD>Bombarda<e>
@@ -6762,6 +6798,8 @@ Quando, all'inizio della Guerra Civile, gli Unionisti lasciarono il cantiere nav
 [UNIT_KNIGHT_PREREQ]
 Richiede:
 <L:DATABASE_ADVANCES,ADVANCE_FEUDALISM>Feudalesimo<e>
+Obsolete:
+<L:DATABASE_ADVANCES,ADVANCE_INDUSTRIAL_REVOLUTION>Rivoluzione industriale<e>
 
 Abilità:
 <L:DATABASE_CONCEPTS,CONCEPT_SPECIAL_FORCES>Forze speciali<e>
@@ -6892,6 +6930,8 @@ Concepita dagli strateghi militari come la più efficace arma difensiva della sto
 [UNIT_LONGSHIP_PREREQ]
 Richiede:
 <L:DATABASE_ADVANCES,ADVANCE_HULL_MAKING>Fabbricazione di navi<e>
+Obsolete:
+<L:DATABASE_ADVANCES,ADVANCE_INTERNAL_COMBUSTION>Combustione interna<e>
 
 Abilità: 
 Può <L:DATABASE_ORDERS,ORDER_BOARD_TRANSPORT>imbarcare<e> fino a 2 unità terrestri
@@ -6922,6 +6962,8 @@ Il drakkar vichingo fu una delle prime unità navali a impiegare uno scafo a fasc
 [UNIT_MACHINE_GUNNER_PREREQ]
 Richiede:
 <L:DATABASE_ADVANCES,ADVANCE_INDUSTRIAL_REVOLUTION>Rivoluzione industriale<e>
+Obsolete:
+<L:DATABASE_ADVANCES,ADVANCE_CHAOS_THEORY>Teoria del caos<e>
 [END]
 
 [UNIT_MACHINE_GUNNER_STATISTICS]
@@ -7043,6 +7085,8 @@ La prima applicazione militare della progettazione dei sistemi organici culminò 
 [UNIT_MOUNTED_ARCHER_PREREQ]
 Richiede:
 <L:DATABASE_ADVANCES,ADVANCE_HORSE_RIDING>Equitazione<e>
+Obsolete:
+<L:DATABASE_ADVANCES,ADVANCE_INDUSTRIAL_REVOLUTION>Rivoluzione industriale<e>
 [END]
 
 [UNIT_MOUNTED_ARCHER_STATISTICS]
@@ -7070,6 +7114,8 @@ Le prime armate dell'età antica utilizzavano le bighe per sferrare attacchi molt
 [UNIT_NUCLEAR_SUBMARINE_PREREQ]
 Richiede:
 <L:DATABASE_ADVANCES,ADVANCE_NUCLEAR_POWER>Energia nucleare<e>
+Obsolete:
+<L:DATABASE_ADVANCES,ADVANCE_GENETIC_TAILORING>Ingegneria genetica<e>
 
 Abilità:
 Può trasportare fino a 2 <L:DATABASE_UNITS,UNIT_CRUISE_MISSILE>missili da crociera<e> o <L:DATABASE_UNITS,UNIT_NUKE>bombe atomiche<e>
@@ -7172,6 +7218,8 @@ Durante la Seconda Guerra Mondiale, gli eserciti approntarono delle forze di fan
 [UNIT_PIKEMEN_PREREQ]
 Richiede:
 <L:DATABASE_ADVANCES,ADVANCE_FEUDALISM>Feudalesimo<e>
+Obsolete:
+<L:DATABASE_ADVANCES,ADVANCE_FASCISM>Fascismo<e>
 
 Abilità:
 Bonus difensivo contro le unità a cavallo
@@ -7326,6 +7374,8 @@ Fin dalla preistoria gli uomini conducevano un'esistenza nomade, spostandosi di 
 [UNIT_SHIP_OF_THE_LINE_PREREQ]
 Richiede:
 <L:DATABASE_ADVANCES,ADVANCE_NAVAL_TACTICS>Tattiche navali<e>
+Obsolete:
+<L:DATABASE_ADVANCES,ADVANCE_MASS_PRODUCTION>Produzione di massa<e>
 
 Abilità:
 <L:DATABASE_ORDERS,ORDER_BOMBARD>Bombarda<e>
@@ -7420,6 +7470,8 @@ Nel 2047 gli scienziati dell'Amministrazione Nazionale Spaziale e Aeronautica la
 [UNIT_SPY_PREREQ]
 Richiede:
 <L:DATABASE_ADVANCES,ADVANCE_NATIONALISM>Patriottismo<e>
+Obsolete:
+<L:DATABASE_ADVANCES,ADVANCE_NEURAL_INTERFACE>Interfaccia neurale<e>
 Abilità:
 <L:DATABASE_ORDERS,ORDER_INCITE_REVOLUTION>Incita una rivoluzione<e>
 <L:DATABASE_ORDERS,ORDER_INVESTIGATE_CITY>Spia<e>
@@ -7549,6 +7601,8 @@ La tecnologia antiradar non arrivava a buon prezzo: il primo caccia antiradar, l
 [UNIT_SUBMARINE_PREREQ]
 Richiede:
 <L:DATABASE_ADVANCES,ADVANCE_OIL_REFINING>Raffinazione del petrolio<e>
+Obsolete:
+<L:DATABASE_ADVANCES,ADVANCE_NUCLEAR_POWER>Energia nucleare<e>
 
 Abilità:
 Bombarda
@@ -7581,6 +7635,8 @@ I primi sottomarini, costruiti e sperimentati da entrambi i contendenti della Gu
 [UNIT_SWORDSMAN_PREREQ]
 Richiede:
 <L:DATABASE_ADVANCES,ADVANCE_IRON_WORKING>Lavorazione del ferro<e>
+Obsolete:
+<L:DATABASE_ADVANCES,ADVANCE_INDUSTRIAL_REVOLUTION>Rivoluzione industriale<e>
 
 Abilità:
 <L:DATABASE_CONCEPTS,CONCEPT_SPECIAL_FORCES>Forze speciali<e>
@@ -7611,6 +7667,8 @@ I samurai erano la classe di guerrieri dell'età feudale giapponese, attivi dal X
 [UNIT_TANK_PREREQ]
 Richiede:
 <L:DATABASE_ADVANCES,ADVANCE_TANK_WARFARE>Guerra coi carri armati<e>
+Obsolete:
+<L:DATABASE_ADVANCES,ADVANCE_FUSION>Fusione nucleare<e>
 [END]
 
 [UNIT_TANK_STATISTICS]
@@ -7740,6 +7798,8 @@ A metà del XX secolo gli urbanisti iniziarono a sperimentare nuovi concetti per 
 [UNIT_WARRIOR_PREREQ]
 Richiede:
 <L:DATABASE_ADVANCES,ADVANCE_TOOLMAKING>Fabbricazione di utensili<e>
+Obsolete:
+<L:DATABASE_ADVANCES,ADVANCE_GUNPOWDER>Polvere da sparo<e>
 [END]
 
 [UNIT_WARRIOR_STATISTICS]
@@ -9361,6 +9421,8 @@ A player may want to upgrade a unit for a variety of reasons.  Older and obsolet
 [UNIT_LONGBOWMAN_PREREQ]
 Requires:
 <L:DATABASE_ADVANCES,ADVANCE_FEUDALISM><e>
+Obsolete:
+<L:DATABASE_ADVANCES,ADVANCE_CANNON_MAKING>Fabbricazione di cannoni<e>
 [END]
 
 [UNIT_LONGBOWMAN_STATISTICS]

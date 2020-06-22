@@ -5743,6 +5743,8 @@ Au début de deuxième guerre mondiale, les bombardiers et lance-torpilles embarqu
 [UNIT_ARCHER_PREREQ]
 Condition :
 <L:DATABASE_ADVANCES,ADVANCE_BALLISTICS>Balistique<e>
+Obsolete:
+<L:DATABASE_ADVANCES,ADVANCE_CANNON_MAKING>Fabric. canons<e>
 [END]
 
 [UNIT_ARCHER_STATISTICS]
@@ -5835,6 +5837,8 @@ La seconde guerre mondiale est l'âge d'or des cuirassés, après l'abandon du trai
 [UNIT_BOMBER_PREREQ]
 Condition :
 <L:DATABASE_ADVANCES,ADVANCE_JET_PROPULSION>Propulsion à réaction<e>
+Obsolete:
+<L:DATABASE_ADVANCES,ADVANCE_ADVANCED_COMPOSITES>Composites avancés<e>
 
 Capacités :
 Transporter un <L:DATABASE_UNITS,UNIT_NUKE>missile nucléaire<e> ou un <L:DATABASE_UNITS,UNIT_CRUISE_MISSILE>missile de croisère<e>
@@ -5869,6 +5873,8 @@ En dépit de l'impact notable des bombardiers conventionnels sur la deuxième guer
 [UNIT_CANNON_PREREQ]
 Condition :
 <L:DATABASE_ADVANCES,ADVANCE_CANNON_MAKING>Fabrication de canons<e>
+Obsolete:
+<L:DATABASE_ADVANCES,ADVANCE_CYBERNETICS>Cybernétique<e>
 
 Capacités :
 <L:DATABASE_ORDERS,ORDER_BOMBARD>Bombarder<e>
@@ -5900,6 +5906,8 @@ La poudre à canon a révolutionné l'infanterie et le combat rapproché au XVIe siè
 [UNIT_CARAVAN_PREREQ]
 Condition :
 <L:DATABASE_ADVANCES,ADVANCE_TRADE>Echanges<e>
+Obsolete:
+<L:DATABASE_ADVANCES,ADVANCE_GLOBAL_ECONOMICS>Economie mondiale<e>
 
 Coût :
 <L:DATABASE_CONCEPTS,CONCEPT_PRODUCTION>Production<e> : {UnitDB(UnitRecord[0]).ShieldCost}
@@ -5952,6 +5960,8 @@ Bien que certains hélicoptères militaires soient avant tout conçus pour l'attaqu
 [UNIT_CARRACK_PREREQ]
 Condition :
 <L:DATABASE_ADVANCES,ADVANCE_OCEAN_FARING>Exploration maritime<e>
+Obsolete:
+<L:DATABASE_ADVANCES,ADVANCE_INTERNAL_COMBUSTION>Combust. interne<e>
 
 Capacités :
 <L:DATABASE_ORDERS,ORDER_BOARD_TRANSPORT>Transporter<e> jusqu'à trois unités terrestres
@@ -5986,6 +5996,8 @@ Deux des carracks les plus célèbres ont été le Santa Maria, l'un des navires de 
 [UNIT_CATAMARAN_PREREQ]
 Condition :
 <L:DATABASE_ADVANCES,ADVANCE_SHIP_BUILDING>Construction navale<e>
+Obsolete:
+<L:DATABASE_ADVANCES,ADVANCE_HULL_MAKING>Fabr. coques<e>
 
 Capacités :
 Peut <L:DATABASE_ORDERS,ORDER_BOARD_TRANSPORT>transporter<e> une unité terrestre
@@ -6017,6 +6029,8 @@ Le coracle est un bateau originaire du Pays de Galles et d'Irlande. Certains cor
 [UNIT_CATAPULT_PREREQ]
 Condition :
 <L:DATABASE_ADVANCES,ADVANCE_GEOMETRY>Géometrie<e>
+Obsolete:
+<L:DATABASE_ADVANCES,ADVANCE_EXPLOSIVES>Explosifs<e>
 
 Capacités :
 <L:DATABASE_ORDERS,ORDER_BOMBARD>Bombarder<e>
@@ -6048,6 +6062,8 @@ La catapulte est l'une des armes de siège les plus efficaces de l'Antiquité et d
 [UNIT_CAVALRY_PREREQ]
 Condition :
 <L:DATABASE_ADVANCES,ADVANCE_CAVALRY_TACTICS>Tactiques de cavalerie<e>
+Obsolete:
+<L:DATABASE_ADVANCES,ADVANCE_TANK_WARFARE>Guerre blindés<e>
 [END]
 
 [UNIT_CAVALRY_STATISTICS]
@@ -6076,6 +6092,8 @@ Au début du XIVe siècle, l'arrivée de la poudre à canon et des munitions capable
 [UNIT_CLERIC_PREREQ]
 Condition :
 <L:DATABASE_ADVANCES,ADVANCE_THEOLOGY>Théologie<e>
+Obsolete:
+<L:DATABASE_ADVANCES,ADVANCE_MASS_MEDIA>Médias<e>
 
 Capacités :
 <L:DATABASE_ORDERS,ORDER_CONVERT>Convertir des villes<e>
@@ -6246,6 +6264,8 @@ A la suite de la mise au point d'un appareil interne d'interfaçage neural, les m
 [UNIT_DESTROYER_PREREQ]
 Condition :
 <L:DATABASE_ADVANCES,ADVANCE_MASS_PRODUCTION>Production de masse<e>
+Obsolete:
+<L:DATABASE_ADVANCES,ADVANCE_PLASMA_WEAPONRY>Armes à plasma<e>
 
 Capacités :
 <L:DATABASE_ORDERS,ORDER_BOMBARD>Bombarder<e>
@@ -6282,6 +6302,8 @@ Après la deuxième guerre mondiale, le double rôle du destroyer (défense anti-aér
 [UNIT_DIPLOMAT_PREREQ]
 Condition :
 <L:DATABASE_ADVANCES,ADVANCE_BUREAUCRACY>Bureaucratie<e>
+Obsolete:
+<L:DATABASE_ADVANCES,ADVANCE_EUGENICS>Thérapie génique<e>
 
 Capacités :
 <L:DATABASE_ORDERS,ORDER_ESTABLISH_EMBASSY>Etablir des ambassades<e>
@@ -6495,6 +6517,8 @@ En avril 1925, Adolf Hitler crée le Schutzstaffeln (en allemand, 'unité de prote
 [UNIT_FIGHTER_PREREQ]
 Condition :
 <L:DATABASE_ADVANCES,ADVANCE_AERODYNAMICS>Aérodynamique<e>
+Obsolete:
+<L:DATABASE_ADVANCES,ADVANCE_SUPERSONIC_FLIGHT>Vol supersonique<e>
 
 Capacités :
 Atterrir sur un <L:DATABASE_UNITS,UNIT_AIRCRAFT_CARRIER>porte-avions<e>
@@ -6530,6 +6554,8 @@ Durant la deuxième guerre mondiale, les chasseurs sont construit entièrement en 
 [UNIT_FIRE_TRIREME_PREREQ]
 Condition :
 <L:DATABASE_ADVANCES,ADVANCE_ALCHEMY>Alchimie<e>
+Obsolete:
+<L:DATABASE_ADVANCES,ADVANCE_MODERN_METALLURGY>Métall. moderne<e>
 [END]
 
 [UNIT_FIRE_TRIREME_STATISTICS]
@@ -6581,6 +6607,8 @@ L'utilisation de conteneurs standard facilite l'acheminement du fret. Un camion 
 [UNIT_FRIGATE_PREREQ]
 Condition :
 <L:DATABASE_ADVANCES,ADVANCE_MASS_PRODUCTION>Production de masse<e> 
+Obsolete:
+<L:DATABASE_ADVANCES,ADVANCE_PLASMA_WEAPONRY>Armes à plasma<e>
 
 Capacités :
 <L:DATABASE_ORDERS,ORDER_BOMBARD>Bombarder<e>
@@ -6649,6 +6677,8 @@ Le char à fusion peut perforer les blindages les plus résistants grâce à son can
 [UNIT_HOPLITE_PREREQ]
 Condition :
 <L:DATABASE_ADVANCES,ADVANCE_BRONZE_WORKING>Travail du bronze<e>
+Obsolete:
+<L:DATABASE_ADVANCES,ADVANCE_GUNPOWDER>Poudre à canon<e>
 [END]
 
 [UNIT_HOPLITE_STATISTICS]
@@ -6705,6 +6735,8 @@ Les applications de la théorie du chaos ont ouvert de nouvelles perspectives dan
 [UNIT_INFANTRYMAN_PREREQ]
 Condition :
 <L:DATABASE_ADVANCES,ADVANCE_GUNPOWDER>Poudre à canon<e>
+Obsolete:
+<L:DATABASE_ADVANCES,ADVANCE_ADV_INFANTRY_TACTICS>Infanterie avanc.<e>
 [END]
 
 [UNIT_INFANTRYMAN_STATISTICS]
@@ -6770,6 +6802,8 @@ La menace de la guerre biologique a pesé lourdement sur la fin du XXe siècle, ma
 [UNIT_INTERCEPTOR_PREREQ]
 Condition :
 <L:DATABASE_ADVANCES,ADVANCE_SUPERSONIC_FLIGHT>Vol supersonique<e>
+Obsolete:
+<L:DATABASE_ADVANCES,ADVANCE_AI_SURVEILLANCE>Surveil. infor.<e>
 
 Capacités :
 <L:DATABASE_CONCEPTS,CONCEPT_ACTIVE_DEFENSE>Défense active anti-aérienne<e>
@@ -6802,6 +6836,8 @@ En raison de leur vitesse et de leur altitude de vol, il devient très compliqué 
 [UNIT_IRONCLAD_PREREQ]
 Condition :
 <L:DATABASE_ADVANCES,ADVANCE_MODERN_METALLURGY>Métallurgie moderne<e>
+Obsolete:
+<L:DATABASE_ADVANCES,ADVANCE_ADV_NAVAL_TACTICS>Tact. nav. avanc.<e>
 
 Capacités :
 <L:DATABASE_ORDERS,ORDER_BOMBARD>Bombarder<e>
@@ -6835,6 +6871,8 @@ Lorsque, au début de la guerre de Sécession, l'Union abandonne la base maritime 
 [UNIT_KNIGHT_PREREQ]
 Condition :
 <L:DATABASE_ADVANCES,ADVANCE_FEUDALISM>Féodalisme<e>
+Obsolete:
+<L:DATABASE_ADVANCES,ADVANCE_INDUSTRIAL_REVOLUTION>Rév. industr.<e>
 
 Capacités :
 <L:DATABASE_CONCEPTS,CONCEPT_SPECIAL_FORCES>Forces spéciales<e>
@@ -6969,6 +7007,8 @@ Conçu par les stratèges militaires pour être le véhicule défensif le plus effica
 [UNIT_LONGSHIP_PREREQ]
 Condition :
 <L:DATABASE_ADVANCES,ADVANCE_HULL_MAKING>Fabrication de coques<e>
+Obsolete:
+<L:DATABASE_ADVANCES,ADVANCE_INTERNAL_COMBUSTION>Combust. interne<e>
 
 Capacités : 
 <L:DATABASE_ORDERS,ORDER_BOARD_TRANSPORT>Transporter<e> jusqu'à 2 unités terrestres
@@ -7000,6 +7040,8 @@ Le drakkar viking est l'un des premiers navires de haute mer doté d'une coque fa
 [UNIT_MACHINE_GUNNER_PREREQ]
 Condition :
 <L:DATABASE_ADVANCES,ADVANCE_INDUSTRIAL_REVOLUTION>Révolution industrielle<e>
+Obsolete:
+<L:DATABASE_ADVANCES,ADVANCE_CHAOS_THEORY>Théorie du chaos<e>
 [END]
 
 [UNIT_MACHINE_GUNNER_STATISTICS]
@@ -7126,6 +7168,8 @@ La première application militaire de cette conception des systèmes organiques a 
 [UNIT_MOUNTED_ARCHER_PREREQ]
 Condition :
 <L:DATABASE_ADVANCES,ADVANCE_HORSE_RIDING>Equitation<e>
+Obsolete:
+<L:DATABASE_ADVANCES,ADVANCE_INDUSTRIAL_REVOLUTION>Rév. industr.<e>
 [END]
 
 [UNIT_MOUNTED_ARCHER_STATISTICS]
@@ -7154,6 +7198,8 @@ Les premières armées de l'Antiquité se servaient de chars pour mener des attaque
 [UNIT_NUCLEAR_SUBMARINE_PREREQ]
 Condition :
 <L:DATABASE_ADVANCES,ADVANCE_NUCLEAR_POWER>Energie nucléaire<e>
+Obsolete:
+<L:DATABASE_ADVANCES,ADVANCE_GENETIC_TAILORING>Génie génétique<e>
 
 Capacités :
 Peut transporter jusqu'à 2 <L:DATABASE_UNITS,UNIT_CRUISE_MISSILE>missiles de croisière<e> ou 2 <L:DATABASE_UNITS,UNIT_NUKE>missiles nucléaires<e>
@@ -7253,6 +7299,8 @@ Au cours de la deuxième guerre mondiale, les forces en présence déploient des un
 [UNIT_PIKEMEN_PREREQ]
 Condition :
 <L:DATABASE_ADVANCES,ADVANCE_AGRICULTURAL_REVOLUTION>Révolution agricole<e>
+Obsolete:
+<L:DATABASE_ADVANCES,ADVANCE_FASCISM>Fascisme<e>
 
 Capacités :
 Bonus défensif contre les unités montées
@@ -7412,6 +7460,8 @@ Aux temps les plus reculés, l'être humain vivait en nomade, allant d'un lieu à l
 [UNIT_SHIP_OF_THE_LINE_PREREQ]
 Condition :
 <L:DATABASE_ADVANCES,ADVANCE_NAVAL_TACTICS>Tactiques navales<e>
+Obsolete:
+<L:DATABASE_ADVANCES,ADVANCE_MASS_PRODUCTION>Prod. de masse<e>
 
 Capacités :
 <L:DATABASE_ORDERS,ORDER_BOMBARD>Bombarder<e>
@@ -7508,6 +7558,8 @@ En 2047, les chercheurs de la NASA lancent le premier véhicule de transport orbi
 [UNIT_SPY_PREREQ]
 Condition :
 <L:DATABASE_ADVANCES,ADVANCE_NATIONALISM>Nationalisme<e>
+Obsolete:
+<L:DATABASE_ADVANCES,ADVANCE_NEURAL_INTERFACE>Interface neurale<e>
 
 Capacités :
 <L:DATABASE_ORDERS,ORDER_INCITE_REVOLUTION>Inciter à la révolution<e>
@@ -7643,6 +7695,8 @@ Mais la technologie furtive a un prix élevé. Le premier chasseur furtif, le F-11
 [UNIT_SUBMARINE_PREREQ]
 Condition :
 <L:DATABASE_ADVANCES,ADVANCE_OIL_REFINING>Raffinage de pétrole<e>
+Obsolete:
+<L:DATABASE_ADVANCES,ADVANCE_NUCLEAR_POWER>Energie nucl.<e>
 
 Capacités :
 Bombarder 
@@ -7675,6 +7729,8 @@ Les premiers sous-marins, conçus et testés par les deux camps de la guerre de Sé
 [UNIT_SWORDSMAN_PREREQ]
 Condition :
 <L:DATABASE_ADVANCES,ADVANCE_IRON_WORKING>Travail du fer<e>
+Obsolete:
+<L:DATABASE_ADVANCES,ADVANCE_INDUSTRIAL_REVOLUTION>Rév. industr.<e>
 
 Capacités :
 <L:DATABASE_CONCEPTS,CONCEPT_SPECIAL_FORCES>Forces spéciales<e>
@@ -7706,6 +7762,8 @@ Les samouraïs forment une caste de guerriers qui agit pendant l'époque féodale d
 [UNIT_TANK_PREREQ]
 Condition :
 <L:DATABASE_ADVANCES,ADVANCE_TANK_WARFARE>Guerre de blindés<e>
+Obsolete:
+<L:DATABASE_ADVANCES,ADVANCE_FUSION>Fusion<e>
 [END]
 
 [UNIT_TANK_STATISTICS]
@@ -7841,6 +7899,8 @@ Vers le milieu du XXe siècle, les urbanistes expérimentent de nouveaux concepts 
 [UNIT_WARRIOR_PREREQ]
 Condition :
 <L:DATABASE_ADVANCES,ADVANCE_TOOLMAKING>Fabrication d'outils<e>
+Obsolete:
+<L:DATABASE_ADVANCES,ADVANCE_GUNPOWDER>Poudre à canon<e>
 [END]
 
 [UNIT_WARRIOR_STATISTICS]
@@ -9449,6 +9509,8 @@ A player may want to upgrade a unit for a variety of reasons.  Older and obsolet
 [UNIT_LONGBOWMAN_PREREQ]
 Requires:
 <L:DATABASE_ADVANCES,ADVANCE_FEUDALISM><e>
+Obsolete:
+<L:DATABASE_ADVANCES,ADVANCE_CANNON_MAKING>Fabric. canons<e>
 [END]
 
 [UNIT_LONGBOWMAN_STATISTICS]

@@ -766,7 +766,7 @@ UNIT_CAVALRY {
    MaxMovePoints 400
    VisionRange 2
    EnableAdvance ADVANCE_CAVALRY_TACTICS
-   ObsoleteAdvance ADVANCE_FUSION
+   ObsoleteAdvance ADVANCE_TANK_WARFARE
    UpgradeTo	UNIT_TANK
    UpgradeTo	UNIT_FUSION_TANK
    ActiveDefenseRange 0
@@ -2378,7 +2378,7 @@ UNIT_LEVIATHON {
    FoodHunger 0
    MaxMovePoints 10
    VisionRange 3
-   EnableAdvance ADVANCE_UNIFIED_PHYSICS
+   EnableAdvance ADVANCE_PLASMA_WEAPONRY
    BombRounds 5
    BombardRange 1
    CanCounterBombard
@@ -3955,7 +3955,7 @@ UNIT_TANK {
    MaxMovePoints 600
    VisionRange 3
    EnableAdvance ADVANCE_TANK_WARFARE
-   ObsoleteAdvance ADVANCE_UNIFIED_PHYSICS
+   ObsoleteAdvance ADVANCE_FUSION
    UpgradeTo	UNIT_FUSION_TANK
    ActiveDefenseRange 0
    LossMoveToDmgNone
