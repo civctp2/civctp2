@@ -34,62 +34,6 @@ uint16 aui_Pixel::Get16BitRGB( uint8 red, uint8 green, uint8 blue )
     }
 }
 
-uint8 aui_Pixel::GetPaletteIndexedColor(uint8 red, uint8 green, uint8 blue, HPALETTE *hpal)
-{
-#ifdef __AUI_USE_DIRECTX__
-	PALETTEENTRY *  pe              = new PALETTEENTRY[256];
-	size_t const    paletteCount    =
-        static_cast<size_t>(GetPaletteEntries(*hpal, 0, 256, pe));
-    Assert(paletteCount == 256);
-
-	uint16          valMain         = ColorCode555(red, green, blue);
-	uint8           color           = 0;
-	sint32          diff            = INT_MAX;
-
-	for (uint8 i = 0; i < static_cast<uint8>(paletteCount); ++i)
-    {
-		uint16  valCompare = ColorCode555(pe[i].peRed, pe[i].peGreen, pe[i].peBlue);
-
-		if (abs(valCompare - valMain) < diff )
-        {
-			color   = i;
-			diff    = abs(valCompare - valMain);
-			if (diff == 0) break;
-		}
-	}
-
-	delete [] pe;
-	return color;
-#else
-	// TODO: 8bit modes wanted?
-	Assert(0);
-	return 0;
-#endif
-}
-
-uint8 aui_Pixel::GetPaletteIndexedColor( uint8 red, uint8 green, uint8 blue, RGBQUAD *rgbq )
-{
-	uint8   color   = 0;
-	sint32  diff    = INT_MAX;
-	uint16  valMain = ColorCode555(red, green, blue);
-
-	for (uint8 i = 0; i < 256; i++)
-    {
-		uint16  valCompare = ColorCode555(rgbq[i].rgbRed, rgbq[i].rgbGreen, rgbq[i].rgbBlue);
-
-		if (abs(valCompare - valMain) < diff)
-        {
-			color   = i;
-			diff    = abs(valCompare - valMain);
-
-			if (diff == 0) break;
-		}
-	}
-
-	return color;
-
-}
-
 AUI_ERRCODE aui_Pixel::Convert24To16Dither(
 							 uint16 *buf16,
 							 uint8 *buf24,
