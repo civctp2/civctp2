@@ -24,12 +24,12 @@
 //
 // Modifications from the original Activision code:
 //
-// - Initialized local variables. (Sep 9th 2005 Martin Gühmann)
+// - Initialized local variables. (Sep 9th 2005 Martin GÃ¼hmann)
 // - Reorganised to try to prevent crashes.
 // - Number of colors in a ColorsXX.txt must be now either 58 like in the
 //   original game or 74 like in the source code edition. If there are just
 //   58 the missing player colors are filled with the map colors at that
-//   like in the original version. (Oct 22nd 2005 Martin Gühmann)
+//   like in the original version. (Oct 22nd 2005 Martin GÃ¼hmann)
 // - Relaxed the above to allow more than 74 color entries in the future.
 // - Added check for invalid/unassigned player index in ComputePlayerColor.
 //
@@ -326,4 +326,22 @@ Pixel16 ColorSet::GetLightColor(COLOR color) const
 Pixel16 ColorSet::GetLightPlayerColor(sint32 playerNum) const
 {
 	return pixelutils_Lightening(GetPlayerColor(playerNum));
+}
+
+bool ColorSet::UseDarkFontColor(sint32 red, sint32 green, sint32 blue, sint32 maxChannel)
+{
+	// Counting the perceptive luminance - human eye favors green color...
+	return ((0.299 * red + 0.587 * green + 0.114 * blue) / maxChannel) > 0.5;
+}
+
+bool ColorSet::UseDarkFontColor(Pixel16 backgroundColor)
+{
+	sint32 r = (backgroundColor >> (g_is565Format ? 11 : 10)) & 0x1F;
+	sint32 g = (backgroundColor >> (g_is565Format ? 6 : 5)) & 0x1F;
+	sint32 b = backgroundColor & 0x1F;
+	return UseDarkFontColor(r, g, b, 0x1F);
+}
+
+bool ColorSet::UseDarkFontColor(COLORREF backgroundColor) {
+	return UseDarkFontColor(GetRValue(backgroundColor), GetGValue(backgroundColor), GetBValue(backgroundColor), 0xFF);
 }
