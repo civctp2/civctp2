@@ -1013,7 +1013,7 @@ RECT UnitActor::DrawStackingIndicator(const RECT & rect, sint32 stack) const
 // Remove the next line when the scaling and centering of the text has been implemented
 // properly - or you want to test its operation. Currently, the generated text looks too
 // ugly to include it in a release.
-#define USE_PREDEFINED_ICONS
+#undef USE_PREDEFINED_ICONS
 
 #if defined(USE_PREDEFINED_ICONS)
 	MAPICON icon = MAPICON_HERALD; // default: plain icon
@@ -1029,20 +1029,29 @@ RECT UnitActor::DrawStackingIndicator(const RECT & rect, sint32 stack) const
 	g_tiledMap->DrawColorizedOverlayIntoMix(
 			g_tiledMap->GetTileSet()->GetMapIconData(icon), rect.left, rect.top, GetDisplayedColor());
 #else
-	g_tiledMap->DrawColorizedOverlayIntoMix(
-			tileSet->GetMapIconData(MAPICON_HERALD), rect.left, rect.top, GetDisplayedColor());
+	MAPICON   icon    = MAPICON_HERALD; // default: plain icon
+	TileSet	* tileSet = g_tiledMap->GetTileSet();
 
-	// Generate text
-	MBCHAR strn[80];
-	sprintf(strn, "%i", stack);
+	Pixel16 displayedColor = GetDisplayedColor();
+	g_tiledMap->DrawColorizedOverlayIntoMix(tileSet->GetMapIconData(icon), rect.left, rect.top, displayedColor);
 
-	/// @todo Scale and center text
-	if (stack > 1 && stack <= 9) {
-		// single digit
-		DrawText(rect.left + 5, rect.top, strn);
-	} else if (stack >= 10 && stack <= 12) {
-		// double digits
-		DrawText(rect.left, rect.top, strn);
+	if (stack > 1)
+	{
+		aui_BitmapFont * font = g_tiledMap->GetFont();
+		if (!font) {
+			return rect;
+		}
+
+		MBCHAR stackString[80];
+		sprintf(stackString, "%i", stack);
+
+		COLOR color = ColorSet::UseDarkFontColor(displayedColor) ? COLOR_BLACK : COLOR_WHITE;
+		RECT textRect = { rect.left + (stack < 10 ? 5 : 1), rect.top + (stack < 10 ? 0 : -1),
+					rect.left + (stack < 10 ? 12 : 14), rect.top + (stack < 10 ? 12 : 11) };
+
+		aui_Surface * surf = g_screenManager->GetSurface();
+		RECT clipRect = primitives_GetScreenAdjustedRectCopy(surf, textRect);
+		font->DrawString(surf, &textRect, &clipRect, stackString, 0, g_colorSet->GetColorRef(color));
 	}
 #endif
 

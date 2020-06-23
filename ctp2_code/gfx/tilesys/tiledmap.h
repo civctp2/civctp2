@@ -429,14 +429,6 @@ public:
 				         );
 
 	void		DrawCityNames(aui_Surface *surf, sint32 layer);
-	void		DrawCityIcons(aui_Surface *surf, MapPoint const &pos, sint32 owner, bool fog, RECT &popRect,
-								BOOL isBioInfected, BOOL isNanoInfected, BOOL isConverted,
-								BOOL isFranchised, BOOL isInjoined, BOOL wasHappinessAttacked,
-								sint32 bioInfectedOnwer, sint32 nanoInfectedOwner, sint32 convertedOwner, sint32 convertedLoss,
-								sint32 franchiseOwner, sint32 franchiseLoss, sint32 injoinedOwner, sint32 happinessAttackOwner,
-								uint32 slaveBits, BOOL isRioting, BOOL hasAirport, BOOL hasSleepingUnits,
-								BOOL isWatchful, BOOL isCapitol, BOOL isProdIcon, sint32 citySize,
-								BOOL isPollutionRisk);
 
 	//EMOD to add Civ4 Style Icons
 	void		DrawCityReligionIcons(aui_Surface *surf, MapPoint const & pos, sint32 owner, bool fog, RECT &popRect, BOOL HasReligionIcon );
@@ -504,7 +496,27 @@ protected:
 
 	void ZoomHitMask();
 
-	void ZoomUpdate(sint32 zoomLevel);
+	void     ZoomUpdate(sint32 zoomLevel);
+	COLORREF GetCityNameColorRef(bool fog, bool isRioting, bool drawQueueEmpty);
+	RECT     DrawCityName(aui_Surface & surf, const MBCHAR * const name, const POINT & position, COLORREF colorRef);
+	RECT     DrawCityIsCapitol(aui_Surface & surf, const POINT & position, Pixel16 color);
+	RECT     DrawCitySleepingUnits(aui_Surface & surf, const POINT & position, Pixel16 color);
+	RECT     DrawCityIsWatchful(aui_Surface & surf, const POINT & position, Pixel16 color);
+	RECT     DrawCityPopulation(aui_Surface & surf, sint32 population, const RECT & rect, Pixel16 color);
+	RECT     DrawCityNextPopulation(aui_Surface & surf, sint32 nextPopulation, const RECT & rect, Pixel16 color);
+	RECT     DrawCityProductionIcon(aui_Surface & surf, sint32 population, const POINT & position, Pixel16 color);
+	RECT     DrawCityBuildItemName(
+				aui_Surface  &       surf,
+				const MBCHAR * const name,
+				const POINT  &       position,
+				COLORREF             colorRef);
+	RECT     DrawCityBuildItemTime(aui_Surface & surf, sint32 nextPopulation, const RECT & rect, Pixel16 color);
+	RECT     DrawCityIcons(aui_Surface & surf, sint32 owner, bool fog, const RECT & outerCityRect, bool isBioInfected,
+				bool isNanoInfected, bool isConverted, bool isFranchised, bool isInjoined, bool wasHappinessAttacked,
+				sint32 bioInfectedOnwer, sint32 nanoInfectedOwner, sint32 convertedOwner, sint32 convertedLoss,
+				sint32 franchiseOwner, sint32 franchiseLoss, sint32 injoinedOwner, sint32 happinessAttackOwner,
+				bool hasAirport, bool isPollutionRisk);
+	RECT     DrawCityEnslaved(aui_Surface & surf, const RECT & outerCityRect, sint32 owner, uint32 slaveBits);
 
 	void     DrawClippedColorizedOverlay(Pixel16 * data, aui_Surface & surface, sint32 x, sint32 y, Pixel16 color);
 
