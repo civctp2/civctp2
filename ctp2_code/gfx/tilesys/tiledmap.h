@@ -506,8 +506,7 @@ protected:
 
 	void ZoomUpdate(sint32 zoomLevel);
 
-
-
+	void     DrawClippedColorizedOverlay(Pixel16 * data, aui_Surface & surface, sint32 x, sint32 y, Pixel16 color);
 
 	sint32	m_zoomLevel;
 	sint32	m_zoomTilePixelWidth[k_MAX_ZOOM_LEVELS];

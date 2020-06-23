@@ -24,9 +24,9 @@
 //
 // Modifications from the original Activision code:
 //
-// - Initialized local variables. (Sep 9th 2005 Martin G�hmann)
-// - Standardized code (May 21st 2006 Martin G�hmann)
-// - Added primitives_GetScreenAdjustedRectCopy function. (3-Mar-2007 Martin G�hmann)
+// - Initialized local variables. (Sep 9th 2005 Martin Gühmann)
+// - Standardized code (May 21st 2006 Martin Gühmann)
+// - Added primitives_GetScreenAdjustedRectCopy function. (3-Mar-2007 Martin Gühmann)
 //
 //----------------------------------------------------------------------------
 
@@ -3747,6 +3747,118 @@ void primitives_LightenRect(aui_Surface *pSurface, RECT &rect, sint32 percentLig
 	}
 
 	return;
+}
+
+inline bool RectIntersectSurface(const aui_Surface & surf, const RECT & rect)
+{
+	return rect.left < surf.Width() && rect.right >= 0 && rect.top < surf.Height() && rect.bottom >= 0;
+}
+
+inline RECT ClipRect(const aui_Surface & surf, const RECT & rect)
+{
+	Assert(rect.left <= rect.right);
+	Assert(rect.top <= rect.bottom);
+
+	if (!RectIntersectSurface(surf, rect)) {
+		return RECT { 0, 0, 0, 0 };
+	}
+
+	return RECT {
+		rect.left >= 0 ? rect.left : 0,
+		rect.top >= 0 ? rect.top : 0,
+		rect.right < surf.Width() ? rect.right : surf.Width() - 1,
+		rect.bottom < surf.Height() ? rect.bottom : surf.Height() - 1
+	};
+}
+
+inline Pixel16 * GetBasePixel16(const aui_Surface & surf, const RECT & rect)
+{
+	uint8 * base = surf.Buffer();
+	Assert(base);
+	return (Pixel16 *) (base) + rect.top * (surf.Pitch() >> 1) + rect.left;
+}
+
+inline void DrawLine16(Pixel16 * pixel, sint32 length, sint32 pitch, Pixel16 color)
+{
+	Pixel16 * endPixel = pixel + length * pitch;
+	while (pixel < endPixel) {
+		*pixel = color;
+		pixel += pitch;
+	}
+}
+
+inline void DrawShadowLine16(Pixel16 * pixel, sint32 length, sint32 pitch)
+{
+	Pixel16 * endPixel = pixel + length * pitch;
+	while (pixel < endPixel) {
+		*pixel = pixelutils_Shadow(*pixel);
+		pixel += pitch;
+	}
+}
+
+void primitives_ClippedPaintRect16(aui_Surface & surf, const RECT & rect, Pixel16 color)
+{
+	RECT clippedRect = ClipRect(surf, rect);
+	sint32 width  = clippedRect.right - clippedRect.left;
+	sint32 height = clippedRect.bottom - clippedRect.top;
+
+	sint32 surfPitchPixels = surf.Pitch() >> 1;
+
+	Pixel16 * pixel = GetBasePixel16(surf, clippedRect);
+	Pixel16 * endPixel = pixel + height * surfPitchPixels;
+	while (pixel < endPixel)
+	{
+		DrawLine16(pixel, width, 1, color);
+		pixel += surfPitchPixels;
+	}
+}
+
+void primitives_ClippedFrameRect16(aui_Surface & surf, const RECT & rect, Pixel16 color)
+{
+	RECT clippedRect = ClipRect(surf, rect);
+	sint32 width  = clippedRect.right - clippedRect.left;
+	sint32 height = clippedRect.bottom - clippedRect.top;
+
+	sint32 surfPitchPixels = surf.Pitch() >> 1;
+	Pixel16 * basePixel = GetBasePixel16(surf, clippedRect);
+
+	// top line
+	if (rect.top >= 0)
+	{
+		DrawLine16(basePixel, width, 1, color);
+	}
+	// left line
+	if (rect.left >= 0)
+	{
+		DrawLine16(basePixel, height, surfPitchPixels, color);
+	}
+	// right line
+	if (rect.right < surf.Width())
+	{
+		DrawLine16(basePixel + width - 1, height, surfPitchPixels, color);
+	}
+	// bottom line
+	if (rect.bottom < surf.Height())
+	{
+		DrawLine16(basePixel + (height - 1) * surfPitchPixels, width, 1, color);
+	}
+}
+
+void primitives_ClippedShadowRect16(aui_Surface & surf, const RECT & rect)
+{
+	RECT clippedRect = ClipRect(surf, rect);
+	sint32 width  = clippedRect.right - clippedRect.left;
+	sint32 height = clippedRect.bottom - clippedRect.top;
+
+	sint32 surfPitchPixels = surf.Pitch() >> 1;
+
+	Pixel16 * pixel = GetBasePixel16(surf, clippedRect);
+	Pixel16 * endPixel = pixel + height * surfPitchPixels;
+	while (pixel < endPixel)
+	{
+		DrawShadowLine16(pixel, width, 1);
+		pixel += surfPitchPixels;
+	}
 }
 
 RECT primitives_GetScreenAdjustedRectCopy(aui_Surface *surf, RECT &theRect)

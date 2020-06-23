@@ -2678,10 +2678,104 @@ sint32 TiledMap::DrawColorizedOverlay(Pixel16 *data, aui_Surface *surface, sint3
 	return 0;
 }
 
+void TiledMap::DrawClippedColorizedOverlay(Pixel16 * data, aui_Surface & surface, sint32 x, sint32 y, Pixel16 color)
+{
+	Assert(data);
+	if (!data) {
+		return;
+	}
 
+	uint8 * base = surface.Buffer();
+	Assert(base);
+	if (!base) {
+		return;
+	}
 
+	sint32 width = surface.Width();
+	if (x >= width) {
+		return;
+	}
+	sint32 height = surface.Height();
+	if (y >= height) {
+		return;
+	}
+	sint32 pixelPitch = surface.Pitch() >> 1;
 
+	uint16    start = (uint16)*data++;
+	uint16    end   = (uint16)*data++;
+	Pixel16 * table = data;
+	Pixel16 * dataStart = table + (end - start + 1);
 
+	Pixel16 * rowPixel = (Pixel16 *) (base) + pixelPitch * (y + start - 1);
+	for (sint32 row = start; row <= end; row++)
+	{
+		rowPixel += pixelPitch;
+		if (y + row < 0) {
+			continue;
+		}
+		if (y + row >= height) {
+			break;
+		}
+		if ((sint16)table[row - start] == -1) {
+			continue;
+		}
+
+		Pixel16 * rowData     = dataStart + table[row - start];
+		Pixel16 * pixel       = rowPixel + x;
+		Pixel16 * rowEndPixel = rowPixel + width;
+		Pixel16   tag;
+		do
+		{
+			tag = *rowData++;
+			uint16 runLength = tag & 0x00FF;
+			uint16 runCode   = (tag &0x0F00) >> 8;
+			Pixel16 * endPixel = pixel + runLength;
+			if (endPixel < rowPixel) { // end of run is before start of surface (skip complete run)
+				pixel = endPixel;
+				if (runCode == k_TILE_COPY_RUN_ID) {
+					rowData += runLength;
+				}
+			} else {
+				if (pixel < rowPixel) { // start of run is before start of surface (skip part of run)
+					if (runCode == k_TILE_COPY_RUN_ID)
+					{
+						while (pixel < rowPixel)
+						{
+							rowData++;
+							pixel++;
+						}
+					} else {
+						pixel = rowPixel;
+					}
+				}
+				if (endPixel > rowEndPixel) { // end of run is after end of surface (skip part of run and next runs)
+					endPixel = rowEndPixel;
+				}
+				switch (runCode) {
+					case k_TILE_SKIP_RUN_ID:
+						pixel = endPixel;
+						break;
+					case k_TILE_COPY_RUN_ID:
+						while (pixel < endPixel) {
+							*pixel++ = *rowData++;
+						}
+						break;
+					case k_TILE_SHADOW_RUN_ID:
+						while (pixel < endPixel) {
+							*pixel = pixelutils_Shadow(*pixel);
+							pixel++;
+						}
+						break;
+					case k_TILE_COLORIZE_RUN_ID:
+						while (pixel < endPixel) {
+							*pixel++ = color;
+						}
+						break;
+				}
+			}
+		} while (((tag & 0xF000) == 0) && (pixel < rowEndPixel));
+	}
+}
 
 sint32 TiledMap::DrawColorizedOverlayIntoMix(Pixel16 *data, sint32 x, sint32 y, Pixel16 color)
 {
