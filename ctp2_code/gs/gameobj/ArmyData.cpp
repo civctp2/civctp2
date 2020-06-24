@@ -2630,7 +2630,6 @@ ORDER_RESULT ArmyData::CauseUnhappiness(const MapPoint &point, sint32 uindex)
     //InformAI(UNIT_ORDER_CAUSE_UNHAPPINESS, point); //does nothing here but could be implemented
 
 	AddSpecialActionUsed(u);
-	ActionSuccessful(SPECATTACK_CAUSEUNHAPPINESS, u, c);
 
 	c.ModifySpecialAttackChance(UNIT_ORDER_CAUSE_UNHAPPINESS, chance);
 	c.SetWatchful();
@@ -2661,6 +2660,8 @@ ORDER_RESULT ArmyData::CauseUnhappiness(const MapPoint &point, sint32 uindex)
 									  timer,
 									  amount));
 	}
+
+	ActionSuccessful(SPECATTACK_CAUSEUNHAPPINESS, u, c);
 	c.AddHappyTimer(timer, double(-amount), HAPPY_REASON_HAPPINESS_ATTACK);
 	c.AccessData()->GetCityData()->HappinessAttackedBy(m_owner) ;
 
