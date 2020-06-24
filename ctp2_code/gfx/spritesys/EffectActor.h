@@ -16,10 +16,6 @@ class Action;
 class EffectActor : public Actor
 {
 public:
-	// Make position methods public
-	using Actor::GetX;
-	using Actor::GetY;
-
 	EffectActor(SpriteState * spriteState, const MapPoint & pos);
 	virtual ~EffectActor();
 
@@ -37,14 +33,13 @@ public:
 
 	uint16 GetWidth() const;
 	uint16 GetHeight() const;
-	void   GetBoundingRect(RECT * rect) const;
 
 protected:
 	Anim * CreateAnim(EFFECTACTION action) const;
 
-	void Draw() const;
-	void DrawDirect(aui_Surface * surf) const;
+	void Draw(const POINT & pos) const;
 	void DrawText(sint32 x, sint32 y, MBCHAR * EffectText) const;
+	void GetBoundingRect(RECT * rect, const POINT & pos) const;
 
 	MapPoint            m_pos;
 

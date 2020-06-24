@@ -3517,7 +3517,7 @@ bool TiledMap::ScrollMap(sint32 deltaX, sint32 deltaY)
 	InvalidateMix();
 
 	g_theTradePool->Draw(m_surface);
-	RepaintSprites(m_surface, &m_mapViewRect, true);
+	RepaintSprites(m_surface, &tempRect, true);
 
 	return true;
 }

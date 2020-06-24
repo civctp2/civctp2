@@ -460,11 +460,7 @@ public:
 		m_activeActor->Draw(paintRect);
 	}
 
-	virtual void Offset(sint32 deltaX, sint32 deltaY)
-	{
-		m_activeActor->SetX(m_activeActor->GetX() + deltaX);
-		m_activeActor->SetY(m_activeActor->GetY() + deltaY);
-	}
+	virtual void Offset(sint32 deltaX, sint32 deltaY) {}
 
 	virtual bool IsAnimationFinished()
 	{
