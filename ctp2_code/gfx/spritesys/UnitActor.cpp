@@ -864,6 +864,12 @@ bool UnitActor::Draw(bool fogged)
 
 	if (m_unitSpriteGroup)
 	{
+		if (m_curAction) {
+			POINT current = m_curAction->CalculatePixelXY(m_pos);
+			m_x = current.x;
+			m_y = current.y;
+		}
+
 		sint32 xoffset = (sint32)(k_ACTOR_CENTER_OFFSET_X * g_tiledMap->GetScale());
 		sint32 yoffset = (sint32)(k_ACTOR_CENTER_OFFSET_Y * g_tiledMap->GetScale());
 

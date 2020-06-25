@@ -90,10 +90,6 @@ void EffectActor::Process(void)
 
 	if (m_curAction)
 	{
-		POINT current = m_curAction->CalculatePixelXY(m_pos);
-		m_x = current.x;
-		m_y = current.y;
-
 		m_facing = m_curAction->CalculateFacing(m_facing);
 		m_frame = m_curAction->GetSpriteFrame();
 		m_transparency = m_curAction->GetTransparency();
@@ -146,29 +142,25 @@ void EffectActor::Draw(RECT * paintRect) const
 		maputils_MapX2TileX(m_pos.x, m_pos.y, &tileX);
 		if (maputils_TilePointInTileRect(tileX, m_pos.y, paintRect))
 		{
-			Draw();
+			POINT current = m_curAction->CalculatePixelXY(m_pos);
+			Draw(current);
 
 			RECT rect;
-			GetBoundingRect(&rect);
+			GetBoundingRect(&rect, current);
 			g_tiledMap->AddDirtyRectToMix(rect);
 		}
 	}
 }
 
-void EffectActor::Draw() const
+void EffectActor::Draw(const POINT & pos) const
 {
 	uint16  flags   = k_DRAWFLAGS_NORMAL;
 	Pixel16 color   = 0x0000;
 	sint32  xoffset = (sint32)((double)k_ACTOR_CENTER_OFFSET_X * g_tiledMap->GetScale());
 	sint32  yoffset = (sint32)((double)k_ACTOR_CENTER_OFFSET_Y * g_tiledMap->GetScale());
 
-	m_effectSpriteGroup->Draw(m_curEffectAction, m_frame, m_x+xoffset, m_y+yoffset,
-			m_x+xoffset, m_y+yoffset, m_facing, g_tiledMap->GetScale(), m_transparency, color, flags);
-}
-
-void EffectActor::DrawDirect(aui_Surface * surf) const
-{
-	DrawDirectWithFlags(surf, k_DRAWFLAGS_NORMAL);
+	m_effectSpriteGroup->Draw(m_curEffectAction, m_frame, pos.x+xoffset, pos.y+yoffset,
+			pos.x+xoffset, pos.y+yoffset, m_facing, g_tiledMap->GetScale(), m_transparency, color, flags);
 }
 
 void EffectActor::DrawDirectWithFlags(aui_Surface * surf, uint16 flags) const
@@ -219,7 +211,7 @@ uint16 EffectActor::GetHeight() const
 	return sprite ? sprite->GetHeight() : 0;
 }
 
-void EffectActor::GetBoundingRect(RECT * rect) const
+void EffectActor::GetBoundingRect(RECT * rect, const POINT & pos) const
 {
 	Assert(rect);
 	if (!rect) {
@@ -236,5 +228,5 @@ void EffectActor::GetBoundingRect(RECT * rect) const
 	rect->right  = (sint32)((double)GetWidth() * scale);
 	rect->bottom = (sint32)((double)GetHeight() * scale);
 
-	OffsetRect(rect, m_x + xoffset, m_y + yoffset);
+	OffsetRect(rect, pos.x + xoffset, pos.y + yoffset);
 }
