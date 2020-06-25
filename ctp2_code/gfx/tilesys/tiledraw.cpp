@@ -3715,14 +3715,6 @@ void TiledMap::DrawCityNames(aui_Surface * surf, sint32 layer)
 							RECT sleepingUnitsRect = DrawCitySleepingUnits(*surf, sleepingUnitsPos, playerColor);
 							outerCityNameRect.right += (sleepingUnitsRect.right - sleepingUnitsRect.left - 1);
 						}
-						if (isWatchful)
-						{
-							POINT watchfulIconPos = {outerCityNameRect.right, outerCityNameRect.top };
-							RECT watchfulRect = DrawCityIsWatchful(*surf, watchfulIconPos, playerColor);
-							outerCityNameRect.right += (watchfulRect.right - watchfulRect.left + 1);
-						}
-						InflateRect(&outerCityNameRect, 1, 1);
-						primitives_ClippedFrameRect16(*surf, outerCityNameRect, playerColor);
 
 						RECT populationRect = DrawCityPopulation(*surf, pop, outerCityNameRect, playerColor);
 						outerCityNameRect.left = populationRect.left;
@@ -3733,6 +3725,16 @@ void TiledMap::DrawCityNames(aui_Surface * surf, sint32 layer)
 									playerColor);
 							outerCityNameRect.right = nextPopulationRect.right;
 						}
+
+						if (isWatchful)
+						{
+							POINT watchfulIconPos = {outerCityNameRect.right, outerCityNameRect.top };
+							RECT watchfulRect = DrawCityIsWatchful(*surf, watchfulIconPos, playerColor);
+							outerCityNameRect.right += (watchfulRect.right - watchfulRect.left + 1);
+						}
+						InflateRect(&outerCityNameRect, 1, 1);
+						primitives_ClippedFrameRect16(*surf, outerCityNameRect, playerColor);
+
 						if (fog) {
 							primitives_ClippedShadowRect16(*surf, outerCityNameRect);
 						}
@@ -3922,9 +3924,9 @@ RECT TiledMap::DrawCityNextPopulation(aui_Surface & surf, sint32 nextPopulation,
 		sprintf(nextPopulationString, "%s", TEXT_NONE);
 	}
 
-	sint32 offsetX = nextPopulation < 10 ? 3 : (nextPopulation < THRESHOLD_SLOW_GROWTH ? 1 : 2);
-	sint32 width = nextPopulation < 10 ? 12 : (nextPopulation < THRESHOLD_SLOW_GROWTH ? 16 : 15);
-	RECT nextPopulationRect = { rect.right, rect.top + 1, rect.right + width, rect.bottom - 1 };
+	sint32 offsetX = nextPopulation < 10 ? 3 : 2;
+	sint32 width = nextPopulation < 10 ? 12 : (nextPopulation < THRESHOLD_SLOW_GROWTH ? 17 : 15);
+	RECT nextPopulationRect = { rect.right + 1, rect.top, rect.right + 1 + width, rect.bottom };
 	primitives_ClippedPaintRect16(surf, nextPopulationRect, GetColor(COLOR_BLACK));
 
 	RECT textRect = { nextPopulationRect.left + offsetX, nextPopulationRect.top + 1,
@@ -3934,6 +3936,7 @@ RECT TiledMap::DrawCityNextPopulation(aui_Surface & surf, sint32 nextPopulation,
 
 	InflateRect(&nextPopulationRect, 1, 1);
 	primitives_ClippedFrameRect16(surf, nextPopulationRect, color);
+	nextPopulationRect.right -= 1;
 	return nextPopulationRect;
 }
 
@@ -3987,8 +3990,8 @@ RECT TiledMap::DrawCityBuildItemTime(aui_Surface & surf, sint32 buildItemTime, c
 		sprintf(buildItemNameString, "%s", TEXT_NONE);
 	}
 
-	sint32 offsetX = (buildItemTime == 0 || buildItemTime >= THRESHOLD_PROD_TIME) ? 2 : (buildItemTime < 10 ? 3 : 1);
-	sint32 width = (buildItemTime == 0 || buildItemTime >= THRESHOLD_PROD_TIME) ? 15 : (buildItemTime < 10 ? 12 : 16);
+	sint32 offsetX = (buildItemTime == 0 || buildItemTime >= THRESHOLD_PROD_TIME) ? 2 : (buildItemTime < 10 ? 3 : 2);
+	sint32 width = (buildItemTime == 0 || buildItemTime >= THRESHOLD_PROD_TIME) ? 15 : (buildItemTime < 10 ? 12 : 17);
 	RECT builtItemTimeRect = { rect.right, rect.top + 1, rect.right + width, rect.bottom - 1 };
 	primitives_ClippedPaintRect16(surf, builtItemTimeRect, GetColor(COLOR_BLACK));
 
@@ -4062,6 +4065,9 @@ RECT TiledMap::DrawCityIcons(aui_Surface & surf, sint32 owner, bool fog, const R
 			outerRect.top   = outerRect.bottom - dimensions.y;
 			outerRect.right += dimensions.x - 1;
 		}
+	} else {
+		// No icon in player color, do not overwrite frame in player color
+		outerRect.right += 1;
 	}
 
 	if (isConverted)
