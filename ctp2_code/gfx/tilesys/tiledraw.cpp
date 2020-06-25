@@ -4077,7 +4077,7 @@ RECT TiledMap::DrawCityIcons(aui_Surface & surf, sint32 owner, bool fog, const R
 			DrawClippedColorizedOverlay(icon, surf, outerRect.right-1, outerRect.bottom - dimensions.y, color);
 			RECT frame = { outerRect.right-1, outerRect.bottom - dimensions.y, outerRect.right -1 + dimensions.x,
 			               outerRect.bottom };
-			primitives_ClippedFrameRect16(surf, frame, playerColor);
+			primitives_ClippedFrameRect16(surf, frame, color);
 
 			sint32 myOwner = g_selected_item->GetVisiblePlayer();
 			if (convertedLoss && myOwner >= 0 && (myOwner == owner || myOwner == convertedOwner))
@@ -4114,7 +4114,7 @@ RECT TiledMap::DrawCityIcons(aui_Surface & surf, sint32 owner, bool fog, const R
 			DrawClippedColorizedOverlay(icon, surf, outerRect.right-1, outerRect.bottom - dimensions.y, color);
 			RECT frame = { outerRect.right-1, outerRect.bottom - dimensions.y, outerRect.right -1 + dimensions.x,
 			               outerRect.bottom };
-			primitives_ClippedFrameRect16(surf, frame, playerColor);
+			primitives_ClippedFrameRect16(surf, frame, color);
 
 			sint32 myOwner = g_selected_item->GetVisiblePlayer();
 			if (franchiseLoss && myOwner >= 0 && (myOwner == owner || myOwner == franchiseOwner))
@@ -4151,7 +4151,7 @@ RECT TiledMap::DrawCityIcons(aui_Surface & surf, sint32 owner, bool fog, const R
 			DrawClippedColorizedOverlay(icon, surf, outerRect.right-1, outerRect.bottom - dimensions.y, color);
 			RECT frame = { outerRect.right-1, outerRect.bottom - dimensions.y, outerRect.right -1 + dimensions.x,
 			               outerRect.bottom };
-			primitives_ClippedFrameRect16(surf, frame, playerColor);
+			primitives_ClippedFrameRect16(surf, frame, color);
 
 			outerRect.top   = outerRect.bottom - dimensions.y;
 			outerRect.right += dimensions.x - 1;
@@ -4171,7 +4171,7 @@ RECT TiledMap::DrawCityIcons(aui_Surface & surf, sint32 owner, bool fog, const R
 			DrawClippedColorizedOverlay(icon, surf, outerRect.right-1, outerRect.bottom - dimensions.y, color);
 			RECT frame = { outerRect.right-1, outerRect.bottom - dimensions.y, outerRect.right -1 + dimensions.x,
 			               outerRect.bottom };
-			primitives_ClippedFrameRect16(surf, frame, playerColor);
+			primitives_ClippedFrameRect16(surf, frame, color);
 
 			outerRect.top   = outerRect.bottom - dimensions.y;
 			outerRect.right += dimensions.x - 1;
@@ -4195,7 +4195,7 @@ RECT TiledMap::DrawCityIcons(aui_Surface & surf, sint32 owner, bool fog, const R
 			DrawClippedColorizedOverlay(icon, surf, outerRect.right-1, outerRect.bottom - dimensions.y, color);
 			RECT frame = { outerRect.right-1, outerRect.bottom - dimensions.y, outerRect.right -1 + dimensions.x,
 			               outerRect.bottom };
-			primitives_ClippedFrameRect16(surf, frame, playerColor);
+			primitives_ClippedFrameRect16(surf, frame, color);
 
 			outerRect.top   = outerRect.bottom - dimensions.y;
 			outerRect.right += dimensions.x - 1;
@@ -4219,7 +4219,7 @@ RECT TiledMap::DrawCityIcons(aui_Surface & surf, sint32 owner, bool fog, const R
 			DrawClippedColorizedOverlay(icon, surf, outerRect.right-1, outerRect.bottom - dimensions.y, color);
 			RECT frame = { outerRect.right-1, outerRect.bottom - dimensions.y, outerRect.right -1 + dimensions.x,
 			               outerRect.bottom };
-			primitives_ClippedFrameRect16(surf, frame, playerColor);
+			primitives_ClippedFrameRect16(surf, frame, color);
 
 			outerRect.top   = outerRect.bottom - dimensions.y;
 			outerRect.right += dimensions.x - 1;
@@ -4238,7 +4238,7 @@ RECT TiledMap::DrawCityEnslaved(aui_Surface & surf, const RECT & outerCityRect, 
 		Pixel16 playerColor = GetPlayerColor(owner);
 		uint32 bits = slaveBits;
 		POINT dimensions = GetTileSet()->GetMapIconDimensions(slave);
-		RECT outerRect = { outerCityRect.right-1, outerCityRect.top+1, outerCityRect.right-1, outerCityRect.top+1};
+		RECT outerRect = { outerCityRect.right-2, outerCityRect.top, outerCityRect.right-2, outerCityRect.top};
 		for (sint32 i = 0; i < k_MAX_PLAYERS; i++)
 		{
 			if (bits & 1)
@@ -4247,7 +4247,7 @@ RECT TiledMap::DrawCityEnslaved(aui_Surface & surf, const RECT & outerCityRect, 
 				outerRect.top = outerRect.bottom - dimensions.y;
 				DrawClippedColorizedOverlay(icon, surf, outerRect.left, outerRect.top, GetPlayerColor(i));
 				RECT frame = { outerRect.left, outerRect.top, outerRect.left + dimensions.x, outerRect.bottom };
-				primitives_ClippedFrameRect16(surf, frame, playerColor);
+				primitives_ClippedFrameRect16(surf, frame, GetPlayerColor(i));
 			}
 
 			bits >>= 1;
