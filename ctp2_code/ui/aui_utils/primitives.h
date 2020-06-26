@@ -165,4 +165,24 @@ void primitives_ClippedPaintRect16(aui_Surface & surf, const RECT & rect, Pixel1
 void primitives_ClippedFrameRect16(aui_Surface & surf, const RECT & rect, Pixel16 color);
 void primitives_ClippedShadowRect16(aui_Surface & surf, const RECT & rect);
 
+inline Pixel16 BlendPixel16(Pixel16 pixel, Pixel16 color, uint8 alpha)
+{
+	if (alpha == 0) {
+		return pixel;
+	}
+	if (alpha == 255) {
+		return color;
+	}
+
+	// blend formula: result = (1 - alpha) * pixel + alpha * color = pixel + (color - pixel) * alpha
+	static const uint32 RGB_MASK = 0b00000111111000001111100000011111;
+	uint32 background = (pixel | (pixel << 16)) & RGB_MASK;
+	uint32 foreground = (color | (color << 16)) & RGB_MASK;
+	uint32 result = (foreground - background) * (alpha >> 3);
+	result >>= 5;
+	result += background;
+	result &= RGB_MASK;
+	return (Pixel16) (result | (result >> 16));
+}
+
 #endif

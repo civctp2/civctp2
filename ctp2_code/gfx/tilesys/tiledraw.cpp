@@ -2704,6 +2704,7 @@ void TiledMap::DrawClippedColorizedOverlay(Pixel16 * data, aui_Surface & surface
 	if (y >= height) {
 		return;
 	}
+	uint32 alpha = g_theProfileDB->GetShowCityNames();
 	sint32 pixelPitch = surface.Pitch() >> 1;
 
 	uint16    start = (uint16)*data++;
@@ -2762,18 +2763,20 @@ void TiledMap::DrawClippedColorizedOverlay(Pixel16 * data, aui_Surface & surface
 						break;
 					case k_TILE_COPY_RUN_ID:
 						while (pixel < endPixel) {
-							*pixel++ = *rowData++;
+							*pixel = BlendPixel16(*pixel, *rowData++, alpha);
+							pixel++;
 						}
 						break;
 					case k_TILE_SHADOW_RUN_ID:
 						while (pixel < endPixel) {
-							*pixel = pixelutils_Shadow(*pixel);
+							*pixel = BlendPixel16(*pixel, pixelutils_Shadow(*pixel), alpha);
 							pixel++;
 						}
 						break;
 					case k_TILE_COLORIZE_RUN_ID:
 						while (pixel < endPixel) {
-							*pixel++ = color;
+							*pixel = BlendPixel16(*pixel, color, alpha);
+							pixel++;
 						}
 						break;
 				}
@@ -3839,7 +3842,7 @@ RECT TiledMap::DrawCityName(aui_Surface & surf, const MBCHAR * const name, const
 			position.y + m_font->GetMaxHeight()
 	};
 	RECT outerNameRect = cityNameRect;
-    InflateRect(&outerNameRect, 2, 1); // expand for borders
+	InflateRect(&outerNameRect, 2, 1); // expand for borders
 	primitives_ClippedPaintRect16(surf, outerNameRect, GetColor(COLOR_BLACK));
 	RECT clipRect = primitives_GetScreenAdjustedRectCopy(&surf, cityNameRect);
 	m_font->DrawString(&surf, &cityNameRect, &clipRect, name, 0, colorRef, 0);
@@ -3858,12 +3861,6 @@ RECT TiledMap::DrawCityIsCapitol(aui_Surface & surf, const POINT & position, Pix
 		// Draw over borders
 		POINT iconDimensions = GetTileSet()->GetMapIconDimensions(capital);
 		RECT border = { position.x, position.y, position.x + iconDimensions.x, position.y + iconDimensions.y };
-		//primitives_ClippedFrameRect16(surf, border, color);
-		//InflateRect(&border, 0, -1);
-		//primitives_ClippedFrameRect16(surf, border, color);
-		//InflateRect(&border, -1, -1);
-		//primitives_ClippedFrameRect16(surf, border, color);
-		//InflateRect(&border, 1, 2);
 		return border;
 	}
 	return RECT { position.x, position.y, position.x, position.y };
@@ -3908,7 +3905,7 @@ RECT TiledMap::DrawCityPopulation(aui_Surface & surf, sint32 population, const R
 	RECT populationRect = { rect.left - (population < 10 ? 13 : 17), rect.top, rect.left, rect.bottom };
 	primitives_ClippedPaintRect16(surf, populationRect, color);
 	COLOR fontColor = ColorSet::UseDarkFontColor(color) ? COLOR_BLACK : COLOR_WHITE;
-	RECT textRect = { populationRect.left + (population < 10 ? 4 : 2), populationRect.top + 2,
+	RECT textRect = { populationRect.left + (population < 10 ? 4 : 2), populationRect.top + 1,
 				populationRect.right - (population < 10 ? 3 : 1), populationRect.bottom - 1 };
 	RECT clipRect = primitives_GetScreenAdjustedRectCopy(&surf, textRect);
 	m_font->DrawString(&surf, &textRect, &clipRect, populationString, 0, GetColorRef(fontColor));

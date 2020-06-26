@@ -49,6 +49,8 @@
 #include "tileset.h"
 #include "colorset.h"               // g_colorSet
 
+#include "profileDB.h"
+
 extern sint32		g_is565Format;
 extern C3UI			*g_c3ui;
 
@@ -3780,9 +3782,10 @@ inline Pixel16 * GetBasePixel16(const aui_Surface & surf, const RECT & rect)
 
 inline void DrawLine16(Pixel16 * pixel, sint32 length, sint32 pitch, Pixel16 color)
 {
+	uint32 alpha = g_theProfileDB->GetShowCityNames();
 	Pixel16 * endPixel = pixel + length * pitch;
 	while (pixel < endPixel) {
-		*pixel = color;
+		*pixel = BlendPixel16(*pixel, color, alpha);
 		pixel += pitch;
 	}
 }
