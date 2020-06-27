@@ -619,8 +619,12 @@ HandleEvent(ArmySelected) 'AGCenterOnAlexander_F' post {
     {
         if (g.player == 1) 
         {
+	      // alexUnit not yet initialized when function is called
+	      FindSpecialUnit (UnitDB(UNIT_ALEXANDER), 1);
+	      alexUnit = specUnit;	
+
 	      SelectUnit(alexUnit);
-	      AddCenter(alexUnit);
+	      AddCenter(alexUnit.location);
 	      DisableTrigger('AGCenterOnAlexander_F');
         }
     }
