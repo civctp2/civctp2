@@ -3517,13 +3517,13 @@ UNIT_SPACE_PLANE {
    ShieldHunger 25
    GoldHunger 100
    FoodHunger 0
-   MaxMovePoints 1500
+   MaxMovePoints 800
    VisionRange 1
    EnableAdvance ADVANCE_SPACE_FLIGHT
    ActiveDefenseRange 0
    LossMoveToDmgNone
    NoFuelThenCrash
-   MaxFuel 4500
+   MaxFuel 2500
    IgnoreZOC
    NoZoc
    CantCaptureCity
