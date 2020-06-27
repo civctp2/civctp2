@@ -2677,8 +2677,10 @@ ORDER_RESULT ArmyData::CauseUnhappiness(const MapPoint &point, sint32 uindex)
 	    SlicObject * so = new CityReport("197AdvertiseCompleteVictim", c);
 	    so->AddCivilisation(GetOwner());
 	    g_slicEngine->Execute(so);
+	    /* disabled because success of action is obvious any way (special effect and city icon) and therefore message spamming can be avoided
 	    g_slicEngine->Execute
 		(new AggressorReport("911AdvertiseCompleteAttacker", u, c)) ;
+	    */
 	    }
 
 	return ORDER_RESULT_SUCCEEDED;
@@ -4420,18 +4422,22 @@ ORDER_RESULT ArmyData::IndulgenceSale(const MapPoint &point)
 	if(u.GetDBRec()->GetIsTelevangelist()) {
 		g_slicEngine->Execute(new CityReport("911FaithHealVictim", c));
 
+		/* disabled because action never fails and gold increase already tells the success and therefore message spamming can be avoided
 		SlicObject * so  = new SlicObject("911FaithHealAttacker");
 		so->AddRecipient(u.GetOwner());
 		so->AddCivilisation(c.GetOwner()); // Televangelist message differs that of clerics and in addition needs the civ
 		so->AddCity(c);
 		g_slicEngine->Execute(so);
+		*/
 	} else {
 		g_slicEngine->Execute(new CityReport("911IndulgenceCompleteVictim", c));
 
+		/* disabled because action never fails and gold increase already tells the success and therefore message spamming can be avoided
 		SlicObject * so = new SlicObject("911IndulgenceCompleteAttacker");
 		so->AddRecipient(u.GetOwner());
 		so->AddCity(c);
 		g_slicEngine->Execute(so);
+		*/
 	}
 
 	ActionSuccessful(SPECATTACK_SELLINDULGENCE, m_array[uindex], c);
@@ -5122,8 +5128,10 @@ ORDER_RESULT ArmyData::Injoin(const MapPoint &point)
 						   GEA_City, c.m_id,
 						   GEA_End);
 	ActionSuccessful(SPECATTACK_INJOIN, u, c);
+	/* disabled because injunction icon of city already tells the success and therefore message spamming can be avoided
 	g_slicEngine->Execute
 	    (new AggressorReport("911InjunctionCompleteAttack", u, c));
+	*/
 
 	return ORDER_RESULT_SUCCEEDED;
 }

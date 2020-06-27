@@ -1473,10 +1473,12 @@ STDEHANDLER(LawsuitEvent)
 		so->AddUnitRecord(utype);
 		g_slicEngine->Execute(so);
 		
+		/* disabled because disappearing of the sued unit already tells the success and therefore message spamming can be avoided
 		so = new SlicObject("911SueCompleteAttacker");
 		so->AddRecipient(lawyer->GetOwner());
 		so->AddUnitRecord(utype);
 		g_slicEngine->Execute(so);
+		*/
 	}
 
 	return GEV_HD_Continue;

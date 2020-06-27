@@ -73,8 +73,8 @@ void HandleMouseWheel(sint16 delta)
 			return;
 		}
 	}
-	else
-		fprintf(stderr, "%s L%d: Mouse wheel for SDL not handled!\n", __FILE__, __LINE__);
+	else { // handl mouse wheel for other element than scroll boxes, e.g. scroll map
+ 	}
 }
 
 AUI_ERRCODE aui_SDLMouse::HandleAnim() {
@@ -97,7 +97,7 @@ sint32 aui_SDLMouse::ManipulateInputs(aui_MouseEvent *data, BOOL add) {
 	// check for mouse events
 	int numberSDLEvents = SDL_PeepEvents(sdlEvents, k_MOUSE_MAXINPUT, SDL_GETEVENT, SDL_MOUSEMOTION, SDL_MOUSEWHEEL);
 	if (0 > numberSDLEvents) {
-		fprintf(stderr, "Mouse PeepEvents failed: %s\n", SDL_GetError());
+		// fprintf(stderr, "%s L%d: Mouse PeepEvents failed: %s\n", __FILE__, __LINE__, SDL_GetError());
 		return 0;
 	}
 
