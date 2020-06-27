@@ -1398,6 +1398,7 @@ UNIT_ECO_RANGER {
    CantCaptureCity
    DeathEffectsHappy
    IsSpecialForces
+   InvisibleForGlobeSat
    SoundSelect1 SOUND_SELECT1_ECO_RANGER
    SoundSelect2 SOUND_SELECT2_ECO_RANGER
    SoundMove SOUND_MOVE_ECO_RANGER
@@ -1452,6 +1453,7 @@ UNIT_ECO_TERRORIST {
    CantCaptureCity
    DeathEffectsHappy
    IsSpecialForces
+   InvisibleForGlobeSat
    SoundSelect1 SOUND_SELECT1_ECOTERRORIST
    SoundSelect2 SOUND_SELECT2_ECOTERRORIST
    SoundMove SOUND_MOVE_ECOTERRORIST
@@ -2037,6 +2039,7 @@ UNIT_INFECTOR {
    CantCaptureCity
    DeathEffectsHappy
    IsSpecialForces
+   InvisibleForGlobeSat
    SoundSelect1 SOUND_SELECT1_INFECTOR
    SoundSelect2 SOUND_SELECT2_INFECTOR
    SoundMove SOUND_MOVE_INFECTOR
