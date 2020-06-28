@@ -9605,8 +9605,8 @@ bool ArmyData::ExecuteSpecialOrder(Order *order, bool &keepGoing)
 			deduct = true;
 
 			sint32	spriteID = g_theSpecialEffectDB->Get(g_theSpecialEffectDB->FindTypeIndex("SPECEFFECT_GENERAL_FAIL"))->GetValue();
-			sint32 soundID;
-			if(!order_rec->GetFailSound(soundID)) {
+			sint32 soundID = order_rec->GetFailSoundIndex();
+			if(soundID < 0) {
 				soundID = gamesounds_GetGameSoundID(GAMESOUNDS_GENERALFAIL);
 			}
 
@@ -9634,8 +9634,8 @@ bool ArmyData::ExecuteSpecialOrder(Order *order, bool &keepGoing)
 				}
 
 				sint32	spriteID = g_theSpecialEffectDB->Get(g_theSpecialEffectDB->FindTypeIndex("SPECEFFECT_GENERAL_SUCCESS"))->GetValue();
-				sint32 soundID;
-				if(!order_rec->GetSound(soundID)) {
+				sint32 soundID = order_rec->GetSoundIndex();
+				if(soundID < 0) {
 					soundID = gamesounds_GetGameSoundID(GAMESOUNDS_GENERALSUCCEED);
 				}
 

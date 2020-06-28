@@ -21,8 +21,8 @@
 #    - UnitPretest_NoFuelThenCrash: To allow the AI to order planes back 
 #                                   when fuel is low.
 #    - UnitPretest_CanParadrop:     To allow paradropping.
-#    - April 23rd 2005 Martin Gühmann
-#  - Added TargetPretest:CanRefuel - April 30th 2005 Martin Gühmann
+#    - April 23rd 2005 Martin GÃ¼hmann
+#  - Added TargetPretest:CanRefuel - April 30th 2005 Martin GÃ¼hmann
 #
 #-----------------------------------------------------------------------------
 
@@ -123,6 +123,6 @@ Order {
 
   Int Cursor
   Int InvalidCursor
-  Bit(Int) FailSound
-  Bit(Int) Sound
+  Record Sound FailSound
+  Record Sound Sound
 }
