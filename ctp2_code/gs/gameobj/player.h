@@ -345,7 +345,7 @@ public:
 	CreateUnitRequest                *m_unitRequestList;
 
 	Unit                             *m_slic_special_city;        // Not serialized
-	BOOL                              m_hasGlobalRadar;           // Not serialized and unused
+	BOOL                              m_hasGlobalRadar;           // Not serialized
 
 #ifdef _DEBUG_INCOMPATIBLE
 

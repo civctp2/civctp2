@@ -1869,7 +1869,7 @@ void UnitData::BeginTurnVision(PLAYER_INDEX player)
 		m_temp_visibility &= ~(1 << player);
 		m_temp_visibility_array.NextTurn(player);
 		m_temp_visibility |= m_temp_visibility_array.GetCurrentVisibility(player);
-		if(g_player[player]->m_hasGlobalRadar && GetDBRec()->GetVisionClassStandard()) {
+		if(g_player[player]->m_hasGlobalRadar && m_army.m_id && !m_army.IsInvisibleForGlobeSat() && GetDBRec()->GetVisionClassStandard()) {
 			m_temp_visibility |= (1 << player);
 			m_visibility |= (1 << player);
 		}
