@@ -49,16 +49,7 @@
 #include "tileset.h"
 #include "colorset.h"               // g_colorSet
 
-#include "profileDB.h"
-
-extern sint32		g_is565Format;
 extern C3UI			*g_c3ui;
-
-
-
-
-
-
 
 PRIMITIVES_ERRCODE primitives_SetRect(
 	RECT *rect,
@@ -3782,24 +3773,56 @@ inline Pixel16 * GetBasePixel16(const aui_Surface & surf, const RECT & rect)
 
 inline void DrawLine16(Pixel16 * pixel, sint32 length, sint32 pitch, Pixel16 color)
 {
-	uint32 alpha = g_theProfileDB->GetShowCityNames();
 	Pixel16 * endPixel = pixel + length * pitch;
 	while (pixel < endPixel) {
-		*pixel = BlendPixel16(*pixel, color, alpha);
+		*pixel = color;
 		pixel += pitch;
 	}
 }
 
-inline void DrawShadowLine16(Pixel16 * pixel, sint32 length, sint32 pitch)
+inline void BlendLine16(Pixel16 * pixel, sint32 length, sint32 pitch, Pixel16 color, uint8 alpha, int blendRGBMask)
 {
 	Pixel16 * endPixel = pixel + length * pitch;
 	while (pixel < endPixel) {
-		*pixel = pixelutils_Shadow(*pixel);
+		*pixel = pixelutils_Blend16(*pixel, color, alpha, blendRGBMask);
 		pixel += pitch;
 	}
 }
 
-void primitives_ClippedPaintRect16(aui_Surface & surf, const RECT & rect, Pixel16 color)
+inline void DrawShadowLine16(Pixel16 * pixel, sint32 length, sint32 pitch, int shadowRGBMask)
+{
+	Pixel16 * endPixel = pixel + length * pitch;
+	while (pixel < endPixel) {
+		*pixel = pixelutils_Shadow16(*pixel, shadowRGBMask);
+		pixel += pitch;
+	}
+}
+
+inline void DrawRect(Pixel16 * base, sint32 width, sint32 height, sint32 pitch, Pixel16 color)
+{
+	Pixel16 * pixel = base;
+	Pixel16 * endPixel = pixel + height * pitch;
+	while (pixel < endPixel)
+	{
+		DrawLine16(pixel, width, 1, color);
+		pixel += pitch;
+	}
+}
+
+inline void BlendRect(Pixel16 * base, sint32 width, sint32 height, sint32 pitch, Pixel16 color, uint8 alpha)
+{
+	const int RGB_MASK = pixelutils_GetBlend16RGBMask();
+
+	Pixel16 * pixel = base;
+	Pixel16 * endPixel = pixel + height * pitch;
+	while (pixel < endPixel)
+	{
+		BlendLine16(pixel, width, 1, color, alpha, RGB_MASK);
+		pixel += pitch;
+	}
+}
+
+void primitives_ClippedPaintRect16(aui_Surface & surf, const RECT & rect, Pixel16 color, uint8 alpha)
 {
 	RECT clippedRect = ClipRect(surf, rect);
 	sint32 width  = clippedRect.right - clippedRect.left;
@@ -3807,17 +3830,18 @@ void primitives_ClippedPaintRect16(aui_Surface & surf, const RECT & rect, Pixel1
 
 	sint32 surfPitchPixels = surf.Pitch() >> 1;
 
-	Pixel16 * pixel = GetBasePixel16(surf, clippedRect);
-	Pixel16 * endPixel = pixel + height * surfPitchPixels;
-	while (pixel < endPixel)
-	{
-		DrawLine16(pixel, width, 1, color);
-		pixel += surfPitchPixels;
+	Pixel16 * base = GetBasePixel16(surf, clippedRect);
+	if (alpha == pixelutils_OPAQUE) {
+		DrawRect(base, width, height, surfPitchPixels, color);
+	} else {
+		BlendRect(base, width, height, surfPitchPixels, color, alpha);
 	}
 }
 
-void primitives_ClippedFrameRect16(aui_Surface & surf, const RECT & rect, Pixel16 color)
+void primitives_ClippedFrameRect16(aui_Surface & surf, const RECT & rect, Pixel16 color, uint8 alpha)
 {
+	const int blendRGBMask = pixelutils_GetBlend16RGBMask();
+
 	RECT clippedRect = ClipRect(surf, rect);
 	sint32 width  = clippedRect.right - clippedRect.left;
 	sint32 height = clippedRect.bottom - clippedRect.top;
@@ -3828,27 +3852,29 @@ void primitives_ClippedFrameRect16(aui_Surface & surf, const RECT & rect, Pixel1
 	// top line
 	if (rect.top >= 0)
 	{
-		DrawLine16(basePixel, width, 1, color);
+		BlendLine16(basePixel, width, 1, color, alpha, blendRGBMask);
 	}
 	// left line
 	if (rect.left >= 0)
 	{
-		DrawLine16(basePixel, height, surfPitchPixels, color);
+		BlendLine16(basePixel + surfPitchPixels, height - 2, surfPitchPixels, color, alpha, blendRGBMask);
 	}
 	// right line
 	if (rect.right < surf.Width())
 	{
-		DrawLine16(basePixel + width - 1, height, surfPitchPixels, color);
+		BlendLine16(basePixel + surfPitchPixels + width - 1, height - 2, surfPitchPixels, color, alpha, blendRGBMask);
 	}
 	// bottom line
 	if (rect.bottom < surf.Height())
 	{
-		DrawLine16(basePixel + (height - 1) * surfPitchPixels, width, 1, color);
+		BlendLine16(basePixel + (height - 1) * surfPitchPixels, width, 1, color, alpha, blendRGBMask);
 	}
 }
 
 void primitives_ClippedShadowRect16(aui_Surface & surf, const RECT & rect)
 {
+	const int shadowRGBMask = pixelutils_GetShadow16RGBMask();
+
 	RECT clippedRect = ClipRect(surf, rect);
 	sint32 width  = clippedRect.right - clippedRect.left;
 	sint32 height = clippedRect.bottom - clippedRect.top;
@@ -3859,7 +3885,7 @@ void primitives_ClippedShadowRect16(aui_Surface & surf, const RECT & rect)
 	Pixel16 * endPixel = pixel + height * surfPitchPixels;
 	while (pixel < endPixel)
 	{
-		DrawShadowLine16(pixel, width, 1);
+		DrawShadowLine16(pixel, width, 1, shadowRGBMask);
 		pixel += surfPitchPixels;
 	}
 }

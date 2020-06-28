@@ -1007,17 +1007,17 @@ sint32 ui_HandleKeypress(WPARAM wParam, LPARAM lParam)
 
 	case KEY_FUNCTION_TOGGLE_CITY_NAMES:
 		{
-			uint32 transparent = g_theProfileDB->GetShowCityNames();
-			if (transparent == 0) {
-				transparent = 255;
+			uint32 alpha = g_theProfileDB->GetShowCityNameAlpha();
+			if (alpha == pixelutils_TRANSPARENT) {
+				alpha = pixelutils_OPAQUE;
+			} else if (alpha == pixelutils_OPAQUE) {
+				alpha -= 64;
+			} else if (alpha < 128) {
+				alpha = pixelutils_TRANSPARENT;
 			} else {
-				if (transparent < 128) {
-					transparent = 0;
-				} else {
-					transparent -= 32;
-				}
+				alpha -= 32;
 			}
-			g_theProfileDB->SetShowCityNames(transparent);
+			g_theProfileDB->SetShowCityNameAlpha(alpha);
 		}
 		break;
 

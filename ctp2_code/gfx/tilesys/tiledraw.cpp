@@ -2683,7 +2683,8 @@ sint32 TiledMap::DrawColorizedOverlay(Pixel16 *data, aui_Surface *surface, sint3
 	return 0;
 }
 
-void TiledMap::DrawClippedColorizedOverlay(Pixel16 * data, aui_Surface & surface, sint32 x, sint32 y, Pixel16 color)
+void TiledMap::DrawClippedColorizedOverlay(Pixel16 * data, aui_Surface & surface, sint32 x, sint32 y, Pixel16 color,
+		uint8 alpha)
 {
 	Assert(data);
 	if (!data) {
@@ -2704,8 +2705,8 @@ void TiledMap::DrawClippedColorizedOverlay(Pixel16 * data, aui_Surface & surface
 	if (y >= height) {
 		return;
 	}
-	uint32 alpha = g_theProfileDB->GetShowCityNames();
 	sint32 pixelPitch = surface.Pitch() >> 1;
+	const int blendRGBMask = pixelutils_GetBlend16RGBMask();
 
 	uint16    start = (uint16)*data++;
 	uint16    end   = (uint16)*data++;
@@ -2763,19 +2764,19 @@ void TiledMap::DrawClippedColorizedOverlay(Pixel16 * data, aui_Surface & surface
 						break;
 					case k_TILE_COPY_RUN_ID:
 						while (pixel < endPixel) {
-							*pixel = BlendPixel16(*pixel, *rowData++, alpha);
+							*pixel = pixelutils_Blend16(*pixel, *rowData++, alpha, blendRGBMask);
 							pixel++;
 						}
 						break;
 					case k_TILE_SHADOW_RUN_ID:
 						while (pixel < endPixel) {
-							*pixel = BlendPixel16(*pixel, pixelutils_Shadow(*pixel), alpha);
+							*pixel = pixelutils_Blend16(*pixel, pixelutils_Shadow(*pixel), alpha, blendRGBMask);
 							pixel++;
 						}
 						break;
 					case k_TILE_COLORIZE_RUN_ID:
 						while (pixel < endPixel) {
-							*pixel = BlendPixel16(*pixel, color, alpha);
+							*pixel = pixelutils_Blend16(*pixel, color, alpha, blendRGBMask);
 							pixel++;
 						}
 						break;
@@ -3696,6 +3697,7 @@ void TiledMap::DrawCityNames(aui_Surface * surf, sint32 layer)
 					if (x >= 0 && y >= 0 && x < surfWidth && y < surfHeight)
 					{
 						SurfaceLock surfaceLock(surf);
+						uint32 alpha = g_theProfileDB->GetShowCityNameAlpha();
 
 						Pixel16 playerColor = GetPlayerColor(owner);
 						Pixel16 black       = GetColor(COLOR_BLACK);
@@ -3704,99 +3706,84 @@ void TiledMap::DrawCityNames(aui_Surface * surf, sint32 layer)
 						// only show empty queue: when production is not shown
 						COLORREF cityNameColorRef = GetCityNameColorRef(fog, isRioting,
 								drawQueueEmpty && !(drawOurCity && showCityProd && buildItemName));
-						RECT outerCityNameRect = DrawCityName(*surf, name, cityNamePos, cityNameColorRef);
+						RECT outerCityNameRect = DrawCityName(*surf, name, cityNamePos, cityNameColorRef, alpha);
 
 						if (isCapitol)
 						{
 							POINT capitalIconPos = {outerCityNameRect.right, outerCityNameRect.top - 1 };
-							RECT capitolRect = DrawCityIsCapitol(*surf, capitalIconPos, black);
+							RECT capitolRect = DrawCityIsCapitol(*surf, capitalIconPos, black, alpha);
 							outerCityNameRect.right += (capitolRect.right - capitolRect.left);
 						}
 						if (hasSleepingUnits)
 						{
 							POINT sleepingUnitsPos = {outerCityNameRect.right - 1, outerCityNameRect.top };
-							RECT sleepingUnitsRect = DrawCitySleepingUnits(*surf, sleepingUnitsPos, playerColor);
+							RECT sleepingUnitsRect = DrawCitySleepingUnits(*surf, sleepingUnitsPos, playerColor,
+									alpha);
 							outerCityNameRect.right += (sleepingUnitsRect.right - sleepingUnitsRect.left - 1);
 						}
 
-						RECT populationRect = DrawCityPopulation(*surf, pop, outerCityNameRect, playerColor);
+						RECT populationRect = DrawCityPopulation(*surf, pop, outerCityNameRect, playerColor, alpha);
 						outerCityNameRect.left = populationRect.left;
 
 						if (owner == g_selected_item->GetVisiblePlayer())
 						{
 							RECT nextPopulationRect = DrawCityNextPopulation(*surf, nextpop, outerCityNameRect,
-									playerColor);
+									playerColor, alpha);
 							outerCityNameRect.right = nextPopulationRect.right;
 						}
 
 						if (isWatchful)
 						{
 							POINT watchfulIconPos = {outerCityNameRect.right, outerCityNameRect.top };
-							RECT watchfulRect = DrawCityIsWatchful(*surf, watchfulIconPos, playerColor);
+							RECT watchfulRect = DrawCityIsWatchful(*surf, watchfulIconPos, playerColor, alpha);
 							outerCityNameRect.right += (watchfulRect.right - watchfulRect.left + 1);
 						}
 						InflateRect(&outerCityNameRect, 1, 1);
-						primitives_ClippedFrameRect16(*surf, outerCityNameRect, playerColor);
-
-						if (fog) {
-							primitives_ClippedShadowRect16(*surf, outerCityNameRect);
-						}
-						AddDirtyRectToMix(outerCityNameRect);
 
 						if (drawOurCity && showCityProd && buildItemName)
 						{
 							POINT productionPos = { outerCityNameRect.left, outerCityNameRect.bottom - 1 };
-							RECT outerBuildItemRect = DrawCityProductionIcon(*surf, pop, productionPos, playerColor);
+							RECT outerBuildItemRect = DrawCityProductionIcon(*surf, pop, productionPos, playerColor,
+									alpha);
 
 							POINT buildItemNamePos = { outerBuildItemRect.right + 1, outerBuildItemRect.top + 1 };
 							COLORREF buildItemNameColor = GetCityNameColorRef(fog, isRioting, drawQueueEmpty);
 							RECT buildItemNameRect = DrawCityBuildItemName(*surf, buildItemName, buildItemNamePos,
-									buildItemNameColor);
+									buildItemNameColor, alpha);
 							InflateRect(&buildItemNameRect, 1, 1);
-							primitives_ClippedFrameRect16(*surf, buildItemNameRect, playerColor);
+							primitives_ClippedFrameRect16(*surf, buildItemNameRect, playerColor, alpha);
 							outerBuildItemRect.right = buildItemNameRect.right;
 
 							RECT buildItemTimeRect = DrawCityBuildItemTime(*surf, buildItemTime,
-									outerBuildItemRect, playerColor);
+									outerBuildItemRect, playerColor, alpha);
 							outerBuildItemRect.right = buildItemTimeRect.right;
 
 							AddDirtyRectToMix(outerBuildItemRect);
 						}
-
-						/*
-						isBioInfected = true;
-						isNanoInfected = true;
-						isConverted = true;
-						isFranchised = true;
-						isInjoined = true;
-						wasHappinessAttacked = true;
-						bioInfectedOwner = 3;
-						nanoInfectedOwner = 2;
-						convertedOwner = 1;
-						convertedLoss = 23;
-						franchiseOwner = 2;
-						franchiseLoss = 21;
-						injoinedOwner = 0;
-						happinessAttackOwner = 4;
-						slaveBits = 31;
-						isRioting = true;
-						isPollutionRisk = true;*/
 						outerCityNameRect.right += 1; // to allow all icons to move one to the left
 						RECT cityIconsRect = DrawCityIcons(*surf, owner, fog, outerCityNameRect,isBioInfected,
 								isNanoInfected, isConverted, isFranchised, isInjoined, wasHappinessAttacked,
 								bioInfectedOwner, nanoInfectedOwner, convertedOwner, convertedLoss, franchiseOwner,
-								franchiseLoss, injoinedOwner, happinessAttackOwner,hasAirport, isPollutionRisk);
+								franchiseLoss, injoinedOwner, happinessAttackOwner,hasAirport, isPollutionRisk, alpha);
 						if (fog) {
 							cityIconsRect.left -= 1;
 							primitives_ClippedShadowRect16(*surf, cityIconsRect);
 						}
 						AddDirtyRectToMix(cityIconsRect);
 
-						RECT cityEnslavedRect = DrawCityEnslaved(*surf, outerCityNameRect, owner, slaveBits);
+						RECT cityEnslavedRect = DrawCityEnslaved(*surf, outerCityNameRect, owner, slaveBits, alpha);
 						if (fog) {
 							primitives_ClippedShadowRect16(*surf, cityEnslavedRect);
 						}
 						AddDirtyRectToMix(cityEnslavedRect);
+
+						outerCityNameRect.right -= 1;
+						primitives_ClippedFrameRect16(*surf, outerCityNameRect, playerColor, alpha);
+
+						if (fog) {
+							primitives_ClippedShadowRect16(*surf, outerCityNameRect);
+						}
+						AddDirtyRectToMix(outerCityNameRect);
 
 						//if (CityIcons) {
 
@@ -3833,7 +3820,8 @@ COLORREF TiledMap::GetCityNameColorRef(bool fog, bool isRioting, bool drawQueueE
 	return GetColorRef(COLOR_WHITE);
 }
 
-RECT TiledMap::DrawCityName(aui_Surface & surf, const MBCHAR * const name, const POINT & position, COLORREF colorRef)
+RECT TiledMap::DrawCityName(aui_Surface & surf, const MBCHAR * const name, const POINT & position, COLORREF colorRef,
+		uint8 alpha)
 {
 	RECT cityNameRect = {
 			position.x,
@@ -3843,20 +3831,20 @@ RECT TiledMap::DrawCityName(aui_Surface & surf, const MBCHAR * const name, const
 	};
 	RECT outerNameRect = cityNameRect;
 	InflateRect(&outerNameRect, 2, 1); // expand for borders
-	primitives_ClippedPaintRect16(surf, outerNameRect, GetColor(COLOR_BLACK));
+	primitives_ClippedPaintRect16(surf, outerNameRect, GetColor(COLOR_BLACK), alpha);
 	RECT clipRect = primitives_GetScreenAdjustedRectCopy(&surf, cityNameRect);
 	m_font->DrawString(&surf, &cityNameRect, &clipRect, name, 0, colorRef, 0);
 	return outerNameRect;
 }
 
-RECT TiledMap::DrawCityIsCapitol(aui_Surface & surf, const POINT & position, Pixel16 color)
+RECT TiledMap::DrawCityIsCapitol(aui_Surface & surf, const POINT & position, Pixel16 color, uint8 alpha)
 {
 	static const MAPICON capital = MAPICON_CAPITOL;
 	Pixel16 * capitalIcon = GetTileSet()->GetMapIconData(capital);
 	Assert(capitalIcon);
 	if (capitalIcon)
 	{
-		DrawClippedColorizedOverlay(capitalIcon, surf, position.x, position.y, color);
+		DrawClippedColorizedOverlay(capitalIcon, surf, position.x, position.y, color, alpha);
 
 		// Draw over borders
 		POINT iconDimensions = GetTileSet()->GetMapIconDimensions(capital);
@@ -3866,7 +3854,7 @@ RECT TiledMap::DrawCityIsCapitol(aui_Surface & surf, const POINT & position, Pix
 	return RECT { position.x, position.y, position.x, position.y };
 }
 
-RECT TiledMap::DrawCitySleepingUnits(aui_Surface & surf, const POINT & position, Pixel16 color)
+RECT TiledMap::DrawCitySleepingUnits(aui_Surface & surf, const POINT & position, Pixel16 color, uint8 alpha)
 {
 	static const MAPICON sleepingUnits = MAPICON_SLEEPINGUNITS;
 	Pixel16 * sleepingUnitsIcon = GetTileSet()->GetMapIconData(sleepingUnits);
@@ -3875,14 +3863,14 @@ RECT TiledMap::DrawCitySleepingUnits(aui_Surface & surf, const POINT & position,
 	{
 		POINT iconDimensions = GetTileSet()->GetMapIconDimensions(MAPICON_SLEEPINGUNITS);
 		RECT rect = { position.x, position.y, position.x + iconDimensions.x + 1, position.y + iconDimensions.y + 1 };
-		primitives_ClippedPaintRect16(surf, rect, GetColor(COLOR_BLACK));
-		DrawClippedColorizedOverlay(sleepingUnitsIcon, surf, position.x, position.y, color);
+		primitives_ClippedPaintRect16(surf, rect, GetColor(COLOR_BLACK), alpha);
+		DrawClippedColorizedOverlay(sleepingUnitsIcon, surf, position.x, position.y, color, alpha);
 		return rect;
 	}
 	return RECT { position.x, position.y, position.x, position.y };
 }
 
-RECT TiledMap::DrawCityIsWatchful(aui_Surface & surf, const POINT & position, Pixel16 color)
+RECT TiledMap::DrawCityIsWatchful(aui_Surface & surf, const POINT & position, Pixel16 color, uint8 alpha)
 {
 	static const MAPICON capital = MAPICON_WATCHFUL;
 	Pixel16 * watchFulIcon = GetTileSet()->GetMapIconData(capital);
@@ -3891,19 +3879,19 @@ RECT TiledMap::DrawCityIsWatchful(aui_Surface & surf, const POINT & position, Pi
 	{
 		POINT iconDimensions = GetTileSet()->GetMapIconDimensions(capital);
 		RECT rect = { position.x+1, position.y, position.x + iconDimensions.x-1, position.y + iconDimensions.y+1 };
-		DrawClippedColorizedOverlay(watchFulIcon, surf, position.x, position.y, color);
+		DrawClippedColorizedOverlay(watchFulIcon, surf, position.x, position.y, color, alpha);
 		return rect;
 	}
 
 	return RECT { position.x, position.y, position.x, position.y };
 }
 
-RECT TiledMap::DrawCityPopulation(aui_Surface & surf, sint32 population, const RECT & rect, Pixel16 color)
+RECT TiledMap::DrawCityPopulation(aui_Surface & surf, sint32 population, const RECT & rect, Pixel16 color, uint8 alpha)
 {
 	MBCHAR populationString[80];
 	sprintf(populationString,"%i", population);
 	RECT populationRect = { rect.left - (population < 10 ? 13 : 17), rect.top, rect.left, rect.bottom };
-	primitives_ClippedPaintRect16(surf, populationRect, color);
+	primitives_ClippedPaintRect16(surf, populationRect, color, alpha);
 	COLOR fontColor = ColorSet::UseDarkFontColor(color) ? COLOR_BLACK : COLOR_WHITE;
 	RECT textRect = { populationRect.left + (population < 10 ? 4 : 2), populationRect.top + 1,
 				populationRect.right - (population < 10 ? 3 : 1), populationRect.bottom - 1 };
@@ -3912,7 +3900,8 @@ RECT TiledMap::DrawCityPopulation(aui_Surface & surf, sint32 population, const R
 	return populationRect;
 }
 
-RECT TiledMap::DrawCityNextPopulation(aui_Surface & surf, sint32 nextPopulation, const RECT & rect, Pixel16 color)
+RECT TiledMap::DrawCityNextPopulation(aui_Surface & surf, sint32 nextPopulation, const RECT & rect, Pixel16 color,
+		uint8 alpha)
 {
 	MBCHAR nextPopulationString[80];
 	if (nextPopulation < THRESHOLD_SLOW_GROWTH) {
@@ -3924,7 +3913,7 @@ RECT TiledMap::DrawCityNextPopulation(aui_Surface & surf, sint32 nextPopulation,
 	sint32 offsetX = nextPopulation < 10 ? 3 : 2;
 	sint32 width = nextPopulation < 10 ? 12 : (nextPopulation < THRESHOLD_SLOW_GROWTH ? 17 : 15);
 	RECT nextPopulationRect = { rect.right + 1, rect.top, rect.right + 1 + width, rect.bottom };
-	primitives_ClippedPaintRect16(surf, nextPopulationRect, GetColor(COLOR_BLACK));
+	primitives_ClippedPaintRect16(surf, nextPopulationRect, GetColor(COLOR_BLACK), alpha);
 
 	RECT textRect = { nextPopulationRect.left + offsetX, nextPopulationRect.top + 1,
 				nextPopulationRect.right - offsetX + 1, nextPopulationRect.bottom - 2 };
@@ -3932,12 +3921,14 @@ RECT TiledMap::DrawCityNextPopulation(aui_Surface & surf, sint32 nextPopulation,
 	m_font->DrawString(&surf, &textRect, &clipRect, nextPopulationString, 0, GetColorRef(COLOR_WHITE));
 
 	InflateRect(&nextPopulationRect, 1, 1);
-	primitives_ClippedFrameRect16(surf, nextPopulationRect, color);
+	primitives_ClippedFrameRect16(surf, nextPopulationRect, color, alpha);
 	nextPopulationRect.right -= 1;
 	return nextPopulationRect;
 }
 
-RECT TiledMap::DrawCityProductionIcon(aui_Surface & surf, sint32 population, const POINT & position, Pixel16 color) {
+RECT TiledMap::DrawCityProductionIcon(aui_Surface & surf, sint32 population, const POINT & position, Pixel16 color,
+		uint8 alpha)
+{
 	const MAPICON production = population > 9 ? MAPICON_PRODUCTIONNEWBIG : MAPICON_PRODUCTIONNEW;
 	Pixel16 *productionIcon = GetTileSet()->GetMapIconData(production);
 	Assert(productionIcon);
@@ -3945,17 +3936,14 @@ RECT TiledMap::DrawCityProductionIcon(aui_Surface & surf, sint32 population, con
 	{
 		POINT iconDimensions = GetTileSet()->GetMapIconDimensions(production);
 		RECT rect = {position.x, position.y, position.x + iconDimensions.x - 1, position.y + iconDimensions.y };
-		DrawClippedColorizedOverlay(productionIcon, surf, position.x, position.y, color);
+		DrawClippedColorizedOverlay(productionIcon, surf, position.x, position.y, color, alpha);
 		return rect;
 	}
 	return RECT{ position.x, position.y, position.x, position.y};
 }
 
-RECT TiledMap::DrawCityBuildItemName(
-		aui_Surface  &       surf,
-		const MBCHAR * const name,
-		const POINT  &       position,
-		COLORREF             colorRef)
+RECT TiledMap::DrawCityBuildItemName(aui_Surface & surf, const MBCHAR * const name, const POINT & position,
+		COLORREF colorRef, uint8 alpha)
 {
 	sint32 widthBuildItemName  = m_font->GetStringWidth(name);
 	sint32 heightBuildItemName = m_font->GetMaxHeight();
@@ -3968,7 +3956,7 @@ RECT TiledMap::DrawCityBuildItemName(
 		position.y + m_font->GetMaxHeight() + 2
 	};
 
-	primitives_ClippedPaintRect16(surf, buildNameItemRect, GetColor(COLOR_BLACK));
+	primitives_ClippedPaintRect16(surf, buildNameItemRect, GetColor(COLOR_BLACK), alpha);
 
 	RECT textRect = buildNameItemRect;
 	InflateRect(&textRect, -2, -1);
@@ -3978,7 +3966,8 @@ RECT TiledMap::DrawCityBuildItemName(
 	return buildNameItemRect;
 }
 
-RECT TiledMap::DrawCityBuildItemTime(aui_Surface & surf, sint32 buildItemTime, const RECT & rect, Pixel16 color)
+RECT TiledMap::DrawCityBuildItemTime(aui_Surface & surf, sint32 buildItemTime, const RECT & rect, Pixel16 color,
+		uint8 alpha)
 {
 	MBCHAR buildItemNameString[80];
 	if (buildItemTime < THRESHOLD_PROD_TIME && buildItemTime != 0) {
@@ -3990,7 +3979,7 @@ RECT TiledMap::DrawCityBuildItemTime(aui_Surface & surf, sint32 buildItemTime, c
 	sint32 offsetX = (buildItemTime == 0 || buildItemTime >= THRESHOLD_PROD_TIME) ? 2 : (buildItemTime < 10 ? 3 : 2);
 	sint32 width = (buildItemTime == 0 || buildItemTime >= THRESHOLD_PROD_TIME) ? 15 : (buildItemTime < 10 ? 12 : 17);
 	RECT builtItemTimeRect = { rect.right, rect.top + 1, rect.right + width, rect.bottom - 1 };
-	primitives_ClippedPaintRect16(surf, builtItemTimeRect, GetColor(COLOR_BLACK));
+	primitives_ClippedPaintRect16(surf, builtItemTimeRect, GetColor(COLOR_BLACK), alpha);
 
 	RECT textRect = { builtItemTimeRect.left + offsetX, builtItemTimeRect.top + 1,
 	                  builtItemTimeRect.right - offsetX + 1, builtItemTimeRect.bottom - 2 };
@@ -3998,7 +3987,7 @@ RECT TiledMap::DrawCityBuildItemTime(aui_Surface & surf, sint32 buildItemTime, c
 	m_font->DrawString(&surf, &textRect, &clipRect, buildItemNameString, 0, GetColorRef(COLOR_WHITE));
 
 	InflateRect(&builtItemTimeRect, 1, 1);
-	primitives_ClippedFrameRect16(surf, builtItemTimeRect, color);
+	primitives_ClippedFrameRect16(surf, builtItemTimeRect, color, alpha);
 	return builtItemTimeRect;
 }
 
@@ -4040,7 +4029,7 @@ RECT TiledMap::DrawCityIcons(aui_Surface & surf, sint32 owner, bool fog, const R
 		bool isNanoInfected, bool isConverted, bool isFranchised, bool isInjoined, bool wasHappinessAttacked,
 		sint32 bioInfectedOwner, sint32 nanoInfectedOwner, sint32 convertedOwner, sint32 convertedLoss,
 		sint32 franchiseOwner, sint32 franchiseLoss, sint32 injoinedOwner, sint32 happinessAttackOwner,
-		bool hasAirport, bool isPollutionRisk)
+		bool hasAirport, bool isPollutionRisk, uint8 alpha)
 {
 	TileSet * tileSet     = GetTileSet();
 	RECT      outerRect   = { outerCityRect.right-1, outerCityRect.bottom, outerCityRect.right-1, outerCityRect.bottom };
@@ -4055,10 +4044,11 @@ RECT TiledMap::DrawCityIcons(aui_Surface & surf, sint32 owner, bool fog, const R
 		{
 			POINT dimensions = tileSet->GetMapIconDimensions(pollution);
 
-			DrawClippedColorizedOverlay(icon, surf, outerRect.right-1, outerRect.bottom - dimensions.y, playerColor);
+			DrawClippedColorizedOverlay(icon, surf, outerRect.right-1, outerRect.bottom - dimensions.y, playerColor,
+					alpha);
 			RECT frame = { outerRect.right-1, outerRect.bottom - dimensions.y, outerRect.right -1 + dimensions.x,
-				  outerRect.bottom };
-			primitives_ClippedFrameRect16(surf, frame, playerColor);
+					outerRect.bottom };
+			primitives_ClippedFrameRect16(surf, frame, playerColor, alpha);
 			outerRect.top   = outerRect.bottom - dimensions.y;
 			outerRect.right += dimensions.x - 1;
 		}
@@ -4077,10 +4067,10 @@ RECT TiledMap::DrawCityIcons(aui_Surface & surf, sint32 owner, bool fog, const R
 			POINT dimensions = tileSet->GetMapIconDimensions(conversion);
 
 			Pixel16 color = GetPlayerColor(convertedOwner);
-			DrawClippedColorizedOverlay(icon, surf, outerRect.right-1, outerRect.bottom - dimensions.y, color);
+			DrawClippedColorizedOverlay(icon, surf, outerRect.right-1, outerRect.bottom - dimensions.y, color, alpha);
 			RECT frame = { outerRect.right-1, outerRect.bottom - dimensions.y, outerRect.right -1 + dimensions.x,
 			               outerRect.bottom };
-			primitives_ClippedFrameRect16(surf, frame, color);
+			primitives_ClippedFrameRect16(surf, frame, color, alpha);
 
 			sint32 myOwner = g_selected_item->GetVisiblePlayer();
 			if (convertedLoss && myOwner >= 0 && (myOwner == owner || myOwner == convertedOwner))
@@ -4114,10 +4104,10 @@ RECT TiledMap::DrawCityIcons(aui_Surface & surf, sint32 owner, bool fog, const R
 			POINT dimensions = tileSet->GetMapIconDimensions(franchise);
 
 			Pixel16 color = GetPlayerColor(franchiseOwner);
-			DrawClippedColorizedOverlay(icon, surf, outerRect.right-1, outerRect.bottom - dimensions.y, color);
+			DrawClippedColorizedOverlay(icon, surf, outerRect.right-1, outerRect.bottom - dimensions.y, color, alpha);
 			RECT frame = { outerRect.right-1, outerRect.bottom - dimensions.y, outerRect.right -1 + dimensions.x,
 			               outerRect.bottom };
-			primitives_ClippedFrameRect16(surf, frame, color);
+			primitives_ClippedFrameRect16(surf, frame, color, alpha);
 
 			sint32 myOwner = g_selected_item->GetVisiblePlayer();
 			if (franchiseLoss && myOwner >= 0 && (myOwner == owner || myOwner == franchiseOwner))
@@ -4151,10 +4141,10 @@ RECT TiledMap::DrawCityIcons(aui_Surface & surf, sint32 owner, bool fog, const R
 			POINT dimensions = tileSet->GetMapIconDimensions(injunction);
 
 			Pixel16 color = GetPlayerColor(injoinedOwner);
-			DrawClippedColorizedOverlay(icon, surf, outerRect.right-1, outerRect.bottom - dimensions.y, color);
+			DrawClippedColorizedOverlay(icon, surf, outerRect.right-1, outerRect.bottom - dimensions.y, color, alpha);
 			RECT frame = { outerRect.right-1, outerRect.bottom - dimensions.y, outerRect.right -1 + dimensions.x,
 			               outerRect.bottom };
-			primitives_ClippedFrameRect16(surf, frame, color);
+			primitives_ClippedFrameRect16(surf, frame, color, alpha);
 
 			outerRect.top   = outerRect.bottom - dimensions.y;
 			outerRect.right += dimensions.x - 1;
@@ -4171,10 +4161,10 @@ RECT TiledMap::DrawCityIcons(aui_Surface & surf, sint32 owner, bool fog, const R
 			POINT dimensions = tileSet->GetMapIconDimensions(unhappy);
 
 			Pixel16 color = GetPlayerColor(happinessAttackOwner);
-			DrawClippedColorizedOverlay(icon, surf, outerRect.right-1, outerRect.bottom - dimensions.y, color);
+			DrawClippedColorizedOverlay(icon, surf, outerRect.right-1, outerRect.bottom - dimensions.y, color, alpha);
 			RECT frame = { outerRect.right-1, outerRect.bottom - dimensions.y, outerRect.right -1 + dimensions.x,
 			               outerRect.bottom };
-			primitives_ClippedFrameRect16(surf, frame, color);
+			primitives_ClippedFrameRect16(surf, frame, color, alpha);
 
 			outerRect.top   = outerRect.bottom - dimensions.y;
 			outerRect.right += dimensions.x - 1;
@@ -4195,10 +4185,10 @@ RECT TiledMap::DrawCityIcons(aui_Surface & surf, sint32 owner, bool fog, const R
 				g_bio_flash = 0;
 			}
 
-			DrawClippedColorizedOverlay(icon, surf, outerRect.right-1, outerRect.bottom - dimensions.y, color);
+			DrawClippedColorizedOverlay(icon, surf, outerRect.right-1, outerRect.bottom - dimensions.y, color, alpha);
 			RECT frame = { outerRect.right-1, outerRect.bottom - dimensions.y, outerRect.right -1 + dimensions.x,
 			               outerRect.bottom };
-			primitives_ClippedFrameRect16(surf, frame, color);
+			primitives_ClippedFrameRect16(surf, frame, color, alpha);
 
 			outerRect.top   = outerRect.bottom - dimensions.y;
 			outerRect.right += dimensions.x - 1;
@@ -4219,10 +4209,10 @@ RECT TiledMap::DrawCityIcons(aui_Surface & surf, sint32 owner, bool fog, const R
 				g_nano_flash = 0;
 			}
 
-			DrawClippedColorizedOverlay(icon, surf, outerRect.right-1, outerRect.bottom - dimensions.y, color);
+			DrawClippedColorizedOverlay(icon, surf, outerRect.right-1, outerRect.bottom - dimensions.y, color, alpha);
 			RECT frame = { outerRect.right-1, outerRect.bottom - dimensions.y, outerRect.right -1 + dimensions.x,
 			               outerRect.bottom };
-			primitives_ClippedFrameRect16(surf, frame, color);
+			primitives_ClippedFrameRect16(surf, frame, color, alpha);
 
 			outerRect.top   = outerRect.bottom - dimensions.y;
 			outerRect.right += dimensions.x - 1;
@@ -4231,7 +4221,8 @@ RECT TiledMap::DrawCityIcons(aui_Surface & surf, sint32 owner, bool fog, const R
 	return outerRect;
 }
 
-RECT TiledMap::DrawCityEnslaved(aui_Surface & surf, const RECT & outerCityRect, sint32 owner, uint32 slaveBits)
+RECT TiledMap::DrawCityEnslaved(aui_Surface & surf, const RECT & outerCityRect, sint32 owner, uint32 slaveBits,
+		uint8 alpha)
 {
 	static const MAPICON slave = MAPICON_SLAVE;
 	Pixel16 * icon = GetTileSet()->GetMapIconData(slave);
@@ -4241,16 +4232,16 @@ RECT TiledMap::DrawCityEnslaved(aui_Surface & surf, const RECT & outerCityRect, 
 		Pixel16 playerColor = GetPlayerColor(owner);
 		uint32 bits = slaveBits;
 		POINT dimensions = GetTileSet()->GetMapIconDimensions(slave);
-		RECT outerRect = { outerCityRect.right-2, outerCityRect.top, outerCityRect.right-2, outerCityRect.top};
+		RECT outerRect = { outerCityRect.right-2, outerCityRect.top+1, outerCityRect.right-2, outerCityRect.top+1};
 		for (sint32 i = 0; i < k_MAX_PLAYERS; i++)
 		{
 			if (bits & 1)
 			{
 				outerRect.left -= dimensions.x;
 				outerRect.top = outerRect.bottom - dimensions.y;
-				DrawClippedColorizedOverlay(icon, surf, outerRect.left, outerRect.top, GetPlayerColor(i));
+				DrawClippedColorizedOverlay(icon, surf, outerRect.left, outerRect.top, GetPlayerColor(i), alpha);
 				RECT frame = { outerRect.left, outerRect.top, outerRect.left + dimensions.x, outerRect.bottom };
-				primitives_ClippedFrameRect16(surf, frame, GetPlayerColor(i));
+				primitives_ClippedFrameRect16(surf, frame, GetPlayerColor(i), alpha);
 			}
 
 			bits >>= 1;

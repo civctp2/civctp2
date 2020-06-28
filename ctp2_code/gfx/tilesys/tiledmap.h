@@ -498,27 +498,30 @@ protected:
 
 	void     ZoomUpdate(sint32 zoomLevel);
 	COLORREF GetCityNameColorRef(bool fog, bool isRioting, bool drawQueueEmpty);
-	RECT     DrawCityName(aui_Surface & surf, const MBCHAR * const name, const POINT & position, COLORREF colorRef);
-	RECT     DrawCityIsCapitol(aui_Surface & surf, const POINT & position, Pixel16 color);
-	RECT     DrawCitySleepingUnits(aui_Surface & surf, const POINT & position, Pixel16 color);
-	RECT     DrawCityIsWatchful(aui_Surface & surf, const POINT & position, Pixel16 color);
-	RECT     DrawCityPopulation(aui_Surface & surf, sint32 population, const RECT & rect, Pixel16 color);
-	RECT     DrawCityNextPopulation(aui_Surface & surf, sint32 nextPopulation, const RECT & rect, Pixel16 color);
-	RECT     DrawCityProductionIcon(aui_Surface & surf, sint32 population, const POINT & position, Pixel16 color);
-	RECT     DrawCityBuildItemName(
-				aui_Surface  &       surf,
-				const MBCHAR * const name,
-				const POINT  &       position,
-				COLORREF             colorRef);
-	RECT     DrawCityBuildItemTime(aui_Surface & surf, sint32 nextPopulation, const RECT & rect, Pixel16 color);
+	RECT     DrawCityName(aui_Surface & surf, const MBCHAR * const name, const POINT & position, COLORREF colorRef,
+				uint8 alpha);
+	RECT     DrawCityIsCapitol(aui_Surface & surf, const POINT & position, Pixel16 color, uint8 alpha);
+	RECT     DrawCitySleepingUnits(aui_Surface & surf, const POINT & position, Pixel16 color, uint8 alpha);
+	RECT     DrawCityIsWatchful(aui_Surface & surf, const POINT & position, Pixel16 color, uint8 alpha);
+	RECT     DrawCityPopulation(aui_Surface & surf, sint32 population, const RECT & rect, Pixel16 color, uint8 alpha);
+	RECT     DrawCityNextPopulation(aui_Surface & surf, sint32 nextPopulation, const RECT & rect, Pixel16 color,
+				uint8 alpha);
+	RECT     DrawCityProductionIcon(aui_Surface & surf, sint32 population, const POINT & position, Pixel16 color,
+				uint8 alpha);
+	RECT     DrawCityBuildItemName(aui_Surface  & surf, const MBCHAR * const name, const POINT & position,
+				COLORREF colorRef, uint8 alpha);
+	RECT     DrawCityBuildItemTime(aui_Surface & surf, sint32 nextPopulation, const RECT & rect, Pixel16 color,
+				uint8 alpha);
 	RECT     DrawCityIcons(aui_Surface & surf, sint32 owner, bool fog, const RECT & outerCityRect, bool isBioInfected,
 				bool isNanoInfected, bool isConverted, bool isFranchised, bool isInjoined, bool wasHappinessAttacked,
 				sint32 bioInfectedOnwer, sint32 nanoInfectedOwner, sint32 convertedOwner, sint32 convertedLoss,
 				sint32 franchiseOwner, sint32 franchiseLoss, sint32 injoinedOwner, sint32 happinessAttackOwner,
-				bool hasAirport, bool isPollutionRisk);
-	RECT     DrawCityEnslaved(aui_Surface & surf, const RECT & outerCityRect, sint32 owner, uint32 slaveBits);
+				bool hasAirport, bool isPollutionRisk, uint8 alpha);
+	RECT     DrawCityEnslaved(aui_Surface & surf, const RECT & outerCityRect, sint32 owner, uint32 slaveBits,
+				uint8 alpha);
 
-	void     DrawClippedColorizedOverlay(Pixel16 * data, aui_Surface & surface, sint32 x, sint32 y, Pixel16 color);
+	void     DrawClippedColorizedOverlay(Pixel16 * data, aui_Surface & surface, sint32 x, sint32 y, Pixel16 color,
+				uint8 alpha);
 
 	sint32	m_zoomLevel;
 	sint32	m_zoomTilePixelWidth[k_MAX_ZOOM_LEVELS];

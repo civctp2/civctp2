@@ -116,13 +116,38 @@ static uint32 check[] =
 	GS_TOTAL
 };
 
+void graphicsscreen_initializeValues()
+{
+	if(g_theProfileDB) {
+		s_unitSpeed->SetValue(g_theProfileDB->GetUnitSpeed(), 0);
+	} else {
+		s_unitSpeed->SetValue(0,0);
+	}
 
+	s_walk            ->SetState(g_theProfileDB->IsUnitAnim());
+	s_trade           ->SetState(g_theProfileDB->IsTradeAnim());
+	s_wonder          ->SetState(g_theProfileDB->IsWonderMovies());
+	s_politicalBorders->SetState(g_theProfileDB->GetShowPoliticalBorders());
+	s_tradeRoutes     ->SetState(g_theProfileDB->GetShowTradeRoutes());
+	s_cityNames       ->SetState(g_theProfileDB->GetShowCityNameAlpha());
+	s_armyNames       ->SetState(g_theProfileDB->GetShowArmyNames());
+	s_civflags        ->SetState(g_theProfileDB->IsCivFlags());
+	s_smooth          ->SetState(g_theProfileDB->IsSmoothBorders());
+	s_goodAnims       ->SetState(g_theProfileDB->IsGoodAnim());
+	s_cityInfluence   ->SetState(g_theProfileDB->IsShowCityInfluence());
+	s_grid            ->SetState(g_isGridOn);
+	s_cityProd        ->SetState(g_theProfileDB->IsShowCityProduction());
+}
 
 
 sint32	graphicsscreen_displayMyWindow()
 {
 	sint32 retval=0;
-	if (!s_graphicsWindow) { retval = graphicsscreen_Initialize(); }
+	if (!s_graphicsWindow) {
+		retval = graphicsscreen_Initialize();
+	} else {
+		graphicsscreen_initializeValues();
+	}
 
 	AUI_ERRCODE auiErr  = g_c3ui->AddWindow(s_graphicsWindow);
 	Assert( auiErr == AUI_ERRCODE_OK );
@@ -190,25 +215,7 @@ AUI_ERRCODE graphicsscreen_Initialize( void )
 	s_unitSpeed			= spNew_C3Slider(&errcode, windowBlock, "UnitSpeedSlider", graphicsscreen_unitSpeedSlide);
 	s_unitSpeedN		= spNew_c3_Static(&errcode, windowBlock, "UnitSpeedName");
 
-	if(g_theProfileDB) {
-		s_unitSpeed->SetValue(g_theProfileDB->GetUnitSpeed(), 0);
-	} else {
-		s_unitSpeed->SetValue(0,0);
-	}
-
-	s_walk				->SetState(g_theProfileDB->IsUnitAnim());
-	s_trade				->SetState(g_theProfileDB->IsTradeAnim());
-	s_wonder			->SetState(g_theProfileDB->IsWonderMovies());
-	s_politicalBorders	->SetState(g_theProfileDB->GetShowPoliticalBorders());
-	s_tradeRoutes		->SetState(g_theProfileDB->GetShowTradeRoutes());
-	s_cityNames			->SetState(g_theProfileDB->GetShowCityNames());
-	s_armyNames			->SetState(g_theProfileDB->GetShowArmyNames());
-	s_civflags			->SetState(g_theProfileDB->IsCivFlags());
-	s_smooth			->SetState(g_theProfileDB->IsSmoothBorders());
-	s_goodAnims			->SetState(g_theProfileDB->IsGoodAnim());
-	s_cityInfluence		->SetState(g_theProfileDB->IsShowCityInfluence());
-	s_grid				->SetState(g_isGridOn);
-	s_cityProd			->SetState(g_theProfileDB->IsShowCityProduction());
+	graphicsscreen_initializeValues();
 
 	MBCHAR block[ k_AUI_LDL_MAXBLOCK + 1 ];
 	sprintf( block, "%s.%s", windowBlock, "Name" );
@@ -337,7 +344,7 @@ void graphicsscreen_checkPress(aui_Control *control, uint32 action, uint32 data,
 		s_gridToggled = TRUE;
 		break;
 	case GS_CITYNAMES:
-		func = &ProfileDB::SetShowCityNames;
+		func = &ProfileDB::SetShowCityNameAlpha;
 		break;
 	case GS_ARMYNAMES:
 		func = &ProfileDB::SetShowArmyNames;
