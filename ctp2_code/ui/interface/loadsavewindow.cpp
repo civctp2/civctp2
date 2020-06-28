@@ -72,8 +72,6 @@
 extern C3UI							*g_c3ui;
 extern sint32						g_is565Format;
 
-#define k_LOADSAVE_AUTOSORT_COL		-2
-
 LoadSaveWindow::LoadSaveWindow(AUI_ERRCODE *retval, uint32 id,
 		const MBCHAR *ldlBlock, sint32 bpp, AUI_WINDOW_TYPE type, bool bevel)
 :
@@ -1099,14 +1097,5 @@ LSSavesListItem::~LSSavesListItem()
 
 sint32 LSSavesListItem::Compare(c3_ListItem *item2, uint32 column)
 {
-	LSSavesListItem *item = (LSSavesListItem *)item2;
-
-	switch (column) {
-	case k_LOADSAVE_AUTOSORT_COL:
-
-		return strcmp(this->GetText(), item->GetText());
-		break;
-	}
-
 	return 0;
 }

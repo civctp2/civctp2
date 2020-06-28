@@ -3696,7 +3696,7 @@ void Governor::ComputeDesiredUnits()
 			{
 				m_buildUnitList[list_num].m_maximumCount = 0;
 				m_buildUnitList[list_num].m_desiredCount = 0;
-				DPRINTF(k_DBG_AI, ("// No settler units: needed: %d, max: %d, current: %d\n", m_buildUnitList[list_num].m_desiredCount, m_buildUnitList[list_num].m_maximumCount, m_currentUnitCount[best_unit_type]));
+				DPRINTF(k_DBG_AI, ("// No settler units: needed: %d, max: %d, current: %d\n", m_buildUnitList[list_num].m_desiredCount, m_buildUnitList[list_num].m_maximumCount, 0));
 			}
 
 		case BUILD_UNIT_LIST_SLAVERY:

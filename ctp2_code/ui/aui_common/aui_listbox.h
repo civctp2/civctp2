@@ -152,12 +152,9 @@ public:
 
 		if ( column == -1 ) return AUI_ERRCODE_OK;
 
-		if ( column != -2 )
-		{
-			Assert( 0 <= column && column < m_numColumns );
-			if ( 0 > column || column >= m_numColumns )
-					return AUI_ERRCODE_INVALIDPARAM;
-		}
+		Assert( 0 <= column && column < m_numColumns );
+		if ( 0 > column || column >= m_numColumns )
+			return AUI_ERRCODE_INVALIDPARAM;
 
 		m_sortColumn = column;
 		m_sortAscending = ascending;

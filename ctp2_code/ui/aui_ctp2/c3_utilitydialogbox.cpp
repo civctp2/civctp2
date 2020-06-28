@@ -201,7 +201,7 @@ void C3UtilityTextFieldButtonActionCallback( aui_Control *control, uint32 action
 		if (!strlen(resultText))
 		{
 
-			delete resultText;
+			delete[] resultText;
 			resultText = NULL;
 			if(popup->m_wantEmpties) {
 				popup->m_callback(resultText, TRUE, popup->GetData());

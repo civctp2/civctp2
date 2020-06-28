@@ -668,5 +668,5 @@ void StringDB::Export(MBCHAR * file)
 	}
 
 	c3files_fclose(fout);
-	delete path;
+	delete[] path;
 }

@@ -33,7 +33,7 @@ AUI_ERRCODE aui_DirectBlitter::Blt16To16(
 			}
 			if(((aui_DirectSurface *) destSurf)->BUFFER()->IsLost() != DD_OK)
 			{
-				if(((aui_DirectSurface *) destSurf)->BUFFER()->Restore())
+				if(SUCCEEDED(((aui_DirectSurface *) destSurf)->BUFFER()->Restore()))
 					return AUI_ERRCODE_NOSURFACE;
 			}
 

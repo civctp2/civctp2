@@ -632,13 +632,18 @@ void Scheduler::Match_Resources(const bool move_armies)
 	sint32 committed_agents = 0;
 	sint32 total_agents     = m_agents.size();
 
-	for
-	(
-	    Goal_List::iterator goal_iter  = m_goals.begin();
-	                        goal_iter != m_goals.end();
-	                      ++goal_iter
-	)
+#if defined(_DEBUG)
+	int loopCount = 0;
+	int loopCountBadUtility = -1;
+#endif
+
+	//It is best not to iterate using a for loop, as items may be erased as we go through
+	Goal_List::iterator goal_iter = m_goals.begin();
+	while(goal_iter != m_goals.end())
 	{
+#if defined(_DEBUG)
+		loopCount++;
+#endif
 		if(committed_agents >= total_agents)
 		{
 			Assert(committed_agents == total_agents);
@@ -667,6 +672,9 @@ void Scheduler::Match_Resources(const bool move_armies)
 
 			AI_DPRINTF(k_DBG_SCHEDULER, m_playerId, goal_ptr->Get_Goal_Type(), -1, ("\n"));
 			AI_DPRINTF(k_DBG_SCHEDULER, m_playerId, goal_ptr->Get_Goal_Type(), -1, ("\n"));
+#if defined(_DEBUG)
+			loopCountBadUtility = loopCount;
+#endif
 			// Assuming that the list is still sorted,
 			// and the following has only Goal::BAD_UTILITY
 			break;
@@ -685,9 +693,7 @@ void Scheduler::Match_Resources(const bool move_armies)
 			goal_ptr->Rollback_All_Agents(); // Just roll back but don't report to the build list
 
 			// Actually should be checked in the next cycle, but there still seems to be something wrong.
-			Goal_List::iterator tmp_goal_iter = goal_iter;
-			--goal_iter;
-			m_goals.erase(tmp_goal_iter);
+			m_goals.erase(goal_iter);
 
 			/*
 			// Move to the end
@@ -719,10 +725,8 @@ void Scheduler::Match_Resources(const bool move_armies)
 					// http://www.cplusplus.com/reference/stl/list/splice.html
 					//or use a decrement
 					// Sort the goal list, move iterator increment herein back
-					tmp_goal_iter = goal_iter;
-					--goal_iter;
 					goal_ptr->Rollback_All_Agents(); // Just roll back but don't report to the build list
-					Reprioritize_Goal(tmp_goal_iter);
+					Reprioritize_Goal(goal_iter);
 					continue;
 				}
 			}
@@ -745,6 +749,7 @@ void Scheduler::Match_Resources(const bool move_armies)
 					("\t\tGOAL_FAILED Not enough transporters (goal: %x)\n", goal_ptr));
 
 				Rollback_Matches_For_Goal(goal_ptr);
+				goal_iter++;
 				continue;
 			}
 		}
@@ -756,6 +761,7 @@ void Scheduler::Match_Resources(const bool move_armies)
 			AI_DPRINTF(k_DBG_SCHEDULER, m_playerId, goal_ptr->Get_Goal_Type(), -1,
 					("\t\tGOAL (goal: %x) -- No agents were committed, maybe next time. Continuing...\n",
 						goal_ptr));
+			goal_iter++;
 			continue;
 		}
 
@@ -822,10 +828,9 @@ void Scheduler::Match_Resources(const bool move_armies)
 					{
 						AI_DPRINTF(k_DBG_SCHEDULER, m_playerId, goal_ptr->Get_Goal_Type(), -1,
 							("\t\t Transporters found.\n"));
-						--goal_iter;
 						committed_agents -= goal_ptr->Get_Agent_Count();
 						goal_ptr->Rollback_All_Agents(); // No we don't want to report this to the build list
-						break;
+						continue;
 					}
 				} // if out_of_transports is true, we just fail like in the original code
 			}
@@ -865,11 +870,12 @@ void Scheduler::Match_Resources(const bool move_armies)
 				break;
 			}
 		}
+		goal_iter++;
 	}
 
 #if defined(_DEBUG)
 	sint32 committed_agents_test = 0;
-
+      loopCount = 0;
 	for
 	(
 	    Goal_List::iterator goal_iter2  = m_goals.begin();
@@ -877,6 +883,9 @@ void Scheduler::Match_Resources(const bool move_armies)
 	                      ++goal_iter2
 	)
 	{
+		loopCount++;
+		if (loopCount == loopCountBadUtility)
+			break;
 		Goal_ptr goal_ptr        = static_cast<Goal_ptr>(*goal_iter2);
 		committed_agents_test   += goal_ptr->Get_Agent_Count();
 	}

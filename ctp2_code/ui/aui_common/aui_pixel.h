@@ -34,8 +34,6 @@ public:
 		uint32 srcPitch,
 		RGBQUAD *rgbq );
 	static uint16 Get16BitRGB( uint8 red, uint8 green, uint8 blue );
-	static uint8 GetPaletteIndexedColor( uint8 red, uint8 green, uint8 blue, RGBQUAD *rgbq );
-	static uint8 GetPaletteIndexedColor( uint8 red, uint8 green, uint8 blue, HPALETTE *hpal );
 
 protected:
 
