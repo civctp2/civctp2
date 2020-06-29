@@ -2054,17 +2054,22 @@ sint32 Player::CalcWonderGold()
 	if(goldPerWaterRoute > 0 || goldPerInternationalRoute > 0) {
 		n = g_theTradePool->GetAllRoutes().Num();
 		for(i = 0; i < n; i++) {
-			sint32 owner;
-			owner = g_theTradePool->GetAllRoutes().Get(i).GetSource().GetOwner();
+			TradeRoute route = g_theTradePool->GetAllRoutes().Get(i);
+			if(!route.IsActive()) // skip deactivated routes (only exist for drawing until revisited, see #256)
+			    continue;
+			
+			Unit source(route.GetSource()); // should be valid if route.IsActive()
+			sint32 owner = source.GetOwner();
 
-				if(g_theTradePool->GetAllRoutes().Get(i).CrossesWater()) {
-					totalWonderGold += goldPerWaterRoute;
-				}
+			if(route.CrossesWater()) {
+				totalWonderGold += goldPerWaterRoute;
+			}
 
-			sint32 destOwner;
-			destOwner = g_theTradePool->GetAllRoutes().Get(i).GetDestination().GetOwner();
-			if(destOwner != owner)
+			Unit dest(route.GetDestination()); // should be valid if route.IsActive()
+			sint32 destOwner = dest.GetOwner();
+			if(destOwner != owner) {
 				totalWonderGold += goldPerInternationalRoute;
+			}
 		}
 	}
 

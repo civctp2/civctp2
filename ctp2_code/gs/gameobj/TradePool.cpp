@@ -1,3 +1,15 @@
+//----------------------------------------------------------------------------
+//
+// Notes
+//
+// m_all_routes is expected to hold active routes (trading going on)
+// and inactive routes (broken/cancelled, i.e. no trading any more) still
+// needed for drawing until discoverd by each player to be inactive
+// therefore, so far only the function TradePool::BreakOffTrade needs to be
+// limited to active routes
+//
+//----------------------------------------------------------------------------
+
 #include "c3.h"
 #include "TradePool.h"
 #include "citylayer.h"
@@ -203,6 +215,8 @@ void TradePool::BreakOffTrade(PLAYER_INDEX attack_owner, PLAYER_INDEX defense_ow
 
 	for(i = 0; i < m_all_routes->Num(); i++) {
 		TradeRoute route = m_all_routes->Access(i);
+		if(!route.IsActive()) // skip deactivated routes (only exist for drawing until revisited, see #256) and are expected to be broken already
+		    continue;
 		if((route.GetSource().GetOwner() == attack_owner &&
 			route.GetDestination().GetOwner() == defense_owner) ||
 		   (route.GetDestination().GetOwner() == attack_owner &&

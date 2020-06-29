@@ -466,11 +466,12 @@ void NetAction::Unpacketize(uint16 id, uint8* buf, uint16 size)
 								m_data[0]));
 			TradeRoute route(m_data[0]);
 
-
-			Assert((route.GetSource().GetOwner() == index) ||
+			if(route.IsActive()) { // inactive routes are expected to be broken/cancelled already
+			    Assert((route.GetSource().GetOwner() == index) ||
 				   (route.GetDestination().GetOwner() == index));
-			if(g_player[index])
+			    if(g_player[index])
 				g_player[index]->CancelTradeRoute(route);
+			    }
 			break;
 		}
 

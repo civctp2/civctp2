@@ -698,7 +698,7 @@ void TradeManager::UpdateSummaryList(ctp2_ListBox *summaryList, bool source)
 		if(!item)
 		    break;
 		
-		TradeRoute route = source ? city.CD()->GetTradeSourceList()->Access(r) : city.CD()->GetTradeDestinationList()->Access(r) ;
+		TradeRoute route = source ? city.CD()->GetTradeSourceList()->Access(r) : city.CD()->GetTradeDestinationList()->Access(r) ; // routes from TradeSourceList and TradeDestinationList are expected to be active, so skipping inactive routes should not be necessary here
 		
 		if (ctp2_Static * origin = (ctp2_Static *)item->GetChildByIndex(k_CITY_COL_SUM_INDEX))
 		    {
@@ -1184,7 +1184,7 @@ STDEHANDLER(TradeManagerKillRouteEvent)
 	if(!args->GetTradeRoute(0, route)) return GEV_HD_Continue;
 
 	if((route.GetSource().IsValid() && route.GetSource().GetOwner() == g_selected_item->GetVisiblePlayer()) ||
-	   (route.GetDestination().IsValid() && route.GetDestination().GetOwner() == g_selected_item->GetVisiblePlayer())) {
+	   (route.GetDestination().IsValid() && route.GetDestination().GetOwner() == g_selected_item->GetVisiblePlayer())) { // check appears to be robust concerning inactive routes
 
 
 		g_c3ui->AddAction(new UpdateTradeAction);
