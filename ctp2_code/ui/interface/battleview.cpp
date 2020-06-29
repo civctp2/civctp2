@@ -235,8 +235,7 @@ int battleview_AttackerSort( const void *arg1, const void *arg2 )
 
 void BattleView::DrawAttackers(void)
 {
-	sint32		i;
-	sint32		x, y;
+	sint32 i;
 
 	SortedActor	sortedAttackers[k_MAX_UNITS_PER_SIDE];
 
@@ -251,15 +250,7 @@ void BattleView::DrawAttackers(void)
 	for (i=0; i<m_numAttackers; i++) {
 		sortedAttackers[i].actor->DrawDirect(m_battleSurface, sortedAttackers[i].x, sortedAttackers[i].y);
 	}
-
-
-
-
-
-
-
 }
-
 
 int battleview_DefenderSort( const void *arg1, const void *arg2 )
 {
@@ -293,13 +284,9 @@ int battleview_DefenderSort( const void *arg1, const void *arg2 )
 #endif
 }
 
-
-
-
 void BattleView::DrawDefenders(void)
 {
-	sint32		i;
-	sint32		x, y;
+	sint32 i;
 
 	SortedActor	sortedDefenders[k_MAX_UNITS_PER_SIDE];
 
@@ -314,15 +301,7 @@ void BattleView::DrawDefenders(void)
 	for (i=0; i<m_numDefenders; i++) {
 		sortedDefenders[i].actor->DrawDirect(m_battleSurface, sortedDefenders[i].x, sortedDefenders[i].y);
 	}
-
-
-
-
-
-
-
 }
-
 
 void BattleView::RemoveAttacker(sint32 index)
 {
