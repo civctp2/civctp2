@@ -3518,8 +3518,8 @@ void TiledMap::DrawCityNames(aui_Surface * surf, sint32 layer)
 						hasSleepingUnits     = FALSE,
 						isWatchful           = FALSE,
 						isCapitol            = FALSE,
-						HasReligionIcon      = FALSE,
-						HasSpecialIcon       = FALSE,
+						hasReligionIcon      = FALSE,
+						hasSpecialIcon       = FALSE,
 						isProdIcon			 = FALSE,
 						isPollutionRisk      = FALSE;
 				sint32	bioInfectedOwner     = 0,
@@ -3571,8 +3571,8 @@ void TiledMap::DrawCityNames(aui_Surface * surf, sint32 layer)
 
 					slaveBits            = ucell.m_unseenCell->GetSlaveBits();
 					isCapitol            = ucell.m_unseenCell->IsCapitol(); //emod
-					HasReligionIcon      = ucell.m_unseenCell->IsReligionIcon(); //emod
-					HasSpecialIcon       = ucell.m_unseenCell->IsSpecialIcon(); //emod
+					hasReligionIcon      = ucell.m_unseenCell->IsReligionIcon(); //emod
+					hasSpecialIcon       = ucell.m_unseenCell->IsSpecialIcon(); //emod
 					isPollutionRisk      = ucell.m_unseenCell->IsPollutionRisk();
 
 					if (pop > 0)
@@ -3672,8 +3672,8 @@ void TiledMap::DrawCityNames(aui_Surface * surf, sint32 layer)
 							if(owner == g_selected_item->GetVisiblePlayer())
 							{
 								drawOurCity = true;
-								HasReligionIcon  = cityData->HasReligionIcon();
-								HasSpecialIcon   = cityData->HasSpecialIcon();
+								hasReligionIcon  = cityData->HasReligionIcon();
+								hasSpecialIcon   = cityData->HasSpecialIcon();
 
 								if (!cityData->GetBuildQueue()->GetHead()) {
 									drawQueueEmpty   = true;
@@ -3760,12 +3760,12 @@ void TiledMap::DrawCityNames(aui_Surface * surf, sint32 layer)
 
 							AddDirtyRectToMix(outerBuildItemRect);
 						}
-						outerCityNameRect.right += 1; // to allow all icons to move one to the left
 						RECT cityIconsRect = DrawCityIcons(*surf, owner, fog, outerCityNameRect,isBioInfected,
 								isNanoInfected, isConverted, isFranchised, isInjoined, wasHappinessAttacked,
 								bioInfectedOwner, nanoInfectedOwner, convertedOwner, convertedLoss, franchiseOwner,
 								franchiseLoss, injoinedOwner, happinessAttackOwner,hasAirport, isPollutionRisk, alpha);
-						if (fog) {
+						if (fog)
+						{
 							cityIconsRect.left -= 1;
 							primitives_ClippedShadowRect16(*surf, cityIconsRect);
 						}
@@ -3777,26 +3777,31 @@ void TiledMap::DrawCityNames(aui_Surface * surf, sint32 layer)
 						}
 						AddDirtyRectToMix(cityEnslavedRect);
 
-						outerCityNameRect.right -= 1;
 						primitives_ClippedFrameRect16(*surf, outerCityNameRect, playerColor, alpha);
-
 						if (fog) {
 							primitives_ClippedShadowRect16(*surf, outerCityNameRect);
 						}
 						AddDirtyRectToMix(outerCityNameRect);
 
-						//if (CityIcons) {
+						RECT religionIconsRect = DrawCityReligionIcons(*surf, pos, owner, cityIconsRect,
+								hasReligionIcon, alpha);
+						if (fog)
+						{
+							religionIconsRect.left -= 1;
+							primitives_ClippedShadowRect16(*surf, religionIconsRect);
+						}
+						AddDirtyRectToMix(religionIconsRect);
 
-						/*This may be causing problems in DrawColorizedOverlay,
-						but I left it enabled since we still have the religion mod.*/
-						// TODO: test this function by adding some icon
-						DrawCityReligionIcons(surf, pos, owner, fog, cityIconsRect, HasReligionIcon);
-
-						/*This will definitely cause problems now the city name is higher up,
-						this stuff will try to draw above the city name and cause problems if
-						show city production is enabled. As far as I can see this is not used
-						at all at the moment though.
-						DrawCitySpecialIcons(surf, pos, owner, fog, boxRect, HasSpecialIcon);*/
+						/* As far as could be determined this is not used.
+						RECT specialIconsRect = DrawCitySpecialIcons(*surf, pos, owner, religionIconsRect,
+								hasSpecialIcon, alpha);
+						if (fog)
+						{
+							specialIconsRect.left -= 1;
+							primitives_ClippedShadowRect16(*surf, specialIconsRect);
+						}
+						AddDirtyRectToMix(specialIconsRect);
+						*/
 					}
 				}
 			}
@@ -4032,7 +4037,7 @@ RECT TiledMap::DrawCityIcons(aui_Surface & surf, sint32 owner, bool fog, const R
 		bool hasAirport, bool isPollutionRisk, uint8 alpha)
 {
 	TileSet * tileSet     = GetTileSet();
-	RECT      outerRect   = { outerCityRect.right-1, outerCityRect.bottom, outerCityRect.right-1, outerCityRect.bottom };
+	RECT      outerRect   = { outerCityRect.right, outerCityRect.bottom, outerCityRect.right, outerCityRect.bottom };
 	Pixel16   playerColor = GetPlayerColor(owner);
 
 	if (isPollutionRisk)
@@ -4232,7 +4237,7 @@ RECT TiledMap::DrawCityEnslaved(aui_Surface & surf, const RECT & outerCityRect, 
 		Pixel16 playerColor = GetPlayerColor(owner);
 		uint32 bits = slaveBits;
 		POINT dimensions = GetTileSet()->GetMapIconDimensions(slave);
-		RECT outerRect = { outerCityRect.right-2, outerCityRect.top+1, outerCityRect.right-2, outerCityRect.top+1};
+		RECT outerRect = { outerCityRect.right-1, outerCityRect.top+1, outerCityRect.right-1, outerCityRect.top+1};
 		for (sint32 i = 0; i < k_MAX_PLAYERS; i++)
 		{
 			if (bits & 1)
@@ -4903,163 +4908,132 @@ void TiledMap::AddChatDirtyRectToMap()
 	}
 }
 
-//new DrawCityReligionIcons to allow for multiple religions bound only to the number of mapicons
-// changed from religion to just special icons to cover both types
-void TiledMap::DrawCityReligionIcons
-	(
-		aui_Surface *       surf,
-		MapPoint const &    pos,
-		sint32              owner,
-		bool                fog,
-		RECT &              popRect,
-		BOOL                HasReligionIcon
-	)
+RECT TiledMap::DrawCityReligionIcons(aui_Surface & surf, const MapPoint & pos, sint32 owner, const RECT & rect,
+		bool hasReligionIcon, uint8 alpha)
 {
 	Unit unit;
-	if(!g_theWorld->GetTopVisibleUnit(pos,unit))
-		return;
-
-	TileSet *   tileSet     = GetTileSet();
-	POINT       iconDim     = tileSet->GetMapIconDimensions(MAPICON_BIODISEASE);
-	RECT        iconRect;
-
-	iconRect.left   = popRect.right + 3;
-	iconRect.right  = iconRect.left + iconDim.x + 1;
-	iconRect.top    = popRect.top;
-	iconRect.bottom = iconRect.top + iconDim.y + 1;
-
-	if (iconRect.left < 0 || iconRect.top < 0 ||
-		iconRect.right >= surf->Width() ||
-		iconRect.bottom >= surf->Height())
-		return;
-
-	Pixel16     color       = GetPlayerColor(owner, fog);
-
-	if(HasReligionIcon)
-	{
-		iconRect.left   = popRect.left;
-		iconRect.right  = iconRect.left + iconDim.x + 1;
-		iconRect.top    = popRect.bottom;
-		iconRect.bottom = popRect.top + iconDim.y + 1;
-		sint32  cityIcon = 0;
-		CityData *cityData = unit.GetData()->GetCityData();
-		for(sint32 i = 0; i < g_theBuildingDB->NumRecords(); i++)
-		{
-			if(buildingutil_Get(i, owner)->GetIsReligionIconIndex(cityIcon))
-			{
-				if(cityData->GetImprovements() & ((uint64)1 << i))
-				{
-					//tileSet->GetMapIconData(cityIcon);
-					color = GetPlayerColor(owner, fog);  //optional
-					DrawColorizedOverlay(tileSet->GetMapIconData(cityIcon), surf, iconRect.left, iconRect.top, color);
-					AddDirtyRectToMix(iconRect);
-					iconRect.left += iconDim.x;
-					iconRect.right += iconDim.x;
-				}
-			}
-		}
-		sint32  wonderIcon = 0;
-		for(sint32 j = 0; j < g_theWonderDB->NumRecords(); j++)
-		{
-			if (wonderutil_Get(j, owner)->GetIsReligionIconIndex(wonderIcon))
-			{
-				if(cityData->GetBuiltWonders() & ((uint64)1 << j))
-				{
-					//tileSet->GetMapIconData(cityIcon);
-					color = GetPlayerColor(owner, fog);  //optional
-					DrawColorizedOverlay(tileSet->GetMapIconData(wonderIcon), surf, iconRect.left, iconRect.top, color);
-					AddDirtyRectToMix(iconRect);
-					iconRect.left += iconDim.x;
-					iconRect.right += iconDim.x;
-				}
-			}
-		}
+	if(!g_theWorld->GetTopVisibleUnit(pos,unit)) {
+		return rect;
 	}
 
-	if (iconRect.left < 0 || iconRect.top < 0 ||
-		iconRect.right >= surf->Width() ||
-		iconRect.bottom >= surf->Height())
-		return;
-}
+	TileSet * tileSet     = GetTileSet();
+	POINT     dimensions  = tileSet->GetMapIconDimensions(MAPICON_BIODISEASE);
+	RECT      outerRect   = { rect.right, rect.bottom, rect.right, rect.bottom };
+	Pixel16   playerColor = GetPlayerColor(owner);
 
-void TiledMap::DrawCitySpecialIcons
-	(
-		aui_Surface *      surf,
-		MapPoint const &   pos,
-		sint32             owner,
-		bool               fog,
-		RECT &             popRect,
-		BOOL               HasSpecialIcon
-	)
-{
-	Unit unit;
-	if(!g_theWorld->GetTopVisibleUnit(pos,unit))
-		return;
-
-	//Future Use - use special icon for everything else and just position the icons elsewhere
-	TileSet *   tileSet     = GetTileSet();
-	POINT       iconDim     = tileSet->GetMapIconDimensions(MAPICON_BIODISEASE);
-	RECT        iconRect;
-
-	iconRect.left   = popRect.right + 3;
-	iconRect.right  = iconRect.left + iconDim.x + 1;
-	iconRect.top    = popRect.top;
-	iconRect.bottom = iconRect.top + iconDim.y + 1;
-
-	if (iconRect.left < 0 || iconRect.top < 0 ||
-		iconRect.right >= surf->Width() ||
-		iconRect.bottom >= surf->Height())
-		return;
-
-	Pixel16     color       = GetPlayerColor(owner, fog);
-
-	iconRect.left   = popRect.left;
-	iconRect.right  = iconRect.left + iconDim.x + 1;
-	iconRect.top    = popRect.bottom;
-	iconRect.bottom = popRect.top + iconDim.y + 1;
-	sint32  cityIcon = 0;
-	CityData *cityData = unit.GetData()->GetCityData();
-
-	if(HasSpecialIcon)
+	if (hasReligionIcon)
 	{
-		for(sint32 i = 0; i < g_theBuildingDB->NumRecords(); i++)
+		CityData *cityData = unit.GetData()->GetCityData();
+		for (sint32 i = 0; i < g_theBuildingDB->NumRecords(); i++)
 		{
-			if(buildingutil_Get(i, owner)->GetShowCityIconTopIndex(cityIcon))
+			sint32 religionIcon = 0;
+			if (buildingutil_Get(i, owner)->GetIsReligionIconIndex(religionIcon))
 			{
-				if(cityData->GetImprovements() & ((uint64)1 << i))
+				if (cityData->GetImprovements() & ((uint64) 1 << i))
 				{
-					//tileSet->GetMapIconData(cityIcon);
-					color = GetPlayerColor(owner, fog);  //optional
-					DrawColorizedOverlay(tileSet->GetMapIconData(cityIcon), surf, iconRect.left, iconRect.top, color);
-					AddDirtyRectToMix(iconRect);
-					iconRect.left += iconDim.x;
-					iconRect.right += iconDim.x;
+					Pixel16 * icon = tileSet->GetMapIconData(religionIcon);
+					Assert(icon);
+					if (icon)
+					{
+						DrawClippedColorizedOverlay(icon, surf, outerRect.right - 1, outerRect.bottom - dimensions.y,
+						                            playerColor, alpha);
+						RECT frame = {outerRect.right - 1, outerRect.bottom - dimensions.y,
+						              outerRect.right - 1 + dimensions.x, outerRect.bottom };
+						primitives_ClippedFrameRect16(surf, frame, playerColor, alpha);
+						outerRect.top = outerRect.bottom - dimensions.y;
+						outerRect.right += dimensions.x - 1;
+					}
 				}
 			}
 		}
 
 		sint32 wonderIcon = 0;
-		for(sint32 j = 0; j < g_theWonderDB->NumRecords(); j++)
+		for (sint32 i = 0; i < g_theWonderDB->NumRecords(); i++)
 		{
-			if (wonderutil_Get(j, owner)->GetShowCityIconTopIndex(wonderIcon))
+			if (wonderutil_Get(i, owner)->GetIsReligionIconIndex(wonderIcon))
 			{
-				if(cityData->GetBuiltWonders() & ((uint64)1 << j))
+				if (cityData->GetBuiltWonders() & ((uint64) 1 << i))
 				{
-					//tileSet->GetMapIconData(cityIcon);
-					color = GetPlayerColor(owner, fog);  //optional
-					DrawColorizedOverlay(tileSet->GetMapIconData(wonderIcon), surf, iconRect.left, iconRect.top, color);
-					AddDirtyRectToMix(iconRect);
-					iconRect.left += iconDim.x;
-					iconRect.right += iconDim.x;
+					Pixel16 * icon = tileSet->GetMapIconData(wonderIcon);
+					Assert(icon);
+					if (icon)
+					{
+						DrawClippedColorizedOverlay(icon, surf, outerRect.right - 1, outerRect.bottom - dimensions.y,
+						                            /*playerColor*/ 0xF800, alpha);
+						RECT frame = {outerRect.right - 1, outerRect.bottom - dimensions.y,
+						              outerRect.right - 1 + dimensions.x, outerRect.bottom };
+						primitives_ClippedFrameRect16(surf, frame, playerColor, alpha);
+						outerRect.top = outerRect.bottom - dimensions.y;
+						outerRect.right += dimensions.x - 1;
+					}
 				}
 			}
 		}
 	}
+	return outerRect;
+}
 
-	if (iconRect.left < 0 || iconRect.top < 0 ||
-		iconRect.right >= surf->Width() ||
-		iconRect.bottom >= surf->Height())
-		return;
+RECT TiledMap::DrawCitySpecialIcons(aui_Surface & surf, const MapPoint & pos, sint32 owner, const RECT & rect,
+		bool hasSpecialIcon, uint8 alpha)
+{
+	Unit unit;
+	if(!g_theWorld->GetTopVisibleUnit(pos,unit)) {
+		return rect;
+	}
 
-	//Add Corporation Icons?
+	TileSet * tileSet     = GetTileSet();
+	POINT     dimensions  = tileSet->GetMapIconDimensions(MAPICON_BIODISEASE);
+	RECT      outerRect   = { rect.right, rect.bottom, rect.right, rect.bottom };
+	Pixel16   playerColor = GetPlayerColor(owner);
+
+	if (hasSpecialIcon)
+	{
+		CityData *cityData = unit.GetData()->GetCityData();
+		for (sint32 i = 0; i < g_theBuildingDB->NumRecords(); i++)
+		{
+			sint32 religionIcon = 0;
+			if (buildingutil_Get(i, owner)->GetShowCityIconTopIndex(religionIcon))
+			{
+				if (cityData->GetImprovements() & ((uint64) 1 << i))
+				{
+					Pixel16 * icon = tileSet->GetMapIconData(religionIcon);
+					Assert(icon);
+					if (icon)
+					{
+						DrawClippedColorizedOverlay(icon, surf, outerRect.right - 1, outerRect.bottom - dimensions.y,
+						                            playerColor, alpha);
+						RECT frame = {outerRect.right - 1, outerRect.bottom - dimensions.y,
+						              outerRect.right - 1 + dimensions.x, outerRect.bottom };
+						primitives_ClippedFrameRect16(surf, frame, playerColor, alpha);
+						outerRect.top = outerRect.bottom - dimensions.y;
+						outerRect.right += dimensions.x - 1;
+					}
+				}
+			}
+		}
+
+		sint32 wonderIcon = 0;
+		for (sint32 i = 0; i < g_theWonderDB->NumRecords(); i++)
+		{
+			if (wonderutil_Get(i, owner)->GetShowCityIconTopIndex(wonderIcon))
+			{
+				if (cityData->GetBuiltWonders() & ((uint64) 1 << i))
+				{
+					Pixel16 * icon = tileSet->GetMapIconData(wonderIcon);
+					Assert(icon);
+					if (icon)
+					{
+						DrawClippedColorizedOverlay(icon, surf, outerRect.right - 1, outerRect.bottom - dimensions.y,
+								/*playerColor*/ 0xF800, alpha);
+						RECT frame = {outerRect.right - 1, outerRect.bottom - dimensions.y,
+						              outerRect.right - 1 + dimensions.x, outerRect.bottom };
+						primitives_ClippedFrameRect16(surf, frame, playerColor, alpha);
+						outerRect.top = outerRect.bottom - dimensions.y;
+						outerRect.right += dimensions.x - 1;
+					}
+				}
+			}
+		}
+	}
+	return outerRect;
 }

@@ -430,10 +430,6 @@ public:
 
 	void		DrawCityNames(aui_Surface *surf, sint32 layer);
 
-	//EMOD to add Civ4 Style Icons
-	void		DrawCityReligionIcons(aui_Surface *surf, MapPoint const & pos, sint32 owner, bool fog, RECT &popRect, BOOL HasReligionIcon );
-	void		DrawCitySpecialIcons (aui_Surface *surf, MapPoint const & pos, sint32 owner, bool fog, RECT &popRect, BOOL HasSpecialIcon);
-
 	void		NextPlayer(void);
 	void		CopyVision();
 	const Vision		*GetLocalVision(void) const { return m_localVision; }
@@ -519,6 +515,11 @@ protected:
 				bool hasAirport, bool isPollutionRisk, uint8 alpha);
 	RECT     DrawCityEnslaved(aui_Surface & surf, const RECT & outerCityRect, sint32 owner, uint32 slaveBits,
 				uint8 alpha);
+	//EMOD to add Civ4 Style Icons
+	RECT     DrawCityReligionIcons(aui_Surface & surf, const MapPoint & pos, sint32 owner, const RECT & rect,
+				bool hasReligionIcon, uint8 alpha);
+	RECT     DrawCitySpecialIcons (aui_Surface & surf, const MapPoint & pos, sint32 owner, const RECT & rect,
+				bool hasSpecialIcon, uint8 alpha);
 
 	void     DrawClippedColorizedOverlay(Pixel16 * data, aui_Surface & surface, sint32 x, sint32 y, Pixel16 color,
 				uint8 alpha);
