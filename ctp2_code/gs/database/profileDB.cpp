@@ -376,7 +376,10 @@ ProfileDB::ProfileDB()
 	Var("CheatAge"                   , PV_NUM   , &m_cheat_age                  , NULL, false);
 	Var("DontKillMessages"           , PV_BOOL  , &m_dontKillMessages           , NULL, false);
 	Var("AIPopCheat"                 , PV_BOOL  , &m_aiPopCheat                 , NULL, false);
-	Var("ShowCityNames"              , PV_NUM   , &m_showCityNameAlpha          , NULL, false);
+	// Note: ShowCityNames is kept for backward compatibility (and may be deprecated in the future)
+	// Note: order is important ShowCityNameAlpha should be defined AFTER ShowCityName
+	Var("ShowCityNames"              , PV_BOOL  , &m_showCityNameAlpha          , NULL, false);
+	Var("ShowCityNameAlpha"          , PV_NUM   , &m_showCityNameAlpha          , NULL, false);
 	Var("ShowArmyNames"              , PV_BOOL  , &m_showArmyNames              , NULL, false);
 	Var("ShowTradeRoutes"            , PV_BOOL  , &m_showTradeRoutes            , NULL, false);
 
@@ -596,16 +599,6 @@ BOOL ProfileDB::Parse(FILE *file)
 			if(stricmp(var->m_name, name) == 0) {
 				found = true;
 				switch(var->m_type) {
-					case PV_NUM:
-						if(*value == 0) {
-							c3errors_ErrorDialog("Profile", "Line %d: no value found", linenum);
-							return FALSE;
-						}
-						*var->m_numValue = atoi(value);
-						if (*var->m_numValue) {
-							break;
-						}
-						// else fall-through and read possible boolean values
 					case PV_BOOL:
 						if(*value == 0) {
 							c3errors_ErrorDialog("Profile", "Line %d: no value found", linenum);
@@ -623,6 +616,13 @@ BOOL ProfileDB::Parse(FILE *file)
 							c3errors_ErrorDialog("Profile", "Line %d: %s is an illegal value for %s", value, var->m_name);
 							return FALSE;
 						}
+						break;
+					case PV_NUM:
+						if(*value == 0) {
+							c3errors_ErrorDialog("Profile", "Line %d: no value found", linenum);
+							return FALSE;
+						}
+						*var->m_numValue = atoi(value);
 						break;
 					case PV_STRING:
 						if(strlen(value) > k_MAX_NAME_LEN - 1) {
