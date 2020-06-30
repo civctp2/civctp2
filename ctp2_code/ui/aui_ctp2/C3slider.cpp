@@ -24,7 +24,7 @@
 //
 // Modifications from the original Activision code:
 //
-// - Initialized local variables. (Sep 9th 2005 Martin Gühmann)
+// - Initialized local variables. (Sep 9th 2005 Martin GÃ¼hmann)
 //
 //----------------------------------------------------------------------------
 
@@ -214,15 +214,8 @@ void C3Slider::MouseRGrabInside( aui_MouseEvent *mouseData )
 		MouseRGrabOutside( mouseData );
 }
 
-
-
-
 AUI_ERRCODE C3Slider::DrawThis( aui_Surface *surface, sint32 x, sint32 y )
 {
-
-
-
-
 	if ( IsHidden() ) return AUI_ERRCODE_OK;
 
 	if ( !surface ) surface = m_window->TheSurface();
@@ -253,36 +246,34 @@ AUI_ERRCODE C3Slider::DrawThis( aui_Surface *surface, sint32 x, sint32 y )
 	{
 		if ( m_orientation == AUI_RANGER_ORIENTATION_VERTICAL )
 		{
-			sint32 spacing = m_height / ( m_maxY - m_minY ) - 1;
-			RECT tickRect;
-			for ( sint32 i = m_maxY - m_minY; i >= 0; i -= m_ticks )
+			double spacing = ((double) m_height - m_minThumbSize) / (m_maxY - m_minY);
+			for (sint32 i = m_maxY - m_minY; i >= 0; i -= m_ticks)
 			{
-				tickRect.top =
-					i * spacing + dirtyRect.top + m_minThumbSize / 2;
-				tickRect.left = dirtyRect.left + 6;
+				RECT tickRect;
+				tickRect.top    = (sint32) (i * spacing) + dirtyRect.top + m_minThumbSize / 2;
+				tickRect.left   = dirtyRect.left + 6;
 				tickRect.bottom = tickRect.top + 3;
-				tickRect.right = tickRect.left + 6;
-				primitives_BevelRect16( surface, &tickRect, 1, 1, 16, 16 );
-				tickRect.left = dirtyRect.right - 12;
-				tickRect.right = dirtyRect.right - 6;
-				primitives_BevelRect16( surface, &tickRect, 1, 1, 16, 16 );
+				tickRect.right  = tickRect.left + 6;
+				primitives_BevelRect16(surface, &tickRect, 1, 1, 16, 16);
+				tickRect.left   = dirtyRect.right - 12;
+				tickRect.right  = dirtyRect.right - 6;
+				primitives_BevelRect16(surface, &tickRect, 1, 1, 16, 16);
 			}
 		}
 		else
 		{
-			sint32 spacing = m_width / ( m_maxX - m_minX ) - 1;
-			RECT tickRect;
-			for ( sint32 i = m_maxX - m_minX; i >= 0; i -= m_ticks )
+			double spacing = ((double) m_width - m_minThumbSize) / (m_maxX - m_minX);
+			for (sint32 i = m_maxX - m_minX; i >= 0; i -= m_ticks )
 			{
-				tickRect.left =
-					i * spacing + dirtyRect.left + m_minThumbSize / 2;
-				tickRect.top = dirtyRect.top + 6;
-				tickRect.right = tickRect.left + 3;
+				RECT tickRect;
+				tickRect.left   = (sint32)(i * spacing) + dirtyRect.left + m_minThumbSize / 2;
+				tickRect.top    = dirtyRect.top + 6;
+				tickRect.right  = tickRect.left + 3;
 				tickRect.bottom = tickRect.top + 6;
-				primitives_BevelRect16( surface, &tickRect, 1, 1, 16, 16 );
-				tickRect.top = dirtyRect.bottom - 12;
+				primitives_BevelRect16(surface, &tickRect, 1, 1, 16, 16);
+				tickRect.top    = dirtyRect.bottom - 12;
 				tickRect.bottom = dirtyRect.bottom - 6;
-				primitives_BevelRect16( surface, &tickRect, 1, 1, 16, 16 );
+				primitives_BevelRect16(surface, &tickRect, 1, 1, 16, 16);
 			}
 		}
 	}
@@ -293,7 +284,6 @@ AUI_ERRCODE C3Slider::DrawThis( aui_Surface *surface, sint32 x, sint32 y )
 	primitives_BevelRect16( surface, &rect, 1, 1, 16, 16 );
 	if ( IsActive() )
 	{
-
 		primitives_BevelRect16( surface, &rect, 1, 1, 16, 16 );
 	}
 
