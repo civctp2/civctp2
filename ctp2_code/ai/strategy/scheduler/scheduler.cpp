@@ -693,7 +693,7 @@ void Scheduler::Match_Resources(const bool move_armies)
 			goal_ptr->Rollback_All_Agents(); // Just roll back but don't report to the build list
 
 			// Actually should be checked in the next cycle, but there still seems to be something wrong.
-			m_goals.erase(goal_iter);
+			goal_iter = m_goals.erase(goal_iter);
 
 			/*
 			// Move to the end
@@ -725,8 +725,11 @@ void Scheduler::Match_Resources(const bool move_armies)
 					// http://www.cplusplus.com/reference/stl/list/splice.html
 					//or use a decrement
 					// Sort the goal list, move iterator increment herein back
+					tmp_goal_iter = goal_iter;
+					--goal_iter;
 					goal_ptr->Rollback_All_Agents(); // Just roll back but don't report to the build list
-					Reprioritize_Goal(goal_iter);
+					Reprioritize_Goal(tmp_goal_iter);
+					goal_iter++;
 					continue;
 				}
 			}
