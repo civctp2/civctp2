@@ -112,7 +112,7 @@ void UnitSpriteGroup::Draw(UNITACTION action, sint32 frame, sint32 drawX, sint32
 	Assert(action >= UNITACTION_MOVE && action <= UNITACTION_WORK);
 
 	if (// UNITACTION_IDLE only supports default facing
-		(action == UNITACTION_IDLE && (m_sprites[action] == NULL || facing != k_DEFAULTSPRITEFACING))
+		(action == UNITACTION_IDLE && (m_sprites[action] == NULL || !Sprite::IsIdleFacing(facing)))
 		|| (action == UNITACTION_ATTACK && m_sprites[action] == NULL)
 		|| (action == UNITACTION_MOVE && m_sprites[UNITACTION_IDLE] == NULL)
 		)

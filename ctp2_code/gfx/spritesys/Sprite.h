@@ -107,6 +107,11 @@ typedef  void (Sprite::*_SPRITE_DRAWLOW2)(Pixel16 *frame,
 class Sprite
 {
 public:
+	static bool IsIdleFacing(sint32 facing)
+	{
+		static const int k_MIRRORED_IDLE_SPRITEFACING = 5;
+		return facing == k_DEFAULTSPRITEFACING || facing == k_MIRRORED_IDLE_SPRITEFACING;
+	}
 	static bool IsReversedFacing(sint32 facing) { return facing >= 5; }
 
 	Sprite();
