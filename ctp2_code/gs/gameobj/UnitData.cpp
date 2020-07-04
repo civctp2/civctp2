@@ -1869,7 +1869,7 @@ void UnitData::BeginTurnVision(PLAYER_INDEX player)
 		m_temp_visibility &= ~(1 << player);
 		m_temp_visibility_array.NextTurn(player);
 		m_temp_visibility |= m_temp_visibility_array.GetCurrentVisibility(player);
-		if(g_player[player]->m_hasGlobalRadar && m_army.m_id && !m_army.IsInvisibleForGlobeSat() && GetDBRec()->GetVisionClassStandard()) {
+		if(g_player[player]->m_hasGlobalRadar && m_army.IsValid() && !m_army.IsInvisibleForGlobeSat() && GetDBRec()->GetVisionClassStandard()) {
 			m_temp_visibility |= (1 << player);
 			m_visibility |= (1 << player);
 		}
@@ -2547,7 +2547,7 @@ void UnitData::DoVision(UnitDynamicArray *revealedUnits)
 	if(!IsCity())
 	{
 		m_visibility = (1 << m_owner);
-		if(m_army.m_id && !m_army.IsInvisibleForGlobeSat()) // GlobeSat does not reveal all units (i.e. some units cannot be distinguished from ordinary civilians like the common population or traders)
+		if(m_army.IsValid() && !m_army.IsInvisibleForGlobeSat()) // GlobeSat does not reveal all units (i.e. some units cannot be distinguished from ordinary civilians like the common population or traders)
 		    m_visibility |= g_theWonderTracker->GlobeSatFlags();
 		m_radar_visibility = 1 << m_owner;
 		m_ever_visible |= m_visibility;
