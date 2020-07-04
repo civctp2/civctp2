@@ -195,7 +195,7 @@ UnseenCell::UnseenCell(const MapPoint & point)
 												    city.CD()->GetDesiredSpriteIndex(),
 												    m_citySize);
 
-				newActor->SetUnitVisibility((1 << g_selected_item->GetVisiblePlayer())
+				newActor->SetUnitVisibility((1 << g_selected_item->GetVisiblePlayerID())
 										    | actor->GetUnitVisibility());
 
 				newActor->CopyFlags(*actor);

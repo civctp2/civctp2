@@ -31,34 +31,34 @@
 // - Unloaded icons. These were causing an exit-popup in the debug version.
 // - Turn display for capitalization and infrastructure does not show
 //   anymore the number of turns to completion in the list box of the build
-//   manager and city manager, by Martin Gühmann.
+//   manager and city manager, by Martin GÃ¼hmann.
 // - Turn display on the turn button under the image button is disabled for
-//   capitalization and infrastructure as well, by Martin Gühmann.
+//   capitalization and infrastructure as well, by Martin GÃ¼hmann.
 // - Rush buy costs aren't shown anymore for capitalization and
-//   infrastructure, by Martin Gühmann.
+//   infrastructure, by Martin GÃ¼hmann.
 // - Rush buy costs aren't shown anymore for items that aren't at the front
-//   of the build queue, by Martin Gühmann.
+//   of the build queue, by Martin GÃ¼hmann.
 // - Turn count on the turn count button is now updated when another item is
-//   selected than the first item of the build queue, by Martin Gühmann.
+//   selected than the first item of the build queue, by Martin GÃ¼hmann.
 // - #01 Standardization of city selection and focus handling
 //   (L. Hirth 6/2004)
 // - Net food and net production are now displayed insted of gross food and
 //   gross production. So it is done for science and gold. This helps the
 //   player better to know how much food is needed, as a negative amount is
-//   displayed if the city starves. - April 6th 2005 Martin Gühmann
+//   displayed if the city starves. - April 6th 2005 Martin GÃ¼hmann
 // - Added OptimizeSpecialists function for specialists optimisation option.
-//   - April 7th 2005 Martin Gühmann
+//   - April 7th 2005 Martin GÃ¼hmann
 // - The Project method now updates also the sprite of the city to support
 //   new turns to next pop feature, when you change the specialist
 //   distribution, unfortunatly it does work as exspected.
-//   - April 23rd 2005 Martin Gühmann
-// - Added National Manager button and functions callback. - July 24th 2005 Martin Gühmann
-// - Added preparations for city resource calculation replacement. (Aug 12th 2005 Martin Gühmann)
-// - Initialized local variables. (Sep 9th 2005 Martin Gühmann)
-// - Standartized code (May 21st 2006 Martin Gühmann)
-// - Made appear the progress bar of the build item icon button. (Feb 4th 2007 Martin Gühmann)
-// - Pressing the build item icon button opens now the build manager. (Feb 4th 2007 Martin Gühmann)
-// - Replaced old const database by new one. (5-Aug-2007 Martin Gühmann)
+//   - April 23rd 2005 Martin GÃ¼hmann
+// - Added National Manager button and functions callback. - July 24th 2005 Martin GÃ¼hmann
+// - Added preparations for city resource calculation replacement. (Aug 12th 2005 Martin GÃ¼hmann)
+// - Initialized local variables. (Sep 9th 2005 Martin GÃ¼hmann)
+// - Standartized code (May 21st 2006 Martin GÃ¼hmann)
+// - Made appear the progress bar of the build item icon button. (Feb 4th 2007 Martin GÃ¼hmann)
+// - Pressing the build item icon button opens now the build manager. (Feb 4th 2007 Martin GÃ¼hmann)
+// - Replaced old const database by new one. (5-Aug-2007 Martin GÃ¼hmann)
 // - Completely redesigned the window. Removed all the tabs, and added them
 //	 to sections of the window that are always visible. (28-Mar-2009 Maq)
 //
@@ -266,7 +266,6 @@ CityWindow::CityWindow(AUI_ERRCODE *err)
 
 	if (aui_Ldl::GetObject(s_cityWindowBlock, "OptimizeSpecialistButton"))
 	{
-		// Added by Martin Gühmann for specialist optimization option:
 		*err = aui_Ldl::SetActionFuncAndCookie(s_cityWindowBlock, "OptimizeSpecialistButton", CityWindow::OptimizeSpecialists, NULL);
 		Assert(*err == AUI_ERRCODE_OK);
 	}
@@ -513,11 +512,11 @@ AUI_ERRCODE CityWindow::Display(CityData *city)
 	if(city)
 		s_cityWindow->SetCity(city);
 	else {
-		if(g_player[g_selected_item->GetVisiblePlayer()]->m_all_cities->Num() < 1) {
+		if(g_selected_item->GetVisiblePlayer()->m_all_cities->Num() < 1) {
 
 			return AUI_ERRCODE_OK;
 		}
-		s_cityWindow->SetCity(g_player[g_selected_item->GetVisiblePlayer()]->m_all_cities->Access(0).CD());
+		s_cityWindow->SetCity(g_selected_item->GetVisiblePlayer()->m_all_cities->Access(0).CD());
 	}
 
 	AUI_ERRCODE err = g_c3ui->AddWindow(s_cityWindow->m_window);
@@ -618,7 +617,7 @@ void CityWindow::Update()
 
 	ctp2_DropDown *cityDD = (ctp2_DropDown *)aui_Ldl::GetObject("CityWindow.CityList.Pulldown");
 	if(cityDD) {
-		UnitDynamicArray *cityList = g_player[g_selected_item->GetVisiblePlayer()]->m_all_cities;
+		UnitDynamicArray * cityList = g_selected_item->GetVisiblePlayer()->m_all_cities;
 
 		cityDD->Clear();
 
@@ -679,7 +678,7 @@ void CityWindow::Update()
 
 	for(sint32 i = 0; i < CW_RES_MAX; i++) {
 
-		Player *player = g_player[g_selected_item->GetVisiblePlayer()];
+		Player * player = g_selected_item->GetVisiblePlayer();
 		sint32 amt = 0;
 
 		if(m_resVal[i]) {
@@ -811,7 +810,6 @@ void CityWindow::Update()
 	}
 
 	if(m_globalFood) {
-		// Display net food instead of gross food. - Martin Gühmann
 		sprintf(buf, "%d", m_cityData->GetNetCityFood());
 		m_globalFood->SetText(buf);
 	}
@@ -827,7 +825,6 @@ void CityWindow::Update()
 	}
 
 	if(m_globalProduction) {
-		// Display net production instead of gross production - Martin Gühmann
 		sprintf(buf, "%d", m_cityData->GetNetCityProduction());
 		m_globalProduction->SetText(buf);
 	}
@@ -905,7 +902,6 @@ void CityWindow::UpdateBuildTabs()
 	MBCHAR buf[20];
 	if(turnCountButton) {
 		sint32 turns = m_cityData->HowMuchLonger();
-		//Added by Martin Gühmann to disable the turn count display for capitalization and infrastructure
 		if(turns >= 0 && turns < 0x7fffffff
 		&& m_cityData->GetBuildQueue()->GetHead()->m_category != k_GAME_OBJ_TYPE_CAPITALIZATION
 		&& m_cityData->GetBuildQueue()->GetHead()->m_category != k_GAME_OBJ_TYPE_INFRASTRUCTURE)
@@ -990,11 +986,10 @@ void CityWindow::UpdateBuildTabs()
 //----------------------------------------------------------------------------
 void CityWindow::UpdateBuildTabButtons()
 {
-	sint32 const	visiblePlayer	= g_selected_item->GetVisiblePlayer();
-	sint32 const	cost			= m_cityData->GetOvertimeCost();
+	sint32 const cost = m_cityData->GetOvertimeCost();
 
 	if ((cost <= 0)									||
-		(cost > g_player[visiblePlayer]->GetGold())	||
+		(cost > g_selected_item->GetVisiblePlayer()->GetGold())	||
 		m_cityData->AlreadyBoughtFront()			||
 		m_cityData->IsBuildingCapitalization()		||
 		m_cityData->IsBuildingInfrastructure()		||
@@ -1015,7 +1010,6 @@ void CityWindow::UpdateBuildTabButtons()
 	} else {
 		m_sellButton->Enable(TRUE);
 	}
-
 }
 
 //----------------------------------------------------------------------------
@@ -1042,7 +1036,6 @@ void CityWindow::UpdateCostsGives()
 
 	if(m_cityData->GetBuildQueue()->GetLen() < 1
 	|| m_cityData->AlreadyBoughtFront()
-	//Added by Martin Gühmann to disable the rush buy cost in the case of infrastructure and capitalization
 	|| m_cityData->GetBuildQueue()->GetHead()->m_category == k_GAME_OBJ_TYPE_CAPITALIZATION
 	|| m_cityData->GetBuildQueue()->GetHead()->m_category == k_GAME_OBJ_TYPE_INFRASTRUCTURE
 	// Make sure that costs aren't displayed if the first item is not selected
@@ -1095,42 +1088,10 @@ void CityWindow::UpdateCostsGives()
 
 void CityWindow::SetValueBox(MBCHAR *component, sint32 val)
 {
-
-
-
-
-
-
-
-
-
-
-
-
 }
 
 void CityWindow::UpdateInfoBoxes()
 {
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
 }
 
 void CityWindow::CopyCitiesBack()
@@ -1199,7 +1160,7 @@ void CityWindow::NextCity(aui_Control *control, uint32 action, uint32 data, void
 	if(!s_cityWindow)
 		return;
 
-	UnitDynamicArray *cityList = g_player[g_selected_item->GetVisiblePlayer()]->m_all_cities;
+	UnitDynamicArray * cityList = g_selected_item->GetVisiblePlayer()->m_all_cities;
 
 	if(!s_cityWindow->m_cityData) {
 		s_cityWindow->SetCity(cityList->Access(0).CD());
@@ -1233,7 +1194,7 @@ void CityWindow::PreviousCity(aui_Control *control, uint32 action, uint32 data, 
 	if(!s_cityWindow)
 		return;
 
-	UnitDynamicArray *cityList = g_player[g_selected_item->GetVisiblePlayer()]->m_all_cities;
+	UnitDynamicArray * cityList = g_selected_item->GetVisiblePlayer()->m_all_cities;
 
 	if(!s_cityWindow->m_cityData) {
 		s_cityWindow->SetCity(cityList->Access(0).CD());
@@ -1270,7 +1231,7 @@ void CityWindow::SelectCity(aui_Control *control, uint32 action, uint32 data, vo
 
 	ctp2_DropDown *dd = (ctp2_DropDown *)control;
 	if(dd->GetSelectedItem() >= 0) {
-		Unit selectedCity = g_player[g_selected_item->GetVisiblePlayer()]->m_all_cities->Access(dd->GetSelectedItem());
+		Unit selectedCity = g_selected_item->GetVisiblePlayer()->m_all_cities->Access(dd->GetSelectedItem());
 		if(selectedCity.m_id != s_cityWindow->m_cityData->GetHomeCity().m_id) {
 			s_cityWindow->SetCity(selectedCity.CD());
 		}
@@ -1281,22 +1242,7 @@ void CityWindow::Resource(aui_Control *control, uint32 action, uint32 data, void
 {
 	if(action != AUI_BUTTON_ACTION_EXECUTE)
 		return;
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-#if 0
+	#if 0
 
 	ctp2_Static *workerBox = (ctp2_Static *)aui_Ldl::GetObject("CityWindow.Tabs.Specialists.TabPanel.WorkerBox");
 	ctp2_Static *resourceBox = (ctp2_Static *)aui_Ldl::GetObject("CityWindow.ResourceMapBox");
@@ -1475,7 +1421,7 @@ void CityWindow::OptimizeSpecialists(aui_Control *control, uint32 action, uint32
 	if(!s_cityWindow)
 		return;
 
-	PLAYER_INDEX playerId = g_selected_item->GetVisiblePlayer();
+	PLAYER_INDEX playerId = g_selected_item->GetVisiblePlayerID();
 	Governor & governor = Governor::GetGovernor(playerId);
 
 #if defined(_DEBUG) || defined(USE_LOGGING)
@@ -1597,7 +1543,6 @@ void CityWindow::BuildListSelect(aui_Control *control, uint32 action, uint32 dat
 	}
 	s_cityWindow->UpdateBuildTabButtons();
 
-	//Added by Martin Gühmann to update the turn count display of the image button
 	ctp2_Button *	turnCountButton = (ctp2_Button *) aui_Ldl::GetObject
 		(s_cityWindowBlock, "GarrisonSection.ItemProgress.IconBorder.IconButton.RadialButton");
 
@@ -1609,7 +1554,6 @@ void CityWindow::BuildListSelect(aui_Control *control, uint32 action, uint32 dat
 						    	  ?	s_cityWindow->m_cityData->HowMuchLonger()
 							      : s_cityWindow->m_cityData->HowMuchLonger(node->m_cost);
 
-		//Added by Martin Gühmann to disable the turn count display for capitalization and infrastructure
 		MBCHAR buf[20];
 		if ((turns >= 0)											&&
 			(turns < 0x7fffffff)									&&
@@ -1781,9 +1725,6 @@ void CityWindow::PopulateQueueList(CityData *cd, ctp2_ListBox *lb, char *itemBlo
 					}
 				}
 				char buf[20];
-				//Added by Martin Gühmann to remove number of turn
-				//display in the Build Manager and City Manager
-				//if infrastructure or capilization is displayed.
 				if(turns < 0 || turns == 0x7fffffff
 				|| bn->m_category == k_GAME_OBJ_TYPE_INFRASTRUCTURE
 				|| bn->m_category == k_GAME_OBJ_TYPE_CAPITALIZATION)
@@ -2022,7 +1963,7 @@ void CityWindow::UpdateAdviceText()
 			return;
 		}
 
-	PLAYER_INDEX playerId = g_selected_item->GetVisiblePlayer();
+	PLAYER_INDEX playerId = g_selected_item->GetVisiblePlayerID();
 	const Governor & governor = Governor::GetGovernor(playerId);
 
 	StringId adviceId =
@@ -2649,8 +2590,8 @@ void CityWindow::DisbandQuery(bool result, void *ud)
 	if(result) {
 
 		// Create a temporary army to collect the units from the selected boxes.
-		Player *	owner	= g_player[g_selected_item->GetVisiblePlayer()];
-		Army		temp(owner->GetNewArmy(CAUSE_NEW_ARMY_GROUPING));
+		Player * owner = g_selected_item->GetVisiblePlayer();
+		Army     temp(owner->GetNewArmy(CAUSE_NEW_ARMY_GROUPING));
 
 		for (sint32 b = 0; b < k_MAX_ARMY_SIZE; b++)
 		{

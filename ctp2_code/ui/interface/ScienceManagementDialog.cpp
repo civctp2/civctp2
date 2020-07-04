@@ -27,7 +27,7 @@
 // - Display the cost for the player, not the base advancement cost.
 // - Start the great library with the current research project of the player.
 // - Reduced the length of the generated advance effect string.
-// - Added a progress bar to the advance select button. (Feb 4th 2007 Martin Gühmann)
+// - Added a progress bar to the advance select button. (Feb 4th 2007 Martin GÃ¼hmann)
 //
 //----------------------------------------------------------------------------
 
@@ -199,7 +199,7 @@ void ScienceManagementDialog::Update()
 
 void ScienceManagementDialog::UpdateScience()
 {
-	Player *player = g_player[g_selected_item->GetVisiblePlayer()];
+	Player * player = g_selected_item->GetVisiblePlayer();
 	if(!player) {
 		ClearScience();
 		return;
@@ -284,7 +284,7 @@ void ScienceManagementDialog::ClearScience()
 
 void ScienceManagementDialog::UpdateAdvanceList()
 {
-	Player *player = g_player[g_selected_item->GetVisiblePlayer()];
+	Player * player = g_selected_item->GetVisiblePlayer();
 
 	for(int index = 1; index <= k_SMD_CIVILIZATION_COLUMNS; index++) {
 
@@ -354,7 +354,7 @@ BOOL ScienceManagementDialog::UpdateAdvanceItem(ctp2_ListItem *item,
 {
 	BOOL discovered = FALSE;
 
-	Player *player = g_player[g_selected_item->GetVisiblePlayer()];
+	Player * player = g_selected_item->GetVisiblePlayer();
 
 	if(ctp2_Static *column = GetListItemColumn(item, k_SCI_COL_ADVANCE)) {
 		column->SetText(advance->GetNameText());
@@ -365,8 +365,8 @@ BOOL ScienceManagementDialog::UpdateAdvanceItem(ctp2_ListItem *item,
 		if(ctp2_Static *column = GetListItemColumn(item, k_SCI_COL_ADVANCE + index)) {
 
 			if(g_player[index] && g_player[index]->HasAdvance(advance->GetIndex()) &&
-				((index == g_selected_item->GetVisiblePlayer()) ||
-				player->HasEmbassyWith(index))) {
+				((g_selected_item->IsVisiblePlayer(index)) ||
+				 player->HasEmbassyWith(index))) {
 
 				column->SetDrawCallbackAndCookie(ColorBoxActionCallback,
 					reinterpret_cast<void*>(index));
@@ -435,10 +435,10 @@ AUI_ERRCODE ScienceManagementDialog::DrawScienceBar(ctp2_Static *control,
 	if(!g_selected_item)
 		return AUI_ERRCODE_OK;
 
-	if(g_selected_item->GetVisiblePlayer() < 0)
+	if(g_selected_item->GetVisiblePlayerID() < 0)
 		return AUI_ERRCODE_OK;
 
-	Player *player = g_player[g_selected_item->GetVisiblePlayer()];
+	Player * player = g_selected_item->GetVisiblePlayer();
 	if(!player)
 		return AUI_ERRCODE_OK;
 
@@ -492,13 +492,9 @@ AUI_ERRCODE ScienceManagementDialog::ColorHeaderActionCallback(aui_Switch *contr
 
 	sint32 index = reinterpret_cast<sint32>(cookie);
 
-	Player *player = g_player[g_selected_item->GetVisiblePlayer()];
+	Player * player = g_selected_item->GetVisiblePlayer();
 
-
-
-
-	if(!player || ((index != g_selected_item->GetVisiblePlayer()) &&
-		!player->HasContactWith(index)))
+	if (!player || (!g_selected_item->IsVisiblePlayer(index) && !player->HasContactWith(index)))
 		return(AUI_ERRCODE_OK);
 
 	return(g_c3ui->TheBlitter()->ColorBlt16(surface, &colorRect,
@@ -510,7 +506,7 @@ sint32 ScienceManagementDialog::CompareAdvance(ctp2_ListItem *item1,
 											   sint32 column)
 {
 
-	Player *player = g_player[g_selected_item->GetVisiblePlayer()];
+	Player * player = g_selected_item->GetVisiblePlayer();
 
 	const AdvanceRecord *advance1 = g_theAdvanceDB->Get(
 		reinterpret_cast<sint32>(item1->GetUserData()));
@@ -518,9 +514,7 @@ sint32 ScienceManagementDialog::CompareAdvance(ctp2_ListItem *item1,
 		reinterpret_cast<sint32>(item2->GetUserData()));
 
 
-	if(!column || ((column != g_selected_item->GetVisiblePlayer()) &&
-		!player->HasEmbassyWith(column))) {
-
+	if (!column || (!g_selected_item->IsVisiblePlayer(column) && !player->HasEmbassyWith(column))) {
 		return(advance1->GetCost() - advance2->GetCost());
 	}
 
@@ -595,7 +589,7 @@ void ScienceManagementDialog::AdvanceListCallback(aui_Control *control,
 	isAdvance = false;
 
 	for(i = 0; i < g_theBuildingDB->NumRecords(); i++) {
-		const BuildingRecord *rec = buildingutil_Get(i, g_selected_item->GetVisiblePlayer());
+		const BuildingRecord *rec = buildingutil_Get(i, g_selected_item->GetVisiblePlayerID());
 		if(rec->GetEnableAdvanceIndex() == index)
 		{
 
@@ -619,7 +613,7 @@ void ScienceManagementDialog::AdvanceListCallback(aui_Control *control,
 	isAdvance = false;
 
 	for(i = 0; i < g_theWonderDB->NumRecords(); i++) {
-		const WonderRecord *rec = wonderutil_Get(i, g_selected_item->GetVisiblePlayer());
+		const WonderRecord *rec = wonderutil_Get(i, g_selected_item->GetVisiblePlayerID());
 
 		if(rec->GetEnableAdvanceIndex() == index)
 		{

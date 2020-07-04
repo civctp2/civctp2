@@ -206,7 +206,7 @@ bool TiledMap::CanDrawSpecialMove(SELECT_TYPE sType, Army &sel_army, const MapPo
 				const OrderRecord *rec = g_controlPanel->GetCurrentOrder();
 				if(rec->GetTargetPretestEnemyCity())
 				{
-					if(g_theWorld->GetCell(dest_pos)->GetCity().GetOwner() != g_selected_item->GetVisiblePlayer()) {
+					if(!g_selected_item->IsVisiblePlayer(g_theWorld->GetCell(dest_pos)->GetCity().GetOwner())) {
 						return true;
 					}
 				}
@@ -477,7 +477,7 @@ void TiledMap::DrawLegalMove
 			x2 += xoffset;
 			y2 += yoffset;
 
-			if (g_player[g_selected_item->GetVisiblePlayer()]->IsExplored(currPos))
+			if (g_selected_item->GetVisiblePlayer()->IsExplored(currPos))
 			{
 				if ((sType == SELECT_TYPE_LOCAL_ARMY) ||
 					((sType == SELECT_TYPE_LOCAL_ARMY_UNLOADING) && (line_segment_count == 0))
@@ -555,7 +555,7 @@ void TiledMap::DrawLegalMove
 		x2 += xoffset;
 		y2 += yoffset;
 
-		if (g_player[g_selected_item->GetVisiblePlayer()]->IsExplored(currPos))
+		if (g_selected_item->GetVisiblePlayer()->IsExplored(currPos))
 		{
 			if (((sType == SELECT_TYPE_LOCAL_ARMY) ||
 				 ((sType == SELECT_TYPE_LOCAL_ARMY_UNLOADING) && (line_segment_count == 0))
@@ -624,7 +624,7 @@ void TiledMap::DrawLegalMove
 			x2 += xoffset;
 			y2 += yoffset;
 
-			if (g_player[g_selected_item->GetVisiblePlayer()]->IsExplored(currPos))
+			if (g_selected_item->GetVisiblePlayer()->IsExplored(currPos))
 			{
 				if (((sType == SELECT_TYPE_LOCAL_ARMY) ||
 					 ((sType == SELECT_TYPE_LOCAL_ARMY_UNLOADING) && (line_segment_count == 1))

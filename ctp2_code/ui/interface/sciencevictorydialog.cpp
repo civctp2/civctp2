@@ -24,7 +24,7 @@
 //
 // Modifications from the original Activision code:
 //
-// - Standardized code (May 29th 2006 Martin Gühmann)
+// - Standardized code (May 29th 2006 Martin GÃ¼hmann)
 //
 //----------------------------------------------------------------------------
 
@@ -167,14 +167,13 @@ void ScienceVictoryDialog::Update()
 {
 
 	Assert(g_selected_item);
-	Assert(g_player[g_selected_item->GetVisiblePlayer()]);
-	Assert(g_player[g_selected_item->GetVisiblePlayer()]->GetGaiaController());
+	Assert(g_selected_item->GetVisiblePlayer());
+	Assert(g_selected_item->GetVisiblePlayer()->GetGaiaController());
 
-	if(!g_player[g_selected_item->GetVisiblePlayer()])
+	if(!g_selected_item->GetVisiblePlayer())
 		return;
 
-	GaiaController *gaiaController =
-		g_player[g_selected_item->GetVisiblePlayer()]->GetGaiaController();
+	GaiaController * gaiaController = g_selected_item->GetVisiblePlayer()->GetGaiaController();
 
 	if(gaiaController->TurnsToComplete() >= 0)
 		SetSwitchState(k_SWITCH_STATUS);
@@ -336,9 +335,7 @@ void ScienceVictoryDialog::UpdateConstructionList(
 
 	m_mainframeList->Clear();
 
-	UnitDynamicArray *cityList =
-		g_player[g_selected_item->GetVisiblePlayer()]->GetAllCitiesList();
-
+	UnitDynamicArray * cityList = g_selected_item->GetVisiblePlayer()->GetAllCitiesList();
 
 	for(sint32 cityIndex = 0; cityIndex < cityList->Num(); cityIndex++) {
 
@@ -382,7 +379,7 @@ void ScienceVictoryDialog::UpdateConstructionMap(
 		}
 	}
 
-	Player *player = g_player[g_selected_item->GetVisiblePlayer()];
+	Player * player = g_selected_item->GetVisiblePlayer();
 	for(sint32 installation = 0; installation <
 		player->m_allInstallations->Num(); installation++) {
 
@@ -512,14 +509,13 @@ void ScienceVictoryDialog::StartButtonActionCallback(aui_Control *control,
 		return;
 
 	Assert(g_selected_item);
-	Assert(g_player[g_selected_item->GetVisiblePlayer()]);
-	Assert(g_player[g_selected_item->GetVisiblePlayer()]->GetGaiaController());
+	Assert(g_selected_item->GetVisiblePlayer());
+	Assert(g_selected_item->GetVisiblePlayer()->GetGaiaController());
 
-	if(!g_player[g_selected_item->GetVisiblePlayer()])
+	if(!g_selected_item->GetVisiblePlayer())
 		return;
 
-	GaiaController *gaiaController =
-		g_player[g_selected_item->GetVisiblePlayer()]->GetGaiaController();
+	GaiaController * gaiaController = g_selected_item->GetVisiblePlayer()->GetGaiaController();
 
 	gaiaController->StartCountdown();
 
@@ -533,8 +529,7 @@ void ScienceVictoryDialog::BuildButtonActionCallback(aui_Control *control,
 	if(action != static_cast<uint32>(AUI_BUTTON_ACTION_EXECUTE))
 		return;
 
-	UnitDynamicArray *cityList =
-		g_player[g_selected_item->GetVisiblePlayer()]->GetAllCitiesList();
+	UnitDynamicArray * cityList = g_selected_item->GetVisiblePlayer()->GetAllCitiesList();
 
 	sint32 cityIndex;
 	for(cityIndex = 0; cityIndex < cityList->Num(); cityIndex++) {

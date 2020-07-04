@@ -24,8 +24,8 @@
 //
 // Modifications from the original Activision code:
 //
-// - Removed references to the old civilisation database. (Aug 20th 2005 Martin Gühmann)
-// - Initialized local variables. (Sep 9th 2005 Martin Gühmann)
+// - Removed references to the old civilisation database. (Aug 20th 2005 Martin GÃ¼hmann)
+// - Initialized local variables. (Sep 9th 2005 Martin GÃ¼hmann)
 // - Cleaned up static data.
 //
 //----------------------------------------------------------------------------
@@ -172,10 +172,8 @@ void HighScoreWinButtonActionCallback( aui_Control *control, uint32 action, uint
 
 		if(g_turn->IsHotSeat() || g_turn->IsEmail())
 		{
-			Player* player = g_player[g_selected_item->GetVisiblePlayer()];
-			if(!player
-			||  player->m_isDead
-			){
+			Player * player = g_selected_item->GetVisiblePlayer();
+			if (!player || player->m_isDead){
 				if(player->IsRobot())
 				{
 					g_turn->EndThisTurnBeginNewTurn(FALSE);
@@ -437,132 +435,16 @@ sint32 victorywin_Init_Controls(const MBCHAR *windowBlock )
 	return 0;
 }
 
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
 sint32 victorywin_UpdateData( sint32 type )
 {
 	MBCHAR strbuf[256];
 
-	sint32 curPlayer = g_selected_item->GetVisiblePlayer();
+	sint32 curPlayer = g_selected_item->GetVisiblePlayerID();
 	Player *pl = g_player[curPlayer];
 	if(!pl) {
 		PointerList<Player>::Walker walk(g_deadPlayer);
 		while(walk.IsValid()) {
-			if(walk.GetObj()->m_owner == g_selected_item->GetVisiblePlayer()) {
+			if(g_selected_item->IsVisiblePlayer(walk.GetObj()->m_owner)) {
 				pl = walk.GetObj();
 				break;
 			}
@@ -609,8 +491,8 @@ sint32 victorywin_UpdateData( sint32 type )
 	}
 	else
 	{
-		if((g_player[g_selected_item->GetVisiblePlayer()]
-		&& !g_player[g_selected_item->GetVisiblePlayer()]->m_isDead)
+		if((g_selected_item->GetVisiblePlayer()
+		&& !g_selected_item->GetVisiblePlayer()->m_isDead)
 		||  g_turn->IsEmail()
 		||  g_turn->IsHotSeat()
 		){
@@ -622,7 +504,6 @@ sint32 victorywin_UpdateData( sint32 type )
 		}
 	}
 
-
 	sprintf(strbuf,"%d",pl->GetTotalPopulation());
 	s_staticControls[k_VICWIN_POP_BOX]->SetText(strbuf);
 
@@ -633,14 +514,7 @@ sint32 victorywin_UpdateData( sint32 type )
 	sprintf(strbuf,"%s %d", s_stringTable->GetString(8),curScore);
 	s_staticControls[k_VICWIN_SCORE_LABEL]->SetText(strbuf);
 
-
-
-
-
-
-
 	strcpy(strbuf, pl->GetDescriptionString());
-
 
 	if (s_highScoreWin) {
 		if(g_theGameSettings && g_theGameSettings->GetKeeppScore()) {
@@ -654,10 +528,6 @@ sint32 victorywin_UpdateData( sint32 type )
 
 	victorywin_LoadScoreData();
 
-
-
-
-
 	return 0;
 }
 
@@ -667,17 +537,6 @@ sint32 victorywin_DisplayHighScore( void )
 
 	return 0;
 }
-
-
-
-
-
-
-
-
-
-
-
 
 HighScoreListItem::HighScoreListItem(AUI_ERRCODE *retval, const MBCHAR *name, sint32 score, const MBCHAR *ldlBlock)
 	:
@@ -750,16 +609,6 @@ sint32 HighScoreListItem::Compare(ctp2_ListItem *item2, uint32 column)
 	return 0;
 }
 
-
-
-
-
-
-
-
-
-
-
 HighScoreWindowPopup::HighScoreWindowPopup( sint32 type )
 {
 	AUI_ERRCODE errcode = AUI_ERRCODE_OK;
@@ -788,7 +637,7 @@ HighScoreWindowPopup::HighScoreWindowPopup( sint32 type )
 
 	Initialize( windowBlock );
 
-	if (g_player[g_selected_item->GetVisiblePlayer()] == NULL) {
+	if (!g_selected_item->GetVisiblePlayer()) {
 		m_continueButton->Enable(FALSE);
 	} else {
 		m_continueButton->Enable(TRUE);
@@ -807,12 +656,6 @@ sint32 HighScoreWindowPopup::Initialize(const MBCHAR *windowBlock )
 	Assert( AUI_NEWOK(m_continueButton, errcode) );
 	if ( !AUI_NEWOK(m_continueButton, errcode) ) return -1;
 
-
-
-
-
-
-
 	sprintf( controlBlock, "%s.%s", windowBlock, "QuitButton" );
 	m_quitButton = new ctp2_Button(&errcode, aui_UniqueId(), controlBlock, HighScoreWinButtonActionCallback, this);
 
@@ -826,12 +669,6 @@ sint32 HighScoreWindowPopup::Initialize(const MBCHAR *windowBlock )
 
 	sprintf(controlBlock, "%s.%s", windowBlock, "Title");
 	m_window->AddTitle(controlBlock);
-
-
-
-
-
-
 
 	errcode = aui_Ldl::SetupHeirarchyFromRoot( windowBlock );
 	Assert( AUI_SUCCESS(errcode) );
@@ -908,14 +745,6 @@ sint32 HighScoreWindowPopup::UpdateData( void )
 
 	return 0;
 }
-
-
-
-
-
-
-
-
 
 sint32 victorywin_GetWonderFilename( sint32 index, MBCHAR *name )
 {
@@ -1011,10 +840,6 @@ sint32 victorywin_LoadGraphData( void )
 	return 0;
 }
 
-
-
-
-
 void CloseVictoryWindowAction::Execute(aui_Control *control, uint32 action, uint32 data)
 {
 	victorywin_Cleanup();
@@ -1026,7 +851,7 @@ sint32 victorywin_LoadScoreData( void )
 	MBCHAR ldlBlock[ k_AUI_LDL_MAXBLOCK + 1 ];
 	MBCHAR strbuf[256];
 
-	sint32 curPlayer =  g_selected_item->GetVisiblePlayer();
+	sint32 curPlayer = g_selected_item->GetVisiblePlayerID();
 
 	s_scoreList->Clear();
 	strcpy(ldlBlock,"VictoryScoreListItem");
@@ -1038,10 +863,6 @@ sint32 victorywin_LoadScoreData( void )
 
 	label = new InfoScoreLabelListItem(&retval, s_stringTable->GetString(2), NULL, ldlBlock);
 	s_scoreList->AddItem((ctp2_ListItem *)label);
-
-
-
-
 
 	item = new InfoScoreListItem(&retval, curPlayer, SCORE_CAT_ADVANCES, ldlBlock);
 	s_scoreList->AddItem((ctp2_ListItem *)item);
@@ -1059,32 +880,6 @@ sint32 victorywin_LoadScoreData( void )
 	s_scoreList->AddItem((ctp2_ListItem *)item);
 	posValue += item->GetValue();
 
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
 	item = new InfoScoreListItem(&retval, curPlayer, SCORE_CAT_TYPE_OF_VICTORY, ldlBlock);
 	s_scoreList->AddItem((c3_ListItem *)item);
 	posValue += item->GetValue();
@@ -1099,23 +894,6 @@ sint32 victorywin_LoadScoreData( void )
 	label = new InfoScoreLabelListItem(&retval, s_stringTable->GetString(4), NULL, ldlBlock);
 	s_scoreList->AddItem((ctp2_ListItem *)label);
 
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
 	sprintf(strbuf,"%d",negValue);
 	label = new InfoScoreLabelListItem(&retval, s_stringTable->GetString(5), strbuf, ldlBlock);
 	s_scoreList->AddItem((ctp2_ListItem *)label);
@@ -1127,7 +905,7 @@ sint32 victorywin_LoadScoreData( void )
 	if(!pl) {
 		PointerList<Player>::Walker walk(g_deadPlayer);
 		while(walk.IsValid()) {
-			if(walk.GetObj()->m_owner == g_selected_item->GetVisiblePlayer()) {
+			if (g_selected_item->IsVisiblePlayer(walk.GetObj()->m_owner)) {
 				pl = walk.GetObj();
 				break;
 			}
@@ -1157,14 +935,12 @@ sint32 victorywin_LoadWonderData( void )
 
 	Assert(g_theWonderDB->NumRecords() <= (k_VICWIN_WONDER_COL_MAX * k_VICWIN_WONDER_ROW_MAX));
 
-	sint32 curPlayer = g_selected_item->GetVisiblePlayer();
+	sint32 curPlayer = g_selected_item->GetVisiblePlayerID();
 
 	for ( sint32 i = 0; i < g_theWonderDB->NumRecords() ; i++ )
 	{
-
 		if (curPlayer == wonderutil_GetOwner(i))
 		{
-
 			victorywin_GetWonderFilename(i,strbuf);
 
 			s_wonderIcons[i]->SetImage(strbuf);

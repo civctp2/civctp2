@@ -25,7 +25,7 @@
 // Modifications from the original Activision code:
 //
 // - Corrected non-standard syntax.
-// - Initialized local variables. (Sep 9th 2005 Martin Gühmann)
+// - Initialized local variables. (Sep 9th 2005 Martin GÃ¼hmann)
 //
 //----------------------------------------------------------------------------
 
@@ -176,7 +176,7 @@ TradeManager::TradeManager(AUI_ERRCODE *err)
 void TradeManager::TabCallback(aui_Control *control, uint32 action, uint32 data, void *cookie)
 {
 	if(action != ctp2_Tab::ACTION_ACTIVATED) return;
-	
+
 	if(sint32(cookie) > 0){ // avoid updating market tab, which can take very long and only needs to be updated in case of cancelling a route
 	    s_tradeManager->Update();
 	    }
@@ -316,19 +316,19 @@ void TradeManager::Update()
 {
 	if(s_tradeManager->m_window->IsHidden()) // only update if window is visible to avoid spending time on UpdateCreateList e.g. in case AI declares war and all trade routes get deleted which in turn leads to freeing of caravans which is bound to TradeManager::Update() due to the infos in the advice window
 	    return;
-	
+
 	ctp2_Tab *market = (ctp2_Tab *)aui_Ldl::GetObject(s_tradeManagerBlock, "TradeTabs.Market");
 	ctp2_Tab *summary = (ctp2_Tab *)aui_Ldl::GetObject(s_tradeManagerBlock, "TradeTabs.Summary");
 	ctp2_Tab *import = (ctp2_Tab *)aui_Ldl::GetObject(s_tradeManagerBlock, "TradeTabs.Import");
 	ctp2_TabGroup *group = (ctp2_TabGroup *)aui_Ldl::GetObject(s_tradeManagerBlock, "TradeTabs");
-	
+
 	if(market && group->GetCurrentTab() == market)
-	    UpdateCreateList(g_selected_item->GetVisiblePlayer());
+	    UpdateCreateList(g_selected_item->GetVisiblePlayerID());
 	if(summary && group->GetCurrentTab() == summary)
 	    UpdateSummaryList(m_summaryList, true);
 	if(import && group->GetCurrentTab() == import)
 	    UpdateSummaryList(m_importList, false);
-	
+
 	UpdateAdviceWindow();
 }
 
@@ -382,15 +382,15 @@ void TradeManager::UpdateCreateList(const PLAYER_INDEX & player_id)
 				for(op = 1; op < k_MAX_PLAYERS; op++) { // determine player offering highest price for good g
 					if(!g_player[op]) continue; // player gone/dead
 					if(player_id != op && !p->HasContactWith(op)) continue; // player not yet known
-					if(m_showCities == TRADE_CITIES_OWN && op != g_selected_item->GetVisiblePlayer()) continue;
+					if(m_showCities == TRADE_CITIES_OWN && !g_selected_item->IsVisiblePlayer(op)) continue;
 					if ((m_showCities == TRADE_CITIES_ALL)			&&
-						(op != g_selected_item->GetVisiblePlayer()) &&
+						(!g_selected_item->IsVisiblePlayer(op)) &&
 						(AgreementMatrix::s_agreements.TurnsAtWar(player_id, op) >= 0) // no trade if at ware
 					   )
 						continue;
 
-					if ((m_showCities == TRADE_CITIES_FRIENDLY)		&&
-						(op != g_selected_item->GetVisiblePlayer()) &&
+					if ((m_showCities == TRADE_CITIES_FRIENDLY) &&
+						(!g_selected_item->IsVisiblePlayer(op)) &&
 						(!AgreementMatrix::s_agreements.HasAgreement
 							(player_id, op, PROPOSAL_TREATY_PEACE)
 						)
@@ -535,24 +535,24 @@ void TradeManager::UpdateAdviceWindow()
 	}
 
 	MBCHAR buf[20];
-	sint32 pl = g_selected_item->GetVisiblePlayer();
-	if(!g_player[pl]) return;
+	Player * player = g_selected_item->GetVisiblePlayer();
+	if(!player) return;
 
 	ctp2_Static *child = (ctp2_Static *)aui_Ldl::GetObject(s_tradeAdviceBlock, "Available");
 	if(child) {
-		sprintf(buf, "%d", g_player[pl]->m_tradeTransportPoints - g_player[pl]->m_usedTradeTransportPoints);
+		sprintf(buf, "%d", player->m_tradeTransportPoints - player->m_usedTradeTransportPoints);
 		child->SetText(buf);
 	}
 
 	child = (ctp2_Static *)aui_Ldl::GetObject(s_tradeAdviceBlock, "InUse");
 	if(child) {
-		sprintf(buf, "%d", g_player[pl]->m_usedTradeTransportPoints);
+		sprintf(buf, "%d", player->m_usedTradeTransportPoints);
 		child->SetText(buf);
 	}
 
 	sint32 i, totalProfit = 0, totalPiracy = 0, totalTransi = 0, totalRoutes = 0;
-	for(i = 0; i < g_player[pl]->m_all_cities->Num(); i++) {
-		Unit city = g_player[pl]->m_all_cities->Access(i);
+	for(i = 0; i < player->m_all_cities->Num(); i++) {
+		Unit city = player->m_all_cities->Access(i);
 		totalRoutes += city.CD()->GetTradeSourceList()->Num();
 		totalProfit += city.CD()->CalculateGoldFromResources(); // takes piracy and wonder bonus into account
 		totalPiracy += city.CD()->GetGoldLostToPiracy(); // takes wonder bonus into account
@@ -595,7 +595,7 @@ void TradeManager::UpdateAdviceText()
 
 		SlicContext sc;
 
-		Player *p = g_player[g_selected_item->GetVisiblePlayer()];
+		Player * player = g_selected_item->GetVisiblePlayer();
 
 		if(m_createList) {
 			ctp2_ListItem *selItem = (ctp2_ListItem *)m_createList->GetSelectedItem();
@@ -613,10 +613,10 @@ void TradeManager::UpdateAdviceText()
 				stringutils_Interpret(g_theStringDB->GetNameStr("SELECTED_TRADE_ADVICE"),
 									  sc, interp);
 
-				if(p) {
-					if(data->m_caravans > (p->m_tradeTransportPoints - p->m_usedTradeTransportPoints)) {
+				if(player) {
+					if(data->m_caravans > (player->m_tradeTransportPoints - player->m_usedTradeTransportPoints)) {
 						SlicContext sc2;
-						sc2.AddInt(data->m_caravans - (p->m_tradeTransportPoints - p->m_usedTradeTransportPoints));
+						sc2.AddInt(data->m_caravans - (player->m_tradeTransportPoints - player->m_usedTradeTransportPoints));
 
 						strcat(interp + strlen(interp), "  ");
 
@@ -628,7 +628,7 @@ void TradeManager::UpdateAdviceText()
 				advice->SetHyperText(interp);
 			} else {
 
-				if(p) {
+				if(player) {
 					PointerList<CreateListData>::Walker walk(&m_createData);
 					CreateListData *maxData = NULL;
 					while(walk.IsValid()) {
@@ -638,7 +638,7 @@ void TradeManager::UpdateAdviceText()
 							walk.Next();
 							continue;
 						}
-						if(data->m_caravans <= (p->m_tradeTransportPoints - p->m_usedTradeTransportPoints)) {
+						if(data->m_caravans <= (player->m_tradeTransportPoints - player->m_usedTradeTransportPoints)) {
 							if(!maxData || data->m_price > maxData->m_price) {
 								maxData = data;
 							}
@@ -672,22 +672,18 @@ void TradeManager::UpdateAdviceText()
 
 void TradeManager::UpdateSummaryList(ctp2_ListBox *summaryList, bool source)
 {
-	sint32 pl = g_selected_item->GetVisiblePlayer();
-	Assert(pl >= 0 && pl < k_MAX_PLAYERS);
-	if(pl < 0 || pl >= k_MAX_PLAYERS) return;
+	Player * player = g_selected_item->GetVisiblePlayer();
+	Assert(player);
+	if(!player) return;
 
-	Assert(g_player[pl]);
-	if(!g_player[pl]) return;
-
-	Player *p = g_player[pl];
 	Unit maxCity;
 
 	summaryList->Clear();
 	summaryList->BuildListStart();
 
-	for (sint32 c = 0; c < p->m_all_cities->Num(); c++)
+	for (sint32 c = 0; c < player->m_all_cities->Num(); c++)
 	    {
-	    Unit city = p->m_all_cities->Access(c);
+	    Unit city = player->m_all_cities->Access(c);
 	    
 	    sint32 numTradeRoutes= source ? city.CD()->GetTradeSourceList()->Num() : city.CD()->GetTradeDestinationList()->Num();
 	    for (sint32 r = 0; r < numTradeRoutes; r++)
@@ -798,7 +794,7 @@ void TradeManager::UpdateSummaryList(ctp2_ListBox *summaryList, bool source)
 		}
 	    }
 	summaryList->BuildListEnd();
-	
+
 	m_breakButton->Enable(FALSE);
 	m_breakImpBut->Enable(FALSE);
 }
@@ -1098,9 +1094,9 @@ void TradeManager::ListSelect(aui_Control *control, uint32 action, uint32 data, 
 		CreateListData *data = (CreateListData *)item->GetUserData();
 		Assert(data);
 		if(data) {
-			Player *pl = g_player[g_selected_item->GetVisiblePlayer()];
-			Assert(pl);
-			if(pl && (data->m_caravans <= pl->m_tradeTransportPoints - pl->m_usedTradeTransportPoints)) {
+			Player * player = g_selected_item->GetVisiblePlayer();
+			Assert(player);
+			if(player && (data->m_caravans <= player->m_tradeTransportPoints - player->m_usedTradeTransportPoints)) {
 				canCreate = true;
 			}
 		}
@@ -1159,8 +1155,9 @@ STDEHANDLER(TradeManagerSendGoodEvent)
 	if(!args->GetCity(0, source)) return GEV_HD_Continue;
 	if(!args->GetCity(1, destination)) return GEV_HD_Continue;
 
-	if(source.GetOwner() == g_selected_item->GetVisiblePlayer() ||
-	   destination.GetOwner() == g_selected_item->GetVisiblePlayer()) {
+	if (g_selected_item->IsVisiblePlayer(source.GetOwner())
+		|| g_selected_item->IsVisiblePlayer(destination.GetOwner()))
+	{
 		s_tradeManager->Update();
 	}
 	return GEV_HD_Continue;
@@ -1183,10 +1180,8 @@ STDEHANDLER(TradeManagerKillRouteEvent)
 	TradeRoute route;
 	if(!args->GetTradeRoute(0, route)) return GEV_HD_Continue;
 
-	if((route.GetSource().IsValid() && route.GetSource().GetOwner() == g_selected_item->GetVisiblePlayer()) ||
-	   (route.GetDestination().IsValid() && route.GetDestination().GetOwner() == g_selected_item->GetVisiblePlayer())) {
-
-
+	if((route.GetSource().IsValid() && g_selected_item->IsVisiblePlayer(route.GetSource().GetOwner())) ||
+	   (route.GetDestination().IsValid() && g_selected_item->IsVisiblePlayer(route.GetDestination().GetOwner()))) {
 		g_c3ui->AddAction(new UpdateTradeAction);
 	}
 	return GEV_HD_Continue;
@@ -1224,7 +1219,7 @@ void TradeManager::FilterButtonActivated(aui_Control *control)
 		Assert(FALSE);
 	}
 
-	UpdateCreateList(g_selected_item->GetVisiblePlayer());
+	UpdateCreateList(g_selected_item->GetVisiblePlayerID());
 }
 
 void TradeManager::CityFilterButton(aui_Control *control, uint32 action, uint32 data, void *cookie)
@@ -1253,7 +1248,7 @@ void TradeManager::NumCitiesSlider(aui_Control *control, uint32 action, uint32 d
 			s_tradeManager->SetNumCities(s_tradeManager->m_citiesSlider->GetValueX() + 1);
 			break;
 		case AUI_RANGER_ACTION_RELEASE:
-			s_tradeManager->UpdateCreateList(g_selected_item->GetVisiblePlayer());
+			s_tradeManager->UpdateCreateList(g_selected_item->GetVisiblePlayerID());
 			break;
 	}
 }

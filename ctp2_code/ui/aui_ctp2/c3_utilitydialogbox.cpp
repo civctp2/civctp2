@@ -24,7 +24,7 @@
 //
 // Modifications from the original Activision code:
 //
-// - Initialized local variables. (Sep 9th 2005 Martin Gühmann)
+// - Initialized local variables. (Sep 9th 2005 Martin GÃ¼hmann)
 // - Fixed memory leaks.
 //
 //----------------------------------------------------------------------------
@@ -450,11 +450,10 @@ sint32 c3_UtilityCityListPopup::UpdateData( void )
 {
 	MBCHAR strbuf[256];
 	MBCHAR ldlBlock[ k_AUI_LDL_MAXBLOCK + 1 ];
-	sint32 curPlayer = g_selected_item->GetVisiblePlayer();
 
 	AUI_ERRCODE		retval;
 
-	UnitDynamicArray *cityList = g_player[curPlayer]->GetAllCitiesList();
+	UnitDynamicArray * cityList = g_selected_item->GetVisiblePlayer()->GetAllCitiesList();
 
 	strcpy(ldlBlock,"SingleListItem");
 	m_list->Clear();
@@ -575,11 +574,10 @@ sint32 c3_PiracyPopup::UpdateData( void )
 {
 	MBCHAR strbuf[256];
 	MBCHAR ldlBlock[ k_AUI_LDL_MAXBLOCK + 1 ];
-	sint32 curPlayer = g_selected_item->GetVisiblePlayer();
 
 	AUI_ERRCODE		retval;
 
-	UnitDynamicArray *cityList = g_player[curPlayer]->GetAllCitiesList();
+	UnitDynamicArray * cityList = g_selected_item->GetVisiblePlayer()->GetAllCitiesList();
 
 	strcpy(ldlBlock,"PiracyListItem");
 
@@ -1526,7 +1524,7 @@ void NameTheCityDialogBoxCallback(MBCHAR const * text, sint32 val2, void *data)
 
 	if (s_unit.IsValid())
     {
-		if (s_unit.GetOwner() == g_selected_item->GetVisiblePlayer())
+		if (g_selected_item->IsVisiblePlayer(s_unit.GetOwner()))
         {
 			s_unit.GetData()->GetCityData()->SetName(text);
 			g_mainControlPanel->UpdateCityList();

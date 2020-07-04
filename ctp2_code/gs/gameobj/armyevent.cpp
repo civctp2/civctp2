@@ -180,7 +180,7 @@ STDEHANDLER(ArmyUnloadOrderEvent)
 	if(!args->GetPos(0, pos)) return GEV_HD_Continue;
 
 	UNIT_ORDER_TYPE ord = UNIT_ORDER_UNLOAD;
-	if (a.GetOwner() == g_selected_item->GetVisiblePlayer())
+	if (g_selected_item->IsVisiblePlayer(a.GetOwner()))
 	{
 		CellUnitList cargoToUnload;
 		if (MainControlPanel::GetSelectedCargo(cargoToUnload) && !g_player[a.GetOwner()]->IsRobot())
@@ -1068,13 +1068,11 @@ STDEHANDLER(AftermathEvent)
 
 	if(attackerWon)
 	{
-		if(g_selected_item->IsPlayerVisible(defense_owner) && !c.m_id)
-		{
+		if (g_selected_item->IsVisiblePlayer(defense_owner) && !c.m_id) {
 			g_soundManager->AddGameSound(GAMESOUNDS_VICTORY_FANFARE);
 		}
 
-		if(g_selected_item->IsPlayerVisible(attack_owner) && !c.m_id)
-		{
+		if (g_selected_item->IsVisiblePlayer(attack_owner) && !c.m_id) {
 			g_soundManager->AddGameSound(GAMESOUNDS_VICTORY_FANFARE);
 		}
 
@@ -1085,13 +1083,11 @@ STDEHANDLER(AftermathEvent)
 	}
 	else
 	{
-		if(g_selected_item->IsPlayerVisible(attack_owner) && !c.m_id)
-		{
+		if (g_selected_item->IsVisiblePlayer(attack_owner) && !c.m_id) {
 			g_soundManager->AddGameSound(GAMESOUNDS_LOSE_PLAYER_BATTLE);
 		}
 
-		if(g_selected_item->IsPlayerVisible(defense_owner) && !c.m_id)
-		{
+		if (g_selected_item->IsVisiblePlayer(defense_owner) && !c.m_id) {
 			g_soundManager->AddGameSound(GAMESOUNDS_LOSE_PLAYER_BATTLE);
 		}
 
@@ -1327,8 +1323,9 @@ STDEHANDLER(MoveUnitsEvent)
 						//	g_slicEngine->Execute(so);
 						}
 
-						if(c.GetOwner() == g_selected_item->GetVisiblePlayer())
+						if (g_selected_item->IsVisiblePlayer(c.GetOwner())) {
 							g_director->AddCenterMap(to);
+						}
 
 						for(sint32 k = 0; k < a->Num(); k++)
 						{
@@ -1375,13 +1372,13 @@ STDEHANDLER(DirectorMoveUnitsEvent)
 	if (a->IsStealth() && !a->IsVisible(g_selected_item->GetPlayerOnScreen())) return GEV_HD_Continue;
 
 	if (g_selected_item->GetPlayerOnScreen() != -1 &&
-		g_selected_item->GetPlayerOnScreen() != g_selected_item->GetVisiblePlayer() &&
+		g_selected_item->GetPlayerOnScreen() != g_selected_item->GetVisiblePlayerID() &&
 		!g_network.IsActive())
 	{
 		return GEV_HD_Continue;
 	}
 
-	Unit top_src = a->GetTopVisibleUnit(g_selected_item->GetVisiblePlayer());
+	Unit top_src = a->GetTopVisibleUnit(g_selected_item->GetVisiblePlayerID());
 	if (top_src.m_id == 0) {
 		top_src = a[0];
 	}
@@ -1397,8 +1394,8 @@ STDEHANDLER(DirectorMoveUnitsEvent)
 
 	if(g_selected_item->IsAutoCenterOn()
 	   && !g_director->TileWillBeCompletelyVisible(newPos.x, newPos.y)
-	   && (top_src.GetVisibility() & (1 << g_selected_item->GetVisiblePlayer()))
-	   && (g_theProfileDB->IsEnemyMoves() || top_src.GetOwner() == g_selected_item->GetVisiblePlayer()))
+	   && g_selected_item->IsUnitVisible(top_src)
+	   && (g_theProfileDB->IsEnemyMoves() || g_selected_item->IsVisiblePlayer(top_src.GetOwner())))
 	{
 		g_director->AddCenterMap(newPos);
 	}

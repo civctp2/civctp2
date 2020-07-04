@@ -30,7 +30,7 @@
 //
 // - Activision patch reimplementation: propagate the defensive bonus.
 // - Replaced some member names to match the new one in CityData.
-//   - Aug 6th 2005 Martin Gühmann
+//   - Aug 6th 2005 Martin GÃ¼hmann
 //
 //----------------------------------------------------------------------------
 
@@ -306,7 +306,7 @@ void NetCityName::Unpacketize(uint16 id, uint8* buf, uint16 size)
 				g_network.Unblock(home_city.GetOwner());
 			}
 
-			if(home_city.GetOwner() == g_selected_item->GetVisiblePlayer())
+			if (g_selected_item->IsVisiblePlayer(home_city.GetOwner()))
 			{
 				MainControlPanel::UpdateCityList();
 			}

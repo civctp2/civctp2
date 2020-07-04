@@ -1848,10 +1848,11 @@ sint32 CivApp::InitializeGame(CivArchive *archive)
 
 	if(g_turn->IsEmail() && archive) {
 		g_selected_item->KeyboardSelectFirstUnit();
+		Player * player = g_selected_item->GetVisiblePlayer();
 		if(g_selected_item->GetState() != SELECT_TYPE_LOCAL_ARMY &&
-		   (g_player[g_selected_item->GetVisiblePlayer()]->m_all_cities->Num() > 0)) {
-			g_selected_item->SetSelectCity(g_player[g_selected_item->GetVisiblePlayer()]->m_all_cities->Access(0));
-			g_director->AddCenterMap(g_player[g_selected_item->GetVisiblePlayer()]->m_all_cities->Access(0).RetPos());
+		   (player->m_all_cities->Num() > 0)) {
+			g_selected_item->SetSelectCity(player->m_all_cities->Access(0));
+			g_director->AddCenterMap(player->m_all_cities->Access(0).RetPos());
 		}
 		g_director->AddCenterMap(g_selected_item->GetCurSelectPos());
 
@@ -2128,10 +2129,11 @@ sint32 CivApp::InitializeSpriteEditor(CivArchive *archive)
 
 	if(g_turn->IsEmail() && archive) {
 		g_selected_item->KeyboardSelectFirstUnit();
+		Player * player = g_selected_item->GetVisiblePlayer();
 		if(g_selected_item->GetState() != SELECT_TYPE_LOCAL_ARMY &&
-		   (g_player[g_selected_item->GetVisiblePlayer()]->m_all_cities->Num() > 0)) {
-			g_selected_item->SetSelectCity(g_player[g_selected_item->GetVisiblePlayer()]->m_all_cities->Access(0));
-			g_director->AddCenterMap(g_player[g_selected_item->GetVisiblePlayer()]->m_all_cities->Access(0).RetPos());
+		   (player->m_all_cities->Num() > 0)) {
+			g_selected_item->SetSelectCity(player->m_all_cities->Access(0));
+			g_director->AddCenterMap(player->m_all_cities->Access(0).RetPos());
 		}
 		g_director->AddCenterMap(g_selected_item->GetCurSelectPos());
 
@@ -2557,7 +2559,7 @@ sint32 CivApp::Process(void)
 	{
 		Player *    p = g_player[g_selected_item->GetCurPlayer()];
 		if(p && !p->IsRobot()
-		|| g_selected_item->GetVisiblePlayer() == g_selected_item->GetCurPlayer())
+		|| g_selected_item->IsVisiblePlayer(g_selected_item->GetCurPlayer()))
 		{
 			if (g_director)
 				g_director->CatchUp();
@@ -2878,12 +2880,12 @@ void CivApp::PostRestartGameAction(void)
 
 void CivApp::PostRestartGameSameMapAction(void)
 {
-	Player * p = g_player[g_selected_item->GetVisiblePlayer()];
+	Player * player = g_selected_item->GetVisiblePlayer();
 
-	if (p && g_theProfileDB)
+	if (player && g_theProfileDB)
 	{
-		g_theProfileDB->SetLeaderName(p->GetLeaderName());
-		g_theProfileDB->SetCivIndex(p->GetCivilisation()->GetCivilisation());
+		g_theProfileDB->SetLeaderName(player->GetLeaderName());
+		g_theProfileDB->SetCivIndex(player->GetCivilisation()->GetCivilisation());
 	}
 
 	g_c3ui->AddAction(new RestartGameSameMapAction());

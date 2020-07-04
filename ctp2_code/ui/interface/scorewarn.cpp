@@ -24,7 +24,7 @@
 //
 // Modifications from the original Activision code:
 //
-// - Initialized local variables. (Sep 9th 2005 Martin Gühmann)
+// - Initialized local variables. (Sep 9th 2005 Martin GÃ¼hmann)
 //
 //----------------------------------------------------------------------------
 
@@ -74,7 +74,7 @@ void scorewarn_AcceptWarningCallback( aui_Control *control, uint32 action, uint3
 		if ( auiErr != AUI_ERRCODE_OK ) return;
 
 		if ( g_selected_item ) {
-			g_selected_item->Deselect( g_selected_item->GetVisiblePlayer() );
+			g_selected_item->Deselect(g_selected_item->GetVisiblePlayerID());
 		}
 
 		ScenarioEditor::Display();

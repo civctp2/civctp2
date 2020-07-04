@@ -25,7 +25,7 @@
 // Modifications from the original Activision code:
 //
 // - Keep the embargo and war buttons enabled until confirmed by the player.
-// - Initialized local variables. (Sep 9th 2005 Martin Gühmann)
+// - Initialized local variables. (Sep 9th 2005 Martin GÃ¼hmann)
 //
 //----------------------------------------------------------------------------
 
@@ -326,7 +326,7 @@ void DiplomacyWindow::Update()
 
 void DiplomacyWindow::UpdateProposalList(ctp2_ListBox *propList, bool toPlayer)
 {
-	sint32 player = g_selected_item->GetVisiblePlayer();
+	sint32 player = g_selected_item->GetVisiblePlayerID();
 	sint32 i;
 	bool selectedSomething = false;
 
@@ -370,7 +370,7 @@ void DiplomacyWindow::UpdateProposalList(ctp2_ListBox *propList, bool toPlayer)
 					propData = prop->detail;
 
 					if(!response) {
-						response = &Diplomat::GetDiplomat(i).GetResponsePending(g_selected_item->GetVisiblePlayer());
+						response = &Diplomat::GetDiplomat(i).GetResponsePending(g_selected_item->GetVisiblePlayerID());
 						if(*response == Diplomat::s_badResponse) {
 							response = NULL;
 						} else if(response->type != RESPONSE_THREATEN) {
@@ -889,7 +889,7 @@ STDEHANDLER(DipWinResponseReady)
 	if(!args->GetPlayer(0, p1)) return GEV_HD_Continue;
 	if(!args->GetPlayer(1, p2)) return GEV_HD_Continue;
 
-	if(p1 == g_selected_item->GetVisiblePlayer()) {
+	if (g_selected_item->IsVisiblePlayer(p1)) {
 
 		s_dipWindow->Display();
 		s_dipWindow->SetViewingResponse(p1, p2);
@@ -913,7 +913,7 @@ STDEHANDLER(DipWinResponseReady)
 		} else {
 			s_dipWindow->ShowSections(k_DIPWIN_RESPONSE | k_DIPWIN_PROPOSALS_MADE | k_DIPWIN_PROPOSALS_RECEIVED);
 		}
-	} else if(p2 == g_selected_item->GetVisiblePlayer()) {
+	} else if (g_selected_item->IsVisiblePlayer(p2)) {
 
 		ctp2_ListBox *lb = (ctp2_ListBox *)aui_Ldl::GetObject(s_dipWindowBlock, "DiplomacyTabs.Negotiations.TabPanel.ProposalsReceivedBox.List");
 		Assert(lb);
@@ -943,7 +943,7 @@ STDEHANDLER(DipWinNewProposalEvent)
 	if(!args->GetPlayer(0, p1)) return GEV_HD_Continue;
 	if(!args->GetPlayer(1, p2)) return GEV_HD_Continue;
 
-	if(p2 == g_selected_item->GetVisiblePlayer()) {
+	if (g_selected_item->IsVisiblePlayer(p2)) {
 
 		if(!g_attractWindow) {
 			AttractWindow::Initialize();
@@ -981,8 +981,7 @@ STDEHANDLER(DipWinNewNegotiationEvent)
 	if(!args->GetPlayer(0, p1)) return GEV_HD_Continue;
 	if(!args->GetPlayer(1, p2)) return GEV_HD_Continue;
 
-	if(p2 == g_selected_item->GetVisiblePlayer()) {
-
+	if (g_selected_item->IsVisiblePlayer(p2)) {
 	}
 	return GEV_HD_Continue;
 }
@@ -1165,7 +1164,7 @@ void DiplomacyWindow::RequestGoldValue(sint32 player)
 	}
 
 	ctp2_Spinner *spinner = (ctp2_Spinner *)aui_Ldl::GetObject("DipGoldRequest.Spinner");
-	if(player == g_selected_item->GetVisiblePlayer()) {
+	if (g_selected_item->IsVisiblePlayer(player)) {
 		spinner->SetMaximum(g_player[player]->m_gold->GetLevel(), 0);
 	} else {
 
@@ -1255,7 +1254,7 @@ bool DiplomacyWindow::ProposalContextMenu(sint32 proposal)
 	m_curMenu = new ctp2_Menu(true, DiplomacyWindow::MenuCallback);
 	switch(rec->GetArg1()) {
 		case k_DiplomacyProposal_Arg1_OwnCity_Bit:
-			AddCityItems(m_curMenu, g_selected_item->GetVisiblePlayer());
+			AddCityItems(m_curMenu, g_selected_item->GetVisiblePlayerID());
 			break;
 		case k_DiplomacyProposal_Arg1_HisCity_Bit:
 			AddCityItems(m_curMenu, m_sendToCiv);
@@ -1270,10 +1269,10 @@ bool DiplomacyWindow::ProposalContextMenu(sint32 proposal)
 
 			break;
 		case k_DiplomacyProposal_Arg1_OwnAdvance_Bit:
-			AddAdvanceItems(m_curMenu, g_selected_item->GetVisiblePlayer(), m_sendToCiv);
+			AddAdvanceItems(m_curMenu, g_selected_item->GetVisiblePlayerID(), m_sendToCiv);
 			break;
 		case k_DiplomacyProposal_Arg1_HisAdvance_Bit:
-			AddAdvanceItems(m_curMenu, m_sendToCiv, g_selected_item->GetVisiblePlayer());
+			AddAdvanceItems(m_curMenu, m_sendToCiv, g_selected_item->GetVisiblePlayerID());
 			break;
 
 		case k_DiplomacyProposal_Arg1_OwnUnitType_Bit:
@@ -1286,7 +1285,7 @@ bool DiplomacyWindow::ProposalContextMenu(sint32 proposal)
 
 			break;
 		case k_DiplomacyProposal_Arg1_OwnGold_Bit:
-			RequestGoldValue(g_selected_item->GetVisiblePlayer());
+			RequestGoldValue(g_selected_item->GetVisiblePlayerID());
 			if(m_getRequest)
 				m_proposalArg.gold = 0;
 			else
@@ -1302,7 +1301,7 @@ bool DiplomacyWindow::ProposalContextMenu(sint32 proposal)
 			needItems = false;
 			break;
 		case k_DiplomacyProposal_Arg1_OwnPollution_Bit:
-			RequestPollutionValue(g_selected_item->GetVisiblePlayer());
+			RequestPollutionValue(g_selected_item->GetVisiblePlayerID());
 			if(m_getRequest)
 				m_proposalArg.gold = 0;
 			else
@@ -1327,7 +1326,7 @@ bool DiplomacyWindow::ProposalContextMenu(sint32 proposal)
 			needItems = false;
 			break;
 		case k_DiplomacyProposal_Arg1_ThirdParty_Bit:
-			AddThirdPartyItems(m_curMenu, g_selected_item->GetVisiblePlayer(), m_sendToCiv);
+			AddThirdPartyItems(m_curMenu, g_selected_item->GetVisiblePlayerID(), m_sendToCiv);
 			break;
 		default:
 
@@ -1563,9 +1562,9 @@ void DiplomacyWindow::ProposalsMade(aui_Control *control, uint32 action, uint32 
 	} else {
 
 		sint32 otherPlayer = (sint32)item->GetUserData();
-		s_dipWindow->SetViewingResponse(g_selected_item->GetVisiblePlayer(),
-										otherPlayer);
-		RESPONSE_TYPE rtype = Diplomat::GetDiplomat(otherPlayer).GetResponsePending(g_selected_item->GetVisiblePlayer()).type;
+		s_dipWindow->SetViewingResponse(g_selected_item->GetVisiblePlayerID(), otherPlayer);
+		RESPONSE_TYPE rtype = Diplomat::GetDiplomat(otherPlayer).GetResponsePending(
+				g_selected_item->GetVisiblePlayerID()).type;
 		if((rtype == RESPONSE_COUNTER) || (rtype == RESPONSE_REJECT)) {
 			s_dipWindow->ShowSections(k_DIPWIN_RESPONSE | k_DIPWIN_RESPONSE_WITH_COUNTER | k_DIPWIN_PROPOSALS_RECEIVED | k_DIPWIN_PROPOSALS_MADE);
 		} else {
@@ -1686,7 +1685,7 @@ bool DiplomacyWindow::ThreatContextMenu(sint32 threat)
 			AddCityItems(m_threatMenu, m_viewResponseReceiver);
 			break;
 		case k_DiplomacyThreat_Arg1_ThirdParty_Bit:
-			AddThirdPartyItems(m_threatMenu, g_selected_item->GetVisiblePlayer(), m_viewResponseReceiver);
+			AddThirdPartyItems(m_threatMenu, g_selected_item->GetVisiblePlayerID(), m_viewResponseReceiver);
 			break;
 		default:
 			needItems = false;
@@ -1969,24 +1968,15 @@ void DiplomacyWindow::EnableButtons(BOOL enable, sint32 player)
 	sm_detailsButton->Enable(enable);
 	sm_messageButton->Enable(enable);
 
-	if(enable
-	&& g_player[g_selected_item->GetVisiblePlayer()]->HasWarWith(player)
-	){
+	if (enable && g_selected_item->GetVisiblePlayer()->HasWarWith(player)) {
 		sm_warButton->Enable(FALSE);
-	}
-	else
-	{
+	} else {
 		sm_warButton->Enable(enable);
 	}
 
-	if(enable
-	&& Diplomat::GetDiplomat(g_selected_item->GetVisiblePlayer()).GetEmbargo(player)
-	){
+	if (enable && Diplomat::GetDiplomat(g_selected_item->GetVisiblePlayerID()).GetEmbargo(player)) {
 		sm_embargoButton->Enable(FALSE);
-	}
-	else
-	{
+	} else {
 		sm_embargoButton->Enable(enable);
 	}
-
 }

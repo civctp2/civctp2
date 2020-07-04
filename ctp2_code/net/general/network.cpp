@@ -728,7 +728,7 @@ Network::Process()
 
 			sint32 p;
 			for(p = 0; p < k_MAX_PLAYERS; p++) {
-				if(!g_player[p] || p == g_selected_item->GetVisiblePlayer())
+				if(!g_player[p] || g_selected_item->IsVisiblePlayer(p))
 					continue;
 				if(Diplomat::GetDiplomat(GetPlayerIndex()).GetReceiverHasInitiative(p)) {
 
@@ -751,15 +751,13 @@ Network::Process()
 		}
 
 		if(g_selected_item) {
-			if(g_selected_item->GetCurPlayer() ==
-			   g_selected_item->GetVisiblePlayer() &&
+			if (g_selected_item->IsVisiblePlayer(g_selected_item->GetCurPlayer()) &&
 			   IsMyTurn() && (!m_iAmHost || m_readyToStart)) {
 				if(timeNow >= m_turnEndsAt) {
 					if(sci_advancescreen_isOnScreen()) {
 						sci_advancescreen_removeMyWindow(AUI_BUTTON_ACTION_EXECUTE);
 					}
 					g_gevManager->EndTurnRequest();
-
 				}
 			}
 		}
@@ -2307,7 +2305,7 @@ Network::ProcessNewPlayer(uint16 id)
 		Assert(!g_player[newslot]->IsNetwork());
 
 
-//		sint32 oldVisPlayer = g_selected_item->GetVisiblePlayer();
+//		sint32 oldVisPlayer = g_selected_item->GetVisiblePlayerID();
 		if(player->m_id != m_pid) {
 			g_player[newslot]->SetPlayerType(PLAYER_TYPE_NETWORK);
 		} else {
@@ -2498,8 +2496,7 @@ void Network::SendChatText(MBCHAR *str, sint32 len)
 		return;
 	}
 
-
-	AddChatText(str, len, static_cast<uint8>(g_selected_item->GetVisiblePlayer()), FALSE);
+	AddChatText(str, len, static_cast<uint8>(g_selected_item->GetVisiblePlayerID()), FALSE);
 
 	NetChat *chatPacket = new NetChat(m_chatMask, str, (sint16)len);
 	chatPacket->AddRef();

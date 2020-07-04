@@ -26,8 +26,8 @@
 //
 // - Added option to show info for tile improvements that are too expensive
 //   and made it modifiable in-game.
-// - Added a construction time line to the tileimp tracker window. (Aug 14th 2005 Martin Gühmann)
-// - Initialized local variables. (Sep 9th 2005 Martin Gühmann)
+// - Added a construction time line to the tileimp tracker window. (Aug 14th 2005 Martin GÃ¼hmann)
+// - Initialized local variables. (Sep 9th 2005 Martin GÃ¼hmann)
 //
 //----------------------------------------------------------------------------
 
@@ -200,9 +200,9 @@ void tileimptracker_DisplayData(MapPoint const & p, sint32 type)
 	if(!g_tileImpTrackerWindow)
 		return;
 
-	MBCHAR		mytext[256];
-	sint32		x, y;
-	sint32		visPlayer = g_selected_item->GetVisiblePlayer();
+	MBCHAR   mytext[256];
+	sint32   x, y;
+	Player * visiblePlayer = g_selected_item->GetVisiblePlayer();
 
 	s_tileImprovementNum = type;
 	if (s_tileImprovementNum < 0) {
@@ -216,7 +216,7 @@ void tileimptracker_DisplayData(MapPoint const & p, sint32 type)
 																	TERRAIN_IMPROVEMENT(s_tileImprovementNum),
 																	extraData);
 
-	if(g_player[visPlayer]->IsExplored(p) && !alreadyHasIt) {
+	if (visiblePlayer->IsExplored(p) && !alreadyHasIt) {
 
 		maputils_MapXY2PixelXY(p.x,p.y,&x,&y);
 
@@ -302,11 +302,11 @@ void tileimptracker_DisplayData(MapPoint const & p, sint32 type)
 
 		bool const	checkMaterials	= !g_theProfileDB->GetValueByName("ShowExpensive");
 
-		if (g_player[visPlayer]->CanCreateImprovement
+		if (visiblePlayer->CanCreateImprovement
 				(TERRAIN_IMPROVEMENT(s_tileImprovementNum), p, checkMaterials)
 		   )
 		{
-			if (g_player[visPlayer]->CanCreateImprovement
+			if (visiblePlayer->CanCreateImprovement
 					(TERRAIN_IMPROVEMENT(s_tileImprovementNum), p, true)
 			   )
 			{

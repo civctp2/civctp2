@@ -358,10 +358,7 @@ void BattleViewWindow::SetupBattle(Battle *battle)
 	if(!g_theCurrentBattle)
 		return;
 
-	if (g_theCurrentBattle->GetAttacker() ==
-		    g_selected_item->GetVisiblePlayer()
-	    && !g_network.IsActive()
-	   )
+	if (g_selected_item->IsVisiblePlayer(g_theCurrentBattle->GetAttacker()) && !g_network.IsActive())
 	{
 		m_retreatButton->Show();
 		m_retreatButton->Enable(true);

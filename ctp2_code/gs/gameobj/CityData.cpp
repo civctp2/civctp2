@@ -1846,11 +1846,7 @@ void CityData::Revolt(sint32 &playerToJoin, bool causeIsExternal)
 			}
 			else
 			{
-				sint32 const visiblePlayer = g_selected_item->GetVisiblePlayer();
-				if ((visiblePlayer == m_owner) ||
-				    (m_home_city.GetVisibility() & (1 << visiblePlayer))
-				   )
-				{
+				if (g_selected_item->IsVisiblePlayer(m_owner) || g_selected_item->IsUnitVisible(m_home_city)) {
 					g_soundManager->AddSound(SOUNDTYPE_SFX, (uint32)0, 	soundID,
 					                         m_home_city.RetPos().x, m_home_city.RetPos().y);
 				}
@@ -5299,9 +5295,7 @@ void CityData::CheckRiot()
 //					}
 //					else
 //					{
-//						sint32 const visiblePlayer = g_selected_item->GetVisiblePlayer();
-//						if ((visiblePlayer == m_owner) || (m_home_city.GetVisibility() & (1 << visiblePlayer)) )
-//						{
+//						if (g_selected_item->IsVisiblePlayer(m_owner) || g_selected_item->IsUnitVisible(m_home_city)) {
 //							g_soundManager->AddSound(SOUNDTYPE_SFX, (uint32)0, 	soundID, m_home_city.RetPos().x, m_home_city.RetPos().y);
 //						}
 //					}

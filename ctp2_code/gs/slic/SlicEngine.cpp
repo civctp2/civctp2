@@ -24,15 +24,15 @@
 //
 // Modifications from the original Activision code:
 //
-// - Readded the new slicfunctions of the patch, by Martin Gühmann.
+// - Readded the new slicfunctions of the patch, by Martin GÃ¼hmann.
 // - Added FreeAllSlaves slicfunction by The Big Mc.
 // - Added PlantSpecificGood and RemoveGood slicfunctions by MrBaggins.
 // - Data blanked out at screen in between 2 players in hotseat play.
 // - Great library history cleared between 2 players in hotseat play.
 // - Corrected reported memory leak.
 // - Added database access to all databases in the new database format,
-//   even if it does not make sense, by Martin Gühmann.
-// - New slic functions added by Martin Gühmann:
+//   even if it does not make sense, by Martin GÃ¼hmann.
+// - New slic functions added by Martin GÃ¼hmann:
 //   - CargoCapacity     Gets number of additional units a unit can carry.
 //   - MaxCargoSize      Gets the maximum number of units a unit can carry.
 //   - CargoSize         Gets the current number of units a unit is carrying.
@@ -49,17 +49,17 @@
 // - Redesigned to prevent memory leaks and crashes.
 // - Reuse SlicSegment pool between SlicEngine sessions.
 // - Added slic civilisation database support.
-// - Added slic risk database support. (Sep 15th 2005 Martin Gühmann)
+// - Added slic risk database support. (Sep 15th 2005 Martin GÃ¼hmann)
 // - Added City Capture options by E 6.09.2006
 // - Added database slic access of difficulty, pollution and global warming
-//   databases. (July 15th 2006 Martin Gühmann)
+//   databases. (July 15th 2006 Martin GÃ¼hmann)
 // - PopContext refills the builtins when it restores the old context so
-//   that slic does not forget the values of the builtins. (Sep 24th 2006 Martin Gühmann)
-// - Added GetContinentSize slic function. (Dec 24th 2006 Martin Gühmann)
-// - Added slic database access to the new map icon database. (27-Mar-2007 Martin Gühmann)
-// - Added slic database access to the new map database. (27-Mar-2007 Martin Gühmann)
-// - Added slic database access to the new concept database. (31-Mar-2007 Martin Gühmann)
-// - Added slic database access to the new const database. (29-Oct-2007 Martin Gühmann)
+//   that slic does not forget the values of the builtins. (Sep 24th 2006 Martin GÃ¼hmann)
+// - Added GetContinentSize slic function. (Dec 24th 2006 Martin GÃ¼hmann)
+// - Added slic database access to the new map icon database. (27-Mar-2007 Martin GÃ¼hmann)
+// - Added slic database access to the new map database. (27-Mar-2007 Martin GÃ¼hmann)
+// - Added slic database access to the new concept database. (31-Mar-2007 Martin GÃ¼hmann)
+// - Added slic database access to the new const database. (29-Oct-2007 Martin GÃ¼hmann)
 //
 //----------------------------------------------------------------------------
 
@@ -800,10 +800,6 @@ void SlicEngine::AddBuiltinFunctions()
 	m_functionHash->Add(new Slic_GetArmyByIndex);
 	m_functionHash->Add(new Slic_GetCityByIndex);
 
-
-
-
-
 	m_functionHash->Add(new Slic_LogRegardEvent);
 	m_functionHash->Add(new Slic_GetPublicRegard);
 	m_functionHash->Add(new Slic_GetEffectiveRegard);
@@ -829,11 +825,6 @@ void SlicEngine::AddBuiltinFunctions()
 	m_functionHash->Add(new Slic_AtWarWith);
 	m_functionHash->Add(new Slic_EffectiveWarWith);
 
-
-
-
-
-
 	m_functionHash->Add(new Slic_HasAgreementWithAnyone);
 	m_functionHash->Add(new Slic_HasAgreement);
 	m_functionHash->Add(new Slic_CancelAgreement);
@@ -842,12 +833,8 @@ void SlicEngine::AddBuiltinFunctions()
 	m_functionHash->Add(new Slic_GetLastHotwarAttack);
 	m_functionHash->Add(new Slic_GetLastColdwarAttack);
 
-
-
-
 	m_functionHash->Add(new Slic_GetNuclearLaunchTarget);
 	m_functionHash->Add(new Slic_TargetNuclearAttack);
-
 
 	m_functionHash->Add(new Slic_GetMapHeight);
 	m_functionHash->Add(new Slic_GetMapWidth);
@@ -908,7 +895,7 @@ void SlicEngine::AddBuiltinFunctions()
 	m_functionHash->Add(new Slic_IsUnitAtHead);
 	m_functionHash->Add(new Slic_OpenScenarioEditor);
 
-	//Readded Slic functions of CTP2.1 by Martin Gühmann
+	//Readded Slic functions of CTP2.1 by Martin GÃ¼hmann
 	m_functionHash->Add(new Slic_DestroyBuilding);
 	m_functionHash->Add(new Slic_OpenBuildQueue);
 	m_functionHash->Add(new Slic_TileHasImprovement);
@@ -953,15 +940,11 @@ void SlicEngine::AddBuiltinFunctions()
 	m_functionHash->Add(new Slic_GetMostAtRiskCity);
 	m_functionHash->Add(new Slic_GetRoundsToNextDisaster);
 	m_functionHash->Add(new Slic_GetCurrentPollutionLevel);
-	// New slicfunction by The Big Mc
 	m_functionHash->Add(new Slic_FreeAllSlaves);
 	m_functionHash->Add(new Slic_AddSlaves);
-	// New good functions by MrBaggins
 	m_functionHash->Add(new Slic_PlantSpecificGood);
 	m_functionHash->Add(new Slic_RemoveGood);
-	// Added by Peter Triggs
 	m_functionHash->Add(new Slic_DeclareWar);
-	// Added by Martin Gühmann
 	m_functionHash->Add(new Slic_CargoCapacity);
 	m_functionHash->Add(new Slic_MaxCargoSize);
 	m_functionHash->Add(new Slic_CargoSize);
@@ -969,21 +952,17 @@ void SlicEngine::AddBuiltinFunctions()
 	m_functionHash->Add(new Slic_GetContinent);
 	m_functionHash->Add(new Slic_GetContinentSize);
 	m_functionHash->Add(new Slic_IsWater);
-	//Added by Solver
 	m_functionHash->Add(new Slic_IsOnSameContinent);
-	//Added by E
 	m_functionHash->Add(new Slic_KillCity);
 	m_functionHash->Add(new Slic_Pillage);
 	m_functionHash->Add(new Slic_Plunder);
 	m_functionHash->Add(new Slic_Liberate);
 	m_functionHash->Add(new Slic_AddPW);
 	//m_functionHash->Add(new Slic_PuppetGovt);
-	//Added by Maq
 	m_functionHash->Add(new Slic_CreateBuilding);
 	m_functionHash->Add(new Slic_CreateWonder);
 	m_functionHash->Add(new Slic_UnitMovementLeft);
 	m_functionHash->Add(new Slic_GetStoredProduction);
-
 }
 
 void SlicEngine::Link()
@@ -1469,9 +1448,9 @@ void SlicEngine::RunTradeScreenTriggers()
 	PointerList<SlicSegment>::Walker walk(m_triggerLists[TRIGGER_LIST_TRADE_SCREEN]);
 	while(walk.IsValid()) {
 		if(walk.GetObj()->IsEnabled()) {
-			if (g_player[g_selected_item->GetVisiblePlayer()] != NULL) {
+			if (g_selected_item->GetVisiblePlayer()) {
 				SlicObject *obj = new SlicObject(walk.GetObj());
-				obj->AddPlayer(g_selected_item->GetVisiblePlayer());
+				obj->AddPlayer(g_selected_item->GetVisiblePlayerID());
 				Execute(obj);
 			}
 		}
@@ -1484,9 +1463,9 @@ void SlicEngine::RunSameGoodTriggers(const Unit &city1, const Unit &city2)
 	PointerList<SlicSegment>::Walker walk(m_triggerLists[TRIGGER_LIST_SAME_GOOD]);
 	while(walk.IsValid()) {
 		if(walk.GetObj()->IsEnabled()) {
-			if (g_player[g_selected_item->GetVisiblePlayer()] != NULL) {
+			if (g_selected_item->GetVisiblePlayer()) {
 				SlicObject *obj = new SlicObject(walk.GetObj());
-				obj->AddPlayer(g_selected_item->GetVisiblePlayer());
+				obj->AddPlayer(g_selected_item->GetVisiblePlayerID());
 				obj->AddCity(city1);
 				obj->AddCity(city2);
 				Execute(obj);
@@ -1506,9 +1485,9 @@ void SlicEngine::RunSameGoodAsTradedTriggers(sint32 good, const Unit &city1)
 	PointerList<SlicSegment>::Walker walk(m_triggerLists[TRIGGER_LIST_SAME_GOOD_AS_TRADED]);
 	while(walk.IsValid()) {
 		if(walk.GetObj()->IsEnabled()) {
-			if (g_player[g_selected_item->GetVisiblePlayer()] != NULL) {
+			if (g_selected_item->GetVisiblePlayer()) {
 				SlicObject *obj = new SlicObject(walk.GetObj());
-				obj->AddCivilisation(*g_player[g_selected_item->GetVisiblePlayer()]->m_civilisation);
+				obj->AddCivilisation(*g_selected_item->GetVisiblePlayer()->m_civilisation);
 				obj->AddCity(city1);
 				Execute(obj);
 			}
@@ -1522,9 +1501,9 @@ void SlicEngine::RunUnitQueueTriggers()
 	PointerList<SlicSegment>::Walker walk(m_triggerLists[TRIGGER_LIST_UNIT_QUEUE]);
 	while(walk.IsValid()) {
 		if(walk.GetObj()->IsEnabled()) {
-			if (g_player[g_selected_item->GetVisiblePlayer()] != NULL) {
+			if (g_selected_item->GetVisiblePlayer()) {
 				SlicObject *obj = new SlicObject(walk.GetObj());
-				obj->AddCivilisation(*g_player[g_selected_item->GetVisiblePlayer()]->m_civilisation);
+				obj->AddCivilisation(*g_selected_item->GetVisiblePlayer()->m_civilisation);
 				Execute(obj);
 			}
 		}
@@ -1537,9 +1516,9 @@ void SlicEngine::RunProductionQueueTriggers()
 	PointerList<SlicSegment>::Walker walk(m_triggerLists[TRIGGER_LIST_PRODUCTION_QUEUE]);
 	while(walk.IsValid()) {
 		if(walk.GetObj()->IsEnabled()) {
-			if (g_player[g_selected_item->GetVisiblePlayer()] != NULL) {
+			if (g_selected_item->GetVisiblePlayer()) {
 				SlicObject *obj = new SlicObject(walk.GetObj());
-				obj->AddCivilisation(*g_player[g_selected_item->GetVisiblePlayer()]->m_civilisation);
+				obj->AddCivilisation(*g_selected_item->GetVisiblePlayer()->m_civilisation);
 				Execute(obj);
 			}
 		}
@@ -1552,9 +1531,9 @@ void SlicEngine::RunDiplomaticScreenTriggers()
 	PointerList<SlicSegment>::Walker walk(m_triggerLists[TRIGGER_LIST_DIPLOMATIC_SCREEN]);
 	while(walk.IsValid()) {
 		if(walk.GetObj()->IsEnabled()) {
-			if (g_player[g_selected_item->GetVisiblePlayer()] != NULL) {
+			if (g_selected_item->GetVisiblePlayer()) {
 				SlicObject *obj = new SlicObject(walk.GetObj());
-				obj->AddCivilisation(*g_player[g_selected_item->GetVisiblePlayer()]->m_civilisation);
+				obj->AddCivilisation(*g_selected_item->GetVisiblePlayer()->m_civilisation);
 				Execute(obj);
 			}
 		}
@@ -1567,9 +1546,9 @@ void SlicEngine::RunCreateStackTriggers()
 	PointerList<SlicSegment>::Walker walk(m_triggerLists[TRIGGER_LIST_CREATE_STACK]);
 	while(walk.IsValid()) {
 		if(walk.GetObj()->IsEnabled()) {
-			if (g_player[g_selected_item->GetVisiblePlayer()] != NULL) {
+			if (g_selected_item->GetVisiblePlayer()) {
 				SlicObject *obj = new SlicObject(walk.GetObj());
-				obj->AddCivilisation(*g_player[g_selected_item->GetVisiblePlayer()]->m_civilisation);
+				obj->AddCivilisation(*g_selected_item->GetVisiblePlayer()->m_civilisation);
 				Execute(obj);
 			}
 		}
@@ -1582,9 +1561,9 @@ void SlicEngine::RunCreateMixedStackTriggers()
 	PointerList<SlicSegment>::Walker walk(m_triggerLists[TRIGGER_LIST_CREATE_MIXED_STACK]);
 	while(walk.IsValid()) {
 		if(walk.GetObj()->IsEnabled()) {
-			if (g_player[g_selected_item->GetVisiblePlayer()] != NULL) {
+			if (g_selected_item->GetVisiblePlayer()) {
 				SlicObject *obj = new SlicObject(walk.GetObj());
-				obj->AddCivilisation(*g_player[g_selected_item->GetVisiblePlayer()]->m_civilisation);
+				obj->AddCivilisation(*g_selected_item->GetVisiblePlayer()->m_civilisation);
 				Execute(obj);
 			}
 		}
@@ -1597,9 +1576,9 @@ void SlicEngine::RunAutoArrangeOffTriggers()
 	PointerList<SlicSegment>::Walker walk(m_triggerLists[TRIGGER_LIST_AUTO_ARRANGE_OFF]);
 	while(walk.IsValid()) {
 		if(walk.GetObj()->IsEnabled()) {
-			if (g_player[g_selected_item->GetVisiblePlayer()] != NULL) {
+			if (g_selected_item->GetVisiblePlayer()) {
 				SlicObject *obj = new SlicObject(walk.GetObj());
-				obj->AddCivilisation(*g_player[g_selected_item->GetVisiblePlayer()]->m_civilisation);
+				obj->AddCivilisation(*g_selected_item->GetVisiblePlayer()->m_civilisation);
 				Execute(obj);
 			}
 		}
@@ -2103,7 +2082,7 @@ void SlicEngine::RunHelpTriggers(const MBCHAR *helpName)
 	if(seg && seg->IsEnabled()) {
 		SlicObject *obj = new SlicObject(seg);
 		if (g_selected_item)
-			obj->AddRecipient(g_selected_item->GetVisiblePlayer());
+			obj->AddRecipient(g_selected_item->GetVisiblePlayerID());
 		Execute(obj);
 	}
 }
@@ -2570,7 +2549,7 @@ void SlicEngine::BlankScreen(bool blank)
 		{
 			CheckPendingResearch();
 
-			PLAYER_INDEX const		player	= g_selected_item->GetVisiblePlayer();
+			PLAYER_INDEX const player = g_selected_item->GetVisiblePlayerID();
 
 			MainControlPanel::UpdatePlayer(player);
 			MainControlPanel::UpdateCityList();
@@ -2589,7 +2568,7 @@ void SlicEngine::CheckPendingResearch()
 {
 	if(m_doResearchOnUnblank) {
 		m_doResearchOnUnblank = FALSE;
-		if(m_researchOwner == g_selected_item->GetVisiblePlayer()) {
+		if(g_selected_item->IsVisiblePlayer(m_researchOwner)) {
 			g_director->AddInvokeResearchAdvance(m_researchText);
 		}
 	}
@@ -2893,7 +2872,6 @@ void SlicEngine::AddDatabases()
 																  g_DiplomacyRecord_Accessors,
 																  g_Diplomacy_Tokens,
 																  k_Num_DiplomacyRecord_Tokens));
-	//The rest of the new databases available through slic added by Martin Gühmann
 	m_dbHash->Add(new SlicDBConduit<PersonalityRecord,
 									PersonalityRecordAccessorInfo>("PersonalityDB", g_thePersonalityDB,
 																  g_PersonalityRecord_Accessors,

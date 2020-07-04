@@ -26,9 +26,9 @@
 //
 // - Prevent production errors when pressing F3 after end of turn.
 // - The information window is no more closed on the begin of a new turn.
-//   (Aug 7th 2005 Martin Gühmann)
+//   (Aug 7th 2005 Martin GÃ¼hmann)
 // - The initial city interface is no more displayed if the visible player
-//   is a robot. (26-Jan-2008 Martin Gühmann)
+//   is a robot. (26-Jan-2008 Martin GÃ¼hmann)
 //
 //----------------------------------------------------------------------------
 
@@ -58,7 +58,7 @@ STDEHANDLER(InterfaceCreateCityEvent)
 	Unit city;
 	if(!args->GetCity(0, city)) return GEV_HD_Continue;
 
-	if(city.GetOwner() == g_selected_item->GetVisiblePlayer()) {
+	if (g_selected_item->IsVisiblePlayer(city.GetOwner())) {
 		if(g_theProfileDB->GetAutoRenameCities()) {
 			c3_utilitydialogbox_NameCity(city);
 		}
@@ -88,9 +88,7 @@ STDEHANDLER(InterfaceOpenInitialCityInterfaceEvent)
 	if(g_theProfileDB->GetAutoOpenCityWindow()) {
 		static Unit city;
 		if(!args->GetCity(0, city)) return GEV_HD_Continue;
-		if( city.GetOwner() == g_selected_item->GetVisiblePlayer()
-		&& !g_player[city.GetOwner()]->IsRobot()
-		){
+		if (g_selected_item->IsVisiblePlayer(city.GetOwner()) && !g_player[city.GetOwner()]->IsRobot()) {
 			EditQueue::Display(CityWindow::GetCityData(city));
 		}
 	}
@@ -112,7 +110,7 @@ STDEHANDLER(InterfaceStartMovePhaseEvent)
 {
 	sint32 pl;
 	if(!args->GetPlayer(0, pl)) return GEV_HD_Continue;
-	if(pl == g_selected_item->GetVisiblePlayer()) {
+	if (g_selected_item->IsVisiblePlayer(pl)) {
 		static Unit selCity;
 		if(g_selected_item->GetSelectedCity(selCity)) {
 			controlpanelwindow_Update(&selCity);
@@ -132,7 +130,7 @@ STDEHANDLER(InterfaceUpdateCityProjection)
 	sint32 pl;
 	if(!args->GetPlayer(0, pl)) return GEV_HD_Continue;
 
-	if(pl == g_selected_item->GetVisiblePlayer()) {
+	if (g_selected_item->IsVisiblePlayer(pl)) {
 		MainControlPanel::SelectedCity();
 		// Reenable opening the city window - see InterfacePreBeginTurnEvent.
 		if (g_modalWindow > 0)
@@ -149,7 +147,7 @@ STDEHANDLER(InterfaceBeginTurnRecenter)
 	sint32 pl;
 	if(!args->GetPlayer(0, pl)) return GEV_HD_Continue;
 
-	if(pl == g_selected_item->GetVisiblePlayer())
+	if (g_selected_item->IsVisiblePlayer(pl))
 	{
 		Army a;
 		Unit c;
@@ -178,7 +176,7 @@ STDEHANDLER(InterfacePreBeginTurn)
 	sint32 pl;
 	if(!args->GetPlayer(0, pl)) return GEV_HD_Continue;
 
-	if(pl == g_selected_item->GetVisiblePlayer()) {
+	if (g_selected_item->IsVisiblePlayer(pl)) {
 		close_AllScreensAndUpdateInfoScreen();
 		// Prevent opening the city window during the production computations.
 		// It will be reenabled in InterfaceUpdateCityProjection.

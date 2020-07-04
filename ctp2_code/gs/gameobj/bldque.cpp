@@ -604,8 +604,7 @@ bool BuildQueue::BuildFront(sint32 &shieldstore, CityData *cd, const MapPoint &p
 			m_frontWhenBuilt = m_list->GetHead();
 
 			if (g_soundManager) {
-				sint32 visiblePlayer = g_selected_item->GetVisiblePlayer();
-				if (visiblePlayer == m_owner) {
+				if (g_selected_item->IsVisiblePlayer(m_owner)) {
 					g_soundManager->AddSound(SOUNDTYPE_VOICE, (uint32)0,
 											gamesounds_GetGameSoundID(GAMESOUNDS_BUILDING_COMPLETE),
 											pos.x,
@@ -1139,17 +1138,11 @@ void BuildQueue::ReplaceHead(sint32 cat, sint32 t, sint32 cost)
 
 		HandleProductionStart();
 
-		if (g_soundManager && (g_selected_item->GetVisiblePlayer() == m_owner))
-		{
-			g_soundManager->AddSound(
-			                         SOUNDTYPE_VOICE,
-			                         (uint32)0,
-			                         gamesounds_GetGameSoundID(GAMESOUNDS_BUILDING_STARTED),
-			                         0,
-			                         0
-			                        );
-			}
+		if (g_soundManager && g_selected_item->IsVisiblePlayer(m_owner)) {
+			g_soundManager->AddSound(SOUNDTYPE_VOICE,(uint32)0,
+			                         gamesounds_GetGameSoundID(GAMESOUNDS_BUILDING_STARTED),0,0);
 		}
+	}
 	else
 	{
 		InsertTail(cat, t, cost);
@@ -1249,9 +1242,7 @@ bool BuildQueue::InsertTail(sint32 cat, sint32 t, sint32 cost)
 
 	if (m_list->GetCount() == 0)
 	{
-		sint32 visiblePlayer = g_selected_item->GetVisiblePlayer();
-		if ((visiblePlayer == m_owner) && g_soundManager)
-		{
+		if (g_soundManager && g_selected_item->IsVisiblePlayer(m_owner)) {
 			g_soundManager->AddSound(SOUNDTYPE_VOICE, (uint32)0,
 									gamesounds_GetGameSoundID(GAMESOUNDS_BUILDING_STARTED),
 									0,

@@ -25,7 +25,7 @@
 //
 // Modifications from the original Activision code:
 //
-// - Added debug pathing for the city astar. (17-Jan-2008 Martin Gühmann)
+// - Added debug pathing for the city astar. (17-Jan-2008 Martin GÃ¼hmann)
 //
 //----------------------------------------------------------------------------
 
@@ -165,12 +165,12 @@ public:
 	void SetSelectUnit(const Unit &u, bool all = true, bool isDoubleClick = false);
 	void SetSelectGood(const MapPoint &pos);
 
-	SELECT_TYPE GetState() { return m_select_state[GetVisiblePlayer()]; }
+	SELECT_TYPE GetState() { return m_select_state[GetVisiblePlayerID()]; }
 
 	void GetTopCurItem(PLAYER_INDEX &s_player, ID &s_item,
 					   SELECT_TYPE &s_state);
 
-	MapPoint GetCurSelectPos(void) { return m_select_pos[GetVisiblePlayer()]; }
+	MapPoint GetCurSelectPos(void) { return m_select_pos[GetVisiblePlayerID()]; }
 
 	void ClipCurrentItem();
 	void NextItem();
@@ -192,8 +192,17 @@ public:
 	PLAYER_INDEX GetCurPlayer() const { return m_current_player; };
 	void RemovePlayer(PLAYER_INDEX p);
 	void AddPlayer(PLAYER_INDEX p) ;
-	sint32 GetVisiblePlayer() const;
-	bool IsPlayerVisible(sint32 player) const { return player == GetVisiblePlayer(); };
+
+	sint32   GetVisiblePlayerID() const;
+	Player * GetVisiblePlayer() const { return g_player[GetVisiblePlayerID()]; }
+	bool     IsVisiblePlayer(sint32 player) const { return player == GetVisiblePlayerID(); }
+	bool     IsUnitVisible(const Unit & unit) const { return IsUnitVisible(unit.GetVisibility()); }
+	bool     IsUnitVisible(uint32 unitVisibility) const { return unitVisibility & (1 << GetVisiblePlayerID()); }
+	bool     IsPosVisible(const MapPoint & pos) const {
+		const Player * const visiblePlayer = GetVisiblePlayer();
+		return visiblePlayer && visiblePlayer->IsVisible(pos);
+	}
+
 	bool IsAutoCenterOn() const;
 	void SetAutoCenter(const bool on);
 

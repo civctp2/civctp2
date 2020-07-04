@@ -28,20 +28,20 @@
 // - Start the great library with the current research project of the player.
 // - Made rush buy button behaviour consistent with other windows.
 // - Disabled rushbuy button if infrastructure or captalization are
-//   at the front of the build queue, by Martin Gühmann.
+//   at the front of the build queue, by Martin GÃ¼hmann.
 // - If infrastructure or capitalization are at the front of the
-//   build queue turns are shown anymore, by Martin Gühmann.
-// - Disabled rush buy button when it is not your turn by Martin Gühmann.
+//   build queue turns are shown anymore, by Martin GÃ¼hmann.
+// - Disabled rush buy button when it is not your turn by Martin GÃ¼hmann.
 // - Repaired CtD when double-clicking on an empty build queue - caused by
 //   the changes above.
 // - #01 Standardization of city selection and focus handling
 //   (L. Hirth 6/2004)
-// - Added National Manager button and functions callback. - July 24th 2005 Martin Gühmann
-// - Made Build Manager window non-modal. - July 24th 2005 Martin Gühmann
-// - Initialized local variables. (Sep 9th 2005 Martin Gühmann)
-// - Added a suggest build item button to the build manager for AI testing. (30-Jun-2008 Martin Gühmann)
+// - Added National Manager button and functions callback. - July 24th 2005 Martin GÃ¼hmann
+// - Made Build Manager window non-modal. - July 24th 2005 Martin GÃ¼hmann
+// - Initialized local variables. (Sep 9th 2005 Martin GÃ¼hmann)
+// - Added a suggest build item button to the build manager for AI testing. (30-Jun-2008 Martin GÃ¼hmann)
 // - Added stuff for reimplementing switch production penalty. (22-Jul-2009 Maq)
-// - Fixed AI city rank calculation. (9-Nov-2009 Martin Gühmann)
+// - Fixed AI city rank calculation. (9-Nov-2009 Martin GÃ¼hmann)
 //
 //----------------------------------------------------------------------------
 
@@ -503,9 +503,9 @@ sint32 EditQueue::CompareBuildingWonderItems(ctp2_ListItem *item1, ctp2_ListItem
 			sint32 cost1, cost2;
 
 			if(info1->m_category == k_GAME_OBJ_TYPE_WONDER) {
-				cost1 = wonderutil_Get(info1->m_type, g_selected_item->GetVisiblePlayer())->GetProductionCost();
+				cost1 = wonderutil_Get(info1->m_type, g_selected_item->GetVisiblePlayerID())->GetProductionCost();
 			} else if(info1->m_category == k_GAME_OBJ_TYPE_IMPROVEMENT) {
-				cost1 = buildingutil_Get(info1->m_type, g_selected_item->GetVisiblePlayer())->GetProductionCost();
+				cost1 = buildingutil_Get(info1->m_type, g_selected_item->GetVisiblePlayerID())->GetProductionCost();
 			} else if(info1->m_category == k_GAME_OBJ_TYPE_CAPITALIZATION ||
 					  info1->m_category == k_GAME_OBJ_TYPE_INFRASTRUCTURE) {
 				cost1 = 0;
@@ -514,9 +514,9 @@ sint32 EditQueue::CompareBuildingWonderItems(ctp2_ListItem *item1, ctp2_ListItem
 			}
 
 			if(info2->m_category == k_GAME_OBJ_TYPE_WONDER) {
-				cost2 = wonderutil_Get(info2->m_type, g_selected_item->GetVisiblePlayer())->GetProductionCost();
+				cost2 = wonderutil_Get(info2->m_type, g_selected_item->GetVisiblePlayerID())->GetProductionCost();
 			} else if(info2->m_category == k_GAME_OBJ_TYPE_IMPROVEMENT) {
-				cost2 = buildingutil_Get(info2->m_type, g_selected_item->GetVisiblePlayer())->GetProductionCost();
+				cost2 = buildingutil_Get(info2->m_type, g_selected_item->GetVisiblePlayerID())->GetProductionCost();
 			} else if(info2->m_category == k_GAME_OBJ_TYPE_CAPITALIZATION ||
 					  info2->m_category == k_GAME_OBJ_TYPE_INFRASTRUCTURE) {
 				cost2 = 0;
@@ -776,7 +776,7 @@ void EditQueue::UpdateChoiceLists()
 				!m_cityData->GetBuildQueue()->IsItemInQueue(k_GAME_OBJ_TYPE_IMPROVEMENT, i))
 			{
 
-				prodRemaining = buildingutil_Get(i, g_selected_item->GetVisiblePlayer())->GetProductionCost();
+				prodRemaining = buildingutil_Get(i, g_selected_item->GetVisiblePlayerID())->GetProductionCost();
 				AddChoiceItem(g_theBuildingDB->Get(i)->GetNameText(),
 							  new EditItemInfo(k_GAME_OBJ_TYPE_IMPROVEMENT, i),
 							  m_cityData->HowMuchLonger(prodRemaining),
@@ -784,7 +784,7 @@ void EditQueue::UpdateChoiceLists()
 			}
 		}
 
-		if(g_player[g_selected_item->GetVisiblePlayer()]->CanBuildCapitalization() || (!m_cityData && m_mode == EDIT_QUEUE_MODE_CUSTOM)) {
+		if(g_selected_item->GetVisiblePlayer()->CanBuildCapitalization() || (!m_cityData && m_mode == EDIT_QUEUE_MODE_CUSTOM)) {
 			if(m_cityData || m_mode == EDIT_QUEUE_MODE_MULTI || !IsItemInQueueList(k_GAME_OBJ_TYPE_CAPITALIZATION, 0)) {
 				AddChoiceItem(g_theStringDB->GetNameStr("CAPITALIZATION"),
 							  new EditItemInfo(k_GAME_OBJ_TYPE_CAPITALIZATION, 0),
@@ -793,7 +793,7 @@ void EditQueue::UpdateChoiceLists()
 			}
 		}
 
-		if(g_player[g_selected_item->GetVisiblePlayer()]->CanBuildInfrastructure() || (!m_cityData && m_mode == EDIT_QUEUE_MODE_CUSTOM)) {
+		if(g_selected_item->GetVisiblePlayer()->CanBuildInfrastructure() || (!m_cityData && m_mode == EDIT_QUEUE_MODE_CUSTOM)) {
 			if(m_cityData || m_mode == EDIT_QUEUE_MODE_MULTI || !IsItemInQueueList(k_GAME_OBJ_TYPE_INFRASTRUCTURE, 0)) {
 				AddChoiceItem(g_theStringDB->GetNameStr("INFRASTRUCTURE"),
 							  new EditItemInfo(k_GAME_OBJ_TYPE_INFRASTRUCTURE, 0),
@@ -841,7 +841,7 @@ void EditQueue::UpdateChoiceLists()
 				}
 			} else if(m_cityData->CanBuildWonder(i) &&
 				!m_cityData->GetBuildQueue()->IsItemInQueue(k_GAME_OBJ_TYPE_WONDER, i)) {
-				prodRemaining = wonderutil_Get(i, g_selected_item->GetVisiblePlayer())->GetProductionCost();
+				prodRemaining = wonderutil_Get(i, g_selected_item->GetVisiblePlayerID())->GetProductionCost();
 				AddChoiceItem(g_theWonderDB->Get(i)->GetNameText(),
 							  new EditItemInfo(k_GAME_OBJ_TYPE_WONDER, i),
 							  m_cityData->HowMuchLonger(prodRemaining),
@@ -966,28 +966,30 @@ void EditQueue::UpdateCityLists()
 {
 
 	sint32 i;
-	Player *pl = g_player[g_selected_item->GetVisiblePlayer()];
-	Assert(pl);
-	if(!pl) return;
+	Player * player = g_selected_item->GetVisiblePlayer();
+	Assert(player);
+	if (!player) {
+		return;
+	}
 
-	if(m_cityDropDown) {
-
+	if(m_cityDropDown)
+	{
 		m_cityDropDown->BuildListStart();
 		m_cityDropDown->Clear();
 
 		sint32 viewingIndex = -1;
 
-		for(i = 0; i < pl->m_all_cities->Num(); i++) {
+		for(i = 0; i < player->m_all_cities->Num(); i++) {
 			ctp2_ListItem *item = (ctp2_ListItem *)aui_Ldl::BuildHierarchyFromRoot("cw_CityItem");
 			Assert(item);
 			if(!item) break;
 
 			ctp2_Static *label = (ctp2_Static *)item->GetChildByIndex(0);
-			label->SetText(pl->m_all_cities->Access(i).GetName());
-			item->SetUserData((void *)pl->m_all_cities->Access(i).m_id);
+			label->SetText(player->m_all_cities->Access(i).GetName());
+			item->SetUserData((void *)player->m_all_cities->Access(i).m_id);
 			m_cityDropDown->AddItem(item);
 
-			if(m_cityData && pl->m_all_cities->Access(i).m_id == m_cityData->GetHomeCity().m_id)
+			if(m_cityData && player->m_all_cities->Access(i).m_id == m_cityData->GetHomeCity().m_id)
 				viewingIndex = i;
 		}
 		m_cityDropDown->BuildListEnd();
@@ -1015,7 +1017,6 @@ void EditQueue::UpdateCityLists()
 		}
 		m_multiCityList->BuildListEnd();
 	}
-
 }
 
 //----------------------------------------------------------------------------
@@ -1066,9 +1067,6 @@ void EditQueue::UpdateButtons()
 			m_upButton->Enable(TRUE);
 		}
 
-		// Added by Martin Gühmann to disable the rushbuy button and rush
-		// buy costs if the first item is capitalization or infrastructure
-
 		if (m_cityData && (m_queueList->GetSelectedItemIndex() == 0))
 		{
 			sint32 const	cost	= m_cityData->GetOvertimeCost();
@@ -1088,11 +1086,10 @@ void EditQueue::UpdateButtons()
 				sprintf(buf, "%d", cost);
 				m_rushBuyCost->SetText(buf);
 
-				sint32 const	visiblePlayer	= g_selected_item->GetVisiblePlayer();
-				m_rushBuyButton->Enable
-					((visiblePlayer == g_selected_item->GetCurPlayer())	&&	// my turn
-					 (g_player[visiblePlayer]->GetGold() >= cost)			// enough money
-				   	);
+				m_rushBuyButton->Enable(
+					g_selected_item->IsVisiblePlayer(g_selected_item->GetCurPlayer())	&&	// my turn
+					(g_selected_item->GetVisiblePlayer()->GetGold() >= cost)			// enough money
+				);
 			}
 		} else {
 			m_rushBuyButton->Enable(FALSE);
@@ -1294,10 +1291,10 @@ void EditQueue::InsertInQueue(EditItemInfo *info, bool insert, bool confirmed, b
 	if(!info) return;
 
 	if(!confirmed && info->m_category == k_GAME_OBJ_TYPE_IMPROVEMENT &&
-	   buildingutil_Get(info->m_type, g_selected_item->GetVisiblePlayer())->GetCapitol() &&
-		g_player[g_selected_item->GetVisiblePlayer()]->m_capitol &&
-		g_player[g_selected_item->GetVisiblePlayer()]->m_capitol->IsValid() &&
-		m_cityData)
+	   buildingutil_Get(info->m_type, g_selected_item->GetVisiblePlayerID())->GetCapitol() &&
+	   g_selected_item->GetVisiblePlayer()->m_capitol &&
+	   g_selected_item->GetVisiblePlayer()->m_capitol->IsValid() &&
+	   m_cityData)
 	{
 		static CapitolConfirmData data;
 		data.info = info;
@@ -1483,8 +1480,8 @@ void EditQueue::Suggest(bool insert)
 
 		sint32  cat         = 0;
 		sint32  type        = CTPRecord::INDEX_INVALID;
-		Governor::GetGovernor(g_selected_item->GetVisiblePlayer()).ComputeDesiredUnits();
-		Governor::GetGovernor(g_selected_item->GetVisiblePlayer()).ComputeNextBuildItem(m_cityData, cat, type);
+		Governor::GetGovernor(g_selected_item->GetVisiblePlayerID()).ComputeDesiredUnits();
+		Governor::GetGovernor(g_selected_item->GetVisiblePlayerID()).ComputeNextBuildItem(m_cityData, cat, type);
 
 		//EditItemInfo info(cat, type);
 		//InsertInQueue(&info, insert);
@@ -2135,11 +2132,11 @@ void EditQueue::MultiActionButton(aui_Control *control, uint32 action, uint32 da
 						continue;
 					break;
 				case k_GAME_OBJ_TYPE_INFRASTRUCTURE:
-					if(!g_player[g_selected_item->GetVisiblePlayer()]->CanBuildInfrastructure())
+					if(!g_selected_item->GetVisiblePlayer()->CanBuildInfrastructure())
 						continue;
 					break;
 				case k_GAME_OBJ_TYPE_CAPITALIZATION:
-					if(!g_player[g_selected_item->GetVisiblePlayer()]->CanBuildCapitalization())
+					if(!g_selected_item->GetVisiblePlayer()->CanBuildCapitalization())
 						continue;
 					break;
 			}

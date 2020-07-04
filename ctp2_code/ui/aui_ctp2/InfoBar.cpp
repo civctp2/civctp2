@@ -25,7 +25,7 @@
 // Modifications from the original Activision code:
 //
 // - Hidden cities are no longer displayed in the info bar.
-//   - Oct. 15th 2004 Martin Gühmann
+//   - Oct. 15th 2004 Martin GÃ¼hmann
 // - Hidden tile improvements are no longer displayed.
 // - Does not show anymore the current tarrain stats but those from
 //   the last visit.
@@ -33,19 +33,19 @@
 //   terraforming event.
 // - Displays now if a foreign city has been speacial attacked
 //   as this is shown as well on the map.
-//   - Last 4 on Dec. 22nd 2004 Martin Gühmann
+//   - Last 4 on Dec. 22nd 2004 Martin GÃ¼hmann
 // - InfoBar does not display anymore players without contact and player
-//   fog of war is toggled on. - Dec. 24th 2004 Martin Gühmann
+//   fog of war is toggled on. - Dec. 24th 2004 Martin GÃ¼hmann
 // - Game doesn't crash anymore if the the cursor is moved over the city
 //   that belonged to the selected player and the sprite is missing.
 // - Game doesn't crash anymore if the cursor is moved over a city that is
 //   displayed as city belonging to a civilisation that was destroyed.
-//   - Last 2 on Mar. 4th 2004 Martin Gühmann
+//   - Last 2 on Mar. 4th 2004 Martin GÃ¼hmann
 // - Moved Peter's last modification to Cell.cpp and UnseenCell.cpp, idially
-//   such code should only be put at one place. - April 12th 2005 Martin Gühmann
+//   such code should only be put at one place. - April 12th 2005 Martin GÃ¼hmann
 // - Added Hidden Nationality check to SetTextFromMap - by E 2-21-2007
 // - The tile coordinates are shown in the info bar if the army goal text is
-//   displayed. (26-Jan-2008 Martin Gühmann)
+//   displayed. (26-Jan-2008 Martin GÃ¼hmann)
 //
 //----------------------------------------------------------------------------
 
@@ -200,8 +200,8 @@ void InfoBar::SetTextFromMap(const MapPoint &point)
 	m_curY = point.y;
 	m_textFromMap = true;
 
-	if(!g_player[g_selected_item->GetVisiblePlayer()] ||
-		!g_player[g_selected_item->GetVisiblePlayer()]->IsExplored(point)) {
+	if (!g_selected_item->GetVisiblePlayer() || !g_selected_item->GetVisiblePlayer()->IsExplored(point))
+	{
 		Concat(g_theStringDB->GetNameStr("INFOBAR_UNEXPLORED"));
 
 #ifndef _DEBUG
@@ -221,7 +221,7 @@ void InfoBar::SetTextFromMap(const MapPoint &point)
 
 		if(owner >= 0
 		&& g_player[owner]
-		&&(g_player[owner]->HasContactWith(g_selected_item->GetVisiblePlayer())
+		&&(g_player[owner]->HasContactWith(g_selected_item->GetVisiblePlayerID())
 		|| g_fog_toggle)
 		){
 
@@ -249,9 +249,8 @@ void InfoBar::SetTextFromMap(const MapPoint &point)
 
 // To hide the city name if the city is hidden
 		Unit city = cell->GetCity();
-		if(city.m_id
-		&&(city->GetVisibility() & (1 << g_selected_item->GetVisiblePlayer()))
-		){
+		if (city.m_id && g_selected_item->IsUnitVisible(city))
+		{
 			if(hasUnseen){
 				if(g_theStringDB->GetNameStr("INFOBAR_CITY")) {
 					Concat(g_theStringDB->GetNameStr("INFOBAR_CITY"));
@@ -439,8 +438,8 @@ void InfoBar::SetTextFromMap(const MapPoint &point)
 		}
 
 		if(cell->GetNumUnits() > 0) {
-			if(cell->AccessUnit(0).GetOwner() == g_selected_item->GetVisiblePlayer() ||
-			   !cell->HasCity()) {
+			if (g_selected_item->IsVisiblePlayer(cell->AccessUnit(0).GetOwner()) || !cell->HasCity())
+			{
 				sint32 i;
 				bool anyVisible = false;
 				for(i = 0; i < cell->GetNumUnits(); i++) {
@@ -448,7 +447,7 @@ void InfoBar::SetTextFromMap(const MapPoint &point)
 					if(!cell->AccessUnit(i).IsValid())
 						break;
 
-					if(cell->AccessUnit(i).GetVisibility() & (1 << g_selected_item->GetVisiblePlayer())) {
+					if (g_selected_item->IsUnitVisible(cell->AccessUnit(i))) {
 						anyVisible = true;
 						break;
 					}
@@ -466,7 +465,9 @@ void InfoBar::SetTextFromMap(const MapPoint &point)
 						//original
 						//g_player[cell->AccessUnit(0).GetOwner()]->m_civilisation->GetSingularCivName(civName);
 						//emod
-						if ((cell->AccessUnit(0).IsHiddenNationality()) && (cell->AccessUnit(0).GetOwner() != g_selected_item->GetVisiblePlayer())) {
+						if ((cell->AccessUnit(0).IsHiddenNationality())
+							&& !g_selected_item->IsVisiblePlayer(cell->AccessUnit(0).GetOwner()))
+						{
 							g_player[PLAYER_INDEX_VANDALS]->m_civilisation->GetSingularCivName(civName);
 						} else {
 							g_player[cell->AccessUnit(0).GetOwner()]->m_civilisation->GetSingularCivName(civName);
@@ -478,7 +479,8 @@ void InfoBar::SetTextFromMap(const MapPoint &point)
 					}
 					//hidden nationality?
 					for(i = 0; i < cell->GetNumUnits(); i++) {
-						if(cell->AccessUnit(i).GetVisibility() & (1 << g_selected_item->GetVisiblePlayer())) {
+						if (g_selected_item->IsUnitVisible(cell->AccessUnit(i)))
+						{
 							Concat(cell->AccessUnit(i).GetName());
 							if(i < cell->GetNumUnits() - 1)
 								Concat(", ");

@@ -25,7 +25,7 @@
 // Modifications from the original Activision code:
 //
 // - Enable selection of transported units from the tactical info tab.
-// - Initialized local variables. (Sep 9th 2005 Martin Gühmann)
+// - Initialized local variables. (Sep 9th 2005 Martin GÃ¼hmann)
 // - Handled crash when disbanding armies at the main screen while the unit
 //   manager was shown.
 // - Changed occurances of UnitRecord::GetMaxHP to
@@ -306,9 +306,8 @@ void UnitManager::UpdateStatsList()
 	if(!m_statsList) return;
 
 	sint32 i;
-	sint32 visP = g_selected_item->GetVisiblePlayer();
-	if(!g_player[visP]) return;
-	Player *pl = g_player[visP];
+	Player * player = g_selected_item->GetVisiblePlayer();
+	if(!player) return;
 
 	sint32 *unitcount = new sint32[g_theUnitDB->NumRecords()];
 	memset(unitcount, 0, g_theUnitDB->NumRecords() * sizeof(sint32));
@@ -316,8 +315,8 @@ void UnitManager::UpdateStatsList()
 	if(m_statsList) {
 		m_statsList->Clear();
 
-		for(i = 0; i < pl->m_all_units->Num(); i++) {
-			unitcount[pl->m_all_units->Access(i).GetType()]++;
+		for(i = 0; i < player->m_all_units->Num(); i++) {
+			unitcount[player->m_all_units->Access(i).GetType()]++;
 		}
 
 		for(i = 0; i < g_theUnitDB->NumRecords(); i++) {
@@ -404,16 +403,16 @@ void UnitManager::UpdateStatsList()
 
 void UnitManager::UpdateTacticalList()
 {
-	Player *pl = g_player[g_selected_item->GetVisiblePlayer()];
-	Assert(pl);
-	if(!pl) return;
+	Player * player = g_selected_item->GetVisiblePlayer();
+	Assert(player);
+	if(!player) return;
 
 	Assert(m_tacticalList);
 	if(!m_tacticalList) return;
 
 	m_tacticalList->Clear();
 
-	UnitDynamicArray *units = pl->m_all_units;
+	UnitDynamicArray *units = player->m_all_units;
 	Assert(units);
 	if(!units) return;
 
@@ -517,9 +516,9 @@ static void UpdateUpkeepButton(ctp2_Button *butt, Player *pl, bool useTotalForma
 
 void UnitManager::UpdateAdvice()
 {
-	Player *pl = g_player[g_selected_item->GetVisiblePlayer()];
-	Assert(pl);
-	if(!pl)
+	Player * player = g_selected_item->GetVisiblePlayer();
+	Assert(player);
+	if(!player)
 		return;
 
 	Assert(m_adviceList);
@@ -533,8 +532,8 @@ void UnitManager::UpdateAdvice()
 	}
 
 	sint32 i;
-	for(i = 0; i < pl->m_all_units->Num(); i++) {
-		sint32 cat = pl->m_all_units->Access(i).GetDBRec()->GetCategory();
+	for(i = 0; i < player->m_all_units->Num(); i++) {
+		sint32 cat = player->m_all_units->Access(i).GetDBRec()->GetCategory();
 		PointerList<UnitManagerCategoryInfo>::Walker walk(&m_unitCategories);
 		while(walk.IsValid()) {
 			if(walk.GetObj()->stringId == cat) {
@@ -567,7 +566,7 @@ void UnitManager::UpdateAdvice()
 		MBCHAR buf[20];
 		child = (ctp2_Static *)item->GetChildByIndex(k_ADVICE_PERCENT_COL);
 		if(child) {
-			sprintf(buf, "%d%%", sint32((100.0 * walk.GetObj()->numUnits) / double(pl->m_all_units->Num())));
+			sprintf(buf, "%d%%", sint32((100.0 * walk.GetObj()->numUnits) / double(player->m_all_units->Num())));
 			child->SetText(buf);
 		}
 
@@ -587,19 +586,19 @@ void UnitManager::UpdateAdvice()
 	Assert(upkeepButt);
 	bool useTotalFormat = false; // force initial percent format
 
-	UpdateUpkeepButton(upkeepButt, pl, useTotalFormat);
+	UpdateUpkeepButton(upkeepButt, player, useTotalFormat);
 }
 
 void UnitManager::UpdateReadiness()
 {
-	Player *pl = g_player[g_selected_item->GetVisiblePlayer()];
-	if(!pl) return;
+	Player * player = g_selected_item->GetVisiblePlayer();
+	if(!player) return;
 
 	ctp2_Static *state = (ctp2_Static *)aui_Ldl::GetObject(s_unitManagerBlock, "State");
 	Assert(state);
 	if(!state) return;
 
-	switch(pl->GetReadinessLevel()) {
+	switch(player->GetReadinessLevel()) {
 		case READINESS_LEVEL_PEACE:
 			state->SetText(g_theStringDB->GetNameStr("str_ldl_READINESS_LEVEL_PEACE"));
 			(static_cast<ctp2_Spinner*>(aui_Ldl::GetObject("UnitManager","Slider")))->SetValue(0,0);
@@ -624,7 +623,7 @@ void UnitManager::UpdateReadiness()
 	// if percent sign exist then useTotalFormat==false
 	bool useTotalFormat = !strstr(butt->GetText(), "%");
 
-	UpdateUpkeepButton(butt, pl, useTotalFormat);
+	UpdateUpkeepButton(butt, player, useTotalFormat);
 }
 
 void  UnitManager::UpdateNumUnits()
@@ -633,12 +632,12 @@ void  UnitManager::UpdateNumUnits()
 	Assert(counter);
 	if(!counter) return;
 
-	Player *pl = g_player[g_selected_item->GetVisiblePlayer()];
-	Assert(pl);
-	if(!pl) return;
+	Player * player = g_selected_item->GetVisiblePlayer();
+	Assert(player);
+	if(!player) return;
 
 	MBCHAR buf[20];
-	sprintf(buf, "%d", pl->m_all_units->Num());
+	sprintf(buf, "%d", player->m_all_units->Num());
 	counter->SetText(buf);
 }
 
@@ -651,7 +650,7 @@ void UnitManager::UpdateAdviceText()
 	if(advice == NULL)
 		return;
 
-	PLAYER_INDEX playerId = g_selected_item->GetVisiblePlayer();
+	PLAYER_INDEX playerId = g_selected_item->GetVisiblePlayerID();
 	const Governor & governor = Governor::GetGovernor(playerId);
 
 	SlicContext sc;
@@ -684,17 +683,17 @@ sint32 UnitManager::CompareStatItems(ctp2_ListItem *item1, ctp2_ListItem *item2,
 			return stricmp(rec1->GetNameText(), rec2->GetNameText());
 		case k_STATS_COUNT_COL:
 		{
-			Player *pl = g_player[g_selected_item->GetVisiblePlayer()];
-			if(!pl)
+			Player * player = g_selected_item->GetVisiblePlayer();
+			if(!player)
 				return 0;
 
 			sint32 count1 = 0, count2 = 0;
-			for(sint32 i = 0; i < pl->m_all_units->Num(); i++) {
-				if(pl->m_all_units->Access(i).GetType() == idx1) {
+			for(sint32 i = 0; i < player->m_all_units->Num(); i++) {
+				if(player->m_all_units->Access(i).GetType() == idx1) {
 					count1++;
 				}
 
-				if(pl->m_all_units->Access(i).GetType() == idx2) {
+				if(player->m_all_units->Access(i).GetType() == idx2) {
 					count2++;
 				}
 			}
@@ -885,9 +884,9 @@ void UnitManager::UpkeepButton(aui_Control *control, uint32 action, uint32 data,
 {
 	if(action != AUI_BUTTON_ACTION_EXECUTE) return;
 
-	Player *pl = g_player[g_selected_item->GetVisiblePlayer()];
-	Assert(pl);
-	if(!pl) return;
+	Player * player = g_selected_item->GetVisiblePlayer();
+	Assert(player);
+	if(!player) return;
 
 	ctp2_Button *butt = (ctp2_Button *)control;
 	Assert(butt);
@@ -896,7 +895,7 @@ void UnitManager::UpkeepButton(aui_Control *control, uint32 action, uint32 data,
 	// (i.e. useTotalFormat==true) and vice versa
 	bool useTotalFormat = strstr(butt->GetText(), "%");
 
-	UpdateUpkeepButton(butt, pl, useTotalFormat);
+	UpdateUpkeepButton(butt, player, useTotalFormat);
 }
 
 void UnitManager::Advice(aui_Control *control, uint32 action, uint32 data, void *cookie)
@@ -1044,12 +1043,12 @@ void UnitManager::DisbandSelected()
 
 			sint32 unitType = (sint32)item->GetUserData();
 			sint32 i;
-			Player *pl = g_player[g_selected_item->GetVisiblePlayer()];
-			Assert(pl);
-			if(!pl) break;
+			Player * player = g_selected_item->GetVisiblePlayer();
+			Assert(player);
+			if(!player) break;
 
-			for(i = 0; i < pl->m_all_units->Num(); i++) {
-				Unit u = pl->m_all_units->Access(i);
+			for(i = 0; i < player->m_all_units->Num(); i++) {
+				Unit u = player->m_all_units->Access(i);
 				if(u.GetType() == unitType) {
 
 					m_lastDisbandedUnit = u.m_id;
@@ -1122,12 +1121,12 @@ void UnitManager::ReadinessActionCallback(aui_Control *control,
 	if(action != static_cast<uint32>(AUI_RANGER_ACTION_VALUECHANGE))
 		return;
 
-	Player *pl = g_player[g_selected_item->GetVisiblePlayer()];
-	Assert(pl);
-	if(!pl) return;
+	Player * player = g_selected_item->GetVisiblePlayer();
+	Assert(player);
+	if(!player) return;
 
 	ctp2_Spinner *spinner = static_cast<ctp2_Spinner*>(control);
 
-	pl->SetReadinessLevel((READINESS_LEVEL) spinner->GetValueX());
+	player->SetReadinessLevel((READINESS_LEVEL) spinner->GetValueX());
 	s_unitManager->UpdateReadiness();
 }

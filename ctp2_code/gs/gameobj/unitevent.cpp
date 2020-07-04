@@ -74,8 +74,7 @@ namespace {
 		{
 			if (g_selected_item->IsAutoCenterOn())
 			{
-				if ((unit.GetOwner() == g_selected_item->GetVisiblePlayer())
-					|| (unit.GetVisibility() & (1 << g_selected_item->GetVisiblePlayer()))) {
+				if (g_selected_item->IsVisiblePlayer(unit.GetOwner()) || g_selected_item->IsUnitVisible(unit)) {
 					g_director->AddCenterMap(pos);
 				}
 			}
@@ -83,8 +82,7 @@ namespace {
 			g_director->AddSpecialEffect(pos, spriteID, soundID);
 		} else {
 			if (soundID != -1) {
-				sint32 visiblePlayer = g_selected_item->GetVisiblePlayer();
-				if ((visiblePlayer == unit.GetOwner()) || (unit.GetVisibility() & (1 << visiblePlayer))) {
+				if (g_selected_item->IsVisiblePlayer(unit.GetOwner()) || g_selected_item->IsUnitVisible(unit)) {
 					g_soundManager->AddSound(SOUNDTYPE_SFX, (uint32)0, 	soundID, pos.x, pos.y);
 				}
 			}

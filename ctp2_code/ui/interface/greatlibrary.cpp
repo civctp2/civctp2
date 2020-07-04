@@ -25,24 +25,24 @@
 //
 // Modifications from the original Activision code:
 //
-// - Modified by Martin Gühmann on October the 28th: line added in
+// - Modified by Martin GÃ¼hmann on October the 28th: line added in
 //   sint32 GreatLibrary::UpdateList( DATABASE database )
 //   to make sure that also goods with the GLHidden flag aren't shown.
 // - Start the great library with the current research project of the player.
 // - Clears the research goal of the player, when an item is selected that
-//   enabling advance has been researched already, by Martin Gühmann.
-// - The tech goal can now also set for tile improvements, by Martin Gühmann.
+//   enabling advance has been researched already, by Martin GÃ¼hmann.
+// - The tech goal can now also set for tile improvements, by Martin GÃ¼hmann.
 // - Handle Japanese input data, by t.s. (2003.12).
 // - Memory leaks repaired.
 // - Increased maximum library text size to support the German version.
 // - Exported database name size max.
 // - Added function to look up an item name on creation index.
-// - Initialized local variables. (Sep 9th 2005 Martin Gühmann)
+// - Initialized local variables. (Sep 9th 2005 Martin GÃ¼hmann)
 // - Fixed display of topics after the fixing of the alphanumerical
-//   indexing of the databases. (Sep 13th 2005 Martin Gühmann)
-// - Search now searches now in the topic names, prerq and vari texts. (Sep 13th 2005 Martin Gühmann)
-// - Replaced old concept database by new one. (31-Mar-2007 Martin Gühmann)
-// - Search does not find items that are supposed to be hidden. (21-Apr-2007 Martin Gühmann)
+//   indexing of the databases. (Sep 13th 2005 Martin GÃ¼hmann)
+// - Search now searches now in the topic names, prerq and vari texts. (Sep 13th 2005 Martin GÃ¼hmann)
+// - Replaced old concept database by new one. (31-Mar-2007 Martin GÃ¼hmann)
+// - Search does not find items that are supposed to be hidden. (21-Apr-2007 Martin GÃ¼hmann)
 //
 //----------------------------------------------------------------------------
 //
@@ -973,9 +973,9 @@ void GreatLibrary::Display( void )
 
 	FixTabs();
 
-	if(g_player[g_selected_item->GetVisiblePlayer()]->m_researchGoal > -1)
+	if(g_selected_item->GetVisiblePlayer()->m_researchGoal > -1)
 	{
-		sci_advancescreen_initAndFillGoalArray(g_player[g_selected_item->GetVisiblePlayer()]->m_researchGoal);
+		sci_advancescreen_initAndFillGoalArray(g_selected_item->GetVisiblePlayer()->m_researchGoal);
 	}
 }
 
@@ -1211,11 +1211,11 @@ void GreatLibrary::HandleSetGoal( void )
 	if (selection_name)
 	{
 		MBCHAR goal_set_message[500];
-		int tmp = g_player[g_selected_item->GetVisiblePlayer()]->SetResearchGoal(m_database, m_window->GetTechMode());
+		int tmp = g_selected_item->GetVisiblePlayer()->SetResearchGoal(m_database, m_window->GetTechMode());
 
 		if(tmp == 1)
 		{
-			sci_advancescreen_initAndFillGoalArray(g_player[g_selected_item->GetVisiblePlayer()]->m_researchGoal);
+			sci_advancescreen_initAndFillGoalArray(g_selected_item->GetVisiblePlayer()->m_researchGoal);
 			const MBCHAR *fmt = g_theStringDB->GetNameStr("str_ldl_GreatLibraryGoalSetTo");
 			if (!fmt) fmt = "Goal set to: %s";
 			sprintf(goal_set_message, fmt, selection_name);

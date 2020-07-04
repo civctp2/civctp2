@@ -606,7 +606,7 @@ private:
 
 	bool SkipEnemyMoves()
 	{
-		return (!g_theProfileDB->IsEnemyMoves() && m_owner != -1 && m_owner != g_selected_item->GetVisiblePlayer());
+		return (!g_theProfileDB->IsEnemyMoves() && m_owner != -1 && !g_selected_item->IsVisiblePlayer(m_owner));
 	}
 
 	bool SkipRobotUnitAnimations()
@@ -774,7 +774,7 @@ void Director::ReloadAllSprites()
 
 		//PFT  29 mar 05
 		//cycle through human players' cities
-		if (g_player[g_selected_item->GetVisiblePlayer()]->IsHuman())
+		if (g_selected_item->GetVisiblePlayer()->IsHuman())
 		{
 			for (int i = 0; i < g_player[player]->m_all_cities->Num(); i++)
 			{
@@ -1246,7 +1246,7 @@ public:
 					// With the existing behaviour they would show immediately
 					// which would often mean that they show on the wrong players
 					// turn.
-					&& g_selected_item->GetVisiblePlayer() == message.GetOwner())
+					&& g_selected_item->IsVisiblePlayer(message.GetOwner()))
 				{
 					message.Show();
 				}
@@ -1478,9 +1478,8 @@ public:
 			activeLoopingSound = NULL;
 
 			if (!SkipAnimation() && g_soundManager && soundID >= 0) {
-				sint32 visiblePlayer = g_selected_item->GetVisiblePlayer();
-				if ((visiblePlayer == moveActor->GetPlayerNum()) ||
-						(moveActor->GetUnitVisibility() & (1 << visiblePlayer)))
+				if (g_selected_item->IsVisiblePlayer(moveActor->GetPlayerNum())
+					|| g_selected_item->IsUnitVisible(moveActor->GetUnitVisibility()))
 				{
 					activeLoopingSound = new DQActiveLoopingSound(moveActor->GetUnitID(), soundID);
 				}
@@ -1506,7 +1505,7 @@ public:
 		}
 
 		const MapPoint & actorPosition = moveActor->GetMapPos();
-		if (g_selected_item->GetVisiblePlayer() != moveActor->GetPlayerNum()
+		if (!g_selected_item->IsVisiblePlayer(moveActor->GetPlayerNum())
 			&& !g_tiledMap->TileIsVisible(actorPosition.x, actorPosition.y))
 		{
 			CenterMap(actorPosition);
@@ -1695,8 +1694,8 @@ protected:
 		sint32  deltaX = defenderPoints.x - attackerPoints.x;
 		sint32  deltaY = defenderPoints.y - attackerPoints.y;
 
-		bool playerInvolved = (defender->GetPlayerNum() == g_selected_item->GetVisiblePlayer())
-							  || (attacker->GetPlayerNum() == g_selected_item->GetVisiblePlayer());
+		bool playerInvolved = g_selected_item->IsVisiblePlayer(defender->GetPlayerNum())
+				|| g_selected_item->IsVisiblePlayer(attacker->GetPlayerNum());
 		if (playerInvolved)
 		{
 			sint32 facing = spriteutils_DeltaToFacing(deltaX, deltaY);
@@ -1849,9 +1848,8 @@ protected:
 		AddActiveActor(attacker);
 
 		if (g_soundManager) {
-			sint32 visiblePlayer = g_selected_item->GetVisiblePlayer();
-			if ((visiblePlayer == attacker->GetPlayerNum()) ||
-				(attacker->GetUnitVisibility() & (1 << visiblePlayer)))
+			if (g_selected_item->IsVisiblePlayer(attacker->GetPlayerNum()) ||
+				g_selected_item->IsUnitVisible(attacker->GetUnitVisibility()))
 			{
 				g_soundManager->AddSound(SOUNDTYPE_SFX, attacker->GetUnitID(), soundID,
 										 attackerPos.x, attackerPos.y);
@@ -1894,7 +1892,7 @@ public:
 protected:
 	virtual bool ForceAnimation()
 	{
-		return killedBy == g_selected_item->GetVisiblePlayer();
+		return g_selected_item->IsVisiblePlayer(killedBy);
 	}
 
 	virtual bool DoSkipAnimation()
@@ -1916,9 +1914,8 @@ protected:
 		AddActiveActor(dead);
 
 		if (g_soundManager) {
-			sint32 visiblePlayer = g_selected_item->GetVisiblePlayer();
-			if ((visiblePlayer == dead->GetPlayerNum()) ||
-				(dead->GetUnitVisibility() & (1 << visiblePlayer))) {
+			if (g_selected_item->IsVisiblePlayer(dead->GetPlayerNum()) ||
+				g_selected_item->IsUnitVisible(dead->GetUnitVisibility())) {
 				g_soundManager->AddSound(SOUNDTYPE_SFX, (uint32)dead->GetUnitID(), deadSoundID,
 										 deadPos.x, deadPos.y);
 			}
@@ -1969,9 +1966,8 @@ protected:
 
 		if (g_soundManager)
 		{
-			sint32 visiblePlayer = g_selected_item->GetVisiblePlayer();
-			if ((visiblePlayer == workActor->GetPlayerNum()) ||
-				(workActor->GetUnitVisibility() & (1 << visiblePlayer)))
+			if (g_selected_item->IsVisiblePlayer(workActor->GetPlayerNum()) ||
+				g_selected_item->IsUnitVisible(workActor->GetUnitVisibility()))
 			{
 				g_soundManager->AddSound(SOUNDTYPE_SFX, workActor->GetUnitID(), workSoundID,
 						workPos.x, workPos.y);
@@ -2034,8 +2030,8 @@ protected:
 		attacked->AddAction(attackedAction);
 
 		bool attackedVisible = TileIsVisibleToPlayer(attackedPos);
-		if (attacker->GetPlayerNum() == g_selected_item->GetVisiblePlayer() ||
-			attacked->GetPlayerNum() == g_selected_item->GetVisiblePlayer())
+		if (g_selected_item->IsVisiblePlayer(attacker->GetPlayerNum())
+			|| g_selected_item->IsVisiblePlayer(attacked->GetPlayerNum()))
 		{
 			attackedVisible = true;
 		}
@@ -2044,8 +2040,8 @@ protected:
 		}
 
 		bool attackerVisible = TileIsVisibleToPlayer(attackerPos);
-		if (attacked->GetPlayerNum() == g_selected_item->GetVisiblePlayer() ||
-			attacker->GetPlayerNum() == g_selected_item->GetVisiblePlayer())
+		if (g_selected_item->IsVisiblePlayer(attacked->GetPlayerNum())
+			|| g_selected_item->IsVisiblePlayer(attacker->GetPlayerNum()))
 		{
 			attackerVisible = true;
 			attackedVisible = true;
@@ -2546,9 +2542,7 @@ void DirectorImpl::OffsetAnimations(sint32 deltaX, sint32 deltaY)
 
 void DirectorImpl::NextPlayer() {
 #ifdef _PLAYTEST
-	if (!g_doingFastRounds &&
-		(!g_network.IsActive() || g_player[g_selected_item->GetVisiblePlayer()]->IsRobot()))
-	{
+	if (!g_doingFastRounds && (!g_network.IsActive() || g_selected_item->GetVisiblePlayer()->IsRobot())) {
 		return;
 	}
 #else
@@ -2616,8 +2610,8 @@ void DirectorImpl::AddMove (
 	Assert(actor->GetUnitID() == mover.m_id);
 
 	if (g_theProfileDB->IsEnemyMoves() &&
-		mover.GetOwner() != g_selected_item->GetVisiblePlayer() &&
-		(mover.GetVisibility() & (1 << g_selected_item->GetVisiblePlayer())) &&
+		!g_selected_item->IsVisiblePlayer(mover.GetOwner()) &&
+		g_selected_item->IsUnitVisible(mover) &&
 		!TileWillBeCompletelyVisible(endPos.x, endPos.y))
 	{
 		AddCenterMap(endPos);
@@ -2753,7 +2747,7 @@ void DirectorImpl::AddAttack(const Unit &attacker, const Unit &defender)
 			defender.IsCity());
 	m_actionQueue->AddTail(action);
 
-	Player *visiblePlayer = g_player[g_selected_item->GetVisiblePlayer()];
+	Player *visiblePlayer = g_selected_item->GetVisiblePlayer();
 	if (visiblePlayer && visiblePlayer->IsVisible(attacker.RetPos())) {
 		AddCombatFlash(attacker.RetPos());
 	}
@@ -2769,9 +2763,8 @@ void DirectorImpl::AddSpaceLaunch(const Unit & launcher, const MapPoint & destin
 		return;
 	}
 
-	bool playerInvolved = (launcher->GetOwner() == g_selected_item->GetVisiblePlayer());
-	bool visibleEnemyUnit = g_theProfileDB->IsEnemyMoves()
-	                        && (launcher->GetVisibility() & (1 << g_selected_item->GetVisiblePlayer()));
+	bool playerInvolved = g_selected_item->IsVisiblePlayer(launcher->GetOwner());
+	bool visibleEnemyUnit = g_theProfileDB->IsEnemyMoves() && g_selected_item->IsUnitVisible(launcher);
 	if ((playerInvolved || visibleEnemyUnit)
 		&& !TileWillBeCompletelyVisible(launcher.RetPos().x, launcher.RetPos().y)) {
 		AddCenterMap(launcher.RetPos());
@@ -2797,9 +2790,7 @@ void DirectorImpl::AddAttackPos(const Unit &attacker, const MapPoint &pos)
 			attacker.GetOwner(), attacker.GetActor(), attacker.RetPos(), pos, attacker.GetAttackSoundID());
 	m_actionQueue->AddTail(action);
 
-	if (g_player[g_selected_item->GetVisiblePlayer()] &&
-		g_player[g_selected_item->GetVisiblePlayer()]->IsVisible(pos))
-	{
+	if (g_selected_item->IsPosVisible(pos)) {
 		AddCombatFlash(pos);
 	}
 }
@@ -2815,11 +2806,10 @@ void DirectorImpl::AddSpecialAttack(const Unit& attacker, const Unit &attacked, 
 		return;
 	}
 
-	if (g_player[g_selected_item->GetVisiblePlayer()] &&
-		g_player[g_selected_item->GetVisiblePlayer()]->IsVisible(attacked.RetPos()))
+	if (g_selected_item->IsPosVisible(attacked.RetPos()))
 	{
 		MapPoint attackPosition;
-		if (attacker->GetVisibility() & (1 << g_selected_item->GetVisiblePlayer())) {
+		if (g_selected_item->IsUnitVisible(attacker)) {
 			attackPosition = attacker.RetPos();
 		} else { // attacker is invisible; do not give away its position by the animation
 			attackPosition = attacked.RetPos();
@@ -2845,11 +2835,11 @@ void DirectorImpl::AddDeath(UnitActor *dead, const MapPoint &deadPos, sint32 dea
 {
 	Assert(dead);
 
-	bool playerInvolved = (dead->GetPlayerNum() == g_selected_item->GetVisiblePlayer())
-			|| (killedBy == g_selected_item->GetVisiblePlayer());
+	bool playerInvolved = g_selected_item->IsVisiblePlayer(dead->GetPlayerNum())
+			|| g_selected_item->IsVisiblePlayer(killedBy);
 	bool visibleEnemyUnit = g_theProfileDB->IsEnemyMoves()
-							&& dead->GetPlayerNum() != g_selected_item->GetVisiblePlayer()
-							&& (dead->GetUnitVisibility() & (1 << g_selected_item->GetVisiblePlayer()));
+			&& !g_selected_item->IsVisiblePlayer(dead->GetPlayerNum())
+			&& g_selected_item->IsUnitVisible(dead->GetUnitVisibility());
 	if ((playerInvolved || visibleEnemyUnit) && !TileWillBeCompletelyVisible(deadPos.x, deadPos.y)) {
 		AddCenterMap(deadPos);
 	}
@@ -2989,8 +2979,8 @@ void DirectorImpl::AddPlayVictoryMovie(GAME_OVER reason, bool previouslyWon, boo
 {
 	if (previouslyWon || previouslyLost)
 	{
-		PLAYER_INDEX player = g_selected_item->GetVisiblePlayer();
-		if (g_player[player] && !g_player[player]->m_isDead) {
+		Player * player = g_selected_item->GetVisiblePlayer();
+		if (player && !player->m_isDead) {
 			return;
 		}
 	}

@@ -478,16 +478,18 @@ sint32 Chart::SetTipInfo( ctp2_Button *button, sint32 index )
 AUI_ERRCODE Chart::Update( sint32 index )
 {
 	MBCHAR str[_MAX_PATH];
-	if(g_player[g_selected_item->GetVisiblePlayer()]->m_researchGoal >= 0)
+
+	sint32 visiblePlayerResearchGoal = g_selected_item->GetVisiblePlayer()->m_researchGoal;
+	if (visiblePlayerResearchGoal >= 0)
 	{
 		if(!sci_advancescreen_hasGoal())
-			sci_advancescreen_initAndFillGoalArray(g_player[g_selected_item->GetVisiblePlayer()]->m_researchGoal);
+			sci_advancescreen_initAndFillGoalArray(visiblePlayerResearchGoal);
 
 		sint32 all;
 		sint32 have;
 		sci_advancescreen_getGoalAdvances(have, all);
 		sprintf(str, "%s %s (%d/%d)", g_theStringDB->GetNameStr("str_ldl_ResearchGoal"),
-				g_theAdvanceDB->Get(g_player[g_selected_item->GetVisiblePlayer()]->m_researchGoal)->GetNameText(), have, all);
+				g_theAdvanceDB->Get(visiblePlayerResearchGoal)->GetNameText(), have, all);
 	}
 	else
 	{
@@ -524,8 +526,8 @@ AUI_ERRCODE Chart::Update( sint32 index )
 	sint32 ypos = (Height() - ((m_numPreReq + m_numEitherPreReq) * buttonHeight
 		+ ((m_numPreReq + m_numEitherPreReq) - 1) * heightBetweenButtons)) / 2;
 
-	sint32 curPlayer = g_selected_item->GetVisiblePlayer();
-	uint8 *adv = g_player[curPlayer]->m_advances->CanResearch();
+	Player * curPlayer = g_selected_item->GetVisiblePlayer();
+	uint8 *adv = curPlayer->m_advances->CanResearch();
 
 	for ( i = 0; i < m_numPreReq; i++ )
 	{
@@ -555,7 +557,7 @@ AUI_ERRCODE Chart::Update( sint32 index )
 			ldl->Associate((aui_Control *)m_preReqButton[i], name);
 		}
 
-		if ( g_player[curPlayer]->HasAdvance(m_preReqIndex[i]) )
+		if (curPlayer->HasAdvance(m_preReqIndex[i]) )
 		{
 			m_preReqColor[i] = COLOR_GREEN;
 		}
@@ -609,7 +611,7 @@ AUI_ERRCODE Chart::Update( sint32 index )
 			ldl->Associate((aui_Control *)m_eitherPreReqButton[i], name);
 		}
 
-		if ( g_player[curPlayer]->HasAdvance(m_eitherPreReqIndex[i]) )
+		if (curPlayer->HasAdvance(m_eitherPreReqIndex[i]) )
 		{
 			m_eitherPreReqColor[i] = COLOR_GREEN;
 		}
@@ -659,7 +661,7 @@ AUI_ERRCODE Chart::Update( sint32 index )
 		ldl->Associate((aui_Control *)m_centerButton, name);
 	}
 
-	if ( g_player[curPlayer]->HasAdvance(m_centerIndex) )
+	if (curPlayer->HasAdvance(m_centerIndex))
 	{
 		m_centerColor = COLOR_GREEN;
 	}
@@ -705,7 +707,7 @@ AUI_ERRCODE Chart::Update( sint32 index )
 			ldl->Associate((aui_Control *)m_leadsToButton[i], name);
 		}
 
-		if ( g_player[curPlayer]->HasAdvance(m_leadsToIndex[i]) )
+		if (curPlayer->HasAdvance(m_leadsToIndex[i]))
 		{
 			m_leadsToColor[i] = COLOR_GREEN;
 		}

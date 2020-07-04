@@ -25,7 +25,7 @@
 // Modifications from the original Activision code:
 //
 // - Readded possibility to gain an advance from a just captured
-//   city, by Martin Gühmann. However with or without the change
+//   city, by Martin GÃ¼hmann. However with or without the change
 //   the CaptureCityEvent leaks, maybe a problem of SlicObject.
 // - Prevented crash when reporting completion of the Solaris project.
 // - Corrected memory leaks for city captures.
@@ -33,7 +33,7 @@
 // - Corrected message recipients for the Gaia Controller messages.
 // - added check to make sure city pop is greater than 1 before city capture options
 // - added city leaves ruins options
-// - Replaced old const database by new one. (5-Aug-2007 Martin Gühmann)
+// - Replaced old const database by new one. (5-Aug-2007 Martin GÃ¼hmann)
 //
 //----------------------------------------------------------------------------
 
@@ -139,13 +139,11 @@ STDEHANDLER(CaptureCityEvent)
 		// Added by Maq - Reset shield store for captured cities.
 		city.CD()->SetShieldstore(0);
 
-		if (city.GetOwner() == g_selected_item->GetVisiblePlayer())
-		{
+		if (g_selected_item->IsVisiblePlayer(city.GetOwner())) {
 			g_director->AddCenterMap(pos);
 		}
 
-		if (newOwner == g_selected_item->GetVisiblePlayer())
-		{
+		if (g_selected_item->IsVisiblePlayer(newOwner)) {
 			g_selected_item->SetSelectCity(city);
 		}
 
@@ -224,7 +222,7 @@ STDEHANDLER(CaptureCityEvent)
 
 		if(g_rand->Next(100) <
 		   g_theConstDB->Get(0)->GetCaptureCityAdvanceChance() * 100) {
-			//Added by Martin Gühmann to allow city advance gaining from
+			//Added by Martin GÃ¼hmann to allow city advance gaining from
 			//a captured city.
 
 			//Check if there are any advances to steal:
@@ -271,7 +269,7 @@ STDEHANDLER(CaptureCityEvent)
 		g_slicEngine->RunCityCapturedTriggers(newOwner, originalOwner,
 		                                      city);
 
-		if(city.GetVisibility() & (1 << g_selected_item->GetVisiblePlayer()))
+		if (g_selected_item->IsUnitVisible(city))
 		{
 			sint32 soundID = gamesounds_GetGameSoundID(GAMESOUNDS_CITYCONQUERED);
 			if (soundID != 0)
@@ -752,15 +750,13 @@ STDEHANDLER(CreateWonderEvent)
 	wonderutil_AddBuilt(wonder);
 	g_player[c->GetOwner()]->AddWonder(wonder, c);
 
-	if (c->GetOwner() == g_selected_item->GetVisiblePlayer() &&
-		!Player::IsThisPlayerARobot(c->GetOwner())) {
-
+	if (g_selected_item->IsVisiblePlayer(c->GetOwner()) && !Player::IsThisPlayerARobot(c->GetOwner()))
+	{
 		if ( g_theProfileDB->IsWonderMovies() ) {
 			if (g_director) {
 				g_director->AddPlayWonderMovie(c.CD()->GetBuildQueue()->GetHead()->m_type);
 			}
 		}
-
 	}
 	if(g_network.IsHost()) {
 		g_network.Block(c.GetOwner());

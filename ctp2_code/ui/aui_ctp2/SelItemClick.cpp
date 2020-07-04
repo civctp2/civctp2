@@ -26,12 +26,12 @@
 //
 // - Bug fix: prevent easy invisible unit detection, by reporting the basic
 //   terrain info when (right-)clicking on an enemy object.
-// - Added selection of goods. (Oct 8th 2005 Martin Gühmann)
+// - Added selection of goods. (Oct 8th 2005 Martin GÃ¼hmann)
 // - Added option to open cities or the army manager if there are units
-//   on top of a city. (Oct 8th 2005 Martin Gühmann)
-// - Treat entrenching units like entrenched units. (Oct 16th 2005 Martin Gühmann)
-// - Standardized code (May 21st 2006 Martin Gühmann)
-// - Added debug pathing for the city astar. (17-Jan-2008 Martin Gühmann)
+//   on top of a city. (Oct 8th 2005 Martin GÃ¼hmann)
+// - Treat entrenching units like entrenched units. (Oct 16th 2005 Martin GÃ¼hmann)
+// - Standardized code (May 21st 2006 Martin GÃ¼hmann)
+// - Added debug pathing for the city astar. (17-Jan-2008 Martin GÃ¼hmann)
 //
 //----------------------------------------------------------------------------
 
@@ -866,7 +866,7 @@ void SelectedItem::SetupClickFunctions()
 void SelectedItem::NewRegisterClick(const MapPoint &pos, const aui_MouseEvent *data, bool doubleClick,
 									bool leftDrag, bool leftDrop)
 {
-	PLAYER_INDEX      vPlayer = GetVisiblePlayer();
+	PLAYER_INDEX      vPlayer = GetVisiblePlayerID();
 	bool			     left = data->lbutton != 0;
 	bool		        right = data->rbutton != 0;
 	SELECT_BUTTON button = SELECT_BUTTON_MAX;
@@ -1019,7 +1019,7 @@ void SelectedItem::SelectEnemyArmyClick(const MapPoint &pos, const aui_MouseEven
 	Unit top;
 	GetTopUnit(pos, top);
 	g_gevManager->AddEvent(GEV_INSERT_Tail, GEV_ArmyClicked, GEA_Army, top->GetArmy(), GEA_End);
-	Deselect(GetVisiblePlayer());
+	Deselect(GetVisiblePlayerID());
 }
 
 void SelectedItem::SelectEnemyCityClick(const MapPoint &pos, const aui_MouseEvent *data, bool doubleClick)
@@ -1027,7 +1027,7 @@ void SelectedItem::SelectEnemyCityClick(const MapPoint &pos, const aui_MouseEven
 	Unit top;
 	GetTopUnitOrCity(pos, top);
 	g_gevManager->AddEvent(GEV_INSERT_Tail, GEV_CityClicked, GEA_City, top, GEA_End);
-	Deselect(GetVisiblePlayer());
+	Deselect(GetVisiblePlayerID());
 }
 
 void SelectedItem::SelectTradeRouteClick(const MapPoint &pos, const aui_MouseEvent *data, bool doubleClick)
@@ -1037,14 +1037,14 @@ void SelectedItem::SelectTradeRouteClick(const MapPoint &pos, const aui_MouseEve
 
 void SelectedItem::DeselectClick(const MapPoint &pos, const aui_MouseEvent *data, bool doubleClick)
 {
-	m_select_pos[GetVisiblePlayer()] = pos;
+	m_select_pos[GetVisiblePlayerID()] = pos;
 
-	Deselect(GetVisiblePlayer());
+	Deselect(GetVisiblePlayerID());
 }
 
 void SelectedItem::UnloadClick(const MapPoint &pos, const aui_MouseEvent *data, bool doubleClick)
 {
-	sint32 player = GetVisiblePlayer();
+	sint32 player = GetVisiblePlayerID();
 
 	g_gevManager->AddEvent(GEV_INSERT_Tail, GEV_UnloadOrder,
 						   GEA_Army, m_selected_army[player],
@@ -1069,8 +1069,7 @@ void SelectedItem::UnloadClick(const MapPoint &pos, const aui_MouseEvent *data, 
 //----------------------------------------------------------------------------
 void SelectedItem::TerrainContextClick(const MapPoint &pos, const aui_MouseEvent *data, bool doubleClick)
 {
-	if(g_player[GetVisiblePlayer()] && g_player[GetVisiblePlayer()]->IsExplored(pos))
-	{
+	if (GetVisiblePlayer() && GetVisiblePlayer()->IsExplored(pos)) {
 		helptile_displayData(pos);
 	}
 }
@@ -1169,7 +1168,7 @@ void SelectedItem::TradeRouteContextClick(const MapPoint &pos, const aui_MouseEv
 
 void SelectedItem::GoodContextClick(const MapPoint &pos, const aui_MouseEvent *data, bool doubleClick)
 {
-	if(g_player[GetVisiblePlayer()] && g_player[GetVisiblePlayer()]->IsExplored(pos))
+	if (GetVisiblePlayer() && GetVisiblePlayer()->IsExplored(pos))
 	{
 		helptile_displayData(pos);
 	}
@@ -1177,7 +1176,7 @@ void SelectedItem::GoodContextClick(const MapPoint &pos, const aui_MouseEvent *d
 
 void SelectedItem::SendGoodClick(const MapPoint &pos, const aui_MouseEvent *data, bool doubleClick)
 {
-	sint32 player = GetVisiblePlayer();
+	sint32 player = GetVisiblePlayerID();
 
 	bool isForeignGood = false;
 
@@ -1226,7 +1225,7 @@ void SelectedItem::SendGoodClick(const MapPoint &pos, const aui_MouseEvent *data
 
 void SelectedItem::MoveArmyClick(const MapPoint &pos, const aui_MouseEvent *data, bool doubleClick)
 {
-	sint32 player = GetVisiblePlayer();
+	sint32 player = GetVisiblePlayerID();
 
 	MapPoint army_pos;
 	m_selected_army[player].GetPos(army_pos);
@@ -1332,7 +1331,7 @@ void SelectedItem::MoveDrop(const MapPoint &pos, const aui_MouseEvent *data, boo
 			return;
 		}
 
-		if(pos == m_select_pos[GetVisiblePlayer()])
+		if(pos == m_select_pos[GetVisiblePlayerID()])
 		{
 			CancelPathingClick(pos, data, doubleClick);
 			return;
@@ -1371,7 +1370,7 @@ void SelectedItem::ActionClick(const MapPoint &pos, const aui_MouseEvent *data, 
 	if(!m_isDragging
 	&& !GetIsPathing()
 	){
-		if(m_select_pos[GetVisiblePlayer()] != pos)
+		if(m_select_pos[GetVisiblePlayerID()] != pos)
 		{
 			DeselectClick(pos, data, doubleClick);
 		}
@@ -1381,7 +1380,7 @@ void SelectedItem::ActionClick(const MapPoint &pos, const aui_MouseEvent *data, 
 	if(GetIsPathing())
 	{
 		MapPoint army_pos;
-		sint32 player = GetVisiblePlayer();
+		sint32 player = GetVisiblePlayerID();
 
 		g_controlPanel->ClearTargetingMode();
 
@@ -1432,7 +1431,7 @@ void SelectedItem::CancelPathingClick(const MapPoint &pos, const aui_MouseEvent 
 SELECT_TYPE SelectedItem::GetClickedThing(const MapPoint &pos, bool click)
 {
 	Unit		top;
-	sint32		visiblePlayer = GetVisiblePlayer();
+	sint32		visiblePlayer = GetVisiblePlayerID();
 	bool hasUnitOrCity = GetTopUnitOrCity(pos, top);
 	Cell *cell = g_theWorld->GetCell(pos);
 

@@ -134,7 +134,7 @@ AUI_ERRCODE MessageIconWindow::InitCommon( Message *data,
 	uint32 pos = messagelist->GetList()->L();
 
 	if ( pos > ( g_messageMaxVisible + messagelist->GetOffset() )) {
-		if(data->GetOwner() == g_selected_item->GetVisiblePlayer())
+		if (g_selected_item->IsVisiblePlayer(data->GetOwner()))
 			messagewin_MoreMessagesIcon( TRUE );
 	} else {
 		SetupAnimation( pos - messagelist->GetOffset( ));

@@ -25,9 +25,9 @@
 // Modifications from the original Activision code:
 //
 // - To display the captital of a civ and you know were it is no embassy is
-//   necessary anymore. (10-Feb-2008 Martin Gühmann)
+//   necessary anymore. (10-Feb-2008 Martin GÃ¼hmann)
 // - Instead of cities with wonders all cities are displayed if there is an
-//   embassy, otherwise only the known cities are displayed. (10-Feb-2008 Martin Gühmann)
+//   embassy, otherwise only the known cities are displayed. (10-Feb-2008 Martin GÃ¼hmann)
 //
 //----------------------------------------------------------------------------
 
@@ -224,7 +224,8 @@ AUI_ERRCODE DiplomacyDetails::Display(Unit *cfdshk)
 			st->SetText(interp);
 
 			interp[0] = 0;
-			StringId dip_adviceId = Diplomat::GetDiplomat(detailPlayer).ExplainRegard(g_selected_item->GetVisiblePlayer());
+			StringId dip_adviceId = Diplomat::GetDiplomat(detailPlayer).ExplainRegard(
+					g_selected_item->GetVisiblePlayerID());
 			if (dip_adviceId != -1)
 			{
 				stringutils_Interpret(g_theStringDB->GetNameStr(dip_adviceId), so, interp);
@@ -232,7 +233,7 @@ AUI_ERRCODE DiplomacyDetails::Display(Unit *cfdshk)
 			else
 			{
 
-				dip_adviceId = Diplomat::GetDiplomat(g_selected_item->GetVisiblePlayer()).GetDiplomacyAdvice(so, detailPlayer);
+				dip_adviceId = Diplomat::GetDiplomat(g_selected_item->GetVisiblePlayerID()).GetDiplomacyAdvice(so, detailPlayer);
 				if (dip_adviceId != -1)
 				{
 					stringutils_Interpret(g_theStringDB->GetNameStr(dip_adviceId), so, interp);
@@ -348,7 +349,7 @@ AUI_ERRCODE DiplomacyDetails::Display(Unit *cfdshk)
 			st = (ctp2_Static *)aui_Ldl::GetObject(s_DiplomacyDetailsBlock, "TabGroup.Tab2.TabPanel.CapitalLabel");
 			st->SetText(interp);
 
-			if(g_player[g_selected_item->GetVisiblePlayer()]->HasEmbassyWith(detailPlayer))
+			if (g_selected_item->GetVisiblePlayer()->HasEmbassyWith(detailPlayer))
 			{
 				interp[0] = 0;
 				stringutils_Interpret(g_theStringDB->GetNameStr("str_ldl_DipDetails_EmpireSize"), so, interp);
@@ -415,7 +416,7 @@ AUI_ERRCODE DiplomacyDetails::Display(Unit *cfdshk)
 					sm_list->Clear();
 					sm_list->SetAbsorbancy(FALSE);
 					for(int a = 0; a < g_theAdvanceDB->NumRecords(); a++) {
-						if(g_player[g_selected_item->GetVisiblePlayer()]->HasAdvance(a))
+						if (g_selected_item->GetVisiblePlayer()->HasAdvance(a))
 						{
 							continue;
 						}
@@ -442,7 +443,7 @@ AUI_ERRCODE DiplomacyDetails::Display(Unit *cfdshk)
 					sm_list->SetAbsorbancy(FALSE);
 					for(int a = 0; a < g_theAdvanceDB->NumRecords(); a++)
 					{
-						if(!g_player[g_selected_item->GetVisiblePlayer()]->HasAdvance(a))
+						if (!g_selected_item->GetVisiblePlayer()->HasAdvance(a))
 						{
 							continue;
 						}
@@ -484,11 +485,9 @@ AUI_ERRCODE DiplomacyDetails::Display(Unit *cfdshk)
 				st->SetText(interp);
 
 				Unit *capitol = g_player[detailPlayer]->m_capitol;
-				if( capitol && capitol->m_id
-				&& (    capitol->GetCityData()->GetBuiltWonders()
-				    || (capitol->GetVisibility() & (1 << g_selected_item->GetVisiblePlayer())) != 0
-				   )
-				){
+				if (capitol && capitol->m_id
+					&& (capitol->GetCityData()->GetBuiltWonders() || g_selected_item->IsUnitVisible(*capitol)))
+				{
 					interp[0] = 0;
 					if(g_player[detailPlayer]->m_capitol && g_player[detailPlayer]->m_capitol->m_id)
 					{
@@ -548,9 +547,7 @@ AUI_ERRCODE DiplomacyDetails::Display(Unit *cfdshk)
 					for(int a = 0; a < g_player[detailPlayer]->m_all_cities->Num(); a++)
 					{
 						Unit city = g_player[detailPlayer]->m_all_cities->Get(a);
-						if(!city->GetCityData()->GetBuiltWonders()
-						&& (city.GetVisibility() & (1 << g_selected_item->GetVisiblePlayer())) == 0
-						){
+						if (!city->GetCityData()->GetBuiltWonders() && !g_selected_item->IsUnitVisible(city)) {
 							continue;
 						}
 
@@ -864,7 +861,6 @@ AUI_ERRCODE DiplomacyDetails::DrawTreaties(ctp2_Static *control, aui_Surface *su
     {
     //// similar to IntelligenceWindow::DrawTreaties
     sint32 p = (sint32)cookie;
-    sint32 visP = g_selected_item->GetVisiblePlayer();
 
     sint32 x = 0;
 

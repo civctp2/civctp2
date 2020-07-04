@@ -25,7 +25,7 @@
 //
 // - Option added to close a message box automatically on eyepoint clicking.
 // - Messages are closed if an open command is executed and there is already
-//   an open messages, enables left click close. (Oct 16th 2005 Martin G?hmann)
+//   an open messages, enables left click close. (Oct 16th 2005 Martin Gühmann)
 //
 //----------------------------------------------------------------------------
 
@@ -109,11 +109,11 @@ void MessageMinimizeAction::Execute( aui_Control *control, uint32 action, uint32
 
 	m_window->GetIconWindow()->SetCurrentIconButton( NULL );
 
-	sint32 p = g_selected_item->GetVisiblePlayer();
-	if(g_player[p]) {
+	Player * player = g_selected_item->GetVisiblePlayer();
+	if(player) {
 		sint32 m;
-		for(m = 0; m < g_player[p]->m_messages->Num(); m++) {
-			Message msg = g_player[p]->m_messages->Access(m);
+		for(m = 0; m < player->m_messages->Num(); m++) {
+			Message msg = player->m_messages->Access(m);
 			if(!msg.IsRead() && msg.IsInstantMessage()) {
 				g_director->AddMessage(msg);
 				break;

@@ -24,14 +24,14 @@
 //
 // Modifications from the original Activision code:
 //
-// - Added emissary photo to the diplomatic manager by Martin Gühmann
+// - Added emissary photo to the diplomatic manager by Martin GÃ¼hmann
 // - Diplomatic proposals/responses sent from UI get the highest priority possible
 //   so that the AI won't override them: DipWizard::SendCallback
 // - Repaired crashes when the emissary photo is missing.
-// - Added female leader images. (Aug 20th 2005 Martin Gühmann)
-// - Initialized local variables. (Sep 9th 2005 Martin Gühmann)
+// - Added female leader images. (Aug 20th 2005 Martin GÃ¼hmann)
+// - Initialized local variables. (Sep 9th 2005 Martin GÃ¼hmann)
 // - removed new diplo attempt - E 12.27.2006
-// - Added HotSeat and PBEM human-human diplomacy support. (17-Oct-2007 Martin Gühmann)
+// - Added HotSeat and PBEM human-human diplomacy support. (17-Oct-2007 Martin GÃ¼hmann)
 //
 //----------------------------------------------------------------------------
 
@@ -109,7 +109,6 @@ ctp2_Static       *DipWizard::m_createButtons = NULL,
                   *DipWizard::m_parchment = NULL,
                   *DipWizard::m_responseDiplomat;
 
-//Added by Martin Gühmann to display the emissary photo of recipient
 ctp2_Static       *DipWizard::m_emissary_photo = NULL;
 
 ctp2_DropDown     *DipWizard::m_nations = NULL;
@@ -237,7 +236,6 @@ DipWizard::DipWizard(AUI_ERRCODE *err)
 
 	m_parchment = (ctp2_Static *)aui_Ldl::GetObject(s_dipWizardBlock, "Details.Parchment");
 	m_responseDiplomat = (ctp2_Static *)aui_Ldl::GetObject(s_dipWizardBlock, "Stage3.Diplomat");
-	//Added by Martin Gühmann to display the emissary photo of recipient
 	m_emissary_photo = (ctp2_Static *)aui_Ldl::GetObject(s_dipWizardBlock, "Details.Picture");
 
 	m_threatList = (ctp2_ListBox *)aui_Ldl::GetObject(s_dipWizardBlock, "Stage4.List");
@@ -265,7 +263,6 @@ DipWizard::DipWizard(AUI_ERRCODE *err)
 	m_viewThreat = -1;
 
 	m_sendCounter = false;
-	//Added by Martin Gühmann to display the emissary photo of recipient
 	//Makes shure that the default image is never shown not even for one or two seconds
 	if (m_emissary_photo)
 	{
@@ -347,9 +344,7 @@ AUI_ERRCODE DipWizard::Display()
 		return AUI_ERRCODE_HACK;
 	}
 
-	if(g_network.IsActive() && g_player[g_selected_item->GetVisiblePlayer()] &&
-	   g_player[g_selected_item->GetVisiblePlayer()]->IsRobot()) {
-
+	if(g_network.IsActive() && g_selected_item->GetVisiblePlayer() && g_selected_item->GetVisiblePlayer()->IsRobot()) {
 		return AUI_ERRCODE_OK;
 	}
 
@@ -406,12 +401,11 @@ bool DipWizard::CanInitiateRightNow()
 		return false;
 	}
 
-	const Diplomat & diplomat =
-		Diplomat::GetDiplomat(g_selected_item->GetVisiblePlayer());
+	const Diplomat & diplomat = Diplomat::GetDiplomat(g_selected_item->GetVisiblePlayerID());
 
 	sint32 p;
 	for(p = 0; p < k_MAX_PLAYERS; p++) {
-		if(p == g_selected_item->GetVisiblePlayer())
+		if (g_selected_item->IsVisiblePlayer(p))
 			continue;
 		if(!g_player[p])
 			continue;
@@ -438,8 +432,7 @@ void DipWizard::FillProposalLists()
 		m_exchList[i]->SetActionFuncAndCookie(ExchListCallback, (void *)i);
 	}
 
-	const Diplomat & diplomat =
-		Diplomat::GetDiplomat(g_selected_item->GetVisiblePlayer());
+	const Diplomat & diplomat = Diplomat::GetDiplomat(g_selected_item->GetVisiblePlayerID());
 
 	for(pr = 0; pr < g_theDiplomacyProposalDB->NumRecords(); pr++) {
 		const DiplomacyProposalRecord *rec = g_theDiplomacyProposalDB->Get(pr);
@@ -453,7 +446,7 @@ void DipWizard::FillProposalLists()
 			sint32 c;
 			bool seenOne = false;
 			for(c = 0; c < g_player[m_recipient]->m_all_cities->Num(); c++) {
-				if(g_player[m_recipient]->m_all_cities->Access(c)->GetEverVisible() & (1 << g_selected_item->GetVisiblePlayer())) {
+				if (g_player[m_recipient]->m_all_cities->Access(c)->GetEverVisible() & (1 << g_selected_item->GetVisiblePlayerID())) {
 					seenOne = true;
 					break;
 				}
@@ -508,7 +501,7 @@ void DipWizard::FillProposalLists()
 
 						sint32 c;
 						for(c = 0; c < g_player[threatenee]->m_all_cities->Num(); c++) {
-							if(g_player[threatenee]->m_all_cities->Access(c).GetEverVisible() & (1 << g_selected_item->GetVisiblePlayer())) {
+							if(g_player[threatenee]->m_all_cities->Access(c).GetEverVisible() & (1 << g_selected_item->GetVisiblePlayerID())) {
 								foundCity = true;
 								break;
 							}
@@ -525,13 +518,13 @@ void DipWizard::FillProposalLists()
 						for(p = 1; p < k_MAX_PLAYERS; p++) {
 							if(!g_player[p]) continue;
 
-							if(p == g_selected_item->GetVisiblePlayer())
+							if (g_selected_item->IsVisiblePlayer(p))
 								continue;
 
 							if(p == threatenee)
 								continue;
 
-							if(!g_player[g_selected_item->GetVisiblePlayer()]->HasContactWith(p))
+							if(!g_selected_item->GetVisiblePlayer()->HasContactWith(p))
 								continue;
 
 							foundThirdParty = true;
@@ -548,7 +541,7 @@ void DipWizard::FillProposalLists()
 						if(m_recipient < 0 || m_recipient >= k_MAX_PLAYERS || !g_player[threatenee])
 							continue;
 
-						const Diplomat & diplomat = Diplomat::GetDiplomat(g_selected_item->GetVisiblePlayer());
+						const Diplomat & diplomat = Diplomat::GetDiplomat(g_selected_item->GetVisiblePlayerID());
 
 						ai::Agreement pact;
 
@@ -584,9 +577,10 @@ void DipWizard::FillProposalLists()
 void DipWizard::FillRecipientLists()
 {
 	ctp2_ListItem *item = NULL;
-	Player *visPlayer = g_player[g_selected_item->GetVisiblePlayer()];
-	if(!visPlayer) return;
-
+	Player * visiblePlayer = g_selected_item->GetVisiblePlayer();
+	if (!visiblePlayer) {
+		return;
+	}
 
 	if(m_nations) {
 		m_nations->Clear();
@@ -602,9 +596,9 @@ void DipWizard::FillRecipientLists()
 
 		sint32 pl;
 		for(pl = 1; pl < k_MAX_PLAYERS; pl++) {
-			if(g_player[pl] == visPlayer) continue;
+			if(g_player[pl] == visiblePlayer) continue;
 			if(!g_player[pl]) continue;
-			if(!visPlayer->HasContactWith(pl)) continue;
+			if(!visiblePlayer->HasContactWith(pl)) continue;
 
 			item = (ctp2_ListItem *)aui_Ldl::BuildHierarchyFromRoot("DipWizNationItem");
 			Assert(item);
@@ -855,7 +849,7 @@ void DipWizard::SetViewResponse(sint32 sender, sint32 recipient, bool negotiatio
 			return;
 		}
 
-		if(  resp.receiverId == g_selected_item->GetVisiblePlayer()
+		if(  g_selected_item->IsVisiblePlayer(resp.receiverId)
 		&& ( last_receiver_response.type == RESPONSE_COUNTER
 		||  (last_receiver_response.counter.first_type != PROPOSAL_NONE
 		&&   sender_response.type != RESPONSE_THREATEN))
@@ -867,8 +861,9 @@ void DipWizard::SetViewResponse(sint32 sender, sint32 recipient, bool negotiatio
 			m_viewExchange = diplomacyutil_GetDBIndex(last_receiver_response.counter.second_type);
 			m_viewExchangeArg = last_receiver_response.counter.second_arg;
 			m_viewTone = last_receiver_response.counter.tone;
-		} else {
-
+		}
+		else
+		{
 			m_viewProposal = diplomacyutil_GetDBIndex(orig.detail.first_type);
 			m_viewProposalArg = orig.detail.first_arg;
 			m_viewExchange = diplomacyutil_GetDBIndex(orig.detail.second_type);
@@ -958,7 +953,7 @@ void DipWizard::UpdateViewProposalStage()
 			break;
 		case DIP_WIZ_VIEW_TYPE_RESPONSE:
 		{
-			sint32 pl = m_viewRecipient == g_selected_item->GetVisiblePlayer() ? m_viewSender : m_viewRecipient;
+			sint32 pl = g_selected_item->IsVisiblePlayer(m_viewRecipient) ? m_viewSender : m_viewRecipient;
 			so.AddPlayer(pl);
 			DisplayResponseDiplomat(pl);
 
@@ -982,7 +977,7 @@ void DipWizard::UpdateViewProposalStage()
 		}
 		case DIP_WIZ_VIEW_TYPE_FINAL_RESPONSE:
 		{
-			sint32 pl = m_viewRecipient == g_selected_item->GetVisiblePlayer() ? m_viewSender : m_viewRecipient;
+			sint32 pl = g_selected_item->IsVisiblePlayer(m_viewRecipient) ? m_viewSender : m_viewRecipient;
 			so.AddPlayer(pl);
 			DisplayResponseDiplomat(pl);
 
@@ -1271,9 +1266,8 @@ void DipWizard::UpdateDetails()
 	st = (ctp2_Static *)aui_Ldl::GetObject(s_dipWizardBlock, "Details.Recipient");
 	if(st) {
 		if(!viewingProposal) {
-			//Added by Martin Gühmann to display the emissary photo of recipient
 			DisplayDiplomat(m_recipient);
-			DisplayParchment(g_selected_item->GetVisiblePlayer());
+			DisplayParchment(g_selected_item->GetVisiblePlayerID());
 			if(m_recipient >= 0) {
 				SlicObject so;
 				so.AddPlayer(m_recipient);
@@ -1284,36 +1278,32 @@ void DipWizard::UpdateDetails()
 			}
 		} else {
 
-			if(m_viewRecipient == g_selected_item->GetVisiblePlayer()) {
+			if (g_selected_item->IsVisiblePlayer(m_viewRecipient)) {
 				SlicObject so;
 				so.AddPlayer(m_viewSender);
 				stringutils_Interpret(g_theStringDB->GetNameStr("str_ldl_DipWizSender"), so, text);
 				st->SetText(text);
 
-				//Modified by Martin Gühmann to display the emissary photo of recipient
 				DisplayDiplomat(m_viewRecipient);
 				DisplayParchment(m_viewSender);
 
 			} else if(m_viewResponseType == RESPONSE_COUNTER) {
-				//Modified by Martin Gühmann to display the emissary photo of recipient
 				DisplayDiplomat(m_viewSender);
 				DisplayParchment(m_viewRecipient);
 				SlicObject so;
 				so.AddPlayer(m_viewRecipient);
 				stringutils_Interpret(g_theStringDB->GetNameStr("str_ldl_DipWizSender"), so, text);
 				st->SetText(text);
-			} else if(m_viewSender == g_selected_item->GetVisiblePlayer()) {
-				//Added by Martin Gühmann to display the emissary photo of recipient
+			} else if (g_selected_item->IsVisiblePlayer(m_viewSender)) {
 				DisplayDiplomat(m_viewRecipient);
-				DisplayParchment(g_selected_item->GetVisiblePlayer());
+				DisplayParchment(g_selected_item->GetVisiblePlayerID());
 				SlicObject so;
 				so.AddPlayer(m_viewRecipient);
 				stringutils_Interpret(g_theStringDB->GetNameStr("str_ldl_DipWizRecipient"), so, text);
 				st->SetText(text);
 			} else {
-				//Added by Martin Gühmann to display the emissary photo of recipient
 				DisplayDiplomat(-1);
-				DisplayParchment(g_selected_item->GetVisiblePlayer());
+				DisplayParchment(g_selected_item->GetVisiblePlayerID());
 				st->SetText("");
 			}
 		}
@@ -1338,7 +1328,7 @@ void DipWizard::UpdateDetails()
 
 			sint32 sender, receiver;
 			if(!viewingProposal) {
-				sender = g_selected_item->GetVisiblePlayer();
+				sender = g_selected_item->GetVisiblePlayerID();
 				receiver = m_recipient;
 			} else {
 				sender = m_viewSender;
@@ -1640,7 +1630,7 @@ void DipWizard::SendCallback(aui_Control *control, uint32 action, uint32 data, v
 	if(m_sendCounter) {
 		Response response;
 		response.senderId = m_recipient;
-		response.receiverId = g_selected_item->GetVisiblePlayer();
+		response.receiverId = g_selected_item->GetVisiblePlayerID();
 		response.priority = 9999;
 		FillInProposalData(response.counter, true);
 		response.type = RESPONSE_COUNTER;
@@ -1658,7 +1648,7 @@ void DipWizard::SendCallback(aui_Control *control, uint32 action, uint32 data, v
 	} else if(GetStage() != DIP_WIZ_STAGE_MAKE_THREAT) {
 		NewProposal prop;
 
-		prop.senderId = g_selected_item->GetVisiblePlayer();
+		prop.senderId = g_selected_item->GetVisiblePlayerID();
 		prop.receiverId = m_recipient;
 		prop.priority=9999;
 		FillInProposalData(prop.detail);
@@ -1669,12 +1659,12 @@ void DipWizard::SendCallback(aui_Control *control, uint32 action, uint32 data, v
 
 		}
 
-		Diplomat::GetDiplomat(g_selected_item->GetVisiblePlayer()).ExecuteNewProposal(prop);
+		Diplomat::GetDiplomat(g_selected_item->GetVisiblePlayerID()).ExecuteNewProposal(prop);
 	} else {
 
 		Response resp;
 		resp.type = RESPONSE_THREATEN;
-		resp.senderId = g_selected_item->GetVisiblePlayer();
+		resp.senderId = g_selected_item->GetVisiblePlayerID();
 		resp.receiverId = m_viewRecipient;
 		resp.threat.type = diplomacyutil_GetThreatType(m_threat);
 		resp.threat.arg = m_threatArg;
@@ -1683,18 +1673,14 @@ void DipWizard::SendCallback(aui_Control *control, uint32 action, uint32 data, v
 			SetStage(DIP_WIZ_STAGE_RECIPIENT);
 		}
 
-		if(g_player[resp.senderId]->IsHuman()
-		&& g_selected_item->GetVisiblePlayer() != resp.senderId
-		){
+		if (g_player[resp.senderId]->IsHuman() && !g_selected_item->IsVisiblePlayer(resp.senderId)) {
 			Hide();
 		}
-		else if(g_player[resp.receiverId]->IsHuman()
-		&&      g_selected_item->GetVisiblePlayer() != resp.receiverId
-		){
+		else if (g_player[resp.receiverId]->IsHuman() && !g_selected_item->IsVisiblePlayer(resp.receiverId)) {
 			Hide();
 		}
 
-		Diplomat::GetDiplomat(g_selected_item->GetVisiblePlayer()).ExecuteResponse(resp);
+		Diplomat::GetDiplomat(g_selected_item->GetVisiblePlayerID()).ExecuteResponse(resp);
 	}
 
 	g_gevManager->AddEvent(GEV_INSERT_Tail, GEV_ResumeEmailAndHotSeatDiplomacy,
@@ -1757,18 +1743,15 @@ void DipWizard::AcceptCallback(aui_Control *control, uint32 action, uint32 data,
 	if(GetStage() != DIP_WIZ_STAGE_VIEW_PROPOSAL)
 		return;
 
-	if( m_viewType == DIP_WIZ_VIEW_TYPE_FINAL_RESPONSE
-	|| (m_viewSender == g_selected_item->GetVisiblePlayer()
-	&&  m_viewResponseType != RESPONSE_COUNTER)
-	){
-
+	if (m_viewType == DIP_WIZ_VIEW_TYPE_FINAL_RESPONSE
+	|| (g_selected_item->IsVisiblePlayer(m_viewSender) && m_viewResponseType != RESPONSE_COUNTER))
+	{
 		Hide();
 
 		g_gevManager->AddEvent(GEV_INSERT_Tail, GEV_ResumeEmailAndHotSeatDiplomacy,
 							   GEA_Player,		g_selected_item->GetCurPlayer(),
 							   GEA_End
 							  );
-
 		return;
 	}
 
@@ -1776,7 +1759,8 @@ void DipWizard::AcceptCallback(aui_Control *control, uint32 action, uint32 data,
 	response.senderId = m_viewSender;
 	response.receiverId = m_viewRecipient;
 
-	if(m_viewSender == g_selected_item->GetVisiblePlayer()) {
+	if (g_selected_item->IsVisiblePlayer(m_viewSender))
+	{
 		if(m_viewResponseType == RESPONSE_COUNTER) {
 			response.type = RESPONSE_ACCEPT;
 		} else {
@@ -1812,7 +1796,7 @@ void DipWizard::RejectCallback(aui_Control *control, uint32 action, uint32 data,
 
 	response.type = RESPONSE_REJECT;
 	Hide();
-	Diplomat::GetDiplomat(g_selected_item->GetVisiblePlayer()).ExecuteResponse(response);
+	Diplomat::GetDiplomat(g_selected_item->GetVisiblePlayerID()).ExecuteResponse(response);
 
 	g_gevManager->AddEvent(GEV_INSERT_Tail, GEV_ResumeEmailAndHotSeatDiplomacy,
 						   GEA_Player,		g_selected_item->GetCurPlayer(),
@@ -1828,7 +1812,8 @@ void DipWizard::CounterOrThreatenCallback(aui_Control *control, uint32 action, u
 	if(GetStage() != DIP_WIZ_STAGE_VIEW_PROPOSAL)
 		return;
 
-	if(m_viewSender == g_selected_item->GetVisiblePlayer()) {
+	if (g_selected_item->IsVisiblePlayer(m_viewSender))
+	{
 		NewProposal prop = Diplomat::GetDiplomat(m_viewSender).GetMyLastNewProposal(m_viewRecipient);
 
 		m_viewProposal = diplomacyutil_GetDBIndex(prop.detail.first_type);
@@ -1964,7 +1949,7 @@ bool DipWizard::ProposalContextMenu(sint32 proposal)
 	m_curMenu = new ctp2_Menu(true, DipWizard::MenuCallback);
 	switch(rec->GetArg1()) {
 		case k_DiplomacyProposal_Arg1_OwnCity_Bit:
-			AddCityItems(m_curMenu, g_selected_item->GetVisiblePlayer());
+			AddCityItems(m_curMenu, g_selected_item->GetVisiblePlayerID());
 			break;
 		case k_DiplomacyProposal_Arg1_HisCity_Bit:
 			AddCityItems(m_curMenu, m_recipient);
@@ -1979,13 +1964,13 @@ bool DipWizard::ProposalContextMenu(sint32 proposal)
 
 			break;
 		case k_DiplomacyProposal_Arg1_OwnAdvance_Bit:
-			AddAdvanceItems(m_curMenu, g_selected_item->GetVisiblePlayer(), m_recipient);
+			AddAdvanceItems(m_curMenu, g_selected_item->GetVisiblePlayerID(), m_recipient);
 			break;
 		case k_DiplomacyProposal_Arg1_HisAdvance_Bit:
-			AddAdvanceItems(m_curMenu, m_recipient, g_selected_item->GetVisiblePlayer());
+			AddAdvanceItems(m_curMenu, m_recipient, g_selected_item->GetVisiblePlayerID());
 			break;
 		case k_DiplomacyProposal_Arg1_OwnStopResearch_Bit:
-			AddStopResearchItems(m_curMenu, g_selected_item->GetVisiblePlayer());
+			AddStopResearchItems(m_curMenu, g_selected_item->GetVisiblePlayerID());
 			break;
 		case k_DiplomacyProposal_Arg1_HisStopResearch_Bit:
 			AddStopResearchItems(m_curMenu, m_recipient);
@@ -2000,7 +1985,7 @@ bool DipWizard::ProposalContextMenu(sint32 proposal)
 
 			break;
 		case k_DiplomacyProposal_Arg1_OwnGold_Bit:
-			RequestGoldValue(g_selected_item->GetVisiblePlayer());
+			RequestGoldValue(g_selected_item->GetVisiblePlayerID());
 			needItems = false;
 			break;
 		case k_DiplomacyProposal_Arg1_HisGold_Bit:
@@ -2008,10 +1993,10 @@ bool DipWizard::ProposalContextMenu(sint32 proposal)
 			needItems = false;
 			break;
 		case k_DiplomacyProposal_Arg1_ThirdParty_Bit:
-			AddThirdPartyItems(m_curMenu, g_selected_item->GetVisiblePlayer(), m_recipient);
+			AddThirdPartyItems(m_curMenu, g_selected_item->GetVisiblePlayerID(), m_recipient);
 			break;
 		case k_DiplomacyProposal_Arg1_OwnPollution_Bit:
-			RequestPollutionValue(g_selected_item->GetVisiblePlayer());
+			RequestPollutionValue(g_selected_item->GetVisiblePlayerID());
 			needItems = false;
 			break;
 		case k_DiplomacyProposal_Arg1_HisPollution_Bit:
@@ -2057,9 +2042,9 @@ void DipWizard::AddCityItems(ctp2_Menu *menu, sint32 player)
 	sint32 i;
 	for(i = 0; i < g_player[player]->m_all_cities->Num(); i++) {
 		Unit city = g_player[player]->m_all_cities->Access(i);
-		if(player != g_selected_item->GetVisiblePlayer()) {
-
-			if(!(city.GetEverVisible() & (1 << g_selected_item->GetVisiblePlayer())))
+		if (!g_selected_item->IsVisiblePlayer(player))
+		{
+			if(!(city.GetEverVisible() & (1 << g_selected_item->GetVisiblePlayerID())))
 				continue;
 		}
 		menu->AddItem(city.GetName(), NULL, (void *)city.m_id);
@@ -2077,43 +2062,43 @@ void DipWizard::AddAgreementItems(ctp2_Menu *menu, sint32 player)
 	if(!g_player[player])
 		return;
 
-	sint32 visplayer = g_selected_item->GetVisiblePlayer();
+	sint32 visiblePlayer = g_selected_item->GetVisiblePlayerID();
 
 	const AgreementMatrix & agreement_matrix = AgreementMatrix::s_agreements;
 	ai::Agreement tmp_agreement;
-	if (agreement_matrix.HasAgreement(player, visplayer, PROPOSAL_TREATY_PEACE))
+	if (agreement_matrix.HasAgreement(player, visiblePlayer, PROPOSAL_TREATY_PEACE))
 	{
-		tmp_agreement = agreement_matrix.GetAgreement(player, visplayer, PROPOSAL_TREATY_PEACE);
+		tmp_agreement = agreement_matrix.GetAgreement(player, visiblePlayer, PROPOSAL_TREATY_PEACE);
 		menu->AddItem(g_theStringDB->GetNameStr("DIP_TREATY_PEACE"), NULL, (void *)PROPOSAL_TREATY_PEACE);
 	}
 
-	if (agreement_matrix.HasAgreement(player, visplayer, PROPOSAL_TREATY_TRADE_PACT))
+	if (agreement_matrix.HasAgreement(player, visiblePlayer, PROPOSAL_TREATY_TRADE_PACT))
 	{
-		tmp_agreement = agreement_matrix.GetAgreement(player, visplayer, PROPOSAL_TREATY_TRADE_PACT);
+		tmp_agreement = agreement_matrix.GetAgreement(player, visiblePlayer, PROPOSAL_TREATY_TRADE_PACT);
 		menu->AddItem(g_theStringDB->GetNameStr("DIP_TREATY_TRADE_PACT"), NULL, (void *)PROPOSAL_TREATY_TRADE_PACT);
 	}
 
-	if (agreement_matrix.HasAgreement(player, visplayer, PROPOSAL_TREATY_RESEARCH_PACT))
+	if (agreement_matrix.HasAgreement(player, visiblePlayer, PROPOSAL_TREATY_RESEARCH_PACT))
 	{
-		tmp_agreement = agreement_matrix.GetAgreement(player, visplayer, PROPOSAL_TREATY_RESEARCH_PACT);
+		tmp_agreement = agreement_matrix.GetAgreement(player, visiblePlayer, PROPOSAL_TREATY_RESEARCH_PACT);
 		menu->AddItem(g_theStringDB->GetNameStr("DIP_TREATY_RESEARCH_PACT"), NULL, (void *)PROPOSAL_TREATY_RESEARCH_PACT);
 	}
 
-	if (agreement_matrix.HasAgreement(player, visplayer, PROPOSAL_TREATY_MILITARY_PACT))
+	if (agreement_matrix.HasAgreement(player, visiblePlayer, PROPOSAL_TREATY_MILITARY_PACT))
 	{
-		tmp_agreement = agreement_matrix.GetAgreement(player, visplayer, PROPOSAL_TREATY_MILITARY_PACT);
+		tmp_agreement = agreement_matrix.GetAgreement(player, visiblePlayer, PROPOSAL_TREATY_MILITARY_PACT);
 		menu->AddItem(g_theStringDB->GetNameStr("DIP_TREATY_MILITARY_PACT"), NULL, (void *)PROPOSAL_TREATY_MILITARY_PACT);
 	}
 
-	if (agreement_matrix.HasAgreement(player, visplayer, PROPOSAL_TREATY_POLLUTION_PACT))
+	if (agreement_matrix.HasAgreement(player, visiblePlayer, PROPOSAL_TREATY_POLLUTION_PACT))
 	{
-		tmp_agreement = agreement_matrix.GetAgreement(player, visplayer, PROPOSAL_TREATY_POLLUTION_PACT);
+		tmp_agreement = agreement_matrix.GetAgreement(player, visiblePlayer, PROPOSAL_TREATY_POLLUTION_PACT);
 		menu->AddItem(g_theStringDB->GetNameStr("DIP_TREATY_POLLUTION_PACT"), NULL, (void *)PROPOSAL_TREATY_POLLUTION_PACT);
 	}
 
-	if (agreement_matrix.HasAgreement(player, visplayer, PROPOSAL_TREATY_ALLIANCE))
+	if (agreement_matrix.HasAgreement(player, visiblePlayer, PROPOSAL_TREATY_ALLIANCE))
 	{
-		tmp_agreement = agreement_matrix.GetAgreement(player, visplayer, PROPOSAL_TREATY_ALLIANCE);
+		tmp_agreement = agreement_matrix.GetAgreement(player, visiblePlayer, PROPOSAL_TREATY_ALLIANCE);
 		menu->AddItem(g_theStringDB->GetNameStr("DIP_TREATY_ALLIANCE"), NULL, (void *)PROPOSAL_TREATY_ALLIANCE);
 	}
 }
@@ -2222,7 +2207,7 @@ bool DipWizard::AddThreatData(SlicObject &so, sint32 threat, const DiplomacyArg 
 	        ai::Agreement agreement =
                 AgreementMatrix::s_agreements.GetAgreement
                     (m_viewRecipient,
-                     g_selected_item->GetVisiblePlayer(),
+					 g_selected_item->GetVisiblePlayerID(),
                      static_cast<PROPOSAL_TYPE>(arg.agreementId)
                     );
 			so.AddAgreement(agreement);
@@ -2363,7 +2348,7 @@ void DipWizard::RequestGoldValue(sint32 player)
 		m_goldRequestWindow->SetStronglyModal(TRUE);
 	}
 	ctp2_Spinner *spinner = (ctp2_Spinner *)aui_Ldl::GetObject("DipGoldRequest.Spinner");
-	if(player == g_selected_item->GetVisiblePlayer()) {
+	if (g_selected_item->IsVisiblePlayer(player)) {
 		spinner->SetMaximum(g_player[player]->m_gold->GetLevel(), 0);
 	} else {
 
@@ -2504,7 +2489,7 @@ bool DipWizard::ThreatContextMenu(sint32 threat)
 			AddCityItems(m_threatMenu, m_viewRecipient);
 			break;
 		case k_DiplomacyThreat_Arg1_ThirdParty_Bit:
-			AddThirdPartyItems(m_threatMenu, g_selected_item->GetVisiblePlayer(), m_viewRecipient);
+			AddThirdPartyItems(m_threatMenu, g_selected_item->GetVisiblePlayerID(), m_viewRecipient);
 			break;
 		case k_DiplomacyThreat_Arg1_AgreementId_Bit:
 			AddAgreementItems(m_threatMenu, m_viewRecipient);
@@ -2557,9 +2542,7 @@ STDEHANDLER(DipWizResponseReady)
 	if(!args->GetPlayer(0, p1)) return GEV_HD_Continue;
 	if(!args->GetPlayer(1, p2)) return GEV_HD_Continue;
 
-	if(p1 == g_selected_item->GetVisiblePlayer() ||
-	   p2 == g_selected_item->GetVisiblePlayer()) {
-
+	if (g_selected_item->IsVisiblePlayer(p1) || g_selected_item->IsVisiblePlayer(p2)) {
 		DipWizard::SetViewResponse(p1, p2, false);
 	}
 
@@ -2572,7 +2555,7 @@ STDEHANDLER(DipWizNewProposalEvent)
 	if(!args->GetPlayer(0, p1)) return GEV_HD_Continue;
 	if(!args->GetPlayer(1, p2)) return GEV_HD_Continue;
 
-	if(p2 == g_selected_item->GetVisiblePlayer()) {
+	if (g_selected_item->IsVisiblePlayer(p2)) {
 		DipWizard::SetViewProposal(p1, p2);
 	}
 	return GEV_HD_Continue;
@@ -2585,14 +2568,13 @@ STDEHANDLER(DipWizContinueDiplomacyEvent)
 	if(!args->GetPlayer(0, p1)) return GEV_HD_Continue;
 	if(!args->GetPlayer(1, p2)) return GEV_HD_Continue;
 
-	if(p1 == g_selected_item->GetVisiblePlayer()) {
-
+	if (g_selected_item->IsVisiblePlayer(p1))
+	{
 		DipWizard::SetViewResponse(p1, p2, true);
 
 		RESPONSE_TYPE rtype = Diplomat::GetDiplomat(p2).GetResponsePending(p1).type;
 		/// @todo Probably need to do something here - this doesn't make sense
-	} else if(p2 == g_selected_item->GetVisiblePlayer()) {
-
+	} else if (g_selected_item->IsVisiblePlayer(p2)) {
 		DipWizard::SetViewResponse(p1, p2, true);
 	}
 	return GEV_HD_Continue;
@@ -2606,7 +2588,8 @@ void DipWizard::InitializeEvents()
 
 void DipWizard::NotifyResponse(const Response &resp, sint32 responder, sint32 other_player)
 {
-	if(other_player == g_selected_item->GetVisiblePlayer()) {
+	if(g_selected_item->IsVisiblePlayer(other_player))
+	{
 		Assert(resp.senderId > 0);
 		Assert(resp.receiverId > 0);
 		SetViewResponse(resp.senderId, resp.receiverId, true, &resp);
@@ -2615,14 +2598,13 @@ void DipWizard::NotifyResponse(const Response &resp, sint32 responder, sint32 ot
 
 void DipWizard::NotifyThreatRejected(const Response &resp, const Response &sender_response, sint32 responder, sint32 other_player)
 {
-	if(other_player == g_selected_item->GetVisiblePlayer()) {
+	if(g_selected_item->IsVisiblePlayer(other_player)) {
 		SetViewResponse(resp.senderId, resp.receiverId, true, &resp, &sender_response);
 	}
 }
 
 void DipWizard::DisplayDiplomat(sint32 player)
 {
-	//Added by Martin Gühmann to display the emissary photo of recipient
 	if (m_emissary_photo)
 	{
 		const MBCHAR *	fileName	= NULL;
@@ -2686,7 +2668,7 @@ void DipWizard::CheckIntelligence(aui_Control *control, uint32 action, uint32 da
 			break;
 		case DIP_WIZ_STAGE_VIEW_PROPOSAL:
 		case DIP_WIZ_STAGE_MAKE_THREAT:
-			pl = m_viewRecipient == g_selected_item->GetVisiblePlayer() ? m_viewSender : m_viewRecipient;
+			pl = g_selected_item->IsVisiblePlayer(m_viewRecipient) ? m_viewSender : m_viewRecipient;
 			break;
 	}
 

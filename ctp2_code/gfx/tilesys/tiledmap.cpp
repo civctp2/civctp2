@@ -314,7 +314,7 @@ sint32 TiledMap::Initialize(RECT *viewRect)
 
 	CalculateMetrics();
 
-	m_localVision = g_player[g_selected_item->GetVisiblePlayer()]->m_vision;
+	m_localVision = g_selected_item->GetVisiblePlayer()->m_vision;
 
 	Assert(m_localVision);
 
@@ -1844,9 +1844,8 @@ sint32 TiledMap::DrawImprovements(aui_Surface *surface,
     sint32              numDBImprovements;
 	bool				hasGoody = false;
 
-	bool visiblePlayerOwnsThis = g_selected_item->GetVisiblePlayer() == g_theWorld->GetOwner(pos);
+	bool visiblePlayerOwnsThis = g_selected_item->IsVisiblePlayer(g_theWorld->GetOwner(pos));
 
-// Added by Martin Gühmann
 	if(!g_fog_toggle // The sense of toogling off the fog is to see something
 	&& !visiblePlayerOwnsThis
 	&& m_localVision->GetLastSeen(pos, ucell)
@@ -2321,21 +2320,14 @@ void TiledMap::PaintUnitActor(UnitActor *actor, bool fog)
 	Assert(actor != NULL);
 	if (actor == NULL) return;
 
-	if (actor->GetUnitVisibility() & (1 << g_selected_item->GetVisiblePlayer()))
+	if (g_selected_item->IsUnitVisible(actor->GetUnitVisibility()))
 	{
-
 		if (actor->Draw(fog)) {
 
 			RECT rect;
 
 			actor->GetBoundingRect(&rect);
 			AddDirtyRectToMix(rect);
-		} else {
-
-
-
-
-
 		}
 
 		if (
@@ -2566,20 +2558,17 @@ sint32 TiledMap::RepaintLayerSprites(RECT *paintRect, sint32 layer)
 					actor->SetHasForceField(cityData->HasForceField());
 				}
 
-
-
-
-
 				// For visibility god mode and fog of war should be handled equally
-				if(!( actor->GetUnitVisibility() & (1 << g_selected_item->GetVisiblePlayer()))
-				&& !g_fog_toggle
-				&& !g_god
-				&& (g_player[g_selected_item->GetVisiblePlayer()]
-				&& !g_player[g_selected_item->GetVisiblePlayer()]->m_hasGlobalRadar))
+				if (!g_selected_item->IsUnitVisible(actor->GetUnitVisibility())
+					&& !g_fog_toggle
+					&& !g_god
+					&& g_selected_item->GetVisiblePlayer()
+					&& !g_selected_item->GetVisiblePlayer()->m_hasGlobalRadar)
+				{
 					continue;
+				}
 
-				if (top.GetOwner() == g_selected_item->GetVisiblePlayer()
-					&& top.CanSettle(top.RetPos()))
+				if (g_selected_item->IsVisiblePlayer(top.GetOwner()) && top.CanSettle(top.RetPos()))
 				{
 					SELECT_TYPE		selectType;
 					ID				selectedID;
@@ -2663,19 +2652,18 @@ sint32 TiledMap::RepaintLayerSprites(RECT *paintRect, sint32 layer)
 					}
 
 					// For visibility god mode and fog of war should be handled equally
-					if (top.GetOwner() != g_selected_item->GetVisiblePlayer()
+					if (!g_selected_item->IsVisiblePlayer(top.GetOwner())
 					&& !g_fog_toggle
-					&& !g_god)
+					&& !g_god) {
 						continue;
+					}
 
 					actor = top.GetActor();
 					if(!actor) continue;
 
-
-
-
-					if (!(actor->GetUnitVisibility() & (1 << g_selected_item->GetVisiblePlayer())))
+					if (!g_selected_item->IsUnitVisible(actor->GetUnitVisibility())) {
 						continue;
+					}
 
 					if (!actor->IsActive() && TileIsVisible(actorCurPos.x, actorCurPos.y))
                     {
@@ -2759,10 +2747,6 @@ void TiledMap::ProcessLayerSprites(RECT *paintRect, sint32 layer)
 				}
 			}
 
-
-
-
-// Added by Martin Gühmann
 			// We want to something when we lift the fog of war
 			if(!g_fog_toggle
 			&&  m_localVision
@@ -4552,11 +4536,11 @@ void TiledMap::HandleCheat(MapPoint &pos)
 
 	if ( ScenarioEditor::PaintTerrainImprovementMode() )
 	{
-		Player * p = g_player[g_selected_item->GetVisiblePlayer()];
-		if (!p) return;
+		Player * player = g_selected_item->GetVisiblePlayer();
+		if (!player) return;
 		TerrainImprovement theImprovement =
             g_theTerrainImprovementPool->Create
-                (p->m_owner,
+                (player->m_owner,
 				 pos,
 				 ScenarioEditor::PaintTerrainImprovement(),
 				 0
@@ -4564,7 +4548,7 @@ void TiledMap::HandleCheat(MapPoint &pos)
 
 		if (g_theTerrainImprovementPool->IsValid(theImprovement.m_id))
         {
-			p->m_terrainImprovements->Insert(theImprovement);
+			player->m_terrainImprovements->Insert(theImprovement);
 			theImprovement.Complete();
 		}
 	}
@@ -4678,9 +4662,9 @@ void TiledMap::HandleCheat(MapPoint &pos)
 
 		sint32 unitNum = ScenarioEditor::PlaceUnitsMode() ? ScenarioEditor::UnitIndex() : g_unitNum;
 
-		Player *p = g_player[g_selected_item->GetVisiblePlayer()];
-		if (!p) return;
-		sint32 govType = p->GetGovernmentType();
+		Player * player = g_selected_item->GetVisiblePlayer();
+		if (!player) return;
+		sint32 govType = player->GetGovernmentType();
 
 		if(ScenarioEditor::PlaceCityMode()) {
 			sint32 ui;
@@ -4699,7 +4683,7 @@ void TiledMap::HandleCheat(MapPoint &pos)
 			Cell *cell = g_theWorld->GetCell(pos);
 			if(cell->UnitArmy()) {
 				cell->UnitArmy()->KillList(CAUSE_REMOVE_ARMY_TOE, -1);
-				g_selected_item->Deselect(g_selected_item->GetVisiblePlayer());
+				g_selected_item->Deselect(g_selected_item->GetVisiblePlayerID());
 			}
 
 			if (0 != cell->GetCity().m_id) {
@@ -4722,31 +4706,22 @@ void TiledMap::HandleCheat(MapPoint &pos)
 							}
 						}
 					}
-					Unit id1 = p->CreateCity(unitNum, pos, CAUSE_NEW_CITY_CHEAT, NULL, -1);
-					//Added by Martin Gühmann to make the created city selected.
+					Unit id1 = player->CreateCity(unitNum, pos, CAUSE_NEW_CITY_CHEAT, NULL, -1);
 					g_selected_item->SetSelectCity(id1);
-					//End Add
 				} else {
 
 					if (g_theWorld->HasCity(pos)) {
-						if (g_theWorld->GetCell(pos)->GetCity().GetOwner() == g_selected_item->GetVisiblePlayer()) {
-							Unit id1 = p->CreateUnit(unitNum, pos, Unit(), FALSE, CAUSE_NEW_ARMY_CHEAT);
+						if (g_selected_item->IsVisiblePlayer(g_theWorld->GetCell(pos)->GetCity().GetOwner())) {
+							Unit id1 = player->CreateUnit(unitNum, pos, Unit(), FALSE, CAUSE_NEW_ARMY_CHEAT);
 						}
 					} else {
-
-						Unit id1 = p->CreateUnit(unitNum, pos, Unit(), FALSE, CAUSE_NEW_ARMY_CHEAT);
+						Unit id1 = player->CreateUnit(unitNum, pos, Unit(), FALSE, CAUSE_NEW_ARMY_CHEAT);
 					}
 				}
 			}
 		}
 	}
 }
-
-
-
-
-
-
 
 void TiledMap::AdjustForOverlappingSprite(POINT mousePt, MapPoint &pos)
 {
@@ -4838,7 +4813,7 @@ void TiledMap::Click(aui_MouseEvent *data, bool doubleClick)
 			else if ( g_isTransportOn )
 			{
 				g_isTransportOn = FALSE;
-				g_selected_item->Deselect( g_selected_item->GetVisiblePlayer() );
+				g_selected_item->Deselect(g_selected_item->GetVisiblePlayerID() );
 			}
 			else if (g_tileImprovementMode)
 			{
@@ -4856,7 +4831,7 @@ void TiledMap::Click(aui_MouseEvent *data, bool doubleClick)
 			{
 				if ( g_tileImprovementMode )
 				{
-					g_selected_item->Deselect( g_selected_item->GetVisiblePlayer() );
+					g_selected_item->Deselect(g_selected_item->GetVisiblePlayerID() );
 				}
 				else
 				{
@@ -4961,7 +4936,7 @@ void TiledMap::NextPlayer(void)
 
 void TiledMap::CopyVision()
 {
-	sint32  newPlayer   = g_selected_item->GetVisiblePlayer();
+	sint32 newPlayer = g_selected_item->GetVisiblePlayerID();
 	if (g_player[newPlayer])
 	{
 		m_localVision->SetAmOnScreen(false);

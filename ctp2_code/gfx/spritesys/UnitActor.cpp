@@ -539,7 +539,7 @@ Anim * UnitActor::CreateAnim(UNITACTION action) const
 
 void UnitActor::Draw(RECT * paintRect)
 {
-	if (GetUnitVisibility() & (1 << g_selected_item->GetVisiblePlayer()))
+	if (g_selected_item->IsUnitVisible(GetUnitVisibility()))
 	{
 		sint32 tileX;
 		maputils_MapX2TileX(m_pos.x, m_pos.y, &tileX);
@@ -983,7 +983,7 @@ void UnitActor::DrawShield() const
 	g_tiledMap->AddDirtyRectToMix(dirtyRect);
 
 	RECT healthBarRect = drawRect;
-	if (g_theProfileDB->GetShowEnemyHealth() || m_playerNum == g_selected_item->GetVisiblePlayer())
+	if (g_theProfileDB->GetShowEnemyHealth() || g_selected_item->IsVisiblePlayer(m_playerNum))
 	{
 		healthBarRect.bottom = healthBarRect.top + 4;
 		if (!IsRectCompletelyOnScreen(healthBarRect)) {
@@ -1088,7 +1088,7 @@ RECT UnitActor::DrawIndicators(const RECT & rect) const
 		if (m_unitID->GetArmy()->HasCargo())
 		{
 			// Do not draw the cargo icon if enemy army is carrying only stealth.
-			if (m_unitID->GetArmy()->HasCargoOnlyStealth() && m_playerNum != g_selected_item->GetVisiblePlayer())
+			if (m_unitID->GetArmy()->HasCargoOnlyStealth() && !g_selected_item->IsVisiblePlayer(m_playerNum))
 			{}
 			// Draw it in all other cases.
 			else
@@ -1668,7 +1668,7 @@ sint32 UnitActor::DetermineStackSize() const
 
 				Army army = Army(unitList->Access(i).GetArmy().m_id);
 				if (army.IsValid()) {
-					top = army->GetTopVisibleUnit(g_selected_item->GetVisiblePlayer());
+					top = army->GetTopVisibleUnit(g_selected_item->GetVisiblePlayerID());
 				}
 
 				if (!top.IsValid()) {
@@ -1706,7 +1706,7 @@ double UnitActor::CalculateHealthPercentage(sint32 stackSize) const
 sint32 UnitActor::GetDisplayedOwner() const
 {
 	sint32 displayedOwner = m_playerNum;
-	if (m_unitID.IsValid() && m_unitID.IsHiddenNationality() && (m_playerNum != g_selected_item->GetVisiblePlayer())) {
+	if (m_unitID.IsValid() && m_unitID.IsHiddenNationality() && !g_selected_item->IsVisiblePlayer(m_playerNum)) {
 		// Display unit as barbarians
 		displayedOwner = PLAYER_INDEX_VANDALS;
 	}
@@ -1720,7 +1720,7 @@ Pixel16 UnitActor::GetDisplayedColor() const
 
 void UnitActor::DrawHealthBar(const RECT & rect, sint32 stackSize) const
 {
-	if (!g_theProfileDB->GetShowEnemyHealth() && m_playerNum != g_selected_item->GetVisiblePlayer()) {
+	if (!g_theProfileDB->GetShowEnemyHealth() && !g_selected_item->IsVisiblePlayer(m_playerNum)) {
 		return;
 	}
 

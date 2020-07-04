@@ -24,7 +24,7 @@
 //
 // Modifications from the original Activision code:
 //
-// - Initialized local variables. (Sep 9th 2005 Martin G�hmann)
+// - Initialized local variables. (Sep 9th 2005 Martin Gühmann)
 //
 //----------------------------------------------------------------------------
 
@@ -195,7 +195,6 @@ void CloseVictoryMovieAction::Execute(aui_Control *control, uint32 action, uint3
 		Assert(0);
 	}
 
-
 	infowin_Cleanup();
 
 	infowin_Initialize();
@@ -207,14 +206,7 @@ void CloseVictoryMovieAction::Execute(aui_Control *control, uint32 action, uint3
 	if (s_result == GAME_OVER_WON_SCIENCE) {
 		EndGame *endGame = NULL;
 
-		sint32 p = g_selected_item->GetVisiblePlayer();
-		if (g_player[p] != NULL)
-			endGame = g_player[p]->m_endGame;
-
-
+		if (g_selected_item->GetVisiblePlayer())
+			endGame = g_selected_item->GetVisiblePlayer()->m_endGame;
 	}
-
-
-
-
 }

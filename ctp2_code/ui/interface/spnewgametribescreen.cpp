@@ -26,7 +26,7 @@
 // Modifications from the original Activision code:
 //
 // - Memory leaks repaired.
-// - Replaced old civ selection button bank by list box. (2-Jan-2008 Martin Gühmann)
+// - Replaced old civ selection button bank by list box. (2-Jan-2008 Martin GÃ¼hmann)
 //
 //----------------------------------------------------------------------------
 
@@ -130,8 +130,7 @@ void spnewgametribescreen_setTribeIndex( sint32 index, MBCHAR *lname )
 
 	s_tribeIndex = index;
 
-	sint32 const    playerIndex         =
-	    g_selected_item ? g_selected_item->GetVisiblePlayer() : 1;
+	sint32 const    playerIndex         = g_selected_item ? g_selected_item->GetVisiblePlayerID() : 1;
 	bool const      shouldSetProfileDB  =
 	    !g_isCheatModeOn ||
 	     (g_player[playerIndex] &&

@@ -25,9 +25,9 @@
 // Modifications from the original Activision code:
 //
 // - This file is not part of the original source code.
-// - File created. (Aug 15th 2005 Martin Gühmann)
+// - File created. (Aug 15th 2005 Martin GÃ¼hmann)
 // - Made special attack window doesn't appear anymore if the costs
-//   are zero. (Aug 18th 2005 Martin Gühmann)
+//   are zero. (Aug 18th 2005 Martin GÃ¼hmann)
 // - Compatibility fixes to prevent crashes and Asserts.
 //
 //----------------------------------------------------------------------------
@@ -166,8 +166,7 @@ void specialAttackWindow_DisplayData(MapPoint &p, sint32 type)
 	maputils_MapXY2PixelXY(p.x,p.y,&x,&y);
 	g_theSpecialAttackWindow->Move(x,y);
 
-	sint32		visPlayer = g_selected_item->GetVisiblePlayer();
-	if(costs <= g_player[visPlayer]->GetGold()){
+	if (costs <= g_selected_item->GetVisiblePlayer()->GetGold()){
 		s_saWindowBorderColor = COLOR_GREEN;
 	}
 	else{

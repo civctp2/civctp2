@@ -29,11 +29,11 @@
 //   it displays the correct value.  John Bytheway, late 2003
 // - Disabled rush buy button when it is not the players turn by John Bytheway.
 // - No rush buy costs are displayed if all selected items are capitalization
-//   or infrastructure, by Martin Gühmann.
+//   or infrastructure, by Martin GÃ¼hmann.
 // - No turn numbers aren't shown anymore in the listbox if the build item is
-//   infrastructure or capitalization, by Martin Gühmann.
+//   infrastructure or capitalization, by Martin GÃ¼hmann.
 // - Rush buy button is disabled when it is not the players turn,
-//   by Martin Gühmann.
+//   by Martin GÃ¼hmann.
 // - #01 Added a third tab to the dialog that shows the nuber of experts and
 //   military units in each city.
 //   (L. Hirth 6/2004)
@@ -43,12 +43,12 @@
 //   gross production. So it is done for science and gold. This helps the
 //   player better to know how much food is needed, as a negative amount is
 //   displayed if the city starves. Gold is now displayed in red if it is
-//   critical. - April 6th 2005 Martin Gühmann
-// - Added City Manager button and functions callback. - July 24th 2005 Martin Gühmann
+//   critical. - April 6th 2005 Martin GÃ¼hmann
+// - Added City Manager button and functions callback. - July 24th 2005 Martin GÃ¼hmann
 // - National Manager window will always be displayed on top of other
-//   windows when activated. - July 24th 2005 Martin Gühmann
+//   windows when activated. - July 24th 2005 Martin GÃ¼hmann
 // - Corrected crashes with mods.
-// - Replaced old const database by new one. (5-Aug-2007 Martin Gühmann)
+// - Replaced old const database by new one. (5-Aug-2007 Martin GÃ¼hmann)
 //
 //----------------------------------------------------------------------------
 
@@ -348,8 +348,7 @@ void NationalManagementDialog::UpdateResourceList()
 
 	m_resourceList->Clear();
 
-	UnitDynamicArray *cityList =
-		g_player[g_selected_item->GetVisiblePlayer()]->GetAllCitiesList();
+	UnitDynamicArray * cityList = g_selected_item->GetVisiblePlayer()->GetAllCitiesList();
 
 	for(sint32 cityIndex = 0; cityIndex < cityList->Num(); cityIndex++) {
 
@@ -368,8 +367,7 @@ void NationalManagementDialog::UpdateStatusList()
 
 	m_statusList->Clear();
 
-	UnitDynamicArray *cityList =
-		g_player[g_selected_item->GetVisiblePlayer()]->GetAllCitiesList();
+	UnitDynamicArray * cityList = g_selected_item->GetVisiblePlayer()->GetAllCitiesList();
 
 	for(sint32 cityIndex = 0; cityIndex < cityList->Num(); cityIndex++) {
 
@@ -403,8 +401,7 @@ void NationalManagementDialog::UpdateSpecialistList()
 		m_specialistList->BuildListStart();
 		m_specialistList->Clear();
 
-		UnitDynamicArray * cityList =
-			g_player[g_selected_item->GetVisiblePlayer()]->GetAllCitiesList();
+		UnitDynamicArray * cityList = g_selected_item->GetVisiblePlayer()->GetAllCitiesList();
 
 		for (sint32 cityIndex = 0; cityIndex < cityList->Num(); cityIndex++)
 		{
@@ -604,11 +601,9 @@ void NationalManagementDialog::UpdateRushBuy()
 	}
 
 	// Extra conditions to prevent buying out of turn.
-	sint32 const	player	= g_selected_item->GetVisiblePlayer();
-
 	m_rushBuyButton->Enable((rushBuyTotal > 0)								&&
-						    (rushBuyTotal <= g_player[player]->GetGold())	&&
-							(player == g_selected_item->GetCurPlayer())
+						    (rushBuyTotal <= g_selected_item->GetVisiblePlayer()->GetGold())	&&
+							g_selected_item->IsVisiblePlayer(g_selected_item->GetCurPlayer())
 						   );
 
 	if (rushBuyTotal <= 0)
@@ -682,14 +677,12 @@ void NationalManagementDialog::UpdateResourceItem(ctp2_ListItem *item,
 	}
 
 	if(ctp2_Static *column = GetListItemColumn(item, k_NMD_RES_PRODUCTION)) {
-		// Use net production instead gross production. - Martin Gühmann
 		sprintf(stringBuffer, "%d", cityData->GetNetCityProduction());
 		column->SetText(stringBuffer);
 		column->SetTextColor(colorNorm);
 	}
 
 	if(ctp2_Static *column = GetListItemColumn(item, k_NMD_RES_FOOD)) {
-		// Use net food instead of gross food. - Martin Gühmann
 		sint32 food = cityData->GetNetCityFood();
 		sprintf(stringBuffer, "%d", food);
 		column->SetText(stringBuffer);
@@ -704,7 +697,7 @@ void NationalManagementDialog::UpdateResourceItem(ctp2_ListItem *item,
 		sint32 gold = cityData->GetNetCityGold();
 		sprintf(stringBuffer, "%d", gold);
 		column->SetText(stringBuffer);
-		if (gold < 0) { // Gold is critical display in red as well. - Martin Gühmann
+		if (gold < 0) {
 			column->SetTextColor(colorCritical);
 			cityCritical = true;
 		} else
@@ -846,7 +839,6 @@ void NationalManagementDialog::UpdateStatusItem(ctp2_ListItem *item,
 			static MBCHAR stringBuffer[32];
 			sint32 turns = cityData->HowMuchLonger();
 			if (turns == 0x7fffffff
-			//Added by Martin Gühmann to disable the turn display in case of capitalization and infrastructure
 			|| cityData->GetBuildQueue()->GetHead()->m_category == k_GAME_OBJ_TYPE_CAPITALIZATION
 			|| cityData->GetBuildQueue()->GetHead()->m_category == k_GAME_OBJ_TYPE_INFRASTRUCTURE)
 				sprintf(stringBuffer, "---");
