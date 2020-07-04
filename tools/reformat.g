@@ -20,5 +20,7 @@ E{
 }
 END_G{
     aset($, "bgcolor", "#111111"); // dark bg
+    aset($, "margin", "0"); // no margin
+    aset($, "pad", "1"); // pad graph [inches]
     aset(sg, "rank", "same"); // put root-nodes on same rank
 }

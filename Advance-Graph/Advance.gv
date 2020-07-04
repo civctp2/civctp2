@@ -1,6 +1,8 @@
 digraph G {
 	graph [bgcolor="#111111",
 		imagepath=pic555,
+		margin=0,
+		pad=1,
 		rankdir=LR
 	];
 	node [fontname="Sans serif",
