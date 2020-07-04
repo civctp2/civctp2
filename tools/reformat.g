@@ -13,5 +13,6 @@ N[$.indegree!=0 && $.outdegree!=0]{ // intermediate node
     style="filled";
 }
 END_G{
+    aset($, "bgcolor", "#111111"); // dark bg
     aset(sg, "rank", "same"); // put root-nodes on same rank
 }
