@@ -1,3 +1,6 @@
+N{
+    fontcolor="#ffffff88"
+}
 N[$.indegree==0]{ // indegree==0 <=> root-node
     color="#00ff0055";
     style="filled";
@@ -11,6 +14,9 @@ N[$.outdegree==0]{ // outdegree==0 <=> leaf-node
 N[$.indegree!=0 && $.outdegree!=0]{ // intermediate node
     color="#88888855"; // yellow bg looks odd
     style="filled";
+}
+E{
+    color="#ffffff88"
 }
 END_G{
     aset($, "bgcolor", "#111111"); // dark bg

@@ -10,733 +10,839 @@ digraph G {
 		subgraph "root-nodes" {
 			graph [rank=same];
 			ADVANCE_AGRICULTURE	[color="#00ff0055",
+				fontcolor="#ffffff88",
 				label=<<TABLE border="0" cellspacing="0" cellborder="0"><TR><TD><IMG SCALE="TRUE" SRC="upap008l.png"/></TD></TR>
-<TR><TD>AGRICULTURE</TD></TR></TABLE>>,
+<TR><TD><B>AGRICULTURE</B></TD></TR></TABLE>>,
 				shape=box,
 				style=filled];
 			ADVANCE_RELIGION	[color="#00ff0055",
+				fontcolor="#ffffff88",
 				label=<<TABLE border="0" cellspacing="0" cellborder="0"><TR><TD><IMG SCALE="TRUE" SRC="upap089l.png"/></TD></TR>
-<TR><TD>RELIGION</TD></TR></TABLE>>,
+<TR><TD><B>RELIGION</B></TD></TR></TABLE>>,
 				shape=box,
 				style=filled];
 			ADVANCE_SHIP_BUILDING	[color="#00ff0055",
+				fontcolor="#ffffff88",
 				label=<<TABLE border="0" cellspacing="0" cellborder="0"><TR><TD><IMG SCALE="TRUE" SRC="upap091l.png"/></TD></TR>
-<TR><TD>SHIP BUILDING</TD></TR></TABLE>>,
+<TR><TD><B>SHIP BUILDING</B></TD></TR></TABLE>>,
 				shape=box,
 				style=filled];
 			ADVANCE_STONE_WORKING	[color="#00ff0055",
+				fontcolor="#ffffff88",
 				label=<<TABLE border="0" cellspacing="0" cellborder="0"><TR><TD><IMG SCALE="TRUE" SRC="upap095l.png"/></TD></TR>
-<TR><TD>STONE WORKING</TD></TR></TABLE>>,
+<TR><TD><B>STONE WORKING</B></TD></TR></TABLE>>,
 				shape=box,
 				style=filled];
 			ADVANCE_TOOLMAKING	[color="#00ff0055",
+				fontcolor="#ffffff88",
 				label=<<TABLE border="0" cellspacing="0" cellborder="0"><TR><TD><IMG SCALE="TRUE" SRC="upap101l.png"/></TD></TR>
-<TR><TD>TOOLMAKING</TD></TR></TABLE>>,
+<TR><TD><B>TOOLMAKING</B></TD></TR></TABLE>>,
 				shape=box,
 				style=filled];
 			ADVANCE_WRITING	[color="#00ff0055",
+				fontcolor="#ffffff88",
 				label=<<TABLE border="0" cellspacing="0" cellborder="0"><TR><TD><IMG SCALE="TRUE" SRC="upap107l.png"/></TD></TR>
-<TR><TD>WRITING</TD></TR></TABLE>>,
+<TR><TD><B>WRITING</B></TD></TR></TABLE>>,
 				shape=box,
 				style=filled];
 		}
 	}
 	ADVANCE_ADV_INFANTRY_TACTICS	[color="#ff000055",
+		fontcolor="#ffffff88",
 		label=<<TABLE border="0" cellspacing="0" cellborder="0"><TR><TD><IMG SCALE="TRUE" SRC="cm2_upap001l.png"/></TD></TR>
-<TR><TD>ADV INFANTRY TACTICS</TD></TR></TABLE>>,
+<TR><TD><B>ADV INFANTRY TACTICS</B></TD></TR></TABLE>>,
 		shape=box,
 		style=filled];
 	ADVANCE_ADV_NAVAL_TACTICS	[color="#ff000055",
+		fontcolor="#ffffff88",
 		label=<<TABLE border="0" cellspacing="0" cellborder="0"><TR><TD><IMG SCALE="TRUE" SRC="cm2_upap002l.png"/></TD></TR>
-<TR><TD>ADV NAVAL TACTICS</TD></TR></TABLE>>,
+<TR><TD><B>ADV NAVAL TACTICS</B></TD></TR></TABLE>>,
 		shape=box,
 		style=filled];
 	ADVANCE_ADV_URBAN_PLANNING	[color="#88888855",
+		fontcolor="#ffffff88",
 		label=<<TABLE border="0" cellspacing="0" cellborder="0"><TR><TD><IMG SCALE="TRUE" SRC="cm2_upap003l.png"/></TD></TR>
-<TR><TD>ADV URBAN PLANNING</TD></TR></TABLE>>,
+<TR><TD><B>ADV URBAN PLANNING</B></TD></TR></TABLE>>,
 		shape=box,
 		style=filled];
 	ADVANCE_ARCOLOGIES	[color="#88888855",
+		fontcolor="#ffffff88",
 		label=<<TABLE border="0" cellspacing="0" cellborder="0"><TR><TD><IMG SCALE="TRUE" SRC="upap011l.png"/></TD></TR>
-<TR><TD>ARCOLOGIES</TD></TR></TABLE>>,
+<TR><TD><B>ARCOLOGIES</B></TD></TR></TABLE>>,
 		shape=box,
 		style=filled];
-	ADVANCE_ADV_URBAN_PLANNING -> ADVANCE_ARCOLOGIES;
+	ADVANCE_ADV_URBAN_PLANNING -> ADVANCE_ARCOLOGIES	[color="#ffffff88"];
 	ADVANCE_AI_SURVEILLANCE	[color="#ff000055",
+		fontcolor="#ffffff88",
 		label=<<TABLE border="0" cellspacing="0" cellborder="0"><TR><TD><IMG SCALE="TRUE" SRC="upap009l.png"/></TD></TR>
-<TR><TD>AI SURVEILLANCE</TD></TR></TABLE>>,
+<TR><TD><B>AI SURVEILLANCE</B></TD></TR></TABLE>>,
 		shape=box,
 		style=filled];
-	ADVANCE_ARCOLOGIES -> ADVANCE_AI_SURVEILLANCE;
+	ADVANCE_ARCOLOGIES -> ADVANCE_AI_SURVEILLANCE	[color="#ffffff88"];
 	ADVANCE_DIGITAL_ENCRYPTION	[color="#88888855",
+		fontcolor="#ffffff88",
 		label=<<TABLE border="0" cellspacing="0" cellborder="0"><TR><TD><IMG SCALE="TRUE" SRC="upap030l.png"/></TD></TR>
-<TR><TD>DIGITAL ENCRYPTION</TD></TR></TABLE>>,
+<TR><TD><B>DIGITAL ENCRYPTION</B></TD></TR></TABLE>>,
 		shape=box,
 		style=filled];
-	ADVANCE_ARCOLOGIES -> ADVANCE_DIGITAL_ENCRYPTION;
+	ADVANCE_ARCOLOGIES -> ADVANCE_DIGITAL_ENCRYPTION	[color="#ffffff88"];
 	ADVANCE_ADVANCED_COMPOSITES	[color="#88888855",
+		fontcolor="#ffffff88",
 		label=<<TABLE border="0" cellspacing="0" cellborder="0"><TR><TD><IMG SCALE="TRUE" SRC="cm2_upap004l.png"/></TD></TR>
-<TR><TD>ADVANCED COMPOSITES</TD></TR></TABLE>>,
+<TR><TD><B>ADVANCED COMPOSITES</B></TD></TR></TABLE>>,
 		shape=box,
 		style=filled];
-	ADVANCE_ADVANCED_COMPOSITES -> ADVANCE_ARCOLOGIES;
+	ADVANCE_ADVANCED_COMPOSITES -> ADVANCE_ARCOLOGIES	[color="#ffffff88"];
 	ADVANCE_HT_SUPERCONDUCTOR	[color="#88888855",
+		fontcolor="#ffffff88",
 		label=<<TABLE border="0" cellspacing="0" cellborder="0"><TR><TD><IMG SCALE="TRUE" SRC="upap052l.png"/></TD></TR>
-<TR><TD>HT SUPERCONDUCTOR</TD></TR></TABLE>>,
+<TR><TD><B>HT SUPERCONDUCTOR</B></TD></TR></TABLE>>,
 		shape=box,
 		style=filled];
-	ADVANCE_ADVANCED_COMPOSITES -> ADVANCE_HT_SUPERCONDUCTOR;
+	ADVANCE_ADVANCED_COMPOSITES -> ADVANCE_HT_SUPERCONDUCTOR	[color="#ffffff88"];
 	ADVANCE_LIQUID_BREATHING_APPARATUS	[color="#88888855",
+		fontcolor="#ffffff88",
 		label=<<TABLE border="0" cellspacing="0" cellborder="0"><TR><TD><IMG SCALE="TRUE" SRC="upap061l.png"/></TD></TR>
-<TR><TD>LIQUID BREATHING APPARATUS</TD></TR></TABLE>>,
+<TR><TD><B>LIQUID BREATHING APPARATUS</B></TD></TR></TABLE>>,
 		shape=box,
 		style=filled];
-	ADVANCE_ADVANCED_COMPOSITES -> ADVANCE_LIQUID_BREATHING_APPARATUS;
+	ADVANCE_ADVANCED_COMPOSITES -> ADVANCE_LIQUID_BREATHING_APPARATUS	[color="#ffffff88"];
 	ADVANCE_ROBOTICS	[color="#88888855",
+		fontcolor="#ffffff88",
 		label=<<TABLE border="0" cellspacing="0" cellborder="0"><TR><TD><IMG SCALE="TRUE" SRC="cm2_upap090l.png"/></TD></TR>
-<TR><TD>ROBOTICS</TD></TR></TABLE>>,
+<TR><TD><B>ROBOTICS</B></TD></TR></TABLE>>,
 		shape=box,
 		style=filled];
-	ADVANCE_ADVANCED_COMPOSITES -> ADVANCE_ROBOTICS;
+	ADVANCE_ADVANCED_COMPOSITES -> ADVANCE_ROBOTICS	[color="#ffffff88"];
 	ADVANCE_SPACE_FLIGHT	[color="#ff000055",
+		fontcolor="#ffffff88",
 		label=<<TABLE border="0" cellspacing="0" cellborder="0"><TR><TD><IMG SCALE="TRUE" SRC="upap094l.png"/></TD></TR>
-<TR><TD>SPACE FLIGHT</TD></TR></TABLE>>,
+<TR><TD><B>SPACE FLIGHT</B></TD></TR></TABLE>>,
 		shape=box,
 		style=filled];
-	ADVANCE_ADVANCED_COMPOSITES -> ADVANCE_SPACE_FLIGHT;
+	ADVANCE_ADVANCED_COMPOSITES -> ADVANCE_SPACE_FLIGHT	[color="#ffffff88"];
 	ADVANCE_NEURAL_INTERFACE	[color="#88888855",
+		fontcolor="#ffffff88",
 		label=<<TABLE border="0" cellspacing="0" cellborder="0"><TR><TD><IMG SCALE="TRUE" SRC="upap075l.png"/></TD></TR>
-<TR><TD>NEURAL INTERFACE</TD></TR></TABLE>>,
+<TR><TD><B>NEURAL INTERFACE</B></TD></TR></TABLE>>,
 		shape=box,
 		style=filled];
-	ADVANCE_HT_SUPERCONDUCTOR -> ADVANCE_NEURAL_INTERFACE;
+	ADVANCE_HT_SUPERCONDUCTOR -> ADVANCE_NEURAL_INTERFACE	[color="#ffffff88"];
 	ADVANCE_ULTRAPRESSURE_MACHINERY	[color="#88888855",
+		fontcolor="#ffffff88",
 		label=<<TABLE border="0" cellspacing="0" cellborder="0"><TR><TD><IMG SCALE="TRUE" SRC="upap103l.png"/></TD></TR>
-<TR><TD>ULTRAPRESSURE MACHINERY</TD></TR></TABLE>>,
+<TR><TD><B>ULTRAPRESSURE MACHINERY</B></TD></TR></TABLE>>,
 		shape=box,
 		style=filled];
-	ADVANCE_LIQUID_BREATHING_APPARATUS -> ADVANCE_ULTRAPRESSURE_MACHINERY;
-	ADVANCE_ROBOTICS -> ADVANCE_AI_SURVEILLANCE;
+	ADVANCE_LIQUID_BREATHING_APPARATUS -> ADVANCE_ULTRAPRESSURE_MACHINERY	[color="#ffffff88"];
+	ADVANCE_ROBOTICS -> ADVANCE_AI_SURVEILLANCE	[color="#ffffff88"];
 	ADVANCE_NANO_ASSEMBLY	[color="#88888855",
+		fontcolor="#ffffff88",
 		label=<<TABLE border="0" cellspacing="0" cellborder="0"><TR><TD><IMG SCALE="TRUE" SRC="cm2_upap069l.png"/></TD></TR>
-<TR><TD>NANO ASSEMBLY</TD></TR></TABLE>>,
+<TR><TD><B>NANO ASSEMBLY</B></TD></TR></TABLE>>,
 		shape=box,
 		style=filled];
-	ADVANCE_ROBOTICS -> ADVANCE_NANO_ASSEMBLY;
+	ADVANCE_ROBOTICS -> ADVANCE_NANO_ASSEMBLY	[color="#ffffff88"];
 	ADVANCE_GENETICS	[color="#88888855",
+		fontcolor="#ffffff88",
 		label=<<TABLE border="0" cellspacing="0" cellborder="0"><TR><TD><IMG SCALE="TRUE" SRC="upap044l.png"/></TD></TR>
-<TR><TD>GENETICS</TD></TR></TABLE>>,
+<TR><TD><B>GENETICS</B></TD></TR></TABLE>>,
 		shape=box,
 		style=filled];
-	ADVANCE_ROBOTICS -> ADVANCE_GENETICS;
+	ADVANCE_ROBOTICS -> ADVANCE_GENETICS	[color="#ffffff88"];
 	ADVANCE_TECHNOCRACY	[color="#88888855",
+		fontcolor="#ffffff88",
 		label=<<TABLE border="0" cellspacing="0" cellborder="0"><TR><TD><IMG SCALE="TRUE" SRC="upap099l.png"/></TD></TR>
-<TR><TD>TECHNOCRACY</TD></TR></TABLE>>,
+<TR><TD><B>TECHNOCRACY</B></TD></TR></TABLE>>,
 		shape=box,
 		style=filled];
-	ADVANCE_ROBOTICS -> ADVANCE_TECHNOCRACY;
+	ADVANCE_ROBOTICS -> ADVANCE_TECHNOCRACY	[color="#ffffff88"];
 	ADVANCE_AERODYNAMICS	[color="#88888855",
+		fontcolor="#ffffff88",
 		label=<<TABLE border="0" cellspacing="0" cellborder="0"><TR><TD><IMG SCALE="TRUE" SRC="cm2_upap005l.png"/></TD></TR>
-<TR><TD>AERODYNAMICS</TD></TR></TABLE>>,
+<TR><TD><B>AERODYNAMICS</B></TD></TR></TABLE>>,
 		shape=box,
 		style=filled];
 	ADVANCE_JET_PROPULSION	[color="#88888855",
+		fontcolor="#ffffff88",
 		label=<<TABLE border="0" cellspacing="0" cellborder="0"><TR><TD><IMG SCALE="TRUE" SRC="cm2_upap058l.png"/></TD></TR>
-<TR><TD>JET PROPULSION</TD></TR></TABLE>>,
+<TR><TD><B>JET PROPULSION</B></TD></TR></TABLE>>,
 		shape=box,
 		style=filled];
-	ADVANCE_AERODYNAMICS -> ADVANCE_JET_PROPULSION;
+	ADVANCE_AERODYNAMICS -> ADVANCE_JET_PROPULSION	[color="#ffffff88"];
 	ADVANCE_NAVAL_AVIATION	[color="#88888855",
+		fontcolor="#ffffff88",
 		label=<<TABLE border="0" cellspacing="0" cellborder="0"><TR><TD><IMG SCALE="TRUE" SRC="cm2_upap073l.png"/></TD></TR>
-<TR><TD>NAVAL AVIATION</TD></TR></TABLE>>,
+<TR><TD><B>NAVAL AVIATION</B></TD></TR></TABLE>>,
 		shape=box,
 		style=filled];
-	ADVANCE_AERODYNAMICS -> ADVANCE_NAVAL_AVIATION;
+	ADVANCE_AERODYNAMICS -> ADVANCE_NAVAL_AVIATION	[color="#ffffff88"];
 	ADVANCE_VERTICAL_FLIGHT_AIRCRAFT	[color="#88888855",
+		fontcolor="#ffffff88",
 		label=<<TABLE border="0" cellspacing="0" cellborder="0"><TR><TD><IMG SCALE="TRUE" SRC="cm2_upap105l.png"/></TD></TR>
-<TR><TD>VERTICAL FLIGHT AIRCRAFT</TD></TR></TABLE>>,
+<TR><TD><B>VERTICAL FLIGHT AIRCRAFT</B></TD></TR></TABLE>>,
 		shape=box,
 		style=filled];
-	ADVANCE_AERODYNAMICS -> ADVANCE_VERTICAL_FLIGHT_AIRCRAFT;
+	ADVANCE_AERODYNAMICS -> ADVANCE_VERTICAL_FLIGHT_AIRCRAFT	[color="#ffffff88"];
 	ADVANCE_GLOBAL_ECONOMICS	[color="#88888855",
+		fontcolor="#ffffff88",
 		label=<<TABLE border="0" cellspacing="0" cellborder="0"><TR><TD><IMG SCALE="TRUE" SRC="cm2_upap047l.png"/></TD></TR>
-<TR><TD>GLOBAL ECONOMICS</TD></TR></TABLE>>,
+<TR><TD><B>GLOBAL ECONOMICS</B></TD></TR></TABLE>>,
 		shape=box,
 		style=filled];
-	ADVANCE_JET_PROPULSION -> ADVANCE_GLOBAL_ECONOMICS;
+	ADVANCE_JET_PROPULSION -> ADVANCE_GLOBAL_ECONOMICS	[color="#ffffff88"];
 	ADVANCE_SUPERSONIC_FLIGHT	[color="#88888855",
+		fontcolor="#ffffff88",
 		label=<<TABLE border="0" cellspacing="0" cellborder="0"><TR><TD><IMG SCALE="TRUE" SRC="cm2_upap097l.png"/></TD></TR>
-<TR><TD>SUPERSONIC FLIGHT</TD></TR></TABLE>>,
+<TR><TD><B>SUPERSONIC FLIGHT</B></TD></TR></TABLE>>,
 		shape=box,
 		style=filled];
-	ADVANCE_JET_PROPULSION -> ADVANCE_SUPERSONIC_FLIGHT;
-	ADVANCE_NAVAL_AVIATION -> ADVANCE_ADV_INFANTRY_TACTICS;
+	ADVANCE_JET_PROPULSION -> ADVANCE_SUPERSONIC_FLIGHT	[color="#ffffff88"];
+	ADVANCE_NAVAL_AVIATION -> ADVANCE_ADV_INFANTRY_TACTICS	[color="#ffffff88"];
 	ADVANCE_RADAR	[color="#88888855",
+		fontcolor="#ffffff88",
 		label=<<TABLE border="0" cellspacing="0" cellborder="0"><TR><TD><IMG SCALE="TRUE" SRC="cm2_upap087l.png"/></TD></TR>
-<TR><TD>RADAR</TD></TR></TABLE>>,
+<TR><TD><B>RADAR</B></TD></TR></TABLE>>,
 		shape=box,
 		style=filled];
-	ADVANCE_NAVAL_AVIATION -> ADVANCE_RADAR;
-	ADVANCE_VERTICAL_FLIGHT_AIRCRAFT -> ADVANCE_ADV_INFANTRY_TACTICS;
+	ADVANCE_NAVAL_AVIATION -> ADVANCE_RADAR	[color="#ffffff88"];
+	ADVANCE_VERTICAL_FLIGHT_AIRCRAFT -> ADVANCE_ADV_INFANTRY_TACTICS	[color="#ffffff88"];
 	ADVANCE_AGE_OF_REASON	[color="#88888855",
+		fontcolor="#ffffff88",
 		label=<<TABLE border="0" cellspacing="0" cellborder="0"><TR><TD><IMG SCALE="TRUE" SRC="upap006l.png"/></TD></TR>
-<TR><TD>AGE OF REASON</TD></TR></TABLE>>,
+<TR><TD><B>AGE OF REASON</B></TD></TR></TABLE>>,
 		shape=box,
 		style=filled];
 	ADVANCE_DEMOCRACY	[color="#88888855",
+		fontcolor="#ffffff88",
 		label=<<TABLE border="0" cellspacing="0" cellborder="0"><TR><TD><IMG SCALE="TRUE" SRC="cm2_upap029l.png"/></TD></TR>
-<TR><TD>DEMOCRACY</TD></TR></TABLE>>,
+<TR><TD><B>DEMOCRACY</B></TD></TR></TABLE>>,
 		shape=box,
 		style=filled];
-	ADVANCE_AGE_OF_REASON -> ADVANCE_DEMOCRACY;
+	ADVANCE_AGE_OF_REASON -> ADVANCE_DEMOCRACY	[color="#ffffff88"];
 	ADVANCE_MODERN_METALLURGY	[color="#88888855",
+		fontcolor="#ffffff88",
 		label=<<TABLE border="0" cellspacing="0" cellborder="0"><TR><TD><IMG SCALE="TRUE" SRC="cm2_upap067l.png"/></TD></TR>
-<TR><TD>MODERN METALLURGY</TD></TR></TABLE>>,
+<TR><TD><B>MODERN METALLURGY</B></TD></TR></TABLE>>,
 		shape=box,
 		style=filled];
-	ADVANCE_AGE_OF_REASON -> ADVANCE_MODERN_METALLURGY;
+	ADVANCE_AGE_OF_REASON -> ADVANCE_MODERN_METALLURGY	[color="#ffffff88"];
 	ADVANCE_PHYSICS	[color="#88888855",
+		fontcolor="#ffffff88",
 		label=<<TABLE border="0" cellspacing="0" cellborder="0"><TR><TD><IMG SCALE="TRUE" SRC="cm2_upap083l.png"/></TD></TR>
-<TR><TD>PHYSICS</TD></TR></TABLE>>,
+<TR><TD><B>PHYSICS</B></TD></TR></TABLE>>,
 		shape=box,
 		style=filled];
-	ADVANCE_AGE_OF_REASON -> ADVANCE_PHYSICS;
+	ADVANCE_AGE_OF_REASON -> ADVANCE_PHYSICS	[color="#ffffff88"];
 	ADVANCE_ECONOMICS	[color="#88888855",
+		fontcolor="#ffffff88",
 		label=<<TABLE border="0" cellspacing="0" cellborder="0"><TR><TD><IMG SCALE="TRUE" SRC="cm2_upap032l.png"/></TD></TR>
-<TR><TD>ECONOMICS</TD></TR></TABLE>>,
+<TR><TD><B>ECONOMICS</B></TD></TR></TABLE>>,
 		shape=box,
 		style=filled];
-	ADVANCE_DEMOCRACY -> ADVANCE_ECONOMICS;
+	ADVANCE_DEMOCRACY -> ADVANCE_ECONOMICS	[color="#ffffff88"];
 	ADVANCE_PHARMACEUTICALS	[color="#88888855",
+		fontcolor="#ffffff88",
 		label=<<TABLE border="0" cellspacing="0" cellborder="0"><TR><TD><IMG SCALE="TRUE" SRC="upap081l.png"/></TD></TR>
-<TR><TD>PHARMACEUTICALS</TD></TR></TABLE>>,
+<TR><TD><B>PHARMACEUTICALS</B></TD></TR></TABLE>>,
 		shape=box,
 		style=filled];
-	ADVANCE_DEMOCRACY -> ADVANCE_PHARMACEUTICALS;
-	ADVANCE_MODERN_METALLURGY -> ADVANCE_ADV_URBAN_PLANNING;
-	ADVANCE_MODERN_METALLURGY -> ADVANCE_JET_PROPULSION;
+	ADVANCE_DEMOCRACY -> ADVANCE_PHARMACEUTICALS	[color="#ffffff88"];
+	ADVANCE_MODERN_METALLURGY -> ADVANCE_ADV_URBAN_PLANNING	[color="#ffffff88"];
+	ADVANCE_MODERN_METALLURGY -> ADVANCE_JET_PROPULSION	[color="#ffffff88"];
 	ADVANCE_INDUSTRIAL_REVOLUTION	[color="#88888855",
+		fontcolor="#ffffff88",
 		label=<<TABLE border="0" cellspacing="0" cellborder="0"><TR><TD><IMG SCALE="TRUE" SRC="upap055l.png"/></TD></TR>
-<TR><TD>INDUSTRIAL REVOLUTION</TD></TR></TABLE>>,
+<TR><TD><B>INDUSTRIAL REVOLUTION</B></TD></TR></TABLE>>,
 		shape=box,
 		style=filled];
-	ADVANCE_MODERN_METALLURGY -> ADVANCE_INDUSTRIAL_REVOLUTION;
+	ADVANCE_MODERN_METALLURGY -> ADVANCE_INDUSTRIAL_REVOLUTION	[color="#ffffff88"];
 	ADVANCE_RAILROAD	[color="#88888855",
+		fontcolor="#ffffff88",
 		label=<<TABLE border="0" cellspacing="0" cellborder="0"><TR><TD><IMG SCALE="TRUE" SRC="cm2_upap088l.png"/></TD></TR>
-<TR><TD>RAILROAD</TD></TR></TABLE>>,
+<TR><TD><B>RAILROAD</B></TD></TR></TABLE>>,
 		shape=box,
 		style=filled];
-	ADVANCE_MODERN_METALLURGY -> ADVANCE_RAILROAD;
+	ADVANCE_MODERN_METALLURGY -> ADVANCE_RAILROAD	[color="#ffffff88"];
 	ADVANCE_QUANTUM_MECHANICS	[color="#88888855",
+		fontcolor="#ffffff88",
 		label=<<TABLE border="0" cellspacing="0" cellborder="0"><TR><TD><IMG SCALE="TRUE" SRC="cm2_upap086l.png"/></TD></TR>
-<TR><TD>QUANTUM MECHANICS</TD></TR></TABLE>>,
+<TR><TD><B>QUANTUM MECHANICS</B></TD></TR></TABLE>>,
 		shape=box,
 		style=filled];
-	ADVANCE_PHYSICS -> ADVANCE_QUANTUM_MECHANICS;
+	ADVANCE_PHYSICS -> ADVANCE_QUANTUM_MECHANICS	[color="#ffffff88"];
 	ADVANCE_ELECTRICITY	[color="#88888855",
+		fontcolor="#ffffff88",
 		label=<<TABLE border="0" cellspacing="0" cellborder="0"><TR><TD><IMG SCALE="TRUE" SRC="upap034l.png"/></TD></TR>
-<TR><TD>ELECTRICITY</TD></TR></TABLE>>,
+<TR><TD><B>ELECTRICITY</B></TD></TR></TABLE>>,
 		shape=box,
 		style=filled];
-	ADVANCE_PHYSICS -> ADVANCE_ELECTRICITY;
+	ADVANCE_PHYSICS -> ADVANCE_ELECTRICITY	[color="#ffffff88"];
 	ADVANCE_AGRICULTURAL_REVOLUTION	[color="#88888855",
+		fontcolor="#ffffff88",
 		label=<<TABLE border="0" cellspacing="0" cellborder="0"><TR><TD><IMG SCALE="TRUE" SRC="cm2_upap007l.png"/></TD></TR>
-<TR><TD>AGRICULTURAL REVOLUTION</TD></TR></TABLE>>,
+<TR><TD><B>AGRICULTURAL REVOLUTION</B></TD></TR></TABLE>>,
 		shape=box,
 		style=filled];
-	ADVANCE_AGRICULTURAL_REVOLUTION -> ADVANCE_INDUSTRIAL_REVOLUTION;
+	ADVANCE_AGRICULTURAL_REVOLUTION -> ADVANCE_INDUSTRIAL_REVOLUTION	[color="#ffffff88"];
 	ADVANCE_COMMUNISM	[color="#88888855",
+		fontcolor="#ffffff88",
 		label=<<TABLE border="0" cellspacing="0" cellborder="0"><TR><TD><IMG SCALE="TRUE" SRC="upap021l.png"/></TD></TR>
-<TR><TD>COMMUNISM</TD></TR></TABLE>>,
+<TR><TD><B>COMMUNISM</B></TD></TR></TABLE>>,
 		shape=box,
 		style=filled];
-	ADVANCE_INDUSTRIAL_REVOLUTION -> ADVANCE_COMMUNISM;
-	ADVANCE_INDUSTRIAL_REVOLUTION -> ADVANCE_PHARMACEUTICALS;
-	ADVANCE_INDUSTRIAL_REVOLUTION -> ADVANCE_ELECTRICITY;
+	ADVANCE_INDUSTRIAL_REVOLUTION -> ADVANCE_COMMUNISM	[color="#ffffff88"];
+	ADVANCE_INDUSTRIAL_REVOLUTION -> ADVANCE_PHARMACEUTICALS	[color="#ffffff88"];
+	ADVANCE_INDUSTRIAL_REVOLUTION -> ADVANCE_ELECTRICITY	[color="#ffffff88"];
 	ADVANCE_EXPLOSIVES	[color="#88888855",
+		fontcolor="#ffffff88",
 		label=<<TABLE border="0" cellspacing="0" cellborder="0"><TR><TD><IMG SCALE="TRUE" SRC="upap036l.png"/></TD></TR>
-<TR><TD>EXPLOSIVES</TD></TR></TABLE>>,
+<TR><TD><B>EXPLOSIVES</B></TD></TR></TABLE>>,
 		shape=box,
 		style=filled];
-	ADVANCE_INDUSTRIAL_REVOLUTION -> ADVANCE_EXPLOSIVES;
+	ADVANCE_INDUSTRIAL_REVOLUTION -> ADVANCE_EXPLOSIVES	[color="#ffffff88"];
 	ADVANCE_FASCISM	[color="#ff000055",
+		fontcolor="#ffffff88",
 		label=<<TABLE border="0" cellspacing="0" cellborder="0"><TR><TD><IMG SCALE="TRUE" SRC="cm2_upap037l.png"/></TD></TR>
-<TR><TD>FASCISM</TD></TR></TABLE>>,
+<TR><TD><B>FASCISM</B></TD></TR></TABLE>>,
 		shape=box,
 		style=filled];
-	ADVANCE_INDUSTRIAL_REVOLUTION -> ADVANCE_FASCISM;
+	ADVANCE_INDUSTRIAL_REVOLUTION -> ADVANCE_FASCISM	[color="#ffffff88"];
 	ADVANCE_OIL_REFINING	[color="#88888855",
+		fontcolor="#ffffff88",
 		label=<<TABLE border="0" cellspacing="0" cellborder="0"><TR><TD><IMG SCALE="TRUE" SRC="upap079l.png"/></TD></TR>
-<TR><TD>OIL REFINING</TD></TR></TABLE>>,
+<TR><TD><B>OIL REFINING</B></TD></TR></TABLE>>,
 		shape=box,
 		style=filled];
-	ADVANCE_INDUSTRIAL_REVOLUTION -> ADVANCE_OIL_REFINING;
+	ADVANCE_INDUSTRIAL_REVOLUTION -> ADVANCE_OIL_REFINING	[color="#ffffff88"];
 	ADVANCE_BALLISTICS	[color="#88888855",
+		fontcolor="#ffffff88",
 		label=<<TABLE border="0" cellspacing="0" cellborder="0"><TR><TD><IMG SCALE="TRUE" SRC="cm2_upap012l.png"/></TD></TR>
-<TR><TD>BALLISTICS</TD></TR></TABLE>>,
+<TR><TD><B>BALLISTICS</B></TD></TR></TABLE>>,
 		shape=box,
 		style=filled];
-	ADVANCE_AGRICULTURE -> ADVANCE_BALLISTICS;
+	ADVANCE_AGRICULTURE -> ADVANCE_BALLISTICS	[color="#ffffff88"];
 	ADVANCE_SLAVE_LABOR	[color="#ff000055",
+		fontcolor="#ffffff88",
 		label=<<TABLE border="0" cellspacing="0" cellborder="0"><TR><TD><IMG SCALE="TRUE" SRC="cm2_upap092l.png"/></TD></TR>
-<TR><TD>SLAVE LABOR</TD></TR></TABLE>>,
+<TR><TD><B>SLAVE LABOR</B></TD></TR></TABLE>>,
 		shape=box,
 		style=filled];
-	ADVANCE_AGRICULTURE -> ADVANCE_SLAVE_LABOR;
+	ADVANCE_AGRICULTURE -> ADVANCE_SLAVE_LABOR	[color="#ffffff88"];
 	ADVANCE_TRADE	[color="#88888855",
+		fontcolor="#ffffff88",
 		label=<<TABLE border="0" cellspacing="0" cellborder="0"><TR><TD><IMG SCALE="TRUE" SRC="upap102l.png"/></TD></TR>
-<TR><TD>TRADE</TD></TR></TABLE>>,
+<TR><TD><B>TRADE</B></TD></TR></TABLE>>,
 		shape=box,
 		style=filled];
-	ADVANCE_AGRICULTURE -> ADVANCE_TRADE;
+	ADVANCE_AGRICULTURE -> ADVANCE_TRADE	[color="#ffffff88"];
 	ADVANCE_GEOMETRY	[color="#88888855",
+		fontcolor="#ffffff88",
 		label=<<TABLE border="0" cellspacing="0" cellborder="0"><TR><TD><IMG SCALE="TRUE" SRC="cm2_upap045l.png"/></TD></TR>
-<TR><TD>GEOMETRY</TD></TR></TABLE>>,
+<TR><TD><B>GEOMETRY</B></TD></TR></TABLE>>,
 		shape=box,
 		style=filled];
-	ADVANCE_BALLISTICS -> ADVANCE_GEOMETRY;
+	ADVANCE_BALLISTICS -> ADVANCE_GEOMETRY	[color="#ffffff88"];
 	ADVANCE_HORSE_RIDING	[color="#88888855",
+		fontcolor="#ffffff88",
 		label=<<TABLE border="0" cellspacing="0" cellborder="0"><TR><TD><IMG SCALE="TRUE" SRC="cm2_upap051l.png"/></TD></TR>
-<TR><TD>HORSE RIDING</TD></TR></TABLE>>,
+<TR><TD><B>HORSE RIDING</B></TD></TR></TABLE>>,
 		shape=box,
 		style=filled];
-	ADVANCE_BALLISTICS -> ADVANCE_HORSE_RIDING;
-	ADVANCE_TRADE -> ADVANCE_HORSE_RIDING;
+	ADVANCE_BALLISTICS -> ADVANCE_HORSE_RIDING	[color="#ffffff88"];
+	ADVANCE_TRADE -> ADVANCE_HORSE_RIDING	[color="#ffffff88"];
 	ADVANCE_BANKING	[color="#88888855",
+		fontcolor="#ffffff88",
 		label=<<TABLE border="0" cellspacing="0" cellborder="0"><TR><TD><IMG SCALE="TRUE" SRC="upap013l.png"/></TD></TR>
-<TR><TD>BANKING</TD></TR></TABLE>>,
+<TR><TD><B>BANKING</B></TD></TR></TABLE>>,
 		shape=box,
 		style=filled];
-	ADVANCE_TRADE -> ADVANCE_BANKING;
+	ADVANCE_TRADE -> ADVANCE_BANKING	[color="#ffffff88"];
 	ADVANCE_IRON_WORKING	[color="#88888855",
+		fontcolor="#ffffff88",
 		label=<<TABLE border="0" cellspacing="0" cellborder="0"><TR><TD><IMG SCALE="TRUE" SRC="cm2_upap057l.png"/></TD></TR>
-<TR><TD>IRON WORKING</TD></TR></TABLE>>,
+<TR><TD><B>IRON WORKING</B></TD></TR></TABLE>>,
 		shape=box,
 		style=filled];
-	ADVANCE_TRADE -> ADVANCE_IRON_WORKING;
+	ADVANCE_TRADE -> ADVANCE_IRON_WORKING	[color="#ffffff88"];
 	ADVANCE_CONCRETE	[color="#88888855",
+		fontcolor="#ffffff88",
 		label=<<TABLE border="0" cellspacing="0" cellborder="0"><TR><TD><IMG SCALE="TRUE" SRC="cm2_upap023l.png"/></TD></TR>
-<TR><TD>CONCRETE</TD></TR></TABLE>>,
+<TR><TD><B>CONCRETE</B></TD></TR></TABLE>>,
 		shape=box,
 		style=filled];
-	ADVANCE_TRADE -> ADVANCE_CONCRETE;
+	ADVANCE_TRADE -> ADVANCE_CONCRETE	[color="#ffffff88"];
 	ADVANCE_PHILOSOPHY	[color="#88888855",
+		fontcolor="#ffffff88",
 		label=<<TABLE border="0" cellspacing="0" cellborder="0"><TR><TD><IMG SCALE="TRUE" SRC="cm2_upap082l.png"/></TD></TR>
-<TR><TD>PHILOSOPHY</TD></TR></TABLE>>,
+<TR><TD><B>PHILOSOPHY</B></TD></TR></TABLE>>,
 		shape=box,
 		style=filled];
-	ADVANCE_TRADE -> ADVANCE_PHILOSOPHY;
+	ADVANCE_TRADE -> ADVANCE_PHILOSOPHY	[color="#ffffff88"];
 	ADVANCE_ALCHEMY	[color="#88888855",
+		fontcolor="#ffffff88",
 		label=<<TABLE border="0" cellspacing="0" cellborder="0"><TR><TD><IMG SCALE="TRUE" SRC="cm2_upap010l.png"/></TD></TR>
-<TR><TD>ALCHEMY</TD></TR></TABLE>>,
+<TR><TD><B>ALCHEMY</B></TD></TR></TABLE>>,
 		shape=box,
 		style=filled];
 	ADVANCE_CHEMISTRY	[color="#88888855",
+		fontcolor="#ffffff88",
 		label=<<TABLE border="0" cellspacing="0" cellborder="0"><TR><TD><IMG SCALE="TRUE" SRC="upap019l.png"/></TD></TR>
-<TR><TD>CHEMISTRY</TD></TR></TABLE>>,
+<TR><TD><B>CHEMISTRY</B></TD></TR></TABLE>>,
 		shape=box,
 		style=filled];
-	ADVANCE_ALCHEMY -> ADVANCE_CHEMISTRY;
+	ADVANCE_ALCHEMY -> ADVANCE_CHEMISTRY	[color="#ffffff88"];
 	ADVANCE_GUNPOWDER	[color="#88888855",
+		fontcolor="#ffffff88",
 		label=<<TABLE border="0" cellspacing="0" cellborder="0"><TR><TD><IMG SCALE="TRUE" SRC="upap050l.png"/></TD></TR>
-<TR><TD>GUNPOWDER</TD></TR></TABLE>>,
+<TR><TD><B>GUNPOWDER</B></TD></TR></TABLE>>,
 		shape=box,
 		style=filled];
-	ADVANCE_ALCHEMY -> ADVANCE_GUNPOWDER;
-	ADVANCE_CHEMISTRY -> ADVANCE_AGE_OF_REASON;
+	ADVANCE_ALCHEMY -> ADVANCE_GUNPOWDER	[color="#ffffff88"];
+	ADVANCE_CHEMISTRY -> ADVANCE_AGE_OF_REASON	[color="#ffffff88"];
 	ADVANCE_CANNON_MAKING	[color="#88888855",
+		fontcolor="#ffffff88",
 		label=<<TABLE border="0" cellspacing="0" cellborder="0"><TR><TD><IMG SCALE="TRUE" SRC="upap016l.png"/></TD></TR>
-<TR><TD>CANNON MAKING</TD></TR></TABLE>>,
+<TR><TD><B>CANNON MAKING</B></TD></TR></TABLE>>,
 		shape=box,
 		style=filled];
-	ADVANCE_GUNPOWDER -> ADVANCE_CANNON_MAKING;
+	ADVANCE_GUNPOWDER -> ADVANCE_CANNON_MAKING	[color="#ffffff88"];
 	ADVANCE_CAVALRY_TACTICS	[color="#ff000055",
+		fontcolor="#ffffff88",
 		label=<<TABLE border="0" cellspacing="0" cellborder="0"><TR><TD><IMG SCALE="TRUE" SRC="upap017l.png"/></TD></TR>
-<TR><TD>CAVALRY TACTICS</TD></TR></TABLE>>,
+<TR><TD><B>CAVALRY TACTICS</B></TD></TR></TABLE>>,
 		shape=box,
 		style=filled];
-	ADVANCE_GUNPOWDER -> ADVANCE_CAVALRY_TACTICS;
-	ADVANCE_GUNPOWDER -> ADVANCE_EXPLOSIVES;
+	ADVANCE_GUNPOWDER -> ADVANCE_CAVALRY_TACTICS	[color="#ffffff88"];
+	ADVANCE_GUNPOWDER -> ADVANCE_EXPLOSIVES	[color="#ffffff88"];
 	ADVANCE_UNIFIED_PHYSICS	[color="#88888855",
+		fontcolor="#ffffff88",
 		label=<<TABLE border="0" cellspacing="0" cellborder="0"><TR><TD><IMG SCALE="TRUE" SRC="upap104l.png"/></TD></TR>
-<TR><TD>UNIFIED PHYSICS</TD></TR></TABLE>>,
+<TR><TD><B>UNIFIED PHYSICS</B></TD></TR></TABLE>>,
 		shape=box,
 		style=filled];
-	ADVANCE_DIGITAL_ENCRYPTION -> ADVANCE_UNIFIED_PHYSICS;
+	ADVANCE_DIGITAL_ENCRYPTION -> ADVANCE_UNIFIED_PHYSICS	[color="#ffffff88"];
 	ADVANCE_HUMAN_CLONING	[color="#88888855",
+		fontcolor="#ffffff88",
 		label=<<TABLE border="0" cellspacing="0" cellborder="0"><TR><TD><IMG SCALE="TRUE" SRC="upap054l.png"/></TD></TR>
-<TR><TD>HUMAN CLONING</TD></TR></TABLE>>,
+<TR><TD><B>HUMAN CLONING</B></TD></TR></TABLE>>,
 		shape=box,
 		style=filled];
-	ADVANCE_DIGITAL_ENCRYPTION -> ADVANCE_HUMAN_CLONING;
-	ADVANCE_DIGITAL_ENCRYPTION -> ADVANCE_NANO_ASSEMBLY;
+	ADVANCE_DIGITAL_ENCRYPTION -> ADVANCE_HUMAN_CLONING	[color="#ffffff88"];
+	ADVANCE_DIGITAL_ENCRYPTION -> ADVANCE_NANO_ASSEMBLY	[color="#ffffff88"];
 	ADVANCE_NEURAL_REPROGRAMMING	[color="#ff000055",
+		fontcolor="#ffffff88",
 		label=<<TABLE border="0" cellspacing="0" cellborder="0"><TR><TD><IMG SCALE="TRUE" SRC="cm2_upap076l.png"/></TD></TR>
-<TR><TD>NEURAL REPROGRAMMING</TD></TR></TABLE>>,
+<TR><TD><B>NEURAL REPROGRAMMING</B></TD></TR></TABLE>>,
 		shape=box,
 		style=filled];
-	ADVANCE_DIGITAL_ENCRYPTION -> ADVANCE_NEURAL_REPROGRAMMING;
+	ADVANCE_DIGITAL_ENCRYPTION -> ADVANCE_NEURAL_REPROGRAMMING	[color="#ffffff88"];
 	ADVANCE_VIRTUAL_DEMOCRACY	[color="#88888855",
+		fontcolor="#ffffff88",
 		label=<<TABLE border="0" cellspacing="0" cellborder="0"><TR><TD><IMG SCALE="TRUE" SRC="upap106l.png"/></TD></TR>
-<TR><TD>VIRTUAL DEMOCRACY</TD></TR></TABLE>>,
+<TR><TD><B>VIRTUAL DEMOCRACY</B></TD></TR></TABLE>>,
 		shape=box,
 		style=filled];
-	ADVANCE_DIGITAL_ENCRYPTION -> ADVANCE_VIRTUAL_DEMOCRACY;
-	ADVANCE_GEOMETRY -> ADVANCE_PHYSICS;
+	ADVANCE_DIGITAL_ENCRYPTION -> ADVANCE_VIRTUAL_DEMOCRACY	[color="#ffffff88"];
+	ADVANCE_GEOMETRY -> ADVANCE_PHYSICS	[color="#ffffff88"];
 	ADVANCE_CLASSICAL_EDUCATION	[color="#88888855",
+		fontcolor="#ffffff88",
 		label=<<TABLE border="0" cellspacing="0" cellborder="0"><TR><TD><IMG SCALE="TRUE" SRC="upap020l.png"/></TD></TR>
-<TR><TD>CLASSICAL EDUCATION</TD></TR></TABLE>>,
+<TR><TD><B>CLASSICAL EDUCATION</B></TD></TR></TABLE>>,
 		shape=box,
 		style=filled];
-	ADVANCE_GEOMETRY -> ADVANCE_CLASSICAL_EDUCATION;
+	ADVANCE_GEOMETRY -> ADVANCE_CLASSICAL_EDUCATION	[color="#ffffff88"];
 	ADVANCE_HULL_MAKING	[color="#88888855",
+		fontcolor="#ffffff88",
 		label=<<TABLE border="0" cellspacing="0" cellborder="0"><TR><TD><IMG SCALE="TRUE" SRC="cm2_upap053l.png"/></TD></TR>
-<TR><TD>HULL MAKING</TD></TR></TABLE>>,
+<TR><TD><B>HULL MAKING</B></TD></TR></TABLE>>,
 		shape=box,
 		style=filled];
-	ADVANCE_GEOMETRY -> ADVANCE_HULL_MAKING;
-	ADVANCE_HORSE_RIDING -> ADVANCE_CAVALRY_TACTICS;
+	ADVANCE_GEOMETRY -> ADVANCE_HULL_MAKING	[color="#ffffff88"];
+	ADVANCE_HORSE_RIDING -> ADVANCE_CAVALRY_TACTICS	[color="#ffffff88"];
 	ADVANCE_FEUDALISM	[color="#88888855",
+		fontcolor="#ffffff88",
 		label=<<TABLE border="0" cellspacing="0" cellborder="0"><TR><TD><IMG SCALE="TRUE" SRC="cm2_upap038l.png"/></TD></TR>
-<TR><TD>FEUDALISM</TD></TR></TABLE>>,
+<TR><TD><B>FEUDALISM</B></TD></TR></TABLE>>,
 		shape=box,
 		style=filled];
-	ADVANCE_HORSE_RIDING -> ADVANCE_FEUDALISM;
-	ADVANCE_BANKING -> ADVANCE_COMMUNISM;
-	ADVANCE_BANKING -> ADVANCE_ECONOMICS;
-	ADVANCE_BANKING -> ADVANCE_RAILROAD;
+	ADVANCE_HORSE_RIDING -> ADVANCE_FEUDALISM	[color="#ffffff88"];
+	ADVANCE_BANKING -> ADVANCE_COMMUNISM	[color="#ffffff88"];
+	ADVANCE_BANKING -> ADVANCE_ECONOMICS	[color="#ffffff88"];
+	ADVANCE_BANKING -> ADVANCE_RAILROAD	[color="#ffffff88"];
 	ADVANCE_GUIDED_WEAPON_SYSTEMS	[color="#88888855",
+		fontcolor="#ffffff88",
 		label=<<TABLE border="0" cellspacing="0" cellborder="0"><TR><TD><IMG SCALE="TRUE" SRC="cm2_upap049l.png"/></TD></TR>
-<TR><TD>GUIDED WEAPON SYSTEMS</TD></TR></TABLE>>,
+<TR><TD><B>GUIDED WEAPON SYSTEMS</B></TD></TR></TABLE>>,
 		shape=box,
 		style=filled];
-	ADVANCE_COMMUNISM -> ADVANCE_GUIDED_WEAPON_SYSTEMS;
+	ADVANCE_COMMUNISM -> ADVANCE_GUIDED_WEAPON_SYSTEMS	[color="#ffffff88"];
 	ADVANCE_MASS_MEDIA	[color="#88888855",
+		fontcolor="#ffffff88",
 		label=<<TABLE border="0" cellspacing="0" cellborder="0"><TR><TD><IMG SCALE="TRUE" SRC="cm2_upap063l.png"/></TD></TR>
-<TR><TD>MASS MEDIA</TD></TR></TABLE>>,
+<TR><TD><B>MASS MEDIA</B></TD></TR></TABLE>>,
 		shape=box,
 		style=filled];
-	ADVANCE_ECONOMICS -> ADVANCE_MASS_MEDIA;
+	ADVANCE_ECONOMICS -> ADVANCE_MASS_MEDIA	[color="#ffffff88"];
 	ADVANCE_MASS_PRODUCTION	[color="#88888855",
+		fontcolor="#ffffff88",
 		label=<<TABLE border="0" cellspacing="0" cellborder="0"><TR><TD><IMG SCALE="TRUE" SRC="cm2_upap064l.png"/></TD></TR>
-<TR><TD>MASS PRODUCTION</TD></TR></TABLE>>,
+<TR><TD><B>MASS PRODUCTION</B></TD></TR></TABLE>>,
 		shape=box,
 		style=filled];
-	ADVANCE_ECONOMICS -> ADVANCE_MASS_PRODUCTION;
-	ADVANCE_RAILROAD -> ADVANCE_OIL_REFINING;
+	ADVANCE_ECONOMICS -> ADVANCE_MASS_PRODUCTION	[color="#ffffff88"];
+	ADVANCE_RAILROAD -> ADVANCE_OIL_REFINING	[color="#ffffff88"];
 	ADVANCE_BRONZE_WORKING	[color="#88888855",
+		fontcolor="#ffffff88",
 		label=<<TABLE border="0" cellspacing="0" cellborder="0"><TR><TD><IMG SCALE="TRUE" SRC="upap014l.png"/></TD></TR>
-<TR><TD>BRONZE WORKING</TD></TR></TABLE>>,
+<TR><TD><B>BRONZE WORKING</B></TD></TR></TABLE>>,
 		shape=box,
 		style=filled];
-	ADVANCE_BRONZE_WORKING -> ADVANCE_IRON_WORKING;
-	ADVANCE_IRON_WORKING -> ADVANCE_MODERN_METALLURGY;
-	ADVANCE_IRON_WORKING -> ADVANCE_CANNON_MAKING;
+	ADVANCE_BRONZE_WORKING -> ADVANCE_IRON_WORKING	[color="#ffffff88"];
+	ADVANCE_IRON_WORKING -> ADVANCE_MODERN_METALLURGY	[color="#ffffff88"];
+	ADVANCE_IRON_WORKING -> ADVANCE_CANNON_MAKING	[color="#ffffff88"];
 	ADVANCE_PRINTING_PRESS	[color="#88888855",
+		fontcolor="#ffffff88",
 		label=<<TABLE border="0" cellspacing="0" cellborder="0"><TR><TD><IMG SCALE="TRUE" SRC="upap085l.png"/></TD></TR>
-<TR><TD>PRINTING PRESS</TD></TR></TABLE>>,
+<TR><TD><B>PRINTING PRESS</B></TD></TR></TABLE>>,
 		shape=box,
 		style=filled];
-	ADVANCE_IRON_WORKING -> ADVANCE_PRINTING_PRESS;
+	ADVANCE_IRON_WORKING -> ADVANCE_PRINTING_PRESS	[color="#ffffff88"];
 	ADVANCE_BUREAUCRACY	[color="#88888855",
+		fontcolor="#ffffff88",
 		label=<<TABLE border="0" cellspacing="0" cellborder="0"><TR><TD><IMG SCALE="TRUE" SRC="cm2_upap015l.png"/></TD></TR>
-<TR><TD>BUREAUCRACY</TD></TR></TABLE>>,
+<TR><TD><B>BUREAUCRACY</B></TD></TR></TABLE>>,
 		shape=box,
 		style=filled];
-	ADVANCE_BUREAUCRACY -> ADVANCE_CLASSICAL_EDUCATION;
+	ADVANCE_BUREAUCRACY -> ADVANCE_CLASSICAL_EDUCATION	[color="#ffffff88"];
 	ADVANCE_OCEAN_FARING	[color="#88888855",
+		fontcolor="#ffffff88",
 		label=<<TABLE border="0" cellspacing="0" cellborder="0"><TR><TD><IMG SCALE="TRUE" SRC="upap078l.png"/></TD></TR>
-<TR><TD>OCEAN FARING</TD></TR></TABLE>>,
+<TR><TD><B>OCEAN FARING</B></TD></TR></TABLE>>,
 		shape=box,
 		style=filled];
-	ADVANCE_BUREAUCRACY -> ADVANCE_OCEAN_FARING;
-	ADVANCE_CLASSICAL_EDUCATION -> ADVANCE_GUNPOWDER;
-	ADVANCE_CLASSICAL_EDUCATION -> ADVANCE_BANKING;
+	ADVANCE_BUREAUCRACY -> ADVANCE_OCEAN_FARING	[color="#ffffff88"];
+	ADVANCE_CLASSICAL_EDUCATION -> ADVANCE_GUNPOWDER	[color="#ffffff88"];
+	ADVANCE_CLASSICAL_EDUCATION -> ADVANCE_BANKING	[color="#ffffff88"];
 	ADVANCE_OPTICS	[color="#88888855",
+		fontcolor="#ffffff88",
 		label=<<TABLE border="0" cellspacing="0" cellborder="0"><TR><TD><IMG SCALE="TRUE" SRC="upap080l.png"/></TD></TR>
-<TR><TD>OPTICS</TD></TR></TABLE>>,
+<TR><TD><B>OPTICS</B></TD></TR></TABLE>>,
 		shape=box,
 		style=filled];
-	ADVANCE_CLASSICAL_EDUCATION -> ADVANCE_OPTICS;
-	ADVANCE_CLASSICAL_EDUCATION -> ADVANCE_PRINTING_PRESS;
-	ADVANCE_OCEAN_FARING -> ADVANCE_OPTICS;
+	ADVANCE_CLASSICAL_EDUCATION -> ADVANCE_OPTICS	[color="#ffffff88"];
+	ADVANCE_CLASSICAL_EDUCATION -> ADVANCE_PRINTING_PRESS	[color="#ffffff88"];
+	ADVANCE_OCEAN_FARING -> ADVANCE_OPTICS	[color="#ffffff88"];
 	ADVANCE_NAVAL_TACTICS	[color="#88888855",
+		fontcolor="#ffffff88",
 		label=<<TABLE border="0" cellspacing="0" cellborder="0"><TR><TD><IMG SCALE="TRUE" SRC="upap074l.png"/></TD></TR>
-<TR><TD>NAVAL TACTICS</TD></TR></TABLE>>,
+<TR><TD><B>NAVAL TACTICS</B></TD></TR></TABLE>>,
 		shape=box,
 		style=filled];
-	ADVANCE_CANNON_MAKING -> ADVANCE_NAVAL_TACTICS;
-	ADVANCE_NAVAL_TACTICS -> ADVANCE_NAVAL_AVIATION;
+	ADVANCE_CANNON_MAKING -> ADVANCE_NAVAL_TACTICS	[color="#ffffff88"];
+	ADVANCE_NAVAL_TACTICS -> ADVANCE_NAVAL_AVIATION	[color="#ffffff88"];
 	ADVANCE_CHAOS_THEORY	[color="#88888855",
+		fontcolor="#ffffff88",
 		label=<<TABLE border="0" cellspacing="0" cellborder="0"><TR><TD><IMG SCALE="TRUE" SRC="upap018l.png"/></TD></TR>
-<TR><TD>CHAOS THEORY</TD></TR></TABLE>>,
+<TR><TD><B>CHAOS THEORY</B></TD></TR></TABLE>>,
 		shape=box,
 		style=filled];
 	ADVANCE_EUGENICS	[color="#88888855",
+		fontcolor="#ffffff88",
 		label=<<TABLE border="0" cellspacing="0" cellborder="0"><TR><TD><IMG SCALE="TRUE" SRC="upap035l.png"/></TD></TR>
-<TR><TD>EUGENICS</TD></TR></TABLE>>,
+<TR><TD><B>EUGENICS</B></TD></TR></TABLE>>,
 		shape=box,
 		style=filled];
-	ADVANCE_CHAOS_THEORY -> ADVANCE_EUGENICS;
+	ADVANCE_CHAOS_THEORY -> ADVANCE_EUGENICS	[color="#ffffff88"];
 	ADVANCE_FUSION	[color="#88888855",
+		fontcolor="#ffffff88",
 		label=<<TABLE border="0" cellspacing="0" cellborder="0"><TR><TD><IMG SCALE="TRUE" SRC="upap040l.png"/></TD></TR>
-<TR><TD>FUSION</TD></TR></TABLE>>,
+<TR><TD><B>FUSION</B></TD></TR></TABLE>>,
 		shape=box,
 		style=filled];
-	ADVANCE_CHAOS_THEORY -> ADVANCE_FUSION;
-	ADVANCE_CHAOS_THEORY -> ADVANCE_UNIFIED_PHYSICS;
+	ADVANCE_CHAOS_THEORY -> ADVANCE_FUSION	[color="#ffffff88"];
+	ADVANCE_CHAOS_THEORY -> ADVANCE_UNIFIED_PHYSICS	[color="#ffffff88"];
 	ADVANCE_CYBERNETICS	[color="#88888855",
+		fontcolor="#ffffff88",
 		label=<<TABLE border="0" cellspacing="0" cellborder="0"><TR><TD><IMG SCALE="TRUE" SRC="upap028l.png"/></TD></TR>
-<TR><TD>CYBERNETICS</TD></TR></TABLE>>,
+<TR><TD><B>CYBERNETICS</B></TD></TR></TABLE>>,
 		shape=box,
 		style=filled];
-	ADVANCE_EUGENICS -> ADVANCE_CYBERNETICS;
+	ADVANCE_EUGENICS -> ADVANCE_CYBERNETICS	[color="#ffffff88"];
 	ADVANCE_GENETIC_TAILORING	[color="#88888855",
+		fontcolor="#ffffff88",
 		label=<<TABLE border="0" cellspacing="0" cellborder="0"><TR><TD><IMG SCALE="TRUE" SRC="upap043l.png"/></TD></TR>
-<TR><TD>GENETIC TAILORING</TD></TR></TABLE>>,
+<TR><TD><B>GENETIC TAILORING</B></TD></TR></TABLE>>,
 		shape=box,
 		style=filled];
-	ADVANCE_EUGENICS -> ADVANCE_GENETIC_TAILORING;
+	ADVANCE_EUGENICS -> ADVANCE_GENETIC_TAILORING	[color="#ffffff88"];
 	ADVANCE_PLASMA_WEAPONRY	[color="#88888855",
+		fontcolor="#ffffff88",
 		label=<<TABLE border="0" cellspacing="0" cellborder="0"><TR><TD><IMG SCALE="TRUE" SRC="upap084l.png"/></TD></TR>
-<TR><TD>PLASMA WEAPONRY</TD></TR></TABLE>>,
+<TR><TD><B>PLASMA WEAPONRY</B></TD></TR></TABLE>>,
 		shape=box,
 		style=filled];
-	ADVANCE_FUSION -> ADVANCE_PLASMA_WEAPONRY;
-	ADVANCE_UNIFIED_PHYSICS -> ADVANCE_PLASMA_WEAPONRY;
-	ADVANCE_OPTICS -> ADVANCE_CHEMISTRY;
-	ADVANCE_PRINTING_PRESS -> ADVANCE_AGE_OF_REASON;
+	ADVANCE_FUSION -> ADVANCE_PLASMA_WEAPONRY	[color="#ffffff88"];
+	ADVANCE_UNIFIED_PHYSICS -> ADVANCE_PLASMA_WEAPONRY	[color="#ffffff88"];
+	ADVANCE_OPTICS -> ADVANCE_CHEMISTRY	[color="#ffffff88"];
+	ADVANCE_PRINTING_PRESS -> ADVANCE_AGE_OF_REASON	[color="#ffffff88"];
 	ADVANCE_NATIONALISM	[color="#88888855",
+		fontcolor="#ffffff88",
 		label=<<TABLE border="0" cellspacing="0" cellborder="0"><TR><TD><IMG SCALE="TRUE" SRC="cm2_upap072l.png"/></TD></TR>
-<TR><TD>NATIONALISM</TD></TR></TABLE>>,
+<TR><TD><B>NATIONALISM</B></TD></TR></TABLE>>,
 		shape=box,
 		style=filled];
-	ADVANCE_PRINTING_PRESS -> ADVANCE_NATIONALISM;
+	ADVANCE_PRINTING_PRESS -> ADVANCE_NATIONALISM	[color="#ffffff88"];
 	ADVANCE_NUCLEAR_POWER	[color="#88888855",
+		fontcolor="#ffffff88",
 		label=<<TABLE border="0" cellspacing="0" cellborder="0"><TR><TD><IMG SCALE="TRUE" SRC="cm2_upap077l.png"/></TD></TR>
-<TR><TD>NUCLEAR POWER</TD></TR></TABLE>>,
+<TR><TD><B>NUCLEAR POWER</B></TD></TR></TABLE>>,
 		shape=box,
 		style=filled];
-	ADVANCE_GUIDED_WEAPON_SYSTEMS -> ADVANCE_NUCLEAR_POWER;
+	ADVANCE_GUIDED_WEAPON_SYSTEMS -> ADVANCE_NUCLEAR_POWER	[color="#ffffff88"];
 	ADVANCE_COMPUTER	[color="#88888855",
+		fontcolor="#ffffff88",
 		label=<<TABLE border="0" cellspacing="0" cellborder="0"><TR><TD><IMG SCALE="TRUE" SRC="cm2_upap022l.png"/></TD></TR>
-<TR><TD>COMPUTER</TD></TR></TABLE>>,
+<TR><TD><B>COMPUTER</B></TD></TR></TABLE>>,
 		shape=box,
 		style=filled];
-	ADVANCE_COMPUTER -> ADVANCE_CHAOS_THEORY;
-	ADVANCE_COMPUTER -> ADVANCE_GUIDED_WEAPON_SYSTEMS;
-	ADVANCE_COMPUTER -> ADVANCE_QUANTUM_MECHANICS;
+	ADVANCE_COMPUTER -> ADVANCE_CHAOS_THEORY	[color="#ffffff88"];
+	ADVANCE_COMPUTER -> ADVANCE_GUIDED_WEAPON_SYSTEMS	[color="#ffffff88"];
+	ADVANCE_COMPUTER -> ADVANCE_QUANTUM_MECHANICS	[color="#ffffff88"];
 	ADVANCE_FUEL_CELLS	[color="#88888855",
+		fontcolor="#ffffff88",
 		label=<<TABLE border="0" cellspacing="0" cellborder="0"><TR><TD><IMG SCALE="TRUE" SRC="cm2_upap039l.png"/></TD></TR>
-<TR><TD>FUEL CELLS</TD></TR></TABLE>>,
+<TR><TD><B>FUEL CELLS</B></TD></TR></TABLE>>,
 		shape=box,
 		style=filled];
-	ADVANCE_QUANTUM_MECHANICS -> ADVANCE_FUEL_CELLS;
-	ADVANCE_QUANTUM_MECHANICS -> ADVANCE_NUCLEAR_POWER;
-	ADVANCE_CONCRETE -> ADVANCE_AGRICULTURAL_REVOLUTION;
+	ADVANCE_QUANTUM_MECHANICS -> ADVANCE_FUEL_CELLS	[color="#ffffff88"];
+	ADVANCE_QUANTUM_MECHANICS -> ADVANCE_NUCLEAR_POWER	[color="#ffffff88"];
+	ADVANCE_CONCRETE -> ADVANCE_AGRICULTURAL_REVOLUTION	[color="#ffffff88"];
 	ADVANCE_CONSERVATION	[color="#88888855",
+		fontcolor="#ffffff88",
 		label=<<TABLE border="0" cellspacing="0" cellborder="0"><TR><TD><IMG SCALE="TRUE" SRC="cm2_upap024l.png"/></TD></TR>
-<TR><TD>CONSERVATION</TD></TR></TABLE>>,
+<TR><TD><B>CONSERVATION</B></TD></TR></TABLE>>,
 		shape=box,
 		style=filled];
-	ADVANCE_CONSERVATION -> ADVANCE_ADVANCED_COMPOSITES;
-	ADVANCE_CONSERVATION -> ADVANCE_FUEL_CELLS;
-	ADVANCE_FUEL_CELLS -> ADVANCE_HT_SUPERCONDUCTOR;
-	ADVANCE_FUEL_CELLS -> ADVANCE_SPACE_FLIGHT;
+	ADVANCE_CONSERVATION -> ADVANCE_ADVANCED_COMPOSITES	[color="#ffffff88"];
+	ADVANCE_CONSERVATION -> ADVANCE_FUEL_CELLS	[color="#ffffff88"];
+	ADVANCE_FUEL_CELLS -> ADVANCE_HT_SUPERCONDUCTOR	[color="#ffffff88"];
+	ADVANCE_FUEL_CELLS -> ADVANCE_SPACE_FLIGHT	[color="#ffffff88"];
 	ADVANCE_CORPORATE_REPUBLIC	[color="#88888855",
+		fontcolor="#ffffff88",
 		label=<<TABLE border="0" cellspacing="0" cellborder="0"><TR><TD><IMG SCALE="TRUE" SRC="cm2_upap025l.png"/></TD></TR>
-<TR><TD>CORPORATE REPUBLIC</TD></TR></TABLE>>,
+<TR><TD><B>CORPORATE REPUBLIC</B></TD></TR></TABLE>>,
 		shape=box,
 		style=filled];
-	ADVANCE_CORPORATE_REPUBLIC -> ADVANCE_COMPUTER;
-	ADVANCE_CORPORATE_REPUBLIC -> ADVANCE_GLOBAL_ECONOMICS;
+	ADVANCE_CORPORATE_REPUBLIC -> ADVANCE_COMPUTER	[color="#ffffff88"];
+	ADVANCE_CORPORATE_REPUBLIC -> ADVANCE_GLOBAL_ECONOMICS	[color="#ffffff88"];
 	ADVANCE_MASS_TRANSIT	[color="#88888855",
+		fontcolor="#ffffff88",
 		label=<<TABLE border="0" cellspacing="0" cellborder="0"><TR><TD><IMG SCALE="TRUE" SRC="cm2_upap065l.png"/></TD></TR>
-<TR><TD>MASS TRANSIT</TD></TR></TABLE>>,
+<TR><TD><B>MASS TRANSIT</B></TD></TR></TABLE>>,
 		shape=box,
 		style=filled];
-	ADVANCE_CORPORATE_REPUBLIC -> ADVANCE_MASS_TRANSIT;
-	ADVANCE_CORPORATE_REPUBLIC -> ADVANCE_SUPERSONIC_FLIGHT;
-	ADVANCE_GLOBAL_ECONOMICS -> ADVANCE_CONSERVATION;
-	ADVANCE_MASS_TRANSIT -> ADVANCE_ADV_URBAN_PLANNING;
-	ADVANCE_MASS_TRANSIT -> ADVANCE_CONSERVATION;
-	ADVANCE_SUPERSONIC_FLIGHT -> ADVANCE_ADVANCED_COMPOSITES;
+	ADVANCE_CORPORATE_REPUBLIC -> ADVANCE_MASS_TRANSIT	[color="#ffffff88"];
+	ADVANCE_CORPORATE_REPUBLIC -> ADVANCE_SUPERSONIC_FLIGHT	[color="#ffffff88"];
+	ADVANCE_GLOBAL_ECONOMICS -> ADVANCE_CONSERVATION	[color="#ffffff88"];
+	ADVANCE_MASS_TRANSIT -> ADVANCE_ADV_URBAN_PLANNING	[color="#ffffff88"];
+	ADVANCE_MASS_TRANSIT -> ADVANCE_CONSERVATION	[color="#ffffff88"];
+	ADVANCE_SUPERSONIC_FLIGHT -> ADVANCE_ADVANCED_COMPOSITES	[color="#ffffff88"];
 	ADVANCE_GLOBAL_DEFENSE	[color="#88888855",
+		fontcolor="#ffffff88",
 		label=<<TABLE border="0" cellspacing="0" cellborder="0"><TR><TD><IMG SCALE="TRUE" SRC="cm2_upap046l.png"/></TD></TR>
-<TR><TD>GLOBAL DEFENSE</TD></TR></TABLE>>,
+<TR><TD><B>GLOBAL DEFENSE</B></TD></TR></TABLE>>,
 		shape=box,
 		style=filled];
-	ADVANCE_SUPERSONIC_FLIGHT -> ADVANCE_GLOBAL_DEFENSE;
+	ADVANCE_SUPERSONIC_FLIGHT -> ADVANCE_GLOBAL_DEFENSE	[color="#ffffff88"];
 	ADVANCE_CORPORATION	[color="#88888855",
+		fontcolor="#ffffff88",
 		label=<<TABLE border="0" cellspacing="0" cellborder="0"><TR><TD><IMG SCALE="TRUE" SRC="cm2_upap026l.png"/></TD></TR>
-<TR><TD>CORPORATION</TD></TR></TABLE>>,
+<TR><TD><B>CORPORATION</B></TD></TR></TABLE>>,
 		shape=box,
 		style=filled];
-	ADVANCE_CORPORATION -> ADVANCE_VERTICAL_FLIGHT_AIRCRAFT;
-	ADVANCE_CORPORATION -> ADVANCE_CORPORATE_REPUBLIC;
+	ADVANCE_CORPORATION -> ADVANCE_VERTICAL_FLIGHT_AIRCRAFT	[color="#ffffff88"];
+	ADVANCE_CORPORATION -> ADVANCE_CORPORATE_REPUBLIC	[color="#ffffff88"];
 	ADVANCE_MEDICINE	[color="#88888855",
+		fontcolor="#ffffff88",
 		label=<<TABLE border="0" cellspacing="0" cellborder="0"><TR><TD><IMG SCALE="TRUE" SRC="cm2_upap066l.png"/></TD></TR>
-<TR><TD>MEDICINE</TD></TR></TABLE>>,
+<TR><TD><B>MEDICINE</B></TD></TR></TABLE>>,
 		shape=box,
 		style=filled];
-	ADVANCE_CORPORATION -> ADVANCE_MEDICINE;
+	ADVANCE_CORPORATION -> ADVANCE_MEDICINE	[color="#ffffff88"];
 	ADVANCE_TANK_WARFARE	[color="#ff000055",
+		fontcolor="#ffffff88",
 		label=<<TABLE border="0" cellspacing="0" cellborder="0"><TR><TD><IMG SCALE="TRUE" SRC="cm2_upap098l.png"/></TD></TR>
-<TR><TD>TANK WARFARE</TD></TR></TABLE>>,
+<TR><TD><B>TANK WARFARE</B></TD></TR></TABLE>>,
 		shape=box,
 		style=filled];
-	ADVANCE_CORPORATION -> ADVANCE_TANK_WARFARE;
-	ADVANCE_MEDICINE -> ADVANCE_LIQUID_BREATHING_APPARATUS;
-	ADVANCE_MEDICINE -> ADVANCE_GENETICS;
+	ADVANCE_CORPORATION -> ADVANCE_TANK_WARFARE	[color="#ffffff88"];
+	ADVANCE_MEDICINE -> ADVANCE_LIQUID_BREATHING_APPARATUS	[color="#ffffff88"];
+	ADVANCE_MEDICINE -> ADVANCE_GENETICS	[color="#ffffff88"];
 	ADVANCE_CRIMINAL_CODE	[color="#88888855",
+		fontcolor="#ffffff88",
 		label=<<TABLE border="0" cellspacing="0" cellborder="0"><TR><TD><IMG SCALE="TRUE" SRC="cm2_upap027l.png"/></TD></TR>
-<TR><TD>CRIMINAL CODE</TD></TR></TABLE>>,
+<TR><TD><B>CRIMINAL CODE</B></TD></TR></TABLE>>,
 		shape=box,
 		style=filled];
-	ADVANCE_CRIMINAL_CODE -> ADVANCE_CORPORATE_REPUBLIC;
+	ADVANCE_CRIMINAL_CODE -> ADVANCE_CORPORATE_REPUBLIC	[color="#ffffff88"];
 	ADVANCE_LIFE_EXTENSION	[color="#ff000055",
+		fontcolor="#ffffff88",
 		label=<<TABLE border="0" cellspacing="0" cellborder="0"><TR><TD><IMG SCALE="TRUE" SRC="cm2_upap060l.png"/></TD></TR>
-<TR><TD>LIFE EXTENSION</TD></TR></TABLE>>,
+<TR><TD><B>LIFE EXTENSION</B></TD></TR></TABLE>>,
 		shape=box,
 		style=filled];
-	ADVANCE_CYBERNETICS -> ADVANCE_LIFE_EXTENSION;
+	ADVANCE_CYBERNETICS -> ADVANCE_LIFE_EXTENSION	[color="#ffffff88"];
 	ADVANCE_SMART_MATERIALS	[color="#88888855",
+		fontcolor="#ffffff88",
 		label=<<TABLE border="0" cellspacing="0" cellborder="0"><TR><TD><IMG SCALE="TRUE" SRC="upap093l.png"/></TD></TR>
-<TR><TD>SMART MATERIALS</TD></TR></TABLE>>,
+<TR><TD><B>SMART MATERIALS</B></TD></TR></TABLE>>,
 		shape=box,
 		style=filled];
-	ADVANCE_CYBERNETICS -> ADVANCE_SMART_MATERIALS;
+	ADVANCE_CYBERNETICS -> ADVANCE_SMART_MATERIALS	[color="#ffffff88"];
 	ADVANCE_GAIA_CONTROLLER	[color="#ff000055",
+		fontcolor="#ffffff88",
 		label=<<TABLE border="0" cellspacing="0" cellborder="0"><TR><TD><IMG SCALE="TRUE" SRC="cm2_upap041l.png"/></TD></TR>
-<TR><TD>GAIA CONTROLLER</TD></TR></TABLE>>,
+<TR><TD><B>GAIA CONTROLLER</B></TD></TR></TABLE>>,
 		shape=box,
 		style=filled];
-	ADVANCE_SMART_MATERIALS -> ADVANCE_GAIA_CONTROLLER;
-	ADVANCE_PHARMACEUTICALS -> ADVANCE_MEDICINE;
-	ADVANCE_HUMAN_CLONING -> ADVANCE_GENETIC_TAILORING;
-	ADVANCE_NANO_ASSEMBLY -> ADVANCE_FUSION;
+	ADVANCE_SMART_MATERIALS -> ADVANCE_GAIA_CONTROLLER	[color="#ffffff88"];
+	ADVANCE_PHARMACEUTICALS -> ADVANCE_MEDICINE	[color="#ffffff88"];
+	ADVANCE_HUMAN_CLONING -> ADVANCE_GENETIC_TAILORING	[color="#ffffff88"];
+	ADVANCE_NANO_ASSEMBLY -> ADVANCE_FUSION	[color="#ffffff88"];
 	ADVANCE_NANO_MACHINES	[color="#88888855",
+		fontcolor="#ffffff88",
 		label=<<TABLE border="0" cellspacing="0" cellborder="0"><TR><TD><IMG SCALE="TRUE" SRC="upap070l.png"/></TD></TR>
-<TR><TD>NANO MACHINES</TD></TR></TABLE>>,
+<TR><TD><B>NANO MACHINES</B></TD></TR></TABLE>>,
 		shape=box,
 		style=filled];
-	ADVANCE_NANO_ASSEMBLY -> ADVANCE_NANO_MACHINES;
+	ADVANCE_NANO_ASSEMBLY -> ADVANCE_NANO_MACHINES	[color="#ffffff88"];
 	ADVANCE_ECOTOPIA	[color="#88888855",
+		fontcolor="#ffffff88",
 		label=<<TABLE border="0" cellspacing="0" cellborder="0"><TR><TD><IMG SCALE="TRUE" SRC="upap033l.png"/></TD></TR>
-<TR><TD>ECOTOPIA</TD></TR></TABLE>>,
+<TR><TD><B>ECOTOPIA</B></TD></TR></TABLE>>,
 		shape=box,
 		style=filled];
-	ADVANCE_VIRTUAL_DEMOCRACY -> ADVANCE_ECOTOPIA;
+	ADVANCE_VIRTUAL_DEMOCRACY -> ADVANCE_ECOTOPIA	[color="#ffffff88"];
 	ADVANCE_DRAMA	[color="#88888855",
+		fontcolor="#ffffff88",
 		label=<<TABLE border="0" cellspacing="0" cellborder="0"><TR><TD><IMG SCALE="TRUE" SRC="cm2_upap031l.png"/></TD></TR>
-<TR><TD>DRAMA</TD></TR></TABLE>>,
+<TR><TD><B>DRAMA</B></TD></TR></TABLE>>,
 		shape=box,
 		style=filled];
-	ADVANCE_DRAMA -> ADVANCE_PHILOSOPHY;
-	ADVANCE_PHILOSOPHY -> ADVANCE_ALCHEMY;
-	ADVANCE_PHILOSOPHY -> ADVANCE_GEOMETRY;
+	ADVANCE_DRAMA -> ADVANCE_PHILOSOPHY	[color="#ffffff88"];
+	ADVANCE_PHILOSOPHY -> ADVANCE_ALCHEMY	[color="#ffffff88"];
+	ADVANCE_PHILOSOPHY -> ADVANCE_GEOMETRY	[color="#ffffff88"];
 	ADVANCE_THEOLOGY	[color="#88888855",
+		fontcolor="#ffffff88",
 		label=<<TABLE border="0" cellspacing="0" cellborder="0"><TR><TD><IMG SCALE="TRUE" SRC="cm2_upap100l.png"/></TD></TR>
-<TR><TD>THEOLOGY</TD></TR></TABLE>>,
+<TR><TD><B>THEOLOGY</B></TD></TR></TABLE>>,
 		shape=box,
 		style=filled];
-	ADVANCE_PHILOSOPHY -> ADVANCE_THEOLOGY;
+	ADVANCE_PHILOSOPHY -> ADVANCE_THEOLOGY	[color="#ffffff88"];
 	ADVANCE_MONARCHY	[color="#ff000055",
+		fontcolor="#ffffff88",
 		label=<<TABLE border="0" cellspacing="0" cellborder="0"><TR><TD><IMG SCALE="TRUE" SRC="cm2_upap068l.png"/></TD></TR>
-<TR><TD>MONARCHY</TD></TR></TABLE>>,
+<TR><TD><B>MONARCHY</B></TD></TR></TABLE>>,
 		shape=box,
 		style=filled];
-	ADVANCE_PHILOSOPHY -> ADVANCE_MONARCHY;
-	ADVANCE_MASS_MEDIA -> ADVANCE_CORPORATION;
-	ADVANCE_MASS_MEDIA -> ADVANCE_CRIMINAL_CODE;
-	ADVANCE_MASS_PRODUCTION -> ADVANCE_ADV_NAVAL_TACTICS;
-	ADVANCE_MASS_PRODUCTION -> ADVANCE_AERODYNAMICS;
-	ADVANCE_MASS_PRODUCTION -> ADVANCE_CORPORATION;
+	ADVANCE_PHILOSOPHY -> ADVANCE_MONARCHY	[color="#ffffff88"];
+	ADVANCE_MASS_MEDIA -> ADVANCE_CORPORATION	[color="#ffffff88"];
+	ADVANCE_MASS_MEDIA -> ADVANCE_CRIMINAL_CODE	[color="#ffffff88"];
+	ADVANCE_MASS_PRODUCTION -> ADVANCE_ADV_NAVAL_TACTICS	[color="#ffffff88"];
+	ADVANCE_MASS_PRODUCTION -> ADVANCE_AERODYNAMICS	[color="#ffffff88"];
+	ADVANCE_MASS_PRODUCTION -> ADVANCE_CORPORATION	[color="#ffffff88"];
 	ADVANCE_GAIA_THEORY	[color="#88888855",
+		fontcolor="#ffffff88",
 		label=<<TABLE border="0" cellspacing="0" cellborder="0"><TR><TD><IMG SCALE="TRUE" SRC="upap042l.png"/></TD></TR>
-<TR><TD>GAIA THEORY</TD></TR></TABLE>>,
+<TR><TD><B>GAIA THEORY</B></TD></TR></TABLE>>,
 		shape=box,
 		style=filled];
-	ADVANCE_ECOTOPIA -> ADVANCE_GAIA_THEORY;
-	ADVANCE_GAIA_THEORY -> ADVANCE_GAIA_CONTROLLER;
-	ADVANCE_ELECTRICITY -> ADVANCE_COMPUTER;
-	ADVANCE_ELECTRICITY -> ADVANCE_MASS_MEDIA;
+	ADVANCE_ECOTOPIA -> ADVANCE_GAIA_THEORY	[color="#ffffff88"];
+	ADVANCE_GAIA_THEORY -> ADVANCE_GAIA_CONTROLLER	[color="#ffffff88"];
+	ADVANCE_ELECTRICITY -> ADVANCE_COMPUTER	[color="#ffffff88"];
+	ADVANCE_ELECTRICITY -> ADVANCE_MASS_MEDIA	[color="#ffffff88"];
 	ADVANCE_INTERNAL_COMBUSTION	[color="#88888855",
+		fontcolor="#ffffff88",
 		label=<<TABLE border="0" cellspacing="0" cellborder="0"><TR><TD><IMG SCALE="TRUE" SRC="cm2_upap056l.png"/></TD></TR>
-<TR><TD>INTERNAL COMBUSTION</TD></TR></TABLE>>,
+<TR><TD><B>INTERNAL COMBUSTION</B></TD></TR></TABLE>>,
 		shape=box,
 		style=filled];
-	ADVANCE_ELECTRICITY -> ADVANCE_INTERNAL_COMBUSTION;
-	ADVANCE_ELECTRICITY -> ADVANCE_RADAR;
-	ADVANCE_INTERNAL_COMBUSTION -> ADVANCE_AERODYNAMICS;
-	ADVANCE_INTERNAL_COMBUSTION -> ADVANCE_MASS_TRANSIT;
-	ADVANCE_INTERNAL_COMBUSTION -> ADVANCE_TANK_WARFARE;
-	ADVANCE_RADAR -> ADVANCE_GLOBAL_DEFENSE;
-	ADVANCE_GENETIC_TAILORING -> ADVANCE_LIFE_EXTENSION;
-	ADVANCE_EXPLOSIVES -> ADVANCE_ADV_NAVAL_TACTICS;
-	ADVANCE_FEUDALISM -> ADVANCE_AGRICULTURAL_REVOLUTION;
-	ADVANCE_FEUDALISM -> ADVANCE_BUREAUCRACY;
+	ADVANCE_ELECTRICITY -> ADVANCE_INTERNAL_COMBUSTION	[color="#ffffff88"];
+	ADVANCE_ELECTRICITY -> ADVANCE_RADAR	[color="#ffffff88"];
+	ADVANCE_INTERNAL_COMBUSTION -> ADVANCE_AERODYNAMICS	[color="#ffffff88"];
+	ADVANCE_INTERNAL_COMBUSTION -> ADVANCE_MASS_TRANSIT	[color="#ffffff88"];
+	ADVANCE_INTERNAL_COMBUSTION -> ADVANCE_TANK_WARFARE	[color="#ffffff88"];
+	ADVANCE_RADAR -> ADVANCE_GLOBAL_DEFENSE	[color="#ffffff88"];
+	ADVANCE_GENETIC_TAILORING -> ADVANCE_LIFE_EXTENSION	[color="#ffffff88"];
+	ADVANCE_EXPLOSIVES -> ADVANCE_ADV_NAVAL_TACTICS	[color="#ffffff88"];
+	ADVANCE_FEUDALISM -> ADVANCE_AGRICULTURAL_REVOLUTION	[color="#ffffff88"];
+	ADVANCE_FEUDALISM -> ADVANCE_BUREAUCRACY	[color="#ffffff88"];
 	ADVANCE_NANO_WARFARE	[color="#88888855",
+		fontcolor="#ffffff88",
 		label=<<TABLE border="0" cellspacing="0" cellborder="0"><TR><TD><IMG SCALE="TRUE" SRC="upap071l.png"/></TD></TR>
-<TR><TD>NANO WARFARE</TD></TR></TABLE>>,
+<TR><TD><B>NANO WARFARE</B></TD></TR></TABLE>>,
 		shape=box,
 		style=filled];
-	ADVANCE_PLASMA_WEAPONRY -> ADVANCE_NANO_WARFARE;
-	ADVANCE_GENETICS -> ADVANCE_EUGENICS;
-	ADVANCE_GENETICS -> ADVANCE_HUMAN_CLONING;
-	ADVANCE_GENETICS -> ADVANCE_NEURAL_INTERFACE;
-	ADVANCE_NEURAL_INTERFACE -> ADVANCE_CYBERNETICS;
-	ADVANCE_NEURAL_INTERFACE -> ADVANCE_NEURAL_REPROGRAMMING;
-	ADVANCE_NEURAL_INTERFACE -> ADVANCE_VIRTUAL_DEMOCRACY;
-	ADVANCE_HULL_MAKING -> ADVANCE_OCEAN_FARING;
-	ADVANCE_HULL_MAKING -> ADVANCE_NAVAL_TACTICS;
+	ADVANCE_PLASMA_WEAPONRY -> ADVANCE_NANO_WARFARE	[color="#ffffff88"];
+	ADVANCE_GENETICS -> ADVANCE_EUGENICS	[color="#ffffff88"];
+	ADVANCE_GENETICS -> ADVANCE_HUMAN_CLONING	[color="#ffffff88"];
+	ADVANCE_GENETICS -> ADVANCE_NEURAL_INTERFACE	[color="#ffffff88"];
+	ADVANCE_NEURAL_INTERFACE -> ADVANCE_CYBERNETICS	[color="#ffffff88"];
+	ADVANCE_NEURAL_INTERFACE -> ADVANCE_NEURAL_REPROGRAMMING	[color="#ffffff88"];
+	ADVANCE_NEURAL_INTERFACE -> ADVANCE_VIRTUAL_DEMOCRACY	[color="#ffffff88"];
+	ADVANCE_HULL_MAKING -> ADVANCE_OCEAN_FARING	[color="#ffffff88"];
+	ADVANCE_HULL_MAKING -> ADVANCE_NAVAL_TACTICS	[color="#ffffff88"];
 	ADVANCE_GLOBAL_COMMUNICATIONS	[color="#88888855",
+		fontcolor="#ffffff88",
 		label=<<TABLE border="0" cellspacing="0" cellborder="0"><TR><TD><IMG SCALE="TRUE" SRC="cm2_upap048l.png"/></TD></TR>
-<TR><TD>GLOBAL COMMUNICATIONS</TD></TR></TABLE>>,
+<TR><TD><B>GLOBAL COMMUNICATIONS</B></TD></TR></TABLE>>,
 		shape=box,
 		style=filled];
-	ADVANCE_GLOBAL_COMMUNICATIONS -> ADVANCE_DIGITAL_ENCRYPTION;
-	ADVANCE_GLOBAL_COMMUNICATIONS -> ADVANCE_TECHNOCRACY;
-	ADVANCE_TECHNOCRACY -> ADVANCE_CHAOS_THEORY;
-	ADVANCE_TECHNOCRACY -> ADVANCE_NANO_MACHINES;
-	ADVANCE_GLOBAL_DEFENSE -> ADVANCE_GLOBAL_COMMUNICATIONS;
-	ADVANCE_NUCLEAR_POWER -> ADVANCE_ROBOTICS;
-	ADVANCE_NUCLEAR_POWER -> ADVANCE_GLOBAL_COMMUNICATIONS;
-	ADVANCE_OIL_REFINING -> ADVANCE_MASS_PRODUCTION;
-	ADVANCE_OIL_REFINING -> ADVANCE_INTERNAL_COMBUSTION;
+	ADVANCE_GLOBAL_COMMUNICATIONS -> ADVANCE_DIGITAL_ENCRYPTION	[color="#ffffff88"];
+	ADVANCE_GLOBAL_COMMUNICATIONS -> ADVANCE_TECHNOCRACY	[color="#ffffff88"];
+	ADVANCE_TECHNOCRACY -> ADVANCE_CHAOS_THEORY	[color="#ffffff88"];
+	ADVANCE_TECHNOCRACY -> ADVANCE_NANO_MACHINES	[color="#ffffff88"];
+	ADVANCE_GLOBAL_DEFENSE -> ADVANCE_GLOBAL_COMMUNICATIONS	[color="#ffffff88"];
+	ADVANCE_NUCLEAR_POWER -> ADVANCE_ROBOTICS	[color="#ffffff88"];
+	ADVANCE_NUCLEAR_POWER -> ADVANCE_GLOBAL_COMMUNICATIONS	[color="#ffffff88"];
+	ADVANCE_OIL_REFINING -> ADVANCE_MASS_PRODUCTION	[color="#ffffff88"];
+	ADVANCE_OIL_REFINING -> ADVANCE_INTERNAL_COMBUSTION	[color="#ffffff88"];
 	ADVANCE_JURISPRUDENCE	[color="#88888855",
+		fontcolor="#ffffff88",
 		label=<<TABLE border="0" cellspacing="0" cellborder="0"><TR><TD><IMG SCALE="TRUE" SRC="cm2_upap059l.png"/></TD></TR>
-<TR><TD>JURISPRUDENCE</TD></TR></TABLE>>,
+<TR><TD><B>JURISPRUDENCE</B></TD></TR></TABLE>>,
 		shape=box,
 		style=filled];
-	ADVANCE_JURISPRUDENCE -> ADVANCE_TRADE;
-	ADVANCE_JURISPRUDENCE -> ADVANCE_BUREAUCRACY;
-	ADVANCE_JURISPRUDENCE -> ADVANCE_THEOLOGY;
-	ADVANCE_THEOLOGY -> ADVANCE_NATIONALISM;
-	ADVANCE_ULTRAPRESSURE_MACHINERY -> ADVANCE_GAIA_THEORY;
+	ADVANCE_JURISPRUDENCE -> ADVANCE_TRADE	[color="#ffffff88"];
+	ADVANCE_JURISPRUDENCE -> ADVANCE_BUREAUCRACY	[color="#ffffff88"];
+	ADVANCE_JURISPRUDENCE -> ADVANCE_THEOLOGY	[color="#ffffff88"];
+	ADVANCE_THEOLOGY -> ADVANCE_NATIONALISM	[color="#ffffff88"];
+	ADVANCE_ULTRAPRESSURE_MACHINERY -> ADVANCE_GAIA_THEORY	[color="#ffffff88"];
 	ADVANCE_MASONRY	[color="#88888855",
+		fontcolor="#ffffff88",
 		label=<<TABLE border="0" cellspacing="0" cellborder="0"><TR><TD><IMG SCALE="TRUE" SRC="upap062l.png"/></TD></TR>
-<TR><TD>MASONRY</TD></TR></TABLE>>,
+<TR><TD><B>MASONRY</B></TD></TR></TABLE>>,
 		shape=box,
 		style=filled];
-	ADVANCE_MASONRY -> ADVANCE_CONCRETE;
-	ADVANCE_MASONRY -> ADVANCE_FEUDALISM;
-	ADVANCE_NANO_MACHINES -> ADVANCE_ECOTOPIA;
-	ADVANCE_NANO_MACHINES -> ADVANCE_ULTRAPRESSURE_MACHINERY;
-	ADVANCE_NANO_MACHINES -> ADVANCE_NANO_WARFARE;
-	ADVANCE_NANO_WARFARE -> ADVANCE_SMART_MATERIALS;
-	ADVANCE_NATIONALISM -> ADVANCE_DEMOCRACY;
-	ADVANCE_NATIONALISM -> ADVANCE_CRIMINAL_CODE;
-	ADVANCE_NATIONALISM -> ADVANCE_FASCISM;
-	ADVANCE_RELIGION -> ADVANCE_SLAVE_LABOR;
-	ADVANCE_RELIGION -> ADVANCE_DRAMA;
-	ADVANCE_RELIGION -> ADVANCE_MONARCHY;
-	ADVANCE_SHIP_BUILDING -> ADVANCE_ALCHEMY;
-	ADVANCE_SHIP_BUILDING -> ADVANCE_HULL_MAKING;
-	ADVANCE_STONE_WORKING -> ADVANCE_MASONRY;
-	ADVANCE_TOOLMAKING -> ADVANCE_BALLISTICS;
-	ADVANCE_TOOLMAKING -> ADVANCE_BRONZE_WORKING;
-	ADVANCE_TOOLMAKING -> ADVANCE_MASONRY;
-	ADVANCE_WRITING -> ADVANCE_DRAMA;
-	ADVANCE_WRITING -> ADVANCE_JURISPRUDENCE;
+	ADVANCE_MASONRY -> ADVANCE_CONCRETE	[color="#ffffff88"];
+	ADVANCE_MASONRY -> ADVANCE_FEUDALISM	[color="#ffffff88"];
+	ADVANCE_NANO_MACHINES -> ADVANCE_ECOTOPIA	[color="#ffffff88"];
+	ADVANCE_NANO_MACHINES -> ADVANCE_ULTRAPRESSURE_MACHINERY	[color="#ffffff88"];
+	ADVANCE_NANO_MACHINES -> ADVANCE_NANO_WARFARE	[color="#ffffff88"];
+	ADVANCE_NANO_WARFARE -> ADVANCE_SMART_MATERIALS	[color="#ffffff88"];
+	ADVANCE_NATIONALISM -> ADVANCE_DEMOCRACY	[color="#ffffff88"];
+	ADVANCE_NATIONALISM -> ADVANCE_CRIMINAL_CODE	[color="#ffffff88"];
+	ADVANCE_NATIONALISM -> ADVANCE_FASCISM	[color="#ffffff88"];
+	ADVANCE_RELIGION -> ADVANCE_SLAVE_LABOR	[color="#ffffff88"];
+	ADVANCE_RELIGION -> ADVANCE_DRAMA	[color="#ffffff88"];
+	ADVANCE_RELIGION -> ADVANCE_MONARCHY	[color="#ffffff88"];
+	ADVANCE_SHIP_BUILDING -> ADVANCE_ALCHEMY	[color="#ffffff88"];
+	ADVANCE_SHIP_BUILDING -> ADVANCE_HULL_MAKING	[color="#ffffff88"];
+	ADVANCE_STONE_WORKING -> ADVANCE_MASONRY	[color="#ffffff88"];
+	ADVANCE_TOOLMAKING -> ADVANCE_BALLISTICS	[color="#ffffff88"];
+	ADVANCE_TOOLMAKING -> ADVANCE_BRONZE_WORKING	[color="#ffffff88"];
+	ADVANCE_TOOLMAKING -> ADVANCE_MASONRY	[color="#ffffff88"];
+	ADVANCE_WRITING -> ADVANCE_DRAMA	[color="#ffffff88"];
+	ADVANCE_WRITING -> ADVANCE_JURISPRUDENCE	[color="#ffffff88"];
 }
