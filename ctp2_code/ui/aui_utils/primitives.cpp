@@ -3764,11 +3764,80 @@ inline RECT ClipRect(const aui_Surface & surf, const RECT & rect)
 	};
 }
 
-inline Pixel16 * GetBasePixel16(const aui_Surface & surf, const RECT & rect)
+bool ClipLine(const RECT & rect, sint32 & x1, sint32 & y1, sint32 & x2, sint32 & y2)
+{
+	Assert(y1 <= y2);
+
+	sint32 left   = rect.left;
+	sint32 right  = rect.right;
+	sint32 top    = rect.top;
+	sint32 bottom = rect.bottom;
+
+	bool mirror = false;
+
+	if ( y1 > bottom || y2 < top) {
+		return false;
+	}
+	if (x1 > x2)
+	{
+		if (x1 < left || x2 > right) {
+			return false;
+		}
+		mirror = true;
+		x1 = -x1;
+		x2 = -x2;
+
+		sint32 temp = left;
+		left  = -right;
+		right = -temp;
+	} else {
+		if (x1 > right || x2 < left) {
+			return false;
+		}
+	}
+	sint32 deltaX = x2 - x1;
+	sint32 deltaY = y2 - y1;
+	if (x1 < left)
+	{
+		y1 += ((left - x1) * deltaY) / deltaX;
+		if (y1 > bottom) {
+			return false;
+		}
+		x1 = left;
+	}
+	if (y1 < top)
+	{
+		x1 += ((top - y1) * deltaX) / deltaY;
+ 		if (x1 > right) {
+		    return false;
+	    }
+		y1 = top;
+	}
+	if (x2 > right)
+	{
+		y2 = y1 + ((right - x1) * deltaY) / deltaX;
+		x2 = right;
+	}
+	if (y2 > bottom)
+	{
+		x2 = x1 + ((bottom - y1) * deltaX) / deltaY;
+		y2 = bottom;
+	}
+
+	if (mirror)
+	{
+		x1 = -x1;
+		x2 = -x2;
+	}
+	return true;
+}
+
+
+inline Pixel16 * GetBasePixel16(const aui_Surface & surf, sint32 x, sint32 y)
 {
 	uint8 * base = surf.Buffer();
 	Assert(base);
-	return (Pixel16 *) (base) + rect.top * (surf.Pitch() >> 1) + rect.left;
+	return (Pixel16 *) (base) + y * (surf.Pitch() >> 1) + x;
 }
 
 inline void DrawLine16(Pixel16 * pixel, sint32 length, sint32 pitch, Pixel16 color)
@@ -3795,6 +3864,47 @@ inline void DrawShadowLine16(Pixel16 * pixel, sint32 length, sint32 pitch, int s
 	while (pixel < endPixel) {
 		*pixel = pixelutils_Shadow16(*pixel, shadowRGBMask);
 		pixel += pitch;
+	}
+}
+
+void DrawAntiAliasedLine16(Pixel16 * pixel, sint32 majorLength, sint32 minorLength, sint32 majorPitch,
+		sint32 minorPitch, Pixel16 color)
+{
+	const uint32 RGB_MASK = pixelutils_GetBlend16RGBMask();
+
+	Pixel16 * endPixel = pixel + majorLength * majorPitch + minorLength * minorPitch;
+
+	// first and last pixel are full-pixel
+	*pixel    = color;
+	*endPixel = color;
+
+	// calculate 16-bit fixed-point fractional part of a
+	// pixel that minor advances each time major advances 1 pixel, truncating the
+	// result so that we won't overrun the endpoint along the minor axis
+	const uint16 errorFraction = uint16 ((minorLength << 16) / (uint32) majorLength);
+	// Initialize the line error accumulator to 0
+	uint16 errorAccumulator = 0;
+
+	while (pixel < endPixel)
+	{
+		const uint16 error = errorAccumulator; // remember current accumulated error
+		errorAccumulator += errorFraction;     // calculate error for next pixel
+
+		if (errorAccumulator <= error)
+		{
+			// Error accumulator turned over, so advance the minor
+			pixel += minorPitch;
+		}
+		pixel += majorPitch; // always advance major
+
+		Pixel16 * pairedPixel = pixel + minorPitch;
+		if (pairedPixel <= endPixel + 2) // + 2 to allow lines with negative x to connect to end-pixel
+		{
+			// Most significant bits of exrrorAccumulator determine the weight of this pixel
+			uint8 weight = errorAccumulator >> 8;
+			*pixel = pixelutils_Blend16(*pixel, color, weight ^ 255, RGB_MASK);
+			*pairedPixel = pixelutils_Blend16(*pairedPixel, color, weight, RGB_MASK);
+		}
 	}
 }
 
@@ -3830,7 +3940,7 @@ void primitives_ClippedPaintRect16(aui_Surface & surf, const RECT & rect, Pixel1
 
 	sint32 surfPitchPixels = surf.Pitch() >> 1;
 
-	Pixel16 * base = GetBasePixel16(surf, clippedRect);
+	Pixel16 * base = GetBasePixel16(surf, clippedRect.left, clippedRect.top);
 	if (alpha == pixelutils_OPAQUE) {
 		DrawRect(base, width, height, surfPitchPixels, color);
 	} else {
@@ -3847,7 +3957,7 @@ void primitives_ClippedFrameRect16(aui_Surface & surf, const RECT & rect, Pixel1
 	sint32 height = clippedRect.bottom - clippedRect.top;
 
 	sint32 surfPitchPixels = surf.Pitch() >> 1;
-	Pixel16 * basePixel = GetBasePixel16(surf, clippedRect);
+	Pixel16 * basePixel = GetBasePixel16(surf, clippedRect.left, clippedRect.top);
 
 	// top line
 	if (rect.top >= 0)
@@ -3881,12 +3991,51 @@ void primitives_ClippedShadowRect16(aui_Surface & surf, const RECT & rect)
 
 	sint32 surfPitchPixels = surf.Pitch() >> 1;
 
-	Pixel16 * pixel = GetBasePixel16(surf, clippedRect);
+	Pixel16 * pixel = GetBasePixel16(surf, clippedRect.left, clippedRect.top);
 	Pixel16 * endPixel = pixel + height * surfPitchPixels;
 	while (pixel < endPixel)
 	{
 		DrawShadowLine16(pixel, width, 1, shadowRGBMask);
 		pixel += surfPitchPixels;
+	}
+}
+
+void primitives_ClippedAntiAliasedLine16(aui_Surface & surf, sint32 x1, sint32 y1, sint32 x2, sint32 y2, Pixel16 color)
+{
+	if (y2 < y1)
+	{
+		SWAPVARS(x1, x2)
+		SWAPVARS(y1, y2);
+	}
+
+	RECT clipRect = { 0, 0, surf.Width() - 1, surf.Height() - 1 };
+	if (!ClipLine(clipRect, x1, y1, x2, y2)) {
+		return;
+	}
+
+	sint32 deltaY     = y2 - y1;
+	sint32 deltaX     = x2 - x1;
+	sint32 incrementX = deltaX < 0 ? -1 : 1;
+	if (incrementX < 0) {
+		deltaX = -deltaX;
+	}
+
+	Pixel16 * base = GetBasePixel16(surf, x1, y1);
+	sint32 surfPitchPixels = surf.Pitch() >> 1;
+	if (deltaX == 0) { // vertical
+		DrawLine16(base, deltaY + 1, surfPitchPixels, color);
+	} else if (deltaY == 0) { // horizontal
+		if (incrementX < 0) {
+			base = base - deltaX;
+		}
+		DrawLine16(base, deltaX + 1, 1, color);
+	} else if (deltaX == deltaY) { // diagonal
+		DrawLine16(base, deltaX + 1, surfPitchPixels + incrementX, color);
+	} else if (deltaX < deltaY) {
+		DrawAntiAliasedLine16(base, deltaY, deltaX, surfPitchPixels, incrementX, color);
+	} else {
+		Assert (deltaX > deltaY);
+		DrawAntiAliasedLine16(base, deltaX, deltaY, incrementX, surfPitchPixels, color);
 	}
 }
 

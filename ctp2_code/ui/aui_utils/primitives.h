@@ -166,5 +166,6 @@ void primitives_ClippedPaintRect16(aui_Surface & surf, const RECT & rect, Pixel1
 void primitives_ClippedFrameRect16(aui_Surface & surf, const RECT & rect, Pixel16 color,
 		uint8 alpha = pixelutils_OPAQUE);
 void primitives_ClippedShadowRect16(aui_Surface & surf, const RECT & rect);
+void primitives_ClippedAntiAliasedLine16(aui_Surface & surf, sint32 x1, sint32 y1, sint32 x2, sint32 y2, Pixel16 color);
 
 #endif
