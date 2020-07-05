@@ -2323,6 +2323,88 @@ inline void BlendRect(Pixel16 * base, sint32 width, sint32 height, sint32 pitch,
 	}
 }
 
+/*
+ * Note: DrawAliasedLine16, DrawAliasedPatternLine16, DrawAntiAliasedLine16 and DrawAntiAliasedPatternLine16 all have
+ *   the same algorithm. The difference is that drawing may be conditional (pattern) and drawing may use blending
+ *   (anti-aliased). The algorithm has been implemented multiple times for efficiency.
+ */
+void DrawAliasedLine16(Pixel16 * pixel, sint32 majorLength, sint32 minorLength, sint32 majorPitch, sint32 minorPitch,
+		Pixel16 color)
+{
+	Pixel16 * endPixel = pixel + majorLength * majorPitch + minorLength * minorPitch;
+
+	// first and last pixel
+	*pixel    = color;
+	*endPixel = color;
+
+	// calculate 16-bit fixed-point fractional part of a
+	// pixel that minor advances each time major advances 1 pixel, truncating the
+	// result so that we won't overrun the endpoint along the minor axis
+	const uint16 errorFraction = uint16 ((minorLength << 16) / (uint32) majorLength);
+	// Initialize the line error accumulator to 0
+	uint16 errorAccumulator = 0;
+
+	while (pixel < endPixel)
+	{
+		const uint16 error = errorAccumulator; // remember current accumulated error
+		errorAccumulator += errorFraction;     // calculate error for next pixel
+
+		if (errorAccumulator <= error)
+		{
+			// Error accumulator turned over, so advance the minor
+			pixel += minorPitch;
+		}
+		pixel += majorPitch; // always advance major
+
+		if (pixel < endPixel)
+		{
+			*pixel = color;
+		}
+	}
+}
+
+void DrawAliasedPatternLine16(Pixel16 * pixel, sint32 majorLength, sint32 minorLength, sint32 majorPitch,
+                                  sint32 minorPitch, Pixel16 color, uint32 fullPattern, uint32 currentPattern)
+{
+	Pixel16 * endPixel = pixel + majorLength * majorPitch + minorLength * minorPitch;
+
+	// first pixel is full-pixel
+	if (IsLinePatternActive(currentPattern)) {
+		*pixel = color;
+	}
+	currentPattern = UpdateLinePattern(fullPattern, currentPattern);
+
+	// calculate 16-bit fixed-point fractional part of a
+	// pixel that minor advances each time major advances 1 pixel, truncating the
+	// result so that we won't overrun the endpoint along the minor axis
+	const uint16 errorFraction = uint16 ((minorLength << 16) / (uint32) majorLength);
+	// Initialize the line error accumulator to 0
+	uint16 errorAccumulator = 0;
+
+	while (pixel < endPixel)
+	{
+		const uint16 error = errorAccumulator; // remember current accumulated error
+		errorAccumulator += errorFraction;     // calculate error for next pixel
+
+		if (errorAccumulator <= error)
+		{
+			// Error accumulator turned over, so advance the minor
+			pixel += minorPitch;
+		}
+		pixel += majorPitch; // always advance major
+
+		if ((pixel < endPixel) && IsLinePatternActive(currentPattern))
+		{
+			*pixel = color;
+		}
+		currentPattern = UpdateLinePattern(fullPattern, currentPattern);
+	}
+	// last pixel is full-pixel
+	if (IsLinePatternActive(currentPattern)) {
+		*endPixel = color;
+	}
+}
+
 void DrawAntiAliasedLine16(Pixel16 * pixel, sint32 majorLength, sint32 minorLength, sint32 majorPitch,
 		sint32 minorPitch, Pixel16 color)
 {
@@ -2413,6 +2495,107 @@ void DrawAntiAliasedPatternLine16(Pixel16 * pixel, sint32 majorLength, sint32 mi
 	}
 }
 
+void BaseDrawLine16(Pixel16 * base, sint32 deltaX, sint32 deltaY, sint32 incrementX, sint32 incrementY,
+		Pixel16 color, bool antiAliased)
+{
+	if (deltaX == 0) { // vertical
+		DrawLine16(base, deltaY + 1, incrementY, color);
+	} else if (deltaY == 0) { // horizontal
+		if (incrementX < 0) {
+			base = base - deltaX;
+		}
+		DrawLine16(base, deltaX + 1, 1, color);
+	} else if (deltaX == deltaY) { // diagonal
+		DrawLine16(base, deltaX + 1, incrementY + incrementX, color);
+	} else if (deltaX < deltaY) {
+		if (antiAliased) {
+			DrawAntiAliasedLine16(base, deltaY, deltaX, incrementY, incrementX, color);
+		} else {
+			DrawAliasedLine16(base, deltaY, deltaX, incrementY, incrementX, color);
+		}
+	} else {
+		Assert (deltaX > deltaY);
+		if (antiAliased) {
+			DrawAntiAliasedLine16(base, deltaX, deltaY, incrementX, incrementY, color);
+		}
+		else {
+			DrawAliasedLine16(base, deltaX, deltaY, incrementX, incrementY, color);
+		}
+	}
+}
+
+void BaseDrawPatternLine16(Pixel16 * base, sint32 x, sint32 y, sint32 deltaX, sint32 deltaY, sint32 incrementX,
+		sint32 incrementY, Pixel16 color, bool antiAliased, uint32 fullPattern, uint32 patternLength)
+{
+	if (deltaX == 0) { // vertical
+		uint32 startPattern = fullPattern >> (y % patternLength);
+		DrawPatternLine16(base, deltaY + 1, incrementY, color, fullPattern, startPattern);
+	} else if (deltaY == 0) { // horizontal
+		if (incrementX < 0) {
+			base = base - deltaX;
+		}
+		uint32 startPattern = fullPattern >> ((incrementX < 0 ? (x - deltaX) : x) % patternLength);
+		DrawPatternLine16(base, deltaX + 1, 1, color, fullPattern, startPattern);
+	} else if (deltaX == deltaY) { // diagonal
+		uint32 startPattern = fullPattern >> (y % patternLength);
+		DrawPatternLine16(base, deltaX + 1, incrementY + incrementX, color, fullPattern, startPattern);
+	} else if (deltaX < deltaY) {
+		uint32 startPattern = fullPattern >> (y % patternLength);
+		if (antiAliased) {
+			DrawAntiAliasedPatternLine16(base, deltaY, deltaX, incrementY, incrementX, color, fullPattern,
+					startPattern);
+		} else {
+			DrawAliasedPatternLine16(base, deltaY, deltaX, incrementY, incrementX, color, fullPattern, startPattern);
+		}
+	} else {
+		Assert (deltaX > deltaY);
+		uint32 startPattern;
+		if (incrementX < 0) {
+			fullPattern = ReverseLinePattern(fullPattern, patternLength);
+			startPattern = fullPattern >> (patternLength - 1 - (x % patternLength));
+		} else {
+			startPattern = fullPattern >> (x % patternLength);
+		}
+		if (antiAliased) {
+			DrawAntiAliasedPatternLine16(base, deltaX, deltaY, incrementX, incrementY, color, fullPattern,
+					startPattern);
+		} else {
+			DrawAliasedPatternLine16(base, deltaX, deltaY, incrementX, incrementY, color, fullPattern, startPattern);
+		}
+	}
+}
+
+void primitives_BaseClippedDrawLine16(aui_Surface & surf, sint32 x1, sint32 y1, sint32 x2, sint32 y2, Pixel16 color,
+		bool antiAliased, uint32 fullPattern, uint32 patternLength)
+{
+	if (y2 < y1)
+	{
+		SWAPVARS(x1, x2)
+		SWAPVARS(y1, y2);
+	}
+
+	RECT clipRect = { 0, 0, surf.Width() - 1, surf.Height() - 1 };
+	if (!ClipLine(clipRect, x1, y1, x2, y2)) {
+		return;
+	}
+
+	sint32 deltaY     = y2 - y1;
+	sint32 deltaX     = x2 - x1;
+	sint32 incrementX = deltaX < 0 ? -1 : 1;
+	if (incrementX < 0) {
+		deltaX = -deltaX;
+	}
+
+	Pixel16 * base = GetBasePixel16(surf, x1, y1);
+	sint32 incrementY = surf.Pitch() >> 1;
+	if (patternLength == 0) {
+		BaseDrawLine16(base, deltaX, deltaY, incrementX, incrementY, color, antiAliased);
+	} else {
+		BaseDrawPatternLine16(base, x1, y1, deltaX, deltaY, incrementX, incrementY, color, antiAliased, fullPattern,
+				patternLength);
+	}
+}
+
 void primitives_ClippedPaintRect16(aui_Surface & surf, const RECT & rect, Pixel16 color, uint8 alpha)
 {
 	RECT clippedRect = ClipRect(surf, rect);
@@ -2478,98 +2661,6 @@ void primitives_ClippedShadowRect16(aui_Surface & surf, const RECT & rect)
 	{
 		DrawShadowLine16(pixel, width, 1, shadowRGBMask);
 		pixel += surfPitchPixels;
-	}
-}
-
-void primitives_ClippedAntiAliasedLine16(aui_Surface & surf, sint32 x1, sint32 y1, sint32 x2, sint32 y2, Pixel16 color)
-{
-	if (y2 < y1)
-	{
-		SWAPVARS(x1, x2)
-		SWAPVARS(y1, y2);
-	}
-
-	RECT clipRect = { 0, 0, surf.Width() - 1, surf.Height() - 1 };
-	if (!ClipLine(clipRect, x1, y1, x2, y2)) {
-		return;
-	}
-
-	sint32 deltaY     = y2 - y1;
-	sint32 deltaX     = x2 - x1;
-	sint32 incrementX = deltaX < 0 ? -1 : 1;
-	if (incrementX < 0) {
-		deltaX = -deltaX;
-	}
-
-	Pixel16 * base = GetBasePixel16(surf, x1, y1);
-	sint32 surfPitchPixels = surf.Pitch() >> 1;
-	if (deltaX == 0) { // vertical
-		DrawLine16(base, deltaY + 1, surfPitchPixels, color);
-	} else if (deltaY == 0) { // horizontal
-		if (incrementX < 0) {
-			base = base - deltaX;
-		}
-		DrawLine16(base, deltaX + 1, 1, color);
-	} else if (deltaX == deltaY) { // diagonal
-		DrawLine16(base, deltaX + 1, surfPitchPixels + incrementX, color);
-	} else if (deltaX < deltaY) {
-		DrawAntiAliasedLine16(base, deltaY, deltaX, surfPitchPixels, incrementX, color);
-	} else {
-		Assert (deltaX > deltaY);
-		DrawAntiAliasedLine16(base, deltaX, deltaY, incrementX, surfPitchPixels, color);
-	}
-}
-
-void primitives_ClippedAntiAliasedPatternLine16(aui_Surface & surf, sint32 x1, sint32 y1, sint32 x2, sint32 y2,
-		Pixel16 color, uint32 fullPattern, uint32 patternLength)
-{
-	if (y2 < y1)
-	{
-		SWAPVARS(x1, x2)
-		SWAPVARS(y1, y2);
-	}
-
-	RECT clipRect = { 0, 0, surf.Width() - 1, surf.Height() - 1 };
-	if (!ClipLine(clipRect, x1, y1, x2, y2)) {
-		return;
-	}
-
-	sint32 deltaY     = y2 - y1;
-	sint32 deltaX     = x2 - x1;
-	sint32 incrementX = deltaX < 0 ? -1 : 1;
-	if (incrementX < 0) {
-		deltaX = -deltaX;
-	}
-
-	Pixel16 * base = GetBasePixel16(surf, x1, y1);
-	sint32 surfPitchPixels = surf.Pitch() >> 1;
-	if (deltaX == 0) { // vertical
-		uint32 startPattern = fullPattern >> (y1 % patternLength);
-		DrawPatternLine16(base, deltaY + 1, surfPitchPixels, color, fullPattern, startPattern);
-	} else if (deltaY == 0) { // horizontal
-		uint32 startPattern = fullPattern >> ((incrementX < 0 ? (x1 - deltaX) : x1) % patternLength);
-		if (incrementX < 0) {
-			base = base - deltaX;
-		}
-		DrawPatternLine16(base, deltaX + 1, 1, color, fullPattern, startPattern);
-	} else if (deltaX == deltaY) { // diagonal
-		uint32 startPattern = fullPattern >> (y1 % patternLength);
-		DrawPatternLine16(base, deltaX + 1, surfPitchPixels + incrementX, color, fullPattern, startPattern);
-	} else if (deltaX < deltaY) {
-		uint32 startPattern = fullPattern >> (y1 % patternLength);
-		DrawAntiAliasedPatternLine16(base, deltaY, deltaX, surfPitchPixels, incrementX, color, fullPattern,
-		                             startPattern);
-	} else {
-		Assert (deltaX > deltaY);
-		uint32 startPattern;
-		if (incrementX < 0) {
-			fullPattern = ReverseLinePattern(fullPattern, patternLength);
-			startPattern = fullPattern >> (patternLength - 1 - (x1 % patternLength));
-		} else {
-			startPattern = fullPattern >> (x1 % patternLength);
-		}
-		DrawAntiAliasedPatternLine16(base, deltaX, deltaY, incrementX, surfPitchPixels, color, fullPattern,
-		                             startPattern);
 	}
 }
 
