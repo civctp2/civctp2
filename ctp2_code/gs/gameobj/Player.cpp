@@ -7947,6 +7947,7 @@ void Player::SetHasAdvance(AdvanceType advance, const bool init)
 		}
 	}
 
+	/* message is about completing Solaris wonder not about discovering Gaia Controller advance, so moved to CreateWonderEvent
 	sint32 gaiaWonder = wonderutil_GetGaiaIndex();
 	sint32 foo;
 	if(gaiaWonder < 0 || gaiaWonder >= g_theWonderDB->NumRecords())
@@ -7976,6 +7977,7 @@ void Player::SetHasAdvance(AdvanceType advance, const bool init)
 			}
 		}
 	}
+	*/
 
 	const AdvanceRecord *advRec = g_theAdvanceDB->Get(advance);
 

@@ -787,10 +787,25 @@ STDEHANDLER(CreateWonderEvent)
 		{
 			if (g_player[i] && !g_player[i]->IsDead() && (i != c.GetOwner()))
 			{
+			    if (g_player[i]->HasAdvance(wonderutil_Get(wonder, i)->GetEnableAdvanceIndex())) { // player knows gaia advance
+				SlicObject *so = new SlicObject("GCDiscoveredSolarisProjectThem");
+				so->AddRecipient(i);
+				so->AddPlayer(c.GetOwner());
+				g_slicEngine->Execute(so);
+			    }
+			    else {
 				SlicObject * so	= new SlicObject("GCMustDiscoverGaiaController");
 				so->AddRecipient(i);
 				so->AddPlayer(i);
 				so->AddPlayer(c.GetOwner());
+				g_slicEngine->Execute(so);	// will delete so after handling
+			    }
+			}
+			else if (i == c.GetOwner())
+			{
+				SlicObject * so	= new SlicObject("GCDiscoveredSolarisProjectUs");
+				so->AddRecipient(i);
+				so->AddPlayer(i);
 				g_slicEngine->Execute(so);	// will delete so after handling
 			}
 		}
