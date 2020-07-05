@@ -1080,7 +1080,7 @@ STDEHANDLER(AftermathEvent)
 
 		if(army.IsValid())
 		{
-			army.AccessData()->DoVictoryEnslavement(defense_owner);
+			army.AccessData()->DoVictoryEnslavement(defense_owner, td);
 		}
 	}
 	else
@@ -1095,7 +1095,7 @@ STDEHANDLER(AftermathEvent)
 			g_soundManager->AddGameSound(GAMESOUNDS_LOSE_PLAYER_BATTLE);
 		}
 
-		defender.DoVictoryEnslavement(attack_owner);
+		defender.DoVictoryEnslavement(attack_owner, ta);
 	}
 
 	if(attackerWon && army.IsValid() && army.Num() > 0)
@@ -1548,6 +1548,7 @@ STDEHANDLER(EnslaveSettlerEvent)
 
 		SlicObject *so = new SlicObject("139SettlerSlavedVictim");
 		so->AddRecipient(settlerOwner);
+		so->AddUnitRecord(settler.GetType());
 		g_slicEngine->Execute(so);
 
 		so = new SlicObject("137SlaveryCompleteAttacker");

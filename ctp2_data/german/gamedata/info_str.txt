@@ -291,7 +291,7 @@ SLAVE_FAILED_ATTACKER			"{player[0].leader_name#SIR_CAP}, unsere Sklavenbeschaff
 SLAVE_KILLED_ATTACKER			"{player[0].leader_name#SIR_CAP}, unsere Sklavenbeschaffung in der Stadt {city[0].name} ist fehlgeschlagen, leider wurden unsere Sklavenhändler gefangen genommen und getötet."
 PROTECTED_FROM_SLAVERY_VICTIM		"Großartige Nachrichten: Die Stadtmauern haben die Bevölkerung von {city[0].name} vor der Sklaverei bewahrt!"
 PROTECTED_FROM_SLAVERY_ATTACKER		"Der Überfall unserer Sklavenhändler auf die Stadt {city[0].name} ist an den dort vorhandenen Stadtmauern gescheitert."
-SETTLER_SLAVED_VICTIM			"Es ist furchtbar!! Unser Siedler ist spurlos verschwunden. Vermutlich stecken feindliche Sklavenhändler hinter dieser mysteriösen Sache."
+SETTLER_SLAVED_VICTIM			"Es ist furchtbar!! {unitrecord[0].name#OUR_SINGULAR_CAPS} ist spurlos verschwunden. Vermutlich stecken feindliche Sklavenhändler hinter dieser mysteriösen Sache."
 VICTORY_ENSLAVEMENT_CITY		"{unit[0].name#PRONOUN_YOUR} hat einen neuen Sklaven gefangen genommen und ihn nach {city[0].name} geschickt."
 
 ## Establish Embassy ##

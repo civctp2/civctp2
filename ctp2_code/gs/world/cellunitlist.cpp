@@ -563,7 +563,7 @@ double CellUnitList::GetHPModifier() const
 	return (m_nElements > 0) ? m_array[0].GetHPModifier() : 0.0;
 }
 
-void CellUnitList::DoVictoryEnslavement(sint32 origOwner)
+void CellUnitList::DoVictoryEnslavement(sint32 origOwner, const Unit &looser)
 {
 	double success = 0;
 
@@ -602,6 +602,12 @@ void CellUnitList::DoVictoryEnslavement(sint32 origOwner)
 				so->AddRecipient(GetOwner());
 				so->AddCivilisation(GetOwner());
 				so->AddCity(hc);
+				g_slicEngine->Execute(so);
+
+				//// message telling victim that unit was enslaved
+				so = new SlicObject("139SettlerSlavedVictim");
+				so->AddRecipient(origOwner);
+				so->AddUnitRecord(looser.GetType());
 				g_slicEngine->Execute(so);
 
 				if(g_network.IsHost()) {
