@@ -2663,7 +2663,6 @@ void CityWindow::DisbandQuery(bool result, void *ud)
 				if (u.IsValid())
 				{
 					// Transfer the unit to the temporary army.
-					u.GetArmy().SetRemoveCause(CAUSE_REMOVE_ARMY_GROUPING);
 					u.ChangeArmy(temp, CAUSE_NEW_ARMY_GROUPING);
 
 					s_cityWindow->m_unitButtons[b]->SetToggleState(false);

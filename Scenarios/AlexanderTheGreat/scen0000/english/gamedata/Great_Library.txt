@@ -7361,7 +7361,7 @@ Sub-orbital launch
 [END]
 
 [UNIT_SPACE_PLANE_GAMEPLAY]
-The Space Plane is a long-range suborbital <L:DATABASE_ORDERS,ORDER_BOARD_TRANSPORT>Transport<e> vehicle.  When launched from a city, it can <L:DATABASE_ORDERS,ORDER_BOARD_TRANSPORT>Transport<e> up to five units to any other city on the map.  The <L:DATABASE_ORDERS,ORDER_BOARD_TRANSPORT>Transport<e> takes 4 turns to complete.  Although not well suited to transporting short distances, the Space Plane is ideal if you need to quickly get units the other side of the map.
+The Space Plane is a long-range suborbital <L:DATABASE_ORDERS,ORDER_BOARD_TRANSPORT>Transport<e> vehicle.  When launched from a city, it can <L:DATABASE_ORDERS,ORDER_BOARD_TRANSPORT>Transport<e> up to five units to any other city on the map.  The <L:DATABASE_ORDERS,ORDER_BOARD_TRANSPORT>Transport<e> takes {UnitDB(UnitRecord[0]).SpaceLaunch} turns to complete.  Although not well suited to transporting short distances, the Space Plane is ideal if you need to quickly get units the other side of the map.
 [END]
 
 [UNIT_SPACE_PLANE_HISTORICAL]

@@ -2016,7 +2016,6 @@ void UnitData::ResetUnitOwner(const Unit &me, const PLAYER_INDEX new_owner,
 
 	if(m_army.IsValid())
 	{
-		m_army.SetRemoveCause(rem_cause);
 		m_army.Del(me);
 	}
 	m_army.m_id = 0;

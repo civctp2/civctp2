@@ -186,7 +186,8 @@ void NetArmy::Packetize(uint8 *buf, uint16 &size)
 	PUSHBYTE((uint8)m_data->m_owner);
 	PUSHSHORT((uint16)m_data->m_pos.x);
 	PUSHSHORT((uint16)m_data->m_pos.y);
-	PUSHLONG(m_data->m_removeCause);
+	PUSHSHORT((uint16)m_data->m_reentryPos.x);
+	PUSHSHORT((uint16)m_data->m_reentryPos.y);
 }
 
 void NetArmy::Unpacketize(uint16 id, uint8 *buf, uint16 size)
@@ -221,7 +222,8 @@ void NetArmy::Unpacketize(uint16 id, uint8 *buf, uint16 size)
 	PULLBYTE(m_data->m_owner);
 	PULLSHORT(m_data->m_pos.x);
 	PULLSHORT(m_data->m_pos.y);
-	PULLLONGTYPE(m_data->m_removeCause, CAUSE_REMOVE_ARMY);
+	PULLSHORT(m_data->m_reentryPos.x);
+	PULLSHORT(m_data->m_reentryPos.y);
 
 	if(!g_theArmyPool->IsValid(army)) {
 		g_theArmyPool->HackSetKey(((uint32)m_data->m_id & k_ID_KEY_MASK) + 1);

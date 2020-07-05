@@ -116,15 +116,11 @@ private:
     MBCHAR                    *m_name;                 // Used and serialized
     MBCHAR                    *m_debugString;          // Used for debugging
 
-    // enums 32 bit, hopefully not something else on other systems
-    CAUSE_REMOVE_ARMY          m_removeCause;          // Used and serialized (sint32)
-
     // Should be all 32 bit on all systems
     PLAYER_INDEX               m_owner;                // Used and serialized
-    PLAYER_INDEX               m_killer;               // In unused methods used and is serialized
-    sint32                     m_reentryTurn;          // Used
+    sint32                     m_reentryTurn;          // Used and serialized, could be reduced to uint8 by only storing the difference to the current turn
     MapPoint                   m_pos;                  // Used and serialized
-    MapPoint                   m_reentryPos;           // Used
+    MapPoint                   m_reentryPos;           // Used and serialized
 
     // 8 bit
     uint8                      m_debugStringColor;     // Used for debugging
@@ -376,9 +372,6 @@ public:
     bool MoveIntoTransport(const MapPoint &pos, CellUnitList &transports);
     void DoBoardTransport(Order *order);
 
-    void SetRemoveCause(CAUSE_REMOVE_ARMY cause);
-    CAUSE_REMOVE_ARMY GetRemoveCause() const;
-
     uint8 DontKillCount() const { return m_dontKillCount; }
     void SetNeedToKill() { m_needToKill = TRUE; }
     void IncrementDontKillCount() { m_dontKillCount++; }
@@ -389,8 +382,6 @@ public:
     void GetAdvanceFromCityAssault(const Unit &c, PLAYER_INDEX otherPlayer);
 
     void IndicateAdded();
-    PLAYER_INDEX GetKiller() const;
-    void SetKiller(PLAYER_INDEX who);
 
     void AddDeath(const Unit &unit, CAUSE_REMOVE_ARMY cause,
                   PLAYER_INDEX who);
@@ -589,10 +580,8 @@ public:
 		DPRINTF(k_DBG_AI, ("m_killMeSoon: %d\n",          sizeof(m_killMeSoon)));
 		DPRINTF(k_DBG_AI, ("m_name: %d\n",                sizeof(m_name)));
 		DPRINTF(k_DBG_AI, ("m_debugString: %d\n",         sizeof(m_debugString)));
-		DPRINTF(k_DBG_AI, ("m_removeCause: %d\n",         sizeof(m_removeCause)));
 		DPRINTF(k_DBG_AI, ("m_owner: %d\n",               sizeof(m_owner)));
 		DPRINTF(k_DBG_AI, ("m_pos: %d\n",                 sizeof(m_pos)));
-		DPRINTF(k_DBG_AI, ("m_killer: %d\n",              sizeof(m_killer)));
 		DPRINTF(k_DBG_AI, ("m_reentryTurn: %d\n",         sizeof(m_reentryTurn)));
 		DPRINTF(k_DBG_AI, ("m_pos: %d\n",                 sizeof(m_pos)));
 		DPRINTF(k_DBG_AI, ("m_reentryPos: %d\n",          sizeof(m_reentryPos)));

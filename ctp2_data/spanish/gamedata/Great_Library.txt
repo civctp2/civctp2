@@ -7498,7 +7498,7 @@ Lanzamiento suborbital
 [END]
 
 [UNIT_SPACE_PLANE_GAMEPLAY]
-El avión espacial es un vehículo de transporte suborbital de largo alcance. Cuando se lanza desde una ciudad, puede transportar hasta cinco unidades a cualquier otra ciudad del mapa. El viaje tarda 4 turnos en completarse. Aunque no es muy apropiado para el transporte a corta distancia, se puede utilizar para mandar rápidamente unidades a la otra parte del mapa.
+El avión espacial es un vehículo de transporte suborbital de largo alcance. Cuando se lanza desde una ciudad, puede transportar hasta cinco unidades a cualquier otra ciudad del mapa. El viaje tarda {UnitDB(UnitRecord[0]).SpaceLaunch} turnos en completarse. Aunque no es muy apropiado para el transporte a corta distancia, se puede utilizar para mandar rápidamente unidades a la otra parte del mapa.
 [END]
 
 [UNIT_SPACE_PLANE_HISTORICAL]

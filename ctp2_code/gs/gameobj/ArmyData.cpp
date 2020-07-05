@@ -351,8 +351,6 @@ ArmyData::ArmyData(const Army &army, const UnitDynamicArray &units)
     m_orders                (new PointerList<Order>),
     m_owner                 (-1),
     m_pos                   (),
-    m_removeCause           (CAUSE_REMOVE_ARMY_UNKNOWN),
-    m_killer                (-1),
     m_hasBeenAdded          (false),
     m_isPirating            (false),
     m_name                  (NULL),
@@ -378,8 +376,6 @@ ArmyData::ArmyData(const Army &army, const CellUnitList &units)
     m_orders                (new PointerList<Order>),
     m_owner                 (-1),
     m_pos                   (),
-    m_removeCause           (CAUSE_REMOVE_ARMY_UNKNOWN),
-    m_killer                (-1),
     m_hasBeenAdded          (false),
     m_isPirating            (false),
     m_name                  (NULL),
@@ -405,8 +401,6 @@ ArmyData::ArmyData(const Army &army, Unit &u)
     m_orders                (new PointerList<Order>),
     m_owner                 (-1),
     m_pos                   (),
-    m_removeCause           (CAUSE_REMOVE_ARMY_UNKNOWN),
-    m_killer                (-1),
     m_hasBeenAdded          (false),
     m_isPirating            (false),
     m_name                  (NULL),
@@ -429,8 +423,6 @@ ArmyData::ArmyData(const Army &army)
     m_orders                (new PointerList<Order>),
     m_owner                 (-1),
     m_pos                   (),
-    m_removeCause           (CAUSE_REMOVE_ARMY_UNKNOWN),
-    m_killer                (-1),
     m_hasBeenAdded          (false),
     m_isPirating            (false),
     m_name                  (NULL),
@@ -452,8 +444,6 @@ ArmyData::ArmyData(CivArchive &archive)
     m_orders                (new PointerList<Order>),
     m_owner                 (-1),
     m_pos                   (),
-    m_removeCause           (CAUSE_REMOVE_ARMY_UNKNOWN),
-    m_killer                (-1),
     m_hasBeenAdded          (false),
     m_isPirating            (false),
     m_name                  (NULL),
@@ -500,8 +490,8 @@ void ArmyData::Serialize(CivArchive &archive)
 
     if(archive.IsStoring()) {
         archive << m_owner;
-        archive << m_killer;
-        archive.PutSINT32(m_removeCause);
+        archive << m_reentryTurn;
+	m_reentryPos.Serialize(archive);
         archive.PutUINT8(m_dontKillCount);
         archive.PutUINT8(m_needToKill);
         archive.PutUINT8(m_hasBeenAdded);
@@ -535,8 +525,8 @@ void ArmyData::Serialize(CivArchive &archive)
 
     } else {
         archive >> m_owner;
-        archive >> m_killer;
-        m_removeCause = (CAUSE_REMOVE_ARMY)archive.GetSINT32();
+        archive >> m_reentryTurn;
+	m_reentryPos.Serialize(archive);
         m_dontKillCount = archive.GetUINT8();
         m_needToKill    = archive.GetUINT8() != 0;
         m_hasBeenAdded  = archive.GetUINT8() != 0;
@@ -593,47 +583,6 @@ void ArmyData::SetOwner(PLAYER_INDEX p)
 {
     Assert(m_nElements <= 0);
     m_owner = p;
-}
-
-//----------------------------------------------------------------------------
-//
-// Name       : ArmyData::SetRemoveCause
-//
-// Description: Set RemoveCause for this army
-//
-// Parameters : CAUSE_REMOVE_ARMY cause
-//
-// Globals    : -
-//
-// Returns    : -
-//
-// Remark(s)  : see ctp_types.h for enum CAUSE_REMOVE_ARMY
-//
-//----------------------------------------------------------------------------
-void ArmyData::SetRemoveCause(CAUSE_REMOVE_ARMY cause)
-{
-    m_removeCause = cause;
-}
-
-//----------------------------------------------------------------------------
-//
-// Name       : ArmyData::GetRemoveCause
-//
-// Description: Get RemoveCause for this army
-//
-// Parameters : -
-//
-// Globals    : -
-//
-// Returns    : CAUSE_REMOVE_ARMY   : why this army is to be removed
-//
-// Remark(s)  : see ctp_types.h for enum CAUSE_REMOVE_ARMY.
-//              see, e.g., Unit::RemoveAllReferences
-//
-//----------------------------------------------------------------------------
-CAUSE_REMOVE_ARMY ArmyData::GetRemoveCause() const
-{
-    return m_removeCause;
 }
 
 //----------------------------------------------------------------------------
@@ -1165,7 +1114,6 @@ void ArmyData::GroupArmy(Army &army)
     }
 
     // both armies ok
-    army.SetRemoveCause(CAUSE_REMOVE_ARMY_GROUPING);
     bool atLeastOneAsleep = false;
 
     for(i = army.Num() - 1; i >= 0; i--) {
@@ -1233,7 +1181,6 @@ void ArmyData::GroupAllUnits()
                 if (IsSolist(ul->Access(i)))
                     continue;
 
-                ul->Access(i).GetArmy().SetRemoveCause(CAUSE_REMOVE_ARMY_GROUPING);
                 ul->Access(i).ChangeArmy(Army(m_id), CAUSE_NEW_ARMY_GROUPING);
                 DPRINTF(k_DBG_GAMESTATE, ("Grouped unit 0x%lx\n",
                                           ul->Access(i).m_id));
@@ -1314,7 +1261,7 @@ void ArmyData::GroupUnit(Unit unit)
 
         if (unit.GetArmy().IsValid())
         {
-            unit.GetArmy().SetRemoveCause(CAUSE_REMOVE_ARMY_GROUPING);
+	    // SetRemoveCause used to be called here which had no effect and was removed
         }
         else
         {
@@ -1732,7 +1679,7 @@ void ArmyData::BeginTurn()
     }
 
     if(m_flags & k_CULF_IN_SPACE) {
-        if(NewTurnCount::GetCurrentRound() >= m_reentryTurn) {
+        if(NewTurnCount::GetCurrentRound() >= m_reentryTurn) { // > ensures that space plan can reenter later in case city cannot hold any more units at that moment
             if(g_network.IsHost()) {
                 g_network.Block(m_owner);
                 g_network.Enqueue(new NetInfo(NET_INFO_CODE_REENTER, m_id));
@@ -4671,10 +4618,11 @@ void ArmyData::Reenter()
 	}
 
 	Unit city = g_theWorld->GetCity(m_reentryPos);
-	if(!city.IsValid() || city.GetOwner() != m_owner)
+	if(!city.IsValid() || city.GetOwner() != m_owner) // target city is gone
 	{
 		for (int i = 0; i < m_nElements; i++)
 		{
+			// ToDo: add message (with eye) that the space plane and its cargo was lost because the target city is gone
 			g_gevManager->AddEvent(GEV_INSERT_AfterCurrent, GEV_KillUnit,
 								   GEA_Unit, m_array[i].m_id,
 								   GEA_Int, 0,
@@ -4682,8 +4630,9 @@ void ArmyData::Reenter()
 								   GEA_End);
 		}
 	}
-	else if(g_theWorld->GetCell(m_reentryPos)->GetNumUnits() > (k_MAX_ARMY_SIZE - m_nElements))
+	else if(g_theWorld->GetCell(m_reentryPos)->GetNumUnits() > (k_MAX_ARMY_SIZE - m_nElements)) // target city cannot hold any more units
 	{
+		// ToDo: add message (with eye) that the space plan cannot reenter as long as the target city cannot hold more units
 		return;
 	}
 	else
@@ -8430,7 +8379,6 @@ void ArmyData::FinishUnloadOrder(Army &debark, MapPoint &to_pt)
 					}
 
 					Assert(inserted);
-					debark.SetRemoveCause(CAUSE_REMOVE_ARMY_UNKNOWN);
 					debark.DelIndex(i);
 					i--;
 				}
@@ -8454,7 +8402,6 @@ void ArmyData::FinishUnloadOrder(Army &debark, MapPoint &to_pt)
 					}
 
 					Assert(inserted);
-					debark.SetRemoveCause(CAUSE_REMOVE_ARMY_UNKNOWN);
 					debark.DelIndex(i);
 				}
 			}
@@ -8943,16 +8890,6 @@ void ArmyData::GetAdvanceFromCityAssault(const Unit &c,
 void ArmyData::IndicateAdded()
 {
 	m_hasBeenAdded = true;
-}
-
-PLAYER_INDEX ArmyData::GetKiller() const
-{
-	return m_killer;
-}
-
-void ArmyData::SetKiller(PLAYER_INDEX who)
-{
-	m_killer = who;
 }
 
 void ArmyData::AddDeath(const Unit &unit, CAUSE_REMOVE_ARMY cause,

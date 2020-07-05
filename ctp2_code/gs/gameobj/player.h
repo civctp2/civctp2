@@ -396,10 +396,7 @@ public:
 				 const CAUSE_NEW_ARMY cause,
 				 bool fromNetwork,
 				 const Unit &whereBuilt);
-	void RemoveArmy(const Army &army,
-					const CAUSE_REMOVE_ARMY cause,
-					PLAYER_INDEX killedBy,
-					bool fromNetwork = false);
+	void RemoveArmy(const Army &army, bool fromNetwork = false);
 
 	bool RemoveCityReferenceFromPlayer(const Unit &id,  CAUSE_REMOVE_CITY cause,
 									   sint32 &killedBy);
@@ -916,6 +913,7 @@ public:
 
 	void BuildDiplomaticSlicMessage(DiplomaticRequest &req);
 
+	void GameOverCheck(sint32 killedBy);
 	void GameOver(GAME_OVER reason, sint32 data);
 
 	sint32 GetPoints() const;

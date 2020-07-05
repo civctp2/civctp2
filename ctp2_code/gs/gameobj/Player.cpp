@@ -1188,22 +1188,13 @@ void Player::AddArmy(const Army &army,
 	}
 }
 
-void Player::RemoveArmy(const Army &army, CAUSE_REMOVE_ARMY cause,
-						PLAYER_INDEX killedBy, bool fromNetwork)
+void Player::RemoveArmy(const Army &army, bool fromNetwork)
 {
 	g_selected_item->RegisterRemovedArmy(m_owner, army);
 
 	sint32 dead = FindArmyIndex(army);
 
 	m_all_armies->DelIndex(dead);
-
-	if(!m_isDead && CheckPlayerDead()) {
-		if(killedBy >= 0) {
-			GameOver(GAME_OVER_LOST_CONQUERED, killedBy);
-		} else {
-			GameOver(GAME_OVER_LOST_INEPT, -1);
-		}
-	}
 }
 
 sint32 Player::FindArmyIndex(const Unit &unit_in_the_army) const
@@ -1551,17 +1542,7 @@ bool Player::RemoveCityReferenceFromPlayer(const Unit &killme,  CAUSE_REMOVE_CIT
 
 	MapAnalysis::GetMapAnalysis().CalcEmpireCenter(m_owner);
 
-	if(CheckPlayerDead())
-	{
-		if(killedBy >= 0)
-		{
-			GameOver(GAME_OVER_LOST_CONQUERED, killedBy);
-		}
-		else
-		{
-			GameOver(GAME_OVER_LOST_INEPT, -1);
-		}
-	}
+	GameOverCheck(killedBy);
 
 	MainControlPanel::UpdateCityList();
 
@@ -6769,6 +6750,17 @@ MBCHAR *Player::GetDescriptionString()
 
         return(GenerateDescriptionString(true));
     }
+}
+
+void Player::GameOverCheck(sint32 killedBy)
+{
+	if(!m_isDead && CheckPlayerDead()) {
+		if(killedBy >= 0) {
+			GameOver(GAME_OVER_LOST_CONQUERED, killedBy);
+		} else {
+			GameOver(GAME_OVER_LOST_INEPT, -1);
+		}
+	}
 }
 
 void Player::GameOver(GAME_OVER reason, sint32 data)

@@ -241,9 +241,6 @@ public:
 
 	void Fight(CellUnitList &defender);
 
-	void SetRemoveCause(CAUSE_REMOVE_ARMY cause);
-	CAUSE_REMOVE_ARMY GetRemoveCause() const;
-
 	void ResetPos();
 
 	sint32 NumOrders() const;
@@ -266,8 +263,6 @@ public:
 	bool CanMoveIntoThisTransport(const Army &transports);
 
 	void IndicateAdded() const;
-	PLAYER_INDEX GetKiller() const;
-	void SetKiller(PLAYER_INDEX who);
 
 	void AddDeath(const Unit &u, CAUSE_REMOVE_ARMY cause, PLAYER_INDEX who);
 

@@ -54,12 +54,9 @@ void Army::KillArmy()
 		return;
 	}
 
-	CAUSE_REMOVE_ARMY cause = GetRemoveCause();
-
 	AccessData()->StopPirating(); // do not execute pirating if army gets killed
 
 	Army tmp(*this);
-	tmp.SetRemoveCause(cause);
 	tmp.RemoveAllReferences();
 }
 
@@ -68,8 +65,7 @@ void Army::RemoveAllReferences()
 	Assert(Num() < 1);
 
 	if(GetOwner() >= 0 && GetData()->HasBeenAdded()) {
-		g_player[GetOwner()]->RemoveArmy(*this, GetRemoveCause(),
-										 GetKiller());
+		g_player[GetOwner()]->RemoveArmy(*this);
 	}
 	g_selected_item->RegisterRemovedArmy(GetOwner(), *this);
 
@@ -669,19 +665,6 @@ void Army::Fight(CellUnitList &defender)
 	AccessData()->Fight(defender);
 }
 
-void Army::SetRemoveCause(CAUSE_REMOVE_ARMY cause)
-{
-	AccessData()->SetRemoveCause(cause);
-}
-
-CAUSE_REMOVE_ARMY Army::GetRemoveCause() const
-{
-	return GetData()->GetRemoveCause();
-}
-
-
-
-
 sint32 Army::NumOrders() const
 {
 	return AccessData()->NumOrders();
@@ -776,16 +759,6 @@ void Army::ResetPos()
 void Army::IndicateAdded() const
 {
 	AccessData()->IndicateAdded();
-}
-
-PLAYER_INDEX Army::GetKiller() const
-{
-	return GetData()->GetKiller();
-}
-
-void Army::SetKiller(PLAYER_INDEX who)
-{
-	AccessData()->SetKiller(who);
 }
 
 void Army::AddDeath(const Unit &u, CAUSE_REMOVE_ARMY cause, PLAYER_INDEX who)
