@@ -1,6 +1,7 @@
 
 
 all : Advance.gv
+all : Advance.png
 all : Advance.svg
 all : Advance.pdf
 
@@ -11,6 +12,9 @@ all : Advance.pdf
 	../tools/json2dot.sh ../ctp2_data/default/gamedata/uniticon.txt < $< \
 	| gvpr -c 'N[$$.degree==0]{delete(root, $$)}' `# remove nodes without any edges, e.g. DEFAULT, SUBNEURAL_ADS, MIND_CONTROL ` \
 	| gvpr -c -f ../tools/reformat.g > $@ 
+
+%.png : %.gv
+	dot $< -Gsize=8 -Gdpi=100 -Tpng > $@ # https://stackoverflow.com/questions/14784405/how-to-set-the-output-size-in-graphviz-for-the-dot-format
 
 %.svg : %.gv
 	dot $< -Tsvg \
