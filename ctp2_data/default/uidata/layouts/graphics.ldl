@@ -65,7 +65,7 @@ GraphicsWindow {
 	##############################################
 	WalkButton:GRAPHICS_CHECKBOX {
 		int	xpix	30
-		int	ypix	90
+		int	ypix	130
 		stringtable {
 			string	string0	"str_ldl_Unit_Animation_Off"
 			string	string1	"str_ldl_Unit_Animation_On"
@@ -73,7 +73,7 @@ GraphicsWindow {
 	}
 	TradeButton:GRAPHICS_CHECKBOX {
 		int	xpix	30
-		int	ypix	120
+		int	ypix	160
 		stringtable {
 			string	string0	"str_ldl_Animated_Trade_Routes_Off"
 			string	string1	"str_ldl_Animated_Trade_Routes_On"
@@ -81,23 +81,15 @@ GraphicsWindow {
 	}
 	WonderButton:GRAPHICS_CHECKBOX {
 		int	xpix	30
-		int	ypix	150
+		int	ypix	190
 		stringtable {
 			string	string0	"str_ldl_Wonder_Movies_Off"
 			string	string1	"str_ldl_Wonder_Movies_On"
 		}
 	}
-	CityNamesButton:GRAPHICS_CHECKBOX {
-		int	xpix	30
-		int	ypix	180
-		stringtable {
-			string	string0	"str_ldl_City_Names_Off"
-			string	string1	"str_ldl_City_Names_On"
-		}
-	}
 	ArmyNamesButton:GRAPHICS_CHECKBOX {
 		int	xpix	30
-		int	ypix	210
+		int	ypix	220
 		stringtable {
 			string	string0	"str_ldl_Army_Names_Off"
 			string	string1	"str_ldl_Army_Names_On"
@@ -105,7 +97,7 @@ GraphicsWindow {
 	}
 	CivFlagButton:GRAPHICS_CHECKBOX {
 		int	xpix	30
-		int	ypix	240
+		int	ypix	250
 		stringtable {
 			string	string0	"str_ldl_Civ_Flags_Off"
 			string	string1	"str_ldl_Civ_Flags_On"
@@ -113,7 +105,7 @@ GraphicsWindow {
 	}
 	ShowCityProdButton:GRAPHICS_CHECKBOX {
 		int	xpix	30
-		int	ypix	270
+		int	ypix	280
 		stringtable {
 			string	string0	"str_ldl_Show_City_Prod_Off"
 			string	string1	"str_ldl_Show_City_Prod_On"
@@ -126,7 +118,7 @@ GraphicsWindow {
 
 	PoliticalBordersButton:GRAPHICS_CHECKBOX {
 		int	xpix	350
-		int	ypix	90
+		int	ypix	130
 		stringtable {
 			string	string0	"str_ldl_ShowPoliticalBorders_Off"
 			string	string1	"str_ldl_ShowPoliticalBorders_On"
@@ -134,7 +126,7 @@ GraphicsWindow {
 	}
 	TradeRoutesButton:GRAPHICS_CHECKBOX {
 		int	xpix	350
-		int	ypix	120
+		int	ypix	160
 		stringtable {
 			string	string0	"str_ldl_ShowTradeRoutes_Off"
 			string	string1	"str_ldl_ShowTradeRoutes_On"
@@ -142,7 +134,7 @@ GraphicsWindow {
 	}
 	CityInflenceButton:GRAPHICS_CHECKBOX {
 		int	xpix	350
-		int	ypix	150
+		int	ypix	190
 		stringtable {
 			string	string0	"str_ldl_Show_City_Inflence_Off"
 			string	string1	"str_ldl_Show_City_Inflence_On"
@@ -150,7 +142,7 @@ GraphicsWindow {
 	}
 	GridButton:GRAPHICS_CHECKBOX {
 		int	xpix	350
-		int	ypix	180
+		int	ypix	220
 		stringtable {
 			string	string0	"str_ldl_Grid_Off"
 			string	string1	"str_ldl_Grid_On"
@@ -158,7 +150,7 @@ GraphicsWindow {
 	}
 	SmoothButton:GRAPHICS_CHECKBOX {
 		int	xpix	350
-		int	ypix	210
+		int	ypix	250
 		stringtable {
 			string	string0	"str_ldl_SmoothBorders_Off"
 			string	string1	"str_ldl_SmoothBorders_On"
@@ -166,7 +158,7 @@ GraphicsWindow {
 	}
 	GoodsButton:GRAPHICS_CHECKBOX {
 		int	xpix	350
-		int	ypix	240
+		int	ypix	280
 		stringtable {
 			string	string0	"str_ldl_Good_Animations_Off"
 			string	string1	"str_ldl_Good_Animations_On"
@@ -191,7 +183,7 @@ GraphicsWindow {
 	####################################
 	UnitSpeedSlider {
 		string	xanchor	"center"
-		int	ypix	50
+		int	ypix	45
 		int	widthpix	300
 		int	heightpix	40
 		int	maxxval	9
@@ -215,13 +207,48 @@ GraphicsWindow {
 		}
 	}
 	UnitSpeedName:CTP2_STANDARD_FONT {
-		int	xpix	30
+		int	xpix	25
 		int	ypix	60
 		int	widthpix	140
 		int	heightpix	20
 		string	pattern	"uptg20e.tga"
 		String	just	"right"
 		string	text	"str_ldl_Unit_Speed"
+	}
+	####################################
+	CityNameAlphaSlider {
+		string	xanchor	"center"
+		int	ypix	85
+		int	widthpix	300
+		int	heightpix	40
+		int	maxxval	4
+		int	maxyval	0
+		int	pagexval	1
+		int	pageyval	1
+		int	xval	4
+		string	pattern	"uptg20e.tga"
+		string	type	"slider"
+		string	orientation	"horizontal"
+		bool	rigidthumb	TRUE
+		bool	quantizedrag	TRUE
+		int	minthumbsize	9
+		int	ticks	1
+		thumb {
+			int	widthpix	9
+			int	heightpix	40
+			string	image0	"upba2513.tga"
+
+			string	imagebltflag	"chromakey"
+		}
+	}
+	CityNameAlphaName:CTP2_STANDARD_FONT {
+		int	xpix	30
+		int	ypix	95
+		int	widthpix	140
+		int	heightpix	20
+		string	pattern	"uptg20e.tga"
+		String	just	"right"
+		string	text	"str_profile_ShowCityNames"
 	}
 }
 

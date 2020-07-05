@@ -2941,7 +2941,7 @@ sint32 TiledMap::RepaintSprites(aui_Surface *surf, RECT *paintRect, bool scrolli
 
 	g_screenManager->UnlockSurface();
 
-	if (g_theProfileDB->GetShowCityNames())
+	if (g_theProfileDB->GetShowCityNameAlpha() != pixelutils_TRANSPARENT)
 	{
 		g_tiledMap->DrawCityNames(surf, 0);
 	}

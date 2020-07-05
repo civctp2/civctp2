@@ -34,11 +34,11 @@
 // - Import order modified to enable GCC compilation (no functional change).
 // - Option added to enable viewing info on actions that are too expensive.
 // - Modified GetWorldShape function to allow four possible shapes instead
-//   of two by Martin G�hmann
+//   of two by Martin Gühmann
 // - Option added to close a messagebox automatically on eyepoint clicking.
 // - Changed the value for an assert to make the assert fire only when the
 //   NumPlayers is higher the maximum number of players the game currently
-//   supports by Martin G�hmann.
+//   supports by Martin Gühmann.
 // - Option added to choose a color set.
 // - Option added to select which order buttons are displayed for an army.
 // - Option added to select message adding style (top or bottom).
@@ -47,18 +47,18 @@
 // - Added world shape handling.
 // - Made file compilable in Win32 Test configuration.
 // - Option added to select whether an army is selected or a city is selected,
-//   if both options are available. (Oct 8th 2005 Martin G�hmann)
+//   if both options are available. (Oct 8th 2005 Martin Gühmann)
 // - Added option to avoid an end turn if there are cities with empty build
-//   queues. (Oct. 22nd 2005 Martin G�hmann)
+//   queues. (Oct. 22nd 2005 Martin Gühmann)
 // - Added option to allow end turn if the game runs in the background,
-//   useful for automatic AI testing. (Oct. 22nd 2005 Martin G�hmann)
+//   useful for automatic AI testing. (Oct. 22nd 2005 Martin Gühmann)
 // - Made automatic treaty ending an option.
 // - Made city capture options an option.
-// - Option added to select between square and smooth borders. (Feb 4th 2007 Martin G�hmann)
+// - Option added to select between square and smooth borders. (Feb 4th 2007 Martin Gühmann)
 // - Added Army Names and Civflags options
 // - Added DebugAI option and SetEnemyHealth to add sceanrio editor options
 // - Removed new rules attempt - E 12.27.2006
-// - Added debug pathing option for the city astar. (17-Jan-2008 Martin G�hmann)
+// - Added debug pathing option for the city astar. (17-Jan-2008 Martin Gühmann)
 // - Added a new combat option (28-Feb-2009 Maq)
 // - Added a no goody huts option (20-Mar-2009 Maq)
 // - Added random map settings option. (5-Apr-2009 Maq)
@@ -70,7 +70,7 @@
 // - Added display capitol stuff (5-Jan-10 EPW)
 // - Added display relotionship options (7-Jan-10 EPW)
 // - Disabled the CD-check in the retail version, so that the Apolyton Edition
-//   can be used with the good old games version. (27-Feb-2010 Martin G�hmann)
+//   can be used with the good old games version. (27-Feb-2010 Martin Gühmann)
 //
 //----------------------------------------------------------------------------
 
@@ -129,6 +129,7 @@ enum WORLD_SHAPE
 #include "pointerlist.h"        // PointerList
 #include "SimpleDynArr.h"       // SimpleDynamicArray
 #include "gfx_options.h"        // for debugai
+#include "pixelutils.h"         // pixelutils_OPAQUE
 
 //----------------------------------------------------------------------------
 // Class declarations
@@ -277,7 +278,7 @@ private:
     sint32 m_dontKillMessages;
     sint32 m_aiPopCheat;
 
-    sint32 m_showCityNames;
+    sint32 m_showCityNameAlpha;
     sint32 m_showArmyNames; //emod1
     sint32 m_showTradeRoutes;
 
@@ -447,7 +448,7 @@ public:
 
 
 
-    //Added by Martin G�hmann to avoid an assert if NumPlayer is under the maximum supported players.
+    //Added by Martin Gühmann to avoid an assert if NumPlayer is under the maximum supported players.
     void SetNPlayers(uint32 n)                          { Assert((n > 1) && (n <= k_MAX_PLAYERS)); m_nPlayers = n; }
 
     void SetLeaderName(MBCHAR const *name)              { strcpy(m_leaderName, name); }
@@ -551,7 +552,7 @@ public:
     void SetAllUnitCompleteMessages(BOOL on)            { m_unitCompleteMessages = on; }
     void SetNonContinuousUnitCompleteMessages(BOOL on)  { m_nonContinuousUnitCompleteMessages = on; }
 
-    void SetShowCityNames(BOOL on)                      { m_showCityNames = on; }
+    void SetShowCityNameAlpha(uint32 alpha)             { m_showCityNameAlpha = alpha; }
     void SetShowArmyNames(BOOL on)                      { m_showArmyNames = on; }
     void SetShowTradeRoutes(BOOL on)                    { m_showTradeRoutes = on; }
 
@@ -763,7 +764,7 @@ public:
     BOOL        DontKillMessages() const        { return m_dontKillMessages; }
     BOOL        AIPopCheat() const              { return m_aiPopCheat; }
 
-    BOOL        GetShowCityNames()              { return m_showCityNames; }
+    uint32      GetShowCityNameAlpha()          { return m_showCityNameAlpha != 1 ? m_showCityNameAlpha : pixelutils_OPAQUE; }
     BOOL        GetShowTradeRoutes()            { return m_showTradeRoutes; }
 
     sint32      GetUnitSpeed(void)              { return m_unitSpeed; }

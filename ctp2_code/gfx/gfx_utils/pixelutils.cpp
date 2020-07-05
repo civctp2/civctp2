@@ -7,14 +7,12 @@
 #include "windows.h"
 #endif
 
-uint16_t		gPixelTable[BLEND_LEVELS][BLEND_MAX_VALUE][BLEND_MAX_VALUE];
 Pixel16		gRGBTable[RGB_VALUES];
 
 extern sint32 g_is565Format;
 
 void pixelutils_Initialize(void)
 {
-	pixelutils_ComputeBlendTable();
 	pixelutils_ComputeRGBTable();
 }
 
@@ -48,17 +46,6 @@ Pixel16 *RGB32ToRGB16(char *buf, uint16 width, uint16 height)
 	}
 
 	return (Pixel16 *)outBuf;
-}
-
-void pixelutils_ComputeBlendTable(void)
-{
-	for (uint16_t i=0; i<BLEND_LEVELS; i++) {
-		for (uint16_t c1=0; c1<BLEND_MAX_VALUE; c1++) {
-			for (uint16_t c2=0; c2<BLEND_MAX_VALUE; c2++) {
-				gPixelTable[i][c1][c2] = (uint16_t) (( ((uint32_t)i * (uint32_t)c1) + ((uint32_t)(BLEND_LEVELS-i-1) * (uint32_t)c2)) / (uint32_t)BLEND_LEVELS);
-			}
-		}
-	}
 }
 
 void RGB32Components(Pixel32 pixel, Pixel16 *r, Pixel16 *g, Pixel16 *b, Pixel16 *a)
@@ -142,28 +129,6 @@ Pixel16 pixelutils_Desaturate(Pixel16 pixel)
 }
 
 #if 0
-
-Pixel16 pixelutils_Blend_565(Pixel16 pixel1, Pixel16 pixel2, uint16_t blend)
-{
-	Pixel16			r1, g1, b1, r2, g2, b2;
-	Pixel16			r0, g0, b0;
-	extern uint16_t	gPixelTable[BLEND_LEVELS][BLEND_MAX_VALUE][BLEND_MAX_VALUE];
-
-	r1 = ((pixel1 & 0xF800) >> 10) ;
-	g1 = ((pixel1 & 0x07E0) >> 5);
-	b1 = ((pixel1 & 0x001F) << 1) ;
-
-	r2 = ((pixel2 & 0xF800) >> 10);
-	g2 = ((pixel2 & 0x07E0) >> 5);
-	b2 = ((pixel2 & 0x001F) << 1);
-
-	r0 = ((gPixelTable[blend][r1][r2] & 0xFFFE) << 10) ;
-	g0 = ( gPixelTable[blend][g1][g2] << 5) ;
-	b0 = ( gPixelTable[blend][b1][b2] >> 1) ;
-
-	return(r0|g0|b0);
-
-}
 
 Pixel16 pixelutils_Additive_565(Pixel16 pixel1, Pixel16 pixel2)
 {

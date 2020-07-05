@@ -23,7 +23,7 @@
 //
 // Modifications from the original Activision code:
 //
-// - Added new colors above player 15 by Martin Gühmann
+// - Added new colors above player 15 by Martin GÃ¼hmann
 //
 //----------------------------------------------------------------------------
 
@@ -79,7 +79,7 @@ enum COLOR {
 	COLOR_PLAYER16,
 	COLOR_PLAYER17,
 
-	// Added by Martin Gühmann to support more players with colors
+	// Added by Martin GÃ¼hmann to support more players with colors
 	COLOR_PLAYER18,
 	COLOR_PLAYER19,
 	COLOR_PLAYER20,
@@ -167,12 +167,17 @@ public:
 	COLORREF	GetLightColorRef(COLOR color) const;
 
 	static void	Initialize(uint32 fileNumber = 0);
-    static void Cleanup(void);
+	static void Cleanup(void);
+
+	static bool UseDarkFontColor(Pixel16 backgroundColor);
+	static bool UseDarkFontColor(COLORREF backgroundColor);
 
 private:
-    void        Import(uint32 fileNumber = 0);
+	static bool UseDarkFontColor(sint32 red, sint32 green, sint32 blue, sint32 maxChannel);
 
-	std::vector<Pixel16>    m_colors;
+	void Import(uint32 fileNumber = 0);
+
+	std::vector<Pixel16> m_colors;
 };
 
 #endif
