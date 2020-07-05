@@ -50,6 +50,7 @@
 #include "Army.h"
 #include "network.h"
 #include "SlicEngine.h"
+#include "SlicObject.h"
 #include "Cell.h"
 #include "UnitDynArr.h"
 #include "UnitData.h"
@@ -594,8 +595,15 @@ void CellUnitList::DoVictoryEnslavement(sint32 origOwner)
 									   GEA_Player, origOwner,
 									   GEA_End);
 
-				g_slicEngine->RunVictoryEnslavementTriggers(m_array[i],
-															origOwner, hc);
+				g_slicEngine->RunVictoryEnslavementTriggers(m_array[i], origOwner, hc);
+
+				//// message telling in which city slave has been put to work
+				SlicObject * so = new SlicObject("137SlaveryCompleteAttacker");
+				so->AddRecipient(GetOwner());
+				so->AddCivilisation(GetOwner());
+				so->AddCity(hc);
+				g_slicEngine->Execute(so);
+
 				if(g_network.IsHost()) {
 					g_network.Unblock(hc.GetOwner());
 				}
