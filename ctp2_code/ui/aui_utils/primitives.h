@@ -69,6 +69,13 @@ struct fRect
 #include "c3ui.h"
 extern C3UI			*g_c3ui;
 
+// All kind of patterns may be defined and used; the highest 1 is an indicator to roll-over the pattern
+//   Note: for efficiency may the desired pattern be repeated in the 32-bit pattern
+static const uint32 LINE_PATTERN_DOT         = 0b00010011001100110011001100110011;
+static const uint32 LINE_PATTERN_DOT_LENGTH  = 4;
+static const uint32 LINE_PATTERN_DASH        = 0b00000001000011110000111100001111;
+static const uint32 LINE_PATTERN_DASH_LENGTH = 8;
+
 inline aui_BitmapFont * getBitmapFont()
     {
     aui_BitmapFont *font= NULL;
@@ -166,6 +173,9 @@ void primitives_ClippedPaintRect16(aui_Surface & surf, const RECT & rect, Pixel1
 void primitives_ClippedFrameRect16(aui_Surface & surf, const RECT & rect, Pixel16 color,
 		uint8 alpha = pixelutils_OPAQUE);
 void primitives_ClippedShadowRect16(aui_Surface & surf, const RECT & rect);
-void primitives_ClippedAntiAliasedLine16(aui_Surface & surf, sint32 x1, sint32 y1, sint32 x2, sint32 y2, Pixel16 color);
+void primitives_ClippedAntiAliasedLine16(aui_Surface & surf, sint32 x1, sint32 y1, sint32 x2, sint32 y2,
+		Pixel16 color);
+void primitives_ClippedAntiAliasedPatternLine16(aui_Surface & surf, sint32 x1, sint32 y1, sint32 x2, sint32 y2,
+		Pixel16 color, uint32 fullPattern, uint32 patternLength);
 
 #endif
