@@ -1549,6 +1549,7 @@ STDEHANDLER(EnslaveSettlerEvent)
 		SlicObject *so = new SlicObject("139SettlerSlavedVictim");
 		so->AddRecipient(settlerOwner);
 		so->AddUnitRecord(settler.GetType());
+		so->AddLocation(settler.RetPos());
 		g_slicEngine->Execute(so);
 
 		so = new SlicObject("137SlaveryCompleteAttacker");

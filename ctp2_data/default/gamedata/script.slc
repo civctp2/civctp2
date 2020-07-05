@@ -1965,6 +1965,7 @@ messagebox '138SlaveFailedVictim' {
 messagebox '139SettlerSlavedVictim' {
 	Text(ID_SETTLER_SLAVED_VICTIM) ;
 	MessageType("CAPTURE_SLAVES");
+	EyePoint(location[0]);
 }
 
 messagebox '140ProtectedFromSlaveryVictim' {

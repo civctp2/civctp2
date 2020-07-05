@@ -608,6 +608,7 @@ void CellUnitList::DoVictoryEnslavement(sint32 origOwner, const Unit &looser)
 				so = new SlicObject("139SettlerSlavedVictim");
 				so->AddRecipient(origOwner);
 				so->AddUnitRecord(looser.GetType());
+				so->AddLocation(looser.RetPos());
 				g_slicEngine->Execute(so);
 
 				if(g_network.IsHost()) {
