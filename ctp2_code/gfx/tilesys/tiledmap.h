@@ -69,10 +69,10 @@ struct  TILEHITMASK;
 #define k_OVERLAY_FLAG_SHADOWSONLY  0x00000001
 #define k_OVERLAY_FLAG_NOSHADOWS    0x00000002
 
-#define k_MAX_ZOOM_LEVELS           6
-#define k_ZOOM_NORMAL               5
+#define k_MAX_ZOOM_LEVELS           7
+#define k_ZOOM_NORMAL               6
 #define k_ZOOM_SMALLEST             0
-#define k_ZOOM_LARGEST              5
+#define k_ZOOM_LARGEST              6
 
 extern TiledMap *   g_tiledMap;
 

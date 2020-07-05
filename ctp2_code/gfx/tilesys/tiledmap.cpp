@@ -156,14 +156,11 @@ sint32      g_isGridOn              = 0;
 sint32      g_placeGoodsMode        = FALSE;
 BOOL	    g_drawArmyClumps;
 
-sint32 s_zoomTilePixelWidth[k_MAX_ZOOM_LEVELS]	=	{48,56,68,76,88,96};
-sint32 s_zoomTilePixelHeight[k_MAX_ZOOM_LEVELS]	=	{24,28,34,38,44,48};
-sint32 s_zoomTileGridHeight[k_MAX_ZOOM_LEVELS] =	{36,42,51,57,66,72};
-sint32 s_zoomTileHeadroom[k_MAX_ZOOM_LEVELS] =		{12,14,17,19,22,24};
-double s_zoomTileScale[k_MAX_ZOOM_LEVELS] =			{0.50526, 0.58947, 0.71578, 0.8, 0.92631, 1.0};
-
-#define k_GRID_CHUNKS_X		10
-#define k_GRID_CHUNKS_Y		6
+sint32 s_zoomTilePixelWidth[k_MAX_ZOOM_LEVELS]  = {48, 56, 64, 72, 80, 88, 96};
+sint32 s_zoomTilePixelHeight[k_MAX_ZOOM_LEVELS] = {24, 28, 32, 36, 40, 44, 48};
+sint32 s_zoomTileGridHeight[k_MAX_ZOOM_LEVELS]  = {36, 42, 48, 54, 60, 66, 72};
+sint32 s_zoomTileHeadroom[k_MAX_ZOOM_LEVELS]    = {12, 14, 16, 18, 20, 22, 24};
+double s_zoomTileScale[k_MAX_ZOOM_LEVELS]       = {0.5, 0.58333, 0.66667, 0.75, 0.83333, 0.91667, 1.0};
 
 namespace
 {
