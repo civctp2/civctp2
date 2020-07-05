@@ -17,15 +17,10 @@ FROM system as builder
 
 RUN apt-get update && apt-get install -y --no-install-recommends \
     libsdl2-dev libsdl2-mixer-dev libsdl2-image-dev libtiff-dev libavcodec-dev libavformat-dev libswscale-dev \
-    byacc gcc-5 g++-5 automake libtool unzip flex git ca-certificates
+    byacc gcc g++ automake libtool unzip flex git ca-certificates
 
 ### set default compilers
-RUN update-alternatives --install /usr/bin/gcc gcc /usr/bin/gcc-5 100 && \
-    update-alternatives --install /usr/bin/g++ g++ /usr/bin/g++-5 100 && \
-    update-alternatives --install /usr/bin/cpp cpp-bin /usr/bin/cpp-5 30 && \
-    update-alternatives --install /usr/bin/c++ c++ /usr/bin/g++ 30 && \
-    update-alternatives --install /usr/bin/cc cc /usr/bin/gcc 30 && \
-    cc --version && \
+RUN cc --version && \
     c++ --version && \
     cpp --version
 
@@ -41,11 +36,9 @@ COPY ctp2_code/  /ctp2/ctp2_code/
 ARG BTYP
 
 RUN cd /ctp2 \
-    && ./autogen.sh \
-    && CC=/usr/bin/gcc-5 \
-    CXX=/usr/bin/g++-5 \
-    CFLAGS="$CFLAGS -w $( [ "${BTYP##*debug*}" ] && echo -O3 || echo -g -rdynamic ) -fuse-ld=gold" \
-    CXXFLAGS="$CXXFLAGS -fpermissive -w $( [ "${BTYP##*debug*}" ] && echo -O3 || echo -g -rdynamic ) -fuse-ld=gold" \
+    && ./autogen.sh && \
+    CFLAGS="$CFLAGS $( [ "${BTYP##*debug*}" ] && echo -O3 || echo -g -rdynamic ) -fuse-ld=gold" \
+    CXXFLAGS="$CXXFLAGS -fpermissive $( [ "${BTYP##*debug*}" ] && echo -O3 || echo -g -rdynamic ) -fuse-ld=gold" \
     ./configure --prefix=/opt/ctp2 --bindir=/opt/ctp2/ctp2_program/ctp --enable-silent-rules $( [ "${BTYP##*debug*}" ] || echo --enable-debug ) \
     && make -j"$(nproc)" \
     && make -j"$(nproc)" install \

@@ -108,12 +108,12 @@ TERRAIN_FOREST_GOOD_TWO {
    Icon ICON_GOOD_FOREST_TWO
 }
 
-# Apples #10
+# Mushrooms #10
 TERRAIN_FOREST_GOOD_THREE {
-   SpriteID 56
+   SpriteID 70
    Sound SOUND_ID_APPELS
-   Gold 5
-   Food 10
+   Gold 10
+   Food 15
    Production 0
    Probability 0.25
    Icon ICON_GOOD_FOREST_THREE
@@ -132,7 +132,7 @@ TERRAIN_FOREST_GOOD_FOUR {
 
 # Cotton/Flax #12
 TERRAIN_GRASSLAND_GOOD_ONE {
-   SpriteID 23
+   SpriteID 5
    Sound SOUND_ID_COTTON
    Gold 5
    Food 0
@@ -143,7 +143,7 @@ TERRAIN_GRASSLAND_GOOD_ONE {
 
 # Tobacco #13
 TERRAIN_GRASSLAND_GOOD_TWO {
-   SpriteID 23
+   SpriteID 21
    Sound SOUND_ID_TOBACCO
    Gold 10
    Food 0
@@ -152,7 +152,7 @@ TERRAIN_GRASSLAND_GOOD_TWO {
    Icon ICON_GOOD_GRASSLAND_TWO
 }
 
-# Potatoes #23
+# Potatoes #14
 TERRAIN_GRASSLAND_GOOD_THREE {
    SpriteID 44
    Sound SOUND_ID_POTATOES
@@ -163,7 +163,7 @@ TERRAIN_GRASSLAND_GOOD_THREE {
    Icon ICON_GOOD_GRASSLAND_THREE
 }
 
-# Poppies #23
+# Poppies #15
 TERRAIN_GRASSLAND_GOOD_FOUR {
    SpriteID 59
    Sound SOUND_ID_POPPIES
@@ -401,42 +401,42 @@ TERRAIN_TUNDRA_GOOD_ONE {
    Gold 5
    Food 10
    Production 5
-   Probability 0.5
+   Probability 0.25
    Icon ICON_GOOD_TUNDRA_ONE
 }
 
 # Oil
-#TERRAIN_TUNDRA_GOOD_TWO {
-#   SpriteID 16
-#   Sound SOUND_ID_OIL
-#   Gold 1
-#   Food 10
-#   Production 10
-#   Probability 0.25
-#   Icon ICON_GOOD_TUNDRA_TWO
-#}
+TERRAIN_TUNDRA_GOOD_TWO {
+  SpriteID 16
+  Sound SOUND_ID_OIL
+  Gold 1
+  Food 10
+  Production 10
+  Probability 0.25
+  Icon ICON_GOOD_TUNDRA_TWO
+}
 
 # Caribou
-#TERRAIN_TUNDRA_GOOD_THREE {
-#   SpriteID 3
-#   Sound SOUND_ID_CARIBOU
-#   Gold 1
-#   Food 10
-#   Production 10
-#   Probability 0.25
-#   Icon ICON_GOOD_TUNDRA_THREE
-#}
+TERRAIN_TUNDRA_GOOD_THREE {
+  SpriteID 3
+  Sound SOUND_ID_CARIBOU
+  Gold 1
+  Food 10
+  Production 10
+  Probability 0.25
+  Icon ICON_GOOD_TUNDRA_THREE
+}
 
 # Caribou
-#TERRAIN_TUNDRA_GOOD_FOUR {
-#   SpriteID 3
-#   Sound SOUND_ID_CARIBOU
-#   Gold 1
-#   Food 10
-#   Production 10
-#   Probability 0.25
-#   Icon ICON_GOOD_TUNDRA_FOUR
-#}
+TERRAIN_TUNDRA_GOOD_FOUR {
+  SpriteID 3
+  Sound SOUND_ID_CARIBOU
+  Gold 1
+  Food 10
+  Production 10
+  Probability 0.25
+  Icon ICON_GOOD_TUNDRA_FOUR
+}
 
 # Whales #37
 TERRAIN_WATER_DEEP_GOOD_ONE {
@@ -467,20 +467,20 @@ TERRAIN_WATER_DEEP_GOOD_THREE {
    Gold 5
    Food 15
    Production 0
-   Probability 0.5
+   Probability 0.4
    Icon ICON_GOOD_DEEP_WATER_THREE
 }
 
 # Giant Squid
-#TERRAIN_WATER_DEEP_GOOD_FOUR {
-#   SpriteID 10
-#   Sound SOUND_ID_GIANT_SQUID
-#   Gold 1
-#   Food 10
-#   Production 10
-#   Probability 0.25
-#   Icon ICON_GOOD_DEEP_WATER_FOUR
-#}
+TERRAIN_WATER_DEEP_GOOD_FOUR {
+  SpriteID 10
+  Sound SOUND_ID_GIANT_SQUID
+  Gold 5
+  Food 20
+  Production 0
+  Probability 0.1
+  Icon ICON_GOOD_DEEP_WATER_FOUR
+}
 
 # Crabs #40
 TERRAIN_WATER_SHALLOW_GOOD_ONE {
@@ -500,18 +500,18 @@ TERRAIN_WATER_SHALLOW_GOOD_TWO {
    Gold 5
    Food 5
    Production 0
-   Probability 0.25
+   Probability 0.1
    Icon ICON_GOOD_SHALLOW_WATER_TWO
 }
 
-# Salmon #42
+# Fish #47
 TERRAIN_WATER_SHALLOW_GOOD_THREE {
-   SpriteID 37
-   Sound SOUND_ID_SALMON
+   SpriteID 36
+   Sound SOUND_ID_FISH
    Gold 5
    Food 15
    Production 0
-   Probability 0.25
+   Probability 0.4
    Icon ICON_GOOD_SHALLOW_WATER_THREE
 }
 
@@ -549,27 +549,27 @@ TERRAIN_BROWN_HILL_GOOD_TWO {
    GLHidden
 }
 
-# Crabs
-#TERRAIN_BROWN_HILL_GOOD_THREE {
-#   SpriteID 6
-#   Sound SOUND_ID_CRABS
-#   Gold 1
-#   Food 10
-#   Production 10
-#   Probability 0.25
-#   Icon ICON_GOOD_BROWN_HILL_THREE
-#}
+# Camels
+TERRAIN_BROWN_HILL_GOOD_THREE {
+   SpriteID 39
+   Sound SOUND_ID_CAMELS
+   Gold 5
+   Food 10
+   Production 0
+   Probability 0.25
+   Icon ICON_GOOD_DESERT_FOUR
+}
 
-# Pearls
-#TERRAIN_BROWN_HILL_GOOD_FOUR {
-#   SpriteID 17
-#   Sound SOUND_ID_PEARLS
-#   Gold 1
-#   Food 10
-#   Production 10
-#   Probability 0.25
-#   Icon ICON_GOOD_BROWN_HILL_FOUR
-#}
+# Camels
+TERRAIN_BROWN_HILL_GOOD_FOUR {
+   SpriteID 39
+   Sound SOUND_ID_CAMELS
+   Gold 5
+   Food 10
+   Production 0
+   Probability 0.25
+   Icon ICON_GOOD_DESERT_FOUR
+}
 
 
 # Crabs #46
@@ -584,10 +584,10 @@ TERRAIN_WATER_BEACH_GOOD_ONE {
    GLHidden
 }
 
-# Fish #47
+# Salmon #42
 TERRAIN_WATER_BEACH_GOOD_TWO {
-   SpriteID 36
-   Sound SOUND_ID_FISH
+   SpriteID 37
+   Sound SOUND_ID_SALMON
    Gold 5
    Food 15
    Production 0
@@ -602,20 +602,20 @@ TERRAIN_WATER_BEACH_GOOD_THREE {
    Gold 5
    Food 0
    Production 10
-   Probability 0.4
+   Probability 0.3
    Icon ICON_GOOD_WATER_BEACH_THREE
 }
 
 # Pearls
-#TERRAIN_WATER_BEACH_GOOD_FOUR {
-#  SpriteID 17
-#  Sound SOUND_ID_PEARLS
-#   Gold 1
-#   Food 10
-#   Production 10
-#   Probability 0.25
-#   Icon ICON_GOOD_WATER_BEACH_FOUR
-#}
+TERRAIN_WATER_BEACH_GOOD_FOUR {
+ SpriteID 17
+ Sound SOUND_ID_PEARLS
+  Gold 1
+  Food 10
+  Production 10
+  Probability 0.1
+  Icon ICON_GOOD_WATER_BEACH_FOUR
+}
 
 # Iron Ore #49
 TERRAIN_BROWN_MOUNTAIN_GOOD_ONE {
@@ -624,7 +624,7 @@ TERRAIN_BROWN_MOUNTAIN_GOOD_ONE {
    Gold 5
    Food 0
    Production 20
-   Probability 0.7
+   Probability 0.35
    Icon ICON_GOOD_BROWN_MOUNTAIN_ONE
 }
 
@@ -635,31 +635,31 @@ TERRAIN_BROWN_MOUNTAIN_GOOD_TWO {
    Gold 10
    Food 0
    Production 0
-   Probability 0.3
+   Probability 0.15
    Icon ICON_GOOD_BROWN_MOUNTAIN_TWO
 }
 
-# Crabs
-#TERRAIN_BROWN_MOUNTAIN_GOOD_THREE {
-#   SpriteID 6
-#   Sound SOUND_ID_CRABS
-#   Gold 1
-#   Food 10
-#   Production 10
-#   Probability 0.25
-#   Icon ICON_GOOD_BROWN_MOUNTAIN_THREE
-#}
+# Iron Ore #49
+TERRAIN_BROWN_MOUNTAIN_GOOD_THREE {
+   SpriteID 32
+   Sound SOUND_ID_IRON_ORE
+   Gold 5
+   Food 0
+   Production 20
+   Probability 0.35
+   Icon ICON_GOOD_BROWN_MOUNTAIN_THREE
+}
 
-# Pearls
-#TERRAIN_BROWN_MOUNTAIN_GOOD_FOUR {
-#   SpriteID 17
-#   Sound SOUND_ID_PEARLS
-#   Gold 1
-#   Food 10
-#   Production 10
-#   Probability 0.25
-#   Icon ICON_GOOD_BROWN_MOUNTAIN_FOUR
-#}
+# Silver #50
+TERRAIN_BROWN_MOUNTAIN_GOOD_FOUR {
+   SpriteID 33
+   Sound SOUND_ID_SILVER
+   Gold 10
+   Food 0
+   Production 0
+   Probability 0.15
+   Icon ICON_GOOD_BROWN_MOUNTAIN_FOUR
+}
 
 # Sapphires #51
 TERRAIN_WHITE_HILL_GOOD_ONE {
@@ -679,32 +679,32 @@ TERRAIN_WHITE_HILL_GOOD_TWO {
    Gold 15
    Food 0
    Production 0
-   Probability 0.75
+   Probability 0.25
    Icon ICON_GOOD_WHITE_HILL_TWO
    GLHidden
 }
 
-# Crabs
-#TERRAIN_WHITE_HILL_GOOD_THREE {
-#   SpriteID 6
-#   Sound SOUND_ID_CRABS
-#   Gold 1
-#   Food 10
-#   Production 10
-#   Probability 0.25
-#   Icon ICON_GOOD_WHITE_HILL_THREE
-#}
+# Emeralds #52
+TERRAIN_WHITE_HILL_GOOD_THREE {
+   SpriteID 29
+   Sound SOUND_ID_EMERALS
+   Gold 15
+   Food 0
+   Production 0
+   Probability 0.25
+   Icon ICON_GOOD_WHITE_HILL_THREE
+}
 
-# Pearls
-#TERRAIN_WHITE_HILL_GOOD_FOUR {
-#   SpriteID 17
-#   Sound SOUND_ID_PEARLS
-#   Gold 1
-#   Food 10
-#   Production 10
-#   Probability 0.25
-#   Icon ICON_GOOD_WHITE_HILL_FOUR
-#}
+# Emeralds #52
+TERRAIN_WHITE_HILL_GOOD_FOUR {
+   SpriteID 29
+   Sound SOUND_ID_EMERALS
+   Gold 15
+   Food 0
+   Production 0
+   Probability 0.25
+   Icon ICON_GOOD_WHITE_HILL_FOUR
+}
 
 # Seals #53
 TERRAIN_GLACIER_GOOD_ONE {
@@ -713,7 +713,7 @@ TERRAIN_GLACIER_GOOD_ONE {
    Gold 5
    Food 5
    Production 10
-   Probability 0.5
+   Probability 0.25
    Icon ICON_GOOD_GLACIER_ONE
 }
 
@@ -724,75 +724,75 @@ TERRAIN_GLACIER_GOOD_TWO {
    Gold 5
    Food 10
    Production 5
-   Probability 0.5
+   Probability 0.25
    Icon ICON_GOOD_GLACIER_TWO
 }
 
-# Crabs
-#TERRAIN_GLACIER_GOOD_THREE {
-#   SpriteID 23
-#   Sound SOUND_ID_CRABS
-#   Gold 0
-#   Food 10
-#   Production 10
-#   Probability 0
-#   Icon ICON_GOOD_GLACIER_THREE
-#}
+# Seals #53
+TERRAIN_GLACIER_GOOD_THREE {
+   SpriteID 34
+   Sound SOUND_ID_SEALS
+   Gold 5
+   Food 5
+   Production 10
+   Probability 0.25
+   Icon ICON_GOOD_GLACIER_THREE
+}
 
-# Pearls
-#TERRAIN_GLACIER_GOOD_FOUR {
-#   SpriteID 24
-#   Sound SOUND_ID_PEARLS
-#   Gold -1
-#   Food 10
-#   Production 10
-#   Probability 0
-#   Icon ICON_GOOD_GLACIER_FOUR
-#}
+# Walrus #54
+TERRAIN_GLACIER_GOOD_FOUR {
+   SpriteID 42
+   Sound SOUND_ID_WALRUS
+   Gold 5
+   Food 10
+   Production 5
+   Probability 0.25
+   Icon ICON_GOOD_GLACIER_FOUR
+}
 
-# Perls
-#TERRAIN_WATER_SHELF_GOOD_ONE {
-#   SpriteID 17
-#   Sound SOUND_ID_CRABS
-#   Gold 1
-#   Food 10
-#   Production 10
-#   Probability 0.25
-#   Icon ICON_GOOD_GLACIER_ONE
-#}
+# Jellyfish # 73
+TERRAIN_WATER_SHELF_GOOD_ONE {
+  SpriteID 73
+  Sound SOUND_ID_GIANT_SQUID
+  Gold 5
+  Food 10
+  Production 0
+  Probability 0.25
+  Icon ICON_GOOD_SHELF_WATER_ONE
+}
 
-# Oil
-#TERRAIN_WATER_SHELF_GOOD_TWO {
-#   SpriteID 16
-#   Sound SOUND_ID_PEARLS
-#   Gold 1
-#   Food 10
-#   Production 10
-#   Probability 0.25
-#   Icon ICON_GOOD_GLACIER_TWO
-#}
+# Octopus # 56
+TERRAIN_WATER_SHELF_GOOD_TWO {
+  SpriteID 71
+  Sound SOUND_ID_GIANT_SQUID
+  Gold 20
+  Food 10
+  Production 5
+  Probability 0.25
+  Icon ICON_GOOD_WATER_SHELF_TWO
+}
 
-# Crabs
-#TERRAIN_WATER_SHELF_GOOD_THREE {
-#   SpriteID 6
-#   Sound SOUND_ID_CRABS
-#   Gold 1
-#   Food 10
-#   Production 10
-#   Probability 0.25
-#   Icon ICON_GOOD_GLACIER_THREE
-#}
+# Crabs # 57
+TERRAIN_WATER_SHELF_GOOD_THREE {
+  SpriteID 6
+  Sound SOUND_ID_CRABS
+  Gold 1
+  Food 10
+  Production 10
+  Probability 0.25
+  Icon ICON_GOOD_GLACIER_THREE
+}
 
-# Pearls
-#TERRAIN_WATER_SHELF_GOOD_FOUR {
-#   SpriteID 17
-#   Sound SOUND_ID_PEARLS
-#   Gold 1
-#   Food 10
-#   Production 10
-#   Probability 0.25
-#   Icon ICON_GOOD_GLACIER_FOUR
-#}
+# Turtle # 58
+TERRAIN_WATER_SHELF_GOOD_FOUR {
+  SpriteID 72
+  Sound SOUND_ID_GIANT_SQUID
+  Gold 35
+  Food 5
+  Production 10
+  Probability 0.25
+  Icon ICON_GOOD_WATER_SHELF_FOUR
+}
 
 #Silk
 #Tea2
