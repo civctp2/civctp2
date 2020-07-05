@@ -24,7 +24,7 @@
 //
 // Modifications from the original Activision code:
 //
-// - Initialized local variables. (Sep 9th 2005 Martin Gühmann)
+// - Initialized local variables. (Sep 9th 2005 Martin Gï¿½hmann)
 //
 //----------------------------------------------------------------------------
 
@@ -51,10 +51,10 @@ extern Background		*g_background;
 #include "screenmanager.h"
 extern ScreenManager	*g_screenManager;
 
-#define k_TRADE_DASH_LEN 5
+static const uint32 LINE_PATTERN_TRADE_DASH        = 0b01000001111100000111110000011111;
+static const uint32 LINE_PATTERN_TRADE_DASH_LENGTH = 10;
 
-void DrawTradeRouteSegment(aui_Surface *surf, MapPoint &pos, WORLD_DIRECTION dir,
-							uint16 route, uint16 outline)
+void DrawTradeRouteSegment(aui_Surface *surf, MapPoint &pos, WORLD_DIRECTION dir, uint16 route, uint16 outline)
 {
 	sint32		x1 = 0, y1 = 0,
 				x2 = 0, y2 = 0;
@@ -120,14 +120,10 @@ void DrawTradeRouteSegment(aui_Surface *surf, MapPoint &pos, WORLD_DIRECTION dir
 	}
 
 	RECT tempRect;
-
 	SetRect(&tempRect, left, top, right, bottom);
 
-	if (x1 >= 0 && y1 >= 0 && x2 >= 0 && y2 >= 0 &&
-		x1 < surf->Width() && y1 < surf->Height() && x2 < surf->Width() && y2 < surf->Height()) {
-
-		primitives_DrawDashedLine16(surf,x1,y1,x2,y2,route,k_TRADE_DASH_LEN);
-	}
+	primitives_ClippedAntiAliasedPatternLine16(*surf, x1, y1, x2, y2, route, LINE_PATTERN_TRADE_DASH,
+			LINE_PATTERN_TRADE_DASH_LENGTH);
 
 	if (x1==x2) {
 		x1++;
@@ -140,11 +136,8 @@ void DrawTradeRouteSegment(aui_Surface *surf, MapPoint &pos, WORLD_DIRECTION dir
 	tempRect.right++;
 	tempRect.bottom++;
 
-	if (x1 >= 0 && y1 >= 0 && x2 >= 0 && y2 >= 0 &&
-		x1 < surf->Width() && y1 < surf->Height() && x2 < surf->Width() && y2 < surf->Height()) {
-
-		primitives_DrawDashedLine16(surf,x1,y1,x2,y2,route, k_TRADE_DASH_LEN);
-	}
+	primitives_ClippedAntiAliasedPatternLine16(*surf, x1, y1, x2, y2, route, LINE_PATTERN_TRADE_DASH,
+			LINE_PATTERN_TRADE_DASH_LENGTH);
 
 	if (x1==x2) {
 		x1++;
@@ -157,18 +150,13 @@ void DrawTradeRouteSegment(aui_Surface *surf, MapPoint &pos, WORLD_DIRECTION dir
 	tempRect.right++;
 	tempRect.bottom++;
 
-	if (x1 >= 0 && y1 >= 0 && x2 >= 0 && y2 >= 0 &&
-		x1 < surf->Width() && y1 < surf->Height() && x2 < surf->Width() && y2 < surf->Height()) {
-
-		primitives_DrawDashedLine16(surf,x1,y1,x2,y2,outline, k_TRADE_DASH_LEN);
-	}
+	primitives_ClippedAntiAliasedPatternLine16(*surf, x1, y1, x2, y2, outline, LINE_PATTERN_TRADE_DASH,
+			LINE_PATTERN_TRADE_DASH_LENGTH);
 
 	g_tiledMap->AddDirtyRectToMix(tempRect);
-
 }
 
-void DrawReversedTradeRouteSegment(aui_Surface *surf, MapPoint &pos, WORLD_DIRECTION dir,
-							uint16 route, uint16 outline)
+void DrawReversedTradeRouteSegment(aui_Surface *surf, MapPoint &pos, WORLD_DIRECTION dir, uint16 route, uint16 outline)
 {
 	WORLD_DIRECTION revDir = NOWHERE;
 

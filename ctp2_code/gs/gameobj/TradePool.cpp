@@ -25,7 +25,9 @@
 #include "Events.h"
 #include "GameEventUser.h"
 #include "SelItem.h"            // g_selected_item
+#include "screenmanager.h"
 
+extern ScreenManager * g_screenManager;
 
 class aui_Surface;
 
@@ -102,14 +104,16 @@ void TradePool::Draw(aui_Surface* surface)
 
 	sint32 num = m_all_routes->Num();
 
-    for (sint32 i = 0; i < num; i++) {
+	g_screenManager->LockSurface(surface);
+	for (sint32 i = 0; i < num; i++) {
 		TradeRoute route = m_all_routes->Access(i);
 
-		if(route.SeenBy(g_selected_item->GetVisiblePlayer())){
-		    DrawTradeRoute(surface, (DynamicArray<MapPoint>*)m_all_routes->Access(i).GetPath(),
+		if (route.SeenBy(g_selected_item->GetVisiblePlayer()))
+		{
+			DrawTradeRoute(surface, (DynamicArray<MapPoint>*)m_all_routes->Access(i).GetPath(),
 			g_colorSet->GetPlayerColor(route.GetOwner()),
 			g_colorSet->GetColor(COLOR_BLACK));
-		    }
+		}
 
 #if 0
 
@@ -137,6 +141,7 @@ void TradePool::Draw(aui_Surface* surface)
 		}
 #endif
 	}
+	g_screenManager->UnlockSurface();
 }
 
 void TradePool::Serialize(CivArchive &archive)
