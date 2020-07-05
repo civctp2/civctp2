@@ -4126,11 +4126,11 @@ ORDER_RESULT ArmyData::ConvertCity(const MapPoint &point)
 		}
 		Assert(i < g_theWonderDB->NumRecords());
 		if(i >= g_theWonderDB->NumRecords()) {
+			delete so;
+		} else {
 			so->AddCivilisation(city.GetOwner());
 			so->AddRecipient(m_owner);
 			g_slicEngine->Execute(so);
-		} else {
-			delete so;
 		}
 		return ORDER_RESULT_ILLEGAL;
 	}
