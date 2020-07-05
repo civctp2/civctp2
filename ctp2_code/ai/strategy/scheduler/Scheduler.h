@@ -219,7 +219,7 @@ private:
 
 	void Rollback_Matches_For_Goal(const Goal_ptr & goal_ptr);
 
-	void Reprioritize_Goal(Goal_List::iterator &goal_iter);
+	Goal_List::iterator Reprioritize_Goal(Goal_List::iterator &goal_iter);
 
 	bool Add_Transport_Matches_For_Goal(const Goal_ptr & goal_ptr);
 
