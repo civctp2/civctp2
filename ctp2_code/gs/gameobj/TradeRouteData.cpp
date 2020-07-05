@@ -203,6 +203,7 @@ void TradeRouteData::RevealTradeRouteStateIfInVision()
 					}
 
 					g_player[p]->m_vision->RevealTradeRouteCities(route);
+					g_player[p]->m_vision->RevealTradeRouteTiles(route);
 				}
 				else
 				{

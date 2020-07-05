@@ -156,7 +156,7 @@ void NetTradeRoute::Unpacketize(uint16 id, uint8 *buf, uint16 size)
 		g_theWorld->GetCell(pnt)->AddTradeRoute(route);
 	}
 
-	if(!g_theTradePool->IsValid(route)) {
+	if(!g_theTradePool->IsValid(route)) { // should work for active an inactive routes
 		g_theTradePool->HackSetKey(((uint32)m_routeData->m_id & k_ID_KEY_MASK) + 1);
 		g_theTradePool->Insert(m_routeData);
 		m_routeData->m_sourceCity.AddTradeRoute(route, !m_newRoute);

@@ -1505,7 +1505,7 @@ void Network::SetReady(uint16 id)
 	chunkPackets.AddTail(new NetWorld());
 	n = g_theTradePool->m_all_routes->Num();
 	for(i = 0; i < n; i++) {
-		chunkPackets.AddTail(new NetTradeRoute(g_theTradePool->m_all_routes->Access(i).AccessData(), false));
+		chunkPackets.AddTail(new NetTradeRoute(g_theTradePool->m_all_routes->Access(i).AccessData(), false)); // should work for active an inactive routes
 	}
 
 	PROGRESS(90);
