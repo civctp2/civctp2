@@ -3564,9 +3564,12 @@ ORDER_RESULT ArmyData::EstablishEmbassy(const MapPoint &point)
 		so->AddCivilisation(c.GetOwner());
 		so->AddCity(c);
 		sint32 w;
-		for(w = 0; w < g_theWonderDB->NumRecords(); w++) {
-			if(g_player[c.GetOwner()]->HasWonder(w) &&
-			   !wonderutil_IsObsolete(w)) {
+		for(w = 0; w < g_theWonderDB->NumRecords(); w++)
+		{
+			if( g_player[c.GetOwner()]->HasWonder(w)
+			&&  wonderutil_Get(w, c.GetOwner())->GetCloseEmbassies()
+			&& !wonderutil_IsObsolete(w)
+			){
 				so->AddWonder(w);
 				break;
 			}
