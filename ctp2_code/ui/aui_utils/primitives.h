@@ -157,9 +157,6 @@ PRIMITIVES_ERRCODE	primitives_DrawFrame16(aui_Surface *pSurface,
 				Pattern *pPatternLeft, Pattern *pPatternTop, Pattern *pPatternRight, Pattern *pPatternBottom,
 				RECT *pDestRect);
 
-void	primitives_DrawAALine16(aui_Surface *pSurface, sint32 x1, sint32 y1, sint32 x2, sint32 y2, Pixel16 color);
-void	primitives_DrawDashedAALine16(aui_Surface *pSurface, sint32 x1, sint32 y1, sint32 x2, sint32 y2, Pixel16 color, sint32 length = 0);
-
 void	primitives_HackStencilDraw(aui_Surface *pSurface);
 
 void	primitives_BlendSurfaces( aui_Surface *pOldSurface, aui_Surface *pNewSurface, aui_Surface *pDstSurface, RECT *pDstRect, sint32 blend );
