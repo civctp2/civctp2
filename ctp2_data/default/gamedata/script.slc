@@ -1785,6 +1785,7 @@ messagebox '046OfferAccepted' {
 messagebox '047InfectedViaTrade' {
 	Text(ID_INFECTED_VIA_TRADE) ;
 	MessageType("STARVE");
+	EyePoint(city[0].location);
 }
 
 messagebox '052AlienBegunOthers' {
@@ -1939,22 +1940,26 @@ messagebox '137SlaveryCompleteAttacker' {
 messagebox '137SlaveCompleteVictim' {
 	Text(ID_SLAVE_COMPLETE_VICTIM) ;
 	MessageType("CAPTURE_SLAVES");
+	EyePoint(city[0].location);
 }
 
 messagebox '138SlaveryFailedAttacker' {
 	Text(ID_SLAVE_FAILED_ATTACKER) ;
 	MessageType("CAPTURE_SLAVES");
+	EyePoint(city[0].location);
 }
 
 messagebox '138SlaveryKilledAttacker' {
 	Text(ID_SLAVE_KILLED_ATTACKER) ;
 	MessageType("CAPTURE_SLAVES");
+	EyePoint(city[0].location);
 }
 
 messagebox '138SlaveFailedVictim' {
 	Show();
 	Text(ID_SLAVE_FAILED_VICTIM) ;
 	MessageType("CAPTURE_SLAVES");
+	EyePoint(city[0].location);
 }
 
 messagebox '139SettlerSlavedVictim' {
@@ -1965,11 +1970,13 @@ messagebox '139SettlerSlavedVictim' {
 messagebox '140ProtectedFromSlaveryVictim' {
 	Text(ID_PROTECTED_FROM_SLAVERY_VICTIM) ;
 	MessageType("CAPTURE_SLAVES");
+	EyePoint(city[0].location);
 }
 
 messagebox '141ProtectedFromSlaveryAttacker' {
 	Text(ID_PROTECTED_FROM_SLAVERY_ATTACKER) ;
 	MessageType("CAPTURE_SLAVES");
+	EyePoint(city[0].location);
 }
 
 messagebox '143EmbassyVictim' {
