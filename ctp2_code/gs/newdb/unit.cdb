@@ -670,6 +670,9 @@ Unit {
 	// set this flag for units that non-evil AI's should not attack
 	Bit Civilian
 
+	// set this flag for units that should not be made visible by GlobeSat
+	Bit InvisibleForGlobeSat = 0
+
 	Bit NoBarbarian 				// Added by tombom
 	Bit GoodyHutExcluded			// Prevents Some Units from appearing by E
 	Bit CanHarvest					// Added by E to add Gold and Shields from terrain

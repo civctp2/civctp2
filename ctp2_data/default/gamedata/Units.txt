@@ -58,6 +58,7 @@ UNIT_ABOLITIONIST {
    NoSlaves
    IsSpecialForces
    Civilian
+   InvisibleForGlobeSat
    SoundSelect1 SOUND_SELECT1_ABOLITIONIST
    SoundSelect2 SOUND_SELECT2_ABOLITIONIST
    SoundMove SOUND_MOVE_ABOLITIONIST
@@ -890,6 +891,7 @@ UNIT_CLERIC {
    DeathEffectsHappy
    IsSpecialForces
    Civilian
+   InvisibleForGlobeSat
    SoundSelect1 SOUND_SELECT1_CLERIC
    SoundSelect2 SOUND_SELECT2_CLERIC
    SoundMove SOUND_MOVE_CLERIC
@@ -966,6 +968,7 @@ UNIT_CORPORATE_BRANCH {
    Advertise
    IsSpecialForces
    Civilian
+   InvisibleForGlobeSat
    SoundSelect1 SOUND_SELECT1_CORPORATE_BRANCH
    SoundSelect2 SOUND_SELECT2_CORPORATE_BRANCH
    SoundMove SOUND_MOVE_CORPORATE_BRANCH
@@ -1140,6 +1143,7 @@ UNIT_CYBER_NINJA {
    CanBeExpelled
    CantCaptureCity
    IsSpecialForces
+   InvisibleForGlobeSat
    DefendAgainstSpies 0.5
    SoundSelect1 SOUND_SELECT1_CYBER_NINJA
    SoundSelect2 SOUND_SELECT2_CYBER_NINJA
@@ -1286,6 +1290,7 @@ UNIT_DIPLOMAT {
    DeathEffectsHappy
    IsSpecialForces
    Civilian
+   InvisibleForGlobeSat
    SoundSelect1 SOUND_SELECT1_DIPLOMAT
    SoundSelect2 SOUND_SELECT2_DIPLOMAT
    SoundMove SOUND_MOVE_DIPLOMAT
@@ -1393,6 +1398,7 @@ UNIT_ECO_RANGER {
    CantCaptureCity
    DeathEffectsHappy
    IsSpecialForces
+   InvisibleForGlobeSat
    SoundSelect1 SOUND_SELECT1_ECO_RANGER
    SoundSelect2 SOUND_SELECT2_ECO_RANGER
    SoundMove SOUND_MOVE_ECO_RANGER
@@ -1447,6 +1453,7 @@ UNIT_ECO_TERRORIST {
    CantCaptureCity
    DeathEffectsHappy
    IsSpecialForces
+   InvisibleForGlobeSat
    SoundSelect1 SOUND_SELECT1_ECOTERRORIST
    SoundSelect2 SOUND_SELECT2_ECOTERRORIST
    SoundMove SOUND_MOVE_ECOTERRORIST
@@ -1510,6 +1517,7 @@ UNIT_EMPATHIC_DIPLOMAT {
    DeathEffectsHappy
    IsSpecialForces
    Civilian
+   InvisibleForGlobeSat
    SoundSelect1 SOUND_SELECT1_EMPATHIC_DIPLOMAT
    SoundSelect2 SOUND_SELECT2_EMPATHIC_DIPLOMAT
    SoundMove SOUND_MOVE_EMPATHIC_DIPLOMAT
@@ -2031,6 +2039,7 @@ UNIT_INFECTOR {
    CantCaptureCity
    DeathEffectsHappy
    IsSpecialForces
+   InvisibleForGlobeSat
    SoundSelect1 SOUND_SELECT1_INFECTOR
    SoundSelect2 SOUND_SELECT2_INFECTOR
    SoundMove SOUND_MOVE_INFECTOR
@@ -2334,6 +2343,7 @@ UNIT_LAWYER {
    DeathEffectsHappy
    IsSpecialForces
    Civilian
+   InvisibleForGlobeSat
    SoundSelect1 SOUND_SELECT1_LAWYER
    SoundSelect2 SOUND_SELECT2_LAWYER
    SoundMove SOUND_MOVE_LAWYER
@@ -3242,6 +3252,7 @@ UNIT_SEA_ENGINEER {
    OnlyBuildOne
    IsSpecialForces
    Civilian
+   InvisibleForGlobeSat
    SoundSelect1 SOUND_SELECT1_SEA_ENGINEER
    SoundSelect2 SOUND_SELECT2_SEA_ENGINEER
    SoundMove SOUND_MOVE_SEA_ENGINEER
@@ -3300,6 +3311,7 @@ UNIT_SETTLER {
    OnlyBuildOne
    IsSpecialForces
    Civilian
+   InvisibleForGlobeSat
    SoundSelect1 SOUND_SELECT1_SETTLER
    SoundSelect2 SOUND_SELECT2_SETTLER
    SoundMove SOUND_MOVE_SETTLER
@@ -3587,6 +3599,7 @@ UNIT_SPY {
    CantCaptureCity
    DeathEffectsHappy
    IsSpecialForces
+   InvisibleForGlobeSat
    DefendAgainstSpies 0.25
    SoundSelect1 SOUND_SELECT1_SPY
    SoundSelect2 SOUND_SELECT2_SPY
@@ -4025,6 +4038,7 @@ UNIT_TELEVANGELIST {
    IsSpecialForces
    IsTelevangelist
    Civilian
+   InvisibleForGlobeSat
    SoundSelect1 SOUND_SELECT1_TELEVANGELIST
    SoundSelect2 SOUND_SELECT2_TELEVANGELIST
    SoundMove SOUND_MOVE_TELEVANGELIST
@@ -4156,6 +4170,7 @@ UNIT_URBAN_PLANNER {
    OnlyBuildOne
    IsSpecialForces
    Civilian
+   InvisibleForGlobeSat
    SoundSelect1 SOUND_SELECT1_URBAN_PLANNER
    SoundSelect2 SOUND_SELECT2_URBAN_PLANNER
    SoundMove SOUND_MOVE_URBAN_PLANNER

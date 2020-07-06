@@ -861,6 +861,11 @@ bool Army::IsCivilian(void) const
 	return GetData()->IsCivilian();
 }
 
+bool Army::IsInvisibleForGlobeSat(void) const
+{
+	return GetData()->IsInvisibleForGlobeSat();
+}
+
 bool Army::IsWounded(void) const
 {
 	return GetData()->IsWounded();

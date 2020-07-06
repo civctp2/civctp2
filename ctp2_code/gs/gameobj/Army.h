@@ -303,6 +303,7 @@ public:
 
 	bool CanTransport(void) const;
 	bool IsCivilian(void) const;
+	bool IsInvisibleForGlobeSat(void) const;
 	bool IsWounded(void) const;
 
 	bool ExecutedThisTurn() const;
