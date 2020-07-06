@@ -118,8 +118,8 @@ TITLE_CITY_BUILD_QUEUE_IS_EMPTY		"{city[0].name}"
 UNIT_COMPLETED_QUEUE_EMPTY		"A new {unit[0].name} is ready in {city[0].name}. The queue for {city[0].name} is now empty."
 BUILDING_BUILT				"{city[0].name} has built a {building[0].name}. Next item in the queue: {action[0].name}."
 BUILDING_BUILT_QUEUE_EMPTY		"{city[0].name} has built a {building[0].name}. The queue for {city[0].name} is now empty."
-WONDER_BUILT				"{city[0].name} has built {wonder[0].name#ARTICLE} {wonder[0].name}. Next item in the queue: {action[0].name}."
-WONDER_BUILT_QUEUE_EMPTY		"{city[0].name} has built {wonder[0].name#ARTICLE} {wonder[0].name}. The queue for {city[0].name} is now empty."
+WONDER_BUILT				"{city[0].name} has built {wonder[0].name#ARTICLE}{wonder[0].name}. Next item in the queue: {action[0].name}."
+WONDER_BUILT_QUEUE_EMPTY		"{city[0].name} has built {wonder[0].name#ARTICLE}{wonder[0].name}. The queue for {city[0].name} is now empty."
 ENDGAME_BUILT				"{city[0].name} has built a {action[0].name}. Next item in queue: {action[1].name}."
 ENDGAME_BUILT_QUEUE_EMPTY		"{city[0].name} has built a {action[0].name}. The queue for {city[0].name} is now empty."
 CITY_INEFFICIENCY			"The people of {city[0].name} are attempting to build items that are obsolete. We should issue them new orders."
@@ -192,17 +192,17 @@ CITY_POLLUTION_WARNING			"{player[0].sir_cap}, {city[0].name} is producing consi
 CITIES_KILLED_BY_CALAMITY		"{city[0].name} has been destroyed by flooding. We must quickly reduce pollution in our empire before more environmental disasters occur."
 
 ## Wonders ##
-WONDER_STARTED				"There is a race afoot to complete a Wonder of the World. {player[0].leader_name} of the {player[0].civ_name_plural} has begun work on {wonder[0].name#ARTICLE} {wonder[0].name}."
-WONDER_STOPPED				"Our rivals have ended their quest for glory. {player[0].leader_name} has stopped work on {wonder[0].name#ARTICLE} {wonder[0].name}."
-WONDER_ALMOST_FINISHED			"We have almost run out of time. {player[0].leader_name} is nearing completion on {wonder[0].name#ARTICLE} {wonder[0].name}."
-WONDER_COMPLETE_OWNER			"Our empire's greatness manifests itself in the work of our people!! {city[0].name} has completed {wonder[0].name#ARTICLE} {wonder[0].name}!"
-WONDER_COMPLETE_ALL			"A most troubling development has occurred. {player[0].leader_name} has completed {wonder[0].name#ARTICLE} {wonder[0].name}."
-WONDER_DESTROYED			"With the destruction of the city of {city[0].name}, {wonder[0].name#ARTICLE} {wonder[0].name} was destroyed. Our planet has lost a wonder of the world."
-NANITE_DEFUSER_ELIMINATES_NUKES		"The {player[0].civ_name_plural} have built {wonder[0].name#ARTICLE} {wonder[0].name}. It has effectively eliminated all nuclear weapons in the world."
+WONDER_STARTED				"There is a race afoot to complete a Wonder of the World. {player[0].leader_name} of the {player[0].civ_name_plural} has begun work on {wonder[0].name#ARTICLE}{wonder[0].name}."
+WONDER_STOPPED				"Our rivals have ended their quest for glory. {player[0].leader_name} has stopped work on {wonder[0].name#ARTICLE}{wonder[0].name}."
+WONDER_ALMOST_FINISHED			"We have almost run out of time. {player[0].leader_name} is nearing completion on {wonder[0].name#ARTICLE}{wonder[0].name}."
+WONDER_COMPLETE_OWNER			"Our empire's greatness manifests itself in the work of our people!! {city[0].name} has completed {wonder[0].name#ARTICLE}{wonder[0].name}!"
+WONDER_COMPLETE_ALL			"A most troubling development has occurred. {player[0].leader_name} has completed {wonder[0].name#ARTICLE}{wonder[0].name}."
+WONDER_DESTROYED			"With the destruction of the city of {city[0].name}, {wonder[0].name#ARTICLE}{wonder[0].name} was destroyed. Our planet has lost a wonder of the world."
+NANITE_DEFUSER_ELIMINATES_NUKES		"The {player[0].civ_name_plural} have built {wonder[0].name#ARTICLE}{wonder[0].name}. It has effectively eliminated all nuclear weapons in the world."
 FORBIDDEN_CITY_PEACE			"We have succeeded in building the Forbidden City."
 CITY_JOINE_YOUR_CIV			"With the passage of the Egalitarian Act, oppressed people the world over now leap at the change to join our empire. The citizens of {city[0].name} have revolted, breaking from {player[0].country_name} and joining your empire."
 NO_EMBASSIES_WONDER			"The Forbidden City prevents us from establishing an embassy with {player[0].country_name}."
-WONDER_OBSOLETE				"The discovery of {advance[0].name} has rendered {wonder[0].name#ARTICLE} {wonder[0].name} obsolete."
+WONDER_OBSOLETE				"The discovery of {advance[0].name} has rendered {wonder[0].name#ARTICLE}{wonder[0].name} obsolete."
 
 ## Ruins ##
 DISCOVERED_REMNANTS_OF_ANCIENT_CIV	"We have found the remnants of an ancient culture. Among the ruins, explorers discovered the secrets to a new advance. We now have knowledge of {advance[0].name}."
@@ -280,7 +280,7 @@ CONDUCTHIT_FAILED_ATTACK		"A troubling setback, {player[0].sir}. Our Eco-Terrori
 CONVERT_COMPLETE_VICTIM			"A foreign {unitrecord[0].name} has converted the city of {city[0].name} to a heretical faith."
 CONVERT_FAILED_VICTIM			"We caught a foreign {unitrecord[0].name} in an attempt to convert the city of {city[0].name}."
 CONVERT_FAILED_ATTACKER			"Our attempts at religious conversion have failed. The citizens of {city[0].name} have rejected our faith."
-PROTECTED_FROM_CONVERSION_BY_WONDER	"{city[0].name} is protected from conversion by {wonder[0].name#ARTICLE} {wonder[0].name}."
+PROTECTED_FROM_CONVERSION_BY_WONDER	"{city[0].name} is protected from conversion by {wonder[0].name#ARTICLE}{wonder[0].name}."
 
 ## Enslave ##
 ## Slaver Attack ##
@@ -420,9 +420,9 @@ SUE_COMPLETE_VICTIM			"We have suffered a legal setback. A foreign Lawyer has su
 SUE_FAILED_VICTIM			"A foreign Lawyer has tried in vain to sue one of our {unitrecord[0].name} units. Justice, however, has prevailed."
 SUE_COMPLETE_ATTACKER			"Our Lawyer has successfully litigated the destruction of a foreign {unitrecord[0].name}."
 SUE_FAILED_ATTACKER			"Our Lawyer has failed in its attempt to sue a foreign {unitrecord[0].name}."
-SUE_FRANCHISE_COMPLETE_VICTIM		"Foreign legal action has forced our franchise in the city of {city[0].name} to close up shop in {gold[0].value} turn(s). The franchise is worth {gold[1].value} gold."
+SUE_FRANCHISE_COMPLETE_VICTIM		"Foreign legal action has forced our franchise in the city of {city[0].name} to close up shop in {gold[0].value} turn(s). The franchise is worth {gold[1].value} gold."
 SUE_FRANCHISE_FAILED_VICTIM		"Despite the best efforts of a foreign Lawyer, our franchise in the city of {city[0].name} remains in business."
-SUE_FRANCHISE_COMPLETE_ATTACKER		"A Lawyer of ours has successfully sued the foreign franchise in our city of {city[0].name}, forcing it out of business in {gold[0].value} turn(s)."
+SUE_FRANCHISE_COMPLETE_ATTACKER		"A Lawyer of ours has successfully sued the foreign franchise in our city of {city[0].name}, forcing it out of business in {gold[0].value} turn(s)."
 SUE_FRANCHISE_FAILED_ATTACKER		"Though our Lawyer fought valiantly, the foreign franchise in {city[0].name} remains to drain even more money from our citizens."
 
 ## Hold Reception ##

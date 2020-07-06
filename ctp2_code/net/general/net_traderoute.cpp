@@ -99,7 +99,7 @@ void NetTradeRoute::Unpacketize(uint16 id, uint8 *buf, uint16 size)
 	PULLBYTETYPE(m_routeData->m_payingFor, PLAYER_INDEX);
 
 	PULLLONG(transportCost);
-	m_routeData->m_transportCost = transportCost / 10000.;
+	m_routeData->m_transportCost = static_cast<sint32>(transportCost / 10000.0);
 	PULLBYTETYPE(m_routeData->m_sourceRouteType, ROUTE_TYPE);
 	PULLLONG(m_routeData->m_sourceResource);
 

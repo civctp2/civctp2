@@ -3514,9 +3514,12 @@ ORDER_RESULT ArmyData::EstablishEmbassy(const MapPoint &point)
 		so->AddCivilisation(c.GetOwner());
 		so->AddCity(c);
 		sint32 w;
-		for(w = 0; w < g_theWonderDB->NumRecords(); w++) {
-			if((g_player[c.GetOwner()]->m_builtWonders & ((uint64)1 << w)) &&
-			   !wonderutil_IsObsolete(w)) {
+		for(w = 0; w < g_theWonderDB->NumRecords(); w++)
+		{
+			if( g_player[c.GetOwner()]->HasWonder(w)
+			&&  wonderutil_Get(w, c.GetOwner())->GetCloseEmbassies()
+			&& !wonderutil_IsObsolete(w)
+			){
 				so->AddWonder(w);
 				break;
 			}
@@ -4052,19 +4055,18 @@ ORDER_RESULT ArmyData::ConvertCity(const MapPoint &point)
 	double best_chance = 0.0;
 	double best_death_chance = 0.0;
 	sint32 best_uindex = -1;
-	sint32 i;
 
 	Unit city = GetAdjacentCity(point);
 
 	if(city.m_id  == 0)
 		return ORDER_RESULT_ILLEGAL;
 
-	if(city.GetData()->GetCityData()->IsProtectedFromConversion()) {
+	if(city.GetCityData()->IsProtectedFromConversion()) {
 		SlicObject *so = new SlicObject("361IAProtectedFromConversionByWonder");
 		so->AddCity(city);
 		sint32 i;
 		for(i = 0; i < g_theWonderDB->NumRecords(); i++) {
-			if(!g_player[city.GetOwner()]->m_builtWonders & ((uint64)1 << (uint64)i))
+			if(!g_player[city.GetOwner()]->HasWonder(i))
 				continue;
 
 			if(wonderutil_Get(i, m_owner)->GetPreventConversion()) {
@@ -4074,18 +4076,18 @@ ORDER_RESULT ArmyData::ConvertCity(const MapPoint &point)
 		}
 		Assert(i < g_theWonderDB->NumRecords());
 		if(i >= g_theWonderDB->NumRecords()) {
+			delete so;
+		} else {
 			so->AddCivilisation(city.GetOwner());
 			so->AddRecipient(m_owner);
 			g_slicEngine->Execute(so);
-		} else {
-			delete so;
 		}
 		return ORDER_RESULT_ILLEGAL;
 	}
 
 	const UnitRecord::SuccessDeathEffect *data;
 
-	for (i = m_nElements - 1; i>= 0; i--) {
+	for (sint32 i = m_nElements - 1; i>= 0; i--) {
 		if(m_array[i].CanPerformSpecialAction()&&
 		   m_array[i].CanConvertCity(city)) {
 			m_array[i].GetDBRec()->GetConvertCities(data);
@@ -4120,7 +4122,7 @@ ORDER_RESULT ArmyData::ConvertCity(const MapPoint &point)
 
 		// EMOD - if city can convert building & establishbuilding it builds
 		// that building there. Used to spread religions
-		for (i = m_nElements - 1; i>= 0; i--)
+		for (sint32 i = m_nElements - 1; i>= 0; i--)
 		{
 			const UnitRecord *urec = m_array[i].GetDBRec();
 			if(m_array[i].GetDBRec()->GetNumEstablishBuilding())
