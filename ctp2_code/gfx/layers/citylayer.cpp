@@ -51,8 +51,8 @@ extern Background		*g_background;
 #include "screenmanager.h"
 extern ScreenManager	*g_screenManager;
 
-static const uint32 LINE_PATTERN_TRADE_DASH        = 0b01000001111100000111110000011111;
-static const uint32 LINE_PATTERN_TRADE_DASH_LENGTH = 10;
+static const uint32 LINE_PATTERN_TRADE_DASH        = 0b00010000000111111100000001111111;
+static const uint32 LINE_PATTERN_TRADE_DASH_LENGTH = 14;
 
 void DrawTradeRouteSegment(aui_Surface *surf, MapPoint &pos, WORLD_DIRECTION dir, uint16 route, uint16 outline)
 {
@@ -122,8 +122,24 @@ void DrawTradeRouteSegment(aui_Surface *surf, MapPoint &pos, WORLD_DIRECTION dir
 	RECT tempRect;
 	SetRect(&tempRect, left, top, right, bottom);
 
-	primitives_ClippedAntiAliasedPatternLine16(*surf, x1, y1, x2, y2, route, LINE_PATTERN_TRADE_DASH,
+	primitives_ClippedPatternLine16(*surf, x1, y1, x2, y2, route, LINE_PATTERN_TRADE_DASH,
 			LINE_PATTERN_TRADE_DASH_LENGTH);
+
+	if (g_tiledMap->GetZoomLevel() > k_ZOOM_SMALLEST + 2) {
+		if (x1 == x2) {
+			x1++;
+			x2++;
+		} else {
+			y1++;
+			y2++;
+		}
+
+		tempRect.right++;
+		tempRect.bottom++;
+
+		primitives_ClippedPatternLine16(*surf, x1, y1, x2, y2, route, LINE_PATTERN_TRADE_DASH,
+		                                LINE_PATTERN_TRADE_DASH_LENGTH);
+	}
 
 	if (x1==x2) {
 		x1++;
@@ -136,21 +152,7 @@ void DrawTradeRouteSegment(aui_Surface *surf, MapPoint &pos, WORLD_DIRECTION dir
 	tempRect.right++;
 	tempRect.bottom++;
 
-	primitives_ClippedAntiAliasedPatternLine16(*surf, x1, y1, x2, y2, route, LINE_PATTERN_TRADE_DASH,
-			LINE_PATTERN_TRADE_DASH_LENGTH);
-
-	if (x1==x2) {
-		x1++;
-		x2++;
-	} else {
-		y1++;
-		y2++;
-	}
-
-	tempRect.right++;
-	tempRect.bottom++;
-
-	primitives_ClippedAntiAliasedPatternLine16(*surf, x1, y1, x2, y2, outline, LINE_PATTERN_TRADE_DASH,
+	primitives_ClippedPatternLine16(*surf, x1, y1, x2, y2, outline, LINE_PATTERN_TRADE_DASH,
 			LINE_PATTERN_TRADE_DASH_LENGTH);
 
 	g_tiledMap->AddDirtyRectToMix(tempRect);
