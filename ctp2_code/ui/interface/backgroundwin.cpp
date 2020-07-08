@@ -194,8 +194,8 @@ AUI_ERRCODE background_draw_handler(LPVOID bg)
 	pos.y = mouse->Y() - back->Y();
 	if (pos.y < back->Height())
 	{
-		g_tiledMap->DrawHiliteMouseTile(surface);
 		g_screenManager->LockSurface(surface);
+		g_tiledMap->DrawHiliteMouseTile(surface);
 		g_tiledMap->DrawLegalMove(surface);
 		g_screenManager->UnlockSurface();
 	}

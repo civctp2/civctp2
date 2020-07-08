@@ -28,18 +28,18 @@
 //   (L. Hirth 6/2004)
 // - Standardised ceil/min/max usage.
 // - Radar tile boarder color determined by the visual cell owner instead by
-//   the actual cell owner. - Nov 1st 2004 - Martin Gühmann
+//   the actual cell owner. - Nov 1st 2004 - Martin Gï¿½hmann
 // - Radar tile boarder is now fully determined by the visible tile onwer
 //   instead of being determined half by the actual tile owner and half by the
 //   the the visible tile owner this fixes the bug that appears after conquest
-//   of a city. - Nov. 1st 2004 - Martin Gühmann
+//   of a city. - Nov. 1st 2004 - Martin Gï¿½hmann
 // - The radar map now shows the current terrain and the current units and
 //   cities if fog of war is off, otherwise it only displays the kind of
-//   information it should display. - Dec. 25th 2004 - Martin Gühmann
+//   information it should display. - Dec. 25th 2004 - Martin Gï¿½hmann
 // - Borders on the minimap are now shown if fog of war is off or god mode
 //   is on, even if the there is no contact to that civilisation.
-//   - Mar. 4th 2005 Martin Gühmann
-// - Initialized local variables. (Sep 9th 2005 Martin Gühmann)
+//   - Mar. 4th 2005 Martin Gï¿½hmann
+// - Initialized local variables. (Sep 9th 2005 Martin Gï¿½hmann)
 // - Added political map functionality (6-Jul-2009 EPW)
 // - Added View capitol on minimap (5-Jan-10 EPW)
 //----------------------------------------------------------------------------
@@ -542,7 +542,7 @@ uint8 RadarMap::RadarTileBorder(const Player *player, const MapPoint &position)
 	if(!player->m_vision->IsExplored(position))
 		return(borderFlags);
 
-// Added by Martin Gühmann
+// Added by Martin Gï¿½hmann
 	sint32 owner = g_tiledMap->GetVisibleCellOwner(const_cast<MapPoint&>(position));
 
 	if(owner < 0)
@@ -1183,15 +1183,11 @@ void RadarMap::RenderViewRect
 		y2 = y4 = 0;
 	}
 
-	// Draw the rectangle
-	primitives_DrawLine16(surf,x1,y1,x2,y1,0xffff);
-	primitives_DrawLine16(surf,x1,y1,x1,y2,0xffff);
-	primitives_DrawLine16(surf,x3,y1,x4,y1,0xffff);
-	primitives_DrawLine16(surf,x4,y1,x4,y2,0xffff);
-	primitives_DrawLine16(surf,x1,y4,x2,y4,0xffff);
-	primitives_DrawLine16(surf,x1,y3,x1,y4,0xffff);
-	primitives_DrawLine16(surf,x3,y4,x4,y4,0xffff);
- 	primitives_DrawLine16(surf,x4,y3,x4,y4,0xffff);
+	// Draw the rectangles
+	RECT viewRect = { x1, y1, x2, y2 };
+	primitives_ClippedFrameRect16(*surf, viewRect, g_colorSet->GetColor(COLOR_WHITE));
+	viewRect = { x3, y1, x4, y2 };
+	primitives_ClippedFrameRect16(*surf, viewRect, g_colorSet->GetColor(COLOR_WHITE));
 }
 
 //---------------------------------------------------------------------------

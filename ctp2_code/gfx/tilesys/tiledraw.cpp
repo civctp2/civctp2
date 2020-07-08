@@ -566,67 +566,23 @@ void TiledMap::DrawPartiallyConstructedImprovement(aui_Surface *surface, uint32 
 
 }
 
-void TiledMap::DrawHitMask(aui_Surface *surf, const MapPoint &pos)
+void TiledMap::DrawHitMask(aui_Surface * surf, const MapPoint & pos)
 {
-	sint32		x, y;
+	extern BOOL g_killMode;
+	Pixel16 color = GetColor(g_killMode ? COLOR_RED : g_curSelectColor);
+
+	sint32 x, y;
 	maputils_MapXY2PixelXY(pos.x, pos.y, &x, &y);
 
-	if (x < 0) return;
-	y += (sint32) ((double)k_TILE_PIXEL_HEADROOM * m_scale);
-	if (y < 0) return;
+	y += m_zoomTileHeadroom[m_zoomLevel];
+	sint32 offsetX = m_zoomTilePixelWidth[m_zoomLevel] / 2;
+	sint32 offsetY = m_zoomTilePixelHeight[m_zoomLevel] / 2;
+	primitives_ClippedLine16(*surf, x, y + offsetY, x + offsetX, y, color);  // north-west
+	primitives_ClippedLine16(*surf, x + offsetX, y, x + offsetX * 2, y + offsetY, color); // north-east
+	primitives_ClippedLine16(*surf, x, y + offsetY, x + offsetX, y + offsetY * 2, color); // south-west
+	primitives_ClippedLine16(*surf, x + offsetX, y + offsetY * 2, x + offsetX * 2, y + offsetY, color); // south-east
 
-	sint32 width = GetZoomTilePixelWidth();
-	sint32 height = GetZoomTilePixelHeight();
-
-	if (x >= surf->Width()-width) return;
-	if (y >= surf->Height() - height) return;
-
-	AddDirtyToMix(x, y, width, height);
-
-	SurfaceLock lock        = SurfaceLock(surf);
-	if (!lock.IsValid()) return;
-
-	uint8 *     pSurfBase   = lock.Base();
-	sint32      surfPitch   = surf->Pitch();
-
-	sint32 num = k_TILE_GRID_HEIGHT - k_TILE_PIXEL_HEADROOM;
-	sint32 den = height;
-	sint32 tot = num;
-	sint32 row = 0;
-
-	extern BOOL g_killMode;
-	Pixel16 selectColorPixel = GetColor(g_killMode ? COLOR_RED : g_curSelectColor);
-
-	for (sint32 i = k_TILE_PIXEL_HEADROOM; i < k_TILE_GRID_HEIGHT;)
-	{
-		sint32 start = m_tileHitMask[i].start;
-		sint32 end   = m_tileHitMask[i].end;
-
-		while (tot >= den)
-		{
-			i++;
-			tot -= den;
-		}
-		tot += num;
-
-		Pixel16 * pDestPixel = (Pixel16 *)(pSurfBase + ((y+row) * surfPitch) + ((x+start) << 1));
-		*pDestPixel++ = selectColorPixel;
-		*pDestPixel = selectColorPixel;
-
-		pDestPixel += (end-start-2);
-
-		*pDestPixel++ = selectColorPixel;
-		*pDestPixel = selectColorPixel;
-
-		row++;
-	}
-
-#if 0
-	// Add a timer and a possibility to disable the blinking
-	// Move it into the calling method, so that the blinking in the scenario editor would be correct
-	g_curSelectColor = (COLOR)(g_curSelectColor + 1);
-	if (g_curSelectColor > COLOR_SELECT_2) g_curSelectColor = COLOR_SELECT_0;
-#endif
+	AddDirtyToMix(x, y, offsetX * 2 + 1, offsetY * 2 + 1);
 }
 
 void TiledMap::DrawColoredHitMask(aui_Surface *surf, const MapPoint &pos, COLOR color)
@@ -683,62 +639,26 @@ void TiledMap::DrawColoredHitMask(aui_Surface *surf, const MapPoint &pos, COLOR 
 
 void TiledMap::DrawHitMask(aui_Surface *surf, const MapPoint &pos, RECT *mapViewRect, RECT *destRect)
 {
-	sint32		x, y;
+	Pixel16 color = GetColor(g_curSelectColor);
+
+	sint32 x, y;
 	maputils_MapXY2PixelXY(pos.x, pos.y, &x, &y, mapViewRect);
+
 	x += destRect->left;
-	if (x < 0) return;
+	y += destRect->top + m_zoomTileHeadroom[m_zoomLevel];
+	sint32 offsetX = m_zoomTilePixelWidth[m_zoomLevel] / 2;
+	sint32 offsetY = m_zoomTilePixelHeight[m_zoomLevel] / 2;
+	primitives_ClippedLine16(*surf, x, y + offsetY, x + offsetX, y, color);  // north-west
+	primitives_ClippedLine16(*surf, x + offsetX, y, x + offsetX * 2, y + offsetY, color); // north-east
+	primitives_ClippedLine16(*surf, x, y + offsetY, x + offsetX, y + offsetY * 2, color); // south-west
+	primitives_ClippedLine16(*surf, x + offsetX, y + offsetY * 2, x + offsetX * 2, y + offsetY, color); // south-east
 
-	y += destRect->top + (sint32) ((double)k_TILE_PIXEL_HEADROOM * m_scale);
-	if (y < 0) return;
-
-	sint32 width = GetZoomTilePixelWidth();
-	sint32 height = GetZoomTilePixelHeight();
-
-    if (x >= surf->Width()-width) return;
-	if (y >= surf->Height() - height) return;
-
-	AddDirtyToMix(x, y, width, height);
-
-    SurfaceLock lock    = SurfaceLock(surf);
-    if (!lock.IsValid()) return;
-
-	uint8 * pSurfBase   = lock.Base();
-	sint32  surfPitch   = surf->Pitch();
-
-	sint32 num = k_TILE_GRID_HEIGHT - k_TILE_PIXEL_HEADROOM;
-	sint32 den = height;
-	sint32 tot = num;
-
-	sint32 row = 0;
-	Pixel16		selectColorPixel = GetColor(g_curSelectColor);
-
-	for (sint32 i = k_TILE_PIXEL_HEADROOM; i < k_TILE_GRID_HEIGHT;)
-	{
-#if 0
-		start = (sint32) ((double)m_tileHitMask[i].start * m_scale);
-		end   = (sint32)((double)m_tileHitMask[i].end * m_scale);
-#endif
-		sint32 start = m_tileHitMask[i].start;
-		sint32 end   = m_tileHitMask[i].end  ;
-
-		while (tot >= den)
-		{
-			i++;
-			tot -= den;
-		}
-		tot += num;
-
-		Pixel16 * pDestPixel = (Pixel16 *)(pSurfBase + ((y+row) * surfPitch) + ((x+start) << 1));
-		*pDestPixel = selectColorPixel;
-		pDestPixel += (end-start);
-		*pDestPixel = selectColorPixel;
-
-		row++;
-	}
+	AddDirtyToMix(x, y, offsetX * 2 + 1, offsetY * 2 + 1);
 
 	g_curSelectColor = (COLOR)(g_curSelectColor + 1);
-	if (g_curSelectColor > COLOR_SELECT_3)
+	if (g_curSelectColor > COLOR_SELECT_3) {
 		g_curSelectColor = COLOR_SELECT_0;
+	}
 }
 
 void TiledMap::DrawColoredHitMaskEdge(aui_Surface *surf, const MapPoint &pos, Pixel16 selectColorPixel, WORLD_DIRECTION side)
@@ -818,96 +738,144 @@ void TiledMap::DrawColoredHitMaskEdge(aui_Surface *surf, const MapPoint &pos, Pi
 
 }
 
+inline void DrawNorthEastBorder(aui_Surface & surf, sint32 centerX, sint32 centerY, sint32 offsetX, sint32 offsetY,
+		sint32 indent, Pixel16 color, uint32 borders, bool usePattern)
+{
+	if (!(borders & (1 << NORTHEAST))) {
+		return;
+	}
+
+	bool southEast = borders & (1 << SOUTHEAST);
+	bool east      = borders & (1 << EAST);
+	bool northWest = borders & (1 << NORTHWEST);
+
+	sint32 x1 = centerX + offsetX - (southEast || east ? indent * 2 : 0);
+	sint32 x2 = centerX - (northWest ? 0 : indent * 2);
+	sint32 y1 = centerY + (southEast || east ? 0 : indent);
+	sint32 y2 = centerY - offsetY + (northWest ? indent : 0);
+
+	if (usePattern) {
+		primitives_ClippedPatternLine16(surf, x1, y1, x2, y2, color, LINE_PATTERN_DASH, LINE_PATTERN_DASH_LENGTH);
+	} else {
+		primitives_ClippedLine16(surf, x1, y1, x2, y2, color);
+	}
+}
+
+inline void DrawNorthWestBorder(aui_Surface & surf, sint32 centerX, sint32 centerY, sint32 offsetX, sint32 offsetY,
+		sint32 indent, Pixel16 color, uint32 borders, bool usePattern)
+{
+	if (!(borders & (1 << NORTHWEST))) {
+		return;
+	}
+
+	bool northEast = borders & (1 << NORTHEAST);
+	bool north     = borders & (1 << NORTH);
+	bool southWest = borders & (1 << SOUTHWEST);
+
+	sint32 x1 = centerX + (northEast || north ? 0 : indent * 2);
+	sint32 x2 = centerX - offsetX + (southWest ? indent * 2 : 0);
+	sint32 y1 = centerY - offsetY + (northEast || north ? indent : 0);
+	sint32 y2 = centerY + (southWest ? 0 : indent);
+
+	if (usePattern) {
+		primitives_ClippedPatternLine16(surf, x1, y1, x2, y2, color, LINE_PATTERN_DASH, LINE_PATTERN_DASH_LENGTH);
+	} else {
+		primitives_ClippedLine16(surf, x1, y1, x2, y2, color);
+	}
+}
+
+inline void DrawSouthEastBorder(aui_Surface & surf, sint32 centerX, sint32 centerY, sint32 offsetX, sint32 offsetY,
+		sint32 indent, Pixel16 color, uint32 borders, bool usePattern)
+{
+	if (!(borders & (1 << SOUTHEAST))) {
+		return;
+	}
+
+	bool southWest = borders & (1 << SOUTHWEST);
+	bool south     = borders & (1 << SOUTH);
+	bool northEast = borders & (1 << NORTHEAST);
+
+	sint32 x1 = centerX - (southWest || south ? 0 : indent * 2);
+	sint32 x2 = centerX + offsetX - (northEast ? indent * 2 : 0);
+	sint32 y1 = centerY + offsetY - (southWest || south ? indent : 0);
+	sint32 y2 = centerY - (northEast ? 0 : indent);
+
+	if (usePattern) {
+		primitives_ClippedPatternLine16(surf, x1, y1, x2, y2, color, LINE_PATTERN_DASH, LINE_PATTERN_DASH_LENGTH);
+	} else {
+		primitives_ClippedLine16(surf, x1, y1, x2, y2, color);
+	}
+}
+
+inline void DrawSouthWestBorder(aui_Surface & surf, sint32 centerX, sint32 centerY, sint32 offsetX, sint32 offsetY,
+		sint32 indent, Pixel16 color, uint32 borders, bool usePattern)
+{
+	if (!(borders & (1 << SOUTHWEST))) {
+		return;
+	}
+
+	bool northWest = borders & (1 << NORTHWEST);
+	bool west      = borders & (1 << WEST);
+	bool southEast = borders & (1 << SOUTHEAST);
+
+	sint32 x1 = centerX - offsetX + (northWest || west ? indent * 2 : 0);
+	sint32 x2 = centerX + (southEast ? 0 : indent * 2);
+	sint32 y1 = centerY - (northWest || west ? 0 : indent);
+	sint32 y2 = centerY + offsetY - (southEast ? indent : 0);
+
+	if (usePattern) {
+		primitives_ClippedPatternLine16(surf, x1, y1, x2, y2, color, LINE_PATTERN_DASH, LINE_PATTERN_DASH_LENGTH);
+	} else {
+		primitives_ClippedLine16(surf, x1, y1, x2, y2, color);
+	}
+}
+
+inline void DrawBorders(aui_Surface & surf, sint32 centerX, sint32 centerY, sint32 offsetX, sint32 offsetY,
+		sint32 indent, Pixel16 color, uint32 borders, bool usePattern)
+{
+	DrawNorthEastBorder(surf, centerX, centerY, offsetX, offsetY, indent, color, borders, usePattern);
+	DrawNorthWestBorder(surf, centerX, centerY, offsetX, offsetY, indent, color, borders, usePattern);
+	DrawSouthEastBorder(surf, centerX, centerY, offsetX, offsetY, indent, color, borders, usePattern);
+	DrawSouthWestBorder(surf, centerX, centerY, offsetX, offsetY, indent, color, borders, usePattern);
+}
+
 /// Draw a colored border edge at a tile
 /// \param      surf                Surface to draw on
 /// \param      pos                 Tile to draw
 /// \param      selectColorPixel    Color to use
-/// \param      side                Side of the tile to draw
-/// \param      dashMode            Not used
+/// \param      borders             Borders of the tile to draw
+/// \param      dashMode            Draw dash, solid or smooth lines
 /// \remarks    This function expects that \a surf has been locked
-void TiledMap::DrawColoredBorderEdge(aui_Surface *surf, const MapPoint &pos, Pixel16 selectColorPixel, WORLD_DIRECTION side, sint32 dashMode)
+void TiledMap::DrawColoredBorderEdge(aui_Surface & surf, const MapPoint & pos, Pixel16 selectColorPixel, uint32 borders,
+		sint32 dashMode, sint32 indent)
 {
-	sint32		x, y;
-	maputils_MapXY2PixelXY(pos.x, pos.y, &x, &y);
-
-	if (x < 0) return;
-	y += (sint32) ((double)k_TILE_PIXEL_HEADROOM * m_scale);
-	if (y < 0) return;
-
-	sint32 width = GetZoomTilePixelWidth();  // changing here got rid of the border
-	sint32 height = GetZoomTilePixelHeight();
-
-	if (!surf) surf = m_surface;
-
-	if (x >= surf->Width()-width) return;
-	if (y >= surf->Height() - height) return;
-
-	AddDirtyToMix(x, y, width, height);
-
-	uint8	* surfBase = m_surfBase;
-	sint32  surfPitch = m_surfPitch;
-
-    sint32 num = k_TILE_GRID_HEIGHT - k_TILE_PIXEL_HEADROOM;
-	sint32 den = height;
-	sint32 tot = num;
-
-	sint32 row = 0;
-
-	sint32 startI, endI;
-	if(side == NORTHWEST || side == NORTHEAST) {
-		startI = k_TILE_PIXEL_HEADROOM;  // E - pixel headroom is the space on the tga above the square tileset.h has these values
-		endI = k_TILE_PIXEL_HEADROOM + (k_TILE_GRID_HEIGHT / 2);
-	} else {
-		startI = k_TILE_PIXEL_HEADROOM + (k_TILE_GRID_HEIGHT / 2);
-		endI = k_TILE_GRID_HEIGHT;
+	if (!borders) {
+		return;
 	}
 
-	bool west = (side == NORTHWEST) || (side == SOUTHWEST);
-	bool north = (side == NORTHWEST) || (side == NORTHEAST);
+	sint32 x1, y1;
+	maputils_MapXY2PixelXY(pos.x, pos.y, &x1, &y1);
+	y1 += m_zoomTileHeadroom[m_zoomLevel];
 
-	for (sint32 i = k_TILE_PIXEL_HEADROOM; i < k_TILE_GRID_HEIGHT;)
+	sint32 offsetX = m_zoomTilePixelWidth[m_zoomLevel] / 2;
+	sint32 offsetY = m_zoomTilePixelHeight[m_zoomLevel] / 2;
+	sint32 centerX = x1 + offsetX;
+	sint32 centerY = y1 + offsetY;
+	AddDirtyToMix(x1, y1, offsetX * 2 + 1, offsetY * 2 + 1);
+
+	if (dashMode == k_BORDER_SOLID) {
+		DrawBorders(surf, centerX, centerY, offsetX, offsetY, indent, selectColorPixel, borders, false);
+	}
+	else if (dashMode == k_BORDER_SMOOTH)
 	{
-		if(north && i >= (k_TILE_PIXEL_HEADROOM + k_TILE_GRID_HEIGHT) / 2)
-			break;
-
-#if 0
-		start = (sint32) ((double)m_tileHitMask[i].start * m_scale);
-		end = (sint32)((double)m_tileHitMask[i].end * m_scale);
-#endif
-		sint32 start = m_tileHitMask[i].start;
-		sint32 end   = m_tileHitMask[i].end  ;
-
-		while (tot >= den) {
-			i++;
-			tot -= den;
+		DrawBorders(surf, centerX, centerY, offsetX, offsetY, indent, selectColorPixel, borders, false);
+		if (m_zoomLevel >= k_ZOOM_LARGEST - 2) {
+			DrawBorders(surf, centerX, centerY, offsetX, offsetY, indent + 1, selectColorPixel, borders, false);
 		}
-		tot += num;
-
-		if(!north && i < (k_TILE_PIXEL_HEADROOM + k_TILE_GRID_HEIGHT) / 2) {
-			row++;
-			continue;
-		}
-
-		if(dashMode && (row & 0x2)) {
-			row++;
-			continue;
-		}
-
-		Pixel16 * pDestPixel = (Pixel16 *)(surfBase + ((y+row) * surfPitch) + ((x+start) << 1)); //EMOD change here
-		if(west) {
-			*pDestPixel = selectColorPixel;
-			*(pDestPixel + 1) = selectColorPixel;
-			*(pDestPixel + 2) = selectColorPixel;
-		}
-		pDestPixel += (end-start);
-
-		if(!west) {
-			*pDestPixel = 0; selectColorPixel;
-			*(pDestPixel - 1) = selectColorPixel;
-			*(pDestPixel - 2) = selectColorPixel;
-		}
-
-		row++;
+	}
+	else if (dashMode == k_BORDER_DASHED)
+	{
+		DrawBorders(surf, centerX, centerY, offsetX, offsetY, indent, selectColorPixel, borders, true);
 	}
 }
 
@@ -4614,217 +4582,57 @@ bool TiledMap::HasVisibleCity(const MapPoint &pos) const
 	return g_theWorld->GetCell(pos)->GetCity().IsValid();
 }
 
-void TiledMap::DrawNationalBorders(aui_Surface *surface, MapPoint &pos)
+void TiledMap::DrawNationalBorders(aui_Surface & surf, const MapPoint & pos)
 {
 	sint32 myOwner = GetVisibleCellOwner(pos);
-	if (myOwner < 0)
+	if (myOwner < 0) {
 		return;
+	}
 
-	Player *visP = g_player[g_selected_item->GetVisiblePlayer()];
-	if (visP == NULL)
+	Player *visiblePlayer = g_player[g_selected_item->GetVisiblePlayer()];
+	if (visiblePlayer == NULL) {
 		return;
+	}
+
+	static const WORLD_DIRECTION NEIGHBOR_DIRECTIONS[] = {
+			NORTH, NORTHEAST, EAST, NORTHWEST, SOUTHEAST, WEST, SOUTHWEST, SOUTH
+	};
+
+	if (g_theProfileDB->GetShowPoliticalBorders())
+	{
+		uint32 borders = 0;
+
+		for (auto neighborDirection : NEIGHBOR_DIRECTIONS)
+		{
+			MapPoint neighborPos;
+			if (pos.GetNeighborPosition(neighborDirection, neighborPos)) {
+				sint32 neighborOwner = GetVisibleCellOwner(neighborPos);
+				if ((neighborOwner != myOwner) && (visiblePlayer->HasSeen(myOwner) || g_fog_toggle || g_god)) {
+					borders |= (1 << neighborDirection);
+				}
+			}
+		}
+		sint32 borderMode = g_theProfileDB->IsSmoothBorders() ? k_BORDER_SMOOTH : k_BORDER_SOLID;
+		DrawColoredBorderEdge(surf, pos, g_colorSet->GetPlayerColor(myOwner), borders, borderMode, 2);
+	}
 
 	uint32 myCityOwner = GetVisibleCityOwner(pos);
-	Pixel16 color = g_colorSet->GetPlayerColor(myOwner);
-	Pixel16 white = GetColor(COLOR_WHITE);
+	Unit   myCity(myCityOwner);
+	bool   isCityVisible = myCity.IsValid() ? (myCity.GetVisibility() & (1 << visiblePlayer->m_owner)) : false;
 
-	Unit myCity(myCityOwner);
-	UnitData *myCityData = myCity.IsValid() ? myCity.AccessData() : NULL;
+	if (g_theProfileDB->IsShowCityInfluence() && isCityVisible) {
+		uint32 borders = 0;
 
-	//emod
-	sint32		x, y;
-	maputils_MapXY2PixelXY(pos.x, pos.y, &x, &y);
-	if ((x < 0) || (y < 0))
-		return;
-
-	TileSet *   tileSet     = GetTileSet();
-	POINT       iconDim     = tileSet->GetMapIconDimensions(MAPICON_POLBORDERNW);
-	RECT        iconRect;
-	iconRect.left   = x;
-	iconRect.right  = iconRect.left + iconDim.x + 1;
-	iconRect.top    = y;
-	iconRect.bottom = iconRect.top + iconDim.y + 1;
-
-	sint32  maxWidth    = surface ? surface->Width() : m_surface->Width();
-	sint32  maxHeight   = surface ? surface->Height() : m_surface->Height();
-
-	if ((iconRect.right >= maxWidth) || (iconRect.bottom >= maxHeight))
-		return;
-	//add city wall icons?
-	//bool HasCityWall = myCity.hasCityWall
-	//add Great Wall Icon?
-	// bool PlayerHasGreatWall = g_player->GethasGreatWall future function
-
-	//end emod
-
-	Pixel16 *   borderIcon;
-	uint32      neighborCityOwner;
-	sint32      neighborOwner;
-	MapPoint    neighbor;
-	if(pos.GetNeighborPosition(NORTHWEST, neighbor)) {
-		neighborOwner = GetVisibleCellOwner(neighbor);
-		if(neighborOwner != myOwner
-		&&(visP->HasSeen(myOwner)
-		|| g_fog_toggle // The sense of fog of and god mode is to see something.
-		|| g_god)
-		&& g_theProfileDB->GetShowPoliticalBorders()
-		){
-			if(!g_theProfileDB->IsSmoothBorders())
-			{
-				DrawColoredBorderEdge(surface, pos, color, NORTHWEST, k_BORDER_SOLID); //EMOD- k_BORDER_SOLID defined in tiledmap.h as 0 and dashed as 1 its a bool?
-			}
-			else
-			{
-				// could change this to the same DrawColorizedOverlay but use different icons for NW etc.
-				// create a new function like drawcityicons but requires a pos and converts a pos to pixels THEN place Icon.
-				// emod
-				//X = k_TILE_PIXEL_HEADROOM + (k_TILE_GRID_HEIGHT / 2); -> 24 + 72/2 = 60 FROM DRAWCOLOREDBORDEREDGE
-				iconRect.top    = y + 18;
-				borderIcon = tileSet->GetMapIconData(MAPICON_POLBORDERNW);
-				Assert(borderIcon);
-				if (!borderIcon) return;
-
-				//DrawDitheredOverlay(NULL, borderIcon,iconRect.left, iconRect.top,color);
-				//AddDirtyToMap(x, y, k_TILE_PIXEL_WIDTH, k_TILE_GRID_HEIGHT);
-				DrawColorizedOverlay(borderIcon, surface, iconRect.left, iconRect.top, color);
-				AddDirtyRectToMix(iconRect);
-
-				//if ((PlayerHasGreatWall) && (IsLand(pos)) {
-					//iconRect.top    = y + 20;  //y
-					//GWIcon = tileSet->GetMapIconData(MAPICON_GREATWALLNW);
-					//Assert(borderIcon);
-					//if (!borderIcon) return;
-					//DrawColorizedOverlay(GWIcon, surface, iconRect.left, iconRect.top, color);
-					//AddDirtyRectToMix(iconRect);
-				//}
-			}
-			//end emod
-		}
-
-		neighborCityOwner = GetVisibleCityOwner(neighbor);
-		if(neighborCityOwner != myCityOwner) {
-			if(myCityData &&
-			   myCityData->GetVisibility() & (1 << visP->m_owner) &&
-			   g_theProfileDB->IsShowCityInfluence()) {
-				DrawColoredBorderEdge(surface, pos, white, NORTHWEST, k_BORDER_DASHED);
-				//if ((PlayerHasGreatWall) && (IsLand(pos)) {
-					//iconRect.top    = y + 20;  //y
-					//CWIcon = tileSet->GetMapIconData(MAPICON_CITYWALLNW);
-					//Assert(CWIcon);
-					//if (!CWIcon) return;
-					//DrawColorizedOverlay(CWIcon, surface, iconRect.left, iconRect.top, color);
-					//AddDirtyRectToMix(iconRect);
-				//}
+		for (auto neighborDirection : NEIGHBOR_DIRECTIONS) {
+			MapPoint neighborPos;
+			if (pos.GetNeighborPosition(neighborDirection, neighborPos)) {
+				uint32 neighborCityOwner = GetVisibleCityOwner(neighborPos);
+				if (neighborCityOwner != myCityOwner) {
+					borders |= (1 << neighborDirection);
+				}
 			}
 		}
-	}
-
-	if(pos.GetNeighborPosition(SOUTHWEST, neighbor)) {
-		neighborOwner = GetVisibleCellOwner(neighbor);
-		if(neighborOwner != myOwner
-		&&(visP->HasSeen(myOwner)
-		|| g_fog_toggle
-		|| g_god)
-		&& g_theProfileDB->GetShowPoliticalBorders()
-		){
-			if(!g_theProfileDB->IsSmoothBorders())
-			{
-				DrawColoredBorderEdge(surface, pos, color, SOUTHWEST, k_BORDER_SOLID); //EMOD- k_BORDER_SOLID defined in tiledmap.h as 0 and dashed as 1 its a bool?
-			}
-			else
-			{
-				//emod
-				iconRect.top    = y + 46;  //y
-				borderIcon = tileSet->GetMapIconData(MAPICON_POLBORDERSW);
-				Assert(borderIcon);
-				if (!borderIcon) return;
-				DrawColorizedOverlay(borderIcon, surface, iconRect.left, iconRect.top, color);
-				AddDirtyRectToMix(iconRect);
-				//end emod
-			}
-		}
-		neighborCityOwner = GetVisibleCityOwner(neighbor);
-		if(neighborCityOwner != myCityOwner) {
-			if(myCityData &&
-			   myCityData->GetVisibility() & (1 << visP->m_owner) &&
-			   g_theProfileDB->IsShowCityInfluence()) {
-				DrawColoredBorderEdge(surface, pos, white, SOUTHWEST, k_BORDER_DASHED);
-			}
-		}
-	}
-
-	if(pos.GetNeighborPosition(NORTHEAST, neighbor)) {
-		neighborOwner = GetVisibleCellOwner(neighbor);
-		if(neighborOwner != myOwner
-		&&(visP->HasSeen(myOwner)
-		|| g_fog_toggle
-		|| g_god)
-		&& g_theProfileDB->GetShowPoliticalBorders()
-		){
-
-			if(!g_theProfileDB->IsSmoothBorders())
-			{
-				DrawColoredBorderEdge(surface, pos, color, NORTHEAST, k_BORDER_SOLID);  //original
-			}
-			else
-			{
-				//emod
-				iconRect.left   = x + 44;
-				iconRect.top    = y + 22;  //y
-
-				borderIcon = tileSet->GetMapIconData(MAPICON_POLBORDERNE);
-				Assert(borderIcon);
-				if (!borderIcon) return;
-				DrawColorizedOverlay(borderIcon, surface, iconRect.left, iconRect.top, color);
-				AddDirtyRectToMix(iconRect);
-				//end emod
-			}
-		}
-		neighborCityOwner = GetVisibleCityOwner(neighbor);
-		if(neighborCityOwner != myCityOwner) {
-			if(myCityData &&
-			   myCityData->GetVisibility() & (1 << visP->m_owner) &&
-			   g_theProfileDB->IsShowCityInfluence()) {
-				DrawColoredBorderEdge(surface, pos, white, NORTHEAST, k_BORDER_DASHED);
-			}
-		}
-	}
-
-	if(pos.GetNeighborPosition(SOUTHEAST, neighbor)) {
-		neighborOwner = GetVisibleCellOwner(neighbor);
-		if(neighborOwner != myOwner
-		&&(visP->HasSeen(myOwner)
-		|| g_fog_toggle
-		|| g_god)
-		&& g_theProfileDB->GetShowPoliticalBorders()
-		){
-
-			if(!g_theProfileDB->IsSmoothBorders())
-			{
-				DrawColoredBorderEdge(surface, pos, color, SOUTHEAST, k_BORDER_SOLID); //original
-			}
-			else
-			{
-				//emod
-				iconRect.left   = x + 46;
-				iconRect.top    = y + 48;  //y
-
-				borderIcon = tileSet->GetMapIconData(MAPICON_POLBORDERSE);
-				Assert(borderIcon);
-				if (!borderIcon) return;
-				DrawColorizedOverlay(borderIcon, surface, iconRect.left, iconRect.top, color);
-				AddDirtyRectToMix(iconRect);
-				//end emod
-			}
-		}
-		neighborCityOwner = GetVisibleCityOwner(neighbor);
-		if(neighborCityOwner != myCityOwner) {
-			if(myCityData &&
-			   myCityData->GetVisibility() & (1 << visP->m_owner) &&
-			   g_theProfileDB->IsShowCityInfluence()) {
-				DrawColoredBorderEdge(surface, pos, white, SOUTHEAST, k_BORDER_DASHED);
-			}
-		}
+		DrawColoredBorderEdge(surf, pos, GetColor(COLOR_WHITE), borders, k_BORDER_DASHED, 0);
 	}
 }
 

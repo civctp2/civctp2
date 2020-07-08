@@ -59,6 +59,7 @@ struct  TILEHITMASK;
 
 #define k_BORDER_SOLID              0
 #define k_BORDER_DASHED             1
+#define k_BORDER_SMOOTH             2
 
 #define k_FOW_COLOR                 0x0000
 #define k_FOW_BLEND_VALUE           16
@@ -184,7 +185,6 @@ public:
 	void			DrawHitMask(aui_Surface *surf, const MapPoint &pos);
 	void			DrawColoredHitMask(aui_Surface *surf, const MapPoint &pos, COLOR color);
 	void			DrawColoredHitMaskEdge(aui_Surface *surf, const MapPoint &pos, Pixel16 color, WORLD_DIRECTION d);
-	void			DrawColoredBorderEdge(aui_Surface *surf, const MapPoint &pos, Pixel16 color, WORLD_DIRECTION d, sint32 dashMode);
 	void			DrawHitMask(aui_Surface *surf, const MapPoint &pos, RECT *mapViewRect, RECT *destRect);
 	void			SetHiliteMouseTile(MapPoint &pos);
 	void			DrawHiliteMouseTile(aui_Surface *destSurf);
@@ -459,11 +459,6 @@ public:
 	uint32 GetVisibleCityOwner  (const MapPoint &pos) const;
 	uint32 GetVisibleTerrainType(const MapPoint &pos) const;
 	bool   HasVisibleCity       (const MapPoint &pos) const;
-	void DrawNationalBorders(aui_Surface *surface, MapPoint &pos);
-
-
-
-
 
 	void SetZoomLevel(sint32 level);
 
@@ -523,6 +518,10 @@ protected:
 
 	void     DrawClippedColorizedOverlay(Pixel16 * data, aui_Surface & surface, sint32 x, sint32 y, Pixel16 color,
 				uint8 alpha);
+
+	void     DrawNationalBorders(aui_Surface & surf, const MapPoint & pos);
+	void     DrawColoredBorderEdge(aui_Surface & surf, const MapPoint & pos, Pixel16 color, uint32 borders,
+				sint32 dashMode, sint32 indent);
 
 	sint32	m_zoomLevel;
 	sint32	m_zoomTilePixelWidth[k_MAX_ZOOM_LEVELS];

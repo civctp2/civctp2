@@ -3896,14 +3896,14 @@ sint32 TiledMap::RedrawHat(
 		if (m_localVision->IsExplored(nw))
         {
 
-			DrawNationalBorders(surface, nw);
+			DrawNationalBorders(surface ? *surface : *m_surface, nw);
 		}
 	}
 
 	if(tempPos.GetNeighborPosition(NORTHEAST, ne)) {
 		if (m_localVision->IsExplored(ne))
         {
-			DrawNationalBorders(surface, ne);
+			DrawNationalBorders(surface ? *surface : *m_surface, ne);
 		}
 	}
 
@@ -3940,7 +3940,7 @@ sint32 TiledMap::RedrawBorders(
 		return 0;
 	}
 	//DrawBorderIcon(surface, tempPos);  //emod?
-	DrawNationalBorders(surface, tempPos);
+	DrawNationalBorders(surface ? *surface : *m_surface, tempPos);
 
 	return 0;
 }
