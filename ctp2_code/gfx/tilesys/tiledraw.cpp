@@ -863,15 +863,14 @@ void TiledMap::DrawColoredBorderEdge(aui_Surface & surf, const MapPoint & pos, P
 	sint32 centerY = y1 + offsetY;
 	AddDirtyToMix(x1, y1, offsetX * 2 + 1, offsetY * 2 + 1);
 
+	Pixel16 darkColor = pixelutils_Shadow16(selectColorPixel, pixelutils_GetShadow16RGBMask());
 	if (dashMode == k_BORDER_SOLID) {
 		DrawBorders(surf, centerX, centerY, offsetX, offsetY, indent, selectColorPixel, borders, false);
 	}
 	else if (dashMode == k_BORDER_SMOOTH)
 	{
 		DrawBorders(surf, centerX, centerY, offsetX, offsetY, indent, selectColorPixel, borders, false);
-		if (m_zoomLevel >= k_ZOOM_LARGEST - 2) {
-			DrawBorders(surf, centerX, centerY, offsetX, offsetY, indent + 1, selectColorPixel, borders, false);
-		}
+		DrawBorders(surf, centerX, centerY, offsetX, offsetY, indent + 1, darkColor, borders, false);
 	}
 	else if (dashMode == k_BORDER_DASHED)
 	{
@@ -4598,6 +4597,8 @@ void TiledMap::DrawNationalBorders(aui_Surface & surf, const MapPoint & pos)
 			NORTH, NORTHEAST, EAST, NORTHWEST, SOUTHEAST, WEST, SOUTHWEST, SOUTH
 	};
 
+	bool fog = m_localVision && m_localVision->IsExplored(pos) && !m_localVision->IsVisible(pos);
+
 	if (g_theProfileDB->GetShowPoliticalBorders())
 	{
 		uint32 borders = 0;
@@ -4613,7 +4614,7 @@ void TiledMap::DrawNationalBorders(aui_Surface & surf, const MapPoint & pos)
 			}
 		}
 		sint32 borderMode = g_theProfileDB->IsSmoothBorders() ? k_BORDER_SMOOTH : k_BORDER_SOLID;
-		DrawColoredBorderEdge(surf, pos, g_colorSet->GetPlayerColor(myOwner), borders, borderMode, 2);
+		DrawColoredBorderEdge(surf, pos, GetPlayerColor(myOwner, fog), borders, borderMode, 2);
 	}
 
 	uint32 myCityOwner = GetVisibleCityOwner(pos);
@@ -4632,7 +4633,7 @@ void TiledMap::DrawNationalBorders(aui_Surface & surf, const MapPoint & pos)
 				}
 			}
 		}
-		DrawColoredBorderEdge(surf, pos, GetColor(COLOR_WHITE), borders, k_BORDER_DASHED, 0);
+		DrawColoredBorderEdge(surf, pos, GetColor(COLOR_WHITE, fog), borders, k_BORDER_DASHED, 0);
 	}
 }
 
