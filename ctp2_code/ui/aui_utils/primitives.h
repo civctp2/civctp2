@@ -69,6 +69,12 @@ struct fRect
 #include "c3ui.h"
 extern C3UI			*g_c3ui;
 
+enum LINE_FLAGS {
+	LF_NONE         = 0x00,
+	LF_ANTI_ALIASED = 0x01,
+	LF_SHADOW       = 0x02
+};
+
 // All kind of patterns may be defined and used; the highest 1 is an indicator to roll-over the pattern
 //   Note: for efficiency may the desired pattern be repeated in the 32-bit pattern
 static const uint32 LINE_PATTERN_DOT         = 0b00010011001100110011001100110011;
@@ -155,29 +161,40 @@ void primitives_ClippedShadowRect16(aui_Surface & surf, const RECT & rect);
 
 // Clipped lines primitives
 void primitives_BaseClippedDrawLine16(aui_Surface & surf, sint32 x1, sint32 y1, sint32 x2, sint32 y2, Pixel16 color,
-		bool antiAliased, uint32 fullPattern, uint32 patternLength); // Do not use directly; use below signatures
+		LINE_FLAGS lineFlags , uint32 fullPattern, uint32 patternLength); // Do not use directly; use below signatures
 
 inline void primitives_ClippedLine16(aui_Surface & surf, sint32 x1, sint32 y1, sint32 x2, sint32 y2, Pixel16 color)
 {
-	primitives_BaseClippedDrawLine16(surf, x1, y1, x2, y2, color, false, 0, 0);
+	primitives_BaseClippedDrawLine16(surf, x1, y1, x2, y2, color, LF_NONE, 0, 0);
 }
 
 inline void primitives_ClippedPatternLine16(aui_Surface & surf, sint32 x1, sint32 y1, sint32 x2, sint32 y2, Pixel16 color,
 		uint32 fullPattern, uint32 patternLength)
 {
-	primitives_BaseClippedDrawLine16(surf, x1, y1, x2, y2, color, false, fullPattern, patternLength);
+	primitives_BaseClippedDrawLine16(surf, x1, y1, x2, y2, color, LF_NONE, fullPattern, patternLength);
+}
+
+inline void primitives_ClippedShadowLine16(aui_Surface & surf, sint32 x1, sint32 y1, sint32 x2, sint32 y2)
+{
+	primitives_BaseClippedDrawLine16(surf, x1, y1, x2, y2, 0, LF_SHADOW, 0, 0);
+}
+
+inline void primitives_ClippedShadowPatternLine16(aui_Surface & surf, sint32 x1, sint32 y1, sint32 x2, sint32 y2,
+		uint32 fullPattern, uint32 patternLength)
+{
+	primitives_BaseClippedDrawLine16(surf, x1, y1, x2, y2, 0, LF_SHADOW, fullPattern, patternLength);
 }
 
 inline void primitives_ClippedAntiAliasedLine16(aui_Surface & surf, sint32 x1, sint32 y1, sint32 x2, sint32 y2,
 		Pixel16 color)
 {
-	primitives_BaseClippedDrawLine16(surf, x1, y1, x2, y2, color, true, 0, 0);
+	primitives_BaseClippedDrawLine16(surf, x1, y1, x2, y2, color, LF_ANTI_ALIASED, 0, 0);
 }
 
 inline void primitives_ClippedAntiAliasedPatternLine16(aui_Surface & surf, sint32 x1, sint32 y1, sint32 x2, sint32 y2,
 		Pixel16 color, uint32 fullPattern, uint32 patternLength)
 {
-	primitives_BaseClippedDrawLine16(surf, x1, y1, x2, y2, color, true, fullPattern, patternLength);
+	primitives_BaseClippedDrawLine16(surf, x1, y1, x2, y2, color, LF_ANTI_ALIASED, fullPattern, patternLength);
 }
 
 #endif
