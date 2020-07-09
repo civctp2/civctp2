@@ -641,9 +641,6 @@ void Scheduler::Match_Resources(const bool move_armies)
 	Goal_List::iterator goal_iter = m_goals.begin();
 	while(goal_iter != m_goals.end())
 	{
-#if defined(_DEBUG)
-		loopCount++;
-#endif
 		if(committed_agents >= total_agents)
 		{
 			Assert(committed_agents == total_agents);
@@ -693,7 +690,8 @@ void Scheduler::Match_Resources(const bool move_armies)
 			goal_ptr->Rollback_All_Agents(); // Just roll back but don't report to the build list
 
 			// Actually should be checked in the next cycle, but there still seems to be something wrong.
-			m_goals.erase(goal_iter);
+			goal_iter = m_goals.erase(goal_iter);
+
 
 			/*
 			// Move to the end
@@ -726,7 +724,7 @@ void Scheduler::Match_Resources(const bool move_armies)
 					//or use a decrement
 					// Sort the goal list, move iterator increment herein back
 					goal_ptr->Rollback_All_Agents(); // Just roll back but don't report to the build list
-					Reprioritize_Goal(goal_iter);
+					goal_iter = Reprioritize_Goal(goal_iter);
 					continue;
 				}
 			}
@@ -750,6 +748,9 @@ void Scheduler::Match_Resources(const bool move_armies)
 
 				Rollback_Matches_For_Goal(goal_ptr);
 				goal_iter++;
+#if defined(_DEBUG)
+				loopCount++;
+#endif
 				continue;
 			}
 		}
@@ -762,6 +763,9 @@ void Scheduler::Match_Resources(const bool move_armies)
 					("\t\tGOAL (goal: %x) -- No agents were committed, maybe next time. Continuing...\n",
 						goal_ptr));
 			goal_iter++;
+#if defined(_DEBUG)
+			loopCount++;
+#endif
 			continue;
 		}
 
@@ -871,6 +875,9 @@ void Scheduler::Match_Resources(const bool move_armies)
 			}
 		}
 		goal_iter++;
+#if defined(_DEBUG)
+		loopCount++;
+#endif
 	}
 
 #if defined(_DEBUG)
@@ -1747,12 +1754,13 @@ bool Scheduler::Add_Transport_Matches_For_Goal
 	return match_added;
 }
 
-void Scheduler::Reprioritize_Goal(Goal_List::iterator &goal_iter)
+Scheduler::Goal_List::iterator Scheduler::Reprioritize_Goal(Goal_List::iterator &goal_iter)
 {
-	Goal_List::iterator goal_ptr_iter = goal_iter;
+	Goal_List::iterator goal_ptr_iter = goal_iter, return_iter;
 	Utility matchValue = static_cast<Goal_ptr>(*goal_ptr_iter)->Get_Matching_Value();
 
 	++goal_ptr_iter;
+	return_iter = goal_ptr_iter;
 
 	Goal_List tmp_list;
 	tmp_list.splice(tmp_list.begin(), m_goals, goal_iter);
@@ -1768,8 +1776,15 @@ void Scheduler::Reprioritize_Goal(Goal_List::iterator &goal_iter)
 		else
 		{
 			++goal_ptr_iter;
+			if (goal_ptr_iter == m_goals.end())
+			{
+				m_goals.splice(goal_ptr_iter, tmp_list);
+				break;
+			}
 		}
 	}
+
+	return return_iter;
 }
 
 GOAL_TYPE Scheduler::GetMaxEvalExec(const StrategyRecord::GoalElement *goal_element_ptr, sint16 & max_eval, sint16 & max_exec)
