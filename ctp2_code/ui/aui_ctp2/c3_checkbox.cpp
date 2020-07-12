@@ -130,10 +130,10 @@ AUI_ERRCODE c3_CheckBox::DrawThis(
 		if (GetState())
 		{
 			uint32 off = 5;
-			primitives_ClippedAntiAliasedLine16(*surface, checkrect.left + off, checkrect.top + off,
-					checkrect.right - off, checkrect.bottom - off, g_colorSet->GetColor(COLOR_RED));
-			primitives_ClippedAntiAliasedLine16(*surface, checkrect.left + off, checkrect.bottom - off,
-					checkrect.right - off, checkrect.top + off, g_colorSet->GetColor(COLOR_RED));
+			primitives_ClippedLine16(*surface, checkrect.left + off, checkrect.top + off,checkrect.right - off,
+					checkrect.bottom - off, g_colorSet->GetColor(COLOR_RED), LF_ANTI_ALIASED);
+			primitives_ClippedLine16(*surface, checkrect.left + off, checkrect.bottom - off,checkrect.right - off,
+					checkrect.top + off, g_colorSet->GetColor(COLOR_RED), LF_ANTI_ALIASED);
 		}
 
 		RECT textrect = {m_height + bordWidth, 0, m_width - bordWidth - m_height, m_height};

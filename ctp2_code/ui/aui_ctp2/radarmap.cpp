@@ -28,18 +28,18 @@
 //   (L. Hirth 6/2004)
 // - Standardised ceil/min/max usage.
 // - Radar tile boarder color determined by the visual cell owner instead by
-//   the actual cell owner. - Nov 1st 2004 - Martin G�hmann
+//   the actual cell owner. - Nov 1st 2004 - Martin Gühmann
 // - Radar tile boarder is now fully determined by the visible tile onwer
 //   instead of being determined half by the actual tile owner and half by the
 //   the the visible tile owner this fixes the bug that appears after conquest
-//   of a city. - Nov. 1st 2004 - Martin G�hmann
+//   of a city. - Nov. 1st 2004 - Martin Gühmann
 // - The radar map now shows the current terrain and the current units and
 //   cities if fog of war is off, otherwise it only displays the kind of
-//   information it should display. - Dec. 25th 2004 - Martin G�hmann
+//   information it should display. - Dec. 25th 2004 - Martin Gühmann
 // - Borders on the minimap are now shown if fog of war is off or god mode
 //   is on, even if the there is no contact to that civilisation.
-//   - Mar. 4th 2005 Martin G�hmann
-// - Initialized local variables. (Sep 9th 2005 Martin G�hmann)
+//   - Mar. 4th 2005 Martin Gühmann
+// - Initialized local variables. (Sep 9th 2005 Martin Gühmann)
 // - Added political map functionality (6-Jul-2009 EPW)
 // - Added View capitol on minimap (5-Jan-10 EPW)
 //----------------------------------------------------------------------------
@@ -542,7 +542,7 @@ uint8 RadarMap::RadarTileBorder(const Player *player, const MapPoint &position)
 	if(!player->m_vision->IsExplored(position))
 		return(borderFlags);
 
-// Added by Martin G�hmann
+// Added by Martin Gühmann
 	sint32 owner = g_tiledMap->GetVisibleCellOwner(const_cast<MapPoint&>(position));
 
 	if(owner < 0)

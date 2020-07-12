@@ -296,7 +296,7 @@ void TiledMap::DrawLegalMove
 				x2 += xoffset;
 				y2 += yoffset;
 
-				primitives_ClippedAntiAliasedLine16(*pSurface, x1, y1, x2, y2, g_colorSet->GetColor(lineColor));
+				primitives_ClippedLine16(*pSurface, x1, y1, x2, y2, g_colorSet->GetColor(lineColor), LF_ANTI_ALIASED);
 
 				AddDirtyTileToMix(prevPos);
 				AddDirtyTileToMix(currPos);
@@ -410,8 +410,8 @@ void TiledMap::DrawLegalMove
 		x2 += xoffset;
 		y2 += yoffset;
 
-		primitives_ClippedAntiAliasedPatternLine16(*pSurface, x1, y1, x2, y2,
-				g_colorSet->GetColor(k_TURN_COLOR_PROJECTILE), LINE_PATTERN_DOT, LINE_PATTERN_DOT_LENGTH);
+		primitives_ClippedPatternLine16(*pSurface, x1, y1, x2, y2, g_colorSet->GetColor(k_TURN_COLOR_PROJECTILE),
+				LINE_PATTERN_DOT, LINE_PATTERN_DOT_LENGTH, LF_ANTI_ALIASED);
 		return;
 	}
 
@@ -483,12 +483,12 @@ void TiledMap::DrawLegalMove
 			const Pixel16 pixelColor = g_colorSet->GetColor(lineColor);
 			if (num_tiles_to_half < line_segment_count)
 			{
-				primitives_ClippedAntiAliasedPatternLine16(*pSurface, x1, y1, x2, y2, pixelColor, LINE_PATTERN_DASH,
-						LINE_PATTERN_DASH_LENGTH);
+				primitives_ClippedPatternLine16(*pSurface, x1, y1, x2, y2, pixelColor, LINE_PATTERN_DASH,
+						LINE_PATTERN_DASH_LENGTH, LF_ANTI_ALIASED);
 			}
 			else
 			{
-				primitives_ClippedAntiAliasedLine16(*pSurface, x1, y1, x2, y2, pixelColor);
+				primitives_ClippedLine16(*pSurface, x1, y1, x2, y2, pixelColor, LF_ANTI_ALIASED);
 
 				if( currPos == move_pos ){
 
@@ -501,8 +501,8 @@ void TiledMap::DrawLegalMove
 					y2 += yoffset;
 
 					const Pixel16 pixelColor = g_colorSet->GetColor(k_TURN_COLOR_PROJECTILE);
-					primitives_ClippedAntiAliasedPatternLine16(*pSurface, x1, y1, x2, y2, pixelColor, LINE_PATTERN_DOT,
-							LINE_PATTERN_DOT_LENGTH);
+					primitives_ClippedPatternLine16(*pSurface, x1, y1, x2, y2, pixelColor, LINE_PATTERN_DOT,
+							LINE_PATTERN_DOT_LENGTH, LF_ANTI_ALIASED);
 					break;
 				}
 			}
@@ -564,17 +564,17 @@ void TiledMap::DrawLegalMove
 		const Pixel16 pixelColor = g_colorSet->GetColor(actual_line_color);
 		if (num_tiles_to_half < line_segment_count)
 		{
-			primitives_ClippedAntiAliasedPatternLine16(*pSurface, x1, y1, x2, y2, pixelColor, LINE_PATTERN_DASH,
-					LINE_PATTERN_DASH_LENGTH);
+			primitives_ClippedPatternLine16(*pSurface, x1, y1, x2, y2, pixelColor, LINE_PATTERN_DASH,
+					LINE_PATTERN_DASH_LENGTH, LF_ANTI_ALIASED);
 		}
 		else {
 			if(dist-max_rge < line_segment_count){//draw dotted line from bombard launch point to target
-				primitives_ClippedAntiAliasedPatternLine16(*pSurface, x1, y1, x2, y2, pixelColor, LINE_PATTERN_DOT,
-						LINE_PATTERN_DOT_LENGTH);
+				primitives_ClippedPatternLine16(*pSurface, x1, y1, x2, y2, pixelColor, LINE_PATTERN_DOT,
+						LINE_PATTERN_DOT_LENGTH, LF_ANTI_ALIASED);
 			}
 			else
 			{
-				primitives_ClippedAntiAliasedLine16(*pSurface, x1, y1, x2, y2, pixelColor);
+				primitives_ClippedLine16(*pSurface, x1, y1, x2, y2, pixelColor, LF_ANTI_ALIASED);
 			}
 		}
 
@@ -628,7 +628,8 @@ void TiledMap::DrawLegalMove
 			}
 			old_line_color = actual_line_color;
 
-			primitives_ClippedAntiAliasedLine16(*pSurface, x1, y1, x2, y2, g_colorSet->GetColor(actual_line_color));
+			primitives_ClippedLine16(*pSurface, x1, y1, x2, y2, g_colorSet->GetColor(actual_line_color),
+					LF_ANTI_ALIASED);
 
 			AddDirtyTileToMix(prevPos);
 			AddDirtyTileToMix(currPos);
@@ -947,10 +948,10 @@ void TiledMap::DrawUnfinishedMove(aui_Surface * pSurface)
 
 
 				if (num_tiles_to_half < line_segement_count) {
-					primitives_ClippedAntiAliasedPatternLine16(*pSurface, x1, y1, x2, y2, lineColor,
-							LINE_PATTERN_DASH, LINE_PATTERN_DASH_LENGTH);
+					primitives_ClippedPatternLine16(*pSurface, x1, y1, x2, y2, lineColor, LINE_PATTERN_DASH,
+							LINE_PATTERN_DASH_LENGTH, LF_ANTI_ALIASED);
 				} else {
-					primitives_ClippedAntiAliasedLine16(*pSurface, x1, y1, x2, y2, lineColor);
+					primitives_ClippedLine16(*pSurface, x1, y1, x2, y2, lineColor, LF_ANTI_ALIASED);
 				}
 
 				AddDirtyTileToMix(prevPos);
