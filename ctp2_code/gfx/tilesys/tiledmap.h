@@ -480,12 +480,7 @@ public:
 	sint32 GetZoomTileHeadroom() const { return m_zoomTileHeadroom[m_zoomLevel]; }
 	double GetZoomScale(sint32 level) const { return m_zoomTileScale[level]; }
 
-	void UpdateMapViewRect(const RECT & rect)
-	{
-		// m_mapViewRect is const so that it can only be updated by this method
-		RECT * mapViewRect = const_cast<RECT *> (&m_mapViewRect);
-		*mapViewRect = rect;
-	}
+	void UpdateMapViewRect(const RECT & rect);
 
 protected:
     struct GridRect
@@ -597,6 +592,7 @@ protected:
 	RECT m_chatRect;
 
 private:
+	// m_mapViewRect is const so that it can only be updated by UpdateMapViewRect
 	const RECT m_mapViewRect;
 };
 

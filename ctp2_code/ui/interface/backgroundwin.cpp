@@ -186,7 +186,7 @@ AUI_ERRCODE background_draw_handler(LPVOID bg)
     }
 
 	const RECT & paintRect = g_tiledMap->GetMapViewRect();
-	g_theTradePool->Draw(surface, paintRect, false);
+	g_theTradePool->Draw(surface, paintRect);
 	g_tiledMap->RepaintSprites(surface, paintRect, false);
 
 	g_tiledMap->DrawUnfinishedMove(surface);

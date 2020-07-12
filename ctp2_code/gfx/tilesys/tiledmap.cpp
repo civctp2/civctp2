@@ -376,10 +376,14 @@ void TiledMap::DeleteGrid(void)
 	m_gridRects = NULL;
 }
 
+void TiledMap::UpdateMapViewRect(const RECT & rect)
+{
+	RECT * mapViewRect = const_cast<RECT *> (&m_mapViewRect);
+	*mapViewRect = rect;
 
-
-
-
+	primitives_SetPatternOffset(m_mapViewRect.left * m_zoomTilePixelWidth[m_zoomLevel],
+			m_mapViewRect.top * (m_zoomTilePixelHeight[m_zoomLevel] / 2));
+}
 
 void TiledMap::CheckRectAgainstGrid
 (
@@ -3517,7 +3521,7 @@ bool TiledMap::ScrollMap(sint32 deltaX, sint32 deltaY)
 
 	InvalidateMix();
 
-	g_theTradePool->Draw(m_surface);
+	g_theTradePool->Draw(m_surface, inflatedRepaintRect);
 	RepaintSprites(m_surface, inflatedRepaintRect, true);
 
 	return true;
@@ -3658,7 +3662,7 @@ bool TiledMap::ScrollMapSmooth(sint32 pdeltaX, sint32 pdeltaY)
 
 	InvalidateMix();
 
-	g_theTradePool->Draw(m_surface);
+	g_theTradePool->Draw(m_surface, inflatedRepaintRect);
 	RepaintSprites(m_surface, inflatedRepaintRect, true);
 
 	return true;

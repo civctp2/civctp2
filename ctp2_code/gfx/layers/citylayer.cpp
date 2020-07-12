@@ -51,8 +51,8 @@ extern Background		*g_background;
 #include "screenmanager.h"
 extern ScreenManager	*g_screenManager;
 
-static const uint32 LINE_PATTERN_TRADE_DASH        = 0b00010000000111111100000001111111;
-static const uint32 LINE_PATTERN_TRADE_DASH_LENGTH = 14;
+static const uint32 LINE_PATTERN_TRADE_DASH        = 0b00000000000000001111000000001111;
+static const uint32 LINE_PATTERN_TRADE_DASH_LENGTH = 16;
 
 void DrawTradeRouteSegment(aui_Surface *surf, MapPoint &pos, WORLD_DIRECTION dir, uint16 route, uint16 outline)
 {
@@ -138,7 +138,7 @@ void DrawTradeRouteSegment(aui_Surface *surf, MapPoint &pos, WORLD_DIRECTION dir
 		tempRect.bottom++;
 
 		primitives_ClippedPatternLine16(*surf, x1, y1, x2, y2, route, LINE_PATTERN_TRADE_DASH,
-		                                LINE_PATTERN_TRADE_DASH_LENGTH);
+				LINE_PATTERN_TRADE_DASH_LENGTH);
 	}
 
 	if (x1==x2) {
@@ -177,12 +177,8 @@ void DrawReversedTradeRouteSegment(aui_Surface *surf, MapPoint &pos, WORLD_DIREC
 }
 
 
-void DrawTradeRoute(
-		aui_Surface *pSurface,
-		DynamicArray<MapPoint> *pRoute,
-		uint16 route,
-		uint16 outline
-		)
+void DrawTradeRoute(aui_Surface *pSurface, DynamicArray<MapPoint> *pRoute, const RECT & paintRect, uint16 route,
+		uint16 outline)
 {
 	Assert(pSurface);
 	if (pSurface==NULL) return;
@@ -202,7 +198,9 @@ void DrawTradeRoute(
 		prev = pRoute->Get(i);
 		curr = pRoute->Get(i+1);
 
-		if (g_tiledMap->TileIsVisible(prev.x, prev.y))
+		sint32 tileX;
+		maputils_MapX2TileX(prev.x, prev.y, &tileX);
+		if (g_tiledMap->TileIsVisible(prev.x, prev.y) && maputils_TilePointInTileRect(tileX, prev.y, paintRect))
 		{
 			dir = prev.GetNeighborDirection(curr);
 

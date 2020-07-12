@@ -97,7 +97,7 @@ TradeRoute TradePool::GetRouteIndex(sint32 index)
 	return m_all_routes->Access(index);
 }
 
-void TradePool::Draw(aui_Surface* surface)
+void TradePool::Draw(aui_Surface* surface, const RECT & paintRect)
 {
 	if(!g_theProfileDB->GetShowTradeRoutes())
 		return;
@@ -112,7 +112,8 @@ void TradePool::Draw(aui_Surface* surface)
 		{
 			Pixel16 color = g_colorSet->GetPlayerColor(route.GetOwner());
 			Pixel16 darkColor = pixelutils_Shadow16(color, pixelutils_GetShadow16RGBMask());
-			DrawTradeRoute(surface, (DynamicArray<MapPoint>*)m_all_routes->Access(i).GetPath(), color, darkColor);
+			DrawTradeRoute(surface, (DynamicArray<MapPoint>*)m_all_routes->Access(i).GetPath(), paintRect, color,
+					darkColor);
 		}
 
 #if 0

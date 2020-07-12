@@ -72,15 +72,16 @@ extern C3UI			*g_c3ui;
 enum LINE_FLAGS {
 	LF_NONE             = 0x00,
 	LF_ANTI_ALIASED     = 0x01,
-	LF_SHADOW           = 0x02,
-	LF_NO_ALIGN_PATTERN = 0x04
+	LF_SHADOW           = 0x02
 };
 
-// All kind of patterns may be defined and used; the highest 1 is an indicator to roll-over the pattern
-//   Note: for efficiency may the desired pattern be repeated in the 32-bit pattern
-static const uint32 LINE_PATTERN_DOT         = 0b00010011001100110011001100110011;
+// All kind of patterns may be defined and used
+// Restrictions:
+//   pattern-length has to be a multitude of 2, i.e. 2, 4, 8, 16 or 32
+//   lowest and highest element of a pattern has to be 1 (when there are no more ones then pattern is restarted)
+static const uint32 LINE_PATTERN_DOT         = 0b00000000000000000000000000001001;
 static const uint32 LINE_PATTERN_DOT_LENGTH  = 4;
-static const uint32 LINE_PATTERN_DASH        = 0b00000001000011110000111100001111;
+static const uint32 LINE_PATTERN_DASH        = 0b00000000000000000000000011000011;
 static const uint32 LINE_PATTERN_DASH_LENGTH = 8;
 
 inline aui_BitmapFont * getBitmapFont()
@@ -161,6 +162,7 @@ void primitives_ClippedFrameRect16(aui_Surface & surf, const RECT & rect, Pixel1
 void primitives_ClippedShadowRect16(aui_Surface & surf, const RECT & rect);
 
 // Clipped lines primitives
+void primitives_SetPatternOffset(sint32 x, sint32 y);
 void primitives_BaseClippedDrawLine16(aui_Surface & surf, sint32 x1, sint32 y1, sint32 x2, sint32 y2, Pixel16 color,
 		LINE_FLAGS lineFlags , uint32 fullPattern, uint32 patternLength); // Do not use directly; use below signatures
 

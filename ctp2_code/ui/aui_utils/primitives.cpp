@@ -48,6 +48,15 @@
 
 #define SWAPVARS(a, b) { sint32 temp; temp = a; a = b; b = temp; }
 
+sint32 g_patternOffsetX = 0;
+sint32 g_patternOffsetY = 0;
+
+void primitives_SetPatternOffset(sint32 x, sint32 y)
+{
+	g_patternOffsetX = x;
+	g_patternOffsetY = y;
+}
+
 PRIMITIVES_ERRCODE primitives_FrameRect16(
 	aui_Surface *pSurface,
 	RECT *pRect,
@@ -2144,13 +2153,13 @@ inline uint32 ReverseLinePattern(uint32 fullPattern, uint32 patternLength)
 		reversePattern |= fullPattern & 1;
 		fullPattern >>= 1;
 	}
-	return reversePattern | (1 << patternLength); // add roll-over bit
+	return reversePattern;
 }
 
 inline uint32 UpdateLinePattern(uint32 fullPattern, uint32 currentPattern)
 {
 	currentPattern >>= 1;
-	if (currentPattern == 1) {
+	if (currentPattern == 0) {
 		currentPattern = fullPattern;
 	}
 	return currentPattern;
@@ -2592,9 +2601,10 @@ void SpecialDrawLine16(Pixel16 * base, sint32 deltaX, sint32 deltaY, sint32 incr
 void BaseDrawPatternLine16(Pixel16 * base, sint32 x, sint32 y, sint32 deltaX, sint32 deltaY, sint32 incrementX,
 		sint32 incrementY, Pixel16 color, LINE_FLAGS lineFlags, uint32 fullPattern, uint32 patternLength)
 {
+	uint32 patternMask = patternLength - 1;
 	if (deltaX == 0) // vertical
 	{
-		uint32 startPattern = lineFlags & LF_NO_ALIGN_PATTERN ? fullPattern : fullPattern >> (y % patternLength);
+		uint32 startPattern = fullPattern >> ((y + g_patternOffsetY) & patternMask);
 		DrawPatternLine16(base, deltaY + 1, incrementY, color, fullPattern, startPattern);
 	}
 	else if (deltaY == 0) // horizontal
@@ -2602,18 +2612,18 @@ void BaseDrawPatternLine16(Pixel16 * base, sint32 x, sint32 y, sint32 deltaX, si
 		if (incrementX < 0) {
 			base = base - deltaX;
 		}
-		uint32 startPattern = lineFlags & LF_NO_ALIGN_PATTERN ? fullPattern
-				: fullPattern >> ((incrementX < 0 ? (x - deltaX) : x) % patternLength);
+		sint32 xPattern = (incrementX < 0 ? (x - deltaX) : x) + g_patternOffsetX;
+		uint32 startPattern = fullPattern >> (xPattern & patternMask);
 		DrawPatternLine16(base, deltaX + 1, 1, color, fullPattern, startPattern);
 	}
 	else if (deltaX == deltaY) // diagonal
 	{
-		uint32 startPattern = lineFlags & LF_NO_ALIGN_PATTERN ? fullPattern : fullPattern >> (y % patternLength);
+		uint32 startPattern = fullPattern >> ((y + g_patternOffsetY) & patternMask);
 		DrawPatternLine16(base, deltaX + 1, incrementY + incrementX, color, fullPattern, startPattern);
 	}
 	else if (deltaX < deltaY) // Y-major
 	{
-		uint32 startPattern = lineFlags & LF_NO_ALIGN_PATTERN ? fullPattern : fullPattern >> (y % patternLength);
+		uint32 startPattern = fullPattern >> ((y + g_patternOffsetY) & patternMask);
 		DrawAngledPatternLine16(base, deltaY, deltaX, incrementY, incrementX, color, fullPattern, startPattern);
 	}
 	else // X-major
@@ -2623,10 +2633,9 @@ void BaseDrawPatternLine16(Pixel16 * base, sint32 x, sint32 y, sint32 deltaX, si
 		if (incrementX < 0)
 		{
 			fullPattern = ReverseLinePattern(fullPattern, patternLength);
-			startPattern = lineFlags & LF_NO_ALIGN_PATTERN ? fullPattern
-					: fullPattern >> (patternLength - 1 - (x % patternLength));
+			startPattern = fullPattern >> (patternMask - ((x + g_patternOffsetX) & patternMask));
 		} else {
-			startPattern = lineFlags & LF_NO_ALIGN_PATTERN ? fullPattern : fullPattern >> (x % patternLength);
+			startPattern = fullPattern >> ((x + g_patternOffsetX) & patternMask);
 		}
 
 		DrawAngledPatternLine16(base, deltaX, deltaY, incrementX, incrementY, color, fullPattern, startPattern);
@@ -2638,9 +2647,10 @@ void SpecialDrawPatternLine16(Pixel16 * base, sint32 x, sint32 y, sint32 deltaX,
 {
 	Assert(lineFlags != LF_NONE);
 
+	uint32 patternMask = patternLength - 1;
 	if (deltaX == 0) // vertical
 	{
-		uint32 startPattern = lineFlags & LF_NO_ALIGN_PATTERN ? fullPattern : fullPattern >> (y % patternLength);
+		uint32 startPattern = fullPattern >> ((y + g_patternOffsetY) & patternMask);
 		DrawShadowPatternLine16(base, deltaY + 1, incrementY, fullPattern, startPattern,
 				pixelutils_GetShadow16RGBMask());
 	}
@@ -2649,20 +2659,20 @@ void SpecialDrawPatternLine16(Pixel16 * base, sint32 x, sint32 y, sint32 deltaX,
 		if (incrementX < 0) {
 			base = base - deltaX;
 		}
-		uint32 startPattern = lineFlags & LF_NO_ALIGN_PATTERN ? fullPattern
-				: fullPattern >> ((incrementX < 0 ? (x - deltaX) : x) % patternLength);
+		sint32 xPattern = (incrementX < 0 ? (x - deltaX) : x) + g_patternOffsetX;
+		uint32 startPattern = fullPattern >> (xPattern & patternMask);
 		DrawShadowPatternLine16(base, deltaX + 1, 1, fullPattern, startPattern,
 				pixelutils_GetShadow16RGBMask());
 	}
 	else if (deltaX == deltaY) // diagonal
 	{
-		uint32 startPattern = lineFlags & LF_NO_ALIGN_PATTERN ? fullPattern : fullPattern >> (y % patternLength);
+		uint32 startPattern = fullPattern >> ((y + g_patternOffsetY) & patternMask);
 		DrawShadowPatternLine16(base, deltaX + 1, incrementY + incrementX, fullPattern, startPattern,
 				pixelutils_GetShadow16RGBMask());
 	}
 	else if (deltaX < deltaY) // Y-major
 	{
-		uint32 startPattern = lineFlags & LF_NO_ALIGN_PATTERN ? fullPattern : fullPattern >> (y % patternLength);
+		uint32 startPattern = fullPattern >> ((y + g_patternOffsetY) & patternMask);
 		SpecialDrawAngledPatternLine16(base, deltaY, deltaX, incrementY, incrementX, color, fullPattern, startPattern,
 				lineFlags);
 	}
@@ -2673,10 +2683,9 @@ void SpecialDrawPatternLine16(Pixel16 * base, sint32 x, sint32 y, sint32 deltaX,
 		if (incrementX < 0)
 		{
 			fullPattern = ReverseLinePattern(fullPattern, patternLength);
-			startPattern = lineFlags & LF_NO_ALIGN_PATTERN ? fullPattern
-					: fullPattern >> (patternLength - 1 - (x % patternLength));
+			startPattern = fullPattern >> (patternMask - ((x + g_patternOffsetX) & patternMask));
 		} else {
-			startPattern = lineFlags & LF_NO_ALIGN_PATTERN ? fullPattern : fullPattern >> (x % patternLength);
+			startPattern = fullPattern >> ((x + g_patternOffsetX) & patternMask);
 		}
 
 		SpecialDrawAngledPatternLine16(base, deltaX, deltaY, incrementX, incrementY, color, fullPattern, startPattern,
@@ -2687,6 +2696,9 @@ void SpecialDrawPatternLine16(Pixel16 * base, sint32 x, sint32 y, sint32 deltaX,
 void primitives_BaseClippedDrawLine16(aui_Surface & surf, sint32 x1, sint32 y1, sint32 x2, sint32 y2, Pixel16 color,
 		LINE_FLAGS lineFlags, uint32 fullPattern, uint32 patternLength)
 {
+	// Verify that patternLength is a multitude of 2
+	Assert((patternLength & (patternLength - 1)) == 0);
+
 	if (y2 < y1)
 	{
 		SWAPVARS(x1, x2)
@@ -2714,7 +2726,7 @@ void primitives_BaseClippedDrawLine16(aui_Surface & surf, sint32 x1, sint32 y1, 
 			SpecialDrawLine16(base, deltaX, deltaY, incrementX, incrementY, color, lineFlags);
 		}
 	} else {
-		if ((lineFlags & ~LF_NO_ALIGN_PATTERN) == LF_NONE ) {
+		if (lineFlags == LF_NONE ) {
 			BaseDrawPatternLine16(base, x1, y1, deltaX, deltaY, incrementX, incrementY, color, lineFlags, fullPattern,
 					patternLength);
 		} else {
