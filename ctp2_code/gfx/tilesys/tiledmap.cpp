@@ -3367,45 +3367,34 @@ void TiledMap::ScrollPixels(sint32 deltaX, sint32 deltaY, aui_Surface *surf)
 #define kMV_TopMin (-4)
 #define kMV_BottomMax 12
 
-
-
-
-
-
-
 bool TiledMap::ScrollMap(sint32 deltaX, sint32 deltaY)
 {
-	if (g_modalWindow)
+	if (g_modalWindow) {
 		return false;
-
-	RECT	repaintRect;
-	RECT	oldMapViewRect;
-
-
-
+	}
 
 	RetargetTileSurface(g_background->TheSurface());
 
-	sint32		mapWidth = g_theWorld->GetWidth();
-	sint32		mapHeight = g_theWorld->GetHeight();
-	sint32		hscroll = GetZoomTilePixelWidth();
-	sint32		vscroll = GetZoomTilePixelHeight()/2;
-
-
-
-
+	sint32 mapWidth  = g_theWorld->GetWidth();
+	sint32 mapHeight = g_theWorld->GetHeight();
+	sint32 hscroll   = GetZoomTilePixelWidth();
+	sint32 vscroll   = GetZoomTilePixelHeight()/2;
 
 	if (!g_theWorld->IsXwrap())
 	{
 		if ((deltaX < 0) && (m_mapViewRect.left + deltaX < kMV_LeftMin ))
 		{
 			deltaX = kMV_LeftMin - m_mapViewRect.left;
-			if (deltaX > 0) deltaX = 0;
+			if (deltaX > 0) {
+				deltaX = 0;
+			}
 		}
 		if ((deltaX > 0) && (m_mapViewRect.right + deltaX > m_mapBounds.right + kMV_RightMax))
 		{
 			deltaX = m_mapBounds.right + kMV_RightMax - m_mapViewRect.right;
-			if (deltaX < 0) deltaX = 0;
+			if (deltaX < 0) {
+				deltaX = 0;
+			}
 		}
 	}
 
@@ -3414,22 +3403,21 @@ bool TiledMap::ScrollMap(sint32 deltaX, sint32 deltaY)
 		if ((deltaY < 0) && (m_mapViewRect.top + deltaY < kMV_TopMin))
 		{
 			deltaY = kMV_TopMin - m_mapViewRect.top;
-			if (deltaY > 0) deltaY = 0;
+			if (deltaY > 0) {
+				deltaY = 0;
+			}
 		}
 
 		if ((deltaY > 0) && (m_mapViewRect.bottom + deltaY > m_mapBounds.bottom + kMV_BottomMax))
 		{
 			deltaY = m_mapBounds.bottom + kMV_BottomMax - m_mapViewRect.bottom;
-			if (deltaY  < 0) deltaY = 0;
+			if (deltaY  < 0) {
+				deltaY = 0;
+			}
 		}
 	}
 
-	oldMapViewRect = m_mapViewRect;
-
 	OffsetRect(&m_mapViewRect, deltaX, deltaY);
-
-	SubtractRect(&repaintRect, &m_mapViewRect, &oldMapViewRect);
-
 	OffsetMixDirtyRects(deltaX, deltaY);
 
 	if (m_mapViewRect.right <= 0)
@@ -3438,7 +3426,6 @@ bool TiledMap::ScrollMap(sint32 deltaX, sint32 deltaY)
 		m_mapViewRect.right += mapWidth;
 		Assert(m_mapViewRect.right > 0);
 	}
-
 	if (m_mapViewRect.left >= mapWidth)
 	{
 		m_mapViewRect.left -= mapWidth;
@@ -3458,6 +3445,22 @@ bool TiledMap::ScrollMap(sint32 deltaX, sint32 deltaY)
 		Assert(m_mapViewRect.top < mapHeight);
 	}
 
+	RECT repaintRect = m_mapViewRect;
+	if (deltaY == 0)
+	{
+		if (deltaX > 0) {
+			repaintRect.left = m_mapViewRect.right - deltaX;
+		} else {
+			repaintRect.right = m_mapViewRect.left - deltaX;
+		}
+	} else if (deltaX == 0) {
+		if (deltaY > 0) {
+			repaintRect.top = m_mapViewRect.bottom - deltaY;
+		} else {
+			repaintRect.bottom = m_mapViewRect.top - deltaY;
+		}
+	}
+
 	RECT tempRect = repaintRect;
 
 	if (deltaX == 1) {
@@ -3470,7 +3473,6 @@ bool TiledMap::ScrollMap(sint32 deltaX, sint32 deltaY)
 		tempRect.top += 1;
 		tempRect.bottom += 1;
 	}
-
 	if (deltaY == 1) {
 		tempRect.right += 1;
 		tempRect.top -= 2;
@@ -3478,16 +3480,10 @@ bool TiledMap::ScrollMap(sint32 deltaX, sint32 deltaY)
 	else if (deltaY == -1) {
 		tempRect.right += 1;
 		tempRect.bottom += 2;
-
 	}
 
-	OffsetSprites(&m_mapViewRect, deltaX*hscroll, deltaY*vscroll);
-	ScrollPixels((sint32)(deltaX*hscroll), (sint32)(deltaY*vscroll), m_surface);
-
-
-
-
-
+	OffsetSprites(&m_mapViewRect, deltaX * hscroll, deltaY * vscroll);
+	ScrollPixels(deltaX * hscroll, deltaY * vscroll, m_surface);
 
 	LockSurface();
 
