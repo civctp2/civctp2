@@ -206,6 +206,10 @@ public:
 	{
 		return g_theWorld->GetWidth();
 	}
+	sint32          GetMapHeight() const
+	{
+		return g_theWorld->GetHeight();
+	}
 
 	sint32			CalculateWrap(aui_Surface *surface, sint32 i, sint32 j);
 	sint32			CalculateWrapClipped(aui_Surface *surface, sint32 i, sint32 j);
@@ -483,6 +487,7 @@ protected:
 	    BOOL		dirty;
     };
 
+	RECT EnsureRectOverlapMap(const RECT & rect) const;
 	void CalculateZoomViewRectangle(sint32 zoomLevel, RECT &rectangle) const;
 
 	void ZoomHitMask();

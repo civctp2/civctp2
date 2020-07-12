@@ -3362,6 +3362,39 @@ void TiledMap::ScrollPixels(sint32 deltaX, sint32 deltaY, aui_Surface *surf)
 	if (errcode != AUI_ERRCODE_OK) return;
 }
 
+RECT TiledMap::EnsureRectOverlapMap(const RECT & rect) const
+{
+	sint32 mapWidth  = GetMapWidth();
+	sint32 mapHeight = GetMapHeight();
+
+	RECT result = rect;
+	if (result.right <= 0)
+	{
+		result.left += mapWidth;
+		result.right += mapWidth;
+		Assert(result.right > 0);
+	}
+	if (result.left >= mapWidth)
+	{
+		result.left -= mapWidth;
+		result.right -= mapWidth;
+		Assert(result.left < mapWidth);
+	}
+	if (result.bottom <= 0)
+	{
+		result.top += mapHeight;
+		result.bottom += mapHeight;
+		Assert(result.bottom > 0);
+	}
+	if (result.top >= mapHeight)
+	{
+		result.top -= mapHeight;
+		result.bottom -= mapHeight;
+		Assert(result.top < mapHeight);
+	}
+	return result;
+}
+
 #define kMV_LeftMin (-1)
 #define kMV_RightMax 2
 #define kMV_TopMin (-4)
@@ -3374,11 +3407,6 @@ bool TiledMap::ScrollMap(sint32 deltaX, sint32 deltaY)
 	}
 
 	RetargetTileSurface(g_background->TheSurface());
-
-	sint32 mapWidth  = g_theWorld->GetWidth();
-	sint32 mapHeight = g_theWorld->GetHeight();
-	sint32 hscroll   = GetZoomTilePixelWidth();
-	sint32 vscroll   = GetZoomTilePixelHeight()/2;
 
 	if (!g_theWorld->IsXwrap())
 	{
@@ -3420,30 +3448,14 @@ bool TiledMap::ScrollMap(sint32 deltaX, sint32 deltaY)
 	OffsetRect(&m_mapViewRect, deltaX, deltaY);
 	OffsetMixDirtyRects(deltaX, deltaY);
 
-	if (m_mapViewRect.right <= 0)
-	{
-		m_mapViewRect.left += mapWidth;
-		m_mapViewRect.right += mapWidth;
-		Assert(m_mapViewRect.right > 0);
-	}
-	if (m_mapViewRect.left >= mapWidth)
-	{
-		m_mapViewRect.left -= mapWidth;
-		m_mapViewRect.right -= mapWidth;
-		Assert(m_mapViewRect.left < mapWidth);
-	}
-	if (m_mapViewRect.bottom <= 0)
-	{
-		m_mapViewRect.top += mapHeight;
-		m_mapViewRect.bottom += mapHeight;
-		Assert(m_mapViewRect.bottom > 0);
-	}
-	if (m_mapViewRect.top >= mapHeight)
-	{
-		m_mapViewRect.top -= mapHeight;
-		m_mapViewRect.bottom -= mapHeight;
-		Assert(m_mapViewRect.top < mapHeight);
-	}
+	m_mapViewRect = EnsureRectOverlapMap(m_mapViewRect);
+
+	sint32 hscroll = GetZoomTilePixelWidth();
+	sint32 vscroll = GetZoomTilePixelHeight() / 2;
+	OffsetSprites(&m_mapViewRect, deltaX * hscroll, deltaY * vscroll);
+	ScrollPixels(deltaX * hscroll, deltaY * vscroll, m_surface);
+
+	LockSurface();
 
 	RECT repaintRect = m_mapViewRect;
 	if (deltaY == 0)
@@ -3460,32 +3472,7 @@ bool TiledMap::ScrollMap(sint32 deltaX, sint32 deltaY)
 			repaintRect.bottom = m_mapViewRect.top - deltaY;
 		}
 	}
-
-	RECT tempRect = repaintRect;
-
-	if (deltaX == 1) {
-		tempRect.left -= 1;
-		tempRect.top += 1;
-		tempRect.bottom += 1;
-	}
-	else if (deltaX == -1) {
-		tempRect.right += 1;
-		tempRect.top += 1;
-		tempRect.bottom += 1;
-	}
-	if (deltaY == 1) {
-		tempRect.right += 1;
-		tempRect.top -= 2;
-	}
-	else if (deltaY == -1) {
-		tempRect.right += 1;
-		tempRect.bottom += 2;
-	}
-
-	OffsetSprites(&m_mapViewRect, deltaX * hscroll, deltaY * vscroll);
-	ScrollPixels(deltaX * hscroll, deltaY * vscroll, m_surface);
-
-	LockSurface();
+	repaintRect = EnsureRectOverlapMap(repaintRect);
 
 	RepaintTiles(&repaintRect);
 
@@ -3499,9 +3486,30 @@ bool TiledMap::ScrollMap(sint32 deltaX, sint32 deltaY)
 			m_mapViewRect.bottom + deltaY > m_mapBounds.bottom-2)
 			RepaintEdgeY(&repaintRect);
 
-	RepaintHats(&tempRect);
-	RepaintBorders(&tempRect);
-	RepaintImprovements(&tempRect);
+	RECT inflatedRepaintRect = repaintRect;
+
+	if (deltaX == 1) {
+		inflatedRepaintRect.left -= 1;
+		inflatedRepaintRect.top += 1;
+		inflatedRepaintRect.bottom += 1;
+	}
+	else if (deltaX == -1) {
+		inflatedRepaintRect.right += 1;
+		inflatedRepaintRect.top += 1;
+		inflatedRepaintRect.bottom += 1;
+	}
+	if (deltaY == 1) {
+		inflatedRepaintRect.right += 1;
+		inflatedRepaintRect.top -= 2;
+	}
+	else if (deltaY == -1) {
+		inflatedRepaintRect.right += 1;
+		inflatedRepaintRect.bottom += 2;
+	}
+
+	RepaintHats(&inflatedRepaintRect);
+	RepaintBorders(&inflatedRepaintRect);
+	RepaintImprovements(&inflatedRepaintRect);
 
 	UnlockSurface();
 
@@ -3510,29 +3518,17 @@ bool TiledMap::ScrollMap(sint32 deltaX, sint32 deltaY)
 	InvalidateMix();
 
 	g_theTradePool->Draw(m_surface);
-	RepaintSprites(m_surface, &tempRect, true);
+	RepaintSprites(m_surface, &inflatedRepaintRect, true);
 
 	return true;
 }
-
-
-
-
 
 bool TiledMap::SmoothScrollAligned() const
 {
 	return ((!m_smoothOffsetX) && (!m_smoothOffsetY));
 }
 
-
-
-
 #ifdef IANSCROLL
-
-
-
-
-
 
 bool TiledMap::ScrollMapSmooth(sint32 pdeltaX, sint32 pdeltaY)
 {
