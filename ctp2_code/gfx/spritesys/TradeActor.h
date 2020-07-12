@@ -19,7 +19,7 @@ public:
 
 	void       Process();
 
-	void       Draw(RECT * paintRect) const;
+	void       Draw(const RECT & paintRect) const;
 
 	TradeRoute GetRouteID() const { return m_routeID; }
 

@@ -1499,10 +1499,9 @@ sint32 TiledMap::CalculateMetrics(void)
 	sint32			w = m_displayRect.right - m_displayRect.left;
 	sint32			h = m_displayRect.bottom - m_displayRect.top;
 
-	m_mapViewRect.left = 0;
-	m_mapViewRect.top = 0;
-	m_mapViewRect.right = (sint32)((w-(GetZoomTilePixelWidth()/2))/(GetZoomTilePixelWidth()));
-	m_mapViewRect.bottom = (sint32)((h-GetZoomTileHeadroom())/(GetZoomTilePixelHeight()/2)-1);
+	RECT mapViewRect = { 0, 0, (sint32)((w-(GetZoomTilePixelWidth()/2))/(GetZoomTilePixelWidth())),
+					(sint32)((h-GetZoomTileHeadroom())/(GetZoomTilePixelHeight()/2)-1) };
+	UpdateMapViewRect(mapViewRect);
 
 	return 0;
 }
@@ -2451,7 +2450,7 @@ void TiledMap::PaintGoodActor(GoodActor *actor, bool fog)
 
 
 
-sint32 TiledMap::RepaintLayerSprites(RECT *paintRect, sint32 layer)
+sint32 TiledMap::RepaintLayerSprites(const RECT & paintRect, sint32 layer)
 {
 	if(!ReadyToDraw())
 		return 0;
@@ -2461,8 +2460,8 @@ sint32 TiledMap::RepaintLayerSprites(RECT *paintRect, sint32 layer)
 	g_tiledMap->RectMetricNewLoop();
 #endif
 
-	for (sint32 i=paintRect->top; i<paintRect->bottom; i++) {
-		for (sint32 j=paintRect->left; j<paintRect->right; j++) {
+	for (sint32 i=paintRect.top; i<paintRect.bottom; i++) {
+		for (sint32 j=paintRect.left; j<paintRect.right; j++) {
 
 			if(!g_theWorld->IsXwrap() && (j < 0 || j >= g_theWorld->GetXWidth()))
 				continue;
@@ -2710,7 +2709,7 @@ TiledMap::ProcessUnit(CellUnitList * a_List)
     }
 }
 
-void TiledMap::ProcessLayerSprites(RECT *paintRect, sint32 layer)
+void TiledMap::ProcessLayerSprites(const RECT & paintRect, sint32 layer)
 {
 	if(!ReadyToDraw())
 		return;
@@ -2726,9 +2725,9 @@ void TiledMap::ProcessLayerSprites(RECT *paintRect, sint32 layer)
 	Unit				unit;
 	Cell				*CurrentCell=NULL;
 
-	for (i=paintRect->top; i<paintRect->bottom; i++)
+	for (i=paintRect.top; i<paintRect.bottom; i++)
 	{
-		for (j=paintRect->left; j<paintRect->right; j++)
+		for (j=paintRect.left; j<paintRect.right; j++)
 		{
 			maputils_WrapPoint(j,i,&tileX,&tileY);
 
@@ -2813,13 +2812,13 @@ void TiledMap::ProcessLayerSprites(RECT *paintRect, sint32 layer)
 	}
 }
 
-sint32 TiledMap::OffsetLayerSprites(RECT *paintRect, sint32 deltaX, sint32 deltaY, sint32 layer)
+sint32 TiledMap::OffsetLayerSprites(const RECT & paintRect, sint32 deltaX, sint32 deltaY, sint32 layer)
 {
 	if(!ReadyToDraw())
 		return 0;
 
-	for (sint32 i=paintRect->top; i<paintRect->bottom; i++) {
-		for (sint32 j=paintRect->left; j<paintRect->right; j++) {
+	for (sint32 i=paintRect.top; i<paintRect.bottom; i++) {
+		for (sint32 j=paintRect.left; j<paintRect.right; j++) {
 
 			sint32 tileX,tileY;
 			maputils_WrapPoint(j,i,&tileX,&tileY);
@@ -2897,7 +2896,7 @@ sint32 TiledMap::OffsetLayerSprites(RECT *paintRect, sint32 deltaX, sint32 delta
 	return 0;
 }
 
-sint32 TiledMap::OffsetSprites(RECT *paintRect, sint32 deltaX, sint32 deltaY)
+sint32 TiledMap::OffsetSprites(const RECT & paintRect, sint32 deltaX, sint32 deltaY)
 {
 	OffsetLayerSprites(paintRect, deltaX, deltaY, 0);
 
@@ -2906,7 +2905,7 @@ sint32 TiledMap::OffsetSprites(RECT *paintRect, sint32 deltaX, sint32 deltaY)
 	return 0;
 }
 
-sint32 TiledMap::RepaintSprites(aui_Surface *surf, RECT *paintRect, bool scrolling)
+sint32 TiledMap::RepaintSprites(aui_Surface *surf, const RECT & paintRect, bool scrolling)
 {
 	if(!ReadyToDraw())
 		return 0;
@@ -3445,14 +3444,15 @@ bool TiledMap::ScrollMap(sint32 deltaX, sint32 deltaY)
 		}
 	}
 
-	OffsetRect(&m_mapViewRect, deltaX, deltaY);
-	OffsetMixDirtyRects(deltaX, deltaY);
+	RECT mapViewRect = m_mapViewRect;
+	OffsetRect(&mapViewRect, deltaX, deltaY);
+	UpdateMapViewRect(EnsureRectOverlapMap(mapViewRect));
 
-	m_mapViewRect = EnsureRectOverlapMap(m_mapViewRect);
+	OffsetMixDirtyRects(deltaX, deltaY);
 
 	sint32 hscroll = GetZoomTilePixelWidth();
 	sint32 vscroll = GetZoomTilePixelHeight() / 2;
-	OffsetSprites(&m_mapViewRect, deltaX * hscroll, deltaY * vscroll);
+	OffsetSprites(mapViewRect, deltaX * hscroll, deltaY * vscroll);
 	ScrollPixels(deltaX * hscroll, deltaY * vscroll, m_surface);
 
 	LockSurface();
@@ -3518,7 +3518,7 @@ bool TiledMap::ScrollMap(sint32 deltaX, sint32 deltaY)
 	InvalidateMix();
 
 	g_theTradePool->Draw(m_surface);
-	RepaintSprites(m_surface, &inflatedRepaintRect, true);
+	RepaintSprites(m_surface, inflatedRepaintRect, true);
 
 	return true;
 }
@@ -3528,241 +3528,141 @@ bool TiledMap::SmoothScrollAligned() const
 	return ((!m_smoothOffsetX) && (!m_smoothOffsetY));
 }
 
-#ifdef IANSCROLL
-
 bool TiledMap::ScrollMapSmooth(sint32 pdeltaX, sint32 pdeltaY)
 {
-
-	if (g_modalWindow)
-		return false;
-
-	m_smoothOffsetX += pdeltaX;
-	m_smoothOffsetY	+= pdeltaY;
-
-	sint32		hscroll		= GetZoomTilePixelWidth();
-	sint32		vscroll		= GetZoomTilePixelHeight()>>1;
-
-	sint32 deltaX =	(m_smoothOffsetX/hscroll);
-	sint32 deltaY =	(m_smoothOffsetY/vscroll);
-
-	if (deltaX != 0)
-	{
-
-		m_smoothOffsetX -= deltaX * hscroll;
-
-
-	}
-
-	if (deltaY != 0)
-	{
-
-		m_smoothOffsetY -= deltaY * vscroll;
-
-
-	}
-
-	OffsetRect(&m_mapViewRect , deltaX, deltaY);
-
-	OffsetMixDirtyRects(deltaX,deltaY);
-
-
 	RetargetTileSurface(g_background->TheSurface());
 
-	ScrollPixels((sint32)(pdeltaX), (sint32)(pdeltaY), m_surface);
+	sint32 signX  = (!pdeltaX ? 0 : (pdeltaX < 0 ? -1 : 1));
+	sint32 signY  = (!pdeltaY ? 0 : (pdeltaY < 0 ? -1 : 1));
 
-	LockSurface();
+	if (!g_theWorld->IsXwrap())
+	{
+		if ((signX < 0) && (m_mapViewRect.left + signX < kMV_LeftMin ))
+		{
+			signX = kMV_LeftMin - m_mapViewRect.left;
+			if (signX > 0) {
+				signX = 0;
+			}
+		}
+		if ((signX > 0) && (m_mapViewRect.right + signX > m_mapBounds.right + kMV_RightMax))
+		{
+			signX = m_mapBounds.right + kMV_RightMax - m_mapViewRect.right;
+			if (signX < 0) {
+				signX = 0;
+			}
+		}
+	}
 
-	RECT repaintRect = m_mapViewRect;
+	if (!g_theWorld->IsYwrap())
+	{
+		if ((signY < 0) && (m_mapViewRect.top + signY < kMV_TopMin))
+		{
+			signY = kMV_TopMin - m_mapViewRect.top;
+			if (signY > 0) {
+				signY = 0;
+			}
+		}
 
-	repaintRect.top--;
-	repaintRect.left--;
-	repaintRect.bottom++;
-	repaintRect.right++;
+		if ((signY > 0) && (m_mapViewRect.bottom + signY > m_mapBounds.bottom + kMV_BottomMax))
+		{
+			signY = m_mapBounds.bottom + kMV_BottomMax - m_mapViewRect.bottom;
+			if (signY  < 0) {
+				signY = 0;
+			}
+		}
+	}
 
-
-	OffsetSprites(&repaintRect, pdeltaX, pdeltaY);
-	RepaintTilesClipped (&repaintRect);
-	RepaintImprovements (&repaintRect);
-	RepaintHats			(&repaintRect,true);
-	RepaintBorders      (&repaintRect, true);
-
-	UnlockSurface();
-
-	InvalidateMix();
-
- 	RepaintSprites(m_surface, &repaintRect, true);
-
-	return true;
-}
-
-#else // IANSCROLL
-
-bool TiledMap::ScrollMapSmooth(sint32 pdeltaX, sint32 pdeltaY)
-{
-	if (g_modalWindow)
-		return false;
-
-	m_smoothOffsetX += pdeltaX;
-	m_smoothOffsetY	+= pdeltaY;
-
-	sint32 signX  = (!pdeltaX ? 0 :(pdeltaX<0? -1:1));
-	sint32 signY  = (!pdeltaY ? 0 :(pdeltaY<0? -1:1));
-
-	RetargetTileSurface(g_background->TheSurface());
-
-	sint32	mapWidth	= g_theWorld->GetWidth();
-	sint32	mapHeight	= g_theWorld->GetHeight();
 	sint32	hscroll		= GetZoomTilePixelWidth();
 	sint32	vscroll		= GetZoomTilePixelHeight() >> 1;
 	sint32  deltaX      = m_smoothOffsetX / hscroll;
 	sint32  deltaY      = m_smoothOffsetY / vscroll;
 
-	if (deltaX != 0)
-	{
+	if (deltaX != 0) {
 		m_smoothOffsetX -= deltaX * hscroll;
 	}
-
-	if (deltaY != 0)
-	{
+	if (deltaY != 0) {
 		m_smoothOffsetY -= deltaY * vscroll;
 	}
 
 	m_smoothLastX =	pdeltaX;
 	m_smoothLastY =	pdeltaY;
 
-   	if ((!g_theWorld->IsXwrap())&&signX)
-   	{
-   		if ((m_mapViewRect.left + signX) <= 0)
-		{
-			m_smoothOffsetX=0;
-			m_mapViewRect.top = 0;
-			return false;
-		}
-
-		if ((m_mapViewRect.right + signX) >= (m_mapBounds.right))
-		{
-			m_smoothOffsetX=0;
-			m_mapViewRect.top = 0;
-			return false;
-		}
-   	}
-
-   	if ((!g_theWorld->IsYwrap())&&(signY))
-   	{
-   		if ((m_mapViewRect.top+signY) < 0)
-		{
-			m_mapViewRect.top = 0;
-			m_smoothOffsetY=0;
-			return false;
-		}
-		if ((m_mapViewRect.bottom+signY) >= (m_mapBounds.bottom))
-		{
-			m_smoothOffsetY=0;
-			m_mapViewRect.bottom = m_mapBounds.bottom;
-			return false;
-		}
-   	}
-
-	RECT oldMapViewRect = m_mapViewRect;
-	RECT repaintRect;
-
-	OffsetRect(&m_mapViewRect, deltaX, deltaY);
-
-	SubtractRect(&repaintRect, &m_mapViewRect, &oldMapViewRect);
+	RECT mapViewRect = m_mapViewRect;
+	OffsetRect(&mapViewRect, deltaX, deltaY);
+	UpdateMapViewRect(EnsureRectOverlapMap(m_mapViewRect));
 
 	OffsetMixDirtyRects(deltaX, deltaY);
 
-	if (m_mapViewRect.right <= 0)
-	{
-		m_mapViewRect.left += mapWidth;
-		m_mapViewRect.right += mapWidth;
-		Assert(m_mapViewRect.right > 0);
-	}
-
-	if (m_mapViewRect.left >= mapWidth)
-	{
-		m_mapViewRect.left -= mapWidth;
-		m_mapViewRect.right -= mapWidth;
-		Assert(m_mapViewRect.left < mapWidth);
-	}
-	if (m_mapViewRect.bottom <= 0)
-	{
-		m_mapViewRect.top += mapHeight;
-		m_mapViewRect.bottom += mapHeight;
-		Assert(m_mapViewRect.bottom > 0);
-	}
-	if (m_mapViewRect.top >= mapHeight)
-	{
-		m_mapViewRect.top -= mapHeight;
-		m_mapViewRect.bottom -= mapHeight;
-		Assert(m_mapViewRect.top < mapHeight);
-	}
-
-	RECT tempRect = repaintRect;
-
-	if (signX == 1) {
-		tempRect.left -= 1;
-		tempRect.top += 1;
-		tempRect.bottom += 1;
-	}
-	else if (signX == -1) {
-		tempRect.right += 1;
-		tempRect.top += 1;
-		tempRect.bottom += 1;
-	}
-
-	if (signY == 1) {
-		tempRect.right += 1;
-		tempRect.top -= 2;
-	}
-	else if (signY == -1) {
-		tempRect.right += 1;
-		tempRect.bottom += 2;
-
-	}
-
-	OffsetSprites(&tempRect, pdeltaX, pdeltaY);
-
-	ScrollPixels((sint32)(pdeltaX), (sint32)(pdeltaY), m_surface);
-
-
-
-
+	OffsetSprites(mapViewRect, pdeltaX, pdeltaY);
+	ScrollPixels(pdeltaX, pdeltaY, m_surface);
 
 	LockSurface();
+
+	RECT repaintRect = m_mapViewRect;
+	if (deltaY == 0)
+	{
+		if (deltaX > 0) {
+			repaintRect.left = m_mapViewRect.right - deltaX;
+		} else {
+			repaintRect.right = m_mapViewRect.left - deltaX;
+		}
+	} else if (deltaX == 0) {
+		if (deltaY > 0) {
+			repaintRect.top = m_mapViewRect.bottom - deltaY;
+		} else {
+			repaintRect.bottom = m_mapViewRect.top - deltaY;
+		}
+	}
+	repaintRect = EnsureRectOverlapMap(repaintRect);
 
 	RepaintTiles(&repaintRect);
 
 	if (!g_theWorld->IsXwrap())
 		if (m_mapViewRect.left + deltaX < 0 ||
-			m_mapViewRect.right + deltaX > m_mapBounds.right-1)
+		    m_mapViewRect.right + deltaX > m_mapBounds.right-1)
 			RepaintEdgeX(&repaintRect);
 
 	if (!g_theWorld->IsYwrap())
 		if (m_mapViewRect.top + deltaY < 0 ||
-			m_mapViewRect.bottom + deltaY > m_mapBounds.bottom-2)
+		    m_mapViewRect.bottom + deltaY > m_mapBounds.bottom-2)
 			RepaintEdgeY(&repaintRect);
 
-	RepaintHats(&tempRect);
-	RepaintBorders(&tempRect);
-	RepaintImprovements(&tempRect);
+	RECT inflatedRepaintRect = repaintRect;
+
+	if (deltaX == 1) {
+		inflatedRepaintRect.left -= 1;
+		inflatedRepaintRect.top += 1;
+		inflatedRepaintRect.bottom += 1;
+	}
+	else if (deltaX == -1) {
+		inflatedRepaintRect.right += 1;
+		inflatedRepaintRect.top += 1;
+		inflatedRepaintRect.bottom += 1;
+	}
+	if (deltaY == 1) {
+		inflatedRepaintRect.right += 1;
+		inflatedRepaintRect.top -= 2;
+	}
+	else if (deltaY == -1) {
+		inflatedRepaintRect.right += 1;
+		inflatedRepaintRect.bottom += 2;
+	}
+
+	RepaintHats(&inflatedRepaintRect);
+	RepaintBorders(&inflatedRepaintRect);
+	RepaintImprovements(&inflatedRepaintRect);
 
 	UnlockSurface();
 
+	m_mapDirtyList->Flush();
+
 	InvalidateMix();
 
-	RepaintSprites(m_surface, &tempRect, true);
+	g_theTradePool->Draw(m_surface);
+	RepaintSprites(m_surface, inflatedRepaintRect, true);
 
 	return true;
 }
-
-#endif // IANSCROLL
-
-
-
-
-
-
 
 sint32 TiledMap::RedrawHat(
 			aui_Surface *surface,

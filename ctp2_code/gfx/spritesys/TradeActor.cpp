@@ -152,7 +152,7 @@ Anim * TradeActor::CreateAnim(GOODACTION action) const
 	return animation ? Anim::CreateLooping(*animation) : NULL;
 }
 
-void TradeActor::Draw(RECT * paintRect) const
+void TradeActor::Draw(const RECT & paintRect) const
 {
 	sint32 tileX;
 	maputils_MapX2TileX(m_currentPos.x, m_currentPos.y, &tileX);

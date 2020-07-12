@@ -87,7 +87,7 @@ public:
 	bool             IsActionFinished() const;
 
 	bool             Draw(bool fogged = false);
-	void             Draw(RECT * paintRect);
+	void             Draw(const RECT & paintRect);
 	void             DrawDirect(aui_Surface * surf, sint32 x, sint32 y, double scale) const;
 
 	uint16           GetWidth() const;

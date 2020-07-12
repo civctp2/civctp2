@@ -231,7 +231,7 @@ public:
 	sint32			DrawCityRadius1(const MapPoint &cpos, COLOR color);
 	sint32			PaintColoredTile(sint32 x, sint32 y, COLOR color);
 
-	void			ProcessLayerSprites(RECT *processRect, sint32 layer);
+	void			ProcessLayerSprites(const RECT & processRect, sint32 layer);
 	void			PaintGoodActor(GoodActor *actor, bool fog = false);
 
 	void			ProcessUnit(Unit unit);
@@ -266,11 +266,11 @@ public:
 
 	void			PaintUnitActor(UnitActor *actor, bool fog = false);
 
-	sint32			RepaintLayerSprites(RECT *paintRect, sint32 layer);
-	sint32			RepaintSprites(aui_Surface *surf, RECT *paintRect, bool scrolling);
+	sint32			RepaintLayerSprites(const RECT & paintRect, sint32 layer);
+	sint32			RepaintSprites(aui_Surface *surf, const RECT & paintRect, bool scrolling);
 
-	sint32			OffsetLayerSprites(RECT *paintRect, sint32 deltaX, sint32 deltaY, sint32 layer);
-	sint32			OffsetSprites(RECT *paintRect, sint32 deltaX, sint32 deltaY);
+	sint32			OffsetLayerSprites(const RECT & paintRect, sint32 deltaX, sint32 deltaY, sint32 layer);
+	sint32			OffsetSprites(const RECT & paintRect, sint32 deltaX, sint32 deltaY);
 
 	void			DrawStartingLocations(aui_Surface *surf, sint32 layer);
 
@@ -380,7 +380,7 @@ public:
 	void		SetScale(double s) { m_scale = s; }
 
 	TileInfo   *GetTileInfo(const MapPoint &pos);
-	RECT		*GetMapViewRect(void) { return &m_mapViewRect; }
+	const RECT & GetMapViewRect(void) { return m_mapViewRect; }
 
 	TileSet		*GetTileSet(void) { return m_tileSet; }
 
@@ -480,6 +480,13 @@ public:
 	sint32 GetZoomTileHeadroom() const { return m_zoomTileHeadroom[m_zoomLevel]; }
 	double GetZoomScale(sint32 level) const { return m_zoomTileScale[level]; }
 
+	void UpdateMapViewRect(const RECT & rect)
+	{
+		// m_mapViewRect is const so that it can only be updated by this method
+		RECT * mapViewRect = const_cast<RECT *> (&m_mapViewRect);
+		*mapViewRect = rect;
+	}
+
 protected:
     struct GridRect
     {
@@ -552,7 +559,6 @@ protected:
 	RECT			m_surfaceRect;
 
 	RECT			m_mapBounds;
-	RECT			m_mapViewRect;
 
 	double			m_scale;
 	sint32			m_smoothOffsetX,m_smoothOffsetY;
@@ -589,6 +595,9 @@ protected:
 	GridRect		**m_gridRects;
 
 	RECT m_chatRect;
+
+private:
+	const RECT m_mapViewRect;
 };
 
 #endif

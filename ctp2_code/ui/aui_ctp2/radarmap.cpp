@@ -1017,25 +1017,19 @@ void RadarMap::RenderMap(aui_Surface *surface)
 //    the main tile map.
 //
 //---------------------------------------------------------------------------
-void RadarMap::RenderViewRect
-(
-	aui_Surface *surf,
-	sint32 x,
-	sint32 y
-)
+void RadarMap::RenderViewRect(aui_Surface *surf, sint32 x, sint32 y)
 {
-    RECT offsetRect = {0, 0, 0, 0};
+	RECT offsetRect = {0, 0, 0, 0};
 
 	if (g_tiledMap)
-    {
-		RECT *  temp        = g_tiledMap->GetMapViewRect();
+	{
+		m_mapViewRect = g_tiledMap->GetMapViewRect();
 
-        m_mapViewRect = *temp;
-
-		if(!g_tiledMap->ReadyToDraw())
+		if(!g_tiledMap->ReadyToDraw()) {
 			return;
+		}
 
-	    sint32  nrplayer    = g_selected_item->GetVisiblePlayer();
+		sint32 nrplayer = g_selected_item->GetVisiblePlayer();
 
 		offsetRect.bottom = m_mapViewRect.bottom;
 		offsetRect.top = m_mapViewRect.top;
@@ -1058,7 +1052,6 @@ void RadarMap::RenderViewRect
 			offsetRect.right -= m_mapSize->x;
 		}
 	}
-
 
 	sint32 x1,x2,x3,x4;
 	sint32 y1,y2,y3,y4;
@@ -1244,10 +1237,11 @@ MapPoint RadarMap::CenterMap(MapPoint const & pos)
 
 	m_lastCenteredPoint = pos;
 
-	RECT *mapViewRect = g_tiledMap->GetMapViewRect();
+	RECT mapViewRect = g_tiledMap->GetMapViewRect();
+	ComputeCenteredMap(pos, &mapViewRect);
+	m_mapViewRect = mapViewRect;
+	g_tiledMap->UpdateMapViewRect(mapViewRect);
 
-	ComputeCenteredMap(pos, mapViewRect);
-	m_mapViewRect = *mapViewRect;
 	RenderMap(m_mapSurface);
 
 	return LastPT;
@@ -1264,15 +1258,15 @@ MapPoint RadarMap::CenterMap(MapPoint const & pos)
 //---------------------------------------------------------------------------
 BOOL RadarMap::IncludePointInView(MapPoint &pos, sint32 radius)
 {
-	RECT		*mapViewRect = g_tiledMap->GetMapViewRect();
-	RECT		adjustedRect = *mapViewRect;
+	const RECT & mapViewRect = g_tiledMap->GetMapViewRect();
+	RECT adjustedRect = mapViewRect;
 
 	sint32		tileX;
 	maputils_MapX2TileX(pos.x, pos.y, &tileX);
 	sint32  tileY = pos.y;
 
 	sint32		wrappedLeft, wrappedTop;
-	maputils_WrapPoint(mapViewRect->left, mapViewRect->top, &wrappedLeft, &wrappedTop);
+	maputils_WrapPoint(mapViewRect.left, mapViewRect.top, &wrappedLeft, &wrappedTop);
 
 	InflateRect(&adjustedRect, -radius, -radius);
 	adjustedRect.top += 1;
@@ -1300,13 +1294,11 @@ BOOL RadarMap::IncludePointInView(MapPoint &pos, sint32 radius)
 	sint32 newX, newY;
 	maputils_WrapPoint(newLeft, newTop, &newX, &newY);
 
-	sint32 w = mapViewRect->right - mapViewRect->left;
-	sint32 h = mapViewRect->bottom - mapViewRect->top;
+	sint32 w = mapViewRect.right - mapViewRect.left;
+	sint32 h = mapViewRect.bottom - mapViewRect.top;
 
-	mapViewRect->left = newX;
-	mapViewRect->top = newY & ~0x1;
-	mapViewRect->right = newX + w;
-	mapViewRect->bottom = newY + h;
+	RECT updatedMapViewRect = { newX, newY & ~0x1, newX + w, newY + h };
+	g_tiledMap->UpdateMapViewRect(updatedMapViewRect);
 
 	return TRUE;
 }
@@ -1324,7 +1316,7 @@ void RadarMap::Setup(void)
 
 	if (g_tiledMap)
     {
-		m_mapViewRect = *g_tiledMap->GetMapViewRect();
+		m_mapViewRect = g_tiledMap->GetMapViewRect();
 	}
 }
 
@@ -1507,8 +1499,7 @@ void RadarMap::MouseLGrabInside(aui_MouseEvent *data)
 	m_mapViewRect.top = (tileY - (height / 2)) & ~0x01;
 	m_mapViewRect.bottom = m_mapViewRect.top + height;
 
-	RECT *  realMapViewRect = g_tiledMap->GetMapViewRect();
-	*realMapViewRect = m_mapViewRect;
+	g_tiledMap->UpdateMapViewRect(m_mapViewRect);
 
 	g_tiledMap->Refresh();
 	g_tiledMap->InvalidateMap();

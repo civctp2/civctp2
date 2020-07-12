@@ -88,12 +88,12 @@ void maputils_WrapPoint(
 	}
 }
 
-BOOL maputils_TilePointInTileRect(sint32 x, sint32 y, RECT *tileRect)
+BOOL maputils_TilePointInTileRect(sint32 x, sint32 y, const RECT & tileRect)
 {
 	sint32 mapWidth, mapHeight;
 	g_tiledMap->GetMapMetrics(&mapWidth,&mapHeight);
 
-	RECT wrappedRect = *tileRect;
+	RECT wrappedRect = tileRect;
 
 	if (wrappedRect.left < 0) {
 		wrappedRect.left = g_theWorld->IsXwrap() ? wrappedRect.left + mapWidth : 0;
@@ -111,7 +111,6 @@ BOOL maputils_TilePointInTileRect(sint32 x, sint32 y, RECT *tileRect)
 	if (wrappedRect.right < wrappedRect.left) {
 		if (x < wrappedRect.left && x >= wrappedRect.right) return FALSE;
 	} else {
-
 		if (x < wrappedRect.left || x >= wrappedRect.right) return FALSE;
 	}
 
@@ -199,11 +198,11 @@ void maputils_MapXY2PixelXY(
 	RECT		splitViewRectL, splitViewRectR, splitViewRectT, splitViewRectB;
 	POINT		tempPos;
 
-	RECT		*mapViewRect = g_tiledMap->GetMapViewRect();
+	const RECT & mapViewRect = g_tiledMap->GetMapViewRect();
 
 	g_tiledMap->GetMapMetrics(&mapWidth,&mapHeight);
 
-	splitViewRectB = splitViewRectT = splitViewRectR = splitViewRectL = *mapViewRect;
+	splitViewRectB = splitViewRectT = splitViewRectR = splitViewRectL = mapViewRect;
 
 	if (mapY & 0x01)
 
@@ -216,55 +215,44 @@ void maputils_MapXY2PixelXY(
 	tempPos.x = realX;
 	tempPos.y = mapY;
 
-
-
-
-
-
-
-
-
-
-
-
-	if(mapViewRect->right >= mapWidth && mapViewRect->left < mapWidth) {
-		splitViewRectR.left = mapViewRect->left;
+	if(mapViewRect.right >= mapWidth && mapViewRect.left < mapWidth) {
+		splitViewRectR.left = mapViewRect.left;
 		splitViewRectR.right = mapWidth;
 		splitViewRectR.top = 0;
 		splitViewRectR.bottom = mapHeight;
 		splitViewRectL.left = 0 - (splitViewRectR.right - splitViewRectR.left);
-		splitViewRectL.right = mapViewRect->right - mapWidth;
+		splitViewRectL.right = mapViewRect.right - mapWidth;
 		splitViewRectL.top = 0;
 		splitViewRectL.bottom = mapHeight;
 	}
-	else if(mapViewRect->left < 0 && mapViewRect->right >= 0) {
-		splitViewRectR.left = mapViewRect->left + mapWidth;
+	else if(mapViewRect.left < 0 && mapViewRect.right >= 0) {
+		splitViewRectR.left = mapViewRect.left + mapWidth;
 		splitViewRectR.right = mapWidth;
 		splitViewRectR.top = 0;
 		splitViewRectR.bottom = mapHeight;
 		splitViewRectL.left = 0 - (splitViewRectR.right - splitViewRectR.left);
-		splitViewRectL.right = mapViewRect->right;
+		splitViewRectL.right = mapViewRect.right;
 		splitViewRectL.top = 0;
 		splitViewRectL.bottom = mapHeight;
 	}
 
-	if(mapViewRect->bottom >= mapHeight && mapViewRect->top < mapHeight) {
-		splitViewRectB.top = mapViewRect->top;
+	if(mapViewRect.bottom >= mapHeight && mapViewRect.top < mapHeight) {
+		splitViewRectB.top = mapViewRect.top;
 		splitViewRectB.bottom = mapHeight;
 		splitViewRectB.left = 0;
 		splitViewRectB.right = mapWidth;
 		splitViewRectT.top = 0 - (splitViewRectB.bottom - splitViewRectB.top);
-		splitViewRectT.bottom = mapViewRect->bottom - mapHeight;
+		splitViewRectT.bottom = mapViewRect.bottom - mapHeight;
 		splitViewRectT.left = 0;
 		splitViewRectT.right = mapWidth;
 	}
-	else if((mapViewRect->top < 0 && g_theWorld->IsYwrap()) && mapViewRect->bottom >= 0) {
-		splitViewRectB.top = mapViewRect->top + mapHeight;
+	else if((mapViewRect.top < 0 && g_theWorld->IsYwrap()) && mapViewRect.bottom >= 0) {
+		splitViewRectB.top = mapViewRect.top + mapHeight;
 		splitViewRectB.bottom = mapHeight;
 		splitViewRectB.left = 0;
 		splitViewRectB.right = mapWidth;
 		splitViewRectT.top = 0 - (splitViewRectB.bottom - splitViewRectB.top);
-		splitViewRectT.bottom = mapViewRect->bottom;
+		splitViewRectT.bottom = mapViewRect.bottom;
 		splitViewRectT.left = 0;
 		splitViewRectT.right = mapWidth;
 	}
@@ -279,7 +267,7 @@ void maputils_MapXY2PixelXY(
 	}
 	else
 	{
-		*pixelX = (sint32)((realX * (g_tiledMap->GetZoomTilePixelWidth()) + nudge) - (mapViewRect->left * (g_tiledMap->GetZoomTilePixelWidth())));
+		*pixelX = (sint32)((realX * (g_tiledMap->GetZoomTilePixelWidth()) + nudge) - (mapViewRect.left * (g_tiledMap->GetZoomTilePixelWidth())));
 	}
 
 	if(PtInRect(&splitViewRectT, tempPos))
@@ -294,7 +282,7 @@ void maputils_MapXY2PixelXY(
 	}
 	else
 	{
-	  	*pixelY = (sint32)((mapY * ((g_tiledMap->GetZoomTilePixelHeight())/2)) - (mapViewRect->top * ((g_tiledMap->GetZoomTilePixelHeight())/2)));
+	  	*pixelY = (sint32)((mapY * ((g_tiledMap->GetZoomTilePixelHeight())/2)) - (mapViewRect.top * ((g_tiledMap->GetZoomTilePixelHeight())/2)));
 
 	}
 

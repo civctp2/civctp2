@@ -134,7 +134,7 @@ Anim * EffectActor::CreateAnim(EFFECTACTION action) const
 	return animation ? Anim::CreateSequential(*animation) : NULL;
 }
 
-void EffectActor::Draw(RECT * paintRect) const
+void EffectActor::Draw(const RECT & paintRect) const
 {
 	if (m_curAction)
 	{

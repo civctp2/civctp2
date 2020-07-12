@@ -26,7 +26,7 @@ public:
 	Anim * CreatePlayElseFlashAnim(EFFECTACTION & action) const;
 	Anim * CreatePlayAnim() const;
 
-	void Draw(RECT * paintRect) const;
+	void Draw(const RECT & paintRect) const;
 	void DrawDirectWithFlags(aui_Surface * surf, uint16 flags) const;
 
 	const MapPoint & GetMapPos() const { return m_pos; }

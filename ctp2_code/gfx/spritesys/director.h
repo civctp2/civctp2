@@ -62,7 +62,7 @@ public:
 
 	virtual void Process() = 0;
 	virtual void PauseDirector(bool pause) = 0;
-	virtual void Draw(RECT *paintRect, sint32 layer) = 0;
+	virtual void Draw(const RECT & paintRect, sint32 layer) = 0;
 	virtual void OffsetActors(sint32 deltaX, sint32 deltaY) = 0;
 
 	virtual void ExternalActionFinished(DEACTION_TYPE externalActionType) = 0;
