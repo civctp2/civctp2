@@ -45,6 +45,7 @@ protected:
 	uint32                         m_currentPosID;
 	uint32                         m_destPosID;
 	MapPoint                       m_currentPos;
+	MapPoint                       m_nextPos;
 
 	GoodSpriteGroup              * m_goodSpriteGroup;
 

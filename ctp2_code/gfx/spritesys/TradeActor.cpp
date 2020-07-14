@@ -53,6 +53,7 @@ TradeActor::TradeActor(TradeRoute newRoute)
 	m_currentPosID    (0),
 	m_destPosID       (0),
 	m_currentPos      (MapPoint(0,0)),
+	m_nextPos         (MapPoint(0, 0)),
 	m_goodSpriteGroup (NULL),
 	m_facing          (k_DEFAULTSPRITEFACING),
 	m_idleAnim        (NULL),
@@ -66,6 +67,7 @@ TradeActor::TradeActor(TradeRoute newRoute)
 	m_currentPosID = m_sourcePosID + 1;
 	m_destPosID    = m_routePath->Num() - 1;
 	m_currentPos   = m_routePath->Get(m_currentPosID);
+	m_nextPos      = LookAtNextPos();
 
 	Assert(g_goodSpriteGroupList);
 
@@ -95,7 +97,8 @@ void TradeActor::AddIdle(void)
 	delete m_curAction;
 
 	m_currentPos = GetNextPos();
-	m_curAction = Action::CreateGoodAction(GOODACTION_IDLE, m_idleAnim, m_currentPos, LookAtNextPos());
+	m_nextPos    = LookAtNextPos();
+	m_curAction = Action::CreateGoodAction(GOODACTION_IDLE, m_idleAnim, m_currentPos, m_nextPos);
 	m_curGoodAction = GOODACTION_IDLE;
 }
 
@@ -154,14 +157,18 @@ Anim * TradeActor::CreateAnim(GOODACTION action) const
 
 void TradeActor::Draw(const RECT & paintRect) const
 {
-	sint32 tileX;
-	maputils_MapX2TileX(m_currentPos.x, m_currentPos.y, &tileX);
+	sint32 currentTileX;
+	maputils_MapX2TileX(m_currentPos.x, m_currentPos.y, &currentTileX);
+	sint32 nextTileX;
+	maputils_MapX2TileX(m_nextPos.x, m_nextPos.y, &nextTileX);
 
-	if (maputils_TilePointInTileRect(tileX, m_currentPos.y, paintRect))
+	if (maputils_TilePointInTileRect(currentTileX, m_currentPos.y, paintRect)
+		&& maputils_TilePointInTileRect(nextTileX, m_nextPos.y, paintRect))
 	{
 		POINT drawPos = m_curAction->CalculatePixelXY(m_currentPos);
-		drawPos.x += k_ACTOR_CENTER_OFFSET_X;
-		drawPos.y += k_ACTOR_CENTER_OFFSET_Y;
+		double scale = g_tiledMap->GetScale();
+		drawPos.x += (sint32)(k_ACTOR_CENTER_OFFSET_X * scale);
+		drawPos.y += (sint32)(k_ACTOR_CENTER_OFFSET_Y * scale);
 
 		Draw(g_tiledMap->GetLocalVision(), drawPos);
 		RECT dirtyRect;
