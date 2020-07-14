@@ -235,8 +235,9 @@ void TradeActor::GetBoundingRect(RECT * rect, const POINT & drawPos) const
 
 	rect->left   = 0;
 	rect->top    = 0;
-	rect->right  = (sint32)((double)GetWidth() * scale);
-	rect->bottom = (sint32)((double)GetHeight() * scale);
+	rect->right  = (sint32)(GetWidth() * scale);
+	rect->bottom = (sint32)(GetHeight() * scale);
 
-	OffsetRect(rect, drawPos.x, drawPos.y);
+	POINT hotPoint = m_goodSpriteGroup->GetHotPoint(m_curGoodAction);
+	OffsetRect(rect, drawPos.x - (sint32)(hotPoint.x * scale), drawPos.y - (sint32)(hotPoint.y * scale));
 }
