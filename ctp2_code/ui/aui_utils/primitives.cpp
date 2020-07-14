@@ -2574,18 +2574,30 @@ void SpecialDrawLine16(Pixel16 * base, sint32 deltaX, sint32 deltaY, sint32 incr
 
 	if (deltaX == 0) // vertical
 	{
-		DrawShadowLine16(base, deltaY + 1, incrementY, pixelutils_GetShadow16RGBMask());
+		if (lineFlags & LF_SHADOW) {
+			DrawShadowLine16(base, deltaY + 1, incrementY, pixelutils_GetShadow16RGBMask());
+		} else {
+			DrawLine16(base, deltaY + 1, incrementY, color);
+		}
 	}
 	else if (deltaY == 0) // horizontal
 	{
 		if (incrementX < 0) {
 			base = base - deltaX;
 		}
-		DrawShadowLine16(base, deltaX + 1, 1, pixelutils_GetShadow16RGBMask());
+		if (lineFlags & LF_SHADOW) {
+			DrawShadowLine16(base, deltaX + 1, 1, pixelutils_GetShadow16RGBMask());
+		} else {
+			DrawLine16(base, deltaX + 1, 1, color);
+		}
 	}
 	else if (deltaX == deltaY) // diagonal
 	{
-		DrawShadowLine16(base, deltaX + 1, incrementY + incrementX, pixelutils_GetShadow16RGBMask());
+		if (lineFlags & LF_SHADOW) {
+			DrawShadowLine16(base, deltaX + 1, incrementY + incrementX, pixelutils_GetShadow16RGBMask());
+		} else {
+			DrawLine16(base, deltaX + 1, incrementY + incrementX, color);
+		}
 	}
 	else if (deltaX < deltaY) // Y-major
 	{
