@@ -489,8 +489,10 @@ protected:
 	    BOOL		dirty;
     };
 
-	RECT EnsureRectOverlapMap(const RECT & rect) const;
-	void CalculateZoomViewRectangle(sint32 zoomLevel, RECT &rectangle) const;
+	RECT   EnsureRectOverlapMap(const RECT & rect) const;
+	void   CalculateZoomViewRectangle(sint32 zoomLevel, RECT &rectangle) const;
+	sint32 GetZoomDisplayWidth() const;
+	sint32 GetZoomDisplayHeight() const;
 
 	void ZoomHitMask();
 

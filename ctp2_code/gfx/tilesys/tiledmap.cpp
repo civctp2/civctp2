@@ -1500,22 +1500,14 @@ sint32 TiledMap::RecalculateViewRect(RECT &myRect)
 
 sint32 TiledMap::CalculateMetrics(void)
 {
-	sint32			w = m_displayRect.right - m_displayRect.left;
-	sint32			h = m_displayRect.bottom - m_displayRect.top;
-
-	RECT mapViewRect = { 0, 0, (sint32)((w-(GetZoomTilePixelWidth()/2))/(GetZoomTilePixelWidth())),
-					(sint32)((h-GetZoomTileHeadroom())/(GetZoomTilePixelHeight()/2)-1) };
+	sint32 displayWidth = GetZoomDisplayWidth();
+	sint32 displayHeight = GetZoomDisplayHeight();
+	RECT mapViewRect = { 0, 0, (sint32)((displayWidth-(GetZoomTilePixelWidth()/2))/(GetZoomTilePixelWidth())),
+					(sint32)((displayHeight-GetZoomTileHeadroom())/(GetZoomTilePixelHeight()/2)-1) };
 	UpdateMapViewRect(mapViewRect);
 
 	return 0;
 }
-
-
-
-
-
-
-
 
 #if defined(_PLAYTEST)
 extern sint32 g_is_debug_map_color;
@@ -3398,11 +3390,6 @@ RECT TiledMap::EnsureRectOverlapMap(const RECT & rect) const
 	return result;
 }
 
-#define kMV_LeftMin (-1)
-#define kMV_RightMax 2
-#define kMV_TopMin (-4)
-#define kMV_BottomMax 12
-
 bool TiledMap::ScrollMap(sint32 deltaX, sint32 deltaY)
 {
 	if (g_modalWindow) {
@@ -3413,38 +3400,30 @@ bool TiledMap::ScrollMap(sint32 deltaX, sint32 deltaY)
 
 	if (!g_theWorld->IsXwrap())
 	{
-		if ((deltaX < 0) && (m_mapViewRect.left + deltaX < kMV_LeftMin ))
+		const sint32 leftMin = 1;
+		if ((deltaX < 0) && (m_mapViewRect.left + deltaX < m_mapBounds.left - leftMin))
 		{
-			deltaX = kMV_LeftMin - m_mapViewRect.left;
-			if (deltaX > 0) {
-				deltaX = 0;
-			}
+			deltaX = 0;
 		}
-		if ((deltaX > 0) && (m_mapViewRect.right + deltaX > m_mapBounds.right + kMV_RightMax))
+		sint32 rightMax = 1 + ((GetZoomDisplayWidth() % GetZoomTilePixelWidth()) >= GetZoomTilePixelWidth()/2 ? 1 : 0);
+		if ((deltaX > 0) && (m_mapViewRect.right + deltaX > m_mapBounds.right + rightMax))
 		{
-			deltaX = m_mapBounds.right + kMV_RightMax - m_mapViewRect.right;
-			if (deltaX < 0) {
-				deltaX = 0;
-			}
+			deltaX = 0;
 		}
 	}
 
 	if (!g_theWorld->IsYwrap())
 	{
-		if ((deltaY < 0) && (m_mapViewRect.top + deltaY < kMV_TopMin))
+		const sint32 topMin = 3;
+		if ((deltaY < 0) && (m_mapViewRect.top + deltaY < m_mapBounds.top - topMin))
 		{
-			deltaY = kMV_TopMin - m_mapViewRect.top;
-			if (deltaY > 0) {
-				deltaY = 0;
-			}
+			deltaY = 0;
 		}
 
-		if ((deltaY > 0) && (m_mapViewRect.bottom + deltaY > m_mapBounds.bottom + kMV_BottomMax))
+		const sint32 bottomMax = 3 + g_controlPanel->Height() / (GetZoomTilePixelHeight() / 2);
+		if ((deltaY > 0) && (m_mapViewRect.bottom + deltaY > m_mapBounds.bottom + bottomMax))
 		{
-			deltaY = m_mapBounds.bottom + kMV_BottomMax - m_mapViewRect.bottom;
-			if (deltaY  < 0) {
-				deltaY = 0;
-			}
+			deltaY = 0;
 		}
 	}
 
@@ -3465,15 +3444,31 @@ bool TiledMap::ScrollMap(sint32 deltaX, sint32 deltaY)
 	if (deltaY == 0)
 	{
 		if (deltaX > 0) {
-			repaintRect.left = m_mapViewRect.right - deltaX;
+			if (m_mapViewRect.right > m_mapBounds.right && !g_theWorld->IsXwrap()) {
+				repaintRect = RECT_INVISIBLE;
+			} else {
+				repaintRect.left = m_mapViewRect.right - deltaX;
+			}
 		} else {
-			repaintRect.right = m_mapViewRect.left - deltaX;
+			if (m_mapViewRect.left < m_mapBounds.left && !g_theWorld->IsXwrap()) {
+				repaintRect = RECT_INVISIBLE;
+			} else {
+				repaintRect.right = m_mapViewRect.left - deltaX;
+			}
 		}
 	} else if (deltaX == 0) {
 		if (deltaY > 0) {
-			repaintRect.top = m_mapViewRect.bottom - deltaY;
+			if (m_mapViewRect.bottom > m_mapBounds.bottom && !g_theWorld->IsYwrap()) {
+				repaintRect = RECT_INVISIBLE;
+			} else {
+				repaintRect.top = m_mapViewRect.bottom - deltaY;
+			}
 		} else {
-			repaintRect.bottom = m_mapViewRect.top - deltaY;
+			if (m_mapViewRect.top < m_mapBounds.top && !g_theWorld->IsYwrap()) {
+				repaintRect = RECT_INVISIBLE;
+			} else {
+				repaintRect.bottom = m_mapViewRect.top - deltaY;
+			}
 		}
 	}
 	repaintRect = EnsureRectOverlapMap(repaintRect);
@@ -3541,38 +3536,30 @@ bool TiledMap::ScrollMapSmooth(sint32 pdeltaX, sint32 pdeltaY)
 
 	if (!g_theWorld->IsXwrap())
 	{
-		if ((signX < 0) && (m_mapViewRect.left + signX < kMV_LeftMin ))
+		const sint32 leftMin = 1;
+		if ((signX < 0) && (m_mapViewRect.left + signX < m_mapBounds.left - leftMin))
 		{
-			signX = kMV_LeftMin - m_mapViewRect.left;
-			if (signX > 0) {
-				signX = 0;
-			}
+			signX = 0;
 		}
-		if ((signX > 0) && (m_mapViewRect.right + signX > m_mapBounds.right + kMV_RightMax))
+		sint32 rightMax = 1 + ((GetZoomDisplayWidth() % GetZoomTilePixelWidth()) >= GetZoomTilePixelWidth()/2 ? 1 : 0);
+		if ((signX > 0) && (m_mapViewRect.right + signX > m_mapBounds.right + rightMax))
 		{
-			signX = m_mapBounds.right + kMV_RightMax - m_mapViewRect.right;
-			if (signX < 0) {
-				signX = 0;
-			}
+			signX = 0;
 		}
 	}
 
 	if (!g_theWorld->IsYwrap())
 	{
-		if ((signY < 0) && (m_mapViewRect.top + signY < kMV_TopMin))
+		const sint32 topMin = 3;
+		if ((signY < 0) && (m_mapViewRect.top + signY < m_mapBounds.top - topMin))
 		{
-			signY = kMV_TopMin - m_mapViewRect.top;
-			if (signY > 0) {
-				signY = 0;
-			}
+			signY = 0;
 		}
 
-		if ((signY > 0) && (m_mapViewRect.bottom + signY > m_mapBounds.bottom + kMV_BottomMax))
+		const sint32 bottomMax = 3 + g_controlPanel->Height() / (GetZoomTilePixelHeight() / 2);
+		if ((signY > 0) && (m_mapViewRect.bottom + signY > m_mapBounds.bottom + bottomMax))
 		{
-			signY = m_mapBounds.bottom + kMV_BottomMax - m_mapViewRect.bottom;
-			if (signY  < 0) {
-				signY = 0;
-			}
+			signY = 0;
 		}
 	}
 
@@ -3606,15 +3593,31 @@ bool TiledMap::ScrollMapSmooth(sint32 pdeltaX, sint32 pdeltaY)
 	if (deltaY == 0)
 	{
 		if (deltaX > 0) {
-			repaintRect.left = m_mapViewRect.right - deltaX;
+			if (m_mapViewRect.right > m_mapBounds.right && !g_theWorld->IsXwrap()) {
+				repaintRect = RECT_INVISIBLE;
+			} else {
+				repaintRect.left = m_mapViewRect.right - deltaX;
+			}
 		} else {
-			repaintRect.right = m_mapViewRect.left - deltaX;
+			if (m_mapViewRect.left < m_mapBounds.left && !g_theWorld->IsXwrap()) {
+				repaintRect = RECT_INVISIBLE;
+			} else {
+				repaintRect.right = m_mapViewRect.left - deltaX;
+			}
 		}
 	} else if (deltaX == 0) {
 		if (deltaY > 0) {
-			repaintRect.top = m_mapViewRect.bottom - deltaY;
+			if (m_mapViewRect.bottom > m_mapBounds.bottom && !g_theWorld->IsYwrap()) {
+				repaintRect = RECT_INVISIBLE;
+			} else {
+				repaintRect.top = m_mapViewRect.bottom - deltaY;
+			}
 		} else {
-			repaintRect.bottom = m_mapViewRect.top - deltaY;
+			if (m_mapViewRect.top < m_mapBounds.top && !g_theWorld->IsYwrap()) {
+				repaintRect = RECT_INVISIBLE;
+			} else {
+				repaintRect.bottom = m_mapViewRect.top - deltaY;
+			}
 		}
 	}
 	repaintRect = EnsureRectOverlapMap(repaintRect);
@@ -5144,6 +5147,21 @@ void TiledMap::SetZoomLevel(sint32 level)
 
 	Assert(level >= 0 && level < k_MAX_ZOOM_LEVELS);
 
+	if (g_background)
+	{
+		sint32 xOffset;
+		sint32 yOffset;
+		if (level == k_ZOOM_LARGEST) {
+			xOffset = -m_zoomTilePixelWidth[m_zoomLevel] - g_background->X();
+			yOffset = -(m_zoomTilePixelHeight[m_zoomLevel] / 2) * 3 - g_background->Y();
+		} else {
+			xOffset = m_zoomTilePixelWidth[m_zoomLevel] - m_zoomTilePixelWidth[level];
+			yOffset = (m_zoomTilePixelHeight[m_zoomLevel] - m_zoomTilePixelHeight[level]) * 2;
+		}
+		g_background->Offset(xOffset, yOffset);
+		OffsetRect(&g_backgroundViewport, -xOffset, -yOffset);
+	}
+
 	m_zoomLevel = level;
 
 	m_scale = m_zoomTileScale[m_zoomLevel];
@@ -5217,6 +5235,20 @@ void TiledMap::CalculateZoomViewRectangle(sint32 zoomLevel, RECT &rectangle) con
 		(m_zoomTilePixelHeight[zoomLevel] / 2) - 1;
 }
 
+sint32 TiledMap::GetZoomDisplayWidth() const
+{
+	// Total width = screen-width + 5/2 * max-tile-width, so zoomed width need to be adjusted 5/2 delta tile-width
+	sint32 deltaTileWidth = m_zoomTilePixelWidth[k_ZOOM_LARGEST] - GetZoomTilePixelWidth();
+	return m_displayRect.right - m_displayRect.left - (deltaTileWidth / 2) * 5;
+}
+
+sint32 TiledMap::GetZoomDisplayHeight() const
+{
+	// Total height = screen-height + 2 * max-tile-height, so zoomed height need to be adjusted 4 delta tile-height
+	sint32 deltaTileHeight = m_zoomTilePixelHeight[k_ZOOM_LARGEST] - GetZoomTilePixelHeight();
+	return m_displayRect.bottom - m_displayRect.top - deltaTileHeight * 4;
+}
+
 void TiledMap::ZoomHitMask()
 {
 	for (int i=0; i<k_TILE_GRID_HEIGHT;i++) {
@@ -5233,10 +5265,6 @@ void TiledMap::ZoomUpdate(sint32 zoomLevel)
 	sint32 mapViewCenterXWrap = 0, mapViewCenterYWrap = 0;
 	maputils_WrapPoint(mapViewCenterX, mapViewCenterY,
 		&mapViewCenterXWrap, &mapViewCenterYWrap);
-
-
-
-
 
 	sint32 mapViewCenterXTile = maputils_TileX2MapX(mapViewCenterXWrap, mapViewCenterYWrap);
 
