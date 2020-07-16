@@ -1372,7 +1372,11 @@ STDEHANDLER(DirectorMoveUnitsEvent)
 	if (!args->GetPos(1, to)) return GEV_HD_Continue;
 
 	if (a.Num() <= 0) return GEV_HD_Continue;
-	if (a->IsStealth() && !a->IsVisible(g_selected_item->GetPlayerOnScreen())) return GEV_HD_Continue;
+
+	bool hiddenMove = false;
+	if (a->IsStealth() && !a->IsVisible(g_selected_item->GetPlayerOnScreen())) {
+		hiddenMove = true;
+	}
 
 	if (g_selected_item->GetPlayerOnScreen() != -1 &&
 		g_selected_item->GetPlayerOnScreen() != g_selected_item->GetVisiblePlayer() &&
@@ -1395,7 +1399,7 @@ STDEHANDLER(DirectorMoveUnitsEvent)
 
 	MapPoint newPos = to;
 
-	if(g_selected_item->IsAutoCenterOn()
+	if(!hiddenMove && g_selected_item->IsAutoCenterOn()
 	   && !g_director->TileWillBeCompletelyVisible(newPos.x, newPos.y)
 	   && (top_src.GetVisibility() & (1 << g_selected_item->GetVisiblePlayer()))
 	   && (g_theProfileDB->IsEnemyMoves() || top_src.GetOwner() == g_selected_item->GetVisiblePlayer()))
@@ -1403,7 +1407,7 @@ STDEHANDLER(DirectorMoveUnitsEvent)
 		g_director->AddCenterMap(newPos);
 	}
 
-	if (!to.IsNextTo(from)) {
+	if (hiddenMove || !to.IsNextTo(from)) {
 		g_director->AddTeleport(top_src, from, newPos, numRest, restOfStack);
 	} else {
 		g_director->AddMove(top_src, from, newPos, numRest, restOfStack, top_src.GetMoveSoundID());
