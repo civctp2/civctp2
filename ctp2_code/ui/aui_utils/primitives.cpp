@@ -2751,8 +2751,8 @@ void primitives_BaseClippedDrawLine16(aui_Surface & surf, sint32 x1, sint32 y1, 
 void primitives_ClippedPaintRect16(aui_Surface & surf, const RECT & rect, Pixel16 color, uint8 alpha)
 {
 	RECT clippedRect = ClipRect(surf, rect);
-	sint32 width  = clippedRect.right - clippedRect.left;
-	sint32 height = clippedRect.bottom - clippedRect.top;
+	sint32 width  = clippedRect.right - clippedRect.left + 1;
+	sint32 height = clippedRect.bottom - clippedRect.top + 1;
 
 	sint32 surfPitchPixels = surf.Pitch() >> 1;
 
@@ -2769,8 +2769,8 @@ void primitives_ClippedFrameRect16(aui_Surface & surf, const RECT & rect, Pixel1
 	const int blendRGBMask = pixelutils_GetBlend16RGBMask();
 
 	RECT clippedRect = ClipRect(surf, rect);
-	sint32 width  = clippedRect.right - clippedRect.left;
-	sint32 height = clippedRect.bottom - clippedRect.top;
+	sint32 width  = clippedRect.right - clippedRect.left + 1;
+	sint32 height = clippedRect.bottom - clippedRect.top + 1;
 
 	sint32 surfPitchPixels = surf.Pitch() >> 1;
 	Pixel16 * basePixel = GetBasePixel16(surf, clippedRect.left, clippedRect.top);

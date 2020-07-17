@@ -755,9 +755,6 @@ void TiledMap::DrawLegalMove
 				x += xoffset;
 				y += yoffset;
 
-				RECT	turnRect	=
-					{x - boxEdgeSize, y - boxEdgeSize, x + boxEdgeSize, y + boxEdgeSize};
-
 				MBCHAR turnNumber[80];
 
 				if ((!special_box_done) && (special_line_segment == line_segment_count))
@@ -775,16 +772,14 @@ void TiledMap::DrawLegalMove
 				dist = drawPos.NormalizedDistance(target_pos);//pft
 				if(dist > max_rge)
 				{
+					RECT turnRect = {x - boxEdgeSize, y - boxEdgeSize, x + boxEdgeSize - 1, y + boxEdgeSize - 1};
 					primitives_ClippedPaintRect16(*pSurface, turnRect, g_colorSet->GetColor(actual_line_color));
 					primitives_ClippedFrameRect16(*pSurface, turnRect, g_colorSet->GetColor(COLOR_BLACK));
 
 					sint32 const width = m_font->GetStringWidth(turnNumber);
 					sint32 const height = m_font->GetMaxHeight();
 					RECT rect = {0, 0, width, height};
-					OffsetRect(&rect, // position rect relative to turnRect
-					    turnRect.left + (turnRect.right - turnRect.left) / 2 - width  / 2,
-					    turnRect.top  + (turnRect.bottom - turnRect.top) / 2 - height / 2);
-
+					OffsetRect(&rect, x - width / 2, y - height / 2);
 					RECT clipRect = primitives_GetScreenAdjustedRectCopy(pSurface, rect);
 					m_font->DrawString(pSurface, &rect, &clipRect, turnNumber, 0, g_colorSet->GetColorRef(COLOR_BLACK), 0);
 				}
@@ -817,25 +812,22 @@ void TiledMap::DrawLegalMove
 			x += xoffset;
 			y += yoffset;
 
-			RECT	turnRect	=
-				{x - boxEdgeSize, y - boxEdgeSize, x + boxEdgeSize, y + boxEdgeSize};
-
 			dist = drawPos.NormalizedDistance(target_pos);//pft
+
 			if(dist > max_rge){
 				MBCHAR turnNumber[80];
 				sprintf(turnNumber, "*");
 				actual_line_color	= k_TURN_COLOR_SPECIAL;
 				special_box_done	= true;
 
+				RECT turnRect = {x - boxEdgeSize, y - boxEdgeSize, x + boxEdgeSize - 1, y + boxEdgeSize - 1};
 				primitives_ClippedPaintRect16(*pSurface, turnRect, g_colorSet->GetColor(actual_line_color));
 				primitives_ClippedFrameRect16(*pSurface, turnRect, g_colorSet->GetColor(COLOR_BLACK));
 
 				sint32 const width = m_font->GetStringWidth(turnNumber);
 				sint32 const height = m_font->GetMaxHeight();
 				RECT rect = {0, 0, width, height};
-				OffsetRect(&rect, // position rect relative to turnRect
-				    turnRect.left + (turnRect.right - turnRect.left) / 2 - width  / 2,
-				    turnRect.top  + (turnRect.bottom - turnRect.top) / 2 - height / 2);
+				OffsetRect(&rect, x - width / 2, y - height / 2);
 
 				RECT clipRect = primitives_GetScreenAdjustedRectCopy(pSurface, turnRect);
 				m_font->DrawString(pSurface, &turnRect, &clipRect, turnNumber, 0, g_colorSet->GetColorRef(COLOR_BLACK), 0);

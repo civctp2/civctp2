@@ -157,8 +157,20 @@ RECT	primitives_GetScreenAdjustedRectCopy(aui_Surface *surf, RECT &clipRect);
 // Clipped primitives
 void primitives_ClippedPaintRect16(aui_Surface & surf, const RECT & rect, Pixel16 color,
 		uint8 alpha = pixelutils_OPAQUE);
+inline void primitives_ClippedPaint16(aui_Surface & surf, sint32 x, sint32 y, sint32 width, sint32 height,
+		Pixel16 color, uint8 alpha = pixelutils_OPAQUE)
+{
+	RECT paintRect = { x, y, x + width - 1, y + height - 1 };
+	primitives_ClippedPaintRect16(surf, paintRect, color, alpha);
+}
 void primitives_ClippedFrameRect16(aui_Surface & surf, const RECT & rect, Pixel16 color,
 		uint8 alpha = pixelutils_OPAQUE);
+inline void primitives_ClippedFrame16(aui_Surface & surf, sint32 x, sint32 y, sint32 width, sint32 height,
+		Pixel16 color, uint8 alpha = pixelutils_OPAQUE)
+{
+	RECT frameRect = { x, y, x + width - 1, y + height - 1 };
+	primitives_ClippedFrameRect16(surf, frameRect, color, alpha);
+}
 void primitives_ClippedShadowRect16(aui_Surface & surf, const RECT & rect);
 
 // Clipped lines primitives
