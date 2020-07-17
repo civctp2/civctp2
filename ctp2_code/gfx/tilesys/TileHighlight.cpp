@@ -829,8 +829,8 @@ void TiledMap::DrawLegalMove
 				RECT rect = {0, 0, width, height};
 				OffsetRect(&rect, x - width / 2, y - height / 2);
 
-				RECT clipRect = primitives_GetScreenAdjustedRectCopy(pSurface, turnRect);
-				m_font->DrawString(pSurface, &turnRect, &clipRect, turnNumber, 0, g_colorSet->GetColorRef(COLOR_BLACK), 0);
+				RECT clipRect = primitives_GetScreenAdjustedRectCopy(pSurface, rect);
+				m_font->DrawString(pSurface, &rect, &clipRect, turnNumber, 0, g_colorSet->GetColorRef(COLOR_BLACK), 0);
 			}
 		}
 	}
