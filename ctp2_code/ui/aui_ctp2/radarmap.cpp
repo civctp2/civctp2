@@ -1239,8 +1239,8 @@ MapPoint RadarMap::CenterMap(MapPoint const & pos)
 
 	RECT mapViewRect = g_tiledMap->GetMapViewRect();
 	ComputeCenteredMap(pos, &mapViewRect);
-	m_mapViewRect = mapViewRect;
-	g_tiledMap->UpdateMapViewRect(mapViewRect);
+	g_tiledMap->UpdateAndClipMapViewRect(mapViewRect);
+	m_mapViewRect = g_tiledMap->GetMapViewRect();
 
 	RenderMap(m_mapSurface);
 
@@ -1298,7 +1298,7 @@ BOOL RadarMap::IncludePointInView(MapPoint &pos, sint32 radius)
 	sint32 h = mapViewRect.bottom - mapViewRect.top;
 
 	RECT updatedMapViewRect = { newX, newY & ~0x1, newX + w, newY + h };
-	g_tiledMap->UpdateMapViewRect(updatedMapViewRect);
+	g_tiledMap->UpdateAndClipMapViewRect(updatedMapViewRect);
 
 	return TRUE;
 }
@@ -1499,7 +1499,8 @@ void RadarMap::MouseLGrabInside(aui_MouseEvent *data)
 	m_mapViewRect.top = (tileY - (height / 2)) & ~0x01;
 	m_mapViewRect.bottom = m_mapViewRect.top + height;
 
-	g_tiledMap->UpdateMapViewRect(m_mapViewRect);
+	g_tiledMap->UpdateAndClipMapViewRect(m_mapViewRect);
+	m_mapViewRect = g_tiledMap->GetMapViewRect();
 
 	g_tiledMap->Refresh();
 	g_tiledMap->InvalidateMap();

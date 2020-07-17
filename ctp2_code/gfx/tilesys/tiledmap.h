@@ -88,10 +88,11 @@ extern TiledMap *   g_tiledMap;
 #include "mouse.h"
 #endif
 #include "colorset.h"
-#include "MapPoint.h"       // MapPoint
-#include "pixelutils.h"     // Pixel types
+#include "controlpanelwindow.h" // g_controlPanel
+#include "MapPoint.h"           // MapPoint
+#include "pixelutils.h"         // Pixel types
 #include "SelItem.h"
-#include "tileset.h"        // TileSet
+#include "tileset.h"            // TileSet
 #include "tileutils.h"
 #include "Vision.h"
 #include "World.h"
@@ -480,7 +481,7 @@ public:
 	sint32 GetZoomTileHeadroom() const { return m_zoomTileHeadroom[m_zoomLevel]; }
 	double GetZoomScale(sint32 level) const { return m_zoomTileScale[level]; }
 
-	void UpdateMapViewRect(const RECT & rect);
+	void UpdateAndClipMapViewRect(const RECT & rect);
 
 protected:
     struct GridRect
@@ -594,7 +595,23 @@ protected:
 	RECT m_chatRect;
 
 private:
-	// m_mapViewRect is const so that it can only be updated by UpdateMapViewRect
+	static const POINT MAP_VIEW_ORIGIN = { -1, -3 };
+
+	sint32 GetMinMapLeft() const { return m_mapBounds.top + MAP_VIEW_ORIGIN.x; }
+	sint32 GetMaxMapRight() const
+	{
+		const sint32 zoomTilePixelWidth = GetZoomTilePixelWidth();
+		const sint32 rightMax = ((GetZoomDisplayWidth() % zoomTilePixelWidth) >= (zoomTilePixelWidth / 2)) ? 1 : 0;
+		return m_mapBounds.right + rightMax - MAP_VIEW_ORIGIN.x;
+	}
+	sint32 GetMinMapTop() const { return m_mapBounds.top + MAP_VIEW_ORIGIN.y; }
+	sint32 GetMaxMapBottom() const
+	{
+		const sint32 bottomMax = g_controlPanel->Height() / (GetZoomTilePixelHeight() / 2) - MAP_VIEW_ORIGIN.y;
+		return m_mapBounds.bottom + bottomMax;
+	}
+
+	// m_mapViewRect is const so that it can only be updated by UpdateAndClipMapViewRect
 	const RECT m_mapViewRect;
 };
 
