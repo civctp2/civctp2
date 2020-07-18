@@ -7,6 +7,11 @@ N[$.indegree==0]{ // indegree==0 <=> root-node
     graph_t sg = subg($T, "root-nodes"); // create an anonymous subgraph for root nodes, or return existing subgraph
     subnode(sg, $); // insert node into sg
 }
+N[$.xlabel]{
+    graph_t sgA = subg($T, "cluster_"+$.xlabel); // create a cluster subgraph for each age
+    aset(sgA, "label", $.xlabel);
+    subnode(sgA, $); // insert node into sg
+}
 N[$.outdegree==0]{ // outdegree==0 <=> leaf-node
     color="#ff000055";
     style="filled";
