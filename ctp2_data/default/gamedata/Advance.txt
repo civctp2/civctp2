@@ -423,7 +423,7 @@ ADVANCE_ECOTOPIA {
    Cost 170414
    Icon ICON_ADVANCE_ECOTOPIA
    Branch 0
-   Age AGE_EIGHT
+   Age AGE_NINE
 }
 
 ## 33 #########################################################
@@ -501,7 +501,7 @@ ADVANCE_FUEL_CELLS {
    Cost 64843
    Icon ICON_ADVANCE_FUEL_CELLS
    Branch 0
-   Age AGE_EIGHT
+   Age AGE_SEVEN
 }
 
 ## 39 #########################################################
@@ -690,7 +690,7 @@ ADVANCE_HULL_MAKING {
    Cost 1582
    Icon ICON_ADVANCE_HULL_MAKING
    Branch 0
-   Age AGE_TWO
+   Age AGE_THREE
 }
 
 ## 53 #########################################################
@@ -889,7 +889,7 @@ ADVANCE_MONARCHY {
    Cost 1142
    Icon ICON_ADVANCE_MONARCHY
    Branch 0
-   Age AGE_ONE
+   Age AGE_THREE
 }
 
 ## 68 #########################################################
@@ -983,7 +983,7 @@ ADVANCE_NEURAL_INTERFACE {
    Cost 118375
    Icon ICON_ADVANCE_NEURAL_INTERFACE
    Branch 0
-   Age AGE_NINE
+   Age AGE_EIGHT
 }
 
 ## 75 #########################################################
