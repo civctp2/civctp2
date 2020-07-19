@@ -26,14 +26,14 @@
 //
 // - Safeguard FindLevel against infinite recursion.
 // - Speeded up goody hut advance and unit selection.
-// - Replaced old civilisation database by new one. (Aug 22nd 2005 Martin Gühmann)
-// - Fixed GetPollutionProductionModifier (June 11st 2005 Martin Gühmann)
-// - Fixed GetPollutionSizeModifier (June 11st 2005 Martin Gühmann)
+// - Replaced old civilisation database by new one. (Aug 22nd 2005 Martin GÃ¼hmann)
+// - Fixed GetPollutionProductionModifier (June 11st 2005 Martin GÃ¼hmann)
+// - Fixed GetPollutionSizeModifier (June 11st 2005 Martin GÃ¼hmann)
 // - Added checks for advances requiring goods, cultureonly, govt only
 // - Added EitherPreRequisite to allow flexible tech tree like civ4
-// - Added FractionComplete methods. (Feb 4th 2007 Martin Gühmann)
+// - Added FractionComplete methods. (Feb 4th 2007 Martin GÃ¼hmann)
 // - Added commodityGold and GoldSupport to projected science
-// - Replaced old const database by new one. (5-Aug-2007 Martin Gühmann)
+// - Replaced old const database by new one. (5-Aug-2007 Martin GÃ¼hmann)
 // - Added single-player start and end age affects. (11-Apr-2009 Maq)
 //
 //----------------------------------------------------------------------------
@@ -710,8 +710,13 @@ void Advances::ResetCanResearch(sint32 justGot)
 				for(h = p; h > howMany; h--)
 				{
 					sint32 which = g_rand->Next(p);
+					// Do not remove advance that is currently being researched
+					while (possible[which] == m_researching) {
+						which = g_rand->Next(p);
+					}
 					m_canResearch[possible[which]] = 0;
-					memmove(&possible[which], &possible[which + 1], p - which - 1);
+					// Copy last record to selected record
+					possible[which] = possible[p-1];
 					p--;
 				}
 
