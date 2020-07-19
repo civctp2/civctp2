@@ -10,7 +10,10 @@ digraph G {
 	];
 	subgraph gvpr_result {
 		subgraph cluster_AGE_SIX {
-			graph [label=AGE_SIX];
+			graph [color="#88888855",
+				fontcolor="#88888855",
+				label=AGE_SIX
+			];
 			ADVANCE_ADV_INFANTRY_TACTICS	[color="#ff000055",
 				fontcolor="#ffffff88",
 				label=<<TABLE border="0" cellspacing="0" cellborder="0"><TR><TD><IMG SCALE="TRUE" SRC="cm2_upap001l.png"/></TD></TR>
@@ -146,7 +149,10 @@ digraph G {
 				xlabel=AGE_SIX];
 		}
 		subgraph cluster_AGE_EIGHT {
-			graph [label=AGE_EIGHT];
+			graph [color="#88888855",
+				fontcolor="#88888855",
+				label=AGE_EIGHT
+			];
 			ADVANCE_ARCOLOGIES	[color="#88888855",
 				fontcolor="#ffffff88",
 				label=<<TABLE border="0" cellspacing="0" cellborder="0"><TR><TD><IMG SCALE="TRUE" SRC="upap011l.png"/></TD></TR>
@@ -240,7 +246,10 @@ digraph G {
 				xlabel=AGE_EIGHT];
 		}
 		subgraph cluster_AGE_SEVEN {
-			graph [label=AGE_SEVEN];
+			graph [color="#88888855",
+				fontcolor="#88888855",
+				label=AGE_SEVEN
+			];
 			ADVANCE_ADVANCED_COMPOSITES	[color="#88888855",
 				fontcolor="#ffffff88",
 				label=<<TABLE border="0" cellspacing="0" cellborder="0"><TR><TD><IMG SCALE="TRUE" SRC="cm2_upap004l.png"/></TD></TR>
@@ -306,7 +315,10 @@ digraph G {
 				xlabel=AGE_SEVEN];
 		}
 		subgraph cluster_AGE_FOUR {
-			graph [label=AGE_FOUR];
+			graph [color="#88888855",
+				fontcolor="#88888855",
+				label=AGE_FOUR
+			];
 			ADVANCE_AGE_OF_REASON	[color="#88888855",
 				fontcolor="#ffffff88",
 				label=<<TABLE border="0" cellspacing="0" cellborder="0"><TR><TD><IMG SCALE="TRUE" SRC="upap006l.png"/></TD></TR>
@@ -386,7 +398,10 @@ digraph G {
 				xlabel=AGE_FOUR];
 		}
 		subgraph cluster_AGE_FIVE {
-			graph [label=AGE_FIVE];
+			graph [color="#88888855",
+				fontcolor="#88888855",
+				label=AGE_FIVE
+			];
 			ADVANCE_DEMOCRACY	[color="#88888855",
 				fontcolor="#ffffff88",
 				label=<<TABLE border="0" cellspacing="0" cellborder="0"><TR><TD><IMG SCALE="TRUE" SRC="cm2_upap029l.png"/></TD></TR>
@@ -480,7 +495,10 @@ digraph G {
 				xlabel=AGE_FIVE];
 		}
 		subgraph cluster_AGE_THREE {
-			graph [label=AGE_THREE];
+			graph [color="#88888855",
+				fontcolor="#88888855",
+				label=AGE_THREE
+			];
 			ADVANCE_AGRICULTURAL_REVOLUTION	[color="#88888855",
 				fontcolor="#ffffff88",
 				label=<<TABLE border="0" cellspacing="0" cellborder="0"><TR><TD><IMG SCALE="TRUE" SRC="cm2_upap007l.png"/></TD></TR>
@@ -531,12 +549,43 @@ digraph G {
 				style=filled,
 				xlabel=AGE_THREE];
 		}
-		subgraph "root-nodes" {
-			graph [rank=same];
+		subgraph cluster_AGE_ONE {
+			graph [color="#88888855",
+				fontcolor="#88888855",
+				label=AGE_ONE
+			];
 			ADVANCE_AGRICULTURE	[color="#00ff0055",
 				fontcolor="#ffffff88",
 				label=<<TABLE border="0" cellspacing="0" cellborder="0"><TR><TD><IMG SCALE="TRUE" SRC="upap008l.png"/></TD></TR>
 <TR><TD><B>AGRICULTURE</B></TD></TR></TABLE>>,
+				shape=box,
+				style=filled,
+				xlabel=AGE_ONE];
+			ADVANCE_TRADE	[color="#88888855",
+				fontcolor="#ffffff88",
+				label=<<TABLE border="0" cellspacing="0" cellborder="0"><TR><TD><IMG SCALE="TRUE" SRC="upap102l.png"/></TD></TR>
+<TR><TD><B>TRADE</B></TD></TR></TABLE>>,
+				shape=box,
+				style=filled,
+				xlabel=AGE_ONE];
+			ADVANCE_BRONZE_WORKING	[color="#88888855",
+				fontcolor="#ffffff88",
+				label=<<TABLE border="0" cellspacing="0" cellborder="0"><TR><TD><IMG SCALE="TRUE" SRC="upap014l.png"/></TD></TR>
+<TR><TD><B>BRONZE WORKING</B></TD></TR></TABLE>>,
+				shape=box,
+				style=filled,
+				xlabel=AGE_ONE];
+			ADVANCE_MASONRY	[color="#88888855",
+				fontcolor="#ffffff88",
+				label=<<TABLE border="0" cellspacing="0" cellborder="0"><TR><TD><IMG SCALE="TRUE" SRC="upap062l.png"/></TD></TR>
+<TR><TD><B>MASONRY</B></TD></TR></TABLE>>,
+				shape=box,
+				style=filled,
+				xlabel=AGE_ONE];
+			ADVANCE_MONARCHY	[color="#ff000055",
+				fontcolor="#ffffff88",
+				label=<<TABLE border="0" cellspacing="0" cellborder="0"><TR><TD><IMG SCALE="TRUE" SRC="cm2_upap068l.png"/></TD></TR>
+<TR><TD><B>MONARCHY</B></TD></TR></TABLE>>,
 				shape=box,
 				style=filled,
 				xlabel=AGE_ONE];
@@ -576,45 +625,11 @@ digraph G {
 				style=filled,
 				xlabel=AGE_ONE];
 		}
-		subgraph cluster_AGE_ONE {
-			graph [label=AGE_ONE];
-			ADVANCE_AGRICULTURE;
-			ADVANCE_TRADE	[color="#88888855",
-				fontcolor="#ffffff88",
-				label=<<TABLE border="0" cellspacing="0" cellborder="0"><TR><TD><IMG SCALE="TRUE" SRC="upap102l.png"/></TD></TR>
-<TR><TD><B>TRADE</B></TD></TR></TABLE>>,
-				shape=box,
-				style=filled,
-				xlabel=AGE_ONE];
-			ADVANCE_BRONZE_WORKING	[color="#88888855",
-				fontcolor="#ffffff88",
-				label=<<TABLE border="0" cellspacing="0" cellborder="0"><TR><TD><IMG SCALE="TRUE" SRC="upap014l.png"/></TD></TR>
-<TR><TD><B>BRONZE WORKING</B></TD></TR></TABLE>>,
-				shape=box,
-				style=filled,
-				xlabel=AGE_ONE];
-			ADVANCE_MASONRY	[color="#88888855",
-				fontcolor="#ffffff88",
-				label=<<TABLE border="0" cellspacing="0" cellborder="0"><TR><TD><IMG SCALE="TRUE" SRC="upap062l.png"/></TD></TR>
-<TR><TD><B>MASONRY</B></TD></TR></TABLE>>,
-				shape=box,
-				style=filled,
-				xlabel=AGE_ONE];
-			ADVANCE_MONARCHY	[color="#ff000055",
-				fontcolor="#ffffff88",
-				label=<<TABLE border="0" cellspacing="0" cellborder="0"><TR><TD><IMG SCALE="TRUE" SRC="cm2_upap068l.png"/></TD></TR>
-<TR><TD><B>MONARCHY</B></TD></TR></TABLE>>,
-				shape=box,
-				style=filled,
-				xlabel=AGE_ONE];
-			ADVANCE_RELIGION;
-			ADVANCE_SHIP_BUILDING;
-			ADVANCE_STONE_WORKING;
-			ADVANCE_TOOLMAKING;
-			ADVANCE_WRITING;
-		}
 		subgraph cluster_AGE_TWO {
-			graph [label=AGE_TWO];
+			graph [color="#88888855",
+				fontcolor="#88888855",
+				label=AGE_TWO
+			];
 			ADVANCE_SLAVE_LABOR	[color="#ff000055",
 				fontcolor="#ffffff88",
 				label=<<TABLE border="0" cellspacing="0" cellborder="0"><TR><TD><IMG SCALE="TRUE" SRC="cm2_upap092l.png"/></TD></TR>
@@ -673,7 +688,10 @@ digraph G {
 				xlabel=AGE_TWO];
 		}
 		subgraph cluster_AGE_NINE {
-			graph [label=AGE_NINE];
+			graph [color="#88888855",
+				fontcolor="#88888855",
+				label=AGE_NINE
+			];
 			ADVANCE_FUSION	[color="#88888855",
 				fontcolor="#ffffff88",
 				label=<<TABLE border="0" cellspacing="0" cellborder="0"><TR><TD><IMG SCALE="TRUE" SRC="upap040l.png"/></TD></TR>
@@ -767,7 +785,10 @@ digraph G {
 				xlabel=AGE_NINE];
 		}
 		subgraph cluster_AGE_TEN {
-			graph [label=AGE_TEN];
+			graph [color="#88888855",
+				fontcolor="#88888855",
+				label=AGE_TEN
+			];
 			ADVANCE_LIFE_EXTENSION	[color="#ff000055",
 				fontcolor="#ffffff88",
 				label=<<TABLE border="0" cellspacing="0" cellborder="0"><TR><TD><IMG SCALE="TRUE" SRC="cm2_upap060l.png"/></TD></TR>
