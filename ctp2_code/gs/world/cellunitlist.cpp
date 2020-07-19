@@ -50,6 +50,7 @@
 #include "Army.h"
 #include "network.h"
 #include "SlicEngine.h"
+#include "SlicObject.h"
 #include "Cell.h"
 #include "UnitDynArr.h"
 #include "UnitData.h"
@@ -562,16 +563,15 @@ double CellUnitList::GetHPModifier() const
 	return (m_nElements > 0) ? m_array[0].GetHPModifier() : 0.0;
 }
 
-void CellUnitList::DoVictoryEnslavement(sint32 origOwner)
+void CellUnitList::DoVictoryEnslavement(sint32 origOwner, const Unit &looser)
 {
 	double success = 0;
 
 	for (sint32 i = 0; i < m_nElements; i++) {
 		if(m_array[i].GetHP() > 0 &&
 			m_array[i].GetDBRec()->GetVictoryEnslavement()) {
-#ifdef WIN32
+
 			if(!m_array[i].GetDBRec()->GetVictoryEnslavementChance(success))
-#endif
 				success = 1.0;
 
 			if(g_rand->Next(100) < sint32(success * 100.0)) {
@@ -595,8 +595,22 @@ void CellUnitList::DoVictoryEnslavement(sint32 origOwner)
 									   GEA_Player, origOwner,
 									   GEA_End);
 
-				g_slicEngine->RunVictoryEnslavementTriggers(m_array[i],
-															origOwner, hc);
+				g_slicEngine->RunVictoryEnslavementTriggers(m_array[i], origOwner, hc);
+
+				//// message telling in which city slave has been put to work
+				SlicObject * so = new SlicObject("137SlaveryCompleteAttacker");
+				so->AddRecipient(GetOwner());
+				so->AddCivilisation(GetOwner());
+				so->AddCity(hc);
+				g_slicEngine->Execute(so);
+
+				//// message telling victim that unit was enslaved
+				so = new SlicObject("139SettlerSlavedVictim");
+				so->AddRecipient(origOwner);
+				so->AddUnitRecord(looser.GetType());
+				so->AddLocation(looser.RetPos());
+				g_slicEngine->Execute(so);
+
 				if(g_network.IsHost()) {
 					g_network.Unblock(hc.GetOwner());
 				}

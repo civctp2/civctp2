@@ -291,7 +291,7 @@ SLAVE_FAILED_ATTACKER			"{player[0].sir_cap}, our slave raid has failed in {city
 SLAVE_KILLED_ATTACKER			"{player[0].sir_cap}, our slave raid has failed in {city[0].name}, unfortunately our slavers were caught and killed."
 PROTECTED_FROM_SLAVERY_VICTIM		"Grandi notizie! Le mura cittadine hanno impedito che gli abitanti di {city[0].name} venissero fatti schiavi."
 PROTECTED_FROM_SLAVERY_ATTACKER		"Le mura della città straniera di {city[0].name} hanno impedito ai nostri schiavisti di compiere la loro opera."
-SETTLER_SLAVED_VICTIM			"Orrore! Il nostro colono è scomparso senza lasciare tracce! Molto probabilmente, questo atto infame è opera di qualche schiavista straniero."
+SETTLER_SLAVED_VICTIM			"Orrore! Il {unitrecord[0].name#ARTICLE_ONE_OF_OUR} è scomparso senza lasciare tracce! Molto probabilmente, questo atto infame è opera di qualche schiavista straniero."
 VICTORY_ENSLAVEMENT_CITY		"{unit[0].name#ARTICLE_YOUR_CAP} ha catturato un nuovo schiavo e lo ha inviato a {city[0].name}."
 
 ## Establish Embassy ##

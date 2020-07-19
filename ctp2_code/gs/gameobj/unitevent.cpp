@@ -427,11 +427,13 @@ STDEHANDLER(PlagueCityUnitEvent)
 	so->AddCity(c) ;
 	g_slicEngine->Execute(so) ;
 
+	/* disabled because success of action is obvious any way (special effect and city size) and therefore message spamming can be avoided
 	so = new SlicObject("11jPlagueComplete") ;
 	so->AddRecipient(u.GetOwner()) ;
 	so->AddCivilisation(u.GetOwner()) ;
 	so->AddCity(c) ;
 	g_slicEngine->Execute(so) ;
+	*/
 
 	g_gevManager->AddEvent(GEV_INSERT_AfterCurrent, GEV_PlagueCity,
 						   GEA_City, c.m_id,

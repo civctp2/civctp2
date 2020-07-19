@@ -291,7 +291,7 @@ SLAVE_FAILED_ATTACKER			"{player[0].sir_cap}, la incursion de nuestros cazadores
 SLAVE_KILLED_ATTACKER			"{player[0].sir_cap}, la incursion de nuestros cazadores de esclavos ha fallado en {city[0].name}, desafortunadamente nuestros cazadores de esclavos fueron atrapados y asesinados."
 PROTECTED_FROM_SLAVERY_VICTIM		"¡Buenas noticias! Las murallas han protegido a nuestra gente en la ciudad de {city[0].name} de la esclavitud."
 PROTECTED_FROM_SLAVERY_ATTACKER		"Las murallas han impedido que nuestros cazadores de esclavos se infiltrasen en {city[0].name}."
-SETTLER_SLAVED_VICTIM			"¡¡Horror!! Nuestro colonizador ha desaparecido sin dejar huella. Los cazadores de esclavos extranjeros son probablemente los culpables de este horrible acto."
+SETTLER_SLAVED_VICTIM			"¡¡Horror!! Nuestro {unitrecord[0].name} ha desaparecido sin dejar huella. Los cazadores de esclavos extranjeros son probablemente los culpables de este horrible acto."
 VICTORY_ENSLAVEMENT_CITY		"Tu {unit[0].name} ha capturado un nuevo esclavo y lo ha enviado a {city[0].name}."
 
 ## Establish Embassy ##

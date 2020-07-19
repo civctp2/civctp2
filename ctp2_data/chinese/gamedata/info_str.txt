@@ -290,7 +290,8 @@ SLAVE_FAILED_ATTACKER			"{player[0].sir_cap}，我们的猎奴行动在 {city[0].name} 失
 SLAVE_KILLED_ATTACKER			"{player[0].sir_cap}，我们的猎奴行动在 {city[0].name} 失败了，奴隶贩子也被处死了。"
 PROTECTED_FROM_SLAVERY_VICTIM 		"好消息，城墙阻止了奴隶贩子对{city[0].name}的渗透。"
 PROTECTED_FROM_SLAVERY_ATTACKER 	"{city[0].name}城墙阻止了我奴隶贩子渗入该市抓奴隶。"
-SETTLER_SLAVED_VICTIM 			"真可怕。我们的开拓队无声无息地失踪了，外国奴隶贩子是最有可能干出这种令人发指的行为。"
+SETTLER_SLAVED_VICTIM			"The horror!! Our {unitrecord[0].name} has disappeared without a trace. Foreign slavers are most likely responsible for this heinous act."
+## SETTLER_SLAVED_VICTIM 			"真可怕。我们的开拓队无声无息地失踪了，外国奴隶贩子是最有可能干出这种令人发指的行为。"
 VICTORY_ENSLAVEMENT_CITY 		"我国的{unit[0].name}新俘虏了一名奴隶，并将他送至{city[0].name}。"
 
 ## Establish Embassy ##

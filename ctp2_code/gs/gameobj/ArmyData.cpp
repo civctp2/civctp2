@@ -8746,17 +8746,7 @@ sint32 ArmyData::Fight(CellUnitList &defender)
 	if(defenderSucks) {
 		if(ta.IsValid()) {
 			g_director->AddAttack(ta, td);
-			g_gevManager->AddEvent(GEV_INSERT_AfterCurrent,
-								   GEV_BattleAftermath,
-								   GEA_Army, m_id,
-								   GEA_MapPoint, pos,
-								   GEA_Unit, ta,
-								   GEA_Unit, td,
-								   GEA_Player, m_owner,
-								   GEA_Player, defense_owner,
-								   GEA_Int, 0,
-								   GEA_End);
-			for(i = 0; i < defender.Num(); i++) {
+			for(i = 0; i < defender.Num(); i++) { // insert unit kill event such that it is exectued after BattleAftermath event
 				CAUSE_REMOVE_ARMY cause = CAUSE_REMOVE_ARMY_DIED_IN_ATTACK;
 				if(defender[i].m_id == td.m_id) {
 					cause  = CAUSE_REMOVE_ARMY_DIED_IN_ATTACK_ON_TOP;
@@ -8768,6 +8758,16 @@ sint32 ArmyData::Fight(CellUnitList &defender)
 									   GEA_Player, m_owner,
 									   GEA_End);
 			}
+			g_gevManager->AddEvent(GEV_INSERT_AfterCurrent, // BattleAftermath event has to be added after unit kill to be executed before
+								   GEV_BattleAftermath,
+								   GEA_Army, m_id,
+								   GEA_MapPoint, pos,
+								   GEA_Unit, ta,
+								   GEA_Unit, td,
+								   GEA_Player, m_owner,
+								   GEA_Player, defense_owner,
+								   GEA_Int, 0,
+								   GEA_End);
 		}
 	}
 	else

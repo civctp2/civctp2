@@ -73,7 +73,8 @@ STDEHANDLER(RunCombatEvent)
 	}
 	else if (g_theCurrentBattle->IsDone())
 	{
-		g_gevManager->AddEvent(GEV_INSERT_AfterCurrent,
+		g_theCurrentBattle->KillUnits(GEV_INSERT_AfterCurrent); // insert unit kill event such that it is exectued after BattleAftermath event
+		g_gevManager->AddEvent(GEV_INSERT_AfterCurrent, // BattleAftermath event has to be added after unit kill to be executed before
 		                       GEV_BattleAftermath,
 		                       GEA_Army,     army,
 		                       GEA_MapPoint, pos,
@@ -84,7 +85,6 @@ STDEHANDLER(RunCombatEvent)
 		                       GEA_Int,      1,
 		                       GEA_End
 		                      );
-		g_theCurrentBattle->KillUnits(GEV_INSERT_AfterCurrent);
 	}
 	else
 	{
