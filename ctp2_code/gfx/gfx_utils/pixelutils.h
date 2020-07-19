@@ -4,8 +4,6 @@
 #ifndef __PIXELUTILS_H__
 #define __PIXELUTILS_H__
 
-#define BLEND_LEVELS		16
-#define BLEND_MAX_VALUE		64
 #define RGB_VALUES			32768
 #define k_MAX_PERCENT		128
 #define k_PERCENT_SHIFT		7
@@ -48,8 +46,7 @@ inline uint32 pixelutils_GetShadow16RGBMask()
 }
 
 // This method can replace:
-//   pixelutils_Blend, pixelutils_BlendFast, pixelutils_Blend_565, pixelutils_BlendFast_565, pixelutils_Blend_555 and
-//   pixelutils_BlendFast_555
+//   pixelutils_Blend, pixelutils_BlendFast, pixelutils_Blend_565, pixelutils_Blend_555 and pixelutils_BlendFast_555
 // Note: blendRGBMask contains special blending mask based on 565 or 555-format (see pixelutils_GetBlend16RGBMask)
 inline Pixel16 pixelutils_Blend16(Pixel16 background, Pixel16 foreground, uint8 alpha, uint32 blendRGBMask)
 {
@@ -73,11 +70,6 @@ inline Pixel16 pixelutils_Blend16(Pixel16 background, Pixel16 foreground, uint8 
 inline Pixel16 pixelutils_BlendFast(sint32 pixel1, sint32 pixel2, sint32 blend)
 {
 	return pixelutils_Blend16(pixel2, pixel1, blend << 3, pixelutils_GetBlend16RGBMask());
-}
-
-inline Pixel16 pixelutils_BlendFast_565(sint32 pixel1, sint32 pixel2, sint32 blend)
-{
-	return pixelutils_Blend16(pixel2, pixel1, blend << 3, BLEND_16_MASK_565);
 }
 
 inline Pixel16 pixelutils_BlendFast_555(sint32 pixel1, sint32 pixel2, sint32 blend)
