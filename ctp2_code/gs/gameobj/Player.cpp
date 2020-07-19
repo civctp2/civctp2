@@ -8098,7 +8098,8 @@ void Player::SetHasAdvance(AdvanceType advance, const bool init)
 
 	SetCityRoads();
 
-	if(!init)
+	// Only need to set research when the advance that is currently researched, cannot be researched any more
+	if(!init && !m_advances->CanResearch(m_advances->GetResearching()))
 	{
 		CtpAi::SetResearch(m_owner);
 	}
