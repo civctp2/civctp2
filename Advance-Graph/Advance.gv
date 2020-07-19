@@ -22,7 +22,7 @@ digraph G {
 <TR><TD><B>ADV INFANTRY TACTICS</B></TD></TR></TABLE>>,
 				shape=box,
 				style=filled,
-				xlabel=UNIT_PARATROOPER];
+				xlabel="UNIT_MARINE,UNIT_PARATROOPER"];
 			ADVANCE_ADV_NAVAL_TACTICS	[color="#ff000055",
 				fontcolor="#ffffff88",
 				group=AGE_SIX,
@@ -94,7 +94,7 @@ digraph G {
 <TR><TD><B>MASS PRODUCTION</B></TD></TR></TABLE>>,
 				shape=box,
 				style=filled,
-				xlabel=UNIT_FRIGATE];
+				xlabel="UNIT_DESTROYER,UNIT_FRIGATE"];
 			ADVANCE_QUANTUM_MECHANICS	[color="#88888855",
 				fontcolor="#ffffff88",
 				group=AGE_SIX,
@@ -273,7 +273,7 @@ digraph G {
 <TR><TD><B>ADVANCED COMPOSITES</B></TD></TR></TABLE>>,
 				shape=box,
 				style=filled,
-				xlabel=UNIT_STEALTH_FIGHTER];
+				xlabel="UNIT_STEALTH_BOMBER,UNIT_STEALTH_FIGHTER"];
 			ADVANCE_ROBOTICS	[color="#88888855",
 				fontcolor="#ffffff88",
 				group=AGE_SEVEN,
@@ -312,7 +312,7 @@ digraph G {
 <TR><TD><B>NUCLEAR POWER</B></TD></TR></TABLE>>,
 				shape=box,
 				style=filled,
-				xlabel=UNIT_NUKE];
+				xlabel="UNIT_NUCLEAR_SUBMARINE,UNIT_NUKE"];
 			ADVANCE_COMPUTER	[color="#88888855",
 				fontcolor="#ffffff88",
 				group=AGE_SEVEN,
@@ -407,7 +407,7 @@ digraph G {
 <TR><TD><B>PLASMA WEAPONRY</B></TD></TR></TABLE>>,
 				shape=box,
 				style=filled,
-				xlabel=UNIT_PLASMA_DESTROYER];
+				xlabel="UNIT_LEVIATHON,UNIT_PLASMA_DESTROYER"];
 			ADVANCE_SMART_MATERIALS	[color="#88888855",
 				fontcolor="#ffffff88",
 				group=AGE_NINE,
@@ -430,7 +430,7 @@ digraph G {
 <TR><TD><B>ECOTOPIA</B></TD></TR></TABLE>>,
 				shape=box,
 				style=filled,
-				xlabel=UNIT_ECO_TERRORIST];
+				xlabel="UNIT_ECO_RANGER,UNIT_ECO_TERRORIST"];
 			ADVANCE_GAIA_THEORY	[color="#88888855",
 				fontcolor="#ffffff88",
 				group=AGE_NINE,
@@ -690,7 +690,7 @@ digraph G {
 <TR><TD><B>FEUDALISM</B></TD></TR></TABLE>>,
 				shape=box,
 				style=filled,
-				xlabel=UNIT_PIKEMEN];
+				xlabel="UNIT_KNIGHT,UNIT_PIKEMEN"];
 			ADVANCE_BUREAUCRACY	[color="#88888855",
 				fontcolor="#ffffff88",
 				group=AGE_THREE,

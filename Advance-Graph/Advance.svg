@@ -65,7 +65,7 @@
 <polygon fill="#ff0000" fill-opacity="0.333333" stroke="#ff0000" stroke-opacity="0.333333" points="3201,-1096.8 3061,-1096.8 3061,-982.8 3201,-982.8 3201,-1096.8"/>
 <image xlink:href="pic555/cm2_upap001l.png" width="120px" height="90px" preserveAspectRatio="xMinYMin meet" x="3071" y="-1090.8"/>
 <text text-anchor="start" x="3081.5" y="-991.8" font-family="Sans serif" font-weight="bold" font-size="7.50" fill="#ffffff" fill-opacity="0.533333">ADV INFANTRY TACTICS</text>
-<text text-anchor="middle" x="3163" y="-976.8" font-family="Sans serif" font-size="7.50" fill="#ffffff" fill-opacity="0.533333">UNIT_PARATROOPER</text>
+<text text-anchor="middle" x="3136.5" y="-976.8" font-family="Sans serif" font-size="7.50" fill="#ffffff" fill-opacity="0.533333">UNIT_MARINE,UNIT_PARATROOPER</text>
 </g>
 <!-- ADVANCE_ADV_NAVAL_TACTICS -->
 <g id="node2" class="node">
@@ -166,7 +166,7 @@
 <polygon fill="#888888" fill-opacity="0.333333" stroke="#888888" stroke-opacity="0.333333" points="3377,-355.8 3237,-355.8 3237,-241.8 3377,-241.8 3377,-355.8"/>
 <image xlink:href="pic555/cm2_upap097l.png" width="120px" height="90px" preserveAspectRatio="xMinYMin meet" x="3247" y="-349.802"/>
 <text text-anchor="start" x="3263.5" y="-250.8" font-family="Sans serif" font-weight="bold" font-size="7.50" fill="#ffffff" fill-opacity="0.533333">SUPERSONIC FLIGHT</text>
-<text text-anchor="middle" x="3200.5" y="-235.8" font-family="Sans serif" font-size="7.50" fill="#ffffff" fill-opacity="0.533333">UNIT_INTERCEPTOR</text>
+<text text-anchor="middle" x="3200.5" y="-357.8" font-family="Sans serif" font-size="7.50" fill="#ffffff" fill-opacity="0.533333">UNIT_INTERCEPTOR</text>
 </g>
 <!-- ADVANCE_JET_PROPULSION&#45;&gt;ADVANCE_SUPERSONIC_FLIGHT -->
 <g id="edge35" class="edge">
@@ -255,7 +255,7 @@
 <polygon fill="#888888" fill-opacity="0.333333" stroke="#888888" stroke-opacity="0.333333" points="2673,-888.8 2533,-888.8 2533,-774.8 2673,-774.8 2673,-888.8"/>
 <image xlink:href="pic555/cm2_upap064l.png" width="120px" height="90px" preserveAspectRatio="xMinYMin meet" x="2543" y="-882.802"/>
 <text text-anchor="start" x="2561.5" y="-783.8" font-family="Sans serif" font-weight="bold" font-size="7.50" fill="#ffffff" fill-opacity="0.533333">MASS PRODUCTION</text>
-<text text-anchor="middle" x="2506.5" y="-776.8" font-family="Sans serif" font-size="7.50" fill="#ffffff" fill-opacity="0.533333">UNIT_FRIGATE</text>
+<text text-anchor="middle" x="2472.5" y="-776.8" font-family="Sans serif" font-size="7.50" fill="#ffffff" fill-opacity="0.533333">UNIT_DESTROYER,UNIT_FRIGATE</text>
 </g>
 <!-- ADVANCE_MASS_PRODUCTION&#45;&gt;ADVANCE_ADV_NAVAL_TACTICS -->
 <g id="edge111" class="edge">
@@ -288,7 +288,7 @@
 <polygon fill="#888888" fill-opacity="0.333333" stroke="#888888" stroke-opacity="0.333333" points="3553,-223.8 3413,-223.8 3413,-109.8 3553,-109.8 3553,-223.8"/>
 <image xlink:href="pic555/cm2_upap077l.png" width="120px" height="90px" preserveAspectRatio="xMinYMin meet" x="3423" y="-217.802"/>
 <text text-anchor="start" x="3446.5" y="-118.8" font-family="Sans serif" font-weight="bold" font-size="7.50" fill="#ffffff" fill-opacity="0.533333">NUCLEAR POWER</text>
-<text text-anchor="middle" x="3392" y="-103.8" font-family="Sans serif" font-size="7.50" fill="#ffffff" fill-opacity="0.533333">UNIT_NUKE</text>
+<text text-anchor="middle" x="3339" y="-103.8" font-family="Sans serif" font-size="7.50" fill="#ffffff" fill-opacity="0.533333">UNIT_NUCLEAR_SUBMARINE,UNIT_NUKE</text>
 </g>
 <!-- ADVANCE_QUANTUM_MECHANICS&#45;&gt;ADVANCE_NUCLEAR_POWER -->
 <g id="edge138" class="edge">
@@ -322,7 +322,7 @@
 <polygon fill="#888888" fill-opacity="0.333333" stroke="#888888" stroke-opacity="0.333333" points="3553,-355.8 3413,-355.8 3413,-241.8 3553,-241.8 3553,-355.8"/>
 <image xlink:href="pic555/cm2_upap004l.png" width="120px" height="90px" preserveAspectRatio="xMinYMin meet" x="3423" y="-349.802"/>
 <text text-anchor="start" x="3431" y="-250.8" font-family="Sans serif" font-weight="bold" font-size="7.50" fill="#ffffff" fill-opacity="0.533333">ADVANCED COMPOSITES</text>
-<text text-anchor="middle" x="3367.5" y="-235.8" font-family="Sans serif" font-size="7.50" fill="#ffffff" fill-opacity="0.533333">UNIT_STEALTH_FIGHTER</text>
+<text text-anchor="middle" x="3321" y="-235.8" font-family="Sans serif" font-size="7.50" fill="#ffffff" fill-opacity="0.533333">UNIT_STEALTH_BOMBER,UNIT_STEALTH_FIGHTER</text>
 </g>
 <!-- ADVANCE_CONSERVATION&#45;&gt;ADVANCE_ADVANCED_COMPOSITES -->
 <g id="edge142" class="edge">
@@ -945,7 +945,7 @@
 <polygon fill="#888888" fill-opacity="0.333333" stroke="#888888" stroke-opacity="0.333333" points="4446,-970.8 4306,-970.8 4306,-856.8 4446,-856.8 4446,-970.8"/>
 <image xlink:href="pic555/upap084l.png" width="120px" height="90px" preserveAspectRatio="xMinYMin meet" x="4316" y="-964.802"/>
 <text text-anchor="start" x="4333.5" y="-865.8" font-family="Sans serif" font-weight="bold" font-size="7.50" fill="#ffffff" fill-opacity="0.533333">PLASMA WEAPONRY</text>
-<text text-anchor="middle" x="4256" y="-850.8" font-family="Sans serif" font-size="7.50" fill="#ffffff" fill-opacity="0.533333">UNIT_PLASMA_DESTROYER</text>
+<text text-anchor="middle" x="4223" y="-850.8" font-family="Sans serif" font-size="7.50" fill="#ffffff" fill-opacity="0.533333">UNIT_LEVIATHON,UNIT_PLASMA_DESTROYER</text>
 </g>
 <!-- ADVANCE_UNIFIED_PHYSICS&#45;&gt;ADVANCE_PLASMA_WEAPONRY -->
 <g id="edge94" class="edge">
@@ -965,7 +965,7 @@
 <polygon fill="#888888" fill-opacity="0.333333" stroke="#888888" stroke-opacity="0.333333" points="4623.5,-1234.8 4483.5,-1234.8 4483.5,-1120.8 4623.5,-1120.8 4623.5,-1234.8"/>
 <image xlink:href="pic555/upap033l.png" width="120px" height="90px" preserveAspectRatio="xMinYMin meet" x="4493.5" y="-1228.8"/>
 <text text-anchor="start" x="4531.5" y="-1129.8" font-family="Sans serif" font-weight="bold" font-size="7.50" fill="#ffffff" fill-opacity="0.533333">ECOTOPIA</text>
-<text text-anchor="middle" x="4442" y="-1114.8" font-family="Sans serif" font-size="7.50" fill="#ffffff" fill-opacity="0.533333">UNIT_ECO_TERRORIST</text>
+<text text-anchor="middle" x="4405" y="-1114.8" font-family="Sans serif" font-size="7.50" fill="#ffffff" fill-opacity="0.533333">UNIT_ECO_RANGER,UNIT_ECO_TERRORIST</text>
 </g>
 <!-- ADVANCE_VIRTUAL_DEMOCRACY&#45;&gt;ADVANCE_ECOTOPIA -->
 <g id="edge96" class="edge">
@@ -1568,7 +1568,7 @@
 <polygon fill="#888888" fill-opacity="0.333333" stroke="#888888" stroke-opacity="0.333333" points="1264,-1167.8 1124,-1167.8 1124,-1053.8 1264,-1053.8 1264,-1167.8"/>
 <image xlink:href="pic555/cm2_upap038l.png" width="120px" height="90px" preserveAspectRatio="xMinYMin meet" x="1134" y="-1161.8"/>
 <text text-anchor="start" x="1169.5" y="-1062.8" font-family="Sans serif" font-weight="bold" font-size="7.50" fill="#ffffff" fill-opacity="0.533333">FEUDALISM</text>
-<text text-anchor="middle" x="1096.5" y="-1047.8" font-family="Sans serif" font-size="7.50" fill="#ffffff" fill-opacity="0.533333">UNIT_PIKEMEN</text>
+<text text-anchor="middle" x="1070.5" y="-1047.8" font-family="Sans serif" font-size="7.50" fill="#ffffff" fill-opacity="0.533333">UNIT_KNIGHT,UNIT_PIKEMEN</text>
 </g>
 <!-- ADVANCE_HORSE_RIDING&#45;&gt;ADVANCE_FEUDALISM -->
 <g id="edge79" class="edge">
