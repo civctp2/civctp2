@@ -4201,6 +4201,7 @@ void TiledMap::ProcessRun(Pixel16 **rowData1, Pixel16 **rowData2, Pixel16 *pix1,
 		return;
 	}
 
+	uint32 shadowRgbMask = pixelutils_GetShadow16RGBMask();
 	while (pos1 <= pos) {
 		switch (mode1) {
 			case k_TILE_SKIP_RUN_ID	:
@@ -4217,7 +4218,7 @@ void TiledMap::ProcessRun(Pixel16 **rowData1, Pixel16 **rowData2, Pixel16 *pix1,
 				break;
 			case k_TILE_SHADOW_RUN_ID : {
 					if (!(flags & k_OVERLAY_FLAG_NOSHADOWS)) {
-						pixel1 = pixelutils_Shadow(**rowData1);
+						pixel1 = pixelutils_Shadow16(**rowData1, shadowRgbMask);
 					} else {
 						pixel1 = k_MEDIUM_KEY;
 					}
@@ -4255,7 +4256,7 @@ void TiledMap::ProcessRun(Pixel16 **rowData1, Pixel16 **rowData2, Pixel16 *pix1,
 			case k_TILE_SHADOW_RUN_ID		:
 				{
 					if (!(flags & k_OVERLAY_FLAG_SHADOWSONLY)) {
-						pixel2 = pixelutils_Shadow(**rowData2);
+						pixel2 = pixelutils_Shadow16(**rowData2, shadowRgbMask);
 					} else {
 						pixel2 = k_MEDIUM_KEY;
 					}
@@ -4964,10 +4965,11 @@ TiledMap::DrawOverlayClipped(aui_Surface *surface, Pixel16 *data, sint32 x, sint
 
 	unsigned short	*destPixel;
 
-	uint16		start	= (uint16)*data++;
-	uint16		end		= (uint16)*data++;
-	Pixel16		*table	= data;
-	Pixel16		*dataStart = table + (end - start + 1);
+	uint32    shadowRgbMask = pixelutils_GetShadow16RGBMask();
+	uint16    start         = (uint16)*data++;
+	uint16    end           = (uint16)*data++;
+	Pixel16 * table         = data;
+	Pixel16 * dataStart     = table + (end - start + 1);
 
 	sint32 len,looplen;
 
@@ -5041,8 +5043,8 @@ TiledMap::DrawOverlayClipped(aui_Surface *surface, Pixel16 *data, sint32 x, sint
 
 						for (i=0; i<looplen; i++)
 						{
-					  		if (!(flags & k_OVERLAY_FLAG_NOSHADOWS))
-				destPixel[i] = pixelutils_Shadow(destPixel[i]);
+							if (!(flags & k_OVERLAY_FLAG_NOSHADOWS))
+								destPixel[i] = pixelutils_Shadow16(destPixel[i], shadowRgbMask);
 						}
 
 						destPixel += len;

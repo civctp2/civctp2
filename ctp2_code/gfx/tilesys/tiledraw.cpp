@@ -1384,11 +1384,12 @@ sint32 TiledMap::DrawBlendedOverlay(aui_Surface *surface, Pixel16 *data, sint32 
     if (x >= surfWidth - k_TILE_GRID_WIDTH) return 0;
     if (y >= surfHeight - k_TILE_GRID_HEIGHT) return 0;
 
-	uint32    blendRgbMask = pixelutils_GetBlend16RGBMask();
-	uint16    start        = (uint16)*data++;
-	uint16    end          = (uint16)*data++;
-	Pixel16 * table        = data;
-	Pixel16 * dataStart    = table + (end - start + 1);
+	uint32    blendRgbMask  = pixelutils_GetBlend16RGBMask();
+	uint32    shadowRgbMask = pixelutils_GetShadow16RGBMask();
+	uint16    start         = (uint16)*data++;
+	uint16    end           = (uint16)*data++;
+	Pixel16 * table         = data;
+	Pixel16 * dataStart     = table + (end - start + 1);
 
 	for (sint32 j=start; j<end; j++)
     {
@@ -1426,7 +1427,7 @@ sint32 TiledMap::DrawBlendedOverlay(aui_Surface *surface, Pixel16 *data, sint32 
 						sint32 len = (sint32)(tag & 0x00FF);
 						for (sint32 i=0; i<len; i++) {
 							if (!(flags & k_OVERLAY_FLAG_NOSHADOWS)) {
-								*destPixel = pixelutils_Shadow(*destPixel);
+								*destPixel = pixelutils_Shadow16(*destPixel, shadowRgbMask);
 								destPixel++;
 							} else {
 								destPixel++;
@@ -1570,13 +1571,14 @@ sint32 TiledMap::DrawBlendedOverlayIntoMix(Pixel16 *data, sint32 x, sint32 y, Pi
 	if (x >= surfWidth - k_TILE_GRID_WIDTH) return 0;
 	if (y >= surfHeight - k_TILE_GRID_HEIGHT) return 0;
 
-	uint32    blendRgbMask = pixelutils_GetBlend16RGBMask();
-	sint32    surfPitch    = g_screenManager->GetSurfPitch();
-	uint8   * surfBase     = g_screenManager->GetSurfBase();
-	uint16    start        = (uint16)*data++;
-	uint16    end          = (uint16)*data++;
-	Pixel16 * table        = data;
-	Pixel16 * dataStart    = table + (end - start + 1);
+	uint32    blendRgbMask  = pixelutils_GetBlend16RGBMask();
+	uint32    shadowRgbMask = pixelutils_GetShadow16RGBMask();
+	sint32    surfPitch     = g_screenManager->GetSurfPitch();
+	uint8   * surfBase      = g_screenManager->GetSurfBase();
+	uint16    start         = (uint16)*data++;
+	uint16    end           = (uint16)*data++;
+	Pixel16 * table         = data;
+	Pixel16 * dataStart     = table + (end - start + 1);
 
 	for (sint32 j = start; j < end; j++)
     {
@@ -1608,7 +1610,7 @@ sint32 TiledMap::DrawBlendedOverlayIntoMix(Pixel16 *data, sint32 x, sint32 y, Pi
 				case k_TILE_SHADOW_RUN_ID		: {
 						sint32 len = (sint32)(tag & 0x00FF);
 						for (sint32 i=0; i<len; i++) {
-							*destPixel = pixelutils_Shadow(*destPixel);
+							*destPixel = pixelutils_Shadow16(*destPixel, shadowRgbMask);
 							destPixel++;
 						}
 					}
@@ -1714,13 +1716,14 @@ sint32 TiledMap::DrawDitheredOverlayIntoMix(Pixel16 *data, sint32 x, sint32 y, B
 	if (x >= surfWidth - k_TILE_GRID_WIDTH) return 0;
 	if (y >= surfHeight - k_TILE_GRID_HEIGHT) return 0;
 
-	uint32    blendRgbMask = pixelutils_GetBlend16RGBMask();
-	sint32    surfPitch    = g_screenManager->GetSurfPitch();
-	uint8   * surfBase     = g_screenManager->GetSurfBase();
-	uint16    start        = (uint16)*data++;
-	uint16    end          = (uint16)*data++;
-	Pixel16 * table        = data;
-	Pixel16 * dataStart    = table + (end - start + 1);
+	uint32    blendRgbMask  = pixelutils_GetBlend16RGBMask();
+	uint32    shadowRgbMask = pixelutils_GetShadow16RGBMask();
+	sint32    surfPitch     = g_screenManager->GetSurfPitch();
+	uint8   * surfBase      = g_screenManager->GetSurfBase();
+	uint16    start         = (uint16)*data++;
+	uint16    end           = (uint16)*data++;
+	Pixel16 * table         = data;
+	Pixel16 * dataStart     = table + (end - start + 1);
 
 	for (sint32 j = start; j < end; j++)
     {
@@ -1761,7 +1764,7 @@ sint32 TiledMap::DrawDitheredOverlayIntoMix(Pixel16 *data, sint32 x, sint32 y, B
 				case k_TILE_SHADOW_RUN_ID		: {
 						sint32 len = (sint32)(tag & 0x00FF);
 						for (sint32 i=0; i<len; i++) {
-							*destPixel = pixelutils_Shadow(*destPixel);
+							*destPixel = pixelutils_Shadow16(*destPixel, shadowRgbMask);
 							destPixel++;
 							hpos++;
 						}
@@ -1880,12 +1883,13 @@ sint32 TiledMap::DrawDitheredOverlay(aui_Surface *surface, Pixel16 *data, sint32
     if (x >= surface->Width() - k_TILE_GRID_WIDTH) return 0;
     if (y >= surface->Height() - k_TILE_GRID_HEIGHT) return 0;
 
-	uint8 *     surfBase    = m_surfBase;
-	sint32      surfPitch   = m_surfPitch;
-	uint16		start       = (uint16)*data++;
-	uint16		end         = (uint16)*data++;
-	Pixel16	*   table       = data;
-	Pixel16	*   dataStart   = table + (end - start + 1);
+    uint32    shadowRgbMask = pixelutils_GetShadow16RGBMask();
+	uint8   * surfBase      = m_surfBase;
+	sint32    surfPitch     = m_surfPitch;
+	uint16    start         = (uint16)*data++;
+	uint16    end           = (uint16)*data++;
+	Pixel16 * table         = data;
+	Pixel16 * dataStart     = table + (end - start + 1);
 
 	for (sint32 j = start; j < end; j++)
     {
@@ -1921,7 +1925,7 @@ sint32 TiledMap::DrawDitheredOverlay(aui_Surface *surface, Pixel16 *data, sint32
 				case k_TILE_SHADOW_RUN_ID		: {
 						sint32 len = (sint32)(tag & 0x00FF);
 						for (sint32 i=0; i<len; i++) {
-							*destPixel = pixelutils_Shadow(*destPixel);
+							*destPixel = pixelutils_Shadow16(*destPixel, shadowRgbMask);
 							destPixel++;
 						}
 					}
@@ -2285,10 +2289,11 @@ sint32 TiledMap::DrawOverlay(aui_Surface *surface, Pixel16 *data, sint32 x, sint
 		return 0;
 	}
 
-	uint16		start       = (uint16)*data++;
-	uint16		end         = (uint16)*data++;
-	Pixel16	*   table       = data;
-	Pixel16	*   dataStart   = table + (end - start + 1);
+	uint32    shadowRgbMask = pixelutils_GetShadow16RGBMask();
+	uint16    start        = (uint16)*data++;
+	uint16    end          = (uint16)*data++;
+	Pixel16 * table        = data;
+	Pixel16 * dataStart    = table + (end - start + 1);
 
 	sint32 len;
 
@@ -2327,7 +2332,7 @@ sint32 TiledMap::DrawOverlay(aui_Surface *surface, Pixel16 *data, sint32 x, sint
 						len = (tag & 0x00FF);
 						while (len--) {
 							if (!(flags & k_OVERLAY_FLAG_NOSHADOWS)) {
-								*destPixel = pixelutils_Shadow(*destPixel);
+								*destPixel = pixelutils_Shadow16(*destPixel, shadowRgbMask);
 								destPixel++;
 							} else {
 								destPixel++;
@@ -2385,11 +2390,12 @@ sint32 TiledMap::DrawColorBlendedOverlay(aui_Surface *surface, Pixel16 *data, si
 		return 0;
 	}
 
-	uint32    blendRgbMask = pixelutils_GetBlend16RGBMask();
-	uint16    start        = (uint16)*data++;
-	uint16    end          = (uint16)*data++;
-	Pixel16 * table        = data;
-	Pixel16 * dataStart    = table + (end - start + 1);
+	uint32    blendRgbMask  = pixelutils_GetBlend16RGBMask();
+	uint32    shadowRgbMask = pixelutils_GetShadow16RGBMask();
+	uint16    start         = (uint16)*data++;
+	uint16    end           = (uint16)*data++;
+	Pixel16 * table         = data;
+	Pixel16 * dataStart     = table + (end - start + 1);
 
 	sint32 len;
 
@@ -2422,7 +2428,7 @@ sint32 TiledMap::DrawColorBlendedOverlay(aui_Surface *surface, Pixel16 *data, si
 				case k_TILE_SHADOW_RUN_ID		: {
 						len = (tag & 0x00FF);
 						while (len--) {
-							*destPixel = pixelutils_Shadow(*destPixel);
+							*destPixel = pixelutils_Shadow16(*destPixel, shadowRgbMask);
 							destPixel++;
 						}
 					}
@@ -2590,10 +2596,11 @@ sint32 TiledMap::DrawColorizedOverlay(Pixel16 *data, aui_Surface *surface, sint3
 		return 0;
 	}
 
-	uint16		start = (uint16)*data++;
-	uint16		end = (uint16)*data++;
-	Pixel16		*table = data;
-	Pixel16		*dataStart = table + (end - start + 1);
+	uint32    shadowRgbMask = pixelutils_GetShadow16RGBMask();
+	uint16    start = (uint16)*data++;
+	uint16    end = (uint16)*data++;
+	Pixel16 * table = data;
+	Pixel16 * dataStart = table + (end - start + 1);
 
 	sint32 len;
 
@@ -2628,7 +2635,7 @@ sint32 TiledMap::DrawColorizedOverlay(Pixel16 *data, aui_Surface *surface, sint3
 
 						while (len--) {
 
-							*destPixel = pixelutils_Shadow(*destPixel);
+							*destPixel = pixelutils_Shadow16(*destPixel, shadowRgbMask);
 							destPixel++;
 						}
 					}
@@ -2672,8 +2679,9 @@ void TiledMap::DrawClippedColorizedOverlay(Pixel16 * data, aui_Surface & surface
 		return;
 	}
 	sint32 pixelPitch = surface.Pitch() >> 1;
-	const int blendRGBMask = pixelutils_GetBlend16RGBMask();
 
+	uint32    blendRgbMask = pixelutils_GetBlend16RGBMask();
+	uint32    shadowRgbMask = pixelutils_GetShadow16RGBMask();
 	uint16    start = (uint16)*data++;
 	uint16    end   = (uint16)*data++;
 	Pixel16 * table = data;
@@ -2730,19 +2738,20 @@ void TiledMap::DrawClippedColorizedOverlay(Pixel16 * data, aui_Surface & surface
 						break;
 					case k_TILE_COPY_RUN_ID:
 						while (pixel < endPixel) {
-							*pixel = pixelutils_Blend16(*pixel, *rowData++, alpha, blendRGBMask);
+							*pixel = pixelutils_Blend16(*pixel, *rowData++, alpha, blendRgbMask);
 							pixel++;
 						}
 						break;
 					case k_TILE_SHADOW_RUN_ID:
 						while (pixel < endPixel) {
-							*pixel = pixelutils_Blend16(*pixel, pixelutils_Shadow(*pixel), alpha, blendRGBMask);
+							*pixel = pixelutils_Blend16(*pixel, pixelutils_Shadow16(*pixel, shadowRgbMask), alpha,
+									blendRgbMask);
 							pixel++;
 						}
 						break;
 					case k_TILE_COLORIZE_RUN_ID:
 						while (pixel < endPixel) {
-							*pixel = pixelutils_Blend16(*pixel, color, alpha, blendRGBMask);
+							*pixel = pixelutils_Blend16(*pixel, color, alpha, blendRgbMask);
 							pixel++;
 						}
 						break;
@@ -2762,10 +2771,11 @@ sint32 TiledMap::DrawColorizedOverlayIntoMix(Pixel16 *data, sint32 x, sint32 y, 
 	sint32 surfHeight = g_screenManager->GetSurfHeight();
 	sint32 surfPitch = g_screenManager->GetSurfPitch();
 
-	uint16		start = (uint16)*data++;
-	uint16		end = (uint16)*data++;
-	Pixel16		*table = data;
-	Pixel16		*dataStart = table + (end - start + 1);
+	uint32    shadowRgbMask = pixelutils_GetShadow16RGBMask();
+	uint16    start = (uint16)*data++;
+	uint16    end = (uint16)*data++;
+	Pixel16 * table = data;
+	Pixel16 * dataStart = table + (end - start + 1);
 
 	sint32 len;
 
@@ -2800,7 +2810,7 @@ sint32 TiledMap::DrawColorizedOverlayIntoMix(Pixel16 *data, sint32 x, sint32 y, 
 						len = (tag & 0x00FF);
 
 						while (len--) {
-							*destPixel = pixelutils_Shadow(*destPixel);
+							*destPixel = pixelutils_Shadow16(*destPixel, shadowRgbMask);
 							destPixel++;
 						}
 					}
@@ -4259,11 +4269,12 @@ sint32 TiledMap::DrawColorBlendedOverlay(aui_Surface *surface, Pixel16 *data, si
 		return 0;
 	}
 
-	uint32    blendRgbMask = pixelutils_GetBlend16RGBMask();
-	uint16    start        = (uint16)*data++;
-	uint16    end          = (uint16)*data++;
-	Pixel16 * table        = data;
-	Pixel16 * dataStart    = table + (end - start + 1);
+	uint32    blendRgbMask  = pixelutils_GetBlend16RGBMask();
+	uint32    shadowRgbMask = pixelutils_GetShadow16RGBMask();
+	uint16    start         = (uint16)*data++;
+	uint16    end           = (uint16)*data++;
+	Pixel16 * table         = data;
+	Pixel16 * dataStart     = table + (end - start + 1);
 
 	sint32 len;
 
@@ -4296,7 +4307,7 @@ sint32 TiledMap::DrawColorBlendedOverlay(aui_Surface *surface, Pixel16 *data, si
 				case k_TILE_SHADOW_RUN_ID		: {
 						len = (tag & 0x00FF);
 						while (len--) {
-							*destPixel = pixelutils_Shadow(*destPixel);
+							*destPixel = pixelutils_Shadow16(*destPixel, shadowRgbMask);
 							destPixel++;
 						}
 					}

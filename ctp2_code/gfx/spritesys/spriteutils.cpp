@@ -499,6 +499,7 @@ Pixel16 * spriteutils_RGB32ToEncoded(Pixel32 *buf, uint16 width, uint16 height, 
 void spriteutils_DecodeToBuffer(Pixel16 *data, sint32 width, sint32 height)
 {
 	uint32    blendRgbMask = pixelutils_GetBlend16RGBMask();
+	uint32    shadowRgbMask = pixelutils_GetShadow16RGBMask();
 	Pixel16 * table = data+1;
 	Pixel16 * dataStart = table + height * 2;
 	Pixel16 * outBuf = (Pixel16 *)malloc(width * height * 8);
@@ -536,7 +537,7 @@ void spriteutils_DecodeToBuffer(Pixel16 *data, sint32 width, sint32 height)
 							short len = (tag & 0x00FF);
 
 							for (short i=0; i<len; i++) {
-								*destPixel = pixelutils_Shadow(*destPixel);
+								*destPixel = pixelutils_Shadow16(*destPixel, shadowRgbMask);
 								destPixel++;
 							}
 
