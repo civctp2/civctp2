@@ -20,70 +20,80 @@ digraph G {
 				label=<<TABLE border="0" cellspacing="0" cellborder="0"><TR><TD><IMG SCALE="TRUE" SRC="cm2_upap001l.png"/></TD></TR>
 <TR><TD><B>ADV INFANTRY TACTICS</B></TD></TR></TABLE>>,
 				shape=box,
-				style=filled];
+				style=filled,
+				xlabel=UNIT_PARATROOPER];
 			ADVANCE_ADV_NAVAL_TACTICS	[color="#ff000055",
 				fontcolor="#ffffff88",
 				group=AGE_SIX,
 				label=<<TABLE border="0" cellspacing="0" cellborder="0"><TR><TD><IMG SCALE="TRUE" SRC="cm2_upap002l.png"/></TD></TR>
 <TR><TD><B>ADV NAVAL TACTICS</B></TD></TR></TABLE>>,
 				shape=box,
-				style=filled];
+				style=filled,
+				xlabel=UNIT_BATTLESHIP];
 			ADVANCE_ADV_URBAN_PLANNING	[color="#88888855",
 				fontcolor="#ffffff88",
 				group=AGE_SIX,
 				label=<<TABLE border="0" cellspacing="0" cellborder="0"><TR><TD><IMG SCALE="TRUE" SRC="cm2_upap003l.png"/></TD></TR>
 <TR><TD><B>ADV URBAN PLANNING</B></TD></TR></TABLE>>,
 				shape=box,
-				style=filled];
+				style=filled,
+				xlabel=UNIT_URBAN_PLANNER];
 			ADVANCE_AERODYNAMICS	[color="#88888855",
 				fontcolor="#ffffff88",
 				group=AGE_SIX,
 				label=<<TABLE border="0" cellspacing="0" cellborder="0"><TR><TD><IMG SCALE="TRUE" SRC="cm2_upap005l.png"/></TD></TR>
 <TR><TD><B>AERODYNAMICS</B></TD></TR></TABLE>>,
 				shape=box,
-				style=filled];
+				style=filled,
+				xlabel=UNIT_FIGHTER];
 			ADVANCE_JET_PROPULSION	[color="#88888855",
 				fontcolor="#ffffff88",
 				group=AGE_SIX,
 				label=<<TABLE border="0" cellspacing="0" cellborder="0"><TR><TD><IMG SCALE="TRUE" SRC="cm2_upap058l.png"/></TD></TR>
 <TR><TD><B>JET PROPULSION</B></TD></TR></TABLE>>,
 				shape=box,
-				style=filled];
+				style=filled,
+				xlabel=UNIT_BOMBER];
 			ADVANCE_NAVAL_AVIATION	[color="#88888855",
 				fontcolor="#ffffff88",
 				group=AGE_SIX,
 				label=<<TABLE border="0" cellspacing="0" cellborder="0"><TR><TD><IMG SCALE="TRUE" SRC="cm2_upap073l.png"/></TD></TR>
 <TR><TD><B>NAVAL AVIATION</B></TD></TR></TABLE>>,
 				shape=box,
-				style=filled];
+				style=filled,
+				xlabel=UNIT_AIRCRAFT_CARRIER];
 			ADVANCE_VERTICAL_FLIGHT_AIRCRAFT	[color="#88888855",
 				fontcolor="#ffffff88",
 				group=AGE_SIX,
 				label=<<TABLE border="0" cellspacing="0" cellborder="0"><TR><TD><IMG SCALE="TRUE" SRC="cm2_upap105l.png"/></TD></TR>
 <TR><TD><B>VERTICAL FLIGHT AIRCRAFT</B></TD></TR></TABLE>>,
 				shape=box,
-				style=filled];
+				style=filled,
+				xlabel=UNIT_CARGO_HELICOPTER];
 			ADVANCE_RADAR	[color="#88888855",
 				fontcolor="#ffffff88",
 				group=AGE_SIX,
 				label=<<TABLE border="0" cellspacing="0" cellborder="0"><TR><TD><IMG SCALE="TRUE" SRC="cm2_upap087l.png"/></TD></TR>
 <TR><TD><B>RADAR</B></TD></TR></TABLE>>,
 				shape=box,
-				style=filled];
+				style=filled,
+				xlabel=UNIT_MOBILE_SAM];
 			ADVANCE_MASS_MEDIA	[color="#88888855",
 				fontcolor="#ffffff88",
 				group=AGE_SIX,
 				label=<<TABLE border="0" cellspacing="0" cellborder="0"><TR><TD><IMG SCALE="TRUE" SRC="cm2_upap063l.png"/></TD></TR>
 <TR><TD><B>MASS MEDIA</B></TD></TR></TABLE>>,
 				shape=box,
-				style=filled];
+				style=filled,
+				xlabel=UNIT_TELEVANGELIST];
 			ADVANCE_MASS_PRODUCTION	[color="#88888855",
 				fontcolor="#ffffff88",
 				group=AGE_SIX,
 				label=<<TABLE border="0" cellspacing="0" cellborder="0"><TR><TD><IMG SCALE="TRUE" SRC="cm2_upap064l.png"/></TD></TR>
 <TR><TD><B>MASS PRODUCTION</B></TD></TR></TABLE>>,
 				shape=box,
-				style=filled];
+				style=filled,
+				xlabel=UNIT_FRIGATE];
 			ADVANCE_QUANTUM_MECHANICS	[color="#88888855",
 				fontcolor="#ffffff88",
 				group=AGE_SIX,
@@ -118,7 +128,8 @@ digraph G {
 				label=<<TABLE border="0" cellspacing="0" cellborder="0"><TR><TD><IMG SCALE="TRUE" SRC="cm2_upap026l.png"/></TD></TR>
 <TR><TD><B>CORPORATION</B></TD></TR></TABLE>>,
 				shape=box,
-				style=filled];
+				style=filled,
+				xlabel=UNIT_CORPORATE_BRANCH];
 			ADVANCE_MEDICINE	[color="#88888855",
 				fontcolor="#ffffff88",
 				group=AGE_SIX,
@@ -132,21 +143,24 @@ digraph G {
 				label=<<TABLE border="0" cellspacing="0" cellborder="0"><TR><TD><IMG SCALE="TRUE" SRC="cm2_upap098l.png"/></TD></TR>
 <TR><TD><B>TANK WARFARE</B></TD></TR></TABLE>>,
 				shape=box,
-				style=filled];
+				style=filled,
+				xlabel=UNIT_TANK];
 			ADVANCE_CRIMINAL_CODE	[color="#88888855",
 				fontcolor="#ffffff88",
 				group=AGE_SIX,
 				label=<<TABLE border="0" cellspacing="0" cellborder="0"><TR><TD><IMG SCALE="TRUE" SRC="cm2_upap027l.png"/></TD></TR>
 <TR><TD><B>CRIMINAL CODE</B></TD></TR></TABLE>>,
 				shape=box,
-				style=filled];
+				style=filled,
+				xlabel=UNIT_LAWYER];
 			ADVANCE_INTERNAL_COMBUSTION	[color="#88888855",
 				fontcolor="#ffffff88",
 				group=AGE_SIX,
 				label=<<TABLE border="0" cellspacing="0" cellborder="0"><TR><TD><IMG SCALE="TRUE" SRC="cm2_upap056l.png"/></TD></TR>
 <TR><TD><B>INTERNAL COMBUSTION</B></TD></TR></TABLE>>,
 				shape=box,
-				style=filled];
+				style=filled,
+				xlabel=UNIT_TROOP_SHIP];
 		}
 		subgraph cluster_AGE_EIGHT {
 			graph [color="#88888855",
@@ -166,7 +180,8 @@ digraph G {
 				label=<<TABLE border="0" cellspacing="0" cellborder="0"><TR><TD><IMG SCALE="TRUE" SRC="upap009l.png"/></TD></TR>
 <TR><TD><B>AI SURVEILLANCE</B></TD></TR></TABLE>>,
 				shape=box,
-				style=filled];
+				style=filled,
+				xlabel=UNIT_SPY_PLANE];
 			ADVANCE_DIGITAL_ENCRYPTION	[color="#88888855",
 				fontcolor="#ffffff88",
 				group=AGE_EIGHT,
@@ -187,35 +202,40 @@ digraph G {
 				label=<<TABLE border="0" cellspacing="0" cellborder="0"><TR><TD><IMG SCALE="TRUE" SRC="upap061l.png"/></TD></TR>
 <TR><TD><B>LIQUID BREATHING APPARATUS</B></TD></TR></TABLE>>,
 				shape=box,
-				style=filled];
+				style=filled,
+				xlabel=UNIT_SCOUT_SUB];
 			ADVANCE_SPACE_FLIGHT	[color="#ff000055",
 				fontcolor="#ffffff88",
 				group=AGE_EIGHT,
 				label=<<TABLE border="0" cellspacing="0" cellborder="0"><TR><TD><IMG SCALE="TRUE" SRC="upap094l.png"/></TD></TR>
 <TR><TD><B>SPACE FLIGHT</B></TD></TR></TABLE>>,
 				shape=box,
-				style=filled];
+				style=filled,
+				xlabel=UNIT_SPACE_PLANE];
 			ADVANCE_NEURAL_INTERFACE	[color="#88888855",
 				fontcolor="#ffffff88",
 				group=AGE_EIGHT,
 				label=<<TABLE border="0" cellspacing="0" cellborder="0"><TR><TD><IMG SCALE="TRUE" SRC="upap075l.png"/></TD></TR>
 <TR><TD><B>NEURAL INTERFACE</B></TD></TR></TABLE>>,
 				shape=box,
-				style=filled];
+				style=filled,
+				xlabel=UNIT_CYBER_NINJA];
 			ADVANCE_NANO_ASSEMBLY	[color="#88888855",
 				fontcolor="#ffffff88",
 				group=AGE_EIGHT,
 				label=<<TABLE border="0" cellspacing="0" cellborder="0"><TR><TD><IMG SCALE="TRUE" SRC="cm2_upap069l.png"/></TD></TR>
 <TR><TD><B>NANO ASSEMBLY</B></TD></TR></TABLE>>,
 				shape=box,
-				style=filled];
+				style=filled,
+				xlabel=UNIT_SEA_ENGINEER];
 			ADVANCE_GENETICS	[color="#88888855",
 				fontcolor="#ffffff88",
 				group=AGE_EIGHT,
 				label=<<TABLE border="0" cellspacing="0" cellborder="0"><TR><TD><IMG SCALE="TRUE" SRC="upap044l.png"/></TD></TR>
 <TR><TD><B>GENETICS</B></TD></TR></TABLE>>,
 				shape=box,
-				style=filled];
+				style=filled,
+				xlabel=UNIT_MOREY_STRIKER];
 			ADVANCE_TECHNOCRACY	[color="#88888855",
 				fontcolor="#ffffff88",
 				group=AGE_EIGHT,
@@ -229,14 +249,16 @@ digraph G {
 				label=<<TABLE border="0" cellspacing="0" cellborder="0"><TR><TD><IMG SCALE="TRUE" SRC="upap018l.png"/></TD></TR>
 <TR><TD><B>CHAOS THEORY</B></TD></TR></TABLE>>,
 				shape=box,
-				style=filled];
+				style=filled,
+				xlabel=UNIT_HOVER_INFANTRY];
 			ADVANCE_EUGENICS	[color="#88888855",
 				fontcolor="#ffffff88",
 				group=AGE_EIGHT,
 				label=<<TABLE border="0" cellspacing="0" cellborder="0"><TR><TD><IMG SCALE="TRUE" SRC="upap035l.png"/></TD></TR>
 <TR><TD><B>EUGENICS</B></TD></TR></TABLE>>,
 				shape=box,
-				style=filled];
+				style=filled,
+				xlabel=UNIT_EMPATHIC_DIPLOMAT];
 		}
 		subgraph cluster_AGE_SEVEN {
 			graph [color="#88888855",
@@ -249,7 +271,8 @@ digraph G {
 				label=<<TABLE border="0" cellspacing="0" cellborder="0"><TR><TD><IMG SCALE="TRUE" SRC="cm2_upap004l.png"/></TD></TR>
 <TR><TD><B>ADVANCED COMPOSITES</B></TD></TR></TABLE>>,
 				shape=box,
-				style=filled];
+				style=filled,
+				xlabel=UNIT_STEALTH_FIGHTER];
 			ADVANCE_ROBOTICS	[color="#88888855",
 				fontcolor="#ffffff88",
 				group=AGE_SEVEN,
@@ -263,28 +286,32 @@ digraph G {
 				label=<<TABLE border="0" cellspacing="0" cellborder="0"><TR><TD><IMG SCALE="TRUE" SRC="cm2_upap047l.png"/></TD></TR>
 <TR><TD><B>GLOBAL ECONOMICS</B></TD></TR></TABLE>>,
 				shape=box,
-				style=filled];
+				style=filled,
+				xlabel=UNIT_Z_FREIGHT_TRANSPORT];
 			ADVANCE_SUPERSONIC_FLIGHT	[color="#88888855",
 				fontcolor="#ffffff88",
 				group=AGE_SEVEN,
 				label=<<TABLE border="0" cellspacing="0" cellborder="0"><TR><TD><IMG SCALE="TRUE" SRC="cm2_upap097l.png"/></TD></TR>
 <TR><TD><B>SUPERSONIC FLIGHT</B></TD></TR></TABLE>>,
 				shape=box,
-				style=filled];
+				style=filled,
+				xlabel=UNIT_INTERCEPTOR];
 			ADVANCE_GUIDED_WEAPON_SYSTEMS	[color="#88888855",
 				fontcolor="#ffffff88",
 				group=AGE_SEVEN,
 				label=<<TABLE border="0" cellspacing="0" cellborder="0"><TR><TD><IMG SCALE="TRUE" SRC="cm2_upap049l.png"/></TD></TR>
 <TR><TD><B>GUIDED WEAPON SYSTEMS</B></TD></TR></TABLE>>,
 				shape=box,
-				style=filled];
+				style=filled,
+				xlabel=UNIT_CRUISE_MISSILE];
 			ADVANCE_NUCLEAR_POWER	[color="#88888855",
 				fontcolor="#ffffff88",
 				group=AGE_SEVEN,
 				label=<<TABLE border="0" cellspacing="0" cellborder="0"><TR><TD><IMG SCALE="TRUE" SRC="cm2_upap077l.png"/></TD></TR>
 <TR><TD><B>NUCLEAR POWER</B></TD></TR></TABLE>>,
 				shape=box,
-				style=filled];
+				style=filled,
+				xlabel=UNIT_NUKE];
 			ADVANCE_COMPUTER	[color="#88888855",
 				fontcolor="#ffffff88",
 				group=AGE_SEVEN,
@@ -325,7 +352,8 @@ digraph G {
 				label=<<TABLE border="0" cellspacing="0" cellborder="0"><TR><TD><IMG SCALE="TRUE" SRC="upap103l.png"/></TD></TR>
 <TR><TD><B>ULTRAPRESSURE MACHINERY</B></TD></TR></TABLE>>,
 				shape=box,
-				style=filled];
+				style=filled,
+				xlabel=UNIT_CRAWLER];
 			ADVANCE_UNIFIED_PHYSICS	[color="#88888855",
 				fontcolor="#ffffff88",
 				group=AGE_NINE,
@@ -353,35 +381,40 @@ digraph G {
 				label=<<TABLE border="0" cellspacing="0" cellborder="0"><TR><TD><IMG SCALE="TRUE" SRC="upap040l.png"/></TD></TR>
 <TR><TD><B>FUSION</B></TD></TR></TABLE>>,
 				shape=box,
-				style=filled];
+				style=filled,
+				xlabel=UNIT_FUSION_TANK];
 			ADVANCE_CYBERNETICS	[color="#88888855",
 				fontcolor="#ffffff88",
 				group=AGE_NINE,
 				label=<<TABLE border="0" cellspacing="0" cellborder="0"><TR><TD><IMG SCALE="TRUE" SRC="upap028l.png"/></TD></TR>
 <TR><TD><B>CYBERNETICS</B></TD></TR></TABLE>>,
 				shape=box,
-				style=filled];
+				style=filled,
+				xlabel=UNIT_WAR_WALKER];
 			ADVANCE_GENETIC_TAILORING	[color="#88888855",
 				fontcolor="#ffffff88",
 				group=AGE_NINE,
 				label=<<TABLE border="0" cellspacing="0" cellborder="0"><TR><TD><IMG SCALE="TRUE" SRC="upap043l.png"/></TD></TR>
 <TR><TD><B>GENETIC TAILORING</B></TD></TR></TABLE>>,
 				shape=box,
-				style=filled];
+				style=filled,
+				xlabel=UNIT_KRAKEN];
 			ADVANCE_PLASMA_WEAPONRY	[color="#88888855",
 				fontcolor="#ffffff88",
 				group=AGE_NINE,
 				label=<<TABLE border="0" cellspacing="0" cellborder="0"><TR><TD><IMG SCALE="TRUE" SRC="upap084l.png"/></TD></TR>
 <TR><TD><B>PLASMA WEAPONRY</B></TD></TR></TABLE>>,
 				shape=box,
-				style=filled];
+				style=filled,
+				xlabel=UNIT_PLASMA_DESTROYER];
 			ADVANCE_SMART_MATERIALS	[color="#88888855",
 				fontcolor="#ffffff88",
 				group=AGE_NINE,
 				label=<<TABLE border="0" cellspacing="0" cellborder="0"><TR><TD><IMG SCALE="TRUE" SRC="upap093l.png"/></TD></TR>
 <TR><TD><B>SMART MATERIALS</B></TD></TR></TABLE>>,
 				shape=box,
-				style=filled];
+				style=filled,
+				xlabel=UNIT_DREADNAUGHT];
 			ADVANCE_NANO_MACHINES	[color="#88888855",
 				fontcolor="#ffffff88",
 				group=AGE_NINE,
@@ -395,7 +428,8 @@ digraph G {
 				label=<<TABLE border="0" cellspacing="0" cellborder="0"><TR><TD><IMG SCALE="TRUE" SRC="upap033l.png"/></TD></TR>
 <TR><TD><B>ECOTOPIA</B></TD></TR></TABLE>>,
 				shape=box,
-				style=filled];
+				style=filled,
+				xlabel=UNIT_ECO_TERRORIST];
 			ADVANCE_GAIA_THEORY	[color="#88888855",
 				fontcolor="#ffffff88",
 				group=AGE_NINE,
@@ -409,7 +443,8 @@ digraph G {
 				label=<<TABLE border="0" cellspacing="0" cellborder="0"><TR><TD><IMG SCALE="TRUE" SRC="upap071l.png"/></TD></TR>
 <TR><TD><B>NANO WARFARE</B></TD></TR></TABLE>>,
 				shape=box,
-				style=filled];
+				style=filled,
+				xlabel=UNIT_INFECTOR];
 		}
 		subgraph cluster_AGE_FOUR {
 			graph [color="#88888855",
@@ -436,28 +471,32 @@ digraph G {
 				label=<<TABLE border="0" cellspacing="0" cellborder="0"><TR><TD><IMG SCALE="TRUE" SRC="upap050l.png"/></TD></TR>
 <TR><TD><B>GUNPOWDER</B></TD></TR></TABLE>>,
 				shape=box,
-				style=filled];
+				style=filled,
+				xlabel=UNIT_INFANTRYMAN];
 			ADVANCE_CANNON_MAKING	[color="#88888855",
 				fontcolor="#ffffff88",
 				group=AGE_FOUR,
 				label=<<TABLE border="0" cellspacing="0" cellborder="0"><TR><TD><IMG SCALE="TRUE" SRC="upap016l.png"/></TD></TR>
 <TR><TD><B>CANNON MAKING</B></TD></TR></TABLE>>,
 				shape=box,
-				style=filled];
+				style=filled,
+				xlabel=UNIT_CANNON];
 			ADVANCE_CAVALRY_TACTICS	[color="#ff000055",
 				fontcolor="#ffffff88",
 				group=AGE_FOUR,
 				label=<<TABLE border="0" cellspacing="0" cellborder="0"><TR><TD><IMG SCALE="TRUE" SRC="upap017l.png"/></TD></TR>
 <TR><TD><B>CAVALRY TACTICS</B></TD></TR></TABLE>>,
 				shape=box,
-				style=filled];
+				style=filled,
+				xlabel=UNIT_CAVALRY];
 			ADVANCE_CLASSICAL_EDUCATION	[color="#88888855",
 				fontcolor="#ffffff88",
 				group=AGE_FOUR,
 				label=<<TABLE border="0" cellspacing="0" cellborder="0"><TR><TD><IMG SCALE="TRUE" SRC="upap020l.png"/></TD></TR>
 <TR><TD><B>CLASSICAL EDUCATION</B></TD></TR></TABLE>>,
 				shape=box,
-				style=filled];
+				style=filled,
+				xlabel=UNIT_ABOLITIONIST];
 			ADVANCE_BANKING	[color="#88888855",
 				fontcolor="#ffffff88",
 				group=AGE_FOUR,
@@ -478,7 +517,8 @@ digraph G {
 				label=<<TABLE border="0" cellspacing="0" cellborder="0"><TR><TD><IMG SCALE="TRUE" SRC="upap078l.png"/></TD></TR>
 <TR><TD><B>OCEAN FARING</B></TD></TR></TABLE>>,
 				shape=box,
-				style=filled];
+				style=filled,
+				xlabel=UNIT_CARRACK];
 			ADVANCE_OPTICS	[color="#88888855",
 				fontcolor="#ffffff88",
 				group=AGE_FOUR,
@@ -492,7 +532,8 @@ digraph G {
 				label=<<TABLE border="0" cellspacing="0" cellborder="0"><TR><TD><IMG SCALE="TRUE" SRC="upap074l.png"/></TD></TR>
 <TR><TD><B>NAVAL TACTICS</B></TD></TR></TABLE>>,
 				shape=box,
-				style=filled];
+				style=filled,
+				xlabel=UNIT_SHIP_OF_THE_LINE];
 		}
 		subgraph cluster_AGE_FIVE {
 			graph [color="#88888855",
@@ -512,7 +553,8 @@ digraph G {
 				label=<<TABLE border="0" cellspacing="0" cellborder="0"><TR><TD><IMG SCALE="TRUE" SRC="cm2_upap067l.png"/></TD></TR>
 <TR><TD><B>MODERN METALLURGY</B></TD></TR></TABLE>>,
 				shape=box,
-				style=filled];
+				style=filled,
+				xlabel=UNIT_IRONCLAD];
 			ADVANCE_PHYSICS	[color="#88888855",
 				fontcolor="#ffffff88",
 				group=AGE_FIVE,
@@ -540,7 +582,8 @@ digraph G {
 				label=<<TABLE border="0" cellspacing="0" cellborder="0"><TR><TD><IMG SCALE="TRUE" SRC="upap055l.png"/></TD></TR>
 <TR><TD><B>INDUSTRIAL REVOLUTION</B></TD></TR></TABLE>>,
 				shape=box,
-				style=filled];
+				style=filled,
+				xlabel=UNIT_MACHINE_GUNNER];
 			ADVANCE_RAILROAD	[color="#88888855",
 				fontcolor="#ffffff88",
 				group=AGE_FIVE,
@@ -568,28 +611,32 @@ digraph G {
 				label=<<TABLE border="0" cellspacing="0" cellborder="0"><TR><TD><IMG SCALE="TRUE" SRC="upap036l.png"/></TD></TR>
 <TR><TD><B>EXPLOSIVES</B></TD></TR></TABLE>>,
 				shape=box,
-				style=filled];
+				style=filled,
+				xlabel=UNIT_ARTILLERY];
 			ADVANCE_FASCISM	[color="#ff000055",
 				fontcolor="#ffffff88",
 				group=AGE_FIVE,
 				label=<<TABLE border="0" cellspacing="0" cellborder="0"><TR><TD><IMG SCALE="TRUE" SRC="cm2_upap037l.png"/></TD></TR>
 <TR><TD><B>FASCISM</B></TD></TR></TABLE>>,
 				shape=box,
-				style=filled];
+				style=filled,
+				xlabel=UNIT_FASCIST];
 			ADVANCE_OIL_REFINING	[color="#88888855",
 				fontcolor="#ffffff88",
 				group=AGE_FIVE,
 				label=<<TABLE border="0" cellspacing="0" cellborder="0"><TR><TD><IMG SCALE="TRUE" SRC="upap079l.png"/></TD></TR>
 <TR><TD><B>OIL REFINING</B></TD></TR></TABLE>>,
 				shape=box,
-				style=filled];
+				style=filled,
+				xlabel=UNIT_SUBMARINE];
 			ADVANCE_NATIONALISM	[color="#88888855",
 				fontcolor="#ffffff88",
 				group=AGE_FIVE,
 				label=<<TABLE border="0" cellspacing="0" cellborder="0"><TR><TD><IMG SCALE="TRUE" SRC="cm2_upap072l.png"/></TD></TR>
 <TR><TD><B>NATIONALISM</B></TD></TR></TABLE>>,
 				shape=box,
-				style=filled];
+				style=filled,
+				xlabel=UNIT_SPY];
 		}
 		subgraph cluster_AGE_THREE {
 			graph [color="#88888855",
@@ -609,49 +656,56 @@ digraph G {
 				label=<<TABLE border="0" cellspacing="0" cellborder="0"><TR><TD><IMG SCALE="TRUE" SRC="cm2_upap012l.png"/></TD></TR>
 <TR><TD><B>BALLISTICS</B></TD></TR></TABLE>>,
 				shape=box,
-				style=filled];
+				style=filled,
+				xlabel=UNIT_ARCHER];
 			ADVANCE_HORSE_RIDING	[color="#88888855",
 				fontcolor="#ffffff88",
 				group=AGE_THREE,
 				label=<<TABLE border="0" cellspacing="0" cellborder="0"><TR><TD><IMG SCALE="TRUE" SRC="cm2_upap051l.png"/></TD></TR>
 <TR><TD><B>HORSE RIDING</B></TD></TR></TABLE>>,
 				shape=box,
-				style=filled];
+				style=filled,
+				xlabel=UNIT_MOUNTED_ARCHER];
 			ADVANCE_ALCHEMY	[color="#88888855",
 				fontcolor="#ffffff88",
 				group=AGE_THREE,
 				label=<<TABLE border="0" cellspacing="0" cellborder="0"><TR><TD><IMG SCALE="TRUE" SRC="cm2_upap010l.png"/></TD></TR>
 <TR><TD><B>ALCHEMY</B></TD></TR></TABLE>>,
 				shape=box,
-				style=filled];
+				style=filled,
+				xlabel=UNIT_FIRE_TRIREME];
 			ADVANCE_HULL_MAKING	[color="#88888855",
 				fontcolor="#ffffff88",
 				group=AGE_THREE,
 				label=<<TABLE border="0" cellspacing="0" cellborder="0"><TR><TD><IMG SCALE="TRUE" SRC="cm2_upap053l.png"/></TD></TR>
 <TR><TD><B>HULL MAKING</B></TD></TR></TABLE>>,
 				shape=box,
-				style=filled];
+				style=filled,
+				xlabel=UNIT_LONGSHIP];
 			ADVANCE_FEUDALISM	[color="#88888855",
 				fontcolor="#ffffff88",
 				group=AGE_THREE,
 				label=<<TABLE border="0" cellspacing="0" cellborder="0"><TR><TD><IMG SCALE="TRUE" SRC="cm2_upap038l.png"/></TD></TR>
 <TR><TD><B>FEUDALISM</B></TD></TR></TABLE>>,
 				shape=box,
-				style=filled];
+				style=filled,
+				xlabel=UNIT_PIKEMEN];
 			ADVANCE_BUREAUCRACY	[color="#88888855",
 				fontcolor="#ffffff88",
 				group=AGE_THREE,
 				label=<<TABLE border="0" cellspacing="0" cellborder="0"><TR><TD><IMG SCALE="TRUE" SRC="cm2_upap015l.png"/></TD></TR>
 <TR><TD><B>BUREAUCRACY</B></TD></TR></TABLE>>,
 				shape=box,
-				style=filled];
+				style=filled,
+				xlabel=UNIT_DIPLOMAT];
 			ADVANCE_THEOLOGY	[color="#88888855",
 				fontcolor="#ffffff88",
 				group=AGE_THREE,
 				label=<<TABLE border="0" cellspacing="0" cellborder="0"><TR><TD><IMG SCALE="TRUE" SRC="cm2_upap100l.png"/></TD></TR>
 <TR><TD><B>THEOLOGY</B></TD></TR></TABLE>>,
 				shape=box,
-				style=filled];
+				style=filled,
+				xlabel=UNIT_CLERIC];
 			ADVANCE_MONARCHY	[color="#ff000055",
 				fontcolor="#ffffff88",
 				group=AGE_THREE,
@@ -678,14 +732,16 @@ digraph G {
 				label=<<TABLE border="0" cellspacing="0" cellborder="0"><TR><TD><IMG SCALE="TRUE" SRC="upap102l.png"/></TD></TR>
 <TR><TD><B>TRADE</B></TD></TR></TABLE>>,
 				shape=box,
-				style=filled];
+				style=filled,
+				xlabel=UNIT_CARAVAN];
 			ADVANCE_BRONZE_WORKING	[color="#88888855",
 				fontcolor="#ffffff88",
 				group=AGE_ONE,
 				label=<<TABLE border="0" cellspacing="0" cellborder="0"><TR><TD><IMG SCALE="TRUE" SRC="upap014l.png"/></TD></TR>
 <TR><TD><B>BRONZE WORKING</B></TD></TR></TABLE>>,
 				shape=box,
-				style=filled];
+				style=filled,
+				xlabel=UNIT_HOPLITE];
 			ADVANCE_MASONRY	[color="#88888855",
 				fontcolor="#ffffff88",
 				group=AGE_ONE,
@@ -706,7 +762,8 @@ digraph G {
 				label=<<TABLE border="0" cellspacing="0" cellborder="0"><TR><TD><IMG SCALE="TRUE" SRC="upap091l.png"/></TD></TR>
 <TR><TD><B>SHIP BUILDING</B></TD></TR></TABLE>>,
 				shape=box,
-				style=filled];
+				style=filled,
+				xlabel=UNIT_CATAMARAN];
 			ADVANCE_STONE_WORKING	[color="#00ff0055",
 				fontcolor="#ffffff88",
 				group=AGE_ONE,
@@ -720,7 +777,8 @@ digraph G {
 				label=<<TABLE border="0" cellspacing="0" cellborder="0"><TR><TD><IMG SCALE="TRUE" SRC="upap101l.png"/></TD></TR>
 <TR><TD><B>TOOLMAKING</B></TD></TR></TABLE>>,
 				shape=box,
-				style=filled];
+				style=filled,
+				xlabel=UNIT_WARRIOR];
 			ADVANCE_WRITING	[color="#00ff0055",
 				fontcolor="#ffffff88",
 				group=AGE_ONE,
@@ -740,21 +798,24 @@ digraph G {
 				label=<<TABLE border="0" cellspacing="0" cellborder="0"><TR><TD><IMG SCALE="TRUE" SRC="cm2_upap092l.png"/></TD></TR>
 <TR><TD><B>SLAVE LABOR</B></TD></TR></TABLE>>,
 				shape=box,
-				style=filled];
+				style=filled,
+				xlabel=UNIT_SLAVER];
 			ADVANCE_GEOMETRY	[color="#88888855",
 				fontcolor="#ffffff88",
 				group=AGE_TWO,
 				label=<<TABLE border="0" cellspacing="0" cellborder="0"><TR><TD><IMG SCALE="TRUE" SRC="cm2_upap045l.png"/></TD></TR>
 <TR><TD><B>GEOMETRY</B></TD></TR></TABLE>>,
 				shape=box,
-				style=filled];
+				style=filled,
+				xlabel=UNIT_CATAPULT];
 			ADVANCE_IRON_WORKING	[color="#88888855",
 				fontcolor="#ffffff88",
 				group=AGE_TWO,
 				label=<<TABLE border="0" cellspacing="0" cellborder="0"><TR><TD><IMG SCALE="TRUE" SRC="cm2_upap057l.png"/></TD></TR>
 <TR><TD><B>IRON WORKING</B></TD></TR></TABLE>>,
 				shape=box,
-				style=filled];
+				style=filled,
+				xlabel=UNIT_SWORDSMAN];
 			ADVANCE_CONCRETE	[color="#88888855",
 				fontcolor="#ffffff88",
 				group=AGE_TWO,
