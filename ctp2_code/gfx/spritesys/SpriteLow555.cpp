@@ -132,7 +132,7 @@ void Sprite::DrawLowClipped555(Pixel16 *frame, sint32 drawX, sint32 drawY, sint3
 									while (len) {
 										len--;
 										if (xpos >= xstart && xpos < xend)
-											*destPixel++ = pixelutils_Shadow_555(*rowData++);
+											*destPixel++ = pixelutils_Shadow16(*rowData++, SHADOW_16_MASK_555);
 										else
 											rowData++;
 										xpos++;
@@ -166,7 +166,7 @@ void Sprite::DrawLowClipped555(Pixel16 *frame, sint32 drawX, sint32 drawY, sint3
 							while (len) {
 								len--;
 								if (xpos >= xstart && xpos < xend) {
-									*destPixel = pixelutils_Shadow_555(*destPixel);
+									*destPixel = pixelutils_Shadow16(*destPixel, SHADOW_16_MASK_555);
 									destPixel++;
 								}
 								xpos++;
@@ -185,7 +185,7 @@ void Sprite::DrawLowClipped555(Pixel16 *frame, sint32 drawX, sint32 drawY, sint3
 							Pixel16 pixel = *rowData;
 							if (flags & k_BIT_DRAWFLAGS_FOGGED)
 							{
-								pixel = pixelutils_Shadow_555(pixel);
+								pixel = pixelutils_Shadow16(pixel, SHADOW_16_MASK_555);
 							}
 							if (flags & k_BIT_DRAWFLAGS_DESATURATED)
 							{
@@ -327,7 +327,7 @@ void Sprite::DrawLow555(Pixel16 *frame, sint32 drawX, sint32 drawY, sint32 width
 							Pixel16 pixel = *rowAddr.w_ptr;
 
 							if (flags & k_BIT_DRAWFLAGS_FOGGED)
-								pixel = pixelutils_Shadow_555(pixel);
+								pixel = pixelutils_Shadow16(pixel, SHADOW_16_MASK_555);
 
 							if (flags & k_BIT_DRAWFLAGS_DESATURATED)
 								pixel = pixelutils_Desaturate_555(pixel);
@@ -448,7 +448,7 @@ void Sprite::DrawLowReversedClipped555(Pixel16 *frame, sint32 drawX, sint32 draw
 									while (len) {
 										len--;
 										if (xpos >= xstart && xpos < xend)
-											*destPixel-- = pixelutils_Shadow_555(*rowData++);
+											*destPixel-- = pixelutils_Shadow16(*rowData++, SHADOW_16_MASK_555);
 										else
 											rowData++;
 										xpos--;
@@ -482,7 +482,7 @@ void Sprite::DrawLowReversedClipped555(Pixel16 *frame, sint32 drawX, sint32 draw
 							while (len) {
 								len--;
 								if (xpos >= xstart && xpos < xend) {
-									*destPixel = pixelutils_Shadow_555(*destPixel);
+									*destPixel = pixelutils_Shadow16(*destPixel, SHADOW_16_MASK_555);
 									destPixel--;
 								}
 								xpos--;
@@ -500,7 +500,7 @@ void Sprite::DrawLowReversedClipped555(Pixel16 *frame, sint32 drawX, sint32 draw
 						} else {
 							Pixel16 pixel = *rowData;
 							if (flags & k_BIT_DRAWFLAGS_FOGGED) {
-								pixel = pixelutils_Shadow_555(pixel);
+								pixel = pixelutils_Shadow16(pixel, SHADOW_16_MASK_555);
 							}
 							if (flags & k_BIT_DRAWFLAGS_DESATURATED) {
 								pixel = pixelutils_Desaturate_555(pixel);
@@ -592,7 +592,7 @@ void Sprite::DrawLowReversed555(Pixel16 *frame, sint32 drawX, sint32 drawY, sint
 							} else
 							if (flags & k_BIT_DRAWFLAGS_FOGGED) {
 								while (len--) {
-									*destPixel-- = pixelutils_Shadow_555(*rowData++);
+									*destPixel-- = pixelutils_Shadow16(*rowData++, SHADOW_16_MASK_555);
 								}
 							} else
 								if (flags & k_BIT_DRAWFLAGS_DESATURATED) {
@@ -611,7 +611,7 @@ void Sprite::DrawLowReversed555(Pixel16 *frame, sint32 drawX, sint32 drawY, sint
 
 							while (len--) {
 
-								*destPixel = pixelutils_Shadow_555(*destPixel);
+								*destPixel = pixelutils_Shadow16(*destPixel, SHADOW_16_MASK_555);
 								destPixel--;
 							}
 						}
@@ -625,7 +625,7 @@ void Sprite::DrawLowReversed555(Pixel16 *frame, sint32 drawX, sint32 drawY, sint
 						} else {
 							Pixel16 pixel = *rowData;
 							if (flags & k_BIT_DRAWFLAGS_FOGGED) {
-								pixel = pixelutils_Shadow_555(pixel);
+								pixel = pixelutils_Shadow16(pixel, SHADOW_16_MASK_555);
 							}
 							if (flags & k_BIT_DRAWFLAGS_DESATURATED) {
 								pixel = pixelutils_Desaturate_555(pixel);
@@ -765,7 +765,7 @@ void Sprite::DrawScaledLow555(Pixel16 *data, sint32 x, sint32 y, sint32 destWidt
 												BLEND_16_MASK_555);
 									} else
 									if (flags & k_BIT_DRAWFLAGS_FOGGED) {
-										firstPixel = pixelutils_Shadow_555(*rowData1);
+										firstPixel = pixelutils_Shadow16(*rowData1, SHADOW_16_MASK_555);
 									} else
 									if (flags & k_BIT_DRAWFLAGS_DESATURATED) {
 										firstPixel = pixelutils_Desaturate_555(*rowData1);
@@ -775,7 +775,7 @@ void Sprite::DrawScaledLow555(Pixel16 *data, sint32 x, sint32 y, sint32 destWidt
 									rowData1++;
 								break;
 							case k_SHADOW_RUN_ID		:
-									firstPixel = pixelutils_Shadow_555(*destPixel);
+									firstPixel = pixelutils_Shadow16(*destPixel, SHADOW_16_MASK_555);
 								break;
 							case k_FEATHERED_RUN_ID	:
 									if (flags & k_BIT_DRAWFLAGS_OUTLINE) {
@@ -787,7 +787,7 @@ void Sprite::DrawScaledLow555(Pixel16 *data, sint32 x, sint32 y, sint32 destWidt
 										} else {
 											Pixel16 pixel = *rowData1;
 											if (flags & k_BIT_DRAWFLAGS_FOGGED) {
-												pixel = pixelutils_Shadow_555(pixel);
+												pixel = pixelutils_Shadow16(pixel, SHADOW_16_MASK_555);
 											}
 											if (flags & k_BIT_DRAWFLAGS_DESATURATED) {
 												pixel = pixelutils_Desaturate_555(pixel);
@@ -825,7 +825,7 @@ void Sprite::DrawScaledLow555(Pixel16 *data, sint32 x, sint32 y, sint32 destWidt
 												BLEND_16_MASK_555);
 									} else
 									if (flags & k_BIT_DRAWFLAGS_FOGGED) {
-										secondPixel = pixelutils_Shadow_555(*rowData2);
+										secondPixel = pixelutils_Shadow16(*rowData2, SHADOW_16_MASK_555);
 									} else
 									if (flags & k_BIT_DRAWFLAGS_DESATURATED) {
 										secondPixel = pixelutils_Desaturate_555(*rowData2);
@@ -836,7 +836,7 @@ void Sprite::DrawScaledLow555(Pixel16 *data, sint32 x, sint32 y, sint32 destWidt
 									rowData2++;
 								break;
 							case k_SHADOW_RUN_ID		:
-									secondPixel = pixelutils_Shadow_555(*destPixel);
+									secondPixel = pixelutils_Shadow16(*destPixel, SHADOW_16_MASK_555);
 								break;
 							case k_FEATHERED_RUN_ID	:
 									if (flags & k_BIT_DRAWFLAGS_OUTLINE) {
@@ -848,7 +848,7 @@ void Sprite::DrawScaledLow555(Pixel16 *data, sint32 x, sint32 y, sint32 destWidt
 										} else {
 											Pixel16 pixel = *rowData2;
 											if (flags & k_BIT_DRAWFLAGS_FOGGED) {
-												pixel = pixelutils_Shadow_555(pixel);
+												pixel = pixelutils_Shadow16(pixel, SHADOW_16_MASK_555);
 											}
 											if (flags & k_BIT_DRAWFLAGS_DESATURATED) {
 												pixel = pixelutils_Desaturate_555(pixel);
@@ -989,7 +989,7 @@ void Sprite::DrawFlashLow555(Pixel16 *frame, sint32 drawX, sint32 drawY, sint32 
 
 							while (len--) {
 
-								*destPixel = pixelutils_Shadow_555(*destPixel);
+								*destPixel = pixelutils_Shadow16(*destPixel, SHADOW_16_MASK_555);
 								destPixel++;
 							}
 						}
@@ -1077,7 +1077,7 @@ void Sprite::DrawFlashLowReversed555(Pixel16 *frame, sint32 drawX, sint32 drawY,
 							uint16 len = (tag & 0x00FF);
 
 							for (uint16 i=0; i<len; i++) {
-								*destPixel = pixelutils_Shadow_555(*destPixel);
+								*destPixel = pixelutils_Shadow16(*destPixel, SHADOW_16_MASK_555);
 								destPixel--;
 							}
 						}
@@ -1250,7 +1250,7 @@ void Sprite::DrawFlashScaledLow555(Pixel16 *data, sint32 x, sint32 y, sint32 des
 									rowData1++;
 								break;
 							case k_SHADOW_RUN_ID		:
-									firstPixel = pixelutils_Shadow_555(*destPixel);
+									firstPixel = pixelutils_Shadow16(*destPixel, SHADOW_16_MASK_555);
 								break;
 							case k_FEATHERED_RUN_ID	:
 									if (flags & k_BIT_DRAWFLAGS_OUTLINE) {
@@ -1299,7 +1299,7 @@ void Sprite::DrawFlashScaledLow555(Pixel16 *data, sint32 x, sint32 y, sint32 des
 									rowData2++;
 								break;
 							case k_SHADOW_RUN_ID		:
-									secondPixel = pixelutils_Shadow_555(*destPixel);
+									secondPixel = pixelutils_Shadow16(*destPixel, SHADOW_16_MASK_555);
 								break;
 							case k_FEATHERED_RUN_ID	:
 									if (flags & k_BIT_DRAWFLAGS_OUTLINE) {
@@ -1553,28 +1553,21 @@ inline void Sprite::__Shadow_555_16(PixelAddress &dest,PixelAddress &src,sint32 
   while (num)
   {
   	 num--;
-  	*dest.w_ptr = pixelutils_Shadow_555(*src.w_ptr);
+  	*dest.w_ptr = pixelutils_Shadow16(*src.w_ptr, SHADOW_16_MASK_555);
   	 dest.w_ptr+=dest_inc;
   	 src.w_ptr +=src_inc;
   }
 }
-
-
-
 
 inline void Sprite::__Shadow_555_16(PixelAddress &dest,sint32 dest_inc,sint32 num)
 {
   while (num)
   {
   	 num--;
-  	*dest.w_ptr = pixelutils_Shadow_555(*dest.w_ptr);
+  	*dest.w_ptr = pixelutils_Shadow16(*dest.w_ptr, SHADOW_16_MASK_555);
   	 dest.w_ptr+=dest_inc;
   }
 }
-
-
-
-
 
 inline void Sprite::__Shadow_555_32(PixelAddress &dest,PixelAddress &src,sint32 dest_inc,sint32 src_inc,sint32 num)
 {
@@ -1586,9 +1579,6 @@ inline void Sprite::__Shadow_555_32(PixelAddress &dest,PixelAddress &src,sint32 
   	 src.l_ptr +=src_inc;
   }
 }
-
-
-
 
 inline void Sprite::__Shadow_555_32(PixelAddress &dest,sint32 dest_inc,sint32 num)
 {
