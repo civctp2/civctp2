@@ -3496,16 +3496,6 @@ bool TiledMap::ScrollMap(sint32 deltaX, sint32 deltaY)
 
 	RepaintTiles(&repaintRect);
 
-	if (!g_theWorld->IsXwrap())
-		if (m_mapViewRect.left + deltaX < 0 ||
-			m_mapViewRect.right + deltaX > m_mapBounds.right-1)
-			RepaintEdgeX(&repaintRect);
-
-	if (!g_theWorld->IsYwrap())
-		if (m_mapViewRect.top + deltaY < 0 ||
-			m_mapViewRect.bottom + deltaY > m_mapBounds.bottom-2)
-			RepaintEdgeY(&repaintRect);
-
 	RECT inflatedRepaintRect = repaintRect;
 
 	if (deltaX == 1) {
@@ -3640,16 +3630,6 @@ bool TiledMap::ScrollMapSmooth(sint32 pdeltaX, sint32 pdeltaY)
 	repaintRect = EnsureRectOverlapMap(repaintRect);
 
 	RepaintTiles(&repaintRect);
-
-	if (!g_theWorld->IsXwrap())
-		if (m_mapViewRect.left + deltaX < 0 ||
-		    m_mapViewRect.right + deltaX > m_mapBounds.right-1)
-			RepaintEdgeX(&repaintRect);
-
-	if (!g_theWorld->IsYwrap())
-		if (m_mapViewRect.top + deltaY < 0 ||
-		    m_mapViewRect.bottom + deltaY > m_mapBounds.bottom-2)
-			RepaintEdgeY(&repaintRect);
 
 	RECT inflatedRepaintRect = repaintRect;
 
