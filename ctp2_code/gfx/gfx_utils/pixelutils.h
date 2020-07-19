@@ -45,8 +45,6 @@ inline uint32 pixelutils_GetShadow16RGBMask()
 	return g_is565Format ? SHADOW_16_MASK_565 : SHADOW_16_MASK_555;
 }
 
-// This method can replace:
-//   pixelutils_Blend
 // Note: blendRGBMask contains special blending mask based on 565 or 555-format (see pixelutils_GetBlend16RGBMask)
 inline Pixel16 pixelutils_Blend16(Pixel16 background, Pixel16 foreground, uint8 alpha, uint32 blendRGBMask)
 {
@@ -65,11 +63,6 @@ inline Pixel16 pixelutils_Blend16(Pixel16 background, Pixel16 foreground, uint8 
 	result += splitBackground;
 	result &= blendRGBMask;
 	return (Pixel16) (result | (result >> 16));
-}
-
-inline Pixel16 pixelutils_Blend(Pixel16 pixel1, Pixel16 pixel2, uint16_t blend)
-{
-	return pixelutils_Blend16(pixel2, pixel1, blend << 4, pixelutils_GetBlend16RGBMask());
 }
 
 // This method can replace:

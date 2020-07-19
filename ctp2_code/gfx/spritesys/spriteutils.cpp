@@ -24,7 +24,7 @@
 //
 // Modifications from the original Activision code:
 //
-// - Removed unused local variables. (Sep 9th 2005 Martin Gühmann)
+// - Removed unused local variables. (Sep 9th 2005 Martin GÃ¼hmann)
 // - Repaired memory leaks.
 //
 //----------------------------------------------------------------------------
@@ -498,10 +498,11 @@ Pixel16 * spriteutils_RGB32ToEncoded(Pixel32 *buf, uint16 width, uint16 height, 
 
 void spriteutils_DecodeToBuffer(Pixel16 *data, sint32 width, sint32 height)
 {
-	Pixel16     *table = data+1;
-	Pixel16     *dataStart = table + height * 2;
-	Pixel16     *outBuf = (Pixel16 *)malloc(width * height * 8);
-	Pixel16     *destPixel = outBuf;
+	uint32    blendRgbMask = pixelutils_GetBlend16RGBMask();
+	Pixel16 * table = data+1;
+	Pixel16 * dataStart = table + height * 2;
+	Pixel16 * outBuf = (Pixel16 *)malloc(width * height * 8);
+	Pixel16 * destPixel = outBuf;
 
 	for(sint32 j=0; j<height; j++) {
 		if (table[j*2] != k_EMPTY_TABLE_ENTRY) {
@@ -544,9 +545,9 @@ void spriteutils_DecodeToBuffer(Pixel16 *data, sint32 width, sint32 height)
 						break;
 					case k_FEATHERED_RUN_ID:
 						if (TRUE) { // ???
-								short alpha = (tag & 0x00FF);
+								uint8 alpha = (tag & 0xFF);
 
-								*destPixel = pixelutils_Blend(*rowData, *destPixel, (short)alpha>>4);
+								*destPixel = pixelutils_Blend16(*destPixel, *rowData, alpha, blendRgbMask);
 								destPixel++;
 								rowData--;
 						} else {
