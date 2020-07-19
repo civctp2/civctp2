@@ -195,6 +195,13 @@ digraph G {
 <TR><TD><B>SPACE FLIGHT</B></TD></TR></TABLE>>,
 				shape=box,
 				style=filled];
+			ADVANCE_NEURAL_INTERFACE	[color="#88888855",
+				fontcolor="#ffffff88",
+				group=AGE_EIGHT,
+				label=<<TABLE border="0" cellspacing="0" cellborder="0"><TR><TD><IMG SCALE="TRUE" SRC="upap075l.png"/></TD></TR>
+<TR><TD><B>NEURAL INTERFACE</B></TD></TR></TABLE>>,
+				shape=box,
+				style=filled];
 			ADVANCE_NANO_ASSEMBLY	[color="#88888855",
 				fontcolor="#ffffff88",
 				group=AGE_EIGHT,
@@ -228,20 +235,6 @@ digraph G {
 				group=AGE_EIGHT,
 				label=<<TABLE border="0" cellspacing="0" cellborder="0"><TR><TD><IMG SCALE="TRUE" SRC="upap035l.png"/></TD></TR>
 <TR><TD><B>EUGENICS</B></TD></TR></TABLE>>,
-				shape=box,
-				style=filled];
-			ADVANCE_FUEL_CELLS	[color="#88888855",
-				fontcolor="#ffffff88",
-				group=AGE_EIGHT,
-				label=<<TABLE border="0" cellspacing="0" cellborder="0"><TR><TD><IMG SCALE="TRUE" SRC="cm2_upap039l.png"/></TD></TR>
-<TR><TD><B>FUEL CELLS</B></TD></TR></TABLE>>,
-				shape=box,
-				style=filled];
-			ADVANCE_ECOTOPIA	[color="#88888855",
-				fontcolor="#ffffff88",
-				group=AGE_EIGHT,
-				label=<<TABLE border="0" cellspacing="0" cellborder="0"><TR><TD><IMG SCALE="TRUE" SRC="upap033l.png"/></TD></TR>
-<TR><TD><B>ECOTOPIA</B></TD></TR></TABLE>>,
 				shape=box,
 				style=filled];
 		}
@@ -299,6 +292,13 @@ digraph G {
 <TR><TD><B>COMPUTER</B></TD></TR></TABLE>>,
 				shape=box,
 				style=filled];
+			ADVANCE_FUEL_CELLS	[color="#88888855",
+				fontcolor="#ffffff88",
+				group=AGE_SEVEN,
+				label=<<TABLE border="0" cellspacing="0" cellborder="0"><TR><TD><IMG SCALE="TRUE" SRC="cm2_upap039l.png"/></TD></TR>
+<TR><TD><B>FUEL CELLS</B></TD></TR></TABLE>>,
+				shape=box,
+				style=filled];
 			ADVANCE_GLOBAL_DEFENSE	[color="#88888855",
 				fontcolor="#ffffff88",
 				group=AGE_SEVEN,
@@ -319,13 +319,6 @@ digraph G {
 				fontcolor="#88888855",
 				label=AGE_NINE
 			];
-			ADVANCE_NEURAL_INTERFACE	[color="#88888855",
-				fontcolor="#ffffff88",
-				group=AGE_NINE,
-				label=<<TABLE border="0" cellspacing="0" cellborder="0"><TR><TD><IMG SCALE="TRUE" SRC="upap075l.png"/></TD></TR>
-<TR><TD><B>NEURAL INTERFACE</B></TD></TR></TABLE>>,
-				shape=box,
-				style=filled];
 			ADVANCE_ULTRAPRESSURE_MACHINERY	[color="#88888855",
 				fontcolor="#ffffff88",
 				group=AGE_NINE,
@@ -394,6 +387,13 @@ digraph G {
 				group=AGE_NINE,
 				label=<<TABLE border="0" cellspacing="0" cellborder="0"><TR><TD><IMG SCALE="TRUE" SRC="upap070l.png"/></TD></TR>
 <TR><TD><B>NANO MACHINES</B></TD></TR></TABLE>>,
+				shape=box,
+				style=filled];
+			ADVANCE_ECOTOPIA	[color="#88888855",
+				fontcolor="#ffffff88",
+				group=AGE_NINE,
+				label=<<TABLE border="0" cellspacing="0" cellborder="0"><TR><TD><IMG SCALE="TRUE" SRC="upap033l.png"/></TD></TR>
+<TR><TD><B>ECOTOPIA</B></TD></TR></TABLE>>,
 				shape=box,
 				style=filled];
 			ADVANCE_GAIA_THEORY	[color="#88888855",
@@ -624,6 +624,13 @@ digraph G {
 <TR><TD><B>ALCHEMY</B></TD></TR></TABLE>>,
 				shape=box,
 				style=filled];
+			ADVANCE_HULL_MAKING	[color="#88888855",
+				fontcolor="#ffffff88",
+				group=AGE_THREE,
+				label=<<TABLE border="0" cellspacing="0" cellborder="0"><TR><TD><IMG SCALE="TRUE" SRC="cm2_upap053l.png"/></TD></TR>
+<TR><TD><B>HULL MAKING</B></TD></TR></TABLE>>,
+				shape=box,
+				style=filled];
 			ADVANCE_FEUDALISM	[color="#88888855",
 				fontcolor="#ffffff88",
 				group=AGE_THREE,
@@ -643,6 +650,13 @@ digraph G {
 				group=AGE_THREE,
 				label=<<TABLE border="0" cellspacing="0" cellborder="0"><TR><TD><IMG SCALE="TRUE" SRC="cm2_upap100l.png"/></TD></TR>
 <TR><TD><B>THEOLOGY</B></TD></TR></TABLE>>,
+				shape=box,
+				style=filled];
+			ADVANCE_MONARCHY	[color="#ff000055",
+				fontcolor="#ffffff88",
+				group=AGE_THREE,
+				label=<<TABLE border="0" cellspacing="0" cellborder="0"><TR><TD><IMG SCALE="TRUE" SRC="cm2_upap068l.png"/></TD></TR>
+<TR><TD><B>MONARCHY</B></TD></TR></TABLE>>,
 				shape=box,
 				style=filled];
 		}
@@ -670,13 +684,6 @@ digraph G {
 				group=AGE_ONE,
 				label=<<TABLE border="0" cellspacing="0" cellborder="0"><TR><TD><IMG SCALE="TRUE" SRC="upap014l.png"/></TD></TR>
 <TR><TD><B>BRONZE WORKING</B></TD></TR></TABLE>>,
-				shape=box,
-				style=filled];
-			ADVANCE_MONARCHY	[color="#ff000055",
-				fontcolor="#ffffff88",
-				group=AGE_ONE,
-				label=<<TABLE border="0" cellspacing="0" cellborder="0"><TR><TD><IMG SCALE="TRUE" SRC="cm2_upap068l.png"/></TD></TR>
-<TR><TD><B>MONARCHY</B></TD></TR></TABLE>>,
 				shape=box,
 				style=filled];
 			ADVANCE_MASONRY	[color="#88888855",
@@ -760,13 +767,6 @@ digraph G {
 				group=AGE_TWO,
 				label=<<TABLE border="0" cellspacing="0" cellborder="0"><TR><TD><IMG SCALE="TRUE" SRC="cm2_upap082l.png"/></TD></TR>
 <TR><TD><B>PHILOSOPHY</B></TD></TR></TABLE>>,
-				shape=box,
-				style=filled];
-			ADVANCE_HULL_MAKING	[color="#88888855",
-				fontcolor="#ffffff88",
-				group=AGE_TWO,
-				label=<<TABLE border="0" cellspacing="0" cellborder="0"><TR><TD><IMG SCALE="TRUE" SRC="cm2_upap053l.png"/></TD></TR>
-<TR><TD><B>HULL MAKING</B></TD></TR></TABLE>>,
 				shape=box,
 				style=filled];
 			ADVANCE_DRAMA	[color="#88888855",
