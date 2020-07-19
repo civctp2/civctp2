@@ -148,11 +148,6 @@ Pixel16 pixelutils_Additive_565(Pixel16 pixel1, Pixel16 pixel2)
 	return ((r<<11) | (g<<5) | b);
 }
 
-Pixel16 pixelutils_Shadow_565(Pixel16 pixel)
-{
-  return ((pixel&0xF7DF)>>1);
-}
-
 Pixel16 pixelutils_Lightening_565(Pixel16 pixel)
 {
 	uint16_t r, g, b;
