@@ -581,7 +581,7 @@ ADVANCE_GEOMETRY {
    Cost 1536
    Icon ICON_ADVANCE_GEOMETRY
    Branch 0
-   Age AGE_TWO
+   Age AGE_THREE
 }
 
 ## 45 #########################################################
