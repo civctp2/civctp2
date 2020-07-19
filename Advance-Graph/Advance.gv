@@ -1,5 +1,6 @@
 digraph G {
 	graph [bgcolor="#111111",
+		forcelabels=true,
 		imagepath=pic555,
 		margin=0,
 		pad=1,
