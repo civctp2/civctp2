@@ -684,6 +684,14 @@ digraph G {
 				shape=box,
 				style=filled,
 				xlabel="IMPROVE_BALLISTA_TOWERS,UNIT_ARCHER"];
+			ADVANCE_GEOMETRY	[color="#88888855",
+				fontcolor="#ffffff88",
+				group=AGE_THREE,
+				label=<<TABLE border="0" cellspacing="0" cellborder="0"><TR><TD><IMG SCALE="TRUE" SRC="cm2_upap045l.png"/></TD></TR>
+<TR><TD><B>GEOMETRY</B></TD></TR></TABLE>>,
+				shape=box,
+				style=filled,
+				xlabel=UNIT_CATAPULT];
 			ADVANCE_HORSE_RIDING	[color="#88888855",
 				fontcolor="#ffffff88",
 				group=AGE_THREE,
@@ -830,14 +838,6 @@ digraph G {
 				shape=box,
 				style=filled,
 				xlabel=UNIT_SLAVER];
-			ADVANCE_GEOMETRY	[color="#88888855",
-				fontcolor="#ffffff88",
-				group=AGE_TWO,
-				label=<<TABLE border="0" cellspacing="0" cellborder="0"><TR><TD><IMG SCALE="TRUE" SRC="cm2_upap045l.png"/></TD></TR>
-<TR><TD><B>GEOMETRY</B></TD></TR></TABLE>>,
-				shape=box,
-				style=filled,
-				xlabel=UNIT_CATAPULT];
 			ADVANCE_IRON_WORKING	[color="#88888855",
 				fontcolor="#ffffff88",
 				group=AGE_TWO,
