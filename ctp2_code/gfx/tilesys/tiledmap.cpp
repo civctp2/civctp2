@@ -3195,7 +3195,8 @@ if (y >= surface->Height() - k_TILE_PIXEL_HEIGHT) return 0;
 
 	sint32 startX, endX;
 
-	Pixel16		pixelColor = g_colorSet->GetColor(color);
+	uint32  blendRgbMask = pixelutils_GetBlend16RGBMask();
+	Pixel16 pixelColor   = g_colorSet->GetColor(color);
 
 	for(sint32 j=0; j<k_TILE_PIXEL_HEIGHT; j++) {
 		if (j<=23) {
@@ -3211,7 +3212,7 @@ if (y >= surface->Height() - k_TILE_PIXEL_HEIGHT) return 0;
 			if (*destPixel == 352)  {
 				*destPixel = 352;
 			}
-			*destPixel = pixelutils_BlendFast(*destPixel, pixelColor, 20);
+			*destPixel = pixelutils_Blend16(pixelColor, *destPixel, 160, blendRgbMask);
 			destPixel++;
 		}
 	}

@@ -144,6 +144,7 @@ AUI_ERRCODE c3_CheckBox::DrawThis(
 		if (IsDisabled() && rect.left < rect.right && rect.top < rect.bottom)
 		{
 
+			const uint32 blendRgbMask = pixelutils_GetBlend16RGBMask();
 			const sint32 pitch = surface->Pitch() / 2;
 			const sint32 width = rect.right - rect.left;
 			const sint32 diff = pitch - width;
@@ -156,10 +157,7 @@ AUI_ERRCODE c3_CheckBox::DrawThis(
 			{
 				do
 				{
-					*pixel = pixelutils_BlendFast(
-						*pixel,
-						0x0000,
-						24 );
+					*pixel = pixelutils_Blend16(0x0000, *pixel, 192, blendRgbMask);
 
 				} while ( ++pixel != stopHorizontal );
 

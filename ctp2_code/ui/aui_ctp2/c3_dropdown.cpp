@@ -24,7 +24,7 @@
 //
 // Modifications from the original Activision code:
 //
-// - Initialized local variables. (Sep 9th 2005 Martin Gühmann)
+// - Initialized local variables. (Sep 9th 2005 Martin GÃ¼hmann)
 //
 //----------------------------------------------------------------------------
 
@@ -298,6 +298,7 @@ AUI_ERRCODE c3_DropDown::DrawThis( aui_Surface *surface, sint32 x, sint32 y )
 
 			uint16 *origPixel = pixel;
 
+			const uint32 blendRgbMask = pixelutils_GetBlend16RGBMask();
 			const sint32 pitch = surface->Pitch() / 2;
 			const sint32 width = rect.right - rect.left;
 			const sint32 diff = pitch - width;
@@ -310,11 +311,7 @@ AUI_ERRCODE c3_DropDown::DrawThis( aui_Surface *surface, sint32 x, sint32 y )
 			{
 				do
 				{
-					*pixel = pixelutils_BlendFast(
-						*pixel,
-						0x0000,
-						24 );
-
+					*pixel = pixelutils_Blend16(0x0000, *pixel, 192, blendRgbMask);
 				} while ( ++pixel != stopHorizontal );
 
 				stopHorizontal += pitch;

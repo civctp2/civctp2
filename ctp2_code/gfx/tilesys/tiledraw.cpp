@@ -1134,6 +1134,7 @@ sint32 TiledMap::DrawBlendedTile(aui_Surface *surface, const MapPoint &pos,sint3
 	uint8 *     pSurfBase           = m_surfBase;
 	sint32      surfPitch           = m_surfPitch;
 
+	uint32  blendRgbMask = pixelutils_GetBlend16RGBMask();
 	Pixel16 transPixel = 0;
 
 	for (sint32 y = 0; y < k_TILE_PIXEL_HEIGHT; y++)
@@ -1167,7 +1168,7 @@ sint32 TiledMap::DrawBlendedTile(aui_Surface *surface, const MapPoint &pos,sint3
 			Pixel16 * pDestPixel = (Pixel16 *)
                 (pSurfBase + ((y+ypos) * surfPitch) + ((x+xpos) << 1));
 
-			*pDestPixel = pixelutils_BlendFast(srcPixel,color,blend);
+			*pDestPixel = pixelutils_Blend16(color, srcPixel, blend << 3, blendRgbMask);
 		}
 	}
 
@@ -1297,6 +1298,7 @@ void TiledMap::DrawBlendedTileScaled(aui_Surface *surface, const MapPoint &pos, 
 		}
         else
         {
+        	uint32  blendRgbMask = pixelutils_GetBlend16RGBMask();
 			sint32  haccum      = destWidth * 2 - k_TILE_PIXEL_WIDTH;
 			sint32  hincx       = destWidth * 2;
 			sint32  hincxy      = (destWidth - k_TILE_PIXEL_WIDTH) * 2;
@@ -1334,7 +1336,7 @@ void TiledMap::DrawBlendedTileScaled(aui_Surface *surface, const MapPoint &pos, 
 					Pixel16 * pDestPixel = (Pixel16 *)
                         (pSurfBase + (vdestpos * surfPitch) + (hdestpos << 1));
 
-					*pDestPixel = pixelutils_BlendFast(srcPixel,color,blend);
+					*pDestPixel = pixelutils_Blend16(color, srcPixel, blend << 3, blendRgbMask);
 
 					hdestpos++;
 				}
@@ -1382,10 +1384,11 @@ sint32 TiledMap::DrawBlendedOverlay(aui_Surface *surface, Pixel16 *data, sint32 
     if (x >= surfWidth - k_TILE_GRID_WIDTH) return 0;
     if (y >= surfHeight - k_TILE_GRID_HEIGHT) return 0;
 
-	uint16		start = (uint16)*data++;
-	uint16		end = (uint16)*data++;
-	Pixel16		*table = data;
-	Pixel16		*dataStart = table + (end - start + 1);
+	uint32    blendRgbMask = pixelutils_GetBlend16RGBMask();
+	uint16    start        = (uint16)*data++;
+	uint16    end          = (uint16)*data++;
+	Pixel16 * table        = data;
+	Pixel16 * dataStart    = table + (end - start + 1);
 
 	for (sint32 j=start; j<end; j++)
     {
@@ -1409,7 +1412,7 @@ sint32 TiledMap::DrawBlendedOverlay(aui_Surface *surface, Pixel16 *data, sint32 
 
 						for (short i=0; i<len; i++) {
 							if (!(flags & k_OVERLAY_FLAG_SHADOWSONLY)) {
-								*destPixel++ = pixelutils_BlendFast(*rowData,color,blend);
+								*destPixel++ = pixelutils_Blend16(color, *rowData, blend << 3, blendRgbMask);
 								rowData++;
 							} else {
 								rowData++;
@@ -1485,16 +1488,17 @@ void TiledMap::DrawBlendedOverlayScaled(aui_Surface *surface,Pixel16 *data, sint
 
 	surfBase += (surfPitch * y + x * 2);
 
-	uint16		vstart      = (uint16)*data++;
-	uint16		end         = (uint16)*data++;
-	Pixel16	*   table       = data;
-	Pixel16	*   dataStart   = table + (end - vstart + 1);
-	sint32      vaccum      = destHeight*2 - k_TILE_GRID_HEIGHT;
-	sint32      vincx       = destHeight*2;
-	sint32      vincxy      = (destHeight-k_TILE_GRID_HEIGHT) * 2;
-	sint32      vpos2       = (sint32)((double)((end+1) - destHeight) / (double)destHeight);
-    sint32      vdestpos    = y;
-	sint32      vend        = (end+1) - 1;
+	uint32    blendRgbMask = pixelutils_GetBlend16RGBMask();
+	uint16    vstart       = (uint16)*data++;
+	uint16    end          = (uint16)*data++;
+	Pixel16 * table        = data;
+	Pixel16 * dataStart    = table + (end - vstart + 1);
+	sint32    vaccum       = destHeight*2 - k_TILE_GRID_HEIGHT;
+	sint32    vincx        = destHeight*2;
+	sint32    vincxy       = (destHeight-k_TILE_GRID_HEIGHT) * 2;
+	sint32    vpos2        = (sint32)((double)((end+1) - destHeight) / (double)destHeight);
+	sint32    vdestpos     = y;
+	sint32    vend         = (end+1) - 1;
 
 	for (sint32 vpos1 = 0; vpos1 < vend; ++vpos1)
     {
@@ -1538,10 +1542,7 @@ void TiledMap::DrawBlendedOverlayScaled(aui_Surface *surface,Pixel16 *data, sint
 					if (pixel1 != k_MEDIUM_KEY || pixel2 != k_MEDIUM_KEY || pixel3 != k_MEDIUM_KEY || pixel4 != k_MEDIUM_KEY) {
 
 						pixel = pixel3;
-
-
-						*destPixel = pixelutils_BlendFast(pixel,color,blend);
-
+						*destPixel = pixelutils_Blend16(color, pixel, blend << 3, blendRgbMask);
 					}
 
 					pixel1 = pixel3;
@@ -1569,12 +1570,13 @@ sint32 TiledMap::DrawBlendedOverlayIntoMix(Pixel16 *data, sint32 x, sint32 y, Pi
 	if (x >= surfWidth - k_TILE_GRID_WIDTH) return 0;
 	if (y >= surfHeight - k_TILE_GRID_HEIGHT) return 0;
 
-	sint32      surfPitch   = g_screenManager->GetSurfPitch();
-	uint8 *     surfBase    = g_screenManager->GetSurfBase();
-	uint16		start       = (uint16)*data++;
-	uint16		end         = (uint16)*data++;
-	Pixel16	*   table       = data;
-	Pixel16	*   dataStart   = table + (end - start + 1);
+	uint32    blendRgbMask = pixelutils_GetBlend16RGBMask();
+	sint32    surfPitch    = g_screenManager->GetSurfPitch();
+	uint8   * surfBase     = g_screenManager->GetSurfBase();
+	uint16    start        = (uint16)*data++;
+	uint16    end          = (uint16)*data++;
+	Pixel16 * table        = data;
+	Pixel16 * dataStart    = table + (end - start + 1);
 
 	for (sint32 j = start; j < end; j++)
     {
@@ -1597,7 +1599,7 @@ sint32 TiledMap::DrawBlendedOverlayIntoMix(Pixel16 *data, sint32 x, sint32 y, Pi
 						short len = (tag & 0x00FF);
 
 						for (short i=0; i<len; i++) {
-							*destPixel++ = pixelutils_BlendFast(*rowData,color,blend);
+							*destPixel++ = pixelutils_Blend16(color, *rowData, blend << 3, blendRgbMask);
 							rowData++;
 						}
 
@@ -1629,18 +1631,19 @@ void TiledMap::DrawBlendedOverlayScaledIntoMix(Pixel16 *data, sint32 x, sint32 y
 	if (x >= surfWidth - destWidth) return;
 	if (y >= surfHeight - destHeight) return;
 
-	sint32      surfPitch   = g_screenManager->GetSurfPitch();
-	uint8 *     surfBase    = g_screenManager->GetSurfBase() + (surfPitch * y + x * 2);
-	uint16		vstart      = (uint16)*data++;
-	uint16		end         = (uint16)*data++;
-	Pixel16	*   table       = data;
-	Pixel16	*   dataStart   = table + (end - vstart + 1);
-	sint32      vaccum      = destHeight*2 - k_TILE_GRID_HEIGHT;
-	sint32      vincx       = destHeight*2;
-	sint32      vincxy      = (destHeight-k_TILE_GRID_HEIGHT) * 2;
-	sint32      vpos2       = (sint32)((double)((end+1) - destHeight) / (double)destHeight);
-	sint32      vdestpos    = y;
-	sint32      vend        = (end+1) - 1;
+	uint32    blendRgbMask = pixelutils_GetBlend16RGBMask();
+	sint32    surfPitch    = g_screenManager->GetSurfPitch();
+	uint8   * surfBase     = g_screenManager->GetSurfBase() + (surfPitch * y + x * 2);
+	uint16    vstart       = (uint16)*data++;
+	uint16    end          = (uint16)*data++;
+	Pixel16 * table        = data;
+	Pixel16 * dataStart    = table + (end - vstart + 1);
+	sint32    vaccum       = destHeight*2 - k_TILE_GRID_HEIGHT;
+	sint32    vincx        = destHeight*2;
+	sint32    vincxy       = (destHeight-k_TILE_GRID_HEIGHT) * 2;
+	sint32    vpos2        = (sint32)((double)((end+1) - destHeight) / (double)destHeight);
+	sint32    vdestpos     = y;
+	sint32    vend         = (end+1) - 1;
 
 	Pixel16		emptyRow[2];
 	emptyRow[0] = (k_TILE_SKIP_RUN_ID << 8) | k_TILE_GRID_WIDTH;
@@ -1684,10 +1687,7 @@ void TiledMap::DrawBlendedOverlayScaledIntoMix(Pixel16 *data, sint32 x, sint32 y
 					if (pixel1 != k_MEDIUM_KEY || pixel2 != k_MEDIUM_KEY || pixel3 != k_MEDIUM_KEY || pixel4 != k_MEDIUM_KEY) {
 
 						pixel = pixel3;
-
-
-						*destPixel = pixelutils_BlendFast(pixel,color,blend);
-
+						*destPixel = pixelutils_Blend16(color, pixel, blend << 3, blendRgbMask);
 					}
 
 					pixel1 = pixel3;
@@ -1714,12 +1714,13 @@ sint32 TiledMap::DrawDitheredOverlayIntoMix(Pixel16 *data, sint32 x, sint32 y, B
 	if (x >= surfWidth - k_TILE_GRID_WIDTH) return 0;
 	if (y >= surfHeight - k_TILE_GRID_HEIGHT) return 0;
 
-	sint32      surfPitch   = g_screenManager->GetSurfPitch();
-	uint8 *     surfBase    = g_screenManager->GetSurfBase();
-	uint16		start       = (uint16)*data++;
-	uint16		end         = (uint16)*data++;
-	Pixel16	*   table       = data;
-	Pixel16	*   dataStart   = table + (end - start + 1);
+	uint32    blendRgbMask = pixelutils_GetBlend16RGBMask();
+	sint32    surfPitch    = g_screenManager->GetSurfPitch();
+	uint8   * surfBase     = g_screenManager->GetSurfBase();
+	uint16    start        = (uint16)*data++;
+	uint16    end          = (uint16)*data++;
+	Pixel16 * table        = data;
+	Pixel16 * dataStart    = table + (end - start + 1);
 
 	for (sint32 j = start; j < end; j++)
     {
@@ -1745,9 +1746,11 @@ sint32 TiledMap::DrawDitheredOverlayIntoMix(Pixel16 *data, sint32 x, sint32 y, B
 
 						for (short i=0; i<len; i++) {
 						        if (fogged)
-								*destPixel++ = pixelutils_BlendFast(pixelutils_BlendFast(*rowData, *destPixel, k_FOW_BLEND_VALUE), k_FOW_COLOR, k_FOW_BLEND_VALUE);
+								*destPixel++ = pixelutils_Blend16(k_FOW_COLOR, pixelutils_Blend16(*destPixel, *rowData,
+										k_FOW_BLEND_VALUE << 3, blendRgbMask), k_FOW_BLEND_VALUE << 3, blendRgbMask);
 							else
-								*destPixel++ = pixelutils_BlendFast(*rowData, *destPixel, k_FOW_BLEND_VALUE);
+								*destPixel++ = pixelutils_Blend16(*destPixel, *rowData, k_FOW_BLEND_VALUE << 3,
+										blendRgbMask);
 
 							hpos++;
 							rowData++;
@@ -1784,18 +1787,19 @@ void TiledMap::DrawDitheredOverlayScaledIntoMix(Pixel16 *data, sint32 x, sint32 
 	if (x >= surfWidth - destWidth) return;
 	if (y >= surfHeight - destHeight) return;
 
-	sint32      surfPitch   = g_screenManager->GetSurfPitch();
-	uint8 *     surfBase    = g_screenManager->GetSurfBase() + (surfPitch * y + x * 2);
-	uint16		vstart      = (uint16)*data++;
-	uint16		end         = (uint16)*data++;
-	Pixel16	*   table       = data;
-	Pixel16	*   dataStart   = table + (end - vstart + 1);
-	sint32      vaccum      = destHeight*2 - k_TILE_GRID_HEIGHT;
-	sint32      vincx       = destHeight*2;
-	sint32      vincxy      = (destHeight-k_TILE_GRID_HEIGHT) * 2;
-	sint32      vpos2       = (sint32)((double)((end+1) - destHeight) / (double)destHeight);
-	sint32      vdestpos    = y;
-	sint32      vend        = (end+1) - 1;
+	uint32    blendRgbMask = pixelutils_GetBlend16RGBMask();
+	sint32    surfPitch    = g_screenManager->GetSurfPitch();
+	uint8   * surfBase     = g_screenManager->GetSurfBase() + (surfPitch * y + x * 2);
+	uint16    vstart       = (uint16)*data++;
+	uint16    end          = (uint16)*data++;
+	Pixel16 * table        = data;
+	Pixel16 * dataStart    = table + (end - vstart + 1);
+	sint32    vaccum       = destHeight*2 - k_TILE_GRID_HEIGHT;
+	sint32    vincx        = destHeight*2;
+	sint32    vincxy       = (destHeight-k_TILE_GRID_HEIGHT) * 2;
+	sint32    vpos2        = (sint32)((double)((end+1) - destHeight) / (double)destHeight);
+	sint32    vdestpos     = y;
+	sint32    vend         = (end+1) - 1;
 
 	Pixel16		emptyRow[2];
 	emptyRow[0] = (k_TILE_SKIP_RUN_ID << 8) | k_TILE_GRID_WIDTH;
@@ -1843,9 +1847,10 @@ void TiledMap::DrawDitheredOverlayScaledIntoMix(Pixel16 *data, sint32 x, sint32 
 						pixel = pixel3;
 
 						if (fogged)
-						    *destPixel = pixelutils_BlendFast(pixelutils_BlendFast(pixel, *destPixel, k_FOW_BLEND_VALUE), k_FOW_COLOR, k_FOW_BLEND_VALUE);
+							*destPixel = pixelutils_Blend16(k_FOW_COLOR, pixelutils_Blend16(*destPixel, pixel,
+									k_FOW_BLEND_VALUE << 3, blendRgbMask), k_FOW_BLEND_VALUE << 3, blendRgbMask);
 						else
-						    *destPixel = pixelutils_BlendFast(pixel, *destPixel, k_FOW_BLEND_VALUE);
+							*destPixel = pixelutils_Blend16(*destPixel, pixel, k_FOW_BLEND_VALUE << 3, blendRgbMask);
 					}
 
 					pixel1 = pixel3;
@@ -2380,10 +2385,11 @@ sint32 TiledMap::DrawColorBlendedOverlay(aui_Surface *surface, Pixel16 *data, si
 		return 0;
 	}
 
-	uint16		start       = (uint16)*data++;
-	uint16		end         = (uint16)*data++;
-	Pixel16	*   table       = data;
-	Pixel16	*   dataStart   = table + (end - start + 1);
+	uint32    blendRgbMask = pixelutils_GetBlend16RGBMask();
+	uint16    start        = (uint16)*data++;
+	uint16    end          = (uint16)*data++;
+	Pixel16 * table        = data;
+	Pixel16 * dataStart    = table + (end - start + 1);
 
 	sint32 len;
 
@@ -2408,7 +2414,7 @@ sint32 TiledMap::DrawColorBlendedOverlay(aui_Surface *surface, Pixel16 *data, si
 						len = (tag & 0x00FF);
 
 						while (len--) {
-							*destPixel = pixelutils_BlendFast(color, *rowData++, 8);
+							*destPixel = pixelutils_Blend16(*rowData++, color, 64, blendRgbMask);
 							destPixel++;
 						}
 					}
@@ -2470,16 +2476,17 @@ void TiledMap::DrawColorBlendedOverlayScaled(aui_Surface *surface, Pixel16 *data
 
 	surfBase += (y * surfPitch + x * 2);
 
-	uint16		vstart      = (uint16)*data++;
-	uint16		end         = (uint16)*data++;
-	Pixel16	*   table       = data;
-	Pixel16	*   dataStart   = table + (end - vstart + 1);
-	sint32      vaccum      = destHeight*2 - k_TILE_GRID_HEIGHT;
-	sint32      vincx       = destHeight*2;
-	sint32      vincxy      = (destHeight-k_TILE_GRID_HEIGHT) * 2 ;
-	sint32      vpos2       = (sint32)((double)((end+1) - destHeight) / (double)destHeight);
-	sint32      vdestpos    = y;
-	sint32      vend        = (end+1) - 1;
+	uint32    blendRgbMask = pixelutils_GetBlend16RGBMask();
+	uint16    vstart       = (uint16)*data++;
+	uint16    end          = (uint16)*data++;
+	Pixel16 * table        = data;
+	Pixel16 * dataStart    = table + (end - vstart + 1);
+	sint32    vaccum       = destHeight*2 - k_TILE_GRID_HEIGHT;
+	sint32    vincx        = destHeight*2;
+	sint32    vincxy       = (destHeight-k_TILE_GRID_HEIGHT) * 2 ;
+	sint32    vpos2        = (sint32)((double)((end+1) - destHeight) / (double)destHeight);
+	sint32    vdestpos     = y;
+	sint32    vend         = (end+1) - 1;
 
 	Pixel16		emptyRow[2];
 	emptyRow[0] = (k_TILE_SKIP_RUN_ID << 8) | k_TILE_GRID_WIDTH;
@@ -2524,9 +2531,7 @@ void TiledMap::DrawColorBlendedOverlayScaled(aui_Surface *surface, Pixel16 *data
 					if (pixel1 != k_MEDIUM_KEY || pixel2 != k_MEDIUM_KEY || pixel3 != k_MEDIUM_KEY || pixel4 != k_MEDIUM_KEY) {
 
 						pixel = pixel3;
-
-
-						*destPixel = pixelutils_BlendFast(color, pixel, 8);
+						*destPixel = pixelutils_Blend16(pixel, color, 64, blendRgbMask);
 					}
 
 					pixel1 = pixel3;
@@ -4254,10 +4259,11 @@ sint32 TiledMap::DrawColorBlendedOverlay(aui_Surface *surface, Pixel16 *data, si
 		return 0;
 	}
 
-	uint16		start = (uint16)*data++;
-	uint16		end = (uint16)*data++;
-	Pixel16		*table = data;
-	Pixel16		*dataStart = table + (end - start + 1);
+	uint32    blendRgbMask = pixelutils_GetBlend16RGBMask();
+	uint16    start        = (uint16)*data++;
+	uint16    end          = (uint16)*data++;
+	Pixel16 * table        = data;
+	Pixel16 * dataStart    = table + (end - start + 1);
 
 	sint32 len;
 
@@ -4282,7 +4288,7 @@ sint32 TiledMap::DrawColorBlendedOverlay(aui_Surface *surface, Pixel16 *data, si
 						len = (tag & 0x00FF);
 
 						while (len--) {
-							*destPixel = pixelutils_BlendFast(color, *rowData++, blendValue);
+							*destPixel = pixelutils_Blend16(*rowData++, color, blendValue << 3, blendRgbMask);
 							destPixel++;
 						}
 					}
@@ -4344,18 +4350,17 @@ void TiledMap::DrawColorBlendedOverlayScaled(aui_Surface *surface, Pixel16 *data
 
 	surfBase += (y * surfPitch + x * 2);
 
-	uint16			vstart = (uint16)*data++;
-	uint16			end = (uint16)*data++;
-	Pixel16			*table = data;
-
-	Pixel16			*dataStart = table + (end - vstart + 1);
-
-	sint32 vaccum = destHeight*2 - k_TILE_GRID_HEIGHT;
-	sint32 vincx = destHeight*2;
-	sint32 vincxy = (destHeight-k_TILE_GRID_HEIGHT) * 2 ;
-	sint32 vpos2 = (sint32)((double)((end+1) - destHeight) / (double)destHeight);
-	sint32 vdestpos = y;
-	sint32 vend = (end+1) - 1;
+	uint32    blendRgbMask = pixelutils_GetBlend16RGBMask();
+	uint16    vstart       = (uint16)*data++;
+	uint16    end          = (uint16)*data++;
+	Pixel16 * table        = data;
+	Pixel16 * dataStart    = table + (end - vstart + 1);
+	sint32    vaccum       = destHeight*2 - k_TILE_GRID_HEIGHT;
+	sint32    vincx        = destHeight*2;
+	sint32    vincxy       = (destHeight-k_TILE_GRID_HEIGHT) * 2 ;
+	sint32    vpos2        = (sint32)((double)((end+1) - destHeight) / (double)destHeight);
+	sint32    vdestpos     = y;
+	sint32    vend         = (end+1) - 1;
 
 	for (sint32 vpos1 = 0; vpos1 < vend; ++vpos1)
     {
@@ -4399,7 +4404,7 @@ void TiledMap::DrawColorBlendedOverlayScaled(aui_Surface *surface, Pixel16 *data
 						pixel = pixel3;
 
 
-						*destPixel = pixelutils_BlendFast(color, pixel, blendValue);
+						*destPixel = pixelutils_Blend16(pixel, color, blendValue << 3, blendRgbMask);
 					}
 
 					pixel1 = pixel3;

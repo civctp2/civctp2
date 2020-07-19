@@ -378,6 +378,7 @@ PRIMITIVES_ERRCODE primitives_BevelRect16(
 			level = width >> 1;
 	}
 
+	uint32 blendRgbMask = pixelutils_GetBlend16RGBMask();
 	uint16 * pDestPixel = (uint16 *)(pSurfBase + top * surfPitch + (left << 1));
 	sint32 inc = (surfPitch >> 1) - width;
 
@@ -393,7 +394,7 @@ PRIMITIVES_ERRCODE primitives_BevelRect16(
 			for (sint32 i=tempWidth;i;i--)
 			{
 
-				srcPixel = pixelutils_BlendFast(*pDestPixel,0x0000,blendDark);
+				srcPixel = pixelutils_Blend16(0x0000, *pDestPixel, blendDark << 3, blendRgbMask);
 				*pDestPixel++ = srcPixel;
 			}
 			tempWidth-=2;
@@ -410,7 +411,7 @@ PRIMITIVES_ERRCODE primitives_BevelRect16(
 			for (sint32 i=tempWidth;i;i--)
 			{
 
-				srcPixel = pixelutils_BlendFast(*pDestPixel,0xffff,blendLight);
+				srcPixel = pixelutils_Blend16(0xffff, *pDestPixel, blendLight << 3, blendRgbMask);
 				*pDestPixel-- = srcPixel;
 			}
 			tempWidth-=2;
@@ -429,7 +430,7 @@ PRIMITIVES_ERRCODE primitives_BevelRect16(
 			for (sint32 y=tempHeight;y;y--)
 			{
 
-				srcPixel = pixelutils_BlendFast(*pDestPixel,0x0000,blendDark);
+				srcPixel = pixelutils_Blend16(0x0000, *pDestPixel, blendDark << 3, blendRgbMask);
 				*pDestPixel++ = srcPixel;
 				pDestPixel += tempInc;
 			}
@@ -447,7 +448,7 @@ PRIMITIVES_ERRCODE primitives_BevelRect16(
 			for (sint32 y=tempHeight;y;y--)
 			{
 
-				srcPixel = pixelutils_BlendFast(*pDestPixel,0xffff,blendLight);
+				srcPixel = pixelutils_Blend16(0xffff, *pDestPixel, blendLight << 3, blendRgbMask);
 				*pDestPixel++ = srcPixel;
 				pDestPixel += tempInc;
 			}
@@ -463,7 +464,7 @@ PRIMITIVES_ERRCODE primitives_BevelRect16(
 			for (sint32 i=tempWidth;i;i--)
 			{
 
-				srcPixel = pixelutils_BlendFast(*pDestPixel,0xffff,blendLight);
+				srcPixel = pixelutils_Blend16(0xffff, *pDestPixel, blendLight << 3, blendRgbMask);
 				*pDestPixel++ = srcPixel;
 			}
 			tempWidth-=2;
@@ -480,7 +481,7 @@ PRIMITIVES_ERRCODE primitives_BevelRect16(
 			for (sint32 i=tempWidth;i;i--)
 			{
 
-				srcPixel = pixelutils_BlendFast(*pDestPixel,0x0000,blendDark);
+				srcPixel = pixelutils_Blend16(0x0000, *pDestPixel, blendDark << 3, blendRgbMask);
 				*pDestPixel-- = srcPixel;
 			}
 			tempWidth-=2;
@@ -499,7 +500,7 @@ PRIMITIVES_ERRCODE primitives_BevelRect16(
 			for (sint32 y=tempHeight;y;y--)
 			{
 
-				srcPixel = pixelutils_BlendFast(*pDestPixel,0xffff,blendLight);
+				srcPixel = pixelutils_Blend16(0xffff, *pDestPixel, blendLight << 3, blendRgbMask);
 				*pDestPixel++ = srcPixel;
 				pDestPixel += tempInc;
 			}
@@ -517,7 +518,7 @@ PRIMITIVES_ERRCODE primitives_BevelRect16(
 			for (sint32 y=tempHeight;y;y--)
 			{
 
-				srcPixel = pixelutils_BlendFast(*pDestPixel,0x0000,blendDark);
+				srcPixel = pixelutils_Blend16(0x0000, *pDestPixel, blendDark << 3, blendRgbMask);
 				*pDestPixel++ = srcPixel;
 				pDestPixel += tempInc;
 			}
@@ -1323,6 +1324,7 @@ PRIMITIVES_ERRCODE primitives_BevelPane16(
 			level = width >> 1;
 	}
 
+	uint32 blendRgbMask = pixelutils_GetBlend16RGBMask();
 	uint16 * pDestPixel = (uint16 *)(pSurfBase + top * surfPitch + (left << 1));
 	sint32 inc = (surfPitch >> 1) - width;
 
@@ -1342,7 +1344,7 @@ PRIMITIVES_ERRCODE primitives_BevelPane16(
 			for (sint32 i = tempWidth;i;i--)
 			{
 
-				srcPixel = pixelutils_BlendFast(*pDestPixel,0xffff,blendLight);
+				srcPixel = pixelutils_Blend16(0xffff, *pDestPixel,blendLight << 3, blendRgbMask);
 				*pDestPixel-- = srcPixel;
 			}
 			tempWidth-=2;
@@ -1360,7 +1362,7 @@ PRIMITIVES_ERRCODE primitives_BevelPane16(
 			for (sint32 y = tempHeight;y;y--)
 			{
 
-				srcPixel = pixelutils_BlendFast(*pDestPixel,0x0000,blendDark);
+				srcPixel = pixelutils_Blend16(0x0000, *pDestPixel,blendDark << 3, blendRgbMask);
 				*pDestPixel++ = srcPixel;
 				pDestPixel += tempInc;
 			}
@@ -1377,7 +1379,7 @@ PRIMITIVES_ERRCODE primitives_BevelPane16(
 			for (sint32 y = tempHeight;y;y--)
 			{
 
-				srcPixel = pixelutils_BlendFast(*pDestPixel,0xffff,blendLight);
+				srcPixel = pixelutils_Blend16(0xffff, *pDestPixel,blendLight << 3, blendRgbMask);
 				*pDestPixel++ = srcPixel;
 				pDestPixel += tempInc;
 			}
@@ -1393,7 +1395,7 @@ PRIMITIVES_ERRCODE primitives_BevelPane16(
 			for (sint32 i = tempWidth;i;i--)
 			{
 
-				srcPixel = pixelutils_BlendFast(*pDestPixel,0x0000,blendDark);
+				srcPixel = pixelutils_Blend16(0x0000, *pDestPixel,blendDark << 3, blendRgbMask);
 				*pDestPixel-- = srcPixel;
 			}
 			tempWidth-=2;
@@ -1411,7 +1413,7 @@ PRIMITIVES_ERRCODE primitives_BevelPane16(
 			for (sint32 y = tempHeight;y;y--)
 			{
 
-				srcPixel = pixelutils_BlendFast(*pDestPixel,0xffff,blendLight);
+				srcPixel = pixelutils_Blend16(0xffff, *pDestPixel,blendLight << 3, blendRgbMask);
 				*pDestPixel++ = srcPixel;
 				pDestPixel += tempInc;
 			}
@@ -1428,7 +1430,7 @@ PRIMITIVES_ERRCODE primitives_BevelPane16(
 			for (sint32 y = tempHeight;y;y--)
 			{
 
-				srcPixel = pixelutils_BlendFast(*pDestPixel,0x0000,blendDark);
+				srcPixel = pixelutils_Blend16(0x0000, *pDestPixel,blendDark << 3, blendRgbMask);
 				*pDestPixel++ = srcPixel;
 				pDestPixel += tempInc;
 			}
@@ -1502,6 +1504,7 @@ PRIMITIVES_ERRCODE primitives_BevelTabSelected16(
 			level = width >> 1;
 	}
 
+	uint32 blendRgbMask = pixelutils_GetBlend16RGBMask();
 	uint16 * pDestPixel = (uint16 *)(pSurfBase + top * surfPitch + (left << 1));
 	sint32 inc = (surfPitch >> 1) - width;
 
@@ -1520,7 +1523,7 @@ PRIMITIVES_ERRCODE primitives_BevelTabSelected16(
 			for (sint32 i = tempWidth;i;i--)
 			{
 
-				srcPixel = pixelutils_BlendFast(*pDestPixel,0x0000,blendDark);
+				srcPixel = pixelutils_Blend16(0x0000, *pDestPixel, blendDark << 3, blendRgbMask);
 				*pDestPixel++ = srcPixel;
 			}
 			tempWidth-=2;
@@ -1538,7 +1541,7 @@ PRIMITIVES_ERRCODE primitives_BevelTabSelected16(
 			for (sint32 y=0;y < tempHeight;y++)
 			{
 
-				srcPixel = pixelutils_BlendFast(*pDestPixel,0x0000,blendDark);
+				srcPixel = pixelutils_Blend16(0x0000, *pDestPixel, blendDark << 3, blendRgbMask);
 				*pDestPixel++ = srcPixel;
 				pDestPixel += tempInc;
 			}
@@ -1551,7 +1554,7 @@ PRIMITIVES_ERRCODE primitives_BevelTabSelected16(
 			for (sint32 y=0;y < tempHeight;y++)
 			{
 
-				srcPixel = pixelutils_BlendFast(*pDestPixel,0xffff,blendLight);
+				srcPixel = pixelutils_Blend16(0xffff, *pDestPixel, blendLight << 3, blendRgbMask);
 				*pDestPixel++ = srcPixel;
 				pDestPixel += tempInc;
 			}
@@ -1565,7 +1568,7 @@ PRIMITIVES_ERRCODE primitives_BevelTabSelected16(
 			for (sint32 i = tempWidth;i;i--)
 			{
 
-				srcPixel = pixelutils_BlendFast(*pDestPixel,0xffff,blendLight);
+				srcPixel = pixelutils_Blend16(0xffff, *pDestPixel, blendLight << 3, blendRgbMask);
 				*pDestPixel++ = srcPixel;
 			}
 			tempWidth-=2;
@@ -1583,7 +1586,7 @@ PRIMITIVES_ERRCODE primitives_BevelTabSelected16(
 			for (sint32 y=0;y < tempHeight;y++)
 			{
 
-				srcPixel = pixelutils_BlendFast(*pDestPixel,0xffff,blendLight);
+				srcPixel = pixelutils_Blend16(0xffff, *pDestPixel, blendLight << 3, blendRgbMask);
 				*pDestPixel++ = srcPixel;
 				pDestPixel += tempInc;
 			}
@@ -1596,7 +1599,7 @@ PRIMITIVES_ERRCODE primitives_BevelTabSelected16(
 			for (sint32 y=0;y < tempHeight;y++)
 			{
 
-				srcPixel = pixelutils_BlendFast(*pDestPixel,0x0000,blendDark);
+				srcPixel = pixelutils_Blend16(0x0000, *pDestPixel, blendDark << 3, blendRgbMask);
 				*pDestPixel++ = srcPixel;
 				pDestPixel += tempInc;
 			}
@@ -1668,6 +1671,7 @@ PRIMITIVES_ERRCODE primitives_BevelTabDeselected16(
 			level = width >> 1;
 	}
 
+	uint32 blendRgbMask = pixelutils_GetBlend16RGBMask();
 	uint16 * pDestPixel = (uint16 *)(pSurfBase + top * surfPitch + (left << 1));
 	sint32 inc = (surfPitch >> 1) - width;
 
@@ -1685,7 +1689,7 @@ PRIMITIVES_ERRCODE primitives_BevelTabDeselected16(
 			for (sint32 i=0;i < tempWidth;i++)
 			{
 
-				srcPixel = pixelutils_BlendFast(*pDestPixel,0x0000,blendDark);
+				srcPixel = pixelutils_Blend16(0x0000, *pDestPixel, blendDark << 3, blendRgbMask);
 				*pDestPixel++ = srcPixel;
 			}
 			tempWidth-=2;
@@ -1703,7 +1707,7 @@ PRIMITIVES_ERRCODE primitives_BevelTabDeselected16(
 			for (sint32 y=0;y < tempHeight;y++)
 			{
 
-				srcPixel = pixelutils_BlendFast(*pDestPixel,0x0000,blendDark);
+				srcPixel = pixelutils_Blend16(0x0000, *pDestPixel, blendDark << 3, blendRgbMask);
 				*pDestPixel++ = srcPixel;
 				pDestPixel += tempInc;
 			}
@@ -1719,7 +1723,7 @@ PRIMITIVES_ERRCODE primitives_BevelTabDeselected16(
 			for (sint32 y=0;y < tempHeight;y++)
 			{
 
-				srcPixel = pixelutils_BlendFast(*pDestPixel,0xffff,blendLight);
+				srcPixel = pixelutils_Blend16(0xffff, *pDestPixel, blendLight << 3, blendRgbMask);
 				*pDestPixel++ = srcPixel;
 				pDestPixel += tempInc;
 			}
@@ -1734,7 +1738,7 @@ PRIMITIVES_ERRCODE primitives_BevelTabDeselected16(
 			for (sint32 i=0;i < tempWidth;i++)
 			{
 
-				srcPixel = pixelutils_BlendFast(*pDestPixel,0xffff,blendLight);
+				srcPixel = pixelutils_Blend16(0xffff, *pDestPixel, blendLight << 3, blendRgbMask);
 				*pDestPixel++ = srcPixel;
 			}
 			tempWidth-=2;
@@ -1752,7 +1756,7 @@ PRIMITIVES_ERRCODE primitives_BevelTabDeselected16(
 			for (sint32 y=0;y < tempHeight;y++)
 			{
 
-				srcPixel = pixelutils_BlendFast(*pDestPixel,0xffff,blendLight);
+				srcPixel = pixelutils_Blend16(0xffff, *pDestPixel, blendLight << 3, blendRgbMask);
 				*pDestPixel++ = srcPixel;
 				pDestPixel += tempInc;
 			}
@@ -1768,7 +1772,7 @@ PRIMITIVES_ERRCODE primitives_BevelTabDeselected16(
 			for (sint32 y=0;y < tempHeight;y++)
 			{
 
-				srcPixel = pixelutils_BlendFast(*pDestPixel,0x0000,blendDark);
+				srcPixel = pixelutils_Blend16(0x0000, *pDestPixel, blendDark << 3, blendRgbMask);
 				*pDestPixel++ = srcPixel;
 				pDestPixel += tempInc;
 			}
@@ -1842,12 +1846,13 @@ PRIMITIVES_ERRCODE primitives_BevelLeftPiece16(
 	Assert(errcode == AUI_ERRCODE_OK);
 	if (errcode != AUI_ERRCODE_OK) return PRIMITIVES_ERRCODE_SURFACELOCKFAILED;
 
-	sint32      surfPitch   = pSurface->Pitch();
-	sint32      width       = xEnd-xStart;
-	uint16 *    pDestPixel  = (uint16 *)(pSurfBase + y * surfPitch + (xStart << 1));
-	sint32      inc         = (surfPitch >> 1) - (width-1);
-	sint32      tempWidth   = width;
-	sint32      tempInc     = inc;
+	uint32   blendRgbMask = pixelutils_GetBlend16RGBMask();
+	sint32   surfPitch    = pSurface->Pitch();
+	sint32   width        = xEnd-xStart;
+	uint16 * pDestPixel   = (uint16 *)(pSurfBase + y * surfPitch + (xStart << 1));
+	sint32   inc          = (surfPitch >> 1) - (width-1);
+	sint32   tempWidth    = width;
+	sint32   tempInc      = inc;
 
 	Pixel16 srcPixel;
 
@@ -1860,8 +1865,7 @@ PRIMITIVES_ERRCODE primitives_BevelLeftPiece16(
 		{
 			for (sint32 i=0;i < tempWidth;i++)
 			{
-
-				srcPixel = pixelutils_BlendFast(*pDestPixel,0x0000,blendDark);
+				srcPixel = pixelutils_Blend16(0x0000, *pDestPixel, blendDark << 3, blendRgbMask);
 				*pDestPixel++ = srcPixel;
 			}
 			pDestPixel += tempInc;
@@ -1875,7 +1879,7 @@ PRIMITIVES_ERRCODE primitives_BevelLeftPiece16(
 			for (sint32 i=0;i < tempWidth;i++)
 			{
 
-				srcPixel = pixelutils_BlendFast(*pDestPixel,0xffff,blendLight);
+				srcPixel = pixelutils_Blend16(0xffff, *pDestPixel,blendLight << 3, blendRgbMask);
 				*pDestPixel++ = srcPixel;
 			}
 			pDestPixel += tempInc;
@@ -1947,12 +1951,13 @@ PRIMITIVES_ERRCODE primitives_BevelRightPiece16(
 	Assert(errcode == AUI_ERRCODE_OK);
 	if (errcode != AUI_ERRCODE_OK) return PRIMITIVES_ERRCODE_SURFACELOCKFAILED;
 
-	sint32      surfPitch   = pSurface->Pitch();
-	sint32      width       = xEnd-xStart;
-	uint16 *    pDestPixel  = (uint16 *)(pSurfBase + y * surfPitch + (xStart << 1));
-	sint32      inc         = (surfPitch >> 1) - (width);
-	sint32      tempWidth   = width-1;
-	sint32      tempInc     = inc;
+	uint32   blendRgbMask = pixelutils_GetBlend16RGBMask();
+	sint32   surfPitch    = pSurface->Pitch();
+	sint32   width        = xEnd-xStart;
+	uint16 * pDestPixel   = (uint16 *)(pSurfBase + y * surfPitch + (xStart << 1));
+	sint32   inc          = (surfPitch >> 1) - (width);
+	sint32   tempWidth    = width-1;
+	sint32   tempInc      = inc;
 
 	Pixel16 srcPixel;
 	if ( a == AUI_TABGROUP_ALIGNMENT_TOP )
@@ -1965,7 +1970,7 @@ PRIMITIVES_ERRCODE primitives_BevelRightPiece16(
 			for (sint32 i=0;i < tempWidth;i++)
 			{
 
-				srcPixel = pixelutils_BlendFast(*pDestPixel,0x0000,blendDark);
+				srcPixel = pixelutils_Blend16(0x0000, *pDestPixel, blendDark << 3, blendRgbMask);
 				*pDestPixel++ = srcPixel;
 			}
 			pDestPixel += tempInc;
@@ -1979,7 +1984,7 @@ PRIMITIVES_ERRCODE primitives_BevelRightPiece16(
 			for (sint32 i=0;i < tempWidth;i++)
 			{
 
-				srcPixel = pixelutils_BlendFast(*pDestPixel,0xffff,blendLight);
+				srcPixel = pixelutils_Blend16(0xffff, *pDestPixel, blendLight << 3, blendRgbMask);
 				*pDestPixel++ = srcPixel;
 			}
 			pDestPixel += tempInc;
@@ -2052,6 +2057,7 @@ void primitives_BlendSurfaces( aui_Surface *pOldSurface, aui_Surface *pNewSurfac
 	sint32 width = pDstRect->right - pDstRect->left;
 	sint32 height = pDstRect->bottom - pDstRect->top;
 
+	uint32 blendRgbMask = pixelutils_GetBlend16RGBMask();
 	uint16 * pDestPixel = (uint16 *)(pDstBase + pDstRect->top * dstSurfPitch + (pDstRect->left << 1));
 	sint32 dstInc = (dstSurfPitch >> 1) - width;
 
@@ -2062,7 +2068,7 @@ void primitives_BlendSurfaces( aui_Surface *pOldSurface, aui_Surface *pNewSurfac
 
 	for (sint32 j=height;j;j--) {
 		for (sint32 i=width;i;i--) {
-			color = pixelutils_BlendFast( *pOldSrc++, *pNewSrc++, blend );
+			color = pixelutils_Blend16(*pNewSrc++, *pOldSrc++, blend << 3, blendRgbMask);
 			*pDestPixel++ = color;
 		}
 		pDestPixel += dstInc;
