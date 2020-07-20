@@ -1084,12 +1084,9 @@ void TiledMap::DrawUnfinishedMove(aui_Surface * pSurface)
 						sint32 const width = m_font->GetStringWidth(turnNumber);
 						sint32 const height = m_font->GetMaxHeight();
 						RECT rect = {0, 0, width, height};
-						OffsetRect(&rect, // position rect relative to turnRect
-						    turnRect.left + (turnRect.right - turnRect.left) / 2 - width  / 2,
-						    turnRect.top  + (turnRect.bottom - turnRect.top) / 2 - height / 2);
-						
-						RECT clipRect = primitives_GetScreenAdjustedRectCopy(pSurface, turnRect);
-						m_font->DrawString(pSurface, &turnRect, &clipRect, turnNumber, 0, color, 0);
+						OffsetRect(&rect, x - width /2, y - height / 2);
+						RECT clipRect = primitives_GetScreenAdjustedRectCopy(pSurface, rect);
+						m_font->DrawString(pSurface, &rect, &clipRect, turnNumber, 0, color, 0);
 					}
 				}
 			}
