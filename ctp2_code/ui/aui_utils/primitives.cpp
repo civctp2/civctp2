@@ -2669,8 +2669,12 @@ void SpecialDrawPatternLine16(Pixel16 * base, sint32 x, sint32 y, sint32 deltaX,
 	if (deltaX == 0) // vertical
 	{
 		uint32 startPattern = fullPattern >> ((y + g_patternOffsetY) & patternMask);
-		DrawShadowPatternLine16(base, deltaY + 1, incrementY, fullPattern, startPattern,
-				pixelutils_GetShadow16RGBMask());
+		if (lineFlags & LF_SHADOW) {
+			DrawShadowPatternLine16(base, deltaY + 1, incrementY, fullPattern, startPattern,
+					pixelutils_GetShadow16RGBMask());
+		} else {
+			DrawPatternLine16(base, deltaY + 1, incrementY, color, fullPattern, startPattern);
+		}
 	}
 	else if (deltaY == 0) // horizontal
 	{
@@ -2679,14 +2683,22 @@ void SpecialDrawPatternLine16(Pixel16 * base, sint32 x, sint32 y, sint32 deltaX,
 		}
 		sint32 xPattern = (incrementX < 0 ? (x - deltaX) : x) + g_patternOffsetX;
 		uint32 startPattern = fullPattern >> (xPattern & patternMask);
-		DrawShadowPatternLine16(base, deltaX + 1, 1, fullPattern, startPattern,
-				pixelutils_GetShadow16RGBMask());
+		if (lineFlags & LF_SHADOW) {
+			DrawShadowPatternLine16(base, deltaX + 1, 1, fullPattern, startPattern,
+					pixelutils_GetShadow16RGBMask());
+		} else {
+			DrawPatternLine16(base, deltaX + 1, 1, color, fullPattern, startPattern);
+		}
 	}
 	else if (deltaX == deltaY) // diagonal
 	{
 		uint32 startPattern = fullPattern >> ((y + g_patternOffsetY) & patternMask);
-		DrawShadowPatternLine16(base, deltaX + 1, incrementY + incrementX, fullPattern, startPattern,
-				pixelutils_GetShadow16RGBMask());
+		if (lineFlags & LF_SHADOW) {
+			DrawShadowPatternLine16(base, deltaX + 1, incrementY + incrementX, fullPattern, startPattern,
+			                        pixelutils_GetShadow16RGBMask());
+		} else {
+			DrawPatternLine16(base, deltaX + 1, incrementY + incrementX, color, fullPattern, startPattern);
+		}
 	}
 	else if (deltaX < deltaY) // Y-major
 	{
