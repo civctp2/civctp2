@@ -595,24 +595,13 @@ protected:
 	RECT m_chatRect;
 
 private:
-	static constexpr RECT MAP_VIEW_BORDER = { -2, -5, 1, 3 };
-
-	sint32 GetMinMapLeft() const { return m_mapBounds.top + MAP_VIEW_BORDER.left; }
-	sint32 GetMaxMapRight() const
-	{
-		const sint32 zoomTilePixelWidth = GetZoomTilePixelWidth();
-		const sint32 rightMax = ((GetZoomDisplayWidth() % zoomTilePixelWidth) >= (zoomTilePixelWidth / 2)) ? 1 : 0;
-		return m_mapBounds.right + rightMax + MAP_VIEW_BORDER.right;
-	}
-	sint32 GetMinMapTop() const { return m_mapBounds.top + MAP_VIEW_BORDER.top; }
-	sint32 GetMaxMapBottom() const
-	{
-		const sint32 bottomMax = g_controlPanel->Height() / (GetZoomTilePixelHeight() / 2) + MAP_VIEW_BORDER.bottom;
-		return m_mapBounds.bottom + bottomMax;
-	}
-
 	// m_mapViewRect is const so that it can only be updated by UpdateAndClipMapViewRect
 	const RECT m_mapViewRect;
+
+	sint32 GetMinMapLeft()   const { return m_mapBounds.left   - (m_mapViewRect.right  - m_mapViewRect.left) / 2; }
+	sint32 GetMaxMapRight()  const { return m_mapBounds.right  + (m_mapViewRect.right  - m_mapViewRect.left) / 2; }
+	sint32 GetMinMapTop()    const { return m_mapBounds.top    - (m_mapViewRect.bottom - m_mapViewRect.top)  / 2; }
+	sint32 GetMaxMapBottom() const { return m_mapBounds.bottom + (m_mapViewRect.bottom - m_mapViewRect.top)  / 2; }
 };
 
 #endif
