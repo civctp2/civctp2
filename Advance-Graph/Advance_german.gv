@@ -1,0 +1,993 @@
+digraph G {
+	graph [bgcolor="#111111",
+		forcelabels=true,
+		imagepath=pic555,
+		margin=0,
+		pad=1,
+		rankdir=LR
+	];
+	node [fontname="Sans serif",
+		fontsize=7.0
+	];
+	subgraph gvpr_result {
+		subgraph cluster_AGE_SIX {
+			graph [color="#88888855",
+				fontcolor="#88888855",
+				label=AGE_SIX
+			];
+			node_ADV_INFANTRY_TACTICS	[color="#ff000055",
+				fontcolor="#ffffff88",
+				group=AGE_SIX,
+				label=<<TABLE border="0" cellspacing="0" cellborder="0"><TR><TD><IMG SCALE="TRUE" SRC="cm2_upap001l.png"/></TD></TR><TR><TD><B>Geh. Infanteriet.</B></TD></TR></TABLE>>,
+				shape=box,
+				style=filled,
+				xlabel="Marine,Fallschirmjäger"];
+			node_ADV_NAVAL_TACTICS	[color="#ff000055",
+				fontcolor="#ffffff88",
+				group=AGE_SIX,
+				label=<<TABLE border="0" cellspacing="0" cellborder="0"><TR><TD><IMG SCALE="TRUE" SRC="cm2_upap002l.png"/></TD></TR><TR><TD><B>Geh. Marinetakt.</B></TD></TR></TABLE>>,
+				shape=box,
+				style=filled,
+				xlabel=Schlachtschiff];
+			node_ADV_URBAN_PLANNING	[color="#88888855",
+				fontcolor="#ffffff88",
+				group=AGE_SIX,
+				label=<<TABLE border="0" cellspacing="0" cellborder="0"><TR><TD><IMG SCALE="TRUE" SRC="cm2_upap003l.png"/></TD></TR><TR><TD><B>Stadtplanung</B></TD></TR></TABLE>>,
+				shape=box,
+				style=filled,
+				xlabel=Stadtplaner];
+			node_AERODYNAMICS	[color="#88888855",
+				fontcolor="#ffffff88",
+				group=AGE_SIX,
+				label=<<TABLE border="0" cellspacing="0" cellborder="0"><TR><TD><IMG SCALE="TRUE" SRC="cm2_upap005l.png"/></TD></TR><TR><TD><B>Aerodynamik</B></TD></TR></TABLE>>,
+				shape=box,
+				style=filled,
+				xlabel="Flughafen,Jäger"];
+			node_JET_PROPULSION	[color="#88888855",
+				fontcolor="#ffffff88",
+				group=AGE_SIX,
+				label=<<TABLE border="0" cellspacing="0" cellborder="0"><TR><TD><IMG SCALE="TRUE" SRC="cm2_upap058l.png"/></TD></TR><TR><TD><B>Düsenantrieb</B></TD></TR></TABLE>>,
+				shape=box,
+				style=filled,
+				xlabel=Bomber];
+			node_NAVAL_AVIATION	[color="#88888855",
+				fontcolor="#ffffff88",
+				group=AGE_SIX,
+				label=<<TABLE border="0" cellspacing="0" cellborder="0"><TR><TD><IMG SCALE="TRUE" SRC="cm2_upap073l.png"/></TD></TR><TR><TD><B>Marineflugwesen</B></TD></TR></TABLE>>,
+				shape=box,
+				style=filled,
+				xlabel=Flugzeugträger];
+			node_VERTICAL_FLIGHT_AIRCRAFT	[color="#88888855",
+				fontcolor="#ffffff88",
+				group=AGE_SIX,
+				label=<<TABLE border="0" cellspacing="0" cellborder="0"><TR><TD><IMG SCALE="TRUE" SRC="cm2_upap105l.png"/></TD></TR><TR><TD><B>Senkrechtstarter</B></TD></TR></TABLE>>,
+				shape=box,
+				style=filled,
+				xlabel="Transport-Heli"];
+			node_RADAR	[color="#88888855",
+				fontcolor="#ffffff88",
+				group=AGE_SIX,
+				label=<<TABLE border="0" cellspacing="0" cellborder="0"><TR><TD><IMG SCALE="TRUE" SRC="cm2_upap087l.png"/></TD></TR><TR><TD><B>Radar</B></TD></TR></TABLE>>,
+				shape=box,
+				style=filled,
+				xlabel="Flakgeschütz,Mob. Raketenw."];
+			node_MASS_MEDIA	[color="#88888855",
+				fontcolor="#ffffff88",
+				group=AGE_SIX,
+				label=<<TABLE border="0" cellspacing="0" cellborder="0"><TR><TD><IMG SCALE="TRUE" SRC="cm2_upap063l.png"/></TD></TR><TR><TD><B>Massenmedien</B></TD></TR></TABLE>>,
+				shape=box,
+				style=filled,
+				xlabel="Fernsehtechnik,Televangelist"];
+			node_MASS_PRODUCTION	[color="#88888855",
+				fontcolor="#ffffff88",
+				group=AGE_SIX,
+				label=<<TABLE border="0" cellspacing="0" cellborder="0"><TR><TD><IMG SCALE="TRUE" SRC="cm2_upap064l.png"/></TD></TR><TR><TD><B>Massenproduktion</B></TD></TR></TABLE>>,
+				shape=box,
+				style=filled,
+				xlabel="Zerstörer,Fregatte"];
+			node_QUANTUM_MECHANICS	[color="#88888855",
+				fontcolor="#ffffff88",
+				group=AGE_SIX,
+				label=<<TABLE border="0" cellspacing="0" cellborder="0"><TR><TD><IMG SCALE="TRUE" SRC="cm2_upap086l.png"/></TD></TR><TR><TD><B>Quantenphysik</B></TD></TR></TABLE>>,
+				shape=box,
+				style=filled];
+			node_CONSERVATION	[color="#88888855",
+				fontcolor="#ffffff88",
+				group=AGE_SIX,
+				label=<<TABLE border="0" cellspacing="0" cellborder="0"><TR><TD><IMG SCALE="TRUE" SRC="cm2_upap024l.png"/></TD></TR><TR><TD><B>Umweltschutz</B></TD></TR></TABLE>>,
+				shape=box,
+				style=filled,
+				xlabel="Recycling-Anlage"];
+			node_CORPORATE_REPUBLIC	[color="#88888855",
+				fontcolor="#ffffff88",
+				group=AGE_SIX,
+				label=<<TABLE border="0" cellspacing="0" cellborder="0"><TR><TD><IMG SCALE="TRUE" SRC="cm2_upap025l.png"/></TD></TR><TR><TD><B>Handelsrepublik</B></TD></TR></TABLE>>,
+				shape=box,
+				style=filled];
+			node_MASS_TRANSIT	[color="#88888855",
+				fontcolor="#ffffff88",
+				group=AGE_SIX,
+				label=<<TABLE border="0" cellspacing="0" cellborder="0"><TR><TD><IMG SCALE="TRUE" SRC="cm2_upap065l.png"/></TD></TR><TR><TD><B>Personenfernverk.</B></TD></TR></TABLE>>,
+				shape=box,
+				style=filled,
+				xlabel="Öff. Nahverkehr"];
+			node_CORPORATION	[color="#88888855",
+				fontcolor="#ffffff88",
+				group=AGE_SIX,
+				label=<<TABLE border="0" cellspacing="0" cellborder="0"><TR><TD><IMG SCALE="TRUE" SRC="cm2_upap026l.png"/></TD></TR><TR><TD><B>Handelsges.</B></TD></TR></TABLE>>,
+				shape=box,
+				style=filled,
+				xlabel="Bürokrat,Emp. State Build."];
+			node_MEDICINE	[color="#88888855",
+				fontcolor="#ffffff88",
+				group=AGE_SIX,
+				label=<<TABLE border="0" cellspacing="0" cellborder="0"><TR><TD><IMG SCALE="TRUE" SRC="cm2_upap066l.png"/></TD></TR><TR><TD><B>Mod. Medizin</B></TD></TR></TABLE>>,
+				shape=box,
+				style=filled,
+				xlabel=Krankenhaus];
+			node_TANK_WARFARE	[color="#ff000055",
+				fontcolor="#ffffff88",
+				group=AGE_SIX,
+				label=<<TABLE border="0" cellspacing="0" cellborder="0"><TR><TD><IMG SCALE="TRUE" SRC="cm2_upap098l.png"/></TD></TR><TR><TD><B>Panzereinsatz</B></TD></TR></TABLE>>,
+				shape=box,
+				style=filled,
+				xlabel=Panzer];
+			node_CRIMINAL_CODE	[color="#88888855",
+				fontcolor="#ffffff88",
+				group=AGE_SIX,
+				label=<<TABLE border="0" cellspacing="0" cellborder="0"><TR><TD><IMG SCALE="TRUE" SRC="cm2_upap027l.png"/></TD></TR><TR><TD><B>Strafgesetz</B></TD></TR></TABLE>>,
+				shape=box,
+				style=filled,
+				xlabel="Haftanstalt,Anwalt,Bagatellerlass"];
+			node_INTERNAL_COMBUSTION	[color="#88888855",
+				fontcolor="#ffffff88",
+				group=AGE_SIX,
+				label=<<TABLE border="0" cellspacing="0" cellborder="0"><TR><TD><IMG SCALE="TRUE" SRC="cm2_upap056l.png"/></TD></TR><TR><TD><B>Verbr.-Motor</B></TD></TR></TABLE>>,
+				shape=box,
+				style=filled,
+				xlabel="Truppentransp."];
+		}
+		subgraph cluster_AGE_EIGHT {
+			graph [color="#88888855",
+				fontcolor="#88888855",
+				label=AGE_EIGHT
+			];
+			node_ARCOLOGIES	[color="#88888855",
+				fontcolor="#ffffff88",
+				group=AGE_EIGHT,
+				label=<<TABLE border="0" cellspacing="0" cellborder="0"><TR><TD><IMG SCALE="TRUE" SRC="upap011l.png"/></TD></TR><TR><TD><B>Arcology</B></TD></TR></TABLE>>,
+				shape=box,
+				style=filled,
+				xlabel=Arcology];
+			node_AI_SURVEILLANCE	[color="#ff000055",
+				fontcolor="#ffffff88",
+				group=AGE_EIGHT,
+				label=<<TABLE border="0" cellspacing="0" cellborder="0"><TR><TD><IMG SCALE="TRUE" SRC="upap009l.png"/></TD></TR><TR><TD><B>KI-Überwachung</B></TD></TR></TABLE>>,
+				shape=box,
+				style=filled,
+				xlabel="Bürgerkontrolle,Spion_PLANE"];
+			node_DIGITAL_ENCRYPTION	[color="#88888855",
+				fontcolor="#ffffff88",
+				group=AGE_EIGHT,
+				label=<<TABLE border="0" cellspacing="0" cellborder="0"><TR><TD><IMG SCALE="TRUE" SRC="upap030l.png"/></TD></TR><TR><TD><B>Digit. Kodierung</B></TD></TR></TABLE>>,
+				shape=box,
+				style=filled,
+				xlabel="E-Bank,Datenparadies"];
+			node_HT_SUPERCONDUCTOR	[color="#88888855",
+				fontcolor="#ffffff88",
+				group=AGE_EIGHT,
+				label=<<TABLE border="0" cellspacing="0" cellborder="0"><TR><TD><IMG SCALE="TRUE" SRC="upap052l.png"/></TD></TR><TR><TD><B>Supraleiter</B></TD></TR></TABLE>>,
+				shape=box,
+				style=filled,
+				xlabel="Labor f. Felddyn."];
+			node_LIQUID_BREATHING_APPARATUS	[color="#88888855",
+				fontcolor="#ffffff88",
+				group=AGE_EIGHT,
+				label=<<TABLE border="0" cellspacing="0" cellborder="0"><TR><TD><IMG SCALE="TRUE" SRC="upap061l.png"/></TD></TR><TR><TD><B>Flüssigatmung</B></TD></TR></TABLE>>,
+				shape=box,
+				style=filled,
+				xlabel="Stealth-U-Boot"];
+			node_SPACE_FLIGHT	[color="#ff000055",
+				fontcolor="#ffffff88",
+				group=AGE_EIGHT,
+				label=<<TABLE border="0" cellspacing="0" cellborder="0"><TR><TD><IMG SCALE="TRUE" SRC="upap094l.png"/></TD></TR><TR><TD><B>Raumfahrt</B></TD></TR></TABLE>>,
+				shape=box,
+				style=filled,
+				xlabel="Orbitallabor,Raumtransporter"];
+			node_NEURAL_INTERFACE	[color="#88888855",
+				fontcolor="#ffffff88",
+				group=AGE_EIGHT,
+				label=<<TABLE border="0" cellspacing="0" cellborder="0"><TR><TD><IMG SCALE="TRUE" SRC="upap075l.png"/></TD></TR><TR><TD><B>Neur. Schnittst.</B></TD></TR></TABLE>>,
+				shape=box,
+				style=filled,
+				xlabel="VR-Vergnügungsp.,Cyber-Ninja"];
+			node_NANO_ASSEMBLY	[color="#88888855",
+				fontcolor="#ffffff88",
+				group=AGE_EIGHT,
+				label=<<TABLE border="0" cellspacing="0" cellborder="0"><TR><TD><IMG SCALE="TRUE" SRC="cm2_upap069l.png"/></TD></TR><TR><TD><B>Nanokonstruktion</B></TD></TR></TABLE>>,
+				shape=box,
+				style=filled,
+				xlabel="Nanitenproduktion,Meereskolonisator"];
+			node_GENETICS	[color="#88888855",
+				fontcolor="#ffffff88",
+				group=AGE_EIGHT,
+				label=<<TABLE border="0" cellspacing="0" cellborder="0"><TR><TD><IMG SCALE="TRUE" SRC="upap044l.png"/></TD></TR><TR><TD><B>Genetik</B></TD></TR></TABLE>>,
+				shape=box,
+				style=filled,
+				xlabel="Muränengleiter,Genom-Projekt"];
+			node_TECHNOCRACY	[color="#88888855",
+				fontcolor="#ffffff88",
+				group=AGE_EIGHT,
+				label=<<TABLE border="0" cellspacing="0" cellborder="0"><TR><TD><IMG SCALE="TRUE" SRC="upap099l.png"/></TD></TR><TR><TD><B>Technokratie</B></TD></TR></TABLE>>,
+				shape=box,
+				style=filled];
+			node_CHAOS_THEORY	[color="#88888855",
+				fontcolor="#ffffff88",
+				group=AGE_EIGHT,
+				label=<<TABLE border="0" cellspacing="0" cellborder="0"><TR><TD><IMG SCALE="TRUE" SRC="upap018l.png"/></TD></TR><TR><TD><B>Chaostheorie</B></TD></TR></TABLE>>,
+				shape=box,
+				style=filled,
+				xlabel="Hover-Infanterist"];
+			node_EUGENICS	[color="#88888855",
+				fontcolor="#ffffff88",
+				group=AGE_EIGHT,
+				label=<<TABLE border="0" cellspacing="0" cellborder="0"><TR><TD><IMG SCALE="TRUE" SRC="upap035l.png"/></TD></TR><TR><TD><B>Gentherapie</B></TD></TR></TABLE>>,
+				shape=box,
+				style=filled,
+				xlabel="Empath. Diplomatin,Weltfriedensz."];
+		}
+		subgraph cluster_AGE_SEVEN {
+			graph [color="#88888855",
+				fontcolor="#88888855",
+				label=AGE_SEVEN
+			];
+			node_ADVANCED_COMPOSITES	[color="#88888855",
+				fontcolor="#ffffff88",
+				group=AGE_SEVEN,
+				label=<<TABLE border="0" cellspacing="0" cellborder="0"><TR><TD><IMG SCALE="TRUE" SRC="cm2_upap004l.png"/></TD></TR><TR><TD><B>Neue Kunststoffe</B></TD></TR></TABLE>>,
+				shape=box,
+				style=filled,
+				xlabel="Stealth-Bomber,Stealth-Jäger"];
+			node_ROBOTICS	[color="#88888855",
+				fontcolor="#ffffff88",
+				group=AGE_SEVEN,
+				label=<<TABLE border="0" cellspacing="0" cellborder="0"><TR><TD><IMG SCALE="TRUE" SRC="cm2_upap090l.png"/></TD></TR><TR><TD><B>Roboter</B></TD></TR></TABLE>>,
+				shape=box,
+				style=filled,
+				xlabel=Roboterfabrik];
+			node_GLOBAL_ECONOMICS	[color="#88888855",
+				fontcolor="#ffffff88",
+				group=AGE_SEVEN,
+				label=<<TABLE border="0" cellspacing="0" cellborder="0"><TR><TD><IMG SCALE="TRUE" SRC="cm2_upap047l.png"/></TD></TR><TR><TD><B>Weltwirtschaft</B></TD></TR></TABLE>>,
+				shape=box,
+				style=filled,
+				xlabel="Frachttransp.,Hollywood"];
+			node_SUPERSONIC_FLIGHT	[color="#88888855",
+				fontcolor="#ffffff88",
+				group=AGE_SEVEN,
+				label=<<TABLE border="0" cellspacing="0" cellborder="0"><TR><TD><IMG SCALE="TRUE" SRC="cm2_upap097l.png"/></TD></TR><TR><TD><B>Überschallflüge</B></TD></TR></TABLE>>,
+				shape=box,
+				style=filled,
+				xlabel=Abfangjäger];
+			node_GUIDED_WEAPON_SYSTEMS	[color="#88888855",
+				fontcolor="#ffffff88",
+				group=AGE_SEVEN,
+				label=<<TABLE border="0" cellspacing="0" cellborder="0"><TR><TD><IMG SCALE="TRUE" SRC="cm2_upap049l.png"/></TD></TR><TR><TD><B>Lenkwaffensyst.</B></TD></TR></TABLE>>,
+				shape=box,
+				style=filled,
+				xlabel=Cruisemissile];
+			node_NUCLEAR_POWER	[color="#88888855",
+				fontcolor="#ffffff88",
+				group=AGE_SEVEN,
+				label=<<TABLE border="0" cellspacing="0" cellborder="0"><TR><TD><IMG SCALE="TRUE" SRC="cm2_upap077l.png"/></TD></TR><TR><TD><B>Atomenergie</B></TD></TR></TABLE>>,
+				shape=box,
+				style=filled,
+				xlabel="Kernkraftwerk,Atom-U-Boot,Nuklearrakete"];
+			node_COMPUTER	[color="#88888855",
+				fontcolor="#ffffff88",
+				group=AGE_SEVEN,
+				label=<<TABLE border="0" cellspacing="0" cellborder="0"><TR><TD><IMG SCALE="TRUE" SRC="cm2_upap022l.png"/></TD></TR><TR><TD><B>Computer</B></TD></TR></TABLE>>,
+				shape=box,
+				style=filled,
+				xlabel="Rechenzentrum,Internet"];
+			node_FUEL_CELLS	[color="#88888855",
+				fontcolor="#ffffff88",
+				group=AGE_SEVEN,
+				label=<<TABLE border="0" cellspacing="0" cellborder="0"><TR><TD><IMG SCALE="TRUE" SRC="cm2_upap039l.png"/></TD></TR><TR><TD><B>Brennstoffzellen</B></TD></TR></TABLE>>,
+				shape=box,
+				style=filled,
+				xlabel=Ökofahrzeug];
+			node_GLOBAL_DEFENSE	[color="#88888855",
+				fontcolor="#ffffff88",
+				group=AGE_SEVEN,
+				label=<<TABLE border="0" cellspacing="0" cellborder="0"><TR><TD><IMG SCALE="TRUE" SRC="cm2_upap046l.png"/></TD></TR><TR><TD><B>Glob. Verteid.</B></TD></TR></TABLE>>,
+				shape=box,
+				style=filled,
+				xlabel=Geheimdienst];
+			node_GLOBAL_COMMUNICATIONS	[color="#88888855",
+				fontcolor="#ffffff88",
+				group=AGE_SEVEN,
+				label=<<TABLE border="0" cellspacing="0" cellborder="0"><TR><TD><IMG SCALE="TRUE" SRC="cm2_upap048l.png"/></TD></TR><TR><TD><B>GlobeNet</B></TD></TR></TABLE>>,
+				shape=box,
+				style=filled,
+				xlabel="Raketenabwehr,GlobeSat"];
+		}
+		subgraph cluster_AGE_NINE {
+			graph [color="#88888855",
+				fontcolor="#88888855",
+				label=AGE_NINE
+			];
+			node_ULTRAPRESSURE_MACHINERY	[color="#88888855",
+				fontcolor="#ffffff88",
+				group=AGE_NINE,
+				label=<<TABLE border="0" cellspacing="0" cellborder="0"><TR><TD><IMG SCALE="TRUE" SRC="upap103l.png"/></TD></TR><TR><TD><B>Extremdruckmasch.</B></TD></TR></TABLE>>,
+				shape=box,
+				style=filled,
+				xlabel=Crawler];
+			node_UNIFIED_PHYSICS	[color="#88888855",
+				fontcolor="#ffffff88",
+				group=AGE_NINE,
+				label=<<TABLE border="0" cellspacing="0" cellborder="0"><TR><TD><IMG SCALE="TRUE" SRC="upap104l.png"/></TD></TR><TR><TD><B>Ganzheitstheorie</B></TD></TR></TABLE>>,
+				shape=box,
+				style=filled,
+				xlabel="Kraftfeld,Nat. Kraftfeld"];
+			node_HUMAN_CLONING	[color="#88888855",
+				fontcolor="#ffffff88",
+				group=AGE_NINE,
+				label=<<TABLE border="0" cellspacing="0" cellborder="0"><TR><TD><IMG SCALE="TRUE" SRC="upap054l.png"/></TD></TR><TR><TD><B>Klonverfahren</B></TD></TR></TABLE>>,
+				shape=box,
+				style=filled,
+				xlabel=Inkubationsstätte];
+			node_VIRTUAL_DEMOCRACY	[color="#88888855",
+				fontcolor="#ffffff88",
+				group=AGE_NINE,
+				label=<<TABLE border="0" cellspacing="0" cellborder="0"><TR><TD><IMG SCALE="TRUE" SRC="upap106l.png"/></TD></TR><TR><TD><B>Virt. Demokratie</B></TD></TR></TABLE>>,
+				shape=box,
+				style=filled,
+				xlabel=Humanitätserlass];
+			node_FUSION	[color="#88888855",
+				fontcolor="#ffffff88",
+				group=AGE_NINE,
+				label=<<TABLE border="0" cellspacing="0" cellborder="0"><TR><TD><IMG SCALE="TRUE" SRC="upap040l.png"/></TD></TR><TR><TD><B>Kernfusion</B></TD></TR></TABLE>>,
+				shape=box,
+				style=filled,
+				xlabel="Fusionsreaktor,Fusionspanzer"];
+			node_CYBERNETICS	[color="#88888855",
+				fontcolor="#ffffff88",
+				group=AGE_NINE,
+				label=<<TABLE border="0" cellspacing="0" cellborder="0"><TR><TD><IMG SCALE="TRUE" SRC="upap028l.png"/></TD></TR><TR><TD><B>Kybernetik</B></TD></TR></TABLE>>,
+				shape=box,
+				style=filled,
+				xlabel=Kampfkoloss];
+			node_GENETIC_TAILORING	[color="#88888855",
+				fontcolor="#ffffff88",
+				group=AGE_NINE,
+				label=<<TABLE border="0" cellspacing="0" cellborder="0"><TR><TD><IMG SCALE="TRUE" SRC="upap043l.png"/></TD></TR><TR><TD><B>Genmanipulation</B></TD></TR></TABLE>>,
+				shape=box,
+				style=filled,
+				xlabel="Nahrungsreplikator,Krakengleiter"];
+			node_PLASMA_WEAPONRY	[color="#88888855",
+				fontcolor="#ffffff88",
+				group=AGE_NINE,
+				label=<<TABLE border="0" cellspacing="0" cellborder="0"><TR><TD><IMG SCALE="TRUE" SRC="upap084l.png"/></TD></TR><TR><TD><B>Plasmawaffen</B></TD></TR></TABLE>>,
+				shape=box,
+				style=filled,
+				xlabel="Leviathan,Plasmazerstörer"];
+			node_SMART_MATERIALS	[color="#88888855",
+				fontcolor="#ffffff88",
+				group=AGE_NINE,
+				label=<<TABLE border="0" cellspacing="0" cellborder="0"><TR><TD><IMG SCALE="TRUE" SRC="upap093l.png"/></TD></TR><TR><TD><B>Int. Materialien</B></TD></TR></TABLE>>,
+				shape=box,
+				style=filled,
+				xlabel=Dreadnaught];
+			node_NANO_MACHINES	[color="#88888855",
+				fontcolor="#ffffff88",
+				group=AGE_NINE,
+				label=<<TABLE border="0" cellspacing="0" cellborder="0"><TR><TD><IMG SCALE="TRUE" SRC="upap070l.png"/></TD></TR><TR><TD><B>Naniten</B></TD></TR></TABLE>>,
+				shape=box,
+				style=filled,
+				xlabel="Kläranlage,Nanitenentsch."];
+			node_ECOTOPIA	[color="#88888855",
+				fontcolor="#ffffff88",
+				group=AGE_NINE,
+				label=<<TABLE border="0" cellspacing="0" cellborder="0"><TR><TD><IMG SCALE="TRUE" SRC="upap033l.png"/></TD></TR><TR><TD><B>Ökotopie</B></TD></TR></TABLE>>,
+				shape=box,
+				style=filled,
+				xlabel="Materiewandler,Öko-Ranger,Ökoterrorist,Mult. Materiew."];
+			node_GAIA_THEORY	[color="#88888855",
+				fontcolor="#ffffff88",
+				group=AGE_NINE,
+				label=<<TABLE border="0" cellspacing="0" cellborder="0"><TR><TD><IMG SCALE="TRUE" SRC="upap042l.png"/></TD></TR><TR><TD><B>Gaia-Theorie</B></TD></TR></TABLE>>,
+				shape=box,
+				style=filled,
+				xlabel="Eden-Projekt"];
+			node_NANO_WARFARE	[color="#88888855",
+				fontcolor="#ffffff88",
+				group=AGE_NINE,
+				label=<<TABLE border="0" cellspacing="0" cellborder="0"><TR><TD><IMG SCALE="TRUE" SRC="upap071l.png"/></TD></TR><TR><TD><B>Nanokriegsf.</B></TD></TR></TABLE>>,
+				shape=box,
+				style=filled,
+				xlabel="Bio-Schutzfilter,Infektor"];
+		}
+		subgraph cluster_AGE_FOUR {
+			graph [color="#88888855",
+				fontcolor="#88888855",
+				label=AGE_FOUR
+			];
+			node_AGE_OF_REASON	[color="#88888855",
+				fontcolor="#ffffff88",
+				group=AGE_FOUR,
+				label=<<TABLE border="0" cellspacing="0" cellborder="0"><TR><TD><IMG SCALE="TRUE" SRC="upap006l.png"/></TD></TR><TR><TD><B>Ära der Vernunft</B></TD></TR></TABLE>>,
+				shape=box,
+				style=filled,
+				xlabel="Freiheitsprokl."];
+			node_CHEMISTRY	[color="#88888855",
+				fontcolor="#ffffff88",
+				group=AGE_FOUR,
+				label=<<TABLE border="0" cellspacing="0" cellborder="0"><TR><TD><IMG SCALE="TRUE" SRC="upap019l.png"/></TD></TR><TR><TD><B>Chemie</B></TD></TR></TABLE>>,
+				shape=box,
+				style=filled];
+			node_GUNPOWDER	[color="#88888855",
+				fontcolor="#ffffff88",
+				group=AGE_FOUR,
+				label=<<TABLE border="0" cellspacing="0" cellborder="0"><TR><TD><IMG SCALE="TRUE" SRC="upap050l.png"/></TD></TR><TR><TD><B>Schießpulver</B></TD></TR></TABLE>>,
+				shape=box,
+				style=filled,
+				xlabel=Infanterist];
+			node_CANNON_MAKING	[color="#88888855",
+				fontcolor="#ffffff88",
+				group=AGE_FOUR,
+				label=<<TABLE border="0" cellspacing="0" cellborder="0"><TR><TD><IMG SCALE="TRUE" SRC="upap016l.png"/></TD></TR><TR><TD><B>Kanonenbau</B></TD></TR></TABLE>>,
+				shape=box,
+				style=filled,
+				xlabel=Kanone];
+			node_CAVALRY_TACTICS	[color="#ff000055",
+				fontcolor="#ffffff88",
+				group=AGE_FOUR,
+				label=<<TABLE border="0" cellspacing="0" cellborder="0"><TR><TD><IMG SCALE="TRUE" SRC="upap017l.png"/></TD></TR><TR><TD><B>Kavallerietakt.</B></TD></TR></TABLE>>,
+				shape=box,
+				style=filled,
+				xlabel=Kavallerist];
+			node_CLASSICAL_EDUCATION	[color="#88888855",
+				fontcolor="#ffffff88",
+				group=AGE_FOUR,
+				label=<<TABLE border="0" cellspacing="0" cellborder="0"><TR><TD><IMG SCALE="TRUE" SRC="upap020l.png"/></TD></TR><TR><TD><B>Erziehungswesen</B></TD></TR></TABLE>>,
+				shape=box,
+				style=filled,
+				xlabel="Universität,Freiheitskämpferin"];
+			node_BANKING	[color="#88888855",
+				fontcolor="#ffffff88",
+				group=AGE_FOUR,
+				label=<<TABLE border="0" cellspacing="0" cellborder="0"><TR><TD><IMG SCALE="TRUE" SRC="upap013l.png"/></TD></TR><TR><TD><B>Bankwesen</B></TD></TR></TABLE>>,
+				shape=box,
+				style=filled,
+				xlabel=Bank];
+			node_PRINTING_PRESS	[color="#88888855",
+				fontcolor="#ffffff88",
+				group=AGE_FOUR,
+				label=<<TABLE border="0" cellspacing="0" cellborder="0"><TR><TD><IMG SCALE="TRUE" SRC="upap085l.png"/></TD></TR><TR><TD><B>Druckerpresse</B></TD></TR></TABLE>>,
+				shape=box,
+				style=filled,
+				xlabel="Verlagshaus,Gutenberg-Bibel"];
+			node_OCEAN_FARING	[color="#88888855",
+				fontcolor="#ffffff88",
+				group=AGE_FOUR,
+				label=<<TABLE border="0" cellspacing="0" cellborder="0"><TR><TD><IMG SCALE="TRUE" SRC="upap078l.png"/></TD></TR><TR><TD><B>Seefahrt</B></TD></TR></TABLE>>,
+				shape=box,
+				style=filled,
+				xlabel="Karavelle,Ostind. Kompanie"];
+			node_OPTICS	[color="#88888855",
+				fontcolor="#ffffff88",
+				group=AGE_FOUR,
+				label=<<TABLE border="0" cellspacing="0" cellborder="0"><TR><TD><IMG SCALE="TRUE" SRC="upap080l.png"/></TD></TR><TR><TD><B>Optik</B></TD></TR></TABLE>>,
+				shape=box,
+				style=filled,
+				xlabel="Galileis Telesk."];
+			node_NAVAL_TACTICS	[color="#88888855",
+				fontcolor="#ffffff88",
+				group=AGE_FOUR,
+				label=<<TABLE border="0" cellspacing="0" cellborder="0"><TR><TD><IMG SCALE="TRUE" SRC="upap074l.png"/></TD></TR><TR><TD><B>Marinetaktiken</B></TD></TR></TABLE>>,
+				shape=box,
+				style=filled,
+				xlabel="Festungsmauer,Dreimaster"];
+		}
+		subgraph cluster_AGE_FIVE {
+			graph [color="#88888855",
+				fontcolor="#88888855",
+				label=AGE_FIVE
+			];
+			node_DEMOCRACY	[color="#88888855",
+				fontcolor="#ffffff88",
+				group=AGE_FIVE,
+				label=<<TABLE border="0" cellspacing="0" cellborder="0"><TR><TD><IMG SCALE="TRUE" SRC="cm2_upap029l.png"/></TD></TR><TR><TD><B>Demokratie</B></TD></TR></TABLE>>,
+				shape=box,
+				style=filled];
+			node_MODERN_METALLURGY	[color="#88888855",
+				fontcolor="#ffffff88",
+				group=AGE_FIVE,
+				label=<<TABLE border="0" cellspacing="0" cellborder="0"><TR><TD><IMG SCALE="TRUE" SRC="cm2_upap067l.png"/></TD></TR><TR><TD><B>Mod. Metallurgie</B></TD></TR></TABLE>>,
+				shape=box,
+				style=filled,
+				xlabel=Panzerschiff];
+			node_PHYSICS	[color="#88888855",
+				fontcolor="#ffffff88",
+				group=AGE_FIVE,
+				label=<<TABLE border="0" cellspacing="0" cellborder="0"><TR><TD><IMG SCALE="TRUE" SRC="cm2_upap083l.png"/></TD></TR><TR><TD><B>Physik</B></TD></TR></TABLE>>,
+				shape=box,
+				style=filled];
+			node_ECONOMICS	[color="#88888855",
+				fontcolor="#ffffff88",
+				group=AGE_FIVE,
+				label=<<TABLE border="0" cellspacing="0" cellborder="0"><TR><TD><IMG SCALE="TRUE" SRC="cm2_upap032l.png"/></TD></TR><TR><TD><B>Volkswirtschaft</B></TD></TR></TABLE>>,
+				shape=box,
+				style=filled,
+				xlabel="Vermögensverw.,Londoner Börse"];
+			node_PHARMACEUTICALS	[color="#88888855",
+				fontcolor="#ffffff88",
+				group=AGE_FIVE,
+				label=<<TABLE border="0" cellspacing="0" cellborder="0"><TR><TD><IMG SCALE="TRUE" SRC="upap081l.png"/></TD></TR><TR><TD><B>Pharmazeutika</B></TD></TR></TABLE>>,
+				shape=box,
+				style=filled,
+				xlabel="Apotheke,Penizillin"];
+			node_INDUSTRIAL_REVOLUTION	[color="#88888855",
+				fontcolor="#ffffff88",
+				group=AGE_FIVE,
+				label=<<TABLE border="0" cellspacing="0" cellborder="0"><TR><TD><IMG SCALE="TRUE" SRC="upap055l.png"/></TD></TR><TR><TD><B>Ind. Revolution</B></TD></TR></TABLE>>,
+				shape=box,
+				style=filled,
+				xlabel="Fabrik,MG-Schütze"];
+			node_RAILROAD	[color="#88888855",
+				fontcolor="#ffffff88",
+				group=AGE_FIVE,
+				label=<<TABLE border="0" cellspacing="0" cellborder="0"><TR><TD><IMG SCALE="TRUE" SRC="cm2_upap088l.png"/></TD></TR><TR><TD><B>Eisenbahn</B></TD></TR></TABLE>>,
+				shape=box,
+				style=filled,
+				xlabel=Siloanlage];
+			node_ELECTRICITY	[color="#88888855",
+				fontcolor="#ffffff88",
+				group=AGE_FIVE,
+				label=<<TABLE border="0" cellspacing="0" cellborder="0"><TR><TD><IMG SCALE="TRUE" SRC="upap034l.png"/></TD></TR><TR><TD><B>Elektrizität</B></TD></TR></TABLE>>,
+				shape=box,
+				style=filled,
+				xlabel=Filmpalast];
+			node_COMMUNISM	[color="#88888855",
+				fontcolor="#ffffff88",
+				group=AGE_FIVE,
+				label=<<TABLE border="0" cellspacing="0" cellborder="0"><TR><TD><IMG SCALE="TRUE" SRC="upap021l.png"/></TD></TR><TR><TD><B>Kommunismus</B></TD></TR></TABLE>>,
+				shape=box,
+				style=filled];
+			node_EXPLOSIVES	[color="#88888855",
+				fontcolor="#ffffff88",
+				group=AGE_FIVE,
+				label=<<TABLE border="0" cellspacing="0" cellborder="0"><TR><TD><IMG SCALE="TRUE" SRC="upap036l.png"/></TD></TR><TR><TD><B>Sprengstoff</B></TD></TR></TABLE>>,
+				shape=box,
+				style=filled,
+				xlabel=Artillerie];
+			node_FASCISM	[color="#ff000055",
+				fontcolor="#ffffff88",
+				group=AGE_FIVE,
+				label=<<TABLE border="0" cellspacing="0" cellborder="0"><TR><TD><IMG SCALE="TRUE" SRC="cm2_upap037l.png"/></TD></TR><TR><TD><B>Faschismus</B></TD></TR></TABLE>>,
+				shape=box,
+				style=filled,
+				xlabel=Faschist];
+			node_OIL_REFINING	[color="#88888855",
+				fontcolor="#ffffff88",
+				group=AGE_FIVE,
+				label=<<TABLE border="0" cellspacing="0" cellborder="0"><TR><TD><IMG SCALE="TRUE" SRC="upap079l.png"/></TD></TR><TR><TD><B>Ölraffination</B></TD></TR></TABLE>>,
+				shape=box,
+				style=filled,
+				xlabel="Ölraffinerie,U-Boot"];
+			node_NATIONALISM	[color="#88888855",
+				fontcolor="#ffffff88",
+				group=AGE_FIVE,
+				label=<<TABLE border="0" cellspacing="0" cellborder="0"><TR><TD><IMG SCALE="TRUE" SRC="cm2_upap072l.png"/></TD></TR><TR><TD><B>Nationalismus</B></TD></TR></TABLE>>,
+				shape=box,
+				style=filled,
+				xlabel=Spion];
+		}
+		subgraph cluster_AGE_THREE {
+			graph [color="#88888855",
+				fontcolor="#88888855",
+				label=AGE_THREE
+			];
+			node_AGRICULTURAL_REVOLUTION	[color="#88888855",
+				fontcolor="#ffffff88",
+				group=AGE_THREE,
+				label=<<TABLE border="0" cellspacing="0" cellborder="0"><TR><TD><IMG SCALE="TRUE" SRC="cm2_upap007l.png"/></TD></TR><TR><TD><B>Landw. Revolut.</B></TD></TR></TABLE>>,
+				shape=box,
+				style=filled,
+				xlabel=Mühle];
+			node_BALLISTICS	[color="#88888855",
+				fontcolor="#ffffff88",
+				group=AGE_THREE,
+				label=<<TABLE border="0" cellspacing="0" cellborder="0"><TR><TD><IMG SCALE="TRUE" SRC="cm2_upap012l.png"/></TD></TR><TR><TD><B>Ballistik</B></TD></TR></TABLE>>,
+				shape=box,
+				style=filled,
+				xlabel="Ballistentürme,Bogenschütze"];
+			node_GEOMETRY	[color="#88888855",
+				fontcolor="#ffffff88",
+				group=AGE_THREE,
+				label=<<TABLE border="0" cellspacing="0" cellborder="0"><TR><TD><IMG SCALE="TRUE" SRC="cm2_upap045l.png"/></TD></TR><TR><TD><B>Geometrie</B></TD></TR></TABLE>>,
+				shape=box,
+				style=filled,
+				xlabel=Katapult];
+			node_HORSE_RIDING	[color="#88888855",
+				fontcolor="#ffffff88",
+				group=AGE_THREE,
+				label=<<TABLE border="0" cellspacing="0" cellborder="0"><TR><TD><IMG SCALE="TRUE" SRC="cm2_upap051l.png"/></TD></TR><TR><TD><B>Rittertum</B></TD></TR></TABLE>>,
+				shape=box,
+				style=filled,
+				xlabel="Ber. Bogenschütze"];
+			node_ALCHEMY	[color="#88888855",
+				fontcolor="#ffffff88",
+				group=AGE_THREE,
+				label=<<TABLE border="0" cellspacing="0" cellborder="0"><TR><TD><IMG SCALE="TRUE" SRC="cm2_upap010l.png"/></TD></TR><TR><TD><B>Alchimie</B></TD></TR></TABLE>>,
+				shape=box,
+				style=filled,
+				xlabel=Feuertriere];
+			node_HULL_MAKING	[color="#88888855",
+				fontcolor="#ffffff88",
+				group=AGE_THREE,
+				label=<<TABLE border="0" cellspacing="0" cellborder="0"><TR><TD><IMG SCALE="TRUE" SRC="cm2_upap053l.png"/></TD></TR><TR><TD><B>Schiffskonstr.</B></TD></TR></TABLE>>,
+				shape=box,
+				style=filled,
+				xlabel=Langschiff];
+			node_FEUDALISM	[color="#88888855",
+				fontcolor="#ffffff88",
+				group=AGE_THREE,
+				label=<<TABLE border="0" cellspacing="0" cellborder="0"><TR><TD><IMG SCALE="TRUE" SRC="cm2_upap038l.png"/></TD></TR><TR><TD><B>Feudalismus</B></TD></TR></TABLE>>,
+				shape=box,
+				style=filled,
+				xlabel="Kapitol,Ritter,Lanzenkämpfer"];
+			node_BUREAUCRACY	[color="#88888855",
+				fontcolor="#ffffff88",
+				group=AGE_THREE,
+				label=<<TABLE border="0" cellspacing="0" cellborder="0"><TR><TD><IMG SCALE="TRUE" SRC="cm2_upap015l.png"/></TD></TR><TR><TD><B>Bürokratie</B></TD></TR></TABLE>>,
+				shape=box,
+				style=filled,
+				xlabel=Diplomat];
+			node_THEOLOGY	[color="#88888855",
+				fontcolor="#ffffff88",
+				group=AGE_THREE,
+				label=<<TABLE border="0" cellspacing="0" cellborder="0"><TR><TD><IMG SCALE="TRUE" SRC="cm2_upap100l.png"/></TD></TR><TR><TD><B>Theologie</B></TD></TR></TABLE>>,
+				shape=box,
+				style=filled,
+				xlabel="Basilika,Kleriker,Hagia Sophia"];
+			node_MONARCHY	[color="#ff000055",
+				fontcolor="#ffffff88",
+				group=AGE_THREE,
+				label=<<TABLE border="0" cellspacing="0" cellborder="0"><TR><TD><IMG SCALE="TRUE" SRC="cm2_upap068l.png"/></TD></TR><TR><TD><B>Monarchie</B></TD></TR></TABLE>>,
+				shape=box,
+				style=filled];
+		}
+		subgraph cluster_AGE_ONE {
+			graph [color="#88888855",
+				fontcolor="#88888855",
+				label=AGE_ONE
+			];
+			node_AGRICULTURE	[color="#00ff0055",
+				fontcolor="#ffffff88",
+				group=AGE_ONE,
+				label=<<TABLE border="0" cellspacing="0" cellborder="0"><TR><TD><IMG SCALE="TRUE" SRC="upap008l.png"/></TD></TR><TR><TD><B>Landwirtschaft</B></TD></TR></TABLE>>,
+				shape=box,
+				style=filled,
+				xlabel=Lagerhaus];
+			node_TRADE	[color="#88888855",
+				fontcolor="#ffffff88",
+				group=AGE_ONE,
+				label=<<TABLE border="0" cellspacing="0" cellborder="0"><TR><TD><IMG SCALE="TRUE" SRC="upap102l.png"/></TD></TR><TR><TD><B>Handel</B></TD></TR></TABLE>>,
+				shape=box,
+				style=filled,
+				xlabel="Bazar,Karawane,Via Appia"];
+			node_BRONZE_WORKING	[color="#88888855",
+				fontcolor="#ffffff88",
+				group=AGE_ONE,
+				label=<<TABLE border="0" cellspacing="0" cellborder="0"><TR><TD><IMG SCALE="TRUE" SRC="upap014l.png"/></TD></TR><TR><TD><B>Bronzeverarb.</B></TD></TR></TABLE>>,
+				shape=box,
+				style=filled,
+				xlabel=Phalanx];
+			node_MASONRY	[color="#88888855",
+				fontcolor="#ffffff88",
+				group=AGE_ONE,
+				label=<<TABLE border="0" cellspacing="0" cellborder="0"><TR><TD><IMG SCALE="TRUE" SRC="upap062l.png"/></TD></TR><TR><TD><B>Maurerhandwerk</B></TD></TR></TABLE>>,
+				shape=box,
+				style=filled,
+				xlabel="Aquädukt,Chin. Mauer"];
+			node_RELIGION	[color="#00ff0055",
+				fontcolor="#ffffff88",
+				group=AGE_ONE,
+				label=<<TABLE border="0" cellspacing="0" cellborder="0"><TR><TD><IMG SCALE="TRUE" SRC="upap089l.png"/></TD></TR><TR><TD><B>Religion</B></TD></TR></TABLE>>,
+				shape=box,
+				style=filled,
+				xlabel="Schrein,Ramajana"];
+			node_SHIP_BUILDING	[color="#00ff0055",
+				fontcolor="#ffffff88",
+				group=AGE_ONE,
+				label=<<TABLE border="0" cellspacing="0" cellborder="0"><TR><TD><IMG SCALE="TRUE" SRC="upap091l.png"/></TD></TR><TR><TD><B>Schiffbau</B></TD></TR></TABLE>>,
+				shape=box,
+				style=filled,
+				xlabel=Korvette];
+			node_STONE_WORKING	[color="#00ff0055",
+				fontcolor="#ffffff88",
+				group=AGE_ONE,
+				label=<<TABLE border="0" cellspacing="0" cellborder="0"><TR><TD><IMG SCALE="TRUE" SRC="upap095l.png"/></TD></TR><TR><TD><B>Steinverarb.</B></TD></TR></TABLE>>,
+				shape=box,
+				style=filled,
+				xlabel="Stadtmauer,Pyramide"];
+			node_TOOLMAKING	[color="#00ff0055",
+				fontcolor="#ffffff88",
+				group=AGE_ONE,
+				label=<<TABLE border="0" cellspacing="0" cellborder="0"><TR><TD><IMG SCALE="TRUE" SRC="upap101l.png"/></TD></TR><TR><TD><B>Werkzeugbau</B></TD></TR></TABLE>>,
+				shape=box,
+				style=filled,
+				xlabel=Krieger];
+			node_WRITING	[color="#00ff0055",
+				fontcolor="#ffffff88",
+				group=AGE_ONE,
+				label=<<TABLE border="0" cellspacing="0" cellborder="0"><TR><TD><IMG SCALE="TRUE" SRC="upap107l.png"/></TD></TR><TR><TD><B>Schrift</B></TD></TR></TABLE>>,
+				shape=box,
+				style=filled];
+		}
+		subgraph cluster_AGE_TWO {
+			graph [color="#88888855",
+				fontcolor="#88888855",
+				label=AGE_TWO
+			];
+			node_SLAVE_LABOR	[color="#ff000055",
+				fontcolor="#ffffff88",
+				group=AGE_TWO,
+				label=<<TABLE border="0" cellspacing="0" cellborder="0"><TR><TD><IMG SCALE="TRUE" SRC="cm2_upap092l.png"/></TD></TR><TR><TD><B>Sklavenarbeit</B></TD></TR></TABLE>>,
+				shape=box,
+				style=filled,
+				xlabel=Sklavenhändler];
+			node_IRON_WORKING	[color="#88888855",
+				fontcolor="#ffffff88",
+				group=AGE_TWO,
+				label=<<TABLE border="0" cellspacing="0" cellborder="0"><TR><TD><IMG SCALE="TRUE" SRC="cm2_upap057l.png"/></TD></TR><TR><TD><B>Eisenverarb.</B></TD></TR></TABLE>>,
+				shape=box,
+				style=filled,
+				xlabel=Samurai];
+			node_CONCRETE	[color="#88888855",
+				fontcolor="#ffffff88",
+				group=AGE_TWO,
+				label=<<TABLE border="0" cellspacing="0" cellborder="0"><TR><TD><IMG SCALE="TRUE" SRC="cm2_upap023l.png"/></TD></TR><TR><TD><B>Betonbau</B></TD></TR></TABLE>>,
+				shape=box,
+				style=filled,
+				xlabel="Arena,Verbotene Stadt"];
+			node_PHILOSOPHY	[color="#88888855",
+				fontcolor="#ffffff88",
+				group=AGE_TWO,
+				label=<<TABLE border="0" cellspacing="0" cellborder="0"><TR><TD><IMG SCALE="TRUE" SRC="cm2_upap082l.png"/></TD></TR><TR><TD><B>Philosophie</B></TD></TR></TABLE>>,
+				shape=box,
+				style=filled,
+				xlabel="Akademie,Arist. Lyceum"];
+			node_DRAMA	[color="#88888855",
+				fontcolor="#ffffff88",
+				group=AGE_TWO,
+				label=<<TABLE border="0" cellspacing="0" cellborder="0"><TR><TD><IMG SCALE="TRUE" SRC="cm2_upap031l.png"/></TD></TR><TR><TD><B>Schauspiel</B></TD></TR></TABLE>>,
+				shape=box,
+				style=filled,
+				xlabel=Theater];
+			node_JURISPRUDENCE	[color="#88888855",
+				fontcolor="#ffffff88",
+				group=AGE_TWO,
+				label=<<TABLE border="0" cellspacing="0" cellborder="0"><TR><TD><IMG SCALE="TRUE" SRC="cm2_upap059l.png"/></TD></TR><TR><TD><B>Rechtswiss.</B></TD></TR></TABLE>>,
+				shape=box,
+				style=filled,
+				xlabel="Gerichtsgebäude,Chichen Itza"];
+		}
+		subgraph cluster_AGE_TEN {
+			graph [color="#88888855",
+				fontcolor="#88888855",
+				label=AGE_TEN
+			];
+			node_NEURAL_REPROGRAMMING	[color="#ff000055",
+				fontcolor="#ffffff88",
+				group=AGE_TEN,
+				label=<<TABLE border="0" cellspacing="0" cellborder="0"><TR><TD><IMG SCALE="TRUE" SRC="cm2_upap076l.png"/></TD></TR><TR><TD><B>Neur. Manipulat.</B></TD></TR></TABLE>>,
+				shape=box,
+				style=filled,
+				xlabel=Therapiezentrum];
+			node_LIFE_EXTENSION	[color="#ff000055",
+				fontcolor="#ffffff88",
+				group=AGE_TEN,
+				label=<<TABLE border="0" cellspacing="0" cellborder="0"><TR><TD><IMG SCALE="TRUE" SRC="cm2_upap060l.png"/></TD></TR><TR><TD><B>Lebensverläng.</B></TD></TR></TABLE>>,
+				shape=box,
+				style=filled,
+				xlabel=Körperwandler];
+			node_GAIA_CONTROLLER	[color="#ff000055",
+				fontcolor="#ffffff88",
+				group=AGE_TEN,
+				label=<<TABLE border="0" cellspacing="0" cellborder="0"><TR><TD><IMG SCALE="TRUE" SRC="cm2_upap041l.png"/></TD></TR><TR><TD><B>Gaia-Controller</B></TD></TR></TABLE>>,
+				shape=box,
+				style=filled,
+				xlabel="Gaia-Controllerkern,Gaia-Satellit,Solaris-Projekt"];
+		}
+	}
+	node_ADV_URBAN_PLANNING -> node_ARCOLOGIES	[color="#ffffff88"];
+	node_ARCOLOGIES -> node_AI_SURVEILLANCE	[color="#ffffff88"];
+	node_ARCOLOGIES -> node_DIGITAL_ENCRYPTION	[color="#ffffff88"];
+	node_DIGITAL_ENCRYPTION -> node_NANO_ASSEMBLY	[color="#ffffff88"];
+	node_DIGITAL_ENCRYPTION -> node_UNIFIED_PHYSICS	[color="#ffffff88"];
+	node_DIGITAL_ENCRYPTION -> node_HUMAN_CLONING	[color="#ffffff88"];
+	node_DIGITAL_ENCRYPTION -> node_NEURAL_REPROGRAMMING	[color="#ffffff88"];
+	node_DIGITAL_ENCRYPTION -> node_VIRTUAL_DEMOCRACY	[color="#ffffff88"];
+	node_ADVANCED_COMPOSITES -> node_ARCOLOGIES	[color="#ffffff88"];
+	node_ADVANCED_COMPOSITES -> node_HT_SUPERCONDUCTOR	[color="#ffffff88"];
+	node_ADVANCED_COMPOSITES -> node_LIQUID_BREATHING_APPARATUS	[color="#ffffff88"];
+	node_ADVANCED_COMPOSITES -> node_ROBOTICS	[color="#ffffff88"];
+	node_ADVANCED_COMPOSITES -> node_SPACE_FLIGHT	[color="#ffffff88"];
+	node_HT_SUPERCONDUCTOR -> node_NEURAL_INTERFACE	[color="#ffffff88"];
+	node_LIQUID_BREATHING_APPARATUS -> node_ULTRAPRESSURE_MACHINERY	[color="#ffffff88"];
+	node_ROBOTICS -> node_AI_SURVEILLANCE	[color="#ffffff88"];
+	node_ROBOTICS -> node_NANO_ASSEMBLY	[color="#ffffff88"];
+	node_ROBOTICS -> node_GENETICS	[color="#ffffff88"];
+	node_ROBOTICS -> node_TECHNOCRACY	[color="#ffffff88"];
+	node_NEURAL_INTERFACE -> node_NEURAL_REPROGRAMMING	[color="#ffffff88"];
+	node_NEURAL_INTERFACE -> node_VIRTUAL_DEMOCRACY	[color="#ffffff88"];
+	node_NEURAL_INTERFACE -> node_CYBERNETICS	[color="#ffffff88"];
+	node_ULTRAPRESSURE_MACHINERY -> node_GAIA_THEORY	[color="#ffffff88"];
+	node_NANO_ASSEMBLY -> node_FUSION	[color="#ffffff88"];
+	node_NANO_ASSEMBLY -> node_NANO_MACHINES	[color="#ffffff88"];
+	node_GENETICS -> node_NEURAL_INTERFACE	[color="#ffffff88"];
+	node_GENETICS -> node_HUMAN_CLONING	[color="#ffffff88"];
+	node_GENETICS -> node_EUGENICS	[color="#ffffff88"];
+	node_TECHNOCRACY -> node_CHAOS_THEORY	[color="#ffffff88"];
+	node_TECHNOCRACY -> node_NANO_MACHINES	[color="#ffffff88"];
+	node_AERODYNAMICS -> node_JET_PROPULSION	[color="#ffffff88"];
+	node_AERODYNAMICS -> node_NAVAL_AVIATION	[color="#ffffff88"];
+	node_AERODYNAMICS -> node_VERTICAL_FLIGHT_AIRCRAFT	[color="#ffffff88"];
+	node_JET_PROPULSION -> node_GLOBAL_ECONOMICS	[color="#ffffff88"];
+	node_JET_PROPULSION -> node_SUPERSONIC_FLIGHT	[color="#ffffff88"];
+	node_NAVAL_AVIATION -> node_ADV_INFANTRY_TACTICS	[color="#ffffff88"];
+	node_NAVAL_AVIATION -> node_RADAR	[color="#ffffff88"];
+	node_VERTICAL_FLIGHT_AIRCRAFT -> node_ADV_INFANTRY_TACTICS	[color="#ffffff88"];
+	node_GLOBAL_ECONOMICS -> node_CONSERVATION	[color="#ffffff88"];
+	node_SUPERSONIC_FLIGHT -> node_ADVANCED_COMPOSITES	[color="#ffffff88"];
+	node_SUPERSONIC_FLIGHT -> node_GLOBAL_DEFENSE	[color="#ffffff88"];
+	node_RADAR -> node_GLOBAL_DEFENSE	[color="#ffffff88"];
+	node_AGE_OF_REASON -> node_DEMOCRACY	[color="#ffffff88"];
+	node_AGE_OF_REASON -> node_MODERN_METALLURGY	[color="#ffffff88"];
+	node_AGE_OF_REASON -> node_PHYSICS	[color="#ffffff88"];
+	node_DEMOCRACY -> node_ECONOMICS	[color="#ffffff88"];
+	node_DEMOCRACY -> node_PHARMACEUTICALS	[color="#ffffff88"];
+	node_MODERN_METALLURGY -> node_INDUSTRIAL_REVOLUTION	[color="#ffffff88"];
+	node_MODERN_METALLURGY -> node_RAILROAD	[color="#ffffff88"];
+	node_PHYSICS -> node_ELECTRICITY	[color="#ffffff88"];
+	node_ECONOMICS -> node_MASS_MEDIA	[color="#ffffff88"];
+	node_ECONOMICS -> node_MASS_PRODUCTION	[color="#ffffff88"];
+	node_PHARMACEUTICALS -> node_MEDICINE	[color="#ffffff88"];
+	node_INDUSTRIAL_REVOLUTION -> node_PHARMACEUTICALS	[color="#ffffff88"];
+	node_INDUSTRIAL_REVOLUTION -> node_ELECTRICITY	[color="#ffffff88"];
+	node_INDUSTRIAL_REVOLUTION -> node_COMMUNISM	[color="#ffffff88"];
+	node_INDUSTRIAL_REVOLUTION -> node_EXPLOSIVES	[color="#ffffff88"];
+	node_INDUSTRIAL_REVOLUTION -> node_FASCISM	[color="#ffffff88"];
+	node_INDUSTRIAL_REVOLUTION -> node_OIL_REFINING	[color="#ffffff88"];
+	node_RAILROAD -> node_OIL_REFINING	[color="#ffffff88"];
+	node_ELECTRICITY -> node_MASS_MEDIA	[color="#ffffff88"];
+	node_ELECTRICITY -> node_INTERNAL_COMBUSTION	[color="#ffffff88"];
+	node_AGRICULTURAL_REVOLUTION -> node_INDUSTRIAL_REVOLUTION	[color="#ffffff88"];
+	node_COMMUNISM -> node_GUIDED_WEAPON_SYSTEMS	[color="#ffffff88"];
+	node_EXPLOSIVES -> node_ADV_NAVAL_TACTICS	[color="#ffffff88"];
+	node_OIL_REFINING -> node_MASS_PRODUCTION	[color="#ffffff88"];
+	node_OIL_REFINING -> node_INTERNAL_COMBUSTION	[color="#ffffff88"];
+	node_AGRICULTURE -> node_BALLISTICS	[color="#ffffff88"];
+	node_AGRICULTURE -> node_SLAVE_LABOR	[color="#ffffff88"];
+	node_AGRICULTURE -> node_TRADE	[color="#ffffff88"];
+	node_BALLISTICS -> node_GEOMETRY	[color="#ffffff88"];
+	node_BALLISTICS -> node_HORSE_RIDING	[color="#ffffff88"];
+	node_TRADE -> node_HORSE_RIDING	[color="#ffffff88"];
+	node_TRADE -> node_IRON_WORKING	[color="#ffffff88"];
+	node_TRADE -> node_CONCRETE	[color="#ffffff88"];
+	node_TRADE -> node_PHILOSOPHY	[color="#ffffff88"];
+	node_GEOMETRY -> node_CLASSICAL_EDUCATION	[color="#ffffff88"];
+	node_GEOMETRY -> node_HULL_MAKING	[color="#ffffff88"];
+	node_HORSE_RIDING -> node_FEUDALISM	[color="#ffffff88"];
+	node_IRON_WORKING -> node_CANNON_MAKING	[color="#ffffff88"];
+	node_IRON_WORKING -> node_PRINTING_PRESS	[color="#ffffff88"];
+	node_CONCRETE -> node_AGRICULTURAL_REVOLUTION	[color="#ffffff88"];
+	node_PHILOSOPHY -> node_GEOMETRY	[color="#ffffff88"];
+	node_PHILOSOPHY -> node_ALCHEMY	[color="#ffffff88"];
+	node_PHILOSOPHY -> node_THEOLOGY	[color="#ffffff88"];
+	node_PHILOSOPHY -> node_MONARCHY	[color="#ffffff88"];
+	node_ALCHEMY -> node_CHEMISTRY	[color="#ffffff88"];
+	node_ALCHEMY -> node_GUNPOWDER	[color="#ffffff88"];
+	node_CHEMISTRY -> node_AGE_OF_REASON	[color="#ffffff88"];
+	node_GUNPOWDER -> node_EXPLOSIVES	[color="#ffffff88"];
+	node_GUNPOWDER -> node_CANNON_MAKING	[color="#ffffff88"];
+	node_GUNPOWDER -> node_CAVALRY_TACTICS	[color="#ffffff88"];
+	node_CANNON_MAKING -> node_NAVAL_TACTICS	[color="#ffffff88"];
+	node_UNIFIED_PHYSICS -> node_PLASMA_WEAPONRY	[color="#ffffff88"];
+	node_HUMAN_CLONING -> node_GENETIC_TAILORING	[color="#ffffff88"];
+	node_VIRTUAL_DEMOCRACY -> node_ECOTOPIA	[color="#ffffff88"];
+	node_CLASSICAL_EDUCATION -> node_GUNPOWDER	[color="#ffffff88"];
+	node_CLASSICAL_EDUCATION -> node_BANKING	[color="#ffffff88"];
+	node_CLASSICAL_EDUCATION -> node_PRINTING_PRESS	[color="#ffffff88"];
+	node_CLASSICAL_EDUCATION -> node_OPTICS	[color="#ffffff88"];
+	node_HULL_MAKING -> node_OCEAN_FARING	[color="#ffffff88"];
+	node_HULL_MAKING -> node_NAVAL_TACTICS	[color="#ffffff88"];
+	node_FEUDALISM -> node_AGRICULTURAL_REVOLUTION	[color="#ffffff88"];
+	node_FEUDALISM -> node_BUREAUCRACY	[color="#ffffff88"];
+	node_BANKING -> node_ECONOMICS	[color="#ffffff88"];
+	node_BANKING -> node_RAILROAD	[color="#ffffff88"];
+	node_BANKING -> node_COMMUNISM	[color="#ffffff88"];
+	node_GUIDED_WEAPON_SYSTEMS -> node_NUCLEAR_POWER	[color="#ffffff88"];
+	node_MASS_MEDIA -> node_CORPORATION	[color="#ffffff88"];
+	node_MASS_MEDIA -> node_CRIMINAL_CODE	[color="#ffffff88"];
+	node_MASS_PRODUCTION -> node_ADV_NAVAL_TACTICS	[color="#ffffff88"];
+	node_MASS_PRODUCTION -> node_AERODYNAMICS	[color="#ffffff88"];
+	node_MASS_PRODUCTION -> node_CORPORATION	[color="#ffffff88"];
+	node_BRONZE_WORKING -> node_IRON_WORKING	[color="#ffffff88"];
+	node_PRINTING_PRESS -> node_AGE_OF_REASON	[color="#ffffff88"];
+	node_PRINTING_PRESS -> node_NATIONALISM	[color="#ffffff88"];
+	node_BUREAUCRACY -> node_CLASSICAL_EDUCATION	[color="#ffffff88"];
+	node_BUREAUCRACY -> node_OCEAN_FARING	[color="#ffffff88"];
+	node_OCEAN_FARING -> node_OPTICS	[color="#ffffff88"];
+	node_OPTICS -> node_CHEMISTRY	[color="#ffffff88"];
+	node_NAVAL_TACTICS -> node_NAVAL_AVIATION	[color="#ffffff88"];
+	node_CHAOS_THEORY -> node_UNIFIED_PHYSICS	[color="#ffffff88"];
+	node_CHAOS_THEORY -> node_EUGENICS	[color="#ffffff88"];
+	node_CHAOS_THEORY -> node_FUSION	[color="#ffffff88"];
+	node_EUGENICS -> node_CYBERNETICS	[color="#ffffff88"];
+	node_EUGENICS -> node_GENETIC_TAILORING	[color="#ffffff88"];
+	node_FUSION -> node_PLASMA_WEAPONRY	[color="#ffffff88"];
+	node_CYBERNETICS -> node_LIFE_EXTENSION	[color="#ffffff88"];
+	node_CYBERNETICS -> node_SMART_MATERIALS	[color="#ffffff88"];
+	node_GENETIC_TAILORING -> node_LIFE_EXTENSION	[color="#ffffff88"];
+	node_PLASMA_WEAPONRY -> node_NANO_WARFARE	[color="#ffffff88"];
+	node_NATIONALISM -> node_DEMOCRACY	[color="#ffffff88"];
+	node_NATIONALISM -> node_FASCISM	[color="#ffffff88"];
+	node_NUCLEAR_POWER -> node_ROBOTICS	[color="#ffffff88"];
+	node_NUCLEAR_POWER -> node_GLOBAL_COMMUNICATIONS	[color="#ffffff88"];
+	node_COMPUTER -> node_GUIDED_WEAPON_SYSTEMS	[color="#ffffff88"];
+	node_COMPUTER -> node_QUANTUM_MECHANICS	[color="#ffffff88"];
+	node_QUANTUM_MECHANICS -> node_NUCLEAR_POWER	[color="#ffffff88"];
+	node_QUANTUM_MECHANICS -> node_FUEL_CELLS	[color="#ffffff88"];
+	node_FUEL_CELLS -> node_HT_SUPERCONDUCTOR	[color="#ffffff88"];
+	node_FUEL_CELLS -> node_SPACE_FLIGHT	[color="#ffffff88"];
+	node_CONSERVATION -> node_ADVANCED_COMPOSITES	[color="#ffffff88"];
+	node_CONSERVATION -> node_FUEL_CELLS	[color="#ffffff88"];
+	node_CORPORATE_REPUBLIC -> node_GLOBAL_ECONOMICS	[color="#ffffff88"];
+	node_CORPORATE_REPUBLIC -> node_SUPERSONIC_FLIGHT	[color="#ffffff88"];
+	node_CORPORATE_REPUBLIC -> node_COMPUTER	[color="#ffffff88"];
+	node_CORPORATE_REPUBLIC -> node_MASS_TRANSIT	[color="#ffffff88"];
+	node_MASS_TRANSIT -> node_ADV_URBAN_PLANNING	[color="#ffffff88"];
+	node_MASS_TRANSIT -> node_CONSERVATION	[color="#ffffff88"];
+	node_GLOBAL_DEFENSE -> node_GLOBAL_COMMUNICATIONS	[color="#ffffff88"];
+	node_CORPORATION -> node_VERTICAL_FLIGHT_AIRCRAFT	[color="#ffffff88"];
+	node_CORPORATION -> node_CORPORATE_REPUBLIC	[color="#ffffff88"];
+	node_CORPORATION -> node_MEDICINE	[color="#ffffff88"];
+	node_CORPORATION -> node_TANK_WARFARE	[color="#ffffff88"];
+	node_MEDICINE -> node_LIQUID_BREATHING_APPARATUS	[color="#ffffff88"];
+	node_MEDICINE -> node_GENETICS	[color="#ffffff88"];
+	node_CRIMINAL_CODE -> node_CORPORATE_REPUBLIC	[color="#ffffff88"];
+	node_SMART_MATERIALS -> node_GAIA_CONTROLLER	[color="#ffffff88"];
+	node_NANO_MACHINES -> node_ULTRAPRESSURE_MACHINERY	[color="#ffffff88"];
+	node_NANO_MACHINES -> node_ECOTOPIA	[color="#ffffff88"];
+	node_NANO_MACHINES -> node_NANO_WARFARE	[color="#ffffff88"];
+	node_ECOTOPIA -> node_GAIA_THEORY	[color="#ffffff88"];
+	node_DRAMA -> node_PHILOSOPHY	[color="#ffffff88"];
+	node_THEOLOGY -> node_NATIONALISM	[color="#ffffff88"];
+	node_GAIA_THEORY -> node_GAIA_CONTROLLER	[color="#ffffff88"];
+	node_INTERNAL_COMBUSTION -> node_AERODYNAMICS	[color="#ffffff88"];
+	node_INTERNAL_COMBUSTION -> node_MASS_TRANSIT	[color="#ffffff88"];
+	node_INTERNAL_COMBUSTION -> node_TANK_WARFARE	[color="#ffffff88"];
+	node_NANO_WARFARE -> node_SMART_MATERIALS	[color="#ffffff88"];
+	node_GLOBAL_COMMUNICATIONS -> node_DIGITAL_ENCRYPTION	[color="#ffffff88"];
+	node_GLOBAL_COMMUNICATIONS -> node_TECHNOCRACY	[color="#ffffff88"];
+	node_JURISPRUDENCE -> node_BUREAUCRACY	[color="#ffffff88"];
+	node_JURISPRUDENCE -> node_THEOLOGY	[color="#ffffff88"];
+	node_MASONRY -> node_CONCRETE	[color="#ffffff88"];
+	node_MASONRY -> node_FEUDALISM	[color="#ffffff88"];
+	node_RELIGION -> node_SLAVE_LABOR	[color="#ffffff88"];
+	node_RELIGION -> node_DRAMA	[color="#ffffff88"];
+	node_SHIP_BUILDING -> node_ALCHEMY	[color="#ffffff88"];
+	node_SHIP_BUILDING -> node_HULL_MAKING	[color="#ffffff88"];
+	node_STONE_WORKING -> node_MASONRY	[color="#ffffff88"];
+	node_TOOLMAKING -> node_BALLISTICS	[color="#ffffff88"];
+	node_TOOLMAKING -> node_BRONZE_WORKING	[color="#ffffff88"];
+	node_TOOLMAKING -> node_MASONRY	[color="#ffffff88"];
+	node_WRITING -> node_TRADE	[color="#ffffff88"];
+	node_WRITING -> node_DRAMA	[color="#ffffff88"];
+	node_WRITING -> node_JURISPRUDENCE	[color="#ffffff88"];
+}
