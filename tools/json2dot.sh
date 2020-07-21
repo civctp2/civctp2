@@ -8,7 +8,7 @@ jq -r 'to_entries[] | .key as $k | .value[]? | if $k != . then if . | startswith
     | cat <(echo 'digraph G {') \
           <(echo 'imagepath="pic555"') \
           <(echo 'rankdir=LR') \
-          <(echo 'node [fontname="Sans serif" fontsize=7.0]') \
+          <(echo 'node [fontname="Sans serif" fontsize=8.0]') \
           <(echo 'forcelabels=true;') \
 	  - \
 	  <(echo '}')
