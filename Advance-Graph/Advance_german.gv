@@ -13,7 +13,7 @@ digraph G {
 		subgraph cluster_AGE_SIX {
 			graph [color="#88888855",
 				fontcolor="#88888855",
-				label=AGE_SIX
+				label="Moderne"
 			];
 			node_ADV_INFANTRY_TACTICS	[color="#ff000055",
 				fontcolor="#ffffff88",
@@ -150,7 +150,7 @@ digraph G {
 		subgraph cluster_AGE_EIGHT {
 			graph [color="#88888855",
 				fontcolor="#88888855",
-				label=AGE_EIGHT
+				label="Genetische Ära"
 			];
 			node_ARCOLOGIES	[color="#88888855",
 				fontcolor="#ffffff88",
@@ -239,7 +239,7 @@ digraph G {
 		subgraph cluster_AGE_SEVEN {
 			graph [color="#88888855",
 				fontcolor="#88888855",
-				label=AGE_SEVEN
+				label="Informationszeitalter"
 			];
 			node_ADVANCED_COMPOSITES	[color="#88888855",
 				fontcolor="#ffffff88",
@@ -315,7 +315,7 @@ digraph G {
 		subgraph cluster_AGE_NINE {
 			graph [color="#88888855",
 				fontcolor="#88888855",
-				label=AGE_NINE
+				label="Diamantene Ära"
 			];
 			node_ULTRAPRESSURE_MACHINERY	[color="#88888855",
 				fontcolor="#ffffff88",
@@ -412,7 +412,7 @@ digraph G {
 		subgraph cluster_AGE_FOUR {
 			graph [color="#88888855",
 				fontcolor="#88888855",
-				label=AGE_FOUR
+				label="Renaissance"
 			];
 			node_AGE_OF_REASON	[color="#88888855",
 				fontcolor="#ffffff88",
@@ -494,7 +494,7 @@ digraph G {
 		subgraph cluster_AGE_FIVE {
 			graph [color="#88888855",
 				fontcolor="#88888855",
-				label=AGE_FIVE
+				label="Industriezeitalter"
 			];
 			node_DEMOCRACY	[color="#88888855",
 				fontcolor="#ffffff88",
@@ -588,7 +588,7 @@ digraph G {
 		subgraph cluster_AGE_THREE {
 			graph [color="#88888855",
 				fontcolor="#88888855",
-				label=AGE_THREE
+				label="Mittelalter"
 			];
 			node_AGRICULTURAL_REVOLUTION	[color="#88888855",
 				fontcolor="#ffffff88",
@@ -663,7 +663,7 @@ digraph G {
 		subgraph cluster_AGE_ONE {
 			graph [color="#88888855",
 				fontcolor="#88888855",
-				label=AGE_ONE
+				label="Antike"
 			];
 			node_AGRICULTURE	[color="#00ff0055",
 				fontcolor="#ffffff88",
@@ -731,7 +731,7 @@ digraph G {
 		subgraph cluster_AGE_TWO {
 			graph [color="#88888855",
 				fontcolor="#88888855",
-				label=AGE_TWO
+				label="Klassik"
 			];
 			node_SLAVE_LABOR	[color="#ff000055",
 				fontcolor="#ffffff88",
@@ -779,7 +779,7 @@ digraph G {
 		subgraph cluster_AGE_TEN {
 			graph [color="#88888855",
 				fontcolor="#88888855",
-				label=AGE_TEN
+				label="Zukunft"
 			];
 			node_NEURAL_REPROGRAMMING	[color="#ff000055",
 				fontcolor="#ffffff88",

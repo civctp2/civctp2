@@ -12,52 +12,52 @@
 <g id="clust2" class="cluster">
 <title>cluster_AGE_SIX</title>
 <polygon fill="#111111" stroke="#888888" stroke-opacity="0.333333" points="2533,-510.8 2533,-1327.8 3377,-1327.8 3377,-510.8 2533,-510.8"/>
-<text text-anchor="middle" x="2955" y="-1312.6" font-family="Times,serif" font-size="14.00" fill="#888888" fill-opacity="0.333333">AGE_SIX</text>
+<text text-anchor="middle" x="2955" y="-1312.6" font-family="Times,serif" font-size="14.00" fill="#888888" fill-opacity="0.333333">Modern</text>
 </g>
 <g id="clust3" class="cluster">
 <title>cluster_AGE_EIGHT</title>
 <polygon fill="#111111" stroke="#888888" stroke-opacity="0.333333" points="3765,-270.8 3765,-935.8 4257,-935.8 4257,-270.8 3765,-270.8"/>
-<text text-anchor="middle" x="4011" y="-920.6" font-family="Times,serif" font-size="14.00" fill="#888888" fill-opacity="0.333333">AGE_EIGHT</text>
+<text text-anchor="middle" x="4011" y="-920.6" font-family="Times,serif" font-size="14.00" fill="#888888" fill-opacity="0.333333">Genetic</text>
 </g>
 <g id="clust4" class="cluster">
 <title>cluster_AGE_SEVEN</title>
 <polygon fill="#111111" stroke="#888888" stroke-opacity="0.333333" points="3061,-109.8 3061,-510.8 3729,-510.8 3729,-109.8 3061,-109.8"/>
-<text text-anchor="middle" x="3395" y="-495.6" font-family="Times,serif" font-size="14.00" fill="#888888" fill-opacity="0.333333">AGE_SEVEN</text>
+<text text-anchor="middle" x="3395" y="-495.6" font-family="Times,serif" font-size="14.00" fill="#888888" fill-opacity="0.333333">Information Age</text>
 </g>
 <g id="clust5" class="cluster">
 <title>cluster_AGE_NINE</title>
 <polygon fill="#111111" stroke="#888888" stroke-opacity="0.333333" points="4117,-935.8 4117,-1468.8 4785,-1468.8 4785,-935.8 4117,-935.8"/>
-<text text-anchor="middle" x="4451" y="-1453.6" font-family="Times,serif" font-size="14.00" fill="#888888" fill-opacity="0.333333">AGE_NINE</text>
+<text text-anchor="middle" x="4451" y="-1453.6" font-family="Times,serif" font-size="14.00" fill="#888888" fill-opacity="0.333333">Diamond</text>
 </g>
 <g id="clust6" class="cluster">
 <title>cluster_AGE_FOUR</title>
 <polygon fill="#111111" stroke="#888888" stroke-opacity="0.333333" points="1477,-241.8 1477,-774.8 2145,-774.8 2145,-241.8 1477,-241.8"/>
-<text text-anchor="middle" x="1811" y="-759.6" font-family="Times,serif" font-size="14.00" fill="#888888" fill-opacity="0.333333">AGE_FOUR</text>
+<text text-anchor="middle" x="1811" y="-759.6" font-family="Times,serif" font-size="14.00" fill="#888888" fill-opacity="0.333333">Renaissance</text>
 </g>
 <g id="clust7" class="cluster">
 <title>cluster_AGE_FIVE</title>
 <polygon fill="#111111" stroke="#888888" stroke-opacity="0.333333" points="2005,-774.8 2005,-1703.8 2497,-1703.8 2497,-774.8 2005,-774.8"/>
-<text text-anchor="middle" x="2251" y="-1688.6" font-family="Times,serif" font-size="14.00" fill="#888888" fill-opacity="0.333333">AGE_FIVE</text>
+<text text-anchor="middle" x="2251" y="-1688.6" font-family="Times,serif" font-size="14.00" fill="#888888" fill-opacity="0.333333">Industrial</text>
 </g>
 <g id="clust8" class="cluster">
 <title>cluster_AGE_THREE</title>
 <polygon fill="#111111" stroke="#888888" stroke-opacity="0.333333" points="773,-330.8 773,-863.8 1441,-863.8 1441,-330.8 773,-330.8"/>
-<text text-anchor="middle" x="1107" y="-848.6" font-family="Times,serif" font-size="14.00" fill="#888888" fill-opacity="0.333333">AGE_THREE</text>
+<text text-anchor="middle" x="1107" y="-848.6" font-family="Times,serif" font-size="14.00" fill="#888888" fill-opacity="0.333333">Middle Ages</text>
 </g>
 <g id="clust9" class="cluster">
 <title>cluster_AGE_ONE</title>
 <polygon fill="#111111" stroke="#888888" stroke-opacity="0.333333" points="69,-236.8 69,-1033.8 385,-1033.8 385,-236.8 69,-236.8"/>
-<text text-anchor="middle" x="227" y="-1018.6" font-family="Times,serif" font-size="14.00" fill="#888888" fill-opacity="0.333333">AGE_ONE</text>
+<text text-anchor="middle" x="227" y="-1018.6" font-family="Times,serif" font-size="14.00" fill="#888888" fill-opacity="0.333333">Ancient</text>
 </g>
 <g id="clust10" class="cluster">
 <title>cluster_AGE_TWO</title>
 <polygon fill="#111111" stroke="#888888" stroke-opacity="0.333333" points="421,-473.8 421,-1138.8 737,-1138.8 737,-473.8 421,-473.8"/>
-<text text-anchor="middle" x="579" y="-1123.6" font-family="Times,serif" font-size="14.00" fill="#888888" fill-opacity="0.333333">AGE_TWO</text>
+<text text-anchor="middle" x="579" y="-1123.6" font-family="Times,serif" font-size="14.00" fill="#888888" fill-opacity="0.333333">Classic</text>
 </g>
 <g id="clust11" class="cluster">
 <title>cluster_AGE_TEN</title>
 <polygon fill="#111111" stroke="#888888" stroke-opacity="0.333333" points="4821,-1187.8 4821,-1588.8 4961,-1588.8 4961,-1187.8 4821,-1187.8"/>
-<text text-anchor="middle" x="4891" y="-1573.6" font-family="Times,serif" font-size="14.00" fill="#888888" fill-opacity="0.333333">AGE_TEN</text>
+<text text-anchor="middle" x="4891" y="-1573.6" font-family="Times,serif" font-size="14.00" fill="#888888" fill-opacity="0.333333">Future</text>
 </g>
 <!-- node_ADV_INFANTRY_TACTICS -->
 <g id="node1" class="node">
