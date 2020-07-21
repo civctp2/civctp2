@@ -20,12 +20,13 @@ all : Advance_spanish.gv
 
 Advance_%.gv_ : Advance.json ../ctp2_data/%/gamedata/gl_str.txt
 	../tools/json2dot.sh < $< > $@
-	awk -v FPAT='([^ \t]+)|("[^"]+")' ' !/^#/ && NF>1 {gsub("\"","", $$2); cmd = sprintf("sed -i \"/label/s/%s/%s/g\" $@", $$1, $$2); system(cmd)}' $(word 2,$^)
+	awk -v FPAT='([^ \t]+)|("[^"]+")' ' !/^#/ && NF>1 {gsub("\"","", $$2); cmd = sprintf("sed -i \"/label/s/%s/%s/g\" $@", $$1, $$2); system(cmd)}' $(word 2,$^)  # 1st look-up run needed before gvpr removes unnecessary double-quotes
 
-%.gv : %.gv_
+Advance_%.gv : Advance_%.gv_ ../ctp2_data/%/gamedata/gl_str.txt
 	gvpr -c 'N[$$.degree==0]{delete(root, $$)}' $< `# remove nodes without any edges, e.g. DEFAULT, SUBNEURAL_ADS, MIND_CONTROL ` \
 	| tred `# removes edges implied by transitivity ` \
 	| gvpr -c -f ../tools/reformat.g > $@ 
+	awk -v FPAT='([^ \t]+)|("[^"]+")' ' !/^#/ && NF>1 {gsub("\"","", $$2); cmd = sprintf("sed -i \"/label/s/%s/\\\"%s\\\"/g\" $@", $$1, $$2); system(cmd)}' $(word 2,$^)  # 2nd look-up run needed for cluster label introduced by reformat.g
 
 %.png : %.gv
 	dot $< -Gcharset=latin1 -Gsize=8 -Gdpi=100 -Tpng > $@ # https://stackoverflow.com/questions/14784405/how-to-set-the-output-size-in-graphviz-for-the-dot-format
