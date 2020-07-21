@@ -7,7 +7,7 @@ digraph G {
 		rankdir=LR
 	];
 	node [fontname="Sans serif",
-		fontsize=7.0
+		fontsize=8.0
 	];
 	subgraph gvpr_result {
 		subgraph cluster_AGE_SIX {
