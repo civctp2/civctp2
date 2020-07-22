@@ -35,14 +35,14 @@ digraph G {
 				label=<<TABLE border="0" cellspacing="0" cellborder="0"><TR><TD><IMG SCALE="TRUE" SRC="cm2_upap003l.png"/></TD></TR><TR><TD><B>Adv. Urban Planning</B></TD></TR></TABLE>>,
 				shape=box,
 				style=filled,
-				xlabel="Mega Mine,Mega Mine,Mega Mine,Urban Planner"];
+				xlabel="Mega Mine,Urban Planner"];
 			node_AERODYNAMICS	[color="#88888855",
 				fontcolor="#ffffff88",
 				group=AGE_SIX,
 				label=<<TABLE border="0" cellspacing="0" cellborder="0"><TR><TD><IMG SCALE="TRUE" SRC="cm2_upap005l.png"/></TD></TR><TR><TD><B>Aerodynamics</B></TD></TR></TABLE>>,
 				shape=box,
 				style=filled,
-				xlabel="Airport,Air Base,Air Base,Fighter"];
+				xlabel="Airport,Air Base,Fighter"];
 			node_JET_PROPULSION	[color="#88888855",
 				fontcolor="#ffffff88",
 				group=AGE_SIX,
@@ -179,7 +179,7 @@ digraph G {
 				label=<<TABLE border="0" cellspacing="0" cellborder="0"><TR><TD><IMG SCALE="TRUE" SRC="upap052l.png"/></TD></TR><TR><TD><B>Superconductor</B></TD></TR></TABLE>>,
 				shape=box,
 				style=filled,
-				xlabel="Maglev,Maglev,Maglev,Maglev,Field Dynamics Lab"];
+				xlabel="Maglev,Field Dynamics Lab"];
 			node_LIQUID_BREATHING_APPARATUS	[color="#88888855",
 				fontcolor="#ffffff88",
 				group=AGE_EIGHT,
@@ -207,7 +207,7 @@ digraph G {
 				label=<<TABLE border="0" cellspacing="0" cellborder="0"><TR><TD><IMG SCALE="TRUE" SRC="cm2_upap069l.png"/></TD></TR><TR><TD><B>Nano-Assembly</B></TD></TR></TABLE>>,
 				shape=box,
 				style=filled,
-				xlabel="Nanite Factory,Undersea Tunnel,Undersea Tunnel,Undersea Tunnel,Sea Engineer"];
+				xlabel="Nanite Factory,Undersea Tunnel,Sea Engineer"];
 			node_GENETICS	[color="#88888855",
 				fontcolor="#ffffff88",
 				group=AGE_EIGHT,
@@ -254,7 +254,7 @@ digraph G {
 				label=<<TABLE border="0" cellspacing="0" cellborder="0"><TR><TD><IMG SCALE="TRUE" SRC="cm2_upap090l.png"/></TD></TR><TR><TD><B>Robotics</B></TD></TR></TABLE>>,
 				shape=box,
 				style=filled,
-				xlabel="Robotic Plant,Automated Fishery,Automated Fishery,Automated Fishery"];
+				xlabel="Robotic Plant,Automated Fishery"];
 			node_GLOBAL_ECONOMICS	[color="#88888855",
 				fontcolor="#ffffff88",
 				group=AGE_SEVEN,
@@ -323,7 +323,7 @@ digraph G {
 				label=<<TABLE border="0" cellspacing="0" cellborder="0"><TR><TD><IMG SCALE="TRUE" SRC="upap103l.png"/></TD></TR><TR><TD><B>Ultrapressure Machines</B></TD></TR></TABLE>>,
 				shape=box,
 				style=filled,
-				xlabel="Advanced Undersea Mine,Advanced Undersea Mine,Advanced Undersea Mine,Crawler"];
+				xlabel="Advanced Undersea Mine,Crawler"];
 			node_UNIFIED_PHYSICS	[color="#88888855",
 				fontcolor="#ffffff88",
 				group=AGE_NINE,
@@ -379,14 +379,14 @@ digraph G {
 				label=<<TABLE border="0" cellspacing="0" cellborder="0"><TR><TD><IMG SCALE="TRUE" SRC="upap093l.png"/></TD></TR><TR><TD><B>Smart Materials</B></TD></TR></TABLE>>,
 				shape=box,
 				style=filled,
-				xlabel="Mega Undersea Mine,Mega Undersea Mine,Mega Undersea Mine,Dreadnaught"];
+				xlabel="Mega Undersea Mine,Dreadnaught"];
 			node_NANO_MACHINES	[color="#88888855",
 				fontcolor="#ffffff88",
 				group=AGE_NINE,
 				label=<<TABLE border="0" cellspacing="0" cellborder="0"><TR><TD><IMG SCALE="TRUE" SRC="upap070l.png"/></TD></TR><TR><TD><B>Nano-Machines</B></TD></TR></TABLE>>,
 				shape=box,
 				style=filled,
-				xlabel="Aqua-Filter,Undersea Mine,Undersea Mine,Undersea Mine,Nanite Defuser"];
+				xlabel="Aqua-Filter,Undersea Mine,Nanite Defuser"];
 			node_ECOTOPIA	[color="#88888855",
 				fontcolor="#ffffff88",
 				group=AGE_NINE,
@@ -475,7 +475,7 @@ digraph G {
 				label=<<TABLE border="0" cellspacing="0" cellborder="0"><TR><TD><IMG SCALE="TRUE" SRC="upap078l.png"/></TD></TR><TR><TD><B>Ocean Faring</B></TD></TR></TABLE>>,
 				shape=box,
 				style=filled,
-				xlabel="Fishery,Fishery,Fishery,Carrack,East India Company"];
+				xlabel="Fishery,Carrack,East India Company"];
 			node_OPTICS	[color="#88888855",
 				fontcolor="#ffffff88",
 				group=AGE_FOUR,
@@ -542,7 +542,7 @@ digraph G {
 				label=<<TABLE border="0" cellspacing="0" cellborder="0"><TR><TD><IMG SCALE="TRUE" SRC="cm2_upap088l.png"/></TD></TR><TR><TD><B>Railroad</B></TD></TR></TABLE>>,
 				shape=box,
 				style=filled,
-				xlabel="Food Silo,Railroad,Railroad,Railroad,Railroad"];
+				xlabel="Food Silo,Railroad"];
 			node_ELECTRICITY	[color="#88888855",
 				fontcolor="#ffffff88",
 				group=AGE_FIVE,
@@ -562,7 +562,7 @@ digraph G {
 				label=<<TABLE border="0" cellspacing="0" cellborder="0"><TR><TD><IMG SCALE="TRUE" SRC="upap036l.png"/></TD></TR><TR><TD><B>Explosives</B></TD></TR></TABLE>>,
 				shape=box,
 				style=filled,
-				xlabel="Advanced Mine,Advanced Mine,Advanced Mine,Terraform Sand Dunes,Terraform Hill,Terraform Polar Hill,Artillery"];
+				xlabel="Advanced Mine,Terraform Sand Dunes,Terraform Hill,Terraform Polar Hill,Artillery"];
 			node_FASCISM	[color="#ff000055",
 				fontcolor="#ffffff88",
 				group=AGE_FIVE,
@@ -678,7 +678,7 @@ digraph G {
 				label=<<TABLE border="0" cellspacing="0" cellborder="0"><TR><TD><IMG SCALE="TRUE" SRC="upap102l.png"/></TD></TR><TR><TD><B>Trade</B></TD></TR></TABLE>>,
 				shape=box,
 				style=filled,
-				xlabel="Bazaar,Road,Road,Road,Road,Caravan,The Appian Way"];
+				xlabel="Bazaar,Road,Caravan,The Appian Way"];
 			node_BRONZE_WORKING	[color="#88888855",
 				fontcolor="#ffffff88",
 				group=AGE_ONE,
@@ -706,7 +706,7 @@ digraph G {
 				label=<<TABLE border="0" cellspacing="0" cellborder="0"><TR><TD><IMG SCALE="TRUE" SRC="upap091l.png"/></TD></TR><TR><TD><B>Shipbuilding</B></TD></TR></TABLE>>,
 				shape=box,
 				style=filled,
-				xlabel="Net,Net,Net,Coracle"];
+				xlabel="Net,Coracle"];
 			node_STONE_WORKING	[color="#00ff0055",
 				fontcolor="#ffffff88",
 				group=AGE_ONE,
@@ -739,7 +739,7 @@ digraph G {
 				label=<<TABLE border="0" cellspacing="0" cellborder="0"><TR><TD><IMG SCALE="TRUE" SRC="cm2_upap092l.png"/></TD></TR><TR><TD><B>Slave Labor</B></TD></TR></TABLE>>,
 				shape=box,
 				style=filled,
-				xlabel="Mine,Mine,Mine,Slaver"];
+				xlabel="Mine,Slaver"];
 			node_IRON_WORKING	[color="#88888855",
 				fontcolor="#ffffff88",
 				group=AGE_TWO,

@@ -81,7 +81,7 @@
 <polygon fill="#888888" fill-opacity="0.333333" stroke="#888888" stroke-opacity="0.333333" points="3515,-1161.36 3375,-1161.36 3375,-1046.36 3515,-1046.36 3515,-1161.36"/>
 <image xlink:href="pic555/cm2_upap003l.png" width="120px" height="90px" preserveAspectRatio="xMinYMin meet" x="3385" y="-1154.86"/>
 <text text-anchor="start" x="3397.5" y="-1055.46" font-family="Sans serif" font-weight="bold" font-size="8.00" fill="#ffffff" fill-opacity="0.533333">Adv. Urban Planning</text>
-<text text-anchor="middle" x="3276" y="-1039.96" font-family="Sans serif" font-size="8.00" fill="#ffffff" fill-opacity="0.533333">Mega Mine,Mega Mine,Mega Mine,Urban Planner</text>
+<text text-anchor="middle" x="3322.5" y="-1039.96" font-family="Sans serif" font-size="8.00" fill="#ffffff" fill-opacity="0.533333">Mega Mine,Urban Planner</text>
 </g>
 <!-- node_ARCOLOGIES -->
 <g id="node20" class="node">
@@ -103,7 +103,7 @@
 <polygon fill="#888888" fill-opacity="0.333333" stroke="#888888" stroke-opacity="0.333333" points="2987,-895.36 2847,-895.36 2847,-780.36 2987,-780.36 2987,-895.36"/>
 <image xlink:href="pic555/cm2_upap005l.png" width="120px" height="90px" preserveAspectRatio="xMinYMin meet" x="2857" y="-888.857"/>
 <text text-anchor="start" x="2885" y="-789.46" font-family="Sans serif" font-weight="bold" font-size="8.00" fill="#ffffff" fill-opacity="0.533333">Aerodynamics</text>
-<text text-anchor="middle" x="2783" y="-773.96" font-family="Sans serif" font-size="8.00" fill="#ffffff" fill-opacity="0.533333">Airport,Air Base,Air Base,Fighter</text>
+<text text-anchor="middle" x="2800.5" y="-773.96" font-family="Sans serif" font-size="8.00" fill="#ffffff" fill-opacity="0.533333">Airport,Air Base,Fighter</text>
 </g>
 <!-- node_JET_PROPULSION -->
 <g id="node5" class="node">
@@ -290,7 +290,7 @@
 <polygon fill="#888888" fill-opacity="0.333333" stroke="#888888" stroke-opacity="0.333333" points="3691,-225.36 3551,-225.36 3551,-110.36 3691,-110.36 3691,-225.36"/>
 <image xlink:href="pic555/cm2_upap077l.png" width="120px" height="90px" preserveAspectRatio="xMinYMin meet" x="3561" y="-218.857"/>
 <text text-anchor="start" x="3588" y="-119.46" font-family="Sans serif" font-weight="bold" font-size="8.00" fill="#ffffff" fill-opacity="0.533333">Nuclear Power</text>
-<text text-anchor="middle" x="3472" y="-227.96" font-family="Sans serif" font-size="8.00" fill="#ffffff" fill-opacity="0.533333">Nuclear Plant,Nuclear Submarine,Nuke</text>
+<text text-anchor="middle" x="3472" y="-103.96" font-family="Sans serif" font-size="8.00" fill="#ffffff" fill-opacity="0.533333">Nuclear Plant,Nuclear Submarine,Nuke</text>
 </g>
 <!-- node_QUANTUM_MECHANICS&#45;&gt;node_NUCLEAR_POWER -->
 <g id="edge138" class="edge">
@@ -353,7 +353,7 @@
 <polygon fill="#888888" fill-opacity="0.333333" stroke="#888888" stroke-opacity="0.333333" points="3339,-1161.36 3199,-1161.36 3199,-1046.36 3339,-1046.36 3339,-1161.36"/>
 <image xlink:href="pic555/cm2_upap065l.png" width="120px" height="90px" preserveAspectRatio="xMinYMin meet" x="3209" y="-1154.86"/>
 <text text-anchor="start" x="3240.5" y="-1055.46" font-family="Sans serif" font-weight="bold" font-size="8.00" fill="#ffffff" fill-opacity="0.533333">Mass Transit</text>
-<text text-anchor="middle" x="3156" y="-1163.96" font-family="Sans serif" font-size="8.00" fill="#ffffff" fill-opacity="0.533333">Public Transportation</text>
+<text text-anchor="middle" x="3156" y="-1039.96" font-family="Sans serif" font-size="8.00" fill="#ffffff" fill-opacity="0.533333">Public Transportation</text>
 </g>
 <!-- node_CORPORATE_REPUBLIC&#45;&gt;node_MASS_TRANSIT -->
 <g id="edge147" class="edge">
@@ -445,7 +445,7 @@
 <polygon fill="#888888" fill-opacity="0.333333" stroke="#888888" stroke-opacity="0.333333" points="4043,-786.36 3903,-786.36 3903,-671.36 4043,-671.36 4043,-786.36"/>
 <image xlink:href="pic555/upap061l.png" width="120px" height="90px" preserveAspectRatio="xMinYMin meet" x="3913" y="-779.857"/>
 <text text-anchor="start" x="3937" y="-680.46" font-family="Sans serif" font-weight="bold" font-size="8.00" fill="#ffffff" fill-opacity="0.533333">Fluid Breathing</text>
-<text text-anchor="middle" x="3882" y="-673.96" font-family="Sans serif" font-size="8.00" fill="#ffffff" fill-opacity="0.533333">Scout Sub</text>
+<text text-anchor="middle" x="3882" y="-664.96" font-family="Sans serif" font-size="8.00" fill="#ffffff" fill-opacity="0.533333">Scout Sub</text>
 </g>
 <!-- node_MEDICINE&#45;&gt;node_LIQUID_BREATHING_APPARATUS -->
 <g id="edge155" class="edge">
@@ -533,7 +533,7 @@
 <polygon fill="#888888" fill-opacity="0.333333" stroke="#888888" stroke-opacity="0.333333" points="4395,-919.36 4255,-919.36 4255,-804.36 4395,-804.36 4395,-919.36"/>
 <image xlink:href="pic555/cm2_upap069l.png" width="120px" height="90px" preserveAspectRatio="xMinYMin meet" x="4265" y="-912.857"/>
 <text text-anchor="start" x="4290" y="-813.46" font-family="Sans serif" font-weight="bold" font-size="8.00" fill="#ffffff" fill-opacity="0.533333">Nano&#45;Assembly</text>
-<text text-anchor="middle" x="4560" y="-797.96" font-family="Sans serif" font-size="8.00" fill="#ffffff" fill-opacity="0.533333">Nanite Factory,Undersea Tunnel,Undersea Tunnel,Undersea Tunnel,Sea Engineer</text>
+<text text-anchor="middle" x="4301.5" y="-797.96" font-family="Sans serif" font-size="8.00" fill="#ffffff" fill-opacity="0.533333">Nanite Factory,Undersea Tunnel,Sea Engineer</text>
 </g>
 <!-- node_DIGITAL_ENCRYPTION&#45;&gt;node_NANO_ASSEMBLY -->
 <g id="edge4" class="edge">
@@ -603,7 +603,7 @@
 <polygon fill="#888888" fill-opacity="0.333333" stroke="#888888" stroke-opacity="0.333333" points="4219,-786.36 4079,-786.36 4079,-671.36 4219,-671.36 4219,-786.36"/>
 <image xlink:href="pic555/upap052l.png" width="120px" height="90px" preserveAspectRatio="xMinYMin meet" x="4089" y="-779.857"/>
 <text text-anchor="start" x="4112.5" y="-680.46" font-family="Sans serif" font-weight="bold" font-size="8.00" fill="#ffffff" fill-opacity="0.533333">Superconductor</text>
-<text text-anchor="middle" x="3976.5" y="-664.96" font-family="Sans serif" font-size="8.00" fill="#ffffff" fill-opacity="0.533333">Maglev,Maglev,Maglev,Maglev,Field Dynamics Lab</text>
+<text text-anchor="middle" x="4024" y="-664.96" font-family="Sans serif" font-size="8.00" fill="#ffffff" fill-opacity="0.533333">Maglev,Field Dynamics Lab</text>
 </g>
 <!-- node_NEURAL_INTERFACE -->
 <g id="node26" class="node">
@@ -625,7 +625,7 @@
 <polygon fill="#888888" fill-opacity="0.333333" stroke="#888888" stroke-opacity="0.333333" points="4747,-1456.36 4607,-1456.36 4607,-1341.36 4747,-1341.36 4747,-1456.36"/>
 <image xlink:href="pic555/upap103l.png" width="120px" height="90px" preserveAspectRatio="xMinYMin meet" x="4617" y="-1449.86"/>
 <text text-anchor="start" x="4623" y="-1350.46" font-family="Sans serif" font-weight="bold" font-size="8.00" fill="#ffffff" fill-opacity="0.533333">Ultrapressure Machines</text>
-<text text-anchor="middle" x="4431.5" y="-1334.96" font-family="Sans serif" font-size="8.00" fill="#ffffff" fill-opacity="0.533333">Advanced Undersea Mine,Advanced Undersea Mine,Advanced Undersea Mine,Crawler</text>
+<text text-anchor="middle" x="4538" y="-1334.96" font-family="Sans serif" font-size="8.00" fill="#ffffff" fill-opacity="0.533333">Advanced Undersea Mine,Crawler</text>
 </g>
 <!-- node_LIQUID_BREATHING_APPARATUS&#45;&gt;node_ULTRAPRESSURE_MACHINERY -->
 <g id="edge15" class="edge">
@@ -687,7 +687,7 @@
 <polygon fill="#888888" fill-opacity="0.333333" stroke="#888888" stroke-opacity="0.333333" points="4571,-1323.36 4431,-1323.36 4431,-1208.36 4571,-1208.36 4571,-1323.36"/>
 <image xlink:href="pic555/upap070l.png" width="120px" height="90px" preserveAspectRatio="xMinYMin meet" x="4441" y="-1316.86"/>
 <text text-anchor="start" x="4466" y="-1217.46" font-family="Sans serif" font-weight="bold" font-size="8.00" fill="#ffffff" fill-opacity="0.533333">Nano&#45;Machines</text>
-<text text-anchor="middle" x="4281.5" y="-1201.96" font-family="Sans serif" font-size="8.00" fill="#ffffff" fill-opacity="0.533333">Aqua&#45;Filter,Undersea Mine,Undersea Mine,Undersea Mine,Nanite Defuser</text>
+<text text-anchor="middle" x="4345" y="-1201.96" font-family="Sans serif" font-size="8.00" fill="#ffffff" fill-opacity="0.533333">Aqua&#45;Filter,Undersea Mine,Nanite Defuser</text>
 </g>
 <!-- node_NANO_ASSEMBLY&#45;&gt;node_NANO_MACHINES -->
 <g id="edge25" class="edge">
@@ -778,7 +778,7 @@
 <polygon fill="#888888" fill-opacity="0.333333" stroke="#888888" stroke-opacity="0.333333" points="4571,-1456.36 4431,-1456.36 4431,-1341.36 4571,-1341.36 4571,-1456.36"/>
 <image xlink:href="pic555/upap043l.png" width="120px" height="90px" preserveAspectRatio="xMinYMin meet" x="4441" y="-1449.86"/>
 <text text-anchor="start" x="4462" y="-1350.46" font-family="Sans serif" font-weight="bold" font-size="8.00" fill="#ffffff" fill-opacity="0.533333">Genetic Tailoring</text>
-<text text-anchor="middle" x="4382.5" y="-1458.96" font-family="Sans serif" font-size="8.00" fill="#ffffff" fill-opacity="0.533333">Cornucopic Vats,Kraken</text>
+<text text-anchor="middle" x="4382.5" y="-1334.96" font-family="Sans serif" font-size="8.00" fill="#ffffff" fill-opacity="0.533333">Cornucopic Vats,Kraken</text>
 </g>
 <!-- node_EUGENICS&#45;&gt;node_GENETIC_TAILORING -->
 <g id="edge126" class="edge">
@@ -816,7 +816,7 @@
 <polygon fill="#888888" fill-opacity="0.333333" stroke="#888888" stroke-opacity="0.333333" points="3867,-225.36 3727,-225.36 3727,-110.36 3867,-110.36 3867,-225.36"/>
 <image xlink:href="pic555/cm2_upap090l.png" width="120px" height="90px" preserveAspectRatio="xMinYMin meet" x="3737" y="-218.857"/>
 <text text-anchor="start" x="3777.5" y="-119.46" font-family="Sans serif" font-weight="bold" font-size="8.00" fill="#ffffff" fill-opacity="0.533333">Robotics</text>
-<text text-anchor="middle" x="3583" y="-103.96" font-family="Sans serif" font-size="8.00" fill="#ffffff" fill-opacity="0.533333">Robotic Plant,Automated Fishery,Automated Fishery,Automated Fishery</text>
+<text text-anchor="middle" x="3661" y="-103.96" font-family="Sans serif" font-size="8.00" fill="#ffffff" fill-opacity="0.533333">Robotic Plant,Automated Fishery</text>
 </g>
 <!-- node_ADVANCED_COMPOSITES&#45;&gt;node_ROBOTICS -->
 <g id="edge12" class="edge">
@@ -1002,7 +1002,7 @@
 <polygon fill="#888888" fill-opacity="0.333333" stroke="#888888" stroke-opacity="0.333333" points="4923,-1190.36 4783,-1190.36 4783,-1075.36 4923,-1075.36 4923,-1190.36"/>
 <image xlink:href="pic555/upap093l.png" width="120px" height="90px" preserveAspectRatio="xMinYMin meet" x="4793" y="-1183.86"/>
 <text text-anchor="start" x="4816.5" y="-1084.46" font-family="Sans serif" font-weight="bold" font-size="8.00" fill="#ffffff" fill-opacity="0.533333">Smart Materials</text>
-<text text-anchor="middle" x="4623" y="-1068.96" font-family="Sans serif" font-size="8.00" fill="#ffffff" fill-opacity="0.533333">Mega Undersea Mine,Mega Undersea Mine,Mega Undersea Mine,Dreadnaught</text>
+<text text-anchor="middle" x="4711.5" y="-1068.96" font-family="Sans serif" font-size="8.00" fill="#ffffff" fill-opacity="0.533333">Mega Undersea Mine,Dreadnaught</text>
 </g>
 <!-- node_CYBERNETICS&#45;&gt;node_SMART_MATERIALS -->
 <g id="edge129" class="edge">
@@ -1036,7 +1036,7 @@
 <polygon fill="#888888" fill-opacity="0.333333" stroke="#888888" stroke-opacity="0.333333" points="4747,-1190.36 4607,-1190.36 4607,-1075.36 4747,-1075.36 4747,-1190.36"/>
 <image xlink:href="pic555/upap071l.png" width="120px" height="90px" preserveAspectRatio="xMinYMin meet" x="4617" y="-1183.86"/>
 <text text-anchor="start" x="4645.5" y="-1084.46" font-family="Sans serif" font-weight="bold" font-size="8.00" fill="#ffffff" fill-opacity="0.533333">Nano&#45;Warfare</text>
-<text text-anchor="middle" x="4560.5" y="-1192.96" font-family="Sans serif" font-size="8.00" fill="#ffffff" fill-opacity="0.533333">Micro Defense,Infector</text>
+<text text-anchor="middle" x="4560.5" y="-1068.96" font-family="Sans serif" font-size="8.00" fill="#ffffff" fill-opacity="0.533333">Micro Defense,Infector</text>
 </g>
 <!-- node_PLASMA_WEAPONRY&#45;&gt;node_NANO_WARFARE -->
 <g id="edge131" class="edge">
@@ -1197,7 +1197,7 @@
 <polygon fill="#888888" fill-opacity="0.333333" stroke="#888888" stroke-opacity="0.333333" points="2635,-1560.36 2495,-1560.36 2495,-1445.36 2635,-1445.36 2635,-1560.36"/>
 <image xlink:href="pic555/upap036l.png" width="120px" height="90px" preserveAspectRatio="xMinYMin meet" x="2505" y="-1553.86"/>
 <text text-anchor="start" x="2541" y="-1454.46" font-family="Sans serif" font-weight="bold" font-size="8.00" fill="#ffffff" fill-opacity="0.533333">Explosives</text>
-<text text-anchor="middle" x="2861.5" y="-1438.96" font-family="Sans serif" font-size="8.00" fill="#ffffff" fill-opacity="0.533333">Advanced Mine,Advanced Mine,Advanced Mine,Terraform Sand Dunes,Terraform Hill,Terraform Polar Hill,Artillery</text>
+<text text-anchor="middle" x="2797" y="-1438.96" font-family="Sans serif" font-size="8.00" fill="#ffffff" fill-opacity="0.533333">Advanced Mine,Terraform Sand Dunes,Terraform Hill,Terraform Polar Hill,Artillery</text>
 </g>
 <!-- node_GUNPOWDER&#45;&gt;node_EXPLOSIVES -->
 <g id="edge90" class="edge">
@@ -1295,7 +1295,7 @@
 <polygon fill="#888888" fill-opacity="0.333333" stroke="#888888" stroke-opacity="0.333333" points="2459,-1560.36 2319,-1560.36 2319,-1445.36 2459,-1445.36 2459,-1560.36"/>
 <image xlink:href="pic555/cm2_upap088l.png" width="120px" height="90px" preserveAspectRatio="xMinYMin meet" x="2329" y="-1553.86"/>
 <text text-anchor="start" x="2370" y="-1454.46" font-family="Sans serif" font-weight="bold" font-size="8.00" fill="#ffffff" fill-opacity="0.533333">Railroad</text>
-<text text-anchor="middle" x="2228" y="-1438.96" font-family="Sans serif" font-size="8.00" fill="#ffffff" fill-opacity="0.533333">Food Silo,Railroad,Railroad,Railroad,Railroad</text>
+<text text-anchor="middle" x="2282" y="-1438.96" font-family="Sans serif" font-size="8.00" fill="#ffffff" fill-opacity="0.533333">Food Silo,Railroad</text>
 </g>
 <!-- node_BANKING&#45;&gt;node_RAILROAD -->
 <g id="edge106" class="edge">
@@ -1342,7 +1342,7 @@
 <polygon fill="#888888" fill-opacity="0.333333" stroke="#888888" stroke-opacity="0.333333" points="1755,-358.36 1615,-358.36 1615,-243.36 1755,-243.36 1755,-358.36"/>
 <image xlink:href="pic555/upap078l.png" width="120px" height="90px" preserveAspectRatio="xMinYMin meet" x="1625" y="-351.857"/>
 <text text-anchor="start" x="1655" y="-252.46" font-family="Sans serif" font-weight="bold" font-size="8.00" fill="#ffffff" fill-opacity="0.533333">Ocean Faring</text>
-<text text-anchor="middle" x="1511.5" y="-236.96" font-family="Sans serif" font-size="8.00" fill="#ffffff" fill-opacity="0.533333">Fishery,Fishery,Fishery,Carrack,East India Company</text>
+<text text-anchor="middle" x="1542.5" y="-236.96" font-family="Sans serif" font-size="8.00" fill="#ffffff" fill-opacity="0.533333">Fishery,Carrack,East India Company</text>
 </g>
 <!-- node_OCEAN_FARING&#45;&gt;node_OPTICS -->
 <g id="edge119" class="edge">
@@ -1729,7 +1729,7 @@
 <polygon fill="#888888" fill-opacity="0.333333" stroke="#888888" stroke-opacity="0.333333" points="523,-750.36 383,-750.36 383,-635.36 523,-635.36 523,-750.36"/>
 <image xlink:href="pic555/upap102l.png" width="120px" height="90px" preserveAspectRatio="xMinYMin meet" x="393" y="-743.857"/>
 <text text-anchor="start" x="440.5" y="-644.46" font-family="Sans serif" font-weight="bold" font-size="8.00" fill="#ffffff" fill-opacity="0.533333">Trade</text>
-<text text-anchor="middle" x="410" y="-628.96" font-family="Sans serif" font-size="8.00" fill="#ffffff" fill-opacity="0.533333">Bazaar,Road,Road,Road,Road,Caravan,The Appian Way</text>
+<text text-anchor="middle" x="304.5" y="-628.96" font-family="Sans serif" font-size="8.00" fill="#ffffff" fill-opacity="0.533333">Bazaar,Road,Caravan,The Appian Way</text>
 </g>
 <!-- node_AGRICULTURE&#45;&gt;node_TRADE -->
 <g id="edge70" class="edge">
@@ -1743,7 +1743,7 @@
 <polygon fill="#ff0000" fill-opacity="0.333333" stroke="#ff0000" stroke-opacity="0.333333" points="699,-855.36 559,-855.36 559,-740.36 699,-740.36 699,-855.36"/>
 <image xlink:href="pic555/cm2_upap092l.png" width="120px" height="90px" preserveAspectRatio="xMinYMin meet" x="569" y="-848.857"/>
 <text text-anchor="start" x="602" y="-749.46" font-family="Sans serif" font-weight="bold" font-size="8.00" fill="#ffffff" fill-opacity="0.533333">Slave Labor</text>
-<text text-anchor="middle" x="653.5" y="-733.96" font-family="Sans serif" font-size="8.00" fill="#ffffff" fill-opacity="0.533333">Mine,Mine,Mine,Slaver</text>
+<text text-anchor="middle" x="675" y="-733.96" font-family="Sans serif" font-size="8.00" fill="#ffffff" fill-opacity="0.533333">Mine,Slaver</text>
 </g>
 <!-- node_AGRICULTURE&#45;&gt;node_SLAVE_LABOR -->
 <g id="edge69" class="edge">
@@ -1867,7 +1867,7 @@
 <polygon fill="#00ff00" fill-opacity="0.333333" stroke="#00ff00" stroke-opacity="0.333333" points="347,-484.36 207,-484.36 207,-369.36 347,-369.36 347,-484.36"/>
 <image xlink:href="pic555/upap091l.png" width="120px" height="90px" preserveAspectRatio="xMinYMin meet" x="217" y="-477.857"/>
 <text text-anchor="start" x="246.5" y="-378.46" font-family="Sans serif" font-weight="bold" font-size="8.00" fill="#ffffff" fill-opacity="0.533333">Shipbuilding</text>
-<text text-anchor="middle" x="166.5" y="-362.96" font-family="Sans serif" font-size="8.00" fill="#ffffff" fill-opacity="0.533333">Net,Net,Net,Coracle</text>
+<text text-anchor="middle" x="183" y="-362.96" font-family="Sans serif" font-size="8.00" fill="#ffffff" fill-opacity="0.533333">Net,Coracle</text>
 </g>
 <!-- node_SHIP_BUILDING&#45;&gt;node_ALCHEMY -->
 <g id="edge178" class="edge">

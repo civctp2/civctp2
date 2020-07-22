@@ -35,14 +35,14 @@ digraph G {
 				label=<<TABLE border="0" cellspacing="0" cellborder="0"><TR><TD><IMG SCALE="TRUE" SRC="cm2_upap003l.png"/></TD></TR><TR><TD><B>Stadtplanung</B></TD></TR></TABLE>>,
 				shape=box,
 				style=filled,
-				xlabel="Megabergwerke,Megabergwerke,Megabergwerke,Stadtplaner"];
+				xlabel="Megabergwerke,Stadtplaner"];
 			node_AERODYNAMICS	[color="#88888855",
 				fontcolor="#ffffff88",
 				group=AGE_SIX,
 				label=<<TABLE border="0" cellspacing="0" cellborder="0"><TR><TD><IMG SCALE="TRUE" SRC="cm2_upap005l.png"/></TD></TR><TR><TD><B>Aerodynamik</B></TD></TR></TABLE>>,
 				shape=box,
 				style=filled,
-				xlabel="Flughafen,Luftwaffenstützpunkt,Luftwaffenstützpunkt,Jäger"];
+				xlabel="Flughafen,Luftwaffenstützpunkt,Jäger"];
 			node_JET_PROPULSION	[color="#88888855",
 				fontcolor="#ffffff88",
 				group=AGE_SIX,
@@ -179,7 +179,7 @@ digraph G {
 				label=<<TABLE border="0" cellspacing="0" cellborder="0"><TR><TD><IMG SCALE="TRUE" SRC="upap052l.png"/></TD></TR><TR><TD><B>Supraleiter</B></TD></TR></TABLE>>,
 				shape=box,
 				style=filled,
-				xlabel="Schwebebahnen,Schwebebahnen,Schwebebahnen,Schwebebahnen,Labor f. Felddyn."];
+				xlabel="Schwebebahnen,Labor f. Felddyn."];
 			node_LIQUID_BREATHING_APPARATUS	[color="#88888855",
 				fontcolor="#ffffff88",
 				group=AGE_EIGHT,
@@ -207,7 +207,7 @@ digraph G {
 				label=<<TABLE border="0" cellspacing="0" cellborder="0"><TR><TD><IMG SCALE="TRUE" SRC="cm2_upap069l.png"/></TD></TR><TR><TD><B>Nanokonstruktion</B></TD></TR></TABLE>>,
 				shape=box,
 				style=filled,
-				xlabel="Nanitenproduktion,Tiefseetunnel,Tiefseetunnel,Tiefseetunnel,Meereskolonisator"];
+				xlabel="Nanitenproduktion,Tiefseetunnel,Meereskolonisator"];
 			node_GENETICS	[color="#88888855",
 				fontcolor="#ffffff88",
 				group=AGE_EIGHT,
@@ -254,7 +254,7 @@ digraph G {
 				label=<<TABLE border="0" cellspacing="0" cellborder="0"><TR><TD><IMG SCALE="TRUE" SRC="cm2_upap090l.png"/></TD></TR><TR><TD><B>Roboter</B></TD></TR></TABLE>>,
 				shape=box,
 				style=filled,
-				xlabel="Roboterfabrik,Autom. Tiefseefischereien,Autom. Tiefseefischereien,Autom. Tiefseefischereien"];
+				xlabel="Roboterfabrik,Autom. Tiefseefischereien"];
 			node_GLOBAL_ECONOMICS	[color="#88888855",
 				fontcolor="#ffffff88",
 				group=AGE_SEVEN,
@@ -323,7 +323,7 @@ digraph G {
 				label=<<TABLE border="0" cellspacing="0" cellborder="0"><TR><TD><IMG SCALE="TRUE" SRC="upap103l.png"/></TD></TR><TR><TD><B>Extremdruckmasch.</B></TD></TR></TABLE>>,
 				shape=box,
 				style=filled,
-				xlabel="Große Tiefseebergwerke,Große Tiefseebergwerke,Große Tiefseebergwerke,Crawler"];
+				xlabel="Große Tiefseebergwerke,Crawler"];
 			node_UNIFIED_PHYSICS	[color="#88888855",
 				fontcolor="#ffffff88",
 				group=AGE_NINE,
@@ -379,14 +379,14 @@ digraph G {
 				label=<<TABLE border="0" cellspacing="0" cellborder="0"><TR><TD><IMG SCALE="TRUE" SRC="upap093l.png"/></TD></TR><TR><TD><B>Int. Materialien</B></TD></TR></TABLE>>,
 				shape=box,
 				style=filled,
-				xlabel="Megatiefseebergwerke,Megatiefseebergwerke,Megatiefseebergwerke,Dreadnaught"];
+				xlabel="Megatiefseebergwerke,Dreadnaught"];
 			node_NANO_MACHINES	[color="#88888855",
 				fontcolor="#ffffff88",
 				group=AGE_NINE,
 				label=<<TABLE border="0" cellspacing="0" cellborder="0"><TR><TD><IMG SCALE="TRUE" SRC="upap070l.png"/></TD></TR><TR><TD><B>Naniten</B></TD></TR></TABLE>>,
 				shape=box,
 				style=filled,
-				xlabel="Kläranlage,Tiefseebergwerke,Tiefseebergwerke,Tiefseebergwerke,Nanitenentsch."];
+				xlabel="Kläranlage,Tiefseebergwerke,Nanitenentsch."];
 			node_ECOTOPIA	[color="#88888855",
 				fontcolor="#ffffff88",
 				group=AGE_NINE,
@@ -475,7 +475,7 @@ digraph G {
 				label=<<TABLE border="0" cellspacing="0" cellborder="0"><TR><TD><IMG SCALE="TRUE" SRC="upap078l.png"/></TD></TR><TR><TD><B>Seefahrt</B></TD></TR></TABLE>>,
 				shape=box,
 				style=filled,
-				xlabel="Tiefseefischereien,Tiefseefischereien,Tiefseefischereien,Karavelle,Ostind. Kompanie"];
+				xlabel="Tiefseefischereien,Karavelle,Ostind. Kompanie"];
 			node_OPTICS	[color="#88888855",
 				fontcolor="#ffffff88",
 				group=AGE_FOUR,
@@ -542,7 +542,7 @@ digraph G {
 				label=<<TABLE border="0" cellspacing="0" cellborder="0"><TR><TD><IMG SCALE="TRUE" SRC="cm2_upap088l.png"/></TD></TR><TR><TD><B>Eisenbahn</B></TD></TR></TABLE>>,
 				shape=box,
 				style=filled,
-				xlabel="Siloanlage,Schienen,Schienen,Schienen,Schienen"];
+				xlabel="Siloanlage,Schienen"];
 			node_ELECTRICITY	[color="#88888855",
 				fontcolor="#ffffff88",
 				group=AGE_FIVE,
@@ -562,7 +562,7 @@ digraph G {
 				label=<<TABLE border="0" cellspacing="0" cellborder="0"><TR><TD><IMG SCALE="TRUE" SRC="upap036l.png"/></TD></TR><TR><TD><B>Sprengstoff</B></TD></TR></TABLE>>,
 				shape=box,
 				style=filled,
-				xlabel="Große Bergwerke,Große Bergwerke,Große Bergwerke,Terraforming Sandhügel,Terraforming Hügel,Terraforming Gletscherhügel,Artillerie"];
+				xlabel="Große Bergwerke,Terraforming Sandhügel,Terraforming Hügel,Terraforming Gletscherhügel,Artillerie"];
 			node_FASCISM	[color="#ff000055",
 				fontcolor="#ffffff88",
 				group=AGE_FIVE,
@@ -678,7 +678,7 @@ digraph G {
 				label=<<TABLE border="0" cellspacing="0" cellborder="0"><TR><TD><IMG SCALE="TRUE" SRC="upap102l.png"/></TD></TR><TR><TD><B>Handel</B></TD></TR></TABLE>>,
 				shape=box,
 				style=filled,
-				xlabel="Bazar,Straßen,Straßen,Straßen,Straßen,Karawane,Via Appia"];
+				xlabel="Bazar,Straßen,Karawane,Via Appia"];
 			node_BRONZE_WORKING	[color="#88888855",
 				fontcolor="#ffffff88",
 				group=AGE_ONE,
@@ -706,7 +706,7 @@ digraph G {
 				label=<<TABLE border="0" cellspacing="0" cellborder="0"><TR><TD><IMG SCALE="TRUE" SRC="upap091l.png"/></TD></TR><TR><TD><B>Schiffbau</B></TD></TR></TABLE>>,
 				shape=box,
 				style=filled,
-				xlabel="Fischereien,Fischereien,Fischereien,Korvette"];
+				xlabel="Fischereien,Korvette"];
 			node_STONE_WORKING	[color="#00ff0055",
 				fontcolor="#ffffff88",
 				group=AGE_ONE,
@@ -739,7 +739,7 @@ digraph G {
 				label=<<TABLE border="0" cellspacing="0" cellborder="0"><TR><TD><IMG SCALE="TRUE" SRC="cm2_upap092l.png"/></TD></TR><TR><TD><B>Sklavenarbeit</B></TD></TR></TABLE>>,
 				shape=box,
 				style=filled,
-				xlabel="Bergwerke,Bergwerke,Bergwerke,Sklavenhändler"];
+				xlabel="Bergwerke,Sklavenhändler"];
 			node_IRON_WORKING	[color="#88888855",
 				fontcolor="#ffffff88",
 				group=AGE_TWO,
