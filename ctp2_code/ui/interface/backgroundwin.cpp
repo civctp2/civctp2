@@ -185,8 +185,9 @@ AUI_ERRCODE background_draw_handler(LPVOID bg)
         g_tiledMap->DrawWater();
     }
 
-	g_theTradePool->Draw(surface);
-	g_tiledMap->RepaintSprites(surface, g_tiledMap->GetMapViewRect(), false);
+	const RECT & paintRect = g_tiledMap->GetMapViewRect();
+	g_theTradePool->Draw(surface, paintRect);
+	g_tiledMap->RepaintSprites(surface, paintRect, false);
 
 	g_tiledMap->DrawUnfinishedMove(surface);
 
@@ -194,8 +195,10 @@ AUI_ERRCODE background_draw_handler(LPVOID bg)
 	pos.y = mouse->Y() - back->Y();
 	if (pos.y < back->Height())
 	{
+		g_screenManager->LockSurface(surface);
 		g_tiledMap->DrawHiliteMouseTile(surface);
 		g_tiledMap->DrawLegalMove(surface);
+		g_screenManager->UnlockSurface();
 	}
 
 #ifdef _PLAYTEST

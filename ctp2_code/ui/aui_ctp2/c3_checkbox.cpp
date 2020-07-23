@@ -119,34 +119,32 @@ AUI_ERRCODE c3_CheckBox::DrawThis(
 	ToWindow(&checkrect);
 	primitives_BevelRect16(surface, &checkrect, m_bevelWidth, 1, 16,16);
 
-	if(GetState()) {
-		uint32 off = 5;
-		primitives_DrawAALine16(surface, checkrect.left+off,checkrect.top+off,
-										 checkrect.right-off,checkrect.bottom-off,g_colorSet->GetColor(COLOR_RED));
-		primitives_DrawAALine16(surface, checkrect.left+off,checkrect.bottom-off,
-										 checkrect.right-off,checkrect.top+off, g_colorSet->GetColor(COLOR_RED));
-	}
+	uint16 *pixel;
+	AUI_ERRCODE errcode = surface->Lock( &rect, (void **)&pixel, 0 );
+	Assert( AUI_SUCCESS(errcode) );
 
-	RECT textrect = { m_height + bordWidth, 0, m_width - bordWidth - m_height, m_height };
-	OffsetRect(&textrect, m_x+x, m_y+y);
-	ToWindow(&textrect);
-	DrawThisText(
-		surface,
-		&textrect );
-
-
-	if ( IsDisabled() && rect.left < rect.right && rect.top < rect.bottom )
+	if ( AUI_SUCCESS(errcode) )
 	{
+		uint16 *origPixel = pixel;
 
-		uint16 *pixel;
+		if (GetState())
+		{
+			uint32 off = 5;
+			primitives_ClippedLine16(*surface, checkrect.left + off, checkrect.top + off,checkrect.right - off,
+					checkrect.bottom - off, g_colorSet->GetColor(COLOR_RED), LF_ANTI_ALIASED);
+			primitives_ClippedLine16(*surface, checkrect.left + off, checkrect.bottom - off,checkrect.right - off,
+					checkrect.top + off, g_colorSet->GetColor(COLOR_RED), LF_ANTI_ALIASED);
+		}
 
-		AUI_ERRCODE errcode = surface->Lock( &rect, (void **)&pixel, 0 );
-		Assert( AUI_SUCCESS(errcode) );
-		if ( AUI_SUCCESS(errcode) )
+		RECT textrect = {m_height + bordWidth, 0, m_width - bordWidth - m_height, m_height};
+		OffsetRect(&textrect, m_x + x, m_y + y);
+		ToWindow(&textrect);
+		DrawThisText(surface, &textrect);
+
+		if (IsDisabled() && rect.left < rect.right && rect.top < rect.bottom)
 		{
 
-			uint16 *origPixel = pixel;
-
+			const uint32 blendRgbMask = pixelutils_GetBlend16RGBMask();
 			const sint32 pitch = surface->Pitch() / 2;
 			const sint32 width = rect.right - rect.left;
 			const sint32 diff = pitch - width;
@@ -159,19 +157,16 @@ AUI_ERRCODE c3_CheckBox::DrawThis(
 			{
 				do
 				{
-					*pixel = pixelutils_BlendFast(
-						*pixel,
-						0x0000,
-						24 );
+					*pixel = pixelutils_Blend16(0x0000, *pixel, 192, blendRgbMask);
 
 				} while ( ++pixel != stopHorizontal );
 
 				stopHorizontal += pitch;
 			} while ( (pixel += diff) != stopVertical );
 
-			errcode = surface->Unlock( origPixel );
-			Assert( AUI_SUCCESS(errcode) );
 		}
+		errcode = surface->Unlock( origPixel );
+		Assert( AUI_SUCCESS(errcode) );
 	}
 
 	if ( surface == m_window->TheSurface() )

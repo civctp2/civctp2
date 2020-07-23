@@ -62,6 +62,7 @@ AUI_ERRCODE Icon::Draw( aui_Surface *pDestSurf,	RECT *pDestRect, uint32 color )
 		errcode = pSrcSurf->Lock(NULL, (LPVOID *)&pSrcBuffer, 0);
 		if (errcode == AUI_ERRCODE_OK)
 		{
+			uint32 blendRgbMask = pixelutils_GetBlend16RGBMask();
 			sint32 surfPitch = pDestSurf->Pitch();
 			sint32 srcWidth = pSrcSurf->Width();
 			sint32 srcHeight = pSrcSurf->Height();
@@ -86,16 +87,14 @@ AUI_ERRCODE Icon::Draw( aui_Surface *pDestSurf,	RECT *pDestRect, uint32 color )
 				{
 					if (*pSrcPixel)
 					{
-
 						blendValue = *pSrcPixel & 0x001f;
-						blendPixel = pixelutils_BlendFast((Pixel16)color,*pDestPixel,blendValue);
+						blendPixel = pixelutils_Blend16(*pDestPixel, (Pixel16)color, blendValue << 3, blendRgbMask);
 						*pDestPixel = blendPixel;
 					}
 
 					pDestPixel++;
 					pSrcPixel++;
 				}
-
 			}
 
 			errcode = pSrcSurf->Unlock((LPVOID)pSrcBuffer);

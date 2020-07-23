@@ -52,7 +52,7 @@ public:
 	void Remove(TradeRoute route);
 	TradeRoute GetRouteIndex(sint32 index);
 
-	void Draw(aui_Surface* surface);
+	void Draw(aui_Surface* surface, const RECT & paintRect);
 	void Serialize(CivArchive &archive);
 	void RecreateActors();
 

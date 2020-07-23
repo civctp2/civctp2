@@ -537,7 +537,7 @@ Anim * UnitActor::CreateAnim(UNITACTION action) const
 	return animation ? Anim::CreateSequential(*animation) : NULL;
 }
 
-void UnitActor::Draw(RECT * paintRect)
+void UnitActor::Draw(const RECT & paintRect)
 {
 	if (GetUnitVisibility() & (1 << g_selected_item->GetVisiblePlayer()))
 	{

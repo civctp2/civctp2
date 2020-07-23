@@ -24,8 +24,8 @@
 //
 // Modifications from the original Activision code:
 //
-// - Initialized local variables. (Sep 9th 2005 Martin Gühmann)
-// - Removed unused local variables. (Sep 9th 2005 Martin Gühmann)
+// - Initialized local variables. (Sep 9th 2005 Martin Gï¿½hmann)
+// - Removed unused local variables. (Sep 9th 2005 Martin Gï¿½hmann)
 //
 //----------------------------------------------------------------------------
 #pragma GCC optimize 2
@@ -132,7 +132,8 @@ void Sprite::DrawLowClipped565(Pixel16 *frame, sint32 drawX, sint32 drawY, sint3
 								{
 						 			len--;
 						 			if (xpos >= xstart && xpos < xend)
-						 				*destPixel = (Pixel16)pixelutils_BlendFast_565(*rowData, *destPixel, transparency);
+						 				*destPixel = pixelutils_Blend16(*destPixel, *rowData, transparency << 3,
+						 						BLEND_16_MASK_565);
 						 			destPixel++;
 						 			rowData++;
 						 			xpos++;
@@ -147,7 +148,7 @@ void Sprite::DrawLowClipped565(Pixel16 *frame, sint32 drawX, sint32 drawY, sint3
 								{
 						 			len--;
 						 			if ((xpos >= xstart) && (xpos < xend))
-						 				*destPixel++ = pixelutils_Shadow_565(*rowData++);
+						 				*destPixel++ = pixelutils_Shadow16(*rowData++, SHADOW_16_MASK_565);
 						 			else
 						 				rowData++;
 						 			xpos++;
@@ -189,7 +190,7 @@ void Sprite::DrawLowClipped565(Pixel16 *frame, sint32 drawX, sint32 drawY, sint3
 						 	len--;
 						 	if ((xpos >= xstart) && (xpos < xend))
 						 	{
-						 		*destPixel = pixelutils_Shadow_565(*destPixel);
+						 		*destPixel = pixelutils_Shadow16(*destPixel, SHADOW_16_MASK_565);
 						 		destPixel++;
 						 	}
 						 	xpos++;
@@ -206,40 +207,6 @@ void Sprite::DrawLowClipped565(Pixel16 *frame, sint32 drawX, sint32 drawY, sint3
 
 						 break;
 
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
 				default:
 						Assert(FALSE);
 						break;
@@ -249,10 +216,6 @@ void Sprite::DrawLowClipped565(Pixel16 *frame, sint32 drawX, sint32 drawY, sint3
 		}
 	}
 }
-
-
-
-
 
 Pixel16 test_BlendFast_565(sint32 pixel1, sint32 pixel2, sint32 blend)
 {
@@ -283,24 +246,14 @@ Pixel16 test_BlendFast_565(sint32 pixel1, sint32 pixel2, sint32 blend)
 
 
 
-void Sprite::DrawLow565(Pixel16 *frame, sint32 drawX, sint32 drawY, sint32 width, sint32 height,
-					 uint16 transparency, Pixel16 outlineColor, uint16 flags)
+void Sprite::DrawLow565(Pixel16 *frame, sint32 drawX, sint32 drawY, sint32 width, sint32 height, uint16 transparency,
+		Pixel16 outlineColor, uint16 flags)
 {
-	uint8			*surfBase;
+	uint8 * surfBase;
 
 	sint32 surfWidth  = m_surfWidth;
 	sint32 surfHeight = m_surfHeight;
 	sint32 surfPitch  = m_surfPitch;
-
-
-
-
-
-
-
-
-
-
 
 	if ((drawX < 0) ||
 		(drawY < 0) ||
@@ -319,10 +272,6 @@ void Sprite::DrawLow565(Pixel16 *frame, sint32 drawX, sint32 drawY, sint32 width
 
 	surfBase = m_surfBase + (drawY * surfPitch) + (drawX * sizeof(Pixel16));
 
-
-
-
-
 	PixelAddress destAddr;
 	PixelAddress rowAddr;
 
@@ -333,10 +282,6 @@ void Sprite::DrawLow565(Pixel16 *frame, sint32 drawX, sint32 drawY, sint32 width
 
 	uint32		w_len;
 	Pixel16		tag;
-
-
-
-
 
 	for(j=0; j<height; j++)
 	{
@@ -400,45 +345,32 @@ void Sprite::DrawLow565(Pixel16 *frame, sint32 drawX, sint32 drawY, sint32 width
 
 					case k_FEATHERED_RUN_ID	:
 
-
-
-
-
-
 					  	 if (flags & k_BIT_DRAWFLAGS_TRANSPARENCY)
 					  	 {
-
-
-					 		*destAddr.w_ptr = pixelutils_BlendFast_565(*rowAddr.w_ptr, *destAddr.w_ptr, transparency);
+					 		*destAddr.w_ptr = pixelutils_Blend16(*destAddr.w_ptr, *rowAddr.w_ptr, transparency << 3,
+					 				BLEND_16_MASK_565);
 					 		destAddr.w_ptr++;
 							rowAddr.w_ptr++;
 					 	 }
 					  	 else
-
 						 {
-
 							Pixel16 pixel = *rowAddr.w_ptr;
 
 							if (flags & k_BIT_DRAWFLAGS_FOGGED)
-								pixel = pixelutils_Shadow_565(pixel);
+								pixel = pixelutils_Shadow16(pixel, SHADOW_16_MASK_565);
 
 							if (flags & k_BIT_DRAWFLAGS_DESATURATED)
 								pixel = pixelutils_Desaturate_565(pixel);
 
 							if (flags & k_BIT_DRAWFLAGS_FEATHERING)
 							{
-								uint16 alpha = (tag & 0x00FF);
-
-
-
-
-								*destAddr.w_ptr = pixelutils_BlendFast_565(pixel,*destAddr.w_ptr, (uint16)alpha>>3);
+								uint8 alpha = (tag & 0xFF);
+								*destAddr.w_ptr = pixelutils_Blend16(*destAddr.w_ptr, pixel, alpha, BLEND_16_MASK_565);
 								destAddr.w_ptr++;
 								rowAddr.w_ptr++;
 							}
 							else
 							{
-
 								*destAddr.w_ptr++ = pixel;
 								rowAddr.w_ptr++;
 							}
@@ -452,8 +384,6 @@ void Sprite::DrawLow565(Pixel16 *frame, sint32 drawX, sint32 drawY, sint32 width
 				tag = *rowAddr.w_ptr++;
 			}
 		}
-
-
 	}
 }
 
@@ -546,7 +476,8 @@ void Sprite::DrawLowReversedClipped565(Pixel16 *frame, sint32 drawX, sint32 draw
 								while (len) {
 									len--;
 									if (xpos >= xstart && xpos < xend)
-										*destPixel = (Pixel16)pixelutils_BlendFast_565(*rowData, *destPixel, transparency);
+										*destPixel = pixelutils_Blend16(*destPixel, *rowData, transparency << 3,
+												BLEND_16_MASK_565);
 									destPixel--;
 									rowData++;
 									xpos--;
@@ -556,7 +487,7 @@ void Sprite::DrawLowReversedClipped565(Pixel16 *frame, sint32 drawX, sint32 draw
 									while (len) {
 										len--;
 										if (xpos >= xstart && xpos < xend)
-											*destPixel-- = pixelutils_Shadow_565(*rowData++);
+											*destPixel-- = pixelutils_Shadow16(*rowData++, SHADOW_16_MASK_565);
 										else
 											rowData++;
 										xpos--;
@@ -590,7 +521,7 @@ void Sprite::DrawLowReversedClipped565(Pixel16 *frame, sint32 drawX, sint32 draw
 							while (len) {
 								len--;
 								if (xpos >= xstart && xpos < xend) {
-									*destPixel = pixelutils_Shadow_565(*destPixel);
+									*destPixel = pixelutils_Shadow16(*destPixel, SHADOW_16_MASK_565);
 									destPixel--;
 								}
 								xpos--;
@@ -600,22 +531,23 @@ void Sprite::DrawLowReversedClipped565(Pixel16 *frame, sint32 drawX, sint32 draw
 					case k_FEATHERED_RUN_ID	:
 						if (flags & k_BIT_DRAWFLAGS_TRANSPARENCY) {
 							if (xpos >= xstart && xpos < xend)
-								*destPixel = (Pixel16)pixelutils_BlendFast_565(*rowData, *destPixel, transparency);
+								*destPixel = pixelutils_Blend16(*destPixel, *rowData, transparency << 3,
+										BLEND_16_MASK_565);
 							destPixel--;
 							rowData++;
 							xpos--;
 						} else {
 							Pixel16 pixel = *rowData;
 							if (flags & k_BIT_DRAWFLAGS_FOGGED) {
-								pixel = pixelutils_Shadow_565(pixel);
+								pixel = pixelutils_Shadow16(pixel, SHADOW_16_MASK_565);
 							}
 							if (flags & k_BIT_DRAWFLAGS_DESATURATED) {
 								pixel = pixelutils_Desaturate_565(pixel);
 							}
 							if (flags & k_BIT_DRAWFLAGS_FEATHERING) {
-								uint16 alpha = (tag & 0x00FF);
+								uint8 alpha = (tag & 0xFF);
 								if (xpos >= xstart && xpos < xend) {
-									*destPixel = pixelutils_BlendFast_565(pixel, *destPixel, (uint16)alpha>>3);
+									*destPixel = pixelutils_Blend16(*destPixel, pixel, alpha, BLEND_16_MASK_565);
 									destPixel--;
 								}
 								rowData++;
@@ -638,26 +570,14 @@ void Sprite::DrawLowReversedClipped565(Pixel16 *frame, sint32 drawX, sint32 draw
 	}
 }
 
-
-
-
 void Sprite::DrawLowReversed565(Pixel16 *frame, sint32 drawX, sint32 drawY, sint32 width, sint32 height,
-							 uint16 transparency, Pixel16 outlineColor, uint16 flags)
+		uint16 transparency, Pixel16 outlineColor, uint16 flags)
 {
 	uint8			*surfBase;
 
 	sint32 surfWidth = m_surfWidth;
 	sint32 surfHeight= m_surfHeight;
 	sint32 surfPitch = m_surfPitch;
-
-
-
-
-
-
-
-
-
 
 	if ((drawX < 0) ||
 		(drawY < 0) ||
@@ -710,7 +630,6 @@ void Sprite::DrawLowReversed565(Pixel16 *frame, sint32 drawX, sint32 drawY, sint
 
 						 if(flags&k_BIT_DRAWFLAGS_SPECIAL1)
 						 {
-
 							if (flags & k_BIT_DRAWFLAGS_TRANSPARENCY)
 							{
 								__BlendFast_565_16(destAddr,rowAddr,-1,1,len,transparency);
@@ -724,79 +643,25 @@ void Sprite::DrawLowReversed565(Pixel16 *frame, sint32 drawX, sint32 drawY, sint
 							}
 
 							__Desaturate_565_16(destAddr,rowAddr,-1,1,len);
-
 							break;
 						 }
 
-
-
-
 						 __Copy_16(destAddr,rowAddr,-1,1,len);
-
 						 break;
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
 
 					case k_SHADOW_RUN_ID		:
 
 						 len = (tag & 0x00FF);
-
-
 						 __Shadow_565_32(destAddr,-1,len>>1);
 						 __Shadow_565_16(destAddr,-1,len&0x01);
-
 						 break;
 
 					case k_FEATHERED_RUN_ID	:
 
-
-
-
-
-
-
 						if (flags & k_BIT_DRAWFLAGS_TRANSPARENCY)
 						{
-								*destAddr.w_ptr = pixelutils_BlendFast_565(*rowAddr.w_ptr, *destAddr.w_ptr, (uint16)transparency);
+								*destAddr.w_ptr = pixelutils_Blend16(*destAddr.w_ptr, *rowAddr.w_ptr, transparency << 3,
+										BLEND_16_MASK_565);
 								destAddr.w_ptr--;
 								rowAddr.w_ptr++;
 						}
@@ -804,17 +669,17 @@ void Sprite::DrawLowReversed565(Pixel16 *frame, sint32 drawX, sint32 drawY, sint
 						{
 							Pixel16 pixel = *rowAddr.w_ptr;
 							if (flags & k_BIT_DRAWFLAGS_FOGGED) {
-								pixel = pixelutils_Shadow_565(pixel);
+								pixel = pixelutils_Shadow16(pixel, SHADOW_16_MASK_565);
 							}
 							if (flags & k_BIT_DRAWFLAGS_DESATURATED) {
 								pixel = pixelutils_Desaturate_565(pixel);
 							}
 							if (flags & k_BIT_DRAWFLAGS_FEATHERING) {
-								uint16 alpha = (tag & 0x00FF);
+								uint8 alpha = (tag & 0xFF);
 								if (flags & k_BIT_DRAWFLAGS_DESATURATED) {
 									pixel = pixelutils_Desaturate_565(pixel);
 								}
-								*destAddr.w_ptr = pixelutils_BlendFast_565(pixel, *destAddr.w_ptr, (uint16)alpha>>3);
+								*destAddr.w_ptr = pixelutils_Blend16(*destAddr.w_ptr, pixel, alpha, BLEND_16_MASK_565);
 								destAddr.w_ptr--;
 								rowAddr.w_ptr++;
 							} else {
@@ -822,7 +687,6 @@ void Sprite::DrawLowReversed565(Pixel16 *frame, sint32 drawX, sint32 drawY, sint
 								rowAddr.w_ptr++;
 							}
 						}
-
 				}
 				tag = *rowAddr.w_ptr++;
 			}
@@ -943,10 +807,11 @@ void Sprite::DrawScaledLow565(Pixel16 *data, sint32 x, sint32 y, sint32 destWidt
 								break;
 							case k_COPY_RUN_ID			:
 									if (flags & k_BIT_DRAWFLAGS_TRANSPARENCY) {
-										firstPixel = pixelutils_Blend_565(*rowData1, *destPixel, transparency);
+										firstPixel = pixelutils_Blend16(*destPixel, *rowData1, transparency << 3,
+												BLEND_16_MASK_565);
 									} else
 									if (flags & k_BIT_DRAWFLAGS_FOGGED) {
-										firstPixel = pixelutils_Shadow_565(*rowData1);
+										firstPixel = pixelutils_Shadow16(*rowData1, SHADOW_16_MASK_565);
 									} else
 									if (flags & k_BIT_DRAWFLAGS_DESATURATED) {
 										firstPixel = pixelutils_Desaturate_565(*rowData1);
@@ -956,24 +821,26 @@ void Sprite::DrawScaledLow565(Pixel16 *data, sint32 x, sint32 y, sint32 destWidt
 									rowData1++;
 								break;
 							case k_SHADOW_RUN_ID		:
-									firstPixel = pixelutils_Shadow_565(*destPixel);
+									firstPixel = pixelutils_Shadow16(*destPixel, SHADOW_16_MASK_565);
 								break;
 							case k_FEATHERED_RUN_ID	:
 									if (flags & k_BIT_DRAWFLAGS_OUTLINE) {
 										firstPixel = outlineColor;
 									} else {
 										if (flags & k_BIT_DRAWFLAGS_TRANSPARENCY) {
-											firstPixel = pixelutils_Blend_565(*rowData1, *destPixel, (uint16)transparency);
+											firstPixel = pixelutils_Blend16(*destPixel, *rowData1, transparency << 3,
+													BLEND_16_MASK_565);
 										} else {
 											Pixel16 pixel = *rowData1;
 											if (flags & k_BIT_DRAWFLAGS_FOGGED) {
-												pixel = pixelutils_Shadow_565(pixel);
+												pixel = pixelutils_Shadow16(pixel, SHADOW_16_MASK_565);
 											}
 											if (flags & k_BIT_DRAWFLAGS_DESATURATED) {
 												pixel = pixelutils_Desaturate_565(pixel);
 											}
 											if (flags & k_BIT_DRAWFLAGS_FEATHERING) {
-												pixel = pixelutils_Blend_565(pixel, *destPixel, (uint16)alpha1>>3);
+												pixel = pixelutils_Blend16(*destPixel, pixel, alpha1,
+														BLEND_16_MASK_565);
 											}
 											firstPixel = pixel;
 										}
@@ -1000,10 +867,11 @@ void Sprite::DrawScaledLow565(Pixel16 *data, sint32 x, sint32 y, sint32 destWidt
 								break;
 							case k_COPY_RUN_ID			:
 									if (flags & k_BIT_DRAWFLAGS_TRANSPARENCY) {
-										secondPixel = pixelutils_Blend_565(*rowData2, *destPixel, transparency);
+										secondPixel = pixelutils_Blend16(*destPixel, *rowData2, transparency << 3,
+												BLEND_16_MASK_565);
 									} else
 									if (flags & k_BIT_DRAWFLAGS_FOGGED) {
-										secondPixel = pixelutils_Shadow_565(*rowData2);
+										secondPixel = pixelutils_Shadow16(*rowData2, SHADOW_16_MASK_565);
 									} else
 									if (flags & k_BIT_DRAWFLAGS_DESATURATED) {
 										secondPixel = pixelutils_Desaturate_565(*rowData2);
@@ -1014,24 +882,26 @@ void Sprite::DrawScaledLow565(Pixel16 *data, sint32 x, sint32 y, sint32 destWidt
 									rowData2++;
 								break;
 							case k_SHADOW_RUN_ID		:
-									secondPixel = pixelutils_Shadow_565(*destPixel);
+									secondPixel = pixelutils_Shadow16(*destPixel, SHADOW_16_MASK_565);
 								break;
 							case k_FEATHERED_RUN_ID	:
 									if (flags & k_BIT_DRAWFLAGS_OUTLINE) {
 										secondPixel = outlineColor;
 									} else {
 										if (flags & k_BIT_DRAWFLAGS_TRANSPARENCY) {
-											secondPixel = pixelutils_Blend_565(*rowData2, *destPixel, (uint16)transparency);
+											secondPixel = pixelutils_Blend16(*destPixel, *rowData2, transparency << 3,
+													BLEND_16_MASK_565);
 										} else {
 											Pixel16 pixel = *rowData2;
 											if (flags & k_BIT_DRAWFLAGS_FOGGED) {
-												pixel = pixelutils_Shadow_565(pixel);
+												pixel = pixelutils_Shadow16(pixel, SHADOW_16_MASK_565);
 											}
 											if (flags & k_BIT_DRAWFLAGS_DESATURATED) {
 												pixel = pixelutils_Desaturate_565(pixel);
 											}
 											if (flags & k_BIT_DRAWFLAGS_FEATHERING) {
-												pixel = pixelutils_Blend_565(pixel, *destPixel, (uint16)alpha2>>3);
+												pixel = pixelutils_Blend16(*destPixel, pixel, alpha2,
+														BLEND_16_MASK_565);
 											}
 											secondPixel = pixel;
 										}
@@ -1172,7 +1042,7 @@ void Sprite::DrawFlashLow565(Pixel16 *frame, sint32 drawX, sint32 drawY, sint32 
 						 while (len--)
 						 {
 
-							*destPixel = pixelutils_Shadow_565(*destPixel);
+							*destPixel = pixelutils_Shadow16(*destPixel, SHADOW_16_MASK_565);
 							destPixel++;
 						 }
 						break;
@@ -1188,12 +1058,7 @@ void Sprite::DrawFlashLow565(Pixel16 *frame, sint32 drawX, sint32 drawY, sint32 
 			}
 		}
 	}
-
-
 }
-
-
-
 
 void Sprite::DrawFlashLowReversed565(Pixel16 *frame, sint32 drawX, sint32 drawY, sint32 width, sint32 height,
 							 uint16 transparency, Pixel16 outlineColor, uint16 flags)
@@ -1241,7 +1106,8 @@ void Sprite::DrawFlashLowReversed565(Pixel16 *frame, sint32 drawX, sint32 drawY,
 
 							if (flags & k_BIT_DRAWFLAGS_TRANSPARENCY) {
 								for (uint16 i=0; i<len; i++) {
-									*destPixel = (Pixel16)pixelutils_Blend_565(*rowData, *destPixel, transparency);
+									*destPixel = pixelutils_Blend16(*destPixel, *rowData, transparency << 3,
+											BLEND_16_MASK_565);
 									destPixel--;
 									rowData++;
 								}
@@ -1258,7 +1124,7 @@ void Sprite::DrawFlashLowReversed565(Pixel16 *frame, sint32 drawX, sint32 drawY,
 							uint16 len = (tag & 0x00FF);
 
 							for (uint16 i=0; i<len; i++) {
-								*destPixel = pixelutils_Shadow_565(*destPixel);
+								*destPixel = pixelutils_Shadow16(*destPixel, SHADOW_16_MASK_565);
 								destPixel--;
 							}
 						}
@@ -1269,14 +1135,14 @@ void Sprite::DrawFlashLowReversed565(Pixel16 *frame, sint32 drawX, sint32 drawY,
 							rowData++;
 						} else {
 							if (flags & k_BIT_DRAWFLAGS_TRANSPARENCY) {
-									*destPixel = pixelutils_Blend_565(*rowData, *destPixel, (uint16)transparency);
+									*destPixel = pixelutils_Blend16(*destPixel, *rowData, transparency << 3,
+											BLEND_16_MASK_565);
 									destPixel--;
 									rowData++;
 							} else {
 								if (flags & k_BIT_DRAWFLAGS_FEATHERING) {
-									uint16 alpha = (tag & 0x00FF);
-
-									*destPixel = pixelutils_Blend_565(*rowData, *destPixel, (uint16)alpha>>3);
+									uint8 alpha = (tag & 0xFF);
+									*destPixel = pixelutils_Blend16(*destPixel, *rowData, alpha, BLEND_16_MASK_565);
 									destPixel--;
 									rowData++;
 								} else {
@@ -1295,9 +1161,6 @@ void Sprite::DrawFlashLowReversed565(Pixel16 *frame, sint32 drawX, sint32 drawY,
 }
 
 #define k_MEDIUM_KEY	0x4208
-
-
-
 
 void Sprite::DrawFlashScaledLow565(Pixel16 *data, sint32 x, sint32 y, sint32 destWidth, sint32 destHeight,
 							 uint16 transparency, Pixel16 outlineColor, uint16 flags, BOOL reverse)
@@ -1372,9 +1235,6 @@ void Sprite::DrawFlashScaledLow565(Pixel16 *data, sint32 x, sint32 y, sint32 des
 			else hdestpos = x;
 			hend = m_width-1;
 
-
-
-
 			sint32		mode1;
 			sint32		mode2;
 			sint32		pos1 = 0;
@@ -1395,10 +1255,6 @@ void Sprite::DrawFlashScaledLow565(Pixel16 *data, sint32 x, sint32 y, sint32 des
 			pixel1 = k_MEDIUM_KEY;
 			pixel2 = k_MEDIUM_KEY;
 
-
-
-
-
 			while (hpos < hend) {
 				if (haccum < 0) {
 					haccum += hincx;
@@ -1407,14 +1263,6 @@ void Sprite::DrawFlashScaledLow565(Pixel16 *data, sint32 x, sint32 y, sint32 des
 
 					destPixel = (Pixel16 *)(surfBase + ((vdestpos-y) * surfPitch) + ((hdestpos-x) * 2));
 
-
-
-
-
-
-
-
-
 					while (pos1 <= hpos) {
 						switch (mode1) {
 							case k_CHROMAKEY_RUN_ID	:
@@ -1422,25 +1270,28 @@ void Sprite::DrawFlashScaledLow565(Pixel16 *data, sint32 x, sint32 y, sint32 des
 								break;
 							case k_COPY_RUN_ID			:
 									if (flags & k_BIT_DRAWFLAGS_TRANSPARENCY) {
-										firstPixel = pixelutils_Blend_565(*rowData1, *destPixel, transparency);
+										firstPixel = pixelutils_Blend16(*destPixel, *rowData1, transparency << 3,
+												BLEND_16_MASK_565);
 									} else {
 										firstPixel = pixelutils_Additive_565(*rowData1, *destPixel);
 									}
 									rowData1++;
 								break;
 							case k_SHADOW_RUN_ID		:
-									firstPixel = pixelutils_Shadow_565(*destPixel);
+									firstPixel = pixelutils_Shadow16(*destPixel, SHADOW_16_MASK_565);
 								break;
 							case k_FEATHERED_RUN_ID	:
 									if (flags & k_BIT_DRAWFLAGS_OUTLINE) {
 										firstPixel = outlineColor;
 									} else {
 										if (flags & k_BIT_DRAWFLAGS_TRANSPARENCY) {
-											firstPixel = pixelutils_Blend_565(*rowData1, *destPixel, (uint16)transparency);
+											firstPixel = pixelutils_Blend16(*destPixel, *rowData1, transparency << 3,
+													BLEND_16_MASK_565);
 										} else {
 											if (flags & k_BIT_DRAWFLAGS_FEATHERING) {
 
-												firstPixel = pixelutils_Blend_565(*rowData1, *destPixel, (uint16)alpha1>>3);
+												firstPixel = pixelutils_Blend16(*destPixel, *rowData1, alpha1,
+														BLEND_16_MASK_565);
 											} else {
 												firstPixel = *rowData1;
 											}
@@ -1468,24 +1319,27 @@ void Sprite::DrawFlashScaledLow565(Pixel16 *data, sint32 x, sint32 y, sint32 des
 								break;
 							case k_COPY_RUN_ID			:
 									if (flags & k_BIT_DRAWFLAGS_TRANSPARENCY) {
-										secondPixel = pixelutils_Blend_565(*rowData2, *destPixel, transparency);
+										secondPixel = pixelutils_Blend16(*destPixel, *rowData2, transparency << 3,
+												BLEND_16_MASK_565);
 									} else {
 										secondPixel = pixelutils_Additive_565(*rowData2, *destPixel);
 									}
 									rowData2++;
 								break;
 							case k_SHADOW_RUN_ID		:
-									secondPixel = pixelutils_Shadow_565(*destPixel);
+									secondPixel = pixelutils_Shadow16(*destPixel, SHADOW_16_MASK_565);
 								break;
 							case k_FEATHERED_RUN_ID	:
 									if (flags & k_BIT_DRAWFLAGS_OUTLINE) {
 										secondPixel = outlineColor;
 									} else {
 										if (flags & k_BIT_DRAWFLAGS_TRANSPARENCY) {
-											secondPixel = pixelutils_Blend_565(*rowData2, *destPixel, (uint16)transparency);
+											secondPixel = pixelutils_Blend16(*destPixel, *rowData2, transparency << 3,
+													BLEND_16_MASK_565);
 										} else {
 											if (flags & k_BIT_DRAWFLAGS_FEATHERING) {
-												secondPixel = pixelutils_Blend_565(*rowData2, *destPixel, (uint16)alpha2>>3);
+												secondPixel = pixelutils_Blend16(*destPixel, *rowData2, alpha2,
+														BLEND_16_MASK_565);
 
 											} else {
 												secondPixel = *rowData2;
@@ -1508,11 +1362,6 @@ void Sprite::DrawFlashScaledLow565(Pixel16 *data, sint32 x, sint32 y, sint32 des
 
 					pixel3 = firstPixel;
 					pixel4 = secondPixel;
-
-
-
-
-
 
 					if (flags & k_BIT_DRAWFLAGS_AA) {
 						if (flags & k_BIT_DRAWFLAGS_AA_4_WAY) {
@@ -1548,16 +1397,12 @@ void Sprite::DrawFlashScaledLow565(Pixel16 *data, sint32 x, sint32 y, sint32 des
 		vpos1++;
 		vpos2++;
 	}
-
-
-
-
 }
 
-#define k_REFLECTION_BLEND_LEVEL	4
+const uint8 k_REFLECTION_BLEND_LEVEL = 32;
 
 void Sprite::DrawReflectionLow565(Pixel16 *frame, sint32 drawX, sint32 drawY, sint32 width, sint32 height,
-					 uint16 transparency, Pixel16 outlineColor, uint16 flags)
+		uint16 transparency, Pixel16 outlineColor, uint16 flags)
 {
 	uint8			*surfBase;
 
@@ -1603,13 +1448,15 @@ void Sprite::DrawReflectionLow565(Pixel16 *frame, sint32 drawX, sint32 drawY, si
 
 							if (flags & k_BIT_DRAWFLAGS_TRANSPARENCY) {
 								for (uint16 i=0; i<len; i++) {
-									*destPixel = (Pixel16)pixelutils_BlendFast_565(*rowData, *destPixel, k_REFLECTION_BLEND_LEVEL);
+									*destPixel = pixelutils_Blend16(*destPixel, *rowData, k_REFLECTION_BLEND_LEVEL,
+											BLEND_16_MASK_565);
 									destPixel++;
 									rowData++;
 								}
 							} else {
 								for (uint16 i=0; i<len; i++) {
-									*destPixel = (Pixel16)pixelutils_BlendFast_565(*rowData, *destPixel, k_REFLECTION_BLEND_LEVEL);
+									*destPixel = pixelutils_Blend16(*destPixel, *rowData, k_REFLECTION_BLEND_LEVEL,
+											BLEND_16_MASK_565);
 
 									destPixel++;
 									rowData++;
@@ -1623,7 +1470,8 @@ void Sprite::DrawReflectionLow565(Pixel16 *frame, sint32 drawX, sint32 drawY, si
 						}
 						break;
 					case k_FEATHERED_RUN_ID	:
-							*destPixel = (Pixel16)pixelutils_BlendFast_565(*rowData, *destPixel, k_REFLECTION_BLEND_LEVEL);
+							*destPixel = pixelutils_Blend16(*destPixel, *rowData, k_REFLECTION_BLEND_LEVEL,
+									BLEND_16_MASK_565);
 							destPixel++;
 							rowData++;
 						break;
@@ -1638,78 +1486,18 @@ void Sprite::DrawReflectionLow565(Pixel16 *frame, sint32 drawX, sint32 drawY, si
 	}
 }
 
-
-
-
 inline Pixel16 Sprite::average_565(Pixel16 pixel1, Pixel16 pixel2, Pixel16 pixel3, Pixel16 pixel4)
 {
-
 	uint32 sum=(uint32)(pixel1+pixel2+pixel3+pixel4)&0xE79CE79C;
-
 	return (Pixel16)(sum>>2);
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
 }
-
-
-
 
 inline Pixel16 Sprite::average_565(Pixel16 pixel1, Pixel16 pixel2)
 {
 	uint32 sum=(uint32)(pixel1+pixel2)&0xFFFFE79C;
 
 	return (Pixel16)(sum>>1);
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
 }
-
-
-
 
 inline void Sprite::__Desaturate_565_16	(PixelAddress &dest,PixelAddress &src,sint32 dest_inc,sint32 src_inc,sint32 num)
 {
@@ -1722,44 +1510,37 @@ inline void Sprite::__Desaturate_565_16	(PixelAddress &dest,PixelAddress &src,si
 	}
 }
 
-
-inline void Sprite::__BlendFast_565_16	(PixelAddress &dest,PixelAddress &src,sint32 dest_inc,sint32 src_inc,sint32 num,uint16 transparency)
+inline void Sprite::__BlendFast_565_16 (PixelAddress &dest, PixelAddress &src, sint32 dest_inc, sint32 src_inc,
+		sint32 num, uint16 transparency)
 {
 	while (num)
 	{
 		num--;
 
-		*dest.w_ptr=(Pixel16)pixelutils_BlendFast_565(*src.w_ptr, *dest.w_ptr, transparency);
+		*dest.w_ptr = pixelutils_Blend16(*dest.w_ptr, *src.w_ptr, transparency << 3, BLEND_16_MASK_565);
 
 		dest.w_ptr +=dest_inc;
 		src.w_ptr  +=src_inc;
 	}
 }
 
-
-
-
-
 inline void Sprite::__Shadow_565_16(PixelAddress &dest,PixelAddress &src,sint32 dest_inc,sint32 src_inc,sint32 num)
 {
   while (num)
   {
   	 num--;
-  	*dest.w_ptr = pixelutils_Shadow_565(*src.w_ptr);
+  	*dest.w_ptr = pixelutils_Shadow16(*src.w_ptr, SHADOW_16_MASK_565);
   	 dest.w_ptr+=dest_inc;
   	 src.w_ptr +=src_inc;
   }
 }
-
-
-
 
 inline void Sprite::__Shadow_565_16(PixelAddress &dest,sint32 dest_inc,sint32 num)
 {
   while (num)
   {
   	 num--;
-  	*dest.w_ptr = pixelutils_Shadow_565(*dest.w_ptr);
+  	*dest.w_ptr = pixelutils_Shadow16(*dest.w_ptr, SHADOW_16_MASK_565);
   	 dest.w_ptr+=dest_inc;
   }
 }

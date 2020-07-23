@@ -59,6 +59,7 @@ struct  TILEHITMASK;
 
 #define k_BORDER_SOLID              0
 #define k_BORDER_DASHED             1
+#define k_BORDER_SMOOTH             2
 
 #define k_FOW_COLOR                 0x0000
 #define k_FOW_BLEND_VALUE           16
@@ -69,10 +70,10 @@ struct  TILEHITMASK;
 #define k_OVERLAY_FLAG_SHADOWSONLY  0x00000001
 #define k_OVERLAY_FLAG_NOSHADOWS    0x00000002
 
-#define k_MAX_ZOOM_LEVELS           6
-#define k_ZOOM_NORMAL               5
+#define k_MAX_ZOOM_LEVELS           7
+#define k_ZOOM_NORMAL               6
 #define k_ZOOM_SMALLEST             0
-#define k_ZOOM_LARGEST              5
+#define k_ZOOM_LARGEST              6
 
 extern TiledMap *   g_tiledMap;
 
@@ -87,10 +88,11 @@ extern TiledMap *   g_tiledMap;
 #include "mouse.h"
 #endif
 #include "colorset.h"
-#include "MapPoint.h"       // MapPoint
-#include "pixelutils.h"     // Pixel types
+#include "controlpanelwindow.h" // g_controlPanel
+#include "MapPoint.h"           // MapPoint
+#include "pixelutils.h"         // Pixel types
 #include "SelItem.h"
-#include "tileset.h"        // TileSet
+#include "tileset.h"            // TileSet
 #include "tileutils.h"
 #include "Vision.h"
 #include "World.h"
@@ -184,7 +186,6 @@ public:
 	void			DrawHitMask(aui_Surface *surf, const MapPoint &pos);
 	void			DrawColoredHitMask(aui_Surface *surf, const MapPoint &pos, COLOR color);
 	void			DrawColoredHitMaskEdge(aui_Surface *surf, const MapPoint &pos, Pixel16 color, WORLD_DIRECTION d);
-	void			DrawColoredBorderEdge(aui_Surface *surf, const MapPoint &pos, Pixel16 color, WORLD_DIRECTION d, sint32 dashMode);
 	void			DrawHitMask(aui_Surface *surf, const MapPoint &pos, RECT *mapViewRect, RECT *destRect);
 	void			SetHiliteMouseTile(MapPoint &pos);
 	void			DrawHiliteMouseTile(aui_Surface *destSurf);
@@ -205,6 +206,10 @@ public:
 	sint32          GetMapWidth() const
 	{
 		return g_theWorld->GetWidth();
+	}
+	sint32          GetMapHeight() const
+	{
+		return g_theWorld->GetHeight();
 	}
 
 	sint32			CalculateWrap(aui_Surface *surface, sint32 i, sint32 j);
@@ -227,7 +232,7 @@ public:
 	sint32			DrawCityRadius1(const MapPoint &cpos, COLOR color);
 	sint32			PaintColoredTile(sint32 x, sint32 y, COLOR color);
 
-	void			ProcessLayerSprites(RECT *processRect, sint32 layer);
+	void			ProcessLayerSprites(const RECT & processRect, sint32 layer);
 	void			PaintGoodActor(GoodActor *actor, bool fog = false);
 
 	void			ProcessUnit(Unit unit);
@@ -262,11 +267,11 @@ public:
 
 	void			PaintUnitActor(UnitActor *actor, bool fog = false);
 
-	sint32			RepaintLayerSprites(RECT *paintRect, sint32 layer);
-	sint32			RepaintSprites(aui_Surface *surf, RECT *paintRect, bool scrolling);
+	sint32			RepaintLayerSprites(const RECT & paintRect, sint32 layer);
+	sint32			RepaintSprites(aui_Surface *surf, const RECT & paintRect, bool scrolling);
 
-	sint32			OffsetLayerSprites(RECT *paintRect, sint32 deltaX, sint32 deltaY, sint32 layer);
-	sint32			OffsetSprites(RECT *paintRect, sint32 deltaX, sint32 deltaY);
+	sint32			OffsetLayerSprites(const RECT & paintRect, sint32 deltaX, sint32 deltaY, sint32 layer);
+	sint32			OffsetSprites(const RECT & paintRect, sint32 deltaX, sint32 deltaY);
 
 	void			DrawStartingLocations(aui_Surface *surf, sint32 layer);
 
@@ -376,7 +381,7 @@ public:
 	void		SetScale(double s) { m_scale = s; }
 
 	TileInfo   *GetTileInfo(const MapPoint &pos);
-	RECT		*GetMapViewRect(void) { return &m_mapViewRect; }
+	const RECT & GetMapViewRect(void) { return m_mapViewRect; }
 
 	TileSet		*GetTileSet(void) { return m_tileSet; }
 
@@ -459,11 +464,6 @@ public:
 	uint32 GetVisibleCityOwner  (const MapPoint &pos) const;
 	uint32 GetVisibleTerrainType(const MapPoint &pos) const;
 	bool   HasVisibleCity       (const MapPoint &pos) const;
-	void DrawNationalBorders(aui_Surface *surface, MapPoint &pos);
-
-
-
-
 
 	void SetZoomLevel(sint32 level);
 
@@ -481,6 +481,8 @@ public:
 	sint32 GetZoomTileHeadroom() const { return m_zoomTileHeadroom[m_zoomLevel]; }
 	double GetZoomScale(sint32 level) const { return m_zoomTileScale[level]; }
 
+	void UpdateAndClipMapViewRect(const RECT & rect);
+
 protected:
     struct GridRect
     {
@@ -488,7 +490,10 @@ protected:
 	    BOOL		dirty;
     };
 
-	void CalculateZoomViewRectangle(sint32 zoomLevel, RECT &rectangle) const;
+	RECT   EnsureRectOverlapMap(const RECT & rect) const;
+	void   CalculateZoomViewRectangle(sint32 zoomLevel, RECT &rectangle) const;
+	sint32 GetZoomDisplayWidth() const;
+	sint32 GetZoomDisplayHeight() const;
 
 	void ZoomHitMask();
 
@@ -524,6 +529,10 @@ protected:
 	void     DrawClippedColorizedOverlay(Pixel16 * data, aui_Surface & surface, sint32 x, sint32 y, Pixel16 color,
 				uint8 alpha);
 
+	void     DrawNationalBorders(aui_Surface & surf, const MapPoint & pos);
+	void     DrawColoredBorderEdge(aui_Surface & surf, const MapPoint & pos, Pixel16 color, uint32 borders,
+				sint32 dashMode, sint32 indent);
+
 	sint32	m_zoomLevel;
 	sint32	m_zoomTilePixelWidth[k_MAX_ZOOM_LEVELS];
 	sint32	m_zoomTilePixelHeight[k_MAX_ZOOM_LEVELS];
@@ -548,7 +557,6 @@ protected:
 	RECT			m_surfaceRect;
 
 	RECT			m_mapBounds;
-	RECT			m_mapViewRect;
 
 	double			m_scale;
 	sint32			m_smoothOffsetX,m_smoothOffsetY;
@@ -585,6 +593,15 @@ protected:
 	GridRect		**m_gridRects;
 
 	RECT m_chatRect;
+
+private:
+	// m_mapViewRect is const so that it can only be updated by UpdateAndClipMapViewRect
+	const RECT m_mapViewRect;
+
+	sint32 GetMinMapLeft()   const { return m_mapBounds.left   - (m_mapViewRect.right  - m_mapViewRect.left) / 2; }
+	sint32 GetMaxMapRight()  const { return m_mapBounds.right  + (m_mapViewRect.right  - m_mapViewRect.left) / 2; }
+	sint32 GetMinMapTop()    const { return m_mapBounds.top    - (m_mapViewRect.bottom - m_mapViewRect.top)  / 2; }
+	sint32 GetMaxMapBottom() const { return m_mapBounds.bottom + (m_mapViewRect.bottom - m_mapViewRect.top)  / 2; }
 };
 
 #endif

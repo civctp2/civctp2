@@ -49,8 +49,10 @@
 #include "SelItem.h"            // g_selected_item
 #include "tiledmap.h"           // g_tiledMap
 #include "primitives.h"
+#include "screenmanager.h"
 
-extern C3UI				*g_c3ui;
+extern C3UI          * g_c3ui;
+extern ScreenManager * g_screenManager;
 
 ThumbnailMap::ThumbnailMap(AUI_ERRCODE *retval,
 							sint32 id,
@@ -386,8 +388,8 @@ void ThumbnailMap::RenderTradeRoute(aui_Surface *surf, TradeRoute *route)
 		if (p2.x <= 0) p2.x = 1;
 		if (p2.y <= 0) p2.y = 1;
 
-		primitives_DrawAALine16(surf, p1.x, p1.y, p2.x, p2.y, blackColor);
-		primitives_DrawAALine16(surf, p1.x-1, p1.y-1, p2.x-1, p2.y-1, color);
+		primitives_ClippedLine16(*surf, p1.x, p1.y, p2.x, p2.y, blackColor, LF_ANTI_ALIASED);
+		primitives_ClippedLine16(*surf, p1.x-1, p1.y-1,p2.x-1, p2.y-1, color, LF_ANTI_ALIASED);
 	} else {
 		for (sint32 i = 1; i < path->Num(); i++) {
 			pt = path->Get(i);
@@ -397,11 +399,8 @@ void ThumbnailMap::RenderTradeRoute(aui_Surface *surf, TradeRoute *route)
 			if (p2.x <= 0) p2.x = 1;
 			if (p2.y <= 0) p2.y = 1;
 
-
-
-
-			primitives_DrawAALine16(surf, p1.x, p1.y, p2.x, p2.y, blackColor);
-			primitives_DrawAALine16(surf, p1.x-1, p1.y-1, p2.x-1, p2.y-1, color);
+			primitives_ClippedLine16(*surf, p1.x, p1.y, p2.x, p2.y, blackColor, LF_ANTI_ALIASED);
+			primitives_ClippedLine16(*surf, p1.x-1, p1.y-1,p2.x-1, p2.y-1, color, LF_ANTI_ALIASED);
 
 			p1 = p2;
 		}
@@ -418,6 +417,7 @@ void ThumbnailMap::RenderTradeRoutes(aui_Surface *surf)
 	Assert(cities != NULL);
 	if (cities == NULL) return;
 
+	g_screenManager->LockSurface(surf);
 	for (sint32 i=0; i<cities->Num(); i++) {
 		CityData			*cityData = cities->Get(i).GetData()->GetCityData();
 		TradeDynamicArray	*source = cityData->GetTradeSourceList();
@@ -428,6 +428,7 @@ void ThumbnailMap::RenderTradeRoutes(aui_Surface *surf)
 			RenderTradeRoute(surf, &route);
 		}
 	}
+	g_screenManager->UnlockSurface();
 }
 
 void ThumbnailMap::RenderUnitMovement(aui_Surface *surf)

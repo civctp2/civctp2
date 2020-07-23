@@ -296,13 +296,7 @@ void TiledMap::DrawLegalMove
 				x2 += xoffset;
 				y2 += yoffset;
 
-				if (INSURFACE(x1, y1) && INSURFACE(x2, y2))
-				{
-					Pixel16 const	pixelColor	= g_colorSet->GetColor(lineColor);
-
-					primitives_DrawAALine16(pSurface, x1, y1, x2, y2, pixelColor);
-
-				}
+				primitives_ClippedLine16(*pSurface, x1, y1, x2, y2, g_colorSet->GetColor(lineColor), LF_ANTI_ALIASED);
 
 				AddDirtyTileToMix(prevPos);
 				AddDirtyTileToMix(currPos);
@@ -416,12 +410,8 @@ void TiledMap::DrawLegalMove
 		x2 += xoffset;
 		y2 += yoffset;
 
-		if (INSURFACE(x1, y1) && INSURFACE(x2, y2))
-		{
-			Pixel16 const	pixelColor	= g_colorSet->GetColor(k_TURN_COLOR_PROJECTILE);
-
-			primitives_DrawDashedAALine16(pSurface, x1, y1, x2, y2, pixelColor, k_DOT_LENGTH);
-		}
+		primitives_ClippedPatternLine16(*pSurface, x1, y1, x2, y2, g_colorSet->GetColor(k_TURN_COLOR_PROJECTILE),
+				LINE_PATTERN_DOT, LINE_PATTERN_DOT_LENGTH, LF_ANTI_ALIASED);
 		return;
 	}
 
@@ -490,37 +480,30 @@ void TiledMap::DrawLegalMove
 				}
 			}
 
-			if (INSURFACE(x1, y1) && INSURFACE(x2, y2))
+			const Pixel16 pixelColor = g_colorSet->GetColor(lineColor);
+			if (num_tiles_to_half < line_segment_count)
 			{
-				Pixel16 const	pixelColor	= g_colorSet->GetColor(lineColor);
-				if (num_tiles_to_half < line_segment_count)
-				{
-					primitives_DrawDashedAALine16(pSurface, x1, y1, x2, y2, pixelColor, k_DASH_LENGTH);
-				}
-				else
-				{
-					primitives_DrawAALine16(pSurface, x1, y1, x2, y2, pixelColor);
+				primitives_ClippedPatternLine16(*pSurface, x1, y1, x2, y2, pixelColor, LINE_PATTERN_DASH,
+						LINE_PATTERN_DASH_LENGTH, LF_ANTI_ALIASED);
+			}
+			else
+			{
+				primitives_ClippedLine16(*pSurface, x1, y1, x2, y2, pixelColor, LF_ANTI_ALIASED);
 
-					if( currPos == move_pos ){
+				if( currPos == move_pos ){
 
-						maputils_MapXY2PixelXY(currPos.x, currPos.y, &x1, &y1);
-						maputils_MapXY2PixelXY(target_pos.x, target_pos.y, &x2, &y2);
+					maputils_MapXY2PixelXY(currPos.x, currPos.y, &x1, &y1);
+					maputils_MapXY2PixelXY(target_pos.x, target_pos.y, &x2, &y2);
 
-						x1 += xoffset;
-						y1 += yoffset;
-						x2 += xoffset;
-						y2 += yoffset;
+					x1 += xoffset;
+					y1 += yoffset;
+					x2 += xoffset;
+					y2 += yoffset;
 
-						if (INSURFACE(x1, y1) && INSURFACE(x2, y2))
-						{
-							Pixel16 const	pixelColor	= g_colorSet->GetColor(k_TURN_COLOR_PROJECTILE);
-
-							primitives_DrawDashedAALine16(pSurface, x1, y1, x2, y2, pixelColor, k_DOT_LENGTH);
-
-							break;
-
-						}
-					}
+					const Pixel16 pixelColor = g_colorSet->GetColor(k_TURN_COLOR_PROJECTILE);
+					primitives_ClippedPatternLine16(*pSurface, x1, y1, x2, y2, pixelColor, LINE_PATTERN_DOT,
+							LINE_PATTERN_DOT_LENGTH, LF_ANTI_ALIASED);
+					break;
 				}
 			}
 
@@ -578,22 +561,20 @@ void TiledMap::DrawLegalMove
 		}
 		line_segment_count++;
 
-		if (INSURFACE(x1, y1) && INSURFACE(x2, y2))
+		const Pixel16 pixelColor = g_colorSet->GetColor(actual_line_color);
+		if (num_tiles_to_half < line_segment_count)
 		{
-			Pixel16 const	pixelColor	= g_colorSet->GetColor(actual_line_color);
-
-			if (num_tiles_to_half < line_segment_count)
-			{
-				primitives_DrawDashedAALine16(pSurface, x1, y1, x2, y2, pixelColor, k_DASH_LENGTH);
+			primitives_ClippedPatternLine16(*pSurface, x1, y1, x2, y2, pixelColor, LINE_PATTERN_DASH,
+					LINE_PATTERN_DASH_LENGTH, LF_ANTI_ALIASED);
+		}
+		else {
+			if(dist-max_rge < line_segment_count){//draw dotted line from bombard launch point to target
+				primitives_ClippedPatternLine16(*pSurface, x1, y1, x2, y2, pixelColor, LINE_PATTERN_DOT,
+						LINE_PATTERN_DOT_LENGTH, LF_ANTI_ALIASED);
 			}
-			else {
-				if(dist-max_rge < line_segment_count){//draw dotted line from bombard launch point to target
-					primitives_DrawDashedAALine16(pSurface, x1, y1, x2, y2, pixelColor, k_DOT_LENGTH);
-				}
-				else
-				{
-					primitives_DrawAALine16(pSurface, x1, y1, x2, y2, pixelColor);
-				}
+			else
+			{
+				primitives_ClippedLine16(*pSurface, x1, y1, x2, y2, pixelColor, LF_ANTI_ALIASED);
 			}
 		}
 
@@ -647,11 +628,8 @@ void TiledMap::DrawLegalMove
 			}
 			old_line_color = actual_line_color;
 
-			if (INSURFACE(x1, y1) && INSURFACE(x2, y2))
-			{
-				primitives_DrawAALine16
-					(pSurface, x1, y1, x2, y2, g_colorSet->GetColor(actual_line_color));
-			}
+			primitives_ClippedLine16(*pSurface, x1, y1, x2, y2, g_colorSet->GetColor(actual_line_color),
+					LF_ANTI_ALIASED);
 
 			AddDirtyTileToMix(prevPos);
 			AddDirtyTileToMix(currPos);
@@ -777,40 +755,33 @@ void TiledMap::DrawLegalMove
 				x += xoffset;
 				y += yoffset;
 
-				RECT	turnRect	=
-					{x - boxEdgeSize, y - boxEdgeSize, x + boxEdgeSize, y + boxEdgeSize};
+				MBCHAR turnNumber[80];
 
-				if (INSURFACE(turnRect.left, turnRect.top) && INSURFACE(turnRect.right, turnRect.bottom))
+				if ((!special_box_done) && (special_line_segment == line_segment_count))
 				{
-					MBCHAR turnNumber[80];
+					special_box_done = true;
+					sprintf(turnNumber, "*");
+					actual_line_color = k_TURN_COLOR_SPECIAL;
+				}
+				else
+				{
+					sprintf(turnNumber,"%d",turn);
+					actual_line_color = turnColor;
+				}
 
-					if ((!special_box_done) && (special_line_segment == line_segment_count))
-					{
-						special_box_done = true;
-						sprintf(turnNumber, "*");
-						actual_line_color = k_TURN_COLOR_SPECIAL;
-					}
-					else
-					{
-						sprintf(turnNumber,"%d",turn);
-						actual_line_color = turnColor;
-					}
+				dist = drawPos.NormalizedDistance(target_pos);//pft
+				if(dist > max_rge)
+				{
+					RECT turnRect = {x - boxEdgeSize, y - boxEdgeSize, x + boxEdgeSize - 1, y + boxEdgeSize - 1};
+					primitives_ClippedPaintRect16(*pSurface, turnRect, g_colorSet->GetColor(actual_line_color));
+					primitives_ClippedFrameRect16(*pSurface, turnRect, g_colorSet->GetColor(COLOR_BLACK));
 
-                    dist = drawPos.NormalizedDistance(target_pos);//pft
-					if(dist > max_rge){
-						primitives_PaintRect16(pSurface, &turnRect, g_colorSet->GetColor(actual_line_color));
-						primitives_FrameRect16(pSurface, &turnRect, 0);
-
-						sint32 const width = m_font->GetStringWidth(turnNumber);
-						sint32 const height = m_font->GetMaxHeight();
-						RECT rect = {0, 0, width, height};
-						OffsetRect(&rect, // position rect relative to turnRect
-						    turnRect.left + (turnRect.right - turnRect.left) / 2 - width  / 2,
-						    turnRect.top  + (turnRect.bottom - turnRect.top) / 2 - height / 2);
-
-						RECT clipRect = primitives_GetScreenAdjustedRectCopy(pSurface, rect);
-						m_font->DrawString(pSurface, &rect, &clipRect, turnNumber, 0, g_colorSet->GetColorRef(COLOR_BLACK), 0);
-					}
+					sint32 const width = m_font->GetStringWidth(turnNumber);
+					sint32 const height = m_font->GetMaxHeight();
+					RECT rect = {0, 0, width, height};
+					OffsetRect(&rect, x - width / 2, y - height / 2);
+					RECT clipRect = primitives_GetScreenAdjustedRectCopy(pSurface, rect);
+					m_font->DrawString(pSurface, &rect, &clipRect, turnNumber, 0, g_colorSet->GetColorRef(COLOR_BLACK), 0);
 				}
 			}
 		}
@@ -841,31 +812,25 @@ void TiledMap::DrawLegalMove
 			x += xoffset;
 			y += yoffset;
 
-			RECT	turnRect	=
-				{x - boxEdgeSize, y - boxEdgeSize, x + boxEdgeSize, y + boxEdgeSize};
+			dist = drawPos.NormalizedDistance(target_pos);//pft
 
-			if (INSURFACE(turnRect.left, turnRect.top) && INSURFACE(turnRect.right, turnRect.bottom))
-			{
-                dist = drawPos.NormalizedDistance(target_pos);//pft
-				if(dist > max_rge){
-					MBCHAR turnNumber[80];
-					sprintf(turnNumber, "*");
-					actual_line_color	= k_TURN_COLOR_SPECIAL;
-					special_box_done	= true;
+			if(dist > max_rge){
+				MBCHAR turnNumber[80];
+				sprintf(turnNumber, "*");
+				actual_line_color	= k_TURN_COLOR_SPECIAL;
+				special_box_done	= true;
 
-					primitives_PaintRect16(pSurface, &turnRect, g_colorSet->GetColor(actual_line_color));
-					primitives_FrameRect16(pSurface, &turnRect, 0);
+				RECT turnRect = {x - boxEdgeSize, y - boxEdgeSize, x + boxEdgeSize - 1, y + boxEdgeSize - 1};
+				primitives_ClippedPaintRect16(*pSurface, turnRect, g_colorSet->GetColor(actual_line_color));
+				primitives_ClippedFrameRect16(*pSurface, turnRect, g_colorSet->GetColor(COLOR_BLACK));
 
-					sint32 const width = m_font->GetStringWidth(turnNumber);
-					sint32 const height = m_font->GetMaxHeight();
-					RECT rect = {0, 0, width, height};
-					OffsetRect(&rect, // position rect relative to turnRect
-					    turnRect.left + (turnRect.right - turnRect.left) / 2 - width  / 2,
-					    turnRect.top  + (turnRect.bottom - turnRect.top) / 2 - height / 2);
+				sint32 const width = m_font->GetStringWidth(turnNumber);
+				sint32 const height = m_font->GetMaxHeight();
+				RECT rect = {0, 0, width, height};
+				OffsetRect(&rect, x - width / 2, y - height / 2);
 
-					RECT clipRect = primitives_GetScreenAdjustedRectCopy(pSurface, turnRect);
-					m_font->DrawString(pSurface, &turnRect, &clipRect, turnNumber, 0, g_colorSet->GetColorRef(COLOR_BLACK), 0);
-				}
+				RECT clipRect = primitives_GetScreenAdjustedRectCopy(pSurface, rect);
+				m_font->DrawString(pSurface, &rect, &clipRect, turnNumber, 0, g_colorSet->GetColorRef(COLOR_BLACK), 0);
 			}
 		}
 	}
@@ -924,11 +889,12 @@ void TiledMap::DrawUnfinishedMove(aui_Surface * pSurface)
 	sint32 yoffset = (sint32)(k_TILE_PIXEL_HEIGHT*m_scale);
 
 	MapPoint prevPos;
+	LockThisSurface(pSurface);
 	while (!goodPath.IsEnd())
 	{
 		prevPos = currPos;
 		goodPath.Next(currPos);
-		uint16 lineColor = g_colorSet->GetColor(k_TURN_COLOR_UNFINISHED);
+		uint16 lineColor = g_colorSet->GetDarkColor(k_TURN_COLOR_UNFINISHED);
 		double old, cost;
 		line_segement_count++;
 
@@ -973,12 +939,11 @@ void TiledMap::DrawUnfinishedMove(aui_Surface * pSurface)
 				y2 += yoffset;
 
 
-				if (INSURFACE(x1, y1) && INSURFACE(x2, y2)) {
-					if (num_tiles_to_half < line_segement_count) {
-						primitives_DrawDashedAALine16(pSurface, x1, y1, x2, y2, lineColor, k_DASH_LENGTH);
-					} else {
-						primitives_DrawAALine16(pSurface, x1, y1, x2, y2, lineColor);
-					}
+				if (num_tiles_to_half < line_segement_count) {
+					primitives_ClippedPatternLine16(*pSurface, x1, y1, x2, y2, lineColor, LINE_PATTERN_DASH,
+							LINE_PATTERN_DASH_LENGTH, LF_ANTI_ALIASED);
+				} else {
+					primitives_ClippedLine16(*pSurface, x1, y1, x2, y2, lineColor, LF_ANTI_ALIASED);
 				}
 
 				AddDirtyTileToMix(prevPos);
@@ -986,6 +951,7 @@ void TiledMap::DrawUnfinishedMove(aui_Surface * pSurface)
 			}
 		}
 	}
+	UnlockSurface();
 
 	line_segement_count++;
 	sint32 turn = 0;
@@ -1118,12 +1084,9 @@ void TiledMap::DrawUnfinishedMove(aui_Surface * pSurface)
 						sint32 const width = m_font->GetStringWidth(turnNumber);
 						sint32 const height = m_font->GetMaxHeight();
 						RECT rect = {0, 0, width, height};
-						OffsetRect(&rect, // position rect relative to turnRect
-						    turnRect.left + (turnRect.right - turnRect.left) / 2 - width  / 2,
-						    turnRect.top  + (turnRect.bottom - turnRect.top) / 2 - height / 2);
-						
-						RECT clipRect = primitives_GetScreenAdjustedRectCopy(pSurface, turnRect);
-						m_font->DrawString(pSurface, &turnRect, &clipRect, turnNumber, 0, color, 0);
+						OffsetRect(&rect, x - width /2, y - height / 2);
+						RECT clipRect = primitives_GetScreenAdjustedRectCopy(pSurface, rect);
+						m_font->DrawString(pSurface, &rect, &clipRect, turnNumber, 0, color, 0);
 					}
 				}
 			}

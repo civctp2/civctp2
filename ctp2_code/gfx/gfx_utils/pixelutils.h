@@ -4,8 +4,6 @@
 #ifndef __PIXELUTILS_H__
 #define __PIXELUTILS_H__
 
-#define BLEND_LEVELS		16
-#define BLEND_MAX_VALUE		64
 #define RGB_VALUES			32768
 #define k_MAX_PERCENT		128
 #define k_PERCENT_SHIFT		7
@@ -47,9 +45,6 @@ inline uint32 pixelutils_GetShadow16RGBMask()
 	return g_is565Format ? SHADOW_16_MASK_565 : SHADOW_16_MASK_555;
 }
 
-// This method can replace:
-//   pixelutils_Blend, pixelutils_BlendFast, pixelutils_Blend_565, pixelutils_BlendFast_565, pixelutils_Blend_555 and
-//   pixelutils_BlendFast_555
 // Note: blendRGBMask contains special blending mask based on 565 or 555-format (see pixelutils_GetBlend16RGBMask)
 inline Pixel16 pixelutils_Blend16(Pixel16 background, Pixel16 foreground, uint8 alpha, uint32 blendRGBMask)
 {
@@ -70,56 +65,9 @@ inline Pixel16 pixelutils_Blend16(Pixel16 background, Pixel16 foreground, uint8 
 	return (Pixel16) (result | (result >> 16));
 }
 
-inline Pixel16 pixelutils_BlendFast(sint32 pixel1, sint32 pixel2, sint32 blend)
-{
-	return pixelutils_Blend16(pixel2, pixel1, blend << 3, pixelutils_GetBlend16RGBMask());
-}
-
-inline Pixel16 pixelutils_BlendFast_565(sint32 pixel1, sint32 pixel2, sint32 blend)
-{
-	return pixelutils_Blend16(pixel2, pixel1, blend << 3, BLEND_16_MASK_565);
-}
-
-inline Pixel16 pixelutils_BlendFast_555(sint32 pixel1, sint32 pixel2, sint32 blend)
-{
-	return pixelutils_Blend16(pixel2, pixel1, blend << 3, BLEND_16_MASK_555);
-}
-
-inline Pixel16 pixelutils_Blend(Pixel16 pixel1, Pixel16 pixel2, uint16_t blend)
-{
-	return pixelutils_Blend16(pixel2, pixel1, blend << 4, pixelutils_GetBlend16RGBMask());
-}
-
-inline Pixel16 pixelutils_Blend_565(Pixel16 pixel1, Pixel16 pixel2, uint16_t blend)
-{
-	return pixelutils_Blend16(pixel2, pixel1, blend << 4, BLEND_16_MASK_565);
-}
-
-inline Pixel16 pixelutils_Blend_555(Pixel16 pixel1, Pixel16 pixel2, uint16_t blend)
-{
-	return pixelutils_Blend16(pixel2, pixel1, blend << 4, BLEND_16_MASK_555);
-}
-
-// This method can replace:
-//   pixelutils_Shadow, pixelutils_Shadow_565, pixelutils_Shadow_555
 // Note: shadowRGBMask contains special blending mask based on 565 or 555-format (see pixelutils_GetShadow16RGBMask)
 inline Pixel16 pixelutils_Shadow16(Pixel16 pixel, uint32 shadowRGBMask) {
 	return (pixel >> 1) & shadowRGBMask;
-}
-
-inline Pixel16 pixelutils_Shadow(Pixel16 pixel)
-{
-	return pixelutils_Shadow16(pixel, pixelutils_GetShadow16RGBMask());
-}
-
-inline Pixel16 pixelutils_Shadow_565(Pixel16 pixel)
-{
-	return pixelutils_Shadow16(pixel, SHADOW_16_MASK_565);
-}
-
-inline Pixel16 pixelutils_Shadow_555(Pixel16 pixel)
-{
-	return pixelutils_Shadow16(pixel, SHADOW_16_MASK_555);
 }
 
 inline Pixel16 pixelutils_Additive(Pixel16 pixel1, Pixel16 pixel2)

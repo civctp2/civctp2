@@ -148,26 +148,6 @@ Pixel16 pixelutils_Additive_565(Pixel16 pixel1, Pixel16 pixel2)
 	return ((r<<11) | (g<<5) | b);
 }
 
-Pixel16 pixelutils_BlendFast_565(sint32 pixel1, sint32 pixel2, sint32 blend)
-{
-	sint32 rb2, g2;
-	sint32 rb0, g0;
-
-	rb2 = (pixel2 & 0xF81F);
-
-	rb0 = ((rb2<<5)+((blend*((pixel1 & 0xF81F)-rb2))>>5)) & 0xF81F;
-
-	g2 = (pixel2 & 0x07E0);
-	g0 = (((g2<<5)+blend*((pixel1 & 0x07E0)-g2))>>5) & 0x07E0;
-
-	return (Pixel16)(rb0|g0);
-}
-
-Pixel16 pixelutils_Shadow_565(Pixel16 pixel)
-{
-  return ((pixel&0xF7DF)>>1);
-}
-
 Pixel16 pixelutils_Lightening_565(Pixel16 pixel)
 {
 	uint16_t r, g, b;

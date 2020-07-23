@@ -310,12 +310,12 @@ COLORREF ColorSet::GetLightColorRef(COLOR color) const
 
 Pixel16 ColorSet::GetDarkColor(COLOR color) const
 {
-	return pixelutils_Shadow(GetColor(color));
+	return pixelutils_Shadow16(GetColor(color), pixelutils_GetShadow16RGBMask());
 }
 
 Pixel16 ColorSet::GetDarkPlayerColor(sint32 playerNum) const
 {
-	return pixelutils_Shadow(GetPlayerColor(playerNum));
+	return pixelutils_Shadow16(GetPlayerColor(playerNum), pixelutils_GetShadow16RGBMask());
 }
 
 Pixel16 ColorSet::GetLightColor(COLOR color) const

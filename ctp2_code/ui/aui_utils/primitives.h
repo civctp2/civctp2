@@ -69,6 +69,21 @@ struct fRect
 #include "c3ui.h"
 extern C3UI			*g_c3ui;
 
+enum LINE_FLAGS {
+	LF_NONE             = 0x00,
+	LF_ANTI_ALIASED     = 0x01,
+	LF_SHADOW           = 0x02
+};
+
+// All kind of patterns may be defined and used
+// Restrictions:
+//   pattern-length has to be a multitude of 2, i.e. 2, 4, 8, 16 or 32
+//   lowest and highest element of a pattern has to be 1 (when there are no more ones then pattern is restarted)
+static const uint32 LINE_PATTERN_DOT         = 0b00000000000000000000000000001001;
+static const uint32 LINE_PATTERN_DOT_LENGTH  = 4;
+static const uint32 LINE_PATTERN_DASH        = 0b00000000000000000000000011000011;
+static const uint32 LINE_PATTERN_DASH_LENGTH = 8;
+
 inline aui_BitmapFont * getBitmapFont()
     {
     aui_BitmapFont *font= NULL;
@@ -81,16 +96,12 @@ inline aui_BitmapFont * getBitmapFont()
     }
 #endif
 
-PRIMITIVES_ERRCODE	primitives_SetRect(RECT *rect,sint32 left,sint32 top,sint32 right,sint32 bottom);
 PRIMITIVES_ERRCODE	primitives_FrameRect16(aui_Surface *pSurface,RECT *pRect,Pixel16 color);
 PRIMITIVES_ERRCODE	primitives_PaintRect16(aui_Surface *pSurface,RECT *pRect,Pixel16 color);
-PRIMITIVES_ERRCODE	primitives_OldBevelRect16(aui_Surface *pSurface, RECT *pRect,sint32 level,BOOL flag);
 PRIMITIVES_ERRCODE  primitives_Scale16(aui_Surface *pSrc, aui_Surface *pDst, const fRect &sRect, const fRect &dRect, bool bFilter);
 
 PRIMITIVES_ERRCODE	primitives_DrawLine16(aui_Surface *pSurface,
 			  sint32 x1,sint32 y1,sint32 x2,sint32 y2,Pixel16 color);
-PRIMITIVES_ERRCODE	primitives_DrawDashedLine16(aui_Surface *pSurface,
-			  sint32 x1,sint32 y1,sint32 x2,sint32 y2,Pixel16 color, sint32 length = 0);
 
 PRIMITIVES_ERRCODE	primitives_DrawText(aui_Surface *pDirectSurface,
 				sint32 x, sint32 y, const MBCHAR *pString,COLORREF color, bool bg);
@@ -120,12 +131,6 @@ PRIMITIVES_ERRCODE primitives_ColoredDropTextCentered(
 PRIMITIVES_ERRCODE	primitives_DropTextBatch(aui_Surface *pDirectSurface,sint32 x,sint32 y,
 				const MBCHAR **pString,sint32 numStrings,COLORREF color,BOOL bg);
 
-PRIMITIVES_ERRCODE	primitives_OldBevelPane16(aui_Surface *pSurface, RECT *pRect,sint32 level,BOOL flag);
-PRIMITIVES_ERRCODE	primitives_OldBevelTabSelected16(aui_Surface *pSurface, RECT *pRect,sint32 level,BOOL flag);
-PRIMITIVES_ERRCODE	primitives_OldBevelTabDeselected16(aui_Surface *pSurface, RECT *pRect,sint32 level,BOOL flag);
-PRIMITIVES_ERRCODE	primitives_OldBevelLeftPiece16(aui_Surface *pSurface, sint32 xStart, sint32 xEnd, sint32 y, sint32 level,BOOL flag);
-PRIMITIVES_ERRCODE	primitives_OldBevelRightPiece16(aui_Surface *pSurface, sint32 xStart, sint32 xEnd, sint32 y, sint32 level,BOOL flag);
-
 PRIMITIVES_ERRCODE	primitives_BevelPane16(
 	aui_Surface *pSurface, RECT *pRect, sint32 level, BOOL flag,
 	sint32 blendLight, sint32 blendDark, AUI_TABGROUP_ALIGNMENT a);
@@ -145,26 +150,44 @@ PRIMITIVES_ERRCODE	primitives_BevelRightPiece16(
 PRIMITIVES_ERRCODE	primitives_BevelRect16(aui_Surface *pSurface, RECT *pRect, sint32 level, BOOL flag, sint32 blendLight, sint32 blendDark);
 PRIMITIVES_ERRCODE	primitives_FrameThickRect16(aui_Surface *pSurface, RECT *pRect, Pixel16 color, sint32 level );
 
-PRIMITIVES_ERRCODE	primitives_DrawFrame16(aui_Surface *pSurface,
-				aui_Image *pImageUpperLeft, aui_Image *pImageUpperRight, aui_Image *pImageLowerLeft, aui_Image *pImageLowerRight,
-				Pattern *pPatternLeft, Pattern *pPatternTop, Pattern *pPatternRight, Pattern *pPatternBottom,
-				RECT *pDestRect);
-
-void	primitives_DrawAALine16(aui_Surface *pSurface, sint32 x1, sint32 y1, sint32 x2, sint32 y2, Pixel16 color);
-void	primitives_DrawDashedAALine16(aui_Surface *pSurface, sint32 x1, sint32 y1, sint32 x2, sint32 y2, Pixel16 color, sint32 length = 0);
-
-void	primitives_HackStencilDraw(aui_Surface *pSurface);
-
 void	primitives_BlendSurfaces( aui_Surface *pOldSurface, aui_Surface *pNewSurface, aui_Surface *pDstSurface, RECT *pDstRect, sint32 blend );
 void	primitives_LightenSurface( aui_Surface *pSurface, sint32 percentLighten );
-void	primitives_LightenRect(aui_Surface *pSurface, RECT &rect, sint32 percentLighten);
 RECT	primitives_GetScreenAdjustedRectCopy(aui_Surface *surf, RECT &clipRect);
 
 // Clipped primitives
 void primitives_ClippedPaintRect16(aui_Surface & surf, const RECT & rect, Pixel16 color,
 		uint8 alpha = pixelutils_OPAQUE);
+inline void primitives_ClippedPaint16(aui_Surface & surf, sint32 x, sint32 y, sint32 width, sint32 height,
+		Pixel16 color, uint8 alpha = pixelutils_OPAQUE)
+{
+	RECT paintRect = { x, y, x + width - 1, y + height - 1 };
+	primitives_ClippedPaintRect16(surf, paintRect, color, alpha);
+}
 void primitives_ClippedFrameRect16(aui_Surface & surf, const RECT & rect, Pixel16 color,
 		uint8 alpha = pixelutils_OPAQUE);
+inline void primitives_ClippedFrame16(aui_Surface & surf, sint32 x, sint32 y, sint32 width, sint32 height,
+		Pixel16 color, uint8 alpha = pixelutils_OPAQUE)
+{
+	RECT frameRect = { x, y, x + width - 1, y + height - 1 };
+	primitives_ClippedFrameRect16(surf, frameRect, color, alpha);
+}
 void primitives_ClippedShadowRect16(aui_Surface & surf, const RECT & rect);
+
+// Clipped lines primitives
+void primitives_SetPatternOffset(sint32 x, sint32 y);
+void primitives_BaseClippedDrawLine16(aui_Surface & surf, sint32 x1, sint32 y1, sint32 x2, sint32 y2, Pixel16 color,
+		LINE_FLAGS lineFlags , uint32 fullPattern, uint32 patternLength); // Do not use directly; use below signatures
+
+inline void primitives_ClippedLine16(aui_Surface & surf, sint32 x1, sint32 y1, sint32 x2, sint32 y2, Pixel16 color,
+		LINE_FLAGS lineFlags = LF_NONE)
+{
+	primitives_BaseClippedDrawLine16(surf, x1, y1, x2, y2, color, lineFlags, 0, 0);
+}
+
+inline void primitives_ClippedPatternLine16(aui_Surface & surf, sint32 x1, sint32 y1, sint32 x2, sint32 y2, Pixel16 color,
+		uint32 fullPattern, uint32 patternLength, LINE_FLAGS lineFlags = LF_NONE)
+{
+	primitives_BaseClippedDrawLine16(surf, x1, y1, x2, y2, color, lineFlags, fullPattern, patternLength);
+}
 
 #endif

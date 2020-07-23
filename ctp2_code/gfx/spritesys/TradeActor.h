@@ -19,7 +19,7 @@ public:
 
 	void       Process();
 
-	void       Draw(RECT * paintRect) const;
+	void       Draw(const RECT & paintRect) const;
 
 	TradeRoute GetRouteID() const { return m_routeID; }
 
@@ -45,6 +45,7 @@ protected:
 	uint32                         m_currentPosID;
 	uint32                         m_destPosID;
 	MapPoint                       m_currentPos;
+	MapPoint                       m_nextPos;
 
 	GoodSpriteGroup              * m_goodSpriteGroup;
 

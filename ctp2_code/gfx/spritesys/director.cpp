@@ -170,7 +170,7 @@ public:
 	virtual ~DQAnimation() {}
 
 	virtual void Process() = 0;
-	virtual void Draw(RECT *paintRect) = 0;
+	virtual void Draw(const RECT & paintRect) = 0;
 	virtual void Offset(sint32 deltaX, sint32 deltaY) = 0;
 
 	virtual void Dump() = 0;
@@ -194,7 +194,7 @@ public:
 		}
 	}
 
-	virtual void Draw(RECT *paintRect)
+	virtual void Draw(const RECT & paintRect)
 	{
 		if (g_theProfileDB->IsTradeAnim())
 		{
@@ -264,7 +264,7 @@ public:
 		}
 	}
 
-	virtual void Draw(RECT * paintRect)
+	virtual void Draw(const RECT & paintRect)
 	{
 		for (auto actorReference : m_standbyActors) {
 			UnitActor *actor = actorReference.first;
@@ -371,7 +371,7 @@ public:
 
 	// Animation behaviour
 	virtual void Process() = 0;
-	virtual void Draw(RECT *paintRect) = 0;
+	virtual void Draw(const RECT & paintRect) = 0;
 	virtual void Offset(sint32 deltaX, sint32 deltaY) = 0;
 	virtual bool IsAnimationFinished() = 0;
 
@@ -416,7 +416,7 @@ public:
 
 	// Animation behaviour
 	virtual void Process() {}
-	virtual void Draw(RECT *paintRect) {}
+	virtual void Draw(const RECT & paintRect) {}
 	virtual void Offset(sint32 deltaX, sint32 deltaY) {}
 	virtual bool IsAnimationFinished() { return true; }
 };
@@ -455,7 +455,7 @@ public:
 		m_activeActor->Process();
 	}
 
-	virtual void Draw(RECT *paintRect)
+	virtual void Draw(const RECT & paintRect)
 	{
 		m_activeActor->Draw(paintRect);
 	}
@@ -502,7 +502,7 @@ public:
 
 	// Animation behaviour
 	virtual void Process() {}
-	virtual void Draw(RECT *paintRect) {}
+	virtual void Draw(const RECT & paintRect) {}
 	virtual void Offset(sint32 deltaX, sint32 deltaY) {}
 	virtual bool IsAnimationFinished() { return true; }
 
@@ -562,7 +562,7 @@ public:
 		}
 	}
 
-	virtual void Draw(RECT *paintRect)
+	virtual void Draw(const RECT & paintRect)
 	{
 		for (const auto &activeActor : m_activeActors) {
 			activeActor->Draw(paintRect);
@@ -631,7 +631,7 @@ public:
 	virtual void PauseDirector(bool pause);
 
 	virtual void Process();
-	virtual void Draw(RECT *paintRect, sint32 layer);
+	virtual void Draw(const RECT & paintRect, sint32 layer);
 	virtual void OffsetActors(sint32 deltaX, sint32 deltaY);
 
 	virtual void ExternalActionFinished(DEACTION_TYPE externalActionType);
@@ -725,8 +725,8 @@ private:
 	void ProcessActions();
 	void ProcessAnimations();
 
-	void DrawActions(RECT *paintRect);
-	void DrawAnimations(RECT *paintRect);
+	void DrawActions(const RECT & paintRect);
+	void DrawAnimations(const RECT & paintRect);
 
 	void OffsetActions(sint32 deltaX, sint32 deltaY);
 	void OffsetAnimations(sint32 deltaX, sint32 deltaY);
@@ -1116,7 +1116,7 @@ public:
 
 	bool TileIsCompletelyVisible(sint32 x, sint32 y)
 	{
-		RECT tempViewRect = *g_tiledMap->GetMapViewRect();
+		RECT tempViewRect = g_tiledMap->GetMapViewRect();
 		g_radarMap->ComputeCenteredMap(centerMapPos, &tempViewRect);
 		return g_tiledMap->TileIsCompletelyVisible(x, y, &tempViewRect);
 	}
@@ -2580,20 +2580,20 @@ void DirectorImpl::NextPlayer() {
 	}
 }
 
-void DirectorImpl::Draw(RECT *paintRect, sint32 layer)
+void DirectorImpl::Draw(const RECT & paintRect, sint32 layer)
 {
 	DrawAnimations(paintRect);
 	DrawActions(paintRect);
 }
 
-void DirectorImpl::DrawActions(RECT *paintRect)
+void DirectorImpl::DrawActions(const RECT & paintRect)
 {
 	for (auto action : m_animatingActions) {
 		action->Draw(paintRect);
 	}
 }
 
-void DirectorImpl::DrawAnimations(RECT *paintRect)
+void DirectorImpl::DrawAnimations(const RECT & paintRect)
 {
 	m_tradeAnimations->Draw(paintRect);
 	m_standbyAnimations->Draw(paintRect);

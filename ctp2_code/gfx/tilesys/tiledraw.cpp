@@ -566,67 +566,23 @@ void TiledMap::DrawPartiallyConstructedImprovement(aui_Surface *surface, uint32 
 
 }
 
-void TiledMap::DrawHitMask(aui_Surface *surf, const MapPoint &pos)
+void TiledMap::DrawHitMask(aui_Surface * surf, const MapPoint & pos)
 {
-	sint32		x, y;
+	extern BOOL g_killMode;
+	Pixel16 color = GetColor(g_killMode ? COLOR_RED : g_curSelectColor);
+
+	sint32 x, y;
 	maputils_MapXY2PixelXY(pos.x, pos.y, &x, &y);
 
-	if (x < 0) return;
-	y += (sint32) ((double)k_TILE_PIXEL_HEADROOM * m_scale);
-	if (y < 0) return;
+	y += m_zoomTileHeadroom[m_zoomLevel];
+	sint32 offsetX = m_zoomTilePixelWidth[m_zoomLevel] / 2;
+	sint32 offsetY = m_zoomTilePixelHeight[m_zoomLevel] / 2;
+	primitives_ClippedLine16(*surf, x, y + offsetY, x + offsetX, y, color);  // north-west
+	primitives_ClippedLine16(*surf, x + offsetX, y, x + offsetX * 2, y + offsetY, color); // north-east
+	primitives_ClippedLine16(*surf, x, y + offsetY, x + offsetX, y + offsetY * 2, color); // south-west
+	primitives_ClippedLine16(*surf, x + offsetX, y + offsetY * 2, x + offsetX * 2, y + offsetY, color); // south-east
 
-	sint32 width = GetZoomTilePixelWidth();
-	sint32 height = GetZoomTilePixelHeight();
-
-	if (x >= surf->Width()-width) return;
-	if (y >= surf->Height() - height) return;
-
-	AddDirtyToMix(x, y, width, height);
-
-	SurfaceLock lock        = SurfaceLock(surf);
-	if (!lock.IsValid()) return;
-
-	uint8 *     pSurfBase   = lock.Base();
-	sint32      surfPitch   = surf->Pitch();
-
-	sint32 num = k_TILE_GRID_HEIGHT - k_TILE_PIXEL_HEADROOM;
-	sint32 den = height;
-	sint32 tot = num;
-	sint32 row = 0;
-
-	extern BOOL g_killMode;
-	Pixel16 selectColorPixel = GetColor(g_killMode ? COLOR_RED : g_curSelectColor);
-
-	for (sint32 i = k_TILE_PIXEL_HEADROOM; i < k_TILE_GRID_HEIGHT;)
-	{
-		sint32 start = m_tileHitMask[i].start;
-		sint32 end   = m_tileHitMask[i].end;
-
-		while (tot >= den)
-		{
-			i++;
-			tot -= den;
-		}
-		tot += num;
-
-		Pixel16 * pDestPixel = (Pixel16 *)(pSurfBase + ((y+row) * surfPitch) + ((x+start) << 1));
-		*pDestPixel++ = selectColorPixel;
-		*pDestPixel = selectColorPixel;
-
-		pDestPixel += (end-start-2);
-
-		*pDestPixel++ = selectColorPixel;
-		*pDestPixel = selectColorPixel;
-
-		row++;
-	}
-
-#if 0
-	// Add a timer and a possibility to disable the blinking
-	// Move it into the calling method, so that the blinking in the scenario editor would be correct
-	g_curSelectColor = (COLOR)(g_curSelectColor + 1);
-	if (g_curSelectColor > COLOR_SELECT_2) g_curSelectColor = COLOR_SELECT_0;
-#endif
+	AddDirtyToMix(x, y, offsetX * 2 + 1, offsetY * 2 + 1);
 }
 
 void TiledMap::DrawColoredHitMask(aui_Surface *surf, const MapPoint &pos, COLOR color)
@@ -683,62 +639,26 @@ void TiledMap::DrawColoredHitMask(aui_Surface *surf, const MapPoint &pos, COLOR 
 
 void TiledMap::DrawHitMask(aui_Surface *surf, const MapPoint &pos, RECT *mapViewRect, RECT *destRect)
 {
-	sint32		x, y;
+	Pixel16 color = GetColor(g_curSelectColor);
+
+	sint32 x, y;
 	maputils_MapXY2PixelXY(pos.x, pos.y, &x, &y, mapViewRect);
+
 	x += destRect->left;
-	if (x < 0) return;
+	y += destRect->top + m_zoomTileHeadroom[m_zoomLevel];
+	sint32 offsetX = m_zoomTilePixelWidth[m_zoomLevel] / 2;
+	sint32 offsetY = m_zoomTilePixelHeight[m_zoomLevel] / 2;
+	primitives_ClippedLine16(*surf, x, y + offsetY, x + offsetX, y, color);  // north-west
+	primitives_ClippedLine16(*surf, x + offsetX, y, x + offsetX * 2, y + offsetY, color); // north-east
+	primitives_ClippedLine16(*surf, x, y + offsetY, x + offsetX, y + offsetY * 2, color); // south-west
+	primitives_ClippedLine16(*surf, x + offsetX, y + offsetY * 2, x + offsetX * 2, y + offsetY, color); // south-east
 
-	y += destRect->top + (sint32) ((double)k_TILE_PIXEL_HEADROOM * m_scale);
-	if (y < 0) return;
-
-	sint32 width = GetZoomTilePixelWidth();
-	sint32 height = GetZoomTilePixelHeight();
-
-    if (x >= surf->Width()-width) return;
-	if (y >= surf->Height() - height) return;
-
-	AddDirtyToMix(x, y, width, height);
-
-    SurfaceLock lock    = SurfaceLock(surf);
-    if (!lock.IsValid()) return;
-
-	uint8 * pSurfBase   = lock.Base();
-	sint32  surfPitch   = surf->Pitch();
-
-	sint32 num = k_TILE_GRID_HEIGHT - k_TILE_PIXEL_HEADROOM;
-	sint32 den = height;
-	sint32 tot = num;
-
-	sint32 row = 0;
-	Pixel16		selectColorPixel = GetColor(g_curSelectColor);
-
-	for (sint32 i = k_TILE_PIXEL_HEADROOM; i < k_TILE_GRID_HEIGHT;)
-	{
-#if 0
-		start = (sint32) ((double)m_tileHitMask[i].start * m_scale);
-		end   = (sint32)((double)m_tileHitMask[i].end * m_scale);
-#endif
-		sint32 start = m_tileHitMask[i].start;
-		sint32 end   = m_tileHitMask[i].end  ;
-
-		while (tot >= den)
-		{
-			i++;
-			tot -= den;
-		}
-		tot += num;
-
-		Pixel16 * pDestPixel = (Pixel16 *)(pSurfBase + ((y+row) * surfPitch) + ((x+start) << 1));
-		*pDestPixel = selectColorPixel;
-		pDestPixel += (end-start);
-		*pDestPixel = selectColorPixel;
-
-		row++;
-	}
+	AddDirtyToMix(x, y, offsetX * 2 + 1, offsetY * 2 + 1);
 
 	g_curSelectColor = (COLOR)(g_curSelectColor + 1);
-	if (g_curSelectColor > COLOR_SELECT_3)
+	if (g_curSelectColor > COLOR_SELECT_3) {
 		g_curSelectColor = COLOR_SELECT_0;
+	}
 }
 
 void TiledMap::DrawColoredHitMaskEdge(aui_Surface *surf, const MapPoint &pos, Pixel16 selectColorPixel, WORLD_DIRECTION side)
@@ -818,96 +738,143 @@ void TiledMap::DrawColoredHitMaskEdge(aui_Surface *surf, const MapPoint &pos, Pi
 
 }
 
+inline void DrawNorthEastBorder(aui_Surface & surf, sint32 centerX, sint32 centerY, sint32 offsetX, sint32 offsetY,
+		sint32 indent, Pixel16 color, uint32 borders, bool usePattern)
+{
+	if (!(borders & (1 << NORTHEAST))) {
+		return;
+	}
+
+	bool southEast = borders & (1 << SOUTHEAST);
+	bool east      = borders & (1 << EAST);
+	bool northWest = borders & (1 << NORTHWEST);
+
+	sint32 x1 = centerX + offsetX - (southEast || east ? indent * 2 : 0);
+	sint32 x2 = centerX - (northWest ? 0 : indent * 2);
+	sint32 y1 = centerY + (southEast || east ? 0 : indent);
+	sint32 y2 = centerY - offsetY + (northWest ? indent : 0);
+
+	if (usePattern) {
+		primitives_ClippedPatternLine16(surf, x1, y1, x2, y2, color, LINE_PATTERN_DASH, LINE_PATTERN_DASH_LENGTH);
+	} else {
+		primitives_ClippedLine16(surf, x1, y1, x2, y2, color);
+	}
+}
+
+inline void DrawNorthWestBorder(aui_Surface & surf, sint32 centerX, sint32 centerY, sint32 offsetX, sint32 offsetY,
+		sint32 indent, Pixel16 color, uint32 borders, bool usePattern)
+{
+	if (!(borders & (1 << NORTHWEST))) {
+		return;
+	}
+
+	bool northEast = borders & (1 << NORTHEAST);
+	bool north     = borders & (1 << NORTH);
+	bool southWest = borders & (1 << SOUTHWEST);
+
+	sint32 x1 = centerX + (northEast || north ? 0 : indent * 2);
+	sint32 x2 = centerX - offsetX + (southWest ? indent * 2 : 0);
+	sint32 y1 = centerY - offsetY + (northEast || north ? indent : 0);
+	sint32 y2 = centerY + (southWest ? 0 : indent);
+
+	if (usePattern) {
+		primitives_ClippedPatternLine16(surf, x1, y1, x2, y2, color, LINE_PATTERN_DASH, LINE_PATTERN_DASH_LENGTH);
+	} else {
+		primitives_ClippedLine16(surf, x1, y1, x2, y2, color);
+	}
+}
+
+inline void DrawSouthEastBorder(aui_Surface & surf, sint32 centerX, sint32 centerY, sint32 offsetX, sint32 offsetY,
+		sint32 indent, Pixel16 color, uint32 borders, bool usePattern)
+{
+	if (!(borders & (1 << SOUTHEAST))) {
+		return;
+	}
+
+	bool southWest = borders & (1 << SOUTHWEST);
+	bool south     = borders & (1 << SOUTH);
+	bool northEast = borders & (1 << NORTHEAST);
+
+	sint32 x1 = centerX - (southWest || south ? 0 : indent * 2);
+	sint32 x2 = centerX + offsetX - (northEast ? indent * 2 : 0);
+	sint32 y1 = centerY + offsetY - (southWest || south ? indent : 0);
+	sint32 y2 = centerY - (northEast ? 0 : indent);
+
+	if (usePattern) {
+		primitives_ClippedPatternLine16(surf, x1, y1, x2, y2, color, LINE_PATTERN_DASH, LINE_PATTERN_DASH_LENGTH);
+	} else {
+		primitives_ClippedLine16(surf, x1, y1, x2, y2, color);
+	}
+}
+
+inline void DrawSouthWestBorder(aui_Surface & surf, sint32 centerX, sint32 centerY, sint32 offsetX, sint32 offsetY,
+		sint32 indent, Pixel16 color, uint32 borders, bool usePattern)
+{
+	if (!(borders & (1 << SOUTHWEST))) {
+		return;
+	}
+
+	bool northWest = borders & (1 << NORTHWEST);
+	bool west      = borders & (1 << WEST);
+	bool southEast = borders & (1 << SOUTHEAST);
+
+	sint32 x1 = centerX - offsetX + (northWest || west ? indent * 2 : 0);
+	sint32 x2 = centerX + (southEast ? 0 : indent * 2);
+	sint32 y1 = centerY - (northWest || west ? 0 : indent);
+	sint32 y2 = centerY + offsetY - (southEast ? indent : 0);
+
+	if (usePattern) {
+		primitives_ClippedPatternLine16(surf, x1, y1, x2, y2, color, LINE_PATTERN_DASH, LINE_PATTERN_DASH_LENGTH);
+	} else {
+		primitives_ClippedLine16(surf, x1, y1, x2, y2, color);
+	}
+}
+
+inline void DrawBorders(aui_Surface & surf, sint32 centerX, sint32 centerY, sint32 offsetX, sint32 offsetY,
+		sint32 indent, Pixel16 color, uint32 borders, bool usePattern)
+{
+	DrawNorthEastBorder(surf, centerX, centerY, offsetX, offsetY, indent, color, borders, usePattern);
+	DrawNorthWestBorder(surf, centerX, centerY, offsetX, offsetY, indent, color, borders, usePattern);
+	DrawSouthEastBorder(surf, centerX, centerY, offsetX, offsetY, indent, color, borders, usePattern);
+	DrawSouthWestBorder(surf, centerX, centerY, offsetX, offsetY, indent, color, borders, usePattern);
+}
+
 /// Draw a colored border edge at a tile
 /// \param      surf                Surface to draw on
 /// \param      pos                 Tile to draw
 /// \param      selectColorPixel    Color to use
-/// \param      side                Side of the tile to draw
-/// \param      dashMode            Not used
+/// \param      borders             Borders of the tile to draw
+/// \param      dashMode            Draw dash, solid or smooth lines
 /// \remarks    This function expects that \a surf has been locked
-void TiledMap::DrawColoredBorderEdge(aui_Surface *surf, const MapPoint &pos, Pixel16 selectColorPixel, WORLD_DIRECTION side, sint32 dashMode)
+void TiledMap::DrawColoredBorderEdge(aui_Surface & surf, const MapPoint & pos, Pixel16 selectColorPixel, uint32 borders,
+		sint32 dashMode, sint32 indent)
 {
-	sint32		x, y;
-	maputils_MapXY2PixelXY(pos.x, pos.y, &x, &y);
-
-	if (x < 0) return;
-	y += (sint32) ((double)k_TILE_PIXEL_HEADROOM * m_scale);
-	if (y < 0) return;
-
-	sint32 width = GetZoomTilePixelWidth();  // changing here got rid of the border
-	sint32 height = GetZoomTilePixelHeight();
-
-	if (!surf) surf = m_surface;
-
-	if (x >= surf->Width()-width) return;
-	if (y >= surf->Height() - height) return;
-
-	AddDirtyToMix(x, y, width, height);
-
-	uint8	* surfBase = m_surfBase;
-	sint32  surfPitch = m_surfPitch;
-
-    sint32 num = k_TILE_GRID_HEIGHT - k_TILE_PIXEL_HEADROOM;
-	sint32 den = height;
-	sint32 tot = num;
-
-	sint32 row = 0;
-
-	sint32 startI, endI;
-	if(side == NORTHWEST || side == NORTHEAST) {
-		startI = k_TILE_PIXEL_HEADROOM;  // E - pixel headroom is the space on the tga above the square tileset.h has these values
-		endI = k_TILE_PIXEL_HEADROOM + (k_TILE_GRID_HEIGHT / 2);
-	} else {
-		startI = k_TILE_PIXEL_HEADROOM + (k_TILE_GRID_HEIGHT / 2);
-		endI = k_TILE_GRID_HEIGHT;
+	if (!borders) {
+		return;
 	}
 
-	bool west = (side == NORTHWEST) || (side == SOUTHWEST);
-	bool north = (side == NORTHWEST) || (side == NORTHEAST);
+	sint32 x1, y1;
+	maputils_MapXY2PixelXY(pos.x, pos.y, &x1, &y1);
+	y1 += m_zoomTileHeadroom[m_zoomLevel];
 
-	for (sint32 i = k_TILE_PIXEL_HEADROOM; i < k_TILE_GRID_HEIGHT;)
+	sint32 offsetX = m_zoomTilePixelWidth[m_zoomLevel] / 2;
+	sint32 offsetY = m_zoomTilePixelHeight[m_zoomLevel] / 2;
+	sint32 centerX = x1 + offsetX;
+	sint32 centerY = y1 + offsetY;
+	AddDirtyToMix(x1, y1, offsetX * 2 + 1, offsetY * 2 + 1);
+
+	Pixel16 darkColor = pixelutils_Shadow16(selectColorPixel, pixelutils_GetShadow16RGBMask());
+	if (dashMode == k_BORDER_SOLID) {
+		DrawBorders(surf, centerX, centerY, offsetX, offsetY, indent, selectColorPixel, borders, false);
+	}
+	else if (dashMode == k_BORDER_SMOOTH)
 	{
-		if(north && i >= (k_TILE_PIXEL_HEADROOM + k_TILE_GRID_HEIGHT) / 2)
-			break;
-
-#if 0
-		start = (sint32) ((double)m_tileHitMask[i].start * m_scale);
-		end = (sint32)((double)m_tileHitMask[i].end * m_scale);
-#endif
-		sint32 start = m_tileHitMask[i].start;
-		sint32 end   = m_tileHitMask[i].end  ;
-
-		while (tot >= den) {
-			i++;
-			tot -= den;
-		}
-		tot += num;
-
-		if(!north && i < (k_TILE_PIXEL_HEADROOM + k_TILE_GRID_HEIGHT) / 2) {
-			row++;
-			continue;
-		}
-
-		if(dashMode && (row & 0x2)) {
-			row++;
-			continue;
-		}
-
-		Pixel16 * pDestPixel = (Pixel16 *)(surfBase + ((y+row) * surfPitch) + ((x+start) << 1)); //EMOD change here
-		if(west) {
-			*pDestPixel = selectColorPixel;
-			*(pDestPixel + 1) = selectColorPixel;
-			*(pDestPixel + 2) = selectColorPixel;
-		}
-		pDestPixel += (end-start);
-
-		if(!west) {
-			*pDestPixel = 0; selectColorPixel;
-			*(pDestPixel - 1) = selectColorPixel;
-			*(pDestPixel - 2) = selectColorPixel;
-		}
-
-		row++;
+		DrawBorders(surf, centerX, centerY, offsetX, offsetY, indent, selectColorPixel, borders, false);
+		DrawBorders(surf, centerX, centerY, offsetX, offsetY, indent + 1, darkColor, borders, false);
+	}
+	else if (dashMode == k_BORDER_DASHED)
+	{
+		DrawBorders(surf, centerX, centerY, offsetX, offsetY, indent, selectColorPixel, borders, true);
 	}
 }
 
@@ -1167,6 +1134,7 @@ sint32 TiledMap::DrawBlendedTile(aui_Surface *surface, const MapPoint &pos,sint3
 	uint8 *     pSurfBase           = m_surfBase;
 	sint32      surfPitch           = m_surfPitch;
 
+	uint32  blendRgbMask = pixelutils_GetBlend16RGBMask();
 	Pixel16 transPixel = 0;
 
 	for (sint32 y = 0; y < k_TILE_PIXEL_HEIGHT; y++)
@@ -1200,7 +1168,7 @@ sint32 TiledMap::DrawBlendedTile(aui_Surface *surface, const MapPoint &pos,sint3
 			Pixel16 * pDestPixel = (Pixel16 *)
                 (pSurfBase + ((y+ypos) * surfPitch) + ((x+xpos) << 1));
 
-			*pDestPixel = pixelutils_BlendFast(srcPixel,color,blend);
+			*pDestPixel = pixelutils_Blend16(color, srcPixel, blend << 3, blendRgbMask);
 		}
 	}
 
@@ -1330,6 +1298,7 @@ void TiledMap::DrawBlendedTileScaled(aui_Surface *surface, const MapPoint &pos, 
 		}
         else
         {
+        	uint32  blendRgbMask = pixelutils_GetBlend16RGBMask();
 			sint32  haccum      = destWidth * 2 - k_TILE_PIXEL_WIDTH;
 			sint32  hincx       = destWidth * 2;
 			sint32  hincxy      = (destWidth - k_TILE_PIXEL_WIDTH) * 2;
@@ -1367,7 +1336,7 @@ void TiledMap::DrawBlendedTileScaled(aui_Surface *surface, const MapPoint &pos, 
 					Pixel16 * pDestPixel = (Pixel16 *)
                         (pSurfBase + (vdestpos * surfPitch) + (hdestpos << 1));
 
-					*pDestPixel = pixelutils_BlendFast(srcPixel,color,blend);
+					*pDestPixel = pixelutils_Blend16(color, srcPixel, blend << 3, blendRgbMask);
 
 					hdestpos++;
 				}
@@ -1415,10 +1384,12 @@ sint32 TiledMap::DrawBlendedOverlay(aui_Surface *surface, Pixel16 *data, sint32 
     if (x >= surfWidth - k_TILE_GRID_WIDTH) return 0;
     if (y >= surfHeight - k_TILE_GRID_HEIGHT) return 0;
 
-	uint16		start = (uint16)*data++;
-	uint16		end = (uint16)*data++;
-	Pixel16		*table = data;
-	Pixel16		*dataStart = table + (end - start + 1);
+	uint32    blendRgbMask  = pixelutils_GetBlend16RGBMask();
+	uint32    shadowRgbMask = pixelutils_GetShadow16RGBMask();
+	uint16    start         = (uint16)*data++;
+	uint16    end           = (uint16)*data++;
+	Pixel16 * table         = data;
+	Pixel16 * dataStart     = table + (end - start + 1);
 
 	for (sint32 j=start; j<end; j++)
     {
@@ -1442,7 +1413,7 @@ sint32 TiledMap::DrawBlendedOverlay(aui_Surface *surface, Pixel16 *data, sint32 
 
 						for (short i=0; i<len; i++) {
 							if (!(flags & k_OVERLAY_FLAG_SHADOWSONLY)) {
-								*destPixel++ = pixelutils_BlendFast(*rowData,color,blend);
+								*destPixel++ = pixelutils_Blend16(color, *rowData, blend << 3, blendRgbMask);
 								rowData++;
 							} else {
 								rowData++;
@@ -1456,7 +1427,7 @@ sint32 TiledMap::DrawBlendedOverlay(aui_Surface *surface, Pixel16 *data, sint32 
 						sint32 len = (sint32)(tag & 0x00FF);
 						for (sint32 i=0; i<len; i++) {
 							if (!(flags & k_OVERLAY_FLAG_NOSHADOWS)) {
-								*destPixel = pixelutils_Shadow(*destPixel);
+								*destPixel = pixelutils_Shadow16(*destPixel, shadowRgbMask);
 								destPixel++;
 							} else {
 								destPixel++;
@@ -1518,16 +1489,17 @@ void TiledMap::DrawBlendedOverlayScaled(aui_Surface *surface,Pixel16 *data, sint
 
 	surfBase += (surfPitch * y + x * 2);
 
-	uint16		vstart      = (uint16)*data++;
-	uint16		end         = (uint16)*data++;
-	Pixel16	*   table       = data;
-	Pixel16	*   dataStart   = table + (end - vstart + 1);
-	sint32      vaccum      = destHeight*2 - k_TILE_GRID_HEIGHT;
-	sint32      vincx       = destHeight*2;
-	sint32      vincxy      = (destHeight-k_TILE_GRID_HEIGHT) * 2;
-	sint32      vpos2       = (sint32)((double)((end+1) - destHeight) / (double)destHeight);
-    sint32      vdestpos    = y;
-	sint32      vend        = (end+1) - 1;
+	uint32    blendRgbMask = pixelutils_GetBlend16RGBMask();
+	uint16    vstart       = (uint16)*data++;
+	uint16    end          = (uint16)*data++;
+	Pixel16 * table        = data;
+	Pixel16 * dataStart    = table + (end - vstart + 1);
+	sint32    vaccum       = destHeight*2 - k_TILE_GRID_HEIGHT;
+	sint32    vincx        = destHeight*2;
+	sint32    vincxy       = (destHeight-k_TILE_GRID_HEIGHT) * 2;
+	sint32    vpos2        = (sint32)((double)((end+1) - destHeight) / (double)destHeight);
+	sint32    vdestpos     = y;
+	sint32    vend         = (end+1) - 1;
 
 	for (sint32 vpos1 = 0; vpos1 < vend; ++vpos1)
     {
@@ -1571,10 +1543,7 @@ void TiledMap::DrawBlendedOverlayScaled(aui_Surface *surface,Pixel16 *data, sint
 					if (pixel1 != k_MEDIUM_KEY || pixel2 != k_MEDIUM_KEY || pixel3 != k_MEDIUM_KEY || pixel4 != k_MEDIUM_KEY) {
 
 						pixel = pixel3;
-
-
-						*destPixel = pixelutils_BlendFast(pixel,color,blend);
-
+						*destPixel = pixelutils_Blend16(color, pixel, blend << 3, blendRgbMask);
 					}
 
 					pixel1 = pixel3;
@@ -1602,12 +1571,14 @@ sint32 TiledMap::DrawBlendedOverlayIntoMix(Pixel16 *data, sint32 x, sint32 y, Pi
 	if (x >= surfWidth - k_TILE_GRID_WIDTH) return 0;
 	if (y >= surfHeight - k_TILE_GRID_HEIGHT) return 0;
 
-	sint32      surfPitch   = g_screenManager->GetSurfPitch();
-	uint8 *     surfBase    = g_screenManager->GetSurfBase();
-	uint16		start       = (uint16)*data++;
-	uint16		end         = (uint16)*data++;
-	Pixel16	*   table       = data;
-	Pixel16	*   dataStart   = table + (end - start + 1);
+	uint32    blendRgbMask  = pixelutils_GetBlend16RGBMask();
+	uint32    shadowRgbMask = pixelutils_GetShadow16RGBMask();
+	sint32    surfPitch     = g_screenManager->GetSurfPitch();
+	uint8   * surfBase      = g_screenManager->GetSurfBase();
+	uint16    start         = (uint16)*data++;
+	uint16    end           = (uint16)*data++;
+	Pixel16 * table         = data;
+	Pixel16 * dataStart     = table + (end - start + 1);
 
 	for (sint32 j = start; j < end; j++)
     {
@@ -1630,7 +1601,7 @@ sint32 TiledMap::DrawBlendedOverlayIntoMix(Pixel16 *data, sint32 x, sint32 y, Pi
 						short len = (tag & 0x00FF);
 
 						for (short i=0; i<len; i++) {
-							*destPixel++ = pixelutils_BlendFast(*rowData,color,blend);
+							*destPixel++ = pixelutils_Blend16(color, *rowData, blend << 3, blendRgbMask);
 							rowData++;
 						}
 
@@ -1639,7 +1610,7 @@ sint32 TiledMap::DrawBlendedOverlayIntoMix(Pixel16 *data, sint32 x, sint32 y, Pi
 				case k_TILE_SHADOW_RUN_ID		: {
 						sint32 len = (sint32)(tag & 0x00FF);
 						for (sint32 i=0; i<len; i++) {
-							*destPixel = pixelutils_Shadow(*destPixel);
+							*destPixel = pixelutils_Shadow16(*destPixel, shadowRgbMask);
 							destPixel++;
 						}
 					}
@@ -1662,18 +1633,19 @@ void TiledMap::DrawBlendedOverlayScaledIntoMix(Pixel16 *data, sint32 x, sint32 y
 	if (x >= surfWidth - destWidth) return;
 	if (y >= surfHeight - destHeight) return;
 
-	sint32      surfPitch   = g_screenManager->GetSurfPitch();
-	uint8 *     surfBase    = g_screenManager->GetSurfBase() + (surfPitch * y + x * 2);
-	uint16		vstart      = (uint16)*data++;
-	uint16		end         = (uint16)*data++;
-	Pixel16	*   table       = data;
-	Pixel16	*   dataStart   = table + (end - vstart + 1);
-	sint32      vaccum      = destHeight*2 - k_TILE_GRID_HEIGHT;
-	sint32      vincx       = destHeight*2;
-	sint32      vincxy      = (destHeight-k_TILE_GRID_HEIGHT) * 2;
-	sint32      vpos2       = (sint32)((double)((end+1) - destHeight) / (double)destHeight);
-	sint32      vdestpos    = y;
-	sint32      vend        = (end+1) - 1;
+	uint32    blendRgbMask = pixelutils_GetBlend16RGBMask();
+	sint32    surfPitch    = g_screenManager->GetSurfPitch();
+	uint8   * surfBase     = g_screenManager->GetSurfBase() + (surfPitch * y + x * 2);
+	uint16    vstart       = (uint16)*data++;
+	uint16    end          = (uint16)*data++;
+	Pixel16 * table        = data;
+	Pixel16 * dataStart    = table + (end - vstart + 1);
+	sint32    vaccum       = destHeight*2 - k_TILE_GRID_HEIGHT;
+	sint32    vincx        = destHeight*2;
+	sint32    vincxy       = (destHeight-k_TILE_GRID_HEIGHT) * 2;
+	sint32    vpos2        = (sint32)((double)((end+1) - destHeight) / (double)destHeight);
+	sint32    vdestpos     = y;
+	sint32    vend         = (end+1) - 1;
 
 	Pixel16		emptyRow[2];
 	emptyRow[0] = (k_TILE_SKIP_RUN_ID << 8) | k_TILE_GRID_WIDTH;
@@ -1717,10 +1689,7 @@ void TiledMap::DrawBlendedOverlayScaledIntoMix(Pixel16 *data, sint32 x, sint32 y
 					if (pixel1 != k_MEDIUM_KEY || pixel2 != k_MEDIUM_KEY || pixel3 != k_MEDIUM_KEY || pixel4 != k_MEDIUM_KEY) {
 
 						pixel = pixel3;
-
-
-						*destPixel = pixelutils_BlendFast(pixel,color,blend);
-
+						*destPixel = pixelutils_Blend16(color, pixel, blend << 3, blendRgbMask);
 					}
 
 					pixel1 = pixel3;
@@ -1747,12 +1716,14 @@ sint32 TiledMap::DrawDitheredOverlayIntoMix(Pixel16 *data, sint32 x, sint32 y, B
 	if (x >= surfWidth - k_TILE_GRID_WIDTH) return 0;
 	if (y >= surfHeight - k_TILE_GRID_HEIGHT) return 0;
 
-	sint32      surfPitch   = g_screenManager->GetSurfPitch();
-	uint8 *     surfBase    = g_screenManager->GetSurfBase();
-	uint16		start       = (uint16)*data++;
-	uint16		end         = (uint16)*data++;
-	Pixel16	*   table       = data;
-	Pixel16	*   dataStart   = table + (end - start + 1);
+	uint32    blendRgbMask  = pixelutils_GetBlend16RGBMask();
+	uint32    shadowRgbMask = pixelutils_GetShadow16RGBMask();
+	sint32    surfPitch     = g_screenManager->GetSurfPitch();
+	uint8   * surfBase      = g_screenManager->GetSurfBase();
+	uint16    start         = (uint16)*data++;
+	uint16    end           = (uint16)*data++;
+	Pixel16 * table         = data;
+	Pixel16 * dataStart     = table + (end - start + 1);
 
 	for (sint32 j = start; j < end; j++)
     {
@@ -1778,9 +1749,11 @@ sint32 TiledMap::DrawDitheredOverlayIntoMix(Pixel16 *data, sint32 x, sint32 y, B
 
 						for (short i=0; i<len; i++) {
 						        if (fogged)
-								*destPixel++ = pixelutils_BlendFast(pixelutils_BlendFast(*rowData, *destPixel, k_FOW_BLEND_VALUE), k_FOW_COLOR, k_FOW_BLEND_VALUE);
+								*destPixel++ = pixelutils_Blend16(k_FOW_COLOR, pixelutils_Blend16(*destPixel, *rowData,
+										k_FOW_BLEND_VALUE << 3, blendRgbMask), k_FOW_BLEND_VALUE << 3, blendRgbMask);
 							else
-								*destPixel++ = pixelutils_BlendFast(*rowData, *destPixel, k_FOW_BLEND_VALUE);
+								*destPixel++ = pixelutils_Blend16(*destPixel, *rowData, k_FOW_BLEND_VALUE << 3,
+										blendRgbMask);
 
 							hpos++;
 							rowData++;
@@ -1791,7 +1764,7 @@ sint32 TiledMap::DrawDitheredOverlayIntoMix(Pixel16 *data, sint32 x, sint32 y, B
 				case k_TILE_SHADOW_RUN_ID		: {
 						sint32 len = (sint32)(tag & 0x00FF);
 						for (sint32 i=0; i<len; i++) {
-							*destPixel = pixelutils_Shadow(*destPixel);
+							*destPixel = pixelutils_Shadow16(*destPixel, shadowRgbMask);
 							destPixel++;
 							hpos++;
 						}
@@ -1817,18 +1790,19 @@ void TiledMap::DrawDitheredOverlayScaledIntoMix(Pixel16 *data, sint32 x, sint32 
 	if (x >= surfWidth - destWidth) return;
 	if (y >= surfHeight - destHeight) return;
 
-	sint32      surfPitch   = g_screenManager->GetSurfPitch();
-	uint8 *     surfBase    = g_screenManager->GetSurfBase() + (surfPitch * y + x * 2);
-	uint16		vstart      = (uint16)*data++;
-	uint16		end         = (uint16)*data++;
-	Pixel16	*   table       = data;
-	Pixel16	*   dataStart   = table + (end - vstart + 1);
-	sint32      vaccum      = destHeight*2 - k_TILE_GRID_HEIGHT;
-	sint32      vincx       = destHeight*2;
-	sint32      vincxy      = (destHeight-k_TILE_GRID_HEIGHT) * 2;
-	sint32      vpos2       = (sint32)((double)((end+1) - destHeight) / (double)destHeight);
-	sint32      vdestpos    = y;
-	sint32      vend        = (end+1) - 1;
+	uint32    blendRgbMask = pixelutils_GetBlend16RGBMask();
+	sint32    surfPitch    = g_screenManager->GetSurfPitch();
+	uint8   * surfBase     = g_screenManager->GetSurfBase() + (surfPitch * y + x * 2);
+	uint16    vstart       = (uint16)*data++;
+	uint16    end          = (uint16)*data++;
+	Pixel16 * table        = data;
+	Pixel16 * dataStart    = table + (end - vstart + 1);
+	sint32    vaccum       = destHeight*2 - k_TILE_GRID_HEIGHT;
+	sint32    vincx        = destHeight*2;
+	sint32    vincxy       = (destHeight-k_TILE_GRID_HEIGHT) * 2;
+	sint32    vpos2        = (sint32)((double)((end+1) - destHeight) / (double)destHeight);
+	sint32    vdestpos     = y;
+	sint32    vend         = (end+1) - 1;
 
 	Pixel16		emptyRow[2];
 	emptyRow[0] = (k_TILE_SKIP_RUN_ID << 8) | k_TILE_GRID_WIDTH;
@@ -1876,9 +1850,10 @@ void TiledMap::DrawDitheredOverlayScaledIntoMix(Pixel16 *data, sint32 x, sint32 
 						pixel = pixel3;
 
 						if (fogged)
-						    *destPixel = pixelutils_BlendFast(pixelutils_BlendFast(pixel, *destPixel, k_FOW_BLEND_VALUE), k_FOW_COLOR, k_FOW_BLEND_VALUE);
+							*destPixel = pixelutils_Blend16(k_FOW_COLOR, pixelutils_Blend16(*destPixel, pixel,
+									k_FOW_BLEND_VALUE << 3, blendRgbMask), k_FOW_BLEND_VALUE << 3, blendRgbMask);
 						else
-						    *destPixel = pixelutils_BlendFast(pixel, *destPixel, k_FOW_BLEND_VALUE);
+							*destPixel = pixelutils_Blend16(*destPixel, pixel, k_FOW_BLEND_VALUE << 3, blendRgbMask);
 					}
 
 					pixel1 = pixel3;
@@ -1908,12 +1883,13 @@ sint32 TiledMap::DrawDitheredOverlay(aui_Surface *surface, Pixel16 *data, sint32
     if (x >= surface->Width() - k_TILE_GRID_WIDTH) return 0;
     if (y >= surface->Height() - k_TILE_GRID_HEIGHT) return 0;
 
-	uint8 *     surfBase    = m_surfBase;
-	sint32      surfPitch   = m_surfPitch;
-	uint16		start       = (uint16)*data++;
-	uint16		end         = (uint16)*data++;
-	Pixel16	*   table       = data;
-	Pixel16	*   dataStart   = table + (end - start + 1);
+    uint32    shadowRgbMask = pixelutils_GetShadow16RGBMask();
+	uint8   * surfBase      = m_surfBase;
+	sint32    surfPitch     = m_surfPitch;
+	uint16    start         = (uint16)*data++;
+	uint16    end           = (uint16)*data++;
+	Pixel16 * table         = data;
+	Pixel16 * dataStart     = table + (end - start + 1);
 
 	for (sint32 j = start; j < end; j++)
     {
@@ -1949,7 +1925,7 @@ sint32 TiledMap::DrawDitheredOverlay(aui_Surface *surface, Pixel16 *data, sint32
 				case k_TILE_SHADOW_RUN_ID		: {
 						sint32 len = (sint32)(tag & 0x00FF);
 						for (sint32 i=0; i<len; i++) {
-							*destPixel = pixelutils_Shadow(*destPixel);
+							*destPixel = pixelutils_Shadow16(*destPixel, shadowRgbMask);
 							destPixel++;
 						}
 					}
@@ -2309,20 +2285,15 @@ sint32 TiledMap::DrawOverlay(aui_Surface *surface, Pixel16 *data, sint32 x, sint
         return AUI_ERRCODE_SURFACELOCKFAILED;
 	}
 
-	if ((x < 0) || (y < 0))
-    {
-        /// @todo Check whether the destructor is activated and/or
-        ///       return 0 would be more appropriate.
-        ///       Maybe better test this at the start.
-        ///       Note: still using the surfBase of the unlocked surface
-        Assert(false);
-		lock = SurfaceLock(NULL);
+	if ((x < 0) || (y < 0)) {
+		return 0;
 	}
 
-	uint16		start       = (uint16)*data++;
-	uint16		end         = (uint16)*data++;
-	Pixel16	*   table       = data;
-	Pixel16	*   dataStart   = table + (end - start + 1);
+	uint32    shadowRgbMask = pixelutils_GetShadow16RGBMask();
+	uint16    start        = (uint16)*data++;
+	uint16    end          = (uint16)*data++;
+	Pixel16 * table        = data;
+	Pixel16 * dataStart    = table + (end - start + 1);
 
 	sint32 len;
 
@@ -2361,7 +2332,7 @@ sint32 TiledMap::DrawOverlay(aui_Surface *surface, Pixel16 *data, sint32 x, sint
 						len = (tag & 0x00FF);
 						while (len--) {
 							if (!(flags & k_OVERLAY_FLAG_NOSHADOWS)) {
-								*destPixel = pixelutils_Shadow(*destPixel);
+								*destPixel = pixelutils_Shadow16(*destPixel, shadowRgbMask);
 								destPixel++;
 							} else {
 								destPixel++;
@@ -2419,10 +2390,12 @@ sint32 TiledMap::DrawColorBlendedOverlay(aui_Surface *surface, Pixel16 *data, si
 		return 0;
 	}
 
-	uint16		start       = (uint16)*data++;
-	uint16		end         = (uint16)*data++;
-	Pixel16	*   table       = data;
-	Pixel16	*   dataStart   = table + (end - start + 1);
+	uint32    blendRgbMask  = pixelutils_GetBlend16RGBMask();
+	uint32    shadowRgbMask = pixelutils_GetShadow16RGBMask();
+	uint16    start         = (uint16)*data++;
+	uint16    end           = (uint16)*data++;
+	Pixel16 * table         = data;
+	Pixel16 * dataStart     = table + (end - start + 1);
 
 	sint32 len;
 
@@ -2447,7 +2420,7 @@ sint32 TiledMap::DrawColorBlendedOverlay(aui_Surface *surface, Pixel16 *data, si
 						len = (tag & 0x00FF);
 
 						while (len--) {
-							*destPixel = pixelutils_BlendFast(color, *rowData++, 8);
+							*destPixel = pixelutils_Blend16(*rowData++, color, 64, blendRgbMask);
 							destPixel++;
 						}
 					}
@@ -2455,7 +2428,7 @@ sint32 TiledMap::DrawColorBlendedOverlay(aui_Surface *surface, Pixel16 *data, si
 				case k_TILE_SHADOW_RUN_ID		: {
 						len = (tag & 0x00FF);
 						while (len--) {
-							*destPixel = pixelutils_Shadow(*destPixel);
+							*destPixel = pixelutils_Shadow16(*destPixel, shadowRgbMask);
 							destPixel++;
 						}
 					}
@@ -2509,16 +2482,17 @@ void TiledMap::DrawColorBlendedOverlayScaled(aui_Surface *surface, Pixel16 *data
 
 	surfBase += (y * surfPitch + x * 2);
 
-	uint16		vstart      = (uint16)*data++;
-	uint16		end         = (uint16)*data++;
-	Pixel16	*   table       = data;
-	Pixel16	*   dataStart   = table + (end - vstart + 1);
-	sint32      vaccum      = destHeight*2 - k_TILE_GRID_HEIGHT;
-	sint32      vincx       = destHeight*2;
-	sint32      vincxy      = (destHeight-k_TILE_GRID_HEIGHT) * 2 ;
-	sint32      vpos2       = (sint32)((double)((end+1) - destHeight) / (double)destHeight);
-	sint32      vdestpos    = y;
-	sint32      vend        = (end+1) - 1;
+	uint32    blendRgbMask = pixelutils_GetBlend16RGBMask();
+	uint16    vstart       = (uint16)*data++;
+	uint16    end          = (uint16)*data++;
+	Pixel16 * table        = data;
+	Pixel16 * dataStart    = table + (end - vstart + 1);
+	sint32    vaccum       = destHeight*2 - k_TILE_GRID_HEIGHT;
+	sint32    vincx        = destHeight*2;
+	sint32    vincxy       = (destHeight-k_TILE_GRID_HEIGHT) * 2 ;
+	sint32    vpos2        = (sint32)((double)((end+1) - destHeight) / (double)destHeight);
+	sint32    vdestpos     = y;
+	sint32    vend         = (end+1) - 1;
 
 	Pixel16		emptyRow[2];
 	emptyRow[0] = (k_TILE_SKIP_RUN_ID << 8) | k_TILE_GRID_WIDTH;
@@ -2563,9 +2537,7 @@ void TiledMap::DrawColorBlendedOverlayScaled(aui_Surface *surface, Pixel16 *data
 					if (pixel1 != k_MEDIUM_KEY || pixel2 != k_MEDIUM_KEY || pixel3 != k_MEDIUM_KEY || pixel4 != k_MEDIUM_KEY) {
 
 						pixel = pixel3;
-
-
-						*destPixel = pixelutils_BlendFast(color, pixel, 8);
+						*destPixel = pixelutils_Blend16(pixel, color, 64, blendRgbMask);
 					}
 
 					pixel1 = pixel3;
@@ -2624,10 +2596,11 @@ sint32 TiledMap::DrawColorizedOverlay(Pixel16 *data, aui_Surface *surface, sint3
 		return 0;
 	}
 
-	uint16		start = (uint16)*data++;
-	uint16		end = (uint16)*data++;
-	Pixel16		*table = data;
-	Pixel16		*dataStart = table + (end - start + 1);
+	uint32    shadowRgbMask = pixelutils_GetShadow16RGBMask();
+	uint16    start = (uint16)*data++;
+	uint16    end = (uint16)*data++;
+	Pixel16 * table = data;
+	Pixel16 * dataStart = table + (end - start + 1);
 
 	sint32 len;
 
@@ -2662,7 +2635,7 @@ sint32 TiledMap::DrawColorizedOverlay(Pixel16 *data, aui_Surface *surface, sint3
 
 						while (len--) {
 
-							*destPixel = pixelutils_Shadow(*destPixel);
+							*destPixel = pixelutils_Shadow16(*destPixel, shadowRgbMask);
 							destPixel++;
 						}
 					}
@@ -2706,8 +2679,9 @@ void TiledMap::DrawClippedColorizedOverlay(Pixel16 * data, aui_Surface & surface
 		return;
 	}
 	sint32 pixelPitch = surface.Pitch() >> 1;
-	const int blendRGBMask = pixelutils_GetBlend16RGBMask();
 
+	uint32    blendRgbMask = pixelutils_GetBlend16RGBMask();
+	uint32    shadowRgbMask = pixelutils_GetShadow16RGBMask();
 	uint16    start = (uint16)*data++;
 	uint16    end   = (uint16)*data++;
 	Pixel16 * table = data;
@@ -2764,19 +2738,20 @@ void TiledMap::DrawClippedColorizedOverlay(Pixel16 * data, aui_Surface & surface
 						break;
 					case k_TILE_COPY_RUN_ID:
 						while (pixel < endPixel) {
-							*pixel = pixelutils_Blend16(*pixel, *rowData++, alpha, blendRGBMask);
+							*pixel = pixelutils_Blend16(*pixel, *rowData++, alpha, blendRgbMask);
 							pixel++;
 						}
 						break;
 					case k_TILE_SHADOW_RUN_ID:
 						while (pixel < endPixel) {
-							*pixel = pixelutils_Blend16(*pixel, pixelutils_Shadow(*pixel), alpha, blendRGBMask);
+							*pixel = pixelutils_Blend16(*pixel, pixelutils_Shadow16(*pixel, shadowRgbMask), alpha,
+									blendRgbMask);
 							pixel++;
 						}
 						break;
 					case k_TILE_COLORIZE_RUN_ID:
 						while (pixel < endPixel) {
-							*pixel = pixelutils_Blend16(*pixel, color, alpha, blendRGBMask);
+							*pixel = pixelutils_Blend16(*pixel, color, alpha, blendRgbMask);
 							pixel++;
 						}
 						break;
@@ -2796,10 +2771,11 @@ sint32 TiledMap::DrawColorizedOverlayIntoMix(Pixel16 *data, sint32 x, sint32 y, 
 	sint32 surfHeight = g_screenManager->GetSurfHeight();
 	sint32 surfPitch = g_screenManager->GetSurfPitch();
 
-	uint16		start = (uint16)*data++;
-	uint16		end = (uint16)*data++;
-	Pixel16		*table = data;
-	Pixel16		*dataStart = table + (end - start + 1);
+	uint32    shadowRgbMask = pixelutils_GetShadow16RGBMask();
+	uint16    start = (uint16)*data++;
+	uint16    end = (uint16)*data++;
+	Pixel16 * table = data;
+	Pixel16 * dataStart = table + (end - start + 1);
 
 	sint32 len;
 
@@ -2834,7 +2810,7 @@ sint32 TiledMap::DrawColorizedOverlayIntoMix(Pixel16 *data, sint32 x, sint32 y, 
 						len = (tag & 0x00FF);
 
 						while (len--) {
-							*destPixel = pixelutils_Shadow(*destPixel);
+							*destPixel = pixelutils_Shadow16(*destPixel, shadowRgbMask);
 							destPixel++;
 						}
 					}
@@ -2897,15 +2873,8 @@ void TiledMap::DrawScaledOverlay(aui_Surface *surface, Pixel16 *data, sint32 x, 
 		return;
 	}
 
-	if ((x >= surface->Width() - destWidth) ||
-        (y >= surface->Height() - destHeight)
-       )
-	{
-        /// @todo Check whether the destructor is activated and/or
-        ///       return would be more appropriate.
-        ///       Note: still using the surfBase of the unlocked surface
-        Assert(false);
-        lock = SurfaceLock(NULL);
+	if ((x >= surface->Width() - destWidth) || (y >= surface->Height() - destHeight)) {
+		return;
 	}
 
 	surfBase += (y * surfPitch + x * 2);
@@ -3751,7 +3720,9 @@ void TiledMap::DrawCityNames(aui_Surface * surf, sint32 layer)
 							RECT buildItemNameRect = DrawCityBuildItemName(*surf, buildItemName, buildItemNamePos,
 									buildItemNameColor, alpha);
 							InflateRect(&buildItemNameRect, 1, 1);
-							primitives_ClippedFrameRect16(*surf, buildItemNameRect, playerColor, alpha);
+							primitives_ClippedFrame16(*surf, buildItemNameRect.left, buildItemNameRect.top,
+									buildItemNameRect.right - buildItemNameRect.left,
+									buildItemNameRect.bottom - buildItemNameRect.top, playerColor, alpha);
 							outerBuildItemRect.right = buildItemNameRect.right;
 
 							RECT buildItemTimeRect = DrawCityBuildItemTime(*surf, buildItemTime,
@@ -3777,7 +3748,9 @@ void TiledMap::DrawCityNames(aui_Surface * surf, sint32 layer)
 						}
 						AddDirtyRectToMix(cityEnslavedRect);
 
-						primitives_ClippedFrameRect16(*surf, outerCityNameRect, playerColor, alpha);
+						primitives_ClippedFrame16(*surf, outerCityNameRect.left, outerCityNameRect.top,
+								outerCityNameRect.right - outerCityNameRect.left,
+								outerCityNameRect.bottom - outerCityNameRect.top, playerColor, alpha);
 						if (fog) {
 							primitives_ClippedShadowRect16(*surf, outerCityNameRect);
 						}
@@ -3836,7 +3809,8 @@ RECT TiledMap::DrawCityName(aui_Surface & surf, const MBCHAR * const name, const
 	};
 	RECT outerNameRect = cityNameRect;
 	InflateRect(&outerNameRect, 2, 1); // expand for borders
-	primitives_ClippedPaintRect16(surf, outerNameRect, GetColor(COLOR_BLACK), alpha);
+	primitives_ClippedPaint16(surf, outerNameRect.left, outerNameRect.top, outerNameRect.right - outerNameRect.left,
+			outerNameRect.bottom - outerNameRect.top, GetColor(COLOR_BLACK), alpha);
 	RECT clipRect = primitives_GetScreenAdjustedRectCopy(&surf, cityNameRect);
 	m_font->DrawString(&surf, &cityNameRect, &clipRect, name, 0, colorRef, 0);
 	return outerNameRect;
@@ -3868,7 +3842,8 @@ RECT TiledMap::DrawCitySleepingUnits(aui_Surface & surf, const POINT & position,
 	{
 		POINT iconDimensions = GetTileSet()->GetMapIconDimensions(MAPICON_SLEEPINGUNITS);
 		RECT rect = { position.x, position.y, position.x + iconDimensions.x + 1, position.y + iconDimensions.y + 1 };
-		primitives_ClippedPaintRect16(surf, rect, GetColor(COLOR_BLACK), alpha);
+		primitives_ClippedPaint16(surf, rect.left, rect.top, rect.right - rect.left, rect.bottom - rect.top,
+				GetColor(COLOR_BLACK), alpha);
 		DrawClippedColorizedOverlay(sleepingUnitsIcon, surf, position.x, position.y, color, alpha);
 		return rect;
 	}
@@ -3896,7 +3871,8 @@ RECT TiledMap::DrawCityPopulation(aui_Surface & surf, sint32 population, const R
 	MBCHAR populationString[80];
 	sprintf(populationString,"%i", population);
 	RECT populationRect = { rect.left - (population < 10 ? 13 : 17), rect.top, rect.left, rect.bottom };
-	primitives_ClippedPaintRect16(surf, populationRect, color, alpha);
+	primitives_ClippedPaint16(surf, populationRect.left, populationRect.top,
+			populationRect.right - populationRect.left, populationRect.bottom - populationRect.top, color, alpha);
 	COLOR fontColor = ColorSet::UseDarkFontColor(color) ? COLOR_BLACK : COLOR_WHITE;
 	RECT textRect = { populationRect.left + (population < 10 ? 4 : 2), populationRect.top + 1,
 				populationRect.right - (population < 10 ? 3 : 1), populationRect.bottom - 1 };
@@ -3915,19 +3891,18 @@ RECT TiledMap::DrawCityNextPopulation(aui_Surface & surf, sint32 nextPopulation,
 		sprintf(nextPopulationString, "%s", TEXT_NONE);
 	}
 
-	sint32 offsetX = nextPopulation < 10 ? 3 : 2;
+	sint32 offsetX = nextPopulation < 10 ? 1 : 0;
 	sint32 width = nextPopulation < 10 ? 12 : (nextPopulation < THRESHOLD_SLOW_GROWTH ? 17 : 15);
-	RECT nextPopulationRect = { rect.right + 1, rect.top, rect.right + 1 + width, rect.bottom };
+	RECT nextPopulationRect = { rect.right + 1, rect.top, rect.right + width, rect.bottom - 1 };
 	primitives_ClippedPaintRect16(surf, nextPopulationRect, GetColor(COLOR_BLACK), alpha);
 
-	RECT textRect = { nextPopulationRect.left + offsetX, nextPopulationRect.top + 1,
-				nextPopulationRect.right - offsetX + 1, nextPopulationRect.bottom - 2 };
+	RECT textRect = { nextPopulationRect.left + 2 + offsetX, nextPopulationRect.top + 1,
+				nextPopulationRect.right - offsetX, nextPopulationRect.bottom - 3 };
 	RECT clipRect = primitives_GetScreenAdjustedRectCopy(&surf, textRect);
 	m_font->DrawString(&surf, &textRect, &clipRect, nextPopulationString, 0, GetColorRef(COLOR_WHITE));
 
 	InflateRect(&nextPopulationRect, 1, 1);
 	primitives_ClippedFrameRect16(surf, nextPopulationRect, color, alpha);
-	nextPopulationRect.right -= 1;
 	return nextPopulationRect;
 }
 
@@ -3961,7 +3936,9 @@ RECT TiledMap::DrawCityBuildItemName(aui_Surface & surf, const MBCHAR * const na
 		position.y + m_font->GetMaxHeight() + 2
 	};
 
-	primitives_ClippedPaintRect16(surf, buildNameItemRect, GetColor(COLOR_BLACK), alpha);
+	primitives_ClippedPaint16(surf, buildNameItemRect.left, buildNameItemRect.top,
+			buildNameItemRect.right - buildNameItemRect.left, buildNameItemRect.bottom - buildNameItemRect.top,
+			GetColor(COLOR_BLACK), alpha);
 
 	RECT textRect = buildNameItemRect;
 	InflateRect(&textRect, -2, -1);
@@ -3984,7 +3961,9 @@ RECT TiledMap::DrawCityBuildItemTime(aui_Surface & surf, sint32 buildItemTime, c
 	sint32 offsetX = (buildItemTime == 0 || buildItemTime >= THRESHOLD_PROD_TIME) ? 2 : (buildItemTime < 10 ? 3 : 2);
 	sint32 width = (buildItemTime == 0 || buildItemTime >= THRESHOLD_PROD_TIME) ? 15 : (buildItemTime < 10 ? 12 : 17);
 	RECT builtItemTimeRect = { rect.right, rect.top + 1, rect.right + width, rect.bottom - 1 };
-	primitives_ClippedPaintRect16(surf, builtItemTimeRect, GetColor(COLOR_BLACK), alpha);
+	primitives_ClippedPaint16(surf, builtItemTimeRect.left, builtItemTimeRect.top,
+			builtItemTimeRect.right - builtItemTimeRect.left, builtItemTimeRect.bottom - builtItemTimeRect.top,
+			GetColor(COLOR_BLACK), alpha);
 
 	RECT textRect = { builtItemTimeRect.left + offsetX, builtItemTimeRect.top + 1,
 	                  builtItemTimeRect.right - offsetX + 1, builtItemTimeRect.bottom - 2 };
@@ -3992,7 +3971,9 @@ RECT TiledMap::DrawCityBuildItemTime(aui_Surface & surf, sint32 buildItemTime, c
 	m_font->DrawString(&surf, &textRect, &clipRect, buildItemNameString, 0, GetColorRef(COLOR_WHITE));
 
 	InflateRect(&builtItemTimeRect, 1, 1);
-	primitives_ClippedFrameRect16(surf, builtItemTimeRect, color, alpha);
+	primitives_ClippedFrame16(surf, builtItemTimeRect.left, builtItemTimeRect.top,
+			builtItemTimeRect.right - builtItemTimeRect.left,
+			builtItemTimeRect.bottom - builtItemTimeRect.top, color, alpha);
 	return builtItemTimeRect;
 }
 
@@ -4051,9 +4032,8 @@ RECT TiledMap::DrawCityIcons(aui_Surface & surf, sint32 owner, bool fog, const R
 
 			DrawClippedColorizedOverlay(icon, surf, outerRect.right-1, outerRect.bottom - dimensions.y, playerColor,
 					alpha);
-			RECT frame = { outerRect.right-1, outerRect.bottom - dimensions.y, outerRect.right -1 + dimensions.x,
-					outerRect.bottom };
-			primitives_ClippedFrameRect16(surf, frame, playerColor, alpha);
+			primitives_ClippedFrame16(surf, outerRect.right - 1, outerRect.bottom - dimensions.y, dimensions.x,
+					dimensions.y, playerColor, alpha);
 			outerRect.top   = outerRect.bottom - dimensions.y;
 			outerRect.right += dimensions.x - 1;
 		}
@@ -4073,9 +4053,8 @@ RECT TiledMap::DrawCityIcons(aui_Surface & surf, sint32 owner, bool fog, const R
 
 			Pixel16 color = GetPlayerColor(convertedOwner);
 			DrawClippedColorizedOverlay(icon, surf, outerRect.right-1, outerRect.bottom - dimensions.y, color, alpha);
-			RECT frame = { outerRect.right-1, outerRect.bottom - dimensions.y, outerRect.right -1 + dimensions.x,
-			               outerRect.bottom };
-			primitives_ClippedFrameRect16(surf, frame, color, alpha);
+			primitives_ClippedFrame16(surf, outerRect.right - 1, outerRect.bottom - dimensions.y, dimensions.x,
+					dimensions.y, color, alpha);
 
 			sint32 myOwner = g_selected_item->GetVisiblePlayer();
 			if (convertedLoss && myOwner >= 0 && (myOwner == owner || myOwner == convertedOwner))
@@ -4110,9 +4089,8 @@ RECT TiledMap::DrawCityIcons(aui_Surface & surf, sint32 owner, bool fog, const R
 
 			Pixel16 color = GetPlayerColor(franchiseOwner);
 			DrawClippedColorizedOverlay(icon, surf, outerRect.right-1, outerRect.bottom - dimensions.y, color, alpha);
-			RECT frame = { outerRect.right-1, outerRect.bottom - dimensions.y, outerRect.right -1 + dimensions.x,
-			               outerRect.bottom };
-			primitives_ClippedFrameRect16(surf, frame, color, alpha);
+			primitives_ClippedFrame16(surf, outerRect.right - 1, outerRect.bottom - dimensions.y, dimensions.x,
+					dimensions.y, color, alpha);
 
 			sint32 myOwner = g_selected_item->GetVisiblePlayer();
 			if (franchiseLoss && myOwner >= 0 && (myOwner == owner || myOwner == franchiseOwner))
@@ -4147,9 +4125,8 @@ RECT TiledMap::DrawCityIcons(aui_Surface & surf, sint32 owner, bool fog, const R
 
 			Pixel16 color = GetPlayerColor(injoinedOwner);
 			DrawClippedColorizedOverlay(icon, surf, outerRect.right-1, outerRect.bottom - dimensions.y, color, alpha);
-			RECT frame = { outerRect.right-1, outerRect.bottom - dimensions.y, outerRect.right -1 + dimensions.x,
-			               outerRect.bottom };
-			primitives_ClippedFrameRect16(surf, frame, color, alpha);
+			primitives_ClippedFrame16(surf, outerRect.right - 1, outerRect.bottom - dimensions.y, dimensions.x,
+					dimensions.y, color, alpha);
 
 			outerRect.top   = outerRect.bottom - dimensions.y;
 			outerRect.right += dimensions.x - 1;
@@ -4167,9 +4144,8 @@ RECT TiledMap::DrawCityIcons(aui_Surface & surf, sint32 owner, bool fog, const R
 
 			Pixel16 color = GetPlayerColor(happinessAttackOwner);
 			DrawClippedColorizedOverlay(icon, surf, outerRect.right-1, outerRect.bottom - dimensions.y, color, alpha);
-			RECT frame = { outerRect.right-1, outerRect.bottom - dimensions.y, outerRect.right -1 + dimensions.x,
-			               outerRect.bottom };
-			primitives_ClippedFrameRect16(surf, frame, color, alpha);
+			primitives_ClippedFrame16(surf, outerRect.right - 1, outerRect.bottom - dimensions.y, dimensions.x,
+					dimensions.y, color, alpha);
 
 			outerRect.top   = outerRect.bottom - dimensions.y;
 			outerRect.right += dimensions.x - 1;
@@ -4191,9 +4167,8 @@ RECT TiledMap::DrawCityIcons(aui_Surface & surf, sint32 owner, bool fog, const R
 			}
 
 			DrawClippedColorizedOverlay(icon, surf, outerRect.right-1, outerRect.bottom - dimensions.y, color, alpha);
-			RECT frame = { outerRect.right-1, outerRect.bottom - dimensions.y, outerRect.right -1 + dimensions.x,
-			               outerRect.bottom };
-			primitives_ClippedFrameRect16(surf, frame, color, alpha);
+			primitives_ClippedFrame16(surf, outerRect.right - 1, outerRect.bottom - dimensions.y, dimensions.x,
+					dimensions.y, color, alpha);
 
 			outerRect.top   = outerRect.bottom - dimensions.y;
 			outerRect.right += dimensions.x - 1;
@@ -4215,9 +4190,8 @@ RECT TiledMap::DrawCityIcons(aui_Surface & surf, sint32 owner, bool fog, const R
 			}
 
 			DrawClippedColorizedOverlay(icon, surf, outerRect.right-1, outerRect.bottom - dimensions.y, color, alpha);
-			RECT frame = { outerRect.right-1, outerRect.bottom - dimensions.y, outerRect.right -1 + dimensions.x,
-			               outerRect.bottom };
-			primitives_ClippedFrameRect16(surf, frame, color, alpha);
+			primitives_ClippedFrame16(surf, outerRect.right - 1, outerRect.bottom - dimensions.y, dimensions.x,
+					dimensions.y, color, alpha);
 
 			outerRect.top   = outerRect.bottom - dimensions.y;
 			outerRect.right += dimensions.x - 1;
@@ -4245,8 +4219,8 @@ RECT TiledMap::DrawCityEnslaved(aui_Surface & surf, const RECT & outerCityRect, 
 				outerRect.left -= dimensions.x;
 				outerRect.top = outerRect.bottom - dimensions.y;
 				DrawClippedColorizedOverlay(icon, surf, outerRect.left, outerRect.top, GetPlayerColor(i), alpha);
-				RECT frame = { outerRect.left, outerRect.top, outerRect.left + dimensions.x, outerRect.bottom };
-				primitives_ClippedFrameRect16(surf, frame, GetPlayerColor(i), alpha);
+				primitives_ClippedFrame16(surf, outerRect.left, outerRect.top, dimensions.x, dimensions.y,
+						GetPlayerColor(i), alpha);
 			}
 
 			bits >>= 1;
@@ -4295,10 +4269,12 @@ sint32 TiledMap::DrawColorBlendedOverlay(aui_Surface *surface, Pixel16 *data, si
 		return 0;
 	}
 
-	uint16		start = (uint16)*data++;
-	uint16		end = (uint16)*data++;
-	Pixel16		*table = data;
-	Pixel16		*dataStart = table + (end - start + 1);
+	uint32    blendRgbMask  = pixelutils_GetBlend16RGBMask();
+	uint32    shadowRgbMask = pixelutils_GetShadow16RGBMask();
+	uint16    start         = (uint16)*data++;
+	uint16    end           = (uint16)*data++;
+	Pixel16 * table         = data;
+	Pixel16 * dataStart     = table + (end - start + 1);
 
 	sint32 len;
 
@@ -4323,7 +4299,7 @@ sint32 TiledMap::DrawColorBlendedOverlay(aui_Surface *surface, Pixel16 *data, si
 						len = (tag & 0x00FF);
 
 						while (len--) {
-							*destPixel = pixelutils_BlendFast(color, *rowData++, blendValue);
+							*destPixel = pixelutils_Blend16(*rowData++, color, blendValue << 3, blendRgbMask);
 							destPixel++;
 						}
 					}
@@ -4331,7 +4307,7 @@ sint32 TiledMap::DrawColorBlendedOverlay(aui_Surface *surface, Pixel16 *data, si
 				case k_TILE_SHADOW_RUN_ID		: {
 						len = (tag & 0x00FF);
 						while (len--) {
-							*destPixel = pixelutils_Shadow(*destPixel);
+							*destPixel = pixelutils_Shadow16(*destPixel, shadowRgbMask);
 							destPixel++;
 						}
 					}
@@ -4376,16 +4352,8 @@ void TiledMap::DrawColorBlendedOverlayScaled(aui_Surface *surface, Pixel16 *data
 		return;
 	}
 
-	if (!surface ||
-        (x >= surface->Width() - destWidth) ||
-        (y >= surface->Height() - destHeight)
-       )
-    {
-        /// @todo Check whether the destructor is activated and/or
-        ///       return would be more appropriate.
-        ///       Note: still using the surfBase of the unlocked surface
-        Assert(false);
-        lock = SurfaceLock(NULL);
+	if (!surface || (x >= surface->Width() - destWidth) || (y >= surface->Height() - destHeight)) {
+		return;
 	}
 
 	Pixel16		emptyRow[2];
@@ -4393,18 +4361,17 @@ void TiledMap::DrawColorBlendedOverlayScaled(aui_Surface *surface, Pixel16 *data
 
 	surfBase += (y * surfPitch + x * 2);
 
-	uint16			vstart = (uint16)*data++;
-	uint16			end = (uint16)*data++;
-	Pixel16			*table = data;
-
-	Pixel16			*dataStart = table + (end - vstart + 1);
-
-	sint32 vaccum = destHeight*2 - k_TILE_GRID_HEIGHT;
-	sint32 vincx = destHeight*2;
-	sint32 vincxy = (destHeight-k_TILE_GRID_HEIGHT) * 2 ;
-	sint32 vpos2 = (sint32)((double)((end+1) - destHeight) / (double)destHeight);
-	sint32 vdestpos = y;
-	sint32 vend = (end+1) - 1;
+	uint32    blendRgbMask = pixelutils_GetBlend16RGBMask();
+	uint16    vstart       = (uint16)*data++;
+	uint16    end          = (uint16)*data++;
+	Pixel16 * table        = data;
+	Pixel16 * dataStart    = table + (end - vstart + 1);
+	sint32    vaccum       = destHeight*2 - k_TILE_GRID_HEIGHT;
+	sint32    vincx        = destHeight*2;
+	sint32    vincxy       = (destHeight-k_TILE_GRID_HEIGHT) * 2 ;
+	sint32    vpos2        = (sint32)((double)((end+1) - destHeight) / (double)destHeight);
+	sint32    vdestpos     = y;
+	sint32    vend         = (end+1) - 1;
 
 	for (sint32 vpos1 = 0; vpos1 < vend; ++vpos1)
     {
@@ -4448,7 +4415,7 @@ void TiledMap::DrawColorBlendedOverlayScaled(aui_Surface *surface, Pixel16 *data
 						pixel = pixel3;
 
 
-						*destPixel = pixelutils_BlendFast(color, pixel, blendValue);
+						*destPixel = pixelutils_Blend16(pixel, color, blendValue << 3, blendRgbMask);
 					}
 
 					pixel1 = pixel3;
@@ -4614,217 +4581,59 @@ bool TiledMap::HasVisibleCity(const MapPoint &pos) const
 	return g_theWorld->GetCell(pos)->GetCity().IsValid();
 }
 
-void TiledMap::DrawNationalBorders(aui_Surface *surface, MapPoint &pos)
+void TiledMap::DrawNationalBorders(aui_Surface & surf, const MapPoint & pos)
 {
 	sint32 myOwner = GetVisibleCellOwner(pos);
-	if (myOwner < 0)
+	if (myOwner < 0) {
 		return;
+	}
 
-	Player *visP = g_player[g_selected_item->GetVisiblePlayer()];
-	if (visP == NULL)
+	Player *visiblePlayer = g_player[g_selected_item->GetVisiblePlayer()];
+	if (visiblePlayer == NULL) {
 		return;
+	}
+
+	static const WORLD_DIRECTION NEIGHBOR_DIRECTIONS[] = {
+			NORTH, NORTHEAST, EAST, NORTHWEST, SOUTHEAST, WEST, SOUTHWEST, SOUTH
+	};
+
+	bool fog = m_localVision && m_localVision->IsExplored(pos) && !m_localVision->IsVisible(pos);
+
+	if (g_theProfileDB->GetShowPoliticalBorders())
+	{
+		uint32 borders = 0;
+
+		for (auto neighborDirection : NEIGHBOR_DIRECTIONS)
+		{
+			MapPoint neighborPos;
+			if (pos.GetNeighborPosition(neighborDirection, neighborPos)) {
+				sint32 neighborOwner = GetVisibleCellOwner(neighborPos);
+				if ((neighborOwner != myOwner) && (visiblePlayer->HasSeen(myOwner) || g_fog_toggle || g_god)) {
+					borders |= (1 << neighborDirection);
+				}
+			}
+		}
+		sint32 borderMode = g_theProfileDB->IsSmoothBorders() ? k_BORDER_SMOOTH : k_BORDER_SOLID;
+		DrawColoredBorderEdge(surf, pos, GetPlayerColor(myOwner, fog), borders, borderMode, 2);
+	}
 
 	uint32 myCityOwner = GetVisibleCityOwner(pos);
-	Pixel16 color = g_colorSet->GetPlayerColor(myOwner);
-	Pixel16 white = GetColor(COLOR_WHITE);
+	Unit   myCity(myCityOwner);
+	bool   isCityVisible = myCity.IsValid() ? (myCity.GetVisibility() & (1 << visiblePlayer->m_owner)) : false;
 
-	Unit myCity(myCityOwner);
-	UnitData *myCityData = myCity.IsValid() ? myCity.AccessData() : NULL;
+	if (g_theProfileDB->IsShowCityInfluence() && isCityVisible) {
+		uint32 borders = 0;
 
-	//emod
-	sint32		x, y;
-	maputils_MapXY2PixelXY(pos.x, pos.y, &x, &y);
-	if ((x < 0) || (y < 0))
-		return;
-
-	TileSet *   tileSet     = GetTileSet();
-	POINT       iconDim     = tileSet->GetMapIconDimensions(MAPICON_POLBORDERNW);
-	RECT        iconRect;
-	iconRect.left   = x;
-	iconRect.right  = iconRect.left + iconDim.x + 1;
-	iconRect.top    = y;
-	iconRect.bottom = iconRect.top + iconDim.y + 1;
-
-	sint32  maxWidth    = surface ? surface->Width() : m_surface->Width();
-	sint32  maxHeight   = surface ? surface->Height() : m_surface->Height();
-
-	if ((iconRect.right >= maxWidth) || (iconRect.bottom >= maxHeight))
-		return;
-	//add city wall icons?
-	//bool HasCityWall = myCity.hasCityWall
-	//add Great Wall Icon?
-	// bool PlayerHasGreatWall = g_player->GethasGreatWall future function
-
-	//end emod
-
-	Pixel16 *   borderIcon;
-	uint32      neighborCityOwner;
-	sint32      neighborOwner;
-	MapPoint    neighbor;
-	if(pos.GetNeighborPosition(NORTHWEST, neighbor)) {
-		neighborOwner = GetVisibleCellOwner(neighbor);
-		if(neighborOwner != myOwner
-		&&(visP->HasSeen(myOwner)
-		|| g_fog_toggle // The sense of fog of and god mode is to see something.
-		|| g_god)
-		&& g_theProfileDB->GetShowPoliticalBorders()
-		){
-			if(!g_theProfileDB->IsSmoothBorders())
-			{
-				DrawColoredBorderEdge(surface, pos, color, NORTHWEST, k_BORDER_SOLID); //EMOD- k_BORDER_SOLID defined in tiledmap.h as 0 and dashed as 1 its a bool?
-			}
-			else
-			{
-				// could change this to the same DrawColorizedOverlay but use different icons for NW etc.
-				// create a new function like drawcityicons but requires a pos and converts a pos to pixels THEN place Icon.
-				// emod
-				//X = k_TILE_PIXEL_HEADROOM + (k_TILE_GRID_HEIGHT / 2); -> 24 + 72/2 = 60 FROM DRAWCOLOREDBORDEREDGE
-				iconRect.top    = y + 18;
-				borderIcon = tileSet->GetMapIconData(MAPICON_POLBORDERNW);
-				Assert(borderIcon);
-				if (!borderIcon) return;
-
-				//DrawDitheredOverlay(NULL, borderIcon,iconRect.left, iconRect.top,color);
-				//AddDirtyToMap(x, y, k_TILE_PIXEL_WIDTH, k_TILE_GRID_HEIGHT);
-				DrawColorizedOverlay(borderIcon, surface, iconRect.left, iconRect.top, color);
-				AddDirtyRectToMix(iconRect);
-
-				//if ((PlayerHasGreatWall) && (IsLand(pos)) {
-					//iconRect.top    = y + 20;  //y
-					//GWIcon = tileSet->GetMapIconData(MAPICON_GREATWALLNW);
-					//Assert(borderIcon);
-					//if (!borderIcon) return;
-					//DrawColorizedOverlay(GWIcon, surface, iconRect.left, iconRect.top, color);
-					//AddDirtyRectToMix(iconRect);
-				//}
-			}
-			//end emod
-		}
-
-		neighborCityOwner = GetVisibleCityOwner(neighbor);
-		if(neighborCityOwner != myCityOwner) {
-			if(myCityData &&
-			   myCityData->GetVisibility() & (1 << visP->m_owner) &&
-			   g_theProfileDB->IsShowCityInfluence()) {
-				DrawColoredBorderEdge(surface, pos, white, NORTHWEST, k_BORDER_DASHED);
-				//if ((PlayerHasGreatWall) && (IsLand(pos)) {
-					//iconRect.top    = y + 20;  //y
-					//CWIcon = tileSet->GetMapIconData(MAPICON_CITYWALLNW);
-					//Assert(CWIcon);
-					//if (!CWIcon) return;
-					//DrawColorizedOverlay(CWIcon, surface, iconRect.left, iconRect.top, color);
-					//AddDirtyRectToMix(iconRect);
-				//}
+		for (auto neighborDirection : NEIGHBOR_DIRECTIONS) {
+			MapPoint neighborPos;
+			if (pos.GetNeighborPosition(neighborDirection, neighborPos)) {
+				uint32 neighborCityOwner = GetVisibleCityOwner(neighborPos);
+				if (neighborCityOwner != myCityOwner) {
+					borders |= (1 << neighborDirection);
+				}
 			}
 		}
-	}
-
-	if(pos.GetNeighborPosition(SOUTHWEST, neighbor)) {
-		neighborOwner = GetVisibleCellOwner(neighbor);
-		if(neighborOwner != myOwner
-		&&(visP->HasSeen(myOwner)
-		|| g_fog_toggle
-		|| g_god)
-		&& g_theProfileDB->GetShowPoliticalBorders()
-		){
-			if(!g_theProfileDB->IsSmoothBorders())
-			{
-				DrawColoredBorderEdge(surface, pos, color, SOUTHWEST, k_BORDER_SOLID); //EMOD- k_BORDER_SOLID defined in tiledmap.h as 0 and dashed as 1 its a bool?
-			}
-			else
-			{
-				//emod
-				iconRect.top    = y + 46;  //y
-				borderIcon = tileSet->GetMapIconData(MAPICON_POLBORDERSW);
-				Assert(borderIcon);
-				if (!borderIcon) return;
-				DrawColorizedOverlay(borderIcon, surface, iconRect.left, iconRect.top, color);
-				AddDirtyRectToMix(iconRect);
-				//end emod
-			}
-		}
-		neighborCityOwner = GetVisibleCityOwner(neighbor);
-		if(neighborCityOwner != myCityOwner) {
-			if(myCityData &&
-			   myCityData->GetVisibility() & (1 << visP->m_owner) &&
-			   g_theProfileDB->IsShowCityInfluence()) {
-				DrawColoredBorderEdge(surface, pos, white, SOUTHWEST, k_BORDER_DASHED);
-			}
-		}
-	}
-
-	if(pos.GetNeighborPosition(NORTHEAST, neighbor)) {
-		neighborOwner = GetVisibleCellOwner(neighbor);
-		if(neighborOwner != myOwner
-		&&(visP->HasSeen(myOwner)
-		|| g_fog_toggle
-		|| g_god)
-		&& g_theProfileDB->GetShowPoliticalBorders()
-		){
-
-			if(!g_theProfileDB->IsSmoothBorders())
-			{
-				DrawColoredBorderEdge(surface, pos, color, NORTHEAST, k_BORDER_SOLID);  //original
-			}
-			else
-			{
-				//emod
-				iconRect.left   = x + 44;
-				iconRect.top    = y + 22;  //y
-
-				borderIcon = tileSet->GetMapIconData(MAPICON_POLBORDERNE);
-				Assert(borderIcon);
-				if (!borderIcon) return;
-				DrawColorizedOverlay(borderIcon, surface, iconRect.left, iconRect.top, color);
-				AddDirtyRectToMix(iconRect);
-				//end emod
-			}
-		}
-		neighborCityOwner = GetVisibleCityOwner(neighbor);
-		if(neighborCityOwner != myCityOwner) {
-			if(myCityData &&
-			   myCityData->GetVisibility() & (1 << visP->m_owner) &&
-			   g_theProfileDB->IsShowCityInfluence()) {
-				DrawColoredBorderEdge(surface, pos, white, NORTHEAST, k_BORDER_DASHED);
-			}
-		}
-	}
-
-	if(pos.GetNeighborPosition(SOUTHEAST, neighbor)) {
-		neighborOwner = GetVisibleCellOwner(neighbor);
-		if(neighborOwner != myOwner
-		&&(visP->HasSeen(myOwner)
-		|| g_fog_toggle
-		|| g_god)
-		&& g_theProfileDB->GetShowPoliticalBorders()
-		){
-
-			if(!g_theProfileDB->IsSmoothBorders())
-			{
-				DrawColoredBorderEdge(surface, pos, color, SOUTHEAST, k_BORDER_SOLID); //original
-			}
-			else
-			{
-				//emod
-				iconRect.left   = x + 46;
-				iconRect.top    = y + 48;  //y
-
-				borderIcon = tileSet->GetMapIconData(MAPICON_POLBORDERSE);
-				Assert(borderIcon);
-				if (!borderIcon) return;
-				DrawColorizedOverlay(borderIcon, surface, iconRect.left, iconRect.top, color);
-				AddDirtyRectToMix(iconRect);
-				//end emod
-			}
-		}
-		neighborCityOwner = GetVisibleCityOwner(neighbor);
-		if(neighborCityOwner != myCityOwner) {
-			if(myCityData &&
-			   myCityData->GetVisibility() & (1 << visP->m_owner) &&
-			   g_theProfileDB->IsShowCityInfluence()) {
-				DrawColoredBorderEdge(surface, pos, white, SOUTHEAST, k_BORDER_DASHED);
-			}
-		}
+		DrawColoredBorderEdge(surf, pos, GetColor(COLOR_WHITE, fog), borders, k_BORDER_DASHED, 0);
 	}
 }
 
@@ -4937,9 +4746,8 @@ RECT TiledMap::DrawCityReligionIcons(aui_Surface & surf, const MapPoint & pos, s
 					{
 						DrawClippedColorizedOverlay(icon, surf, outerRect.right - 1, outerRect.bottom - dimensions.y,
 						                            playerColor, alpha);
-						RECT frame = {outerRect.right - 1, outerRect.bottom - dimensions.y,
-						              outerRect.right - 1 + dimensions.x, outerRect.bottom };
-						primitives_ClippedFrameRect16(surf, frame, playerColor, alpha);
+						primitives_ClippedFrame16(surf, outerRect.right - 1, outerRect.bottom - dimensions.y,
+								dimensions.x, dimensions.y, playerColor, alpha);
 						outerRect.top = outerRect.bottom - dimensions.y;
 						outerRect.right += dimensions.x - 1;
 					}
@@ -4960,9 +4768,8 @@ RECT TiledMap::DrawCityReligionIcons(aui_Surface & surf, const MapPoint & pos, s
 					{
 						DrawClippedColorizedOverlay(icon, surf, outerRect.right - 1, outerRect.bottom - dimensions.y,
 						                            /*playerColor*/ 0xF800, alpha);
-						RECT frame = {outerRect.right - 1, outerRect.bottom - dimensions.y,
-						              outerRect.right - 1 + dimensions.x, outerRect.bottom };
-						primitives_ClippedFrameRect16(surf, frame, playerColor, alpha);
+						primitives_ClippedFrame16(surf, outerRect.right - 1, outerRect.bottom - dimensions.y,
+								dimensions.x, dimensions.y, playerColor, alpha);
 						outerRect.top = outerRect.bottom - dimensions.y;
 						outerRect.right += dimensions.x - 1;
 					}
@@ -5002,9 +4809,8 @@ RECT TiledMap::DrawCitySpecialIcons(aui_Surface & surf, const MapPoint & pos, si
 					{
 						DrawClippedColorizedOverlay(icon, surf, outerRect.right - 1, outerRect.bottom - dimensions.y,
 						                            playerColor, alpha);
-						RECT frame = {outerRect.right - 1, outerRect.bottom - dimensions.y,
-						              outerRect.right - 1 + dimensions.x, outerRect.bottom };
-						primitives_ClippedFrameRect16(surf, frame, playerColor, alpha);
+						primitives_ClippedFrame16(surf, outerRect.right - 1, outerRect.bottom - dimensions.y,
+								dimensions.x, dimensions.y, playerColor, alpha);
 						outerRect.top = outerRect.bottom - dimensions.y;
 						outerRect.right += dimensions.x - 1;
 					}
@@ -5024,10 +4830,9 @@ RECT TiledMap::DrawCitySpecialIcons(aui_Surface & surf, const MapPoint & pos, si
 					if (icon)
 					{
 						DrawClippedColorizedOverlay(icon, surf, outerRect.right - 1, outerRect.bottom - dimensions.y,
-								/*playerColor*/ 0xF800, alpha);
-						RECT frame = {outerRect.right - 1, outerRect.bottom - dimensions.y,
-						              outerRect.right - 1 + dimensions.x, outerRect.bottom };
-						primitives_ClippedFrameRect16(surf, frame, playerColor, alpha);
+								playerColor, alpha);
+						primitives_ClippedFrame16(surf, outerRect.right - 1, outerRect.bottom - dimensions.y,
+								dimensions.x, dimensions.y, playerColor, alpha);
 						outerRect.top = outerRect.bottom - dimensions.y;
 						outerRect.right += dimensions.x - 1;
 					}
