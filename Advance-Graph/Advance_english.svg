@@ -505,7 +505,7 @@
 <polygon fill="#ff0000" fill-opacity="0.333333" stroke="#ff0000" stroke-opacity="0.333333" points="4219,-653.36 4079,-653.36 4079,-538.36 4219,-538.36 4219,-653.36"/>
 <image xlink:href="pic555/upap009l.png" width="120px" height="90px" preserveAspectRatio="xMinYMin meet" x="4089" y="-646.857"/>
 <text text-anchor="start" x="4114.5" y="-547.46" font-family="Sans serif" font-weight="bold" font-size="8.00" fill="#ffffff" fill-opacity="0.533333">AI Surveillance</text>
-<text text-anchor="middle" x="4022.5" y="-531.96" font-family="Sans serif" font-size="8.00" fill="#ffffff" fill-opacity="0.533333">Security Monitor,Spy_PLANE</text>
+<text text-anchor="middle" x="4024.5" y="-531.96" font-family="Sans serif" font-size="8.00" fill="#ffffff" fill-opacity="0.533333">Security Monitor,Spy Plane</text>
 </g>
 <!-- node_ARCOLOGIES&#45;&gt;node_AI_SURVEILLANCE -->
 <g id="edge2" class="edge">

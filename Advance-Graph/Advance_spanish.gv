@@ -165,7 +165,7 @@ digraph G {
 				label=<<TABLE border="0" cellspacing="0" cellborder="0"><TR><TD><IMG SCALE="TRUE" SRC="upap009l.png"/></TD></TR><TR><TD><B>Vigilancia por IA</B></TD></TR></TABLE>>,
 				shape=box,
 				style=filled,
-				xlabel="Monitor seguridad,Espía_PLANE"];
+				xlabel="Monitor seguridad,Avión espía"];
 			node_DIGITAL_ENCRYPTION	[color="#88888855",
 				fontcolor="#ffffff88",
 				group=AGE_EIGHT,
