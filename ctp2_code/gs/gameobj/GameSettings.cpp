@@ -87,7 +87,7 @@ GameSettings::GameSettings(CivArchive &archive)
 
 void GameSettings::SetKeepScore( BOOL keepScore )
 {
-	m_keepScore = true;
+	m_keepScore = keepScore;
 }
 
 void GameSettings::SetPollution( BOOL pollution )
