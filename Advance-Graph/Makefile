@@ -20,7 +20,7 @@ all : Advance_spanish.gv
 
 Advance_%.gv_ : Advance.json ../ctp2_data/%/gamedata/gl_str.txt
 	../tools/json2dot.sh < $< > $@
-	awk -v FPAT='([^ \t]+)|("[^"]+")' ' !/^#/ && NF>1 {gsub("\"","", $$2); cmd = sprintf("sed -i \"/label/s/%s/%s/g\" $@", $$1, $$2); system(cmd)}' $(word 2,$^)  # 1st look-up run needed before gvpr removes unnecessary double-quotes
+	awk -v FPAT='([^ \t]+)|("[^"]+")' ' !/^#/ && NF>1 {gsub("\"","", $$2); cmd = sprintf("sed -i -r \"/label/s/%s([^_])/%s\\1/g\" $@", $$1, $$2); system(cmd)}' $(word 2,$^)  # 1st look-up run needed before gvpr removes unnecessary double-quotes
 
 Advance_%.gv : Advance_%.gv_ ../ctp2_data/%/gamedata/gl_str.txt
 	gvpr -c 'N[$$.degree==0]{delete(root, $$)}' $< `# remove nodes without any edges, e.g. DEFAULT, SUBNEURAL_ADS, MIND_CONTROL ` \
