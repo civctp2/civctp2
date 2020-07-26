@@ -4643,7 +4643,6 @@ void UnitData::MakeFranchise(sint32 player)
 		return;
 
 	m_city_data->MakeFranchise(player);
-	SpecialCityAttackResult(ORDER_RESULT_SUCCEEDED, SPECATTACK_CREATEFRANCHISE, Unit(m_id));
 }
 
 sint32 UnitData::GetFranchiseOwner() const
