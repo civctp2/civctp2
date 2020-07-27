@@ -218,14 +218,14 @@ public:
 
 	sint32			DrawImprovements(aui_Surface *surface, sint32 i, sint32 j, bool clip=false);
 
-	sint32			RepaintTiles(RECT *repaintRect);
-	sint32			RepaintTilesClipped(RECT *repaintRect);
+	sint32			RepaintTiles(const RECT & repaintRect);
+	sint32			RepaintTilesClipped(const RECT & repaintRect);
 
-	sint32			RepaintImprovements(RECT *repaintRect,bool clip=false);
-	sint32			RepaintHats(RECT *repaintRect,bool clip=false);
-	sint32          RepaintBorders(RECT *repaintRect, bool clip=false);
-	sint32			RepaintEdgeX(RECT *repaintRect);
-	sint32			RepaintEdgeY(RECT *repaintRect);
+	sint32			RepaintImprovements(const RECT & repaintRect, bool clip=false);
+	sint32			RepaintHats(const RECT & repaintRect, bool clip=false);
+	sint32          RepaintBorders(const RECT & repaintRect, bool clip=false);
+	sint32			RepaintEdgeX(const RECT & repaintRect);
+	sint32			RepaintEdgeY(const RECT & repaintRect);
 	sint32			Refresh(void);
 
 	sint32			DrawCityRadius(const MapPoint &cpos, COLOR color,sint32 size=1);

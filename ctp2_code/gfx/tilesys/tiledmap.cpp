@@ -1923,27 +1923,19 @@ sint32 TiledMap::DrawImprovements(aui_Surface *surface,
 	return 0;
 }
 
-
-
-
-
-
-
-
-
 void TiledMap::RetargetTileSurface(aui_Surface *surf)
 {
 	m_surface = (surf) ? surf : m_mapSurface;
 }
 
-sint32 TiledMap::RepaintTiles(RECT *repaintRect)
+sint32 TiledMap::RepaintTiles(const RECT & repaintRect)
 {
 	sint32		mapWidth, mapHeight;
 	GetMapMetrics(&mapWidth,&mapHeight);
 
-	for (sint32 i=repaintRect->top; i<repaintRect->bottom; i++){
+	for (sint32 i = repaintRect.top; i < repaintRect.bottom; i++){
 		if (g_theWorld->IsYwrap() || (i >= 0 && i < mapHeight)) {
-			for (sint32 j=repaintRect->left; j<repaintRect->right; j++) {
+			for (sint32 j = repaintRect.left; j < repaintRect.right; j++) {
 				if (g_theWorld->IsXwrap() || (j >= 0 && j < mapWidth)) {
 					CalculateWrap(NULL,i,j);
 				}
@@ -1954,27 +1946,27 @@ sint32 TiledMap::RepaintTiles(RECT *repaintRect)
 	return 0;
 }
 
-sint32 TiledMap::RepaintTilesClipped(RECT *repaintRect)
+sint32 TiledMap::RepaintTilesClipped(const RECT & repaintRect)
 {
-	for (sint32 i=repaintRect->top; i<=repaintRect->bottom; i++)
+	for (sint32 i = repaintRect.top; i <= repaintRect.bottom; i++)
 	{
-		for (sint32 j=repaintRect->left; j<=repaintRect->right; j++)
+		for (sint32 j = repaintRect.left; j <= repaintRect.right; j++)
 			CalculateWrapClipped(NULL,i,j);
 	}
 
 	return 0;
 }
 
-sint32 TiledMap::RepaintImprovements(RECT *repaintRect,bool clip)
+sint32 TiledMap::RepaintImprovements(const RECT & repaintRect, bool clip)
 {
 	sint32		mapWidth, mapHeight;
 	sint32		i;
 
 	GetMapMetrics(&mapWidth,&mapHeight);
 
-	for (i=repaintRect->top; i<repaintRect->bottom; i++){
+	for (i = repaintRect.top; i < repaintRect.bottom; i++){
 		if (g_theWorld->IsYwrap() || (i >= 0 && i < mapHeight)) {
-			for (sint32 j=repaintRect->left; j<repaintRect->right; j++) {
+			for (sint32 j = repaintRect.left; j < repaintRect.right; j++) {
 				if (g_theWorld->IsXwrap() || (j >= 0 && j < mapWidth)) {
 					DrawImprovements(NULL,i,j,0);
 				}
@@ -2051,19 +2043,16 @@ sint32 TiledMap::CalculateHatWrap(
 }
 
 
-sint32 TiledMap::RepaintHats(RECT *repaintRect,bool clip)
+sint32 TiledMap::RepaintHats(const RECT & repaintRect, bool clip)
 {
-
 	sint32 mapWidth, mapHeight;
 	GetMapMetrics(&mapWidth, &mapHeight);
 
-	RECT tempRect = *repaintRect;
-
-	for (sint32 j = tempRect.top;j < tempRect.bottom;j++)
+	for (sint32 j = repaintRect.top; j < repaintRect.bottom;j++)
 	{
 		if (g_theWorld->IsYwrap() || ((j >= 0) && (j <= mapHeight)) || clip)
 		{
-			for (sint32 i = tempRect.left;i<=tempRect.right;i++)
+			for (sint32 i = repaintRect.left; i <= repaintRect.right;i++)
 			{
 				if (g_theWorld->IsXwrap() || (i >= 0 && i < mapWidth)||clip)
 					RedrawHat(NULL, j,i,clip);
@@ -2074,21 +2063,19 @@ sint32 TiledMap::RepaintHats(RECT *repaintRect,bool clip)
 	return 0;
 }
 
-sint32 TiledMap::RepaintBorders(RECT *repaintRect, bool clip)
+sint32 TiledMap::RepaintBorders(const RECT & repaintRect, bool clip)
 {
 	sint32 mapWidth, mapHeight;
 	GetMapMetrics(&mapWidth, &mapHeight);
 
-	RECT tempRect = *repaintRect;
-
-	for (sint32 j = tempRect.top;j < tempRect.bottom;j++)
+	for (sint32 j = repaintRect.top; j < repaintRect.bottom; j++)
 	{
 		if (g_theWorld->IsYwrap() || ((j >= 0) && (j <= mapHeight)) || clip)
 		{
-			for (sint32 i = tempRect.left;i<=tempRect.right;i++)
+			for (sint32 i = repaintRect.left; i<= repaintRect.right; i++)
 			{
 				if (g_theWorld->IsXwrap() || (i >= 0 && i < mapWidth)||clip)
-					RedrawBorders(NULL, j,i,clip);
+					RedrawBorders(NULL, j, i, clip);
 			}
 		}
 	}
@@ -2096,23 +2083,17 @@ sint32 TiledMap::RepaintBorders(RECT *repaintRect, bool clip)
 	return 0;
 }
 
-
-
-
-
-
-
-sint32 TiledMap::RepaintEdgeX(RECT *repaintRect)
+sint32 TiledMap::RepaintEdgeX(const RECT & repaintRect)
 {
 	sint32 mapWidth, mapHeight;
 	GetMapMetrics(&mapWidth,&mapHeight);
 
-	if (repaintRect->left < 0) {
+	if (repaintRect.left < 0) {
 
 		RECT erase = {0,0,(sint32)((k_TILE_PIXEL_WIDTH+k_TILE_PIXEL_WIDTH/2)*m_scale),m_surface->Height()};
 		primitives_PaintRect16(m_surface,&erase,0x0000);
 
-		for (sint32 i=m_mapViewRect.top; i<m_mapViewRect.bottom; i++){
+		for (sint32 i = m_mapViewRect.top; i < m_mapViewRect.bottom; i++){
 			if (g_theWorld->IsYwrap() || (i>=0 && i < mapHeight)) {
 				for (sint32 j=0; j<1; j++) {
 					if (g_theWorld->IsXwrap() || (j >= 0 && j < mapWidth)) {
@@ -2122,14 +2103,15 @@ sint32 TiledMap::RepaintEdgeX(RECT *repaintRect)
 			}
 		}
 	}
-	if (repaintRect->right > m_mapBounds.right-1) {
 
-		RECT erase = {m_surface->Width() - (sint32)((repaintRect->right-(m_mapBounds.right-2))*k_TILE_PIXEL_WIDTH*m_scale),0,m_surface->Width(),m_surface->Height()};
+	if (repaintRect.right > m_mapBounds.right-1) {
+
+		RECT erase = {m_surface->Width() - (sint32)((repaintRect.right-(m_mapBounds.right-2))*k_TILE_PIXEL_WIDTH*m_scale),0,m_surface->Width(),m_surface->Height()};
 		primitives_PaintRect16(m_surface,&erase,0x0000);
 
-		for (sint32 i=m_mapViewRect.top; i<m_mapViewRect.bottom; i++){
+		for (sint32 i = m_mapViewRect.top; i < m_mapViewRect.bottom; i++){
 			if (g_theWorld->IsYwrap() || (i>=0 && i < mapHeight)) {
-				for (sint32 j=m_mapBounds.right-2; j<m_mapBounds.right; j++) {
+				for (sint32 j = m_mapBounds.right-2; j < m_mapBounds.right; j++) {
 					if (g_theWorld->IsXwrap() || (j >=0 && j < mapWidth)) {
 						CalculateWrap(NULL,i,j);
 					}
@@ -2140,25 +2122,19 @@ sint32 TiledMap::RepaintEdgeX(RECT *repaintRect)
 	return 0;
 }
 
-
-
-
-
-
-
-sint32 TiledMap::RepaintEdgeY(RECT *repaintRect)
+sint32 TiledMap::RepaintEdgeY(const RECT & repaintRect)
 {
 	sint32 mapWidth, mapHeight;
 	GetMapMetrics(&mapWidth,&mapHeight);
 
-	if (repaintRect->top < 0) {
+	if (repaintRect.top < 0) {
 
 		RECT erase = {0,0,m_surface->Width(),(sint32)(k_TILE_PIXEL_HEIGHT*2*m_scale)};
 		primitives_PaintRect16(m_surface,&erase,0x0000);
 
-		for (sint32 i=0; i<1; i++) {
+		for (sint32 i = 0; i < 1; i++) {
 			if (g_theWorld->IsYwrap() || (i >= 0 && i < mapHeight)) {
-				for (sint32 j=m_mapViewRect.left; j<m_mapViewRect.right; j++) {
+				for (sint32 j = m_mapViewRect.left; j < m_mapViewRect.right; j++) {
 					if (g_theWorld->IsXwrap() || (j >= 0 && j < mapWidth)) {
 						CalculateWrap(NULL,i,j);
 					}
@@ -2166,7 +2142,8 @@ sint32 TiledMap::RepaintEdgeY(RECT *repaintRect)
 			}
 		}
 	}
-	if (repaintRect->bottom > m_mapBounds.bottom) {
+
+	if (repaintRect.bottom > m_mapBounds.bottom) {
 
 		RECT erase = {0,
 						m_surface->Height()-(sint32)((k_TILE_PIXEL_HEIGHT*2)*m_scale),
@@ -2174,9 +2151,9 @@ sint32 TiledMap::RepaintEdgeY(RECT *repaintRect)
 						m_surface->Height()};
 		primitives_PaintRect16(m_surface,&erase,0x0000);
 
-		for (sint32 i=m_mapBounds.bottom-3; i<m_mapBounds.bottom; i++) {
+		for (sint32 i = m_mapBounds.bottom-3; i < m_mapBounds.bottom; i++) {
 			if (g_theWorld->IsYwrap() || (i >= 0 && i < mapHeight)) {
-				for (sint32 j=m_mapViewRect.left; j<m_mapViewRect.right; j++) {
+				for (sint32 j = m_mapViewRect.left; j < m_mapViewRect.right; j++) {
 					if (g_theWorld->IsXwrap() || (j >= 0 && j < mapWidth)) {
 						CalculateWrap(NULL,i,j);
 					}
@@ -2184,6 +2161,7 @@ sint32 TiledMap::RepaintEdgeY(RECT *repaintRect)
 			}
 		}
 	}
+
 	return 0;
 }
 
@@ -2191,7 +2169,7 @@ sint32 TiledMap::RepaintEdgeY(RECT *repaintRect)
 void TiledMap::ColorMagnitudeToRGB(uint8 col, sint32 *r, sint32 *g, sint32 *b)
 {
 	if (col < 128)
-    {
+	{
 		*r = 255 - (col * 2);
 		*g = (col * 2);
 		*b = 0;
@@ -3240,9 +3218,9 @@ sint32 TiledMap::Refresh(void)
 
 	if (SmoothScrollAligned())
 	{
-		RepaintTiles(&m_mapViewRect);
-		RepaintHats (&m_mapViewRect);
-		RepaintBorders(&m_mapViewRect);
+		RepaintTiles(m_mapViewRect);
+		RepaintHats (m_mapViewRect);
+		RepaintBorders(m_mapViewRect);
 	}
 	else
 	{
@@ -3252,12 +3230,12 @@ sint32 TiledMap::Refresh(void)
 		altrect.top    -= 1;
 		altrect.right  += 1;
 		altrect.bottom -= 1;
-		RepaintTilesClipped(&altrect);
-		RepaintHats(&altrect,true);
-		RepaintBorders(&altrect, true);
+		RepaintTilesClipped(altrect);
+		RepaintHats(altrect, true);
+		RepaintBorders(altrect, true);
 	}
 
-	RepaintImprovements(&m_mapViewRect);
+	RepaintImprovements(m_mapViewRect);
 
 	UnlockSurface();
 
@@ -3494,7 +3472,7 @@ bool TiledMap::ScrollMap(sint32 deltaX, sint32 deltaY)
 	}
 	repaintRect = EnsureRectOverlapMap(repaintRect);
 
-	RepaintTiles(&repaintRect);
+	RepaintTiles(repaintRect);
 
 	RECT inflatedRepaintRect = repaintRect;
 
@@ -3517,9 +3495,9 @@ bool TiledMap::ScrollMap(sint32 deltaX, sint32 deltaY)
 		inflatedRepaintRect.bottom += 2;
 	}
 
-	RepaintHats(&inflatedRepaintRect);
-	RepaintBorders(&inflatedRepaintRect);
-	RepaintImprovements(&inflatedRepaintRect);
+	RepaintHats(inflatedRepaintRect);
+	RepaintBorders(inflatedRepaintRect);
+	RepaintImprovements(inflatedRepaintRect);
 
 	UnlockSurface();
 
@@ -3629,7 +3607,7 @@ bool TiledMap::ScrollMapSmooth(sint32 pdeltaX, sint32 pdeltaY)
 	}
 	repaintRect = EnsureRectOverlapMap(repaintRect);
 
-	RepaintTiles(&repaintRect);
+	RepaintTiles(repaintRect);
 
 	RECT inflatedRepaintRect = repaintRect;
 
@@ -3652,9 +3630,9 @@ bool TiledMap::ScrollMapSmooth(sint32 pdeltaX, sint32 pdeltaY)
 		inflatedRepaintRect.bottom += 2;
 	}
 
-	RepaintHats(&inflatedRepaintRect);
-	RepaintBorders(&inflatedRepaintRect);
-	RepaintImprovements(&inflatedRepaintRect);
+	RepaintHats(inflatedRepaintRect);
+	RepaintBorders(inflatedRepaintRect);
+	RepaintImprovements(inflatedRepaintRect);
 
 	UnlockSurface();
 
