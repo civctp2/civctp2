@@ -218,14 +218,14 @@ public:
 
 	sint32			DrawImprovements(aui_Surface *surface, sint32 i, sint32 j, bool clip=false);
 
-	sint32			RepaintTiles(const RECT & repaintRect);
-	sint32			RepaintTilesClipped(const RECT & repaintRect);
+	void			RepaintTiles(const RECT & repaintRect);
+	void			RepaintTilesClipped(const RECT & repaintRect);
 
-	sint32			RepaintImprovements(const RECT & repaintRect, bool clip=false);
-	sint32			RepaintHats(const RECT & repaintRect, bool clip=false);
-	sint32          RepaintBorders(const RECT & repaintRect, bool clip=false);
-	sint32			RepaintEdgeX(const RECT & repaintRect);
-	sint32			RepaintEdgeY(const RECT & repaintRect);
+	void			RepaintImprovements(const RECT & repaintRect, bool clip=false);
+	void			RepaintHats(const RECT & repaintRect, bool clip=false);
+	void			RepaintBorders(const RECT & repaintRect, bool clip=false);
+	void			RepaintEdgeX(const RECT & repaintRect);
+	void			RepaintEdgeY(const RECT & repaintRect);
 	sint32			Refresh(void);
 
 	sint32			DrawCityRadius(const MapPoint &cpos, COLOR color,sint32 size=1);
@@ -359,14 +359,14 @@ public:
 	sint32			DrawTileBorder(aui_Surface *surface, sint32 x, sint32 y, Pixel16 color);
 	void			DrawTileBorderScaled(aui_Surface *surface, const MapPoint &pos, sint32 x, sint32 y, sint32 destWidth, sint32 destHeight,Pixel16 color);
 
-	Pixel16	    average(Pixel16 pixel1, Pixel16 pixel2, Pixel16 pixel3, Pixel16 pixel4);
+	Pixel16			average(Pixel16 pixel1, Pixel16 pixel2, Pixel16 pixel3, Pixel16 pixel4);
 
 	void			DrawBlackScaledLow(aui_Surface *surface, const MapPoint &pos, sint32 x, sint32 y, sint32 destWidth, sint32 destHeight);
 
 	void			ProcessRun(Pixel16 **rowData1, Pixel16 **rowData2, Pixel16 *pix1, Pixel16 *pix2,
 							sint32 pos, Pixel16 destPixel, short transparency, Pixel16 outlineColor,
 							sint32 flags = k_OVERLAY_FLAG_NORMAL);
-	sint32	    ReadTag(sint32 *mode, Pixel16 **rowData, sint32 *alpha);
+	sint32			ReadTag(sint32 *mode, Pixel16 **rowData, sint32 *alpha);
 
 	void		Blt(aui_Surface *surf);
 

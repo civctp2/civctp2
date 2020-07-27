@@ -1928,7 +1928,7 @@ void TiledMap::RetargetTileSurface(aui_Surface *surf)
 	m_surface = (surf) ? surf : m_mapSurface;
 }
 
-sint32 TiledMap::RepaintTiles(const RECT & repaintRect)
+void TiledMap::RepaintTiles(const RECT & repaintRect)
 {
 	sint32		mapWidth, mapHeight;
 	GetMapMetrics(&mapWidth,&mapHeight);
@@ -1942,22 +1942,18 @@ sint32 TiledMap::RepaintTiles(const RECT & repaintRect)
 			}
 		}
 	}
-
-	return 0;
 }
 
-sint32 TiledMap::RepaintTilesClipped(const RECT & repaintRect)
+void TiledMap::RepaintTilesClipped(const RECT & repaintRect)
 {
 	for (sint32 i = repaintRect.top; i <= repaintRect.bottom; i++)
 	{
 		for (sint32 j = repaintRect.left; j <= repaintRect.right; j++)
 			CalculateWrapClipped(NULL,i,j);
 	}
-
-	return 0;
 }
 
-sint32 TiledMap::RepaintImprovements(const RECT & repaintRect, bool clip)
+void TiledMap::RepaintImprovements(const RECT & repaintRect, bool clip)
 {
 	sint32		mapWidth, mapHeight;
 	sint32		i;
@@ -1973,8 +1969,6 @@ sint32 TiledMap::RepaintImprovements(const RECT & repaintRect, bool clip)
 			}
 		}
 	}
-
-	return 0;
 }
 
 sint32 TiledMap::CalculateHatWrap(
@@ -2043,7 +2037,7 @@ sint32 TiledMap::CalculateHatWrap(
 }
 
 
-sint32 TiledMap::RepaintHats(const RECT & repaintRect, bool clip)
+void TiledMap::RepaintHats(const RECT & repaintRect, bool clip)
 {
 	sint32 mapWidth, mapHeight;
 	GetMapMetrics(&mapWidth, &mapHeight);
@@ -2059,11 +2053,9 @@ sint32 TiledMap::RepaintHats(const RECT & repaintRect, bool clip)
 			}
 		}
 	}
-
-	return 0;
 }
 
-sint32 TiledMap::RepaintBorders(const RECT & repaintRect, bool clip)
+void TiledMap::RepaintBorders(const RECT & repaintRect, bool clip)
 {
 	sint32 mapWidth, mapHeight;
 	GetMapMetrics(&mapWidth, &mapHeight);
@@ -2079,11 +2071,9 @@ sint32 TiledMap::RepaintBorders(const RECT & repaintRect, bool clip)
 			}
 		}
 	}
-
-	return 0;
 }
 
-sint32 TiledMap::RepaintEdgeX(const RECT & repaintRect)
+void TiledMap::RepaintEdgeX(const RECT & repaintRect)
 {
 	sint32 mapWidth, mapHeight;
 	GetMapMetrics(&mapWidth,&mapHeight);
@@ -2119,10 +2109,9 @@ sint32 TiledMap::RepaintEdgeX(const RECT & repaintRect)
 			}
 		}
 	}
-	return 0;
 }
 
-sint32 TiledMap::RepaintEdgeY(const RECT & repaintRect)
+void TiledMap::RepaintEdgeY(const RECT & repaintRect)
 {
 	sint32 mapWidth, mapHeight;
 	GetMapMetrics(&mapWidth,&mapHeight);
@@ -2161,10 +2150,7 @@ sint32 TiledMap::RepaintEdgeY(const RECT & repaintRect)
 			}
 		}
 	}
-
-	return 0;
 }
-
 
 void TiledMap::ColorMagnitudeToRGB(uint8 col, sint32 *r, sint32 *g, sint32 *b)
 {
