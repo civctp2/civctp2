@@ -1177,10 +1177,19 @@ void RadarMap::RenderViewRect(aui_Surface *surf, sint32 x, sint32 y)
 	}
 
 	// Draw the rectangles
-	RECT viewRect = { x1, y1, x2, y2 };
-	primitives_ClippedFrameRect16(*surf, viewRect, g_colorSet->GetColor(COLOR_WHITE));
-	viewRect = { x3, y1, x4, y2 };
-	primitives_ClippedFrameRect16(*surf, viewRect, g_colorSet->GetColor(COLOR_WHITE));
+//	RECT viewRect = { x1, y1, x2, y2 };
+//	primitives_ClippedFrameRect16(*surf, viewRect, g_colorSet->GetColor(COLOR_WHITE));
+//	viewRect = { x3, y1, x4, y2 };
+//	primitives_ClippedFrameRect16(*surf, viewRect, g_colorSet->GetColor(COLOR_WHITE));
+
+	primitives_DrawLine16(surf, x1, y1, x2, y1, 0xffff);
+	primitives_DrawLine16(surf, x1, y1, x1, y2, 0xffff);
+	primitives_DrawLine16(surf, x3, y1, x4, y1, 0xffff);
+	primitives_DrawLine16(surf, x4, y1, x4, y2, 0xffff);
+	primitives_DrawLine16(surf, x1, y4, x2, y4, 0xffff);
+	primitives_DrawLine16(surf, x1, y3, x1, y4, 0xffff);
+	primitives_DrawLine16(surf, x3, y4, x4, y4, 0xffff);
+	primitives_DrawLine16(surf, x4, y3, x4, y4, 0xffff);
 }
 
 //---------------------------------------------------------------------------
