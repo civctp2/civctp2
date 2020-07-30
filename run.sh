@@ -18,6 +18,7 @@ mkdir -p $HOME/.civctp2/maps/ # if not existent created by docker then owned by 
 mkdir -p $HOME/.civctp2/Scenarios/ # if not existent created by docker then owned by root
 touch $HOME/.civctp2/userprofile.txt # file must exist for docker file-vol
 touch $HOME/.civctp2/userkeymap.txt # file must exist for docker file-vol
+touch $HOME/.civctp2/hscore.txt # file must exist for docker file-vol
 
 if test -s $HOME/.civctp2/Const.txt # file must exist for docker file-vol
 then CON="-v $HOME/.civctp2/Const.txt:/opt/ctp2/ctp2_program/ctp/Const.txt"
@@ -31,6 +32,7 @@ docker run \
        --env "DISPLAY" \
        -v $HOME/.civctp2/userprofile.txt:/opt/ctp2/ctp2_program/ctp/userprofile.txt \
        -v $HOME/.civctp2/userkeymap.txt:/opt/ctp2/ctp2_program/ctp/userkeymap.txt \
+       -v $HOME/.civctp2/hscore.txt:/opt/ctp2/ctp2_data/default/gamedata/hscore.txt \
        $CON \
        -v $HOME/.civctp2/save/:/opt/ctp2/ctp2_program/ctp/save \
        -v $HOME/.civctp2/logs/:/opt/ctp2/ctp2_program/ctp/logs \
