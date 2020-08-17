@@ -21,6 +21,9 @@ all : Advance_spanish.gv
 Advance_%.gv_ : Advance.json ../ctp2_data/%/gamedata/gl_str.txt
 	../tools/json2dot.sh < $< > $@
 	../tools/advBenefits.sh $@
+	sed -i 's|<TD>|<TD align="text">|g;s|</TD>|<BR align="left" /></TD>|g' $@
+	sed -i 's|<TD align="text"><BR align="left" /></TD>|<TD></TD>|g' $@
+	sed -i 's|<TH>|<TD>|g;s|</TH>|</TD>|g' $@
 	awk -v FPAT='([^ \t]+)|("[^"]+")' ' !/^#/ && NF>1 {gsub("\"","", $$2); cmd = sprintf("sed -i -r \"/label/s/%s([^_])/%s\\1/g\" $@", $$1, $$2); system(cmd)}' $(word 2,$^)  # 1st look-up run needed before gvpr removes unnecessary double-quotes
 
 Advance_%.gv : Advance_%.gv_ ../ctp2_data/%/gamedata/gl_str.txt
