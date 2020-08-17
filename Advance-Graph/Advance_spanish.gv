@@ -18,73 +18,63 @@ digraph G {
 			node_ADV_INFANTRY_TACTICS	[color="#ff000055",
 				fontcolor="#ffffff88",
 				group=AGE_SIX,
-				label=<<TABLE border="0" cellspacing="0" cellborder="0"><TR><TD><IMG SCALE="TRUE" SRC="cm2_upap001l.png"/></TD></TR><TR><TD><B>Táctica Infantería avanz.</B></TD></TR></TABLE>>,
+				label=<<TABLE border="0" cellspacing="0" cellborder="0"><TR><TD><IMG SCALE="TRUE" SRC="cm2_upap001l.png"/></TD></TR><TR><TD><B>Táctica Infantería avanz.</B></TD></TR><TR><TD>Marine,Paracaidista</TD></TR></TABLE>>,
 				shape=box,
-				style=filled,
-				xlabel="Marine,Paracaidista"];
+				style=filled];
 			node_ADV_NAVAL_TACTICS	[color="#ff000055",
 				fontcolor="#ffffff88",
 				group=AGE_SIX,
-				label=<<TABLE border="0" cellspacing="0" cellborder="0"><TR><TD><IMG SCALE="TRUE" SRC="cm2_upap002l.png"/></TD></TR><TR><TD><B>Táctica naval avanz.</B></TD></TR></TABLE>>,
+				label=<<TABLE border="0" cellspacing="0" cellborder="0"><TR><TD><IMG SCALE="TRUE" SRC="cm2_upap002l.png"/></TD></TR><TR><TD><B>Táctica naval avanz.</B></TD></TR><TR><TD>Crucero acorazado</TD></TR></TABLE>>,
 				shape=box,
-				style=filled,
-				xlabel="Crucero acorazado"];
+				style=filled];
 			node_ADV_URBAN_PLANNING	[color="#88888855",
 				fontcolor="#ffffff88",
 				group=AGE_SIX,
-				label=<<TABLE border="0" cellspacing="0" cellborder="0"><TR><TD><IMG SCALE="TRUE" SRC="cm2_upap003l.png"/></TD></TR><TR><TD><B>Planific. urbana avanz.</B></TD></TR></TABLE>>,
+				label=<<TABLE border="0" cellspacing="0" cellborder="0"><TR><TD><IMG SCALE="TRUE" SRC="cm2_upap003l.png"/></TD></TR><TR><TD><B>Planific. urbana avanz.</B></TD></TR><TR><TD>Planificador urbano</TD></TR><TR><TD>Megaminas</TD></TR></TABLE>>,
 				shape=box,
-				style=filled,
-				xlabel="Megaminas,Planificador urbano"];
+				style=filled];
 			node_AERODYNAMICS	[color="#88888855",
 				fontcolor="#ffffff88",
 				group=AGE_SIX,
-				label=<<TABLE border="0" cellspacing="0" cellborder="0"><TR><TD><IMG SCALE="TRUE" SRC="cm2_upap005l.png"/></TD></TR><TR><TD><B>Aerodinámica</B></TD></TR></TABLE>>,
+				label=<<TABLE border="0" cellspacing="0" cellborder="0"><TR><TD><IMG SCALE="TRUE" SRC="cm2_upap005l.png"/></TD></TR><TR><TD><B>Aerodinámica</B></TD></TR><TR><TD>Caza</TD></TR><TR><TD>Aeropuerto</TD></TR><TR><TD>Base aérea</TD></TR></TABLE>>,
 				shape=box,
-				style=filled,
-				xlabel="Aeropuerto,Base aérea,Caza"];
+				style=filled];
 			node_JET_PROPULSION	[color="#88888855",
 				fontcolor="#ffffff88",
 				group=AGE_SIX,
-				label=<<TABLE border="0" cellspacing="0" cellborder="0"><TR><TD><IMG SCALE="TRUE" SRC="cm2_upap058l.png"/></TD></TR><TR><TD><B>Propulsión a reacc.</B></TD></TR></TABLE>>,
+				label=<<TABLE border="0" cellspacing="0" cellborder="0"><TR><TD><IMG SCALE="TRUE" SRC="cm2_upap058l.png"/></TD></TR><TR><TD><B>Propulsión a reacc.</B></TD></TR><TR><TD>Bombardero</TD></TR></TABLE>>,
 				shape=box,
-				style=filled,
-				xlabel=Bombardero];
+				style=filled];
 			node_NAVAL_AVIATION	[color="#88888855",
 				fontcolor="#ffffff88",
 				group=AGE_SIX,
-				label=<<TABLE border="0" cellspacing="0" cellborder="0"><TR><TD><IMG SCALE="TRUE" SRC="cm2_upap073l.png"/></TD></TR><TR><TD><B>Aviación naval</B></TD></TR></TABLE>>,
+				label=<<TABLE border="0" cellspacing="0" cellborder="0"><TR><TD><IMG SCALE="TRUE" SRC="cm2_upap073l.png"/></TD></TR><TR><TD><B>Aviación naval</B></TD></TR><TR><TD>Portaaviones</TD></TR></TABLE>>,
 				shape=box,
-				style=filled,
-				xlabel=Portaaviones];
+				style=filled];
 			node_VERTICAL_FLIGHT_AIRCRAFT	[color="#88888855",
 				fontcolor="#ffffff88",
 				group=AGE_SIX,
-				label=<<TABLE border="0" cellspacing="0" cellborder="0"><TR><TD><IMG SCALE="TRUE" SRC="cm2_upap105l.png"/></TD></TR><TR><TD><B>Avión de vuelo vertical</B></TD></TR></TABLE>>,
+				label=<<TABLE border="0" cellspacing="0" cellborder="0"><TR><TD><IMG SCALE="TRUE" SRC="cm2_upap105l.png"/></TD></TR><TR><TD><B>Avión de vuelo vertical</B></TD></TR><TR><TD>Helicóptero de carga</TD></TR></TABLE>>,
 				shape=box,
-				style=filled,
-				xlabel="Helicóptero de carga"];
+				style=filled];
 			node_RADAR	[color="#88888855",
 				fontcolor="#ffffff88",
 				group=AGE_SIX,
-				label=<<TABLE border="0" cellspacing="0" cellborder="0"><TR><TD><IMG SCALE="TRUE" SRC="cm2_upap087l.png"/></TD></TR><TR><TD><B>Radar</B></TD></TR></TABLE>>,
+				label=<<TABLE border="0" cellspacing="0" cellborder="0"><TR><TD><IMG SCALE="TRUE" SRC="cm2_upap087l.png"/></TD></TR><TR><TD><B>Radar</B></TD></TR><TR><TD>SAM Móvil</TD></TR><TR><TD>Torretas antiaéreas</TD></TR><TR><TD>Puesto de radar</TD></TR></TABLE>>,
 				shape=box,
-				style=filled,
-				xlabel="Torretas antiaéreas,Puesto de radar,SAM Móvil"];
+				style=filled];
 			node_MASS_MEDIA	[color="#88888855",
 				fontcolor="#ffffff88",
 				group=AGE_SIX,
-				label=<<TABLE border="0" cellspacing="0" cellborder="0"><TR><TD><IMG SCALE="TRUE" SRC="cm2_upap063l.png"/></TD></TR><TR><TD><B>Medios de comunicación</B></TD></TR></TABLE>>,
+				label=<<TABLE border="0" cellspacing="0" cellborder="0"><TR><TD><IMG SCALE="TRUE" SRC="cm2_upap063l.png"/></TD></TR><TR><TD><B>Medios de comunicación</B></TD></TR><TR><TD>Telepredicador</TD></TR><TR><TD>Televisión</TD></TR><TR><TD>Centro comercial</TD></TR></TABLE>>,
 				shape=box,
-				style=filled,
-				xlabel="Televisión,Centro comercial,Telepredicador"];
+				style=filled];
 			node_MASS_PRODUCTION	[color="#88888855",
 				fontcolor="#ffffff88",
 				group=AGE_SIX,
-				label=<<TABLE border="0" cellspacing="0" cellborder="0"><TR><TD><IMG SCALE="TRUE" SRC="cm2_upap064l.png"/></TD></TR><TR><TD><B>Producc. en cadena</B></TD></TR></TABLE>>,
+				label=<<TABLE border="0" cellspacing="0" cellborder="0"><TR><TD><IMG SCALE="TRUE" SRC="cm2_upap064l.png"/></TD></TR><TR><TD><B>Producc. en cadena</B></TD></TR><TR><TD>Destructor,Barco PT</TD></TR><TR><TD>Boya de sonar</TD></TR></TABLE>>,
 				shape=box,
-				style=filled,
-				xlabel="Boya de sonar,Destructor,Barco PT"];
+				style=filled];
 			node_QUANTUM_MECHANICS	[color="#88888855",
 				fontcolor="#ffffff88",
 				group=AGE_SIX,
@@ -94,10 +84,9 @@ digraph G {
 			node_CONSERVATION	[color="#88888855",
 				fontcolor="#ffffff88",
 				group=AGE_SIX,
-				label=<<TABLE border="0" cellspacing="0" cellborder="0"><TR><TD><IMG SCALE="TRUE" SRC="cm2_upap024l.png"/></TD></TR><TR><TD><B>Ecologismo</B></TD></TR></TABLE>>,
+				label=<<TABLE border="0" cellspacing="0" cellborder="0"><TR><TD><IMG SCALE="TRUE" SRC="cm2_upap024l.png"/></TD></TR><TR><TD><B>Ecologismo</B></TD></TR><TR><TD>Centro de recicl.</TD></TR><TR><TD>Reserva natural</TD></TR></TABLE>>,
 				shape=box,
-				style=filled,
-				xlabel="Centro de recicl.,Reserva natural"];
+				style=filled];
 			node_CORPORATE_REPUBLIC	[color="#88888855",
 				fontcolor="#ffffff88",
 				group=AGE_SIX,
@@ -107,45 +96,39 @@ digraph G {
 			node_MASS_TRANSIT	[color="#88888855",
 				fontcolor="#ffffff88",
 				group=AGE_SIX,
-				label=<<TABLE border="0" cellspacing="0" cellborder="0"><TR><TD><IMG SCALE="TRUE" SRC="cm2_upap065l.png"/></TD></TR><TR><TD><B>Transporte público</B></TD></TR></TABLE>>,
+				label=<<TABLE border="0" cellspacing="0" cellborder="0"><TR><TD><IMG SCALE="TRUE" SRC="cm2_upap065l.png"/></TD></TR><TR><TD><B>Transporte público</B></TD></TR><TR><TD>Transporte público</TD></TR></TABLE>>,
 				shape=box,
-				style=filled,
-				xlabel="Transporte público"];
+				style=filled];
 			node_CORPORATION	[color="#88888855",
 				fontcolor="#ffffff88",
 				group=AGE_SIX,
-				label=<<TABLE border="0" cellspacing="0" cellborder="0"><TR><TD><IMG SCALE="TRUE" SRC="cm2_upap026l.png"/></TD></TR><TR><TD><B>Sociedad Anónima</B></TD></TR></TABLE>>,
+				label=<<TABLE border="0" cellspacing="0" cellborder="0"><TR><TD><IMG SCALE="TRUE" SRC="cm2_upap026l.png"/></TD></TR><TR><TD><B>Sociedad Anónima</B></TD></TR><TR><TD>Filial de empresa</TD></TR><TR><TD>Empire State Building</TD></TR></TABLE>>,
 				shape=box,
-				style=filled,
-				xlabel="Filial de empresa,Empire State Building"];
+				style=filled];
 			node_MEDICINE	[color="#88888855",
 				fontcolor="#ffffff88",
 				group=AGE_SIX,
-				label=<<TABLE border="0" cellspacing="0" cellborder="0"><TR><TD><IMG SCALE="TRUE" SRC="cm2_upap066l.png"/></TD></TR><TR><TD><B>Medicina moderna</B></TD></TR></TABLE>>,
+				label=<<TABLE border="0" cellspacing="0" cellborder="0"><TR><TD><IMG SCALE="TRUE" SRC="cm2_upap066l.png"/></TD></TR><TR><TD><B>Medicina moderna</B></TD></TR><TR><TD>Hospital</TD></TR></TABLE>>,
 				shape=box,
-				style=filled,
-				xlabel=Hospital];
+				style=filled];
 			node_TANK_WARFARE	[color="#ff000055",
 				fontcolor="#ffffff88",
 				group=AGE_SIX,
-				label=<<TABLE border="0" cellspacing="0" cellborder="0"><TR><TD><IMG SCALE="TRUE" SRC="cm2_upap098l.png"/></TD></TR><TR><TD><B>Combate blindados</B></TD></TR></TABLE>>,
+				label=<<TABLE border="0" cellspacing="0" cellborder="0"><TR><TD><IMG SCALE="TRUE" SRC="cm2_upap098l.png"/></TD></TR><TR><TD><B>Combate blindados</B></TD></TR><TR><TD>Blindado</TD></TR></TABLE>>,
 				shape=box,
-				style=filled,
-				xlabel=Blindado];
+				style=filled];
 			node_CRIMINAL_CODE	[color="#88888855",
 				fontcolor="#ffffff88",
 				group=AGE_SIX,
-				label=<<TABLE border="0" cellspacing="0" cellborder="0"><TR><TD><IMG SCALE="TRUE" SRC="cm2_upap027l.png"/></TD></TR><TR><TD><B>Código Penal</B></TD></TR></TABLE>>,
+				label=<<TABLE border="0" cellspacing="0" cellborder="0"><TR><TD><IMG SCALE="TRUE" SRC="cm2_upap027l.png"/></TD></TR><TR><TD><B>Código Penal</B></TD></TR><TR><TD>Abogado</TD></TR><TR><TD>Correccional</TD></TR><TR><TD>Proy. Ley Crimen Cero</TD></TR></TABLE>>,
 				shape=box,
-				style=filled,
-				xlabel="Correccional,Abogado,Proy. Ley Crimen Cero"];
+				style=filled];
 			node_INTERNAL_COMBUSTION	[color="#88888855",
 				fontcolor="#ffffff88",
 				group=AGE_SIX,
-				label=<<TABLE border="0" cellspacing="0" cellborder="0"><TR><TD><IMG SCALE="TRUE" SRC="cm2_upap056l.png"/></TD></TR><TR><TD><B>Combustión interna</B></TD></TR></TABLE>>,
+				label=<<TABLE border="0" cellspacing="0" cellborder="0"><TR><TD><IMG SCALE="TRUE" SRC="cm2_upap056l.png"/></TD></TR><TR><TD><B>Combustión interna</B></TD></TR><TR><TD>Barco transporte</TD></TR></TABLE>>,
 				shape=box,
-				style=filled,
-				xlabel="Barco transporte"];
+				style=filled];
 		}
 		subgraph cluster_AGE_EIGHT {
 			graph [color="#88888855",
@@ -155,66 +138,57 @@ digraph G {
 			node_ARCOLOGIES	[color="#88888855",
 				fontcolor="#ffffff88",
 				group=AGE_EIGHT,
-				label=<<TABLE border="0" cellspacing="0" cellborder="0"><TR><TD><IMG SCALE="TRUE" SRC="upap011l.png"/></TD></TR><TR><TD><B>Arcologías</B></TD></TR></TABLE>>,
+				label=<<TABLE border="0" cellspacing="0" cellborder="0"><TR><TD><IMG SCALE="TRUE" SRC="upap011l.png"/></TD></TR><TR><TD><B>Arcologías</B></TD></TR><TR><TD>Arcologías</TD></TR></TABLE>>,
 				shape=box,
-				style=filled,
-				xlabel=Arcologías];
+				style=filled];
 			node_AI_SURVEILLANCE	[color="#ff000055",
 				fontcolor="#ffffff88",
 				group=AGE_EIGHT,
-				label=<<TABLE border="0" cellspacing="0" cellborder="0"><TR><TD><IMG SCALE="TRUE" SRC="upap009l.png"/></TD></TR><TR><TD><B>Vigilancia por IA</B></TD></TR></TABLE>>,
+				label=<<TABLE border="0" cellspacing="0" cellborder="0"><TR><TD><IMG SCALE="TRUE" SRC="upap009l.png"/></TD></TR><TR><TD><B>Vigilancia por IA</B></TD></TR><TR><TD>Avión espía</TD></TR><TR><TD>Monitor seguridad</TD></TR></TABLE>>,
 				shape=box,
-				style=filled,
-				xlabel="Monitor seguridad,Avión espía"];
+				style=filled];
 			node_DIGITAL_ENCRYPTION	[color="#88888855",
 				fontcolor="#ffffff88",
 				group=AGE_EIGHT,
-				label=<<TABLE border="0" cellspacing="0" cellborder="0"><TR><TD><IMG SCALE="TRUE" SRC="upap030l.png"/></TD></TR><TR><TD><B>Cifrado digital</B></TD></TR></TABLE>>,
+				label=<<TABLE border="0" cellspacing="0" cellborder="0"><TR><TD><IMG SCALE="TRUE" SRC="upap030l.png"/></TD></TR><TR><TD><B>Cifrado digital</B></TD></TR><TR><TD>Banco Elect. Global</TD></TR><TR><TD>Refugio de datos</TD></TR></TABLE>>,
 				shape=box,
-				style=filled,
-				xlabel="Banco Elect. Global,Refugio de datos"];
+				style=filled];
 			node_HT_SUPERCONDUCTOR	[color="#88888855",
 				fontcolor="#ffffff88",
 				group=AGE_EIGHT,
-				label=<<TABLE border="0" cellspacing="0" cellborder="0"><TR><TD><IMG SCALE="TRUE" SRC="upap052l.png"/></TD></TR><TR><TD><B>Superconductor</B></TD></TR></TABLE>>,
+				label=<<TABLE border="0" cellspacing="0" cellborder="0"><TR><TD><IMG SCALE="TRUE" SRC="upap052l.png"/></TD></TR><TR><TD><B>Superconductor</B></TD></TR><TR><TD>Lab. dinámica de campos</TD></TR><TR><TD>Maglevs</TD></TR></TABLE>>,
 				shape=box,
-				style=filled,
-				xlabel="Maglevs,Lab. dinámica de campos"];
+				style=filled];
 			node_LIQUID_BREATHING_APPARATUS	[color="#88888855",
 				fontcolor="#ffffff88",
 				group=AGE_EIGHT,
-				label=<<TABLE border="0" cellspacing="0" cellborder="0"><TR><TD><IMG SCALE="TRUE" SRC="upap061l.png"/></TD></TR><TR><TD><B>Respiración submarina</B></TD></TR></TABLE>>,
+				label=<<TABLE border="0" cellspacing="0" cellborder="0"><TR><TD><IMG SCALE="TRUE" SRC="upap061l.png"/></TD></TR><TR><TD><B>Respiración submarina</B></TD></TR><TR><TD>Subm. de reconocim.</TD></TR></TABLE>>,
 				shape=box,
-				style=filled,
-				xlabel="Subm. de reconocim."];
+				style=filled];
 			node_SPACE_FLIGHT	[color="#ff000055",
 				fontcolor="#ffffff88",
 				group=AGE_EIGHT,
-				label=<<TABLE border="0" cellspacing="0" cellborder="0"><TR><TD><IMG SCALE="TRUE" SRC="upap094l.png"/></TD></TR><TR><TD><B>Vuelo espacial</B></TD></TR></TABLE>>,
+				label=<<TABLE border="0" cellspacing="0" cellborder="0"><TR><TD><IMG SCALE="TRUE" SRC="upap094l.png"/></TD></TR><TR><TD><B>Vuelo espacial</B></TD></TR><TR><TD>Avión espacial</TD></TR><TR><TD>Laboratorio orbital</TD></TR></TABLE>>,
 				shape=box,
-				style=filled,
-				xlabel="Laboratorio orbital,Avión espacial"];
+				style=filled];
 			node_NEURAL_INTERFACE	[color="#88888855",
 				fontcolor="#ffffff88",
 				group=AGE_EIGHT,
-				label=<<TABLE border="0" cellspacing="0" cellborder="0"><TR><TD><IMG SCALE="TRUE" SRC="upap075l.png"/></TD></TR><TR><TD><B>Interfaz neuronal</B></TD></TR></TABLE>>,
+				label=<<TABLE border="0" cellspacing="0" cellborder="0"><TR><TD><IMG SCALE="TRUE" SRC="upap075l.png"/></TD></TR><TR><TD><B>Interfaz neuronal</B></TD></TR><TR><TD>Ciberninja</TD></TR><TR><TD>Parque de atracc. RV</TD></TR></TABLE>>,
 				shape=box,
-				style=filled,
-				xlabel="Parque de atracc. RV,Ciberninja"];
+				style=filled];
 			node_NANO_ASSEMBLY	[color="#88888855",
 				fontcolor="#ffffff88",
 				group=AGE_EIGHT,
-				label=<<TABLE border="0" cellspacing="0" cellborder="0"><TR><TD><IMG SCALE="TRUE" SRC="cm2_upap069l.png"/></TD></TR><TR><TD><B>Nanoensamblaje</B></TD></TR></TABLE>>,
+				label=<<TABLE border="0" cellspacing="0" cellborder="0"><TR><TD><IMG SCALE="TRUE" SRC="cm2_upap069l.png"/></TD></TR><TR><TD><B>Nanoensamblaje</B></TD></TR><TR><TD>Ing. submarino</TD></TR><TR><TD>Fábrica de nanita</TD></TR><TR><TD>Túneles submarinos</TD></TR></TABLE>>,
 				shape=box,
-				style=filled,
-				xlabel="Fábrica de nanita,Túneles submarinos,Ing. submarino"];
+				style=filled];
 			node_GENETICS	[color="#88888855",
 				fontcolor="#ffffff88",
 				group=AGE_EIGHT,
-				label=<<TABLE border="0" cellspacing="0" cellborder="0"><TR><TD><IMG SCALE="TRUE" SRC="upap044l.png"/></TD></TR><TR><TD><B>Genética</B></TD></TR></TABLE>>,
+				label=<<TABLE border="0" cellspacing="0" cellborder="0"><TR><TD><IMG SCALE="TRUE" SRC="upap044l.png"/></TD></TR><TR><TD><B>Genética</B></TD></TR><TR><TD>Submarino Morey</TD></TR><TR><TD>Proyecto Genoma </TD></TR><TR><TD>Granjas hidropónicas</TD></TR></TABLE>>,
 				shape=box,
-				style=filled,
-				xlabel="Granjas hidropónicas,Submarino Morey,Proyecto Genoma "];
+				style=filled];
 			node_TECHNOCRACY	[color="#88888855",
 				fontcolor="#ffffff88",
 				group=AGE_EIGHT,
@@ -224,17 +198,15 @@ digraph G {
 			node_CHAOS_THEORY	[color="#88888855",
 				fontcolor="#ffffff88",
 				group=AGE_EIGHT,
-				label=<<TABLE border="0" cellspacing="0" cellborder="0"><TR><TD><IMG SCALE="TRUE" SRC="upap018l.png"/></TD></TR><TR><TD><B>Teoría del caos</B></TD></TR></TABLE>>,
+				label=<<TABLE border="0" cellspacing="0" cellborder="0"><TR><TD><IMG SCALE="TRUE" SRC="upap018l.png"/></TD></TR><TR><TD><B>Teoría del caos</B></TD></TR><TR><TD>Infantería Hover</TD></TR></TABLE>>,
 				shape=box,
-				style=filled,
-				xlabel="Infantería Hover"];
+				style=filled];
 			node_EUGENICS	[color="#88888855",
 				fontcolor="#ffffff88",
 				group=AGE_EIGHT,
-				label=<<TABLE border="0" cellspacing="0" cellborder="0"><TR><TD><IMG SCALE="TRUE" SRC="upap035l.png"/></TD></TR><TR><TD><B>Eugenesia</B></TD></TR></TABLE>>,
+				label=<<TABLE border="0" cellspacing="0" cellborder="0"><TR><TD><IMG SCALE="TRUE" SRC="upap035l.png"/></TD></TR><TR><TD><B>Eugenesia</B></TD></TR><TR><TD>Diplomático empático</TD></TR><TR><TD>Centro de Vigil. Global</TD></TR></TABLE>>,
 				shape=box,
-				style=filled,
-				xlabel="Diplomático empático,Centro de Vigil. Global"];
+				style=filled];
 		}
 		subgraph cluster_AGE_SEVEN {
 			graph [color="#88888855",
@@ -244,73 +216,63 @@ digraph G {
 			node_ADVANCED_COMPOSITES	[color="#88888855",
 				fontcolor="#ffffff88",
 				group=AGE_SEVEN,
-				label=<<TABLE border="0" cellspacing="0" cellborder="0"><TR><TD><IMG SCALE="TRUE" SRC="cm2_upap004l.png"/></TD></TR><TR><TD><B>Compuestos avanz.</B></TD></TR></TABLE>>,
+				label=<<TABLE border="0" cellspacing="0" cellborder="0"><TR><TD><IMG SCALE="TRUE" SRC="cm2_upap004l.png"/></TD></TR><TR><TD><B>Compuestos avanz.</B></TD></TR><TR><TD>Bombard. Stealth,Caza Stealth</TD></TR></TABLE>>,
 				shape=box,
-				style=filled,
-				xlabel="Bombard. Stealth,Caza Stealth"];
+				style=filled];
 			node_ROBOTICS	[color="#88888855",
 				fontcolor="#ffffff88",
 				group=AGE_SEVEN,
-				label=<<TABLE border="0" cellspacing="0" cellborder="0"><TR><TD><IMG SCALE="TRUE" SRC="cm2_upap090l.png"/></TD></TR><TR><TD><B>Robótica</B></TD></TR></TABLE>>,
+				label=<<TABLE border="0" cellspacing="0" cellborder="0"><TR><TD><IMG SCALE="TRUE" SRC="cm2_upap090l.png"/></TD></TR><TR><TD><B>Robótica</B></TD></TR><TR><TD>Fábrica robotizada</TD></TR><TR><TD>Ind. pesquera autom.</TD></TR></TABLE>>,
 				shape=box,
-				style=filled,
-				xlabel="Fábrica robotizada,Ind. pesquera autom."];
+				style=filled];
 			node_GLOBAL_ECONOMICS	[color="#88888855",
 				fontcolor="#ffffff88",
 				group=AGE_SEVEN,
-				label=<<TABLE border="0" cellspacing="0" cellborder="0"><TR><TD><IMG SCALE="TRUE" SRC="cm2_upap047l.png"/></TD></TR><TR><TD><B>Economía global</B></TD></TR></TABLE>>,
+				label=<<TABLE border="0" cellspacing="0" cellborder="0"><TR><TD><IMG SCALE="TRUE" SRC="cm2_upap047l.png"/></TD></TR><TR><TD><B>Economía global</B></TD></TR><TR><TD>Transporte de merc.</TD></TR><TR><TD>Hollywood</TD></TR></TABLE>>,
 				shape=box,
-				style=filled,
-				xlabel="Transporte de merc.,Hollywood"];
+				style=filled];
 			node_SUPERSONIC_FLIGHT	[color="#88888855",
 				fontcolor="#ffffff88",
 				group=AGE_SEVEN,
-				label=<<TABLE border="0" cellspacing="0" cellborder="0"><TR><TD><IMG SCALE="TRUE" SRC="cm2_upap097l.png"/></TD></TR><TR><TD><B>Vuelo supersónico</B></TD></TR></TABLE>>,
+				label=<<TABLE border="0" cellspacing="0" cellborder="0"><TR><TD><IMG SCALE="TRUE" SRC="cm2_upap097l.png"/></TD></TR><TR><TD><B>Vuelo supersónico</B></TD></TR><TR><TD>Interceptador</TD></TR></TABLE>>,
 				shape=box,
-				style=filled,
-				xlabel=Interceptador];
+				style=filled];
 			node_GUIDED_WEAPON_SYSTEMS	[color="#88888855",
 				fontcolor="#ffffff88",
 				group=AGE_SEVEN,
-				label=<<TABLE border="0" cellspacing="0" cellborder="0"><TR><TD><IMG SCALE="TRUE" SRC="cm2_upap049l.png"/></TD></TR><TR><TD><B>Sist. de armas teledirig.</B></TD></TR></TABLE>>,
+				label=<<TABLE border="0" cellspacing="0" cellborder="0"><TR><TD><IMG SCALE="TRUE" SRC="cm2_upap049l.png"/></TD></TR><TR><TD><B>Sist. de armas teledirig.</B></TD></TR><TR><TD>Misil de crucero</TD></TR></TABLE>>,
 				shape=box,
-				style=filled,
-				xlabel="Misil de crucero"];
+				style=filled];
 			node_NUCLEAR_POWER	[color="#88888855",
 				fontcolor="#ffffff88",
 				group=AGE_SEVEN,
-				label=<<TABLE border="0" cellspacing="0" cellborder="0"><TR><TD><IMG SCALE="TRUE" SRC="cm2_upap077l.png"/></TD></TR><TR><TD><B>Energía nuclear</B></TD></TR></TABLE>>,
+				label=<<TABLE border="0" cellspacing="0" cellborder="0"><TR><TD><IMG SCALE="TRUE" SRC="cm2_upap077l.png"/></TD></TR><TR><TD><B>Energía nuclear</B></TD></TR><TR><TD>Submarino nuclear,Misil nuclear</TD></TR><TR><TD>Central nuclear</TD></TR></TABLE>>,
 				shape=box,
-				style=filled,
-				xlabel="Central nuclear,Submarino nuclear,Misil nuclear"];
+				style=filled];
 			node_COMPUTER	[color="#88888855",
 				fontcolor="#ffffff88",
 				group=AGE_SEVEN,
-				label=<<TABLE border="0" cellspacing="0" cellborder="0"><TR><TD><IMG SCALE="TRUE" SRC="cm2_upap022l.png"/></TD></TR><TR><TD><B>Ordenador</B></TD></TR></TABLE>>,
+				label=<<TABLE border="0" cellspacing="0" cellborder="0"><TR><TD><IMG SCALE="TRUE" SRC="cm2_upap022l.png"/></TD></TR><TR><TD><B>Ordenador</B></TD></TR><TR><TD>Centro de datos</TD></TR><TR><TD>Internet</TD></TR></TABLE>>,
 				shape=box,
-				style=filled,
-				xlabel="Centro de datos,Internet"];
+				style=filled];
 			node_FUEL_CELLS	[color="#88888855",
 				fontcolor="#ffffff88",
 				group=AGE_SEVEN,
-				label=<<TABLE border="0" cellspacing="0" cellborder="0"><TR><TD><IMG SCALE="TRUE" SRC="cm2_upap039l.png"/></TD></TR><TR><TD><B>Batería de combust.</B></TD></TR></TABLE>>,
+				label=<<TABLE border="0" cellspacing="0" cellborder="0"><TR><TD><IMG SCALE="TRUE" SRC="cm2_upap039l.png"/></TD></TR><TR><TD><B>Batería de combust.</B></TD></TR><TR><TD>Ecotransporte</TD></TR></TABLE>>,
 				shape=box,
-				style=filled,
-				xlabel=Ecotransporte];
+				style=filled];
 			node_GLOBAL_DEFENSE	[color="#88888855",
 				fontcolor="#ffffff88",
 				group=AGE_SEVEN,
-				label=<<TABLE border="0" cellspacing="0" cellborder="0"><TR><TD><IMG SCALE="TRUE" SRC="cm2_upap046l.png"/></TD></TR><TR><TD><B>Defensa global</B></TD></TR></TABLE>>,
+				label=<<TABLE border="0" cellspacing="0" cellborder="0"><TR><TD><IMG SCALE="TRUE" SRC="cm2_upap046l.png"/></TD></TR><TR><TD><B>Defensa global</B></TD></TR><TR><TD>La Agencia</TD></TR></TABLE>>,
 				shape=box,
-				style=filled,
-				xlabel="La Agencia"];
+				style=filled];
 			node_GLOBAL_COMMUNICATIONS	[color="#88888855",
 				fontcolor="#ffffff88",
 				group=AGE_SEVEN,
-				label=<<TABLE border="0" cellspacing="0" cellborder="0"><TR><TD><IMG SCALE="TRUE" SRC="cm2_upap048l.png"/></TD></TR><TR><TD><B>Comunicaciones globales</B></TD></TR></TABLE>>,
+				label=<<TABLE border="0" cellspacing="0" cellborder="0"><TR><TD><IMG SCALE="TRUE" SRC="cm2_upap048l.png"/></TD></TR><TR><TD><B>Comunicaciones globales</B></TD></TR><TR><TD>Misiles antibalística</TD></TR><TR><TD>GlobeSat</TD></TR></TABLE>>,
 				shape=box,
-				style=filled,
-				xlabel="Misiles antibalística,GlobeSat"];
+				style=filled];
 		}
 		subgraph cluster_AGE_NINE {
 			graph [color="#88888855",
@@ -320,94 +282,81 @@ digraph G {
 			node_ULTRAPRESSURE_MACHINERY	[color="#88888855",
 				fontcolor="#ffffff88",
 				group=AGE_NINE,
-				label=<<TABLE border="0" cellspacing="0" cellborder="0"><TR><TD><IMG SCALE="TRUE" SRC="upap103l.png"/></TD></TR><TR><TD><B>Ultrapresionadora</B></TD></TR></TABLE>>,
+				label=<<TABLE border="0" cellspacing="0" cellborder="0"><TR><TD><IMG SCALE="TRUE" SRC="upap103l.png"/></TD></TR><TR><TD><B>Ultrapresionadora</B></TD></TR><TR><TD>Reptador</TD></TR><TR><TD>Minas submarinas avanz.</TD></TR></TABLE>>,
 				shape=box,
-				style=filled,
-				xlabel="Minas submarinas avanz.,Reptador"];
+				style=filled];
 			node_UNIFIED_PHYSICS	[color="#88888855",
 				fontcolor="#ffffff88",
 				group=AGE_NINE,
-				label=<<TABLE border="0" cellspacing="0" cellborder="0"><TR><TD><IMG SCALE="TRUE" SRC="upap104l.png"/></TD></TR><TR><TD><B>Física unificada</B></TD></TR></TABLE>>,
+				label=<<TABLE border="0" cellspacing="0" cellborder="0"><TR><TD><IMG SCALE="TRUE" SRC="upap104l.png"/></TD></TR><TR><TD><B>Física unificada</B></TD></TR><TR><TD>Campo de fuerza</TD></TR><TR><TD>Escudo nacional</TD></TR></TABLE>>,
 				shape=box,
-				style=filled,
-				xlabel="Campo de fuerza,Escudo nacional"];
+				style=filled];
 			node_HUMAN_CLONING	[color="#88888855",
 				fontcolor="#ffffff88",
 				group=AGE_NINE,
-				label=<<TABLE border="0" cellspacing="0" cellborder="0"><TR><TD><IMG SCALE="TRUE" SRC="upap054l.png"/></TD></TR><TR><TD><B>Clonación humana</B></TD></TR></TABLE>>,
+				label=<<TABLE border="0" cellspacing="0" cellborder="0"><TR><TD><IMG SCALE="TRUE" SRC="upap054l.png"/></TD></TR><TR><TD><B>Clonación humana</B></TD></TR><TR><TD>Centro incubación</TD></TR></TABLE>>,
 				shape=box,
-				style=filled,
-				xlabel="Centro incubación"];
+				style=filled];
 			node_VIRTUAL_DEMOCRACY	[color="#88888855",
 				fontcolor="#ffffff88",
 				group=AGE_NINE,
-				label=<<TABLE border="0" cellspacing="0" cellborder="0"><TR><TD><IMG SCALE="TRUE" SRC="upap106l.png"/></TD></TR><TR><TD><B>Democracia virtual</B></TD></TR></TABLE>>,
+				label=<<TABLE border="0" cellspacing="0" cellborder="0"><TR><TD><IMG SCALE="TRUE" SRC="upap106l.png"/></TD></TR><TR><TD><B>Democracia virtual</B></TD></TR><TR><TD>Decreto Humanidad</TD></TR></TABLE>>,
 				shape=box,
-				style=filled,
-				xlabel="Decreto Humanidad"];
+				style=filled];
 			node_FUSION	[color="#88888855",
 				fontcolor="#ffffff88",
 				group=AGE_NINE,
-				label=<<TABLE border="0" cellspacing="0" cellborder="0"><TR><TD><IMG SCALE="TRUE" SRC="upap040l.png"/></TD></TR><TR><TD><B>Fusión</B></TD></TR></TABLE>>,
+				label=<<TABLE border="0" cellspacing="0" cellborder="0"><TR><TD><IMG SCALE="TRUE" SRC="upap040l.png"/></TD></TR><TR><TD><B>Fusión</B></TD></TR><TR><TD>Blindado de fusión</TD></TR><TR><TD>Central de fusión</TD></TR><TR><TD>Terraformar montaña desértica,Terraformar montaña,Terraformar montaña polar</TD></TR></TABLE>>,
 				shape=box,
-				style=filled,
-				xlabel="Central de fusión,Terraformar montaña desértica,Terraformar montaña,Terraformar montaña polar,Blindado de fusión"];
+				style=filled];
 			node_CYBERNETICS	[color="#88888855",
 				fontcolor="#ffffff88",
 				group=AGE_NINE,
-				label=<<TABLE border="0" cellspacing="0" cellborder="0"><TR><TD><IMG SCALE="TRUE" SRC="upap028l.png"/></TD></TR><TR><TD><B>Cibernética</B></TD></TR></TABLE>>,
+				label=<<TABLE border="0" cellspacing="0" cellborder="0"><TR><TD><IMG SCALE="TRUE" SRC="upap028l.png"/></TD></TR><TR><TD><B>Cibernética</B></TD></TR><TR><TD>War Walker</TD></TR></TABLE>>,
 				shape=box,
-				style=filled,
-				xlabel="War Walker"];
+				style=filled];
 			node_GENETIC_TAILORING	[color="#88888855",
 				fontcolor="#ffffff88",
 				group=AGE_NINE,
-				label=<<TABLE border="0" cellspacing="0" cellborder="0"><TR><TD><IMG SCALE="TRUE" SRC="upap043l.png"/></TD></TR><TR><TD><B>Ingeniería genética</B></TD></TR></TABLE>>,
+				label=<<TABLE border="0" cellspacing="0" cellborder="0"><TR><TD><IMG SCALE="TRUE" SRC="upap043l.png"/></TD></TR><TR><TD><B>Ingeniería genética</B></TD></TR><TR><TD>Kraken</TD></TR><TR><TD>Cubas de la cornucopia</TD></TR></TABLE>>,
 				shape=box,
-				style=filled,
-				xlabel="Cubas de la cornucopia,Kraken"];
+				style=filled];
 			node_PLASMA_WEAPONRY	[color="#88888855",
 				fontcolor="#ffffff88",
 				group=AGE_NINE,
-				label=<<TABLE border="0" cellspacing="0" cellborder="0"><TR><TD><IMG SCALE="TRUE" SRC="upap084l.png"/></TD></TR><TR><TD><B>Armas de plasma</B></TD></TR></TABLE>>,
+				label=<<TABLE border="0" cellspacing="0" cellborder="0"><TR><TD><IMG SCALE="TRUE" SRC="upap084l.png"/></TD></TR><TR><TD><B>Armas de plasma</B></TD></TR><TR><TD>Leviatán,Destructor de plasma</TD></TR></TABLE>>,
 				shape=box,
-				style=filled,
-				xlabel="Leviatán,Destructor de plasma"];
+				style=filled];
 			node_SMART_MATERIALS	[color="#88888855",
 				fontcolor="#ffffff88",
 				group=AGE_NINE,
-				label=<<TABLE border="0" cellspacing="0" cellborder="0"><TR><TD><IMG SCALE="TRUE" SRC="upap093l.png"/></TD></TR><TR><TD><B>Mat. inteligentes</B></TD></TR></TABLE>>,
+				label=<<TABLE border="0" cellspacing="0" cellborder="0"><TR><TD><IMG SCALE="TRUE" SRC="upap093l.png"/></TD></TR><TR><TD><B>Mat. inteligentes</B></TD></TR><TR><TD>Aniquilador</TD></TR><TR><TD>Megaminas submarinas</TD></TR></TABLE>>,
 				shape=box,
-				style=filled,
-				xlabel="Megaminas submarinas,Aniquilador"];
+				style=filled];
 			node_NANO_MACHINES	[color="#88888855",
 				fontcolor="#ffffff88",
 				group=AGE_NINE,
-				label=<<TABLE border="0" cellspacing="0" cellborder="0"><TR><TD><IMG SCALE="TRUE" SRC="upap070l.png"/></TD></TR><TR><TD><B>Nanomáquinas</B></TD></TR></TABLE>>,
+				label=<<TABLE border="0" cellspacing="0" cellborder="0"><TR><TD><IMG SCALE="TRUE" SRC="upap070l.png"/></TD></TR><TR><TD><B>Nanomáquinas</B></TD></TR><TR><TD>Filtro de agua</TD></TR><TR><TD>Desactivador Nanita</TD></TR><TR><TD>Minas submarinas</TD></TR></TABLE>>,
 				shape=box,
-				style=filled,
-				xlabel="Filtro de agua,Minas submarinas,Desactivador Nanita"];
+				style=filled];
 			node_ECOTOPIA	[color="#88888855",
 				fontcolor="#ffffff88",
 				group=AGE_NINE,
-				label=<<TABLE border="0" cellspacing="0" cellborder="0"><TR><TD><IMG SCALE="TRUE" SRC="upap033l.png"/></TD></TR><TR><TD><B>Ecotopía</B></TD></TR></TABLE>>,
+				label=<<TABLE border="0" cellspacing="0" cellborder="0"><TR><TD><IMG SCALE="TRUE" SRC="upap033l.png"/></TD></TR><TR><TD><B>Ecotopía</B></TD></TR><TR><TD>Guarda ecológico,Ecoterrorista</TD></TR><TR><TD>Descompilador materia</TD></TR><TR><TD>Desc. materia cent.</TD></TR></TABLE>>,
 				shape=box,
-				style=filled,
-				xlabel="Descompilador materia,Guarda ecológico,Ecoterrorista,Desc. materia cent."];
+				style=filled];
 			node_GAIA_THEORY	[color="#88888855",
 				fontcolor="#ffffff88",
 				group=AGE_NINE,
-				label=<<TABLE border="0" cellspacing="0" cellborder="0"><TR><TD><IMG SCALE="TRUE" SRC="upap042l.png"/></TD></TR><TR><TD><B>Teoría Gaia</B></TD></TR></TABLE>>,
+				label=<<TABLE border="0" cellspacing="0" cellborder="0"><TR><TD><IMG SCALE="TRUE" SRC="upap042l.png"/></TD></TR><TR><TD><B>Teoría Gaia</B></TD></TR><TR><TD>Proyecto Edén</TD></TR></TABLE>>,
 				shape=box,
-				style=filled,
-				xlabel="Proyecto Edén"];
+				style=filled];
 			node_NANO_WARFARE	[color="#88888855",
 				fontcolor="#ffffff88",
 				group=AGE_NINE,
-				label=<<TABLE border="0" cellspacing="0" cellborder="0"><TR><TD><IMG SCALE="TRUE" SRC="upap071l.png"/></TD></TR><TR><TD><B>Nanocombate</B></TD></TR></TABLE>>,
+				label=<<TABLE border="0" cellspacing="0" cellborder="0"><TR><TD><IMG SCALE="TRUE" SRC="upap071l.png"/></TD></TR><TR><TD><B>Nanocombate</B></TD></TR><TR><TD>Infectante</TD></TR><TR><TD>Microdefensa</TD></TR></TABLE>>,
 				shape=box,
-				style=filled,
-				xlabel="Microdefensa,Infectante"];
+				style=filled];
 		}
 		subgraph cluster_AGE_FOUR {
 			graph [color="#88888855",
@@ -417,10 +366,9 @@ digraph G {
 			node_AGE_OF_REASON	[color="#88888855",
 				fontcolor="#ffffff88",
 				group=AGE_FOUR,
-				label=<<TABLE border="0" cellspacing="0" cellborder="0"><TR><TD><IMG SCALE="TRUE" SRC="upap006l.png"/></TD></TR><TR><TD><B>Edad de la razón</B></TD></TR></TABLE>>,
+				label=<<TABLE border="0" cellspacing="0" cellborder="0"><TR><TD><IMG SCALE="TRUE" SRC="upap006l.png"/></TD></TR><TR><TD><B>Edad de la razón</B></TD></TR><TR><TD>Emancipación</TD></TR></TABLE>>,
 				shape=box,
-				style=filled,
-				xlabel=Emancipación];
+				style=filled];
 			node_CHEMISTRY	[color="#88888855",
 				fontcolor="#ffffff88",
 				group=AGE_FOUR,
@@ -430,66 +378,57 @@ digraph G {
 			node_GUNPOWDER	[color="#88888855",
 				fontcolor="#ffffff88",
 				group=AGE_FOUR,
-				label=<<TABLE border="0" cellspacing="0" cellborder="0"><TR><TD><IMG SCALE="TRUE" SRC="upap050l.png"/></TD></TR><TR><TD><B>Pólvora</B></TD></TR></TABLE>>,
+				label=<<TABLE border="0" cellspacing="0" cellborder="0"><TR><TD><IMG SCALE="TRUE" SRC="upap050l.png"/></TD></TR><TR><TD><B>Pólvora</B></TD></TR><TR><TD>Sold. infant.</TD></TR></TABLE>>,
 				shape=box,
-				style=filled,
-				xlabel="Sold. infant."];
+				style=filled];
 			node_CANNON_MAKING	[color="#88888855",
 				fontcolor="#ffffff88",
 				group=AGE_FOUR,
-				label=<<TABLE border="0" cellspacing="0" cellborder="0"><TR><TD><IMG SCALE="TRUE" SRC="upap016l.png"/></TD></TR><TR><TD><B>Fab. de cañones</B></TD></TR></TABLE>>,
+				label=<<TABLE border="0" cellspacing="0" cellborder="0"><TR><TD><IMG SCALE="TRUE" SRC="upap016l.png"/></TD></TR><TR><TD><B>Fab. de cañones</B></TD></TR><TR><TD>Cañón</TD></TR></TABLE>>,
 				shape=box,
-				style=filled,
-				xlabel=Cañón];
+				style=filled];
 			node_CAVALRY_TACTICS	[color="#ff000055",
 				fontcolor="#ffffff88",
 				group=AGE_FOUR,
-				label=<<TABLE border="0" cellspacing="0" cellborder="0"><TR><TD><IMG SCALE="TRUE" SRC="upap017l.png"/></TD></TR><TR><TD><B>Tácticas caballería </B></TD></TR></TABLE>>,
+				label=<<TABLE border="0" cellspacing="0" cellborder="0"><TR><TD><IMG SCALE="TRUE" SRC="upap017l.png"/></TD></TR><TR><TD><B>Tácticas caballería </B></TD></TR><TR><TD>Caballería</TD></TR></TABLE>>,
 				shape=box,
-				style=filled,
-				xlabel=Caballería];
+				style=filled];
 			node_CLASSICAL_EDUCATION	[color="#88888855",
 				fontcolor="#ffffff88",
 				group=AGE_FOUR,
-				label=<<TABLE border="0" cellspacing="0" cellborder="0"><TR><TD><IMG SCALE="TRUE" SRC="upap020l.png"/></TD></TR><TR><TD><B>Educación clásica </B></TD></TR></TABLE>>,
+				label=<<TABLE border="0" cellspacing="0" cellborder="0"><TR><TD><IMG SCALE="TRUE" SRC="upap020l.png"/></TD></TR><TR><TD><B>Educación clásica </B></TD></TR><TR><TD>Abolicionista</TD></TR><TR><TD>Universidad</TD></TR></TABLE>>,
 				shape=box,
-				style=filled,
-				xlabel="Universidad,Abolicionista"];
+				style=filled];
 			node_BANKING	[color="#88888855",
 				fontcolor="#ffffff88",
 				group=AGE_FOUR,
-				label=<<TABLE border="0" cellspacing="0" cellborder="0"><TR><TD><IMG SCALE="TRUE" SRC="upap013l.png"/></TD></TR><TR><TD><B>Banca</B></TD></TR></TABLE>>,
+				label=<<TABLE border="0" cellspacing="0" cellborder="0"><TR><TD><IMG SCALE="TRUE" SRC="upap013l.png"/></TD></TR><TR><TD><B>Banca</B></TD></TR><TR><TD>Banco</TD></TR></TABLE>>,
 				shape=box,
-				style=filled,
-				xlabel=Banco];
+				style=filled];
 			node_PRINTING_PRESS	[color="#88888855",
 				fontcolor="#ffffff88",
 				group=AGE_FOUR,
-				label=<<TABLE border="0" cellspacing="0" cellborder="0"><TR><TD><IMG SCALE="TRUE" SRC="upap085l.png"/></TD></TR><TR><TD><B>Imprenta</B></TD></TR></TABLE>>,
+				label=<<TABLE border="0" cellspacing="0" cellborder="0"><TR><TD><IMG SCALE="TRUE" SRC="upap085l.png"/></TD></TR><TR><TD><B>Imprenta</B></TD></TR><TR><TD>Editorial</TD></TR><TR><TD>Biblia de Gutenberg</TD></TR></TABLE>>,
 				shape=box,
-				style=filled,
-				xlabel="Editorial,Biblia de Gutenberg"];
+				style=filled];
 			node_OCEAN_FARING	[color="#88888855",
 				fontcolor="#ffffff88",
 				group=AGE_FOUR,
-				label=<<TABLE border="0" cellspacing="0" cellborder="0"><TR><TD><IMG SCALE="TRUE" SRC="upap078l.png"/></TD></TR><TR><TD><B>Nav. en alta mar</B></TD></TR></TABLE>>,
+				label=<<TABLE border="0" cellspacing="0" cellborder="0"><TR><TD><IMG SCALE="TRUE" SRC="upap078l.png"/></TD></TR><TR><TD><B>Nav. en alta mar</B></TD></TR><TR><TD>Carraca</TD></TR><TR><TD>Cía. de las Indias Orient.</TD></TR><TR><TD>Industria pesquera</TD></TR></TABLE>>,
 				shape=box,
-				style=filled,
-				xlabel="Industria pesquera,Carraca,Cía. de las Indias Orient."];
+				style=filled];
 			node_OPTICS	[color="#88888855",
 				fontcolor="#ffffff88",
 				group=AGE_FOUR,
-				label=<<TABLE border="0" cellspacing="0" cellborder="0"><TR><TD><IMG SCALE="TRUE" SRC="upap080l.png"/></TD></TR><TR><TD><B>Óptica</B></TD></TR></TABLE>>,
+				label=<<TABLE border="0" cellspacing="0" cellborder="0"><TR><TD><IMG SCALE="TRUE" SRC="upap080l.png"/></TD></TR><TR><TD><B>Óptica</B></TD></TR><TR><TD>Telesc. de Galileo</TD></TR></TABLE>>,
 				shape=box,
-				style=filled,
-				xlabel="Telesc. de Galileo"];
+				style=filled];
 			node_NAVAL_TACTICS	[color="#88888855",
 				fontcolor="#ffffff88",
 				group=AGE_FOUR,
-				label=<<TABLE border="0" cellspacing="0" cellborder="0"><TR><TD><IMG SCALE="TRUE" SRC="upap074l.png"/></TD></TR><TR><TD><B>Táctica naval</B></TD></TR></TABLE>>,
+				label=<<TABLE border="0" cellspacing="0" cellborder="0"><TR><TD><IMG SCALE="TRUE" SRC="upap074l.png"/></TD></TR><TR><TD><B>Táctica naval</B></TD></TR><TR><TD>Buque de guerra</TD></TR><TR><TD>Almenas</TD></TR></TABLE>>,
 				shape=box,
-				style=filled,
-				xlabel="Almenas,Buque de guerra"];
+				style=filled];
 		}
 		subgraph cluster_AGE_FIVE {
 			graph [color="#88888855",
@@ -505,10 +444,9 @@ digraph G {
 			node_MODERN_METALLURGY	[color="#88888855",
 				fontcolor="#ffffff88",
 				group=AGE_FIVE,
-				label=<<TABLE border="0" cellspacing="0" cellborder="0"><TR><TD><IMG SCALE="TRUE" SRC="cm2_upap067l.png"/></TD></TR><TR><TD><B>Metalurgia moderna</B></TD></TR></TABLE>>,
+				label=<<TABLE border="0" cellspacing="0" cellborder="0"><TR><TD><IMG SCALE="TRUE" SRC="cm2_upap067l.png"/></TD></TR><TR><TD><B>Metalurgia moderna</B></TD></TR><TR><TD>Acorazado</TD></TR></TABLE>>,
 				shape=box,
-				style=filled,
-				xlabel=Acorazado];
+				style=filled];
 			node_PHYSICS	[color="#88888855",
 				fontcolor="#ffffff88",
 				group=AGE_FIVE,
@@ -518,38 +456,33 @@ digraph G {
 			node_ECONOMICS	[color="#88888855",
 				fontcolor="#ffffff88",
 				group=AGE_FIVE,
-				label=<<TABLE border="0" cellspacing="0" cellborder="0"><TR><TD><IMG SCALE="TRUE" SRC="cm2_upap032l.png"/></TD></TR><TR><TD><B>Economía</B></TD></TR></TABLE>>,
+				label=<<TABLE border="0" cellspacing="0" cellborder="0"><TR><TD><IMG SCALE="TRUE" SRC="cm2_upap032l.png"/></TD></TR><TR><TD><B>Economía</B></TD></TR><TR><TD>Agenc. corred. de bolsa</TD></TR><TR><TD>Bolsa de Londres</TD></TR></TABLE>>,
 				shape=box,
-				style=filled,
-				xlabel="Agenc. corred. de bolsa,Bolsa de Londres"];
+				style=filled];
 			node_PHARMACEUTICALS	[color="#88888855",
 				fontcolor="#ffffff88",
 				group=AGE_FIVE,
-				label=<<TABLE border="0" cellspacing="0" cellborder="0"><TR><TD><IMG SCALE="TRUE" SRC="upap081l.png"/></TD></TR><TR><TD><B>Fármacos</B></TD></TR></TABLE>>,
+				label=<<TABLE border="0" cellspacing="0" cellborder="0"><TR><TD><IMG SCALE="TRUE" SRC="upap081l.png"/></TD></TR><TR><TD><B>Fármacos</B></TD></TR><TR><TD>Farmacia </TD></TR><TR><TD>Penicilina</TD></TR></TABLE>>,
 				shape=box,
-				style=filled,
-				xlabel="Farmacia ,Penicilina"];
+				style=filled];
 			node_INDUSTRIAL_REVOLUTION	[color="#88888855",
 				fontcolor="#ffffff88",
 				group=AGE_FIVE,
-				label=<<TABLE border="0" cellspacing="0" cellborder="0"><TR><TD><IMG SCALE="TRUE" SRC="upap055l.png"/></TD></TR><TR><TD><B>Rev. Industrial</B></TD></TR></TABLE>>,
+				label=<<TABLE border="0" cellspacing="0" cellborder="0"><TR><TD><IMG SCALE="TRUE" SRC="upap055l.png"/></TD></TR><TR><TD><B>Rev. Industrial</B></TD></TR><TR><TD>Ametrallador</TD></TR><TR><TD>Fábrica</TD></TR><TR><TD>Terraformar ciénaga</TD></TR></TABLE>>,
 				shape=box,
-				style=filled,
-				xlabel="Fábrica,Terraformar ciénaga,Ametrallador"];
+				style=filled];
 			node_RAILROAD	[color="#88888855",
 				fontcolor="#ffffff88",
 				group=AGE_FIVE,
-				label=<<TABLE border="0" cellspacing="0" cellborder="0"><TR><TD><IMG SCALE="TRUE" SRC="cm2_upap088l.png"/></TD></TR><TR><TD><B>Ferrocarril</B></TD></TR></TABLE>>,
+				label=<<TABLE border="0" cellspacing="0" cellborder="0"><TR><TD><IMG SCALE="TRUE" SRC="cm2_upap088l.png"/></TD></TR><TR><TD><B>Ferrocarril</B></TD></TR><TR><TD>Silo de alimentos</TD></TR><TR><TD>Ferrocarriles</TD></TR></TABLE>>,
 				shape=box,
-				style=filled,
-				xlabel="Silo de alimentos,Ferrocarriles"];
+				style=filled];
 			node_ELECTRICITY	[color="#88888855",
 				fontcolor="#ffffff88",
 				group=AGE_FIVE,
-				label=<<TABLE border="0" cellspacing="0" cellborder="0"><TR><TD><IMG SCALE="TRUE" SRC="upap034l.png"/></TD></TR><TR><TD><B>Electricidad</B></TD></TR></TABLE>>,
+				label=<<TABLE border="0" cellspacing="0" cellborder="0"><TR><TD><IMG SCALE="TRUE" SRC="upap034l.png"/></TD></TR><TR><TD><B>Electricidad</B></TD></TR><TR><TD>Cine</TD></TR><TR><TD>Puesto de escucha</TD></TR></TABLE>>,
 				shape=box,
-				style=filled,
-				xlabel="Cine,Puesto de escucha"];
+				style=filled];
 			node_COMMUNISM	[color="#88888855",
 				fontcolor="#ffffff88",
 				group=AGE_FIVE,
@@ -559,31 +492,27 @@ digraph G {
 			node_EXPLOSIVES	[color="#88888855",
 				fontcolor="#ffffff88",
 				group=AGE_FIVE,
-				label=<<TABLE border="0" cellspacing="0" cellborder="0"><TR><TD><IMG SCALE="TRUE" SRC="upap036l.png"/></TD></TR><TR><TD><B>Explosivos</B></TD></TR></TABLE>>,
+				label=<<TABLE border="0" cellspacing="0" cellborder="0"><TR><TD><IMG SCALE="TRUE" SRC="upap036l.png"/></TD></TR><TR><TD><B>Explosivos</B></TD></TR><TR><TD>Artillería</TD></TR><TR><TD>Minas avanzadas,Terraformar colina desértica,Terraformar colina,Terraformar colina polar</TD></TR></TABLE>>,
 				shape=box,
-				style=filled,
-				xlabel="Minas avanzadas,Terraformar colina desértica,Terraformar colina,Terraformar colina polar,Artillería"];
+				style=filled];
 			node_FASCISM	[color="#ff000055",
 				fontcolor="#ffffff88",
 				group=AGE_FIVE,
-				label=<<TABLE border="0" cellspacing="0" cellborder="0"><TR><TD><IMG SCALE="TRUE" SRC="cm2_upap037l.png"/></TD></TR><TR><TD><B>Fascismo</B></TD></TR></TABLE>>,
+				label=<<TABLE border="0" cellspacing="0" cellborder="0"><TR><TD><IMG SCALE="TRUE" SRC="cm2_upap037l.png"/></TD></TR><TR><TD><B>Fascismo</B></TD></TR><TR><TD>Fascista</TD></TR></TABLE>>,
 				shape=box,
-				style=filled,
-				xlabel=Fascista];
+				style=filled];
 			node_OIL_REFINING	[color="#88888855",
 				fontcolor="#ffffff88",
 				group=AGE_FIVE,
-				label=<<TABLE border="0" cellspacing="0" cellborder="0"><TR><TD><IMG SCALE="TRUE" SRC="upap079l.png"/></TD></TR><TR><TD><B>Refinado de petróleo</B></TD></TR></TABLE>>,
+				label=<<TABLE border="0" cellspacing="0" cellborder="0"><TR><TD><IMG SCALE="TRUE" SRC="upap079l.png"/></TD></TR><TR><TD><B>Refinado de petróleo</B></TD></TR><TR><TD>Submarino</TD></TR><TR><TD>Ref. de petróleo</TD></TR><TR><TD>Plataforma de perforación</TD></TR></TABLE>>,
 				shape=box,
-				style=filled,
-				xlabel="Ref. de petróleo,Plataforma de perforación,Submarino"];
+				style=filled];
 			node_NATIONALISM	[color="#88888855",
 				fontcolor="#ffffff88",
 				group=AGE_FIVE,
-				label=<<TABLE border="0" cellspacing="0" cellborder="0"><TR><TD><IMG SCALE="TRUE" SRC="cm2_upap072l.png"/></TD></TR><TR><TD><B>Nacionalismo</B></TD></TR></TABLE>>,
+				label=<<TABLE border="0" cellspacing="0" cellborder="0"><TR><TD><IMG SCALE="TRUE" SRC="cm2_upap072l.png"/></TD></TR><TR><TD><B>Nacionalismo</B></TD></TR><TR><TD>Espía</TD></TR></TABLE>>,
 				shape=box,
-				style=filled,
-				xlabel=Espía];
+				style=filled];
 		}
 		subgraph cluster_AGE_THREE {
 			graph [color="#88888855",
@@ -593,66 +522,57 @@ digraph G {
 			node_AGRICULTURAL_REVOLUTION	[color="#88888855",
 				fontcolor="#ffffff88",
 				group=AGE_THREE,
-				label=<<TABLE border="0" cellspacing="0" cellborder="0"><TR><TD><IMG SCALE="TRUE" SRC="cm2_upap007l.png"/></TD></TR><TR><TD><B>Rev. Agrícola </B></TD></TR></TABLE>>,
+				label=<<TABLE border="0" cellspacing="0" cellborder="0"><TR><TD><IMG SCALE="TRUE" SRC="cm2_upap007l.png"/></TD></TR><TR><TD><B>Rev. Agrícola </B></TD></TR><TR><TD>Molino</TD></TR><TR><TD>Granjas avanzadas,Terraformar desierto,Terraformar bosque,Terraformar selva</TD></TR></TABLE>>,
 				shape=box,
-				style=filled,
-				xlabel="Molino,Granjas avanzadas,Terraformar desierto,Terraformar bosque,Terraformar selva"];
+				style=filled];
 			node_BALLISTICS	[color="#88888855",
 				fontcolor="#ffffff88",
 				group=AGE_THREE,
-				label=<<TABLE border="0" cellspacing="0" cellborder="0"><TR><TD><IMG SCALE="TRUE" SRC="cm2_upap012l.png"/></TD></TR><TR><TD><B>Balística</B></TD></TR></TABLE>>,
+				label=<<TABLE border="0" cellspacing="0" cellborder="0"><TR><TD><IMG SCALE="TRUE" SRC="cm2_upap012l.png"/></TD></TR><TR><TD><B>Balística</B></TD></TR><TR><TD>Arquero</TD></TR><TR><TD>Torres de ballesta</TD></TR></TABLE>>,
 				shape=box,
-				style=filled,
-				xlabel="Torres de ballesta,Arquero"];
+				style=filled];
 			node_GEOMETRY	[color="#88888855",
 				fontcolor="#ffffff88",
 				group=AGE_THREE,
-				label=<<TABLE border="0" cellspacing="0" cellborder="0"><TR><TD><IMG SCALE="TRUE" SRC="cm2_upap045l.png"/></TD></TR><TR><TD><B>Geometría</B></TD></TR></TABLE>>,
+				label=<<TABLE border="0" cellspacing="0" cellborder="0"><TR><TD><IMG SCALE="TRUE" SRC="cm2_upap045l.png"/></TD></TR><TR><TD><B>Geometría</B></TD></TR><TR><TD>Catapulta</TD></TR></TABLE>>,
 				shape=box,
-				style=filled,
-				xlabel=Catapulta];
+				style=filled];
 			node_HORSE_RIDING	[color="#88888855",
 				fontcolor="#ffffff88",
 				group=AGE_THREE,
-				label=<<TABLE border="0" cellspacing="0" cellborder="0"><TR><TD><IMG SCALE="TRUE" SRC="cm2_upap051l.png"/></TD></TR><TR><TD><B>Montar a caballo</B></TD></TR></TABLE>>,
+				label=<<TABLE border="0" cellspacing="0" cellborder="0"><TR><TD><IMG SCALE="TRUE" SRC="cm2_upap051l.png"/></TD></TR><TR><TD><B>Montar a caballo</B></TD></TR><TR><TD>Arquero a caballo</TD></TR><TR><TD>Puesto comercial</TD></TR></TABLE>>,
 				shape=box,
-				style=filled,
-				xlabel="Puesto comercial,Arquero a caballo"];
+				style=filled];
 			node_ALCHEMY	[color="#88888855",
 				fontcolor="#ffffff88",
 				group=AGE_THREE,
-				label=<<TABLE border="0" cellspacing="0" cellborder="0"><TR><TD><IMG SCALE="TRUE" SRC="cm2_upap010l.png"/></TD></TR><TR><TD><B>Alquimia</B></TD></TR></TABLE>>,
+				label=<<TABLE border="0" cellspacing="0" cellborder="0"><TR><TD><IMG SCALE="TRUE" SRC="cm2_upap010l.png"/></TD></TR><TR><TD><B>Alquimia</B></TD></TR><TR><TD>Trirreme de fuego</TD></TR></TABLE>>,
 				shape=box,
-				style=filled,
-				xlabel="Trirreme de fuego"];
+				style=filled];
 			node_HULL_MAKING	[color="#88888855",
 				fontcolor="#ffffff88",
 				group=AGE_THREE,
-				label=<<TABLE border="0" cellspacing="0" cellborder="0"><TR><TD><IMG SCALE="TRUE" SRC="cm2_upap053l.png"/></TD></TR><TR><TD><B>Fab. de cascos </B></TD></TR></TABLE>>,
+				label=<<TABLE border="0" cellspacing="0" cellborder="0"><TR><TD><IMG SCALE="TRUE" SRC="cm2_upap053l.png"/></TD></TR><TR><TD><B>Fab. de cascos </B></TD></TR><TR><TD>Barco vikingo</TD></TR><TR><TD>Puerto</TD></TR></TABLE>>,
 				shape=box,
-				style=filled,
-				xlabel="Puerto,Barco vikingo"];
+				style=filled];
 			node_FEUDALISM	[color="#88888855",
 				fontcolor="#ffffff88",
 				group=AGE_THREE,
-				label=<<TABLE border="0" cellspacing="0" cellborder="0"><TR><TD><IMG SCALE="TRUE" SRC="cm2_upap038l.png"/></TD></TR><TR><TD><B>Feudalismo</B></TD></TR></TABLE>>,
+				label=<<TABLE border="0" cellspacing="0" cellborder="0"><TR><TD><IMG SCALE="TRUE" SRC="cm2_upap038l.png"/></TD></TR><TR><TD><B>Feudalismo</B></TD></TR><TR><TD>Caballero,Piqueros</TD></TR><TR><TD>Capitolio</TD></TR></TABLE>>,
 				shape=box,
-				style=filled,
-				xlabel="Capitolio,Caballero,Piqueros"];
+				style=filled];
 			node_BUREAUCRACY	[color="#88888855",
 				fontcolor="#ffffff88",
 				group=AGE_THREE,
-				label=<<TABLE border="0" cellspacing="0" cellborder="0"><TR><TD><IMG SCALE="TRUE" SRC="cm2_upap015l.png"/></TD></TR><TR><TD><B>Burocracia </B></TD></TR></TABLE>>,
+				label=<<TABLE border="0" cellspacing="0" cellborder="0"><TR><TD><IMG SCALE="TRUE" SRC="cm2_upap015l.png"/></TD></TR><TR><TD><B>Burocracia </B></TD></TR><TR><TD>Diplomático</TD></TR></TABLE>>,
 				shape=box,
-				style=filled,
-				xlabel=Diplomático];
+				style=filled];
 			node_THEOLOGY	[color="#88888855",
 				fontcolor="#ffffff88",
 				group=AGE_THREE,
-				label=<<TABLE border="0" cellspacing="0" cellborder="0"><TR><TD><IMG SCALE="TRUE" SRC="cm2_upap100l.png"/></TD></TR><TR><TD><B>Teología</B></TD></TR></TABLE>>,
+				label=<<TABLE border="0" cellspacing="0" cellborder="0"><TR><TD><IMG SCALE="TRUE" SRC="cm2_upap100l.png"/></TD></TR><TR><TD><B>Teología</B></TD></TR><TR><TD>Clérigo</TD></TR><TR><TD>Basílica</TD></TR><TR><TD>Hagia Sofía</TD></TR></TABLE>>,
 				shape=box,
-				style=filled,
-				xlabel="Basílica,Clérigo,Hagia Sofía"];
+				style=filled];
 			node_MONARCHY	[color="#ff000055",
 				fontcolor="#ffffff88",
 				group=AGE_THREE,
@@ -668,59 +588,51 @@ digraph G {
 			node_AGRICULTURE	[color="#00ff0055",
 				fontcolor="#ffffff88",
 				group=AGE_ONE,
-				label=<<TABLE border="0" cellspacing="0" cellborder="0"><TR><TD><IMG SCALE="TRUE" SRC="upap008l.png"/></TD></TR><TR><TD><B>Agricultura</B></TD></TR></TABLE>>,
+				label=<<TABLE border="0" cellspacing="0" cellborder="0"><TR><TD><IMG SCALE="TRUE" SRC="upap008l.png"/></TD></TR><TR><TD><B>Agricultura</B></TD></TR><TR><TD>Granero</TD></TR><TR><TD>Granjas,Terraformar planicie,Terraformar llanura</TD></TR></TABLE>>,
 				shape=box,
-				style=filled,
-				xlabel="Granero,Granjas,Terraformar planicie,Terraformar llanura"];
+				style=filled];
 			node_TRADE	[color="#88888855",
 				fontcolor="#ffffff88",
 				group=AGE_ONE,
-				label=<<TABLE border="0" cellspacing="0" cellborder="0"><TR><TD><IMG SCALE="TRUE" SRC="upap102l.png"/></TD></TR><TR><TD><B>Comercio</B></TD></TR></TABLE>>,
+				label=<<TABLE border="0" cellspacing="0" cellborder="0"><TR><TD><IMG SCALE="TRUE" SRC="upap102l.png"/></TD></TR><TR><TD><B>Comercio</B></TD></TR><TR><TD>Caravana</TD></TR><TR><TD>Bazar</TD></TR><TR><TD>Vía Apia</TD></TR><TR><TD>Carreteras</TD></TR></TABLE>>,
 				shape=box,
-				style=filled,
-				xlabel="Bazar,Carreteras,Caravana,Vía Apia"];
+				style=filled];
 			node_BRONZE_WORKING	[color="#88888855",
 				fontcolor="#ffffff88",
 				group=AGE_ONE,
-				label=<<TABLE border="0" cellspacing="0" cellborder="0"><TR><TD><IMG SCALE="TRUE" SRC="upap014l.png"/></TD></TR><TR><TD><B>Trabajo en bronce</B></TD></TR></TABLE>>,
+				label=<<TABLE border="0" cellspacing="0" cellborder="0"><TR><TD><IMG SCALE="TRUE" SRC="upap014l.png"/></TD></TR><TR><TD><B>Trabajo en bronce</B></TD></TR><TR><TD>Falange</TD></TR></TABLE>>,
 				shape=box,
-				style=filled,
-				xlabel=Falange];
+				style=filled];
 			node_MASONRY	[color="#88888855",
 				fontcolor="#ffffff88",
 				group=AGE_ONE,
-				label=<<TABLE border="0" cellspacing="0" cellborder="0"><TR><TD><IMG SCALE="TRUE" SRC="upap062l.png"/></TD></TR><TR><TD><B>Albañilería</B></TD></TR></TABLE>>,
+				label=<<TABLE border="0" cellspacing="0" cellborder="0"><TR><TD><IMG SCALE="TRUE" SRC="upap062l.png"/></TD></TR><TR><TD><B>Albañilería</B></TD></TR><TR><TD>Acueducto</TD></TR><TR><TD>Muralla China</TD></TR></TABLE>>,
 				shape=box,
-				style=filled,
-				xlabel="Acueducto,Muralla China"];
+				style=filled];
 			node_RELIGION	[color="#00ff0055",
 				fontcolor="#ffffff88",
 				group=AGE_ONE,
-				label=<<TABLE border="0" cellspacing="0" cellborder="0"><TR><TD><IMG SCALE="TRUE" SRC="upap089l.png"/></TD></TR><TR><TD><B>Religión</B></TD></TR></TABLE>>,
+				label=<<TABLE border="0" cellspacing="0" cellborder="0"><TR><TD><IMG SCALE="TRUE" SRC="upap089l.png"/></TD></TR><TR><TD><B>Religión</B></TD></TR><TR><TD>Altar</TD></TR><TR><TD>Ramayana</TD></TR></TABLE>>,
 				shape=box,
-				style=filled,
-				xlabel="Altar,Ramayana"];
+				style=filled];
 			node_SHIP_BUILDING	[color="#00ff0055",
 				fontcolor="#ffffff88",
 				group=AGE_ONE,
-				label=<<TABLE border="0" cellspacing="0" cellborder="0"><TR><TD><IMG SCALE="TRUE" SRC="upap091l.png"/></TD></TR><TR><TD><B>Construcción naval</B></TD></TR></TABLE>>,
+				label=<<TABLE border="0" cellspacing="0" cellborder="0"><TR><TD><IMG SCALE="TRUE" SRC="upap091l.png"/></TD></TR><TR><TD><B>Construcción naval</B></TD></TR><TR><TD>Corácora</TD></TR><TR><TD>Redes</TD></TR></TABLE>>,
 				shape=box,
-				style=filled,
-				xlabel="Redes,Corácora"];
+				style=filled];
 			node_STONE_WORKING	[color="#00ff0055",
 				fontcolor="#ffffff88",
 				group=AGE_ONE,
-				label=<<TABLE border="0" cellspacing="0" cellborder="0"><TR><TD><IMG SCALE="TRUE" SRC="upap095l.png"/></TD></TR><TR><TD><B>Cantería</B></TD></TR></TABLE>>,
+				label=<<TABLE border="0" cellspacing="0" cellborder="0"><TR><TD><IMG SCALE="TRUE" SRC="upap095l.png"/></TD></TR><TR><TD><B>Cantería</B></TD></TR><TR><TD>Muro de la ciudad</TD></TR><TR><TD>Pirámides</TD></TR><TR><TD>Fortificación</TD></TR></TABLE>>,
 				shape=box,
-				style=filled,
-				xlabel="Muro de la ciudad,Fortificación,Pirámides"];
+				style=filled];
 			node_TOOLMAKING	[color="#00ff0055",
 				fontcolor="#ffffff88",
 				group=AGE_ONE,
-				label=<<TABLE border="0" cellspacing="0" cellborder="0"><TR><TD><IMG SCALE="TRUE" SRC="upap101l.png"/></TD></TR><TR><TD><B>Fabric. herramientas</B></TD></TR></TABLE>>,
+				label=<<TABLE border="0" cellspacing="0" cellborder="0"><TR><TD><IMG SCALE="TRUE" SRC="upap101l.png"/></TD></TR><TR><TD><B>Fabric. herramientas</B></TD></TR><TR><TD>Guerrero</TD></TR></TABLE>>,
 				shape=box,
-				style=filled,
-				xlabel=Guerrero];
+				style=filled];
 			node_WRITING	[color="#00ff0055",
 				fontcolor="#ffffff88",
 				group=AGE_ONE,
@@ -736,45 +648,39 @@ digraph G {
 			node_SLAVE_LABOR	[color="#ff000055",
 				fontcolor="#ffffff88",
 				group=AGE_TWO,
-				label=<<TABLE border="0" cellspacing="0" cellborder="0"><TR><TD><IMG SCALE="TRUE" SRC="cm2_upap092l.png"/></TD></TR><TR><TD><B>Trab. de esclavos</B></TD></TR></TABLE>>,
+				label=<<TABLE border="0" cellspacing="0" cellborder="0"><TR><TD><IMG SCALE="TRUE" SRC="cm2_upap092l.png"/></TD></TR><TR><TD><B>Trab. de esclavos</B></TD></TR><TR><TD>Negrero</TD></TR><TR><TD>Minas</TD></TR></TABLE>>,
 				shape=box,
-				style=filled,
-				xlabel="Minas,Negrero"];
+				style=filled];
 			node_IRON_WORKING	[color="#88888855",
 				fontcolor="#ffffff88",
 				group=AGE_TWO,
-				label=<<TABLE border="0" cellspacing="0" cellborder="0"><TR><TD><IMG SCALE="TRUE" SRC="cm2_upap057l.png"/></TD></TR><TR><TD><B>Hierro forjado</B></TD></TR></TABLE>>,
+				label=<<TABLE border="0" cellspacing="0" cellborder="0"><TR><TD><IMG SCALE="TRUE" SRC="cm2_upap057l.png"/></TD></TR><TR><TD><B>Hierro forjado</B></TD></TR><TR><TD>Samuray</TD></TR></TABLE>>,
 				shape=box,
-				style=filled,
-				xlabel=Samuray];
+				style=filled];
 			node_CONCRETE	[color="#88888855",
 				fontcolor="#ffffff88",
 				group=AGE_TWO,
-				label=<<TABLE border="0" cellspacing="0" cellborder="0"><TR><TD><IMG SCALE="TRUE" SRC="cm2_upap023l.png"/></TD></TR><TR><TD><B>Hormigón</B></TD></TR></TABLE>>,
+				label=<<TABLE border="0" cellspacing="0" cellborder="0"><TR><TD><IMG SCALE="TRUE" SRC="cm2_upap023l.png"/></TD></TR><TR><TD><B>Hormigón</B></TD></TR><TR><TD>Arena</TD></TR><TR><TD>Ciudad Prohibida</TD></TR></TABLE>>,
 				shape=box,
-				style=filled,
-				xlabel="Arena,Ciudad Prohibida"];
+				style=filled];
 			node_PHILOSOPHY	[color="#88888855",
 				fontcolor="#ffffff88",
 				group=AGE_TWO,
-				label=<<TABLE border="0" cellspacing="0" cellborder="0"><TR><TD><IMG SCALE="TRUE" SRC="cm2_upap082l.png"/></TD></TR><TR><TD><B>Filosofía</B></TD></TR></TABLE>>,
+				label=<<TABLE border="0" cellspacing="0" cellborder="0"><TR><TD><IMG SCALE="TRUE" SRC="cm2_upap082l.png"/></TD></TR><TR><TD><B>Filosofía</B></TD></TR><TR><TD>Academia</TD></TR><TR><TD>El Liceo de Aristóteles</TD></TR></TABLE>>,
 				shape=box,
-				style=filled,
-				xlabel="Academia,El Liceo de Aristóteles"];
+				style=filled];
 			node_DRAMA	[color="#88888855",
 				fontcolor="#ffffff88",
 				group=AGE_TWO,
-				label=<<TABLE border="0" cellspacing="0" cellborder="0"><TR><TD><IMG SCALE="TRUE" SRC="cm2_upap031l.png"/></TD></TR><TR><TD><B>Drama</B></TD></TR></TABLE>>,
+				label=<<TABLE border="0" cellspacing="0" cellborder="0"><TR><TD><IMG SCALE="TRUE" SRC="cm2_upap031l.png"/></TD></TR><TR><TD><B>Drama</B></TD></TR><TR><TD>Teatro</TD></TR></TABLE>>,
 				shape=box,
-				style=filled,
-				xlabel=Teatro];
+				style=filled];
 			node_JURISPRUDENCE	[color="#88888855",
 				fontcolor="#ffffff88",
 				group=AGE_TWO,
-				label=<<TABLE border="0" cellspacing="0" cellborder="0"><TR><TD><IMG SCALE="TRUE" SRC="cm2_upap059l.png"/></TD></TR><TR><TD><B>Jurisprudencia</B></TD></TR></TABLE>>,
+				label=<<TABLE border="0" cellspacing="0" cellborder="0"><TR><TD><IMG SCALE="TRUE" SRC="cm2_upap059l.png"/></TD></TR><TR><TD><B>Jurisprudencia</B></TD></TR><TR><TD>Juzgados</TD></TR><TR><TD>Chichen Itzá</TD></TR></TABLE>>,
 				shape=box,
-				style=filled,
-				xlabel="Juzgados,Chichen Itzá"];
+				style=filled];
 		}
 		subgraph cluster_AGE_TEN {
 			graph [color="#88888855",
@@ -784,24 +690,21 @@ digraph G {
 			node_NEURAL_REPROGRAMMING	[color="#ff000055",
 				fontcolor="#ffffff88",
 				group=AGE_TEN,
-				label=<<TABLE border="0" cellspacing="0" cellborder="0"><TR><TD><IMG SCALE="TRUE" SRC="cm2_upap076l.png"/></TD></TR><TR><TD><B>Reprogram. neuronal</B></TD></TR></TABLE>>,
+				label=<<TABLE border="0" cellspacing="0" cellborder="0"><TR><TD><IMG SCALE="TRUE" SRC="cm2_upap076l.png"/></TD></TR><TR><TD><B>Reprogram. neuronal</B></TD></TR><TR><TD>Centro de modif. comport.</TD></TR></TABLE>>,
 				shape=box,
-				style=filled,
-				xlabel="Centro de modif. comport."];
+				style=filled];
 			node_LIFE_EXTENSION	[color="#ff000055",
 				fontcolor="#ffffff88",
 				group=AGE_TEN,
-				label=<<TABLE border="0" cellspacing="0" cellborder="0"><TR><TD><IMG SCALE="TRUE" SRC="cm2_upap060l.png"/></TD></TR><TR><TD><B>Prolongación vida</B></TD></TR></TABLE>>,
+				label=<<TABLE border="0" cellspacing="0" cellborder="0"><TR><TD><IMG SCALE="TRUE" SRC="cm2_upap060l.png"/></TD></TR><TR><TD><B>Prolongación vida</B></TD></TR><TR><TD>Interc. cuerpos</TD></TR></TABLE>>,
 				shape=box,
-				style=filled,
-				xlabel="Interc. cuerpos"];
+				style=filled];
 			node_GAIA_CONTROLLER	[color="#ff000055",
 				fontcolor="#ffffff88",
 				group=AGE_TEN,
-				label=<<TABLE border="0" cellspacing="0" cellborder="0"><TR><TD><IMG SCALE="TRUE" SRC="cm2_upap041l.png"/></TD></TR><TR><TD><B>Controlador Gaia</B></TD></TR></TABLE>>,
+				label=<<TABLE border="0" cellspacing="0" cellborder="0"><TR><TD><IMG SCALE="TRUE" SRC="cm2_upap041l.png"/></TD></TR><TR><TD><B>Controlador Gaia</B></TD></TR><TR><TD>Núcleo controlador Gaia,Satélite energía Gaia</TD></TR><TR><TD>Proyecto Solaris</TD></TR><TR><TD>Obelisco</TD></TR></TABLE>>,
 				shape=box,
-				style=filled,
-				xlabel="Núcleo controlador Gaia,Satélite energía Gaia,Obelisco,Proyecto Solaris"];
+				style=filled];
 		}
 	}
 	node_ADV_URBAN_PLANNING -> node_ARCOLOGIES	[color="#ffffff88"];
