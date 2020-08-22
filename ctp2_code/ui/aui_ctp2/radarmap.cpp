@@ -1017,7 +1017,7 @@ void RadarMap::RenderMap(aui_Surface *surface)
 //    the main tile map.
 //
 //---------------------------------------------------------------------------
-void RadarMap::RenderViewRect(aui_Surface *surf, sint32 x, sint32 y)
+void RadarMap::RenderViewRect(aui_Surface & surf, sint32 x, sint32 y)
 {
 	RECT offsetRect = {0, 0, 0, 0};
 
@@ -1177,19 +1177,15 @@ void RadarMap::RenderViewRect(aui_Surface *surf, sint32 x, sint32 y)
 	}
 
 	// Draw the rectangles
-//	RECT viewRect = { x1, y1, x2, y2 };
-//	primitives_ClippedFrameRect16(*surf, viewRect, g_colorSet->GetColor(COLOR_WHITE));
-//	viewRect = { x3, y1, x4, y2 };
-//	primitives_ClippedFrameRect16(*surf, viewRect, g_colorSet->GetColor(COLOR_WHITE));
-
-	primitives_DrawLine16(surf, x1, y1, x2, y1, 0xffff);
-	primitives_DrawLine16(surf, x1, y1, x1, y2, 0xffff);
-	primitives_DrawLine16(surf, x3, y1, x4, y1, 0xffff);
-	primitives_DrawLine16(surf, x4, y1, x4, y2, 0xffff);
-	primitives_DrawLine16(surf, x1, y4, x2, y4, 0xffff);
-	primitives_DrawLine16(surf, x1, y3, x1, y4, 0xffff);
-	primitives_DrawLine16(surf, x3, y4, x4, y4, 0xffff);
-	primitives_DrawLine16(surf, x4, y3, x4, y4, 0xffff);
+	Pixel16 lineColor = g_colorSet->GetColor(COLOR_WHITE);
+	primitives_ClippedLine16(surf, x1, y1, x2, y1, lineColor);
+	primitives_ClippedLine16(surf, x1, y1, x1, y2, lineColor);
+	primitives_ClippedLine16(surf, x3, y1, x4, y1, lineColor);
+	primitives_ClippedLine16(surf, x4, y1, x4, y2, lineColor);
+	primitives_ClippedLine16(surf, x1, y4, x2, y4, lineColor);
+	primitives_ClippedLine16(surf, x1, y3, x1, y4, lineColor);
+	primitives_ClippedLine16(surf, x3, y4, x4, y4, lineColor);
+	primitives_ClippedLine16(surf, x4, y3, x4, y4, lineColor);
 }
 
 //---------------------------------------------------------------------------
@@ -1197,17 +1193,28 @@ void RadarMap::RenderViewRect(aui_Surface *surf, sint32 x, sint32 y)
 //	RadarMap::UpdateMap
 //
 //---------------------------------------------------------------------------
-void RadarMap::UpdateMap(aui_Surface *surf, sint32 x, sint32 y)
+void RadarMap::UpdateMap(aui_Surface * surf, sint32 x, sint32 y)
 {
-	RECT		destRect = {x, y, x + Width(), y + Height() };
-	RECT		srcRect = {0, 0, Width(), Height()};
+	RECT destRect = {x, y, x + Width(), y + Height() };
+	RECT srcRect  = {0, 0, Width(), Height()};
+
+	LPVOID surfaceBuffer = NULL;
+	if (!surf->Buffer())
+	{
+		surf->Lock(NULL, &surfaceBuffer, 0);
+		Assert(surf->Buffer());
+	}
 
 	g_c3ui->TheBlitter()->StretchBlt(surf, &destRect, m_mapSurface, &srcRect, k_AUI_BLITTER_FLAG_COPY);
 
-	if(IsInteractive())
-		RenderViewRect(surf, x, y);
-}
+	if (IsInteractive()) {
+		RenderViewRect(*surf, x, y);
+	}
 
+	if (surfaceBuffer) {
+		surf->Unlock(surfaceBuffer);
+	}
+}
 
 //---------------------------------------------------------------------------
 //
