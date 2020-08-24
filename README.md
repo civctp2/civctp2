@@ -17,6 +17,8 @@ This version builds on Linux (i386 and x86_64), Ubuntu, Pandora, and Pyra.
 Note that the game files are not included in this repository, you can get them from the original CD or from the [GoG version](https://www.gog.com/game/call_to_power_2).
 
 ![screenshot](screenshot.png "screenshot of CTP2 running on Linux")
+![Advance-Graph](Advance-Graph/Advance_english.png "generated Advance-Graph as PNG, SVG and PDF")
+
 
 The Windows version supports CD audio music, and the Linux version supports ripped CD music files compressed as ogg (like found in the GoG version). The Audio tracks should be named `Track02.ogg` to `Track11.ogg` and be in the `ctp2_program/ctp/music` folder.
 
