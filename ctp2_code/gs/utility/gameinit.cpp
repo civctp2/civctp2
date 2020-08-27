@@ -51,7 +51,6 @@
 #include "c3.h"
 #include "gameinit.h"
 
-#include "A_Star_Heuristic_Cost.h"
 #include "AchievementTracker.h"
 #include "AdvanceRecord.h"
 #include "Advances.h"
@@ -1342,24 +1341,12 @@ sint32 spriteEditor_Initialize(sint32 mWidth, sint32 mHeight)
 		g_selected_item->Refresh();
 	}
 
-	g_theWorld->A_star_heuristic->Update();
-
 	g_theWorld->RecalculateZOC();
-
-
-
 
 	g_player[1]->m_gold->SetLevel(1000000);
 	g_player[1]->m_materialPool->AddMaterials(1000000);
 
 	g_scenarioUsePlayerNumber = 0;
-
-
-
-
-
-
-
 
 	g_turn->SetHotSeat(FALSE);
 	g_turn->SetEmail(FALSE);
@@ -2154,7 +2141,6 @@ sint32 gameinit_Initialize(sint32 mWidth, sint32 mHeight, CivArchive *archive)
 	if (archive && loadEverything)
 	{
 		g_theWorld->SetAllMoveCost();
-		g_theWorld->A_star_heuristic->Update();
 		SPLASH_STRING("Load AI data elements...");
 
 		CtpAi::Load(*archive);
@@ -2349,7 +2335,6 @@ sint32 gameinit_Initialize(sint32 mWidth, sint32 mHeight, CivArchive *archive)
 
 	SPLASH_STRING("Update World stats...");
 
-	g_theWorld->A_star_heuristic->Update();
 	g_theWorld->RecalculateZOC();
 
 #ifdef _DEBUG

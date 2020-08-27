@@ -71,8 +71,7 @@ protected:
 	             Path &a_path,
 	             float &total_cost,
 	             const bool isunit,
-	             AstarPoint *best,
-	             AstarPoint *cost_tree);
+	             AstarPoint *best);
 
 #ifdef PRINT_COSTS
 	void PrintCosts(MapPoint pos, uint8 magnitude, float costs);

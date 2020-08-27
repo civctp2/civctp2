@@ -35,9 +35,9 @@
 //   If no alternate path found, go on the first founded path. The method
 //   considers a danger if the owner is less than neutral - Calvitix
 // - Disabled Calvitix check for danger. If an army encounter something on
-//   its way the goal should be reconsidered. - Feb. 21st 2005 Martin Gühmann
+//   its way the goal should be reconsidered. - Feb. 21st 2005 Martin GÃ¼hmann
 // - Updated for wrap correction.
-// - Made Government modified for units work here. (July 29th 2006 Martin Gühmann)
+// - Made Government modified for units work here. (July 29th 2006 Martin GÃ¼hmann)
 //
 //----------------------------------------------------------------------------
 
@@ -660,11 +660,6 @@ float UnitAstar::EstimateFutureCost(const MapPoint &pos, const MapPoint &dest)
 	if (m_move_intersection & k_Unit_MovementType_Air_Bit)
 	{
 		float air_dist = 90.0f * pos.NormalizedDistance(dest);
-
-#ifdef SUPER_DEBUG_HEURISTIC
-			g_theWorld->SetColor(pos, sint32(air_dist));
-#endif
-
 		return air_dist;
 	}
 	else
