@@ -91,12 +91,9 @@ public:
 	void		CalculateMetrics(void);
 
 	void RenderMap(aui_Surface *surface);
-	void RenderViewRect(aui_Surface *surf, sint32 x, sint32 y);
 
 	POINT		MapToPixel(sint32 x, sint32 y);
 	POINT		MapToPixel(MapPoint *pos);
-
-	void		UpdateMap(aui_Surface *surf, sint32 x, sint32 y);
 
 	BOOL		IncludePointInView(MapPoint &pos, sint32 radius);
 	MapPoint	ComputeCenteredMap(MapPoint const & pos, RECT *viewRect);
@@ -155,8 +152,9 @@ public:
 
 private:
 
-	Player *GetVisiblePlayerToRender();
-
+	Player * GetVisiblePlayerToRender();
+	void     UpdateMap(aui_Surface * surf, sint32 x, sint32 y);
+	void     RenderViewRect(aui_Surface & surf, sint32 x, sint32 y);
 
 	Pixel16 RadarTileColor(const Player *player, const MapPoint &position, uint32 &flags);
 

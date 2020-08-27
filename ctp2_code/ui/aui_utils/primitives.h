@@ -65,10 +65,6 @@ struct fRect
 	float left, top, right, bottom;
 };
 
-#ifndef __AUI_USE_DIRECTX__
-#include "c3ui.h"
-extern C3UI			*g_c3ui;
-
 enum LINE_FLAGS {
 	LF_NONE             = 0x00,
 	LF_ANTI_ALIASED     = 0x01,
@@ -83,6 +79,10 @@ static const uint32 LINE_PATTERN_DOT         = 0b0000000000000000000000000000100
 static const uint32 LINE_PATTERN_DOT_LENGTH  = 4;
 static const uint32 LINE_PATTERN_DASH        = 0b00000000000000000000000011000011;
 static const uint32 LINE_PATTERN_DASH_LENGTH = 8;
+
+#ifndef __AUI_USE_DIRECTX__
+#include "c3ui.h"
+extern C3UI			*g_c3ui;
 
 inline aui_BitmapFont * getBitmapFont()
     {
