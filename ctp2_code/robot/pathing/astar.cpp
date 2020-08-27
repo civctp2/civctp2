@@ -167,7 +167,7 @@ bool Astar::InitPoint(AstarPoint *parent, AstarPoint *point,
 		d->SetZoc(is_zoc);
 
 		DecayOrtho(parent, point, d->m_entry_cost);
-		d->m_future_cost = d->m_entry_cost * d->m_pos.NormalizedDistance(dest);
+		d->m_future_cost = EstimateFutureCost(d->m_pos, dest);
 		d->m_total_cost = d->m_past_cost + d->m_entry_cost + d->m_future_cost;
 
 #ifdef PRINT_COSTS

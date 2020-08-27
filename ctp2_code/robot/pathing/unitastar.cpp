@@ -883,10 +883,7 @@ bool UnitAstar::FindBrokenPath(const MapPoint &start, const MapPoint &dest,
         sint32 nodes_opened = 0;
         sint32 cutoff       = 2000000000;
 
-        if (Astar::FindPath(start, no_enter_pos, good_path, total_cost, FALSE,
-                            cutoff, nodes_opened
-                           )
-           )
+        if (Astar::FindPath(start, no_enter_pos, good_path, total_cost, false, cutoff, nodes_opened))
         {
             bad_path.ClipStartToCurrent();
         }
@@ -1030,8 +1027,7 @@ bool UnitAstar::FindStraightPath(const MapPoint &start, const MapPoint &dest,
 				}
 				else
 				{
-					return Astar::FindPath(start, vision_edge, good_path, total_cost,  FALSE,
-					    cutoff, nodes_opened);
+					return Astar::FindPath(start, vision_edge, good_path, total_cost, false, cutoff, nodes_opened);
 				}
 			}
 		}
@@ -1445,7 +1441,7 @@ bool UnitAstar::FindPath(Army army,
 					}
 				}
 
-				if (Astar::FindPath(start, dest, good_path, total_cost, FALSE, cutoff, nodes_opened))
+				if (Astar::FindPath(start, dest, good_path, total_cost, false, cutoff, nodes_opened))
 				{
 					ClearMem();
 					return true;
@@ -1477,7 +1473,7 @@ bool UnitAstar::FindPath(Army army,
 	   )
 	{
 
-		if (Astar::FindPath(start, dest, good_path, total_cost, FALSE, cutoff, nodes_opened))
+		if (Astar::FindPath(start, dest, good_path, total_cost, false, cutoff, nodes_opened))
 		{
 			ClearMem();
 			return true;
