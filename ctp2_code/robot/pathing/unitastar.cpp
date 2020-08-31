@@ -1323,7 +1323,7 @@ bool UnitAstar::FindPath(Army &army,  MapPoint const & start,
 	sint32 nodes_opened = 0;
 	bool result = FindPath(army, nUnits, move_intersection, move_union,
 	   start, owner, dest, good_path, is_broken_path, bad_path,
-	   total_cost, FALSE, FALSE, cutoff, nodes_opened,
+	   total_cost, FALSE, cutoff, nodes_opened,
 	   TRUE, FALSE);
 
 	return result;
@@ -1342,7 +1342,6 @@ bool UnitAstar::FindPath(Army army,
 						Path &bad_path,
 						float &total_cost,
 						const bool no_bad_path,
-						const bool check_rail_launcher,
 						const sint32 cutoff,
 						sint32 &nodes_opened,
 						const bool &check_dest,
@@ -1362,7 +1361,6 @@ bool UnitAstar::FindPath(Army army,
 
 	m_can_be_cargo_podded  = FALSE;
 
-	m_check_rail_launchers = check_rail_launcher;
 	m_no_bad_path          = no_bad_path;
 	m_ignore_zoc           = (m_army.m_id != (0) && m_army.IsIgnoresZOC());
 

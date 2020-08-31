@@ -57,7 +57,6 @@ protected:
 				Path &bad_path,
 				float &total_cost,
 				const bool no_bad_path,
-				const bool check_rail_launcher,
 				const sint32 cutoff,
 				sint32 &nodes_opened,
 				const bool &check_dest,
@@ -82,7 +81,6 @@ protected:
     BOOL m_can_space_launch;
     BOOL m_can_space_land;
     BOOL m_can_be_cargo_podded;
-    bool m_check_rail_launchers;
     bool m_ignore_zoc;
     bool m_is_cargo_pod;
     uint32 m_cargo_pod_intersection;
