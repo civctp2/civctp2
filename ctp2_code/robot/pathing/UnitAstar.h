@@ -45,6 +45,24 @@ class CityData;
 class UnitAstar : public Astar
 {
 protected:
+	bool FindPath(Army army,
+				sint32 nUnits,
+				uint32 move_intersetion,
+				uint32 move_union,
+				const MapPoint &start,
+				const PLAYER_INDEX owner,
+				const MapPoint &dest,
+				Path &good_path,
+				bool  &is_broken_path,
+				Path &bad_path,
+				float &total_cost,
+				const bool no_bad_path,
+				const bool check_rail_launcher,
+				const sint32 cutoff,
+				sint32 &nodes_opened,
+				const bool &check_dest,
+				const bool no_straight_lines);
+
     uint32 m_move_union;
     uint32 m_move_intersection;
     sint32 m_max_dir;
@@ -69,7 +87,6 @@ protected:
     bool m_is_cargo_pod;
     uint32 m_cargo_pod_intersection;
     bool m_check_dest;
-    bool m_check_units_in_cell;
     bool m_is_robot;
     bool m_army_can_expel_stealth;
     MapPoint m_start;
@@ -157,25 +174,6 @@ public:
                   const PLAYER_INDEX owner, MapPoint const & dest, Path &new_path,
                   bool &is_broken_path, Path &bad_path,
                   float &total_cost);
-
-    bool FindPath(Army army,
-                  sint32 nUnits,
-                  uint32 move_intersetion,
-                  uint32 move_union,
-                  const MapPoint &start,
-                  const PLAYER_INDEX owner,
-                  const MapPoint &dest,
-                  Path &good_path,
-                  bool  &is_broken_path,
-                  Path &bad_path,
-                  float &total_cost,
-                  const bool no_bad_path,
-                  const bool check_rail_launcher,
-                  const sint32 cutoff,
-                  sint32 &nodes_opened,
-                  const bool &check_dest,
-                  const bool no_straight_lines,
-                  const bool check_units_in_cell);
 
     bool StraightLine(const MapPoint &start, const MapPoint &dest, Path &new_path) const;
 

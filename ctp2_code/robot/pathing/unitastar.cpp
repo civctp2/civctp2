@@ -610,16 +610,16 @@ bool UnitAstar::EntryCost(const MapPoint &prev, const MapPoint &pos,
 
 #define RESTORE if(restore) {the_pos_cell->SetEnvFast(origEnv); the_pos_cell->SetMoveCost(double(origMove)); }
 
-	if (CheckUnexplored(prev, pos, the_prev_cell, the_pos_cell, cost, is_zoc, entry, can_enter)){ RESTORE; return can_enter; }
-
-	if (m_check_units_in_cell)
+	if (CheckUnexplored(prev, pos, the_prev_cell, the_pos_cell, cost, is_zoc, entry, can_enter))
 	{
-		if (CheckUnits(prev, pos, the_prev_cell, the_pos_cell, cost, is_zoc, can_be_zoc, entry,
-		    can_enter))
-		{
-			RESTORE;
-			return can_enter;
-		}
+		RESTORE;
+		return can_enter;
+	}
+
+	if (CheckUnits(prev, pos, the_prev_cell, the_pos_cell, cost, is_zoc, can_be_zoc, entry, can_enter))
+	{
+		RESTORE;
+		return can_enter;
 	}
 
 	CityData *the_pos_city = NULL;
@@ -1324,30 +1324,29 @@ bool UnitAstar::FindPath(Army &army,  MapPoint const & start,
 	bool result = FindPath(army, nUnits, move_intersection, move_union,
 	   start, owner, dest, good_path, is_broken_path, bad_path,
 	   total_cost, FALSE, FALSE, cutoff, nodes_opened,
-	   TRUE, FALSE, TRUE);
+	   TRUE, FALSE);
 
 	return result;
 
 }
 
 bool UnitAstar::FindPath(Army army,
-                         sint32 nUnits,
-                         uint32 move_intersection,
-                         uint32 move_union,
-                         const MapPoint & start,
-                         const PLAYER_INDEX owner,
-                         const MapPoint & dest,
-                         Path &good_path,
-                         bool &is_broken_path,
-                         Path &bad_path,
-                         float &total_cost,
-                         const bool no_bad_path,
-                         const bool check_rail_launcher,
-                         const sint32 cutoff,
-                         sint32 &nodes_opened,
-                         const bool &check_dest,
-                         const bool no_straight_lines,
-                         const bool check_units_in_cell)
+						sint32 nUnits,
+						uint32 move_intersection,
+						uint32 move_union,
+						const MapPoint & start,
+						const PLAYER_INDEX owner,
+						const MapPoint & dest,
+						Path &good_path,
+						bool &is_broken_path,
+						Path &bad_path,
+						float &total_cost,
+						const bool no_bad_path,
+						const bool check_rail_launcher,
+						const sint32 cutoff,
+						sint32 &nodes_opened,
+						const bool &check_dest,
+						const bool no_straight_lines)
 {
 	if (start == dest)
 	{
@@ -1360,15 +1359,12 @@ bool UnitAstar::FindPath(Army army,
 	m_move_intersection    = move_intersection;
 	m_move_union           = move_union;
 	m_check_dest           = check_dest;
-	m_check_units_in_cell  = check_units_in_cell;
 
 	m_can_be_cargo_podded  = FALSE;
 
 	m_check_rail_launchers = check_rail_launcher;
 	m_no_bad_path          = no_bad_path;
 	m_ignore_zoc           = (m_army.m_id != (0) && m_army.IsIgnoresZOC());
-	if (!check_units_in_cell)
-		m_ignore_zoc = true;
 
 	InitSearch(start, owner, dest, good_path, is_broken_path, bad_path);
 
