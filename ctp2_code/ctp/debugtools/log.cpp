@@ -9,6 +9,7 @@
 #include <string.h>
 #include <stdio.h>
 #include <stdarg.h>
+#include "c3files.h"
 
 #ifdef WIN32
 #include <crtdbg.h>
@@ -375,7 +376,7 @@ void Log_Open (const char *config_file, int number)
 
 	char name[30];
 	sprintf(name, k_DEBUG_FILENAME, number);
-
+	c3files_CreateDirectory("logs");
 	Log_InitReadConfig (config_file, name);
 
 #ifdef USE_SDL
