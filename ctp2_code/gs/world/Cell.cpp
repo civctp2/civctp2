@@ -24,23 +24,23 @@
 //
 // Modifications from the original Activision code:
 //
-// - Added CalcTerrainFreightCost by Martin Gühmann
+// - Added CalcTerrainFreightCost by Martin Gï¿½hmann
 // - Corrected handling of tile improvements that did not have a Freight
 //   modifier.
 // - Standardised min/max usage.
 // - Prevented some crashes.
 // - Added GetFoodFromTerrain, GetShieldsFromTerrain and GetGoldFromTerrain
 //   with a hypothetical terrain type argument to check whether there is a
-//   a good terraforming option. - Sep. 21st 2004 Martin Gühmann
+//   a good terraforming option. - Sep. 21st 2004 Martin Gï¿½hmann
 // - GetGoldProduced function now uses GetGoldFromTerrain function to avoid
-//   duplicating code. - Sep. 21st 2004 Martin Gühmann
+//   duplicating code. - Sep. 21st 2004 Martin Gï¿½hmann
 // - Moved Peter's good's fix to the according Get*FromTerrain functions.
-//   - April 13th 2005 Martin Gühmann
-// - Fix retrieval of good boni. - May 18th 2005 Martin Gühmann
+//   - April 13th 2005 Martin Gï¿½hmann
+// - Fix retrieval of good boni. - May 18th 2005 Martin Gï¿½hmann
 // - Prevented crash with multiple instances of an improvement that is deleted.
-// - Moved some Upgrade functionality from ArmyData. (Dec 24th 2006 Martin Gühmann)
+// - Moved some Upgrade functionality from ArmyData. (Dec 24th 2006 Martin Gï¿½hmann)
 // - Added methods to retrieve the future terrain move costs of tile
-//   improvments under construction. (17-Jan-2008 Martin Gühmann)
+//   improvments under construction. (17-Jan-2008 Martin Gï¿½hmann)
 //
 //----------------------------------------------------------------------------
 
@@ -845,7 +845,7 @@ void Cell::GetArmy(CellUnitList &al)
 		al.Clear();
 }
 
-CellUnitList *Cell::UnitArmy()
+CellUnitList * Cell::UnitArmy() const
 {
 	return m_unit_army;
 }
