@@ -80,10 +80,10 @@ public:
 	UnitAstar();
 
 	virtual bool   EntryCost(const MapPoint & prev, const MapPoint & pos, float & cost, bool & is_zoc,
-					ASTAR_ENTRY_TYPE & entry);
+				ASTAR_ENTRY_TYPE & entry);
 	virtual float  EstimateFutureCost(const MapPoint & pos, const MapPoint & dest);
 	virtual void   RecalcEntryCost(AstarPoint * parent, AstarPoint * node, float & new_entry_cost, bool & new_is_zoc,
-	                               ASTAR_ENTRY_TYPE & entry);
+				ASTAR_ENTRY_TYPE & entry);
 	virtual sint32 GetMaxDir(MapPoint & pos) const;
 
 	bool FindPath(Army & army, const MapPoint & start, PLAYER_INDEX owner, const MapPoint & dest, Path & new_path,
@@ -110,8 +110,8 @@ private:
 				const Cell & the_pos_cell, CityData * the_pos_city, float & cost, bool & is_zoc,
 				ASTAR_ENTRY_TYPE & entry, bool & can_enter);
 	bool CheckMoveUnion(const MapPoint & prev, const MapPoint & pos, const Cell & the_prev_cell,
-					const Cell & the_pos_cell, float & cost, bool & is_zoc, bool can_be_zoc,
-					ASTAR_ENTRY_TYPE & entry, bool & can_enter);
+				const Cell & the_pos_cell, float & cost, bool & is_zoc, bool can_be_zoc,
+				ASTAR_ENTRY_TYPE & entry, bool & can_enter);
 	bool CheckMoveIntersection(const MapPoint & prev, const MapPoint & pos, const Cell & the_prev_cell,
 				const Cell & the_pos_cell, float & cost, bool & is_zoc, bool can_be_zoc, ASTAR_ENTRY_TYPE & entry,
 				bool & can_enter);

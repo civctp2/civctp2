@@ -24,13 +24,13 @@
 //
 // Modifications from the original Activision code:
 //
-// - Added CalcTerrainFreightCost by Martin G�hmann
+// - Added CalcTerrainFreightCost by Martin Gühmann
 // - Added GetFoodFromTerrain, GetShieldsFromTerrain and GetGoldFromTerrain
 //   with a hypothetical terrain type argument to check whether there is a
-//   a good terraforming option. - Sep. 21st 2004 Martin G�hmann
-// - Moved some Upgrade functionality from ArmyData. (Dec 24th 2006 Martin G�hmann)
+//   a good terraforming option. - Sep. 21st 2004 Martin Gühmann
+// - Moved some Upgrade functionality from ArmyData. (Dec 24th 2006 Martin Gühmann)
 // - Added methods to retrieve the future terrain move costs of tile
-//   improvments under construction. (17-Jan-2008 Martin G�hmann)
+//   improvments under construction. (17-Jan-2008 Martin Gühmann)
 //
 //----------------------------------------------------------------------------
 
