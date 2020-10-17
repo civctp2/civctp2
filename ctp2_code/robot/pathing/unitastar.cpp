@@ -679,7 +679,6 @@ void UnitAstar::InitArmy(const Army &army, sint32 &nUnits,
     move_intersection = 0xffffffff;
     nUnits = army.Num();
 
-    m_can_space_launch = true;
     m_can_space_land = true;
     m_is_zero_attack = true;
     m_army_can_expel_stealth = false;
@@ -688,10 +687,6 @@ void UnitAstar::InitArmy(const Army &army, sint32 &nUnits,
         move_intersection &= army[i].GetMovementType();
 
         rec = army[i].GetDBRec();
-        if (!rec->HasSpaceLaunch()) {
-            m_can_space_launch = false;
-        }
-
         if (!rec->GetSpaceLand()) {
             m_can_space_land = false;
         }
@@ -1490,7 +1485,6 @@ void UnitAstar::ClearMem()
 	m_nUnits                      = MARK_UNUSED;
 	m_army.m_id                   = MARK_UNUSED;
 	m_army_minmax_move            = -9999999.0f;
-	m_can_space_launch            = false;
 	m_can_space_land              = false;
 	m_can_be_cargo_podded         = false;
 	m_army_strength               = Squad_Strength();

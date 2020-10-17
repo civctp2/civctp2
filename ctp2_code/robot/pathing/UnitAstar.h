@@ -150,7 +150,6 @@ private:
 
 	sint32 m_nUnits;
 
-	bool m_can_space_launch;
 	bool m_can_space_land;
 	bool m_can_be_cargo_podded;
 	bool m_ignore_zoc;
