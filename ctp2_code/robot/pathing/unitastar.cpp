@@ -144,6 +144,10 @@ bool UnitAstar::StraightLine
 
 float UnitAstar::ComputeValidMoveCost(const MapPoint & pos, const Cell & cell) const
 {
+	if (m_move_intersection & k_Unit_MovementType_Air_Bit) {
+		return k_MOVE_AIR_COST;
+	}
+
 	bool const is_tunnel_and_boat = g_theWorld->IsTunnel(pos) &&
 			((m_move_intersection & k_Unit_MovementType_Sea_Bit) ||
 			(m_move_intersection & k_Unit_MovementType_ShallowWater_Bit));
@@ -650,8 +654,7 @@ float UnitAstar::EstimateFutureCost(const MapPoint &pos, const MapPoint &dest)
 {
 	if (m_move_intersection & k_Unit_MovementType_Air_Bit)
 	{
-		float air_dist = 90.0f * pos.NormalizedDistance(dest);
-		return air_dist;
+		return k_MOVE_AIR_COST * pos.NormalizedDistance(dest);
 	}
 
 	return Astar::EstimateFutureCost(pos, dest);
