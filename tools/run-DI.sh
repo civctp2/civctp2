@@ -6,19 +6,19 @@
 ##
 ## saves games, maps, Scenarios, scores, user settinges etc in $HOME/.civctp2/
 ## use -v to specify the folder with OGGs (TrackXX.ogg) for the game music and videos, e.g.:
-## ./run.sh \
+## ./run-DI.sh \
 ##     -v $HOME/ctp2CD/ctp2_program/ctp/music/:/opt/ctp2/ctp2_program/ctp/music/:ro \
 ##     -v $HOME/ctp2CD/ctp2_program/ctp/videos/:opt/ctp2/ctp2_data/default/videos/:ro \
 ##     registry.gitlab.com/civctp2/civctp2/master:latest ./ctp2 fullscreen
 ## 
 ## start a saved game directly with e.g.:
-## ./run.sh \
+## ./run-DI.sh \
 ##     -v $HOME/ctp2CD/ctp2_program/ctp/music/:/opt/ctp2/ctp2_program/ctp/music/:ro \
 ##     -v $HOME/ctp2CD/ctp2_program/ctp/videos/:opt/ctp2/ctp2_data/default/videos/:ro \
 ##     registry.gitlab.com/civctp2/civctp2/master:latest ./ctp2 -lsave/games/Julius/QUICKSAVE-Julius
 ## 
 ## specify environment vars for the docker environment (e.g. use different sound card):
-## ./run.sh \
+## ./run-DI.sh \
 ##     -v $HOME/ctp2CD/ctp2_program/ctp/music/:/opt/ctp2/ctp2_program/ctp/music/:ro \
 ##     -v $HOME/ctp2CD/ctp2_program/ctp/videos/:opt/ctp2/ctp2_data/default/videos/:ro \
 ##     --env="ALSA_CARD=1" \
