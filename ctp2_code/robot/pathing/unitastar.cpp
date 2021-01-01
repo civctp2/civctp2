@@ -192,10 +192,9 @@ bool UnitAstar::CheckUnexplored(const MapPoint & prev, const MapPoint & pos, con
 
 	if (!m_is_robot)
 	{
-		if(!g_player[m_owner]->IsExplored(prev)
-		&& !g_player[m_owner]->IsExplored(pos)
-		){
-			cost = 100;
+		if (!g_player[m_owner]->IsExplored(pos))
+		{
+			cost = k_MOVE_UNEXPLORED;
 			can_enter = true;
 			return true;
 		}
@@ -1378,20 +1377,10 @@ bool UnitAstar::FindPath(const Army & army,
 		    !(m_move_intersection & k_Unit_MovementType_Land_Bit))
 		{
 			if (!m_check_dest ||
-			     (g_theWorld->CanEnter(dest, m_move_intersection) ||
-			     (g_theWorld->HasCity(dest)
-			     ) ))
+				g_theWorld->CanEnter(dest, m_move_intersection) ||
+				g_theWorld->HasCity(dest)
+				)
 			{
-				if (!no_straight_lines)
-				{
-					StraightLine(start, dest, good_path);
-					if (EnterPathPoints(good_path, no_enter_pos))
-					{
-						ClearMem();
-						return true;
-					}
-				}
-
 				if (Astar::FindPath(start, dest, good_path, total_cost, false, cutoff, nodes_opened))
 				{
 					ClearMem();

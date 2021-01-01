@@ -49,6 +49,8 @@ const float k_ASTAR_BIG = 7654321.0f;
 
 class Astar
 {
+private:
+	// pre-allocated queue for performance
 	DAPriorityQueue<AstarPoint> m_priority_queue;
 
 protected:

@@ -26,6 +26,7 @@
     #define k_MOVE_COMBAT_COST 100.0
     #define k_MOVE_ENTER_TRANSPORT_COST 100.0
     #define k_MOVE_SPACE_LAUNCH_COST 100.0
+    #define k_MOVE_UNEXPLORED 1000.0
     #define k_MOVE_ISDANGER_COST 1000.0
     #define k_MOVE_TREASPASSING_COST 1000.0
 #endif
