@@ -194,7 +194,12 @@ bool UnitAstar::CheckUnexplored(const MapPoint & prev, const MapPoint & pos, con
 	{
 		if (!g_player[m_owner]->IsExplored(pos))
 		{
-			cost = k_MOVE_UNEXPLORED;
+			const uint32 unlimitedUnitBits = k_Unit_MovementType_Air_Bit | k_Unit_MovementType_Sea_Bit;
+			if ((m_move_intersection & unlimitedUnitBits) != 0 || (m_move_union == unlimitedUnitBits)) {
+				cost = k_MOVE_UNEXPLORED_UNLIMITED_UNITS_COST;
+			} else {
+				cost = k_MOVE_UNEXPLORED_COST;
+			}
 			can_enter = true;
 			return true;
 		}
