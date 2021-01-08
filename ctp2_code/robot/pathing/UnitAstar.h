@@ -133,8 +133,6 @@ private:
 
 	void InitSearch(const MapPoint & start, PLAYER_INDEX owner, const MapPoint & dest, Path & good_path,
 				bool & is_broken_path, Path & bad_path);
-	bool FindStraightPath(const MapPoint & start, const MapPoint & dest, Path & good_path, bool & is_broken_path,
-				Path & bad_path, float & total_cost, bool no_bad_path, sint32 cutoff, sint32 & nodes_opened);
 	bool FindBrokenPath(const MapPoint & start, const MapPoint & dest, Path & good_path, Path & bad_path,
 				float & total_cost);
 	bool EnterPathPoints(Path & a_path, MapPoint & old);
