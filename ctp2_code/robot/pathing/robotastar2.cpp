@@ -223,7 +223,6 @@ bool RobotAstar2::FindPath( const PathType & pathType,
 	sint32 cutoff = 20000;
 
 	sint32 nodes_opened = 0;
-	const bool no_straight_lines = false;
 	bool is_broken_path = false;
 	Path bad_path;
 
@@ -286,8 +285,7 @@ bool RobotAstar2::FindPath( const PathType & pathType,
 	                        true,
 	                        cutoff,
 	                        nodes_opened,
-	                        check_dest,
-	                        no_straight_lines)
+	                        check_dest)
 	){
 		return false;
 	}

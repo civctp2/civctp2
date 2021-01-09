@@ -45,22 +45,22 @@ class CityData;
 class UnitAstar : public Astar
 {
 protected:
-	bool FindPath(const Army & army,
-				sint32           nUnits,
-				uint32           move_intersection,
-				uint32           move_union,
-				const MapPoint & start,
-				PLAYER_INDEX     owner,
-				const MapPoint & dest,
-				Path           & good_path,
-				bool           & is_broken_path,
-				Path           & bad_path,
-				float          & total_cost,
-				bool             no_bad_path,
-				sint32           cutoff,
-				sint32         & nodes_opened,
-				const bool     & check_dest,
-				bool             no_straight_lines);
+	bool FindPath(
+			const Army       & army,
+			sint32             nUnits,
+			uint32             move_intersection,
+			uint32             move_union,
+			const MapPoint   & start,
+			const PLAYER_INDEX owner,
+			const MapPoint   & dest,
+			Path             & good_path,
+			bool             & is_broken_path,
+			Path             & bad_path,
+			float            & total_cost,
+			const bool         no_bad_path,
+			const sint32       cutoff,
+			sint32           & nodes_opened,
+			const bool       & check_dest);
 
 	bool CheckIsDangerForPos(const MapPoint & pos);
 	void InitArmy(const Army & army, sint32 & nUnits, uint32 & move_intersection, uint32 & move_union,
@@ -126,7 +126,7 @@ private:
 	bool IsBeachLanding(const MapPoint & prev, const MapPoint & pos, const uint32 & m_move_intersection);
 	bool CanSpaceLaunch();
 	bool CanSpaceLand();
-	bool CanMoveIntoTransports(const MapPoint & pos);
+	bool CanMoveIntoTransports(const MapPoint & dest);
 
 	float ComputeValidMoveCost(const MapPoint & pos, const Cell & cell) const;
 	bool FindVisionEdge(Path & a_path, MapPoint & old) const;

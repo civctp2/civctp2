@@ -161,7 +161,7 @@ float UnitAstar::ComputeValidMoveCost(const MapPoint & pos, const Cell & cell) c
 	return std::min(m_army_minmax_move, static_cast<float>(cell.GetMoveCost()));
 }
 
-bool UnitAstar::CanMoveIntoTransports(const MapPoint &pos)
+bool UnitAstar::CanMoveIntoTransports(const MapPoint & dest)
 {
 	static CellUnitList tmp_transports;
 	if (m_army.m_id == (0))
@@ -170,7 +170,7 @@ bool UnitAstar::CanMoveIntoTransports(const MapPoint &pos)
 	}
 	else
 	{
-		return m_army.CanMoveIntoTransport(m_dest, tmp_transports);
+		return m_army.CanMoveIntoTransport(dest, tmp_transports);
 	}
 }
 
@@ -278,7 +278,7 @@ bool UnitAstar::CheckUnits(
 
 				if (pos == m_dest)
 				{
-					if (CanMoveIntoTransports(pos))
+					if (CanMoveIntoTransports(m_dest))
 					{
 						cost = k_MOVE_ENTER_TRANSPORT_COST;
 						entry = ASTAR_CAN_ENTER;
@@ -916,15 +916,15 @@ bool UnitAstar::PretestDest_Enterable(const MapPoint &start, const MapPoint &des
 	return true;
 }
 
-bool UnitAstar::PretestDest_HasRoom(const MapPoint &start, const MapPoint &dest)
+bool UnitAstar::PretestDest_HasRoom(const MapPoint & start, const MapPoint & dest)
 {
-	CellUnitList *dest_army = g_theWorld->GetArmyPtr(dest);
+	CellUnitList * dest_army = g_theWorld->GetArmyPtr(dest);
 
 	if (dest_army && m_check_dest)
 	{
-		if (m_owner ==  dest_army ->GetOwner())
+		if (m_owner == dest_army ->GetOwner())
 		{
-			if (k_MAX_ARMY_SIZE < (m_nUnits + g_theWorld->GetArmyPtr(dest)->Num()))
+			if (k_MAX_ARMY_SIZE < (m_nUnits + dest_army->Num()))
 			{
 				if (!CanMoveIntoTransports(dest))
 				{
@@ -932,9 +932,7 @@ bool UnitAstar::PretestDest_HasRoom(const MapPoint &start, const MapPoint &dest)
 				}
 			}
 		}
-		else if (m_is_zero_attack &&
-		    !g_theWorld->HasCity(dest) &&
-		    dest_army->IsVisible(m_owner))
+		else if (m_is_zero_attack && !g_theWorld->HasCity(dest) && dest_army->IsVisible(m_owner))
 		{
 			return false;
 		}
@@ -1113,154 +1111,63 @@ bool UnitAstar::FindPath(Army &army,  MapPoint const & start,
 	sint32 cutoff       = 2000000000;
 	sint32 nodes_opened = 0;
 	bool result = FindPath(army, nUnits, move_intersection, move_union,
-	   start, owner, dest, good_path, is_broken_path, bad_path,
-	   total_cost, false, cutoff, nodes_opened,
-	   true, false);
+	                       start, owner, dest, good_path, is_broken_path, bad_path,
+	                       total_cost, false, cutoff, nodes_opened,
+	                       true);
 
 	return result;
 
 }
 
-bool UnitAstar::FindPath(const Army & army,
-						sint32 nUnits,
-						uint32 move_intersection,
-						uint32 move_union,
-						const MapPoint & start,
-						const PLAYER_INDEX owner,
-						const MapPoint & dest,
-						Path &good_path,
-						bool &is_broken_path,
-						Path &bad_path,
-						float &total_cost,
-						const bool no_bad_path,
-						const sint32 cutoff,
-						sint32 &nodes_opened,
-						const bool &check_dest,
-						const bool no_straight_lines)
+bool UnitAstar::FindPath(
+		const Army         & army,
+		sint32               nUnits,
+		uint32               move_intersection,
+		uint32               move_union,
+		const MapPoint     & start,
+		const PLAYER_INDEX   owner,
+		const MapPoint     & dest,
+		Path               & good_path,
+		bool               & is_broken_path,
+		Path               & bad_path,
+		float              & total_cost,
+		const bool           no_bad_path,
+		const sint32         cutoff,
+		sint32             & nodes_opened,
+		const bool         & check_dest)
 {
-	if (start == dest)
-	{
+	if (start == dest) {
 		return false;
 	}
 
 	m_army_strength.Set_Army_Strength(army, m_isTransporter);
-	m_army                 = army;
-	m_nUnits               = nUnits;
-	m_move_intersection    = move_intersection;
-	m_move_union           = move_union;
-	m_check_dest           = check_dest;
-
-	m_can_be_cargo_podded  = false;
-
-	m_no_bad_path          = no_bad_path;
-	m_ignore_zoc           = (m_army.m_id != (0) && m_army.IsIgnoresZOC());
+	m_army                = army;
+	m_nUnits              = nUnits;
+	m_move_intersection   = move_intersection;
+	m_move_union          = move_union;
+	m_check_dest          = check_dest;
+	m_can_be_cargo_podded = false;
+	m_no_bad_path         = no_bad_path;
+	m_ignore_zoc          = ((m_army.m_id != 0) && m_army.IsIgnoresZOC());
 
 	InitSearch(start, owner, dest, good_path, is_broken_path, bad_path);
-
-	if (!PretestDest(start, dest))
-	{
-		if (no_bad_path)
-		{
-			ClearMem();
-			return false;
-		}
-		else
-		{
-			bool find_ok =  FindBrokenPath(start, dest, good_path, bad_path, total_cost);
-			is_broken_path = true;
-			ClearMem();
-			return find_ok;
-		}
-	}
-
-	static MapPoint pos, old;
-	static MapPoint tmpa, tmpb;
-	static MapPoint no_enter_pos;
-
-	bool r;
-
 	Assert(VerifyMem());
 
-	if (m_move_union != 0)
-	{
-		if (Astar::FindPath(start, dest, good_path, total_cost, false, cutoff, nodes_opened))
-		{
-			ClearMem();
-			return true;
-		}
-		else if (no_bad_path)
-		{
-			ClearMem();
-			return false;
-		}
-	}
-	else
-	{
-		if (((m_move_intersection & k_Unit_MovementType_Sea_Bit)||
-		     (m_move_intersection & k_Unit_MovementType_ShallowWater_Bit)) &&
-		    !(m_move_intersection & k_Unit_MovementType_Land_Bit))
-		{
-			if (!m_check_dest ||
-				g_theWorld->CanEnter(dest, m_move_intersection) ||
-				g_theWorld->HasCity(dest)
-				)
-			{
-				if (Astar::FindPath(start, dest, good_path, total_cost, false, cutoff, nodes_opened))
-				{
-					ClearMem();
-					return true;
-				}
-				else if (no_bad_path)
-				{
-					ClearMem();
-					return false;
-				}
-			}
-			else if (no_bad_path)
-			{
-				ClearMem();
-				return false;
-			}
-
-			is_broken_path = true;
-			r = FindBrokenPath(start, dest, good_path, bad_path, total_cost);
-			ClearMem();
-			return r;
+	bool result;
+	if (PretestDest(start, dest) &&
+			Astar::FindPath(start, dest, good_path, total_cost, false, cutoff, nodes_opened)) {
+		result = true;
+	} else {
+		if (no_bad_path) {
+			result = false;
+		} else {
+			result = FindBrokenPath(start, dest, good_path, bad_path, total_cost);
+			is_broken_path = true; // That should depend on result
 		}
 	}
-
-	if (!m_check_dest ||
-	    (
-	        (g_theWorld->CanEnter(dest, m_move_intersection)) ||
-	         CanMoveIntoTransports(pos)
-	    )
-	   )
-	{
-
-		if (Astar::FindPath(start, dest, good_path, total_cost, false, cutoff, nodes_opened))
-		{
-			ClearMem();
-			return true;
-		}
-		else if (no_bad_path)
-		{
-			ClearMem();
-			return false;
-		}
-	}
-	else if (no_bad_path)
-	{
-		ClearMem();
-		return false;
-	}
-
-	is_broken_path = true;
-
-	r = FindBrokenPath(start, dest, good_path, bad_path, total_cost);
-	is_broken_path = true; // That should depend on r
 
 	ClearMem();
-	return r;
+	return result;
 }
 
 bool UnitAstar::IsBeachLanding(const MapPoint &prev,
