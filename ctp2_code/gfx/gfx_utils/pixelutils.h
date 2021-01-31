@@ -236,7 +236,8 @@ inline Pixel16 pixelutils_Convert565to555(Pixel16 pixel)
 
 	if (g_is565Format) return pixel;
 
-	return static_cast<Pixel16>(((pixel & 0xFFC0) >> 1) | (pixel & 0x001F));
+	return static_cast<Pixel16>(((pixel & 0xFFC0) >> 1) // 1111 1111 1100 0000 -> 0111 1111 1110 0000
+	    | (pixel & 0x001F)); // 0000 0000 0001 1111 => MSB discarded
 }
 
 inline Pixel16 pixelutils_Convert555to565(Pixel16 pixel)
@@ -245,7 +246,8 @@ inline Pixel16 pixelutils_Convert555to565(Pixel16 pixel)
 
 	if (!g_is565Format) return pixel;
 
-	return static_cast<Pixel16>(((pixel & 0x7FE0) << 1) | (pixel & 0x001F));
+	return static_cast<Pixel16>(((pixel & 0x7FE0) << 1) // 0111 1111 1110 0000 -> 1111 1111 1100 0000
+	    | (pixel & 0x001F)); // 0000 0000 0001 1111 => MSB discarded
 }
 
 Pixel16 pixelutils_Convert565to555(Pixel16 pixel);
