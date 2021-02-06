@@ -947,7 +947,7 @@ sint16 TiledMap::TryRiver(BOOL bc, BOOL bn, BOOL bne, BOOL be, BOOL bse, BOOL bs
 
 #define IS_LAND(x)          ((g_theTerrainDB->Get(x)->GetMovementTypeLand()) || (g_theTerrainDB->Get(x)->GetMovementTypeMountain()))
 
-#define IS_DEEP(x)		((x == TERRAIN_WATER_DEEP) || (x == TERRAIN_WATER_VOLCANO) || (x == TERRAIN_WATER_SHELF) || (x == TERRAIN_WATER_TRENCH) || (x == TERRAIN_WATER_RIFT))
+#define IS_DEEP(x)		((x == TERRAIN_WATER_DEEP) || (x == TERRAIN_WATER_VOLCANO) || (x == TERRAIN_WATER_SHELF) || (x == TERRAIN_WATER_TRENCH))
 #define IS_SHALLOW(x)	((g_theTerrainDB->Get(x)->GetMovementTypeShallowWater()))
 #define IS_TRENCHSHELF(x) ((x == TERRAIN_WATER_SHELF) || (x == TERRAIN_WATER_TRENCH))
 
