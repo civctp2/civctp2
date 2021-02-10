@@ -18,7 +18,6 @@
 #endif
 #include "ldlif.h"
 
-int state;
 int g_ldlLineNumber = 1;
 
 YY_BUFFER_STATE ldl_include_stack[MAX_INCLUDE_DEPTH];
