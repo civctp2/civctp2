@@ -1050,21 +1050,29 @@ STDEHANDLER(AftermathEvent)
 		g_director->AddTerminateFaceoff(td);
 	}
 
-	bool attackerWon = false;
-
+	//// similar to ArmyData::IsWounded()
+	double attacker_relTotHP= 0;
 	if(army.IsValid() && army.Num() > 0)
 	{
 		for(sint32 i = 0; i < army.Num(); i++)
 		{
-			if(army[i].GetHP() < 0.5)
-			{
-				continue;
-			}
-
-			attackerWon = true;
-			break;
+			attacker_relTotHP+= army[i].GetHP();
 		}
+		attacker_relTotHP/= army.Num();
 	}
+	
+	//// similar to ArmyData::IsWounded()
+	double defender_relTotHP= 0;
+	if(defender.Num() > 0)
+	{
+		for(sint32 i = 0; i < defender.Num(); i++)
+		{
+			defender_relTotHP+= defender[i].GetHP();
+		}
+		defender_relTotHP/= defender.Num();
+	}
+
+	bool attackerWon = attacker_relTotHP > defender_relTotHP;
 
 	if(attackerWon)
 	{
