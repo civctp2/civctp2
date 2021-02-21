@@ -143,7 +143,7 @@ AUI_ERRCODE TargaImageFormat::Load(MBCHAR const * filename, aui_Image *image)
 	Assert( errcode == AUI_ERRCODE_OK );
 	if ( errcode == AUI_ERRCODE_OK )
 	{
-		if (Load_TGA_File(CI_FixName(filename), (uint8 *)buffer, (int)surface->Pitch(), width, height, NULL, TRUE))
+		if (Load_TGA_File(CI_FixName(filename), (uint8 *)buffer, (int)surface->Pitch(), width, height, NULL, TRUE)) // Load_TGA_File does 555to565 conversion (using SDL IMG_Load instead used to be the source of the green artefacts bug, see b6e80165)
         {
 		    errcode = surface->Unlock( buffer );
 
