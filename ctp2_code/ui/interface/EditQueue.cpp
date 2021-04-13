@@ -1188,6 +1188,11 @@ void EditQueue::SetCity(CityData *city)
 	s_editQueue->m_cityData = city;
 	SetMode(EDIT_QUEUE_MODE_SINGLE);
 	s_editQueue->Update();
+	if (s_editQueue->m_queueList->NumItems() > 0) {
+		s_editQueue->m_queueList->SelectItem(0);
+	} else {
+		ShowSelectedInfo();
+	}
 
 	if(city && city->GetHomeCity().IsValid()) {
 		g_selected_item->SetSelectCity(city->GetHomeCity());
