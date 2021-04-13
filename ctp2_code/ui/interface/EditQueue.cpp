@@ -2462,7 +2462,6 @@ void EditQueue::DeleteQueryCallback(bool response, void *data)
 
 	char delFileName[_MAX_PATH];
 	g_civPaths->GetSavePath(C3SAVEDIR_QUEUES, delFileName);
-	strcat(delFileName, "\\");
 	strcat(delFileName, queueName);
 
 	remove(delFileName);
