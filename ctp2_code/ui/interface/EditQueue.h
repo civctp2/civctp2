@@ -103,6 +103,7 @@ private:
 
 	ctp2_Button *m_rushBuyButton;
 	ctp2_Static *m_rushBuyCost;
+	ctp2_Button *m_libraryButton;
 
 	ctp2_Button *m_addButton;
 	ctp2_Button *m_insertButton;

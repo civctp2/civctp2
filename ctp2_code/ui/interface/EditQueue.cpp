@@ -135,8 +135,9 @@ EditQueue::EditQueue(AUI_ERRCODE *err)
 	*err = aui_Ldl::SetActionFuncAndCookie(s_editQueueBlock, "ItemsBox.WondersButton", EditQueue::ToggleWonders, NULL);
 	Assert(*err == AUI_ERRCODE_OK);
 
-	*err = aui_Ldl::SetActionFuncAndCookie(s_editQueueBlock, "LibraryButton", EditQueue::Library, NULL);
-	Assert(*err == AUI_ERRCODE_OK);
+	m_libraryButton = (ctp2_Button *)aui_Ldl::GetObject(s_editQueueBlock, "LibraryButton");
+	Assert(m_libraryButton);
+	m_libraryButton->SetActionFuncAndCookie(EditQueue::Library, NULL);
 
 	m_addButton = (ctp2_Button *)aui_Ldl::GetObject(s_editQueueBlock, "ItemsBox.AddButton");
 	m_insertButton = (ctp2_Button *)aui_Ldl::GetObject(s_editQueueBlock, "ItemsBox.InsertButton");
@@ -161,6 +162,8 @@ EditQueue::EditQueue(AUI_ERRCODE *err)
 	aui_Ldl::SetActionFuncAndCookie(s_editQueueBlock, "ItemsBox.WonderList", EditQueue::ListCallback, NULL);
 
 	m_itemImageButton = (ctp2_Button *)aui_Ldl::GetObject(s_editQueueBlock, "ItemImage.IconBorder.IconButton");
+	Assert(m_itemImageButton);
+	m_itemImageButton->Enable(FALSE);
 	m_itemDescription = (ctp2_HyperTextBox *)aui_Ldl::GetObject(s_editQueueBlock, "ItemDescription");
 
 	m_itemsBox = (ctp2_Static *)aui_Ldl::GetObject(s_editQueueBlock, "ItemsBox");
@@ -1823,6 +1826,7 @@ void EditQueue::ShowSelectedInfo()
 		s_editQueue->m_itemType = -1;
 		CityWindow::SetItemDescription(NULL, sc, NULL, s_editQueue->m_itemDescription,
 									   s_editQueue->m_window, s_editQueue->m_itemImageButton);
+		s_editQueue->m_libraryButton->Enable(FALSE);
 		return;
 	}
 
@@ -1863,8 +1867,9 @@ void EditQueue::ShowSelectedInfo()
 	s_editQueue->m_itemCategory = category;
 	s_editQueue->m_itemType = type;
 
-	CityWindow::SetItemDescription(icon, sc, NULL, s_editQueue->m_itemDescription,
-								   s_editQueue->m_window, s_editQueue->m_itemImageButton);
+	CityWindow::SetItemDescription(icon, sc, NULL, s_editQueue->m_itemDescription, s_editQueue->m_window,
+			s_editQueue->m_itemImageButton);
+	s_editQueue->m_libraryButton->Enable(TRUE);
 }
 
 void EditQueue::Close(aui_Control *control, uint32 action, uint32 data, void *cookie)
