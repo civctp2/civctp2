@@ -24,8 +24,8 @@
 //
 // Modifications from the original Activision code:
 //
-// - Added National Manager button and functions callback. - July 24th 2005 Martin Gühmann
-// - Added a suggest build item button to the build manager for AI testing. (30-Jun-2008 Martin Gühmann)
+// - Added National Manager button and functions callback. - July 24th 2005 Martin GÃ¼hmann
+// - Added a suggest build item button to the build manager for AI testing. (30-Jun-2008 Martin GÃ¼hmann)
 // - Added stuff for reimplementing switch production penalty. (22-Jul-2009 Maq)
 //
 //----------------------------------------------------------------------------
@@ -62,7 +62,7 @@ enum EDIT_QUEUE_MULTI_ACTION {
 };
 
 class EditItemInfo {
-  public:
+public:
 	EditItemInfo(uint32 cat, sint32 type) {
 		m_category = cat;
 		m_type = type;
@@ -73,7 +73,7 @@ class EditItemInfo {
 };
 
 class EditQueueCityInfo {
-  public:
+public:
 	EditQueueCityInfo(CityData *cd) {
 		m_cityData = cd;
 	}
@@ -81,7 +81,7 @@ class EditQueueCityInfo {
 };
 
 class EditQueue {
-  private:
+private:
 	ctp2_Window *m_window;
 	ctp2_ListBox *m_unitList, *m_buildingList, *m_wonderList;
 	ctp2_ListBox *m_queueList;
@@ -134,7 +134,7 @@ class EditQueue {
 
 	EDIT_QUEUE_MODE m_mode, m_oldMode;
 
-  public:
+public:
 	EditQueue(AUI_ERRCODE *err);
 	~EditQueue();
 
