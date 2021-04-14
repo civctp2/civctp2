@@ -109,14 +109,22 @@ EditQueue::EditQueue(AUI_ERRCODE *err)
 	m_queueBox = (ctp2_Static *)aui_Ldl::GetObject(s_editQueueBlock, "QueueGroup");
 
 	m_unitList = (ctp2_ListBox *)aui_Ldl::GetObject(s_editQueueBlock, "ItemsBox.UnitsList");
-	m_buildingList = (ctp2_ListBox *)aui_Ldl::GetObject(s_editQueueBlock, "ItemsBox.BuildingList");
-	m_wonderList = (ctp2_ListBox *)aui_Ldl::GetObject(s_editQueueBlock, "ItemsBox.WonderList");
-
+	Assert(m_unitList);
+	m_unitList->SetActionFuncAndCookie(EditQueue::ListCallback, NULL);
 	m_unitList->SetForceSelect(TRUE);
+
+	m_buildingList = (ctp2_ListBox *)aui_Ldl::GetObject(s_editQueueBlock, "ItemsBox.BuildingList");
+	Assert(m_buildingList);
+	m_buildingList->SetActionFuncAndCookie(EditQueue::ListCallback, NULL);
 	m_buildingList->SetForceSelect(TRUE);
+
+	m_wonderList = (ctp2_ListBox *)aui_Ldl::GetObject(s_editQueueBlock, "ItemsBox.WonderList");
+	Assert(m_wonderList);
+	m_wonderList->SetActionFuncAndCookie(EditQueue::ListCallback, NULL);
 	m_wonderList->SetForceSelect(TRUE);
 
 	m_queueList = (ctp2_ListBox *)aui_Ldl::GetObject(s_editQueueBlock, "QueueGroup.QueueList");
+	Assert(m_queueList);
 	m_queueList->SetActionFuncAndCookie(QueueListCallback, NULL);
 
 	m_unitsButton = (ctp2_Button *)aui_Ldl::GetObject(s_editQueueBlock, "ItemsBox.UnitsButton");
@@ -156,10 +164,6 @@ EditQueue::EditQueue(AUI_ERRCODE *err)
 	m_removeButton->SetActionFuncAndCookie(EditQueue::RemoveItem, NULL);
 	m_upButton->SetActionFuncAndCookie(EditQueue::ItemUp, NULL);
 	m_downButton->SetActionFuncAndCookie(EditQueue::ItemDown, NULL);
-
-	aui_Ldl::SetActionFuncAndCookie(s_editQueueBlock, "ItemsBox.UnitsList", EditQueue::ListCallback, NULL);
-	aui_Ldl::SetActionFuncAndCookie(s_editQueueBlock, "ItemsBox.BuildingList", EditQueue::ListCallback, NULL);
-	aui_Ldl::SetActionFuncAndCookie(s_editQueueBlock, "ItemsBox.WonderList", EditQueue::ListCallback, NULL);
 
 	m_itemImageButton = (ctp2_Button *)aui_Ldl::GetObject(s_editQueueBlock, "ItemImage.IconBorder.IconButton");
 	Assert(m_itemImageButton);
@@ -213,6 +217,8 @@ EditQueue::EditQueue(AUI_ERRCODE *err)
 	m_queueFileList = (ctp2_ListBox *)aui_Ldl::GetObject(s_editQueueBlock, "LoadBox.QueuesList");
 	m_queueFileList->SetActionFuncAndCookie(QueueFileList, NULL);
 	m_queueContents = (ctp2_ListBox *)aui_Ldl::GetObject(s_editQueueBlock, "LoadBox.Contents");
+	Assert(m_queueContents);
+	m_queueContents->SetActionFuncAndCookie(EditQueue::ListCallback, NULL);
 
 	m_loadModeLoadButton = (ctp2_Button *)aui_Ldl::GetObject(s_editQueueBlock, "LoadBox.LoadButton");
 	aui_Ldl::SetActionFuncAndCookie(s_editQueueBlock, "LoadBox.LoadButton", EditQueue::LoadCallback, NULL);
@@ -607,16 +613,19 @@ void EditQueue::ClearChoiceLists()
 	ClearChoiceList(m_unitList);
 	ClearChoiceList(m_buildingList);
 	ClearChoiceList(m_wonderList);
+	ClearChoiceList(m_queueContents);
 }
 
 ctp2_ListBox *EditQueue::GetVisibleItemList()
 {
-	if(m_unitList && !m_unitList->IsHidden()) {
+	if (m_unitList && !m_unitList->IsHidden()) {
 		return m_unitList;
-	} else if(m_buildingList && !m_buildingList->IsHidden()) {
+	} else if (m_buildingList && !m_buildingList->IsHidden()) {
 		return m_buildingList;
-	} else if(m_wonderList && !m_wonderList->IsHidden()) {
+	} else if (m_wonderList && !m_wonderList->IsHidden()) {
 		return m_wonderList;
+	} else if (m_queueContents && !m_queueContents->IsHidden()) {
+		return m_queueContents;
 	}
 
 	return NULL;
@@ -876,8 +885,9 @@ void EditQueue::UpdateFileLists()
 
 	m_queueFileList->BuildListEnd();
 
-	m_queueContents->Clear();
+	ClearChoiceList(m_queueContents);
 	m_queueName->SetText("");
+	ShowSelectedInfo();
 }
 
 void EditQueue::UpdateQueueList()
@@ -1905,8 +1915,10 @@ void EditQueue::LoadModeCallback(aui_Control *control, uint32 action, uint32 dat
 			s_editQueue->ExitLoadMode();
 		} else {
 			s_editQueue->m_listBeforeLoadSaveMode = s_editQueue->GetVisibleItemList();
+			s_editQueue->m_listBeforeLoadSaveMode->Hide();
 			s_editQueue->m_loadBox->Show();
 			s_editQueue->m_itemsBox->Hide();
+			ShowSelectedInfo();
 		}
 	}
 }
@@ -2351,7 +2363,8 @@ void EditQueue::QueueFileList(aui_Control *control, uint32 action, uint32 data, 
 	if(!s_editQueue) return;
 	if(!s_editQueue->m_queueFileList) return;
 
-	s_editQueue->m_queueContents->Clear();
+	ClearChoiceList(s_editQueue->m_queueContents);
+	ShowSelectedInfo();
 
 	ctp2_ListItem *item = (ctp2_ListItem *)s_editQueue->m_queueFileList->GetSelectedItem();
 	if(!item) {
@@ -2371,7 +2384,7 @@ void EditQueue::DisplayQueueContents(const MBCHAR *queueName)
 	FILE * fpQueue = c3files_fopen(C3DIR_DIRECT, loadFileName, "r");
 	if(!fpQueue) return;
 
-	m_queueContents->Clear();
+	ClearChoiceList(m_queueContents);
 
 	char buf[k_MAX_NAME_LEN];
 	sint32 category;
@@ -2440,6 +2453,7 @@ void EditQueue::DisplayQueueContents(const MBCHAR *queueName)
 		if(!label) break;
 
 		label->SetText(name);
+		item->SetUserData(new EditItemInfo(category, type));
 		m_queueContents->AddItem(item);
 	}
 

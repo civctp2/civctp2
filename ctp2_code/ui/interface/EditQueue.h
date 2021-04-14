@@ -162,7 +162,7 @@ public:
 	void UpdateCityLists();
 	void UpdateFileLists();
 	void UpdateButtons();
-	void ClearChoiceList(ctp2_ListBox *choiceList);
+	static void ClearChoiceList(ctp2_ListBox *choiceList);
 	void ClearChoiceLists();
 	ctp2_ListBox *GetVisibleItemList();
 
