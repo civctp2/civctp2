@@ -275,7 +275,7 @@ BuildEditorWindow:CTP2_DIALOG_WINDOW {
 			int	xpix	187
 			int	ypix	136
 			int widthpix 79
-			string text "str_ldl_EditQueueDelete"
+			string text "str_ldl_REMOVE2"
 			# Tooltip
 			string	statustext	"STATUSBAR_CITYMAN_MAIN_REM_BUTTON"
 		}
