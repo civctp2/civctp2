@@ -116,6 +116,7 @@ private:
 	ctp2_Static *m_customModeButtons, *m_normalModeButtons;
 	ctp2_ListBox *m_listBeforeLoadSaveMode;
 	ctp2_Static *m_queueLabel;
+	ctp2_Button *m_createCustomQueueButton;
 
 	ctp2_Button *m_loadModeLoadButton, *m_loadModeSaveButton;
 

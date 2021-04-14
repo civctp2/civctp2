@@ -128,20 +128,18 @@ EditQueue::EditQueue(AUI_ERRCODE *err)
 	m_queueList->SetActionFuncAndCookie(QueueListCallback, NULL);
 
 	m_unitsButton = (ctp2_Button *)aui_Ldl::GetObject(s_editQueueBlock, "ItemsBox.UnitsButton");
+	Assert(m_unitsButton);
+	m_unitsButton->SetActionFuncAndCookie(EditQueue::ToggleUnits, NULL);
+
 	m_buildingsButton = (ctp2_Button *)aui_Ldl::GetObject(s_editQueueBlock, "ItemsBox.BuildingsButton");
+	Assert(m_buildingsButton);
+	m_buildingsButton->SetActionFuncAndCookie(EditQueue::ToggleBuildings, NULL);
+
 	m_wondersButton = (ctp2_Button *)aui_Ldl::GetObject(s_editQueueBlock, "ItemsBox.WondersButton");
+	Assert(m_wondersButton);
+	m_wondersButton->SetActionFuncAndCookie(EditQueue::ToggleWonders, NULL);
 	//EMOD to have button that has all units buildings, and wonders in the build box instead of sort
 	//m_AllButton = (ctp2_Button *)aui_Ldl::GetObject(s_editQueueBlock, "ItemsBox.AllButton");
-
-	*err = aui_Ldl::SetActionFuncAndCookie(s_editQueueBlock, "ItemsBox.UnitsButton", EditQueue::ToggleUnits, NULL);
-	Assert(*err == AUI_ERRCODE_OK);
-
-	*err = aui_Ldl::SetActionFuncAndCookie(s_editQueueBlock, "ItemsBox.BuildingsButton", EditQueue::ToggleBuildings,
-			NULL);
-	Assert(*err == AUI_ERRCODE_OK);
-
-	*err = aui_Ldl::SetActionFuncAndCookie(s_editQueueBlock, "ItemsBox.WondersButton", EditQueue::ToggleWonders, NULL);
-	Assert(*err == AUI_ERRCODE_OK);
 
 	m_libraryButton = (ctp2_Button *)aui_Ldl::GetObject(s_editQueueBlock, "LibraryButton");
 	Assert(m_libraryButton);
@@ -197,7 +195,9 @@ EditQueue::EditQueue(AUI_ERRCODE *err)
 	aui_Ldl::SetActionFuncAndCookie(s_editQueueBlock, "ItemsBox.LoadSaveButton", EditQueue::LoadModeCallback, NULL);
 	aui_Ldl::SetActionFuncAndCookie(s_editQueueBlock, "QueueGroup.ClearButton", EditQueue::ClearButton, NULL);
 
-	aui_Ldl::SetActionFuncAndCookie(s_editQueueBlock, "NormalModeButtons.CustomButton", EditQueue::CustomButton, NULL);
+	m_createCustomQueueButton = (ctp2_Button *) aui_Ldl::GetObject(s_editQueueBlock, "NormalModeButtons.CustomButton");
+	Assert(m_createCustomQueueButton);
+	m_createCustomQueueButton->SetActionFuncAndCookie(EditQueue::CustomButton, NULL);
 	aui_Ldl::SetActionFuncAndCookie(s_editQueueBlock, "CustomModeButtons.CancelButton", EditQueue::CustomButton, NULL);
 
 	aui_Ldl::SetActionFuncAndCookie(s_editQueueBlock, "CustomModeButtons.SaveButton", EditQueue::SaveButton, NULL);
@@ -221,7 +221,8 @@ EditQueue::EditQueue(AUI_ERRCODE *err)
 	m_queueContents->SetActionFuncAndCookie(EditQueue::ListCallback, NULL);
 
 	m_loadModeLoadButton = (ctp2_Button *)aui_Ldl::GetObject(s_editQueueBlock, "LoadBox.LoadButton");
-	aui_Ldl::SetActionFuncAndCookie(s_editQueueBlock, "LoadBox.LoadButton", EditQueue::LoadCallback, NULL);
+	Assert(m_loadModeLoadButton);
+	m_loadModeLoadButton->SetActionFuncAndCookie(EditQueue::LoadCallback, NULL);
 
 	aui_Ldl::SetActionFuncAndCookie(s_editQueueBlock, "LoadBox.CancelButton", EditQueue::LoadModeCallback, NULL);
 	aui_Ldl::SetActionFuncAndCookie(s_editQueueBlock, "LoadBox.DeleteButton", EditQueue::DeleteCallback, NULL);
@@ -1896,6 +1897,7 @@ void EditQueue::Close(aui_Control *control, uint32 action, uint32 data, void *co
 
 void EditQueue::ExitLoadMode()
 {
+	s_editQueue->m_createCustomQueueButton->Enable(TRUE);
 	s_editQueue->m_loadBox->Hide();
 	s_editQueue->m_itemsBox->Show();
 	s_editQueue->SelectChoiceList(s_editQueue->m_listBeforeLoadSaveMode);
@@ -1919,6 +1921,7 @@ void EditQueue::LoadModeCallback(aui_Control *control, uint32 action, uint32 dat
 			s_editQueue->m_loadBox->Show();
 			s_editQueue->m_itemsBox->Hide();
 			ShowSelectedInfo();
+			s_editQueue->m_createCustomQueueButton->Enable(FALSE);
 		}
 	}
 }
