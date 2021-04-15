@@ -27,7 +27,7 @@
 // - Switched INF/CAP typo corrected by Peter Triggs
 // - Start the great library with the current research project of the player.
 // - Made rush buy button behaviour consistent with other windows.
-// - Disabled rushbuy button if infrastructure or captalization are
+// - Disabled rush-buy button if infrastructure or capitalization are
 //   at the front of the build queue, by Martin Gühmann.
 // - If infrastructure or capitalization are at the front of the
 //   build queue turns are shown anymore, by Martin Gühmann.
@@ -96,12 +96,12 @@ static MBCHAR *s_editQueueBlock = "BuildEditorWindow";
 
 extern C3UI *g_c3ui;
 
-EditQueue::EditQueue(AUI_ERRCODE *err)
+EditQueue::EditQueue(AUI_ERRCODE * error)
 {
 	m_window = (ctp2_Window *)aui_Ldl::BuildHierarchyFromRoot(s_editQueueBlock);
 	Assert(m_window);
 	if(!m_window) {
-		*err = AUI_ERRCODE_INVALIDPARAM;
+		*error = AUI_ERRCODE_INVALIDPARAM;
 		return;
 	}
 
@@ -248,6 +248,7 @@ EditQueue::EditQueue(AUI_ERRCODE *err)
 	m_updating = false;
 
 	m_mode = EDIT_QUEUE_MODE_SINGLE;
+	m_oldMode = m_mode;
 
 	m_listBeforeLoadSaveMode = NULL;
 
@@ -281,7 +282,7 @@ AUI_ERRCODE EditQueue::Initialize()
 	return err;
 }
 
-AUI_ERRCODE EditQueue::Display(CityData *city)
+AUI_ERRCODE EditQueue::Display(CityData * city)
 {
 	if(g_network.IsClient() && g_network.GetSensitiveUIBlocked()) {
 		return AUI_ERRCODE_OK;
@@ -300,7 +301,7 @@ AUI_ERRCODE EditQueue::Display(CityData *city)
 	return err;
 }
 
-AUI_ERRCODE EditQueue::Display(const UnitDynamicArray &cities)
+AUI_ERRCODE EditQueue::Display(const UnitDynamicArray & cities)
 {
 	AUI_ERRCODE err = Display();
 
@@ -393,20 +394,6 @@ bool EditQueue::IsShown()
 		return false;
 
 	return g_c3ui->GetWindow(s_editQueue->m_window->Id()) != NULL;
-}
-
-void EditQueue::AttachTo(ctp2_Window *attachToWindow)
-{
-#if 0
-	if(!s_editQueue) return;
-	if(!s_editQueue->m_window) return;
-
-	if(attachToWindow) {
-		attachToWindow->AddDockedWindow(s_editQueue->m_window);
-		s_editQueue->m_window->SetDock(attachToWindow);
-	}
-	s_editQueue->m_attachedToWindow = attachToWindow;
-#endif
 }
 
 static void setIntColumn(ctp2_Static *box, sint32 col, sint32 val)
@@ -1059,7 +1046,7 @@ void EditQueue::UpdateButtons()
 			m_upButton->Enable(TRUE);
 		}
 
-		// Added by Martin Gühmann to disable the rushbuy button and rush
+		// Added by Martin Gühmann to disable the rush-buy button and rush
 		// buy costs if the first item is capitalization or infrastructure
 
 		if (m_cityData && (m_queueList->GetSelectedItemIndex() == 0))
@@ -1103,23 +1090,19 @@ void EditQueue::UpdateButtons()
 	m_addButton->Enable(visList && visList->GetSelectedItem());
 }
 
-void EditQueue::SetQueueList(ctp2_ListBox *)
-{
-}
-
-bool EditQueue::EditingCity(CityData *cd)
+bool EditQueue::EditingCity(CityData * city)
 {
 	if(!s_editQueue) return false;
 
 	if(s_editQueue->m_mode == EDIT_QUEUE_MODE_CUSTOM)
 		return false;
 
-	if(s_editQueue->m_cityData && s_editQueue->m_cityData->GetHomeCity().m_id == cd->GetHomeCity().m_id)
+	if(s_editQueue->m_cityData && s_editQueue->m_cityData->GetHomeCity().m_id == city->GetHomeCity().m_id)
 		return true;
 	else {
 		PointerList<EditQueueCityInfo>::Walker walk(&s_editQueue->m_multiCities);
 		while(walk.IsValid()) {
-			if(walk.GetObj()->m_cityData->GetHomeCity().m_id == cd->GetHomeCity().m_id)
+			if(walk.GetObj()->m_cityData->GetHomeCity().m_id == city->GetHomeCity().m_id)
 				return true;
 			walk.Next();
 		}
@@ -1876,7 +1859,7 @@ void EditQueue::ShowSelectedInfo()
 			break;
 		}
 		default:
-			Assert(FALSE);
+			Assert(false);
 			break;
 	}
 
@@ -1893,6 +1876,16 @@ void EditQueue::Close(aui_Control *control, uint32 action, uint32 data, void *co
 	if(action != AUI_BUTTON_ACTION_EXECUTE) return;
 
 	Hide();
+}
+
+void EditQueue::EnterLoadMode()
+{
+	s_editQueue->m_listBeforeLoadSaveMode = s_editQueue->GetVisibleItemList();
+	s_editQueue->m_listBeforeLoadSaveMode->Hide();
+	s_editQueue->m_loadBox->Show();
+	s_editQueue->m_itemsBox->Hide();
+	ShowSelectedInfo();
+	s_editQueue->m_createCustomQueueButton->Enable(FALSE);
 }
 
 void EditQueue::ExitLoadMode()
@@ -1916,12 +1909,7 @@ void EditQueue::LoadModeCallback(aui_Control *control, uint32 action, uint32 dat
 		if(s_editQueue->m_itemsBox->IsHidden()) {
 			s_editQueue->ExitLoadMode();
 		} else {
-			s_editQueue->m_listBeforeLoadSaveMode = s_editQueue->GetVisibleItemList();
-			s_editQueue->m_listBeforeLoadSaveMode->Hide();
-			s_editQueue->m_loadBox->Show();
-			s_editQueue->m_itemsBox->Hide();
-			ShowSelectedInfo();
-			s_editQueue->m_createCustomQueueButton->Enable(FALSE);
+			s_editQueue->EnterLoadMode();
 		}
 	}
 }
@@ -2012,7 +2000,7 @@ void EditQueue::CustomButton(aui_Control *control, uint32 action, uint32 data, v
 	}
 }
 
-void EditQueue::ClearMessageCallback(bool response, void *ud)
+void EditQueue::ClearMessageCallback(bool response, void * data)
 {
 	Assert(s_editQueue);
 	if(!s_editQueue) return;
@@ -2043,7 +2031,7 @@ void EditQueue::ClearButton(aui_Control *control, uint32 action, uint32 data, vo
 	}
 }
 
-void EditQueue::ConfirmOverwrite(bool response, void *ud)
+void EditQueue::ConfirmOverwrite(bool response, void * data)
 {
 	if(response) {
 		EditQueue::MultiActionButton(NULL, AUI_BUTTON_ACTION_EXECUTE, 0,
@@ -2132,47 +2120,7 @@ void EditQueue::MultiActionButton(aui_Control *control, uint32 action, uint32 da
 	}
 }
 
-void EditQueue::SaveCallback(aui_Control *control, uint32 action, uint32 data, void *cookie)
-{
-	if(action != AUI_BUTTON_ACTION_EXECUTE) return;
-
-	return;
-#if 0
-
-	MBCHAR saveName[_MAX_PATH];
-	static MBCHAR saveFileName[_MAX_PATH];
-	if(!s_editQueue) return;
-	if(!s_editQueue->m_queueName) return;
-
-	if(s_editQueue->m_queueName->GetFieldText(saveName, _MAX_PATH) < 1) {
-		MessageBoxDialog::Information("str_ldl_EditQueueMustEnterName");
-		return;
-	}
-
-	g_civPaths->GetSavePath(C3SAVEDIR_QUEUES, saveFileName);
-	strcat(saveFileName, FILE_SEP);
-	strcat(saveFileName, saveName);
-
-	FILE *test = c3files_fopen(C3DIR_DIRECT, saveFileName, "r");
-	if(!test) {
-		Save(saveFileName);
-		s_editQueue->ExitLoadMode();
-	} else {
-		c3files_fclose(test);
-		MBCHAR buf[k_MAX_NAME_LEN];
-		const MBCHAR *fmt = g_theStringDB->GetNameStr("str_ldl_EditQueueReallyOverwrite");
-		if(!fmt) fmt = "Overwrite queue %s?";
-		sprintf(buf, fmt, saveName);
-
-		MessageBoxDialog::Query(buf, SaveQueryCallback, (void *)saveFileName);
-	}
-
-	s_editQueue->UpdateFileLists();
-#endif
-
-}
-
-void EditQueue::SaveQueryCallback(bool response, void *data)
+void EditQueue::SaveQueryCallback(bool response, void * data)
 {
 	if(response) {
 		Save((const MBCHAR *)data);
@@ -2247,7 +2195,7 @@ void EditQueue::LoadCallback(aui_Control *control, uint32 action, uint32 data, v
 	}
 }
 
-void EditQueue::LoadQueryCallback(bool response, void *data)
+void EditQueue::LoadQueryCallback(bool response, void * data)
 {
 	if(!response)
 		return;
@@ -2273,12 +2221,12 @@ void EditQueue::LoadQueryCallback(bool response, void *data)
 	s_editQueue->Update();
 }
 
-void  EditQueue::LoadCustom(const MBCHAR *loadName)
+void  EditQueue::LoadCustom(const MBCHAR * fileName)
 {
 	char loadFileName[_MAX_PATH];
 	g_civPaths->GetSavePath(C3SAVEDIR_QUEUES, loadFileName);
 	strcat(loadFileName, FILE_SEP);
-	strcat(loadFileName, loadName);
+	strcat(loadFileName, fileName);
 
 	s_editQueue->m_customBuildList.DeleteAll();
 
@@ -2299,21 +2247,21 @@ void  EditQueue::LoadCustom(const MBCHAR *loadName)
 			case 'U':
 				category = k_GAME_OBJ_TYPE_UNIT;
 				if(!g_theUnitDB->GetNamedItem(&buf[2], type)) {
-					Assert(FALSE);
+					Assert(false);
 					continue;
 				}
 				break;
 			case 'B':
 				category = k_GAME_OBJ_TYPE_IMPROVEMENT;
 				if(!g_theBuildingDB->GetNamedItem(&buf[2], type)) {
-					Assert(FALSE);
+					Assert(false);
 					continue;
 				}
 				break;
 			case 'W':
 				category = k_GAME_OBJ_TYPE_WONDER;
 				if(!g_theWonderDB->GetNamedItem(&buf[2], type)) {
-					Assert(FALSE);
+					Assert(false);
 					continue;
 				}
 				break;
@@ -2338,7 +2286,7 @@ void  EditQueue::LoadCustom(const MBCHAR *loadName)
 				}
 				break;
 			default:
-				Assert(FALSE);
+				Assert(false);
 				continue;
 		}
 		s_editQueue->m_customBuildList.AddTail(new EditItemInfo(category, type));
@@ -2403,7 +2351,7 @@ void EditQueue::DisplayQueueContents(const MBCHAR *queueName)
 			case 'U':
 				category = k_GAME_OBJ_TYPE_UNIT;
 				if(!g_theUnitDB->GetNamedItem(&buf[2], type)) {
-					Assert(FALSE);
+					Assert(false);
 					continue;
 				}
 				name = g_theUnitDB->Get(type)->GetNameText();
@@ -2411,7 +2359,7 @@ void EditQueue::DisplayQueueContents(const MBCHAR *queueName)
 			case 'B':
 				category = k_GAME_OBJ_TYPE_IMPROVEMENT;
 				if(!g_theBuildingDB->GetNamedItem(&buf[2], type)) {
-					Assert(FALSE);
+					Assert(false);
 					continue;
 				}
 				name = g_theBuildingDB->Get(type)->GetNameText();
@@ -2419,7 +2367,7 @@ void EditQueue::DisplayQueueContents(const MBCHAR *queueName)
 			case 'W':
 				category = k_GAME_OBJ_TYPE_WONDER;
 				if(!g_theWonderDB->GetNamedItem(&buf[2], type)) {
-					Assert(FALSE);
+					Assert(false);
 					continue;
 				}
 				name = g_theWonderDB->Get(type)->GetNameText();
@@ -2443,7 +2391,7 @@ void EditQueue::DisplayQueueContents(const MBCHAR *queueName)
 				}
 				break;
 			default:
-				Assert(FALSE);
+				Assert(false);
 				continue;
 		}
 
@@ -2478,28 +2426,28 @@ void EditQueue::DeleteCallback(aui_Control *control, uint32 action, uint32 data,
 	sprintf(buf, fmt, queueName);
 
 	MessageBoxDialog::Query(buf, "QueryDeleteQueue", DeleteQueryCallback, (void *)queueName);
-
 }
 
-void EditQueue::DeleteQueryCallback(bool response, void *data)
+void EditQueue::DeleteQueryCallback(bool response, void * data)
 {
 	if(!response) return;
 
 	const MBCHAR *queueName = (const MBCHAR *)data;
 
-	char delFileName[_MAX_PATH];
-	g_civPaths->GetSavePath(C3SAVEDIR_QUEUES, delFileName);
-	strcat(delFileName, queueName);
+	char deleteFileName[_MAX_PATH];
+	g_civPaths->GetSavePath(C3SAVEDIR_QUEUES, deleteFileName);
+	strcat(deleteFileName, FILE_SEP);
+	strcat(deleteFileName, queueName);
 
-	remove(delFileName);
+	remove(deleteFileName);
 	s_editQueue->UpdateFileLists();
 }
 
-void EditQueue::SelectChoiceList(ctp2_ListBox * a_List)
+void EditQueue::SelectChoiceList(ctp2_ListBox * list)
 {
-	a_List->Show();
+	list->Show();
 
-	if (a_List != m_buildingList)
+	if (list != m_buildingList)
 	{
 		m_buildingList->Hide();
 		m_buildingList->DeselectItem(m_buildingList->GetSelectedItem());
@@ -2508,7 +2456,7 @@ void EditQueue::SelectChoiceList(ctp2_ListBox * a_List)
 		m_buildingsButton->SetToggleState(true);
 	}
 
-	if (a_List != m_unitList)
+	if (list != m_unitList)
 	{
 		m_unitList->Hide();
 		m_unitList->DeselectItem(m_unitList->GetSelectedItem());
@@ -2517,7 +2465,7 @@ void EditQueue::SelectChoiceList(ctp2_ListBox * a_List)
 		m_unitsButton->SetToggleState(true);
 	}
 
-	if (a_List != m_wonderList)
+	if (list != m_wonderList)
 	{
 		m_wonderList->Hide();
 		m_wonderList->DeselectItem(m_wonderList->GetSelectedItem());
@@ -2634,7 +2582,7 @@ void ConfirmOverwriteQueueAction::Execute(aui_Control *control, uint32 action, u
 	if(!fmt) fmt = "Overwrite queue %s?";
 	sprintf(buf, fmt, m_text);
 
-	MessageBoxDialog::Query(buf, "QueryOverwiteQueue", EditQueue::SaveQueryCallback, (void *)m_saveFileName);
+	MessageBoxDialog::Query(buf, "QueryOverwriteQueue", EditQueue::SaveQueryCallback, (void *)m_saveFileName);
 };
 
 AUI_ACTION_BASIC(MustEnterNameAction);
@@ -2644,7 +2592,7 @@ void MustEnterNameAction::Execute(aui_Control *control, uint32 action, uint32 da
 	MessageBoxDialog::Information("str_ldl_EditQueueMustEnterName", "InfoMustName");
 }
 
-void EditQueue::SaveNameResponse(bool response, const char *text, void *userData)
+void EditQueue::SaveNameResponse(bool response, const char * text, void * data)
 {
 	if(response) {
 		if(strlen(text) < 1) {
@@ -2678,7 +2626,7 @@ void EditQueue::SaveButton(aui_Control *control, uint32 action, uint32 data, voi
 								SaveNameResponse);
 }
 
-bool EditQueue::IsItemInQueueList(uint32 cat, sint32 type)
+bool EditQueue::IsItemInQueueList(uint32 category, sint32 type)
 {
 	sint32 i;
 	for(i = 0; i < m_queueList->NumItems(); i++) {
@@ -2688,7 +2636,7 @@ bool EditQueue::IsItemInQueueList(uint32 cat, sint32 type)
 			EditItemInfo *eii = (EditItemInfo *)item->GetUserData();
 
 			if(eii) {
-				if(eii->m_category == cat && eii->m_type == type)
+				if(eii->m_category == category && eii->m_type == type)
 					return true;
 			}
 		}
@@ -2696,7 +2644,7 @@ bool EditQueue::IsItemInQueueList(uint32 cat, sint32 type)
 	return false;
 }
 
-void EditQueue::NotifyCityCaptured(const Unit &c)
+void EditQueue::NotifyCityCaptured(const Unit & unit)
 {
 	if(!s_editQueue)
 		return;
@@ -2705,7 +2653,7 @@ void EditQueue::NotifyCityCaptured(const Unit &c)
 		return;
 
 	if(s_editQueue->m_cityData) {
-		if(c.m_id == s_editQueue->m_cityData->GetHomeCity().m_id)
+		if(unit.m_id == s_editQueue->m_cityData->GetHomeCity().m_id)
 		{
 			s_editQueue->m_cityData = NULL;
 			Hide();
@@ -2714,7 +2662,7 @@ void EditQueue::NotifyCityCaptured(const Unit &c)
 		PointerList<EditQueueCityInfo>::Walker walk(&s_editQueue->m_multiCities);
 		bool wasEditing = false;
 		while(walk.IsValid()) {
-			if(walk.GetObj()->m_cityData->GetHomeCity().m_id == c.m_id) {
+			if(walk.GetObj()->m_cityData->GetHomeCity().m_id == unit.m_id) {
 				walk.Remove();
 				wasEditing = true;
 			} else {

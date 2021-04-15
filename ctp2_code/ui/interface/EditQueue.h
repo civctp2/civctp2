@@ -81,51 +81,156 @@ public:
 };
 
 class EditQueue {
+public:
+	EditQueue(AUI_ERRCODE * error);
+	~EditQueue();
+
+	static AUI_ERRCODE   Display(CityData * city);
+	static AUI_ERRCODE   Display(const UnitDynamicArray & cities);
+	static AUI_ERRCODE   Hide();
+	static EditQueue   * GetEditQueueWindow();
+	static AUI_ERRCODE   Cleanup();
+
+	static void SaveQueryCallback(bool response, void * data);
+
+	CityData * GetCityData() const { return m_cityData; }
+
+	void InsertInQueue(EditItemInfo * info, bool insert, bool confirm = false, bool confirmSwitch = false);
+	void Down(bool confirmSwitch = false);
+	void Up(bool confirmSwitch = false);
+	void Remove(bool confirmSwitch = false);
+
+	static void NotifyCityCaptured(const Unit & unit);
+	static bool EditingCity(CityData * city);
+
 private:
-	ctp2_Window *m_window;
-	ctp2_ListBox *m_unitList, *m_buildingList, *m_wonderList;
-	ctp2_ListBox *m_queueList;
-	CityData *m_cityData;
-	ctp2_Window *m_attachedToWindow;
-	ctp2_Button *m_itemImageButton;
-	ctp2_HyperTextBox *m_itemDescription;
+	static AUI_ERRCODE Initialize();
+	static AUI_ERRCODE Display();
+	static bool        IsShown();
 
-	ctp2_Static *m_itemsBox, *m_loadBox, *m_queueBox;
-	ctp2_Static *m_singleCityChooser;
-	ctp2_ListBox *m_multiCityList;
-	ctp2_DropDown *m_cityDropDown;
-	ctp2_Static *m_multiButtonGroup;
-	ctp2_Static *m_queueName;
-	ctp2_ListBox *m_queueFileList;
-	ctp2_ListBox *m_queueContents;
+	static const MBCHAR * GetSelectedQueueName();
 
-	ctp2_Button *m_unitsButton, *m_buildingsButton, *m_wondersButton;
+	static void ShowSelectedInfo();
+	static void ClearChoiceList(ctp2_ListBox * choiceList);
 
-	ctp2_Button *m_rushBuyButton;
-	ctp2_Static *m_rushBuyCost;
-	ctp2_Button *m_libraryButton;
+	static void Save(const MBCHAR * saveFileName);
+	static void LoadCustom(const MBCHAR * loadFileName);
 
-	ctp2_Button *m_addButton;
-	ctp2_Button *m_insertButton;
-	ctp2_Button *m_suggestButton;
-	ctp2_Button *m_upButton;
-	ctp2_Button *m_downButton;
-	ctp2_Button *m_removeButton;
+	static void SetMode(EDIT_QUEUE_MODE mode);
+	static void SetCity(CityData * city);
+	static void SetMultiCities(const UnitDynamicArray & cities);
 
-	ctp2_Static *m_modeLabel;
-	ctp2_Static *m_customModeButtons, *m_normalModeButtons;
-	ctp2_ListBox *m_listBeforeLoadSaveMode;
-	ctp2_Static *m_queueLabel;
-	ctp2_Button *m_createCustomQueueButton;
+	static sint32 CompareUnitItems(ctp2_ListItem * item1, ctp2_ListItem * item2, sint32 column);
+	static sint32 CompareBuildingWonderItems(ctp2_ListItem * item1, ctp2_ListItem * item2, sint32 column);
 
-	ctp2_Button *m_loadModeLoadButton, *m_loadModeSaveButton;
+	static void ToggleUnits        (aui_Control * control, uint32 action, uint32 data, void * cookie);
+	static void ToggleBuildings    (aui_Control * control, uint32 action, uint32 data, void * cookie);
+	static void ToggleWonders      (aui_Control * control, uint32 action, uint32 data, void * cookie);
+	static void AddItem            (aui_Control * control, uint32 action, uint32 data, void * cookie);
+	static void InsertItem         (aui_Control * control, uint32 action, uint32 data, void * cookie);
+	static void SuggestItem        (aui_Control * control, uint32 action, uint32 data, void * cookie);
+	static void RemoveItem         (aui_Control * control, uint32 action, uint32 data, void * cookie);
+	static void ItemUp             (aui_Control * control, uint32 action, uint32 data, void * cookie);
+	static void ItemDown           (aui_Control * control, uint32 action, uint32 data, void * cookie);
+	static void ListCallback       (aui_Control * control, uint32 action, uint32 data, void * cookie);
+	static void ClearButton        (aui_Control * control, uint32 action, uint32 data, void * cookie);
+	static void Close              (aui_Control * control, uint32 action, uint32 data, void * cookie);
 
-	ctp2_Button *m_gotoCityButton;
-	ctp2_Button *m_nationalManagerButton;
+	static void CityDropDown       (aui_Control * control, uint32 action, uint32 data, void * cookie);
+	static void PreviousCity       (aui_Control * control, uint32 action, uint32 data, void * cookie);
+	static void NextCity           (aui_Control * control, uint32 action, uint32 data, void * cookie);
 
-	PointerList<EditItemInfo> m_customBuildList;
+	static void RushBuyCallback    (aui_Control * control, uint32 action, uint32 data, void * cookie);
+	static void Library            (aui_Control * control, uint32 action, uint32 data, void * cookie);
+
+	static void GotoCity           (aui_Control * control, uint32 action, uint32 data, void * cookie);
+	static void OpenNationalManager(aui_Control * control, uint32 action, uint32 data, void * cookie);
+
+	static void LoadModeCallback   (aui_Control * control, uint32 action, uint32 data, void * cookie);
+	static void LoadCallback       (aui_Control * control, uint32 action, uint32 data, void * cookie);
+	static void DeleteCallback     (aui_Control * control, uint32 action, uint32 data, void * cookie);
+	static void CustomButton       (aui_Control * control, uint32 action, uint32 data, void * cookie);
+	static void SaveButton         (aui_Control * control, uint32 action, uint32 data, void * cookie);
+	static void MultiActionButton  (aui_Control * control, uint32 action, uint32 data, void * cookie);
+	static void QueueFileList      (aui_Control * control, uint32 action, uint32 data, void * cookie);
+	static void QueueListCallback  (aui_Control * control, uint32 action, uint32 data, void * cookie);
+
+	static void LoadQueryCallback   (bool response, void * data);
+	static void DeleteQueryCallback (bool response, void * data);
+	static void ClearMessageCallback(bool response, void * data);
+	static void ConfirmOverwrite    (bool response, void * data);
+
+	static void SaveNameResponse(bool response, const char * text, void * data);
+
+	ctp2_ListBox * GetVisibleItemList();
+
+	void DisplayQueueContents(const MBCHAR * queueName);
+
+	void AddChoiceItem(const MBCHAR * text, EditItemInfo * info, sint32 time, ctp2_ListBox * list);
+	void Update();
+	void UpdateChoiceLists();
+	void UpdateQueueList();
+	void UpdateCityLists();
+	void UpdateFileLists();
+	void UpdateButtons();
+	void ClearChoiceLists();
+
+	void Add(bool insert);
+	void Suggest(bool insert);
+
+	void EnterLoadMode();
+	void ExitLoadMode();
+
+	void SelectChoiceList(ctp2_ListBox * list);
+
+	void RushBuy();
+
+	bool IsItemInQueueList(uint32 category, sint32 type);
+
+	ctp2_Window       * m_window;
+	ctp2_ListBox      * m_unitList, * m_buildingList, * m_wonderList;
+	ctp2_ListBox      * m_queueList;
+	CityData          * m_cityData;
+	ctp2_Window       * m_attachedToWindow;
+	ctp2_Button       * m_itemImageButton;
+	ctp2_HyperTextBox * m_itemDescription;
+
+	ctp2_Static   * m_itemsBox, * m_loadBox, * m_queueBox;
+	ctp2_Static   * m_singleCityChooser;
+	ctp2_ListBox  * m_multiCityList;
+	ctp2_DropDown * m_cityDropDown;
+	ctp2_Static   * m_multiButtonGroup;
+	ctp2_Static   * m_queueName;
+	ctp2_ListBox  * m_queueFileList;
+	ctp2_ListBox  * m_queueContents;
+
+	ctp2_Button * m_unitsButton, * m_buildingsButton, * m_wondersButton;
+
+	ctp2_Button * m_rushBuyButton;
+	ctp2_Static * m_rushBuyCost;
+	ctp2_Button * m_libraryButton;
+
+	ctp2_Button * m_addButton;
+	ctp2_Button * m_insertButton;
+	ctp2_Button * m_suggestButton;
+	ctp2_Button * m_upButton;
+	ctp2_Button * m_downButton;
+	ctp2_Button * m_removeButton;
+
+	ctp2_Static  * m_modeLabel;
+	ctp2_Static  * m_customModeButtons, * m_normalModeButtons;
+	ctp2_ListBox * m_listBeforeLoadSaveMode;
+	ctp2_Static  * m_queueLabel;
+	ctp2_Button  * m_createCustomQueueButton;
+
+	ctp2_Button * m_loadModeLoadButton;
+
+	ctp2_Button * m_gotoCityButton;
+	ctp2_Button * m_nationalManagerButton;
+
+	PointerList<EditItemInfo>      m_customBuildList;
 	PointerList<EditQueueCityInfo> m_multiCities;
-	PointerList<MBCHAR> m_queueFileNames;
+	PointerList<MBCHAR>            m_queueFileNames;
 
 	bool m_inCallback;
 	bool m_updating;
@@ -135,109 +240,6 @@ private:
 	sint32 m_itemType;
 
 	EDIT_QUEUE_MODE m_mode, m_oldMode;
-
-public:
-	EditQueue(AUI_ERRCODE *err);
-	~EditQueue();
-
-	static AUI_ERRCODE Initialize();
-	static AUI_ERRCODE Display(CityData *city);
-	static AUI_ERRCODE Display(const UnitDynamicArray &cities);
-	static AUI_ERRCODE Display();
-	static AUI_ERRCODE Hide();
-	static AUI_ERRCODE Cleanup();
-	static bool IsShown();
-	static void AttachTo(ctp2_Window *attachToWindow);
-
-	void SetQueueList(ctp2_ListBox *list);
-	static void SetMode(EDIT_QUEUE_MODE);
-	static void SetCity(CityData *city);
-	static void SetMultiCities(const UnitDynamicArray &cities);
-
-	static sint32 CompareUnitItems(ctp2_ListItem *item1, ctp2_ListItem *item2, sint32 column);
-	static sint32 CompareBuildingWonderItems(ctp2_ListItem *item1, ctp2_ListItem *item2, sint32 column);
-	void AddChoiceItem(const MBCHAR *text, EditItemInfo *info, sint32 time, ctp2_ListBox *list);
-	void Update();
-	void UpdateChoiceLists();
-	void UpdateQueueList();
-	void UpdateCityLists();
-	void UpdateFileLists();
-	void UpdateButtons();
-	static void ClearChoiceList(ctp2_ListBox *choiceList);
-	void ClearChoiceLists();
-	ctp2_ListBox *GetVisibleItemList();
-
-	static bool EditingCity(CityData *city);
-
-	void InsertInQueue(EditItemInfo *info, bool insert, bool confirm = false, bool confirmSwitch = false);
-	void Add(bool insert);
-	void Suggest(bool insert);
-	void Remove(bool confirmSwitch = false);
-	void Up(bool confirmSwitch = false);
-	void Down(bool confirmSwitch = false);
-
-	static void ShowSelectedInfo();
-
-	static void ToggleUnits(aui_Control *control, uint32 action, uint32 data, void *cookie);
-	static void ToggleBuildings(aui_Control *control, uint32 action, uint32 data, void *cookie);
-	static void ToggleWonders(aui_Control *control, uint32 action, uint32 data, void *cookie);
-	static void Library(aui_Control *control, uint32 action, uint32 data, void *cookie);
-	static void AddItem(aui_Control *control, uint32 action, uint32 data, void *cookie);
-	static void InsertItem(aui_Control *control, uint32 action, uint32 data, void *cookie);
-	static void SuggestItem(aui_Control *control, uint32 action, uint32 data, void *cookie);
-	static void RemoveItem(aui_Control *control, uint32 action, uint32 data, void *cookie);
-	static void ItemUp(aui_Control *control, uint32 action, uint32 data, void *cookie);
-	static void ItemDown(aui_Control *control, uint32 action, uint32 data, void *cookie);
-	static void ListCallback(aui_Control *control, uint32 action, uint32 data, void *cookie);
-	static void Close(aui_Control *control, uint32 action, uint32 data, void *cookie);
-
-	void ExitLoadMode();
-	static void LoadModeCallback(aui_Control *control, uint32 action, uint32 data, void *cookie);
-
-	static void CityDropDown(aui_Control *control, uint32 action, uint32 data, void *cookie);
-	static void PreviousCity(aui_Control *control, uint32 action, uint32 data, void *cookie);
-	static void NextCity(aui_Control *control, uint32 action, uint32 data, void *cookie);
-
-	static void CustomButton(aui_Control *control, uint32 action, uint32 data, void *cookie);
-
-	static void ClearMessageCallback(bool response, void *ud);
-	static void ClearButton(aui_Control *control, uint32 action, uint32 data, void *cookie);
-
-	static void ConfirmOverwrite(bool response, void *ud);
-	static void MultiActionButton(aui_Control *control, uint32 action, uint32 data, void *cookie);
-
-	static void SaveCallback(aui_Control *control, uint32 action, uint32 data, void *cookie);
-	static void SaveQueryCallback(bool response, void *data);
-	static void Save(const MBCHAR *saveFileName);
-
-	static void LoadCallback(aui_Control *control, uint32 action, uint32 data, void *cookie);
-	static void LoadQueryCallback(bool response, void *data);
-	static void LoadCustom(const MBCHAR *loadName);
-
-	static const MBCHAR *GetSelectedQueueName();
-	static void QueueFileList(aui_Control *control, uint32 action, uint32 data, void *cookie);
-	void DisplayQueueContents(const MBCHAR *queueName);
-
-	static void DeleteCallback(aui_Control *control, uint32 action, uint32 data, void *cookie);
-	static void DeleteQueryCallback(bool response, void *data);
-
-	void SelectChoiceList(ctp2_ListBox *);
-
-	void RushBuy();
-	static void RushBuyCallback(aui_Control *control, uint32 action, uint32 data, void *cookie);
-
-	static void QueueListCallback(aui_Control *control, uint32 action, uint32 data, void *cookie);
-
-	static void GotoCity(aui_Control *control, uint32 action, uint32 data, void *cookie);
-	static void OpenNationalManager(aui_Control *control, uint32 action, uint32 data, void *cookie);
-	static void SaveNameResponse(bool response, const char *text, void *userData);
-	static void SaveButton(aui_Control *control, uint32 action, uint32 data, void *cookie);
-
-	bool IsItemInQueueList(uint32 cat, sint32 type);
-
-	static void NotifyCityCaptured(const Unit &c);
-	static EditQueue* GetEditQueueWindow();
-	CityData * GetCityData() const { return m_cityData; };
 };
 
 #endif
