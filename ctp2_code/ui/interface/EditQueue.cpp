@@ -1459,12 +1459,14 @@ void EditQueue::Suggest(bool insert)
 	}
 }
 
-static void ConfirmRemoveProduction(bool confirm, void *lemurpoo)
+static void ConfirmRemoveProduction(bool confirm, void * data)
 {
-	if(confirm) {
+	if (confirm)
+	{
 		Assert(s_editQueue);
-		if(!s_editQueue)
+		if(!s_editQueue) {
 			return;
+		}
 
 		s_editQueue->Remove(true);
 	}
@@ -1525,6 +1527,14 @@ void EditQueue::Remove(bool confirmedSwitch)
 			}
 		}
 		Update();
+
+		if (m_queueList->NumItems() > 0)
+		{
+			if (buildIndex >= m_queueList->NumItems()) {
+				buildIndex = m_queueList->NumItems() - 1;
+			}
+			m_queueList->SelectItem(buildIndex);
+		}
 	}
 }
 
