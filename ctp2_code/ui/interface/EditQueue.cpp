@@ -151,6 +151,7 @@ EditQueue::EditQueue(AUI_ERRCODE * error)
 	m_removeButton = (ctp2_Button *)aui_Ldl::GetObject(s_editQueueBlock, "QueueGroup.RemoveButton");
 	m_upButton = (ctp2_Button *)aui_Ldl::GetObject(s_editQueueBlock, "QueueGroup.UpButton");
 	m_downButton = (ctp2_Button *)aui_Ldl::GetObject(s_editQueueBlock, "QueueGroup.DownButton");
+	m_clearButton = (ctp2_Button *)aui_Ldl::GetObject(s_editQueueBlock, "QueueGroup.ClearButton");
 
 	m_unitList->SetKeyboardActionControl(m_addButton);
 	m_buildingList->SetKeyboardActionControl(m_addButton);
@@ -162,6 +163,7 @@ EditQueue::EditQueue(AUI_ERRCODE * error)
 	m_removeButton->SetActionFuncAndCookie(EditQueue::RemoveItem, NULL);
 	m_upButton->SetActionFuncAndCookie(EditQueue::ItemUp, NULL);
 	m_downButton->SetActionFuncAndCookie(EditQueue::ItemDown, NULL);
+	m_clearButton->SetActionFuncAndCookie(EditQueue::ClearButton, NULL);
 
 	m_itemImageButton = (ctp2_Button *)aui_Ldl::GetObject(s_editQueueBlock, "ItemImage.IconBorder.IconButton");
 	Assert(m_itemImageButton);
@@ -193,7 +195,6 @@ EditQueue::EditQueue(AUI_ERRCODE * error)
 	aui_Ldl::SetActionFuncAndCookie(s_editQueueBlock, "NormalModeButtons.CloseButton", EditQueue::Close, NULL);
 
 	aui_Ldl::SetActionFuncAndCookie(s_editQueueBlock, "ItemsBox.LoadSaveButton", EditQueue::LoadModeCallback, NULL);
-	aui_Ldl::SetActionFuncAndCookie(s_editQueueBlock, "QueueGroup.ClearButton", EditQueue::ClearButton, NULL);
 
 	m_createCustomQueueButton = (ctp2_Button *) aui_Ldl::GetObject(s_editQueueBlock, "NormalModeButtons.CustomButton");
 	Assert(m_createCustomQueueButton);
@@ -1088,6 +1089,7 @@ void EditQueue::UpdateButtons()
 	}
 
 	m_addButton->Enable(visList && visList->GetSelectedItem());
+	m_clearButton->Enable(m_queueList->NumItems() > 0);
 }
 
 bool EditQueue::EditingCity(CityData * city)

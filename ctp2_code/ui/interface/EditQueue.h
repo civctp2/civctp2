@@ -216,6 +216,7 @@ private:
 	ctp2_Button * m_upButton;
 	ctp2_Button * m_downButton;
 	ctp2_Button * m_removeButton;
+	ctp2_Button * m_clearButton;
 
 	ctp2_Static  * m_modeLabel;
 	ctp2_Static  * m_customModeButtons, * m_normalModeButtons;
