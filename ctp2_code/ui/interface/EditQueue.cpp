@@ -1781,94 +1781,91 @@ void EditQueue::ListCallback(aui_Control *control, uint32 action, uint32 data, v
 void EditQueue::ShowSelectedInfo()
 {
 	Assert(s_editQueue);
-	if(!s_editQueue) return;
+	if (!s_editQueue) {
+		return;
+	}
 
-	SlicContext sc;
-
-	ctp2_ListBox *visList = s_editQueue->GetVisibleItemList();
+	SlicContext context;
 
 	uint32 category = 0xffffffffu;
 	sint32 type = -1;
 
-	ctp2_ListItem *item;
-	item = (ctp2_ListItem *)s_editQueue->m_queueList->GetSelectedItem();
-	EditItemInfo *info = NULL;
-	if(item) {
-		if(s_editQueue->m_cityData) {
-			BuildNode *bn = s_editQueue->m_cityData->GetBuildQueue()->GetNodeByIndex(
+	ctp2_ListItem * item = (ctp2_ListItem *) s_editQueue->m_queueList->GetSelectedItem();
+	if (item)
+	{
+		if (s_editQueue->m_cityData)
+		{
+			BuildNode *buildNode = s_editQueue->m_cityData->GetBuildQueue()->GetNodeByIndex(
 					s_editQueue->m_queueList->GetSelectedItemIndex());
-			if(bn) {
-				category = bn->m_category;
-				type = bn->m_type;
+			if (buildNode)
+			{
+				category = buildNode->m_category;
+				type = buildNode->m_type;
 			}
-		} else {
-			EditItemInfo *info = (EditItemInfo *)item->GetUserData();
+		}
+		else
+		{
+			EditItemInfo * info = (EditItemInfo *) item->GetUserData();
 			Assert(info);
+			category = info->m_category;
+			type = info->m_type;
 		}
-	} else {
-		if(visList) {
-			item = (ctp2_ListItem *)visList->GetSelectedItem();
-			if(item) {
-				info = (EditItemInfo *)item->GetUserData();
+	}
+	else
+	{
+		ctp2_ListBox * visibleList = s_editQueue->GetVisibleItemList();
+		if (visibleList)
+		{
+			item = (ctp2_ListItem *) visibleList->GetSelectedItem();
+			if (item)
+			{
+				EditItemInfo * info = (EditItemInfo *) item->GetUserData();
 				Assert(info);
+				category = info->m_category;
+				type = info->m_type;
 			}
 		}
 	}
 
-	if(info) {
-		category = info->m_category;
-		type = info->m_type;
-	}
+	const IconRecord * icon = NULL;
+	s_editQueue->m_itemCategory = -1;
+	s_editQueue->m_itemType = -1;
+	if (category >= 0 && type >= 0) {
+		s_editQueue->m_itemCategory = category;
+		s_editQueue->m_itemType = type;
 
-	if(category < 0 || type < 0) {
-		s_editQueue->m_itemCategory = -1;
-		s_editQueue->m_itemType = -1;
-		CityWindow::SetItemDescription(NULL, sc, NULL, s_editQueue->m_itemDescription,
-									   s_editQueue->m_window, s_editQueue->m_itemImageButton);
-		s_editQueue->m_libraryButton->Enable(FALSE);
-		return;
-	}
-
-	const IconRecord *icon = NULL;
-
-	switch(category) {
-		case k_GAME_OBJ_TYPE_UNIT:
-			icon = g_theUnitDB->Get(type)->GetDefaultIcon();
-			sc.AddUnitRecord(type);
-			break;
-		case k_GAME_OBJ_TYPE_IMPROVEMENT:
-			icon = g_theBuildingDB->Get(type)->GetDefaultIcon();
-			sc.AddBuilding(type);
-			break;
-		case k_GAME_OBJ_TYPE_WONDER:
-			icon = g_theWonderDB->Get(type)->GetDefaultIcon();
-			sc.AddWonder(type);
-			break;
-		case k_GAME_OBJ_TYPE_INFRASTRUCTURE:
-		{
-			sint32 index;
-			g_theIconDB->GetNamedItem("ICON_IMPROVE_INFRASTRUCTURE", index);
-			icon = g_theIconDB->Get(index);
-			break;
+		switch (category) {
+			case k_GAME_OBJ_TYPE_UNIT:
+				icon = g_theUnitDB->Get(type)->GetDefaultIcon();
+				context.AddUnitRecord(type);
+				break;
+			case k_GAME_OBJ_TYPE_IMPROVEMENT:
+				icon = g_theBuildingDB->Get(type)->GetDefaultIcon();
+				context.AddBuilding(type);
+				break;
+			case k_GAME_OBJ_TYPE_WONDER:
+				icon = g_theWonderDB->Get(type)->GetDefaultIcon();
+				context.AddWonder(type);
+				break;
+			case k_GAME_OBJ_TYPE_INFRASTRUCTURE: {
+				sint32 index;
+				g_theIconDB->GetNamedItem("ICON_IMPROVE_INFRASTRUCTURE", index);
+				icon = g_theIconDB->Get(index);
+				break;
+			}
+			case k_GAME_OBJ_TYPE_CAPITALIZATION: {
+				sint32 index;
+				g_theIconDB->GetNamedItem("ICON_IMPROVE_CAPITALIZATION", index);
+				icon = g_theIconDB->Get(index);
+				break;
+			}
+			default: Assert(false);
+				break;
 		}
-		case k_GAME_OBJ_TYPE_CAPITALIZATION:
-		{
-			sint32 index;
-			g_theIconDB->GetNamedItem("ICON_IMPROVE_CAPITALIZATION", index);
-			icon = g_theIconDB->Get(index);
-			break;
-		}
-		default:
-			Assert(false);
-			break;
 	}
-
-	s_editQueue->m_itemCategory = category;
-	s_editQueue->m_itemType = type;
-
-	CityWindow::SetItemDescription(icon, sc, NULL, s_editQueue->m_itemDescription, s_editQueue->m_window,
+	CityWindow::SetItemDescription(icon, context, NULL, s_editQueue->m_itemDescription, s_editQueue->m_window,
 			s_editQueue->m_itemImageButton);
-	s_editQueue->m_libraryButton->Enable(TRUE);
+	s_editQueue->m_libraryButton->Enable(s_editQueue->m_itemCategory != -1 && s_editQueue->m_itemType != -1);
 }
 
 void EditQueue::Close(aui_Control *control, uint32 action, uint32 data, void *cookie)
