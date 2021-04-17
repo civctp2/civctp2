@@ -355,17 +355,8 @@ NetInfo::Unpacketize(uint16 id, uint8* buf, uint16 size)
 
 			if(g_selected_item->GetCurPlayer() == g_network.GetPlayerIndex()) {
 				if(g_network.ShouldAckBeginTurn()) {
-
-
-
-
-
-
-
-
 					CityWindow::Hide();
 					EditQueue::Hide();
-					CityWindow::CopyCitiesBack();
 					DomesticManagementDialog::Close();
 					UnitManager::Hide();
 
@@ -531,21 +522,11 @@ NetInfo::Unpacketize(uint16 id, uint8* buf, uint16 size)
 				g_player[m_data]->m_advances->m_discovered = m_data3;
 				g_player[m_data]->m_science->SetLevel(m_data4);
 
-
-
-
 				sint32 i;
 				for(i = 0; i < g_player[m_data]->m_all_cities->Num(); i++) {
 					g_player[m_data]->m_all_cities->Access(i).GetData()->
 						GetCityData()->GetBuildQueue()->RemoveIllegalItems(TRUE);
 				}
-
-
-
-
-
-
-
 			}
 			break;
 		}
@@ -679,17 +660,6 @@ NetInfo::Unpacketize(uint16 id, uint8* buf, uint16 size)
 			Assert(g_theUnitPool->IsValid(city));
 			if(!g_theUnitPool->IsValid(city))
 				return;
-
-
-
-
-
-
-
-
-
-
-
 			break;
 		}
 		case NET_INFO_CODE_KILL_MESSAGE:
@@ -811,13 +781,6 @@ NetInfo::Unpacketize(uint16 id, uint8* buf, uint16 size)
 				g_network.SetMyTurn(TRUE);
 				g_network.UnitsMoved(-g_network.GetUnitMovesUsed());
 				g_turn->BeginNewSlice();
-
-
-
-
-
-
-
 			} else {
 				g_network.SetMyTurn(FALSE);
 			}

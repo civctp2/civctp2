@@ -6641,7 +6641,7 @@ SFN_ERROR Slic_OpenBuildQueue::Call(SlicArgList *args)
 	if(!args->GetCity(0, city))
 		return SFN_ERROR_TYPE_BUILTIN;
 
-	EditQueue::Display(city->GetCityData());
+	EditQueue::Display(city);
 	return SFN_ERROR_OK;
 }
 

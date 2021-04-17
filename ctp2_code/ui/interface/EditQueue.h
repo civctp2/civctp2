@@ -34,7 +34,6 @@
 #define EDIT_QUEUE_H__
 
 class ctp2_ListBox;
-class CityData;
 class ctp2_Window;
 class aui_Control;
 class ctp2_Static;
@@ -44,6 +43,8 @@ class UnitDynamicArray;
 class ctp2_TextField;
 class ctp2_Button;
 class ctp2_ListItem;
+class aui_Region;
+class SlicContext;
 
 #include "pointerlist.h"
 #include "Unit.h"
@@ -74,10 +75,10 @@ public:
 
 class EditQueueCityInfo {
 public:
-	EditQueueCityInfo(CityData *cd) {
-		m_cityData = cd;
+	EditQueueCityInfo(const Unit & city)
+	: m_city(city) {
 	}
-	CityData *m_cityData;
+	Unit m_city;
 };
 
 class EditQueue {
@@ -85,23 +86,21 @@ public:
 	EditQueue(AUI_ERRCODE * error);
 	~EditQueue();
 
-	static AUI_ERRCODE   Display(CityData * city);
-	static AUI_ERRCODE   Display(const UnitDynamicArray & cities);
-	static AUI_ERRCODE   Hide();
-	static EditQueue   * GetEditQueueWindow();
-	static AUI_ERRCODE   Cleanup();
+	static AUI_ERRCODE Display(const Unit & city);
+	static AUI_ERRCODE Display(const UnitDynamicArray & cities);
+	static AUI_ERRCODE Hide();
+	static AUI_ERRCODE Cleanup();
+
+	static void SelectCity(const Unit & city);
+	static void UpdateCity(const Unit & city);
+	static void NotifyCityCaptured(const Unit & city);
 
 	static void SaveQueryCallback(bool response, void * data);
-
-	CityData * GetCityData() const { return m_cityData; }
 
 	void InsertInQueue(EditItemInfo * info, bool insert, bool confirm = false, bool confirmSwitch = false);
 	void Down(bool confirmSwitch = false);
 	void Up(bool confirmSwitch = false);
 	void Remove(bool confirmSwitch = false);
-
-	static void NotifyCityCaptured(const Unit & unit);
-	static bool EditingCity(CityData * city);
 
 private:
 	static AUI_ERRCODE Initialize();
@@ -112,12 +111,13 @@ private:
 
 	static void ShowSelectedInfo();
 	static void ClearChoiceList(ctp2_ListBox * choiceList);
+	static bool EditingCity(const Unit & city);
 
 	static void Save(const MBCHAR * saveFileName);
 	static void LoadCustom(const MBCHAR * loadFileName);
 
 	static void SetMode(EDIT_QUEUE_MODE mode);
-	static void SetCity(CityData * city);
+	static void SetCity(const Unit & city);
 	static void SetMultiCities(const UnitDynamicArray & cities);
 
 	static sint32 CompareUnitItems(ctp2_ListItem * item1, ctp2_ListItem * item2, sint32 column);
@@ -162,6 +162,14 @@ private:
 
 	static void SaveNameResponse(bool response, const char * text, void * data);
 
+	static void SetItemDescription(
+			const IconRecord  * icon,
+			SlicContext       & context,
+			ctp2_Static       * imageBox,
+			ctp2_HyperTextBox * hyperTextBox,
+			aui_Region        * parent,
+			ctp2_Button       * imageButton);
+
 	ctp2_ListBox * GetVisibleItemList();
 
 	void DisplayQueueContents(const MBCHAR * queueName);
@@ -183,14 +191,13 @@ private:
 
 	void SelectChoiceList(ctp2_ListBox * list);
 
-	void RushBuy();
+	void RushBuy(bool pay = true);
 
 	bool IsItemInQueueList(uint32 category, sint32 type);
 
 	ctp2_Window       * m_window;
 	ctp2_ListBox      * m_unitList, * m_buildingList, * m_wonderList;
 	ctp2_ListBox      * m_queueList;
-	CityData          * m_cityData;
 	ctp2_Window       * m_attachedToWindow;
 	ctp2_Button       * m_itemImageButton;
 	ctp2_HyperTextBox * m_itemDescription;
@@ -235,6 +242,7 @@ private:
 
 	bool m_inCallback;
 	bool m_updating;
+	Unit m_city;
 	Unit m_oldCity;
 
 	sint32 m_itemCategory;

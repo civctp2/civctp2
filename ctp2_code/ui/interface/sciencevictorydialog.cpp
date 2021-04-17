@@ -24,7 +24,7 @@
 //
 // Modifications from the original Activision code:
 //
-// - Standardized code (May 29th 2006 Martin Gühmann)
+// - Standardized code (May 29th 2006 Martin GÃ¼hmann)
 //
 //----------------------------------------------------------------------------
 
@@ -542,7 +542,7 @@ void ScienceVictoryDialog::BuildButtonActionCallback(aui_Control *control,
 		Unit city = cityList->Get(cityIndex);
 
 		if(!city.HaveImprovement(GaiaController::GetMainframeBuildingIndex())) {
-			EditQueue::Display(CityWindow::GetCityData(city));
+			EditQueue::Display(city);
 			return;
 		}
 	}
@@ -553,14 +553,14 @@ void ScienceVictoryDialog::BuildButtonActionCallback(aui_Control *control,
 		Unit city = cityList->Get(cityIndex);
 
 		if(!city.HaveImprovement(GaiaController::GetSatelliteBuildingIndex())) {
-			EditQueue::Display(CityWindow::GetCityData(city));
+			EditQueue::Display(city);
 			return;
 		}
 	}
 
 
 	if(cityList->Num())
-		EditQueue::Display(CityWindow::GetCityData(cityList->Get(0)));
+		EditQueue::Display(cityList->Get(0));
 }
 
 void ScienceVictoryDialog::CloseButtonActionCallback(aui_Control *control,

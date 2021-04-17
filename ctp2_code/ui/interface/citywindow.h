@@ -25,8 +25,8 @@
 // Modifications from the original Activision code:
 //
 // - Added OptimizeSpecialists function for specialists optimisation option.
-//   - April 7th 2005 Martin Gühmann
-// - Added National Manager button and functions callback. - July 24th 2005 Martin Gühmann
+//   - April 7th 2005 Martin GÃ¼hmann
+// - Added National Manager button and functions callback. - July 24th 2005 Martin GÃ¼hmann
 // - Completely redesigned the window. Removed some CW_PANELS that are not used. (28-Mar-2009 Maq)
 //
 //----------------------------------------------------------------------------
@@ -42,12 +42,11 @@ class CityWindow;
 class InventoryItemInfo;
 
 #include "auitypes.h"           // AUI_ERRCODE
-#include "citydata.h"
 #include "ctp2_inttypes.h"      // sint32, uint32
 #include "gstypes.h"
+#include "Unit.h"
 
 class ctp2_Window;
-class CityData;
 class aui_Control;
 class ctp2_Spinner;
 class ctp2_ListBox;
@@ -89,12 +88,105 @@ enum {
 };
 
 class CityWindow {
-  private:
+public:
+	CityWindow(AUI_ERRCODE *err);
+	~CityWindow();
+
+	static AUI_ERRCODE Initialize();
+	static AUI_ERRCODE Cleanup();
+	static AUI_ERRCODE Display();
+	static AUI_ERRCODE Display(const Unit & city);
+	static AUI_ERRCODE Hide();
+
+	static void SelectCity(const Unit & city);
+	static void UpdateCity(const Unit & city);
+	static void NotifyCityCaptured(const Unit & city);
+	static void NotifyUnitChange();
+	static void NotifyBuildChange(const Unit & city);
+	static void Project(const Unit & city);
+
+	static void PopulateQueueList(const Unit & city, ctp2_ListBox * listBox, char * itemBlock);
+
+private:
+	static void Close(aui_Control *control, uint32 action, uint32 data, void *cookie);
+	static void NextCity(aui_Control *control, uint32 action, uint32 data, void *cookie);
+	static void PreviousCity(aui_Control *control, uint32 action, uint32 data, void *cookie);
+	static void Resource(aui_Control *control, uint32 action, uint32 data, void *cookie);
+	static void WorkerSpinnerCallback(aui_Control *control, uint32 action, uint32 data, void *cookie);
+	static void GovernorToggle(aui_Control *control, uint32 action, uint32 data, void *cookie);
+	static void GovernorPriority(aui_Control *control, uint32 action, uint32 data, void *cookie);
+	static void EditQueue(aui_Control *control, uint32 action, uint32 data, void *cookie);
+	static void OpenNationalManager(aui_Control *control, uint32 action, uint32 data, void *cookie);
+	static void BuildListSelect(aui_Control *control, uint32 action, uint32 data, void *cookie);
+	static void InventoryListSelect(aui_Control *control, uint32 action, uint32 data, void *cookie);
+	static void SelectCity(aui_Control *control, uint32 action, uint32 data, void *cookie);
+	static void Buy(aui_Control *control, uint32 action, uint32 data, void *cookie);
+	static void Sell(aui_Control *control, uint32 action, uint32 data, void *cookie);
+	static void CityList(aui_Control *control, uint32 action, uint32 data, void *cookie);
+	static void ShowStatistics(aui_Control *control, uint32 action, uint32 data, void *cookie);
+
+	static void BuildTabCallback(aui_Control *control, uint32 action, uint32 data, void *cookie);
+
+	static void OptimizeSpecialists(aui_Control *control, uint32 action, uint32 data, void *cookie);
+
+	static AUI_ERRCODE DrawGrowthBar(ctp2_Static *control,
+									 aui_Surface *surface,
+									 RECT &rect,
+									 void *cookie );
+	static AUI_ERRCODE DrawHappinessBar(ctp2_Static *control,
+										aui_Surface *surface,
+										RECT &rect,
+										void *cookie );
+	static AUI_ERRCODE DrawEfficiencyBar(ctp2_Static *control,
+									 aui_Surface *surface,
+									 RECT &rect,
+									 void *cookie );
+	static AUI_ERRCODE DrawResourceMap(ctp2_Static *control,
+									   aui_Surface *surface,
+									   RECT &rect,
+									   void *cookie );
+	static AUI_ERRCODE DrawBuildBar(ctp2_Static *control,
+									 aui_Surface *surface,
+									 RECT &rect,
+									 void *cookie );
+
+	void SetCity(const Unit & city);
+	void Update();
+	void UpdateBuildTabs();
+	void UpdateBuildTabButtons();
+	void UpdateCostsGives();
+	void UpdateResourceMap();
+	void UpdateAdviceText();
+	void UpdateUnitButtons();
+	void UpdateActivateButtons();
+
+	void Project();
+
+	static void SetItemIconOnly(const IconRecord *icon, SlicContext &sc, ctp2_Static *imageBox, aui_Region *parent,
+								   ctp2_Button *itemButton = NULL);
+
+	void FillHappinessList();
+	void FillPollutionList();
+	void FillStatsLists();
+
+	static AUI_ERRCODE DrawHappyIcons(ctp2_Static *control,
+									aui_Surface *surface,
+									RECT &rect,
+									void *cookie );
+	static AUI_ERRCODE DrawUnhappyIcons(ctp2_Static *control,
+									  aui_Surface *surface,
+									  RECT &rect,
+									  void *cookie );
+
+	static void UnitButtonCallback(aui_Control *control, uint32 action, uint32 data, void *cookie);
+	static void ActivateUnitCallback(aui_Control *control, uint32 action, uint32 data, void *cookie);
+	static void DisbandQuery(bool result, void *ud);
+	static void DisbandUnitCallback(aui_Control *control, uint32 action, uint32 data, void *cookie);
+
 	ctp2_Window *m_window;
 	ctp2_Window *m_statsWindow;
-	CityData *m_cityData;
-	PointerList<CityData> *m_cities;
-	bool m_updating;
+	Unit         m_city;
+	bool         m_updating;
 
 	ctp2_Spinner *m_popSpinners[POP_MAX];
 	ctp2_Static *m_resVal[CW_RES_MAX];
@@ -130,112 +222,6 @@ class CityWindow {
 	ctp2_Button *m_unitButtons[k_MAX_ARMY_SIZE];
 	ctp2_Button *m_activateButton;
 	ctp2_Button *m_disbandButton;
-
-  public:
-	CityWindow(AUI_ERRCODE *err);
-	~CityWindow();
-
-	static AUI_ERRCODE Initialize();
-	static AUI_ERRCODE Cleanup();
-	static AUI_ERRCODE Display(CityData *city);
-	static AUI_ERRCODE Hide();
-
-	static void CopyCitiesBack();
-
-	static void Close(aui_Control *control, uint32 action, uint32 data, void *cookie);
-	static void Cancel(aui_Control *control, uint32 action, uint32 data, void *cookie);
-	static void NextCity(aui_Control *control, uint32 action, uint32 data, void *cookie);
-	static void PreviousCity(aui_Control *control, uint32 action, uint32 data, void *cookie);
-	static void Resource(aui_Control *control, uint32 action, uint32 data, void *cookie);
-	static void WorkerSpinnerCallback(aui_Control *control, uint32 action, uint32 data, void *cookie);
-	static void GovernorToggle(aui_Control *control, uint32 action, uint32 data, void *cookie);
-	static void GovernorPriority(aui_Control *control, uint32 action, uint32 data, void *cookie);
-	static void ToggleQueueInventory(aui_Control *control, uint32 action, uint32 data, void *cookie);
-	static void EditQueue(aui_Control *control, uint32 action, uint32 data, void *cookie);
-	static void OpenNationalManager(aui_Control *control, uint32 action, uint32 data, void *cookie);
-	static void BuildListSelect(aui_Control *control, uint32 action, uint32 data, void *cookie);
-	static void InventoryListSelect(aui_Control *control, uint32 action, uint32 data, void *cookie);
-	static void SelectCity(aui_Control *control, uint32 action, uint32 data, void *cookie);
-	static void Buy(aui_Control *control, uint32 action, uint32 data, void *cookie);
-	static void Sell(aui_Control *control, uint32 action, uint32 data, void *cookie);
-	static void HyperLink(aui_Control *control, uint32 action, uint32 data, void *cookie);
-	static void CityList(aui_Control *control, uint32 action, uint32 data, void *cookie);
-	static void ShowStatistics(aui_Control *control, uint32 action, uint32 data, void *cookie);
-
-	static void BuildTabCallback(aui_Control *control, uint32 action, uint32 data, void *cookie);
-
-	static void OptimizeSpecialists(aui_Control *control, uint32 action, uint32 data, void *cookie);
-
-	static AUI_ERRCODE DrawGrowthBar(ctp2_Static *control,
-									 aui_Surface *surface,
-									 RECT &rect,
-									 void *cookie );
-	static AUI_ERRCODE DrawHappinessBar(ctp2_Static *control,
-										aui_Surface *surface,
-										RECT &rect,
-										void *cookie );
-	static AUI_ERRCODE DrawEfficiencyBar(ctp2_Static *control,
-									 aui_Surface *surface,
-									 RECT &rect,
-									 void *cookie );
-	static AUI_ERRCODE DrawResourceMap(ctp2_Static *control,
-									   aui_Surface *surface,
-									   RECT &rect,
-									   void *cookie );
-	static AUI_ERRCODE DrawBuildBar(ctp2_Static *control,
-									 aui_Surface *surface,
-									 RECT &rect,
-									 void *cookie );
-
-	static CityData *GetCityData(const Unit &city);
-	CityData * GetCityData() const { return m_cityData; };
-	void SetCity(CityData *city);
-	void Update();
-	void UpdateBuildTabs();
-	void UpdateBuildTabButtons();
-	void UpdateCostsGives();
-	void UpdateInfoBoxes();
-	void UpdateResourceMap();
-	void UpdateAdviceText();
-	void UpdateUnitButtons();
-	void UpdateActivateButtons();
-
-	static void NotifyUnitChange();
-	static void NotifyBuildChange(CityData *city);
-	static void NotifyCityCaptured(const Unit &c);
-
-	static void Project(CityData *cityData);
-
-	void Project();
-	void SetValueBox(MBCHAR *component, sint32 val);
-
-	static void PopulateQueueList(CityData *cd, ctp2_ListBox *lb, char *itemBlock);
-
-	static void SetItemDescription(const IconRecord *icon, SlicContext &sc, ctp2_Static *imageBox, ctp2_HyperTextBox *hyperTextBox, aui_Region *parent,
-								   ctp2_Button *itemButton = NULL);
-	static void SetItemIconOnly(const IconRecord *icon, SlicContext &sc, ctp2_Static *imageBox, aui_Region *parent,
-								   ctp2_Button *itemButton = NULL);
-
-	void FillHappinessList();
-	void FillPollutionList();
-	void FillStatsLists();
-
-	static AUI_ERRCODE DrawHappyIcons(ctp2_Static *control,
-									aui_Surface *surface,
-									RECT &rect,
-									void *cookie );
-	static AUI_ERRCODE DrawUnhappyIcons(ctp2_Static *control,
-									  aui_Surface *surface,
-									  RECT &rect,
-									  void *cookie );
-
-	static void DoneEditingQueue(CityData *cd);
-
-	static void UnitButtonCallback(aui_Control *control, uint32 action, uint32 data, void *cookie);
-	static void ActivateUnitCallback(aui_Control *control, uint32 action, uint32 data, void *cookie);
-	static void DisbandQuery(bool result, void *ud);
-	static void DisbandUnitCallback(aui_Control *control, uint32 action, uint32 data, void *cookie);
-	static CityWindow* GetCityWindow();
 };
 
 #endif

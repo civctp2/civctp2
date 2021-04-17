@@ -74,6 +74,7 @@
 #include "SlicContext.h"
 
 #include "ctp2_Static.h"
+#include "ctp2_hypertextbox.h"
 #include "player.h"
 #include "SelItem.h"
 
@@ -89,12 +90,16 @@
 #include "buildingutil.h"
 #include "wonderutil.h"
 #include "mapanalysis.h"
+#include "stringutils.h"
 
-static EditQueue *s_editQueue = NULL;
+#include "prjfile.h"
+extern ProjectFile * g_GreatLibPF;
 
-static MBCHAR *s_editQueueBlock = "BuildEditorWindow";
+static EditQueue * s_editQueue = NULL;
 
-extern C3UI *g_c3ui;
+static MBCHAR * s_editQueueBlock = "BuildEditorWindow";
+
+extern C3UI * g_c3ui;
 
 EditQueue::EditQueue(AUI_ERRCODE * error)
 {
@@ -189,6 +194,7 @@ EditQueue::EditQueue(AUI_ERRCODE * error)
 	aui_Ldl::SetActionFuncAndCookie(s_editQueueBlock, "SingleCityChooser.Next", NextCity, NULL);
 
 	m_rushBuyButton = (ctp2_Button *)aui_Ldl::GetObject(s_editQueueBlock, "RushBuyButton");
+	Assert(m_rushBuyButton);
 	m_rushBuyButton->SetActionFuncAndCookie(RushBuyCallback, NULL);
 	m_rushBuyCost = (ctp2_Static *)aui_Ldl::GetObject(s_editQueueBlock, "RushBuyCost");
 
@@ -244,7 +250,7 @@ EditQueue::EditQueue(AUI_ERRCODE * error)
 	m_attachedToWindow = NULL;
 
 	m_inCallback = false;
-	m_cityData = NULL;
+	m_city = 0;
 
 	m_updating = false;
 
@@ -283,7 +289,7 @@ AUI_ERRCODE EditQueue::Initialize()
 	return err;
 }
 
-AUI_ERRCODE EditQueue::Display(CityData * city)
+AUI_ERRCODE EditQueue::Display(const Unit & city)
 {
 	if(g_network.IsClient() && g_network.GetSensitiveUIBlocked()) {
 		return AUI_ERRCODE_OK;
@@ -347,20 +353,13 @@ AUI_ERRCODE EditQueue::Display()
 
 AUI_ERRCODE EditQueue::Hide()
 {
-	if(s_editQueue) {
-		if(s_editQueue->m_cityData)
-		{
-			CityData *cd = s_editQueue->m_cityData;
-			s_editQueue->m_cityData = NULL;
-			CityWindow::DoneEditingQueue(cd);
-		}
-
+	if(s_editQueue)
+	{
 		if(s_editQueue->m_multiCities.GetCount() > 0) {
 			PointerList<EditQueueCityInfo>::Walker walk(&s_editQueue->m_multiCities);
 
 			while(walk.IsValid()) {
 				EditQueueCityInfo *ci = walk.Remove();
-				CityWindow::DoneEditingQueue(ci->m_cityData);
 				delete ci;
 			}
 			s_editQueue->m_multiCities.DeleteAll();
@@ -384,6 +383,22 @@ AUI_ERRCODE EditQueue::Cleanup()
 	delete s_editQueue;
 	s_editQueue = NULL;
 	return AUI_ERRCODE_OK;
+}
+
+void EditQueue::SelectCity(const Unit & city)
+{
+	if (!s_editQueue || !s_editQueue->IsShown || EditingCity(city)) {
+		return;
+	}
+	SetCity(city);
+}
+
+void EditQueue::UpdateCity(const Unit & city)
+{
+	if (!s_editQueue || !s_editQueue->IsShown() || !EditingCity(city)) {
+		return;
+	}
+	s_editQueue->RushBuy(false);
 }
 
 bool EditQueue::IsShown()
@@ -645,6 +660,7 @@ void EditQueue::UpdateChoiceLists()
 		m_buildingList->BuildListStart();
 		m_wonderList->BuildListStart();
 
+		CityData * cityData = m_city.IsValid() ? m_city.GetCityData() : NULL;
 		ClearChoiceLists();
 
 		sint32 i;
@@ -654,14 +670,14 @@ void EditQueue::UpdateChoiceLists()
 
 			ctp2_ListBox *whichList = m_unitList;
 
-			if(m_cityData && !m_cityData->CanBuildUnit(i))
+			if(cityData && !cityData->CanBuildUnit(i))
 				continue;
 
 			if(m_mode == EDIT_QUEUE_MODE_MULTI) {
 				PointerList<EditQueueCityInfo>::Walker walk(&m_multiCities);
 				bool include = false;
 				while(walk.IsValid()) {
-					if(walk.GetObj()->m_cityData->CanBuildUnit(i)) {
+					if(walk.GetObj()->m_city.GetCityData()->CanBuildUnit(i)) {
 						include = true;
 						break;
 					}
@@ -693,7 +709,7 @@ void EditQueue::UpdateChoiceLists()
 							  new EditItemInfo(k_GAME_OBJ_TYPE_UNIT, i),
 							  -1,
 							  whichList);
-			} else if(!m_cityData) {
+			} else if(!cityData) {
 				if(rec->GetHasPopAndCanBuild()) continue;
 				if(rec->GetCantBuild()) continue;
 
@@ -701,11 +717,11 @@ void EditQueue::UpdateChoiceLists()
 							  new EditItemInfo(k_GAME_OBJ_TYPE_UNIT, i),
 							  -1,
 							  whichList);
-			} else if(m_cityData->CanBuildUnit(i)) {
+			} else if(cityData->CanBuildUnit(i)) {
 				prodRemaining = rec->GetShieldCost();
 				AddChoiceItem(buf,
 							  new EditItemInfo(k_GAME_OBJ_TYPE_UNIT, i),
-							  m_cityData->HowMuchLonger(prodRemaining),
+							  cityData->HowMuchLonger(prodRemaining),
 							  whichList);
 			}
 		}
@@ -728,7 +744,7 @@ void EditQueue::UpdateChoiceLists()
 				PointerList<EditQueueCityInfo>::Walker walk(&m_multiCities);
 				bool include = false;
 				while(walk.IsValid()) {
-					if(walk.GetObj()->m_cityData->CanBuildBuilding(i)) {
+					if(walk.GetObj()->m_city.GetCityData()->CanBuildBuilding(i)) {
 						include = true;
 						break;
 					}
@@ -741,7 +757,7 @@ void EditQueue::UpdateChoiceLists()
 							  -1,
 							  m_buildingList);
 			}
-			else if(!m_cityData)
+			else if(!cityData)
 			{
 				if(IsItemInQueueList(k_GAME_OBJ_TYPE_IMPROVEMENT, i))
 					continue;
@@ -751,21 +767,21 @@ void EditQueue::UpdateChoiceLists()
 							  -1,
 							  m_buildingList);
 			}
-			else if(m_cityData->CanBuildBuilding(i) &&
-				!m_cityData->GetBuildQueue()->IsItemInQueue(k_GAME_OBJ_TYPE_IMPROVEMENT, i))
+			else if(cityData->CanBuildBuilding(i) &&
+				!cityData->GetBuildQueue()->IsItemInQueue(k_GAME_OBJ_TYPE_IMPROVEMENT, i))
 			{
 				prodRemaining = buildingutil_Get(i, g_selected_item->GetVisiblePlayer())->GetProductionCost();
 				AddChoiceItem(g_theBuildingDB->Get(i)->GetNameText(),
 							  new EditItemInfo(k_GAME_OBJ_TYPE_IMPROVEMENT, i),
-							  m_cityData->HowMuchLonger(prodRemaining),
+							  cityData->HowMuchLonger(prodRemaining),
 							  m_buildingList);
 			}
 		}
 
 		if (g_player[g_selected_item->GetVisiblePlayer()]->CanBuildCapitalization()
-				|| (!m_cityData && m_mode == EDIT_QUEUE_MODE_CUSTOM))
+				|| (!cityData && m_mode == EDIT_QUEUE_MODE_CUSTOM))
 		{
-			if (m_cityData || m_mode == EDIT_QUEUE_MODE_MULTI
+			if (cityData || m_mode == EDIT_QUEUE_MODE_MULTI
 					|| !IsItemInQueueList(k_GAME_OBJ_TYPE_CAPITALIZATION, 0))
 			{
 				AddChoiceItem(g_theStringDB->GetNameStr("CAPITALIZATION"),
@@ -776,9 +792,9 @@ void EditQueue::UpdateChoiceLists()
 		}
 
 		if (g_player[g_selected_item->GetVisiblePlayer()]->CanBuildInfrastructure()
-				|| (!m_cityData && m_mode == EDIT_QUEUE_MODE_CUSTOM))
+				|| (!cityData && m_mode == EDIT_QUEUE_MODE_CUSTOM))
 		{
-			if (m_cityData || m_mode == EDIT_QUEUE_MODE_MULTI
+			if (cityData || m_mode == EDIT_QUEUE_MODE_MULTI
 					|| !IsItemInQueueList(k_GAME_OBJ_TYPE_INFRASTRUCTURE, 0))
 			{
 				AddChoiceItem(g_theStringDB->GetNameStr("INFRASTRUCTURE"),
@@ -805,7 +821,7 @@ void EditQueue::UpdateChoiceLists()
 				PointerList<EditQueueCityInfo>::Walker walk(&m_multiCities);
 				bool include = false;
 				while(walk.IsValid()) {
-					if(walk.GetObj()->m_cityData->CanBuildWonder(i)) {
+					if(walk.GetObj()->m_city.GetCityData()->CanBuildWonder(i)) {
 						include = true;
 						break;
 					}
@@ -817,19 +833,19 @@ void EditQueue::UpdateChoiceLists()
 							  new EditItemInfo(k_GAME_OBJ_TYPE_WONDER, i),
 							  -1,
 							  m_wonderList);
-			} else if(!m_cityData) {
+			} else if(!cityData) {
 				if(!IsItemInQueueList(k_GAME_OBJ_TYPE_WONDER, i)) {
 					AddChoiceItem(g_theWonderDB->Get(i)->GetNameText(),
 								  new EditItemInfo(k_GAME_OBJ_TYPE_WONDER, i),
 								  -1,
 								  m_wonderList);
 				}
-			} else if(m_cityData->CanBuildWonder(i) &&
-				!m_cityData->GetBuildQueue()->IsItemInQueue(k_GAME_OBJ_TYPE_WONDER, i)) {
+			} else if(cityData->CanBuildWonder(i) &&
+				!cityData->GetBuildQueue()->IsItemInQueue(k_GAME_OBJ_TYPE_WONDER, i)) {
 				prodRemaining = wonderutil_Get(i, g_selected_item->GetVisiblePlayer())->GetProductionCost();
 				AddChoiceItem(g_theWonderDB->Get(i)->GetNameText(),
 							  new EditItemInfo(k_GAME_OBJ_TYPE_WONDER, i),
-							  m_cityData->HowMuchLonger(prodRemaining),
+							  cityData->HowMuchLonger(prodRemaining),
 							  m_wonderList);
 			}
 		}
@@ -881,18 +897,18 @@ void EditQueue::UpdateFileLists()
 
 void EditQueue::UpdateQueueList()
 {
-	if(m_cityData) {
-		CityWindow::NotifyBuildChange(m_cityData);
+	if(m_city.IsValid()) {
+		CityWindow::NotifyBuildChange(m_city);
 
 		if(m_queueList) {
-			CityWindow::PopulateQueueList(m_cityData, m_queueList, "eq_QueueListItem");
+			CityWindow::PopulateQueueList(m_city, m_queueList, "eq_QueueListItem");
 		}
 	} else {
 		Assert(m_mode == EDIT_QUEUE_MODE_CUSTOM || m_mode == EDIT_QUEUE_MODE_MULTI);
 		if(m_mode == EDIT_QUEUE_MODE_MULTI) {
 			PointerList<EditQueueCityInfo>::Walker walk(&m_multiCities);
 			while(walk.IsValid()) {
-				CityWindow::NotifyBuildChange(walk.GetObj()->m_cityData);
+				CityWindow::NotifyBuildChange(walk.GetObj()->m_city);
 				walk.Next();
 			}
 		}
@@ -969,7 +985,7 @@ void EditQueue::UpdateCityLists()
 			item->SetUserData((void *)pl->m_all_cities->Access(i).m_id);
 			m_cityDropDown->AddItem(item);
 
-			if(m_cityData && pl->m_all_cities->Access(i).m_id == m_cityData->GetHomeCity().m_id)
+			if(m_city.IsValid() && pl->m_all_cities->Access(i) == m_city)
 				viewingIndex = i;
 		}
 		m_cityDropDown->BuildListEnd();
@@ -989,8 +1005,8 @@ void EditQueue::UpdateCityLists()
 			if(!item) break;
 
 			ctp2_Static *label = (ctp2_Static *)item->GetChildByIndex(0);
-			label->SetText(walk.GetObj()->m_cityData->GetName());
-			item->SetUserData((void *)walk.GetObj()->m_cityData->GetHomeCity().m_id);
+			label->SetText(walk.GetObj()->m_city.GetCityData()->GetName());
+			item->SetUserData((void *)walk.GetObj()->m_city.m_id);
 
 			m_multiCityList->AddItem(item);
 			walk.Next();
@@ -1017,31 +1033,37 @@ void EditQueue::UpdateCityLists()
 //----------------------------------------------------------------------------
 void EditQueue::UpdateButtons()
 {
-	ctp2_ListBox *visList = GetVisibleItemList();
+	CityData * cityData = m_city.IsValid() ? m_city.GetCityData() : NULL;
+	ctp2_ListBox * visibleList = GetVisibleItemList();
+	bool alreadyBoughtFront = cityData && cityData->AlreadyBoughtFront();
 
-	if(!m_queueList->GetSelectedItem()) {
+	if (!m_queueList->GetSelectedItem())
+	{
 		m_upButton->Enable(FALSE);
 		m_downButton->Enable(FALSE);
 		m_removeButton->Enable(FALSE);
 		m_rushBuyButton->Enable(FALSE);
 		m_rushBuyCost->SetText("---");
 		m_insertButton->Enable(FALSE);
-	} else {
-		if(m_queueList->GetSelectedItemIndex() == 0 && m_cityData && m_cityData->AlreadyBoughtFront()) {
+	}
+	else
+	{
+		if (m_queueList->GetSelectedItemIndex() == 0 && alreadyBoughtFront) {
 			m_removeButton->Enable(FALSE);
 		} else {
 			m_removeButton->Enable(TRUE);
 		}
 
-		if(visList && visList->GetSelectedItem() &&
-		   (!m_cityData ||
-			((m_queueList->GetSelectedItemIndex() != 0) || (!m_cityData->AlreadyBoughtFront())))) {
+		if (visibleList && visibleList->GetSelectedItem() &&
+		   (!cityData ||
+			((m_queueList->GetSelectedItemIndex() != 0) || !alreadyBoughtFront))) {
 			m_insertButton->Enable(TRUE);
 		} else {
 			m_insertButton->Enable(FALSE);
 		}
-		if(m_queueList->GetSelectedItemIndex() == 0 ||
-		   (m_queueList->GetSelectedItemIndex() == 1 && m_cityData && m_cityData->AlreadyBoughtFront())) {
+		if (m_queueList->GetSelectedItemIndex() == 0 ||
+			(m_queueList->GetSelectedItemIndex() == 1 && alreadyBoughtFront))
+		{
 			m_upButton->Enable(FALSE);
 		} else {
 			m_upButton->Enable(TRUE);
@@ -1050,14 +1072,14 @@ void EditQueue::UpdateButtons()
 		// Added by Martin Gühmann to disable the rush-buy button and rush
 		// buy costs if the first item is capitalization or infrastructure
 
-		if (m_cityData && (m_queueList->GetSelectedItemIndex() == 0))
+		if (cityData && (m_queueList->GetSelectedItemIndex() == 0))
 		{
-			sint32 const	cost	= m_cityData->GetOvertimeCost();
+			sint32 const	cost	= cityData->GetOvertimeCost();
 
 			if ((cost <= 0)								||	// switched with overproduction
-			    m_cityData->AlreadyBoughtFront()		||	// already rush-buying
-			    m_cityData->IsBuildingCapitalization()	||	// building capitalisation
-			    m_cityData->IsBuildingInfrastructure()	    // building infrastructure
+			    cityData->AlreadyBoughtFront()		||	// already rush-buying
+			    cityData->IsBuildingCapitalization()	||	// building capitalisation
+			    cityData->IsBuildingInfrastructure()	    // building infrastructure
 			   )
 			{
 				m_rushBuyCost->SetText("---");
@@ -1081,31 +1103,34 @@ void EditQueue::UpdateButtons()
 		}
 
 		if(m_queueList->GetSelectedItemIndex() == m_queueList->NumItems() - 1 ||
-		   (m_queueList->GetSelectedItemIndex() == 0 && m_cityData && m_cityData->AlreadyBoughtFront())) {
+		   (m_queueList->GetSelectedItemIndex() == 0 && alreadyBoughtFront)) {
 			m_downButton->Enable(FALSE);
 		} else {
 			m_downButton->Enable(TRUE);
 		}
 	}
 
-	m_addButton->Enable(visList && visList->GetSelectedItem());
-	m_clearButton->Enable(m_queueList->NumItems() > 0);
+	m_addButton->Enable(visibleList && visibleList->GetSelectedItem());
+	m_clearButton->Enable(m_queueList->NumItems() > 0 && !(m_queueList->NumItems() == 1 && alreadyBoughtFront));
 }
 
-bool EditQueue::EditingCity(CityData * city)
+bool EditQueue::EditingCity(const Unit & city)
 {
-	if(!s_editQueue) return false;
-
-	if(s_editQueue->m_mode == EDIT_QUEUE_MODE_CUSTOM)
+	if (!s_editQueue || s_editQueue->m_mode == EDIT_QUEUE_MODE_CUSTOM) {
 		return false;
+	}
 
-	if(s_editQueue->m_cityData && s_editQueue->m_cityData->GetHomeCity().m_id == city->GetHomeCity().m_id)
+	if(s_editQueue->m_city == city) {
 		return true;
-	else {
+	}
+	else
+	{
 		PointerList<EditQueueCityInfo>::Walker walk(&s_editQueue->m_multiCities);
-		while(walk.IsValid()) {
-			if(walk.GetObj()->m_cityData->GetHomeCity().m_id == city->GetHomeCity().m_id)
+		while(walk.IsValid())
+		{
+			if(walk.GetObj()->m_city == city) {
 				return true;
+			}
 			walk.Next();
 		}
 	}
@@ -1118,11 +1143,7 @@ void EditQueue::SetMode(EDIT_QUEUE_MODE mode)
 
 	s_editQueue->m_oldMode = s_editQueue->m_mode;
 	Unit oldCity(s_editQueue->m_oldCity);
-	if(s_editQueue->m_cityData) {
-		s_editQueue->m_oldCity.m_id = s_editQueue->m_cityData->GetHomeCity().m_id;
-	} else {
-		s_editQueue->m_oldCity.m_id = 0;
-	}
+	s_editQueue->m_oldCity = s_editQueue->m_city;
 
 	s_editQueue->m_mode = mode;
 
@@ -1139,7 +1160,7 @@ void EditQueue::SetMode(EDIT_QUEUE_MODE mode)
 			s_editQueue->m_multiButtonGroup->Hide();
 			s_editQueue->m_gotoCityButton->Enable(TRUE);
 			if(s_editQueue->m_oldMode == EDIT_QUEUE_MODE_CUSTOM && oldCity.IsValid()) {
-				s_editQueue->m_cityData = CityWindow::GetCityData(oldCity);
+				s_editQueue->m_city = oldCity;
 			}
 			break;
 		case EDIT_QUEUE_MODE_MULTI:
@@ -1153,7 +1174,7 @@ void EditQueue::SetMode(EDIT_QUEUE_MODE mode)
 			s_editQueue->m_singleCityChooser->Hide();
 			s_editQueue->m_multiButtonGroup->Show();
 			s_editQueue->m_gotoCityButton->Enable(FALSE);
-			s_editQueue->m_cityData = NULL;
+			s_editQueue->m_city = 0;
 			s_editQueue->m_customBuildList.DeleteAll();
 			break;
 		case EDIT_QUEUE_MODE_CUSTOM:
@@ -1166,7 +1187,7 @@ void EditQueue::SetMode(EDIT_QUEUE_MODE mode)
 			s_editQueue->m_multiCityList->Hide();
 			s_editQueue->m_singleCityChooser->Hide();
 			s_editQueue->m_gotoCityButton->Enable(FALSE);
-			s_editQueue->m_cityData = NULL;
+			s_editQueue->m_city = 0;
 			s_editQueue->m_customBuildList.DeleteAll();
 			s_editQueue->m_multiButtonGroup->Hide();
 			break;
@@ -1177,11 +1198,11 @@ void EditQueue::SetMode(EDIT_QUEUE_MODE mode)
 	s_editQueue->Update();
 }
 
-void EditQueue::SetCity(CityData *city)
+void EditQueue::SetCity(const Unit & city)
 {
 	if(!s_editQueue) return;
 
-	s_editQueue->m_cityData = city;
+	s_editQueue->m_city = city;
 	SetMode(EDIT_QUEUE_MODE_SINGLE);
 	s_editQueue->Update();
 	if (s_editQueue->m_queueList->NumItems() > 0) {
@@ -1190,8 +1211,9 @@ void EditQueue::SetCity(CityData *city)
 		ShowSelectedInfo();
 	}
 
-	if(city && city->GetHomeCity().IsValid()) {
-		g_selected_item->SetSelectCity(city->GetHomeCity());
+	Unit currentCity;
+	if(city.IsValid() && (!g_selected_item->GetSelectedCity(currentCity) || currentCity != city)) {
+		g_selected_item->SetSelectCity(city);
 	}
 }
 
@@ -1201,7 +1223,7 @@ void EditQueue::SetMultiCities(const UnitDynamicArray &cities)
 	SetMode(EDIT_QUEUE_MODE_MULTI);
 	s_editQueue->m_multiCities.DeleteAll();
 	for(i = 0; i < cities.Num(); i++) {
-		s_editQueue->m_multiCities.AddTail(new EditQueueCityInfo(CityWindow::GetCityData(cities[i])));
+		s_editQueue->m_multiCities.AddTail(new EditQueueCityInfo(cities[i]));
 	}
 	s_editQueue->Update();
 }
@@ -1274,7 +1296,7 @@ void EditQueue::InsertInQueue(EditItemInfo *info, bool insert, bool confirmed, b
 	   buildingutil_Get(info->m_type, g_selected_item->GetVisiblePlayer())->GetCapitol() &&
 		g_player[g_selected_item->GetVisiblePlayer()]->m_capitol &&
 		g_player[g_selected_item->GetVisiblePlayer()]->m_capitol->IsValid() &&
-		m_cityData)
+		m_city.IsValid())
 	{
 		static CapitolConfirmData data;
 		data.info = info;
@@ -1303,13 +1325,14 @@ void EditQueue::InsertInQueue(EditItemInfo *info, bool insert, bool confirmed, b
 		insIndex = -1;
 	}
 
-	if(m_cityData)// Editing a single queue?
+	CityData * cityData = m_city.IsValid() ? m_city.GetCityData() : NULL;
+	if(cityData)// Editing a single queue?
 	{
 		if (insIndex == 0)// Inserting to replace top queue item.
 		{                 // Queues must have at least one item selected to "insert",
 			              // so we know we can get the head.
-			if (info->m_category != m_cityData->GetBuildQueue()->GetHead()->m_category
-				&& m_cityData->GetStoredCityProduction() > 0)
+			if (info->m_category != cityData->GetBuildQueue()->GetHead()->m_category
+				&& cityData->GetStoredCityProduction() > 0)
 			{
 				if(!confirmedSwitch)
 				{
@@ -1326,14 +1349,14 @@ void EditQueue::InsertInQueue(EditItemInfo *info, bool insert, bool confirmed, b
 											ConfirmSwitchProduction, &data);
 					return;
 				}
-				m_cityData->CheckSwitchProductionPenalty(info->m_category);
+				cityData->CheckSwitchProductionPenalty(info->m_category);
 			}
 		}
 		else if (insIndex == -1 && m_queueList->NumItems() == 0)// Adding, and no items in queue, so adding to top.
 		{// This is also for when the "suggest" button is used and the queue is empty.
-			if (info->m_category != m_cityData->GetBuildCategoryAtBeginTurn()
-				&& m_cityData->GetStoredCityProduction() > 0
-				&& m_cityData->GetBuildCategoryAtBeginTurn() != -5)// -5 is the no penalty type.
+			if (info->m_category != cityData->GetBuildCategoryAtBeginTurn()
+				&& cityData->GetStoredCityProduction() > 0
+				&& cityData->GetBuildCategoryAtBeginTurn() != -5)// -5 is the no penalty type.
 			{
 				if(!confirmedSwitch)
 				{
@@ -1351,12 +1374,12 @@ void EditQueue::InsertInQueue(EditItemInfo *info, bool insert, bool confirmed, b
 					return;
 				}
 
-				m_cityData->CheckSwitchProductionPenalty(info->m_category);
+				cityData->CheckSwitchProductionPenalty(info->m_category);
 			}
 		}
 
 		// Item is actually replaced here:
-		m_cityData->InsertBuildItem(insIndex, info->m_category, info->m_type);
+		cityData->InsertBuildItem(insIndex, info->m_category, info->m_type);
 	}
 	else// Editing a custom queue or multiple city queues?
 	{
@@ -1444,14 +1467,15 @@ void EditQueue::Suggest(bool insert)
 	if(!item)
 		return;
 
-	if(m_cityData)
+	CityData * cityData = m_city.IsValid() ? m_city.GetCityData() : NULL;
+	if(cityData)
 	{
-		MapAnalysis::GetMapAnalysis().RecalcCityRanks(m_cityData->GetOwner());
+		MapAnalysis::GetMapAnalysis().RecalcCityRanks(cityData->GetOwner());
 
 		sint32  cat         = 0;
 		sint32  type        = CTPRecord::INDEX_INVALID;
 		Governor::GetGovernor(g_selected_item->GetVisiblePlayer()).ComputeDesiredUnits();
-		Governor::GetGovernor(g_selected_item->GetVisiblePlayer()).ComputeNextBuildItem(m_cityData, cat, type);
+		Governor::GetGovernor(g_selected_item->GetVisiblePlayer()).ComputeNextBuildItem(cityData, cat, type);
 
 		EditItemInfo *info = new EditItemInfo(cat, type);
 		Assert(info);
@@ -1482,16 +1506,17 @@ void EditQueue::Remove(bool confirmedSwitch)
 	sint32 buildIndex = m_queueList->GetSelectedItemIndex();
 	if(buildIndex >= 0)
 	{
-		if(m_cityData)
+		CityData * cityData = m_city.IsValid() ? m_city.GetCityData() : NULL;
+		if(cityData)
 		{
 			if (buildIndex == 0// Removing the top item so 2nd item may move up if there is one.
 				&& m_queueList->NumItems() >= 2)
 			{
-				BuildNode *node = m_cityData->GetBuildQueue()->GetNodeByIndex(1);// Get 2nd item.
+				BuildNode *node = cityData->GetBuildQueue()->GetNodeByIndex(1);// Get 2nd item.
 				Assert(node);
 
-				if (node->m_category != m_cityData->GetBuildQueue()->GetHead()->m_category
-					&& m_cityData->GetStoredCityProduction() > 0)
+				if (node->m_category != cityData->GetBuildQueue()->GetHead()->m_category
+					&& cityData->GetStoredCityProduction() > 0)
 				{
 					if(!confirmedSwitch)
 					{
@@ -1506,11 +1531,11 @@ void EditQueue::Remove(bool confirmedSwitch)
 					}
 
 					if(node)
-						m_cityData->CheckSwitchProductionPenalty(node->m_category);
+						cityData->CheckSwitchProductionPenalty(node->m_category);
 				}
 			}
 
-			m_cityData->GetBuildQueue()->RemoveNodeByIndex(buildIndex, CAUSE_REMOVE_BUILD_ITEM_MANUAL);
+			cityData->GetBuildQueue()->RemoveNodeByIndex(buildIndex, CAUSE_REMOVE_BUILD_ITEM_MANUAL);
 		}
 		else
 		{
@@ -1559,15 +1584,16 @@ void EditQueue::Up(bool confirmedSwitch)
 	sint32 selectedIndex = m_queueList->GetSelectedItemIndex();
 	if(selectedIndex > 0)
 	{
-		if(m_cityData)
+		CityData * cityData = m_city.IsValid() ? m_city.GetCityData() : NULL;
+		if(cityData)
 		{
 			if (selectedIndex == 1)// If the 2nd item will be moved up to replace the top item.
 			{
-				BuildNode *node = m_cityData->GetBuildQueue()->GetNodeByIndex(1);// Get 2nd item.
+				BuildNode *node = cityData->GetBuildQueue()->GetNodeByIndex(1);// Get 2nd item.
 				Assert(node);
 
-				if (node->m_category != m_cityData->GetBuildQueue()->GetHead()->m_category
-					&& m_cityData->GetStoredCityProduction() > 0)
+				if (node->m_category != cityData->GetBuildQueue()->GetHead()->m_category
+					&& cityData->GetStoredCityProduction() > 0)
 				{
 					if(!confirmedSwitch)
 					{
@@ -1582,11 +1608,11 @@ void EditQueue::Up(bool confirmedSwitch)
 					}
 
 					if(node)
-						m_cityData->CheckSwitchProductionPenalty(node->m_category);
+						cityData->CheckSwitchProductionPenalty(node->m_category);
 				}
 			}
 
-			m_cityData->GetBuildQueue()->MoveNodeUp(selectedIndex);
+			cityData->GetBuildQueue()->MoveNodeUp(selectedIndex);
 		}
 		else
 		{
@@ -1635,15 +1661,16 @@ void EditQueue::Down(bool confirmedSwitch)
 
 	sint32 selectedIndex = m_queueList->GetSelectedItemIndex();
 	if(selectedIndex >= 0 && selectedIndex < m_queueList->NumItems() - 1) {
-		if(m_cityData)
+		CityData * cityData = m_city.IsValid() ? m_city.GetCityData() : NULL;
+		if(cityData)
 		{
 			if (selectedIndex == 0)// The top item will be moved down to get replaced by 2nd item.
 			{
-				BuildNode *node = m_cityData->GetBuildQueue()->GetNodeByIndex(1);// Get 2nd item.
+				BuildNode *node = cityData->GetBuildQueue()->GetNodeByIndex(1);// Get 2nd item.
 				Assert(node);
 
-				if (node->m_category != m_cityData->GetBuildQueue()->GetHead()->m_category
-					&& m_cityData->GetStoredCityProduction() > 0)
+				if (node->m_category != cityData->GetBuildQueue()->GetHead()->m_category
+					&& cityData->GetStoredCityProduction() > 0)
 				{
 					if(!confirmedSwitch)
 					{
@@ -1658,11 +1685,11 @@ void EditQueue::Down(bool confirmedSwitch)
 					}
 
 					if(node)
-						m_cityData->CheckSwitchProductionPenalty(node->m_category);
+						cityData->CheckSwitchProductionPenalty(node->m_category);
 				}
 			}
 
-			m_cityData->GetBuildQueue()->MoveNodeDown(selectedIndex);
+			cityData->GetBuildQueue()->MoveNodeDown(selectedIndex);
 
 		} else {
 			Assert(m_mode == EDIT_QUEUE_MODE_CUSTOM || m_mode == EDIT_QUEUE_MODE_MULTI);
@@ -1805,9 +1832,10 @@ void EditQueue::ShowSelectedInfo()
 	ctp2_ListItem * item = (ctp2_ListItem *) s_editQueue->m_queueList->GetSelectedItem();
 	if (item)
 	{
-		if (s_editQueue->m_cityData)
+		CityData * cityData = s_editQueue->m_city.IsValid() ? s_editQueue->m_city.GetCityData() : NULL;
+		if (cityData)
 		{
-			BuildNode *buildNode = s_editQueue->m_cityData->GetBuildQueue()->GetNodeByIndex(
+			BuildNode *buildNode = cityData->GetBuildQueue()->GetNodeByIndex(
 					s_editQueue->m_queueList->GetSelectedItemIndex());
 			if (buildNode)
 			{
@@ -1875,7 +1903,7 @@ void EditQueue::ShowSelectedInfo()
 				break;
 		}
 	}
-	CityWindow::SetItemDescription(icon, context, NULL, s_editQueue->m_itemDescription, s_editQueue->m_window,
+	SetItemDescription(icon, context, NULL, s_editQueue->m_itemDescription, s_editQueue->m_window,
 			s_editQueue->m_itemImageButton);
 	s_editQueue->m_libraryButton->Enable(s_editQueue->m_itemCategory != -1 && s_editQueue->m_itemType != -1);
 }
@@ -1940,11 +1968,10 @@ void EditQueue::CityDropDown(aui_Control *control, uint32 action, uint32 data, v
 		ctp2_ListItem *item = (ctp2_ListItem *)s_editQueue->m_cityDropDown->GetListBox()->GetItemByIndex(
 				s_editQueue->m_cityDropDown->GetSelectedItem());
 		Assert(item);
-		if(item) {
+		if (item) {
 			Unit city((uint32)item->GetUserData());
-			CityData *cd = CityWindow::GetCityData(city);
-			if(cd != s_editQueue->m_cityData) {
-				SetCity(cd);
+			if(!s_editQueue->EditingCity(city)) {
+				SetCity(city);
 			}
 		}
 	}
@@ -1967,9 +1994,7 @@ void EditQueue::PreviousCity(aui_Control *control, uint32 action, uint32 data, v
 	Assert(item);
 	if(!item) return;
 
-	static Unit city;
-	city.m_id = (uint32)item->GetUserData();
-	SetCity(CityWindow::GetCityData(city));
+	SetCity((uint32)item->GetUserData());
 }
 
 void EditQueue::NextCity(aui_Control *control, uint32 action, uint32 data, void *cookie)
@@ -1987,9 +2012,7 @@ void EditQueue::NextCity(aui_Control *control, uint32 action, uint32 data, void 
 	Assert(item);
 	if(!item) return;
 
-	static Unit city;
-	city.m_id = (uint32)item->GetUserData();
-	SetCity(CityWindow::GetCityData(city));
+	SetCity((uint32)item->GetUserData());
 }
 
 void EditQueue::CustomButton(aui_Control *control, uint32 action, uint32 data, void *cookie)
@@ -2013,15 +2036,20 @@ void EditQueue::ClearMessageCallback(bool response, void * data)
 {
 	Assert(s_editQueue);
 	if(!s_editQueue) return;
-	if(!s_editQueue->m_cityData) return;
+	if(!s_editQueue->m_city.IsValid()) return;
 
 	if(response) {
-		if(s_editQueue->m_cityData->AlreadyBoughtFront()) {
-			s_editQueue->m_cityData->GetBuildQueue()->ClearAllButHead();
+		CityData * cityData = s_editQueue->m_city.GetCityData();
+		if(cityData->AlreadyBoughtFront()) {
+			cityData->GetBuildQueue()->ClearAllButHead();
 		} else {
-			s_editQueue->m_cityData->GetBuildQueue()->Clear();
+			cityData->GetBuildQueue()->Clear();
 		}
 		s_editQueue->Update();
+		// In case already bought front, select bought front item
+		if (s_editQueue->m_queueList->NumItems() > 0) {
+			s_editQueue->m_queueList->SelectItem(0);
+		}
 	}
 }
 
@@ -2030,7 +2058,7 @@ void EditQueue::ClearButton(aui_Control *control, uint32 action, uint32 data, vo
 	if(action != AUI_BUTTON_ACTION_EXECUTE) return;
 	if(!s_editQueue) return;
 
-	if(s_editQueue->m_cityData) {
+	if(s_editQueue->m_city.IsValid()) {
 		MessageBoxDialog::Query(g_theStringDB->GetNameStr("str_ldl_ClearQueueQuery"),
 								"QueryClearQueue",
 								EditQueue::ClearMessageCallback);
@@ -2067,7 +2095,8 @@ void EditQueue::MultiActionButton(aui_Control *control, uint32 action, uint32 da
 
 	PointerList<EditQueueCityInfo>::Walker walk(&s_editQueue->m_multiCities);
 	while(walk.IsValid()) {
-		BuildQueue *bq = walk.GetObj()->m_cityData->GetBuildQueue();
+		CityData * walkCityData = walk.GetObj()->m_city.GetCityData();
+		BuildQueue *bq = walkCityData->GetBuildQueue();
 
 		if(eqAction == EDIT_QUEUE_MULTI_ACTION_OVERWRITE_CONFIRMED) {
 			bq->Clear();
@@ -2091,15 +2120,15 @@ void EditQueue::MultiActionButton(aui_Control *control, uint32 action, uint32 da
 		for(; itemWalk.IsValid(); itemWalk.Next()) {
 			switch(itemWalk.GetObj()->m_category) {
 				case k_GAME_OBJ_TYPE_UNIT:
-					if(!walk.GetObj()->m_cityData->CanBuildUnit(itemWalk.GetObj()->m_type))
+					if(!walkCityData->CanBuildUnit(itemWalk.GetObj()->m_type))
 						continue;
 					break;
 				case k_GAME_OBJ_TYPE_IMPROVEMENT:
-					if(!walk.GetObj()->m_cityData->CanBuildBuilding(itemWalk.GetObj()->m_type))
+					if(!walkCityData->CanBuildBuilding(itemWalk.GetObj()->m_type))
 						continue;
 					break;
 				case k_GAME_OBJ_TYPE_WONDER:
-					if(!walk.GetObj()->m_cityData->CanBuildWonder(itemWalk.GetObj()->m_type))
+					if(!walkCityData->CanBuildWonder(itemWalk.GetObj()->m_type))
 						continue;
 					break;
 				case k_GAME_OBJ_TYPE_INFRASTRUCTURE:
@@ -2114,16 +2143,15 @@ void EditQueue::MultiActionButton(aui_Control *control, uint32 action, uint32 da
 			// Check first item only.
 			if (insIndex == 0) {
 				if (itemWalk.GetObj()->m_category
-					!= walk.GetObj()->m_cityData->GetBuildCategoryAtBeginTurn()
-					&& walk.GetObj()->m_cityData->GetStoredCityProduction() > 0
-					&& walk.GetObj()->m_cityData->GetBuildCategoryAtBeginTurn() != -5)// -5 is the no penalty type.
+					!= walkCityData->GetBuildCategoryAtBeginTurn()
+					&& walkCityData->GetStoredCityProduction() > 0
+					&& walkCityData->GetBuildCategoryAtBeginTurn() != -5)// -5 is the no penalty type.
 				{
-					walk.GetObj()->m_cityData->CheckSwitchProductionPenalty(itemWalk.GetObj()->m_category);
+					walkCityData->CheckSwitchProductionPenalty(itemWalk.GetObj()->m_category);
 				}
 			}
 
-			walk.GetObj()->m_cityData->InsertBuildItem(insIndex++, itemWalk.GetObj()->m_category,
-													   itemWalk.GetObj()->m_type);
+			walkCityData->InsertBuildItem(insIndex++, itemWalk.GetObj()->m_category, itemWalk.GetObj()->m_type);
 		}
 		walk.Next();
 	}
@@ -2141,8 +2169,8 @@ void EditQueue::SaveQueryCallback(bool response, void * data)
 
 void EditQueue::Save(const MBCHAR *saveFileName)
 {
-	if(s_editQueue->m_cityData) {
-		s_editQueue->m_cityData->SaveQueue(saveFileName);
+	if(s_editQueue->m_city.IsValid()) {
+		s_editQueue->m_city.GetCityData()->SaveQueue(saveFileName);
 	} else {
 		FILE * saveFile = c3files_fopen(C3DIR_DIRECT, saveFileName, "w");
 		Assert(saveFile);
@@ -2183,11 +2211,11 @@ void EditQueue::LoadCallback(aui_Control *control, uint32 action, uint32 data, v
 	if(!loadName)
 		return;
 
-	if(s_editQueue->m_cityData) {
+	if(s_editQueue->m_city.IsValid()) {
 		MBCHAR buf[k_MAX_NAME_LEN];
 		const MBCHAR *fmt = g_theStringDB->GetNameStr("str_ldl_EditQueueReallyLoad");
 		if(!fmt) fmt = "Load queue %s, for city %s?";
-		sprintf(buf, fmt, loadName, s_editQueue->m_cityData->GetName());
+		sprintf(buf, fmt, loadName, s_editQueue->m_city.GetCityData()->GetName());
 
 		MessageBoxDialog::Query(buf, "QueryLoadQueue", LoadQueryCallback, (void *)loadName);
 	} else if(s_editQueue->m_mode == EDIT_QUEUE_MODE_MULTI) {
@@ -2216,13 +2244,13 @@ void EditQueue::LoadQueryCallback(bool response, void * data)
 	strcat(loadFileName, FILE_SEP);
 	strcat(loadFileName, loadName);
 
-	if(s_editQueue->m_cityData) {
-		s_editQueue->m_cityData->LoadQueue(loadFileName);
+	if(s_editQueue->m_city.IsValid()) {
+		s_editQueue->m_city.GetCityData()->LoadQueue(loadFileName);
 	} else {
 		Assert(s_editQueue->m_mode == EDIT_QUEUE_MODE_MULTI);
 		PointerList<EditQueueCityInfo>::Walker walk(&s_editQueue->m_multiCities);
 		while(walk.IsValid()) {
-			walk.GetObj()->m_cityData->LoadQueue(loadFileName);
+			walk.GetObj()->m_city.GetCityData()->LoadQueue(loadFileName);
 			walk.Next();
 		}
 	}
@@ -2487,7 +2515,7 @@ void EditQueue::SelectChoiceList(ctp2_ListBox * list)
 	UpdateButtons();
 }
 
-void EditQueue::RushBuy()
+void EditQueue::RushBuy(bool pay)
 {
 	if(!m_queueList) return;
 
@@ -2495,20 +2523,28 @@ void EditQueue::RushBuy()
 
 	if(m_queueList->GetSelectedItemIndex() != 0) return;
 
-	if(!m_cityData) return;
+	if(!m_city.IsValid()) return;
 
-	m_cityData->AddBuyFront();
+	if (pay) {
+		m_city.GetCityData()->AddBuyFront();
+	}
 	m_rushBuyButton->Enable(FALSE);
 	m_rushBuyCost->SetText("---");
 	UpdateQueueList();
+	m_queueList->SelectItem(0);
 }
 
 void EditQueue::RushBuyCallback(aui_Control *control, uint32 action, uint32 data, void *cookie)
 {
-	if(action != AUI_BUTTON_ACTION_EXECUTE) return;
+	if (action != AUI_BUTTON_ACTION_EXECUTE) {
+		return;
+	}
+	if (!s_editQueue || !s_editQueue->m_city.IsValid()) {
+		return;
+	}
 
-	if(!s_editQueue) return;
 	s_editQueue->RushBuy();
+	NationalManagementDialog::UpdateCity(s_editQueue->m_city);
 }
 
 void EditQueue::QueueListCallback(aui_Control *control, uint32 action, uint32 data, void *cookie)
@@ -2521,7 +2557,7 @@ void EditQueue::QueueListCallback(aui_Control *control, uint32 action, uint32 da
 	if(s_editQueue->m_inCallback) return;
 
 	if(action == AUI_LISTBOX_ACTION_DOUBLECLICKSELECT) {
-		if(data == 0 && s_editQueue->m_cityData && s_editQueue->m_cityData->AlreadyBoughtFront()) {
+		if(data == 0 && s_editQueue->m_city.IsValid() && s_editQueue->m_city.GetCityData()->AlreadyBoughtFront()) {
 
 		} else {
 			s_editQueue->Remove();
@@ -2537,9 +2573,9 @@ void EditQueue::GotoCity(aui_Control *control, uint32 action, uint32 data, void 
 	if(action != AUI_BUTTON_ACTION_EXECUTE) return;
 
 	if(!s_editQueue) return;
-	if(!s_editQueue->m_cityData) return;
+	if(!s_editQueue->m_city.IsValid()) return;
 
-	CityWindow::Display(s_editQueue->m_cityData);
+	CityWindow::Display(s_editQueue->m_city);
 }
 
 //----------------------------------------------------------------------------
@@ -2653,7 +2689,7 @@ bool EditQueue::IsItemInQueueList(uint32 category, sint32 type)
 	return false;
 }
 
-void EditQueue::NotifyCityCaptured(const Unit & unit)
+void EditQueue::NotifyCityCaptured(const Unit & city)
 {
 	if(!s_editQueue)
 		return;
@@ -2661,17 +2697,17 @@ void EditQueue::NotifyCityCaptured(const Unit & unit)
 	if(!IsShown())
 		return;
 
-	if(s_editQueue->m_cityData) {
-		if(unit.m_id == s_editQueue->m_cityData->GetHomeCity().m_id)
+	if(s_editQueue->m_city.IsValid()) {
+		if(city == s_editQueue->m_city)
 		{
-			s_editQueue->m_cityData = NULL;
+			s_editQueue->m_city = 0;
 			Hide();
 		}
 	} else if(s_editQueue->m_multiCities.GetCount() > 0) {
 		PointerList<EditQueueCityInfo>::Walker walk(&s_editQueue->m_multiCities);
 		bool wasEditing = false;
 		while(walk.IsValid()) {
-			if(walk.GetObj()->m_cityData->GetHomeCity().m_id == unit.m_id) {
+			if(walk.GetObj()->m_city == city) {
 				walk.Remove();
 				wasEditing = true;
 			} else {
@@ -2683,7 +2719,87 @@ void EditQueue::NotifyCityCaptured(const Unit & unit)
 	}
 }
 
-EditQueue* EditQueue::GetEditQueueWindow()
+void EditQueue::SetItemDescription(
+		const IconRecord  * icon,
+		SlicContext       & context,
+		ctp2_Static       * imageBox,
+		ctp2_HyperTextBox * hyperTextBox,
+		aui_Region        * parent,
+		ctp2_Button       * imageButton)
 {
-	return s_editQueue;
+	Assert(imageBox || imageButton);
+	if(!imageBox && !imageButton) return;
+
+	Assert(hyperTextBox);
+	if(!hyperTextBox) return;
+
+	if(icon) {
+		MBCHAR dammit[1024];
+		if(!icon->GetLargeIcon() || stricmp(icon->GetLargeIcon(), "null") == 0) {
+			strcpy(dammit, icon->GetIcon());
+		} else {
+			strcpy(dammit, icon->GetLargeIcon());
+		}
+		if(imageBox) {
+			imageBox->SetImage(dammit);
+			imageBox->ShouldDraw(TRUE);
+		} else if(imageButton) {
+			imageButton->ExchangeImage(4, 0, dammit);
+			imageButton->ShouldDraw(TRUE);
+		}
+
+		const char *statText = icon->GetStatText();
+		const char *descString = NULL;
+		char *allocatedText = NULL;
+		const char *gltext = NULL;
+		if(strrchr(statText, '.') &&
+		   (!(stricmp(strrchr(statText, '.'), ".txt")))) {
+
+			size_t      size = 0;
+			MBCHAR *    fileText = reinterpret_cast<MBCHAR *>
+			(g_GreatLibPF->getData(statText, size, C3DIR_GL));
+
+			if (fileText)
+			{
+				allocatedText = new MBCHAR[size + 1];
+				memcpy(allocatedText, fileText, size * sizeof(MBCHAR));
+				allocatedText[size] = 0;
+			}
+
+			g_GreatLibPF->freeData(fileText);
+		} else {
+			gltext = glutil_LoadText(statText, context);
+		}
+
+		if(!allocatedText && !gltext) {
+			descString = g_theStringDB->GetNameStr(icon->GetStatText());
+		}
+
+		Assert(descString || allocatedText || gltext);
+		MBCHAR interpText[2048];
+		if(descString) {
+			stringutils_Interpret(descString, context, interpText);
+		} else if(allocatedText) {
+			stringutils_Interpret(allocatedText, context, interpText);
+			delete [] allocatedText;
+		} else if(gltext) {
+			strcpy(interpText, gltext);
+		} else {
+			strcpy(interpText, icon->GetStatText());
+		}
+
+		hyperTextBox->SetHyperText(interpText);
+	} else {
+		if(imageBox) {
+			imageBox->SetImage(NULL);
+			imageBox->ShouldDraw(TRUE);
+		} else if(imageButton) {
+			imageButton->ExchangeImage(4, 0, NULL);
+			imageButton->ShouldDraw(TRUE);
+		}
+
+		hyperTextBox->SetHyperText("");
+		if(parent)
+			parent->ShouldDraw(TRUE);
+	}
 }

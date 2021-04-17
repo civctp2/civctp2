@@ -26,9 +26,9 @@
 //
 // - Prevent production errors when pressing F3 after end of turn.
 // - The information window is no more closed on the begin of a new turn.
-//   (Aug 7th 2005 Martin Gühmann)
+//   (Aug 7th 2005 Martin Gï¿½hmann)
 // - The initial city interface is no more displayed if the visible player
-//   is a robot. (26-Jan-2008 Martin Gühmann)
+//   is a robot. (26-Jan-2008 Martin Gï¿½hmann)
 //
 //----------------------------------------------------------------------------
 
@@ -91,7 +91,7 @@ STDEHANDLER(InterfaceOpenInitialCityInterfaceEvent)
 		if( city.GetOwner() == g_selected_item->GetVisiblePlayer()
 		&& !g_player[city.GetOwner()]->IsRobot()
 		){
-			EditQueue::Display(CityWindow::GetCityData(city));
+			EditQueue::Display(city);
 		}
 	}
 	return GEV_HD_Continue;
