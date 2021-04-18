@@ -116,17 +116,14 @@ EditQueue::EditQueue(AUI_ERRCODE * error)
 	m_unitList = (ctp2_ListBox *)aui_Ldl::GetObject(s_editQueueBlock, "ItemsBox.UnitsList");
 	Assert(m_unitList);
 	m_unitList->SetActionFuncAndCookie(EditQueue::ListCallback, NULL);
-	m_unitList->SetForceSelect(TRUE);
 
 	m_buildingList = (ctp2_ListBox *)aui_Ldl::GetObject(s_editQueueBlock, "ItemsBox.BuildingList");
 	Assert(m_buildingList);
 	m_buildingList->SetActionFuncAndCookie(EditQueue::ListCallback, NULL);
-	m_buildingList->SetForceSelect(TRUE);
 
 	m_wonderList = (ctp2_ListBox *)aui_Ldl::GetObject(s_editQueueBlock, "ItemsBox.WonderList");
 	Assert(m_wonderList);
 	m_wonderList->SetActionFuncAndCookie(EditQueue::ListCallback, NULL);
-	m_wonderList->SetForceSelect(TRUE);
 
 	m_queueList = (ctp2_ListBox *)aui_Ldl::GetObject(s_editQueueBlock, "QueueGroup.QueueList");
 	Assert(m_queueList);
@@ -298,12 +295,7 @@ AUI_ERRCODE EditQueue::Display(const Unit & city)
 	AUI_ERRCODE err = Display();
 
 	SetCity(city);
-
-	ctp2_ListBox *visList = s_editQueue->GetVisibleItemList();
-
-	if(visList && visList->NumItems() > 0 && !visList->GetSelectedItem()) {
-		visList->SelectItem((sint32)0);
-	}
+	DoFocusList(s_editQueue->GetVisibleItemList(), true);
 
 	return err;
 }
@@ -325,24 +317,27 @@ AUI_ERRCODE EditQueue::Display(const UnitDynamicArray & cities)
 
 AUI_ERRCODE EditQueue::Display()
 {
-	if(!s_editQueue)
+	if (!s_editQueue) {
 		Initialize();
+	}
 
 	Assert(s_editQueue);
-	if(!s_editQueue)
+	if (!s_editQueue) {
 		return AUI_ERRCODE_NOCONTROL;
+	}
 
 	g_c3ui->AddWindow(s_editQueue->m_window);
 
 	AUI_ERRCODE err;
 	err = s_editQueue->m_window->Show();
 
-	if(err == AUI_ERRCODE_OK) {
+	if (err == AUI_ERRCODE_OK) {
 		g_c3ui->BringWindowToTop(s_editQueue->m_window);
 	}
 
-	if(s_editQueue->m_loadBox)
+	if (s_editQueue->m_loadBox) {
 		s_editQueue->m_loadBox->Hide();
+	}
 
 	s_editQueue->ClearChoiceLists();
 	s_editQueue->m_queueList->Clear();
@@ -1044,7 +1039,6 @@ void EditQueue::UpdateButtons()
 		m_removeButton->Enable(FALSE);
 		m_rushBuyButton->Enable(FALSE);
 		m_rushBuyCost->SetText("---");
-		m_insertButton->Enable(FALSE);
 	}
 	else
 	{
@@ -1054,13 +1048,6 @@ void EditQueue::UpdateButtons()
 			m_removeButton->Enable(TRUE);
 		}
 
-		if (visibleList && visibleList->GetSelectedItem() &&
-		   (!cityData ||
-			((m_queueList->GetSelectedItemIndex() != 0) || !alreadyBoughtFront))) {
-			m_insertButton->Enable(TRUE);
-		} else {
-			m_insertButton->Enable(FALSE);
-		}
 		if (m_queueList->GetSelectedItemIndex() == 0 ||
 			(m_queueList->GetSelectedItemIndex() == 1 && alreadyBoughtFront))
 		{
@@ -1111,6 +1098,7 @@ void EditQueue::UpdateButtons()
 	}
 
 	m_addButton->Enable(visibleList && visibleList->GetSelectedItem());
+	m_insertButton->Enable(visibleList && visibleList->GetSelectedItem());
 	m_clearButton->Enable(m_queueList->NumItems() > 0 && !(m_queueList->NumItems() == 1 && alreadyBoughtFront));
 }
 
@@ -1229,38 +1217,39 @@ void EditQueue::SetMultiCities(const UnitDynamicArray &cities)
 }
 
 struct CapitolConfirmData {
-	EditItemInfo *info;
+	EditItemInfo * info;
 	bool insert;
 };
 
 static void ConfirmRebuildCapitol(bool confirm, void *data)
 {
-	if(confirm) {
-		CapitolConfirmData *ccd = (CapitolConfirmData *)data;
-		Assert(ccd && ccd->info);
+	if (confirm) {
+		CapitolConfirmData *confirmData = (CapitolConfirmData *)data;
+		Assert(confirmData && confirmData->info);
 		Assert(s_editQueue);
-		if(!s_editQueue || !ccd || !ccd->info)
+		if (!s_editQueue || !confirmData || !confirmData->info) {
 			return;
+		}
 
-		s_editQueue->InsertInQueue(ccd->info, ccd->insert, true, false);
+		s_editQueue->InsertInQueue(confirmData->info, confirmData->insert, true, false);
 	}
 }
 
 struct SwitchProductionConfirmData {
-	EditItemInfo *info;
+	EditItemInfo * info;
 	bool insert;
 };
 
 static void ConfirmSwitchProduction(bool confirm, void *data)
 {
-	if(confirm) {
-		SwitchProductionConfirmData *spcd = (SwitchProductionConfirmData *)data;
-		Assert(spcd && spcd->info);
+	if (confirm) {
+		SwitchProductionConfirmData *confirmData = (SwitchProductionConfirmData *)data;
+		Assert(confirmData && confirmData->info);
 		Assert(s_editQueue);
-		if(!s_editQueue || !spcd || !spcd->info)
+		if (!s_editQueue || !confirmData || !confirmData->info) {
 			return;
-
-		s_editQueue->InsertInQueue(spcd->info, spcd->insert, true, true);
+		}
+		s_editQueue->InsertInQueue(confirmData->info, confirmData->insert, true, true);
 	}
 }
 
@@ -1287,54 +1276,48 @@ static void ConfirmSwitchProduction(bool confirm, void *data)
 // Remark(s)  : "Suggest" button uses "Add", so also goes through this.
 //
 //----------------------------------------------------------------------------
-void EditQueue::InsertInQueue(EditItemInfo *info, bool insert, bool confirmed, bool confirmedSwitch)
+void EditQueue::InsertInQueue(EditItemInfo * info, bool insert, bool confirmed, bool confirmedSwitch)
 {
 	Assert(info);
-	if(!info) return;
+	if (!info || !m_queueList) {
+		return;
+	}
 
-	if(!confirmed && info->m_category == k_GAME_OBJ_TYPE_IMPROVEMENT &&
-	   buildingutil_Get(info->m_type, g_selected_item->GetVisiblePlayer())->GetCapitol() &&
-		g_player[g_selected_item->GetVisiblePlayer()]->m_capitol &&
-		g_player[g_selected_item->GetVisiblePlayer()]->m_capitol->IsValid() &&
-		m_city.IsValid())
+	if (!confirmed
+			&& info->m_category == k_GAME_OBJ_TYPE_IMPROVEMENT
+			&& buildingutil_Get(info->m_type, g_selected_item->GetVisiblePlayer())->GetCapitol()
+			&& g_player[g_selected_item->GetVisiblePlayer()]->m_capitol
+			&& g_player[g_selected_item->GetVisiblePlayer()]->m_capitol->IsValid()
+			&& m_city.IsValid())
 	{
 		static CapitolConfirmData data;
 		data.info = info;
 		data.insert = insert;
-		MessageBoxDialog::Query(g_theStringDB->GetNameStr("str_code_QueryRebuildCapitol"),
-								"QueryRebuildCapitol",
-								ConfirmRebuildCapitol, &data);
+		MessageBoxDialog::Query(g_theStringDB->GetNameStr("str_code_QueryRebuildCapitol"),"QueryRebuildCapitol",
+				ConfirmRebuildCapitol, &data);
 		return;
 	}
 
-	sint32 insIndex;
-	if(m_queueList && insert)
-	{
-		sint32 buildIndex = m_queueList->GetSelectedItemIndex();
-		if(buildIndex >= 0)
-		{
-			insIndex = buildIndex;// Insert in place of the currently selected item.
-		}
-		else
-		{
-			insIndex = -1;// Add to the end of the queue.
-		}
-	}
-	else
-	{
-		insIndex = -1;
-	}
+	const sint32 TOP = 0;
+	const sint32 BOTTOM = -1;
+	sint32 insertIndex = (insert && m_queueList->NumItems() > 0) ? TOP : BOTTOM;
 
 	CityData * cityData = m_city.IsValid() ? m_city.GetCityData() : NULL;
-	if(cityData)// Editing a single queue?
+	if (cityData) // Editing a single queue?
 	{
-		if (insIndex == 0)// Inserting to replace top queue item.
-		{                 // Queues must have at least one item selected to "insert",
-			              // so we know we can get the head.
+		if (insertIndex == TOP && cityData->AlreadyBoughtFront()) {
+			insertIndex++;
+			if (insertIndex > m_queueList->NumItems()) {
+				insertIndex = BOTTOM;
+			}
+		}
+
+		if (insertIndex == TOP) // Queues must have at least one item selected to "insert", so head is available.
+		{
 			if (info->m_category != cityData->GetBuildQueue()->GetHead()->m_category
-				&& cityData->GetStoredCityProduction() > 0)
+					&& cityData->GetStoredCityProduction() > 0)
 			{
-				if(!confirmedSwitch)
+				if (!confirmedSwitch)
 				{
 					static SwitchProductionConfirmData data;
 					data.info = info;
@@ -1344,21 +1327,19 @@ void EditQueue::InsertInQueue(EditItemInfo *info, bool insert, bool confirmed, b
 					sint32 p = g_theConstDB->Get(0)->GetChangeCurrentlyBuildingItemPenalty();
 					sprintf(buf, g_theStringDB->GetNameStr("str_code_QuerySwitchProduction"), p);
 
-					MessageBoxDialog::Query(buf,
-											"QuerySwitchProduction",
-											ConfirmSwitchProduction, &data);
+					MessageBoxDialog::Query(buf, "QuerySwitchProduction", ConfirmSwitchProduction, &data);
 					return;
 				}
 				cityData->CheckSwitchProductionPenalty(info->m_category);
 			}
 		}
-		else if (insIndex == -1 && m_queueList->NumItems() == 0)// Adding, and no items in queue, so adding to top.
-		{// This is also for when the "suggest" button is used and the queue is empty.
+		else if (insertIndex == BOTTOM && m_queueList->NumItems() == 0) // Adding, and no items in queue, so adding to top.
+		{ // This is also for when the "suggest" button is used and the queue is empty.
 			if (info->m_category != cityData->GetBuildCategoryAtBeginTurn()
-				&& cityData->GetStoredCityProduction() > 0
-				&& cityData->GetBuildCategoryAtBeginTurn() != -5)// -5 is the no penalty type.
+					&& cityData->GetStoredCityProduction() > 0
+					&& cityData->GetBuildCategoryAtBeginTurn() != -5) // -5 is the no penalty type.
 			{
-				if(!confirmedSwitch)
+				if (!confirmedSwitch)
 				{
 					static SwitchProductionConfirmData data;
 					data.info = info;
@@ -1368,89 +1349,94 @@ void EditQueue::InsertInQueue(EditItemInfo *info, bool insert, bool confirmed, b
 					sint32 p = g_theConstDB->Get(0)->GetChangeCurrentlyBuildingItemPenalty();
 					sprintf(buf, g_theStringDB->GetNameStr("str_code_QuerySwitchProduction"), p);
 
-					MessageBoxDialog::Query(buf,
-											"QuerySwitchProduction",
-											ConfirmSwitchProduction, &data);
+					MessageBoxDialog::Query(buf, "QuerySwitchProduction", ConfirmSwitchProduction, &data);
 					return;
 				}
-
 				cityData->CheckSwitchProductionPenalty(info->m_category);
 			}
 		}
 
 		// Item is actually replaced here:
-		cityData->InsertBuildItem(insIndex, info->m_category, info->m_type);
+		cityData->InsertBuildItem(insertIndex, info->m_category, info->m_type);
 	}
-	else// Editing a custom queue or multiple city queues?
+	else // Editing a custom queue or multiple city queues?
 	{
 		Assert(m_mode == EDIT_QUEUE_MODE_CUSTOM || m_mode == EDIT_QUEUE_MODE_MULTI);
 		EditItemInfo *copiedInfo = new EditItemInfo(info->m_category, info->m_type);
-		if(insIndex < 0) {// Adding to the end of the queue or to empty queue.
+		if (insertIndex == BOTTOM) { // Adding to the end of the queue or to empty queue.
 			m_customBuildList.AddTail(copiedInfo);
-		} else {
+		}
+		else
+		{
 			PointerList<EditItemInfo>::Walker walk(&m_customBuildList);
 			sint32 idx = 0;
-			while(walk.IsValid()) {
-				if(idx == insIndex) {
+			while (walk.IsValid())
+			{
+				if (idx == insertIndex)
+				{
 					walk.Insert(copiedInfo);
 					break;
 				}
 				walk.Next();
 				idx++;
 			}
-			if(!walk.IsValid()) {
+			if (!walk.IsValid()) {
 				m_customBuildList.AddTail(copiedInfo);
 			}
 		}
 	}
 
-	ctp2_ListBox *checkRemoveList = NULL;
-	if(info->m_category == k_GAME_OBJ_TYPE_IMPROVEMENT ||
-	   info->m_category == k_GAME_OBJ_TYPE_CAPITALIZATION ||
-	   info->m_category == k_GAME_OBJ_TYPE_INFRASTRUCTURE) {
+	ctp2_ListBox * checkRemoveList = NULL;
+	if(info->m_category == k_GAME_OBJ_TYPE_IMPROVEMENT
+			|| info->m_category == k_GAME_OBJ_TYPE_CAPITALIZATION
+			|| info->m_category == k_GAME_OBJ_TYPE_INFRASTRUCTURE)
+	{
 		checkRemoveList = m_buildingList;
-	} else if(info->m_category == k_GAME_OBJ_TYPE_WONDER) {
+	} else if (info->m_category == k_GAME_OBJ_TYPE_WONDER) {
 		checkRemoveList = m_wonderList;
 	}
 
-	if(checkRemoveList) {
+	bool removed = false;
+	if (checkRemoveList) {
 		sint32 type = info->m_type;
 		uint32 cat = info->m_category;
-		sint32 i;
-		for(i = checkRemoveList->NumItems() - 1; i >= 0; i--) {
+		for (sint32 i = checkRemoveList->NumItems() - 1; i >= 0; i--)
+		{
 			ctp2_ListItem * item     = (ctp2_ListItem *)checkRemoveList->GetItemByIndex(i);
 			EditItemInfo  * itemInfo = (EditItemInfo *)item->GetUserData();
 
-			if(cat == itemInfo->m_category && type == itemInfo->m_type) {
+			if (cat == itemInfo->m_category && type == itemInfo->m_type)
+			{
 				checkRemoveList->RemoveItem(item->Id());
 				delete item;
 				delete itemInfo;
+				removed = true;
 			}
 		}
 	}
 	UpdateQueueList();
-
-	if(insert && insIndex >= 0) {
-		m_queueList->SelectItem(insIndex + 1);
+	if (removed) {
+		m_queueList->SelectItem(insert ? insertIndex : m_queueList->NumItems() - 1);
 	}
 	UpdateButtons();
 }
 
 void EditQueue::Add(bool insert)
 {
-	ctp2_ListBox *visList = GetVisibleItemList();
-
-	Assert(visList);
-	if(!visList)
+	ctp2_ListBox * visibleList = GetVisibleItemList();
+	Assert(visibleList);
+	if (!visibleList) {
 		return;
+	}
 
-	ctp2_ListItem *item = (ctp2_ListItem *)visList->GetSelectedItem();
-	if(!item)
+	ctp2_ListItem * item = reinterpret_cast<ctp2_ListItem *>(visibleList->GetSelectedItem());
+	if (!item) {
 		return;
+	}
 
-	EditItemInfo *info = (EditItemInfo *)item->GetUserData();
+	EditItemInfo * info = reinterpret_cast<EditItemInfo *>(item->GetUserData());
 	Assert(info);
-	if(info) {
+	if (info) {
 		InsertInQueue(info, insert);
 	}
 }
@@ -1802,18 +1788,20 @@ void EditQueue::ItemDown(aui_Control *control, uint32 action, uint32 data, void 
 
 void EditQueue::ListCallback(aui_Control *control, uint32 action, uint32 data, void *cookie)
 {
-	if(action != AUI_LISTBOX_ACTION_DOUBLECLICKSELECT && action != AUI_LISTBOX_ACTION_SELECT)
+	if (action != AUI_LISTBOX_ACTION_DOUBLECLICKSELECT && action != AUI_LISTBOX_ACTION_SELECT) {
 		return;
+	}
 
-	if(!s_editQueue) return;
+	if (!s_editQueue || s_editQueue->m_inCallback) {
+		return;
+	}
 
-	if(s_editQueue->m_inCallback) return;
-
-	if(action == AUI_LISTBOX_ACTION_DOUBLECLICKSELECT)
+	if (action == AUI_LISTBOX_ACTION_DOUBLECLICKSELECT) {
 		s_editQueue->Add(false);
+	}
 
+	s_editQueue->FocusList(reinterpret_cast<ctp2_ListBox *>(control));
 	ShowSelectedInfo();
-
 	s_editQueue->UpdateButtons();
 }
 
@@ -1921,12 +1909,15 @@ void EditQueue::EnterLoadMode()
 	s_editQueue->m_listBeforeLoadSaveMode->Hide();
 	s_editQueue->m_loadBox->Show();
 	s_editQueue->m_itemsBox->Hide();
+	DoFocusList(s_editQueue->m_listBeforeLoadSaveMode, false);
+	DoFocusList(s_editQueue->m_queueList, false);
 	ShowSelectedInfo();
 	s_editQueue->m_createCustomQueueButton->Enable(FALSE);
 }
 
 void EditQueue::ExitLoadMode()
 {
+	DoFocusList(s_editQueue->m_queueList, false);
 	s_editQueue->m_createCustomQueueButton->Enable(TRUE);
 	s_editQueue->m_loadBox->Hide();
 	s_editQueue->m_itemsBox->Show();
@@ -1935,15 +1926,20 @@ void EditQueue::ExitLoadMode()
 
 void EditQueue::LoadModeCallback(aui_Control *control, uint32 action, uint32 data, void *cookie)
 {
-	if(action != AUI_BUTTON_ACTION_EXECUTE) return;
+	if (action != AUI_BUTTON_ACTION_EXECUTE) {
+		return;
+	}
 
 	Assert(s_editQueue);
-	if(!s_editQueue) return;
+	if (!s_editQueue) {
+		return;
+	}
 
 	Assert(s_editQueue->m_itemsBox);
 	Assert(s_editQueue->m_loadBox);
-	if(s_editQueue->m_itemsBox && s_editQueue->m_loadBox) {
-		if(s_editQueue->m_itemsBox->IsHidden()) {
+	if (s_editQueue->m_itemsBox && s_editQueue->m_loadBox)
+	{
+		if (s_editQueue->m_itemsBox->IsHidden()) {
 			s_editQueue->ExitLoadMode();
 		} else {
 			s_editQueue->EnterLoadMode();
@@ -2047,9 +2043,7 @@ void EditQueue::ClearMessageCallback(bool response, void * data)
 		}
 		s_editQueue->Update();
 		// In case already bought front, select bought front item
-		if (s_editQueue->m_queueList->NumItems() > 0) {
-			s_editQueue->m_queueList->SelectItem(0);
-		}
+		DoFocusList(s_editQueue->m_queueList, true);
 	}
 }
 
@@ -2203,39 +2197,51 @@ void EditQueue::Save(const MBCHAR *saveFileName)
 
 void EditQueue::LoadCallback(aui_Control *control, uint32 action, uint32 data, void *cookie)
 {
-	if(action != AUI_BUTTON_ACTION_EXECUTE) return;
+	if (action != AUI_BUTTON_ACTION_EXECUTE) {
+		return;
+	}
 
-	if(!s_editQueue) return;
+	if (!s_editQueue) {
+		return;
+	}
 
 	const MBCHAR *loadName = s_editQueue->GetSelectedQueueName();
-	if(!loadName)
+	if (!loadName) {
 		return;
+	}
 
-	if(s_editQueue->m_city.IsValid()) {
+	if (s_editQueue->m_city.IsValid())
+	{
 		MBCHAR buf[k_MAX_NAME_LEN];
 		const MBCHAR *fmt = g_theStringDB->GetNameStr("str_ldl_EditQueueReallyLoad");
 		if(!fmt) fmt = "Load queue %s, for city %s?";
 		sprintf(buf, fmt, loadName, s_editQueue->m_city.GetCityData()->GetName());
 
 		MessageBoxDialog::Query(buf, "QueryLoadQueue", LoadQueryCallback, (void *)loadName);
-	} else if(s_editQueue->m_mode == EDIT_QUEUE_MODE_MULTI) {
+	}
+	else if(s_editQueue->m_mode == EDIT_QUEUE_MODE_MULTI)
+	{
 		MBCHAR buf[k_MAX_NAME_LEN];
 		const MBCHAR *fmt = g_theStringDB->GetNameStr("str_ldl_EditQueueReallyLoadMulti");
 		if(!fmt) fmt = "Load Queue %s into all selected cities?";
 		sprintf(buf, fmt, loadName);
 
 		MessageBoxDialog::Query(buf, "QueryLoadQueueMulti", LoadQueryCallback, (void *)loadName);
-	} else {
+	}
+	else
+	{
 		LoadCustom(loadName);
 		s_editQueue->ExitLoadMode();
 		s_editQueue->Update();
+		DoFocusList(s_editQueue->m_queueList, true);
 	}
 }
 
 void EditQueue::LoadQueryCallback(bool response, void * data)
 {
-	if(!response)
+	if (!response) {
 		return;
+	}
 
 	const MBCHAR *loadName = (const MBCHAR *)data;
 
@@ -2244,18 +2250,22 @@ void EditQueue::LoadQueryCallback(bool response, void * data)
 	strcat(loadFileName, FILE_SEP);
 	strcat(loadFileName, loadName);
 
-	if(s_editQueue->m_city.IsValid()) {
+	if (s_editQueue->m_city.IsValid()) {
 		s_editQueue->m_city.GetCityData()->LoadQueue(loadFileName);
-	} else {
+	}
+	else
+	{
 		Assert(s_editQueue->m_mode == EDIT_QUEUE_MODE_MULTI);
 		PointerList<EditQueueCityInfo>::Walker walk(&s_editQueue->m_multiCities);
-		while(walk.IsValid()) {
+		while (walk.IsValid())
+		{
 			walk.GetObj()->m_city.GetCityData()->LoadQueue(loadFileName);
 			walk.Next();
 		}
 	}
 	s_editQueue->ExitLoadMode();
 	s_editQueue->Update();
+	DoFocusList(s_editQueue->m_queueList, true);
 }
 
 void  EditQueue::LoadCustom(const MBCHAR * fileName)
@@ -2480,36 +2490,51 @@ void EditQueue::DeleteQueryCallback(bool response, void * data)
 	s_editQueue->UpdateFileLists();
 }
 
+void EditQueue::DoFocusList(ctp2_ListBox * list, bool focus)
+{
+	if (!list) {
+		return;
+	}
+
+	if (!focus && list->GetSelectedItemIndex() >= 0) {
+		list->DeselectItem(list->GetSelectedItemIndex());
+	} else if (focus && list->GetSelectedItemIndex() < 0 && list->NumItems() > 0) {
+		list->SelectItem(0);
+	}
+}
+
+void EditQueue::FocusList(ctp2_ListBox * list)
+{
+	if (list->GetSelectedItemIndex() >= 0)
+	{
+		DoFocusList(m_unitList, list == m_unitList);
+		DoFocusList(m_buildingList, list == m_buildingList);
+		DoFocusList(m_wonderList, list == m_wonderList);
+		DoFocusList(m_queueList, list == m_queueList);
+		DoFocusList(m_queueContents, list == m_queueContents);
+	}
+}
+
+void EditQueue::ToggleTab(ctp2_ListBox * list, ctp2_Button * button, bool show)
+{
+	if (show) {
+		button->SetToggleState(true);
+	}
+	else
+	{
+		list->Hide();
+		list->DeselectItem(list->GetSelectedItem());
+		button->SetToggleState(false);
+	}
+}
+
 void EditQueue::SelectChoiceList(ctp2_ListBox * list)
 {
 	list->Show();
 
-	if (list != m_buildingList)
-	{
-		m_buildingList->Hide();
-		m_buildingList->DeselectItem(m_buildingList->GetSelectedItem());
-		m_buildingsButton->SetToggleState(false);
-	} else {
-		m_buildingsButton->SetToggleState(true);
-	}
-
-	if (list != m_unitList)
-	{
-		m_unitList->Hide();
-		m_unitList->DeselectItem(m_unitList->GetSelectedItem());
-		m_unitsButton->SetToggleState(false);
-	} else {
-		m_unitsButton->SetToggleState(true);
-	}
-
-	if (list != m_wonderList)
-	{
-		m_wonderList->Hide();
-		m_wonderList->DeselectItem(m_wonderList->GetSelectedItem());
-		m_wondersButton->SetToggleState(false);
-	} else {
-		m_wondersButton->SetToggleState(true);
-	}
+	ToggleTab(m_unitList, m_unitsButton, list == m_unitList);
+	ToggleTab(m_buildingList, m_buildingsButton, list == m_buildingList);
+	ToggleTab(m_wonderList, m_wondersButton, list == m_wonderList);
 
 	ShowSelectedInfo();
 	UpdateButtons();
@@ -2549,20 +2574,24 @@ void EditQueue::RushBuyCallback(aui_Control *control, uint32 action, uint32 data
 
 void EditQueue::QueueListCallback(aui_Control *control, uint32 action, uint32 data, void *cookie)
 {
-	if(action != AUI_LISTBOX_ACTION_DOUBLECLICKSELECT && action != AUI_LISTBOX_ACTION_SELECT)
+	if (action != AUI_LISTBOX_ACTION_DOUBLECLICKSELECT && action != AUI_LISTBOX_ACTION_SELECT) {
 		return;
+	}
 
-	if(!s_editQueue) return;
-
-	if(s_editQueue->m_inCallback) return;
-
-	if(action == AUI_LISTBOX_ACTION_DOUBLECLICKSELECT) {
-		if(data == 0 && s_editQueue->m_city.IsValid() && s_editQueue->m_city.GetCityData()->AlreadyBoughtFront()) {
+	if (!s_editQueue || s_editQueue->m_inCallback) {
+		return;
+	}
+	if (action == AUI_LISTBOX_ACTION_DOUBLECLICKSELECT)
+	{
+		if (data == 0 && s_editQueue->m_city.IsValid() && s_editQueue->m_city.GetCityData()->AlreadyBoughtFront()) {
 
 		} else {
 			s_editQueue->Remove();
 		}
-	} else {
+	}
+	else
+	{
+		s_editQueue->FocusList(reinterpret_cast<ctp2_ListBox *>(control));
 		s_editQueue->ShowSelectedInfo();
 		s_editQueue->UpdateButtons();
 	}

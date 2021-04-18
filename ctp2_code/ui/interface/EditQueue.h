@@ -169,6 +169,8 @@ private:
 			ctp2_HyperTextBox * hyperTextBox,
 			aui_Region        * parent,
 			ctp2_Button       * imageButton);
+	static void DoFocusList(ctp2_ListBox * list, bool focus);
+	static void ToggleTab(ctp2_ListBox * list, ctp2_Button * button, bool show);
 
 	ctp2_ListBox * GetVisibleItemList();
 
@@ -189,6 +191,7 @@ private:
 	void EnterLoadMode();
 	void ExitLoadMode();
 
+	void FocusList(ctp2_ListBox * list);
 	void SelectChoiceList(ctp2_ListBox * list);
 
 	void RushBuy(bool pay = true);

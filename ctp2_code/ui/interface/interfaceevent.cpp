@@ -26,9 +26,9 @@
 //
 // - Prevent production errors when pressing F3 after end of turn.
 // - The information window is no more closed on the begin of a new turn.
-//   (Aug 7th 2005 Martin G�hmann)
+//   (Aug 7th 2005 Martin Gühmann)
 // - The initial city interface is no more displayed if the visible player
-//   is a robot. (26-Jan-2008 Martin G�hmann)
+//   is a robot. (26-Jan-2008 Martin Gühmann)
 //
 //----------------------------------------------------------------------------
 
