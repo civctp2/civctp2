@@ -1912,7 +1912,8 @@ void EditQueue::EnterLoadMode()
 	DoFocusList(s_editQueue->m_listBeforeLoadSaveMode, false);
 	DoFocusList(s_editQueue->m_queueList, false);
 	ShowSelectedInfo();
-	s_editQueue->m_createCustomQueueButton->Enable(FALSE);
+	s_editQueue->m_loadModeLoadButton->Enable(false);
+	s_editQueue->m_createCustomQueueButton->Enable(false);
 }
 
 void EditQueue::ExitLoadMode()
@@ -1921,6 +1922,9 @@ void EditQueue::ExitLoadMode()
 	s_editQueue->m_createCustomQueueButton->Enable(TRUE);
 	s_editQueue->m_loadBox->Hide();
 	s_editQueue->m_itemsBox->Show();
+	if (s_editQueue->m_mode == EDIT_QUEUE_MODE_CUSTOM) {
+		s_editQueue->m_suggestButton->Hide();
+	}
 	s_editQueue->SelectChoiceList(s_editQueue->m_listBeforeLoadSaveMode);
 }
 
@@ -2356,20 +2360,24 @@ const MBCHAR *EditQueue::GetSelectedQueueName()
 
 void EditQueue::QueueFileList(aui_Control *control, uint32 action, uint32 data, void *cookie)
 {
-	if(action != AUI_LISTBOX_ACTION_SELECT) return;
+	if (action != AUI_LISTBOX_ACTION_SELECT) {
+		return;
+	}
 
-	if(!s_editQueue) return;
-	if(!s_editQueue->m_queueFileList) return;
+	if(!s_editQueue || !s_editQueue->m_queueFileList) {
+		return;
+	}
 
 	ClearChoiceList(s_editQueue->m_queueContents);
 	ShowSelectedInfo();
 
 	ctp2_ListItem *item = (ctp2_ListItem *)s_editQueue->m_queueFileList->GetSelectedItem();
-	if(!item) {
+	if (!item) {
 		s_editQueue->m_queueName->SetText("");
-		return;
+	} else {
+		s_editQueue->DisplayQueueContents((const MBCHAR *) item->GetUserData());
 	}
-	s_editQueue->DisplayQueueContents((const MBCHAR *)item->GetUserData());
+	s_editQueue->m_loadModeLoadButton->Enable(s_editQueue->m_queueContents->NumItems() > 0);
 }
 
 void EditQueue::DisplayQueueContents(const MBCHAR *queueName)
