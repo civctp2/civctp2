@@ -83,6 +83,7 @@ void MessageBoxDialog::TextQuery(const MBCHAR *message,
 	s_messageBoxDialog->m_isTextQuery = true;
 	s_messageBoxDialog->m_textField->SetFieldText(defaultText);
 	s_messageBoxDialog->m_textField->Show();
+	s_messageBoxDialog->m_textField->SetKeyboardFocus();
 	s_messageBoxDialog->m_dontShowButton->Hide();
 }
 

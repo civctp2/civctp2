@@ -1142,10 +1142,10 @@ void EditQueue::SetMode(EDIT_QUEUE_MODE mode)
 
 	switch(s_editQueue->m_mode) {
 		case EDIT_QUEUE_MODE_SINGLE:
-			// Can use suggest editing single queue.
 			if (s_editQueue->m_itemsBox->IsHidden()) {
 				s_editQueue->ExitLoadMode();
 			}
+			// Can use suggest editing single queue.
 			s_editQueue->m_suggestButton->Show();
 			s_editQueue->m_customModeButtons->Hide();
 			s_editQueue->m_normalModeButtons->Show();
@@ -1160,6 +1160,9 @@ void EditQueue::SetMode(EDIT_QUEUE_MODE mode)
 			}
 			break;
 		case EDIT_QUEUE_MODE_MULTI:
+			if (s_editQueue->m_itemsBox->IsHidden()) {
+				s_editQueue->ExitLoadMode();
+			}
 			// Can't use suggest editing multiple queues.
 			s_editQueue->m_suggestButton->Hide();
 			s_editQueue->m_customModeButtons->Hide();
@@ -1452,18 +1455,8 @@ void EditQueue::Add(bool insert)
 
 void EditQueue::Suggest(bool insert)
 {
-	ctp2_ListBox *visList = GetVisibleItemList();
-
-	Assert(visList);
-	if(!visList)
-		return;
-
-	ctp2_ListItem *item = (ctp2_ListItem *)visList->GetSelectedItem();
-	if(!item)
-		return;
-
 	CityData * cityData = m_city.IsValid() ? m_city.GetCityData() : NULL;
-	if(cityData)
+	if (cityData)
 	{
 		MapAnalysis::GetMapAnalysis().RecalcCityRanks(cityData->GetOwner());
 
@@ -1474,7 +1467,7 @@ void EditQueue::Suggest(bool insert)
 
 		EditItemInfo *info = new EditItemInfo(cat, type);
 		Assert(info);
-		if(info) {
+		if (info) {
 			InsertInQueue(info, insert);
 		}
 	}
@@ -1774,7 +1767,7 @@ void EditQueue::InsertItem(aui_Control *control, uint32 action, uint32 data, voi
 void EditQueue::SuggestItem(aui_Control *control, uint32 action, uint32 data, void *cookie)
 {
 	if(action != AUI_BUTTON_ACTION_EXECUTE) return;
-	s_editQueue->Suggest(true);
+	s_editQueue->Suggest(false);
 }
 
 void EditQueue::RemoveItem(aui_Control *control, uint32 action, uint32 data, void *cookie)
