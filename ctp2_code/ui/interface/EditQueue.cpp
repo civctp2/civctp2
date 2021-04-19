@@ -169,7 +169,7 @@ EditQueue::EditQueue(AUI_ERRCODE * error)
 
 	m_itemImageButton = (ctp2_Button *)aui_Ldl::GetObject(s_editQueueBlock, "ItemImage.IconBorder.IconButton");
 	Assert(m_itemImageButton);
-	m_itemImageButton->Enable(FALSE);
+	m_itemImageButton->Enable(false);
 	m_itemDescription = (ctp2_HyperTextBox *)aui_Ldl::GetObject(s_editQueueBlock, "ItemDescription");
 
 	m_itemsBox = (ctp2_Static *)aui_Ldl::GetObject(s_editQueueBlock, "ItemsBox");
@@ -180,7 +180,7 @@ EditQueue::EditQueue(AUI_ERRCODE * error)
 
 	m_singleCityChooser = (ctp2_Static *)aui_Ldl::GetObject(s_editQueueBlock, "SingleCityChooser");
 	m_multiCityList = (ctp2_ListBox *)aui_Ldl::GetObject(s_editQueueBlock, "MultiCityList");
-	m_multiCityList->SetAbsorbancy(FALSE);
+	m_multiCityList->SetAbsorbancy(false);
 
 	Assert(m_singleCityChooser && m_multiCityList);
 
@@ -1038,26 +1038,26 @@ void EditQueue::UpdateButtons()
 
 	if (!m_queueList->GetSelectedItem())
 	{
-		m_upButton->Enable(FALSE);
-		m_downButton->Enable(FALSE);
-		m_removeButton->Enable(FALSE);
-		m_rushBuyButton->Enable(FALSE);
+		m_upButton->Enable(false);
+		m_downButton->Enable(false);
+		m_removeButton->Enable(false);
+		m_rushBuyButton->Enable(false);
 		m_rushBuyCost->SetText("---");
 	}
 	else
 	{
 		if (m_queueList->GetSelectedItemIndex() == 0 && alreadyBoughtFront) {
-			m_removeButton->Enable(FALSE);
+			m_removeButton->Enable(false);
 		} else {
-			m_removeButton->Enable(TRUE);
+			m_removeButton->Enable(true);
 		}
 
 		if (m_queueList->GetSelectedItemIndex() == 0 ||
 			(m_queueList->GetSelectedItemIndex() == 1 && alreadyBoughtFront))
 		{
-			m_upButton->Enable(FALSE);
+			m_upButton->Enable(false);
 		} else {
-			m_upButton->Enable(TRUE);
+			m_upButton->Enable(true);
 		}
 
 		// Added by Martin Gühmann to disable the rush-buy button and rush
@@ -1074,7 +1074,7 @@ void EditQueue::UpdateButtons()
 			   )
 			{
 				m_rushBuyCost->SetText("---");
-				m_rushBuyButton->Enable(FALSE);
+				m_rushBuyButton->Enable(false);
 			}
 			else
 			{
@@ -1089,15 +1089,15 @@ void EditQueue::UpdateButtons()
 				   	);
 			}
 		} else {
-			m_rushBuyButton->Enable(FALSE);
+			m_rushBuyButton->Enable(false);
 			m_rushBuyCost->SetText("---");
 		}
 
 		if(m_queueList->GetSelectedItemIndex() == m_queueList->NumItems() - 1 ||
 		   (m_queueList->GetSelectedItemIndex() == 0 && alreadyBoughtFront)) {
-			m_downButton->Enable(FALSE);
+			m_downButton->Enable(false);
 		} else {
-			m_downButton->Enable(TRUE);
+			m_downButton->Enable(true);
 		}
 	}
 
@@ -1154,7 +1154,7 @@ void EditQueue::SetMode(EDIT_QUEUE_MODE mode)
 			s_editQueue->m_multiCityList->Hide();
 			s_editQueue->m_singleCityChooser->Show();
 			s_editQueue->m_multiButtonGroup->Hide();
-			s_editQueue->m_gotoCityButton->Enable(TRUE);
+			s_editQueue->m_gotoCityButton->Enable(true);
 			if(s_editQueue->m_oldMode == EDIT_QUEUE_MODE_CUSTOM && oldCity.IsValid()) {
 				s_editQueue->m_city = oldCity;
 			}
@@ -1172,7 +1172,7 @@ void EditQueue::SetMode(EDIT_QUEUE_MODE mode)
 			s_editQueue->m_multiCityList->Show();
 			s_editQueue->m_singleCityChooser->Hide();
 			s_editQueue->m_multiButtonGroup->Show();
-			s_editQueue->m_gotoCityButton->Enable(FALSE);
+			s_editQueue->m_gotoCityButton->Enable(false);
 			s_editQueue->m_city = 0;
 			s_editQueue->m_customBuildList.DeleteAll();
 			break;
@@ -1185,7 +1185,7 @@ void EditQueue::SetMode(EDIT_QUEUE_MODE mode)
 			s_editQueue->m_queueLabel->SetText(g_theStringDB->GetNameStr("str_ldl_EditQueueCustomQueue"));
 			s_editQueue->m_multiCityList->Hide();
 			s_editQueue->m_singleCityChooser->Hide();
-			s_editQueue->m_gotoCityButton->Enable(FALSE);
+			s_editQueue->m_gotoCityButton->Enable(false);
 			s_editQueue->m_city = 0;
 			s_editQueue->m_customBuildList.DeleteAll();
 			s_editQueue->m_multiButtonGroup->Hide();
@@ -1922,7 +1922,7 @@ void EditQueue::EnterLoadMode()
 void EditQueue::ExitLoadMode()
 {
 	DoFocusList(s_editQueue->m_queueList, false);
-	s_editQueue->m_createCustomQueueButton->Enable(TRUE);
+	s_editQueue->m_createCustomQueueButton->Enable(true);
 	s_editQueue->m_loadBox->Hide();
 	s_editQueue->m_itemsBox->Show();
 	if (s_editQueue->m_mode == EDIT_QUEUE_MODE_CUSTOM) {
@@ -2555,7 +2555,7 @@ void EditQueue::RushBuy(bool pay)
 	if (pay) {
 		m_city.GetCityData()->AddBuyFront();
 	}
-	m_rushBuyButton->Enable(FALSE);
+	m_rushBuyButton->Enable(false);
 	m_rushBuyCost->SetText("---");
 	UpdateQueueList();
 	m_queueList->SelectItem(0);
@@ -2826,10 +2826,10 @@ void EditQueue::SetItemDescription(
 		}
 		if(imageBox) {
 			imageBox->SetImage(dammit);
-			imageBox->ShouldDraw(TRUE);
+			imageBox->ShouldDraw(true);
 		} else if(imageButton) {
 			imageButton->ExchangeImage(4, 0, dammit);
-			imageButton->ShouldDraw(TRUE);
+			imageButton->ShouldDraw(true);
 		}
 
 		const char *statText = icon->GetStatText();
@@ -2876,14 +2876,14 @@ void EditQueue::SetItemDescription(
 	} else {
 		if(imageBox) {
 			imageBox->SetImage(NULL);
-			imageBox->ShouldDraw(TRUE);
+			imageBox->ShouldDraw(true);
 		} else if(imageButton) {
 			imageButton->ExchangeImage(4, 0, NULL);
-			imageButton->ShouldDraw(TRUE);
+			imageButton->ShouldDraw(true);
 		}
 
 		hyperTextBox->SetHyperText("");
 		if(parent)
-			parent->ShouldDraw(TRUE);
+			parent->ShouldDraw(true);
 	}
 }
