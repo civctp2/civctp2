@@ -76,10 +76,12 @@ void MessageBoxDialog::TextQuery(const MBCHAR *message,
 								 MessageTextCallback callback,
 								 void *userData,
 								 const MBCHAR *okText,
-								 const MBCHAR *cancelText)
+								 const MBCHAR *cancelText,
+								 const MBCHAR *defaultText)
 {
 	s_messageBoxDialog = new MessageBoxDialog(message, NULL, (void*)callback, userData, okText, cancelText);
 	s_messageBoxDialog->m_isTextQuery = true;
+	s_messageBoxDialog->m_textField->SetFieldText(defaultText);
 	s_messageBoxDialog->m_textField->Show();
 	s_messageBoxDialog->m_dontShowButton->Hide();
 }
@@ -209,78 +211,39 @@ private:
 	MessageBoxDialog *  m_dialog;
 };
 
-void MessageBoxDialog::LeftButtonActionCallback(aui_Control *control,
-	uint32 action, uint32 data, void *cookie)
+void MessageBoxDialog::ButtonActionCallback(bool response, aui_Control * control, uint32 action, uint32 data,
+		void * cookie)
 {
-
-	if(action != static_cast<uint32>(AUI_BUTTON_ACTION_EXECUTE))
-		return;
-
-	MessageBoxDialog *dialog =
-		static_cast<MessageBoxDialog*>(cookie);
-
-	if(dialog->m_closing) {
-
+	if (action != static_cast<uint32>(AUI_BUTTON_ACTION_EXECUTE)) {
 		return;
 	}
 
+	MessageBoxDialog * dialog = static_cast<MessageBoxDialog*>(cookie);
+	if (dialog->m_closing) {
+		return;
+	}
 	dialog->m_closing = true;
-
-	static char text[256];
-
-	g_c3ui->AddDestructiveAction(new DismissMessageBoxAction(dialog));
-
-	if(dialog->m_callback) {
-		if(dialog->m_isTextQuery) {
-			dialog->m_textField->GetFieldText(text, 255);
-			MessageTextCallback cb = (MessageTextCallback)dialog->m_callback;
-			cb(true, text, dialog->m_userData);
-		} else {
-			MessageCallback cb = (MessageCallback)dialog->m_callback;
-			cb(true, dialog->m_userData);
-		}
-	}
-	if(!dialog->m_isTextQuery && dialog->m_dontShowButton->GetToggleState() && dialog->m_identifier)
-	{
-		g_theCriticalMessagesPrefs->SetEnabled(dialog->m_identifier,!dialog->m_dontShowButton->GetToggleState());
-	}
-}
-
-void MessageBoxDialog::RightButtonActionCallback(aui_Control *control,
-	uint32 action, uint32 data, void *cookie)
-{
-
-	if(action != static_cast<uint32>(AUI_BUTTON_ACTION_EXECUTE))
-		return;
-
-	MessageBoxDialog *dialog =
-		static_cast<MessageBoxDialog*>(cookie);
-
-	if(dialog->m_closing) {
-
-		return;
-	}
-
-	dialog->m_closing = true;
-
-	static char text[256];
 
 	g_c3ui->AddAction(new DismissMessageBoxAction(dialog));
 
-	if(dialog->m_callback) {
-		if(dialog->m_isTextQuery) {
+	static char text[256];
+	if (dialog->m_callback)
+	{
+		if (dialog->m_isTextQuery)
+		{
 			dialog->m_textField->GetFieldText(text, 255);
-			MessageTextCallback cb = (MessageTextCallback)dialog->m_callback;
-			cb(false, text, dialog->m_userData);
-		} else {
-			MessageCallback cb = (MessageCallback)dialog->m_callback;
-			cb(false, dialog->m_userData);
+			MessageTextCallback callback = (MessageTextCallback)dialog->m_callback;
+			callback(response, text, dialog->m_userData);
+		}
+		else
+		{
+			MessageCallback callback = (MessageCallback)dialog->m_callback;
+			callback(response, dialog->m_userData);
 		}
 	}
 
-	if(!dialog->m_isTextQuery && dialog->m_dontShowButton->GetToggleState() && dialog->m_identifier)
-	{
-		g_theCriticalMessagesPrefs->SetEnabled(dialog->m_identifier,!dialog->m_dontShowButton->GetToggleState());
+	if (!dialog->m_isTextQuery && dialog->m_dontShowButton->GetToggleState() && dialog->m_identifier) {
+		g_theCriticalMessagesPrefs->SetEnabled(dialog->m_identifier, !dialog->m_dontShowButton->GetToggleState());
 	}
 }
 

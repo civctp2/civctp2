@@ -95,7 +95,9 @@ public:
 	static void UpdateCity(const Unit & city);
 	static void NotifyCityCaptured(const Unit & city);
 
-	static void SaveQueryCallback(bool response, void * data);
+	static void SaveQueryCallback      (bool response, void * data);
+	static void SaveInformationCallBack(bool response, void * data);
+	static void SaveNameResponse       (bool response, const char * text, void * data);
 
 	void InsertInQueue(EditItemInfo * info, bool insert, bool confirm = false, bool confirmSwitch = false);
 	void Down(bool confirmSwitch = false);
@@ -159,8 +161,6 @@ private:
 	static void DeleteQueryCallback (bool response, void * data);
 	static void ClearMessageCallback(bool response, void * data);
 	static void ConfirmOverwrite    (bool response, void * data);
-
-	static void SaveNameResponse(bool response, const char * text, void * data);
 
 	static void SetItemDescription(
 			const IconRecord  * icon,
@@ -233,7 +233,9 @@ private:
 	ctp2_ListBox * m_listBeforeLoadSaveMode;
 	ctp2_Static  * m_queueLabel;
 	ctp2_Button  * m_createCustomQueueButton;
+	ctp2_Button  * m_saveQueueButton;
 
+	ctp2_Button * m_deleteButton;
 	ctp2_Button * m_loadModeLoadButton;
 
 	ctp2_Button * m_gotoCityButton;
@@ -252,6 +254,8 @@ private:
 	sint32 m_itemType;
 
 	EDIT_QUEUE_MODE m_mode, m_oldMode;
+
+	MBCHAR m_queueFileName[_MAX_PATH];
 };
 
 #endif

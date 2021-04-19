@@ -204,7 +204,9 @@ EditQueue::EditQueue(AUI_ERRCODE * error)
 	m_createCustomQueueButton->SetActionFuncAndCookie(EditQueue::CustomButton, NULL);
 	aui_Ldl::SetActionFuncAndCookie(s_editQueueBlock, "CustomModeButtons.CancelButton", EditQueue::CustomButton, NULL);
 
-	aui_Ldl::SetActionFuncAndCookie(s_editQueueBlock, "CustomModeButtons.SaveButton", EditQueue::SaveButton, NULL);
+	m_saveQueueButton = (ctp2_Button *)aui_Ldl::GetObject(s_editQueueBlock, "CustomModeButtons.SaveButton");
+	Assert(m_saveQueueButton);
+	m_saveQueueButton->SetActionFuncAndCookie(EditQueue::SaveButton, NULL);
 
 	m_multiButtonGroup = (ctp2_Static *)aui_Ldl::GetObject(s_editQueueBlock, "MultiGroup");
 	Assert(m_multiButtonGroup);
@@ -229,7 +231,9 @@ EditQueue::EditQueue(AUI_ERRCODE * error)
 	m_loadModeLoadButton->SetActionFuncAndCookie(EditQueue::LoadCallback, NULL);
 
 	aui_Ldl::SetActionFuncAndCookie(s_editQueueBlock, "LoadBox.CancelButton", EditQueue::LoadModeCallback, NULL);
-	aui_Ldl::SetActionFuncAndCookie(s_editQueueBlock, "LoadBox.DeleteButton", EditQueue::DeleteCallback, NULL);
+	m_deleteButton = (ctp2_Button *)aui_Ldl::GetObject(s_editQueueBlock, "LoadBox.DeleteButton");
+	Assert(m_deleteButton);
+	m_deleteButton->SetActionFuncAndCookie(EditQueue::DeleteCallback, NULL);
 
 	m_modeLabel = (ctp2_Static *)aui_Ldl::GetObject(s_editQueueBlock, "ItemsBox.ModeLabel");
 
@@ -1100,6 +1104,7 @@ void EditQueue::UpdateButtons()
 	m_addButton->Enable(visibleList && visibleList->GetSelectedItem());
 	m_insertButton->Enable(visibleList && visibleList->GetSelectedItem());
 	m_clearButton->Enable(m_queueList->NumItems() > 0 && !(m_queueList->NumItems() == 1 && alreadyBoughtFront));
+	m_saveQueueButton->Enable(m_queueList->NumItems() > 0);
 }
 
 bool EditQueue::EditingCity(const Unit & city)
@@ -1138,6 +1143,9 @@ void EditQueue::SetMode(EDIT_QUEUE_MODE mode)
 	switch(s_editQueue->m_mode) {
 		case EDIT_QUEUE_MODE_SINGLE:
 			// Can use suggest editing single queue.
+			if (s_editQueue->m_itemsBox->IsHidden()) {
+				s_editQueue->ExitLoadMode();
+			}
 			s_editQueue->m_suggestButton->Show();
 			s_editQueue->m_customModeButtons->Hide();
 			s_editQueue->m_normalModeButtons->Show();
@@ -1178,6 +1186,7 @@ void EditQueue::SetMode(EDIT_QUEUE_MODE mode)
 			s_editQueue->m_city = 0;
 			s_editQueue->m_customBuildList.DeleteAll();
 			s_editQueue->m_multiButtonGroup->Hide();
+			s_editQueue->m_saveQueueButton->Enable(false);
 			break;
 	}
 	s_editQueue->m_itemsBox->ShouldDraw();
@@ -1912,7 +1921,8 @@ void EditQueue::EnterLoadMode()
 	DoFocusList(s_editQueue->m_listBeforeLoadSaveMode, false);
 	DoFocusList(s_editQueue->m_queueList, false);
 	ShowSelectedInfo();
-	s_editQueue->m_loadModeLoadButton->Enable(false);
+	s_editQueue->m_deleteButton->Enable(s_editQueue->m_queueFileList->GetSelectedItemIndex() >= 0);
+	s_editQueue->m_loadModeLoadButton->Enable(s_editQueue->m_queueContents->NumItems() > 0);
 	s_editQueue->m_createCustomQueueButton->Enable(false);
 }
 
@@ -2155,16 +2165,6 @@ void EditQueue::MultiActionButton(aui_Control *control, uint32 action, uint32 da
 	}
 }
 
-void EditQueue::SaveQueryCallback(bool response, void * data)
-{
-	if(response) {
-		Save((const MBCHAR *)data);
-		if(s_editQueue->m_mode == EDIT_QUEUE_MODE_CUSTOM) {
-			SetMode(s_editQueue->m_oldMode);
-		}
-	}
-}
-
 void EditQueue::Save(const MBCHAR *saveFileName)
 {
 	if(s_editQueue->m_city.IsValid()) {
@@ -2377,6 +2377,7 @@ void EditQueue::QueueFileList(aui_Control *control, uint32 action, uint32 data, 
 	} else {
 		s_editQueue->DisplayQueueContents((const MBCHAR *) item->GetUserData());
 	}
+	s_editQueue->m_deleteButton->Enable(item != NULL);
 	s_editQueue->m_loadModeLoadButton->Enable(s_editQueue->m_queueContents->NumItems() > 0);
 }
 
@@ -2643,18 +2644,16 @@ void EditQueue::OpenNationalManager(aui_Control *control, uint32 action, uint32 
 class ConfirmOverwriteQueueAction:public aui_Action
 {
 public:
-	ConfirmOverwriteQueueAction(MBCHAR *saveFileName, const MBCHAR *text)
+	ConfirmOverwriteQueueAction(const MBCHAR * text)
 	{
-		m_saveFileName = saveFileName;
-		strncpy(m_text, text, 256);
-		m_text[256] = 0;
+		strncpy(m_text, text, _MAX_PATH-1);
+		m_text[_MAX_PATH-1] = 0;
 	}
 
 	virtual void Execute(aui_Control * control,uint32 action,uint32 data);
 
 private:
-	MBCHAR m_text[257];
-	MBCHAR *m_saveFileName;
+	MBCHAR m_text[_MAX_PATH];
 };
 
 void ConfirmOverwriteQueueAction::Execute(aui_Control *control, uint32 action, uint32 data)
@@ -2664,28 +2663,79 @@ void ConfirmOverwriteQueueAction::Execute(aui_Control *control, uint32 action, u
 	if(!fmt) fmt = "Overwrite queue %s?";
 	sprintf(buf, fmt, m_text);
 
-	MessageBoxDialog::Query(buf, "QueryOverwriteQueue", EditQueue::SaveQueryCallback, (void *)m_saveFileName);
+	MessageBoxDialog::Query(buf, "QueryOverwriteQueue", EditQueue::SaveQueryCallback);
 };
 
 AUI_ACTION_BASIC(MustEnterNameAction);
 
-void MustEnterNameAction::Execute(aui_Control *control, uint32 action, uint32 data)
+void MustEnterNameAction::Execute(aui_Control * control, uint32 action, uint32 data)
 {
-	MessageBoxDialog::Information("str_ldl_EditQueueMustEnterName", "InfoMustName");
+	MessageBoxDialog::Information("str_ldl_EditQueueMustEnterName", "InfoMustName",
+		EditQueue::SaveInformationCallBack);
+}
+
+class QuerySaveNameAction:public aui_Action {
+public:
+	QuerySaveNameAction(const MBCHAR *defaultSaveName)
+	{
+		strncpy(m_defaultSaveName, defaultSaveName, _MAX_PATH-1);
+		m_defaultSaveName[_MAX_PATH-1] = 0;
+	}
+
+	virtual void Execute(aui_Control * control, uint32 action, uint32 data);
+
+private:
+	MBCHAR m_defaultSaveName[_MAX_PATH];
+};
+
+void QuerySaveNameAction::Execute(aui_Control * control, uint32 action, uint32 data)
+{
+	MessageBoxDialog::TextQuery(g_theStringDB->GetNameStr("str_code_SaveQueueAsColon"), EditQueue::SaveNameResponse,
+							 NULL, "str_ldl_MB_OK", "str_ldl_MB_CANCEL", m_defaultSaveName);
+}
+
+void EditQueue::SaveQueryCallback(bool response, void * data)
+{
+	if (!s_editQueue) {
+		return;
+	}
+
+	if (response) {
+		MBCHAR saveFileName[_MAX_PATH];
+		g_civPaths->GetSavePath(C3SAVEDIR_QUEUES, saveFileName);
+		strncat(saveFileName, FILE_SEP, _MAX_PATH - 1 - strlen(saveFileName));
+		strncat(saveFileName, s_editQueue->m_queueFileName, _MAX_PATH - 1 - strlen(saveFileName));
+		saveFileName[_MAX_PATH - 1] = 0;
+
+		Save(saveFileName);
+		if(s_editQueue->m_mode == EDIT_QUEUE_MODE_CUSTOM) {
+			SetMode(s_editQueue->m_oldMode);
+		}
+	} else {
+		g_c3ui->AddAction(new QuerySaveNameAction(s_editQueue->m_queueFileName));
+	}
 }
 
 void EditQueue::SaveNameResponse(bool response, const char * text, void * data)
 {
+	if (!s_editQueue) {
+		return;
+	}
+
 	if(response) {
 		if(strlen(text) < 1) {
 			g_c3ui->AddAction(new MustEnterNameAction());
 			return;
 		}
 
-		static MBCHAR saveFileName[_MAX_PATH];
+		strncpy(s_editQueue->m_queueFileName, text, _MAX_PATH-1);
+		s_editQueue->m_queueFileName[_MAX_PATH-1] = 0;
+
+		MBCHAR saveFileName [_MAX_PATH];
 		g_civPaths->GetSavePath(C3SAVEDIR_QUEUES, saveFileName);
-		strcat(saveFileName, FILE_SEP);
-		strcat(saveFileName, text);
+		strncat(saveFileName, FILE_SEP, _MAX_PATH - 1 - strlen(saveFileName));
+		strncat(saveFileName, s_editQueue->m_queueFileName, _MAX_PATH - 1 - strlen(saveFileName));
+		saveFileName[_MAX_PATH - 1] = 0;
 
 		FILE *test = c3files_fopen(C3DIR_DIRECT, saveFileName, "r");
 		if(!test) {
@@ -2695,7 +2745,7 @@ void EditQueue::SaveNameResponse(bool response, const char * text, void * data)
 			}
 		} else {
 			c3files_fclose(test);
-			g_c3ui->AddAction(new ConfirmOverwriteQueueAction(saveFileName, text));
+			g_c3ui->AddAction(new ConfirmOverwriteQueueAction(s_editQueue->m_queueFileName));
 		}
 	}
 }
@@ -2704,8 +2754,12 @@ void EditQueue::SaveButton(aui_Control *control, uint32 action, uint32 data, voi
 {
 	if(action != AUI_BUTTON_ACTION_EXECUTE) return;
 
-	MessageBoxDialog::TextQuery(g_theStringDB->GetNameStr("str_code_SaveQueueAsColon"),
-								SaveNameResponse);
+	g_c3ui->AddAction(new QuerySaveNameAction(""));
+}
+
+void EditQueue::SaveInformationCallBack(bool response, void * data)
+{
+	g_c3ui->AddAction(new QuerySaveNameAction(""));
 }
 
 bool EditQueue::IsItemInQueueList(uint32 category, sint32 type)
