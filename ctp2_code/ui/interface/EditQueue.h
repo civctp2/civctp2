@@ -33,6 +33,9 @@
 #ifndef EDIT_QUEUE_H__
 #define EDIT_QUEUE_H__
 
+#include "pointerlist.h"
+#include "Unit.h"
+
 class ctp2_ListBox;
 class ctp2_Window;
 class aui_Control;
@@ -45,9 +48,6 @@ class ctp2_Button;
 class ctp2_ListItem;
 class aui_Region;
 class SlicContext;
-
-#include "pointerlist.h"
-#include "Unit.h"
 
 enum EDIT_QUEUE_MODE {
 	EDIT_QUEUE_MODE_SINGLE,
@@ -64,10 +64,17 @@ enum EDIT_QUEUE_MULTI_ACTION {
 
 class EditItemInfo {
 public:
-	EditItemInfo(uint32 cat, sint32 type) {
-		m_category = cat;
+	static EditItemInfo * Construct(const char * string);
+
+	EditItemInfo(uint32 category, sint32 type) {
+		m_category = category;
 		m_type = type;
 	}
+
+	const char * GetCategory() const;
+	const char * GetID()   const;
+	const char * GetName() const;
+	sint32       GetCost() const;
 
 	uint32 m_category;
 	sint32 m_type;
@@ -91,8 +98,8 @@ public:
 	static AUI_ERRCODE Hide();
 	static AUI_ERRCODE Cleanup();
 
-	static void SelectCity(const Unit & city);
-	static void UpdateCity(const Unit & city);
+	static void SelectCity        (const Unit & city);
+	static void UpdateCity        (const Unit & city);
 	static void NotifyCityCaptured(const Unit & city);
 
 	static void SaveQueryCallback      (bool response, void * data);
@@ -245,7 +252,6 @@ private:
 	PointerList<EditQueueCityInfo> m_multiCities;
 	PointerList<MBCHAR>            m_queueFileNames;
 
-	bool m_inCallback;
 	bool m_updating;
 	Unit m_city;
 	Unit m_oldCity;
