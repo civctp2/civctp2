@@ -42,8 +42,8 @@
 //  add
 //      aui_BitmapFont::GlyphInfo *aui_BitmapFont::GetGlyphInfo2( MBCHAR *c )
 //
-// - Initialized local variables. (Sep 9th 2005 Martin G�hmann)
-// - Standardized code (May 21th 2006 Martin G�hmann)
+// - Initialized local variables. (Sep 9th 2005 Martin Gühmann)
+// - Standardized code (May 21th 2006 Martin Gühmann)
 //
 //----------------------------------------------------------------------------
 
@@ -521,10 +521,10 @@ aui_BitmapFont::GlyphInfo *aui_BitmapFont::GetGlyphInfo( MBCHAR c )
 		gi->advance = (sint16)floor( (double)ttMetrics.advance / 64.0 + 0.5 );
 
 		uint32 nextOffset;
-		nextOffset = m_curOffset + gi->bbox.right - gi->bbox.left;
+		nextOffset = m_curOffset + gi->bbox.right - (gi->bbox.left < 0 ? gi->bbox.left : 0);
 
 		if ( !m_surfaceList->L()
-		||   nextOffset > k_AUI_BITMAPFONT_SURFACEWIDTH )
+		||   nextOffset >= k_AUI_BITMAPFONT_SURFACEWIDTH )
 		{
 			aui_Surface *cache;
 
