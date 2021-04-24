@@ -398,30 +398,27 @@ Pixel16 RadarMap::RadarTileColor(const Player *player, const MapPoint &position,
 			return(g_colorSet->GetColor(COLOR_WHITE));
 		}
 
-		if(m_displayUnits && (g_theWorld->GetTopVisibleUnit(worldpos, unit) || g_theWorld->GetTopRadarUnit(worldpos, unit)))
+		if (m_displayUnits && (g_theWorld->GetTopVisibleUnit(worldpos, unit) || g_theWorld->GetTopRadarUnit(worldpos, unit)))
 		{
-			if(m_displayRelations)
-			{
-				if(m_displayPolitical && unit.GetOwner() == owner)
-					return RadarTileRelationsDarkColor(worldpos, player, unit.GetOwner());
-				else
-					return RadarTileRelationsColor(worldpos, player, unit.GetOwner());
+			if (m_displayRelations) {
+				return RadarTileRelationsColor(worldpos, player, unit.GetOwner());
 			}
-			else
-			{
-				if(m_displayPolitical && unit.GetOwner() == owner)
-					return g_colorSet->GetDarkPlayerColor(unit.GetOwner());
-				else
-					return g_colorSet->GetPlayerColor(unit.GetOwner());
+			else {
+				return g_colorSet->GetPlayerColor(unit.GetOwner());
 			}
 		}
 
-		if(m_displayPolitical && owner >= 0 && !g_theWorld->IsWater(worldpos) )
+		if (m_displayPolitical && !g_theWorld->IsWater(worldpos) )
 		{
-			if(m_displayRelations)
+			if (owner < 0) {
+				return g_colorSet->GetDarkColor(COLOR_WHITE);
+			}
+			else if (m_displayRelations) {
 				return RadarTileRelationsColor(worldpos, player);
-			else
+			}
+			else {
 				return g_colorSet->GetPlayerColor(g_tiledMap->GetVisibleCellOwner(worldpos));
+			}
 		}
 
 		if(m_displayTerrain)
@@ -458,7 +455,7 @@ Pixel16 RadarMap::RadarTileBorderColor(const MapPoint &position, const Player *p
 {
 	sint32 owner = g_tiledMap->GetVisibleCellOwner(position);
 	if(owner < 0)
-		return(g_colorSet->GetColor(COLOR_BLACK));
+		return(g_colorSet->GetDarkColor(COLOR_WHITE));
 
 	if(m_displayRelations)
 		return RadarTileRelationsColor(position, player);
@@ -466,58 +463,24 @@ Pixel16 RadarMap::RadarTileBorderColor(const MapPoint &position, const Player *p
 		return(g_colorSet->GetPlayerColor(owner));
 }
 
-//---------------------------------------------------------------------------
-//
-//	RadarMap::RadarTileBorderColor
-//
-//---------------------------------------------------------------------------
-//	- Checks which color a border must be drawn for the current tile
-//
-//---------------------------------------------------------------------------
-Pixel16 RadarMap::RadarTileRelationsColor(const MapPoint &position, const Player *player, sint32 unitOwner)
-{
+Pixel16 RadarMap::RadarTileRelationsColor(const MapPoint & position, const Player * player, sint32 unitOwner) {
 	Assert(m_displayRelations);
 
-	sint32 owner = unitOwner < 0 ? g_tiledMap->GetVisibleCellOwner(position) : unitOwner;
-	if(owner < 0)
-		return(g_colorSet->GetColor(COLOR_WHITE));
-	else if(player->m_owner == owner || player->HasAllianceWith(owner))
-		return(g_colorSet->GetColor(COLOR_BLUE));
-	else if(player->HasWarWith(owner))
-		return(g_colorSet->GetColor(COLOR_RED));
-	else if(player->HasPeaceTreatyWith(owner) || player->HasAnyPactWith(owner))
-		return(g_colorSet->GetColor(COLOR_GREEN));
-	else if(!player->HasContactWith(owner))
-		return(g_colorSet->GetColor(COLOR_WHITE));
-	else
-		return(g_colorSet->GetColor(COLOR_YELLOW));
-}
-
-//---------------------------------------------------------------------------
-//
-//	RadarMap::RadarTileBorderDarkColor
-//
-//---------------------------------------------------------------------------
-//	- Dark alternative to RadarTileBorderColor
-//
-//---------------------------------------------------------------------------
-Pixel16 RadarMap::RadarTileRelationsDarkColor(const MapPoint &position, const Player *player, sint32 unitOwner)
-{
-	Assert(m_displayRelations);
+	COLOR color = COLOR_WHITE;
 
 	sint32 owner = unitOwner < 0 ? g_tiledMap->GetVisibleCellOwner(position) : unitOwner;
-	if(owner < 0)
-		return(g_colorSet->GetDarkColor(COLOR_WHITE));
-	else if(player->m_owner == owner || player->HasAllianceWith(owner))
-		return(g_colorSet->GetDarkColor(COLOR_BLUE));
-	else if(player->HasWarWith(owner))
-		return(g_colorSet->GetDarkColor(COLOR_RED));
-	else if(player->HasPeaceTreatyWith(owner) || player->HasAnyPactWith(owner))
-		return(g_colorSet->GetDarkColor(COLOR_GREEN));
-	else if(!player->HasContactWith(owner))
-		return(g_colorSet->GetDarkColor(COLOR_WHITE));
-	else
-		return(g_colorSet->GetDarkColor(COLOR_YELLOW));
+	if (owner >= 0) {
+		if (player->m_owner == owner || player->HasAllianceWith(owner)) {
+			color = COLOR_BLUE;
+		} else if (player->HasWarWith(owner)) {
+			color = COLOR_RED;
+		} else if (player->HasPeaceTreatyWith(owner) || player->HasAnyPactWith(owner)) {
+			color = COLOR_GREEN;
+		} else if (player->HasContactWith(owner)) {
+			color = COLOR_YELLOW;
+		}
+	}
+	return g_colorSet->GetColor(color);
 }
 
 //---------------------------------------------------------------------------
