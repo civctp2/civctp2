@@ -66,9 +66,15 @@ void UnitsToggleButtonActionCallback
 {
 	switch (action)
 	{
-	case AUI_SWITCH_ACTION_ON:
-		g_radarMap->DisplayUnits( true );
+	case AUI_SWITCH_ACTION_ON: {
+		g_radarMap->DisplayUnits(true);
+		ctp2_Switch * politicalButton = static_cast<ctp2_Switch *>(aui_Ldl::GetObject(
+				"RadarWindow.TopBorder.Button8"));
+		if (politicalButton) {
+			politicalButton->SetState(false);
+		}
 		break;
+	}
 	case AUI_SWITCH_ACTION_OFF:
 		g_radarMap->DisplayUnits( false );
 		break;
@@ -175,9 +181,14 @@ void PoliticalToggleButtonActionCallback(aui_Control *control,
 {
 	switch (action)
 	{
-	case AUI_SWITCH_ACTION_ON:
-		g_radarMap->DisplayPolitical( true );
+	case AUI_SWITCH_ACTION_ON: {
+		g_radarMap->DisplayPolitical(true);
+		ctp2_Switch * unitsButton = static_cast<ctp2_Switch *>(aui_Ldl::GetObject("RadarWindow.TopBorder.Button1"));
+		if (unitsButton) {
+			unitsButton->SetState(false);
+		}
 		break;
+	}
 	case AUI_SWITCH_ACTION_OFF:
 		g_radarMap->DisplayPolitical( false );
 		break;
