@@ -430,15 +430,12 @@ Pixel16 RadarMap::RadarTileColor(const Player *player, const MapPoint &position,
 		}
 		else
 		{
-			if(g_theWorld->IsLand(worldpos) || g_theWorld->IsMountain(worldpos))
+			if ((g_theWorld->IsLand(worldpos) || g_theWorld->IsMountain(worldpos)) && !g_theWorld->IsTunnel(worldpos))
 			{
-				return g_colorSet->GetColor(static_cast<COLOR>(COLOR_TERRAIN_0 +
-														   TERRAIN_GRASSLAND));
+				return g_colorSet->GetColor(static_cast<COLOR>(COLOR_TERRAIN_0 + TERRAIN_GRASSLAND));
 			}
-			else
-			{
-				return g_colorSet->GetColor(static_cast<COLOR>(COLOR_TERRAIN_0 +
-														   TERRAIN_WATER_DEEP));
+			else {
+				return g_colorSet->GetColor(static_cast<COLOR>(COLOR_TERRAIN_0 + TERRAIN_WATER_DEEP));
 			}
 		}
 	}
