@@ -81,12 +81,14 @@ extern PointerList<Player> *g_deadPlayer;
 extern sint32 g_fog_toggle;
 extern sint32 g_god;
 
-static const unsigned char k_EAST_BORDER_FLAG		= 0x01;
-static const unsigned char k_WEST_BORDER_FLAG		= 0x02;
-static const unsigned char k_NORTH_EAST_BORDER_FLAG	= 0x04;
-static const unsigned char k_NORTH_WEST_BORDER_FLAG	= 0x08;
-static const unsigned char k_SOUTH_EAST_BORDER_FLAG	= 0x10;
-static const unsigned char k_SOUTH_WEST_BORDER_FLAG	= 0x20;
+static const WORLD_DIRECTION NEIGHBOR_DIRECTIONS[] = { EAST, WEST, NORTHEAST, NORTHWEST, SOUTHEAST, SOUTHWEST };
+
+static const unsigned char k_EAST_BORDER_FLAG		= 1 << EAST;
+static const unsigned char k_WEST_BORDER_FLAG		= 1 << WEST;
+static const unsigned char k_NORTH_EAST_BORDER_FLAG	= 1 << NORTHEAST;
+static const unsigned char k_NORTH_WEST_BORDER_FLAG	= 1 << NORTHWEST;
+static const unsigned char k_SOUTH_EAST_BORDER_FLAG	= 1 << SOUTHEAST;
+static const unsigned char k_SOUTH_WEST_BORDER_FLAG	= 1 << SOUTHWEST;
 
 //---------------------------------------------------------------------------
 //
@@ -493,51 +495,41 @@ Pixel16 RadarMap::RadarTileRelationsColor(const MapPoint & position, const Playe
 //---------------------------------------------------------------------------
 uint8 RadarMap::RadarTileBorder(const Player *player, const MapPoint &position)
 {
-
 	uint8 borderFlags = 0;
+	if (!m_displayBorders) {
+		return borderFlags;
+	}
 
-	if(!m_displayBorders)
-		return(borderFlags);
+	if (!player->IsExplored(position)) {
+		return borderFlags;
+	}
 
-	if(!player->m_vision->IsExplored(position))
-		return(borderFlags);
-
-// Added by Martin Gühmann
+	// Added by Martin Gühmann
 	sint32 owner = g_tiledMap->GetVisibleCellOwner(const_cast<MapPoint&>(position));
+	if (owner < 0) {
+		return borderFlags;
+	}
 
-	if(owner < 0)
-		return(borderFlags);
+	if (owner != player->m_owner
+			&& !player->m_hasGlobalRadar
+			&& !Scheduler::CachedHasContactWithExceptSelf(player->m_owner, owner)
+			&& !g_fog_toggle // Don't forget if fog of war is off
+			&& !g_god)
+	{
+		return borderFlags;
+	}
 
-	if(owner != player->m_owner
-	&& !player->m_hasGlobalRadar
-	&& !Scheduler::CachedHasContactWithExceptSelf(player->m_owner, owner)
-	&& !g_fog_toggle // Don't forget if fog of war is off
-	&& !g_god
-	)
-		return(borderFlags);
+	for (auto neighborDirection : NEIGHBOR_DIRECTIONS)
+	{
+		MapPoint neighborPosition;
+		if (position.GetNeighborPosition(neighborDirection, neighborPosition) &&
+			(g_tiledMap->GetVisibleCellOwner(neighborPosition) != owner))
+		{
+			borderFlags |= (1 << neighborDirection);
+		}
+	}
 
-	MapPoint neighborPosition;
-
-	if(position.GetNeighborPosition(EAST, neighborPosition) &&
-		(g_tiledMap->GetVisibleCellOwner(neighborPosition) != owner))
-		borderFlags |= k_EAST_BORDER_FLAG;
-	if(position.GetNeighborPosition(WEST, neighborPosition) &&
-		(g_tiledMap->GetVisibleCellOwner(neighborPosition) != owner))
-		borderFlags |= k_WEST_BORDER_FLAG;
-	if(position.GetNeighborPosition(NORTHEAST, neighborPosition) &&
-		(g_tiledMap->GetVisibleCellOwner(neighborPosition) != owner))
-		borderFlags |= k_NORTH_EAST_BORDER_FLAG;
-	if(position.GetNeighborPosition(NORTHWEST, neighborPosition) &&
-		(g_tiledMap->GetVisibleCellOwner(neighborPosition) != owner))
-		borderFlags |= k_NORTH_WEST_BORDER_FLAG;
-	if(position.GetNeighborPosition(SOUTHEAST, neighborPosition) &&
-		(g_tiledMap->GetVisibleCellOwner(neighborPosition) != owner))
-		borderFlags |= k_SOUTH_EAST_BORDER_FLAG;
-	if(position.GetNeighborPosition(SOUTHWEST, neighborPosition) &&
-		(g_tiledMap->GetVisibleCellOwner(neighborPosition) != owner))
-		borderFlags |= k_SOUTH_WEST_BORDER_FLAG;
-
-	return(borderFlags);
+	return borderFlags;
 }
 
 //---------------------------------------------------------------------------
@@ -548,20 +540,13 @@ uint8 RadarMap::RadarTileBorder(const Player *player, const MapPoint &position)
 //	- Draws a trade route sign for the current tile
 //
 //---------------------------------------------------------------------------
-void RadarMap::RenderTradeRoute(aui_Surface *surface,
-								const RECT &tileRectangle)
+void RadarMap::RenderTradeRoute(aui_Surface & surface, const RECT & tileRectangle)
 {
-	sint32 tileWidth = tileRectangle.right - tileRectangle.left;
-	sint32 tileHeight = tileRectangle.bottom - tileRectangle.top;
+	sint32 midX = (tileRectangle.left + tileRectangle.right) / 2;
+	sint32 midY = (tileRectangle.top + tileRectangle.bottom) / 2;
+	RECT tradeRect = { midX, midY, midX, midY };
 
-	RECT tradeRect = {
-		tileRectangle.left + (tileWidth / 2),
-		tileRectangle.top + (tileHeight / 2),
-		tileRectangle.left + (tileWidth / 2) + 1,
-		tileRectangle.top + (tileHeight / 2) + 1
-	};
-
-	primitives_PaintRect16(surface, &tradeRect, g_colorSet->GetColor(COLOR_YELLOW));
+	primitives_ClippedPaintRect16(surface, tradeRect, g_colorSet->GetColor(COLOR_YELLOW));
 }
 
 //---------------------------------------------------------------------------
@@ -572,51 +557,44 @@ void RadarMap::RenderTradeRoute(aui_Surface *surface,
 //	- Draws a Capitol marker for the current tile
 //
 //---------------------------------------------------------------------------
-void RadarMap::RenderCapitol(aui_Surface *surface, const MapPoint &position, const MapPoint &worldpos, Player *player)
+void RadarMap::RenderCapitol(aui_Surface & surface, const MapPoint & position, const MapPoint & worldPos,
+		Player * player)
 {
-	if(!m_displayCapitols)
+	if (!m_displayCapitols || !player->IsExplored(worldPos)) {
 		return;
-
-	if(!player->m_vision->IsExplored(worldpos))
-		return;
+	}
 
 	Unit unit;
-
-	if(!g_theWorld->GetTopVisibleUnit(worldpos, unit))
-		if(!g_theWorld->GetTopRadarUnit(worldpos, unit))
-			return;
-
-	if(!unit.IsValid() || !unit.IsCity() || !unit.IsCapitol())
+	if (!g_theWorld->GetTopVisibleUnit(worldPos, unit) || !g_theWorld->GetTopRadarUnit(worldPos, unit)) {
 		return;
+	}
 
-	MapPoint screenPosition(((worldpos.y / 2) + position.x) % (m_mapSize->x), position.y);
+	if (!unit.IsValid() || !unit.IsCity() || !unit.IsCapitol()) {
+		return;
+	}
 
+	MapPoint screenPosition(((worldPos.y / 2) + position.x) % (m_mapSize->x), position.y);
 	double xPosition = screenPosition.x * m_tilePixelWidth;
 	double yPosition = screenPosition.y * m_tilePixelHeight;
 
-	if(screenPosition.y & 1)
+	if (screenPosition.y & 1) {
 		xPosition += m_tilePixelWidth / 2.0;
+	}
 
 	//Now to build the "star"
 	RECT vertical = {
-		static_cast<sint32>(ceil(xPosition - m_tilePixelWidth)),
-		static_cast<sint32>(ceil(yPosition)),
-		static_cast<sint32>(ceil(xPosition + 2*m_tilePixelWidth)),
-		static_cast<sint32>(ceil(yPosition + m_tilePixelHeight))
+		xPosition - m_tilePixelWidth, yPosition,
+		xPosition + 2 * m_tilePixelWidth - 1, yPosition + m_tilePixelHeight - 1
 	};
 
 	RECT horizontal = {
-		static_cast<sint32>(ceil(xPosition)),
-		static_cast<sint32>(ceil(yPosition  - m_tilePixelHeight)),
-		static_cast<sint32>(ceil(xPosition + m_tilePixelWidth)),
-		static_cast<sint32>(ceil(yPosition + 2*m_tilePixelHeight))
+		xPosition, yPosition - m_tilePixelHeight,
+		xPosition + m_tilePixelWidth - 1, yPosition + 2 * m_tilePixelHeight - 1
 	};
 
-	primitives_PaintRect16(surface, &vertical, g_colorSet->GetColor(COLOR_ORANGE));
-	primitives_PaintRect16(surface, &horizontal, g_colorSet->GetColor(COLOR_ORANGE));
-
+	primitives_ClippedPaintRect16(surface, vertical, g_colorSet->GetColor(COLOR_ORANGE));
+	primitives_ClippedPaintRect16(surface, horizontal, g_colorSet->GetColor(COLOR_ORANGE));
 }
-
 
 //---------------------------------------------------------------------------
 //
@@ -647,60 +625,6 @@ void RadarMap::RenderSpecialTile(aui_Surface *surface,
 
 }
 
-
-//---------------------------------------------------------------------------
-//
-//	RadarMap::RenderSpecialTileBorder
-//
-//---------------------------------------------------------------------------
-//	- Renders the current special radar map borders, that means tiles that are
-//    on the max or min x value.
-//
-//---------------------------------------------------------------------------
-void RadarMap::RenderSpecialTileBorder(aui_Surface *surface,
-								 const MapPoint &screenPosition,
-								 uint8 borderFlags,
-								 Pixel16 borderColor)
-{
-
-	double xPosition = screenPosition.x * m_tilePixelWidth;
-	double yPosition = screenPosition.y * m_tilePixelHeight;
-
-	RECT tileRectangle = {
-		static_cast<sint32>(ceil(xPosition + (m_tilePixelWidth / 2.0))),
-		static_cast<sint32>(ceil(yPosition)),
-		static_cast<sint32>(ceil(xPosition + m_tilePixelWidth)),
-		static_cast<sint32>(ceil(yPosition + m_tilePixelHeight))
-	};
-
-	tileRectangle.right		= std::max<sint32>(tileRectangle.left, (tileRectangle.right - 1L));
-	tileRectangle.bottom	= std::max<sint32>(tileRectangle.top, (tileRectangle.bottom - 1L));
-
-	if(borderFlags & k_WEST_BORDER_FLAG)
-		primitives_DrawLine16(surface, tileRectangle.left, tileRectangle.top,
-			tileRectangle.left, tileRectangle.bottom, borderColor);
-	if(borderFlags & k_NORTH_WEST_BORDER_FLAG)
-		primitives_DrawLine16(surface, tileRectangle.right, tileRectangle.top,
-			tileRectangle.left, tileRectangle.top, borderColor);
-	if(borderFlags & k_SOUTH_WEST_BORDER_FLAG)
-		primitives_DrawLine16(surface, tileRectangle.right, tileRectangle.bottom,
-			tileRectangle.left, tileRectangle.bottom, borderColor);
-
-	tileRectangle.left  = 0;
-	tileRectangle.right	=
-        std::max<LONG>(0, static_cast<LONG>(ceil(m_tilePixelWidth / 2.0)) - 1);
-
-	if(borderFlags & k_EAST_BORDER_FLAG)
-		primitives_DrawLine16(surface, tileRectangle.right, tileRectangle.top,
-			tileRectangle.right, tileRectangle.bottom, borderColor);
-	if(borderFlags & k_NORTH_EAST_BORDER_FLAG)
-		primitives_DrawLine16(surface, tileRectangle.left, tileRectangle.top,
-			tileRectangle.right, tileRectangle.top, borderColor);
-	if(borderFlags & k_SOUTH_EAST_BORDER_FLAG)
-		primitives_DrawLine16(surface, tileRectangle.left, tileRectangle.bottom,
-			tileRectangle.right, tileRectangle.bottom, borderColor);
-}
-
 //---------------------------------------------------------------------------
 //
 //	RadarMap::RenderNormalTile
@@ -720,66 +644,6 @@ void RadarMap::RenderNormalTile(aui_Surface *surface,
 	tileRectangle.bottom = screenPosition.y + 1;
 	primitives_PaintRect16(surface, &tileRectangle, color);
 
-}
-
-
-//---------------------------------------------------------------------------
-//
-//	RadarMap::RenderNormalTileBorder
-//
-//---------------------------------------------------------------------------
-//	- Renders the current normal radar map borders
-//
-//---------------------------------------------------------------------------
-void RadarMap::RenderNormalTileBorder(aui_Surface *surface,
-		const MapPoint &screenPosition,
-		uint8 borderFlags, Pixel16 borderColor)
-{
-
-	double xPosition = screenPosition.x * m_tilePixelWidth;
-	double yPosition = screenPosition.y * m_tilePixelHeight;
-
-	if(screenPosition.y & 1)
-		xPosition += m_tilePixelWidth / 2.0;
-
-	RECT tileRectangle = {
-		static_cast<LONG>(ceil(xPosition)),
-		static_cast<LONG>(ceil(yPosition)),
-		static_cast<LONG>(ceil(xPosition + m_tilePixelWidth)),
-		static_cast<LONG>(ceil(yPosition + m_tilePixelHeight))
-	};
-
-	tileRectangle.right		= std::max<sint32>(tileRectangle.left, (tileRectangle.right - 1L));
-	tileRectangle.bottom	= std::max<sint32>(tileRectangle.top, (tileRectangle.bottom - 1L));
-	LONG    middle			=
-        std::min<LONG>(static_cast<LONG>(ceil(xPosition + m_tilePixelWidth/2)),
-                       tileRectangle.right
-                      );
-
-	if(tileRectangle.right >= surface->Width())
-		tileRectangle.right = surface->Width() - 1;
-	if(tileRectangle.bottom >= surface->Height())
-		tileRectangle.bottom = surface->Height() - 1;
-
-	if(borderFlags & k_EAST_BORDER_FLAG)
-		primitives_DrawLine16(surface, tileRectangle.right, tileRectangle.top,
-			tileRectangle.right, tileRectangle.bottom, borderColor);
-	if(borderFlags & k_NORTH_EAST_BORDER_FLAG)
-		primitives_DrawLine16(surface, middle, tileRectangle.top,
-			tileRectangle.right, tileRectangle.top, borderColor);
-	if(borderFlags & k_SOUTH_EAST_BORDER_FLAG)
-		primitives_DrawLine16(surface, middle, tileRectangle.bottom,
-			tileRectangle.right, tileRectangle.bottom, borderColor);
-
-	if(borderFlags & k_WEST_BORDER_FLAG)
-		primitives_DrawLine16(surface, tileRectangle.left, tileRectangle.top,
-			tileRectangle.left, tileRectangle.bottom, borderColor);
-	if(borderFlags & k_NORTH_WEST_BORDER_FLAG)
-		primitives_DrawLine16(surface, middle, tileRectangle.top,
-			tileRectangle.left, tileRectangle.top, borderColor);
-	if(borderFlags & k_SOUTH_WEST_BORDER_FLAG)
-		primitives_DrawLine16(surface, middle, tileRectangle.bottom,
-			tileRectangle.left, tileRectangle.bottom, borderColor);
 }
 
 //---------------------------------------------------------------------------
@@ -809,14 +673,61 @@ void RadarMap::RenderMapTile(aui_Surface *surface, const MapPoint &screenPositio
 //    borders
 //
 //---------------------------------------------------------------------------
-void RadarMap::RenderMapTileBorder(aui_Surface *surface, const MapPoint &screenPosition,
-							 uint8 borderFlags, Pixel16 borderColor)
+void RadarMap::RenderMapTileBorder(aui_Surface & surface, const MapPoint & screenPosition, uint8 borderFlags,
+		Pixel16 borderColor)
 {
+	double xPosition = screenPosition.x * m_tilePixelWidth;
+	double yPosition = screenPosition.y * m_tilePixelHeight;
+	if (screenPosition.y & 1) {
+		xPosition += m_tilePixelWidth / 2.0;
+	}
 
-	if((screenPosition.y & 1) && (screenPosition.x == (m_mapSize->x - 1)))
-		RenderSpecialTileBorder(surface, screenPosition, borderFlags, borderColor);
-	else
-		RenderNormalTileBorder(surface, screenPosition, borderFlags, borderColor);
+	RECT tileRectangle = { xPosition, yPosition, xPosition + m_tilePixelWidth, yPosition + m_tilePixelHeight };
+	sint32 middleX = xPosition + m_tilePixelWidth / 2.0;
+
+	sint32 eastFlags = borderFlags & (k_EAST_BORDER_FLAG | k_NORTH_EAST_BORDER_FLAG | k_SOUTH_EAST_BORDER_FLAG);
+	if (eastFlags == 0) {
+		// skip
+	} else if (eastFlags == (k_EAST_BORDER_FLAG | k_NORTH_EAST_BORDER_FLAG | k_SOUTH_EAST_BORDER_FLAG)) {
+		primitives_ClippedLine16(surface, middleX, tileRectangle.top, middleX, tileRectangle.bottom, borderColor);
+	} else if (eastFlags == k_EAST_BORDER_FLAG) {
+		primitives_ClippedLine16(surface, tileRectangle.right, tileRectangle.top, tileRectangle.right,
+				tileRectangle.bottom, borderColor);
+	} else if (eastFlags == (k_EAST_BORDER_FLAG | k_NORTH_EAST_BORDER_FLAG)) {
+		primitives_ClippedLine16(surface, middleX, tileRectangle.top, tileRectangle.right, tileRectangle.bottom,
+				borderColor);
+	} else if (eastFlags == (k_EAST_BORDER_FLAG | k_SOUTH_EAST_BORDER_FLAG)) {
+		primitives_ClippedLine16(surface, tileRectangle.right, tileRectangle.top, middleX, tileRectangle.bottom,
+				borderColor);
+	} else if (eastFlags == k_NORTH_EAST_BORDER_FLAG) {
+		primitives_ClippedLine16(surface, middleX, tileRectangle.top, tileRectangle.right, tileRectangle.top,
+				borderColor);
+	} else if (eastFlags == k_SOUTH_EAST_BORDER_FLAG) {
+		primitives_ClippedLine16(surface, middleX, tileRectangle.bottom, tileRectangle.right, tileRectangle.bottom,
+				borderColor);
+	}
+
+	sint32 westFlags = borderFlags & (k_WEST_BORDER_FLAG | k_NORTH_WEST_BORDER_FLAG | k_SOUTH_WEST_BORDER_FLAG);
+	if (westFlags == 0) {
+		// skip
+	} else if (westFlags == (k_WEST_BORDER_FLAG | k_NORTH_WEST_BORDER_FLAG | k_SOUTH_WEST_BORDER_FLAG)) {
+		primitives_ClippedLine16(surface, middleX, tileRectangle.top, middleX, tileRectangle.bottom, borderColor);
+	} else if (westFlags == k_WEST_BORDER_FLAG) {
+		primitives_ClippedLine16(surface, tileRectangle.left, tileRectangle.top, tileRectangle.left,
+				tileRectangle.bottom, borderColor);
+	} else if (westFlags == (k_WEST_BORDER_FLAG | k_NORTH_WEST_BORDER_FLAG)) {
+		primitives_ClippedLine16(surface, tileRectangle.left, tileRectangle.bottom, middleX, tileRectangle.top,
+				borderColor);
+	} else if (westFlags == (k_WEST_BORDER_FLAG | k_SOUTH_WEST_BORDER_FLAG)) {
+		primitives_ClippedLine16(surface, tileRectangle.left, tileRectangle.top, middleX, tileRectangle.bottom,
+				borderColor);
+	} else if (westFlags == k_SOUTH_WEST_BORDER_FLAG) {
+		primitives_ClippedLine16(surface, tileRectangle.left, tileRectangle.bottom, middleX, tileRectangle.bottom,
+				borderColor);
+	} else if (westFlags == k_NORTH_WEST_BORDER_FLAG) {
+		primitives_ClippedLine16(surface, tileRectangle.left, tileRectangle.top, middleX, tileRectangle.top,
+				borderColor);
+	}
 }
 
 //---------------------------------------------------------------------------
@@ -853,17 +764,15 @@ void RadarMap::RenderTile(aui_Surface *surface, const MapPoint &position,
 //	- Controls the rendering of the borders for the current radar map
 //    position
 //---------------------------------------------------------------------------
-void RadarMap::RenderTileBorder(aui_Surface *surface, const MapPoint &position,
-						  const MapPoint &worldpos, Player *player)
+void RadarMap::RenderTileBorder(aui_Surface & surface, const MapPoint & position, const MapPoint & worldPos,
+		Player * player)
 {
-	uint8 const	borderFlags =
-		RadarTileBorder(player, MapPoint(worldpos.x, worldpos.y));
+	uint8 borderFlags = RadarTileBorder(player, worldPos);
 
 	if (borderFlags)
 	{
-		Pixel16 const	borderColor =
-			RadarTileBorderColor(MapPoint(worldpos.x, worldpos.y), player);
-		sint32 const	x	= ((position.y / 2) + position.x) % m_mapSize->x;
+		Pixel16 borderColor = RadarTileBorderColor(worldPos, player);
+		sint32 x = ((position.y / 2) + position.x) % m_mapSize->x;
 		RenderMapTileBorder(surface, MapPoint(x, position.y), borderFlags, borderColor);
 	}
 }
@@ -876,42 +785,35 @@ void RadarMap::RenderTileBorder(aui_Surface *surface, const MapPoint &position,
 //  - Prepares and call the rendering of the trade routes
 //
 //---------------------------------------------------------------------------
-void RadarMap::RenderTrade(aui_Surface *surface, const MapPoint &position, const MapPoint &worldpos, Player *player)
+void RadarMap::RenderTrade(aui_Surface & surface, const MapPoint & position, const MapPoint & worldPos,
+		Player * player)
 {
-	if(!m_displayTrade)
-		return;
-
-
-
-
-	MapPoint screenPosition(((worldpos.y / 2) + position.x) % (m_mapSize->x), position.y);
-
-	bool seenTrade= false;
-	for (sint32 i = 0; i < g_theWorld->GetCell(worldpos)->GetNumTradeRoutes(); i++) {
-	    TradeRoute route = g_theWorld->GetCell(worldpos)->GetTradeRoute(i);
-	    if(route.SeenBy(g_selected_item->GetVisiblePlayer())){
-		seenTrade= true;
-		}
-	    }
-
-	if(!seenTrade ||
-	   !player->m_vision->IsExplored(worldpos)) {
+	if (!m_displayTrade || !player->IsExplored(worldPos)) {
 		return;
 	}
 
+	bool seenTrade= false;
+	for (sint32 i = 0; i < g_theWorld->GetCell(worldPos)->GetNumTradeRoutes(); i++) {
+		TradeRoute route = g_theWorld->GetCell(worldPos)->GetTradeRoute(i);
+		if (route.SeenBy(g_selected_item->GetVisiblePlayer())) {
+			seenTrade= true;
+			break;
+		}
+	}
+
+	if (!seenTrade) {
+		return;
+	}
+
+	MapPoint screenPosition(((worldPos.y / 2) + position.x) % (m_mapSize->x), position.y);
 	double xPosition = screenPosition.x * m_tilePixelWidth;
 	double yPosition = screenPosition.y * m_tilePixelHeight;
 
-	if(screenPosition.y & 1)
+	if (screenPosition.y & 1) {
 		xPosition += m_tilePixelWidth / 2.0;
+	}
 
-	RECT tileRectangle = {
-		static_cast<sint32>(ceil(xPosition)),
-		static_cast<sint32>(ceil(yPosition)),
-		static_cast<sint32>(ceil(xPosition + m_tilePixelWidth)),
-		static_cast<sint32>(ceil(yPosition + m_tilePixelHeight))
-	};
-
+	RECT tileRectangle = { xPosition, yPosition, xPosition + m_tilePixelWidth, yPosition + m_tilePixelHeight };
 	RenderTradeRoute(surface, tileRectangle);
 }
 
@@ -959,13 +861,16 @@ void RadarMap::RenderMap(aui_Surface *surface)
 		dRect,
 		m_filter);
 
-	for(y = 0; y < m_mapSize->y; y++)
-		for(x = 0; x < m_mapSize->x; x++)
-		{
-			RenderTileBorder(surface, PosWorldToPosRadar(MapPoint(x, y)), MapPoint(x, y), player);
-			RenderCapitol(surface, PosWorldToPosRadar(MapPoint(x, y)), MapPoint(x, y), player);
-			RenderTrade(surface, PosWorldToPosRadar(MapPoint(x, y)), MapPoint(x, y), player);
+	uint8 *pSurfBase;
+	surface->Lock(NULL, (LPVOID *)&pSurfBase, 0);
+	for(y = 0; y < m_mapSize->y; y++) {
+		for (x = 0; x < m_mapSize->x; x++) {
+			RenderTileBorder(*surface, PosWorldToPosRadar(MapPoint(x, y)), MapPoint(x, y), player);
+			RenderCapitol(*surface, PosWorldToPosRadar(MapPoint(x, y)), MapPoint(x, y), player);
+			RenderTrade(*surface, PosWorldToPosRadar(MapPoint(x, y)), MapPoint(x, y), player);
 		}
+	}
+	surface->Unlock(pSurfBase);
 }
 
 //---------------------------------------------------------------------------
@@ -1378,26 +1283,19 @@ void RadarMap::RedrawTile( const MapPoint *point )
 		primitives_Scale16(m_tempSurface, m_mapSurface, sRect, dRect, m_filter);
 	}
 
-	RenderTileBorder(m_mapSurface, offsetpos, *point, player);
-	RenderCapitol(m_mapSurface, offsetpos, *point, player);
-	RenderTrade(m_mapSurface, offsetpos, *point, player);
+	RenderTileBorder(*m_mapSurface, offsetpos, *point, player);
+	RenderCapitol(*m_mapSurface, offsetpos, *point, player);
+	RenderTrade(*m_mapSurface, offsetpos, *point, player);
 
 	if (m_filter)
 	{
-		MapPoint neighbor;
-		if (point->GetNeighborPosition(NORTHEAST, neighbor))
-				RenderTileBorder(m_mapSurface, PosWorldToPosRadar(neighbor),neighbor, player);
-		if (point->GetNeighborPosition(NORTHWEST, neighbor))
-				RenderTileBorder(m_mapSurface, PosWorldToPosRadar(neighbor),neighbor, player);
-		if (point->GetNeighborPosition(EAST, neighbor))
-				RenderTileBorder(m_mapSurface, PosWorldToPosRadar(neighbor),neighbor, player);
-		if (point->GetNeighborPosition(WEST, neighbor))
-				RenderTileBorder(m_mapSurface, PosWorldToPosRadar(neighbor),neighbor, player);
-		if (point->GetNeighborPosition(SOUTHEAST, neighbor))
-				RenderTileBorder(m_mapSurface, PosWorldToPosRadar(neighbor),neighbor, player);
-		if (point->GetNeighborPosition(SOUTHWEST, neighbor))
-				RenderTileBorder(m_mapSurface, PosWorldToPosRadar(neighbor),neighbor, player);
-
+		for (auto neighborDirection : NEIGHBOR_DIRECTIONS)
+		{
+			MapPoint neighbor;
+			if (point->GetNeighborPosition(neighborDirection, neighbor)) {
+				RenderTileBorder(*m_mapSurface, PosWorldToPosRadar(neighbor), neighbor, player);
+			}
+		}
 	}
 }
 
