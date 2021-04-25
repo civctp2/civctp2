@@ -156,37 +156,29 @@ private:
 	void     UpdateMap(aui_Surface * surf, sint32 x, sint32 y);
 	void     RenderViewRect(aui_Surface & surf, sint32 x, sint32 y);
 
-	Pixel16 RadarTileColor(const Player *player, const MapPoint &position, uint32 &flags);
-
 	Pixel16 RadarTileBorderColor(const MapPoint &position, const Player *player);
 
 	Pixel16 RadarTileRelationsColor (const MapPoint & position, const Player * player, sint32 unitOwner = -1);
 
 	uint8 RadarTileBorder(const Player *player, const MapPoint &position);
 
-	void RenderTradeRoute(aui_Surface *surf, const RECT &tileRectangle);
+	void RenderTradeRoute(aui_Surface & surfuce, const RECT & tileRectangle);
 
-	void RenderCapitol(aui_Surface *surface, const MapPoint &position, const MapPoint &worldpos, Player *player);
+	void RenderCapitol(aui_Surface & surface, const MapPoint & position, const MapPoint & worldPos, Player * player);
 
 
 	void RenderSpecialTile(aui_Surface *surface, const MapPoint &screenPosition,
 		Pixel16 color, uint32 flags);
 
 
-	void RenderSpecialTileBorder(aui_Surface *surface, const MapPoint &screenPosition,
-		uint8 borderFlags, Pixel16 borderColor);
-
 	void RenderNormalTile(aui_Surface *surface, const MapPoint &screenPosition,
 		Pixel16 color, uint32 flags);
-
-	void RenderNormalTileBorder(aui_Surface *surface, const MapPoint &screenPosition,
-		uint8 borderFlags, Pixel16 borderColor);
 
 	void RenderMapTile(aui_Surface *surface, const MapPoint &screenPosition,
 		Pixel16 color, uint32 flags);
 
-	void RenderMapTileBorder(aui_Surface *surface, const MapPoint &screenPosition,
-		uint8 borderFlags, Pixel16 borderColor);
+	void RenderMapTileBorder(aui_Surface & surface, const MapPoint & screenPosition, uint8 borderFlags,
+			Pixel16 borderColor);
 
 	Pixel16 RadarTileColor(const Player *player, const MapPoint &position,
 							const MapPoint &worldpos, uint32 &flags);
@@ -194,10 +186,9 @@ private:
 	void RenderTile(aui_Surface *surface, const MapPoint &position,
 		const MapPoint &worldpos, Player *player);
 
-	void RenderTrade(aui_Surface *surface, const MapPoint &position, const MapPoint &worldpos, Player *player);
+	void RenderTrade(aui_Surface & surface, const MapPoint & position, const MapPoint & worldPos, Player * player);
 
-	void RenderTileBorder(aui_Surface *surface, const MapPoint &position,
-						  const MapPoint &worldpos, Player *player);
+	void RenderTileBorder(aui_Surface & surface, const MapPoint & position, const MapPoint & worldPos, Player * player);
 
 	MapPoint MapOffset(const MapPoint oldPosition);
 	MapPoint PosWorldToPosRadar(const MapPoint worldpos);
