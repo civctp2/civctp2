@@ -2875,9 +2875,6 @@ void primitives_ClippedShadowRect16(aui_Surface & surf, const RECT & rect)
 void primitives_ClippedTriangle16(aui_Surface & surf, sint32 x1, sint32 y1, sint32 x2, sint32 y2, Pixel16 color,
 		uint8 alpha)
 {
-	RECT rect = { x1, y1, x2, y2 };
-	primitives_ClippedTwoColorPaintRect16(surf, rect, 0xF800, 0, pixelutils_OPAQUE);
-
 	bool mirror = (y2 < y1);
 	if (y2 < y1)
 	{
