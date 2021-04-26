@@ -2465,6 +2465,70 @@ void SpecialDrawAngledLine16(Pixel16 * pixel, sint32 majorLength, sint32 minorLe
 	} while (--majorLength > 0);
 }
 
+void FillDrawDiagonalLine16(Pixel16 * pixel, sint32 length, sint32 incrementX, sint32 incrementY, Pixel16 color,
+		uint8 alpha, bool mirror)
+{
+	const uint32 blendRGBMask = pixelutils_GetBlend16RGBMask();
+
+	Pixel16 * endPixel = pixel + length * (incrementX + incrementY);
+
+	sint32 fillLength = mirror ? length : 0;
+	sint32 fillLengthPitch = mirror ? -1 : 1;
+	bool fromDiagonal = mirror ? incrementX > 0 : incrementX < 0;
+	while (pixel <= endPixel)
+	{
+		BlendLine16(fromDiagonal ? pixel : pixel - fillLength, fillLength + 1, 1, color, alpha, blendRGBMask);
+		fillLength += fillLengthPitch;
+		pixel += (incrementX + incrementY);
+	}
+}
+
+void FillDrawAngledLine16(Pixel16 * pixel, sint32 majorLength, sint32 minorLength, sint32 majorPitch,
+		sint32 minorPitch, Pixel16 color, uint8 alpha, bool toDiagonal)
+{
+	const uint32 blendRGBMask  = pixelutils_GetBlend16RGBMask();
+
+	Pixel16 * endPixel = pixel + majorLength * majorPitch + minorLength * minorPitch;
+
+	sint32 fillLength          = majorPitch > 0 ? (toDiagonal ? 0 : majorLength) : (toDiagonal ? majorLength : 0);
+	sint32 fillLengthIncrement = majorPitch > 0 ? (toDiagonal ? 1 : -1) : (toDiagonal ? -1 : 1);
+	sint32 positiveMajorPitch  = majorPitch > 0 ? majorPitch : -majorPitch;
+
+	// first line
+	BlendLine16(toDiagonal ? pixel - (fillLength * positiveMajorPitch) : pixel, fillLength + 1, positiveMajorPitch,
+			color, alpha, blendRGBMask);
+
+	// calculate 16-bit fixed-point fractional part of a
+	// pixel that minor advances each time major advances 1 pixel, truncating the
+	// result so that we won't overrun the endpoint along the minor axis
+	const uint16 errorFraction = uint16 ((minorLength << 16) / (uint32) majorLength);
+	// Initialize the line error accumulator to 0
+	uint16 errorAccumulator = 0;
+
+	while (pixel < endPixel)
+	{
+		const uint16 error = errorAccumulator; // remember current accumulated error
+		errorAccumulator += errorFraction;     // calculate error for next pixel
+
+		if (errorAccumulator <= error)
+		{
+			// Error accumulator turned over, so advance the minor
+			pixel += minorPitch;
+			if (pixel >= endPixel) {
+				break;
+			}
+			BlendLine16(toDiagonal ? pixel - (fillLength * positiveMajorPitch) : pixel, fillLength + 1,
+					positiveMajorPitch, color, alpha, blendRGBMask);
+		}
+		pixel += majorPitch; // always advance major
+		fillLength += fillLengthIncrement;
+	}
+
+	// Last line
+	BlendLine16(toDiagonal ? endPixel - (fillLength * positiveMajorPitch) : endPixel, fillLength + 1,
+			positiveMajorPitch, color, alpha, blendRGBMask);
+}
+
 void SpecialDrawAngledPatternLine16(Pixel16 * pixel, sint32 majorLength, sint32 minorLength, sint32 majorPitch,
 		sint32 minorPitch, Pixel16 color, uint32 fullPattern, uint32 currentPattern, LINE_FLAGS lineFlags)
 {
@@ -2805,6 +2869,47 @@ void primitives_ClippedShadowRect16(aui_Surface & surf, const RECT & rect)
 	{
 		DrawShadowLine16(pixel, width, 1, shadowRGBMask);
 		pixel += surfPitchPixels;
+	}
+}
+
+void primitives_ClippedTriangle16(aui_Surface & surf, sint32 x1, sint32 y1, sint32 x2, sint32 y2, Pixel16 color,
+		uint8 alpha)
+{
+	RECT rect = { x1, y1, x2, y2 };
+	primitives_ClippedTwoColorPaintRect16(surf, rect, 0xF800, 0, pixelutils_OPAQUE);
+
+	bool mirror = (y2 < y1);
+	if (y2 < y1)
+	{
+		SWAPVARS(x1, x2)
+		SWAPVARS(y1, y2);
+	}
+
+	RECT clipRect = { 0, 0, surf.Width() - 1, surf.Height() - 1 };
+	if (!ClipLine(clipRect, x1, y1, x2, y2)) {
+		return;
+	}
+
+	sint32 deltaY = y2 - y1;
+	sint32 deltaX = x2 - x1;
+	if (deltaX == 0 || deltaY == 0) {
+		return;
+	}
+
+	sint32 incrementX = deltaX < 0 ? -1 : 1;
+	if (incrementX < 0) {
+		deltaX = -deltaX;
+	}
+
+	Pixel16 * base = GetBasePixel16(surf, x1, y1);
+	sint32 incrementY = surf.Pitch() >> 1;
+	if (deltaX == deltaY) { // diagonal
+		FillDrawDiagonalLine16(base, deltaX, incrementX, incrementY, color, alpha, mirror);
+	}
+	else if (deltaX < deltaY) { // Y-major
+		FillDrawAngledLine16(base, deltaY, deltaX, incrementY, incrementX, color, alpha, mirror);
+	} else { // X-major
+		FillDrawAngledLine16(base, deltaX, deltaY, incrementX, incrementY, color, alpha, mirror ^ (incrementX > 0));
 	}
 }
 
