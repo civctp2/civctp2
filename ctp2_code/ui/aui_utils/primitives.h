@@ -71,6 +71,13 @@ enum LINE_FLAGS {
 	LF_SHADOW       = 0x02
 };
 
+enum TRIANGLE_ID {
+	TI_LEFT_TOP,
+	TI_LEFT_BOTTOM,
+	TI_RIGHT_TOP,
+	TI_RIGHT_BOTTOM
+};
+
 // All kind of patterns may be defined and used
 // Restrictions:
 //   pattern-length has to be a multitude of 2, i.e. 2, 4, 8, 16 or 32
@@ -173,9 +180,8 @@ inline void primitives_ClippedFrame16(aui_Surface & surf, sint32 x, sint32 y, si
 }
 void primitives_ClippedShadowRect16(aui_Surface & surf, const RECT & rect);
 
-// Third point is formed by x1, y2
-void primitives_ClippedTriangle16(aui_Surface & surf, sint32 x1, sint32 y1, sint32 x2, sint32 y2, Pixel16 color,
-		uint8 alpha = pixelutils_OPAQUE);
+void primitives_ClippedTriangle16(aui_Surface & surf, const RECT & rect, TRIANGLE_ID triangleId, Pixel16 color,
+                                  uint8 alpha = pixelutils_OPAQUE);
 
 // Clipped lines primitives
 void primitives_SetPatternOffset(sint32 x, sint32 y);

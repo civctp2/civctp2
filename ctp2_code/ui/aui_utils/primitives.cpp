@@ -2466,37 +2466,36 @@ void SpecialDrawAngledLine16(Pixel16 * pixel, sint32 majorLength, sint32 minorLe
 }
 
 void FillDrawDiagonalLine16(Pixel16 * pixel, sint32 length, sint32 incrementX, sint32 incrementY, Pixel16 color,
-		uint8 alpha, bool mirror)
+                            uint8 alpha, TRIANGLE_ID triangleId)
 {
 	const uint32 blendRGBMask = pixelutils_GetBlend16RGBMask();
 
 	Pixel16 * endPixel = pixel + length * (incrementX + incrementY);
 
-	sint32 fillLength = mirror ? length : 0;
-	sint32 fillLengthPitch = mirror ? -1 : 1;
-	bool fromDiagonal = mirror ? incrementX > 0 : incrementX < 0;
+	sint32 fillLength          = triangleId == TI_LEFT_TOP || triangleId == TI_RIGHT_TOP ? length : 0;
+	sint32 fillLengthIncrement = triangleId == TI_LEFT_TOP || triangleId == TI_RIGHT_TOP ? -1 : 1;
+	bool   toDiagonal          = triangleId == TI_LEFT_TOP || triangleId == TI_LEFT_BOTTOM;
 	while (pixel <= endPixel)
 	{
-		BlendLine16(fromDiagonal ? pixel : pixel - fillLength, fillLength + 1, 1, color, alpha, blendRGBMask);
-		fillLength += fillLengthPitch;
+		BlendLine16(toDiagonal ? pixel - fillLength : pixel, fillLength + 1, 1, color, alpha, blendRGBMask);
+		fillLength += fillLengthIncrement;
 		pixel += (incrementX + incrementY);
 	}
 }
 
 void FillDrawAngledLine16(Pixel16 * pixel, sint32 majorLength, sint32 minorLength, sint32 majorPitch,
-		sint32 minorPitch, Pixel16 color, uint8 alpha, bool toDiagonal)
+		sint32 minorPitch, Pixel16 color, uint8 alpha, sint32 fillPitch, bool toAngledLine)
 {
 	const uint32 blendRGBMask  = pixelutils_GetBlend16RGBMask();
 
 	Pixel16 * endPixel = pixel + majorLength * majorPitch + minorLength * minorPitch;
 
-	sint32 fillLength          = majorPitch > 0 ? (toDiagonal ? 0 : majorLength) : (toDiagonal ? majorLength : 0);
-	sint32 fillLengthIncrement = majorPitch > 0 ? (toDiagonal ? 1 : -1) : (toDiagonal ? -1 : 1);
-	sint32 positiveMajorPitch  = majorPitch > 0 ? majorPitch : -majorPitch;
+	sint32 fillLength         = fillPitch < 0 ? majorLength : 0;
+	sint32 positiveMajorPitch = majorPitch > 0 ? majorPitch : -majorPitch;
 
 	// first line
-	BlendLine16(toDiagonal ? pixel - (fillLength * positiveMajorPitch) : pixel, fillLength + 1, positiveMajorPitch,
-			color, alpha, blendRGBMask);
+	BlendLine16(toAngledLine ? pixel - (fillLength * positiveMajorPitch) : pixel, fillLength + 1, positiveMajorPitch,
+	            color, alpha, blendRGBMask);
 
 	// calculate 16-bit fixed-point fractional part of a
 	// pixel that minor advances each time major advances 1 pixel, truncating the
@@ -2517,16 +2516,16 @@ void FillDrawAngledLine16(Pixel16 * pixel, sint32 majorLength, sint32 minorLengt
 			if (pixel >= endPixel) {
 				break;
 			}
-			BlendLine16(toDiagonal ? pixel - (fillLength * positiveMajorPitch) : pixel, fillLength + 1,
+			BlendLine16(toAngledLine ? pixel - (fillLength * positiveMajorPitch) : pixel, fillLength + 1,
 					positiveMajorPitch, color, alpha, blendRGBMask);
 		}
 		pixel += majorPitch; // always advance major
-		fillLength += fillLengthIncrement;
+		fillLength += fillPitch;
 	}
 
 	// Last line
-	BlendLine16(toDiagonal ? endPixel - (fillLength * positiveMajorPitch) : endPixel, fillLength + 1,
-			positiveMajorPitch, color, alpha, blendRGBMask);
+	BlendLine16(toAngledLine ? endPixel - (fillLength * positiveMajorPitch) : endPixel, fillLength + 1,
+	            positiveMajorPitch, color, alpha, blendRGBMask);
 }
 
 void SpecialDrawAngledPatternLine16(Pixel16 * pixel, sint32 majorLength, sint32 minorLength, sint32 majorPitch,
@@ -2872,27 +2871,86 @@ void primitives_ClippedShadowRect16(aui_Surface & surf, const RECT & rect)
 	}
 }
 
-void primitives_ClippedTriangle16(aui_Surface & surf, sint32 x1, sint32 y1, sint32 x2, sint32 y2, Pixel16 color,
+sint32 angleDirection (sint32 x1, sint32 y1, sint32 x2, sint32 y2, sint32 x3, sint32 y3)
+{
+	return (x2 - x1) * (y3 - y1) - (y2 - y1) * (x3 - x1);
+}
+
+/*
+ * Method can be tested by TestClipRectangle per example by calling it from RadarMap::RenderMap
+ */
+void primitives_ClippedTriangle16(aui_Surface & surf, const RECT & rect, TRIANGLE_ID triangleId, Pixel16 color,
 		uint8 alpha)
 {
-	bool mirror = (y2 < y1);
-	if (y2 < y1)
-	{
-		SWAPVARS(x1, x2)
-		SWAPVARS(y1, y2);
-	}
-
-	RECT clipRect = { 0, 0, surf.Width() - 1, surf.Height() - 1 };
-	if (!ClipLine(clipRect, x1, y1, x2, y2)) {
+	if (!RectIntersectSurface(surf, rect)) {
 		return;
 	}
 
-	sint32 deltaY = y2 - y1;
+	// Diagonal
+	sint32 x1 = (triangleId == TI_LEFT_TOP || triangleId == TI_RIGHT_BOTTOM) ? rect.right : rect.left;
+	sint32 y1 = rect.top;
+	sint32 x2 = (triangleId == TI_LEFT_TOP || triangleId == TI_RIGHT_BOTTOM) ? rect.left : rect.right;
+	sint32 y2 = rect.bottom;
+
 	sint32 deltaX = x2 - x1;
-	if (deltaX == 0 || deltaY == 0) {
+	sint32 deltaY = y2 - y1;
+	if (deltaX == 0 || deltaY == 0)
+	{
+		primitives_ClippedPaintRect16(surf, rect, color, alpha);
 		return;
 	}
 
+	sint32 x3;
+	sint32 y3;
+	switch (triangleId) {
+		case TI_LEFT_TOP:
+			x3 = rect.left;
+			y3 = rect.top;
+			break;
+		case TI_LEFT_BOTTOM:
+			x3 = rect.left;
+			y3 = rect.bottom;
+			break;
+		case TI_RIGHT_TOP:
+			x3 = rect.right;
+			y3 = rect.top;
+			break;
+		case TI_RIGHT_BOTTOM:
+			x3 = rect.right;
+			y3 = rect.bottom;
+			break;
+		default:
+		Assert(false);
+	}
+
+	sint32 x1BeforeClip = x1;
+	sint32 y1BeforeClip = y1;
+	sint32 x2BeforeCLip = x2;
+	sint32 y2BeforeClip = y2;
+	bool lineClipped = ClipLine(RECT { 0, 0, surf.Width() - 1, surf.Height() - 1 }, x1, y1, x2, y2);
+	if (!lineClipped || (x2 == x1) || (y2 == y1))
+	{
+		sint32 signTriangle  = angleDirection(x1BeforeClip, y1BeforeClip, x2BeforeCLip, y2BeforeClip, x3, y3);
+		// Try top-left corner of rectangle
+		sint32 signRectangle = angleDirection(x1BeforeClip, y1BeforeClip, x2BeforeCLip, y2BeforeClip, 0, 0);
+		if (signRectangle == 0) { // if on same line, try top-right corner
+			signRectangle = angleDirection(x1BeforeClip, y1BeforeClip, x2BeforeCLip, y2BeforeClip, surf.Width(), 0);
+		}
+		// Both have the same sign, so in same half-plane => visible
+		if ((signTriangle < 0 && signRectangle < 0) || (signTriangle > 0 && signRectangle > 0))
+		{
+			primitives_ClippedPaintRect16(surf, rect, color, alpha);
+		}
+		else if ((x1 == x2) || (y1 == y2)) { // line touches corner, draw single point
+			primitives_ClippedPaintRect16(surf, RECT { x1, y1, x2, y2 }, color, alpha);
+		}
+		return;
+	}
+	bool point1Clipped = (x1 != x1BeforeClip) || (y1 != y1BeforeClip);
+	bool point2Clipped = (x2 != x2BeforeCLip) || (y2 != y2BeforeClip);
+
+	deltaX = x2 - x1;
+	deltaY = y2 - y1;
 	sint32 incrementX = deltaX < 0 ? -1 : 1;
 	if (incrementX < 0) {
 		deltaX = -deltaX;
@@ -2901,12 +2959,42 @@ void primitives_ClippedTriangle16(aui_Surface & surf, sint32 x1, sint32 y1, sint
 	Pixel16 * base = GetBasePixel16(surf, x1, y1);
 	sint32 incrementY = surf.Pitch() >> 1;
 	if (deltaX == deltaY) { // diagonal
-		FillDrawDiagonalLine16(base, deltaX, incrementX, incrementY, color, alpha, mirror);
+		FillDrawDiagonalLine16(base, deltaX, incrementX, incrementY, color, alpha, triangleId);
 	}
-	else if (deltaX < deltaY) { // Y-major
-		FillDrawAngledLine16(base, deltaY, deltaX, incrementY, incrementX, color, alpha, mirror);
-	} else { // X-major
-		FillDrawAngledLine16(base, deltaX, deltaY, incrementX, incrementY, color, alpha, mirror ^ (incrementX > 0));
+	else if (deltaX < deltaY) // Y-major
+	{
+		bool   toAngledLine = (triangleId == TI_LEFT_TOP || triangleId == TI_RIGHT_TOP);
+		sint32 fillPitch    = (triangleId == TI_LEFT_BOTTOM || triangleId == TI_RIGHT_BOTTOM) ? -1 : 1;
+		FillDrawAngledLine16(base, deltaY, deltaX, incrementY, incrementX, color, alpha, fillPitch, toAngledLine);
+	}
+	else // X-major
+	{
+		bool   toAngledLine = triangleId == TI_LEFT_TOP || triangleId == TI_LEFT_BOTTOM;
+		sint32 fillPitch    = triangleId == TI_LEFT_TOP || triangleId == TI_RIGHT_TOP ? -1 : 1;
+		FillDrawAngledLine16(base, deltaX, deltaY, incrementX, incrementY, color, alpha, fillPitch, toAngledLine);
+	}
+
+	if (point1Clipped)
+	{
+		RECT fillRect = { x1, y1, x3, y3 };
+		if (fillRect.left > fillRect.right) {
+			SWAPVARS(fillRect.left, fillRect.right);
+		}
+		if (fillRect.top > fillRect.bottom) {
+			SWAPVARS(fillRect.top, fillRect.bottom);
+		}
+		primitives_ClippedPaintRect16(surf, fillRect, color, alpha);
+	}
+	if (point2Clipped)
+	{
+		RECT fillRect = {x2, y2, x3, y3 };
+		if (fillRect.left > fillRect.right) {
+			SWAPVARS(fillRect.left, fillRect.right);
+		}
+		if (fillRect.top > fillRect.bottom) {
+			SWAPVARS(fillRect.top, fillRect.bottom);
+		}
+		primitives_ClippedPaintRect16(surf, fillRect, color, alpha);
 	}
 }
 
