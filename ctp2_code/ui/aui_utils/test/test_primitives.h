@@ -23,7 +23,7 @@ struct ClipTriangleTest {
  */
 void TestClippedTriangle16(aui_Surface & surface, const RECT & rect, TRIANGLE_ID triangleId, Pixel16 color)
 {
-	primitives_ClippedTriangle16(surface, rect, triangleId, color);
+	primitives_ClippedTriangle16(surface, rect, triangleId, color, pixelutils_OPAQUE, false);
 
 	sint32 xOffset = (TEST_WIDTH / 8) * 5;
 	sint32 yOffset = (TEST_HEIGHT / 8) * 5;
