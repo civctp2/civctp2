@@ -2495,7 +2495,7 @@ void FillDrawAngledLine16(Pixel16 * pixel, sint32 majorLength, sint32 minorLengt
 
 	// first line
 	BlendLine16(toAngledLine ? pixel - (fillLength * positiveMajorPitch) : pixel, fillLength + 1, positiveMajorPitch,
-	            color, alpha, blendRGBMask);
+			color, alpha, blendRGBMask);
 
 	// calculate 16-bit fixed-point fractional part of a
 	// pixel that minor advances each time major advances 1 pixel, truncating the
@@ -2525,7 +2525,69 @@ void FillDrawAngledLine16(Pixel16 * pixel, sint32 majorLength, sint32 minorLengt
 
 	// Last line
 	BlendLine16(toAngledLine ? endPixel - (fillLength * positiveMajorPitch) : endPixel, fillLength + 1,
-	            positiveMajorPitch, color, alpha, blendRGBMask);
+			positiveMajorPitch, color, alpha, blendRGBMask);
+}
+
+void FillDrawAntiAliasedAngledLine16(Pixel16 * pixel, sint32 majorLength, sint32 minorLength, sint32 majorPitch,
+		sint32 minorPitch, Pixel16 color, uint8 alpha, sint32 fillPitch, bool toAngledLine)
+{
+	const uint32 blendRGBMask  = pixelutils_GetBlend16RGBMask();
+
+	Pixel16 * endPixel = pixel + majorLength * majorPitch + minorLength * minorPitch;
+
+	sint32 fillLength         = fillPitch < 0 ? majorLength : 0;
+	sint32 positiveMajorPitch = majorPitch > 0 ? majorPitch : -majorPitch;
+	bool   positiveEdge       = toAngledLine ^ (majorPitch > 0);
+
+	// first line
+	BlendLine16(toAngledLine ? pixel - (fillLength * positiveMajorPitch) : pixel, fillLength + 1, positiveMajorPitch,
+			color, alpha, blendRGBMask);
+
+	// calculate 16-bit fixed-point fractional part of a
+	// pixel that minor advances each time major advances 1 pixel, truncating the
+	// result so that we won't overrun the endpoint along the minor axis
+	const uint16 errorFraction = uint16 ((minorLength << 16) / (uint32) majorLength);
+	// Initialize the line error accumulator to 0
+	uint16 errorAccumulator = 0;
+
+	while (pixel < endPixel)
+	{
+		const uint16 error = errorAccumulator; // remember current accumulated error
+		errorAccumulator += errorFraction;     // calculate error for next pixel
+
+		if (errorAccumulator <= error)
+		{
+			// Error accumulator turned over, so advance the minor
+			pixel += minorPitch;
+			if (pixel >= endPixel) {
+				break;
+			}
+			BlendLine16(toAngledLine ? pixel - (fillLength * positiveMajorPitch) : pixel + positiveMajorPitch,
+					fillLength, positiveMajorPitch, color, alpha, blendRGBMask);
+		}
+		if (positiveEdge) {
+			pixel += majorPitch; // always advance major
+		}
+
+		Pixel16 * pairedPixel = pixel + (positiveEdge ? minorPitch : -minorPitch);
+		if (pairedPixel <= endPixel + 2) // + 2 to allow lines with negative delta-x to connect to end-pixel
+		{
+			// Most significant bits of errorAccumulator determine the weight of this pixel
+			uint8 weight = errorAccumulator >> 8;
+			*pixel       = color;
+			*pairedPixel = pixelutils_Blend16(*pairedPixel, color, positiveEdge ? weight : weight ^ 255, blendRGBMask);
+		}
+
+		if (!positiveEdge) {
+			pixel += majorPitch; // always advance major
+		}
+
+		fillLength += fillPitch;
+	}
+
+	// Last line
+	BlendLine16(toAngledLine ? endPixel - (fillLength * positiveMajorPitch) : endPixel, fillLength + 1,
+			positiveMajorPitch, color, alpha, blendRGBMask);
 }
 
 void SpecialDrawAngledPatternLine16(Pixel16 * pixel, sint32 majorLength, sint32 minorLength, sint32 majorPitch,
@@ -2880,7 +2942,7 @@ sint32 angleDirection (sint32 x1, sint32 y1, sint32 x2, sint32 y2, sint32 x3, si
  * Method can be tested by TestClipRectangle per example by calling it from RadarMap::RenderMap
  */
 void primitives_ClippedTriangle16(aui_Surface & surf, const RECT & rect, TRIANGLE_ID triangleId, Pixel16 color,
-		uint8 alpha)
+		uint8 alpha, bool antiAliased)
 {
 	if (!RectIntersectSurface(surf, rect)) {
 		return;
@@ -2965,13 +3027,23 @@ void primitives_ClippedTriangle16(aui_Surface & surf, const RECT & rect, TRIANGL
 	{
 		bool   toAngledLine = (triangleId == TI_LEFT_TOP || triangleId == TI_RIGHT_TOP);
 		sint32 fillPitch    = (triangleId == TI_LEFT_BOTTOM || triangleId == TI_RIGHT_BOTTOM) ? -1 : 1;
-		FillDrawAngledLine16(base, deltaY, deltaX, incrementY, incrementX, color, alpha, fillPitch, toAngledLine);
+		if (antiAliased) {
+			FillDrawAntiAliasedAngledLine16(base, deltaY, deltaX, incrementY, incrementX, color, alpha, fillPitch,
+					toAngledLine);
+		} else {
+			FillDrawAngledLine16(base, deltaY, deltaX, incrementY, incrementX, color, alpha, fillPitch, toAngledLine);
+		}
 	}
 	else // X-major
 	{
 		bool   toAngledLine = triangleId == TI_LEFT_TOP || triangleId == TI_LEFT_BOTTOM;
 		sint32 fillPitch    = triangleId == TI_LEFT_TOP || triangleId == TI_RIGHT_TOP ? -1 : 1;
-		FillDrawAngledLine16(base, deltaX, deltaY, incrementX, incrementY, color, alpha, fillPitch, toAngledLine);
+		if (antiAliased) {
+			FillDrawAntiAliasedAngledLine16(base, deltaX, deltaY, incrementX, incrementY, color, alpha, fillPitch,
+					toAngledLine);
+		} else {
+			FillDrawAngledLine16(base, deltaX, deltaY, incrementX, incrementY, color, alpha, fillPitch, toAngledLine);
+		}
 	}
 
 	if (point1Clipped)

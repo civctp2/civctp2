@@ -181,7 +181,7 @@ inline void primitives_ClippedFrame16(aui_Surface & surf, sint32 x, sint32 y, si
 void primitives_ClippedShadowRect16(aui_Surface & surf, const RECT & rect);
 
 void primitives_ClippedTriangle16(aui_Surface & surf, const RECT & rect, TRIANGLE_ID triangleId, Pixel16 color,
-                                  uint8 alpha = pixelutils_OPAQUE);
+		uint8 alpha = pixelutils_OPAQUE, bool antiAliased = false);
 
 // Clipped lines primitives
 void primitives_SetPatternOffset(sint32 x, sint32 y);
