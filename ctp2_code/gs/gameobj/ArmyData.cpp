@@ -7863,8 +7863,8 @@ void ArmyData::MoveUnits(const MapPoint &pos)
 
 	if(anyVisible && g_radarMap)
 	{
-		g_radarMap->RedrawTile(&oldPos); // oldPos only used here
-		g_radarMap->RedrawTile(&m_pos);  // m_pos hasn't been modified so oldPos and m_pos are still identical
+		g_radarMap->RedrawTile(oldPos); // oldPos only used here
+		g_radarMap->RedrawTile(m_pos);  // m_pos hasn't been modified so oldPos and m_pos are still identical
 	}
 
 	if(HasLeftMap())
