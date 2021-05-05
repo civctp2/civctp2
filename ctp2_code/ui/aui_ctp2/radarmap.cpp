@@ -75,35 +75,31 @@
 #include "terrainutil.h"
 #include "Scheduler.h"
 
-extern C3UI				*g_c3ui;
-extern PointerList<Player> *g_deadPlayer;
+extern C3UI * g_c3ui;
 
 extern sint32 g_fog_toggle;
 extern sint32 g_god;
 
 static const WORLD_DIRECTION NEIGHBOR_DIRECTIONS[] = { EAST, WEST, NORTHEAST, NORTHWEST, SOUTHEAST, SOUTHWEST };
 
-static const unsigned char k_EAST_BORDER_FLAG		= 1 << EAST;
-static const unsigned char k_WEST_BORDER_FLAG		= 1 << WEST;
-static const unsigned char k_NORTH_EAST_BORDER_FLAG	= 1 << NORTHEAST;
-static const unsigned char k_NORTH_WEST_BORDER_FLAG	= 1 << NORTHWEST;
-static const unsigned char k_SOUTH_EAST_BORDER_FLAG	= 1 << SOUTHEAST;
-static const unsigned char k_SOUTH_WEST_BORDER_FLAG	= 1 << SOUTHWEST;
+static const unsigned char k_EAST_BORDER_FLAG       = 1 << EAST;
+static const unsigned char k_WEST_BORDER_FLAG       = 1 << WEST;
+static const unsigned char k_NORTH_EAST_BORDER_FLAG = 1 << NORTHEAST;
+static const unsigned char k_NORTH_WEST_BORDER_FLAG = 1 << NORTHWEST;
+static const unsigned char k_SOUTH_EAST_BORDER_FLAG = 1 << SOUTHEAST;
+static const unsigned char k_SOUTH_WEST_BORDER_FLAG = 1 << SOUTHWEST;
 
 //---------------------------------------------------------------------------
 //
 //	RadarMap::RadarMap
 //
 //---------------------------------------------------------------------------
-RadarMap::RadarMap(AUI_ERRCODE *retval,
-							sint32 id,
-							const MBCHAR *ldlBlock,
-							ControlActionCallback *ActionFunc,
-							void *cookie)
+RadarMap::RadarMap(AUI_ERRCODE * errCode, sint32 id, const MBCHAR * ldlBlock, ControlActionCallback * ActionFunc,
+		void * cookie)
 	:
 		aui_ImageBase(ldlBlock),
 		aui_TextBase(ldlBlock),
-		aui_Control(retval, id, ldlBlock, ActionFunc, cookie),
+		aui_Control(errCode, id, ldlBlock, ActionFunc, cookie),
 		PatternBase(ldlBlock, NULL)
 {
 	InitCommonLdl(ldlBlock);
@@ -114,19 +110,12 @@ RadarMap::RadarMap(AUI_ERRCODE *retval,
 //	RadarMap::RadarMap
 //
 //---------------------------------------------------------------------------
-RadarMap::RadarMap(AUI_ERRCODE *retval,
-							uint32 id,
-							sint32 x,
-							sint32 y,
-							sint32 width,
-							sint32 height,
-							const MBCHAR *pattern,
-							ControlActionCallback *ActionFunc,
-							void *cookie)
+RadarMap::RadarMap(AUI_ERRCODE * errCode, uint32 id, sint32 x, sint32 y, sint32 width, sint32 height,
+		const MBCHAR * pattern, ControlActionCallback * ActionFunc, void * cookie)
 	:
-		aui_ImageBase((sint32)0),
-		aui_TextBase((MBCHAR *)NULL),
-		aui_Control(retval, id, x, y, width, height, ActionFunc, cookie),
+		aui_ImageBase(0),
+		aui_TextBase(NULL),
+		aui_Control(errCode, id, x, y, width, height, ActionFunc, cookie),
 		PatternBase(pattern)
 {
 	InitCommon();
@@ -150,11 +139,13 @@ RadarMap::~RadarMap()
 //	RadarMap::InitCommonLdl
 //
 //---------------------------------------------------------------------------
-void RadarMap::InitCommonLdl(const MBCHAR *ldlBlock)
+void RadarMap::InitCommonLdl(const MBCHAR * ldlBlock)
 {
 	ldl_datablock * block = aui_Ldl::FindDataBlock(ldlBlock);
 	Assert( block != NULL );
-	if ( !block ) return;
+	if ( !block ) {
+		return;
+	}
 
 	InitCommon();
 }
@@ -164,7 +155,7 @@ void RadarMap::InitCommonLdl(const MBCHAR *ldlBlock)
 //	RadarMap::InitCommon
 //
 //---------------------------------------------------------------------------
-void RadarMap::InitCommon(void)
+void RadarMap::InitCommon()
 {
 	m_mapSurface = NULL;
 	m_mapSize = NULL;
@@ -191,8 +182,6 @@ void RadarMap::InitCommon(void)
 
 	m_isInteractive = true;
 
-	m_selectedCity.m_id = 0;
-
 	AUI_ERRCODE errcode = AUI_ERRCODE_OK;
 	m_mapSurface = aui_Factory::new_Surface(errcode, m_width, m_height);
 	Assert(AUI_NEWOK(m_mapSurface, errcode));
@@ -203,10 +192,9 @@ void RadarMap::InitCommon(void)
 		m_pattern->Draw( m_mapSurface, &rect );
 	}
 
-	if ( g_theWorld ) {
-
+	if ( g_theWorld )
+	{
 		CalculateMetrics();
-
 		RenderMap(m_mapSurface);
 	}
 }
@@ -231,14 +219,16 @@ void RadarMap::ClearMapOverlay(void)
 //    lay it does not exists yet
 //
 //---------------------------------------------------------------------------
-void RadarMap::SetMapOverlayCell(MapPoint const & pos, COLOR color)
+void RadarMap::SetMapOverlayCell(const MapPoint & pos, COLOR color)
 {
-	if (m_mapOverlay == NULL) {
+	if (!m_mapOverlay)
+	{
 		sint32 len = m_mapSize->x * m_mapSize->y;
 		m_mapOverlay = new COLOR[len];
 
-		for (sint32 i=0; i<len; i++)
+		for (sint32 i=0; i<len; i++) {
 			m_mapOverlay[i] = COLOR_MAX;
+		}
 	}
 
 	m_mapOverlay[pos.x + (pos.y * m_mapSize->x)] = color;
@@ -252,20 +242,19 @@ void RadarMap::SetMapOverlayCell(MapPoint const & pos, COLOR color)
 //	- resize the radar map
 //
 //---------------------------------------------------------------------------
-AUI_ERRCODE	RadarMap::Resize( sint32 width, sint32 height )
+AUI_ERRCODE	RadarMap::Resize(sint32 width, sint32 height)
 {
-	AUI_ERRCODE		errcode = aui_Region::Resize(width, height);
-	Assert(errcode == AUI_ERRCODE_OK);
+	AUI_ERRCODE errCode = aui_Region::Resize(width, height);
+	Assert(errCode == AUI_ERRCODE_OK);
 
 	delete m_mapSurface;
-	m_mapSurface = aui_Factory::new_Surface(errcode, width, height);
-	Assert( AUI_NEWOK(m_mapSurface, errcode) );
+	m_mapSurface = aui_Factory::new_Surface(errCode, width, height);
+	Assert(AUI_NEWOK(m_mapSurface, errCode));
 
 	CalculateMetrics();
-
 	RenderMap(m_mapSurface);
 
-	return errcode;
+	return errCode;
 }
 
 //---------------------------------------------------------------------------
@@ -276,9 +265,11 @@ AUI_ERRCODE	RadarMap::Resize( sint32 width, sint32 height )
 //	- calculate some values depending on the current radar map size
 //
 //---------------------------------------------------------------------------
-void RadarMap::CalculateMetrics(void)
+void RadarMap::CalculateMetrics()
 {
-	if (!g_theWorld) return;
+	if (!g_theWorld) {
+		return;
+	}
 
 	free(m_colorMap);
 	m_colorMap = NULL;
@@ -324,16 +315,19 @@ Player * RadarMap::GetVisiblePlayerToRender()
 //	- Checks which color a border must be drawn for the current tile
 //
 //---------------------------------------------------------------------------
-Pixel16 RadarMap::RadarTileBorderColor(const MapPoint &position, const Player & player)
+Pixel16 RadarMap::RadarTileBorderColor(const MapPoint & position, const Player & player)
 {
 	sint32 owner = g_tiledMap->GetVisibleCellOwner(position);
-	if(owner < 0)
-		return(g_colorSet->GetDarkColor(COLOR_WHITE));
+	if (owner < 0) {
+		return g_colorSet->GetDarkColor(COLOR_WHITE);
+	}
 
-	if(m_displayRelations)
+	if (m_displayRelations) {
 		return g_colorSet->GetColor(RadarTileRelationsColor(position, player));
-	else
-		return(g_colorSet->GetPlayerColor(owner));
+	}
+	else {
+		return g_colorSet->GetPlayerColor(owner);
+	}
 }
 
 COLOR RadarMap::RadarTileRelationsColor(const MapPoint & position, const Player & player, sint32 unitOwner)
@@ -343,7 +337,8 @@ COLOR RadarMap::RadarTileRelationsColor(const MapPoint & position, const Player 
 	COLOR color = COLOR_WHITE;
 
 	sint32 owner = unitOwner < 0 ? g_tiledMap->GetVisibleCellOwner(position) : unitOwner;
-	if (owner >= 0) {
+	if (owner >= 0)
+	{
 		if (player.m_owner == owner || player.HasAllianceWith(owner)) {
 			color = COLOR_BLUE;
 		} else if (player.HasWarWith(owner)) {
@@ -365,7 +360,7 @@ COLOR RadarMap::RadarTileRelationsColor(const MapPoint & position, const Player 
 //	- Checks which borders must be drawn for the current tile
 //
 //---------------------------------------------------------------------------
-uint8 RadarMap::RadarTileBorder(const Player & player, const MapPoint &position)
+uint8 RadarMap::RadarTileBorder(const Player & player, const MapPoint & position)
 {
 	uint8 borderFlags = 0;
 	if (!m_displayBorders) {
@@ -948,10 +943,10 @@ void RadarMap::RenderMapTileColor(const Player & player)
 //	RadarMap::RenderMap
 //
 //---------------------------------------------------------------------------
-//	- Redraws the complete radarmap
+//	- Redraws the complete radar-map
 //
 //---------------------------------------------------------------------------
-void RadarMap::RenderMap(aui_Surface *surface)
+void RadarMap::RenderMap(aui_Surface * surface)
 {
 	Player *player = GetVisiblePlayerToRender();
 
@@ -1004,46 +999,48 @@ void RadarMap::RenderMap(aui_Surface *surface)
 //---------------------------------------------------------------------------
 void RadarMap::RenderViewRect(aui_Surface & surf, sint32 x, sint32 y)
 {
-	RECT offsetRect = {0, 0, 0, 0};
+	RECT offsetRect = {0, 0, 0, 0 };
 
 	if (g_tiledMap)
 	{
 		m_mapViewRect = g_tiledMap->GetMapViewRect();
 
-		if(!g_tiledMap->ReadyToDraw()) {
+		if (!g_tiledMap->ReadyToDraw()) {
 			return;
 		}
 
-		sint32 nrplayer = g_selected_item->GetVisiblePlayer();
+		sint32 nrPlayer = g_selected_item->GetVisiblePlayer();
 
 		offsetRect.bottom = m_mapViewRect.bottom;
-		offsetRect.top = m_mapViewRect.top;
-		offsetRect.left = m_mapViewRect.left;
-		offsetRect.right = m_mapViewRect.right;
+		offsetRect.top    = m_mapViewRect.top;
+		offsetRect.left   = m_mapViewRect.left;
+		offsetRect.right  = m_mapViewRect.right;
 
-		offsetRect.top += m_displayOffset[nrplayer].y;
-		offsetRect.bottom += m_displayOffset[nrplayer].y;
-		if (offsetRect.top + ((offsetRect.bottom - offsetRect.top)/2) > m_mapSize->y) {
-			// if view is now too far to the bottom subtract the y-mapsize
-			offsetRect.top -= m_mapSize->y;
+		offsetRect.top    += m_displayOffset[nrPlayer].y;
+		offsetRect.bottom += m_displayOffset[nrPlayer].y;
+		if (offsetRect.top + ((offsetRect.bottom - offsetRect.top)/2) > m_mapSize->y)
+		{
+			// if view is now too far to the bottom subtract the y-map-size
+			offsetRect.top    -= m_mapSize->y;
 			offsetRect.bottom -= m_mapSize->y;
 		}
 
-		offsetRect.left += m_displayOffset[nrplayer].x;
-		offsetRect.right += m_displayOffset[nrplayer].x;
-		if (offsetRect.left + ((offsetRect.right - offsetRect.left)/2) > m_mapSize->x) {
-			// if view is now too far to the right subtract the x-mapsize
-			offsetRect.left -= m_mapSize->x;
+		offsetRect.left  += m_displayOffset[nrPlayer].x;
+		offsetRect.right += m_displayOffset[nrPlayer].x;
+		if (offsetRect.left + ((offsetRect.right - offsetRect.left)/2) > m_mapSize->x)
+		{
+			// if view is now too far to the right subtract the x-map-size
+			offsetRect.left  -= m_mapSize->x;
 			offsetRect.right -= m_mapSize->x;
 		}
 	}
 
-	sint32 x1,x2,x3,x4;
-	sint32 y1,y2,y3,y4;
+	sint32 x1, x2, x3, x4;
+	sint32 y1, y2, y3, y4;
 
-	if ( m_mapSize )
+	if (m_mapSize)
 	{
-		sint32 mapWidth = m_mapSize->x;
+		sint32 mapWidth  = m_mapSize->x;
 		sint32 mapHeight = m_mapSize->y;
 
 		// Set the X coordinate points
@@ -1052,23 +1049,19 @@ void RadarMap::RenderViewRect(aui_Surface & surf, sint32 x, sint32 y)
 			x1 = x3 = offsetRect.left;
 			x2 = x4 = offsetRect.right;
 
-			if (offsetRect.left < 0)
-			{
+			if (offsetRect.left < 0) {
 				x1 = x3 = 0;
 			}
-			if (offsetRect.right > mapWidth)
-			{
+			if (offsetRect.right > mapWidth) {
 				x2 = x4 = mapWidth;
 			}
 		}
-
 		else
 		{
 			if (offsetRect.left < 0)
 			{
 				x1 = offsetRect.left + mapWidth;
 				x2 = mapWidth;
-
 				if (offsetRect.right <= 0)
 				{
 					x3 = mapWidth;
@@ -1080,7 +1073,6 @@ void RadarMap::RenderViewRect(aui_Surface & surf, sint32 x, sint32 y)
 					x4 = offsetRect.right;
 				}
 			}
-
 			else
 			{
 				if (offsetRect.right > mapWidth)
@@ -1106,10 +1098,10 @@ void RadarMap::RenderViewRect(aui_Surface & surf, sint32 x, sint32 y)
 		x4 = (sint32) (x4 * m_tilePixelWidth) + x - 1;
 
 		// Set the Y points
-		if ( !g_theWorld->IsYwrap() && ( offsetRect.top < 0 || offsetRect.bottom >= mapHeight))
+		if (!g_theWorld->IsYwrap() && ( offsetRect.top < 0 || offsetRect.bottom >= mapHeight))
 		{
-            y1 = y3 = std::max<sint32>(0, offsetRect.top);
-            y2 = y4 = std::min<sint32>(mapHeight, offsetRect.bottom);
+			y1 = y3 = std::max<sint32>(0, offsetRect.top);
+			y2 = y4 = std::min<sint32>(mapHeight, offsetRect.bottom);
 		}
 		else
 		{
@@ -1151,7 +1143,6 @@ void RadarMap::RenderViewRect(aui_Surface & surf, sint32 x, sint32 y)
 		y2 = (sint32) (y2 * m_tilePixelHeight) + y - 1;
 		y3 = (sint32) (y3 * m_tilePixelHeight) + y;
 		y4 = (sint32) (y4 * m_tilePixelHeight) + y - 1;
-
 	}
 	else
 	{ // no map size
@@ -1206,18 +1197,18 @@ void RadarMap::UpdateMap(aui_Surface * surf, sint32 x, sint32 y)
 //	RadarMap::ComputeCenteredMap
 //
 //---------------------------------------------------------------------------
-MapPoint RadarMap::ComputeCenteredMap(MapPoint const & pos, RECT *viewRect)
+MapPoint RadarMap::ComputeCenteredMap(const MapPoint & pos, RECT * viewRect)
 {
-	LONG const  w   = viewRect->right - viewRect->left;
-	LONG const  h   = viewRect->bottom - viewRect->top;
+	sint32 width  = viewRect->right - viewRect->left;
+	sint32 height = viewRect->bottom - viewRect->top;
 
 	sint32 tileX;
 	maputils_MapX2TileX(pos.x, pos.y, &tileX);
 
-	viewRect->left      = tileX - (w>>1);
-	viewRect->top       = (pos.y - (h>>1)) & (~1);
-	viewRect->right     = viewRect->left + w;
-	viewRect->bottom    = viewRect->top + h;
+	viewRect->left   = tileX - (width >> 1);
+	viewRect->top    = (pos.y - (height >> 1)) & (~1);
+	viewRect->right  = viewRect->left + width;
+	viewRect->bottom = viewRect->top + height;
 
 	return pos;
 }
@@ -1230,11 +1221,12 @@ MapPoint RadarMap::ComputeCenteredMap(MapPoint const & pos, RECT *viewRect)
 //  - Used to focus the RadarMap to a specific point
 //
 //---------------------------------------------------------------------------
-MapPoint RadarMap::CenterMap(MapPoint const & pos)
+MapPoint RadarMap::CenterMap(const MapPoint & pos)
 {
-	MapPoint LastPT = m_lastCenteredPoint;
-	if(!LastPT.IsValid())
-		LastPT = pos;
+	MapPoint lastPoint = m_lastCenteredPoint;
+	if (!lastPoint.IsValid()) {
+		lastPoint = pos;
+	}
 
 	m_lastCenteredPoint = pos;
 
@@ -1245,7 +1237,7 @@ MapPoint RadarMap::CenterMap(MapPoint const & pos)
 
 	RenderMap(m_mapSurface);
 
-	return LastPT;
+	return lastPoint;
 }
 
 //---------------------------------------------------------------------------
@@ -1253,14 +1245,13 @@ MapPoint RadarMap::CenterMap(MapPoint const & pos)
 //	RadarMap::Setup
 //
 //---------------------------------------------------------------------------
-void RadarMap::Setup(void)
+void RadarMap::Setup()
 {
 	CalculateMetrics();
 
 	RenderMap(m_mapSurface);
 
-	if (g_tiledMap)
-    {
+	if (g_tiledMap) {
 		m_mapViewRect = g_tiledMap->GetMapViewRect();
 	}
 }
@@ -1270,9 +1261,8 @@ void RadarMap::Setup(void)
 //	RadarMap::Update
 //
 //---------------------------------------------------------------------------
-void RadarMap::Update( void )
+void RadarMap::Update()
 {
-
 	m_mapSize = g_theWorld->GetSize();
 
 	RenderMap(m_mapSurface);
@@ -1359,22 +1349,25 @@ void RadarMap::RedrawTile(const MapPoint & pos)
 //	RadarMap::DrawThis
 //
 //---------------------------------------------------------------------------
-AUI_ERRCODE RadarMap::DrawThis(aui_Surface *surface, sint32 x,	sint32 y )
+AUI_ERRCODE RadarMap::DrawThis(aui_Surface * surface, sint32 x,	sint32 y)
 {
+	if (IsHidden()) {
+		return AUI_ERRCODE_OK;
+	}
 
-	if ( IsHidden() ) return AUI_ERRCODE_OK;
-
-	if ( !surface )
+	if (!surface) {
 		surface = m_window->TheSurface();
+	}
 
 	RECT rect = { 0, 0, m_width, m_height };
-	OffsetRect( &rect, m_x + x, m_y + y );
-	ToWindow( &rect );
+	OffsetRect(&rect, m_x + x, m_y + y);
+	ToWindow(&rect);
 
 	UpdateMap(surface, rect.left, rect.top);
 
-	if ( surface == m_window->TheSurface() )
-		m_window->AddDirtyRect( &rect );
+	if (surface == m_window->TheSurface()) {
+		m_window->AddDirtyRect(&rect);
+	}
 
 	return AUI_ERRCODE_OK;
 }
@@ -1384,48 +1377,52 @@ AUI_ERRCODE RadarMap::DrawThis(aui_Surface *surface, sint32 x,	sint32 y )
 //	RadarMap::MouseLGrabInside
 //
 //---------------------------------------------------------------------------
-//  - Processes a left mouse click in the radarmap region. Sets therefore
+//  - Processes a left mouse click in the radar-map region. Sets therefore
 //	  a rectangle which region is seen centered by the point the mouse click
-//    was located and call tiledmap methods to refresh the current view.
+//    was located and call tiled-map methods to refresh the current view.
 //---------------------------------------------------------------------------
-void RadarMap::MouseLGrabInside(aui_MouseEvent *data)
+void RadarMap::MouseLGrabInside(aui_MouseEvent * data)
 {
-
-	if(IsDisabled() || !IsInteractive())
+	if (IsDisabled() || !IsInteractive()) {
 		return;
+	}
 
-	if (GetWhichSeesMouse() && GetWhichSeesMouse() != this) return;
+	if (GetWhichSeesMouse() && GetWhichSeesMouse() != this) {
+		return;
+	}
 	SetWhichSeesMouse(this);
 
-	Assert(g_tiledMap != NULL);
-	if (g_tiledMap == NULL) return;
+	Assert(g_tiledMap);
+	if (!g_tiledMap) {
+		return;
+	}
 
 	data->position.x -= X();
 	data->position.y -= Y();
 
-	RECT mapRect = {0, 0, Width(), Height()};
-	if ( !PtInRect(&mapRect, data->position) ) return;
+	RECT mapRect = { 0, 0, Width(), Height() };
+	if (!PtInRect(&mapRect, data->position)) {
+		return;
+	}
 
 	g_tiledMap->SetSmoothScrollOffsets(0,0);
 
-	sint32		mapWidth, mapHeight;
+	sint32 mapWidth, mapHeight;
 	g_tiledMap->GetMapMetrics(&mapWidth, &mapHeight);
 
-	sint32  tileY   = (sint32) (data->position.y / m_tilePixelHeight);
-    double  nudge   = (tileY & 1) ? m_tilePixelWidth / 2.0 : 0.0;
-    sint32  tileX   = (sint32) ( ceil(((double)(data->position.x - nudge) / m_tilePixelWidth)) );
+	sint32 tileY = (sint32) (data->position.y / m_tilePixelHeight);
+    double nudge = (tileY & 1) ? m_tilePixelWidth / 2.0 : 0.0;
+    sint32 tileX = (sint32) (ceil(((double)(data->position.x - nudge) / m_tilePixelWidth)));
 
-	tileX = (sint32) ((tileX - m_displayOffset[g_selected_item->GetVisiblePlayer()].x
-									+ m_mapSize->x) % m_mapSize->x);
-	tileY = (sint32) ((tileY - m_displayOffset[g_selected_item->GetVisiblePlayer()].y
-									+ m_mapSize->y) % m_mapSize->y);
+	tileX = (sint32) ((tileX - m_displayOffset[g_selected_item->GetVisiblePlayer()].x + m_mapSize->x) % m_mapSize->x);
+	tileY = (sint32) ((tileY - m_displayOffset[g_selected_item->GetVisiblePlayer()].y + m_mapSize->y) % m_mapSize->y);
 
-	sint32 width = m_mapViewRect.right - m_mapViewRect.left;
+	sint32 width  = m_mapViewRect.right - m_mapViewRect.left;
 	sint32 height = m_mapViewRect.bottom - m_mapViewRect.top;
 
-	m_mapViewRect.left = tileX - (width / 2);
-	m_mapViewRect.right = m_mapViewRect.left + width;
-	m_mapViewRect.top = (tileY - (height / 2)) & ~0x01;
+	m_mapViewRect.left   = tileX - (width / 2);
+	m_mapViewRect.right  = m_mapViewRect.left + width;
+	m_mapViewRect.top    = (tileY - (height / 2)) & ~0x01;
 	m_mapViewRect.bottom = m_mapViewRect.top + height;
 
 	g_tiledMap->UpdateAndClipMapViewRect(m_mapViewRect);
@@ -1443,43 +1440,47 @@ void RadarMap::MouseLGrabInside(aui_MouseEvent *data)
 //	- Handling of a right mouseclick over the radar map
 //
 //---------------------------------------------------------------------------
-void RadarMap::MouseRGrabInside(aui_MouseEvent *data)
+void RadarMap::MouseRGrabInside(aui_MouseEvent * data)
 {
-
-	if(IsDisabled() || !IsInteractive())
+	if (IsDisabled() || !IsInteractive()) {
 		return;
+	}
 
-	if (GetWhichSeesMouse() && GetWhichSeesMouse() != this) return;
+	if (GetWhichSeesMouse() && GetWhichSeesMouse() != this) {
+		return;
+	}
 	SetWhichSeesMouse(this);
 
-	Assert(g_tiledMap != NULL);
-	if (g_tiledMap == NULL) return;
+	Assert(g_tiledMap);
+	if (!g_tiledMap) {
+		return;
+	}
 
 	data->position.x -= X();
 	data->position.y -= Y();
 
-	sint32 nrplayer = g_selected_item->GetVisiblePlayer();
+	sint32 nrPlayer = g_selected_item->GetVisiblePlayer();
 
-	// compute the offsets after the MouseRClick to center the map with the
-	// desired point
-
-	if (g_theWorld->IsXwrap()) {
-		m_displayOffset[nrplayer].x  =
-			(m_mapSize->x - ( m_mapSize->x * data->position.x / m_width) + (m_mapSize->x / 2)
-			  + m_mapSize->x + m_displayOffset[nrplayer].x) % m_mapSize->x;
+	// compute the offsets after the MouseRClick to center the map with the desired point
+	if (g_theWorld->IsXwrap())
+	{
+		m_displayOffset[nrPlayer].x =
+				(m_mapSize->x - ( m_mapSize->x * data->position.x / m_width) + (m_mapSize->x / 2)
+				+ m_mapSize->x + m_displayOffset[nrPlayer].x) % m_mapSize->x;
 	} else {
-		m_displayOffset[nrplayer].x = 0;
+		m_displayOffset[nrPlayer].x = 0;
 	}
-	if (g_theWorld->IsYwrap()) {
-		m_displayOffset[nrplayer].y  =
-			(m_mapSize->y - ((( m_mapSize->y * data->position.y / m_height) >>1)<<1)
-			  + (m_mapSize->y / 2) + m_mapSize->y + m_displayOffset[nrplayer].y) % m_mapSize->y;
+
+	if (g_theWorld->IsYwrap())
+	{
+		m_displayOffset[nrPlayer].y =
+				(m_mapSize->y - ((( m_mapSize->y * data->position.y / m_height) >>1)<<1)
+				+ (m_mapSize->y / 2) + m_mapSize->y + m_displayOffset[nrPlayer].y) % m_mapSize->y;
 	} else {
-		m_displayOffset[nrplayer].y = 0;
+		m_displayOffset[nrPlayer].y = 0;
 	}
 
 	RenderMap(m_mapSurface);
-
 }
 
 
@@ -1491,11 +1492,15 @@ void RadarMap::MouseRGrabInside(aui_MouseEvent *data)
 //  - Constantly called in the idle time
 //
 //---------------------------------------------------------------------------
-AUI_ERRCODE RadarMap::Idle( void )
+AUI_ERRCODE RadarMap::Idle()
 {
 	static uint32 lastDraw = 0;
-	if (GetTickCount() - lastDraw > 100) lastDraw = GetTickCount();
-	else return AUI_ERRCODE_OK;
+	if (GetTickCount() - lastDraw > 100) {
+		lastDraw = GetTickCount();
+	}
+	else {
+		return AUI_ERRCODE_OK;
+	}
 
 	DrawThis(NULL, 0, 0);
 
@@ -1511,15 +1516,14 @@ AUI_ERRCODE RadarMap::Idle( void )
 //   radar map for handling the offset of the X and/or the Y axis
 //
 //---------------------------------------------------------------------------
-MapPoint RadarMap::PosWorldToPosRadar(MapPoint worldPos)
+MapPoint RadarMap::PosWorldToPosRadar(const MapPoint & worldPos)
 {
-	sint32 nrplayer = g_selected_item->GetVisiblePlayer();
+	sint32 nrPlayer = g_selected_item->GetVisiblePlayer();
 
 	MapPoint posRadar;
-	posRadar.x = (worldPos.x - m_displayOffset[nrplayer].y / 2 + m_mapSize->x
-	              + m_displayOffset[nrplayer].x) % m_mapSize->x;
-
-	posRadar.y = (worldPos.y + m_displayOffset[nrplayer].y) % m_mapSize->y;
+	posRadar.x = (worldPos.x - m_displayOffset[nrPlayer].y / 2 + m_mapSize->x + m_displayOffset[nrPlayer].x)
+			% m_mapSize->x;
+	posRadar.y = (worldPos.y + m_displayOffset[nrPlayer].y) % m_mapSize->y;
 
 	return posRadar;
 }
