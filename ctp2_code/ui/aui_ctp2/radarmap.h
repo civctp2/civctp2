@@ -55,83 +55,108 @@ class Player;
 class RadarMap : public aui_Control, public PatternBase
 {
 public:
-	RadarMap(AUI_ERRCODE *retval,
-					sint32 id,
-					const MBCHAR *ldlBlock,
-					ControlActionCallback *ActionFunc = NULL,
-					void *cookie = NULL);
-	RadarMap(AUI_ERRCODE *retval,
-					uint32 id,
-					sint32 x,
-					sint32 y,
-					sint32 width,
-					sint32 height,
-					const MBCHAR *pattern,
-					ControlActionCallback *ActionFunc = NULL,
-					void *cookie = NULL);
+	RadarMap(AUI_ERRCODE * errCode, sint32 id, const MBCHAR * ldlBlock, ControlActionCallback * ActionFunc = NULL,
+			void *cookie = NULL);
+	RadarMap(AUI_ERRCODE * errCode, uint32 id, sint32 x, sint32 y, sint32 width, sint32 height, const MBCHAR * pattern,
+			ControlActionCallback * ActionFunc = NULL, void * cookie = NULL);
 
 	virtual ~RadarMap();
-	virtual AUI_ERRCODE	Resize( sint32 width, sint32 height );
+	virtual AUI_ERRCODE	Resize(sint32 width, sint32 height);
 
-	void		InitCommonLdl(const MBCHAR *ldlBlock);
-	void		InitCommon(void);
+	void InitCommonLdl(const MBCHAR * ldlBlock);
+	void InitCommon();
 
-	void		ClearMapOverlay(void);
-	void		SetMapOverlayCell(MapPoint const & pos, COLOR color);
+	void ClearMapOverlay();
+	void SetMapOverlayCell(const MapPoint & pos, COLOR color);
 
-	void		CalculateMetrics(void);
+	void CalculateMetrics();
 
-	void RenderMap(aui_Surface *surface);
+	void RenderMap(aui_Surface * surface);
 
-	MapPoint	ComputeCenteredMap(MapPoint const & pos, RECT *viewRect);
-	MapPoint	CenterMap(const MapPoint &pos );
-	void		Setup( void );
-	void		Update( void );
-	void		RedrawTile(const MapPoint & pos);
-	void		SetSelectedCity( Unit city ) { m_selectedCity = city; };
+	MapPoint ComputeCenteredMap(const MapPoint & pos, RECT * viewRect);
+	MapPoint CenterMap(const MapPoint & pos);
+	void Setup();
+	void Update();
+	void RedrawTile(const MapPoint & pos);
 
-	aui_Surface *GetMapSurface(void) const { return m_mapSurface; }
+	aui_Surface * GetMapSurface() const { return m_mapSurface; }
 
-	virtual AUI_ERRCODE			DrawThis(aui_Surface *surface, sint32 x, sint32 y);
+	virtual AUI_ERRCODE DrawThis(aui_Surface * surface, sint32 x, sint32 y);
 
-	virtual void	MouseLGrabInside(aui_MouseEvent * mouseData);
-	virtual void	MouseRGrabInside(aui_MouseEvent * mouseData);
+	virtual void MouseLGrabInside(aui_MouseEvent * mouseData);
+	virtual void MouseRGrabInside(aui_MouseEvent * mouseData);
 
-	virtual AUI_ERRCODE			Idle( void );
+	virtual AUI_ERRCODE Idle();
 
-	bool IsInteractive() const { return(m_isInteractive); }
-
+	bool IsInteractive() const { return m_isInteractive; }
 	void SetInteractive(bool status = true)
-	{ m_isInteractive = status; ShouldDraw(); }
+	{
+		m_isInteractive = status;
+		ShouldDraw();
+	}
 
 	void DisplayUnits(bool status = true)
-		{ m_displayUnits = status; Update(); g_theProfileDB->SetDisplayUnits(status);}
+	{
+		m_displayUnits = status;
+		Update();
+		g_theProfileDB->SetDisplayUnits(status);
+	}
 	void DisplayCities(bool status = true)
-		{ m_displayCities = status; Update(); g_theProfileDB->SetDisplayCities(status);}
+	{
+		m_displayCities = status;
+		Update();
+		g_theProfileDB->SetDisplayCities(status);
+	}
 	void DisplayBorders(bool status = true)
-		{ m_displayBorders = status; Update(); g_theProfileDB->SetDisplayBorders(status);}
+	{
+		m_displayBorders = status;
+		Update();
+		g_theProfileDB->SetDisplayBorders(status);
+	}
 	void DisplayOverlay(bool status = true)
-		{ m_displayOverlay = status; Update(); }
+	{
+		m_displayOverlay = status;
+		Update();
+	}
 	void DisplayTrade(bool status = true)
-		{ m_displayTrade = status; Update(); g_theProfileDB->SetDisplayTrade(status);}
-	void DisplayTerrain(bool status = true)
-		{ m_displayTerrain = status; Update(); g_theProfileDB->SetDisplayTerrain(status);}
+	{
+		m_displayTrade = status;
+		Update();
+		g_theProfileDB->SetDisplayTrade(status);
+	}
+	void DisplayTerrain(bool status = true) {
+		m_displayTerrain = status;
+		Update();
+		g_theProfileDB->SetDisplayTerrain(status);
+	}
 	void DisplayPolitical(bool status = true)
-		{ m_displayPolitical = status; Update(); g_theProfileDB->SetDisplayPolitical(status);}
+	{
+		m_displayPolitical = status;
+		Update();
+		g_theProfileDB->SetDisplayPolitical(status);
+	}
 	void DisplayCapitols(bool status = true)
-		{ m_displayCapitols = status; Update(); g_theProfileDB->SetDisplayCapitols(status);}
+	{
+		m_displayCapitols = status;
+		Update();
+		g_theProfileDB->SetDisplayCapitols(status);
+	}
 	void DisplayRelations(bool status = true)
-		{ m_displayRelations = status; Update(); g_theProfileDB->SetDisplayRelations(status);}
+	{
+		m_displayRelations = status;
+		Update();
+		g_theProfileDB->SetDisplayRelations(status);
+	}
 
-	bool IsDisplayUnits() { return(m_displayUnits); }
-	bool IsDisplayCities() { return(m_displayCities); }
-	bool IsDisplayBorders() { return(m_displayBorders); }
-	bool IsDisplayOverlay() { return(m_displayOverlay); }
-	bool IsDisplayTrade() { return m_displayTrade; }
-	bool IsDisplayTerrain() { return m_displayTerrain; }
-	bool IsDisplayPolitical() { return m_displayPolitical; }
-	bool IsDisplayCapitols() { return m_displayCapitols; }
-	bool IsDisplayRelations() { return m_displayRelations; }
+	bool IsDisplayUnits() const { return m_displayUnits; }
+	bool IsDisplayCities() const { return m_displayCities; }
+	bool IsDisplayBorders() const { return m_displayBorders; }
+	bool IsDisplayOverlay() const { return m_displayOverlay; }
+	bool IsDisplayTrade() const { return m_displayTrade; }
+	bool IsDisplayTerrain() const { return m_displayTerrain; }
+	bool IsDisplayPolitical() const { return m_displayPolitical; }
+	bool IsDisplayCapitols() const { return m_displayCapitols; }
+	bool IsDisplayRelations() const { return m_displayRelations; }
 
 private:
 	Player * GetVisiblePlayerToRender();
@@ -162,7 +187,7 @@ private:
 				aui_Surface & surface, const MapPoint & position, const MapPoint & worldPos, const Player & player);
 	void    RenderTradeRoute(aui_Surface & surface, const RECT & tileRectangle);
 
-	MapPoint PosWorldToPosRadar(const MapPoint worldPos);
+	MapPoint PosWorldToPosRadar(const MapPoint & worldPos);
 
 	bool m_displayUnits;
 	bool m_displayCities;
@@ -179,12 +204,11 @@ private:
 	aui_Surface * m_mapSurface;
 	MapPoint    * m_mapSize;
 	COLOR       * m_mapOverlay;
+	Pixel16     * m_colorMap;
 	double        m_tilePixelWidth;
 	double        m_tilePixelHeight;
-	Pixel16     * m_colorMap;
 	RECT          m_mapViewRect;
 	MapPoint      m_lastCenteredPoint;
-	Unit          m_selectedCity;
 	MapPoint      m_displayOffset[k_MAX_PLAYERS]; // Shifted x and y value for each player (Hotseat)
 };
 
