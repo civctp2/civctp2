@@ -27,9 +27,9 @@
 // - #01 Allow shifting the X and Y axis in the radar map with RMouse clicks
 //   (L. Hirth 6/2004)
 // - Standardised ceil/min/max usage.
-// - Radar tile boarder color determined by the visual cell owner instead by
+// - Radar tile border color determined by the visual cell owner instead by
 //   the actual cell owner. - Nov 1st 2004 - Martin Gühmann
-// - Radar tile boarder is now fully determined by the visible tile owner
+// - Radar tile border is now fully determined by the visible tile owner
 //   instead of being determined half by the actual tile owner and half by the
 //   the the visible tile owner this fixes the bug that appears after conquest
 //   of a city. - Nov. 1st 2004 - Martin Gühmann
@@ -811,7 +811,7 @@ Pixel16 RadarMap::MapTileColor(const Player & player, const MapPoint & position,
 		}
 		else if (m_displayPolitical && !g_theWorld->IsWater(worldPos) )
 		{
-			if (owner < 0)
+			if (owner < 0 || !player.HasContactWith(owner))
 			{
 				darken = true;
 				color  = COLOR_WHITE;
