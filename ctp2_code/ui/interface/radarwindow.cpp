@@ -119,20 +119,6 @@ void BordersToggleButtonActionCallback
 	}
 }
 
-void FilterToggleButtonActionCallback(aui_Control *control,
-	uint32 action, uint32 data, void *cookie)
-{
-	switch (action)
-	{
-	case AUI_SWITCH_ACTION_ON:
-		g_radarMap->Filter( true );
-		break;
-	case AUI_SWITCH_ACTION_OFF:
-		g_radarMap->Filter( false );
-		break;
-	}
-}
-
 void TradeToggleButtonActionCallback(aui_Control *control,
 	uint32 action, uint32 data, void *cookie)
 {
@@ -306,7 +292,7 @@ sint32 radarwindow_Initialize()
 		"RadarWindow.TopBorder.Button2"));
 	ctp2_Switch *bordersButton	= static_cast<ctp2_Switch*>(aui_Ldl::GetObject(
 		"RadarWindow.TopBorder.Button3"));
-	ctp2_Switch *filterButton	= static_cast<ctp2_Switch*>(aui_Ldl::GetObject(
+	ctp2_Switch *capitolsButton = static_cast<ctp2_Switch *>(aui_Ldl::GetObject(
 		"RadarWindow.TopBorder.Button4"));
 	ctp2_Switch *tradeButton = static_cast<ctp2_Switch *>(aui_Ldl::GetObject(
 		"RadarWindow.TopBorder.Button5"));
@@ -316,10 +302,8 @@ sint32 radarwindow_Initialize()
 		"RadarWindow.TopBorder.Button7"));
 	ctp2_Switch *politicalButton = static_cast<ctp2_Switch *>(aui_Ldl::GetObject(
 		"RadarWindow.TopBorder.Button8"));
-	ctp2_Switch *capitolsButton = static_cast<ctp2_Switch *>(aui_Ldl::GetObject(
-		"RadarWindow.TopBorder.Button9"));
 	ctp2_Switch *relationsButton = static_cast<ctp2_Switch *>(aui_Ldl::GetObject(
-		"RadarWindow.TopBorder.Button10"));
+		"RadarWindow.TopBorder.Button9"));
 
 	minimizeButton->Move(topBorder->Width() - minimizeButton->Width() - 15, minimizeButton->Y());
 
@@ -330,7 +314,6 @@ sint32 radarwindow_Initialize()
 	unitsButton->SetState( g_radarMap->IsDisplayUnits() );
 	citiesButton->SetState( g_radarMap->IsDisplayCities() );
 	bordersButton->SetState( g_radarMap->IsDisplayBorders() );
-	filterButton->SetState( g_radarMap->IsFilter() );
 	tradeButton->SetState( g_radarMap->IsDisplayTrade());
 	terrainButton->SetState( g_radarMap->IsDisplayTerrain());
 	politicalButton->SetState( g_radarMap->IsDisplayPolitical());
@@ -340,7 +323,6 @@ sint32 radarwindow_Initialize()
 	unitsButton->SetActionFuncAndCookie(UnitsToggleButtonActionCallback, NULL);
 	citiesButton->SetActionFuncAndCookie(CitiesToggleButtonActionCallback, NULL);
 	bordersButton->SetActionFuncAndCookie(BordersToggleButtonActionCallback, NULL);
-	filterButton->SetActionFuncAndCookie(FilterToggleButtonActionCallback, NULL);
 	tradeButton->SetActionFuncAndCookie(TradeToggleButtonActionCallback, NULL);
 	terrainButton->SetActionFuncAndCookie(TerrainToggleButtonActionCallback, NULL);
 	minimizeButton->SetActionFuncAndCookie(MinimizeCallback, NULL);

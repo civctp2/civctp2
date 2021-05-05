@@ -26,7 +26,7 @@
 //
 // - Event handlers declared in a notation that is more standard C++.
 // - #pragma once commented out.
-// - #01 Allow shifing the X and Y axis in the radar map with RMouse click
+// - #01 Allow shifting the X and Y axis in the radar map with RMouse click
 //   (L. Hirth 6/2004)
 // -Added m_displayPolitical variable and associated functions (6-Jul-2009 EPW)
 // -Added m_displayCapitol and functions(5-Jan-10 EPW)
@@ -47,11 +47,6 @@
 #include "pixeltypes.h"
 #include "profileDB.h"
 #include "colorset.h"	// COLOR
-
-enum C3_RADAR_ACTION {
-	C3_RADAR_ACTION_NULL,
-	C3_RADAR_ACTION_MAX
-};
 
 class aui_Surface;
 class MapPoint;
@@ -88,9 +83,6 @@ public:
 
 	void RenderMap(aui_Surface *surface);
 
-	POINT		MapToPixel(sint32 x, sint32 y);
-	POINT		MapToPixel(MapPoint *pos);
-
 	MapPoint	ComputeCenteredMap(MapPoint const & pos, RECT *viewRect);
 	MapPoint	CenterMap(const MapPoint &pos );
 	void		Setup( void );
@@ -120,8 +112,6 @@ public:
 		{ m_displayBorders = status; Update(); g_theProfileDB->SetDisplayBorders(status);}
 	void DisplayOverlay(bool status = true)
 		{ m_displayOverlay = status; Update(); }
-	void Filter(bool status = true)
-		{ m_filter = status; Update(); g_theProfileDB->SetDisplayFilter(status);}
 	void DisplayTrade(bool status = true)
 		{ m_displayTrade = status; Update(); g_theProfileDB->SetDisplayTrade(status);}
 	void DisplayTerrain(bool status = true)
@@ -135,7 +125,6 @@ public:
 
 	bool IsDisplayUnits() { return(m_displayUnits); }
 	bool IsDisplayCities() { return(m_displayCities); }
-	bool IsFilter() { return(m_filter); }
 	bool IsDisplayBorders() { return(m_displayBorders); }
 	bool IsDisplayOverlay() { return(m_displayOverlay); }
 	bool IsDisplayTrade() { return m_displayTrade; }
@@ -173,14 +162,12 @@ private:
 				aui_Surface & surface, const MapPoint & position, const MapPoint & worldPos, const Player & player);
 	void    RenderTradeRoute(aui_Surface & surface, const RECT & tileRectangle);
 
-
 	MapPoint PosWorldToPosRadar(const MapPoint worldPos);
 
 	bool m_displayUnits;
 	bool m_displayCities;
 	bool m_displayBorders;
 	bool m_displayOverlay;
-	bool m_filter;
 	bool m_displayTerrain;
 	bool m_displayTrade;
 	bool m_displayPolitical;
@@ -194,8 +181,6 @@ private:
 	COLOR       * m_mapOverlay;
 	double        m_tilePixelWidth;
 	double        m_tilePixelHeight;
-	aui_Surface * m_tempSurface;
-	uint8       * m_tempBuffer;
 	Pixel16     * m_colorMap;
 	RECT          m_mapViewRect;
 	MapPoint      m_lastCenteredPoint;
