@@ -24,12 +24,12 @@
 //
 // Modifications from the original Activision code:
 //
-// - #01 Allow shifing the X and Y axis in the radar map with RMouse clicks
+// - #01 Allow shifting the X and Y axis in the radar map with RMouse clicks
 //   (L. Hirth 6/2004)
 // - Standardised ceil/min/max usage.
 // - Radar tile boarder color determined by the visual cell owner instead by
 //   the actual cell owner. - Nov 1st 2004 - Martin Gühmann
-// - Radar tile boarder is now fully determined by the visible tile onwer
+// - Radar tile boarder is now fully determined by the visible tile owner
 //   instead of being determined half by the actual tile owner and half by the
 //   the the visible tile owner this fixes the bug that appears after conquest
 //   of a city. - Nov. 1st 2004 - Martin Gühmann
@@ -141,9 +141,6 @@ RadarMap::~RadarMap()
 {
 	delete[] m_mapOverlay;
 	delete m_mapSurface;
-	delete m_tempSurface;
-	if (m_tempBuffer)
-		free(m_tempBuffer);
 
 	free(m_colorMap);
 }
@@ -171,8 +168,6 @@ void RadarMap::InitCommon(void)
 {
 	m_mapSurface = NULL;
 	m_mapSize = NULL;
-	m_tempSurface = NULL;
-	m_tempBuffer = NULL;
 
 	m_colorMap = NULL;
 
@@ -183,7 +178,6 @@ void RadarMap::InitCommon(void)
 	m_displayCities = g_theProfileDB->GetDisplayCities() != FALSE;
 	m_displayBorders = g_theProfileDB->GetDisplayBorders() != FALSE;
 	m_displayOverlay = true;
-	m_filter = g_theProfileDB->GetDisplayFilter() != FALSE;
 	m_displayTrade = g_theProfileDB->GetDisplayTrade() != FALSE;
 	m_displayTerrain = g_theProfileDB->GetDisplayTerrain() != FALSE;
 	m_displayPolitical = g_theProfileDB->GetDisplayPolitical() != FALSE;
@@ -286,10 +280,6 @@ void RadarMap::CalculateMetrics(void)
 {
 	if (!g_theWorld) return;
 
-	delete m_tempSurface;
-	if (m_tempBuffer)
-		free(m_tempBuffer);
-
 	free(m_colorMap);
 	m_colorMap = NULL;
 
@@ -301,48 +291,8 @@ void RadarMap::CalculateMetrics(void)
 	uint32 width = m_mapSize->x * 2;
 	uint32 height = m_mapSize->y;
 
-	m_tempBuffer = (uint8 *)calloc((width + 2) * (height + 2), 2);
-
 	m_colorMap  = (Pixel16*) malloc((width + 2) * (height + 2) * sizeof(Pixel16));
-
-	AUI_ERRCODE err;
-	m_tempSurface = new aui_Surface(&err, width, height, 16, 2*(width + 2), &m_tempBuffer[2*((width + 2) + (1))]);
 }
-
-//---------------------------------------------------------------------------
-//
-//	RadarMap::MapToPixel
-//
-//---------------------------------------------------------------------------
-//	- Seems unused
-//
-//---------------------------------------------------------------------------
-POINT RadarMap::MapToPixel(sint32 x, sint32 y)
-{
-	sint32		k       = ((y / 2) + x) % m_mapSize->x;
-
-    POINT		pt;
-	pt.x = (sint32)(k * m_tilePixelWidth);
-	pt.y = (sint32)(y * m_tilePixelHeight);
-
-	return pt;
-}
-
-//---------------------------------------------------------------------------
-//
-//	RadarMap::MapToPixel
-//
-//---------------------------------------------------------------------------
-//	- Seems unused because calling function is unused
-//
-//---------------------------------------------------------------------------
-POINT RadarMap::MapToPixel(MapPoint *pos)
-{
-	return MapToPixel(pos->x, pos->y);
-}
-
-
-
 
 //---------------------------------------------------------------------------
 //
@@ -352,24 +302,18 @@ POINT RadarMap::MapToPixel(MapPoint *pos)
 //	- Gives back the player that shall be shown currently
 //
 //---------------------------------------------------------------------------
-Player *RadarMap::GetVisiblePlayerToRender()
+Player * RadarMap::GetVisiblePlayerToRender()
 {
-
-
-	if(!g_tiledMap || !g_tiledMap->ReadyToDraw() ||
-		!g_theWorld || !g_selected_item || !m_mapSize)
-		return(NULL);
-
-
-
-
-
+	if (!g_tiledMap || !g_tiledMap->ReadyToDraw() || !g_theWorld || !g_selected_item || !m_mapSize) {
+		return NULL;
+	}
 
 	Assert(m_mapSize->x < 0 || m_mapSize->y > 0);
-	if(m_mapSize->x <= 0 || m_mapSize->y <= 0)
-		return(NULL);
+	if (m_mapSize->x <= 0 || m_mapSize->y <= 0) {
+		return NULL;
+	}
 
-	return(g_player[g_selected_item->GetVisiblePlayer()]);
+	return g_player[g_selected_item->GetVisiblePlayer()];
 }
 
 //---------------------------------------------------------------------------
@@ -505,19 +449,20 @@ void RadarMap::RenderCapitol(aui_Surface & surface, const MapPoint & position, c
 	double xPosition = screenPosition.x * m_tilePixelWidth;
 	double yPosition = screenPosition.y * m_tilePixelHeight;
 
+	double halfTilePixelWidth = m_tilePixelWidth / 2.0;
 	if (screenPosition.y & 1) {
-		xPosition += m_tilePixelWidth / 2.0;
+		xPosition += halfTilePixelWidth;
 	}
 
 	//Now to build the "star"
-	RECT vertical = {
-		xPosition - m_tilePixelWidth, yPosition,
-		xPosition + 2 * m_tilePixelWidth - 1, yPosition + m_tilePixelHeight - 1
+	RECT horizontal = {
+		xPosition - halfTilePixelWidth, yPosition,
+		xPosition + m_tilePixelWidth - 1, yPosition + m_tilePixelHeight - 1
 	};
 
-	RECT horizontal = {
+	RECT vertical = {
 		xPosition, yPosition - m_tilePixelHeight,
-		xPosition + m_tilePixelWidth - 1, yPosition + 2 * m_tilePixelHeight - 1
+		xPosition + halfTilePixelWidth - 1, yPosition + 2 * m_tilePixelHeight - 1
 	};
 
 	primitives_ClippedPaintRect16(surface, vertical, g_colorSet->GetColor(COLOR_ORANGE));
@@ -592,8 +537,8 @@ void RadarMap::RenderMapTileBorder(aui_Surface & surface, const MapPoint & posit
 
 void RadarMap::RenderTiles(aui_Surface & surface)
 {
-	double tileWidth = m_width / static_cast<double>(m_mapSize->x);
-	double tileHeight = m_height / static_cast<double>(m_mapSize->y);
+	double tileWidth  = m_tilePixelWidth;
+	double tileHeight = m_tilePixelHeight;
 
 	MapPoint worldPos(0, 0);
 	MapPoint radarOffset = PosWorldToPosRadar(worldPos);
@@ -815,9 +760,11 @@ void RadarMap::RenderTrade(aui_Surface & surface, const MapPoint & position, con
 	}
 
 	bool seenTrade= false;
-	for (sint32 i = 0; i < g_theWorld->GetCell(worldPos)->GetNumTradeRoutes(); i++) {
+	for (sint32 i = 0; i < g_theWorld->GetCell(worldPos)->GetNumTradeRoutes(); i++)
+	{
 		TradeRoute route = g_theWorld->GetCell(worldPos)->GetTradeRoute(i);
-		if (route.SeenBy(g_selected_item->GetVisiblePlayer())) {
+		if (route.SeenBy(g_selected_item->GetVisiblePlayer()))
+		{
 			seenTrade= true;
 			break;
 		}
@@ -831,11 +778,12 @@ void RadarMap::RenderTrade(aui_Surface & surface, const MapPoint & position, con
 	double xPosition = screenPosition.x * m_tilePixelWidth;
 	double yPosition = screenPosition.y * m_tilePixelHeight;
 
+	double halfTilePixelWidth = m_tilePixelWidth / 2.0;
 	if (screenPosition.y & 1) {
-		xPosition += m_tilePixelWidth / 2.0;
+		xPosition += halfTilePixelWidth;
 	}
 
-	RECT tileRectangle = { xPosition, yPosition, xPosition + m_tilePixelWidth, yPosition + m_tilePixelHeight };
+	RECT tileRectangle = { xPosition, yPosition, xPosition + halfTilePixelWidth, yPosition + m_tilePixelHeight };
 	RenderTradeRoute(surface, tileRectangle);
 }
 
@@ -1334,8 +1282,8 @@ void RadarMap::DoRedrawTile(const Player & player, const MapPoint & pos)
 {
 	bool isLand = (g_theWorld->IsLand(pos) || g_theWorld->IsMountain(pos)) && !g_theWorld->IsTunnel(pos);
 
-	double tileWidth = m_width / static_cast<double>(m_mapSize->x);
-	double tileHeight = m_height / static_cast<double>(m_mapSize->y);
+	double tileWidth  = m_tilePixelWidth;
+	double tileHeight = m_tilePixelHeight;
 
 	MapPoint radarOffset = PosWorldToPosRadar(pos);
 
@@ -1559,7 +1507,7 @@ AUI_ERRCODE RadarMap::Idle( void )
 // RadarMap::PosWorldToPosRadarCorrectedX
 //
 //---------------------------------------------------------------------------
-// - Calculates from a given world point the coresponding point of the
+// - Calculates from a given world point the corresponding point of the
 //   radar map for handling the offset of the X and/or the Y axis
 //
 //---------------------------------------------------------------------------
