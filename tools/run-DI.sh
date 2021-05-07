@@ -1,5 +1,30 @@
 #!/bin/sh
 
+## shell script to run docker image (DI) created by GitLab CI (or built locally)
+## used in .gitlab-ci.yml for running smoke tests in GitLab CI
+## also ment for playing ctp2 directly from DI (needs no local built, only docker)
+##
+## saves games, maps, Scenarios, scores, user settinges etc in $HOME/.civctp2/
+## use -v to specify the folder with OGGs (TrackXX.ogg) for the game music and videos, e.g.:
+## ./run-DI.sh \
+##     -v $HOME/ctp2CD/ctp2_program/ctp/music/:/opt/ctp2/ctp2_program/ctp/music/:ro \
+##     -v $HOME/ctp2CD/ctp2_program/ctp/videos/:opt/ctp2/ctp2_data/default/videos/:ro \
+##     registry.gitlab.com/civctp2/civctp2/master:latest ./ctp2 fullscreen
+## 
+## start a saved game directly with e.g.:
+## ./run-DI.sh \
+##     -v $HOME/ctp2CD/ctp2_program/ctp/music/:/opt/ctp2/ctp2_program/ctp/music/:ro \
+##     -v $HOME/ctp2CD/ctp2_program/ctp/videos/:opt/ctp2/ctp2_data/default/videos/:ro \
+##     registry.gitlab.com/civctp2/civctp2/master:latest ./ctp2 -lsave/games/Julius/QUICKSAVE-Julius
+## 
+## specify environment vars for the docker environment (e.g. use different sound card):
+## ./run-DI.sh \
+##     -v $HOME/ctp2CD/ctp2_program/ctp/music/:/opt/ctp2/ctp2_program/ctp/music/:ro \
+##     -v $HOME/ctp2CD/ctp2_program/ctp/videos/:opt/ctp2/ctp2_data/default/videos/:ro \
+##     --env="ALSA_CARD=1" \
+##     registry.gitlab.com/civctp2/civctp2/master:latest ./ctp2 fullscreen
+
+
 XSOCK=/tmp/.X11-unix
 if [ -z ${XVFBtmp+x} ]; then 
     XAUTH=/tmp/.docker.xauth
@@ -24,8 +49,6 @@ if test -s $HOME/.civctp2/Const.txt # file must exist for docker file-vol
 then CON="-v $HOME/.civctp2/Const.txt:/opt/ctp2/ctp2_program/ctp/Const.txt"
 fi     
 
-## use -v to specify the folder with OGGs (TrackXX.ogg) for the game music, e.g.:
-## ./run.sh -v $HOME/ctp2CD/ctp2_program/ctp/music/:/opt/ctp2/ctp2_program/ctp/music/:ro registry.gitlab.com/civctp2/civctp2/master:latest ./ctp2 fullscreen
 docker run \
        --rm \
        $DOCKERARGS \
