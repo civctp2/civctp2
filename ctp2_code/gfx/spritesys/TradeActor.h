@@ -39,8 +39,7 @@ protected:
 	void     LoadSprites();
 
 	TradeRoute                     m_routeID;
-	ROUTE_TYPE                     m_routeType;
-	sint32                         m_routeResource;
+	sint32                         m_spriteID;
 
 	const DynamicArray<MapPoint> * m_routePath;
 	uint32                         m_sourcePosID;
@@ -57,6 +56,7 @@ protected:
 	Action                       * m_curAction;
 	GOODACTION                     m_curGoodAction;
 	LOADTYPE                       m_loadType;
+	uint32                         m_nextGoodAnimation;
 };
 
 #endif
