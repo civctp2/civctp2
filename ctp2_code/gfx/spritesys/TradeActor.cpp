@@ -39,6 +39,7 @@
 #include "ResourceRecord.h"
 #include "maputils.h"
 #include "tiledmap.h"
+#include "profileDB.h"
 
 extern SpriteGroupList * g_goodSpriteGroupList;
 
@@ -58,7 +59,8 @@ TradeActor::TradeActor(TradeRoute newRoute)
 	m_facing          (k_DEFAULTSPRITEFACING),
 	m_idleAnim        (NULL),
 	m_curAction       (NULL),
-	m_curGoodAction   (GOODACTION_NONE)
+	m_curGoodAction   (GOODACTION_NONE),
+	m_loadType        (LOADTYPE_NONE)
 {
 	m_routeID.GetSourceResource(m_routeType, m_routeResource);
 
@@ -68,16 +70,6 @@ TradeActor::TradeActor(TradeRoute newRoute)
 	m_destPosID    = m_routePath->Num() - 1;
 	m_currentPos   = m_routePath->Get(m_currentPosID);
 	m_nextPos      = LookAtNextPos();
-
-	Assert(g_goodSpriteGroupList);
-
-	sint32 index = g_theResourceDB->Get(m_routeResource)->GetSpriteID();
-	m_goodSpriteGroup = (GoodSpriteGroup *)
-			g_goodSpriteGroupList->GetSprite(index, GROUPTYPE_GOOD, LOADTYPE_FULL,(GAME_ACTION)0);
-	if (!m_goodSpriteGroup) {
-		m_goodSpriteGroup = (GoodSpriteGroup *)
-			g_goodSpriteGroupList->GetSprite(index, GROUPTYPE_GOOD, LOADTYPE_BASIC, (GAME_ACTION) 0);
-	}
 
 	AddIdle();
 }
@@ -91,6 +83,8 @@ TradeActor::~TradeActor()
 
 void TradeActor::AddIdle(void)
 {
+	LoadSprites();
+
 	// Copy of animation is made to ensure smooth animations within the movement
 	//   animation is owned by action so it has to be (re-)created
 	m_idleAnim = m_idleAnim ? Anim::CreateLooping(*m_idleAnim) : CreateAnim(GOODACTION_IDLE);
@@ -240,4 +234,29 @@ void TradeActor::GetBoundingRect(RECT * rect, const POINT & drawPos) const
 
 	POINT hotPoint = m_goodSpriteGroup->GetHotPoint(m_curGoodAction);
 	OffsetRect(rect, drawPos.x - (sint32)(hotPoint.x * scale), drawPos.y - (sint32)(hotPoint.y * scale));
+}
+
+void TradeActor::LoadSprites()
+{
+	LOADTYPE loadType = g_theProfileDB->IsGoodAnim() ? LOADTYPE_FULL : LOADTYPE_BASIC;
+	if (loadType != m_loadType)
+	{
+		Assert(g_goodSpriteGroupList);
+
+		sint32 index = g_theResourceDB->Get(m_routeResource)->GetSpriteID();
+
+		if (m_loadType != LOADTYPE_NONE) {
+			g_goodSpriteGroupList->ReleaseSprite(index, m_loadType);
+		}
+
+		m_loadType = loadType;
+		m_goodSpriteGroup = (GoodSpriteGroup *)
+				g_goodSpriteGroupList->GetSprite(index, GROUPTYPE_GOOD, m_loadType, (GAME_ACTION) 0);
+		if (!m_goodSpriteGroup && loadType == LOADTYPE_FULL)
+		{
+			m_loadType = LOADTYPE_BASIC;
+			m_goodSpriteGroup = (GoodSpriteGroup *)
+					g_goodSpriteGroupList->GetSprite(index, GROUPTYPE_GOOD, m_loadType, (GAME_ACTION) 0);
+		}
+	}
 }
