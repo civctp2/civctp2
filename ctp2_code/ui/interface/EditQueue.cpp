@@ -415,7 +415,6 @@ AUI_ERRCODE EditQueue::Display(const Unit & city)
 	AUI_ERRCODE err = Display();
 
 	SetCity(city);
-	DoFocusList(s_editQueue->GetVisibleItemList(), true);
 
 	return err;
 }
