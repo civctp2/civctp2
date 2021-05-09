@@ -412,7 +412,7 @@ public:
 
 	bool        CanDrawSpecialMove(SELECT_TYPE sType, Army &sel_army, const MapPoint &dest_pos);
 	void		DrawLegalMove(aui_Surface *pSurface);
-	void		DrawUnfinishedMove(aui_Surface *pSurface);
+	void		DrawUnfinishedMove(aui_Surface *surface);
 
 	void		DrawPath(Path *path);
 
@@ -595,6 +595,9 @@ protected:
 	RECT m_chatRect;
 
 private:
+	void DrawUnfinishedPath(aui_Surface & surface, const Army & army);
+	void DrawUnfinishedTurnCount(aui_Surface & surface, const Army & army);
+
 	// m_mapViewRect is const so that it can only be updated by UpdateAndClipMapViewRect
 	const RECT m_mapViewRect;
 
