@@ -289,6 +289,7 @@ AUI_ERRCODE sci_advancescreen_Initialize( MBCHAR *messageText )
 		sci_advancescreen_listAction );
 	Assert( AUI_NEWOK(s_advanceList, errcode) );
 	if ( !AUI_NEWOK(s_advanceList, errcode) ) return errcode;
+	s_advanceList->DoneInstantiating();
 
 	s_advanceList->SetForceSelect( TRUE );
 
