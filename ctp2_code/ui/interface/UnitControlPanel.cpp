@@ -26,9 +26,9 @@
 //
 // - Option added to select which order buttons are displayed for an army.
 // - Added unit display name.
-// - Standartized code (May 21st 2006 Martin Gühmann)
-// - Added a custom status bar text for the upgrade order. (13-Sep-2008 Martin Gühmann)
-// - Changed occurances of UnitRecord::GetMaxHP to
+// - Standardized code (May 21st 2006 Martin GÃ¼hmann)
+// - Added a custom status bar text for the upgrade order. (13-Sep-2008 Martin GÃ¼hmann)
+// - Changed occurrences of UnitRecord::GetMaxHP to
 //   UnitData::CalculateTotalHP. (Aug 3rd 2009 Maq)
 //
 //----------------------------------------------------------------------------
@@ -38,7 +38,6 @@
 
 #include "ArmyData.h"
 #include "ArmyPool.h"
-#include "aui_blitter.h"
 #include "aui_ldl.h"
 #include "c3ui.h"
 #include "Cell.h"
@@ -199,7 +198,7 @@ m_transportSelectionIcon(static_cast<ctp2_Button *>(
 #define k_TERRAINIMP_COLS_PER_ROW 6
 	m_terrainImpSwitches        (NULL),
 new and delete in constructor/dest
-  		s_scenarioEditor->PopulateTerrainImprovementList();  //emod5 defientely need something to populate it
+  		s_scenarioEditor->PopulateTerrainImprovementList();  //emod5 definitely need something to populate it
 
 void ScenarioEditor::PopulateTerrainImprovementList()  //emod1 note  use this format instead of current switches but add item populating checks?
 {
@@ -940,7 +939,7 @@ Army UnitControlPanel::GetSelectedArmy()
 	return Army();
 }
 
-void UnitControlPanel::GiveOrder(OrderRecord *order)  //emod4 this needs to work from selectinga list
+void UnitControlPanel::GiveOrder(OrderRecord *order)  //emod4 this needs to work from selecting a list
 {
 
 	g_controlPanel->BeginOrderDelivery(order);
@@ -1005,24 +1004,27 @@ void UnitControlPanel::PrevUnitButtonActionCallback(aui_Control *control,
 	}
 }
 
-void UnitControlPanel::NextUnitButtonActionCallback(aui_Control *control,
-	uint32 action, uint32 data, void *cookie)
+void UnitControlPanel::NextUnitButtonActionCallback(aui_Control * control, uint32 action, uint32 data, void * cookie)
 {
-
-	if(action != static_cast<uint32>(AUI_BUTTON_ACTION_EXECUTE))
+	if (action != static_cast<uint32>(AUI_BUTTON_ACTION_EXECUTE)) {
 		return;
+	}
 
-	UnitControlPanel *panel = static_cast<UnitControlPanel*>(cookie);
-
-	switch(panel->m_currentMode) {
+	UnitControlPanel * panel = static_cast<UnitControlPanel*>(cookie);
+	switch (panel->m_currentMode)
+	{
 		case SINGLE_SELECTION:
 		case ARMY_SELECTION:
-
-			panel->SetSelectionMode(MULTIPLE_SELECTION);
+			if (g_theWorld->GetCell(g_selected_item->GetCurSelectPos())->GetNumUnits() > 1) {
+				panel->SetSelectionMode(MULTIPLE_SELECTION);
+			}
+			else {
+				g_selected_item->NextUnmovedUnit();
+			}
 			break;
+
 		case MULTIPLE_SELECTION:
 		default:
-
 			g_selected_item->NextUnmovedUnit();
 			break;
 	}
