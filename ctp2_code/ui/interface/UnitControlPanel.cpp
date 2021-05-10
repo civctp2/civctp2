@@ -60,6 +60,8 @@
 
 extern C3UI *g_c3ui;
 
+static MBCHAR * ARMY_SYMBOL = "UPIC21.tga";
+
 UnitControlPanel::UnitControlPanel(MBCHAR *ldlBlock) :
 m_unitDisplayGroup(static_cast<ctp2_Static*>(
 	aui_Ldl::GetObject(ldlBlock,
@@ -611,8 +613,7 @@ void UnitControlPanel::UpdateMultipleSelectionDisplay()
 				m_multipleSelectionButton[multiIndex]->ExchangeImage(0, 0,
 					unit.GetDBRec()->GetDefaultIcon()->GetIcon());
 				if(army.IsValid() && army.Num() > 1) {
-					m_multipleSelectionButton[multiIndex]->ExchangeImage(1, 0,
-																		 "UPIC21.tga");
+					m_multipleSelectionButton[multiIndex]->ExchangeImage(1, 0, ARMY_SYMBOL);
 				} else {
 					m_multipleSelectionButton[multiIndex]->ExchangeImage(1, 0, NULL);
 				}
@@ -653,10 +654,10 @@ void UnitControlPanel::UpdateArmySelectionDisplay()
 
 	Unit unit = army[0];
 	if (unit.IsValid())
-    {
-		m_armySelectionIcon->ExchangeImage
-            (0, 0, unit.GetDBRec()->GetDefaultIcon()->GetIcon());
-    }
+	{
+		m_armySelectionIcon->ExchangeImage(0, 0, unit.GetDBRec()->GetDefaultIcon()->GetIcon());
+		m_armySelectionIcon->ExchangeImage(1, 0, ARMY_SYMBOL);
+	}
 
 	for (int armyIndex = 0; armyIndex <
 		NUMBER_OF_ARMY_SELECTION_BUTTONS; armyIndex++) {
