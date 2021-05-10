@@ -366,7 +366,7 @@ void UnitControlPanel::SelectedUnit()
 	if(g_selected_item->GetSelectedArmy(a) && (!a.IsValid() || (a.Num() < 2))) {
 		SetSelectionMode(SINGLE_SELECTION);
 	} else {
-		SetSelectionMode(MULTIPLE_SELECTION);
+		SetSelectionMode(ARMY_SELECTION);
 	}
 
 	m_lastSelectedArmy.m_id = 0;
@@ -1015,10 +1015,9 @@ void UnitControlPanel::NextUnitButtonActionCallback(aui_Control * control, uint3
 	{
 		case SINGLE_SELECTION:
 		case ARMY_SELECTION:
-			if (g_theWorld->GetCell(g_selected_item->GetCurSelectPos())->GetNumUnits() > 1) {
-				panel->SetSelectionMode(MULTIPLE_SELECTION);
-			}
-			else {
+			if (SelectionContainsMultipleArmies()) {
+					panel->SetSelectionMode(MULTIPLE_SELECTION);
+			} else {
 				g_selected_item->NextUnmovedUnit();
 			}
 			break;
@@ -1028,6 +1027,24 @@ void UnitControlPanel::NextUnitButtonActionCallback(aui_Control * control, uint3
 			g_selected_item->NextUnmovedUnit();
 			break;
 	}
+}
+
+bool UnitControlPanel::SelectionContainsMultipleArmies()
+{
+	CellUnitList unitList;
+	g_theWorld->GetCell(g_selected_item->GetCurSelectPos())->GetArmy(unitList);
+	if (unitList.Num() <= 0) {
+		return false;
+	}
+
+	Army army = unitList.Get(0).GetArmy();
+	for (sint32 i = 1; i < unitList.Num(); i++)
+	{
+		if (unitList.Get(i).GetArmy() != army) {
+			return true;
+		}
+	}
+	return false;
 }
 
 AUI_ERRCODE UnitControlPanel::HealthBarActionCallback(ctp2_Static *control,

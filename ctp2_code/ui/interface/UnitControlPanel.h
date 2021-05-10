@@ -99,6 +99,7 @@ private:
 	static void TransportImageCallback(ctp2_Static *control,
 									   aui_MouseEvent *event,
 									   void *cookie);
+	static bool SelectionContainsMultipleArmies();
 
 	void UnsetCargoButtons();
 
