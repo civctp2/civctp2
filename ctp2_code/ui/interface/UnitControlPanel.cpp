@@ -451,6 +451,8 @@ void UnitControlPanel::UpdateSingleSelectionDisplay()
 		}
 	}
 
+	m_unitListLabel->SetText(unit.IsValid() ? unit.GetDisplayName().c_str() : "");
+
 	if((m_curSingleArmy.m_id == army.m_id) &&
 	   (m_curSingleUnit.m_id == unit.m_id) &&
 	   (m_curMovement == movement) &&
@@ -475,7 +477,6 @@ void UnitControlPanel::UpdateSingleSelectionDisplay()
 		m_singleSelectionRange->SetText("");
 		m_singleSelectionArmor->SetText("");
 		m_singleSelectionFirepower->SetText("");
-		m_unitListLabel->SetText("");
 
 		m_singleSelectionHealth->SetDrawCallbackAndCookie(NULL, NULL);
 		m_singleSelectionIcon->SetDrawCallbackAndCookie(NULL, NULL);
@@ -532,8 +533,6 @@ void UnitControlPanel::UpdateSingleSelectionDisplay()
 		m_singleSelectionIcon->SetDrawCallbackAndCookie(NULL, NULL, false);
 		m_singleSelectionIcon->SetImageMapCallback(NULL, NULL);
 	}
-
-	m_unitListLabel->SetText(unit.GetDisplayName().c_str());
 }
 
 void UnitControlPanel::UpdateMultipleSelectionDisplay()
@@ -549,6 +548,8 @@ void UnitControlPanel::UpdateMultipleSelectionDisplay()
     {
 		newArmyList.push_back(newUnitList[i].GetArmy());
 	}
+
+	m_unitListLabel->SetText("");
 
 	bool changed = false;
 
@@ -631,8 +632,6 @@ void UnitControlPanel::UpdateMultipleSelectionDisplay()
 			multiIndex++;
 		}
 	}
-
-	m_unitListLabel->SetText("");
 
     m_cellArmyList.swap(newArmyList);
     m_cellUnitList.clear();
