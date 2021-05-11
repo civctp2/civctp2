@@ -19,8 +19,8 @@
 #  Modifications from the original Activision code:
 #
 # - Added to the tileimp tracker popup window a construction time line.
-#   (Aug 15th 2005 Martin Gühmann)
-# - Made the special attack window work. (Aug 16th 2005 Martin Gühmann)
+#   (Aug 15th 2005 Martin GÃ¼hmann)
+# - Made the special attack window work. (Aug 16th 2005 Martin GÃ¼hmann)
 # - Added political map button - 6-Jul-2009 EPW
 # -Added view capital button -5-Jan-2009 EPW
 # -Added view relations button -7-Jan-10 EPW
@@ -340,10 +340,22 @@ template UNIT_LABEL_SPINNER:CTP2_STATIC_GROUP {
 		int		widthpix	124
 		int		heightpix	29
 
+		int		numberoflayers		2
+
 		# Background.
-		string	image00				"upsp01bl.tga"
-		string	image01				"upsp01bm.tga"
-		string	image02				"upsp01br.tga"
+		string	image00				"uppd02ax.tga"
+		string	image01				"uppd02bx.tga"
+		string	image02				"uppd02dx.tga"
+
+		# enabled
+		bool	layerenabled1				true
+		# Mark the middle images as stretchable.
+		bool	imagestretchx11			true
+		string	imageblttype11				"tile"
+
+		string	image10				"uppd02au.tga"
+		string	image11				"uppd02bu.tga"
+		string	image12				"uppd02du.tga"
 	}
 
 	# Previous.
