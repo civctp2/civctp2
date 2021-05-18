@@ -1253,10 +1253,36 @@ ControlPanelWindow:CTP2_WINDOW {
 							# Background
 							string	image00	"upfg52.tga"
 
-							# Army icon.
-							Icon:UNIT_BUTTON_MEDIUM_SIZE {
-								int	xpix	18
-								int ypix	33
+							# Hide extra box
+							Background:CTP2_STATIC_IMAGE {
+								int    xpix            11
+								int    ypix            12
+								int    widthpix        66
+								int    heightpix       103
+
+								string image00         "uptg20e.tga"
+								string imageblttype00  "stretch"
+								bool   imagestretchx00 true
+								bool   imagestretchy00 true
+
+								Icon:CTP2_STATIC_IMAGE {
+									# Location.
+									int    xpix            7
+									int    ypix            48
+
+									int    widthpix        54
+									int    heightpix       51
+
+									string imageblttype00  "stretch"
+									bool   imagestretchx00 true
+									bool   imagestretchy00 true
+
+									ArmySymbol:CTP2_STATIC_IMAGE {
+										int xpix 1
+										int ypix 1
+										string image00 "upic21.tga"
+									}
+								}
 							}
 
 							# Unit buttons.

@@ -110,9 +110,9 @@ m_multipleSelectionDisplay(static_cast<ctp2_Static*>(
 m_armySelectionDisplay(static_cast<ctp2_Static*>(
 	aui_Ldl::GetObject(ldlBlock,
 	"UnitTab.TabPanel.UnitSelectionDisplay.ArmySelect"))),
-m_armySelectionIcon(static_cast<ctp2_Button*>(
+m_armySelectionIcon(static_cast<ctp2_Static*>(
 	aui_Ldl::GetObject(ldlBlock,
-	"UnitTab.TabPanel.UnitSelectionDisplay.ArmySelect.Icon"))),
+	"UnitTab.TabPanel.UnitSelectionDisplay.ArmySelect.Background.Icon"))),
 m_transportSelectionDisplay(static_cast<ctp2_Static *>(
 	aui_Ldl::GetObject(ldlBlock, "UnitTab.TabPanel.UnitSelectionDisplay.TransportSelect"))),
 m_transportSelectionIcon(static_cast<ctp2_Button *>(
@@ -654,8 +654,13 @@ void UnitControlPanel::UpdateArmySelectionDisplay()
 	Unit unit = army[0];
 	if (unit.IsValid())
 	{
-		m_armySelectionIcon->ExchangeImage(0, 0, unit.GetDBRec()->GetDefaultIcon()->GetIcon());
-		m_armySelectionIcon->ExchangeImage(1, 0, ARMY_SYMBOL);
+		const MBCHAR * armyIconName = unit.GetDBRec()->GetDefaultIcon()->GetLargeIcon();
+		if (!armyIconName || strcmp(armyIconName, "NULL") == 0) {
+			armyIconName = unit.GetDBRec()->GetDefaultIcon()->GetIcon();
+		}
+		if (armyIconName && strcmp(armyIconName, "NULL") != 0) {
+			m_armySelectionIcon->ExchangeImage(0, 0, armyIconName);
+		}
 	}
 
 	for (int armyIndex = 0; armyIndex <

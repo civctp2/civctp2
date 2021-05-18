@@ -133,7 +133,7 @@ private:
 
 	enum { NUMBER_OF_ARMY_SELECTION_BUTTONS = 12 };
 	ctp2_Static *m_armySelectionDisplay;
-	ctp2_Button *m_armySelectionIcon;
+	ctp2_Static *m_armySelectionIcon;
 	ctp2_Button *m_armySelectionButton[
 		NUMBER_OF_ARMY_SELECTION_BUTTONS];
 	ctp2_Static *m_armySelectionHealth[NUMBER_OF_ARMY_SELECTION_BUTTONS];
