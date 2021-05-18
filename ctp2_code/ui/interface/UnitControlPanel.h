@@ -96,9 +96,8 @@ private:
 	static void OrderButtonActionCallback(aui_Control *control,
 		uint32 action, uint32 data, void *cookie);
 
-	static void TransportImageCallback(ctp2_Static *control,
-									   aui_MouseEvent *event,
-									   void *cookie);
+	static void TransportImageCallback(ctp2_Static * control, aui_MouseEvent * event, void * cookie);
+	static void TransportSelectionImageCallback(ctp2_Static * control, aui_MouseEvent * event, void * cookie);
 	static bool SelectionContainsMultipleArmies();
 
 	void UnsetCargoButtons();
@@ -139,7 +138,7 @@ private:
 	ctp2_Static *m_armySelectionHealth[NUMBER_OF_ARMY_SELECTION_BUTTONS];
 
 	ctp2_Static *m_transportSelectionDisplay;
-	ctp2_Button *m_transportSelectionIcon;
+	ctp2_Static *m_transportSelectionIcon;
 	ctp2_Switch *m_transportSelectionButton[k_MAX_CP_CARGO];
 	uint32       m_transportSelectionCargo[k_MAX_CP_CARGO];
 	ctp2_Static *m_transportSelectionHealth[k_MAX_CP_CARGO];

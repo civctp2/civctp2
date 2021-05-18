@@ -115,8 +115,8 @@ m_armySelectionIcon(static_cast<ctp2_Static*>(
 	"UnitTab.TabPanel.UnitSelectionDisplay.ArmySelect.Background.Icon"))),
 m_transportSelectionDisplay(static_cast<ctp2_Static *>(
 	aui_Ldl::GetObject(ldlBlock, "UnitTab.TabPanel.UnitSelectionDisplay.TransportSelect"))),
-m_transportSelectionIcon(static_cast<ctp2_Button *>(
-	aui_Ldl::GetObject(ldlBlock, "UnitTab.TabPanel.UnitSelectionDisplay.TransportSelect.Icon"))),
+m_transportSelectionIcon(static_cast<ctp2_Static *>(
+	aui_Ldl::GetObject(ldlBlock, "UnitTab.TabPanel.UnitSelectionDisplay.TransportSelect.Background.Icon"))),
 	m_cellUnitList      (),
     m_cellArmyList      ()
 {
@@ -318,6 +318,8 @@ void ScenarioEditor::TerrainImprovementSwitch(aui_Control *control, uint32 actio
 
 */
 /////////////////////end note
+
+	m_transportSelectionIcon->SetImageMapCallback(TransportSelectionImageCallback, this);
 
 	m_unitListPreviousButton->SetActionFuncAndCookie(
 		PrevUnitButtonActionCallback, this);
@@ -522,14 +524,13 @@ void UnitControlPanel::UpdateSingleSelectionDisplay()
 	m_singleSelectionHealth->SetDrawCallbackAndCookie(
 		HealthBarActionCallback, reinterpret_cast<void*>(unit.m_id));
 
-	if(m_curCargo >= 0) {
+	if(m_curCargo >= 0)
+	{
 		m_singleSelectionIcon->SetDrawCallbackAndCookie(DrawCargoCallback, (void *)unit.m_id, false);
-		if(cargo > 0) {
-			m_singleSelectionIcon->SetImageMapCallback(TransportImageCallback, (void *)this);
-		} else {
-			m_singleSelectionIcon->SetImageMapCallback(NULL, NULL);
-		}
-	} else {
+		m_singleSelectionIcon->SetImageMapCallback(TransportImageCallback, (void *)this);
+	}
+	else
+	{
 		m_singleSelectionIcon->SetDrawCallbackAndCookie(NULL, NULL, false);
 		m_singleSelectionIcon->SetImageMapCallback(NULL, NULL);
 	}
@@ -712,7 +713,13 @@ void UnitControlPanel::UpdateTransportSelectionDisplay()
 	if(unit.IsValid()) {
 		UnitDynamicArray *cargoList = unit->GetCargoList();
 
-		m_transportSelectionIcon->ExchangeImage(0, 0, unit.GetDBRec()->GetDefaultIcon()->GetIcon());
+		const MBCHAR * transportIconName = unit.GetDBRec()->GetDefaultIcon()->GetLargeIcon();
+		if (!transportIconName || strcmp(transportIconName, "NULL") == 0) {
+			transportIconName = unit.GetDBRec()->GetDefaultIcon()->GetIcon();
+		}
+		if (transportIconName && strcmp(transportIconName, "NULL") != 0) {
+			m_transportSelectionIcon->ExchangeImage(0, 0, transportIconName);
+		}
 
 		Assert(cargoList);
 		if(!cargoList) {
@@ -1244,12 +1251,34 @@ AUI_ERRCODE UnitControlPanel::DrawCargoCallback(ctp2_Static *control,
 	return AUI_ERRCODE_OK;
 }
 
-void UnitControlPanel::TransportImageCallback(ctp2_Static *control,
-											  aui_MouseEvent *event,
-											  void *cookie)
+class TransportSwitchAction : public aui_Action
 {
-	UnitControlPanel *panel = (UnitControlPanel *)cookie;
-	panel->SetSelectionMode(TRANSPORT_SELECTION);
+public:
+	TransportSwitchAction(UnitControlPanel * panel, UnitControlPanel::UnitSelectionMode mode)
+	: aui_Action(),
+		m_panel(panel),
+		m_mode(mode)
+	{
+	}
+
+	virtual void Execute(aui_Control * control, uint32 action, uint32 data)
+	{
+		m_panel->SetSelectionMode(m_mode);
+	}
+
+private:
+	UnitControlPanel                    * m_panel;
+	UnitControlPanel::UnitSelectionMode   m_mode;
+};
+
+void UnitControlPanel::TransportImageCallback(ctp2_Static * control, aui_MouseEvent * event, void * cookie)
+{
+	g_c3ui->AddAction(new TransportSwitchAction((UnitControlPanel *) cookie, TRANSPORT_SELECTION));
+}
+
+void UnitControlPanel::TransportSelectionImageCallback(ctp2_Static * control, aui_MouseEvent * event, void * cookie)
+{
+	g_c3ui->AddAction(new TransportSwitchAction((UnitControlPanel *) cookie, SINGLE_SELECTION));
 }
 
 bool UnitControlPanel::GetSelectedCargo(CellUnitList &cargo)
