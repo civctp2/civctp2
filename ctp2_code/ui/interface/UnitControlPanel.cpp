@@ -60,7 +60,8 @@
 
 extern C3UI *g_c3ui;
 
-static MBCHAR * ARMY_SYMBOL = "UPIC21.tga";
+static MBCHAR * ARMY_SYMBOL  = "UPIC21.tga";
+static MBCHAR * CARGO_SYMBOL = "UPC045.tga";
 
 UnitControlPanel::UnitControlPanel(MBCHAR *ldlBlock) :
 m_unitDisplayGroup(static_cast<ctp2_Static*>(
@@ -81,6 +82,9 @@ m_singleSelectionDisplay(static_cast<ctp2_Static*>(
 m_singleSelectionIcon(static_cast<ctp2_Static*>(
 	aui_Ldl::GetObject(ldlBlock,
 	"UnitTab.TabPanel.UnitSelectionDisplay.SingleSelect.Icon"))),
+m_singleSelectionSymbol(static_cast<ctp2_Static*>(
+	aui_Ldl::GetObject(ldlBlock,
+	"UnitTab.TabPanel.UnitSelectionDisplay.SingleSelect.Icon.Symbol"))),
 m_singleSelectionAttack(static_cast<ctp2_Static*>(
 	aui_Ldl::GetObject(ldlBlock,
 	"UnitTab.TabPanel.UnitSelectionDisplay.SingleSelect.Attack.Value"))),
@@ -473,6 +477,7 @@ void UnitControlPanel::UpdateSingleSelectionDisplay()
 
 	if(!unit.IsValid()) {
 		m_singleSelectionIcon->SetImage(NULL);
+		m_singleSelectionSymbol->SetImage(NULL);
 		m_singleSelectionAttack->SetText("");
 		m_singleSelectionDefend->SetText("");
 		m_singleSelectionMove->SetText("");
@@ -493,8 +498,10 @@ void UnitControlPanel::UpdateSingleSelectionDisplay()
 
 	const MBCHAR *unitIconName = iconRecord->GetLargeIcon();
 
-	if(unitIconName && strcmp(unitIconName, "NULL"))
-		m_singleSelectionIcon->SetImage((char *)unitIconName);
+	if(unitIconName && strcmp(unitIconName, "NULL")) {
+		m_singleSelectionIcon->SetImage((char *) unitIconName);
+		m_singleSelectionSymbol->ExchangeImage(0, 0, m_curCargo >= 0 ? CARGO_SYMBOL : NULL);
+	}
 
 	MBCHAR valueString[16];
 

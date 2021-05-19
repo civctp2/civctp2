@@ -112,6 +112,7 @@ private:
 
 	ctp2_Static *m_singleSelectionDisplay;
 	ctp2_Static *m_singleSelectionIcon;
+	ctp2_Static *m_singleSelectionSymbol;
 	ctp2_Static *m_singleSelectionAttack;
 	ctp2_Static *m_singleSelectionDefend;
 	ctp2_Static *m_singleSelectionMove;

@@ -1125,6 +1125,15 @@ ControlPanelWindow:CTP2_WINDOW {
 								string imageblttype "stretch"
 								int widthpix 96
 								int heightpix 72
+
+								Symbol:CTP2_STATIC_IMAGE {
+									int xpix        3
+									int ypix        3
+
+									int chromared   0
+									int chromagreen 0
+									int chromablue  0
+								}
 							}
 
 							# Attack/Defense/Move/Range
@@ -1265,6 +1274,15 @@ ControlPanelWindow:CTP2_WINDOW {
 								bool   imagestretchx00 true
 								bool   imagestretchy00 true
 
+								ArmyLabel:CTP2_STATIC_BASE {
+									int    xpix      7
+									int    ypix      31
+									int    widthpix  54
+									int    heightpix 17
+									string just      "left"
+									string text      "str_ldl_Army"
+								}
+
 								Icon:CTP2_STATIC_IMAGE {
 									# Location.
 									int    xpix            7
@@ -1350,6 +1368,15 @@ ControlPanelWindow:CTP2_WINDOW {
 								string imageblttype00  "stretch"
 								bool   imagestretchx00 true
 								bool   imagestretchy00 true
+
+								CargoLabel:CTP2_STATIC_BASE {
+									int    xpix      7
+									int    ypix      31
+									int    widthpix  54
+									int    heightpix 17
+									string just      "left"
+									string text      "str_ldl_Cargo"
+								}
 
 								Icon:CTP2_STATIC_IMAGE {
 									# Location.
