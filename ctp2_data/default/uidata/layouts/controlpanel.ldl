@@ -1126,13 +1126,24 @@ ControlPanelWindow:CTP2_WINDOW {
 								int widthpix 96
 								int heightpix 72
 
-								Symbol:CTP2_STATIC_IMAGE {
-									int xpix        3
-									int ypix        3
+								ArmySymbol:CTP2_STATIC_IMAGE {
+									int    xpix       2
+									int    ypix       2
 
-									int chromared   0
-									int chromagreen 0
-									int chromablue  0
+									string image00    "upic21.tga"
+
+									string tipwindow  "str_ldl_Return"
+								}
+
+								CargoSymbol:CTP2_STATIC_IMAGE {
+									int    xpix        3
+									int    ypix        3
+
+									string image00     "upc045.tga"
+
+									int    chromared   0
+									int    chromagreen 0
+									int    chromablue  0
 								}
 							}
 
@@ -1294,12 +1305,6 @@ ControlPanelWindow:CTP2_WINDOW {
 									string imageblttype00  "stretch"
 									bool   imagestretchx00 true
 									bool   imagestretchy00 true
-
-									ArmySymbol:CTP2_STATIC_IMAGE {
-										int xpix 1
-										int ypix 1
-										string image00 "upic21.tga"
-									}
 								}
 							}
 
@@ -1389,6 +1394,15 @@ ControlPanelWindow:CTP2_WINDOW {
 									string imageblttype00  "stretch"
 									bool   imagestretchx00 true
 									bool   imagestretchy00 true
+
+									string tipwindow  "str_ldl_Return"
+
+									ArmySymbol:CTP2_STATIC_IMAGE {
+										int    xpix 2
+										int    ypix 2
+
+										string image00 "upic21.tga"
+									}
 								}
 							}
 

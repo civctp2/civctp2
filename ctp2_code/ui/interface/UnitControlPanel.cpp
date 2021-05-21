@@ -76,8 +76,10 @@ m_singleSelectionDisplay(static_cast<ctp2_Static*>(aui_Ldl::GetObject(ldlBlock,
 		"UnitTab.TabPanel.UnitSelectionDisplay.SingleSelect"))),
 m_singleSelectionIcon(static_cast<ctp2_Static*>(aui_Ldl::GetObject(ldlBlock,
 		"UnitTab.TabPanel.UnitSelectionDisplay.SingleSelect.Icon"))),
-m_singleSelectionSymbol(static_cast<ctp2_Static*>(aui_Ldl::GetObject(ldlBlock,
-		"UnitTab.TabPanel.UnitSelectionDisplay.SingleSelect.Icon.Symbol"))),
+m_singleSelectionArmySymbol(static_cast<ctp2_Static*>(aui_Ldl::GetObject(ldlBlock,
+		"UnitTab.TabPanel.UnitSelectionDisplay.SingleSelect.Icon.ArmySymbol"))),
+m_singleSelectionCargoSymbol(static_cast<ctp2_Static*>(aui_Ldl::GetObject(ldlBlock,
+		"UnitTab.TabPanel.UnitSelectionDisplay.SingleSelect.Icon.CargoSymbol"))),
 m_singleSelectionAttack(static_cast<ctp2_Static*>(aui_Ldl::GetObject(ldlBlock,
 		"UnitTab.TabPanel.UnitSelectionDisplay.SingleSelect.Attack.Value"))),
 m_singleSelectionDefend(static_cast<ctp2_Static*>(aui_Ldl::GetObject(ldlBlock,
@@ -104,6 +106,8 @@ m_transportSelectionDisplay(static_cast<ctp2_Static *>(aui_Ldl::GetObject(ldlBlo
 		"UnitTab.TabPanel.UnitSelectionDisplay.TransportSelect"))),
 m_transportSelectionIcon(static_cast<ctp2_Static *>(aui_Ldl::GetObject(ldlBlock,
 		"UnitTab.TabPanel.UnitSelectionDisplay.TransportSelect.Background.Icon"))),
+m_transportSelectionIconArmySymbol(static_cast<ctp2_Static *>(aui_Ldl::GetObject(ldlBlock,
+		"UnitTab.TabPanel.UnitSelectionDisplay.TransportSelect.Background.Icon.ArmySymbol"))),
 m_cellUnitList(),
 m_cellArmyList()
 {
@@ -118,6 +122,8 @@ m_cellArmyList()
 	Assert(m_armySelectionIcon);
 	Assert(m_transportSelectionDisplay);
 	Assert(m_transportSelectionIcon);
+
+	m_armySelectionUnit = -1;
 
 	m_curSingleArmy.m_id = 0;
 	m_curSingleUnit.m_id = 0;
@@ -173,6 +179,7 @@ m_cellArmyList()
 		m_orderButton[orderIndex]->Enable(false);
 	}
 
+	m_singleSelectionArmySymbol->SetImageMapCallback(SingleSelectionArmySymbolImageCallback, this);
 	m_transportSelectionIcon->SetImageMapCallback(TransportSelectionImageCallback, this);
 
 	m_unitListPreviousButton->SetActionFuncAndCookie(PrevUnitButtonActionCallback, this);
@@ -225,8 +232,14 @@ void UnitControlPanel::SelectedUnit()
 
 void UnitControlPanel::SetSelectionMode(UnitSelectionMode mode)
 {
-	m_currentMode = mode;
 	m_armySelectionUnit = -1;
+
+	DoSetSelectionMode(mode);
+}
+
+void UnitControlPanel::DoSetSelectionMode(UnitSelectionMode mode)
+{
+	m_currentMode = mode;
 
 	if (m_unitDisplayGroup->IsHidden()) {
 		return;
@@ -235,6 +248,7 @@ void UnitControlPanel::SetSelectionMode(UnitSelectionMode mode)
 	switch(m_currentMode) {
 		case SINGLE_SELECTION:
 			m_singleSelectionDisplay->Show();
+			updateSingleSelectionSymbols();
 			m_multipleSelectionDisplay->Hide();
 			m_armySelectionDisplay->Hide();
 			m_transportSelectionDisplay->Hide();
@@ -278,8 +292,8 @@ void UnitControlPanel::UpdateSingleSelectionDisplay()
 	sint32 fuel = -1;
 	sint32 maxFuel = -1;
 
-	if(army.IsValid())
-    {
+	if (army.IsValid())
+	{
 		if (m_armySelectionUnit >= 0 && m_armySelectionUnit < army.Num()) {
 			unit.m_id = army[m_armySelectionUnit].m_id;
 		} else {
@@ -320,7 +334,8 @@ void UnitControlPanel::UpdateSingleSelectionDisplay()
 	if (!unit.IsValid())
 	{
 		m_singleSelectionIcon->SetImage(NULL);
-		m_singleSelectionSymbol->SetImage(NULL);
+		m_singleSelectionArmySymbol->Hide();
+		m_singleSelectionCargoSymbol->Hide();
 		m_singleSelectionAttack->SetText("");
 		m_singleSelectionDefend->SetText("");
 		m_singleSelectionMove->SetText("");
@@ -341,7 +356,7 @@ void UnitControlPanel::UpdateSingleSelectionDisplay()
 	if (unitIconName && strcmp(unitIconName, "NULL"))
 	{
 		m_singleSelectionIcon->SetImage((char *) unitIconName);
-		m_singleSelectionSymbol->ExchangeImage(0, 0, m_curCargo >= 0 ? CARGO_SYMBOL : NULL);
+		updateSingleSelectionSymbols();
 	}
 
 	MBCHAR valueString[16];
@@ -475,6 +490,8 @@ void UnitControlPanel::UpdateMultipleSelectionDisplay()
 
 void UnitControlPanel::UpdateArmySelectionDisplay()
 {
+	m_armySelectionUnit = -1;
+
 	Army army = GetSelectedArmy();
 	if (!army.IsValid() || (army.Num() <= 1))
     {
@@ -551,6 +568,11 @@ void UnitControlPanel::UpdateTransportSelectionDisplay()
 		}
 		if (transportIconName && strcmp(transportIconName, "NULL") != 0) {
 			m_transportSelectionIcon->ExchangeImage(0, 0, transportIconName);
+			if (m_armySelectionUnit >= 0) {
+				m_transportSelectionIconArmySymbol->Show();
+			} else {
+				m_transportSelectionIconArmySymbol->Hide();
+			}
 		}
 
 		Assert(cargoList);
@@ -567,6 +589,7 @@ void UnitControlPanel::UpdateTransportSelectionDisplay()
 			if (index >= capacity)
 			{
 				button->Hide();
+				m_transportSelectionCargo[index] = 0;
 				m_transportSelectionHealth[index]->SetDrawCallbackAndCookie(NULL, NULL);
 			}
 			else
@@ -957,6 +980,7 @@ void UnitControlPanel::ArmyButtonActionCallback(aui_Control * control, uint32 ac
 		if (panel->m_armySelectionButton[armyIndex] == control)
 		{
 			panel->SetSelectionMode(SINGLE_SELECTION);
+			panel->m_curSingleArmy = 0; // Reset: single selection display
 			panel->m_armySelectionUnit = armyIndex;
 			break;
 		}
@@ -1026,10 +1050,10 @@ AUI_ERRCODE UnitControlPanel::DrawCargoCallback(ctp2_Static * control, aui_Surfa
 	return AUI_ERRCODE_OK;
 }
 
-class TransportSwitchAction : public aui_Action
+class UnitControlPanel::SetSelectionAction : public aui_Action
 {
 public:
-	TransportSwitchAction(UnitControlPanel * panel, UnitControlPanel::UnitSelectionMode mode)
+	SetSelectionAction(UnitControlPanel * panel, UnitControlPanel::UnitSelectionMode mode)
 	: aui_Action(),
 		m_panel(panel),
 		m_mode(mode)
@@ -1038,7 +1062,11 @@ public:
 
 	virtual void Execute(aui_Control * control, uint32 action, uint32 data)
 	{
-		m_panel->SetSelectionMode(m_mode);
+		// transition to TRANSPORT_SELECTION is only valid from SINGLE_SELECTION
+		if (m_mode == TRANSPORT_SELECTION && m_panel->m_currentMode != SINGLE_SELECTION) {
+			return;
+		}
+		m_panel->DoSetSelectionMode(m_mode);
 	}
 
 private:
@@ -1046,14 +1074,23 @@ private:
 	UnitControlPanel::UnitSelectionMode   m_mode;
 };
 
+void UnitControlPanel::SingleSelectionArmySymbolImageCallback(ctp2_Static * control, aui_MouseEvent * event,
+		void * cookie)
+{
+	UnitControlPanel * panel = static_cast<UnitControlPanel *>(cookie);
+	g_c3ui->AddAction(new SetSelectionAction(panel, ARMY_SELECTION));
+}
+
 void UnitControlPanel::TransportImageCallback(ctp2_Static * control, aui_MouseEvent * event, void * cookie)
 {
-	g_c3ui->AddAction(new TransportSwitchAction((UnitControlPanel *) cookie, TRANSPORT_SELECTION));
+	UnitControlPanel * panel = static_cast<UnitControlPanel *>(cookie);
+	g_c3ui->AddAction(new SetSelectionAction(panel, TRANSPORT_SELECTION));
 }
 
 void UnitControlPanel::TransportSelectionImageCallback(ctp2_Static * control, aui_MouseEvent * event, void * cookie)
 {
-	g_c3ui->AddAction(new TransportSwitchAction((UnitControlPanel *) cookie, SINGLE_SELECTION));
+	UnitControlPanel * panel = static_cast<UnitControlPanel *>(cookie);
+	g_c3ui->AddAction(new SetSelectionAction(panel, SINGLE_SELECTION));
 }
 
 bool UnitControlPanel::GetSelectedCargo(CellUnitList & cargoList)
@@ -1071,6 +1108,24 @@ bool UnitControlPanel::GetSelectedCargo(CellUnitList & cargoList)
 		}
 	}
 	return true;
+}
+
+void UnitControlPanel::updateSingleSelectionSymbols()
+{
+	if (m_armySelectionUnit >= 0)
+	{
+		m_singleSelectionArmySymbol->Show();
+		m_singleSelectionCargoSymbol->Hide();
+	}
+	else
+	{
+		m_singleSelectionArmySymbol->Hide();
+		if (m_curCargo >= 0) {
+			m_singleSelectionCargoSymbol->Show();
+		} else {
+			m_singleSelectionCargoSymbol->Hide();
+		}
+	}
 }
 
 void UnitControlPanel::UnsetCargoButtons()

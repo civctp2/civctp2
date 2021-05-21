@@ -44,6 +44,8 @@ public:
 	void SetSelectionMode(UnitSelectionMode mode);
 
 private:
+	void DoSetSelectionMode(UnitSelectionMode mode);
+
 	void UpdateSingleSelectionDisplay();
 	void UpdateMultipleSelectionDisplay();
 	void UpdateArmySelectionDisplay();
@@ -53,6 +55,7 @@ private:
 	Army GetSelectedArmy();
 	void GiveOrder(OrderRecord *order);
 	void UnsetCargoButtons();
+	void updateSingleSelectionSymbols();
 
 	static void UnitDisplayGroupCallback(aui_Region * region, void * userData);
 	static void PrevUnitButtonActionCallback(aui_Control * control, uint32 action, uint32 data, void * cookie);
@@ -66,6 +69,7 @@ private:
 	static AUI_ERRCODE FuelBarDrawCallback(ctp2_Static * control, aui_Surface * surface, RECT & rect, void * cookie);
 	static AUI_ERRCODE DrawCargoCallback(ctp2_Static * control, aui_Surface * surface, RECT & rect, void * cookie);
 
+	static void SingleSelectionArmySymbolImageCallback(ctp2_Static * control, aui_MouseEvent * event, void * cookie);
 	static void TransportImageCallback(ctp2_Static * control, aui_MouseEvent * event, void * cookie);
 	static void TransportSelectionImageCallback(ctp2_Static * control, aui_MouseEvent * event, void * cookie);
 
@@ -81,7 +85,8 @@ private:
 
 	ctp2_Static * m_singleSelectionDisplay;
 	ctp2_Static * m_singleSelectionIcon;
-	ctp2_Static * m_singleSelectionSymbol;
+	ctp2_Static * m_singleSelectionArmySymbol;
+	ctp2_Static * m_singleSelectionCargoSymbol;
 	ctp2_Static * m_singleSelectionAttack;
 	ctp2_Static * m_singleSelectionDefend;
 	ctp2_Static * m_singleSelectionMove;
@@ -102,14 +107,14 @@ private:
 	ctp2_Static * m_armySelectionIcon;
 	ctp2_Button * m_armySelectionButton[NUMBER_OF_ARMY_SELECTION_BUTTONS];
 	ctp2_Static * m_armySelectionHealth[NUMBER_OF_ARMY_SELECTION_BUTTONS];
+	sint32        m_armySelectionUnit;
 
 	ctp2_Static * m_transportSelectionDisplay;
 	ctp2_Static * m_transportSelectionIcon;
+	ctp2_Static * m_transportSelectionIconArmySymbol;
 	ctp2_Switch * m_transportSelectionButton[k_MAX_CP_CARGO];
 	uint32        m_transportSelectionCargo[k_MAX_CP_CARGO];
 	ctp2_Static * m_transportSelectionHealth[k_MAX_CP_CARGO];
-
-	sint32 m_armySelectionUnit;
 
 	static const sint32 NUMBER_OF_ORDER_BUTTONS = 12;
 	sint32        m_displayedOrderIndex[NUMBER_OF_ORDER_BUTTONS];
@@ -129,6 +134,8 @@ private:
 
     std::vector<Unit> m_cellUnitList;
     std::vector<Army> m_cellArmyList;
+
+    class SetSelectionAction;
 };
 
 #endif
