@@ -59,6 +59,7 @@
 #include "ctp2_Switch.h"
 #include "ldl_data.hpp"
 #include "colorset.h"
+#include "primitives.h"
 
 extern C3UI *g_c3ui;
 
@@ -990,12 +991,7 @@ AUI_ERRCODE UnitControlPanel::StackSymbolDrawCallback(ctp2_Static * control, aui
 AUI_ERRCODE UnitControlPanel::FuelBarDrawCallback(ctp2_Static * control, aui_Surface * surface, RECT & rect,
 		void * cookie)
 {
-	Unit unit (reinterpret_cast<uint32>(cookie));
-	AUI_ERRCODE errCode = g_c3ui->TheBlitter()->ColorBlt(surface, &rect, RGB(0,0,0), 0);
-	if (errCode != AUI_ERRCODE_OK) {
-		return errCode;
-	}
-
+	Unit unit(reinterpret_cast<uint32>(cookie));
 	if (!unit.IsValid()) {
 		return AUI_ERRCODE_OK;
 	}
@@ -1010,21 +1006,71 @@ AUI_ERRCODE UnitControlPanel::FuelBarDrawCallback(ctp2_Static * control, aui_Sur
 			fuelPercent = 0;
 		}
 
-		RECT fuelRect = rect;
-		fuelRect.left   += 2;
-		fuelRect.right  -= 2;
-		fuelRect.top    += 2;
-		fuelRect.bottom -= 2;
+		Pixel16 color = g_colorSet->GetColor((fuelPercent > 0.5) ? COLOR_GREEN
+				: ((fuelPercent > 0.2) ? COLOR_YELLOW : COLOR_RED));
 
-		sint32 width = fuelRect.right - fuelRect.left;
-		width = sint32(fuelPercent * double(width));
-		fuelRect.right = fuelRect.left + width;
+		static uint32 nextBlink = 0;
+		static bool show = true;
 
-		Pixel16 color = (fuelPercent < 0.2) ? RGB(255,0,0) : ((fuelPercent < 0.5) ? RGB(255,255,0)
-				: RGB(0,255,0));
-		errCode = g_c3ui->TheBlitter()->ColorBlt(surface, &fuelRect, color, 0);
+		if (show)
+		{
+			uint8 * buffer = surface->Buffer();
+			bool isLocked = false;
+			if (!buffer)
+			{
+				surface->Lock(&rect, (LPVOID*) &buffer, 0);
+				isLocked = true;
+			}
+
+			const sint32 levelWidth = 5;
+			RECT levelRect = { rect.left + 8, rect.top + 8, rect.left + 6 + levelWidth, rect.top + 9 };
+			primitives_ClippedPaintRect16(*surface, levelRect, color);
+			if (fuelPercent > 0.2)
+			{
+				primitives_ClippedPaintRect16(*surface, levelRect, color);
+				levelRect = { levelRect.right + 2, levelRect.top - 1, levelRect.right + levelWidth, levelRect.bottom };
+			}
+			if (fuelPercent > 0.33)
+			{
+				primitives_ClippedPaintRect16(*surface, levelRect, color);
+				levelRect = { levelRect.right + 2, levelRect.top - 1, levelRect.right + levelWidth, levelRect.bottom };
+			}
+			if (fuelPercent > 0.5)
+			{
+				primitives_ClippedPaintRect16(*surface, levelRect, color);
+				levelRect = { levelRect.right + 2, levelRect.top - 1, levelRect.right + levelWidth, levelRect.bottom };
+			}
+			if (fuelPercent > 0.66)
+			{
+				primitives_ClippedPaintRect16(*surface, levelRect, color);
+				levelRect = { levelRect.right + 2, levelRect.top - 1, levelRect.right + levelWidth, levelRect.bottom };
+			}
+			if (fuelPercent > 0.83) {
+				primitives_ClippedPaintRect16(*surface, levelRect, color);
+			}
+			if (fuelPercent < 0.2)
+			{
+				primitives_ClippedFrameRect16(*surface, rect, color);
+				InflateRect(&rect, -1, -1);
+				primitives_ClippedFrameRect16(*surface, rect, color);
+			}
+			if (isLocked) {
+				surface->Unlock(buffer);
+			}
+		}
+		if (fuelPercent < 0.2)
+		{
+			if (GetTickCount() > nextBlink)
+			{
+				show = !show;
+				nextBlink = GetTickCount() + 500;
+			}
+		}
+		else {
+			show = true;
+		}
 	}
-	return errCode;
+	return AUI_ERRCODE_OK;
 }
 
 void UnitControlPanel::MultiButtonActionCallback(aui_Control * control, uint32 action, uint32 data, void * cookie)
