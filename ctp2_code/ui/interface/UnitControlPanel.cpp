@@ -57,11 +57,12 @@
 #include "UnitData.h"
 #include "Unit.h"
 #include "ctp2_Switch.h"
+#include "ldl_data.hpp"
+#include "colorset.h"
 
 extern C3UI *g_c3ui;
 
 static MBCHAR * ARMY_SYMBOL  = "UPIC21.tga";
-static MBCHAR * CARGO_SYMBOL = "UPC045.tga";
 
 UnitControlPanel::UnitControlPanel(MBCHAR * ldlBlock) :
 m_unitDisplayGroup(static_cast<ctp2_Static*>(aui_Ldl::GetObject(ldlBlock,
@@ -80,6 +81,8 @@ m_singleSelectionArmySymbol(static_cast<ctp2_Static*>(aui_Ldl::GetObject(ldlBloc
 		"UnitTab.TabPanel.UnitSelectionDisplay.SingleSelect.Icon.ArmySymbol"))),
 m_singleSelectionCargoSymbol(static_cast<ctp2_Static*>(aui_Ldl::GetObject(ldlBlock,
 		"UnitTab.TabPanel.UnitSelectionDisplay.SingleSelect.Icon.CargoSymbol"))),
+m_singleSelectionStackSymbol(static_cast<ctp2_Static*>(aui_Ldl::GetObject(ldlBlock,
+		"UnitTab.TabPanel.UnitSelectionDisplay.SingleSelect.Icon.StackSymbol"))),
 m_singleSelectionAttack(static_cast<ctp2_Static*>(aui_Ldl::GetObject(ldlBlock,
 		"UnitTab.TabPanel.UnitSelectionDisplay.SingleSelect.Attack.Value"))),
 m_singleSelectionDefend(static_cast<ctp2_Static*>(aui_Ldl::GetObject(ldlBlock,
@@ -102,6 +105,8 @@ m_armySelectionDisplay(static_cast<ctp2_Static*>(aui_Ldl::GetObject(ldlBlock,
 		"UnitTab.TabPanel.UnitSelectionDisplay.ArmySelect"))),
 m_armySelectionIcon(static_cast<ctp2_Static*>(aui_Ldl::GetObject(ldlBlock,
 		"UnitTab.TabPanel.UnitSelectionDisplay.ArmySelect.Background.Icon"))),
+m_armySelectionStackSymbol(static_cast<ctp2_Static*>(aui_Ldl::GetObject(ldlBlock,
+		"UnitTab.TabPanel.UnitSelectionDisplay.ArmySelect.Background.StackSymbol"))),
 m_transportSelectionDisplay(static_cast<ctp2_Static *>(aui_Ldl::GetObject(ldlBlock,
 		"UnitTab.TabPanel.UnitSelectionDisplay.TransportSelect"))),
 m_transportSelectionIcon(static_cast<ctp2_Static *>(aui_Ldl::GetObject(ldlBlock,
@@ -179,6 +184,10 @@ m_cellArmyList()
 		m_orderButton[orderIndex]->Enable(false);
 	}
 
+	LoadImage00(m_singleSelectionStackSymbol);
+	m_singleSelectionStackSymbol->SetDrawCallbackAndCookie(StackSymbolDrawCallback, this);
+	LoadImage00(m_armySelectionStackSymbol);
+	m_armySelectionStackSymbol->SetDrawCallbackAndCookie(StackSymbolDrawCallback, this);
 	m_singleSelectionArmySymbol->SetImageMapCallback(SingleSelectionArmySymbolImageCallback, this);
 	m_transportSelectionIcon->SetImageMapCallback(TransportSelectionImageCallback, this);
 
@@ -248,7 +257,7 @@ void UnitControlPanel::DoSetSelectionMode(UnitSelectionMode mode)
 	switch(m_currentMode) {
 		case SINGLE_SELECTION:
 			m_singleSelectionDisplay->Show();
-			updateSingleSelectionSymbols();
+			UpdateSingleSelectionSymbols();
 			m_multipleSelectionDisplay->Hide();
 			m_armySelectionDisplay->Hide();
 			m_transportSelectionDisplay->Hide();
@@ -356,7 +365,7 @@ void UnitControlPanel::UpdateSingleSelectionDisplay()
 	if (unitIconName && strcmp(unitIconName, "NULL"))
 	{
 		m_singleSelectionIcon->SetImage((char *) unitIconName);
-		updateSingleSelectionSymbols();
+		UpdateSingleSelectionSymbols();
 	}
 
 	MBCHAR valueString[16];
@@ -395,11 +404,10 @@ void UnitControlPanel::UpdateMultipleSelectionDisplay()
 	}
 
 	CellUnitList newUnitList;
-    g_theWorld->GetCell(g_selected_item->GetCurSelectPos())->GetArmy(newUnitList);
+	g_theWorld->GetCell(g_selected_item->GetCurSelectPos())->GetArmy(newUnitList);
 
-    std::vector<Army> newArmyList;
-	for (sint32 i = 0; i < newUnitList.Num(); ++i)
-    {
+	std::vector<Army> newArmyList;
+	for (sint32 i = 0; i < newUnitList.Num(); ++i) {
 		newArmyList.push_back(newUnitList[i].GetArmy());
 	}
 
@@ -407,23 +415,21 @@ void UnitControlPanel::UpdateMultipleSelectionDisplay()
 
 	bool changed = false;
 	if (static_cast<size_t>(newUnitList.Num()) == m_cellUnitList.size())
-    {
+	{
 		for (sint32 i = 0; i < newUnitList.Num(); ++i)
-        {
+		{
 			if (newUnitList[i].m_id != m_cellUnitList[i].m_id || newArmyList[i].m_id != m_cellArmyList[i].m_id)
-            {
+			{
 				changed = true;
 				break;
 			}
 		}
 	}
-    else
-    {
+	else {
 		changed = true;
 	}
 
-	if (!changed)
-    {
+	if (!changed) {
 		return;
 	}
 
@@ -431,9 +437,9 @@ void UnitControlPanel::UpdateMultipleSelectionDisplay()
 	sint32 unitIndex  = 0;
 
 	while (multiIndex < NUMBER_OF_MULTIPLE_SELECTION_BUTTONS)
-    {
+	{
 		if (unitIndex < newUnitList.Num())
-        {
+		{
 			Unit & unit = newUnitList[unitIndex++];
 			Army   army = unit.GetArmy();
 
@@ -442,11 +448,11 @@ void UnitControlPanel::UpdateMultipleSelectionDisplay()
 			{
 				if (newUnitList[testIndex].GetArmy().m_id == army.m_id) {
 					armyAlreadyShown = true;
-                }
+				}
 			}
 
 			if (!armyAlreadyShown)
-            {
+			{
 				m_multiPair[multiIndex].first   = this;
 				m_multiPair[multiIndex].second  = army.m_id;
 
@@ -469,8 +475,8 @@ void UnitControlPanel::UpdateMultipleSelectionDisplay()
 				multiIndex++;
 			}
 		}
-        else
-        {
+		else
+		{
 			m_multipleSelectionButton[multiIndex]->SetActionFuncAndCookie(NULL, NULL);
 			m_multipleSelectionHealth[multiIndex]->SetDrawCallbackAndCookie(NULL, NULL);
 			m_multipleSelectionButton[multiIndex]->Enable(false);
@@ -480,12 +486,11 @@ void UnitControlPanel::UpdateMultipleSelectionDisplay()
 		}
 	}
 
-    m_cellArmyList.swap(newArmyList);
-    m_cellUnitList.clear();
-	for (sint32 newUnitIndex = 0; newUnitIndex < newUnitList.Num(); ++newUnitIndex)
-    {
-        m_cellUnitList.push_back(newUnitList[newUnitIndex]);
-    }
+	m_cellArmyList.swap(newArmyList);
+	m_cellUnitList.clear();
+	for (sint32 newUnitIndex = 0; newUnitIndex < newUnitList.Num(); ++newUnitIndex) {
+		m_cellUnitList.push_back(newUnitList[newUnitIndex]);
+	}
 }
 
 void UnitControlPanel::UpdateArmySelectionDisplay()
@@ -909,6 +914,79 @@ AUI_ERRCODE UnitControlPanel::HealthBarActionCallback(ctp2_Static * control, aui
 	return g_c3ui->TheBlitter()->ColorBlt(surface, &healthRectangle, color, 0);
 }
 
+AUI_ERRCODE UnitControlPanel::StackSymbolDrawCallback(ctp2_Static * control, aui_Surface * surface, RECT & rect,
+		void * cookie)
+{
+	CellUnitList unitList;
+	g_theWorld->GetCell(g_selected_item->GetCurSelectPos())->GetArmy(unitList);
+	sint32 stackSize = unitList.Num();
+	if (stackSize < 2) {
+		return AUI_ERRCODE_OK;
+	}
+
+	UnitControlPanel * panel = static_cast<UnitControlPanel *>(cookie);
+	aui_Image * image = control->GetImage();
+	if (!image) {
+		return AUI_ERRCODE_BLTFAILED;
+	}
+
+	aui_Surface * sourceSurface = image->TheSurface();
+	if (!sourceSurface) {
+		return AUI_ERRCODE_BLTFAILED;
+	}
+
+	Pixel16 playerColor = g_colorSet->GetPlayerColor(panel->GetSelectedArmy().GetOwner());
+	Pixel16 colorizePixel = (sourceSurface->PixelFormat() == AUI_SURFACE_PIXELFORMAT_555) ? k_16_BIT_COLORIZE_PIXEL
+			: (k_16_BIT_COLORIZE_PIXEL & 0x7FE0) << 1 | (k_16_BIT_COLORIZE_PIXEL & 0x001F);
+	Pixel16 chromaPixel = sourceSurface->GetChromaKey();
+
+	sint32 destinationPitch = surface->Pitch() / 2;
+	sint32 sourcePitch      = sourceSurface->Pitch() / 2;
+
+	LPVOID destinationBuffer = NULL;
+	surface->Lock(&rect, &destinationBuffer, 0);
+
+	LPVOID sourceBuffer = NULL;
+	RECT sourceRect = { 0, 0, sourceSurface->Width(), sourceSurface->Height() };
+	sourceSurface->Lock(&sourceRect, &sourceBuffer, 0);
+
+	Pixel16 * sourcePixel       = (Pixel16*) sourceBuffer;
+	Pixel16 * destinationRow    = (Pixel16*) destinationBuffer;
+	Pixel16 * destinationRowEnd = destinationRow + destinationPitch * sourceRect.bottom;
+	while (destinationRow < destinationRowEnd)
+	{
+		Pixel16 * destinationPixel    = destinationRow;
+		Pixel16 * destinationPixelEnd = destinationRow + sourceRect.right;
+		while (destinationPixel < destinationPixelEnd)
+		{
+			if (*sourcePixel == chromaPixel) {
+				// skip
+			} else if (*sourcePixel == colorizePixel) {
+				*destinationPixel = playerColor;
+			} else {
+				*destinationPixel = *sourcePixel;
+			}
+			sourcePixel++;
+			destinationPixel++;
+		}
+		destinationRow += destinationPitch;
+	}
+
+	aui_BitmapFont * font = control->GetTextFont();
+	if (font) {
+		MBCHAR stackString[80];
+		sprintf(stackString, "%i", stackSize);
+
+		COLOR color = ColorSet::UseDarkFontColor(playerColor) ? COLOR_BLACK : COLOR_WHITE;
+		RECT textRect = { rect.left + (stackSize < 10 ? 5 : 1), rect.top + (stackSize < 10 ? 0 : -1),
+		                  rect.left + (stackSize < 10 ? 12 : 14), rect.top + (stackSize < 10 ? 12 : 11) };
+		font->DrawString(surface, &textRect, &textRect, stackString, 0, g_colorSet->GetColorRef(color));
+	}
+
+	sourceSurface->Unlock(sourceBuffer);
+	surface->Unlock(destinationBuffer);
+}
+
 AUI_ERRCODE UnitControlPanel::FuelBarDrawCallback(ctp2_Static * control, aui_Surface * surface, RECT & rect,
 		void * cookie)
 {
@@ -1110,7 +1188,7 @@ bool UnitControlPanel::GetSelectedCargo(CellUnitList & cargoList)
 	return true;
 }
 
-void UnitControlPanel::updateSingleSelectionSymbols()
+void UnitControlPanel::UpdateSingleSelectionSymbols()
 {
 	if (m_armySelectionUnit >= 0)
 	{
@@ -1126,6 +1204,19 @@ void UnitControlPanel::updateSingleSelectionSymbols()
 			m_singleSelectionCargoSymbol->Hide();
 		}
 	}
+}
+
+void UnitControlPanel::LoadImage00(ctp2_Static * control)
+{
+	const MBCHAR * ldlBlock = control->GetLdlBlock();
+	if (!ldlBlock) {
+		return;
+	}
+	ldl_datablock * block = aui_Ldl::FindDataBlock(ldlBlock);
+	if (!block) {
+		return;
+	}
+	control->SetImage(block->GetString("image00"));
 }
 
 void UnitControlPanel::UnsetCargoButtons()

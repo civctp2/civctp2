@@ -1145,6 +1145,17 @@ ControlPanelWindow:CTP2_WINDOW {
 									int    chromagreen 0
 									int    chromablue  0
 								}
+
+								StackSymbol:CTP2_STATIC_IMAGE {
+									int    xpix        78
+									int    ypix        3
+
+									string image00     "upc006.tga"
+
+									int    chromared   0
+									int    chromagreen 0
+									int    chromablue  0
+								}
 							}
 
 							# Attack/Defense/Move/Range
@@ -1284,6 +1295,17 @@ ControlPanelWindow:CTP2_WINDOW {
 								string imageblttype00  "stretch"
 								bool   imagestretchx00 true
 								bool   imagestretchy00 true
+
+								StackSymbol:CTP2_STATIC_IMAGE {
+									int    xpix        45
+									int    ypix        27
+
+									string image00     "upc006.tga"
+
+									int    chromared   0
+									int    chromagreen 0
+									int    chromablue  0
+								}
 
 								ArmyLabel:CTP2_STATIC_BASE {
 									int    xpix      7

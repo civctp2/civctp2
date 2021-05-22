@@ -55,7 +55,7 @@ private:
 	Army GetSelectedArmy();
 	void GiveOrder(OrderRecord *order);
 	void UnsetCargoButtons();
-	void updateSingleSelectionSymbols();
+	void UpdateSingleSelectionSymbols();
 
 	static void UnitDisplayGroupCallback(aui_Region * region, void * userData);
 	static void PrevUnitButtonActionCallback(aui_Control * control, uint32 action, uint32 data, void * cookie);
@@ -66,6 +66,8 @@ private:
 
 	static AUI_ERRCODE HealthBarActionCallback(ctp2_Static * control, aui_Surface * surface, RECT & rect,
 			void * cookie);
+	static AUI_ERRCODE StackSymbolDrawCallback(ctp2_Static * control, aui_Surface * surface, RECT & rect,
+			void * cookie);
 	static AUI_ERRCODE FuelBarDrawCallback(ctp2_Static * control, aui_Surface * surface, RECT & rect, void * cookie);
 	static AUI_ERRCODE DrawCargoCallback(ctp2_Static * control, aui_Surface * surface, RECT & rect, void * cookie);
 
@@ -74,6 +76,7 @@ private:
 	static void TransportSelectionImageCallback(ctp2_Static * control, aui_MouseEvent * event, void * cookie);
 
 	static bool SelectionContainsMultipleArmies();
+	static void LoadImage00(ctp2_Static * control);
 
 	UnitSelectionMode m_currentMode;
 
@@ -87,6 +90,7 @@ private:
 	ctp2_Static * m_singleSelectionIcon;
 	ctp2_Static * m_singleSelectionArmySymbol;
 	ctp2_Static * m_singleSelectionCargoSymbol;
+	ctp2_Static * m_singleSelectionStackSymbol;
 	ctp2_Static * m_singleSelectionAttack;
 	ctp2_Static * m_singleSelectionDefend;
 	ctp2_Static * m_singleSelectionMove;
@@ -105,6 +109,7 @@ private:
 	static const sint32 NUMBER_OF_ARMY_SELECTION_BUTTONS = 12;
 	ctp2_Static * m_armySelectionDisplay;
 	ctp2_Static * m_armySelectionIcon;
+	ctp2_Static * m_armySelectionStackSymbol;
 	ctp2_Button * m_armySelectionButton[NUMBER_OF_ARMY_SELECTION_BUTTONS];
 	ctp2_Static * m_armySelectionHealth[NUMBER_OF_ARMY_SELECTION_BUTTONS];
 	sint32        m_armySelectionUnit;
