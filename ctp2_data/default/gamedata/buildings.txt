@@ -397,8 +397,6 @@ IMPROVE_FORCEFIELD {
    Description DESCRIPTION_IMPROVE_FORCEFIELD
    EnableAdvance ADVANCE_UNIFIED_PHYSICS
 
-   PrerequisiteBuilding IMPROVE_CITY_WALLS
-
    ProductionCost 10000
    Upkeep 20
    DefendersPercent 80
