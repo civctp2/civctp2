@@ -19,8 +19,8 @@
 #  Modifications from the original Activision code:
 #
 # - Added to the tileimp tracker popup window a construction time line.
-#   (Aug 15th 2005 Martin Gühmann)
-# - Made the special attack window work. (Aug 16th 2005 Martin Gühmann)
+#   (Aug 15th 2005 Martin Gï¿½hmann)
+# - Made the special attack window work. (Aug 16th 2005 Martin Gï¿½hmann)
 # - Added political map button - 6-Jul-2009 EPW
 # -Added view capital button -5-Jan-2009 EPW
 # -Added view relations button -7-Jan-10 EPW
@@ -3021,13 +3021,13 @@ RadarWindow {
 			int		xpix			124
 			int		ypix			14
 #			# Label.
-#			string	text			"str_ldl_RADAR_MAP_FILTER"
+#			string	text			"str_ldl_RADAR_MAP_CAPITOLS"
 			# Icon for button
-			string 	image0 		"upcb23u.tga"
-			string 	image1 		"upcb23.tga"
+			string 	image0 		"upcb29u.tga"
+			string 	image1 		"upcb29.tga"
 			# Tooltip
-			string	tipwindow	"TOOLTIP_MINIMAP_SHOW_FILTER_BUTTON"
-			string	statustext	"STATUSBAR_MINIMAP_SHOW_FILTER_BUTTON"
+			string	tipwindow	"TOOLTIP_MINIMAP_SHOW_CAPITOLS_BUTTON"
+			string	statustext	"STATUSBAR_MINIMAP_SHOW_CAPITOLS_BUTTON"
 		}
 		Button5:RADARWINDOW_TOGGLE_BUTTON {
 			# Location.
@@ -3094,19 +3094,6 @@ RadarWindow {
 			int		xpix			36
 			int		ypix			14
 #			# Label.
-#			string	text			"str_ldl_RADAR_MAP_CAPITOLS"
-			# Icon for button
-			string 	image0 		"upcb29u.tga"
-			string 	image1 		"upcb29.tga"
-			# Tooltip
-			string	tipwindow	"TOOLTIP_MINIMAP_SHOW_CAPITOLS_BUTTON"
-			string	statustext	"STATUSBAR_MINIMAP_SHOW_CAPITOLS_BUTTON"
-		}
-		Button10:RADARWINDOW_TOGGLE_BUTTON {
-			# Location.
-			int		xpix			38
-			int		ypix			14
-#			# Label.
 #			string	text			"str_ldl_RADAR_MAP_RELATIONS"
 			# Icon for button
 			string 	image0 		"upcb30u.tga"
@@ -3115,7 +3102,19 @@ RadarWindow {
 			string	tipwindow	"TOOLTIP_MINIMAP_SHOW_RELATIONS_BUTTON"
 			string	statustext	"STATUSBAR_MINIMAP_SHOW_RELATIONS_BUTTON"
 		}
-
+#		Button10:RADARWINDOW_TOGGLE_BUTTON {
+#			# Location.
+#			int		xpix			58
+#			int		ypix			14
+#			# Label.
+#			string	text			"str_ldl_RADAR_MAP_FILTER"
+#			# Icon for button
+#			string 	image0 		"upcb23u.tga"
+#			string 	image1 		"upcb23.tga"
+#			# Tooltip
+#			string	tipwindow	"TOOLTIP_MINIMAP_SHOW_FILTER_BUTTON"
+#			string	statustext	"STATUSBAR_MINIMAP_SHOW_FILTER_BUTTON"
+#		}
 	}
 	LeftBorder:CTP2_STATIC_BACKGROUND {	
 		# Image layout.
