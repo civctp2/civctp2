@@ -313,15 +313,9 @@ void UnitActor::ChangeImage(SpriteState * spriteState, sint32 type, const Unit &
 	{
 		id.GetPop(m_citySize); // put the city's pop into the actor's m_size
 
-		CityWindow * cityWindow = CityWindow::GetCityWindow();
-		CityData   * citaData   = cityWindow ? cityWindow->GetCityData() : NULL;
-		if (citaData && citaData->GetHomeCity() == id) {
-			m_nextPop = citaData->TurnsToNextPop();
-		} else {
-			// PFT, computes TurnsToNextPop and puts
-			// it into the actor's m_nextPop
-			id.GetTurnsToNextPop(m_nextPop);
-		}
+		// PFT, computes TurnsToNextPop and puts
+		// it into the actor's m_nextPop
+		id.GetTurnsToNextPop(m_nextPop);
 	}
 
 	DumpAllActions();

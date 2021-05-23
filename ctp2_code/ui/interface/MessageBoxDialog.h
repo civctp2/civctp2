@@ -31,7 +31,8 @@ public:
 	static void TextQuery(const MBCHAR *message,
 		MessageTextCallback callback = NULL, void *userData = NULL,
 		const MBCHAR *okText = "str_ldl_MB_OK",
-		const MBCHAR *cancelText = "str_ldl_MB_CANCEL");
+		const MBCHAR *cancelText = "str_ldl_MB_CANCEL",
+		const MBCHAR *defaultText = "");
 
 	~MessageBoxDialog();
 
@@ -42,14 +43,16 @@ private:
 		void *callback, void *userData,
 		const MBCHAR *okText, const MBCHAR *cancelText);
 
-	static void LeftButtonActionCallback(aui_Control *control,
-		uint32 action, uint32 data, void *cookie);
+	static void LeftButtonActionCallback(aui_Control * control, uint32 action, uint32 data, void * cookie) {
+		ButtonActionCallback(true, control, action, data, cookie);
+	}
 
-	static void RightButtonActionCallback(aui_Control *control,
-		uint32 action, uint32 data, void *cookie);
+	static void RightButtonActionCallback(aui_Control * control, uint32 action, uint32 data, void * cookie) {
+		ButtonActionCallback(false, control, action, data, cookie);
+	}
 
-	static void TextFieldActionCallback(aui_Control *control,
-		uint32 action, uint32 data, void *cookie);
+	static void ButtonActionCallback(bool response, aui_Control * control, uint32 action, uint32 data, void * cookie);
+	static void TextFieldActionCallback(aui_Control * control, uint32 action, uint32 data, void * cookie);
 
 	static void DontShowButtonActionCallback(aui_Control *control,
 		uint32 action, uint32 data, void *cookie);

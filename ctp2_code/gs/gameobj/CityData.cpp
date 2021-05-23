@@ -5319,7 +5319,7 @@ bool CityData::BuildUnit(sint32 type)
 
 	if(g_network.IsClient() && g_network.IsLocalPlayer(m_owner))
 	{
-		g_network.SendAction(new NetAction(NET_ACTION_BUILD, type, m_home_city));
+		g_network.SendAction(new NetAction(NET_ACTION_BUILD, type, m_home_city.m_id));
 	}
 	else if(g_network.IsHost())
 	{
@@ -5359,8 +5359,7 @@ bool CityData::BuildImprovement(sint32 type)
 
 	if(g_network.IsClient() && g_network.IsLocalPlayer(m_owner))
 	{
-		g_network.SendAction(new NetAction(NET_ACTION_BUILD_IMP, type,
-		                     m_home_city));
+		g_network.SendAction(new NetAction(NET_ACTION_BUILD_IMP, type, m_home_city.m_id));
 	}
 	else if(g_network.IsHost())
 	{
@@ -6707,12 +6706,6 @@ sint32 CityData::LoadQueue(const MBCHAR *file)
 //----------------------------------------------------------------------------
 void CityData::CheckSwitchProductionPenalty(sint32 newCat)
 {
-	// Deduct shields from build manager city data if it's open.
-	// Shields also deducted from city data kept in city control panel,
-	// since the build manager city data is not copied to there.
-	EditQueue* eqWindow = EditQueue::GetEditQueueWindow();
-	CityData* cityData = eqWindow ? eqWindow->GetCityData() : NULL;
-
 	if (GetStoredCityProduction() > 0)
 	{
 		sint32 s = 0;
@@ -6726,14 +6719,6 @@ void CityData::CheckSwitchProductionPenalty(sint32 newCat)
 						  );
 
 		s = static_cast<sint32>(static_cast<double>(GetStoredCityProduction()) * penalty);
-
-		// Update build manager city data if possible.
-		if(cityData != NULL && cityData->GetHomeCity() == m_home_city)
-		{
-			cityData->SetShieldstore(s);
-			cityData->SetBuildCategoryAtBeginTurn(newCat);
-		}
-
 		SetShieldstore(s);
 		SetBuildCategoryAtBeginTurn(newCat);
 	}
@@ -6741,12 +6726,6 @@ void CityData::CheckSwitchProductionPenalty(sint32 newCat)
 	{
 		// Set this even for cities with no shields stored,
 		// so we know the last item type the next time a switch happens.
-
-		// Update build manager city data if possible.
-		if(cityData != NULL && cityData->GetHomeCity() == m_home_city)
-		{
-			cityData->SetBuildCategoryAtBeginTurn(newCat);
-		}
 		SetBuildCategoryAtBeginTurn(newCat);
 	}
 }

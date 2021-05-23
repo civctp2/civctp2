@@ -3578,7 +3578,7 @@ void TiledMap::DrawCityNames(aui_Surface * surf, sint32 layer)
 								{
 									BuildNode *bn = bq->GetHead();
 
-									buildItemTime = cityData->HowMuchLonger();
+									buildItemTime = cityData->AlreadyBoughtFront() ? 0 : cityData->HowMuchLonger();
 
 									switch(bn->m_category) {
 										case k_GAME_OBJ_TYPE_UNIT:
@@ -3592,11 +3592,11 @@ void TiledMap::DrawCityNames(aui_Surface * surf, sint32 layer)
 											break;
 										case k_GAME_OBJ_TYPE_INFRASTRUCTURE:
 											buildItemName = g_theStringDB->GetNameStr("INFRASTRUCTURE");
-											buildItemTime = 1;
+											buildItemTime = 0;
 											break;
 										case k_GAME_OBJ_TYPE_CAPITALIZATION:
 											buildItemName = g_theStringDB->GetNameStr("CAPITALIZATION");
-											buildItemTime = 1;
+											buildItemTime = 0;
 											break;
 									}
 								}

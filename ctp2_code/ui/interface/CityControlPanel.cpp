@@ -27,18 +27,18 @@
 //
 // - Made rush buy button behaviour consistent with other windows.
 // - Disabled rushbuy button if infrastructure or captalization are
-//   at the front of the build queue, by Martin Gühmann.
+//   at the front of the build queue, by Martin GÃ¼hmann.
 // - If infrastructure or capitalization are at the front of the
-//   build queue no cost or turns are shown anymore, by Martin Gühmann.
+//   build queue no cost or turns are shown anymore, by Martin GÃ¼hmann.
 // - Rush buy button should be disabled when it is not the player's turn
 //   unfortunatly the button state is not updated on the end turn event.
 // - Made update of rush buy button possible when (only) the gold of the
 //   player has changed.
 // - #01 Standardization of city selection and focus handling
 //   (L. Hirth 6/2004)
-// - Disabled ForceSelect while updating the city list. (Feb 4th 2007 Martin Gühmann)
-// - Cleaned and made the build progress bar green. (Feb 4th 2007 Martin Gühmann)
-// - The city tab is now updated when you modify the city in the city manager. (9-Feb-2008 Martin Gühmann)
+// - Disabled ForceSelect while updating the city list. (Feb 4th 2007 Martin GÃ¼hmann)
+// - Cleaned and made the build progress bar green. (Feb 4th 2007 Martin GÃ¼hmann)
+// - The city tab is now updated when you modify the city in the city manager. (9-Feb-2008 Martin GÃ¼hmann)
 //
 //----------------------------------------------------------------------------
 
@@ -72,7 +72,8 @@
 #include "director.h"
 #include "network.h"
 #include "c3ui.h"
-#include "aui_blitter.h"
+#include "screenutils.h"
+#include "NationalManagementDialog.h"
 #include "Globals.h"                        // k_GAME_OBJ_TYPE_...
 
 extern C3UI *g_c3ui;
@@ -194,55 +195,37 @@ void CityControlPanel::Update()
 	UpdateGovernor();
 }
 
-void CityControlPanel::PrevCityButtonActionCallback(aui_Control *control,
-	uint32 action, uint32 data, void *cookie)
+void CityControlPanel::PrevCityButtonActionCallback(aui_Control * control, uint32 action, uint32 data, void * cookie)
 {
-
-	if(action != static_cast<uint32>(AUI_BUTTON_ACTION_EXECUTE))
+	if (action != static_cast<uint32>(AUI_BUTTON_ACTION_EXECUTE)) {
 		return;
+	}
 
-	CityControlPanel *cityControlPanel =
-		static_cast<CityControlPanel*>(cookie);
-
-	sint32 numberOfItems =
-		cityControlPanel->m_cityListDropDown->GetListBox()->NumItems();
-
-
-	if(numberOfItems < 2)
+	CityControlPanel * cityControlPanel = static_cast<CityControlPanel*>(cookie);
+	sint32 numberOfItems = cityControlPanel->m_cityListDropDown->GetListBox()->NumItems();
+	if (numberOfItems < 2) {
 		return;
+	}
 
 	cityControlPanel->m_cityListDropDown->SetSelectedItem(
-		(cityControlPanel->m_cityListDropDown->GetSelectedItem() +
-		numberOfItems - 1) % numberOfItems);
-
+			(cityControlPanel->m_cityListDropDown->GetSelectedItem() + numberOfItems - 1) % numberOfItems);
 	cityControlPanel->Update();
 }
 
-void CityControlPanel::NextCityButtonActionCallback(aui_Control *control,
-	uint32 action, uint32 data, void *cookie)
+void CityControlPanel::NextCityButtonActionCallback(aui_Control * control, uint32 action, uint32 data, void * cookie)
 {
-	// if button wasn't pushed, exit
-	if(action != static_cast<uint32>(AUI_BUTTON_ACTION_EXECUTE))
+	if (action != static_cast<uint32>(AUI_BUTTON_ACTION_EXECUTE)) {
 		return;
+	}
 
-	// set the class instance
-	CityControlPanel *cityControlPanel =
-		static_cast<CityControlPanel*>(cookie);
-
-	// get the number of items (cities) in the list
-	sint32 numberOfItems =
-		cityControlPanel->m_cityListDropDown->GetListBox()->NumItems();
-
-	// If only one or zero city exists, no change needed
-	if(numberOfItems < 2)
+	CityControlPanel * cityControlPanel = static_cast<CityControlPanel*>(cookie);
+	sint32 numberOfItems = cityControlPanel->m_cityListDropDown->GetListBox()->NumItems();
+	if(numberOfItems < 2) {
 		return;
+	}
 
-	// set the next city as the actual (modulo to get back to 1)
 	cityControlPanel->m_cityListDropDown->SetSelectedItem(
-		(cityControlPanel->m_cityListDropDown->GetSelectedItem() + 1) %
-		numberOfItems);
-
-	// Update the BuildItem and the Governor
+		(cityControlPanel->m_cityListDropDown->GetSelectedItem() + 1) % numberOfItems);
 	cityControlPanel->Update();
 }
 
@@ -273,26 +256,32 @@ void CityControlPanel::EditBuildQueueButtonActionCallback(aui_Control *control,
 
 	if(g_network.IsClient() && g_network.GetSensitiveUIBlocked()) {
 	} else {
-		EditQueue::Display(CityWindow::GetCityData(player->GetCityFromIndex(selectedItem)));
+		close_AllScreens();
+		EditQueue::Display(player->GetCityFromIndex(selectedItem));
 	}
 }
 
-void CityControlPanel::RushBuyBuildButtonActionCallback(aui_Control *control,
-	uint32 action, uint32 data, void *cookie)
+void CityControlPanel::RushBuyBuildButtonActionCallback(aui_Control * control, uint32 action, uint32 data,
+		void * cookie)
 {
-
-	if(action != static_cast<uint32>(AUI_BUTTON_ACTION_EXECUTE))
-		return;
-
-	CityData *theCity=((CityControlPanel*)cookie)->GetSelectedCity();
-	Assert(theCity);
-	if(!theCity)
-	{
+	if (action != static_cast<uint32>(AUI_BUTTON_ACTION_EXECUTE)) {
 		return;
 	}
-	theCity->AddBuyFront();
-	((CityControlPanel*)cookie)->m_currentTurns = 0;	// Force update of city control panel
-	((CityControlPanel*)cookie)->Update();
+
+	Unit selectedCity;
+	if (!((CityControlPanel*)cookie)->GetSelectedCity(selectedCity)) {
+		return;
+	}
+
+	if (!selectedCity.GetCityData()->AlreadyBoughtFront())
+	{
+		selectedCity.GetCityData()->AddBuyFront();
+		((CityControlPanel *) cookie)->m_currentTurns = 0; // Force update of city control panel
+		((CityControlPanel *) cookie)->Update();
+		CityWindow::UpdateCity(selectedCity);
+		EditQueue::UpdateCity(selectedCity);
+		NationalManagementDialog::UpdateCity(selectedCity);
+	}
 }
 
 void CityControlPanel::ToggleGovernorButtonActionCallback(aui_Control *control,
@@ -352,23 +341,23 @@ void CityControlPanel::SelectGovernorActionCallback(aui_Control *control,
 	if(numberOfItems < 1)
 		return;
 
-	CityData *cityData = cityControlPanel->GetSelectedCity();
-	if(cityData) {
-		cityData->SetBuildListSequenceIndex(
-			static_cast<ctp2_DropDown*>(control)->GetSelectedItem());
+	Unit selectedCity;
+	if(cityControlPanel->GetSelectedCity(selectedCity)) {
+		selectedCity.GetCityData()->SetBuildListSequenceIndex(static_cast<ctp2_DropDown*>(control)->GetSelectedItem());
 	}
 
 	cityControlPanel->UpdateGovernor();
 }
 
-CityData *CityControlPanel::GetSelectedCity()
+bool CityControlPanel::GetSelectedCity(Unit & selectedCity)
 {
-	ctp2_ListItem *selItem = (ctp2_ListItem *)m_cityListDropDown->GetListBox()->GetSelectedItem();
-	if(!selItem) return NULL;
-	Unit u;
-	u.m_id = (uint32)selItem->GetUserData();
-	if(!u.IsValid()) return NULL;
-	return u.CD();
+	ctp2_ListItem * selItem = (ctp2_ListItem *)m_cityListDropDown->GetListBox()->GetSelectedItem();
+	if (!selItem) {
+		return false;
+	}
+
+	selectedCity.m_id = (uint32)selItem->GetUserData();
+	return selectedCity.IsValid();
 }
 
 //----------------------------------------------------------------------------
@@ -379,39 +368,29 @@ CityData *CityControlPanel::GetSelectedCity()
 //              city list.
 //
 //----------------------------------------------------------------------------
-void CityControlPanel::CitySelectActionCallback(aui_Control *control,
-												uint32 action, uint32 data, void *cookie)
+void CityControlPanel::CitySelectActionCallback(aui_Control * control, uint32 action, uint32 data, void * cookie)
 {
-	if(action != static_cast<uint32>(AUI_DROPDOWN_ACTION_SELECT))
+	if (action != static_cast<uint32>(AUI_DROPDOWN_ACTION_SELECT)) {
 		return;
-
-	// set the class
-	CityControlPanel *cityControlPanel =
-		static_cast<CityControlPanel*>(cookie);
-
-	// Get the currently selected city of the list
-	CityData *cd = cityControlPanel->GetSelectedCity();
-
-	if(cd) {  // City data pointer is valid
-		if(g_selected_item) {
-			Unit oldCity;
-			if(g_selected_item->GetSelectedCity(oldCity) && (oldCity.m_id == cd->GetHomeCity().m_id)) {
-			// same city selected as before, nothing to do
-
-			} else {
- 				// City has changed, do the neccessary
-				g_selected_item->SetSelectCity(cd->GetHomeCity());
-
-				MapPoint pos = cd->GetHomeCity().RetPos(); // Not needed
-
-			}
-		}
-		if(!g_network.IsClient()) {
-			CityWindow::Project(cd);  // Update calculated fields of the city
-		}
 	}
-}
 
+	if (!g_selected_item) {
+		return;
+	}
+
+	CityControlPanel * cityControlPanel = static_cast<CityControlPanel*>(cookie);
+	Unit newSelectedCity;
+	if (!cityControlPanel->GetSelectedCity(newSelectedCity)) {
+		return;
+	}
+
+	Unit currentSelectedCity;
+	if (!g_selected_item->GetSelectedCity(currentSelectedCity) || (currentSelectedCity != newSelectedCity)) {
+		g_selected_item->SetSelectCity(newSelectedCity);
+	}
+	CityWindow::SelectCity(newSelectedCity);
+	EditQueue::SelectCity(newSelectedCity);
+}
 
 //----------------------------------------------------------------------------
 //
@@ -433,17 +412,16 @@ void CityControlPanel::CitySelectActionCallback(aui_Control *control,
 //----------------------------------------------------------------------------
 void CityControlPanel::UpdateBuildItem()
 {
-	sint32 const	visiblePlayer	= g_selected_item->GetVisiblePlayer();
-	Player *		player			= g_player[visiblePlayer];
-	if(!player || (player->GetNumCities() <= 0))
+	sint32 const visiblePlayer = g_selected_item->GetVisiblePlayer();
+	Player * player = g_player[visiblePlayer];
+	if (!player || (player->GetNumCities() <= 0))
 	{
 		ClearBuildItem();
 		return;
 	}
 
-	sint32			city_index		= m_cityListDropDown->GetSelectedItem();
-	if (city_index == -1)
-	{
+	sint32 city_index = m_cityListDropDown->GetSelectedItem();
+	if (city_index == -1) {
 		return;
 	}
 	else if (city_index >= player->GetNumCities())
@@ -451,26 +429,20 @@ void CityControlPanel::UpdateBuildItem()
 		city_index	= 0;
 	}
 
-	CityWindow*     cityWindow      = CityWindow::GetCityWindow();
+	Unit       city     = player->GetCityFromIndex(city_index);
+	CityData * cityData = city.GetCityData();
 
-	Unit            city            = player->GetCityFromIndex(city_index);
-	CityData*       theCity = city.CD();
-	if(cityWindow && cityWindow->GetCityData())
-	{
-		theCity = cityWindow->GetCityData();
-	}
-
-	sint32			numberOfItems	= m_cityListDropDown->GetListBox()->NumItems();
-	BuildQueue *	queue			= theCity ? theCity->GetBuildQueue() : NULL;
-	BuildNode *		head			= queue ? queue->GetHead() : NULL;
-	sint32 const	cost			= theCity ? theCity->GetOvertimeCost() : 0;
-	bool const		isMyTurn		= visiblePlayer == g_selected_item->GetCurPlayer();
+	sint32       numberOfItems = m_cityListDropDown->GetListBox()->NumItems();
+	BuildQueue * queue         = cityData ? cityData->GetBuildQueue() : NULL;
+	BuildNode  * head          = queue ? queue->GetHead() : NULL;
+	sint32 const cost          = cityData ? cityData->GetOvertimeCost() : 0;
+	bool const   isMyTurn      = visiblePlayer == g_selected_item->GetCurPlayer();
 
 	// Do update the rush buy button, even when the production has not changed.
-	if ((cost <= 0)							||
-	    theCity->AlreadyBoughtFront()		||
-		theCity->IsBuildingCapitalization()	||
-		theCity->IsBuildingInfrastructure()
+	if ((cost <= 0) ||
+	    cityData->AlreadyBoughtFront() ||
+	    cityData->IsBuildingCapitalization() ||
+	    cityData->IsBuildingInfrastructure()
 	   )
 	{
 		m_rushBuyCost->SetText("---");
@@ -484,7 +456,7 @@ void CityControlPanel::UpdateBuildItem()
 		m_buildRushBuy->Enable(isMyTurn && (cost <= player->GetGold()));
 	}
 
-	sint32 turns = theCity ? theCity->HowMuchLonger() : CITY_PRODUCTION_HALTED;
+	sint32 turns = cityData ? cityData->HowMuchLonger() : CITY_PRODUCTION_HALTED;
 
 	if ((m_currentCity.m_id == city.m_id) &&
 	    (m_currentNumItems == numberOfItems) &&
@@ -524,20 +496,22 @@ void CityControlPanel::UpdateBuildItem()
 	m_buildItemLabel->SetText(tempStr);
 
 	const MBCHAR *buildIconName = GetBuildIcon(head);
-	if (buildIconName && strcmp(buildIconName, "NULL")) {
-
+	if (buildIconName && strcmp(buildIconName, "NULL"))
+	{
 		m_buildItemIconButton->SetText("");
 		m_buildItemIconButton->ExchangeImage(4, 0, buildIconName);
-	} else {
-
+	}
+	else
+	{
 		m_buildItemIconButton->SetText("---");
 		m_buildItemIconButton->ExchangeImage(4, 0, NULL);
 	}
 
 	MBCHAR numTurns[50];
-	if ((turns == CITY_PRODUCTION_HALTED)	||
-		theCity->IsBuildingCapitalization()	||
-		theCity->IsBuildingInfrastructure()
+	if ((turns == CITY_PRODUCTION_HALTED) ||
+	    cityData->AlreadyBoughtFront() ||
+	    cityData->IsBuildingCapitalization() ||
+	    cityData->IsBuildingInfrastructure()
 	   )
 	{
 		sprintf(numTurns, "---");
@@ -808,58 +782,55 @@ const MBCHAR *CityControlPanel::GetBuildIcon(const BuildNode *buildNode)
 void CityControlPanel::SelectedCity()
 {
 	Unit newCity;
-	if(!g_selected_item->GetSelectedCity(newCity))
+	if (!g_selected_item->GetSelectedCity(newCity)) {
 		return;
+	}
 
-	CityData *oldCityData = GetSelectedCity();
-	if(oldCityData && oldCityData->GetHomeCity().m_id == newCity.m_id) {
-
-		if(!g_network.IsClient()) {
-			CityWindow::Project(oldCityData);
+	Unit currentCity;
+	if (GetSelectedCity(currentCity) && currentCity == newCity)
+	{
+		if (!g_network.IsClient()) {
+			CityWindow::Project(newCity);
 		}
 		return;
 	}
 
 	sint32 numberOfItems = m_cityListDropDown->GetListBox()->NumItems();
-
-	sint32 i;
-	for(i = 0; i < numberOfItems; i++) {
-		ctp2_ListItem *item = static_cast<ctp2_ListItem*>(m_cityListDropDown->GetListBox()->GetItemByIndex(i));
-		if(item) {
-			Unit thisCity; thisCity.m_id = (uint32)item->GetUserData();
-			if(thisCity.m_id == newCity.m_id) {
-				m_cityListDropDown->SetSelectedItem(i);
-				break;
-			}
+	for(sint32 i = 0; i < numberOfItems; i++)
+	{
+		ctp2_ListItem * item = static_cast<ctp2_ListItem*>(m_cityListDropDown->GetListBox()->GetItemByIndex(i));
+		if (item && (uint32)item->GetUserData() == newCity.m_id)
+		{
+			m_cityListDropDown->SetSelectedItem(i);
+			break;
 		}
 	}
 }
 
 void CityControlPanel::Activated()
 {
+	if (!g_selected_item) {
+		return;
+	}
 	Unit city;
-	if(g_selected_item->GetSelectedCity(city))
+	if (g_selected_item->GetSelectedCity(city)) {
 		return;
-
-
-	if(!g_selected_item)
+	}
+	Player * player = g_player[g_selected_item->GetVisiblePlayer()];
+	if (!player) {
 		return;
-
-	Player *player = g_player[g_selected_item->GetVisiblePlayer()];
-
-	if(!player)
-		return;
+	}
 
 	ID id;
 	PLAYER_INDEX playerIndex;
 	SELECT_TYPE selectionType;
-	g_selected_item->GetTopCurItem(playerIndex, id,
-		selectionType);
+	g_selected_item->GetTopCurItem(playerIndex, id, selectionType);
 
-  	if(selectionType != SELECT_TYPE_NONE) {
-
+	if (selectionType != SELECT_TYPE_NONE)
+	{
 		Unit city = g_theWorld->GetCity(g_selected_item->GetCurSelectPos());
-		if(city.IsValid()) {
+		if (city.IsValid())
+		{
 			g_selected_item->SetSelectCity(city);
 		}
 	}
@@ -870,39 +841,28 @@ AUI_ERRCODE CityControlPanel::ProgressDrawCallback(ctp2_Static *control,
 												   RECT &rect,
 												   void *cookie)
 {
-	Unit city; city.m_id = (uint32)cookie;
-
 	g_c3ui->TheBlitter()->ColorBlt(surface, &rect, RGB(0,0,0), 0);
 
-	if(!city.IsValid() || !city.CD()->GetBuildQueue()->GetHead()) {
+	Unit city;
+	city.m_id = (uint32)cookie;
+	if (!city.IsValid()) {
+		return AUI_ERRCODE_OK;
+	}
+	CityData * cityData = city.GetCityData();
+	if (!cityData || !cityData->GetBuildQueue()->GetHead()) {
 		return AUI_ERRCODE_OK;
 	}
 
-	double storedProd;
-	double neededProd;
-
-	CityWindow* cityWindow = CityWindow::GetCityWindow();
-	CityData* cityData = cityWindow ? cityWindow->GetCityData() : NULL;
-	if(cityData != NULL && cityData->GetHomeCity() == city)
-	{
-		storedProd = double(cityData->GetStoredCityProduction());
-		neededProd = cityData->GetBuildQueue()->GetHead() ? double(cityData->GetBuildQueue()->GetHead()->m_cost) : 0.0;
-	}
-	else
-	{
-		storedProd = double(city.CD()->GetStoredCityProduction());
-		neededProd = city.CD()->GetBuildQueue()->GetHead() ? double(city.CD()->GetBuildQueue()->GetHead()->m_cost) : 0.0;
+	double storedProd = double(cityData->GetStoredCityProduction());
+	double neededProd = 0.0;
+	if (cityData->GetBuildQueue()->GetHead() && !cityData->AlreadyBoughtFront()) {
+		neededProd = double(cityData->GetBuildQueue()->GetHead()->m_cost);
 	}
 
-	double percentComplete;
-	if(neededProd == 0) {
+	double percentComplete = (neededProd == 0) ? 1.0 : storedProd / neededProd;
+	if(percentComplete > 1.0) {
 		percentComplete = 1.0;
-	} else {
-		percentComplete = storedProd / neededProd;
 	}
-
-	if(percentComplete > 1.0)
-		percentComplete = 1.0;
 
 	RECT destRect = rect;
 
@@ -911,10 +871,7 @@ AUI_ERRCODE CityControlPanel::ProgressDrawCallback(ctp2_Static *control,
 	destRect.left += 1;
 	destRect.right -= 1;
 
-	destRect.right =
-	    destRect.left +
-	    static_cast<LONG>(percentComplete * (destRect.right - destRect.left));
-
+	destRect.right = destRect.left + static_cast<LONG>(percentComplete * (destRect.right - destRect.left));
 	g_c3ui->TheBlitter()->ColorBlt(surface, &destRect, RGB(0,255,0), 0);
 	return AUI_ERRCODE_OK;
 }

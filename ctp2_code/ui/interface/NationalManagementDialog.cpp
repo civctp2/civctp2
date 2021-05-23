@@ -29,26 +29,26 @@
 //   it displays the correct value.  John Bytheway, late 2003
 // - Disabled rush buy button when it is not the players turn by John Bytheway.
 // - No rush buy costs are displayed if all selected items are capitalization
-//   or infrastructure, by Martin Gühmann.
+//   or infrastructure, by Martin GÃ¼hmann.
 // - No turn numbers aren't shown anymore in the listbox if the build item is
-//   infrastructure or capitalization, by Martin Gühmann.
+//   infrastructure or capitalization, by Martin GÃ¼hmann.
 // - Rush buy button is disabled when it is not the players turn,
-//   by Martin Gühmann.
-// - #01 Added a third tab to the dialog that shows the nuber of experts and
+//   by Martin GÃ¼hmann.
+// - #01 Added a third tab to the dialog that shows the number of experts and
 //   military units in each city.
 //   (L. Hirth 6/2004)
 // - #02 // #02 Fixed sorting sequence for governor type in status tab
 //   (L. Hirth 7/2004)
-// - Net food and net production are now displayed insted of gross food and
+// - Net food and net production are now displayed instead of gross food and
 //   gross production. So it is done for science and gold. This helps the
 //   player better to know how much food is needed, as a negative amount is
 //   displayed if the city starves. Gold is now displayed in red if it is
-//   critical. - April 6th 2005 Martin Gühmann
-// - Added City Manager button and functions callback. - July 24th 2005 Martin Gühmann
+//   critical. - April 6th 2005 Martin GÃ¼hmann
+// - Added City Manager button and functions callback. - July 24th 2005 Martin GÃ¼hmann
 // - National Manager window will always be displayed on top of other
-//   windows when activated. - July 24th 2005 Martin Gühmann
+//   windows when activated. - July 24th 2005 Martin GÃ¼hmann
 // - Corrected crashes with mods.
-// - Replaced old const database by new one. (5-Aug-2007 Martin Gühmann)
+// - Replaced old const database by new one. (5-Aug-2007 Martin GÃ¼hmann)
 //
 //----------------------------------------------------------------------------
 
@@ -191,7 +191,7 @@ bool NationalManagementDialog::IsShown()
 //
 // Name       : NationalManagementDialog::NationalManagementDialog()
 //
-// Description: Creates the National Managment Window (Contructor)
+// Description: Creates the National Management Window (Constructor)
 //
 //
 // Parameters : -
@@ -254,7 +254,7 @@ m_specialistTab(static_cast<ctp2_Tab*>(aui_Ldl::GetObject(
 	Assert(m_buildQueueButton);
 	Assert(m_disbandButton);
 
-	m_resourceList->SetMultiSelect(true);       // Allow the selction of multiple
+	m_resourceList->SetMultiSelect(true);       // Allow the selection of multiple
 	m_statusList->SetMultiSelect(true);         // items in the lists
 
 	m_closeButton->SetActionFuncAndCookie(CloseButtonActionCallback, this);
@@ -331,6 +331,21 @@ void NationalManagementDialog::Hide()
 {
 	m_window->Hide();
 	g_c3ui->RemoveWindow(m_window->Id());
+}
+
+void NationalManagementDialog::UpdateCity(const Unit & city)
+{
+	if (g_nationalManagementDialog) {
+		NationalManagementDialog * dialog = g_nationalManagementDialog;
+		for (sint32 i = 0; i < dialog->m_statusList->NumItems(); i++) {
+			Unit listCity = GetCityAtIndex(dialog->m_statusList, i);
+			if (listCity == city) {
+				dialog->UpdateStatusItem(
+						reinterpret_cast<ctp2_ListItem*>(dialog->m_statusList->GetItemByIndex(i)), city);
+			}
+		}
+		g_nationalManagementDialog->UpdateRushBuy();
+	}
 }
 
 void NationalManagementDialog::Update()
@@ -418,89 +433,53 @@ void NationalManagementDialog::UpdateSpecialistList()
 
 void NationalManagementDialog::UpdateGovernor()
 {
-
 	bool governorStatus = false;
 
 	sint32 governorPriority = -1;
 
 	tech_WLList<sint32> *selectedList = m_statusList->GetSelectedList();
-
-	if( selectedList->L() < 1 )
+	if (selectedList->L() < 1)
 	{
-
 		m_governorToggle->SetText("");
-
-		m_governorToggle->Enable( FALSE );
-
-		m_governorDropDown->SetSelectedItem( governorPriority );
-
-		m_governorDropDown->Enable( FALSE );
-
+		m_governorToggle->Enable(FALSE);
+		m_governorDropDown->SetSelectedItem(governorPriority);
+		m_governorDropDown->Enable(FALSE);
 		return;
 	}
-
-	else
-
-	{
-
-		m_governorToggle->Enable( TRUE );
+	else {
+		m_governorToggle->Enable(TRUE);
 	}
 
-	for(uint32 selectIndex = 0; selectIndex < selectedList->L(); selectIndex++)
+	for (uint32 selectIndex = 0; selectIndex < selectedList->L(); selectIndex++)
 	{
-
-		Unit city;
-		city.m_id = reinterpret_cast<uint32>(
-			static_cast<ctp2_ListItem*>(m_statusList->GetItemByIndex(
-			selectedList->GetAtIndex(selectIndex)
-			))->GetUserData());
-
-
-
-
-
-
-		if( selectIndex == 0 )
+		CityData * cityData = GetCityAtIndex(m_statusList, selectedList->GetAtIndex(selectIndex)).GetCityData();
+		if (selectIndex == 0)
 		{
-			governorStatus = ( city.GetCityData()->GetUseGovernor() == TRUE );
-			governorPriority = city.GetCityData()->GetBuildListSequenceIndex();
+			governorStatus = cityData->GetUseGovernor();
+			governorPriority = cityData->GetBuildListSequenceIndex();
 		}
-
 		else
 		{
-
-			governorStatus = governorStatus && city.GetCityData()->GetUseGovernor();
-
-			if( city.GetCityData()->GetBuildListSequenceIndex() != governorPriority )
-			{
-
+			governorStatus = governorStatus && cityData->GetUseGovernor();
+			if( cityData->GetBuildListSequenceIndex() != governorPriority ) {
 				governorPriority = -1;
 			}
 		}
 	}
 
-	if( governorStatus )
+	if (governorStatus)
 	{
-
-		m_governorDropDown->SetSelectedItem( governorPriority );
-
+		m_governorDropDown->SetSelectedItem(governorPriority);
 		m_governorDropDown->Enable(TRUE);
-
 		m_governorToggle->SetText("X");
 	}
 	else
-
 	{
-
-		m_governorDropDown->SetSelectedItem( -1 );
-
+		m_governorDropDown->SetSelectedItem(-1);
 		m_governorDropDown->Enable(FALSE);
-
 		m_governorToggle->SetText("");
 	}
-
 }
-
 
 void NationalManagementDialog::UpdateBuildQueue()
 {
@@ -575,24 +554,17 @@ void NationalManagementDialog::UpdateRushBuy()
 {
 	sint32 rushBuyTotal = 0;
 
-	tech_WLList<sint32> *selectedList = m_statusList->GetSelectedList();
+	tech_WLList<sint32> * selectedList = m_statusList->GetSelectedList();
 
-	for(uint32 selectIndex = 0; selectIndex < selectedList->L(); selectIndex++) {
-
-		Unit city;
-		city.m_id = reinterpret_cast<uint32>(
-			static_cast<ctp2_ListItem*>(m_statusList->GetItemByIndex(
-			selectedList->GetAtIndex(selectIndex)
-			))->GetUserData());
-
-		CityData *		theCity	= city.GetCityData();
-		sint32 const	cost	= theCity ? theCity->GetOvertimeCost() : 0;
-
-		if ((cost <= 0)									||
-			(theCity->GetBuildQueue()->GetLen() == 0)	||
-			theCity->AlreadyBoughtFront()				||
-			theCity->IsBuildingCapitalization()			||
-			theCity->IsBuildingInfrastructure()
+	for(uint32 selectIndex = 0; selectIndex < selectedList->L(); selectIndex++)
+	{
+		CityData * cityData = GetCityAtIndex(m_statusList, selectedList->GetAtIndex(selectIndex)).GetCityData();
+		sint32 const cost = cityData ? cityData->GetOvertimeCost() : 0;
+		if ((cost <= 0) ||
+		    (cityData->GetBuildQueue()->GetLen() == 0) ||
+		    cityData->AlreadyBoughtFront() ||
+		    cityData->IsBuildingCapitalization() ||
+		    cityData->IsBuildingInfrastructure()
 		   )
 		{
 			// No action: nothing to rush buy in this city
@@ -604,12 +576,12 @@ void NationalManagementDialog::UpdateRushBuy()
 	}
 
 	// Extra conditions to prevent buying out of turn.
-	sint32 const	player	= g_selected_item->GetVisiblePlayer();
+	sint32 const player = g_selected_item->GetVisiblePlayer();
 
-	m_rushBuyButton->Enable((rushBuyTotal > 0)								&&
-						    (rushBuyTotal <= g_player[player]->GetGold())	&&
-							(player == g_selected_item->GetCurPlayer())
-						   );
+	m_rushBuyButton->Enable(
+			(rushBuyTotal > 0)
+			&& (rushBuyTotal <= g_player[player]->GetGold())
+			&& (player == g_selected_item->GetCurPlayer()));
 
 	if (rushBuyTotal <= 0)
 	{
@@ -648,17 +620,16 @@ ctp2_ListItem *NationalManagementDialog::CreateResourceItem(const Unit &city)
 	return(item);
 }
 
-void NationalManagementDialog::UpdateResourceItem(ctp2_ListItem *item,
-												  const Unit &city)
+void NationalManagementDialog::UpdateResourceItem(ctp2_ListItem * item, const Unit & city)
 {
+	if (!city.IsValid()) {
+		return;
+	}
+	CityData * cityData = city.GetCityData();
 	const COLORREF colorNorm = g_colorSet->GetColorRef(COLOR_BLACK);
 	const COLORREF colorCritical = g_colorSet->GetColorRef(COLOR_RED);
 
 	static MBCHAR stringBuffer[32];
-
-	CityData *cityData = new CityData(city.GetCityData());
-
-	CityWindow::Project(cityData);
 
 	BOOL cityCritical = false;
 
@@ -682,14 +653,14 @@ void NationalManagementDialog::UpdateResourceItem(ctp2_ListItem *item,
 	}
 
 	if(ctp2_Static *column = GetListItemColumn(item, k_NMD_RES_PRODUCTION)) {
-		// Use net production instead gross production. - Martin Gühmann
+		// Use net production instead gross production. - Martin GÃ¼hmann
 		sprintf(stringBuffer, "%d", cityData->GetNetCityProduction());
 		column->SetText(stringBuffer);
 		column->SetTextColor(colorNorm);
 	}
 
 	if(ctp2_Static *column = GetListItemColumn(item, k_NMD_RES_FOOD)) {
-		// Use net food instead of gross food. - Martin Gühmann
+		// Use net food instead of gross food. - Martin GÃ¼hmann
 		sint32 food = cityData->GetNetCityFood();
 		sprintf(stringBuffer, "%d", food);
 		column->SetText(stringBuffer);
@@ -704,7 +675,7 @@ void NationalManagementDialog::UpdateResourceItem(ctp2_ListItem *item,
 		sint32 gold = cityData->GetNetCityGold();
 		sprintf(stringBuffer, "%d", gold);
 		column->SetText(stringBuffer);
-		if (gold < 0) { // Gold is critical display in red as well. - Martin Gühmann
+		if (gold < 0) { // Gold is critical display in red as well. - Martin GÃ¼hmann
 			column->SetTextColor(colorCritical);
 			cityCritical = true;
 		} else
@@ -763,8 +734,7 @@ void NationalManagementDialog::UpdateResourceItem(ctp2_ListItem *item,
 		else
 			column->SetTextColor(colorNorm);
 	}
-
-	delete cityData;
+	m_resourceList->ShouldDraw();
 }
 
 ctp2_ListItem *NationalManagementDialog::CreateStatusItem(const Unit &city)
@@ -778,7 +748,6 @@ ctp2_ListItem *NationalManagementDialog::CreateStatusItem(const Unit &city)
 		return(NULL);
 
 	item->SetUserData(reinterpret_cast<void*>(city.m_id));
-
 	item->SetCompareCallback(CompareStatus);
 
 	UpdateStatusItem(item, city);
@@ -803,13 +772,12 @@ ctp2_ListItem *NationalManagementDialog::CreateStatusItem(const Unit &city)
 // Remark(s)  : -
 //
 //----------------------------------------------------------------------------
-void NationalManagementDialog::UpdateStatusItem(ctp2_ListItem *item,
-												const Unit &city)
+void NationalManagementDialog::UpdateStatusItem(ctp2_ListItem *item, const Unit & city)
 {
-
-	CityData *cityData = new CityData(city.GetCityData());
-	CityWindow::Project(cityData);
-
+	if (!city.IsValid()) {
+		return;
+	}
+	CityData * cityData = city.GetCityData();
 	if(ctp2_Static *column = GetListItemColumn(item, k_NMD_STAT_CITY_NAME)) {
 		column->SetText(cityData->GetName());
 	}
@@ -846,7 +814,8 @@ void NationalManagementDialog::UpdateStatusItem(ctp2_ListItem *item,
 			static MBCHAR stringBuffer[32];
 			sint32 turns = cityData->HowMuchLonger();
 			if (turns == 0x7fffffff
-			//Added by Martin Gühmann to disable the turn display in case of capitalization and infrastructure
+			|| cityData->AlreadyBoughtFront()
+			//Added by Martin GÃ¼hmann to disable the turn display in case of capitalization and infrastructure
 			|| cityData->GetBuildQueue()->GetHead()->m_category == k_GAME_OBJ_TYPE_CAPITALIZATION
 			|| cityData->GetBuildQueue()->GetHead()->m_category == k_GAME_OBJ_TYPE_INFRASTRUCTURE)
 				sprintf(stringBuffer, "---");
@@ -856,7 +825,7 @@ void NationalManagementDialog::UpdateStatusItem(ctp2_ListItem *item,
 		} else
 			column->SetText(g_theStringDB->GetNameStr("str_ldl_ND_NA"));
 	}
-	delete cityData;
+	m_statusList->ShouldDraw();
 }
 
 //----------------------------------------------------------------------------
@@ -866,7 +835,7 @@ void NationalManagementDialog::UpdateStatusItem(ctp2_ListItem *item,
 // Description: Creates an item of the specialist list
 //
 //
-// Parameters : Unit:	Cityunit from which the data is taken
+// Parameters : Unit:	City from which the data is taken
 //
 // Globals    : -
 //
@@ -911,17 +880,16 @@ ctp2_ListItem *NationalManagementDialog::CreateSpecialistItem(const Unit &city)
 // Remark(s)  : -
 //
 //----------------------------------------------------------------------------
-void NationalManagementDialog::UpdateSpecialistItem(ctp2_ListItem *item,
-												  const Unit &city)
+void NationalManagementDialog::UpdateSpecialistItem(ctp2_ListItem * item, const Unit & city)
 {
+	if (!city.IsValid()) {
+		return;
+	}
+	CityData * cityData = city.GetCityData();
 	const COLORREF colorNorm = g_colorSet->GetColorRef(COLOR_BLACK);
 	const COLORREF colorCritical = g_colorSet->GetColorRef(COLOR_RED);
 
 	static MBCHAR stringBuffer[32];
-
-	CityData *cityData = new CityData(city.GetCityData());
-
-	CityWindow::Project(cityData);
 
 	BOOL cityCritical = false;
 
@@ -988,42 +956,32 @@ void NationalManagementDialog::UpdateSpecialistItem(ctp2_ListItem *item,
 		else
 			column->SetTextColor(colorNorm);
 	}
-	delete cityData;
+	m_specialistList->ShouldDraw();
 }
 
 
 bool NationalManagementDialog::CanBuild(uint32 category, sint32 type)
 {
-
 	tech_WLList<sint32> *selectedList = m_statusList->GetSelectedList();
 
 	if(!selectedList->L())
 		return(false);
 
-
 	bool canBuild = true;
-
 
 	for(uint32 selectIndex = 0; selectIndex < selectedList->L(); selectIndex++) {
 
-		Unit city;
-		city.m_id = reinterpret_cast<uint32>(
-			static_cast<ctp2_ListItem*>(m_statusList->GetItemByIndex(
-			selectedList->GetAtIndex(selectIndex)
-			))->GetUserData());
+		CityData * cityData = GetCityAtIndex(m_statusList, selectedList->GetAtIndex(selectIndex)).GetCityData();
 
 		switch(category) {
 		case k_GAME_OBJ_TYPE_UNIT:
-			canBuild = canBuild &&
-				city.GetCityData()->CanBuildUnit(type);
+			canBuild = canBuild && cityData->CanBuildUnit(type);
 			break;
 		case k_GAME_OBJ_TYPE_IMPROVEMENT:
-			canBuild = canBuild &&
-				city.GetCityData()->CanBuildBuilding(type);
+			canBuild = canBuild && cityData->CanBuildBuilding(type);
 			break;
 		case k_GAME_OBJ_TYPE_WONDER:
-			canBuild = canBuild &&
-				city.GetCityData()->CanBuildWonder(type);
+			canBuild = canBuild && cityData->CanBuildWonder(type);
 			break;
 		default:
 			Assert(false);
@@ -1031,7 +989,7 @@ bool NationalManagementDialog::CanBuild(uint32 category, sint32 type)
 		}
 	}
 
-	return(canBuild);
+	return canBuild;
 }
 
 ctp2_ListItem *NationalManagementDialog::CreateBuildQueueItem(uint32 category,
@@ -1067,17 +1025,6 @@ sint32 NationalManagementDialog::CompareResources(ctp2_ListItem *item1,
 												  ctp2_ListItem *item2,
 												  sint32 column)
 {
-
-	Unit city1, city2;
-	city1.m_id = reinterpret_cast<uint32>(item1->GetUserData());
-	city2.m_id = reinterpret_cast<uint32>(item2->GetUserData());
-
-	Assert(city1.IsValid());
-	Assert(city2.IsValid());
-
-//	CityData *cityData1 = city1.GetCityData();
-//	CityData *cityData2 = city2.GetCityData();
-
 	sint32 result = 0;
 
 	ctp2_Static *column1 = GetListItemColumn(item1, column);
@@ -1150,16 +1097,10 @@ sint32 NationalManagementDialog::CompareStatus(ctp2_ListItem *item1,
 											   ctp2_ListItem *item2,
 											   sint32 column)
 {
-
-	Unit city1, city2;
-	city1.m_id = reinterpret_cast<uint32>(item1->GetUserData());
-	city2.m_id = reinterpret_cast<uint32>(item2->GetUserData());
-
-	Assert(city1.IsValid());
-	Assert(city2.IsValid());
-
-	CityData *cityData1 = city1.GetCityData();
-	CityData *cityData2 = city2.GetCityData();
+	Unit city1(reinterpret_cast<uint32>(item1->GetUserData()));
+	Unit city2(reinterpret_cast<uint32>(item2->GetUserData()));
+	CityData * cityData1 = city1.GetCityData();
+	CityData * cityData2 = city2.GetCityData();
 
 	BuildQueue *queue1 = cityData1->GetBuildQueue();
 	BuildQueue *queue2 = cityData2->GetBuildQueue();
@@ -1214,17 +1155,6 @@ sint32 NationalManagementDialog::CompareSpecialists(ctp2_ListItem *item1,
 												  ctp2_ListItem *item2,
 												  sint32 column)
 {
-
-	Unit city1, city2;
-	city1.m_id = reinterpret_cast<uint32>(item1->GetUserData());
-	city2.m_id = reinterpret_cast<uint32>(item2->GetUserData());
-
-	Assert(city1.IsValid());
-	Assert(city2.IsValid());
-
-//	CityData *cityData1 = city1.GetCityData();
-//	CityData *cityData2 = city2.GetCityData();
-
 	sint32 result = 0;
 
 	ctp2_Static *column1 = GetListItemColumn(item1, column);
@@ -1306,13 +1236,7 @@ void NationalManagementDialog::BuildQueueButtonActionCallback(aui_Control *contr
 	UnitDynamicArray cities;
 
 	for(uint32 selectIndex = 0; selectIndex < selectedList->L(); selectIndex++) {
-
-		Unit city;
-		city.m_id = reinterpret_cast<uint32>(
-			static_cast<ctp2_ListItem*>(visibleList->GetItemByIndex(
-			selectedList->GetAtIndex(selectIndex)
-			))->GetUserData());
-		cities.Insert(city);
+		cities.Insert(GetCityAtIndex(visibleList, selectedList->GetAtIndex(selectIndex)));
 	}
 
 	if (g_network.IsClient() && g_network.GetSensitiveUIBlocked())
@@ -1323,7 +1247,7 @@ void NationalManagementDialog::BuildQueueButtonActionCallback(aui_Control *contr
     {
 	    if (cities.Num() == 1)
         {
-			EditQueue::Display(CityWindow::GetCityData(cities.Access(0)));
+			EditQueue::Display(cities.Access(0));
 		}
         else
         {
@@ -1366,14 +1290,8 @@ void NationalManagementDialog::CityManagerButtonActionCallback(aui_Control *cont
 	tech_WLList<sint32> *selectedList = visibleList->GetSelectedList();
 
 	if(selectedList->L() == 1) {
-
-		Unit city;
-		city.m_id = reinterpret_cast<uint32>(
-		    static_cast<ctp2_ListItem*>(visibleList->GetItemByIndex(
-		    selectedList->GetAtIndex(0)
-		    ))->GetUserData());
 		if(!(g_network.IsClient() && g_network.GetSensitiveUIBlocked())) {
-			CityWindow::Display(CityWindow::GetCityData(city));
+			CityWindow::Display(GetCityAtIndex(visibleList, selectedList->GetAtIndex(0)));
 		}
 	}
 }
@@ -1433,34 +1351,23 @@ void NationalManagementDialog::ToggleGovernorButtonActionCallback(aui_Control *c
 
 	tech_WLList<sint32> *selectedList = dialog->m_statusList->GetSelectedList();
 
-	for(uint32 selectIndex = 0; selectIndex < selectedList->L(); selectIndex++) {
-
-		Unit city;
-		city.m_id = reinterpret_cast<uint32>(
-			static_cast<ctp2_ListItem*>(dialog->m_statusList->GetItemByIndex(
-			selectedList->GetAtIndex(selectIndex)
-			))->GetUserData());
-
-
+	for(uint32 selectIndex = 0; selectIndex < selectedList->L(); selectIndex++)
+	{
+		CityData * cityData = GetCityAtIndex(dialog->m_statusList, selectedList->GetAtIndex(selectIndex)).GetCityData();
 		if(selectIndex) {
-			governorStatus = governorStatus && city.GetCityData()->GetUseGovernor();
+			governorStatus = governorStatus && cityData->GetUseGovernor();
 		} else {
-			governorStatus = (city.GetCityData()->GetUseGovernor() == TRUE);
+			governorStatus = cityData->GetUseGovernor();
 		}
 	}
 
 
-	for(uint32 selectIndex2 = 0; selectIndex2 < selectedList->L(); selectIndex2++) {
-
+	for(uint32 selectIndex2 = 0; selectIndex2 < selectedList->L(); selectIndex2++)
+	{
 		ctp2_ListItem *item = static_cast<ctp2_ListItem*>(
-			dialog->m_statusList->GetItemByIndex(
-			selectedList->GetAtIndex(selectIndex2)));
-
-		Unit city;
-		city.m_id = reinterpret_cast<uint32>(item->GetUserData());
-
+			dialog->m_statusList->GetItemByIndex(selectedList->GetAtIndex(selectIndex2)));
+		Unit city(reinterpret_cast<uint32>(item->GetUserData()));
 		city.GetCityData()->SetUseGovernor(!governorStatus);
-
 		dialog->UpdateStatusItem(item, city);
 	}
 
@@ -1483,15 +1390,9 @@ void NationalManagementDialog::SelectGovernorActionCallback(aui_Control *control
 	for(uint32 selectIndex = 0; selectIndex < selectedList->L(); selectIndex++) {
 
 		ctp2_ListItem *item = static_cast<ctp2_ListItem*>(
-			dialog->m_statusList->GetItemByIndex(
-			selectedList->GetAtIndex(selectIndex)));
-
-		Unit city;
-		city.m_id = reinterpret_cast<uint32>(item->GetUserData());
-
-		city.GetCityData()->SetBuildListSequenceIndex(
-			static_cast<ctp2_DropDown*>(control)->GetSelectedItem());
-
+			dialog->m_statusList->GetItemByIndex(selectedList->GetAtIndex(selectIndex)));
+		Unit city(reinterpret_cast<uint32>(item->GetUserData()));
+		city.GetCityData()->SetBuildListSequenceIndex(static_cast<ctp2_DropDown*>(control)->GetSelectedItem());
 		dialog->UpdateStatusItem(item, city);
 	}
 
@@ -1500,54 +1401,12 @@ void NationalManagementDialog::SelectGovernorActionCallback(aui_Control *control
 	dialog->UpdateGovernor();
 }
 
-void NationalManagementDialog::SelectBuildItemActionCallback(aui_Control *control,
-	uint32 action, uint32 data, void *cookie)
-{
-
-	if(action != static_cast<uint32>(AUI_DROPDOWN_ACTION_SELECT))
-		return;
-
-	NationalManagementDialog *dialog = static_cast<NationalManagementDialog*>(cookie);
-
-	sint32 selectedItem =
-		static_cast<ctp2_DropDown*>(control)->GetSelectedItem();
-	if(selectedItem < 0)
-		return;
-
-	ctp2_ListItem *buildItem = static_cast<ctp2_ListItem*>(
-		static_cast<ctp2_DropDown*>(control)->GetListBox()->GetItemByIndex(
-		selectedItem));
-
-	BuildQueueDropdownItem *buildInformation =
-		static_cast<BuildQueueDropdownItem*>(buildItem->GetUserData());
-
-	tech_WLList<sint32> *selectedList = dialog->m_statusList->GetSelectedList();
-
-	for(uint32 selectIndex = 0; selectIndex < selectedList->L(); selectIndex++) {
-
-		ctp2_ListItem *item = static_cast<ctp2_ListItem*>(
-			dialog->m_statusList->GetItemByIndex(
-			selectedList->GetAtIndex(selectIndex)));
-
-		Unit city;
-		city.m_id = reinterpret_cast<uint32>(item->GetUserData());
-
-		city.GetCityData()->InsertBuildItem(
-			city.GetCityData()->GetBuildQueue()->GetLen() ? 0 : -1,
-			buildInformation->m_category, buildInformation->m_type);
-
-		dialog->UpdateStatusItem(item, city);
-	}
-
-	dialog->m_statusList->ShouldDraw();
-}
-
 void NationalManagementDialog::RushBuyButtonActionCallback(aui_Control *control,
 	uint32 action, uint32 data, void *cookie)
 {
-
-	if(action != static_cast<uint32>(AUI_BUTTON_ACTION_EXECUTE))
+	if (action != static_cast<uint32>(AUI_BUTTON_ACTION_EXECUTE)) {
 		return;
+	}
 
 	NationalManagementDialog *dialog = static_cast<NationalManagementDialog*>(cookie);
 
@@ -1559,19 +1418,13 @@ void NationalManagementDialog::RushBuyButtonActionCallback(aui_Control *control,
 			dialog->m_statusList->GetItemByIndex(
 			selectedList->GetAtIndex(selectIndex)));
 
-		Unit city;
-		city.m_id = reinterpret_cast<uint32>(item->GetUserData());
-
-		// JJB removed the following:
-		// and replaced it with the following:
-		if (!city.GetCityData()->AlreadyBoughtFront()
-		  && city.GetOwner() == g_selected_item->GetCurPlayer()) {
-			city.GetCityData()->AddBuyFront();
+		Unit city(reinterpret_cast<uint32>(item->GetUserData()));
+		CityData * cityData = city.GetCityData();
+		if (!cityData->AlreadyBoughtFront() && city.GetOwner() == g_selected_item->GetCurPlayer()) {
+			cityData->AddBuyFront();
 		}
-		// in the hope of fixing the rush buy bug.
-		// We only allow rush buying when it is the player's turn, and only
-		// when the given item has not yet been rush bought this turn.
-
+		CityWindow::UpdateCity(city);
+		EditQueue::UpdateCity(city);
 		dialog->UpdateStatusItem(item, city);
 	}
 
@@ -1608,7 +1461,7 @@ void NationalManagementDialog::ResourceListSelectActionCallback(aui_Control *con
 //
 //
 // Parameters : *control:	Which control was activated
-//				action:		Which action has happend
+//				action:		Which action has happened
 //				data:
 //				*cookie:
 //
@@ -1670,7 +1523,9 @@ void NationalManagementDialog::TabActionCallback(aui_Control *control,
 
 	if(dialog->m_resourceTab == (ctp2_Tab *)control) {
 		dialog->UpdateMainButtons(dialog->m_resourceList);
-	} else if(dialog->m_statusTab == (ctp2_Tab *)control) {
+	} else if(dialog->m_statusTab == (ctp2_Tab *)control)
+	{
+		dialog->UpdateRushBuy();
 		dialog->UpdateMainButtons(dialog->m_statusList);
 	} else if(dialog->m_specialistTab == (ctp2_Tab *)control) {
 		dialog->UpdateMainButtons(dialog->m_specialistList);
@@ -1709,99 +1564,80 @@ Unit NationalManagementDialog::GetSelectedCity()
 
 void NationalManagementDialog::MirrorSelectedCities()
 {
-	if(!g_nationalManagementDialog)
+	if (!g_nationalManagementDialog) {
 		return;
+	}
 
 	Unit city = GetSelectedCity();
-	if(!city.IsValid())
+	if (!city.IsValid()) {
 		return;
+	}
 
 	ctp2_ListBox *visList;
-    std::vector<ctp2_ListBox *> invisList;
+	std::vector<ctp2_ListBox *> invisibleList;
 
 	if(!g_nationalManagementDialog->m_resourceList->IsHidden())
-    {
-		visList     = g_nationalManagementDialog->m_resourceList;
-		invisList.push_back(g_nationalManagementDialog->m_statusList);
-		if (g_nationalManagementDialog->m_specialistList)
-        {
-            invisList.push_back(g_nationalManagementDialog->m_specialistList);
-        }
+	{
+		visList = g_nationalManagementDialog->m_resourceList;
+		invisibleList.push_back(g_nationalManagementDialog->m_statusList);
+		if (g_nationalManagementDialog->m_specialistList) {
+			invisibleList.push_back(g_nationalManagementDialog->m_specialistList);
+		}
 	}
-    else if (!g_nationalManagementDialog->m_statusList->IsHidden())
-    {
+	else if (!g_nationalManagementDialog->m_statusList->IsHidden())
+	{
 		visList = g_nationalManagementDialog->m_statusList;
-		if (g_nationalManagementDialog->m_specialistList)
-        {
-            invisList.push_back(g_nationalManagementDialog->m_specialistList);
-        }
-		invisList.push_back(g_nationalManagementDialog->m_resourceList);
+		if (g_nationalManagementDialog->m_specialistList) {
+			invisibleList.push_back(g_nationalManagementDialog->m_specialistList);
+		}
+		invisibleList.push_back(g_nationalManagementDialog->m_resourceList);
 
-	} else if (g_nationalManagementDialog->m_specialistList &&
-               !g_nationalManagementDialog->m_specialistList->IsHidden()
-              )
-    {
+	} else if (g_nationalManagementDialog->m_specialistList
+			&& !g_nationalManagementDialog->m_specialistList->IsHidden())
+	{
 		visList = g_nationalManagementDialog->m_specialistList;
-		invisList.push_back(g_nationalManagementDialog->m_resourceList);
-		invisList.push_back(g_nationalManagementDialog->m_statusList);
-	} else {
+		invisibleList.push_back(g_nationalManagementDialog->m_resourceList);
+		invisibleList.push_back(g_nationalManagementDialog->m_statusList);
+	}
+	else {
 		Assert(false);
 		return;
 	}
 
 	tech_WLList<sint32> *selectedList = visList->GetSelectedList();
 
-	if( selectedList->L() < 1 )
-	{
+	if( selectedList->L() < 1 ) {
 		return;
 	}
 
 	g_nationalManagementDialog->m_mirroring = true;
 
-	for
-	(
-		std::vector<ctp2_ListBox *>::iterator p = invisList.begin();
-		p != invisList.end();
-		++p
-	)
+	for (std::vector<ctp2_ListBox *>::iterator p = invisibleList.begin(); p != invisibleList.end(); ++p)
 	{
-		for (sint32 i = 0; i < (*p)->NumItems(); ++i)
-		{
+		for (sint32 i = 0; i < (*p)->NumItems(); ++i) {
 			(*p)->DeselectItem(i);
 		}
 	}
 
 	for (uint32 selectIndex = 0; selectIndex < selectedList->L(); selectIndex++)
 	{
+		uint32 cityId   = reinterpret_cast<uint32>(
+				static_cast<ctp2_ListItem*>(visList->GetItemByIndex(selectedList->GetAtIndex(selectIndex)))
+				->GetUserData());
 
-		uint32 cityId   = reinterpret_cast<uint32>
-                            (static_cast<ctp2_ListItem*>
-                                (visList->GetItemByIndex
-                                    (selectedList->GetAtIndex(selectIndex))
-                                )->GetUserData()
-                            );
+		for(std::vector<ctp2_ListBox *>::iterator p = invisibleList.begin(); p != invisibleList.end(); ++p)
+		{
+			for (sint32 i = 0; i < (*p)->NumItems(); ++i)
+			{
+				uint32 invisibleId  = reinterpret_cast<uint32>(
+						static_cast<ctp2_ListItem *>((*p)->GetItemByIndex(i))->GetUserData());
 
-        for
-        (
-            std::vector<ctp2_ListBox *>::iterator p = invisList.begin();
-            p != invisList.end();
-            ++p
-        )
-        {
-		    for (sint32 i = 0; i < (*p)->NumItems(); ++i)
-            {
-			    uint32 invisId  = reinterpret_cast<uint32>
-                                    (static_cast<ctp2_ListItem *>((*p)->GetItemByIndex(i))
-                                        ->GetUserData()
-                                    );
-
-                if (invisId == cityId)
-                {
-				    (*p)->SelectItem(i);
-				    break;
-			    }
-		    }
-        }
+				if (invisibleId == cityId) {
+					(*p)->SelectItem(i);
+					break;
+				}
+			}
+		}
 	}
 
 	g_nationalManagementDialog->m_mirroring = false;
@@ -1816,4 +1652,9 @@ void NationalManagementDialog::GotoSelectedCity()
 			g_director->AddCenterMap(city.RetPos());
 		}
 	}
+}
+
+Unit NationalManagementDialog::GetCityAtIndex(ctp2_ListBox * listbox, uint32 index)
+{
+	return Unit(reinterpret_cast<uint32>(static_cast<ctp2_ListItem*>(listbox->GetItemByIndex(index))->GetUserData()));
 }

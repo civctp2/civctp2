@@ -28,7 +28,7 @@
 // - Start the great library with the current research project of the player.
 // - Prevent production errors when pressing F3 after end of turn.
 // - Added close_AllScreensAndUpdateInfoScreen so that on a new turn the
-//   information window can stay open. (Aug. 7th 2005 Martin Gühmann)
+//   information window can stay open. (Aug. 7th 2005 Martin GÃ¼hmann)
 //
 //----------------------------------------------------------------------------
 
@@ -130,7 +130,7 @@ void close_WorkView(void)
 
 sint32 open_CityView( void )
 {
-	AUI_ERRCODE auiErr  = CityWindow::Display(NULL);
+	AUI_ERRCODE auiErr  = CityWindow::Display();
 
 	Assert( auiErr == AUI_ERRCODE_OK );
 	if ( auiErr != AUI_ERRCODE_OK ) return -1;
@@ -140,7 +140,7 @@ sint32 open_CityView( void )
 
 void close_CityView(void)
 {
-	CityWindow::Close(NULL, AUI_BUTTON_ACTION_EXECUTE, 0, NULL);
+	CityWindow::Hide();
 }
 
 sint32 open_CityStatus( void )

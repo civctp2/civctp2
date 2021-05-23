@@ -101,14 +101,15 @@ public:
         } // for
     }
 
-	void Clear(void);
+	void Clear();
 
 	virtual AUI_ERRCODE SortByColumn( sint32 column, BOOL ascending );
 	virtual AUI_ERRCODE Draw(aui_Surface *surface = NULL, sint32 x = 0, sint32 y = 0);
 	virtual AUI_ERRCODE DrawThis(aui_Surface *surface = NULL, sint32 x = 0, sint32 y = 0 );
 
-	sint32 GetBevelWidth(void) { return m_bevelWidth; }
-	sint32 GetBevelType(void) { return m_bevelType; }
+	sint32 GetBevelWidth() { return m_bevelWidth; }
+	sint32 GetBevelType() { return m_bevelType; }
+	const POINT & GetBorderOffset() const { return m_borderOffset; }
 
 	sint32 GetMaxItemHeight() { return m_maxItemHeight; }
 	sint32 GetMaxItemWidth() { return m_maxItemWidth; }

@@ -239,9 +239,6 @@ extern Network              g_network;
 
 extern FilenameDB           *g_theMessageIconFileDB;
 
-void CityManagerButtonCallback(aui_Control *control, uint32 action, uint32 data, void *cookie);
-
-void TabGroupButtonCallback   (aui_Control *control, uint32 action, uint32 data, void *cookie);
 void TileImpSelectionCallback (aui_Control *control, uint32 action, uint32 data, void *cookie);
 
 void CityPanelDropDownCallback(aui_Control *control, uint32 action, uint32 data, void *cookie);
@@ -291,34 +288,6 @@ void TurnNextCityButtonActionCallback( aui_Control *control, uint32 action, uint
 	}
 
 	controlpanelwindow_Update();
-}
-
-void CityManagerButtonCallback(aui_Control *control, uint32 action, uint32 data, void *cookie)
-{
-	if(action != (uint32)AUI_BUTTON_ACTION_EXECUTE) return;
-
-	CityWindow::Initialize();
-
-	CityData *	selection	= NULL;
-	Unit 		city;
-	Army		a;
-
-	if (g_selected_item->GetSelectedCity(city))
-	{
-		selection = city.CD();
-	}
-	else if (g_selected_item->GetSelectedArmy(a) &&
-	         g_theWorld->HasCity(a->RetPos())
-	        )
-	{
-		selection = g_theWorld->GetCity(a->RetPos()).CD();
-	}
-
-	CityWindow::Display(selection);
-}
-
-void TabGroupButtonCallback(aui_Control *control, uint32 action, uint32 data, void *cookie)
-{
 }
 
 void CityPanelDropDownCallback( aui_Control *control, uint32 action, uint32 data, void *cookie )
@@ -385,17 +354,6 @@ void TileImpButtonCallback2(aui_Control *control, uint32 action, uint32 data, vo
 		return;
 
 	g_controlPanel->BeginImprovementCycle((void *)rec);
-}
-
-void GotoCityUtilityDialogBoxCallback(Unit city, sint32 val2)
-{
-	if (!val2) return;
-
-	if (city.IsValid())
-	{
-	    MapPoint        destPos = city.RetPos();
-	    g_selected_item->Goto(destPos);
-	}
 }
 
 void controlpanelwindow_MessageListCallback(aui_Control *control, uint32 action, uint32 data, void *cookie)
@@ -535,7 +493,7 @@ void ContextMenuCallback(ctp2_Menu *menu, CTP2_MENU_ACTION action, sint32 itemIn
 	switch((sint32)cookie)
 	{
 		case k_CONTEXT_CITY_VIEW:
-			if(haveCity) CityWindow::Display(city.CD());
+			if(haveCity) CityWindow::Display(city);
 			break;
 		case k_CONTEXT_CITY_BUILD:
 			if(g_network.IsClient() && g_network.GetSensitiveUIBlocked())
@@ -543,7 +501,7 @@ void ContextMenuCallback(ctp2_Menu *menu, CTP2_MENU_ACTION action, sint32 itemIn
 			}
 			else
 			{
-				EditQueue::Display(CityWindow::GetCityData(city));
+				EditQueue::Display(city);
 			}
 			break;
 		case k_CONTEXT_CITY_RENAME:
@@ -738,7 +696,7 @@ void CityMenuCallback(ctp2_Menu *menu, CTP2_MENU_ACTION action, sint32 itemIndex
 				}
 				else
 				{
-					EditQueue::Display(CityWindow::GetCityData(city));
+					EditQueue::Display(city);
 				}
 			}
 			else if(g_player[g_selected_item->GetVisiblePlayer()]->m_all_cities->Num() > 0)
@@ -748,18 +706,19 @@ void CityMenuCallback(ctp2_Menu *menu, CTP2_MENU_ACTION action, sint32 itemIndex
 				}
 				else
 				{
-					EditQueue::Display(CityWindow::GetCityData(g_player[g_selected_item->GetVisiblePlayer()]->
-					                                           m_all_cities->Access(0)));
+					EditQueue::Display(g_player[g_selected_item->GetVisiblePlayer()]->m_all_cities->Access(0));
 				}
 			}
 			break;
 		case CP_MENU_ITEM_1:
 			CityWindow::Initialize();
 
-			if(g_selected_item->GetSelectedCity(city))
-				CityWindow::Display(city.CD());
-			else
-				CityWindow::Display(NULL);
+			if(g_selected_item->GetSelectedCity(city)) {
+				CityWindow::Display(city);
+			}
+			else {
+				CityWindow::Display();
+			}
 			break;
 		case CP_MENU_ITEM_2:
 			open_CityStatus();
