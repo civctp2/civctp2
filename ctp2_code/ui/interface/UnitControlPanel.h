@@ -72,11 +72,13 @@ private:
 	static AUI_ERRCODE DrawCargoCallback(ctp2_Static * control, aui_Surface * surface, RECT & rect, void * cookie);
 
 	static void SingleSelectionArmySymbolImageCallback(ctp2_Static * control, aui_MouseEvent * event, void * cookie);
+	static void StackSymbolImageCallback(ctp2_Static * control, aui_MouseEvent * event, void * cookie);
 	static void TransportImageCallback(ctp2_Static * control, aui_MouseEvent * event, void * cookie);
 	static void TransportSelectionImageCallback(ctp2_Static * control, aui_MouseEvent * event, void * cookie);
 
 	static bool SelectionContainsMultipleArmies();
 	static void LoadImage00(ctp2_Static * control);
+	static void SetVisibilityStackSymbol(ctp2_Static * stackSymbol);
 
 	UnitSelectionMode m_currentMode;
 
@@ -104,7 +106,6 @@ private:
 	ctp2_Static * m_multipleSelectionDisplay;
 	ctp2_Button * m_multipleSelectionButton[NUMBER_OF_MULTIPLE_SELECTION_BUTTONS];
 	ctp2_Static * m_multipleSelectionHealth[NUMBER_OF_MULTIPLE_SELECTION_BUTTONS];
-	std::pair<UnitControlPanel*, uint32> m_multiPair[NUMBER_OF_MULTIPLE_SELECTION_BUTTONS];
 
 	static const sint32 NUMBER_OF_ARMY_SELECTION_BUTTONS = 12;
 	ctp2_Static * m_armySelectionDisplay;
@@ -137,10 +138,11 @@ private:
 	sint32 m_lastSelectionUnit;
 	sint32 m_lastSelectedArmyCount;
 
-    std::vector<Unit> m_cellUnitList;
-    std::vector<Army> m_cellArmyList;
+	std::vector<Unit> m_cellUnitList;
+	std::vector<Army> m_cellArmyList;
 
-    class SetSelectionAction;
+	class SetSelectionAction;
+	class SelectUnitAction;
 };
 
 #endif

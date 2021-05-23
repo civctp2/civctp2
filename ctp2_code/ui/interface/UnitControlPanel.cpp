@@ -187,8 +187,11 @@ m_cellArmyList()
 
 	LoadImage00(m_singleSelectionStackSymbol);
 	m_singleSelectionStackSymbol->SetDrawCallbackAndCookie(StackSymbolDrawCallback, this);
+	m_singleSelectionStackSymbol->SetImageMapCallback(StackSymbolImageCallback, this);
 	LoadImage00(m_armySelectionStackSymbol);
 	m_armySelectionStackSymbol->SetDrawCallbackAndCookie(StackSymbolDrawCallback, this);
+	m_armySelectionStackSymbol->SetImageMapCallback(StackSymbolImageCallback, this);
+
 	m_singleSelectionArmySymbol->SetImageMapCallback(SingleSelectionArmySymbolImageCallback, this);
 	m_transportSelectionIcon->SetImageMapCallback(TransportSelectionImageCallback, this);
 
@@ -454,11 +457,8 @@ void UnitControlPanel::UpdateMultipleSelectionDisplay()
 
 			if (!armyAlreadyShown)
 			{
-				m_multiPair[multiIndex].first   = this;
-				m_multiPair[multiIndex].second  = army.m_id;
-
 				m_multipleSelectionButton[multiIndex]->SetActionFuncAndCookie(MultiButtonActionCallback,
-						&m_multiPair[multiIndex]);
+						(void *) army.m_id);
 				if (army.IsValid() && army.Num() == 1)
 				{
 					m_multipleSelectionHealth[multiIndex]->SetDrawCallbackAndCookie(HealthBarActionCallback,
@@ -544,6 +544,8 @@ void UnitControlPanel::UpdateArmySelectionDisplay()
 	}
 
 	m_unitListLabel->SetText(army.GetData()->GetName());
+
+	SetVisibilityStackSymbol(m_armySelectionStackSymbol);
 }
 
 void UnitControlPanel::UpdateTransportSelectionDisplay()
@@ -1009,87 +1011,61 @@ AUI_ERRCODE UnitControlPanel::FuelBarDrawCallback(ctp2_Static * control, aui_Sur
 		Pixel16 color = g_colorSet->GetColor((fuelPercent > 0.5) ? COLOR_GREEN
 				: ((fuelPercent > 0.2) ? COLOR_YELLOW : COLOR_RED));
 
-		static uint32 nextBlink = 0;
-		static bool show = true;
-
-		if (show)
+		uint8 * buffer = surface->Buffer();
+		bool isLocked = false;
+		if (!buffer)
 		{
-			uint8 * buffer = surface->Buffer();
-			bool isLocked = false;
-			if (!buffer)
-			{
-				surface->Lock(&rect, (LPVOID*) &buffer, 0);
-				isLocked = true;
-			}
+			surface->Lock(&rect, (LPVOID*) &buffer, 0);
+			isLocked = true;
+		}
 
-			const sint32 levelWidth = 5;
-			RECT levelRect = { rect.left + 8, rect.top + 8, rect.left + 6 + levelWidth, rect.top + 9 };
+		const sint32 levelWidth = 5;
+		RECT levelRect = { rect.left + 8, rect.top + 8, rect.left + 6 + levelWidth, rect.top + 9 };
+		primitives_ClippedPaintRect16(*surface, levelRect, color);
+		if (fuelPercent > 0.2)
+		{
 			primitives_ClippedPaintRect16(*surface, levelRect, color);
-			if (fuelPercent > 0.2)
-			{
-				primitives_ClippedPaintRect16(*surface, levelRect, color);
-				levelRect = { levelRect.right + 2, levelRect.top - 1, levelRect.right + levelWidth, levelRect.bottom };
-			}
-			if (fuelPercent > 0.33)
-			{
-				primitives_ClippedPaintRect16(*surface, levelRect, color);
-				levelRect = { levelRect.right + 2, levelRect.top - 1, levelRect.right + levelWidth, levelRect.bottom };
-			}
-			if (fuelPercent > 0.5)
-			{
-				primitives_ClippedPaintRect16(*surface, levelRect, color);
-				levelRect = { levelRect.right + 2, levelRect.top - 1, levelRect.right + levelWidth, levelRect.bottom };
-			}
-			if (fuelPercent > 0.66)
-			{
-				primitives_ClippedPaintRect16(*surface, levelRect, color);
-				levelRect = { levelRect.right + 2, levelRect.top - 1, levelRect.right + levelWidth, levelRect.bottom };
-			}
-			if (fuelPercent > 0.83) {
-				primitives_ClippedPaintRect16(*surface, levelRect, color);
-			}
-			if (fuelPercent < 0.2)
+			levelRect = { levelRect.right + 2, levelRect.top - 1, levelRect.right + levelWidth, levelRect.bottom };
+		}
+		if (fuelPercent > 0.33)
+		{
+			primitives_ClippedPaintRect16(*surface, levelRect, color);
+			levelRect = { levelRect.right + 2, levelRect.top - 1, levelRect.right + levelWidth, levelRect.bottom };
+		}
+		if (fuelPercent > 0.5)
+		{
+			primitives_ClippedPaintRect16(*surface, levelRect, color);
+			levelRect = { levelRect.right + 2, levelRect.top - 1, levelRect.right + levelWidth, levelRect.bottom };
+		}
+		if (fuelPercent > 0.66)
+		{
+			primitives_ClippedPaintRect16(*surface, levelRect, color);
+			levelRect = { levelRect.right + 2, levelRect.top - 1, levelRect.right + levelWidth, levelRect.bottom };
+		}
+		if (fuelPercent > 0.83) {
+			primitives_ClippedPaintRect16(*surface, levelRect, color);
+		}
+		if (fuelPercent <= 0.2)
+		{
+			static bool   showFuelAlarm = true;
+			static uint32 nextFuelBlink = 0;
+			if (showFuelAlarm)
 			{
 				primitives_ClippedFrameRect16(*surface, rect, color);
 				InflateRect(&rect, -1, -1);
 				primitives_ClippedFrameRect16(*surface, rect, color);
 			}
-			if (isLocked) {
-				surface->Unlock(buffer);
-			}
-		}
-		if (fuelPercent < 0.2)
-		{
-			if (GetTickCount() > nextBlink)
+			if (GetTickCount() > nextFuelBlink)
 			{
-				show = !show;
-				nextBlink = GetTickCount() + 500;
+				showFuelAlarm = !showFuelAlarm;
+				nextFuelBlink = GetTickCount() + 500;
 			}
 		}
-		else {
-			show = true;
+		if (isLocked) {
+			surface->Unlock(buffer);
 		}
 	}
 	return AUI_ERRCODE_OK;
-}
-
-void UnitControlPanel::MultiButtonActionCallback(aui_Control * control, uint32 action, uint32 data, void * cookie)
-{
-	if (action != static_cast<uint32>(AUI_BUTTON_ACTION_EXECUTE)) {
-		return;
-	}
-
-	std::pair<UnitControlPanel*, uint32> *multiPair = static_cast<std::pair<UnitControlPanel*, uint32>*>(cookie);
-	Army army(multiPair->second);
-	if (army.IsValid())
-	{
-		Unit unit = army[0];
-		if (unit.IsValid())
-		{
-			g_selected_item->SetSelectUnit(unit);
-			multiPair->first->SetSelectionMode(ARMY_SELECTION);
-		}
-	}
 }
 
 void UnitControlPanel::ArmyButtonActionCallback(aui_Control * control, uint32 action, uint32 data, void * cookie)
@@ -1174,6 +1150,41 @@ AUI_ERRCODE UnitControlPanel::DrawCargoCallback(ctp2_Static * control, aui_Surfa
 	return AUI_ERRCODE_OK;
 }
 
+class UnitControlPanel::SelectUnitAction : public aui_Action
+{
+public:
+	SelectUnitAction(const Unit & unit)
+	: aui_Action(),
+		m_unit(unit)
+	{
+	}
+
+	virtual void Execute(aui_Control * control, uint32 action, uint32 data)
+	{
+		g_selected_item->SetSelectUnit(m_unit);
+	}
+
+private:
+	Unit m_unit;
+};
+
+void UnitControlPanel::MultiButtonActionCallback(aui_Control * control, uint32 action, uint32 data, void * cookie)
+{
+	if (action != static_cast<uint32>(AUI_BUTTON_ACTION_EXECUTE)) {
+		return;
+	}
+
+	Army army((uint32) cookie);
+	if (army.IsValid())
+	{
+		Unit unit = army[0];
+		if (unit.IsValid())
+		{
+			g_c3ui->AddAction(new SelectUnitAction(unit));
+		}
+	}
+}
+
 class UnitControlPanel::SetSelectionAction : public aui_Action
 {
 public:
@@ -1203,6 +1214,14 @@ void UnitControlPanel::SingleSelectionArmySymbolImageCallback(ctp2_Static * cont
 {
 	UnitControlPanel * panel = static_cast<UnitControlPanel *>(cookie);
 	g_c3ui->AddAction(new SetSelectionAction(panel, ARMY_SELECTION));
+}
+
+void UnitControlPanel::StackSymbolImageCallback(ctp2_Static * control, aui_MouseEvent * event, void * cookie)
+{
+	UnitControlPanel * panel = static_cast<UnitControlPanel *>(cookie);
+	if (panel->m_currentMode == SINGLE_SELECTION || panel->m_currentMode == ARMY_SELECTION) {
+		g_c3ui->AddAction(new SetSelectionAction(panel, MULTIPLE_SELECTION));
+	}
 }
 
 void UnitControlPanel::TransportImageCallback(ctp2_Static * control, aui_MouseEvent * event, void * cookie)
@@ -1250,6 +1269,7 @@ void UnitControlPanel::UpdateSingleSelectionSymbols()
 			m_singleSelectionCargoSymbol->Hide();
 		}
 	}
+	SetVisibilityStackSymbol(m_singleSelectionStackSymbol);
 }
 
 void UnitControlPanel::LoadImage00(ctp2_Static * control)
@@ -1269,5 +1289,16 @@ void UnitControlPanel::UnsetCargoButtons()
 {
 	for(sint32 index = 0; index < k_MAX_CP_CARGO; index++) {
 		m_transportSelectionButton[index]->SetState(false);
+	}
+}
+
+void UnitControlPanel::SetVisibilityStackSymbol(ctp2_Static * stackSymbol)
+{
+	CellUnitList unitList;
+	g_theWorld->GetCell(g_selected_item->GetCurSelectPos())->GetArmy(unitList);
+	if (unitList.Num() > 1 && SelectionContainsMultipleArmies()) {
+		stackSymbol->Show();
+	} else {
+		stackSymbol->Hide();
 	}
 }
