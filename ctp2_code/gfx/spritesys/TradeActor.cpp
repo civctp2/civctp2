@@ -39,28 +39,34 @@
 #include "ResourceRecord.h"
 #include "maputils.h"
 #include "tiledmap.h"
+#include "profileDB.h"
 
 extern SpriteGroupList * g_goodSpriteGroupList;
 
 TradeActor::TradeActor(TradeRoute newRoute)
 :
-	Actor             (),
-	m_routeID         (newRoute),
-	m_routeType       (ROUTE_TYPE_RESOURCE),
-	m_routeResource   (0),
-	m_routePath       (NULL),
-	m_sourcePosID     (0),
-	m_currentPosID    (0),
-	m_destPosID       (0),
-	m_currentPos      (MapPoint(0,0)),
-	m_nextPos         (MapPoint(0, 0)),
-	m_goodSpriteGroup (NULL),
-	m_facing          (k_DEFAULTSPRITEFACING),
-	m_idleAnim        (NULL),
-	m_curAction       (NULL),
-	m_curGoodAction   (GOODACTION_NONE)
+	Actor               (),
+	m_routeID           (newRoute),
+	m_spriteID          (0),
+	m_routePath         (NULL),
+	m_sourcePosID       (0),
+	m_currentPosID      (0),
+	m_destPosID         (0),
+	m_currentPos        (MapPoint(0,0)),
+	m_nextPos           (MapPoint(0, 0)),
+	m_goodSpriteGroup   (NULL),
+	m_facing            (k_DEFAULTSPRITEFACING),
+	m_idleAnim          (NULL),
+	m_curAction         (NULL),
+	m_curGoodAction     (GOODACTION_NONE),
+	m_loadType          (LOADTYPE_NONE),
+	m_nextGoodAnimation (0)
 {
-	m_routeID.GetSourceResource(m_routeType, m_routeResource);
+	ROUTE_TYPE routeType     = ROUTE_TYPE_RESOURCE;
+	sint32     routeResource = 0;
+	m_routeID.GetSourceResource(routeType, routeResource);
+
+	m_spriteID = g_theResourceDB->Get(routeResource)->GetSpriteID();
 
 	m_routePath    = m_routeID.GetPath();
 	m_sourcePosID  = 0;
@@ -68,16 +74,6 @@ TradeActor::TradeActor(TradeRoute newRoute)
 	m_destPosID    = m_routePath->Num() - 1;
 	m_currentPos   = m_routePath->Get(m_currentPosID);
 	m_nextPos      = LookAtNextPos();
-
-	Assert(g_goodSpriteGroupList);
-
-	sint32 index = g_theResourceDB->Get(m_routeResource)->GetSpriteID();
-	m_goodSpriteGroup = (GoodSpriteGroup *)
-			g_goodSpriteGroupList->GetSprite(index, GROUPTYPE_GOOD, LOADTYPE_FULL,(GAME_ACTION)0);
-	if (!m_goodSpriteGroup) {
-		m_goodSpriteGroup = (GoodSpriteGroup *)
-			g_goodSpriteGroupList->GetSprite(index, GROUPTYPE_GOOD, LOADTYPE_BASIC, (GAME_ACTION) 0);
-	}
 
 	AddIdle();
 }
@@ -87,13 +83,25 @@ TradeActor::~TradeActor()
 	// m_routePath is reference and owned by m_routeID
 	// m_idleAnim is reference and is owned by m_curAction
 	delete m_curAction;
+	g_goodSpriteGroupList->ReleaseSprite(m_spriteID, m_loadType);
 }
 
 void TradeActor::AddIdle(void)
 {
+	LoadSprites();
+
 	// Copy of animation is made to ensure smooth animations within the movement
 	//   animation is owned by action so it has to be (re-)created
-	m_idleAnim = m_idleAnim ? Anim::CreateLooping(*m_idleAnim) : CreateAnim(GOODACTION_IDLE);
+	if (!m_idleAnim || (m_idleAnim->IsFinished() && GetTickCount() > m_nextGoodAnimation)) {
+		m_idleAnim = CreateAnim(GOODACTION_IDLE);
+	}
+	else
+	{
+		m_idleAnim = Anim::CreateSequential(*m_idleAnim);
+		if (!m_idleAnim->IsFinished()) {
+			m_nextGoodAnimation = GetTickCount() + 5000 + rand() % 3000;
+		}
+	}
 	delete m_curAction;
 
 	m_currentPos = GetNextPos();
@@ -152,7 +160,7 @@ Anim * TradeActor::CreateAnim(GOODACTION action) const
 		Assert(animation);
 	}
 
-	return animation ? Anim::CreateLooping(*animation) : NULL;
+	return animation ? Anim::CreateSequential(*animation) : NULL;
 }
 
 void TradeActor::Draw(const RECT & paintRect) const
@@ -240,4 +248,27 @@ void TradeActor::GetBoundingRect(RECT * rect, const POINT & drawPos) const
 
 	POINT hotPoint = m_goodSpriteGroup->GetHotPoint(m_curGoodAction);
 	OffsetRect(rect, drawPos.x - (sint32)(hotPoint.x * scale), drawPos.y - (sint32)(hotPoint.y * scale));
+}
+
+void TradeActor::LoadSprites()
+{
+	LOADTYPE loadType = g_theProfileDB->IsGoodAnim() ? LOADTYPE_FULL : LOADTYPE_BASIC;
+	if (loadType != m_loadType)
+	{
+		Assert(g_goodSpriteGroupList);
+
+		if (m_loadType != LOADTYPE_NONE) {
+			g_goodSpriteGroupList->ReleaseSprite(m_spriteID, m_loadType);
+		}
+
+		m_loadType = loadType;
+		m_goodSpriteGroup = (GoodSpriteGroup *)
+				g_goodSpriteGroupList->GetSprite(m_spriteID, GROUPTYPE_GOOD, m_loadType, (GAME_ACTION) 0);
+		if (!m_goodSpriteGroup && loadType == LOADTYPE_FULL)
+		{
+			m_loadType = LOADTYPE_BASIC;
+			m_goodSpriteGroup = (GoodSpriteGroup *)
+					g_goodSpriteGroupList->GetSprite(m_spriteID, GROUPTYPE_GOOD, m_loadType, (GAME_ACTION) 0);
+		}
+	}
 }
