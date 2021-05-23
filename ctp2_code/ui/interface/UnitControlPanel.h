@@ -58,7 +58,6 @@ private:
 	void UpdateSingleSelectionSymbols();
 
 	static void UnitDisplayGroupCallback(aui_Region * region, void * userData);
-	static void PrevUnitButtonActionCallback(aui_Control * control, uint32 action, uint32 data, void * cookie);
 	static void NextUnitButtonActionCallback(aui_Control * control, uint32 action, uint32 data, void * cookie);
 	static void MultiButtonActionCallback(aui_Control * control, uint32 action, uint32 data, void * cookie);
 	static void ArmyButtonActionCallback(aui_Control * control, uint32 action, uint32 data, void * cookie);
@@ -84,7 +83,6 @@ private:
 
 	ctp2_Static * m_unitDisplayGroup;
 
-	ctp2_Button * m_unitListPreviousButton;
 	ctp2_Static * m_unitListLabel;
 	ctp2_Button * m_unitListNextButton;
 

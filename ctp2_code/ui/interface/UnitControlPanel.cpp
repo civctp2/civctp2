@@ -68,8 +68,6 @@ static MBCHAR * ARMY_SYMBOL  = "UPIC21.tga";
 UnitControlPanel::UnitControlPanel(MBCHAR * ldlBlock) :
 m_unitDisplayGroup(static_cast<ctp2_Static*>(aui_Ldl::GetObject(ldlBlock,
 		"UnitTab.TabPanel.UnitSelectionDisplay"))),
-m_unitListPreviousButton(static_cast<ctp2_Button*>(aui_Ldl::GetObject(ldlBlock,
-		"UnitTab.TabPanel.UnitSelectionDisplay.UnitSelect.Previous"))),
 m_unitListLabel(static_cast<ctp2_Static*>(aui_Ldl::GetObject(ldlBlock,
 		"UnitTab.TabPanel.UnitSelectionDisplay.UnitSelect.Label"))),
 m_unitListNextButton(static_cast<ctp2_Button*>(aui_Ldl::GetObject(ldlBlock,
@@ -118,7 +116,6 @@ m_cellUnitList(),
 m_cellArmyList()
 {
 	Assert(m_unitDisplayGroup);
-	Assert(m_unitListPreviousButton);
 	Assert(m_unitListLabel);
 	Assert(m_unitListNextButton);
 	Assert(m_singleSelectionDisplay);
@@ -195,7 +192,6 @@ m_cellArmyList()
 	m_singleSelectionArmySymbol->SetImageMapCallback(SingleSelectionArmySymbolImageCallback, this);
 	m_transportSelectionIcon->SetImageMapCallback(TransportSelectionImageCallback, this);
 
-	m_unitListPreviousButton->SetActionFuncAndCookie(PrevUnitButtonActionCallback, this);
 	m_unitListNextButton->SetActionFuncAndCookie(NextUnitButtonActionCallback, this);
 
 	SetSelectionMode(MULTIPLE_SELECTION);
@@ -816,27 +812,6 @@ void UnitControlPanel::UnitDisplayGroupCallback(aui_Region * region, void * user
 {
 	UnitControlPanel * panel = static_cast<UnitControlPanel*>(userData);
 	panel->SetSelectionMode(panel->m_currentMode);
-}
-
-void UnitControlPanel::PrevUnitButtonActionCallback(aui_Control * control, uint32 action, uint32 data, void * cookie)
-{
-	if (action != static_cast<uint32>(AUI_BUTTON_ACTION_EXECUTE)) {
-		return;
-	}
-
-	UnitControlPanel * panel = static_cast<UnitControlPanel*>(cookie);
-	switch (panel->m_currentMode)
-	{
-		case SINGLE_SELECTION:
-		case ARMY_SELECTION:
-			panel->SetSelectionMode(MULTIPLE_SELECTION);
-			break;
-
-		case MULTIPLE_SELECTION:
-		default:
-			g_selected_item->NextUnmovedUnit();
-			break;
-	}
 }
 
 void UnitControlPanel::NextUnitButtonActionCallback(aui_Control * control, uint32 action, uint32 data, void * cookie)

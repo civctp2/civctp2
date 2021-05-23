@@ -358,31 +358,6 @@ template UNIT_LABEL_SPINNER:CTP2_STATIC_GROUP {
 		string	image12				"uppd02du.tga"
 	}
 
-	# Previous.
-	Previous:CTP2_GENERIC_ARROW_BUTTON {
-		# Location.
-#		int		xpix		0
-		int		xpix		24
-		int		ypix		0
-
-		# Background.
-		string	image00				"uptg20j.tga"
-		string	image10				"uptg20j.tga"
-		string	image20				"uptg20j.tga"
-		string	image30				"uptg20j.tga"
-
-#		string	image00				"upsp01au.tga"
-#		string	image10				"upsp01ah.tga"
-#		string	image20				"upsp01ad.tga"
-#		string	image30				"upsp01ax.tga"
-
-		# Tooltip
-#		string	tipwindow	"TOOLTIP_UNIT_PREV_UNIT_BUTTON"
-#		string	statustext	"STATUSBAR_UNIT_PREV_UNIT_BUTTON"
-		string	tipwindow	"TOOLTIP_UNIT_NEXT_UNIT_BUTTON"
-		string	statustext	"STATUSBAR_UNIT_NEXT_UNIT_BUTTON"
-	}
-
 	# Next.
 	Next:CTP2_GENERIC_ARROW_BUTTON {
 		# Location.
