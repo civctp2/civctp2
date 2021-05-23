@@ -24,13 +24,13 @@
 //
 // Modifications from the original Activision code:
 //
-// - Added CalcTerrainFreightCost by Martin Gühmann
+// - Added CalcTerrainFreightCost by Martin GÃ¼hmann
 // - Added GetFoodFromTerrain, GetShieldsFromTerrain and GetGoldFromTerrain
 //   with a hypothetical terrain type argument to check whether there is a
-//   a good terraforming option. - Sep. 21st 2004 Martin Gühmann
-// - Moved some Upgrade functionality from ArmyData. (Dec 24th 2006 Martin Gühmann)
+//   a good terraforming option. - Sep. 21st 2004 Martin GÃ¼hmann
+// - Moved some Upgrade functionality from ArmyData. (Dec 24th 2006 Martin GÃ¼hmann)
 // - Added methods to retrieve the future terrain move costs of tile
-//   improvments under construction. (17-Jan-2008 Martin Gühmann)
+//   improvments under construction. (17-Jan-2008 Martin GÃ¼hmann)
 //
 //----------------------------------------------------------------------------
 
@@ -232,7 +232,7 @@ public:
 	sint32 GetNumUnits() const;
 	sint32 GetNumFortifiedUnits() const;
 	void GetArmy(CellUnitList &al);
-	CellUnitList *UnitArmy();
+	CellUnitList * UnitArmy() const;
 	Unit &AccessUnit(sint32 index);
 
 	bool HasRiver() const { return (m_env & k_MASK_ENV_RIV_CUR) != 0; }

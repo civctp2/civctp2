@@ -37,7 +37,6 @@
 #include "c3.h"
 #include "TurnCnt.h"
 
-#include "A_Star_Heuristic_Cost.h"
 #include "AgreementPool.h"          // g_theAgreementPool
 #include "AICause.h"
 #include "Barbarians.h"
@@ -331,8 +330,6 @@ void TurnCount::BeginNewRound()
 	sint32 i;
 
 	m_round++;
-
-	g_theWorld->A_star_heuristic->Update();
 
 #ifdef _DEBUG
     if (g_theDiplomacyLog) {

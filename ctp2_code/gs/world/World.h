@@ -80,7 +80,6 @@ class UnitDynamicArray;
 class GoodyHut;
 class CellUnitList;
 class Army;
-class A_Star_Heuristic_Cost;
 class TerrainRecord;
 
 typedef Cell * CellPtr;
@@ -169,8 +168,6 @@ class World : public CityRadiusCallback
 
 public:
 	void SetCapitolDistanceDirtyFlags(uint32 flags) {m_capitolDistanceDirtyFlags |= flags;}
-
-	A_Star_Heuristic_Cost * A_star_heuristic;
 
     World(const MapPoint & m, const int xw, const int yw);
     World(CivArchive &archive, BOOL fromMapFile = FALSE);

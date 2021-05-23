@@ -2487,12 +2487,8 @@ void ToggleMapColorCommand::Execute(sint32 argc, char **argv)
 #endif
 }
 
-bool g_old_heuristic = false;
-
 void ToggleHeuristicCommand::Execute(sint32 argc, char **argv)
 {
-
-    g_old_heuristic = !g_old_heuristic;
 }
 
 void GetAdvanceCommand::Execute(sint32 argc, char **argv)

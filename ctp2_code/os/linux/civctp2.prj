@@ -975,7 +975,6 @@ module.include.files=\
 	../../../ctp2_code/robot/pathing/astarpnt.h\
 	../../../ctp2_code/robot/pathing/AstarQ.h\
 	../../../ctp2_code/robot/pathing/TestP.h\
-	../../../ctp2_code/robot/pathing/A_Star_Heuristic_Cost.h\
 	../../../ctp2_code/robot/pathing/TradeAstar.h\
 	../../../ctp2_code/robot/pathing/robotastar2.h\
 	../../../ctp2_code/sound/ear.h\
@@ -1979,7 +1978,6 @@ module.source.files=\
 	../../../ctp2_code/robot/pathing/AstarPnt.cpp\
 	../../../ctp2_code/robot/pathing/TradeAstar.cpp\
 	../../../ctp2_code/robot/pathing/AstarQ.cpp\
-	../../../ctp2_code/robot/pathing/A_Star_Heuristic_Cost.cpp\
 	../../../ctp2_code/robot/pathing/AVLHeap.cpp\
 	../../../ctp2_code/robot/pathing/astar.cpp\
 	../../../ctp2_code/robot/pathing/TestP.cpp\

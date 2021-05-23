@@ -28,19 +28,18 @@
 //
 // Modifications from the original Activision code:
 //
-// - X-wrap added to A* heuristics costs
-// - Implemented CalcTerrainFreightCost by Martin G�hmann
+// - Implemented CalcTerrainFreightCost by Martin Gühmann
 // - Resolved ambiguous sqrt call.
 // - Standardised min/max usage.
 // - Repaired memory leaks.
 // - Force a good value recalculation on reload if the ressouce database was
-//   modified (goods added removed). - May 19th 2005 Martin G�hmann
+//   modified (goods added removed). - May 19th 2005 Martin Gühmann
 // - Wrap handling improved
 // - Using /importmap to import a text map no longer causes the river mouths
 //   to be deleted - 2005-07-01 Shaun Dove
-// - Initialized local variables. (Sep 9th 2005 Martin G�hmann)
-// - Replaced old map database by new one. (27-Mar-2007 Martin G�hmann)
-// - Replaced old const database by new one. (5-Aug-2007 Martin G�hmann)
+// - Initialized local variables. (Sep 9th 2005 Martin Gühmann)
+// - Replaced old map database by new one. (27-Mar-2007 Martin Gühmann)
+// - Replaced old const database by new one. (5-Aug-2007 Martin Gühmann)
 // - Added a no goody huts option (20-Mar-2009 Maq)
 //
 //----------------------------------------------------------------------------
@@ -49,7 +48,6 @@
 #include "World.h"                  // own declarations, g_theWorld
 #include "worldutils.h"
 
-#include "A_Star_Heuristic_Cost.h"
 #include "AICause.h"
 #include <algorithm>
 #if defined(DUMP_TERRAIN_HEIGHT_MAPS)
@@ -128,8 +126,7 @@ World::World(const MapPoint & m, const int xw, const int yw)
     m_goodValue             (NULL),
     m_num_civ_starts        (0),
     m_current_plugin        (NULL),
-    m_distanceQueue         (NULL),
-    A_star_heuristic        (NULL)
+    m_distanceQueue         (NULL)
 {
     Assert(0 < m_size.x);
     Assert(0 < m_size.y);
@@ -156,14 +153,6 @@ void World::CreateTheWorld(MapPoint player_start_list[k_MAX_PLAYERS],
 
 		SetAllMoveCost();
 
-
-		delete A_star_heuristic;
-		A_star_heuristic = new A_Star_Heuristic_Cost
-								(m_size.y,
-								 m_size.x,
-								 m_isYwrap ? true : false,
-								 m_isXwrap ? true : false
-								);
 		m_continents_are_numbered= FALSE;
 
 		NumberContinents();
@@ -233,8 +222,7 @@ World::World(CivArchive &archive, BOOL fromMapFile)
     m_goodValue             (NULL),
     m_num_civ_starts        (0),
     m_current_plugin        (NULL),
-    m_distanceQueue         (NULL),
-    A_star_heuristic        (NULL)
+    m_distanceQueue         (NULL)
 //  m_isXwrap, m_isYwrap, m_size: set by Serialize
 {
 	if ( fromMapFile )
@@ -243,13 +231,6 @@ World::World(CivArchive &archive, BOOL fromMapFile)
 	    Serialize(archive) ;
 
 	g_mp_size = m_size;
-
-	A_star_heuristic = new A_Star_Heuristic_Cost
-							(m_size.y,
-							 m_size.x,
-							 IsYwrap(),
-							 IsXwrap()
-							);
 }
 
 World::~World()
@@ -258,7 +239,6 @@ World::~World()
                 // m_land_next_too_water, m_water_size, m_land_size,
                 // m_tileInfoStorage
 	delete m_distanceQueue;
-	delete A_star_heuristic;
 
 	delete [] m_goodValue;
 
