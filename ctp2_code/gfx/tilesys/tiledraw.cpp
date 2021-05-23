@@ -1097,8 +1097,8 @@ sint32 TiledMap::DrawBlendedTile(aui_Surface *surface, const MapPoint &pos,sint3
         if (!surface) return 0;
     }
 
-    if (xpos >= surface->Width() - k_TILE_PIXEL_WIDTH) return 0;
-    if (ypos >= surface->Height() - k_TILE_PIXEL_HEIGHT) return 0;
+    if (xpos > surface->Width() - k_TILE_PIXEL_WIDTH) return 0;
+    if (ypos > surface->Height() - k_TILE_PIXEL_HEIGHT) return 0;
 
 	TileInfo * tileInfo = GetTileInfo(pos);
 	Assert(tileInfo);
