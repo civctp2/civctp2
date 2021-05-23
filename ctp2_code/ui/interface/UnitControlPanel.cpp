@@ -820,23 +820,7 @@ void UnitControlPanel::NextUnitButtonActionCallback(aui_Control * control, uint3
 		return;
 	}
 
-	UnitControlPanel * panel = static_cast<UnitControlPanel*>(cookie);
-	switch (panel->m_currentMode)
-	{
-		case SINGLE_SELECTION:
-		case ARMY_SELECTION:
-			if (SelectionContainsMultipleArmies()) {
-				panel->SetSelectionMode(MULTIPLE_SELECTION);
-			} else {
-				g_selected_item->NextUnmovedUnit();
-			}
-			break;
-
-		case MULTIPLE_SELECTION:
-		default:
-			g_selected_item->NextUnmovedUnit();
-			break;
-	}
+	g_selected_item->NextUnmovedUnit();
 }
 
 bool UnitControlPanel::SelectionContainsMultipleArmies()
