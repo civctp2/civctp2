@@ -25,24 +25,24 @@
 //
 // Modifications from the original Activision code:
 //
-// - Modified by Martin Gühmann on October the 28th: line added in
+// - Modified by Martin GÃ¼hmann on October the 28th: line added in
 //   sint32 GreatLibrary::UpdateList( DATABASE database )
 //   to make sure that also goods with the GLHidden flag aren't shown.
 // - Start the great library with the current research project of the player.
 // - Clears the research goal of the player, when an item is selected that
-//   enabling advance has been researched already, by Martin Gühmann.
-// - The tech goal can now also set for tile improvements, by Martin Gühmann.
+//   enabling advance has been researched already, by Martin GÃ¼hmann.
+// - The tech goal can now also set for tile improvements, by Martin GÃ¼hmann.
 // - Handle Japanese input data, by t.s. (2003.12).
 // - Memory leaks repaired.
 // - Increased maximum library text size to support the German version.
 // - Exported database name size max.
 // - Added function to look up an item name on creation index.
-// - Initialized local variables. (Sep 9th 2005 Martin Gühmann)
+// - Initialized local variables. (Sep 9th 2005 Martin GÃ¼hmann)
 // - Fixed display of topics after the fixing of the alphanumerical
-//   indexing of the databases. (Sep 13th 2005 Martin Gühmann)
-// - Search now searches now in the topic names, prerq and vari texts. (Sep 13th 2005 Martin Gühmann)
-// - Replaced old concept database by new one. (31-Mar-2007 Martin Gühmann)
-// - Search does not find items that are supposed to be hidden. (21-Apr-2007 Martin Gühmann)
+//   indexing of the databases. (Sep 13th 2005 Martin GÃ¼hmann)
+// - Search now searches now in the topic names, prerq and vari texts. (Sep 13th 2005 Martin GÃ¼hmann)
+// - Replaced old concept database by new one. (31-Mar-2007 Martin GÃ¼hmann)
+// - Search does not find items that are supposed to be hidden. (21-Apr-2007 Martin GÃ¼hmann)
 //
 //----------------------------------------------------------------------------
 //
@@ -104,6 +104,7 @@
 #include "videoutils.h"
 #include "WonderRecord.h"
 #include "wonderutil.h"
+#include "AgeRecord.h"
 
 extern sint32		g_ScreenWidth;
 extern sint32		g_ScreenHeight;
@@ -1673,7 +1674,11 @@ void GreatLibrary::HandleListButton
 		if (item)
 		{
 		    int const   index = reinterpret_cast<int>(item->GetUserData());
-    		SetLibrary(GetIndexFromAlpha(index, m_listDatabase), m_listDatabase);
+		    if (index >= 0) {
+			    SetLibrary(GetIndexFromAlpha(index, m_listDatabase), m_listDatabase);
+		    } else {
+			    m_topics_list->SelectItem(m_topics_list->GetSelectedItemIndex() + 1);
+		    }
         }
     }
 }
@@ -1837,16 +1842,7 @@ void GreatLibrary::UpdateList( DATABASE database )
 		break;
 
 	case DATABASE_ADVANCES:
-
-		for (index = 0; index < g_theAdvanceDB->NumRecords(); index++)
-		{
-			if(HIDE(g_theAdvanceDB, index)) continue;
-
-			Add_Item_To_Topics_List(g_theStringDB->GetNameStr(g_theAdvanceDB->GetName(
-						g_theAdvanceDB->m_alphaToIndex[ index ])), index);
-
-		}
-
+		AddAdvancesBasedOnAge();
 		break;
 
 	case DATABASE_TERRAIN:
@@ -2131,7 +2127,10 @@ void GreatLibrary::Add_Item_To_Topics_List
 	Assert(m_topics_list);
 	if(!m_topics_list) return;
 
-	ctp2_ListItem *item = (ctp2_ListItem *)aui_Ldl::BuildHierarchyFromRoot("GreatLibraryTopicItem");
+
+	ctp2_ListItem *item = (index == -1)
+			? (ctp2_ListItem *)aui_Ldl::BuildHierarchyFromRoot("GreatLibraryHeaderItem")
+			: (ctp2_ListItem *)aui_Ldl::BuildHierarchyFromRoot("GreatLibraryTopicItem");
 	Assert(item);
 	if(!item) return;
 
@@ -2152,4 +2151,70 @@ void GreatLibrary::FixTabs()
 	m_tabGroup->SelectTab(m_gameplayTab);
 
 	m_tabGroup->SelectTab(curTab->IsDisabled() ? m_gameplayTab : curTab);
+}
+
+class AdvanceSortRecord {
+public:
+	AdvanceSortRecord()
+	: m_age(-1),
+		m_name(NULL),
+		m_index(-1)
+	{}
+
+	void Initialize(sint32 age, const MBCHAR * name, sint32 index)
+	{
+		m_age   = age;
+		m_name  = name;
+		m_index = index;
+	}
+
+	sint32 GetAge() const {
+		return m_age;
+	}
+
+	const MBCHAR * GetName() const {
+		return m_name;
+	}
+
+	sint32 GetIndex() const {
+		return m_index;
+	}
+
+	bool operator < (const AdvanceSortRecord & other) const
+	{
+		if (m_age != other.m_age) {
+			return (m_age < other.m_age);
+		} else {
+			return _stricoll(m_name, other.m_name) < 0;
+		}
+	}
+
+private:
+	sint32         m_age;
+	const MBCHAR * m_name;
+	sint32         m_index;
+};
+
+void GreatLibrary::AddAdvancesBasedOnAge()
+{
+	std::vector<AdvanceSortRecord> advances(g_theAdvanceDB->NumRecords());
+	for (sint32 index = 0; index < g_theAdvanceDB->NumRecords(); index++)
+	{
+		const AdvanceRecord * advanceRecord = g_theAdvanceDB->Get(g_theAdvanceDB->m_alphaToIndex[index]);
+		advances[index].Initialize(advanceRecord->GetAgeIndex(), g_theStringDB->GetNameStr(advanceRecord->GetName()),
+				index);
+	}
+
+	// Sort advances using std::sort
+	std::sort(advances.begin(), advances.end());
+
+	sint32 currentAge = -1;
+	for (const auto& advance : advances)
+	{
+		if (advance.GetAge() != currentAge) {
+			Add_Item_To_Topics_List(g_theAgeDB->GetNameStr(advance.GetAge()), -1);
+			currentAge = advance.GetAge();
+		}
+		Add_Item_To_Topics_List(advance.GetName(), advance.GetIndex());
+	}
 }

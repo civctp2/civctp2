@@ -29,7 +29,7 @@
 // - Increased maximum library text size to support the German version.
 // - Exported database name size max.
 // - Added function to look up an item name on creation index.
-// - Added alpha <-> index functions. (Sep 13th 2005 Martin Gühmann)
+// - Added alpha <-> index functions. (Sep 13th 2005 Martin GÃ¼hmann)
 //
 //----------------------------------------------------------------------------
 //
@@ -237,10 +237,11 @@ public:
 	bool IsHidden(sint32 index, DATABASE theDatabase) const;
 
 private:
-    void Initialize(MBCHAR const * windowBlock);
+	void Initialize(MBCHAR const * windowBlock);
+	void AddAdvancesBasedOnAge();
 
-    friend void TechListItem::Update(void);
-    friend bool greatlibrary_Initialize(sint32 theMode, bool sci);
+	friend void TechListItem::Update(void);
+	friend bool greatlibrary_Initialize(sint32 theMode, bool sci);
 
 	ctp2_Button		*m_setGoalButton;
 

@@ -654,12 +654,25 @@ GreatLibraryTopicItem:CTP2_LIST_ITEM {
 
 	box:CTP2_STANDARD_FONT {
 		string objecttype "ctp2_static"
-		int widthpix 160
-		int heightpix 20
+
+		int    widthpix   160
+		int    heightpix  20
 	}
 }
 
+GreatLibraryHeaderItem:CTP2_LIST_ITEM {
+	int widthpix 160
+	int heighpix 20
 
+	box:CTP_GREY_TITLE_FONT {
+		string objecttype    "ctp2_static"
+
+		int    widthpix      160
+		int    heightpix     20
+
+		int    underlinefont 1
+	}
+}
 
 $
 
