@@ -56,6 +56,7 @@ private:
 	void GiveOrder(OrderRecord *order);
 	void UnsetCargoButtons();
 	void UpdateSingleSelectionSymbols();
+	void UpdateMultiSelectionArmySymbols();
 
 	static void UnitDisplayGroupCallback(aui_Region * region, void * userData);
 	static void NextUnitButtonActionCallback(aui_Control * control, uint32 action, uint32 data, void * cookie);
@@ -104,6 +105,7 @@ private:
 	ctp2_Static * m_multipleSelectionDisplay;
 	ctp2_Button * m_multipleSelectionButton[NUMBER_OF_MULTIPLE_SELECTION_BUTTONS];
 	ctp2_Static * m_multipleSelectionHealth[NUMBER_OF_MULTIPLE_SELECTION_BUTTONS];
+	ctp2_Static * m_multipleSelectionArmySymbol[NUMBER_OF_MULTIPLE_SELECTION_BUTTONS];
 
 	static const sint32 NUMBER_OF_ARMY_SELECTION_BUTTONS = 12;
 	ctp2_Static * m_armySelectionDisplay;

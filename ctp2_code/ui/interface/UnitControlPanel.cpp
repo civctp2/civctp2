@@ -63,8 +63,6 @@
 
 extern C3UI *g_c3ui;
 
-static MBCHAR * ARMY_SYMBOL  = "UPIC21.tga";
-
 UnitControlPanel::UnitControlPanel(MBCHAR * ldlBlock) :
 m_unitDisplayGroup(static_cast<ctp2_Static*>(aui_Ldl::GetObject(ldlBlock,
 		"UnitTab.TabPanel.UnitSelectionDisplay"))),
@@ -144,6 +142,8 @@ m_cellArmyList()
 				static_cast<ctp2_Button*>(aui_Ldl::GetObject(ldlBlock, multiButtonName));
 		m_multipleSelectionHealth[multiIndex] =
 				(ctp2_Static *)m_multipleSelectionButton[multiIndex]->GetChildByIndex(0);
+		m_multipleSelectionArmySymbol[multiIndex] =
+				(ctp2_Static *)m_multipleSelectionButton[multiIndex]->GetChildByIndex(1);
 
 		Assert(m_multipleSelectionButton[multiIndex]);
 	}
@@ -288,6 +288,11 @@ void UnitControlPanel::DoSetSelectionMode(UnitSelectionMode mode)
 
 	if (g_selected_item) {
 		Update();
+	}
+
+	// This has to be executed after Update
+	if (m_currentMode == MULTIPLE_SELECTION) {
+		UpdateMultiSelectionArmySymbols();
 	}
 }
 
@@ -458,7 +463,7 @@ void UnitControlPanel::UpdateMultipleSelectionDisplay()
 				if (army.IsValid() && army.Num() == 1)
 				{
 					m_multipleSelectionHealth[multiIndex]->SetDrawCallbackAndCookie(HealthBarActionCallback,
-							(void *)army[0].m_id);
+							(void *) army[0].m_id);
 				}
 				else {
 					m_multipleSelectionHealth[multiIndex]->SetDrawCallbackAndCookie(NULL, NULL);
@@ -467,8 +472,6 @@ void UnitControlPanel::UpdateMultipleSelectionDisplay()
 
 				m_multipleSelectionButton[multiIndex]->ExchangeImage(0, 0,
 						unit.GetDBRec()->GetDefaultIcon()->GetIcon());
-				m_multipleSelectionButton[multiIndex]->ExchangeImage(1, 0,
-						(army.IsValid() && army.Num() > 1) ?  ARMY_SYMBOL : NULL);
 				multiIndex++;
 			}
 		}
@@ -478,7 +481,6 @@ void UnitControlPanel::UpdateMultipleSelectionDisplay()
 			m_multipleSelectionHealth[multiIndex]->SetDrawCallbackAndCookie(NULL, NULL);
 			m_multipleSelectionButton[multiIndex]->Enable(false);
 			m_multipleSelectionButton[multiIndex]->ExchangeImage(0, 0, NULL);
-			m_multipleSelectionButton[multiIndex]->ExchangeImage(1, 0, NULL);
 			multiIndex++;
 		}
 	}
@@ -1248,6 +1250,26 @@ void UnitControlPanel::UnsetCargoButtons()
 {
 	for(sint32 index = 0; index < k_MAX_CP_CARGO; index++) {
 		m_transportSelectionButton[index]->SetState(false);
+	}
+}
+
+void UnitControlPanel::UpdateMultiSelectionArmySymbols()
+{
+	for (sint32 index = 0; index < NUMBER_OF_MULTIPLE_SELECTION_BUTTONS; index++)
+	{
+		bool show = false;
+
+		aui_Control::ControlActionCallback * callback = m_multipleSelectionButton[index]->GetActionFunc();
+		if (callback) {
+			Army army((uint32) (m_multipleSelectionButton[index]->GetCookie()));
+			show = (army.IsValid() && army.Num() > 1);
+		}
+
+		if (show) {
+			m_multipleSelectionArmySymbol[index]->Show();
+		} else {
+			m_multipleSelectionArmySymbol[index]->Hide();
+		}
 	}
 }
 

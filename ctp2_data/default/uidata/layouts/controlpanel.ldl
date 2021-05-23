@@ -93,28 +93,35 @@ template ICON_VALUE_PAIR:CTP2_STATIC_GROUP {
 # 30x40 Image Button for Unit Tab.
 template UNIT_BUTTON_MEDIUM_SIZE:CTP2_BUTTON_BASE {
 	# Image layout.
-	int		numberoflayers		2
-	int		imagesperlayer		1
+	int    numberoflayers 1
+	int    imagesperlayer 1
 
-	string  imagebltflag10 "chromakey"
-	int xpix10 0
-	int ypix10 0
-	int widthpix10 20
-	int heightpix10 20
+	string imagebltflag10 "chromakey"
+
+	int    xpix10         0
+	int    ypix10         0
+	int    widthpix10     20
+	int    heightpix10    20
 
 	# Background.
-	bool	layeralways0		true
-	bool    layeralways1        true
+	bool   layeralways0   true
 
 	# Image size.
-	int		widthpix			32
-	int		heightpix			24
+	int    widthpix       32
+	int    heightpix      24
 
 	UnitHealth:CTP2_STATIC_BASE {
-		int xpix 2
-		int ypix 22
-		int widthpix 28
+		int xpix      2
+		int ypix      22
+		int widthpix  28
 		int heightpix 1
+	}
+
+	ArmySymbol:CTP2_STATIC_IMAGE {
+		int    xpix    0
+		int    ypix    0
+
+		string image00 "upic21.tga"
 	}
 }
 
