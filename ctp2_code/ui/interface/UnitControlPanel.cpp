@@ -899,7 +899,12 @@ AUI_ERRCODE UnitControlPanel::StackSymbolDrawCallback(ctp2_Static * control, aui
 		return AUI_ERRCODE_BLTFAILED;
 	}
 
-	Pixel16 playerColor = g_colorSet->GetPlayerColor(panel->GetSelectedArmy().GetOwner());
+	Army army = panel->GetSelectedArmy();
+	if (!army.IsValid()) {
+		return AUI_ERRCODE_BLTFAILED;
+	}
+
+	Pixel16 playerColor = g_colorSet->GetPlayerColor(army.GetOwner());
 	Pixel16 colorizePixel = (sourceSurface->PixelFormat() == AUI_SURFACE_PIXELFORMAT_555) ? k_16_BIT_COLORIZE_PIXEL
 			: (k_16_BIT_COLORIZE_PIXEL & 0x7FE0) << 1 | (k_16_BIT_COLORIZE_PIXEL & 0x001F);
 	Pixel16 chromaPixel = sourceSurface->GetChromaKey();
