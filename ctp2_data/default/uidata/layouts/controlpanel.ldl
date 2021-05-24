@@ -19,8 +19,8 @@
 #  Modifications from the original Activision code:
 #
 # - Added to the tileimp tracker popup window a construction time line.
-#   (Aug 15th 2005 Martin Gühmann)
-# - Made the special attack window work. (Aug 16th 2005 Martin Gühmann)
+#   (Aug 15th 2005 Martin GÃ¼hmann)
+# - Made the special attack window work. (Aug 16th 2005 Martin GÃ¼hmann)
 # - Added political map button - 6-Jul-2009 EPW
 # -Added view capital button -5-Jan-2009 EPW
 # -Added view relations button -7-Jan-10 EPW
@@ -93,28 +93,35 @@ template ICON_VALUE_PAIR:CTP2_STATIC_GROUP {
 # 30x40 Image Button for Unit Tab.
 template UNIT_BUTTON_MEDIUM_SIZE:CTP2_BUTTON_BASE {
 	# Image layout.
-	int		numberoflayers		2
-	int		imagesperlayer		1
+	int    numberoflayers 1
+	int    imagesperlayer 1
 
-	string  imagebltflag10 "chromakey"
-	int xpix10 0
-	int ypix10 0
-	int widthpix10 20
-	int heightpix10 20
+	string imagebltflag10 "chromakey"
+
+	int    xpix10         0
+	int    ypix10         0
+	int    widthpix10     20
+	int    heightpix10    20
 
 	# Background.
-	bool	layeralways0		true
-	bool    layeralways1        true
+	bool   layeralways0   true
 
 	# Image size.
-	int		widthpix			32
-	int		heightpix			24
+	int    widthpix       32
+	int    heightpix      24
 
 	UnitHealth:CTP2_STATIC_BASE {
-		int xpix 2
-		int ypix 22
-		int widthpix 28
+		int xpix      2
+		int ypix      22
+		int widthpix  28
 		int heightpix 1
+	}
+
+	ArmySymbol:CTP2_STATIC_IMAGE {
+		int    xpix    0
+		int    ypix    0
+
+		string image00 "upic21.tga"
 	}
 }
 
@@ -340,35 +347,22 @@ template UNIT_LABEL_SPINNER:CTP2_STATIC_GROUP {
 		int		widthpix	124
 		int		heightpix	29
 
-		# Background.
-		string	image00				"upsp01bl.tga"
-		string	image01				"upsp01bm.tga"
-		string	image02				"upsp01br.tga"
-	}
-
-	# Previous.
-	Previous:CTP2_GENERIC_ARROW_BUTTON {
-		# Location.
-#		int		xpix		0
-		int		xpix		24
-		int		ypix		0
+		int		numberoflayers		2
 
 		# Background.
-		string	image00				"uptg20j.tga"
-		string	image10				"uptg20j.tga"
-		string	image20				"uptg20j.tga"
-		string	image30				"uptg20j.tga"
+		string	image00				"uppd02ax.tga"
+		string	image01				"uppd02bx.tga"
+		string	image02				"uppd02dx.tga"
 
-#		string	image00				"upsp01au.tga"
-#		string	image10				"upsp01ah.tga"
-#		string	image20				"upsp01ad.tga"
-#		string	image30				"upsp01ax.tga"
+		# enabled
+		bool	layerenabled1				true
+		# Mark the middle images as stretchable.
+		bool	imagestretchx11			true
+		string	imageblttype11				"tile"
 
-		# Tooltip
-#		string	tipwindow	"TOOLTIP_UNIT_PREV_UNIT_BUTTON"
-#		string	statustext	"STATUSBAR_UNIT_PREV_UNIT_BUTTON"
-		string	tipwindow	"TOOLTIP_UNIT_NEXT_UNIT_BUTTON"
-		string	statustext	"STATUSBAR_UNIT_NEXT_UNIT_BUTTON"
+		string	image10				"uppd02au.tga"
+		string	image11				"uppd02bu.tga"
+		string	image12				"uppd02du.tga"
 	}
 
 	# Next.
@@ -1113,6 +1107,37 @@ ControlPanelWindow:CTP2_WINDOW {
 								string imageblttype "stretch"
 								int widthpix 96
 								int heightpix 72
+
+								ArmySymbol:CTP2_STATIC_IMAGE {
+									int    xpix       2
+									int    ypix       2
+
+									string image00    "upic21.tga"
+
+									string tipwindow  "str_ldl_Return"
+								}
+
+								CargoSymbol:CTP2_STATIC_IMAGE {
+									int    xpix        3
+									int    ypix        3
+
+									string image00     "upc045.tga"
+
+									int    chromared   0
+									int    chromagreen 0
+									int    chromablue  0
+								}
+
+								StackSymbol:CTP2_STATIC_IMAGE {
+									int    xpix        78
+									int    ypix        3
+
+									string image00     "upc006.tga"
+
+									int    chromared   0
+									int    chromagreen 0
+									int    chromablue  0
+								}
 							}
 
 							# Attack/Defense/Move/Range
@@ -1241,10 +1266,50 @@ ControlPanelWindow:CTP2_WINDOW {
 							# Background
 							string	image00	"upfg52.tga"
 
-							# Army icon.
-							Icon:UNIT_BUTTON_MEDIUM_SIZE {
-								int	xpix	18
-								int ypix	33
+							# Hide extra box
+							Background:CTP2_STATIC_IMAGE {
+								int    xpix            11
+								int    ypix            12
+								int    widthpix        66
+								int    heightpix       103
+
+								string image00         "uptg20e.tga"
+								string imageblttype00  "stretch"
+								bool   imagestretchx00 true
+								bool   imagestretchy00 true
+
+								StackSymbol:CTP2_STATIC_IMAGE {
+									int    xpix        45
+									int    ypix        27
+
+									string image00     "upc006.tga"
+
+									int    chromared   0
+									int    chromagreen 0
+									int    chromablue  0
+								}
+
+								ArmyLabel:CTP2_STATIC_BASE {
+									int    xpix      7
+									int    ypix      31
+									int    widthpix  54
+									int    heightpix 17
+									string just      "left"
+									string text      "str_ldl_Army"
+								}
+
+								Icon:CTP2_STATIC_IMAGE {
+									# Location.
+									int    xpix            7
+									int    ypix            48
+
+									int    widthpix        54
+									int    heightpix       51
+
+									string imageblttype00  "stretch"
+									bool   imagestretchx00 true
+									bool   imagestretchy00 true
+								}
 							}
 
 							# Unit buttons.
@@ -1301,41 +1366,78 @@ ControlPanelWindow:CTP2_WINDOW {
 						TransportSelect:CTP2_STATIC_IMAGE {
 							string image00 "upfg53.tga"
 
-							# Transport icon.
-							Icon:UNIT_BUTTON_MEDIUM_SIZE {
-								int xpix 18
-								int ypix 33
+							# Hide extra box
+							Background:CTP2_STATIC_IMAGE {
+								int    xpix            11
+								int    ypix            12
+								int    widthpix        66
+								int    heightpix       103
+
+								string image00         "uptg20e.tga"
+								string imageblttype00  "stretch"
+								bool   imagestretchx00 true
+								bool   imagestretchy00 true
+
+								CargoLabel:CTP2_STATIC_BASE {
+									int    xpix      7
+									int    ypix      31
+									int    widthpix  54
+									int    heightpix 17
+									string just      "left"
+									string text      "str_ldl_Cargo"
+								}
+
+								Icon:CTP2_STATIC_IMAGE {
+									# Location.
+									int    xpix            7
+									int    ypix            48
+
+									int    widthpix        54
+									int    heightpix       51
+
+									string imageblttype00  "stretch"
+									bool   imagestretchx00 true
+									bool   imagestretchy00 true
+
+									string tipwindow  "str_ldl_Return"
+
+									ArmySymbol:CTP2_STATIC_IMAGE {
+										int    xpix 2
+										int    ypix 2
+
+										string image00 "upic21.tga"
+									}
+								}
 							}
 
 							# Unit buttons
 							Cargo0:UNIT_TOGGLE_MEDIUM_SIZE {
-								int xpix 79
-								int ypix 33
+								int xpix 83
+								int ypix 36
 							}
 							Cargo1:UNIT_TOGGLE_MEDIUM_SIZE {
-								int xpix 114
-								int ypix 33
+								int xpix 118
+								int ypix 36
 							}
 
 							Cargo2:UNIT_TOGGLE_MEDIUM_SIZE {
-								int xpix 79
-								int ypix 58
+								int xpix 83
+								int ypix 61
 							}
 							Cargo3:UNIT_TOGGLE_MEDIUM_SIZE {
-								int xpix 114
-								int ypix 58
+								int xpix 118
+								int ypix 61
 							}
 
 							Cargo4:UNIT_TOGGLE_MEDIUM_SIZE {
-								int xpix 79
-								int ypix 83
+								int xpix 83
+								int ypix 86
 							}
 #							Cargo5:UNIT_TOGGLE_MEDIUM_SIZE {
-#								int xpix 114
-#								int ypix 83
+#								int xpix 118
+#								int ypix 86
 #							}
 						}
-
 					}
 
 					#UnitOrderButtonGrid:ORDER_BUTTON_PANEL {
