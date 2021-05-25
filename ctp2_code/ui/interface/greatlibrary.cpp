@@ -1752,21 +1752,11 @@ void GreatLibrary::UpdateList( DATABASE database )
 	m_topics_list->Clear();
 	m_listDatabase = database;
 
-	switch ( database ) {
-	case DATABASE_UNITS:
-
 #define HIDE(db, index) (db->Get(db->m_alphaToIndex[index])->GetGLHidden())
 
-		for (index = 0; index < g_theUnitDB->NumRecords(); index++)
-		{
-			if(HIDE(g_theUnitDB, index))
-				continue;
-
-			Add_Item_To_Topics_List(g_theStringDB->GetNameStr(g_theUnitDB->GetName(
-						g_theUnitDB->m_alphaToIndex[index])), index);
-
-		}
-
+	switch ( database ) {
+	case DATABASE_UNITS:
+		AddTopicsBasedOnAge<UnitRecord>(g_theUnitDB);
 		break;
 
 	case DATABASE_SEARCH:
@@ -1816,33 +1806,15 @@ void GreatLibrary::UpdateList( DATABASE database )
 		break;
 
 	case DATABASE_BUILDINGS:
-
-		for (index = 0; index < g_theBuildingDB->NumRecords(); index++)
-		{
-			if(HIDE(g_theBuildingDB, index)) continue;
-
-			Add_Item_To_Topics_List(g_theStringDB->GetNameStr(g_theBuildingDB->GetName(
-						g_theBuildingDB->m_alphaToIndex[ index ])), index);
-
-		}
-
+		AddTopicsBasedOnAge<BuildingRecord>(g_theBuildingDB);
 		break;
 
 	case DATABASE_WONDERS:
-
-		for (index = 0; index < g_theWonderDB->NumRecords(); index++)
-		{
-			if(HIDE(g_theWonderDB, index)) continue;
-
-			Add_Item_To_Topics_List(g_theStringDB->GetNameStr(g_theWonderDB->GetName(
-						g_theWonderDB->m_alphaToIndex[ index ])), index);
-
-		}
-
+		AddTopicsBasedOnAge<WonderRecord>(g_theWonderDB);
 		break;
 
 	case DATABASE_ADVANCES:
-		AddAdvancesBasedOnAge();
+		AddTopicsBasedOnAge<AdvanceRecord>(g_theAdvanceDB);
 		break;
 
 	case DATABASE_TERRAIN:
@@ -1873,29 +1845,11 @@ void GreatLibrary::UpdateList( DATABASE database )
 		break;
 
 	case DATABASE_GOVERNMENTS:
-
-		for (index = 0; index < g_theGovernmentDB->NumRecords(); index++)
-		{
-			if(HIDE(g_theGovernmentDB, index)) continue;
-
-			Add_Item_To_Topics_List(g_theStringDB->GetNameStr(g_theGovernmentDB->GetName(
-						g_theGovernmentDB->m_alphaToIndex[ index ])), index);
-
-		}
-
+		AddTopicsBasedOnAge<GovernmentRecord>(g_theGovernmentDB);
 		break;
 
 	case DATABASE_TILE_IMPROVEMENTS:
-
-		for (index = 0; index < g_theTerrainImprovementDB->NumRecords(); index++)
-		{
-			if(HIDE(g_theTerrainImprovementDB, index)) continue;
-
-			Add_Item_To_Topics_List(g_theStringDB->GetNameStr(g_theTerrainImprovementDB->GetName(
-						g_theTerrainImprovementDB->m_alphaToIndex[ index ])), index);
-
-		}
-
+		AddTopicsBasedOnAge<TerrainImprovementRecord>(g_theTerrainImprovementDB);
 		break;
 
 	default:
@@ -2109,15 +2063,6 @@ void GreatLibrary::Forward()
     }
 }
 
-
-
-
-
-
-
-
-
-
 void GreatLibrary::Add_Item_To_Topics_List
 (
 	const MBCHAR *name,
@@ -2127,8 +2072,7 @@ void GreatLibrary::Add_Item_To_Topics_List
 	Assert(m_topics_list);
 	if(!m_topics_list) return;
 
-
-	ctp2_ListItem *item = (index == -1)
+	ctp2_ListItem *item = (index == CTPRecord::INDEX_INVALID)
 			? (ctp2_ListItem *)aui_Ldl::BuildHierarchyFromRoot("GreatLibraryHeaderItem")
 			: (ctp2_ListItem *)aui_Ldl::BuildHierarchyFromRoot("GreatLibraryTopicItem");
 	Assert(item);
@@ -2153,19 +2097,25 @@ void GreatLibrary::FixTabs()
 	m_tabGroup->SelectTab(curTab->IsDisabled() ? m_gameplayTab : curTab);
 }
 
-class AdvanceSortRecord {
+class AgeSortRecord {
 public:
-	AdvanceSortRecord()
+	AgeSortRecord()
 	: m_age(-1),
 		m_name(NULL),
-		m_index(-1)
+		m_index(CTPRecord::INDEX_INVALID),
+		m_isHidden(false)
 	{}
 
-	void Initialize(sint32 age, const MBCHAR * name, sint32 index)
+	void Initialize(sint32 age, const MBCHAR * name, sint32 index, bool isHidden)
 	{
-		m_age   = age;
-		m_name  = name;
-		m_index = index;
+		m_age      = age;
+		m_name     = name;
+		m_index    = index;
+		m_isHidden = isHidden;
+	}
+
+	bool IsHidden() const {
+		return m_isHidden;
 	}
 
 	sint32 GetAge() const {
@@ -2180,7 +2130,7 @@ public:
 		return m_index;
 	}
 
-	bool operator < (const AdvanceSortRecord & other) const
+	bool operator < (const AgeSortRecord & other) const
 	{
 		if (m_age != other.m_age) {
 			return (m_age < other.m_age);
@@ -2193,28 +2143,54 @@ private:
 	sint32         m_age;
 	const MBCHAR * m_name;
 	sint32         m_index;
+	bool           m_isHidden;
 };
 
-void GreatLibrary::AddAdvancesBasedOnAge()
+template <class T>
+sint32 GetAgeIndex(const T * topic)
 {
-	std::vector<AdvanceSortRecord> advances(g_theAdvanceDB->NumRecords());
-	for (sint32 index = 0; index < g_theAdvanceDB->NumRecords(); index++)
+	sint32 advanceIndex = topic->GetEnableAdvanceIndex();
+	return advanceIndex >= 0 ? GetAgeIndex(g_theAdvanceDB->Get(advanceIndex)) : 0;
+}
+
+template <>
+sint32 GetAgeIndex<AdvanceRecord>(const AdvanceRecord * topic)
+{
+	return topic->GetAgeIndex();
+}
+
+template <>
+sint32 GetAgeIndex<TerrainImprovementRecord>(const TerrainImprovementRecord * topic)
+{
+	sint32 advanceIndex = topic->GetTerrainEffect(0)->GetEnableAdvanceIndex();
+	return advanceIndex >= 0 ? GetAgeIndex(g_theAdvanceDB->Get(advanceIndex)) : 0;
+}
+
+template <class T>
+void GreatLibrary::AddTopicsBasedOnAge(CTPDatabase<T> * database)
+{
+	std::vector<AgeSortRecord> ageSortRecords(database->NumRecords());
+	for (sint32 index = 0; index < database->NumRecords(); index++)
 	{
-		const AdvanceRecord * advanceRecord = g_theAdvanceDB->Get(g_theAdvanceDB->m_alphaToIndex[index]);
-		advances[index].Initialize(advanceRecord->GetAgeIndex(), g_theStringDB->GetNameStr(advanceRecord->GetName()),
-				index);
+		const T * topic = database->Get(database->m_alphaToIndex[index]);
+		ageSortRecords[index].Initialize(GetAgeIndex(topic), g_theStringDB->GetNameStr(topic->GetName()), index,
+				topic->GetGLHidden());
 	}
 
-	// Sort advances using std::sort
-	std::sort(advances.begin(), advances.end());
+	// Sort ageSortRecords using std::sort
+	std::sort(ageSortRecords.begin(), ageSortRecords.end());
 
 	sint32 currentAge = -1;
-	for (const auto& advance : advances)
+	for (const auto& ageSortRecord : ageSortRecords)
 	{
-		if (advance.GetAge() != currentAge) {
-			Add_Item_To_Topics_List(g_theAgeDB->GetNameStr(advance.GetAge()), -1);
-			currentAge = advance.GetAge();
+		if (ageSortRecord.IsHidden()) {
+			continue;
 		}
-		Add_Item_To_Topics_List(advance.GetName(), advance.GetIndex());
+
+		if (ageSortRecord.GetAge() != currentAge) {
+			Add_Item_To_Topics_List(g_theAgeDB->GetNameStr(ageSortRecord.GetAge()), CTPRecord::INDEX_INVALID);
+			currentAge = ageSortRecord.GetAge();
+		}
+		Add_Item_To_Topics_List(ageSortRecord.GetName(), ageSortRecord.GetIndex());
 	}
 }

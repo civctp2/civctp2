@@ -48,6 +48,7 @@
 //----------------------------------------------------------------------------
 
 #include <vector>	// std::vector
+#include "CTPDatabase.h"
 
 //----------------------------------------------------------------------------
 // Export overview
@@ -238,7 +239,8 @@ public:
 
 private:
 	void Initialize(MBCHAR const * windowBlock);
-	void AddAdvancesBasedOnAge();
+	template <class T>
+	void AddTopicsBasedOnAge(CTPDatabase<T> * database);
 
 	friend void TechListItem::Update(void);
 	friend bool greatlibrary_Initialize(sint32 theMode, bool sci);
