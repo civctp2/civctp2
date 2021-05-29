@@ -2093,6 +2093,7 @@ void GreatLibrary::Add_Item_To_Topics_List
 	if(!box) return;
 
 	box->SetText(name);
+	item->Enable(index != CTPRecord::INDEX_INVALID);
 	item->SetUserData((void *) index);
 	m_topics_list->AddItem(item);
 }
@@ -2209,6 +2210,7 @@ void GreatLibrary::AddTopics(CTPDatabase<T> * database)
 		}
 
 		if (m_sortByAgeButton->GetToggleState() && ageSortRecord.GetAge() != currentAge) {
+			Add_Item_To_Topics_List("", CTPRecord::INDEX_INVALID);
 			Add_Item_To_Topics_List(g_theAgeDB->GetNameStr(ageSortRecord.GetAge()), CTPRecord::INDEX_INVALID);
 			currentAge = ageSortRecord.GetAge();
 		}
