@@ -266,9 +266,9 @@ GreatLibrary:CTP2_WINDOW {
 
 	OkButton:CTP2_GENERIC_SIZABLE_TEXT_BUTTON {
 
-		int	xpix	650
+		int	xpix	630
 
-		int	ypix	525
+		int	ypix	528
 
 		int		widthpix	124
 
@@ -311,9 +311,9 @@ GreatLibrary:CTP2_WINDOW {
 	# shows how to get there
 	SetGoalButton:CTP2_BUTTON_SMALL {
 
-		int	xpix	500
+		int	xpix	480
 
-		int	ypix	525
+		int	ypix	528
 
 		int	widthpix	124
 
@@ -611,7 +611,30 @@ GreatLibrary:CTP2_WINDOW {
 		bool	alwaysranger TRUE
 	}
 
+	SortByAgeButton:CTP2_GENERIC_SIZABLE_TEXT_BUTTON {
+		int    xpix            107
+		int    ypix            528
 
+		int    widthpix        140
+
+		bool   togglebutton    true
+		int    numberoflayers  5
+		bool   layerupon4      true
+		string imageblttype41  "tile"
+		bool   imagestretchx41 true
+
+
+		string image00         "upbt16aX.tga"
+		string image10         "upbt16aU.tga"
+		string image20         "upbt16aD.tga"
+		string image30         "upbt16aH.tga"
+		string image40         "upbt16aD.tga"
+		string image41         "upbt01bD.tga"
+		string image42         "upbt01cD.tga"
+
+		# Label
+		string text            "str_ldl_SORT_BY_AGE"
+	}
 }
 
 

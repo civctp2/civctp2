@@ -2832,6 +2832,7 @@ str_ldl_GreatLibraryGoalSetTo "目標の設定: %s"
 str_ldl_SEARCH_WORD "検索:"
 str_ldl_TECH_TREE "技術系統樹"
 str_ldl_SET_GOAL	"目標の設定"
+str_ldl_SORT_BY_AGE "エポックで並べ替え"
 
 
 

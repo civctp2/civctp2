@@ -2743,6 +2743,7 @@ str_ldl_GreatLibraryNoGoalPossible		"%s 尚未研发。"
 str_ldl_SEARCH_WORD "搜索："
 str_ldl_TECH_TREE "科技树"
 str_ldl_SET_GOAL	"设定目标"
+str_ldl_SORT_BY_AGE "按时代排序"
 
 
 

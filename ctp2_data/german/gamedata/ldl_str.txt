@@ -2743,6 +2743,7 @@ str_ldl_GreatLibraryNoGoalPossible		"%s kann nicht erforscht werden."
 str_ldl_SEARCH_WORD				"Suchen:"
 str_ldl_TECH_TREE				"Technologiebaum"
 str_ldl_SET_GOAL				"Projekt festlegen"
+str_ldl_SORT_BY_AGE				"Sortieren nach Ära"
 
 
 

@@ -238,9 +238,11 @@ public:
 	bool IsHidden(sint32 index, DATABASE theDatabase) const;
 
 private:
+	static void SortByAgeCallback(aui_Control * control, uint32 action, uint32 data, void * cookie);
+
 	void Initialize(MBCHAR const * windowBlock);
 	template <class T>
-	void AddTopicsBasedOnAge(CTPDatabase<T> * database);
+	void AddTopics(CTPDatabase<T> * database);
 
 	friend void TechListItem::Update(void);
 	friend bool greatlibrary_Initialize(sint32 theMode, bool sci);
@@ -292,6 +294,7 @@ private:
 	ctp2_Button		*m_conceptButton;
 	ctp2_Button		*m_goodsButton;
 	ctp2_Button		*m_ordersButton;
+	ctp2_Button		*m_sortByAgeButton;
 
 	ctp2_ListBox	*m_topics_list;
 	ctp2_Static		*m_indexLeft;
