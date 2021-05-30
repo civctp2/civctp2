@@ -37,11 +37,11 @@
 # Modifications from the original Activision code:
 #
 # - Moved build list sequence strings to gl_str.txt.
-#   - April 7th 2005 Martin Gühmann
-# - Added str_ldl_OptimizeSpecialists string - April 7th 2005 Martin Gühmann 
+#   - April 7th 2005 Martin Gï¿½hmann
+# - Added str_ldl_OptimizeSpecialists string - April 7th 2005 Martin Gï¿½hmann 
 # - Added str_ldl_DD_OPTIMIZE_SLIDERS for sliders optimization button. 
-#   - April 9th 2005 Martin Gühmann
-# - Moved Great Libary title string from add_str.txt. - April 9th 2005 Martin Gühmann
+#   - April 9th 2005 Martin Gï¿½hmann
+# - Moved Great Libary title string from add_str.txt. - April 9th 2005 Martin Gï¿½hmann
 # - Added battleview window strings for attack building bonuses, and modified
 #   new combat names. - 07-Mar-2009 Maq
 # - Added new strings for redesigned City Window. - 28-Mar-2009 Maq
@@ -2744,6 +2744,7 @@ str_ldl_GreatLibraryNoGoalPossible		"%s cannot be researched."
 str_ldl_SEARCH_WORD				"Search:"
 str_ldl_TECH_TREE				"Tech Tree"
 str_ldl_SET_GOAL				"Set Goal"
+str_ldl_SORT_BY_AGE				"Sort by age"
 
 
 

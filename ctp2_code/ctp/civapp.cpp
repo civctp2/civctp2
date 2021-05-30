@@ -1721,6 +1721,10 @@ sint32 CivApp::InitializeGame(CivArchive *archive)
 		return FALSE;
 	}
 
+	if (archive) { // Ensure that SlicEngine's strings have correct numbering
+		SlicEngine::Reload(g_slic_filename);
+	}
+
 	g_theProgressWindow->StartCountingTo( 610 );
 
 	if(g_isScenario && archive &&

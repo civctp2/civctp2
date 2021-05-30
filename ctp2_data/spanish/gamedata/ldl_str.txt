@@ -2743,6 +2743,7 @@ str_ldl_GreatLibraryNoGoalPossible		"%s cannot be researched."
 str_ldl_SEARCH_WORD				"Búsqueda:"
 str_ldl_TECH_TREE				"Árbol tecnológico"
 str_ldl_SET_GOAL				"Fijar objetivo"
+str_ldl_SORT_BY_AGE				"Ordenar por edad"
 
 
 

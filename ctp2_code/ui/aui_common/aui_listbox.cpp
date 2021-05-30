@@ -25,8 +25,8 @@
 // Modifications from the original Activision code:
 //
 // - Always focus on the latest message.
-// - Initialized local variables. (Sep 9th 2005 Martin Gühmann)
-// - Standardized code (May 21st 2006 Martin Gühmann)
+// - Initialized local variables. (Sep 9th 2005 Martin Gï¿½hmann)
+// - Standardized code (May 21st 2006 Martin Gï¿½hmann)
 //
 //----------------------------------------------------------------------------
 
@@ -1189,6 +1189,10 @@ AUI_ERRCODE aui_ListBox::DragSelect( sint32 y )
 		if ( itemIndex >= m_numRows ) itemIndex = m_numRows - 1;
 	}
 
+	if (GetItemByIndex(itemIndex)->IsDisabled()) {
+		return AUI_ERRCODE_OK;
+	}
+
 	ListPos position = m_visualSelectedList->Find( itemIndex );
 	if ( position )
 	{
@@ -1255,6 +1259,10 @@ AUI_ERRCODE aui_ListBox::SelectItem( sint32 index, uint32 data )
 {
 	if ( index < 0 || index >= (sint32)m_pane->ChildList()->L() )
 		return AUI_ERRCODE_INVALIDPARAM;
+
+	if (GetItemByIndex(index)->IsDisabled()) {
+		return AUI_ERRCODE_INVALIDPARAM;
+	}
 
 	if ( m_multiSelect )
 	{
@@ -1505,8 +1513,11 @@ void aui_ListBox::MouseLGrabInside( aui_MouseEvent *mouseData )
 
 		if ( y < maxY )
 		{
-			sint32 itemIndex =
-				y / (m_maxItemHeight != 0 ? m_maxItemHeight : 1) + m_verticalRanger->GetValueY();
+			sint32 itemIndex = y / (m_maxItemHeight != 0 ? m_maxItemHeight : 1) + m_verticalRanger->GetValueY();
+
+			if (GetItemByIndex(itemIndex)->IsDisabled()) {
+				return;
+			}
 
 			ListPos position = m_selectedList->Find( itemIndex );
 			if ( position )
@@ -1638,8 +1649,11 @@ void aui_ListBox::MouseRGrabInside( aui_MouseEvent *mouseData )
 
 		if ( y < maxY )
 		{
-			sint32 itemIndex =
-				y / m_maxItemHeight + m_verticalRanger->GetValueY();
+			sint32 itemIndex = y / m_maxItemHeight + m_verticalRanger->GetValueY();
+
+			if (GetItemByIndex(itemIndex)->IsDisabled()) {
+				return;
+			}
 
 			ListPos position = m_selectedList->Find( itemIndex );
 			if ( position )
@@ -1873,12 +1887,11 @@ void aui_ListBox::MouseLDoubleClickInside( aui_MouseEvent *mouseData )
 
 		if ( y < maxY )
 		{
-			sint32 itemIndex =
-				y / m_maxItemHeight + m_verticalRanger->GetValueY();
+			sint32 itemIndex = y / m_maxItemHeight + m_verticalRanger->GetValueY();
 
-			SendSelectCallback(
-				AUI_LISTBOX_ACTION_DOUBLECLICKSELECT,
-				(uint32)itemIndex );
+			if (!GetItemByIndex(itemIndex)->IsDisabled()) {
+				SendSelectCallback(AUI_LISTBOX_ACTION_DOUBLECLICKSELECT, (uint32) itemIndex);
+			}
 		}
 
 		m_selectStatus = AUI_LISTBOX_SELECTSTATUS_NONE;
