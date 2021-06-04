@@ -24,9 +24,9 @@
 //
 // Modifications from the original Activision code:
 //
-// - Initialized local variables. (Sep 9th 2005 Martin Gühmann)
-// - Standardized code (May 21st 2006 Martin Gühmann)
-// - Added army debug text to the army manager window. (Dec 24th 2006 Martin Gühmann)
+// - Initialized local variables. (Sep 9th 2005 Martin Gï¿½hmann)
+// - Standardized code (May 21st 2006 Martin Gï¿½hmann)
+// - Added army debug text to the army manager window. (Dec 24th 2006 Martin Gï¿½hmann)
 // - Changed occurances of UnitRecord::GetMaxHP to
 //   UnitData::CalculateTotalHP. (Aug 3rd 2009 Maq)
 //
@@ -314,8 +314,8 @@ void ArmyManagerWindow::Update()
 
 				inCellSwitch->Enable(TRUE);
 				inCellSwitch->SetState(0);
-				inCellSwitch->SetImage((char *)irec->GetIcon(), 0);
-				inCellSwitch->SetImage((char *)irec->GetIcon(), 1);
+				inCellSwitch->SetImage((char *)irec->GetLargeIcon(), 0);
+				inCellSwitch->SetImage((char *)irec->GetLargeIcon(), 1);
 				inCellSwitch->ShouldDraw(TRUE);
 			}
 		}
@@ -347,8 +347,8 @@ void ArmyManagerWindow::Update()
 			Assert(inArmySwitch);
 			if(inArmySwitch) {
 				inArmySwitch->SetState(0);
-				inArmySwitch->SetImage((char *)irec->GetIcon(), 0);
-				inArmySwitch->SetImage((char *)irec->GetIcon(), 1);
+				inArmySwitch->SetImage((char *)irec->GetLargeIcon(), 0);
+				inArmySwitch->SetImage((char *)irec->GetLargeIcon(), 1);
 				inArmySwitch->Enable(TRUE);
 				inArmySwitch->ShouldDraw(TRUE);
 			}
