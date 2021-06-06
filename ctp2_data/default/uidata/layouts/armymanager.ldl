@@ -274,40 +274,13 @@ ArmyManagerItem:CTP2_LIST_ITEM {
 	int xpix      14
 	int widthpix  60
 	int heightpix 18
-	box {
+	box:CTP2_STANDARD_FONT {
 		string objecttype "ctp2_Static"
 
 		int xpix      12
 		int ypix      0
-		int widthpix  62
+		int widthpix  140
 		int heightpix 18
-
-		string pattern "uptg06e.tga"
-
-		icon {
-			string objecttype "ctp2_Static"
-
-			int xpix      10
-			int ypix      2
-			int widthpix  16
-			int heightpix 16
-
-			string imagebltflag "chromakey"
-		}
-		count:AM_LIST_ITEM_FONT {
-			string objecttype "ctp2_Static"
-
-			int xpix      30
-			int ypix      2
-			int widthpix  28
-			int heightpix 16
-
-			string text        "str_ldl_0"
-			bool   vertcenter  true
-			string textblttype "center"
-			string just        "center"
-			string pattern     "uptg06e.tga"
-		}
 	}
 }
 

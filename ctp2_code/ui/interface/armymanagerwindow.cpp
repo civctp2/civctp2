@@ -24,9 +24,9 @@
 //
 // Modifications from the original Activision code:
 //
-// - Initialized local variables. (Sep 9th 2005 Martin G�hmann)
-// - Standardized code (May 21st 2006 Martin G�hmann)
-// - Added army debug text to the army manager window. (Dec 24th 2006 Martin G�hmann)
+// - Initialized local variables. (Sep 9th 2005 Martin Gühmann)
+// - Standardized code (May 21st 2006 Martin Gühmann)
+// - Added army debug text to the army manager window. (Dec 24th 2006 Martin Gühmann)
 // - Changed occurances of UnitRecord::GetMaxHP to
 //   UnitData::CalculateTotalHP. (Aug 3rd 2009 Maq)
 //
@@ -100,6 +100,7 @@ ArmyManagerWindow::ArmyManagerWindow(AUI_ERRCODE *err)
 	aui_Ldl::SetActionFuncAndCookie(s_armyWindowBlock, "AddAllButton", ArmyManagerWindow::AddAll, NULL);
 	aui_Ldl::SetActionFuncAndCookie(s_armyWindowBlock, "RemoveButton", ArmyManagerWindow::Remove, NULL);
 	aui_Ldl::SetActionFuncAndCookie(s_armyWindowBlock, "RemoveAllButton", ArmyManagerWindow::RemoveAll, NULL);
+	aui_Ldl::SetActionFuncAndCookie(s_armyWindowBlock, "ArmyName", ArmyManagerWindow::ArmyNameChanged, this);
 
 	sint32 i;
 	for(i = 0; i < k_MAX_ARMY_SIZE; i++) {
@@ -374,35 +375,6 @@ void ArmyManagerWindow::Update()
 	}
 
 	UpdateArmyName();
-
-	ctp2_Static *armyTextlabel = (ctp2_Static *)aui_Ldl::GetObject(s_armyWindowBlock, "ArmyTextLabel");
-	if(armyTextlabel){
-		if((g_graphicsOptions
-		&&  g_graphicsOptions->IsArmyTextOn()
-		||  g_theProfileDB->GetDebugAI())
-		&& m_army.IsValid()
-		&& m_army->GetDebugString()
-		){
-			armyTextlabel->SetText(m_army->GetDebugString());
-
-			sint32		r,g,b;
-			uint8		col = m_army.GetData()->GetDebugStringColor();
-
-			g_tiledMap->ColorMagnitudeToRGB(col, &r, &g, &b);
-
-			COLORREF	fgColor = RGB(r, g, b);
-			// not used COLORREF	bgColor = RGB(0,0,0);
-
-			armyTextlabel->SetTextColor(fgColor);
-			armyTextlabel->SetTextShadow(true);
-			armyTextlabel->SetTextShadowColor(fgColor); /// @todo bgColor?
-		}
-		else{
-			armyTextlabel->SetText("");
-		}
-		armyTextlabel->ShouldDraw(true);
-	}
-
 	updating = false;
 }
 
@@ -420,35 +392,28 @@ void ArmyManagerWindow::UpdateArmyName()
 	}
 }
 
-void ArmyManagerWindow::UpdateArmyItem(ctp2_ListItem *item)
+void ArmyManagerWindow::UpdateArmyItem(ctp2_ListItem * item)
 {
-	ArmyListNode *node = (ArmyListNode *)item->GetUserData();
+	ArmyListNode * node = (ArmyListNode *)item->GetUserData();
 	Assert(node);
-	if(!node)
+	if (!node) {
 		return;
-
-	ctp2_Static *box = (ctp2_Static *)item->GetChildByIndex(0);
-	Assert(box);
-	if(box) {
-		ctp2_Static *icon = (ctp2_Static *)box->GetChildByIndex(0);
-		Assert(icon);
-		if(icon) {
-
-			icon->SetImage("upic21.tga");
-		}
-
-		ctp2_Static *count = (ctp2_Static *)box->GetChildByIndex(1);
-		Assert(count);
-		if(count) {
-			MBCHAR text[20];
-			if(g_theArmyPool->IsValid(node->m_army)) {
-				sprintf(text, "%d", node->m_army.Num());
-			} else {
-				strcpy(text, "0");
-			}
-			count->SetText(text);
-		}
 	}
+
+	ctp2_Static * box = (ctp2_Static *)item->GetChildByIndex(0);
+	Assert(box);
+	if (!box) {
+		return;
+	}
+
+	MBCHAR truncatedString[100];
+	strncpy(truncatedString, node->m_army->GetName(), 99);
+	truncatedString[99] = 0;
+	if (!box->GetTextFont()) {
+		box->TextReloadFont();
+	}
+	box->GetTextFont()->TruncateString(truncatedString, box->Width());
+	box->SetText(truncatedString);
 }
 
 void ArmyManagerWindow::UpdateAllArmyItems()
@@ -933,6 +898,25 @@ void ArmyManagerWindow::OutOfArmy(aui_Control *control, uint32 action, uint32 da
 
 	(static_cast<ctp2_Button*>(aui_Ldl::GetObject("ArmyManager.AddButton")))->Enable(enableAddButton);
 	(static_cast<ctp2_Button*>(aui_Ldl::GetObject("ArmyManager.AddAllButton")))->Enable(enableAddAllButton);
+}
+
+void ArmyManagerWindow::ArmyNameChanged(aui_Control * control, uint32 action, uint32 data, void * cookie)
+{
+	if (action != AUI_TEXTFIELD_ACTION_EXECUTE) {
+		return;
+	}
+
+	ArmyManagerWindow * armyManagerWindow = static_cast<ArmyManagerWindow *>(cookie);
+	Assert(armyManagerWindow);
+	if (!armyManagerWindow) {
+		return;
+	}
+
+	armyManagerWindow->RenameArmy();
+
+	ctp2_ListBox  * armyList = static_cast<ctp2_ListBox *>(aui_Ldl::GetObject(s_armyWindowBlock, "ArmiesList"));
+	armyManagerWindow->UpdateArmyItem(dynamic_cast<ctp2_ListItem *>(armyList->GetSelectedItem()));
+	armyList->ShouldDraw();
 }
 
 AUI_ERRCODE ArmyManagerWindow::DrawHealthCallbackInArmy(ctp2_Static *control, aui_Surface *surface, RECT &rect, void *cookie)
