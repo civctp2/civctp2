@@ -407,7 +407,7 @@ void ArmyManagerWindow::UpdateArmyItem(ctp2_ListItem * item)
 	}
 
 	MBCHAR truncatedString[100];
-	strncpy(truncatedString, node->m_army->GetName(), 99);
+	strncpy(truncatedString, node->m_army.IsValid() ? node->m_army->GetName() : "---", 99);
 	truncatedString[99] = 0;
 	if (!box->GetTextFont()) {
 		box->TextReloadFont();

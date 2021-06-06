@@ -37,19 +37,20 @@ AM_LIST_ITEM_FONT:CTP2_STANDARD_FONT {
 ##                Data               ##
 ##-----------------------------------##
 ArmyManager:CTP2_DIALOG_WINDOW {
-	string title     "str_ldl_ArmyManagement"
+	string title     "str_ldl_ArmyManagementTitle"
 	int    xpix      200
 	int    ypix      30
 	int    widthpix  800
 	int    heightpix 384
 
 	ArmiesLabel:CTP2_STATIC_BASE:AM_TEXT_FONT {
-		int xpix      50
+		int xpix      80
 		int ypix      45
 		int widthpix  80
 		int heightpix 20
 
 		string pattern "uptg20e.tga"
+		string just    "left"
 		string text    "str_ldl_Armies"
 	}
 	ArmiesList:CTP2_LISTBOX {
@@ -178,12 +179,13 @@ ArmyManager:CTP2_DIALOG_WINDOW {
 		string statustext "STATUSBAR_ARMYMAN_REMOVE_ALL_BUTTON"
 	}
 	OutOfArmyLabel:CTP2_STATIC_BASE:AM_TEXT_FONT {
-		int xpix      535
+		int xpix      565
 		int ypix      60
 		int widthpix  116
-		int	heightpix 20
+		int heightpix 20
 
 		string pattern "uptg20e.tga"
+		string just    "left"
 		string text    "str_ldl_SingleUnits"
 	}
 	OutOfArmyBox {
