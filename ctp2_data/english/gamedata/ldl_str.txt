@@ -37,11 +37,11 @@
 # Modifications from the original Activision code:
 #
 # - Moved build list sequence strings to gl_str.txt.
-#   - April 7th 2005 Martin Gühmann
-# - Added str_ldl_OptimizeSpecialists string - April 7th 2005 Martin Gühmann 
+#   - April 7th 2005 Martin Gï¿½hmann
+# - Added str_ldl_OptimizeSpecialists string - April 7th 2005 Martin Gï¿½hmann 
 # - Added str_ldl_DD_OPTIMIZE_SLIDERS for sliders optimization button. 
-#   - April 9th 2005 Martin Gühmann
-# - Moved Great Libary title string from add_str.txt. - April 9th 2005 Martin Gühmann
+#   - April 9th 2005 Martin Gï¿½hmann
+# - Moved Great Libary title string from add_str.txt. - April 9th 2005 Martin Gï¿½hmann
 # - Added battleview window strings for attack building bonuses, and modified
 #   new combat names. - 07-Mar-2009 Maq
 # - Added new strings for redesigned City Window. - 28-Mar-2009 Maq
@@ -2609,6 +2609,7 @@ str_ldl_MB_CANCEL				"Cancel"
 
 # Army Management
 str_ldl_ArmyManagement				"Army Manager"
+str_ldl_ArmyManagementTitle			"A R M Y   M A N A G E R"
 
 # Diplomacy wizard
 str_ldl_DiplomacyWizardTitle			"D I P L O M A T I C   P R O P O S A L"

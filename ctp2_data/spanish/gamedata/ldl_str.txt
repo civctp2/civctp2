@@ -2608,6 +2608,7 @@ str_ldl_MB_CANCEL				"Cancelar"
 
 # Army Management
 str_ldl_ArmyManagement				"Administrador del ejército"
+str_ldl_ArmyManagementTitle			"A D M I N I S T R A C I Ó N   D E L   E J É R C I T O"
 
 # Diplomacy wizard
 str_ldl_DiplomacyWizardTitle			"E N V I A R   U N A   P R O P O S I C I Ó N"

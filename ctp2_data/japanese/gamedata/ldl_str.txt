@@ -2704,6 +2704,7 @@ str_ldl_MB_CANCEL					"ｷｬﾝｾﾙ"
 
 # 軍管理
 str_ldl_ArmyManagement "軍管理"
+str_ldl_ArmyManagementTitle "軍管理"
 
 # 外交ウィザード
 str_ldl_DiplomacyWizardTitle "外交上の提案"

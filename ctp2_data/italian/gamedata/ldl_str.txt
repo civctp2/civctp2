@@ -2608,6 +2608,7 @@ str_ldl_MB_CANCEL				"Annulla"
 
 # Army Management
 str_ldl_ArmyManagement				"Gestione armate"
+str_ldl_ArmyManagementTitle			"G E S T I O N E   A R M A T E"
 
 # Diplomacy wizard
 str_ldl_DiplomacyWizardTitle			"P R O P O S T A  D I P L O M A T I C A"

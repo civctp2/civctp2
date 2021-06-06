@@ -2608,6 +2608,7 @@ str_ldl_MB_CANCEL					"取消"
 
 # Army Management
 str_ldl_ArmyManagement "军务官"
+str_ldl_ArmyManagementTitle "军务官"
 
 # Diplomacy wizard
 str_ldl_DiplomacyWizardTitle "外交提议"

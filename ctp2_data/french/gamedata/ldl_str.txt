@@ -2608,6 +2608,7 @@ str_ldl_MB_CANCEL				"Annuler"
 
 # Army Management
 str_ldl_ArmyManagement				"Gest. d'armée"
+str_ldl_ArmyManagementTitle			"GESTIONNAIRE D'ARMEE"
 
 # Diplomacy wizard
 str_ldl_DiplomacyWizardTitle			"PROPOSITION DIPLOMATIQUE"

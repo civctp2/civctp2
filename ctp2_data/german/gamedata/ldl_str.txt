@@ -2608,6 +2608,7 @@ str_ldl_MB_CANCEL				"Abbrechen"
 
 # Army Management
 str_ldl_ArmyManagement				"Truppenmanager"
+str_ldl_ArmyManagementTitle			"T R U P P E N M A N A G E R"
 
 # Diplomacy wizard
 str_ldl_DiplomacyWizardTitle			"D I P L O M A T I S C H E S   G E S U C H"
