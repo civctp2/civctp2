@@ -894,9 +894,10 @@ template CTP2_BORDER_BOX {
 	int numberoflayers 1
 	int imagesperlayer 9
 
-	int borderleft   8
-	int borderwidth  5
-	int borderheight 5
+	int borderleft   7
+	int borderright  5
+	int bordertop    8
+	int borderbottom 5
 	
 	# Background.
 	bool   layeralways0    true

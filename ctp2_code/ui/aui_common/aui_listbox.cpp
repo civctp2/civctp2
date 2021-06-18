@@ -841,8 +841,8 @@ AUI_ERRCODE aui_ListBox::CalculateDimensions( void )
 		}
 	}
 
-	m_itemsPerWidth = m_maxItemWidth ? m_width / m_maxItemWidth : 0;
-	m_itemsPerHeight = m_maxItemHeight ? m_height / m_maxItemHeight : 0;
+	m_itemsPerWidth = m_maxItemWidth ? WidthForItems() / m_maxItemWidth : 0;
+	m_itemsPerHeight = m_maxItemHeight ? HeightForItems() / m_maxItemHeight : 0;
 
 	return AUI_ERRCODE_OK;
 }

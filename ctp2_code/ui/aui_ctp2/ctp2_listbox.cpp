@@ -180,8 +180,7 @@ AUI_ERRCODE ctp2_ListBox::InitCommon(sint32 bevelWidth, sint32 bevelType)
 	m_bevelType = bevelType;
 	m_menuButton = NULL;
 
-	m_borderOffset.x = 0;
-	m_borderOffset.y = 0;
+	m_borderOffset = { 0, 0, 0, 0 };
 
 	return AUI_ERRCODE_OK;
 }
@@ -380,8 +379,8 @@ AUI_ERRCODE ctp2_ListBox::Draw(aui_Surface *surf, sint32 x, sint32 y)
 
 	sint32 headerHeight = m_header->IsHidden() ? 0 : m_header->Height();
 
-	RECT rect = { m_borderOffset.x, -headerHeight + m_borderOffset.y,
-				  m_width - m_borderOffset.x, m_height - m_borderOffset.y };
+	RECT rect = { m_borderOffset.left, -headerHeight + m_borderOffset.top,
+				  m_width - m_borderOffset.right, m_height - m_borderOffset.bottom };
 	OffsetRect( &rect, m_x + x, m_y + y );
 	ToWindow( &rect );
 
@@ -513,13 +512,20 @@ AUI_ERRCODE ctp2_ListBox::DoneInstantiatingThis(const MBCHAR *ldlBlock)
 	Assert( block != NULL );
 	if ( !block ) return AUI_ERRCODE_LDLFINDDATABLOCKFAILED;
 
-	m_borderOffset.x = block->GetInt(k_CTP2_LISTBOX_LDL_BORDER_WIDTH);
-	m_borderOffset.y = block->GetInt(k_CTP2_LISTBOX_LDL_BORDER_HEIGHT);
+	m_borderOffset.left   = block->GetAttributeType(k_CTP2_LISTBOX_LDL_BORDER_LEFT) == ATTRIBUTE_TYPE_INT ?
+			block->GetInt(k_CTP2_LISTBOX_LDL_BORDER_LEFT) : block->GetInt(k_CTP2_LISTBOX_LDL_BORDER_WIDTH);
+	m_borderOffset.right  = block->GetAttributeType(k_CTP2_LISTBOX_LDL_BORDER_RIGHT) == ATTRIBUTE_TYPE_INT ?
+			block->GetInt(k_CTP2_LISTBOX_LDL_BORDER_RIGHT) : block->GetInt(k_CTP2_LISTBOX_LDL_BORDER_WIDTH);
+	m_borderOffset.top    = block->GetAttributeType(k_CTP2_LISTBOX_LDL_BORDER_TOP) == ATTRIBUTE_TYPE_INT ?
+			block->GetInt(k_CTP2_LISTBOX_LDL_BORDER_TOP) : block->GetInt(k_CTP2_LISTBOX_LDL_BORDER_HEIGHT);
+	m_borderOffset.bottom = block->GetAttributeType(k_CTP2_LISTBOX_LDL_BORDER_BOTTOM) == ATTRIBUTE_TYPE_INT ?
+			block->GetInt(k_CTP2_LISTBOX_LDL_BORDER_BOTTOM) : block->GetInt(k_CTP2_LISTBOX_LDL_BORDER_HEIGHT);
 
-	Resize(Width() + m_borderOffset.x * 2, Height() + m_borderOffset.y * 2);
-	Move(m_x - m_borderOffset.x, m_y - m_borderOffset.y);
-	m_headerOffset.x = m_borderOffset.x;
-	m_pane->Move(m_pane->X() + m_borderOffset.x, m_pane->Y() + m_borderOffset.y);
+	Resize(Width() + m_borderOffset.left + m_borderOffset.right,
+			Height() + m_borderOffset.top + m_borderOffset.bottom);
+	Move(m_x - m_borderOffset.left, m_y - m_borderOffset.top);
+	m_headerOffset.x = m_borderOffset.left;
+	m_pane->Move(m_pane->X() + m_borderOffset.left, m_pane->Y() + m_borderOffset.top);
 	return AUI_ERRCODE_OK;
 }
 

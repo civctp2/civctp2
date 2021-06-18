@@ -251,6 +251,9 @@ protected:
 	virtual AUI_ERRCODE	RepositionHeaderSwitches( void );
 	virtual AUI_ERRCODE	RepositionRangers( void );
 
+	virtual sint32 WidthForItems() const { return m_width; }
+	virtual sint32 HeightForItems() const { return m_height; }
+
 	virtual aui_DragDropWindow *CreateDragDropWindow( aui_Control *dragDropItem );
 
 	sint32		ItemsPerWidth( sint32 column );
