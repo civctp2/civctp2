@@ -35,10 +35,10 @@
 
 class ctp2_Listbox;
 
-#define k_CTP2_LISTBOX_LDL_BEVELWIDTH		"bevelwidth"
-#define k_CTP2_LISTBOX_LDL_BEVELTYPE		"beveltype"
-#define k_CTP2_LISTBOX_LDL_BORDER_WIDTH     "borderwidth"
-#define k_CTP2_LISTBOX_LDL_BORDER_HEIGHT    "borderheight"
+#define k_CTP2_LISTBOX_LDL_BEVELWIDTH    "bevelwidth"
+#define k_CTP2_LISTBOX_LDL_BEVELTYPE     "beveltype"
+#define k_CTP2_LISTBOX_LDL_BORDER_WIDTH  "borderwidth"
+#define k_CTP2_LISTBOX_LDL_BORDER_HEIGHT "borderheight"
 
 #include "aui_control.h"    // ControlActionCallback
 #include "aui_listbox.h"    // aui_ListBox

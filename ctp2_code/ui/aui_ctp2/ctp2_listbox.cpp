@@ -516,13 +516,10 @@ AUI_ERRCODE ctp2_ListBox::DoneInstantiatingThis(const MBCHAR *ldlBlock)
 	m_borderOffset.x = block->GetInt(k_CTP2_LISTBOX_LDL_BORDER_WIDTH);
 	m_borderOffset.y = block->GetInt(k_CTP2_LISTBOX_LDL_BORDER_HEIGHT);
 
-	Resize(Width() + m_borderOffset.x * 2,
-		   Height() + m_borderOffset.y * 2);
-	Move(m_x - m_borderOffset.x,
-		 m_y - m_borderOffset.y);
+	Resize(Width() + m_borderOffset.x * 2, Height() + m_borderOffset.y * 2);
+	Move(m_x - m_borderOffset.x, m_y - m_borderOffset.y);
 	m_headerOffset.x = m_borderOffset.x;
-	m_pane->Move(m_pane->X() + m_borderOffset.x,
-				 m_pane->Y() + m_borderOffset.y);
+	m_pane->Move(m_pane->X() + m_borderOffset.x, m_pane->Y() + m_borderOffset.y);
 	return AUI_ERRCODE_OK;
 }
 

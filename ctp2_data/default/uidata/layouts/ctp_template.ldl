@@ -891,33 +891,33 @@ template CTP2_TEXT_BOX:CTP2_GENERIC_TEXT_DISPLAY_20 {
 #
 template CTP2_BORDER_BOX {
 	# Image layout.
-	int		numberoflayers		1
-	int		imagesperlayer		9
+	int numberoflayers 1
+	int imagesperlayer 9
 
-	int	borderwidth  5
-	int 	borderheight 5
+	int borderleft   8
+	int borderwidth  5
+	int borderheight 5
 	
 	# Background.
-	bool	layeralways0		true
-	string	image00				"uptg06a.tga"
-	bool	imagestretchx01		true
-	string  imageblttype01      "tile"
-	string	image01				"uptg06b.tga"
-	string	image02				"uptg06c.tga"
-	bool	imagenextrow03		true
-	bool	imagestretchy03		true
-	string	image03				"uptg06d.tga"
-	bool	imagestretchx04		true
-	bool	imagestretchy04		true
-	string	image04				"uptg06e.tga"
-	bool	imagestretchy05		true
-	string	image05				"uptg06f.tga"
-	bool	imagenextrow06		true
-	string	image06				"uptg06g.tga"
-	bool	imagestretchx07		true
-	string	image07				"uptg06h.tga"
-	string	image08				"uptg06i.tga"
-
+	bool   layeralways0    true
+	string image00         "uptg06a.tga"
+	bool   imagestretchx01 true
+	string imageblttype01  "tile"
+	string image01         "uptg06b.tga"
+	string image02         "uptg06c.tga"
+	bool   imagenextrow03  true
+	bool   imagestretchy03 true
+	string image03         "uptg06d.tga"
+	bool   imagestretchx04 true
+	bool   imagestretchy04 true
+	string image04         "uptg06e.tga"
+	bool   imagestretchy05 true
+	string image05         "uptg06f.tga"
+	bool   imagenextrow06  true
+	string image06         "uptg06g.tga"
+	bool   imagestretchx07 true
+	string image07         "uptg06h.tga"
+	string image08         "uptg06i.tga"
 }
 
 ##################################################
@@ -938,53 +938,49 @@ template CTP2_LIST_ITEM:CTP2_STANDARD_FONT {
 #
 template CTP2_LISTBOX:CTP2_BORDER_BOX {
 	# Runtime type.
-	string	objecttype			"ctp2_ListBox"
+	string objecttype "ctp2_ListBox"
 
 	# Consider this as a single control... I believe?
-	bool	atomic				true
-	
-	#Set ranger to always be visable.
-	bool alwaysranger TRUE
+	bool atomic true
+
+	# Set ranger to always be visible.
+	bool alwaysranger true
 
 	# Scrollbar.
 	rangery {
 		# Why is this here?
-		int	widthpix	15
-		int	heigthpix	15
+		int widthpix  15
+		int heigthpix 15
 
 		# Type of scrollbar, what are they?
-		string	type	"scroller"
+		string type "scroller"
 
 		# Vertical orientation.
-		string	orientation	"vertical"
+		string orientation "vertical"
 
 		# Background pattern, this is also going to change.
-		string	pattern	"uptg04e.tga"
+		string pattern "uptg04e.tga"
 
 		# Up button.
 		incy {
-			int	widthpix	15
-			int	heightpix	15
-			string	pattern	"upbt13.tga"
+			int    widthpix  15
+			int    heightpix 15
+			string pattern   "upbt13.tga"
 		}
 
 		# Down button.
 		decy {
-			int	widthpix	15
-			int	heightpix	15
-			string	pattern	"upbt13.tga"
+			int    widthpix  15
+			int    heightpix 15
+			string pattern   "upbt13.tga"
 		}
 
 		thumb {
-			int widthpix 15
-			string	pattern	"upbt14.tga"
+			int    widthpix 15
+			string pattern  "upbt14.tga"
 		}
-
 	}
 }
-
-
-
 
 ##################################################
 # 
