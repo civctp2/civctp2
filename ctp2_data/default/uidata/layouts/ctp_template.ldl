@@ -895,7 +895,7 @@ template CTP2_BORDER_BOX {
 	int imagesperlayer 9
 
 	int borderleft   7
-	int borderright  5
+	int borderright  4
 	int bordertop    8
 	int borderbottom 5
 	
@@ -913,7 +913,7 @@ template CTP2_BORDER_BOX {
 	bool   imagestretchy04 true
 	string image04         "uptg06e.tga"
 	bool   imagestretchy05 true
-	string image05         "uptg06f.tga"
+	string image05         "uptg06f-2.tga"
 	bool   imagenextrow06  true
 	string image06         "uptg06g.tga"
 	bool   imagestretchx07 true
