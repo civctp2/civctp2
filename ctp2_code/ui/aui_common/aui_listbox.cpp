@@ -25,8 +25,8 @@
 // Modifications from the original Activision code:
 //
 // - Always focus on the latest message.
-// - Initialized local variables. (Sep 9th 2005 Martin G�hmann)
-// - Standardized code (May 21st 2006 Martin G�hmann)
+// - Initialized local variables. (Sep 9th 2005 Martin Gühmann)
+// - Standardized code (May 21st 2006 Martin Gühmann)
 //
 //----------------------------------------------------------------------------
 
@@ -119,8 +119,6 @@ AUI_ERRCODE aui_ListBox::InitCommonLdl( const MBCHAR *ldlBlock )
 
 	m_alwaysRanger = block->GetBool( k_AUI_LISTBOX_LDL_ALWAYSRANGER );
 
-	m_headerOffset.x = block->GetInt(  k_AUI_LISTBOX_LDL_HEADEROFFSETX );
-	m_headerOffset.y = block->GetInt(  k_AUI_LISTBOX_LDL_HEADEROFFSETY );
 	m_verticalRangerOffset.x =
 		block->GetInt(  k_AUI_LISTBOX_LDL_RANGERYOFFSETX );
 	m_verticalRangerOffset.y =
@@ -919,43 +917,49 @@ AUI_ERRCODE aui_ListBox::RepositionItems( void )
 
 AUI_ERRCODE aui_ListBox::RepositionHeaderSwitches( void )
 {
-	m_header->Move( m_headerOffset.x, m_headerOffset.y - m_header->Height() );
+	m_header->Move(0, -m_header->Height());
 
-	if ( !IsHidden() ) m_header->Show();
+	if (!IsHidden()) {
+		m_header->Show();
+	}
 
 	sint32 minHorizontal = m_horizontalRanger->GetValueX();
-	sint32 maxHorizontal = minHorizontal + ItemsPerWidth( minHorizontal );
+	sint32 maxHorizontal = minHorizontal + ItemsPerWidth(minHorizontal);
 
 	sint32 x = 0;
 	ListPos widthPosition = m_widthList->GetHeadPosition();
 	ListPos position = m_header->ChildList()->GetHeadPosition();
-	for ( sint32 i = 0; i < m_numColumns; i++ )
+	bool firstVisibleHeader = true;
+	for (sint32 i = 0; i < m_numColumns; i++)
 	{
+		if (!position) {
+			break;
+		}
 
-		if ( !position ) break;
+		sint32 width = m_widthList->GetNext(widthPosition);
 
-		sint32 width = m_widthList->GetNext( widthPosition );
+		aui_Switch *theSwitch = (aui_Switch *)m_header->ChildList()->GetNext(position);
 
-		aui_Switch *theSwitch =
-			(aui_Switch *)m_header->ChildList()->GetNext( position );
-
-		if ( minHorizontal <= i && i < maxHorizontal )
+		if (minHorizontal <= i && i < maxHorizontal)
 		{
-			theSwitch->Move(
-				x,
-				m_header->Height() - theSwitch->Height() );
-
-			theSwitch->Resize(
-				width,
-				theSwitch->Height() );
-
+			// First visible header
+			if (width > 0 && firstVisibleHeader)
+			{
+				width += m_headerOffset.x;
+				firstVisibleHeader = false;
+			}
+			// Last visible header
+			if (i == maxHorizontal - 1) {
+				width = Width() - x;
+			}
+			theSwitch->Move(x, m_header->Height() - theSwitch->Height());
+			theSwitch->Resize(width, theSwitch->Height());
 			x += width;
 		}
-		else
+		else {
 			theSwitch->Hide();
+		}
 	}
-
-
 	return AUI_ERRCODE_OK;
 }
 

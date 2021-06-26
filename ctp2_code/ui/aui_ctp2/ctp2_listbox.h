@@ -127,13 +127,12 @@ public:
 	friend class ctp2_Menu;
 
 protected:
-	virtual sint32      WidthForItems() const {
+	virtual sint32 WidthForItems() const {
 		return aui_ListBox::WidthForItems() - m_borderOffset.left - m_borderOffset.right;
 	}
-	virtual sint32      HeightForItems() const {
+	virtual sint32 HeightForItems() const {
 		return aui_ListBox::HeightForItems() - m_borderOffset.top - m_borderOffset.bottom;
 	}
-
 	virtual AUI_ERRCODE DoneInstantiatingThis(const MBCHAR *ldlBlock);
 
 	AUI_ERRCODE ReformatItemFromHeader(aui_Item *item);

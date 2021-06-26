@@ -523,9 +523,11 @@ AUI_ERRCODE ctp2_ListBox::DoneInstantiatingThis(const MBCHAR *ldlBlock)
 
 	Resize(Width() + m_borderOffset.left + m_borderOffset.right,
 			Height() + m_borderOffset.top + m_borderOffset.bottom);
-	Move(m_x - m_borderOffset.left, m_y - m_borderOffset.top);
+	Offset(-m_borderOffset.left, -m_borderOffset.top);
 	m_headerOffset.x = m_borderOffset.left;
-	m_pane->Move(m_pane->X() + m_borderOffset.left, m_pane->Y() + m_borderOffset.top);
+	m_pane->Offset(m_borderOffset.left, m_borderOffset.top);
+	m_pane->Resize(Width() - m_borderOffset.left - m_borderOffset.right,
+			Height() - m_borderOffset.top - m_borderOffset.bottom);
 	return AUI_ERRCODE_OK;
 }
 
