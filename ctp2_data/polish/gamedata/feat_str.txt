@@ -1,0 +1,25 @@
+## FEATS OF WONDER STRINGS
+
+FEAT_ACCOMPISHED_TITLE		"WIELKIE DOKONANIA"
+
+## ADVANCE-RELATED FEATS
+FEAT_GOT_CONCRETE		"Gratulacje!  Jestes pierwsza nacja ktora odkryla beton!  Beton jest tanim i latwym w uzyciu materialem budowlanym.  Przez nastepne {FeatDB(Value[0]).Duration} tur, o {FeatDB(Value[0]).EffectIncreaseProduction}% zwiekszy sie produkcja w Twoim panstwie!"  
+FEAT_GOT_GUNPOWDER		"Gratulacje!  Jako pierwszy odkryles proch strzelniczy.  Jest to przelomowe odkrycie, calkowicie zmieniajace dotychczasowy sposob walki. Inne nacje beda musialy sie bardziej bronic przed Twoimi atakami .  Przez nastepne {FeatDB(Value[0]).Duration} tur mury obronne innych panstw beda mniej efektywne w obronie przeciwko Twoim jednostka."
+FEAT_GOT_MASS_PRODUCTION	"Gratulacje!  Jestes pierwszym narodem ktory odkryl masowa produkcje.  Dzieki zastosowaniu linii produkcyjnej i wyszkolonych sil roboczych w twoich fabrykach znacznie wzrosla wydajnosc produkcji.  Przez nastepne {FeatDB(Value[0]).Duration} tur uzyskasz {FeatDB(Value[0]).EffectIncreaseProduction}% wzrostu wydajnosci produkcji!"
+FEAT_GOT_COMPUTER		"Gratulacje!  Jestes pierwszym panstwem ktore odkrylo komputer.  Dzieki temu, latwiej jest dokonywac obliczen na duzych liczbach i przeprowadzac wieksza ilosc eksperymentow.  Przez nastepne {FeatDB(Value[0]).Duration} tur otrzymasz o {FeatDB(Value[0]).EffectIncreaseScience}% zwiekszona wydajnosc naukowa!"
+FEAT_GOT_ROBOTICS		"Gratulacje!  Jestes pierwszym panstwem ktore odkrylo robotyke.  Zaowocowalo to wzrostem wydajnosci produkcji, przy ktorej nie sa ju¿ potrzebni ludzie.  Przez nastepne {FeatDB(Value[0]).Duration} tur uzyskasz {FeatDB(Value[0]).EffectIncreaseProduction}% wzrostu wydajnosci produkcji!"
+FEAT_GOT_LIFE_EXTENSION		"Gratulacje!  Jestes pierwszym panstwem ktore odkrylo przedluzenie zycia.  Teraz Twoi beda prawie niesmiertelni, dzieki wymiane starych zuzytych cial na nowe, mlode i zdrowe!  Przez nastepne {FeatDB(Value[0]).Duration} tur cale Twoje panstwo uzyska {FeatDB(Value[0]).EffectIncreaseHappiness} punktow zadowolenia."  
+
+## CONSTRUCTION-RELATED FEATS
+
+FEAT_BUILT_THEATERS		"Zbudowales wiele teatrow w swoim imperium a wszystkie sztuki jakie grasz sa znane na calym swiecie.  Przez nastepne {FeatDB(Value[0]).Duration} tur Twoj narod otrzyma {FeatDB(Value[0]).EffectIncreaseHappiness} punktow zadowolenia z powodu swoich obywateli z ich kulturalnych osiagniec."
+FEAT_BUILT_BROKERAGES		"Zbudowales wiele gield, utrwalajac swoja silna pozycje ekonomiczna na swiecie.  Handlowcy, kupcy i bankierzy swiata szanuja i chwala Twoj kraj.  Otrzymasz {FeatDB(Value[0]).EffectIncreaseCommerce} punktow premii do calkowitego dochodu przez nastepne {FeatDB(Value[0]).Duration} tur."
+FEAT_BUILT_INTERNET		"W kilkunastu Swoich miastach zbudowales centra komputerowe, laczace bazy wojskowe, uniwersytety i komputery zwyklych uzytkownikow, tworzac szybko dzialajaca narodowa siec komputerowa.  Przez nastepne {FeatDB(Value[0]).Duration} tur Twoja wydajnosc naukowa wzrosnie o {FeatDB(Value[0]).EffectIncreaseScience} punktow."
+FEAT_BUILT_SYNDICATE		"Zbudowales kilkanascie ulepszen o nazwie telewizja, tworzac pierwsza siec telewizyjna.  Ludzie uwazaja teraz telewizor za swoje podstawowe zrodlo informacji i rozrywki.  Twoje panstwo otrzyma dodatkowe {FeatDB(Value[0]).EffectIncreaseHappiness} punktow zadowolenia przez nastepne {FeatDB(Value[0]).Duration} tur."  
+FEAT_BUILT_ORBITAL_LABS		"Zbudowales siec laboratoriow orbitalnych, ktore tworza swiatowej klasy centrum badawcze.  Z powodu wysokiej wiedzy jaka osiagnelo Twoje panstwo, otrzymujesz {FeatDB(Value[0]).EffectIncreaseScience} punktow premii do badan naukowych, przez nastepne {FeatDB(Value[0]).Duration} tur."  
+
+## ACTION-RELATED FEATS
+FEAT_SAILED_AROUND_THE_WORLD	"Udalo Ci sie oplynac swiat dookola!  Twoi marynarze doskonale znaja morze i sa swietnie wyszkoleni.  Nagroda za Twoje morskie osiagniecia jest {FeatDB(Value[0]).EffectBoatMovement/100} dodatkowych punktow ruchu dla wszystkich jednostek morskich, przez nastepne {FeatDB(Value[0]).Duration} tur."  
+FEAT_CONQUERED_BY_FORCE		"Jestes zdobywca!  Dzieki walecznosci, odwadze i determinacji Twoich wojsk podbiles silna nacje!"  
+FEAT_RECAPTURED_CITY 		"Odbiles jedno ze swoich miast z rak nieprzyjaciela!  Odzyskujac to co bylo Twoje, podniosles ludnosc na duchu i dales im nadzieje wolnosci w odliczu wrogiej okupacji.  Zadowolenie w calym imperium zwiekszy sie o {FeatDB(Value[0]).EffectIncreaseHappiness} punktow i utrzyma sie przez nastepne {FeatDB(Value[0]).Duration} tur. "  
+
