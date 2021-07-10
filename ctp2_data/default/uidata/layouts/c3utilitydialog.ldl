@@ -429,18 +429,17 @@ DefaultUtilityPlayerListPopup {
 
 
 	PlayerList:UTIL_RANGER {
-#		bool	shadowfont	true
-		int	xpix	32
-		int	ypix	80
-		int	widthpix	320
-		int	heightpix	200
+		int xpix      40
+		int ypix      80
+		int widthpix  305
+		int heightpix 200
+
 		int columns		2
-#		int bevelwidth	1
-#		int beveltype	2
 		header {
 			switch0:CTP2_HEADER_FONT {
-				int	widthpix	220
-				int	heightpix	20
+				int widthpix  205
+				int heightpix 20
+
 				string text "str_ldl_Player"
 				string	pattern	"uptg04e.tga"
 				int bevelwidth 	1

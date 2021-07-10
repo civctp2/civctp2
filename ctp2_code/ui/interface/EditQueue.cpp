@@ -936,7 +936,8 @@ void EditQueue::UpdateFileLists()
 			break;
 		}
 
-		ctp2_Static * label = (ctp2_Static *)item->GetChildByIndex(0);
+		ctp2_Static * box = (ctp2_Static *)item->GetChildByIndex(0);
+		ctp2_Static * label = (ctp2_Static *)box->GetChildByIndex(0);
 		Assert(label);
 		if (!label) {
 			break;
@@ -2500,7 +2501,8 @@ void EditQueue::DisplayQueueContents(const MBCHAR * queueName)
 			break;
 		}
 
-		ctp2_Static * label = (ctp2_Static *)item->GetChildByIndex(0);
+		ctp2_Static * box = (ctp2_Static *)item->GetChildByIndex(0);
+		ctp2_Static * label = (ctp2_Static *)box->GetChildByIndex(0);
 		Assert(label);
 		if (!label) {
 			break;

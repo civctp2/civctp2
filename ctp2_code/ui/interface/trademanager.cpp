@@ -25,7 +25,7 @@
 // Modifications from the original Activision code:
 //
 // - Corrected non-standard syntax.
-// - Initialized local variables. (Sep 9th 2005 Martin Gühmann)
+// - Initialized local variables. (Sep 9th 2005 Martin Gï¿½hmann)
 //
 //----------------------------------------------------------------------------
 
@@ -334,7 +334,6 @@ void TradeManager::Update()
 
 void TradeManager::UpdateCreateList(const PLAYER_INDEX & player_id)
 {
-	fprintf(stderr, "%s L%d:\n", __FILE__, __LINE__);
 	Assert(player_id >= 0 && player_id < k_MAX_PLAYERS);
 	if(player_id < 0 || player_id >= k_MAX_PLAYERS) return;
 
@@ -517,7 +516,6 @@ void TradeManager::UpdateCreateList(const PLAYER_INDEX & player_id)
 	m_createList->BuildListEnd();
 
 	m_createButton->Enable(FALSE);
-	fprintf(stderr, "%s L%d:\n", __FILE__, __LINE__);
 }
 
 void TradeManager::UpdateAdviceWindow()

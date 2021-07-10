@@ -800,7 +800,7 @@ template CTP2_3TAB_DIALOG_WINDOW:CTP2_DIALOG_WINDOW {
 			# Tab.
 			TabButton:CTP2_SIMPLE_TAB_BUTTON {
 				# Location.
-				int		xpix		316
+				int xpix 315
 
 				# Background.
 				string image00 "upct33ul.tga"
@@ -897,7 +897,7 @@ template CTP2_BORDER_BOX {
 	int borderleft   7
 	int borderright  4
 	int bordertop    8
-	int borderbottom 5
+	int borderbottom 6
 	
 	# Background.
 	bool   layeralways0    true

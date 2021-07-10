@@ -7,66 +7,70 @@
 ##                Data               ##
 ##-----------------------------------##
 ScenarioListItem:CTP2_LIST_ITEM {
-	string	pattern	"uptg20e.tga"
-	int	widthpix	575	
-	int	heightpix	128	
+	string pattern   "uptg20e.tga"
+	int    widthpix  564
+	int    heightpix 126
 	Item:CTP2_STANDARD_FONT {
 		string objecttype "ctp2_static"
-		int	widthpix	575	
-		int	heightpix	126	
-		string	text	"str_ldl_"
-		int	bevelwidth	1
-		int	beveltype	1
+		int widthpix  564
+		int heightpix 126
+
+		string text       "str_ldl_"
+		int    bevelwidth 1
+		int    beveltype  1
 		Name:CTP2_STANDARD_FONT {
 			string objecttype "ctp2_static"
-			int	xpix	166
-			int	ypix	3
-			int	widthpix	405	# MDS was 470
-			int	heightpix	20
-			string	pattern	"uptg06e.tga"
-			string	text	"str_ldl_"
-			string	textblttype	"fill"
 
+			int xpix      166
+			int ypix      3
+			int widthpix  395
+			int heightpix 20
+
+			string pattern     "uptg06e.tga"
+			string text        "str_ldl_"
+			string textblttype "fill"
 		}
 		Description:CTP2_STANDARD_FONT {
 			string objecttype "ctp2_static"
-			int	xpix	166
-			int	ypix	23
-			int	widthpix	405	
-			int	heightpix	100	
-			string	pattern	"uptg06e.tga"
-			string	text	"str_ldl_"
-			string	textblttype	"fill"
-			int maxlength	512
+
+			int xpix      166
+			int ypix      23
+			int widthpix  395
+			int heightpix 100
+
+			string pattern     "uptg06e.tga"
+			string text        "str_ldl_"
+			string textblttype "fill"
+
+			int maxlength 512
 		}
 		Image {
 			string objecttype "ctp2_static"
-			int	xpix	3
-			int	ypix	3
-			int	widthpix	96
-			int	heightpix	72
-			string	image0	"upwp028L.tga"
-			
+
+			int xpix      3
+			int ypix      3
+			int widthpix  96
+			int heightpix 72
+
+			string image0 "upwp028L.tga"
 		}
 	}
 }
 
 ScenarioWindow:CTP2_WINDOW {
 	string	pattern	"uptg20e.tga"
-#	int	xpix	479
-#	int	ypix	372
 	string	xanchor	"center"
 	string	yanchor	"center"
 	int	widthpix	640
-	int	heightpix	480	
+	int	heightpix	480
+
 	AvailableListBox:CTP2_LISTBOX {
-		int	widthpix	575	
-		int	heightpix	380	
-		int	xpix	24	
-		int	ypix	42
-		string	pattern	"uptg06e.tga"
-		int	bevelwidth	2
-		int	beveltype	0
+		int xpix      32
+		int ypix      43
+		int widthpix  564
+		int heightpix 378
+
+		string pattern "uptg06e.tga"
 	}
 	Title:CTP_GREY_TITLE_FONT {
 		string objecttype "ctp2_static"
@@ -91,42 +95,48 @@ ScenarioWindow:CTP2_WINDOW {
 	}
 	PackInstructions:CTP2_HEADER_FONT {
 		string objecttype "ctp2_static"
-		int	xpix	103	
-		int	ypix	429	
-		int	widthpix	342
-		int	heightpix	34
-		string pattern	"uptg20e.tga"
-		string	text	"str_ldl_PACK_INSTRUCTIONS"
-		string	just	"LEFT"
-		bool	wordwrap	TRUE
-		string	textblttype	"fill"
+
+		int xpix      115
+		int ypix      431
+		int widthpix  332
+		int heightpix 30
+
+		string pattern     "uptg20e.tga"
+		string text        "str_ldl_PACK_INSTRUCTIONS"
+		string just        "LEFT"
+		bool   wordwrap    true
+		string textblttype "fill"
 	}
 
 	CancelButton:CTP2_BUTTON_SMALL {
-		int xpix 20	# MDS was 550
-		int ypix 436	# MDS was 390
+		int xpix     25
+		int ypix     434
 		int widthpix 80
+
 		string text "str_ldl_Back"
 	}
 
 	LoadButton:CTP2_BUTTON_SMALL {
-		int xpix 540
-		int ypix 436	# MDS was 390
+		int xpix     535
+		int ypix     434
 		int widthpix 80
+
 		string text "str_ldl_SCEN_LOAD"
 	}
 
 	SaveButton:CTP2_BUTTON_SMALL {
-		int xpix 540
-		int ypix 436	# MDS was 390
+		int xpix     535
+		int ypix     434
 		int widthpix 80
+
 		string text "str_ldl_SCEN_SAVE"
 	}
 
 	NewButton:CTP2_BUTTON_SMALL {
-		int xpix 450
-		int ypix 436	# MDS was 390
+		int xpix     450
+		int ypix     434
 		int widthpix 80
+
 		string text "str_ldl_SCEN_NEW_PACK"
 	}
 	SCEN_UL {

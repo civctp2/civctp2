@@ -2,100 +2,104 @@
 ProfileEdit:CTP2_TITLE_WINDOW {
 	string title "str_ldl_AdvancedOptions"
 
-	int widthpix 340
+	int widthpix  360
 	int heightpix 484
 
 	bool centeredwindow true
 
 	Title:CTP2_STATIC_BASE:CTP_GREY_TITLE_FONT {
-		int 	xpix 	26
-		int 	ypix 	20
-		int 	widthpix 	270
-		string 	just 	"center"
-		string	text	"str_ldl_AdvancedOptions"
+		int xpix     36
+		int ypix     24
+		int widthpix 270
+
+		string just "center"
+		string text "str_ldl_AdvancedOptions"
 	}
 
 	List:CTP2_LISTBOX {
-		int xpix 26
-		int ypix 43
-		int widthpix 270
-		int heightpix 367
+		int xpix      35
+		int ypix      53
+		int widthpix  278
+		int heightpix 336
+
 		bool canfocus true
 	}
 
 	EnableMessages:CTP2_BUTTON_SMALL {
-		int xpix 26
-		int ypix 418
-		int widthpix 270
+		int xpix     28
+		int ypix     403
+		int widthpix 304
+
 		string text "str_ldl_EnableAllMessages"
 	}
+
 	CloseButton:CTP2_BUTTON_SMALL {
-#		string yanchor "bottom"
-#		string xanchor "left"
-		int xpix 131 
-		int ypix 442
-		int widthpix 80
+		int xpix 141
+		int ypix 434
+		int widthpix 83
+
 		string text "str_ldl_Close"
 		string shortcut "^["
 	}
 
 	Background:CTP2_STANDARD_DIALOG_PATTERN {
-		int widthpix 340
+		int widthpix  360
 		int heightpix 484
 	}
 }
 
 ProfileEditBoolItem:CTP2_LIST_ITEM {
-	int widthpix 270
+	int widthpix 278
 	int heightpix 28
 
-
 	box:CTP2_STATIC_BASE {
-		int xpix 0
-		int ypix 0
-		int widthpix 270
+		int xpix      0
+		int ypix      0
+		int widthpix  278
 		int heightpix 24
 
 		Label:CTP2_STATIC_BASE {
-			int xpix 4
-			int ypix 6
-			int widthpix 240
+			int xpix      4
+			int ypix      6
+			int widthpix  240
 			int heightpix 24
+
 			string just "left"
 		}
 
 		Toggle:CTP2_CHECK_BUTTON {
-			int ypix 4
-			int xpix 240			
-			int widthpix 20
+			int xpix      245
+			int ypix      2
+			int widthpix  20
 			int heightpix 24
 		}	
 	}
 }
 
 ProfileEditNumItem:CTP2_LIST_ITEM {
-	int widthpix 270
+	int widthpix  278
 	int heightpix 26
 
 	box:CTP2_STATIC_BASE {
-		int xpix 0
-		int ypix 0
-		int widthpix 270
+		int xpix      0
+		int ypix      0
+		int widthpix  278
 		int heightpix 28
 
 		Label:CTP2_STATIC_BASE {
-			int xpix 4
-			int ypix 6
-			int widthpix 192
+			int xpix      4
+			int ypix      6
+			int widthpix  175
 			int heightpix 24
+
 			string just "left"
 		}
-	
+
 		Value:CTP2_TEXT_FIELD {
-			int xpix 192
-			int ypix 4
-			int widthpix 70
+			int xpix      197
+			int ypix      4
+			int widthpix  70
 			int heightpix 20
-		}		
+		}
 	}
 }

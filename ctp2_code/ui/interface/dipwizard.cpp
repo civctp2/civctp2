@@ -24,14 +24,14 @@
 //
 // Modifications from the original Activision code:
 //
-// - Added emissary photo to the diplomatic manager by Martin Gühmann
+// - Added emissary photo to the diplomatic manager by Martin GÃ¼hmann
 // - Diplomatic proposals/responses sent from UI get the highest priority possible
 //   so that the AI won't override them: DipWizard::SendCallback
 // - Repaired crashes when the emissary photo is missing.
-// - Added female leader images. (Aug 20th 2005 Martin Gühmann)
-// - Initialized local variables. (Sep 9th 2005 Martin Gühmann)
+// - Added female leader images. (Aug 20th 2005 Martin GÃ¼hmann)
+// - Initialized local variables. (Sep 9th 2005 Martin GÃ¼hmann)
 // - removed new diplo attempt - E 12.27.2006
-// - Added HotSeat and PBEM human-human diplomacy support. (17-Oct-2007 Martin Gühmann)
+// - Added HotSeat and PBEM human-human diplomacy support. (17-Oct-2007 Martin GÃ¼hmann)
 //
 //----------------------------------------------------------------------------
 
@@ -109,7 +109,7 @@ ctp2_Static       *DipWizard::m_createButtons = NULL,
                   *DipWizard::m_parchment = NULL,
                   *DipWizard::m_responseDiplomat;
 
-//Added by Martin Gühmann to display the emissary photo of recipient
+//Added by Martin GÃ¼hmann to display the emissary photo of recipient
 ctp2_Static       *DipWizard::m_emissary_photo = NULL;
 
 ctp2_DropDown     *DipWizard::m_nations = NULL;
@@ -237,15 +237,11 @@ DipWizard::DipWizard(AUI_ERRCODE *err)
 
 	m_parchment = (ctp2_Static *)aui_Ldl::GetObject(s_dipWizardBlock, "Details.Parchment");
 	m_responseDiplomat = (ctp2_Static *)aui_Ldl::GetObject(s_dipWizardBlock, "Stage3.Diplomat");
-	//Added by Martin Gühmann to display the emissary photo of recipient
+	//Added by Martin GÃ¼hmann to display the emissary photo of recipient
 	m_emissary_photo = (ctp2_Static *)aui_Ldl::GetObject(s_dipWizardBlock, "Details.Picture");
 
 	m_threatList = (ctp2_ListBox *)aui_Ldl::GetObject(s_dipWizardBlock, "Stage4.List");
 	m_threatList->SetActionFuncAndCookie(ThreatListCallback, NULL);
-
-
-
-
 
 	m_window->SetStronglyModal(TRUE);
 
@@ -265,7 +261,7 @@ DipWizard::DipWizard(AUI_ERRCODE *err)
 	m_viewThreat = -1;
 
 	m_sendCounter = false;
-	//Added by Martin Gühmann to display the emissary photo of recipient
+	//Added by Martin GÃ¼hmann to display the emissary photo of recipient
 	//Makes shure that the default image is never shown not even for one or two seconds
 	if (m_emissary_photo)
 	{
@@ -481,15 +477,11 @@ void DipWizard::FillProposalLists()
 		AddProposalItem(exchList, rec);
 	}
 
-
-
-
 	if(m_threatList) {
 		m_threatList->Clear();
 		if(GetStage() == DIP_WIZ_STAGE_MAKE_THREAT) {
 			m_sendButton->Enable(FALSE);
 		}
-
 
 		sint32 threatenee = m_recipient;
 
@@ -562,17 +554,25 @@ void DipWizard::FillProposalLists()
 					break;
 				}
 
-				ctp2_ListItem *item = (ctp2_ListItem *)aui_Ldl::BuildHierarchyFromRoot("DipWizThreatItem");
+				ctp2_ListItem * item = (ctp2_ListItem *)aui_Ldl::BuildHierarchyFromRoot("DipWizThreatItem");
 				Assert(item);
-				if(!item)
+				if (!item) {
 					break;
+				}
 
 				item->SetUserData((void *)i);
 
-				ctp2_Static *text = (ctp2_Static *)item->GetChildByIndex(0);
-				Assert(text);
-				if(!text)
+				ctp2_Static * box = (ctp2_Static *)item->GetChildByIndex(0);
+				Assert(box);
+				if (!box) {
 					break;
+				}
+
+				ctp2_Static * text = (ctp2_Static *)box->GetChildByIndex(0);
+				Assert(text);
+				if (!text) {
+					break;
+				}
 
 				text->SetText(g_theStringDB->GetNameStr(rec->GetTitle()));
 				m_threatList->AddItem(item);
@@ -625,12 +625,18 @@ void DipWizard::FillRecipientLists()
 
 void DipWizard::AddProposalItem(ctp2_ListBox *propList, const DiplomacyProposalRecord *rec)
 {
-	if(propList) {
-		ctp2_ListItem *propItem = (ctp2_ListItem *)aui_Ldl::BuildHierarchyFromRoot("DipWizProposalItem");
-		if(propItem) {
-			ctp2_Static *label = (ctp2_Static *)propItem->GetChildByIndex(0);
-			if(label) {
-				label->SetText(g_theStringDB->GetNameStr(rec->GetTitle()));
+	if (propList)
+	{
+		ctp2_ListItem * propItem = (ctp2_ListItem *)aui_Ldl::BuildHierarchyFromRoot("DipWizProposalItem");
+		if (propItem)
+		{
+			ctp2_Static * box = (ctp2_Static *) propItem->GetChildByIndex(0);
+			if (box)
+			{
+				ctp2_Static * label = (ctp2_Static *) box->GetChildByIndex(0);
+				if (label) {
+					label->SetText(g_theStringDB->GetNameStr(rec->GetTitle()));
+				}
 			}
 			propItem->SetUserData((void *)rec->GetIndex());
 			propList->AddItem(propItem);
@@ -1271,7 +1277,7 @@ void DipWizard::UpdateDetails()
 	st = (ctp2_Static *)aui_Ldl::GetObject(s_dipWizardBlock, "Details.Recipient");
 	if(st) {
 		if(!viewingProposal) {
-			//Added by Martin Gühmann to display the emissary photo of recipient
+			//Added by Martin GÃ¼hmann to display the emissary photo of recipient
 			DisplayDiplomat(m_recipient);
 			DisplayParchment(g_selected_item->GetVisiblePlayer());
 			if(m_recipient >= 0) {
@@ -1290,12 +1296,12 @@ void DipWizard::UpdateDetails()
 				stringutils_Interpret(g_theStringDB->GetNameStr("str_ldl_DipWizSender"), so, text);
 				st->SetText(text);
 
-				//Modified by Martin Gühmann to display the emissary photo of recipient
+				//Modified by Martin GÃ¼hmann to display the emissary photo of recipient
 				DisplayDiplomat(m_viewRecipient);
 				DisplayParchment(m_viewSender);
 
 			} else if(m_viewResponseType == RESPONSE_COUNTER) {
-				//Modified by Martin Gühmann to display the emissary photo of recipient
+				//Modified by Martin GÃ¼hmann to display the emissary photo of recipient
 				DisplayDiplomat(m_viewSender);
 				DisplayParchment(m_viewRecipient);
 				SlicObject so;
@@ -1303,7 +1309,7 @@ void DipWizard::UpdateDetails()
 				stringutils_Interpret(g_theStringDB->GetNameStr("str_ldl_DipWizSender"), so, text);
 				st->SetText(text);
 			} else if(m_viewSender == g_selected_item->GetVisiblePlayer()) {
-				//Added by Martin Gühmann to display the emissary photo of recipient
+				//Added by Martin GÃ¼hmann to display the emissary photo of recipient
 				DisplayDiplomat(m_viewRecipient);
 				DisplayParchment(g_selected_item->GetVisiblePlayer());
 				SlicObject so;
@@ -1311,7 +1317,7 @@ void DipWizard::UpdateDetails()
 				stringutils_Interpret(g_theStringDB->GetNameStr("str_ldl_DipWizRecipient"), so, text);
 				st->SetText(text);
 			} else {
-				//Added by Martin Gühmann to display the emissary photo of recipient
+				//Added by Martin GÃ¼hmann to display the emissary photo of recipient
 				DisplayDiplomat(-1);
 				DisplayParchment(g_selected_item->GetVisiblePlayer());
 				st->SetText("");
@@ -2622,7 +2628,7 @@ void DipWizard::NotifyThreatRejected(const Response &resp, const Response &sende
 
 void DipWizard::DisplayDiplomat(sint32 player)
 {
-	//Added by Martin Gühmann to display the emissary photo of recipient
+	//Added by Martin GÃ¼hmann to display the emissary photo of recipient
 	if (m_emissary_photo)
 	{
 		const MBCHAR *	fileName	= NULL;

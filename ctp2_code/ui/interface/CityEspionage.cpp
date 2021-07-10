@@ -24,7 +24,7 @@
 //
 // Modifications from the original Activision code:
 //
-// - Initialized local variables. (Sep 9th 2005 Martin Gühmann)
+// - Initialized local variables. (Sep 9th 2005 Martin GÃ¼hmann)
 // - Improved cleanup and structure.
 //
 //----------------------------------------------------------------------------
@@ -211,11 +211,12 @@ void CityEspionage::DisplayWindow(Unit a_City)
 				if (cityData->HasBuilding(buildIndex))
 				{
 					ctp2_ListItem * item = static_cast<ctp2_ListItem *>
-					    (aui_Ldl::BuildHierarchyFromRoot("ce_InventoryListItem"));
-
+							(aui_Ldl::BuildHierarchyFromRoot("ce_InventoryListItem"));
 					if (item)
 					{
-						item->SetText(g_theBuildingDB->Get(buildIndex)->GetNameText());
+						ctp2_Static * box = static_cast<ctp2_Static*>(item->GetChildByIndex(0));
+						ctp2_Static * label = static_cast<ctp2_Static*>(box->GetChildByIndex(0));
+						label->SetText(g_theBuildingDB->Get(buildIndex)->GetNameText());
 						item->SetUserData(new InventoryItemInfo(true, buildIndex));
 					}
 
@@ -232,7 +233,9 @@ void CityEspionage::DisplayWindow(Unit a_City)
 
 					if (item)
 					{
-						item->SetText(g_theWonderDB->Get(wonderIndex)->GetNameText());
+						ctp2_Static * box = static_cast<ctp2_Static*>(item->GetChildByIndex(0));
+						ctp2_Static * label = static_cast<ctp2_Static*>(box->GetChildByIndex(0));
+						label->SetText(g_theWonderDB->Get(wonderIndex)->GetNameText());
 						item->SetUserData(new InventoryItemInfo(false, wonderIndex));
 					}
 
