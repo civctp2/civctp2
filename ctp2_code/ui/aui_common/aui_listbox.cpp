@@ -1174,7 +1174,7 @@ void aui_ListBox::WhatsChanged(
 	}
 }
 
-AUI_ERRCODE aui_ListBox::DragSelect( sint32 y )
+AUI_ERRCODE aui_ListBox::DragSelect(sint32 relativeY)
 {
 	if ( m_dragDropWindow ) return AUI_ERRCODE_OK;
 
@@ -1183,10 +1183,11 @@ AUI_ERRCODE aui_ListBox::DragSelect( sint32 y )
 	maxY *= m_maxItemHeight;
 
 	sint32 itemIndex = 0;
-	if ( y < 0 )
+	if (relativeY < 0 ) {
 		itemIndex = m_verticalRanger->GetValueY();
-	else if ( y < maxY )
-		itemIndex = y / m_maxItemHeight + m_verticalRanger->GetValueY();
+	} else if (relativeY < maxY ) {
+		itemIndex = CalculateItemIndexByRelativeY(relativeY);
+	}
 	else
 	{
 		itemIndex = m_itemsPerHeight + m_verticalRanger->GetValueY() - 1;
@@ -1414,7 +1415,7 @@ void aui_ListBox::PostChildrenCallback( aui_MouseEvent *mouseData )
 		m_lastRepeatTime = mouseData->time;
 
 		ScrollList();
-		DragSelect( mouseData->position.y - m_y );
+		DragSelect(CalculateRelativeY(mouseData->position.y));
 
 		m_draw |= m_drawMask & k_AUI_REGION_DRAWFLAG_UPDATE;
 		if ( m_mouseCode == AUI_ERRCODE_UNHANDLED )
@@ -1509,15 +1510,15 @@ void aui_ListBox::MouseLGrabInside( aui_MouseEvent *mouseData )
 		SetMouseOwnership();
 		SetKeyboardFocus();
 
-		sint32 y = mouseData->position.y - m_y;
+		sint32 relativeY = CalculateRelativeY(mouseData->position.y);
 
 		sint32 maxY = m_itemsPerHeight;
 		if ( maxY > m_numRows ) maxY = m_numRows;
 		maxY *= m_maxItemHeight;
 
-		if ( y < maxY )
+		if (relativeY < maxY )
 		{
-			sint32 itemIndex = y / (m_maxItemHeight != 0 ? m_maxItemHeight : 1) + m_verticalRanger->GetValueY();
+			sint32 itemIndex = CalculateItemIndexByRelativeY(relativeY);
 
 			if (GetItemByIndex(itemIndex)->IsDisabled()) {
 				return;
@@ -1606,7 +1607,7 @@ void aui_ListBox::MouseLGrabInside( aui_MouseEvent *mouseData )
 				{
 					m_dragDropWindow->StartDragging(
 						mouseData->position.x - m_x - item->X(),
-						y - item->Y() );
+						relativeY - item->Y());
 				}
 
 				SendSelectCallback();
@@ -1645,15 +1646,15 @@ void aui_ListBox::MouseRGrabInside( aui_MouseEvent *mouseData )
 		SetMouseOwnership();
 		SetKeyboardFocus();
 
-		sint32 y = mouseData->position.y - m_y;
+		sint32 relativeY = CalculateRelativeY(mouseData->position.y);
 
 		sint32 maxY = m_itemsPerHeight;
 		if ( maxY > m_numRows ) maxY = m_numRows;
 		maxY *= m_maxItemHeight;
 
-		if ( y < maxY )
+		if (relativeY < maxY )
 		{
-			sint32 itemIndex = y / m_maxItemHeight + m_verticalRanger->GetValueY();
+			sint32 itemIndex = CalculateItemIndexByRelativeY(relativeY);
 
 			if (GetItemByIndex(itemIndex)->IsDisabled()) {
 				return;
@@ -1811,7 +1812,7 @@ void aui_ListBox::MouseLDragAway( aui_MouseEvent *mouseData )
 		CalculateScroll( mouseData->position.x, mouseData->position.y );
 
 		ScrollList();
-		DragSelect( mouseData->position.y - m_y );
+		DragSelect(CalculateRelativeY(mouseData->position.y));
 		m_scrolling = TRUE;
 		m_startWaitTime = mouseData->time;
 
@@ -1838,7 +1839,7 @@ void aui_ListBox::MouseLDragOver( aui_MouseEvent *mouseData )
 	m_scrolling = FALSE;
 
 	if ( GetMouseOwnership() == this )
-		DragSelect( mouseData->position.y - m_y );
+		DragSelect(CalculateRelativeY(mouseData->position.y));
 
 	aui_ListBox::SetMouseFocusListBox(this);
 }
@@ -1857,7 +1858,7 @@ void aui_ListBox::MouseLDragInside( aui_MouseEvent *mouseData )
 	if (IsDisabled()) return;
 
 	if ( GetMouseOwnership() == this )
-		DragSelect( mouseData->position.y - m_y );
+		DragSelect(CalculateRelativeY(mouseData->position.y));
 }
 
 void aui_ListBox::MouseLDragOutside( aui_MouseEvent *mouseData )
@@ -1868,7 +1869,7 @@ void aui_ListBox::MouseLDragOutside( aui_MouseEvent *mouseData )
 	{
 		CalculateScroll( mouseData->position.x, mouseData->position.y );
 
-		DragSelect( mouseData->position.y - m_y );
+		DragSelect(CalculateRelativeY(mouseData->position.y));
 	}
 }
 
@@ -1883,15 +1884,15 @@ void aui_ListBox::MouseLDoubleClickInside( aui_MouseEvent *mouseData )
 
 		PlaySound( AUI_SOUNDBASE_SOUND_EXECUTE );
 
-		sint32 y = mouseData->position.y - m_y;
+		sint32 relativeY = CalculateRelativeY(mouseData->position.y);
 
 		sint32 maxY = m_itemsPerHeight;
 		if ( maxY > m_numRows ) maxY = m_numRows;
 		maxY *= m_maxItemHeight;
 
-		if ( y < maxY )
+		if (relativeY < maxY )
 		{
-			sint32 itemIndex = y / m_maxItemHeight + m_verticalRanger->GetValueY();
+			sint32 itemIndex = CalculateItemIndexByRelativeY(relativeY);
 
 			if (!GetItemByIndex(itemIndex)->IsDisabled()) {
 				SendSelectCallback(AUI_LISTBOX_ACTION_DOUBLECLICKSELECT, (uint32) itemIndex);

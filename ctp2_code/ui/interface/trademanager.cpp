@@ -25,7 +25,7 @@
 // Modifications from the original Activision code:
 //
 // - Corrected non-standard syntax.
-// - Initialized local variables. (Sep 9th 2005 Martin G�hmann)
+// - Initialized local variables. (Sep 9th 2005 Martin Gühmann)
 //
 //----------------------------------------------------------------------------
 

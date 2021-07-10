@@ -34,11 +34,10 @@
 
 #include "aui_control.h"
 #include "aui_header.h"
+#include "aui_ranger.h"
 
 class aui_Item;
-class aui_Ranger;
 class aui_DropDown;
-
 
 #define k_AUI_LISTBOX_LDL_HEADER			"header"
 #define k_AUI_LISTBOX_LDL_RANGERX			"rangerx"
@@ -64,7 +63,6 @@ enum AUI_LISTBOX_ACTION
 	AUI_LISTBOX_ACTION_LAST
 };
 
-
 enum AUI_LISTBOX_SELECTSTATUS
 {
 	AUI_LISTBOX_SELECTSTATUS_FIRST = 0,
@@ -75,11 +73,9 @@ enum AUI_LISTBOX_SELECTSTATUS
 	AUI_LISTBOX_SELECTSTATUS_LAST,
 };
 
-
 class aui_ListBox : public aui_Control
 {
 public:
-
 	aui_ListBox(
 		AUI_ERRCODE *retval,
 		uint32 id,
@@ -129,7 +125,6 @@ public:
 	aui_Item	*GetItem( uint32 itemId ) const
 		{ return (aui_Item *)m_pane->GetChild( itemId ); }
 
-
 	void RemoveItems( BOOL destroy = FALSE, BOOL destroyAction = FALSE );
 
 	AUI_ERRCODE	RemoveItemByIndex( sint32 index );
@@ -149,7 +144,6 @@ public:
 
 	virtual AUI_ERRCODE SortByColumn( sint32 column, BOOL ascending )
 	{
-
 		if ( column == -1 ) return AUI_ERRCODE_OK;
 
 		Assert( 0 <= column && column < m_numColumns );
@@ -170,17 +164,8 @@ public:
 	aui_Item	*GetSelectedItem( void ) const;
 	sint32		GetSelectedItemIndex( void ) const;
 
-
-
-
-
-
-
-
-
 	sint32 ExtractDoubleClickedItem( uint32 data ) const
 	{ return (sint32)data; }
-
 
 	BOOL ExtractEndUserTriggeredEvent( uint32 data ) const
 	{ return (data & 0x1) == 0; }
@@ -216,17 +201,7 @@ public:
 	sint32 GetSortColumn( void ) const { return m_sortColumn; }
 	BOOL GetSortAscending( void ) const { return m_sortAscending; }
 
-
-
-
-
-
-
-
-
-
 	void BuildListStart(void);
-
 	void BuildListEnd(bool isAddBottom = false);
 
 	aui_Item *ConstructAndAddTextItem(const MBCHAR *ldlblock, const MBCHAR *text, void *userData);
@@ -265,7 +240,7 @@ protected:
 	AUI_ERRCODE	CalculateScroll( sint32 x, sint32 y );
 	AUI_ERRCODE	ScrollList( void );
 
-	AUI_ERRCODE	DragSelect( sint32 y );
+	AUI_ERRCODE	DragSelect(sint32 relativeY);
 
 	void SendSelectCallback(
 		AUI_LISTBOX_ACTION action = AUI_LISTBOX_ACTION_SELECT,
@@ -326,11 +301,6 @@ protected:
 
 	BOOL		m_buildingTheList;
 
-
-
-
-
-
 	BOOL		m_savedForceSelect;
 	bool        m_ignoreOutsideDrops;
 
@@ -360,6 +330,16 @@ protected:
 	virtual void	MouseRDropInside       (aui_MouseEvent * mouseData);
 	virtual void	MouseRDragAway         (aui_MouseEvent * mouseData);
 	virtual void	MouseRDragOver         (aui_MouseEvent * mouseData);
+
+private:
+	sint32 CalculateRelativeY(sint32 y) const {
+		return y - m_y - (m_pane ? m_pane->Y() : 0);
+	}
+
+	sint32 CalculateItemIndexByRelativeY(sint32 relativeY) const {
+		return (relativeY / (m_maxItemHeight != 0 ? m_maxItemHeight : 1))
+				+ (m_verticalRanger ? m_verticalRanger->GetValueY() : 0);
+	}
 };
 
 aui_Control::ControlActionCallback ListBoxRangerActionCallback;
