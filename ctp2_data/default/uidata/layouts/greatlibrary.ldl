@@ -3,124 +3,82 @@ template GREAT_TAB_BUTTON:CTP2_SMALL_TAB_BUTTON {
 	int	widthpix	141
 }
 
-
 template GREAT_TAB_PANEL:CTP2_TABBG {
 	string objecttype "ctp2_Static"
-#	int xpix 20
 	int ypix 15
 	int widthpix 450
 	int heightpix 210				
 }
 
-
 template GREAT_INDEX_BUTTON:CTP2_BUTTON_NODULE_ONLY_LARGE {
-
 	int	widthpix	50
-
 	int	heightpix	42
-
 	int	bevelwidth	0
-
 }
 
-
-
 template GREAT_ARROW_BUTTON:CTP2_GENERIC_SIZABLE_TEXT_BUTTON {
-
 	int	ypix	470
-
 	int	widthpix	85
 
 	string	image0	"UPBT01XU.tga"
 	string	image1	"UPBT01XU.tga"
 	string	disabledimage0	"UPBT01XU.tga"
-
 }
 
 
 # Text box for statistics about item
 template GREAT_BOX : CTP2_HEADER_FONT: CTP2_HYPER_TEXT_BOX {
-
-
 	int	ypix		85
-
 	int	widthpix	110
-
 	int	heightpix	112
-
 	int bevelwidth 0
-	
+
 	string	pattern	"upfg502.tga"
-
 }
-
 
 # Text box for tabs
 template GREAT_BIG_BOX : CTP2_HYPER_TEXT_BOX {
-
 	int	xpix	15
-
 	int	ypix	15
-
 	int	widthpix	415
-
 	int	heightpix	180
-
 	int	bevelwidth	0
 
 	int	hypermaxlength	4096
-
 	string	pattern	"uptg04e.tga"
-
 }
 
-
 template GREAT_WALLPAPER : CTP2_STATIC_BASE {
-
 	int	xpix	0
-
 	int	ypix	0
-
 	int	widthpix	456
-
 	int	heightpix	170
 
 	string	pattern	"uptg14.tga"
-
 	int	srcxpix	0
-
 	int	srcypix	0
-
 	int	srcwidthpix	64
-
 	int	srcheightpix	64
 
 	int	beveltype	0
-
 	int	bevelwidth	0
-
 }
 
 TechTree {
-
 	int	xpix	5
 	int	ypix	5
-
 	int	widthpix	440
 	int	heightpix	200
 
 	int	beveltype	0
-
 	int	bevelwidth	0
 
 	bool	atomic		true
 
 	button:CTP2_HEADER_FONT:CTP2_GENERIC_SIZABLE_TEXT_BUTTON {
-
 		string	text	"str_ldl_"
 		int	xpix	0
 		int	ypix	0
-
 		int	widthpix	124
 		int	heightpix	20
 
@@ -128,7 +86,7 @@ TechTree {
 		string	image1	"UPBT01XU.tga"
 		string	disabledimage0	"UPBT01XU.tga"
 	} #button
-	
+
 	ResearchGoal:CTP2_STANDARD_FONT {
 		int xpix		10
 		int ypix		10
@@ -137,42 +95,28 @@ TechTree {
 		string just		"left"
 		string text		"str_ldl_ResearchGoal"
 	}
-	
 } #techtree
 
-
 #######################
-
 # GreatLibrary
-
 #######################
 
 GreatLibrary:CTP2_WINDOW {
-
 	string	pattern	"upfg500.tga"
-
 	string	xanchor		"center"
-
 	string	yanchor		"center"
-
 	int	widthpix	800
-
 	int	heightpix	558
 
 	Title:CTP_GREY_TITLE_FONT {
 		string	objecttype		"ctp2_Static"
-
-#		int xpix	472
 		string	xanchor	"center"
 		int	ypix	7
-
 		int	widthpix	100
-
-		int	heightpix	13	
+		int	heightpix	13
 
 		string	text	"str_ldl_CAPS_GREAT_LIBRARY"
 	}
-
 
 	ItemLabel:CTP2_STATIC_BASE:CTP2_STANDARD_TITLE_FONT {
 		int xpix 459
@@ -184,28 +128,19 @@ GreatLibrary:CTP2_WINDOW {
 	}
 
 	Category:CTP2_STATIC_BASE {
-
-
 		int	xpix	110
-
 		int	ypix	85
-
 		int	widthpix	136
-
-		int	heightpix	18	
+		int	heightpix	18
 
 		int	beveltype	0
-
 		int	bevelwidth	0
 
 		string	pattern	"upfg500.tga"
 
 		int	srcxpix	110
-
 		int	srcypix	85
-
 		int	srcwidthpix		136
-
 		int	srcheightpix	18
 
 		string	text	"str_ldl_CAPS_UNITS"
@@ -213,12 +148,14 @@ GreatLibrary:CTP2_WINDOW {
 
 	# Field for entering a search word
 	SearchWord:CTP2_TEXT_FIELD {
-		int xpix 126
-		int ypix 60
-		int widthpix 138
+		int xpix     126
+		int ypix     60
+		int widthpix 136
+
 		# Tooltip
-		string	statustext	"STATUSBAR_GL_SEARCHTEXT_BOX_DISPLAY"
+		string statustext "STATUSBAR_GL_SEARCHTEXT_BOX_DISPLAY"
 	}
+
 	FieldLabel:CTP2_STATIC_BASE:CTP_GOLD_TITLE_FONT {
 		int xpix 40
 		int ypix 60
@@ -230,53 +167,39 @@ GreatLibrary:CTP2_WINDOW {
 		int fontshadowcolorred 		40			
 		int fontshadowcolorgreen 	40
 		int fontshadowcolorblue 	40
-	#	int fontsize			16
 		string	just	"right"
 
 		string	text	"str_ldl_Search"
 	}
+
 	# Tells the user where to enter search text
 	SearchLabel:CTP2_STATIC_BASE {
+		int xpix      -45
+		int ypix      23
+		int widthpix  110
+		int heightpix 18
 
-		int xpix	-45
+		int beveltype 0
+		int bevelwidth 0
 
-		int	ypix	23
+		string pattern      "upfg500.tga"
+		int    srcxpix      -45
+		int    srcypix      23
+		int    srcwidthpix  110
+		int    srcheightpix 18
 
-		int	widthpix	110
-
-		int	heightpix	18	
-
-		int	beveltype	0
-
-		int	bevelwidth	0
-
-		string	pattern	"upfg500.tga"
-
-		int	srcxpix	-45
-
-		int	srcypix	23
-
-		int	srcwidthpix		110
-
-		int	srcheightpix	18
-
-		string	text	"str_ldl_SEARCH_WORD"
-
+		string text "str_ldl_SEARCH_WORD"
 	}
 
 	OkButton:CTP2_GENERIC_SIZABLE_TEXT_BUTTON {
-
 		int	xpix	650
-
 		int	ypix	525
-
 		int		widthpix	124
 
 		# Label
 		string	text	"str_ldl_CLOSE_BUTTON"
 
 		string	image0	"UPBT01XU.tga"
-
 		string	image1	"UPBT01XU.tga"
 
 		string	disabledimage0	"UPBT01XU.tga"
@@ -284,105 +207,68 @@ GreatLibrary:CTP2_WINDOW {
 		string	statustext	"STATUSBAR_GL_CLOSE_BUTTON"
 	}
 
-
 	# Web-style "BACK"
 	BackButton:GREAT_ARROW_BUTTON {
-
 		int	xpix	440
 
 		string	text	"str_ldl_Back"
 		# Tooltip
 		string	statustext	"STATUSBAR_GL_BACK_BUTTON"
-
 	}
 
 	# Web-style "FORWARD"
 	ForwardButton:GREAT_ARROW_BUTTON {
-
 		int	xpix	528
 
 		string	text	"str_ldl_Next"
 		# Tooltip
 		string	statustext	"STATUSBAR_GL_FORWARD_BUTTON"
-
 	}
 
 	# The user presses this button to set a goal, and the tech tree
 	# shows how to get there
 	SetGoalButton:CTP2_BUTTON_SMALL {
-
 		int	xpix	500
-
 		int	ypix	525
-
 		int	widthpix	124
-
 		int heightpix	24
 
 		# Label
 		string	text	"str_ldl_SET_GOAL"
 
 		string	image0	"UPBT01XU.tga"
-
 		string	image1	"UPBT01XU.tga"
 
 		string	disabledimage0	"UPBT01XU.tga"
 	}
 
-
-
-
 	TechStillShot : CTP2_STATIC_BASE {
-
 		int	xpix	298
-
 		int	ypix	81
-
 		int	widthpix	160
-
 		int	heightpix	120
 
-
 		string	imageblttype	"stretch"
-
 	}
 
-
-
 	RequirementsText:GREAT_BOX {
-
 		int	xpix	472
-
-
 	}
 
 	VariablesText:GREAT_BOX {
-
 		int	xpix	616
-
 	}
 
-
-
-
-
-
 	##### index stuff
-
 	IndexButtonSwitchGroup {
 		string objecttype "ctp2_Static"
 
 		int	xpix	3
 		int	ypix	44
-
 		int	widthpix	320 # was 200
 		int	heightpix	480
 
-		#string	pattern	"uptg14.tga"
-
-
 		AdvancesButton:GREAT_INDEX_BUTTON {
-
 			string	image20	"UPCT01d.tga"
 			string	image10	"UPCT01u.tga"
 			string	image30	"UPCT01h.tga"
@@ -390,159 +276,128 @@ GreatLibrary:CTP2_WINDOW {
 			int	xpix	29
 			int	ypix	42
 
-			#string	text	"str_ldl_CAPS_ADVANCES"
 			# Tooltip
 			string	tipwindow	"TOOLTIP_GL_SHOWADV_BUTTON"
 			string	statustext	"STATUSBAR_GL_SHOWADV_BUTTON"
 		}
 
 		UnitsButton : GREAT_INDEX_BUTTON {
-
 			string	image20	"upct02d.tga"
 			string	image10	"upct02u.tga"
 			string	image30	"UPCT02h.tga"
 
 			int	xpix	29
-
 			int	ypix	85
 
-#			string	text	"str_ldl_CAPS_UNITS"
 			# Tooltip
 			string	tipwindow	"TOOLTIP_GL_SHOWUNITS_BUTTON"
 			string	statustext	"STATUSBAR_GL_SHOWUNITS_BUTTON"
 		}
 
 		ImproveButton:GREAT_INDEX_BUTTON {
-
 			string	image20	"UPCT03d.TGA"
 			string	image10	"UPCT03u.tga"
 			string	image30	"UPCT03H.tga"
 
 			int	xpix	29
-
 			int	ypix	128
 
-#			string	text	"str_ldl_IMPROVE"
 			# Tooltip
 			string	tipwindow	"TOOLTIP_GL_SHOWCITYIMP_BUTTON"
 			string	statustext	"STATUSBAR_GL_SHOWCITYIMP_BUTTON"
 		}
 
 		WondersButton:GREAT_INDEX_BUTTON {
-
 			string	image20	"UPCT04d.tga"
 			string	image10	"UPCT04u.tga"
 			string	image30	"UPCT04H.tga"
 
 			int	xpix	29
-
 			int	ypix	171
 
-#			string	text	"str_ldl_CAPS_WONDERS"
 			# Tooltip
 			string	tipwindow	"TOOLTIP_GL_SHOWWONDERS_BUTTON"
 			string	statustext	"STATUSBAR_GL_SHOWWONDERS_BUTTON"
 		}
 
 		TerrainButton:GREAT_INDEX_BUTTON {
-
 			string	image20	"upct05d.tga"
 			string	image10	"upct05u.tga"
 			string	image30	"UPCT05H.tga"
 
 			int	xpix	29
-
 			int	ypix	214
 
-#			string	text	"str_ldl_TERRAIN"
 			# Tooltip
 			string	tipwindow	"TOOLTIP_GL_SHOWTERRAIN_BUTTON"
 			string	statustext	"STATUSBAR_GL_SHOWTERRAIN_BUTTON"
 		}
 
 		GoodsButton : GREAT_INDEX_BUTTON {
-
 			string	image20	"UPCT06d.TGA"
 			string	image10	"UPCT06u.tga"
 			string	image30	"UPCT06H.tga"
 
 			int	xpix	29
-
 			int	ypix	257
 
-#			string	text	"str_ldl_CAPS_GOODS"
 			# Tooltip
 			string	tipwindow	"TOOLTIP_GL_SHOWGOODS_BUTTON"
 			string	statustext	"STATUSBAR_GL_SHOWGOODS_BUTTON"
 		}
 
 		TileImpButton:GREAT_INDEX_BUTTON {
-
 			string	image20	"upct07d.tga"
 			string	image10	"upct07u.tga"
 			string	image30	"UPCT07H.tga"
 
 			int	xpix	29
-
 			int	ypix	300
 
-#			string	text	"str_ldl_CAPS_TILE_IMP"
 			# Tooltip
 			string	tipwindow	"TOOLTIP_GL_SHOWTILEIMP_BUTTON"
 			string	statustext	"STATUSBAR_GL_SHOWTILEIMP_BUTTON"
 		}
 
 		GovernButton:GREAT_INDEX_BUTTON {
-
 			string	image20	"UPCT08d.tga"
 			string	image10	"upct08u.tga"
 			string	image30	"UPCT08H.tga"
 
 			int	xpix	29
-
 			int	ypix	343
 
-#			string	text	"str_ldl_GOVERN"
 			# Tooltip
 			string	tipwindow	"TOOLTIP_GL_SHOWGOVS_BUTTON"
 			string	statustext	"STATUSBAR_GL_SHOWGOVS_BUTTON"
 		}
 
-
 		OrdersButton : GREAT_INDEX_BUTTON {
-
 			string	image20	"upct09d.tga"
 			string	image10	"upct09u.tga"
 			string	image30	"UPCT09H.tga"
 
 			int	xpix	29
-
 			int	ypix	387
 
-#			string	text	"str_ldl_CAPS_GOODS"
 			# Tooltip
 			string	tipwindow	"TOOLTIP_GL_SHOWSPECIAL_BUTTON"
 			string	statustext	"STATUSBAR_GL_SHOWSPECIAL_BUTTON"
 		}
 
 		ConceptButton:GREAT_INDEX_BUTTON {
-
 			string	image20	"upct10d.tga"
 			string	image10	"upct10u.tga"
 			string	image30	"UPCT10H.tga"
 
 			int	xpix	29
-
 			int	ypix	430
 
-#			string	text	"str_ldl_CONCEPTS"
 			# Tooltip
 			string	tipwindow	"TOOLTIP_GL_SHOWCONCEPTS_BUTTON"
 			string	statustext	"STATUSBAR_GL_SHOWCONCEPTS_BUTTON"
 		}
-
 	}
-
 
 	Tabs:CTP2_TAB_GROUP {
 		int xpix 292
@@ -559,9 +414,6 @@ GreatLibrary:CTP2_WINDOW {
 			}
 			TabPanel : GREAT_TAB_PANEL {
 				GameplayText:GREAT_BIG_BOX  {
-				# Tooltip
-				#string	statustext	"STATUSBAR_GL_GAMEPLAY_TAB_BUTTON"
-
 				}
 			}
 		}
@@ -574,9 +426,6 @@ GreatLibrary:CTP2_WINDOW {
 			}
 			TabPanel : GREAT_TAB_PANEL {
 				HistoricalText:GREAT_BIG_BOX {
-				# Tooltip
-				#string	statustext	"STATUSBAR_GL_HISTORY_TAB_BUTTON"
-
 				}
 			}
 		}
@@ -589,59 +438,35 @@ GreatLibrary:CTP2_WINDOW {
 			}
 			TabPanel : GREAT_TAB_PANEL {
 				# will manually add the panel in code
-				# Tooltip
-				#string	statustext	"STATUSBAR_GL_TECHTREE_TAB_BUTTON"
 			}
 		}
 	}
 
-
-
 	# All the items in database are displayed here
 	IndexSheet:CTP2_LISTBOX {
+		int xpix      103
+		int ypix      113
+		int widthpix  149
+		int heightpix 388
 
-		int	xpix	98  # was 100
-
-		int	ypix	110
-
-		int	widthpix	156 # was 148
-
-		int	heightpix	398
-
-		bool	alwaysranger TRUE
+		bool alwaysranger true
 	}
-
-
 }
-
-
 
 TechListItem : CTP2_LIST_ITEM {
-
 	Name:CTP2_STATIC_BASE {
-
 		int		xpix			0
-
 		int		ypix			0
-
 		int		widthpix		701
-
 		int		heightpix		20
-
 	}
-
 }
 
-
-
 ########################
-
 # strings
-
 ########################
 
 LibraryStrings {
-
 	int	numstrings	2
 
 	string	string0	"str_tbl_ldl_INDEX"
@@ -649,17 +474,14 @@ LibraryStrings {
 }
 
 GreatLibraryTopicItem:CTP2_LIST_ITEM {
-	int widthpix 160
+	int widthpix 149
 	int heighpix 20
 
 	box:CTP2_STANDARD_FONT {
 		string objecttype "ctp2_static"
-		int widthpix 160
+		int widthpix 149
 		int heightpix 20
 	}
 }
 
-
-
 $
-

@@ -49,15 +49,15 @@ template DIP_WIZARD_TAB_BUTTON:CTP2_SMALL_TAB_BUTTON {
 
 template DIP_WIZARD_LIST_TAB_PANEL:CTP2_TABBG {
 	string objecttype "ctp2_Static"
-	int xpix 0
-	int ypix 15
-	int widthpix 222
-	int heightpix 236				
+	int xpix      0
+	int ypix      15
+	int widthpix  222
+	int heightpix 236
 	List:CTP2_LISTBOX {
-		int xpix 9
-		int ypix 24
-		int widthpix 190
-		int heightpix 200
+		int xpix      11
+		int ypix      25
+		int widthpix  186
+		int heightpix 198
 	}
 }
 
@@ -412,12 +412,11 @@ DipWizard:CTP2_DIALOG_WINDOW {
 
 	# Threat stage
 	Stage4:DIP_WIZARD_STAGE {
-	
 		List:CTP2_LISTBOX {
-			int xpix 5 #8
-			int ypix 13 #38 #10 #30
-			int heightpix 250 #250
-			int widthpix 203 #212
+			int xpix      13
+			int ypix      16
+			int widthpix  192
+			int heightpix 250
 		}
 	}
 
@@ -516,7 +515,6 @@ DipWizard:CTP2_DIALOG_WINDOW {
 		string image03 "dw_lb.tga" #"uptg23d.tga"
 		string image05 "dw_rb.tga" #"uptg23f.tga"
 	}
-
 }
 
 DipWizNationItem:CTP2_LIST_ITEM {
@@ -532,29 +530,46 @@ DipWizNationItem:CTP2_LIST_ITEM {
 }
 
 DipWizProposalItem:CTP2_LIST_ITEM {
-	int widthpix 190
+	int widthpix  190
 	int heightpix 22
-	#label:CTP2_HEADER_FONT {
-	label:CTP2_STANDARD_FONT {
-		string objecttype "ctp2_Static"
-		string just "left"
-		bool vertcenter TRUE
-		int widthpix 190
+	box {
+		string objecttype "ctp2_static"
+		int widthpix  190
 		int heightpix 22
+
+		label:CTP2_STANDARD_FONT {
+			string objecttype "ctp2_Static"
+
+			int xpix      3
+			int widthpix  190
+			int heightpix 22
+
+			string just       "left"
+			bool   vertcenter true
+		}
 	}
 }
 
 
 DipWizThreatItem:CTP2_LIST_ITEM {
-	int widthpix 212
+	int widthpix  190
 	int heightpix 22
-	#label:CTP2_HEADER_FONT {
-	label:CTP2_STANDARD_FONT {
-		string objecttype "ctp2_Static"
-		string just "left"
-		bool vertcenter TRUE
-		int widthpix 212
+
+	box {
+		string objecttype "ctp2_static"
+		int widthpix  190
 		int heightpix 22
+
+		label:CTP2_STANDARD_FONT {
+			string objecttype "ctp2_Static"
+
+			int xpix      3
+			int widthpix  190
+			int heightpix 22
+
+			string just       "left"
+			bool   vertcenter true
+		}
 	}
 }
 

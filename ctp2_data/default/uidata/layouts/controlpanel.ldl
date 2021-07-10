@@ -19,8 +19,8 @@
 #  Modifications from the original Activision code:
 #
 # - Added to the tileimp tracker popup window a construction time line.
-#   (Aug 15th 2005 Martin Gühmann)
-# - Made the special attack window work. (Aug 16th 2005 Martin Gühmann)
+#   (Aug 15th 2005 Martin GÃ¼hmann)
+# - Made the special attack window work. (Aug 16th 2005 Martin GÃ¼hmann)
 # - Added political map button - 6-Jul-2009 EPW
 # -Added view capital button -5-Jan-2009 EPW
 # -Added view relations button -7-Jan-10 EPW
@@ -1443,10 +1443,10 @@ ControlPanelWindow:CTP2_WINDOW {
 ################################################################################
 					MessageListBox:CTP2_LISTBOX {
 						# Location.
-						int		xpix			9
-						int		ypix			5
-						int		widthpix		318
-						int		heightpix		107
+						int xpix      12
+						int ypix      9
+						int widthpix  318
+						int heightpix 102
 
 						# Tooltip
 						string	statustext	"STATUSBAR_MESSAGES_READMESSAGE_BUTTON"
@@ -1455,7 +1455,7 @@ ControlPanelWindow:CTP2_WINDOW {
 						bool	alwaysranger	true
 
 						# handle right clicks separately
-						bool    sendrightclicks true
+						bool sendrightclicks true
 					}
 ################################################################################
 # End Message Tab Panel
@@ -2286,64 +2286,36 @@ UnitInfoListItem:CTP2_LIST_ITEM {
 ## Message List Items
 #
 MessagePanelListItem:CTP2_LIST_ITEM {
-	int heightpix		26
-#	string pattern		"uptg02.tga"
-	
+	int heightpix 32
+
 	StaticContainer {
-		string 	objecttype		"ctp2_Static"
-		int 	widthpix		318
-		int 	heightpix		26
+		string objecttype "ctp2_Static"
+
+		int widthpix  318
+		int heightpix 32
 
 		StaticIcon {
-			string 	objecttype		"ctp2_Static"
-			int		xpix			3
-			int		ypix			3
-			int		widthpix 		30
-			int		heightpix 		24
-			string	image0			"upk101.tga"
+			string objecttype "ctp2_Static"
+
+			int xpix   3
+			int ypix   4
+			int widthpix  30
+			int heightpix 24
+
+			string image0       "upk101.tga"
 			string imagebltflag "chromakey"
 		}
 
 		StaticText:CTP2_HEADER_FONT {
-		#CTP2_STANDARD_FONT {}
-			string 	objecttype		"ctp2_Static"
-			string	textblttype		"fill"
-#			bool	vertcenter		true
-			
-			int		xpix			34
-			int		ypix			5
-			int		widthpix 		288
-			int		heightpix 		21
+			string objecttype "ctp2_Static"
+
+			int xpix      34
+			int widthpix  288
+			int heightpix 32
+
+			bool   vertcenter  true
+			string textblttype "fill"
 		}
-	}
-}
-
-################################################
-# This one is nasty cause of the 36 buttons
-################################################
-
-UnitPopupWindow:CTP2_WINDOW {
-
-	string pattern "pattern.TGA"
- 
- 	int xpix	0
-	int ypix	0
-
-	int widthpix	364
-	int heightpix	107
-
-	ListUnit:CTP2_LISTBOX_WITH_HEADER {
-		int xpix		0
-		int ypix		0
-		int widthpix	79
-		int heightpix	99
-	}
-	
-	ListCity:CTP2_LISTBOX_WITH_HEADER {
-		int xpix		0
-		int ypix		0
-		int widthpix	79
-		int heightpix	99
 	}
 }
 

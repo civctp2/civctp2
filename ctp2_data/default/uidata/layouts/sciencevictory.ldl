@@ -7,20 +7,29 @@
 ################################################################################
 
 # Single column in a single item.
-template MAINFRAME_LIST_COLUMN:CTP2_STATIC_BACKGROUND {
+template MAINFRAME_LIST_COLUMN:CTP2_STATIC_BASE {
 	# Size.
-	int		heightpix	17	
+	int heightpix 17
 }
 
 # Item for use in mainframe list.
 MainframeListItem:CTP2_LIST_ITEM {
-	column0:MAINFRAME_LIST_COLUMN {
-		int		widthpix	160
-		string	just		"left"
-	}
-	column1:MAINFRAME_LIST_COLUMN {
-		int		widthpix	50
-		string	just		"right"
+	box:CTP2_STATIC_BASE {
+		int widthpix  190
+		int heightpix 18
+
+		column0:MAINFRAME_LIST_COLUMN {
+			int xpix     3
+			int widthpix 130
+
+			string just "left"
+		}
+		column1:MAINFRAME_LIST_COLUMN {
+			int xpix     130
+			int widthpix 57
+
+			string just "right"
+		}
 	}
 }
 
@@ -67,7 +76,6 @@ template CTP2_SV_LABELED_INFORMATION:CTP2_STATIC_GROUP {
 		int fontcolorred			255
 		int fontcolorgreen		206
 		int fontcolorblue			99
-
 	}
 }
 
@@ -179,11 +187,14 @@ ScienceVictoryDialog:CTP2_DIALOG_WINDOW {
 
 			# List of currently building and complete mainframes.
 			MainframeList:CTP2_LISTBOX {
+				int borderright  9
+				int bordertop    7
+
 				# Location
-				int		xpix			23
-				int		ypix			90
-				int		widthpix		208
-				int		heightpix		120
+				int xpix      26
+				int ypix      95
+				int widthpix  190
+				int heightpix 109
 
 				# Change font to White-ish
 				int fontcolorred			180
@@ -192,7 +203,7 @@ ScienceVictoryDialog:CTP2_DIALOG_WINDOW {
 
 				string fontname 			"arialbd.ttf"
 
-				# Specail SV Background.
+				# Special SV Background.
 				string	image00				"uptg07a.tga"
 				string	image01				"uptg07b.tga"
 				string	image02				"uptg07c.tga"
@@ -203,12 +214,12 @@ ScienceVictoryDialog:CTP2_DIALOG_WINDOW {
 				string	image07				"uptg07h.tga"
 				string	image08				"uptg07i.tga"
 
-				
 				# Column headers, here is the fun part, these need to
 				# match the item widths in order to appear correctly.
 				header {
 					switch0:CITY_STATUS_HEADER {
-						int		widthpix	160
+						int widthpix 130
+
 						string pattern "uptg07e.tga"
 
 						# Change font to White-ish
@@ -219,7 +230,8 @@ ScienceVictoryDialog:CTP2_DIALOG_WINDOW {
 						string	text		"str_ldl_SV_MAINFRAME_LOC"
 					}
 					switch1:CITY_STATUS_HEADER {
-						int		widthpix	50
+						int widthpix 60
+
 						string pattern "uptg07e.tga"
 		
 						# Change font to White-ish
@@ -340,26 +352,6 @@ ScienceVictoryDialog:CTP2_DIALOG_WINDOW {
 			}
 		}
 	}
-
-	# Advisor button.
-#	AdvisorButton:CTP2_STANDARD_ADVISOR {
-#				
-#				# special SV art for button
-#				string	image00		"upbt10aX.tga"
-#				string	image01		"upbt10bX.tga"
-#				string	image02		"upbt10cX.tga"
-#				string	image10		"upbt10aU.tga"
-#				string	image11		"upbt10bU.tga"
-#				string	image12		"upbt10cU.tga"
-#				string	image20		"upbt10aD.tga"
-#				string	image21		"upbt10bD.tga"
-#				string	image22		"upbt10cD.tga"
-#				string	image30		"upbt10aH.tga"
-#				string	image31		"upbt10bH.tga"
-#				string	image32		"upbt10cH.tga"
-#
-#				string fontname 			"arialbd.ttf"
-#	}
 
 	# Build Queue button.
 	BuildQueueButton:CTP2_GENERIC_SIZABLE_TEXT_BUTTON {

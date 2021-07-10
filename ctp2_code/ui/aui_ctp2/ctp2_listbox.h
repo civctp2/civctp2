@@ -35,10 +35,14 @@
 
 class ctp2_Listbox;
 
-#define k_CTP2_LISTBOX_LDL_BEVELWIDTH		"bevelwidth"
-#define k_CTP2_LISTBOX_LDL_BEVELTYPE		"beveltype"
-#define k_CTP2_LISTBOX_LDL_BORDER_WIDTH     "borderwidth"
-#define k_CTP2_LISTBOX_LDL_BORDER_HEIGHT    "borderheight"
+#define k_CTP2_LISTBOX_LDL_BEVELWIDTH    "bevelwidth"
+#define k_CTP2_LISTBOX_LDL_BEVELTYPE     "beveltype"
+#define k_CTP2_LISTBOX_LDL_BORDER_LEFT   "borderleft"
+#define k_CTP2_LISTBOX_LDL_BORDER_RIGHT  "borderright"
+#define k_CTP2_LISTBOX_LDL_BORDER_TOP    "bordertop"
+#define k_CTP2_LISTBOX_LDL_BORDER_BOTTOM "borderbottom"
+#define k_CTP2_LISTBOX_LDL_BORDER_WIDTH  "borderwidth"
+#define k_CTP2_LISTBOX_LDL_BORDER_HEIGHT "borderheight"
 
 #include "aui_control.h"    // ControlActionCallback
 #include "aui_listbox.h"    // aui_ListBox
@@ -122,6 +126,12 @@ public:
 	friend class ctp2_Menu;
 
 protected:
+	virtual sint32 WidthForItems() const {
+		return aui_ListBox::WidthForItems() - m_borderOffset.left - m_borderOffset.right;
+	}
+	virtual sint32 HeightForItems() const {
+		return aui_ListBox::HeightForItems() - m_borderOffset.top - m_borderOffset.bottom;
+	}
 	virtual AUI_ERRCODE DoneInstantiatingThis(const MBCHAR *ldlBlock);
 
 	AUI_ERRCODE ReformatItemFromHeader(aui_Item *item);
@@ -134,7 +144,7 @@ private:
 
 	ctp2_MenuButton *m_menuButton;
 
-	POINT m_borderOffset;
+	RECT m_borderOffset;
 };
 
 #endif

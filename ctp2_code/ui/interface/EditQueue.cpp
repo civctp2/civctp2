@@ -28,20 +28,20 @@
 // - Start the great library with the current research project of the player.
 // - Made rush buy button behaviour consistent with other windows.
 // - Disabled rushbuy button if infrastructure or captalization are
-//   at the front of the build queue, by Martin Gühmann.
+//   at the front of the build queue, by Martin Gï¿½hmann.
 // - If infrastructure or capitalization are at the front of the
-//   build queue turns are shown anymore, by Martin Gühmann.
-// - Disabled rush buy button when it is not your turn by Martin Gühmann.
+//   build queue turns are shown anymore, by Martin Gï¿½hmann.
+// - Disabled rush buy button when it is not your turn by Martin Gï¿½hmann.
 // - Repaired CtD when double-clicking on an empty build queue - caused by
 //   the changes above.
 // - #01 Standardization of city selection and focus handling
 //   (L. Hirth 6/2004)
-// - Added National Manager button and functions callback. - July 24th 2005 Martin Gühmann
-// - Made Build Manager window non-modal. - July 24th 2005 Martin Gühmann
-// - Initialized local variables. (Sep 9th 2005 Martin Gühmann)
-// - Added a suggest build item button to the build manager for AI testing. (30-Jun-2008 Martin Gühmann)
+// - Added National Manager button and functions callback. - July 24th 2005 Martin Gï¿½hmann
+// - Made Build Manager window non-modal. - July 24th 2005 Martin Gï¿½hmann
+// - Initialized local variables. (Sep 9th 2005 Martin Gï¿½hmann)
+// - Added a suggest build item button to the build manager for AI testing. (30-Jun-2008 Martin Gï¿½hmann)
 // - Added stuff for reimplementing switch production penalty. (22-Jul-2009 Maq)
-// - Fixed AI city rank calculation. (9-Nov-2009 Martin Gühmann)
+// - Fixed AI city rank calculation. (9-Nov-2009 Martin Gï¿½hmann)
 //
 //----------------------------------------------------------------------------
 
@@ -878,7 +878,8 @@ void EditQueue::UpdateFileLists()
 		Assert(item);
 		if(!item) break;
 
-		ctp2_Static *label = (ctp2_Static *)item->GetChildByIndex(0);
+		ctp2_Static *box = (ctp2_Static *)item->GetChildByIndex(0);
+		ctp2_Static *label = (ctp2_Static *)box->GetChildByIndex(0);
 		Assert(label);
 		if(!label) break;
 
@@ -1066,7 +1067,7 @@ void EditQueue::UpdateButtons()
 			m_upButton->Enable(TRUE);
 		}
 
-		// Added by Martin Gühmann to disable the rushbuy button and rush
+		// Added by Martin Gï¿½hmann to disable the rushbuy button and rush
 		// buy costs if the first item is capitalization or infrastructure
 
 		if (m_cityData && (m_queueList->GetSelectedItemIndex() == 0))
@@ -2481,7 +2482,8 @@ void EditQueue::DisplayQueueContents(const MBCHAR *queueName)
 		Assert(item);
 		if(!item) break;
 
-		ctp2_Static *label = (ctp2_Static *)item->GetChildByIndex(0);
+		ctp2_Static *box = (ctp2_Static *)item->GetChildByIndex(0);
+		ctp2_Static *label = (ctp2_Static *)box->GetChildByIndex(0);
 		Assert(label);
 		if(!label) break;
 

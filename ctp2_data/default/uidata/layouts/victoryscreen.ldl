@@ -5,61 +5,43 @@
 #########################
 
 template victoryscreen_pane {
-
 	int	xpix	0
-
 	int	ypix	0
-
 	int	widthpix	540
-
 	int	heightpix	290
 }
 
 template victoryscreen_block {
-
 	int	xpix	0
-
 	int	ypix	0
-
 	int	widthpix	540
-
 	int	heightpix	290
 
 	string	pattern	"uptg20e.tga" #"error.tga"
 
 	int bevelwidth	2
-
 	int beveltype	2
-	
+
 	int	srcxpix		53
-
 	int	srcypix		157
-
 	int	srcwidthpix		544
-
 	int	srcheightpix	294
-
 }
 
 template victoryscreen_tab : CTP2_STANDARD_FONT {
-
 	int	widthpix	100
-
 	int	heightpix	20
 
 	string	parent	"VictoryWindow"
 
-	string	pattern	"uptg20e.tga" #"error.tga"
+	string	pattern	"uptg20e.tga"
 
 	int bevelwidth	1
-
 	int beveltype	2
 }
 
 template victoryscreen_button : CTP2_STANDARD_FONT{
-
 	int	widthpix	59
-
 	int heightpix	32
 
 	int bevelwidth	0
@@ -74,55 +56,29 @@ template victoryscreen_staticbox : CTP2_GENERIC_TEXT_DISPLAY_14 {
 }
 
 template highscore_buttons : CTP2_GENERIC_SIZABLE_TEXT_BUTTON { #CTP2_STANDARD_FONT {
-
 	int widthpix	91
-
 	int heightpix	24
-
-#	int bevelwidth	0
-
-#	int beveltype	0
-
-#	string imagebltflag	"chromakey"
-
-#	string	image0			"error.tga"
-
-#	string	image1			"error.tga"
-
-#	string	disabledimage0	"error.tga"
 }
 
 VictoryWindow_WonderIcon {
-
 	int xpix	0
-
 	int ypix	0
-
 	int	widthpix	72
-
 	int heightpix	54
 
 	string	image0	"upu087.tga"
-
 	string	imageblttype	"stretch"
 }
 
 
 VictoryWindow : CTP2_3TAB_DIALOG_WINDOW {
-	# Title string.
-	#string	title	"str_ldl_INFORMATION_DIALOG_TITLE"
-
 	# window title
 	Title:CTP_GREY_TITLE_FONT:CTP2_STATIC_BASE {
 
 		string xanchor	"center"
-
 		int	ypix	5
-
 		int	widthpix	100
-
 		int	heightpix	20
-		
 	}
 
 	# Close button.
@@ -135,7 +91,6 @@ VictoryWindow : CTP2_3TAB_DIALOG_WINDOW {
 		string	text	"str_ldl_CLOSE_BUTTON"
 	}
 
-
 		# Tabs...
 	TabGroup {
 		Tab1 {
@@ -144,17 +99,14 @@ VictoryWindow : CTP2_3TAB_DIALOG_WINDOW {
 			}
 			TabPanel {
 				WonderList : CTP2_LISTBOX {
-					int xpix	35
-					int	ypix	10
-
-					int	widthpix	430
-					int	heightpix	270
+					int xpix      35
+					int ypix      10
+					int widthpix  433
+					int heightpix 270
 
 					bool alwaysranger	FALSE
-
 				}
 			}
-
 		}
 
 		########################################################################
@@ -165,132 +117,78 @@ VictoryWindow : CTP2_3TAB_DIALOG_WINDOW {
 				string	text	"str_ldl_Score"
 			}
 			TabPanel {
-
-				#ScoreBlock { : victoryscreen_block {
-
-
 				# Your Civilization Score Is:
-					StaticText0:CTP2_STATIC_BASE{
+				StaticText0:CTP2_STATIC_BASE{
+					string xanchor   "center"
+					int    ypix      260
+					int    widthpix  365
+					int    heightpix 20
+				}
 
-						string	xanchor	"center"
-						int	ypix	15
+				StaticText1:CTP2_STATIC_BASE{
+					string xanchor "center"
+				}
 
-						int	widthpix	367
-						int	heightpix	20
+				# Population label
+				StaticText2:CTP2_STATIC_BASE{
+					int xpix      270
+					int ypix      23
+					int widthpix  80
+					int heightpix 14
 
-						#string	text	"str_ldl_YOUR_CIVILIZATION_SCORE_IS_COLON"
-					}
+					string text "str_ldl_POPULATION_COLON"
+				}
 
-					StaticText1:CTP2_STATIC_BASE{
+				# Population box
+				StaticText3:victoryscreen_staticbox {
+					int xpix 359
+					int ypix 23
+				}
 
-						string	xanchor	"center"
+				# City label
+				StaticText4:CTP2_STATIC_BASE{
+					int xpix      58
+					int ypix      23
+					int widthpix  80
+					int heightpix 14
 
-						#int	ypix	25
+					string text "str_ldl_CITIES_COLON"
+				}
 
-						#int	widthpix	347
-
-						#int	heightpix	14
-
-						#string	text	"str_ldl_YOUR_NAME_WILL_GO_DOWN_IN_THE_ANNALS_OF_HISTORY_AS"	
-					}
-
-					StaticText2:CTP2_STATIC_BASE{
-
-						int	xpix	300
-
-						int	ypix	40
-
-						int	widthpix	80
-
-						int	heightpix	14
-
-						string	text	"str_ldl_POPULATION_COLON"
-					}
-
-					StaticText3:victoryscreen_staticbox {
-
-						int	xpix	390
-
-
-						int	ypix	40
-
-					}
-
-					StaticText4:CTP2_STATIC_BASE{
-
-						int	xpix	15
-
-						int	ypix	40
-
-						int	widthpix	80
-
-						int	heightpix	14
-
-						string	text	"str_ldl_CITIES_COLON"
-					}
-
-					StaticText5:victoryscreen_staticbox {
-
-						int	xpix	88
-
-						int	ypix	40
-					}
+				# City box
+				StaticText5:victoryscreen_staticbox {
+					int xpix 126
+					int ypix 23
+				}
 
 				# Player known as:
-					StaticText6:CTP2_STATIC_BASE{
+				StaticText6:CTP2_STATIC_BASE{
+					string	xanchor	"center"
+				}
 
-						string	xanchor	"center"
+				ScoreList : CTP2_LISTBOX {
+					int xpix      80
+					int ypix      60
+					int widthpix  340
+					int heightpix 180
 
-						#int	ypix	40
+					int columns		2
 
-						#int	widthpix	268
+					string	pattern	"uptg20e.tga"
+					header {
+						switch0:CTP2_HEADER_FONT {
+							int	widthpix	170
+							int	heightpix	0
 
-						#int	heightpix	18
-
-					}
-
-					ScoreList : CTP2_LISTBOX {
-
-						int xpix	120
-
-						int	ypix	80
-
-						int	widthpix	300
-
-						int	heightpix	180
-
-
-						int columns		2
-
-						int bevelwidth	2
-
-						int beveltype	2
-
-						string	pattern	"uptg20e.tga"
-
-
-						header {
-							switch0:CTP2_HEADER_FONT {
-
-								int	widthpix	150
-
-								int	heightpix	0
-
-								int bevelwidth 	0
-
-							}
-							switch1:CTP2_STANDARD_FONT {
-
-								int	widthpix	150
-
-								int	heightpix	0
-
-								int bevelwidth 	0
-
-							}
+							int bevelwidth 	0
 						}
+						switch1:CTP2_STANDARD_FONT {
+							int	widthpix	170
+							int	heightpix	0
 
-					#}
+							int bevelwidth 	0
+						}
+					}
 				}
 			} # TabPanel
 		}
@@ -307,13 +205,9 @@ VictoryWindow : CTP2_3TAB_DIALOG_WINDOW {
 			}
 			TabPanel {
 				Graph {
-
 					int	xpix	13
-
 					int	ypix	40
-
 					int	widthpix	300
-
 					int	heightpix	200
 
 					# Runtime type.
@@ -322,18 +216,13 @@ VictoryWindow : CTP2_3TAB_DIALOG_WINDOW {
 					string	imageblttype	"stretch"
 
 					string	image0	"uptg20e.tga"
-
 				}
 
 				GraphList : CTP2_LISTBOX {
-
-					int	xpix	327
-
-					int	ypix	40
-
-					int	widthpix	150
-
-					int	heightpix	200
+					int xpix      327
+					int ypix      48
+					int widthpix  148
+					int heightpix 186
 				}
 
 				# LineOrZeroSum button.
@@ -342,18 +231,15 @@ VictoryWindow : CTP2_3TAB_DIALOG_WINDOW {
 					int		xpix		30
 					int		ypix		250
 					int		widthpix	136
+
 					# Label
 					string	text	"str_ldl_LINE_BUTTON"
-
 				} # LineOrZeroSum
 			} # TabPanel
-
-
 		}
 		########################################################################
 		# End Ranking Tab
 		########################################################################
-
 	}
 
 	# Background image.
@@ -363,205 +249,115 @@ VictoryWindow : CTP2_3TAB_DIALOG_WINDOW {
 		string image03 "uptg23d.tga"
 		string image05 "uptg23f.tga"
 	}
-
 } # VictoryScreen
 
-
-
-# Commented this one out, it's a duplicate.  The other has "Civilization" instead of name, and is 150 wide instead of 50.
-# Not really sure which is "current" (neither, technically speaking, this is CTP1 stuff)
-#VictoryPlayerListItem {
-
-#	Name:CTP2_STANDARD_FONT{
-
-#		int		xpix			0
-
-#		int		ypix			0
-
-#		int		widthpix		50
-
-#		int		heightpix		20
-
-#	}
-#}
-
 HighScoreListItem {
-
 	Rank:CTP2_STANDARD_FONT{
-
-		int		xpix			0
-
-		int		ypix			0
-
-		int		widthpix		250
-
-		int		heightpix		20
-
+		int xpix      0
+		int ypix      0
+		int widthpix  235
+		int heightpix 20
 	}
 
 	Score:CTP2_STANDARD_FONT{
-
-		int		xpix			0
-
-		int		ypix			0
-
-		int		widthpix		50
-
-		int		heightpix		20
-
+		int xpix      0
+		int ypix      0
+		int widthpix  50
+		int heightpix 20
 	}
 }
 
 HighScoreWindowPopup {
-
 	string	xanchor		"center"
-
 	string	yanchor		"center"
 
 	int		widthpix	400
-
 	int		heightpix	320
 
 	string	pattern	"uptg20e.tga"
 
 	Title:CTP_GREY_TITLE_FONT {
-
 		string	parent	"c3_PopupTitle"
 
 		string xanchor "center"
-
 		string yanchor "top"
-		
 		int ypix	28
-
 		int widthpct 50
-
 		int heightpix 20
 
 		string	text	"str_ldl_HIGH_SCORES"
-
 	}
 
 	ContinueButton : highscore_buttons {
-	
-		int		xpix	20
+		int xpix 45
+		int ypix 260
 
-		int		ypix	260
-
-		string	text	"str_ldl_CONTINUE"
+		string text "str_ldl_CONTINUE"
 	}
 
 	CreditsButton : highscore_buttons {
-	
 		string	xanchor	"center"
-
 		int		ypix	260
 
 		string	text	"str_ldl_CREDITS"
 	}
 
 	QuitButton : highscore_buttons {
-	
-		int		xpix	290
+		int xpix 265
+		int ypix 260
 
-		int		ypix	260
-
-		string	text	"str_ldl_CAPS_QUIT"
+		string text "str_ldl_CAPS_QUIT"
 	}
 
-
 	HighScoreList:CTP2_LISTBOX {
-
-		int	xpix	45
-
-		int	ypix	67
-
-		int	widthpix	300
-
-		int	heightpix	160
+		int xpix      52
+		int ypix      67
+		int widthpix  285
+		int heightpix 160
 
 		int columns		2
 
-#		int bevelwidth	2
-
-#		int beveltype	2
-
 		bool alwaysranger	TRUE
-
-#		string	pattern	"uptg20e.tga" #"error.tga"
-
 		header {
-
 			switch0:CTP2_HEADER_FONT {
-
-				int	widthpix	250
-
+				int	widthpix	235
 				int	heightpix	0
 
-#				string text	"str_ldl_Rank"
-#				string	pattern	"error.tga"
-
 				int bevelwidth 	0
-
 			}
 
 			switch1:CTP2_STANDARD_FONT {
-
 				int	widthpix	50
-
 				int	heightpix	0
 
-#				string text	"str_ldl_Player"
-#				string	pattern	"error.tga"
-
 				int bevelwidth 	0
-
 			}
 		}
-
 	}
-
 }
 
 VictoryScoreListItem {
-
 	ScoreCategory:CTP2_STANDARD_FONT{
-
 		int		xpix			0
-
 		int		ypix			0
-
-		int		widthpix		150
-
+		int		widthpix		170
 		int		heightpix		20
-
 	}
 
 	ScoreValue:CTP2_STANDARD_FONT{
-
 		int		xpix			0
-
 		int		ypix			0
-
-		int		widthpix		150
-
+		int		widthpix		170
 		int		heightpix		20
-
 	}
 }
 
 VictoryPlayerListItem {
-
 	Civilization:CTP2_STANDARD_FONT{
-
 		int		xpix			0
-
 		int		ypix			0
-
 		int		widthpix		150
-
 		int		heightpix		20
-
 	}
 }
 
@@ -590,7 +386,6 @@ VictoryStrings {
 	string string18		"str_ldl_THE_LION_HEARTED"
 	string string19		"str_ldl_THE_INDOMITABLE"
 	string string20		"str_ldl_THE_CIV_LORD"
-
 }
 
 $

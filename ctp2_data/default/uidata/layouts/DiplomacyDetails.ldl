@@ -127,10 +127,11 @@ DiplomacyDetails:CTP2_3TAB_DIALOG_WINDOW {
 # Start Foreign Relations Tab...
 ################################################################################
 				List:CTP2_LISTBOX {
-					int xpix 10
-					int ypix 24
-					int widthpix 470
-					int heightpix 173
+					int xpix      16
+					int ypix      31
+					int widthpix  464
+					int heightpix 164
+
 					header {
 						# MDS 090600  Added flag
 						switch0:DIP_INTEL_HEADER {
@@ -243,11 +244,12 @@ DiplomacyDetails:CTP2_3TAB_DIALOG_WINDOW {
 					string text "str_ldl_Cities"
 				}
 				WonderList:CTP2_LISTBOX {
-					int	xpix	300
-					int	ypix	30
-					int	widthpix	170
-					int	heightpix	160
-					bool 	alwaysranger TRUE
+					int xpix      305
+					int ypix      30
+					int widthpix  165
+					int heightpix 160
+
+					bool alwaysranger true
 				}
 ###############################################################################
 # End Domestic Tab
@@ -302,18 +304,20 @@ DiplomacyDetails:CTP2_3TAB_DIALOG_WINDOW {
 					string text "str_ldl_DipDetails_KnownToYou"
 				}
 				ForAdvancesList:CTP2_LISTBOX {
-					int	xpix	25
-					int	ypix	100
-					int	widthpix	200
-					int	heightpix	90
-					bool 	alwaysranger TRUE
+					int xpix      30
+					int ypix      100
+					int widthpix  195
+					int heightpix 90
+
+					bool alwaysranger true
 				}
 				YourAdvancesList:CTP2_LISTBOX {
-					int	xpix	265
-					int	ypix	100
-					int	widthpix	200
-					int	heightpix	90
-					bool 	alwaysranger TRUE
+					int xpix      270
+					int ypix      100
+					int widthpix  195
+					int heightpix 90
+
+					bool alwaysranger true
 				}
 
 ###############################################################################

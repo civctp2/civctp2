@@ -27,7 +27,7 @@
 // - Display the cost for the player, not the base advancement cost.
 // - Start the great library with the current research project of the player.
 // - Reduced the length of the generated advance effect string.
-// - Added a progress bar to the advance select button. (Feb 4th 2007 Martin Gühmann)
+// - Added a progress bar to the advance select button. (Feb 4th 2007 Martin GÃ¼hmann)
 //
 //----------------------------------------------------------------------------
 
@@ -356,8 +356,10 @@ BOOL ScienceManagementDialog::UpdateAdvanceItem(ctp2_ListItem *item,
 
 	Player *player = g_player[g_selected_item->GetVisiblePlayer()];
 
-	if(ctp2_Static *column = GetListItemColumn(item, k_SCI_COL_ADVANCE)) {
-		column->SetText(advance->GetNameText());
+	if (ctp2_Static *column = GetListItemColumn(item, k_SCI_COL_ADVANCE))
+	{
+		ctp2_Static * label = (ctp2_Static *)column->GetChildByIndex(0);
+		label->SetText(advance->GetNameText());
 	}
 
 	for(int index = 1; index <= k_SMD_CIVILIZATION_COLUMNS; index++) {

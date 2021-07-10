@@ -24,7 +24,7 @@
 //
 // Modifications from the original Activision code:
 //
-// - Standardized code (May 29th 2006 Martin Gühmann)
+// - Standardized code (May 29th 2006 Martin Gï¿½hmann)
 //
 //----------------------------------------------------------------------------
 
@@ -287,10 +287,10 @@ void ScienceVictoryDialog::UpdateConstructionInformation(
 	m_satCom->SetText(buffer);
 }
 
-ctp2_Static *ScienceVictoryDialog::GetListItemColumn(ctp2_ListItem *item,
-													 sint32 column)
+ctp2_Static *ScienceVictoryDialog::GetListItemColumn(ctp2_ListItem * item, sint32 column)
 {
-	return(static_cast<ctp2_Static*>(item->GetChildByIndex(column)));
+	ctp2_Static * box = static_cast<ctp2_Static *>(item->GetChildByIndex(0));
+	return static_cast<ctp2_Static *>(box->GetChildByIndex(column));
 }
 
 ctp2_ListItem *ScienceVictoryDialog::CreateMainframeItem(const Unit &city,

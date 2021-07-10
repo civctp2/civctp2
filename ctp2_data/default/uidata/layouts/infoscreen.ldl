@@ -1,7 +1,5 @@
 #########################
-
 # Info Window LDL Script
-
 #########################
 
 template SCORE_COLUMN:CTP2_STANDARD_FONT {
@@ -10,18 +8,14 @@ template SCORE_COLUMN:CTP2_STANDARD_FONT {
 }
 
 template infoscreen_iconinfobuttons : CTP2_BUTTON_ICONIC {
-
 	int widthpix	16
-
 	int heightpix	16
 
 	int bevelwidth	0
-
 	int beveltype	0
 
 	string imagebltflag	"chromakey"
 }
-
 
 ScoreElement:CTP2_LIST_ITEM {
 	int widthpix 492
@@ -66,12 +60,10 @@ Breakdown:CTP2_STATIC_GROUP {
 	}
 }
 
-
 ###################
 #
 # RANKING TEMPLATES
 #
-
 
 # Rank graph selection.
 template RANKING_PULLDOWN_TOGGLE:CTP2_STATIC_GROUP {
@@ -88,7 +80,6 @@ template RANKING_PULLDOWN_TOGGLE:CTP2_STATIC_GROUP {
 		int		heightpix	29
 		bool	inverted	false
 	}
-
 }
 
 # Item type for Ranking type pulldown.
@@ -98,7 +89,6 @@ RankingListItem:CTP2_LIST_ITEM {
 	int heightpix	22
 
 	Label:CTP2_STATIC_BACKGROUND {
-
 		# Location.
 		int	xpix		0
 
@@ -112,12 +102,10 @@ RankingListItem:CTP2_LIST_ITEM {
 	}
 }
 
-
 #
 # RANKING TEMPLATES
 #
 ###################
-
 
 # Domestic Management dialog definition.
 # Information/Statistics dialog definition.
@@ -142,35 +130,35 @@ InfoDialog:CTP2_3TAB_DIALOG_WINDOW {
 			TabButton {
 				string	text	"str_ldl_SCORE_TAB_TITLE"
 			}
-			TabPanel {
 
+			TabPanel {
 				Difficulty:SCORE_GRAPHIC {
-					int		xpix	35
-					int		ypix	4
+					int xpix 18
+					int ypix 5
 					Label {
-						string	text		"str_ldl_SCORE_DIFFICULTY"
+						string text "str_ldl_SCORE_DIFFICULTY"
 					}
 				}
 				Rank:SCORE_GRAPHIC {
-					int		xpix	195
-					int		ypix	4
+					int xpix 190
+					int ypix 5
 					Label {
-						string	text		"str_ldl_SCORE_YOUR_RANK"
+						string text "str_ldl_SCORE_YOUR_RANK"
 					}
 				}
 				Total:SCORE_GRAPHIC {
-					int		xpix	355
-					int		ypix	4
+					int xpix 351
+					int ypix 5
 					Label {
-						string	text		"str_ldl_SCORE_YOUR_SCORE"
+						string text "str_ldl_SCORE_YOUR_SCORE"
 					}
 				}
 
 				List:CTP2_LISTBOX {
-					int xpix 10
-					int ypix 44
-					int widthpix 470
-					int heightpix 226
+					int xpix      22
+					int ypix      54
+					int widthpix  450
+					int heightpix 220
 					header {
 						switch0:CTP2_STANDARD_FONT {
 							int	widthpix	10
@@ -193,10 +181,10 @@ InfoDialog:CTP2_3TAB_DIALOG_WINDOW {
 							string text "str_ldl_SCORE_VALUE"
 						}
 						switch3:CTP2_STANDARD_FONT {
-							int	widthpix	140
+							int	widthpix	117
 							int	heightpix	20
+
 							string pattern "uptg04e.tga"
-						#	string just "right"
 							int bevelwidth 	1
 							string text "str_ldl_SCORE_TOTAL"
 						}
@@ -220,11 +208,13 @@ InfoDialog:CTP2_3TAB_DIALOG_WINDOW {
 			}
 			TabPanel {
 				List:CTP2_LISTBOX {
-					int xpix 10
-					int ypix 44
-					int widthpix 470
-					int heightpix 216
+					int xpix      22
+					int ypix      34
+					int widthpix  450
+					int heightpix 240
+
 					bool alwaysranger true
+
 					header {
 						switch0:CTP2_STANDARD_FONT {
 							int widthpix 160
@@ -234,22 +224,25 @@ InfoDialog:CTP2_3TAB_DIALOG_WINDOW {
 							string text "str_ldl_InfoScreenWonder"
 						}
 						switch1:CTP2_STANDARD_FONT {
-							int widthpix 80
+							int widthpix  60
 							int heightpix 20
+
 							string pattern "uptg04e.tga"
 							int bevelwidth 1
 							string text "str_ldl_InfoScreenYear"
 						}
 						switch2:CTP2_STANDARD_FONT {
-							int widthpix 120
+							int widthpix  110
 							int heightpix 20
+
 							string pattern "uptg04e.tga"
 							int bevelwidth 1
 							string text "str_ldl_InfoScreenCity"
 						}
 						switch3:CTP2_STANDARD_FONT {
-							int widthpix 110
+							int widthpix  100
 							int heightpix 20
+
 							string pattern "uptg04e.tga"
 							int bevelwidth 1
 							string text "str_ldl_InfoScreenPlayer"
@@ -261,184 +254,6 @@ InfoDialog:CTP2_3TAB_DIALOG_WINDOW {
 		#
 		# End Wonder tab
 		#
-		########################################################################
-		# Start Timeline Tab...
-
-		# OBSOLETE
-		########################################################################
-#		Tab2 {
-#			TabButton {
-#				string	text	"str_ldl_INFO_TIMELINE_TAB"
-#			}
-#			TabPanel {
-#
-#				# Scroll left button.
-#				LeftButton:CTP2_GENERIC_SIZABLE_TEXT_BUTTON {
-#					# Location
-#					int		xpix		30
-#					int		ypix		250
-#					int		widthpix	100
-#					# Label
-#					string	text	"str_ldl_LEFT_BUTTON"
-#
-#				} # Scroll left button
-#
-#								# Scroll left button.
-#				RightButton:CTP2_GENERIC_SIZABLE_TEXT_BUTTON {
-#					# Location
-#					int		xpix		370
-#					int		ypix		250
-#					int		widthpix	100
-#					# Label
-#					string	text	"str_ldl_RIGHT_BUTTON"
-#
-#				} # Scroll right button
-#
-#				# The graph
-#				InfoGraph {
-#
-#					int	xpix	10
-#
-#					int	ypix	10
-#
-#					int	widthpix	450
-#
-#					int	heightpix	240
-#
-#					# Runtime type.
-#					string	objecttype		"ctp2_LineGraph"
-#
-#					string	imageblttype	"tile"
-#
-#					string	image0	"uptg20e.tga"
-#
-#					EventsInfoButton1:infoscreen_iconinfobuttons {
-#							int	xpix	40
-#							int	ypix	211
-#							string	image00	"upic11.tga"
-#							string	image10	"upic11.tga"
-#					}
-#					EventsInfoButton2:infoscreen_iconinfobuttons {
-#							int	xpix	60
-#							int	ypix	211
-#							string	image00	"upic11.tga"
-#							string	image10	"upic11.tga"
-#					}
-#					EventsInfoButton3:infoscreen_iconinfobuttons {
-#							int	xpix	80
-#							int	ypix	211
-#							string	image00	"upic11.tga"
-#							string	image10	"upic11.tga"
-#					}
-#					EventsInfoButton4:infoscreen_iconinfobuttons {
-#							int	xpix	100
-#							int	ypix	211
-#							string	image00	"upic11.tga"
-#							string	image10	"upic11.tga"
-#					}
-#					EventsInfoButton5:infoscreen_iconinfobuttons {
-#							int	xpix	120
-#							int	ypix	211
-#							string	image00	"upic11.tga"
-#							string	image10	"upic11.tga"
-#					}
-#					EventsInfoButton6:infoscreen_iconinfobuttons {
-#							int	xpix	140
-#							int	ypix	211
-#							string	image00	"upic11.tga"
-#							string	image10	"upic11.tga"
-#					}
-#					EventsInfoButton7:infoscreen_iconinfobuttons {
-#							int	xpix	160
-#							int	ypix	211
-#							string	image00	"upic11.tga"
-#							string	image10	"upic11.tga"
-#					}
-#					EventsInfoButton8:infoscreen_iconinfobuttons {
-#							int	xpix	180
-#							int	ypix	211
-#							string	image00	"upic11.tga"
-#							string	image10	"upic11.tga"
-#					}
-#					EventsInfoButton9:infoscreen_iconinfobuttons {
-#							int	xpix	200
-#							int	ypix	211
-#							string	image00	"upic11.tga"
-#							string	image10	"upic11.tga"
-#					}
-#					EventsInfoButton10:infoscreen_iconinfobuttons {
-#							int	xpix	220
-#							int	ypix	211
-#							string	image00	"upic11.tga"
-#							string	image10	"upic11.tga"
-#					}
-#					EventsInfoButton11:infoscreen_iconinfobuttons {
-#							int	xpix	240
-#							int	ypix	211
-#							string	image00	"upic11.tga"
-#							string	image10	"upic11.tga"
-#					}
-#					EventsInfoButton12:infoscreen_iconinfobuttons {
-#							int	xpix	260
-#							int	ypix	211
-#							string	image00	"upic11.tga"
-#							string	image10	"upic11.tga"
-#					}
-#					EventsInfoButton13:infoscreen_iconinfobuttons {
-#							int	xpix	280
-#							int	ypix	211
-#							string	image00	"upic11.tga"
-#							string	image10	"upic11.tga"
-#					}
-#					EventsInfoButton14:infoscreen_iconinfobuttons {
-#							int	xpix	300
-#							int	ypix	211
-#							string	image00	"upic11.tga"
-#							string	image10	"upic11.tga"
-#					}
-#					EventsInfoButton15:infoscreen_iconinfobuttons {
-#							int	xpix	320
-#							int	ypix	211
-#							string	image00	"upic11.tga"
-#							string	image10	"upic11.tga"
-#					}
-#					EventsInfoButton16:infoscreen_iconinfobuttons {
-#							int	xpix	340
-#							int	ypix	211
-#							string	image00	"upic11.tga"
-#							string	image10	"upic11.tga"
-#					}
-#					EventsInfoButton17:infoscreen_iconinfobuttons {
-#							int	xpix	360
-#							int	ypix	211
-#							string	image00	"upic11.tga"
-#							string	image10	"upic11.tga"
-#					}
-#					EventsInfoButton18:infoscreen_iconinfobuttons {
-#							int	xpix	380
-#							int	ypix	211
-#							string	image00	"upic11.tga"
-#							string	image10	"upic11.tga"
-#					}
-#					EventsInfoButton19:infoscreen_iconinfobuttons {
-#							int	xpix	400
-#							int	ypix	211
-#							string	image00	"upic11.tga"
-#							string	image10	"upic11.tga"
-#					}
-#					EventsInfoButton20:infoscreen_iconinfobuttons {
-#							int	xpix	420
-#							int	ypix	211
-#							string	image00	"upic11.tga"
-#							string	image10	"upic11.tga"
-#					}
-#				} # InfoGraph
-#			
-#			} # TabPanel
-#		}
-		########################################################################
-		# End Timeline Tab
-		########################################################################
 
 		########################################################################
 		# Start Ranking Tab...
@@ -451,71 +266,50 @@ InfoDialog:CTP2_3TAB_DIALOG_WINDOW {
 				# Rank Label
 				RankLabel:CTP2_STATIC_BACKGROUND {
 					# Location.
-					int		xpix		30
-					int		ypix		10
+					int xpix 36
+					int ypix 13
 					# Name.
-					string	just	"left"
-					string	text	"str_ldl_RANKING_RANK"
-
+					string just "left"
+					string text "str_ldl_RANKING_RANK"
 				} # RankLabel
 
 				# Governor box.
 				RankSelect:RANKING_PULLDOWN_TOGGLE {
 					# Location.
-					int		xpix	64
-					int		ypix	10
-
+					int xpix 64
+					int ypix 10
 				} # RankSelect
 
 				# LineOrZeroSum button.
 				LineOrZeroSum:CTP2_GENERIC_SIZABLE_TEXT_BUTTON {
 					# Location
-					int		xpix		30
-					int		ypix		250
-					int		widthpix	136
-					# Label
-					string	text	"str_ldl_LINE_BUTTON"
+					int xpix     30
+					int ypix     255
+					int widthpix 136
 
+					# Label
+					string text "str_ldl_LINE_BUTTON"
 				} # LineOrZeroSum
 
 				# The graph
 				InfoGraph {
-
-					int	xpix	13
-
-					int	ypix	40
-
-					int	widthpix	300
-
-					int	heightpix	200
+					int xpix      13
+					int ypix      45
+					int widthpix  300
+					int heightpix 200
 
 					# Runtime type.
-					string	objecttype		"ctp2_LineGraph"
-
-					#string	imageblttype	"stretch"
-
-					#string	image0	"uptg20e.tga"
-
+					string objecttype "ctp2_LineGraph"
 				} # InfoGraph
-
 
 				# List of civilizations in game
 				InfoPlayerList:CTP2_LISTBOX {
-
-					int	xpix	327
-
-					int	ypix	40
-
-					int	widthpix	150
-
-					int	heightpix	200
-
-
+					int xpix      329
+					int ypix      53
+					int widthpix  144
+					int heightpix 186
 				} # InfoPlayerList
-
 			} # TabPanel
-
-
 		}
 		########################################################################
 		# End Ranking Tab
@@ -530,27 +324,18 @@ InfoDialog:CTP2_3TAB_DIALOG_WINDOW {
 		string image03 "uptg23d.tga"
 		string image05 "uptg23f.tga"
 	}
-
 }
 
-
 InfoPlayerListItem {
-
 	Civilization:CTP2_STANDARD_FONT {
-
 		int		xpix			0
-
 		int		ypix			0
-
 		int		widthpix		150
-
 		int		heightpix		20
-
 	}
 }
 
 InfoStrings {
-
 	int	numstrings	7
 
 	string string0 		"str_tbl_ldl_Positive_Points_For_Colon"
@@ -560,62 +345,65 @@ InfoStrings {
 	string string4 		"str_tbl_ldl_Total_Points_Colon"
 	string string5 		"str_tbl_ldl_Civ_Score_Colon"
 	string string6		"str_ldl_Turns"
-
 }
-
-
 
 WonderTabListItem:CTP2_LIST_ITEM
 {
-	int widthpix 470
-	int heightpix 50
+	int widthpix  450
+	int heightpix 48
 
 	Box {
 		string objecttype "ctp2_Static"
-		int widthpix 470
-		int heightpix 50
+		int widthpix  450
+		int heightpix 48
+
 		Icon:CTP2_STATIC_BASE {
-			int widthpix 68
+			int xpix      4
+			int ypix      4
+			int widthpix  68
 			int heightpix 42
-			int xpix 4
-			int ypix 4	
+
 			string imageblttype "stretch"
 		}
+
 		Name:CTP2_STATIC_BASE {
-			int widthpix 88
-			int xpix 72
-			int ypix 0
-			int heightpix 50
+			int xpix      72
+			int ypix      0
+			int widthpix  88
+			int heightpix 48
+
 			string text "str_ldl_0"
 			bool vertcenter true
 			string just "center"
 			bool wordwrap true
 		}
-	
+
 		Year:CTP2_STATIC_BASE {
-			int widthpix 80
-			int heightpix 50
-			int xpix 160
+			int xpix      160
+			int widthpix  60
+			int heightpix 48
+
 			bool vertcenter true
 			string just "center"
 			bool wordwrap true
 		}
 
 		City:CTP2_STATIC_BASE {
-			int widthpix 120
-			int heightpix 50
-			int xpix 240
+			int xpix      220
+			int widthpix  110
+			int heightpix 48
+
 			bool vertcenter true
 			string just "center"
 		}
 
 		OrigPlayer:CTP2_STATIC_BASE {
-			int widthpix 110
-			int heightpix 50
-			int xpix 360
+			int xpix      330
+			int widthpix  100
+			int heightpix 48
+
 			bool vertcenter true
 			string just "center"
 		}
 	}
 }
-

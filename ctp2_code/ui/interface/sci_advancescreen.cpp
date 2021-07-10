@@ -26,7 +26,7 @@
 //
 // - Start the great library with the current research project of the player.
 // - Start the "change to"-list with the current research selected.
-// - Initialized local variables. (Sep 9th 2005 Martin G�hmann)
+// - Initialized local variables. (Sep 9th 2005 Martin Gühmann)
 // - Fixed memory leaks.
 //
 //----------------------------------------------------------------------------
@@ -285,10 +285,10 @@ AUI_ERRCODE sci_advancescreen_Initialize( MBCHAR *messageText )
 	s_name = new ctp2_Static(&errcode, aui_UniqueId(), "SciAdvanceScreen.Background.Name");
 
 	sprintf( controlBlock, "%s.%s", windowBlock, "Background.SciAdvanceList" );
-	s_advanceList = new ctp2_ListBox( &errcode, aui_UniqueId(), controlBlock,
-		sci_advancescreen_listAction );
+	s_advanceList = new ctp2_ListBox( &errcode, aui_UniqueId(), controlBlock, sci_advancescreen_listAction );
 	Assert( AUI_NEWOK(s_advanceList, errcode) );
 	if ( !AUI_NEWOK(s_advanceList, errcode) ) return errcode;
+	s_advanceList->DoneInstantiating();
 
 	s_advanceList->SetForceSelect( TRUE );
 

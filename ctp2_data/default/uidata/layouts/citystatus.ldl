@@ -18,9 +18,9 @@
 # 
 #  Modifications from the original Activision code:
 #
-# - Added a city manager button. - July 24th 2005 Martin Gühmann
+# - Added a city manager button. - July 24th 2005 Martin GÃ¼hmann
 # - Added conversion loss and franchise loss column to the resource list
-#   tab. (Aug 14th 2005 Martin Gühmann)
+#   tab. (Aug 14th 2005 Martin GÃ¼hmann)
 # 
 ################################################################################
 
@@ -283,10 +283,10 @@ CityStatusWin:CTP2_3TAB_DIALOG_WINDOW {
 ################################################################################
 				ResourceList:CTP2_LISTBOX {
 					# Location
-					int		xpix		11
-					int		ypix		37
-					int		widthpix	469
-					int		heightpix	238
+					int xpix      18
+					int ypix      37
+					int widthpix  458
+					int heightpix 238
 
 					# Number of columns this list box is expected to have.
 					# This isn't really necessary, listbox figures it out anyway.
@@ -296,7 +296,7 @@ CityStatusWin:CTP2_3TAB_DIALOG_WINDOW {
 					# match the item widths in order to appear correctly.
 					header {
 						switch0:CITY_STATUS_HEADER {
-							int widthpix 149
+							int widthpix 142
 							string	text		"str_ldl_ND_RTL_CITY_NAME"
 							# Tooltip
 							string	statustext	"STATUSBAR_CITYMAN_NATL_SUMM_SORTCITY_BUTTON"
@@ -468,10 +468,10 @@ CityStatusWin:CTP2_3TAB_DIALOG_WINDOW {
 				# List of status items for cities.
 				StatusList:CTP2_LISTBOX {
 					# Location
-					int		xpix		11
-					int		ypix		37
-					int		widthpix	469
-					int		heightpix	213
+					int xpix      18
+					int ypix      37
+					int widthpix  458
+					int heightpix 210
 
 					# Number of columns this list box is expected to have.
 					#int		columns		5
@@ -494,18 +494,18 @@ CityStatusWin:CTP2_3TAB_DIALOG_WINDOW {
 							string	statustext	"STATUSBAR_CITYMAN_NATL_SUMM_SORTMAYOR_BUTTON"
 						}
 						switch2:CITY_STATUS_HEADER {
-							int		widthpix	90
-							string	text		"str_ldl_ND_STL_PRIORITY"
+							int    widthpix 60
+							string text     "str_ldl_ND_STL_PRIORITY"
 							# Tooltip
-							string	tipwindow	"TOOLTIP_CITYMAN_NATL_SUMM_SORTPRIOR_BUTTON"
-							string	statustext	"STATUSBAR_CITYMAN_NATL_SUMM_SORTPRIOR_BUTTON"
+							string tipwindow  "TOOLTIP_CITYMAN_NATL_SUMM_SORTPRIOR_BUTTON"
+							string statustext  "STATUSBAR_CITYMAN_NATL_SUMM_SORTPRIOR_BUTTON"
 						}
 						switch3:CITY_STATUS_HEADER {
-							int		widthpix	90
-							string	text		"str_ldl_ND_STL_BUILDING"
+							int    widthpix 120
+							string text     "str_ldl_ND_STL_BUILDING"
 							# Tooltip
-							string	tipwindow	"TOOLTIP_CITYMAN_NATL_SUMM_SORTBILD_BUTTON"
-							string	statustext	"STATUSBAR_CITYMAN_NATL_SUMM_SORTBILD_BUTTON"
+							string tipwindow  "TOOLTIP_CITYMAN_NATL_SUMM_SORTBILD_BUTTON"
+							string statustext "STATUSBAR_CITYMAN_NATL_SUMM_SORTBILD_BUTTON"
 						}
 						switch4:CITY_STATUS_HEADER {
 							int		widthpix	90
@@ -532,10 +532,10 @@ CityStatusWin:CTP2_3TAB_DIALOG_WINDOW {
 ################################################################################
 				SpecialistList:CTP2_LISTBOX {
 					# Location
-					int		xpix		11
-					int		ypix		37
-					int		widthpix	469
-					int		heightpix	238
+					int xpix      18
+					int ypix      37
+					int widthpix  458
+					int heightpix 238
 
 					header {
 						switch0:CITY_STATUS_HEADER {
@@ -547,11 +547,11 @@ CityStatusWin:CTP2_3TAB_DIALOG_WINDOW {
 						}
 						# Population
 						switch1:CITY_STATUS_HEADER {
-							int		widthpix	68
-							string	text		"str_ldl_ND_RTL_POPULATION"
+							int    widthpix 58
+							string text     "str_ldl_ND_RTL_POPULATION"
 							# Tooltip
-							string	tipwindow	"TOOLTIP_CITYMAN_NATL_SUMM_SORTPOP_BUTTON"
-							string	statustext	"STATUSBAR_CITYMAN_NATL_SUMM_SORTPOP_BUTTON"
+							string tipwindow  "TOOLTIP_CITYMAN_NATL_SUMM_SORTPOP_BUTTON"
+							string statustext "STATUSBAR_CITYMAN_NATL_SUMM_SORTPOP_BUTTON"
 						}
 						# Worker
 						switch2:CITY_STATUS_HEADER {

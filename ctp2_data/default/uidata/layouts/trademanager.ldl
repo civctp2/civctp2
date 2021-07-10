@@ -1,9 +1,10 @@
 
 TradeManager:CTP2_DIALOG_WINDOW {
-	int xpix 200
-	int ypix 50
-	int widthpix 576
+	int xpix      200
+	int ypix      50
+	int widthpix  591
 	int heightpix 384
+
 	string title "str_ldl_TradeTitle"
 
 	TradeTabs:CTP2_TAB_GROUP {
@@ -14,6 +15,8 @@ TradeManager:CTP2_DIALOG_WINDOW {
 
 		Market:CTP2_TAB{
 			TabButton:CTP2_SIMPLE_TAB_BUTTON {
+				int xpix 7
+
 				string text "str_ldl_TradeMarket"
 				string image00 "upct31ur.tga"
 				string image10 "upct31u.tga"
@@ -23,12 +26,14 @@ TradeManager:CTP2_DIALOG_WINDOW {
 				string	statustext	"STATUSBAR_TRADEMAN_OPEN_GOTO_MARKET_BUTTON"
 			}
 			TabPanel:CTP2_DIALOG_WINDOW_TAB_HELPER {
-			
+				int widthpix 511
+
 				Filters:CTP2_STATIC_BASE {
-					int xpix 4
-					int ypix 4
-					int widthpix 470
+					int xpix      9
+					int ypix      3
+					int widthpix  485
 					int heightpix 24
+
 					CitiesLabel:CTP2_STATIC_BASE {
 						int xpix 0
 						int ypix 0
@@ -53,9 +58,10 @@ TradeManager:CTP2_DIALOG_WINDOW {
 					}
 
 					CitiesPerGoodLabel:CTP2_STATIC_BASE {
-						int xpix 272
-						int widthpix 100
+						int xpix      277
+						int widthpix  100
 						int heightpix 24
+
 						string text "str_ldl_TradeManagerCitiesPerGood"
 					}
 
@@ -72,10 +78,10 @@ TradeManager:CTP2_DIALOG_WINDOW {
 						bool	quantizedrag	TRUE
 
 						# Location.
-						int		xpix		372
-						int		ypix		2
-						int		widthpix	84
-						int		heightpix	20
+						int xpix      377
+						int ypix      2
+						int widthpix  84
+						int heightpix 20
 
 						# Background.
 						string	pattern		"uptg20e.tga"
@@ -100,18 +106,20 @@ TradeManager:CTP2_DIALOG_WINDOW {
 						}
 					}
 					NumCities:CTP2_TEXT_BOX {
-						int xpix 458
-						int ypix 0
-						int widthpix 18
+						int xpix      463
+						int ypix      0
+						int widthpix  18
 						int heightpix 24
+
 						string text "str_ldl_0"
 					}
 				}
 				List:CTP2_LISTBOX {
-					int xpix 10
-					int ypix 56
-					int widthpix 470
-					int heightpix 204
+					int xpix      20
+					int ypix      58
+					int widthpix  466
+					int heightpix 200
+
 					header {
 						switch0:CTP2_HEADER_FONT {
 							int widthpix 100
@@ -166,9 +174,10 @@ TradeManager:CTP2_DIALOG_WINDOW {
 							string	statustext	"STATUSBAR_TRADEMAN_OPEN_SORTBY_NATION_BUTTON"
 						}
 						switch5:CTP2_HEADER_FONT {
-							int xpix 0
-							int widthpix 40
+							int xpix      0
+							int widthpix  35
 							int heightpix 20
+
 							string pattern "uptg04e.tga"
 							int bevelwidth 1
 							string text "str_ldl_TradePrice"
@@ -177,9 +186,10 @@ TradeManager:CTP2_DIALOG_WINDOW {
 							string	statustext	"STATUSBAR_TRADEMAN_OPEN_SORTBY_COST_BUTTON"
 						}
 						switch6:CTP2_HEADER_FONT {
-							int xpix 0
-							int widthpix 50
+							int xpix      0
+							int widthpix  60
 							int heightpix 20
+
 							string pattern "uptg04e.tga"
 							int bevelwidth 1
 							string text "str_ldl_TradeCaravans"
@@ -190,9 +200,10 @@ TradeManager:CTP2_DIALOG_WINDOW {
 					}
 				}
 				CreateRouteButton:CTP2_BUTTON_SMALL {
-					int xpix 170
-					int ypix 267
+					int xpix     177
+					int ypix     267
 					int widthpix 160
+
 					string text "str_ldl_CreateRoute"
 				}
 			}
@@ -200,7 +211,8 @@ TradeManager:CTP2_DIALOG_WINDOW {
 	
 		Summary:CTP2_TAB {
 			TabButton:CTP2_SIMPLE_TAB_BUTTON {
-				int xpix 144
+				int xpix 151
+
 				string text "str_ldl_TradeSummary"
 				string image00 "upct32ur.tga"
 				string image10 "upct32u.tga"
@@ -213,10 +225,11 @@ TradeManager:CTP2_DIALOG_WINDOW {
 			TabPanel:CTP2_DIALOG_WINDOW_TAB_HELPER {
 
 				List:CTP2_LISTBOX {
-					int xpix 10
-					int widthpix 470
-					int heightpix 236
-					int ypix 24
+					int xpix      20
+					int ypix      38
+					int widthpix  466
+					int heightpix 220
+
 					header {
 						switch0:CTP2_HEADER_FONT {
 							int widthpix 100
@@ -279,9 +292,10 @@ TradeManager:CTP2_DIALOG_WINDOW {
 							int numimagegroups 3
 						}
 						switch6:CTP2_HEADER_FONT {
-							int xpix 0
-							int widthpix 40
+							int xpix      0
+							int widthpix  35
 							int heightpix 20
+
 							string pattern "uptg04e.tga"
 							int bevelwidth 1
 							string text "str_ldl_TradePrice"
@@ -290,9 +304,10 @@ TradeManager:CTP2_DIALOG_WINDOW {
 							string	statustext	"STATUSBAR_TRADEMAN_OPEN_SORTBY_COST_BUTTON"
 						}
 						switch7:CTP2_HEADER_FONT {
-							int xpix 0
-							int widthpix 50
+							int xpix      0
+							int widthpix  60
 							int heightpix 20
+
 							string pattern "uptg04e.tga"
 							int bevelwidth 1
 							string text "str_ldl_TradeCaravans"
@@ -303,9 +318,10 @@ TradeManager:CTP2_DIALOG_WINDOW {
 					}
 				}
 				BreakRouteButton:CTP2_BUTTON_SMALL {
-					int xpix 170
-					int ypix 267
+					int xpix     177
+					int ypix     267
 					int widthpix 160
+
 					string text "str_ldl_BreakRoute"
 					# Tooltip
 					string	statustext	"STATUSBAR_TRADEMAN_OPEN_BREAK_ROUTE_BUTTON"
@@ -315,7 +331,8 @@ TradeManager:CTP2_DIALOG_WINDOW {
 
 		Import:CTP2_TAB {
 			TabButton:CTP2_SIMPLE_TAB_BUTTON {
-				int xpix 316
+				int xpix 322
+
 				string text "str_ldl_TradeImport"
 				string image00 "upct33ul.tga"
 				string image10 "upct33u.tga"
@@ -328,10 +345,11 @@ TradeManager:CTP2_DIALOG_WINDOW {
 			TabPanel:CTP2_DIALOG_WINDOW_TAB_HELPER {
 
 				List:CTP2_LISTBOX {
-					int xpix 10
-					int widthpix 470
-					int heightpix 236
-					int ypix 24
+					int xpix      20
+					int ypix      38
+					int widthpix  466
+					int heightpix 220
+
 					header {
 						switch0:CTP2_HEADER_FONT {
 							int widthpix 100
@@ -394,9 +412,10 @@ TradeManager:CTP2_DIALOG_WINDOW {
 							int numimagegroups 3
 						}
 						switch6:CTP2_HEADER_FONT {
-							int xpix 0
-							int widthpix 40
+							int xpix      0
+							int widthpix  35
 							int heightpix 20
+
 							string pattern "uptg04e.tga"
 							int bevelwidth 1
 							string text "str_ldl_TradePrice"
@@ -405,9 +424,10 @@ TradeManager:CTP2_DIALOG_WINDOW {
 							string	statustext	"STATUSBAR_TRADEMAN_OPEN_SORTBY_COST_BUTTON"
 						}
 						switch7:CTP2_HEADER_FONT {
-							int xpix 0
-							int widthpix 50
+							int xpix      0
+							int widthpix  60
 							int heightpix 20
+
 							string pattern "uptg04e.tga"
 							int bevelwidth 1
 							string text "str_ldl_TradeBonus"
@@ -418,9 +438,10 @@ TradeManager:CTP2_DIALOG_WINDOW {
 					}
 				}
 				BreakRouteButton:CTP2_BUTTON_SMALL {
-					int xpix 170
-					int ypix 267
+					int xpix     177
+					int ypix     267
 					int widthpix 160
+
 					string text "str_ldl_BreakRoute"
 					# Tooltip
 					string	statustext	"STATUSBAR_TRADEMAN_OPEN_BREAK_ROUTE_BUTTON"
@@ -435,18 +456,15 @@ TradeManager:CTP2_DIALOG_WINDOW {
 	}
 
 	ShowAdviceButton:CTP2_STANDARD_ADVISOR {
+		int xpix 56
+
 		# Tooltip
 		string	statustext	"STATUSBAR_TRADEMAN_OPEN_SHOWADV_BUTTON"
 	}
 
-#	SummaryButton:CTP2_BUTTON_SMALL {
-#		int xpix 110
-#		int ypix 390
-#		int widthpix 90
-#		string text "str_ldl_TradeSummary"
-#	}
-
 	Background:CTP2_DIALOG_BG {
+		int widthpix 591
+
 		string image00 "uptg27a.tga"
 		string image02 "uptg27c.tga"
 		string image03 "uptg27d.tga"
@@ -479,10 +497,10 @@ CreateRouteItem:CTP2_LIST_ITEM {
 		int widthpix 40
 	}
 	Price:TRADE_MANAGER_COLUMN {
-		int widthpix 40
+		int widthpix 35
 	}
 	Caravans:TRADE_MANAGER_COLUMN {
-		int widthpix 50
+		int widthpix 60
 	}
 }
 
@@ -509,10 +527,10 @@ TradeSummaryItem:CTP2_LIST_ITEM {
 		int widthpix 40
 	}
 	Price:TRADE_MANAGER_COLUMN {
-		int widthpix 40
+		int widthpix 35
 	}
 	Caravans:TRADE_MANAGER_COLUMN {
-		int widthpix 50
+		int widthpix 60
 	}
 }
 

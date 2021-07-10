@@ -309,6 +309,7 @@ template DIP_INTEL_HEADER:CTP2_HEADER_FONT {
 ################################################################################
 DiplomacyWindow:CTP2_DIALOG_WINDOW {
 	string	pattern	"uptg20e.tga"
+	int widthpix  601
 	int heightpix 558
 	string title "str_ldl_DiplomacyTitle"
 
@@ -316,10 +317,11 @@ DiplomacyWindow:CTP2_DIALOG_WINDOW {
 # Group of all tab panels and their tabs in the Diplomacy window.
 ################################################################################
 	DiplomacyTabs:CTP2_STATIC_BASE {
-		int xpix 36
-		int ypix 29
-		int widthpix 500
+		int xpix      38
+		int ypix      29
+		int widthpix  580
 		int heightpix 320
+
 		# Intelligence information tab.
 		Intelligence:CTP2_STATIC_BASE {
 
@@ -327,11 +329,11 @@ DiplomacyWindow:CTP2_DIALOG_WINDOW {
 			TabPanel:CTP2_DIALOG_WINDOW_TAB_HELPER {
 
 				List:CTP2_LISTBOX {
-					int xpix 10
-					int ypix 12
-					int widthpix 470
-					int heightpix 418
-					
+					int xpix      21
+					int ypix      20
+					int widthpix  470
+					int heightpix 396
+
 					header {
 						# MDS 090600  Adding color flag
 						switch0:DIP_INTEL_HEADER {
@@ -371,52 +373,55 @@ DiplomacyWindow:CTP2_DIALOG_WINDOW {
 				}
 
 				DetailsButton:CTP2_POSITION_13_BUTTON {
-					int xpix 5 #42
-					int ypix 436 #510 #267
-					string text "str_ldl_Intelligence"
-					string	statustext	"STATUSBAR_DIPMAN_TABLE_GOTO_INTEL_BUTTON"
+					int xpix 14
+					int ypix 432
+
+					string text       "str_ldl_Intelligence"
+					string statustext "STATUSBAR_DIPMAN_TABLE_GOTO_INTEL_BUTTON"
 				}
 
 				MessageButton:CTP2_POSITION_23_BUTTON {
-					int xpix 110 #150
-					int ypix 436 #510 #267
-					string text "str_ldl_CreateProposal"
-					# Tooltip
-					string	statustext	"STATUSBAR_DIPMAN_TABLE_GOTO_CREATE_BUTTON"
+					int xpix 118
+					int ypix 432
+
+					string text       "str_ldl_CreateProposal"
+					string statustext "STATUSBAR_DIPMAN_TABLE_GOTO_CREATE_BUTTON"
 				}
 
 				WarButton:CTP2_POSITION_33_BUTTON {
-					int xpix 214 #258
-					int ypix 436 #510 #267
-					string text "str_ldl_DeclareWar"
-					# Tooltip
-					string	statustext	"STATUSBAR_DIPMAN_TABLE_DECLAREWAR_BUTTON"
+					int xpix 222
+					int ypix 432
+
+					string text       "str_ldl_DeclareWar"
+					string statustext "STATUSBAR_DIPMAN_TABLE_DECLAREWAR_BUTTON"
 				}
 
 				EmbargoButton:CTP2_POSITION_33_BUTTON {
-					int xpix 317 #366
-					int ypix 436 #510 #267
-					string text "str_ldl_DeclareEmbargo"
-					# Tooltip
-					string	statustext	"STATUSBAR_DIPMAN_TABLE_EMBARGO_BUTTON"
+					int xpix 326
+					int ypix 432
+
+					string text       "str_ldl_DeclareEmbargo"
+					string statustext "STATUSBAR_DIPMAN_TABLE_EMBARGO_BUTTON"
 				}
-			
 			} 
 		}
 	}
+
 	CloseButton:CTP2_STANDARD_CLOSE {
-		# Tooltip
-		int xpix 455
-		int ypix 489
-		string	statustext	"STATUSBAR_DIPMAN_TABLE_CLOSE_BUTTON"
+		int xpix 468
+		int ypix 485
+
+		string statustext "STATUSBAR_DIPMAN_TABLE_CLOSE_BUTTON"
 	}
-		
+
 	Background:CTP2_DIALOG_BG {
-		int heightpix 558 #added to make window bigger
+		int widthpix  601
+		int heightpix 558
+
 		string image00 "uptg23a.tga"
 		string image02 "uptg23c.tga"
-		string image03 "dw_lb.tga" #"uptg23d.tga"
-		string image05 "dw_rb.tga" #"uptg23f.tga"
+		string image03 "dw_lb.tga"
+		string image05 "dw_rb.tga"
 	}
 }
 

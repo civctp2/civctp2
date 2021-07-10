@@ -149,10 +149,10 @@ ScenDifficultyItem:CTP2_LIST_ITEM:CTP2_STANDARD_FONT {
 }
 	
 ScenarioEditor:CTP2_TITLE_WINDOW {
-	int xpix 0
-	int ypix 50
-	int widthpix 600
-	int heightpix 420
+	int xpix      0
+	int ypix      50
+	int widthpix  604
+	int heightpix 424
 	string title "str_ldl_ScenarioEditor"
 	string	pattern	"uptg20e.tga"
 	TitleBar:CTP2_GENERIC_TEXT_DISPLAY_20 {
@@ -370,10 +370,10 @@ ScenarioEditor:CTP2_TITLE_WINDOW {
 
 		World:SCEN_TAB {
 			List:CTP2_LISTBOX {
-				int xpix 17
-				int ypix 10
-				int widthpix 312
-				int heightpix 162
+				int xpix      19
+				int ypix      15
+				int widthpix  313
+				int heightpix 160
 			}
 			HutSwitch:SCEN_TOGGLE_SWITCH {
 				int xpix 12
@@ -449,36 +449,44 @@ ScenarioEditor:CTP2_TITLE_WINDOW {
 
 		Unit:SCEN_TAB {
 			List:CTP2_LISTBOX {
-				int xpix 78
-				int ypix 9
-				int widthpix 260
-				int heightpix 208
+				int xpix      84
+				int ypix      9
+				int widthpix  261
+				int heightpix 209
 			}
 	
 			LandButton:CTP2_BUTTON_SMALL {
-				int xpix 4
-				int ypix 12
+				int xpix     8
+				int ypix     17
+				int widthpix 60
+
 				string text "str_ldl_ScenLand"
 				string statustext "str_SE_Land"
 				string tipwindow "str_SE_Land"
 			}
 			SeaButton:CTP2_BUTTON_SMALL {
-				int xpix 4
-				int ypix 62
+				int xpix     8
+				int ypix     69
+				int widthpix 60
+
 				string text "str_ldl_ScenSea"
 				string statustext "str_SE_Sea"
 				string tipwindow "str_SE_Sea"
 			}
 			AirButton:CTP2_BUTTON_SMALL {
-				int xpix 4
-				int ypix 112
+				int xpix     8
+				int ypix     121
+				int widthpix 60
+
 				string text "str_ldl_ScenAir"
 				string statustext "str_SE_Air"
 				string tipwindow "str_SE_Air"
 			}
 			SpecialButton:CTP2_BUTTON_SMALL {
-				int xpix 4
-				int ypix 162
+				int xpix     8
+				int ypix     173
+				int widthpix 60
+
 				string text "str_ldl_ScenSpecial"
 				string statustext "str_SE_Special"
 				string tipwindow "str_SE_Special"
@@ -511,30 +519,26 @@ ScenarioEditor:CTP2_TITLE_WINDOW {
 		City:SCEN_TAB {
 			# Shows city styles
 			List:CTP2_LISTBOX {
-				int xpix 15
-				int ypix 12
-				int widthpix 312
-				int heightpix 42
+				int xpix      19
+				int ypix      15
+				int widthpix  313
+				int heightpix 40
 			}
 			PopLabel:CTP2_STATIC_BASE {
-				int xpix 15
-				# MDS 08/2000
-				# int ypix 112
-				int ypix 65
-				#int widthpix 60
+				int xpix     22
+				int ypix     77
 				int widthpix 30
+
 				string text "str_ldl_Size"
 			}
 	
 			Pop:CTP2_SPINNER {
-				# MDS 08/2000
-				# int xpix 70
-				# int ypix 112
-				int xpix 58
-				int ypix 63
+				int xpix     60
+				int ypix     66
 				int widthpix 90
+
 				int minxval 1
-				# Set maxxval from 200 to 999 by Martin Gühmann
+				# Set maxxval from 200 to 999 by Martin GÃ¼hmann
 				int maxxval 999
 				int incxval 1
 				int xval 1
@@ -543,40 +547,30 @@ ScenarioEditor:CTP2_TITLE_WINDOW {
 			}
 
 			AddBuildings:CTP2_GENERIC_SIZABLE_TEXT_BUTTON {
-				# MDS 08/2000
-				# int xpix 220
-				# int ypix 112
-				int xpix 10
-				int ypix 195
+				int xpix     12
+				int ypix     195
 				int widthpix 90
+
 				string text "str_ldl_AddBuildings"
 				string statustext "str_SE_AddBuildings"
 				string tipwindow "str_SE_AddBuildings"
 			}
 			AddWonders:CTP2_GENERIC_SIZABLE_TEXT_BUTTON {
-				# MDS 08/2000 
-				# int xpix 220
-				# int ypix 136
-				int xpix 248
-				int ypix 195
+				int xpix     261
+				int ypix     195
 				int widthpix 90
+
 				string text "str_ldl_AddWonders"
 				string statustext "str_SE_AddWonders"
 				string tipwindow "str_SE_AddWonders"
 			}
 
-			#
-			# MDS 08/2000 - listbox for adding terrain improvements
-			#
 			TerrainImprovementList:CTP2_LISTBOX {
-				int xpix 15
-				int ypix 100
-				int widthpix 312
+				int xpix      19
+				int ypix      102
+				int widthpix  313
 				int heightpix 80
 			}
-	
-
-
 		}
 
 		Civ:SCEN_TAB {
@@ -1080,9 +1074,10 @@ ScenarioEditor:CTP2_TITLE_WINDOW {
 
 	Background:CTP2_STANDARD_DIALOG_PATTERN {
 		string objecttype "ctp2_Static"
-		int	ypix	20
-		int widthpix 600
-		int heightpix 400
+
+		int ypix      20
+		int widthpix  604
+		int heightpix 404
 
 		string	image00				"uptg03d.tga"
 		string	image01				"uptg03e.tga"
@@ -1343,7 +1338,6 @@ ScenAddStuffWindow:CTP2_WINDOW {
 	}
 
 	AddStuff_Bottom {
-
 		string objecttype "ctp2_Static"
 		string pattern "uptg03h.tga"
 
@@ -1352,21 +1346,20 @@ ScenAddStuffWindow:CTP2_WINDOW {
 
 		int	widthpix	426
 		int	heightpix	12
-
 	}
 
 	Left:CTP2_LISTBOX {
-		int xpix 24
-		int ypix 24
-		int widthpix 155
-		int heightpix 196
+		int xpix      30
+		int ypix      36
+		int widthpix  146
+		int heightpix 180
 	}
 
 	Right:CTP2_LISTBOX {
-		int xpix 260
-		int ypix 24
-		int widthpix 155
-		int heightpix 196
+		int xpix      263
+		int ypix      36
+		int widthpix  146
+		int heightpix 180
 	}
 
 	AddButton:CTP2_BUTTON_NODULE_ONLY_SMALL {
@@ -1390,8 +1383,9 @@ ScenAddStuffWindow:CTP2_WINDOW {
 	}
 
 	CloseButton:CTP2_BUTTON_SMALL {
-		int xpix 207
-		int ypix 205
+		int xpix 204
+		int ypix 198
+
 		string text "str_ldl_Ok"
 	}
 }
@@ -1452,24 +1446,25 @@ GenericFileDialog:CTP2_WINDOW {
 	string yanchor "CENTER"
 
 	List:CTP2_LISTBOX {
-		int xpix 20
-		int ypix 20
-		int widthpix 192
-		int heightpix 140		
+		int xpix      24
+		int ypix      25
+		int widthpix  190
+		int heightpix 127
 	}
-	
+
 	NameLabel:CTP2_STATIC_BASE {
-		int xpix 21
-		int ypix 170
-		int widthpix 60
+		int xpix      21
+		int ypix      164
+		int widthpix  60
 		int heightpix 20
-		string	pattern	"uptg20e.tga"
-		string text "str_ldl_FileName"
+
+		string pattern "uptg20e.tga"
+		string text    "str_ldl_FileName"
 	}
 
 	NameField:CTP2_TEXT_FIELD {
-		int xpix 87
-		int ypix 172
+		int xpix     87
+		int ypix     166
 		int widthpix 132
 	}
 
@@ -1500,8 +1495,6 @@ GenericFileDialog:CTP2_WINDOW {
 		int xpix 0
 		int xpix 0
 	}
-
-
 }
 
 GenericFileItem:CTP2_LIST_ITEM {

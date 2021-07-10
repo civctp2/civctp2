@@ -18,8 +18,8 @@
 #
 #  Modifications from the original Activision code:
 #
-# - Added a national manager button. - July 24th 2005 Martin Gühmann
-# - Added a suggest build item button to the build manager for AI testing. (30-Jun-2008 Martin Gühmann)
+# - Added a national manager button. - July 24th 2005 Martin GÃ¼hmann
+# - Added a suggest build item button to the build manager for AI testing. (30-Jun-2008 Martin GÃ¼hmann)
 #
 ################################################################################
 
@@ -29,17 +29,19 @@ eq_QueueListItem:CTP2_LIST_ITEM {
 	StaticThing:CTP2_STATIC_BASE {
 		int xpix 4
 		Label:CTP2_STATIC_BASE {
-			int	xpix	0
-			string	just	"left"
-			bool	vertcenter	TRUE
-			int	widthpix	113
-			int	heightpix	16
+			int xpix      3
+			int widthpix  103
+			int heightpix 16
+
+			string just       "left"
+			bool   vertcenter true
 		}
 		Turns:CTP2_STATIC_BASE {
-			int xpix 117
-			string just "right"
-			int widthpix 36
+			int xpix      106
+			int widthpix  36
 			int heightpix 16
+
+			string just "right"
 			string text "str_ldl_0"
 		}
 	}
@@ -83,70 +85,83 @@ eq_UnitItem:CTP2_LIST_ITEM {
 		int widthpix 316
 		int heightpix 18
 		Item:CTP2_STATIC_BASE {
-			int xpix 3
+			int xpix      3
+			int widthpix  141
+			int heightpix 18
+
 			string just "left"
 			bool vertcenter true
-			int widthpix 145
-			int heightpix 18
 		}
 		Attack:eq_UNIT_ITEM_COL {
-			int xpix 148
+			int xpix 145
 		}
 		Defense:eq_UNIT_ITEM_COL {
-			int xpix 169
+			int xpix 166
 		}
 		Armor:eq_UNIT_ITEM_COL {
-			int xpix 190
+			int xpix 187
 		}
 		Ranged:eq_UNIT_ITEM_COL {
-			int xpix 211
+			int xpix 208
 		}
 		Damage:eq_UNIT_ITEM_COL {
-			int xpix 232
+			int xpix 229
 		}
 		Movement:eq_UNIT_ITEM_COL {
-			int xpix 253
+			int xpix 250
 		}
 		Time:eq_UNIT_ITEM_COL {
+			int xpix     274
 			int widthpix 39
-			int xpix 279
 		}
 	}
 }
 
 eq_MultiCityListItem:CTP2_LIST_ITEM {
-	int widthpix 273
+	int widthpix  224
 	int heightpix 16
-	StaticThing:CTP2_STANDARD_FONT {
-		string	objecttype	"ctp2_static"
-		string	just	"center"
-		bool	vertcenter	TRUE
-		int	widthpix	273
-		int	heightpix	16
+	StaticThing:CTP2_STATIC_BASE {
+		int widthpix  224
+		int heightpix 16
+
+		string just       "center"
+		bool   vertcenter true
 	}
 }
-	
+
 eq_LoadListItem:CTP2_LIST_ITEM {
-	int widthpix 100
+	int widthpix  100
 	int heightpix 18
-	label:CTP2_STANDARD_FONT {
-		string objecttype "ctp2_static"
-		string just "left"
-		bool vertcenter true
-		int widthpix 100
+
+	box:CTP2_STATIC_BASE {
+		int widthpix  100
 		int heightpix 18
+		label:CTP2_STATIC_BASE {
+			int xpix      3
+			int widthpix  100
+			int heightpix 18
+
+			string just "left"
+			bool vertcenter true
+		}
 	}
 }
 
 eq_ContentsItem:CTP2_LIST_ITEM {
-	int widthpix 146
+	int widthpix  146
 	int heightpix 18
-	label:CTP2_STANDARD_FONT {
-		string objecttype "ctp2_static"
-		string just "left"
-		bool vertcenter true
-		int widthpix 146
+
+	box:CTP2_STATIC_BASE {
+		int widthpix  146
 		int heightpix 18
+		label:CTP2_STATIC_BASE {
+			int xpix      3
+			int widthpix  146
+			int heightpix 18
+
+			string just "left"
+			bool vertcenter true
+		}
 	}
 }
 
@@ -221,69 +236,76 @@ BuildEditorWindow:CTP2_DIALOG_WINDOW {
 	}
 
 	MultiCityList:CTP2_LISTBOX {
-		int xpix 49
-		int ypix 45
-		int widthpix 273
-		int heightpix 75
+		int xpix      63
+		int ypix      47
+		int widthpix  235
+		int heightpix 80
+
 		int focusindex 1
 	}
 
 	QueueGroup:CTP2_STATIC_BASE {
-		int xpix 485
-		int ypix 147
-		int widthpix 271
-		int heightpix 193
-		int beveltype 2
+		int xpix       485
+		int ypix       147
+		int widthpix   271
+		int heightpix  194
+		int beveltype  2
 		int bevelwidth 1
-	
+
 		string pattern "uptg20e.tga"
 
 		QueueLabel:CTP2_STATIC_BASE {
-			int xpix 6
-			int ypix 3
-			int widthpix 153
+			int xpix      9
+			int ypix      3
+			int widthpix  153
 			int heightpix 18
+
 			string just "left"
 			string text "str_ldl_CurrentQueue"
 		}
 		QueueList:CTP2_LISTBOX {
-			int xpix 11
-			int ypix 22
-			int widthpix 153
-			int heightpix 161
+			int xpix      16
+			int ypix      39
+			int widthpix  148
+			int heightpix 144
+
 			bool alwaysranger true
 		}
 
 		UpButton:CTP2_BUTTON_SMALL {
-			int	xpix	187
-			int	ypix	45
+			int xpix     187
+			int ypix     49
 			int widthpix 79
+
 			string text "str_ldl_EditQueueUp"
 			# Tooltip
 			string	statustext	"STATUSBAR_CITYMAN_MAIN_MOVEUP_BUTTON"
 		}
 		DownButton:CTP2_BUTTON_SMALL {
-			int	xpix	187
-			int	ypix	73
+			int xpix     187
+			int ypix     77
 			int widthpix 79
+
 			string text "str_ldl_EditQueueDown"
 			# Tooltip
 			string	statustext	"STATUSBAR_CITYMAN_MAIN_MOVEDN_BUTTON"
 		}
 
 		RemoveButton:CTP2_BUTTON_SMALL {
-			int	xpix	187
-			int	ypix	136
+			int xpix     187
+			int ypix     137
 			int widthpix 79
+
 			string text "str_ldl_EditQueueDelete"
 			# Tooltip
 			string	statustext	"STATUSBAR_CITYMAN_MAIN_REM_BUTTON"
 		}
 
 		ClearButton:CTP2_GENERIC_SIZABLE_TEXT_BUTTON {
-			int xpix 187
-			int ypix 164
+			int xpix     187
+			int ypix     165
 			int widthpix 79
+
 			string text "str_ldl_Clear"
 			# Tooltip
 			string	statustext	"STATUSBAR_CITYMAN_MAIN_CLEAR_BUTTON"
@@ -296,50 +318,34 @@ BuildEditorWindow:CTP2_DIALOG_WINDOW {
 	}
 
 	ItemsBox:CTP2_STATIC_BASE {
-		int xpix 44
-		int ypix 147
-		int widthpix 435
-		int heightpix 193
-		int beveltype 2
+		int xpix       44
+		int ypix       147
+		int widthpix   435
+		int heightpix  194
+		int beveltype  2
 		int bevelwidth 1
 
 		ModeLabel:CTP2_STATIC_BASE {
-			int xpix 300
-			int ypix 3
-			int widthpix 133
+			int xpix      300
+			int ypix      3
+			int widthpix  132
 			int heightpix 18
+
+			string just "right"
 			string text "str_ldl_EditQueueBuildableItems"
 		}
 
-#		CustomModeButtons:CTP2_STATIC_BASE {
-#			int xpix 153
-#			int ypix 2
-#			int widthpix 282
-#			int heightpix 24
-#			LoadModeButton:CTP2_BUTTON_SMALL {
-#				int xpix 0
-#				int ypix 0
-#				int widthpix 141
-#				string text "str_ldl_EditQueueLoadMode"
-#			}
-#			SaveModeButton:CTP2_BUTTON_SMALL {
-#				int xpix 142
-#				int ypix 0
-#				int widthpix 141
-#				string text "str_ldl_EditQueueSaveMode"
-#			}
-#		}
-	
 		UnitsList:CTP2_LISTBOX {
-			int xpix 11
-			int ypix 52
-			int widthpix 316
-			int heightpix 132
+			int xpix      17
+			int ypix      57
+			int widthpix  306
+			int heightpix 126
+
 			bool alwaysranger true
 			header {
 				switch0:EDIT_QUEUE_STAT_SWITCH {
-					int widthpix 148
-					string text "str_ldl_Name"
+					int    widthpix 144
+					string text     "str_ldl_Name"
 				}
 				switch1:EDIT_QUEUE_ICON_SWITCH {
 					string image0 "upic40.tga"
@@ -397,24 +403,17 @@ BuildEditorWindow:CTP2_DIALOG_WINDOW {
 		}
 					
 		BuildingList:CTP2_LISTBOX {
-			int	xpix	11
-			int	ypix	52
-			int	widthpix	316
-			int	heightpix	132
+			int xpix      17
+			int ypix      57
+			int widthpix  306
+			int heightpix 126
+
 			bool alwaysranger true
 			header {
 				switch0:EDIT_QUEUE_STAT_SWITCH {
-					int widthpix 274
-					string text "str_ldl_Name"
+					int    widthpix 270
+					string text     "str_ldl_Name"
 				}
-#				switch1:EDIT_QUEUE_STAT_SWITCH {
-#					int widthpix 42
-#					bool centerimage true
-#					string image0 "upic06.tga"
-#					string image1 "upic06.tga"
-#					string image2 "upic06.tga"
-#					string imagebltflag "chromakey"
-#				}
 				switch1:EDIT_QUEUE_STAT_SWITCH{
 					int widthpix 42
 					string text "str_ldl_Time"
@@ -423,24 +422,17 @@ BuildEditorWindow:CTP2_DIALOG_WINDOW {
 		}
 	
 		WonderList:CTP2_LISTBOX {
-			int	xpix	11
-			int	ypix	52
-			int	widthpix	316
-			int	heightpix	132
+			int xpix      17
+			int ypix      57
+			int widthpix  306
+			int heightpix 126
+
 			bool alwaysranger true
 			header {
 				switch0:EDIT_QUEUE_STAT_SWITCH {
-					int widthpix 274
-					string text "str_ldl_Name"
+					int    widthpix 270
+					string text     "str_ldl_Name"
 				}
-#				switch1:EDIT_QUEUE_STAT_SWITCH {
-#					int widthpix 42
-#					bool centerimage true
-#					string image0 "upic06.tga"
-#					string image1 "upic06.tga"
-#					string image2 "upic06.tga"
-#					string imagebltflag "chromakey"
-#				}
 				switch1:EDIT_QUEUE_STAT_SWITCH{
 					int widthpix 42
 					string text "str_ldl_Time"
@@ -477,33 +469,37 @@ BuildEditorWindow:CTP2_DIALOG_WINDOW {
 		}
 
 		AddButton:CTP2_BUTTON_SMALL {
-			int	xpix	352
-			int	ypix	45
+			int xpix     352
+			int ypix     49
 			int widthpix 79
+
 			string text "str_ldl_EditQueueAppend"
 			# Tooltip
 			string	statustext	"STATUSBAR_CITYMAN_MAIN_ADD_BUTTON"
 		}
 		InsertButton:CTP2_BUTTON_SMALL {
-			int	xpix	352
-			int	ypix	73
+			int xpix     352
+			int ypix     77
 			int widthpix 79
+
 			string text "str_ldl_EditQueueInsert"
 			# Tooltip
 			string	statustext	"STATUSBAR_CITYMAN_MAIN_INSERT_BUTTON"
 		}
 		SuggestButton:CTP2_GENERIC_SIZABLE_TEXT_BUTTON {
-			int xpix 352
-			int ypix 136
+			int xpix     352
+			int ypix     137
 			int widthpix 79
+
 			string text "str_ldl_EditQueueSuggest"
 			# Tooltip
 			string	statustext	"STATUSBAR_CITYMAN_MAIN_SUGGEST_BUTTON"
 		}
 		LoadSaveButton:CTP2_GENERIC_SIZABLE_TEXT_BUTTON {
-			int xpix 352
-			int ypix 164
+			int xpix     352
+			int ypix     165
 			int widthpix 79
+
 			string text "str_ldl_Load"
 			# Tooltip
 			string	statustext	"STATUSBAR_CITYMAN_NATL_ADV_LOADQ_BUTTON"
@@ -513,82 +509,83 @@ BuildEditorWindow:CTP2_DIALOG_WINDOW {
 	} # End of ItemsBox
 
 	LoadBox:CTP2_STATIC_BASE {
-		int xpix 44
-		int ypix 147
-		int widthpix 435
-		int heightpix 193
+		int xpix      44
+		int ypix      147
+		int widthpix  435
+		int heightpix 194
+
 		string pattern "uptg20e2.tga"
 		int beveltype 2
 		int bevelwidth 1
 
 		LoadQueueLabel:CTP2_STATIC_BASE {
-			int xpix 9
+			int xpix 10
 			int ypix 4
 			int widthpix 130
 			int heightpix 18
+
+			string just "left"
 			string text "str_ldl_LoadQueueColon"
 		}
 
 		QueuesList:CTP2_LISTBOX {
-			int xpix 9
-			int ypix 26
-			int widthpix 130
-			int heightpix 130
+			int xpix      17
+			int ypix      29
+			int widthpix  118
+			int heightpix 126
+
 			bool alwaysranger true
 		}
 		
 		QueueName:CTP2_TEXT_BOX {
-			int xpix 170
-			int ypix 4
-			int widthpix 240
+			int xpix      164
+			int ypix      4
+			int widthpix  240
 			int heightpix 16
-			string	image00				"uptg20e2.tga"
-			string	image01				"uptg20e2.tga"
-			string	image02				"uptg20e2.tga"
-			int bevelwidth 0
-			string text "str_ldl_0"
+
+			string just       "left"
+			string image00    "uptg20e2.tga"
+			string image01    "uptg20e2.tga"
+			string image02    "uptg20e2.tga"
+			int    bevelwidth 0
+			string text       "str_ldl_0"
 		}
 
 		Contents:CTP2_LISTBOX {
-			int xpix 170
-			int ypix 26
-			int heightpix 130
-			int widthpix 240
+			int xpix      171
+			int ypix      29
+			int widthpix  235
+			int heightpix 126
+
 			bool alwaysranger true
 		}
 
 		DeleteButton:CTP2_BUTTON_SMALL {
-			int xpix 4
-			int ypix 164
+			int xpix     10
+			int ypix     165
 			int widthpix 100
+
 			string text "str_ldl_DeleteQueue"
 		}
 
 		LoadButton:CTP2_BUTTON_SMALL {
-			int xpix 170
-			int ypix 164
+			int xpix     164
+			int ypix     165
 			int widthpix 75
+
 			string text "str_ldl_Load"
 		}
 
-#		string pattern "uptg20e.tga"
-#		SaveButton:CTP2_GENERIC_SIZABLE_TEXT_BUTTON {
-#			int xpix 248
-#			int ypix 168
-#			int widthpix 75
-#			string text "str_ldl_Save"
-#		}
-
 		CancelButton:CTP2_BUTTON_SMALL {
-			int xpix 357
-			int ypix 164
+			int xpix     350
+			int ypix     165
 			int widthpix 75
+
 			string text "str_ldl_Cancel"
 		}
-
 	}
-			
-	
+
+
 	# MultiGroup only visible when in multiple cities mode
 	MultiGroup:CTP2_STATIC_BASE {
 		int xpix 388
