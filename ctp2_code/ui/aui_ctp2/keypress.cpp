@@ -1294,7 +1294,7 @@ sint32 ui_HandleKeypress(WPARAM wParam, LPARAM lParam)
 			}
 				if(city.IsValid()) {
 					close_AllScreens();
-					EditQueue::Display(CityWindow::GetCityData(city));
+					EditQueue::Display(city);
 				}
 		}
 		break;
@@ -1304,11 +1304,11 @@ sint32 ui_HandleKeypress(WPARAM wParam, LPARAM lParam)
 			close_AllScreens();
 			Unit city;
 			if(g_selected_item->GetSelectedCity(city)) {
-				CityWindow::Display(city.GetData()->GetCityData());
+				CityWindow::Display(city);
 			} else if(g_player[g_selected_item->GetVisiblePlayer()]->GetNumCities()) {
 				city = g_player[g_selected_item->GetVisiblePlayer()]->m_all_cities->Access(0);
 				g_selected_item->SetSelectCity(city);
-				CityWindow::Display(city.GetData()->GetCityData());
+				CityWindow::Display(city);
 			}
 		}
 		break;

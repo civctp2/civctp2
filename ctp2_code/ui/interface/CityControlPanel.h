@@ -92,7 +92,7 @@ private:
 											RECT &rect,
 											void *cookie);
 
-	CityData *GetSelectedCity();
+	bool GetSelectedCity(Unit & selectedCity);
 
 	void UpdateBuildItem();
 

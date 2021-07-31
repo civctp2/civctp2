@@ -2991,7 +2991,7 @@ str_ldl_EditQueueUnits "部队"
 str_ldl_EditQueueBuildings "建物"
 str_ldl_EditQueueWonders "奇观"
 str_ldl_EditQueueAppend "新增 >"
-str_ldl_EditQueueInsert ">插入<"
+str_ldl_EditQueueInsert "插入 <"
 str_ldl_EditQueueSuggest			"建议"
 
 str_ldl_EditQueueAttack "攻击"

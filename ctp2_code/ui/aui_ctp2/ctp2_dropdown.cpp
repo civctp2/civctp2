@@ -24,7 +24,7 @@
 //
 // Modifications from the original Activision code:
 //
-// - ForceSelect can now be disabled. (Feb 4th 2007 Martin Gühmann)
+// - ForceSelect can now be disabled. (Feb 4th 2007 Martin GÃ¼hmann)
 //
 //----------------------------------------------------------------------------
 
@@ -194,7 +194,6 @@ AUI_ERRCODE ctp2_DropDown::CreateComponents( const MBCHAR *ldlBlock )
 				block,
 				16, AUI_WINDOW_TYPE_POPUP );
 
-
 			aui_Ldl::Remove( m_listBoxWindow );
 
 			if ( m_listBoxWindow )
@@ -205,12 +204,13 @@ AUI_ERRCODE ctp2_DropDown::CreateComponents( const MBCHAR *ldlBlock )
 
 			sprintf( block, "%s.%s.%s", ldlBlock, k_AUI_DROPDOWN_LDL_WINDOW, k_AUI_DROPDOWN_LDL_LISTBOX );
 
-			if (aui_Ldl::FindDataBlock( block ) )
+			if (aui_Ldl::FindDataBlock( block ) ) {
 				m_listBox = new ctp2_ListBox(
-					&errcode,
-					aui_UniqueId(),
-					block,
-					DropDownListBoxActionCallback, this );
+						&errcode,
+						aui_UniqueId(),
+						block,
+						DropDownListBoxActionCallback, this);
+			}
 
 			if(m_listBoxWindow && m_listBox)
 				m_listBoxWindow->AddChild( m_listBox );
@@ -309,6 +309,13 @@ AUI_ERRCODE ctp2_DropDown::DrawThis( aui_Surface *surface, sint32 x, sint32 y )
 	return AUI_ERRCODE_OK;
 }
 
+AUI_ERRCODE ctp2_DropDown::DoneInstantiatingThis(const MBCHAR * ldlBlock)
+{
+	aui_DropDown::DoneInstantiatingThis(ldlBlock);
+	m_listBoxWindow->DoneInstantiating();
+	RepositionListBoxWindow();
+}
+
 AUI_ERRCODE ctp2_DropDown::RepositionButton( void )
 {
 	m_button->Resize( m_width, m_button->Height() );
@@ -328,11 +335,7 @@ AUI_ERRCODE ctp2_DropDown::AddItem(ctp2_ListItem *item)
 
 	m_listBox->AddItem((aui_Item *)item);
 
-	ctp2_ListBox *myListBox = (ctp2_ListBox *)m_listBox;
-	sint32 height = ((ctp2_ListBox *)m_listBox)->GetMaxItemHeight() * m_listBox->NumItems() +
-		(2 * myListBox->GetBevelWidth()) + 20;
-
-	SetWindowSize(height < 350 ? height : 350);
+	SetWindowSizeThis();
 	return AUI_ERRCODE_OK;
 }
 
@@ -350,15 +353,22 @@ void ctp2_DropDown::BuildListEnd(void)
 	if (m_listBox == NULL) return;
 
 	m_listBox->BuildListEnd();
-
-	ctp2_ListBox *myListBox = (ctp2_ListBox *)m_listBox;
-	sint32 height = ((ctp2_ListBox *)m_listBox)->GetMaxItemHeight() * m_listBox->NumItems() +
-		(2 * myListBox->GetBevelWidth());
-
-	SetWindowSize(height < 350 ? height : 350);
+	SetWindowSizeThis();
 }
 
 void ctp2_DropDown::SetForceSelect(bool forceSelect)
 {
 	m_listBox->SetForceSelect(forceSelect);
+}
+
+sint32 ctp2_DropDown::SetWindowSizeThis()
+{
+	ctp2_ListBox * myListBox = (ctp2_ListBox *) m_listBox;
+
+	sint32 borderHeight = 2 * myListBox->GetBevelWidth() + 2 * myListBox->GetBorderOffset().y;
+	sint32 maxHeight = borderHeight + ((350 - borderHeight) / myListBox->GetMaxItemHeight()) * myListBox->GetMaxItemHeight();
+
+	sint32 height = myListBox->GetMaxItemHeight() * m_listBox->NumItems() + borderHeight;
+
+	return SetWindowSize(height < maxHeight ? height : maxHeight);
 }

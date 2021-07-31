@@ -393,16 +393,11 @@ bool c3files_getfilelist(C3SAVEDIR dirID, MBCHAR *ext, PointerList<MBCHAR> *list
 	while ((dent = readdir(dir)))
 	{
 		char *p = strrchr(dent->d_name, '.');
-		if (NULL == p)
+		if (p != NULL && 1 == strlen(p)) // filter '.' and '..' directories
 		{
 			continue;
 		}
-		if (1 == strlen(p))
-		{
-			continue;
-		}
-		p++;
-		if (ext != NULL && 0 != strcasecmp(p, ext))
+		if (ext != NULL && (p == NULL || (0 != strcasecmp(++p, ext))))
 		{
 			continue;
 		}

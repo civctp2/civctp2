@@ -3101,7 +3101,7 @@ str_ldl_EditQueueUnits "ƒ†ƒjƒbƒg"
 str_ldl_EditQueueBuildings "‰ü‘PŽ{Ý"
 str_ldl_EditQueueWonders "Žµ•sŽv‹c"
 str_ldl_EditQueueAppend "’Ç‰Á >"
-str_ldl_EditQueueInsert ">‘}“ü<"
+str_ldl_EditQueueInsert "‘}“ü <"
 str_ldl_EditQueueSuggest			"Suggest"
 
 str_ldl_EditQueueAttack "UŒ‚"

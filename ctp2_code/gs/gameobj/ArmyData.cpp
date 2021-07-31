@@ -8930,38 +8930,15 @@ void ArmyData::Disband()
 	Diplomat &  cell_diplomat   = Diplomat::GetDiplomat
 	    ((PLAYER_UNASSIGNED == cellOwner) ? PLAYER_INDEX_VANDALS : cellOwner);
 
-	bool cw;
-	CityWindow* cityWindow = CityWindow::GetCityWindow();
-	CityData* cityData = cityWindow ? cityWindow->GetCityData() : NULL;
-	if(cityData != NULL && cityData->GetHomeCity() == city)
-	{
-		cw = true;
-	}
-	else
-		cw = false;
-
 	// Usually, "for (int i = 0; i < n; ++i)" expresses more clearly that you
 	// are going through all items of an array. But when killing/removing items,
 	// it is safer to start from the end, otherwise indices may get shifted
 	// while you are busy, and half of the items will not be removed.
 	for(sint32 i = m_nElements - 1; i >= 0; i--)
 	{
-		if (city.IsValid())
-		{
-			// Disbanding from the city window requires the
-			// shields to be sent to the citydata of the city window.
-			if (cw)
-			{
-				// Shield cost should be difficulty dependent
-				cityData->AddShields
-					(m_array[i].GetDBRec()->GetShieldCost() / 2);
-			}
-			else
-			{
-				// Shield cost should be difficulty dependent
-				city.AccessData()->GetCityData()->AddShields
-					(m_array[i].GetDBRec()->GetShieldCost() / 2);
-			}
+		if (city.IsValid()) {
+			// Shield cost should be difficulty dependent
+			city.GetCityData()->AddShields(m_array[i].GetDBRec()->GetShieldCost() / 2);
 		}
 
 		// Should be moved into own method and own event

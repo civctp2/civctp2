@@ -26,12 +26,12 @@
 //
 // - Bug fix: prevent easy invisible unit detection, by reporting the basic
 //   terrain info when (right-)clicking on an enemy object.
-// - Added selection of goods. (Oct 8th 2005 Martin Gühmann)
+// - Added selection of goods. (Oct 8th 2005 Martin GÃ¼hmann)
 // - Added option to open cities or the army manager if there are units
-//   on top of a city. (Oct 8th 2005 Martin Gühmann)
-// - Treat entrenching units like entrenched units. (Oct 16th 2005 Martin Gühmann)
-// - Standardized code (May 21st 2006 Martin Gühmann)
-// - Added debug pathing for the city astar. (17-Jan-2008 Martin Gühmann)
+//   on top of a city. (Oct 8th 2005 Martin GÃ¼hmann)
+// - Treat entrenching units like entrenched units. (Oct 16th 2005 Martin GÃ¼hmann)
+// - Standardized code (May 21st 2006 Martin GÃ¼hmann)
+// - Added debug pathing for the city astar. (17-Jan-2008 Martin GÃ¼hmann)
 //
 //----------------------------------------------------------------------------
 
@@ -995,7 +995,7 @@ void SelectedItem::SelectCityClick(const MapPoint &pos, const aui_MouseEvent *da
 		if(doubleClick)
 		{
 			if(top.IsCity())
-				CityWindow::Display(top.CD());
+				CityWindow::Display(top);
 			else
 				ArmyManagerWindow::Display();
 		}

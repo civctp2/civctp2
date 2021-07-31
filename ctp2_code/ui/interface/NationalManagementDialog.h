@@ -26,7 +26,7 @@
 //
 // - #01 Added a third tab to the dialog that shows the nuber of experts and
 //   military units in each city. (L. Hirth 6/2004)
-// - Added City Manager button and functions callback. - July 24th 2005 Martin Gühmann
+// - Added City Manager button and functions callback. - July 24th 2005 Martin GÃ¼hmann
 //
 //----------------------------------------------------------------------------
 
@@ -49,14 +49,11 @@ class ctp2_Tab;
 
 class NationalManagementDialog {
 public:
-
 	static void Open();
-
 	static void Close();
-
 	static void Cleanup();
-
 	static bool IsShown();
+	static void UpdateCity(const Unit & city);
 
 	NationalManagementDialog();
 
@@ -82,20 +79,14 @@ private:
 
 	static ctp2_Static *GetListItemColumn(ctp2_ListItem *item, sint32 column);
 
-	ctp2_ListItem *CreateResourceItem(const Unit &city);
-
-	void UpdateResourceItem(ctp2_ListItem *item,
-	                        const Unit &city);
+	ctp2_ListItem *CreateResourceItem(const Unit & city);
+	void UpdateResourceItem(ctp2_ListItem *item, const Unit & city);
 
 	ctp2_ListItem *CreateStatusItem(const Unit &city);
-
-	void UpdateStatusItem(ctp2_ListItem *item,
-	                      const Unit &city);
+	void UpdateStatusItem(ctp2_ListItem *item, const Unit & city);
 
 	ctp2_ListItem *CreateSpecialistItem(const Unit &city);
-
-	void UpdateSpecialistItem(ctp2_ListItem *item,
-	                          const Unit &city);
+	void UpdateSpecialistItem(ctp2_ListItem *item, const Unit & city);
 
 	bool CanBuild(uint32 category, sint32 type);
 
@@ -133,9 +124,6 @@ private:
 	static void SelectGovernorActionCallback(aui_Control *control,
 	                                         uint32 action, uint32 data, void *cookie);
 
-	static void SelectBuildItemActionCallback(aui_Control *control,
-	                                          uint32 action, uint32 data, void *cookie);
-
 	static void RushBuyButtonActionCallback(aui_Control *control,
 	                                        uint32 action, uint32 data, void *cookie);
 
@@ -153,6 +141,7 @@ private:
 	void MirrorSelectedCities();
 	static Unit GetSelectedCity();
 	static void GotoSelectedCity();
+	static Unit GetCityAtIndex(ctp2_ListBox * listbox, uint32 index);
 
 	ctp2_Window     *m_window;
 
