@@ -113,7 +113,7 @@ public:
 
 	sint32 GetBevelWidth() { return m_bevelWidth; }
 	sint32 GetBevelType() { return m_bevelType; }
-	const POINT & GetBorderOffset() const { return m_borderOffset; }
+	const RECT & GetBorderOffset() const { return m_borderOffset; }
 
 	sint32 GetMaxItemHeight() { return m_maxItemHeight; }
 	sint32 GetMaxItemWidth() { return m_maxItemWidth; }
