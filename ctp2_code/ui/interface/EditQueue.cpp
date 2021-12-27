@@ -500,7 +500,7 @@ AUI_ERRCODE EditQueue::Cleanup()
 
 void EditQueue::SelectCity(const Unit & city)
 {
-	if (!s_editQueue || !s_editQueue->IsShown || EditingCity(city)) {
+	if (!s_editQueue || !s_editQueue->IsShown() || EditingCity(city)) {
 		return;
 	}
 	SetCity(city);
@@ -2482,7 +2482,6 @@ void EditQueue::DisplayQueueContents(const MBCHAR * queueName)
 	ClearChoiceList(m_queueContents);
 
 	char buffer[k_MAX_NAME_LEN];
-	const MBCHAR *name;
 	while (!c3files_feof(queueFile))
 	{
 		if (!c3files_fgets(buffer, k_MAX_NAME_LEN, queueFile)) {
