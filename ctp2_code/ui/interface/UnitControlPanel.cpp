@@ -954,6 +954,8 @@ AUI_ERRCODE UnitControlPanel::StackSymbolDrawCallback(ctp2_Static * control, aui
 
 	sourceSurface->Unlock(sourceBuffer);
 	surface->Unlock(destinationBuffer);
+
+	return AUI_ERRCODE_OK;
 }
 
 AUI_ERRCODE UnitControlPanel::FuelBarDrawCallback(ctp2_Static * control, aui_Surface * surface, RECT & rect,
@@ -1105,7 +1107,6 @@ AUI_ERRCODE UnitControlPanel::DrawCargoCallback(ctp2_Static * control, aui_Surfa
 	sint32 tickSpaceWidth = boxWidth / k_MAX_CP_CARGO;
 	sint32 tickWidth      = tickSpaceWidth - 2;
 
-	sint32 i;
 	for (sint32 i = 0; i < capacity; i++)
 	{
 		RECT tickRect = { box.left + i * tickSpaceWidth, box.top, box.left + i * tickSpaceWidth + tickWidth,

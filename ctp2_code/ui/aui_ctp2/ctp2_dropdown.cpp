@@ -314,6 +314,8 @@ AUI_ERRCODE ctp2_DropDown::DoneInstantiatingThis(const MBCHAR * ldlBlock)
 	aui_DropDown::DoneInstantiatingThis(ldlBlock);
 	m_listBoxWindow->DoneInstantiating();
 	RepositionListBoxWindow();
+
+	return AUI_ERRCODE_OK;
 }
 
 AUI_ERRCODE ctp2_DropDown::RepositionButton( void )

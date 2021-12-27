@@ -492,6 +492,8 @@ AUI_ERRCODE CityWindow::Display()
 	}
 
 	Display(g_player[g_selected_item->GetVisiblePlayer()]->m_all_cities->Access(0));
+
+	return AUI_ERRCODE_OK;
 }
 
 AUI_ERRCODE CityWindow::Display(const Unit & city)
