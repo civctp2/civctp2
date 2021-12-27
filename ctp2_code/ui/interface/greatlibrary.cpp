@@ -741,7 +741,6 @@ GreatLibrary::GreatLibrary(sint32 theMode)
 	m_database               (DATABASE_UNITS),
 	m_listDatabase           (DATABASE_UNITS),
 	m_selectedIndex          (CTPRecord::INDEX_INVALID),
-	m_maxIndex               (0),
 	m_sci                    (false),
 	m_itemLabel              (NULL),
 	m_search_results         (),
@@ -1757,8 +1756,6 @@ bool GreatLibrary::IsHidden(sint32 index, DATABASE theDatabase) const
 //----------------------------------------------------------------------------
 void GreatLibrary::UpdateList( DATABASE database )
 {
-	sint32 index;
-
 	m_topics_list->Clear();
 	m_listDatabase = database;
 
@@ -1773,7 +1770,7 @@ void GreatLibrary::UpdateList( DATABASE database )
 		m_sortByAgeButton->Enable(false);
 		Search_Great_Library();
 
-		for (index = 0; index < static_cast<sint32>(m_search_results.size()); index++)
+		for (sint32 index = 0; index < static_cast<sint32>(m_search_results.size()); index++)
 		{
 
 			int real_index = m_search_results[index].m_item;
@@ -1791,7 +1788,7 @@ void GreatLibrary::UpdateList( DATABASE database )
 
 	case DATABASE_ORDERS:
 		m_sortByAgeButton->Enable(false);
-		for (index = 0; index < g_theOrderDB->NumRecords(); index++)
+		for (sint32 index = 0; index < g_theOrderDB->NumRecords(); index++)
 		{
 			if(HIDE(g_theOrderDB, index)) continue;
 
@@ -1804,7 +1801,7 @@ void GreatLibrary::UpdateList( DATABASE database )
 
 	case DATABASE_RESOURCE:
 		m_sortByAgeButton->Enable(false);
-		for (index = 0; index < g_theResourceDB->NumRecords(); index++)
+		for (sint32 index = 0; index < g_theResourceDB->NumRecords(); index++)
 		{
 			if(HIDE(g_theResourceDB, index)) continue;
 
@@ -1829,7 +1826,7 @@ void GreatLibrary::UpdateList( DATABASE database )
 
 	case DATABASE_TERRAIN:
 		m_sortByAgeButton->Enable(false);
-		for (index = 0; index < g_theTerrainDB->NumRecords(); index++)
+		for (sint32 index = 0; index < g_theTerrainDB->NumRecords(); index++)
 		{
 			if(HIDE(g_theTerrainDB, index)) continue;
 
@@ -1842,7 +1839,7 @@ void GreatLibrary::UpdateList( DATABASE database )
 
 	case DATABASE_CONCEPTS:
 		m_sortByAgeButton->Enable(false);
-		for (index = 0; index < g_theConceptDB->NumRecords(); index++)
+		for (sint32 index = 0; index < g_theConceptDB->NumRecords(); index++)
 		{
 
 			if(HIDE(g_theConceptDB, index)) continue;
@@ -1866,8 +1863,6 @@ void GreatLibrary::UpdateList( DATABASE database )
         return;
 
 	}
-
-	m_maxIndex = index;
 }
 
 //----------------------------------------------------------------------------

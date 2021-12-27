@@ -306,7 +306,6 @@ private:
 	DATABASE		m_database;
 	DATABASE    m_listDatabase;
 	sint32			m_selectedIndex;
-	sint32			m_maxIndex;
 
 	bool			m_sci;
 
