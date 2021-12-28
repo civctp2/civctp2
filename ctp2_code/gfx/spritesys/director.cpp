@@ -1177,11 +1177,9 @@ public:
 
 	virtual void Execute()
 	{
-		g_gevManager->Pause();
 		g_gevManager->AddEvent(GEV_INSERT_Tail, GEV_EndTurn,
 							   GEA_Player, g_selected_item->GetCurPlayer(),
 							   GEA_End);
-		g_gevManager->Resume();
 	}
 
 	virtual void Dump()
