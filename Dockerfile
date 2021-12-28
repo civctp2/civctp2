@@ -54,15 +54,18 @@ FROM system as install
 
 ARG BTYP
 
-RUN apt-get update && apt-get install -y --no-install-recommends \
-    libsdl2-2.0 libsdl2-mixer-2.0 libsdl2-image-2.0 libavcodec57 libavformat57 libswscale4 && \
-    apt-get clean && \
-    rm -rf /var/lib/apt/lists/*
-
 ## ctp2CD/ copy done in install stage such that stages before are compatible with travis docker build, results in one additional layer in the final DI (incr. DI download size)
 COPY ctp2CD/ /opt/ctp2/
-## ctp2/ copy has to be after ctp2CD/ to overwrite with newer versions from civctp2
-COPY --from=builder /opt/ctp2/ /opt/ctp2/
+
+## ctp2 install has to be after ctp2CD/ to overwrite with newer versions from civctp2
+## deb-file has to be copied first, sadly this adds a layer (which is not necessary with COPY --from=builder): https://stackoverflow.com/questions/52211895/docker-build-avoid-adding-files-only-needed-at-build-time
+COPY deb/ /deb/
+
+## apt install installs local deb-file with its dependencies: https://unix.stackexchange.com/questions/159094/how-to-install-a-deb-file-by-dpkg-i-or-by-apt#159114
+RUN apt-get update && apt install -y --no-install-recommends \
+    /deb/ctp2-${BTYP}.deb && \
+    apt-get clean && \
+    rm -rf /var/lib/apt/lists/*
 
 USER $USERNAME
 
