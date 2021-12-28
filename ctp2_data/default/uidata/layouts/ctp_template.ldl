@@ -994,6 +994,11 @@ template CTP2_MENU:CTP2_WINDOW {
 	bool detach true
 
 	List:CTP2_LISTBOX {
+		int borderleft   4
+		int borderright  4
+		int bordertop    4
+		int borderbottom 4
+
 		int numberoflayers 1
 		int imagesperlayer 3
 
@@ -1007,10 +1012,10 @@ template CTP2_MENU:CTP2_WINDOW {
 
 		bool imagestretchy02 true
 		string image02 "uptg05c.tga"
-		
-		int xpix 2
-		int ypix 2
+
 		string pattern "uptg01e.TGA"
+
+		bool alwaysranger false
 	}
 }
 
