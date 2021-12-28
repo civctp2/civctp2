@@ -2,6 +2,8 @@
 #include "SlicSymTab.h"
 #include "SlicEngine.h"
 #include "civarchive.h"
+#include "StrDB.h"
+
 
 SlicSymTab::SlicSymTab(sint32 size) :
 	StringHash<SlicNamedSymbol>(k_SLIC_SYM_TAB_HASH_SIZE)
@@ -71,9 +73,14 @@ void SlicSymTab::Serialize(CivArchive &archive)
 
 void SlicSymTab::PostSerialize()
 {
-	for(sint32 i = 0; i < m_numEntries; i++) {
-		if(m_array[i]) {
-
+	for (sint32 i = 0; i < m_numEntries; i++)
+	{
+		if (m_array[i] && m_array[i]->GetType() == SLIC_SYM_SVAR)
+		{
+			StringId stringId;
+			if (g_theStringDB->GetStringID(m_array[i]->GetName(), stringId)) {
+				m_array[i]->SetStringId(stringId);
+			}
 		}
 	}
 }
