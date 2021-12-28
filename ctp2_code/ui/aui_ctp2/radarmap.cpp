@@ -813,8 +813,7 @@ Pixel16 RadarMap::MapTileColor(const Player & player, const MapPoint & position,
 		{
 			if (owner < 0 || !player.HasContactWith(owner))
 			{
-				darken = true;
-				color  = COLOR_WHITE;
+				color = static_cast<COLOR>(COLOR_TERRAIN_0 + TERRAIN_GRASSLAND);
 			}
 			else if (m_displayRelations) {
 				color = RadarTileRelationsColor(worldPos, player);
