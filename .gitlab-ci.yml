@@ -100,6 +100,13 @@ debug:
     - echo $DOCKER_PARAMS
     - echo $CTP_PARAMS
     - mkdir -p $(pwd)/logs/ && chmod a+rw $(pwd)/logs/ # needs to be rw for diUser
+    - XVFBtmp=${SHARED_PATH}/.X11-unix/ HOME=$(pwd) tools/run-DI.sh
+             $DOCKER_PARAMS
+             $IMAGE_TAG:${CI_JOB_STAGE}-${BTYP}
+             ./ctp2 $CTP_PARAMS &
+    - pidD=$!
+    - java -cp "/opt/sikulixapi.jar:/opt/jython-standalone-2.7.1.jar" org.python.util.jython tests/${JOB}.sikuli/${JOB}.py
+    - kill $pidD
     - kill -INT $pidF
     - kill $pidX
     - test -f ${JOB}.png
