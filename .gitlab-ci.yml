@@ -93,7 +93,7 @@ debug:
     - JOB=${CI_JOB_NAME##* }
     - echo "$BTYP $JOB"
     - docker pull $IMAGE_TAG:${CI_JOB_STAGE}-${BTYP}
-    - ffmpeg -nostdin -y -f x11grab -draw_mouse 0 -framerate 25 -video_size 1280x1024 -i $DISPLAY -v error "${BTYP}_${JOB}.mpg" >& ffmpeg_out.txt &
+    - ffmpeg -nostdin -y -f x11grab -draw_mouse 0 -framerate 25 -video_size 1280x1024 -i $DISPLAY -v error -movflags faststart "${BTYP}_${JOB}.mp4" >& ffmpeg_out.txt &
     - pidF=$!
     - xclock -update 1 & # -update < 30 enables a second hand
     - sleep 10
