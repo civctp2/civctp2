@@ -2744,8 +2744,7 @@ str_ldl_GreatLibraryNoGoalPossible		"%s cannot be researched."
 str_ldl_SEARCH_WORD				"Search:"
 str_ldl_TECH_TREE				"Tech Tree"
 str_ldl_SET_GOAL				"Set Goal"
-
-
+str_ldl_SORT_BY_AGE				"Sort by Age"
 
 
 # Ranking Tab

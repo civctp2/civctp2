@@ -24,7 +24,7 @@
 //
 // Modifications from the original Activision code:
 //
-// - Added own Draw method. (2-Jan-2008 Martin Gühmann)
+// - Added own Draw method. (2-Jan-2008 Martin Gï¿½hmann)
 //
 //----------------------------------------------------------------------------
 
@@ -57,9 +57,8 @@ AUI_ERRCODE ctp2_ListItem::Draw(aui_Surface *surface, sint32 x, sint32 y)
 {
 	AUI_ERRCODE errcode = AUI_ERRCODE_OK;
 
-	if(!IsHidden()
-	&& !IsDisabled()
-	){
+	if(!IsHidden())
+	{
 		errcode = DrawThis(surface, x, y);
 
 		if(errcode == AUI_ERRCODE_OK)

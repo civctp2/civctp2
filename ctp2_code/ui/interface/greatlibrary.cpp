@@ -25,24 +25,24 @@
 //
 // Modifications from the original Activision code:
 //
-// - Modified by Martin Gühmann on October the 28th: line added in
+// - Modified by Martin GÃ¼hmann on October the 28th: line added in
 //   sint32 GreatLibrary::UpdateList( DATABASE database )
 //   to make sure that also goods with the GLHidden flag aren't shown.
 // - Start the great library with the current research project of the player.
 // - Clears the research goal of the player, when an item is selected that
-//   enabling advance has been researched already, by Martin Gühmann.
-// - The tech goal can now also set for tile improvements, by Martin Gühmann.
+//   enabling advance has been researched already, by Martin GÃ¼hmann.
+// - The tech goal can now also set for tile improvements, by Martin GÃ¼hmann.
 // - Handle Japanese input data, by t.s. (2003.12).
 // - Memory leaks repaired.
 // - Increased maximum library text size to support the German version.
 // - Exported database name size max.
 // - Added function to look up an item name on creation index.
-// - Initialized local variables. (Sep 9th 2005 Martin Gühmann)
+// - Initialized local variables. (Sep 9th 2005 Martin GÃ¼hmann)
 // - Fixed display of topics after the fixing of the alphanumerical
-//   indexing of the databases. (Sep 13th 2005 Martin Gühmann)
-// - Search now searches now in the topic names, prerq and vari texts. (Sep 13th 2005 Martin Gühmann)
-// - Replaced old concept database by new one. (31-Mar-2007 Martin Gühmann)
-// - Search does not find items that are supposed to be hidden. (21-Apr-2007 Martin Gühmann)
+//   indexing of the databases. (Sep 13th 2005 Martin GÃ¼hmann)
+// - Search now searches now in the topic names, prerq and vari texts. (Sep 13th 2005 Martin GÃ¼hmann)
+// - Replaced old concept database by new one. (31-Mar-2007 Martin GÃ¼hmann)
+// - Search does not find items that are supposed to be hidden. (21-Apr-2007 Martin GÃ¼hmann)
 //
 //----------------------------------------------------------------------------
 //
@@ -104,6 +104,7 @@
 #include "videoutils.h"
 #include "WonderRecord.h"
 #include "wonderutil.h"
+#include "AgeRecord.h"
 
 extern sint32		g_ScreenWidth;
 extern sint32		g_ScreenHeight;
@@ -543,8 +544,18 @@ void GreatLibrary_Topics_List_Callback
 	g_greatLibrary->HandleListButton(control, action, data, cookie);
 }
 
+void GreatLibrary::SortByAgeCallback(aui_Control * control, uint32 action, uint32 data, void * cookie)
+{
+	if (action != (uint32)AUI_BUTTON_ACTION_EXECUTE ) {
+		return;
+	}
 
+	ctp2_Button * sortByAgeButton = static_cast<ctp2_Button*>(control);
+	sortByAgeButton->SetToggleState(!sortByAgeButton->GetToggleState());
 
+	GreatLibrary * greatLibrary = static_cast<GreatLibrary*>(cookie);
+	greatLibrary->UpdateList(greatLibrary->m_listDatabase);
+}
 
 TechListItem::TechListItem(AUI_ERRCODE * retval, sint32 index, DATABASE database, MBCHAR * ldlBlock)
 :
@@ -686,57 +697,57 @@ void greatlibrary_Cleanup(void)
 
 GreatLibrary::GreatLibrary(sint32 theMode)
 :
-    KeyboardHandler             (),
-    m_setGoalButton             (NULL),
-    m_techTree                  (NULL),
-    m_techRequirementsText      (NULL),
-    m_techVariablesText         (NULL),
+	KeyboardHandler          (),
+	m_setGoalButton          (NULL),
+	m_techTree               (NULL),
+	m_techRequirementsText   (NULL),
+	m_techVariablesText      (NULL),
 #ifdef __AUI_USE_DIRECTX__
-    m_techMovie                 (NULL),
+	m_techMovie              (NULL),
 #endif // __AUI_USE_DIRECTX__
-    m_techStillShot             (NULL),
-    m_string                    (NULL),
-    m_buttonString              (LIB_STRING_INDEX),
-    m_tabGroup                  (NULL),
-    m_gameplayTab               (NULL),
-    m_historicalTab             (NULL),
-    m_techTab                   (NULL),
-    m_techHistoricalText        (NULL),
-    m_techGameplayText          (NULL),
-    m_okButton                  (NULL),
-    m_backButton                (NULL),
-    m_forwardButton             (NULL),
-    m_categoryText              (NULL),
-    m_searchLabel               (NULL),
-    m_search_word               (NULL),
-    m_indexButtonSwitchGroup    (NULL),
-    m_searchButton              (NULL),
-    m_unitsButton               (NULL),
-    m_improveButton             (NULL),
-    m_wondersButton             (NULL),
-    m_advancesButton            (NULL),
-    m_governButton              (NULL),
-    m_terrainButton             (NULL),
-    m_tileimpButton             (NULL),
-    m_conceptButton             (NULL),
-    m_goodsButton               (NULL),
-    m_ordersButton              (NULL),
-    m_topics_list               (NULL),
-    m_indexLeft                 (NULL),
-    m_indexMiddle               (NULL),
-    m_indexRight                (NULL),
-    m_page                      (0),
-    m_maxPage                   (false),
-    m_database                  (DATABASE_UNITS),
-    m_listDatabase              (DATABASE_UNITS),
-    m_selectedIndex             (CTPRecord::INDEX_INVALID),
-    m_maxIndex                  (0),
-    m_sci                       (false),
-    m_itemLabel                 (NULL),
-    m_search_results            (),
-    m_history                   (),
-    m_history_position          (0),
-    m_window                    (NULL)
+	m_techStillShot          (NULL),
+	m_string                 (NULL),
+	m_buttonString           (LIB_STRING_INDEX),
+	m_tabGroup               (NULL),
+	m_gameplayTab            (NULL),
+	m_historicalTab          (NULL),
+	m_techTab                (NULL),
+	m_techHistoricalText     (NULL),
+	m_techGameplayText       (NULL),
+	m_okButton               (NULL),
+	m_backButton             (NULL),
+	m_forwardButton          (NULL),
+	m_categoryText           (NULL),
+	m_searchLabel            (NULL),
+	m_search_word            (NULL),
+	m_indexButtonSwitchGroup (NULL),
+	m_searchButton           (NULL),
+	m_unitsButton            (NULL),
+	m_improveButton          (NULL),
+	m_wondersButton          (NULL),
+	m_advancesButton         (NULL),
+	m_governButton           (NULL),
+	m_terrainButton          (NULL),
+	m_tileimpButton          (NULL),
+	m_conceptButton          (NULL),
+	m_goodsButton            (NULL),
+	m_ordersButton           (NULL),
+	m_topics_list            (NULL),
+	m_indexLeft              (NULL),
+	m_indexMiddle            (NULL),
+	m_indexRight             (NULL),
+	m_page                   (0),
+	m_maxPage                (false),
+	m_database               (DATABASE_UNITS),
+	m_listDatabase           (DATABASE_UNITS),
+	m_selectedIndex          (CTPRecord::INDEX_INVALID),
+	m_sci                    (false),
+	m_itemLabel              (NULL),
+	m_search_results         (),
+	m_history                (),
+	m_history_position       (0),
+	m_window                 (NULL),
+	m_sortByAgeButton        (NULL)
 {
 	AUI_ERRCODE errcode = AUI_ERRCODE_OK;
 
@@ -834,9 +845,6 @@ void GreatLibrary::Initialize(MBCHAR const * windowBlock)
 
 	m_search_word->SetKeyboardFocus();
 	m_search_word->SelectAll();
-
-
-
 
 	if ( g_theProfileDB->IsLibraryAnim() ) {
 		RECT rect = {
@@ -939,6 +947,8 @@ void GreatLibrary::Initialize(MBCHAR const * windowBlock)
 	m_conceptButton = (ctp2_Button *)aui_Ldl::GetObject(windowBlock, buttonBlock);
 	m_conceptButton->SetActionFuncAndCookie( greatlibrary_IndexButtonCallback, NULL );
 
+	m_sortByAgeButton = (ctp2_Button *)aui_Ldl::GetObject(windowBlock, "SortByAgeButton");
+	m_sortByAgeButton->SetActionFuncAndCookie(SortByAgeCallback, this);
 	if (m_history.size() == 0)
 	{
 		m_forwardButton->Enable(FALSE);
@@ -1673,7 +1683,11 @@ void GreatLibrary::HandleListButton
 		if (item)
 		{
 		    int const   index = reinterpret_cast<int>(item->GetUserData());
-    		SetLibrary(GetIndexFromAlpha(index, m_listDatabase), m_listDatabase);
+		    if (index >= 0) {
+			    SetLibrary(GetIndexFromAlpha(index, m_listDatabase), m_listDatabase);
+		    } else {
+			    m_topics_list->SelectItem(m_topics_list->GetSelectedItemIndex() + 1);
+		    }
         }
     }
 }
@@ -1742,33 +1756,21 @@ bool GreatLibrary::IsHidden(sint32 index, DATABASE theDatabase) const
 //----------------------------------------------------------------------------
 void GreatLibrary::UpdateList( DATABASE database )
 {
-	sint32 index;
-
 	m_topics_list->Clear();
 	m_listDatabase = database;
 
-	switch ( database ) {
-	case DATABASE_UNITS:
-
 #define HIDE(db, index) (db->Get(db->m_alphaToIndex[index])->GetGLHidden())
 
-		for (index = 0; index < g_theUnitDB->NumRecords(); index++)
-		{
-			if(HIDE(g_theUnitDB, index))
-				continue;
-
-			Add_Item_To_Topics_List(g_theStringDB->GetNameStr(g_theUnitDB->GetName(
-						g_theUnitDB->m_alphaToIndex[index])), index);
-
-		}
-
+	switch ( database ) {
+	case DATABASE_UNITS:
+		AddTopics<UnitRecord>(g_theUnitDB);
 		break;
 
 	case DATABASE_SEARCH:
-
+		m_sortByAgeButton->Enable(false);
 		Search_Great_Library();
 
-		for (index = 0; index < static_cast<sint32>(m_search_results.size()); index++)
+		for (sint32 index = 0; index < static_cast<sint32>(m_search_results.size()); index++)
 		{
 
 			int real_index = m_search_results[index].m_item;
@@ -1785,8 +1787,8 @@ void GreatLibrary::UpdateList( DATABASE database )
 		break;
 
 	case DATABASE_ORDERS:
-
-		for (index = 0; index < g_theOrderDB->NumRecords(); index++)
+		m_sortByAgeButton->Enable(false);
+		for (sint32 index = 0; index < g_theOrderDB->NumRecords(); index++)
 		{
 			if(HIDE(g_theOrderDB, index)) continue;
 
@@ -1798,8 +1800,8 @@ void GreatLibrary::UpdateList( DATABASE database )
 		break;
 
 	case DATABASE_RESOURCE:
-
-		for (index = 0; index < g_theResourceDB->NumRecords(); index++)
+		m_sortByAgeButton->Enable(false);
+		for (sint32 index = 0; index < g_theResourceDB->NumRecords(); index++)
 		{
 			if(HIDE(g_theResourceDB, index)) continue;
 
@@ -1811,47 +1813,20 @@ void GreatLibrary::UpdateList( DATABASE database )
 		break;
 
 	case DATABASE_BUILDINGS:
-
-		for (index = 0; index < g_theBuildingDB->NumRecords(); index++)
-		{
-			if(HIDE(g_theBuildingDB, index)) continue;
-
-			Add_Item_To_Topics_List(g_theStringDB->GetNameStr(g_theBuildingDB->GetName(
-						g_theBuildingDB->m_alphaToIndex[ index ])), index);
-
-		}
-
+		AddTopics<BuildingRecord>(g_theBuildingDB);
 		break;
 
 	case DATABASE_WONDERS:
-
-		for (index = 0; index < g_theWonderDB->NumRecords(); index++)
-		{
-			if(HIDE(g_theWonderDB, index)) continue;
-
-			Add_Item_To_Topics_List(g_theStringDB->GetNameStr(g_theWonderDB->GetName(
-						g_theWonderDB->m_alphaToIndex[ index ])), index);
-
-		}
-
+		AddTopics<WonderRecord>(g_theWonderDB);
 		break;
 
 	case DATABASE_ADVANCES:
-
-		for (index = 0; index < g_theAdvanceDB->NumRecords(); index++)
-		{
-			if(HIDE(g_theAdvanceDB, index)) continue;
-
-			Add_Item_To_Topics_List(g_theStringDB->GetNameStr(g_theAdvanceDB->GetName(
-						g_theAdvanceDB->m_alphaToIndex[ index ])), index);
-
-		}
-
+		AddTopics<AdvanceRecord>(g_theAdvanceDB);
 		break;
 
 	case DATABASE_TERRAIN:
-
-		for (index = 0; index < g_theTerrainDB->NumRecords(); index++)
+		m_sortByAgeButton->Enable(false);
+		for (sint32 index = 0; index < g_theTerrainDB->NumRecords(); index++)
 		{
 			if(HIDE(g_theTerrainDB, index)) continue;
 
@@ -1863,8 +1838,8 @@ void GreatLibrary::UpdateList( DATABASE database )
 		break;
 
 	case DATABASE_CONCEPTS:
-
-		for (index = 0; index < g_theConceptDB->NumRecords(); index++)
+		m_sortByAgeButton->Enable(false);
+		for (sint32 index = 0; index < g_theConceptDB->NumRecords(); index++)
 		{
 
 			if(HIDE(g_theConceptDB, index)) continue;
@@ -1877,37 +1852,17 @@ void GreatLibrary::UpdateList( DATABASE database )
 		break;
 
 	case DATABASE_GOVERNMENTS:
-
-		for (index = 0; index < g_theGovernmentDB->NumRecords(); index++)
-		{
-			if(HIDE(g_theGovernmentDB, index)) continue;
-
-			Add_Item_To_Topics_List(g_theStringDB->GetNameStr(g_theGovernmentDB->GetName(
-						g_theGovernmentDB->m_alphaToIndex[ index ])), index);
-
-		}
-
+		AddTopics<GovernmentRecord>(g_theGovernmentDB);
 		break;
 
 	case DATABASE_TILE_IMPROVEMENTS:
-
-		for (index = 0; index < g_theTerrainImprovementDB->NumRecords(); index++)
-		{
-			if(HIDE(g_theTerrainImprovementDB, index)) continue;
-
-			Add_Item_To_Topics_List(g_theStringDB->GetNameStr(g_theTerrainImprovementDB->GetName(
-						g_theTerrainImprovementDB->m_alphaToIndex[ index ])), index);
-
-		}
-
+		AddTopics<TerrainImprovementRecord>(g_theTerrainImprovementDB);
 		break;
 
 	default:
         return;
 
 	}
-
-	m_maxIndex = index;
 }
 
 //----------------------------------------------------------------------------
@@ -2113,15 +2068,6 @@ void GreatLibrary::Forward()
     }
 }
 
-
-
-
-
-
-
-
-
-
 void GreatLibrary::Add_Item_To_Topics_List
 (
 	const MBCHAR *name,
@@ -2131,7 +2077,9 @@ void GreatLibrary::Add_Item_To_Topics_List
 	Assert(m_topics_list);
 	if(!m_topics_list) return;
 
-	ctp2_ListItem *item = (ctp2_ListItem *)aui_Ldl::BuildHierarchyFromRoot("GreatLibraryTopicItem");
+	ctp2_ListItem *item = (index == CTPRecord::INDEX_INVALID)
+			? (ctp2_ListItem *)aui_Ldl::BuildHierarchyFromRoot("GreatLibraryHeaderItem")
+			: (ctp2_ListItem *)aui_Ldl::BuildHierarchyFromRoot("GreatLibraryTopicItem");
 	Assert(item);
 	if(!item) return;
 
@@ -2140,6 +2088,7 @@ void GreatLibrary::Add_Item_To_Topics_List
 	if(!box) return;
 
 	box->SetText(name);
+	item->Enable(index != CTPRecord::INDEX_INVALID);
 	item->SetUserData((void *) index);
 	m_topics_list->AddItem(item);
 }
@@ -2152,4 +2101,114 @@ void GreatLibrary::FixTabs()
 	m_tabGroup->SelectTab(m_gameplayTab);
 
 	m_tabGroup->SelectTab(curTab->IsDisabled() ? m_gameplayTab : curTab);
+}
+
+class AgeSortRecord {
+public:
+	AgeSortRecord()
+	: m_age(-1),
+		m_name(NULL),
+		m_index(CTPRecord::INDEX_INVALID),
+		m_isHidden(false)
+	{}
+
+	void Initialize(sint32 age, const MBCHAR * name, sint32 index, bool isHidden)
+	{
+		m_age      = age;
+		m_name     = name;
+		m_index    = index;
+		m_isHidden = isHidden;
+	}
+
+	bool IsHidden() const {
+		return m_isHidden;
+	}
+
+	sint32 GetAge() const {
+		return m_age;
+	}
+
+	const MBCHAR * GetName() const {
+		return m_name;
+	}
+
+	sint32 GetIndex() const {
+		return m_index;
+	}
+
+	bool operator < (const AgeSortRecord & other) const
+	{
+		if (m_age != other.m_age) {
+			return (m_age < other.m_age);
+		} else {
+			return _stricoll(m_name, other.m_name) < 0;
+		}
+	}
+
+private:
+	sint32         m_age;
+	const MBCHAR * m_name;
+	sint32         m_index;
+	bool           m_isHidden;
+};
+
+template <class T>
+sint32 GetAgeIndex(const T * topic)
+{
+	sint32 advanceIndex = topic->GetEnableAdvanceIndex();
+	return advanceIndex >= 0 ? GetAgeIndex(g_theAdvanceDB->Get(advanceIndex)) : 0;
+}
+
+template <>
+sint32 GetAgeIndex<AdvanceRecord>(const AdvanceRecord * topic)
+{
+	return topic->GetAgeIndex();
+}
+
+template <>
+sint32 GetAgeIndex<TerrainImprovementRecord>(const TerrainImprovementRecord * topic)
+{
+	sint32 maxAgeIndex = 0;
+	for (sint32 index = 0; index < topic->GetNumTerrainEffect(); index++)
+	{
+		sint32 advanceIndex = topic->GetTerrainEffect(index)->GetEnableAdvanceIndex();
+		sint32 ageIndex = advanceIndex >= 0 ? GetAgeIndex(g_theAdvanceDB->Get(advanceIndex)) : 0;
+		if (ageIndex > maxAgeIndex) {
+			maxAgeIndex = ageIndex;
+		}
+	}
+	return maxAgeIndex;
+}
+
+template <class T>
+void GreatLibrary::AddTopics(CTPDatabase<T> * database)
+{
+	m_sortByAgeButton->Enable(true);
+	std::vector<AgeSortRecord> ageSortRecords(database->NumRecords());
+	for (sint32 index = 0; index < database->NumRecords(); index++)
+	{
+		const T * topic = database->Get(database->m_alphaToIndex[index]);
+		ageSortRecords[index].Initialize(GetAgeIndex(topic), g_theStringDB->GetNameStr(topic->GetName()), index,
+				topic->GetGLHidden());
+	}
+
+	if (m_sortByAgeButton->GetToggleState()) {
+		// Sort ageSortRecords using std::sort
+		std::sort(ageSortRecords.begin(), ageSortRecords.end());
+	}
+
+	sint32 currentAge = -1;
+	for (const auto& ageSortRecord : ageSortRecords)
+	{
+		if (ageSortRecord.IsHidden()) {
+			continue;
+		}
+
+		if (m_sortByAgeButton->GetToggleState() && ageSortRecord.GetAge() != currentAge) {
+			Add_Item_To_Topics_List("", CTPRecord::INDEX_INVALID);
+			Add_Item_To_Topics_List(g_theAgeDB->GetNameStr(ageSortRecord.GetAge()), CTPRecord::INDEX_INVALID);
+			currentAge = ageSortRecord.GetAge();
+		}
+		Add_Item_To_Topics_List(ageSortRecord.GetName(), ageSortRecord.GetIndex());
+	}
 }

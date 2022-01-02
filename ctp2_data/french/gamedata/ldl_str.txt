@@ -2743,6 +2743,7 @@ str_ldl_GreatLibraryNoGoalPossible		"%s ne peut pas être recherché."
 str_ldl_SEARCH_WORD				"Recherche :"
 str_ldl_TECH_TREE				"ARBORESCENCE"
 str_ldl_SET_GOAL				"Fixer objectif"
+str_ldl_SORT_BY_AGE				"Trier par âge"
 
 
 
