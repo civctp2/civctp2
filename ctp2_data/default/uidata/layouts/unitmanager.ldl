@@ -18,22 +18,6 @@ UnitManager:CTP2_DIALOG_WINDOW {
 	int widthpix 576
 	int heightpix 384
 
-#	StatsButton:CTP2_BUTTON_SMALL {
-#		int xpix 4
-#		int ypix 30
-#		int widthpix 292
-#		int heightpix 24
-#		string text "str_ldl_UnitStats"
-#	}
-
-#	TacticalButton:CTP2_BUTTON_SMALL {
-#		int xpix 304
-#		int ypix 30
-#		int widthpix 292
-#		int heightpix 24
-#		string text "str_ldl_TacticalInfo"
-#	}
-
 	Tabs:CTP2_TAB_GROUP {
 		int xpix 36
 		int ypix 29
@@ -49,27 +33,23 @@ UnitManager:CTP2_DIALOG_WINDOW {
 				bool nohighlight true
 			}
 			TabPanel:CTP2_DIALOG_WINDOW_TAB_HELPER {
-				#string objecttype "ctp2_Static"
-				#int xpix 3
-				#int ypix 24
-				#int widthpix 497
 				int heightpix 237
-				#string pattern "uptg20e.tga"
 
 				List:CTP2_LISTBOX {
-					int xpix 10
-					int ypix 32
-					int widthpix 470
-					int heightpix 205
+					int xpix      18
+					int ypix      35
+					int widthpix  454
+					int heightpix 200
 					header {
 						switch0:CTP2_HEADER_FONT {
-							int widthpix 20
+							int widthpix  27
 							int heightpix 20
-							string pattern "uptg20e.tga"
-							int numimagegroups 3
+
+							string pattern        "uptg20e.tga"
+							int    numimagegroups 3
 						}
 						switch1:CTP2_HEADER_FONT {
-							int widthpix 125
+							int widthpix  107
 							int heightpix 20
 							string pattern "uptg04e.tga"
 							int bevelwidth 1
@@ -79,7 +59,7 @@ UnitManager:CTP2_DIALOG_WINDOW {
 							string	statustext	"STATUSBAR_UNITMAN_STATS_TAB_SORTBY_NAME_BUTTON"
 						}
 						switch2:CTP2_HEADER_FONT {
-							int widthpix 20
+							int widthpix  20
 							int heightpix 20
 							string pattern "uptg04e.tga"
 							int bevelwidth 1
@@ -89,7 +69,7 @@ UnitManager:CTP2_DIALOG_WINDOW {
 							string	statustext	"STATUSBAR_UNITMAN_STATS_TAB_SORTBY_NUMBER_BUTTON"
 						}
 						switch3:CTP2_HEADER_FONT {
-							int widthpix 130
+							int widthpix  130
 							int heightpix 20
 							string pattern "uptg04e.tga"
 							int bevelwidth 1
@@ -109,7 +89,7 @@ UnitManager:CTP2_DIALOG_WINDOW {
 							string	statustext	"STATUSBAR_UNITMAN_STATS_TAB_SORTBY_COST_BUTTON"
 						}
 						switch5:CTP2_HEADER_FONT {
-							int widthpix 25
+							int widthpix  25
 							int heightpix 20
 							string pattern "uptg04e.tga"
 							int bevelwidth 1
@@ -119,7 +99,7 @@ UnitManager:CTP2_DIALOG_WINDOW {
 							string	statustext	"STATUSBAR_UNITMAN_STATS_TAB_SORTBY_STATS_BUTTON"
 						}
 						switch6:CTP2_HEADER_FONT {
-							int widthpix 25
+							int widthpix  25
 							int heightpix 20
 							string pattern "uptg04e.tga"
 							int bevelwidth 1
@@ -129,7 +109,7 @@ UnitManager:CTP2_DIALOG_WINDOW {
 							string	statustext	" "
 						}
 						switch7:CTP2_HEADER_FONT {
-							int widthpix 25
+							int widthpix  25
 							int heightpix 20
 							string pattern "uptg04e.tga"
 							int bevelwidth 1
@@ -137,7 +117,7 @@ UnitManager:CTP2_DIALOG_WINDOW {
 							int numimagegroups 3
 						}
 						switch8:CTP2_HEADER_FONT {
-							int widthpix 25
+							int widthpix  25
 							int heightpix 20
 							string pattern "uptg04e.tga"
 							int bevelwidth 1
@@ -159,22 +139,23 @@ UnitManager:CTP2_DIALOG_WINDOW {
 				bool nohighlight true
 			}
 			TabPanel:CTP2_DIALOG_WINDOW_TAB_HELPER {
-				int heightpix 237				
-				
+				int heightpix 237
+
 				List:CTP2_LISTBOX {
-					int xpix 10
-					int ypix 32
-					int widthpix 470
-					int heightpix 205
+					int xpix      18
+					int ypix      35
+					int widthpix  454
+					int heightpix 200
 					header {
 						switch0:CTP2_HEADER_FONT {
-							int widthpix 20
+							int widthpix  27
 							int heightpix 20
+
 							string pattern "uptg20e.tga"
 							int numimagegroups 3
 						}
 						switch1:CTP2_HEADER_FONT {
-							int widthpix 120
+							int widthpix  102
 							int heightpix 20
 							string pattern "uptg04e.tga"
 							int bevelwidth 1
@@ -308,39 +289,6 @@ UnitManager:CTP2_DIALOG_WINDOW {
 		string	statustext	"STATUSBAR_UNITMAN_MAIN_STATE_WAR_BUTTON"
 	}
 
-	##############################################################
-#	PeaceButton:CTP2_BUTTON_NODULE_ONLY_SMALL {
-#		int xpix 42
-#		int ypix 298
-#		
-#		string image40 "updi21.tga"
-#		int xpix40 10
-#		int ypix40 10
-#		# Tooltip
-#		string	tipwindow	"TOOLTIP_UNITMAN_MAIN_STATE_PEACE_BUTTON"
-#		string	statustext	"STATUSBAR_UNITMAN_MAIN_STATE_PEACE_BUTTON"
-#	}
-#	AlertButton:CTP2_BUTTON_NODULE_ONLY_SMALL {
-#		int xpix 86
-#		int ypix 298
-#		string image40 "updi22.tga"
-#		int xpix40 10
-#		int ypix40 10
-#		# Tooltip
-#		string	tipwindow	"TOOLTIP_UNITMAN_MAIN_STATE_ALERT_BUTTON"
-#		string	statustext	"STATUSBAR_UNITMAN_MAIN_STATE_ALERT_BUTTON"
-#	}
-#	WarButton:CTP2_BUTTON_NODULE_ONLY_SMALL {
-#		int xpix 130
-#		int ypix 298
-#		string image40 "updi20.tga"
-#		int xpix40 10
-#		int ypix40 10
-#		# Tooltip
-#		string	tipwindow	"TOOLTIP_UNITMAN_MAIN_STATE_WAR_BUTTON"
-#		string	statustext	"STATUSBAR_UNITMAN_MAIN_STATE_WAR_BUTTON"
-#	}
-
 	StateLabel:CTP2_STANDARD_FONT {
 		string objecttype "ctp2_Static"
 		int xpix 200
@@ -363,8 +311,8 @@ UnitManager:CTP2_DIALOG_WINDOW {
 	TotalUnitsLabel:CTP2_STANDARD_FONT {
 		string objecttype "ctp2_Static"
 		int xpix 390
-		int ypix 315
-		string text "str_ldl_TotalUnits"		
+		int ypix 313
+		string text "str_ldl_TotalUnits"
 		int widthpix 80
 		int heightpix 24
 		# Tooltip
@@ -399,7 +347,6 @@ UnitManager:CTP2_DIALOG_WINDOW {
 		string image02 "uptg21c.tga"
 		string image03 "uptg21d.tga"
 		string image05 "uptg21f.tga"
-		
 	}
 }
 
@@ -409,67 +356,104 @@ template UNIT_COLUMN:CTP2_STANDARD_FONT {
 }
 
 UnitStatsItem:CTP2_LIST_ITEM {
-	int widthpix 475
+	int widthpix  454
 	int heightpix 20
 
-	UnitIcon:UNIT_COLUMN {
-		int widthpix 20
+	box:CTP2_STANDARD_FONT {
+		string objecttype "ctp2_static"
+		int widthpix  454
+		int heightpix 20
+
+		UnitIcon:UNIT_COLUMN {
+			int xpix     2
+			int ypix     1
+			int widthpix 25
+		}
+
+		UnitName:UNIT_COLUMN {
+			int xpix     27
+			int widthpix 107
+			# Tooltip
+			string statustext "STATUSBAR_UNITMAN_STATS_TAB_SORTBY_NAME_BUTTON"
+		}
+
+		Count:UNIT_COLUMN {
+			int xpix     134
+			int widthpix 20
+		}
+
+		UnitType:UNIT_COLUMN {
+			int xpix     154
+			int widthpix 130
+		}
+
+		Support:UNIT_COLUMN {
+			int xpix     284
+			int widthpix 70
+		}
+
+		A:UNIT_COLUMN {
+			int xpix     354
+			int widthpix 25
+		}
+
+		R:UNIT_COLUMN {
+			int xpix     379
+			int widthpix 25
+		}
+
+		D:UNIT_COLUMN {
+			int xpix     404
+			int widthpix 25
+		}
+
+		M:UNIT_COLUMN {
+			int xpix     429
+			int widthpix 25
+		}
 	}
-	UnitName:UNIT_COLUMN {
-		int widthpix 125
-		# Tooltip
-		string	statustext	"STATUSBAR_UNITMAN_STATS_TAB_SORTBY_NAME_BUTTON"
-	}
-	Count:UNIT_COLUMN {
-		int widthpix 20
-	}
-	UnitType:UNIT_COLUMN {
-		int widthpix 130
-	}
-	Support:UNIT_COLUMN {
-		int widthpix 70
-	}
-	A:UNIT_COLUMN {
-		int widthpix 25
-	}
-	R:UNIT_COLUMN {
-		int widthpix 25
-	}
-	
-	D:UNIT_COLUMN {
-		int widthpix 25
-	}
-	
-	M:UNIT_COLUMN {
-		int widthpix 25
-	}
-	
-	
 }
 
 UnitTacticalItem:CTP2_LIST_ITEM {
-	int widthpix 475
+	int widthpix  454
 	int heightpix 20
 
-	UnitIcon:UNIT_COLUMN {
-		int widthpix 20
+	box:CTP2_STANDARD_FONT {
+		string objecttype "ctp2_static"
+		int widthpix  454
+		int heightpix 20
+
+		UnitIcon:UNIT_COLUMN {
+			int xpix     2
+			int ypix     1
+			int widthpix 25
+		}
+
+		UnitName:UNIT_COLUMN {
+			int xpix     27
+			int widthpix 102
+		}
+
+		Army:UNIT_COLUMN {
+			int xpix     129
+			int widthpix 70
+		}
+
+		Order:UNIT_COLUMN {
+			int xpix     199
+			int widthpix 90
+		}
+
+		Location:UNIT_COLUMN {
+			int xpix     289
+			int widthpix 95
+		}
+
+		Health:UNIT_COLUMN {
+			int xpix     384
+			int widthpix 70
+		}
 	}
-	UnitName:UNIT_COLUMN {
-		int widthpix 120
-	}
-	Army:UNIT_COLUMN {
-		int widthpix 70
-	}
-	Order:UNIT_COLUMN {
-		int widthpix 90
-	}
-	Location:UNIT_COLUMN {
-		int widthpix 95
-	}
-	Health:UNIT_COLUMN {
-		int widthpix 70
-	}
-	
 }
 
 UnitManagerAdviceWindow:CTP2_WINDOW {
@@ -501,14 +485,14 @@ UnitManagerAdviceWindow:CTP2_WINDOW {
 	}
 
 	List:CTP2_LISTBOX {
-		int xpix 34
-		int ypix 203
-		int widthpix 142
+		int xpix      36
+		int ypix      203
+		int widthpix  140
 		int heightpix 100
 		bool alwaysranger true
 		header {
 			switch0:CTP2_HEADER_FONT {
-				int widthpix 80
+				int widthpix  80
 				int heightpix 20
 				string pattern "uptg04e.tga"
 				int bevelwidth 1
@@ -516,7 +500,7 @@ UnitManagerAdviceWindow:CTP2_WINDOW {
 				int numimagegroups 3
 			}
 			switch1:CTP2_HEADER_FONT {
-				int widthpix 31
+				int widthpix 35
 				int heightpix 20
 				string pattern "uptg04e.tga"
 				int bevelwidth 1
@@ -524,7 +508,7 @@ UnitManagerAdviceWindow:CTP2_WINDOW {
 				int numimagegroups 3
 			}
 			switch2:CTP2_HEADER_FONT {
-				int widthpix 31
+				int widthpix 25
 				int heightpix 20
 				string pattern "uptg04e.tga"
 				int bevelwidth 1
@@ -533,7 +517,6 @@ UnitManagerAdviceWindow:CTP2_WINDOW {
 			}
 		}
 	}
-
 
 	UpkeepButton:CTP2_BUTTON_SMALL {
 		int xpix 27
@@ -555,19 +538,19 @@ UnitManagerAdviceWindow:CTP2_WINDOW {
 
 
 UnitManagerAdviceItem:CTP2_LIST_ITEM {
-	int widthpix 142
+	int widthpix 140
 	int heightpix 20
 
 	Type:UNIT_COLUMN {
-		int widthpix 83
+		int widthpix 80
 	}
 
 	Percent:UNIT_COLUMN {
-		int widthpix 32
+		int widthpix 35
 	}
 
 	Total:UNIT_COLUMN {
-		int widthpix 32
+		int widthpix 25
 	}
 }
 

@@ -19,7 +19,7 @@
 #  Modifications from the original Activision code:
 # 
 # - Added a optimize specialists button.
-# - Added a national manager button. - July 24th 2005 Martin Gühmann
+# - Added a national manager button. - July 24th 2005 Martin GÃ¼hmann
 # - Removed tabs and put all information into one city window. - 28-Mar-2009 Maq
 # 
 ################################################################################
@@ -57,109 +57,70 @@ cw_CityItem:CTP2_LIST_ITEM {
 }
 
 cw_HappyListItem:CTP2_LIST_ITEM {
-	int widthpix 320
-	int heightpix 20
+	int widthpix  314
+	int heightpix 18
 	box {
 		string objecttype "ctp2_Static"
-		int widthpix 320
+
+		int widthpix  314
 		int heightpix 18
 
 		UnhappyAmount:CTP2_STATIC_BASE {
-			int widthpix 90
+			int xpix      0
+			int ypix      0
+			int widthpix  90
 			int heightpix 18
-			int xpix 0
-			int ypix 0
 		}
-#		UnhappyReason:CTP2_STANDARD_FONT {
-#			string objecttype "ctp2_static"
-#			int widthpix 115
-#			int heightpix 18
-#			int xpix 0
-#			int fontcolorred 255
-#			int fontcolorgreen 0
-#			int fontcolorblue 0
-#			bool shadowfont true
-#			string just "left"
-#		}
-#		UnhappyAmount:CTP2_STANDARD_FONT {
-#			string objecttype "ctp2_static"
-#			int widthpix 40
-#			int heightpix 18
-#			int xpix 80
-#		}	
-#		HappyAmount:CTP2_STANDARD_FONT {
-#			string objecttype "ctp2_static"
-#			int widthpix 40
-#			int heightpix 18
-#			int xpix 120
-#		}
 		HappyReason:CTP2_HEADER_FONT {
 			string objecttype "ctp2_static"
-			int widthpix 100
+
+			int xpix      90
+			int widthpix  100
 			int heightpix 18
-			int xpix 90
-#			int fontcolorred 0
-#			int fontcolorgreen 255
-#			int fontcolorblue 0
-#			bool shadowfont true
+
 			string just "center"
 		}
 		HappyAmount:CTP2_STATIC_BASE {
-			int widthpix 90
+			int xpix      190
+			int ypix      0
+			int widthpix  90
 			int heightpix 18
-			int xpix 190
-			int ypix 0
 		}
 		Numeric:CTP2_HEADER_FONT:CTP2_STATIC_BASE {
-			int widthpix 40
+			int xpix      280
+			int ypix      0
+			int widthpix  34
 			int heightpix 18
-			int xpix 280
-			int ypix 0
+
 			string text "str_ldl_0"
 		}
 	}
 }
 
 cw_PollutionListItem:CTP2_LIST_ITEM {
-	int widthpix 320
-	int heightpix 20
+	int widthpix  314
+	int heightpix 18
 	box {
 		string objecttype "ctp2_Static"
-		int widthpix 320
+		int widthpix  314
 		int heightpix 18
 
 		PollutionReason:CTP2_HEADER_FONT {
 			string objecttype "ctp2_static"
-			int widthpix 277
+
+			int xpix      3
+			int widthpix  271
 			int heightpix 18
-			int xpix 3
-#			int fontcolorred 255
-#			int fontcolorgreen 0
-#			int fontcolorblue 0
-#			bool shadowfont true
+
 			string just "left"
 		}
-#		UnhappyAmount:CTP2_STANDARD_FONT {
-#			string objecttype "ctp2_static"
-#			int widthpix 40
-#			int heightpix 18
-#			int xpix 80
-#		}	
-#		HappyAmount:CTP2_STANDARD_FONT {
-#			string objecttype "ctp2_static"
-#			int widthpix 40
-#			int heightpix 18
-#			int xpix 120
-#		}
 		PollutionAmount:CTP2_HEADER_FONT {
 			string objecttype "ctp2_static"
-			int widthpix 37
+
+			int xpix      272
+			int widthpix  37
 			int heightpix 18
-			int xpix 280
-#			int fontcolorred 0
-#			int fontcolorgreen 255
-#			int fontcolorblue 0
-#			bool shadowfont true
+
 			string just "right"
 		}
 	}
@@ -167,22 +128,23 @@ cw_PollutionListItem:CTP2_LIST_ITEM {
 
 # production queue items
 cw_InventoryListItem:CTP2_LIST_ITEM {
-	int	widthpix	220
-	int	heightpix	16
+	int widthpix  220
+	int heightpix 17
 	StaticThing:CTP2_STATIC_BASE {
-		int xpix 4
 		Label:CTP2_STATIC_BASE {
-			int	xpix	0
-			string	just	"left"
-			bool	vertcenter	TRUE
-			int	widthpix	176
-			int	heightpix	16
+			int xpix      3
+			int widthpix  175
+			int heightpix 16
+
+			string just       "left"
+			bool   vertcenter true
 		}
 		Turns:CTP2_STATIC_BASE {
-			int xpix 193
-			string just "right"
-			int widthpix 36
+			int xpix      181
+			int widthpix  36
 			int heightpix 16
+
+			string just "right"
 			string text "str_ldl_0"
 		}
 	}
@@ -190,22 +152,24 @@ cw_InventoryListItem:CTP2_LIST_ITEM {
 
 # created a new list item for city inventory, so I could resize it separately
 inv_InventoryListItem:CTP2_LIST_ITEM {
-	int	widthpix	208
-	int	heightpix	16
+	int widthpix 212
+	int heightpix 17
 	StaticThing:CTP2_STATIC_BASE {
-		int xpix 4
+		int xpix 0
 		Label:CTP2_STATIC_BASE {
-			int	xpix	0
-			string	just	"left"
-			bool	vertcenter	TRUE
-			int	widthpix	164
-			int	heightpix	16
+			int xpix      3
+			int widthpix  168
+			int heightpix 16
+
+			string just       "left"
+			bool   vertcenter true
 		}
 		Turns:CTP2_STATIC_BASE {
-			int xpix 180
-			string just "right"
-			int widthpix 36
+			int xpix      173
+			int widthpix  36
 			int heightpix 16
+
+			string just "right"
 			string text "str_ldl_0"
 		}
 	}
@@ -1222,12 +1186,13 @@ CityWindow:CTP2_NEW_CITY_WINDOW {
 			string imagebltflag "chromakey"
 		}
 		List:CTP2_LISTBOX {
-			int	xpix	6
-			int	ypix	6
-			int	widthpix	218
-			int	heightpix	146
-			int	focusindex 20
-			bool	alwaysraner TRUE
+			int xpix      8
+			int ypix      9
+			int widthpix  212
+			int heightpix 136
+
+			int focusindex   20
+			bool alwaysraner true
 		}
 	}
 
@@ -1368,15 +1333,16 @@ CityWindow:CTP2_NEW_CITY_WINDOW {
 			string imagebltflag "chromakey"
 		}
 		List:CTP2_LISTBOX {
-			int	xpix	6
-			int	ypix	6
-			int	widthpix	230
-			int	heightpix	146 #145
-			bool 	alwaysranger TRUE
+			int xpix      13
+			int ypix      9
+			int widthpix  220
+			int heightpix 136
+
+			bool alwaysranger true
+			int  focusindex   20
 
 			# Tooltip
-			string	statustext	"STATUSBAR_CITYMAN_MAIN_QUEUELIST_BUTTON"
-			int focusindex 20
+			string statustext "STATUSBAR_CITYMAN_MAIN_QUEUELIST_BUTTON"
 		}
 	}
 
@@ -1502,10 +1468,11 @@ CityWindow:CTP2_NEW_CITY_WINDOW {
 		}
 
 		HappinessList:CTP2_LISTBOX {
-			int widthpix 320
-			int heightpix 80
-			int xpix 6
-			int ypix 68
+			int xpix      9
+			int ypix      71
+			int widthpix  314
+			int heightpix 72
+
 			int focusindex 20
 		}
 
@@ -1532,10 +1499,10 @@ CityWindow:CTP2_NEW_CITY_WINDOW {
 			int	heightpix	15
 		}
 		PollutionList:CTP2_LISTBOX {
-			int xpix 6
-			int ypix 175
-			int widthpix 320
-			int heightpix 80
+			int xpix      9
+			int ypix      178
+			int widthpix  314
+			int heightpix 72
 		}
 	}
 		

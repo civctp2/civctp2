@@ -13,19 +13,16 @@
 
 extern  C3UI				*g_c3ui;
 
-#define k_STANDARD_EXTRA_WIDTH 60
 #define k_MINIMUM_TEXT_WIDTH 20
 
-#define k_EXTRA_WINDOW_WIDTH 4
-#define k_EXTRA_WINDOW_HEIGHT 4
-#define k_LIST_HEIGHT_DELTA 20
-#define k_LIST_WIDTH_DELTA 0
 #define k_EXTRA_SHORTCUT_WIDTH 10
 
 #define k_LEFT_ITEM_MARGIN 3
 #define k_RIGHT_ITEM_MARGIN 3
 
 #define k_EXTRA_LEFT_SPACE 4
+
+const sint32 k_MAX_NUMBER_OF_VISIBLE_ITEMS = 25;
 
 extern sint32 g_ScreenHeight, g_ScreenWidth;
 
@@ -127,6 +124,12 @@ void ctp2_Menu::Init(const MBCHAR *block, bool atMouse, CTP2MenuCallback *callba
 		m_list->Clear();
 		m_list->SetActionFuncAndCookie(ctp2_Menu::StaticListCallback, this);
 		m_list->SetIgnoreOutsideDrops(true);
+
+		// Read borderOffset and position correctly
+		MBCHAR listBlock[k_AUI_LDL_MAXBLOCK + 1];
+		sprintf( listBlock, "%s.%s", block, "List" );
+		m_list->DoneInstantiatingThis(listBlock);
+		m_list->Move(0, 0);
 	}
 
 	if (atMouse)
@@ -137,13 +140,10 @@ void ctp2_Menu::Init(const MBCHAR *block, bool atMouse, CTP2MenuCallback *callba
 
 void ctp2_Menu::Reformat(ctp2_Menu::Item *menuItem)
 {
-
-
 	ctp2_Static *box = (ctp2_Static *)menuItem->m_item->GetChildByIndex(0);
 	Assert(box);
 	if(!box)
 		return;
-
 
 	ctp2_Static *textBox = (ctp2_Static *)box->GetChildByIndex(0);
 	Assert(textBox);
@@ -300,17 +300,20 @@ void ctp2_Menu::AddItem(const MBCHAR *text, const MBCHAR *shortcut, void *cookie
 void ctp2_Menu::AddItemWithIcon(const MBCHAR *text, const MBCHAR *icon, const MBCHAR *shortcut, void *cookie)
 {
 	ctp2_Menu::Item *item = CreateItem("IconMenuListItem", text, shortcut, icon, cookie);
-
 	Assert(item);
 }
 
 void ctp2_Menu::Resize()
 {
-
-	m_window->Resize(m_maxTextWidth + m_maxIconWidth + m_maxShortcutWidth + k_LEFT_ITEM_MARGIN + k_RIGHT_ITEM_MARGIN + k_EXTRA_WINDOW_WIDTH + k_EXTRA_LEFT_SPACE,
-					 m_items->GetCount() * m_maxItemHeight + k_EXTRA_WINDOW_HEIGHT);
-	m_list->Resize(m_maxTextWidth + m_maxIconWidth + m_maxShortcutWidth + k_LEFT_ITEM_MARGIN + k_RIGHT_ITEM_MARGIN + k_LIST_WIDTH_DELTA + k_EXTRA_LEFT_SPACE,
-				   m_window->Height() + k_LIST_HEIGHT_DELTA);
+	const RECT & borderOffset = m_list->GetBorderOffset();
+	sint32 extraSpaceX = borderOffset.left + borderOffset.right + k_LEFT_ITEM_MARGIN + k_RIGHT_ITEM_MARGIN;
+	sint32 extraSpaceY = borderOffset.top + borderOffset.bottom;
+	sint32 width = m_maxTextWidth + m_maxIconWidth + m_maxShortcutWidth + extraSpaceX;
+	sint32 numberOfVisibleItems = std::min(m_items->GetCount(), k_MAX_NUMBER_OF_VISIBLE_ITEMS);
+	sint32 height = numberOfVisibleItems * m_maxItemHeight + extraSpaceY;
+	sint32 rangerSpace = (numberOfVisibleItems < m_items->GetCount()) ? m_list->GetRangerSize() : 0;
+	m_window->Resize(width + rangerSpace, height);
+	m_list->Resize(width, height);
 
 	PointerList<Item>::Walker walk(m_items);
 	m_list->BuildListStart();

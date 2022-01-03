@@ -33,9 +33,15 @@ template ADVANCE_LIST_COLUMN:CTP2_STATIC_BACKGROUND {
 
 # Item for use in city resource list.
 ScienceAdvanceListItem:CTP2_LIST_ITEM {
-	column0:ADVANCE_LIST_COLUMN {
-		string	just		"left"
-		int		widthpix	234
+	box:ADVANCE_LIST_COLUMN {
+		int widthpix 234
+		label:CTP2_STATIC_BACKGROUND {
+			int xpix      3
+			int widthpix  234
+			int heightPix 14
+
+			string just "left"
+		}
 	}
 	column1:ADVANCE_LIST_COLUMN {
 		int		widthpix	28
@@ -288,10 +294,11 @@ ScienceManagementDialog:CTP2_DIALOG_WINDOW {
 	# List of advances and which civilizations have them.
 	AdvanceList:CTP2_LISTBOX {
 		# Location
-		int		xpix		60
-		int		ypix		192
-		int		widthpix	448
-		int		heightpix	142
+		int xpix      63
+		int ypix      200
+		int widthpix  439
+		int heightpix 126
+
 		bool		alwaysranger	FALSE
 
 		# Column headers, here is the fun part, these need to
@@ -399,11 +406,12 @@ SciAdvanceScreen {
 		# List box with advance options.
 		SciAdvanceList:CTP2_LISTBOX {
 			# Location and size.
-			int	xpix	33
-			int	ypix	165
-			int	widthpix	160
-			int	heightpix	314 #114
-			bool 	alwaysranger FALSE
+			int xpix      40
+			int ypix      173
+			int widthpix  149
+			int heightpix 300
+
+			bool alwaysranger false
 
 			# Thumb control should be at least 6 high.
 #			int minthumbsize	6

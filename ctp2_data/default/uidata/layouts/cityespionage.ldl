@@ -10,7 +10,7 @@ CityEspionage:CTP2_WINDOW {
 	int	heightpix	348
 
 	# Background art.
-	DialogBackground:CTP2_STATIC_BACKGROUND {	
+	DialogBackground:CTP2_STATIC_BACKGROUND {
 		# Size.
 		int	widthpix	364
 		int	heightpix	348
@@ -92,11 +92,10 @@ CityEspionage:CTP2_WINDOW {
 			string text "str_ldl_Espionage_GoldInTrade_Label"
 		}
 		InventoryList:CTP2_LISTBOX {
-			int	xpix	25
-			int	ypix	120
-			int	widthpix	170
-			int	heightpix	160
-#			bool 	alwaysranger TRUE
+			int xpix      32
+			int ypix      118
+			int widthpix  163
+			int heightpix 160
 		}
 
 		FortifiedUnitsBox {
@@ -161,24 +160,15 @@ CityEspionage:CTP2_WINDOW {
 }
 
 ce_InventoryListItem:CTP2_LIST_ITEM {
-	int	widthpix	170
-	int	heightpix	16
-	string	just	"left"
-#	StaticThing:CTP2_STATIC_BASE {
-#		int xpix 4
-#		Label:CTP2_STATIC_BASE {
-#			int	xpix	0
-#			bool	vertcenter	TRUE
-#			int	widthpix	162
-#			int	heightpix	16
-#		}
-#		Turns:CTP2_STATIC_BASE {
-#			int xpix 276
-#			string just "right"
-#			int widthpix 36
-#			int heightpix 16
-#			string text "str_ldl_0"
-#		}
-#	}
-}
+	box:CTP2_STATIC_BASE {
+		int widthpix  170
+		int heightpix 16
+		label:CTP2_STATIC_BASE {
+			int xpix      3
+			int	widthpix  170
+			int	heightpix 16
 
+			string just "left"
+		}
+	}
+}

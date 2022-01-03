@@ -48,10 +48,11 @@ ArmyManager:CTP2_TITLE_WINDOW {
 		int	heightpix	20
 	}
 	ArmiesList:CTP2_LISTBOX {
-		int	xpix		23
-		int	ypix		50
-		int	heightpix	124
-		int	widthpix	66
+		int xpix      27
+		int ypix      58
+		int widthpix  71
+		int heightpix 110
+
 		rangery {
 		}
 	}
