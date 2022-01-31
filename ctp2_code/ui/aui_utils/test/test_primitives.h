@@ -614,4 +614,186 @@ void TestClipRectangle(aui_Surface & visualSurface)
 		visualSurface.Unlock(pSurfBase);
 	}
 }
+
+void DoExecuteClippedTriangleTest(aui_Surface & surface, sint32 x, sint32 y, sint32 triangleBase, bool testWidth,
+		bool antiAliased)
+{
+	const Pixel16 rectangleColor = 0x4208; // dark-gray
+	const Pixel16 triangleColor = 0xf800; // red
+
+	static const TRIANGLE_ID TRIANGLE_IDS[] = { TI_LEFT_TOP, TI_RIGHT_TOP, TI_LEFT_BOTTOM, TI_RIGHT_BOTTOM };
+	sint32 base = triangleBase - 1;
+	sint32 startY = y + 1;
+	sint32 startX = x + 1;
+	for (TRIANGLE_ID triangleId : TRIANGLE_IDS) {
+		if (testWidth) {
+			startX = x + 1;
+		} else {
+			startY = y + 1;
+		}
+		for (sint32 i = base; i >= 0; i--) {
+			sint32 x1 = startX;
+			sint32 x2 = x1 + (testWidth ? i : base);
+			sint32 y1 = startY;
+			sint32 y2 = y1 + (testWidth ? base : i);
+			primitives_ClippedFrameRect16(surface, RECT{x1 - 1, y1 - 1, x2 + 1, y2 + 1}, rectangleColor);
+			primitives_ClippedTriangle16(surface, RECT{x1, y1, x2, y2}, triangleId, triangleColor, pixelutils_OPAQUE, antiAliased);
+			startX += (testWidth ? i + 3 : 0);
+			startY += (testWidth ? 0 : i + 3);
+		}
+		startX += (testWidth ? 0 : base + 3);
+		startY += (testWidth ? base + 3 : 0);
+	}
+}
+
+void ExecuteClippedTriangleTest(aui_Surface & surface, bool antiAliased)
+{
+	primitives_ClippedFrameRect16(surface, RECT { 0, 0, 199, 199 }, 0x001f);
+
+	DoExecuteClippedTriangleTest(surface, 5, 5, 10, true, antiAliased);
+	DoExecuteClippedTriangleTest(surface, 85, 5, 9, true, antiAliased);
+	DoExecuteClippedTriangleTest(surface, 5, 58, 8, true, antiAliased);
+	DoExecuteClippedTriangleTest(surface, 153, 5, 7, true, antiAliased);
+	DoExecuteClippedTriangleTest(surface, 62, 58, 6, true, antiAliased);
+	DoExecuteClippedTriangleTest(surface, 100, 58, 5, true, antiAliased);
+	DoExecuteClippedTriangleTest(surface, 130, 58, 4, true, antiAliased);
+	DoExecuteClippedTriangleTest(surface, 155, 58, 3, true, antiAliased);
+	DoExecuteClippedTriangleTest(surface, 175, 58, 2, true, antiAliased);
+
+	DoExecuteClippedTriangleTest(surface, 5, 105, 10, false, antiAliased);
+	DoExecuteClippedTriangleTest(surface, 60, 105, 9, false, antiAliased);
+	DoExecuteClippedTriangleTest(surface, 110, 105, 8, false, antiAliased);
+	DoExecuteClippedTriangleTest(surface, 155, 105, 7, false, antiAliased);
+	DoExecuteClippedTriangleTest(surface, 155, 165, 6, false, antiAliased);
+	DoExecuteClippedTriangleTest(surface, 110, 165, 5, false, antiAliased);
+	DoExecuteClippedTriangleTest(surface, 60, 175, 4, false, antiAliased);
+	DoExecuteClippedTriangleTest(surface, 5, 183, 3, false, antiAliased);
+	DoExecuteClippedTriangleTest(surface, 35, 183, 2, false, antiAliased);
+}
+
+void ExecuteSolidClippedTriangleTest(aui_Surface & surface) {
+	ExecuteClippedTriangleTest(surface, false);
+}
+
+void ExecuteClippedTriangleWithAntiAliasTest(aui_Surface & surface) {
+	ExecuteClippedTriangleTest(surface, true);
+}
+
+void DoExecuteClippedLineTest(aui_Surface & surface, sint32 x, sint32 y, sint32 lineLength, uint32 pattern,
+		uint32 patternLength, LINE_FLAGS lineFlags)
+{
+	const Pixel16 rectangleColor = 0x4208; // dark-gray
+	const Pixel16 lineColor = 0xf800; // red
+
+	const sint32 length = lineLength - 1;
+	primitives_ClippedFrameRect16(surface, RECT { x, y, x + length * 6 + 2, y + length * 6 + 2 }, rectangleColor);
+	primitives_ClippedFrameRect16(surface, RECT { x + length + 2, y + length + 2, x + length * 5, y + length * 5 },
+			rectangleColor);
+
+	for (sint32 block = 0; block < 8; block++)
+	{
+		sint32 startX;
+		sint32 startY;
+		sint32 incrementX;
+		sint32 incrementY;
+		sint32 deltaX;
+		sint32 deltaY;
+		switch(block) {
+			case 0:
+			case 1:
+				startX = x + 3 * length + 1;
+				startY = y + length + 1;
+				incrementX = (block == 0) ? -1 : 1;
+				incrementY = 0;
+				deltaX = 0;
+				deltaY = - length;
+				break;
+			case 2:
+			case 3:
+				startX = x + 5 * length + 1;
+				startY = y + 3 * length + 1;
+				incrementX = 0;
+				incrementY = (block == 2) ? -1 : 1;
+				deltaX = length;
+				deltaY = 0;
+				break;
+			case 4:
+			case 5:
+				startX = x + 3 * length + 1;
+				startY = y + 5 * length + 1;
+				incrementX = (block == 4) ? 1 : -1;
+				incrementY = 0;
+				deltaX = 0;
+				deltaY = length;
+				break;
+			case 6:
+			case 7:
+				startX = x + length + 1;
+				startY = y + 3 * length + 1;
+				incrementX = 0;
+				incrementY = (block == 6) ? 1 : -1;
+				deltaX = -length;
+				deltaY = 0;
+				break;
+		}
+
+		for (sint32 i = length; i >= 0; i--)
+		{
+			sint32 x1 = startX + 2 * incrementX * i;
+			sint32 x2 = x1 + deltaX + i * incrementX;
+			sint32 y1 = startY + 2 * incrementY * i;
+			sint32 y2 = y1 + deltaY + i * incrementY;
+			if (patternLength > 0) {
+				primitives_ClippedPatternLine16(surface, x1, y1, x2, y2, lineColor, pattern, patternLength, lineFlags);
+			} else {
+				primitives_ClippedLine16(surface, x1, y1, x2, y2, lineColor, lineFlags);
+			}
+		}
+	}
+}
+
+void ExecuteClippedLineTest(aui_Surface & surface, uint32 pattern, uint32 patternLength, LINE_FLAGS lineFlags)
+{
+	DoExecuteClippedLineTest(surface, 10, 10, 19, pattern, patternLength, lineFlags);
+	DoExecuteClippedLineTest(surface, 130, 10, 10, pattern, patternLength, lineFlags);
+	DoExecuteClippedLineTest(surface, 130, 75, 9, pattern, patternLength, lineFlags);
+	DoExecuteClippedLineTest(surface, 10, 130, 8, pattern, patternLength, lineFlags);
+	DoExecuteClippedLineTest(surface, 65, 130, 7, pattern, patternLength, lineFlags);
+	DoExecuteClippedLineTest(surface, 110, 130, 6, pattern, patternLength, lineFlags);
+	DoExecuteClippedLineTest(surface, 150, 130, 5, pattern, patternLength, lineFlags);
+	DoExecuteClippedLineTest(surface, 180, 130, 4, pattern, patternLength, lineFlags);
+	DoExecuteClippedLineTest(surface, 180, 160, 3, pattern, patternLength, lineFlags);
+	DoExecuteClippedLineTest(surface, 180, 180, 2, pattern, patternLength, lineFlags);
+}
+
+void ExecuteSolidClippedLineTest(aui_Surface & surface)
+{
+	ExecuteClippedLineTest(surface, 0, 0, LF_NONE);
+}
+
+void ExecuteClippedPatternLineTest(aui_Surface & surface)
+{
+	ExecuteClippedLineTest(surface, LINE_PATTERN_DOT, LINE_PATTERN_DOT_LENGTH, LF_NONE);
+}
+
+void ExecuteClippedLineWithShadowTest(aui_Surface & surface)
+{
+	ExecuteClippedLineTest(surface, 0, 0, LF_SHADOW);
+}
+
+void ExecuteClippedLineWithAntiAliasTest(aui_Surface & surface)
+{
+	ExecuteClippedLineTest(surface, 0, 0, LF_ANTI_ALIASED);
+}
+
+void ExecuteClippedPatternLineWithShadowTest(aui_Surface & surface)
+{
+	ExecuteClippedLineTest(surface, LINE_PATTERN_DASH, LINE_PATTERN_DASH_LENGTH, LF_SHADOW);
+}
+
+void ExecuteClippedPatternLineWithAntiAliasTest(aui_Surface & surface)
+{
+	ExecuteClippedLineTest(surface, LINE_PATTERN_DASH, LINE_PATTERN_DASH_LENGTH, LF_ANTI_ALIASED);
+}
+
 #endif

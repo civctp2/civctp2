@@ -97,114 +97,95 @@ public:
 
 	void DisplayUnits(bool status = true)
 	{
-		m_displayUnits = status;
+		m_radarProperties.m_displayUnits = status;
 		Update();
 		g_theProfileDB->SetDisplayUnits(status);
 	}
 	void DisplayCities(bool status = true)
 	{
-		m_displayCities = status;
+		m_radarProperties.m_displayCities = status;
 		Update();
 		g_theProfileDB->SetDisplayCities(status);
 	}
 	void DisplayBorders(bool status = true)
 	{
-		m_displayBorders = status;
+		m_radarProperties.m_displayBorders = status;
 		Update();
 		g_theProfileDB->SetDisplayBorders(status);
 	}
 	void DisplayOverlay(bool status = true)
 	{
-		m_displayOverlay = status;
+		m_radarProperties.m_displayOverlay = status;
 		Update();
 	}
 	void DisplayTrade(bool status = true)
 	{
-		m_displayTrade = status;
+		m_radarProperties.m_displayTrade = status;
 		Update();
 		g_theProfileDB->SetDisplayTrade(status);
 	}
 	void DisplayTerrain(bool status = true) {
-		m_displayTerrain = status;
+		m_radarProperties.m_displayTerrain = status;
 		Update();
 		g_theProfileDB->SetDisplayTerrain(status);
 	}
 	void DisplayPolitical(bool status = true)
 	{
-		m_displayPolitical = status;
+		m_radarProperties.m_displayPolitical = status;
 		Update();
 		g_theProfileDB->SetDisplayPolitical(status);
 	}
 	void DisplayCapitols(bool status = true)
 	{
-		m_displayCapitols = status;
+		m_radarProperties.m_displayCapitols = status;
 		Update();
 		g_theProfileDB->SetDisplayCapitols(status);
 	}
 	void DisplayRelations(bool status = true)
 	{
-		m_displayRelations = status;
+		m_radarProperties.m_displayRelations = status;
 		Update();
 		g_theProfileDB->SetDisplayRelations(status);
 	}
 
-	bool IsDisplayUnits() const { return m_displayUnits; }
-	bool IsDisplayCities() const { return m_displayCities; }
-	bool IsDisplayBorders() const { return m_displayBorders; }
-	bool IsDisplayOverlay() const { return m_displayOverlay; }
-	bool IsDisplayTrade() const { return m_displayTrade; }
-	bool IsDisplayTerrain() const { return m_displayTerrain; }
-	bool IsDisplayPolitical() const { return m_displayPolitical; }
-	bool IsDisplayCapitols() const { return m_displayCapitols; }
-	bool IsDisplayRelations() const { return m_displayRelations; }
+	bool IsDisplayUnits() const { return m_radarProperties.m_displayUnits; }
+	bool IsDisplayCities() const { return m_radarProperties.m_displayCities; }
+	bool IsDisplayBorders() const { return m_radarProperties.m_displayBorders; }
+	bool IsDisplayOverlay() const { return m_radarProperties.m_displayOverlay; }
+	bool IsDisplayTrade() const { return m_radarProperties.m_displayTrade; }
+	bool IsDisplayTerrain() const { return m_radarProperties.m_displayTerrain; }
+	bool IsDisplayPolitical() const { return m_radarProperties.m_displayPolitical; }
+	bool IsDisplayCapitols() const { return m_radarProperties.m_displayCapitols; }
+	bool IsDisplayRelations() const { return m_radarProperties.m_displayRelations; }
+
+	struct RadarProperties {
+		bool    m_displayCities;
+		bool    m_displayUnits;
+		bool    m_displayTerrain;
+		bool    m_displayBorders;
+		bool    m_displayRelations;
+		bool    m_displayPolitical;
+		bool    m_displayTrade;
+		bool    m_displayCapitols;
+		bool    m_displayOverlay;
+		COLOR * m_mapOverlay;
+	};
 
 private:
 	Player * GetVisiblePlayerToRender();
-	void     UpdateMap(aui_Surface * surf, sint32 x, sint32 y);
-	void     RenderViewRect(aui_Surface & surf, sint32 x, sint32 y);
-	void     DoRedrawTile(const Player & player, const MapPoint & pos);
-
-	void    RenderMapTileColor(const Player & player);
-	Pixel16 MapTileColor(const Player & player, const MapPoint & position, const MapPoint & worldPos);
-	void    FillColorMapBorders();
-	COLOR   RadarTileRelationsColor(const MapPoint & position, const Player & player, sint32 unitOwner = -1);
-
-	void    RenderTiles(aui_Surface & surface);
-	void    RenderTile(aui_Surface & surface, const RECT & tileRectangle, Pixel16 * colorMap, bool isLand);
-	void    RenderTileCrossing(aui_Surface & surface, const RECT & rect, Pixel16 * colorMap, bool isLand);
-
-	void    RenderTileBorder(
-				aui_Surface & surface, const MapPoint & position, const MapPoint & worldPos, const Player & player);
-	uint8   RadarTileBorder(const Player & player, const MapPoint & position);
-	Pixel16 RadarTileBorderColor(const MapPoint & position, const Player & player);
-	void    RenderMapTileBorder(
-				aui_Surface & surface, const MapPoint & position, uint8 borderFlags, Pixel16 borderColor);
-
-	void    RenderCapitol(
-				aui_Surface & surface, const MapPoint & position, const MapPoint & worldPos, const Player & player);
-
-	void    RenderTrade(
-				aui_Surface & surface, const MapPoint & position, const MapPoint & worldPos, const Player & player);
-	void    RenderTradeRoute(aui_Surface & surface, const RECT & tileRectangle);
+	void     UpdateMap(aui_Surface & surface, sint32 x, sint32 y);
+	void     RenderViewRect(aui_Surface & surface, sint32 x, sint32 y);
+	void     DoRedrawTile(aui_Surface & surface, const Player & player, const MapPoint & pos);
 
 	MapPoint PosWorldToPosRadar(const MapPoint & worldPos);
 
-	bool m_displayUnits;
-	bool m_displayCities;
-	bool m_displayBorders;
-	bool m_displayOverlay;
-	bool m_displayTerrain;
-	bool m_displayTrade;
-	bool m_displayPolitical;
-	bool m_displayCapitols;
-	bool m_displayRelations;
+	RadarProperties m_radarProperties;
 
 	bool m_isInteractive;
 
 	aui_Surface * m_mapSurface;
 	MapPoint    * m_mapSize;
-	COLOR       * m_mapOverlay;
-	Pixel16     * m_colorMap;
+	void        * m_mapTexture;
 	double        m_tilePixelWidth;
 	double        m_tilePixelHeight;
 	RECT          m_mapViewRect;

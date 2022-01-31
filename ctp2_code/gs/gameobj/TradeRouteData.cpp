@@ -175,11 +175,12 @@ uint32 TradeRouteData::SeenByBits() const
 
 void TradeRouteData::RedrawRadarMapAlongRoute()
 {
-	sint32 const    num = m_path.Num();
-	for (sint32 i = 0; i < num; i++)
+	if (g_radarMap)
 	{
-		if(g_radarMap)
+		sint32 const num = m_path.Num();
+		for (sint32 i = 0; i < num; i++) {
 			g_radarMap->RedrawTile(m_path[i]);
+		}
 	}
 }
 
