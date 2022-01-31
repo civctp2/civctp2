@@ -2493,10 +2493,6 @@ void FillDrawAngledLine16(Pixel16 * pixel, sint32 majorLength, sint32 minorLengt
 	sint32 fillLength         = fillPitch < 0 ? majorLength : 0;
 	sint32 positiveMajorPitch = majorPitch > 0 ? majorPitch : -majorPitch;
 
-	// first line
-	BlendLine16(toAngledLine ? pixel - (fillLength * positiveMajorPitch) : pixel, fillLength + 1, positiveMajorPitch,
-			color, alpha, blendRGBMask);
-
 	// calculate 16-bit fixed-point fractional part of a
 	// pixel that minor advances each time major advances 1 pixel, truncating the
 	// result so that we won't overrun the endpoint along the minor axis
@@ -2504,8 +2500,11 @@ void FillDrawAngledLine16(Pixel16 * pixel, sint32 majorLength, sint32 minorLengt
 	// Initialize the line error accumulator to 0
 	uint16 errorAccumulator = 0;
 
-	while (pixel < endPixel)
+	do
 	{
+		BlendLine16(toAngledLine ? pixel - (fillLength * positiveMajorPitch) : pixel, fillLength + 1,
+				positiveMajorPitch, color, alpha, blendRGBMask);
+
 		const uint16 error = errorAccumulator; // remember current accumulated error
 		errorAccumulator += errorFraction;     // calculate error for next pixel
 
@@ -2513,15 +2512,10 @@ void FillDrawAngledLine16(Pixel16 * pixel, sint32 majorLength, sint32 minorLengt
 		{
 			// Error accumulator turned over, so advance the minor
 			pixel += minorPitch;
-			if (pixel >= endPixel) {
-				break;
-			}
-			BlendLine16(toAngledLine ? pixel - (fillLength * positiveMajorPitch) : pixel, fillLength + 1,
-					positiveMajorPitch, color, alpha, blendRGBMask);
 		}
 		pixel += majorPitch; // always advance major
 		fillLength += fillPitch;
-	}
+	} while (--majorLength > 0);
 
 	// Last line
 	BlendLine16(toAngledLine ? endPixel - (fillLength * positiveMajorPitch) : endPixel, fillLength + 1,
@@ -2529,7 +2523,7 @@ void FillDrawAngledLine16(Pixel16 * pixel, sint32 majorLength, sint32 minorLengt
 }
 
 void FillDrawAntiAliasedAngledLine16(Pixel16 * pixel, sint32 majorLength, sint32 minorLength, sint32 majorPitch,
-		sint32 minorPitch, Pixel16 color, uint8 alpha, sint32 fillPitch, bool toAngledLine)
+                                     sint32 minorPitch, Pixel16 color, uint8 alpha, sint32 fillPitch, bool toAngledLine)
 {
 	const uint32 blendRGBMask  = pixelutils_GetBlend16RGBMask();
 
@@ -2541,7 +2535,7 @@ void FillDrawAntiAliasedAngledLine16(Pixel16 * pixel, sint32 majorLength, sint32
 
 	// first line
 	BlendLine16(toAngledLine ? pixel - (fillLength * positiveMajorPitch) : pixel, fillLength + 1, positiveMajorPitch,
-			color, alpha, blendRGBMask);
+	            color, alpha, blendRGBMask);
 
 	// calculate 16-bit fixed-point fractional part of a
 	// pixel that minor advances each time major advances 1 pixel, truncating the
@@ -2550,7 +2544,7 @@ void FillDrawAntiAliasedAngledLine16(Pixel16 * pixel, sint32 majorLength, sint32
 	// Initialize the line error accumulator to 0
 	uint16 errorAccumulator = 0;
 
-	while (pixel < endPixel)
+	do
 	{
 		const uint16 error = errorAccumulator; // remember current accumulated error
 		errorAccumulator += errorFraction;     // calculate error for next pixel
@@ -2559,39 +2553,35 @@ void FillDrawAntiAliasedAngledLine16(Pixel16 * pixel, sint32 majorLength, sint32
 		{
 			// Error accumulator turned over, so advance the minor
 			pixel += minorPitch;
-			if (pixel >= endPixel) {
-				break;
-			}
-			BlendLine16(toAngledLine ? pixel - (fillLength * positiveMajorPitch) : pixel + positiveMajorPitch,
-					fillLength, positiveMajorPitch, color, alpha, blendRGBMask);
 		}
+
+		BlendLine16(toAngledLine ? pixel - (fillLength * positiveMajorPitch) : pixel + positiveMajorPitch,
+		            fillLength, positiveMajorPitch, color, alpha, blendRGBMask);
+
 		if (positiveEdge) {
 			pixel += majorPitch; // always advance major
 		}
 
 		Pixel16 * pairedPixel = pixel + (positiveEdge ? minorPitch : -minorPitch);
-		if (pairedPixel <= endPixel + 2) // + 2 to allow lines with negative delta-x to connect to end-pixel
-		{
-			// Most significant bits of errorAccumulator determine the weight of this pixel
-			uint8 weight = errorAccumulator >> 8;
-			*pixel       = color;
-			*pairedPixel = pixelutils_Blend16(*pairedPixel, color, positiveEdge ? weight : weight ^ 255, blendRGBMask);
-		}
+		// Most significant bits of errorAccumulator determine the weight of this pixel
+		uint8 weight = errorAccumulator >> 8;
+		*pixel       = color;
+		*pairedPixel = pixelutils_Blend16(*pairedPixel, color, positiveEdge ? weight : weight ^ 255, blendRGBMask);
 
 		if (!positiveEdge) {
 			pixel += majorPitch; // always advance major
 		}
 
 		fillLength += fillPitch;
-	}
+	} while (--majorLength > 0);
 
 	// Last line
 	BlendLine16(toAngledLine ? endPixel - (fillLength * positiveMajorPitch) : endPixel, fillLength + 1,
-			positiveMajorPitch, color, alpha, blendRGBMask);
+	            positiveMajorPitch, color, alpha, blendRGBMask);
 }
 
 void SpecialDrawAngledPatternLine16(Pixel16 * pixel, sint32 majorLength, sint32 minorLength, sint32 majorPitch,
-		sint32 minorPitch, Pixel16 color, uint32 fullPattern, uint32 currentPattern, LINE_FLAGS lineFlags)
+                                    sint32 minorPitch, Pixel16 color, uint32 fullPattern, uint32 currentPattern, LINE_FLAGS lineFlags)
 {
 	const uint32 shadowRgbMask = pixelutils_GetShadow16RGBMask();
 	const uint32 blendRgbMask  = pixelutils_GetBlend16RGBMask();

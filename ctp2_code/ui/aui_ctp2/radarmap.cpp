@@ -30,8 +30,8 @@
 // - Radar tile border color determined by the visual cell owner instead by
 //   the actual cell owner. - Nov 1st 2004 - Martin Gühmann
 // - Radar tile border is now fully determined by the visible tile owner
-//   instead of being determined half by the actual tile owner and half by the
-//   the the visible tile owner this fixes the bug that appears after conquest
+//   instead of being determined half by the actual tile owner and half by
+//   the visible tile owner this fixes the bug that appears after conquest
 //   of a city. - Nov. 1st 2004 - Martin Gühmann
 // - The radar map now shows the current terrain and the current units and
 //   cities if fog of war is off, otherwise it only displays the kind of
@@ -80,14 +80,1491 @@ extern C3UI * g_c3ui;
 extern sint32 g_fog_toggle;
 extern sint32 g_god;
 
-static const WORLD_DIRECTION NEIGHBOR_DIRECTIONS[] = { EAST, WEST, NORTHEAST, NORTHWEST, SOUTHEAST, SOUTHWEST };
+/*
+ * Radar map rendering method
+ *
+ * Due to the diamond shape of the tiles two elements need to be rendered (see picture):
+ * 1. the basic tile (-)
+ * 2. the crossing between the tiles (x)
+ * where the basic tile always gets the color of the tile, and the crossing will get its colors from the surrounding
+ * basic tiles (see method RenderCrossing). As coastal tiles are not only water yet also contain a piece of land, they
+ * are processed separately.
+ *
+ *      X       X       X       X       X       X           --xxxx----xxxx----xxxx----xxxx----xxxx--
+ *     / \     / \     / \     / \     / \     /            --xxxx----xxxx----xxxx----xxxx----xxxx--
+ *    /   \   /   \   /   \   /   \   /   \   /             xx----xxxx----xxxx----xxxx----xxxx----xx
+ *   /     \ /     \ /     \ /     \ /     \ /              xx----xxxx----xxxx----xxxx----xxxx----xx
+ *  X       X       X       X       X       X               xx----xxxx----xxxx----xxxx----xxxx----xx
+ *   \     / \     / \     / \     / \     / \       --->   xx----xxxx----xxxx----xxxx----xxxx----xx
+ *    \   /   \   /   \   /   \   /   \   /   \             --xxxx----xxxx----xxxx----xxxx----xxxx--
+ *     \ /     \ /     \ /     \ /     \ /     \            --xxxx----xxxx----xxxx----xxxx----xxxx--
+ *      X       X       X       X       X       X           --xxxx----xxxx----xxxx----xxxx----xxxx--
+ *     / \     / \     / \     / \     / \     /            --xxxx----xxxx----xxxx----xxxx----xxxx--
+ *    /   \   /   \   /   \   /   \   /   \   /             xx----xxxx----xxxx----xxxx----xxxx----xx
+ *   /     \ /     \ /     \ /     \ /     \ /              xx----xxxx----xxxx----xxxx----xxxx----xx
+ *  X       X       X       X       X       X               xx----xxxx----xxxx----xxxx----xxxx----xx
+ *
+ *  The size of the rectangles depends both on the radar-map size as the world-map size. This means that the rectangle
+ *  size may differ per column/row (depending on the fraction of the rectangle size). The algorithm is implemented
+ *  in such a way that there is always a chess-board pattern, meaning that the size of a single row/column is constant.
+ *
+ *  Units, Cities and Trade are rendered as an overlay and rendered at position independent of the above grid. They
+ *  will always be the same size.
+ */
 
-static const unsigned char k_EAST_BORDER_FLAG       = 1 << EAST;
-static const unsigned char k_WEST_BORDER_FLAG       = 1 << WEST;
-static const unsigned char k_NORTH_EAST_BORDER_FLAG = 1 << NORTHEAST;
-static const unsigned char k_NORTH_WEST_BORDER_FLAG = 1 << NORTHWEST;
-static const unsigned char k_SOUTH_EAST_BORDER_FLAG = 1 << SOUTHEAST;
-static const unsigned char k_SOUTH_WEST_BORDER_FLAG = 1 << SOUTHWEST;
+class RadarMapCell
+{
+public:
+	typedef uint16 Type;
+
+	static inline Type createValue(const COLOR landColor, const COLOR waterColor, bool isLand) {
+		return landColor | (waterColor << 9) | (isLand ? ISLAND_MARKER : 0);
+	}
+
+	static inline bool GetIsLand(const Type value) {
+		return (value & ISLAND_MARKER);
+	}
+
+	static inline Pixel16 GetPixel16(const Type value) {
+		return GetIsLand(value) ? GetLandPixel16(value) : GetWaterPixel16(value);
+	}
+
+	static inline Pixel16 GetLandPixel16(const Type value) {
+		return g_colorSet->GetColor(static_cast<COLOR>(value & 0xff));
+	}
+
+	static inline Pixel16 GetWaterPixel16(const Type value) {
+		return g_colorSet->GetColor(static_cast<COLOR>(value >> 9));
+	}
+
+	static inline Type createValue(bool explored, bool owned, const COLOR ownerColor) {
+		return explored ? (owned ? ownerColor : NO_OWNER) : NOT_EXPLORED;
+	}
+
+	static inline Pixel16 GetIsExplored(const Type value) {
+		return !(value & NOT_EXPLORED);
+	}
+
+	static inline Pixel16 GetOwnerPixel16(const Type value) {
+		return ((value & NOT_EXPLORED) || (value & NO_OWNER)) ? 0 : g_colorSet->GetColor(static_cast<COLOR>(value));
+	}
+
+	static inline Type GetTileCell(const WORLD_DIRECTION direction, const Type *map, sint32 mapPitch)
+	{
+		// Tile cell deduction is not straight-forward due to diamond shape
+		switch (direction) {
+			case NORTHWEST:
+				return *(map - mapPitch);
+			case NORTH:
+				return *(map + 1 - 2 * mapPitch);
+			case NORTHEAST:
+				return *(map + 1 - mapPitch);
+			case EAST:
+				return *(map + 1);
+			case SOUTHEAST:
+				return *(map + mapPitch);
+			case SOUTH:
+				return *(map - 1 + 2 * mapPitch);
+			case SOUTHWEST:
+				return *(map - 1 + mapPitch);
+			case WEST:
+				return *(map - 1);
+			default:
+				return *map;
+		}
+	}
+
+	static inline Type GetCrossingCell(const WORLD_DIRECTION direction, const Type *map, sint32 mapPitch)
+	{
+		switch (direction) {
+			case WEST:
+				return *map;
+			case NORTH:
+				return *(map + 1 - mapPitch);
+			case EAST:
+				return *(map + 1);
+			case SOUTH:
+				return *(map + mapPitch);
+		}
+	}
+
+private:
+	static const Type ISLAND_MARKER = 0x0100;
+	static const Type NOT_EXPLORED = 0x0100;
+	static const Type NO_OWNER = 0x0200;
+};
+
+/*
+ * Radar render classes
+ */
+class RadarRenderBase
+{
+public:
+	RadarRenderBase(const Player & player, const RadarMap::RadarProperties & radarProperties, const MapPoint & mapSize,
+			double tileWidth, double tileHeight)
+	: m_player(player)
+	, m_radarProperties(radarProperties)
+	, m_mapSize(mapSize)
+	, m_tileSize { tileWidth, tileHeight }
+	{}
+	virtual ~RadarRenderBase() {}
+
+protected:
+	struct MapPointDouble {
+		double x;
+		double y;
+	};
+	inline const MapPointDouble GetScreenPosition(const MapPoint & radarPos) const;
+
+	COLOR RadarTileRelationsColor(const MapPoint & position, sint32 unitOwner = -1) const;
+	COLOR DoRadarTileRelationsColor(sint32 owner) const;
+
+	const Player                    & m_player;
+	const RadarMap::RadarProperties & m_radarProperties;
+	const MapPoint                  & m_mapSize;
+	const MapPointDouble              m_tileSize;
+};
+
+class RadarRender : public RadarRenderBase
+{
+public:
+	RadarRender(const Player & player, const RadarMap::RadarProperties & radarProperties, const MapPoint & mapSize,
+			double tileWidth, double tileHeight)
+	: RadarRenderBase(player, radarProperties, mapSize, tileWidth, tileHeight)
+	{
+	}
+	virtual ~RadarRender() {}
+
+	void Render(aui_Surface & surface, RadarMapCell::Type * map, const MapPoint & radarSize,
+			const MapPoint & radarPos) const;
+	void RenderSingleTile(aui_Surface & surface, const MapPoint & worldPos, const MapPoint & radarPos) const;
+
+protected:
+	const MapPoint WrapPoint(const MapPoint & point) const;
+
+	void FillTileMap(const MapPoint & worldPos, RadarMapCell::Type tileMap[15]) const;
+	virtual void RenderCrossing(aui_Surface & surface, const RECT & rect, RadarMapCell::Type * map,
+			sint32 mapPitch) const = 0;
+	virtual void RenderTile(aui_Surface & surface, const RECT & rect, RadarMapCell::Type * map,
+			sint32 mapPitch) const = 0;
+	void RenderMapTexture(aui_Surface & surface, RadarMapCell::Type * map, const MapPoint & radarSize,
+			double oddYStartValueX, sint32 startWorldPosX, sint32 startWorldPosY) const;
+
+	virtual RadarMapCell::Type GetMapCellValue(const MapPoint & worldPos) const = 0;
+
+private:
+	void FillMapTexture(RadarMapCell::Type * map) const;
+	void FillTextureBorders(RadarMapCell::Type * map) const;
+};
+
+class RadarRenderWorld : public RadarRender {
+public:
+	RadarRenderWorld(const Player & player, const RadarMap::RadarProperties & radarProperties, const MapPoint & mapSize,
+			double tileWidth, double tileHeight)
+	: RadarRender(player, radarProperties, mapSize, tileWidth, tileHeight) {}
+	virtual ~RadarRenderWorld() {}
+
+protected:
+	RadarMapCell::Type GetMapCellValue(const MapPoint & worldPos) const override;
+
+	void RenderTile(aui_Surface & surface, const RECT & rect, RadarMapCell::Type * map,
+			sint32 mapPitch) const override;
+	void RenderCrossing(aui_Surface & surface, const RECT & rect, RadarMapCell::Type * map,
+			sint32 mapPitch) const override;
+
+private:
+	static const RadarMapCell::Type BLEND_WATER = 128;
+
+	static const uint32 NO_COAST    = 0;
+	static const uint32 WEST_COAST  = 1;
+	static const uint32 NORTH_COAST = 2;
+	static const uint32 EAST_COAST  = 4;
+	static const uint32 SOUTH_COAST = 8;
+	static const uint32 WATER       = 0;
+	static const uint32 WEST_LAND   = 1;
+	static const uint32 NORTH_LAND  = 2;
+	static const uint32 EAST_LAND   = 4;
+	static const uint32 SOUTH_LAND  = 8;
+	static const uint32 ALL_LAND    = WEST_LAND | NORTH_LAND | EAST_LAND | SOUTH_LAND;
+
+	uint32 DetermineCoast(RadarMapCell::Type * map, sint32 mapPitch) const;
+
+	inline void RenderStandardTile(aui_Surface & surface, const RECT & rect, RadarMapCell::Type * map) const {
+		primitives_ClippedPaintRect16(surface, rect, RadarMapCell::GetPixel16(*map));
+	}
+	void RenderCoastTile(aui_Surface & surface, const RECT & rect, RadarMapCell::Type * map, sint32 mapPitch,
+			uint32 coast) const;
+	void RenderTerrainCoastTile(aui_Surface & surface, const RECT & rect, RadarMapCell::Type * map, sint32 mapPitch,
+			uint32 coast) const;
+	void RenderStandardCrossing(aui_Surface & surface, const RECT & rect, RadarMapCell::Type * map,
+			sint32 mapPitch) const;
+	void RenderCoastCrossing(aui_Surface & surface, const RECT & rect, RadarMapCell::Type * map, sint32 mapPitch,
+			uint32 landPattern) const;
+	void RenderBasicCrossing(aui_Surface & surface, const RECT & rect, Pixel16 west, Pixel16 north, Pixel16 east,
+			Pixel16 south) const;
+};
+
+class RadarRenderPlayerBorder : public RadarRender {
+public:
+	RadarRenderPlayerBorder(const Player & player, const RadarMap::RadarProperties & radarProperties,
+			const MapPoint & mapSize, double tileWidth, double tileHeight)
+	: RadarRender(player, radarProperties, mapSize, tileWidth, tileHeight)
+	{
+		Assert(m_radarProperties.m_displayBorders);
+	}
+	virtual ~RadarRenderPlayerBorder() {}
+
+protected:
+	void RenderCrossing(aui_Surface & surface, const RECT & rect, RadarMapCell::Type * map,
+			sint32 mapPitch) const override;
+	void RenderTile(aui_Surface & surface, const RECT & rect, RadarMapCell::Type * map, sint32 mapPitch) const override
+	{}
+
+	RadarMapCell::Type GetMapCellValue(const MapPoint & worldPos) const override;
+
+private:
+	static inline void RenderBorderLine(aui_Surface & surface, sint32 x1, sint32 y1, sint32 x2, sint32 y2,
+			Pixel16 color)
+	{
+		if (color != 0) {
+			primitives_ClippedLine16(surface, x1, y1, x2, y2, color);
+		}
+	}
+
+	void RenderCrossingAllExplored(aui_Surface & surface, const RECT & rect, Pixel16 west, Pixel16 north, Pixel16 east,
+			Pixel16 south) const;
+};
+
+class RadarRenderOverlay : public RadarRenderBase {
+public:
+	RadarRenderOverlay(const Player & player, const RadarMap::RadarProperties & radarProperties,
+			const MapPoint & mapSize, double tileWidth, double tileHeight)
+	: RadarRenderBase(player, radarProperties, mapSize, tileWidth, tileHeight) {}
+	virtual ~RadarRenderOverlay() {}
+
+	void Render(aui_Surface & surface, const MapPoint & radarOffset) const;
+	void RenderSingleTile(aui_Surface & surface, const MapPoint & worldPos, const MapPoint & radarPos) const;
+
+private:
+	void RenderCity(aui_Surface & surface, const MapPoint & worldPos, const MapPointDouble & screenPosition) const;
+	void RenderUnit(aui_Surface & surface, const MapPoint & worldPos, const MapPointDouble & screenPosition) const;
+	void RenderCapitol(aui_Surface & surface, const MapPoint & worldPos, const MapPointDouble & screenPosition) const;
+	void RenderTrade(aui_Surface & surface, const MapPoint & worldPos, const MapPointDouble & screenPosition) const;
+	void RenderTradeRoute(aui_Surface & surface, const RECT & rect) const;
+};
+
+/*
+ * RadarRenderBase - implementation
+ */
+const RadarRenderBase::MapPointDouble RadarRenderBase::GetScreenPosition(const MapPoint & radarPos) const
+{
+	MapPointDouble position;
+	const MapPoint screenPosition(((radarPos.y / 2) + radarPos.x) % m_mapSize.x, radarPos.y);
+	position.x = screenPosition.x * m_tileSize.x;
+	position.y = screenPosition.y * m_tileSize.y;
+	if (screenPosition.y & 1) {
+		position.x += m_tileSize.x / 2.0;
+	}
+	return position;
+}
+
+COLOR RadarRenderBase::RadarTileRelationsColor(const MapPoint & position, sint32 unitOwner) const
+{
+	sint32 owner = unitOwner < 0 ? g_tiledMap->GetVisibleCellOwner(position) : unitOwner;
+	return DoRadarTileRelationsColor(owner);
+}
+
+COLOR RadarRenderBase::DoRadarTileRelationsColor(sint32 owner) const
+{
+	COLOR color = COLOR_WHITE;
+	if (owner >= 0)
+	{
+		if (m_player.m_owner == owner || m_player.HasAllianceWith(owner)) {
+			color = COLOR_BLUE;
+		} else if (m_player.HasWarWith(owner)) {
+			color = COLOR_RED;
+		} else if (m_player.HasPeaceTreatyWith(owner) || m_player.HasAnyPactWith(owner)) {
+			color = COLOR_GREEN;
+		} else if (m_player.HasContactWith(owner)) {
+			color = COLOR_YELLOW;
+		}
+	}
+	return color;
+}
+
+/*
+ * RadarRender - implementation
+ */
+void RadarRender::Render(aui_Surface & surface, RadarMapCell::Type * map, const MapPoint & radarSize,
+		const MapPoint & radarPos) const
+{
+	FillMapTexture(map);
+
+	sint32 tileWidthWhole = floor(m_tileSize.x);
+	double tileWidthFraction = m_tileSize.x - tileWidthWhole;
+	double oddYStartValueX = floor(m_tileSize.x / 2.0) + ((tileWidthWhole & 1) ? tileWidthFraction : 0.0);
+
+	sint32 startWorldPosX = m_mapSize.x - radarPos.x;
+	if (startWorldPosX >= m_mapSize.x) {
+		startWorldPosX = 0;
+	}
+	sint32 startWorldPosY = m_mapSize.y - radarPos.y;
+	if (startWorldPosY >= m_mapSize.y) {
+		startWorldPosY = 0;
+	}
+
+	RenderMapTexture(surface, map, radarSize, oddYStartValueX, startWorldPosX, startWorldPosY);
+}
+
+void RadarRender::RenderMapTexture(aui_Surface & surface, RadarMapCell::Type * map, const MapPoint & radarSize,
+		double oddYStartValueX, sint32 startWorldPosX, sint32 startWorldPosY) const
+{
+	const sint32 mapPitch = m_mapSize.x + 2;
+	RadarMapCell::Type * const mapStart = map + 1 + (2 * mapPitch);
+	RadarMapCell::Type * const mapEnd = mapStart + m_mapSize.y * mapPitch;
+	RadarMapCell::Type * mapRowStart = mapStart + startWorldPosY * mapPitch;
+
+	double y = 0.0;
+	bool oddY = startWorldPosY & 1;
+	while (y < radarSize.y)
+	{
+		sint32 y1 = static_cast<sint32>(y);
+		y += m_tileSize.y;
+		sint32 y2 = static_cast<sint32>(y);
+
+		RadarMapCell::Type * const colorMapRowEnd = mapRowStart + m_mapSize.x;
+		RadarMapCell::Type * colorMapCell = mapRowStart + startWorldPosX;
+
+		double x = oddY ? oddYStartValueX : 0.0;
+		if (oddY) {
+			RenderCrossing(surface, RECT {0, y1, static_cast<sint32>(x) - 1, y2 - 1 },
+					colorMapCell - 1, mapPitch);
+		}
+		while (x < radarSize.x) {
+			sint32 x1 = static_cast<sint32>(x);
+			x += m_tileSize.x;
+			sint32 x2 = static_cast<sint32>(x);
+
+			sint32 width = x2 - x1;
+			sint32 split = x1 + (width + (oddY ? 1 : 0)) / 2;
+			RECT renderRect = { x1, y1, split - 1, y2 - 1 };
+			RenderTile(surface, renderRect, colorMapCell, mapPitch);
+
+			renderRect.left  = split;
+			renderRect.right = x2 - 1;
+			RenderCrossing(surface, renderRect, colorMapCell, mapPitch);
+
+			colorMapCell++;
+			if (colorMapCell >= colorMapRowEnd) {
+				colorMapCell = mapRowStart;
+			}
+		}
+
+		mapRowStart += mapPitch;
+		if (mapRowStart >= mapEnd) {
+			mapRowStart = mapStart;
+		}
+
+		oddY = !oddY;
+		if (!oddY) {
+			startWorldPosX--;
+			if (startWorldPosX < 0) {
+				startWorldPosX = m_mapSize.x - 1;
+			}
+		}
+	}
+}
+
+void RadarRender::RenderSingleTile(aui_Surface & surface, const MapPoint & worldPos, const MapPoint & radarPos) const
+{
+	RadarMapCell::Type tileMap[15];
+	FillTileMap(worldPos, tileMap);
+	const sint32 mapPitch = 3;
+
+	const MapPointDouble position = GetScreenPosition(radarPos);
+
+	sint32 y1 = static_cast<sint32>(position.y);
+	sint32 y2 = static_cast<sint32>(position.y + m_tileSize.y);
+
+	sint32 x1 = static_cast<sint32>(position.x);
+	sint32 x2 = static_cast<sint32>(position.x + m_tileSize.x);
+
+	bool oddY = radarPos.y & 1;
+	sint32 width = x2 - x1;
+	sint32 split = x1 + (width + (oddY ? 1 : 0)) / 2;
+	RECT renderRect = { x1, y1, split - 1, y2 - 1 };
+
+	RenderTile(surface, renderRect, tileMap + 7, mapPitch);
+	if ((x1 <= m_tileSize.x) && oddY) { // first column, render also crossing before
+		const RECT firstColumn = {0, y1, x1 - 1, y2 - 1};
+		RenderCrossing(surface, firstColumn, tileMap + 6, mapPitch);
+	}
+
+	renderRect.left = split;
+	renderRect.right = x2 - 1;
+	RenderCrossing(surface, renderRect, tileMap + 7, mapPitch);
+}
+
+const MapPoint RadarRender::WrapPoint(const MapPoint & point) const
+{
+	MapPoint result = point;
+	if (result.x < 0) {
+		result.x = g_theWorld->IsXwrap() ? m_mapSize.x - 1 : 0;
+	} else if (result.x >= m_mapSize.x) {
+		result.x = g_theWorld->IsXwrap() ? 0 : m_mapSize.x - 1;
+	}
+	if (result.y < 0) {
+		result.y = g_theWorld->IsYwrap() ? m_mapSize.y - 1 : 0;
+	} else if (result.y >= m_mapSize.y) {
+		result.y = g_theWorld->IsYwrap() ? 0 : m_mapSize.y - 1;
+	}
+	return result;
+}
+
+void RadarRender::FillMapTexture(RadarMapCell::Type * map) const
+{
+	sint32 mapPitch = m_mapSize.x + 2;
+	RadarMapCell::Type * row = map + 1 + (2 * mapPitch); // skip borders
+
+	for (sint32 y = 0; y < m_mapSize.y; y++)
+	{
+		RadarMapCell::Type * cell = row;
+		for (sint32 x = 0; x < m_mapSize.x; x++)
+		{
+			*cell++ = GetMapCellValue(MapPoint(x, y));
+		}
+		row += mapPitch;
+	}
+
+	FillTextureBorders(map);
+}
+
+void RadarRender::FillTextureBorders(RadarMapCell::Type * map) const
+{
+	sint32 pitch = m_mapSize.x + 2;
+
+	bool xWrap = g_theWorld->IsXwrap();
+	bool yWrap = g_theWorld->IsYwrap();
+
+	// Fill double top- and bottom-border
+	RadarMapCell::Type * topColor = map + 1 + pitch;
+	RadarMapCell::Type * topColor2 = topColor - pitch;
+	RadarMapCell::Type * bottomColor = topColor + pitch * (m_mapSize.y + 1);
+	RadarMapCell::Type * bottomColor2 = bottomColor + pitch;
+	RadarMapCell::Type * endTopColor = topColor + m_mapSize.x;
+	for ( ; topColor < endTopColor; topColor++, topColor2++, bottomColor++, bottomColor2++)
+	{
+		if (yWrap)
+		{
+			*topColor = *(bottomColor - pitch);
+			*topColor2 = *(bottomColor - 2 * pitch);
+			*bottomColor = *(topColor + pitch);
+			*bottomColor2 = *(topColor + 2 * pitch);
+		}
+		else
+		{
+			*topColor = *(topColor + pitch);
+			*topColor2 = *topColor;
+			*bottomColor = *(bottomColor - pitch);
+			*bottomColor2 = *bottomColor;
+		}
+	}
+
+	// Fill left- and right-border
+	RadarMapCell::Type * leftBorder = map + 2 * pitch;
+	RadarMapCell::Type * rightBorder = leftBorder + m_mapSize.x + 1;
+	RadarMapCell::Type * endLeftBorder = leftBorder + m_mapSize.y * pitch;
+	for ( ; leftBorder < endLeftBorder; leftBorder += pitch, rightBorder += pitch)
+	{
+		if (xWrap)
+		{
+			*leftBorder = *(rightBorder - 1);
+			*rightBorder = *(leftBorder + 1);
+		}
+		else
+		{
+			*leftBorder = *(leftBorder + 1);
+			*rightBorder = *(rightBorder - 1);
+		}
+	}
+
+	// Corners
+	RadarMapCell::Type * leftTopCorner     = map + pitch;
+	RadarMapCell::Type * leftTop2Corner    = leftTopCorner - pitch;
+	RadarMapCell::Type * rightTopCorner    = leftTopCorner + m_mapSize.x + 1;
+	RadarMapCell::Type * rightTop2Corner   = rightTopCorner - pitch;
+	RadarMapCell::Type * leftBottomCorner  = leftTopCorner + pitch * (m_mapSize.y - 1);
+	RadarMapCell::Type * leftBottom2Corner = leftBottomCorner + pitch;
+	RadarMapCell::Type * rightBottomCorner = leftBottomCorner + m_mapSize.x + 1;
+	RadarMapCell::Type * rightBottom2Corner = rightBottomCorner + pitch;
+	if (yWrap && xWrap)
+	{
+		*leftTopCorner      = *(rightBottomCorner - 1);
+		*leftTop2Corner     = *(rightBottomCorner - 1 - pitch);
+		*rightTopCorner     = *(leftBottomCorner + 1);
+		*rightTop2Corner    = *(leftBottomCorner + 1 - pitch);
+		*leftBottomCorner   = *(rightTopCorner - 1);
+		*leftBottom2Corner  = *(rightTopCorner - 1 + pitch);
+		*rightBottomCorner  = *(leftTopCorner + 1);
+		*rightBottom2Corner = *(leftTopCorner + 1 + pitch);
+	} else {
+		sint32 xOffset = xWrap ? 0 : 1;
+		sint32 yOffset = yWrap ? -pitch : 0;
+
+		*leftTopCorner      = *(leftTopCorner + xOffset + yOffset);
+		*leftTop2Corner     = *(leftTopCorner + xOffset + 2 * yOffset);
+		*rightTopCorner     = *(rightTopCorner - xOffset + yOffset);
+		*rightTop2Corner    = *(rightTopCorner - xOffset + 2 * yOffset);
+		*leftBottomCorner   = *(leftBottomCorner + xOffset - yOffset);
+		*leftBottom2Corner  = *(leftBottomCorner + xOffset - 2 * yOffset);
+		*rightBottomCorner  = *(rightBottomCorner - xOffset - yOffset);
+		*rightBottom2Corner = *(rightBottomCorner - xOffset - 2 * yOffset);
+	}
+}
+
+void RadarRender::FillTileMap(const MapPoint & worldPos, RadarMapCell::Type tileMap[15]) const
+{
+	MapPoint point(worldPos.x - 1, worldPos.y - 2);
+	for (sint32 y = 0; y < 5; y++, point.y++)
+	{
+		for (sint32 x = 0; x < 3; x++, point.x++) {
+			tileMap[y * 3 + x] = GetMapCellValue(WrapPoint(point));
+		}
+		point.x = worldPos.x - 1;
+	}
+}
+
+/*
+ * RadarRenderWorld - implementation
+ */
+RadarMapCell::Type RadarRenderWorld::GetMapCellValue(const MapPoint & worldPos) const
+{
+	bool isLand = (g_theWorld->IsLand(worldPos) || g_theWorld->IsMountain(worldPos))
+			&& !g_theWorld->IsTunnel(worldPos);
+
+	if (!m_player.IsExplored(worldPos)) {
+		return RadarMapCell::createValue( COLOR_BLACK, COLOR_BLACK, isLand);
+	}
+
+	COLOR landColor = static_cast<COLOR>(COLOR_TERRAIN_0 + TERRAIN_GRASSLAND);
+	if (m_radarProperties.m_displayOverlay && m_radarProperties.m_mapOverlay) {
+		landColor = m_radarProperties.m_mapOverlay[worldPos.y * m_mapSize.x + worldPos.x];
+	}
+	else if (m_radarProperties.m_displayPolitical)
+	{
+		sint32 owner = g_theWorld->GetOwner(worldPos);
+		if (owner >= 0 && (m_player.HasContactWith(owner) || m_player.m_hasGlobalRadar || g_fog_toggle || g_god))
+		{
+			if (m_radarProperties.m_displayRelations) {
+				landColor = RadarTileRelationsColor(worldPos);
+			} else {
+				landColor = g_colorSet->ComputePlayerColor(g_tiledMap->GetVisibleCellOwner(worldPos));
+			}
+		}
+	}
+	else if (m_radarProperties.m_displayTerrain) {
+		landColor = static_cast<COLOR>(COLOR_TERRAIN_0 + g_tiledMap->GetVisibleTerrainType(worldPos));
+	}
+
+	const COLOR waterColor = isLand ? COLOR_BLACK : static_cast<COLOR>(COLOR_TERRAIN_0 +
+			(m_radarProperties.m_displayTerrain ? g_tiledMap->GetVisibleTerrainType(worldPos) : TERRAIN_WATER_DEEP));
+	return RadarMapCell::createValue(landColor, waterColor, isLand);
+}
+
+void RadarRenderWorld::RenderTile(aui_Surface & surface, const RECT & rect, RadarMapCell::Type * map,
+		sint32 mapPitch) const
+{
+	const uint32 coast = DetermineCoast(map, mapPitch);
+	if (coast == NO_COAST) {
+		RenderStandardTile(surface, rect, map);
+	} else {
+		if (m_radarProperties.m_displayTerrain && !m_radarProperties.m_displayPolitical) {
+			RenderTerrainCoastTile(surface, rect, map, mapPitch, coast);
+		} else {
+			RenderCoastTile(surface, rect, map, mapPitch, coast);
+		}
+	}
+}
+
+void RadarRenderWorld::RenderCrossing(aui_Surface & surface, const RECT & rect, RadarMapCell::Type * map,
+		sint32 mapPitch) const
+{
+	uint32 landPattern = WATER;
+	landPattern |= RadarMapCell::GetIsLand(RadarMapCell::GetCrossingCell(WEST, map, mapPitch)) ? WEST_LAND : WATER;
+	landPattern |= RadarMapCell::GetIsLand(RadarMapCell::GetCrossingCell(NORTH, map, mapPitch)) ? NORTH_LAND : WATER;
+	landPattern |= RadarMapCell::GetIsLand(RadarMapCell::GetCrossingCell(EAST, map, mapPitch)) ? EAST_LAND : WATER;
+	landPattern |= RadarMapCell::GetIsLand(RadarMapCell::GetCrossingCell(SOUTH, map, mapPitch)) ? SOUTH_LAND : WATER;
+
+	if ((landPattern == ALL_LAND) || (landPattern == WATER))
+	{
+		RenderStandardCrossing(surface, rect, map, mapPitch);
+	} else {
+		RenderCoastCrossing(surface, rect, map, mapPitch, landPattern);
+	}
+}
+
+uint32 RadarRenderWorld::DetermineCoast(RadarMapCell::Type * map, sint32 mapPitch) const
+{
+	if (RadarMapCell::GetIsLand(*map)) {
+		return NO_COAST;
+	}
+
+	const bool northWestIsLand = RadarMapCell::GetIsLand(RadarMapCell::GetTileCell(NORTHWEST, map, mapPitch));
+	const bool northIsLand     = RadarMapCell::GetIsLand(RadarMapCell::GetTileCell(NORTH, map, mapPitch));
+	const bool northEastIsLand = RadarMapCell::GetIsLand(RadarMapCell::GetTileCell(NORTHEAST, map, mapPitch));
+	const bool westIsLand      = RadarMapCell::GetIsLand(RadarMapCell::GetTileCell(WEST, map, mapPitch));
+	const bool eastIsLand      = RadarMapCell::GetIsLand(RadarMapCell::GetTileCell(EAST, map, mapPitch));
+	const bool southWestIsLand = RadarMapCell::GetIsLand(RadarMapCell::GetTileCell(SOUTHWEST, map, mapPitch));
+	const bool southIsLand     = RadarMapCell::GetIsLand(RadarMapCell::GetTileCell(SOUTH, map, mapPitch));
+	const bool southEastIsLand = RadarMapCell::GetIsLand(RadarMapCell::GetTileCell(SOUTHEAST, map, mapPitch));
+
+	uint32 coast = northWestIsLand && westIsLand && southWestIsLand ? WEST_COAST : NO_COAST;
+	coast |= (northWestIsLand && northIsLand && northEastIsLand ? NORTH_COAST : NO_COAST);
+	coast |= (northEastIsLand && eastIsLand && southEastIsLand ? EAST_COAST : NO_COAST);
+	coast |= (southWestIsLand && southIsLand && southEastIsLand ? SOUTH_COAST : NO_COAST);
+	return coast;
+}
+
+void RadarRenderWorld::RenderCoastTile(aui_Surface & surface, const RECT & rect, RadarMapCell::Type * map,
+		sint32 mapPitch, uint32 coast) const
+{
+	primitives_ClippedPaintRect16(surface, rect, RadarMapCell::GetPixel16(*map));
+
+	const Pixel16 landColor = RadarMapCell::GetLandPixel16(*map);
+	if (coast & WEST_COAST) {
+		primitives_ClippedPaintRect16(surface, RECT{ rect.left, rect.top, rect.left, rect.bottom }, landColor);
+	}
+	if (coast & NORTH_COAST) {
+		primitives_ClippedPaintRect16(surface, RECT { rect.left, rect.top, rect.right, rect.top }, landColor);
+	}
+	if (coast & EAST_COAST) {
+		primitives_ClippedPaintRect16(surface, RECT { rect.right, rect.top, rect.right, rect.bottom }, landColor);
+	}
+	if (coast & SOUTH_COAST) {
+		primitives_ClippedPaintRect16(surface, RECT { rect.left, rect.bottom, rect.right, rect.bottom }, landColor);
+	}
+}
+
+void RadarRenderWorld::RenderTerrainCoastTile(aui_Surface &surface, const RECT &rect, RadarMapCell::Type *map,
+		sint32 mapPitch, uint32 coast) const
+{
+	const Pixel16 northWest = RadarMapCell::GetLandPixel16(RadarMapCell::GetTileCell(NORTHWEST, map, mapPitch));
+	const Pixel16 north     = RadarMapCell::GetLandPixel16(RadarMapCell::GetTileCell(NORTH, map, mapPitch));
+	const Pixel16 northEast = RadarMapCell::GetLandPixel16(RadarMapCell::GetTileCell(NORTHEAST, map, mapPitch));
+	const Pixel16 west      = RadarMapCell::GetLandPixel16(RadarMapCell::GetTileCell(WEST, map, mapPitch));
+	const Pixel16 center    = RadarMapCell::GetLandPixel16(RadarMapCell::GetTileCell(NOWHERE, map, mapPitch));
+	const Pixel16 east      = RadarMapCell::GetLandPixel16(RadarMapCell::GetTileCell(EAST, map, mapPitch));
+	const Pixel16 southWest = RadarMapCell::GetLandPixel16(RadarMapCell::GetTileCell(SOUTHWEST, map, mapPitch));
+	const Pixel16 south     = RadarMapCell::GetLandPixel16(RadarMapCell::GetTileCell(SOUTH, map, mapPitch));
+	const Pixel16 southEast = RadarMapCell::GetLandPixel16(RadarMapCell::GetTileCell(SOUTHEAST, map, mapPitch));
+
+	primitives_ClippedPaintRect16(surface, rect, center);
+
+	if (coast & WEST_COAST)
+	{
+		if ((northWest == west) && (southWest == west)) {
+			primitives_ClippedPaintRect16(surface, RECT{ rect.left, rect.top, rect.left, rect.bottom }, west);
+		}
+	}
+	if (coast & NORTH_COAST)
+	{
+		if ((northWest == north) && (northEast == north)) {
+			primitives_ClippedPaintRect16(surface, RECT { rect.left, rect.top, rect.right, rect.top }, north);
+		}
+	}
+	if (coast & EAST_COAST)
+	{
+		if ((northEast == east) && (southEast == east)) {
+			primitives_ClippedPaintRect16(surface, RECT { rect.right, rect.top, rect.right, rect.bottom }, east);
+		}
+	}
+	if (coast & SOUTH_COAST)
+	{
+		if ((southWest == south) && (southEast == south)) {
+			primitives_ClippedPaintRect16(surface, RECT { rect.left, rect.bottom, rect.right, rect.bottom }, south);
+		}
+	}
+}
+
+void RadarRenderWorld::RenderStandardCrossing(aui_Surface & surface, const RECT & rect, RadarMapCell::Type * map,
+		sint32 mapPitch) const
+{
+	Pixel16 west  = RadarMapCell::GetPixel16(RadarMapCell::GetCrossingCell(WEST, map, mapPitch));
+	Pixel16 north = RadarMapCell::GetPixel16(RadarMapCell::GetCrossingCell(NORTH, map, mapPitch));
+	Pixel16 east  = RadarMapCell::GetPixel16(RadarMapCell::GetCrossingCell(EAST, map, mapPitch));
+	Pixel16 south = RadarMapCell::GetPixel16(RadarMapCell::GetCrossingCell(SOUTH, map, mapPitch));
+
+	RenderBasicCrossing(surface, rect, west, north, east, south);
+}
+
+void RadarRenderWorld::RenderCoastCrossing(aui_Surface & surface, const RECT & rect, RadarMapCell::Type * map,
+		sint32 mapPitch, uint32 landPattern) const
+{
+	const RadarMapCell::Type west = RadarMapCell::GetCrossingCell(WEST, map, mapPitch);
+	Pixel16 westLand  = RadarMapCell::GetLandPixel16(west);
+	Pixel16 westWater = RadarMapCell::GetWaterPixel16(west);
+
+	RadarMapCell::Type north = RadarMapCell::GetCrossingCell(NORTH, map, mapPitch);
+	Pixel16 northLand  = RadarMapCell::GetLandPixel16(north);
+	Pixel16 northWater = RadarMapCell::GetWaterPixel16(north);
+
+	RadarMapCell::Type east = RadarMapCell::GetCrossingCell(EAST, map, mapPitch);
+	Pixel16 eastLand  = RadarMapCell::GetLandPixel16(east);
+	Pixel16 eastWater = RadarMapCell::GetWaterPixel16(east);
+
+	RadarMapCell::Type south = RadarMapCell::GetCrossingCell(SOUTH, map, mapPitch);
+	Pixel16 southLand  = RadarMapCell::GetLandPixel16(south);
+	Pixel16 southWater = RadarMapCell::GetWaterPixel16(south);
+
+	switch (landPattern) {
+		case WEST_LAND:
+			primitives_ClippedPaintRect16(surface, rect, eastWater);
+			primitives_ClippedPaintRect16(surface, RECT{rect.left, rect.top, rect.left, rect.bottom}, westLand);
+			break;
+		case NORTH_LAND:
+			primitives_ClippedPaintRect16(surface, rect, westWater);
+			primitives_ClippedPaintRect16(surface, RECT{rect.left, rect.top, rect.right, rect.top}, northLand);
+			break;
+		case EAST_LAND:
+			primitives_ClippedPaintRect16(surface, rect, westWater);
+			primitives_ClippedPaintRect16(surface, RECT{rect.right, rect.top, rect.right, rect.bottom}, eastLand);
+			break;
+		case SOUTH_LAND:
+			primitives_ClippedPaintRect16(surface, rect, westWater);
+			primitives_ClippedPaintRect16(surface, RECT{rect.left, rect.bottom, rect.right, rect.bottom}, southLand);
+			break;
+		case ALL_LAND & ~WEST_LAND:
+		case ALL_LAND & ~NORTH_LAND:
+		case ALL_LAND & ~EAST_LAND:
+		case ALL_LAND & ~SOUTH_LAND:
+			RenderBasicCrossing(surface, rect, westLand, northLand, eastLand, southLand);
+			break;
+		case WEST_LAND | NORTH_LAND:
+			if (westLand == northLand) {
+				primitives_ClippedPaintRect16(surface, rect, eastWater);
+				primitives_ClippedTriangle16(surface, rect, TI_LEFT_TOP, westLand);
+			} else {
+				primitives_ClippedTriangle16(surface, rect, TI_LEFT_BOTTOM, westLand);
+				primitives_ClippedTriangle16(surface, rect, TI_RIGHT_TOP, northLand);
+				primitives_ClippedTriangle16(surface, RECT{rect.left + 1, rect.top + 1, rect.right, rect.bottom},
+						TI_RIGHT_BOTTOM, eastWater);
+			}
+			break;
+		case NORTH_LAND | EAST_LAND:
+			if (northLand == eastLand) {
+				primitives_ClippedPaintRect16(surface, rect, westWater);
+				primitives_ClippedTriangle16(surface, rect, TI_RIGHT_TOP, eastLand);
+			} else {
+				primitives_ClippedTriangle16(surface, rect, TI_LEFT_TOP, northLand);
+				primitives_ClippedTriangle16(surface, rect, TI_RIGHT_BOTTOM, eastLand);
+				primitives_ClippedTriangle16(surface, RECT{rect.left, rect.top + 1, rect.right - 1, rect.bottom},
+						TI_LEFT_BOTTOM, westWater);
+			}
+			break;
+		case EAST_LAND | SOUTH_LAND:
+			if (eastLand == southLand) {
+				primitives_ClippedPaintRect16(surface, rect, westWater);
+				primitives_ClippedTriangle16(surface, rect, TI_RIGHT_BOTTOM, eastLand);
+			} else {
+				primitives_ClippedTriangle16(surface, rect, TI_RIGHT_TOP, eastLand);
+				primitives_ClippedTriangle16(surface, rect, TI_LEFT_BOTTOM, southLand);
+				primitives_ClippedTriangle16(surface, RECT{rect.left, rect.top, rect.right - 1, rect.bottom - 1},
+						TI_LEFT_TOP, westWater);
+			}
+			break;
+		case SOUTH_LAND | WEST_LAND:
+			if (southLand == westLand) {
+				primitives_ClippedPaintRect16(surface, rect, eastWater);
+				primitives_ClippedTriangle16(surface, rect, TI_LEFT_BOTTOM, westLand);
+			} else {
+				primitives_ClippedTriangle16(surface, rect, TI_LEFT_TOP, westLand);
+				primitives_ClippedTriangle16(surface, rect, TI_RIGHT_BOTTOM, southLand);
+				primitives_ClippedTriangle16(surface, RECT{rect.left + 1, rect.top, rect.right, rect.bottom - 1},
+						TI_RIGHT_TOP, eastWater);
+			}
+			break;
+		case WEST_LAND | EAST_LAND:
+			if (westLand == eastLand) {
+				primitives_ClippedPaintRect16(surface, rect, westLand);
+			} else {
+				sint32 split = (rect.left + rect.right) / 2;
+				primitives_ClippedPaintRect16(surface, RECT{rect.left, rect.top, split, rect.bottom}, westLand);
+				primitives_ClippedPaintRect16(surface, RECT{split + 1, rect.top, rect.right, rect.bottom}, eastLand);
+			}
+			if (rect.right - rect.left > 1)
+			{
+				primitives_ClippedPaintRect16(surface, RECT{rect.left + 1, rect.top, rect.right - 1, rect.top}, northWater,
+						BLEND_WATER);
+				primitives_ClippedPaintRect16(surface, RECT{rect.left + 1, rect.bottom, rect.right - 1, rect.bottom},
+						southWater, BLEND_WATER);
+			}
+			break;
+		case NORTH_LAND | SOUTH_LAND:
+			if (northLand == southLand) {
+				primitives_ClippedPaintRect16(surface, rect, northLand);
+			} else {
+				sint32 split = (rect.top + rect.bottom) / 2;
+				primitives_ClippedPaintRect16(surface, RECT{rect.left, rect.top, rect.right, split}, northLand);
+				primitives_ClippedPaintRect16(surface, RECT{rect.left, split + 1, rect.right, rect.bottom}, southLand);
+			}
+			if (rect.bottom - rect.top > 1)
+			{
+				primitives_ClippedPaintRect16(surface, RECT{rect.left, rect.top + 1, rect.left, rect.bottom - 1}, westWater,
+						BLEND_WATER);
+				primitives_ClippedPaintRect16(surface, RECT{rect.right, rect.top + 1, rect.right, rect.bottom - 1},
+						eastWater, BLEND_WATER);
+			}
+			break;
+	}
+}
+
+void RadarRenderWorld::RenderBasicCrossing(aui_Surface & surface, const RECT & rect, Pixel16 west, Pixel16 north,
+		Pixel16 east, Pixel16 south) const
+{
+	const uint32 ALL_EQUAL    = 0;
+	const uint32 NORTH_DIFFER = 1;
+	const uint32 EAST_DIFFER  = 2;
+	const uint32 SOUTH_DIFFER = 4;
+
+	uint32 westPattern = (west == north) ? 0 : NORTH_DIFFER;
+	westPattern += (west == east) ? 0 : EAST_DIFFER;
+	westPattern += (west == south) ? 0 : SOUTH_DIFFER;
+	switch (westPattern) {
+		case ALL_EQUAL:
+		case NORTH_DIFFER:
+		case EAST_DIFFER:
+		case SOUTH_DIFFER:
+			primitives_ClippedPaintRect16(surface, rect, west);
+			break;
+		case NORTH_DIFFER | EAST_DIFFER:
+			if (east == north) {
+				primitives_ClippedPaintRect16(surface, rect, east);
+				primitives_ClippedTriangle16(surface, rect, TI_LEFT_BOTTOM, west);
+			} else {
+				primitives_ClippedTriangle16(surface, rect, TI_LEFT_TOP, north);
+				primitives_ClippedTriangle16(surface, rect, TI_RIGHT_BOTTOM, east);
+				primitives_ClippedTriangle16(surface, rect, TI_LEFT_BOTTOM, west);
+			}
+			break;
+		case NORTH_DIFFER | SOUTH_DIFFER:
+			primitives_ClippedPaintRect16(surface, rect, west);
+			primitives_ClippedPaintRect16(surface, RECT{ rect.left, rect.top, rect.right, rect.top }, north,
+					BLEND_WATER);
+			primitives_ClippedPaintRect16(surface, RECT{ rect.left, rect.bottom, rect.right, rect.bottom }, south,
+					BLEND_WATER);
+			break;
+		case EAST_DIFFER | SOUTH_DIFFER:
+			if (east == south) {
+				primitives_ClippedPaintRect16(surface, rect, east);
+				primitives_ClippedTriangle16(surface, rect, TI_LEFT_TOP, west);
+			} else {
+				primitives_ClippedTriangle16(surface, rect, TI_RIGHT_TOP, east);
+				primitives_ClippedTriangle16(surface, rect, TI_LEFT_BOTTOM, south);
+				primitives_ClippedTriangle16(surface, rect, TI_LEFT_TOP, west);
+			}
+			break;
+		case NORTH_DIFFER | EAST_DIFFER | SOUTH_DIFFER:
+			sint32 eastPattern = (east == north) ? 0 : NORTH_DIFFER;
+			eastPattern += (east == south) ? 0 : SOUTH_DIFFER;
+			switch (eastPattern) {
+				case ALL_EQUAL:
+					primitives_ClippedPaintRect16(surface, rect, east);
+					break;
+				case NORTH_DIFFER:
+					primitives_ClippedTriangle16(surface, rect, TI_LEFT_BOTTOM, west);
+					primitives_ClippedTriangle16(surface, rect, TI_RIGHT_TOP, north);
+					primitives_ClippedTriangle16(surface, rect, TI_RIGHT_BOTTOM, east);
+					break;
+				case SOUTH_DIFFER:
+					primitives_ClippedTriangle16(surface, rect, TI_LEFT_TOP, west);
+					primitives_ClippedTriangle16(surface, rect, TI_RIGHT_BOTTOM, south);
+					primitives_ClippedTriangle16(surface, rect, TI_RIGHT_TOP, east);
+					break;
+				case NORTH_DIFFER | SOUTH_DIFFER:
+					if (north == south)
+					{
+						primitives_ClippedPaintRect16(surface, rect, north);
+						primitives_ClippedPaintRect16(surface, RECT{rect.left, rect.top, rect.left, rect.bottom}, west,
+								BLEND_WATER);
+						primitives_ClippedPaintRect16(surface, RECT{rect.right, rect.top, rect.right, rect.bottom},
+								east, BLEND_WATER);
+					}
+					else
+					{
+						primitives_ClippedTriangle16(surface, rect, TI_LEFT_TOP, west);
+						primitives_ClippedTriangle16(surface, rect, TI_RIGHT_TOP, north);
+						primitives_ClippedTriangle16(surface, RECT{ rect.left + 1, rect.top, rect.right, rect.bottom},
+								TI_RIGHT_BOTTOM, east);
+						primitives_ClippedPaintRect16(surface,
+								RECT{rect.left + 1, rect.bottom, rect.right, rect.bottom}, south);
+					}
+					break;
+			}
+			break;
+	}
+}
+
+/*
+ * RadarRenderPlayerBorder - implementation
+ */
+RadarMapCell::Type RadarRenderPlayerBorder::GetMapCellValue(const MapPoint & worldPos) const
+{
+	if (!m_player.IsExplored(worldPos)) {
+		return RadarMapCell::createValue(false, false, COLOR_BLACK);
+	}
+
+	sint32 owner = g_tiledMap->GetVisibleCellOwner(worldPos);
+	if ((owner == PLAYER_UNASSIGNED) ||
+		(   // owner is assigned &&
+			owner != m_player.m_owner
+			&& !m_player.m_hasGlobalRadar
+			&& !Scheduler::CachedHasContactWithExceptSelf(m_player.m_owner, owner)
+			&& !g_fog_toggle // Don't forget if fog of war is off
+			&& !g_god
+		))
+	{
+		return RadarMapCell::createValue(true, false, COLOR_BLACK);
+	}
+
+	bool ownerVisible = m_player.m_hasGlobalRadar || m_player.HasContactWith(owner) || g_fog_toggle || g_god;
+	return RadarMapCell::createValue(true, ownerVisible, m_radarProperties.m_displayRelations
+		? DoRadarTileRelationsColor(owner) : g_colorSet->ComputePlayerColor(owner));
+}
+
+void RadarRenderPlayerBorder::RenderCrossing(aui_Surface & surface, const RECT & rect, RadarMapCell::Type * map,
+		sint32 mapPitch) const
+{
+	const RadarMapCell::Type westCell  = RadarMapCell::GetCrossingCell(WEST, map, mapPitch);
+	const RadarMapCell::Type northCell = RadarMapCell::GetCrossingCell(NORTH, map, mapPitch);
+	const RadarMapCell::Type eastCell  = RadarMapCell::GetCrossingCell(EAST, map, mapPitch);
+	const RadarMapCell::Type southCell = RadarMapCell::GetCrossingCell(SOUTH, map, mapPitch);
+
+	const uint32 NONE_EXPLORED  = 0;
+	const uint32 WEST_EXPLORED  = 1;
+	const uint32 NORTH_EXPLORED = 2;
+	const uint32 EAST_EXPLORED  = 4;
+	const uint32 SOUTH_EXPLORED = 8;
+	const uint32 ALL_EXPLORED   = WEST_EXPLORED | NORTH_EXPLORED | EAST_EXPLORED | SOUTH_EXPLORED;
+
+	uint32 explored = RadarMapCell::GetIsExplored(westCell) ? WEST_EXPLORED : 0;
+	explored |= RadarMapCell::GetIsExplored(northCell) ? NORTH_EXPLORED : 0;
+	explored |= RadarMapCell::GetIsExplored(eastCell) ? EAST_EXPLORED : 0;
+	explored |= RadarMapCell::GetIsExplored(southCell) ? SOUTH_EXPLORED : 0;
+
+	Pixel16 west  = RadarMapCell::GetOwnerPixel16(westCell);
+	Pixel16 north = RadarMapCell::GetOwnerPixel16(northCell);
+	Pixel16 east  = RadarMapCell::GetOwnerPixel16(eastCell);
+	Pixel16 south = RadarMapCell::GetOwnerPixel16(southCell);
+
+	switch(explored)
+	{
+		case NONE_EXPLORED:
+			break;
+		case ALL_EXPLORED:
+			RenderCrossingAllExplored(surface, rect, west, north, east, south);
+			break;
+		case WEST_EXPLORED | NORTH_EXPLORED:
+			if (west != north)
+			{
+				sint32 centerRight = (rect.right + rect.left) / 2;
+				sint32 centerBottom = (rect.top + rect.bottom) / 2;
+				if (centerRight == rect.left) {
+					centerRight++;
+				}
+				if (centerBottom == rect.top) {
+					centerBottom++;
+				}
+				if (west == 0)
+				{
+					RenderBorderLine(surface, rect.left, rect.top, centerRight, centerBottom, north);
+				}
+				else
+				{
+					RenderBorderLine(surface, rect.left, rect.top, centerRight, centerBottom, west);
+					RenderBorderLine(surface, rect.left, rect.top - 1, centerRight, centerBottom - 1, north);
+				}
+			}
+			break;
+		case NORTH_EXPLORED | EAST_EXPLORED:
+			if (north != east)
+			{
+				sint32 centerLeft = (rect.right + rect.left) / 2;
+				sint32 centerBottom = (rect.top + rect.bottom) / 2;
+				if (centerLeft == rect.right) {
+					centerLeft--;
+				}
+				if (centerBottom == rect.top) {
+					centerBottom++;
+				}
+				if (east == 0) {
+					RenderBorderLine(surface, centerLeft, centerBottom, rect.right, rect.top, north);
+				}
+				else
+				{
+					RenderBorderLine(surface, centerLeft, centerBottom, rect.right, rect.top, east);
+					RenderBorderLine(surface, centerLeft, centerBottom - 1, rect.right, rect.top - 1, north);
+				}
+			}
+			break;
+		case EAST_EXPLORED | SOUTH_EXPLORED:
+			if (east != south)
+			{
+				sint32 centerLeft = (rect.right + rect.left) / 2;
+				sint32 centerTop = (rect.top + rect.bottom) / 2;
+				if (centerLeft == rect.right) {
+					centerLeft--;
+				}
+				if (centerTop == rect.bottom) {
+					centerTop--;
+				}
+				if (east == 0)
+				{
+					RenderBorderLine(surface, centerLeft, centerTop, rect.right, rect.bottom, south);
+				}
+				else
+				{
+					RenderBorderLine(surface, centerLeft, centerTop, rect.right, rect.bottom, east);
+					RenderBorderLine(surface, centerLeft, centerTop + 1, rect.right, rect.bottom + 1, south);
+				}
+			}
+			break;
+		case SOUTH_EXPLORED | WEST_EXPLORED:
+			if (south != west)
+			{
+				sint32 centerRight = (rect.right + rect.left) / 2;
+				sint32 centerTop = (rect.top + rect.bottom) / 2;
+				if (centerRight == rect.left) {
+					centerRight++;
+				}
+				if (centerTop == rect.bottom) {
+					centerTop--;
+				}
+				if (west == 0) {
+					RenderBorderLine(surface, rect.left, rect.bottom, centerRight, centerTop, south);
+				}
+				else
+				{
+					RenderBorderLine(surface, rect.left, rect.bottom, centerRight, centerTop, west);
+					RenderBorderLine(surface, rect.left, rect.bottom + 1, centerRight, centerTop + 1, south);
+				}
+			}
+			break;
+		case NORTH_EXPLORED | EAST_EXPLORED | SOUTH_EXPLORED:
+			if ((north == south) && (north == east)) { // all equal
+				break;
+			}
+			if (north == south)
+			{
+				RenderBorderLine(surface, rect.right, rect.top, rect.right, rect.bottom, north);
+				RenderBorderLine(surface, rect.right + 1, rect.top, rect.right + 1, rect.bottom, east);
+			}
+			else if (north == east)
+			{
+				if (north == 0) {
+					RenderBorderLine(surface, rect.left, rect.top, rect.right, rect.bottom, south);
+				}
+				else
+				{
+					RenderBorderLine(surface, rect.left, rect.top, rect.right, rect.bottom, north);
+					RenderBorderLine(surface, rect.left, rect.top + 1, rect.right, rect.bottom + 1, south);
+				}
+			}
+			else if (south == east)
+			{
+				if (south == 0) {
+					RenderBorderLine(surface, rect.right, rect.top, rect.left, rect.bottom, north);
+				}
+				else
+				{
+					RenderBorderLine(surface, rect.right, rect.top, rect.left, rect.bottom, south);
+					RenderBorderLine(surface, rect.right, rect.top - 1, rect.left, rect.bottom - 1, north);
+				}
+			}
+			else // all three different
+			{
+				RenderBorderLine(surface, rect.left, rect.top - 1, rect.right, rect.top - 1, north);
+				RenderBorderLine(surface, rect.right + 1, rect.top, rect.right + 1, rect.bottom, east);
+				RenderBorderLine(surface, rect.left, rect.bottom + 1, rect.right, rect.bottom + 1, south);
+			}
+			break;
+		case EAST_EXPLORED | SOUTH_EXPLORED | WEST_EXPLORED:
+			if ((east == west) && (east == south)) { // all equal
+				break;
+			}
+			if (east == west)
+			{
+				RenderBorderLine(surface, rect.left, rect.bottom, rect.right, rect.bottom, east);
+				RenderBorderLine(surface, rect.left, rect.bottom + 1, rect.right, rect.bottom + 1, south);
+			}
+			else if (east == south)
+			{
+				if (east == 0) {
+					RenderBorderLine(surface, rect.right, rect.top, rect.left, rect.bottom, west);
+				}
+				else
+				{
+					RenderBorderLine(surface, rect.right, rect.top, rect.left, rect.bottom, east);
+					RenderBorderLine(surface, rect.right - 1, rect.top, rect.left - 1, rect.bottom, west);
+				}
+			}
+			else if (west == south)
+			{
+				if (west == 0) {
+					RenderBorderLine(surface, rect.left, rect.top, rect.right, rect.bottom, east);
+				}
+				else
+				{
+					RenderBorderLine(surface, rect.left, rect.top, rect.right, rect.bottom, west);
+					RenderBorderLine(surface, rect.left + 1, rect.top, rect.right + 1, rect.bottom, east);
+				}
+			}
+			else // all three different
+			{
+				RenderBorderLine(surface, rect.right + 1, rect.top, rect.right + 1, rect.bottom, east);
+				RenderBorderLine(surface, rect.left, rect.bottom + 1, rect.right, rect.bottom + 1, south);
+				RenderBorderLine(surface, rect.left - 1, rect.top, rect.left - 1, rect.bottom, west);
+			}
+			break;
+		case SOUTH_EXPLORED | WEST_EXPLORED | NORTH_EXPLORED:
+			if ((south == north) && (south == west)) { // all equal
+				break;
+			}
+			if (south == north)
+			{
+				RenderBorderLine(surface, rect.left, rect.top, rect.left, rect.bottom, south);
+				RenderBorderLine(surface, rect.left - 1, rect.top, rect.left - 1, rect.bottom, west);
+			}
+			else if (south == west)
+			{
+				if (south == 0) {
+					RenderBorderLine(surface, rect.left, rect.top, rect.right, rect.bottom, north);
+				}
+				else
+				{
+					RenderBorderLine(surface, rect.left, rect.top, rect.right, rect.top, south);
+					RenderBorderLine(surface, rect.left, rect.top - 1, rect.right, rect.bottom - 1, north);
+				}
+			}
+			else if (north == west)
+			{
+				if (north == 0) {
+					RenderBorderLine(surface, rect.left, rect.bottom, rect.right, rect.top, south);
+				}
+				else
+				{
+					RenderBorderLine(surface, rect.left, rect.bottom, rect.right, rect.top, north);
+					RenderBorderLine(surface, rect.left, rect.bottom + 1, rect.right, rect.top + 1, south);
+				}
+			}
+			else // all three different
+			{
+				RenderBorderLine(surface, rect.left, rect.bottom + 1, rect.right, rect.bottom + 1, south);
+				RenderBorderLine(surface, rect.left - 1, rect.top, rect.left - 1, rect.bottom, west);
+				RenderBorderLine(surface, rect.left, rect.top - 1, rect.right, rect.top - 1, north);
+			}
+			break;
+		case WEST_EXPLORED | NORTH_EXPLORED | EAST_EXPLORED:
+			if ((west == east) && (west == north)) { // all equal
+				break;
+			}
+			if (west == east)
+			{
+				RenderBorderLine(surface, rect.left, rect.top, rect.right, rect.top, west);
+				RenderBorderLine(surface, rect.left, rect.top - 1, rect.right, rect.top - 1, north);
+			}
+			else if (west == north)
+			{
+				if (west == 0) {
+					RenderBorderLine(surface, rect.right, rect.top, rect.left, rect.bottom, east);
+				}
+				else
+				{
+					RenderBorderLine(surface, rect.right, rect.top, rect.left, rect.bottom, west);
+					RenderBorderLine(surface, rect.right + 1, rect.top, rect.left + 1, rect.bottom, east);
+				}
+			}
+			else if (east == north)
+			{
+				if (east == 0) {
+					RenderBorderLine(surface, rect.left, rect.top, rect.right, rect.bottom, west);
+				}
+				else
+				{
+					RenderBorderLine(surface, rect.left, rect.top, rect.right, rect.bottom, east);
+					RenderBorderLine(surface, rect.left - 1, rect.top, rect.right - 1, rect.bottom, west);
+				}
+			}
+			else // all three different
+			{
+				RenderBorderLine(surface, rect.left - 1, rect.top, rect.left - 1, rect.bottom, west);
+				RenderBorderLine(surface, rect.left, rect.top - 1, rect.right, rect.top - 1, north);
+				RenderBorderLine(surface, rect.right + 1, rect.top, rect.right + 1, rect.bottom, east);
+			}
+			break;
+	}
+}
+
+void RadarRenderPlayerBorder::RenderCrossingAllExplored(aui_Surface & surface, const RECT & rect,
+		Pixel16 west, Pixel16 north, Pixel16 east, Pixel16 south) const
+{
+	const uint32 ALL_EQUAL    = 0;
+	const uint32 NORTH_DIFFER = 1;
+	const uint32 EAST_DIFFER  = 2;
+	const uint32 SOUTH_DIFFER = 4;
+
+	uint32 westPattern = (west == north) ? 0 : NORTH_DIFFER;
+	westPattern += (west == east) ? 0 : EAST_DIFFER;
+	westPattern += (west == south) ? 0 : SOUTH_DIFFER;
+	switch (westPattern) {
+		case ALL_EQUAL: // to west
+			// nothing to do
+			break;
+		case NORTH_DIFFER: // from west; east + south equal to west
+			RenderBorderLine(surface, rect.left, rect.top, rect.right, rect.top, west);
+			RenderBorderLine(surface, rect.left, rect.top - 1, rect.right, rect.top - 1, north);
+			break;
+		case EAST_DIFFER: // from west; south + north equal to west
+			RenderBorderLine(surface, rect.right, rect.top, rect.right, rect.bottom, west);
+			RenderBorderLine(surface, rect.right + 1, rect.top, rect.right + 1, rect.bottom, east);
+			break;
+		case SOUTH_DIFFER: // from west; east + north equal to west
+			RenderBorderLine(surface, rect.left, rect.bottom, rect.right, rect.bottom, west);
+			RenderBorderLine(surface, rect.left, rect.bottom + 1, rect.right, rect.bottom + 1, south);
+			break;
+		case NORTH_DIFFER | EAST_DIFFER: // from west; south equal to west
+			if (east == north) {
+				if (east == 0) {
+					RenderBorderLine(surface, rect.left, rect.top, rect.right, rect.bottom, west);
+				} else {
+					RenderBorderLine(surface, rect.left - 1, rect.top, rect.right, rect.bottom + 1, west);
+					RenderBorderLine(surface, rect.left, rect.top, rect.right, rect.bottom, east);
+				}
+			} else {
+				RenderBorderLine(surface, rect.left, rect.top, rect.right, rect.bottom, west);
+				if (east == 0) {
+					RenderBorderLine(surface, rect.left, rect.top - 1, rect.right, rect.top - 1, north);
+				} else {
+					RenderBorderLine(surface, rect.right + 1, rect.top, rect.right + 1, rect.bottom, east);
+					RenderBorderLine(surface, rect.left, rect.top - 1, rect.right, rect.bottom - 1, north);
+					RenderBorderLine(surface, rect.right, rect.top, rect.right, rect.bottom - 1, north);
+				}
+			}
+			break;
+		case NORTH_DIFFER | SOUTH_DIFFER: // from west; east equal to west
+			RenderBorderLine(surface, rect.left, rect.top, rect.right, rect.top, west);
+			RenderBorderLine(surface, rect.left, rect.bottom, rect.right, rect.bottom, west);
+			RenderBorderLine(surface, rect.left, rect.top - 1, rect.right, rect.top - 1, north);
+			RenderBorderLine(surface, rect.left, rect.bottom + 1, rect.right, rect.bottom + 1, south);
+			break;
+		case EAST_DIFFER | SOUTH_DIFFER: // from west; north equal to west
+			if (east == south) {
+				if (west == 0) {
+					RenderBorderLine(surface, rect.left, rect.bottom, rect.right, rect.top, east);
+				} else {
+					RenderBorderLine(surface, rect.left, rect.bottom, rect.right, rect.top, west);
+					RenderBorderLine(surface, rect.left, rect.bottom + 1, rect.right + 1, rect.top, east);
+				}
+			} else {
+				RenderBorderLine(surface, rect.left, rect.bottom, rect.right, rect.top, west);
+				if (east == 0) {
+					RenderBorderLine(surface, rect.left, rect.bottom + 1, rect.right, rect.bottom + 1, south);
+				} else {
+					RenderBorderLine(surface, rect.right + 1, rect.top, rect.right + 1, rect.bottom, east);
+					RenderBorderLine(surface, rect.left, rect.bottom + 1, rect.right, rect.top + 1, south);
+					RenderBorderLine(surface, rect.right, rect.top + 1, rect.right, rect.bottom, south);
+				}
+			}
+			break;
+		case NORTH_DIFFER | EAST_DIFFER | SOUTH_DIFFER: // all differ from west
+			sint32 eastPattern = (east == north) ? 0 : NORTH_DIFFER;
+			eastPattern += (east == south) ? 0 : SOUTH_DIFFER;
+			switch (eastPattern) {
+				case ALL_EQUAL: // to east; and differ from west
+					RenderBorderLine(surface, rect.left, rect.top, rect.left, rect.bottom, east);
+					RenderBorderLine(surface, rect.left - 1, rect.top, rect.left - 1, rect.bottom, west);
+					break;
+				case NORTH_DIFFER: // to east; south equal to east
+					RenderBorderLine(surface, rect.left, rect.bottom, rect.right, rect.top, east);
+					if (west == 0) {
+						RenderBorderLine(surface, rect.left, rect.top - 1, rect.right, rect.top - 1, north);
+					} else {
+						RenderBorderLine(surface, rect.left - 1, rect.top, rect.left - 1, rect.bottom, west);
+						RenderBorderLine(surface, rect.left, rect.bottom - 1, rect.right, rect.top - 1, north);
+						RenderBorderLine(surface, rect.left, rect.bottom - 1, rect.left, rect.top, north);
+					}
+					break;
+				case SOUTH_DIFFER: // to east; north equal to east
+					RenderBorderLine(surface, rect.left, rect.top, rect.right, rect.bottom, east);
+					if (west == 0) {
+						RenderBorderLine(surface, rect.left, rect.bottom + 1, rect.right, rect.bottom + 1, south);
+					} else {
+						RenderBorderLine(surface, rect.left - 1, rect.top, rect.left - 1, rect.bottom, west);
+						RenderBorderLine(surface, rect.left, rect.top + 1, rect.right, rect.bottom + 1, south);
+						RenderBorderLine(surface, rect.left, rect.top + 1, rect.left, rect.bottom, south);
+					}
+					break;
+				case NORTH_DIFFER | SOUTH_DIFFER: // to east; all differ to west and east
+					if (north == south) {
+						RenderBorderLine(surface, rect.left, rect.top, rect.left, rect.bottom, north);
+						RenderBorderLine(surface, rect.right, rect.top, rect.right, rect.bottom, north);
+						RenderBorderLine(surface, rect.left - 1, rect.top, rect.left - 1, rect.bottom, west);
+						RenderBorderLine(surface, rect.right + 1, rect.top, rect.right + 1, rect.bottom, east);
+					} else {
+						RenderBorderLine(surface, rect.left, rect.top + 1, rect.left, rect.bottom - 1, west);
+						RenderBorderLine(surface, rect.left + 1, rect.top, rect.right - 1 , rect.top, north);
+						RenderBorderLine(surface, rect.right, rect.top + 1, rect.right, rect.bottom - 1, east);
+						RenderBorderLine(surface, rect.left + 1, rect.bottom, rect.right - 1, rect.bottom, south);
+					}
+					break;
+			}
+			break;
+	}
+}
+
+/*
+ * RadarRenderOverlay
+ */
+void RadarRenderOverlay::Render(aui_Surface & surface, const MapPoint & radarOffset) const
+{
+	MapPoint radarPos = radarOffset;
+	for (sint32 y = 0; y < m_mapSize.y; y++)
+	{
+		for (sint32 x = 0; x < m_mapSize.x; x++)
+		{
+			const MapPoint worldPos(x,y);
+			if (m_player.IsExplored(worldPos))
+			{
+				const MapPointDouble screenPosition = GetScreenPosition(radarPos);
+				RenderCity(surface, worldPos, screenPosition);
+				RenderUnit(surface, worldPos, screenPosition);
+				RenderCapitol(surface, worldPos, screenPosition);
+				RenderTrade(surface, worldPos, screenPosition);
+			}
+			radarPos.x++;
+			if (radarPos.x >= m_mapSize.x) {
+				radarPos.x = 0;
+			}
+		}
+
+		radarPos.y++;
+		if (radarPos.y >= m_mapSize.y) {
+			radarPos.y = 0;
+		}
+	}
+}
+
+void RadarRenderOverlay::RenderSingleTile(aui_Surface & surface, const MapPoint & worldPos,
+		const MapPoint & radarPos) const
+{
+	if (m_player.IsExplored(worldPos)) {
+		const MapPointDouble screenPosition = GetScreenPosition(radarPos);
+		RenderUnit(surface, worldPos, screenPosition);
+		RenderCapitol(surface, worldPos, screenPosition);
+		RenderTrade(surface, worldPos, screenPosition);
+	}
+}
+
+void RadarRenderOverlay::RenderCity(aui_Surface & surface, const MapPoint & worldPos,
+		const MapPointDouble & screenPosition) const
+{
+	if (m_radarProperties.m_displayCities && g_tiledMap->HasVisibleCity(worldPos)) {
+		const Pixel16 color = g_colorSet->GetColor(COLOR_WHITE);
+		const uint8 alpha = 128;
+
+		sint32 x1 = static_cast<sint32>(screenPosition.x);
+		sint32 x2 = x1 + static_cast<sint32>(m_tileSize.x / 2.0);
+		sint32 y1 = static_cast<sint32>(screenPosition.y);
+		sint32 y2 = y1 + static_cast<sint32>(m_tileSize.y);
+
+		primitives_ClippedPaintRect16(surface, RECT { x1, y1, x2, y2}, color);
+		primitives_ClippedPaintRect16(surface, RECT { x1 - 1, y1, x1 - 1, y2 }, color, alpha);
+		primitives_ClippedPaintRect16(surface, RECT { x1, y1 - 1, x2, y1 - 1 }, color, alpha);
+		primitives_ClippedPaintRect16(surface, RECT { x2 + 1, y1, x2 + 1, y2 }, color, alpha);
+		primitives_ClippedPaintRect16(surface, RECT { x1, y2 + 1, x2, y2 + 1 }, color, alpha);
+	}
+}
+
+void RadarRenderOverlay::RenderUnit(aui_Surface & surface, const MapPoint & worldPos,
+		const MapPointDouble & screenPosition) const
+{
+	Unit unit;
+	if (m_radarProperties.m_displayUnits
+		&& (g_theWorld->GetTopVisibleUnit(worldPos, unit) || g_theWorld->GetTopRadarUnit(worldPos, unit)))
+	{
+		COLOR unitColor =  m_radarProperties.m_displayRelations ? RadarTileRelationsColor(worldPos, unit.GetOwner()) :
+				g_colorSet->ComputePlayerColor(unit.GetOwner());
+
+		sint32 x1 = static_cast<sint32>(screenPosition.x);
+		sint32 x2 = x1 + static_cast<sint32>(m_tileSize.x / 2.0);
+		sint32 y1 = static_cast<sint32>(screenPosition.y);
+		sint32 y2 = y1 + static_cast<sint32>(m_tileSize.y);
+		primitives_ClippedPaintRect16(surface, RECT { x1, y1, x2, y2}, g_colorSet->GetColor(unitColor));
+	}
+}
+
+void RadarRenderOverlay::RenderCapitol(aui_Surface & surface, const MapPoint & worldPos,
+		const MapPointDouble & screenPosition) const
+{
+	if (!m_radarProperties.m_displayCapitols) {
+		return;
+	}
+
+	Unit unit;
+	if (!g_theWorld->GetTopVisibleUnit(worldPos, unit) || !g_theWorld->GetTopRadarUnit(worldPos, unit)) {
+		return;
+	}
+
+	if (!unit.IsValid() || !unit.IsCity() || !unit.IsCapitol()) {
+		return;
+	}
+
+	const Pixel16 color = g_colorSet->GetColor(COLOR_ORANGE);
+
+	sint32 x1 = static_cast<sint32>(screenPosition.x);
+	sint32 x2 = x1 + static_cast<sint32>(m_tileSize.x / 2.0);
+	sint32 y1 = static_cast<sint32>(screenPosition.y);
+	sint32 y2 = y1 + static_cast<sint32>(m_tileSize.y);
+
+	primitives_ClippedPaintRect16(surface, RECT { x1 - 2, y1, x2 + 2, y2}, color);
+	primitives_ClippedPaintRect16(surface, RECT { x1, y1 - 2, x2, y2 + 2}, color);
+}
+
+void RadarRenderOverlay::RenderTrade(aui_Surface & surface, const MapPoint & worldPos,
+		const MapPointDouble & screenPosition) const
+{
+	if (!m_radarProperties.m_displayTrade) {
+		return;
+	}
+
+	bool seenTrade= false;
+	for (sint32 i = 0; i < g_theWorld->GetCell(worldPos)->GetNumTradeRoutes(); i++)
+	{
+		TradeRoute route = g_theWorld->GetCell(worldPos)->GetTradeRoute(i);
+		if (route.SeenBy(m_player.GetOwner()))
+		{
+			seenTrade= true;
+			break;
+		}
+	}
+	if (!seenTrade) {
+		return;
+	}
+
+	RECT rect = {
+			screenPosition.x, screenPosition.y,
+			screenPosition.x + (m_tileSize.x / 2.0),screenPosition.y + m_tileSize.y
+	};
+	RenderTradeRoute(surface, rect);
+}
+
+void RadarRenderOverlay::RenderTradeRoute(aui_Surface & surface, const RECT & rect) const
+{
+	sint32 midX = (rect.left + rect.right) / 2;
+	sint32 midY = (rect.top + rect.bottom) / 2;
+	RECT tradeRect = { midX, midY, midX, midY };
+
+	primitives_ClippedPaintRect16(surface, tradeRect, g_colorSet->GetColor(COLOR_YELLOW));
+}
 
 //---------------------------------------------------------------------------
 //
@@ -128,10 +1605,10 @@ RadarMap::RadarMap(AUI_ERRCODE * errCode, uint32 id, sint32 x, sint32 y, sint32 
 //---------------------------------------------------------------------------
 RadarMap::~RadarMap()
 {
-	delete[] m_mapOverlay;
+	delete[] m_radarProperties.m_mapOverlay;
 	delete m_mapSurface;
 
-	free(m_colorMap);
+	free(m_mapTexture);
 }
 
 //---------------------------------------------------------------------------
@@ -160,22 +1637,22 @@ void RadarMap::InitCommon()
 	m_mapSurface = NULL;
 	m_mapSize = NULL;
 
-	m_colorMap = NULL;
+	m_mapTexture = NULL;
 
 	m_tilePixelWidth = 0.0;
 	m_tilePixelHeight = 0.0;
 
-	m_displayUnits = g_theProfileDB->GetDisplayUnits() != FALSE;
-	m_displayCities = g_theProfileDB->GetDisplayCities() != FALSE;
-	m_displayBorders = g_theProfileDB->GetDisplayBorders() != FALSE;
-	m_displayOverlay = true;
-	m_displayTrade = g_theProfileDB->GetDisplayTrade() != FALSE;
-	m_displayTerrain = g_theProfileDB->GetDisplayTerrain() != FALSE;
-	m_displayPolitical = g_theProfileDB->GetDisplayPolitical() != FALSE;
-	m_displayCapitols = g_theProfileDB->GetDisplayCapitols() != FALSE;
-	m_displayRelations = g_theProfileDB->GetDisplayRelations() != FALSE;
+	m_radarProperties.m_displayUnits = g_theProfileDB->GetDisplayUnits() != FALSE;
+	m_radarProperties.m_displayCities = g_theProfileDB->GetDisplayCities() != FALSE;
+	m_radarProperties.m_displayBorders = g_theProfileDB->GetDisplayBorders() != FALSE;
+	m_radarProperties.m_displayOverlay = true;
+	m_radarProperties.m_displayTrade = g_theProfileDB->GetDisplayTrade() != FALSE;
+	m_radarProperties.m_displayTerrain = g_theProfileDB->GetDisplayTerrain() != FALSE;
+	m_radarProperties.m_displayPolitical = g_theProfileDB->GetDisplayPolitical() != FALSE;
+	m_radarProperties.m_displayCapitols = g_theProfileDB->GetDisplayCapitols() != FALSE;
+	m_radarProperties.m_displayRelations = g_theProfileDB->GetDisplayRelations() != FALSE;
 
-	m_mapOverlay = NULL;
+	m_radarProperties.m_mapOverlay = NULL;
 
 	MapPoint resetPos (0,0);
 	m_lastCenteredPoint = resetPos;
@@ -206,8 +1683,8 @@ void RadarMap::InitCommon()
 //---------------------------------------------------------------------------
 void RadarMap::ClearMapOverlay(void)
 {
-	delete [] m_mapOverlay;
-	m_mapOverlay = NULL;
+	delete [] m_radarProperties.m_mapOverlay;
+	m_radarProperties.m_mapOverlay = NULL;
 }
 
 //---------------------------------------------------------------------------
@@ -221,17 +1698,17 @@ void RadarMap::ClearMapOverlay(void)
 //---------------------------------------------------------------------------
 void RadarMap::SetMapOverlayCell(const MapPoint & pos, COLOR color)
 {
-	if (!m_mapOverlay)
+	if (!m_radarProperties.m_mapOverlay)
 	{
 		sint32 len = m_mapSize->x * m_mapSize->y;
-		m_mapOverlay = new COLOR[len];
+		m_radarProperties.m_mapOverlay = new COLOR[len];
 
 		for (sint32 i=0; i<len; i++) {
-			m_mapOverlay[i] = COLOR_MAX;
+			m_radarProperties.m_mapOverlay[i] = COLOR_MAX;
 		}
 	}
 
-	m_mapOverlay[pos.x + (pos.y * m_mapSize->x)] = color;
+	m_radarProperties.m_mapOverlay[pos.x + (pos.y * m_mapSize->x)] = color;
 }
 
 //---------------------------------------------------------------------------
@@ -271,8 +1748,8 @@ void RadarMap::CalculateMetrics()
 		return;
 	}
 
-	free(m_colorMap);
-	m_colorMap = NULL;
+	free(m_mapTexture);
+	m_mapTexture = NULL;
 
 	m_mapSize = g_theWorld->GetSize();
 
@@ -282,7 +1759,7 @@ void RadarMap::CalculateMetrics()
 	uint32 width = m_mapSize->x * 2;
 	uint32 height = m_mapSize->y;
 
-	m_colorMap  = (Pixel16*) malloc((width + 2) * (height + 2) * sizeof(Pixel16));
+	m_mapTexture = malloc((width + 2) * (height + 4) * sizeof(RadarMapCell::Type));
 }
 
 //---------------------------------------------------------------------------
@@ -309,636 +1786,6 @@ Player * RadarMap::GetVisiblePlayerToRender()
 
 //---------------------------------------------------------------------------
 //
-//	RadarMap::RadarTileBorderColor
-//
-//---------------------------------------------------------------------------
-//	- Checks which color a border must be drawn for the current tile
-//
-//---------------------------------------------------------------------------
-Pixel16 RadarMap::RadarTileBorderColor(const MapPoint & position, const Player & player)
-{
-	sint32 owner = g_tiledMap->GetVisibleCellOwner(position);
-	if (owner < 0) {
-		return g_colorSet->GetDarkColor(COLOR_WHITE);
-	}
-
-	if (m_displayRelations) {
-		return g_colorSet->GetColor(RadarTileRelationsColor(position, player));
-	}
-	else {
-		return g_colorSet->GetPlayerColor(owner);
-	}
-}
-
-COLOR RadarMap::RadarTileRelationsColor(const MapPoint & position, const Player & player, sint32 unitOwner)
-{
-	Assert(m_displayRelations);
-
-	COLOR color = COLOR_WHITE;
-
-	sint32 owner = unitOwner < 0 ? g_tiledMap->GetVisibleCellOwner(position) : unitOwner;
-	if (owner >= 0)
-	{
-		if (player.m_owner == owner || player.HasAllianceWith(owner)) {
-			color = COLOR_BLUE;
-		} else if (player.HasWarWith(owner)) {
-			color = COLOR_RED;
-		} else if (player.HasPeaceTreatyWith(owner) || player.HasAnyPactWith(owner)) {
-			color = COLOR_GREEN;
-		} else if (player.HasContactWith(owner)) {
-			color = COLOR_YELLOW;
-		}
-	}
-	return color;
-}
-
-//---------------------------------------------------------------------------
-//
-//	RadarMap::RadarTileBorder
-//
-//---------------------------------------------------------------------------
-//	- Checks which borders must be drawn for the current tile
-//
-//---------------------------------------------------------------------------
-uint8 RadarMap::RadarTileBorder(const Player & player, const MapPoint & position)
-{
-	uint8 borderFlags = 0;
-	if (!m_displayBorders) {
-		return borderFlags;
-	}
-
-	if (!player.IsExplored(position)) {
-		return borderFlags;
-	}
-
-	// Added by Martin Gühmann
-	sint32 owner = g_tiledMap->GetVisibleCellOwner(const_cast<MapPoint&>(position));
-	if (owner < 0) {
-		return borderFlags;
-	}
-
-	if (owner != player.m_owner
-			&& !player.m_hasGlobalRadar
-			&& !Scheduler::CachedHasContactWithExceptSelf(player.m_owner, owner)
-			&& !g_fog_toggle // Don't forget if fog of war is off
-			&& !g_god)
-	{
-		return borderFlags;
-	}
-
-	for (auto neighborDirection : NEIGHBOR_DIRECTIONS)
-	{
-		MapPoint neighborPosition;
-		if (position.GetNeighborPosition(neighborDirection, neighborPosition) &&
-			(g_tiledMap->GetVisibleCellOwner(neighborPosition) != owner))
-		{
-			borderFlags |= (1 << neighborDirection);
-		}
-	}
-
-	return borderFlags;
-}
-
-//---------------------------------------------------------------------------
-//
-//	RadarMap::RenderTradeRoute
-//
-//---------------------------------------------------------------------------
-//	- Draws a trade route sign for the current tile
-//
-//---------------------------------------------------------------------------
-void RadarMap::RenderTradeRoute(aui_Surface & surface, const RECT & tileRectangle)
-{
-	sint32 midX = (tileRectangle.left + tileRectangle.right) / 2;
-	sint32 midY = (tileRectangle.top + tileRectangle.bottom) / 2;
-	RECT tradeRect = { midX, midY, midX, midY };
-
-	primitives_ClippedPaintRect16(surface, tradeRect, g_colorSet->GetColor(COLOR_YELLOW));
-}
-
-//---------------------------------------------------------------------------
-//
-//	RadarMap::RenderCapitol
-//
-//---------------------------------------------------------------------------
-//	- Draws a Capitol marker for the current tile
-//
-//---------------------------------------------------------------------------
-void RadarMap::RenderCapitol(aui_Surface & surface, const MapPoint & position, const MapPoint & worldPos,
-		const Player & player)
-{
-	if (!m_displayCapitols || !player.IsExplored(worldPos)) {
-		return;
-	}
-
-	Unit unit;
-	if (!g_theWorld->GetTopVisibleUnit(worldPos, unit) || !g_theWorld->GetTopRadarUnit(worldPos, unit)) {
-		return;
-	}
-
-	if (!unit.IsValid() || !unit.IsCity() || !unit.IsCapitol()) {
-		return;
-	}
-
-	MapPoint screenPosition(((worldPos.y / 2) + position.x) % (m_mapSize->x), position.y);
-	double xPosition = screenPosition.x * m_tilePixelWidth;
-	double yPosition = screenPosition.y * m_tilePixelHeight;
-
-	double halfTilePixelWidth = m_tilePixelWidth / 2.0;
-	if (screenPosition.y & 1) {
-		xPosition += halfTilePixelWidth;
-	}
-
-	//Now to build the "star"
-	RECT horizontal = {
-		xPosition - halfTilePixelWidth, yPosition,
-		xPosition + m_tilePixelWidth - 1, yPosition + m_tilePixelHeight - 1
-	};
-
-	RECT vertical = {
-		xPosition, yPosition - m_tilePixelHeight,
-		xPosition + halfTilePixelWidth - 1, yPosition + 2 * m_tilePixelHeight - 1
-	};
-
-	primitives_ClippedPaintRect16(surface, vertical, g_colorSet->GetColor(COLOR_ORANGE));
-	primitives_ClippedPaintRect16(surface, horizontal, g_colorSet->GetColor(COLOR_ORANGE));
-}
-
-//---------------------------------------------------------------------------
-//
-//	RadarMap::RenderMapTileBorder
-//
-//---------------------------------------------------------------------------
-//	- Controls which method renders the current radar map
-//    borders
-//
-//---------------------------------------------------------------------------
-void RadarMap::RenderMapTileBorder(aui_Surface & surface, const MapPoint & position, uint8 borderFlags,
-                                   Pixel16 borderColor)
-{
-	double xPosition = position.x * m_tilePixelWidth;
-	double yPosition = position.y * m_tilePixelHeight;
-	if (position.y & 1) {
-		xPosition += m_tilePixelWidth / 2.0;
-	}
-
-	RECT tileRectangle = { xPosition, yPosition, xPosition + m_tilePixelWidth, yPosition + m_tilePixelHeight };
-	sint32 middleX = xPosition + m_tilePixelWidth / 2.0;
-
-	sint32 eastFlags = borderFlags & (k_EAST_BORDER_FLAG | k_NORTH_EAST_BORDER_FLAG | k_SOUTH_EAST_BORDER_FLAG);
-	if (eastFlags == 0) {
-		// skip
-	} else if (eastFlags == (k_EAST_BORDER_FLAG | k_NORTH_EAST_BORDER_FLAG | k_SOUTH_EAST_BORDER_FLAG)) {
-		primitives_ClippedLine16(surface, middleX, tileRectangle.top, middleX, tileRectangle.bottom, borderColor);
-	} else if (eastFlags == k_EAST_BORDER_FLAG) {
-		primitives_ClippedLine16(surface, tileRectangle.right, tileRectangle.top, tileRectangle.right,
-				tileRectangle.bottom, borderColor);
-	} else if (eastFlags == (k_EAST_BORDER_FLAG | k_NORTH_EAST_BORDER_FLAG)) {
-		primitives_ClippedLine16(surface, middleX, tileRectangle.top, tileRectangle.right, tileRectangle.bottom,
-				borderColor);
-	} else if (eastFlags == (k_EAST_BORDER_FLAG | k_SOUTH_EAST_BORDER_FLAG)) {
-		primitives_ClippedLine16(surface, tileRectangle.right, tileRectangle.top, middleX, tileRectangle.bottom,
-				borderColor);
-	} else if (eastFlags == k_NORTH_EAST_BORDER_FLAG) {
-		primitives_ClippedLine16(surface, middleX, tileRectangle.top, tileRectangle.right, tileRectangle.top,
-				borderColor);
-	} else if (eastFlags == k_SOUTH_EAST_BORDER_FLAG) {
-		primitives_ClippedLine16(surface, middleX, tileRectangle.bottom, tileRectangle.right, tileRectangle.bottom,
-				borderColor);
-	}
-
-	sint32 westFlags = borderFlags & (k_WEST_BORDER_FLAG | k_NORTH_WEST_BORDER_FLAG | k_SOUTH_WEST_BORDER_FLAG);
-	if (westFlags == 0) {
-		// skip
-	} else if (westFlags == (k_WEST_BORDER_FLAG | k_NORTH_WEST_BORDER_FLAG | k_SOUTH_WEST_BORDER_FLAG)) {
-		primitives_ClippedLine16(surface, middleX, tileRectangle.top, middleX, tileRectangle.bottom, borderColor);
-	} else if (westFlags == k_WEST_BORDER_FLAG) {
-		primitives_ClippedLine16(surface, tileRectangle.left, tileRectangle.top, tileRectangle.left,
-				tileRectangle.bottom, borderColor);
-	} else if (westFlags == (k_WEST_BORDER_FLAG | k_NORTH_WEST_BORDER_FLAG)) {
-		primitives_ClippedLine16(surface, tileRectangle.left, tileRectangle.bottom, middleX, tileRectangle.top,
-				borderColor);
-	} else if (westFlags == (k_WEST_BORDER_FLAG | k_SOUTH_WEST_BORDER_FLAG)) {
-		primitives_ClippedLine16(surface, tileRectangle.left, tileRectangle.top, middleX, tileRectangle.bottom,
-				borderColor);
-	} else if (westFlags == k_SOUTH_WEST_BORDER_FLAG) {
-		primitives_ClippedLine16(surface, tileRectangle.left, tileRectangle.bottom, middleX, tileRectangle.bottom,
-				borderColor);
-	} else if (westFlags == k_NORTH_WEST_BORDER_FLAG) {
-		primitives_ClippedLine16(surface, tileRectangle.left, tileRectangle.top, middleX, tileRectangle.top,
-				borderColor);
-	}
-}
-
-void RadarMap::RenderTiles(aui_Surface & surface)
-{
-	double tileWidth  = m_tilePixelWidth;
-	double tileHeight = m_tilePixelHeight;
-
-	MapPoint worldPos(0, 0);
-	MapPoint radarOffset = PosWorldToPosRadar(worldPos);
-	bool     oddY        = radarOffset.y & 1;
-	double   startX      = (radarOffset.x + (radarOffset.y / 2)) * tileWidth + (oddY ? (tileWidth / 2.0) : 0.0);
-	double   y           = radarOffset.y * tileHeight;
-
-	sint32    colorMapPitch = m_mapSize->x + 2;
-	Pixel16 * colorMap      = m_colorMap + 1 + colorMapPitch;
-	Pixel16 * endColorMap   = colorMap + m_mapSize->y * colorMapPitch;
-	for (; colorMap < endColorMap; colorMap += colorMapPitch, worldPos.y++)
-	{
-		if (y > (m_height - 1)) {
-			y -= m_height;
-		}
-
-		sint32 y1 = static_cast<sint32>(y);
-		y += tileHeight;
-		sint32 y2 = static_cast<sint32>(y);
-
-		double x = startX;
-		worldPos.x = 0;
-
-		Pixel16 * endColorMapRow = colorMap + m_mapSize->x;
-		for (Pixel16 * colorMapRow = colorMap; colorMapRow < endColorMapRow; colorMapRow++, worldPos.x++)
-		{
-			bool isLand = (g_theWorld->IsLand(worldPos) || g_theWorld->IsMountain(worldPos))
-					&& !g_theWorld->IsTunnel(worldPos);
-
-			if (x > (m_width - 1)) { // - 1 to prevent rounding errors
-				x -= m_width;
-			}
-
-			sint32 x1 = static_cast<sint32>(x);
-			x += tileWidth;
-			sint32 x2 = static_cast<sint32>(x);
-			if ((x1 <= tileWidth) && oddY) { // first row, render also crossing before
-				RenderTileCrossing(surface, RECT { 0, y1, x1 - 1, y2 - 1 }, colorMapRow - 1, isLand);
-			}
-			RenderTile(surface, RECT { x1, y1, x2, y2 }, colorMapRow, isLand);
-		}
-
-		oddY = !oddY;
-		startX += (tileWidth / 2.0);
-		if (startX > (m_width - 1)) { // - 1 to prevent rounding errors
-			startX -= m_width;
-		}
-	}
-}
-
-void RadarMap::RenderTile(aui_Surface & surface, const RECT & tileRectangle, Pixel16 * colorMap, bool isLand)
-{
-	sint32 split = (tileRectangle.left + tileRectangle.right - 1) / 2;
-	RECT renderRect = { tileRectangle.left, tileRectangle.top, split, tileRectangle.bottom - 1 };
-	primitives_ClippedPaintRect16(surface, renderRect, *colorMap);
-
-	renderRect.left  = renderRect.right + 1;
-	renderRect.right = tileRectangle.right - 1;
-	RenderTileCrossing(surface, renderRect, colorMap, isLand);
-}
-
-void RadarMap::RenderTileCrossing(aui_Surface & surface, const RECT & rect, Pixel16 * colorMap, bool isLand)
-{
-	const uint8 alpha = 128;
-	Pixel16 current = *colorMap;
-	Pixel16 above   = *(colorMap + 1 - (m_mapSize->x + 2));
-	Pixel16 right   = *(colorMap + 1);
-	Pixel16 below   = *(colorMap + (m_mapSize->x + 2));
-
-	if ((current == above) && (above == right) && (right == below)) { // all same color
-		primitives_ClippedPaintRect16(surface, rect, current);
-	}
-	else if ((current == above && current == right) || (current == right && current == below)
-			|| (current == above && current == below)) // two others same as current
-	{
-		primitives_ClippedPaintRect16(surface, rect, current);
-		if (current != above) {
-			primitives_ClippedPaintRect16(surface, RECT {rect.left, rect.top, rect.right, rect.top },
-					above, alpha);
-		} else if (current != right) {
-			primitives_ClippedPaintRect16(surface, RECT {rect.right, rect.top, rect.right, rect.bottom },
-					right, alpha);
-		} else { // below differs
-			primitives_ClippedPaintRect16(surface, RECT {rect.left, rect.bottom, rect.right, rect.bottom },
-					below, alpha);
-		}
-	}
-	else if ((above == right) && (right == below)) // three same colors, different from current
-	{
-		primitives_ClippedPaintRect16(surface, rect, above);
-		primitives_ClippedPaintRect16(surface, RECT {rect.left, rect.top, rect.left, rect.bottom },
-				current, alpha);
-	}
-	else if (current == above) // two same colors
-	{
-		primitives_ClippedPaintRect16(surface, rect, current);
-		if (right == below) {
-			primitives_ClippedTriangle16(surface, rect, TI_RIGHT_BOTTOM, right);
-		}
-		else
-		{
-			primitives_ClippedPaintRect16(surface, RECT {rect.right, rect.top, rect.right, rect.bottom},
-					right, alpha);
-			primitives_ClippedPaintRect16(surface, RECT {rect.left, rect.bottom, rect.left, rect.bottom},
-					below, alpha);
-		}
-	}
-	else if (current == below) // two same colors
-	{
-		primitives_ClippedPaintRect16(surface, rect, current);
-		if (above == right) {
-			primitives_ClippedTriangle16(surface, rect, TI_RIGHT_TOP, above);
-		}
-		else
-		{
-			primitives_ClippedPaintRect16(surface, RECT {rect.left, rect.top, rect.right, rect.top },
-					above, alpha);
-			primitives_ClippedPaintRect16(surface, RECT {rect.right, rect.top, rect.right, rect.bottom },
-					right, alpha);
-		}
-	}
-	else if (above == right) // two same colors, current != below as is already tested
-	{
-		primitives_ClippedPaintRect16(surface, rect, above);
-		primitives_ClippedPaintRect16(surface, RECT {rect.left, rect.top, rect.left, rect.bottom },
-				current, alpha);
-		primitives_ClippedPaintRect16(surface, RECT {rect.left, rect.bottom, rect.right, rect.bottom },
-				below, alpha);
-	}
-	else if (right == below) // two same colors, current != above as is already tested
-	{
-		primitives_ClippedPaintRect16(surface, rect, right);
-		primitives_ClippedPaintRect16(surface, RECT {rect.left, rect.top, rect.left, rect.bottom },
-				current, alpha);
-		primitives_ClippedPaintRect16(surface, RECT {rect.left, rect.top, rect.right, rect.top },
-				above, alpha);
-	}
-	else if (current == right) // two same colors, opposite
-	{
-		if (isLand || (above != below))
-		{
-			primitives_ClippedPaintRect16(surface, rect, current);
-			primitives_ClippedPaintRect16(surface, RECT{ rect.left, rect.top, rect.right, rect.top },
-					above, alpha);
-			primitives_ClippedPaintRect16(surface, RECT{ rect.left, rect.bottom, rect.right, rect.bottom },
-					below, alpha);
-		}
-		else { // not isLand and above == below
-			primitives_ClippedPaintRect16(surface, rect, above);
-			primitives_ClippedPaintRect16(surface, RECT{ rect.left, rect.top, rect.left, rect.bottom },
-					current, alpha);
-			primitives_ClippedPaintRect16(surface, RECT{ rect.right, rect.top, rect.right, rect.bottom },
-					right, alpha);
-		}
-	}
-	else if (above == below) // two same colors, opposite
-	{
-		primitives_ClippedPaintRect16(surface, rect, above);
-		primitives_ClippedPaintRect16(surface, RECT { rect.left, rect.top, rect.left, rect.bottom },
-				current, alpha);
-		primitives_ClippedPaintRect16(surface, RECT { rect.right, rect.top, rect.right, rect.bottom },
-				right, alpha);
-	}
-	else // four different colors
-	{
-		if (isLand)
-		{
-			primitives_ClippedPaintRect16(surface, rect, current);
-			primitives_ClippedPaintRect16(surface, RECT{ rect.right, rect.top, rect.right, rect.bottom },
-					right, alpha);
-		}
-		else // arbitrary choice to give preference to right over above and bottom
-		{
-			primitives_ClippedPaintRect16(surface, rect, right);
-			primitives_ClippedPaintRect16(surface, RECT{ rect.left, rect.top, rect.left, rect.bottom },
-					current, alpha);
-		}
-		primitives_ClippedPaintRect16(surface, RECT { rect.left, rect.top, rect.right, rect.top },
-				above, alpha);
-		primitives_ClippedPaintRect16(surface, RECT { rect.left, rect.bottom, rect.right, rect.bottom },
-				below, alpha);
-	}
-}
-
-//---------------------------------------------------------------------------
-//
-//	RadarMap::RenderTileBorder
-//
-//---------------------------------------------------------------------------
-//	- Controls the rendering of the borders for the current radar map
-//    position
-//---------------------------------------------------------------------------
-void RadarMap::RenderTileBorder(aui_Surface & surface, const MapPoint & position, const MapPoint & worldPos,
-		const Player & player)
-{
-	uint8 borderFlags = RadarTileBorder(player, worldPos);
-
-	if (borderFlags)
-	{
-		Pixel16 borderColor = RadarTileBorderColor(worldPos, player);
-		sint32 x = ((position.y / 2) + position.x) % m_mapSize->x;
-		RenderMapTileBorder(surface, MapPoint(x, position.y), borderFlags, borderColor);
-	}
-}
-
-//---------------------------------------------------------------------------
-//
-//	RadarMap::RenderTrade
-//
-//---------------------------------------------------------------------------
-//  - Prepares and call the rendering of the trade routes
-//
-//---------------------------------------------------------------------------
-void RadarMap::RenderTrade(aui_Surface & surface, const MapPoint & position, const MapPoint & worldPos,
-		const Player & player)
-{
-	if (!m_displayTrade || !player.IsExplored(worldPos)) {
-		return;
-	}
-
-	bool seenTrade= false;
-	for (sint32 i = 0; i < g_theWorld->GetCell(worldPos)->GetNumTradeRoutes(); i++)
-	{
-		TradeRoute route = g_theWorld->GetCell(worldPos)->GetTradeRoute(i);
-		if (route.SeenBy(g_selected_item->GetVisiblePlayer()))
-		{
-			seenTrade= true;
-			break;
-		}
-	}
-
-	if (!seenTrade) {
-		return;
-	}
-
-	MapPoint screenPosition(((worldPos.y / 2) + position.x) % (m_mapSize->x), position.y);
-	double xPosition = screenPosition.x * m_tilePixelWidth;
-	double yPosition = screenPosition.y * m_tilePixelHeight;
-
-	double halfTilePixelWidth = m_tilePixelWidth / 2.0;
-	if (screenPosition.y & 1) {
-		xPosition += halfTilePixelWidth;
-	}
-
-	RECT tileRectangle = { xPosition, yPosition, xPosition + halfTilePixelWidth, yPosition + m_tilePixelHeight };
-	RenderTradeRoute(surface, tileRectangle);
-}
-
-Pixel16 RadarMap::MapTileColor(const Player & player, const MapPoint & position, const MapPoint & worldPos)
-{
-	Unit unit;
-
-	bool  darken = false;
-	COLOR color  = COLOR_BLACK;
-
-	if (player.IsExplored(worldPos))
-	{
-		sint32 owner = g_theWorld->GetOwner(worldPos);
-
-		if (m_displayOverlay && m_mapOverlay) {
-			color = m_mapOverlay[worldPos.y * m_mapSize->x + worldPos.x];
-		}
-		else if (m_displayCities && g_tiledMap->HasVisibleCity(worldPos)) {
-			color = COLOR_WHITE;
-		}
-		else if (m_displayUnits
-				&& (g_theWorld->GetTopVisibleUnit(worldPos, unit) || g_theWorld->GetTopRadarUnit(worldPos, unit)))
-		{
-			if (m_displayRelations) {
-				color = RadarTileRelationsColor(worldPos, player, unit.GetOwner());
-			}
-			else {
-				color = g_colorSet->ComputePlayerColor(unit.GetOwner());
-			}
-		}
-		else if (m_displayPolitical && !g_theWorld->IsWater(worldPos) )
-		{
-			if (owner < 0 || !player.HasContactWith(owner))
-			{
-				color = static_cast<COLOR>(COLOR_TERRAIN_0 + TERRAIN_GRASSLAND);
-			}
-			else if (m_displayRelations) {
-				color = RadarTileRelationsColor(worldPos, player);
-			}
-			else {
-				color = g_colorSet->ComputePlayerColor(g_tiledMap->GetVisibleCellOwner(worldPos));
-			}
-		}
-		else if (m_displayTerrain) {
-			color = static_cast<COLOR>(COLOR_TERRAIN_0 + g_tiledMap->GetVisibleTerrainType(worldPos));
-		}
-		else
-		{
-			if ((g_theWorld->IsLand(worldPos) || g_theWorld->IsMountain(worldPos)) && !g_theWorld->IsTunnel(worldPos))
-			{
-				color = static_cast<COLOR>(COLOR_TERRAIN_0 + TERRAIN_GRASSLAND);
-			}
-			else
-			{
-				color = static_cast<COLOR>(COLOR_TERRAIN_0 + TERRAIN_WATER_DEEP);
-			}
-		}
-	} else if (g_theWorld->GetTopRadarUnit(worldPos, unit)) {
-		color = g_colorSet->ComputePlayerColor(unit.GetOwner());
-	}
-
-	return darken ? g_colorSet->GetDarkColor(color) : g_colorSet->GetColor(color);
-}
-
-void RadarMap::FillColorMapBorders()
-{
-	sint32 pitch = m_mapSize->x + 2;
-
-	bool xWrap = g_theWorld->IsXwrap();
-	bool yWrap = g_theWorld->IsYwrap();
-
-	// Fill top- and bottom-border
-	Pixel16 * topColor = m_colorMap + 1;
-	Pixel16 * bottomColor = topColor + pitch * (m_mapSize->y + 1);
-	Pixel16 * endTopColor = topColor + m_mapSize->x;
-	for ( ; topColor < endTopColor; topColor++, bottomColor++)
-	{
-		if (yWrap)
-		{
-			*topColor = *(bottomColor - pitch);
-			*bottomColor = *(topColor + pitch);
-		}
-		else
-		{
-			*topColor = *(topColor + pitch);
-			*bottomColor = *(bottomColor - pitch);
-		}
-	}
-
-	// Fill left- and right-border
-	Pixel16 * leftBorder = m_colorMap + pitch;
-	Pixel16 * rightBorder = leftBorder + m_mapSize->x + 1;
-	Pixel16 * endLeftBorder = leftBorder + m_mapSize->y * pitch;
-	for ( ; leftBorder < endLeftBorder; leftBorder += pitch, rightBorder += pitch)
-	{
-		if (xWrap)
-		{
-			*leftBorder = *(rightBorder - 1);
-			*rightBorder = *(leftBorder + 1);
-		}
-		else
-		{
-			*leftBorder = *(leftBorder + 1);
-			*rightBorder = *(rightBorder - 1);
-		}
-	}
-
-	// Corners
-	Pixel16 * leftTopCorner     = m_colorMap;
-	Pixel16 * rightTopCorner    = leftTopCorner + m_mapSize->x + 1;
-	Pixel16 * leftBottomCorner  = leftTopCorner + pitch * (m_mapSize->y + 1);
-	Pixel16 * rightBottomCorner = leftBottomCorner + m_mapSize->x + 1;
-	if (yWrap && xWrap)
-	{
-		*leftTopCorner     = *(rightBottomCorner - 1 - pitch);
-		*rightTopCorner    = *(leftBottomCorner + 1 - pitch);
-		*leftBottomCorner  = *(rightTopCorner - 1 + pitch);
-		*rightBottomCorner = *(leftTopCorner + 1 + pitch);
-	} else {
-		sint32 xOffset = xWrap ? 0 : 1;
-		sint32 yOffset = yWrap ? 0 : pitch;
-
-		*leftTopCorner     = *(leftTopCorner + xOffset + yOffset);
-		*rightTopCorner    = *(rightTopCorner - xOffset + yOffset);
-		*leftBottomCorner  = *(leftBottomCorner + xOffset - yOffset);
-		*rightBottomCorner = *(rightBottomCorner - xOffset - yOffset);
-	}
-}
-
-void RadarMap::RenderMapTileColor(const Player & player)
-{
-	sint32 pitch = m_mapSize->x + 2;
-	Pixel16 * color = m_colorMap + 1 + pitch; // skip border
-
-	MapPoint radarOffset = PosWorldToPosRadar(MapPoint(0, 0));
-	for (sint32 y = 0; y < m_mapSize->y; y++)
-	{
-		Pixel16 * tileColor = color;
-		for (sint32 x = 0; x < m_mapSize->x; x++)
-		{
-			*tileColor++ = MapTileColor(player, radarOffset, MapPoint(x, y));
-
-			radarOffset.x++;
-			if (radarOffset.x >= m_mapSize->x) {
-				radarOffset.x -= m_mapSize->x;
-			}
-		}
-		color += pitch;
-
-		radarOffset.y++;
-		if (radarOffset.y >= m_mapSize->y) {
-			radarOffset.y -= m_mapSize->y;
-		}
-	}
-
-	FillColorMapBorders();
-}
-
-//---------------------------------------------------------------------------
-//
 //	RadarMap::RenderMap
 //
 //---------------------------------------------------------------------------
@@ -956,33 +1803,27 @@ void RadarMap::RenderMap(aui_Surface * surface)
 		return;
 	}
 
-	RenderMapTileColor(*player);
-
 	uint8 *pSurfBase;
 	surface->Lock(NULL, (LPVOID *)&pSurfBase, 0);
-	RenderTiles(*surface);
 
-	MapPoint radarOffset = PosWorldToPosRadar(MapPoint(0, 0));
-	for (sint32 y = 0; y < m_mapSize->y; y++)
+	const MapPoint & radarPos = PosWorldToPosRadar(MapPoint(0, 0));
+
+	const RadarRenderWorld radarRenderTile(*player, m_radarProperties, *m_mapSize,
+			m_tilePixelWidth, m_tilePixelHeight);
+	radarRenderTile.Render(*surface, static_cast<RadarMapCell::Type*>(m_mapTexture),
+			MapPoint(m_width, m_height), radarPos);
+
+	if (m_radarProperties.m_displayBorders)
 	{
-		for (sint32 x = 0; x < m_mapSize->x; x++)
-		{
-			const MapPoint worldPos(x,y);
-			RenderTileBorder(*surface, radarOffset, worldPos, *player);
-			RenderCapitol(*surface, radarOffset, worldPos, *player);
-			RenderTrade(*surface, radarOffset, worldPos, *player);
-
-			radarOffset.x++;
-			if (radarOffset.x >= m_mapSize->x) {
-				radarOffset.x -= 0;
-			}
-		}
-
-		radarOffset.y++;
-		if (radarOffset.y >= m_mapSize->y) {
-			radarOffset.y -= 0;
-		}
+		const RadarRenderPlayerBorder radarRenderPlayerBorder(*player, m_radarProperties, *m_mapSize,
+				m_tilePixelWidth, m_tilePixelHeight);
+		radarRenderPlayerBorder.Render(*surface, static_cast<RadarMapCell::Type *>(m_mapTexture),
+				MapPoint(m_width, m_height), radarPos);
 	}
+
+	const RadarRenderOverlay radarRenderOverlay(*player, m_radarProperties, *m_mapSize,
+			m_tilePixelWidth,m_tilePixelHeight);
+	radarRenderOverlay.Render(*surface, radarPos);
 
 	surface->Unlock(pSurfBase);
 }
@@ -996,7 +1837,7 @@ void RadarMap::RenderMap(aui_Surface * surface)
 //    the main tile map.
 //
 //---------------------------------------------------------------------------
-void RadarMap::RenderViewRect(aui_Surface & surf, sint32 x, sint32 y)
+void RadarMap::RenderViewRect(aui_Surface & surface, sint32 x, sint32 y)
 {
 	RECT offsetRect = {0, 0, 0, 0 };
 
@@ -1153,14 +1994,14 @@ void RadarMap::RenderViewRect(aui_Surface & surf, sint32 x, sint32 y)
 
 	// Draw the rectangles
 	Pixel16 lineColor = g_colorSet->GetColor(COLOR_WHITE);
-	primitives_ClippedLine16(surf, x1, y1, x2, y1, lineColor);
-	primitives_ClippedLine16(surf, x1, y1, x1, y2, lineColor);
-	primitives_ClippedLine16(surf, x3, y1, x4, y1, lineColor);
-	primitives_ClippedLine16(surf, x4, y1, x4, y2, lineColor);
-	primitives_ClippedLine16(surf, x1, y4, x2, y4, lineColor);
-	primitives_ClippedLine16(surf, x1, y3, x1, y4, lineColor);
-	primitives_ClippedLine16(surf, x3, y4, x4, y4, lineColor);
-	primitives_ClippedLine16(surf, x4, y3, x4, y4, lineColor);
+	primitives_ClippedLine16(surface, x1, y1, x2, y1, lineColor);
+	primitives_ClippedLine16(surface, x1, y1, x1, y2, lineColor);
+	primitives_ClippedLine16(surface, x3, y1, x4, y1, lineColor);
+	primitives_ClippedLine16(surface, x4, y1, x4, y2, lineColor);
+	primitives_ClippedLine16(surface, x1, y4, x2, y4, lineColor);
+	primitives_ClippedLine16(surface, x1, y3, x1, y4, lineColor);
+	primitives_ClippedLine16(surface, x3, y4, x4, y4, lineColor);
+	primitives_ClippedLine16(surface, x4, y3, x4, y4, lineColor);
 }
 
 //---------------------------------------------------------------------------
@@ -1168,26 +2009,26 @@ void RadarMap::RenderViewRect(aui_Surface & surf, sint32 x, sint32 y)
 //	RadarMap::UpdateMap
 //
 //---------------------------------------------------------------------------
-void RadarMap::UpdateMap(aui_Surface * surf, sint32 x, sint32 y)
+void RadarMap::UpdateMap(aui_Surface & surface, sint32 x, sint32 y)
 {
 	RECT destRect = {x, y, x + Width(), y + Height() };
 	RECT srcRect  = {0, 0, Width(), Height()};
 
 	LPVOID surfaceBuffer = NULL;
-	if (!surf->Buffer())
+	if (!surface.Buffer())
 	{
-		surf->Lock(NULL, &surfaceBuffer, 0);
-		Assert(surf->Buffer());
+		surface.Lock(NULL, &surfaceBuffer, 0);
+		Assert(surface.Buffer());
 	}
 
-	g_c3ui->TheBlitter()->StretchBlt(surf, &destRect, m_mapSurface, &srcRect, k_AUI_BLITTER_FLAG_COPY);
+	g_c3ui->TheBlitter()->StretchBlt(&surface, &destRect, m_mapSurface, &srcRect, k_AUI_BLITTER_FLAG_COPY);
 
 	if (IsInteractive()) {
-		RenderViewRect(*surf, x, y);
+		RenderViewRect(surface, x, y);
 	}
 
 	if (surfaceBuffer) {
-		surf->Unlock(surfaceBuffer);
+		surface.Unlock(surfaceBuffer);
 	}
 }
 
@@ -1267,46 +2108,23 @@ void RadarMap::Update()
 	RenderMap(m_mapSurface);
 }
 
-void RadarMap::DoRedrawTile(const Player & player, const MapPoint & pos)
+void RadarMap::DoRedrawTile(aui_Surface & surface, const Player & player, const MapPoint & pos)
 {
-	bool isLand = (g_theWorld->IsLand(pos) || g_theWorld->IsMountain(pos)) && !g_theWorld->IsTunnel(pos);
+	const MapPoint radarPos = PosWorldToPosRadar(pos);
 
-	double tileWidth  = m_tilePixelWidth;
-	double tileHeight = m_tilePixelHeight;
+	const RadarRenderWorld radarRenderTile(player, m_radarProperties, *m_mapSize, m_tilePixelWidth, m_tilePixelHeight);
+	radarRenderTile.RenderSingleTile(surface, pos, radarPos);
 
-	MapPoint radarOffset = PosWorldToPosRadar(pos);
-
-	Pixel16 * tileColor = m_colorMap + pos.x + 1 + (pos.y + 1) * (m_mapSize->x + 2);
-	*tileColor = MapTileColor(player, radarOffset, pos);
-	if (pos.x == 0 || pos.x == (m_mapSize->x - 1) || pos.y == 0 || pos.y == (m_mapSize->y - 1)) {
-		FillColorMapBorders();
+	if (m_radarProperties.m_displayBorders)
+	{
+		const RadarRenderPlayerBorder radarRenderPlayerBorder(player, m_radarProperties, *m_mapSize,
+				m_tilePixelWidth, m_tilePixelHeight);
+		radarRenderPlayerBorder.Render(surface, static_cast<RadarMapCell::Type *>(m_mapTexture),
+				MapPoint(m_width, m_height), PosWorldToPosRadar(MapPoint(0, 0)));
 	}
 
-	double x = (radarOffset.x + (radarOffset.y / 2)) * tileWidth + ((radarOffset.y & 1) ? (tileWidth / 2.0) : 0.0);
-	if (x > (m_width - 1)) {
-		x -= m_width;
-	}
-
-	double y = radarOffset.y * tileHeight;
-	if (y > (m_height - 1)) {
-		y -= m_height;
-	}
-
-	sint32 y1 = static_cast<sint32>(y);
-	sint32 y2 = static_cast<sint32>(y + tileHeight);
-
-	sint32 x1 = static_cast<sint32>(x);
-	sint32 x2 = static_cast<sint32>(x + tileWidth);
-
-	if ((x1 <= tileWidth) && (radarOffset.y & 1)) { // first row, render also crossing before
-		RenderTileCrossing(*m_mapSurface, RECT { 0, y1, x1 - 1, y2 - 1 }, tileColor - 1, isLand);
-	}
-	RECT tileRect = { x1, y1, x2, y2 };
-	RenderTile(*m_mapSurface, tileRect, tileColor, isLand);
-
-	RenderTileBorder(*m_mapSurface, radarOffset, pos, player);
-	RenderCapitol(*m_mapSurface, radarOffset, pos, player);
-	RenderTrade(*m_mapSurface, radarOffset, pos, player);
+	const RadarRenderOverlay radarRenderOverlay(player, m_radarProperties, *m_mapSize,m_tilePixelWidth, m_tilePixelHeight);
+	radarRenderOverlay.RenderSingleTile(surface, pos, radarPos);
 }
 
 //---------------------------------------------------------------------------
@@ -1327,19 +2145,20 @@ void RadarMap::RedrawTile(const MapPoint & pos)
 	uint8 *pSurfBase;
 	m_mapSurface->Lock(NULL, (LPVOID *)&pSurfBase, 0);
 
-	DoRedrawTile(*player, pos);
+	DoRedrawTile(*m_mapSurface, *player, pos);
 
 	// Draw neighbor crossings
 	MapPoint neighborPosition;
 	if (pos.GetNeighborPosition(NORTHWEST, neighborPosition)) {
-		DoRedrawTile(*player, neighborPosition);
+		DoRedrawTile(*m_mapSurface, *player, neighborPosition);
 	}
 	if (pos.GetNeighborPosition(WEST, neighborPosition)) {
-		DoRedrawTile(*player, neighborPosition);
+		DoRedrawTile(*m_mapSurface, *player, neighborPosition);
 	}
 	if (pos.GetNeighborPosition(SOUTHWEST, neighborPosition)) {
-		DoRedrawTile(*player, neighborPosition);
+		DoRedrawTile(*m_mapSurface, *player, neighborPosition);
 	}
+
 	m_mapSurface->Unlock(pSurfBase);
 }
 
@@ -1362,7 +2181,7 @@ AUI_ERRCODE RadarMap::DrawThis(aui_Surface * surface, sint32 x,	sint32 y)
 	OffsetRect(&rect, m_x + x, m_y + y);
 	ToWindow(&rect);
 
-	UpdateMap(surface, rect.left, rect.top);
+	UpdateMap(*surface, rect.left, rect.top);
 
 	if (surface == m_window->TheSurface()) {
 		m_window->AddDirtyRect(&rect);
@@ -1410,8 +2229,8 @@ void RadarMap::MouseLGrabInside(aui_MouseEvent * data)
 	g_tiledMap->GetMapMetrics(&mapWidth, &mapHeight);
 
 	sint32 tileY = (sint32) (data->position.y / m_tilePixelHeight);
-    double nudge = (tileY & 1) ? m_tilePixelWidth / 2.0 : 0.0;
-    sint32 tileX = (sint32) (ceil(((double)(data->position.x - nudge) / m_tilePixelWidth)));
+	double nudge = (tileY & 1) ? m_tilePixelWidth / 2.0 : 0.0;
+	sint32 tileX = (sint32) (ceil(((double)(data->position.x - nudge) / m_tilePixelWidth)));
 
 	tileX = (sint32) ((tileX - m_displayOffset[g_selected_item->GetVisiblePlayer()].x + m_mapSize->x) % m_mapSize->x);
 	tileY = (sint32) ((tileY - m_displayOffset[g_selected_item->GetVisiblePlayer()].y + m_mapSize->y) % m_mapSize->y);
