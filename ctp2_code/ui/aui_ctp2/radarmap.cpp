@@ -845,8 +845,10 @@ void RadarRenderWorld::RenderCoastCrossing(aui_Surface & surface, const RECT & r
 			} else {
 				primitives_ClippedTriangle16(surface, rect, TI_LEFT_BOTTOM, westLand);
 				primitives_ClippedTriangle16(surface, rect, TI_RIGHT_TOP, northLand);
-				primitives_ClippedTriangle16(surface, RECT{rect.left + 1, rect.top + 1, rect.right, rect.bottom},
-						TI_RIGHT_BOTTOM, eastWater);
+				if (rect.right > rect.left && rect.bottom > rect.top) {
+					primitives_ClippedTriangle16(surface, RECT{rect.left + 1, rect.top + 1, rect.right, rect.bottom},
+							TI_RIGHT_BOTTOM, eastWater);
+				}
 			}
 			break;
 		case NORTH_LAND | EAST_LAND:
@@ -856,8 +858,10 @@ void RadarRenderWorld::RenderCoastCrossing(aui_Surface & surface, const RECT & r
 			} else {
 				primitives_ClippedTriangle16(surface, rect, TI_LEFT_TOP, northLand);
 				primitives_ClippedTriangle16(surface, rect, TI_RIGHT_BOTTOM, eastLand);
-				primitives_ClippedTriangle16(surface, RECT{rect.left, rect.top + 1, rect.right - 1, rect.bottom},
-						TI_LEFT_BOTTOM, westWater);
+				if (rect.right > rect.left && rect.bottom > rect.top) {
+					primitives_ClippedTriangle16(surface, RECT{ rect.left, rect.top + 1, rect.right - 1, rect.bottom },
+							TI_LEFT_BOTTOM, westWater);
+				}
 			}
 			break;
 		case EAST_LAND | SOUTH_LAND:
@@ -867,8 +871,10 @@ void RadarRenderWorld::RenderCoastCrossing(aui_Surface & surface, const RECT & r
 			} else {
 				primitives_ClippedTriangle16(surface, rect, TI_RIGHT_TOP, eastLand);
 				primitives_ClippedTriangle16(surface, rect, TI_LEFT_BOTTOM, southLand);
-				primitives_ClippedTriangle16(surface, RECT{rect.left, rect.top, rect.right - 1, rect.bottom - 1},
-						TI_LEFT_TOP, westWater);
+				if (rect.right > rect.left && rect.bottom > rect.top) {
+					primitives_ClippedTriangle16(surface, RECT{ rect.left, rect.top, rect.right - 1, rect.bottom - 1 },
+							TI_LEFT_TOP, westWater);
+				}
 			}
 			break;
 		case SOUTH_LAND | WEST_LAND:
@@ -878,8 +884,10 @@ void RadarRenderWorld::RenderCoastCrossing(aui_Surface & surface, const RECT & r
 			} else {
 				primitives_ClippedTriangle16(surface, rect, TI_LEFT_TOP, westLand);
 				primitives_ClippedTriangle16(surface, rect, TI_RIGHT_BOTTOM, southLand);
-				primitives_ClippedTriangle16(surface, RECT{rect.left + 1, rect.top, rect.right, rect.bottom - 1},
-						TI_RIGHT_TOP, eastWater);
+				if (rect.right > rect.left && rect.bottom > rect.top) {
+					primitives_ClippedTriangle16(surface, RECT{ rect.left + 1, rect.top, rect.right, rect.bottom - 1 },
+							TI_RIGHT_TOP, eastWater);
+				}
 			}
 			break;
 		case WEST_LAND | EAST_LAND:
@@ -888,7 +896,10 @@ void RadarRenderWorld::RenderCoastCrossing(aui_Surface & surface, const RECT & r
 			} else {
 				sint32 split = (rect.left + rect.right) / 2;
 				primitives_ClippedPaintRect16(surface, RECT{rect.left, rect.top, split, rect.bottom}, westLand);
-				primitives_ClippedPaintRect16(surface, RECT{split + 1, rect.top, rect.right, rect.bottom}, eastLand);
+				if (rect.right > split) {
+					primitives_ClippedPaintRect16(surface, RECT{ split + 1, rect.top, rect.right, rect.bottom },
+							eastLand);
+				}
 			}
 			if (rect.right - rect.left > 1)
 			{
@@ -904,7 +915,10 @@ void RadarRenderWorld::RenderCoastCrossing(aui_Surface & surface, const RECT & r
 			} else {
 				sint32 split = (rect.top + rect.bottom) / 2;
 				primitives_ClippedPaintRect16(surface, RECT{rect.left, rect.top, rect.right, split}, northLand);
-				primitives_ClippedPaintRect16(surface, RECT{rect.left, split + 1, rect.right, rect.bottom}, southLand);
+				if (rect.bottom > split) {
+					primitives_ClippedPaintRect16(surface, RECT{ rect.left, split + 1, rect.right, rect.bottom },
+							southLand);
+				}
 			}
 			if (rect.bottom - rect.top > 1)
 			{
@@ -992,10 +1006,14 @@ void RadarRenderWorld::RenderBasicCrossing(aui_Surface & surface, const RECT & r
 					{
 						primitives_ClippedTriangle16(surface, rect, TI_LEFT_TOP, west);
 						primitives_ClippedTriangle16(surface, rect, TI_RIGHT_TOP, north);
-						primitives_ClippedTriangle16(surface, RECT{ rect.left + 1, rect.top, rect.right, rect.bottom},
-								TI_RIGHT_BOTTOM, east);
-						primitives_ClippedPaintRect16(surface,
-								RECT{rect.left + 1, rect.bottom, rect.right, rect.bottom}, south);
+						if (rect.right > rect.left) {
+							primitives_ClippedTriangle16(surface,
+									RECT{ rect.left + 1, rect.top, rect.right, rect.bottom },
+									TI_RIGHT_BOTTOM, east);
+							primitives_ClippedPaintRect16(surface,
+									RECT{ rect.left + 1, rect.bottom, rect.right, rect.bottom },
+									south);
+						}
 					}
 					break;
 			}
