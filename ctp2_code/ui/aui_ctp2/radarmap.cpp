@@ -593,32 +593,31 @@ void RadarRender::FillTextureBorders(RadarMapCell::Type * map) const
 	RadarMapCell::Type * leftTop2Corner    = leftTopCorner - pitch;
 	RadarMapCell::Type * rightTopCorner    = leftTopCorner + m_mapSize.x + 1;
 	RadarMapCell::Type * rightTop2Corner   = rightTopCorner - pitch;
-	RadarMapCell::Type * leftBottomCorner  = leftTopCorner + pitch * (m_mapSize.y - 1);
+	RadarMapCell::Type * leftBottomCorner  = leftTopCorner + pitch * (m_mapSize.y + 1);
 	RadarMapCell::Type * leftBottom2Corner = leftBottomCorner + pitch;
 	RadarMapCell::Type * rightBottomCorner = leftBottomCorner + m_mapSize.x + 1;
 	RadarMapCell::Type * rightBottom2Corner = rightBottomCorner + pitch;
 	if (yWrap && xWrap)
 	{
-		*leftTopCorner      = *(rightBottomCorner - 1);
-		*leftTop2Corner     = *(rightBottomCorner - 1 - pitch);
-		*rightTopCorner     = *(leftBottomCorner + 1);
-		*rightTop2Corner    = *(leftBottomCorner + 1 - pitch);
-		*leftBottomCorner   = *(rightTopCorner - 1);
-		*leftBottom2Corner  = *(rightTopCorner - 1 + pitch);
-		*rightBottomCorner  = *(leftTopCorner + 1);
-		*rightBottom2Corner = *(leftTopCorner + 1 + pitch);
+		*leftTopCorner      = *(rightBottomCorner - 1 - pitch);
+		*leftTop2Corner     = *(rightBottomCorner - 1 - 2 * pitch);
+		*rightTopCorner     = *(leftBottomCorner + 1 - pitch);
+		*rightTop2Corner    = *(leftBottomCorner + 1 - 2 * pitch);
+		*leftBottomCorner   = *(rightTopCorner - 1 + pitch);
+		*leftBottom2Corner  = *(rightTopCorner - 1 + 2 * pitch);
+		*rightBottomCorner  = *(leftTopCorner + 1 + pitch);
+		*rightBottom2Corner = *(leftTopCorner + 1 + 2 * pitch);
 	} else {
-		sint32 xOffset = xWrap ? 0 : 1;
-		sint32 yOffset = yWrap ? -pitch : 0;
+		sint32 xOffset = xWrap ? m_mapSize.x : 1;
 
-		*leftTopCorner      = *(leftTopCorner + xOffset + yOffset);
-		*leftTop2Corner     = *(leftTopCorner + xOffset + 2 * yOffset);
-		*rightTopCorner     = *(rightTopCorner - xOffset + yOffset);
-		*rightTop2Corner    = *(rightTopCorner - xOffset + 2 * yOffset);
-		*leftBottomCorner   = *(leftBottomCorner + xOffset - yOffset);
-		*leftBottom2Corner  = *(leftBottomCorner + xOffset - 2 * yOffset);
-		*rightBottomCorner  = *(rightBottomCorner - xOffset - yOffset);
-		*rightBottom2Corner = *(rightBottomCorner - xOffset - 2 * yOffset);
+		*leftTopCorner      = *(leftTopCorner + xOffset);
+		*leftTop2Corner     = *(leftTopCorner + xOffset - pitch);
+		*rightTopCorner     = *(rightTopCorner - xOffset);
+		*rightTop2Corner    = *(rightTopCorner - xOffset - pitch);
+		*leftBottomCorner   = *(leftBottomCorner + xOffset);
+		*leftBottom2Corner  = *(leftBottomCorner + xOffset + pitch);
+		*rightBottomCorner  = *(rightBottomCorner - xOffset);
+		*rightBottom2Corner = *(rightBottomCorner - xOffset + pitch);
 	}
 }
 
