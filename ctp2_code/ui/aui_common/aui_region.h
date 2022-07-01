@@ -404,7 +404,6 @@ protected:
 	// TODO: temporary: introduce MouseHoover
 	bool IsMouseInside() const;
 	uint32 GetNoChangeTime() const;
-	void SetMouseEvent(aui_MouseEvent & mouseEvent);
 private:
 	AUI_ERRCODE InitCommonLdl(const MBCHAR * ldlBlock);
 	void        InitCommon(void);

@@ -1337,25 +1337,20 @@ AUI_ERRCODE aui_UI::ShowSelectedRegion( aui_Region *region )
 
 }
 
+#if defined(MOUSE_EVENT_DEBUG)
 void print_mouse_event(const aui_MouseEvent * const event) {
-#if 0
 	static int counter = 0;
 	static int lastX = 0;
 	static int lastY = 0;
 	if ((event->position.x != lastX) || (event->position.y != lastY) || event->lbutton || event->rbutton)
 	{
-		std::cout << "Event (" << counter << ") :: position (" << event->position.x << ", " << event->position.y
-		          << ") buttons (" <<
-		          (event->lbutton ? "LEFT " : "") << (event->rbutton ? "RIGHT " : "") << ") time (" << event->time
-		          << ") move ("
-		          << event->movecount << ") frame (" << event->framecount << ") flags (" << event->flags << ")"
-		          << std::endl;
+		printf("Event (%d) %s\n", counter, event->asString().c_str());
 		counter++;
 		lastX = event->position.x;
 		lastY = event->position.y;
 	}
-#endif
 }
+#endif
 
 AUI_ERRCODE aui_UI::HandleMouseEvents(sint32 numEvents, aui_MouseEvent * events)
 {
@@ -1378,7 +1373,9 @@ AUI_ERRCODE aui_UI::HandleMouseEvents(sint32 numEvents, aui_MouseEvent * events)
 
 	for (sint32 k = numEvents; k; k--, currentEvent++)
 	{
+#if defined(MOUSE_EVENT_DEBUG)
 		print_mouse_event(currentEvent);
+#endif
 		SetWhichSeesMouse(NULL);
 
 		for (ListPos position = m_childList->GetHeadPosition(); position; )

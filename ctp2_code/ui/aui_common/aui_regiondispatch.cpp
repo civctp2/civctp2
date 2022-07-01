@@ -1,9 +1,13 @@
-#include <iostream>
 #include "c3.h"
 
 #include "aui_region.h"
 
 #include "SelItem.h"
+
+#if defined(MOUSE_EVENT_DEBUG)
+#include <sstream>
+#include "aui_ldl.h"
+#endif
 
 typedef void (aui_Region::*MouseFunction)(aui_MouseEvent * mouseData);
 class MouseDispatcher
@@ -98,7 +102,9 @@ private:
 	void HandleMouseMoved(aui_Region & region, aui_MouseEvent & event, uint32 area, uint32 group);
 	void HandleMouseStatic(aui_Region & region, aui_MouseEvent & event, uint32 area, uint32 group);
 	bool MovedLessThanClickDistance(const aui_MouseEvent & event) const;
-	void ExecuteMouseFunction(aui_Region & region, aui_MouseEvent & event, uint32 button, uint32 action, uint32 area, uint32 group) const;
+	void ExecuteMouseFunction(
+			aui_Region & region, aui_MouseEvent & event, uint32 button, uint32 action, uint32 area, uint32 group) const;
+	void ExecuteNoChangeMouseFunction(aui_Region & region, aui_MouseEvent & event);
 
 	MouseFunction m_mouseNoChange;
 	MouseFunction m_mouseFunctions[BUTTON_MAX][ACTION_MAX][AREA_MAX][GROUP_MAX];
@@ -233,8 +239,61 @@ MouseDispatcher::MouseDispatcher(
 void MouseDispatcher::ExecuteMouseFunction(aui_Region & region, aui_MouseEvent & event, uint32 button, uint32 action, uint32 area,
                                            uint32 group) const
 {
-	// std::cout << "Dispatch for region:: (" << region.Id() << ") :: (" << button << ", " << action << ", " << area << ", " << group << ")" << std::endl;
+#if defined(MOUSE_EVENT_DEBUG)
+	std::string buttonString = (button == BUTTON_LEFT) ? ((action == ACTION_MOVE) ? "none" : "left") : "right";
+	std::string actionString = "unknown";
+	switch (action) {
+		case ACTION_MOVE:
+			actionString = "move";
+			break;
+		case ACTION_DRAG:
+			actionString = "drag";
+			break;
+		case ACTION_GRAB:
+			actionString = "grab";
+			break;
+		case ACTION_DROP:
+			actionString = "drop";
+			break;
+		case ACTION_DOUBLE_CLICK: actionString = "double click";
+		break;
+	}
+	std::string areaString = "unknown";
+	switch (area) {
+		case AREA_OVER:
+			areaString = "over";
+			break;
+		case AREA_AWAY:
+			areaString = "away";
+			break;
+		case AREA_INSIDE:
+			areaString = "inside";
+			break;
+		case AREA_OUTSIDE:
+			areaString = "outside";
+			break;
+	}
+	std::string groupString = group == GROUP_NORMAL ? "normal" : "edit";
+	const MBCHAR * regionString = aui_Ldl::GetBlock(&region);
+	std::stringstream buffer;
+	buffer << "Dispatch for region:: (" << (regionString ? regionString : "unknown") << ") :: (" << buttonString
+		<< ", " << actionString << ", " << areaString << ", " << groupString << ")";
+	printf("%s\n", buffer.str().c_str());
+#endif
+
 	(region.*m_mouseFunctions[button][action][area][group])(&event);
+}
+
+void MouseDispatcher::ExecuteNoChangeMouseFunction(aui_Region & region, aui_MouseEvent & event)
+{
+#if defined(MOUSE_EVENT_DEBUG)
+	const MBCHAR * regionString = aui_Ldl::GetBlock(&region);
+
+	printf("Dispatch for region:: (%s) :: no change\n", regionString ? regionString : "unknown");
+#endif
+
+	m_noChange = true;
+	(region.*m_mouseNoChange)(&event);
 }
 
 bool MouseDispatcher::MovedLessThanClickDistance(const aui_MouseEvent & event) const
@@ -414,8 +473,7 @@ void MouseDispatcher::HandleMouseStatic(aui_Region & region, aui_MouseEvent & ev
 			{
 				if (m_mouseEvent.rbutton)
 				{
-					m_noChange = true;
-					(region.*m_mouseNoChange)(&event);
+					ExecuteNoChangeMouseFunction(region, event);
 				}
 				else
 				{
@@ -430,8 +488,7 @@ void MouseDispatcher::HandleMouseStatic(aui_Region & region, aui_MouseEvent & ev
 				}
 				else
 				{
-					m_noChange = true;
-					(region.*m_mouseNoChange)(&event);
+					ExecuteNoChangeMouseFunction(region, event);
 				}
 			}
 		}
@@ -486,8 +543,7 @@ void MouseDispatcher::HandleMouseStatic(aui_Region & region, aui_MouseEvent & ev
 			{
 				if (m_mouseEvent.rbutton)
 				{
-					m_noChange = true;
-					(region.*m_mouseNoChange)(&event);
+					ExecuteNoChangeMouseFunction(region, event);
 				}
 				else
 				{
@@ -502,8 +558,7 @@ void MouseDispatcher::HandleMouseStatic(aui_Region & region, aui_MouseEvent & ev
 				}
 				else
 				{
-					m_noChange = true;
-					(region.*m_mouseNoChange)(&event);
+					ExecuteNoChangeMouseFunction(region, event);
 				}
 			}
 		}
@@ -512,6 +567,11 @@ void MouseDispatcher::HandleMouseStatic(aui_Region & region, aui_MouseEvent & ev
 
 void MouseDispatcher::Dispatch(aui_Region & region, aui_MouseEvent & event, bool handleIt, bool edit)
 {
+	// Initialize mouse-event with first received event
+	if (m_mouseEvent.time == 0) {
+		m_mouseEvent = event;
+	}
+
 	uint32 group = edit ? GROUP_EDIT : GROUP_NORMAL;
 	if (group == GROUP_NORMAL)
 	{
@@ -624,11 +684,6 @@ bool aui_Region::IsMouseInside() const
 uint32 aui_Region::GetNoChangeTime() const
 {
 	return m_mouseDispatcher->m_noChangeTime;
-}
-
-void aui_Region::SetMouseEvent(aui_MouseEvent & mouseEvent)
-{
-	m_mouseDispatcher->m_mouseEvent = mouseEvent;
 }
 
 void aui_Region::MouseNoChange(aui_MouseEvent * mouseData)

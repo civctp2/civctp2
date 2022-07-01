@@ -361,12 +361,6 @@ void ctp2_Menu::Open()
 	}
 
 	g_c3ui->AddWindow(m_window);
-	m_window->ResetCurrentMouseState();
-
-
-
-
-
 }
 
 void ctp2_Menu::Close()
