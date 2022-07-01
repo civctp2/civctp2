@@ -149,7 +149,7 @@ void ctp2_Window::MouseLGrabOutside( aui_MouseEvent *mouseData )
 
 void    ctp2_Window::ResetCurrentMouseState()
 {
-	m_mouseState = *g_ui->TheMouse()->GetLatestMouseEvent();
+	SetMouseEvent(*g_ui->TheMouse()->GetLatestMouseEvent());
 }
 
 

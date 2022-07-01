@@ -26,7 +26,7 @@
 //
 // Modifications from the original Activision code:
 //
-// - Initialized local variables. (Sep 9th 2005 Martin Gühmann)
+// - Initialized local variables. (Sep 9th 2005 Martin GÃ¼hmann)
 //
 //----------------------------------------------------------------------------
 
@@ -68,45 +68,35 @@ aui_Region::aui_Region
 	const MBCHAR *  ldlBlock
 )
 :
-    aui_Base                    (),
-    m_id                        (id),
-    m_x                         (0),
-    m_y                         (0),
-    m_width                     (0),
-    m_height                    (0),
-    m_dim                       (new aui_Dimension()),
-    m_attributes                (0),
-    m_parent                    (NULL),
-    m_childList                 (new tech_WLList<aui_Region *>()),
-    m_childListChanged          (false),
-    m_blind                     (false),
-    m_mouseCode                 (AUI_ERRCODE_UNHANDLED),
-    m_draw                      (0),
-    m_drawMask                  (k_AUI_REGION_DRAWFLAG_DEFAULTMASK),
-    m_ignoreEvents              (false),
-    m_isMouseInside             (false),
-    //	aui_MouseEvent	m_mouseState;
-    m_xLastTime                 (0),
-    m_yLastTime                 (0),
-    m_noChange                  (false),
-    m_noChangeTime              (0),
-    m_doubleLClickStartWaitTime (0),
-    m_doubleRClickStartWaitTime (0),
-    m_doubleClickingInside      (true),
-    m_doubleClickTimeOut        (0),
-    // POINT		m_doubleClickOldPos;
-    m_ldlBlock                  (NULL),
-    // POINT		m_editGrabPoint;
-    m_editGrabPointAttributes   (0),
-    m_showCallback              (NULL),
-    m_hideCallback              (NULL),
-    m_showCallbackData          (NULL),
-    m_hideCallbackData          (NULL)
+	aui_Base                    (),
+	m_id                        (id),
+	m_x                         (0),
+	m_y                         (0),
+	m_width                     (0),
+	m_height                    (0),
+	m_dim                       (new aui_Dimension()),
+	m_attributes                (0),
+	m_parent                    (NULL),
+	m_childList                 (new tech_WLList<aui_Region *>()),
+	m_childListChanged          (false),
+	m_blind                     (false),
+	m_mouseCode                 (AUI_ERRCODE_UNHANDLED),
+	m_draw                      (0),
+	m_drawMask                  (k_AUI_REGION_DRAWFLAG_DEFAULTMASK),
+	m_ignoreEvents              (false),
+	m_ldlBlock                  (NULL),
+	// POINT		m_editGrabPoint;
+	m_editGrabPointAttributes   (0),
+	m_showCallback              (NULL),
+	m_hideCallback              (NULL),
+	m_showCallbackData          (NULL),
+	m_hideCallbackData          (NULL),
+	m_mouseDispatcher           (NULL)
 {
     m_editGrabPoint.x = -1;
     m_editGrabPoint.y = -1;
 
-    *retval           = InitCommonLdl(id, ldlBlock);
+    *retval = InitCommonLdl(id, ldlBlock);
 }
 
 aui_Region::aui_Region
@@ -119,40 +109,30 @@ aui_Region::aui_Region
 	sint32          height
 )
 :
-    aui_Base                    (),
-    m_id                        (id),
-    m_x                         (x),
-    m_y                         (y),
-    m_width                     (width),
-    m_height                    (height),
-    m_dim                       (new aui_Dimension()),
-    m_attributes                (0),
-    m_parent                    (NULL),
-    m_childList                 (new tech_WLList<aui_Region *>()),
-    m_childListChanged          (false),
-    m_blind                     (false),
-    m_mouseCode                 (AUI_ERRCODE_UNHANDLED),
-    m_draw                      (0),
-    m_drawMask                  (k_AUI_REGION_DRAWFLAG_DEFAULTMASK),
-    m_ignoreEvents              (false),
-    m_isMouseInside             (false),
-    //	aui_MouseEvent	m_mouseState;
-    m_xLastTime                 (x),
-    m_yLastTime                 (y),
-    m_noChange                  (false),
-    m_noChangeTime              (0),
-    m_doubleLClickStartWaitTime (0),
-    m_doubleRClickStartWaitTime (0),
-    m_doubleClickingInside      (true),
-    m_doubleClickTimeOut        (0),
-    // POINT		m_doubleClickOldPos;
-    m_ldlBlock                  (NULL),
-    // POINT		m_editGrabPoint;
-    m_editGrabPointAttributes   (0),
-    m_showCallback              (NULL),
-    m_hideCallback              (NULL),
-    m_showCallbackData          (NULL),
-    m_hideCallbackData          (NULL)
+	aui_Base                    (),
+	m_id                        (id),
+	m_x                         (x),
+	m_y                         (y),
+	m_width                     (width),
+	m_height                    (height),
+	m_dim                       (new aui_Dimension()),
+	m_attributes                (0),
+	m_parent                    (NULL),
+	m_childList                 (new tech_WLList<aui_Region *>()),
+	m_childListChanged          (false),
+	m_blind                     (false),
+	m_mouseCode                 (AUI_ERRCODE_UNHANDLED),
+	m_draw                      (0),
+	m_drawMask                  (k_AUI_REGION_DRAWFLAG_DEFAULTMASK),
+	m_ignoreEvents              (false),
+	m_ldlBlock                  (NULL),
+	// POINT		m_editGrabPoint;
+	m_editGrabPointAttributes   (0),
+	m_showCallback              (NULL),
+	m_hideCallback              (NULL),
+	m_showCallbackData          (NULL),
+	m_hideCallbackData          (NULL),
+	m_mouseDispatcher           (NULL)
 {
     InitCommon();
 
@@ -161,16 +141,11 @@ aui_Region::aui_Region
 
 void aui_Region::InitCommon(void)
 {
-#ifdef __AUI_USE_DIRECTX__
-	m_doubleClickTimeOut    = GetDoubleClickTime();
-#else
-	m_doubleClickTimeOut    = 375;
-#endif
+	delete m_mouseDispatcher;
+	m_mouseDispatcher = createMouseDispatcher();
 
 	m_editGrabPoint.x       = -1;
 	m_editGrabPoint.y       = -1;
-
-	memset(&m_mouseState, 0, sizeof(m_mouseState));
 }
 
 
@@ -313,6 +288,7 @@ aui_Region::~aui_Region()
 	delete m_dim;
 	delete m_childList;
 	delete [] m_ldlBlock;
+	delete m_mouseDispatcher;
 }
 
 void aui_Region::DeleteChildren()
@@ -740,61 +716,57 @@ void aui_Region::ResetHeirarchyChanged( void )
 	if ( m_parent ) m_parent->ResetHeirarchyChanged();
 }
 
-AUI_ERRCODE aui_Region::HandleMouseEvent( aui_MouseEvent *input, BOOL handleIt )
+AUI_ERRCODE aui_Region::HandleMouseEvent(aui_MouseEvent * input, bool handleIt)
 {
 	m_mouseCode = AUI_ERRCODE_UNHANDLED;
 
-	if ( handleIt ) PreChildrenCallback( input );
+	if (handleIt) {
+		PreChildrenCallback(input);
+	}
 
 	ListPos position = m_childList->GetHeadPosition();
-	if ( position )
+	if (position)
 	{
-
 		aui_MouseEvent localInput;
-		memcpy( &localInput, input, sizeof( localInput ) );
+		memcpy(&localInput, input, sizeof(localInput));
 		localInput.position.x -= m_x;
 		localInput.position.y -= m_y;
 
-		for ( sint32 i = m_childList->L(); i; i-- )
+		while (position)
 		{
-			aui_Region *region = m_childList->GetNext( position );
-			AUI_ERRCODE errcode = region->HandleMouseEvent(
-				&localInput,
-				handleIt && !region->IgnoringEvents() );
-
-			if ( m_mouseCode < errcode )
+			aui_Region * region = m_childList->GetNext(position);
+			AUI_ERRCODE errcode = region->HandleMouseEvent(&localInput,handleIt && !region->IgnoringEvents());
+			if (m_mouseCode < errcode) {
 				m_mouseCode = errcode;
+			}
 
-			if ( HasHeirarchyChanged() )
+			if (HasHeirarchyChanged())
 			{
-
-				m_childListChanged = FALSE;
+				m_childListChanged = false;
 				return m_mouseCode;
 			}
 		}
 	}
 
-	if ( handleIt ) PostChildrenCallback( input );
+	if (handleIt) {
+		PostChildrenCallback(input);
+	}
 
-	if ( IsHidden() || IgnoringEvents() ) handleIt = FALSE;
+	if (IsHidden() || IgnoringEvents()) {
+		handleIt = false;
+	}
 
-	if ( g_ui->GetEditMode() )
-		MouseDispatchEdit( input, handleIt );
-	else
-		MouseDispatch( input, handleIt );
+	MouseDispatch(*m_mouseDispatcher, *input, handleIt, g_ui->GetEditMode());
 
-	memcpy( &m_mouseState, input, sizeof( aui_MouseEvent ) );
-
-	m_xLastTime = m_x;
-	m_yLastTime = m_y;
-
-	if ( HasHeirarchyChanged() )
+	if (HasHeirarchyChanged())
 	{
-		m_childListChanged = FALSE;
+		m_childListChanged = false;
 		return m_mouseCode;
 	}
 
-	if ( !input->framecount && m_draw ) Draw();
+	if (!input->framecount && m_draw) {
+		Draw();
+	}
 
 	return m_mouseCode;
 }
@@ -944,12 +916,6 @@ void aui_Region::MouseRDoubleClickOutside( aui_MouseEvent *mouseData )
 	MouseRGrabOutside( mouseData );
 }
 
-void aui_Region::MouseNoChange( aui_MouseEvent *mouseData )
-{
-	if ( IsDisabled() ) return;
-	if ( m_isMouseInside && !GetWhichSeesMouse() ) SetWhichSeesMouse( this );
-}
-
 AUI_ERRCODE aui_Region::AddUndo( void )
 {
 	if (!s_undoList)
@@ -1049,46 +1015,6 @@ AUI_ERRCODE aui_Region::ExpandRect( RECT *rect )
 		child->ExpandRect( rect );
 	}
 	return AUI_ERRCODE_OK;
-}
-
-void aui_Region::MouseLGrabInsideEdit( aui_MouseEvent *mouseData )
-{
-	MouseLGrabEditMode( mouseData );
-}
-
-void aui_Region::MouseLGrabOutsideEdit( aui_MouseEvent *mouseData )
-{
-	MouseLGrabEditMode( mouseData );
-}
-
-void aui_Region::MouseLDragAwayEdit( aui_MouseEvent *mouseData )
-{
-	MouseLDragEditMode( mouseData );
-}
-
-void aui_Region::MouseLDragOverEdit( aui_MouseEvent *mouseData )
-{
-	MouseLDragEditMode( mouseData );
-}
-
-void aui_Region::MouseLDragInsideEdit( aui_MouseEvent *mouseData )
-{
-	MouseLDragEditMode( mouseData );
-}
-
-void aui_Region::MouseLDragOutsideEdit( aui_MouseEvent *mouseData )
-{
-	MouseLDragEditMode( mouseData );
-}
-
-void aui_Region::MouseLDropInsideEdit( aui_MouseEvent *mouseData )
-{
-	MouseLDropEditMode( mouseData );
-}
-
-void aui_Region::MouseLDropOutsideEdit( aui_MouseEvent *mouseData )
-{
-	MouseLDropEditMode( mouseData );
 }
 
 void aui_Region::MouseRGrabInsideEdit( aui_MouseEvent *mouseData )

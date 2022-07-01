@@ -596,10 +596,10 @@ void ThumbnailMap::MouseNoChange( aui_MouseEvent *mouseData )
 {
 	if (IsDisabled()) return;
 
-	if ( m_isMouseInside )
+	if ( IsMouseInside() )
 	if ( !GetWhichSeesMouse() || GetWhichSeesMouse() == this )
 	if ( !mouseData->lbutton && !mouseData->rbutton )
-	if ( mouseData->time - m_noChangeTime > m_timeOut )
+	if ( mouseData->time - GetNoChangeTime() > m_timeOut )
 	{
 
 		POINT		pos = mouseData->position;
