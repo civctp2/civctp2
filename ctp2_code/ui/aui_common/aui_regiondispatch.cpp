@@ -9,12 +9,15 @@
 #include "aui_ldl.h"
 #endif
 
+const uint32 kDefaultHooverTime = 500;
+
 typedef void (aui_Region::*MouseFunction)(aui_MouseEvent * mouseData);
 class MouseDispatcher
 {
 public:
 	MouseDispatcher(
 			MouseFunction mouseNoChange,
+			MouseFunction mouseHoover,
 			MouseFunction mouseMoveOver,
 			MouseFunction mouseMoveOverEdit,
 			MouseFunction mouseMoveAway,
@@ -69,6 +72,7 @@ public:
 public:
 	bool           m_noChange;
 	uint32         m_noChangeTime;
+	uint32         m_hooverTime;
 	bool           m_isMouseInside;
 	aui_MouseEvent m_mouseEvent;
 	bool           m_doubleClickingInside;
@@ -107,6 +111,7 @@ private:
 	void ExecuteNoChangeMouseFunction(aui_Region & region, aui_MouseEvent & event);
 
 	MouseFunction m_mouseNoChange;
+	MouseFunction m_mouseHoover;
 	MouseFunction m_mouseFunctions[BUTTON_MAX][ACTION_MAX][AREA_MAX][GROUP_MAX];
 	uint32        m_doubleClickStartWaitTime[BUTTON_MAX];
 	sint32        m_xLastTime;
@@ -115,6 +120,7 @@ private:
 
 MouseDispatcher::MouseDispatcher(
 		MouseFunction mouseNoChange,
+		MouseFunction mouseHoover,
 		MouseFunction mouseMoveOver,
 		MouseFunction mouseMoveOverEdit,
 		MouseFunction mouseMoveAway,
@@ -166,6 +172,7 @@ MouseDispatcher::MouseDispatcher(
 :
 	m_noChange(false),
 	m_noChangeTime(0),
+	m_hooverTime(kDefaultHooverTime),
 	m_isMouseInside(false),
 	m_mouseEvent(),
 	m_doubleClickingInside(true),
@@ -175,6 +182,7 @@ MouseDispatcher::MouseDispatcher(
 	m_yLastTime(0)
 {
 	m_mouseNoChange = mouseNoChange;
+	m_mouseHoover = mouseHoover;
 	m_mouseFunctions[BUTTON_NONE][ACTION_MOVE][AREA_OVER][GROUP_NORMAL] = mouseMoveOver;
 	m_mouseFunctions[BUTTON_NONE][ACTION_MOVE][AREA_OVER][GROUP_EDIT] = mouseMoveOverEdit;
 	m_mouseFunctions[BUTTON_NONE][ACTION_MOVE][AREA_AWAY][GROUP_NORMAL] = mouseMoveAway;
@@ -284,13 +292,15 @@ void MouseDispatcher::ExecuteMouseFunction(aui_Region & region, aui_MouseEvent &
 	(region.*m_mouseFunctions[button][action][area][group])(&event);
 }
 
-void MouseDispatcher::ExecuteNoChangeMouseFunction(aui_Region & region, aui_MouseEvent & event)
-{
+void MouseDispatcher::ExecuteNoChangeMouseFunction(aui_Region & region, aui_MouseEvent & event) {
 #if defined(MOUSE_EVENT_DEBUG)
 	const MBCHAR * regionString = aui_Ldl::GetBlock(&region);
 
 	printf("Dispatch for region:: (%s) :: no change\n", regionString ? regionString : "unknown");
 #endif
+	if (m_isMouseInside && !event.lbutton && !event.rbutton && (event.time - m_noChangeTime) > m_hooverTime) {
+		(region.*m_mouseHoover)(&event);
+	}
 
 	m_noChange = true;
 	(region.*m_mouseNoChange)(&event);
@@ -613,6 +623,7 @@ void MouseDispatcher::Dispatch(aui_Region & region, aui_MouseEvent & event, bool
 MouseDispatcher * aui_Region::createMouseDispatcher() {
 	auto * mouseDispatcher = new MouseDispatcher(
 		&aui_Region::MouseNoChange,
+		&aui_Region::MouseHoover,
 		&aui_Region::MouseMoveOver,
 		&aui_Region::MouseNoOperation, // No operation
 		&aui_Region::MouseMoveAway,
@@ -676,16 +687,6 @@ void aui_Region::MouseDispatch(MouseDispatcher & mouseDispatcher, aui_MouseEvent
 	mouseDispatcher.Dispatch(*this, event, handleIt, edit);
 }
 
-bool aui_Region::IsMouseInside() const
-{
-	return m_mouseDispatcher->m_isMouseInside;
-}
-
-uint32 aui_Region::GetNoChangeTime() const
-{
-	return m_mouseDispatcher->m_noChangeTime;
-}
-
 void aui_Region::MouseNoChange(aui_MouseEvent * mouseData)
 {
 	if (IsDisabled()) {
@@ -694,4 +695,9 @@ void aui_Region::MouseNoChange(aui_MouseEvent * mouseData)
 	if (m_mouseDispatcher->m_isMouseInside && !GetWhichSeesMouse()) {
 		SetWhichSeesMouse(this );
 	}
+}
+
+uint32 aui_Region::GetTimeOut() const
+{
+	return m_mouseDispatcher->m_hooverTime;
 }

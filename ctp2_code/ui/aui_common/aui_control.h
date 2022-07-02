@@ -26,7 +26,7 @@
 //
 // - Event handlers declared in a notation that is more standard C++.
 // - Prevented crash in destructor after using the default constructor.
-// - Added a constom status bar text for orders. (13-Sep-2008 Martin Gühmann)
+// - Added a custom status bar text for orders. (13-Sep-2008 Martin GÃ¼hmann)
 //
 //----------------------------------------------------------------------------
 
@@ -57,7 +57,6 @@ class aui_StringTable;
 
 
 #define k_CONTROL_DEFAULT_SIZE			20
-#define k_CONTROL_DEFAULT_TIMEOUT		500
 #define k_CONTROL_DEFAULT_REPEATTIME	50
 
 
@@ -195,10 +194,6 @@ public:
 
 	virtual AUI_ERRCODE	HideThis( void );
 
-	uint32		GetTimeOut( void ) const { return m_timeOut; }
-	AUI_ERRCODE	SetTimeOut( uint32 timeOut )
-		{ m_timeOut = timeOut; return AUI_ERRCODE_OK; }
-
 	uint32		GetRepeatTime( void ) const { return m_repeatTime; }
 	AUI_ERRCODE	SetRepeatTime( uint32 repeatTime )
 		{ m_repeatTime = repeatTime; return AUI_ERRCODE_OK; }
@@ -248,7 +243,6 @@ protected:
 	BOOL			m_showingTip;
 
 	uint32			m_startWaitTime;
-	uint32			m_timeOut;
 
 	uint32			m_repeatTime;
 	uint32			m_lastRepeatTime;
@@ -277,7 +271,7 @@ protected:
 	virtual void	MouseRDragOver(aui_MouseEvent * mouseData);
 	virtual void	MouseRDragAway(aui_MouseEvent * mouseData);
 
-	virtual void	MouseNoChange(aui_MouseEvent * mouseData);
+	virtual void	MouseHoover(aui_MouseEvent * mouseData);
 
 private:
 

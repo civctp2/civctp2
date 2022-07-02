@@ -845,7 +845,7 @@ AUI_ERRCODE aui_Ranger::SlideThumb( void )
 void aui_Ranger::PostChildrenCallback( aui_MouseEvent *mouseData )
 {
 
-	if ( m_sliding && mouseData->time - m_startWaitTime > m_timeOut )
+	if ( m_sliding && mouseData->time - m_startWaitTime > GetTimeOut() )
 	if ( mouseData->time - m_lastRepeatTime > m_repeatTime )
 	{
 		m_lastRepeatTime = mouseData->time;

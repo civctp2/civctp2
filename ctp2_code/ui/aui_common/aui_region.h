@@ -389,6 +389,7 @@ protected:
 	virtual void	MouseRDoubleClickOutside(aui_MouseEvent * mouseData);
 
 	virtual void	MouseNoChange(aui_MouseEvent * mouseData);
+	virtual void	MouseHoover(aui_MouseEvent * mouseData) {}
 
 	void			MouseNoOperation(aui_MouseEvent * mouseData) {}
 
@@ -401,9 +402,7 @@ protected:
 	void			MouseLDropEditMode(aui_MouseEvent * mouseData);
 	void			MouseLDragEditMode(aui_MouseEvent * mouseData);
 
-	// TODO: temporary: introduce MouseHoover
-	bool IsMouseInside() const;
-	uint32 GetNoChangeTime() const;
+	uint32 GetTimeOut() const;
 private:
 	AUI_ERRCODE InitCommonLdl(const MBCHAR * ldlBlock);
 	void        InitCommon(void);

@@ -233,7 +233,6 @@ AUI_ERRCODE aui_Control::InitCommon(
 	m_tip = NULL,
 	m_showingTip = FALSE,
 	m_startWaitTime = 0,
-	m_timeOut = k_CONTROL_DEFAULT_TIMEOUT,
 	m_repeatTime = k_CONTROL_DEFAULT_REPEATTIME,
 	m_lastRepeatTime = 0,
 	m_ActionFunc = ActionFunc,
@@ -941,20 +940,17 @@ void aui_Control::MouseRDragAway( aui_MouseEvent *mouseData )
 		MouseMoveAway(mouseData);
 }
 
-
-void aui_Control::MouseNoChange( aui_MouseEvent *mouseData )
+void aui_Control::MouseHoover(aui_MouseEvent * mouseData)
 {
-
-	if ( IsMouseInside() )
-	if ( !GetWhichSeesMouse() || GetWhichSeesMouse() == this )
-	if ( !mouseData->lbutton && !mouseData->rbutton )
-	if ( mouseData->time - GetNoChangeTime() > m_timeOut )
+	if (!GetWhichSeesMouse() || GetWhichSeesMouse() == this)
 	{
-		SetWhichSeesMouse( this );
+		SetWhichSeesMouse(this);
 
-		if ( ShowTipWindow( mouseData ) )
-			if ( m_mouseCode == AUI_ERRCODE_UNHANDLED )
+		if (ShowTipWindow(mouseData)) {
+			if (m_mouseCode == AUI_ERRCODE_UNHANDLED) {
 				m_mouseCode = AUI_ERRCODE_HANDLED;
+			}
+		}
 	}
 }
 
