@@ -233,6 +233,7 @@ AUI_ERRCODE aui_Control::InitCommon(
 	m_tip = NULL,
 	m_showingTip = FALSE,
 	m_startWaitTime = 0,
+	m_timeOut = k_CONTROL_DEFAULT_TIMEOUT,
 	m_repeatTime = k_CONTROL_DEFAULT_REPEATTIME,
 	m_lastRepeatTime = 0,
 	m_ActionFunc = ActionFunc,

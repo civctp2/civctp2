@@ -916,6 +916,16 @@ void aui_Region::MouseRDoubleClickOutside( aui_MouseEvent *mouseData )
 	MouseRGrabOutside( mouseData );
 }
 
+void aui_Region::MouseNoChangeInside(aui_MouseEvent * mouseData)
+{
+	if (IsDisabled()) {
+		return;
+	}
+	if (!GetWhichSeesMouse()) {
+		SetWhichSeesMouse(this );
+	}
+}
+
 AUI_ERRCODE aui_Region::AddUndo( void )
 {
 	if (!s_undoList)

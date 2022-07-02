@@ -321,17 +321,22 @@ void Background::MouseMoveAway(aui_MouseEvent *data)
 	m_lbutton_isdown = FALSE;
 }
 
-void Background::MouseNoChange(aui_MouseEvent *data)
-
+void Background::MouseNoChangeInside(aui_MouseEvent * data)
 {
-	if (IsDisabled()) return;
+	if (IsDisabled()) {
+		return;
+	}
 
     Assert(data);
 
     if (data->movecount==0) {
         ProcessLastMouseMoveThisFrame(data);
     }
+}
 
+void Background::MouseNoChangeOutside(aui_MouseEvent * mouseData)
+{
+	MouseNoChangeInside(mouseData);
 }
 
 void Background::ProcessLastMouseMoveThisFrame(aui_MouseEvent *data)

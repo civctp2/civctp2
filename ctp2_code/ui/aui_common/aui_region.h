@@ -64,13 +64,12 @@ class aui_Region;
 #define k_AUI_REGION_DRAWFLAG_MOUSELDOUBLECLICKOUTSIDE	0x00400000
 #define k_AUI_REGION_DRAWFLAG_MOUSERDOUBLECLICKINSIDE	0x00800000
 #define k_AUI_REGION_DRAWFLAG_MOUSERDOUBLECLICKOUTSIDE	0x01000000
-#define k_AUI_REGION_DRAWFLAG_MOUSENOCHANGE				0x02000000
-#define k_AUI_REGION_DRAWFLAG_KEYSTATECHANGE			0x04000000
-#define k_AUI_REGION_DRAWFLAG_KEYBOARDFOCUSCHANGE		0x08000000
-#define k_AUI_REGION_DRAWFLAG_OVERLAP					0x10000000
-
-
-
+#define k_AUI_REGION_DRAWFLAG_MOUSENOCHANGEINSIDE		0x02000000
+#define k_AUI_REGION_DRAWFLAG_MOUSENOCHANGEOUTSIDE		0x04000000
+#define k_AUI_REGION_DRAWFLAG_KEYSTATECHANGE			0x08000000
+#define k_AUI_REGION_DRAWFLAG_KEYBOARDFOCUSCHANGE		0x10000000
+#define k_AUI_REGION_DRAWFLAG_OVERLAP					0x20000000
+#define k_AUI_REGION_DRAWFLAG_MOUSEHOOVER				0x40000000
 
 #define k_AUI_REGION_DRAWFLAG_DEFAULTMASK				0xffffffff
 
@@ -388,7 +387,8 @@ protected:
 	virtual void	MouseRDoubleClickInside(aui_MouseEvent * mouseData);
 	virtual void	MouseRDoubleClickOutside(aui_MouseEvent * mouseData);
 
-	virtual void	MouseNoChange(aui_MouseEvent * mouseData);
+	virtual void	MouseNoChangeInside(aui_MouseEvent * mouseData);
+	virtual void	MouseNoChangeOutside(aui_MouseEvent * mouseData) {}
 	virtual void	MouseHoover(aui_MouseEvent * mouseData) {}
 
 	void			MouseNoOperation(aui_MouseEvent * mouseData) {}
@@ -402,7 +402,6 @@ protected:
 	void			MouseLDropEditMode(aui_MouseEvent * mouseData);
 	void			MouseLDragEditMode(aui_MouseEvent * mouseData);
 
-	uint32 GetTimeOut() const;
 private:
 	AUI_ERRCODE InitCommonLdl(const MBCHAR * ldlBlock);
 	void        InitCommon(void);
