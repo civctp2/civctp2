@@ -24,7 +24,7 @@
 //
 // Modifications from the original Activision code:
 //
-// - Initialized local variables. (Sep 9th 2005 Martin Gühmann)
+// - Initialized local variables. (Sep 9th 2005 Martin GÃ¼hmann)
 //
 //----------------------------------------------------------------------------
 
@@ -151,12 +151,12 @@ sint32 aui_Tab::SetState( sint32 state )
 
 		if ( m_numStates == 2 ) m_state = 1;
 
-		m_attributes |= k_CONTROL_ATTRIBUTE_ON;
+		GetAttributes().Set(ControlAttribute::On);
 		if ( m_pane->IsHidden() ) m_pane->Show();
 	}
 	else
 	{
-		m_attributes &= ~k_CONTROL_ATTRIBUTE_ON;
+		GetAttributes().Reset(ControlAttribute::On);
 		if ( !m_pane->IsHidden() ) m_pane->Hide();
 	}
 
@@ -226,7 +226,7 @@ void aui_Tab::MouseLDragOver( aui_MouseEvent *mouseData )
 			if ( m_mouseCode == AUI_ERRCODE_UNHANDLED )
 				m_mouseCode = AUI_ERRCODE_HANDLED;
 
-			m_attributes |= k_CONTROL_ATTRIBUTE_ACTIVE;
+			GetAttributes().Set(ControlAttribute::Active);
 			m_draw |= m_drawMask & k_AUI_REGION_DRAWFLAG_MOUSELDRAGOVER;
 
 			if ( m_ActionFunc )
@@ -251,7 +251,7 @@ void aui_Tab::MouseLDragAway( aui_MouseEvent *mouseData )
 		if ( m_mouseCode == AUI_ERRCODE_UNHANDLED )
 			m_mouseCode = AUI_ERRCODE_HANDLED;
 
-		m_attributes &= ~k_CONTROL_ATTRIBUTE_ACTIVE;
+		GetAttributes().Reset(ControlAttribute::Active);
 		m_draw |= m_drawMask & k_AUI_REGION_DRAWFLAG_MOUSELDRAGAWAY;
 
 		if ( m_ActionFunc )
@@ -285,8 +285,7 @@ void aui_Tab::MouseLGrabInside( aui_MouseEvent *mouseData )
 		else
 			SetState( 1 );
 
-		m_attributes |= k_CONTROL_ATTRIBUTE_ACTIVE;
-
+		GetAttributes().Set(ControlAttribute::Active);
 		m_draw |= m_drawMask & k_AUI_REGION_DRAWFLAG_MOUSELGRABINSIDE;
 	}
 	else
@@ -322,7 +321,7 @@ void aui_Tab::MouseLDropInside( aui_MouseEvent *mouseData )
 			if ( m_mouseCode == AUI_ERRCODE_UNHANDLED )
 				m_mouseCode = AUI_ERRCODE_HANDLED;
 
-			m_attributes |= k_CONTROL_ATTRIBUTE_ACTIVE;
+			GetAttributes().Set(ControlAttribute::Active);
 			m_draw |= m_drawMask & k_AUI_REGION_DRAWFLAG_MOUSELDROPINSIDE;
 
 			if ( m_ActionFunc )

@@ -28,7 +28,7 @@
 // - Interpret a zero-length link text as display of the text from gl_str.txt.
 //   Example: <L:DATABASE_UNITS,UNIT_STEALTH_BOMBER><e> will display a
 //            "Stealth Bomber" hyperlink when using the English version.
-// - Initialized local variables. (Sep 9th 2005 Martin Gühmann)
+// - Initialized local variables. (Sep 9th 2005 Martin GÃ¼hmann)
 //
 //----------------------------------------------------------------------------
 
@@ -708,7 +708,7 @@ void ctp2_HyperTextBox::MouseLDropInside( aui_MouseEvent *mouseData )
 
 			m_mouseCode = AUI_ERRCODE_HANDLEDEXCLUSIVE;
 
-			m_attributes &= ~k_CONTROL_ATTRIBUTE_ACTIVE;
+			GetAttributes().Reset(ControlAttribute::Active);
 
 			POINT pos;
 			pos.x = mouseData->position.x - m_x;
@@ -766,7 +766,7 @@ void ctp2_HyperTextBox::MouseLDropInside( aui_MouseEvent *mouseData )
 			if ( m_mouseCode == AUI_ERRCODE_UNHANDLED )
 				m_mouseCode = AUI_ERRCODE_HANDLED;
 
-			m_attributes |= k_CONTROL_ATTRIBUTE_ACTIVE;
+			GetAttributes().Set(ControlAttribute::Active);
 			m_draw |= m_drawMask & k_AUI_REGION_DRAWFLAG_MOUSELDROPINSIDE;
 		}
 	}
@@ -808,8 +808,7 @@ void ctp2_HyperTextBox::MouseLGrabInside( aui_MouseEvent *mouseData )
 
 		m_mouseCode = AUI_ERRCODE_HANDLEDEXCLUSIVE;
 
-		m_attributes |= k_CONTROL_ATTRIBUTE_DOWN;
-		m_attributes |= k_CONTROL_ATTRIBUTE_ACTIVE;
+		GetAttributes().Set(ControlAttribute::Down | ControlAttribute::Active);
 		m_draw |= m_drawMask & k_AUI_REGION_DRAWFLAG_MOUSELGRABINSIDE;
 
 		POINT pos;

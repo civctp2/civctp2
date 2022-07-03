@@ -62,7 +62,7 @@ AUI_ERRCODE aui_Button::InitCommon(void)
 {
 	m_isRepeating = false;
 	m_repeatCount = 0;
-	m_attributes &= ~k_CONTROL_ATTRIBUTE_DOWN;
+	GetAttributes().Reset(ControlAttribute::Down);
 	m_keyboardAction = AUI_BUTTON_ACTION_EXECUTE;
 
 	return AUI_ERRCODE_OK;
@@ -115,8 +115,7 @@ void aui_Button::KeyboardCallback( aui_KeyboardEvent *keyboardData )
 
 			HideTipWindow();
 
-			m_attributes |= k_CONTROL_ATTRIBUTE_DOWN;
-			m_attributes |= k_CONTROL_ATTRIBUTE_ACTIVE;
+			GetAttributes().Set(ControlAttribute::Down | ControlAttribute::Active);
 			m_draw |= m_drawMask & k_AUI_REGION_DRAWFLAG_KEYSTATECHANGE;
 
 			m_isRepeating = TRUE;
@@ -132,9 +131,7 @@ void aui_Button::KeyboardCallback( aui_KeyboardEvent *keyboardData )
 		{
 			PlaySound( AUI_SOUNDBASE_SOUND_EXECUTE );
 
-			m_attributes &= ~k_CONTROL_ATTRIBUTE_DOWN;
-			m_attributes &= ~k_CONTROL_ATTRIBUTE_ACTIVE;
-
+			GetAttributes().Reset(ControlAttribute::Down | ControlAttribute::Active);
 			m_draw |= m_drawMask & k_AUI_REGION_DRAWFLAG_KEYSTATECHANGE;
 
 			if(GetAttracting()) {
@@ -190,8 +187,7 @@ void aui_Button::MouseLDragOver( aui_MouseEvent *mouseData )
 			if ( m_mouseCode == AUI_ERRCODE_UNHANDLED )
 				m_mouseCode = AUI_ERRCODE_HANDLED;
 
-			m_attributes |= k_CONTROL_ATTRIBUTE_DOWN;
-			m_attributes |= k_CONTROL_ATTRIBUTE_ACTIVE;
+			GetAttributes().Set(ControlAttribute::Down | ControlAttribute::Active);
 			m_draw |= m_drawMask & k_AUI_REGION_DRAWFLAG_MOUSELDRAGOVER;
 
 			m_isRepeating = true;
@@ -214,8 +210,7 @@ void aui_Button::MouseLDragAway( aui_MouseEvent *mouseData )
 		if ( m_mouseCode == AUI_ERRCODE_UNHANDLED )
 			m_mouseCode = AUI_ERRCODE_HANDLED;
 
-		m_attributes &= ~k_CONTROL_ATTRIBUTE_DOWN;
-		m_attributes &= ~k_CONTROL_ATTRIBUTE_ACTIVE;
+		GetAttributes().Reset(ControlAttribute::Down | ControlAttribute::Active);
 		m_draw |= m_drawMask & k_AUI_REGION_DRAWFLAG_MOUSELDRAGAWAY;
 
 		m_isRepeating = false;
@@ -249,8 +244,7 @@ void aui_Button::MouseLGrabInside( aui_MouseEvent *mouseData )
 
 		m_mouseCode = AUI_ERRCODE_HANDLEDEXCLUSIVE;
 
-		m_attributes |= k_CONTROL_ATTRIBUTE_DOWN;
-		m_attributes |= k_CONTROL_ATTRIBUTE_ACTIVE;
+		GetAttributes().Set(ControlAttribute::Down | ControlAttribute::Active);
 		m_draw |= m_drawMask & k_AUI_REGION_DRAWFLAG_MOUSELGRABINSIDE;
 
 		m_isRepeating = true;
@@ -283,10 +277,7 @@ void aui_Button::MouseLDropInside( aui_MouseEvent *mouseData )
 
 			m_mouseCode = AUI_ERRCODE_HANDLEDEXCLUSIVE;
 
-			m_attributes &= ~k_CONTROL_ATTRIBUTE_DOWN;
-
-			m_attributes &= ~k_CONTROL_ATTRIBUTE_ACTIVE;
-
+			GetAttributes().Reset(ControlAttribute::Down | ControlAttribute::Active);
 			m_draw |= m_drawMask & k_AUI_REGION_DRAWFLAG_MOUSELDROPINSIDE;
 
 			m_isRepeating = false;
@@ -308,7 +299,7 @@ void aui_Button::MouseLDropInside( aui_MouseEvent *mouseData )
 			if ( m_mouseCode == AUI_ERRCODE_UNHANDLED )
 				m_mouseCode = AUI_ERRCODE_HANDLED;
 
-			m_attributes |= k_CONTROL_ATTRIBUTE_ACTIVE;
+			GetAttributes().Set(ControlAttribute::Active);
 			m_draw |= m_drawMask & k_AUI_REGION_DRAWFLAG_MOUSELDROPINSIDE;
 		}
 	}

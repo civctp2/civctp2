@@ -47,15 +47,6 @@ class aui_Window;
 class aui_Action;
 class aui_StringTable;
 
-
-#define k_CONTROL_ATTRIBUTE_HIDDEN		k_REGION_ATTRIBUTE_HIDDEN
-#define k_CONTROL_ATTRIBUTE_DISABLED	k_REGION_ATTRIBUTE_DISABLED
-#define k_CONTROL_ATTRIBUTE_DRAGDROP	k_REGION_ATTRIBUTE_DRAGDROP
-#define k_CONTROL_ATTRIBUTE_DOWN		0x00000008
-#define k_CONTROL_ATTRIBUTE_ON			0x00000010
-#define k_CONTROL_ATTRIBUTE_ACTIVE		0x00000020
-
-
 #define k_CONTROL_DEFAULT_SIZE			20
 #define k_CONTROL_DEFAULT_TIMEOUT		500
 #define k_CONTROL_DEFAULT_REPEATTIME	50
@@ -103,6 +94,17 @@ public:
 	}
 
 protected:
+	class ControlAttribute
+	{
+	private:
+		constexpr static uint32 First = RegionAttribute::Last() << 1;
+	public:
+		constexpr static uint32 Down   = First << 0;
+		constexpr static uint32 On     = First << 1;
+		constexpr static uint32 Active = First << 2;
+		constexpr static uint32 Last() { return Active; }
+	};
+
 	aui_Control()
 	:	aui_ImageBase       (),
 		aui_TextBase        (),
@@ -156,12 +158,12 @@ public:
 	AUI_ERRCODE	ToScreen( RECT *rect );
 	AUI_ERRCODE	ToScreen( POINT *point );
 
-	BOOL IsDown( void ) const
-		{ return m_attributes & k_CONTROL_ATTRIBUTE_DOWN; }
-	BOOL IsOn( void ) const
-		{ return m_attributes & k_CONTROL_ATTRIBUTE_ON; }
-	BOOL IsActive( void ) const
-		{ return m_attributes & k_CONTROL_ATTRIBUTE_ACTIVE; }
+	bool IsDown() const {
+		return GetAttributes().IsSet(ControlAttribute::Down); }
+	bool IsOn() const {
+		return GetAttributes().IsSet(ControlAttribute::On); }
+	bool IsActive() const {
+		return GetAttributes().IsSet(ControlAttribute::Active); }
 
 	virtual AUI_ERRCODE	SetText(
 		const MBCHAR *text,

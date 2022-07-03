@@ -238,13 +238,7 @@ void c3_ColorIconButton::MouseLDoubleClickInside( aui_MouseEvent *mouseData )
 
 			m_mouseCode = AUI_ERRCODE_HANDLEDEXCLUSIVE;
 
-			m_attributes &= ~k_CONTROL_ATTRIBUTE_DOWN;
-
-
-
-
-			m_attributes &= ~k_CONTROL_ATTRIBUTE_ACTIVE;
-
+			GetAttributes().Reset(ControlAttribute::Down | ControlAttribute::Active);
 			m_draw |= m_drawMask & k_AUI_REGION_DRAWFLAG_MOUSELDROPINSIDE;
 
 			m_isRepeating = FALSE;
@@ -263,7 +257,7 @@ void c3_ColorIconButton::MouseLDoubleClickInside( aui_MouseEvent *mouseData )
 			if ( m_mouseCode == AUI_ERRCODE_UNHANDLED )
 				m_mouseCode = AUI_ERRCODE_HANDLED;
 
-			m_attributes |= k_CONTROL_ATTRIBUTE_ACTIVE;
+			GetAttributes().Set(ControlAttribute::Active);
 			m_draw |= m_drawMask & k_AUI_REGION_DRAWFLAG_MOUSELDROPINSIDE;
 		}
 	}
@@ -288,8 +282,7 @@ void c3_ColorIconButton::MouseRGrabInside( aui_MouseEvent *mouseData )
 
 		m_mouseCode = AUI_ERRCODE_HANDLEDEXCLUSIVE;
 
-		m_attributes |= k_CONTROL_ATTRIBUTE_DOWN;
-		m_attributes |= k_CONTROL_ATTRIBUTE_ACTIVE;
+		GetAttributes().Set(ControlAttribute::Down | ControlAttribute::Active);
 		m_draw |= m_drawMask & k_AUI_REGION_DRAWFLAG_MOUSELGRABINSIDE;
 
 		m_isRepeating = TRUE;
@@ -322,13 +315,7 @@ void c3_ColorIconButton::MouseRDropInside( aui_MouseEvent *mouseData )
 
 			m_mouseCode = AUI_ERRCODE_HANDLEDEXCLUSIVE;
 
-			m_attributes &= ~k_CONTROL_ATTRIBUTE_DOWN;
-
-
-
-
-			m_attributes &= ~k_CONTROL_ATTRIBUTE_ACTIVE;
-
+			GetAttributes().Reset(ControlAttribute::Down | ControlAttribute::Active);
 			m_draw |= m_drawMask & k_AUI_REGION_DRAWFLAG_MOUSELDROPINSIDE;
 
 			m_isRepeating = FALSE;
@@ -346,7 +333,7 @@ void c3_ColorIconButton::MouseRDropInside( aui_MouseEvent *mouseData )
 			if ( m_mouseCode == AUI_ERRCODE_UNHANDLED )
 				m_mouseCode = AUI_ERRCODE_HANDLED;
 
-			m_attributes |= k_CONTROL_ATTRIBUTE_ACTIVE;
+			GetAttributes().Set(ControlAttribute::Active);
 			m_draw |= m_drawMask & k_AUI_REGION_DRAWFLAG_MOUSELDROPINSIDE;
 		}
 	}

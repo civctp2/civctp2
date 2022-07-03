@@ -24,7 +24,7 @@
 //
 // Modifications from the original Activision code:
 //
-// - Initialized local variables. (Sep 9th 2005 Martin Gühmann)
+// - Initialized local variables. (Sep 9th 2005 Martin GÃ¼hmann)
 //
 //----------------------------------------------------------------------------
 
@@ -631,7 +631,7 @@ void c3_HyperTextBox::MouseLDropInside( aui_MouseEvent *mouseData )
 
 			m_mouseCode = AUI_ERRCODE_HANDLEDEXCLUSIVE;
 
-			m_attributes &= ~k_CONTROL_ATTRIBUTE_ACTIVE;
+			GetAttributes().Reset(ControlAttribute::Active);
 
 			POINT pos;
 			pos.x = mouseData->position.x - m_x;
@@ -681,7 +681,7 @@ void c3_HyperTextBox::MouseLDropInside( aui_MouseEvent *mouseData )
 			if ( m_mouseCode == AUI_ERRCODE_UNHANDLED )
 				m_mouseCode = AUI_ERRCODE_HANDLED;
 
-			m_attributes |= k_CONTROL_ATTRIBUTE_ACTIVE;
+			GetAttributes().Set(ControlAttribute::Active);
 			m_draw |= m_drawMask & k_AUI_REGION_DRAWFLAG_MOUSELDROPINSIDE;
 		}
 	}
@@ -723,8 +723,7 @@ void c3_HyperTextBox::MouseLGrabInside( aui_MouseEvent *mouseData )
 
 		m_mouseCode = AUI_ERRCODE_HANDLEDEXCLUSIVE;
 
-		m_attributes |= k_CONTROL_ATTRIBUTE_DOWN;
-		m_attributes |= k_CONTROL_ATTRIBUTE_ACTIVE;
+		GetAttributes().Set(ControlAttribute::Down | ControlAttribute::Active);
 		m_draw |= m_drawMask & k_AUI_REGION_DRAWFLAG_MOUSELGRABINSIDE;
 
 		POINT pos;

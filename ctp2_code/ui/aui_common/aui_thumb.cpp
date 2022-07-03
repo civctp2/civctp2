@@ -177,7 +177,7 @@ void aui_Thumb::MouseLDropInside( aui_MouseEvent *mouseData )
 		{
 			PlaySound( AUI_SOUNDBASE_SOUND_ACTIVATE );
 
-			m_attributes |= k_CONTROL_ATTRIBUTE_ACTIVE;
+			GetAttributes().Set(ControlAttribute::Active);
 			m_draw |= m_drawMask & k_AUI_REGION_DRAWFLAG_MOUSELDROPINSIDE;
 		}
 
@@ -222,7 +222,7 @@ void aui_Thumb::MouseLDropOutside( aui_MouseEvent *mouseData )
 		if ( m_mouseCode == AUI_ERRCODE_UNHANDLED )
 			m_mouseCode = AUI_ERRCODE_HANDLED;
 
-		m_attributes &= ~k_CONTROL_ATTRIBUTE_ACTIVE;
+		GetAttributes().Reset(ControlAttribute::Active);
 		m_draw |= m_drawMask & k_AUI_REGION_DRAWFLAG_MOUSELDROPOUTSIDE;
 
 		if ( m_parent != (aui_Region *)m_window )

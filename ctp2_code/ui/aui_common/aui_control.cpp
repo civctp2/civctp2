@@ -829,7 +829,7 @@ void aui_Control::MouseMoveOver( aui_MouseEvent *mouseData )
 			if ( m_mouseCode == AUI_ERRCODE_UNHANDLED )
 				m_mouseCode = AUI_ERRCODE_HANDLED;
 
-			m_attributes |= k_CONTROL_ATTRIBUTE_ACTIVE;
+			GetAttributes().Set(ControlAttribute::Active);
 			m_draw |= m_drawMask & k_AUI_REGION_DRAWFLAG_MOUSEMOVEOVER;
 
 			if ( m_ActionFunc )
@@ -865,7 +865,7 @@ void aui_Control::MouseMoveAway( aui_MouseEvent *mouseData )
 		if ( m_mouseCode == AUI_ERRCODE_UNHANDLED )
 			m_mouseCode = AUI_ERRCODE_HANDLED;
 
-		m_attributes &= ~k_CONTROL_ATTRIBUTE_ACTIVE;
+		GetAttributes().Reset(ControlAttribute::Active);
 		m_draw |= m_drawMask & k_AUI_REGION_DRAWFLAG_MOUSEMOVEAWAY;
 
 		if ( m_ActionFunc )
