@@ -8265,14 +8265,6 @@ SOURCE=..\robot\utility\RoboInit.h
 # PROP Default_Filter ""
 # Begin Source File
 
-SOURCE=..\robot\pathing\A_Star_Heuristic_Cost.cpp
-# End Source File
-# Begin Source File
-
-SOURCE=..\robot\pathing\A_Star_Heuristic_Cost.h
-# End Source File
-# Begin Source File
-
 SOURCE=..\robot\pathing\Astar.cpp
 # End Source File
 # Begin Source File

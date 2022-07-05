@@ -137,7 +137,6 @@ ctp_ctp2_SOURCES = \
 	net/io/net_thread.cpp \
 	robot/utility/RandTest.cpp \
 	robot/utility/roboinit.cpp \
-	robot/pathing/A_Star_Heuristic_Cost.cpp \
 	robot/pathing/astar.cpp \
 	robot/pathing/AstarPnt.cpp \
 	robot/pathing/AVLHeap.cpp \

@@ -3452,14 +3452,6 @@ rem                                                if                           
       <Optimization Condition="'$(Configuration)|$(Platform)'=='Release|Win32'">Disabled</Optimization>
       <Optimization Condition="'$(Configuration)|$(Platform)'=='Test|Win32'">Disabled</Optimization>
     </ClCompile>
-    <ClCompile Include="..\robot\pathing\A_Star_Heuristic_Cost.cpp">
-      <Optimization Condition="'$(Configuration)|$(Platform)'=='Final with Logging|Win32'">MaxSpeed</Optimization>
-      <Optimization Condition="'$(Configuration)|$(Platform)'=='Final|Win32'">MaxSpeed</Optimization>
-      <Optimization Condition="'$(Configuration)|$(Platform)'=='Optimized Test|Win32'">Disabled</Optimization>
-      <FavorSizeOrSpeed Condition="'$(Configuration)|$(Platform)'=='Optimized Test|Win32'">Size</FavorSizeOrSpeed>
-      <Optimization Condition="'$(Configuration)|$(Platform)'=='Release|Win32'">Disabled</Optimization>
-      <Optimization Condition="'$(Configuration)|$(Platform)'=='Test|Win32'">Disabled</Optimization>
-    </ClCompile>
     <ClCompile Include="..\robot\pathing\CityAstar.cpp">
       <Optimization Condition="'$(Configuration)|$(Platform)'=='Final with Logging|Win32'">MaxSpeed</Optimization>
       <Optimization Condition="'$(Configuration)|$(Platform)'=='Final|Win32'">MaxSpeed</Optimization>
@@ -7282,7 +7274,6 @@ rem                                                if                           
     <ClInclude Include="..\robot\pathing\Astar.h" />
     <ClInclude Include="..\robot\pathing\AstarPnt.h" />
     <ClInclude Include="..\robot\pathing\AVLHeap.h" />
-    <ClInclude Include="..\robot\pathing\A_Star_Heuristic_Cost.h" />
     <ClInclude Include="..\robot\pathing\CityAstar.h" />
     <ClInclude Include="..\robot\pathing\Path.h" />
     <ClInclude Include="..\robot\pathing\RobotAstar2.h" />
