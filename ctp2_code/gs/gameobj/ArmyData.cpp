@@ -9150,19 +9150,6 @@ void ArmyData::ActionSuccessful(SPECATTACK attack, Unit &unit, Unit const & c)
 	}
 }
 
-void ArmyData::ActionUnsuccessful(const MapPoint &point)
-{
-	sint32 visiblePlayer = g_selected_item->GetVisiblePlayer();
-	if ((visiblePlayer == m_owner) ||
-		(m_array[0].GetVisibility() & (1 << visiblePlayer))) {
-
-		g_soundManager->AddSound(SOUNDTYPE_SFX, (uint32)0,
-							gamesounds_GetGameSoundID(GAMESOUNDS_DEFAULT_FAIL),
-							point.x,
-							point.y);
-	}
-}
-
 bool ArmyData::CanSomeCargoBeachAssault() const
 {
 	for(sint32 i = 0; i < m_nElements; i++)
