@@ -9137,7 +9137,14 @@ void ArmyData::ActionSuccessful(SPECATTACK attack, Unit &unit, Unit const & c)
 			if(visiblePlayer == m_owner
 			|| unit.GetVisibility() & (1 << visiblePlayer))
 			{
-				g_soundManager->AddSound(SOUNDTYPE_SFX, (uint32)0, 	soundID, m_pos.x, m_pos.y);
+				if(g_selected_item->IsAutoCenterOn() 
+				    && !g_director->TileWillBeCompletelyVisible(m_pos.x, m_pos.y)
+				    && g_player[g_selected_item->GetVisiblePlayer()]->IsVisible(m_pos)
+				    ){ // center on pos if generally visible but not in current view
+				    g_director->AddCenterMap(m_pos);
+				    }
+				
+				g_soundManager->AddSound(SOUNDTYPE_SFX, (uint32)0, 	soundID, m_pos.x, m_pos.y); // pos not used in SoundManager::AddSound, centering map could be implemented there, not sure though if that would cause troule for sounds not bound to a map position (e.g. click-sound)
 			}
 		}
 	}
