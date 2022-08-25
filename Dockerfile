@@ -1,7 +1,7 @@
 ################################################################################
 # base system
 ################################################################################
-FROM ubuntu:18.04 as system
+FROM ubuntu as system
 
 ENV USERNAME diUser
 RUN useradd -m $USERNAME && \
