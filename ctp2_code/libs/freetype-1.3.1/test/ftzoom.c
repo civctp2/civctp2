@@ -105,7 +105,7 @@
   int        xoffset;
   int        yoffset;
 
-  TT_Raster_Map  Bit;
+  extern TT_Raster_Map  Bit;
 
   int  Fail;
   int  Num;
