@@ -108,7 +108,6 @@ void GaiaController::InitializeStatics()
 		g_theEndGameObjectDB->FindRecordNameIndex("ENDGAME_PROCESSING_TOWER");
 
 	Assert(sm_towerEndgameIndex >= 0);
-	Assert(g_theEndGameObjectDB->Get(sm_towerEndgameIndex) >= 0);
 	if (sm_towerEndgameIndex >= 0 && g_theEndGameObjectDB->Get(sm_towerEndgameIndex))
 	{
 		terr_rec = g_theEndGameObjectDB->Get(sm_towerEndgameIndex)->
@@ -120,7 +119,6 @@ void GaiaController::InitializeStatics()
 		g_theEndGameObjectDB->FindRecordNameIndex("ENDGAME_POWER_SATELLITE");
 
 	Assert(sm_satelliteEndgameIndex >= 0);
-	Assert(g_theEndGameObjectDB->Get(sm_satelliteEndgameIndex) >= 0);
 	if (sm_satelliteEndgameIndex >= 0 && g_theEndGameObjectDB->Get(sm_satelliteEndgameIndex))
 	{
 		building_rec = g_theEndGameObjectDB->Get(sm_satelliteEndgameIndex)->
@@ -132,7 +130,6 @@ void GaiaController::InitializeStatics()
 		g_theEndGameObjectDB->FindRecordNameIndex("ENDGAME_GAIA_COMPUTER");
 
 	Assert(sm_mainframeEndgameIndex >= 0);
-	Assert(g_theEndGameObjectDB->Get(sm_mainframeEndgameIndex) >= 0);
 	if (sm_mainframeEndgameIndex >= 0 && g_theEndGameObjectDB->Get(sm_mainframeEndgameIndex))
 	{
 		building_rec = g_theEndGameObjectDB->Get(sm_mainframeEndgameIndex)->
