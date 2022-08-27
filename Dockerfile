@@ -15,7 +15,8 @@ RUN useradd -m $USERNAME && \
 ################################################################################
 FROM system as builder
 
-RUN apt-get update && apt-get install -y --no-install-recommends \
+RUN apt-get update && \
+    DEBIAN_FRONTEND=noninteractive TZ=Etc/UTC apt-get install -y --no-install-recommends \
     libsdl2-dev libsdl2-mixer-dev libsdl2-image-dev libtiff-dev libavcodec-dev libavformat-dev libswscale-dev \
     byacc gcc g++ automake make libtool unzip flex git ca-certificates
 
