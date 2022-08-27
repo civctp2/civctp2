@@ -2360,9 +2360,6 @@ void DrawAngledLine16(Pixel16 * pixel, sint32 majorLength, sint32 minorLength, s
 		Pixel16 color)
 {
 	Pixel16 * endPixel = pixel + majorLength * majorPitch + minorLength * minorPitch;
-
-	// first and last pixel
-	*pixel    = color;
 	*endPixel = color;
 
 	// calculate 16-bit fixed-point fractional part of a
@@ -2372,8 +2369,10 @@ void DrawAngledLine16(Pixel16 * pixel, sint32 majorLength, sint32 minorLength, s
 	// Initialize the line error accumulator to 0
 	uint16 errorAccumulator = 0;
 
-	while (pixel < endPixel)
+	do
 	{
+		*pixel = color;
+
 		const uint16 error = errorAccumulator; // remember current accumulated error
 		errorAccumulator += errorFraction;     // calculate error for next pixel
 
@@ -2383,24 +2382,13 @@ void DrawAngledLine16(Pixel16 * pixel, sint32 majorLength, sint32 minorLength, s
 			pixel += minorPitch;
 		}
 		pixel += majorPitch; // always advance major
-
-		if (pixel < endPixel)
-		{
-			*pixel = color;
-		}
-	}
+	} while (--majorLength > 0);
 }
 
 void DrawAngledPatternLine16(Pixel16 * pixel, sint32 majorLength, sint32 minorLength, sint32 majorPitch,
 		sint32 minorPitch, Pixel16 color, uint32 fullPattern, uint32 currentPattern)
 {
 	Pixel16 * endPixel = pixel + majorLength * majorPitch + minorLength * minorPitch;
-
-	// first pixel is full-pixel
-	if (IsLinePatternActive(currentPattern)) {
-		*pixel = color;
-	}
-	currentPattern = UpdateLinePattern(fullPattern, currentPattern);
 
 	// calculate 16-bit fixed-point fractional part of a
 	// pixel that minor advances each time major advances 1 pixel, truncating the
@@ -2409,8 +2397,13 @@ void DrawAngledPatternLine16(Pixel16 * pixel, sint32 majorLength, sint32 minorLe
 	// Initialize the line error accumulator to 0
 	uint16 errorAccumulator = 0;
 
-	while (pixel < endPixel)
+	do
 	{
+		if (IsLinePatternActive(currentPattern)) {
+			*pixel = color;
+		}
+		currentPattern = UpdateLinePattern(fullPattern, currentPattern);
+
 		const uint16 error = errorAccumulator; // remember current accumulated error
 		errorAccumulator += errorFraction;     // calculate error for next pixel
 
@@ -2420,13 +2413,8 @@ void DrawAngledPatternLine16(Pixel16 * pixel, sint32 majorLength, sint32 minorLe
 			pixel += minorPitch;
 		}
 		pixel += majorPitch; // always advance major
+	} while (--majorLength > 0);
 
-		if ((pixel < endPixel) && IsLinePatternActive(currentPattern))
-		{
-			*pixel = color;
-		}
-		currentPattern = UpdateLinePattern(fullPattern, currentPattern);
-	}
 	// last pixel is full-pixel
 	if (IsLinePatternActive(currentPattern)) {
 		*endPixel = color;
@@ -2440,9 +2428,6 @@ void SpecialDrawAngledLine16(Pixel16 * pixel, sint32 majorLength, sint32 minorLe
 	const uint32 blendRgbMask  = pixelutils_GetBlend16RGBMask();
 
 	Pixel16 * endPixel = pixel + majorLength * majorPitch + minorLength * minorPitch;
-
-	// first and last pixel are full-pixel
-	*pixel    = lineFlags & LF_SHADOW ? pixelutils_Shadow16(*pixel, shadowRgbMask) : color;
 	*endPixel = lineFlags & LF_SHADOW ? pixelutils_Shadow16(*endPixel, shadowRgbMask) : color;
 
 	// calculate 16-bit fixed-point fractional part of a
@@ -2452,8 +2437,22 @@ void SpecialDrawAngledLine16(Pixel16 * pixel, sint32 majorLength, sint32 minorLe
 	// Initialize the line error accumulator to 0
 	uint16 errorAccumulator = 0;
 
-	while (pixel < endPixel)
+	do
 	{
+		if (lineFlags & LF_ANTI_ALIASED)
+		{
+			Pixel16 *pairedPixel = pixel + minorPitch;
+			// Most significant bits of errorAccumulator determine the weight of this pixel
+			uint8 weight = errorAccumulator >> 8;
+			Pixel16 pixelColor = lineFlags & LF_SHADOW ? pixelutils_Shadow16(*pixel, shadowRgbMask) : color;
+			*pixel = pixelutils_Blend16(*pixel, pixelColor, weight ^ 255, blendRgbMask);
+			pixelColor = lineFlags & LF_SHADOW ? pixelutils_Shadow16(*pairedPixel, shadowRgbMask) : color;
+			*pairedPixel = pixelutils_Blend16(*pairedPixel, pixelColor, weight, blendRgbMask);
+		}
+		else {
+			*pixel = pixelutils_Shadow16(*pixel, shadowRgbMask);
+		}
+
 		const uint16 error = errorAccumulator; // remember current accumulated error
 		errorAccumulator += errorFraction;     // calculate error for next pixel
 
@@ -2463,26 +2462,7 @@ void SpecialDrawAngledLine16(Pixel16 * pixel, sint32 majorLength, sint32 minorLe
 			pixel += minorPitch;
 		}
 		pixel += majorPitch; // always advance major
-
-		if (lineFlags & LF_ANTI_ALIASED)
-		{
-			Pixel16 *pairedPixel = pixel + minorPitch;
-			if (pairedPixel <= endPixel + 2) // + 2 to allow lines with negative delta-x to connect to end-pixel
-			{
-				// Most significant bits of exrrorAccumulator determine the weight of this pixel
-				uint8 weight = errorAccumulator >> 8;
-				Pixel16 pixelColor = lineFlags & LF_SHADOW ? pixelutils_Shadow16(*pixel, shadowRgbMask) : color;
-				*pixel = pixelutils_Blend16(*pixel, pixelColor, weight ^ 255, blendRgbMask);
-				pixelColor = lineFlags & LF_SHADOW ? pixelutils_Shadow16(*pairedPixel, shadowRgbMask) : color;
-				*pairedPixel = pixelutils_Blend16(*pairedPixel, pixelColor, weight, blendRgbMask);
-			}
-		} else {
-			if (pixel < endPixel)
-			{
-				*pixel = pixelutils_Shadow16(*pixel, shadowRgbMask);
-			}
-		}
-	}
+	} while (--majorLength > 0);
 }
 
 void SpecialDrawAngledPatternLine16(Pixel16 * pixel, sint32 majorLength, sint32 minorLength, sint32 majorPitch,
@@ -2493,12 +2473,6 @@ void SpecialDrawAngledPatternLine16(Pixel16 * pixel, sint32 majorLength, sint32 
 
 	Pixel16 * endPixel = pixel + majorLength * majorPitch + minorLength * minorPitch;
 
-	// first pixel is full-pixel
-	if (IsLinePatternActive(currentPattern)) {
-		*pixel = lineFlags & LF_SHADOW ? pixelutils_Shadow16(*pixel, shadowRgbMask) : color;
-	}
-	currentPattern = UpdateLinePattern(fullPattern, currentPattern);
-
 	// calculate 16-bit fixed-point fractional part of a
 	// pixel that minor advances each time major advances 1 pixel, truncating the
 	// result so that we won't overrun the endpoint along the minor axis
@@ -2506,23 +2480,13 @@ void SpecialDrawAngledPatternLine16(Pixel16 * pixel, sint32 majorLength, sint32 
 	// Initialize the line error accumulator to 0
 	uint16 errorAccumulator = 0;
 
-	while (pixel < endPixel)
+	do
 	{
-		const uint16 error = errorAccumulator; // remember current accumulated error
-		errorAccumulator += errorFraction;     // calculate error for next pixel
-
-		if (errorAccumulator <= error)
-		{
-			// Error accumulator turned over, so advance the minor
-			pixel += minorPitch;
-		}
-		pixel += majorPitch; // always advance major
-
 		if (lineFlags & LF_ANTI_ALIASED) {
 			Pixel16 *pairedPixel = pixel + minorPitch;
-			// + 2 to allow lines with negative delta-x to connect to end-pixel
-			if ((pairedPixel <= endPixel + 2) && IsLinePatternActive(currentPattern)) {
-				// Most significant bits of exrrorAccumulator determine the weight of this pixel
+			if (IsLinePatternActive(currentPattern))
+			{
+				// Most significant bits of errorAccumulator determine the weight of this pixel
 				uint8 weight = errorAccumulator >> 8;
 				Pixel16 pixelColor = lineFlags & LF_SHADOW ? pixelutils_Shadow16(*pixel, shadowRgbMask) : color;
 				*pixel = pixelutils_Blend16(*pixel, pixelColor, weight ^ 255, blendRgbMask);
@@ -2532,13 +2496,23 @@ void SpecialDrawAngledPatternLine16(Pixel16 * pixel, sint32 majorLength, sint32 
 		}
 		else
 		{
-			if ((pixel < endPixel) && IsLinePatternActive(currentPattern))
-			{
+			if (IsLinePatternActive(currentPattern)) {
 				*pixel = pixelutils_Shadow16(*pixel, shadowRgbMask);
 			}
 		}
 		currentPattern = UpdateLinePattern(fullPattern, currentPattern);
-	}
+
+		const uint16 error = errorAccumulator; // remember current accumulated error
+		errorAccumulator += errorFraction;     // calculate error for next pixel
+
+		if (errorAccumulator <= error)
+		{
+			// Error accumulator turned over, so advance the minor
+			pixel += minorPitch;
+		}
+		pixel += majorPitch; // always advance major
+	} while (--majorLength > 0);
+
 	// last pixel is full-pixel
 	if (IsLinePatternActive(currentPattern)) {
 		*endPixel = lineFlags & LF_SHADOW ? pixelutils_Shadow16(*endPixel, shadowRgbMask) : color;

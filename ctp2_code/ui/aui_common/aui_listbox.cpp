@@ -25,8 +25,8 @@
 // Modifications from the original Activision code:
 //
 // - Always focus on the latest message.
-// - Initialized local variables. (Sep 9th 2005 Martin G�hmann)
-// - Standardized code (May 21st 2006 Martin G�hmann)
+// - Initialized local variables. (Sep 9th 2005 Martin Gühmann)
+// - Standardized code (May 21st 2006 Martin Gühmann)
 //
 //----------------------------------------------------------------------------
 
@@ -119,8 +119,6 @@ AUI_ERRCODE aui_ListBox::InitCommonLdl( const MBCHAR *ldlBlock )
 
 	m_alwaysRanger = block->GetBool( k_AUI_LISTBOX_LDL_ALWAYSRANGER );
 
-	m_headerOffset.x = block->GetInt(  k_AUI_LISTBOX_LDL_HEADEROFFSETX );
-	m_headerOffset.y = block->GetInt(  k_AUI_LISTBOX_LDL_HEADEROFFSETY );
 	m_verticalRangerOffset.x =
 		block->GetInt(  k_AUI_LISTBOX_LDL_RANGERYOFFSETX );
 	m_verticalRangerOffset.y =
@@ -841,8 +839,8 @@ AUI_ERRCODE aui_ListBox::CalculateDimensions( void )
 		}
 	}
 
-	m_itemsPerWidth = m_maxItemWidth ? m_width / m_maxItemWidth : 0;
-	m_itemsPerHeight = m_maxItemHeight ? m_height / m_maxItemHeight : 0;
+	m_itemsPerWidth = m_maxItemWidth ? WidthForItems() / m_maxItemWidth : 0;
+	m_itemsPerHeight = m_maxItemHeight ? HeightForItems() / m_maxItemHeight : 0;
 
 	return AUI_ERRCODE_OK;
 }
@@ -919,43 +917,49 @@ AUI_ERRCODE aui_ListBox::RepositionItems( void )
 
 AUI_ERRCODE aui_ListBox::RepositionHeaderSwitches( void )
 {
-	m_header->Move( m_headerOffset.x, m_headerOffset.y - m_header->Height() );
+	m_header->Move(0, -m_header->Height());
 
-	if ( !IsHidden() ) m_header->Show();
+	if (!IsHidden()) {
+		m_header->Show();
+	}
 
 	sint32 minHorizontal = m_horizontalRanger->GetValueX();
-	sint32 maxHorizontal = minHorizontal + ItemsPerWidth( minHorizontal );
+	sint32 maxHorizontal = minHorizontal + ItemsPerWidth(minHorizontal);
 
 	sint32 x = 0;
 	ListPos widthPosition = m_widthList->GetHeadPosition();
 	ListPos position = m_header->ChildList()->GetHeadPosition();
-	for ( sint32 i = 0; i < m_numColumns; i++ )
+	bool firstVisibleHeader = true;
+	for (sint32 i = 0; i < m_numColumns; i++)
 	{
+		if (!position) {
+			break;
+		}
 
-		if ( !position ) break;
+		sint32 width = m_widthList->GetNext(widthPosition);
 
-		sint32 width = m_widthList->GetNext( widthPosition );
+		aui_Switch *theSwitch = (aui_Switch *)m_header->ChildList()->GetNext(position);
 
-		aui_Switch *theSwitch =
-			(aui_Switch *)m_header->ChildList()->GetNext( position );
-
-		if ( minHorizontal <= i && i < maxHorizontal )
+		if (minHorizontal <= i && i < maxHorizontal)
 		{
-			theSwitch->Move(
-				x,
-				m_header->Height() - theSwitch->Height() );
-
-			theSwitch->Resize(
-				width,
-				theSwitch->Height() );
-
+			// First visible header
+			if (width > 0 && firstVisibleHeader)
+			{
+				width += m_headerOffset.x;
+				firstVisibleHeader = false;
+			}
+			// Last visible header
+			if (i == maxHorizontal - 1) {
+				width = Width() - x;
+			}
+			theSwitch->Move(x, m_header->Height() - theSwitch->Height());
+			theSwitch->Resize(width, theSwitch->Height());
 			x += width;
 		}
-		else
+		else {
 			theSwitch->Hide();
+		}
 	}
-
-
 	return AUI_ERRCODE_OK;
 }
 
@@ -1170,7 +1174,7 @@ void aui_ListBox::WhatsChanged(
 	}
 }
 
-AUI_ERRCODE aui_ListBox::DragSelect( sint32 y )
+AUI_ERRCODE aui_ListBox::DragSelect(sint32 relativeY)
 {
 	if ( m_dragDropWindow ) return AUI_ERRCODE_OK;
 
@@ -1179,10 +1183,11 @@ AUI_ERRCODE aui_ListBox::DragSelect( sint32 y )
 	maxY *= m_maxItemHeight;
 
 	sint32 itemIndex = 0;
-	if ( y < 0 )
+	if (relativeY < 0 ) {
 		itemIndex = m_verticalRanger->GetValueY();
-	else if ( y < maxY )
-		itemIndex = y / m_maxItemHeight + m_verticalRanger->GetValueY();
+	} else if (relativeY < maxY ) {
+		itemIndex = CalculateItemIndexByRelativeY(relativeY);
+	}
 	else
 	{
 		itemIndex = m_itemsPerHeight + m_verticalRanger->GetValueY() - 1;
@@ -1410,7 +1415,7 @@ void aui_ListBox::PostChildrenCallback( aui_MouseEvent *mouseData )
 		m_lastRepeatTime = mouseData->time;
 
 		ScrollList();
-		DragSelect( mouseData->position.y - m_y );
+		DragSelect(CalculateRelativeY(mouseData->position.y));
 
 		m_draw |= m_drawMask & k_AUI_REGION_DRAWFLAG_UPDATE;
 		if ( m_mouseCode == AUI_ERRCODE_UNHANDLED )
@@ -1505,15 +1510,15 @@ void aui_ListBox::MouseLGrabInside( aui_MouseEvent *mouseData )
 		SetMouseOwnership();
 		SetKeyboardFocus();
 
-		sint32 y = mouseData->position.y - m_y;
+		sint32 relativeY = CalculateRelativeY(mouseData->position.y);
 
 		sint32 maxY = m_itemsPerHeight;
 		if ( maxY > m_numRows ) maxY = m_numRows;
 		maxY *= m_maxItemHeight;
 
-		if ( y < maxY )
+		if (relativeY < maxY )
 		{
-			sint32 itemIndex = y / (m_maxItemHeight != 0 ? m_maxItemHeight : 1) + m_verticalRanger->GetValueY();
+			sint32 itemIndex = CalculateItemIndexByRelativeY(relativeY);
 
 			if (GetItemByIndex(itemIndex)->IsDisabled()) {
 				return;
@@ -1602,7 +1607,7 @@ void aui_ListBox::MouseLGrabInside( aui_MouseEvent *mouseData )
 				{
 					m_dragDropWindow->StartDragging(
 						mouseData->position.x - m_x - item->X(),
-						y - item->Y() );
+						relativeY - item->Y());
 				}
 
 				SendSelectCallback();
@@ -1641,15 +1646,15 @@ void aui_ListBox::MouseRGrabInside( aui_MouseEvent *mouseData )
 		SetMouseOwnership();
 		SetKeyboardFocus();
 
-		sint32 y = mouseData->position.y - m_y;
+		sint32 relativeY = CalculateRelativeY(mouseData->position.y);
 
 		sint32 maxY = m_itemsPerHeight;
 		if ( maxY > m_numRows ) maxY = m_numRows;
 		maxY *= m_maxItemHeight;
 
-		if ( y < maxY )
+		if (relativeY < maxY )
 		{
-			sint32 itemIndex = y / m_maxItemHeight + m_verticalRanger->GetValueY();
+			sint32 itemIndex = CalculateItemIndexByRelativeY(relativeY);
 
 			if (GetItemByIndex(itemIndex)->IsDisabled()) {
 				return;
@@ -1807,7 +1812,7 @@ void aui_ListBox::MouseLDragAway( aui_MouseEvent *mouseData )
 		CalculateScroll( mouseData->position.x, mouseData->position.y );
 
 		ScrollList();
-		DragSelect( mouseData->position.y - m_y );
+		DragSelect(CalculateRelativeY(mouseData->position.y));
 		m_scrolling = TRUE;
 		m_startWaitTime = mouseData->time;
 
@@ -1834,7 +1839,7 @@ void aui_ListBox::MouseLDragOver( aui_MouseEvent *mouseData )
 	m_scrolling = FALSE;
 
 	if ( GetMouseOwnership() == this )
-		DragSelect( mouseData->position.y - m_y );
+		DragSelect(CalculateRelativeY(mouseData->position.y));
 
 	aui_ListBox::SetMouseFocusListBox(this);
 }
@@ -1853,7 +1858,7 @@ void aui_ListBox::MouseLDragInside( aui_MouseEvent *mouseData )
 	if (IsDisabled()) return;
 
 	if ( GetMouseOwnership() == this )
-		DragSelect( mouseData->position.y - m_y );
+		DragSelect(CalculateRelativeY(mouseData->position.y));
 }
 
 void aui_ListBox::MouseLDragOutside( aui_MouseEvent *mouseData )
@@ -1864,7 +1869,7 @@ void aui_ListBox::MouseLDragOutside( aui_MouseEvent *mouseData )
 	{
 		CalculateScroll( mouseData->position.x, mouseData->position.y );
 
-		DragSelect( mouseData->position.y - m_y );
+		DragSelect(CalculateRelativeY(mouseData->position.y));
 	}
 }
 
@@ -1879,15 +1884,15 @@ void aui_ListBox::MouseLDoubleClickInside( aui_MouseEvent *mouseData )
 
 		PlaySound( AUI_SOUNDBASE_SOUND_EXECUTE );
 
-		sint32 y = mouseData->position.y - m_y;
+		sint32 relativeY = CalculateRelativeY(mouseData->position.y);
 
 		sint32 maxY = m_itemsPerHeight;
 		if ( maxY > m_numRows ) maxY = m_numRows;
 		maxY *= m_maxItemHeight;
 
-		if ( y < maxY )
+		if (relativeY < maxY )
 		{
-			sint32 itemIndex = y / m_maxItemHeight + m_verticalRanger->GetValueY();
+			sint32 itemIndex = CalculateItemIndexByRelativeY(relativeY);
 
 			if (!GetItemByIndex(itemIndex)->IsDisabled()) {
 				SendSelectCallback(AUI_LISTBOX_ACTION_DOUBLECLICKSELECT, (uint32) itemIndex);

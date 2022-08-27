@@ -367,7 +367,7 @@ sint32 ctp2_DropDown::SetWindowSizeThis()
 {
 	ctp2_ListBox * myListBox = (ctp2_ListBox *) m_listBox;
 
-	sint32 borderHeight = 2 * myListBox->GetBevelWidth() + 2 * myListBox->GetBorderOffset().y;
+	sint32 borderHeight = 2 * myListBox->GetBevelWidth() + 2 * myListBox->GetBorderOffset().left;
 	sint32 maxHeight = borderHeight + ((350 - borderHeight) / myListBox->GetMaxItemHeight()) * myListBox->GetMaxItemHeight();
 
 	sint32 height = myListBox->GetMaxItemHeight() * m_listBox->NumItems() + borderHeight;

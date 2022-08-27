@@ -1241,9 +1241,6 @@
     <ClCompile Include="..\robot\utility\RoboInit.cpp">
       <Filter>robot\utility No. 1</Filter>
     </ClCompile>
-    <ClCompile Include="..\robot\pathing\A_Star_Heuristic_Cost.cpp">
-      <Filter>robot\pathing</Filter>
-    </ClCompile>
     <ClCompile Include="..\robot\pathing\Astar.cpp">
       <Filter>robot\pathing</Filter>
     </ClCompile>
@@ -3537,9 +3534,6 @@
     </ClInclude>
     <ClInclude Include="..\robot\utility\RoboInit.h">
       <Filter>robot\utility No. 1</Filter>
-    </ClInclude>
-    <ClInclude Include="..\robot\pathing\A_Star_Heuristic_Cost.h">
-      <Filter>robot\pathing</Filter>
     </ClInclude>
     <ClInclude Include="..\robot\pathing\Astar.h">
       <Filter>robot\pathing</Filter>

@@ -1177,11 +1177,9 @@ public:
 
 	virtual void Execute()
 	{
-		g_gevManager->Pause();
 		g_gevManager->AddEvent(GEV_INSERT_Tail, GEV_EndTurn,
 							   GEA_Player, g_selected_item->GetCurPlayer(),
 							   GEA_End);
-		g_gevManager->Resume();
 	}
 
 	virtual void Dump()
@@ -2850,7 +2848,7 @@ void DirectorImpl::AddDeath(UnitActor *dead, const MapPoint &deadPos, sint32 dea
 	bool visibleEnemyUnit = g_theProfileDB->IsEnemyMoves()
 							&& dead->GetPlayerNum() != g_selected_item->GetVisiblePlayer()
 							&& (dead->GetUnitVisibility() & (1 << g_selected_item->GetVisiblePlayer()));
-	if ((playerInvolved || visibleEnemyUnit) && !TileWillBeCompletelyVisible(deadPos.x, deadPos.y)) {
+	if ((playerInvolved || visibleEnemyUnit) && !TileWillBeCompletelyVisible(deadPos.x, deadPos.y) && g_theProfileDB->IsAutoCenter()) {
 		AddCenterMap(deadPos);
 	}
 	dead->SetHiddenUnderStack(false);

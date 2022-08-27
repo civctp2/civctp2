@@ -3,7 +3,7 @@ Version: 1.0-0
 Section: base
 Priority: optional
 Architecture: all
-Depends: libsdl2-2.0-0, libsdl2-mixer-2.0-0, libsdl2-image-2.0-0, libavcodec57, libavformat57, libswscale4
+Depends: libsdl2-2.0-0 (>= 2), libsdl2-mixer-2.0-0 (>= 2), libsdl2-image-2.0-0 (>= 2), libavcodec58 (>= 3), libavformat58 (>= 3), libswscale5 (>= 3)
 Maintainer: Maintainer of civctp2 (https://github.com/civctp2/civctp2)
 Description: Linux version of Call to Power II (ctp2) without game files
   The game files need to be provided before the installation of the dep-package

@@ -25,7 +25,7 @@
 // Modifications from the original Activision code:
 //
 // - Enable selection of transported units from the tactical info tab.
-// - Initialized local variables. (Sep 9th 2005 Martin Gühmann)
+// - Initialized local variables. (Sep 9th 2005 Martin GÃ¼hmann)
 // - Handled crash when disbanding armies at the main screen while the unit
 //   manager was shown.
 // - Changed occurances of UnitRecord::GetMaxHP to
@@ -325,70 +325,91 @@ void UnitManager::UpdateStatsList()
 
 				const UnitRecord *rec = g_theUnitDB->Get(i);
 
-				ctp2_ListItem *item = (ctp2_ListItem *)aui_Ldl::BuildHierarchyFromRoot("UnitStatsItem");
+				ctp2_ListItem * item = (ctp2_ListItem *) aui_Ldl::BuildHierarchyFromRoot("UnitStatsItem");
+				Assert(item);
+				if (!item) {
+					break;
+				}
+				ctp2_Static   * box  = (ctp2_Static *) item->GetChildByIndex(0);
+				Assert(box);
+				if (!box) {
+					break;
+				}
 
-				ctp2_Static *child;
-
-				child = (ctp2_Static *)item->GetChildByIndex(k_STATS_ICON_COL);
-				if(child) {
-					if(rec->GetDefaultIcon()) {
-						if(stricmp(rec->GetDefaultIcon()->GetSmallIcon(), "NULL") == 0) {
+				ctp2_Static * child;
+				child = (ctp2_Static *) box->GetChildByIndex(k_STATS_ICON_COL);
+				if (child)
+				{
+					if (rec->GetDefaultIcon())
+					{
+						if (stricmp(rec->GetDefaultIcon()->GetSmallIcon(), "NULL") == 0)
+						{
 							child->SetImageBltType(AUI_IMAGEBASE_BLTTYPE_STRETCH);
 							child->SetImage((MBCHAR *)rec->GetDefaultIcon()->GetIcon());
-						} else {
+						}
+						else
+						{
 							child->SetImageBltType(AUI_IMAGEBASE_BLTTYPE_COPY);
 							child->SetImage((MBCHAR *)rec->GetDefaultIcon()->GetSmallIcon());
 						}
 					}
 				}
-				child = (ctp2_Static *)item->GetChildByIndex(k_STATS_NAME_COL);
-				if(child) {
+
+				child = (ctp2_Static *) box->GetChildByIndex(k_STATS_NAME_COL);
+				if (child) {
 					child->SetText((MBCHAR *)rec->GetNameText());
 				}
 
-				child = (ctp2_Static *)item->GetChildByIndex(k_STATS_COUNT_COL);
-				if(child) {
+				child = (ctp2_Static *) box->GetChildByIndex(k_STATS_COUNT_COL);
+				if (child)
+				{
 					MBCHAR buf[20];
 					sprintf(buf, "%d", unitcount[i]);
 					child->SetText(buf);
 				}
 
-				child = (ctp2_Static *)item->GetChildByIndex(k_STATS_TYPE_COL);
-				if(child) {
+				child = (ctp2_Static *) box->GetChildByIndex(k_STATS_TYPE_COL);
+				if (child) {
 					child->SetText((MBCHAR *)g_theStringDB->GetNameStr(rec->GetCategory()));
 				}
 
-				child = (ctp2_Static *)item->GetChildByIndex(k_STATS_SUPPORT_COL);
-				if(child) {
+				child = (ctp2_Static *) box->GetChildByIndex(k_STATS_SUPPORT_COL);
+				if (child)
+				{
 					MBCHAR buf[20];
 					sprintf(buf, "%d", g_theUnitDB->Get(i)->GetShieldHunger());
 					child->SetText(buf);
 				}
 
-				MBCHAR buf[100];
-				child = (ctp2_Static *)item->GetChildByIndex(k_STATS_A_COL);
-				if(child) {
-					sprintf(buf, "%d",
-							(sint32)rec->GetAttack());
+				child = (ctp2_Static *)box->GetChildByIndex(k_STATS_A_COL);
+				if (child)
+				{
+					MBCHAR buf[20];
+					sprintf(buf, "%d", (sint32) rec->GetAttack());
 					child->SetText(buf);
 				}
 
-				child = (ctp2_Static *)item->GetChildByIndex(k_STATS_R_COL);
-				if(child) {
-					sprintf(buf, "%d",
-							(sint32)rec->GetZBRangeAttack());
+				child = (ctp2_Static *)box->GetChildByIndex(k_STATS_R_COL);
+				if (child)
+				{
+					MBCHAR buf[20];
+					sprintf(buf, "%d", (sint32) rec->GetZBRangeAttack());
 					child->SetText(buf);
 				}
-				child = (ctp2_Static *)item->GetChildByIndex(k_STATS_D_COL);
-				if(child) {
-					sprintf(buf, "%d",
-							(sint32)rec->GetDefense());
+
+				child = (ctp2_Static *) box->GetChildByIndex(k_STATS_D_COL);
+				if (child)
+				{
+					MBCHAR buf[20];
+					sprintf(buf, "%d", (sint32) rec->GetDefense());
 					child->SetText(buf);
 				}
-				child = (ctp2_Static *)item->GetChildByIndex(k_STATS_M_COL);
-				if(child) {
-					sprintf(buf, "%d",
-							(sint32)rec->GetMaxMovePoints());
+
+				child = (ctp2_Static *) box->GetChildByIndex(k_STATS_M_COL);
+				if (child)
+				{
+					MBCHAR buf[20];
+					sprintf(buf, "%d", (sint32) rec->GetMaxMovePoints());
 					child->SetText(buf);
 				}
 
@@ -421,52 +442,66 @@ void UnitManager::UpdateTacticalList()
 	for (sint32 i = 0; i < units->Num(); i++)
 	{
 		Unit u = units->Access(i);
-		ctp2_ListItem *item = (ctp2_ListItem *)aui_Ldl::BuildHierarchyFromRoot("UnitTacticalItem");
+		ctp2_ListItem * item = (ctp2_ListItem *) aui_Ldl::BuildHierarchyFromRoot("UnitTacticalItem");
 		Assert(item);
-		if(!item) break;
+		if (!item) {
+			break;
+		}
 
-		ctp2_Static *child;
-		child = (ctp2_Static *)item->GetChildByIndex(k_STATS_ICON_COL);
-		if(child) {
+		ctp2_Static * box  = (ctp2_Static *) item->GetChildByIndex(0);
+		Assert(box);
+		if (!box) {
+			break;
+		}
+
+		ctp2_Static * child;
+		child = (ctp2_Static *) box->GetChildByIndex(k_STATS_ICON_COL);
+		if (child)
+		{
 			const UnitRecord *rec = u.GetDBRec();
-			if(rec->GetDefaultIcon()) {
-				if(stricmp(rec->GetDefaultIcon()->GetSmallIcon(), "NULL") == 0) {
+			if (rec->GetDefaultIcon())
+			{
+				if (stricmp(rec->GetDefaultIcon()->GetSmallIcon(), "NULL") == 0)
+				{
 					child->SetImageBltType(AUI_IMAGEBASE_BLTTYPE_STRETCH);
 					child->SetImage(rec->GetDefaultIcon()->GetIcon());
-				} else {
+				}
+				else
+				{
 					child->SetImageBltType(AUI_IMAGEBASE_BLTTYPE_COPY);
 					child->SetImage(rec->GetDefaultIcon()->GetSmallIcon());
 				}
 			}
 		}
 
-		child = (ctp2_Static *)item->GetChildByIndex(k_TACTICAL_NAME_COL);
-		if(child) {
+		child = (ctp2_Static *) box->GetChildByIndex(k_TACTICAL_NAME_COL);
+		if (child) {
 			child->SetText(u.GetDBRec()->GetNameText());
 		}
 
-		child = (ctp2_Static *)item->GetChildByIndex(k_TACTICAL_ARMY_COL);
-		if(child) {
-			if(u.GetArmy().IsValid()) {
+		child = (ctp2_Static *) box->GetChildByIndex(k_TACTICAL_ARMY_COL);
+		if (child)
+		{
+			if (u.GetArmy().IsValid()) {
 				child->SetText(u.GetArmy()->GetName());
 			} else {
 				child->SetText("-");
 			}
 		}
 
-		child = (ctp2_Static *)item->GetChildByIndex(k_TACTICAL_ORDER_COL);
-		if(child) {
+		child = (ctp2_Static *) box->GetChildByIndex(k_TACTICAL_ORDER_COL);
+		if (child) {
 			StringId str;
-			if(u->GetCurrentOrderString(str)) {
+			if (u->GetCurrentOrderString(str)) {
 				child->SetText(g_theStringDB->GetNameStr(str));
 			} else {
 				child->SetText(g_theStringDB->GetNameStr("UNIT_ORDER_NONE"));
 			}
 		}
 
-		child = (ctp2_Static *)item->GetChildByIndex(k_TACTICAL_LOCATION_COL);
-		if(child) {
-			if(u.Flag(k_UDF_IN_SPACE)) {
+		child = (ctp2_Static *) box->GetChildByIndex(k_TACTICAL_LOCATION_COL);
+		if (child) {
+			if (u.Flag(k_UDF_IN_SPACE)) {
 				child->SetText(g_theStringDB->GetNameStr("UNIT_LOCATION_IN_SPACE"));
 			} else if(g_theWorld->GetCell(u.RetPos())->GetCity().IsValid()) {
 				child->SetText(g_theWorld->GetCell(u.RetPos())->GetCity().GetName());
@@ -475,8 +510,8 @@ void UnitManager::UpdateTacticalList()
 			}
 		}
 
-		child = (ctp2_Static *)item->GetChildByIndex(k_TACTICAL_HEALTH_COL);
-		if(child) {
+		child = (ctp2_Static *) box->GetChildByIndex(k_TACTICAL_HEALTH_COL);
+		if (child) {
 			child->SetDrawCallbackAndCookie(DrawHealthBar, (void *)u.m_id);
 		}
 		item->SetUserData((void *)u.m_id);
