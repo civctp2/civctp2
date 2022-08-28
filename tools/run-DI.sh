@@ -23,6 +23,15 @@
 ##     -v $HOME/ctp2CD/ctp2_program/ctp/videos/:opt/ctp2/ctp2_data/default/videos/:ro \
 ##     --env="ALSA_CARD=1" \
 ##     registry.gitlab.com/civctp2/civctp2/master:latest ./ctp2 fullscreen
+## 
+## some sound cards apparently cannot be chosesn by ALSA env-vars (e.g. --env="ALSA_PCM_CARD=0" --env="ALSA_PCM_DEVICE=3) but work with SDL env-var
+## ./run-DI.sh \
+##     -v $HOME/ctp2CD/ctp2_program/ctp/music/:/opt/ctp2/ctp2_program/ctp/music/:ro \
+##     -v $HOME/ctp2CD/ctp2_program/ctp/videos/:opt/ctp2/ctp2_data/default/videos/:ro \
+##     --env="AUDIODEV=hw:0,3" \
+##     registry.gitlab.com/civctp2/civctp2/master:latest ./ctp2 fullscreen
+
+
 
 
 XSOCK=/tmp/.X11-unix
