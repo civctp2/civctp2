@@ -8327,7 +8327,8 @@ bool ArmyData::ExecuteUnloadOrder(Order *order)
 	{
 		sint32 visiblePlayer = g_selected_item->GetVisiblePlayer();
 		if(visiblePlayer == m_array[0].GetOwner()
-		|| (m_array[0].GetVisibility() & (1 << visiblePlayer)))
+//		|| (m_array[0].GetVisibility() & (1 << visiblePlayer)) // not an attack sound, so not appropriate to hear for any unit not owned by visible player
+		    )
 		{
 			g_soundManager->AddSound(SOUNDTYPE_SFX, (uint32)0,
 								m_array[0].GetCantMoveSoundID(),
@@ -8344,8 +8345,9 @@ void ArmyData::FinishUnloadOrder(Army &debark, MapPoint &to_pt)
 	if(debark.Num() <= 0)
 	{
 		sint32 visiblePlayer = g_selected_item->GetVisiblePlayer();
-		if ((visiblePlayer == m_array[0].GetOwner()) ||
-			(m_array[0].GetVisibility() & (1 << visiblePlayer)))
+		if ((visiblePlayer == m_array[0].GetOwner())
+//		|| (m_array[0].GetVisibility() & (1 << visiblePlayer)) // not an attack sound, so not appropriate to hear for any unit not owned by visible player
+		   )
 		{
 			g_soundManager->AddSound(SOUNDTYPE_SFX, (uint32)0,
 								m_array[0].GetCantMoveSoundID(),
