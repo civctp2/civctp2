@@ -8405,13 +8405,13 @@ bool Player::CanBuildUnit(const sint32 type) const
 	}
 
 	if(rec->GetNoSlaves()) {
-
 		sint32 i, n = m_all_cities->Num();
+/* allow building Abolitionists if there are slaves but no slavers in the civ
 		for(i = 0; i < n; i++) {
 			if(m_all_cities->Access(i).CountSlaves() > 0)
 				return false;
 		}
-
+*/
 		n = m_all_units->Num();
 		for(i = 0; i < n; i++) {
 			if(m_all_units->Access(i).GetDBRec()->HasSlaveRaids())
