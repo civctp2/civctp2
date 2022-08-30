@@ -6286,7 +6286,7 @@ void CityData::DoUprising(UPRISING_CAUSE cause)
 	                       GEA_End);
 }
 
-void CityData::FinishUprising(Army &sa, UPRISING_CAUSE cause)
+void CityData::FinishUprising(Army sa, UPRISING_CAUSE cause)
 {
 	sint32 oldOwner = m_owner;
 	Cell *cell = g_theWorld->GetCell(m_home_city.RetPos());
@@ -6331,7 +6331,7 @@ void CityData::FinishUprising(Army &sa, UPRISING_CAUSE cause)
 		sa->IncrementDontKillCount();
 		g_gevManager->AddEvent(GEV_INSERT_Tail, GEV_CleanupUprising,
 		                       GEA_Army, sa,
-		                       GEA_City, m_home_city.m_id,
+		                       GEA_City, m_home_city,
 		                       GEA_End);
 	}
 	else
@@ -6372,14 +6372,11 @@ void CityData::CleanupUprising(Army &sa)
 				sa[i].AddUnitVision();
 
 				g_theWorld->InsertUnit(m_home_city.RetPos(), sa[i]);
-				g_player[sa.GetOwner()]->InsertUnitReference(sa[i],
-												  CAUSE_NEW_ARMY_UPRISING,
-												  m_home_city);
+				g_player[sa.GetOwner()]->InsertUnitReference(sa[i], CAUSE_NEW_ARMY_UPRISING, m_home_city);
 				if(g_network.IsHost())
 				{
 					g_network.Block(oldOwner);
-					g_network.Enqueue(new NetInfo(NET_INFO_CODE_MAKE_UNIT_PERMANENT,
-												  sa[i].m_id));
+					g_network.Enqueue(new NetInfo(NET_INFO_CODE_MAKE_UNIT_PERMANENT, sa[i].m_id));
 					g_network.Unblock(oldOwner);
 				}
 			}

@@ -610,7 +610,7 @@ public:
 	void SetFranchiseTurnsRemaining(sint32 turns);
 
 	void DoUprising(UPRISING_CAUSE cause);
-	void FinishUprising(Army &sa, UPRISING_CAUSE cause);
+	void FinishUprising(Army sa, UPRISING_CAUSE cause);
 	void CleanupUprising(Army &sa);
 
 	void Plague(sint32 player);

@@ -6827,11 +6827,6 @@ void Player::GameOver(GAME_OVER reason, sint32 data)
 			StartDeath(reason, data);
 			for(i = 1; i < k_MAX_PLAYERS; i++) {
 				if(g_player[i] && !g_player[i]->m_isDead && i != m_owner) {
-
-
-
-
-
 					count++;
 					aPlayer = i;
 				}
@@ -6921,9 +6916,9 @@ void Player::StartDeath(GAME_OVER reason, sint32 data)
     g_slicEngine->Execute(so) ;
 
     if (reason == GAME_OVER_LOST_CONQUERED && data != m_owner) {
-        so = new SlicObject("76PlayerDefeatedBy") ;
-        so->AddCivilisation(m_owner) ;
-        so->AddCivilisation(data) ;
+        so = new SlicObject("76PlayerDefeatedBy");
+        so->AddCivilisation(m_owner) ; // m_owner <=> killed player
+        so->AddCivilisation(data) ; // data <=> killedBy
         so->AddAllRecipientsBut(m_owner);
         g_slicEngine->Execute(so) ;
 		if(g_player[data]) {
