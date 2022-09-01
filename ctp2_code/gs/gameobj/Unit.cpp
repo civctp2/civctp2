@@ -1027,7 +1027,7 @@ bool Unit::IsCantCaptureCity()
 	return GetDBRec()->GetCantCaptureCity();
 }
 
-void Unit::ResetCityOwner(const PLAYER_INDEX newo, sint32 is_conquest,
+void Unit::ResetCityOwner(const PLAYER_INDEX newo, bool is_conquest,
                           const CAUSE_REMOVE_CITY cause)
 {
 	AccessData()->ResetCityOwner(*this, newo, is_conquest, cause);

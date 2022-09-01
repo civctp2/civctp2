@@ -1885,7 +1885,7 @@ void UnitData::BeginTurnVision(PLAYER_INDEX player)
 }
 
 void UnitData::ResetCityOwner(const Unit &me, const PLAYER_INDEX newo,
-                              sint32 is_conquest, const CAUSE_REMOVE_CITY cause)
+                              bool is_conquest, const CAUSE_REMOVE_CITY cause)
 {
 	DPRINTF(k_DBG_GAMESTATE, ("ResetCityOwner: %lx, new: %d, old: %d, conq: %d, cause: %d\n",
 							  me.m_id, newo, me.IsValid() ? me.GetOwner() : -1, is_conquest, cause));
