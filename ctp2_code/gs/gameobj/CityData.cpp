@@ -6358,7 +6358,7 @@ void CityData::CleanupUprising(Army &sa)
 
 		if(cell->UnitArmy())
 		{
-			cell->UnitArmy()->KillList(CAUSE_REMOVE_ARMY_SLAVE_UPRISING, GetOwner());
+			cell->UnitArmy()->KillList(CAUSE_REMOVE_ARMY_SLAVE_UPRISING, si); // army of the cell is the army of the city and therefore is killed by si not the current owner of the city
 		}
 
 		for(sint32 i = sa.Num() - 1; i >= 0; i--)
