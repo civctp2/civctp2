@@ -6342,9 +6342,6 @@ void CityData::FinishUprising(Army sa, UPRISING_CAUSE cause)
 
 void CityData::CleanupUprising(Army &sa)
 {
-	Cell *cell = g_theWorld->GetCell(m_home_city.RetPos());
-
-	sint32 oldOwner = m_owner;
 	if(!g_theArmyPool->IsValid(sa) || sa.Num() < 1)
 	{
 		DPRINTF(k_DBG_GAMESTATE, ("The uprising was crushed\n"));
@@ -6353,13 +6350,9 @@ void CityData::CleanupUprising(Army &sa)
 	}
 	else
 	{
-		sint32 si = sa.GetOwner();
 		DPRINTF(k_DBG_GAMESTATE, ("The uprising succeeded\n"));
 
-		if(cell->UnitArmy())
-		{
-			cell->UnitArmy()->KillList(CAUSE_REMOVE_ARMY_SLAVE_UPRISING, si); // army of the cell is the army of the city and therefore is killed by si not the current owner of the city
-		}
+		// city army was already removed by sa.Fight(defenders); in CityData::FinishUprising
 
 		for(sint32 i = sa.Num() - 1; i >= 0; i--)
 		{
@@ -6375,6 +6368,7 @@ void CityData::CleanupUprising(Army &sa)
 				g_player[sa.GetOwner()]->InsertUnitReference(sa[i], CAUSE_NEW_ARMY_UPRISING, m_home_city);
 				if(g_network.IsHost())
 				{
+					sint32 oldOwner = m_owner;
 					g_network.Block(oldOwner);
 					g_network.Enqueue(new NetInfo(NET_INFO_CODE_MAKE_UNIT_PERMANENT, sa[i].m_id));
 					g_network.Unblock(oldOwner);
@@ -6385,7 +6379,8 @@ void CityData::CleanupUprising(Army &sa)
 
 		ChangeSpecialists(POP_SLAVE, -SlaveCount());
 
-		m_home_city.ResetCityOwner(si, false, CAUSE_REMOVE_CITY_SLAVE_UPRISING);
+		sint32 si = sa.GetOwner();
+		m_home_city.ResetCityOwner(si, false, CAUSE_REMOVE_CITY_SLAVE_UPRISING) ;
 	}
 }
 
