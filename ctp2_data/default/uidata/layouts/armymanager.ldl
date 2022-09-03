@@ -276,13 +276,25 @@ ArmyManagerItem:CTP2_LIST_ITEM {
 	int xpix      14
 	int widthpix  60
 	int heightpix 18
-	box:CTP2_STANDARD_FONT {
-		string objecttype "ctp2_Static"
+	box:CTP2_STATIC_BASE {
+		name:CTP2_STATIC_BASE {
+			int xpix      8
+			int ypix      0
+			int widthpix  120
+			int heightpix 18
 
-		int xpix      12
-		int ypix      0
-		int widthpix  140
-		int heightpix 18
+			string just "left"
+			bool vertcenter true
+		}
+		number:CTP2_STATIC_BASE {
+			int xpix      125
+			int ypix      0
+			int widthpix  10
+			int heightpix 18
+
+			string just "right"
+			bool vertcenter true
+		}
 	}
 }
 

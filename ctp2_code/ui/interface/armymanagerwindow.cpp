@@ -406,14 +406,20 @@ void ArmyManagerWindow::UpdateArmyItem(ctp2_ListItem * item)
 		return;
 	}
 
+	ctp2_Static * name = (ctp2_Static *)box->GetChildByIndex(0);
 	MBCHAR truncatedString[100];
 	strncpy(truncatedString, node->m_army.IsValid() ? node->m_army->GetName() : "---", 99);
 	truncatedString[99] = 0;
-	if (!box->GetTextFont()) {
-		box->TextReloadFont();
+	if (!name->GetTextFont()) {
+		name->TextReloadFont();
 	}
-	box->GetTextFont()->TruncateString(truncatedString, box->Width());
-	box->SetText(truncatedString);
+	name->GetTextFont()->TruncateString(truncatedString, name->Width());
+	name->SetText(truncatedString);
+
+	ctp2_Static * numberOfUnits = (ctp2_Static *)box->GetChildByIndex(1);
+	MBCHAR numberOfUnitsText[20];
+	sprintf(numberOfUnitsText, "%d", (node->m_army.IsValid() ? node->m_army->Num() : 0));
+	numberOfUnits->SetText(numberOfUnitsText);
 }
 
 void ArmyManagerWindow::UpdateAllArmyItems()
@@ -429,6 +435,7 @@ void ArmyManagerWindow::UpdateAllArmyItems()
 			UpdateArmyItem(item);
 		}
 	}
+	list->ShouldDraw();
 }
 
 ctp2_ListItem *ArmyManagerWindow::AddArmyItem(ctp2_ListBox *listBox, ArmyListNode *node)
@@ -745,16 +752,6 @@ void ArmyManagerWindow::AddSelectedUnits()
 		}
 	}
 
-
-
-
-
-
-
-
-
-
-
 	UpdateAllArmyItems();
 
 	RemoveDeadArmies();
@@ -831,10 +828,6 @@ void ArmyManagerWindow::RemoveSelectedUnits()
 		g_selected_item->Deselect(g_selected_item->GetVisiblePlayer());
 
 	NotifySelection();
-
-
-
-
 }
 
 void ArmyManagerWindow::InArmy(aui_Control *control, uint32 action, uint32 data, void *cookie)
