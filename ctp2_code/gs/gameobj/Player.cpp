@@ -907,6 +907,7 @@ Unit Player::CreateUnitNoPosition(const sint32 t,
 		g_network.AddNewUnit(oldOwner, u);
 	}
 	army.Insert(u);
+	m_all_units->Insert(u);
 	return u;
 }
 
@@ -1059,7 +1060,8 @@ Unit Player::InsertUnitReference(const Unit &u,  const CAUSE_NEW_ARMY cause,
 	if(u.IsCity())
 		return Unit();
 
-	m_all_units->Insert(u);
+	if(cause != CAUSE_NEW_ARMY_UPRISING) // in case of CAUSE_NEW_ARMY_UPRISING m_all_units->Insert(u); was already done in Player::CreateUnitNoPosition
+	    m_all_units->Insert(u);
 
 	if(cause != CAUSE_NEW_ARMY_NETWORK) {
 		if(u.GetArmy().m_id == (0)) {
@@ -6884,8 +6886,10 @@ bool Player::CheckPlayerDead()
 {
 	if(g_isCheatModeOn || ScenarioEditor::IsShown())
 		return false;
+	
+	DPRINTF(k_DBG_GAMESTATE, ("Player::CheckPlayerDead : m_all_cities->Num()=%d, m_all_units->Num=%d\n", m_all_cities->Num(), m_all_units->Num()));
 
-	if(m_all_cities->Num() <= 0 && (!m_first_city || m_all_units->Num () < 1)) {
+	if(m_all_cities->Num() <= 0 && (!m_first_city || m_all_units->Num() < 1)) {
 		return true;
 	}
 	return false;

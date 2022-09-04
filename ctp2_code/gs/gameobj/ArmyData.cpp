@@ -8787,6 +8787,8 @@ sint32 ArmyData::Fight(CellUnitList &defender)
 							   GEA_End);
 	}
 
+	DPRINTF(k_DBG_GAMESTATE, ("Killing Army 0x%lx attack pos @ (%d,%d) owner %d; defense pos @ (%d,%d), owner %d; turn=%d\n", m_id, attack_pos.x, attack_pos.y, attack_owner, defense_pos.x, defense_pos.y, defense_owner, g_player[m_owner]->m_current_round));
+	
 	Assert(m_dontKillCount);
 	if(m_dontKillCount) {
 		m_dontKillCount--;
