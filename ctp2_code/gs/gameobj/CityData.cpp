@@ -9482,7 +9482,11 @@ double CityData::GetOffenseBonus(const Unit &defender)
 
 uint64 CityData::GetEffectiveBuildings() const
 {
-	return m_built_improvements | g_player[m_owner]->GetWonderBuildings();
+	Assert(g_player[m_owner]);
+	if(g_player[m_owner])
+	    return m_built_improvements | g_player[m_owner]->GetWonderBuildings();
+	else
+	    return m_built_improvements;
 }
 
 sint32 CityData::GetDesiredSpriteIndex(bool justTryLand)
