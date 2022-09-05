@@ -6346,7 +6346,9 @@ void CityData::CleanupUprising(Army &sa)
 	{
 		DPRINTF(k_DBG_GAMESTATE, ("The uprising was crushed\n"));
 
-		RemoveOneSlave(GetOwner());
+		sint32 sc= SlaveCount();
+		ChangeSpecialists(POP_SLAVE, -sc); // remove all slaves since complete slave army (arose from all slaves of the city) was defeated
+		ChangePopulation(-sc); // therefore population is decreased as well
 	}
 	else
 	{
