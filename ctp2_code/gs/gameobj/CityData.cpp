@@ -6313,6 +6313,9 @@ void CityData::FinishUprising(Army sa, UPRISING_CAUSE cause)
 
 		if (defenders.Num() > 0)
 		{
+			g_player[sa.GetOwner()]->ContactMade(m_owner); // create diplomatic contact, needed for fighting back with adjacent units to city if uprise succeeds, avoid assertion on sa.Fight(defenders); in Diplomat::DeclareWar, has to be in CityData::FinishUprising to avoid another assertion with Diplomat::DesireWarWith
+			g_player[m_owner]->ContactMade(sa.GetOwner()); // in both directions
+
 			sa.Fight(defenders);
 			startedBattle = true;
 		}
