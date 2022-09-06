@@ -6370,10 +6370,13 @@ void CityData::CleanupUprising(Army &sa)
 			{
 				sa[i].SetTempSlaveUnit(false);
 				sa[i].SetPosAndNothingElse(m_home_city.RetPos());
-				sa[i].AddUnitVision();
-
+				sa[i].AddUnitVision(); // (does not include Player::ContactMade)
+				
 				g_theWorld->InsertUnit(m_home_city.RetPos(), sa[i]);
 				g_player[sa.GetOwner()]->InsertUnitReference(sa[i], CAUSE_NEW_ARMY_UPRISING, m_home_city);
+
+				UnitDynamicArray revealedUnits;
+				sa[i].DoVision(&revealedUnits); // includes Player::ContactMade for all civs whose units are in vision of any of the slave army's units (i.e. 3rd party witnesses nearby)
 				if(g_network.IsHost())
 				{
 					sint32 oldOwner = m_owner;
@@ -6389,7 +6392,7 @@ void CityData::CleanupUprising(Army &sa)
 		ChangePopulation(sa.Num()+1 - sc); // reduce population by the amount of slave units that died during battle
 
 		sint32 si = sa.GetOwner();
-		m_home_city.ResetCityOwner(si, false, CAUSE_REMOVE_CITY_SLAVE_UPRISING) ;
+		m_home_city.ResetCityOwner(si, false, CAUSE_REMOVE_CITY_SLAVE_UPRISING); // calls InstallationData::DoVision() for city vision (does not include Player::ContactMade)
 	}
 }
 
