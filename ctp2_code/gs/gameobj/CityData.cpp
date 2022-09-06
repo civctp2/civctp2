@@ -6342,11 +6342,14 @@ void CityData::FinishUprising(Army sa, UPRISING_CAUSE cause)
 
 void CityData::CleanupUprising(Army &sa)
 {
+	sint32 sc= SlaveCount();
+	if(sc > k_MAX_ARMY_SIZE)
+		sc = k_MAX_ARMY_SIZE;
+
 	if(!g_theArmyPool->IsValid(sa) || sa.Num() < 1)
 	{
 		DPRINTF(k_DBG_GAMESTATE, ("The uprising was crushed\n"));
 
-		sint32 sc= SlaveCount();
 		ChangeSpecialists(POP_SLAVE, -sc); // remove all slaves since complete slave army (arose from all slaves of the city) was defeated
 		ChangePopulation(-sc); // therefore population is decreased as well
 	}
@@ -6379,7 +6382,8 @@ void CityData::CleanupUprising(Army &sa)
 		}
 		sa.ResetPos();
 
-		ChangeSpecialists(POP_SLAVE, -SlaveCount());
+		ChangeSpecialists(POP_SLAVE, -sc); // slaves become normal citizen in new civ
+		ChangePopulation(sa.Num()+1 - sc); // reduce population by the amount of slave units that died during battle
 
 		sint32 si = sa.GetOwner();
 		m_home_city.ResetCityOwner(si, false, CAUSE_REMOVE_CITY_SLAVE_UPRISING) ;
