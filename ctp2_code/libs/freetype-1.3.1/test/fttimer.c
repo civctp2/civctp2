@@ -74,7 +74,7 @@
   int             cur_point;
   unsigned short  cur_contour;
 
-  TT_Raster_Map  Bit;
+  extern TT_Raster_Map  Bit;
 
   int  Fail;
   int  Num;

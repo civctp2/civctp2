@@ -1,7 +1,7 @@
 ################################################################################
 # base system
 ################################################################################
-FROM ubuntu:18.04 as system
+FROM ubuntu as system
 
 ENV USERNAME diUser
 RUN useradd -m $USERNAME && \
@@ -15,9 +15,10 @@ RUN useradd -m $USERNAME && \
 ################################################################################
 FROM system as builder
 
-RUN apt-get update && apt-get install -y --no-install-recommends \
+RUN apt-get update && \
+    DEBIAN_FRONTEND=noninteractive TZ=Etc/UTC apt-get install -y --no-install-recommends \
     libsdl2-dev libsdl2-mixer-dev libsdl2-image-dev libtiff-dev libavcodec-dev libavformat-dev libswscale-dev \
-    byacc gcc g++ automake libtool unzip flex git ca-certificates
+    byacc gcc g++ automake make libtool unzip flex git ca-certificates
 
 ### set default compilers
 RUN cc --version && \
@@ -37,8 +38,8 @@ ARG BTYP
 
 RUN cd /ctp2 \
     && ./autogen.sh && \
-    CFLAGS="$CFLAGS $( [ "${BTYP##*debug*}" ] && echo -O3 || echo -g -rdynamic ) -fuse-ld=gold" \
-    CXXFLAGS="$CXXFLAGS -fpermissive $( [ "${BTYP##*debug*}" ] && echo -O3 || echo -g -rdynamic ) -fuse-ld=gold" \
+    CFLAGS="$CFLAGS -Wno-misleading-indentation $( [ "${BTYP##*debug*}" ] && echo -O3 || echo -g -rdynamic ) -fuse-ld=gold" \
+    CXXFLAGS="$CXXFLAGS -Wno-misleading-indentation -fpermissive $( [ "${BTYP##*debug*}" ] && echo -O3 || echo -g -rdynamic ) -fuse-ld=gold" \
     ./configure --prefix=/opt/ctp2 --bindir=/opt/ctp2/ctp2_program/ctp --enable-silent-rules $( [ "${BTYP##*debug*}" ] || echo --enable-debug ) \
     && make -j"$(nproc)" \
     && make -j"$(nproc)" install \
