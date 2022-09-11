@@ -1404,8 +1404,8 @@ public:
 
 	virtual void Execute()
 	{
-		if (g_tiledMap->GetLocalVision()->IsVisible(m_activeActor->GetMapPos()))
-		{
+	        const MapPoint pos = m_activeActor->GetMapPos();
+		if(g_player[g_selected_item->GetVisiblePlayer()]->IsVisible(pos)){ // only play animation and sound if pos is generally visible to current player
 			Anim *animation = m_activeActor->CreatePlayAnim();
 			if (animation)
 			{
@@ -1414,7 +1414,6 @@ public:
 
 				if (g_soundManager)
 				{
-					const MapPoint pos = m_activeActor->GetMapPos();
 					g_soundManager->AddSound(SOUNDTYPE_SFX, 0, soundID, pos.x, pos.y);
 				}
 			}
@@ -2667,6 +2666,12 @@ void DirectorImpl::AddProjectileAttack(
 
 void DirectorImpl::AddSpecialEffect(const MapPoint &pos, sint32 spriteID, sint32 soundID)
 {
+	if(g_selected_item->IsAutoCenterOn() 
+	    && !TileWillBeCompletelyVisible(pos.x, pos.y)
+	    && g_player[g_selected_item->GetVisiblePlayer()]->IsVisible(pos)
+	    ){ // center on pos if generally visible but not in current view
+	    AddCenterMap(pos);
+	    }
 	DQActionSpecialEffect *action = new DQActionSpecialEffect(pos, spriteID, soundID);
 	m_actionQueue->AddTail(action);
 }
