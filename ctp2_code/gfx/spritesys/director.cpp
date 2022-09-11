@@ -331,7 +331,7 @@ private:
  *
  * The combination of the two behaviours will create four kind of actions:
  *  - No Lock && No Animation -> immediate
- *  - No Lock && Animation    -> effect
+ *  - Lock    && Animation    -> effect (EffectActor, similar to active now that locking was enabled here as well)
  *  - Lock    && No Animation -> external
  *  - Lock    && Animation    -> active
  *
@@ -422,9 +422,9 @@ public:
 };
 
 /**
- * DQActionEffect: No Lock and Animation
+ * DQActionEffect: Lock and Animation (EffectActor)
  *   -> LoopingSound is ignored
- *   -> IsUnlocked returns true
+ *   -> IsUnlocked returns true when animation is done
  *   -> IsAnimationFinished returns true when animation is done
  */
 class DQActionEffect : public DQAction {
@@ -447,7 +447,7 @@ public:
 
 	// Lock behaviour
 	virtual void Unlock() {}
-	virtual bool IsUnlocked() { return true; }
+	virtual bool IsUnlocked() { return IsAnimationFinished(); }
 
 	// Animation behaviour
 	virtual void Process()
@@ -469,6 +469,24 @@ public:
 
 protected:
 	EffectActor *m_activeActor;
+};
+
+/**
+ * DQActionEffectNoLock: like DQActionEffect but No Lock (for projectiles)
+ *   -> LoopingSound is ignored
+ *   -> IsUnlocked returns true
+ *   -> IsAnimationFinished returns true when animation is done
+ */
+class DQActionEffectNoLock : public DQActionEffect {
+public:
+	DQActionEffectNoLock(SpriteState *spriteState, const MapPoint &pos)
+		: DQActionEffect(spriteState, pos)
+	{}
+	DQActionEffectNoLock(sint32 spriteID, const MapPoint &pos)
+		: DQActionEffect(spriteID, pos)
+	{}
+
+	virtual bool IsUnlocked() { return true; }
 };
 
 /**
@@ -1326,13 +1344,11 @@ public:
 	}
 };
 
-class DQActionMoveProjectile : public DQActionEffect
+class DQActionMoveProjectile : public DQActionEffectNoLock
 {
 public:
 	DQActionMoveProjectile(SpriteState *projectileEndState, const MapPoint &startPos, const MapPoint &endPos)
-		: DQActionEffect(projectileEndState, endPos),
-		startPos (startPos),
-		endPos   (endPos)
+	    : DQActionEffectNoLock(projectileEndState, endPos), startPos (startPos), endPos(endPos)
 	{}
 	virtual ~DQActionMoveProjectile() {}
 	virtual DQACTION_TYPE GetType() { return DQACTION_MOVEPROJECTILE; }
@@ -1362,11 +1378,11 @@ protected:
 	MapPoint endPos;
 };
 
-class DQActionCombatFlash : public DQActionEffect
+class DQActionCombatFlash : public DQActionEffectNoLock
 {
 public:
 	DQActionCombatFlash(const MapPoint &flashPos)
-		: DQActionEffect(99, flashPos)
+		: DQActionEffectNoLock(99, flashPos)
 	{}
 	virtual ~DQActionCombatFlash() {}
 	virtual DQACTION_TYPE GetType() { return DQACTION_COMBATFLASH; }
@@ -1409,13 +1425,14 @@ public:
 			Anim *animation = m_activeActor->CreatePlayAnim();
 			if (animation)
 			{
-				Action *action = Action::CreateEffectAction(EFFECTACTION_PLAY, animation);
-				m_activeActor->SetAction(action);
-
 				if (g_soundManager)
 				{
 					g_soundManager->AddSound(SOUNDTYPE_SFX, 0, soundID, pos.x, pos.y);
 				}
+
+
+				Action *action = Action::CreateEffectAction(EFFECTACTION_PLAY, animation);
+				m_activeActor->SetAction(action);
 			}
 		}
 	}
