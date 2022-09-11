@@ -5839,6 +5839,7 @@ ORDER_RESULT ArmyData::InterceptTrade()
 	sint32 typeIndex = g_theSpecialEffectDB->FindTypeIndex("SPECEFFECT_PIRATE");
 	sint32 effectId = g_theSpecialEffectDB->Get(typeIndex)->GetValue();
 	sint32 soundId = g_theSoundDB->FindTypeIndex("SOUND_ID_SLAVE_RAIDS");
+	sint32 soundIdTmp= -1;
 
 	for (sint32 i = m_nElements - 1; i>= 0; i--)
 	{
@@ -5891,6 +5892,9 @@ ORDER_RESULT ArmyData::InterceptTrade()
 						g_selected_item->ForceDirectorSelect(Army(m_id));
 						return ORDER_RESULT_ILLEGAL;
 					}
+					if (g_selected_item->GetVisiblePlayer() == route_owner){ // set pirating sound if route_owner is human player
+					    soundIdTmp= soundId;
+					    }
 				}
 			}
 
@@ -5912,6 +5916,10 @@ ORDER_RESULT ArmyData::InterceptTrade()
 
 					g_director->AddSpecialEffect(m_pos, effectId, soundId);
 				}
+				else if (soundIdTmp != -1){ // play pirating sound if route_owner is human player even if pirating pos is not visible (i.e. sound corresponds to the feedback of the pirated trader)
+				    g_soundManager->AddSound(SOUNDTYPE_SFX, (uint32)0, 	soundIdTmp, m_pos.x, m_pos.y);
+				    }
+				
 				AddSpecialActionUsed(m_array[i]);
 				m_isPirating = true;
 			}
