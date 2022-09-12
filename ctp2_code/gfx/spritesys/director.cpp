@@ -1786,7 +1786,7 @@ protected:
 		bool attackerVisible = TileIsVisibleToPlayer(attackerPos);
 		bool defenderVisible = TileIsVisibleToPlayer(defenderPos);
 
-		if (attackerSoundID >= 0 && attackerVisible || defenderVisible) {
+		if (attackerSoundID >= 0 && defenderVisible) { // removed || attackerVisible to suppress sound if e.g. invisible slaver is not in FOW of visiblePlayer but his target is in FOW
 			g_soundManager->AddSound(SOUNDTYPE_SFX, 0, attackerSoundID, 0, 0);
 		}
 
