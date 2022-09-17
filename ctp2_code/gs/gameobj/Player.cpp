@@ -9627,15 +9627,3 @@ MapPoint Player::CalcEmpireCenter() const
 
 	return empireCenter;
 }
-
-/*
-void Player::GiveUnit(const PLAYER_INDEX other_player, const sint32 unit_idx)
-{
-	MapPoint	p;
-	Unit	u = m_all_units->Get(unit_idx).m_id;
-
-	GetCapitolPos(p);
-	u.ResetUnitOwner(Merger, CAUSE_REMOVE_ARMY_DIPLOMACY);
-	u.SetPosition(p);
-}
-*/
