@@ -5895,7 +5895,6 @@ ORDER_RESULT ArmyData::InterceptTrade()
 					if (g_selected_item->GetVisiblePlayer() == route_owner){ // set pirating sound if route_owner is human player
 					    soundIdTmp= soundId;
 					    }
-					fprintf(stderr, "%s L%d: pirating player: %d; route owner: %d\n", __FILE__, __LINE__, m_owner, route_owner);
 				}
 			}
 
@@ -5923,7 +5922,6 @@ ORDER_RESULT ArmyData::InterceptTrade()
 				
 				AddSpecialActionUsed(m_array[i]);
 				m_isPirating = true;
-				fprintf(stderr, "%s L%d: player: %d\n", __FILE__, __LINE__, m_owner);
 			}
 
 			return res;
