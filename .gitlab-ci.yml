@@ -28,6 +28,7 @@ variables:
                    --tag $IMAGE_TAG:system-latest
                    --target system
                    .
+                   | tee -a build.log
     - docker push $IMAGE_TAG:system-latest
     ## 2nd stage build using builder-latest for caching
     - docker pull $IMAGE_TAG:builder-latest-${CI_JOB_NAME} || true
@@ -38,6 +39,7 @@ variables:
                    --build-arg BTYP=${CI_JOB_NAME}
                    --target builder 
                    .
+                   | tee -a build.log
     - docker push $IMAGE_TAG:builder-latest-${CI_JOB_NAME}
     - mkdir -p deb/ # create artifacts folder
     - docker run --rm
@@ -60,11 +62,14 @@ variables:
                    --build-arg BTYP=${CI_JOB_NAME}
                    --target install
                    .
+                   | tee -a build.log
     - docker push $IMAGE_TAG:test-${CI_JOB_NAME}
   retry: 2
   artifacts:
+    when: always
     paths:
     - deb/*.deb
+    - build.log
 
 plain:
   <<: *build
