@@ -59,15 +59,16 @@ sint32 tradeutil_GetTradeValue(const sint32 owner, const Unit & destination, sin
     if(resource < 0 || resource >= g_theResourceDB->NumRecords())
 	return 0;
 
-    double baseValue = g_theWorld->GetGoodValue(resource); // good value varies between a min and a map depening on its frequency on the map
+    double baseValue = g_theWorld->GetGoodValue(resource); // good value varies between MIN_GOOD_VALUE and MAX_GOOD_VALUE (Const.txt) depening on its frequency on the map
 
     PLAYER_INDEX const  tradePartner = destination.GetOwner();
 
-    sint32 totalValue= sint32( // do not count distance to good in case of domestic trade (good is within territory then)
-	(owner != tradePartner) ?
-	baseValue * destination.GetCityData()->GetDistanceToGood(resource) :
-	baseValue * destination.GetCityData()->GetDistanceToGood(resource) * g_theConstDB->Get(0)->GetDomesticTradeReduction()
-	);
+    sint32 totalValue= sint32(baseValue * destination.GetCityData()->GetDistanceToGood(resource));
+    
+    if (owner == tradePartner) // reduce value to good in case of domestic trade (good is within territory then)
+	{
+	totalValue *= g_theConstDB->Get(0)->GetDomesticTradeReduction();
+	}
 
     if ((owner != tradePartner)	&& AgreementMatrix::s_agreements.HasAgreement(owner, tradePartner, PROPOSAL_TREATY_TRADE_PACT))
 	{
