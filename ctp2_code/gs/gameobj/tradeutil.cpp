@@ -63,7 +63,8 @@ sint32 tradeutil_GetTradeValue(const sint32 owner, const Unit & destination, sin
 
     PLAYER_INDEX const  tradePartner = destination.GetOwner();
 
-    sint32 totalValue= sint32(baseValue * destination.GetCityData()->GetDistanceToGood(resource));
+    double tmpValue= baseValue * destination.GetCityData()->GetDistanceToGood(resource);
+    sint32 totalValue= static_cast<sint32>(std::min<double>(tmpValue, std::numeric_limits<int>::max())); // limit totalValue to max value of sint32 before casting
     
     if (owner == tradePartner) // reduce value to good in case of domestic trade (good is within territory then)
 	{
