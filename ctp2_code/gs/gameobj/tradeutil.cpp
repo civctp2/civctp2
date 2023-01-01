@@ -60,12 +60,13 @@ sint32 tradeutil_GetTradeValue(const sint32 owner, const Unit & destination, sin
 	return 0;
 
     double baseValue = g_theWorld->GetGoodValue(resource); // good value varies between MIN_GOOD_VALUE and MAX_GOOD_VALUE (Const.txt) depening on its frequency on the map
+    double baseValue2 = baseValue * (10.0*g_theConstDB->Get(0)->GetTradeCoef() - 10) / (100 - 10.0*g_theConstDB->Get(0)->GetTradeCoef()); // TradeCoef is the factor that the VPC (valuePerCaravan) should be increased in case a good needs not just 1 caravan but 10 caravans for creating the trade route, i.e. if TradeCoef= 1 the dependency is just linear (as before), if TradeCoef= 1.002 then the VPC is about 2 times for a good that needs 2 Caravans to trade (in comparison as if the good would only need 1 Caravan to trade)
 
-    PLAYER_INDEX const  tradePartner = destination.GetOwner();
-
-    double tmpValue= baseValue * destination.GetCityData()->GetDistanceToGood(resource);
+    sint32 distToGood= destination.GetCityData()->GetDistanceToGood(resource);
+    double tmpValue= baseValue * distToGood + baseValue2 * distToGood * distToGood; // linear + quadratic dependency
     sint32 totalValue= static_cast<sint32>(std::min<double>(tmpValue, std::numeric_limits<int>::max())); // limit totalValue to max value of sint32 before casting
     
+    PLAYER_INDEX const  tradePartner = destination.GetOwner();
     if (owner == tradePartner) // reduce value to good in case of domestic trade (good is within territory then)
 	{
 	totalValue *= g_theConstDB->Get(0)->GetDomesticTradeReduction();
