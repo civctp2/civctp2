@@ -357,25 +357,28 @@ void TradeManager::UpdateCreateList(const PLAYER_INDEX & player_id)
 			if(city.CD()->IsLocalResource(g)) { // only consider collected goods (not bought goods)
 
 				sint32 op;
-				sint32 maxPrice[k_MAX_CITIES_PER_GOOD];
-				sint32 sellingPrice = -1;
+				sint32 maxValuePerCaravan[k_MAX_CITIES_PER_GOOD];
+				double sellingVPC = -1;
+				sint32 sellingCost = -1;
+				TradeRoute curDestRoute;
 				Unit curDestCity;
 
 				sint32 i,j;
 				for(i = 0; i < k_MAX_CITIES_PER_GOOD; i++) {
 					maxCity[i].m_id = 0;
-					maxPrice[i] = 0;
+					maxValuePerCaravan[i] = 0;
 				}
 
 
-				if(city.CD()->IsSellingResourceTo(g, curDestCity)) { // have already a route for g
-					sellingPrice = tradeutil_GetTradeValue(player_id, curDestCity, g);
-
+				if(city.CD()->GetResourceTradeRoute(g, curDestRoute)){ // have already a route for g
+					sellingCost = curDestRoute->GetCost();
+					curDestCity = curDestRoute->GetDestination();
+					sellingVPC = static_cast<double>(tradeutil_GetTradeValue(player_id, curDestCity, g))
+					    / sellingCost; // tradeutil_GetTradeDistance returns > 1.0
 				//need to add something here where cities that have an improvement that needs a good will demand the good. May be increase the value of selling that good?
 				}
 				else {
 					curDestCity.m_id = 0;
-					sellingPrice = -1;
 				}
 
 				for(op = 1; op < k_MAX_PLAYERS; op++) { // determine player offering highest price for good g
@@ -408,14 +411,17 @@ void TradeManager::UpdateCreateList(const PLAYER_INDEX & player_id)
 
 						if(curDestCity.m_id == destCity.m_id) continue; // exclude standing trade route destination
 
-						sint32 price = tradeutil_GetTradeValue(player_id, destCity, g); // # of gold
+						const sint32 price = tradeutil_GetTradeValue(player_id, destCity, g); // # of gold
+						const sint32 cost = tradeutil_GetTradeDistance(city, destCity); // # of caravans
+						const double valuePerCaravan = static_cast<double>(price) / cost; // cost = tradeutil_GetAccurateTradeDistance returns > 1.0
+
 						for(i = 0; i < m_numCities; i++) {
-							if(price > maxPrice[i]) { // determine best offer
-								for(j = m_numCities - 1; j>= i; j--) {
-									maxPrice[j] = maxPrice[j - 1];
+							if(valuePerCaravan > maxValuePerCaravan[i]) { // determine best offer
+								for(j = m_numCities - 1; j > i; j--) {
+									maxValuePerCaravan[j] = maxValuePerCaravan[j - 1];
 									maxCity[j].m_id = maxCity[j - 1].m_id;
 								}
-								maxPrice[i] = price;
+								maxValuePerCaravan[i] = valuePerCaravan;
 								maxCity[i] = destCity;
 								break;
 							}
@@ -424,7 +430,7 @@ void TradeManager::UpdateCreateList(const PLAYER_INDEX & player_id)
 				}
 
 				for(i = 0; i < k_MAX_CITIES_PER_GOOD; i++) {
-					if(maxPrice[i] > 0) {
+					if(maxValuePerCaravan[i] > 0) {
 
 						if(maxCity[i].m_id == curDestCity.m_id)
 							continue;
@@ -440,7 +446,7 @@ void TradeManager::UpdateCreateList(const PLAYER_INDEX & player_id)
 						data->m_source = city;
 						data->m_resource = g;
 						data->m_destination = maxCity[i];
-						data->m_price = maxPrice[i];
+						data->m_price = maxValuePerCaravan[i];
 						data->m_caravans = tradeutil_GetTradeDistance(city, maxCity[i]);
 						data->m_curDestination.m_id = curDestCity.m_id;
 
@@ -487,7 +493,7 @@ void TradeManager::UpdateCreateList(const PLAYER_INDEX & player_id)
 						}
 
 						MBCHAR buf[20];
-						sprintf(buf, "%d", maxPrice[i]);
+						sprintf(buf, "%d", maxValuePerCaravan[i]);
 						if (ctp2_Static * price = (ctp2_Static *)item->GetChildByIndex(k_PRICE_COL_INDEX))
                         {
 							price->SetText(buf);
