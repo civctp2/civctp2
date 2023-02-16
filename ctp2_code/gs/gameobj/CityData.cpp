@@ -2259,7 +2259,7 @@ sint32 CityData::ProcessProduction(bool projectedOnly, sint32 &grossProduction, 
 
 	sint32 const shields			= grossProduction - (crimeLoss + franchiseLoss);
 
-	if (m_franchise_owner >= 0)
+	if (m_franchise_owner >= 0 && g_player[m_franchise_owner] != NULL)
 	{
 		if(!projectedOnly)
 			g_player[m_franchise_owner]->AddProductionFromFranchise(franchiseLoss);
@@ -6143,7 +6143,8 @@ void CityData::RemoveFranchise()
 	UnseenCellCarton ucell;
 
 	m_home_city.GetPos(pos);
-	if(g_player[m_franchise_owner]->GetLastSeen(pos, ucell)) // get un-seen cell of franchise owner
+	if(g_player[m_franchise_owner] != NULL 
+           && g_player[m_franchise_owner]->GetLastSeen(pos, ucell)) // get un-seen cell of franchise owner
 	{
 		ucell.m_unseenCell->SetIsFranchised(false); // remove franchise flag
 	}
@@ -6542,7 +6543,8 @@ void CityData::Unconvert(bool makeUnhappy)
 	UnseenCellCarton ucell;
 
 	m_home_city.GetPos(pos);
-	if(g_player[m_convertedTo]->GetLastSeen(pos, ucell)) // get un-seen cell of conversion owner
+	if(g_player[m_convertedTo]
+	   && g_player[m_convertedTo]->GetLastSeen(pos, ucell)) // get un-seen cell of conversion owner
 	{
 		ucell.m_unseenCell->SetIsConverted(false); // remove conversion flag
 	}
