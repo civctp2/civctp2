@@ -356,7 +356,7 @@ public:
 
 	bool CanSettle(const MapPoint &pos, const bool settleOnCity = false) const;
 	bool Settle();
-	void ResetCityOwner(const Unit &me, const PLAYER_INDEX newo, sint32 is_conquest,
+	void ResetCityOwner(const Unit &me, const PLAYER_INDEX newo, bool is_conquest,
 	                    const CAUSE_REMOVE_CITY cause);
 	void ResetUnitOwner(const Unit &me, const PLAYER_INDEX new_owner,
 	                    CAUSE_REMOVE_ARMY cause) ;

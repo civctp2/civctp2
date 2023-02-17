@@ -2062,6 +2062,7 @@ messagebox '164FreeslaveFailedVictim' {
 messagebox '165FreeslaveCompleteAgressor' {
 	Text(ID_FREESLAVE_COMPLETE_AGRESSOR) ;
 	MessageType("FREE_SLAVE");
+	EyePoint(city[1].location); // target is of interest
 }
 
 messagebox '166FreeslaveFailedAgressor' {

@@ -267,9 +267,7 @@ STDEHANDLER(UndergroundRailwayUnitEvent)
 
 	Unit hc;
 	double distance;
-	sint32 r = g_player[u.GetOwner()]->GetNearestCity(u.RetPos(),
-													  hc,
-													  distance);
+	sint32 r = g_player[u.GetOwner()]->GetNearestCity(u.RetPos(), hc, distance);
 	Assert(r);
 
 	if(!r)

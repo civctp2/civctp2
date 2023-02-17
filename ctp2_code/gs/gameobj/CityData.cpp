@@ -6246,7 +6246,7 @@ void CityData::DoUprising(UPRISING_CAUSE cause)
 		return;
 
 	sint32 numSlaves = SlaveCount();
-	PLAYER_INDEX si = civilisation_NewCivilisationOrVandals(m_owner);
+	PLAYER_INDEX si = PLAYER_INDEX_VANDALS; // let slave army belong to vandals for the fight to avoid inappropriate "civ-conquered" event in case of failure
 
 	MapPoint cpos;
 	m_home_city.GetPos(cpos);
@@ -6267,6 +6267,7 @@ void CityData::DoUprising(UPRISING_CAUSE cause)
 		{
 			u.SetPosAndNothingElse(cpos);
 			u.SetTempSlaveUnit(true);
+			u.AddUnitVision(); // needed for UnitData::ResetUnitOwner in CityData::CleanupUprising if uprise succeeds (does not include Player::ContactMade)
 		}
 	}
 
@@ -6287,7 +6288,7 @@ void CityData::DoUprising(UPRISING_CAUSE cause)
 	                       GEA_End);
 }
 
-void CityData::FinishUprising(Army &sa, UPRISING_CAUSE cause)
+void CityData::FinishUprising(Army sa, UPRISING_CAUSE cause)
 {
 	sint32 oldOwner = m_owner;
 	Cell *cell = g_theWorld->GetCell(m_home_city.RetPos());
@@ -6314,6 +6315,9 @@ void CityData::FinishUprising(Army &sa, UPRISING_CAUSE cause)
 
 		if (defenders.Num() > 0)
 		{
+			g_player[sa.GetOwner()]->ContactMade(m_owner); // create diplomatic contact, avoid assertion on sa.Fight(defenders); in Diplomat::DeclareWar, has to be in CityData::FinishUprising to avoid another assertion with Diplomat::DesireWarWith
+			g_player[m_owner]->ContactMade(sa.GetOwner()); // in both directions
+
 			sa.Fight(defenders);
 			startedBattle = true;
 		}
@@ -6332,7 +6336,7 @@ void CityData::FinishUprising(Army &sa, UPRISING_CAUSE cause)
 		sa->IncrementDontKillCount();
 		g_gevManager->AddEvent(GEV_INSERT_Tail, GEV_CleanupUprising,
 		                       GEA_Army, sa,
-		                       GEA_City, m_home_city.m_id,
+		                       GEA_City, m_home_city,
 		                       GEA_End);
 	}
 	else
@@ -6343,53 +6347,66 @@ void CityData::FinishUprising(Army &sa, UPRISING_CAUSE cause)
 
 void CityData::CleanupUprising(Army &sa)
 {
-	Cell *cell = g_theWorld->GetCell(m_home_city.RetPos());
+	sint32 sc= SlaveCount();
+	if(sc > k_MAX_ARMY_SIZE)
+		sc = k_MAX_ARMY_SIZE;
 
-	sint32 oldOwner = m_owner;
 	if(!g_theArmyPool->IsValid(sa) || sa.Num() < 1)
 	{
 		DPRINTF(k_DBG_GAMESTATE, ("The uprising was crushed\n"));
 
-		RemoveOneSlave(GetOwner());
+		ChangeSpecialists(POP_SLAVE, -sc); // remove all slaves since complete slave army (arose from all slaves of the city) was defeated
+		ChangePopulation(-sc); // therefore population is decreased as well
 	}
 	else
 	{
-		sint32 si = sa.GetOwner();
 		DPRINTF(k_DBG_GAMESTATE, ("The uprising succeeded\n"));
 
-		if(cell->UnitArmy())
-		{
-			cell->UnitArmy()->KillList(CAUSE_REMOVE_ARMY_SLAVE_UPRISING, GetOwner());
-		}
+		// city army was already removed by sa.Fight(defenders); in CityData::FinishUprising
 
-		for(sint32 i = sa.Num() - 1; i >= 0; i--)
+		PLAYER_INDEX si = civilisation_NewCivilisationOrVandals(m_owner);
+		sint32 nsa = sa.Num();
+
+		if (si != PLAYER_INDEX_VANDALS){ // number of possible players not exausted
+		    g_player[si]->ContactMade(m_owner); // create diplomatic contact, needed for fighting back with adjacent units to city if uprise succeeds
+		    g_player[m_owner]->ContactMade(si); // in both directions
+
+		    Diplomat::GetDiplomat(si).ComputeAllDesireWarWith(); // avoid assertion with Diplomat::SetDiplomaticState with new civ
+		    Diplomat::GetDiplomat(m_owner).ComputeAllDesireWarWith(); // avoid assertion with Diplomat::SetDiplomaticState with new civ
+		    Diplomat::GetDiplomat(PLAYER_INDEX_VANDALS).ComputeAllDesireWarWith(); // avoid assertion with Diplomat::SetDiplomaticState with new civ
+		    }
+
+		for(sint32 i = nsa - 1; i >= 0; i--) // build (new) army with normal units
 		{
 			if(sa[i].GetHP() < 1)
+			{
 				sa.DelIndex(i);
+				nsa--;
+			}
 			else
 			{
 				sa[i].SetTempSlaveUnit(false);
 				sa[i].SetPosAndNothingElse(m_home_city.RetPos());
-				sa[i].AddUnitVision();
-
 				g_theWorld->InsertUnit(m_home_city.RetPos(), sa[i]);
-				g_player[sa.GetOwner()]->InsertUnitReference(sa[i],
-												  CAUSE_NEW_ARMY_UPRISING,
-												  m_home_city);
+				g_player[si]->InsertUnitReference(sa[i], CAUSE_NEW_ARMY_UPRISING, m_home_city);
 				if(g_network.IsHost())
-				{
-					g_network.Block(oldOwner);
-					g_network.Enqueue(new NetInfo(NET_INFO_CODE_MAKE_UNIT_PERMANENT,
-												  sa[i].m_id));
-					g_network.Unblock(oldOwner);
-				}
+				    {
+				    sint32 oldOwner = m_owner;
+				    g_network.Block(oldOwner);
+				    g_network.Enqueue(new NetInfo(NET_INFO_CODE_MAKE_UNIT_PERMANENT, sa[i].m_id));
+				    g_network.Unblock(oldOwner);
+				    }
+				
+				if (si != PLAYER_INDEX_VANDALS){ // number of possible players not exausted
+				    sa[i].ResetUnitOwner(si, CAUSE_REMOVE_ARMY_SLAVE_UPRISING); // must be last operation on sa[i] because it includes RemoveUnitReference, removal from current army, AddUnitVision and InsertUnitReference
+				    }
 			}
 		}
-		sa.ResetPos();
 
-		ChangeSpecialists(POP_SLAVE, -SlaveCount());
+		ChangeSpecialists(POP_SLAVE, -sc); // slaves become normal citizen in new civ
+		ChangePopulation(nsa+1 - sc); // reduce population by the amount of slave units that died during battle
 
-		m_home_city.ResetCityOwner(si, false, CAUSE_REMOVE_CITY_SLAVE_UPRISING);
+		m_home_city.ResetCityOwner(si, false, CAUSE_REMOVE_CITY_SLAVE_UPRISING); // calls InstallationData::DoVision() for city vision (does not include Player::ContactMade)
 	}
 }
 
@@ -9492,7 +9509,11 @@ double CityData::GetOffenseBonus(const Unit &defender)
 
 uint64 CityData::GetEffectiveBuildings() const
 {
-	return m_built_improvements | g_player[m_owner]->GetWonderBuildings();
+	Assert(g_player[m_owner]);
+	if(g_player[m_owner])
+	    return m_built_improvements | g_player[m_owner]->GetWonderBuildings();
+	else
+	    return m_built_improvements;
 }
 
 sint32 CityData::GetDesiredSpriteIndex(bool justTryLand)

@@ -266,7 +266,7 @@ public:
 	bool Settle();
 
 	bool IsCantCaptureCity();
-	void ResetCityOwner(const PLAYER_INDEX newo, sint32 is_conquest,
+	void ResetCityOwner(const PLAYER_INDEX newo, bool is_conquest,
 	                    const CAUSE_REMOVE_CITY cause);
 	void ResetUnitOwner(const PLAYER_INDEX newo,
 	                    CAUSE_REMOVE_ARMY cause);

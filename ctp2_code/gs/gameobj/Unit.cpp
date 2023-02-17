@@ -204,28 +204,16 @@ void Unit::RemoveAllReferences(const CAUSE_REMOVE_ARMY cause, PLAYER_INDEX kille
 	sint32          r       = TRUE;
 
 	if(!GetDBRec()->GetIsTrader()
-	&& !IsTempSlaveUnit()
+	&& !IsTempSlaveUnit() // kept, because there should be no g_theWorld->InsertUnit for the TempSlaveUnit
 	&& !IsBeingTransported()
 	&& !HasLeftMap()
 	){
 		r = g_theWorld->RemoveUnitReference(pos, *this);
 		Assert(r);
 	}
-	else
-	{
-		if(GetArmy().IsValid() && !HasLeftMap())
-		{
-			Assert(false);
-			r = g_theWorld->RemoveUnitReference(pos, *this);
-			Assert(r);
-		}
-	}
 
-	if(!IsTempSlaveUnit())
-	{
-		r = g_player[owner]->RemoveUnitReference(*this, cause, killedBy);
-		Assert(r);
-	}
+	r = g_player[owner]->RemoveUnitReference(*this, cause, killedBy); // executed also for the TempSlaveUnit due to m_all_units->Insert(u); in Player::CreateUnitNoPosition such that m_all_units->Num() > 0 in Player::CheckPlayerDead()
+	Assert(r);
 
 	Unit transport = GetTransport();
 	if(transport.IsValid())
@@ -1027,7 +1015,7 @@ bool Unit::IsCantCaptureCity()
 	return GetDBRec()->GetCantCaptureCity();
 }
 
-void Unit::ResetCityOwner(const PLAYER_INDEX newo, sint32 is_conquest,
+void Unit::ResetCityOwner(const PLAYER_INDEX newo, bool is_conquest,
                           const CAUSE_REMOVE_CITY cause)
 {
 	AccessData()->ResetCityOwner(*this, newo, is_conquest, cause);

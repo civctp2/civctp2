@@ -907,6 +907,7 @@ Unit Player::CreateUnitNoPosition(const sint32 t,
 		g_network.AddNewUnit(oldOwner, u);
 	}
 	army.Insert(u);
+	m_all_units->Insert(u);
 	return u;
 }
 
@@ -1059,7 +1060,8 @@ Unit Player::InsertUnitReference(const Unit &u,  const CAUSE_NEW_ARMY cause,
 	if(u.IsCity())
 		return Unit();
 
-	m_all_units->Insert(u);
+	if(cause != CAUSE_NEW_ARMY_UPRISING) // in case of CAUSE_NEW_ARMY_UPRISING m_all_units->Insert(u); was already done in Player::CreateUnitNoPosition
+	    m_all_units->Insert(u);
 
 	if(cause != CAUSE_NEW_ARMY_NETWORK) {
 		if(u.GetArmy().m_id == (0)) {
@@ -6827,11 +6829,6 @@ void Player::GameOver(GAME_OVER reason, sint32 data)
 			StartDeath(reason, data);
 			for(i = 1; i < k_MAX_PLAYERS; i++) {
 				if(g_player[i] && !g_player[i]->m_isDead && i != m_owner) {
-
-
-
-
-
 					count++;
 					aPlayer = i;
 				}
@@ -6889,8 +6886,10 @@ bool Player::CheckPlayerDead()
 {
 	if(g_isCheatModeOn || ScenarioEditor::IsShown())
 		return false;
+	
+	DPRINTF(k_DBG_GAMESTATE, ("Player::CheckPlayerDead : m_all_cities->Num()=%d, m_all_units->Num=%d\n", m_all_cities->Num(), m_all_units->Num()));
 
-	if(m_all_cities->Num() <= 0 && (!m_first_city || m_all_units->Num () < 1)) {
+	if(m_all_cities->Num() <= 0 && (!m_first_city || m_all_units->Num() < 1)) {
 		return true;
 	}
 	return false;
@@ -6921,9 +6920,9 @@ void Player::StartDeath(GAME_OVER reason, sint32 data)
     g_slicEngine->Execute(so) ;
 
     if (reason == GAME_OVER_LOST_CONQUERED && data != m_owner) {
-        so = new SlicObject("76PlayerDefeatedBy") ;
-        so->AddCivilisation(m_owner) ;
-        so->AddCivilisation(data) ;
+        so = new SlicObject("76PlayerDefeatedBy");
+        so->AddCivilisation(m_owner) ; // m_owner <=> killed player
+        so->AddCivilisation(data) ; // data <=> killedBy
         so->AddAllRecipientsBut(m_owner);
         g_slicEngine->Execute(so) ;
 		if(g_player[data]) {
@@ -8405,13 +8404,13 @@ bool Player::CanBuildUnit(const sint32 type) const
 	}
 
 	if(rec->GetNoSlaves()) {
-
 		sint32 i, n = m_all_cities->Num();
+/* allow building Abolitionists if there are slaves but no slavers in the civ
 		for(i = 0; i < n; i++) {
 			if(m_all_cities->Access(i).CountSlaves() > 0)
 				return false;
 		}
-
+*/
 		n = m_all_units->Num();
 		for(i = 0; i < n; i++) {
 			if(m_all_units->Access(i).GetDBRec()->HasSlaveRaids())
@@ -9628,15 +9627,3 @@ MapPoint Player::CalcEmpireCenter() const
 
 	return empireCenter;
 }
-
-/*
-void Player::GiveUnit(const PLAYER_INDEX other_player, const sint32 unit_idx)
-{
-	MapPoint	p;
-	Unit	u = m_all_units->Get(unit_idx).m_id;
-
-	GetCapitolPos(p);
-	u.ResetUnitOwner(Merger, CAUSE_REMOVE_ARMY_DIPLOMACY);
-	u.SetPosition(p);
-}
-*/
