@@ -546,7 +546,7 @@ void aui_TextField::PostChildrenCallback( aui_MouseEvent *mouseData )
 		m_draw |= m_drawMask & k_AUI_REGION_DRAWFLAG_UPDATE;
 	}
 
-	if ( m_blinkThisFrame && mouseData->time - m_startWaitTime > m_timeOut )
+	if ( m_blinkThisFrame && mouseData->time - m_startWaitTime > GetTimeOut() )
 	{
 		m_blinkThisFrame = FALSE;
 		m_startWaitTime = mouseData->time;

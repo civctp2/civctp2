@@ -27,7 +27,7 @@
 //
 // - Standardised min/max usage.
 // - Prevented crashes in destructor with uninitialised m_stringTable.
-// - Added a constom status bar text for orders. (13-Sep-2008 Martin G�hmann)
+// - Added a constom status bar text for orders. (13-Sep-2008 Martin Gühmann)
 //
 //----------------------------------------------------------------------------
 
@@ -941,20 +941,17 @@ void aui_Control::MouseRDragAway( aui_MouseEvent *mouseData )
 		MouseMoveAway(mouseData);
 }
 
-
-void aui_Control::MouseNoChange( aui_MouseEvent *mouseData )
+void aui_Control::MouseHoover(aui_MouseEvent * mouseData)
 {
-
-	if ( m_isMouseInside )
-	if ( !GetWhichSeesMouse() || GetWhichSeesMouse() == this )
-	if ( !mouseData->lbutton && !mouseData->rbutton )
-	if ( mouseData->time - m_noChangeTime > m_timeOut )
+	if (!GetWhichSeesMouse() || GetWhichSeesMouse() == this)
 	{
-		SetWhichSeesMouse( this );
+		SetWhichSeesMouse(this);
 
-		if ( ShowTipWindow( mouseData ) )
-			if ( m_mouseCode == AUI_ERRCODE_UNHANDLED )
+		if (ShowTipWindow(mouseData)) {
+			if (m_mouseCode == AUI_ERRCODE_UNHANDLED) {
 				m_mouseCode = AUI_ERRCODE_HANDLED;
+			}
+		}
 	}
 }
 

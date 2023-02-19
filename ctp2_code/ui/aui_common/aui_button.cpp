@@ -152,7 +152,7 @@ void aui_Button::KeyboardCallback( aui_KeyboardEvent *keyboardData )
 
 void aui_Button::PostChildrenCallback( aui_MouseEvent *mouseData )
 {
-	if ( m_isRepeating && mouseData->time - m_startWaitTime > m_timeOut )
+	if ( m_isRepeating && mouseData->time - m_startWaitTime > GetTimeOut() )
 	{
 		if ( mouseData->time - m_lastRepeatTime > m_repeatTime )
 		{

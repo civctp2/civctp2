@@ -1409,7 +1409,7 @@ void aui_ListBox::PreChildrenCallback( aui_MouseEvent *mouseData )
 void aui_ListBox::PostChildrenCallback( aui_MouseEvent *mouseData )
 {
 	if ( !m_dragDropWindow )
-	if ( m_scrolling && mouseData->time - m_startWaitTime > m_timeOut )
+	if ( m_scrolling && mouseData->time - m_startWaitTime > GetTimeOut() )
 	if ( mouseData->time - m_lastRepeatTime > m_repeatTime )
 	{
 		m_lastRepeatTime = mouseData->time;

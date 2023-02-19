@@ -64,13 +64,12 @@ class aui_Region;
 #define k_AUI_REGION_DRAWFLAG_MOUSELDOUBLECLICKOUTSIDE	0x00400000
 #define k_AUI_REGION_DRAWFLAG_MOUSERDOUBLECLICKINSIDE	0x00800000
 #define k_AUI_REGION_DRAWFLAG_MOUSERDOUBLECLICKOUTSIDE	0x01000000
-#define k_AUI_REGION_DRAWFLAG_MOUSENOCHANGE				0x02000000
-#define k_AUI_REGION_DRAWFLAG_KEYSTATECHANGE			0x04000000
-#define k_AUI_REGION_DRAWFLAG_KEYBOARDFOCUSCHANGE		0x08000000
-#define k_AUI_REGION_DRAWFLAG_OVERLAP					0x10000000
-
-
-
+#define k_AUI_REGION_DRAWFLAG_MOUSENOCHANGEINSIDE		0x02000000
+#define k_AUI_REGION_DRAWFLAG_MOUSENOCHANGEOUTSIDE		0x04000000
+#define k_AUI_REGION_DRAWFLAG_KEYSTATECHANGE			0x08000000
+#define k_AUI_REGION_DRAWFLAG_KEYBOARDFOCUSCHANGE		0x10000000
+#define k_AUI_REGION_DRAWFLAG_OVERLAP					0x20000000
+#define k_AUI_REGION_DRAWFLAG_MOUSEHOOVER				0x40000000
 
 #define k_AUI_REGION_DRAWFLAG_DEFAULTMASK				0xffffffff
 
@@ -107,6 +106,7 @@ class aui_DragDropWindow;
 class aui_Surface;
 class aui_Undo;
 class aui_Dimension;
+class MouseDispatcher;
 // AUI_ERRCODE, MBCHAR, POINT, RECT
 
 class aui_Region : public aui_Base
@@ -183,10 +183,7 @@ public:
 	BOOL IsDragDrop( void ) const
 		{ return m_attributes & k_REGION_ATTRIBUTE_DRAGDROP; }
 
-	AUI_ERRCODE	HandleMouseEvent( aui_MouseEvent *input, BOOL handleIt = TRUE );
-	void MouseDispatch( aui_MouseEvent *input, BOOL handleIt );
-
-	void MouseDispatchEdit( aui_MouseEvent *input, BOOL handleIt );
+	AUI_ERRCODE	HandleMouseEvent(aui_MouseEvent * input, bool handleIt = true);
 	void EditModeModifyRegion( RECT rect );
 	static void EditModeClear( void )
 			{ s_editChild = NULL;
@@ -237,11 +234,6 @@ public:
 	BOOL	IgnoreEvents( BOOL ignore );
 	BOOL	IgnoringEvents( void ) const { return m_ignoreEvents; }
 
-	uint32		GetDoubleClickTimeOut( void ) const
-		{ return m_doubleClickTimeOut; }
-	AUI_ERRCODE	SetDoubleClickTimeOut( uint32 doubleClickTimeOut )
-		{ m_doubleClickTimeOut = doubleClickTimeOut; return AUI_ERRCODE_OK; }
-
 	static aui_Region * GetWhichSeesMouse( void ) { return s_whichSeesMouse; }
 	static aui_Region * SetWhichSeesMouse(
 		aui_Region *region,
@@ -269,40 +261,30 @@ public:
 protected:
 	aui_Region()
     :
-        aui_Base                    (),
-        m_id                        (0),
-        m_x                         (0),
-        m_y                         (0),
-        m_width                     (0),
-        m_height                    (0),
-        m_dim                       (new aui_Dimension()),
-        m_attributes                (0),
-        m_parent                    (NULL),
-        m_childList                 (new tech_WLList<aui_Region *>()),
-        m_childListChanged          (false),
-        m_blind                     (false),
-        m_mouseCode                 (AUI_ERRCODE_UNHANDLED),
-        m_draw                      (0),
-        m_drawMask                  (k_AUI_REGION_DRAWFLAG_DEFAULTMASK),
-        m_ignoreEvents              (false),
-        m_isMouseInside             (false),
-        //	aui_MouseEvent	m_mouseState;
-        m_xLastTime                 (0),
-        m_yLastTime                 (0),
-        m_noChange                  (false),
-        m_noChangeTime              (0),
-        m_doubleLClickStartWaitTime (0),
-        m_doubleRClickStartWaitTime (0),
-        m_doubleClickingInside      (true),
-        m_doubleClickTimeOut        (0),
-        // POINT		m_doubleClickOldPos;
-        m_ldlBlock                  (NULL),
-        // POINT		m_editGrabPoint;
-        m_editGrabPointAttributes   (0),
-        m_showCallback              (NULL),
-        m_hideCallback              (NULL),
-        m_showCallbackData          (NULL),
-        m_hideCallbackData          (NULL)
+		aui_Base                    (),
+		m_id                        (0),
+		m_x                         (0),
+		m_y                         (0),
+		m_width                     (0),
+		m_height                    (0),
+		m_dim                       (new aui_Dimension()),
+		m_attributes                (0),
+		m_parent                    (NULL),
+		m_childList                 (new tech_WLList<aui_Region *>()),
+		m_childListChanged          (false),
+		m_blind                     (false),
+		m_mouseCode                 (AUI_ERRCODE_UNHANDLED),
+		m_draw                      (0),
+		m_drawMask                  (k_AUI_REGION_DRAWFLAG_DEFAULTMASK),
+		m_ignoreEvents              (false),
+		m_ldlBlock                  (NULL),
+		// POINT		m_editGrabPoint;
+		m_editGrabPointAttributes   (0),
+		m_showCallback              (NULL),
+		m_hideCallback              (NULL),
+		m_showCallbackData          (NULL),
+		m_hideCallbackData          (NULL),
+		m_mouseDispatcher           (NULL)
     {
         InitCommon();
     };
@@ -363,23 +345,6 @@ protected:
 
 	BOOL		m_ignoreEvents;
 
-	BOOL		m_isMouseInside;
-	aui_MouseEvent	m_mouseState;
-
-	sint32		m_xLastTime;
-	sint32		m_yLastTime;
-
-	BOOL		m_noChange;
-	uint32		m_noChangeTime;
-
-	uint32		m_doubleLClickStartWaitTime;
-
-	uint32		m_doubleRClickStartWaitTime;
-
-	BOOL		m_doubleClickingInside;
-	uint32		m_doubleClickTimeOut;
-	POINT		m_doubleClickOldPos;
-
 	MBCHAR     *m_ldlBlock;
 
 	POINT				m_editGrabPoint;
@@ -391,62 +356,43 @@ protected:
 	void				*m_hideCallbackData;
 
 
-
-
-
-	typedef void (MouseEventCallback)( aui_MouseEvent *mouseData );
-
-	virtual void	PreChildrenCallback(aui_MouseEvent * mouseData) {};
-	virtual void	PostChildrenCallback(aui_MouseEvent * mouseData) {};
+	virtual void	PreChildrenCallback(aui_MouseEvent * mouseData) {}
+	virtual void	PostChildrenCallback(aui_MouseEvent * mouseData) {}
 
 	virtual void	MouseMoveOver(aui_MouseEvent * mouseData);
-	virtual void	MouseMoveAway(aui_MouseEvent * mouseData) {};
+	virtual void	MouseMoveAway(aui_MouseEvent * mouseData) {}
 	virtual void	MouseMoveInside(aui_MouseEvent * mouseData);
-	virtual void	MouseMoveOutside(aui_MouseEvent * mouseData) {};
+	virtual void	MouseMoveOutside(aui_MouseEvent * mouseData) {}
 
 	virtual void	MouseLDragOver(aui_MouseEvent * mouseData);
-	virtual void	MouseLDragAway(aui_MouseEvent * mouseData) {};
+	virtual void	MouseLDragAway(aui_MouseEvent * mouseData) {}
 	virtual void	MouseLDragInside(aui_MouseEvent * mouseData);
-	virtual void	MouseLDragOutside(aui_MouseEvent * mouseData) {};
+	virtual void	MouseLDragOutside(aui_MouseEvent * mouseData) {}
 	virtual void	MouseRDragOver(aui_MouseEvent * mouseData);
-	virtual void	MouseRDragAway(aui_MouseEvent * mouseData) {};
+	virtual void	MouseRDragAway(aui_MouseEvent * mouseData) {}
 	virtual void	MouseRDragInside(aui_MouseEvent * mouseData);
-	virtual void	MouseRDragOutside(aui_MouseEvent * mouseData) {};
+	virtual void	MouseRDragOutside(aui_MouseEvent * mouseData) {}
 
 	virtual void	MouseLGrabInside(aui_MouseEvent * mouseData);
-	virtual void	MouseLGrabOutside(aui_MouseEvent * mouseData) {};
+	virtual void	MouseLGrabOutside(aui_MouseEvent * mouseData) {}
 	virtual void	MouseLDropInside(aui_MouseEvent * mouseData);
-	virtual void	MouseLDropOutside(aui_MouseEvent * mouseData) {};
+	virtual void	MouseLDropOutside(aui_MouseEvent * mouseData) {}
 	virtual void	MouseRGrabInside(aui_MouseEvent * mouseData);
-	virtual void	MouseRGrabOutside(aui_MouseEvent * mouseData) {};
+	virtual void	MouseRGrabOutside(aui_MouseEvent * mouseData) {}
 	virtual void	MouseRDropInside(aui_MouseEvent * mouseData);
-	virtual void	MouseRDropOutside(aui_MouseEvent * mouseData) {};
+	virtual void	MouseRDropOutside(aui_MouseEvent * mouseData) {}
 
 	virtual void	MouseLDoubleClickInside(aui_MouseEvent * mouseData);
 	virtual void	MouseLDoubleClickOutside(aui_MouseEvent * mouseData);
 	virtual void	MouseRDoubleClickInside(aui_MouseEvent * mouseData);
 	virtual void	MouseRDoubleClickOutside(aui_MouseEvent * mouseData);
 
-	virtual void	MouseNoChange(aui_MouseEvent * mouseData);
+	virtual void	MouseNoChangeInside(aui_MouseEvent * mouseData);
+	virtual void	MouseNoChangeOutside(aui_MouseEvent * mouseData) {}
+	virtual void	MouseHoover(aui_MouseEvent * mouseData) {}
 
-	void			MouseMoveOverEdit(aui_MouseEvent * mouseData) {};
-	void			MouseMoveAwayEdit(aui_MouseEvent * mouseData) {};
-	void			MouseMoveInsideEdit(aui_MouseEvent * mouseData) {};
-	void			MouseMoveOutsideEdit(aui_MouseEvent * mouseData) {};
+	void			MouseNoOperation(aui_MouseEvent * mouseData) {}
 
-	void			MouseLDragOverEdit(aui_MouseEvent * mouseData);
-	void			MouseLDragAwayEdit(aui_MouseEvent * mouseData);
-	void			MouseLDragInsideEdit(aui_MouseEvent * mouseData);
-	void			MouseLDragOutsideEdit(aui_MouseEvent * mouseData);
-	void			MouseRDragOverEdit(aui_MouseEvent * mouseData) {};
-	void			MouseRDragAwayEdit(aui_MouseEvent * mouseData) {};
-	void			MouseRDragInsideEdit(aui_MouseEvent * mouseData) {};
-	void			MouseRDragOutsideEdit(aui_MouseEvent * mouseData) {};
-
-	void			MouseLGrabInsideEdit(aui_MouseEvent * mouseData);
-	void			MouseLGrabOutsideEdit(aui_MouseEvent * mouseData);
-	void			MouseLDropInsideEdit(aui_MouseEvent * mouseData);
-	void			MouseLDropOutsideEdit(aui_MouseEvent * mouseData);
 	void			MouseRGrabInsideEdit(aui_MouseEvent * mouseData);
 	void			MouseRGrabOutsideEdit(aui_MouseEvent * mouseData);
 	void			MouseRDropInsideEdit(aui_MouseEvent * mouseData);
@@ -455,11 +401,6 @@ protected:
 	void			MouseLGrabEditMode(aui_MouseEvent * mouseData);
 	void			MouseLDropEditMode(aui_MouseEvent * mouseData);
 	void			MouseLDragEditMode(aui_MouseEvent * mouseData);
-
-	void			MouseLDoubleClickInsideEdit(aui_MouseEvent * mouseData) {};
-	void			MouseLDoubleClickOutsideEdit(aui_MouseEvent * mouseData) {};
-	void			MouseRDoubleClickInsideEdit(aui_MouseEvent * mouseData) {};
-	void			MouseRDoubleClickOutsideEdit(aui_MouseEvent * mouseData) {};
 
 private:
 	AUI_ERRCODE InitCommonLdl(const MBCHAR * ldlBlock);
@@ -472,6 +413,11 @@ private:
 	static aui_Region *                 s_editChild;
 	static uint32	        	        s_editModeStatus;
 	static tech_WLList<aui_Undo *> *    s_undoList;
+
+	static MouseDispatcher * createMouseDispatcher();
+	void MouseDispatch(MouseDispatcher & mouseDispatcher, aui_MouseEvent & input, bool handleIt, bool edit);
+
+	MouseDispatcher * m_mouseDispatcher;
 };
 
 #endif

@@ -31,6 +31,11 @@
 #ifndef __AUI_MOUSE_H__
 #define __AUI_MOUSE_H__
 
+#undef MOUSE_EVENT_DEBUG
+#if defined(MOUSE_EVENT_DEBUG)
+#include <sstream>
+#endif
+
 #include "aui_base.h"
 #include "aui_input.h"
 #include "tech_wllist.h"
@@ -71,6 +76,16 @@ struct aui_MouseEvent
 	sint32	movecount;
 	sint32	framecount;
 	uint32	flags;
+
+#if defined(MOUSE_EVENT_DEBUG)
+	std::string asString() const {
+		std::stringstream buffer;
+		buffer << "position (" << position.x << ", " << position.y << ") buttons (" <<
+			(lbutton ? "LEFT " : "") << (rbutton ? "RIGHT " : "") << ") time (" << time << ") move ("
+			<< movecount << ") frame (" << framecount << ") flags (" << flags << ")";
+		return buffer.str();
+	}
+#endif
 };
 
 #define k_MOUSE_MAXINPUT			48

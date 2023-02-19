@@ -98,7 +98,8 @@ protected:
     virtual void	MouseMoveInside(aui_MouseEvent * data);
     virtual void	MouseMoveAway(aui_MouseEvent * data);
     virtual void	MouseMoveOutside(aui_MouseEvent * data);
-    virtual void	MouseNoChange(aui_MouseEvent * data);
+    virtual void	MouseNoChangeInside(aui_MouseEvent * data);
+	virtual void	MouseNoChangeOutside(aui_MouseEvent * data);
     virtual void	MouseLDoubleClickInside(aui_MouseEvent * data);
     virtual void	MouseRDoubleClickInside(aui_MouseEvent * data);
 

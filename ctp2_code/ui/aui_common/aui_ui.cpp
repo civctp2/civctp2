@@ -31,12 +31,12 @@
 // Modifications from the original Activision code:
 //
 // - Moved CalculateHash to aui_Base
-// - Initialized local variables. (Sep 9th 2005 Martin G�hmann)
+// - Initialized local variables. (Sep 9th 2005 Martin Gühmann)
 // - Prevented processing of uninitialised input
 // - Marked DirectX specific items
 // - Handled race condition with mouse initialisation at startup
 // - Added graphics DirectX built in double buffering and extended it
-//   to manual tripple buffering. (1-Jan-2010 Martin G�hmann)
+//   to manual tripple buffering. (1-Jan-2010 Martin Gühmann)
 //
 //----------------------------------------------------------------------------
 
@@ -1337,65 +1337,71 @@ AUI_ERRCODE aui_UI::ShowSelectedRegion( aui_Region *region )
 
 }
 
+#if defined(MOUSE_EVENT_DEBUG)
+void print_mouse_event(const aui_MouseEvent * const event) {
+	static int counter = 0;
+	static int lastX = 0;
+	static int lastY = 0;
+	if ((event->position.x != lastX) || (event->position.y != lastY) || event->lbutton || event->rbutton)
+	{
+		printf("Event (%d) %s\n", counter, event->asString().c_str());
+		counter++;
+		lastX = event->position.x;
+		lastY = event->position.y;
+	}
+}
+#endif
 
-AUI_ERRCODE aui_UI::HandleMouseEvents(
-	sint32 numEvents,
-	aui_MouseEvent *events )
+AUI_ERRCODE aui_UI::HandleMouseEvents(sint32 numEvents, aui_MouseEvent * events)
 {
 	AUI_ERRCODE errcode = AUI_ERRCODE_UNHANDLED;
 
-	if (!m_mouse) return errcode;
-
-	aui_MouseEvent *curEvent = events;
-
-
-	static aui_MouseEvent mouseEvents[ k_MOUSE_MAXINPUT ];
-	if ( !numEvents && !events )
-	{
-		numEvents = m_mouse->ManipulateInputs( mouseEvents, FALSE );
-		curEvent = mouseEvents;
+	if (!m_mouse) {
+		return errcode;
 	}
 
-	TagMouseEvents( numEvents, curEvent );
+	aui_MouseEvent * currentEvent = events;
 
-	for ( sint32 k = numEvents; k; k--, curEvent++ )
+	static aui_MouseEvent mouseEvents[k_MOUSE_MAXINPUT];
+	if (!numEvents && !events)
 	{
-		SetWhichSeesMouse( NULL );
+		numEvents = m_mouse->ManipulateInputs(mouseEvents, FALSE);
+		currentEvent = mouseEvents;
+	}
 
-		ListPos position = m_childList->GetHeadPosition();
-		for ( sint32 i = m_childList->L(); i; i-- )
+	TagMouseEvents(numEvents, currentEvent);
+
+	for (sint32 k = numEvents; k; k--, currentEvent++)
+	{
+#if defined(MOUSE_EVENT_DEBUG)
+		print_mouse_event(currentEvent);
+#endif
+		SetWhichSeesMouse(NULL);
+
+		for (ListPos position = m_childList->GetHeadPosition(); position; )
 		{
-			aui_Window *window = (aui_Window *)m_childList->GetNext( position );
+			aui_Window * window = (aui_Window *) m_childList->GetNext(position);
 
-			if ( !window->IsHidden() && window->Type() != AUI_WINDOW_TYPE_TIP )
+			if (!window->IsHidden() && window->Type() != AUI_WINDOW_TYPE_TIP)
 			{
-				errcode = window->HandleMouseEvent(
-					curEvent,
-					!window->IgnoringEvents() );
+				errcode = window->HandleMouseEvent(currentEvent, !window->IgnoringEvents());
 
-
-
-
-
-
-				if ( m_childListChanged || errcode == AUI_ERRCODE_HANDLEDEXCLUSIVE)
+				if (m_childListChanged || errcode == AUI_ERRCODE_HANDLEDEXCLUSIVE)
 				{
+					m_childListChanged = false;
 
-					m_childListChanged = FALSE;
-
-					position = m_childList->GetHeadPosition();
-					for ( i = m_childList->L(); i; i-- )
+					for (ListPos innerPosition = m_childList->GetHeadPosition(); innerPosition; )
 					{
-						window = (aui_Window *)m_childList->GetNext( position );
-						if ( !window->IsHidden() && window->Type() != AUI_WINDOW_TYPE_TIP )
-						{
-							window->HandleMouseEvent(
-								curEvent,
-								FALSE );
+						window = (aui_Window *)m_childList->GetNext( innerPosition );
+						if (!window->IsHidden() && window->Type() != AUI_WINDOW_TYPE_TIP) {
+							window->HandleMouseEvent(currentEvent, false);
 						}
 					}
 
-					if ( k > 1 ) return HandleMouseEvents( k - 1, curEvent + 1 );
+					if ( k > 1 ) {
+						// TODO: Investigate if this recursion can be removed (depends on TagMouseEvents)
+						return HandleMouseEvents( k - 1, currentEvent + 1 );
+					}
 					return errcode;
 				}
 			}
@@ -1404,7 +1410,6 @@ AUI_ERRCODE aui_UI::HandleMouseEvents(
 
 	return errcode;
 }
-
 
 AUI_ERRCODE aui_UI::HandleKeyboardEvents( void )
 {

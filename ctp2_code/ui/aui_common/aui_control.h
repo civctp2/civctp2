@@ -26,7 +26,7 @@
 //
 // - Event handlers declared in a notation that is more standard C++.
 // - Prevented crash in destructor after using the default constructor.
-// - Added a constom status bar text for orders. (13-Sep-2008 Martin Gühmann)
+// - Added a custom status bar text for orders. (13-Sep-2008 Martin GÃ¼hmann)
 //
 //----------------------------------------------------------------------------
 
@@ -277,7 +277,7 @@ protected:
 	virtual void	MouseRDragOver(aui_MouseEvent * mouseData);
 	virtual void	MouseRDragAway(aui_MouseEvent * mouseData);
 
-	virtual void	MouseNoChange(aui_MouseEvent * mouseData);
+	virtual void	MouseHoover(aui_MouseEvent * mouseData);
 
 private:
 

@@ -591,42 +591,35 @@ BOOL ThumbnailMap::ShowTipWindow( aui_MouseEvent *mouseData )
 	return FALSE;
 }
 
-
-void ThumbnailMap::MouseNoChange( aui_MouseEvent *mouseData )
+void ThumbnailMap::MouseHoover(aui_MouseEvent * mouseData)
 {
-	if (IsDisabled()) return;
+	if (IsDisabled()) {
+		return;
+	}
 
-	if ( m_isMouseInside )
-	if ( !GetWhichSeesMouse() || GetWhichSeesMouse() == this )
-	if ( !mouseData->lbutton && !mouseData->rbutton )
-	if ( mouseData->time - m_noChangeTime > m_timeOut )
+	if (!GetWhichSeesMouse() || GetWhichSeesMouse() == this)
 	{
-
-		POINT		pos = mouseData->position;
-
+		POINT pos = mouseData->position;
 		pos.x -= X();
 		pos.y -= Y();
 
-		CityInfo	info;
-		sint32		i;
-
-		for (i=0; i<m_cityList->Num(); i++) {
+		CityInfo info;
+		for (sint32 i = 0; i < m_cityList->Num(); i++)
+		{
 			info = m_cityList->Access(i);
-			if (PtInRect(&info.cityRect, pos)) {
+			if (PtInRect(&info.cityRect, pos))
+			{
+				SetWhichSeesMouse(this);
 
-
-
-
-				SetWhichSeesMouse( this );
-
-				if ( ShowTipWindow( mouseData ) )
-					if ( m_mouseCode == AUI_ERRCODE_UNHANDLED )
+				if (ShowTipWindow(mouseData)) {
+					if (m_mouseCode == AUI_ERRCODE_UNHANDLED) {
 						m_mouseCode = AUI_ERRCODE_HANDLED;
+					}
+				}
 
 				break;
 			}
 		}
-
 	}
 }
 

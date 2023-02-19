@@ -4,2505 +4,691 @@
 
 #include "SelItem.h"
 
-extern SelectedItem		*g_selected_item;
+#if defined(MOUSE_EVENT_DEBUG)
+#include <sstream>
+#include "aui_ldl.h"
+#endif
 
+const uint32 kDefaultHooverTimeInms = 500;
+const uint32 kDoubleClickTimeInms = 375;
 
-
-
-#define k_DOUBLE_CLICK_TRAVEL_DISTANCE		5
-
-#define LEGALTRAVELDISTANCE					(	(xDistance < k_DOUBLE_CLICK_TRAVEL_DISTANCE) && \
-												(yDistance < k_DOUBLE_CLICK_TRAVEL_DISTANCE))
-
-
-
-
-
-void aui_Region::MouseDispatch( aui_MouseEvent *input, BOOL handleIt )
+typedef void (aui_Region::*MouseFunction)(aui_MouseEvent * mouseData);
+class MouseDispatcher
 {
+public:
+	MouseDispatcher(
+			MouseFunction mouseNoChangeInside,
+			MouseFunction mouseNoChangeOutside,
+			MouseFunction mouseHoover,
+			MouseFunction mouseMoveOver,
+			MouseFunction mouseMoveOverEdit,
+			MouseFunction mouseMoveAway,
+			MouseFunction mouseMoveAwayEdit,
+			MouseFunction mouseMoveInside,
+			MouseFunction mouseMoveInsideEdit,
+			MouseFunction mouseMoveOutside,
+			MouseFunction mouseMoveOutsideEdit,
+			MouseFunction mouseLeftDragOver,
+			MouseFunction mouseLeftDragOverEdit,
+			MouseFunction mouseLeftDragAway,
+			MouseFunction mouseLeftDragAwayEdit,
+			MouseFunction mouseLeftDragInside,
+			MouseFunction mouseLeftDragInsideEdit,
+			MouseFunction mouseLeftDragOutside,
+			MouseFunction mouseLeftDragOutsideEdit,
+			MouseFunction mouseLeftGrabInside,
+			MouseFunction mouseLeftGrabInsideEdit,
+			MouseFunction mouseLeftGrabOutside,
+			MouseFunction mouseLeftGrabOutsideEdit,
+			MouseFunction mouseLeftDropInside,
+			MouseFunction mouseLeftDropInsideEdit,
+			MouseFunction mouseLeftDropOutside,
+			MouseFunction mouseLeftDropOutsideEdit,
+			MouseFunction mouseLeftDoubleClickInside,
+			MouseFunction mouseLeftDoubleClickInsideEdit,
+			MouseFunction mouseLeftDoubleClickOutside,
+			MouseFunction mouseLeftDoubleClickOutsideEdit,
+			MouseFunction mouseRightDragOver,
+			MouseFunction mouseRightDragOverEdit,
+			MouseFunction mouseRightDragAway,
+			MouseFunction mouseRightDragAwayEdit,
+			MouseFunction mouseRightDragInside,
+			MouseFunction mouseRightDragInsideEdit,
+			MouseFunction mouseRightDragOutside,
+			MouseFunction mouseRightDragOutsideEdit,
+			MouseFunction mouseRightGrabInside,
+			MouseFunction mouseRightGrabInsideEdit,
+			MouseFunction mouseRightGrabOutside,
+			MouseFunction mouseRightGrabOutsideEdit,
+			MouseFunction mouseRightDropInside,
+			MouseFunction mouseRightDropInsideEdit,
+			MouseFunction mouseRightDropOutside,
+			MouseFunction mouseRightDropOutsideEdit,
+			MouseFunction mouseRightDoubleClickInside,
+			MouseFunction mouseRightDoubleClickInsideEdit,
+			MouseFunction mouseRightDoubleClickOutside,
+			MouseFunction mouseRightDoubleClickOutsideEdit);
 
-	if ( !m_noChange )
-		m_noChangeTime = input->time;
-	else
-		m_noChange = FALSE;
+	void Dispatch(aui_Region & region, aui_MouseEvent & event, bool handleIt, bool edit);
 
-	sint32 xDistance = abs(input->position.x - m_doubleClickOldPos.x);
-	sint32 yDistance = abs(input->position.y - m_doubleClickOldPos.y);
+private:
+	static const uint32 BUTTON_NONE         = 0;
+	static const uint32 BUTTON_LEFT         = 0;
+	static const uint32 BUTTON_RIGHT        = 1;
+	static const uint32 BUTTON_MAX          = 2;
 
-	if ( input->position.x != m_mouseState.position.x
-	||   input->position.y != m_mouseState.position.y
-	||   m_x != m_xLastTime
-	||   m_y != m_yLastTime )
+	static const uint32 ACTION_MOVE         = 0;
+	static const uint32 ACTION_DRAG         = 1;
+	static const uint32 ACTION_GRAB         = 2;
+	static const uint32 ACTION_DROP         = 3;
+	static const uint32 ACTION_DOUBLE_CLICK = 4;
+	static const uint32 ACTION_MAX          = 5;
+
+	static const uint32 AREA_OVER           = 0;
+	static const uint32 AREA_AWAY           = 1;
+	static const uint32 AREA_INSIDE         = 2;
+	static const uint32 AREA_OUTSIDE        = 3;
+	static const uint32 AREA_MAX            = 4;
+
+	static const uint32 GROUP_NORMAL        = 0;
+	static const uint32 GROUP_EDIT          = 1;
+	static const uint32 GROUP_MAX           = 2;
+
+	void HandleClick(aui_Region & region, aui_MouseEvent & event, uint32 button, uint32 area, uint32 group);
+	void HandleMouseMoved(aui_Region & region, aui_MouseEvent & event, uint32 area, uint32 group);
+	void HandleMouseStatic(aui_Region & region, aui_MouseEvent & event, uint32 area, uint32 group);
+	bool MovedLessThanClickDistance(const aui_MouseEvent & event) const;
+	void ExecuteMouseFunction(
+			aui_Region & region, aui_MouseEvent & event, uint32 button, uint32 action, uint32 area, uint32 group) const;
+	void ExecuteNoChangeMouseFunction(aui_Region & region, aui_MouseEvent & event, uint32 area);
+
+	aui_MouseEvent m_mouseEvent;
+	bool           m_isMouseInside;
+	MouseFunction  m_mouseNoChange[AREA_MAX];
+	MouseFunction  m_mouseHoover;
+	MouseFunction  m_mouseFunctions[BUTTON_MAX][ACTION_MAX][AREA_MAX][GROUP_MAX];
+	uint32         m_doubleClickStartWaitTime[BUTTON_MAX];
+	sint32         m_xLastTime;
+	sint32         m_yLastTime;
+	bool           m_noChange;
+	uint32         m_noChangeTime;
+	uint32         m_hooverTime;
+	uint32         m_doubleClickTimeOut;
+	bool           m_doubleClickingInside;
+	POINT          m_doubleClickOldPos;
+};
+
+MouseDispatcher::MouseDispatcher(
+		MouseFunction mouseNoChangeInside,
+		MouseFunction mouseNoChangeOutside,
+		MouseFunction mouseHoover,
+		MouseFunction mouseMoveOver,
+		MouseFunction mouseMoveOverEdit,
+		MouseFunction mouseMoveAway,
+		MouseFunction mouseMoveAwayEdit,
+		MouseFunction mouseMoveInside,
+		MouseFunction mouseMoveInsideEdit,
+		MouseFunction mouseMoveOutside,
+		MouseFunction mouseMoveOutsideEdit,
+		MouseFunction mouseLeftDragOver,
+		MouseFunction mouseLeftDragOverEdit,
+		MouseFunction mouseLeftDragAway,
+		MouseFunction mouseLeftDragAwayEdit,
+		MouseFunction mouseLeftDragInside,
+		MouseFunction mouseLeftDragInsideEdit,
+		MouseFunction mouseLeftDragOutside,
+		MouseFunction mouseLeftDragOutsideEdit,
+		MouseFunction mouseLeftGrabInside,
+		MouseFunction mouseLeftGrabInsideEdit,
+		MouseFunction mouseLeftGrabOutside,
+		MouseFunction mouseLeftGrabOutsideEdit,
+		MouseFunction mouseLeftDropInside,
+		MouseFunction mouseLeftDropInsideEdit,
+		MouseFunction mouseLeftDropOutside,
+		MouseFunction mouseLeftDropOutsideEdit,
+		MouseFunction mouseLeftDoubleClickInside,
+		MouseFunction mouseLeftDoubleClickInsideEdit,
+		MouseFunction mouseLeftDoubleClickOutside,
+		MouseFunction mouseLeftDoubleClickOutsideEdit,
+		MouseFunction mouseRightDragOver,
+		MouseFunction mouseRightDragOverEdit,
+		MouseFunction mouseRightDragAway,
+		MouseFunction mouseRightDragAwayEdit,
+		MouseFunction mouseRightDragInside,
+		MouseFunction mouseRightDragInsideEdit,
+		MouseFunction mouseRightDragOutside,
+		MouseFunction mouseRightDragOutsideEdit,
+		MouseFunction mouseRightGrabInside,
+		MouseFunction mouseRightGrabInsideEdit,
+		MouseFunction mouseRightGrabOutside,
+		MouseFunction mouseRightGrabOutsideEdit,
+		MouseFunction mouseRightDropInside,
+		MouseFunction mouseRightDropInsideEdit,
+		MouseFunction mouseRightDropOutside,
+		MouseFunction mouseRightDropOutsideEdit,
+		MouseFunction mouseRightDoubleClickInside,
+		MouseFunction mouseRightDoubleClickInsideEdit,
+		MouseFunction mouseRightDoubleClickOutside,
+		MouseFunction mouseRightDoubleClickOutsideEdit)
+:
+	m_isMouseInside(false),
+	m_mouseEvent(),
+	m_mouseNoChange(),
+	m_mouseHoover(NULL),
+	m_mouseFunctions(),
+	m_doubleClickStartWaitTime(),
+	m_xLastTime(0),
+	m_yLastTime(0),
+	m_noChange(false),
+	m_noChangeTime(0),
+	m_hooverTime(kDefaultHooverTimeInms),
+	m_doubleClickTimeOut(0),
+	m_doubleClickingInside(true),
+	m_doubleClickOldPos()
+{
+	m_mouseNoChange[AREA_INSIDE] = mouseNoChangeInside;
+	m_mouseNoChange[AREA_OUTSIDE] = mouseNoChangeOutside;
+	m_mouseHoover = mouseHoover;
+	m_mouseFunctions[BUTTON_NONE][ACTION_MOVE][AREA_OVER][GROUP_NORMAL] = mouseMoveOver;
+	m_mouseFunctions[BUTTON_NONE][ACTION_MOVE][AREA_OVER][GROUP_EDIT] = mouseMoveOverEdit;
+	m_mouseFunctions[BUTTON_NONE][ACTION_MOVE][AREA_AWAY][GROUP_NORMAL] = mouseMoveAway;
+	m_mouseFunctions[BUTTON_NONE][ACTION_MOVE][AREA_AWAY][GROUP_EDIT] = mouseMoveAwayEdit;
+	m_mouseFunctions[BUTTON_NONE][ACTION_MOVE][AREA_INSIDE][GROUP_NORMAL] = mouseMoveInside;
+	m_mouseFunctions[BUTTON_NONE][ACTION_MOVE][AREA_INSIDE][GROUP_EDIT] = mouseMoveInsideEdit;
+	m_mouseFunctions[BUTTON_NONE][ACTION_MOVE][AREA_OUTSIDE][GROUP_NORMAL] = mouseMoveOutside;
+	m_mouseFunctions[BUTTON_NONE][ACTION_MOVE][AREA_OUTSIDE][GROUP_EDIT] = mouseMoveOutsideEdit;
+
+	m_mouseFunctions[BUTTON_LEFT][ACTION_DRAG][AREA_OVER][GROUP_NORMAL] = mouseLeftDragOver;
+	m_mouseFunctions[BUTTON_LEFT][ACTION_DRAG][AREA_OVER][GROUP_EDIT] = mouseLeftDragOverEdit;
+	m_mouseFunctions[BUTTON_LEFT][ACTION_DRAG][AREA_AWAY][GROUP_NORMAL] = mouseLeftDragAway;
+	m_mouseFunctions[BUTTON_LEFT][ACTION_DRAG][AREA_AWAY][GROUP_EDIT] = mouseLeftDragAwayEdit;
+	m_mouseFunctions[BUTTON_LEFT][ACTION_DRAG][AREA_INSIDE][GROUP_NORMAL] = mouseLeftDragInside;
+	m_mouseFunctions[BUTTON_LEFT][ACTION_DRAG][AREA_INSIDE][GROUP_EDIT] = mouseLeftDragInsideEdit;
+	m_mouseFunctions[BUTTON_LEFT][ACTION_DRAG][AREA_OUTSIDE][GROUP_NORMAL] = mouseLeftDragOutside;
+	m_mouseFunctions[BUTTON_LEFT][ACTION_DRAG][AREA_OUTSIDE][GROUP_EDIT] = mouseLeftDragOutsideEdit;
+
+	m_mouseFunctions[BUTTON_LEFT][ACTION_GRAB][AREA_INSIDE][GROUP_NORMAL] = mouseLeftGrabInside;
+	m_mouseFunctions[BUTTON_LEFT][ACTION_GRAB][AREA_INSIDE][GROUP_EDIT] = mouseLeftGrabInsideEdit;
+	m_mouseFunctions[BUTTON_LEFT][ACTION_GRAB][AREA_OUTSIDE][GROUP_NORMAL] = mouseLeftGrabOutside;
+	m_mouseFunctions[BUTTON_LEFT][ACTION_GRAB][AREA_OUTSIDE][GROUP_EDIT] = mouseLeftGrabOutsideEdit;
+
+	m_mouseFunctions[BUTTON_LEFT][ACTION_DROP][AREA_INSIDE][GROUP_NORMAL] = mouseLeftDropInside;
+	m_mouseFunctions[BUTTON_LEFT][ACTION_DROP][AREA_INSIDE][GROUP_EDIT] = mouseLeftDropInsideEdit;
+	m_mouseFunctions[BUTTON_LEFT][ACTION_DROP][AREA_OUTSIDE][GROUP_NORMAL] = mouseLeftDropOutside;
+	m_mouseFunctions[BUTTON_LEFT][ACTION_DROP][AREA_OUTSIDE][GROUP_EDIT] = mouseLeftDropOutsideEdit;
+
+	m_mouseFunctions[BUTTON_LEFT][ACTION_DOUBLE_CLICK][AREA_INSIDE][GROUP_NORMAL] = mouseLeftDoubleClickInside;
+	m_mouseFunctions[BUTTON_LEFT][ACTION_DOUBLE_CLICK][AREA_INSIDE][GROUP_EDIT] = mouseLeftDoubleClickInsideEdit;
+	m_mouseFunctions[BUTTON_LEFT][ACTION_DOUBLE_CLICK][AREA_OUTSIDE][GROUP_NORMAL] = mouseLeftDoubleClickOutside;
+	m_mouseFunctions[BUTTON_LEFT][ACTION_DOUBLE_CLICK][AREA_OUTSIDE][GROUP_EDIT] = mouseLeftDoubleClickOutsideEdit;
+
+	m_mouseFunctions[BUTTON_RIGHT][ACTION_DRAG][AREA_OVER][GROUP_NORMAL] = mouseRightDragOver;
+	m_mouseFunctions[BUTTON_RIGHT][ACTION_DRAG][AREA_OVER][GROUP_EDIT] = mouseRightDragOverEdit;
+	m_mouseFunctions[BUTTON_RIGHT][ACTION_DRAG][AREA_AWAY][GROUP_NORMAL] = mouseRightDragAway;
+	m_mouseFunctions[BUTTON_RIGHT][ACTION_DRAG][AREA_AWAY][GROUP_EDIT] = mouseRightDragAwayEdit;
+	m_mouseFunctions[BUTTON_RIGHT][ACTION_DRAG][AREA_INSIDE][GROUP_NORMAL] = mouseRightDragInside;
+	m_mouseFunctions[BUTTON_RIGHT][ACTION_DRAG][AREA_INSIDE][GROUP_EDIT] = mouseRightDragInsideEdit;
+	m_mouseFunctions[BUTTON_RIGHT][ACTION_DRAG][AREA_OUTSIDE][GROUP_NORMAL] = mouseRightDragOutside;
+	m_mouseFunctions[BUTTON_RIGHT][ACTION_DRAG][AREA_OUTSIDE][GROUP_EDIT] = mouseRightDragOutsideEdit;
+
+	m_mouseFunctions[BUTTON_RIGHT][ACTION_GRAB][AREA_INSIDE][GROUP_NORMAL] = mouseRightGrabInside;
+	m_mouseFunctions[BUTTON_RIGHT][ACTION_GRAB][AREA_INSIDE][GROUP_EDIT] = mouseRightGrabInsideEdit;
+	m_mouseFunctions[BUTTON_RIGHT][ACTION_GRAB][AREA_OUTSIDE][GROUP_NORMAL] = mouseRightGrabOutside;
+	m_mouseFunctions[BUTTON_RIGHT][ACTION_GRAB][AREA_OUTSIDE][GROUP_EDIT] = mouseRightGrabOutsideEdit;
+
+	m_mouseFunctions[BUTTON_RIGHT][ACTION_DROP][AREA_INSIDE][GROUP_NORMAL] = mouseRightDropInside;
+	m_mouseFunctions[BUTTON_RIGHT][ACTION_DROP][AREA_INSIDE][GROUP_EDIT] = mouseRightDropInsideEdit;
+	m_mouseFunctions[BUTTON_RIGHT][ACTION_DROP][AREA_OUTSIDE][GROUP_NORMAL] = mouseRightDropOutside;
+	m_mouseFunctions[BUTTON_RIGHT][ACTION_DROP][AREA_OUTSIDE][GROUP_EDIT] = mouseRightDropOutsideEdit;
+
+	m_mouseFunctions[BUTTON_RIGHT][ACTION_DOUBLE_CLICK][AREA_INSIDE][GROUP_NORMAL] = mouseRightDoubleClickInside;
+	m_mouseFunctions[BUTTON_RIGHT][ACTION_DOUBLE_CLICK][AREA_INSIDE][GROUP_EDIT] = mouseRightDoubleClickInsideEdit;
+	m_mouseFunctions[BUTTON_RIGHT][ACTION_DOUBLE_CLICK][AREA_OUTSIDE][GROUP_NORMAL] = mouseRightDoubleClickOutside;
+	m_mouseFunctions[BUTTON_RIGHT][ACTION_DOUBLE_CLICK][AREA_OUTSIDE][GROUP_EDIT] = mouseRightDoubleClickOutsideEdit;
+
+	m_doubleClickStartWaitTime[BUTTON_LEFT] = 0;
+	m_doubleClickStartWaitTime[BUTTON_RIGHT] = 0;
+
+#ifdef __AUI_USE_DIRECTX__
+	m_doubleClickTimeOut = GetDoubleClickTime();
+#else
+	m_doubleClickTimeOut = kDoubleClickTimeInms;
+#endif
+	memset(&m_mouseEvent, 0, sizeof(m_mouseEvent));
+}
+
+void MouseDispatcher::ExecuteMouseFunction(aui_Region & region, aui_MouseEvent & event, uint32 button, uint32 action, uint32 area,
+                                           uint32 group) const
+{
+#if defined(MOUSE_EVENT_DEBUG)
+	std::string buttonString = (button == BUTTON_LEFT) ? ((action == ACTION_MOVE) ? "none" : "left") : "right";
+	std::string actionString = "unknown";
+	switch (action) {
+		case ACTION_MOVE:
+			actionString = "move";
+			break;
+		case ACTION_DRAG:
+			actionString = "drag";
+			break;
+		case ACTION_GRAB:
+			actionString = "grab";
+			break;
+		case ACTION_DROP:
+			actionString = "drop";
+			break;
+		case ACTION_DOUBLE_CLICK: actionString = "double click";
+		break;
+	}
+	std::string areaString = "unknown";
+	switch (area) {
+		case AREA_OVER:
+			areaString = "over";
+			break;
+		case AREA_AWAY:
+			areaString = "away";
+			break;
+		case AREA_INSIDE:
+			areaString = "inside";
+			break;
+		case AREA_OUTSIDE:
+			areaString = "outside";
+			break;
+	}
+	std::string groupString = group == GROUP_NORMAL ? "normal" : "edit";
+	const MBCHAR * regionString = aui_Ldl::GetBlock(&region);
+	std::stringstream buffer;
+	buffer << "Dispatch for region:: (" << (regionString ? regionString : "unknown") << ") :: (" << buttonString
+		<< ", " << actionString << ", " << areaString << ", " << groupString << ")";
+	printf("%s\n", buffer.str().c_str());
+#endif
+
+	(region.*m_mouseFunctions[button][action][area][group])(&event);
+}
+
+void MouseDispatcher::ExecuteNoChangeMouseFunction(aui_Region & region, aui_MouseEvent & event, uint32 area) {
+#if defined(MOUSE_EVENT_DEBUG)
+	const MBCHAR * regionString = aui_Ldl::GetBlock(&region);
+
+	printf("Dispatch for region:: (%s) :: no change\n", regionString ? regionString : "unknown");
+#endif
+	if (area == AREA_INSIDE && !event.lbutton && !event.rbutton && (event.time - m_noChangeTime) > m_hooverTime) {
+		(region.*m_mouseHoover)(&event);
+	}
+
+	m_noChange = true;
+	(region.*m_mouseNoChange[area])(&event);
+}
+
+bool MouseDispatcher::MovedLessThanClickDistance(const aui_MouseEvent & event) const
+{
+	const sint32 k_DOUBLE_CLICK_TRAVEL_DISTANCE = 5;
+
+	sint32 xDistance = abs(event.position.x - m_doubleClickOldPos.x);
+	sint32 yDistance = abs(event.position.y - m_doubleClickOldPos.y);
+
+	return (xDistance < k_DOUBLE_CLICK_TRAVEL_DISTANCE && yDistance < k_DOUBLE_CLICK_TRAVEL_DISTANCE);
+}
+
+void MouseDispatcher::HandleClick(
+		aui_Region & region,
+		aui_MouseEvent & event,
+		uint32 button,
+		uint32 area,
+		uint32 group)
+{
+	if (
+			((button == BUTTON_RIGHT) || (area == AREA_OUTSIDE) || (group == GROUP_EDIT) || MovedLessThanClickDistance(event))
+			&& (m_doubleClickingInside ^ (area == AREA_OUTSIDE)) // (m_doubleClickingInside and !outside) or (!m_doubleClickingInside and outside)
+			&& event.time - m_doubleClickStartWaitTime[button] < m_doubleClickTimeOut
+	)
 	{
-
-		BOOL wasMouseInside = m_isMouseInside;
-
-		m_isMouseInside = IsInside( &input->position );
-
-
-		if ( handleIt )
-
-		if ( m_isMouseInside )
+		ExecuteMouseFunction(region, event, button, ACTION_DOUBLE_CLICK, area, group);
+	}
+	else
+	{
+		m_doubleClickingInside = (area != AREA_OUTSIDE);
+		m_doubleClickStartWaitTime[button] = event.time;
+		if (button == BUTTON_LEFT && group == GROUP_NORMAL)
 		{
-			if ( wasMouseInside )
+			m_doubleClickOldPos = event.position;
+		}
+		ExecuteMouseFunction(region, event, button, ACTION_GRAB, area, group);
+	}
+}
+
+void MouseDispatcher::HandleMouseMoved(
+		aui_Region & region,
+		aui_MouseEvent & event,
+		uint32 area,
+		uint32 group)
+{
+	uint32 inOutArea = ((area == AREA_INSIDE || area == AREA_OVER) ? AREA_INSIDE : AREA_OUTSIDE);
+	if (event.lbutton)
+	{
+		if (m_mouseEvent.lbutton)
+		{
+			ExecuteMouseFunction(region, event, BUTTON_LEFT, ACTION_DRAG, area, group);
+			if (event.rbutton)
 			{
-				if ( input->lbutton )
+				if (m_mouseEvent.rbutton)
 				{
-					if ( m_mouseState.lbutton )
-					{
-						if ( input->rbutton )
-						{
-							if ( m_mouseState.rbutton )
-							{
-								MouseLDragInside( input );
-								MouseRDragInside( input );
-							}
-							else
-							{
-								MouseLDragInside( input );
-								if (m_doubleClickingInside && input->time - m_doubleRClickStartWaitTime < m_doubleClickTimeOut )
-								{
-									MouseRDoubleClickInside( input );
-								}
-								else
-								{
-									m_doubleClickingInside = TRUE;
-									m_doubleRClickStartWaitTime = input->time;
-									MouseRGrabInside( input );
-								}
-							}
-						}
-						else
-						{
-							if ( m_mouseState.rbutton )
-							{
-								MouseLDragInside( input );
-								MouseRDragInside( input );
-								MouseRDropInside( input );
-							}
-							else
-							{
-								MouseLDragInside( input );
-							}
-						}
-					}
-					else
-					{
-						if ( input->rbutton )
-						{
-							if ( m_mouseState.rbutton )
-							{
-								MouseRDragInside( input );
-								if (LEGALTRAVELDISTANCE && m_doubleClickingInside && input->time - m_doubleLClickStartWaitTime < m_doubleClickTimeOut )
-								{
-									MouseLDoubleClickInside( input );
-								}
-								else
-								{
-									m_doubleClickingInside = TRUE;
-									m_doubleLClickStartWaitTime = input->time;
-									m_doubleClickOldPos = input->position;
-									MouseLGrabInside( input );
-								}
-							}
-							else
-							{
-								MouseMoveInside( input );
-								if (LEGALTRAVELDISTANCE && m_doubleClickingInside && input->time - m_doubleLClickStartWaitTime < m_doubleClickTimeOut )
-								{
-									MouseLDoubleClickInside( input );
-								}
-								else
-								{
-									m_doubleClickingInside = TRUE;
-									m_doubleLClickStartWaitTime = input->time;
-									m_doubleClickOldPos = input->position;
-									MouseLGrabInside( input );
-								}
-								if (m_doubleClickingInside && input->time - m_doubleRClickStartWaitTime < m_doubleClickTimeOut )
-								{
-									MouseRDoubleClickInside( input );
-								}
-								else
-								{
-									m_doubleClickingInside = TRUE;
-									m_doubleRClickStartWaitTime = input->time;
-									MouseRGrabInside( input );
-								}
-							}
-						}
-						else
-						{
-							if ( m_mouseState.rbutton )
-							{
-								MouseRDragInside( input );
-								if (LEGALTRAVELDISTANCE && m_doubleClickingInside && input->time - m_doubleLClickStartWaitTime < m_doubleClickTimeOut )
-								{
-									MouseLDoubleClickInside( input );
-								}
-								else
-								{
-									m_doubleClickingInside = TRUE;
-									m_doubleLClickStartWaitTime = input->time;
-									m_doubleClickOldPos = input->position;
-									MouseLGrabInside( input );
-								}
-								MouseRDropInside( input );
-							}
-							else
-							{
-								MouseMoveInside( input );
-								if (LEGALTRAVELDISTANCE && m_doubleClickingInside && input->time - m_doubleLClickStartWaitTime < m_doubleClickTimeOut )
-								{
-									MouseLDoubleClickInside( input );
-								}
-								else
-								{
-									m_doubleClickingInside = TRUE;
-									m_doubleLClickStartWaitTime = input->time;
-									m_doubleClickOldPos = input->position;
-									MouseLGrabInside( input );
-								}
-							}
-						}
-					}
+					ExecuteMouseFunction(region, event, BUTTON_RIGHT, ACTION_DRAG, area, group);
 				}
 				else
 				{
-					if ( m_mouseState.lbutton )
-					{
-						if ( input->rbutton )
-						{
-							if ( m_mouseState.rbutton )
-							{
-								if (g_selected_item)
-									g_selected_item->RegisterUIClick();
-
-								MouseLDragInside( input );
-								MouseRDragInside( input );
-								MouseLDropInside( input );
-							}
-							else
-							{
-								if (g_selected_item)
-									g_selected_item->RegisterUIClick();
-
-								MouseLDragInside( input );
-								if (m_doubleClickingInside && input->time - m_doubleRClickStartWaitTime < m_doubleClickTimeOut )
-								{
-									MouseRDoubleClickInside( input );
-								}
-								else
-								{
-									m_doubleClickingInside = TRUE;
-									m_doubleRClickStartWaitTime = input->time;
-									MouseRGrabInside( input );
-								}
-								MouseLDropInside( input );
-							}
-						}
-						else
-						{
-							if ( m_mouseState.rbutton )
-							{
-								if (g_selected_item)
-									g_selected_item->RegisterUIClick();
-
-								MouseLDragInside( input );
-								MouseRDragInside( input );
-								MouseLDropInside( input );
-								MouseRDropInside( input );
-							}
-							else
-							{
-								if (g_selected_item)
-									g_selected_item->RegisterUIClick();
-
-								MouseLDragInside( input );
-								MouseLDropInside( input );
-							}
-						}
-					}
-					else
-					{
-						if ( input->rbutton )
-						{
-							if ( m_mouseState.rbutton )
-							{
-								MouseRDragInside( input );
-							}
-							else
-							{
-								MouseMoveInside( input );
-								if (m_doubleClickingInside && input->time - m_doubleRClickStartWaitTime < m_doubleClickTimeOut )
-								{
-									MouseRDoubleClickInside( input );
-								}
-								else
-								{
-									m_doubleClickingInside = TRUE;
-									m_doubleRClickStartWaitTime = input->time;
-									MouseRGrabInside( input );
-								}
-							}
-						}
-						else
-						{
-							if ( m_mouseState.rbutton )
-							{
-								MouseRDragInside( input );
-								MouseRDropInside( input );
-							}
-							else
-							{
-								MouseMoveInside( input );
-							}
-						}
-					}
+					HandleClick(region, event, BUTTON_RIGHT, inOutArea, group);
 				}
 			}
 			else
 			{
-				if ( input->lbutton )
+				if (m_mouseEvent.rbutton)
 				{
-					if ( m_mouseState.lbutton )
-					{
-						if ( input->rbutton )
-						{
-							if ( m_mouseState.rbutton )
-							{
-								MouseLDragOver( input );
-								MouseRDragOver( input );
-							}
-							else
-							{
-								MouseLDragOver( input );
-								if (m_doubleClickingInside && input->time - m_doubleRClickStartWaitTime < m_doubleClickTimeOut )
-								{
-									MouseRDoubleClickInside( input );
-								}
-								else
-								{
-									m_doubleClickingInside = TRUE;
-									m_doubleRClickStartWaitTime = input->time;
-									MouseRGrabInside( input );
-								}
-							}
-						}
-						else
-						{
-							if ( m_mouseState.rbutton )
-							{
-								MouseLDragOver( input );
-								MouseRDragOver( input );
-								MouseRDropInside( input );
-							}
-							else
-							{
-								MouseLDragOver( input );
-							}
-						}
-					}
-					else
-					{
-						if ( input->rbutton )
-						{
-							if ( m_mouseState.rbutton )
-							{
-								MouseRDragOver( input );
-								if (LEGALTRAVELDISTANCE && m_doubleClickingInside && input->time - m_doubleLClickStartWaitTime < m_doubleClickTimeOut )
-								{
-									MouseLDoubleClickInside( input );
-								}
-								else
-								{
-									m_doubleClickingInside = TRUE;
-									m_doubleLClickStartWaitTime = input->time;
-									m_doubleClickOldPos = input->position;
-									MouseLGrabInside( input );
-								}
-							}
-							else
-							{
-								MouseMoveOver( input );
-								if (LEGALTRAVELDISTANCE && m_doubleClickingInside && input->time - m_doubleLClickStartWaitTime < m_doubleClickTimeOut )
-								{
-									MouseLDoubleClickInside( input );
-								}
-								else
-								{
-									m_doubleClickingInside = TRUE;
-									m_doubleLClickStartWaitTime = input->time;
-									m_doubleClickOldPos = input->position;
-									MouseLGrabInside( input );
-								}
-								if (m_doubleClickingInside && input->time - m_doubleRClickStartWaitTime < m_doubleClickTimeOut )
-								{
-									MouseRDoubleClickInside( input );
-								}
-								else
-								{
-									m_doubleClickingInside = TRUE;
-									m_doubleRClickStartWaitTime = input->time;
-									MouseRGrabInside( input );
-								}
-							}
-						}
-						else
-						{
-							if ( m_mouseState.rbutton )
-							{
-								MouseRDragOver( input );
-								if (LEGALTRAVELDISTANCE && m_doubleClickingInside && input->time - m_doubleLClickStartWaitTime < m_doubleClickTimeOut )
-								{
-									MouseLDoubleClickInside( input );
-								}
-								else
-								{
-									m_doubleClickingInside = TRUE;
-									m_doubleLClickStartWaitTime = input->time;
-									m_doubleClickOldPos = input->position;
-									MouseLGrabInside( input );
-								}
-								MouseRDropInside( input );
-							}
-							else
-							{
-								MouseMoveOver( input );
-								if (LEGALTRAVELDISTANCE && m_doubleClickingInside && input->time - m_doubleLClickStartWaitTime < m_doubleClickTimeOut )
-								{
-									MouseLDoubleClickInside( input );
-								}
-								else
-								{
-									m_doubleClickingInside = TRUE;
-									m_doubleLClickStartWaitTime = input->time;
-									m_doubleClickOldPos = input->position;
-									MouseLGrabInside( input );
-								}
-							}
-						}
-					}
-				}
-				else
-				{
-					if ( m_mouseState.lbutton )
-					{
-						if ( input->rbutton )
-						{
-							if ( m_mouseState.rbutton )
-							{
-								if (g_selected_item)
-									g_selected_item->RegisterUIClick();
-								MouseLDragOver( input );
-								MouseRDragOver( input );
-								MouseLDropInside( input );
-							}
-							else
-							{
-								if (g_selected_item)
-									g_selected_item->RegisterUIClick();
-								MouseLDragOver( input );
-								if (m_doubleClickingInside && input->time - m_doubleRClickStartWaitTime < m_doubleClickTimeOut )
-								{
-									MouseRDoubleClickInside( input );
-								}
-								else
-								{
-									m_doubleClickingInside = TRUE;
-									m_doubleRClickStartWaitTime = input->time;
-									MouseRGrabInside( input );
-								}
-								MouseLDropInside( input );
-							}
-						}
-						else
-						{
-							if ( m_mouseState.rbutton )
-							{
-								if (g_selected_item)
-									g_selected_item->RegisterUIClick();
-								MouseLDragOver( input );
-								MouseRDragOver( input );
-								MouseLDropInside( input );
-								MouseRDropInside( input );
-							}
-							else
-							{
-								if (g_selected_item)
-									g_selected_item->RegisterUIClick();
-								MouseLDragOver( input );
-								MouseLDropInside( input );
-							}
-						}
-					}
-					else
-					{
-						if ( input->rbutton )
-						{
-							if ( m_mouseState.rbutton )
-							{
-								MouseRDragOver( input );
-							}
-							else
-							{
-								MouseMoveOver( input );
-								if (m_doubleClickingInside && input->time - m_doubleRClickStartWaitTime < m_doubleClickTimeOut )
-								{
-									MouseRDoubleClickInside( input );
-								}
-								else
-								{
-									m_doubleClickingInside = TRUE;
-									m_doubleRClickStartWaitTime = input->time;
-									MouseRGrabInside( input );
-								}
-							}
-						}
-						else
-						{
-							if ( m_mouseState.rbutton )
-							{
-								MouseRDragOver( input );
-								MouseRDropInside( input );
-							}
-							else
-							{
-								MouseMoveOver( input );
-							}
-						}
-					}
+					ExecuteMouseFunction(region, event, BUTTON_RIGHT, ACTION_DRAG, area, group);
+					ExecuteMouseFunction(region, event, BUTTON_RIGHT, ACTION_DROP, inOutArea, group);
 				}
 			}
 		}
 		else
 		{
-			if ( wasMouseInside )
+			if (event.rbutton)
 			{
-				if ( input->lbutton )
+				if (m_mouseEvent.rbutton)
 				{
-					if ( m_mouseState.lbutton )
-					{
-						if ( input->rbutton )
-						{
-							if ( m_mouseState.rbutton )
-							{
-								MouseLDragAway( input );
-								MouseRDragAway( input );
-							}
-							else
-							{
-								MouseLDragAway( input );
-								if ( !m_doubleClickingInside && input->time - m_doubleRClickStartWaitTime < m_doubleClickTimeOut )
-								{
-									MouseRDoubleClickOutside( input );
-								}
-								else
-								{
-									m_doubleClickingInside = FALSE;
-									m_doubleRClickStartWaitTime = input->time;
-									MouseRGrabOutside( input );
-								}
-							}
-						}
-						else
-						{
-							if ( m_mouseState.rbutton )
-							{
-								MouseLDragAway( input );
-								MouseRDragAway( input );
-								MouseRDropOutside( input );
-							}
-							else
-							{
-								MouseLDragAway( input );
-							}
-						}
-					}
-					else
-					{
-						if ( input->rbutton )
-						{
-							if ( m_mouseState.rbutton )
-							{
-								MouseRDragAway( input );
-								if ( !m_doubleClickingInside && input->time - m_doubleLClickStartWaitTime < m_doubleClickTimeOut )
-								{
-									MouseLDoubleClickOutside( input );
-								}
-								else
-								{
-									m_doubleClickingInside = FALSE;
-									m_doubleLClickStartWaitTime = input->time;
-									m_doubleClickOldPos = input->position;
-									MouseLGrabOutside( input );
-								}
-							}
-							else
-							{
-								MouseMoveAway( input );
-								if ( !m_doubleClickingInside && input->time - m_doubleLClickStartWaitTime < m_doubleClickTimeOut )
-								{
-									MouseLDoubleClickOutside( input );
-								}
-								else
-								{
-									m_doubleClickingInside = FALSE;
-									m_doubleLClickStartWaitTime = input->time;
-									m_doubleClickOldPos = input->position;
-									MouseLGrabOutside( input );
-								}
-								if ( !m_doubleClickingInside && input->time - m_doubleRClickStartWaitTime < m_doubleClickTimeOut )
-								{
-									MouseRDoubleClickOutside( input );
-								}
-								else
-								{
-									m_doubleClickingInside = FALSE;
-									m_doubleRClickStartWaitTime = input->time;
-									MouseRGrabOutside( input );
-								}
-							}
-						}
-						else
-						{
-							if ( m_mouseState.rbutton )
-							{
-								MouseRDragAway( input );
-								if ( !m_doubleClickingInside && input->time - m_doubleLClickStartWaitTime < m_doubleClickTimeOut )
-								{
-									MouseLDoubleClickOutside( input );
-								}
-								else
-								{
-									m_doubleClickingInside = FALSE;
-									m_doubleLClickStartWaitTime = input->time;
-									m_doubleClickOldPos = input->position;
-									MouseLGrabOutside( input );
-								}
-								MouseRDropOutside( input );
-							}
-							else
-							{
-								MouseMoveAway( input );
-								if ( !m_doubleClickingInside && input->time - m_doubleLClickStartWaitTime < m_doubleClickTimeOut )
-								{
-									MouseLDoubleClickOutside( input );
-								}
-								else
-								{
-									m_doubleClickingInside = FALSE;
-									m_doubleLClickStartWaitTime = input->time;
-									m_doubleClickOldPos = input->position;
-									MouseLGrabOutside( input );
-								}
-							}
-						}
-					}
+					ExecuteMouseFunction(region, event, BUTTON_RIGHT, ACTION_DRAG, area, group);
+					HandleClick(region, event, BUTTON_LEFT, inOutArea, group);
 				}
 				else
 				{
-					if ( m_mouseState.lbutton )
-					{
-						if ( input->rbutton )
-						{
-							if ( m_mouseState.rbutton )
-							{
-								MouseLDragAway( input );
-								MouseRDragAway( input );
-								MouseLDropOutside( input );
-							}
-							else
-							{
-								MouseLDragAway( input );
-								if ( !m_doubleClickingInside && input->time - m_doubleRClickStartWaitTime < m_doubleClickTimeOut )
-								{
-									MouseRDoubleClickOutside( input );
-								}
-								else
-								{
-									m_doubleClickingInside = FALSE;
-									m_doubleRClickStartWaitTime = input->time;
-									MouseRGrabOutside( input );
-								}
-								MouseLDropOutside( input );
-							}
-						}
-						else
-						{
-							if ( m_mouseState.rbutton )
-							{
-								MouseLDragAway( input );
-								MouseRDragAway( input );
-								MouseLDropOutside( input );
-								MouseRDropOutside( input );
-							}
-							else
-							{
-								MouseLDragAway( input );
-								MouseLDropOutside( input );
-							}
-						}
-					}
-					else
-					{
-						if ( input->rbutton )
-						{
-							if ( m_mouseState.rbutton )
-							{
-								MouseRDragAway( input );
-							}
-							else
-							{
-								MouseMoveAway( input );
-								if ( !m_doubleClickingInside && input->time - m_doubleRClickStartWaitTime < m_doubleClickTimeOut )
-								{
-									MouseRDoubleClickOutside( input );
-								}
-								else
-								{
-									m_doubleClickingInside = FALSE;
-									m_doubleRClickStartWaitTime = input->time;
-									MouseRGrabOutside( input );
-								}
-							}
-						}
-						else
-						{
-							if ( m_mouseState.rbutton )
-							{
-								MouseRDragAway( input );
-								MouseRDropOutside( input );
-							}
-							else
-							{
-								MouseMoveAway( input );
-							}
-						}
-					}
+					ExecuteMouseFunction(region, event, BUTTON_NONE, ACTION_MOVE, area, group);
+					HandleClick(region, event, BUTTON_LEFT, inOutArea, group);
+					HandleClick(region, event, BUTTON_RIGHT, inOutArea, group);
 				}
 			}
 			else
 			{
-				if ( input->lbutton )
+				if (m_mouseEvent.rbutton)
 				{
-					if ( m_mouseState.lbutton )
-					{
-						if ( input->rbutton )
-						{
-							if ( m_mouseState.rbutton )
-							{
-								MouseLDragOutside( input );
-								MouseRDragOutside( input );
-							}
-							else
-							{
-								MouseLDragOutside( input );
-								if ( !m_doubleClickingInside && input->time - m_doubleRClickStartWaitTime < m_doubleClickTimeOut )
-								{
-									MouseRDoubleClickOutside( input );
-								}
-								else
-								{
-									m_doubleClickingInside = FALSE;
-									m_doubleRClickStartWaitTime = input->time;
-									MouseRGrabOutside( input );
-								}
-							}
-						}
-						else
-						{
-							if ( m_mouseState.rbutton )
-							{
-								MouseLDragOutside( input );
-								MouseRDragOutside( input );
-								MouseRDropOutside( input );
-							}
-							else
-							{
-								MouseLDragOutside( input );
-							}
-						}
-					}
-					else
-					{
-						if ( input->rbutton )
-						{
-							if ( m_mouseState.rbutton )
-							{
-								MouseRDragOutside( input );
-								if ( !m_doubleClickingInside && input->time - m_doubleLClickStartWaitTime < m_doubleClickTimeOut )
-								{
-									MouseLDoubleClickOutside( input );
-								}
-								else
-								{
-									m_doubleClickingInside = FALSE;
-									m_doubleLClickStartWaitTime = input->time;
-									m_doubleClickOldPos = input->position;
-									MouseLGrabOutside( input );
-								}
-							}
-							else
-							{
-								MouseMoveOutside( input );
-								if ( !m_doubleClickingInside && input->time - m_doubleLClickStartWaitTime < m_doubleClickTimeOut )
-								{
-									MouseLDoubleClickOutside( input );
-								}
-								else
-								{
-									m_doubleClickingInside = FALSE;
-									m_doubleLClickStartWaitTime = input->time;
-									m_doubleClickOldPos = input->position;
-									MouseLGrabOutside( input );
-								}
-								if ( !m_doubleClickingInside && input->time - m_doubleRClickStartWaitTime < m_doubleClickTimeOut )
-								{
-									MouseRDoubleClickOutside( input );
-								}
-								else
-								{
-									m_doubleClickingInside = FALSE;
-									m_doubleRClickStartWaitTime = input->time;
-									MouseRGrabOutside( input );
-								}
-							}
-						}
-						else
-						{
-							if ( m_mouseState.rbutton )
-							{
-								MouseRDragOutside( input );
-								if ( !m_doubleClickingInside && input->time - m_doubleLClickStartWaitTime < m_doubleClickTimeOut )
-								{
-									MouseLDoubleClickOutside( input );
-								}
-								else
-								{
-									m_doubleClickingInside = FALSE;
-									m_doubleLClickStartWaitTime = input->time;
-									m_doubleClickOldPos = input->position;
-									MouseLGrabOutside( input );
-								}
-								MouseRDropOutside( input );
-							}
-							else
-							{
-								MouseMoveOutside( input );
-								if ( !m_doubleClickingInside && input->time - m_doubleLClickStartWaitTime < m_doubleClickTimeOut )
-								{
-									MouseLDoubleClickOutside( input );
-								}
-								else
-								{
-									m_doubleClickingInside = FALSE;
-									m_doubleLClickStartWaitTime = input->time;
-									m_doubleClickOldPos = input->position;
-									MouseLGrabOutside( input );
-								}
-							}
-						}
-					}
+					ExecuteMouseFunction(region, event, BUTTON_RIGHT, ACTION_DRAG, area, group);
+					HandleClick(region, event, BUTTON_LEFT, inOutArea, group);
+					ExecuteMouseFunction(region, event, BUTTON_RIGHT, ACTION_DROP, inOutArea, group);
 				}
 				else
 				{
-					if ( m_mouseState.lbutton )
-					{
-						if ( input->rbutton )
-						{
-							if ( m_mouseState.rbutton )
-							{
-								MouseLDragOutside( input );
-								MouseRDragOutside( input );
-								MouseLDropOutside( input );
-							}
-							else
-							{
-								MouseLDragOutside( input );
-								if ( !m_doubleClickingInside && input->time - m_doubleRClickStartWaitTime < m_doubleClickTimeOut )
-								{
-									MouseRDoubleClickOutside( input );
-								}
-								else
-								{
-									m_doubleClickingInside = FALSE;
-									m_doubleRClickStartWaitTime = input->time;
-									MouseRGrabOutside( input );
-								}
-								MouseLDropOutside( input );
-							}
-						}
-						else
-						{
-							if ( m_mouseState.rbutton )
-							{
-								MouseLDragOutside( input );
-								MouseRDragOutside( input );
-								MouseLDropOutside( input );
-								MouseRDropOutside( input );
-							}
-							else
-							{
-								MouseLDragOutside( input );
-								MouseLDropOutside( input );
-							}
-						}
-					}
-					else
-					{
-						if ( input->rbutton )
-						{
-							if ( m_mouseState.rbutton )
-							{
-								MouseRDragOutside( input );
-							}
-							else
-							{
-								MouseMoveOutside( input );
-								if ( !m_doubleClickingInside && input->time - m_doubleRClickStartWaitTime < m_doubleClickTimeOut )
-								{
-									MouseRDoubleClickOutside( input );
-								}
-								else
-								{
-									m_doubleClickingInside = FALSE;
-									m_doubleRClickStartWaitTime = input->time;
-									MouseRGrabOutside( input );
-								}
-							}
-						}
-						else
-						{
-							if ( m_mouseState.rbutton )
-							{
-								MouseRDragOutside( input );
-								MouseRDropOutside( input );
-							}
-							else
-							{
-								MouseMoveOutside( input );
-							}
-						}
-					}
+					ExecuteMouseFunction(region, event, BUTTON_NONE, ACTION_MOVE, area,  group);
+					HandleClick(region, event, BUTTON_LEFT, inOutArea, group);
 				}
 			}
 		}
 	}
-
-
 	else
 	{
-
-		if ( handleIt )
-
-		if ( m_isMouseInside )
+		if (m_mouseEvent.lbutton)
 		{
-			if ( input->lbutton )
+			if (inOutArea == AREA_INSIDE && group == GROUP_NORMAL && g_selected_item)
 			{
-				if ( m_mouseState.lbutton )
+				g_selected_item->RegisterUIClick();
+			}
+
+			ExecuteMouseFunction(region, event, BUTTON_LEFT, ACTION_DRAG, area, group);
+			if (event.rbutton)
+			{
+				if (m_mouseEvent.rbutton)
 				{
-					if ( input->rbutton )
-					{
-						if ( m_mouseState.rbutton )
-						{
-							m_noChange = TRUE;
-							MouseNoChange( input );
-						}
-						else
-						{
-							if (m_doubleClickingInside && input->time - m_doubleRClickStartWaitTime < m_doubleClickTimeOut )
-							{
-								MouseRDoubleClickInside( input );
-							}
-							else
-							{
-								m_doubleClickingInside = TRUE;
-								m_doubleRClickStartWaitTime = input->time;
-								MouseRGrabInside( input );
-							}
-						}
-					}
-					else
-					{
-						if ( m_mouseState.rbutton )
-						{
-							MouseRDropInside( input );
-						}
-						else
-						{
-							m_noChange = TRUE;
-							MouseNoChange( input );
-						}
-					}
+					ExecuteMouseFunction(region, event, BUTTON_RIGHT, ACTION_DRAG, area, group);
 				}
 				else
 				{
-					if ( input->rbutton )
-					{
-						if ( m_mouseState.rbutton )
-						{
-							if (LEGALTRAVELDISTANCE && m_doubleClickingInside && input->time - m_doubleLClickStartWaitTime < m_doubleClickTimeOut )
-							{
-								MouseLDoubleClickInside( input );
-							}
-							else
-							{
-								m_doubleClickingInside = TRUE;
-								m_doubleLClickStartWaitTime = input->time;
-								m_doubleClickOldPos = input->position;
-								MouseLGrabInside( input );
-							}
-						}
-						else
-						{
-							if (LEGALTRAVELDISTANCE && m_doubleClickingInside && input->time - m_doubleLClickStartWaitTime < m_doubleClickTimeOut )
-							{
-								MouseLDoubleClickInside( input );
-							}
-							else
-							{
-								m_doubleClickingInside = TRUE;
-								m_doubleLClickStartWaitTime = input->time;
-								m_doubleClickOldPos = input->position;
-								MouseLGrabInside( input );
-							}
-							if (m_doubleClickingInside && input->time - m_doubleRClickStartWaitTime < m_doubleClickTimeOut )
-							{
-								MouseRDoubleClickInside( input );
-							}
-							else
-							{
-								m_doubleClickingInside = TRUE;
-								m_doubleRClickStartWaitTime = input->time;
-								MouseRGrabInside( input );
-							}
-						}
-					}
-					else
-					{
-						if ( m_mouseState.rbutton )
-						{
-							if (LEGALTRAVELDISTANCE && m_doubleClickingInside && input->time - m_doubleLClickStartWaitTime < m_doubleClickTimeOut )
-							{
-								MouseLDoubleClickInside( input );
-							}
-							else
-							{
-								m_doubleClickingInside = TRUE;
-								m_doubleLClickStartWaitTime = input->time;
-								m_doubleClickOldPos = input->position;
-								MouseLGrabInside( input );
-							}
-							MouseRDropInside( input );
-						}
-						else
-						{
-							if (LEGALTRAVELDISTANCE && m_doubleClickingInside && input->time - m_doubleLClickStartWaitTime < m_doubleClickTimeOut )
-							{
-								MouseLDoubleClickInside( input );
-							}
-							else
-							{
-								m_doubleClickingInside = TRUE;
-								m_doubleLClickStartWaitTime = input->time;
-								m_doubleClickOldPos = input->position;
-								MouseLGrabInside( input );
-							}
-						}
-					}
+					HandleClick(region, event, BUTTON_RIGHT, inOutArea, group);
 				}
+				ExecuteMouseFunction(region, event, BUTTON_LEFT, ACTION_DROP, inOutArea, group);
 			}
 			else
 			{
-				if ( m_mouseState.lbutton )
+				if (m_mouseEvent.rbutton)
 				{
-					if ( input->rbutton )
-					{
-						if ( m_mouseState.rbutton )
-						{
-							if (g_selected_item)
-								g_selected_item->RegisterUIClick();
-							MouseLDropInside( input );
-						}
-						else
-						{
-							if (g_selected_item)
-								g_selected_item->RegisterUIClick();
-							if (m_doubleClickingInside && input->time - m_doubleRClickStartWaitTime < m_doubleClickTimeOut )
-							{
-								MouseRDoubleClickInside( input );
-							}
-							else
-							{
-								m_doubleClickingInside = TRUE;
-								m_doubleRClickStartWaitTime = input->time;
-								MouseRGrabInside( input );
-							}
-							MouseLDropInside( input );
-						}
-					}
-					else
-					{
-						if ( m_mouseState.rbutton )
-						{
-							if (g_selected_item)
-								g_selected_item->RegisterUIClick();
-							MouseLDropInside( input );
-							MouseRDropInside( input );
-						}
-						else
-						{
-							if (g_selected_item)
-								g_selected_item->RegisterUIClick();
-							MouseLDropInside( input );
-						}
-					}
+					ExecuteMouseFunction(region, event, BUTTON_RIGHT, ACTION_DRAG, area, group);
+					ExecuteMouseFunction(region, event, BUTTON_LEFT, ACTION_DROP, inOutArea, group);
+					ExecuteMouseFunction(region, event, BUTTON_RIGHT, ACTION_DROP, inOutArea, group);
 				}
 				else
 				{
-					if ( input->rbutton )
-					{
-						if ( m_mouseState.rbutton )
-						{
-							m_noChange = TRUE;
-							MouseNoChange( input );
-						}
-						else
-						{
-							if (m_doubleClickingInside && input->time - m_doubleRClickStartWaitTime < m_doubleClickTimeOut )
-							{
-								MouseRDoubleClickInside( input );
-							}
-							else
-							{
-								m_doubleClickingInside = TRUE;
-								m_doubleRClickStartWaitTime = input->time;
-								MouseRGrabInside( input );
-							}
-						}
-					}
-					else
-					{
-						if ( m_mouseState.rbutton )
-						{
-							MouseRDropInside( input );
-						}
-						else
-						{
-							m_noChange = TRUE;
-							MouseNoChange( input );
-						}
-					}
+					ExecuteMouseFunction(region, event, BUTTON_LEFT, ACTION_DROP, inOutArea, group);
 				}
 			}
 		}
 		else
 		{
-			if ( input->lbutton )
+			if (event.rbutton)
 			{
-				if ( m_mouseState.lbutton )
+				if (m_mouseEvent.rbutton)
 				{
-					if ( input->rbutton )
-					{
-						if ( m_mouseState.rbutton )
-						{
-							m_noChange = TRUE;
-							MouseNoChange( input );
-						}
-						else
-						{
-							if ( !m_doubleClickingInside && input->time - m_doubleRClickStartWaitTime < m_doubleClickTimeOut )
-							{
-								MouseRDoubleClickOutside( input );
-							}
-							else
-							{
-								m_doubleClickingInside = FALSE;
-								m_doubleRClickStartWaitTime = input->time;
-								MouseRGrabOutside( input );
-							}
-						}
-					}
-					else
-					{
-						if ( m_mouseState.rbutton )
-						{
-							MouseRDropOutside( input );
-						}
-						else
-						{
-							m_noChange = TRUE;
-							MouseNoChange( input );
-						}
-					}
+					ExecuteMouseFunction(region, event, BUTTON_RIGHT, ACTION_DRAG, area, group);
 				}
 				else
 				{
-					if ( input->rbutton )
-					{
-						if ( m_mouseState.rbutton )
-						{
-							if ( !m_doubleClickingInside && input->time - m_doubleLClickStartWaitTime < m_doubleClickTimeOut )
-							{
-								MouseLDoubleClickOutside( input );
-							}
-							else
-							{
-								m_doubleClickingInside = FALSE;
-								m_doubleLClickStartWaitTime = input->time;
-								m_doubleClickOldPos = input->position;
-								MouseLGrabOutside( input );
-							}
-						}
-						else
-						{
-							if ( !m_doubleClickingInside && input->time - m_doubleLClickStartWaitTime < m_doubleClickTimeOut )
-							{
-								MouseLDoubleClickOutside( input );
-							}
-							else
-							{
-								m_doubleClickingInside = FALSE;
-								m_doubleClickOldPos = input->position;
-								m_doubleLClickStartWaitTime = input->time;
-								MouseLGrabOutside( input );
-							}
-							if ( !m_doubleClickingInside && input->time - m_doubleRClickStartWaitTime < m_doubleClickTimeOut )
-							{
-								MouseRDoubleClickOutside( input );
-							}
-							else
-							{
-								m_doubleClickingInside = FALSE;
-								m_doubleRClickStartWaitTime = input->time;
-								MouseRGrabOutside( input );
-							}
-						}
-					}
-					else
-					{
-						if ( m_mouseState.rbutton )
-						{
-							if ( !m_doubleClickingInside && input->time - m_doubleLClickStartWaitTime < m_doubleClickTimeOut )
-							{
-								MouseLDoubleClickOutside( input );
-							}
-							else
-							{
-								m_doubleClickingInside = FALSE;
-								m_doubleClickOldPos = input->position;
-								m_doubleLClickStartWaitTime = input->time;
-								MouseLGrabOutside( input );
-							}
-							MouseRDropOutside( input );
-						}
-						else
-						{
-							if ( !m_doubleClickingInside && input->time - m_doubleLClickStartWaitTime < m_doubleClickTimeOut )
-							{
-								MouseLDoubleClickOutside( input );
-							}
-							else
-							{
-								m_doubleClickingInside = FALSE;
-								m_doubleClickOldPos = input->position;
-								m_doubleLClickStartWaitTime = input->time;
-								MouseLGrabOutside( input );
-							}
-						}
-					}
+					ExecuteMouseFunction(region, event, BUTTON_NONE, ACTION_MOVE, area, group);
+					HandleClick(region, event, BUTTON_RIGHT, inOutArea, group);
 				}
 			}
 			else
 			{
-				if ( m_mouseState.lbutton )
+				if (m_mouseEvent.rbutton)
 				{
-					if ( input->rbutton )
-					{
-						if ( m_mouseState.rbutton )
-						{
-							MouseLDropOutside( input );
-						}
-						else
-						{
-							if ( !m_doubleClickingInside && input->time - m_doubleRClickStartWaitTime < m_doubleClickTimeOut )
-							{
-								MouseRDoubleClickOutside( input );
-							}
-							else
-							{
-								m_doubleClickingInside = FALSE;
-								m_doubleRClickStartWaitTime = input->time;
-								MouseRGrabOutside( input );
-							}
-							MouseLDropOutside( input );
-						}
-					}
-					else
-					{
-						if ( m_mouseState.rbutton )
-						{
-							MouseLDropOutside( input );
-							MouseRDropOutside( input );
-						}
-						else
-						{
-							MouseLDropOutside( input );
-						}
-					}
+					ExecuteMouseFunction(region, event, BUTTON_RIGHT, ACTION_DRAG, area, group);
+					ExecuteMouseFunction(region, event, BUTTON_RIGHT, ACTION_DROP, inOutArea, group);
 				}
 				else
 				{
-					if ( input->rbutton )
-					{
-						if ( m_mouseState.rbutton )
-						{
-							m_noChange = TRUE;
-							MouseNoChange( input );
-						}
-						else
-						{
-							if ( !m_doubleClickingInside && input->time - m_doubleRClickStartWaitTime < m_doubleClickTimeOut )
-							{
-								MouseRDoubleClickOutside( input );
-							}
-							else
-							{
-								m_doubleClickingInside = FALSE;
-								m_doubleRClickStartWaitTime = input->time;
-								MouseRGrabOutside( input );
-							}
-						}
-					}
-					else
-					{
-						if ( m_mouseState.rbutton )
-						{
-							MouseRDropOutside( input );
-						}
-						else
-						{
-							m_noChange = TRUE;
-							MouseNoChange( input );
-						}
-					}
+					ExecuteMouseFunction(region, event, BUTTON_NONE, ACTION_MOVE, area, group);
 				}
 			}
 		}
 	}
 }
 
-void aui_Region::MouseDispatchEdit( aui_MouseEvent *input, BOOL handleIt )
+void MouseDispatcher::HandleMouseStatic(aui_Region & region, aui_MouseEvent & event, uint32 area, uint32 group)
 {
-
-	if ( input->position.x != m_mouseState.position.x
-	||   input->position.y != m_mouseState.position.y
-	||   m_x != m_xLastTime
-	||   m_y != m_yLastTime )
+	if (event.lbutton )
 	{
-
-		BOOL wasMouseInside = m_isMouseInside;
-
-		m_isMouseInside = IsInside( &input->position );
-
-		if ( handleIt )
-
-		if ( m_isMouseInside )
+		if (m_mouseEvent.lbutton)
 		{
-			if ( wasMouseInside )
+			if (event.rbutton)
 			{
-				if ( input->lbutton )
+				if (m_mouseEvent.rbutton)
 				{
-					if ( m_mouseState.lbutton )
-					{
-						if ( input->rbutton )
-						{
-							if ( m_mouseState.rbutton )
-							{
-								MouseLDragInsideEdit( input );
-								MouseRDragInsideEdit( input );
-							}
-							else
-							{
-								MouseLDragInsideEdit( input );
-								if ( m_doubleClickingInside && input->time - m_doubleRClickStartWaitTime < m_doubleClickTimeOut )
-								{
-									MouseRDoubleClickInsideEdit( input );
-								}
-								else
-								{
-									m_doubleClickingInside = TRUE;
-									m_doubleRClickStartWaitTime = input->time;
-									MouseRGrabInsideEdit( input );
-								}
-							}
-						}
-						else
-						{
-							if ( m_mouseState.rbutton )
-							{
-								MouseLDragInsideEdit( input );
-								MouseRDragInsideEdit( input );
-								MouseRDropInsideEdit( input );
-							}
-							else
-							{
-								MouseLDragInsideEdit( input );
-							}
-						}
-					}
-					else
-					{
-						if ( input->rbutton )
-						{
-							if ( m_mouseState.rbutton )
-							{
-								MouseRDragInsideEdit( input );
-								if ( m_doubleClickingInside && input->time - m_doubleLClickStartWaitTime < m_doubleClickTimeOut )
-								{
-									MouseLDoubleClickInsideEdit( input );
-								}
-								else
-								{
-									m_doubleClickingInside = TRUE;
-									m_doubleLClickStartWaitTime = input->time;
-									MouseLGrabInsideEdit( input );
-								}
-							}
-							else
-							{
-								MouseMoveInsideEdit( input );
-								if ( m_doubleClickingInside && input->time - m_doubleLClickStartWaitTime < m_doubleClickTimeOut )
-								{
-									MouseLDoubleClickInsideEdit( input );
-								}
-								else
-								{
-									m_doubleClickingInside = TRUE;
-									m_doubleLClickStartWaitTime = input->time;
-									MouseLGrabInsideEdit( input );
-								}
-								if ( m_doubleClickingInside && input->time - m_doubleRClickStartWaitTime < m_doubleClickTimeOut )
-								{
-									MouseRDoubleClickInsideEdit( input );
-								}
-								else
-								{
-									m_doubleClickingInside = TRUE;
-									m_doubleRClickStartWaitTime = input->time;
-									MouseRGrabInsideEdit( input );
-								}
-							}
-						}
-						else
-						{
-							if ( m_mouseState.rbutton )
-							{
-								MouseRDragInsideEdit( input );
-								if ( m_doubleClickingInside && input->time - m_doubleLClickStartWaitTime < m_doubleClickTimeOut )
-								{
-									MouseLDoubleClickInsideEdit( input );
-								}
-								else
-								{
-									m_doubleClickingInside = TRUE;
-									m_doubleLClickStartWaitTime = input->time;
-									MouseLGrabInsideEdit( input );
-								}
-								MouseRDropInsideEdit( input );
-							}
-							else
-							{
-								MouseMoveInsideEdit( input );
-								if ( m_doubleClickingInside && input->time - m_doubleLClickStartWaitTime < m_doubleClickTimeOut )
-								{
-									MouseLDoubleClickInsideEdit( input );
-								}
-								else
-								{
-									m_doubleClickingInside = TRUE;
-									m_doubleLClickStartWaitTime = input->time;
-									MouseLGrabInsideEdit( input );
-								}
-							}
-						}
-					}
+					ExecuteNoChangeMouseFunction(region, event, area);
 				}
 				else
 				{
-					if ( m_mouseState.lbutton )
-					{
-						if ( input->rbutton )
-						{
-							if ( m_mouseState.rbutton )
-							{
-								MouseLDragInsideEdit( input );
-								MouseRDragInsideEdit( input );
-								MouseLDropInsideEdit( input );
-							}
-							else
-							{
-								MouseLDragInsideEdit( input );
-								if ( m_doubleClickingInside && input->time - m_doubleRClickStartWaitTime < m_doubleClickTimeOut )
-								{
-									MouseRDoubleClickInsideEdit( input );
-								}
-								else
-								{
-									m_doubleClickingInside = TRUE;
-									m_doubleRClickStartWaitTime = input->time;
-									MouseRGrabInsideEdit( input );
-								}
-								MouseLDropInsideEdit( input );
-							}
-						}
-						else
-						{
-							if ( m_mouseState.rbutton )
-							{
-								MouseLDragInsideEdit( input );
-								MouseRDragInsideEdit( input );
-								MouseLDropInsideEdit( input );
-								MouseRDropInsideEdit( input );
-							}
-							else
-							{
-								MouseLDragInsideEdit( input );
-								MouseLDropInsideEdit( input );
-							}
-						}
-					}
-					else
-					{
-						if ( input->rbutton )
-						{
-							if ( m_mouseState.rbutton )
-							{
-								MouseRDragInsideEdit( input );
-							}
-							else
-							{
-								MouseMoveInsideEdit( input );
-								if ( m_doubleClickingInside && input->time - m_doubleRClickStartWaitTime < m_doubleClickTimeOut )
-								{
-									MouseRDoubleClickInsideEdit( input );
-								}
-								else
-								{
-									m_doubleClickingInside = TRUE;
-									m_doubleRClickStartWaitTime = input->time;
-									MouseRGrabInsideEdit( input );
-								}
-							}
-						}
-						else
-						{
-							if ( m_mouseState.rbutton )
-							{
-								MouseRDragInsideEdit( input );
-								MouseRDropInsideEdit( input );
-							}
-							else
-							{
-								MouseMoveInsideEdit( input );
-							}
-						}
-					}
+					HandleClick(region, event, BUTTON_RIGHT, area, group);
 				}
 			}
 			else
 			{
-				if ( input->lbutton )
+				if (m_mouseEvent.rbutton)
 				{
-					if ( m_mouseState.lbutton )
-					{
-						if ( input->rbutton )
-						{
-							if ( m_mouseState.rbutton )
-							{
-								MouseLDragOverEdit( input );
-								MouseRDragOverEdit( input );
-							}
-							else
-							{
-								MouseLDragOverEdit( input );
-								if ( m_doubleClickingInside && input->time - m_doubleRClickStartWaitTime < m_doubleClickTimeOut )
-								{
-									MouseRDoubleClickInsideEdit( input );
-								}
-								else
-								{
-									m_doubleClickingInside = TRUE;
-									m_doubleRClickStartWaitTime = input->time;
-									MouseRGrabInsideEdit( input );
-								}
-							}
-						}
-						else
-						{
-							if ( m_mouseState.rbutton )
-							{
-								MouseLDragOverEdit( input );
-								MouseRDragOverEdit( input );
-								MouseRDropInsideEdit( input );
-							}
-							else
-							{
-								MouseLDragOverEdit( input );
-							}
-						}
-					}
-					else
-					{
-						if ( input->rbutton )
-						{
-							if ( m_mouseState.rbutton )
-							{
-								MouseRDragOverEdit( input );
-								if ( m_doubleClickingInside && input->time - m_doubleLClickStartWaitTime < m_doubleClickTimeOut )
-								{
-									MouseLDoubleClickInsideEdit( input );
-								}
-								else
-								{
-									m_doubleClickingInside = TRUE;
-									m_doubleLClickStartWaitTime = input->time;
-									MouseLGrabInsideEdit( input );
-								}
-							}
-							else
-							{
-								MouseMoveOverEdit( input );
-								if ( m_doubleClickingInside && input->time - m_doubleLClickStartWaitTime < m_doubleClickTimeOut )
-								{
-									MouseLDoubleClickInsideEdit( input );
-								}
-								else
-								{
-									m_doubleClickingInside = TRUE;
-									m_doubleLClickStartWaitTime = input->time;
-									MouseLGrabInsideEdit( input );
-								}
-								if ( m_doubleClickingInside && input->time - m_doubleRClickStartWaitTime < m_doubleClickTimeOut )
-								{
-									MouseRDoubleClickInsideEdit( input );
-								}
-								else
-								{
-									m_doubleClickingInside = TRUE;
-									m_doubleRClickStartWaitTime = input->time;
-									MouseRGrabInsideEdit( input );
-								}
-							}
-						}
-						else
-						{
-							if ( m_mouseState.rbutton )
-							{
-								MouseRDragOverEdit( input );
-								if ( m_doubleClickingInside && input->time - m_doubleLClickStartWaitTime < m_doubleClickTimeOut )
-								{
-									MouseLDoubleClickInsideEdit( input );
-								}
-								else
-								{
-									m_doubleClickingInside = TRUE;
-									m_doubleLClickStartWaitTime = input->time;
-									MouseLGrabInsideEdit( input );
-								}
-								MouseRDropInsideEdit( input );
-							}
-							else
-							{
-								MouseMoveOverEdit( input );
-								if ( m_doubleClickingInside && input->time - m_doubleLClickStartWaitTime < m_doubleClickTimeOut )
-								{
-									MouseLDoubleClickInsideEdit( input );
-								}
-								else
-								{
-									m_doubleClickingInside = TRUE;
-									m_doubleLClickStartWaitTime = input->time;
-									MouseLGrabInsideEdit( input );
-								}
-							}
-						}
-					}
+					ExecuteMouseFunction(region, event, BUTTON_RIGHT, ACTION_DROP, area, group);
 				}
 				else
 				{
-					if ( m_mouseState.lbutton )
-					{
-						if ( input->rbutton )
-						{
-							if ( m_mouseState.rbutton )
-							{
-								MouseLDragOverEdit( input );
-								MouseRDragOverEdit( input );
-								MouseLDropInsideEdit( input );
-							}
-							else
-							{
-								MouseLDragOverEdit( input );
-								if ( m_doubleClickingInside && input->time - m_doubleRClickStartWaitTime < m_doubleClickTimeOut )
-								{
-									MouseRDoubleClickInsideEdit( input );
-								}
-								else
-								{
-									m_doubleClickingInside = TRUE;
-									m_doubleRClickStartWaitTime = input->time;
-									MouseRGrabInsideEdit( input );
-								}
-								MouseLDropInsideEdit( input );
-							}
-						}
-						else
-						{
-							if ( m_mouseState.rbutton )
-							{
-								MouseLDragOverEdit( input );
-								MouseRDragOverEdit( input );
-								MouseLDropInsideEdit( input );
-								MouseRDropInsideEdit( input );
-							}
-							else
-							{
-								MouseLDragOverEdit( input );
-								MouseLDropInsideEdit( input );
-							}
-						}
-					}
-					else
-					{
-						if ( input->rbutton )
-						{
-							if ( m_mouseState.rbutton )
-							{
-								MouseRDragOverEdit( input );
-							}
-							else
-							{
-								MouseMoveOverEdit( input );
-								if ( m_doubleClickingInside && input->time - m_doubleRClickStartWaitTime < m_doubleClickTimeOut )
-								{
-									MouseRDoubleClickInsideEdit( input );
-								}
-								else
-								{
-									m_doubleClickingInside = TRUE;
-									m_doubleRClickStartWaitTime = input->time;
-									MouseRGrabInsideEdit( input );
-								}
-							}
-						}
-						else
-						{
-							if ( m_mouseState.rbutton )
-							{
-								MouseRDragOverEdit( input );
-								MouseRDropInsideEdit( input );
-							}
-							else
-							{
-								MouseMoveOverEdit( input );
-							}
-						}
-					}
+					ExecuteNoChangeMouseFunction(region, event, area);
 				}
 			}
 		}
 		else
 		{
-			if ( wasMouseInside )
+			HandleClick(region, event, BUTTON_LEFT, area, group);
+			if (event.rbutton)
 			{
-				if ( input->lbutton )
+				if (!m_mouseEvent.rbutton)
 				{
-					if ( m_mouseState.lbutton )
-					{
-						if ( input->rbutton )
-						{
-							if ( m_mouseState.rbutton )
-							{
-								MouseLDragAwayEdit( input );
-								MouseRDragAwayEdit( input );
-							}
-							else
-							{
-								MouseLDragAwayEdit( input );
-								if ( !m_doubleClickingInside && input->time - m_doubleRClickStartWaitTime < m_doubleClickTimeOut )
-								{
-									MouseRDoubleClickOutsideEdit( input );
-								}
-								else
-								{
-									m_doubleClickingInside = FALSE;
-									m_doubleRClickStartWaitTime = input->time;
-									MouseRGrabOutsideEdit( input );
-								}
-							}
-						}
-						else
-						{
-							if ( m_mouseState.rbutton )
-							{
-								MouseLDragAwayEdit( input );
-								MouseRDragAwayEdit( input );
-								MouseRDropOutsideEdit( input );
-							}
-							else
-							{
-								MouseLDragAwayEdit( input );
-							}
-						}
-					}
-					else
-					{
-						if ( input->rbutton )
-						{
-							if ( m_mouseState.rbutton )
-							{
-								MouseRDragAwayEdit( input );
-								if ( !m_doubleClickingInside && input->time - m_doubleLClickStartWaitTime < m_doubleClickTimeOut )
-								{
-									MouseLDoubleClickOutsideEdit( input );
-								}
-								else
-								{
-									m_doubleClickingInside = FALSE;
-									m_doubleLClickStartWaitTime = input->time;
-									MouseLGrabOutsideEdit( input );
-								}
-							}
-							else
-							{
-								MouseMoveAwayEdit( input );
-								if ( !m_doubleClickingInside && input->time - m_doubleLClickStartWaitTime < m_doubleClickTimeOut )
-								{
-									MouseLDoubleClickOutsideEdit( input );
-								}
-								else
-								{
-									m_doubleClickingInside = FALSE;
-									m_doubleLClickStartWaitTime = input->time;
-									MouseLGrabOutsideEdit( input );
-								}
-								if ( !m_doubleClickingInside && input->time - m_doubleRClickStartWaitTime < m_doubleClickTimeOut )
-								{
-									MouseRDoubleClickOutsideEdit( input );
-								}
-								else
-								{
-									m_doubleClickingInside = FALSE;
-									m_doubleRClickStartWaitTime = input->time;
-									MouseRGrabOutsideEdit( input );
-								}
-							}
-						}
-						else
-						{
-							if ( m_mouseState.rbutton )
-							{
-								MouseRDragAwayEdit( input );
-								if ( !m_doubleClickingInside && input->time - m_doubleLClickStartWaitTime < m_doubleClickTimeOut )
-								{
-									MouseLDoubleClickOutsideEdit( input );
-								}
-								else
-								{
-									m_doubleClickingInside = FALSE;
-									m_doubleLClickStartWaitTime = input->time;
-									MouseLGrabOutsideEdit( input );
-								}
-								MouseRDropOutsideEdit( input );
-							}
-							else
-							{
-								MouseMoveAwayEdit( input );
-								if ( !m_doubleClickingInside && input->time - m_doubleLClickStartWaitTime < m_doubleClickTimeOut )
-								{
-									MouseLDoubleClickOutsideEdit( input );
-								}
-								else
-								{
-									m_doubleClickingInside = FALSE;
-									m_doubleLClickStartWaitTime = input->time;
-									MouseLGrabOutsideEdit( input );
-								}
-							}
-						}
-					}
-				}
-				else
-				{
-					if ( m_mouseState.lbutton )
-					{
-						if ( input->rbutton )
-						{
-							if ( m_mouseState.rbutton )
-							{
-								MouseLDragAwayEdit( input );
-								MouseRDragAwayEdit( input );
-								MouseLDropOutsideEdit( input );
-							}
-							else
-							{
-								MouseLDragAwayEdit( input );
-								if ( !m_doubleClickingInside && input->time - m_doubleRClickStartWaitTime < m_doubleClickTimeOut )
-								{
-									MouseRDoubleClickOutsideEdit( input );
-								}
-								else
-								{
-									m_doubleClickingInside = FALSE;
-									m_doubleRClickStartWaitTime = input->time;
-									MouseRGrabOutsideEdit( input );
-								}
-								MouseLDropOutsideEdit( input );
-							}
-						}
-						else
-						{
-							if ( m_mouseState.rbutton )
-							{
-								MouseLDragAwayEdit( input );
-								MouseRDragAwayEdit( input );
-								MouseLDropOutsideEdit( input );
-								MouseRDropOutsideEdit( input );
-							}
-							else
-							{
-								MouseLDragAwayEdit( input );
-								MouseLDropOutsideEdit( input );
-							}
-						}
-					}
-					else
-					{
-						if ( input->rbutton )
-						{
-							if ( m_mouseState.rbutton )
-							{
-								MouseRDragAwayEdit( input );
-							}
-							else
-							{
-								MouseMoveAwayEdit( input );
-								if ( !m_doubleClickingInside && input->time - m_doubleRClickStartWaitTime < m_doubleClickTimeOut )
-								{
-									MouseRDoubleClickOutsideEdit( input );
-								}
-								else
-								{
-									m_doubleClickingInside = FALSE;
-									m_doubleRClickStartWaitTime = input->time;
-									MouseRGrabOutsideEdit( input );
-								}
-							}
-						}
-						else
-						{
-							if ( m_mouseState.rbutton )
-							{
-								MouseRDragAwayEdit( input );
-								MouseRDropOutsideEdit( input );
-							}
-							else
-							{
-								MouseMoveAwayEdit( input );
-							}
-						}
-					}
+					HandleClick(region, event, BUTTON_RIGHT, area, group);
 				}
 			}
 			else
 			{
-				if ( input->lbutton )
+				if (m_mouseEvent.rbutton)
 				{
-					if ( m_mouseState.lbutton )
-					{
-						if ( input->rbutton )
-						{
-							if ( m_mouseState.rbutton )
-							{
-								MouseLDragOutsideEdit( input );
-								MouseRDragOutsideEdit( input );
-							}
-							else
-							{
-								MouseLDragOutsideEdit( input );
-								if ( !m_doubleClickingInside && input->time - m_doubleRClickStartWaitTime < m_doubleClickTimeOut )
-								{
-									MouseRDoubleClickOutsideEdit( input );
-								}
-								else
-								{
-									m_doubleClickingInside = FALSE;
-									m_doubleRClickStartWaitTime = input->time;
-									MouseRGrabOutsideEdit( input );
-								}
-							}
-						}
-						else
-						{
-							if ( m_mouseState.rbutton )
-							{
-								MouseLDragOutsideEdit( input );
-								MouseRDragOutsideEdit( input );
-								MouseRDropOutsideEdit( input );
-							}
-							else
-							{
-								MouseLDragOutsideEdit( input );
-							}
-						}
-					}
-					else
-					{
-						if ( input->rbutton )
-						{
-							if ( m_mouseState.rbutton )
-							{
-								MouseRDragOutsideEdit( input );
-								if ( !m_doubleClickingInside && input->time - m_doubleLClickStartWaitTime < m_doubleClickTimeOut )
-								{
-									MouseLDoubleClickOutsideEdit( input );
-								}
-								else
-								{
-									m_doubleClickingInside = FALSE;
-									m_doubleLClickStartWaitTime = input->time;
-									MouseLGrabOutsideEdit( input );
-								}
-							}
-							else
-							{
-								MouseMoveOutsideEdit( input );
-								if ( !m_doubleClickingInside && input->time - m_doubleLClickStartWaitTime < m_doubleClickTimeOut )
-								{
-									MouseLDoubleClickOutsideEdit( input );
-								}
-								else
-								{
-									m_doubleClickingInside = FALSE;
-									m_doubleLClickStartWaitTime = input->time;
-									MouseLGrabOutsideEdit( input );
-								}
-								if ( !m_doubleClickingInside && input->time - m_doubleRClickStartWaitTime < m_doubleClickTimeOut )
-								{
-									MouseRDoubleClickOutsideEdit( input );
-								}
-								else
-								{
-									m_doubleClickingInside = FALSE;
-									m_doubleRClickStartWaitTime = input->time;
-									MouseRGrabOutsideEdit( input );
-								}
-							}
-						}
-						else
-						{
-							if ( m_mouseState.rbutton )
-							{
-								MouseRDragOutsideEdit( input );
-								if ( !m_doubleClickingInside && input->time - m_doubleLClickStartWaitTime < m_doubleClickTimeOut )
-								{
-									MouseLDoubleClickOutsideEdit( input );
-								}
-								else
-								{
-									m_doubleClickingInside = FALSE;
-									m_doubleLClickStartWaitTime = input->time;
-									MouseLGrabOutsideEdit( input );
-								}
-								MouseRDropOutsideEdit( input );
-							}
-							else
-							{
-								MouseMoveOutsideEdit( input );
-								if ( !m_doubleClickingInside && input->time - m_doubleLClickStartWaitTime < m_doubleClickTimeOut )
-								{
-									MouseLDoubleClickOutsideEdit( input );
-								}
-								else
-								{
-									m_doubleClickingInside = FALSE;
-									m_doubleLClickStartWaitTime = input->time;
-									MouseLGrabOutsideEdit( input );
-								}
-							}
-						}
-					}
-				}
-				else
-				{
-					if ( m_mouseState.lbutton )
-					{
-						if ( input->rbutton )
-						{
-							if ( m_mouseState.rbutton )
-							{
-								MouseLDragOutsideEdit( input );
-								MouseRDragOutsideEdit( input );
-								MouseLDropOutsideEdit( input );
-							}
-							else
-							{
-								MouseLDragOutsideEdit( input );
-								if ( !m_doubleClickingInside && input->time - m_doubleRClickStartWaitTime < m_doubleClickTimeOut )
-								{
-									MouseRDoubleClickOutsideEdit( input );
-								}
-								else
-								{
-									m_doubleClickingInside = FALSE;
-									m_doubleRClickStartWaitTime = input->time;
-									MouseRGrabOutsideEdit( input );
-								}
-								MouseLDropOutsideEdit( input );
-							}
-						}
-						else
-						{
-							if ( m_mouseState.rbutton )
-							{
-								MouseLDragOutsideEdit( input );
-								MouseRDragOutsideEdit( input );
-								MouseLDropOutsideEdit( input );
-								MouseRDropOutsideEdit( input );
-							}
-							else
-							{
-								MouseLDragOutsideEdit( input );
-								MouseLDropOutsideEdit( input );
-							}
-						}
-					}
-					else
-					{
-						if ( input->rbutton )
-						{
-							if ( m_mouseState.rbutton )
-							{
-								MouseRDragOutsideEdit( input );
-							}
-							else
-							{
-								MouseMoveOutsideEdit( input );
-								if ( !m_doubleClickingInside && input->time - m_doubleRClickStartWaitTime < m_doubleClickTimeOut )
-								{
-									MouseRDoubleClickOutsideEdit( input );
-								}
-								else
-								{
-									m_doubleClickingInside = FALSE;
-									m_doubleRClickStartWaitTime = input->time;
-									MouseRGrabOutsideEdit( input );
-								}
-							}
-						}
-						else
-						{
-							if ( m_mouseState.rbutton )
-							{
-								MouseRDragOutsideEdit( input );
-								MouseRDropOutsideEdit( input );
-							}
-							else
-							{
-								MouseMoveOutsideEdit( input );
-							}
-						}
-					}
+					ExecuteMouseFunction(region, event, BUTTON_RIGHT, ACTION_DROP, area, group);
 				}
 			}
 		}
 	}
-
-
 	else
 	{
-
-		if ( handleIt )
-
-		if ( m_isMouseInside )
+		if (m_mouseEvent.lbutton)
 		{
-			if ( input->lbutton )
+			if (area == AREA_INSIDE && group == GROUP_NORMAL && g_selected_item)
 			{
-				if ( m_mouseState.lbutton )
+				g_selected_item->RegisterUIClick();
+			}
+
+			if (event.rbutton)
+			{
+				if (!m_mouseEvent.rbutton)
 				{
-					if ( input->rbutton )
-					{
-						if ( m_mouseState.rbutton )
-						{
-							m_noChange = TRUE;
-							MouseNoChange( input );
-						}
-						else
-						{
-							if ( m_doubleClickingInside && input->time - m_doubleRClickStartWaitTime < m_doubleClickTimeOut )
-							{
-								MouseRDoubleClickInsideEdit( input );
-							}
-							else
-							{
-								m_doubleClickingInside = TRUE;
-								m_doubleRClickStartWaitTime = input->time;
-								MouseRGrabInsideEdit( input );
-							}
-						}
-					}
-					else
-					{
-						if ( m_mouseState.rbutton )
-						{
-							MouseRDropInsideEdit( input );
-						}
-						else
-						{
-							m_noChange = TRUE;
-							MouseNoChange( input );
-						}
-					}
+					HandleClick(region, event, BUTTON_RIGHT, area, group);
 				}
-				else
-				{
-					if ( input->rbutton )
-					{
-						if ( m_mouseState.rbutton )
-						{
-							if ( m_doubleClickingInside && input->time - m_doubleLClickStartWaitTime < m_doubleClickTimeOut )
-							{
-								MouseLDoubleClickInsideEdit( input );
-							}
-							else
-							{
-								m_doubleClickingInside = TRUE;
-								m_doubleLClickStartWaitTime = input->time;
-								MouseLGrabInsideEdit( input );
-							}
-						}
-						else
-						{
-							if ( m_doubleClickingInside && input->time - m_doubleLClickStartWaitTime < m_doubleClickTimeOut )
-							{
-								MouseLDoubleClickInsideEdit( input );
-							}
-							else
-							{
-								m_doubleClickingInside = TRUE;
-								m_doubleLClickStartWaitTime = input->time;
-								MouseLGrabInsideEdit( input );
-							}
-							if ( m_doubleClickingInside && input->time - m_doubleRClickStartWaitTime < m_doubleClickTimeOut )
-							{
-								MouseRDoubleClickInsideEdit( input );
-							}
-							else
-							{
-								m_doubleClickingInside = TRUE;
-								m_doubleRClickStartWaitTime = input->time;
-								MouseRGrabInsideEdit( input );
-							}
-						}
-					}
-					else
-					{
-						if ( m_mouseState.rbutton )
-						{
-							if ( m_doubleClickingInside && input->time - m_doubleLClickStartWaitTime < m_doubleClickTimeOut )
-							{
-								MouseLDoubleClickInsideEdit( input );
-							}
-							else
-							{
-								m_doubleClickingInside = TRUE;
-								m_doubleLClickStartWaitTime = input->time;
-								MouseLGrabInsideEdit( input );
-							}
-							MouseRDropInsideEdit( input );
-						}
-						else
-						{
-							if ( m_doubleClickingInside && input->time - m_doubleLClickStartWaitTime < m_doubleClickTimeOut )
-							{
-								MouseLDoubleClickInsideEdit( input );
-							}
-							else
-							{
-								m_doubleClickingInside = TRUE;
-								m_doubleLClickStartWaitTime = input->time;
-								MouseLGrabInsideEdit( input );
-							}
-						}
-					}
-				}
+				ExecuteMouseFunction(region, event, BUTTON_LEFT, ACTION_DROP, area, group);
 			}
 			else
 			{
-				if ( m_mouseState.lbutton )
+				ExecuteMouseFunction(region, event, BUTTON_LEFT, ACTION_DROP, area, group);
+				if (m_mouseEvent.rbutton)
 				{
-					if ( input->rbutton )
-					{
-						if ( m_mouseState.rbutton )
-						{
-							MouseLDropInsideEdit( input );
-						}
-						else
-						{
-							if ( m_doubleClickingInside && input->time - m_doubleRClickStartWaitTime < m_doubleClickTimeOut )
-							{
-								MouseRDoubleClickInsideEdit( input );
-							}
-							else
-							{
-								m_doubleClickingInside = TRUE;
-								m_doubleRClickStartWaitTime = input->time;
-								MouseRGrabInsideEdit( input );
-							}
-							MouseLDropInsideEdit( input );
-						}
-					}
-					else
-					{
-						if ( m_mouseState.rbutton )
-						{
-							MouseLDropInsideEdit( input );
-							MouseRDropInsideEdit( input );
-						}
-						else
-						{
-							MouseLDropInsideEdit( input );
-						}
-					}
-				}
-				else
-				{
-					if ( input->rbutton )
-					{
-						if ( m_mouseState.rbutton )
-						{
-							m_noChange = TRUE;
-							MouseNoChange( input );
-						}
-						else
-						{
-							if ( m_doubleClickingInside && input->time - m_doubleRClickStartWaitTime < m_doubleClickTimeOut )
-							{
-								MouseRDoubleClickInsideEdit( input );
-							}
-							else
-							{
-								m_doubleClickingInside = TRUE;
-								m_doubleRClickStartWaitTime = input->time;
-								MouseRGrabInsideEdit( input );
-							}
-						}
-					}
-					else
-					{
-						if ( m_mouseState.rbutton )
-						{
-							MouseRDropInsideEdit( input );
-						}
-						else
-						{
-							m_noChange = TRUE;
-							MouseNoChange( input );
-						}
-					}
+					ExecuteMouseFunction(region, event, BUTTON_RIGHT, ACTION_DROP, area, group);
 				}
 			}
 		}
 		else
 		{
-			if ( input->lbutton )
+			if (event.rbutton)
 			{
-				if ( m_mouseState.lbutton )
+				if (m_mouseEvent.rbutton)
 				{
-					if ( input->rbutton )
-					{
-						if ( m_mouseState.rbutton )
-						{
-							m_noChange = TRUE;
-							MouseNoChange( input );
-						}
-						else
-						{
-							if ( !m_doubleClickingInside && input->time - m_doubleRClickStartWaitTime < m_doubleClickTimeOut )
-							{
-								MouseRDoubleClickOutsideEdit( input );
-							}
-							else
-							{
-								m_doubleClickingInside = FALSE;
-								m_doubleRClickStartWaitTime = input->time;
-								MouseRGrabOutsideEdit( input );
-							}
-						}
-					}
-					else
-					{
-						if ( m_mouseState.rbutton )
-						{
-							MouseRDropOutsideEdit( input );
-						}
-						else
-						{
-							m_noChange = TRUE;
-							MouseNoChange( input );
-						}
-					}
+					ExecuteNoChangeMouseFunction(region, event, area);
 				}
 				else
 				{
-					if ( input->rbutton )
-					{
-						if ( m_mouseState.rbutton )
-						{
-							if ( !m_doubleClickingInside && input->time - m_doubleLClickStartWaitTime < m_doubleClickTimeOut )
-							{
-								MouseLDoubleClickOutsideEdit( input );
-							}
-							else
-							{
-								m_doubleClickingInside = FALSE;
-								m_doubleLClickStartWaitTime = input->time;
-								MouseLGrabOutsideEdit( input );
-							}
-						}
-						else
-						{
-							if ( !m_doubleClickingInside && input->time - m_doubleLClickStartWaitTime < m_doubleClickTimeOut )
-							{
-								MouseLDoubleClickOutsideEdit( input );
-							}
-							else
-							{
-								m_doubleClickingInside = FALSE;
-								m_doubleLClickStartWaitTime = input->time;
-								MouseLGrabOutsideEdit( input );
-							}
-							if ( !m_doubleClickingInside && input->time - m_doubleRClickStartWaitTime < m_doubleClickTimeOut )
-							{
-								MouseRDoubleClickOutsideEdit( input );
-							}
-							else
-							{
-								m_doubleClickingInside = FALSE;
-								m_doubleRClickStartWaitTime = input->time;
-								MouseRGrabOutsideEdit( input );
-							}
-						}
-					}
-					else
-					{
-						if ( m_mouseState.rbutton )
-						{
-							if ( !m_doubleClickingInside && input->time - m_doubleLClickStartWaitTime < m_doubleClickTimeOut )
-							{
-								MouseLDoubleClickOutsideEdit( input );
-							}
-							else
-							{
-								m_doubleClickingInside = FALSE;
-								m_doubleLClickStartWaitTime = input->time;
-								MouseLGrabOutsideEdit( input );
-							}
-							MouseRDropOutsideEdit( input );
-						}
-						else
-						{
-							if ( !m_doubleClickingInside && input->time - m_doubleLClickStartWaitTime < m_doubleClickTimeOut )
-							{
-								MouseLDoubleClickOutsideEdit( input );
-							}
-							else
-							{
-								m_doubleClickingInside = FALSE;
-								m_doubleLClickStartWaitTime = input->time;
-								MouseLGrabOutsideEdit( input );
-							}
-						}
-					}
+					HandleClick(region, event, BUTTON_RIGHT, area, group);
 				}
 			}
 			else
 			{
-				if ( m_mouseState.lbutton )
+				if (m_mouseEvent.rbutton)
 				{
-					if ( input->rbutton )
-					{
-						if ( m_mouseState.rbutton )
-						{
-							MouseLDropOutsideEdit( input );
-						}
-						else
-						{
-							if ( !m_doubleClickingInside && input->time - m_doubleRClickStartWaitTime < m_doubleClickTimeOut )
-							{
-								MouseRDoubleClickOutsideEdit( input );
-							}
-							else
-							{
-								m_doubleClickingInside = FALSE;
-								m_doubleRClickStartWaitTime = input->time;
-								MouseRGrabOutsideEdit( input );
-							}
-							MouseLDropOutsideEdit( input );
-						}
-					}
-					else
-					{
-						if ( m_mouseState.rbutton )
-						{
-							MouseLDropOutsideEdit( input );
-							MouseRDropOutsideEdit( input );
-						}
-						else
-						{
-							MouseLDropOutsideEdit( input );
-						}
-					}
+					ExecuteMouseFunction(region, event, BUTTON_RIGHT, ACTION_DROP, area, group);
 				}
 				else
 				{
-					if ( input->rbutton )
-					{
-						if ( m_mouseState.rbutton )
-						{
-							m_noChange = TRUE;
-							MouseNoChange( input );
-						}
-						else
-						{
-							if ( !m_doubleClickingInside && input->time - m_doubleRClickStartWaitTime < m_doubleClickTimeOut )
-							{
-								MouseRDoubleClickOutsideEdit( input );
-							}
-							else
-							{
-								m_doubleClickingInside = FALSE;
-								m_doubleRClickStartWaitTime = input->time;
-								MouseRGrabOutsideEdit( input );
-							}
-						}
-					}
-					else
-					{
-						if ( m_mouseState.rbutton )
-						{
-							MouseRDropOutsideEdit( input );
-						}
-						else
-						{
-							m_noChange = TRUE;
-							MouseNoChange( input );
-						}
-					}
+					ExecuteNoChangeMouseFunction(region, event, area);
 				}
 			}
 		}
 	}
+}
+
+void MouseDispatcher::Dispatch(aui_Region & region, aui_MouseEvent & event, bool handleIt, bool edit)
+{
+	// Initialize mouse-event with first received event
+	if (m_mouseEvent.time == 0) {
+		m_mouseEvent = event;
+	}
+
+	uint32 group = edit ? GROUP_EDIT : GROUP_NORMAL;
+	if (group == GROUP_NORMAL)
+	{
+		if (!m_noChange) {
+			m_noChangeTime = event.time;
+		} else {
+			m_noChange = false;
+		}
+	}
+
+	if (event.position.x != m_mouseEvent.position.x
+		|| event.position.y != m_mouseEvent.position.y
+		|| region.X() != m_xLastTime
+		|| region.Y() != m_yLastTime)
+	{
+		bool wasMouseInside = m_isMouseInside;
+
+		m_isMouseInside = region.IsInside(&event.position);
+		if (handleIt)
+		{
+			uint32 area = m_isMouseInside
+					? (wasMouseInside ? AREA_INSIDE : AREA_OVER)
+					: (wasMouseInside ? AREA_AWAY : AREA_OUTSIDE);
+			HandleMouseMoved(region, event, area, group);
+		}
+	}
+	else
+	{
+		if (handleIt)
+		{
+			HandleMouseStatic(region, event, m_isMouseInside ? AREA_INSIDE : AREA_OUTSIDE, group);
+		}
+	}
+	memcpy(&m_mouseEvent, &event, sizeof(aui_MouseEvent));
+	m_xLastTime = region.X();
+	m_yLastTime = region.Y();
+}
+
+MouseDispatcher * aui_Region::createMouseDispatcher() {
+	return new MouseDispatcher(
+		&aui_Region::MouseNoChangeInside,
+		&aui_Region::MouseNoChangeOutside,
+		&aui_Region::MouseHoover,
+		&aui_Region::MouseMoveOver,
+		&aui_Region::MouseNoOperation, // No operation
+		&aui_Region::MouseMoveAway,
+		&aui_Region::MouseNoOperation, // No operation
+		&aui_Region::MouseMoveInside,
+		&aui_Region::MouseNoOperation, // No operation
+		&aui_Region::MouseMoveOutside,
+		&aui_Region::MouseNoOperation, // No operation
+		&aui_Region::MouseLDragOver,
+		&aui_Region::MouseLDragEditMode, // General LDrag-edit-mode
+		&aui_Region::MouseLDragAway,
+		&aui_Region::MouseLDragEditMode, // General LDrag-edit-mode
+		&aui_Region::MouseLDragInside,
+		&aui_Region::MouseLDragEditMode, // General LDrag-edit-mode
+		&aui_Region::MouseLDragOutside,
+		&aui_Region::MouseLDragEditMode, // General LDrag-edit-mode
+		&aui_Region::MouseLGrabInside,
+		&aui_Region::MouseLGrabEditMode, // General LGrab-edit-mode
+		&aui_Region::MouseLGrabOutside,
+		&aui_Region::MouseLGrabEditMode, // General LGrab-edit-mode
+		&aui_Region::MouseLDropInside,
+		&aui_Region::MouseLDropEditMode, // General LDrop-edit-mode
+		&aui_Region::MouseLDropOutside,
+		&aui_Region::MouseLDropEditMode, // General LDrop-edit-mode
+		&aui_Region::MouseLDoubleClickInside,
+		&aui_Region::MouseNoOperation, // No operation
+		&aui_Region::MouseLDoubleClickOutside,
+		&aui_Region::MouseNoOperation, // No operation
+		&aui_Region::MouseRDragOver,
+		&aui_Region::MouseNoOperation, // No operation
+		&aui_Region::MouseRDragAway,
+		&aui_Region::MouseNoOperation, // No operation
+		&aui_Region::MouseRDragInside,
+		&aui_Region::MouseNoOperation, // No operation
+		&aui_Region::MouseRDragOutside,
+		&aui_Region::MouseNoOperation, // No operation
+		&aui_Region::MouseRGrabInside,
+		&aui_Region::MouseRGrabInsideEdit,
+		&aui_Region::MouseRGrabOutside,
+		&aui_Region::MouseRGrabOutsideEdit,
+		&aui_Region::MouseRDropInside,
+		&aui_Region::MouseRDropInsideEdit,
+		&aui_Region::MouseRDropOutside,
+		&aui_Region::MouseRDropOutsideEdit,
+		&aui_Region::MouseRDoubleClickInside,
+		&aui_Region::MouseNoOperation, // No operation
+		&aui_Region::MouseRDoubleClickOutside,
+		&aui_Region::MouseNoOperation); // No operation
+}
+
+void aui_Region::MouseDispatch(MouseDispatcher & mouseDispatcher, aui_MouseEvent & event, bool handleIt, bool edit)
+{
+	mouseDispatcher.Dispatch(*this, event, handleIt, edit);
 }

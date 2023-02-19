@@ -138,8 +138,8 @@ public:
 
     virtual void	MouseLGrabInside(aui_MouseEvent * data);
     virtual void	MouseRGrabInside(aui_MouseEvent * data);
-    virtual void	MouseNoChange(aui_MouseEvent * data);
     virtual void	MouseMoveInside(aui_MouseEvent * data);
+	virtual void	MouseHoover(aui_MouseEvent * data);
 
 	virtual AUI_ERRCODE			Idle( void );
 

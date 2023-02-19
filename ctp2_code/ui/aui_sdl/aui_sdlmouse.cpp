@@ -153,6 +153,7 @@ sint32 aui_SDLMouse::ManipulateInputs(aui_MouseEvent *data, BOOL add) {
 		const int TICKS_PER_FRAME = 1000 / FRAMES_PER_SECOND;
 		if (currentFrameTick > m_lastFrameTick + TICKS_PER_FRAME) {
 			m_lastFrameTick = currentFrameTick;
+			// copy last event with new timestamp
 			data[0] = m_data;
 			data[0].time = currentFrameTick;
 			numberEvents = 1;

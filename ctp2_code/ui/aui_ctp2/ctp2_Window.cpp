@@ -147,12 +147,6 @@ void ctp2_Window::MouseLGrabOutside( aui_MouseEvent *mouseData )
 	}
 }
 
-void    ctp2_Window::ResetCurrentMouseState()
-{
-	m_mouseState = *g_ui->TheMouse()->GetLatestMouseEvent();
-}
-
-
 AUI_ERRCODE ctp2_Window::DoneInstantiatingThis(const MBCHAR *ldlBlock)
 {
 	ctp2_Static *background = (ctp2_Static *)aui_Ldl::GetObject((MBCHAR *)ldlBlock, "Background");

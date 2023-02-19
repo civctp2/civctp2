@@ -87,8 +87,6 @@ public:
 	void	SetBevelMode(bool on_or_off) { m_bevel=on_or_off;};
 
 
-	void    ResetCurrentMouseState();
-
 	virtual AUI_ERRCODE DoneInstantiatingThis(const MBCHAR *ldlBlock);
 
 	virtual AUI_ERRCODE Move(sint32 x, sint32 y);
