@@ -35,10 +35,6 @@
 
 class aui_Region;
 
-#define k_REGION_ATTRIBUTE_HIDDEN		0x00000001
-#define k_REGION_ATTRIBUTE_DISABLED		0x00000002
-#define k_REGION_ATTRIBUTE_DRAGDROP		0x00000004
-
 #define k_AUI_REGION_DRAWFLAG_UPDATE					0x00000001
 #define k_AUI_REGION_DRAWFLAG_MOUSEMOVEOVER				0x00000002
 #define k_AUI_REGION_DRAWFLAG_MOUSEMOVEAWAY				0x00000004
@@ -133,7 +129,6 @@ public:
 	}
 
 	uint32	&Id( void ) { return m_id; }
-	uint32	Attributes( void ) const { return m_attributes; }
 
 	virtual AUI_ERRCODE	Move( sint32 x, sint32 y );
 	virtual AUI_ERRCODE Offset( sint32 dx, sint32 dy );
@@ -176,12 +171,15 @@ public:
 
 	BOOL IsDescendent( aui_Region *region );
 
-	BOOL IsHidden( void ) const
-		{ return m_attributes & k_REGION_ATTRIBUTE_HIDDEN; }
-	BOOL IsDisabled( void ) const
-		{ return m_attributes & k_REGION_ATTRIBUTE_DISABLED; }
-	BOOL IsDragDrop( void ) const
-		{ return m_attributes & k_REGION_ATTRIBUTE_DRAGDROP; }
+	bool IsHidden() const {
+		return m_attributes.IsSet(RegionAttribute::Hidden);
+	}
+	bool IsDisabled() const {
+		return m_attributes.IsSet(RegionAttribute::Disabled);
+	}
+	bool IsDragDrop() const {
+		return m_attributes.IsSet(RegionAttribute::DragDrop);
+	}
 
 	AUI_ERRCODE	HandleMouseEvent( aui_MouseEvent *input, BOOL handleIt = TRUE );
 	void MouseDispatch( aui_MouseEvent *input, BOOL handleIt );
@@ -267,6 +265,37 @@ public:
 	{ m_hideCallback = callback; m_hideCallbackData = userData; }
 
 protected:
+	class RegionAttribute
+	{
+	private:
+		constexpr static uint32 First    = 0x00000001;
+	public:
+		constexpr static uint32 Hidden   = First << 0;
+		constexpr static uint32 Disabled = First << 1;
+		constexpr static uint32 DragDrop = First << 2;
+		constexpr static uint32 Last() { return DragDrop; }
+	};
+
+	class Attributes
+	{
+	public:
+		Attributes() : m_attributes(0) {}
+
+		inline bool IsSet(uint32 attribute) const {
+			return m_attributes & attribute;
+		}
+		inline void Set(uint32 attribute) {
+			m_attributes |= attribute;
+		}
+		inline void Reset(uint32 attribute) {
+			m_attributes &= ~attribute;
+		}
+	private:
+		uint32 m_attributes;
+	};
+	Attributes& GetAttributes() { return m_attributes; }
+	const Attributes& GetAttributes() const { return m_attributes; }
+
 	aui_Region()
     :
         aui_Base                    (),
@@ -276,7 +305,6 @@ protected:
         m_width                     (0),
         m_height                    (0),
         m_dim                       (new aui_Dimension()),
-        m_attributes                (0),
         m_parent                    (NULL),
         m_childList                 (new tech_WLList<aui_Region *>()),
         m_childListChanged          (false),
@@ -302,7 +330,8 @@ protected:
         m_showCallback              (NULL),
         m_hideCallback              (NULL),
         m_showCallbackData          (NULL),
-        m_hideCallbackData          (NULL)
+        m_hideCallbackData          (NULL),
+		m_attributes                ()
     {
         InitCommon();
     };
@@ -346,8 +375,6 @@ protected:
 	sint32		m_height;
 
 	aui_Dimension	*m_dim;
-
-	uint32		m_attributes;
 
 	aui_Region	*m_parent;
 	tech_WLList<aui_Region *> *m_childList;
@@ -472,6 +499,8 @@ private:
 	static aui_Region *                 s_editChild;
 	static uint32	        	        s_editModeStatus;
 	static tech_WLList<aui_Undo *> *    s_undoList;
+
+	Attributes m_attributes;
 };
 
 #endif

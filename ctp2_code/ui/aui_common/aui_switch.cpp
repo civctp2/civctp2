@@ -99,10 +99,10 @@ sint32 aui_Switch::SetState( sint32 state )
 
 		if ( m_numStates == 2 ) m_state = 1;
 
-		m_attributes |= k_CONTROL_ATTRIBUTE_ON;
+		GetAttributes().Set(ControlAttribute::On);
 	}
 	else
-		m_attributes &= ~k_CONTROL_ATTRIBUTE_ON;
+		GetAttributes().Reset(ControlAttribute::On);
 
 	m_state = Mod(m_state,m_numStates);
 
@@ -139,9 +139,9 @@ sint32 aui_Switch::SetNumStates( sint32 numStates )
 AUI_ERRCODE aui_Switch::ResetThis( void )
 {
 	if ( GetState() )
-		m_attributes |= k_CONTROL_ATTRIBUTE_ON;
+		GetAttributes().Set(ControlAttribute::On);
 	else
-		m_attributes &= ~k_CONTROL_ATTRIBUTE_DOWN;
+		GetAttributes().Reset(ControlAttribute::Down);
 
 	return aui_Control::ResetThis();
 }
@@ -222,8 +222,10 @@ void aui_Switch::MouseLDragOver( aui_MouseEvent *mouseData )
 			if ( m_mouseCode == AUI_ERRCODE_UNHANDLED )
 				m_mouseCode = AUI_ERRCODE_HANDLED;
 
-			if ( !m_state ) m_attributes |= k_CONTROL_ATTRIBUTE_ON;
-			m_attributes |= k_CONTROL_ATTRIBUTE_ACTIVE;
+			if ( !m_state ) {
+				GetAttributes().Set(ControlAttribute::On);
+			}
+			GetAttributes().Set(ControlAttribute::Active);
 			m_draw |= m_drawMask & k_AUI_REGION_DRAWFLAG_MOUSELDRAGOVER;
 
 			if ( m_ActionFunc )
@@ -255,8 +257,10 @@ void aui_Switch::MouseLDragAway( aui_MouseEvent *mouseData )
 		if ( m_mouseCode == AUI_ERRCODE_UNHANDLED )
 			m_mouseCode = AUI_ERRCODE_HANDLED;
 
-		if ( !m_state ) m_attributes &= ~k_CONTROL_ATTRIBUTE_ON;
-		m_attributes &= ~k_CONTROL_ATTRIBUTE_ACTIVE;
+		if ( !m_state ) {
+			GetAttributes().Reset(ControlAttribute::On);
+		}
+		GetAttributes().Reset(ControlAttribute::Active);
 		m_draw |= m_drawMask & k_AUI_REGION_DRAWFLAG_MOUSELDRAGAWAY;
 
 		if ( m_ActionFunc )
@@ -293,8 +297,7 @@ void aui_Switch::MouseLGrabInside( aui_MouseEvent *mouseData )
 
 		m_mouseCode = AUI_ERRCODE_HANDLEDEXCLUSIVE;
 
-		m_attributes |= k_CONTROL_ATTRIBUTE_ON;
-		m_attributes |= k_CONTROL_ATTRIBUTE_ACTIVE;
+		GetAttributes().Set(ControlAttribute::On | ControlAttribute::Active);
 		m_draw |= m_drawMask & k_AUI_REGION_DRAWFLAG_MOUSELGRABINSIDE;
 
 		if ( m_ActionFunc )
@@ -330,7 +333,7 @@ void aui_Switch::MouseLDropInside( aui_MouseEvent *mouseData )
 
 			if ( !HandleGameSpecificLeftClick( this ) )
 			SetState( Mod(m_state+1,m_numStates) );
-			m_attributes |= k_CONTROL_ATTRIBUTE_ACTIVE;
+			GetAttributes().Set(ControlAttribute::Active);
 
 			m_draw |= m_drawMask & k_AUI_REGION_DRAWFLAG_MOUSELDROPINSIDE;
 		}
@@ -341,7 +344,7 @@ void aui_Switch::MouseLDropInside( aui_MouseEvent *mouseData )
 			if ( m_mouseCode == AUI_ERRCODE_UNHANDLED )
 				m_mouseCode = AUI_ERRCODE_HANDLED;
 
-			m_attributes |= k_CONTROL_ATTRIBUTE_ACTIVE;
+			GetAttributes().Set(ControlAttribute::Active);
 			m_draw |= m_drawMask & k_AUI_REGION_DRAWFLAG_MOUSELDROPINSIDE;
 
 			if ( m_ActionFunc )

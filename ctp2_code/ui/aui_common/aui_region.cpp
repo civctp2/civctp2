@@ -26,7 +26,7 @@
 //
 // Modifications from the original Activision code:
 //
-// - Initialized local variables. (Sep 9th 2005 Martin Gühmann)
+// - Initialized local variables. (Sep 9th 2005 Martin Gï¿½hmann)
 //
 //----------------------------------------------------------------------------
 
@@ -75,7 +75,6 @@ aui_Region::aui_Region
     m_width                     (0),
     m_height                    (0),
     m_dim                       (new aui_Dimension()),
-    m_attributes                (0),
     m_parent                    (NULL),
     m_childList                 (new tech_WLList<aui_Region *>()),
     m_childListChanged          (false),
@@ -101,7 +100,8 @@ aui_Region::aui_Region
     m_showCallback              (NULL),
     m_hideCallback              (NULL),
     m_showCallbackData          (NULL),
-    m_hideCallbackData          (NULL)
+    m_hideCallbackData          (NULL),
+	m_attributes                ()
 {
     m_editGrabPoint.x = -1;
     m_editGrabPoint.y = -1;
@@ -126,7 +126,6 @@ aui_Region::aui_Region
     m_width                     (width),
     m_height                    (height),
     m_dim                       (new aui_Dimension()),
-    m_attributes                (0),
     m_parent                    (NULL),
     m_childList                 (new tech_WLList<aui_Region *>()),
     m_childListChanged          (false),
@@ -152,7 +151,8 @@ aui_Region::aui_Region
     m_showCallback              (NULL),
     m_hideCallback              (NULL),
     m_showCallbackData          (NULL),
-    m_hideCallbackData          (NULL)
+    m_hideCallbackData          (NULL),
+    m_attributes                ()
 {
     InitCommon();
 
@@ -591,8 +591,8 @@ AUI_ERRCODE aui_Region::ShowThis( void )
 {
 	if ( IsHidden() )
 	{
+		GetAttributes().Reset(RegionAttribute::Hidden);
 		m_draw |= m_drawMask & k_AUI_REGION_DRAWFLAG_UPDATE;
-		m_attributes &= ~k_REGION_ATTRIBUTE_HIDDEN;
 
 		return ResetThis();
 	}
@@ -604,7 +604,7 @@ AUI_ERRCODE aui_Region::HideThis( void )
 {
 	if ( !IsHidden() )
 	{
-		m_attributes |= k_REGION_ATTRIBUTE_HIDDEN;
+		GetAttributes().Set(RegionAttribute::Hidden);
 
 		if ( m_parent ) m_parent->ShouldDraw();
 
@@ -646,7 +646,7 @@ AUI_ERRCODE aui_Region::Enable( BOOL enable )
 	{
 		if ( IsDisabled() )
 		{
-			m_attributes &= ~k_REGION_ATTRIBUTE_DISABLED;
+			GetAttributes().Reset(RegionAttribute::Disabled);
 			changed = TRUE;
 		}
 	}
@@ -654,7 +654,7 @@ AUI_ERRCODE aui_Region::Enable( BOOL enable )
 	{
 		if ( !IsDisabled() )
 		{
-			m_attributes |= k_REGION_ATTRIBUTE_DISABLED;
+			GetAttributes().Set(RegionAttribute::Disabled);
 			changed = TRUE;
 		}
 	}
@@ -706,9 +706,9 @@ AUI_ERRCODE aui_Region::ResetThis( void )
 AUI_ERRCODE aui_Region::EnableDragDrop( BOOL enable )
 {
 	if ( enable )
-		m_attributes |= k_REGION_ATTRIBUTE_DRAGDROP;
+		GetAttributes().Set(RegionAttribute::DragDrop);
 	else
-		m_attributes &= ~k_REGION_ATTRIBUTE_DRAGDROP;
+		GetAttributes().Reset(RegionAttribute::DragDrop);
 
 	return AUI_ERRCODE_OK;
 }

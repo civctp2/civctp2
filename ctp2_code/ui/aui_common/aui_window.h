@@ -52,16 +52,6 @@ enum AUI_WINDOW_TYPE
 	AUI_WINDOW_TYPE_LAST
 };
 
-#define k_WINDOW_ATTRIBUTE_HIDDEN			k_REGION_ATTRIBUTE_HIDDEN
-#define k_WINDOW_ATTRIBUTE_DISABLED			k_REGION_ATTRIBUTE_DISABLED
-#define k_WINDOW_ATTRIBUTE_DRAGDROP			k_REGION_ATTRIBUTE_DRAGDROP
-#define k_WINDOW_ATTRIBUTE_TRANSPARENT		0x00000008
-#define k_WINDOW_ATTRIBUTE_TRANSLUCENT		0x00000010
-#define k_WINDOW_ATTRIBUTE_STRONGLYMODAL	0x00000020
-#define k_WINDOW_ATTRIBUTE_WEAKLYMODAL		0x00000040
-#define k_WINDOW_ATTRIBUTE_DRAGGABLE		0x00000080
-#define k_WINDOW_ATTRIBUTE_DYNAMIC 	   	   	0x00000100
-
 #include "aui_region.h"
 #include "aui_dirtylist.h"
 #include "aui_mouse.h"
@@ -101,6 +91,19 @@ public:
 	static uint32 m_windowClassId;
 
 protected:
+	class WindowAttribute
+	{
+	private:
+		constexpr static uint32 k_First = RegionAttribute::Last();
+	public:
+		constexpr static uint32 Transparent   = k_First << 0;
+		constexpr static uint32 Translucent   = k_First << 1;
+		constexpr static uint32 StronglyModal = k_First << 2;
+		constexpr static uint32 WeaklyModal   = k_First << 3;
+		constexpr static uint32 Draggable     = k_First << 4;
+		constexpr static uint32 Dynamic       = k_First << 5;
+		constexpr static uint32 Last() { return Dynamic; }
+	};
 	aui_Window()
     :   aui_Region          (),
 	    m_surface           (NULL),
@@ -152,29 +155,37 @@ public:
 
 	BOOL	IsDirty( void ) const { return !m_dirtyList->IsEmpty(); }
 
-	BOOL IsOpaque( void ) const
-		{ return !IsTransparent() && !IsTranslucent(); }
-	BOOL IsTransparent( void ) const
-		{ return m_attributes & k_WINDOW_ATTRIBUTE_TRANSPARENT; }
-	BOOL IsTranslucent( void ) const
-		{ return m_attributes & k_WINDOW_ATTRIBUTE_TRANSLUCENT; }
-	BOOL IsModal( void ) const
-		{ return IsStronglyModal() || IsWeaklyModal(); }
-	BOOL IsStronglyModal( void ) const
-		{ return m_attributes & k_WINDOW_ATTRIBUTE_STRONGLYMODAL; }
-	BOOL IsWeaklyModal( void ) const
-		{ return m_attributes & k_WINDOW_ATTRIBUTE_WEAKLYMODAL; }
-	BOOL IsDraggable( void ) const
-		{ return m_attributes & k_WINDOW_ATTRIBUTE_DRAGGABLE; }
-	BOOL IsDynamic( void ) const
-		{ return m_attributes & k_WINDOW_ATTRIBUTE_DYNAMIC; }
+	bool IsOpaque() const {
+		return !IsTransparent() && !IsTranslucent();
+	}
+	bool IsTransparent() const {
+		return GetAttributes().IsSet(WindowAttribute::Transparent);
+	}
+	bool IsTranslucent() const {
+		return GetAttributes().IsSet(WindowAttribute::Translucent);
+	}
+	bool IsModal() const {
+		return IsStronglyModal() || IsWeaklyModal();
+	}
+	bool IsStronglyModal() const {
+		return GetAttributes().IsSet(WindowAttribute::StronglyModal);
+	}
+	bool IsWeaklyModal() const {
+		return GetAttributes().IsSet(WindowAttribute::WeaklyModal);
+	}
+	bool IsDraggable() const {
+		return GetAttributes().IsSet(WindowAttribute::Draggable);
+	}
+	bool IsDynamic() const {
+		return GetAttributes().IsSet(WindowAttribute::Dynamic);
+	}
 
-	uint32 SetTransparent( BOOL transparent, BOOL transparentControls = TRUE );  //FALSE );
-	uint32 SetTranslucent( BOOL translucent, BOOL translucentControls = FALSE );
-	uint32 SetStronglyModal( BOOL stronglyModal );
-	uint32 SetWeaklyModal( BOOL weaklyModal );
-	uint32 SetDraggable( BOOL draggable );
-	uint32 SetDynamic( BOOL dynamic );
+	void SetTransparent(bool transparent, bool transparentControls = true);
+	void SetTranslucent(bool translucent, bool translucentControls = false);
+	void SetStronglyModal(bool stronglyModal);
+	void SetWeaklyModal(bool weaklyModal);
+	void SetDraggable(bool draggable);
+	void SetDynamic(bool dynamic);
 
 	aui_Region *GrabRegion( void ) const { return m_grabRegion; }
 

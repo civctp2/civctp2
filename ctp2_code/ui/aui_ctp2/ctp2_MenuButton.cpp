@@ -52,8 +52,7 @@ void ctp2_MenuButton::MouseLDragAway( aui_MouseEvent *mouseData )
 		if ( m_mouseCode == AUI_ERRCODE_UNHANDLED )
 			m_mouseCode = AUI_ERRCODE_HANDLED;
 
-		m_attributes &= ~k_CONTROL_ATTRIBUTE_DOWN;
-		m_attributes &= ~k_CONTROL_ATTRIBUTE_ACTIVE;
+		GetAttributes().Reset(ControlAttribute::Down | ControlAttribute::Active);
 		m_draw |= m_drawMask & k_AUI_REGION_DRAWFLAG_MOUSELDRAGAWAY;
 
 		m_isRepeating = FALSE;

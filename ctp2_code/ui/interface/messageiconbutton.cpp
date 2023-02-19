@@ -128,8 +128,7 @@ void MessageIconButton::MouseRGrabInside( aui_MouseEvent *mouseData )
 
 		m_mouseCode = AUI_ERRCODE_HANDLEDEXCLUSIVE;
 
-		m_attributes |= k_CONTROL_ATTRIBUTE_DOWN;
-		m_attributes |= k_CONTROL_ATTRIBUTE_ACTIVE;
+		GetAttributes().Set(ControlAttribute::Down | ControlAttribute::Active);
 
 		m_isRepeating = TRUE;
 		m_repeatCount = 0;
@@ -156,12 +155,7 @@ void MessageIconButton::MouseRDropInside( aui_MouseEvent *mouseData )
 
 			m_mouseCode = AUI_ERRCODE_HANDLEDEXCLUSIVE;
 
-			m_attributes &= ~k_CONTROL_ATTRIBUTE_DOWN;
-
-
-
-
-			m_attributes &= ~k_CONTROL_ATTRIBUTE_ACTIVE;
+			GetAttributes().Reset(ControlAttribute::Down | ControlAttribute::Active);
 
 			m_isRepeating = FALSE;
 

@@ -24,7 +24,7 @@
 //
 // Modifications from the original Activision code:
 //
-// - Initialized local variables. (Sep 9th 2005 Martin Gühmann)
+// - Initialized local variables. (Sep 9th 2005 Martin GÃ¼hmann)
 //
 //----------------------------------------------------------------------------
 
@@ -412,120 +412,89 @@ AUI_ERRCODE aui_Window::AddDirtyRect( sint32 left, sint32 top, sint32 right, sin
 	return AUI_ERRCODE_OK;
 }
 
-
-uint32 aui_Window::SetTransparent( BOOL transparent, BOOL opaqueControls )
+void aui_Window::SetTransparent(bool transparent, bool opaqueControls)
 {
-	uint32 oldAttributes = m_attributes;
-
-	if ( transparent )
+	if (transparent)
 	{
-		m_attributes |= k_WINDOW_ATTRIBUTE_TRANSPARENT;
+		GetAttributes().Set(WindowAttribute::Transparent);
 
-		if ( !IsDynamic() || !IsHidden() )
+		if (!IsDynamic() || !IsHidden())
 		{
-			if ( !m_surface ) CreateSurface();
-
+			if (!m_surface) {
+				CreateSurface();
+			}
 		}
 	}
 	else
 	{
-		m_attributes &= ~k_WINDOW_ATTRIBUTE_TRANSPARENT;
-
+		GetAttributes().Reset(WindowAttribute::Transparent);
 	}
 
 	m_opaqueControls = opaqueControls;
-
-	m_dirtyList->AddRect(
-		0,
-		0,
-		m_width,
-		m_height );
-
-	return oldAttributes;
+	m_dirtyList->AddRect(0, 0, m_width, m_height);
 }
 
-uint32 aui_Window::SetTranslucent( BOOL translucent, BOOL opaqueControls )
+void aui_Window::SetTranslucent(bool translucent, bool opaqueControls)
 {
-	uint32 oldAttributes = m_attributes;
-
-	if ( translucent )
+	if (translucent)
 	{
-		m_attributes |= k_WINDOW_ATTRIBUTE_TRANSLUCENT;
+		GetAttributes().Set(WindowAttribute::Translucent);
 
-		if ( !IsDynamic() || !IsHidden() )
+		if (!IsDynamic() || !IsHidden())
 		{
-			if ( !m_surface ) CreateSurface();
+			if (!m_surface) {
+				CreateSurface();
+			}
 		}
 	}
 	else
 	{
-		m_attributes &= ~k_WINDOW_ATTRIBUTE_TRANSLUCENT;
+		GetAttributes().Reset(WindowAttribute::Translucent);
 	}
 
 	m_opaqueControls = opaqueControls;
-
-	m_dirtyList->AddRect(
-		0,
-		0,
-		m_width,
-		m_height );
-
-	return oldAttributes;
+	m_dirtyList->AddRect(0, 0, m_width, m_height);
 }
 
-uint32 aui_Window::SetStronglyModal( BOOL stronglyModal )
+void aui_Window::SetStronglyModal(bool stronglyModal)
 {
-	uint32 oldAttributes = m_attributes;
-
-	if ( stronglyModal )
+	if (stronglyModal)
 	{
-		m_attributes |= k_WINDOW_ATTRIBUTE_STRONGLYMODAL;
-
-		m_attributes &= ~k_WINDOW_ATTRIBUTE_WEAKLYMODAL;
+		GetAttributes().Set(WindowAttribute::StronglyModal);
+		GetAttributes().Reset(WindowAttribute::WeaklyModal);
 	}
-	else
-		m_attributes &= ~k_WINDOW_ATTRIBUTE_STRONGLYMODAL;
-
-	return oldAttributes;
-}
-
-uint32 aui_Window::SetWeaklyModal( BOOL weaklyModal )
-{
-	uint32 oldAttributes = m_attributes;
-
-	if ( weaklyModal )
-	{
-		m_attributes |= k_WINDOW_ATTRIBUTE_WEAKLYMODAL;
-
-		m_attributes &= ~k_WINDOW_ATTRIBUTE_STRONGLYMODAL;
+	else {
+		GetAttributes().Reset(WindowAttribute::StronglyModal);
 	}
-	else
-		m_attributes &= ~k_WINDOW_ATTRIBUTE_WEAKLYMODAL;
-
-	return oldAttributes;
 }
 
-
-uint32 aui_Window::SetDraggable( BOOL draggable )
+void aui_Window::SetWeaklyModal(bool weaklyModal)
 {
-	uint32 oldAttributes = m_attributes;
-
-	if ( draggable )
-		m_attributes |= k_WINDOW_ATTRIBUTE_DRAGGABLE;
-	else
-		m_attributes &= ~k_WINDOW_ATTRIBUTE_DRAGGABLE;
-
-	return oldAttributes;
-}
-
-
-uint32 aui_Window::SetDynamic( BOOL dynamic )
-{
-	uint32 oldAttributes = m_attributes;
-
-	if ( dynamic )
+	if (weaklyModal)
 	{
-		m_attributes |= k_WINDOW_ATTRIBUTE_DYNAMIC;
+		GetAttributes().Set(WindowAttribute::WeaklyModal);
+		GetAttributes().Reset(WindowAttribute::StronglyModal);
+	}
+	else {
+		GetAttributes().Reset(WindowAttribute::WeaklyModal);
+	}
+}
+
+void aui_Window::SetDraggable(bool draggable)
+{
+	if (draggable) {
+		GetAttributes().Set(WindowAttribute::Draggable);
+	}
+	else {
+		GetAttributes().Reset(WindowAttribute::Draggable);
+	}
+}
+
+void aui_Window::SetDynamic(bool dynamic)
+{
+	if (dynamic)
+	{
+		GetAttributes().Set(WindowAttribute::Dynamic);
 		if (IsHidden())
 		{
 			delete m_surface;
@@ -534,11 +503,9 @@ uint32 aui_Window::SetDynamic( BOOL dynamic )
 	}
 	else
 	{
-		m_attributes &= ~k_WINDOW_ATTRIBUTE_DYNAMIC;
+		GetAttributes().Reset(WindowAttribute::Dynamic);
 		MakeSureSurfaceIsValid();
 	}
-
-	return oldAttributes;
 }
 
 AUI_ERRCODE aui_Window::Draw( aui_Surface *surface, sint32 x, sint32 y )

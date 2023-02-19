@@ -74,8 +74,7 @@ void aui_Radio::MouseLDropInside( aui_MouseEvent *mouseData )
 			else
 				SetState( 1 );
 
-			m_attributes |= k_CONTROL_ATTRIBUTE_ACTIVE;
-
+			GetAttributes().Set(ControlAttribute::Active);
 			m_draw |= m_drawMask & k_AUI_REGION_DRAWFLAG_MOUSELDROPINSIDE;
 		}
 		else
@@ -85,7 +84,7 @@ void aui_Radio::MouseLDropInside( aui_MouseEvent *mouseData )
 			if ( m_mouseCode == AUI_ERRCODE_UNHANDLED )
 				m_mouseCode = AUI_ERRCODE_HANDLED;
 
-			m_attributes |= k_CONTROL_ATTRIBUTE_ACTIVE;
+			GetAttributes().Set(ControlAttribute::Active);
 			m_draw |= m_drawMask & k_AUI_REGION_DRAWFLAG_MOUSELDROPINSIDE;
 
 			if ( m_ActionFunc )
