@@ -2246,36 +2246,35 @@ void EditQueue::MultiActionButton(aui_Control * control, uint32 action, uint32 d
 				break;
 		}
 
+		bool goodItem;
 		PointerList<EditItemInfo>::Walker customWalk(&s_editQueue->m_customBuildList);
 		while(customWalk.IsValid())
 		{
 			switch(customWalk.GetObj()->m_category)
 			{
 				case k_GAME_OBJ_TYPE_UNIT:
-					if (!walkCityData->CanBuildUnit(customWalk.GetObj()->m_type)) {
-						continue;
-					}
+					goodItem = walkCityData->CanBuildUnit(customWalk.GetObj()->m_type);
 					break;
 				case k_GAME_OBJ_TYPE_IMPROVEMENT:
-					if (!walkCityData->CanBuildBuilding(customWalk.GetObj()->m_type)) {
-						continue;
-					}
+					goodItem = walkCityData->CanBuildBuilding(customWalk.GetObj()->m_type);
 					break;
 				case k_GAME_OBJ_TYPE_WONDER:
-					if (!walkCityData->CanBuildWonder(customWalk.GetObj()->m_type)) {
-						continue;
-					}
+					goodItem = walkCityData->CanBuildWonder(customWalk.GetObj()->m_type);
 					break;
 				case k_GAME_OBJ_TYPE_INFRASTRUCTURE:
-					if (!g_player[g_selected_item->GetVisiblePlayer()]->CanBuildInfrastructure()) {
-						continue;
-					}
+					goodItem = g_player[g_selected_item->GetVisiblePlayer()]->CanBuildInfrastructure();
 					break;
 				case k_GAME_OBJ_TYPE_CAPITALIZATION:
-					if (!g_player[g_selected_item->GetVisiblePlayer()]->CanBuildCapitalization()) {
-						continue;
-					}
+					goodItem = g_player[g_selected_item->GetVisiblePlayer()]->CanBuildCapitalization();
 					break;
+				default:
+					goodItem = false;
+					break;
+			}
+
+			if (!goodItem) {
+				customWalk.Next();
+				continue;
 			}
 
 			// Check first item only.
