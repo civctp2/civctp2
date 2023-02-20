@@ -55,7 +55,8 @@ ctp_ctp2_LDADD = \
 	sound/libsound.la \
 	$(CTP2_LIBANET_LDADD) \
 	$(CTP2_LIBOSNOWIN32_LDADD) \
-	$(CTP2_LIBTTF_LDADD)
+	$(CTP2_LIBTTF_LDADD) \
+	$(CTP2_LDADD)
 
 ctp_ctp2_LDFLAGS = \
 	$(CTP2_LDFLAGS)
