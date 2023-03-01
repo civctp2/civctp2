@@ -333,7 +333,8 @@ protected:
 
 private:
 	sint32 CalculateRelativeY(sint32 y) const {
-		return y - m_y - (m_pane ? m_pane->Y() : 0);
+		sint32 relativeY = y - m_y - (m_pane ? m_pane->Y() : 0);
+		return (relativeY > 0 ? relativeY : 0);
 	}
 
 	sint32 CalculateItemIndexByRelativeY(sint32 relativeY) const {
