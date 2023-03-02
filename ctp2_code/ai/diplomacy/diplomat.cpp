@@ -1129,6 +1129,14 @@ void Diplomat::LogViolationEvent(const PLAYER_INDEX foreignerId, const PROPOSAL_
 			so->AddCivilisation(m_playerId) ;
 			so->AddRecipient(foreignerId);
 			g_slicEngine->Execute(so) ;
+
+			//// inform the other party, taken from AgreementData.cpp, see https://github.com/civctp2/civctp2/issues/162
+			char objName[256];
+			sprintf(objName, "%sVictim", trust_message);
+			SlicObject *so2 = new SlicObject(objName);
+			so2->AddCivilisation(foreignerId);
+			so2->AddRecipient(m_playerId);
+			g_slicEngine->Execute(so2) ;
 		}
 
 		const DiplomacyProposalRecord * rec = g_theDiplomacyProposalDB->Get(s_proposalTypeToElemIndex[proposal_type]);
