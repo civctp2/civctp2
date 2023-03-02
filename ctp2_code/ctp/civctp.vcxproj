@@ -147,8 +147,8 @@
     <LinkIncremental>false</LinkIncremental>
   </PropertyGroup>
   <PropertyGroup Condition="'$(Configuration)|$(Platform)'=='Debug Browse|Win32'">
-    <OutDir>.\Debug\</OutDir>
-    <IntDir>.\Debug\</IntDir>
+    <OutDir>.\DebugBrowse\</OutDir>
+    <IntDir>.\DebugBrowse\</IntDir>
     <LinkIncremental>true</LinkIncremental>
   </PropertyGroup>
   <PropertyGroup Condition="'$(Configuration)|$(Platform)'=='Release|Win32'">
@@ -423,12 +423,12 @@
       <RuntimeLibrary>MultiThreadedDebugDLL</RuntimeLibrary>
       <PrecompiledHeader>Use</PrecompiledHeader>
       <PrecompiledHeaderFile>c3.h</PrecompiledHeaderFile>
-      <PrecompiledHeaderOutputFile>.\Debug/civctp.pch</PrecompiledHeaderOutputFile>
-      <AssemblerListingLocation>.\Debug/</AssemblerListingLocation>
-      <ObjectFileName>.\Debug/</ObjectFileName>
-      <ProgramDataBaseFileName>.\Debug/</ProgramDataBaseFileName>
+      <PrecompiledHeaderOutputFile>.\DebugBrowse/civctp.pch</PrecompiledHeaderOutputFile>
+      <AssemblerListingLocation>.\DebugBrowse/</AssemblerListingLocation>
+      <ObjectFileName>.\DebugBrowse/</ObjectFileName>
+      <ProgramDataBaseFileName>.\DebugBrowse/</ProgramDataBaseFileName>
       <BrowseInformation>true</BrowseInformation>
-      <BrowseInformationFile>.\Debug/</BrowseInformationFile>
+      <BrowseInformationFile>.\DebugBrowse/</BrowseInformationFile>
       <WarningLevel>Level3</WarningLevel>
       <SuppressStartupBanner>true</SuppressStartupBanner>
       <DebugInformationFormat>EditAndContinue</DebugInformationFormat>
@@ -439,13 +439,13 @@
     </ResourceCompile>
     <Link>
       <AdditionalDependencies>..\libs\anet\win\lib\anet2d.lib;imagehlp.lib;amstrmid.lib;quartz.lib;winmm.lib;dxguid.lib;ddraw.lib;dinput8.lib;dsound.lib;..\libs\tiff\libtiff.lib;..\libs\freetype-1.3.1\lib\arch\win32\Debug\freetype.lib;vfw32.lib;..\libs\miles\mss32.lib;..\libs\zlib\zlib.lib;wsock32.lib;%(AdditionalDependencies)</AdditionalDependencies>
-      <OutputFile>CivCTP_dbg.exe</OutputFile>
+      <OutputFile>CivCTP_dbg_browse.exe</OutputFile>
       <SuppressStartupBanner>true</SuppressStartupBanner>
       <IgnoreSpecificDefaultLibraries>libcd.lib;libc.lib;libcmtd.lib;libcmt.lib;%(IgnoreSpecificDefaultLibraries)</IgnoreSpecificDefaultLibraries>
       <GenerateDebugInformation>true</GenerateDebugInformation>
-      <ProgramDatabaseFile>.\Debug/CivCTP_dbg.pdb</ProgramDatabaseFile>
+      <ProgramDatabaseFile>.\DebugBrowse/CivCTP_dbg_browse.pdb</ProgramDatabaseFile>
       <GenerateMapFile>true</GenerateMapFile>
-      <MapFileName>CivCTP_dbg.map</MapFileName>
+      <MapFileName>CivCTP_dbg_browse.map</MapFileName>
       <SubSystem>Windows</SubSystem>
       <RandomizedBaseAddress>false</RandomizedBaseAddress>
       <DataExecutionPrevention />
