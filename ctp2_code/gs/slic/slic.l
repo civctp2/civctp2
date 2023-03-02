@@ -40,7 +40,6 @@
 #include <windows.h>
 #include "slicif.h"
 
-int state;
 int g_slicLineNumber = 1;
 
 YY_BUFFER_STATE include_stack[MAX_INCLUDE_DEPTH];
