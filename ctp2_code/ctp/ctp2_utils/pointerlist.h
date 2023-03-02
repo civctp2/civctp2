@@ -57,13 +57,13 @@ public:
 	class PointerListNode {
 	public:
 		PointerListNode(T* obj) :
-			m_obj(obj),
-			m_next(NULL),
-			m_prev(NULL)
-        { ; };
+		    m_obj(obj),
+		    m_next(NULL),
+		    m_prev(NULL)
+		{ ; };
 
 		virtual ~PointerListNode()
-        { ; };
+		{ ; };
 
 		T* GetObj() { return m_obj; };
 
@@ -78,14 +78,14 @@ public:
 	};
 
 	PointerList() : m_head(NULL),
-				m_tail(NULL),
-				m_count(0)
-    { ; };
+	                m_tail(NULL),
+	                m_count(0)
+	{ ; };
 
 	virtual ~PointerList()
 	{
 		while (m_head)
-        {
+		{
 			PointerListNode * node = m_head;
 			m_head = m_head->m_next;
 			delete node;
@@ -95,7 +95,7 @@ public:
 	void DeleteAll()
 	{
 		while (m_head)
-        {
+		{
 			PointerListNode * node = m_head;
 			m_head = m_head->m_next;
 			delete node->m_obj;
@@ -192,15 +192,15 @@ public:
 	class Walker {
 	public:
 		Walker(PointerList * list = NULL)
-        :
-            m_node  (list ? list->m_head : NULL),
-			m_list  (list)
+		:
+		    m_node  (list ? list->m_head : NULL),
+		    m_list  (list)
 		{
 		};
 
 		void SetList(PointerList *list)
-        {
-            m_node = list ? list->m_head : NULL;
+		{
+			m_node = list ? list->m_head : NULL;
 			m_list = list;
 		}
 		void Next() { Assert(m_node); m_node = m_node->GetNext(); }
@@ -215,25 +215,28 @@ public:
 			m_node = nextNode;
 			return obj;
 		}
-		void Insert(T *obj) {
+		void Insert(T *obj)
+		{
 			m_list->InsertBefore(m_node, obj);
 		}
-		void InsertAfter(T *obj) {
+		void InsertAfter(T *obj)
+		{
 			m_list->InsertAt(m_node, obj);
 		}
 
 		void MoveUp() {
-			if(!m_node->GetPrev()) {
-
+			if(!m_node->GetPrev())
+			{
 				return;
 			}
 
 			m_list->Swap(m_node, m_node->GetPrev());
 		}
 
-		void MoveDown() {
-			if(!m_node->GetNext()) {
-
+		void MoveDown()
+		{
+			if(!m_node->GetNext())
+			{
 				return;
 			}
 			m_list->Swap(m_node, m_node->GetNext());
@@ -256,11 +259,13 @@ private:
 template <class T> void PointerList<T>::AddTail(T *obj)
 {
 	PointerListNode* node = new PointerListNode(obj);
-	if(m_tail) {
+	if(m_tail)
+	{
 		m_tail->m_next = node;
 		node->m_prev = m_tail;
 		m_tail = node;
-	} else
+	}
+	else
 		m_tail = m_head = node;
 	m_count++;
 }
@@ -268,11 +273,13 @@ template <class T> void PointerList<T>::AddTail(T *obj)
 template <class T> void PointerList<T>::AddHead(T *obj)
 {
 	PointerListNode* node = new PointerListNode(obj);
-	if(m_head) {
+	if(m_head)
+	{
 		m_head->m_prev = node;
 		node->m_next = m_head;
 		m_head = node;
-	} else
+	}
+	else
 		m_tail = m_head = node;
 	m_count++;
 }
@@ -285,11 +292,11 @@ template <class T> T* PointerList<T>::RemoveHead()
 	PointerListNode* node = m_head;
 	m_head = node->m_next;
 	if (m_head)
-    {
-        m_head->m_prev = NULL;
-    }
-    else
-    {
+	{
+		m_head->m_prev = NULL;
+	}
+	else
+	{
 		m_tail = NULL;
 	}
 	T* obj = node->m_obj;
@@ -322,11 +329,11 @@ template <class T> T* PointerList<T>::RemoveTail()
 	PointerListNode* node = m_tail;
 	m_tail = node->m_prev;
 	if (m_tail)
-    {
-        m_tail->m_next = NULL;
-    }
-    else
-    {
+	{
+		m_tail->m_next = NULL;
+	}
+	else
+	{
 		m_head = NULL;
 	}
 	T* obj = node->m_obj;
@@ -339,44 +346,44 @@ template <class T> T* PointerList<T>::RemoveTail()
 
 template <class T> void PointerList<T>::Remove(PointerListNode* node)
 {
-    if (!node)
-        return;
+	if (!node)
+		return;
 
 	if (node == m_head)
-    {
+	{
 		m_head = node->m_next;
-        if (m_head)
-        {
-            m_head->m_prev = NULL;
-        }
-        else
-        {
+		if (m_head)
+		{
+			m_head->m_prev = NULL;
+		}
+		else
+		{
 			m_tail = NULL;
-        }
+		}
 	}
-    else if (node == m_tail)
-    {
+	else if (node == m_tail)
+	{
 		m_tail = node->m_prev;
 		if (m_tail)
-        {
-            m_tail->m_next = NULL;
-        }
-        else
-        {
+		{
+			m_tail->m_next = NULL;
+		}
+		else
+		{
 			m_head = NULL;
-        }
+		}
 	}
-    else
-    {
-        if (node->m_next)
-        {
-            node->m_next->m_prev = node->m_prev;
-        }
-        if (node->m_prev)
-        {
-            node->m_prev->m_next = node->m_next;
-        }
-    }
+	else
+	{
+		if (node->m_next)
+		{
+			node->m_next->m_prev = node->m_prev;
+		}
+		if (node->m_prev)
+		{
+			node->m_prev->m_next = node->m_next;
+		}
+	}
 
 	m_count--;
 	delete node;
@@ -385,59 +392,59 @@ template <class T> void PointerList<T>::Remove(PointerListNode* node)
 template <class T> void PointerList<T>::InsertAt(PointerListNode *node, T *obj)
 {
 	if (node)
-    {
-	    PointerListNode * newNode = new PointerListNode(obj);
+	{
+		PointerListNode * newNode = new PointerListNode(obj);
 		newNode->m_next = node->m_next;
 		newNode->m_prev = node;
-        if (node->m_next)
-        {
-            node->m_next->m_prev = newNode;
-        }
-        else
-        {
-            m_tail      = newNode;
-        }
-        node->m_next    = newNode;
-    	m_count++;
+		if (node->m_next)
+		{
+			node->m_next->m_prev = newNode;
+		}
+		else
+		{
+			m_tail   = newNode;
+		}
+		node->m_next = newNode;
+		m_count++;
 	}
-    else
-    {
+	else
+	{
 		AddHead(obj);   // AddTail would have been more logical
 	}
 }
 
 template <class T> void PointerList<T>::InsertBefore(PointerListNode *node, T *obj)
 {
-    if (node)
-    {
-	    PointerListNode * newNode = new PointerListNode(obj);
+	if (node)
+	{
+		PointerListNode * newNode = new PointerListNode(obj);
 		newNode->m_prev = node->m_prev;
 		newNode->m_next = node;
-        if (node->m_prev)
-        {
-		    node->m_prev->m_next = newNode;
-        }
+		if (node->m_prev)
+		{
+			node->m_prev->m_next = newNode;
+		}
 		else
-        {
+		{
 			m_head      = newNode;
 		}
-        node->m_prev    = newNode;
-    	m_count++;
-    }
-    else
-    {
-        AddHead(obj);
-    }
+		node->m_prev    = newNode;
+		m_count++;
+	}
+	else
+	{
+		AddHead(obj);
+	}
 }
 
 template <class T> typename PointerList<T>::PointerListNode *PointerList<T>::Find(T *obj)
 {
 	for (PointerListNode * search = m_head; search; search = search->m_next)
-    {
+	{
 		if (search->m_obj == obj)
-        {
+		{
 			return search;
-        }
+		}
 	}
 
 	return NULL;
