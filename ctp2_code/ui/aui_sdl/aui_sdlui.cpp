@@ -70,7 +70,6 @@ aui_SDLUI::aui_SDLUI
 )
 :   aui_UI              (),
     aui_SDL             (),
-    m_X11Display        (0),
     m_SDLWindow         (0),
     m_SDLRenderer       (0),
     m_SDLTexture        (0)
@@ -94,22 +93,6 @@ aui_SDLUI::aui_SDLUI
 	*retval = CreateNativeScreen( useExclusiveMode );
 	Assert( AUI_SUCCESS(*retval) );
 	if ( !AUI_SUCCESS(*retval) ) return;
-
-	/**retval = aui_UI::CreateScreen();
-	Assert( AUI_SUCCESS(*retval) );
-	if ( !AUI_SUCCESS(*retval) ) return;*/
-
-#if defined(HAVE_X11)
-	char *dispname = getenv("DISPLAY");
-	if (dispname) {
-		m_X11Display = XOpenDisplay(dispname);
-	} else {
-		m_X11Display = XOpenDisplay(":0.0");
-	}
-	if (!m_X11Display) {
-		*retval = AUI_ERRCODE_NOUI;
-	}
-#endif
 }
 
 AUI_ERRCODE aui_SDLUI::InitCommon()
@@ -171,22 +154,8 @@ AUI_ERRCODE aui_SDLUI::CreateNativeScreen( BOOL useExclusiveMode )
 	return AUI_ERRCODE_OK;
 }
 
-#ifdef HAVE_X11
-Display *
-aui_SDLUI::getDisplay()
-{
-	return m_X11Display;
-}
-#endif
-
 aui_SDLUI::~aui_SDLUI( void )
 {
-#ifdef HAVE_X11
-	if (m_X11Display) {
-		XCloseDisplay(m_X11Display);
-		m_X11Display = 0;
-	}
-#endif
 	if (m_SDLTexture) {
 		SDL_DestroyTexture(m_SDLTexture);
 		m_SDLTexture = NULL;

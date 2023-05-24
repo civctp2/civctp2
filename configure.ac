@@ -1,21 +1,21 @@
 dnl $Id: configure.ac 966 2009-04-11 11:23:43Z ctplinuxfan $
 dnl
-AC_INIT(ctp2,1.2)
-AC_PREREQ(2.54)
+AC_INIT([ctp2],[1.2])
+AC_PREREQ([2.71])
 
 AC_CONFIG_AUX_DIR(ctp2_code/os/autoconf/config)
 AC_CANONICAL_HOST
 AC_CANONICAL_TARGET
 
 AM_INIT_AUTOMAKE([subdir-objects])
-AM_CONFIG_HEADER(ctp2_code/os/include/config.h)
+AC_CONFIG_HEADERS(ctp2_code/os/include/config.h)
 AM_MAINTAINER_MODE
 AC_PROG_MAKE_SET
 
 AC_PROG_CC(cl gcc cc KCC CC egcs)
 AC_PROG_CXX(cl g++ gcc cxx c++ cc++ KCC CC egcs)
 AX_CXX_COMPILE_STDCXX_11(noext, mandatory)
-AC_PROG_LIBTOOL
+LT_INIT
 AC_LANG(C++)
 AM_PROG_LEX
 dnl AC_PROG_YACC
@@ -50,7 +50,7 @@ then
 fi
 AC_SUBST(UNZIP)
 
-dnl AC_PROG_LIBTOOL
+dnl LT_INIT
 
 AM_PATH_DIRECTX
 AM_PATH_DXMEDIA
@@ -60,7 +60,7 @@ AC_PATH_X
 AC_PATH_XTRA
 AC_DEFINE(USE_SDL,1,[Use the SDL-library])
 
-AC_WORDS_BIGENDIAN
+AC_C_BIGENDIAN
 AC_OS_DEFINES
 AC_OS_PATHNAMES
 
@@ -105,9 +105,6 @@ AC_SUBST(CPPFLAGS)
 AC_SUBST(CXXFLAGS)
 
 AC_DEFINE(_TIFF_DATA_TYPEDEFS_,1,[Tiff uint{16,32} datatype collision prevention])
-if test x$have_x=xyes; then
-	AC_DEFINE(HAVE_X11,1,[System with X11R6 present])
-fi
 
 if test x$prefix == xNONE; then
 	if test x$ac_default_prefix == x; then
@@ -122,14 +119,14 @@ AC_DEFINE_UNQUOTED(PACKAGE_DATADIR,"${package_datadir}",[read-only architecture-
 AC_DEFINE_UNQUOTED(PACKAGE_SYSCONFDIR,"${package_sysconfdir}",[read-only single-machine data [PREFIX/etc]])
 
 AC_ARG_ENABLE([logging],
-              AC_HELP_STRING([--enable-logging],[enable logging]),,
+              AS_HELP_STRING([--enable-logging],[enable logging]),,
 	      [enable_logging=no])
 if test x$enable_logging = xyes  || test x$enable_logging = xfull; then
 	AC_DEFINE(USE_LOGGING,1,[Enable logging])
 fi
 
 AC_ARG_ENABLE([debug],
-              AC_HELP_STRING([--enable-debug],[enable debugging]),,
+              AS_HELP_STRING([--enable-debug],[enable debugging]),,
 	      [enable_debug=no])
 if test x$enable_debug = xyes  || test x$enable_debug = xfull; then
 	AC_DEFINE(_DEBUG,1,[Enable debugging code])
@@ -144,7 +141,7 @@ if test 0 -eq 1; then
 fi
 enable_anet=no
 AC_ARG_ENABLE([anet],
-              AC_HELP_STRING([--enable-anet],[enable external anet library]),,
+              AS_HELP_STRING([--enable-anet],[enable external anet library]),,
 	      [enable_anet=no])
 AC_MSG_CHECKING([whether to build with internal anet library])
 if test x$enable_anet == xno; then
@@ -166,7 +163,7 @@ fi
 AC_DEFINE(CTP2_ENABLE_SLICDEBUG,1,[In every version])
 AC_SUBST(CTP2_ENABLE_SLICDEBUG) # What is this good for?
 
-AC_OUTPUT([
+AC_CONFIG_FILES([
    GNUmakefile
    ctp2_code/Makefile
    ctp2_code/gfx/Makefile
@@ -193,3 +190,4 @@ AC_OUTPUT([
    ctp2_code/ui/Makefile
    ctp2_code/ui/interface/Makefile
 ])
+AC_OUTPUT
