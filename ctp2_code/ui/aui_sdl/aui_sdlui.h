@@ -34,9 +34,6 @@
 
 #include "aui_ui.h"
 #include "aui_sdl.h"
-#if defined(HAVE_X11)
-#include <X11/Xlib.h>
-#endif
 
 class aui_SDLUI : public aui_UI, public aui_SDL
 {
@@ -72,17 +69,10 @@ public:
 	void SetWidth(sint32 width) { m_width = width; }
 	void SetHeight(sint32 height) { m_height = height; }
 
-#if defined(HAVE_X11)
-	Display *getDisplay();
-#endif
-
 	aui_MovieManager* CreateMovieManager( void );
 protected:
 	virtual AUI_ERRCODE SDLDrawScreen( void );
 
-#if defined(HAVE_X11)
-	Display *           m_X11Display;
-#endif
 	SDL_Window *m_SDLWindow;
 	SDL_Renderer *m_SDLRenderer;
 	SDL_Texture *m_SDLTexture;
