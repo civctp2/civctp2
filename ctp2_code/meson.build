@@ -39,11 +39,7 @@ if not win32
 	tiff = dependency('libtiff-4')
 	zlib = dependency('zlib')
 
-	x11 = dependency('x11', required: false)
-	if x11.found()
-		conf.set('HAVE_X11', 1, description : 'System with X11 present')
-	endif
-	main_dependencies += [tiff, zlib, sdl, x11]
+	main_dependencies += [tiff, zlib, sdl]
 	
 	incdir += include_directories('os/nowin32')
 

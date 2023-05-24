@@ -11,7 +11,7 @@ CTP2_LDFLAGS = \
 	$(X_LIBS)
 
 CTP2_LDADD = \
-	-ltiff -lz -lSDL2 -lSDL2_image -lSDL2_mixer -ldl -lpthread -lX11
+	-ltiff -lz -lSDL2 -lSDL2_image -lSDL2_mixer -ldl -lpthread
 
 
 CTP2_CFLAGS=\

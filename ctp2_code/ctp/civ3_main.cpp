@@ -172,9 +172,6 @@
 #include <SDL2/SDL_mixer.h>
 #include "aui_sdlkeyboard.h"
 #endif
-#ifdef HAVE_X11
-#include <X11/Xlib.h>
-#endif
 
 #if defined(_DEBUG)
 #include "debug.h"          // Os::SetThreadName
@@ -482,59 +479,7 @@ int ui_Initialize(void)
 	}
 	strcat(s, FILE_SEP "fonts");
 	g_c3ui->AddBitmapFontSearchPath(s);
-#elif defined(HAVE_X11)
-	Display *display = g_c3ui->getDisplay();
-	int ndirs;
-	bool noPath = true;
-	char **fontpaths = XGetFontPath(display, &ndirs);
-	if (fontpaths)
-	{
-		struct stat st = { 0 };
-		for (int i = 0; i < ndirs; i++)
-		{
-			int rc = stat(fontpaths[i], &st);
-			if ((rc == 0) && (S_ISDIR(st.st_mode)))
-			{
-				g_c3ui->AddBitmapFontSearchPath(fontpaths[i]);
-				// Make some default paths get added, too
-				//noPath = false;
-			}
-		}
-		XFreeFontPath(fontpaths);
-	}
-	// Fontpath just contains server(s)?
-	if (noPath)
-	{
-		const int maxPaths = 3;
-		const char* fontPaths[maxPaths] = {
-			"/usr/share/fonts",
-			"/usr/X11R6/lib/X11/fonts",
-			"/usr/lib/X11/fonts"
-		};
-		const int maxDirs = 4;
-		const char* fontDirs[maxDirs] = {
-			"TTF",
-			"corefonts",
-			"truetype",
-			"truetype/msttcorefonts"
-		};
-		for (int pIdx = 0; pIdx < maxPaths; pIdx++)
-		{
-			for (int dIdx = 0; dIdx < maxDirs; dIdx++)
-			{
-				struct stat st = { 0 };
-				snprintf(s, sizeof(s), "%s/%s",
-					fontPaths[pIdx], fontDirs[dIdx]);
-				int rc = stat(s, &st);
-				if ((rc == 0) && (S_ISDIR(st.st_mode)))
-				{
-					g_c3ui->AddBitmapFontSearchPath(s);
-				}
-			}
-		}
-	}
 #endif
-
 	for (i = 0; g_civPaths->FindPath(C3DIR_VIDEOS, i, s); ++i)
 	{
 		if (s[0])
@@ -1600,7 +1545,6 @@ int WINAPI CivMain(HINSTANCE hInstance, HINSTANCE hPrevInstance, PSTR szCmdLine,
 #endif
 
 #ifdef __GNUC__
-	XInitThreads();
 	ParseCommandLine(iCmdShow, pSzCmdLine);
 #else
 	ParseCommandLine(szCmdLine);
