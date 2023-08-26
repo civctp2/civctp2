@@ -6353,14 +6353,14 @@ void CityData::CleanupUprising(Army &sa)
 
 	if(!g_theArmyPool->IsValid(sa) || sa.Num() < 1)
 	{
-		DPRINTF(k_DBG_GAMESTATE, ("The uprising was crushed\n"));
+		DPRINTF(k_DBG_GAMESTATE, ("The uprising was crushed in city: %s\n", m_home_city.CD()->GetName()));
 
 		ChangeSpecialists(POP_SLAVE, -sc); // remove all slaves since complete slave army (arose from all slaves of the city) was defeated
 		ChangePopulation(-sc); // therefore population is decreased as well
 	}
 	else
 	{
-		DPRINTF(k_DBG_GAMESTATE, ("The uprising succeeded\n"));
+		DPRINTF(k_DBG_GAMESTATE, ("The uprising succeeded in city: %s\n", m_home_city.CD()->GetName()));
 
 		// city army was already removed by sa.Fight(defenders); in CityData::FinishUprising
 
