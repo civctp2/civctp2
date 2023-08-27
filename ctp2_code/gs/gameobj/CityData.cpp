@@ -6331,17 +6331,19 @@ void CityData::FinishUprising(Army sa, UPRISING_CAUSE cause)
 		g_slicEngine->Execute(so);
 	}
 
-	if (startedBattle)
+	if (startedBattle) // battle in case city has units
 	{
-		sa->IncrementDontKillCount();
+		sa->IncrementDontKillCount(); // needed for CleanupUprising(sa); sa->DecrementDontKillCount(); in GEV_CleanupUprising after CleanupUprising(sa); :
 		g_gevManager->AddEvent(GEV_INSERT_Tail, GEV_CleanupUprising,
 		                       GEA_Army, sa,
 		                       GEA_City, m_home_city,
 		                       GEA_End);
 	}
-	else
+	else // no battle in case city has no units at all
 	{
+		sa->IncrementDontKillCount(); // needed for CleanupUprising(sa); :
 		CleanupUprising(sa);
+		sa->DecrementDontKillCount(); // similar to GEV_CleanupUprising
 	}
 }
 
