@@ -30,26 +30,7 @@
 ##     -v $HOME/ctp2CD/ctp2_program/ctp/videos/:opt/ctp2/ctp2_data/default/videos/:ro \
 ##     --env="AUDIODEV=hw:0,3" \
 ##     registry.gitlab.com/civctp2/civctp2/master:latest ./ctp2 fullscreen
-##
-## run ctp2 through gdb for interactive debugging:
-## ./run-DI.sh \
-##     -v $HOME/ctp2CD/ctp2_program/ctp/music/:/opt/ctp2/ctp2_program/ctp/music/:ro \
-##     -v $HOME/ctp2CD/ctp2_program/ctp/videos/:opt/ctp2/ctp2_data/default/videos/:ro \
-##     --env="ALSA_CARD=1" \
-##     --security-opt seccomp=unconfined \
-##     -it \
-##     registry.gitlab.com/myname/civctp2/master4testing:test-debug \
-##     gdb --args ./ctp2 -lsave/games/Cyrus/QUICKSAVE-Cyrus # then just type run in gdb prompt
-##
-## run ctp2 through gdb with no-interactive debugging:
-## ./run-DI.sh \
-##     -v $HOME/ctp2CD/ctp2_program/ctp/music/:/opt/ctp2/ctp2_program/ctp/music/:ro \
-##     -v $HOME/ctp2CD/ctp2_program/ctp/videos/:opt/ctp2/ctp2_data/default/videos/:ro \
-##     --env="ALSA_CARD=1" \
-##     --security-opt seccomp=unconfined \
-##     -it \
-##     registry.gitlab.com/myname/civctp2/master4testing:test-debug \
-##     gdb -quiet -batch -x gdb.cmds --args ./ctp2 -lsave/games/Cyrus/QUICKSAVE-Cyrus # catching assertions is only possible with debug version, i.e. DI:test-debug, with DI:test-plain only SIGSEGV can be caught
+
 
 
 
