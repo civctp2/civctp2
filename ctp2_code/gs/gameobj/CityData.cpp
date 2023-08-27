@@ -6307,7 +6307,7 @@ void CityData::FinishUprising(Army sa, UPRISING_CAUSE cause)
 		CellUnitList defenders;
 		for (sint32 i = 0; i < numPossibleDefenders; ++i)
 		{
-			if (cell->AccessUnit(i).GetDBRec()->GetMovementTypeLand())
+			if (cell->AccessUnit(i).IsValid()) // use any unit type (e.g. also sea-units currently in the city) as is normally the case when attacking a city, in particular to avoid non-land units to remain in new civ's city in case the uprise succeeds (so far could be moved out of foreign city, however this is odd an might caus other problems)
 			{
 				defenders.Insert(cell->AccessUnit(i));
 			}
