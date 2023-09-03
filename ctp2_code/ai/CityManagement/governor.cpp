@@ -4543,7 +4543,7 @@ const UnitBuildListRecord * Governor::GetBuildListRecord(const StrategyRecord & 
 		return strategy.HasDiplomatUnitList() ? strategy.GetDiplomatUnitListPtr() : NULL;
 
 	case BUILD_UNIT_LIST_MISSIONARY:
-		//		Assert(strategy.HasDiplomatUnitList());
+		Assert(strategy.HasMissionaryUnitList());
 		return strategy.HasMissionaryUnitList() ? strategy.GetMissionaryUnitListPtr() : NULL;
 
 	case BUILD_UNIT_LIST_SPECIAL:
