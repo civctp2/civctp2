@@ -3322,7 +3322,7 @@ ORDER_RESULT ArmyData::UndergroundRailway(const MapPoint &point)
 
 	if(c.GetOwner() == m_array[0].GetOwner())
 	{
-		DPRINTF(k_DBG_GAMESTATE, ("You can't free your own slaves with an abolitionist.  In fact, you shouldn't even be able to have both slaves and an abolitionist.  Stop cheating!\n"));
+		DPRINTF(k_DBG_GAMESTATE, ("You can't free your own slaves with an abolitionist.\n"));
 		return ORDER_RESULT_ILLEGAL;
 	}
 
