@@ -2966,7 +2966,7 @@ ORDER_RESULT ArmyData::SlaveRaid(const MapPoint &point)
 	Unit home_city; // city where slaves are put to work
 
 	if (!IsSlaveRaidPossible(point, success, death, timer, amount, uindex,
-	    target_is_city, target_city, home_city))
+	    target_is_city, target_city, home_city)) // determines home_city (with Player::GetSlaveCity)
 	{
 		DPRINTF(k_DBG_GAMESTATE, ("!IsSlaveRaidPossible()\n"));
 		return ORDER_RESULT_ILLEGAL;
@@ -2989,7 +2989,7 @@ ORDER_RESULT ArmyData::SlaveRaid(const MapPoint &point)
 		// InformAI(UNIT_ORDER_ENSLAVE_SETTLER, point); //does nothing here but could be implemented
 
 		DPRINTF(k_DBG_GAMESTATE, ("Doing EnslaveSettler instead of SlaveRaid\n"));
-		return EnslaveSettler(point, uindex, home_city); //redetermines home_city?
+		return EnslaveSettler(point, uindex, home_city); // redetermines home_city (with Player::GetSlaveCity) but does not return it
 	}
 
 	double slaveryReduction = target_city.IsProtectedFromSlavery();
@@ -3240,7 +3240,7 @@ bool ArmyData::CanEnslaveSettler(sint32 &uindex) const
 ORDER_RESULT ArmyData::EnslaveSettler(const MapPoint &point, const sint32 uindex,
                               Unit home_city)
 {
-	sint32 r = g_player[m_owner]->GetSlaveCity(m_pos, home_city);
+	sint32 r = g_player[m_owner]->GetSlaveCity(m_pos, home_city);  // could be removed, already checked in ArmyData::SlaveRaid -> check if ArmyData::EnslaveSettler is called from elsewhere
 	if(!r)
 		return ORDER_RESULT_ILLEGAL;
 
