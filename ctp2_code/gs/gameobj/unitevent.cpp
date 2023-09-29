@@ -266,8 +266,7 @@ STDEHANDLER(UndergroundRailwayUnitEvent)
 	c.RemoveOneSlave(u.GetOwner());
 
 	Unit hc;
-	double distance;
-	sint32 r = g_player[u.GetOwner()]->GetNearestCity(u.RetPos(), hc, distance);
+	sint32 r = g_player[u.GetOwner()]->GetSlaveCity(u.RetPos(), hc); // use GetSlaveCity instead of GetNearestCity to include randomness for determining the target city (to avoid accumulation in border cities)
 	Assert(r);
 
 	if(!r)
