@@ -13,8 +13,9 @@
 
 extern "C" {
 	#include <libavformat/avformat.h>
+	#include <libavcodec/avcodec.h>
 	#include <libavutil/time.h>
-    #include <libswresample/swresample.h>
+	#include <libswresample/swresample.h>
 	#include "libswscale/swscale.h"
 }
 #include <SDL2/SDL.h>
