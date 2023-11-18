@@ -1690,18 +1690,18 @@ static int stream_has_enough_packets(AVStream *st, int stream_id, PacketQueue *q
 
 static int is_realtime(AVFormatContext *s)
 {
-	if(   !strcmp(s->iformat->name, "rtp")
-		  || !strcmp(s->iformat->name, "rtsp")
-		  || !strcmp(s->iformat->name, "sdp")
-			)
-		return 1;
+    if(   !strcmp(s->iformat->name, "rtp")
+       || !strcmp(s->iformat->name, "rtsp")
+       || !strcmp(s->iformat->name, "sdp")
+    )
+        return 1;
 
-	if(s->pb && (   !strncmp(s->filename, "rtp:", 4)
-					|| !strncmp(s->filename, "udp:", 4)
-	)
-			)
-		return 1;
-	return 0;
+    if(s->pb && (   !strncmp(s->url, "rtp:", 4)
+                 || !strncmp(s->url, "udp:", 4)
+                )
+    )
+        return 1;
+    return 0;
 }
 
 void print_error(const char *filename, int err)
