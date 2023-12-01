@@ -852,7 +852,7 @@ STRATEGY_ATTACK {
     SlaveryUnitsCount      5
     SpyUnitsCount          3
     DiplomatUnitsCount     2
-    MissionaryUnitsCount   2
+    MissionaryUnitsCount   3
     SpecialUnitsCount      2
 
     // Types of special units that should be built
@@ -1470,7 +1470,7 @@ STRATEGY_SCIENTIST_DEFAULT {
     SlaveryUnitsCount       6
     SpyUnitsCount           3
     DiplomatUnitsCount      2
-    MissionaryUnitsCount    2
+    MissionaryUnitsCount    7
     SpecialUnitsCount       3
 
     // Do not build certain items in cities where if it takes too many turns
@@ -1970,7 +1970,7 @@ STRATEGY_MILITARIST_DEFAULT {
     SlaveryUnitsCount       6
     SpyUnitsCount           3
     DiplomatUnitsCount      2
-    MissionaryUnitsCount    2
+    MissionaryUnitsCount    4
     SpecialUnitsCount       3
 
     // Do not build certain items in cities where if it takes too many turns
@@ -2478,7 +2478,7 @@ STRATEGY_ECONOMIC_DEFAULT {
     SlaveryUnitsCount       6
     SpyUnitsCount           3
     DiplomatUnitsCount      2
-    MissionaryUnitsCount    2
+    MissionaryUnitsCount    7
     SpecialUnitsCount       3
 
     // Do not build certain items in cities where if it takes too many turns
@@ -2977,7 +2977,7 @@ STRATEGY_ECOTOPIAN_DEFAULT {
     SlaveryUnitsCount       6
     SpyUnitsCount           3
     DiplomatUnitsCount      2
-    MissionaryUnitsCount    2
+    MissionaryUnitsCount    4
     SpecialUnitsCount       3
 
     // Do not build certain items in cities where if it takes too many turns
@@ -3476,7 +3476,7 @@ STRATEGY_DIPLOMATIC_DEFAULT {
     SlaveryUnitsCount       5
     SpyUnitsCount           2
     DiplomatUnitsCount      2
-    MissionaryUnitsCount    2
+    MissionaryUnitsCount    4
     SpecialUnitsCount       3
 
     // Do not build certain items in cities where if it takes too many turns

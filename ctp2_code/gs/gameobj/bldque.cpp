@@ -462,7 +462,8 @@ bool BuildQueue::BuildFrontUnit(bool forceFinish)
 		}
 		// End EMOD
 
-		DPRINTF(k_DBG_GAMESTATE, ("City %lx building unit: %s\n",
+		DPRINTF(k_DBG_GAMESTATE, ("City %s (%lx) building unit: %s\n",
+								  cd->GetName(),
 								  (uint32)cd->GetHomeCity(),
 								  g_theStringDB->GetNameStr(g_theUnitDB->Get(m_list->GetHead()->m_type)->m_name)));
 
