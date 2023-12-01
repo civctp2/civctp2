@@ -556,7 +556,7 @@ STDEHANDLER(SendGoodEvent)
 	} else {
 		g_player[sourceCity.GetOwner()]->CreateTradeRoute(sourceCity, ROUTE_TYPE_RESOURCE, // apparently the only active source for the creation of trade routes
 		                                                  resIndex, destCity,
-		                                                  sourceCity.GetOwner(), 0);
+		                                                  sourceCity.GetOwner(), 0); // 0 is for gold_in_return which seems to be a ctp1 remainder where this was used to account for trade bids (https://github.com/civctp2/civctp2/blob/67532c1338ad8c0f8e943a6e04633782543fa06a/ctp2_code/gs/gameobj/Player.cpp#L3418-L3422), in ctp2 the values seems to be determined only by tradeutil_GetTradeValue e.g. in TradeRouteData::GetValue()
 	}
 	return GEV_HD_Continue;
 }

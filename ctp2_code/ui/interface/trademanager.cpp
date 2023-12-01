@@ -446,7 +446,7 @@ void TradeManager::UpdateCreateList(const PLAYER_INDEX & player_id)
 						data->m_source = city;
 						data->m_resource = g;
 						data->m_destination = maxCity[i];
-						data->m_price = maxValuePerCaravan[i];
+						data->m_price = tradeutil_GetTradeValue(player_id, maxCity[i], g); // # of gold
 						data->m_caravans = tradeutil_GetTradeDistance(city, maxCity[i]);
 						data->m_curDestination.m_id = curDestCity.m_id;
 
@@ -454,67 +454,67 @@ void TradeManager::UpdateCreateList(const PLAYER_INDEX & player_id)
 						item->SetUserData(data);
 
 						if (ctp2_Static * origin = (ctp2_Static *)item->GetChildByIndex(k_CITY_COL_INDEX))
-                        {
+						    {
 							MBCHAR name[k_MAX_NAME_LEN + 1];
 							strncpy(name, city.GetName(), k_MAX_NAME_LEN);
 							name[k_MAX_NAME_LEN] = 0;
 							origin->TextReloadFont();
 							origin->GetTextFont()->TruncateString(name, origin->Width());
 							origin->SetText(name);
-						}
+						    }
 
 						if (ctp2_Static * icon = (ctp2_Static *)item->GetChildByIndex(k_GOODICON_COL_INDEX))
-                        {
+						    {
 							const char *iconname = g_theResourceDB->Get(g)->GetIcon()->GetIcon();
 							if (stricmp(iconname, "NULL") == 0)
-                            {
+							    {
 								iconname = NULL;
-							}
+							    }
 							icon->SetImage(iconname);
-						}
+						    }
 
 						if (ctp2_Static * good = (ctp2_Static *)item->GetChildByIndex(k_GOOD_COL_INDEX))
-                        {
+						    {
 							good->SetText(g_theResourceDB->Get(g)->GetNameText());
 							if (curDestCity.m_id != 0)
-                            {
+							    {
 								good->SetTextColor(g_colorSet->GetColorRef(COLOR_RED));
-							}
-						}
+							    }
+						    }
 
 						if (ctp2_Static * dest = (ctp2_Static *)item->GetChildByIndex(k_TOCITY_COL_INDEX))
-                        {
+						    {
 							MBCHAR name[k_MAX_NAME_LEN + 1];
 							strncpy(name, maxCity[i].GetName(), k_MAX_NAME_LEN);
 							name[k_MAX_NAME_LEN] = 0;
 							dest->TextReloadFont();
 							dest->GetTextFont()->TruncateString(name, dest->Width());
 							dest->SetText(name);
-						}
+						    }
 
 						MBCHAR buf[20];
-						sprintf(buf, "%d", maxValuePerCaravan[i]);
+						sprintf(buf, "%d", data->m_price);
 						if (ctp2_Static * price = (ctp2_Static *)item->GetChildByIndex(k_PRICE_COL_INDEX))
-                        {
+						    {
 							price->SetText(buf);
-						}
+						    }
 
 						if (ctp2_Static * count = (ctp2_Static *)item->GetChildByIndex(k_CARAVANS_COL_INDEX))
-                        {
+						    {
 							sprintf(buf, "%d", data->m_caravans);
 							count->SetText(buf);
-						}
+						    }
 
 						if (ctp2_Static * nation = (ctp2_Static *)item->GetChildByIndex(k_NATION_COL_INDEX))
-                        {
+						    {
 							nation->SetDrawCallbackAndCookie
                                 (DrawNationColumn, (void *)data->m_destination.GetOwner());
-						}
+						    }
 
 						item->SetCompareCallback(CompareCreateItems);
 
 						m_createList->AddItem(item);
-					}
+					} // if(maxValuePerCaravan[i] > 0)
 				}
 			}
 		}

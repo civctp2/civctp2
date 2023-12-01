@@ -9453,8 +9453,6 @@ void CityData::FindGoodDistances()
 		m_distanceToGood[i] = 0 + specialdistance;
 	}
 
-//	g_theWorld->FindDistances(m_owner, m_home_city.RetPos(), goodsToFind,
-//	                          FindGoodDistancesCallback, this);
 	g_theWorld->FindDistances(m_owner, m_pos, goodsToFind,
 	                          FindGoodDistancesCallback, this);
 }
