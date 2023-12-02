@@ -331,7 +331,7 @@ private:
  *
  * The combination of the two behaviours will create four kind of actions:
  *  - No Lock && No Animation -> immediate
- *  - No Lock && Animation    -> effect
+ *  - Lock    && Animation    -> effect (EffectActor, similar to active now that locking was enabled here as well)
  *  - Lock    && No Animation -> external
  *  - Lock    && Animation    -> active
  *
@@ -382,7 +382,7 @@ protected:
 			if (g_doingFastRounds) return false;
 		#endif
 
-		return g_tiledMap && g_tiledMap->GetLocalVision()->IsVisible(pos);
+		return g_tiledMap && g_tiledMap->GetLocalVision()->IsVisible(pos); // should this be g_player[g_selected_item->GetVisiblePlayer()]->IsVisible(pos)
 	}
 
 	static void CenterMap(const MapPoint &pos)
@@ -422,9 +422,9 @@ public:
 };
 
 /**
- * DQActionEffect: No Lock and Animation
+ * DQActionEffect: Lock and Animation (EffectActor)
  *   -> LoopingSound is ignored
- *   -> IsUnlocked returns true
+ *   -> IsUnlocked returns true when animation is done
  *   -> IsAnimationFinished returns true when animation is done
  */
 class DQActionEffect : public DQAction {
@@ -447,7 +447,7 @@ public:
 
 	// Lock behaviour
 	virtual void Unlock() {}
-	virtual bool IsUnlocked() { return true; }
+	virtual bool IsUnlocked() { return IsAnimationFinished(); }
 
 	// Animation behaviour
 	virtual void Process()
@@ -469,6 +469,24 @@ public:
 
 protected:
 	EffectActor *m_activeActor;
+};
+
+/**
+ * DQActionEffectNoLock: like DQActionEffect but No Lock (for projectiles)
+ *   -> LoopingSound is ignored
+ *   -> IsUnlocked returns true
+ *   -> IsAnimationFinished returns true when animation is done
+ */
+class DQActionEffectNoLock : public DQActionEffect {
+public:
+	DQActionEffectNoLock(SpriteState *spriteState, const MapPoint &pos)
+		: DQActionEffect(spriteState, pos)
+	{}
+	DQActionEffectNoLock(sint32 spriteID, const MapPoint &pos)
+		: DQActionEffect(spriteID, pos)
+	{}
+
+	virtual bool IsUnlocked() { return true; }
 };
 
 /**
@@ -1326,13 +1344,11 @@ public:
 	}
 };
 
-class DQActionMoveProjectile : public DQActionEffect
+class DQActionMoveProjectile : public DQActionEffectNoLock
 {
 public:
 	DQActionMoveProjectile(SpriteState *projectileEndState, const MapPoint &startPos, const MapPoint &endPos)
-		: DQActionEffect(projectileEndState, endPos),
-		startPos (startPos),
-		endPos   (endPos)
+	    : DQActionEffectNoLock(projectileEndState, endPos), startPos (startPos), endPos(endPos)
 	{}
 	virtual ~DQActionMoveProjectile() {}
 	virtual DQACTION_TYPE GetType() { return DQACTION_MOVEPROJECTILE; }
@@ -1362,11 +1378,11 @@ protected:
 	MapPoint endPos;
 };
 
-class DQActionCombatFlash : public DQActionEffect
+class DQActionCombatFlash : public DQActionEffectNoLock
 {
 public:
 	DQActionCombatFlash(const MapPoint &flashPos)
-		: DQActionEffect(99, flashPos)
+		: DQActionEffectNoLock(99, flashPos)
 	{}
 	virtual ~DQActionCombatFlash() {}
 	virtual DQACTION_TYPE GetType() { return DQACTION_COMBATFLASH; }
@@ -1404,19 +1420,19 @@ public:
 
 	virtual void Execute()
 	{
-		if (g_tiledMap->GetLocalVision()->IsVisible(m_activeActor->GetMapPos()))
-		{
+	        const MapPoint pos = m_activeActor->GetMapPos();
+		if(g_player[g_selected_item->GetVisiblePlayer()]->IsVisible(pos)){ // only play animation and sound if pos is generally visible to current player
 			Anim *animation = m_activeActor->CreatePlayAnim();
 			if (animation)
 			{
-				Action *action = Action::CreateEffectAction(EFFECTACTION_PLAY, animation);
-				m_activeActor->SetAction(action);
-
 				if (g_soundManager)
 				{
-					const MapPoint pos = m_activeActor->GetMapPos();
 					g_soundManager->AddSound(SOUNDTYPE_SFX, 0, soundID, pos.x, pos.y);
 				}
+
+
+				Action *action = Action::CreateEffectAction(EFFECTACTION_PLAY, animation);
+				m_activeActor->SetAction(action);
 			}
 		}
 	}
@@ -1760,10 +1776,6 @@ protected:
 
 	virtual void PrepareAnimation()
 	{
-		if (attackerSoundID >= 0) {
-			g_soundManager->AddSound(SOUNDTYPE_SFX, 0, attackerSoundID, 0, 0);
-		}
-
 		POINT attackerPoints, defenderPoints;
 		maputils_MapXY2PixelXY(attackerPos.x, attackerPos.y, attackerPoints);
 		maputils_MapXY2PixelXY(defenderPos.x, defenderPos.y, defenderPoints);
@@ -1772,6 +1784,12 @@ protected:
 		sint32 deltaY = defenderPoints.y - attackerPoints.y;
 
 		bool attackerVisible = TileIsVisibleToPlayer(attackerPos);
+		bool defenderVisible = TileIsVisibleToPlayer(defenderPos);
+
+		if (attackerSoundID >= 0 && defenderVisible) { // removed || attackerVisible to suppress sound if e.g. invisible slaver is not in FOW of visiblePlayer but his target is in FOW
+			g_soundManager->AddSound(SOUNDTYPE_SFX, 0, attackerSoundID, 0, 0);
+		}
+
 		if (!attackerIsCity && attackerVisible)
 		{
 			Anim * animation = attacker->CreateSpecialAttackAnim();
@@ -1783,7 +1801,6 @@ protected:
 			}
 		}
 
-		bool defenderVisible = TileIsVisibleToPlayer(defenderPos);
 		if (!defenderIsCity && defenderVisible)
 		{
 			Anim * animation = defender->CreateSpecialAttackAnim();
@@ -2667,6 +2684,12 @@ void DirectorImpl::AddProjectileAttack(
 
 void DirectorImpl::AddSpecialEffect(const MapPoint &pos, sint32 spriteID, sint32 soundID)
 {
+	if(g_selected_item->IsAutoCenterOn() 
+	    && !TileWillBeCompletelyVisible(pos.x, pos.y)
+	    && g_player[g_selected_item->GetVisiblePlayer()]->IsVisible(pos)
+	    ){ // center on pos if generally visible but not in current view
+	    AddCenterMap(pos);
+	    }
 	DQActionSpecialEffect *action = new DQActionSpecialEffect(pos, spriteID, soundID);
 	m_actionQueue->AddTail(action);
 }
@@ -2825,8 +2848,14 @@ void DirectorImpl::AddSpecialAttack(const Unit& attacker, const Unit &attacked, 
 		DQActionMoveProjectile * moveProjectileAction = new DQActionMoveProjectile(new SpriteState(spriteID),
 				attackPosition, attacked.RetPos());
 		m_actionQueue->AddTail(moveProjectileAction);
+		if(g_selected_item->IsAutoCenterOn() 
+		    && !TileWillBeCompletelyVisible(attackPosition.x, attackPosition.y)
+		    && g_player[g_selected_item->GetVisiblePlayer()]->IsVisible(attackPosition)
+		    ){ // center on pos if generally visible but not in current view
+		    AddCenterMap(attackPosition);
+		    }
 	}
-
+	
 	DQActionAttack *action = new DQActionSpecialAttack(
 			attacker.GetOwner(),
 			attacker.GetActor(),
