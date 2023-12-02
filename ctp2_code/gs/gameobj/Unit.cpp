@@ -213,7 +213,7 @@ void Unit::RemoveAllReferences(const CAUSE_REMOVE_ARMY cause, PLAYER_INDEX kille
 	}
 
 	r = g_player[owner]->RemoveUnitReference(*this, cause, killedBy); // executed also for the TempSlaveUnit due to m_all_units->Insert(u); in Player::CreateUnitNoPosition such that m_all_units->Num() > 0 in Player::CheckPlayerDead()
-	Assert(r);
+	Assert(r); // asserts in case of former TempSlaveUnit passed on to new civ, not clear why, see Player.cpp
 
 	Unit transport = GetTransport();
 	if(transport.IsValid())
