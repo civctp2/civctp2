@@ -2402,7 +2402,7 @@ void DirectorImpl::HandleNextAction()
 		m_lockingAction = m_actionQueue->RemoveHead();
 	 	m_lockingAction->ProcessLoopingSound(m_activeLoopingSound);
 	 	m_lockingAction->Execute();
-		if (!m_lockingAction->IsAnimationFinished()) {
+		if (m_lockingAction && !m_lockingAction->IsAnimationFinished()) {
 			m_animatingActions.insert(m_lockingAction);
 		}
 	}

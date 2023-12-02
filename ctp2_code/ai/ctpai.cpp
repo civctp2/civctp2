@@ -1052,7 +1052,8 @@ void CtpAi::RemovePlayer(const PLAYER_INDEX deadPlayerId)
 
 	for (PLAYER_INDEX player = 0; player < s_maxPlayers; ++player)
 	{
-		Diplomat::GetDiplomat(player).InitForeigner(deadPlayerId);
+		if (g_player[player])
+			Diplomat::GetDiplomat(player).InitForeigner(deadPlayerId);
 	}
 
 	AgreementMatrix::s_agreements.ClearAgreementsInvolving(deadPlayerId);
