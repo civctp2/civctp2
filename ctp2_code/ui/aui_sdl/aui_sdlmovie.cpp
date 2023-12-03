@@ -13,8 +13,9 @@
 
 extern "C" {
 	#include <libavformat/avformat.h>
+	#include <libavcodec/avcodec.h>
 	#include <libavutil/time.h>
-    #include <libswresample/swresample.h>
+	#include <libswresample/swresample.h>
 	#include "libswscale/swscale.h"
 }
 #include <SDL2/SDL.h>
@@ -446,7 +447,7 @@ static int decoder_decode_frame(Decoder *d, AVFrame *frame) {
 						if (ret >= 0) {
 							AVRational tb = (AVRational){1, frame->sample_rate};
 							if (frame->pts != AV_NOPTS_VALUE)
-								frame->pts = av_rescale_q(frame->pts, av_codec_get_pkt_timebase(d->avctx), tb);
+								frame->pts = av_rescale_q(frame->pts, d->avctx->pkt_timebase, tb);
 							else if (d->next_pts != AV_NOPTS_VALUE)
 								frame->pts = av_rescale_q(d->next_pts, d->next_pts_tb, tb);
 							if (frame->pts != AV_NOPTS_VALUE) {
@@ -1596,7 +1597,7 @@ static int stream_component_open(VideoState *is, int stream_index)
 	ret = avcodec_parameters_to_context(avctx, ic->streams[stream_index]->codecpar);
     if (ret < 0)
 		goto fail;
-	av_codec_set_pkt_timebase(avctx, ic->streams[stream_index]->time_base);
+	avctx->pkt_timebase = ic->streams[stream_index]->time_base;
 
 	codec = avcodec_find_decoder(avctx->codec_id);
 
@@ -1689,18 +1690,18 @@ static int stream_has_enough_packets(AVStream *st, int stream_id, PacketQueue *q
 
 static int is_realtime(AVFormatContext *s)
 {
-	if(   !strcmp(s->iformat->name, "rtp")
-		  || !strcmp(s->iformat->name, "rtsp")
-		  || !strcmp(s->iformat->name, "sdp")
-			)
-		return 1;
+    if(   !strcmp(s->iformat->name, "rtp")
+       || !strcmp(s->iformat->name, "rtsp")
+       || !strcmp(s->iformat->name, "sdp")
+    )
+        return 1;
 
-	if(s->pb && (   !strncmp(s->filename, "rtp:", 4)
-					|| !strncmp(s->filename, "udp:", 4)
-	)
-			)
-		return 1;
-	return 0;
+    if(s->pb && (   !strncmp(s->url, "rtp:", 4)
+                 || !strncmp(s->url, "udp:", 4)
+                )
+    )
+        return 1;
+    return 0;
 }
 
 void print_error(const char *filename, int err)
