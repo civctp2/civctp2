@@ -97,7 +97,7 @@ sint32 tradeutil_GetAccurateTradeDistance(const Unit &source, const Unit &destin
 }
 */
 
-sint32 tradeutil_GetTradeDistance(Unit &source, Unit &destination)
+sint32 tradeutil_GetTradeDistance(Unit &source, const Unit &destination)
 {
 	double cost = g_theWorld->CalcTerrainFreightCost(source.RetPos()) *
 	              static_cast<double>
