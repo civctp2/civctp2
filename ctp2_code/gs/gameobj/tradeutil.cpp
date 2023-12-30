@@ -80,8 +80,7 @@ sint32 tradeutil_GetTradeValue(const sint32 owner, const Unit & destination, sin
     return static_cast<sint32>(std::max<double>(totalValue, 1.0)); // ensure that the trade value is >= 1
     }
 
-/* deprecated (in favor of tradeutil_GetTradeDistance) because result can differ significantly, though exact takes much longer to compute due to use of astar
-sint32 tradeutil_GetAccurateTradeDistance(const Unit &source, const Unit &destination)
+sint32 tradeutil_GetTradeDistance(const Unit &source, const Unit &destination)
 {
 	Path    path;
 	float   cost;
@@ -95,8 +94,8 @@ sint32 tradeutil_GetAccurateTradeDistance(const Unit &source, const Unit &destin
 
 	return DISTANCE_UNKNOWN;
 }
-*/
 
+/* deprecated (in favor of radeutil_GetAccurateTradeDistance) because result can differ significantly, though exact takes much longer to compute due to use of astar
 sint32 tradeutil_GetTradeDistance(Unit &source, const Unit &destination)
 {
 	double cost = g_theWorld->CalcTerrainFreightCost(source.RetPos()) *
@@ -105,9 +104,9 @@ sint32 tradeutil_GetTradeDistance(Unit &source, const Unit &destination)
 
 	return static_cast<sint32>(std::max<double>(tradeutil_GetNetTradeCosts(cost), 1.0));
 }
+*/
 
 // Maybe move the following to worldutils
-
 void constutil_y2meridian(const sint32 y, sint32 &k)
 {
 	k = 0;
