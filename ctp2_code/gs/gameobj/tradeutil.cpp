@@ -98,7 +98,7 @@ sint32 tradeutil_GetTradeDistance(const Unit &source, const Unit &destination)
 
 #else // USE_QUICKTRADEROUTECALC
 // used to be tradeutil_GetTradeDistance which is a very rough calculation but is quick due to avoiding astar
-	cost = g_theWorld->CalcTerrainFreightCost(source.RetPos()) *
+	cost = 5 * // used to be g_theWorld->CalcTerrainFreightCost(source.RetPos()) * which was just returning 5 as a const in orig code: https://github.com/civctp2/civctp2/blob/d614fbdf705db334a4b45037bbcc735142d22016/ctp2_code/gs/world/wldgen.cpp#L1984-L1990
 	    static_cast<double>(source.RetPos().NormalizedDistance(destination.RetPos()));
 
 	return static_cast<sint32>(std::max<double>(tradeutil_GetNetTradeCosts(cost), 1.0));
