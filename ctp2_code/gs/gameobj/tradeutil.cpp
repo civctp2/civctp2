@@ -85,6 +85,8 @@ sint32 tradeutil_GetTradeDistance(const Unit &source, const Unit &destination)
 	Path    path;
 	float   cost;
 
+#ifndef USE_QUICKTRADEROUTECALC
+// used to be tradeutil_GetAccurateTradeDistance which is exact but takes much longer to compute due to use of astar
 	if (g_theTradeAstar.FindPath // comparable to TradeRouteData::GeneratePath cost calculation
             (source.GetOwner(), source.RetPos(), destination.RetPos(), path, cost, FALSE)
        )
@@ -93,18 +95,16 @@ sint32 tradeutil_GetTradeDistance(const Unit &source, const Unit &destination)
     }
 
 	return DISTANCE_UNKNOWN;
-}
 
-/* deprecated (in favor of radeutil_GetAccurateTradeDistance) because result can differ significantly, though exact takes much longer to compute due to use of astar
-sint32 tradeutil_GetTradeDistance(Unit &source, const Unit &destination)
-{
-	double cost = g_theWorld->CalcTerrainFreightCost(source.RetPos()) *
-	              static_cast<double>
-	                (source.RetPos().NormalizedDistance(destination.RetPos()));
+#else // USE_QUICKTRADEROUTECALC
+// used to be tradeutil_GetTradeDistance which is a very rough calculation but is quick due to avoiding astar
+	cost = g_theWorld->CalcTerrainFreightCost(source.RetPos()) *
+	    static_cast<double>(source.RetPos().NormalizedDistance(destination.RetPos()));
 
 	return static_cast<sint32>(std::max<double>(tradeutil_GetNetTradeCosts(cost), 1.0));
+
+#endif // USE_QUICKTRADEROUTECALC
 }
-*/
 
 // Maybe move the following to worldutils
 void constutil_y2meridian(const sint32 y, sint32 &k)
