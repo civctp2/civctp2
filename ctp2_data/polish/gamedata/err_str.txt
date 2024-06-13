@@ -1,0 +1,83 @@
+#### ERROR STRINGS (don't mess with these too much) ####
+DIPLOMACY_ERROR "Diplomacy"
+DIPLOMACY_UNKNOWN_VARIABLE "980424-JRL-001 - Uknown diplomacy variable %s"
+DIPLOMACY_INVALID_REQUEST_ID "980424-JRL-002 - Invalid Diplomatic Request ID generated"
+DIPLOMACY_INVALID_REQUEST_FOUND "980424-JRL-004 - Invalid Diplomatic Request created"
+DIPLOMACY_NOT_OWNER "980424-JRL-005 - This player is not the owner of the Diplomatic Request"
+DIPLOMACY_INVALID_AGREEMENT_ID "980428-JRL-01 - Invalid Diplomatic Agreement ID generated"
+
+DIP_DISP_ERROR "Diplomacy Display Screen"
+DIP_DISP_INVALID_STRING "980817-JRL-005 - String specified was not found"
+DIP_DISP_INVALID_REQUEST "980817-JRL-003 - Could not convert request to valid string"
+
+REGARD_ERROR "Regard"
+REGARD_INVALID_STRING "980817-JRL-002 - Invalid string requested"
+
+ATTITUDE_ERROR "Attitude"
+ATTITUDE_INVALID_STRING "980817-JRL-001 - Invalid string requested"
+
+CIVILIZATION_ERROR "Civilisation"				# type of error
+CIVILIZATION_NO_MORE_CIVS_AVAILABLE "980424-JRL-006 - There are more players in the game than civilisations in the database"
+
+MESSAGE_ERROR "Message Error"					# type of error
+MESSAGE_UNKNOWN_VARIABLE "980424-JRL-007 - Unknown message variable"
+MESSAGE_INDEX_OUT_OF_BOUNDS "980730JRL-001 - Index of variable is out of bounds"
+MESSAGE_INDEX_INVALID "980730JRL-004 - Index is invalid"
+MESSAGE_UNKNOWN_CLASS "980730JRL-003 - Class variable is unknown"
+MESSAGE_UNKNOWN_CLASS_MEMBER "980730JRL-002 - Class member variable is unknown"
+
+AGREEMENT_ERROR "Agreement Error"
+AGREEMENT_ERROR_INDEX_OUT_OF_BOUNDS "980714-JRL-001 - Index of variable is out of bounds"
+AGREEMENT_ERROR_UNKNOWN_PLAYER_MEMBER "980714-JRL-002 - Player member variable is unknown"
+AGREEMENT_ERROR_UNKNOWN_VARIABLE "980714-JRL-003 - Unknown agreement variable"
+
+CIV_ERROR "Civilisation Error"					# type of error
+CIV_FAILED_TO_ADD_PLAYER "980424-JRL-008 - Failed to add player to game"
+
+SAVE_ERROR "Save Game Error"					# type of error
+SAVE_INCORRECT_NUM_PLAYERS "980424-JRL-009 - Incorrect number of players"
+SAVE_FAILED_TO_SAVE "980424-JRL-010 - Failed to save game"
+SAVE_UNABLE_TO_WRITE_SAVEGAME "980424-JRL-011 - Failed to write save game file"
+
+LOAD_ERROR "Load Game Error"					# type of error
+LOAD_FAILED_TO_LOAD_GAME "980424-JRL-012 - Failed to load previously saved game"
+LOAD_UNABLE_TO_READ_GAME "980424-JRL-013 - Unable to read same game file"
+LOAD_NOT_A_SAVEGAME_FILE "The file format of the saved game is not compatible with this version of Call to Power."
+LOAD_INCORRECT_FILE_SIZE "980424-JRL-015 - The size of the save game file is incorrect"
+LOAD_INCORRECT_VERSION_INFO "980424-JRL-016 - Incorrect save game version"
+LOAD_INCORRECT_NUM_PLAYERS "980424-JRL-017 - Incorrect number of players"
+
+LOAD_BUILD_QUEUE_ERROR "Load Build Queue Error"
+LOAD_BUILD_QUEUE_INVALID_DATA_FOUND "980429-JRL-01 - Invalid data found in build queue"
+LOAD_BUILD_QUEUE_INCORRECT_VERSION_INFORMATION "980429-JRL-02 - Incorrect version information in build queue"
+LOAD_BUILD_QUEUE_INCORRECT_FILE_SIZE "980429-JRL-03 - Incorrect file size for build queue"
+LOAD_BUILD_QUEUE_FAILED_TO_LOAD_QUEUE "980429-JRL-04 - Failed to load build queue"
+
+SAVE_BUILD_QUEUE_ERROR "Save Build Queue Error"
+SAVE_BUILD_QUEUE_FAILED_TO_SAVE_QUEUE "980429-JRL-05 - Failed to save Build Queue"
+SAVE_BUILD_QUEUE_UNABLE_TO_WRITE_BUILD_QUEUE "980429-JRL-06 - Unable to write Build Queue"
+SAVE_BUILD_QUEUE_FAILED_TO_SAVE "980429-JRL-07 - Failed to save Build Queue"
+
+
+
+AIDLL "AI DLL"
+FLI_FUZZY_CYCLE "There is a cycle in the fuzzy logic rules"
+FLI_UNKNOWN_INPUT "%s:%d: '%s' is not a valid input variable"
+FLI_UNDECLARED_VARIABLE "%s:%d: Undeclared variable '%s'"
+FLI_UNKNOWN_SET_FUNCTION "%s:%d: Unknown set '%s'"
+FLI_INTERNAL_ERROR "%s:%d: Internal error"
+FLI_NOT_INITIALIZED_WARNING "WARNING: The input variable %s, used by set function %s, is not initalized for section %s"
+
+AGREEMENT_ERROR_NOT_DEMAND_STOP_TRADE "981020-JRL-001 - Not a DEMAND STOP TRADE agreement"
+AGREEMENT_ERROR_UNKNOWN_AGREEMENT "981020-JRL-002 - Unknown agreement type"
+OPTIMAL_OUTPUT_ERROR "Optimal Output Error"
+OPTIMAL_OUTPUT_ERROR_UNKNOWN_OPTIMISATION_STATE "981020-JRL-003 - Unknown city optimisation state"
+MESSAGE_GOLD_INDEX_OUT_OF_BOUNDS "981020-JRL-004 - Gold index is out of bounds"
+MESSAGE_CIV_INDEX_OUT_OF_BOUNDS "981020-JRL-005 - Civilisation index is out of bounds"
+MESSAGE_ADVANCE_INDEX_OUT_OF_BOUNDS "981020-JRL-006 - Advance index is out of bounds"
+MESSAGE_ACTION_INDEX_OUT_OF_BOUNDS "981020-JRL-007 - Action index is out of bounds"
+MESSAGE_UNIT_INDEX_OUT_OF_BOUNDS "981020-JRL-008 - Unit index is out of bounds"
+MESSAGE_CITY_INDEX_OUT_OF_BOUNDS "981020-JRL-009 - City index is out of bounds"
+MESSAGE_WONDER_INDEX_OUT_OF_BOUNDS "981020-JRL-010 - Wonder index is out of bounds"
+DIP_DISP_UNKNOWN_STATE "Unknown Diplomacy state"
+
