@@ -38,8 +38,8 @@ ARG BTYP
 
 RUN cd /ctp2 \
     && ./autogen.sh && \
-    CFLAGS="$CFLAGS -Wno-misleading-indentation $( [ "${BTYP##*debug*}" ] && echo -O3 || echo -ggdb -rdynamic ) -fuse-ld=gold" \
-    CXXFLAGS="$CXXFLAGS -Wno-misleading-indentation -fpermissive $( [ "${BTYP##*debug*}" ] && echo -O3 || echo -ggdb -rdynamic ) -fuse-ld=gold" \
+    CFLAGS="$CFLAGS -Wno-misleading-indentation $( [ "${BTYP##*debug*}" ] && echo -O3 || echo -g -rdynamic ) -fuse-ld=gold" \
+    CXXFLAGS="$CXXFLAGS -Wno-misleading-indentation -fpermissive $( [ "${BTYP##*debug*}" ] && echo -O3 || echo -g -rdynamic ) -fuse-ld=gold" \
     ./configure --prefix=/opt/ctp2 --bindir=/opt/ctp2/ctp2_program/ctp --enable-silent-rules $( [ "${BTYP##*debug*}" ] || echo --enable-debug ) \
     && make -j"$(nproc)" \
     && make -j"$(nproc)" install \
@@ -64,7 +64,6 @@ COPY deb/ /deb/
 
 ## apt install installs local deb-file with its dependencies: https://unix.stackexchange.com/questions/159094/how-to-install-a-deb-file-by-dpkg-i-or-by-apt#159114
 RUN apt-get update && apt install -y --no-install-recommends \
-    gdb libstdc++-10-dev \
     /deb/ctp2-${BTYP}.deb && \
     apt-get clean && \
     rm -rf /var/lib/apt/lists/*
