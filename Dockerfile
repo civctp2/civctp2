@@ -1,7 +1,7 @@
 ################################################################################
 # base system
 ################################################################################
-FROM ubuntu:22.04 as system
+FROM debian as system
 
 ENV USERNAME diUser
 RUN useradd -m $USERNAME && \
