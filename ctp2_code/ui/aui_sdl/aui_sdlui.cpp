@@ -27,6 +27,8 @@
 //
 //----------------------------------------------------------------------------
 
+#include <iostream>
+
 #include "c3.h"
 
 #ifdef __AUI_USE_SDL__
@@ -357,10 +359,19 @@ AUI_ERRCODE aui_SDLUI::SDLDrawScreen( void ) {
 	Assert(m_primary);
 	Assert(m_SDLTexture);
 	Assert(m_SDLRenderer);
-	SDL_UpdateTexture(m_SDLTexture, NULL, m_primary->Buffer(), m_primary->Pitch());
-	SDL_RenderClear(m_SDLRenderer);
-	SDL_RenderCopy(m_SDLRenderer, m_SDLTexture, NULL, NULL);
+	int errcode;
+	errcode= SDL_UpdateTexture(m_SDLTexture, NULL, m_primary->Buffer(), m_primary->Pitch());
+	if (errcode < 0) std::cerr << "SDL error: " << SDL_GetError() << std::endl;
+	errcode= SDL_RenderClear(m_SDLRenderer);
+	if (errcode < 0) std::cerr << "SDL error: " << SDL_GetError() << std::endl;
+	errcode= SDL_RenderCopy(m_SDLRenderer, m_SDLTexture, NULL, NULL);
+	if (errcode < 0) std::cerr << "SDL error: " << SDL_GetError() << std::endl;
 	SDL_RenderPresent(m_SDLRenderer);
+
+	if (errcode < 0)
+	  return AUI_ERRCODE_SURFACEFAILURE;
+	else
+	  return AUI_ERRCODE_OK;
 }
 
 #endif  // __AUI_USE_SDL__
