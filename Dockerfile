@@ -1,7 +1,7 @@
 ################################################################################
 # base system
 ################################################################################
-FROM ubuntu:rolling as system
+FROM ubuntu:22.04 as system
 
 ENV USERNAME diUser
 RUN useradd -m $USERNAME && \
