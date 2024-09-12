@@ -1,7 +1,7 @@
 ################################################################################
 # base system
 ################################################################################
-FROM ubuntu as system
+FROM debian as system
 
 ENV USERNAME diUser
 RUN useradd -m $USERNAME && \

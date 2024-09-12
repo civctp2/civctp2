@@ -30,6 +30,14 @@
 ##     -v $HOME/ctp2CD/ctp2_program/ctp/videos/:opt/ctp2/ctp2_data/default/videos/:ro \
 ##     --env="AUDIODEV=hw:0,3" \
 ##     registry.gitlab.com/civctp2/civctp2/master:latest ./ctp2 fullscreen
+##
+## use root as DI user if you don't want to configure audio access on the host
+## for the default user in the DI: diUser:
+## ./run-DI.sh \
+##     -u 0 \
+##     -v $HOME/ctp2CD/ctp2_program/ctp/music/:/opt/ctp2/ctp2_program/ctp/music/:ro \
+##     -v $HOME/ctp2CD/ctp2_program/ctp/videos/:opt/ctp2/ctp2_data/default/videos/:ro \
+##     registry.gitlab.com/civctp2/civctp2/master:latest ./ctp2 fullscreen
 
 
 
