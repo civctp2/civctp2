@@ -79,13 +79,17 @@ void Path::Clear()
 	m_current.Set(-1,-1);
 }
 
-void Path::FlattenAstarList(AstarPoint *best)
+bool Path::FlattenAstarList(AstarPoint *best)
 {
 	Assert(best);
 	AstarPoint *    ptr = best;
 
 	sint32 n;
-	for(n = 0; ptr->m_parent; n++, ptr = ptr->m_parent) { Assert(n >= 0); }; // Check for endless loop
+	for(n = 0; ptr->m_parent; n++, ptr = ptr->m_parent){
+	    Assert(n >= 0); // Check for endless loop
+	    if(n<0) // no path end found (ptr->m_parent == NULL) within 2^31-1 iterations
+		return false;
+	    }; 
 
 	m_current = m_start = ptr->m_pos;
 	m_next = 0;
@@ -102,6 +106,7 @@ void Path::FlattenAstarList(AstarPoint *best)
 		old = ptr;
 		--i;
 	}
+	return true;
 }
 
 void Path::FlattenNormalizedPointList(const MapPoint &start,
