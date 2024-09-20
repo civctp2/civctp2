@@ -1106,7 +1106,7 @@ bool Governor::TestSliderSettings(const SlidersSetting & sliders_setting,
 		CityData * city = city_unit->GetCityData();
 
 #if defined(_DEBUG) || defined(USE_LOGGING)
-		DPRINTF(k_DBG_GOVERNOR, ("//  Elapsed time for nothing       = %f ms (%s)\n", t2.getElapsedTimeInMilliSec(), city->GetName()));
+		DPRINTF(k_DBG_GOVERNOR_DETAIL, ("//  Elapsed time for nothing       = %f ms (%s)\n", t2.getElapsedTimeInMilliSec(), city->GetName()));
 #endif
 		//Added by Martin Gühmann to take specialists into account.
 		//Well this has an effect but the AI seems to perform worse with it.
@@ -1114,7 +1114,7 @@ bool Governor::TestSliderSettings(const SlidersSetting & sliders_setting,
 		AssignPopulation(city, hasAllAdvances);
 
 #if defined(_DEBUG) || defined(USE_LOGGING)
-		DPRINTF(k_DBG_GOVERNOR, ("//  Elapsed time for pop asignment = %f ms (%s)\n", t2.getElapsedTimeInMilliSec(), city->GetName()));
+		DPRINTF(k_DBG_GOVERNOR_DETAIL, ("//  Elapsed time for pop asignment = %f ms (%s)\n", t2.getElapsedTimeInMilliSec(), city->GetName()));
 #endif
 
 		// Force happiness recalculation as crime losses depend on happiness.
@@ -1122,13 +1122,13 @@ bool Governor::TestSliderSettings(const SlidersSetting & sliders_setting,
 		city->CalcHappiness(gold, false);
 
 #if defined(_DEBUG) || defined(USE_LOGGING)
-		DPRINTF(k_DBG_GOVERNOR, ("//  Elapsed time for happiness     = %f ms (%s)\n", t2.getElapsedTimeInMilliSec(), city->GetName()));
+		DPRINTF(k_DBG_GOVERNOR_DETAIL, ("//  Elapsed time for happiness     = %f ms (%s)\n", t2.getElapsedTimeInMilliSec(), city->GetName()));
 #endif
 
 		city->ProcessAllResources();
 
 #if defined(_DEBUG) || defined(USE_LOGGING)
-		DPRINTF(k_DBG_GOVERNOR, ("//  Elapsed time for resources     = %f ms (%s)\n", t2.getElapsedTimeInMilliSec(), city->GetName()));
+		DPRINTF(k_DBG_GOVERNOR_DETAIL, ("//  Elapsed time for resources     = %f ms (%s)\n", t2.getElapsedTimeInMilliSec(), city->GetName()));
 #endif
 
 		double new_happiness = city->GetHappiness();
@@ -1151,7 +1151,7 @@ bool Governor::TestSliderSettings(const SlidersSetting & sliders_setting,
 		}
 
 #if defined(_DEBUG) || defined(USE_LOGGING)
-		DPRINTF(k_DBG_GOVERNOR, ("//  Elapsed total time             = %f ms (%s)\n", t2.getElapsedTimeInMilliSec(), city->GetName()));
+		DPRINTF(k_DBG_GOVERNOR_DETAIL, ("//  Elapsed total time             = %f ms (%s)\n", t2.getElapsedTimeInMilliSec(), city->GetName()));
 		t2.stop();
 #endif
 	}
@@ -1171,8 +1171,8 @@ bool Governor::TestSliderSettings(const SlidersSetting & sliders_setting,
 	}
 
 #if defined(_DEBUG) || defined(USE_LOGGING)
-	DPRINTF(k_DBG_GOVERNOR, ("// Elapsed time                        = %f ms (All cities)\n", t1.getElapsedTimeInMilliSec()));
-	DPRINTF(k_DBG_GOVERNOR, ("\n"));
+	DPRINTF(k_DBG_GOVERNOR_DETAIL, ("// Elapsed time                        = %f ms (All cities)\n", t1.getElapsedTimeInMilliSec()));
+	DPRINTF(k_DBG_GOVERNOR_DETAIL, ("\n"));
 	t1.stop();
 #endif
 
@@ -2754,7 +2754,7 @@ void Governor::AssignPopulation(CityData *city, bool hasAllAdvances) const
 
 #if defined(_DEBUG) || defined(USE_LOGGING)
 	t1.stop();
-	DPRINTF(k_DBG_GOVERNOR, ("//  Elapsed time for popasign (sub)= %f ms (%s)\n", t1.getElapsedTimeInMilliSec(), city->GetName()));
+	DPRINTF(k_DBG_GOVERNOR_DETAIL, ("//  Elapsed time for popasign (sub)= %f ms (%s)\n", t1.getElapsedTimeInMilliSec(), city->GetName()));
 #endif
 }
 
