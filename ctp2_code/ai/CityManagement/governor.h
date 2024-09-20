@@ -213,6 +213,7 @@ public:
 
 		sint32 GetValue(){ return m_production + m_gold + m_food; }
 		bool   Test()    { return m_productionTest && m_goldTest && m_foodTest && m_happinessTest; }
+		void   Log()     { DPRINTF(k_DBG_GOVERNOR, ("//  Food: %i  Prod: %i Gold: %i Value: %i\n", m_food, m_production, m_gold, GetValue())); }
 
 		sint32 m_production;
 		sint32 m_gold;

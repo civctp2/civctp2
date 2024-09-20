@@ -1295,6 +1295,7 @@ void Governor::OptimizeSliders(SlidersSetting & sliders_setting) const
 	){
 		TestSliderSettings(sliders_setting, slider_tests, hasAllAdvances);
 		value     =      slider_tests.GetValue();
+		slider_tests.Log();
 
 		if(!ProdSliderReachedMin(sliders_setting))
 		{
@@ -1302,6 +1303,7 @@ void Governor::OptimizeSliders(SlidersSetting & sliders_setting) const
 			prod_sliders_setting.m_deltaProduction--;
 			TestSliderSettings(prod_sliders_setting, prod_slider_tests, hasAllAdvances);
 			valueProd = prod_slider_tests.GetValue();
+			prod_slider_tests.Log();
 		}
 		else
 		{
@@ -1314,6 +1316,7 @@ void Governor::OptimizeSliders(SlidersSetting & sliders_setting) const
 			gold_sliders_setting.m_deltaGold--;
 			TestSliderSettings(gold_sliders_setting, gold_slider_tests, hasAllAdvances);
 			valueGold = gold_slider_tests.GetValue();
+			gold_slider_tests.Log();
 		}
 		else
 		{
@@ -1326,6 +1329,7 @@ void Governor::OptimizeSliders(SlidersSetting & sliders_setting) const
 			food_sliders_setting.m_deltaFood--;
 			TestSliderSettings(food_sliders_setting, food_slider_tests, hasAllAdvances);
 			valueFood = food_slider_tests.GetValue();
+			food_slider_tests.Log();
 		}
 		else
 		{
