@@ -1143,6 +1143,7 @@ bool Governor::TestSliderSettings(const SlidersSetting & sliders_setting,
 
 		total_gold_cost += city->GetWagesNeeded();
 		total_gold += city->GetNetCityGold();
+		total_gold += city->GetScience();
 		gross_gold += city->GetGrossCityGold();
 
 		if(city->GetNetCityFood() < 0)
