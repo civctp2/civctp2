@@ -227,20 +227,8 @@ public:
 	};
 
 	// The sliders
-	void NormalizeSliders(SlidersSetting & sliders_setting) const;
 
 	sint32 SetSliders(const SlidersSetting & sliders_setting, const bool & update_cities, bool hasAllAdvances) const;
-
-	void GetSliders(SlidersSetting & sliders_setting) const;
-
-	bool ComputeMinimumSliders(SlidersSetting & sliders_setting, bool hasAllAdvances) const;
-
-	bool ComputeBestSliders(SlidersSetting & sliders_setting, bool hasAllAdvances) const;
-
-	StringId GetSlidersAdvice() const;
-
-	// New slider function
-
 	void OptimizeSliders(SlidersSetting & sliders_setting) const;
 	void GetMaxSliderSettings(SlidersSetting & sliders_setting) const;
 	bool ProdSliderReachedMin(SlidersSetting & sliders_setting) const;
@@ -330,8 +318,6 @@ private:
 	sint32 m_maximumUnitShieldCost;
 
 	sint32 m_currentUnitShieldCost;
-
-	bool FitSlidersToCities(SlidersSetting & sliders_setting, bool hasAllAdvances) const;
 
 	bool TestSliderSettings(const SlidersSetting & sliders_setting,
 	                        bool   & production_test,
