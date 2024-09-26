@@ -227,14 +227,12 @@ public:
 	};
 
 	// The sliders
-
-	sint32 SetSliders(const SlidersSetting & sliders_setting, const bool & update_cities, bool hasAllAdvances) const;
+	void SetSliders(const SlidersSetting & sliders_setting, bool hasAllAdvances) const;
 	void OptimizeSliders(SlidersSetting & sliders_setting) const;
 	void GetMaxSliderSettings(SlidersSetting & sliders_setting) const;
 	bool ProdSliderReachedMin(SlidersSetting & sliders_setting) const;
 	bool GoldSliderReachedMin(SlidersSetting & sliders_setting) const;
 	bool FoodSliderReachedMin(SlidersSetting & sliders_setting) const;
-
 	// End of sliders
 
 	bool AddRoadPriority(Path & path, const double & priority_delta);

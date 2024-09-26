@@ -556,14 +556,12 @@ bool Governor::FoodSliderReachedMin(SlidersSetting & sliders_setting) const
 //
 // Globals    : g_player: List of players
 //
-// Returns    : sint32:   The happiness delta over all cities.
+// Returns    : -
 //
-// Remark(s)  : Happiness delta over all cities is very odd. Actual you are
-//              only interested whether the cities are happy enough.
-//              Consequently this isn't used.
+// Remark(s)  : -
 //
 //----------------------------------------------------------------------------
-sint32 Governor::SetSliders(const SlidersSetting & sliders_setting, const bool & update_cities, bool hasAllAdvances) const
+void Governor::SetSliders(const SlidersSetting & sliders_setting, bool hasAllAdvances) const
 {
 	Player * player_ptr = g_player[m_playerId];
 	Assert(player_ptr != NULL);
@@ -573,14 +571,9 @@ sint32 Governor::SetSliders(const SlidersSetting & sliders_setting, const bool &
 	player_ptr->SetWagesLevel  (static_cast<sint32>(player_ptr->GetWagesExpectation())   - sliders_setting.m_deltaGold);
 	player_ptr->SetRationsLevel(static_cast<sint32>(player_ptr->GetRationsExpectation()) - sliders_setting.m_deltaFood);
 
-	if(!update_cities)
-		return 0;
-
 	UnitDynamicArray * city_list = player_ptr->GetAllCitiesList();
 	sint32             cityCount = city_list ? city_list->Num() : 0;
 
-	/// @todo Find out if "total delta" is a good measure
-	double total_delta_happiness = 0;
 	for (sint32 i = 0; i < cityCount; i++)
 	{
 		CityData * city = city_list->Access(i)->GetCityData();
@@ -596,11 +589,7 @@ sint32 Governor::SetSliders(const SlidersSetting & sliders_setting, const bool &
 		city->CalcHappiness(gold, false);
 
 		city->ProcessAllResources();
-
-		total_delta_happiness += (city->GetHappiness() - old_happiness);
 	}
-
-	return static_cast<sint32>(total_delta_happiness);
 }
 
 //----------------------------------------------------------------------------
@@ -682,7 +671,7 @@ bool Governor::TestSliderSettings(const SlidersSetting & sliders_setting,
 	Player * player_ptr = g_player[m_playerId];
 	Assert(player_ptr);
 
-	SetSliders(sliders_setting, true, hasAllAdvances);
+	SetSliders(sliders_setting, hasAllAdvances);
 
 	UnitDynamicArray *  city_list   = player_ptr->GetAllCitiesList();
 	sint32              num_cities  = city_list ? city_list->Num() : 0;

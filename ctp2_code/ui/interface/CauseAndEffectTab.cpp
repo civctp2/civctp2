@@ -1368,7 +1368,7 @@ void CauseAndEffectTab::OptimizeSlidersButtonActionCallback(aui_Control *control
 	DPRINTF(k_DBG_AI, ("//						     Player %d\n", playerId));
 
 	governor.OptimizeSliders(sliders_setting);
-	governor.SetSliders(sliders_setting, true, g_player[playerId]->m_advances->HasAllAdvances());
+	governor.SetSliders(sliders_setting, g_player[playerId]->m_advances->HasAllAdvances());
 
 	DPRINTF(k_DBG_AI, ("//  elapsed time = %d ms\n", (GetTickCount() - t1)));
 	DPRINTF(k_DBG_AI, ("\n"));
