@@ -738,12 +738,13 @@ void Governor::OptimizeSliders(SlidersSetting & sliders_setting) const
 	g_player[m_playerId]->PreResourceCalculation();
 	bool hasAllAdvances = g_player[m_playerId]->m_advances->HasAllAdvances();
 
+	TestSliderSettings(sliders_setting, slider_tests, hasAllAdvances);
+
 	while( !ProdSliderReachedMin(sliders_setting)
 	||     !GoldSliderReachedMin(sliders_setting)
 	||     !FoodSliderReachedMin(sliders_setting)
 	){
-		TestSliderSettings(sliders_setting, slider_tests, hasAllAdvances);
-		value     =      slider_tests.GetValue();
+		value = slider_tests.GetValue();
 		slider_tests.Log();
 
 		if(!ProdSliderReachedMin(sliders_setting))
@@ -753,6 +754,7 @@ void Governor::OptimizeSliders(SlidersSetting & sliders_setting) const
 			TestSliderSettings(prod_sliders_setting, prod_slider_tests, hasAllAdvances);
 			valueProd = prod_slider_tests.GetValue();
 			prod_slider_tests.Log();
+			slider_tests = prod_slider_tests;
 		}
 		else
 		{
@@ -766,6 +768,7 @@ void Governor::OptimizeSliders(SlidersSetting & sliders_setting) const
 			TestSliderSettings(gold_sliders_setting, gold_slider_tests, hasAllAdvances);
 			valueGold = gold_slider_tests.GetValue();
 			gold_slider_tests.Log();
+			slider_tests = gold_slider_tests;
 		}
 		else
 		{
@@ -779,6 +782,7 @@ void Governor::OptimizeSliders(SlidersSetting & sliders_setting) const
 			TestSliderSettings(food_sliders_setting, food_slider_tests, hasAllAdvances);
 			valueFood = food_slider_tests.GetValue();
 			food_slider_tests.Log();
+			slider_tests = food_slider_tests;
 		}
 		else
 		{
@@ -801,6 +805,7 @@ void Governor::OptimizeSliders(SlidersSetting & sliders_setting) const
 		&&      prod_slider_tests.m_productionTest
 		){
 			sliders_setting = prod_sliders_setting;
+			slider_tests = prod_slider_tests;
 		}
 		// Real equal need a better solution
 		else if(valueGold >= value
@@ -809,6 +814,7 @@ void Governor::OptimizeSliders(SlidersSetting & sliders_setting) const
 		&&      gold_slider_tests.m_goldTest
 		){
 			sliders_setting = gold_sliders_setting;
+			slider_tests = gold_slider_tests;
 		}
 		// Real equal need a better solution
 		else if(valueFood >= value
@@ -817,6 +823,7 @@ void Governor::OptimizeSliders(SlidersSetting & sliders_setting) const
 		&&      food_slider_tests.m_foodTest
 		){
 			sliders_setting = food_sliders_setting;
+			slider_tests = food_slider_tests;
 		}
 		else{
 			// the values aren't satisfying we have to select one other setting.
@@ -826,6 +833,7 @@ void Governor::OptimizeSliders(SlidersSetting & sliders_setting) const
 			&& valueProd >= valueFood
 			){
 				sliders_setting = prod_sliders_setting;
+				slider_tests = prod_slider_tests;
 			}
 			// Real equal need a better solution
 			else if(valueGold >= value
@@ -833,6 +841,7 @@ void Governor::OptimizeSliders(SlidersSetting & sliders_setting) const
 			&&      valueGold >= valueFood
 			){
 				sliders_setting = gold_sliders_setting;
+				slider_tests = gold_slider_tests;
 			}
 			// Real equal need a better solution
 			else if(valueFood >= value
@@ -840,16 +849,20 @@ void Governor::OptimizeSliders(SlidersSetting & sliders_setting) const
 			&&      valueFood >= valueGold
 			){
 				sliders_setting = food_sliders_setting;
+				slider_tests = food_slider_tests;
 			}
 			else{
 				if(!FoodSliderReachedMin(sliders_setting)){
 					sliders_setting = food_sliders_setting;
+					slider_tests = food_slider_tests;
 				}
 				else if(!ProdSliderReachedMin(sliders_setting)){
 					sliders_setting = prod_sliders_setting;
+					slider_tests = prod_slider_tests;
 				}
 				else if(!GoldSliderReachedMin(sliders_setting)){
 					sliders_setting = gold_sliders_setting;
+					slider_tests = gold_slider_tests;
 				}
 				else{
 					Assert(false);
