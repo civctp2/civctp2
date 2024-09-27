@@ -160,20 +160,20 @@ public:
 
 		const SlidersSetting & operator=(const SlidersSetting & rval)
 		{
-			m_deltaProduction = rval.m_deltaProduction;
-			m_deltaGold = rval.m_deltaGold;
-			m_deltaFood = rval.m_deltaFood;
+			m_deltaProduction    = rval.m_deltaProduction;
+			m_deltaGold          = rval.m_deltaGold;
+			m_deltaFood          = rval.m_deltaFood;
 			m_optimizeProduction = rval.m_optimizeProduction;
-			m_optimizeGold = rval.m_optimizeGold;
-			m_optimizeFood = rval.m_optimizeFood;
+			m_optimizeGold       = rval.m_optimizeGold;
+			m_optimizeFood       = rval.m_optimizeFood;
 			return *this;
 		}
 
 		bool operator==(const SlidersSetting & rval) const
 		{
 			return (m_deltaProduction == rval.m_deltaProduction  &&
-					m_deltaGold == rval.m_deltaGold &&
-					m_deltaFood == rval.m_deltaFood );
+			        m_deltaGold       == rval.m_deltaGold &&
+			        m_deltaFood       == rval.m_deltaFood );
 		}
 		bool operator!=(const SlidersSetting & rval) const
 		{
@@ -193,27 +193,35 @@ public:
 	struct SliderTests
 	{
 		SliderTests()
+		:
+		    m_production     (0),
+		    m_gold           (0),
+		    m_food           (0),
+		    m_happiness      (0),
+		    m_productionTest (true),
+		    m_goldTest       (true),
+		    m_foodTest       (true),
+		    m_happinessTest  (true)
 		{
-			m_production = m_gold = m_food = m_happiness = 0;
-			m_productionTest = m_goldTest = m_foodTest = m_happinessTest = true;
 		}
 
 		const SliderTests & operator=(const SliderTests & rval)
 		{
-			m_production = rval.m_production;
-			m_gold = rval.m_gold;
-			m_food = rval.m_food;
-			m_happiness = rval.m_happiness;
+			m_production     = rval.m_production;
+			m_gold           = rval.m_gold;
+			m_food           = rval.m_food;
+			m_happiness      = rval.m_happiness;
 			m_productionTest = rval.m_productionTest;
-			m_goldTest = rval.m_goldTest;
-			m_foodTest = rval.m_foodTest;
-			m_happinessTest = rval.m_happinessTest;
+			m_goldTest       = rval.m_goldTest;
+			m_foodTest       = rval.m_foodTest;
+			m_happinessTest  = rval.m_happinessTest;
 			return *this;
 		}
 
 		sint32 GetValue(){ return m_production + m_gold + m_food; }
 		bool   Test()    { return m_productionTest && m_goldTest && m_foodTest && m_happinessTest; }
 		void   Log()     { DPRINTF(k_DBG_GOVERNOR, ("//  Food: %i  Prod: %i Gold: %i Value: %i\n", m_food, m_production, m_gold, GetValue())); }
+		void   CalcTests(PLAYER_INDEX playerId);
 
 		sint32 m_production;
 		sint32 m_gold;
@@ -317,33 +325,12 @@ private:
 
 	sint32 m_currentUnitShieldCost;
 
-	bool TestSliderSettings(const SlidersSetting & sliders_setting,
-	                        bool   & production_test,
-	                        bool   & gold_test,
-	                        bool   & food_test,
-	                        bool   & happiness_test,
-	                        sint32 & total_production,
-	                        sint32 & total_gold,
-	                        sint32 & total_food,
-	                        bool     hasAllAdvances) const;
-
-	bool TestSliderSettings
+	void TestSliderSettings
 	(
-	    SlidersSetting const &  sliders_setting,
-	    SliderTests &           slider_tests,
-	    bool                    hasAllAdvances
-	) const
-	{
-		return TestSliderSettings(sliders_setting,
-		                          slider_tests.m_productionTest,
-		                          slider_tests.m_goldTest,
-		                          slider_tests.m_foodTest,
-		                          slider_tests.m_happinessTest,
-		                          slider_tests.m_production,
-		                          slider_tests.m_gold,
-		                          slider_tests.m_food,
-		                          hasAllAdvances);
-	}
+		SlidersSetting const &  sliders_setting,
+		SliderTests &           slider_tests,
+		bool                    hasAllAdvances
+	) const;
 
 	void ComputeNextBuildItem(CityData *city, sint32 & cat, sint32 & type, sint32 & list_num) const;
 

@@ -552,7 +552,6 @@ bool Governor::FoodSliderReachedMin(SlidersSetting & sliders_setting) const
 // Description: Gets the current slider settings.
 //
 // Parameters : sliders_setting: Filled with the current slider settings.
-//              update_cities:   Whether the cities should be updated.
 //
 // Globals    : g_player: List of players
 //
@@ -566,7 +565,6 @@ void Governor::SetSliders(const SlidersSetting & sliders_setting, bool hasAllAdv
 	Player * player_ptr = g_player[m_playerId];
 	Assert(player_ptr != NULL);
 
-	//Added casts
 	player_ptr->SetWorkdayLevel(static_cast<sint32>(player_ptr->GetWorkdayExpectation()) - sliders_setting.m_deltaProduction);
 	player_ptr->SetWagesLevel  (static_cast<sint32>(player_ptr->GetWagesExpectation())   - sliders_setting.m_deltaGold);
 	player_ptr->SetRationsLevel(static_cast<sint32>(player_ptr->GetRationsExpectation()) - sliders_setting.m_deltaFood);
@@ -592,64 +590,10 @@ void Governor::SetSliders(const SlidersSetting & sliders_setting, bool hasAllAdv
 	}
 }
 
-//----------------------------------------------------------------------------
-//
-// Name       : Governor::TestSliderSettings
-//
-// Description: Checks if the given slider settings are enough to support
-//              the empire.
-//
-// Parameters : sliders_setting:  The slider settings to be tesed.
-//              production_test:  Indicates after function execution whether
-//                                new slider settings allow to support units.
-//              gold_test:        Indicates after function execution whether
-//                                new slider settings allow to pay wages and
-//                                building upkeep or if building upkeep can't
-//                                be paid whether deficit spending is not to high.
-//              food_test:        Indicates after function execution whether
-//                                new slider settings allow to feed each city.
-//              happiness_test:   Indicates after function execution whether
-//                                new slider settings allow each city to stay
-//                                above the minimum happiness level.
-//              total_production: Filled with empire production (military support,
-//                                public works and production for buildings)
-//              total_gold:       Filled with gold surplus
-//              total_food:       Filled with food surplus
-//
-// Globals    : -
-//
-// Returns    : bool:             Whether production_test and gold_test and
-//                                food_test and happiness_test are true.
-//
-// Remark(s)  : -
-//
-//----------------------------------------------------------------------------
-bool Governor::TestSliderSettings(const SlidersSetting & sliders_setting,
-                                  bool   & production_test,
-                                  bool   & gold_test,
-                                  bool   & food_test,
-                                  bool   & happiness_test,
-                                  sint32 & total_production,
-                                  sint32 & total_gold,
-                                  sint32 & total_food,
-                                  bool     hasAllAdvances) const
+void Governor::SliderTests::CalcTests(PLAYER_INDEX playerId)
 {
-#if defined(_DEBUG) || defined(USE_LOGGING)
-	Timer t1;
-	Timer t2;
-
-	t1.start();
-
-	DPRINTF(k_DBG_GOVERNOR, ("\n"));
-	DPRINTF(k_DBG_GOVERNOR, ("// TEST SLIDER SETTINGS -- Turn    %d\n", g_player[m_playerId]->GetCurRound()));
-	DPRINTF(k_DBG_GOVERNOR, ("//                         Player  %d\n", m_playerId));
-	DPRINTF(k_DBG_GOVERNOR, ("//                         Workday %d\n", sliders_setting.m_deltaProduction));
-	DPRINTF(k_DBG_GOVERNOR, ("//                         Wages   %d\n", sliders_setting.m_deltaGold));
-	DPRINTF(k_DBG_GOVERNOR, ("//                         Rations %d\n", sliders_setting.m_deltaFood));
-#endif
-
 	const StrategyRecord & strategy =
-		Diplomat::GetDiplomat(m_playerId).GetCurrentStrategy();
+		Diplomat::GetDiplomat(playerId).GetCurrentStrategy();
 
 	double deficit_spending;
 	sint32 min_happiness;
@@ -661,20 +605,17 @@ bool Governor::TestSliderSettings(const SlidersSetting & sliders_setting,
 
 	sint32 total_gold_cost = 0;
 	sint32 gross_gold = 0;
-	total_food = 0;
-	total_production = 0;
-	total_gold = 0;
+	m_food = 0;
+	m_production = 0;
+	m_gold = 0;
 
-	food_test = true;
-	happiness_test = true;
+	m_foodTest = true;
+	m_happinessTest = true;
 
-	Player * player_ptr = g_player[m_playerId];
+	Player * player_ptr = g_player[playerId];
 	Assert(player_ptr);
-
-	SetSliders(sliders_setting, hasAllAdvances);
-
-	UnitDynamicArray *  city_list   = player_ptr->GetAllCitiesList();
-	sint32              num_cities  = city_list ? city_list->Num() : 0;
+	UnitDynamicArray *  city_list = player_ptr->GetAllCitiesList();
+	sint32              num_cities = city_list ? city_list->Num() : 0;
 
 	for (sint32 city_index = 0; city_index < num_cities; city_index++)
 	{
@@ -688,44 +629,82 @@ bool Governor::TestSliderSettings(const SlidersSetting & sliders_setting,
 		if(new_happiness < min_happiness
 		|| city->EntertainerCount() == city->PopCount()
 		){
-			happiness_test = false;
+			m_happinessTest = false;
 		}
 
-		total_food += city->GetNetCityFood();
-		total_production += city->GetNetCityProduction();
+		m_food += city->GetNetCityFood();
+		m_production += city->GetNetCityProduction();
 
 		total_gold_cost += city->GetWagesNeeded();
-		total_gold += city->GetNetCityGold();
-		total_gold += city->GetScience();
+		m_gold += city->GetNetCityGold();
+		m_gold += city->GetScience();
 		gross_gold += city->GetGrossCityGold();
 
-		if(city->GetNetCityFood() < 0)
+		if (city->GetNetCityFood() < 0)
 		{
-			food_test = false;
+			m_foodTest = false;
 		}
 	}
 
-	total_production += player_ptr->GetProductionFromFranchises();
-	production_test = (total_production >= player_ptr->GetReadinessCost());
+	m_production += player_ptr->GetProductionFromFranchises();
+	m_productionTest = (m_production >= player_ptr->GetReadinessCost());
 
 	double wages_percent = static_cast<double>(total_gold_cost) / static_cast<double>(gross_gold);
-	gold_test = (wages_percent <= max_wage_percent);
+	m_goldTest = (wages_percent <= max_wage_percent);
 
 	sint32 player_gold = player_ptr->GetGold();
-	if(total_gold < 0
-	&& total_gold + player_gold < 0
-	&& total_gold > player_gold * -deficit_spending
+	if(m_gold < 0
+	&& m_gold + player_gold < 0
+	&& m_gold > player_gold * -deficit_spending
 	){
-		gold_test = false;
+		m_goldTest = false;
 	}
+}
+
+//----------------------------------------------------------------------------
+//
+// Name       : Governor::TestSliderSettings
+//
+// Description: Checks if the given slider settings are enough to support
+//              the empire.
+//
+// Parameters : sliders_setting:  The slider settings to be tested.
+//              slider_tests:     Object calculating the slider tests and
+//                                holding the results.
+//
+// Globals    : -
+//
+// Returns    : bool:             Whether production_test and gold_test and
+//                                food_test and happiness_test are true.
+//
+// Remark(s)  : -
+//
+//----------------------------------------------------------------------------
+void Governor::TestSliderSettings(const SlidersSetting & sliders_setting,
+                                  SliderTests &          slider_tests,
+                                  bool     hasAllAdvances) const
+{
+#if defined(_DEBUG) || defined(USE_LOGGING)
+	Timer t1;
+
+	t1.start();
+
+	DPRINTF(k_DBG_GOVERNOR, ("\n"));
+	DPRINTF(k_DBG_GOVERNOR, ("// TEST SLIDER SETTINGS -- Turn    %d\n", g_player[m_playerId]->GetCurRound()));
+	DPRINTF(k_DBG_GOVERNOR, ("//                         Player  %d\n", m_playerId));
+	DPRINTF(k_DBG_GOVERNOR, ("//                         Workday %d\n", sliders_setting.m_deltaProduction));
+	DPRINTF(k_DBG_GOVERNOR, ("//                         Wages   %d\n", sliders_setting.m_deltaGold));
+	DPRINTF(k_DBG_GOVERNOR, ("//                         Rations %d\n", sliders_setting.m_deltaFood));
+#endif
+
+	SetSliders(sliders_setting, hasAllAdvances);
+	slider_tests.CalcTests(m_playerId);
 
 #if defined(_DEBUG) || defined(USE_LOGGING)
 	DPRINTF(k_DBG_GOVERNOR_DETAIL, ("// Elapsed time                        = %f ms (All cities)\n", t1.getElapsedTimeInMilliSec()));
 	DPRINTF(k_DBG_GOVERNOR_DETAIL, ("\n"));
 	t1.stop();
 #endif
-
-	return (production_test && gold_test && food_test && happiness_test);
 }
 
 //----------------------------------------------------------------------------

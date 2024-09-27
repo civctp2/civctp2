@@ -1387,26 +1387,9 @@ void CauseAndEffectTab::OptimizeSlidersButtonActionCallback(aui_Control *control
 	tab->m_tabPanel->ShouldDraw(TRUE);
 
 #if defined(_DEBUG) || defined(USE_LOGGING)
-	sint32 total_production = 0;
-	sint32 total_gold = 0;
-	sint32 total_food = 0;
-	UnitDynamicArray *  city_list = g_player[playerId]->GetAllCitiesList();
-	sint32              num_cities = city_list ? city_list->Num() : 0;
-
-	for (sint32 city_index = 0; city_index < num_cities; city_index++)
-	{
-		Unit const & city_unit = city_list->Get(city_index);
-		CityData * city = city_unit->GetCityData();
-
-		total_food += city->GetNetCityFood();
-		total_production += city->GetNetCityProduction();
-
-		total_gold += city->GetNetCityGold();
-
-	}
-
-	sint32 value = total_food + total_production + total_gold;
-	DPRINTF(k_DBG_GOVERNOR, ("//  Food: %i  Prod: %i Gold: %i Value: %i\n", total_food, total_production, total_gold, value));
+	Governor::SliderTests slider_tests;
+	slider_tests.CalcTests(playerId);
+	slider_tests.Log();
 #endif
 }
 
