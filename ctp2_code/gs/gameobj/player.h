@@ -846,8 +846,6 @@ public:
 	void   SetCapitol(const Unit &c);
 	bool   GetCapitolPos(MapPoint &pos) const;
 
-	double GetRationLevel() const { return 1.0; }
-
 	void   BuildWonder(Unit city, sint32 wonder);
 	void   AddWonder(sint32 wonder, Unit &city);
 	void   RemoveWonder(sint32 wonder, bool destroyed);
