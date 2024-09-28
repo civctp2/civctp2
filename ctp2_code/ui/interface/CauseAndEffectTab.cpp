@@ -1183,7 +1183,6 @@ void CauseAndEffectTab::RationsSpinnerActionCallback(aui_Control *control,
                                                      uint32 data,
                                                      void *cookie)
 {
-
 	if(action != static_cast<uint32>(AUI_RANGER_ACTION_VALUECHANGE))
 		return;
 
@@ -1193,26 +1192,25 @@ void CauseAndEffectTab::RationsSpinnerActionCallback(aui_Control *control,
 	Player *player = g_player[g_selected_item->GetVisiblePlayer()];
 
 	sint32 rationLevelSet = spinner->GetValueX() -
-		k_ZERO_FOUR__NEG_TWO_TWO_CONVERSION;
-	if(rationLevelSet != player->GetUnitlessRations())	{
+	    k_ZERO_FOUR__NEG_TWO_TWO_CONVERSION;
+	if(rationLevelSet != player->GetUnitlessRations())
+	{
 		player->SetRationsLevel(rationLevelSet);
 		UpdateCities();
+		// Happiness is modified by this spinner and happiness modfies crime
+		// and crime modifies food, production and commerce, therefore all three
+		// need to be updated.
+		tab->UpdateFoodValues();
+		tab->UpdateProductionValues();
+		tab->UpdateCommerceValues();
+		tab->UpdateGeneral();
+		tab->m_tabPanel->ShouldDraw(TRUE);
 	}
-
-	// Happiness is modified by this spinner and happiness modfies crime
-	// and crime modifies food, production and commerce, therefore all three
-	// need to be updated.
-	tab->UpdateFoodValues();
-	tab->UpdateProductionValues();
-	tab->UpdateCommerceValues();
-	tab->UpdateGeneral();
-	tab->m_tabPanel->ShouldDraw(TRUE);
 }
 
 void CauseAndEffectTab::WorkdaySpinnerActionCallback(aui_Control *control,
 	uint32 action, uint32 data, void *cookie)
 {
-
 	if(action != static_cast<uint32>(AUI_RANGER_ACTION_VALUECHANGE))
 		return;
 
@@ -1222,26 +1220,26 @@ void CauseAndEffectTab::WorkdaySpinnerActionCallback(aui_Control *control,
 	Player *player = g_player[g_selected_item->GetVisiblePlayer()];
 
 	sint32 workdayLevelSet = spinner->GetValueX() -
-		k_ZERO_FOUR__NEG_TWO_TWO_CONVERSION;
-	if(workdayLevelSet != player->GetUnitlessWorkday())	{
+	    k_ZERO_FOUR__NEG_TWO_TWO_CONVERSION;
+	if(-workdayLevelSet != player->GetUnitlessWorkday())
+	{
 		player->SetWorkdayLevel(-workdayLevelSet);
 		UpdateCities();
-	}
 
-	// Happiness is modified by this spinner and happiness modfies crime
-	// and crime modifies food, production and commerce, therefore all three
-	// need to be updated.
-	tab->UpdateFoodValues();
-	tab->UpdateProductionValues();
-	tab->UpdateCommerceValues();
-	tab->UpdateGeneral();
-	tab->m_tabPanel->ShouldDraw(TRUE);
+		// Happiness is modified by this spinner and happiness modfies crime
+		// and crime modifies food, production and commerce, therefore all three
+		// need to be updated.
+		tab->UpdateFoodValues();
+		tab->UpdateProductionValues();
+		tab->UpdateCommerceValues();
+		tab->UpdateGeneral();
+		tab->m_tabPanel->ShouldDraw(TRUE);
+	}
 }
 
 void CauseAndEffectTab::PublicWorksSpinnerActionCallback(aui_Control *control,
 	uint32 action, uint32 data, void *cookie)
 {
-
 	if(action != static_cast<uint32>(AUI_RANGER_ACTION_VALUECHANGE))
 		return;
 
@@ -1252,21 +1250,21 @@ void CauseAndEffectTab::PublicWorksSpinnerActionCallback(aui_Control *control,
 
 	sint32 publicWorksLevelSet = spinner->GetValueX();
 	if(publicWorksLevelSet !=
-		static_cast<sint32>((player->m_materialsTax * 100.0) + 0.5))	{
+		static_cast<sint32>((player->m_materialsTax * 100.0) + 0.5))
+	{
 		player->SetMaterialsTax(
 			static_cast<double>(publicWorksLevelSet) / 100.0);
 		UpdateCities();
-	}
 
-	tab->UpdateProductionValues();
-	tab->UpdateGeneral();
-	tab->m_tabPanel->ShouldDraw(TRUE);
+		tab->UpdateProductionValues();
+		tab->UpdateGeneral();
+		tab->m_tabPanel->ShouldDraw(TRUE);
+	}
 }
 
 void CauseAndEffectTab::WagesSpinnerActionCallback(aui_Control *control,
 	uint32 action, uint32 data, void *cookie)
 {
-
 	if(action != static_cast<uint32>(AUI_RANGER_ACTION_VALUECHANGE))
 		return;
 
@@ -1276,26 +1274,25 @@ void CauseAndEffectTab::WagesSpinnerActionCallback(aui_Control *control,
 	Player *player = g_player[g_selected_item->GetVisiblePlayer()];
 
 	sint32 wagesLevelSet = spinner->GetValueX() -
-		k_ZERO_FOUR__NEG_TWO_TWO_CONVERSION;
-	if(wagesLevelSet != player->GetUnitlessWages())	{
+	    k_ZERO_FOUR__NEG_TWO_TWO_CONVERSION;
+	if(wagesLevelSet != player->GetUnitlessWages())
+	{
 		player->SetWagesLevel(wagesLevelSet);
 		UpdateCities();
+		// Happiness is modified by this spinner and happiness modfies crime
+		// and crime modifies food, production and commerce, therefore all three
+		// need to be updated.
+		tab->UpdateFoodValues();
+		tab->UpdateProductionValues();
+		tab->UpdateCommerceValues();
+		tab->UpdateGeneral();
+		tab->m_tabPanel->ShouldDraw(TRUE);
 	}
-
-	// Happiness is modified by this spinner and happiness modfies crime
-	// and crime modifies food, production and commerce, therefore all three
-	// need to be updated.
-	tab->UpdateFoodValues();
-	tab->UpdateProductionValues();
-	tab->UpdateCommerceValues();
-	tab->UpdateGeneral();
-	tab->m_tabPanel->ShouldDraw(TRUE);
 }
 
 void CauseAndEffectTab::ScienceTaxSpinnerActionCallback(aui_Control *control,
 	uint32 action, uint32 data, void *cookie)
 {
-
 	if(action != static_cast<uint32>(AUI_RANGER_ACTION_VALUECHANGE))
 		return;
 
@@ -1307,22 +1304,21 @@ void CauseAndEffectTab::ScienceTaxSpinnerActionCallback(aui_Control *control,
 	sint32 scienceTaxLevelSet = spinner->GetValueX();
 	double currentScienceTax = 0.0;
 	player->GetScienceTaxRate(currentScienceTax);
-	if (scienceTaxLevelSet != AsPercentage(currentScienceTax))
+	if(scienceTaxLevelSet != AsPercentage(currentScienceTax))
 	{
 		player->SetTaxes(
 			static_cast<double>(scienceTaxLevelSet) / 100.0);
 		UpdateCities();
-	}
 
-	tab->UpdateCommerceValues();
-	tab->UpdateGeneral();
-	tab->m_tabPanel->ShouldDraw(TRUE);
+		tab->UpdateCommerceValues();
+		tab->UpdateGeneral();
+		tab->m_tabPanel->ShouldDraw(TRUE);
+	}
 }
 
 void CauseAndEffectTab::DetailsButtonActionCallback(aui_Control *control,
 	uint32 action, uint32 data, void *cookie)
 {
-
 	if(action != static_cast<uint32>(AUI_BUTTON_ACTION_EXECUTE))
 		return;
 
