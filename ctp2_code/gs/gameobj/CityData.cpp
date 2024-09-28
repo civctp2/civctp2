@@ -11271,6 +11271,12 @@ void CityData::ProcessAllResources()
 #endif
 	DPRINTF(k_DBG_GOVERNOR_DETAIL, ("//  City time for nothing         = %f ms (%s)\n", t1.getElapsedTimeInMilliSec(), GetName()));
 
+	// Recalculation happiness as crime losses depends on happiness.
+	sint32 gold;
+	CalcHappiness(gold, false);
+
+	DPRINTF(k_DBG_GOVERNOR_DETAIL, ("//  City time for happiness calc  = %f ms (%s)\n", t1.getElapsedTimeInMilliSec(), GetName()));
+
 	PreResourceCalculation();
 
 	DPRINTF(k_DBG_GOVERNOR_DETAIL, ("//  City time for precalculation  = %f ms (%s)\n", t1.getElapsedTimeInMilliSec(), GetName()));
@@ -11309,7 +11315,6 @@ void CityData::ProcessAllResources()
 
 	DPRINTF(k_DBG_GOVERNOR_DETAIL, ("//  City time for pollution       = %f ms (%s)\n", t1.getElapsedTimeInMilliSec(), GetName()));
 #endif
-	sint32 gold = 0;
 	// Production has an effect on pollution and polltion has an effect
 	// on happiness. Of course better would be only one recalculation.
 	CalcHappiness(gold, false);

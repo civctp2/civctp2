@@ -582,10 +582,6 @@ void Governor::SetSliders(const SlidersSetting & sliders_setting, bool hasAllAdv
 		//Right direction but more debug work is needed.
 		AssignPopulation(city, hasAllAdvances);
 
-		// Force happiness recalculation as crime losses depends on happiness.
-		sint32 gold;
-		city->CalcHappiness(gold, false);
-
 		city->ProcessAllResources();
 	}
 }
