@@ -513,8 +513,8 @@ void CauseAndEffectTab::UpdateFoodValues()
 		double foodRequired = cityData->GetFoodRequired();
 
 		// Gross food.
-		double food = static_cast<double>(cityData->GetGrossCityFood());
-		double noBonusesGrossFood = static_cast<double>(cityData->GetGrossCityFoodBeforeBonuses());
+		double food = cityData->GetGrossCityFood();
+		double noBonusesGrossFood = cityData->GetGrossCityFoodBeforeBonuses();
 
 		// Buildings.
 		double foodBonus;
@@ -536,9 +536,7 @@ void CauseAndEffectTab::UpdateFoodValues()
 		foodGovBonus -= totalFoodWithoutGov;
 
 		// Crime.
-		sint32 ifoodCrime = 0;
-		cityData->GetFoodCrime(ifoodCrime);
-		double foodCrime = static_cast<double>(ifoodCrime);
+		double foodCrime = cityData->GetFoodCrime();
 
 		// Consumed.
 		double foodConsumed = cityData->GetConsumedFood();

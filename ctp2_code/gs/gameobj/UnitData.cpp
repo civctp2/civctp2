@@ -4988,7 +4988,7 @@ sint32 UnitData::GetGrossCityFood() const
 	if(!m_city_data)
 		return 0;
 
-	return m_city_data->GetGrossCityFood();
+	return static_cast<sint32>(m_city_data->GetGrossCityFood());
 }
 
 sint32 UnitData::GetNetCityGold() const

@@ -344,8 +344,8 @@ public:
 
 	sint32 GetStoredCityFood() const { return m_accumulated_food; }
 	sint32 GetNetCityFood() const { return sint32(m_food_delta); }
-	sint32 GetGrossCityFood() const { return sint32(m_gross_food); }
-	sint32 GetGrossCityFoodBeforeBonuses() const { return sint32(m_gross_food_before_bonuses); }
+	double GetGrossCityFood() const { return m_gross_food; }
+	double GetGrossCityFoodBeforeBonuses() const { return m_gross_food_before_bonuses; }
 	sint32 GetGrossCityProdBeforeBonuses() const { return sint32(m_gross_prod_before_bonuses); }
 
 	sint32 GetStarvationTurns() const {return m_starvation_turns;}
@@ -553,9 +553,7 @@ public:
 	sint32 GetScienceCrime() const { return m_scie_lost_to_crime; }
 	sint32 GetTradeCrime() const { return m_gold_lost_to_crime; }
 	sint32 GetProdCrime() const { return m_production_lost_to_crime; }
-	void GetFoodCrime( sint32 &foodCrime ) const {
-		foodCrime = (sint32)(m_food_lost_to_crime);
-	}
+	double GetFoodCrime() const { return m_food_lost_to_crime; }
 
 	bool GetIsRioting(void) const { return m_is_rioting; }
 
