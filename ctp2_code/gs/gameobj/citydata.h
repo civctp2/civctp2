@@ -343,10 +343,10 @@ public:
 	void ResetCityOwner(sint32 owner);
 
 	sint32 GetStoredCityFood() const { return m_accumulated_food; }
-	sint32 GetNetCityFood() const { return sint32(m_food_delta); }
+	double GetNetCityFood() const { return m_food_delta; }
 	double GetGrossCityFood() const { return m_gross_food; }
 	double GetGrossCityFoodBeforeBonuses() const { return m_gross_food_before_bonuses; }
-	sint32 GetGrossCityProdBeforeBonuses() const { return sint32(m_gross_prod_before_bonuses); }
+	double GetGrossCityProdBeforeBonuses() const { return m_gross_prod_before_bonuses; }
 
 	sint32 GetStarvationTurns() const {return m_starvation_turns;}
 

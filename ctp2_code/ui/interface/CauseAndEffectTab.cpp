@@ -619,7 +619,7 @@ void CauseAndEffectTab::UpdateProductionValues()
 		double production = static_cast<double>(cityData->GetGrossCityProduction());
 
 		// Terrain (raw terrain values).
-		double prodNoBonuses = static_cast<double>(cityData->GetGrossCityProdBeforeBonuses());
+		double prodNoBonuses = cityData->GetGrossCityProdBeforeBonuses();
 
 		// Workday bonus (terrain * workday - terrain).
 		double workdayBonus = ceil(prodNoBonuses * player->GetWorkdayPerPerson());

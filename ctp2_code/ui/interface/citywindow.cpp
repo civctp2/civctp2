@@ -778,7 +778,7 @@ void CityWindow::Update()
 
 	if(m_globalFood) {
 		// Display net food instead of gross food. - Martin Gühmann
-		sprintf(buf, "%d", cityData->GetNetCityFood());
+		sprintf(buf, "%d", static_cast<sint32>(cityData->GetNetCityFood()));
 		m_globalFood->SetText(buf);
 	}
 

@@ -3014,7 +3014,7 @@ SFN_ERROR Slic_CityFoodDelta::Call(SlicArgList *args)
 	if(!res)
 		return SFN_ERROR_TYPE_BUILTIN;
 
-	m_result.m_int = city.AccessData()->GetCityData()->GetNetCityFood();
+	m_result.m_int = static_cast<sint32>(city.AccessData()->GetCityData()->GetNetCityFood());
 	return SFN_ERROR_OK;
 }
 

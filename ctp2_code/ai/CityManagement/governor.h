@@ -194,9 +194,9 @@ public:
 	{
 		SliderTests()
 		:
+		    m_food           (0.0),
 		    m_production     (0),
 		    m_gold           (0),
-		    m_food           (0),
 		    m_happiness      (0),
 		    m_productionTest (true),
 		    m_goldTest       (true),
@@ -207,9 +207,9 @@ public:
 
 		const SliderTests & operator=(const SliderTests & rval)
 		{
+			m_food           = rval.m_food;
 			m_production     = rval.m_production;
 			m_gold           = rval.m_gold;
-			m_food           = rval.m_food;
 			m_happiness      = rval.m_happiness;
 			m_productionTest = rval.m_productionTest;
 			m_goldTest       = rval.m_goldTest;
@@ -218,14 +218,14 @@ public:
 			return *this;
 		}
 
-		sint32 GetValue(){ return m_production + m_gold + m_food; }
+		sint32 GetValue(){ return m_production + m_gold + static_cast<sint32>(m_food); }
 		bool   Test()    { return m_productionTest && m_goldTest && m_foodTest && m_happinessTest; }
-		void   Log()     { DPRINTF(k_DBG_GOVERNOR, ("//  Food: %i  Prod: %i Gold: %i Value: %i\n", m_food, m_production, m_gold, GetValue())); }
+		void   Log()     { DPRINTF(k_DBG_GOVERNOR, ("//  Food: %i  Prod: %i Gold: %i Value: %i\n", static_cast<sint32>(m_food), m_production, m_gold, GetValue())); }
 		void   CalcTests(PLAYER_INDEX playerId);
 
+		double m_food;
 		sint32 m_production;
 		sint32 m_gold;
-		sint32 m_food;
 		sint32 m_happiness;
 
 		bool m_productionTest;

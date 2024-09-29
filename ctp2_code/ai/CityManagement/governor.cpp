@@ -636,7 +636,7 @@ void Governor::SliderTests::CalcTests(PLAYER_INDEX playerId)
 		m_gold += city->GetScience();
 		gross_gold += city->GetGrossCityGold();
 
-		if (city->GetNetCityFood() < 0)
+		if (city->GetNetCityFood() < 0.0)
 		{
 			m_foodTest = false;
 		}
@@ -1872,7 +1872,7 @@ void Governor::AssignPopulation(CityData *city, bool hasAllAdvances) const
 	//////////////////////////////////////////////////
 	// Recalculate Happiness after specialists removal
 	sint32 vgs;
-	city->CalcHappiness(vgs, TRUE);
+	city->CalcHappiness(vgs, true);
 
 	/////////////////////////////////////
 	// Get maximum percent of specialists

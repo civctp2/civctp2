@@ -4973,11 +4973,11 @@ sint32 UnitData::GetStoredCityFood() const
 	return m_city_data->GetStoredCityFood();
 }
 
-sint32 UnitData::GetNetCityFood() const
+double UnitData::GetNetCityFood() const
 {
 	Assert(m_city_data);
 	if(!m_city_data)
-		return 0;
+		return 0.0;
 
 	return m_city_data->GetNetCityFood();
 }

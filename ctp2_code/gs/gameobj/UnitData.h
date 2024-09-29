@@ -565,7 +565,7 @@ public:
 	sint32 GetNetCityProduction() const;
 	sint32 GetGrossCityProduction() const;
 	sint32 GetStoredCityFood() const;
-	sint32 GetNetCityFood() const;
+	double GetNetCityFood() const;
 
 	sint32 GetGrossCityFood() const;
 	sint32 GetNetCityGold() const;
