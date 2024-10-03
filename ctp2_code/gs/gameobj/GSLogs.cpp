@@ -112,44 +112,39 @@ void gslog_LogPlayerStats(sint32 player)
 	gslog_print("[Player %d] [Turn %d]\n", player, pl->m_current_round);
 
 
-	sint32 totalFood = 0, totalFoodCrime = 0, totalFoodConsumed = 0;
+	double totalFood = 0, totalFoodCrime = 0, totalFoodConsumed = 0;
 
 	UnitDynamicArray *cityList = pl->GetAllCitiesList();
 	sint32 cityIndex;
 
 
 	for (cityIndex = 0; cityIndex < cityList->Num(); cityIndex++)
-    {
+	{
 		CityData * cityData = (*cityList)[cityIndex].GetData()->GetCityData();
 
-		sint32 foodCrime = 0;
-		cityData->GetFoodCrime(foodCrime);
+		double foodCrime = cityData->GetFoodCrime();
 
 		totalFood           += cityData->GetGrossCityFood();
 		totalFoodCrime      += foodCrime;
-		totalFoodConsumed   += static_cast<sint32>(cityData->GetConsumedFood());
+		totalFoodConsumed   += cityData->GetConsumedFood();
 	}
 
-	sint32 percentFoodCrime = totalFood ?
-		((totalFoodCrime * 100) / totalFood) : 0;
-	sint32 percentFoodConsumed = totalFood ?
-		((totalFoodConsumed * 100) / totalFood) : 0;
-	sint32 percentFoodStored = 100 - (percentFoodCrime + percentFoodConsumed);
+	sint32 percentFoodCrime = static_cast<sint32>(totalFood ?
+		((totalFoodCrime * 100.0) / totalFood) : 0.0);
+	sint32 percentFoodConsumed = static_cast<sint32>(totalFood ?
+		((totalFoodConsumed * 100.0) / totalFood) : 0.0);
+	sint32 percentFoodStored = static_cast<sint32>(100.0 - (percentFoodCrime + percentFoodConsumed));
 
 	gslog_print("  Food Total: %d\n", totalFood);
 	gslog_print("  Food Crime: %d (%d%%):\n", totalFoodCrime, percentFoodCrime);
 	gslog_print("  Food Consumed: %d (%d%%)\n", totalFoodConsumed, percentFoodConsumed);
 	gslog_print("  Food Stored: %d (%d%%)\n", totalFood - (totalFoodConsumed + totalFoodCrime), percentFoodStored);
 
-
-	sint32 totalProduction = 0, totalProductionCrime = 0,
+		sint32 totalProduction = 0, totalProductionCrime = 0,
 		totalProductionUnitUpkeep = 0, totalProductionPublicWorks = 0;
 
-
-
-
 	for (cityIndex = 0; cityIndex < cityList->Num(); cityIndex++)
-    {
+	{
 		CityData *cityData = (*cityList)[cityIndex].GetData()->GetCityData();
 
 		totalProduction             += cityData->GetGrossCityProduction();

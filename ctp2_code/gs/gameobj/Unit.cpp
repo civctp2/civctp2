@@ -1809,7 +1809,7 @@ sint32 Unit::GetStoredCityFood() const
 {
 	return GetData()->GetStoredCityFood();
 }
-sint32 Unit::GetNetCityFood() const
+double Unit::GetNetCityFood() const
 {
 	return GetData()->GetNetCityFood();
 }

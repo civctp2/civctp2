@@ -1245,7 +1245,7 @@ void CtpAi::BeginTurn(const PLAYER_INDEX player)
 		Governor::SlidersSetting sliders_setting;
 
 		Governor::GetGovernor(player).OptimizeSliders(sliders_setting);
-		Governor::GetGovernor(player).SetSliders(sliders_setting, true, player_ptr->m_advances->HasAllAdvances());
+		Governor::GetGovernor(player).SetSliders(sliders_setting, player_ptr->m_advances->HasAllAdvances());
 
 		DPRINTF(k_DBG_AI, ("//  elapsed time = %d ms\n", (GetTickCount() - t1)));
 
@@ -1633,7 +1633,7 @@ void CtpAi::NetworkClientBeginTurn(PLAYER_INDEX player)
 		Governor::SlidersSetting sliders_setting;
 
 		Governor::GetGovernor(player).OptimizeSliders(sliders_setting);
-		Governor::GetGovernor(player).SetSliders(sliders_setting, true, player_ptr->m_advances->HasAllAdvances());
+		Governor::GetGovernor(player).SetSliders(sliders_setting, player_ptr->m_advances->HasAllAdvances());
 
 		DPRINTF(k_DBG_AI, (LOG_SECTION_START));
 		DPRINTF(k_DBG_AI, ("// COMPUTE GOODS TRADE ROUTES -- Turn %d\n", g_player[player]->m_current_round));

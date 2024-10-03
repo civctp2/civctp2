@@ -658,7 +658,7 @@ float UnitAstar::EstimateFutureCost(const MapPoint &pos, const MapPoint &dest)
 {
 	if (m_move_intersection & k_Unit_MovementType_Air_Bit)
 	{
-		return k_MOVE_AIR_COST * pos.NormalizedDistance(dest);
+		return static_cast<float>(k_MOVE_AIR_COST * pos.NormalizedDistance(dest));
 	}
 
 	return Astar::EstimateFutureCost(pos, dest);
@@ -946,7 +946,7 @@ bool UnitAstar::PretestDest_SameLandContinent(const MapPoint & start, const MapP
 	const uint32 landBits = k_Unit_MovementType_Land_Bit | k_Unit_MovementType_Mountain_Bit;
 	const uint32 nonLandBits = k_Unit_MovementType_Air_Bit | k_Unit_MovementType_Space_Bit
 			| k_Unit_MovementType_Sea_Bit | k_Unit_MovementType_ShallowWater_Bit;
-	if ((m_move_intersection & landBits != 0) && (m_move_intersection & nonLandBits == 0))
+	if (((m_move_intersection & landBits) != 0) && ((m_move_intersection & nonLandBits) == 0))
 	{
 		sint16  start_cont_number;
 		bool    start_is_land;
@@ -975,7 +975,7 @@ bool UnitAstar::PretestDest_SameWaterContinent(const MapPoint & start, const Map
 	const uint32 landBits = k_Unit_MovementType_Land_Bit | k_Unit_MovementType_Mountain_Bit;
 	const uint32 nonLandBits = k_Unit_MovementType_Air_Bit | k_Unit_MovementType_Space_Bit
 	                           | k_Unit_MovementType_Sea_Bit | k_Unit_MovementType_ShallowWater_Bit;
-	if ((m_move_intersection & landBits != 0) && (m_move_intersection & nonLandBits == 0))
+	if (((m_move_intersection & landBits) != 0) && ((m_move_intersection & nonLandBits) == 0))
 	{
 		bool   start_is_land;
 		bool    dest_is_land;

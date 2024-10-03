@@ -1066,7 +1066,7 @@ void TurnCount::LogPlayerStats(void)
 	                    maxCitySize = -1;
 	sint32              numCitiesRioting = 0;
 	sint32              totalPop = 0;
-	sint32              totalFood = 0;
+	double              totalFood = 0.0;
 	sint32              totalProduction = 0;
 	sint32              totalGold = 0;
 
@@ -1096,7 +1096,7 @@ void TurnCount::LogPlayerStats(void)
 	fprintf(logfile, "%d\t", m_round);
 	fprintf(logfile, "%d\t", g_player[playerNum]->GetNumCities());
 	fprintf(logfile, "%d\t", totalProduction);
-	fprintf(logfile, "%d\t", totalFood);
+	fprintf(logfile, "%d\t", static_cast<sint32>(totalFood));
 	fprintf(logfile, "%d\t", totalGold);
 	fprintf(logfile, "%d\t", g_player[playerNum]->m_gold->GetScience());
 	fprintf(logfile, "%d\t", numCitiesRioting);
@@ -1125,7 +1125,7 @@ void TurnCount::LogPlayerStats(void)
 		}
 	fprintf(logfile, "%d\t", numAdvances);
 
-    fprintf(logfile, "\n");
+	fprintf(logfile, "\n");
 	fclose(logfile);
 }
 

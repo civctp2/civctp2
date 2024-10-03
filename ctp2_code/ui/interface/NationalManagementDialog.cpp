@@ -661,7 +661,7 @@ void NationalManagementDialog::UpdateResourceItem(ctp2_ListItem * item, const Un
 
 	if(ctp2_Static *column = GetListItemColumn(item, k_NMD_RES_FOOD)) {
 		// Use net food instead of gross food. - Martin Gühmann
-		sint32 food = cityData->GetNetCityFood();
+		sint32 food = static_cast<sint32>(cityData->GetNetCityFood());
 		sprintf(stringBuffer, "%d", food);
 		column->SetText(stringBuffer);
 		if (food < 0) { // Corrected the condition to match net food.
