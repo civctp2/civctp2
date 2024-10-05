@@ -6307,7 +6307,7 @@ void CityData::FinishUprising(Army sa, UPRISING_CAUSE cause)
 		CellUnitList defenders;
 		for (sint32 i = 0; i < numPossibleDefenders; ++i)
 		{
-			if (cell->AccessUnit(i).GetDBRec()->GetMovementTypeLand())
+			if (cell->AccessUnit(i).IsValid()) // use any unit type (e.g. also sea-units currently in the city) as is normally the case when attacking a city, in particular to avoid non-land units to remain in new civ's city in case the uprise succeeds (so far could be moved out of foreign city, however this is odd an might caus other problems)
 			{
 				defenders.Insert(cell->AccessUnit(i));
 			}
@@ -6331,17 +6331,19 @@ void CityData::FinishUprising(Army sa, UPRISING_CAUSE cause)
 		g_slicEngine->Execute(so);
 	}
 
-	if (startedBattle)
+	if (startedBattle) // battle in case city has units
 	{
-		sa->IncrementDontKillCount();
+		sa->IncrementDontKillCount(); // needed for CleanupUprising(sa); sa->DecrementDontKillCount(); in GEV_CleanupUprising after CleanupUprising(sa); :
 		g_gevManager->AddEvent(GEV_INSERT_Tail, GEV_CleanupUprising,
 		                       GEA_Army, sa,
 		                       GEA_City, m_home_city,
 		                       GEA_End);
 	}
-	else
+	else // no battle in case city has no units at all
 	{
+		sa->IncrementDontKillCount(); // needed for CleanupUprising(sa); :
 		CleanupUprising(sa);
+		sa->DecrementDontKillCount(); // similar to GEV_CleanupUprising
 	}
 }
 
@@ -6353,14 +6355,14 @@ void CityData::CleanupUprising(Army &sa)
 
 	if(!g_theArmyPool->IsValid(sa) || sa.Num() < 1)
 	{
-		DPRINTF(k_DBG_GAMESTATE, ("The uprising was crushed\n"));
+		DPRINTF(k_DBG_GAMESTATE, ("The uprising was crushed in city: %s\n", m_home_city.CD()->GetName()));
 
 		ChangeSpecialists(POP_SLAVE, -sc); // remove all slaves since complete slave army (arose from all slaves of the city) was defeated
 		ChangePopulation(-sc); // therefore population is decreased as well
 	}
 	else
 	{
-		DPRINTF(k_DBG_GAMESTATE, ("The uprising succeeded\n"));
+		DPRINTF(k_DBG_GAMESTATE, ("The uprising succeeded in city: %s\n", m_home_city.CD()->GetName()));
 
 		// city army was already removed by sa.Fight(defenders); in CityData::FinishUprising
 

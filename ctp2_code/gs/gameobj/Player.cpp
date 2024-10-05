@@ -1233,9 +1233,9 @@ bool Player::RemoveUnitReference(const Unit &kill_me, const CAUSE_REMOVE_ARMY ca
 							  kill_me.m_id, cause));
 
 	if (!kill_me.IsCity())
-		RemoveUnitReferenceFromPlayer(kill_me, cause, killedBy);
+		RemoveUnitReferenceFromPlayer(kill_me, cause, killedBy); // currently only returns true
 
-	if(m_all_units->Del(kill_me))
+	if(m_all_units->Del(kill_me)) // false in case of former TempSlaveUnit possibly due to IncrementDontKillCount though DecrementDontKillCount is called after CleanupUprising => RemoveUnitReference returns false causing assertion in Unit.cpp@L216
 	{
 		r = true;
 
