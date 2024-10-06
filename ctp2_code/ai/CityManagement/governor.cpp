@@ -4065,7 +4065,7 @@ void Governor::ComputeNextBuildItem(CityData *city, sint32 & cat, sint32 & type,
 			}
 			else if (elem->GetGarrisonUnitBuildList())
 			{
-				type = GetNeededGarrisonUnitType(city, list_num);
+				type = GetNeededGarrisonUnitType(city, list_num); // Attention! GetNeededGarrisonUnitType also yiels other unit types and kind of replaces GetNeededUnitType
 				if (type >= 0)
 				{
 					Assert(city->CanBuildUnit(type));
@@ -4344,6 +4344,11 @@ const BuildListSequenceRecord * Governor::GetMatchingSequence(const CityData *ci
 	return best_elem->GetBuildListSequence();
 }
 
+// Attention! GetNeededGarrisonUnitType also yiels other unit types and kind of replaces GetNeededUnitType
+// GetNeededGarrisonUnitType function covers GarrisonUnitBuildList of BuildListSequences.txt,
+// which is called far more often than AllUnitBuildList which is covered by GetNeededUnitType
+// possibly GetNeededGarrisonUnitType and GetNeededUnitType should be unified and one of them deprecated
+// which would include removal of dublicated code
 sint32 Governor::GetNeededUnitType(const CityData *city, sint32 & list_num) const
 {
 	Assert(g_player[m_playerId]);
@@ -4543,7 +4548,7 @@ const UnitBuildListRecord * Governor::GetBuildListRecord(const StrategyRecord & 
 		return strategy.HasDiplomatUnitList() ? strategy.GetDiplomatUnitListPtr() : NULL;
 
 	case BUILD_UNIT_LIST_MISSIONARY:
-		//		Assert(strategy.HasDiplomatUnitList());
+		Assert(strategy.HasMissionaryUnitList());
 		return strategy.HasMissionaryUnitList() ? strategy.GetMissionaryUnitListPtr() : NULL;
 
 	case BUILD_UNIT_LIST_SPECIAL:
@@ -4593,6 +4598,11 @@ double Governor::MaxiumGarrisonDefence(const MapPoint & pos) const
 }
 
 // @ToDo Cleanup this function, duplicated, and superflous code, and fix it
+// Attention! GetNeededGarrisonUnitType also yiels other unit types and kind of replaces GetNeededUnitType
+// This function covers GarrisonUnitBuildList of BuildListSequences.txt, which is called far more often than
+// AllUnitBuildList which is covered by GetNeededUnitType
+// possibly GetNeededGarrisonUnitType and GetNeededUnitType should be unified and one of them deprecated
+// which would include removal of dublicated code
 sint32 Governor::GetNeededGarrisonUnitType(const CityData * city, sint32 & list_num) const
 {
 	Assert( city );
@@ -4711,6 +4721,7 @@ sint32 Governor::GetNeededGarrisonUnitType(const CityData * city, sint32 & list_
 			   (    static_cast<BUILD_UNIT_LIST>(list_num) == BUILD_UNIT_LIST_SLAVERY
 			     || static_cast<BUILD_UNIT_LIST>(list_num) == BUILD_UNIT_LIST_SPY
 			     || static_cast<BUILD_UNIT_LIST>(list_num) == BUILD_UNIT_LIST_DIPLOMAT
+			     || static_cast<BUILD_UNIT_LIST>(list_num) == BUILD_UNIT_LIST_MISSIONARY
 			     || static_cast<BUILD_UNIT_LIST>(list_num) == BUILD_UNIT_LIST_SPECIAL
 			   )
 			   && garrisonComplete > build_settler_production_level
@@ -4752,6 +4763,7 @@ sint32 Governor::GetNeededGarrisonUnitType(const CityData * city, sint32 & list_
 			    || static_cast<BUILD_UNIT_LIST>(list_num) == BUILD_UNIT_LIST_SLAVERY
 			    || static_cast<BUILD_UNIT_LIST>(list_num) == BUILD_UNIT_LIST_SPY
 			    || static_cast<BUILD_UNIT_LIST>(list_num) == BUILD_UNIT_LIST_DIPLOMAT
+			    || static_cast<BUILD_UNIT_LIST>(list_num) == BUILD_UNIT_LIST_MISSIONARY
 			    || static_cast<BUILD_UNIT_LIST>(list_num) == BUILD_UNIT_LIST_SPECIAL
 			  )
 			{
