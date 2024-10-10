@@ -608,7 +608,7 @@ Utility Goal::Recompute_Matching_Value(Plan_List & matches, const bool update, c
 #if defined(_DEBUG) || defined(USE_LOGGING)
 	if(CtpAiDebug::DebugLogCheck(m_playerId, -1, -1))
 	{
-		AI_DPRINTF(k_DBG_SCHEDULER, m_playerId, m_goal_type, -1, ("\n"));
+		AI_DPRINTF(k_DBG_SCHEDULER_DETAIL, m_playerId, m_goal_type, -1, ("\n"));
 		projected_strength          .Log_Debug_Info(k_DBG_SCHEDULER_DETAIL, m_playerId, m_goal_type, "The Projected Strength:          ");
 		m_current_needed_strength   .Log_Debug_Info(k_DBG_SCHEDULER_DETAIL, m_playerId, m_goal_type, "The Needed Strength:             ");
 		Squad_Strength strength;
@@ -2027,6 +2027,7 @@ Utility Goal::Compute_Raw_Priority()
 	double report_cell_CityConnected     = 0.0;
 	double report_cell_SmallEmpireBonus  = 0.0;
 	double report_cell_WeakestEnemyBonus = 0.0;
+	double report_cell_BarbarianBonus    = 0.0;
 #endif //_DEBUG
 
 	double maxThreat = static_cast<double>(map.GetMaxThreat(m_playerId));
@@ -2346,6 +2347,21 @@ Utility Goal::Compute_Raw_Priority()
 	report_cell_lastvalue         = cell_value;
 #endif //_DEBUG
 
+	if
+	  (
+	       target_owner == 0
+	    && cbRec
+	    && cbRec->GetBarbarianBonus() != 0
+	  )
+	{
+		cell_value += cbRec->GetBarbarianBonus();
+	}
+
+#if defined(_DEBUG) || defined(USE_LOGGING)
+	report_cell_BarbarianBonus    = cell_value - report_cell_lastvalue;
+	report_cell_lastvalue         = cell_value;
+#endif //_DEBUG
+
 	sint32 threaten_bonus = GetThreatenBonus();
 
 	m_raw_priority = (Utility) cell_value + threaten_bonus;
@@ -2388,7 +2404,7 @@ Utility Goal::Compute_Raw_Priority()
 		        report_cell_NoOwnerTerritory
 		       );
 
-		AI_DPRINTF(k_DBG_SCHEDULER, m_playerId, m_goal_type, -1, ("%s\t\t%8f,\t\t\t%8f,\t%i,\t\t\t%8f,\t%8f,\t%8f,\t%s\n",
+		AI_DPRINTF(k_DBG_SCHEDULER, m_playerId, m_goal_type, -1, ("%s\t\t%8f,\t\t\t%8f,\t%i,\t\t\t%8f,\t%8f,\t%8f,\t%8f,\t%s\n",
 		                                 buff,
 		                                 report_cell_SlaveryProtection,
 		                                 report_cell_SmallCitySize,
@@ -2396,6 +2412,7 @@ Utility Goal::Compute_Raw_Priority()
 		                                 report_cell_CityConnected,
 		                                 report_cell_SmallEmpireBonus,
 		                                 report_cell_WeakestEnemyBonus,
+		                                 report_cell_BarbarianBonus,
 		                                 (g_theWorld->HasCity(target_pos) ? g_theWorld->GetCity(target_pos).GetName() : "field")));
 	}
 	// For some reason the following does not work in VC6:

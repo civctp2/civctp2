@@ -106,6 +106,7 @@ GOAL_SEIGE {
     SmallTargetEmpireSize             3
     SmallTargetEmpireBonus          500
     WeakestEnemyBonus              1000
+    BarbarianBonus                 1000
   }
 
   ThreatenType:DestroyCity
