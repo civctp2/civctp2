@@ -189,23 +189,24 @@ bool RobotAstar2::DefensivePathCallback (const bool & can_enter,
 	PLAYER_INDEX prev_owner;
 
 	pos_owner = g_theWorld->GetCell(pos)->GetOwner();
-	if (can_enter)
+	if (!can_enter)
 	{
-		if ((pos_owner < 0) || (m_incursionPermission & (0x1 << pos_owner)))
-			return true;
-
-		prev_owner = g_theWorld->GetCell(prev)->GetOwner();
-		if ((prev_owner == pos_owner) &&
-			!(m_incursionPermission & (0x1 << prev_owner)))
-		{
-			cost += k_MOVE_TREASPASSING_COST;
-			return true;
-		}
+		cost = k_ASTAR_BIG;
+		entry = ASTAR_ENTRY_TYPE(0);
+		return false;
 	}
 
-	cost = k_ASTAR_BIG;
-	entry = ASTAR_ENTRY_TYPE(0);
-	return false;
+	if ((pos_owner < 0) || (m_incursionPermission & (0x1 << pos_owner)))
+		return true;
+
+	prev_owner = g_theWorld->GetCell(prev)->GetOwner();
+	if((prev_owner == pos_owner) &&
+	   !(m_incursionPermission & (0x1 << prev_owner)))
+	{
+		cost += k_MOVE_TREASPASSING_COST;
+	}
+
+	return true;
 }
 
 bool RobotAstar2::FindPath( const PathType & pathType,
