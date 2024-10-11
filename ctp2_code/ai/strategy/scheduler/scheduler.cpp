@@ -1474,7 +1474,7 @@ bool Scheduler::Prune_Goals()
 
 				m_goals.push_back(goal_ptr);
 
-				AI_DPRINTF(k_DBG_SCHEDULER, m_playerId, goal_type, -1,
+				AI_DPRINTF(k_DBG_SCHEDULER_DETAIL, m_playerId, goal_type, -1,
 					("\t%3d: [%x] of %s is added.", goals_added, goal_ptr_iter->second, g_theGoalDB->GetNameStr(goal_type)));
 				goal_ptr_iter->second->Log_Debug_Info(k_DBG_SCHEDULER_DETAIL);
 
@@ -1489,7 +1489,7 @@ bool Scheduler::Prune_Goals()
 				}
 
 #if defined(_DEBUG) || defined(USE_LOGGING)
-				AI_DPRINTF(k_DBG_SCHEDULER, m_playerId, goal_type, -1,
+				AI_DPRINTF(k_DBG_SCHEDULER_DETAIL, m_playerId, goal_type, -1,
 					("\t%3d: [%x] Is removed", count, goal_ptr_iter->second));
 				goal_ptr_iter->second->Log_Debug_Info(k_DBG_SCHEDULER_DETAIL);
 
