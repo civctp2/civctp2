@@ -1008,6 +1008,7 @@ public:
 
 	bool HasCostalCities() const;
 	bool HasTransporters() const;
+	sint32 GetTransporterNum() const;
 
 	bool IsConnected(MapPoint const & center, sint32 maxSquaredDistance, sint32 & distance, bool isLandOnly = true) const;
 

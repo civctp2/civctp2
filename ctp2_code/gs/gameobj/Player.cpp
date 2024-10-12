@@ -9570,6 +9570,18 @@ bool Player::HasTransporters() const
 	return false;
 }
 
+sint32 Player::GetTransporterNum() const
+{
+	sint32 numTransporters = 0;
+	for (sint32 i = 0; i < m_all_units->Num(); i++)
+	{
+		if (m_all_units->Access(i)->GetMaxCargoCapacity() > 0)
+			numTransporters++;
+	}
+
+	return numTransporters;
+}
+
 bool Player::IsConnected(MapPoint const & center, sint32 maxSquaredDistance, sint32 & distance, bool isLandOnly) const
 {
 	distance = std::numeric_limits<sint32>::max();

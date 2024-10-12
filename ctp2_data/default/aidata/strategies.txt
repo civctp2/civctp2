@@ -368,6 +368,7 @@ STRATEGY_DEFAULT {
         HasBuildingsThenStop BUILDING_BUILD_LIST_SMALL_CITIES
         SmallCitiesMaxSize 6
         MinNumUnits 2
+        MinTransporters 2
         Advice BUILD_GROWTH_ADVICE
     }
 
@@ -423,6 +424,7 @@ STRATEGY_DEFAULT {
         Priority 11000
         BuildListSequence BUILD_LIST_SEQUENCE_WONDERS
         MinNumUnits 2
+        MinTransporters 2
         MinNumCities 4
         Top 0.1
         ProductionCities
@@ -442,6 +444,7 @@ STRATEGY_DEFAULT {
         BuildListSequence BUILD_LIST_SEQUENCE_HAPPINESS
         HasBuildingsThenStop BUILDING_BUILD_LIST_HAPPINESS
         MinNumUnits 2
+        MinTransporters 2
         Bottom 0.1
 //      AllCities
 //      MaxRawHappiness 74
@@ -453,6 +456,7 @@ STRATEGY_DEFAULT {
         Priority 3000
         BuildListSequence BUILD_LIST_SEQUENCE_PRODUCTION
         MinNumUnits 2
+        MinTransporters 2
         AllCities
         NoUnits
         Advice BUILD_DEFAULT_ADVICE
@@ -1018,6 +1022,7 @@ STRATEGY_CAREFUL_START {
         HasBuildingsThenStop BUILDING_BUILD_LIST_SMALL_CITIES
         SmallCitiesMaxSize 6
         MinNumUnits 2
+        MinTransporters 2
         Advice BUILD_GROWTH_ADVICE
     }
 }
@@ -1044,6 +1049,7 @@ STRATEGY_AGRESSIVE_START {
         HasBuildingsThenStop BUILDING_BUILD_LIST_SMALL_CITIES
         SmallCitiesMaxSize 6
         MinNumUnits 2
+        MinTransporters 2
         Advice BUILD_GROWTH_ADVICE
     }
 }
@@ -1524,6 +1530,7 @@ STRATEGY_SCIENTIST_DEFAULT {
         HasBuildingsThenStop BUILDING_BUILD_LIST_SMALL_CITIES
         SmallCitiesMaxSize 6
         MinNumUnits 2
+        MinTransporters 2
         Advice BUILD_GROWTH_ADVICE
     }
 
@@ -1579,7 +1586,8 @@ STRATEGY_SCIENTIST_DEFAULT {
         Priority 11000
         BuildListSequence BUILD_LIST_SEQUENCE_WONDERS_SCIENTIST
         MinNumUnits 2
-	MinNumCities 4
+        MinTransporters 2
+        MinNumCities 4
         Top 0.1
         ProductionCities
         Advice BUILD_WONDERS_ADVICE
@@ -1598,6 +1606,7 @@ STRATEGY_SCIENTIST_DEFAULT {
         BuildListSequence BUILD_LIST_SEQUENCE_HAPPINESS
         HasBuildingsThenStop BUILDING_BUILD_LIST_HAPPINESS
         MinNumUnits 2
+        MinTransporters 2
         Bottom 0.1
 //      AllCities
 //      MaxRawHappiness 74
@@ -1609,6 +1618,7 @@ STRATEGY_SCIENTIST_DEFAULT {
         Priority 3000
         BuildListSequence BUILD_LIST_SEQUENCE_PRODUCTION
         MinNumUnits 2
+        MinTransporters 2
         AllCities
         NoUnits
         Advice BUILD_DEFAULT_ADVICE
@@ -2024,6 +2034,7 @@ STRATEGY_MILITARIST_DEFAULT {
         HasBuildingsThenStop BUILDING_BUILD_LIST_SMALL_CITIES_MILITARIST_STOP
         SmallCitiesMaxSize 6
         MinNumUnits 2
+        MinTransporters 2
         Advice BUILD_GROWTH_ADVICE
     }
 
@@ -2079,7 +2090,8 @@ STRATEGY_MILITARIST_DEFAULT {
         Priority 11000
         BuildListSequence BUILD_LIST_SEQUENCE_WONDERS_MILITARIST
         MinNumUnits 2
-	MinNumCities 4
+        MinTransporters 2
+        MinNumCities 4
         Top 0.1
         ProductionCities
         Advice BUILD_WONDERS_ADVICE
@@ -2098,6 +2110,7 @@ STRATEGY_MILITARIST_DEFAULT {
         BuildListSequence BUILD_LIST_SEQUENCE_HAPPINESS
         HasBuildingsThenStop BUILDING_BUILD_LIST_HAPPINESS
         MinNumUnits 2
+        MinTransporters 2
         Bottom 0.1
 //      AllCities
 //      MaxRawHappiness 74
@@ -2109,6 +2122,7 @@ STRATEGY_MILITARIST_DEFAULT {
         Priority 3000
         BuildListSequence BUILD_LIST_SEQUENCE_PRODUCTION
         MinNumUnits 2
+        MinTransporters 2
         AllCities
         NoUnits
         Advice BUILD_DEFAULT_ADVICE
@@ -2532,6 +2546,7 @@ STRATEGY_ECONOMIC_DEFAULT {
         HasBuildingsThenStop BUILDING_BUILD_LIST_SMALL_CITIES
         SmallCitiesMaxSize 6
         MinNumUnits 2
+        MinTransporters 2
         Advice BUILD_GROWTH_ADVICE
     }
 
@@ -2587,7 +2602,8 @@ STRATEGY_ECONOMIC_DEFAULT {
         Priority 11000
         BuildListSequence BUILD_LIST_SEQUENCE_WONDERS_ECONOMIC
         MinNumUnits 2
-	MinNumCities 4
+        MinTransporters 2
+        MinNumCities 4
         Top 0.1
         ProductionCities
         Advice BUILD_WONDERS_ADVICE
@@ -2606,6 +2622,7 @@ STRATEGY_ECONOMIC_DEFAULT {
         BuildListSequence BUILD_LIST_SEQUENCE_HAPPINESS
         HasBuildingsThenStop BUILDING_BUILD_LIST_HAPPINESS
         MinNumUnits 2
+        MinTransporters 2
         Bottom 0.1
 //      AllCities
 //      MaxRawHappiness 74
@@ -2617,6 +2634,7 @@ STRATEGY_ECONOMIC_DEFAULT {
         Priority 3000
         BuildListSequence BUILD_LIST_SEQUENCE_PRODUCTION
         MinNumUnits 2
+        MinTransporters 2
         AllCities
         NoUnits
         Advice BUILD_DEFAULT_ADVICE
@@ -3031,6 +3049,7 @@ STRATEGY_ECOTOPIAN_DEFAULT {
         HasBuildingsThenStop BUILDING_BUILD_LIST_SMALL_CITIES
         SmallCitiesMaxSize 6
         MinNumUnits 2
+        MinTransporters 2
         Advice BUILD_GROWTH_ADVICE
     }
 
@@ -3086,7 +3105,8 @@ STRATEGY_ECOTOPIAN_DEFAULT {
         Priority 11000
         BuildListSequence BUILD_LIST_SEQUENCE_WONDERS_ECOTOPIAN
         MinNumUnits 2
-	MinNumCities 4
+        MinTransporters 2
+        MinNumCities 4
         Top 0.1
         ProductionCities
         Advice BUILD_WONDERS_ADVICE
@@ -3105,6 +3125,7 @@ STRATEGY_ECOTOPIAN_DEFAULT {
         BuildListSequence BUILD_LIST_SEQUENCE_HAPPINESS
         HasBuildingsThenStop BUILDING_BUILD_LIST_HAPPINESS
         MinNumUnits 2
+        MinTransporters 2
         Bottom 0.1
 //      AllCities
 //      MaxRawHappiness 74
@@ -3116,6 +3137,7 @@ STRATEGY_ECOTOPIAN_DEFAULT {
         Priority 3000
         BuildListSequence BUILD_LIST_SEQUENCE_PRODUCTION
         MinNumUnits 2
+        MinTransporters 2
         AllCities
         NoUnits
         Advice BUILD_DEFAULT_ADVICE
@@ -3530,6 +3552,7 @@ STRATEGY_DIPLOMATIC_DEFAULT {
         HasBuildingsThenStop BUILDING_BUILD_LIST_SMALL_CITIES
         SmallCitiesMaxSize 6
         MinNumUnits 2
+        MinTransporters 2
         Advice BUILD_GROWTH_ADVICE
     }
 
@@ -3585,6 +3608,7 @@ STRATEGY_DIPLOMATIC_DEFAULT {
         Priority 11000
         BuildListSequence BUILD_LIST_SEQUENCE_WONDERS_DIPLOMATIC
         MinNumUnits 2
+        MinTransporters 2
         MinNumCities 4
         Top 0.1
         ProductionCities
@@ -3604,6 +3628,7 @@ STRATEGY_DIPLOMATIC_DEFAULT {
         BuildListSequence BUILD_LIST_SEQUENCE_HAPPINESS
         HasBuildingsThenStop BUILDING_BUILD_LIST_HAPPINESS
         MinNumUnits 2
+        MinTransporters 2
         Bottom 0.1
 //      AllCities
 //      MaxRawHappiness 74
@@ -3615,6 +3640,7 @@ STRATEGY_DIPLOMATIC_DEFAULT {
         Priority 3000
         BuildListSequence BUILD_LIST_SEQUENCE_PRODUCTION
         MinNumUnits 2
+        MinTransporters 2
         AllCities
         NoUnits
         Advice BUILD_DEFAULT_ADVICE

@@ -3670,6 +3670,12 @@ const BuildListSequenceRecord * Governor::GetMatchingSequence(const CityData *ci
 				continue;
 		}
 
+		if(elem->GetMinTransporters(minNumUnits) && city->IsCoastal() && m_buildUnitList[BUILD_UNIT_LIST_SEA_TRANSPORT].m_desiredCount > 0)
+		{
+			if (minNumUnits > 0 && g_player[m_playerId]->GetTransporterNum() < minNumUnits) // minNumUnits < 1 is valid input in the strategies.txt
+				continue;
+		}
+
 		if(elem->GetMaxRawHappiness(maxRawHappiness) && maxRawHappiness < cityRawHappiness)
 			continue;
 
@@ -3752,6 +3758,7 @@ const BuildListSequenceRecord * Governor::GetMatchingSequence(const CityData *ci
 		{
 			best_priority = elem->GetPriority();
 			best_elem     = elem;
+			continue;
 		}
 
 		double bottom_value;
@@ -3761,6 +3768,7 @@ const BuildListSequenceRecord * Governor::GetMatchingSequence(const CityData *ci
 		{
 			best_priority = elem->GetPriority();
 			best_elem     = elem;
+			continue;
 		}
 
 		sint32 cityMaxSize;
@@ -3774,6 +3782,7 @@ const BuildListSequenceRecord * Governor::GetMatchingSequence(const CityData *ci
 		{
 			best_priority = elem->GetPriority();
 			best_elem     = elem;
+			continue;
 		}
 
 		sint32 value;
@@ -3786,6 +3795,7 @@ const BuildListSequenceRecord * Governor::GetMatchingSequence(const CityData *ci
 		{
 			best_priority = elem->GetPriority();
 			best_elem     = elem;
+			continue;
 		}
 	}
 
@@ -3836,7 +3846,7 @@ sint32 Governor::GetNeededUnitType(const CityData *city, sint32 & list_num) cons
 
 	bool canBuildTransporters = static_cast<double>(m_currentUnitShieldCost) /
 	                            static_cast<double>(m_maximumUnitShieldCost) >
-	                                         build_settler_production_level;
+	                                         build_transport_production_level;
 //	                      || city->GetNeededGarrisonStrength() * build_transport_production_level <= city->GetCurrentGarrisonStrength();
 
 
