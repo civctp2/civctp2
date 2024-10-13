@@ -4328,6 +4328,7 @@ Agent_ptr Goal::GetRallyAgent() const
 	MapPoint targetPos              = Get_Target_Pos();
 	Agent_ptr rallyAgent            = NULL;
 	sint32 minDistance              = 0x7fffffff;
+	uint32 combinedMovementType     = GetMovementType();
 
 	for
 	(
@@ -4352,8 +4353,17 @@ Agent_ptr Goal::GetRallyAgent() const
 
 		if(distance < minDistance)
 		{
-			minDistance = distance;
-			rallyAgent  = agent_ptr;
+			Cell *cell = g_theWorld->GetCell(agent_ptr->Get_Pos());
+			if(cell->CanEnter(combinedMovementType))
+			{
+				minDistance = distance;
+				rallyAgent = agent_ptr;
+			}
+			else if(rallyAgent == NULL)
+			{
+				// Just put an rally agent in, just in case we won't get anything better
+				rallyAgent = agent_ptr;
+			}
 		}
 	}
 
@@ -4990,4 +5000,29 @@ MapPoint Goal::GetClosestCargoPos(const Agent_ptr agent_ptr) const
 void Goal::ResetNeededTransport()
 {
 	m_current_needed_strength.Set_Transport(0);
+}
+
+uint32 Goal::GetMovementType() const
+{
+	uint32 tmp = 0xffffffffu;
+
+	for
+	(
+	    Agent_List::const_iterator agent_iter  = m_agents.begin();
+	                               agent_iter != m_agents.end();
+	                             ++agent_iter
+	)
+	{
+		Agent_ptr agent_ptr = (Agent_ptr) *agent_iter;
+		Assert(agent_ptr);
+
+		if(agent_ptr->Get_Is_Dead())
+		{
+			continue;
+		}
+
+		tmp &= agent_ptr->Get_Army()->GetMovementType();
+	}
+
+	return tmp;
 }
