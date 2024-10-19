@@ -25,7 +25,7 @@
 //
 // Modifications from the original Activision code:
 //
-// - Standardized trade route cost calculation. - June 5th 2005 Martin Gühmann
+// - Standardized trade route cost calculation. - June 5th 2005 Martin Gï¿½hmann
 // - Do not report (ENQUEUE) a traderoute twice upon construction.
 //
 //----------------------------------------------------------------------------
@@ -175,11 +175,12 @@ uint32 TradeRouteData::SeenByBits() const
 
 void TradeRouteData::RedrawRadarMapAlongRoute()
 {
-	sint32 const    num = m_path.Num();
-	for (sint32 i = 0; i < num; i++)
+	if (g_radarMap)
 	{
-		if(g_radarMap)
-			g_radarMap->RedrawTile(&m_path[i]);
+		sint32 const num = m_path.Num();
+		for (sint32 i = 0; i < num; i++) {
+			g_radarMap->RedrawTile(m_path[i]);
+		}
 	}
 }
 
@@ -226,7 +227,7 @@ void TradeRouteData::RemoveFromCells()
 		if(g_theWorld)
 			g_theWorld->GetCell(m_path[i])->DelTradeRoute(route);
 		if(g_radarMap)
-			g_radarMap->RedrawTile(&m_path[i]);
+			g_radarMap->RedrawTile(m_path[i]);
 	}
 }
 

@@ -3894,7 +3894,7 @@ void TiledMap::RedrawTile
 		UnlockSurface();
 	}
 
-	g_radarMap->RedrawTile( point );
+	g_radarMap->RedrawTile(*point);
 }
 
 
