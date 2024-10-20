@@ -1537,7 +1537,7 @@ Utility Goal::Compute_Agent_Matching_Value(const Agent_ptr agent_ptr) const
 		(!diplomat.IncursionPermission(target_owner)))
 	{
 		bool isspecial, cancapture, haszoc, canbombard;
-		bool isstealth;
+		bool isstealth, canthrowparty, canestablishembassy;
 		sint32 maxattack, maxdefense;
 
 		if(!agent_ptr->Get_Army()->HasCargo())
@@ -1548,7 +1548,9 @@ Utility Goal::Compute_Agent_Matching_Value(const Agent_ptr agent_ptr) const
 				maxdefense,
 				cancapture,
 				haszoc,
-				canbombard);
+				canbombard,
+				canthrowparty,
+				canestablishembassy);
 		}
 		else
 		{
@@ -1558,7 +1560,9 @@ Utility Goal::Compute_Agent_Matching_Value(const Agent_ptr agent_ptr) const
 				maxdefense,
 				cancapture,
 				haszoc,
-				canbombard);
+				canbombard,
+				canthrowparty,
+				canestablishembassy);
 		}
 
 		if (!isspecial || maxattack > 0 || haszoc)
@@ -2710,9 +2714,11 @@ bool Goal::IsInvalidByDiplomacy() const
 			// execute it if there is no incursion permission
 			// (depending on alignement) - Calvitix
 			if((!diplomat.IncursionPermission(target_owner) &&
-				(diplomat.GetPersonality()->GetAlignmentGood() ||
-				 diplomat.GetPersonality()->GetAlignmentNeutral()))
-			   && !goal_record->GetSquadClassStealth())
+			    (diplomat.GetPersonality()->GetAlignmentGood() ||
+			     diplomat.GetPersonality()->GetAlignmentNeutral()))
+			   && (!goal_record->GetSquadClassStealth()
+			   &&  !goal_record->GetSquadClassCanEstablishEmbassy()
+			   &&  !goal_record->GetSquadClassCanThrowParty()))
 			{
 				AI_DPRINTF(k_DBG_SCHEDULER, m_playerId, m_goal_type, 0,
 					("\t Player %d GOAL %x (%s) (%3d,%3d): Diplomacy match failed : No permission to enter territory of player %d\n", m_playerId, this, g_theGoalDB->Get(m_goal_type)->GetNameText(), target_pos.x, target_pos.y, target_owner));
@@ -2784,6 +2790,8 @@ bool Goal::IsTargetImmune() const
 		bool cancapture;
 		bool haszoc;
 		bool canbombard;
+		bool canthrowparty;
+		bool canestablishembassy;
 
 		m_target_army->CharacterizeArmy
 		                               (
@@ -2793,8 +2801,9 @@ bool Goal::IsTargetImmune() const
 		                                maxdefense,
 		                                cancapture,
 		                                haszoc,
-		                                canbombard
-		                               );
+		                                canbombard,
+		                                canthrowparty,
+		                                canestablishembassy);
 
 		if(isspecial && !m_target_army->IsVisible(m_playerId))
 			return true;

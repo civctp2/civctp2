@@ -9920,16 +9920,20 @@ void ArmyData::CharacterizeArmy
     sint32 & maxdefense,
     bool & cancapture,
     bool & haszoc,
-    bool & canbombard
+    bool & canbombard,
+    bool & canthrowparty,
+    bool & canestablishembassy
 ) const
 {
-	isspecial  = false;
-	isstealth  = true;
-	maxattack  = 0;
-	maxdefense = 0;
-	cancapture = false;
-	haszoc     = false;
-	canbombard = false;
+	isspecial           = false;
+	isstealth           = true;
+	maxattack           = 0;
+	maxdefense          = 0;
+	cancapture          = false;
+	haszoc              = false;
+	canbombard          = false;
+	canthrowparty       = false;
+	canestablishembassy = false;
 
 	for(sint32 i = 0; i < m_nElements; i++)
 	{
@@ -9946,15 +9950,17 @@ void ArmyData::CharacterizeArmy
 			break;
 		}
 
-		isspecial  |= !rec->GetVisionClassStandard();
-		isspecial  |= (rec->GetAttack() <= 0.0);
-		isstealth  &=  rec->GetVisionClassStealth();
-		cancapture |= !rec->GetCantCaptureCity();
-		haszoc     |= !rec->GetNoZoc();
-		canbombard |= (rec->GetCanBombard() != 0x0);
+		isspecial           |= !rec->GetVisionClassStandard();
+		isspecial           |= (rec->GetAttack() <= 0.0);
+		isstealth           &=  rec->GetVisionClassStealth();
+		cancapture          |= !rec->GetCantCaptureCity();
+		haszoc              |= !rec->GetNoZoc();
+		canbombard          |= (rec->GetCanBombard() != 0x0);
+		canthrowparty       |= rec->GetThrowParty();
+		canestablishembassy |= rec->GetEstablishEmbassy();
 
-		maxattack   = std::max(maxattack,  static_cast<sint32>(rec->GetAttack()));
-		maxdefense  = std::max(maxdefense, static_cast<sint32>(rec->GetDefense()));
+		maxattack            = std::max(maxattack,  static_cast<sint32>(rec->GetAttack()));
+		maxdefense           = std::max(maxdefense, static_cast<sint32>(rec->GetDefense()));
 	}
 }
 
@@ -9991,16 +9997,20 @@ void ArmyData::CharacterizeCargo
     sint32 & maxdefense,
     bool & cancapture,
     bool & haszoc,
-    bool & canbombard
+    bool & canbombard,
+    bool & canthrowparty,
+    bool & canestablishembassy
 ) const
 {
-	isspecial  = false;
-	isstealth  = true;
-	maxattack  = 0;
-	maxdefense = 0;
-	cancapture = false;
-	haszoc     = false;
-	canbombard = false;
+	isspecial           = false;
+	isstealth           = true;
+	maxattack           = 0;
+	maxdefense          = 0;
+	cancapture          = false;
+	haszoc              = false;
+	canbombard          = false;
+	canthrowparty       = false;
+	canestablishembassy = false;
 
 	for(sint32 i = 0; i < m_nElements; i++)
 	{
@@ -10013,15 +10023,17 @@ void ArmyData::CharacterizeCargo
 			{
 				const UnitRecord *rec = cargo->Access(j)->GetDBRec();
 
-				isspecial  |= !rec->GetVisionClassStandard();
-				isspecial  |= (rec->GetAttack() <= 0.0);
-				isstealth  &=  rec->GetVisionClassStealth();
-				cancapture |= !rec->GetCantCaptureCity();
-				haszoc     |= !rec->GetNoZoc();
-				canbombard |= (rec->GetCanBombard() != 0x0);
+				isspecial           |= !rec->GetVisionClassStandard();
+				isspecial           |= (rec->GetAttack() <= 0.0);
+				isstealth           &=  rec->GetVisionClassStealth();
+				cancapture          |= !rec->GetCantCaptureCity();
+				haszoc              |= !rec->GetNoZoc();
+				canbombard          |= (rec->GetCanBombard() != 0x0);
+				canthrowparty       |= !rec->GetThrowParty();
+				canestablishembassy |= !rec->GetEstablishEmbassy();
 
-				maxattack   = std::max(maxattack,  static_cast<sint32>(rec->GetAttack()));
-				maxdefense  = std::max(maxdefense, static_cast<sint32>(rec->GetDefense()));
+				maxattack            = std::max(maxattack,  static_cast<sint32>(rec->GetAttack()));
+				maxdefense           = std::max(maxdefense, static_cast<sint32>(rec->GetDefense()));
 			}
 		}
 	}

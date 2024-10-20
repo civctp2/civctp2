@@ -238,7 +238,7 @@ bool RobotAstar2::FindPath( const PathType & pathType,
 	m_is_robot = true;
 
 	bool isspecial, cancapture, haszoc, canbombard;
-	bool isstealth;
+	bool isstealth, canthrowparty, canestablishembassy;
 	sint32 maxattack, maxdefense;
 	army->CharacterizeArmy( isspecial,
 	    isstealth,
@@ -246,7 +246,9 @@ bool RobotAstar2::FindPath( const PathType & pathType,
 	    maxdefense,
 	    cancapture,
 	    haszoc,
-	    canbombard);
+	    canbombard,
+	    canthrowparty,
+	    canestablishembassy);
 
 	if(isspecial && maxattack == 0 && !haszoc)
 	{
