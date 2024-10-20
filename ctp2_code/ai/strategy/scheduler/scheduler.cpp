@@ -1438,7 +1438,7 @@ bool Scheduler::Prune_Goals()
 			goal_type,
 			m_goals_of_type[goal_type].size()));
 
-		sprintf(buffer, "\t// max eval = %3.2f, max_exec = %3.2f", goal_element_ptr->GetMaxEval(), goal_element_ptr->GetMaxExec());
+		sprintf(buffer, "\t// max_eval = %3.2f, max_exec = %3.2f max_proc_eval = %i, max_proc_exec = %i ", goal_element_ptr->GetMaxEval(), goal_element_ptr->GetMaxExec(), max_eval, max_exec);
 
 		if(goal_element_ptr->GetExecPerCity())
 			sprintf(buffer, "%s (ExecPerCity)", buffer);
