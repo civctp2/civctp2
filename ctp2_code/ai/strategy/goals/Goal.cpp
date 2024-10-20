@@ -2920,6 +2920,16 @@ bool Goal::IsTargetImmune() const
 		}
 	}
 
+	if (order_record->GetUnitPretest_ThrowParty())
+	{
+		if(    g_player[m_playerId]->HasWarWith(m_target_city.GetOwner())
+		    || !Diplomat::GetDiplomat(m_target_city.GetOwner()).ReadyToParty()
+		  )
+		{
+			return true;
+		}
+	}
+
 	if(order_record->GetUnitPretest_CanCreateFranchise())
 	{
 		if(m_target_city.GetCityData()->GetFranchiseOwner() == m_playerId)
