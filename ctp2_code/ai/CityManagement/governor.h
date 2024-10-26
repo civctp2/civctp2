@@ -251,9 +251,10 @@ public:
 
 	void AssignPopulations();
 
-	void AssignPopulation(CityData *city, bool hasAllAdvances) const;
+	void AssignPopulation  (CityData *city, bool hasAllAdvances) const;
+	sint32 AssignEntertainers(CityData *city, bool decreaseByOne) const;
 
-	void ComputeMinMaxEntertainers(const CityData *city, sint32 & min, sint32 & max) const;
+	sint32 ComputeMinEntertainers(const CityData *city) const;
 
 	sint32 ComputeMinimumWorkers(CityData *city,
 	                           sint32 &farmers,
