@@ -111,6 +111,7 @@ typedef sint32      PLAYER_INDEX;
 typedef sint32      TERRAIN_IMPROVEMENT;
 
 PLAYER_INDEX const  PLAYER_UNASSIGNED   = -1;
+PLAYER_INDEX const  PLAYER_BARBARIAN    =  0;
 
 #define k_ANNOUNCE_TRADE_MESSAGES       1
 #define k_SQUELCH_TRADE_MESSAGES        0

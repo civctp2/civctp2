@@ -2879,7 +2879,7 @@ bool Goal::IsTargetImmune() const
 	// @ToDo adapt if no new civ is created but Barbarians.
 	if(order_record->GetUnitPretest_CanInciteRevolution())
 	{
-		if(g_player[target_owner]->GetNumCities() == 1)
+		if(g_player[target_owner]->GetNumCities() == 1 || target_owner == PLAYER_BARBARIAN)
 			return true;
 	}
 
