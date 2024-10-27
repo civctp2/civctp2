@@ -271,8 +271,12 @@ STDEHANDLER(CaptureCityEvent)
 		g_slicEngine->RunCityCapturedTriggers(newOwner, originalOwner,
 		                                      city);
 
-		if(city.GetVisibility() & (1 << g_selected_item->GetVisiblePlayer()))
+		if(g_player[g_selected_item->GetVisiblePlayer()]->IsVisible(city.RetPos()))
 		{
+		        if(g_selected_item->IsAutoCenterOn() 
+			   && !g_director->TileWillBeCompletelyVisible(city.RetPos().x, city.RetPos().y)
+			   ) // center on pos if generally visible but not in current view
+			   g_director->AddCenterMap(city.RetPos()); 
 			sint32 soundID = gamesounds_GetGameSoundID(GAMESOUNDS_CITYCONQUERED);
 			if (soundID != 0)
 				g_director->AddPlaySound(soundID, city.RetPos());
