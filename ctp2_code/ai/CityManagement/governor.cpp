@@ -740,8 +740,11 @@ void Governor::OptimizeSliders(SlidersSetting & sliders_setting) const
 	||     !GoldSliderReachedMin(sliders_setting)
 	||     !FoodSliderReachedMin(sliders_setting)
 	){
-		value = slider_tests.GetValue();
 		slider_tests.Log();
+		if(slider_tests.m_happinessTest)
+			break;
+
+		value = slider_tests.GetValue();
 
 		if(!ProdSliderReachedMin(sliders_setting))
 		{
@@ -3632,7 +3635,6 @@ const BuildListSequenceRecord * Governor::GetMatchingSequence(const CityData *ci
 	sint32 minNumUnits;
 	sint32 maxRawHappiness;
 
-//	SlidersSetting sliders_setting;
 	sint32 cityRawHappiness = static_cast<sint32>(city->GetHappiness()) - city->GetHappinessFromPops();
 
 	bool canBuildWonders = false;
