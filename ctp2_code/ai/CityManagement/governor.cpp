@@ -592,7 +592,7 @@ void Governor::SliderTests::CalcTests(PLAYER_INDEX playerId)
 		Diplomat::GetDiplomat(playerId).GetCurrentStrategy();
 
 	double deficit_spending;
-	sint32 min_happiness;
+	sint32 min_happiness = g_theConstDB->Get(0)->GetRiotLevel(); // Have a default value if strategy.GetMinimumHappiness is not present
 	double max_wage_percent;
 
 	strategy.GetDeficitSpending(deficit_spending);
@@ -2159,6 +2159,11 @@ void Governor::AssignPopulation(CityData *city, bool hasAllAdvances) const
 	sint32 needed            = g_theConstDB->Get(0)->GetRiotLevel();
 	sint32 current           = static_cast<sint32>(city->GetHappiness());
 
+	// Overwrite with the accepted minimum happiness from strategy.txt, if there is such
+	// a value, otherwise it uses the riot level from const.txt.
+	Diplomat::GetDiplomat(m_playerId).GetCurrentStrategy().GetMinimumHappiness(needed);
+
+
 	while (entertainer_delta != 0 && current > needed)
 	{
 		entertainer_delta = AssignEntertainers(city, true);
@@ -2285,8 +2290,12 @@ sint32 Governor::ComputeMinEntertainers(const CityData *city) const
 		return 0;
 	}
 
-	sint32 needed = g_theConstDB->Get(0)->GetRiotLevel();
+	sint32 needed  = g_theConstDB->Get(0)->GetRiotLevel();
 	sint32 current = static_cast<sint32>(city->GetHappiness());
+
+	// Overwrite with the accepted minimum happiness from strategy.txt, if there is such
+	// a value, otherwise it uses the riot level from const.txt.
+	Diplomat::GetDiplomat(m_playerId).GetCurrentStrategy().GetMinimumHappiness(needed);
 
 	double min_delta = static_cast<double>(needed - current) /
 	                   static_cast<double>(per_pop_happiness);
