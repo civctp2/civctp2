@@ -415,6 +415,9 @@ void CtpAi::GroupWithEscort(const Army & army)
 			 army->GetMovementType()) != army->GetMovementType())
 			continue;
 
+		if (tmp_army->CanTransport())
+			continue;
+
 		unit_rec = tmp_army[0].GetDBRec();
 		tmp_strength = static_cast<sint32>
 			(unit_rec->GetAttack() *
