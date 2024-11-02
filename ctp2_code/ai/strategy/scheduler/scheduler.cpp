@@ -1541,7 +1541,8 @@ void Scheduler::Add_New_Matches_For_Goal
 		if((goal_squad_class & agent->Get_Squad_Class()) != goal_squad_class)
 			continue;
 
-		if(!agent->Get_Army()->TestOrderAny(g_theGoalDB->Get(type)->GetExecute()))
+		if(!agent->Get_Army()->TestOrderAny(g_theGoalDB->Get(type)->GetExecute())
+		&& !agent->Get_Army()->TestCargoOrderAny(g_theGoalDB->Get(type)->GetExecute()))
 			continue;
 
 		if(hasInField && g_theWorld->HasCity(agent->Get_Army()->RetPos()))
