@@ -192,10 +192,10 @@ STRATEGY_DEFAULT {
     RoadUtilityBonus  300
 
     // bonus for building production tile improvements
-    ImproveProductionBonus  120
+    ImproveProductionBonus  150
 
     // bonus for building growth tile improvements
-    ImproveGrowthBonus  130
+    ImproveGrowthBonus  100
 
     // bonus to apply to cells with goods
     ImproveGoodBonus  75
@@ -1858,10 +1858,10 @@ STRATEGY_MILITARIST_DEFAULT {
     RoadUtilityBonus  350
 
     // bonus for building production tile improvements
-    ImproveProductionBonus  120
+    ImproveProductionBonus  160
 
     // bonus for building growth tile improvements
-    ImproveGrowthBonus  130
+    ImproveGrowthBonus  100
 
     // bonus to apply to cells with goods
     ImproveGoodBonus  75
@@ -2370,10 +2370,10 @@ STRATEGY_ECONOMIC_DEFAULT {
     RoadUtilityBonus  300
 
     // bonus for building production tile improvements
-    ImproveProductionBonus  120
+    ImproveProductionBonus  110
 
     // bonus for building growth tile improvements
-    ImproveGrowthBonus  130
+    ImproveGrowthBonus  100
 
     // bonus to apply to cells with goods
     ImproveGoodBonus  75
@@ -2873,10 +2873,10 @@ STRATEGY_ECOTOPIAN_DEFAULT {
     RoadUtilityBonus  300
 
     // bonus for building production tile improvements
-    ImproveProductionBonus  120
+    ImproveProductionBonus  100
 
     // bonus for building growth tile improvements
-    ImproveGrowthBonus  130
+    ImproveGrowthBonus  150
 
     // bonus to apply to cells with goods
     ImproveGoodBonus  75
