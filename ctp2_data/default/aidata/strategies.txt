@@ -1509,8 +1509,8 @@ STRATEGY_SCIENTIST_DEFAULT {
     FreightUnitList      UNIT_BUILD_LIST_FREIGHT
 
     // minimum number of units to keep in cities as a garrison
-    OffensiveGarrisonCount  1
-    DefensiveGarrisonCount  2
+    OffensiveGarrisonCount  0
+    DefensiveGarrisonCount  1
     RangedGarrisonCount     1
 
     // For each city with an empty build queue, build from
@@ -2013,8 +2013,8 @@ STRATEGY_MILITARIST_DEFAULT {
     FreightUnitList      UNIT_BUILD_LIST_FREIGHT
 
     // minimum number of units to keep in cities as a garrison
-    OffensiveGarrisonCount  1
-    DefensiveGarrisonCount  2
+    OffensiveGarrisonCount  0
+    DefensiveGarrisonCount  1
     RangedGarrisonCount     1
 
     // For each city with an empty build queue, build from
@@ -2525,8 +2525,8 @@ STRATEGY_ECONOMIC_DEFAULT {
     FreightUnitList      UNIT_BUILD_LIST_FREIGHT
 
     // minimum number of units to keep in cities as a garrison
-    OffensiveGarrisonCount  1
-    DefensiveGarrisonCount  2
+    OffensiveGarrisonCount  0
+    DefensiveGarrisonCount  1
     RangedGarrisonCount     1
 
     // For each city with an empty build queue, build from
@@ -3028,8 +3028,8 @@ STRATEGY_ECOTOPIAN_DEFAULT {
     FreightUnitList      UNIT_BUILD_LIST_FREIGHT
 
     // minimum number of units to keep in cities as a garrison
-    OffensiveGarrisonCount  1
-    DefensiveGarrisonCount  2
+    OffensiveGarrisonCount  0
+    DefensiveGarrisonCount  1
     RangedGarrisonCount     1
 
     // For each city with an empty build queue, build from
@@ -3531,8 +3531,8 @@ STRATEGY_DIPLOMATIC_DEFAULT {
     FreightUnitList      UNIT_BUILD_LIST_FREIGHT
 
     // minimum number of units to keep in cities as a garrison
-    OffensiveGarrisonCount  1
-    DefensiveGarrisonCount  2
+    OffensiveGarrisonCount  0
+    DefensiveGarrisonCount  1
     RangedGarrisonCount     1
 
     // For each city with an empty build queue, build from
@@ -3755,7 +3755,7 @@ STRATEGY_DEFENSE_NONE {
 
     // minimum number of units to keep in cities as a garrison
     OffensiveGarrisonCount  0
-    DefensiveGarrisonCount  1
+    DefensiveGarrisonCount  0
     RangedGarrisonCount     0
 }
 
@@ -3763,15 +3763,15 @@ STRATEGY_DEFENSE_VERY_LOW {
 
     // minimum number of units to keep in cities as a garrison
     OffensiveGarrisonCount  0
-    DefensiveGarrisonCount  2
-    RangedGarrisonCount     1
+    DefensiveGarrisonCount  1
+    RangedGarrisonCount     0
 }
 
 STRATEGY_DEFENSE_LOW {
 
     // minimum number of units to keep in cities as a garrison
-    OffensiveGarrisonCount  1
-    DefensiveGarrisonCount  2
+    OffensiveGarrisonCount  0
+    DefensiveGarrisonCount  1
     RangedGarrisonCount     1
 }
 
@@ -3779,32 +3779,32 @@ STRATEGY_DEFENSE_MEDIUM {
 
     // minimum number of units to keep in cities as a garrison
     OffensiveGarrisonCount  1
-    DefensiveGarrisonCount  2
-    RangedGarrisonCount     2
+    DefensiveGarrisonCount  1
+    RangedGarrisonCount     1
 }
 
 STRATEGY_DEFENSE_HIGH {
 
     // minimum number of units to keep in cities as a garrison
-    OffensiveGarrisonCount  2
+    OffensiveGarrisonCount  1
     DefensiveGarrisonCount  2
-    RangedGarrisonCount     2
+    RangedGarrisonCount     1
 }
 
 STRATEGY_DEFENSE_VERY_HIGH {
 
     // minimum number of units to keep in cities as a garrison
-    OffensiveGarrisonCount  2
-    DefensiveGarrisonCount  3
+    OffensiveGarrisonCount  1
+    DefensiveGarrisonCount  2
     RangedGarrisonCount     2
 }
 
 STRATEGY_DEFENSE_PARANOIA {
 
     // minimum number of units to keep in cities as a garrison
-    OffensiveGarrisonCount  3
-    DefensiveGarrisonCount  3
-    RangedGarrisonCount     3
+    OffensiveGarrisonCount  2
+    DefensiveGarrisonCount  2
+    RangedGarrisonCount     2
 }
 
 ////////////////////////////////////////
