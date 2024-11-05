@@ -302,10 +302,10 @@ STRATEGY_DEFAULT {
 
     // Unit Percents must total to 1 (100%)
     OffensiveUnitsPercent 0.20
-    DefensiveUnitsPercent 0.40
-    RangedUnitsPercent    0.40
-    SeaUnitsPercent       0.0
-    AirUnitsPercent       0.0
+    DefensiveUnitsPercent 0.35
+    RangedUnitsPercent    0.35
+    SeaUnitsPercent       0.05
+    AirUnitsPercent       0.05
 
     // Number of special units that should be built
     SettlerUnitsCount       4
@@ -955,8 +955,8 @@ STRATEGY_DEFEND {
     OffensiveUnitsPercent 0.10
     DefensiveUnitsPercent 0.40
     RangedUnitsPercent    0.40
-    SeaUnitsPercent       0.0
-    AirUnitsPercent       0.10
+    SeaUnitsPercent       0.05
+    AirUnitsPercent       0.05
 
     GoalElement { Goal GOAL_DEFEND              Priority   657000  MaxEval   2  MaxExec   1 PerCity }
     GoalElement { Goal GOAL_SEIGE               Priority   450000  MaxEval  25  MaxExec   3 }
@@ -1065,8 +1065,8 @@ STRATEGY_ISLAND_NATION {
 	OffensiveUnitsPercent 0.30
 	DefensiveUnitsPercent 0.20
 	RangedUnitsPercent    0.20
-	SeaUnitsPercent       0.30
-	AirUnitsPercent       0.00
+	SeaUnitsPercent       0.25
+	AirUnitsPercent       0.05
 
 	SeaTransportUnitsCount 6
 
@@ -1082,8 +1082,8 @@ STRATEGY_ISLAND_MILITARIST {
 	OffensiveUnitsPercent 0.30
 	DefensiveUnitsPercent 0.20
 	RangedUnitsPercent    0.20
-	SeaUnitsPercent       0.30
-	AirUnitsPercent       0.00
+	SeaUnitsPercent       0.25
+	AirUnitsPercent       0.05
 
 	SeaTransportUnitsCount 6
 
@@ -1098,8 +1098,8 @@ STRATEGY_ISLAND_DIPLOMATIC {
 	OffensiveUnitsPercent 0.30
 	DefensiveUnitsPercent 0.20
 	RangedUnitsPercent    0.20
-	SeaUnitsPercent       0.30
-	AirUnitsPercent       0.00
+	SeaUnitsPercent       0.25
+	AirUnitsPercent       0.05
 
 	SeaTransportUnitsCount 6
 
@@ -1114,8 +1114,8 @@ STRATEGY_ISLAND_ECONOMIC {
 	OffensiveUnitsPercent 0.30
 	DefensiveUnitsPercent 0.20
 	RangedUnitsPercent    0.20
-	SeaUnitsPercent       0.30
-	AirUnitsPercent       0.00
+	SeaUnitsPercent       0.25
+	AirUnitsPercent       0.05
 
 	SeaTransportUnitsCount 6
 
@@ -1130,8 +1130,8 @@ STRATEGY_ISLAND_SCIENTIST {
 	OffensiveUnitsPercent 0.30
 	DefensiveUnitsPercent 0.20
 	RangedUnitsPercent    0.20
-	SeaUnitsPercent       0.30
-	AirUnitsPercent       0.00
+	SeaUnitsPercent       0.25
+	AirUnitsPercent       0.05
 
 	SeaTransportUnitsCount 6
 
@@ -1146,8 +1146,8 @@ STRATEGY_ISLAND_ECOTOPIAN {
 	OffensiveUnitsPercent 0.30
 	DefensiveUnitsPercent 0.20
 	RangedUnitsPercent    0.20
-	SeaUnitsPercent       0.30
-	AirUnitsPercent       0.00
+	SeaUnitsPercent       0.25
+	AirUnitsPercent       0.05
 
 	SeaTransportUnitsCount 6
 
@@ -1464,10 +1464,10 @@ STRATEGY_SCIENTIST_DEFAULT {
 
 	// Unit Percents must total to 1 (100%)
 	OffensiveUnitsPercent 0.20
-	DefensiveUnitsPercent 0.40
-	RangedUnitsPercent    0.40
-	SeaUnitsPercent       0.0
-	AirUnitsPercent       0.0
+	DefensiveUnitsPercent 0.35
+	RangedUnitsPercent    0.35
+	SeaUnitsPercent       0.05
+	AirUnitsPercent       0.05
 
     // Number of special units that should be built
     SettlerUnitsCount       4
@@ -2480,10 +2480,10 @@ STRATEGY_ECONOMIC_DEFAULT {
 
 	// Unit Percents must total to 1 (100%)
 	OffensiveUnitsPercent 0.20
-	DefensiveUnitsPercent 0.40
-	RangedUnitsPercent    0.40
-	SeaUnitsPercent       0.0
-	AirUnitsPercent       0.0
+	DefensiveUnitsPercent 0.35
+	RangedUnitsPercent    0.35
+	SeaUnitsPercent       0.05
+	AirUnitsPercent       0.05
 
     // Number of special units that should be built
     SettlerUnitsCount       2
@@ -2983,10 +2983,10 @@ STRATEGY_ECOTOPIAN_DEFAULT {
 
 	// Unit Percents must total to 1 (100%)
 	OffensiveUnitsPercent 0.20
-	DefensiveUnitsPercent 0.40
-	RangedUnitsPercent    0.40
-	SeaUnitsPercent       0.0
-	AirUnitsPercent       0.0
+	DefensiveUnitsPercent 0.35
+	RangedUnitsPercent    0.35
+	SeaUnitsPercent       0.05
+	AirUnitsPercent       0.05
 
     // Number of special units that should be built
     SettlerUnitsCount       2
@@ -3486,10 +3486,10 @@ STRATEGY_DIPLOMATIC_DEFAULT {
 
 	// Unit Percents must total to 1 (100%)
 	OffensiveUnitsPercent 0.20
-	DefensiveUnitsPercent 0.40
-	RangedUnitsPercent    0.40
-	SeaUnitsPercent       0.0
-	AirUnitsPercent       0.0
+	DefensiveUnitsPercent 0.35
+	RangedUnitsPercent    0.35
+	SeaUnitsPercent       0.05
+	AirUnitsPercent       0.05
 
     // Number of special units that should be built
     SettlerUnitsCount       2
