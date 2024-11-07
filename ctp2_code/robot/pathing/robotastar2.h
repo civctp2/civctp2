@@ -95,7 +95,6 @@ private:
 	sint32 m_transDestCont;
 	float m_transMaxR;
 	uint32 m_incursionPermission;
-	PLAYER_INDEX m_owner;
 };
 
 #endif __ROBOT_ASTAR2_H__

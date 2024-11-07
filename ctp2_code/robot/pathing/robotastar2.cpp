@@ -230,7 +230,6 @@ bool RobotAstar2::FindPath( const PathType & pathType,
 	m_pathType = pathType;
 	m_transDestCont = trans_dest_cont;
 	m_transMaxR = trans_max_r;
-	m_owner = g_theWorld->GetOwner(start);
 
 	sint32 nUnits;
 	uint32 move_intersection;
