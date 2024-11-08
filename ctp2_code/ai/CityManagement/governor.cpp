@@ -2170,7 +2170,7 @@ void Governor::AssignPopulation(CityData *city, bool hasAllAdvances) const
 		current           = static_cast<sint32>(city->GetHappiness());
 	}
 
-	if (current < needed)
+	if (current < needed && city->WorkerCount() > 0)
 	{
 		// In that case we removed one entertainer to many.
 		city->ChangeSpecialists(POP_ENTERTAINER, 1);
