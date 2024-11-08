@@ -220,7 +220,7 @@ STRATEGY_DEFAULT {
     //
 
     GoalElement { Goal GOAL_DEFEND              Priority   557000  MaxEval   2  MaxExec   1 PerCity }
-    GoalElement { Goal GOAL_SEIGE               Priority   725000  MaxEval  20  MaxExec  15 }
+    GoalElement { Goal GOAL_SEIGE               Priority   725000  MaxEval  20  MaxExec   6 }
     GoalElement { Goal GOAL_ATTACK              Priority   725000  MaxEval  25  MaxExec  25 }
     GoalElement { Goal GOAL_HARASS              Priority   355000  MaxEval  25  MaxExec  25 }
     GoalElement { Goal GOAL_SETTLE_LAND         Priority   900000  MaxEval  25  MaxExec  15 }
@@ -776,7 +776,7 @@ STRATEGY_SEIGE {
     AirTransportUnitsCount 4
 
     GoalElement { Goal GOAL_DEFEND              Priority   607000  MaxEval   2  MaxExec   1 PerCity }
-    GoalElement { Goal GOAL_SEIGE               Priority   705000  MaxEval  25  MaxExec  15 }
+    GoalElement { Goal GOAL_SEIGE               Priority   705000  MaxEval  25  MaxExec   7 }
     GoalElement { Goal GOAL_HARASS_CITY         Priority   600000  MaxEval   3  MaxExec   1 }
     GoalElement { Goal GOAL_ATTACK              Priority   600000  MaxEval  25  MaxExec  10 }
     GoalElement { Goal GOAL_HARASS              Priority   595000  MaxEval  25  MaxExec  10 }
@@ -865,7 +865,7 @@ STRATEGY_ATTACK {
     SpecialUnitList      UNIT_BUILD_LIST_SPECIAL_MILITARIST
 
     GoalElement { Goal GOAL_DEFEND              Priority   507000  MaxEval   2  MaxExec   1 PerCity }
-    GoalElement { Goal GOAL_SEIGE               Priority   600000  MaxEval  25  MaxExec  10 }
+    GoalElement { Goal GOAL_SEIGE               Priority   600000  MaxEval  25  MaxExec   5 }
     GoalElement { Goal GOAL_ATTACK              Priority   725000  MaxEval  25  MaxExec  25 }
     GoalElement { Goal GOAL_HARASS              Priority   600000  MaxEval  25  MaxExec  25 }
     GoalElement { Goal GOAL_BOMBARD             Priority   607000  MaxEval  25  MaxExec  10 }
@@ -1382,7 +1382,7 @@ STRATEGY_SCIENTIST_DEFAULT {
     //
 
     GoalElement { Goal GOAL_DEFEND              Priority   557000  MaxEval   2  MaxExec   1 PerCity }
-    GoalElement { Goal GOAL_SEIGE               Priority   725000  MaxEval  25  MaxExec  12 }
+    GoalElement { Goal GOAL_SEIGE               Priority   725000  MaxEval  25  MaxExec   6 }
     GoalElement { Goal GOAL_ATTACK              Priority   725000  MaxEval  25  MaxExec  25 }
     GoalElement { Goal GOAL_HARASS              Priority   305000  MaxEval  25  MaxExec  25 }
     GoalElement { Goal GOAL_SETTLE_LAND         Priority   900000  MaxEval  25  MaxExec  15 }
@@ -1886,7 +1886,7 @@ STRATEGY_MILITARIST_DEFAULT {
     //
 
     GoalElement { Goal GOAL_DEFEND              Priority   557000  MaxEval   2  MaxExec   1 PerCity }
-    GoalElement { Goal GOAL_SEIGE               Priority   725000  MaxEval  25  MaxExec  15 }
+    GoalElement { Goal GOAL_SEIGE               Priority   725000  MaxEval  25  MaxExec   7 }
     GoalElement { Goal GOAL_ATTACK              Priority   725000  MaxEval  25  MaxExec  25 }
     GoalElement { Goal GOAL_HARASS              Priority   305000  MaxEval  25  MaxExec  25 }
     GoalElement { Goal GOAL_SETTLE_LAND         Priority   900000  MaxEval  25  MaxExec  15 }
@@ -2398,7 +2398,7 @@ STRATEGY_ECONOMIC_DEFAULT {
     //
 
     GoalElement { Goal GOAL_DEFEND              Priority   557000  MaxEval   2  MaxExec   1 PerCity }
-    GoalElement { Goal GOAL_SEIGE               Priority   725000  MaxEval  25  MaxExec  10 }
+    GoalElement { Goal GOAL_SEIGE               Priority   725000  MaxEval  25  MaxExec   6 }
     GoalElement { Goal GOAL_ATTACK              Priority   725000  MaxEval  25  MaxExec  25 }
     GoalElement { Goal GOAL_HARASS              Priority   305000  MaxEval  25  MaxExec  25 }
     GoalElement { Goal GOAL_SETTLE_LAND         Priority   900000  MaxEval  25  MaxExec  15 }
@@ -2901,7 +2901,7 @@ STRATEGY_ECOTOPIAN_DEFAULT {
     //
 
     GoalElement { Goal GOAL_DEFEND              Priority   557000  MaxEval   2  MaxExec   1 PerCity }
-    GoalElement { Goal GOAL_SEIGE               Priority   725000  MaxEval  25  MaxExec  15 }
+    GoalElement { Goal GOAL_SEIGE               Priority   725000  MaxEval  25  MaxExec   6 }
     GoalElement { Goal GOAL_ATTACK              Priority   725000  MaxEval  25  MaxExec  25 }
     GoalElement { Goal GOAL_HARASS              Priority   305000  MaxEval  25  MaxExec  25 }
     GoalElement { Goal GOAL_SETTLE_LAND         Priority   900000  MaxEval  25  MaxExec  15 }
@@ -3404,7 +3404,7 @@ STRATEGY_DIPLOMATIC_DEFAULT {
     //
 
     GoalElement { Goal GOAL_DEFEND              Priority   557000  MaxEval   2  MaxExec   1 PerCity }
-    GoalElement { Goal GOAL_SEIGE               Priority   725000  MaxEval  25  MaxExec  12 }
+    GoalElement { Goal GOAL_SEIGE               Priority   725000  MaxEval  25  MaxExec   5 }
     GoalElement { Goal GOAL_ATTACK              Priority   725000  MaxEval  25  MaxExec  25 }
     GoalElement { Goal GOAL_HARASS              Priority   305000  MaxEval  25  MaxExec  25 }
     GoalElement { Goal GOAL_SETTLE_LAND         Priority   900000  MaxEval  25  MaxExec  15 }
@@ -3755,7 +3755,7 @@ STRATEGY_DEFENSE_NONE {
 
     // minimum number of units to keep in cities as a garrison
     OffensiveGarrisonCount  0
-    DefensiveGarrisonCount  0
+    DefensiveGarrisonCount  1
     RangedGarrisonCount     0
 }
 
