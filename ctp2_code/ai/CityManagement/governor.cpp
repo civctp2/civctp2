@@ -192,7 +192,7 @@ extern CityAstar    g_city_astar;
 
 namespace
 {
-	sint32 const            BORDER_DISTANCE_SEARCH_MULT = 3;
+	sint32 const            BORDER_DISTANCE_SEARCH_MULT = 4;
 	/// Value for a trade route not requiring caravans (should not occur)
 	double const            VALUE_FREE_LUNCH 	        =
 		std::numeric_limits<double>::max();
