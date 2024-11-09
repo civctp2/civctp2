@@ -1374,6 +1374,12 @@ Unit Player::CreateCity(
 
 	u->InitializeCityData(settlerType);
 
+	for(sint32 player = 0; player < 32; player++)
+	{
+		if(g_player[player] != NULL && g_player[player]->m_hasGlobalRadar) // You can add the global radar to more then one wonder
+			u->SetVisible(player);
+	}
+
 	CityData *cityData = u.GetData()->GetCityData();
 
 	AddCityReferenceToPlayer(u, cause);
