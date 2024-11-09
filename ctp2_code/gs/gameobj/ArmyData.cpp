@@ -960,6 +960,19 @@ bool ArmyData::CanTransport() const
     return false;
 }
 
+bool ArmyData::HasTransporter() const
+{
+	for (sint32 i = 0; i < m_nElements; ++i)
+	{
+		sint32 const	cargo = m_array[i].GetData()->GetMaxCargoCapacity();
+		if (cargo > 0)
+			return true;
+	}
+
+	return false;
+}
+
+
 // not used
 bool ArmyData::CanPatrol() const
 {
@@ -10154,6 +10167,23 @@ bool ArmyData::CheckValidDestination(const MapPoint &dest) const
 }
 
 // returns true if this army's current order is UNIT_ORDER_MOVE and the army already is where it was ordered to go
+//----------------------------------------------------------------------------
+//
+// Name       : ArmyData::AtEndOfPath
+//
+// Description: Returns true if this army is at the end of its path and was
+//              was moving. If it has no valid path then it is assumed to be
+//              at its end-
+//
+// Parameters : -
+//
+// Globals    : -
+//
+// Returns    : bool
+//
+// Remark(s)  : -
+//
+//----------------------------------------------------------------------------
 bool ArmyData::AtEndOfPath() const
 {
 	Order *order = m_orders->GetHead();

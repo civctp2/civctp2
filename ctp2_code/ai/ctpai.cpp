@@ -415,7 +415,7 @@ void CtpAi::GroupWithEscort(const Army & army)
 			 army->GetMovementType()) != army->GetMovementType())
 			continue;
 
-		if (tmp_army->CanTransport())
+		if (tmp_army->HasTransporter())
 			continue;
 
 		unit_rec = tmp_army[0].GetDBRec();
@@ -426,7 +426,7 @@ void CtpAi::GroupWithEscort(const Army & army)
 			 unit_rec->GetArmor()
 			);
 
-		if (min_strength < 0 || tmp_strength < min_strength)
+		if (tmp_strength > 0 && (min_strength < 0 || tmp_strength < min_strength))
 		{
 			min_strength = tmp_strength;
 			min_army = tmp_army;

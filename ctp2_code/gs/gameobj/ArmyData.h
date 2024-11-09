@@ -163,6 +163,7 @@ public:
     bool CanSettle() const;
 
     bool CanTransport() const;
+    bool HasTransporter() const;
     bool IsWounded() const;
     bool IsCargoWounded() const;
 
