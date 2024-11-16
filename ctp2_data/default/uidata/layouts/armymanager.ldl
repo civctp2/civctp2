@@ -77,6 +77,14 @@ ArmyManager:CTP2_DIALOG_WINDOW {
 
 		bool mouseblind true
 	}
+	ArmyTextLabel:CTP2_STATIC_BASE:AM_TEXT_FONT {
+		int xpix      250
+		int ypix      280
+		string text   ""
+		string just   "left"
+		int	widthpix  97
+		int	heightpix 24
+	}
 	ArmyName:CTP2_TEXT_FIELD {
 		int xpix      252
 		int ypix      53
