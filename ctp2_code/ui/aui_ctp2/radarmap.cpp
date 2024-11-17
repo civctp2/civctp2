@@ -185,6 +185,8 @@ public:
 				return *(map + 1);
 			case SOUTH:
 				return *(map + mapPitch);
+			default:
+				return *map;
 		}
 	}
 
