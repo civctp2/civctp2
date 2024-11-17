@@ -1,12 +1,11 @@
 THIS MATERIAL IS NOT MADE OR SUPPORTED BY ACTIVISION.
-This version of the Call To Power 2 executable developed at apolyton.net
+This version of the Call To Power 2 is developed by the CTP2 community.
 
-Contact the authors on the Apolyton forums at
-http://apolyton.net/forums/forumdisplay.php?s=&forumid=213
-or at ctp2source@apolyton.net
-
+Contact the authors at
+https://github.com/civctp2/civctp2/issues
 
 This is the current state of the source code project released for playtesting.
+Keep in mind CTP2 is not free. You still need to buy the game.
 
 Playtesters should be aware that these files are intended for a plain vanilla 
 install of CTP2. It should also be no problem to install over a patched
@@ -26,7 +25,7 @@ unchanged copy for playing mods, etc.
 After installation, you can start a new game or continue a game from
 a previous version. All you need to do - after loading your save game - is to
 open the chat window by typing the apostrophe key (') and enter: /reloadslic
-You have to do this procedure once per save game.
+You have to do this once per save game.
 
 For Chinese gamers: If you use a Chinese version of the game you have to
                     first rename your ..\ctp2_data\english\ folder to
@@ -35,10 +34,29 @@ For Chinese gamers: If you use a Chinese version of the game you have to
                     ..\ctp2_program\ctp\civpath.txt. This file contains a line
                     saying "english", change it to "chinese".
 
-Please report any problems, bugs, crashes, etc. in the following thread:
-http://apolyton.net/forums/showthread.php?t=196269 "Apolyton CTP2 Edition: Revision 1111 (12-Jun-2011)"
+Please report any problems, bugs, crashes, etc. as an issue on GitHub:
+https://github.com/civctp2/civctp2/issues
 
-For further reading here are the previous playtest threads:
+The latest source code files can be found at: https://github.com/civctp2/civctp2
+
+Visit BureauBert's http://www.ctp2.info/ on how to use some new additions.
+
+This version comes with new tech posters, for that check out the Advance-Graph subdirectory.
+
+Known bugs:
+
+On Windows:
+The new shield that indicates in the control panel that on the
+tile are more than one unit does not display the number of units.
+
+On Linux:
+Keyboard issues, at least with a German keyboard.
+The apostrope key (') to open the chat window does not work. Yo can open
+the chat window via the menu.
+The secondary enter key on the num pad does not work. Instead use the 
+primary big enter key.
+
+The Great History: In case you are interested, here are the previous playtest threads on Apolyton:
 http://apolyton.net/forums/showthread.php?t=103817 "PROJECT: Playtest"
 http://apolyton.net/forums/showthread.php?t=115144 "PROJECT: Playtest II"
 http://apolyton.net/forums/showthread.php?t=127059 "PROJECT: Playtest Thread III"
@@ -49,16 +67,330 @@ http://apolyton.net/forums/showthread.php?t=185707 "CTP2 Apolyton Edition: Revis
 http://apolyton.net/forums/showthread.php?t=187205 "CTP2 Apolyton Edition: Revision 1013 (25-Jul-2009)"
 http://apolyton.net/forums/showthread.php?t=190316 "Apolyton CTP2 Edition: Revision 1056 (28-Feb-2010)"
 http://apolyton.net/forums/showthread.php?t=191653 "Apolyton CTP2 Edition: Revision 1097 (07-Jun-2010)"
-
-Latest Source Code files can be found at: http://ctp2.darkdust.net/
-
-Playtesting would be most useful if it tests the most recent changes, which
-are described below.
-
-Visit BureauBert's http://www.ctp2.info/ on how to use some new additions.
-
+http://apolyton.net/forums/showthread.php?t=196269 "Apolyton CTP2 Edition: Revision 1111 (12-Jun-2011)"
 
 Changelog (Well, you don't have to read the full thing. ;)):
+202X-XX-XX (No revision number we switched to Git) <-- Will be updated right before merge, right after the files will be compiled
+Changed:  Increase the distance of cities the AI connects with roads so
+          that cities that can be connected via road within its boarders
+          are indeed connected.
+Fixed:    Cities founded after the lunch of Globe Sat are also revealed to
+          the Globe Sat owner.
+Changed:  The AI considers less cities for siege. This way it focusses on
+          more important cities and waits until it has built more units.
+Fixed:    AI path finding for boarding units.
+Changed:  The AI builds less units for garrison, as this is quite expansive
+          and garrison units can only be used for city defense.
+Changed:  Add some variety on the order food and production tile improvements
+          depending on the AI's personality.
+Fixed:    The AI also uses units on board of a ship for its goals.
+Fixed:    The AI does not use units as escorts without attack or defense
+          such as transporters.
+Fixed:    The AI uses the most exploitive slider settings as long as the
+          people are happy enough.
+Changed:  The AI does not try to incite revolutions in Barbarian cities.
+          As this does not help.
+Fixed:    The AI only uses the minimum entertainers necessary. The minimum
+          is now determined from the value in strategies.txt.
+Fixed:    The AI does not hold diplomatic receptions where it cannot,
+          since 10 turns must pass so that receptions can be hold again.
+Changed:  The AI ignores trespassing for Diplomats, so that it can build
+          embassies. Trespassing with diplomats is not considered a
+          violation anyway.
+Changed:  Slavers are not civilians, so why should abolitionists be?
+Fixed:    If the AI rally its troops it will use a spot all the units can
+          enter.
+Fixed:    The AI builds transport ships earlier.
+Changed:  Make the AI prefer sieging Barbarian cities a bit more.
+Fixed:    A bug in AI path finding that prevented the AI from sieging cities.
+Fixed:    Do not update the cause and effect tab in the empire manger if
+          the sliders do not change position. Fixes some wired behavior.
+Fixed:    The AI also builds missionary units during garrisoning.
+Changed:  Ecotopian Ai players may build eco rangers.
+Fixed:    Avoid a "No such object" message with game shutdown/crash after a
+          slave uprise in a city without units.
+Fixed:    A crash when more than one player where eliminated in the same
+          turn.
+Fixed:    A hang in the multi queue screen.
+Fixed:    Freed slaves go to random cities, so that they do not starve in
+          overcrowded cities.
+Fixed:    When slaves uprise, the city population is reduced by the number
+          of slaves units that died during a battle.
+Fixed:    If the slave uprising is successful, and found a new civ. This
+          civs establish diplomatic relationships with its former owners.
+Changed:  The free slave success message got and eyepoint.
+Changed:  Abolitionist can be build if the civ has no slavers but still owns
+          slaves.
+Changed:  The best trade route is now determined by the gold per caravan value,
+          instead of the total gold.
+Fixed:    A crash caused by active franchises of a dead civilization.
+Changed:  Victory enslavement is now done on relative HPs of attacker
+          and defender.
+Changed:  The path finder prefers to circumvent unexplored territory for
+          the human player.
+Fixed:    Make sure that the path finder finds the shortest path.
+Added:    Scroll bar for the city list when offering or requesting cities
+          via diplomacy if there are more then 25 cities.
+Improved: Visuals of list boxes.
+Changed:  Make the army manager look like the other managers.
+Added:    Sort age button o sort items in Great Library by age.
+Fixed:    Slic Strings are resolved after loading even so the string
+          database has been modified. Useful if you switch languages
+          while playing. However, after installing a new version of
+          the Apolyton Edition you still have to reloadslic.
+Changed:  The unit panel shows a shield if there are more than one unit
+          unit in different armies on the field. You can click the shield
+          for details. Works in that case like the next unit button.
+          If there is only one army with more than one unit it shows the details.
+          The shield also shows the number of units on Linux, however the number
+          is missing in the Windows version.
+Changed:  The next unit button does not try to select multiple units if
+          only one unit is on the tile.
+Changed:  The build manager gives suggestions without preset conditions.
+Fixed:    A hang that occurs if an empty name is given to a build queue.
+Fixed:    Disable the load queue button in the build manager if there is
+          nothing to load.
+Changed:  Only one list in the Build manager has the focus so that it is
+          clear which item is highlighted.
+Fixed:    Make all managers supporting rush buy using the same underlying
+          city data instead of copies, so that the managers are aligned.
+Fixed:    Disable the clear queue button the build manager if the queue
+          is empty.
+Fixed:    Select the next item when an item is removed from the queue.
+Fixed:    Show the item and the title of a custom queue.
+Fixed:    Disable create custom queue button in the build manager when
+          loading a queue.
+Fixed:    Show the selected item for a loaded queue.
+Changed:  Highlight the current build item after changing city.
+Fixed:    Disable the Great Library button in the build manager if no item
+          is selected.
+Changed:  The good animation delay from 5 to 8 seconds.
+Fixed:    The good animation settings are also respected for trade routes.
+Fixed:    Draw fogged tiles instead of black tiles when scrolling up.
+Fixed:    Fixed overwriting glyphs fixes mostly the capital C.
+Added:    Animate goods in the help tile window.
+Fixed:    Force fields can also be built in sea cities.
+Added:    Trench tiles from CTP1 and enabled in new maps.
+Fixed:    Only one animation is played when a city is being franchised.
+Fixed:    If an advance is given by diplomacy or a goody hut the advance
+          that is being researched can still be selected from the research
+          dialog.
+Fixed:    Make sure that every tile can be centered on every zoom level.
+Fixed:    Draw correctly national and city influence borders while zooming.
+Fixed:    The music is restarted after the victory movie has been shown. 
+Added:    Messages about slaves taken during battle, and where they will work.
+Changed:  Make civilian and special units invisible for globe sat.
+Fixed:    The player is notified if a target is protected against conversion.
+Fixed:    The AI does not try to establish embassies with civilizations that
+          the AI is at war with or that has the Great Wall.
+Changed:  Space plane move points and fuel reduced so that it is less a
+          replacement for cargo helicopters.
+Fixed:    Make the Alexander scenario loadable and center on Alexander when
+          started.
+Changed:  Rearrange city names and city icons drawn on the map.
+Changed:  For modders, Sound and FailedSound in Orders.txt are now SoundRecords.
+          This makes it easier to use them than bare integers.
+Fixed:    Only play the advertisement special effect if advertisement was
+          successful.
+Fixed:    Units, cities, and goods are not redrawn while scrolling to avoid
+          side effect.
+Fixed:    Leviathon is given by plasma weaponry as stated in Great Library.
+Fixed:    Cavalry becomes obsolete with tank warfare.
+Fixed:    Make tanks only obsolete with fusion tanks, not before.
+Added:    Obsolete advances for unit descriptions in the Great Library.
+Changed:  Center the map on a bombarding unit.
+Fixed:    Do not animate a special attack from the position of the attacker,
+          if he is not visible, instead just animate it at the target position.
+Fixed:    Do not draw trade routes below the map when wrap setting are enabled.
+Fixed:    Draw trade routes while scrolling.
+Fixed:    Animate launching a space plane.
+Changed:  Pause the good-actor for 10 seconds after the animation has finished.
+          So that the goods are not continuously animated.
+Fixed:    Keep the units at their position while scrolling.
+Fixed:    Color display of the unit shield and medal.
+Fixed:    Play a general sound if no special attack sound is specified.
+Fixed:    Play the correct success and failure special attack animations.
+Fixed:    Only run the special effects for injoin and reform city, once.
+Changed:  Do animate removing trade routes. Since this has neither sound
+          nor a special effect it is just a waste of time.  
+Fixed:    Draw units that are being removed.
+Fixed:    Draw the animation sequence of units in the correct order.
+Fixed:    Draw animated units when they go off screen or onto a ship.
+Improved: Sped up trade manager, especially with many trade routes.
+Fixed:    Saves games accumulated size if the game was played for a long time.
+          A reload reset this.
+Fixed:    The stored production in a city cannot become negative
+Fixed:    Unknown cities cannot be revealed with the special cursor.
+Changed:  Trade routes can now reveal the source and destination city if one
+          piece is seen thanks to the gossip of traders.
+Fixed:    Caravan demand for trade routes cannot be negative.
+Added:    The trade route creation and cancel message gives the bonus
+          values of the route.
+Fixed:    The AI does not buy a good in a city that is already available there.
+Changed:  The does not consider all possible trade routes, so that it does not
+          waste caravans on low value trade routes.
+Changed:  Reduced the value of domestic trade routes.
+Changed:  Increased the value of trade routes with trade pact partners.
+Changed:  The AI evaluates in all places the value of a trade route the same way.
+          This avoids having the AI changing its mind once a trade route has been
+          created.
+          instead by a rough distance, since the rough distance might be
+          significantly off. 
+Fixed:    The AI takes into account for replacing trade routes that a cravan is
+          lost.
+Fixed:    The best trade route is determined by value per caravan.
+Fixed:    The does not try to sue units that cannot be sued.
+Fixed:    The city capture options are not shown for cities of size 1, since
+          those are destroyed anyway.
+Fixed:    Known city walls and force fields under the fog of war are still
+          known after a reload.
+Changed:  Emphatic Diplomats cannot be expelled like normal Diplomats so
+          that diplomacy cannot be avoided.
+Changed:  The coverage of obelisks has been increased so that the science
+          victory can be achieved with less aggression.
+Fixed:    The readiness costs when the readiness slider is moved.
+Fixed:    Force fields are not drawn with the odd hole.
+Fixed:    The diplomacy window lists all types of agreements.
+Fixed:    For modders, the slic Liberate functions sends the conquering
+          units home before the city is given to the Barbarians.
+Added:    Eye point to unit expelled message.
+Fixed:    Crash when a city is founded on an obelisk.
+Fixed:    Accelerate the unit manager, import if the civilization has many
+          units.
+Fixed:    The AI builds sea tunnels.
+Fixed:    The progress bar shows how many units got their orders this turn
+          with separate color for units that are sleeping or are entrenched.
+Fixed:    The victim of advertising gets a message.
+Fixed:    Cities can only be franchised if the franchiser is next to the city.
+Fixed:    If a franchise is replaced by a franchise from another civilization
+          a message is send to the former owner.
+Added:    Enslave settler message for attacker says where the new saves will be
+          working.
+Added:    Bought goods can add food, production, and gold to a city
+Changed:  City window to account for that.
+Changed:  For modders, the user interface definitions are now in the 
+          ctp2_data/default/uidata/layouts/ folder.
+Added:    If you are about pirating a trade route from a player you have a
+          trade pact with, you must confirm whether you want to break it.
+Changed:  Trade route drawing was cleaned up.
+Added:    The help tile window reports the number of trade routes and their
+          owners that go through a tile.
+Added:    The trade manage shows the profit from trade that goes through cities.
+Fixed:    Adjust the city influence if a neighbor city is gone or has shrunken.
+Added:    The trade manager shows the losses due to piracy.
+Added:    New options for the power graph.
+Fixed:    New civilizations inherit their age from their parent civilization.
+Added:    The number of advances needed and known for the chosen tech goal
+          are now displayed in the tech tree and the advance chooser.
+Added:    If a tech has been chosen than the prerequisites are marked in the
+          Great Library.
+Added:    The tech goal is now also shown in the Great Library if chosen.
+Fixed:    You get a message if you earn some gold from a trade route that goes
+          though your city.
+Fixed:    The AI uses water units for attacking units and sieging cities.
+Fixed:    The AI uses diplomats for establishing embassies and throwing parties.
+Fixed:    The AI does establish embassies and throws parties at civilizations
+          it is at war with.
+Fixed:    The AI does not build obelisks if they do not increase the coverage.
+Fixed:    The AI does not build farm on installations such as watchtowers and
+          thus removing them.
+Fixed:    The AI uses sea engineers to add population to sea cities.
+Fixed:    The AI will only use units for goals that can also execute that goal.
+Fixed:    The AI does not go over the city limit anymore, unless specified
+          in its personality.
+Fixed:    Spies cannot plant nukes anymore if nukes have been eliminated.
+Fixed:    The AI used Capitalization and Infrastructure if it has nothing else
+          to build instead of leaving the build queue empty.
+Fixed:    The AI unloads cargo from helicopters next to a city if it is full
+          and it needs more than 12 units to defend this city.
+Fixed:    If an army is pirating a trade route this is also saved and restored
+          after reload.
+Fixed:    You get a message if one of your trade routes got pirated.
+Fixed:    The AI will siege a city only afterwards all the units in the stacks
+          have been grouped.
+Fixed:    If the AI decides to siege a city with more then 12 units it will
+          attack with the bigger stack first.
+Fixed:    The AI does not use a stack for something else if it is waiting for
+          other units for an attack.
+Fixed:    The AI does not use transport helicopters for attack.
+Fixed:    The AI does not try to use aircraft carries to transport land units.
+Fixed:    The AI gives the same priority for settling land and sea cities.
+Fixed:    Calculating the civilization center so that the AI can use its
+          resources properly.
+Fixed:    The AI can now conquer one tile island cities and cities on peninsulas
+          if land access is blocked. It only selects for those cities units that
+          can beach assault.
+Fixed:    The AI does not retreat units to a city if the city has no room for
+          them.
+Fixed:    AI path-finding for transporters.
+Fixed:    The AI does not try to use units that need transport for a goal if
+          the goal should be executed without transports.
+Fixed:    The does not try to unload transporters in cities if there is not
+          enough room for the cargo.
+Fixed:    The AI does not rally its troops next to the attack target. So that
+          the defenders of a city do not have all the time to bombard to the
+          ground those units that are already there.
+Fixed:    The AI also the units in the city garrison for goals defending
+          a city. This prevents the AI from over defending.
+Fixed:    The AI uses the correct unit count for its garrisons from
+          its perceived treat level.
+Fixed:    The AI only uses single units for pirating and pillaging.
+Fixed:    The AI does not group helicopters into armies, but instead unloads the
+          cargo of the helicopters and groups that into the army.
+Fixed:    The AI does not consider civilizations it has not met yet as enemies. 
+Changed:  The AI tries to enslave more or tries to free more slaves, depending
+          on its attitude towards slavery.
+Fixed:    The following actions are now cold war actions, that means they do
+          not mean hot immediately. The AI treated them as cold war actions
+          anyway:
+          - Enslave settlers
+          - Slave raid citizens
+          - Free slaves
+          - Incite slave uprising
+          - Incite revolutions
+          - Bioinfect a city
+          - Plague a city
+          - Nano infect a city
+          However, nuking a unit is now a hot war action.
+Fixed:    The AI prefers to sue units with its lawyers at home.
+Fixed:    The unit power on a transporter is now also considered by the AI
+          for its attacks. That stops the AI from loading and unloading
+          transporters.
+Fixed:    The AI does not attack players, it is neutral with.
+Fixed:    The AI builds the Gaia Controller.
+Unixed:   The Gaia Controller can only be build by big empires.
+Fixed:    The AI terraforms dead tiles within its borders.
+Fixed:    The AI does not use anything for research if it has nothing to research.
+Added:    You can now trigger a disaster from the chat box, cool isn't it? :D
+          But helped to fixed the following disaster related bugs:
+Fixed:    Tiles with undersea tunnels cannot become dead tiles.
+Fixed:    Remove ruins when the are flooded.
+Fixed:    The AI will resettle the areas that were freed from cities
+          by the raising sea level.
+Fixed:    When swamp tiles are converted to shallow sea during the first
+          disaster of global warming, also roads are removed from them. 
+Fixed:    When the last disaster has been triggered from the database,
+          no more disasters can be triggered.
+Fixed:    When a tile is pillaged than also it neighbor tiles are redrawn, so
+          that a road ends on that neighbor tile properly.
+Added:    The chat window can be opened without the keyboard from the menu.
+Fixed:    The AI will not sell buildings if this does not help to prevent
+          bankruptcy.
+Fixed:    The AI now also considers the city limits for choosing a government.
+Added:    If you pirate somebodies trade-route you will get a message about how
+          much gold you have robbed.
+Fixed:    The wonder with the IncreaseSpecialists flag will increase the amount
+          of happiness an entertainer adds.
+Changed:  The AI builds roads around its cities for better troop deployment.
+Improved: AI priorities to its goals, such as attack or siege
+Improved: AI city spacing and settling
+Added:    Feedback for the Easter eggs coming from the chat box
+Added:    More goods, and some goods were rearranged
+Added:    Mouse-wheel support
+Fixed:    The animation settings for goods and trade routes are now respected
+          for games loaded from file. Previously good animations were only played
+          for newly created games.
+
 2011-06-12 (Revision 1111)
 Fixed:    The game does not crash, if a city is supposed to be converted and the
           converting unit was killed the turn before.
@@ -67,7 +399,7 @@ Fixed:    After a reload, the correct strategy is loaded for the AI.
 Fixed:    The AI does not use units for garrison if they are not needed. This
           frees troops for other tasks.
 Fixed:    Thread and power calculation have been corrected so that the AI does
-          not waste ressources to fullfil its tasks.
+          not waste resources to fulfill its tasks.
 Fixed:    The AI does not hunt enemy units far away from home, just because one
           has been seen by a spy.
 Fixed:    The AI uses the nearest unit as rally point for rallying troops. This
@@ -75,18 +407,18 @@ Fixed:    The AI uses the nearest unit as rally point for rallying troops. This
 Fixed:    When the AI is rallying armies, it marks all armies as being used,
           even so they are not used. This prevents the AI from assigning those
           armies to other tasks, so that the original task can still be
-          fullfilled.
+          fulfilled.
 Fixed:    The AI ungroups stealth units from non-stealth units if their goal
           is a stealth goal.
-Fixed:    The AI does not move ships before all passangers are on board.
+Fixed:    The AI does not move ships before all passengers are on board.
 Fixed:    The AI does not use units for beach assault that cannot beach assault.
 Fixed:    The AI unloads cargo helicopters if they reached land, and there is
           only land up to the target.
 Fixed:    Finished the Oceanforming tab for modders.
 Changed:  Reduced memory requirements for the AI and sped up the AI.
-Fixed:    Fixed inccorect calculation of ZOC.
+Fixed:    Fixed incorrect calculation of ZOC.
 Fixed:    The AI unloads its cargo from helicopters in front of the target city
-          instead of flyring there with the helicopter.
+          instead of flying there with the helicopter.
 Fixed:    Fixed city happiness calculation so that it depends correctly on crime
           and pollution. This way the numbers are the same if an entertainer has
           been added and then removed.
@@ -97,7 +429,7 @@ Changed:  The userprofile options crash logging, show city production, civ flags
           userprofile option scroll delay has been disabled by default.
 Changed:  The difficulty were renamed to classic civ difficulty names.
 Updated:  The AE mod to the current state of the Apolyton Edition.
-Changed:  The AI reconsideres the plans for its units like their paths if they
+Changed:  The AI reconsiders the plans for its units like their paths if they
           reveal foreign units.
 Fixed:    The calculates the strengths of its units correctly even if they are
           transported.
@@ -123,7 +455,7 @@ Fixed:    The AI handles incursion permission correctly even directly after a
 Fixed:    The AI now ranks correctly its opponents by their strength.
 Changed:  If the visible player is a robot, then the displayed unit path is
           those for robots, this is useful for AI testing.
-Added:    The inteligence window now shows opponent as very strong.
+Added:    The intelligence window now shows opponent as very strong.
 Added:    The AI avoids danger on the way of its units.
 Fixed:    Games with a dead player in can be loaded again.
 Fixed:    The scenario editor generates goods even if no new game was created
@@ -137,9 +469,9 @@ Changed:  The AI now conquers cities according to a global plan instead of
 Fixed:    Upgraded units get room for cargo if the original unit had no cargo
           and the upgraded unit should be able to carry cargo.
 Added:    Added Chinese text files.
-Fixed:    The AI uses transporters even if a target is on the same continet
+Fixed:    The AI uses transporters even if a target is on the same continent
           but cannot reached, because for instance the way is blocked.
-Fixed:    The AI conqueres cities if it has a big stack adjacent to that city
+Fixed:    The AI conquers cities if it has a big stack adjacent to that city
           representing 2/3 of the needed power. This is no problem since the
           needed power is calculated with some buffer.
 Changed:  The AI gives for conquest higher priority to cities that have a land
@@ -147,7 +479,7 @@ Changed:  The AI gives for conquest higher priority to cities that have a land
 Changed:  The AI gives for conquest higher priority to cities of empires with
           less than three cities.
 Fixed:    The minimap shows the diplomatic relationships correctly even if you
-          recenter the minimeap.
+          recenter the minimap.
 Changed:  The AI prioritizes for conquest cities of its weakest enemy.
 
 
@@ -167,7 +499,7 @@ Changed:  Removed the CD-check, so that the retail version from gog.com runs
 2010-02-20 (Revision 1055)
 Fixed:    The AI does not check its city limit, if city limit is disabled.
 Changed:  The new game rules screen has been cleaned up and enhanced with
-          discriptions of what the single rules are good for.
+          descriptions of what the single rules are good for.
 Fixed:    Possible crashes due to missing city styles have been fixed.
 Fixed:    City turns to growth and production display now updates on begin
           turn and on city growth.
@@ -194,7 +526,7 @@ Fixed:    Bombard range now uses all ranged boni used in normal combat and
 Fixed:    The AI now builds every turn tile improvements and roads.
 Improved: The AI consider roads along paths that it had layed down in the same
           turn.
-Changed:  The AI prefers to build gold tile improvemts if it does not need to
+Changed:  The AI prefers to build gold tile improvements if it does not need to
           build food or production tile improvements.
 Changed:  The AI builds in small cities tile improvements firs.
 Changed:  The AI rush buys items in cities without garrison first, then it
@@ -212,16 +544,16 @@ Changed:  Increased settle values for dessert and swamp so that the AI will
 Fixed:    Tiles with tunnels do not use the move costs of deep sea for ships,
           instead they use the move costs of their terrain.
 Fixed:    The AI calculates the goal priorities correctly, even if they are in
-          diferent order in startegies.txt and goals.txt.
+          different order in startegies.txt and goals.txt.
 Fixed:    The AI stops building settlers if there is no space left.
-Fixed:    The AI uses surpless settlers to increase the size of small cities.
+Fixed:    The AI uses surplus settlers to increase the size of small cities.
 Fixed:    The AI builds land settlers and sea settlers at the same time.
 Fixed:    The game does not hang if it tries to optimize the sliders for a
           civilization that will starve when the happiness requirements have
           been met.
-Fixed:    The AI does not build ships in that do not have acceass to an ocean
+Fixed:    The AI does not build ships in that do not have access to an ocean
           but only access to a puddle.
-Fixed:    The AI conqueres empty cities with armies containing settlers.
+Fixed:    The AI conquers empty cities with armies containing settlers.
 Fixed:    The AI builds pollution reduction buildings in dirty cities.
 Fixed:    The AI does not try to refuel units in cities that are full.
 Fixed:    The ranking graph does not crash if the civilisations dead or alive
@@ -229,7 +561,7 @@ Fixed:    The ranking graph does not crash if the civilisations dead or alive
 Added:    The ranking tab now has a wonder line graph.
 Fixed:    The AI builds slavers, or abolitionists, spies, and other special
           units at the same time.
-Changed:  Cyper Ninjas have a higher elite change when they investigate a city.
+Changed:  Cyber Ninjas have a higher elite change when they investigate a city.
 Fixed:    Spies steal advances from cities of civilization that have advances
           to steal.
 Fixed:    The AI builds happy buildings in unhappy cities.
@@ -238,7 +570,7 @@ Fixed:    The AI calculates its city ranks correctly, so that it does not
           almost all its cities to the wonder building list.
 Added:    Added for each AI personality an island strategy, that will use an
           island specific advance list.
-Restored: The Penecilin wonder now does what it did in the original game.
+Restored: The Penicillin wonder now does what it did in the original game.
 Changed:  The graphics are now drawn on a back buffer this removes drawing
           artifacts and saves your eyes.
 Added:    The minimap has a button to show you the players' capitals.
@@ -295,14 +627,14 @@ Fixed:    Database errors do not show up anymore when the Magnificant Samurai
 Fixed:    After an unit upgrade, its information is updated properly.
 Fixed:    The game does not crash, if a civilization is conquered. (Another bug)
 Added:    Cities show on the main map optionally what they are building.
-Added:    A polution main map icon for dirty cities.
+Added:    A pollution main map icon for dirty cities.
 Changed:  Other main map city icons have better transparency and outlines.
 Changed:  Some good sprites were replaced so that they can be better seen.
 Changed:  New modern city styles have now all the same color so that the 
           city styles cannot be distinguished so well anymore.
 Fixed:    The game cannot be one anymore by just building the Solaris project.
-          For archieving the science victory all the other components of the
-          Gaja Controller are now necessary, too.
+          For archiving the science victory all the other components of the
+          Gaia Controller are now necessary, too.
 Fixed:    The AI does not consider tiles for new cities anymore if those
           tiles are already controlled by other cities.
 Fixed:    The messages for nano infected and nano destroyed cities address
@@ -316,9 +648,9 @@ Fixed:    The feat that is supposed to increase the unit hit points now
 Added:    A political map option was added to the minimap.
 Fixed:    When a city is founded inside foreign territory it adds national
           borders as it should do.
-Fixed:    The AI does not unload units from transporters on the target continet
+Fixed:    The AI does not unload units from transporters on the target continent
           before the final landfall.
-Fixed:    Sea transporter pathes do not end one tile too early.
+Fixed:    Sea transporter paths do not end one tile too early.
 Changed:  Unit support percent is now zero if production and unit support is
           zero.
 Fixed:    Units disbanded in the city window will now give their production
@@ -329,7 +661,7 @@ Changed:  The Empire Manager shows now more information.
 Changed:  Crime for science is now calculated as all the other resources.
 Fixed:    Wonders that are supposed to give a flat food bonus give a flat food
           bonus instead a food percent bonus.
-Changed:  Laborers now benefit from the government coefficent, too.
+Changed:  Laborers now benefit from the government coefficient, too.
 Fixed:    Changing between buildings, wonders, and units costs now 25% of the
           stored production.
 Fixed:    Database errors and Great Library errors in the Apolyton Edition
@@ -350,7 +682,7 @@ Added:    New database flags for modders:
 Fixed:    The game does not crash, if a civilization is wiped out.
 Fixed:    The game does not hang if the AI cannot find enough transporters for
           a goal like sieging a city.
-Added:    More of the government modifed functionality for buildings and
+Added:    More of the government modified functionality for buildings and
           wonders was implemented.
 Fixed:    The AI regard for another player is recomputed when first contact
           is made. This prevents the AI to give the human player a map exchange,
@@ -1356,7 +1688,7 @@ Changed: Method of caravan cost fix - now mods should have reasonable caravan co
 Changed: Default colour scheme to get player 1 blue by default
 Added: Detailed changelog to playtest version
 
-2005-03-05 
+2005-03-05
 Disabled: AI unit text, so that you don't see the AI goals.
 Fixed: Crashes and memory leaks.
 Fixed: Minor translation problems with the French and German string files.
@@ -1446,7 +1778,7 @@ Changed: Removed some duplicated code and allow to test cell whether its product
   concerning food, shields and gold would be better then with the current terrain type
 Added: If a terrain has no food tile improvement the AI checks whether there is a 
   terraform option available for a terrain with better food stats
-Added: Changes to favorize Respect of non-trespassing Treaty and retreat units
+Added: Changes to favor Respect of non-trespassing Treaty and retreat units
 Added: Checks to avoid Army blocked in grouping phase
 Changed: The Group size check
 Changed: Rollback goals in double search
@@ -1476,7 +1808,7 @@ Fixed: Allow more than 44 playable civs
 Added: 18 new civilizations
 Fixed: Crossed Sword Bug
 Changed: Great library enhanced
-Fixed: Visual tileimp progression
+Fixed: Visual tile improvement progression
 Fixed: Extra checks to disable science victory in network games
 Fixed: Check for clear queue actions from clients received after they lost the city to another player
 Fixed: Network object bookkeeping gets cleared when exiting a game
@@ -1523,7 +1855,7 @@ Changed: AI tile improvement placement strategy to allow it to place undersea tu
 2004-07-25
 Fixed: Various memory leaks
 Added: Added corrections for the French version
-Added: Redermination of the city style when setting the civilization in HotSeat
+Added: Redetermination of the city style when setting the civilization in HotSeat
 Fixed: Strange tile visibility patterns in HotSeat mode
 Fixed: Enabled the end turn button when unblanking the screen in HotSeat mode
 Fixed: Blank the interface when loading a saved hot seat game 
