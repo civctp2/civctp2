@@ -1490,7 +1490,7 @@ CityWindow:CTP2_NEW_CITY_WINDOW {
 			string	statustext	"STATUSBAR_CITYMAN_STATS_POLLUTION_DISPLAY"
 		}
 		PollutionTotal:CITY_WORKER_ALLOCATION_TEXT_BOX {
-			int	xpix		197
+			int	xpix		224
 			int	ypix		154
 			#string pattern "cw_TEST2.tga"
 			string just "left"
