@@ -78,8 +78,8 @@ void HandleMouseWheel(sint16 delta)
 }
 
 AUI_ERRCODE aui_SDLMouse::HandleAnim() {
-	assert(m_lastIndex > m_firstIndex);
-	assert(m_curCursor >= m_cursors + m_firstIndex);
+	Assert(m_lastIndex > m_firstIndex);
+	Assert(m_curCursor >= m_cursors + m_firstIndex);
 
 	if (m_curCursor++ >= m_cursors + m_lastIndex) {
 		m_curCursor = m_cursors + m_firstIndex;
@@ -89,7 +89,7 @@ AUI_ERRCODE aui_SDLMouse::HandleAnim() {
 }
 
 sint32 aui_SDLMouse::ManipulateInputs(aui_MouseEvent *data, BOOL add) {
-	assert(!add);
+	Assert(!add);
 
 	SDL_PumpEvents();
 
