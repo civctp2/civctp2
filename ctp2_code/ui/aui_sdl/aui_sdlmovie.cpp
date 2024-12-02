@@ -2100,6 +2100,7 @@ AUI_ERRCODE aui_SDLMovie::Resume() {
 		toggle_pause(m_videoState);
 	}
 #endif // USE_SDL_FFMPEG
+	return AUI_ERRCODE_OK;
 }
 
 AUI_ERRCODE aui_SDLMovie::Process() {
@@ -2117,6 +2118,7 @@ AUI_ERRCODE aui_SDLMovie::Process() {
 		Close();
 	}
 #endif // USE_SDL_FFMPEG
+	return AUI_ERRCODE_OK;
 }
 
 BOOL aui_SDLMovie::IsOpen() const {

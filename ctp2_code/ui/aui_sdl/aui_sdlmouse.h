@@ -31,8 +31,8 @@ protected:
 
 	virtual void ActivateCursor(aui_Cursor *cursor);
 
-	virtual AUI_ERRCODE GetInput() {}
-	virtual AUI_ERRCODE ReactToInput() {}
+	virtual AUI_ERRCODE GetInput() { return AUI_ERRCODE_OK; }
+	virtual AUI_ERRCODE ReactToInput() { return AUI_ERRCODE_OK; }
 	virtual sint32 ManipulateInputs(aui_MouseEvent *data, BOOL add);
 
 private:
