@@ -85,18 +85,23 @@ debug:
     untracked: true
     when: always
   script:
+    - apk update && apk upgrade && apk add --no-cache xclock
     - export SHARED_PATH="$(dirname ${CI_PROJECT_DIR})/shared"
     - mkdir -p ${SHARED_PATH}/.X11-unix/
     - mkdir -p /tmp/.X11-unix/
     - mount --bind ${SHARED_PATH}/.X11-unix/ /tmp/.X11-unix/
     - export DISPLAY=:99.0
-    - Xvfb $DISPLAY -screen 0 1280x1024x24 &
+    - Xvfb $DISPLAY -cc 4 -ac -screen 0 1280x1024x24 &
     - pidX=$!
     - sleep 3
     - BTYP=${CI_JOB_NAME%% *}
     - JOB=${CI_JOB_NAME##* }
     - echo "$BTYP $JOB"
     - docker pull $IMAGE_TAG:${CI_JOB_STAGE}-${BTYP}
+    - ffmpeg -nostdin -y -f x11grab -draw_mouse 0 -framerate 25 -video_size 1280x1024 -i $DISPLAY -v error "${BTYP}_${JOB}.mpg" >& ffmpeg_out.txt &
+    - pidF=$!
+    - xclock -update 1 & # -update < 30 enables a second hand
+    - sleep 10
     - echo $DOCKER_PARAMS
     - echo $CTP_PARAMS
     - mkdir -p $(pwd)/logs/ && chmod a+rw $(pwd)/logs/ # needs to be rw for diUser
@@ -105,8 +110,9 @@ debug:
              $IMAGE_TAG:${CI_JOB_STAGE}-${BTYP}
              ./ctp2 $CTP_PARAMS &
     - pidD=$!
-    - java -cp "/opt/sikulixapi.jar:/opt/jython-standalone-2.7.1.jar" org.python.util.jython tests/${JOB}.sikuli/${JOB}.py
+    - sleep 60
     - kill $pidD
+    - kill -INT $pidF
     - kill $pidX
     - test -f ${JOB}.png
   retry: 2
