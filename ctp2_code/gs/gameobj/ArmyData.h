@@ -163,6 +163,7 @@ public:
     bool CanSettle() const;
 
     bool CanTransport() const;
+    bool HasTransporter() const;
     bool IsWounded() const;
     bool IsCargoWounded() const;
 
@@ -475,7 +476,9 @@ public:
                            sint32 & maxdefense,
                            bool & cancapture,
                            bool & haszoc,
-                           bool & canbombard
+                           bool & canbombard,
+                           bool & canthrowparty,
+                           bool & canestablishembassy
                           ) const;
 
     bool IsStealth() const;
@@ -487,7 +490,9 @@ public:
                            sint32 & maxdefense,
                            bool & cancapture,
                            bool & haszoc,
-                           bool & canbombard
+                           bool & canbombard,
+                           bool & canthrowparty,
+                           bool & canestablishembassy
                           ) const;
 
     bool CanPerformSpecialAction() const;

@@ -5603,6 +5603,8 @@ bool Diplomat::HasUnitsInOurTerritory(sint32 foreignerId) const
 	bool     isstealth;
 	sint32   maxattack;
 	sint32   maxdefense;
+	bool     canthrowparty;
+	bool     canestablishembassy;
 
 	Assert(player_ptr);
 
@@ -5625,7 +5627,9 @@ bool Diplomat::HasUnitsInOurTerritory(sint32 foreignerId) const
 				                       maxdefense,
 				                       cancapture,
 				                       haszoc,
-				                       canbombard
+				                       canbombard,
+				                       canthrowparty,
+				                       canestablishembassy
 				                      );
 
 				is_threat = (maxattack || cancapture || haszoc || canbombard);

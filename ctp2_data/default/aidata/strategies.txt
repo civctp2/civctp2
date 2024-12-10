@@ -192,10 +192,10 @@ STRATEGY_DEFAULT {
     RoadUtilityBonus  300
 
     // bonus for building production tile improvements
-    ImproveProductionBonus  120
+    ImproveProductionBonus  150
 
     // bonus for building growth tile improvements
-    ImproveGrowthBonus  130
+    ImproveGrowthBonus  100
 
     // bonus to apply to cells with goods
     ImproveGoodBonus  75
@@ -220,7 +220,7 @@ STRATEGY_DEFAULT {
     //
 
     GoalElement { Goal GOAL_DEFEND              Priority   557000  MaxEval   2  MaxExec   1 PerCity }
-    GoalElement { Goal GOAL_SEIGE               Priority   725000  MaxEval  20  MaxExec  15 }
+    GoalElement { Goal GOAL_SEIGE               Priority   725000  MaxEval  20  MaxExec   6 }
     GoalElement { Goal GOAL_ATTACK              Priority   725000  MaxEval  25  MaxExec  25 }
     GoalElement { Goal GOAL_HARASS              Priority   355000  MaxEval  25  MaxExec  25 }
     GoalElement { Goal GOAL_SETTLE_LAND         Priority   900000  MaxEval  25  MaxExec  15 }
@@ -302,10 +302,10 @@ STRATEGY_DEFAULT {
 
     // Unit Percents must total to 1 (100%)
     OffensiveUnitsPercent 0.20
-    DefensiveUnitsPercent 0.40
-    RangedUnitsPercent    0.40
-    SeaUnitsPercent       0.0
-    AirUnitsPercent       0.0
+    DefensiveUnitsPercent 0.35
+    RangedUnitsPercent    0.35
+    SeaUnitsPercent       0.05
+    AirUnitsPercent       0.05
 
     // Number of special units that should be built
     SettlerUnitsCount       4
@@ -368,6 +368,7 @@ STRATEGY_DEFAULT {
         HasBuildingsThenStop BUILDING_BUILD_LIST_SMALL_CITIES
         SmallCitiesMaxSize 6
         MinNumUnits 2
+        MinTransporters 2
         Advice BUILD_GROWTH_ADVICE
     }
 
@@ -423,6 +424,7 @@ STRATEGY_DEFAULT {
         Priority 11000
         BuildListSequence BUILD_LIST_SEQUENCE_WONDERS
         MinNumUnits 2
+        MinTransporters 2
         MinNumCities 4
         Top 0.1
         ProductionCities
@@ -442,6 +444,7 @@ STRATEGY_DEFAULT {
         BuildListSequence BUILD_LIST_SEQUENCE_HAPPINESS
         HasBuildingsThenStop BUILDING_BUILD_LIST_HAPPINESS
         MinNumUnits 2
+        MinTransporters 2
         Bottom 0.1
 //      AllCities
 //      MaxRawHappiness 74
@@ -453,6 +456,7 @@ STRATEGY_DEFAULT {
         Priority 3000
         BuildListSequence BUILD_LIST_SEQUENCE_PRODUCTION
         MinNumUnits 2
+        MinTransporters 2
         AllCities
         NoUnits
         Advice BUILD_DEFAULT_ADVICE
@@ -772,7 +776,7 @@ STRATEGY_SEIGE {
     AirTransportUnitsCount 4
 
     GoalElement { Goal GOAL_DEFEND              Priority   607000  MaxEval   2  MaxExec   1 PerCity }
-    GoalElement { Goal GOAL_SEIGE               Priority   705000  MaxEval  25  MaxExec  15 }
+    GoalElement { Goal GOAL_SEIGE               Priority   705000  MaxEval  25  MaxExec   7 }
     GoalElement { Goal GOAL_HARASS_CITY         Priority   600000  MaxEval   3  MaxExec   1 }
     GoalElement { Goal GOAL_ATTACK              Priority   600000  MaxEval  25  MaxExec  10 }
     GoalElement { Goal GOAL_HARASS              Priority   595000  MaxEval  25  MaxExec  10 }
@@ -861,7 +865,7 @@ STRATEGY_ATTACK {
     SpecialUnitList      UNIT_BUILD_LIST_SPECIAL_MILITARIST
 
     GoalElement { Goal GOAL_DEFEND              Priority   507000  MaxEval   2  MaxExec   1 PerCity }
-    GoalElement { Goal GOAL_SEIGE               Priority   600000  MaxEval  25  MaxExec  10 }
+    GoalElement { Goal GOAL_SEIGE               Priority   600000  MaxEval  25  MaxExec   5 }
     GoalElement { Goal GOAL_ATTACK              Priority   725000  MaxEval  25  MaxExec  25 }
     GoalElement { Goal GOAL_HARASS              Priority   600000  MaxEval  25  MaxExec  25 }
     GoalElement { Goal GOAL_BOMBARD             Priority   607000  MaxEval  25  MaxExec  10 }
@@ -951,8 +955,8 @@ STRATEGY_DEFEND {
     OffensiveUnitsPercent 0.10
     DefensiveUnitsPercent 0.40
     RangedUnitsPercent    0.40
-    SeaUnitsPercent       0.0
-    AirUnitsPercent       0.10
+    SeaUnitsPercent       0.05
+    AirUnitsPercent       0.05
 
     GoalElement { Goal GOAL_DEFEND              Priority   657000  MaxEval   2  MaxExec   1 PerCity }
     GoalElement { Goal GOAL_SEIGE               Priority   450000  MaxEval  25  MaxExec   3 }
@@ -1018,6 +1022,7 @@ STRATEGY_CAREFUL_START {
         HasBuildingsThenStop BUILDING_BUILD_LIST_SMALL_CITIES
         SmallCitiesMaxSize 6
         MinNumUnits 2
+        MinTransporters 2
         Advice BUILD_GROWTH_ADVICE
     }
 }
@@ -1044,6 +1049,7 @@ STRATEGY_AGRESSIVE_START {
         HasBuildingsThenStop BUILDING_BUILD_LIST_SMALL_CITIES
         SmallCitiesMaxSize 6
         MinNumUnits 2
+        MinTransporters 2
         Advice BUILD_GROWTH_ADVICE
     }
 }
@@ -1059,8 +1065,8 @@ STRATEGY_ISLAND_NATION {
 	OffensiveUnitsPercent 0.30
 	DefensiveUnitsPercent 0.20
 	RangedUnitsPercent    0.20
-	SeaUnitsPercent       0.30
-	AirUnitsPercent       0.00
+	SeaUnitsPercent       0.25
+	AirUnitsPercent       0.05
 
 	SeaTransportUnitsCount 6
 
@@ -1076,8 +1082,8 @@ STRATEGY_ISLAND_MILITARIST {
 	OffensiveUnitsPercent 0.30
 	DefensiveUnitsPercent 0.20
 	RangedUnitsPercent    0.20
-	SeaUnitsPercent       0.30
-	AirUnitsPercent       0.00
+	SeaUnitsPercent       0.25
+	AirUnitsPercent       0.05
 
 	SeaTransportUnitsCount 6
 
@@ -1092,8 +1098,8 @@ STRATEGY_ISLAND_DIPLOMATIC {
 	OffensiveUnitsPercent 0.30
 	DefensiveUnitsPercent 0.20
 	RangedUnitsPercent    0.20
-	SeaUnitsPercent       0.30
-	AirUnitsPercent       0.00
+	SeaUnitsPercent       0.25
+	AirUnitsPercent       0.05
 
 	SeaTransportUnitsCount 6
 
@@ -1108,8 +1114,8 @@ STRATEGY_ISLAND_ECONOMIC {
 	OffensiveUnitsPercent 0.30
 	DefensiveUnitsPercent 0.20
 	RangedUnitsPercent    0.20
-	SeaUnitsPercent       0.30
-	AirUnitsPercent       0.00
+	SeaUnitsPercent       0.25
+	AirUnitsPercent       0.05
 
 	SeaTransportUnitsCount 6
 
@@ -1124,8 +1130,8 @@ STRATEGY_ISLAND_SCIENTIST {
 	OffensiveUnitsPercent 0.30
 	DefensiveUnitsPercent 0.20
 	RangedUnitsPercent    0.20
-	SeaUnitsPercent       0.30
-	AirUnitsPercent       0.00
+	SeaUnitsPercent       0.25
+	AirUnitsPercent       0.05
 
 	SeaTransportUnitsCount 6
 
@@ -1140,8 +1146,8 @@ STRATEGY_ISLAND_ECOTOPIAN {
 	OffensiveUnitsPercent 0.30
 	DefensiveUnitsPercent 0.20
 	RangedUnitsPercent    0.20
-	SeaUnitsPercent       0.30
-	AirUnitsPercent       0.00
+	SeaUnitsPercent       0.25
+	AirUnitsPercent       0.05
 
 	SeaTransportUnitsCount 6
 
@@ -1376,7 +1382,7 @@ STRATEGY_SCIENTIST_DEFAULT {
     //
 
     GoalElement { Goal GOAL_DEFEND              Priority   557000  MaxEval   2  MaxExec   1 PerCity }
-    GoalElement { Goal GOAL_SEIGE               Priority   725000  MaxEval  25  MaxExec  12 }
+    GoalElement { Goal GOAL_SEIGE               Priority   725000  MaxEval  25  MaxExec   6 }
     GoalElement { Goal GOAL_ATTACK              Priority   725000  MaxEval  25  MaxExec  25 }
     GoalElement { Goal GOAL_HARASS              Priority   305000  MaxEval  25  MaxExec  25 }
     GoalElement { Goal GOAL_SETTLE_LAND         Priority   900000  MaxEval  25  MaxExec  15 }
@@ -1458,10 +1464,10 @@ STRATEGY_SCIENTIST_DEFAULT {
 
 	// Unit Percents must total to 1 (100%)
 	OffensiveUnitsPercent 0.20
-	DefensiveUnitsPercent 0.40
-	RangedUnitsPercent    0.40
-	SeaUnitsPercent       0.0
-	AirUnitsPercent       0.0
+	DefensiveUnitsPercent 0.35
+	RangedUnitsPercent    0.35
+	SeaUnitsPercent       0.05
+	AirUnitsPercent       0.05
 
     // Number of special units that should be built
     SettlerUnitsCount       4
@@ -1503,8 +1509,8 @@ STRATEGY_SCIENTIST_DEFAULT {
     FreightUnitList      UNIT_BUILD_LIST_FREIGHT
 
     // minimum number of units to keep in cities as a garrison
-    OffensiveGarrisonCount  1
-    DefensiveGarrisonCount  2
+    OffensiveGarrisonCount  0
+    DefensiveGarrisonCount  1
     RangedGarrisonCount     1
 
     // For each city with an empty build queue, build from
@@ -1524,6 +1530,7 @@ STRATEGY_SCIENTIST_DEFAULT {
         HasBuildingsThenStop BUILDING_BUILD_LIST_SMALL_CITIES
         SmallCitiesMaxSize 6
         MinNumUnits 2
+        MinTransporters 2
         Advice BUILD_GROWTH_ADVICE
     }
 
@@ -1579,7 +1586,8 @@ STRATEGY_SCIENTIST_DEFAULT {
         Priority 11000
         BuildListSequence BUILD_LIST_SEQUENCE_WONDERS_SCIENTIST
         MinNumUnits 2
-	MinNumCities 4
+        MinTransporters 2
+        MinNumCities 4
         Top 0.1
         ProductionCities
         Advice BUILD_WONDERS_ADVICE
@@ -1598,6 +1606,7 @@ STRATEGY_SCIENTIST_DEFAULT {
         BuildListSequence BUILD_LIST_SEQUENCE_HAPPINESS
         HasBuildingsThenStop BUILDING_BUILD_LIST_HAPPINESS
         MinNumUnits 2
+        MinTransporters 2
         Bottom 0.1
 //      AllCities
 //      MaxRawHappiness 74
@@ -1609,6 +1618,7 @@ STRATEGY_SCIENTIST_DEFAULT {
         Priority 3000
         BuildListSequence BUILD_LIST_SEQUENCE_PRODUCTION
         MinNumUnits 2
+        MinTransporters 2
         AllCities
         NoUnits
         Advice BUILD_DEFAULT_ADVICE
@@ -1848,10 +1858,10 @@ STRATEGY_MILITARIST_DEFAULT {
     RoadUtilityBonus  350
 
     // bonus for building production tile improvements
-    ImproveProductionBonus  120
+    ImproveProductionBonus  160
 
     // bonus for building growth tile improvements
-    ImproveGrowthBonus  130
+    ImproveGrowthBonus  100
 
     // bonus to apply to cells with goods
     ImproveGoodBonus  75
@@ -1876,7 +1886,7 @@ STRATEGY_MILITARIST_DEFAULT {
     //
 
     GoalElement { Goal GOAL_DEFEND              Priority   557000  MaxEval   2  MaxExec   1 PerCity }
-    GoalElement { Goal GOAL_SEIGE               Priority   725000  MaxEval  25  MaxExec  15 }
+    GoalElement { Goal GOAL_SEIGE               Priority   725000  MaxEval  25  MaxExec   7 }
     GoalElement { Goal GOAL_ATTACK              Priority   725000  MaxEval  25  MaxExec  25 }
     GoalElement { Goal GOAL_HARASS              Priority   305000  MaxEval  25  MaxExec  25 }
     GoalElement { Goal GOAL_SETTLE_LAND         Priority   900000  MaxEval  25  MaxExec  15 }
@@ -2003,8 +2013,8 @@ STRATEGY_MILITARIST_DEFAULT {
     FreightUnitList      UNIT_BUILD_LIST_FREIGHT
 
     // minimum number of units to keep in cities as a garrison
-    OffensiveGarrisonCount  1
-    DefensiveGarrisonCount  2
+    OffensiveGarrisonCount  0
+    DefensiveGarrisonCount  1
     RangedGarrisonCount     1
 
     // For each city with an empty build queue, build from
@@ -2024,6 +2034,7 @@ STRATEGY_MILITARIST_DEFAULT {
         HasBuildingsThenStop BUILDING_BUILD_LIST_SMALL_CITIES_MILITARIST_STOP
         SmallCitiesMaxSize 6
         MinNumUnits 2
+        MinTransporters 2
         Advice BUILD_GROWTH_ADVICE
     }
 
@@ -2079,7 +2090,8 @@ STRATEGY_MILITARIST_DEFAULT {
         Priority 11000
         BuildListSequence BUILD_LIST_SEQUENCE_WONDERS_MILITARIST
         MinNumUnits 2
-	MinNumCities 4
+        MinTransporters 2
+        MinNumCities 4
         Top 0.1
         ProductionCities
         Advice BUILD_WONDERS_ADVICE
@@ -2098,6 +2110,7 @@ STRATEGY_MILITARIST_DEFAULT {
         BuildListSequence BUILD_LIST_SEQUENCE_HAPPINESS
         HasBuildingsThenStop BUILDING_BUILD_LIST_HAPPINESS
         MinNumUnits 2
+        MinTransporters 2
         Bottom 0.1
 //      AllCities
 //      MaxRawHappiness 74
@@ -2109,6 +2122,7 @@ STRATEGY_MILITARIST_DEFAULT {
         Priority 3000
         BuildListSequence BUILD_LIST_SEQUENCE_PRODUCTION
         MinNumUnits 2
+        MinTransporters 2
         AllCities
         NoUnits
         Advice BUILD_DEFAULT_ADVICE
@@ -2356,10 +2370,10 @@ STRATEGY_ECONOMIC_DEFAULT {
     RoadUtilityBonus  300
 
     // bonus for building production tile improvements
-    ImproveProductionBonus  120
+    ImproveProductionBonus  110
 
     // bonus for building growth tile improvements
-    ImproveGrowthBonus  130
+    ImproveGrowthBonus  100
 
     // bonus to apply to cells with goods
     ImproveGoodBonus  75
@@ -2384,7 +2398,7 @@ STRATEGY_ECONOMIC_DEFAULT {
     //
 
     GoalElement { Goal GOAL_DEFEND              Priority   557000  MaxEval   2  MaxExec   1 PerCity }
-    GoalElement { Goal GOAL_SEIGE               Priority   725000  MaxEval  25  MaxExec  10 }
+    GoalElement { Goal GOAL_SEIGE               Priority   725000  MaxEval  25  MaxExec   6 }
     GoalElement { Goal GOAL_ATTACK              Priority   725000  MaxEval  25  MaxExec  25 }
     GoalElement { Goal GOAL_HARASS              Priority   305000  MaxEval  25  MaxExec  25 }
     GoalElement { Goal GOAL_SETTLE_LAND         Priority   900000  MaxEval  25  MaxExec  15 }
@@ -2466,10 +2480,10 @@ STRATEGY_ECONOMIC_DEFAULT {
 
 	// Unit Percents must total to 1 (100%)
 	OffensiveUnitsPercent 0.20
-	DefensiveUnitsPercent 0.40
-	RangedUnitsPercent    0.40
-	SeaUnitsPercent       0.0
-	AirUnitsPercent       0.0
+	DefensiveUnitsPercent 0.35
+	RangedUnitsPercent    0.35
+	SeaUnitsPercent       0.05
+	AirUnitsPercent       0.05
 
     // Number of special units that should be built
     SettlerUnitsCount       2
@@ -2511,8 +2525,8 @@ STRATEGY_ECONOMIC_DEFAULT {
     FreightUnitList      UNIT_BUILD_LIST_FREIGHT
 
     // minimum number of units to keep in cities as a garrison
-    OffensiveGarrisonCount  1
-    DefensiveGarrisonCount  2
+    OffensiveGarrisonCount  0
+    DefensiveGarrisonCount  1
     RangedGarrisonCount     1
 
     // For each city with an empty build queue, build from
@@ -2532,6 +2546,7 @@ STRATEGY_ECONOMIC_DEFAULT {
         HasBuildingsThenStop BUILDING_BUILD_LIST_SMALL_CITIES
         SmallCitiesMaxSize 6
         MinNumUnits 2
+        MinTransporters 2
         Advice BUILD_GROWTH_ADVICE
     }
 
@@ -2587,7 +2602,8 @@ STRATEGY_ECONOMIC_DEFAULT {
         Priority 11000
         BuildListSequence BUILD_LIST_SEQUENCE_WONDERS_ECONOMIC
         MinNumUnits 2
-	MinNumCities 4
+        MinTransporters 2
+        MinNumCities 4
         Top 0.1
         ProductionCities
         Advice BUILD_WONDERS_ADVICE
@@ -2606,6 +2622,7 @@ STRATEGY_ECONOMIC_DEFAULT {
         BuildListSequence BUILD_LIST_SEQUENCE_HAPPINESS
         HasBuildingsThenStop BUILDING_BUILD_LIST_HAPPINESS
         MinNumUnits 2
+        MinTransporters 2
         Bottom 0.1
 //      AllCities
 //      MaxRawHappiness 74
@@ -2617,6 +2634,7 @@ STRATEGY_ECONOMIC_DEFAULT {
         Priority 3000
         BuildListSequence BUILD_LIST_SEQUENCE_PRODUCTION
         MinNumUnits 2
+        MinTransporters 2
         AllCities
         NoUnits
         Advice BUILD_DEFAULT_ADVICE
@@ -2855,10 +2873,10 @@ STRATEGY_ECOTOPIAN_DEFAULT {
     RoadUtilityBonus  300
 
     // bonus for building production tile improvements
-    ImproveProductionBonus  120
+    ImproveProductionBonus  100
 
     // bonus for building growth tile improvements
-    ImproveGrowthBonus  130
+    ImproveGrowthBonus  150
 
     // bonus to apply to cells with goods
     ImproveGoodBonus  75
@@ -2883,7 +2901,7 @@ STRATEGY_ECOTOPIAN_DEFAULT {
     //
 
     GoalElement { Goal GOAL_DEFEND              Priority   557000  MaxEval   2  MaxExec   1 PerCity }
-    GoalElement { Goal GOAL_SEIGE               Priority   725000  MaxEval  25  MaxExec  15 }
+    GoalElement { Goal GOAL_SEIGE               Priority   725000  MaxEval  25  MaxExec   6 }
     GoalElement { Goal GOAL_ATTACK              Priority   725000  MaxEval  25  MaxExec  25 }
     GoalElement { Goal GOAL_HARASS              Priority   305000  MaxEval  25  MaxExec  25 }
     GoalElement { Goal GOAL_SETTLE_LAND         Priority   900000  MaxEval  25  MaxExec  15 }
@@ -2965,10 +2983,10 @@ STRATEGY_ECOTOPIAN_DEFAULT {
 
 	// Unit Percents must total to 1 (100%)
 	OffensiveUnitsPercent 0.20
-	DefensiveUnitsPercent 0.40
-	RangedUnitsPercent    0.40
-	SeaUnitsPercent       0.0
-	AirUnitsPercent       0.0
+	DefensiveUnitsPercent 0.35
+	RangedUnitsPercent    0.35
+	SeaUnitsPercent       0.05
+	AirUnitsPercent       0.05
 
     // Number of special units that should be built
     SettlerUnitsCount       2
@@ -3010,8 +3028,8 @@ STRATEGY_ECOTOPIAN_DEFAULT {
     FreightUnitList      UNIT_BUILD_LIST_FREIGHT
 
     // minimum number of units to keep in cities as a garrison
-    OffensiveGarrisonCount  1
-    DefensiveGarrisonCount  2
+    OffensiveGarrisonCount  0
+    DefensiveGarrisonCount  1
     RangedGarrisonCount     1
 
     // For each city with an empty build queue, build from
@@ -3031,6 +3049,7 @@ STRATEGY_ECOTOPIAN_DEFAULT {
         HasBuildingsThenStop BUILDING_BUILD_LIST_SMALL_CITIES
         SmallCitiesMaxSize 6
         MinNumUnits 2
+        MinTransporters 2
         Advice BUILD_GROWTH_ADVICE
     }
 
@@ -3086,7 +3105,8 @@ STRATEGY_ECOTOPIAN_DEFAULT {
         Priority 11000
         BuildListSequence BUILD_LIST_SEQUENCE_WONDERS_ECOTOPIAN
         MinNumUnits 2
-	MinNumCities 4
+        MinTransporters 2
+        MinNumCities 4
         Top 0.1
         ProductionCities
         Advice BUILD_WONDERS_ADVICE
@@ -3105,6 +3125,7 @@ STRATEGY_ECOTOPIAN_DEFAULT {
         BuildListSequence BUILD_LIST_SEQUENCE_HAPPINESS
         HasBuildingsThenStop BUILDING_BUILD_LIST_HAPPINESS
         MinNumUnits 2
+        MinTransporters 2
         Bottom 0.1
 //      AllCities
 //      MaxRawHappiness 74
@@ -3116,6 +3137,7 @@ STRATEGY_ECOTOPIAN_DEFAULT {
         Priority 3000
         BuildListSequence BUILD_LIST_SEQUENCE_PRODUCTION
         MinNumUnits 2
+        MinTransporters 2
         AllCities
         NoUnits
         Advice BUILD_DEFAULT_ADVICE
@@ -3382,7 +3404,7 @@ STRATEGY_DIPLOMATIC_DEFAULT {
     //
 
     GoalElement { Goal GOAL_DEFEND              Priority   557000  MaxEval   2  MaxExec   1 PerCity }
-    GoalElement { Goal GOAL_SEIGE               Priority   725000  MaxEval  25  MaxExec  12 }
+    GoalElement { Goal GOAL_SEIGE               Priority   725000  MaxEval  25  MaxExec   5 }
     GoalElement { Goal GOAL_ATTACK              Priority   725000  MaxEval  25  MaxExec  25 }
     GoalElement { Goal GOAL_HARASS              Priority   305000  MaxEval  25  MaxExec  25 }
     GoalElement { Goal GOAL_SETTLE_LAND         Priority   900000  MaxEval  25  MaxExec  15 }
@@ -3464,10 +3486,10 @@ STRATEGY_DIPLOMATIC_DEFAULT {
 
 	// Unit Percents must total to 1 (100%)
 	OffensiveUnitsPercent 0.20
-	DefensiveUnitsPercent 0.40
-	RangedUnitsPercent    0.40
-	SeaUnitsPercent       0.0
-	AirUnitsPercent       0.0
+	DefensiveUnitsPercent 0.35
+	RangedUnitsPercent    0.35
+	SeaUnitsPercent       0.05
+	AirUnitsPercent       0.05
 
     // Number of special units that should be built
     SettlerUnitsCount       2
@@ -3509,8 +3531,8 @@ STRATEGY_DIPLOMATIC_DEFAULT {
     FreightUnitList      UNIT_BUILD_LIST_FREIGHT
 
     // minimum number of units to keep in cities as a garrison
-    OffensiveGarrisonCount  1
-    DefensiveGarrisonCount  2
+    OffensiveGarrisonCount  0
+    DefensiveGarrisonCount  1
     RangedGarrisonCount     1
 
     // For each city with an empty build queue, build from
@@ -3530,6 +3552,7 @@ STRATEGY_DIPLOMATIC_DEFAULT {
         HasBuildingsThenStop BUILDING_BUILD_LIST_SMALL_CITIES
         SmallCitiesMaxSize 6
         MinNumUnits 2
+        MinTransporters 2
         Advice BUILD_GROWTH_ADVICE
     }
 
@@ -3585,6 +3608,7 @@ STRATEGY_DIPLOMATIC_DEFAULT {
         Priority 11000
         BuildListSequence BUILD_LIST_SEQUENCE_WONDERS_DIPLOMATIC
         MinNumUnits 2
+        MinTransporters 2
         MinNumCities 4
         Top 0.1
         ProductionCities
@@ -3604,6 +3628,7 @@ STRATEGY_DIPLOMATIC_DEFAULT {
         BuildListSequence BUILD_LIST_SEQUENCE_HAPPINESS
         HasBuildingsThenStop BUILDING_BUILD_LIST_HAPPINESS
         MinNumUnits 2
+        MinTransporters 2
         Bottom 0.1
 //      AllCities
 //      MaxRawHappiness 74
@@ -3615,6 +3640,7 @@ STRATEGY_DIPLOMATIC_DEFAULT {
         Priority 3000
         BuildListSequence BUILD_LIST_SEQUENCE_PRODUCTION
         MinNumUnits 2
+        MinTransporters 2
         AllCities
         NoUnits
         Advice BUILD_DEFAULT_ADVICE
@@ -3737,15 +3763,15 @@ STRATEGY_DEFENSE_VERY_LOW {
 
     // minimum number of units to keep in cities as a garrison
     OffensiveGarrisonCount  0
-    DefensiveGarrisonCount  2
-    RangedGarrisonCount     1
+    DefensiveGarrisonCount  1
+    RangedGarrisonCount     0
 }
 
 STRATEGY_DEFENSE_LOW {
 
     // minimum number of units to keep in cities as a garrison
-    OffensiveGarrisonCount  1
-    DefensiveGarrisonCount  2
+    OffensiveGarrisonCount  0
+    DefensiveGarrisonCount  1
     RangedGarrisonCount     1
 }
 
@@ -3753,32 +3779,32 @@ STRATEGY_DEFENSE_MEDIUM {
 
     // minimum number of units to keep in cities as a garrison
     OffensiveGarrisonCount  1
-    DefensiveGarrisonCount  2
-    RangedGarrisonCount     2
+    DefensiveGarrisonCount  1
+    RangedGarrisonCount     1
 }
 
 STRATEGY_DEFENSE_HIGH {
 
     // minimum number of units to keep in cities as a garrison
-    OffensiveGarrisonCount  2
+    OffensiveGarrisonCount  1
     DefensiveGarrisonCount  2
-    RangedGarrisonCount     2
+    RangedGarrisonCount     1
 }
 
 STRATEGY_DEFENSE_VERY_HIGH {
 
     // minimum number of units to keep in cities as a garrison
-    OffensiveGarrisonCount  2
-    DefensiveGarrisonCount  3
+    OffensiveGarrisonCount  1
+    DefensiveGarrisonCount  2
     RangedGarrisonCount     2
 }
 
 STRATEGY_DEFENSE_PARANOIA {
 
     // minimum number of units to keep in cities as a garrison
-    OffensiveGarrisonCount  3
-    DefensiveGarrisonCount  3
-    RangedGarrisonCount     3
+    OffensiveGarrisonCount  2
+    DefensiveGarrisonCount  2
+    RangedGarrisonCount     2
 }
 
 ////////////////////////////////////////

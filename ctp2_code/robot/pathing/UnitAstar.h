@@ -144,7 +144,6 @@ private:
 
 	bool m_no_bad_path;
 	bool m_is_zero_attack;
-	PLAYER_INDEX m_owner;
 
 	sint32 m_nUnits;
 
@@ -155,6 +154,9 @@ private:
 	uint32 m_cargo_pod_intersection;
 	bool m_check_dest;
 	Squad_Strength m_army_strength;
+
+protected:
+	PLAYER_INDEX m_owner;
 };
 
 #endif

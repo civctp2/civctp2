@@ -960,6 +960,19 @@ bool ArmyData::CanTransport() const
     return false;
 }
 
+bool ArmyData::HasTransporter() const
+{
+	for (sint32 i = 0; i < m_nElements; ++i)
+	{
+		sint32 const	cargo = m_array[i].GetData()->GetMaxCargoCapacity();
+		if (cargo > 0)
+			return true;
+	}
+
+	return false;
+}
+
+
 // not used
 bool ArmyData::CanPatrol() const
 {
@@ -9920,16 +9933,20 @@ void ArmyData::CharacterizeArmy
     sint32 & maxdefense,
     bool & cancapture,
     bool & haszoc,
-    bool & canbombard
+    bool & canbombard,
+    bool & canthrowparty,
+    bool & canestablishembassy
 ) const
 {
-	isspecial  = false;
-	isstealth  = true;
-	maxattack  = 0;
-	maxdefense = 0;
-	cancapture = false;
-	haszoc     = false;
-	canbombard = false;
+	isspecial           = false;
+	isstealth           = true;
+	maxattack           = 0;
+	maxdefense          = 0;
+	cancapture          = false;
+	haszoc              = false;
+	canbombard          = false;
+	canthrowparty       = false;
+	canestablishembassy = false;
 
 	for(sint32 i = 0; i < m_nElements; i++)
 	{
@@ -9946,15 +9963,17 @@ void ArmyData::CharacterizeArmy
 			break;
 		}
 
-		isspecial  |= !rec->GetVisionClassStandard();
-		isspecial  |= (rec->GetAttack() <= 0.0);
-		isstealth  &=  rec->GetVisionClassStealth();
-		cancapture |= !rec->GetCantCaptureCity();
-		haszoc     |= !rec->GetNoZoc();
-		canbombard |= (rec->GetCanBombard() != 0x0);
+		isspecial           |= !rec->GetVisionClassStandard();
+		isspecial           |= (rec->GetAttack() <= 0.0);
+		isstealth           &=  rec->GetVisionClassStealth();
+		cancapture          |= !rec->GetCantCaptureCity();
+		haszoc              |= !rec->GetNoZoc();
+		canbombard          |= (rec->GetCanBombard() != 0x0);
+		canthrowparty       |= rec->GetThrowParty();
+		canestablishembassy |= rec->GetEstablishEmbassy();
 
-		maxattack   = std::max(maxattack,  static_cast<sint32>(rec->GetAttack()));
-		maxdefense  = std::max(maxdefense, static_cast<sint32>(rec->GetDefense()));
+		maxattack            = std::max(maxattack,  static_cast<sint32>(rec->GetAttack()));
+		maxdefense           = std::max(maxdefense, static_cast<sint32>(rec->GetDefense()));
 	}
 }
 
@@ -9991,16 +10010,20 @@ void ArmyData::CharacterizeCargo
     sint32 & maxdefense,
     bool & cancapture,
     bool & haszoc,
-    bool & canbombard
+    bool & canbombard,
+    bool & canthrowparty,
+    bool & canestablishembassy
 ) const
 {
-	isspecial  = false;
-	isstealth  = true;
-	maxattack  = 0;
-	maxdefense = 0;
-	cancapture = false;
-	haszoc     = false;
-	canbombard = false;
+	isspecial           = false;
+	isstealth           = true;
+	maxattack           = 0;
+	maxdefense          = 0;
+	cancapture          = false;
+	haszoc              = false;
+	canbombard          = false;
+	canthrowparty       = false;
+	canestablishembassy = false;
 
 	for(sint32 i = 0; i < m_nElements; i++)
 	{
@@ -10013,15 +10036,17 @@ void ArmyData::CharacterizeCargo
 			{
 				const UnitRecord *rec = cargo->Access(j)->GetDBRec();
 
-				isspecial  |= !rec->GetVisionClassStandard();
-				isspecial  |= (rec->GetAttack() <= 0.0);
-				isstealth  &=  rec->GetVisionClassStealth();
-				cancapture |= !rec->GetCantCaptureCity();
-				haszoc     |= !rec->GetNoZoc();
-				canbombard |= (rec->GetCanBombard() != 0x0);
+				isspecial           |= !rec->GetVisionClassStandard();
+				isspecial           |= (rec->GetAttack() <= 0.0);
+				isstealth           &=  rec->GetVisionClassStealth();
+				cancapture          |= !rec->GetCantCaptureCity();
+				haszoc              |= !rec->GetNoZoc();
+				canbombard          |= (rec->GetCanBombard() != 0x0);
+				canthrowparty       |= !rec->GetThrowParty();
+				canestablishembassy |= !rec->GetEstablishEmbassy();
 
-				maxattack   = std::max(maxattack,  static_cast<sint32>(rec->GetAttack()));
-				maxdefense  = std::max(maxdefense, static_cast<sint32>(rec->GetDefense()));
+				maxattack            = std::max(maxattack,  static_cast<sint32>(rec->GetAttack()));
+				maxdefense           = std::max(maxdefense, static_cast<sint32>(rec->GetDefense()));
 			}
 		}
 	}
@@ -10142,6 +10167,23 @@ bool ArmyData::CheckValidDestination(const MapPoint &dest) const
 }
 
 // returns true if this army's current order is UNIT_ORDER_MOVE and the army already is where it was ordered to go
+//----------------------------------------------------------------------------
+//
+// Name       : ArmyData::AtEndOfPath
+//
+// Description: Returns true if this army is at the end of its path and was
+//              was moving. If it has no valid path then it is assumed to be
+//              at its end-
+//
+// Parameters : -
+//
+// Globals    : -
+//
+// Returns    : bool
+//
+// Remark(s)  : -
+//
+//----------------------------------------------------------------------------
 bool ArmyData::AtEndOfPath() const
 {
 	Order *order = m_orders->GetHead();

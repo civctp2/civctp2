@@ -1374,6 +1374,12 @@ Unit Player::CreateCity(
 
 	u->InitializeCityData(settlerType);
 
+	for(sint32 player = 0; player < 32; player++)
+	{
+		if(g_player[player] != NULL && g_player[player]->m_hasGlobalRadar) // You can add the global radar to more then one wonder
+			u->SetVisible(player);
+	}
+
 	CityData *cityData = u.GetData()->GetCityData();
 
 	AddCityReferenceToPlayer(u, cause);
@@ -9568,6 +9574,18 @@ bool Player::HasTransporters() const
 	}
 
 	return false;
+}
+
+sint32 Player::GetTransporterNum() const
+{
+	sint32 numTransporters = 0;
+	for (sint32 i = 0; i < m_all_units->Num(); i++)
+	{
+		if (m_all_units->Access(i)->GetMaxCargoCapacity() > 0)
+			numTransporters++;
+	}
+
+	return numTransporters;
 }
 
 bool Player::IsConnected(MapPoint const & center, sint32 maxSquaredDistance, sint32 & distance, bool isLandOnly) const

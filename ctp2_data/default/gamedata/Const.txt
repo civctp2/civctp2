@@ -250,7 +250,7 @@ POPULATION_POLLUTION_WARNING_THRESHOLD   10  # population pollution warning mess
 INDUSTRIAL_POLLUTION_WARNING_THRESHOLD   10  # industrial pollution warning message threshold
 VERY_HAPPY_THRESHOLD                     85  # threshold at which a city is considered "very happy"
 CITY_GROWTH_COEFFICIENT                 175  # Amount of food per citizen required to grow a city
-RIOT_LEVEL                               73
+RIOT_LEVEL                               73  # Minimum happiness level so that a city does not riot
 POWER_POINTS_TO_MATERIALS                 1  # 1 power point can be converted to x materials (Unused)
 MAX_AIRLIFT_STACK_SIZE                    2
 GOLD_FROM_PIRACY                         30

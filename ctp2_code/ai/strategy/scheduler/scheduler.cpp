@@ -1438,7 +1438,7 @@ bool Scheduler::Prune_Goals()
 			goal_type,
 			m_goals_of_type[goal_type].size()));
 
-		sprintf(buffer, "\t// max eval = %3.2f, max_exec = %3.2f", goal_element_ptr->GetMaxEval(), goal_element_ptr->GetMaxExec());
+		sprintf(buffer, "\t// max_eval = %3.2f, max_exec = %3.2f max_proc_eval = %i, max_proc_exec = %i ", goal_element_ptr->GetMaxEval(), goal_element_ptr->GetMaxExec(), max_eval, max_exec);
 
 		if(goal_element_ptr->GetExecPerCity())
 			sprintf(buffer, "%s (ExecPerCity)", buffer);
@@ -1474,7 +1474,7 @@ bool Scheduler::Prune_Goals()
 
 				m_goals.push_back(goal_ptr);
 
-				AI_DPRINTF(k_DBG_SCHEDULER, m_playerId, goal_type, -1,
+				AI_DPRINTF(k_DBG_SCHEDULER_DETAIL, m_playerId, goal_type, -1,
 					("\t%3d: [%x] of %s is added.", goals_added, goal_ptr_iter->second, g_theGoalDB->GetNameStr(goal_type)));
 				goal_ptr_iter->second->Log_Debug_Info(k_DBG_SCHEDULER_DETAIL);
 
@@ -1489,7 +1489,7 @@ bool Scheduler::Prune_Goals()
 				}
 
 #if defined(_DEBUG) || defined(USE_LOGGING)
-				AI_DPRINTF(k_DBG_SCHEDULER, m_playerId, goal_type, -1,
+				AI_DPRINTF(k_DBG_SCHEDULER_DETAIL, m_playerId, goal_type, -1,
 					("\t%3d: [%x] Is removed", count, goal_ptr_iter->second));
 				goal_ptr_iter->second->Log_Debug_Info(k_DBG_SCHEDULER_DETAIL);
 
@@ -1541,7 +1541,8 @@ void Scheduler::Add_New_Matches_For_Goal
 		if((goal_squad_class & agent->Get_Squad_Class()) != goal_squad_class)
 			continue;
 
-		if(!agent->Get_Army()->TestOrderAny(g_theGoalDB->Get(type)->GetExecute()))
+		if(!agent->Get_Army()->TestOrderAny(g_theGoalDB->Get(type)->GetExecute())
+		&& !agent->Get_Army()->TestCargoOrderAny(g_theGoalDB->Get(type)->GetExecute()))
 			continue;
 
 		if(hasInField && g_theWorld->HasCity(agent->Get_Army()->RetPos()))

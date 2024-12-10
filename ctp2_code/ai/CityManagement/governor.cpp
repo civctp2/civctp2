@@ -192,7 +192,7 @@ extern CityAstar    g_city_astar;
 
 namespace
 {
-	sint32 const            BORDER_DISTANCE_SEARCH_MULT = 3;
+	sint32 const            BORDER_DISTANCE_SEARCH_MULT = 4;
 	/// Value for a trade route not requiring caravans (should not occur)
 	double const            VALUE_FREE_LUNCH 	        =
 		std::numeric_limits<double>::max();
@@ -592,7 +592,7 @@ void Governor::SliderTests::CalcTests(PLAYER_INDEX playerId)
 		Diplomat::GetDiplomat(playerId).GetCurrentStrategy();
 
 	double deficit_spending;
-	sint32 min_happiness;
+	sint32 min_happiness = g_theConstDB->Get(0)->GetRiotLevel(); // Have a default value if strategy.GetMinimumHappiness is not present
 	double max_wage_percent;
 
 	strategy.GetDeficitSpending(deficit_spending);
@@ -740,8 +740,11 @@ void Governor::OptimizeSliders(SlidersSetting & sliders_setting) const
 	||     !GoldSliderReachedMin(sliders_setting)
 	||     !FoodSliderReachedMin(sliders_setting)
 	){
-		value = slider_tests.GetValue();
 		slider_tests.Log();
+		if(slider_tests.m_happinessTest)
+			break;
+
+		value = slider_tests.GetValue();
 
 		if(!ProdSliderReachedMin(sliders_setting))
 		{
@@ -2147,61 +2150,30 @@ void Governor::AssignPopulation(CityData *city, bool hasAllAdvances) const
 		city->ChangeSpecialists(POP_SCIENTIST, count);
 	}
 
-	best_specialist = city->GetBestSpecialist(POP_ENTERTAINER);
+	/////////////////////////
+	// Recalculate happiness
+	city->CollectResourcesFinally();
+	city->ProcessProduction(true);   // Recalcs also happiness, since production influences happiness
 
-	////////////////////////////////
-	// First pop database index is 0
-	if(best_specialist >= 0)
+	sint32 entertainer_delta = AssignEntertainers(city, false);
+	sint32 needed            = g_theConstDB->Get(0)->GetRiotLevel();
+	sint32 current           = static_cast<sint32>(city->GetHappiness());
+
+	// Overwrite with the accepted minimum happiness from strategy.txt, if there is such
+	// a value, otherwise it uses the riot level from const.txt.
+	Diplomat::GetDiplomat(m_playerId).GetCurrentStrategy().GetMinimumHappiness(needed);
+
+
+	while (entertainer_delta != 0 && current > needed)
 	{
-		/////////////////////////
-		// Recalculate happiness
-		city->CollectResourcesFinally();
-		city->ProcessProduction(true);   // Recalcs also happiness, since production influences happiness
+		entertainer_delta = AssignEntertainers(city, true);
+		current           = static_cast<sint32>(city->GetHappiness());
+	}
 
-		////////////////////////////////////////////////////////////////////////
-		// Retrieve minimum number of entertainers to keep the city from rioing.
-		// Retrieve maximum number of entertainers needed for optimal happiness.
-		sint32 min_entertainers;
-		sint32 max_entertainers;
-		ComputeMinMaxEntertainers(city, min_entertainers, max_entertainers);
-
-		if(min_entertainers > city->WorkerCount())
-		{
-			count = min_entertainers - city->WorkerCount();
-			count = (count <= city->LaborerCount()) ? count : city->LaborerCount();
-			city->ChangeSpecialists(POP_LABORER, -count);
-			// Happiness doesn't need to be recalculated, pops are used for entertainers
-		}
-		if(min_entertainers > city->WorkerCount())
-		{
-			count = min_entertainers - city->WorkerCount();
-			count = (count <= city->ScientistCount()) ? count : city->ScientistCount();
-			city->ChangeSpecialists(POP_SCIENTIST, -count);
-		}
-		if(min_entertainers > city->WorkerCount())
-		{
-			count = min_entertainers - city->WorkerCount();
-			count = (count <= city->MerchantCount()) ? count : city->MerchantCount();
-			city->ChangeSpecialists(POP_MERCHANT, -count);
-		}
-		if(min_entertainers > city->WorkerCount())
-		{
-			min_entertainers = city->WorkerCount();
-		}
-		if(max_entertainers > city->WorkerCount())
-		{
-			max_entertainers = city->WorkerCount();
-		}
-
-		count = static_cast<sint32>
-			(ceil(specialists * pop_assignment->GetEntertainerPercent()));
-
-		count = (count >= min_entertainers ? count : min_entertainers);
-		count = (count <= max_entertainers ? count : max_entertainers);
-
-		count = (count <= specialists || count == min_entertainers ? count : specialists);
-
-		city->ChangeSpecialists(POP_ENTERTAINER, count);
+	if (current < needed && city->WorkerCount() > 0)
+	{
+		// In that case we removed one entertainer to many.
+		city->ChangeSpecialists(POP_ENTERTAINER, 1);
 	}
 
 	if(max_workers < city->WorkerCount() + city->SlaveCount())
@@ -2220,35 +2192,93 @@ void Governor::AssignPopulation(CityData *city, bool hasAllAdvances) const
 #endif
 }
 
+sint32 Governor::AssignEntertainers(CityData *city, bool decreaseByOne) const
+{
+	sint32 best_specialist = city->GetBestSpecialist(POP_ENTERTAINER);
+	if(best_specialist < 0)
+		return 0;
+
+	sint32 count = 0;
+
+	/////////////////////////
+	// Recalculate happiness
+	// Needs to be done before calling this function, either by calling this
+	// explicitly or by a previous call of this function
+	//city->CollectResourcesFinally();
+	//city->ProcessProduction(true);   // Recalcs also happiness, since production influences happiness
+
+	////////////////////////////////////////////////////////////////////////////
+	// Get the minimum of additional entertainers to keep the city from rioing.
+	// Get the maximum of additional entertainers needed for optimal happiness.
+	sint32 min_entertainers = ComputeMinEntertainers(city);
+
+	if(decreaseByOne && min_entertainers != 0)
+	{
+		min_entertainers = -1;
+	}
+
+	if(min_entertainers > city->WorkerCount())
+	{
+		count = min_entertainers - city->WorkerCount();
+		count = (count <= city->LaborerCount()) ? count : city->LaborerCount();
+		city->ChangeSpecialists(POP_LABORER, -count);
+		// Happiness doesn't need to be recalculated, pops are used for entertainers
+	}
+	if(min_entertainers > city->WorkerCount())
+	{
+		count = min_entertainers - city->WorkerCount();
+		count = (count <= city->ScientistCount()) ? count : city->ScientistCount();
+		city->ChangeSpecialists(POP_SCIENTIST, -count);
+	}
+	if(min_entertainers > city->WorkerCount())
+	{
+		count = min_entertainers - city->WorkerCount();
+		count = (count <= city->MerchantCount()) ? count : city->MerchantCount();
+		city->ChangeSpecialists(POP_MERCHANT, -count);
+	}
+	if(min_entertainers > city->WorkerCount())
+	{
+		min_entertainers = city->WorkerCount();
+	}
+	if(city->SpecialistCount(POP_ENTERTAINER) + min_entertainers < 0)
+	{
+		min_entertainers = -city->SpecialistCount(POP_ENTERTAINER);
+	}
+
+	city->ChangeSpecialists(POP_ENTERTAINER, min_entertainers);
+
+	/////////////////////////
+	// Recalculate happiness
+	city->CollectResourcesFinally();
+	city->ProcessProduction(true);   // Recalcs also happiness, since production influences happiness
+
+	return min_entertainers;
+}
+
 //----------------------------------------------------------------------------
 //
-// Name       : Governor::ComputeMinMaxEntertainers
+// Name       : Governor::ComputeMinEntertainers
 //
-// Description: Estimates the amount of entertainers needed to achieve
-//              minimum and full happiness.
+// Description: Computes the additionally needed entertainers
+//              to get the city happiness above riot level.
 //
-// Parameters : city: The city data of city for which the amount of
-//                    entertainers should be estimated.
-//              min:  Filled with the minimum amount of enteriners needed.
-//              max:  Filled with the amount of entertainers needed for
-//                    full happiness.
+// Parameters : city:      The city data of city for which the amount of
+//                         entertainers should be estimated.
 //
 // Globals    : g_theConstDB: The const database.
 //
-// Returns    : -
+// Returns    : The additional entertainers needed if positive
+//              otherwise the number of the superflous entertaners.
 //
 // Remark(s)  : -
 //
 //----------------------------------------------------------------------------
-void Governor::ComputeMinMaxEntertainers(const CityData *city, sint32 & a_Min, sint32 & a_Max) const
+sint32 Governor::ComputeMinEntertainers(const CityData *city) const
 {
-	a_Min = 0;
-	a_Max = 0;
-
 	sint32 entertainer_type = city->GetBestSpecialist(POP_ENTERTAINER);
 
 	if (entertainer_type < 0)
-		return;
+		return 0;
 
 	sint32 per_pop_happiness = g_thePopDB->Get(entertainer_type)->GetHappiness();
 	if (per_pop_happiness <= 0)
@@ -2257,38 +2287,25 @@ void Governor::ComputeMinMaxEntertainers(const CityData *city, sint32 & a_Min, s
 		        ("Entertainer pop type: %i, happiness: %i\n", entertainer_type, per_pop_happiness)
 		       );
 		Assert(0);
-		return;
+		return 0;
 	}
 
-	sint32 needed = g_theConstDB->Get(0)->GetRiotLevel();
-	sint32 maximum = g_theConstDB->Get(0)->GetVeryHappyThreshold();
+	sint32 needed  = g_theConstDB->Get(0)->GetRiotLevel();
 	sint32 current = static_cast<sint32>(city->GetHappiness());
 
+	// Overwrite with the accepted minimum happiness from strategy.txt, if there is such
+	// a value, otherwise it uses the riot level from const.txt.
+	Diplomat::GetDiplomat(m_playerId).GetCurrentStrategy().GetMinimumHappiness(needed);
+
 	double min_delta = static_cast<double>(needed - current) /
-	                     static_cast<double>(per_pop_happiness);
-	double max_delta = static_cast<double>(maximum - current) /
-	                     static_cast<double>(per_pop_happiness);
+	                   static_cast<double>(per_pop_happiness);
 
-	if (min_delta < 0)
-	{
-		min_delta = floor(min_delta);
-	}
-	else
-	{
-		min_delta = ceil(min_delta);
-	}
+	// Round up
+	// If we have to add entertainers, we want to add until we are happy.
+	// If we have to remove entertainers, only as many before we get unhappy.
+	min_delta = ceil(min_delta);
 
-	if (max_delta < 0)
-	{
-		max_delta = floor(max_delta);
-	}
-	else
-	{
-		max_delta = ceil(max_delta);
-	}
-
-	a_Min = std::max<sint32>(0, city->EntertainerCount() + (sint32) min_delta);
-	a_Max = std::max<sint32>(0, city->EntertainerCount() + (sint32) max_delta);
+	return static_cast<sint32>(min_delta);
 }
 
 #if defined(NEW_RESOURCE_PROCESS)
@@ -3627,7 +3644,6 @@ const BuildListSequenceRecord * Governor::GetMatchingSequence(const CityData *ci
 	sint32 minNumUnits;
 	sint32 maxRawHappiness;
 
-	SlidersSetting sliders_setting;
 	sint32 cityRawHappiness = static_cast<sint32>(city->GetHappiness()) - city->GetHappinessFromPops();
 
 	bool canBuildWonders = false;
@@ -3667,6 +3683,12 @@ const BuildListSequenceRecord * Governor::GetMatchingSequence(const CityData *ci
 		if(elem->GetMinNumCities(minNumUnits) && (m_canBuildLandSettlers || (m_canBuildSeaSettlers && city->IsCoastal())))
 		{
 			if(g_player[m_playerId]->GetNumCities() < minNumUnits)
+				continue;
+		}
+
+		if(elem->GetMinTransporters(minNumUnits) && city->IsCoastal() && m_buildUnitList[BUILD_UNIT_LIST_SEA_TRANSPORT].m_desiredCount > 0)
+		{
+			if (minNumUnits > 0 && g_player[m_playerId]->GetTransporterNum() < minNumUnits) // minNumUnits < 1 is valid input in the strategies.txt
 				continue;
 		}
 
@@ -3752,6 +3774,7 @@ const BuildListSequenceRecord * Governor::GetMatchingSequence(const CityData *ci
 		{
 			best_priority = elem->GetPriority();
 			best_elem     = elem;
+			continue;
 		}
 
 		double bottom_value;
@@ -3761,6 +3784,7 @@ const BuildListSequenceRecord * Governor::GetMatchingSequence(const CityData *ci
 		{
 			best_priority = elem->GetPriority();
 			best_elem     = elem;
+			continue;
 		}
 
 		sint32 cityMaxSize;
@@ -3774,6 +3798,7 @@ const BuildListSequenceRecord * Governor::GetMatchingSequence(const CityData *ci
 		{
 			best_priority = elem->GetPriority();
 			best_elem     = elem;
+			continue;
 		}
 
 		sint32 value;
@@ -3786,6 +3811,7 @@ const BuildListSequenceRecord * Governor::GetMatchingSequence(const CityData *ci
 		{
 			best_priority = elem->GetPriority();
 			best_elem     = elem;
+			continue;
 		}
 	}
 
@@ -3836,7 +3862,7 @@ sint32 Governor::GetNeededUnitType(const CityData *city, sint32 & list_num) cons
 
 	bool canBuildTransporters = static_cast<double>(m_currentUnitShieldCost) /
 	                            static_cast<double>(m_maximumUnitShieldCost) >
-	                                         build_settler_production_level;
+	                                         build_transport_production_level;
 //	                      || city->GetNeededGarrisonStrength() * build_transport_production_level <= city->GetCurrentGarrisonStrength();
 
 

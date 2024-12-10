@@ -672,6 +672,7 @@ void spriteutils_ConvertPixelFormat(Pixel16 *frame, sint32 width, sint32 height)
 						break;
 					default:
 						Assert(FALSE);
+						return; // With this return it does not crash, to land here something must have gone wrong before
 				}
 				tag = *rowData++;
 			}
