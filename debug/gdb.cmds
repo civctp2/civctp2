@@ -1,0 +1,12 @@
+show args
+catch signal SIGSEGV
+command  
+   backtrace
+   continue 
+   end
+catch signal SIGINT
+command  
+   backtrace
+   continue 
+   end
+run
