@@ -375,6 +375,37 @@ void ArmyManagerWindow::Update()
 	}
 
 	UpdateArmyName();
+
+	ctp2_Static *armyTextlabel = (ctp2_Static *)aui_Ldl::GetObject(s_armyWindowBlock, "ArmyTextLabel");
+	if(armyTextlabel)
+	{
+		if((g_graphicsOptions
+		&&  g_graphicsOptions->IsArmyTextOn()
+		||  g_theProfileDB->GetDebugAI())
+		&&  m_army.IsValid()
+		&&  m_army->GetDebugString()
+		){
+			armyTextlabel->SetText(m_army->GetDebugString());
+
+			sint32 r, g, b;
+			uint8  col = m_army.GetData()->GetDebugStringColor();
+
+			g_tiledMap->ColorMagnitudeToRGB(col, &r, &g, &b);
+
+			COLORREF fgColor = RGB(r, g, b);
+			// not used COLORREF	bgColor = RGB(0,0,0);
+
+			armyTextlabel->SetTextColor(fgColor);
+			armyTextlabel->SetTextShadow(true);
+			armyTextlabel->SetTextShadowColor(fgColor); /// @todo bgColor?
+		}
+		else
+		{
+			armyTextlabel->SetText("");
+		}
+		armyTextlabel->ShouldDraw(true);
+	}
+
 	updating = false;
 }
 
