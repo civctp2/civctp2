@@ -1569,8 +1569,8 @@ void RadarRenderOverlay::RenderTrade(aui_Surface & surface, const MapPoint & wor
 	}
 
 	RECT rect = {
-			screenPosition.x, screenPosition.y,
-			screenPosition.x + (m_tileSize.x / 2.0),screenPosition.y + m_tileSize.y
+			static_cast<LONG>(screenPosition.x), static_cast<LONG>(screenPosition.y),
+			static_cast<LONG>(screenPosition.x + (m_tileSize.x / 2.0)), static_cast<LONG>(screenPosition.y + m_tileSize.y)
 	};
 	RenderTradeRoute(surface, rect);
 }
