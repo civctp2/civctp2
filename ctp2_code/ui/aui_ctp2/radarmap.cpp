@@ -647,20 +647,17 @@ RadarMapCell::Type RadarRenderWorld::GetMapCellValue(const MapPoint & worldPos) 
 		return RadarMapCell::createValue( COLOR_BLACK, COLOR_BLACK, isLand);
 	}
 
+	sint32 owner = g_tiledMap->GetVisibleCellOwner(worldPos);
 	COLOR landColor = static_cast<COLOR>(COLOR_TERRAIN_0 + TERRAIN_GRASSLAND);
 	if (m_radarProperties.m_displayOverlay && m_radarProperties.m_mapOverlay) {
 		landColor = m_radarProperties.m_mapOverlay[worldPos.y * m_mapSize.x + worldPos.x];
 	}
-	else if (m_radarProperties.m_displayPolitical)
+	else if (m_radarProperties.m_displayPolitical && owner >= 0)
 	{
-		sint32 owner = g_theWorld->GetOwner(worldPos);
-		if (owner >= 0 && (m_player.HasContactWith(owner) || m_player.m_hasGlobalRadar || g_fog_toggle || g_god))
-		{
-			if (m_radarProperties.m_displayRelations) {
-				landColor = RadarTileRelationsColor(worldPos);
-			} else {
-				landColor = g_colorSet->ComputePlayerColor(g_tiledMap->GetVisibleCellOwner(worldPos));
-			}
+		if (m_radarProperties.m_displayRelations) {
+			landColor = RadarTileRelationsColor(worldPos);
+		} else {
+			landColor = g_colorSet->ComputePlayerColor(owner);
 		}
 	}
 	else if (m_radarProperties.m_displayTerrain) {
