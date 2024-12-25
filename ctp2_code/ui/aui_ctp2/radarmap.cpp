@@ -1517,7 +1517,9 @@ void RadarRenderOverlay::RenderUnit(aui_Surface & surface, const MapPoint & worl
 		sint32 x2 = x1 + static_cast<sint32>(m_tileSize.x / 2.0);
 		sint32 y1 = static_cast<sint32>(screenPosition.y);
 		sint32 y2 = y1 + static_cast<sint32>(m_tileSize.y);
-		primitives_ClippedPaintRect16(surface, RECT { x1, y1, x2, y2}, g_colorSet->GetColor(unitColor));
+
+		Pixel16 unitColorPixel = m_radarProperties.m_displayPolitical ? g_colorSet->GetDarkColor(unitColor) : g_colorSet->GetColor(unitColor);
+		primitives_ClippedPaintRect16(surface, RECT { x1, y1, x2, y2}, unitColorPixel);
 	}
 }
 
