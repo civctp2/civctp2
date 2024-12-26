@@ -1474,6 +1474,7 @@ void RadarRenderOverlay::RenderSingleTile(aui_Surface & surface, const MapPoint 
 {
 	if (m_player.IsExplored(worldPos)) {
 		const MapPointDouble screenPosition = GetScreenPosition(radarPos);
+		RenderCity(surface, worldPos, screenPosition);
 		RenderUnit(surface, worldPos, screenPosition);
 		RenderCapitol(surface, worldPos, screenPosition);
 		RenderTrade(surface, worldPos, screenPosition);
@@ -2163,8 +2164,6 @@ void RadarMap::RedrawTile(const MapPoint & pos)
 	uint8 *pSurfBase;
 	m_mapSurface->Lock(NULL, (LPVOID *)&pSurfBase, 0);
 
-	DoRedrawTile(*m_mapSurface, *player, pos);
-
 	// Draw neighbor crossings
 	MapPoint neighborPosition;
 	if (pos.GetNeighborPosition(NORTHWEST, neighborPosition)) {
@@ -2176,6 +2175,8 @@ void RadarMap::RedrawTile(const MapPoint & pos)
 	if (pos.GetNeighborPosition(SOUTHWEST, neighborPosition)) {
 		DoRedrawTile(*m_mapSurface, *player, neighborPosition);
 	}
+
+	DoRedrawTile(*m_mapSurface, *player, pos);
 
 	m_mapSurface->Unlock(pSurfBase);
 }
