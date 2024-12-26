@@ -1711,7 +1711,7 @@ void RadarMap::ClearMapOverlay(void)
 //
 //---------------------------------------------------------------------------
 //	- Sets a position for the Gaia controller overlay and creates the over-
-//    lay it does not exists yet
+//    lay if it does not exists yet
 //
 //---------------------------------------------------------------------------
 void RadarMap::SetMapOverlayCell(const MapPoint & pos, COLOR color)
