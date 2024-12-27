@@ -1449,14 +1449,7 @@ void RadarRenderOverlay::Render(aui_Surface & surface, const MapPoint & radarOff
 		for (sint32 x = 0; x < m_mapSize.x; x++)
 		{
 			const MapPoint worldPos(x,y);
-			if (m_player.IsExplored(worldPos))
-			{
-				const MapPointDouble screenPosition = GetScreenPosition(radarPos);
-				RenderCity(surface, worldPos, screenPosition);
-				RenderUnit(surface, worldPos, screenPosition);
-				RenderCapitol(surface, worldPos, screenPosition);
-				RenderTrade(surface, worldPos, screenPosition);
-			}
+			RenderSingleTile(surface, worldPos, radarPos);
 			radarPos.x++;
 			if (radarPos.x >= m_mapSize.x) {
 				radarPos.x = 0;
