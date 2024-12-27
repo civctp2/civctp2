@@ -418,6 +418,37 @@ void RadarRender::Render(aui_Surface & surface, RadarMapCell::Type * map, const 
 	RenderMapTexture(surface, map, radarSize, oddYStartValueX, startWorldPosX, startWorldPosY);
 }
 
+void RadarRender::RenderSingleTile(aui_Surface & surface, const MapPoint & worldPos, const MapPoint & radarPos) const
+{
+	RadarMapCell::Type tileMap[15];
+	FillTileMap(worldPos, tileMap);
+	const sint32 mapPitch = 3;
+
+	const MapPointDouble position = GetScreenPosition(radarPos);
+
+	sint32 y1 = static_cast<sint32>(position.y);
+	sint32 y2 = static_cast<sint32>(position.y + m_tileSize.y);
+
+	sint32 x1 = static_cast<sint32>(position.x);
+	sint32 x2 = static_cast<sint32>(position.x + m_tileSize.x);
+
+	bool oddY = radarPos.y & 1;
+	bool oddX = radarPos.x & 1;
+	sint32 width = x2 - x1;
+	sint32 split = x1 + (width + (oddY ? 1 : 0)) / 2;
+	RECT renderRect = { x1, y1, split - 1, y2 - 1 };
+
+	RenderTile(surface, renderRect, tileMap + 7, mapPitch);
+	if ((x1 <= m_tileSize.x) && oddY) { // first column, render also crossing before
+		const RECT firstColumn = { 0, y1, x1 - 1, y2 - 1 };
+		RenderCrossing(surface, firstColumn, tileMap + 6, mapPitch);
+	}
+
+	renderRect.left = split;
+	renderRect.right = x2 - 1;
+	RenderCrossing(surface, renderRect, tileMap + 7, mapPitch);
+}
+
 void RadarRender::RenderMapTexture(aui_Surface & surface, RadarMapCell::Type * map, const MapPoint & radarSize,
 		double oddYStartValueX, sint32 startWorldPosX, sint32 startWorldPosY) const
 {
@@ -475,36 +506,6 @@ void RadarRender::RenderMapTexture(aui_Surface & surface, RadarMapCell::Type * m
 			}
 		}
 	}
-}
-
-void RadarRender::RenderSingleTile(aui_Surface & surface, const MapPoint & worldPos, const MapPoint & radarPos) const
-{
-	RadarMapCell::Type tileMap[15];
-	FillTileMap(worldPos, tileMap);
-	const sint32 mapPitch = 3;
-
-	const MapPointDouble position = GetScreenPosition(radarPos);
-
-	sint32 y1 = static_cast<sint32>(position.y);
-	sint32 y2 = static_cast<sint32>(position.y + m_tileSize.y);
-
-	sint32 x1 = static_cast<sint32>(position.x);
-	sint32 x2 = static_cast<sint32>(position.x + m_tileSize.x);
-
-	bool oddY = radarPos.y & 1;
-	sint32 width = x2 - x1;
-	sint32 split = x1 + (width + (oddY ? 1 : 0)) / 2;
-	RECT renderRect = { x1, y1, split - 1, y2 - 1 };
-
-	RenderTile(surface, renderRect, tileMap + 7, mapPitch);
-	if ((x1 <= m_tileSize.x) && oddY) { // first column, render also crossing before
-		const RECT firstColumn = {0, y1, x1 - 1, y2 - 1};
-		RenderCrossing(surface, firstColumn, tileMap + 6, mapPitch);
-	}
-
-	renderRect.left = split;
-	renderRect.right = x2 - 1;
-	RenderCrossing(surface, renderRect, tileMap + 7, mapPitch);
 }
 
 const MapPoint RadarRender::WrapPoint(const MapPoint & point) const
