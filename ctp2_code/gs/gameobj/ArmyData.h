@@ -457,7 +457,6 @@ public:
     void SetUnloadMovementPoints();
 
     void ActionSuccessful(SPECATTACK attack, Unit &unit, const Unit &c);
-    void ActionUnsuccessful(const MapPoint &point);
 
     bool ExecuteSpecialOrder(Order *order, bool &keepGoing);
     void AddSpecialActionUsed(Unit &who);

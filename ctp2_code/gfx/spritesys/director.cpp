@@ -382,7 +382,7 @@ protected:
 			if (g_doingFastRounds) return false;
 		#endif
 
-		return g_tiledMap && g_tiledMap->GetLocalVision()->IsVisible(pos);
+		return g_tiledMap && g_tiledMap->GetLocalVision()->IsVisible(pos); // should this be g_player[g_selected_item->GetVisiblePlayer()]->IsVisible(pos)
 	}
 
 	static void CenterMap(const MapPoint &pos)
@@ -1404,8 +1404,8 @@ public:
 
 	virtual void Execute()
 	{
-		if (g_tiledMap->GetLocalVision()->IsVisible(m_activeActor->GetMapPos()))
-		{
+	        const MapPoint pos = m_activeActor->GetMapPos();
+		if(g_player[g_selected_item->GetVisiblePlayer()]->IsVisible(pos)){ // only play animation and sound if pos is generally visible to current player
 			Anim *animation = m_activeActor->CreatePlayAnim();
 			if (animation)
 			{
@@ -1414,7 +1414,6 @@ public:
 
 				if (g_soundManager)
 				{
-					const MapPoint pos = m_activeActor->GetMapPos();
 					g_soundManager->AddSound(SOUNDTYPE_SFX, 0, soundID, pos.x, pos.y);
 				}
 			}
@@ -1760,10 +1759,6 @@ protected:
 
 	virtual void PrepareAnimation()
 	{
-		if (attackerSoundID >= 0) {
-			g_soundManager->AddSound(SOUNDTYPE_SFX, 0, attackerSoundID, 0, 0);
-		}
-
 		POINT attackerPoints, defenderPoints;
 		maputils_MapXY2PixelXY(attackerPos.x, attackerPos.y, attackerPoints);
 		maputils_MapXY2PixelXY(defenderPos.x, defenderPos.y, defenderPoints);
@@ -1772,6 +1767,12 @@ protected:
 		sint32 deltaY = defenderPoints.y - attackerPoints.y;
 
 		bool attackerVisible = TileIsVisibleToPlayer(attackerPos);
+		bool defenderVisible = TileIsVisibleToPlayer(defenderPos);
+
+		if (attackerSoundID >= 0 && defenderVisible) { // removed || attackerVisible to suppress sound if e.g. invisible slaver is not in FOW of visiblePlayer but his target is in FOW
+			g_soundManager->AddSound(SOUNDTYPE_SFX, 0, attackerSoundID, 0, 0);
+		}
+
 		if (!attackerIsCity && attackerVisible)
 		{
 			Anim * animation = attacker->CreateSpecialAttackAnim();
@@ -1783,7 +1784,6 @@ protected:
 			}
 		}
 
-		bool defenderVisible = TileIsVisibleToPlayer(defenderPos);
 		if (!defenderIsCity && defenderVisible)
 		{
 			Anim * animation = defender->CreateSpecialAttackAnim();
@@ -2667,6 +2667,12 @@ void DirectorImpl::AddProjectileAttack(
 
 void DirectorImpl::AddSpecialEffect(const MapPoint &pos, sint32 spriteID, sint32 soundID)
 {
+	if(g_selected_item->IsAutoCenterOn() 
+	    && !TileWillBeCompletelyVisible(pos.x, pos.y)
+	    && g_player[g_selected_item->GetVisiblePlayer()]->IsVisible(pos)
+	    ){ // center on pos if generally visible but not in current view
+	    AddCenterMap(pos);
+	    }
 	DQActionSpecialEffect *action = new DQActionSpecialEffect(pos, spriteID, soundID);
 	m_actionQueue->AddTail(action);
 }
@@ -2825,8 +2831,14 @@ void DirectorImpl::AddSpecialAttack(const Unit& attacker, const Unit &attacked, 
 		DQActionMoveProjectile * moveProjectileAction = new DQActionMoveProjectile(new SpriteState(spriteID),
 				attackPosition, attacked.RetPos());
 		m_actionQueue->AddTail(moveProjectileAction);
+		if(g_selected_item->IsAutoCenterOn() 
+		    && !TileWillBeCompletelyVisible(attackPosition.x, attackPosition.y)
+		    && g_player[g_selected_item->GetVisiblePlayer()]->IsVisible(attackPosition)
+		    ){ // center on pos if generally visible but not in current view
+		    AddCenterMap(attackPosition);
+		    }
 	}
-
+	
 	DQActionAttack *action = new DQActionSpecialAttack(
 			attacker.GetOwner(),
 			attacker.GetActor(),

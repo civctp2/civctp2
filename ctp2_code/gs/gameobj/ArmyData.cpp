@@ -5852,6 +5852,7 @@ ORDER_RESULT ArmyData::InterceptTrade()
 	sint32 typeIndex = g_theSpecialEffectDB->FindTypeIndex("SPECEFFECT_PIRATE");
 	sint32 effectId = g_theSpecialEffectDB->Get(typeIndex)->GetValue();
 	sint32 soundId = g_theSoundDB->FindTypeIndex("SOUND_ID_SLAVE_RAIDS");
+	sint32 soundIdTmp= -1;
 
 	for (sint32 i = m_nElements - 1; i>= 0; i--)
 	{
@@ -5904,6 +5905,9 @@ ORDER_RESULT ArmyData::InterceptTrade()
 						g_selected_item->ForceDirectorSelect(Army(m_id));
 						return ORDER_RESULT_ILLEGAL;
 					}
+					if (g_selected_item->GetVisiblePlayer() == route_owner){ // set pirating sound if route_owner is human player
+					    soundIdTmp= soundId;
+					    }
 				}
 			}
 
@@ -5925,6 +5929,10 @@ ORDER_RESULT ArmyData::InterceptTrade()
 
 					g_director->AddSpecialEffect(m_pos, effectId, soundId);
 				}
+				else if (soundIdTmp != -1){ // play pirating sound if route_owner is human player even if pirating pos is not visible (i.e. sound corresponds to the feedback of the pirated trader)
+				    g_soundManager->AddSound(SOUNDTYPE_SFX, (uint32)0, 	soundIdTmp, m_pos.x, m_pos.y);
+				    }
+				
 				AddSpecialActionUsed(m_array[i]);
 				m_isPirating = true;
 			}
@@ -8340,7 +8348,8 @@ bool ArmyData::ExecuteUnloadOrder(Order *order)
 	{
 		sint32 visiblePlayer = g_selected_item->GetVisiblePlayer();
 		if(visiblePlayer == m_array[0].GetOwner()
-		|| (m_array[0].GetVisibility() & (1 << visiblePlayer)))
+//		|| (m_array[0].GetVisibility() & (1 << visiblePlayer)) // not an attack sound, so not appropriate to hear for any unit not owned by visible player
+		    )
 		{
 			g_soundManager->AddSound(SOUNDTYPE_SFX, (uint32)0,
 								m_array[0].GetCantMoveSoundID(),
@@ -8357,8 +8366,9 @@ void ArmyData::FinishUnloadOrder(Army &debark, MapPoint &to_pt)
 	if(debark.Num() <= 0)
 	{
 		sint32 visiblePlayer = g_selected_item->GetVisiblePlayer();
-		if ((visiblePlayer == m_array[0].GetOwner()) ||
-			(m_array[0].GetVisibility() & (1 << visiblePlayer)))
+		if ((visiblePlayer == m_array[0].GetOwner())
+//		|| (m_array[0].GetVisibility() & (1 << visiblePlayer)) // not an attack sound, so not appropriate to hear for any unit not owned by visible player
+		   )
 		{
 			g_soundManager->AddSound(SOUNDTYPE_SFX, (uint32)0,
 								m_array[0].GetCantMoveSoundID(),
@@ -9152,22 +9162,16 @@ void ArmyData::ActionSuccessful(SPECATTACK attack, Unit &unit, Unit const & c)
 			if(visiblePlayer == m_owner
 			|| unit.GetVisibility() & (1 << visiblePlayer))
 			{
-				g_soundManager->AddSound(SOUNDTYPE_SFX, (uint32)0, 	soundID, m_pos.x, m_pos.y);
+				if(g_selected_item->IsAutoCenterOn() 
+				    && !g_director->TileWillBeCompletelyVisible(m_pos.x, m_pos.y)
+				    && g_player[g_selected_item->GetVisiblePlayer()]->IsVisible(m_pos)
+				    ){ // center on pos if generally visible but not in current view
+				    g_director->AddCenterMap(m_pos);
+				    }
+				
+				g_soundManager->AddSound(SOUNDTYPE_SFX, (uint32)0, 	soundID, m_pos.x, m_pos.y); // pos not used in SoundManager::AddSound, centering map could be implemented there, not sure though if that would cause troule for sounds not bound to a map position (e.g. click-sound)
 			}
 		}
-	}
-}
-
-void ArmyData::ActionUnsuccessful(const MapPoint &point)
-{
-	sint32 visiblePlayer = g_selected_item->GetVisiblePlayer();
-	if ((visiblePlayer == m_owner) ||
-		(m_array[0].GetVisibility() & (1 << visiblePlayer))) {
-
-		g_soundManager->AddSound(SOUNDTYPE_SFX, (uint32)0,
-							gamesounds_GetGameSoundID(GAMESOUNDS_DEFAULT_FAIL),
-							point.x,
-							point.y);
 	}
 }
 

@@ -368,7 +368,7 @@ SoundManager::AddGameSound(const GAMESOUNDS &sound)
 void
 SoundManager::AddSound(const SOUNDTYPE &type,
                        const uint32 &associatedObject,
-                       const sint32 &soundID, sint32 x, sint32 y)
+                       const sint32 &soundID, sint32 x, sint32 y) // though position is passed in x,y not adding AddCenterMap in here since it would not be appropriate in all cases (like e.g. mouse-click sound)
 {
 	if (m_noSound) return;
 
