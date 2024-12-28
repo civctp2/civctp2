@@ -261,7 +261,7 @@ BOOL g_letUIProcess = FALSE;
 BOOL g_useDDBlit = TRUE;
 BOOL g_powerPointsMode = FALSE;
 
-BOOL g_exclusiveMode = TRUE;
+BOOL g_exclusiveMode = FALSE;
 BOOL g_hideTaskBar = FALSE;
 BOOL g_useIntroMovie = TRUE;
 BOOL g_noAssertDialogs = FALSE;
@@ -1098,7 +1098,7 @@ void ParseCommandLine(PSTR szCmdLine)
 	if(!g_cmdline_load)
 		g_no_shell =  (NULL != strstr(szCmdLine, "noshell"));
 	g_no_exit_action = (NULL != strstr(szCmdLine, "noexitaction"));
-	g_exclusiveMode = !(NULL != strstr(szCmdLine, "nonexclusive"));
+	g_exclusiveMode = (NULL != strstr(szCmdLine, "exclusive"));
 	g_hideTaskBar = (NULL != strstr(szCmdLine, "hidetaskbar"));
 	if(!g_cmdline_load)
 		g_useIntroMovie = !(NULL != strstr(szCmdLine, "nointromovie"));
