@@ -2132,8 +2132,7 @@ void RadarMap::DoRedrawTile(aui_Surface & surface, const Player & player, const 
 	{
 		const RadarRenderPlayerBorder radarRenderPlayerBorder(player, m_radarProperties, *m_mapSize,
 				m_tilePixelWidth, m_tilePixelHeight);
-		radarRenderPlayerBorder.Render(surface, static_cast<RadarMapCell::Type *>(m_mapTexture),
-				MapPoint(m_width, m_height), PosWorldToPosRadar(MapPoint(0, 0)));
+		radarRenderPlayerBorder.RenderSingleTile(surface, pos, radarPos);
 	}
 
 	const RadarRenderOverlay radarRenderOverlay(player, m_radarProperties, *m_mapSize,m_tilePixelWidth, m_tilePixelHeight);
