@@ -115,38 +115,46 @@ extern sint32 g_god;
 class RadarMapCell
 {
 public:
-	typedef uint16 Type;
+	struct Type
+	{
+		Type() : m_color(0), m_owner(PLAYER_UNASSIGNED) {}
+		Type(uint16 color, sint16 owner = PLAYER_UNASSIGNED) : m_color(color), m_owner(owner) {}
+		uint16 m_color;
+		uint16 m_owner;
+	};
+
+	typedef uint16 TypeConst;
 
 	static inline Type createValue(const COLOR landColor, const COLOR waterColor, bool isLand) {
 		return landColor | (waterColor << 9) | (isLand ? ISLAND_MARKER : 0);
 	}
 
 	static inline bool GetIsLand(const Type value) {
-		return (value & ISLAND_MARKER);
+		return (value.m_color & ISLAND_MARKER);
 	}
 
 	static inline Pixel16 GetPixel16(const Type value) {
-		return GetIsLand(value) ? GetLandPixel16(value) : GetWaterPixel16(value);
+		return GetIsLand(value) ? GetLandPixel16(value) : GetWaterPixel16(value.m_color);
 	}
 
 	static inline Pixel16 GetLandPixel16(const Type value) {
-		return g_colorSet->GetColor(static_cast<COLOR>(value & 0xff));
+		return g_colorSet->GetColor(static_cast<COLOR>(value.m_color & 0xff));
 	}
 
 	static inline Pixel16 GetWaterPixel16(const Type value) {
-		return g_colorSet->GetColor(static_cast<COLOR>(value >> 9));
+		return g_colorSet->GetColor(static_cast<COLOR>(value.m_color >> 9));
 	}
 
-	static inline Type createValue(bool explored, bool owned, const COLOR ownerColor) {
-		return explored ? (owned ? ownerColor : NO_OWNER) : NOT_EXPLORED;
+	static inline Type createValue(bool explored, bool owned, const COLOR ownerColor, sint16 owner = PLAYER_UNASSIGNED) {
+		return Type(explored ? (owned ? ownerColor : NO_OWNER) : NOT_EXPLORED, owner);
 	}
 
 	static inline Pixel16 GetIsExplored(const Type value) {
-		return !(value & NOT_EXPLORED);
+		return !(value.m_color & NOT_EXPLORED);
 	}
 
 	static inline Pixel16 GetOwnerPixel16(const Type value) {
-		return ((value & NOT_EXPLORED) || (value & NO_OWNER)) ? 0 : g_colorSet->GetColor(static_cast<COLOR>(value));
+		return ((value.m_color & NOT_EXPLORED) || (value.m_color & NO_OWNER)) ? 0 : g_colorSet->GetColor(static_cast<COLOR>(value.m_color));
 	}
 
 	static inline Type GetTileCell(const WORLD_DIRECTION direction, const Type *map, sint32 mapPitch)
@@ -191,9 +199,9 @@ public:
 	}
 
 private:
-	static const Type ISLAND_MARKER = 0x0100;
-	static const Type NOT_EXPLORED = 0x0100;
-	static const Type NO_OWNER = 0x0200;
+	static const TypeConst ISLAND_MARKER = 0x0100;
+	static const TypeConst NOT_EXPLORED = 0x0100;
+	static const TypeConst NO_OWNER = 0x0200;
 };
 
 /*
@@ -275,7 +283,7 @@ protected:
 			sint32 mapPitch) const override;
 
 private:
-	static const RadarMapCell::Type BLEND_WATER = 128;
+	static const RadarMapCell::TypeConst BLEND_WATER = 128;
 
 	static const uint32 NO_COAST    = 0;
 	static const uint32 WEST_COAST  = 1;
@@ -326,7 +334,7 @@ protected:
 
 private:
 	static inline void RenderBorderLine(aui_Surface & surface, sint32 x1, sint32 y1, sint32 x2, sint32 y2,
-			Pixel16 color)
+	        Pixel16 color)
 	{
 		if (color != 0) {
 			primitives_ClippedLine16(surface, x1, y1, x2, y2, color);
@@ -334,7 +342,8 @@ private:
 	}
 
 	void RenderCrossingAllExplored(aui_Surface & surface, const RECT & rect, Pixel16 west, Pixel16 north, Pixel16 east,
-			Pixel16 south) const;
+	        Pixel16 south, const RadarMapCell::Type & westCell, const RadarMapCell::Type & northCell,
+	        const RadarMapCell::Type & eastCell, const RadarMapCell::Type & southCell) const;
 };
 
 class RadarRenderOverlay : public RadarRenderBase {
@@ -1026,11 +1035,12 @@ void RadarRenderWorld::RenderBasicCrossing(aui_Surface & surface, const RECT & r
  */
 RadarMapCell::Type RadarRenderPlayerBorder::GetMapCellValue(const MapPoint & worldPos) const
 {
+	sint32 owner = g_tiledMap->GetVisibleCellOwner(worldPos);
+
 	if (!m_player.IsExplored(worldPos)) {
-		return RadarMapCell::createValue(false, false, COLOR_BLACK);
+		return RadarMapCell::createValue(false, false, COLOR_BLACK, owner);
 	}
 
-	sint32 owner = g_tiledMap->GetVisibleCellOwner(worldPos);
 	if ((owner == PLAYER_UNASSIGNED) ||
 		(   // owner is assigned &&
 			owner != m_player.m_owner
@@ -1040,12 +1050,12 @@ RadarMapCell::Type RadarRenderPlayerBorder::GetMapCellValue(const MapPoint & wor
 			&& !g_god
 		))
 	{
-		return RadarMapCell::createValue(true, false, COLOR_BLACK);
+		return RadarMapCell::createValue(true, false, COLOR_BLACK, owner);
 	}
 
 	bool ownerVisible = m_player.m_hasGlobalRadar || m_player.HasContactWith(owner) || g_fog_toggle || g_god;
 	return RadarMapCell::createValue(true, ownerVisible, m_radarProperties.m_displayRelations
-		? DoRadarTileRelationsColor(owner) : g_colorSet->ComputePlayerColor(owner));
+		? DoRadarTileRelationsColor(owner) : g_colorSet->ComputePlayerColor(owner), g_tiledMap->GetVisibleCellOwner(worldPos));
 }
 
 void RadarRenderPlayerBorder::RenderCrossing(aui_Surface & surface, const RECT & rect, RadarMapCell::Type * map,
@@ -1078,10 +1088,10 @@ void RadarRenderPlayerBorder::RenderCrossing(aui_Surface & surface, const RECT &
 		case NONE_EXPLORED:
 			break;
 		case ALL_EXPLORED:
-			RenderCrossingAllExplored(surface, rect, west, north, east, south);
+			RenderCrossingAllExplored(surface, rect, west, north, east, south, westCell, northCell, eastCell, southCell);
 			break;
 		case WEST_EXPLORED | NORTH_EXPLORED:
-			if (west != north)
+			if (westCell.m_owner != northCell.m_owner)
 			{
 				sint32 centerRight = (rect.right + rect.left) / 2;
 				sint32 centerBottom = (rect.top + rect.bottom) / 2;
@@ -1103,7 +1113,7 @@ void RadarRenderPlayerBorder::RenderCrossing(aui_Surface & surface, const RECT &
 			}
 			break;
 		case NORTH_EXPLORED | EAST_EXPLORED:
-			if (north != east)
+			if (northCell.m_owner != eastCell.m_owner)
 			{
 				sint32 centerLeft = (rect.right + rect.left) / 2;
 				sint32 centerBottom = (rect.top + rect.bottom) / 2;
@@ -1124,7 +1134,7 @@ void RadarRenderPlayerBorder::RenderCrossing(aui_Surface & surface, const RECT &
 			}
 			break;
 		case EAST_EXPLORED | SOUTH_EXPLORED:
-			if (east != south)
+			if (eastCell.m_owner != southCell.m_owner)
 			{
 				sint32 centerLeft = (rect.right + rect.left) / 2;
 				sint32 centerTop = (rect.top + rect.bottom) / 2;
@@ -1146,7 +1156,7 @@ void RadarRenderPlayerBorder::RenderCrossing(aui_Surface & surface, const RECT &
 			}
 			break;
 		case SOUTH_EXPLORED | WEST_EXPLORED:
-			if (south != west)
+			if (southCell.m_owner != westCell.m_owner)
 			{
 				sint32 centerRight = (rect.right + rect.left) / 2;
 				sint32 centerTop = (rect.top + rect.bottom) / 2;
@@ -1167,15 +1177,15 @@ void RadarRenderPlayerBorder::RenderCrossing(aui_Surface & surface, const RECT &
 			}
 			break;
 		case NORTH_EXPLORED | EAST_EXPLORED | SOUTH_EXPLORED:
-			if ((north == south) && (north == east)) { // all equal
+			if ((northCell.m_owner == southCell.m_owner) && (northCell.m_owner == eastCell.m_owner)) { // all equal
 				break;
 			}
-			if (north == south)
+			if (northCell.m_owner == southCell.m_owner)
 			{
 				RenderBorderLine(surface, rect.right, rect.top, rect.right, rect.bottom, north);
 				RenderBorderLine(surface, rect.right + 1, rect.top, rect.right + 1, rect.bottom, east);
 			}
-			else if (north == east)
+			else if (northCell.m_owner == eastCell.m_owner)
 			{
 				if (north == 0) {
 					RenderBorderLine(surface, rect.left, rect.top, rect.right, rect.bottom, south);
@@ -1186,7 +1196,7 @@ void RadarRenderPlayerBorder::RenderCrossing(aui_Surface & surface, const RECT &
 					RenderBorderLine(surface, rect.left, rect.top + 1, rect.right, rect.bottom + 1, south);
 				}
 			}
-			else if (south == east)
+			else if (southCell.m_owner == eastCell.m_owner)
 			{
 				if (south == 0) {
 					RenderBorderLine(surface, rect.right, rect.top, rect.left, rect.bottom, north);
@@ -1205,15 +1215,15 @@ void RadarRenderPlayerBorder::RenderCrossing(aui_Surface & surface, const RECT &
 			}
 			break;
 		case EAST_EXPLORED | SOUTH_EXPLORED | WEST_EXPLORED:
-			if ((east == west) && (east == south)) { // all equal
+			if ((eastCell.m_owner == westCell.m_owner) && (eastCell.m_owner == southCell.m_owner)) { // all equal
 				break;
 			}
-			if (east == west)
+			if (eastCell.m_owner == westCell.m_owner)
 			{
 				RenderBorderLine(surface, rect.left, rect.bottom, rect.right, rect.bottom, east);
 				RenderBorderLine(surface, rect.left, rect.bottom + 1, rect.right, rect.bottom + 1, south);
 			}
-			else if (east == south)
+			else if (eastCell.m_owner == southCell.m_owner)
 			{
 				if (east == 0) {
 					RenderBorderLine(surface, rect.right, rect.top, rect.left, rect.bottom, west);
@@ -1224,7 +1234,7 @@ void RadarRenderPlayerBorder::RenderCrossing(aui_Surface & surface, const RECT &
 					RenderBorderLine(surface, rect.right - 1, rect.top, rect.left - 1, rect.bottom, west);
 				}
 			}
-			else if (west == south)
+			else if (westCell.m_owner == southCell.m_owner)
 			{
 				if (west == 0) {
 					RenderBorderLine(surface, rect.left, rect.top, rect.right, rect.bottom, east);
@@ -1243,15 +1253,15 @@ void RadarRenderPlayerBorder::RenderCrossing(aui_Surface & surface, const RECT &
 			}
 			break;
 		case SOUTH_EXPLORED | WEST_EXPLORED | NORTH_EXPLORED:
-			if ((south == north) && (south == west)) { // all equal
+			if ((southCell.m_owner == northCell.m_owner) && (southCell.m_owner == westCell.m_owner)) { // all equal
 				break;
 			}
-			if (south == north)
+			if (southCell.m_owner == northCell.m_owner)
 			{
 				RenderBorderLine(surface, rect.left, rect.top, rect.left, rect.bottom, south);
 				RenderBorderLine(surface, rect.left - 1, rect.top, rect.left - 1, rect.bottom, west);
 			}
-			else if (south == west)
+			else if (southCell.m_owner == westCell.m_owner)
 			{
 				if (south == 0) {
 					RenderBorderLine(surface, rect.left, rect.top, rect.right, rect.bottom, north);
@@ -1262,7 +1272,7 @@ void RadarRenderPlayerBorder::RenderCrossing(aui_Surface & surface, const RECT &
 					RenderBorderLine(surface, rect.left, rect.top - 1, rect.right, rect.bottom - 1, north);
 				}
 			}
-			else if (north == west)
+			else if (northCell.m_owner == westCell.m_owner)
 			{
 				if (north == 0) {
 					RenderBorderLine(surface, rect.left, rect.bottom, rect.right, rect.top, south);
@@ -1281,15 +1291,15 @@ void RadarRenderPlayerBorder::RenderCrossing(aui_Surface & surface, const RECT &
 			}
 			break;
 		case WEST_EXPLORED | NORTH_EXPLORED | EAST_EXPLORED:
-			if ((west == east) && (west == north)) { // all equal
+			if ((westCell.m_owner == eastCell.m_owner) && (westCell.m_owner == northCell.m_owner)) { // all equal
 				break;
 			}
-			if (west == east)
+			if (westCell.m_owner == eastCell.m_owner)
 			{
 				RenderBorderLine(surface, rect.left, rect.top, rect.right, rect.top, west);
 				RenderBorderLine(surface, rect.left, rect.top - 1, rect.right, rect.top - 1, north);
 			}
-			else if (west == north)
+			else if (westCell.m_owner == northCell.m_owner)
 			{
 				if (west == 0) {
 					RenderBorderLine(surface, rect.right, rect.top, rect.left, rect.bottom, east);
@@ -1300,7 +1310,7 @@ void RadarRenderPlayerBorder::RenderCrossing(aui_Surface & surface, const RECT &
 					RenderBorderLine(surface, rect.right + 1, rect.top, rect.left + 1, rect.bottom, east);
 				}
 			}
-			else if (east == north)
+			else if (eastCell.m_owner == northCell.m_owner)
 			{
 				if (east == 0) {
 					RenderBorderLine(surface, rect.left, rect.top, rect.right, rect.bottom, west);
@@ -1322,16 +1332,18 @@ void RadarRenderPlayerBorder::RenderCrossing(aui_Surface & surface, const RECT &
 }
 
 void RadarRenderPlayerBorder::RenderCrossingAllExplored(aui_Surface & surface, const RECT & rect,
-		Pixel16 west, Pixel16 north, Pixel16 east, Pixel16 south) const
+        Pixel16 west, Pixel16 north, Pixel16 east, Pixel16 south,
+        const RadarMapCell::Type & westCell, const RadarMapCell::Type & northCell, 
+        const RadarMapCell::Type & eastCell, const RadarMapCell::Type & southCell) const
 {
 	const uint32 ALL_EQUAL    = 0;
 	const uint32 NORTH_DIFFER = 1;
 	const uint32 EAST_DIFFER  = 2;
 	const uint32 SOUTH_DIFFER = 4;
 
-	uint32 westPattern = (west == north) ? 0 : NORTH_DIFFER;
-	westPattern += (west == east) ? 0 : EAST_DIFFER;
-	westPattern += (west == south) ? 0 : SOUTH_DIFFER;
+	uint32 westPattern = (westCell.m_owner == northCell.m_owner) ? 0 : NORTH_DIFFER;
+	westPattern += (westCell.m_owner == eastCell.m_owner) ? 0 : EAST_DIFFER;
+	westPattern += (westCell.m_owner == southCell.m_owner) ? 0 : SOUTH_DIFFER;
 	switch (westPattern) {
 		case ALL_EQUAL: // to west
 			// nothing to do
@@ -1349,14 +1361,17 @@ void RadarRenderPlayerBorder::RenderCrossingAllExplored(aui_Surface & surface, c
 			RenderBorderLine(surface, rect.left, rect.bottom + 1, rect.right, rect.bottom + 1, south);
 			break;
 		case NORTH_DIFFER | EAST_DIFFER: // from west; south equal to west
-			if (east == north) {
+			if (eastCell.m_owner == northCell.m_owner)
+			{
 				if (east == 0) {
 					RenderBorderLine(surface, rect.left, rect.top, rect.right, rect.bottom, west);
 				} else {
 					RenderBorderLine(surface, rect.left - 1, rect.top, rect.right, rect.bottom + 1, west);
 					RenderBorderLine(surface, rect.left, rect.top, rect.right, rect.bottom, east);
 				}
-			} else {
+			}
+			else
+			{
 				RenderBorderLine(surface, rect.left, rect.top, rect.right, rect.bottom, west);
 				if (east == 0) {
 					RenderBorderLine(surface, rect.left, rect.top - 1, rect.right, rect.top - 1, north);
@@ -1374,7 +1389,7 @@ void RadarRenderPlayerBorder::RenderCrossingAllExplored(aui_Surface & surface, c
 			RenderBorderLine(surface, rect.left, rect.bottom + 1, rect.right, rect.bottom + 1, south);
 			break;
 		case EAST_DIFFER | SOUTH_DIFFER: // from west; north equal to west
-			if (east == south) {
+			if (eastCell.m_owner == southCell.m_owner) {
 				if (west == 0) {
 					RenderBorderLine(surface, rect.left, rect.bottom, rect.right, rect.top, east);
 				} else {
@@ -1393,8 +1408,8 @@ void RadarRenderPlayerBorder::RenderCrossingAllExplored(aui_Surface & surface, c
 			}
 			break;
 		case NORTH_DIFFER | EAST_DIFFER | SOUTH_DIFFER: // all differ from west
-			sint32 eastPattern = (east == north) ? 0 : NORTH_DIFFER;
-			eastPattern += (east == south) ? 0 : SOUTH_DIFFER;
+			sint32 eastPattern = (eastCell.m_owner == northCell.m_owner) ? 0 : NORTH_DIFFER;
+			eastPattern += (eastCell.m_owner == southCell.m_owner) ? 0 : SOUTH_DIFFER;
 			switch (eastPattern) {
 				case ALL_EQUAL: // to east; and differ from west
 					RenderBorderLine(surface, rect.left, rect.top, rect.left, rect.bottom, east);
@@ -1421,7 +1436,7 @@ void RadarRenderPlayerBorder::RenderCrossingAllExplored(aui_Surface & surface, c
 					}
 					break;
 				case NORTH_DIFFER | SOUTH_DIFFER: // to east; all differ to west and east
-					if (north == south) {
+					if (northCell.m_owner == southCell.m_owner) {
 						RenderBorderLine(surface, rect.left, rect.top, rect.left, rect.bottom, north);
 						RenderBorderLine(surface, rect.right, rect.top, rect.right, rect.bottom, north);
 						RenderBorderLine(surface, rect.left - 1, rect.top, rect.left - 1, rect.bottom, west);
