@@ -41,8 +41,7 @@
 sint32 const    DISTANCE_UNKNOWN    = 10000;
 
 sint32 tradeutil_GetTradeValue(const sint32 owner, const Unit & destination, sint32 resource);
-//sint32 tradeutil_GetAccurateTradeDistance(const Unit &source, const Unit &destination); deprecated because result can differ significantly, though exact takes much longer to compute due to use of astar
-sint32 tradeutil_GetTradeDistance(Unit &source, Unit &destination);
+sint32 tradeutil_GetTradeDistance(const Unit &source, const Unit &destination);
 double inline tradeutil_GetNetTradeCosts(double costs){return(costs * g_theConstDB->Get(0)->GetCaravanCoef() * 0.1) + 0.5;}
 
 void constutil_y2meridian(const sint32 y, sint32 &k);
