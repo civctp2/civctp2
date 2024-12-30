@@ -1514,7 +1514,7 @@ void RadarRenderOverlay::RenderUnit(aui_Surface & surface, const MapPoint & worl
 {
 	Unit unit;
 	if (m_radarProperties.m_displayUnits
-		&& (g_theWorld->GetTopVisibleUnit(worldPos, unit) || g_theWorld->GetTopRadarUnit(worldPos, unit)))
+		&& (g_theWorld->GetTopRadarUnit(worldPos, unit)))
 	{
 		COLOR unitColor =  m_radarProperties.m_displayRelations ? RadarTileRelationsColor(worldPos, unit.GetOwner()) :
 				g_colorSet->ComputePlayerColor(unit.GetOwner());
