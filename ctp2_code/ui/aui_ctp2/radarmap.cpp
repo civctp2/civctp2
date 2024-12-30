@@ -442,7 +442,6 @@ void RadarRender::RenderSingleTile(aui_Surface & surface, const MapPoint & world
 	sint32 x2 = static_cast<sint32>(position.x + m_tileSize.x);
 
 	bool oddY = radarPos.y & 1;
-	bool oddX = radarPos.x & 1;
 	sint32 width = x2 - x1;
 	sint32 split = x1 + (width + (oddY ? 1 : 0)) / 2;
 	RECT renderRect = { x1, y1, split - 1, y2 - 1 };
