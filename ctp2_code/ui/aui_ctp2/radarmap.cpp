@@ -120,7 +120,7 @@ public:
 		Type() : m_color(0), m_owner(PLAYER_UNASSIGNED) {}
 		Type(uint16 color, sint16 owner = PLAYER_UNASSIGNED) : m_color(color), m_owner(owner) {}
 		uint16 m_color;
-		uint16 m_owner;
+		sint16 m_owner;
 	};
 
 	typedef uint16 TypeConst;
@@ -411,7 +411,7 @@ void RadarRender::Render(aui_Surface & surface, RadarMapCell::Type * map, const 
 {
 	FillMapTexture(map);
 
-	sint32 tileWidthWhole = floor(m_tileSize.x);
+	sint32 tileWidthWhole = static_cast<sint32>(floor(m_tileSize.x));
 	double tileWidthFraction = m_tileSize.x - tileWidthWhole;
 	double oddYStartValueX = floor(m_tileSize.x / 2.0) + ((tileWidthWhole & 1) ? tileWidthFraction : 0.0);
 
