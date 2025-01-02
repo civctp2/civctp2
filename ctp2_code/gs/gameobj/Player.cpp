@@ -1098,6 +1098,12 @@ Unit Player::InsertUnitReference(const Unit &u,  const CAUSE_NEW_ARMY cause,
 #if 0
 	m_readiness->SupportUnitGold(u, m_government_type);
 #endif
+
+	if(g_radarMap && m_owner == g_selected_item->GetVisiblePlayer())
+	{
+		g_radarMap->RedrawTile(u->GetPos());
+	}
+
 	return u;
 }
 
