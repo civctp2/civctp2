@@ -3095,7 +3095,13 @@ void ScenarioEditor::LeaderName(aui_Control *control, uint32 action, uint32 data
 
 void ScenarioEditor::EraseMode(aui_Control *control, uint32 action, uint32 data, void *cookie)
 {
-	if(action != AUI_BUTTON_ACTION_EXECUTE) return;
+	if (action == AUI_SWITCH_ACTION_OFF)
+	{
+		g_toeMode = 0;
+		return;
+	}
+
+	if (action != AUI_SWITCH_ACTION_ON) return;
 
 	// Switch off all terrain switches
 	for (sint32 i = 0; i < g_theTerrainDB->NumRecords(); i++)
@@ -3115,6 +3121,7 @@ void ScenarioEditor::EraseMode(aui_Control *control, uint32 action, uint32 data,
 		}
 	}
 
+	// Switch off all city switches
 	ctp2_ListBox *lb = (ctp2_ListBox *)aui_Ldl::GetObject(s_scenarioEditorBlock, "TabGroup.City.List");
 	Assert(lb);
 
@@ -3141,6 +3148,7 @@ void ScenarioEditor::EraseMode(aui_Control *control, uint32 action, uint32 data,
 		}
 	}
 
+	// Switch off all unit switches
 	lb = (ctp2_ListBox *)aui_Ldl::GetObject(s_scenarioEditorBlock, "TabGroup.Unit.List");
 	Assert(lb);
 
@@ -3177,7 +3185,7 @@ void ScenarioEditor::EraseMode(aui_Control *control, uint32 action, uint32 data,
 		}
 	}
 
-	g_toeMode = !g_toeMode;
+	g_toeMode = 1;
 }
 
 void ScenarioEditor::WorldTabSwitch(aui_Control *control, uint32 action, uint32 data, void *cookie)
