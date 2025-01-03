@@ -745,7 +745,10 @@ bool ui_CheckForScroll(void)
 		lastdeltaY = deltaY;
 
 		if (isMouseScrolling)
+		{
+			g_cursorManager->SaveCursor();
 			g_cursorManager->SetCursor(scrollCursor);
+		}
 		g_tiledMap->SetScrolling(true);
 
 		uint32 accellTickDelta = s_scrollcurtick - s_accelTickStart;
@@ -782,7 +785,7 @@ bool ui_CheckForScroll(void)
 
 		if (isMouseScrolling)
 		{
-			g_cursorManager->SetCursor(CURSORINDEX_DEFAULT);
+			g_cursorManager->RestoreCursor();
 			isMouseScrolling = false;
 		}
 
