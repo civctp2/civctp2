@@ -163,6 +163,7 @@ extern ControlPanelWindow * g_controlPanel;
 extern sint32               g_startInfoType;
 extern CivApp *             g_civApp;
 extern MBCHAR               g_slic_filename[_MAX_PATH];
+extern CursorManager*       g_cursorManager;
 
 extern void WhackScreen();
 
@@ -3097,6 +3098,7 @@ void ScenarioEditor::EraseMode(aui_Control *control, uint32 action, uint32 data,
 {
 	if (action == AUI_SWITCH_ACTION_OFF)
 	{
+		g_cursorManager->SetCursor(CURSORINDEX_DEFAULT);
 		g_toeMode = 0;
 		return;
 	}
@@ -3185,6 +3187,7 @@ void ScenarioEditor::EraseMode(aui_Control *control, uint32 action, uint32 data,
 		}
 	}
 
+	g_cursorManager->SetCursor(CURSORINDEX_ERASE);
 	g_toeMode = 1;
 }
 
@@ -3331,6 +3334,7 @@ sint32 ScenarioEditor::GetLastPlayer()
 
 void ScenarioEditor::DisableErase(void)
 {
+	g_cursorManager->SetCursor(CURSORINDEX_DEFAULT);
 	g_toeMode = 0;
 	s_scenarioEditor->m_eraseButton->SetState(0);
 }

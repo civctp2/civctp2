@@ -325,6 +325,7 @@ void aui_Mouse::SetCurrentCursor( sint32 index )
 	if ( index < m_firstIndex || index > m_lastIndex ) return;
 
 	m_curCursor = m_cursors + index;
+	Assert(*m_curCursor);
 	ActivateCursor(*m_curCursor);
 }
 
