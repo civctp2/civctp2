@@ -229,6 +229,13 @@ protected:
 	COLOR RadarTileRelationsColor(const MapPoint & position, sint32 unitOwner = -1) const;
 	COLOR DoRadarTileRelationsColor(sint32 owner) const;
 
+	double GetOddYStartValueX() const
+	{
+		sint32 tileWidthWhole = static_cast<sint32>(floor(m_tileSize.x));
+		double tileWidthFraction = m_tileSize.x - tileWidthWhole;
+		return floor(m_tileSize.x / 2.0) + ((tileWidthWhole & 1) ? tileWidthFraction : 0.0);
+	}
+
 	const Player                    & m_player;
 	const RadarMap::RadarProperties & m_radarProperties;
 	const MapPoint                  & m_mapSize;
@@ -265,6 +272,26 @@ protected:
 private:
 	void FillMapTexture(RadarMapCell::Type * map) const;
 	void FillTextureBorders(RadarMapCell::Type * map) const;
+
+	sint32 GetStartWorldPosX(const MapPoint & radarPos) const
+	{
+		sint32 startWorldPosX = m_mapSize.x - radarPos.x;
+		if (startWorldPosX >= m_mapSize.x) {
+			startWorldPosX = 0;
+		}
+
+		return startWorldPosX;
+	}
+
+	sint32 GetStartWorldPosY(const MapPoint & radarPos) const
+	{
+		sint32 startWorldPosY = m_mapSize.y - radarPos.y;
+		if (startWorldPosY >= m_mapSize.y) {
+			startWorldPosY = 0;
+		}
+
+		return startWorldPosY;
+	}
 };
 
 class RadarRenderWorld : public RadarRender {
@@ -374,8 +401,9 @@ const RadarRenderBase::MapPointDouble RadarRenderBase::GetScreenPosition(const M
 	position.x = screenPosition.x * m_tileSize.x;
 	position.y = screenPosition.y * m_tileSize.y;
 	if (screenPosition.y & 1) {
-		position.x += m_tileSize.x / 2.0;
+		position.x += GetOddYStartValueX();
 	}
+
 	return position;
 }
 
@@ -411,18 +439,9 @@ void RadarRender::Render(aui_Surface & surface, RadarMapCell::Type * map, const 
 {
 	FillMapTexture(map);
 
-	sint32 tileWidthWhole = static_cast<sint32>(floor(m_tileSize.x));
-	double tileWidthFraction = m_tileSize.x - tileWidthWhole;
-	double oddYStartValueX = floor(m_tileSize.x / 2.0) + ((tileWidthWhole & 1) ? tileWidthFraction : 0.0);
-
-	sint32 startWorldPosX = m_mapSize.x - radarPos.x;
-	if (startWorldPosX >= m_mapSize.x) {
-		startWorldPosX = 0;
-	}
-	sint32 startWorldPosY = m_mapSize.y - radarPos.y;
-	if (startWorldPosY >= m_mapSize.y) {
-		startWorldPosY = 0;
-	}
+	double oddYStartValueX = GetOddYStartValueX();
+	sint32 startWorldPosX  = GetStartWorldPosX(radarPos);
+	sint32 startWorldPosY  = GetStartWorldPosY(radarPos);
 
 	RenderMapTexture(surface, map, radarSize, oddYStartValueX, startWorldPosX, startWorldPosY);
 }
