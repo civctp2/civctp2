@@ -4608,7 +4608,7 @@ void TiledMap::DrawNationalBorders(aui_Surface & surf, const MapPoint & pos)
 			MapPoint neighborPos;
 			if (pos.GetNeighborPosition(neighborDirection, neighborPos)) {
 				sint32 neighborOwner = GetVisibleCellOwner(neighborPos);
-				if ((neighborOwner != myOwner) && (visiblePlayer->HasSeen(myOwner) || g_fog_toggle || g_god)) {
+				if ((neighborOwner != myOwner) && (visiblePlayer->HasSeen(myOwner) && m_localVision->IsExplored(neighborPos) || g_fog_toggle || g_god)) {
 					borders |= (1 << neighborDirection);
 				}
 			}
