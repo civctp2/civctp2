@@ -411,7 +411,7 @@ protected:
 	virtual AUI_ERRCODE ClipAndConsolidate( void );
 
 #ifdef __AUI_USE_SDL__
-	virtual AUI_ERRCODE SDLDrawScreen( void ) {}
+	virtual AUI_ERRCODE SDLDrawScreen( void ) { return AUI_ERRCODE_OK; }
 #endif
 
 	AUI_ERRCODE InsertDirtyRectInfo( RECT *rect, aui_Window *window );
