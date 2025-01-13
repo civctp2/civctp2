@@ -1,10 +1,3 @@
-This LICENSE.md file was created from "EULA - Source Code for CTP2.rtf"
-with pandoc 3.5. This is a web accessable format. The content should be
-identical. However, in case of doubt "EULA - Source Code for CTP2.rtf"
-is the legally binding version, which is in the base directoty of the
-project and can be viewed for instance with LibreOffice Writer.
-
-
 **SOURCE CODE SOFTWARE END USER LICENSE AGREEMENT**
 
 **IMPORTANT - READ CAREFULLY:** USE OF THE ***CALL TO POWER II*** SOURCE
