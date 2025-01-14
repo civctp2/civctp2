@@ -71,6 +71,33 @@ http://apolyton.net/forums/showthread.php?t=196269 "Apolyton CTP2 Edition: Revis
 
 Changelog (Well, you don't have to read the full thing. ;)):
 202X-XX-XX (No revision number we switched to Git) <-- Will be updated right before merge, right after the files will be compiled
+Fixed:    Do not show a border on main map if the tile borders to an
+          unexplored tile to not give away that the tile changed the owner
+          since you have seen it the last time.
+Changed:  Turn the cursor into an erase cursor if the scenario editor is
+          in erase mode so that you do not erase anything accidentally that
+          you do not want to erase.
+Fixed:    Make the erase button in the scenario editor stop erasing when
+          you switch it off
+Fixed:    Deselect any unit, city, terrain, and terrain improvement switch
+          if the erase button is selected in the scenario editor
+Fixed:    Do not cities as units on the radar map if they are not known
+          by the player.
+Fixed:    Show units immediately on the radar map if they were created by
+          from the scenario editor.
+Fixed:    Do not show tiles as white that were owned by nobody when last
+          time visited, but have been claimed in the meantime.
+Change:   Smoothen the drawing of tiles and borders on the radar map.
+Removed:  The filter button on the radar map as this is not needed anymore
+          with the change above.
+Fixed:    Do not show undersea tunnels as land tiles on the radar map.
+Changed:  Make non-exclusive graphics mode the default on Windows DirectX.
+Changed:  Play a pirated route sound even if the position from that the
+          the sounds come is under the fog of war. The player simply gets
+          a message that the route was pirated and so a sound is adequate, too.
+Fixed:    Do not play sounds that come from positions the player does not,
+          either because the position is unexplored or is under the fog of war.
+Fixed:    A crash when clicking on the top border of an empty list box.
 Changed:  Increase the distance of cities the AI connects with roads so
           that cities that can be connected via road within its boarders
           are indeed connected.
