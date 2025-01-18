@@ -25,7 +25,7 @@
 // Modifications from the original Activision code:
 //
 // - Do not trigger disaster warnings when there is no pollution at all.
-// - Replaced old difficulty database by new one. (April 29th 2006 Martin Gühmann)
+// - Replaced old difficulty database by new one. (April 29th 2006 Martin GÃ¼hmann)
 //
 //----------------------------------------------------------------------------
 
@@ -282,14 +282,9 @@ void InfoBigListCallback( aui_Control *control, uint32 action, uint32 data, void
 
 		if (curPlayer == unit->GetOwner())
 		{
-			s_infoRadar->SetSelectedCity(*unit);
 		    MapPoint cityPos;
 			unit->GetPos(cityPos);
 			s_infoRadar->CenterMap(cityPos);
-		}
-		else
-		{
-			s_infoRadar->SetSelectedCity(Unit());
 		}
 
         s_infoRadar->Update();
@@ -1315,7 +1310,6 @@ sint32 infowin_ChangeDataSetting( sint32 type )
 		s_foundedLabel->Hide();
 		s_turnsLabel->Hide();
 
-		s_infoRadar->SetSelectedCity(Unit());
 		s_infoRadar->Update();
 
 		s_infoRadar->Idle();

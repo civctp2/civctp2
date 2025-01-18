@@ -825,8 +825,8 @@ void OrthogonalPoint::Move
 )
 {
 	MapPointData	delta   = Step(direction);
-	delta.x *= count;
-	delta.y *= count;
+	delta.x *= static_cast<sint16>(count);
+	delta.y *= static_cast<sint16>(count);
 #if !defined(_SMALL_MAPPOINTS)
 	delta.z *= count;
 #endif

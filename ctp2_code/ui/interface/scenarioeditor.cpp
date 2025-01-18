@@ -163,6 +163,7 @@ extern ControlPanelWindow * g_controlPanel;
 extern sint32               g_startInfoType;
 extern CivApp *             g_civApp;
 extern MBCHAR               g_slic_filename[_MAX_PATH];
+extern CursorManager*       g_cursorManager;
 
 extern void WhackScreen();
 
@@ -3095,11 +3096,88 @@ void ScenarioEditor::LeaderName(aui_Control *control, uint32 action, uint32 data
 
 void ScenarioEditor::EraseMode(aui_Control *control, uint32 action, uint32 data, void *cookie)
 {
-	if(action != AUI_BUTTON_ACTION_EXECUTE) return;
+	if (action == AUI_SWITCH_ACTION_OFF)
+	{
+		g_cursorManager->SetCursor(CURSORINDEX_DEFAULT);
+		g_toeMode = 0;
+		return;
+	}
 
+	if (action != AUI_SWITCH_ACTION_ON) return;
 
+	// Switch off all terrain switches
+	for (sint32 i = 0; i < g_theTerrainDB->NumRecords(); i++)
+	{
+		if (s_scenarioEditor->m_terrainSwitches[i])
+		{
+			s_scenarioEditor->m_terrainSwitches[i]->SetState(0);
+		}
+	}
 
+	// Switch off all terrain improvement switches
+	for (sint32 i = 0; i < g_theTerrainImprovementDB->NumRecords(); i++)
+	{
+		if (s_scenarioEditor->m_terrainImpSwitches[i])
+		{
+			s_scenarioEditor->m_terrainImpSwitches[i]->SetState(0);
+		}
+	}
 
+	// Switch off all city switches
+	ctp2_ListBox *lb = (ctp2_ListBox *)aui_Ldl::GetObject(s_scenarioEditorBlock, "TabGroup.City.List");
+	Assert(lb);
+
+	if (lb)
+	{
+		for (sint32 itemIndex = 0; itemIndex < lb->NumItems(); itemIndex++) {
+			ctp2_ListItem *item = (ctp2_ListItem *)lb->GetItemByIndex(itemIndex);
+			Assert(item);
+			if (!item)
+				continue;
+
+			ctp2_Static *box = (ctp2_Static *)item->GetChildByIndex(0);
+			Assert(box);
+			if (!box)
+				continue;
+
+			for (sint32 i = 0; i < k_CITY_COLS_PER_ROW; i++) {
+				ctp2_Switch *sw = (ctp2_Switch *)box->GetChildByIndex(i);
+				if (!sw || sw->IsHidden())
+					break;
+
+				sw->SetState(0);
+			}
+		}
+	}
+
+	// Switch off all unit switches
+	lb = (ctp2_ListBox *)aui_Ldl::GetObject(s_scenarioEditorBlock, "TabGroup.Unit.List");
+	Assert(lb);
+
+	if (lb)
+	{
+		for (sint32 itemIndex = 0; itemIndex < lb->NumItems(); itemIndex++)
+		{
+			ctp2_ListItem *item = (ctp2_ListItem *)lb->GetItemByIndex(itemIndex);
+			Assert(item);
+			if (!item)
+				continue;
+
+			ctp2_Static *box = (ctp2_Static *)item->GetChildByIndex(0);
+			Assert(box);
+			if (!box)
+				continue;
+
+			for (sint32 i = 0; i < k_UNIT_COLS_PER_ROW; i++)
+			{
+				ctp2_Switch *sw = (ctp2_Switch *)box->GetChildByIndex(i * 2);
+				if (!sw || sw->IsHidden())
+					break;
+
+				sw->SetState(0);
+			}
+		}
+	}
 
 	if (PlaceUnitsMode() || PlaceCityMode() || PlaceStartFlags() || PaintHutMode() || PaintRiverMode() || PaintGoodsMode())
 	{
@@ -3109,7 +3187,8 @@ void ScenarioEditor::EraseMode(aui_Control *control, uint32 action, uint32 data,
 		}
 	}
 
-	g_toeMode = !g_toeMode;
+	g_cursorManager->SetCursor(CURSORINDEX_ERASE);
+	g_toeMode = 1;
 }
 
 void ScenarioEditor::WorldTabSwitch(aui_Control *control, uint32 action, uint32 data, void *cookie)
@@ -3255,6 +3334,7 @@ sint32 ScenarioEditor::GetLastPlayer()
 
 void ScenarioEditor::DisableErase(void)
 {
+	g_cursorManager->SetCursor(CURSORINDEX_DEFAULT);
 	g_toeMode = 0;
 	s_scenarioEditor->m_eraseButton->SetState(0);
 }

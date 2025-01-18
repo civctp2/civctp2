@@ -7275,13 +7275,13 @@ SFN_ERROR Slic_KillCity::Call(SlicArgList *args)
 
 SFN_ERROR Slic_Pillage::Call(SlicArgList *args)
 {
-    if (args->Count() > 0)
-        return SFN_ERROR_NUM_ARGS;
+	if (args->Count() > 0)
+		return SFN_ERROR_NUM_ARGS;
 
 	Unit city = g_slicEngine->GetContext()->GetCity(0);
 
 	if (!city.IsValid())
-    {
+	{
 		return SFN_ERROR_OK;
 	}
 
@@ -7326,21 +7326,21 @@ SFN_ERROR Slic_Pillage::Call(SlicArgList *args)
 		}
 	}
 
-	amt = p / g_theGovernmentDB->Get(g_player[pl]->m_government_type)->GetBuildingRushModifier();
+	amt = static_cast<sint32>(p / g_theGovernmentDB->Get(g_player[pl]->m_government_type)->GetBuildingRushModifier());
 	if (amt >= 0)
 		g_player[pl]->m_gold->AddGold(amt);
 
-    return SFN_ERROR_OK;
+	return SFN_ERROR_OK;
 }
 
 SFN_ERROR Slic_Plunder::Call(SlicArgList *args)
 {
-    if (args->Count() > 0)
-        return SFN_ERROR_NUM_ARGS;
+	if (args->Count() > 0)
+		return SFN_ERROR_NUM_ARGS;
 
 	Unit city = g_slicEngine->GetContext()->GetCity(0);
 	if (!city.IsValid())
-    {
+	{
 		return SFN_ERROR_OK;
 	}
 
@@ -7385,12 +7385,12 @@ SFN_ERROR Slic_Plunder::Call(SlicArgList *args)
 		}
 	}
 
-	amt = p / g_theGovernmentDB->Get(g_player[pl]->m_government_type)->GetBuildingRushModifier();
+	amt = static_cast<sint32>(p / g_theGovernmentDB->Get(g_player[pl]->m_government_type)->GetBuildingRushModifier());
 
-    if(amt >= 0)
+	if(amt >= 0)
 		g_player[pl]->m_materialPool->AddMaterials(amt);
 
-    return SFN_ERROR_OK;
+	return SFN_ERROR_OK;
 }
 
 SFN_ERROR Slic_Liberate::Call(SlicArgList *args)
@@ -7590,7 +7590,7 @@ SFN_ERROR Slic_UnitMovementLeft::Call(SlicArgList *args)
 		return SFN_ERROR_TYPE_BUILTIN;
 	}
 
-	m_result.m_int = unit.GetMovementPoints();
+	m_result.m_int = static_cast<sint32>(unit.GetMovementPoints());
 
 	return SFN_ERROR_OK;
 }

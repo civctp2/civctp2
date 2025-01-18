@@ -1096,7 +1096,7 @@ void Sprite::DrawFlashLowReversed555(Pixel16 *frame, sint32 drawX, sint32 drawY,
 								if (flags & k_BIT_DRAWFLAGS_FEATHERING) {
 									uint16 alpha = (tag & 0x00FF);
 
-									*destPixel = pixelutils_Blend16(*destPixel, *rowData, alpha, BLEND_16_MASK_555);
+									*destPixel = pixelutils_Blend16(*destPixel, *rowData, static_cast<sint8>(alpha), BLEND_16_MASK_555);
 									destPixel--;
 									rowData++;
 								} else {

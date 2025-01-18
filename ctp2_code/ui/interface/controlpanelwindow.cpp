@@ -238,6 +238,7 @@ ControlPanelWindow          *g_controlPanel;
 extern Network              g_network;
 
 extern FilenameDB           *g_theMessageIconFileDB;
+extern BOOL                 g_toeMode;
 
 void TileImpSelectionCallback (aui_Control *control, uint32 action, uint32 data, void *cookie);
 
@@ -2913,7 +2914,10 @@ void ControlPanelWindow::Idle()
 	else
 		// prevent resetting of scroll-cursor
 		if (!g_tiledMap->IsScrolling())
-			g_cursorManager->SetCursor(CURSORINDEX_DEFAULT);
+			if(!g_toeMode)
+				g_cursorManager->SetCursor(CURSORINDEX_DEFAULT);
+			else
+				g_cursorManager->SetCursor(CURSORINDEX_ERASE);
 }
 
 void ControlPanelWindow::Move( sint32 x, sint32 y )
