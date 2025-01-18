@@ -71,6 +71,8 @@ http://apolyton.net/forums/showthread.php?t=196269 "Apolyton CTP2 Edition: Revis
 
 Changelog (Well, you don't have to read the full thing. ;)):
 202X-XX-XX (No revision number we switched to Git) <-- Will be updated right before merge, right after the files will be compiled
+Fixed:    The flames in the credit screen do not have a black background.
+Added:    The GitHub contributors to the ApolytonEdition to the credit screen.
 Fixed:    Do not show a border on main map if the tile borders to an
           unexplored tile to not give away that the tile changed the owner
           since you have seen it the last time.
