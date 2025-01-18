@@ -51,19 +51,16 @@
 <font1>    Locutus   MarkG      
 <font1>      Martin Gühmann     
 <font3> 
-<font0>	PROGRAMMING
-<font1>   ahenobarb   Andrii Kmit
-<font1>        atsb   ctplinuxfan
-<font1>         "E"   Fromafar   
-<font1> henshall828   J Bytheway 
-<font1> jonwil
-<font1> kaan
-<font1> LynxAbraxas
-<font1> Martin Gühmann
-<font1> MrBaggins
-<font1> NelsonAndBronte
-<font1> Peter Triggs   ptitSeb    
-<font1> William Deurwaarder
+<font0> PROGRAMMING
+<font1>       ahenobarb   Andrii Kmit
+<font1>            atsb   ctplinuxfan
+<font1>             "E"   Fromafar   
+<font1>     henshall828   J Bytheway 
+<font1>    Jacob Gruber   jonwil     
+<font1>            kaan   LynxAbraxas
+<font1>  Martin Gühmann   MrBaggins
+<font1> NelsonAndBronte   Peter Triggs
+<font1>         ptitSeb   William Deurwaarder
 ;
 <page>
 <font1> 
