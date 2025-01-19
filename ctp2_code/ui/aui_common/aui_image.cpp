@@ -38,7 +38,7 @@
 #include "aui_ui.h"
 
 #if defined(__AUI_USE_SDL__)
-    #include <ui/aui_sdl/aui_sdlsurface.h>
+#include "aui_sdlsurface.h"
 #endif
 
 aui_Image::aui_Image(
