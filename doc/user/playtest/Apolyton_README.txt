@@ -45,15 +45,20 @@ This version comes with new tech posters, for that check out the Advance-Graph s
 
 Known bugs:
 
+- When you start a new game from a running game than the game put the new game screen in the
+middle but does not paint the rest of the screen black so that you left with what was on the
+screen before. However, this does not disturb the function.
+- The map on the Gaia Controller does not show the coverage over sea.
+
 On Windows:
-The new shield that indicates in the control panel that on the
-tile are more than one unit does not display the number of units.
+- The new shield that indicates in the control panel that more than one unit is on a tile does
+not display the number of units.
 
 On Linux:
 Keyboard issues, at least with a German keyboard.
-The apostrope key (') to open the chat window does not work. Yo can open
+- The apostrope key (') to open the chat window does not work. Yo can open
 the chat window via the menu.
-The secondary enter key on the num pad does not work. Instead use the 
+- The secondary enter key on the num pad does not work. Instead use the 
 primary big enter key.
 
 The Great History: In case you are interested, here are the previous playtest threads on Apolyton:
@@ -70,7 +75,7 @@ http://apolyton.net/forums/showthread.php?t=191653 "Apolyton CTP2 Edition: Revis
 http://apolyton.net/forums/showthread.php?t=196269 "Apolyton CTP2 Edition: Revision 1111 (12-Jun-2011)"
 
 Changelog (Well, you don't have to read the full thing. ;)):
-202X-XX-XX (No revision number we switched to Git) <-- Will be updated right before merge, right after the files will be compiled
+2025-01-20 (No revision number we switched to Git) <-- Will be updated right before merge, right after the files will be compiled
 Fixed:    The flames in the credit screen do not have a black background.
 Added:    The GitHub contributors to the ApolytonEdition to the credit screen.
 Fixed:    Do not show a border on main map if the tile borders to an
