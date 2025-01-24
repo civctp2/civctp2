@@ -41,7 +41,7 @@ The latest source code files can be found at: https://github.com/civctp2/civctp2
 
 Visit BureauBert's http://www.ctp2.info/ on how to use some new additions.
 
-This version comes with new tech posters, for that check out the Advance-Graph subdirectory.
+This version comes with new tech posters, which are in the same directory as this readme.
 
 Known bugs:
 
@@ -75,7 +75,7 @@ http://apolyton.net/forums/showthread.php?t=191653 "Apolyton CTP2 Edition: Revis
 http://apolyton.net/forums/showthread.php?t=196269 "Apolyton CTP2 Edition: Revision 1111 (12-Jun-2011)"
 
 Changelog (Well, you don't have to read the full thing. ;)):
-2025-01-20 (No revision number we switched to Git) <-- Will be updated right before merge, right after the files will be compiled
+2025-01-20 (No revision number we switched to Git)
 Fixed:    The flames in the credit screen do not have a black background.
 Added:    The GitHub contributors to the ApolytonEdition to the credit screen.
 Fixed:    Do not show a border on main map if the tile borders to an

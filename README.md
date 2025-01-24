@@ -1,5 +1,7 @@
 [![Build Status](https://travis-ci.com/civctp2/civctp2.svg?branch=master)](https://travis-ci.com/civctp2/civctp2)
 
+# Apolyton Call to Power II Source Code Project
+
 #### CivCTP2
 - Git SVN import of http://ctp2.darkdust.net/anonsvn/
 - Originally hosted at: https://ctp2.darkdust.net/
@@ -8,6 +10,10 @@
 ### Original readme files
 - [Activision CTP2 Source Code_Readme.txt](https://github.com/civctp2/civctp2/blob/master/Activision%20CTP2%20Source%20Code_Readme.txt)
 - [Apolyton CTP2 Source Code_Readme.txt](https://github.com/civctp2/civctp2/blob/master/Apolyton%20CTP2%20Source%20Code_Readme.txt)
+
+## Latest release
+
+The latest release is the [Apolyton Edition 2025-01-20](https://github.com/civctp2/civctp2/releases/tag/Apolyton-Edition-2025-01-20). You have installation files for Windows and Linux. The Linux version does not support the CD, so if you have the CD-version and you want to enjoy the music and the videos yo have to install them. Instructions are in the section [Install the music and videos](#install-the-music-and-videos). If you have the GOG-version then don't worry everything is already in place.
 
 ## About
 
@@ -51,7 +57,7 @@ The folder `ctp2_program` is a stripped down version of `ctp2_code` without the 
 
 The Windows version supports CD audio music, and the Linux version supports ripped CD music files compressed as ogg (like found in the GoG version). The Audio tracks in the GoG version are named `Track02.ogg` to `Track11.ogg` and in the `ctp2_program/ctp/music` folder, which should be copied to `ctp2_code/ctp/music`, if you want to use them in your working copy.
 
-The music and the videos are not needed for the playing CTP2. However, if you want to use them you can just use the CD on Windows. However, the GoG audio tracks are not supported on Windows, but you can play them in anther player such as VLC, while playing the game.
+The music and the videos are not needed for the playing CTP2. However, if you want to use them you can just use the CD on Windows. However, the GoG audio tracks are not supported on Windows, but you can play them in another player such as VLC, while playing the game.
 
 As the Linux version does not support direct play from the CD-ROM, you need to rip the music-files from the CD and put them on your disk. The music-files can be ripped with `crip` (http://bach.dynet.com/crip/) or `cdparanoia`.
 
