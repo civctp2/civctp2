@@ -1,6 +1,6 @@
 [![Build Status](https://travis-ci.com/civctp2/civctp2.svg?branch=master)](https://travis-ci.com/civctp2/civctp2)
 
-# Apolyton Call to Power II Source Code Project
+## Apolyton Call to Power II Source Code Project
 
 #### CivCTP2
 - Git SVN import of http://ctp2.darkdust.net/anonsvn/
