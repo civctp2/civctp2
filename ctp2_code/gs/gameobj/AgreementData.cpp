@@ -1120,7 +1120,7 @@ void AgreementData::RecipientIsViolating(PLAYER_INDEX curPlayer, BOOL force)
 			tellAi = TRUE;
 			if(rounds > g_theConstDB->Get(0)->GetLeaveOurLandsRounds() || force) {
 				sendMessage = TRUE;
-				sprintf(objName, "260LeaveOurLandsBroken");
+				sprintf(objName, "TrustLossFailToWithdrawVictim");
 			}
 			break;
 		case AGREEMENT_TYPE_REDUCE_POLLUTION:
@@ -1158,7 +1158,7 @@ void AgreementData::RecipientIsViolating(PLAYER_INDEX curPlayer, BOOL force)
 		case AGREEMENT_TYPE_NO_PIRACY:
 			tellAi = TRUE;
 			sendMessage = TRUE;
-			sprintf(objName, "004NoPiracyBroken");
+			sprintf(objName, "TrustLossFailToStopPiracyVictim");
 			break;
 		default:
 			break;
