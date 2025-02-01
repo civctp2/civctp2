@@ -494,9 +494,9 @@ bool Astar::Cleanup(const MapPoint &dest,
 	else
 	{
 		total_cost = best->m_past_cost + best->m_entry_cost;
-		a_path.FlattenAstarList(best);
+		bool const r = a_path.FlattenAstarList(best);
 		g_astar_mem.MassDelete(isunit);
 
-		return true;
+		return r;
 	}
 }
