@@ -1,3 +1,4 @@
+### Ancient City Styles ###
 
 AGE_ANCIENT_STYLE_ROMAN {
 	Sprites { Type 0 MinSize 0  MaxSize 5   Sprite 28 }
@@ -41,6 +42,27 @@ AGE_ANCIENT_STYLE_PALACE {
 	Sprites { Type 0 MinSize 11 MaxSize 999 Sprite 174 }
 }
 
+AGE_ANCIENT_STYLE_AFRICAN {
+	Sprites { Type 0 MinSize 0  MaxSize 5   Sprite 220 }
+	Sprites { Type 0 MinSize 6  MaxSize 10  Sprite 221 }
+	Sprites { Type 0 MinSize 11 MaxSize 999 Sprite 222 }
+}
+
+AGE_ANCIENT_STYLE_BALKAN {
+	Sprites { Type 0 MinSize 0  MaxSize 5   Sprite 239 }
+	Sprites { Type 0 MinSize 6  MaxSize 10  Sprite 240 }
+	Sprites { Type 0 MinSize 11 MaxSize 999 Sprite 241 }
+}
+
+AGE_ANCIENT_STYLE_BARBARIAN {
+	Sprites { Type 0 MinSize 0  MaxSize 5   Sprite 57 }
+	Sprites { Type 0 MinSize 6  MaxSize 10  Sprite 57 }
+	Sprites { Type 0 MinSize 11 MaxSize 999 Sprite 57 }
+}
+
+
+### Classic City Styles ###
+
 AGE_CLASSIC_STYLE_ROMAN {
 	Sprites { Type 0 MinSize 0  MaxSize 5   Sprite 28 }
 	Sprites { Type 0 MinSize 6  MaxSize 10  Sprite 29 }
@@ -82,6 +104,27 @@ AGE_CLASSIC_STYLE_PALACE {
 	Sprites { Type 0 MinSize 6  MaxSize 10  Sprite 173 }
 	Sprites { Type 0 MinSize 11 MaxSize 999 Sprite 174 }
 }
+
+AGE_CLASSIC_STYLE_AFRICAN {
+	Sprites { Type 0 MinSize 0  MaxSize 5   Sprite 220 }
+	Sprites { Type 0 MinSize 6  MaxSize 10  Sprite 221 }
+	Sprites { Type 0 MinSize 11 MaxSize 999 Sprite 222 }
+}
+
+AGE_CLASSIC_STYLE_BALKAN {
+	Sprites { Type 0 MinSize 0  MaxSize 5   Sprite 239 }
+	Sprites { Type 0 MinSize 6  MaxSize 10  Sprite 240 }
+	Sprites { Type 0 MinSize 11 MaxSize 999 Sprite 241 }
+}
+
+AGE_CLASSIC_STYLE_BARBARIAN {
+	Sprites { Type 0 MinSize 0 MaxSize 5   Sprite 57 }
+	Sprites { Type 0 MinSize 5 MaxSize 10  Sprite 57 }
+	Sprites { Type 0 MinSize 9 MaxSize 999 Sprite 57 }
+}
+
+
+### Medival City Styles ###
 
 AGE_MEDIEVAL_STYLE_ROMAN {
 	Sprites { Type 0 MinSize 0  MaxSize 5   Sprite 37 }
@@ -132,6 +175,30 @@ AGE_MEDIEVAL_STYLE_PALACE {
 	Sprites { Type 0 MinSize 16 MaxSize 999 Sprite 178 }
 }
 
+AGE_MEDIEVAL_STYLE_AFRICAN {
+	Sprites { Type 0 MinSize 0  MaxSize 5   Sprite 223 }
+	Sprites { Type 0 MinSize 6  MaxSize 10  Sprite 224 }
+	Sprites { Type 0 MinSize 11 MaxSize 15  Sprite 225 }
+	Sprites { Type 0 MinSize 16 MaxSize 999 Sprite 226 }
+}
+
+AGE_MEDIEVAL_STYLE_BALKAN {
+	Sprites { Type 0 MinSize 0  MaxSize 5   Sprite 242 }
+	Sprites { Type 0 MinSize 5  MaxSize 10  Sprite 243 }
+	Sprites { Type 0 MinSize 9  MaxSize 15  Sprite 244 }
+	Sprites { Type 0 MinSize 15 MaxSize 999 Sprite 245 }
+}
+
+AGE_MEDIEVAL_STYLE_BARBARIAN {
+	Sprites { Type 0 MinSize 0  MaxSize 5   Sprite 57 }
+	Sprites { Type 0 MinSize 5  MaxSize 10  Sprite 57 }
+	Sprites { Type 0 MinSize 9  MaxSize 15  Sprite 57 }
+	Sprites { Type 0 MinSize 15 MaxSize 999 Sprite 57 }
+}
+
+
+### Renaissance City Styles ###
+
 AGE_RENAISSANCE_STYLE_ROMAN {
 	Sprites { Type 0 MinSize 0  MaxSize 5   Sprite 37 }
 	Sprites { Type 0 MinSize 6  MaxSize 10  Sprite 38 }
@@ -180,6 +247,29 @@ AGE_RENAISSANCE_STYLE_PALACE {
 	Sprites { Type 0 MinSize 11 MaxSize 15  Sprite 177 }
 	Sprites { Type 0 MinSize 16 MaxSize 999 Sprite 178 }
 }
+
+AGE_RENAISSANCE_STYLE_AFRICAN {
+	Sprites { Type 0 MinSize 0  MaxSize 5   Sprite 223 }
+	Sprites { Type 0 MinSize 6  MaxSize 10  Sprite 224 }
+	Sprites { Type 0 MinSize 11 MaxSize 15  Sprite 225 }
+	Sprites { Type 0 MinSize 16 MaxSize 999 Sprite 226 }
+}
+
+AGE_RENAISSANCE_STYLE_BALKAN {
+	Sprites { Type 0 MinSize 0  MaxSize 5   Sprite 242 }
+	Sprites { Type 0 MinSize 6  MaxSize 10  Sprite 243 }
+	Sprites { Type 0 MinSize 11 MaxSize 15  Sprite 244 }
+	Sprites { Type 0 MinSize 16 MaxSize 999 Sprite 245 }
+}
+
+AGE_RENAISSANCE_STYLE_BARBARIAN {
+	Sprites { Type 0 MinSize 0  MaxSize 5   Sprite 57 }
+	Sprites { Type 0 MinSize 6  MaxSize 10  Sprite 57 }
+	Sprites { Type 0 MinSize 11 MaxSize 15  Sprite 57 }
+	Sprites { Type 0 MinSize 16 MaxSize 999 Sprite 57 }
+}
+
+### Industrial City Styles ###
 
 AGE_INDUSTRIAL_STYLE_ROMAN {
 	Sprites { Type 0 MinSize 0  MaxSize 5   Sprite 127 }
@@ -230,6 +320,33 @@ AGE_INDUSTRIAL_STYLE_PALACE {
 	Sprites { Type 0 MinSize 16 MaxSize 999 Sprite 182 }
 }
 
+AGE_INDUSTRIAL_STYLE_AFRICAN {
+	Sprites { Type 0 MinSize 0  MaxSize 5   Sprite 227 }
+	Sprites { Type 0 MinSize 6  MaxSize 10  Sprite 228 }
+	Sprites { Type 0 MinSize 11 MaxSize 15  Sprite 229 }
+	Sprites { Type 0 MinSize 16 MaxSize 999 Sprite 230 }
+}
+
+AGE_INDUSTRIAL_STYLE_BALKAN {
+	Sprites { Type 0 MinSize 0  MaxSize 5    Sprite 246 }
+	Sprites { Type 0 MinSize 6  MaxSize 10   Sprite 247 }
+	Sprites { Type 0 MinSize 11 MaxSize 15   Sprite 248 }
+	Sprites { Type 0 MinSize 16 MaxSize 999  Sprite 249 }
+}
+
+AGE_INDUSTRIAL_STYLE_BARBARIAN {
+	Sprites { Type 0 MinSize 0  MaxSize 5   Sprite 57 }
+	Sprites { Type 0 MinSize 6  MaxSize 10  Sprite 57 }
+	Sprites { Type 0 MinSize 11 MaxSize 15  Sprite 57 }
+	Sprites { Type 0 MinSize 16 MaxSize 999 Sprite 57 }
+}
+
+
+### Modern City Styles ###
+
+# Walls default value = 38
+# ForceField default value = 154
+
 AGE_MODERN_STYLE_ROMAN {
 	Sprites { Type 0 MinSize 0  MaxSize 5   Sprite 147 }
 	Sprites { Type 0 MinSize 6  MaxSize 10  Sprite 148 }
@@ -239,6 +356,15 @@ AGE_MODERN_STYLE_ROMAN {
 	Sprites { Type 0 MinSize 26 MaxSize 30  Sprite   0 }
 	Sprites { Type 0 MinSize 31 MaxSize 35  Sprite   1 }
 	Sprites { Type 0 MinSize 36 MaxSize 999 Sprite   2 }
+
+	Sprites { Type 1 MinSize 0  MaxSize 5   Sprite 89 Walls 153 ForceField 156 }
+	Sprites { Type 1 MinSize 6  MaxSize 10  Sprite 90 Walls 153 ForceField 156 }
+	Sprites { Type 1 MinSize 11 MaxSize 15  Sprite 91 Walls 153 ForceField 156 }
+	Sprites { Type 1 MinSize 16 MaxSize 20  Sprite 92 Walls 153 ForceField 156 }
+	Sprites { Type 1 MinSize 21 MaxSize 25  Sprite 93 Walls 153 ForceField 156 }
+	Sprites { Type 1 MinSize 26 MaxSize 30  Sprite 94 Walls 153 ForceField 156 }
+	Sprites { Type 1 MinSize 31 MaxSize 35  Sprite 95 Walls 153 ForceField 156 }
+	Sprites { Type 1 MinSize 36 MaxSize 999 Sprite 96 Walls 153 ForceField 156 }
 }
 
 AGE_MODERN_STYLE_ARAB {
@@ -250,6 +376,15 @@ AGE_MODERN_STYLE_ARAB {
 	Sprites { Type 0 MinSize 26 MaxSize 30  Sprite   3 }
 	Sprites { Type 0 MinSize 31 MaxSize 35  Sprite   4 }
 	Sprites { Type 0 MinSize 36 MaxSize 999 Sprite   5 }
+
+	Sprites { Type 1 MinSize 0  MaxSize 5   Sprite 89 Walls 153 ForceField 156 }
+	Sprites { Type 1 MinSize 6  MaxSize 10  Sprite 90 Walls 153 ForceField 156 }
+	Sprites { Type 1 MinSize 11 MaxSize 15  Sprite 91 Walls 153 ForceField 156 }
+	Sprites { Type 1 MinSize 16 MaxSize 20  Sprite 92 Walls 153 ForceField 156 }
+	Sprites { Type 1 MinSize 21 MaxSize 25  Sprite 93 Walls 153 ForceField 156 }
+	Sprites { Type 1 MinSize 26 MaxSize 30  Sprite 94 Walls 153 ForceField 156 }
+	Sprites { Type 1 MinSize 31 MaxSize 35  Sprite 95 Walls 153 ForceField 156 }
+	Sprites { Type 1 MinSize 36 MaxSize 999 Sprite 96 Walls 153 ForceField 156 }
 }
 
 AGE_MODERN_STYLE_ASIAN {
@@ -261,6 +396,15 @@ AGE_MODERN_STYLE_ASIAN {
 	Sprites { Type 0 MinSize 26 MaxSize 30  Sprite   6 }
 	Sprites { Type 0 MinSize 31 MaxSize 35  Sprite   7 }
 	Sprites { Type 0 MinSize 36 MaxSize 999 Sprite   8 }
+
+	Sprites { Type 1 MinSize 0  MaxSize 5   Sprite 89 Walls 153 ForceField 156 }
+	Sprites { Type 1 MinSize 6  MaxSize 10  Sprite 90 Walls 153 ForceField 156 }
+	Sprites { Type 1 MinSize 11 MaxSize 15  Sprite 91 Walls 153 ForceField 156 }
+	Sprites { Type 1 MinSize 16 MaxSize 20  Sprite 92 Walls 153 ForceField 156 }
+	Sprites { Type 1 MinSize 21 MaxSize 25  Sprite 93 Walls 153 ForceField 156 }
+	Sprites { Type 1 MinSize 26 MaxSize 30  Sprite 94 Walls 153 ForceField 156 }
+	Sprites { Type 1 MinSize 31 MaxSize 35  Sprite 95 Walls 153 ForceField 156 }
+	Sprites { Type 1 MinSize 36 MaxSize 999 Sprite 96 Walls 153 ForceField 156 }
 }
 
 AGE_MODERN_STYLE_AMERICAN {
@@ -272,6 +416,15 @@ AGE_MODERN_STYLE_AMERICAN {
 	Sprites { Type 0 MinSize 26 MaxSize 30  Sprite   9 }
 	Sprites { Type 0 MinSize 31 MaxSize 35  Sprite  10 }
 	Sprites { Type 0 MinSize 36 MaxSize 999 Sprite  11 }
+
+	Sprites { Type 1 MinSize 0  MaxSize 5   Sprite 89 Walls 153 ForceField 156 }
+	Sprites { Type 1 MinSize 6  MaxSize 10  Sprite 90 Walls 153 ForceField 156 }
+	Sprites { Type 1 MinSize 11 MaxSize 15  Sprite 91 Walls 153 ForceField 156 }
+	Sprites { Type 1 MinSize 16 MaxSize 20  Sprite 92 Walls 153 ForceField 156 }
+	Sprites { Type 1 MinSize 21 MaxSize 25  Sprite 93 Walls 153 ForceField 156 }
+	Sprites { Type 1 MinSize 26 MaxSize 30  Sprite 94 Walls 153 ForceField 156 }
+	Sprites { Type 1 MinSize 31 MaxSize 35  Sprite 95 Walls 153 ForceField 156 }
+	Sprites { Type 1 MinSize 36 MaxSize 999 Sprite 96 Walls 153 ForceField 156 }
 }
 
 AGE_MODERN_STYLE_CASTLE {
@@ -283,6 +436,15 @@ AGE_MODERN_STYLE_CASTLE {
 	Sprites { Type 0 MinSize 26 MaxSize 30  Sprite  12 }
 	Sprites { Type 0 MinSize 31 MaxSize 35  Sprite  13 }
 	Sprites { Type 0 MinSize 36 MaxSize 999 Sprite  14 }
+
+	Sprites { Type 1 MinSize 0  MaxSize 5   Sprite 89 Walls 153 ForceField 156 }
+	Sprites { Type 1 MinSize 6  MaxSize 10  Sprite 90 Walls 153 ForceField 156 }
+	Sprites { Type 1 MinSize 11 MaxSize 15  Sprite 91 Walls 153 ForceField 156 }
+	Sprites { Type 1 MinSize 16 MaxSize 20  Sprite 92 Walls 153 ForceField 156 }
+	Sprites { Type 1 MinSize 21 MaxSize 25  Sprite 93 Walls 153 ForceField 156 }
+	Sprites { Type 1 MinSize 26 MaxSize 30  Sprite 94 Walls 153 ForceField 156 }
+	Sprites { Type 1 MinSize 31 MaxSize 35  Sprite 95 Walls 153 ForceField 156 }
+	Sprites { Type 1 MinSize 36 MaxSize 999 Sprite 96 Walls 153 ForceField 156 }
 }
 
 AGE_MODERN_STYLE_EGYPTAIN {
@@ -294,6 +456,15 @@ AGE_MODERN_STYLE_EGYPTAIN {
 	Sprites { Type 0 MinSize 26 MaxSize 30  Sprite  15 }
 	Sprites { Type 0 MinSize 31 MaxSize 35  Sprite  16 }
 	Sprites { Type 0 MinSize 36 MaxSize 999 Sprite  17 }
+
+	Sprites { Type 1 MinSize 0  MaxSize 5   Sprite 89 Walls 153 ForceField 156 }
+	Sprites { Type 1 MinSize 6  MaxSize 10  Sprite 90 Walls 153 ForceField 156 }
+	Sprites { Type 1 MinSize 11 MaxSize 15  Sprite 91 Walls 153 ForceField 156 }
+	Sprites { Type 1 MinSize 16 MaxSize 20  Sprite 92 Walls 153 ForceField 156 }
+	Sprites { Type 1 MinSize 21 MaxSize 25  Sprite 93 Walls 153 ForceField 156 }
+	Sprites { Type 1 MinSize 26 MaxSize 30  Sprite 94 Walls 153 ForceField 156 }
+	Sprites { Type 1 MinSize 31 MaxSize 35  Sprite 95 Walls 153 ForceField 156 }
+	Sprites { Type 1 MinSize 36 MaxSize 999 Sprite 96 Walls 153 ForceField 156 }
 }
 
 AGE_MODERN_STYLE_PALACE {
@@ -305,7 +476,79 @@ AGE_MODERN_STYLE_PALACE {
 	Sprites { Type 0 MinSize 26 MaxSize 30  Sprite  18 }
 	Sprites { Type 0 MinSize 31 MaxSize 35  Sprite  19 }
 	Sprites { Type 0 MinSize 36 MaxSize 999 Sprite  20 }
+
+	Sprites { Type 1 MinSize 0  MaxSize 5   Sprite 89 Walls 153 ForceField 156 }
+	Sprites { Type 1 MinSize 6  MaxSize 10  Sprite 90 Walls 153 ForceField 156 }
+	Sprites { Type 1 MinSize 11 MaxSize 15  Sprite 91 Walls 153 ForceField 156 }
+	Sprites { Type 1 MinSize 16 MaxSize 20  Sprite 92 Walls 153 ForceField 156 }
+	Sprites { Type 1 MinSize 21 MaxSize 25  Sprite 93 Walls 153 ForceField 156 }
+	Sprites { Type 1 MinSize 26 MaxSize 30  Sprite 94 Walls 153 ForceField 156 }
+	Sprites { Type 1 MinSize 31 MaxSize 35  Sprite 95 Walls 153 ForceField 156 }
+	Sprites { Type 1 MinSize 36 MaxSize 999 Sprite 96 Walls 153 ForceField 156 }
 }
+
+AGE_MODERN_STYLE_AFRICAN {
+	Sprites { Type 0 MinSize 0  MaxSize 5   Sprite 231 }
+	Sprites { Type 0 MinSize 6  MaxSize 10  Sprite 232 }
+	Sprites { Type 0 MinSize 11 MaxSize 15  Sprite 233 }
+	Sprites { Type 0 MinSize 16 MaxSize 20  Sprite 234 }
+	Sprites { Type 0 MinSize 21 MaxSize 25  Sprite 235 }
+	Sprites { Type 0 MinSize 26 MaxSize 30  Sprite 236 }
+	Sprites { Type 0 MinSize 31 MaxSize 35  Sprite 237 }
+	Sprites { Type 0 MinSize 36 MaxSize 999 Sprite 238 }
+
+	Sprites { Type 1 MinSize 0  MaxSize 5   Sprite 89 Walls 153 ForceField 156 }
+	Sprites { Type 1 MinSize 6  MaxSize 10  Sprite 90 Walls 153 ForceField 156 }
+	Sprites { Type 1 MinSize 11 MaxSize 15  Sprite 91 Walls 153 ForceField 156 }
+	Sprites { Type 1 MinSize 16 MaxSize 20  Sprite 92 Walls 153 ForceField 156 }
+	Sprites { Type 1 MinSize 21 MaxSize 25  Sprite 93 Walls 153 ForceField 156 }
+	Sprites { Type 1 MinSize 26 MaxSize 30  Sprite 94 Walls 153 ForceField 156 }
+	Sprites { Type 1 MinSize 31 MaxSize 35  Sprite 95 Walls 153 ForceField 156 }
+	Sprites { Type 1 MinSize 36 MaxSize 999 Sprite 96 Walls 153 ForceField 156 }
+}
+
+AGE_MODERN_STYLE_BALKAN {
+	Sprites { Type 0 MinSize 0  MaxSize 5   Sprite 250 }
+	Sprites { Type 0 MinSize 6  MaxSize 10  Sprite 251 }
+	Sprites { Type 0 MinSize 11 MaxSize 15  Sprite 252 }
+	Sprites { Type 0 MinSize 16 MaxSize 20  Sprite 253 }
+	Sprites { Type 0 MinSize 21 MaxSize 25  Sprite 254 }
+	Sprites { Type 0 MinSize 26 MaxSize 30  Sprite 255 }
+	Sprites { Type 0 MinSize 31 MaxSize 35  Sprite 59 }
+	Sprites { Type 0 MinSize 36 MaxSize 999 Sprite 60 } # Check
+
+	Sprites { Type 1 MinSize 0  MaxSize 5   Sprite 89 Walls 153 ForceField 156 }
+	Sprites { Type 1 MinSize 6  MaxSize 10  Sprite 90 Walls 153 ForceField 156 }
+	Sprites { Type 1 MinSize 11 MaxSize 15  Sprite 91 Walls 153 ForceField 156 }
+	Sprites { Type 1 MinSize 16 MaxSize 20  Sprite 92 Walls 153 ForceField 156 }
+	Sprites { Type 1 MinSize 21 MaxSize 25  Sprite 93 Walls 153 ForceField 156 }
+	Sprites { Type 1 MinSize 26 MaxSize 30  Sprite 94 Walls 153 ForceField 156 }
+	Sprites { Type 1 MinSize 31 MaxSize 35  Sprite 95 Walls 153 ForceField 156 }
+	Sprites { Type 1 MinSize 36 MaxSize 999 Sprite 96 Walls 153 ForceField 156 }
+}
+
+AGE_MODERN_STYLE_BARBARIAN {
+	Sprites { Type 0 MinSize 0  MaxSize 5   Sprite 58 }
+	Sprites { Type 0 MinSize 6  MaxSize 10  Sprite 58 }
+	Sprites { Type 0 MinSize 11 MaxSize 15  Sprite 58 }
+	Sprites { Type 0 MinSize 16 MaxSize 20  Sprite 58 }
+	Sprites { Type 0 MinSize 21 MaxSize 25  Sprite 58 }
+	Sprites { Type 0 MinSize 26 MaxSize 30  Sprite 58 }
+	Sprites { Type 0 MinSize 31 MaxSize 35  Sprite 58 }
+	Sprites { Type 0 MinSize 36 MaxSize 999 Sprite 58 }
+
+	Sprites { Type 1 MinSize 0  MaxSize 5   Sprite 89 Walls 153 ForceField 156 }
+	Sprites { Type 1 MinSize 6  MaxSize 10  Sprite 90 Walls 153 ForceField 156 }
+	Sprites { Type 1 MinSize 11 MaxSize 15  Sprite 91 Walls 153 ForceField 156 }
+	Sprites { Type 1 MinSize 16 MaxSize 20  Sprite 92 Walls 153 ForceField 156 }
+	Sprites { Type 1 MinSize 21 MaxSize 25  Sprite 93 Walls 153 ForceField 156 }
+	Sprites { Type 1 MinSize 26 MaxSize 30  Sprite 94 Walls 153 ForceField 156 }
+	Sprites { Type 1 MinSize 31 MaxSize 35  Sprite 95 Walls 153 ForceField 156 }
+	Sprites { Type 1 MinSize 36 MaxSize 999 Sprite 96 Walls 153 ForceField 156 }
+}
+
+
+### Further City Styles ###
 
 AGE_COMPUTER_STYLE_ALL {
 	Sprites { Type 0 MinSize 0  MaxSize 5   Sprite 57 }
@@ -316,10 +559,16 @@ AGE_COMPUTER_STYLE_ALL {
 	Sprites { Type 0 MinSize 26 MaxSize 30  Sprite 62 }
 	Sprites { Type 0 MinSize 31 MaxSize 35  Sprite 63 }
 	Sprites { Type 0 MinSize 36 MaxSize 999 Sprite 64 }
-}
 
-# Walls default value = 38
-# ForceField default value = 154
+	Sprites { Type 1 MinSize 0  MaxSize 5   Sprite 89 Walls 153 ForceField 156 }
+	Sprites { Type 1 MinSize 6  MaxSize 10  Sprite 90 Walls 153 ForceField 156 }
+	Sprites { Type 1 MinSize 11 MaxSize 15  Sprite 91 Walls 153 ForceField 156 }
+	Sprites { Type 1 MinSize 16 MaxSize 20  Sprite 92 Walls 153 ForceField 156 }
+	Sprites { Type 1 MinSize 21 MaxSize 25  Sprite 93 Walls 153 ForceField 156 }
+	Sprites { Type 1 MinSize 26 MaxSize 30  Sprite 94 Walls 153 ForceField 156 }
+	Sprites { Type 1 MinSize 31 MaxSize 35  Sprite 95 Walls 153 ForceField 156 }
+	Sprites { Type 1 MinSize 36 MaxSize 999 Sprite 96 Walls 153 ForceField 156 }
+}
 
 AGE_GENETIC_STYLE_ALL {
 	Sprites { Type 0 MinSize 0  MaxSize 5   Sprite 73 Walls 153 }
@@ -361,6 +610,26 @@ AGE_DIAMOND_STYLE_ALL {
 	Sprites { Type 1 MinSize 36 MaxSize 999 Sprite 203 Walls 153 ForceField 156 }
 }
 
+AGE_DIAMOND_STYLE_BARBARIAN {
+	Sprites { Type 0 MinSize 0  MaxSize 5   Sprite 58 }
+	Sprites { Type 0 MinSize 6  MaxSize 10  Sprite 58 }
+	Sprites { Type 0 MinSize 11 MaxSize 15  Sprite 58 }
+	Sprites { Type 0 MinSize 16 MaxSize 20  Sprite 58 }
+	Sprites { Type 0 MinSize 21 MaxSize 25  Sprite 58 }
+	Sprites { Type 0 MinSize 26 MaxSize 30  Sprite 58 }
+	Sprites { Type 0 MinSize 31 MaxSize 35  Sprite 58 }
+	Sprites { Type 0 MinSize 36 MaxSize 999 Sprite 58 }
+
+	Sprites { Type 1 MinSize 0  MaxSize 5   Sprite 196 Walls 153 ForceField 156 }
+	Sprites { Type 1 MinSize 6  MaxSize 10  Sprite 197 Walls 153 ForceField 156 }
+	Sprites { Type 1 MinSize 11 MaxSize 15  Sprite 198 Walls 153 ForceField 156 }
+	Sprites { Type 1 MinSize 16 MaxSize 20  Sprite 199 Walls 153 ForceField 156 }
+	Sprites { Type 1 MinSize 21 MaxSize 25  Sprite 200 Walls 153 ForceField 156 }
+	Sprites { Type 1 MinSize 26 MaxSize 30  Sprite 201 Walls 153 ForceField 156 }
+	Sprites { Type 1 MinSize 31 MaxSize 35  Sprite 202 Walls 153 ForceField 156 }
+	Sprites { Type 1 MinSize 36 MaxSize 999 Sprite 203 Walls 153 ForceField 156 }
+}
+
 AGE_FUTURE_STYLE_ALL {
 	Sprites { Type 0 MinSize 0  MaxSize 5   Sprite 204 Walls 153 }
 	Sprites { Type 0 MinSize 6  MaxSize 10  Sprite 205 Walls 153 }
@@ -380,4 +649,3 @@ AGE_FUTURE_STYLE_ALL {
 	Sprites { Type 1 MinSize 31 MaxSize 35  Sprite 202 Walls 153 ForceField 156 }
 	Sprites { Type 1 MinSize 36 MaxSize 999 Sprite 203 Walls 153 ForceField 156 }
 }
-
