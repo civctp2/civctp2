@@ -18,7 +18,8 @@
 //
 // Compiler flags
 //
-// - None
+// USE_SDL
+// - Use SDL for sound and cdrom (originally, now disabled)
 //
 //----------------------------------------------------------------------------
 //

@@ -21,6 +21,9 @@
 // _MSC_VER
 // - Compiler version (for the Microsoft C++ compiler only)
 //
+// USE_SDL
+// - Use SDL for sound and cdrom (originally, now disabled)
+//
 //----------------------------------------------------------------------------
 //
 // Modifications from the original Activision code:
