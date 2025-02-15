@@ -12,10 +12,10 @@
 
 #include <SDL2/SDL_events.h>
 
-class VideoState;
-class SDL_Renderer;
-class SDL_Texture;
-class SDL_Surface;
+struct VideoState;
+struct SDL_Renderer;
+struct SDL_Texture;
+struct SDL_Surface;
 class aui_SDLMovie : public aui_Movie {
 public:
 	aui_SDLMovie(AUI_ERRCODE *retval, const MBCHAR * filename = NULL);
