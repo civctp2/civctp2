@@ -321,15 +321,7 @@ aui_MovieManager* aui_SDLUI::CreateMovieManager( void ) {
 	int windowWidth;
 	int windowHeight;
 	SDL_GetWindowSize(m_SDLWindow, &windowWidth, &windowHeight);
-#if !defined(WIN32)
 	return new aui_SDLMovieManager(m_SDLRenderer, m_SDLTexture, windowWidth, windowHeight);
-#else
-#define STRING2(x) #x
-#define STRING(x) STRING2(x)
-#pragma message(__FILE__ "(" STRING(__LINE__) "): warning: Movie manager is NULL")
-	// For some reason the linker of VS does not find aui_SDLMovieManager, even so it is defined and there
-	return NULL;
-#endif
 }
 
 AUI_ERRCODE aui_SDLUI::SDLDrawScreen( void ) {
